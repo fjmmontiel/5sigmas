@@ -13,7 +13,7 @@ install: $(MKDOCS)
 $(MKDOCS):
 	python3 -m venv $(VENV)
 	$(PIP) install --upgrade pip
-	$(PIP) install mkdocs mkdocs-material
+	$(PIP) install mkdocs mkdocs-material pymdown-extensions
 
 # Compilar la web a HTML estático (en ./site)
 build: install
