@@ -1,12 +1,11 @@
-site_name: De las cavernas a la AGI
+site_name: IA sin hype
 site_description: Technical history of math, philosophy and engineering on the road to AGI
 site_url: ""      # fill when you go public (GitHub Pages URL or custom domain)
 repo_url: https://github.com/fjmmontiel/from-cave-to-agi
-repo_name: De las cavernas a la AGI
-
+repo_name: IA sin hype
 theme:
   name: material
-  language: en
+  language: es
   features:
     - navigation.sections
     - navigation.indexes
@@ -18,10 +17,10 @@ nav:
   - Home: index.md
 
   - Series:
-      - From Cave to AGI:
+      - De las cavernas a la AGI:
           - Overview: series/from-cave-to-AGI/index.md
           - From tallies to Turing: series/from-cave-to-AGI/00-series-overview.md
-          - Logic to computation: series/from-cave-to-AGI/02-logic-to-computation.md
+          - Logic to computation: series/from-cave-to-AGI/01-from-cave-to-logic.md
           - Control to learning: series/from-cave-to-AGI/03-control-to-learning.md
           - Scaling, energy & limits: series/from-cave-to-AGI/04-scaling-energy-limits.md
       - AI Datacenters & Energy:
@@ -46,17 +45,25 @@ nav:
           - Physical limits of reasoning: posts/reasoning-models/2025-03-physical-limits-of-reasoning.md
 
   - About: meta/about.md
-
-
 markdown_extensions:
-  - meta          # front matter support
+  - meta
   - admonition
   - footnotes
   - toc:
       permalink: true
   - pymdownx.highlight
-  - pymdownx.superfences
-  - pymdownx.arithmatex  # if you want LaTeX math later
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.arithmatex:
+      generic: true   # hace que MathJax procese los bloques marcados
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
+
 
 plugins:
   - search
