@@ -1,0 +1,15 @@
+site_name: From Cave to AGI
+site_description: Technical history of mathematics, philosophy and engineering on the road to AGI
+site_url: ""   # you'll fill this at launch if you want
+
+theme:
+  name: material
+
+nav:
+  - Home: index.md
+  - Series:
+      - Overview of the series: series/00-series-overview.md
+      - From tallies to Turing: series/01-from-cave-to-logic.md
+      - Logic to computation: series/02-logic-to-computation.md
+      - Control to learning: series/03-control-to-learning.md
+      - Scaling & energy: series/04-scaling-energy-limits.md
