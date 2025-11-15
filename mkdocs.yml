@@ -1,15 +1,63 @@
-site_name: From Cave to AGI
-site_description: Technical history of mathematics, philosophy and engineering on the road to AGI
-site_url: ""   # you'll fill this at launch if you want
+site_name: De las cavernas a la AGI
+site_description: Technical history of math, philosophy and engineering on the road to AGI
+site_url: ""      # fill when you go public (GitHub Pages URL or custom domain)
+repo_url: https://github.com/fjmmontiel/from-cave-to-agi
+repo_name: De las cavernas a la AGI
 
 theme:
   name: material
+  language: en
+  features:
+    - navigation.sections
+    - navigation.indexes
+    - navigation.instant
+    - content.code.copy
+    - content.action.edit
 
 nav:
   - Home: index.md
+
   - Series:
-      - Overview of the series: series/00-series-overview.md
-      - From tallies to Turing: series/01-from-cave-to-logic.md
-      - Logic to computation: series/02-logic-to-computation.md
-      - Control to learning: series/03-control-to-learning.md
-      - Scaling & energy: series/04-scaling-energy-limits.md
+      - From Cave to AGI:
+          - Overview: series/from-cave-to-AGI/index.md
+          - From tallies to Turing: series/from-cave-to-AGI/00-series-overview.md
+          - Logic to computation: series/from-cave-to-AGI/02-logic-to-computation.md
+          - Control to learning: series/from-cave-to-AGI/03-control-to-learning.md
+          - Scaling, energy & limits: series/from-cave-to-AGI/04-scaling-energy-limits.md
+      - AI Datacenters & Energy:
+          - Overview: series/datacenters-energy/index.md
+          - Energy & welfare history: series/datacenters-energy/01-history-of-energy-and-welfare.md
+          - The gigawatt AI datacenter: series/datacenters-energy/02-ai-datacenters-gigawatt-era.md
+
+      - Reasoning Models:
+          - Overview: series/reasoning-models/index.md
+          - Training vs test-time compute: series/reasoning-models/01-training-vs-test-time-compute.md
+          - Physical time & reasoning: series/reasoning-models/02-physical-time-and-reasoning.md
+
+  - Posts:
+      - Cave to AGI:
+          - Scaling myths: posts/cave-to-agi/2025-01-scaling-myths.md
+          - Why history matters now: posts/cave-to-agi/2025-01-why-history-matters-now.md
+
+      - Datacenters & Energy:
+          - Gigawatt datacenters explained: posts/datacenters-energy/2025-02-gigawatt-dcs-explained.md
+
+      - Reasoning Models:
+          - Physical limits of reasoning: posts/reasoning-models/2025-03-physical-limits-of-reasoning.md
+
+  - About: meta/about.md
+
+
+markdown_extensions:
+  - meta          # front matter support
+  - admonition
+  - footnotes
+  - toc:
+      permalink: true
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.arithmatex  # if you want LaTeX math later
+
+plugins:
+  - search
+  # - blog        # optional – see below
