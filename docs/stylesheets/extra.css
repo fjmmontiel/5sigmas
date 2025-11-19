@@ -1,0 +1,57 @@
+:root {
+    --md-primary-fg-color: #26A69A;
+    --md-primary-fg-color--light: #4DB6AC;
+    --md-primary-fg-color--dark: #00897B;
+    --md-accent-fg-color: #FFB343;
+    
+    /* Gradient definition extracted from logo */
+    --brand-gradient: linear-gradient(135deg, #26A69A 0%, #324AB2 40%, #FFB343 75%, #0F172A 100%);
+    --text-gradient: linear-gradient(to right, #26A69A, #324AB2);
+}
+
+/* Apply gradient to the header/app bar */
+.md-header {
+    background: var(--brand-gradient) !important;
+}
+
+/* Gradient text for the main title in the hero section */
+.md-typeset h1 {
+    background: var(--text-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    display: inline-block; /* Ensures gradient applies correctly */
+}
+
+/* Add a subtle border top to the footer with the gradient */
+.md-footer {
+    border-top: 4px solid;
+    border-image: var(--brand-gradient) 1;
+}
+
+/* Customize the tabs navigation to blend better */
+.md-tabs {
+    background: #0F172A !important; /* Dark blue from the logo end */
+}
+
+/* Hover effects for links */
+.md-typeset a {
+    color: #324AB2;
+    transition: color 0.2s;
+}
+
+.md-typeset a:hover {
+    color: #26A69A;
+}
+
+/* Button customization */
+.md-typeset .md-button--primary {
+    background: #324AB2;
+    border-color: #324AB2;
+}
+
+.md-typeset .md-button--primary:hover {
+    background: #26A69A;
+    border-color: #26A69A;
+}
