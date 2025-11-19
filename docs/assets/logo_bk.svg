@@ -1,13 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 120">
   <defs>
+    <!-- Gradiente vivo para todo el símbolo 5σ -->
     <linearGradient id="grad5sigma" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#26A69A" />
-      <stop offset="40%" stop-color="#324AB2" />
-      <stop offset="75%" stop-color="#FFB343" />
-      <stop offset="100%" stop-color="#0F172A" />
+      <stop offset="0%" stop-color="#6366F1"/>  <!-- índigo -->
+      <stop offset="50%" stop-color="#06B6D4"/> <!-- cian -->
+      <stop offset="100%" stop-color="#22C55E"/> <!-- verde -->
     </linearGradient>
   </defs>
 
+  <!-- 5σ fusionado -->
   <text
     x="50%"
     y="50%"
@@ -17,6 +18,7 @@
     font-size="68"
     letter-spacing="-4"
     fill="url(#grad5sigma)">
+    
     <tspan font-weight="800">5</tspan>
     <tspan dx="-22" font-weight="800">σ</tspan>
   </text>

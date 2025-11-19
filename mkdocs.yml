@@ -1,8 +1,6 @@
 site_name: 5sigmas - Divulgación de IA sin hype
 site_description: Technical history of math, philosophy and engineering on the road to AGI
 site_url: ""      # fill when you go public (GitHub Pages URL or custom domain)
-repo_url: https://github.com/fjmmontiel/from-cave-to-agi
-repo_name: IA sin hype
 theme:
   name: material
   language: es
@@ -50,26 +48,10 @@ nav:
               - "¿Modelos que «razonan»?": series/from-cave-to-AGI/3-03-modelos-razonan.md
               - "Modelos del mundo": series/from-cave-to-AGI/3-04-modelos-mundo.md
           - "Bonus: Scaling & Energy": series/from-cave-to-AGI/04-scaling-energy-limits.md
-      - AI Datacenters & Energy:
-          - Overview: series/datacenters-energy/index.md
-          - Energy & welfare history: series/datacenters-energy/01-history-of-energy-and-welfare.md
-          - The gigawatt AI datacenter: series/datacenters-energy/02-ai-datacenters-gigawatt-era.md
+      - La felicidad, estado de bienestar y energía: series/happiness-welfare-energy/index.md
+      - ¿Qué cojones es la AGI?: series/what-is-agi/index.md
+      - Cómo llegamos de scripts a un LLM: series/scripts-to-llm/index.md
 
-      - Reasoning Models:
-          - Overview: series/reasoning-models/index.md
-          - Training vs test-time compute: series/reasoning-models/01-training-vs-test-time-compute.md
-          - Physical time & reasoning: series/reasoning-models/02-physical-time-and-reasoning.md
-
-  - Posts:
-      - Cave to AGI:
-          - Scaling myths: posts/cave-to-agi/2025-01-scaling-myths.md
-          - Why history matters now: posts/cave-to-agi/2025-01-why-history-matters-now.md
-
-      - Datacenters & Energy:
-          - Gigawatt datacenters explained: posts/datacenters-energy/2025-02-gigawatt-dcs-explained.md
-
-      - Reasoning Models:
-          - Physical limits of reasoning: posts/reasoning-models/2025-03-physical-limits-of-reasoning.md
 
   - About: meta/about.md
 markdown_extensions:
@@ -98,6 +80,9 @@ extra_javascript:
   - javascripts/mathjax.js
   - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
 
+
+extra_css:
+  - stylesheets/extra.css
 
 plugins:
   - search
