@@ -30,13 +30,12 @@ Descubierto en un naufragio en 1901, este dispositivo de bronce, del tamaño de 
 
 No era una herramienta mística; era una máquina matemática. Codificaba los ciclos celestes en las relaciones de transmisión de sus engranajes. Si girabas la manivela (input), los engranajes procesaban la información y las agujas mostraban el estado futuro del cielo (output).
 
-El Mecanismo de Anticitera demuestra que, hace dos mil años, ya entendíamos que **la naturaleza sigue reglas matemáticas** y que 
----
-
-[Siguiente: Cero, álgebra y relojes >](1-03-cero-algebra.md){ .md-button .md-button--primary }
-
 ## Referencias
 
 - [Euclid's Elements - Introduction](https://mathcs.clarku.edu/~djoyce/java/elements/elements.html)
 - [The Antikythera Mechanism Research Project](http://www.antikythera-mechanism.gr/)
 - [Aristotle's Logic - Stanford Encyclopedia of Philosophy](https://plato.stanford.edu/entries/aristotle-logic/)
+
+---
+
+[Siguiente: Cero, álgebra y relojes >](1-03-cero-algebra.md){ .md-button .md-button--primary }

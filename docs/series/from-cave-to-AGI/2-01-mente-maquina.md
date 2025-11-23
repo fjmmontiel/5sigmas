@@ -32,13 +32,12 @@ En 1900, **David Hilbert**, el matemático más influyente de su época, lanzó 
 
 Hilbert creía firmemente que no había límites para el conocimiento matemático. Su famoso lema, *"Wir müssen wissen. Wir werden wissen"* (Debemos saber. Sabremos), encapsulaba el optimismo supremo de la razón.
 
-
----
-
-[Siguiente: De Gotinga a Londres >](2-02-gotinga-londres.md){ .md-button .md-button--primary }
-
 ## Referencias
 
 - [George Boole - The Laws of Thought](https://plato.stanford.edu/entries/boole/)
 - [Gottlob Frege - Internet Encyclopedia of Philosophy](https://iep.utm.edu/frege/)
 - [Hilbert's Program](https://plato.stanford.edu/entries/hilbert-program/)
+
+---
+
+[Siguiente: De Gotinga a Londres >](2-02-gotinga-londres.md){ .md-button .md-button--primary }

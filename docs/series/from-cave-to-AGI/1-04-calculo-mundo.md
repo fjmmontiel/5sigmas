@@ -24,13 +24,12 @@ Aunque la mecánica cuántica y la teoría del caos luego pondrían límites a e
 
 Mientras los filósofos soñaban, los ingenieros construían. **Blaise Pascal** creó la **Pascalina** (1642) para ayudar a su padre con los impuestos. Era una caja de latón con ruedas dentadas que sumaba y restaba.
 
-Estas máquinas demostraron algo fundamental: **la inteligencia no es necesaria para el cálculo**. Un engranaje no "sabe" que 2 + 2 = 4, pero si lo configuras correctamente, te dará el resultado correcto. Habíamos mecanizado la aritmética. El siguiente paso, que tardaría siglos, sería 
----
-
-[Siguiente: Acto II - De la mente a la máquina universal >](2-01-mente-maquina.md){ .md-button .md-button--primary }
-
 ## Referencias
 
 - [Leibniz and the Calculus Ratiocinator](https://www.britannica.com/biography/Gottfried-Wilhelm-Leibniz)
 - [Laplace's Demon and Determinism](https://plato.stanford.edu/entries/determinism-causal/#LaplDemo)
 - [The Pascaline: The First Mechanical Calculator](https://www.britannica.com/technology/Pascaline)
+
+---
+
+[Siguiente: Acto II - De la mente a la máquina universal >](2-01-mente-maquina.md){ .md-button .md-button--primary }

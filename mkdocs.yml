@@ -29,28 +29,30 @@ theme:
 
 nav:
   - Home: index.md
+  - Series: series/index.md
 
-  - Series:
-      - De las cavernas a la AGI:
-          - Presentación: series/from-cave-to-AGI/00_presentacion_serie.md
-          - "Acto I: Inventar símbolos":
-              - "De las muescas en hueso al número: cómo nace la abstracción (< 1000 a. C.)": series/from-cave-to-AGI/1-01-muescas.md
-              - "El proyecto griego (1000 a. C. – año 0)": series/from-cave-to-AGI/1-02-griego.md
-              - "Cero, álgebra y relojes (año 0 – 1500)": series/from-cave-to-AGI/1-03-cero-algebra.md
-              - "Del cálculo al mundo como sistema dinámico (1500–1800)": series/from-cave-to-AGI/1-04-calculo-mundo.md
-          - "Acto II: Enseñar a las máquinas":
-              - "De la mente a la máquina universal": series/from-cave-to-AGI/2-01-mente-maquina.md
-              - "De Gotinga a Londres": series/from-cave-to-AGI/2-02-gotinga-londres.md
-              - "Primeras neuronas de metal": series/from-cave-to-AGI/2-03-neuronas-metal.md
-          - "Acto III: Escalar el aprendizaje":
-              - "WW qué?!": series/from-cave-to-AGI/3-01-ww-que.md
-              - "Primeras neuronas parlantes": series/from-cave-to-AGI/3-02-neuronas-parlantes.md
-              - "¿Modelos que «razonan»?": series/from-cave-to-AGI/3-03-modelos-razonan.md
-              - "Modelos del mundo": series/from-cave-to-AGI/3-04-modelos-mundo.md
-          - "Bonus: Scaling & Energy": series/from-cave-to-AGI/04-scaling-energy-limits.md
-      - La felicidad, estado de bienestar y energía: series/happiness-welfare-energy/index.md
-      - ¿Qué cojones es la AGI?: series/what-is-agi/index.md
-      - Cómo llegamos de scripts a un LLM: series/scripts-to-llm/index.md
+  - De las cavernas a la AGI:
+      - Presentación: series/from-cave-to-AGI/00_presentacion_serie.md
+      - "Acto I: Inventar símbolos":
+          - "De las muescas en hueso al número: cómo nace la abstracción (< 1000 a. C.)": series/from-cave-to-AGI/1-01-muescas.md
+          - "El proyecto griego (1000 a. C. – año 0)": series/from-cave-to-AGI/1-02-griego.md
+          - "Cero, álgebra y relojes (año 0 – 1500)": series/from-cave-to-AGI/1-03-cero-algebra.md
+          - "Del cálculo al mundo como sistema dinámico (1500–1800)": series/from-cave-to-AGI/1-04-calculo-mundo.md
+      - "Acto II: Enseñar a las máquinas":
+          - "De la mente a la máquina universal": series/from-cave-to-AGI/2-01-mente-maquina.md
+          - "De Gotinga a Londres": series/from-cave-to-AGI/2-02-gotinga-londres.md
+          - "Primeras neuronas de metal": series/from-cave-to-AGI/2-03-neuronas-metal.md
+      - "Acto III: Escalar el aprendizaje":
+          - "WW qué?!": series/from-cave-to-AGI/3-01-ww-que.md
+          - "Primeras neuronas parlantes": series/from-cave-to-AGI/3-02-neuronas-parlantes.md
+          - "¿Modelos que «razonan»?": series/from-cave-to-AGI/3-03-modelos-razonan.md
+          - "Modelos del mundo": series/from-cave-to-AGI/3-04-modelos-mundo.md
+      - "Bonus: Scaling & Energy": series/from-cave-to-AGI/04-scaling-energy-limits.md
+  - La felicidad, estado de bienestar y energía: series/happiness-welfare-energy/index.md
+  - ¿Qué cojones es la AGI?:
+      - Introducción: series/what-is-agi/index.md
+      - "Conceptos Básicos: IA, IAG y Ciclo de Vida": series/what-is-agi/01-conceptos-basicos.md
+  - Cómo llegamos de scripts a un LLM: series/scripts-to-llm/index.md
 
 
   - About: meta/about.md
@@ -86,4 +88,5 @@ extra_css:
 
 plugins:
   - search
+  - macros
   # - blog        # optional – see below

@@ -22,13 +22,12 @@ Durante años, los mejores algoritmos (basados en reglas y estadística clásica
 
 Entonces llegó **AlexNet**. Diseñada por Alex Krizhevsky, Ilya Sutskever y Geoffrey Hinton, era una "Red Neuronal Convolucional" (CNN) profunda. Entrenada en dos GPUs GTX 580 durante una semana, AlexNet destrozó a la competencia con una tasa de error del 15.3%.
 
-Fue un shock. De la noche a la mañana, todo el campo de la visión por computador (y pronto, todo el campo de la IA) abandonó los viejos métodos y se pasó al **Deep Learning**. 
----
-
-[Siguiente: Primeras neuronas parlantes >](3-02-neuronas-parlantes.md){ .md-button .md-button--primary }
-
 ## Referencias
 
 - [ImageNet Large Scale Visual Recognition Challenge](https://www.image-net.org/challenges/LSVRC/)
 - [AlexNet Paper: ImageNet Classification with Deep Convolutional Neural Networks](https://papers.nips.cc/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf)
 - [The History of GPUs in AI](https://www.nvidia.com/en-us/about-nvidia/ai-computing/)
+
+---
+
+[Siguiente: Primeras neuronas parlantes >](3-02-neuronas-parlantes.md){ .md-button .md-button--primary }

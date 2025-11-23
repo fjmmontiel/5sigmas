@@ -1,34 +1,41 @@
 ---
-title: From tallies to Turing: how abstraction accumulates
-summary: A technical history of how counting, logic and formal computation emerged from practical problem-solving.
-tags:
-  - history
-  - foundations
-  - computation
+title: [Título del Artículo]
+summary: [Breve descripción de 1-2 líneas para SEO y previews]
 ---
 
-# {{ TITLE }}
+# [Título del Artículo]
 
-## 1. Why this matters now
+> **Resumen para decisores**: [En 2-3 frases, explica qué valor aporta este artículo. Ejemplo: "Analizamos por qué los LLMs alucinan y qué arquitecturas (RAG, Agents) mitigan este riesgo en entornos corporativos."]
 
-(Short, LinkedIn-friendly framing.)
+## 1. Contexto Estratégico
+*¿Por qué importa esto ahora? ¿Qué problema de negocio resuelve?*
 
-## 2. Historical backbone
+[Explica la relevancia del tema para un CTO/Product Manager. No empieces con la historia de 1950, empieza con el dolor actual: coste, incertidumbre, riesgo.]
 
-(Chronological sections with clear dates.)
+## 2. Fundamentos Técnicos (Sin Hype)
+*¿Cómo funciona realmente? (La visión "5 sigmas")*
 
-## 3. Technical core
+[Aquí va la explicación técnica rigurosa. Usa diagramas si es necesario.]
+[Evita metáforas vacías. Habla de vectores, probabilidades, compute, latencia.]
 
-(Key math/philo/engineering ideas; equations and diagrams as needed.)
+### Concepto Clave 1
+...
 
-## 4. What people usually get wrong
+### Concepto Clave 2
+...
 
-(Bullet list of myths vs reality.)
+## 3. Implicaciones Reales
+*Coste, Energía, Arquitectura y Riesgos*
 
-## 5. How this connects to modern AI systems
+*   **Coste/Eficiencia**: [¿Es caro de entrenar? ¿Caro de inferir?]
+*   **Arquitectura**: [¿Requiere GPUs dedicadas? ¿Funciona en CPU?]
+*   **Riesgos**: [Alucinaciones, seguridad, dependencia de vendors.]
 
-(LLMs, datacenters, reasoning models, etc.)
+## 4. Conclusión y Roadmap
+*¿Qué hago con esto mañana?*
 
-## 6. References and further reading
+*   [ ] **Acción 1**: [Ej: Auditar el uso actual de...]
+*   [ ] **Decisión**: [Ej: Elegir entre fine-tuning o RAG...]
 
-(Proper citations + links.)
+---
+*Este artículo es parte de la serie **[Nombre de la Serie]**. Siguiente capítulo: [Enlace].*

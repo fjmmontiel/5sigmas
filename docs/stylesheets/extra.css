@@ -3,7 +3,7 @@
     --md-primary-fg-color--light: #4DB6AC;
     --md-primary-fg-color--dark: #00897B;
     --md-accent-fg-color: #FFB343;
-    
+
     /* Gradient definition extracted from logo */
     --brand-gradient: linear-gradient(135deg, #26A69A 0%, #324AB2 40%, #FFB343 75%, #0F172A 100%);
     --text-gradient: linear-gradient(to right, #26A69A, #324AB2);
@@ -21,7 +21,8 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
     color: transparent;
-    display: inline-block; /* Ensures gradient applies correctly */
+    display: inline-block;
+    /* Ensures gradient applies correctly */
 }
 
 /* Add a subtle border top to the footer with the gradient */
@@ -32,7 +33,8 @@
 
 /* Customize the tabs navigation to blend better */
 .md-tabs {
-    background: #0F172A !important; /* Dark blue from the logo end */
+    background: #0F172A !important;
+    /* Dark blue from the logo end */
 }
 
 /* Hover effects for links */
@@ -54,4 +56,105 @@
 .md-typeset .md-button--primary:hover {
     background: #26A69A;
     border-color: #26A69A;
+}
+
+/* Carousel Styles */
+.carousel-container {
+    width: 100%;
+    overflow: hidden;
+    padding: 40px 0;
+    position: relative;
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+.carousel-track {
+    display: flex;
+    gap: 20px;
+    width: max-content;
+    animation: scroll 40s linear infinite;
+}
+
+.carousel-container:hover .carousel-track {
+    animation-play-state: paused;
+}
+
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(calc(-50% - 10px));
+        /* Adjust based on gap */
+    }
+}
+
+.carousel-card {
+    flex: 0 0 280px;
+    height: 320px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 24px;
+    text-decoration: none !important;
+    color: inherit !important;
+    transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    backdrop-filter: blur(10px);
+}
+
+.carousel-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    border-color: var(--md-primary-fg-color);
+}
+
+.card-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, #26A69A, #324AB2);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.carousel-card h3 {
+    margin: 0 0 12px 0;
+    font-size: 1.2em;
+    font-weight: 700;
+    background: linear-gradient(90deg, #FFB343, #FFD54F);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.carousel-card p {
+    margin: 0;
+    font-size: 0.9em;
+    opacity: 0.8;
+    line-height: 1.5;
+}
+
+/* Podcast Player Styles */
+.podcast-player {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.podcast-player audio {
+    margin-bottom: 15px;
+    filter: invert(0.9);
+    /* Dark mode adjustment for default audio player */
+}
+
+[data-md-color-scheme="default"] .podcast-player audio {
+    filter: none;
 }

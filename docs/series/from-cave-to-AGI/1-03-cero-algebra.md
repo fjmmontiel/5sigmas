@@ -22,13 +22,12 @@ Antes del reloj, el tiempo era fluido, dictado por el sol y las estaciones. El r
 
 El reloj fue la primera máquina autónoma compleja que la gente común veía. Y trajo consigo una metáfora poderosa: **el universo como un mecanismo de relojería**.
 
-Si podemos construir una máquina que simula el tiempo con engranajes, ¿no será que el propio universo es una gran máquina? Esta idea sembró la semilla del determinismo científico. Dios pasó de ser un pastor a ser un relojero. Y si el universo es una máquina, entonces, en teoría, puede ser calculado, 
----
-
-[Siguiente: Del cálculo al mundo como sistema dinámico >](1-04-calculo-mundo.md){ .md-button .md-button--primary }
-
 ## Referencias
 
 - [Al-Khwarizmi: The Father of Algebra](https://www.storyofmathematics.com/islamic_alkhwarizmi.html)
 - [The History of Zero](https://www.scientificamerican.com/article/history-of-zero/)
 - [Mechanical Clocks and the Standardization of Time](https://www.britannica.com/technology/clock)
+
+---
+
+[Siguiente: Del cálculo al mundo como sistema dinámico >](1-04-calculo-mundo.md){ .md-button .md-button--primary }

@@ -26,13 +26,12 @@ En septiembre de 2024, OpenAI lanzó **o1** (Strawberry). Este modelo no solo us
 
 o1 genera miles de tokens de "pensamiento" oculto antes de responder. Explora caminos, verifica sus propios errores y refina su estrategia. Es el paso de la "IA rápida" (Sistema 1 de Kahneman: instintiva) a la "IA lenta" (Sistema 2: deliberativa).
 
-Ya no estamos solo ante loros estocásticos. 
----
-
-[Siguiente: Modelos del mundo >](3-04-modelos-mundo.md){ .md-button .md-button--primary }
-
 ## Referencias
 
 - [Chain-of-Thought Prompting Elicits Reasoning in Large Language Models](https://arxiv.org/abs/2201.11903)
 - [Training language models to follow instructions with human feedback (InstructGPT)](https://arxiv.org/abs/2203.02155)
 - [OpenAI o1 System Card](https://openai.com/index/openai-o1-system-card/)
+
+---
+
+[Siguiente: Modelos del mundo >](3-04-modelos-mundo.md){ .md-button .md-button--primary }
