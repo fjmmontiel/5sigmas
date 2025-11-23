@@ -3,14 +3,7 @@ hide:
   - navigation
   - toc
 ---
-
-# 
-
-<div align="center" style="margin-top: 20px; margin-bottom: 20px;">
-  <img src="assets/logo.svg" alt="5sigmas Logo" width="400">
-  <p style="font-size: 1.5em; color: #666; margin-top: 20px;">Divulgación de IA sin hype</p>
-</div>
-
+# 5sigmas - Divulgación de IA sin hype
 ---
 ### ¿Qué es "5sigmas"?
 Es un proyecto que nace de la curiosidad que sentimos al ver cómo la IA se ha convertido en un fenómeno de masas, algo incluso afectando a la cultura popular. Esta tecnología es capaz de ayudarnos a resolver los verdaderos problemas de la humanidad, desde la energía, salud, agricultura y hasta la educación.
@@ -25,32 +18,71 @@ En física, un descubrimiento se considera confirmado cuando alcanza una signifi
 
 Este proyecto busca esa misma rigurosidad: separar el *hype* del conocimiento fundamental, ofreciendo una perspectiva técnica y profunda sobre la inteligencia artificial.
 
-## La Serie: De las cavernas a la AGI
+Aquí no encontrarás las noticias de última hora, encontrarás *contexto*.
 
-Esta serie explora la evolución del pensamiento humano dividida en tres actos fundamentales. 
-No es solo historia. Es el mapa para entender dónde estamos, cómo hemos llegado aquí y hacia dónde vamos.
-
-<div class="grid cards" markdown>
-
--   :material-pencil: **Acto I: Inventar símbolos**
-    
-    Desde las primeras abstracciones matemáticas hasta la Revolución Científica. Cómo aprendimos a externalizar el pensamiento.
-    
-    [:arrow_right: Leer Acto I](series/from-cave-to-AGI/01-from-cave-to-logic.md)
-
--   :material-robot: **Acto II: Enseñar a las máquinas**
-    
-    La era de la computación mecánica y electrónica. De Ada Lovelace a Alan Turing y las primeras redes neuronales.
-    
-    [:arrow_right: Leer Acto II](series/from-cave-to-AGI/02-logic-to-computation.md)
-
--   :material-brain: **Acto III: Escalar el aprendizaje**
-    
-    El auge del Deep Learning, los LLMs y la búsqueda de la AGI. Entendiendo los límites físicos y energéticos.
-    
-    [:arrow_right: Leer Acto III](series/from-cave-to-AGI/03-control-to-learning.md)
-
-</div>
-<div align="center">
-  <small> 5sigmas - Divulgación de IA sin hype</small>
+### Nuestras series
+<div class="carousel-container">
+    <div class="carousel-track">
+        <!-- Card 1 -->
+        <a href="series/from-cave-to-AGI/00_presentacion_serie/" class="carousel-card">
+            <div class="card-content">
+                <div class="card-icon">🧠</div>
+                <h3>De las cavernas a la AGI</h3>
+                <p>Un viaje histórico desde los primeros símbolos hasta la inteligencia artificial generativa.</p>
+            </div>
+        </a>
+        <!-- Card 2 -->
+        <a href="series/happiness-welfare-energy/" class="carousel-card">
+            <div class="card-content">
+                <div class="card-icon">💓</div>
+                <h3>Felicidad y Energía</h3>
+                <p>La relación entre el consumo de energía, el desarrollo económico y el bienestar humano.</p>
+            </div>
+        </a>
+        <!-- Card 3 -->
+        <a href="series/what-is-agi/" class="carousel-card">
+            <div class="card-content">
+                <div class="card-icon">🤖</div>
+                <h3>¿Qué es la AGI?</h3>
+                <p>Desmitificando la Inteligencia Artificial General. Definiciones y realidad.</p>
+            </div>
+        </a>
+        <!-- Card 4 -->
+        <a href="series/scripts-to-llm/" class="carousel-card">
+            <div class="card-content">
+                <div class="card-icon">💻</div>
+                <h3>Scripts a LLM</h3>
+                <p>La evolución del código: de la automatización básica a la IA generativa.</p>
+            </div>
+        </a>
+        <!-- Duplicate cards for infinite scroll effect -->
+        <a href="series/from-cave-to-AGI/00_presentacion_serie/" class="carousel-card">
+            <div class="card-content">
+                <div class="card-icon">🧠</div>
+                <h3>De las cavernas a la AGI</h3>
+                <p>Un viaje histórico desde los primeros símbolos hasta la inteligencia artificial general.</p>
+            </div>
+        </a>
+        <a href="series/happiness-welfare-energy/" class="carousel-card">
+            <div class="card-content">
+                <div class="card-icon">💓</div>
+                <h3>Felicidad y Energía</h3>
+                <p>La relación entre el consumo de energía, el desarrollo económico y el bienestar humano.</p>
+            </div>
+        </a>
+        <a href="series/what-is-agi/" class="carousel-card">
+            <div class="card-content">
+                <div class="card-icon">🤖</div>
+                <h3>¿Qué es la AGI?</h3>
+                <p>Desmitificando la Inteligencia Artificial General. Definiciones y realidad.</p>
+            </div>
+        </a>
+        <a href="series/scripts-to-llm/" class="carousel-card">
+            <div class="card-content">
+                <div class="card-icon">💻</div>
+                <h3>Scripts a LLM</h3>
+                <p>La evolución del código: de la automatización básica a la IA generativa.</p>
+            </div>
+        </a>
+    </div>
 </div>

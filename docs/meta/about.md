@@ -5,7 +5,7 @@ summary: Who I am, what this project is, and how to support more deep analyses.
 
 # About this project
 
-I’m {{ your short bio in 2–3 lines }}.
+I’m [Your short bio in 2–3 lines].
 
 This site is a long-term project to document the backbone of how we got
 from tally sticks and Euclidean proofs to transformers, reasoning models

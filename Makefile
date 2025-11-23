@@ -13,7 +13,7 @@ install: $(MKDOCS)
 $(MKDOCS):
 	python3 -m venv $(VENV)
 	$(PIP) install --upgrade pip
-	$(PIP) install mkdocs mkdocs-material pymdown-extensions
+	$(PIP) install mkdocs mkdocs-material pymdown-extensions mkdocs-macros-plugin
 
 # Compilar la web a HTML estático (en ./site)
 build: install
@@ -29,6 +29,10 @@ serve: install
 # 3) Levanta el servidor local
 build-and-update: build
 	$(MKDOCS) serve
+
+# Servir con soporte para "Range requests" (necesario para seek en video/audio)
+serve-media: build
+	$(PYTHON) serve_with_ranges.py
 
 # Desplegar a GitHub Pages (gh-pages)
 deploy: build

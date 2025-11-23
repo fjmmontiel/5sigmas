@@ -30,13 +30,12 @@ Al mismo tiempo, **Alonzo Church** llegó a resultados similares usando el Cálc
 
 Esto definió los límites físicos de la computación. Todo ordenador, desde el ENIAC hasta tu iPhone y los superordenadores de la NSA, es equivalente a una Máquina de Turing. Son más rápidos, pero no más poderosos lógicamente.
 
-La ironía es suprema: para demostrar que la matemática tiene límites (Gödel) y que no todo es computable (Turing), tuvimos que 
----
-
-[Siguiente: Primeras neuronas de metal >](2-03-neuronas-metal.md){ .md-button .md-button--primary }
-
 ## Referencias
 
 - [Kurt Gödel - Incompleteness Theorems](https://plato.stanford.edu/entries/goedel-incompleteness/)
 - [Alan Turing - The Enigma](https://www.turing.org.uk/)
 - [The Church-Turing Thesis](https://plato.stanford.edu/entries/church-turing/)
+
+---
+
+[Siguiente: Primeras neuronas de metal >](2-03-neuronas-metal.md){ .md-button .md-button--primary }

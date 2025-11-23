@@ -16,13 +16,12 @@ LeCun propone **JEPA (Joint Embedding Predictive Architecture)**. En lugar de pr
 
 El camino hacia la Inteligencia Artificial General (AGI) probablemente requiera fusionar ambos mundos: la capacidad de razonamiento simbólico y lingüístico de los LLMs (Sistema 2) con la intuición física y el sentido común de los Modelos del Mundo (Sistema 1).
 
-Estamos intentando construir una mente que no solo hable sobre el mundo, sino que pueda vivir en él, 
----
-
-[Siguiente: Bonus - Scaling & Energy >](04-scaling-energy-limits.md){ .md-button .md-button--primary }
-
 ## Referencias
 
 - [Yann LeCun: A Path Towards Autonomous Machine Intelligence](https://openreview.net/pdf?id=BZ5a1r-kVsf)
 - [Video Generation Models as World Simulators (Sora)](https://openai.com/research/video-generation-models-as-world-simulators)
 - [Introduction to Joint Embedding Predictive Architectures (JEPA)](https://ai.meta.com/blog/yann-lecun-ai-model-i-jepa/)
+
+---
+
+[Siguiente: Bonus - Scaling & Energy >](04-scaling-energy-limits.md){ .md-button .md-button--primary }

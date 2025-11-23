@@ -34,13 +34,12 @@ Comenzó el **AI Winter**. Durante los años 70 y 80, el enfoque conexionista (r
 
 Funcionaban bien para problemas muy acotados (diagnóstico médico, química), pero eran frágiles. No podían aprender, no tenían sentido común y fallaban estrepitosamente ante la ambigüedad del mundo real.
 
-La IA necesitaba una nueva idea. O mejor dicho, 
----
-
-[Siguiente: Acto III - WW qué?! >](3-01-ww-que.md){ .md-button .md-button--primary }
-
 ## Referencias
 
 - [A Logical Calculus of the Ideas Immanent in Nervous Activity (1943)](https://www.cs.cmu.edu/~./epxing/Class/10715/reading/McCulloch.and.Pitts.pdf)
 - [Frank Rosenblatt's Perceptron](https://news.cornell.edu/stories/2019/09/professors-perceptron-paved-way-ai-60-years-too-soon)
 - [Minsky and Papert: Perceptrons](https://mitpress.mit.edu/9780262631112/perceptrons/)
+
+---
+
+[Siguiente: Acto III - WW qué?! >](3-01-ww-que.md){ .md-button .md-button--primary }

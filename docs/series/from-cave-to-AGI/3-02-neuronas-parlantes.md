@@ -18,13 +18,12 @@ OpenAI tomó esta arquitectura y apostó todo a una hipótesis simple: **Scaling
 - **GPT-2 (2019)**: 1.5 mil millones. Escribía ensayos coherentes (y aterradores).
 - **GPT-3 (2020)**: 175 mil millones. El salto cuántico.
 
-GPT-3 no fue programado para traducir, resumir o programar. Fue entrenado solo para una cosa: **predecir la siguiente palabra**. Pero al aprender a predecir la siguiente palabra en todo el internet, aprendió de facto a razonar, traducir y codificar. 
----
-
-[Siguiente: ¿Modelos que «razonan»? >](3-03-modelos-razonan.md){ .md-button .md-button--primary }
-
 ## Referencias
 
 - [Attention Is All You Need (2017)](https://arxiv.org/abs/1706.03762)
 - [Language Models are Few-Shot Learners (GPT-3)](https://arxiv.org/abs/2005.14165)
 - [OpenAI GPT-2: Better Language Models](https://openai.com/research/better-language-models)
+
+---
+
+[Siguiente: ¿Modelos que «razonan»? >](3-03-modelos-razonan.md){ .md-button .md-button--primary }
