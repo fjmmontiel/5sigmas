@@ -47,7 +47,7 @@ Save.
 
 GitHub will deploy, and you should see something like:
 
-“Your site is ready to be published at https://YOUR_USERNAME.github.io/from-cave-to-agi/.” 
+“Your site is ready to be published at https://5sigmas.com/.” 
 
 At this point your site is live.
 

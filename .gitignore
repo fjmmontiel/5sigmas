@@ -1,5 +1,14 @@
 .venv/
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
 site/
 .DS_Store
+env/
+venv/
+ENV/
+.env
+.python-version
+.vscode/
+.idea/
+documentacion_interna/
