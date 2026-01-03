@@ -1,16 +1,20 @@
 # De las muescas en hueso al número: cómo nace la abstracción
 
-Imagina que eres el responsable de “datos” de un reino hace 3.500 años. No tienes datalake, ni ERP, ni dashboards. Tienes el Nilo, campos que cambian de forma cada crecida, graneros llenos o vacíos y cientos de personas que esperan su ración de grano.
+La IA no inventó el "token" ni la "memoria externa". 
+Hace 20.000 años ya externalizábamos conceptos fuera del cerebro humano, el primero de los que hicimos fue el número.
 
-Un escriba camina por los campos recién descubiertos tras la inundación. Mide con una cuerda de nudos, anota en un papiro cuántos codos tiene cada parcela y calcula cuánta cosecha corresponde a cada familia. A cientos de kilómetros y miles de años atrás, alguien ya había hecho algo parecido, pero con recursos mucho más pobres: un hueso de animal con muescas cuidadosamente ordenadas, el hueso de Ishango, posiblemente usado para llevar cuentas de días, ciclos de luna o presas cazadas.
+Imagina que eres el responsable de “datos” de un reino hace 3.500 años. No tienes datalake, ni ERP, ni dashboards. Tienes el Nilo, campos que cambian de forma con cada crecida, graneros llenos o vacíos y cientos de personas que esperan su ración de grano.
+
+Un escriba camina por los campos tras la inundación del río. Mide con una cuerda de nudos, anota en un papiro cuántos codos tiene cada parcela y calcula cuánta cosecha corresponde a cada familia. A cientos de kilómetros y miles de años atrás, alguien ya había hecho algo parecido, pero con recursos mucho más pobres: un hueso de animal con muescas cuidadosamente ordenadas, el hueso de Ishango, posiblemente usado para llevar cuentas de días, ciclos de luna o presas cazadas.
 
 En ambos casos ocurre lo mismo que hacemos hoy con IA: externalizar memoria y aplicar reglas sobre símbolos para tomar decisiones.
 
----
 
 ## Del hueso al número
 
 Lo primero que aparece no son los números tal y como los entendemos hoy, sino algo más modesto: marcas.
+
+![image](../images/Ishango_bone_(cropped).jpg)
 
 En el Paleolítico tardío, objetos como el hueso de Ishango muestran series de muescas agrupadas en columnas y patrones. Podemos discutir si representan ciclos lunares, series numéricas o algo más simbólico, pero hay tres gestos claros:
 
@@ -18,11 +22,11 @@ En el Paleolítico tardío, objetos como el hueso de Ishango muestran series de 
 2. Esas marcas no son aleatorias: se ordenan en grupos, columnas, repeticiones.
 3. Esa estructura permite volver días o semanas después y “releer” lo que pasó.
 
-Es el primer paso de cualquier sistema de cómputo: fijar un estado del mundo en un soporte físico para poder operar sobre él más tarde.
+Es el primer paso de cualquier sistema reutilizable: fijar un estado del mundo en un soporte físico para poder operar sobre él más tarde.
 
-Miles de años después, en el Creciente Fértil, ese gesto se vuelve sistemático. Aparecen pequeñas fichas de arcilla —tokens— que codifican bienes: una forma para el grano, otra para el aceite, otra para el ganado. El número de fichas indica cuánta cantidad hay. Durante siglos, el “sistema de información” de una ciudad se reduce a eso: cestas con fichas que representan deudas, contratos y entregas.
+Miles de años después, ese gesto se vuelve sistemático. Aparecen pequeñas fichas de arcilla (tokens) que codifican bienes: una forma para el grano, otra para el aceite, otra para el ganado. El número de fichas indica cuánta cantidad hay. Durante siglos, el “sistema de información” de una ciudad se reduce a eso: cestas con fichas que representan deudas, contratos y entregas.
 
-El salto decisivo llega cuando las fichas dejan de circular como objetos y empiezan a dejar su huella sobre tablillas de arcilla. Primero se guardan dentro de esferas de barro (bullae) que llevan impresas fuera el resumen del contenido. Luego se presionan directamente sobre la superficie. La ciudad ya no necesita la ficha: le basta el signo. La cantidad se ha vuelto **símbolo**.
+El salto decisivo llega cuando las fichas dejan de circular como objetos y empiezan a dejar su huella sobre tablillas de arcilla. Primero se guardan dentro de esferas de barro que llevan impresas fuera el resumen del contenido. Luego se presionan directamente sobre la superficie. La ciudad ya no necesita la ficha: le basta el signo. La cantidad se ha vuelto **símbolo**.
 
 Ahí, discretamente, nace el número.
 
@@ -165,6 +169,12 @@ Allí, las figuras geométricas dejan de ser solo planos de obra para convertirs
 
 Ese será el tema del siguiente post del Acto I: cómo pasamos de recetas útiles a sistemas axiomáticos y qué tiene que ver eso con la manera en que hoy pensamos en demostraciones automáticas, lógica, verificación de software y, en última instancia, límites formales de cualquier AGI.
 
+## Conclusión
+
+La abstracción no es un lujo intelectual, es una herramienta de eficiencia. Pasamos de contar con piedras a contar con tokens digitales por la misma razón: **coste y escala**.
+
+**Acción**: Revisa tu arquitectura de IA. ¿Estás confiando demasiado en la "memoria" interna del modelo (que es falible) en lugar de construir sistemas robustos de memoria externa (RAG, bases de datos)?
+**Reflexión**: Tu "prompt" es la tablilla moderna. Asegúrate de que las instrucciones sean tan claras como las de un escriba egipcio.
 
 ## Referencias
 

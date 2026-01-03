@@ -1,6 +1,6 @@
 site_name: 5sigmas - Divulgación de IA sin hype
 site_description: Technical history of math, philosophy and engineering on the road to AGI
-site_url: ""      # fill when you go public (GitHub Pages URL or custom domain)
+site_url: "https://5sigmas.com"
 theme:
   name: material
   language: es
