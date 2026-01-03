@@ -38,6 +38,14 @@ serve-media: build
 deploy: build
 	$(MKDOCS) gh-deploy --clean
 
+# Rutina completa de publicación: Git + Deploy
+# Uso: make publish msg="Mi mensaje de commit"
+publish: build
+	git add .
+	git commit -m "$(if $(msg),$(msg),Update content $(shell date '+%Y-%m-%d %H:%M:%S'))"
+	git push origin main
+	$(MKDOCS) gh-deploy --clean
+
 # Limpiar artefactos
 clean:
 	rm -rf $(VENV) site
