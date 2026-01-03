@@ -114,6 +114,69 @@
     border-color: var(--md-primary-fg-color);
 }
 
+.carousel-card.locked {
+    filter: grayscale(0.5) opacity(0.8);
+    cursor: default;
+}
+
+.card-status {
+    font-size: 0.7rem;
+    font-weight: 700;
+    margin-top: 12px;
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.card-status.active {
+    background: rgba(16, 185, 129, 0.2);
+    color: #10B981;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.card-status.soon {
+    background: rgba(156, 163, 175, 0.2);
+    color: #9CA3AF;
+    border: 1px solid rgba(156, 163, 175, 0.3);
+}
+
+/* Infinite scroll correction: 50% shift for duplicate set */
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(calc(-50% - 10px));
+    }
+}
+
+/* Headings con toque editorial */
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap");
+
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3 {
+    font-family: "Space Grotesk", "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    letter-spacing: -0.02em;
+}
+
+.md-typeset {
+    line-height: 1.75;
+}
+
+/* Acento: más “serio” (links señal, CTA acción) */
+:root {
+    --md-typeset-a-color: #17BEBB;
+}
+
+.md-typeset a:hover {
+    color: #F59E0B;
+}
+
+/* --- Estilos previos --- */
 .card-icon {
     font-size: 48px;
     margin-bottom: 16px;

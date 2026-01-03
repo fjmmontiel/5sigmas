@@ -1,35 +1,43 @@
----
 title: About
-summary: Who I am, what this project is, and how to support more deep analyses.
+description: 5sigmas es un proyecto editorial para entender la IA sin hype,desde sus fundamentos hasta sistemas modernos.
+
+# About
+
+**5sigmas** es un proyecto editorial para reconstruir, desde los fundamentos como hemos llegado a la IA moderna. 
+
+No es un escaparate de demos. Es un archivo vivo de **ideas**, **métodos** y **límites**: matemática, ingeniería y filosofía, conectados de forma que se puedan consumir de forma sencilla y cómoda.
+
 ---
 
-# About this project
+## Qué encontrarás aquí
 
-I’m [Your short bio in 2–3 lines].
+- **Series largas** (como *De las cavernas a la AGI*) pensadas para leerse en orden, con progresión conceptual.
 
-This site is a long-term project to document the backbone of how we got
-from tally sticks and Euclidean proofs to transformers, reasoning models
-and AI datacenters.
+- **Ensayos técnicos**: explicaciones claras, sin saltos mágicos, con contexto histórico cuando aporta comprensión.
 
-## Support and custom analysis
+---
 
-If you find this valuable and want to support more deep dives
-(on specific models, datacenter economics, AGI timelines, etc.),
-you can donate here. You can also send topic requests along with your donation.
+## Autor / Principal contributor
 
-<!-- PayPal Donate button -->
-<form action="https://www.paypal.com/donate" method="post" target="_top">
-  <input type="hidden" name="hosted_button_id" value="YOUR_HOSTED_BUTTON_ID" />
-  <input type="image"
-         src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif"
-         name="submit"
-         title="Donate with PayPal"
-         alt="Donate with PayPal button" />
-  <img alt="" src="https://www.paypal.com/en_ES/i/scr/pixel.gif" width="1" height="1" />
-</form>
+Soy **Fran Maldonado** doble graduado en Física y Matemáticas.
+Trabajo diseñando y construyendo sistemas de IA en tiempo real, abarcando desde la identificación de necesidades de negocio hasta la implantación y escalado masivo.
+Escribo para ordenar lo que normalmente queda disperso entre papers, repositorios, benchmarks y conversaciones a medias.
 
-If you want to propose a custom analysis:
+5sigmas es mi espacio para publicar mi visión de un manual para navegar el hype de la IA, que sirva tanto para aprender como para tomar decisiones con impacto real.
 
-- Add a note in the donation form, **or**
-- Email me at `you@domain.com`, **or**
-- Open an issue in the GitHub repo with your request.
+
+- LinkedIn: www.linkedin.com/in/fjmm1998
+
+---
+
+## Colaboraciones y propuestas
+
+Si quieres proponer una colaboración, una propuesta de artículo o serie:
+
+**contacto@5sigmas.com**
+
+---
+
+## Support
+
+Si este trabajo te aporta valor y quieres apoyar más análisis (deep dives, comparativas técnicas, revisiones), puedes hacerlo a través de la sección de soporte del sitio.

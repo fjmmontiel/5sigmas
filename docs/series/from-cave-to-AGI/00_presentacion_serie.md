@@ -6,7 +6,7 @@ Exploraremos cómo la necesidad de contar ovejas llevó al cálculo, cómo el de
 
 ## Escucha el podcast de la serie
 
-{{ podcast_player('from-cave-to-agi') }}
+{{ podcast_player('from-cave-to-AGI') }}
 
 ## Vídeos
 

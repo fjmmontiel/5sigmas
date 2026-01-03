@@ -29,60 +29,68 @@ Aquí no encontrarás las noticias de última hora, encontrarás *contexto*.
                 <div class="card-icon">🧠</div>
                 <h3>De las cavernas a la AGI</h3>
                 <p>Un viaje histórico desde los primeros símbolos hasta la inteligencia artificial generativa.</p>
+                <span class="card-status active">Disponible</span>
             </div>
         </a>
         <!-- Card 2 -->
-        <a href="series/happiness-welfare-energy/" class="carousel-card">
+        <div class="carousel-card locked">
             <div class="card-content">
                 <div class="card-icon">💓</div>
                 <h3>Felicidad y Energía</h3>
                 <p>La relación entre el consumo de energía, el desarrollo económico y el bienestar humano.</p>
+                <span class="card-status soon">Próximamente</span>
             </div>
-        </a>
+        </div>
         <!-- Card 3 -->
-        <a href="series/what-is-agi/" class="carousel-card">
+        <div class="carousel-card locked">
             <div class="card-content">
                 <div class="card-icon">🤖</div>
                 <h3>¿Qué es la AGI?</h3>
                 <p>Desmitificando la Inteligencia Artificial General. Definiciones y realidad.</p>
+                <span class="card-status soon">Próximamente</span>
             </div>
-        </a>
+        </div>
         <!-- Card 4 -->
-        <a href="series/scripts-to-llm/" class="carousel-card">
+        <div class="carousel-card locked">
             <div class="card-content">
                 <div class="card-icon">💻</div>
                 <h3>Scripts a LLM</h3>
                 <p>La evolución del código: de la automatización básica a la IA generativa.</p>
+                <span class="card-status soon">Próximamente</span>
             </div>
-        </a>
+        </div>
         <!-- Duplicate cards for infinite scroll effect -->
         <a href="series/from-cave-to-AGI/00_presentacion_serie/" class="carousel-card">
             <div class="card-content">
                 <div class="card-icon">🧠</div>
                 <h3>De las cavernas a la AGI</h3>
                 <p>Un viaje histórico desde los primeros símbolos hasta la inteligencia artificial general.</p>
+                <span class="card-status active">Disponible</span>
             </div>
         </a>
-        <a href="series/happiness-welfare-energy/" class="carousel-card">
+        <div class="carousel-card locked">
             <div class="card-content">
                 <div class="card-icon">💓</div>
                 <h3>Felicidad y Energía</h3>
                 <p>La relación entre el consumo de energía, el desarrollo económico y el bienestar humano.</p>
+                <span class="card-status soon">Próximamente</span>
             </div>
-        </a>
-        <a href="series/what-is-agi/" class="carousel-card">
+        </div>
+        <div class="carousel-card locked">
             <div class="card-content">
                 <div class="card-icon">🤖</div>
                 <h3>¿Qué es la AGI?</h3>
                 <p>Desmitificando la Inteligencia Artificial General. Definiciones y realidad.</p>
+                <span class="card-status soon">Próximamente</span>
             </div>
-        </a>
-        <a href="series/scripts-to-llm/" class="carousel-card">
+        </div>
+        <div class="carousel-card locked">
             <div class="card-content">
                 <div class="card-icon">💻</div>
                 <h3>Scripts a LLM</h3>
                 <p>La evolución del código: de la automatización básica a la IA generativa.</p>
+                <span class="card-status soon">Próximamente</span>
             </div>
-        </a>
+        </div>
     </div>
 </div>
