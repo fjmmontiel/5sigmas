@@ -20,7 +20,7 @@ Explora nuestras series técnicas sobre inteligencia artificial, historia de la 
 
     [:octicons-arrow-right-24: Próximamente](happiness-welfare-energy/index.md)
 
--   :material-robot: **¿Qué cojones es la AGI?**
+-   :material-robot: **La IA, IA Generativa y AGI**
 
     ---
 
@@ -28,11 +28,12 @@ Explora nuestras series técnicas sobre inteligencia artificial, historia de la 
 
     [:octicons-arrow-right-24: Próximamente](what-is-agi/index.md)
 
--   :material-code-braces: **Cómo llegamos de scripts a un LLM**
+-   :material-code-braces: **Modelos razonadores, tiempo físico y paralelización**
 
     ---
 
-    Un viaje técnico desde los primeros scripts de automatización hasta los modelos de lenguaje masivos. La evolución del código y la abstracción.
+    Descubre por qué la IA necesita tiempo para "pensar" de verdad. Veremos por qué no basta con que las máquinas escriban más rápido y cómo el razonamiento profundo se enfrenta a los límites del tiempo real.
+    
 
     [:octicons-arrow-right-24: Próximamente](scripts-to-llm/index.md)
 
