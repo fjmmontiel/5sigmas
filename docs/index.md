@@ -6,17 +6,15 @@ hide:
 # 5sigmas - Divulgación de IA sin hype
 ---
 ### ¿Qué es "5sigmas"?
-Es un proyecto que nace de la curiosidad que sentimos al ver cómo la IA se ha convertido en un fenómeno de masas, algo incluso afectando a la cultura popular. Esta tecnología es capaz de ayudarnos a resolver los verdaderos problemas de la humanidad, desde la energía, salud, agricultura y hasta la educación.
+Es un proyecto que nace de la curiosidad que sentimos al ver cómo la IA se ha convertido en un fenómeno de masas. Esta tecnología es capaz de ayudarnos a resolver los verdaderos retos de la humanidad, desde la energía, salud, agricultura y hasta la educación.
 
-Pero no viene de gratis, acarrean la proliferación de los llamados "gurús". 
-Los que son expertos en ChatGPT (incluso desde el 2012...), los que lo ven venir todo y cuando se equivocan simplemente borran el historial...
-
-Además, la generación de contenido puramente generado por IA hace más necesario que nunca que simplifiquemos los mensajes, que comuniquemos la esencia de la información.
+Pero está tecnología no viene gratis, acarrean la proliferación de los llamados "gurús". 
+Los que son expertos en ChatGPT (incluso desde el 2012), los que lo ven venir todo y cuando se equivocan simplemente borran el historial.
 
 ### ¿Por qué "5sigmas"?
-En física, un descubrimiento se considera confirmado cuando alcanza una significancia estadística de **5 sigma** (probabilidad de error de 1 en 3.5 millones). 
+En física, un descubrimiento se considera confirmado cuando alcanza una significancia estadística de **5 sigmas** (probabilidad de error de 1 en 3.5 millones). 
 
-Este proyecto busca esa misma rigurosidad: separar el *hype* del conocimiento fundamental, ofreciendo una perspectiva técnica y profunda sobre la inteligencia artificial.
+Este proyecto busca ofrecer esa misma rigurosidad, poder separar el *hype* del conocimiento fundamental.
 
 Aquí no encontrarás las noticias de última hora, encontrarás *contexto*.
 
@@ -36,7 +34,7 @@ Aquí no encontrarás las noticias de última hora, encontrarás *contexto*.
         <div class="carousel-card locked">
             <div class="card-content">
                 <div class="card-icon">💓</div>
-                <h3>Felicidad y Energía</h3>
+                <h3>IA, Felicidad, Energía</h3>
                 <p>La relación entre el consumo de energía, el desarrollo económico y el bienestar humano.</p>
                 <span class="card-status soon">Próximamente</span>
             </div>

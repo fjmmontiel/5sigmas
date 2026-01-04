@@ -10,10 +10,10 @@ Esta serie explora la relación fundamental entre el consumo de energía, el des
 4. **Hacia una economía post-escasez**: El papel de la IA generativa.
 
 ---
-
+<!-- 
 ## Escucha el podcast de la serie
 
-{{ podcast_player('happiness-welfare-energy') }}
+{{ podcast_player('happiness-welfare-energy') }} -->
 
 ## Contenido
 

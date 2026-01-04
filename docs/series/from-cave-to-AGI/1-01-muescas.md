@@ -1,6 +1,6 @@
 # De las muescas en hueso al número: cómo nace la abstracción
 
-La IA no inventó el "token" ni la "memoria externa". 
+Con la IA no se inventó el "token" ni la "memoria externa". 
 Hace 20.000 años ya externalizábamos conceptos fuera del cerebro humano, el primero de los que hicimos fue el número.
 
 Imagina que eres el responsable de “datos” de un reino hace 3.500 años. No tienes datalake, ni ERP, ni dashboards. Tienes el Nilo, campos que cambian de forma con cada crecida, graneros llenos o vacíos y cientos de personas que esperan su ración de grano.
@@ -14,7 +14,7 @@ En ambos casos ocurre lo mismo que hacemos hoy con IA: externalizar memoria y ap
 
 Lo primero que aparece no son los números tal y como los entendemos hoy, sino algo más modesto: marcas.
 
-![image](../images/Ishango_bone_(cropped).jpg)
+![image](images/Ishango_bone_(cropped).jpg)
 
 En el Paleolítico tardío, objetos como el hueso de Ishango muestran series de muescas agrupadas en columnas y patrones. Podemos discutir si representan ciclos lunares, series numéricas o algo más simbólico, pero hay tres gestos claros:
 
@@ -183,5 +183,5 @@ La abstracción no es un lujo intelectual, es una herramienta de eficiencia. Pas
 - [History of Number Abstraction](https://historymath.com/number-abstraction)
 
 ---
-
-[Siguiente: El proyecto griego >](1-02-griego.md){ .md-button .md-button--primary }
+<!-- 
+[Siguiente: El proyecto griego >](1-02-griego.md){ .md-button .md-button--primary } -->

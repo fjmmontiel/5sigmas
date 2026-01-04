@@ -11,9 +11,9 @@ Un viaje técnico desde los primeros scripts de automatización hasta los modelo
 
 ---
 
-## Escucha el podcast de la serie
+<!-- ## Escucha el podcast de la serie
 
-{{ podcast_player('scripts-to-llm') }}
+{{ podcast_player('scripts-to-llm') }} -->
 
 ## Contenido
 
