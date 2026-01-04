@@ -1,4 +1,4 @@
-site_name: 5sigmas - Divulgación de IA sin hype
+site_name: 5sigmas - Divulgación sin hype
 site_description: Technical history of math, philosophy and engineering on the road to AGI
 site_url: "https://5sigmas.com"
 theme:
@@ -38,13 +38,13 @@ extra:
 
 nav:
   - Home: index.md
-  - Series: series/index.md
-
-  - De las cavernas a la AGI:
-      - Presentación: series/from-cave-to-AGI/00_presentacion_serie.md
-      - "Acto I: Inventar símbolos":
-          - "De las muescas en hueso al número: cómo nace la abstracción (< 1000 a. C.)": series/from-cave-to-AGI/1-01-muescas.md
-      #     - "El proyecto griego (1000 a. C. – año 0)": series/from-cave-to-AGI/1-02-griego.md
+  - Series:
+      - Todas las series: series/index.md
+      - De las cavernas a la AGI:
+          - Presentación: series/from-cave-to-AGI/00_presentacion_serie.md
+          - "Acto I: Inventar símbolos":
+              - "De las muescas en hueso al número: cómo nace la abstracción (< 1000 a. C.)": series/from-cave-to-AGI/1-01-muescas.md
+      #     -  "El proyecto griego (1000 a. C. – año 0)": series/from-cave-to-AGI/1-02-griego.md
       #     - "Cero, álgebra y relojes (año 0 – 1500)": series/from-cave-to-AGI/1-03-cero-algebra.md
       #     - "Del cálculo al mundo como sistema dinámico (1500–1800)": series/from-cave-to-AGI/1-04-calculo-mundo.md
       # - "Acto II: Enseñar a las máquinas":
@@ -56,11 +56,10 @@ nav:
       #     - "Primeras neuronas parlantes": series/from-cave-to-AGI/3-02-neuronas-parlantes.md
       #     - "¿Modelos que «razonan»?": series/from-cave-to-AGI/3-03-modelos-razonan.md
       #     - "Modelos del mundo": series/from-cave-to-AGI/3-04-modelos-mundo.md
-      # - "Bonus: Scaling & Energy": series/from-cave-to-AGI/04-scaling-energy-limits.md
-  - La felicidad, estado de bienestar y energía: series/happiness-welfare-energy/index.md
-  - La IA, IA Generativa y AGI:
-      - Introducción: series/what-is-agi/index.md
-      # - "Conceptos Básicos: IA, IAG y Ciclo de Vida": series/what-is-agi/01-conceptos-basicos.md
+      # - La felicidad, estado de bienestar y energía: series/happiness-welfare-energy/index.md
+      - La IA, IA Generativa y AGI:
+          - Presentación: series/basicos-IA-IAG/00_presentacion_serie.md
+  - Hoja de ruta: roadmap.md
   - About: meta/about.md
 markdown_extensions:
   - meta
@@ -68,12 +67,16 @@ markdown_extensions:
   - footnotes
   - toc:
       permalink: true
-  - pymdownx.highlight
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
           class: mermaid
-          format: !!python/name:pymdownx.superfences.fence_div_format
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      auto_title: true
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
   - pymdownx.arithmatex:
       generic: true   # hace que MathJax procese los bloques marcados
   - attr_list
@@ -83,6 +86,7 @@ markdown_extensions:
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
 
 extra_javascript:
+  - javascripts/external-links.js
   - https://unpkg.com/mermaid@10/dist/mermaid.min.js
   - javascripts/mermaid-init.js
   - javascripts/mathjax.js

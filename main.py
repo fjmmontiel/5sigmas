@@ -1,5 +1,7 @@
 import os
 import yaml
+import math
+import re
 
 def define_env(env):
     """
@@ -85,3 +87,48 @@ def define_env(env):
             """
         html += '</div>'
         return html
+
+    @env.macro
+    def reading_time():
+        """
+        Returns a string with the estimated reading time of the current page.
+        """
+        markdown = env.markdown
+        if not markdown:
+            return ""
+
+        # Count words (simple implementation)
+        clean_text = re.sub(r'[#*`\-]', '', markdown)
+        words = len(clean_text.split())
+        
+        # Average reading speed: 200 words per minute
+        time = math.ceil(words / 200)
+        
+        if time < 1:
+            time = 1
+            
+        return f"> ⏱️ **Tiempo de lectura:** {time} min\n\n"
+
+def on_pre_page_macros(env):
+    """
+    Hook to automatically prepend the reading_time macro to all pages.
+    """
+    # Only for pages in series/ directory
+    if not env.page.file.src_path.lower().startswith('series/'):
+        return
+
+    if env.page.is_homepage:
+        return
+
+    # Prepend the macro call if not already present
+    macro_call = "{{ reading_time() }}"
+    if macro_call not in env.markdown:
+        # Match the first H1 title (# Title)
+        match = re.search(r'^#\s+.*$', env.markdown, re.MULTILINE)
+        if match:
+            # Insert after the title line
+            pos = match.end()
+            env.markdown = env.markdown[:pos] + "\n\n" + macro_call + env.markdown[pos:]
+        else:
+            # Fallback to prepending if no H1 found
+            env.markdown = macro_call + "\n\n" + env.markdown
