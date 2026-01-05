@@ -596,6 +596,217 @@
     transition: all 0.3s ease;
 }
 
-/* Roadmap Component Styles - Clean Snake/Z-Layout */
+/* --- Unified Roadmap & Series Timeline --- */
+.roadmap-unified {
+    position: relative;
+    max-width: 900px;
+    margin: 60px auto;
+    padding: 40px 20px;
+    isolation: isolate;
+}
 
-/* Roadmap styles removed - now unified in snippets/roadmap-container.html */
+/* Timeline Vertical Line */
+.roadmap-line {
+    position: absolute;
+    top: 40px;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    z-index: 0;
+}
+
+.roadmap-rail {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+[data-md-color-scheme="default"] .roadmap-rail {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.roadmap-progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 0%;
+    /* JS animates this */
+    background: linear-gradient(to bottom, #26A69A, #FFB343, #324AB2);
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(38, 166, 154, 0.4);
+    transition: height 0.1s linear;
+}
+
+/* Steps Wrapper */
+.roadmap-step {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin-bottom: 80px;
+    width: 100%;
+    z-index: 1;
+}
+
+.roadmap-step:last-child {
+    margin-bottom: 0;
+}
+
+/* Marker Circle */
+.roadmap-marker {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 40px;
+    background: #0f172a;
+    border: 3px solid #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    color: #fff;
+    z-index: 2;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+[data-md-color-scheme="default"] .roadmap-marker {
+    background: #fff;
+    border-color: #e2e8f0;
+    color: #334155;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Series Card Adaptation for Roadmap */
+.roadmap-step .series-card {
+    width: 45%;
+    height: 320px;
+    /* Consistent height */
+    position: relative;
+    margin: 0;
+    /* reset grid margin if any */
+}
+
+/* Desktop Logic (Dual Column) */
+@media (min-width: 768px) {
+    .roadmap-step:nth-child(even) {
+        flex-direction: row;
+    }
+
+    .roadmap-step:nth-child(odd) {
+        flex-direction: row-reverse;
+    }
+
+    /* Left Side Cards (Odd Steps in row-reverse = Right visual side? No wait)
+       Row-reverse means flex-start is right. 
+       Let's use specific selector logic:
+    */
+
+    .roadmap-step:nth-child(even) .series-card {
+        margin-right: auto;
+        /* Push to left */
+    }
+
+    .roadmap-step:nth-child(odd) .series-card {
+        margin-left: auto;
+        /* Push to right */
+    }
+
+    /* Connections */
+    .roadmap-step:nth-child(even) .series-card::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        right: -11%;
+        /* Connect to center line */
+        width: 11%;
+        height: 2px;
+        background: rgba(255, 255, 255, 0.1);
+        pointer-events: none;
+    }
+
+    [data-md-color-scheme="default"] .roadmap-step:nth-child(even) .series-card::after {
+        background: rgba(0, 0, 0, 0.1);
+    }
+
+    .roadmap-step:nth-child(odd) .series-card::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: -11%;
+        width: 11%;
+        height: 2px;
+        background: rgba(255, 255, 255, 0.1);
+        pointer-events: none;
+    }
+
+    [data-md-color-scheme="default"] .roadmap-step:nth-child(odd) .series-card::after {
+        background: rgba(0, 0, 0, 0.1);
+    }
+}
+
+/* Mobile Logic (Single Column) */
+@media (max-width: 767px) {
+    .roadmap-unified {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .roadmap-line {
+        left: 20px;
+        transform: none;
+    }
+
+    .roadmap-marker {
+        left: 20px;
+        transform: translateX(-50%);
+    }
+
+    .roadmap-step {
+        flex-direction: column;
+        align-items: flex-end;
+        /* Push card right */
+    }
+
+    .roadmap-step .series-card {
+        width: calc(100% - 50px);
+        margin-left: 50px;
+        /* Space for marker */
+        margin-right: 0;
+    }
+
+    .roadmap-step .series-card::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: -30px;
+        width: 30px;
+        height: 2px;
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    [data-md-color-scheme="default"] .roadmap-step .series-card::before {
+        background: rgba(0, 0, 0, 0.1);
+    }
+}
+
+/* Animations Logic */
+.rm-anim-ready .series-card,
+.rm-anim-ready .roadmap-marker {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.rm-anim-ready .is-visible .series-card,
+.rm-anim-ready .is-visible .roadmap-marker {
+    opacity: 1;
+    transform: translateY(0);
+}

@@ -1,5 +1,5 @@
 site_name: 5sigmas - Más señal, menos ruido
-site_description: Technical history of math, philosophy and engineering on the road to AGI
+site_description: La evolución de las matemáticas, filosofía e ingeniería en el camino al AGI
 site_url: "https://5sigmas.com"
 theme:
   name: material
@@ -37,8 +37,7 @@ extra:
       link: https://www.linkedin.com/in/fjmm1998/
 
 nav:
-  - Home: index.md
-  - Hoja de ruta: roadmap.md
+  - Inicio: index.md
   - Series:
       - La IA, IA Generativa y AGI:
           - Presentación: series/basicos-IA-IAG/00_presentacion_serie.md
@@ -58,8 +57,9 @@ nav:
       #     - "Primeras neuronas parlantes": series/from-cave-to-AGI/3-02-neuronas-parlantes.md
       #     - "¿Modelos que «razonan»?": series/from-cave-to-AGI/3-03-modelos-razonan.md
       #     - "Modelos del mundo": series/from-cave-to-AGI/3-04-modelos-mundo.md
+      #     - "Nuevas arquitecturas": Hablar de Titans, de Nested learning y el cambio de paradigma que suponen
       # - La felicidad, estado de bienestar y energía: series/happiness-welfare-energy/index.md
-  - About: meta/about.md
+  - Sobre mí: meta/about.md
 markdown_extensions:
   - meta
   - admonition
