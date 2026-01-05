@@ -1,9 +1,6 @@
 ---
 hide:
   - navigation
-  - toc
----
-# 5sigmas - Divulgación de IA sin hype
 ---
 ### ¿Qué es "5sigmas"?
 Es un proyecto que nace de la curiosidad que sentimos al ver cómo la IA se ha convertido en un fenómeno de masas. Esta tecnología es capaz de ayudarnos a resolver los verdaderos retos de la humanidad, desde la energía, salud, agricultura y hasta la educación.
@@ -18,11 +15,9 @@ En física, un descubrimiento se considera confirmado cuando alcanza una signifi
 Este proyecto busca ofrecer esa misma rigurosidad, poder separar el *hype* del conocimiento fundamental.
 
 Aquí no encontrarás las noticias de última hora, encontrarás *contexto*.
+## Qué encontrarás aquí
 
-### [Hoja de Ruta recomendada](roadmap.md/)
-Si quieres una guía clara y progresiva, empieza por la hoja de ruta: conecta conceptos básicos, historia y evolución, y la frontera actual hacia la AGI.
-
-### [Series](./series/index.md/)
+- **[Series largas](./series/index.md/)** (como *De las cavernas a la AGI*) pensadas para leerse en orden, con progresión conceptual.
 <div class="carousel-container">
     <div class="carousel-track">
         <!-- Card 1 -->
@@ -96,3 +91,7 @@ Si quieres una guía clara y progresiva, empieza por la hoja de ruta: conecta co
         </div>
     </div>
 </div>
+
+- **Ensayos técnicos**: explicaciones claras, sin saltos mágicos, con contexto histórico cuando aporta comprensión.
+
+- [Hoja de Ruta recomendada](roadmap.md/): Nuestra recomendación para el consumo del contenido para disminuir la curva de aprendizaje.

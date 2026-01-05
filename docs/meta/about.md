@@ -5,25 +5,6 @@ hide:
   - navigation
   - toc
 ---
-
-# About
-
-**5sigmas** es un proyecto para reconstruir, desde los fundamentos como hemos llegado a la IA moderna. 
-
-No es un escaparate de demos. Es un sitio vivo lleno de **ideas**, **métodos** y **límites**, desde sus fundamentos en matemáticas, ingeniería y filosofía.
-
----
-
-## Qué encontrarás aquí
-
-- **Series largas** (como *De las cavernas a la AGI*) pensadas para leerse en orden, con progresión conceptual.
-
-- **Ensayos técnicos**: explicaciones claras, sin saltos mágicos, con contexto histórico cuando aporta comprensión.
-
-- **Hoja de ruta**: Nuestra recomendación para el consumo del contenido para disminuir la curva de aprendizaje.
-
----
-
 ## Sobre mí
 
 Soy **Fran Maldonado** doble graduado en Física y Matemáticas.
