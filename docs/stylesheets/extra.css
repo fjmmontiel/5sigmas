@@ -255,17 +255,37 @@
 
 @media (prefers-color-scheme: light){
     .sigma-graphic{
-        --panel: rgba(10,20,40,.05);
-        --panel2: rgba(10,20,40,.08);
-        --text: rgba(10,20,40,.92);
-        --muted: rgba(10,20,40,.70);
-        --grid: rgba(10,20,40,.16);
-        --curve: rgba(10,20,40,.88);
-        --tail: rgba(230,60,90,.12);
-        --tailStroke: rgba(230,60,90,.85);
+        --panel: rgba(10,20,40,.12);
+        --panel2: rgba(10,20,40,.18);
+        --text: rgba(10,20,40,.96);
+        --muted: rgba(10,20,40,.78);
+        --grid: rgba(10,20,40,.32);
+        --curve: rgba(10,20,40,.96);
+        --tail: rgba(230,60,90,.20);
+        --tailStroke: rgba(210,40,70,.95);
         --accent: rgba(0,120,255,.90);
         --shadow: 0 12px 32px rgba(10,20,40,.14);
     }
+    .sigma-graphic .card{
+        border-color: rgba(10,20,40,.18);
+    }
+}
+
+[data-md-color-scheme="default"] .sigma-graphic{
+    --panel: rgba(15,23,42,.10);
+    --panel2: rgba(15,23,42,.16);
+    --text: rgba(15,23,42,.98);
+    --muted: rgba(15,23,42,.78);
+    --grid: rgba(15,23,42,.35);
+    --curve: rgba(15,23,42,.98);
+    --tail: rgba(220,38,38,.25);
+    --tailStroke: rgba(185,28,28,.95);
+    --accent: rgba(2,132,199,.95);
+    --shadow: 0 12px 32px rgba(15,23,42,.18);
+}
+
+[data-md-color-scheme="default"] .sigma-graphic .card{
+    border-color: rgba(15,23,42,.2);
 }
 
 .sigma-graphic .wrap{
