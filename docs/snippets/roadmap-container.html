@@ -1,0 +1,393 @@
+<!-- Roadmap Unified & Improved v2 -->
+
+<style>
+  /* Variables */
+  :root {
+    --rm-color-1: #26A69A;
+    --rm-color-2: #FFB343;
+    --rm-color-3: #324AB2;
+    --rm-bg: rgba(255, 255, 255, 0.03);
+    --rm-border: rgba(255, 255, 255, 0.1);
+  }
+
+  .roadmap-unified {
+    position: relative;
+    max-width: 900px;
+    margin: 60px auto;
+    padding: 40px 20px;
+    /* Ensure container establishes a new stacking context */
+    isolation: isolate;
+  }
+
+  /* HTML Line Implementation */
+  .roadmap-line {
+    position: absolute;
+    top: 40px;
+    bottom: 40px;
+    /* Aligns with content centers roughly */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    z-index: 0;
+  }
+
+  .roadmap-rail {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+  }
+
+  .roadmap-progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 0%;
+    /* JS will animate this */
+    background: linear-gradient(to bottom, #26A69A, #FFB343, #324AB2);
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(38, 166, 154, 0.4);
+    transition: height 0.1s linear;
+  }
+
+  /* Steps */
+  .roadmap-step {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin-bottom: 80px;
+    width: 100%;
+    z-index: 1;
+    /* Above line */
+  }
+
+  .roadmap-step:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Default Card Style */
+  .roadmap-card {
+    width: 45%;
+    background: var(--rm-bg);
+    border: 1px solid var(--rm-border);
+    border-radius: 16px;
+    padding: 24px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: transform 0.3s ease;
+    position: relative;
+  }
+
+  .roadmap-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255, 255, 255, 0.25);
+  }
+
+  /* Typography */
+  .roadmap-card h3 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    font-size: 1.4rem;
+    font-weight: 700;
+  }
+
+  .step-1 h3 {
+    color: var(--rm-color-1);
+  }
+
+  .step-2 h3 {
+    color: var(--rm-color-2);
+  }
+
+  .step-3 h3 {
+    color: var(--rm-color-3);
+  }
+
+  .roadmap-desc {
+    font-size: 0.95rem;
+    opacity: 0.85;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+  }
+
+  .roadmap-items {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.5rem 0;
+  }
+
+  .roadmap-items li {
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    opacity: 0.9;
+  }
+
+  .roadmap-items li::before {
+    content: "•";
+    color: currentColor;
+    font-size: 1.2em;
+  }
+
+  /* Markers */
+  .roadmap-marker {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 40px;
+    background: #0f172a;
+    border: 3px solid #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    z-index: 2;
+    /* Above card/line */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  }
+
+  .step-1 .roadmap-marker {
+    border-color: var(--rm-color-1);
+    color: var(--rm-color-1);
+  }
+
+  .step-2 .roadmap-marker {
+    border-color: var(--rm-color-2);
+    color: var(--rm-color-2);
+  }
+
+  .step-3 .roadmap-marker {
+    border-color: var(--rm-color-3);
+    color: var(--rm-color-3);
+  }
+
+  /* Desktop Logic (Dual Column) */
+  @media (min-width: 768px) {
+    .roadmap-step:nth-child(odd) {
+      flex-direction: row;
+    }
+
+    .roadmap-step:nth-child(even) {
+      flex-direction: row-reverse;
+    }
+
+    .roadmap-step:nth-child(odd) .roadmap-card {
+      margin-right: auto;
+      /* Push to left */
+      text-align: right;
+    }
+
+    .roadmap-step:nth-child(even) .roadmap-card {
+      margin-left: auto;
+      /* Push to right */
+      text-align: left;
+    }
+
+    /* Connectors */
+    .roadmap-step:nth-child(odd) .roadmap-card::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      right: -5%;
+      /* Bridge gap to center */
+      width: 5%;
+      height: 2px;
+      background: var(--rm-border);
+    }
+
+    .roadmap-step:nth-child(even) .roadmap-card::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: -5%;
+      width: 5%;
+      height: 2px;
+      background: var(--rm-border);
+    }
+
+    .roadmap-items li {
+      justify-content: flex-end;
+      /* Align lists for right-text cards */
+    }
+
+    .roadmap-step:nth-child(even) .roadmap-items li {
+      justify-content: flex-start;
+    }
+  }
+
+  /* Mobile Logic (Single Column) */
+  @media (max-width: 767px) {
+    .roadmap-unified {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+
+    /* Move line to left */
+    .roadmap-line {
+      left: 20px;
+      /* Fixed left position */
+      transform: none;
+    }
+
+    /* Move markers to left */
+    .roadmap-marker {
+      left: 20px;
+      transform: translateX(-50%);
+    }
+
+    .roadmap-step {
+      flex-direction: column;
+      align-items: flex-end;
+      /* Push card to right */
+    }
+
+    .roadmap-card {
+      width: calc(100% - 50px);
+      /* Full width minus marker space */
+      margin-left: 50px;
+      text-align: left;
+    }
+
+    .roadmap-card::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: -30px;
+      /* Reach back to marker */
+      width: 30px;
+      height: 2px;
+      background: var(--rm-border);
+    }
+  }
+
+  /* Initial State for Animation */
+  .rm-anim-ready .roadmap-card,
+  .rm-anim-ready .roadmap-marker {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .rm-anim-ready .is-visible .roadmap-card,
+  .rm-anim-ready .is-visible .roadmap-marker {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+
+<div class="roadmap-unified">
+  <!-- CSS Line Implementation (Robust) -->
+  <div class="roadmap-line">
+    <div class="roadmap-rail"></div>
+    <div id="rm-progress" class="roadmap-progress"></div>
+  </div>
+
+  <!-- Step 1 -->
+  <div class="roadmap-step step-1">
+    <div class="roadmap-marker">1</div>
+    <div class="roadmap-card">
+      <h3>Conceptos básicos</h3>
+      <p class="roadmap-desc">El vocabulario mínimo para distinguir el hype de la realidad.</p>
+      <ul class="roadmap-items">
+        <li>IA vs Machine Learning</li>
+        <li>Tokens & Embeddings</li>
+        <li>El ciclo de vida de un modelo</li>
+      </ul>
+      <a href="../series/basicos-IA-IAG/00_presentacion_serie/"
+        class="md-button md-button--primary md-button--small">Empezar</a>
+    </div>
+  </div>
+
+  <!-- Step 2 -->
+  <div class="roadmap-step step-2">
+    <div class="roadmap-marker">2</div>
+    <div class="roadmap-card">
+      <h3>De las cavernas a la AGI</h3>
+      <p class="roadmap-desc">La historia de cómo aprendimos a computar y enseñar a las máquinas.</p>
+      <ul class="roadmap-items">
+        <li>Símbolos y Lógica</li>
+        <li>Redes Neuronales</li>
+        <li>La revolución Generativa</li>
+      </ul>
+      <a href="../series/from-cave-to-AGI/00_presentacion_serie/"
+        class="md-button md-button--primary md-button--small">Explorar historia</a>
+    </div>
+  </div>
+
+  <!-- Step 3 -->
+  <div class="roadmap-step step-3">
+    <div class="roadmap-marker">3</div>
+    <div class="roadmap-card">
+      <h3>Hacia la AGI</h3>
+      <p class="roadmap-desc">La frontera tecnológica: razonamiento, agentes y el mundo físico.</p>
+      <ul class="roadmap-items">
+        <li>Reasoning Models</li>
+        <li>World Models</li>
+        <li>Límites físicos y energía</li>
+      </ul>
+      <span class="md-button md-button--small" style="opacity:0.6; cursor:default;">Próximamente</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    const container = document.querySelector('.roadmap-unified');
+    if (!container) return;
+
+    // Enable animations
+    container.classList.add('rm-anim-ready');
+
+    const progressLine = document.getElementById('rm-progress');
+    const steps = document.querySelectorAll('.roadmap-step');
+
+    // 1. Scroll Progress Logic
+    function updateLine() {
+      if (!progressLine) return;
+      const rect = container.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+
+      // Logic: 0% when top of container hits 60% viewport
+      // 100% when bottom of container hits 40% viewport
+
+      const startY = viewportHeight * 0.6;
+      const end = rect.height;
+
+      // Relative position calculation
+      // 'currentY' effectively implies how much pixel distance we traversed relative to start point
+      let currentY = startY - rect.top;
+
+      let percentage = currentY / rect.height;
+
+      // Extend range slightly so it looks fully filled when passing sections
+      percentage = (percentage + 0.1) * 1.1;
+
+      percentage = Math.max(0, Math.min(1, percentage));
+
+      progressLine.style.height = (percentage * 100) + '%';
+    }
+
+    window.addEventListener('scroll', updateLine);
+    updateLine(); // initial
+
+    // 2. Element Appearance Logic
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+        }
+      });
+    }, { threshold: 0.25 });
+
+    steps.forEach(s => observer.observe(s));
+  })();
+</script>

@@ -1,4 +1,4 @@
-site_name: 5sigmas - Divulgación sin hype
+site_name: 5sigmas - Más señal, menos ruido
 site_description: Technical history of math, philosophy and engineering on the road to AGI
 site_url: "https://5sigmas.com"
 theme:
@@ -40,11 +40,12 @@ nav:
   - Home: index.md
   - Hoja de ruta: roadmap.md
   - Series:
-      - Todas las series: series/index.md
+      - La IA, IA Generativa y AGI:
+          - Presentación: series/basicos-IA-IAG/00_presentacion_serie.md
       - De las cavernas a la AGI:
           - Presentación: series/from-cave-to-AGI/00_presentacion_serie.md
-          - "Acto I: Inventar símbolos":
-              - "De las muescas en hueso al número: cómo nace la abstracción (< 1000 a. C.)": series/from-cave-to-AGI/1-01-muescas.md
+      #     - "Acto I: Inventar símbolos":
+      #         - "De las muescas en hueso al número, cómo nace la abstracción (< 1000 a. C.)": series/from-cave-to-AGI/1-01-muescas.md
       #     -  "El proyecto griego (1000 a. C. – año 0)": series/from-cave-to-AGI/1-02-griego.md
       #     - "Cero, álgebra y relojes (año 0 – 1500)": series/from-cave-to-AGI/1-03-cero-algebra.md
       #     - "Del cálculo al mundo como sistema dinámico (1500–1800)": series/from-cave-to-AGI/1-04-calculo-mundo.md
@@ -58,9 +59,6 @@ nav:
       #     - "¿Modelos que «razonan»?": series/from-cave-to-AGI/3-03-modelos-razonan.md
       #     - "Modelos del mundo": series/from-cave-to-AGI/3-04-modelos-mundo.md
       # - La felicidad, estado de bienestar y energía: series/happiness-welfare-energy/index.md
-      - La IA, IA Generativa y AGI:
-          - Presentación: series/basicos-IA-IAG/00_presentacion_serie.md
-
   - About: meta/about.md
 markdown_extensions:
   - meta
