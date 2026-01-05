@@ -5,20 +5,15 @@ hide:
   - navigation
   - toc
 ---
-## Sobre mí
-
 Soy **Fran Maldonado** doble graduado en Física y Matemáticas.
-Trabajo diseñando y construyendo sistemas de IA que operan en tiempo real, ya sea asistentes de voz, análisis de imagen...
+Trabajo diseñando y construyendo sistemas de IA que operan en tiempo real, ya sea asistentes de voz, predicción en imágenes...
 Abarcando desde la identificación de necesidades de negocio hasta la implantación y escalado masivo.
 Escribo para ordenar lo que normalmente queda disperso entre los papers que leo, los repositorios que clono, benchmarks y conversaciones a medias.
 
-5sigmas es mi espacio para publicar mi visión de un manual para navegar el hype de la IA, que sirva tanto para aprender como para tomar decisiones con impacto real.
+5sigmas es el espacio para publicar mi visión de cómo navegar entre tanto hype con la IA, que sirva tanto para aprender como para tomar decisiones con impacto real.
 
----
-
-## Colaboraciones y propuestas
-
-Si quieres proponer una colaboración, una propuesta de artículo o serie.
+Si quieres proponer una colaboración, una propuesta de artículo o serie. 
+O si has encontrado algún error, contactame. Prefiero ser fiel a la verdad a llevar la razón.
 
 <div class="contact-grid" markdown="1">
 
