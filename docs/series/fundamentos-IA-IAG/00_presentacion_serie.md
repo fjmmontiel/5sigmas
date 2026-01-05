@@ -1,7 +1,7 @@
-# Conceptos Básicos: IA, IAG, el Ciclo de Vida y definiciones
+# Presentación de la serie
 
 Bienvenidos a esta serie introductoria diseñada para desmitificar el mundo de la Inteligencia Artificial. 
-El objetivo de la serie es entender qué es realmente la IA y la IA Generativa (IAG), sin el "hype" ni el ruido mediático actual.
+El objetivo de la serie es entender qué es realmente la IA y la IA Generativa (IAG), que posibilidades abren estas tecnologías, y como pueden ser complementadas o usadas en conjunto.
 
 En esta serie exploraremos:
 

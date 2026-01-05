@@ -39,27 +39,17 @@ extra:
 nav:
   - Inicio: index.md
   - Series:
-      - La IA, IA Generativa y AGI:
-          - Presentación: series/basicos-IA-IAG/00_presentacion_serie.md
+      - Fundamentos de IA e IA generativa:
+          - Presentación: series/fundamentos-IA-IAG/00_presentacion_serie.md
       - De las cavernas a la AGI:
           - Presentación: series/from-cave-to-AGI/00_presentacion_serie.md
-      #     - "Acto I: Inventar símbolos":
-      #         - "De las muescas en hueso al número, cómo nace la abstracción (< 1000 a. C.)": series/from-cave-to-AGI/1-01-muescas.md
-      #     -  "El proyecto griego (1000 a. C. – año 0)": series/from-cave-to-AGI/1-02-griego.md
-      #     - "Cero, álgebra y relojes (año 0 – 1500)": series/from-cave-to-AGI/1-03-cero-algebra.md
-      #     - "Del cálculo al mundo como sistema dinámico (1500–1800)": series/from-cave-to-AGI/1-04-calculo-mundo.md
-      # - "Acto II: Enseñar a las máquinas":
-      #     - "De la mente a la máquina universal": series/from-cave-to-AGI/2-01-mente-maquina.md
-      #     - "De Gotinga a Londres": series/from-cave-to-AGI/2-02-gotinga-londres.md
-      #     - "Primeras neuronas de metal": series/from-cave-to-AGI/2-03-neuronas-metal.md
-      # - "Acto III: Escalar el aprendizaje":
-      #     - "WW qué?!": series/from-cave-to-AGI/3-01-ww-que.md
-      #     - "Primeras neuronas parlantes": series/from-cave-to-AGI/3-02-neuronas-parlantes.md
-      #     - "¿Modelos que «razonan»?": series/from-cave-to-AGI/3-03-modelos-razonan.md
-      #     - "Modelos del mundo": series/from-cave-to-AGI/3-04-modelos-mundo.md
-      #     - "Nuevas arquitecturas": Hablar de Titans, de Nested learning y el cambio de paradigma que suponen
-      # - La felicidad, estado de bienestar y energía: series/happiness-welfare-energy/index.md
-  - Sobre mí: meta/about.md
+      - Multimodalidad en IA Generativa:
+          - Presentación: series/multimodalidad-IAG/00_presentacion_serie.md
+      - Modelos razonadores y tiempo físico:
+          - Presentación: series/modelos-razonadores-tiempo-fisico/00_presentacion_serie.md
+      - IA, PIB, felicidad y energía:
+          - Presentación: series/IA-PIB-felicidad-energia/00_presentacion_serie.md
+  - Sobre 5sigmas: meta/about.md
 markdown_extensions:
   - meta
   - admonition
