@@ -12,13 +12,17 @@ Pero está tecnología no viene gratis, acarrean la proliferación de los llamad
 Los que son expertos en ChatGPT (incluso desde el 2012), los que lo ven venir todo y cuando se equivocan simplemente borran el historial.
 
 ### ¿Por qué "5sigmas"?
+{{ include_html("snippets/5sigma.html") }}
 En física, un descubrimiento se considera confirmado cuando alcanza una significancia estadística de **5 sigmas** (probabilidad de error de 1 en 3.5 millones). 
 
 Este proyecto busca ofrecer esa misma rigurosidad, poder separar el *hype* del conocimiento fundamental.
 
 Aquí no encontrarás las noticias de última hora, encontrarás *contexto*.
 
-### Nuestras series
+### [Hoja de Ruta recomendada](roadmap.md/)
+Si quieres una guía clara y progresiva, empieza por la hoja de ruta: conecta conceptos básicos, historia y evolución, y la frontera actual hacia la AGI.
+
+### [Series](./series/index.md/)
 <div class="carousel-container">
     <div class="carousel-track">
         <!-- Card 1 -->

@@ -38,6 +38,7 @@ extra:
 
 nav:
   - Home: index.md
+  - Hoja de ruta: roadmap.md
   - Series:
       - Todas las series: series/index.md
       - De las cavernas a la AGI:
@@ -59,7 +60,7 @@ nav:
       # - La felicidad, estado de bienestar y energía: series/happiness-welfare-energy/index.md
       - La IA, IA Generativa y AGI:
           - Presentación: series/basicos-IA-IAG/00_presentacion_serie.md
-  - Hoja de ruta: roadmap.md
+
   - About: meta/about.md
 markdown_extensions:
   - meta

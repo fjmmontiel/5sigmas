@@ -109,6 +109,23 @@ def define_env(env):
             
         return f"> ⏱️ **Tiempo de lectura:** {time} min\n\n"
 
+    @env.macro
+    def include_html(path):
+        """
+        Includes raw HTML snippets from the docs directory.
+        """
+        if not path or ".." in path:
+            return "<!-- Invalid snippet path -->"
+
+        base_dir = os.path.join(os.path.dirname(__file__), "docs")
+        snippet_path = os.path.join(base_dir, path)
+
+        if not os.path.isfile(snippet_path):
+            return f"<!-- Snippet not found: {path} -->"
+
+        with open(snippet_path, "r", encoding="utf-8") as f:
+            return f.read()
+
 def on_pre_page_macros(env):
     """
     Hook to automatically prepend the reading_time macro to all pages.

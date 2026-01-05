@@ -1,0 +1,233 @@
+<div class="sigma-graphic">
+    <div class="wrap">
+        <div class="card">
+            <div class="top">
+                <div>
+                    <h1>5σ: separar señal de ruido</h1>
+                    <p class="sub">
+                        La campana representa “ruido normal”. <span class="mono">5σ</span> es un listón muy exigente para no confundir ruido con señal.
+                        Aun así, la ciencia exige controles, experimentos replicables y la eliminación de sesgos para dar por válido un descubrimiento.
+                    </p>
+                </div>
+                <div class="pill"><span class="dot"></span> zona muy rara</div>
+            </div>
+
+            <div class="plot">
+                <svg id="sigma-svg" viewBox="0 0 920 360" role="img" aria-label="Curva normal con colas resaltadas">
+                    <defs>
+                        <clipPath id="sigma-clip">
+                            <rect x="60" y="40" width="800" height="240" rx="16"></rect>
+                        </clipPath>
+                    </defs>
+
+                    <line x1="60" y1="280" x2="860" y2="280" stroke="var(--grid)" stroke-width="2"/>
+                    <text x="60" y="315" fill="var(--muted)" font-size="14" text-anchor="start">−6σ</text>
+                    <text x="460" y="315" fill="var(--muted)" font-size="14" text-anchor="middle">0</text>
+                    <text x="860" y="315" fill="var(--muted)" font-size="14" text-anchor="end">+6σ</text>
+
+                    <g clip-path="url(#sigma-clip)">
+                        <path id="sigma-tailL" fill="var(--tail)" stroke="none"></path>
+                        <path id="sigma-tailR" fill="var(--tail)" stroke="none"></path>
+                        <path id="sigma-curve" fill="none" stroke="var(--curve)" stroke-width="4" stroke-linecap="round"></path>
+                        <line id="sigma-mL" x1="0" y1="40" x2="0" y2="280" stroke="var(--tailStroke)" stroke-width="2.5" stroke-dasharray="8 8" opacity="0.95"></line>
+                        <line id="sigma-mR" x1="0" y1="40" x2="0" y2="280" stroke="var(--tailStroke)" stroke-width="2.5" stroke-dasharray="8 8" opacity="0.95"></line>
+                    </g>
+
+                    <text id="sigma-tag" x="460" y="28" fill="var(--muted)" font-size="14" text-anchor="middle"></text>
+                </svg>
+            </div>
+        </div>
+
+        <div class="card side">
+            <div class="controls">
+                <div class="row">
+                    <label for="sigma">Umbral (σ)</label>
+                    <div id="sigma-read" style="font-weight:800; font-family: var(--mono);">5.0</div>
+                </div>
+                <input id="sigma" type="range" min="1" max="5" step="0.1" value="5" />
+                <div class="note">Solo el slider es interactivo.</div>
+            </div>
+
+            <div class="metric">
+                <div class="k">Número de lanzamientos seguidos “todo igual” (todo caras o todo cruces) que sería tan raro como el umbral σ actual.</div>
+                <div class="v" id="sigma-coin-one-in">—</div>
+                <div class="note" id="sigma-coin-n">—</div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function erf(x){
+        const sign = x < 0 ? -1 : 1;
+        x = Math.abs(x);
+        const a1=0.254829592, a2=-0.284496736, a3=1.421413741, a4=-1.453152027, a5=1.061405429;
+        const p=0.3275911;
+        const t = 1.0/(1.0 + p*x);
+        const y = 1.0 - (((((a5*t + a4)*t + a3)*t + a2)*t + a1)*t) * Math.exp(-x*x);
+        return sign*y;
+    }
+
+    function normalCDF(x){
+        return 0.5 * (1 + erf(x/Math.SQRT2));
+    }
+
+    function twoSidedTailP(sigma){
+        return 2 * (1 - normalCDF(sigma));
+    }
+
+    function fmt(n){
+        return n.toLocaleString('es-ES');
+    }
+
+    function oneInStr(p){
+        if (!isFinite(p) || p <= 0) return '1 entre \u221E';
+        const n = 1/p;
+        if (n >= 1e12) return `1 entre ${fmt(Math.round(n/1e12))} billones`;
+        if (n >= 1e9)  return `1 entre ${fmtFixed(n/1e9, 2)} mil millones`;
+        if (n >= 1e6)  return `1 entre ${fmtFixed(n/1e6, 2)} millones`;
+        if (n >= 1e3)  return `1 entre ${fmtFixed(n/1e3, 2)} mil`;
+        return `1 entre ${fmtFixed(n, 1)}`;
+    }
+
+    function fmtFixed(x, digits){
+        return x.toFixed(digits).replace('.', ',');
+    }
+
+    function coinAllSameP(n){
+        if (!isFinite(n) || n <= 0) return 0;
+        return Math.pow(2, 1 - n);
+    }
+
+    function coinStreakN(p){
+        if (p <= 0) return Infinity;
+        return Math.ceil(1 + Math.log2(1/p));
+    }
+
+    const curveEl = document.getElementById('sigma-curve');
+    const tailLEl = document.getElementById('sigma-tailL');
+    const tailREl = document.getElementById('sigma-tailR');
+    const mLEl = document.getElementById('sigma-mL');
+    const mREl = document.getElementById('sigma-mR');
+    const sigmaTag = document.getElementById('sigma-tag');
+
+    const sigmaInput = document.getElementById('sigma');
+    const sigmaRead = document.getElementById('sigma-read');
+
+    const coinEquivOneInEl = document.getElementById('sigma-coin-one-in');
+    const coinEquivNEl = document.getElementById('sigma-coin-n');
+
+    const X0=60, Y0=40, W=800, H=240;
+    const xMin=-6, xMax=6;
+    const yMax=0.42;
+
+    function xMap(z){
+        return X0 + ((z - xMin)/(xMax - xMin))*W;
+    }
+    function yMap(pdf){
+        return (Y0 + H) - (pdf / yMax) * H;
+    }
+
+    function normalPDF(z){
+        return Math.exp(-0.5*z*z) / Math.sqrt(2*Math.PI);
+    }
+
+    function buildCurvePath(){
+        const step = 0.05;
+        let d = "";
+        let first = true;
+        for(let z=xMin; z<=xMax + 1e-9; z+=step){
+            const x = xMap(z);
+            const y = yMap(normalPDF(z));
+            d += (first ? `M ${x} ${y}` : ` L ${x} ${y}`);
+            first = false;
+        }
+        return d;
+    }
+
+    function buildTailPath(side, sigma){
+        const step = 0.05;
+        const baseY = Y0 + H;
+
+        let zStart, zEnd;
+        if (side === "L"){
+            zStart = xMin;
+            zEnd = -sigma;
+        } else {
+            zStart = sigma;
+            zEnd = xMax;
+        }
+
+        zStart = Math.max(xMin, Math.min(xMax, zStart));
+        zEnd   = Math.max(xMin, Math.min(xMax, zEnd));
+
+        if ((side==="L" && zEnd <= xMin) || (side==="R" && zStart >= xMax)){
+            return "";
+        }
+
+        let points = [];
+        for(let z=zStart; z<=zEnd + 1e-9; z+=step){
+            points.push([xMap(z), yMap(normalPDF(z))]);
+        }
+
+        let d = `M ${points[0][0]} ${baseY}`;
+        for(const [x,y] of points){
+            d += ` L ${x} ${y}`;
+        }
+        d += ` L ${points[points.length-1][0]} ${baseY} Z`;
+        return d;
+    }
+
+    curveEl.setAttribute("d", buildCurvePath());
+
+    function update(s){
+        const sigma = Math.max(1, Math.min(5, s));
+        sigmaRead.textContent = sigma.toFixed(1);
+        sigmaTag.textContent = `|Z| \u2265 ${sigma.toFixed(1)}\u03c3 (dos colas)`;
+
+        const xL = xMap(-sigma);
+        const xR = xMap(+sigma);
+        mLEl.setAttribute("x1", xL); mLEl.setAttribute("x2", xL);
+        mREl.setAttribute("x1", xR); mREl.setAttribute("x2", xR);
+
+        tailLEl.setAttribute("d", buildTailPath("L", sigma));
+        tailREl.setAttribute("d", buildTailPath("R", sigma));
+
+        const p = twoSidedTailP(sigma);
+        const nEquiv = coinStreakN(p);
+        const pCoin = coinAllSameP(nEquiv);
+
+        coinEquivOneInEl.textContent = oneInStr(pCoin);
+        coinEquivNEl.innerHTML = `≈ <span class="mono">${nEquiv}</span> lanzamientos seguidos “todo igual”`;
+    }
+
+    if (sigmaInput){
+        sigmaInput.addEventListener("input", (e) => update(parseFloat(e.target.value)));
+    }
+
+    function animateToFive(){
+        const start = 1.5, end = 5.0, dur = 1600;
+        const t0 = performance.now();
+        function easeOutCubic(t){ return 1 - Math.pow(1 - t, 3); }
+        function frame(now){
+            const t = Math.min(1, (now - t0)/dur);
+            const s = start + (end - start)*easeOutCubic(t);
+            sigmaInput.value = s.toFixed(1);
+            update(s);
+            if (t < 1) requestAnimationFrame(frame);
+        }
+        requestAnimationFrame(frame);
+    }
+
+    function runSelfTests(){
+        console.assert(Math.abs(coinAllSameP(1) - 1) < 1e-12, 'coinAllSameP(1) should be 1');
+        console.assert(Math.abs(coinAllSameP(2) - 0.5) < 1e-12, 'coinAllSameP(2) should be 0.5');
+        console.assert(coinStreakN(0.5) === 2, 'coinStreakN(0.5) should be 2');
+
+        const p5 = twoSidedTailP(5);
+        console.assert(p5 > 3e-7 && p5 < 1e-6, 'twoSidedTailP(5) out of expected range');
+    }
+
+    runSelfTests();
+    update(parseFloat(sigmaInput.value));
+    animateToFive();
+</script>
