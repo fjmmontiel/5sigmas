@@ -49,6 +49,8 @@ nav:
           - Presentación: series/modelos-razonadores-tiempo-fisico/00_presentacion_serie.md
       - IA, PIB, felicidad y energía:
           - Presentación: series/IA-PIB-felicidad-energia/00_presentacion_serie.md
+      - Datacenters en el espacio:
+          - Presentación: series/datacenters-espacio/00_presentacion_serie.md
   - Sobre 5sigmas: meta/about.md
 markdown_extensions:
   - meta
@@ -80,10 +82,10 @@ extra_javascript:
   - javascripts/mermaid-init.js
   - javascripts/mathjax.js
   - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
-
-
+  - assets/javascripts/series_energy_ai_preview.js
 extra_css:
   - stylesheets/extra.css
+  - assets/stylesheets/series_energy_ai_preview.css
 
 plugins:
   - search
