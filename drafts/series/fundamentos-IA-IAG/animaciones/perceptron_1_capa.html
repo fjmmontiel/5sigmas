@@ -1,0 +1,706 @@
+<!-- Demo autocontenida para MKDocs: entrenar una "red" mínima para aprender °C → °F -->
+<div class="cf-demo" data-seed="42"></div>
+
+<style>
+  .cf-demo{
+    --bg-page: var(--md-default-bg-color, #ffffff);
+    --card: rgba(0,0,0,0.07);
+    --card2: rgba(0,0,0,0.05);
+    --border: rgba(0,0,0,0.18);
+    --text: rgba(0,0,0,0.92);
+    --muted: rgba(0,0,0,0.66);
+    --grid: rgba(0,0,0,0.12);
+    --axis: rgba(0,0,0,0.26);
+    --accent: rgba(20, 110, 235, 0.98);
+    --good: rgba(15, 140, 85, 0.98);
+
+    color-scheme: light dark;
+    color: var(--text);
+    background: var(--bg-page);
+    border: 1px solid var(--border);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    border-radius: 14px;
+    padding: 14px;
+    margin: 18px 0;
+    position: relative;
+
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+  }
+
+  :root[data-md-color-scheme="slate"] .cf-demo,
+  body[data-md-color-scheme="slate"] .cf-demo,
+  [data-md-color-scheme="slate"] .cf-demo{
+    --card: rgba(255,255,255,0.075);
+    --card2: rgba(255,255,255,0.05);
+    --border: rgba(255,255,255,0.16);
+    --text: rgba(255,255,255,0.92);
+    --muted: rgba(255,255,255,0.68);
+    --grid: rgba(255,255,255,0.10);
+    --axis: rgba(255,255,255,0.22);
+    --accent: rgba(120, 200, 255, 0.95);
+    --good: rgba(110, 240, 170, 0.95);
+  }
+
+  .cf-demo *{ box-sizing: border-box; }
+
+  .cf-head{ display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:10px; }
+  .cf-title{ font-weight:800; font-size:16px; letter-spacing:0.2px; line-height:1.2; }
+  .cf-sub{ font-size:12px; color:var(--muted); margin-top:2px; }
+
+  .cf-actions{ display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
+  .cf-btn{
+    appearance:none;
+    border:1px solid var(--border);
+    background: var(--card);
+    color: var(--text);
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-weight: 750;
+    cursor: pointer;
+    user-select: none;
+  }
+  .cf-btn:active{ transform: translateY(1px); }
+
+  .cf-row{ display:grid; grid-template-columns: 1.6fr 1fr; gap:12px; }
+  @media (max-width: 1000px){ .cf-row{ grid-template-columns: 1fr; } }
+
+  .cf-card{ background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 10px; overflow:hidden; }
+  .cf-card-title{ display:flex; justify-content:space-between; align-items:baseline; gap:10px; margin: 2px 2px 8px; }
+  .cf-card-title .t{ font-size:13px; font-weight:850; }
+  .cf-card-title .d{ font-size:12px; color:var(--muted); }
+
+  canvas{ width:100%; height:auto; display:block; border-radius: 10px; }
+  canvas[data-canvas="plot"]{ cursor: crosshair; }
+
+  .cf-metrics{ display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
+  .cf-metric{ background: var(--card2); border: 1px solid var(--border); border-radius: 12px; padding: 10px; }
+  .cf-metric .k{ font-size:11px; color:var(--muted); }
+  .cf-metric .v{ font-size:14px; font-weight:850; margin-top:2px; }
+
+  .cf-formula{
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 13px;
+    line-height: 1.35;
+  }
+  .cf-formula .hl{ color: var(--accent); font-weight: 850; }
+
+  .cf-pill{
+    display:inline-flex;
+    align-items:center;
+    padding: 4px 8px;
+    border: 1px solid var(--border);
+    background: var(--card2);
+    border-radius: 999px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .cf-tooltip{
+    position: absolute;
+    z-index: 20;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 90ms ease, transform 90ms ease;
+
+    background: var(--bg-page);
+    border: 1px solid var(--border);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.14);
+    border-radius: 12px;
+    padding: 10px 12px;
+    min-width: 250px;
+
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 12px;
+    color: var(--text);
+  }
+  .cf-tooltip.show{ opacity: 1; transform: translateY(0px); }
+  .cf-tooltip .k{ color: var(--muted); }
+  .cf-tooltip .row{ display:flex; justify-content:space-between; gap:12px; }
+</style>
+
+<script>
+(() => {
+  function mulberry32(seed){
+    let t = seed >>> 0;
+    return function(){
+      t += 0x6D2B79F5;
+      let r = Math.imul(t ^ (t >>> 15), 1 | t);
+      r ^= r + Math.imul(r ^ (r >>> 7), 61 | r);
+      return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  function clamp(x,a,b){ return Math.max(a, Math.min(b, x)); }
+  function fmt(x, n=4){ return Number.isFinite(x) ? x.toFixed(n) : "—"; }
+
+  function setCanvasSize(canvas, cssHeight){
+    const dpr = Math.max(1, window.devicePixelRatio || 1);
+    const w = canvas.clientWidth;
+    const h = cssHeight;
+    canvas.width = Math.floor(w * dpr);
+    canvas.height = Math.floor(h * dpr);
+    const ctx = canvas.getContext('2d');
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    return { ctx, w, h };
+  }
+
+  function fTrue(c){ return 1.8*c + 32; }
+
+  function buildUI(root){
+    root.innerHTML = `
+      <div class="cf-head">
+        <div>
+          <div class="cf-title">Entrenamiento visible: aprender °C → °F</div>
+          <div class="cf-sub">Modelo: <b>F̂ = a·C + b</b> · Real: <b>F = 1.8·C + 32</b></div>
+        </div>
+        <div class="cf-actions">
+          <button class="cf-btn" data-btn="toggle">▶ Entrenar</button>
+          <button class="cf-btn" data-btn="reset">↺ Reiniciar</button>
+        </div>
+      </div>
+
+      <div class="cf-row">
+        <div class="cf-card">
+          <div class="cf-card-title">
+            <div class="t">Datos y recta aprendida</div>
+            <div class="d"><span class="cf-pill">hover en puntos</span> <span class="cf-pill" data-pill="status">listo</span></div>
+          </div>
+          <canvas data-canvas="plot"></canvas>
+        </div>
+
+        <div class="cf-card">
+          <div class="cf-card-title">
+            <div class="t">Coeficientes</div>
+            <div class="d">auto-stop: MSE ≤ 0.1</div>
+          </div>
+
+          <div class="cf-metrics">
+            <div class="cf-metric"><div class="k">Step</div><div class="v" data-kpi="step">0</div></div>
+            <div class="cf-metric"><div class="k">MSE</div><div class="v" data-kpi="loss">—</div></div>
+            <div class="cf-metric"><div class="k">a (peso)</div><div class="v" data-kpi="a">—</div></div>
+            <div class="cf-metric"><div class="k">b (bias)</div><div class="v" data-kpi="b">—</div></div>
+          </div>
+
+          <div style="height:10px"></div>
+          <div class="cf-formula" data-formula>
+            <div>F̂ = <span class="hl">a</span>·C + <span class="hl">b</span></div>
+            <div style="margin-top:6px;color:var(--muted);font-family: ui-sans-serif, system-ui; font-size: 12px;">Real: <b>F = 1.8·C + 32</b></div>
+          </div>
+
+          <div style="height:10px"></div>
+          <div class="cf-card" style="padding:10px; background: var(--card2);">
+            <div class="cf-card-title" style="margin:0 0 8px;">
+              <div class="t">Esquema de la red</div>
+              <div class="d">(1 neurona + bias)</div>
+            </div>
+            <canvas data-canvas="net"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="cf-tooltip" data-tooltip>
+        <div class="row"><span class="k">C</span><span data-tip="c">—</span></div>
+        <div class="row"><span class="k">F (dato)</span><span data-tip="f">—</span></div>
+        <div class="row"><span class="k">F (real)</span><span data-tip="ftrue">—</span></div>
+        <div class="row"><span class="k">a·C</span><span data-tip="ac">—</span></div>
+        <div class="row"><span class="k">b</span><span data-tip="b">—</span></div>
+        <div class="row"><span class="k">F̂ (modelo)</span><span data-tip="fhat">—</span></div>
+        <div class="row"><span class="k">error</span><span data-tip="err">—</span></div>
+      </div>
+    `;
+  }
+
+  function init(root){
+    buildUI(root);
+
+    const btnToggle = root.querySelector('[data-btn="toggle"]');
+    const btnReset  = root.querySelector('[data-btn="reset"]');
+
+    const kStep = root.querySelector('[data-kpi="step"]');
+    const kLoss = root.querySelector('[data-kpi="loss"]');
+    const kA    = root.querySelector('[data-kpi="a"]');
+    const kB    = root.querySelector('[data-kpi="b"]');
+    const formulaEl = root.querySelector('[data-formula]');
+    const statusPill = root.querySelector('[data-pill="status"]');
+
+    const cPlot = root.querySelector('[data-canvas="plot"]');
+    const cNet  = root.querySelector('[data-canvas="net"]');
+
+    // Tooltip
+    const tip = root.querySelector('[data-tooltip]');
+    const tipC  = root.querySelector('[data-tip="c"]');
+    const tipF  = root.querySelector('[data-tip="f"]');
+    const tipFT = root.querySelector('[data-tip="ftrue"]');
+    const tipAC = root.querySelector('[data-tip="ac"]');
+    const tipBv = root.querySelector('[data-tip="b"]');
+    const tipFH = root.querySelector('[data-tip="fhat"]');
+    const tipE  = root.querySelector('[data-tip="err"]');
+
+    const style = () => getComputedStyle(root);
+
+    const seed = parseInt(root.dataset.seed || '42', 10) || 42;
+    let rng = mulberry32(seed);
+
+    const N = 16;
+    const noiseF = 0.8;
+
+    // Converge rápido pero visible
+    const lr = 0.00045;
+    const stepsPerFrame = 22;
+
+    const MIN_STEPS = 25;
+    const STOP_MSE = 0.1;
+
+    let running = false;
+    let step = 0;
+
+    // Modelo
+    let a = 0;
+    let b = 0;
+
+    let data = [];
+
+    // Hover
+    let hoverIdx = -1;
+    let pointPx = [];
+
+    function setStatus(text){ if (statusPill) statusPill.textContent = text; }
+
+    function makeData(){
+      rng = mulberry32(seed);
+      const pts = [];
+      for(let i=0;i<N;i++){
+        const c = -10 + rng()*50;
+        // pseudo-gauss
+        let g = 0;
+        for(let k=0;k<6;k++) g += (rng()*2 - 1);
+        g = g / 6;
+        const f = fTrue(c) + g*noiseF;
+        pts.push({ c, f });
+      }
+      return pts;
+    }
+
+    function resetAll(){
+      step = 0;
+      data = makeData();
+      a = 0;
+      b = 0;
+
+      running = false;
+      btnToggle.textContent = '▶ Entrenar';
+      setStatus('listo');
+      hideTooltip();
+
+      updateKPIs(NaN);
+      paintAll();
+    }
+
+    function predict(c){ return a*c + b; }
+
+    function mse(){
+      let s = 0;
+      for(const p of data){
+        const e = predict(p.c) - p.f;
+        s += e*e;
+      }
+      return s / data.length;
+    }
+
+    function trainBatchStep(){
+      const n = data.length;
+      let dA = 0;
+      let dB = 0;
+      for(const p of data){
+        const yhat = a*p.c + b;
+        const e = yhat - p.f;
+        dA += (2/n) * e * p.c;
+        dB += (2/n) * e;
+      }
+
+      dA = clamp(dA, -500, 500);
+      dB = clamp(dB, -500, 500);
+
+      a -= lr * dA;
+      b -= lr * dB;
+
+      const L = mse();
+      step++;
+      return L;
+    }
+
+    function updateKPIs(L){
+      kStep.textContent = String(step);
+      kLoss.textContent = Number.isFinite(L) ? L.toFixed(3) : '—';
+      kA.textContent = fmt(a, 4);
+      kB.textContent = fmt(b, 3);
+
+      const aTxt = fmt(a, 4);
+      const sign = (Number.isFinite(b) && b < 0) ? ' − ' : ' + ';
+      formulaEl.innerHTML = `
+        <div>F̂ = <span class="hl">${aTxt}</span>·C${sign}<span class="hl">${Math.abs(b).toFixed(3)}</span></div>
+        <div style="margin-top:6px;color:var(--muted);font-family: ui-sans-serif, system-ui; font-size: 12px;">Real: <b>F = 1.8·C + 32</b></div>
+      `;
+    }
+
+    function drawAxes(ctx, w, h, pad){
+      const grid = style().getPropertyValue('--grid').trim() || 'rgba(0,0,0,0.12)';
+      const axis = style().getPropertyValue('--axis').trim() || 'rgba(0,0,0,0.26)';
+      ctx.clearRect(0,0,w,h);
+      ctx.fillStyle = style().getPropertyValue('--card2').trim() || 'rgba(0,0,0,0.05)';
+      ctx.fillRect(0,0,w,h);
+
+      ctx.strokeStyle = grid;
+      ctx.lineWidth = 1;
+      for(let i=0;i<=5;i++){
+        const x = pad + i*(w-2*pad)/5;
+        ctx.beginPath(); ctx.moveTo(x, pad); ctx.lineTo(x, h-pad); ctx.stroke();
+      }
+      for(let i=0;i<=4;i++){
+        const y = pad + i*(h-2*pad)/4;
+        ctx.beginPath(); ctx.moveTo(pad, y); ctx.lineTo(w-pad, y); ctx.stroke();
+      }
+
+      ctx.strokeStyle = axis;
+      ctx.strokeRect(pad, pad, w-2*pad, h-2*pad);
+    }
+
+    function drawPlot(){
+      const {ctx, w, h} = setCanvasSize(cPlot, 330);
+      const pad = 36;
+      drawAxes(ctx, w, h, pad);
+
+      const cMin = -10, cMax = 40;
+      const fMin = fTrue(cMin) - 5;
+      const fMax = fTrue(cMax) + 5;
+
+      const xToPx = (c) => pad + ((c - cMin)/(cMax - cMin))*(w - 2*pad);
+      const yToPx = (f) => (h - pad) - ((f - fMin)/(fMax - fMin))*(h - 2*pad);
+
+      pointPx = data.map(p => ({ x: xToPx(p.c), y: yToPx(p.f) }));
+
+      // Labels
+      ctx.save();
+      ctx.fillStyle = style().getPropertyValue('--muted').trim() || 'rgba(0,0,0,0.66)';
+      ctx.font = '12px ui-sans-serif, system-ui';
+      ctx.fillText('C (°C)', pad, h - 10);
+      ctx.save();
+      ctx.translate(12, h/2);
+      ctx.rotate(-Math.PI/2);
+      ctx.fillText('F (°F)', 0, 0);
+      ctx.restore();
+      ctx.restore();
+
+      // Clip
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(pad, pad, w - 2*pad, h - 2*pad);
+      ctx.clip();
+
+      // Real
+      ctx.save();
+      ctx.strokeStyle = style().getPropertyValue('--muted').trim() || 'rgba(0,0,0,0.66)';
+      ctx.setLineDash([7,5]);
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(xToPx(cMin), yToPx(fTrue(cMin)));
+      ctx.lineTo(xToPx(cMax), yToPx(fTrue(cMax)));
+      ctx.stroke();
+      ctx.restore();
+
+      // Modelo (recortado y clamped)
+      const yL1 = clamp(predict(cMin), fMin, fMax);
+      const yL2 = clamp(predict(cMax), fMin, fMax);
+      ctx.save();
+      ctx.strokeStyle = style().getPropertyValue('--accent').trim() || 'rgba(20,110,235,0.98)';
+      ctx.setLineDash([]);
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.moveTo(xToPx(cMin), yToPx(yL1));
+      ctx.lineTo(xToPx(cMax), yToPx(yL2));
+      ctx.stroke();
+      ctx.restore();
+
+      // Puntos
+      ctx.save();
+      ctx.fillStyle = style().getPropertyValue('--text').trim() || 'rgba(0,0,0,0.92)';
+      for(let i=0;i<data.length;i++){
+        const x = pointPx[i].x;
+        const y = pointPx[i].y;
+        ctx.beginPath();
+        ctx.arc(x, y, 3.3, 0, Math.PI*2);
+        ctx.fill();
+      }
+      ctx.restore();
+
+      // Hover highlight
+      if (hoverIdx >= 0 && hoverIdx < data.length){
+        const x = pointPx[hoverIdx].x;
+        const y = pointPx[hoverIdx].y;
+        ctx.save();
+        ctx.strokeStyle = style().getPropertyValue('--accent').trim() || 'rgba(20,110,235,0.98)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(x, y, 8.0, 0, Math.PI*2);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      ctx.restore(); // end clip
+
+      // Legend
+      ctx.save();
+      ctx.font = '12px ui-sans-serif, system-ui';
+      let lx = pad + 8, ly = pad + 18;
+      ctx.fillStyle = style().getPropertyValue('--text').trim() || 'rgba(0,0,0,0.92)';
+      ctx.fillText('• datos', lx, ly);
+      ly += 16;
+      ctx.fillStyle = style().getPropertyValue('--accent').trim() || 'rgba(20,110,235,0.98)';
+      ctx.fillText('— modelo (F̂)', lx, ly);
+      ly += 16;
+      ctx.fillStyle = style().getPropertyValue('--muted').trim() || 'rgba(0,0,0,0.66)';
+      ctx.fillText('– – real (1.8·C+32)', lx, ly);
+      ctx.restore();
+    }
+
+    function drawNetwork(){
+      const {ctx, w, h} = setCanvasSize(cNet, 200);
+
+      ctx.clearRect(0,0,w,h);
+      ctx.fillStyle = style().getPropertyValue('--card2').trim() || 'rgba(0,0,0,0.05)';
+      ctx.fillRect(0,0,w,h);
+
+      const border = style().getPropertyValue('--border').trim() || 'rgba(0,0,0,0.18)';
+      const txt = style().getPropertyValue('--text').trim() || 'rgba(0,0,0,0.92)';
+      const muted = style().getPropertyValue('--muted').trim() || 'rgba(0,0,0,0.66)';
+      const accent = style().getPropertyValue('--accent').trim() || 'rgba(20,110,235,0.98)';
+      const good = style().getPropertyValue('--good').trim() || 'rgba(15,140,85,0.98)';
+
+      // Layout: entrada izquierda, neurona+bias en centro, salida derecha
+      const pad = 18;
+      const xL = pad + 22;
+      const xC = Math.round(w * 0.52);
+      const xR = w - pad - 22;
+      // Subimos el diagrama y dejamos espacio a los textos bajo Σ
+      const yMid = Math.round(h * 0.46);
+
+      const cFocus = (hoverIdx >= 0 && hoverIdx < data.length) ? data[hoverIdx].c : 20;
+      const z = a*cFocus + b;
+      const yHat = z;
+      const yTrue = fTrue(cFocus);
+      const err = yHat - yTrue;
+
+      function node(x,y,label,sub,stroke){
+        ctx.save();
+        ctx.fillStyle = style().getPropertyValue('--bg-page').trim() || '#fff';
+        ctx.strokeStyle = stroke;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(x,y,18,0,Math.PI*2);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = txt;
+        ctx.font = '12px ui-sans-serif, system-ui';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(label, x, y-1);
+
+        if (sub){
+          ctx.fillStyle = muted;
+          ctx.font = '11px ui-sans-serif, system-ui';
+          ctx.textBaseline = 'top';
+          ctx.fillText(sub, x, y+20);
+        }
+        ctx.restore();
+      }
+
+      function arrow(x1,y1,x2,y2,color,lw){
+        ctx.save();
+        ctx.strokeStyle = color;
+        ctx.lineWidth = lw;
+        ctx.beginPath();
+        ctx.moveTo(x1,y1);
+        ctx.lineTo(x2,y2);
+        ctx.stroke();
+
+        const ang = Math.atan2(y2-y1, x2-x1);
+        const len = 9;
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.moveTo(x2,y2);
+        ctx.lineTo(x2 - len*Math.cos(ang - 0.35), y2 - len*Math.sin(ang - 0.35));
+        ctx.lineTo(x2 - len*Math.cos(ang + 0.35), y2 - len*Math.sin(ang + 0.35));
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+      }
+      // Edges (minimalistas)
+      const lwA = 1.8 + Math.min(3.0, Math.abs(a) * 1.2);
+      arrow(xL+18, yMid, xC-18, yMid, accent, lwA);               // C -> neurona (peso a)
+      arrow(xC+18, yMid, xR-18, yMid, good, 2.2);                 // neurona -> salida
+      // Nodes
+      node(xL, yMid, 'C', `${cFocus.toFixed(1)}°C`, border);
+      node(xC, yMid, 'Σ', '', accent);
+      node(xR, yMid, 'F̂', `${yHat.toFixed(1)}°F`, good);
+
+      // a y b debajo de Σ (en el centro)
+      ctx.save();
+      ctx.fillStyle = txt;
+      ctx.font = '12px ui-monospace, Menlo, Monaco, Consolas, monospace';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'top';
+      ctx.fillText(`a=${a.toFixed(4)}`, xC, yMid + 24);
+      ctx.fillText(`b=${b.toFixed(3)}`, xC, yMid + 40);
+      ctx.restore();
+
+      // Minimal captions
+      ctx.save();
+      ctx.fillStyle = muted;
+      ctx.font = '12px ui-sans-serif, system-ui';
+      ctx.textAlign = 'left';
+      ctx.fillText('Entrada', pad, 14);
+      ctx.textAlign = 'center';
+      ctx.fillText('Centro', xC, 14);
+      ctx.textAlign = 'right';
+      ctx.fillText('Salida', w - pad, 14);
+      ctx.restore();
+
+      // Real + error (incluye C)
+      ctx.save();
+      ctx.fillStyle = muted;
+      ctx.font = '12px ui-monospace, Menlo, Monaco, Consolas, monospace';
+      ctx.textAlign = 'left';
+      ctx.fillText(`C=${cFocus.toFixed(1)}°C | F real=${yTrue.toFixed(1)}°F | error=${err>=0?'+':''}${err.toFixed(2)}°F`, pad, h - 12);
+      ctx.restore();
+    }
+
+    function paintAll(){
+      drawPlot();
+      drawNetwork();
+    }
+
+    function stopIfConverged(L){
+      if (!Number.isFinite(L)) return;
+      if (step < MIN_STEPS) return;
+      if (L <= STOP_MSE){
+        running = false;
+        btnToggle.textContent = '▶ Entrenar';
+        setStatus('MSE ≤ 0.1');
+      }
+    }
+
+    function showTooltipAt(pointIndex, clientX, clientY){
+      if (pointIndex < 0 || pointIndex >= data.length) return;
+
+      const p = data[pointIndex];
+      const termAC = a * p.c;
+      const termB = b;
+      const fhat = termAC + termB;
+      const ft = fTrue(p.c);
+      const err = fhat - ft;
+
+      tipC.textContent  = `${p.c.toFixed(2)} °C`;
+      tipF.textContent  = `${p.f.toFixed(2)} °F`;
+      tipFT.textContent = `${ft.toFixed(2)} °F`;
+      tipAC.textContent = `${termAC.toFixed(3)} °F`;
+      tipBv.textContent = `${termB.toFixed(3)} °F`;
+      tipFH.textContent = `${fhat.toFixed(2)} °F`;
+      tipE.textContent  = `${err >= 0 ? '+' : ''}${err.toFixed(2)} °F`;
+
+      const rootRect = root.getBoundingClientRect();
+      const x = clientX - rootRect.left;
+      const y = clientY - rootRect.top;
+
+      const pad = 10;
+      tip.style.left = '0px';
+      tip.style.top = '0px';
+      tip.classList.add('show');
+
+      const tw = tip.offsetWidth;
+      const th = tip.offsetHeight;
+
+      let left = x + 14;
+      let top = y + 14;
+      if (left + tw + pad > rootRect.width) left = x - tw - 14;
+      if (top + th + pad > rootRect.height) top = y - th - 14;
+      left = Math.max(pad, Math.min(left, rootRect.width - tw - pad));
+      top  = Math.max(pad, Math.min(top,  rootRect.height - th - pad));
+
+      tip.style.left = `${left}px`;
+      tip.style.top  = `${top}px`;
+    }
+
+    function hideTooltip(){ tip.classList.remove('show'); }
+
+    function findNearestPoint(canvasX, canvasY){
+      if (!pointPx || pointPx.length === 0) return -1;
+      let best = -1;
+      let bestD2 = Infinity;
+      for(let i=0;i<pointPx.length;i++){
+        const dx = canvasX - pointPx[i].x;
+        const dy = canvasY - pointPx[i].y;
+        const d2 = dx*dx + dy*dy;
+        if (d2 < bestD2){ bestD2 = d2; best = i; }
+      }
+      const r = 11;
+      return bestD2 <= r*r ? best : -1;
+    }
+
+    cPlot.addEventListener('mousemove', (ev) => {
+      const rect = cPlot.getBoundingClientRect();
+      const cx = ev.clientX - rect.left;
+      const cy = ev.clientY - rect.top;
+
+      const idx = findNearestPoint(cx, cy);
+      if (idx !== hoverIdx){
+        hoverIdx = idx;
+        paintAll();
+      }
+      if (hoverIdx >= 0){
+        showTooltipAt(hoverIdx, ev.clientX, ev.clientY);
+      } else {
+        hideTooltip();
+      }
+    });
+
+    cPlot.addEventListener('mouseleave', () => {
+      hoverIdx = -1;
+      hideTooltip();
+      paintAll();
+    });
+
+    function frame(){
+      if (running){
+        let L = NaN;
+        for(let k=0;k<stepsPerFrame;k++) L = trainBatchStep();
+        updateKPIs(L);
+        paintAll();
+        stopIfConverged(L);
+        if (running) setStatus('entrenando…');
+      }
+      requestAnimationFrame(frame);
+    }
+
+    btnToggle.addEventListener('click', () => {
+      running = !running;
+      btnToggle.textContent = running ? '⏸ Pausar' : '▶ Entrenar';
+      if (running) setStatus('entrenando…');
+      else setStatus('pausado');
+      if (!running) paintAll();
+    });
+
+    btnReset.addEventListener('click', () => resetAll());
+    window.addEventListener('resize', () => paintAll());
+
+    resetAll();
+    requestAnimationFrame(frame);
+  }
+
+  document.querySelectorAll('.cf-demo').forEach(init);
+})();
+</script>

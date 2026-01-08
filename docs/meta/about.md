@@ -5,7 +5,7 @@ hide:
 ---
 # Para quién es
 Este sitio es para las personas que quieren entender la IA más allá de los titulares. Si buscas aprender a usar una herramienta específica, hay mejores sitios. Si buscas saber cual ha sido exactamente el último modelo publicado por DeepSeek, OpenAI, Anthropic, Google... hay mejores sitios. <br>
-Si buscas entender *cómo funciona* esta tecnología y *hacia dónde parece que va*, este es tu lugar.
+Si buscas entender *cómo funciona* esta tecnología desde sus cimientos, este es tu lugar.
 
 ## Quién lo escribe
 Soy **Francisco Maldonado**, doble graduado en Física y Matemáticas.

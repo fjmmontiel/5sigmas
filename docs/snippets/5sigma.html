@@ -3,15 +3,9 @@
         <div class="card">
             <div class="top">
                 <div>
-                    <h1>5σ: separar señal de ruido</h1>
-                    <p class="sub">
-                        La campana representa “ruido normal”. <span class="mono">5σ</span> es un listón muy exigente
-                        para no confundir ruido con señal.
-                        Aun así, la ciencia exige controles, experimentos replicables y la eliminación de sesgos para
-                        dar por válido un descubrimiento.
-                    </p>
+                    <h1>La campana representa una distribución de datos normal.</h1>
                 </div>
-                <div class="pill"><span class="dot"></span> zona muy rara</div>
+                <div class="pill"><span class="dot"></span> zona de certeza</div>
             </div>
 
             <div class="plot">
@@ -50,12 +44,11 @@
                     <div id="sigma-read" style="font-weight:800; font-family: var(--mono);">5.0</div>
                 </div>
                 <input id="sigma" type="range" min="1" max="5" step="0.1" value="5" />
-                <div class="note">Solo el slider es interactivo.</div>
             </div>
 
             <div class="metric">
-                <div class="k">Número de lanzamientos seguidos “todo igual” (todo caras o todo cruces) que sería tan
-                    raro como el umbral σ actual.</div>
+                <div class="k">Probabilidad de obtener solo caras/cruces con este nivel (σ). <br>
+                </div>
                 <div class="v" id="sigma-coin-one-in">—</div>
                 <div class="note" id="sigma-coin-n">—</div>
             </div>
@@ -207,7 +200,7 @@
             const pCoin = coinAllSameP(nEquiv);
 
             coinEquivOneInEl.textContent = oneInStr(pCoin);
-            coinEquivNEl.innerHTML = `≈ <span class="mono">${nEquiv}</span> lanzamientos seguidos “todo igual”`;
+            coinEquivNEl.innerHTML = `≈ <span class="mono">${nEquiv}</span> lanzamientos seguidos solo caras/cruces.`;
         }
 
         // Remove any existing listener to be safe, though scope isolation handles most collisions
