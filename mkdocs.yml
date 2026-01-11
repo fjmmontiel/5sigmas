@@ -40,15 +40,15 @@ nav:
   - Inicio: index.md
   - Series:
       - Fundamentos de IA e IA generativa:
-          - Presentación: series/fundamentos-IA-IAG/00_presentacion_serie.md
+          - Presentación: series/fundamentos-ia-iag/00_presentacion_serie.md
       - De las cavernas a la AGI:
-          - Presentación: series/from-cave-to-AGI/00_presentacion_serie.md
+          - Presentación: series/from-cave-to-agi/00_presentacion_serie.md
       - Multimodalidad en IA Generativa:
-          - Presentación: series/multimodalidad-IAG/00_presentacion_serie.md
+          - Presentación: series/multimodalidad-iag/00_presentacion_serie.md
       - Modelos razonadores y tiempo físico:
           - Presentación: series/modelos-razonadores-tiempo-fisico/00_presentacion_serie.md
-      - IA, PIB, felicidad y energía:
-          - Presentación: series/IA-PIB-felicidad-energia/00_presentacion_serie.md
+      - IA, PIB, bienestar y energía:
+          - Presentación: series/ia-pib-bienestar-energia/00_presentacion_serie.md
       - Datacenters en el espacio:
           - Presentación: series/datacenters-espacio/00_presentacion_serie.md
   - Sobre 5sigmas: meta/about.md
@@ -78,11 +78,13 @@ markdown_extensions:
 
 extra_javascript:
   - javascripts/external-links.js
+  - assets/javascripts/site-demos.js
   - https://unpkg.com/mermaid@10/dist/mermaid.min.js
   - javascripts/mermaid-init.js
   - javascripts/mathjax.js
   - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
   - assets/javascripts/series_energy_ai_preview.js
+  - assets/javascripts/series_energy_ai_local.js
 extra_css:
   - stylesheets/extra.css
   - assets/stylesheets/series_energy_ai_preview.css

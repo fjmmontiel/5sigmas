@@ -1,12 +1,27 @@
-document.addEventListener("DOMContentLoaded", function () {
-    var links = document.querySelectorAll('a');
-    links.forEach(function (link) {
-        if (link.hostname && link.hostname !== location.hostname) {
-            link.setAttribute('target', '_blank');
-            link.setAttribute('rel', 'noopener');
-        }
-    });
-});
+(function () {
+    function initExternalLinks(root) {
+        var scope = root || document;
+        var links = scope.querySelectorAll('a');
+        links.forEach(function (link) {
+            if (link.hostname && link.hostname !== location.hostname) {
+                link.setAttribute('target', '_blank');
+                link.setAttribute('rel', 'noopener');
+            }
+        });
+    }
+
+    if (typeof document$ !== "undefined" && document$.subscribe) {
+        document$.subscribe(function () {
+            initExternalLinks(document);
+        });
+    } else if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", function () {
+            initExternalLinks(document);
+        });
+    } else {
+        initExternalLinks(document);
+    }
+})();
 
 function copyEmailToClipboard() {
     const email = "contacto@5sigmas.com";

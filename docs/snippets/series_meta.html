@@ -1,0 +1,28 @@
+<div class="series-meta" data-progress="{{ data_progress }}" data-state="{{ data_state }}" data-level="{{ data_level }}" data-read="{{ data_read }}">
+<div class="series-meta-head">
+<span class="series-meta-chip chip--status">
+<span class="chip-dot" aria-hidden="true"></span>
+<span class="chip-k">Estado</span>
+<span class="chip-v">{{ status_label }}</span>
+</span>
+
+<span class="series-meta-chip chip--level">
+<span class="chip-dot" aria-hidden="true"></span>
+<span class="chip-k">Nivel</span>
+<span class="chip-v">{{ level_label }}</span>
+</span>
+
+</div>
+
+<div class="series-meta-row">
+<span class="series-meta-label">Progreso</span>
+<div class="series-meta-progress" role="group" aria-label="Progreso de la serie">
+<div class="series-meta-bar" role="progressbar" aria-valuemin="0" aria-valuemax="{{ aria_valuemax }}" aria-valuenow="{{ aria_valuenow }}">
+<span class="series-meta-bar-fill"></span>
+<span class="series-meta-bar-glow" aria-hidden="{{ glow_hidden }}"></span>
+</div>
+<span class="series-meta-progress-text">{{ progress_text }}</span>
+</div>
+</div>
+{{ extra_rows }}
+</div>
