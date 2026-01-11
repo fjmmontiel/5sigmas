@@ -1,7 +1,47 @@
 import os
-import yaml
+try:
+    import yaml
+except ModuleNotFoundError:
+    yaml = None
 import math
 import re
+
+def _count_series_total(series_dirname):
+    base_dir = os.path.join(os.path.dirname(__file__), "docs/series", series_dirname)
+    series_file = os.path.join(base_dir, "00_presentacion_serie.md")
+    if not os.path.isfile(series_file):
+        print(f"[series-meta] Missing main series file: {series_file}")
+        return 0
+
+    with open(series_file, "r", encoding="utf-8") as f:
+        content = f.read()
+
+    content = re.sub(r'<!--.*?-->', '', content, flags=re.DOTALL)
+    return len(re.findall(r'^###\s+', content, flags=re.MULTILINE))
+
+def _count_series_done(series_dirname):
+    base_dir = os.path.join(os.path.dirname(__file__), "docs/series", series_dirname)
+    if not os.path.isdir(base_dir):
+        print(f"[series-meta] Missing series directory: {base_dir}")
+        return 0
+
+    done = 0
+    for root, _, files in os.walk(base_dir):
+        for filename in files:
+            if not filename.endswith(".md"):
+                continue
+            if filename == "00_presentacion_serie.md":
+                continue
+            done += 1
+    return done
+
+def _render_template(html, context):
+    def repl(match):
+        key = match.group(1).strip()
+        if key not in context:
+            return match.group(0)
+        return str(context[key])
+    return re.sub(r"{{\s*([a-zA-Z0-9_]+)\s*}}", repl, html)
 
 def define_env(env):
     """
@@ -14,6 +54,8 @@ def define_env(env):
     # Load podcasts data
     podcasts_file = os.path.join(os.path.dirname(__file__), 'docs/series/podcasts.yml')
     try:
+        if yaml is None:
+            raise ModuleNotFoundError("PyYAML is not installed")
         with open(podcasts_file, 'r', encoding='utf-8') as f:
             podcasts_data = yaml.safe_load(f)
     except Exception as e:
@@ -110,7 +152,7 @@ def define_env(env):
         return f"> ⏱️ **Tiempo de lectura:** {time} min\n\n"
 
     @env.macro
-    def include_html(path):
+    def include_html(path, **kwargs):
         """
         Includes raw HTML snippets from the docs directory.
         """
@@ -124,7 +166,22 @@ def define_env(env):
             return f"<!-- Snippet not found: {path} -->"
 
         with open(snippet_path, "r", encoding="utf-8") as f:
-            return f.read()
+            html = f.read()
+
+        if kwargs:
+            if "series_dir" in kwargs:
+                done = _count_series_done(kwargs["series_dir"])
+                total = _count_series_total(kwargs["series_dir"])
+                progress_text = f"{done}/{total}"
+                kwargs.setdefault("progress_done", done)
+                kwargs.setdefault("progress_total", total)
+                kwargs.setdefault("progress_text", progress_text)
+                kwargs.setdefault("data_progress", progress_text)
+                kwargs.setdefault("aria_valuenow", done)
+                kwargs.setdefault("aria_valuemax", total)
+            return _render_template(html, kwargs)
+
+        return html
 
 def on_pre_page_macros(env):
     """
