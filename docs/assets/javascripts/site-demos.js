@@ -96,7 +96,7 @@
 
     function coinAllSameP(n) {
       if (!isFinite(n) || n <= 0) return 0;
-      return Math.pow(2, 1 - n);
+      return Math.pow(2, -n);
     }
 
     function coinStreakN(p) {

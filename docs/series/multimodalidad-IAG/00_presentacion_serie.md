@@ -4,7 +4,7 @@ description: Representaciones, entrenamiento y producto en sistemas multimodales
 ---
 # Multimodalidad en IA generativa (GenAI) (texto-imagen-audio-vídeo)
 
-{{ include_html("snippets/series_meta.html", series_dir="multimodalidad-iag", data_state="construction", data_level="general", data_read="6", status_label="En construcción", level_label="General", glow_hidden="true", extra_rows="<div class=\"series-meta-row\"><span class=\"series-meta-label\">Prerequisitos</span><span class=\"series-meta-value\"><a href=\"../fundamentos-ia-iag/00_presentacion_serie.md\">Fundamentos de IA e IA generativa</a></span></div>") }}
+{{ include_html("snippets/series_meta.html", series_dir="multimodalidad-iag", data_state="construction", data_level="general", data_read="6", status_label="En construcción", level_label="General", glow_hidden="true", extra_rows="<div class=\"series-meta-row\"><span class=\"series-meta-label\">Prerequisitos</span><span class=\"series-meta-value\"><a href=\"../fundamentos-ia-iag/00_presentacion_serie/\">Fundamentos de IA e IA generativa</a></span></div>") }}
 
 **Objetivo:** explicar *qué significa multimodal* en términos de representaciones, entrenamiento y producto.  
 **Audiencia:** lectores con nociones básicas de IA que quieren entender sistemas multimodales.

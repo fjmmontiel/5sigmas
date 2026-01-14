@@ -6,7 +6,7 @@ hide:
 ---
 # Datacenters en el espacio
 
-{{ include_html("snippets/series_meta.html", series_dir="datacenters-espacio", data_state="construction", data_level="general", data_read="5", status_label="En construcción", level_label="General", glow_hidden="true", extra_rows="<div class=\"series-meta-row\"><span class=\"series-meta-label\">Prerequisitos</span><span class=\"series-meta-value\"><a href=\"../fundamentos-ia-iag/00_presentacion_serie.md\">Fundamentos de IA e IA generativa</a></span></div>") }}
+{{ include_html("snippets/series_meta.html", series_dir="datacenters-espacio", data_state="construction", data_level="general", data_read="5", status_label="En construcción", level_label="General", glow_hidden="true", extra_rows="<div class=\"series-meta-row\"><span class=\"series-meta-label\">Prerequisitos</span><span class=\"series-meta-value\"><a href=\"../fundamentos-ia-iag/00_presentacion_serie/\">Fundamentos de IA e IA generativa</a></span></div>") }}
 
 **Objetivo:** separar intuiciones populares de restricciones físicas reales (energía, calor, conectividad) y aterrizar casos de uso plausibles.  
 **Audiencia:** lectores interesados en infraestructura, energía y sistemas a gran escala.
@@ -15,7 +15,7 @@ Esta serie explora qué significa llevar computación fuera de la Tierra, qué p
 
 ## Contenido inicial
 
-- [01. Datacenters en el espacio: por qué suena lógico, por qué es difícil, y dónde sí podría tener sentido](01_datacenters-espacio.md)
+- [01. Datacenters en el espacio: por qué suena lógico, por qué es difícil, y dónde sí podría tener sentido](01_datacenters-espacio/)
 
 ## Próximos artículos
 - En preparación.
