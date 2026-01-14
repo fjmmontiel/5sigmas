@@ -25,7 +25,6 @@ theme:
   features:
     - navigation.tabs
     - navigation.sections
-    - navigation.indexes
     - navigation.instant
     - content.code.copy
     - content.action.edit
