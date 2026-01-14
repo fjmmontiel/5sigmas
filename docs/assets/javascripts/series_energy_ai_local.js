@@ -20,11 +20,13 @@
 
     const actual2024 = rows.find(r => r.year === 2024)?.actual_twh ?? 0;
     const projected2030 = rows.find(r => r.year === 2030)?.projected_twh ?? 0;
+    const spain2024 = 248.811;
+    const spain2030 = 357.697;
     const bars = [
+      { id: 'spain_2024', label: 'España 2024', value: spain2024, color: '#F59E0B' },
       { id: 'dc_2024', label: 'Data centers 2024', value: actual2024, color: '#22C55E' },
-      { id: 'dc_2030', label: 'Proyección 2030', value: projected2030, color: '#2563EB' },
-      { id: 'esp_2023', label: 'España 2023', value: 282.0, color: '#F59E0B' },
-      { id: 'usa_2023', label: 'EE. UU. 2023', value: 4494.0, color: '#EF4444' }
+      { id: 'spain_2030', label: 'España 2030', value: spain2030, color: '#F97316' },
+      { id: 'dc_2030', label: 'Data centers 2030', value: projected2030, color: '#2563EB' }
     ];
 
     const maxValue = Math.max(...bars.map(b => b.value));
@@ -59,7 +61,7 @@
     }).join('');
 
     const svg = `
-      <svg viewBox="0 0 ${width} ${height}" role="img" aria-label="Consumo eléctrico de data centers comparado con España y EE. UU.">
+      <svg viewBox="0 0 ${width} ${height}" role="img" aria-label="Comparativa de consumo eléctrico: data centers vs España (2024 y 2030)">
         ${gridLines}
         ${tickLabels}
         <line class="axis" x1="${pad.left}" x2="${width - pad.right}" y1="${height - pad.bottom}" y2="${height - pad.bottom}"></line>

@@ -172,13 +172,19 @@ def define_env(env):
             if "series_dir" in kwargs:
                 done = _count_series_done(kwargs["series_dir"])
                 total = _count_series_total(kwargs["series_dir"])
-                progress_text = f"{done}/{total}"
+                total = max(total, done)
+                if total == 0:
+                    progress_text = "0/0"
+                    aria_max = 1
+                else:
+                    progress_text = f"{done}/{total}"
+                    aria_max = total
                 kwargs.setdefault("progress_done", done)
                 kwargs.setdefault("progress_total", total)
                 kwargs.setdefault("progress_text", progress_text)
                 kwargs.setdefault("data_progress", progress_text)
                 kwargs.setdefault("aria_valuenow", done)
-                kwargs.setdefault("aria_valuemax", total)
+                kwargs.setdefault("aria_valuemax", aria_max)
             return _render_template(html, kwargs)
 
         return html

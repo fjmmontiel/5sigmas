@@ -3,9 +3,10 @@ from pathlib import Path
 
 def main() -> None:
     content = Path("docs/assets/javascripts/series_energy_ai_local.js").read_text(encoding="utf-8")
-    assert "España 2023" in content
-    assert "EE. UU. 2023" in content
-    assert "Proyección 2030" in content
+    assert "España 2024" in content
+    assert "España 2030" in content
+    assert "Data centers 2024" in content
+    assert "Data centers 2030" in content
     assert "Lift-off" not in content
     assert "Headwinds" not in content
     assert "High-efficiency" not in content
