@@ -2,45 +2,48 @@
 title: Multimodalidad en IA generativa
 description: Representaciones, entrenamiento y producto en sistemas multimodales.
 ---
-# Multimodalidad en IA generativa (GenAI) (texto-imagen-audio-vídeo)
+# Multimodalidad en IA generativa
 
-{{ include_html("snippets/series_meta.html", series_dir="multimodalidad-iag", data_state="construction", data_level="general", data_read="6", status_label="En construcción", level_label="General", glow_hidden="true", extra_rows="<div class=\"series-meta-row\"><span class=\"series-meta-label\">Prerequisitos</span><span class=\"series-meta-value\"><a href=\"../fundamentos-ia-iag/00_presentacion_serie/\">Fundamentos de IA e IA generativa</a></span></div>") }}
+{{ include_html("snippets/series_meta.html", series_dir="multimodalidad-iag", data_state="construction", data_level="general", data_read="6", status_label="En construcción", level_label="General", glow_hidden="true", extra_rows="<div class=\"series-meta-row\"><span class=\"series-meta-label\">Prerequisitos</span><span class=\"series-meta-value\"><a href=\"/series/fundamentos-ia-iag/00_presentacion_serie/\">Fundamentos de IA e IA generativa</a></span></div>") }}
 
-**Objetivo:** explicar *qué significa multimodal* en términos de representaciones, entrenamiento y producto.  
-**Audiencia:** lectores con nociones básicas de IA que quieren entender sistemas multimodales.
+La multimodalidad no es "añadir imágenes a un LLM". Es un cambio de diseño: cómo representas señales distintas (texto, imagen, audio, vídeo), cómo las alineas, y qué pierdes/ganas cuando intentas unificarlo todo en un solo sistema.
 
-**Tipos de artículos:**
+**Objetivo de la serie**
+- Entender las piezas técnicas reales (encoders, tokens, alineamiento, datasets, objetivos).
+- Separar capacidades de marketing vs límites físicos/estadísticos del entrenamiento multimodal.
+- Aterrizar criterios de diseño para producto: latencia, coste, fiabilidad, evaluación y seguridad.
 
-* “Arquitectura explicada”
-* “Entrenamiento explicado”
-* “Caso de uso + riesgos”
+## Índice
 
-**Línea de artículos (esbozo):**
+### 1. El problema: "unificar" señales distintas
+- Qué significa compartir espacio latente vs compartir tokens vs compartir backbone.
+- Por qué la multimodalidad no es solo I/O: es inductive bias.
 
-1. **Qué es multimodalidad (definición operacional)**
+### 2. Alineamiento: de pares a mundos (texto↔imagen↔audio)
+- Contraste, matching, captioning, instruction-tuning multimodal.
+- Dónde aparece la ambigüedad y por qué escala mal sin estructura.
 
-   * Modalidad = canal de información; tarea = alineación + composición.
-2. **Embeddings y espacios latentes: el pegamento conceptual**
+### 3. Arquitecturas: encoder-decoder, fusión, y modelos nativamente tokenizados
+- Patrones dominantes y trade-offs (calidad vs coste vs latencia).
+- Qué rompe primero cuando metes vídeo/audio.
 
-   * Por qué “todo acaba en vectores” (sin caer en simplismos).
-3. **Alineación cross-modal: cómo conectas texto↔imagen↔audio**
+### 4. Entrenamiento: datos, objetivos y "limpieza" multimodal
+- Curación de datasets, leakage, y sesgos por modalidad.
+- Por qué la evaluación es más difícil que en texto.
 
-   * Emparejamientos, contrastive learning, supervision débil.
-4. **Arquitecturas típicas**
+### 5. Inferencia: herramientas, OCR, grounding y agentes multimodales
+- Cuándo usar VLM puro vs VLM+tools vs pipelines.
+- Señales de confianza y verificación.
 
-   * Encoders por modalidad + fusion; o un backbone común; pros/cons.
-5. **Generación multimodal: qué cambia respecto a solo texto**
+### 6. Riesgos: prompt-injection visual, jailbreaks y seguridad operacional
+- Superficies nuevas de ataque y mitigaciones de diseño.
 
-   * Decodificación, condicionamiento, control, consistencia temporal (vídeo).
-6. **Tooling y producción**
+## Contenido inicial
+- 01. Qué es (y qué no es) multimodalidad: el mapa mental completo
+- 02. Tokens visuales: qué "ve" realmente un VLM
 
-   * Pipelines, latencia, coste, caching, streaming (audio), guardrails.
-7. **Evaluación multimodal**
-
-   * Calidad perceptual, grounding, consistencia, seguridad (contenido).
-8. **Casos de uso reales y anti-patrones**
-
-   * Documentos, asistencia, search, visión industrial; dónde falla.
+## Próximos artículos
+- En preparación.
 
 <!-- 
 ## Fuentes y notas

@@ -1,0 +1,476 @@
+<!-- Paste this whole block as-is. It includes the updated SVG + CSS + JS. -->
+<div class="sigmas-dcspace" data-animate="off">
+  <div class="sigmas-dcspace__head">
+    <div class="sigmas-dcspace__title">Infografía: El Futuro de la IA y el Límite Térmico de la Tierra</div>
+    <div class="sigmas-dcspace__sub">
+      En la Tierra, una parte relevante de la electricidad se va en <em>mover calor</em> (bombas, ventiladores,
+      compresores) y en pérdidas eléctricas.
+      En órbita, el calor se expulsa principalmente por <strong>radiación</strong> y el <strong>Sol</strong> aporta
+      potencia eléctrica mediante paneles solares.
+    </div>
+  </div>
+
+  <div class="sigmas-dcspace__viz">
+    <svg viewBox="0 0 1100 740" preserveAspectRatio="xMidYMid meet" role="img"
+      aria-label="Infografía: Métricas en Tierra vs Órbita">
+      <defs>
+        <linearGradient id="infographic-bg" x1="0" x2="1" y1="0.5" y2="0.5">
+          <stop offset="0%" stop-color="#050814" />
+          <stop offset="30%" stop-color="#0A1229" />
+          <stop offset="100%" stop-color="#03050C" />
+        </linearGradient>
+
+        <filter id="premium-bloom" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="5" result="blur" />
+          <feComposite in="SourceGraphic" in2="blur" operator="over" />
+        </filter>
+
+        <pattern id="stars-infographic" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse">
+          <circle cx="20" cy="30" r="0.7" fill="#fff" opacity="0.3" />
+          <circle cx="150" cy="50" r="0.9" fill="#fff" opacity="0.5" />
+          <circle cx="80" cy="160" r="0.6" fill="#fff" opacity="0.2" />
+          <circle cx="180" cy="180" r="1.1" fill="#fff" opacity="0.4" />
+        </pattern>
+      </defs>
+
+      <!-- BACKGROUND -->
+      <rect x="0" y="0" width="1100" height="740" rx="20" fill="url(#infographic-bg)" />
+      <rect x="0" y="0" width="1100" height="740" rx="20" fill="url(#stars-infographic)" opacity="0.3" />
+
+      <!-- =====================
+           TIERRA (MÉTRICA + GRÁFICA)
+           ===================== -->
+      <g transform="translate(40,65)">
+        <rect x="0" y="0" width="500" height="520" rx="18" fill="rgba(255,255,255,0.03)"
+          stroke="rgba(160,190,255,0.12)" />
+        <text x="24" y="40" fill="#BFD3FF" font-size="18" font-weight="900">Métricas en Tierra</text>
+
+        <!-- MÉTRICA (demanda) -->
+        <g transform="translate(24,78)">
+          <text x="0" y="0" fill="#BFD3FF" font-size="14" font-weight="800">Energía estimada para centros de datos
+            (IEA) —
+            año 2030</text>
+          <rect x="0" y="16" width="360" height="16" rx="8" fill="#0E1730" stroke="#23376B" />
+          <rect class="metricbar-earth" x="0" y="16" width="0" height="16" rx="8" fill="#26A69A" />
+          <text x="0" y="70" fill="#E8F0FF" font-size="42" font-weight="900" font-family="ui-monospace">
+            <tspan class="counter-earth" data-from="0" data-to="950">0</tspan>
+            <tspan fill="#9FB7FF" font-size="18" font-weight="600"> TWh</tspan>
+          </text>
+          <text x="0" y="98" fill="#9FB7FF" font-size="12">Crecimiento → más calor que expulsar</text>
+        </g>
+
+        <!-- GRÁFICA (dónde se va la energía) -->
+        <g transform="translate(24,210)">
+          <rect x="0" y="0" width="452" height="182" rx="14" fill="rgba(255, 255, 255, 0.03)"
+            stroke="rgba(160, 190, 255, 0.12)" />
+          <text x="16" y="26" fill="#BFD3FF" font-size="14" font-weight="900">Distribución de energía (aprox.)</text>
+          <text x="16" y="46" fill="#9FB7FF" font-size="12">Orden de magnitud: ~60% IT y ~40% infraestructura
+            térmica/servicios</text>
+
+          <rect x="16" y="66" width="328" height="18" rx="9" fill="#0E1730" stroke="#23376B" />
+          <rect class="pue-it" x="16" y="66" width="0" height="18" rx="9" fill="#59F3C2" />
+          <rect class="pue-oh" x="16" y="66" width="0" height="18" rx="9" fill="#FF8B5C" opacity="0.95" />
+
+          <text x="16" y="110" fill="#59F3C2" font-size="12" font-weight="900">IT (cómputo) ≈ 60%</text>
+          <text x="16" y="132" fill="#FF8B5C" font-size="12" font-weight="900">Infraestructura + servicios ≈ 40%</text>
+
+          <text x="16" y="156" fill="#9FB7FF" font-size="11">
+            <tspan x="16" dy="0">• Refrigeración: compresores, ventilación, bombeo</tspan>
+            <tspan x="16" dy="16">• Eléctrico: SAI/UPS, conversión AC/DC, distribución</tspan>
+          </text>
+        </g>
+
+        <!-- IMPLICACIÓN (simétrica) -->
+        <g transform="translate(24,402)">
+          <rect x="0" y="0" width="452" height="86" rx="14" fill="rgba(255, 139, 92, 0.06)"
+            stroke="rgba(255, 139, 92, 0.22)" />
+          <text x="16" y="28" fill="#FF8B5C" font-size="13" font-weight="900">Implicación directa</text>
+          <text x="16" y="48" fill="#9FB7FF" font-size="12">
+            <tspan x="16" dy="0">Cada punto que reduces en refrigeración/servicios se convierte</tspan>
+            <tspan x="16" dy="16">en más cómputo útil o menos coste operativo.</tspan>
+          </text>
+        </g>
+      </g>
+
+      <!-- =====================
+           ÓRBITA (MÉTRICA + GRÁFICA)
+           ===================== -->
+      <g transform="translate(560,65)">
+        <rect x="0" y="0" width="500" height="520" rx="18" fill="rgba(255,255,255,0.03)"
+          stroke="rgba(160,190,255,0.12)" />
+        <text x="24" y="40" fill="#BFD3FF" font-size="18" font-weight="900">Métricas en Órbita</text>
+
+        <!-- MÉTRICA (fracción para IT) -->
+        <g transform="translate(24,78)">
+          <text x="0" y="0" fill="#BFD3FF" font-size="14" font-weight="800">Fracción de electricidad que llega a IT
+            (conceptual)</text>
+          <rect x="0" y="16" width="360" height="16" rx="8" fill="#0E1730" stroke="#23376B" />
+          <rect class="metricbar-orb" x="0" y="16" width="0" height="16" rx="8" fill="#59F3C2" />
+          <text x="0" y="70" fill="#E8F0FF" font-size="42" font-weight="900" font-family="ui-monospace">
+            <tspan class="counter-orb" data-from="0" data-to="90">0</tspan>
+            <tspan fill="#9FB7FF" font-size="18" font-weight="600"> %</tspan>
+          </text>
+          <text x="0" y="98" fill="#9FB7FF" font-size="12">Menos pérdidas auxiliares → más energía útil para
+            cómputo</text>
+        </g>
+
+        <!-- GRÁFICA (dónde se va la energía) -->
+        <g transform="translate(24,210)">
+          <rect x="0" y="0" width="452" height="182" rx="14" fill="rgba(255, 255, 255, 0.03)"
+            stroke="rgba(160, 190, 255, 0.12)" />
+          <text x="16" y="26" fill="#BFD3FF" font-size="14" font-weight="900">Distribución de energía (aprox.)</text>
+          <text x="16" y="46" fill="#9FB7FF" font-size="12">Orden de magnitud: ~90% IT y ~10% servicios/control</text>
+
+          <rect x="16" y="66" width="328" height="18" rx="9" fill="#0E1730" stroke="#23376B" />
+          <rect class="orb-it" x="16" y="66" width="0" height="18" rx="9" fill="#59F3C2" />
+          <rect class="orb-aux" x="16" y="66" width="0" height="18" rx="9" fill="#FFD36A" opacity="0.9" />
+
+          <text x="16" y="110" fill="#59F3C2" font-size="12" font-weight="900">IT (cómputo) ≈ 90%</text>
+          <text x="16" y="132" fill="#FFD36A" font-size="12" font-weight="900">Servicios + control ≈ 10%</text>
+
+          <text x="16" y="156" fill="#9FB7FF" font-size="11">
+            <tspan x="16" dy="0">• Electricidad: DC/DC, control, comunicaciones</tspan>
+            <tspan x="16" dy="16">• Térmico: bombas + radiadores (radiación)</tspan>
+          </text>
+        </g>
+
+        <!-- IMPLICACIÓN (mantener) -->
+        <g transform="translate(24,402)">
+          <rect x="0" y="0" width="452" height="86" rx="14" fill="rgba(89, 243, 194, 0.07)"
+            stroke="rgba(89, 243, 194, 0.22)" />
+          <text x="16" y="28" fill="#59F3C2" font-size="13" font-weight="900">Implicación directa</text>
+          <text x="16" y="48" fill="#9FB7FF" font-size="12">
+            <tspan x="16" dy="0">El “coste” pasa a diseño: más potencia térmica →</tspan>
+            <tspan x="16" dy="16">más área/masa de radiadores.</tspan>
+          </text>
+        </g>
+      </g>
+
+      <!-- CAMBIO CLAVE (debajo de métricas) -->
+      <g transform="translate(40,605)">
+        <rect x="0" y="0" width="1020" height="86" rx="18" fill="rgba(255,255,255,0.03)"
+          stroke="rgba(160,190,255,0.12)" />
+        <text x="510" y="28" text-anchor="middle" fill="#BFD3FF" font-size="18" font-weight="900">Cambio clave</text>
+        <text x="510" y="52" text-anchor="middle" fill="#9FB7FF" font-size="13">
+          Tierra: <tspan fill="#FF8B5C" font-weight="900">+ electricidad</tspan> para enfriar → Órbita: <tspan
+            fill="#59F3C2" font-weight="900">+ radiadores</tspan> para expulsar calor
+        </text>
+      </g>
+    </svg>
+  </div>
+
+  <div class="sigmas-dcspace__foot">
+    <div class="sigmas-dcspace__notes">
+      <span class="chip error">Cuello de botella terrestre: calor y red</span>
+      <span class="chip primary">Ventaja orbital: radiación pasiva</span>
+    </div>
+
+    <div class="sigmas-dcspace__sources">
+      Fuentes:
+      <a href="https://www.iea.org/reports/electricity-2025/executive-summary" target="_blank" rel="noreferrer">IEA
+        2025</a> ·
+      <a href="https://ntrs.nasa.gov/api/citations/20120006537/downloads/20120006537.pdf" target="_blank"
+        rel="noreferrer">NASA Space Cooling</a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .sigmas-dcspace {
+    border: 1px solid rgba(160, 190, 255, .15);
+    border-radius: 28px;
+    padding: 28px;
+    background: linear-gradient(160deg, #080C1C, #04060E);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6);
+    margin: 35px 0;
+    font-family: system-ui, -apple-system, sans-serif;
+    color: #E8F0FF;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .sigmas-dcspace__title {
+    font-size: 24px;
+    font-weight: 900;
+    margin-bottom: 10px;
+    background: linear-gradient(90deg, #E8F0FF, #9FB7FF);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.02em;
+  }
+
+  .sigmas-dcspace__sub {
+    font-size: 15px;
+    color: rgba(190, 210, 255, 0.7);
+    line-height: 1.65;
+    max-width: 900px;
+  }
+
+  .sigmas-dcspace__viz {
+    margin-top: 16px;
+  }
+
+  .sigmas-dcspace__viz svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    filter: saturate(1.15);
+    border-radius: 16px;
+  }
+
+  .sigmas-dcspace__foot {
+    margin-top: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    border-top: 1px solid rgba(160, 190, 255, 0.12);
+    padding-top: 25px;
+  }
+
+  .sigmas-dcspace__notes {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .sigmas-dcspace__sources {
+    font-size: 13px;
+    color: rgba(190, 210, 255, 0.5);
+  }
+
+  .sigmas-dcspace__sources a {
+    color: #26A69A;
+    text-decoration: none;
+    font-weight: 700;
+    border-bottom: 1px solid rgba(38, 166, 154, 0.3);
+    transition: 0.2s;
+  }
+
+  .sigmas-dcspace__sources a:hover {
+    color: #59F3C2;
+    border-bottom-color: #59F3C2;
+  }
+
+  .chip {
+    font-size: 13px;
+    font-weight: 600;
+    padding: 7px 16px;
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .chip.error {
+    color: #FF8B5C;
+    border-color: rgba(255, 139, 92, 0.35);
+    background: rgba(255, 139, 92, 0.05);
+  }
+
+  .chip.primary {
+    color: #59F3C2;
+    border-color: rgba(89, 243, 194, 0.35);
+    background: rgba(89, 243, 194, 0.05);
+  }
+
+  @media (max-width: 768px) {
+    .sigmas-dcspace {
+      padding: 18px;
+    }
+
+    .sigmas-dcspace__title {
+      font-size: 20px;
+    }
+
+    .sigmas-dcspace__sub {
+      font-size: 13px;
+    }
+  }
+</style>
+
+<script>
+  (() => {
+    const findRoot = () => {
+      // Walk backwards from this script until we find the component root.
+      let n = document.currentScript;
+      while (n && n.previousElementSibling) {
+        n = n.previousElementSibling;
+        if (n.classList?.contains("sigmas-dcspace")) return n;
+      }
+      // Fallback: last instance on page.
+      const all = document.querySelectorAll(".sigmas-dcspace");
+      return all.length ? all[all.length - 1] : null;
+    };
+
+    const root = findRoot();
+    if (!root) return;
+
+    const TEST = Boolean(root.dataset.test === "on" || window.__SIGMAS_DCSPACE_TEST__);
+    const prefersReduced = TEST
+      ? true
+      : (window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false);
+
+    const countUp = (el, start, end, duration) => {
+      let t0 = null;
+      const step = (t) => {
+        if (t0 == null) t0 = t;
+        const p = Math.min((t - t0) / duration, 1);
+        const ease = 1 - Math.pow(1 - p, 4);
+        el.textContent = Math.floor(ease * (end - start) + start);
+        if (p < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    };
+
+    const animateRectWidthAttr = (rect, from, to, duration) => {
+      let t0 = null;
+      const step = (t) => {
+        if (t0 == null) t0 = t;
+        const p = Math.min((t - t0) / duration, 1);
+        const ease = 1 - Math.pow(1 - p, 3);
+        const w = from + (to - from) * ease;
+        rect.setAttribute("width", String(w));
+        if (p < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    };
+
+    const animateStacked = (itRect, auxRect, baseX, itTo, auxTo, duration) => {
+      let t0 = null;
+      const step = (t) => {
+        if (t0 == null) t0 = t;
+        const p = Math.min((t - t0) / duration, 1);
+        const ease = 1 - Math.pow(1 - p, 3);
+        const itW = itTo * ease;
+        const auxW = auxTo * ease;
+        itRect.setAttribute("width", String(itW));
+        auxRect.setAttribute("x", String(baseX + itW));
+        auxRect.setAttribute("width", String(auxW));
+        if (p < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    };
+
+    const run = () => {
+      root.dataset.animate = "on";
+
+      // --- TIERRA: contador TWh ---
+      const counterEarth = root.querySelector(".counter-earth");
+      if (counterEarth) {
+        const from = Number(counterEarth.dataset.from ?? 0);
+        const to = Number(counterEarth.dataset.to ?? 950);
+        if (prefersReduced) counterEarth.textContent = String(to);
+        else countUp(counterEarth, from, to, 2200);
+      }
+
+      // --- TIERRA: barra métrica (llenar al 100% para no confundir escala) ---
+      const metricEarth = root.querySelector(".metricbar-earth");
+      if (metricEarth) {
+        if (prefersReduced) metricEarth.setAttribute("width", "360");
+        else animateRectWidthAttr(metricEarth, 0, 360, 2200);
+      }
+
+      // --- TIERRA: barra apilada (total = 328) ---
+      const pueIt = root.querySelector(".pue-it");
+      const pueOh = root.querySelector(".pue-oh");
+      if (pueIt && pueOh) {
+        const baseX = 16;
+        const itTo = 197; // ~60% de 328
+        const ohTo = 131; // ~40% de 328
+        if (prefersReduced) {
+          pueIt.setAttribute("width", String(itTo));
+          pueOh.setAttribute("x", String(baseX + itTo));
+          pueOh.setAttribute("width", String(ohTo));
+        } else {
+          animateStacked(pueIt, pueOh, baseX, itTo, ohTo, 2200);
+        }
+      }
+
+      // --- ÓRBITA: contador % ---
+      const counterOrb = root.querySelector(".counter-orb");
+      if (counterOrb) {
+        const from = Number(counterOrb.dataset.from ?? 0);
+        const to = Number(counterOrb.dataset.to ?? 90);
+        if (prefersReduced) counterOrb.textContent = String(to);
+        else countUp(counterOrb, from, to, 2200);
+      }
+
+      // --- ÓRBITA: barra métrica (90% de 360) ---
+      const metricOrb = root.querySelector(".metricbar-orb");
+      if (metricOrb) {
+        const to = 324; // 0.9 * 360
+        if (prefersReduced) metricOrb.setAttribute("width", String(to));
+        else animateRectWidthAttr(metricOrb, 0, to, 2200);
+      }
+
+      // --- ÓRBITA: barra apilada (total = 328) ---
+      const orbIt = root.querySelector(".orb-it");
+      const orbAux = root.querySelector(".orb-aux");
+      if (orbIt && orbAux) {
+        const baseX = 16;
+        const itTo = 295; // ~90% de 328
+        const auxTo = 33; // ~10% de 328
+        if (prefersReduced) {
+          orbIt.setAttribute("width", String(itTo));
+          orbAux.setAttribute("x", String(baseX + itTo));
+          orbAux.setAttribute("width", String(auxTo));
+        } else {
+          animateStacked(orbIt, orbAux, baseX, itTo, auxTo, 2200);
+        }
+      }
+    };
+
+    // --- Lightweight test cases (opt-in) ---
+    // Enable by setting: window.__SIGMAS_DCSPACE_TEST__ = true
+    const runTests = () => {
+      const assert = (cond, msg) => {
+        if (!cond) throw new Error(`sigmas-dcspace test failed: ${msg}`);
+      };
+      run();
+
+      const earthBar = root.querySelector(".metricbar-earth");
+      const orbBar = root.querySelector(".metricbar-orb");
+      const pueIt = root.querySelector(".pue-it");
+      const pueOh = root.querySelector(".pue-oh");
+      const orbIt = root.querySelector(".orb-it");
+      const orbAux = root.querySelector(".orb-aux");
+
+      assert(root.dataset.animate === "on", "data-animate should be on");
+      assert(!earthBar || earthBar.getAttribute("width") === "360", "earth metric bar should be width=360 in reduced/test mode");
+      assert(!orbBar || orbBar.getAttribute("width") === "324", "orbit metric bar should be width=324 in reduced/test mode");
+      assert(!pueIt || pueIt.getAttribute("width") === "197", "pue-it should be width=197 in reduced/test mode");
+      assert(!pueOh || pueOh.getAttribute("width") === "131", "pue-oh should be width=131 in reduced/test mode");
+      assert(!orbIt || orbIt.getAttribute("width") === "295", "orb-it should be width=295 in reduced/test mode");
+      assert(!orbAux || orbAux.getAttribute("width") === "33", "orb-aux should be width=33 in reduced/test mode");
+
+      // eslint-disable-next-line no-console
+      console.log("sigmas-dcspace: tests passed");
+    };
+
+    if (TEST) {
+      runTests();
+      return;
+    }
+
+    // Prefer IntersectionObserver, fall back to immediate run.
+    if (typeof IntersectionObserver === "undefined") {
+      run();
+      return;
+    }
+
+    const obs = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (e.isIntersecting) {
+          run();
+          obs.disconnect();
+          break;
+        }
+      }
+    }, { threshold: 0.25 });
+
+    obs.observe(root);
+  })();
+</script>
