@@ -29,6 +29,14 @@ class TestSeriesMetaCounts(unittest.TestCase):
         self.assertEqual(total, 3)
         self.assertEqual(done, 2)
 
+    def test_nav_series_points_to_first(self):
+        mkdocs_path = os.path.join(os.path.dirname(main.__file__), "mkdocs.yml")
+        self.assertTrue(os.path.isfile(mkdocs_path))
+        with open(mkdocs_path, "r", encoding="utf-8") as f:
+            content = f.read()
+        self.assertIn("series/fundamentos-ia-iag/00_presentacion_serie.md", content)
+        self.assertNotIn("navigation.indexes", content)
+
 
 if __name__ == "__main__":
     unittest.main()
