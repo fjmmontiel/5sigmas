@@ -9,11 +9,11 @@ Si buscas entender *cómo funciona* esta tecnología desde sus cimientos, este e
 
 ## Quién lo escribe
 Soy **Francisco Maldonado**, doble graduado en Física y Matemáticas.
-Trabajo diseñando y construyendo sistemas de IA que operan en tiempo real, desde asistentes de voz hasta visión artificial. Abarcando desde la identificación de necesidades de negocio hasta la implantación y escalado masivo.
+Trabajo diseñando y construyendo sistemas de IA que operan en tiempo real, desde asistentes de voz hasta visión artificial. Abarcando desde la identificación de necesidades de negocio hasta la implantación.
 Escribo para ordenar lo que normalmente queda disperso entre papers, repositorios y benchmarks.
 
 ## Colaboraciones y contacto
-Si quieres proponer una colaboración, un artículo o una serie, o si has encontrado algún error (prefiero ser fiel a la verdad a llevar la razón), contáctame.
+Si quieres proponer una colaboración, un artículo o una serie, o si has encontrado algún error, contáctame.
 
 <div class="contact-grid" markdown="1">
 

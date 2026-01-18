@@ -44,8 +44,8 @@ nav:
           - Presentación: series/from-cave-to-agi/00_presentacion_serie.md
       - Multimodalidad en IA Generativa:
           - Presentación: series/multimodalidad-iag/00_presentacion_serie.md
-      - Modelos razonadores y tiempo físico:
-          - Presentación: series/modelos-razonadores-tiempo-fisico/00_presentacion_serie.md
+      - Modelos razonadores:
+          - Presentación: series/modelos-razonadores/00_presentacion_serie.md
       - IA, PIB, bienestar y energía:
           - Presentación: series/ia-pib-bienestar-energia/00_presentacion_serie.md
       - Datacenters en el espacio:
@@ -91,4 +91,15 @@ extra_css:
 plugins:
   - search
   - macros
+  - social:
+      cards_layout: clean
+      cards_layout_options:
+        background_color: transparent
+        background_image: docs/assets/social_liquid.png
+        color: "#ffffff"
+        font_family: Inter
+      enabled: true
   # - blog        # optional – see below
+exclude_docs: |
+  - drafts/
+  - drafts/**

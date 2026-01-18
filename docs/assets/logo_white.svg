@@ -16,7 +16,7 @@
     font-family="Inter, sans-serif, Arial"
     font-size="68"
     letter-spacing="-4"
-    fill="url(#grad5sigma)">
+    fill="#ffffff">
     <tspan font-weight="800">5</tspan>
     <tspan dx="-22" font-weight="800">σ</tspan>
   </text>

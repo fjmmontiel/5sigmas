@@ -3,3 +3,4 @@ mkdocs-material
 pymdown-extensions
 mkdocs-macros-plugin
 PyYAML
+mkdocs-material[imaging]
