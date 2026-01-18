@@ -1,6 +1,6 @@
 ---
 title: 5sigmas
-description: Contexto riguroso sobre IA, GenAI y sistemas, sin ruido ni hype.
+description: Contexto riguroso sobre Inteligencia Artificial.
 hide:
   - navigation
 ---

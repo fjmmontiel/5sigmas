@@ -30,7 +30,7 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; else pip install mkdocs mkdocs-material; fi
 
       - name: Build site
-        run: mkdocs build --clean
+        run: mkdocs build --clean --strict
 
       - uses: actions/configure-pages@v5
 

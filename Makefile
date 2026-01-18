@@ -15,7 +15,7 @@ $(MKDOCS):
 
 # Compilar la web a HTML estático (en ./site)
 build: install
-	$(MKDOCS) build
+	$(MKDOCS) build --strict
 
 # Servir en local (http://127.0.0.1:8000)
 serve: install
