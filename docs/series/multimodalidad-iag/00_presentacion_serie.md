@@ -6,12 +6,8 @@ description: Representaciones, entrenamiento y producto en sistemas multimodales
 
 {{ include_html("snippets/series_meta.html", series_dir="multimodalidad-iag", data_state="construction", data_level="general", data_read="6", status_label="En construcción", level_label="General", glow_hidden="true", extra_rows="<div class=\"series-meta-row\"><span class=\"series-meta-label\">Prerequisitos</span><span class=\"series-meta-value\"><a href=\"/series/fundamentos-ia-iag/00_presentacion_serie/\">Fundamentos de IA e IA generativa</a></span></div>") }}
 
-La multimodalidad no es "añadir imágenes a un LLM". Es un cambio de diseño: cómo representas señales distintas (texto, imagen, audio, vídeo), cómo las alineas, y qué pierdes/ganas cuando intentas unificarlo todo en un solo sistema.
-
-**Objetivo de la serie**
-- Entender las piezas técnicas reales (encoders, tokens, alineamiento, datasets, objetivos).
-- Separar capacidades de marketing vs límites físicos/estadísticos del entrenamiento multimodal.
-- Aterrizar criterios de diseño para producto: latencia, coste, fiabilidad, evaluación y seguridad.
+La multimodalidad es un cambio de diseño, de como podemos alinear la naturalidad de interactuar usando el lenguaje natural no solo con el lenguaje, si no con imágenes, audio, vídeo.
+Esto supone un cambio radical de las diferentes áreas que se ven impactadas drásticamente con estos modelos.
 
 ## Índice
 
