@@ -7,6 +7,7 @@ import math
 import re
 
 def _count_series_total(series_dirname):
+    series_dirname = series_dirname.lower()
     base_dir = os.path.join(os.path.dirname(__file__), "docs/series", series_dirname)
     series_file = os.path.join(base_dir, "00_presentacion_serie.md")
     if not os.path.isfile(series_file):
@@ -20,6 +21,7 @@ def _count_series_total(series_dirname):
     return len(re.findall(r'^###\s+', content, flags=re.MULTILINE))
 
 def _count_series_done(series_dirname):
+    series_dirname = series_dirname.lower()
     base_dir = os.path.join(os.path.dirname(__file__), "docs/series", series_dirname)
     if not os.path.isdir(base_dir):
         print(f"[series-meta] Missing series directory: {base_dir}")

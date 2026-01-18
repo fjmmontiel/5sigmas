@@ -29,6 +29,12 @@ class TestSeriesMetaCounts(unittest.TestCase):
         self.assertEqual(total, 3)
         self.assertEqual(done, 2)
 
+    def test_counts_are_case_insensitive(self):
+        total = main._count_series_total("__TEST_SERIES_META")
+        done = main._count_series_done("__TEST_SERIES_META")
+        self.assertEqual(total, 3)
+        self.assertEqual(done, 2)
+
     def test_nav_series_points_to_first(self):
         mkdocs_path = os.path.join(os.path.dirname(main.__file__), "mkdocs.yml")
         self.assertTrue(os.path.isfile(mkdocs_path))
@@ -36,6 +42,19 @@ class TestSeriesMetaCounts(unittest.TestCase):
             content = f.read()
         self.assertIn("series/fundamentos-ia-iag/00_presentacion_serie.md", content)
         self.assertNotIn("navigation.indexes", content)
+
+    def test_datacenters_prereq_link_is_absolute(self):
+        series_path = os.path.join(
+            os.path.dirname(main.__file__),
+            "docs/series/datacenters-espacio/00_presentacion_serie.md",
+        )
+        self.assertTrue(os.path.isfile(series_path))
+        with open(series_path, "r", encoding="utf-8") as f:
+            content = f.read()
+        self.assertIn(
+            'href=\\"/series/fundamentos-ia-iag/00_presentacion_serie/\\"',
+            content,
+        )
 
 
 if __name__ == "__main__":
