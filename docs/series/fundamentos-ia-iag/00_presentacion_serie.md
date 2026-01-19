@@ -21,7 +21,7 @@ En esta serie exploraremos: <br>
 ###  2. **Qué es IA generativa exactamente**
 - Veremos como nace esta nueva tecnología, desde los embeddings al transformer a la Ley de escala. <br>
 - Además, presentaremos el cambio de paradigma y sus motivos, basados en que un único modelo fundacional de IA generativa se puede usar para múltiples tareas simultáneas.<br>
-- Tendremos un glosario de los diferentes conceptos que rodean a esta tecnología <br>
+- Tendremos un glosario de los diferentes conceptos que rodean a esta tecnología. <br>
 - Haremos un despiece general de cómo es un sistema real de una solución de IA generativa y su ciclo de vida (LLMOps)
 
 ### 3. **IA vs IA generativa**

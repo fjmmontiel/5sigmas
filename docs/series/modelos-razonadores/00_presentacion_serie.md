@@ -15,21 +15,21 @@ En esta serie explicaremos que si el razonamiento es un proceso, entonces el tie
 ## Índice
 
 ### 1. **Qué es “razonar” para un LLM**
-- Veremos qué diferentes deficiones de razonamiento pueden encajar en el contexto de los LLMs. 
+- Veremos qué diferentes definiciones de razonamiento pueden encajar en el contexto de los LLMs. 
 - Nacimiento de los modelos razonadores: o1 de OpenAI
-- Repaso del paper de Apple sobre "The ilusion of thinking" y la respuesta de Anthropic.
+- Repaso del paper de Apple sobre "The illusion of thinking" y la respuesta de Anthropic
 
 ### 2. **Cómo se ven los fallos de estos sistemas**
-- Los fallos de este tipo de modelos no son aleatorios, definiriremos sus diferentes tipos como: Atajos, errores sistemáticos, deriva de objetivo y más.
-- Veremos los diferentes métodos de detectarlos y como mitigarlos al máximo.
+- Los fallos de este tipo de modelos no son aleatorios, definiremos sus diferentes tipos como: Atajos, errores sistemáticos, deriva de objetivo y más.
+- Veremos los diferentes métodos de detectarlos y cómo mitigarlos al máximo.
 
 ### 3. **Test-Time Compute**
-- Veremos que significa que el Test-time compute sea una nueva ley de escala para estos modelos
+- Veremos qué significa que el Test-time compute sea una nueva ley de escala para estos modelos
 - Además, que diferentes palancas tenemos para aprovechar al máximo esta nueva ley de escala: Más pasos internos, más generación de candidatos, más estructura.
 - Veremos claramente la relación entre una calidad superior de las respuestas asociada a un mayor coste y latencia. 
 
 ### 4. **Tiempo físico: latencia, streaming, interacción humana**
-- Veremos como “pensar más” en un paper es barato. En un producto, significa: El usuario espera, la sesión es más cara y el sistema tiene más puntos posibles de fallo al ejecutar más pasos. 
+- Veremos cómo “pensar más” en un paper es barato. En un producto, significa: El usuario espera, la sesión es más cara y el sistema tiene más puntos posibles de fallo al ejecutar más pasos. 
 - ¿Dónde está el umbral de latencia aceptable para esta tarea y este usuario? (Lanzamiento de GPT-5 como enrutador)
 - Veremos que patrones nos pueden ayudar a optimizar al máximo los beneficios del test-time compute.
 
