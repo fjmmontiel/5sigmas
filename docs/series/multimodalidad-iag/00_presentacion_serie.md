@@ -6,40 +6,32 @@ description: Representaciones, entrenamiento y producto en sistemas multimodales
 
 {{ include_html("snippets/series_meta.html", series_dir="multimodalidad-iag", data_state="construction", data_level="general", data_read="6", status_label="En construcción", level_label="General", glow_hidden="true", extra_rows="<div class=\"series-meta-row\"><span class=\"series-meta-label\">Prerequisitos</span><span class=\"series-meta-value\"><a href=\"/series/fundamentos-ia-iag/00_presentacion_serie/\">Fundamentos de IA e IA generativa</a></span></div>") }}
 
-La multimodalidad es un cambio de diseño, de como podemos alinear la naturalidad de interactuar usando el lenguaje natural no solo con el lenguaje, si no con imágenes, audio, vídeo.
-Esto supone un cambio radical de las diferentes áreas que se ven impactadas drásticamente con estos modelos.
+La multimodalidad es el salto de “hablar con una IA” a **interactuar con un sistema que puede combinar texto con imágenes, audio o vídeo**. El cambio importante no es añadir entradas/salidas nuevas, sino que el modelo pueda **cruzar información** entre lo que “lee” en lenguaje natural con lo que “observa” en una imagen o lo que “escucha” en un audio.
+
 
 ## Índice
 
 ### 1. El problema: "unificar" señales distintas
-- Qué significa compartir espacio latente vs compartir tokens vs compartir backbone.
-- Por qué la multimodalidad no es solo I/O: es inductive bias.
+- Qué significa que un modelo pueda relacionar lo que “ve”/“oye” con lo que “entiende” en texto: una representación común, no un truco de entrada/salida.
+- Qué cosas esperamos de un sistema multimodal y por qué son difíciles (describir, localizar, comparar, verificar y actuar).
 
 ### 2. Alineamiento: de pares a mundos (texto↔imagen↔audio)
-- Contraste, matching, captioning, instruction-tuning multimodal.
-- Dónde aparece la ambigüedad y por qué escala mal sin estructura.
+- Cómo se entrena la base de pares simples (imagen↔texto) a instrucciones multimodales (pregunta→respuesta, explicación, extracción).
+- Por qué la calidad y estructura de datos manda: si los pares son ruidosos, el modelo aprende asociaciones frágiles.
 
 ### 3. Arquitecturas: encoder-decoder, fusión, y modelos nativamente tokenizados
-- Patrones dominantes y trade-offs (calidad vs coste vs latencia).
-- Qué rompe primero cuando metes vídeo/audio.
+- Tres formas de conectar visión y lenguaje: convertir imagen/audio en señales “entendibles” por el modelo, fusionarlas con texto, y decidir cuándo mezclar información.
+- Calidad vs coste vs latencia, y por qué algunas arquitecturas son más fáciles de servir que otras.
 
-### 4. Entrenamiento: datos, objetivos y "limpieza" multimodal
-- Curación de datasets, leakage, y sesgos por modalidad.
-- Por qué la evaluación es más difícil que en texto.
+### 4. Evaluación
+- Por qué medir multimodalidad es más difícil que medir texto (y cómo evitar autoengaños y fugas de evaluación).
+- Hay que medir **grounding** (si la respuesta está sustentada en la imagen/audio).
+- Hay fugas por *contaminación de benchmarks* y por “prior” lingüístico (responder por probabilidad, no por evidencia).
 
-### 5. Inferencia: herramientas, OCR, grounding y agentes multimodales
-- Cuándo usar VLM puro vs VLM+tools vs pipelines.
-- Señales de confianza y verificación.
-
-### 6. Riesgos: prompt-injection visual, jailbreaks y seguridad operacional
-- Superficies nuevas de ataque y mitigaciones de diseño.
-
-## Contenido inicial
-- 01. Qué es (y qué no es) multimodalidad: el mapa mental completo
-- 02. Tokens visuales: qué "ve" realmente un VLM
-
-## Próximos artículos
-- En preparación.
+### 5. Riesgos: prompt-injection visual, jailbreaks y seguridad operacional
+- **Prompt injection** (incluida la visual: instrucciones ocultas en la imagen).
+- Fugas de sistema/políticas, y manipulación de herramientas (si hay tool-use).
+- Privacidad (imágenes/documentos) y data poisoning.
 
 <!-- 
 ## Fuentes y notas
