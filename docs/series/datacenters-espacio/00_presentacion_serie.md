@@ -12,7 +12,7 @@ hide:
 
 ## Índice
 
-### 1. Por qué ahora: IA como tecnología eléctrica
+### 1. Por qué ahora
 - Demanda de cómputo y fricciones de infraestructura.
 - Cuellos de botella en la tierra.
 
