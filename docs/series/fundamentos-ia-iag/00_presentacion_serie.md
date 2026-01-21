@@ -6,9 +6,9 @@ description: Serie de entrada para entender IA y GenAI con criterio y contexto.
 
 {{ include_html("snippets/series_meta.html", series_dir="fundamentos-ia-iag", data_state="construction", data_level="general", data_read="6", status_label="En construcción", level_label="General", glow_hidden="false", extra_rows="") }}
 
-Bienvenidos a esta serie introductoria diseñada para desmitificar el mundo de la Inteligencia Artificial. 
-El objetivo de la serie es entender qué es realmente la IA y la IA generativa (IAG, GenAI), que capacidades tienen estas tecnologías, y como pueden ser usadas en por separado o en conjunto. 
-Además, presentaremos las definiciones de la Inteligencia Artificial General (AGI), un término bastante disputado.
+Bienvenidos a esta serie introductoria diseñada para desmitificar el mundo de la Inteligencia Artificial. <br>
+El objetivo de la serie es entender qué es realmente la IA y la IA generativa (IAG, GenAI), que capacidades tienen estas tecnologías, y como pueden ser usadas en por separado o en conjunto. <br>
+Además, presentaremos las definiciones de la Inteligencia Artificial General (AGI), un término bastante disputado.<br>
 
 ## Índice
 En esta serie exploraremos: <br>
