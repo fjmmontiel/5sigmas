@@ -1,6 +1,6 @@
 ---
 title: 5sigmas
-description: Contexto riguroso sobre Inteligencia Artificial.
+description: La evolución de las matemáticas, filosofía e ingeniería en el camino a la AGI
 hide:
   - navigation
 ---
