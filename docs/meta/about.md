@@ -4,16 +4,17 @@ hide:
   - toc
 ---
 # Para quién es
-Este sitio es para las personas que quieren entender la IA más allá de los titulares. Si buscas aprender a usar una herramienta específica, hay mejores sitios. Si buscas saber cual ha sido exactamente el último modelo publicado por DeepSeek, OpenAI, Anthropic, Google... hay mejores sitios. <br>
-Si buscas entender *cómo funciona* esta tecnología desde sus cimientos, este es tu lugar.
+Este sitio es para las personas que quieren entender la IA más allá de los titulares. 
+Si buscas aprender a usar una herramienta específica, hay mejores sitios. <br> Si buscas saber cual ha sido exactamente el último modelo publicado por DeepSeek, OpenAI, Anthropic, Google... hay mejores sitios. <br>
+**Si buscas entender *cómo funciona* esta tecnología desde sus cimientos, este es tu lugar.**
 
 ## Quién lo escribe
-Soy **Francisco Maldonado**, doble graduado en Física y Matemáticas.
-Trabajo diseñando y construyendo sistemas de IA que operan en tiempo real, desde asistentes de voz hasta visión artificial. Abarcando desde la identificación de necesidades de negocio hasta la implantación.
+Soy **Francisco Maldonado**, doble graduado en Física y Matemáticas.<br>
+Trabajo diseñando y construyendo sistemas de IA que operan en tiempo real, desde asistentes de voz hasta visión artificial.<br> Abarcando desde la identificación de necesidades de negocio hasta la implantación.<br>
 Escribo para ordenar lo que normalmente queda disperso entre papers, repositorios y benchmarks.
 
 ## Colaboraciones y contacto
-Si quieres proponer una colaboración, un artículo o una serie, o si has encontrado algún error, contáctame.
+Si quieres proponer una colaboración, un artículo o una serie, si has encontrado algún error, o simplemente quieres hablar sobre estas tecnologías, contáctame.
 
 <div class="contact-grid" markdown="1">
 

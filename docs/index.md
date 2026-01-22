@@ -5,9 +5,10 @@ hide:
   - navigation
 ---
 ### ¿Qué es "5sigmas"?
-Es un proyecto que nace de la curiosidad que sentimos al ver cómo la IA se ha convertido en un fenómeno de masas. Esta tecnología es capaz de ayudarnos a resolver los verdaderos retos de la humanidad, desde la energía, salud, agricultura y hasta la educación.
+Es un proyecto que nace de la curiosidad que sentimos al ver cómo la IA se ha convertido en un fenómeno de masas.<br> 
+Esta tecnología es capaz de ayudarnos a resolver los verdaderos retos de la humanidad, desde el acceso a la energía, salud global, agricultura escalable y hasta la educación. <br>
 
-Pero esta tecnología avanza tan rápido que es difícil distinguir lo importante de lo que se irá en la siguiente iteración.
+Pero esta tecnología avanza tan rápido que es difícil distinguir lo importante de lo que se irá en la siguiente iteración.<br>
 Estamos saturados de novedades diarias y de análisis superficiales.
 
 ### ¿Por qué "5sigmas"?
