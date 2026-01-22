@@ -26,4 +26,5 @@ Aquí no encontrarás las noticias de última hora, encontrarás *contexto*.
 Para entender la Inteligencia Artificial (IA) hoy en día, no basta con mirar las noticias de ayer. 
 Necesitamos una base sólida y una perspectiva histórica con la que veremos que esta tecnología no es más que una pieza más del enorme puzzle de herramientas de la humanidad.
 El contenido se ha diseñado para que sirva de guía desde los conceptos más fundamentales hasta la frontera tecnológica del mañana.
+
 {{ include_html("snippets/series_cards.html") }}
