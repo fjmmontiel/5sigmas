@@ -8,28 +8,28 @@ description: Razonamiento como proceso, costes y diseño de sistemas con tiempo 
 
 {{ include_html("snippets/series_meta.html", series_dir="modelos-razonadores", data_state="construction", data_level="tecnico", data_read="6", status_label="En construcción", level_label="Técnico", glow_hidden="true", extra_rows="<div class=\"series-meta-row\"><span class=\"series-meta-label\">Prerequisitos</span><span class=\"series-meta-value\"><a href=\"/series/fundamentos-ia-iag/00_presentacion_serie/\">Fundamentos de IA e IA generativa</a></span></div>") }}
 
-Los LLMs pueden *parecer* que razonan, pero “razonar” es una cualidad inherentemente humana. Lo podemos definir como un **proceso** con diferentes pasos que ejecutarlos consume **tiempo físico** (latencia), energía mental (**cómputo**) y no es infalible (**alucinaciones**).
+Los LLMs pueden *parecer* que razonan, pero “razonar” es una cualidad inherentemente humana. Lo podemos definir como un **proceso** con diferentes pasos que ejecutarlos consume **tiempo físico** (latencia), energía mental (**cómputo**) y no es infalible (**alucinaciones**).<br>
 
-En esta serie explicaremos que si el razonamiento es un proceso, entonces el tiempo de ejecución es una variable más. Puedes **pagar más pasos**, más muestras, más verificación o más interacción con herramientas para **mejorar la calidad de la respuesta**.
+En esta serie explicaremos que si el razonamiento es un proceso, entonces el tiempo de ejecución es una variable más. Puedes **pagar más pasos**, más muestras, más verificación o más interacción con herramientas para **mejorar la calidad de la respuesta**.<br>
 
 ## Índice
 
 ### 1. **Qué es “razonar” para un LLM**
-- Veremos qué diferentes definiciones de razonamiento pueden encajar en el contexto de los LLMs. 
-- Nacimiento de los modelos razonadores: o1 de OpenAI
-- Repaso del paper de Apple sobre "The illusion of thinking" y la respuesta de Anthropic
+- Veremos qué definiciones de razonamiento pueden encajar en el contexto de los LLMs. 
+- Nacimiento de los modelos razonadores: o1 de OpenAI como punto de salida.
+- Repaso del paper de Apple sobre "The illusion of thinking" y la respuesta de Anthropic<br>
 
 ### 2. **Cómo se ven los fallos de estos sistemas**
-- Los fallos de este tipo de modelos no son aleatorios, definiremos sus diferentes tipos como: Atajos, errores sistemáticos, deriva de objetivo y más.
-- Veremos los diferentes métodos de detectarlos y cómo mitigarlos al máximo.
+- Los fallos de este tipo de modelos no son aleatorios, definiremos sus diferentes tipos: Atajos, errores sistemáticos, deriva de objetivo y más.
+- Veremos los métodos para detectarlos y mitigarlos al máximo.
 
 ### 3. **Test-Time Compute**
-- Veremos qué significa que el Test-time compute sea una nueva ley de escala para estos modelos
-- Además, que diferentes palancas tenemos para aprovechar al máximo esta nueva ley de escala: Más pasos internos, más generación de candidatos, más estructura.
-- Veremos claramente la relación entre una calidad superior de las respuestas asociada a un mayor coste y latencia. 
+- Test-time compute como una nueva ley de escala para la IA generativa.
+- Palancas para aprovechar al máximo esta nueva ley de escala: Más pasos internos, más generación de candidatos, más estructura.
+- Relación entre una calidad superior de las respuestas asociada a un mayor coste y latencia. 
 
 ### 4. **Tiempo físico: latencia, streaming, interacción humana**
-- Veremos cómo “pensar más” en un paper es barato. En un producto, significa: El usuario espera, la sesión es más cara y el sistema tiene más puntos posibles de fallo al ejecutar más pasos. 
+- Veremos cómo “pensar más” en un paper es barato. En un producto, significa: El usuario espera, la sesión es más cara y el sistema tiene más puntos posibles de rotura. 
 - ¿Dónde está el umbral de latencia aceptable para esta tarea y este usuario? (Lanzamiento de GPT-5 como enrutador)
 - Veremos que patrones nos pueden ayudar a optimizar al máximo los beneficios del test-time compute.
 

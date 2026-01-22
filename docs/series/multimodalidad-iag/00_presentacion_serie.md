@@ -29,7 +29,7 @@ La multimodalidad es el salto de “hablar con una IA” a **interactuar con un 
 - Hay fugas por *contaminación de benchmarks* y por “prior” lingüístico (responder por probabilidad, no por evidencia).
 
 ### 5. Riesgos: prompt-injection visual, jailbreaks y seguridad operacional
-- **Prompt injection** (incluida la visual: instrucciones ocultas en la imagen).
+- **Prompt injection** multimodal.
 - Fugas de sistema/políticas, y manipulación de herramientas (si hay tool-use).
 - Privacidad (imágenes/documentos) y data poisoning.
 
