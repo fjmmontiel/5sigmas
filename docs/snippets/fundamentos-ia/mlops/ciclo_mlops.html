@@ -1,0 +1,763 @@
+<div class="mlops-walkthrough" data-mk="root" data-default="datos" data-autoplay="true" data-interval="3400">
+  <style>
+    .mlops-walkthrough {
+      --bg: #0b1220;
+      --card: rgba(255, 255, 255, .06);
+      --card2: rgba(255, 255, 255, .09);
+      --txt: rgba(255, 255, 255, .92);
+      --muted: rgba(255, 255, 255, .74);
+      --line: rgba(255, 255, 255, .14);
+      --shadow: rgba(0, 0, 0, .25);
+      --chip: rgba(255, 255, 255, .04);
+      --chip2: rgba(255, 255, 255, .08);
+      --hint: rgba(255, 255, 255, .62);
+      --accent: #86efac;
+      --accent2: #60a5fa;
+      --warn: #fbbf24;
+      --glowTop: rgba(255, 255, 255, .07);
+      --glowBot: rgba(255, 255, 255, .03);
+
+      --svgText: rgba(255, 255, 255, .88);
+      --svgOrbit: rgba(255, 255, 255, .22);
+      --svgNode: rgba(255, 255, 255, .08);
+      --svgNodeStroke: rgba(255, 255, 255, .22);
+
+      --doneFill: rgba(96, 165, 250, .14);
+      --doneStroke: rgba(96, 165, 250, .55);
+      --activeFill: rgba(134, 239, 172, .22);
+      --activeStroke: rgba(134, 239, 172, .78);
+
+      --radius: 16px;
+
+      color: var(--txt);
+      color-scheme: light dark;
+      background:
+        radial-gradient(1200px 600px at 10% 0%, rgba(96, 165, 250, .18), transparent 55%),
+        radial-gradient(900px 520px at 70% 10%, rgba(134, 239, 172, .14), transparent 55%),
+        linear-gradient(180deg, var(--glowTop), var(--glowBot)),
+        var(--bg);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 14px;
+      box-shadow: 0 10px 30px var(--shadow);
+      overflow: hidden;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    }
+
+    .mlops-walkthrough[data-theme="light"] {
+      --bg: #f7fafc;
+      --card: rgba(2, 6, 23, .04);
+      --card2: rgba(2, 6, 23, .06);
+      --txt: rgba(2, 6, 23, .92);
+      --muted: rgba(2, 6, 23, .66);
+      --line: rgba(2, 6, 23, .12);
+      --shadow: rgba(2, 6, 23, .10);
+      --chip: rgba(2, 6, 23, .04);
+      --chip2: rgba(2, 6, 23, .08);
+      --hint: rgba(2, 6, 23, .58);
+      --glowTop: rgba(2, 6, 23, .04);
+      --glowBot: rgba(2, 6, 23, .02);
+
+      --svgText: rgba(2, 6, 23, .84);
+      --svgOrbit: rgba(2, 6, 23, .22);
+      --svgNode: rgba(2, 6, 23, .06);
+      --svgNodeStroke: rgba(2, 6, 23, .20);
+
+      --doneFill: rgba(37, 99, 235, .14);
+      --doneStroke: rgba(37, 99, 235, .55);
+      --activeFill: rgba(34, 197, 94, .18);
+      --activeStroke: rgba(34, 197, 94, .70);
+    }
+
+    @media (prefers-color-scheme: light) {
+      .mlops-walkthrough:not([data-theme]) {
+        --bg: #f7fafc;
+        --card: rgba(2, 6, 23, .04);
+        --card2: rgba(2, 6, 23, .06);
+        --txt: rgba(2, 6, 23, .92);
+        --muted: rgba(2, 6, 23, .66);
+        --line: rgba(2, 6, 23, .12);
+        --shadow: rgba(2, 6, 23, .10);
+        --chip: rgba(2, 6, 23, .04);
+        --chip2: rgba(2, 6, 23, .08);
+        --hint: rgba(2, 6, 23, .58);
+        --glowTop: rgba(2, 6, 23, .04);
+        --glowBot: rgba(2, 6, 23, .02);
+
+        --svgText: rgba(2, 6, 23, .84);
+        --svgOrbit: rgba(2, 6, 23, .22);
+        --svgNode: rgba(2, 6, 23, .06);
+        --svgNodeStroke: rgba(2, 6, 23, .20);
+
+        --doneFill: rgba(37, 99, 235, .14);
+        --doneStroke: rgba(37, 99, 235, .55);
+        --activeFill: rgba(34, 197, 94, .18);
+        --activeStroke: rgba(34, 197, 94, .70);
+      }
+    }
+
+    html[data-md-color-scheme="default"] .mlops-walkthrough:not([data-theme]) {
+      --bg: #f7fafc;
+      --card: rgba(2, 6, 23, .04);
+      --card2: rgba(2, 6, 23, .06);
+      --txt: rgba(2, 6, 23, .92);
+      --muted: rgba(2, 6, 23, .66);
+      --line: rgba(2, 6, 23, .12);
+      --shadow: rgba(2, 6, 23, .10);
+      --chip: rgba(2, 6, 23, .04);
+      --chip2: rgba(2, 6, 23, .08);
+      --hint: rgba(2, 6, 23, .58);
+      --glowTop: rgba(2, 6, 23, .04);
+      --glowBot: rgba(2, 6, 23, .02);
+
+      --svgText: rgba(2, 6, 23, .84);
+      --svgOrbit: rgba(2, 6, 23, .22);
+      --svgNode: rgba(2, 6, 23, .06);
+      --svgNodeStroke: rgba(2, 6, 23, .20);
+
+      --doneFill: rgba(37, 99, 235, .14);
+      --doneStroke: rgba(37, 99, 235, .55);
+      --activeFill: rgba(34, 197, 94, .18);
+      --activeStroke: rgba(34, 197, 94, .70);
+    }
+
+    html[data-md-color-scheme="slate"] .mlops-walkthrough:not([data-theme]) {
+      --bg: #0b1220;
+      --card: rgba(255, 255, 255, .06);
+      --card2: rgba(255, 255, 255, .09);
+      --txt: rgba(255, 255, 255, .92);
+      --muted: rgba(255, 255, 255, .74);
+      --line: rgba(255, 255, 255, .14);
+      --shadow: rgba(0, 0, 0, .25);
+      --chip: rgba(255, 255, 255, .04);
+      --chip2: rgba(255, 255, 255, .08);
+      --hint: rgba(255, 255, 255, .62);
+      --glowTop: rgba(255, 255, 255, .07);
+      --glowBot: rgba(255, 255, 255, .03);
+
+      --svgText: rgba(255, 255, 255, .88);
+      --svgOrbit: rgba(255, 255, 255, .22);
+      --svgNode: rgba(255, 255, 255, .08);
+      --svgNodeStroke: rgba(255, 255, 255, .22);
+
+      --doneFill: rgba(96, 165, 250, .14);
+      --doneStroke: rgba(96, 165, 250, .55);
+      --activeFill: rgba(134, 239, 172, .22);
+      --activeStroke: rgba(134, 239, 172, .78);
+    }
+
+    .mlops-top {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .mlops-title {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .mlops-title b {
+      font-size: 15px;
+      letter-spacing: .2px;
+    }
+
+    .mlops-title span {
+      color: var(--muted);
+      font-size: 12.5px;
+    }
+
+    .mlops-controls {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .mlops-auto {
+      appearance: none;
+      border: 1px solid var(--line);
+      background: var(--chip);
+      color: var(--txt);
+      border-radius: 999px;
+      padding: 6px 10px;
+      cursor: pointer;
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      user-select: none;
+      transition: background .15s ease, border-color .15s ease, transform .08s ease;
+      font-size: 12.5px;
+      line-height: 1;
+    }
+
+    .mlops-auto:active {
+      transform: scale(.98);
+    }
+
+    .mlops-auto[aria-pressed="true"] {
+      border-color: rgba(96, 165, 250, .45);
+      background: rgba(96, 165, 250, .12);
+    }
+
+    .mlops-auto .ico {
+      width: 16px;
+      height: 16px;
+      display: inline-block;
+      color: currentColor;
+    }
+
+    .mlops-steps {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 10px 0 12px;
+    }
+
+    .mlops-step {
+      appearance: none;
+      border: 1px solid var(--line);
+      background: var(--chip);
+      color: var(--txt);
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 12.5px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform .08s ease, background .15s ease, border-color .15s ease;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .mlops-step:active {
+      transform: scale(.98);
+    }
+
+    .mlops-step[aria-selected="true"] {
+      border-color: rgba(134, 239, 172, .42);
+      background: rgba(134, 239, 172, .12);
+    }
+
+    .mlops-step .n {
+      width: 18px;
+      height: 18px;
+      border-radius: 6px;
+      display: inline-grid;
+      place-items: center;
+      background: var(--chip2);
+      border: 1px solid var(--line);
+      font-size: 11px;
+      color: var(--muted);
+      flex: 0 0 auto;
+    }
+
+    .mlops-step[aria-selected="true"] .n {
+      background: rgba(134, 239, 172, .18);
+      border-color: rgba(134, 239, 172, .40);
+      color: var(--txt);
+    }
+
+    .mlops-body {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .mlops-viz,
+    .mlops-panel {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 12px;
+      position: relative;
+      min-height: 268px;
+    }
+
+    .mlops-viz {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      isolation: isolate;
+    }
+
+    .mlops-viz::before {
+      content: "";
+      position: absolute;
+      inset: 10px;
+      border-radius: calc(var(--radius) - 6px);
+      background:
+        radial-gradient(closest-side at 50% 45%, rgba(96, 165, 250, .14), transparent 62%),
+        radial-gradient(closest-side at 40% 55%, rgba(134, 239, 172, .09), transparent 62%);
+      opacity: .75;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .mlops-viz svg {
+      width: 100%;
+      height: auto;
+      max-height: 372px;
+      aspect-ratio: 520 / 320;
+      display: block;
+      position: relative;
+      z-index: 1;
+    }
+
+    .mlops-panel h4 {
+      margin: 0 0 8px;
+      font-size: 13.8px;
+      letter-spacing: .2px;
+    }
+
+    .mlops-panel p {
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .mlops-cards {
+      display: grid;
+      gap: 10px;
+    }
+
+    .mlops-card {
+      background: var(--card2);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 10px;
+    }
+
+    .mlops-card b {
+      display: block;
+      font-size: 12.7px;
+      margin-bottom: 4px;
+    }
+
+    .mlops-card span {
+      color: var(--muted);
+      font-size: 12.6px;
+      line-height: 1.45;
+      display: block;
+    }
+
+    .mlops-walkthrough :is(button, [role="button"]):focus {
+      outline: none;
+    }
+
+    .mlops-walkthrough :is(button, [role="button"]):focus-visible {
+      box-shadow: 0 0 0 3px rgba(96, 165, 250, .25);
+      border-color: rgba(96, 165, 250, .55);
+    }
+
+    .mlops-orbit {
+      stroke: var(--svgOrbit);
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      fill: none;
+    }
+
+    .mlops-station {
+      cursor: pointer;
+    }
+
+    .mlops-dotNode {
+      fill: var(--svgNode);
+      stroke: var(--svgNodeStroke);
+      stroke-width: 1.6;
+    }
+
+    .mlops-dotNum {
+      fill: var(--svgText);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .mlops-dotLbl {
+      fill: var(--svgText);
+      font-size: 11.3px;
+      opacity: .70;
+    }
+
+    .mlops-station.is-done .mlops-dotNode {
+      fill: var(--doneFill);
+      stroke: var(--doneStroke);
+    }
+
+    .mlops-station.is-done .mlops-dotLbl {
+      opacity: .88;
+    }
+
+    .mlops-station.is-active .mlops-dotNode {
+      fill: var(--activeFill);
+      stroke: var(--activeStroke);
+      filter: drop-shadow(0 0 10px rgba(134, 239, 172, .18));
+    }
+
+    .mlops-station.is-active .mlops-dotLbl {
+      opacity: 1;
+    }
+
+    .mlops-hint {
+      position: absolute;
+      left: 12px;
+      bottom: 10px;
+      color: var(--hint);
+      font-size: 11.6px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .mlops-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(134, 239, 172, .60);
+      box-shadow: 0 0 0 4px rgba(134, 239, 172, .12);
+    }
+
+    @media (max-width: 860px) {
+      .mlops-body {
+        grid-template-columns: 1fr;
+      }
+
+      .mlops-viz {
+        min-height: 230px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      .mlops-step,
+      .mlops-auto {
+        transition: none;
+      }
+
+      .mlops-station.is-active .mlops-dotNode {
+        filter: none;
+      }
+    }
+  </style>
+
+  <div class="mlops-top">
+    <div class="mlops-title">
+      <b>MLOps en una mirada</b>
+    </div>
+
+    <div class="mlops-controls">
+      <button class="mlops-auto" type="button" data-mk="auto" aria-pressed="false" title="Reproducción automática">
+        <span class="ico" aria-hidden="true" data-mk="autoIco"></span>
+        <span data-mk="autoLbl">Auto</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="mlops-steps" data-role="tablist" aria-label="Pasos de MLOps">
+    <button class="mlops-step" type="button" data-role="tab" data-step="datos" aria-selected="true"><span
+        class="n">1</span><span>Datos</span></button>
+    <button class="mlops-step" type="button" data-role="tab" data-step="preparar" aria-selected="false"><span
+        class="n">2</span><span>Preparar</span></button>
+    <button class="mlops-step" type="button" data-role="tab" data-step="entrenar" aria-selected="false"><span
+        class="n">3</span><span>Entrenar</span></button>
+    <button class="mlops-step" type="button" data-role="tab" data-step="evaluar" aria-selected="false"><span
+        class="n">4</span><span>Evaluar</span></button>
+    <button class="mlops-step" type="button" data-role="tab" data-step="registrar" aria-selected="false"><span
+        class="n">5</span><span>Versionar</span></button>
+    <button class="mlops-step" type="button" data-role="tab" data-step="desplegar" aria-selected="false"><span
+        class="n">6</span><span>Desplegar</span></button>
+    <button class="mlops-step" type="button" data-role="tab" data-step="monitorizar" aria-selected="false"><span
+        class="n">7</span><span>Monitorizar</span></button>
+    <button class="mlops-step" type="button" data-role="tab" data-step="feedback" aria-selected="false"><span
+        class="n">8</span><span>Feedback</span></button>
+  </div>
+
+  <div class="mlops-body">
+    <div class="mlops-viz">
+      <svg data-mk="svg" viewBox="0 0 520 320" width="100%" height="100%" role="img" aria-label="Ciclo MLOps"
+        preserveAspectRatio="xMidYMid meet">
+        <ellipse class="mlops-orbit" cx="260" cy="160" rx="168" ry="90"></ellipse>
+
+        <g data-node="datos" data-idx="0" class="mlops-station" tabindex="0" role="button" aria-label="Paso 1: Datos">
+          <circle class="mlops-dotNode" cx="0" cy="0" r="18"></circle>
+          <text class="mlops-dotNum" x="0" y="5" text-anchor="middle">1</text>
+          <text class="mlops-dotLbl" x="0" y="36" text-anchor="middle">Datos</text>
+        </g>
+
+        <g data-node="preparar" data-idx="1" class="mlops-station" tabindex="0" role="button"
+          aria-label="Paso 2: Preparar">
+          <circle class="mlops-dotNode" cx="0" cy="0" r="18"></circle>
+          <text class="mlops-dotNum" x="0" y="5" text-anchor="middle">2</text>
+          <text class="mlops-dotLbl" x="0" y="36" text-anchor="middle">Preparar</text>
+        </g>
+
+        <g data-node="entrenar" data-idx="2" class="mlops-station" tabindex="0" role="button"
+          aria-label="Paso 3: Entrenar">
+          <circle class="mlops-dotNode" cx="0" cy="0" r="18"></circle>
+          <text class="mlops-dotNum" x="0" y="5" text-anchor="middle">3</text>
+          <text class="mlops-dotLbl" x="0" y="36" text-anchor="middle">Entrenar</text>
+        </g>
+
+        <g data-node="evaluar" data-idx="3" class="mlops-station" tabindex="0" role="button"
+          aria-label="Paso 4: Evaluar">
+          <circle class="mlops-dotNode" cx="0" cy="0" r="18"></circle>
+          <text class="mlops-dotNum" x="0" y="5" text-anchor="middle">4</text>
+          <text class="mlops-dotLbl" x="0" y="36" text-anchor="middle">Evaluar</text>
+        </g>
+
+        <g data-node="registrar" data-idx="4" class="mlops-station" tabindex="0" role="button"
+          aria-label="Paso 5: Versionar">
+          <circle class="mlops-dotNode" cx="0" cy="0" r="18"></circle>
+          <text class="mlops-dotNum" x="0" y="5" text-anchor="middle">5</text>
+          <text class="mlops-dotLbl" x="0" y="36" text-anchor="middle">Versionar</text>
+        </g>
+
+        <g data-node="desplegar" data-idx="5" class="mlops-station" tabindex="0" role="button"
+          aria-label="Paso 6: Desplegar">
+          <circle class="mlops-dotNode" cx="0" cy="0" r="18"></circle>
+          <text class="mlops-dotNum" x="0" y="5" text-anchor="middle">6</text>
+          <text class="mlops-dotLbl" x="0" y="36" text-anchor="middle">Desplegar</text>
+        </g>
+
+        <g data-node="monitorizar" data-idx="6" class="mlops-station" tabindex="0" role="button"
+          aria-label="Paso 7: Monitorizar">
+          <circle class="mlops-dotNode" cx="0" cy="0" r="18"></circle>
+          <text class="mlops-dotNum" x="0" y="5" text-anchor="middle">7</text>
+          <text class="mlops-dotLbl" x="0" y="36" text-anchor="middle">Monitorizar</text>
+        </g>
+
+        <g data-node="feedback" data-idx="7" class="mlops-station" tabindex="0" role="button"
+          aria-label="Paso 8: Feedback">
+          <circle class="mlops-dotNode" cx="0" cy="0" r="18"></circle>
+          <text class="mlops-dotNum" x="0" y="5" text-anchor="middle">8</text>
+          <text class="mlops-dotLbl" x="0" y="36" text-anchor="middle">Feedback</text>
+        </g>
+
+        <text x="260" y="160" text-anchor="middle" fill="var(--svgText)" opacity=".45"
+          style="font-size:12px">ciclo</text>
+      </svg>
+
+    </div>
+
+    <div class="mlops-panel" role="tabpanel" aria-live="polite" data-mk="panel">
+      <h4 data-mk="h">Paso</h4>
+      <p data-mk="p">Descripción</p>
+
+      <div class="mlops-cards">
+        <div class="mlops-card">
+          <b>Ejemplo (fraude)</b>
+          <span data-mk="ex">...</span>
+        </div>
+        <div class="mlops-card">
+          <b>Qué sale de este paso</b>
+          <span data-mk="out">...</span>
+        </div>
+        <div class="mlops-card">
+          <b>Si no se implementa correctamente</b>
+          <span data-mk="risk">...</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const AUTO_ICONS = {
+        play: '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>',
+        pause: '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg>'
+      };
+
+      function prefersReduced() {
+        return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+      }
+
+      function init(root) {
+        if (!root || root.__mlops_init) return;
+        root.__mlops_init = true;
+
+        const steps = [
+          { id: "datos", title: "1) Datos — capturar señales", desc: "Aquí juntas la información que describe lo que está pasando. Piensa en ello como “tomar apuntes” del mundo real.", ex: "Cada pago se guarda con sus pistas: importe, país, comercio, hora, dispositivo, historial…", out: "Un conjunto de datos fiable (tablas) que representa la realidad.", risk: "Si faltan campos o hay errores, el sistema aprende mal y después es difícil explicar por qué decide así." },
+          { id: "preparar", title: "2) Preparar — ordenar y convertir", desc: "Limpias y conviertes los datos en señales fáciles de usar. Es como pasar de notas sueltas a una lista clara de “pistas”.", ex: "Creas señales como: compras últimas 24h, distancia a sitios habituales, cambio de móvil.", out: "Variables/‘features’ listas para entrenar y también para usar en producción igual.", risk: "Si preparas distinto en entrenamiento y en producción, el modelo se vuelve incoherente sin que lo notes." },
+          { id: "entrenar", title: "3) Entrenar — aprender con ejemplos", desc: "Le enseñas al sistema con casos del pasado para que aprenda patrones. Aprende por repetición.", ex: "Con miles de pagos etiquetados, aprende qué combinaciones suelen acabar siendo fraude.", out: "Un modelo que, dado un pago, devuelve un nivel de riesgo.", risk: "Si hay sesgo o pocas etiquetas, puede aprender reglas equivocadas." },
+          { id: "evaluar", title: "4) Evaluar — comprobar antes de usarlo", desc: "Verificas con datos que el modelo no ha visto si funciona de verdad y qué errores comete.", ex: "Mides: fraudes detectados vs falsos positivos (bloqueos a gente legítima).", out: "Métricas + decisión: umbral para bloquear, revisar o dejar pasar.", risk: "Sin evaluación puedes empeorar la experiencia o el negocio sin darte cuenta." },
+          { id: "registrar", title: "5) Versionar — saber qué está corriendo", desc: "Dejas todo registrado para poder repetirlo o volver atrás: modelo, datos, código y configuración.", ex: "Queda guardado: “modelo v12, datos hasta enero, este código y estos parámetros”.", out: "Una versión trazable (vX) y el modelo asociado.", risk: "Si hay un incidente y no sabes qué versión está en producción, arreglar se vuelve lento." },
+          { id: "desplegar", title: "6) Desplegar — ponerlo a funcionar", desc: "Lo conectas al producto real y lo activas con control, poco a poco si puedes.", ex: "Primero corre en ‘shadow’ (sin decidir) y luego lo activas para un 5% del tráfico.", out: "Un servicio en producción que responde rápido y estable.", risk: "Un cambio brusco puede causar bloqueos masivos o decisiones incorrectas." },
+          { id: "monitorizar", title: "7) Monitorizar — vigilar con el tiempo", desc: "Compruebas que el sistema sigue yendo bien y que los datos no han cambiado demasiado.", ex: "Alertas por latencia, errores, costes y cambios de patrón (drift).", out: "Paneles y alertas para detectar degradación.", risk: "La degradación suele ser silenciosa: el sistema funciona… pero decide peor." },
+          { id: "feedback", title: "8) Feedback — aprender de la realidad", desc: "Cuando llega la verdad (confirmación), la usas para mejorar: reentrenar, ajustar o volver atrás.", ex: "Semanas después confirmas fraude/no fraude y esos casos alimentan el siguiente entrenamiento.", out: "Nuevos ejemplos correctos para la siguiente vuelta.", risk: "Sin feedback, el sistema se queda obsoleto." }
+        ];
+
+        const stepBtns = Array.from(root.querySelectorAll('.mlops-step'));
+        const panelH = root.querySelector('[data-mk="h"]');
+        const panelP = root.querySelector('[data-mk="p"]');
+        const panelEx = root.querySelector('[data-mk="ex"]');
+        const panelOut = root.querySelector('[data-mk="out"]');
+        const panelRisk = root.querySelector('[data-mk="risk"]');
+
+        const svg = root.querySelector('[data-mk="svg"]');
+        const stations = Array.from(root.querySelectorAll('svg [data-node]'));
+
+        const autoBtn = root.querySelector('[data-mk="auto"]');
+        const autoIco = root.querySelector('[data-mk="autoIco"]');
+        const autoLbl = root.querySelector('[data-mk="autoLbl"]');
+
+        const byId = Object.fromEntries(steps.map((s, i) => [s.id, i]));
+
+        const uid = Math.random().toString(36).slice(2, 8);
+        const panel = root.querySelector('[data-mk="panel"]');
+        if (panel) panel.id = `mlops-panel-${uid}`;
+        stepBtns.forEach((b, i) => {
+          b.id = `mlops-tab-${uid}-${i}`;
+          if (panel) b.setAttribute('aria-controls', panel.id);
+        });
+
+        const CX = 260, CY = 160;
+        const NRX = 198, NRY = 116;
+        const N = steps.length;
+        const A0 = -Math.PI / 2;
+        const STEP = (2 * Math.PI) / N;
+
+        function pOn(rx, ry, ang) {
+          return { x: CX + rx * Math.cos(ang), y: CY + ry * Math.sin(ang) };
+        }
+
+        function layoutStations() {
+          stations.forEach(g => {
+            const did = g.getAttribute('data-node');
+            const raw = g.getAttribute('data-idx');
+            const idx = Number.isFinite(Number(raw)) ? Number(raw) : (byId[did] ?? 0);
+            const a = A0 + idx * STEP;
+            const p = pOn(NRX, NRY, a);
+            g.setAttribute('transform', `translate(${p.x.toFixed(2)} ${p.y.toFixed(2)})`);
+          });
+        }
+
+        let timer = null;
+        let inView = true;
+
+        function stopTimer() {
+          if (timer) {
+            clearInterval(timer);
+            timer = null;
+          }
+        }
+
+        function startTimer() {
+          stopTimer();
+          if (!root.__mlops_auto) return;
+          if (prefersReduced()) return;
+          if (!inView) return;
+          const ms = Math.max(1400, parseInt(root.getAttribute('data-interval') || '3400', 10) || 3400);
+          timer = setInterval(() => next(+1), ms);
+        }
+
+        function setAuto(on) {
+          root.__mlops_auto = !!on;
+          if (autoBtn) autoBtn.setAttribute('aria-pressed', root.__mlops_auto ? 'true' : 'false');
+          if (autoLbl) autoLbl.textContent = root.__mlops_auto ? 'Auto' : 'Manual';
+          if (autoIco) autoIco.innerHTML = root.__mlops_auto ? AUTO_ICONS.pause : AUTO_ICONS.play;
+          if (root.__mlops_auto) startTimer(); else stopTimer();
+        }
+
+        function applyProgress(activeIdx) {
+          stations.forEach(g => {
+            const gid = g.getAttribute('data-node');
+            const idx = byId[gid] ?? 0;
+            g.classList.toggle('is-active', idx === activeIdx);
+            g.classList.toggle('is-done', idx <= activeIdx);
+          });
+        }
+
+        function setActive(id, opts) {
+          const silent = !!(opts && opts.silent);
+          const idx = byId[id] ?? 0;
+
+          stepBtns.forEach(b => {
+            const on = (b.getAttribute('data-step') === id);
+            b.setAttribute('aria-selected', on ? 'true' : 'false');
+          });
+
+          const s = steps[idx] || steps[0];
+          if (panelH) panelH.textContent = s.title;
+          if (panelP) panelP.textContent = s.desc;
+          if (panelEx) panelEx.textContent = s.ex;
+          if (panelOut) panelOut.textContent = s.out;
+          if (panelRisk) panelRisk.textContent = s.risk;
+
+          applyProgress(idx);
+          root.dataset.active = id;
+          if (!silent) setAuto(false);
+        }
+
+        function next(delta) {
+          const curId = root.dataset.active || steps[0].id;
+          const cur = byId[curId] ?? 0;
+          const nxt = (cur + delta + N) % N;
+          setActive(steps[nxt].id, { silent: true });
+        }
+
+        stepBtns.forEach(b => {
+          b.addEventListener('click', () => setActive(b.getAttribute('data-step')));
+          b.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') { e.preventDefault(); next(+1); }
+            if (e.key === 'ArrowLeft') { e.preventDefault(); next(-1); }
+            if (e.key === 'Home') { e.preventDefault(); setActive(steps[0].id); }
+            if (e.key === 'End') { e.preventDefault(); setActive(steps[N - 1].id); }
+          });
+        });
+
+        stations.forEach(g => {
+          const id = g.getAttribute('data-node');
+          g.addEventListener('click', () => setActive(id));
+          g.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActive(id); }
+          });
+        });
+
+        if (autoBtn) autoBtn.addEventListener('click', () => setAuto(!root.__mlops_auto));
+
+        let resumeOnLeave = false;
+        root.addEventListener('pointerenter', () => { resumeOnLeave = !!root.__mlops_auto; stopTimer(); });
+        root.addEventListener('pointerleave', () => { if (resumeOnLeave) startTimer(); });
+        root.addEventListener('focusin', () => { resumeOnLeave = !!root.__mlops_auto; stopTimer(); });
+        root.addEventListener('focusout', () => { if (resumeOnLeave) startTimer(); });
+
+        if ('IntersectionObserver' in window) {
+          const io = new IntersectionObserver((entries) => {
+            for (const ent of entries) {
+              if (ent.target !== root) continue;
+              inView = ent.isIntersecting;
+              if (!inView) stopTimer();
+              else startTimer();
+            }
+          }, { threshold: 0.15 });
+          io.observe(root);
+        }
+
+        layoutStations();
+        const def = root.getAttribute('data-default') || steps[0].id;
+        setActive(def, { silent: true });
+        const wantAuto = (root.getAttribute('data-autoplay') || 'true') !== 'false';
+        setAuto(wantAuto && !prefersReduced());
+        startTimer();
+      }
+
+      function boot() {
+        document.querySelectorAll('.mlops-walkthrough[data-mk="root"]').forEach(init);
+      }
+
+      if (window.document$ && typeof window.document$.subscribe === 'function') {
+        window.document$.subscribe(boot);
+      } else {
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+        else boot();
+      }
+    })();
+  </script>
+</div>

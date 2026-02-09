@@ -9,7 +9,7 @@
        - data-seed="..."   (deterministic init)
 -->
 
-<div class="nn-tabs" data-default="linear">
+<div class="nn-tabs" data-tabs data-default="linear">
   <div class="nn-tablist" role="tablist" aria-label="Neural network demos">
     <button class="nn-tab" type="button" role="tab" aria-selected="true" data-tab="linear">Linear: °C → °F</button>
     <button class="nn-tab" type="button" role="tab" aria-selected="false" data-tab="sine">Non-linear: sin(x)</button>
@@ -17,15 +17,15 @@
   </div>
 
   <div class="nn-panel" role="tabpanel" data-panel="linear">
-    <div class="nn-demo" data-demo="linear" data-seed="42" data-stop="0.1" data-focus="20"></div>
+    <div class="nn-demo" data-demo="nn:linear" data-seed="42" data-stop="0.1" data-focus="20"></div>
   </div>
 
   <div class="nn-panel" role="tabpanel" data-panel="sine" hidden>
-    <div class="nn-demo" data-demo="sine" data-seed="7" data-stop="1e-6" data-focus="1.57079632679"></div>
+    <div class="nn-demo" data-demo="nn:sine" data-seed="7" data-stop="1e-6" data-focus="1.57079632679"></div>
   </div>
 
   <div class="nn-panel" role="tabpanel" data-panel="exptan" hidden>
-    <div class="nn-demo" data-demo="exptan" data-seed="13" data-stop="1e-2" data-focus="1.0"></div>
+    <div class="nn-demo" data-demo="nn:exptan" data-seed="13" data-stop="1e-2" data-focus="1.0"></div>
   </div>
 </div>
 
@@ -620,24 +620,6 @@
       `<div class="row"><span class="k">${label}</span><span data-tip="${key}">—</span></div>`
     )).join('');
 
-    const inspectorHTML = (cfg.kind === 'linear') ? '' : `
-      <div style="height:10px"></div>
-      <div class="nn-card" style="padding:10px; background: var(--card2);" data-inspector>
-        <div class="nn-card-title" style="margin:0 0 8px;">
-          <div class="t">Pesos internos</div>
-          <div class="d">clic en la red o en W1/W2/W3</div>
-        </div>
-        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px;">
-          <button class="nn-btn nn-on" type="button" data-layer="W1">W1</button>
-          <button class="nn-btn" type="button" data-layer="W2">W2</button>
-          <button class="nn-btn" type="button" data-layer="W3">W3</button>
-        </div>
-        <canvas data-canvas="weights"></canvas>
-        <div style="height:8px"></div>
-        <div class="nn-formula" data-weights-text style="font-size:12px"></div>
-      </div>
-    `;
-
     root.innerHTML = `
       <div class="nn-head">
         <div>
@@ -674,12 +656,10 @@
           <div class="nn-card" style="padding:10px; background: var(--card2);">
             <div class="nn-card-title" style="margin:0 0 8px;">
               <div class="t">Esquema de la red</div>
-              <div class="d">clic para cambiar capa</div>
+              <div class="d"></div>
             </div>
             <canvas data-canvas="net"></canvas>
           </div>
-
-          ${inspectorHTML}
         </div>
       </div>
 
@@ -987,99 +967,17 @@
   }
 
   /* ===================== */
-  /* Weight inspector       */
-  /* ===================== */
-  function getLayerMatrix(state, key){
-    if (!state || !state.W1) return null;
-    if (key === 'W1') return { rows: 1, cols: state.H1, data: state.W1 };
-    if (key === 'W2') return { rows: state.H2, cols: state.H1, data: state.W2 };
-    if (key === 'W3') return { rows: 1, cols: state.H2, data: state.W3 };
-    return null;
-  }
-
-  function drawWeights(root, state, key){
-    const box = root.querySelector('[data-inspector]');
-    if (!box || !state || !state.W1) return;
-
-    const style = getComputedStyle(root);
-    const cW = box.querySelector('[data-canvas="weights"]');
-    const txtEl = box.querySelector('[data-weights-text]');
-    const mat = getLayerMatrix(state, key);
-    if (!mat){ txtEl.textContent = '—'; return; }
-
-    const {rows, cols, data} = mat;
-    const {ctx, w, h} = setCanvasSize(cW, 140);
-
-    const border = style.getPropertyValue('--border').trim() || 'rgba(0,0,0,0.18)';
-    const muted = style.getPropertyValue('--muted').trim() || 'rgba(0,0,0,0.66)';
-    const accent = style.getPropertyValue('--accent').trim() || 'rgba(20,110,235,0.98)';
-    const good = style.getPropertyValue('--good').trim() || 'rgba(15,140,85,0.98)';
-
-    ctx.clearRect(0,0,w,h);
-    ctx.fillStyle = style.getPropertyValue('--card2').trim() || 'rgba(0,0,0,0.05)';
-    ctx.fillRect(0,0,w,h);
-
-    // stats
-    let min = Infinity, max = -Infinity, sum = 0;
-    let absMax = 0;
-    for(let i=0;i<data.length;i++){
-      const v = data[i];
-      if (v < min) min = v;
-      if (v > max) max = v;
-      sum += v;
-      const av = Math.abs(v);
-      if (av > absMax) absMax = av;
-    }
-    const mean = sum / Math.max(1, data.length);
-    absMax = Math.max(1e-9, absMax);
-
-    // heatmap
-    const pad = 10;
-    const innerW = w - 2*pad;
-    const innerH = h - 2*pad;
-    const cellW = innerW / cols;
-    const cellH = innerH / rows;
-
-    for(let r=0;r<rows;r++){
-      for(let c=0;c<cols;c++){
-        const idx = r*cols + c;
-        const v = data[idx];
-        const a = Math.min(0.85, 0.08 + 0.77 * (Math.abs(v) / absMax));
-        ctx.globalAlpha = a;
-        ctx.fillStyle = (v >= 0) ? accent : good;
-        ctx.fillRect(pad + c*cellW, pad + r*cellH, cellW, cellH);
-      }
-    }
-    ctx.globalAlpha = 1;
-
-    ctx.strokeStyle = border;
-    ctx.lineWidth = 1;
-    ctx.strokeRect(pad, pad, innerW, innerH);
-
-    ctx.fillStyle = muted;
-    ctx.font = '12px ui-monospace, Menlo, Monaco, Consolas, monospace';
-    ctx.textAlign = 'left';
-    ctx.fillText(`${key} (${rows}×${cols})`, 10, 14);
-
-    // short preview
-    const previewCount = Math.min(8, data.length);
-    const preview = [];
-    for(let i=0;i<previewCount;i++) preview.push(data[i].toFixed(2));
-
-    txtEl.innerHTML = `
-      <div><span class="hl">${key}</span> (${rows}×${cols}) · min=${min.toFixed(3)} · mean=${mean.toFixed(3)} · max=${max.toFixed(3)} · |w|max=${absMax.toFixed(3)}</div>
-      <div style="margin-top:6px;color:var(--muted);font-family: ui-sans-serif, system-ui; font-size:12px;">muestra: [${preview.join(', ')}${(data.length>previewCount)?', …':''}]</div>
-    `;
-  }
-
-  /* ===================== */
   /* Demo runtime           */
   /* ===================== */
-  function initDemo(root){
+  function initDemo(root, meta){
     if (root.__nnDemo && root.__nnDemo.__inited) return root.__nnDemo;
 
     safeInit(root, () => {
-      const kind = (root.dataset.demo || 'linear').trim();
+      const kind = (meta && meta.kind) ? meta.kind : (() => {
+        const raw = (root.dataset.demo || 'linear').trim();
+        const i = raw.indexOf(':');
+        return i >= 0 ? raw.slice(i+1) : raw;
+      })();
       const cfg = makeConfig(kind);
 
       const seed = parseInt(root.dataset.seed || '1', 10) || 1;
@@ -1104,12 +1002,6 @@
       const ac = new AbortController();
       const on = (el, ev, fn, opts={}) => el.addEventListener(ev, fn, { ...opts, signal: ac.signal });
 
-      // inspector
-      const inspector = root.querySelector('[data-inspector]');
-      const layerBtns = inspector ? Array.from(inspector.querySelectorAll('[data-layer]')) : [];
-      const layersCycle = ['W1','W2','W3'];
-      let selectedLayer = 'W1';
-
       const rand0 = mulberry32(seed);
       let data = cfg.makeData(rand0);
       let state = (cfg.kind === 'linear') ? cfg.initState() : cfg.initState(rand0);
@@ -1130,15 +1022,6 @@
 
       function setStatus(t){ if (statusPill) statusPill.textContent = t; }
 
-      function setLayer(k){
-        selectedLayer = k;
-        layerBtns.forEach(b => b.classList.toggle('nn-on', b.dataset.layer === k));
-        drawWeights(root, state, selectedLayer);
-        updateMetrics();
-      }
-
-      layerBtns.forEach(b => on(b, 'click', () => setLayer(b.dataset.layer)));
-
       function updateMetrics(){
         if (cfg.kind === 'linear'){
           const rows = [
@@ -1154,19 +1037,9 @@
           return;
         }
 
-        const mat = getLayerMatrix(state, selectedLayer);
-        let absMax = '—';
-        if (mat){
-          let m = 0;
-          for(let i=0;i<mat.data.length;i++) m = Math.max(m, Math.abs(mat.data[i]));
-          absMax = m.toFixed(3);
-        }
-
         const rows = [
           ['Step', String(step)],
           ['MSE', (Number.isFinite(loss) ? loss.toExponential(2) : '—')],
-          ['Capa', selectedLayer],
-          ['|w|max', absMax],
         ];
         metricsEl.innerHTML = rows.map(([k,v]) => (
           `<div class="nn-metric"><div class="k">${k}</div><div class="v">${v}</div></div>`
@@ -1184,7 +1057,6 @@
         drawPlot(root, cfg, state, data, hoverIdx, fx, focusLocked, pointPx);
         const pulsePhase = running ? ((pulseT % 1) + 1) % 1 : null;
         drawNetwork(root, cfg, state, fx, pulsePhase);
-        if (cfg.kind !== 'linear') drawWeights(root, state, selectedLayer);
       }
 
       function stopIfConverged(){
@@ -1263,7 +1135,6 @@
         setStatus('listo');
         updateMetrics();
         repaint();
-        if (cfg.kind !== 'linear') setLayer(selectedLayer);
       }
 
       on(btnToggle, 'click', () => (running ? stop() : start()));
@@ -1342,14 +1213,6 @@
         repaint();
       });
 
-      // net click: cycle inspected layer (MLP only)
-      on(cNet, 'click', () => {
-        if (cfg.kind === 'linear') return;
-        const i = layersCycle.indexOf(selectedLayer);
-        const next = layersCycle[(i + 1) % layersCycle.length];
-        setLayer(next);
-      });
-
       // resize handling
       const ro = new ResizeObserver(() => {
         // resize observer fires while hidden too; schedule on next frame
@@ -1362,7 +1225,6 @@
 
       // initial draw
       updateMetrics();
-      if (cfg.kind !== 'linear') setLayer(selectedLayer);
       repaint();
 
       // expose instance
@@ -1386,65 +1248,21 @@
   }
 
   /* ===================== */
-  /* Tabs + MkDocs hook     */
+  /* Shared tabs runtime    */
   /* ===================== */
-  function cleanupDetached(){
-    const nodes = document.querySelectorAll('.nn-demo');
-    // destroy demos that are no longer connected
-    (window.__NN_DEMOS__ || []).forEach(d => {
-      if (!d.root || !d.root.isConnected){
-        try { d.destroy(); } catch (_) {}
-      }
-    });
-    // rebuild registry from DOM
-    window.__NN_DEMOS__ = Array.from(nodes).map(root => ({ root, destroy: () => root.__nnDemo?.destroy?.() }));
-  }
-
-  function initTabs(container){
-    const tabs = Array.from(container.querySelectorAll('.nn-tab'));
-    const panels = Array.from(container.querySelectorAll('.nn-panel'));
-    const defaultKey = (container.dataset.default || tabs[0]?.dataset.tab || '').trim();
-
-    function show(key){
-      tabs.forEach(t => {
-        const on = t.dataset.tab === key;
-        t.setAttribute('aria-selected', on ? 'true' : 'false');
-      });
-      panels.forEach(p => {
-        const on = p.dataset.panel === key;
-        if (on) p.removeAttribute('hidden');
-        else p.setAttribute('hidden', '');
-      });
-
-      // init + repaint visible demo(s)
-      const panel = panels.find(p => p.dataset.panel === key);
-      if (panel){
-        panel.querySelectorAll('.nn-demo').forEach(d => {
-          const inst = initDemo(d);
-          requestAnimationFrame(() => inst?.repaint?.());
-        });
-      }
+  const __attachTabbed = (TA) => {
+    TA.registerNamespace('nn', (el, meta2) => initDemo(el, meta2));
+    if (typeof console !== 'undefined' && console.debug){
+      console.debug('[nn-demo] TabbedAnimations registered', { namespace: 'nn' });
     }
+  };
 
-    tabs.forEach(t => {
-      t.addEventListener('click', () => show(t.dataset.tab));
-    });
-
-    // initial
-    show(defaultKey);
-  }
-
-  function initAll(){
-    cleanupDetached();
-    document.querySelectorAll('.nn-tabs').forEach(initTabs);
-  }
-
-  // MkDocs Material instant navigation
-  if (typeof window.document$ !== 'undefined' && window.document$ && typeof window.document$.subscribe === 'function'){
-    window.document$.subscribe(() => initAll());
+  if (window.TabbedAnimations){
+    __attachTabbed(window.TabbedAnimations);
+    window.TabbedAnimations.initAll();
   } else {
-    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initAll);
-    else initAll();
+    window.__TAQ__ = window.__TAQ__ || [];
+    window.__TAQ__.push(__attachTabbed);
   }
 })();
 </script>

@@ -7,7 +7,7 @@
   };
 
   function closeFullscreen(reason) {
-    if (!fullscreenState.overlay || !fullscreenState.isOpen) {
+    if (!fullscreenState.overlay) {
       return;
     }
 
@@ -18,6 +18,13 @@
 
     if (reason) {
       console.info("[series-preview] fullscreen closed", reason);
+    }
+  }
+
+  function resetFullscreenState(reason) {
+    closeFullscreen(reason || "reset");
+    if (fullscreenState.body) {
+      fullscreenState.body.innerHTML = "";
     }
   }
 
@@ -220,6 +227,9 @@
   }
 
   function initSeriesPreviews(root) {
+    // Prevent stale fullscreen overlay from blocking interactions across instant navigation.
+    resetFullscreenState("reinit");
+
     var scope = root || document;
     var cards = scope.querySelectorAll("article.sp-card[data-sp-embed]");
     var localCards = scope.querySelectorAll(".sp-card--local");
@@ -244,6 +254,7 @@
 
   if (typeof document$ !== "undefined" && document$.subscribe) {
     document$.subscribe(function () {
+      resetFullscreenState("nav");
       initSeriesPreviews(document);
     });
   } else if (document.readyState === "loading") {

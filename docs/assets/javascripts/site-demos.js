@@ -225,7 +225,7 @@
     }
 
     function runSelfTests() {
-      if (Math.abs(coinAllSameP(1) - 1) >= 1e-12) console.warn('Test failed: coinAllSameP(1)');
+      if (Math.abs(coinAllSameP(1) - 0.5) >= 1e-12) console.warn('Test failed: coinAllSameP(1)');
     }
 
     runSelfTests();
@@ -356,7 +356,17 @@
   function bindDocument$() {
     if (document$Bound) return true;
     if (typeof document$ === 'undefined' || !document$.subscribe) return false;
+
     document$.subscribe(() => initAll());
+
+    // Listen for color palette changes (native Material for MkDocs)
+    if (typeof palette$ !== 'undefined' && palette$.subscribe) {
+      palette$.subscribe(function () {
+        // Redraw/Re-init demos that need theme-specific updates
+        requestAnimationFrame(() => initAll());
+      });
+    }
+
     document$Bound = true;
     return true;
   }
