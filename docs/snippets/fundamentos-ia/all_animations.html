@@ -9,25 +9,26 @@
        - data-seed="..."   (deterministic init)
 -->
 
-<div class="nn-tabs" data-default="linear">
-  <div class="nn-tablist" data-role="tablist" aria-label="Neural network demos">
-    <button class="nn-tab" type="button" data-role="tab" aria-selected="true" data-tab="linear">Perceptrón: °C →
+<div class="nn-tabs ta-tabs" data-tabs data-default="linear">
+  <div class="nn-tablist ta-tablist" data-role="tablist" aria-label="Neural network demos">
+    <button class="nn-tab ta-tab" type="button" data-role="tab" aria-selected="true" data-tab="linear">Linear: °C →
       °F</button>
-    <button class="nn-tab" type="button" data-role="tab" aria-selected="false" data-tab="sine">MLP: sin(x)</button>
-    <button class="nn-tab" type="button" data-role="tab" aria-selected="false" data-tab="exptan">Deep: e^x ·
+    <button class="nn-tab ta-tab" type="button" data-role="tab" aria-selected="false" data-tab="sine">Non-linear:
+      sin(x)</button>
+    <button class="nn-tab ta-tab" type="button" data-role="tab" aria-selected="false" data-tab="exptan">Complex: e^x ·
       tan(x/2)</button>
   </div>
 
-  <div class="nn-panel" role="tabpanel" data-panel="linear">
-    <div class="nn-demo" data-demo="linear" data-seed="42" data-stop="0.1" data-focus="20"></div>
+  <div class="nn-panel ta-panel" role="tabpanel" data-panel="linear">
+    <div class="nn-demo ta-demo" data-demo="nn:linear" data-seed="42" data-stop="0.1" data-focus="20"></div>
   </div>
 
-  <div class="nn-panel" role="tabpanel" data-panel="sine" hidden>
-    <div class="nn-demo" data-demo="sine" data-seed="7" data-stop="1e-6" data-focus="1.57079632679"></div>
+  <div class="nn-panel ta-panel" role="tabpanel" data-panel="sine" hidden>
+    <div class="nn-demo ta-demo" data-demo="nn:sine" data-seed="7" data-stop="1e-6" data-focus="1.57079632679"></div>
   </div>
 
-  <div class="nn-panel" role="tabpanel" data-panel="exptan" hidden>
-    <div class="nn-demo" data-demo="exptan" data-seed="13" data-stop="1e-2" data-focus="1.0"></div>
+  <div class="nn-panel ta-panel" role="tabpanel" data-panel="exptan" hidden>
+    <div class="nn-demo ta-demo" data-demo="nn:exptan" data-seed="13" data-stop="1e-2" data-focus="1.0"></div>
   </div>
 </div>
 
@@ -59,13 +60,13 @@
   }
 
   .nn-tab[aria-selected="true"] {
-    border-color: rgba(20, 110, 235, 0.65);
-    background: rgba(20, 110, 235, 0.12);
+    border-color: var(--ta-brand-active-border, rgba(20, 110, 235, 0.65));
+    background: var(--ta-brand-active, rgba(20, 110, 235, 0.12));
   }
 
   .nn-tab:focus {
     outline: none;
-    box-shadow: 0 0 0 3px rgba(20, 110, 235, 0.18);
+    box-shadow: 0 0 0 3px var(--ta-brand-focus, rgba(20, 110, 235, 0.18));
   }
 
   .nn-panel[hidden] {
@@ -83,8 +84,8 @@
   :root[data-md-color-scheme="slate"] .nn-tab[aria-selected="true"],
   body[data-md-color-scheme="slate"] .nn-tab[aria-selected="true"],
   [data-md-color-scheme="slate"] .nn-tab[aria-selected="true"] {
-    border-color: rgba(120, 200, 255, 0.55);
-    background: rgba(120, 200, 255, 0.14);
+    border-color: var(--ta-brand-active-border, rgba(120, 200, 255, 0.55));
+    background: var(--ta-brand-active, rgba(120, 200, 255, 0.14));
   }
 
   /* ===================== */
@@ -99,9 +100,8 @@
     --muted: rgba(0, 0, 0, 0.66);
     --grid: rgba(0, 0, 0, 0.12);
     --axis: rgba(0, 0, 0, 0.26);
-    --accent: rgba(20, 110, 235, 0.98);
+    --accent: var(--ta-brand-accent, rgba(20, 110, 235, 0.98));
     --good: rgba(15, 140, 85, 0.98);
-    --warn: rgba(235, 160, 60, 0.98);
 
     color-scheme: light dark;
     color: var(--text);
@@ -112,9 +112,9 @@
     padding: 14px;
     margin: 0;
     position: relative;
-    min-height: 610px;
+    min-height: 560px;
 
-    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    font-family: var(--ta-brand-font, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji");
   }
 
   :root[data-md-color-scheme="slate"] .nn-demo,
@@ -127,9 +127,8 @@
     --muted: rgba(255, 255, 255, 0.68);
     --grid: rgba(255, 255, 255, 0.10);
     --axis: rgba(255, 255, 255, 0.22);
-    --accent: rgba(120, 200, 255, 0.95);
+    --accent: var(--ta-brand-accent, rgba(120, 200, 255, 0.95));
     --good: rgba(110, 240, 170, 0.95);
-    --warn: rgba(255, 200, 120, 0.95);
   }
 
   .nn-demo * {
@@ -181,15 +180,15 @@
   }
 
   .nn-btn.nn-on {
-    border-color: rgba(20, 110, 235, 0.65);
-    background: rgba(20, 110, 235, 0.12);
+    border-color: var(--ta-brand-active-border, rgba(20, 110, 235, 0.65));
+    background: var(--ta-brand-active, rgba(20, 110, 235, 0.12));
   }
 
   :root[data-md-color-scheme="slate"] .nn-btn.nn-on,
   body[data-md-color-scheme="slate"] .nn-btn.nn-on,
   [data-md-color-scheme="slate"] .nn-btn.nn-on {
-    border-color: rgba(120, 200, 255, 0.55);
-    background: rgba(120, 200, 255, 0.14);
+    border-color: var(--ta-brand-active-border, rgba(120, 200, 255, 0.55));
+    background: var(--ta-brand-active, rgba(120, 200, 255, 0.14));
   }
 
   .nn-row {
@@ -249,7 +248,6 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
-    margin-top: 10px;
   }
 
   .nn-metric {
@@ -315,163 +313,6 @@
     animation: nnPulse 1.1s ease-in-out infinite;
   }
 
-  /* ===================== */
-  /* Storytelling (Épocas)  */
-  /* ===================== */
-  .nn-storybox {
-    background: var(--card2);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 10px;
-  }
-
-  .nn-epochline {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-  }
-
-  .nn-epochbig {
-    display: flex;
-    align-items: baseline;
-    gap: 8px;
-    padding: 8px 10px;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    background: rgba(0, 0, 0, 0.02);
-    min-width: 150px;
-  }
-
-  .nn-epochbig [data-epoch] {
-    font-size: 22px;
-    font-weight: 900;
-    font-family: ui-monospace, Menlo, Monaco, Consolas, monospace;
-  }
-
-  .nn-epochbig .lbl {
-    font-size: 12px;
-    color: var(--muted);
-    font-weight: 800;
-  }
-
-  .nn-epochmeta {
-    flex: 1;
-    min-width: 0;
-  }
-
-  .nn-epochmeta .r {
-    font-size: 12px;
-    color: var(--muted);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .nn-epochmeta .r b {
-    color: var(--text);
-    font-weight: 900;
-  }
-
-  .nn-epochbar {
-    position: relative;
-    height: 10px;
-    border-radius: 999px;
-    border: 1px solid var(--border);
-    background: rgba(0, 0, 0, 0.02);
-    margin-top: 10px;
-    overflow: hidden;
-  }
-
-  .nn-epochbar .fill {
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 0%;
-    background: linear-gradient(90deg, rgba(20, 110, 235, 0.25), rgba(20, 110, 235, 0.08));
-  }
-
-  :root[data-md-color-scheme="slate"] .nn-epochbar .fill,
-  body[data-md-color-scheme="slate"] .nn-epochbar .fill,
-  [data-md-color-scheme="slate"] .nn-epochbar .fill {
-    background: linear-gradient(90deg, rgba(120, 200, 255, 0.22), rgba(120, 200, 255, 0.06));
-  }
-
-  .nn-epochbar .dot {
-    position: absolute;
-    top: 50%;
-    width: 14px;
-    height: 14px;
-    transform: translate(-50%, -50%);
-    border-radius: 999px;
-    border: 2px solid var(--accent);
-    background: var(--bg-page);
-    left: 0%;
-    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
-  }
-
-  .nn-flow {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-    margin-top: 10px;
-    user-select: none;
-  }
-
-  .nn-flow-step {
-    flex: 1;
-    padding: 8px 10px;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    background: rgba(0, 0, 0, 0.02);
-    font-size: 12px;
-    font-weight: 900;
-    color: var(--muted);
-    text-align: center;
-    transition: transform 120ms ease, color 120ms ease, background 120ms ease, border-color 120ms ease;
-  }
-
-  .nn-flow-arrow {
-    width: 16px;
-    text-align: center;
-    color: var(--muted);
-    opacity: 0.7;
-    font-weight: 900;
-  }
-
-  .nn-flow-step.on {
-    color: var(--text);
-    border-color: rgba(20, 110, 235, 0.55);
-    background: rgba(20, 110, 235, 0.10);
-    transform: translateY(-1px);
-  }
-
-  :root[data-md-color-scheme="slate"] .nn-flow-step.on,
-  body[data-md-color-scheme="slate"] .nn-flow-step.on,
-  [data-md-color-scheme="slate"] .nn-flow-step.on {
-    border-color: rgba(120, 200, 255, 0.45);
-    background: rgba(120, 200, 255, 0.10);
-  }
-
-  .nn-demo.nn-running .nn-flow-arrow {
-    animation: nnPulse 1.1s ease-in-out infinite;
-  }
-
-  .nn-demo.nn-epoch-flash {
-    box-shadow: 0 14px 50px rgba(20, 110, 235, 0.14);
-  }
-
-  :root[data-md-color-scheme="slate"] .nn-demo.nn-epoch-flash,
-  body[data-md-color-scheme="slate"] .nn-demo.nn-epoch-flash,
-  [data-md-color-scheme="slate"] .nn-demo.nn-epoch-flash {
-    box-shadow: 0 14px 50px rgba(120, 200, 255, 0.14);
-  }
-
-  /* ===================== */
-  /* Tooltip                */
-  /* ===================== */
   .nn-tooltip {
     position: absolute;
     z-index: 20;
@@ -522,9 +363,181 @@
     .nn-demo.nn-running .nn-pill[data-pill="status"] {
       animation: none;
     }
+  }
+</style>
 
-    .nn-demo.nn-running .nn-flow-arrow {
-      animation: none;
+<style>
+  .ta-demo {
+    --ta-brand-primary: var(--md-primary-fg-color, #26A69A);
+    --ta-brand-accent: #324AB2;
+    --ta-brand-warm: var(--md-accent-fg-color, #FFB343);
+    --ta-brand-ink: #0F172A;
+    --ta-brand-focus: rgba(50, 74, 178, .24);
+    --ta-brand-active: rgba(50, 74, 178, .14);
+    --ta-brand-active-border: rgba(50, 74, 178, .55);
+    --ta-brand-font: "Avenir Next", "Avenir", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    --ta-footer-border: rgba(15, 23, 42, .16);
+    --ta-footer-fg: rgba(15, 23, 42, .62);
+    position: relative;
+    font-family: var(--ta-brand-font);
+    isolation: isolate;
+  }
+
+  .ta-demo::before {
+    content: "5SIGMAS · Animation Library";
+    position: absolute;
+    left: 12px;
+    right: 138px;
+    bottom: 10px;
+    padding-top: 6px;
+    border-top: 1px solid var(--ta-footer-border);
+    color: var(--ta-footer-fg);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    line-height: 1.2;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .ta-demo::after {
+    content: "";
+    position: absolute;
+    right: 12px;
+    bottom: 8px;
+    width: 120px;
+    height: 30px;
+    background: url("/assets/logo.svg") no-repeat center / contain;
+    opacity: 0.08;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .ta-demo>* {
+    position: relative;
+    z-index: 1;
+  }
+
+  [data-md-color-scheme="slate"] .ta-demo {
+    --ta-brand-accent: #78C8FF;
+    --ta-brand-focus: rgba(120, 200, 255, .28);
+    --ta-brand-active: rgba(120, 200, 255, .16);
+    --ta-brand-active-border: rgba(120, 200, 255, .62);
+    --ta-footer-border: rgba(226, 232, 240, .24);
+    --ta-footer-fg: rgba(226, 232, 240, .72);
+  }
+
+  [data-md-color-scheme="slate"] .ta-demo::after {
+    background-image: url("/assets/logo_white.svg");
+    opacity: 0.10;
+  }
+</style>
+<style>
+  .ta-tabs {
+    margin: 16px 0;
+  }
+
+  .ta-tablist {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 0 0 10px;
+  }
+
+  .ta-tab {
+    appearance: none;
+    border: 1px solid rgba(0, 0, 0, 0.18);
+    background: rgba(0, 0, 0, 0.06);
+    color: rgba(0, 0, 0, 0.92);
+    border-radius: 999px;
+    padding: 8px 12px;
+    font-weight: 800;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .ta-tab[aria-selected="true"],
+  .ta-tab.on {
+    border-color: var(--ta-brand-active-border, rgba(20, 110, 235, 0.65));
+    background: var(--ta-brand-active, rgba(20, 110, 235, 0.12));
+  }
+
+  .ta-tab:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--ta-brand-focus, rgba(20, 110, 235, 0.18));
+  }
+
+  .ta-panels {
+    border-top: 1px dashed color-mix(in srgb, var(--ta-brand-warm, #FFB343) 35%, transparent);
+    padding-top: 12px;
+  }
+
+  .ta-panel[hidden] {
+    display: none;
+  }
+
+  .ta-panel {
+    display: block;
+  }
+
+  .ta-card {
+    border: 1px solid rgba(0, 0, 0, 0.18);
+    border-radius: 12px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .ta-card-k {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    opacity: .78;
+    margin-bottom: 6px;
+  }
+
+  .ta-card-v {
+    font-size: 14px;
+    line-height: 1.45;
+  }
+
+  .ta-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .ta-chip {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid rgba(0, 0, 0, 0.18);
+    border-radius: 999px;
+    padding: 7px 10px;
+    font-size: 13px;
+    font-weight: 800;
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .ta-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  [data-md-color-scheme="slate"] .ta-tab {
+    border-color: rgba(255, 255, 255, 0.16);
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.92);
+  }
+
+  [data-md-color-scheme="slate"] .ta-card,
+  [data-md-color-scheme="slate"] .ta-chip {
+    border-color: rgba(255, 255, 255, 0.16);
+  }
+
+  @media (max-width: 1020px) {
+    .ta-grid {
+      grid-template-columns: 1fr;
     }
   }
 </style>
@@ -552,13 +565,6 @@
       if (x >= 1e-3) return x.toFixed(3);
       if (x >= 1e-6) return x.toExponential(1);
       return x.toExponential(0);
-    }
-
-    function shuffleInPlace(arr, rand) {
-      for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(rand() * (i + 1));
-        const t = arr[i]; arr[i] = arr[j]; arr[j] = t;
-      }
     }
 
     function setCanvasSize(canvas, cssHeight) {
@@ -710,8 +716,8 @@
       return yhat;
     }
 
-    function mlpTrainMiniBatch(s, data, batchIdxs, xNorm, yNorm, lr) {
-      const n = Math.max(1, batchIdxs.length);
+    function mlpTrainBatch(s, data, xNorm, yNorm, lr) {
+      const n = data.length;
       const { H1, H2 } = s;
 
       const gW1 = new Float64Array(H1);
@@ -723,8 +729,7 @@
 
       let sseOrig = 0;
 
-      for (const idx of batchIdxs) {
-        const p = data[idx];
+      for (const p of data) {
         const x = p.x / xNorm;
         const y = p.y / yNorm;
 
@@ -777,7 +782,7 @@
       adamStepVec(s.W3, gW3, s.mW3, s.vW3, lr, s.t);
       adamStepScalar(s, 'b3', gb3, s.ms, s.vs, lr, s.t);
 
-      return sseOrig / n; // MSE (mini-lote) en escala original
+      return sseOrig / n; // MSE in original scale
     }
 
     /* ===================== */
@@ -787,21 +792,17 @@
       if (kind === 'linear') {
         const N = 16;
         const noise = 0.8;
-        const lr = 0.0012;
+        const lr = 0.00045;
         function fTrue(c) { return 1.8 * c + 32; }
         return {
           kind,
-          title: 'Perceptrón (1 neurona): aprende °C → °F',
-          subtitle: 'Idea: en cada <b>época</b> el modelo recorre los datos en varios <b>mini-pases</b> y ajusta (a,b) para reducir el error.',
+          title: 'Entrenamiento visible: aprender °C → °F',
+          subtitle: 'Modelo: <b>F̂ = a·C + b</b> · Real: <b>F = 1.8·C + 32</b>',
           plot: { xMin: -10, xMax: 40, yMin: fTrue(-10) - 5, yMax: fTrue(40) + 5, labelX: 'C (°C)', labelY: 'F (°F)', trueLegend: '1.8·C+32', modelLegend: 'F̂', samples: 220 },
-          net: { layers: [1, 1, 1], labels: ['Entrada', 'Neurona', 'Salida'] },
-
-          batchSize: 4,
-          shuffleEachEpoch: true,
-          stepsPerFrame: 2,
-          frameDelayMs: 26,
-          minEpochsHint: 6,
-
+          net: { layers: [1, 1, 1], labels: ['Entrada', 'Red', 'Salida'] },
+          minSteps: 25,
+          stepsPerFrame: 18,
+          frameDelayMs: 0,
           makeData: (rand) => {
             const pts = [];
             for (let i = 0; i < N; i++) {
@@ -815,40 +816,22 @@
           trueY: (x) => fTrue(x),
           initState: () => ({ a: 0, b: 0 }),
           predictY: (x, s) => s.a * x + s.b,
-
-          trainMiniStep: ({ state: s, data, batchIdxs }) => {
-            const n = Math.max(1, batchIdxs.length);
+          trainStep: ({ state: s, data }) => {
+            const n = data.length;
             let dA = 0, dB = 0;
-            for (const idx of batchIdxs) {
-              const p = data[idx];
+            for (const p of data) {
               const e = (s.a * p.x + s.b) - p.y;
               dA += (2 / n) * e * p.x;
               dB += (2 / n) * e;
             }
-            dA = clamp(dA, -800, 800);
-            dB = clamp(dB, -800, 800);
+            dA = clamp(dA, -500, 500);
+            dB = clamp(dB, -500, 500);
             s.a -= lr * dA;
             s.b -= lr * dB;
-
             let sse = 0;
-            for (const idx of batchIdxs) {
-              const p = data[idx];
-              const e = (s.a * p.x + s.b) - p.y;
-              sse += e * e;
-            }
-            return sse / n; // MSE mini-lote
-          },
-
-          evalLoss: ({ state: s, data }) => {
-            const n = Math.max(1, data.length);
-            let sse = 0;
-            for (const p of data) {
-              const e = (s.a * p.x + s.b) - p.y;
-              sse += e * e;
-            }
+            for (const p of data) { const e = (s.a * p.x + s.b) - p.y; sse += e * e; }
             return sse / n;
           },
-
           formulaHTML: (s) => {
             const aTxt = fmt(s.a, 4);
             const sign = s.b < 0 ? ' − ' : ' + ';
@@ -869,17 +852,13 @@
         function fTrue(x) { return Math.sin(x); }
         return {
           kind,
-          title: 'ML (MLP): aprende una curva no lineal (sin x)',
-          subtitle: 'Más capas ⇒ más “flexibilidad” para doblar la curva. Aquí una <b>época</b> = recorrer todos los puntos en varios <b>mini-pases</b>.',
+          title: 'Entrenamiento visible: aproximar sin(x)',
+          subtitle: 'Ejemplo: <b>x = π/2</b> → <b>y = 1</b> · Modelo: <b>MLP 1–10–10–1 (tanh)</b>',
           plot: { xMin: -Math.PI, xMax: Math.PI, yMin: -1.25, yMax: 1.25, labelX: 'x', labelY: 'y', trueLegend: 'sin x', modelLegend: 'ŷ', samples: 300 },
-          net: { layers: [1, 10, 10, 1], labels: ['Entrada', 'Capa 1', 'Capa 2', 'Salida'] },
-
-          batchSize: 8,
-          shuffleEachEpoch: true,
-          stepsPerFrame: 2,
+          net: { layers: [1, 10, 10, 1], labels: ['Entrada', 'Red (1)', 'Red (2)', 'Salida'] },
+          minSteps: 300,
+          stepsPerFrame: 6,
           frameDelayMs: 26,
-          minEpochsHint: 18,
-
           xNorm: 1,
           yNorm: 1,
           lr: 0.015,
@@ -895,21 +874,7 @@
           trueY: (x) => fTrue(x),
           initState: (rand) => makeMLPState(rand, 10, 10, 0.6),
           predictY: (x, s) => mlpForward(s, x),
-
-          trainMiniStep: ({ state, data, cfg, batchIdxs }) =>
-            mlpTrainMiniBatch(state, data, batchIdxs, cfg.xNorm, cfg.yNorm, cfg.lr),
-
-          evalLoss: ({ state, data, cfg }) => {
-            const n = Math.max(1, data.length);
-            let sse = 0;
-            for (const p of data) {
-              const yhat = mlpForward(state, p.x / cfg.xNorm) * cfg.yNorm;
-              const e = yhat - p.y;
-              sse += e * e;
-            }
-            return sse / n;
-          },
-
+          trainStep: ({ state, data, cfg }) => mlpTrainBatch(state, data, cfg.xNorm, cfg.yNorm, cfg.lr),
           formulaHTML: () => (
             '<div><span class="hl">ŷ</span> = W3·tanh(W2·tanh(W1·x + b1) + b2) + b3</div>'
             + '<div style="margin-top:6px;color:var(--muted);font-family: ui-sans-serif, system-ui; font-size: 12px;">Real: <b>y = sin(x)</b></div>'
@@ -929,17 +894,13 @@
       const xMax = 2.4;
       return {
         kind,
-        title: 'Deep learning: función “más rica” (e^x · tan(x/2))',
-        subtitle: 'Más datos + más neuronas ⇒ más capacidad para capturar comportamientos distintos. Épocas visibles (con mini-pases).',
+        title: 'Entrenamiento visible: aproximar e^x · tan(x/2)',
+        subtitle: 'Ejemplo: <b>x = 1</b> → y ≈ <b>e·tan(0.5)</b> · Modelo: <b>MLP 1–18–18–1 (tanh)</b> (con normalización)',
         plot: { xMin, xMax, yMin: -6, yMax: 32, labelX: 'x', labelY: 'y', trueLegend: 'e^x·tan(x/2)', modelLegend: 'ŷ', samples: 340 },
-        net: { layers: [1, 18, 18, 1], labels: ['Entrada', 'Capa 1', 'Capa 2', 'Salida'] },
-
-        batchSize: 10,
-        shuffleEachEpoch: true,
-        stepsPerFrame: 2,
+        net: { layers: [1, 18, 18, 1], labels: ['Entrada', 'Red (1)', 'Red (2)', 'Salida'] },
+        minSteps: 520,
+        stepsPerFrame: 6,
         frameDelayMs: 26,
-        minEpochsHint: 16,
-
         xNorm: xMax,
         yNorm: 30,
         lr: 0.02,
@@ -958,21 +919,7 @@
         trueY: (x) => fTrue(x),
         initState: (rand) => makeMLPState(rand, 18, 18, 0.55),
         predictY: (x, s) => mlpForward(s, x / xMax) * 30,
-
-        trainMiniStep: ({ state, data, cfg, batchIdxs }) =>
-          mlpTrainMiniBatch(state, data, batchIdxs, cfg.xNorm, cfg.yNorm, cfg.lr),
-
-        evalLoss: ({ state, data, cfg }) => {
-          const n = Math.max(1, data.length);
-          let sse = 0;
-          for (const p of data) {
-            const yhat = mlpForward(state, (p.x / cfg.xNorm)) * cfg.yNorm;
-            const e = yhat - p.y;
-            sse += e * e;
-          }
-          return sse / n;
-        },
-
+        trainStep: ({ state, data, cfg }) => mlpTrainBatch(state, data, cfg.xNorm, cfg.yNorm, cfg.lr),
         formulaHTML: () => (
           '<div><span class="hl">y</span> = e^x · tan(x/2)</div>'
           + '<div style="margin-top:6px;color:var(--muted);font-family: ui-sans-serif, system-ui; font-size: 12px;">Interno: x′ = x/2.4, y′ = y/30</div>'
@@ -989,28 +936,10 @@
     /* ===================== */
     /* UI builder             */
     /* ===================== */
-    function buildUI(root, cfg, stopMSE, meta) {
+    function buildUI(root, cfg, stopMSE) {
       const tooltipHTML = cfg.tooltipRows.map(([label, key]) => (
         `<div class="row"><span class="k">${label}</span><span data-tip="${key}">—</span></div>`
       )).join('');
-
-      const inspectorHTML = (cfg.kind === 'linear') ? '' : `
-      <div style="height:10px"></div>
-      <div class="nn-card" style="padding:10px; background: var(--card2);" data-inspector>
-        <div class="nn-card-title" style="margin:0 0 8px;">
-          <div class="t">Pesos internos (resumen)</div>
-          <div class="d">clic en la red o en W1/W2/W3</div>
-        </div>
-        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px;">
-          <button class="nn-btn nn-on" type="button" data-layer="W1">W1</button>
-          <button class="nn-btn" type="button" data-layer="W2">W2</button>
-          <button class="nn-btn" type="button" data-layer="W3">W3</button>
-        </div>
-        <canvas data-canvas="weights"></canvas>
-        <div style="height:8px"></div>
-        <div class="nn-formula" data-weights-text style="font-size:12px"></div>
-      </div>
-    `;
 
       root.innerHTML = `
       <div class="nn-head">
@@ -1035,31 +964,8 @@
 
         <div class="nn-card">
           <div class="nn-card-title">
-            <div class="t">Épocas (storytelling)</div>
+            <div class="t">Entreno</div>
             <div class="d">auto-stop: MSE ≤ ${fmtMSE(stopMSE)}</div>
-          </div>
-
-          <div class="nn-storybox" data-story>
-            <div class="nn-epochline">
-              <div class="nn-epochbig"><span data-epoch>0</span><span class="lbl">Época</span></div>
-              <div class="nn-epochmeta">
-                <div class="r">Pase <b><span data-pass>0</span>/<span data-pass-total>${meta?.batchesPerEpoch ?? '—'}</span></b> · mini-lote: <b><span data-batchsize>${meta?.batchSize ?? '—'}</span></b></div>
-                <div class="r">Updates (steps): <b><span data-step>0</span></b> · MSE (época): <b><span data-epoch-mse>—</span></b></div>
-              </div>
-            </div>
-            <div class="nn-epochbar">
-              <div class="fill" data-epoch-fill></div>
-              <div class="dot" data-epoch-dot></div>
-            </div>
-            <div class="nn-flow" data-flow>
-              <div class="nn-flow-step" data-flowi="0">Datos</div>
-              <div class="nn-flow-arrow">→</div>
-              <div class="nn-flow-step" data-flowi="1">Predice</div>
-              <div class="nn-flow-arrow">→</div>
-              <div class="nn-flow-step" data-flowi="2">Error</div>
-              <div class="nn-flow-arrow">→</div>
-              <div class="nn-flow-step" data-flowi="3">Ajusta pesos</div>
-            </div>
           </div>
 
           <div class="nn-metrics" data-metrics></div>
@@ -1071,12 +977,10 @@
           <div class="nn-card" style="padding:10px; background: var(--card2);">
             <div class="nn-card-title" style="margin:0 0 8px;">
               <div class="t">Esquema de la red</div>
-              <div class="d">clic para cambiar capa</div>
+              <div class="d"></div>
             </div>
             <canvas data-canvas="net"></canvas>
           </div>
-
-          ${inspectorHTML}
         </div>
       </div>
 
@@ -1091,7 +995,7 @@
     /* ===================== */
     /* Plot drawing           */
     /* ===================== */
-    function drawPlot(root, cfg, state, data, hoverIdx, focusX, focusLocked, pointPxOut, batchIdxs) {
+    function drawPlot(root, cfg, state, data, hoverIdx, focusX, focusLocked, pointPxOut) {
       const style = getComputedStyle(root);
       const cPlot = root.querySelector('[data-canvas="plot"]');
       const { ctx, w, h } = setCanvasSize(cPlot, 330);
@@ -1193,22 +1097,6 @@
       }
       ctx.restore();
 
-      // highlight current mini-batch (visual "pase")
-      if (batchIdxs && batchIdxs.length) {
-        ctx.save();
-        ctx.strokeStyle = style.getPropertyValue('--warn').trim() || 'rgba(235, 160, 60, 0.98)';
-        ctx.globalAlpha = 0.85;
-        ctx.lineWidth = 2.2;
-        for (const idx of batchIdxs) {
-          const pt = pointPxOut[idx];
-          if (!pt) continue;
-          ctx.beginPath();
-          ctx.arc(pt.x, pt.y, 7.8, 0, Math.PI * 2);
-          ctx.stroke();
-        }
-        ctx.restore();
-      }
-
       // hover highlight
       if (hoverIdx >= 0 && hoverIdx < pointPxOut.length) {
         const pt = pointPxOut[hoverIdx];
@@ -1229,8 +1117,6 @@
       let lx = pad + 8, ly = pad + 18;
       ctx.fillStyle = style.getPropertyValue('--text').trim() || 'rgba(0,0,0,0.92)';
       ctx.fillText('• datos', lx, ly); ly += 16;
-      ctx.fillStyle = style.getPropertyValue('--warn').trim() || 'rgba(235,160,60,0.98)';
-      ctx.fillText('◯ mini-lote (pase actual)', lx, ly); ly += 16;
       ctx.fillStyle = style.getPropertyValue('--accent').trim() || 'rgba(20,110,235,0.98)';
       ctx.fillText(`— modelo (${cfg.plot.modelLegend})`, lx, ly); ly += 16;
       ctx.fillStyle = style.getPropertyValue('--muted').trim() || 'rgba(0,0,0,0.66)';
@@ -1402,156 +1288,24 @@
     }
 
     /* ===================== */
-    /* Weight inspector (no heatmap)
-    /* - Shows per-vector bars (W1,W3)
-    /* - Shows per-output-neuron summary bars for W2
-    /* ===================== */
-    function getLayerVectorOrSummary(state, key) {
-      if (!state || !state.W1) return null;
-
-      if (key === 'W1') {
-        return { type: 'vec', label: `W1 (1×${state.H1})`, data: state.W1 };
-      }
-      if (key === 'W3') {
-        return { type: 'vec', label: `W3 (1×${state.H2})`, data: state.W3 };
-      }
-      if (key === 'W2') {
-        // summary per output neuron: mean(|w|) and mean(w)
-        const H1 = state.H1, H2 = state.H2;
-        const mag = new Float64Array(H2);
-        const mean = new Float64Array(H2);
-        for (let j = 0; j < H2; j++) {
-          let sAbs = 0, s = 0;
-          const row = j * H1;
-          for (let i = 0; i < H1; i++) {
-            const v = state.W2[row + i];
-            s += v;
-            sAbs += Math.abs(v);
-          }
-          mag[j] = sAbs / H1;
-          mean[j] = s / H1;
-        }
-        return { type: 'summary', label: `W2 (resumen por neurona, ${H2} barras)`, mag, mean };
-      }
-      return null;
-    }
-
-    function drawWeights(root, state, key) {
-      const box = root.querySelector('[data-inspector]');
-      if (!box || !state || !state.W1) return;
-
-      const style = getComputedStyle(root);
-      const cW = box.querySelector('[data-canvas="weights"]');
-      const txtEl = box.querySelector('[data-weights-text]');
-      const info = getLayerVectorOrSummary(state, key);
-      if (!info) { txtEl.textContent = '—'; return; }
-
-      const { ctx, w, h } = setCanvasSize(cW, 140);
-
-      const border = style.getPropertyValue('--border').trim() || 'rgba(0,0,0,0.18)';
-      const muted = style.getPropertyValue('--muted').trim() || 'rgba(0,0,0,0.66)';
-      const accent = style.getPropertyValue('--accent').trim() || 'rgba(20,110,235,0.98)';
-      const good = style.getPropertyValue('--good').trim() || 'rgba(15,140,85,0.98)';
-
-      ctx.clearRect(0, 0, w, h);
-      ctx.fillStyle = style.getPropertyValue('--card2').trim() || 'rgba(0,0,0,0.05)';
-      ctx.fillRect(0, 0, w, h);
-
-      const pad = 14;
-      const top = 28;
-      const baseY = h - 18;
-      const innerW = w - 2 * pad;
-      const innerH = baseY - top;
-
-      ctx.strokeStyle = border;
-      ctx.strokeRect(pad, top, innerW, innerH);
-
-      ctx.fillStyle = muted;
-      ctx.font = '12px ui-monospace, Menlo, Monaco, Consolas, monospace';
-      ctx.textAlign = 'left';
-      ctx.fillText(info.label, pad, 16);
-
-      function drawBars(values, signValues) {
-        const n = values.length;
-        let maxAbs = 1e-9;
-        for (let i = 0; i < n; i++) maxAbs = Math.max(maxAbs, Math.abs(values[i]));
-        const barW = innerW / n;
-
-        for (let i = 0; i < n; i++) {
-          const v = values[i];
-          const sgn = signValues ? signValues[i] : v;
-          const x = pad + i * barW;
-          const hh = (Math.abs(v) / maxAbs) * (innerH - 8);
-          const y = baseY - hh;
-
-          ctx.globalAlpha = 0.92;
-          ctx.fillStyle = (sgn >= 0) ? accent : good;
-          ctx.fillRect(x + 1, y, Math.max(1, barW - 2), hh);
-        }
-        ctx.globalAlpha = 1;
-
-        ctx.fillStyle = muted;
-        ctx.font = '11px ui-sans-serif, system-ui';
-        ctx.textAlign = 'left';
-        ctx.fillText(`|w| máx ≈ ${maxAbs.toFixed(3)}`, pad, h - 4);
-        return maxAbs;
-      }
-
-      if (info.type === 'vec') {
-        const arr = info.data;
-        const maxAbs = drawBars(arr, arr);
-
-        // stats
-        let min = Infinity, max = -Infinity, sum = 0;
-        for (let i = 0; i < arr.length; i++) { const v = arr[i]; min = Math.min(min, v); max = Math.max(max, v); sum += v; }
-        const mean = sum / Math.max(1, arr.length);
-
-        const previewCount = Math.min(10, arr.length);
-        const preview = [];
-        for (let i = 0; i < previewCount; i++) preview.push(arr[i].toFixed(2));
-
-        txtEl.innerHTML = `
-        <div><span class="hl">${key}</span> · min=${min.toFixed(3)} · mean=${mean.toFixed(3)} · max=${max.toFixed(3)} · |w|max=${maxAbs.toFixed(3)}</div>
-        <div style="margin-top:6px;color:var(--muted);font-family: ui-sans-serif, system-ui; font-size:12px;">muestra: [${preview.join(', ')}${(arr.length > previewCount) ? ', …' : ''}]</div>
-      `;
-        return;
-      }
-
-      // summary for W2
-      const maxAbs = drawBars(info.mag, info.mean);
-      let minM = Infinity, maxM = -Infinity, sumM = 0;
-      for (let i = 0; i < info.mag.length; i++) { const v = info.mag[i]; minM = Math.min(minM, v); maxM = Math.max(maxM, v); sumM += v; }
-      const meanM = sumM / Math.max(1, info.mag.length);
-
-      txtEl.innerHTML = `
-      <div><span class="hl">${key}</span> · barra = mean(|w|) por neurona de salida · min=${minM.toFixed(3)} · mean=${meanM.toFixed(3)} · max=${maxM.toFixed(3)} · |w|max≈${maxAbs.toFixed(3)}</div>
-      <div style="margin-top:6px;color:var(--muted);font-family: ui-sans-serif, system-ui; font-size:12px;">color: azul (media positiva) / verde (media negativa)</div>
-    `;
-    }
-
-    /* ===================== */
     /* Demo runtime           */
     /* ===================== */
-    function initDemo(root) {
+    function initDemo(root, meta) {
       if (root.__nnDemo && root.__nnDemo.__inited) return root.__nnDemo;
 
       safeInit(root, () => {
-        const kind = (root.dataset.demo || 'linear').trim();
+        const kind = (meta && meta.kind) ? meta.kind : (() => {
+          const raw = (root.dataset.demo || 'linear').trim();
+          const i = raw.indexOf(':');
+          return i >= 0 ? raw.slice(i + 1) : raw;
+        })();
         const cfg = makeConfig(kind);
 
         const seed = parseInt(root.dataset.seed || '1', 10) || 1;
         const stopMSE = Number.isFinite(Number(root.dataset.stop)) ? Number(root.dataset.stop) : 0.1;
         const focusDefault = Number.isFinite(Number(root.dataset.focus)) ? Number(root.dataset.focus) : ((cfg.kind === 'linear') ? 20 : 0);
 
-        const rand0 = mulberry32(seed);
-        let data = cfg.makeData(rand0);
-        let state = (cfg.kind === 'linear') ? cfg.initState() : cfg.initState(rand0);
-
-        const batchSize = Math.max(1, Math.min(cfg.batchSize || data.length, data.length));
-        const batchesPerEpoch = Math.max(1, Math.ceil(data.length / batchSize));
-        const minEpochs = Math.max(0, cfg.minEpochsHint || Math.ceil(((cfg.minSteps || 0) / batchesPerEpoch)));
-
-        buildUI(root, cfg, stopMSE, { batchSize, batchesPerEpoch });
+        buildUI(root, cfg, stopMSE);
 
         const btnToggle = root.querySelector('[data-btn="toggle"]');
         const btnReset = root.querySelector('[data-btn="reset"]');
@@ -1563,39 +1317,19 @@
         const cNet = root.querySelector('[data-canvas="net"]');
         const tip = root.querySelector('[data-tooltip]');
 
-        // story elements
-        const story = root.querySelector('[data-story]');
-        const elEpoch = story?.querySelector('[data-epoch]');
-        const elPass = story?.querySelector('[data-pass]');
-        const elPassTotal = story?.querySelector('[data-pass-total]');
-        const elStep = story?.querySelector('[data-step]');
-        const elEpochMSE = story?.querySelector('[data-epoch-mse]');
-        const elFill = story?.querySelector('[data-epoch-fill]');
-        const elDot = story?.querySelector('[data-epoch-dot]');
-        const flowSteps = story ? Array.from(story.querySelectorAll('.nn-flow-step[data-flowi]')) : [];
-
         const tipEls = {};
         tip.querySelectorAll('[data-tip]').forEach(el => tipEls[el.getAttribute('data-tip')] = el);
 
         const ac = new AbortController();
         const on = (el, ev, fn, opts = {}) => el.addEventListener(ev, fn, { ...opts, signal: ac.signal });
 
-        // inspector
-        const inspector = root.querySelector('[data-inspector]');
-        const layerBtns = inspector ? Array.from(inspector.querySelectorAll('[data-layer]')) : [];
-        const layersCycle = ['W1', 'W2', 'W3'];
-        let selectedLayer = 'W1';
+        const rand0 = mulberry32(seed);
+        let data = cfg.makeData(rand0);
+        let state = (cfg.kind === 'linear') ? cfg.initState() : cfg.initState(rand0);
 
         let running = false;
-
-        // epoch/step bookkeeping
-        let step = 0;                // update counter
-        let epoch = 0;               // epoch counter (visible)
-        let passInEpoch = 0;         // 0..batchesPerEpoch-1
-        let order = Array.from({ length: data.length }, (_, i) => i);
-        let batchIdxs = [];
-        let lossBatch = NaN;
-        let lossEpoch = NaN;
+        let step = 0;
+        let loss = NaN;
 
         let hoverIdx = -1;
         const pointPx = [];
@@ -1609,57 +1343,11 @@
 
         function setStatus(t) { if (statusPill) statusPill.textContent = t; }
 
-        function setFlow(i) {
-          if (!flowSteps.length) return;
-          for (const el of flowSteps) {
-            const on = Number(el.getAttribute('data-flowi')) === i;
-            el.classList.toggle('on', on);
-          }
-        }
-
-        function setLayer(k) {
-          selectedLayer = k;
-          layerBtns.forEach(b => b.classList.toggle('nn-on', b.dataset.layer === k));
-          drawWeights(root, state, selectedLayer);
-          updateMetrics();
-        }
-        layerBtns.forEach(b => on(b, 'click', () => setLayer(b.dataset.layer)));
-
-        function currentFocusX() {
-          if (hoverIdx >= 0 && hoverIdx < data.length) return data[hoverIdx].x;
-          if (focusLocked && Number.isFinite(focusManual)) return focusManual;
-          return focusDefault;
-        }
-
-        function updateStory() {
-          if (!story) return;
-          if (elEpoch) elEpoch.textContent = String(epoch);
-          if (elPassTotal) elPassTotal.textContent = String(batchesPerEpoch);
-          if (elPass) elPass.textContent = String(Math.min(batchesPerEpoch, passInEpoch + 1));
-          if (elStep) elStep.textContent = String(step);
-          if (elEpochMSE) elEpochMSE.textContent = Number.isFinite(lossEpoch) ? fmtMSE(lossEpoch) : '—';
-
-          const prog = clamp((passInEpoch + 0.999) / batchesPerEpoch, 0, 1);
-          const pct = (prog * 100).toFixed(2) + '%';
-          if (elFill) elFill.style.width = pct;
-          if (elDot) elDot.style.left = pct;
-
-          if (running) {
-            // cycle "Datos → Predice → Error → Ajusta" slowly and visibly
-            const flowI = Math.floor((pulseT * 1.2) % 4);
-            setFlow(flowI);
-          } else {
-            setFlow(0);
-          }
-        }
-
         function updateMetrics() {
           if (cfg.kind === 'linear') {
             const rows = [
-              ['Época', String(epoch)],
-              ['Pase', `${Math.min(batchesPerEpoch, passInEpoch + 1)}/${batchesPerEpoch}`],
-              ['MSE (época)', fmtMSE(lossEpoch)],
-              ['MSE (pase)', fmtMSE(lossBatch)],
+              ['Step', String(step)],
+              ['MSE', fmtMSE(loss)],
               ['a (peso)', fmt(state.a, 4)],
               ['b (bias)', fmt(state.b, 3)],
             ];
@@ -1667,88 +1355,39 @@
               `<div class="nn-metric"><div class="k">${k}</div><div class="v">${v}</div></div>`
             )).join('');
             formulaEl.innerHTML = cfg.formulaHTML(state);
-            updateStory();
             return;
           }
 
-          // weights summary
-          let absMax = '—';
-          const info = getLayerVectorOrSummary(state, selectedLayer);
-          if (info) {
-            if (info.type === 'vec') {
-              let m = 0;
-              for (let i = 0; i < info.data.length; i++) m = Math.max(m, Math.abs(info.data[i]));
-              absMax = m.toFixed(3);
-            } else if (info.type === 'summary') {
-              let m = 0;
-              for (let i = 0; i < info.mag.length; i++) m = Math.max(m, info.mag[i]);
-              absMax = m.toFixed(3);
-            }
-          }
-
           const rows = [
-            ['Época', String(epoch)],
-            ['Pase', `${Math.min(batchesPerEpoch, passInEpoch + 1)}/${batchesPerEpoch}`],
-            ['MSE (época)', Number.isFinite(lossEpoch) ? lossEpoch.toExponential(2) : '—'],
-            ['MSE (pase)', Number.isFinite(lossBatch) ? lossBatch.toExponential(2) : '—'],
-            ['Capa', selectedLayer],
-            ['|w|max', absMax],
+            ['Step', String(step)],
+            ['MSE', (Number.isFinite(loss) ? loss.toExponential(2) : '—')],
           ];
           metricsEl.innerHTML = rows.map(([k, v]) => (
             `<div class="nn-metric"><div class="k">${k}</div><div class="v">${v}</div></div>`
           )).join('');
-          updateStory();
+        }
+
+        function currentFocusX() {
+          if (hoverIdx >= 0 && hoverIdx < data.length) return data[hoverIdx].x;
+          if (focusLocked && Number.isFinite(focusManual)) return focusManual;
+          return focusDefault;
         }
 
         function repaint() {
           const fx = currentFocusX();
-          drawPlot(root, cfg, state, data, hoverIdx, fx, focusLocked, pointPx, batchIdxs);
+          drawPlot(root, cfg, state, data, hoverIdx, fx, focusLocked, pointPx);
           const pulsePhase = running ? ((pulseT % 1) + 1) % 1 : null;
           drawNetwork(root, cfg, state, fx, pulsePhase);
-          if (cfg.kind !== 'linear') drawWeights(root, state, selectedLayer);
-          updateStory();
-        }
-
-        function evalEpochLoss() {
-          if (typeof cfg.evalLoss === 'function') {
-            lossEpoch = cfg.evalLoss({ state, data, cfg });
-          } else {
-            // generic fallback
-            const n = Math.max(1, data.length);
-            let sse = 0;
-            for (const p of data) {
-              const e = cfg.predictY(p.x, state) - p.y;
-              sse += e * e;
-            }
-            lossEpoch = sse / n;
-          }
-        }
-
-        function startNewEpoch(rand) {
-          epoch += 1;
-          passInEpoch = 0;
-          order = Array.from({ length: data.length }, (_, i) => i);
-          if (cfg.shuffleEachEpoch) shuffleInPlace(order, rand);
-          // flash for storytelling
-          root.classList.add('nn-epoch-flash');
-          setTimeout(() => root.classList.remove('nn-epoch-flash'), 180);
-        }
-
-        function getBatchIdxs() {
-          const start = passInEpoch * batchSize;
-          const end = Math.min(order.length, start + batchSize);
-          batchIdxs = order.slice(start, end);
         }
 
         function stopIfConverged() {
-          const m = Number.isFinite(lossEpoch) ? lossEpoch : lossBatch;
-          if (!Number.isFinite(m)) return;
-          if (epoch < minEpochs) return;
-          if (m <= stopMSE) {
+          if (!Number.isFinite(loss)) return;
+          if (step < (cfg.minSteps || 0)) return;
+          if (loss <= stopMSE) {
             running = false;
             root.classList.remove('nn-running');
             btnToggle.textContent = '▶ Entrenar';
-            setStatus(`MSE ≤ ${fmtMSE(stopMSE)} (época ${epoch})`);
+            setStatus(`MSE ≤ ${fmtMSE(stopMSE)}`);
           }
         }
 
@@ -1770,39 +1409,16 @@
           }
         }
 
-        const randEpoch = mulberry32(seed ^ 0xA53C9E1);
-
         function tick() {
           if (!running) { clearTimers(); return; }
 
-          const iters = (cfg.stepsPerFrame || 1);
+          const iters = (cfg.stepsPerFrame || 10);
           for (let k = 0; k < iters; k++) {
-            // ensure epoch exists
-            if (epoch === 0 && passInEpoch === 0) {
-              startNewEpoch(randEpoch);
-            }
-
-            // build current mini-batch
-            getBatchIdxs();
-
-            // 1 mini-step = 1 mini-batch update
-            lossBatch = cfg.trainMiniStep({ state, data, cfg, batchIdxs });
-
-            step += 1;
-            pulseT += 0.10;
-
-            // next mini-pass
-            passInEpoch += 1;
-
-            // end of epoch
-            if (passInEpoch >= batchesPerEpoch) {
-              evalEpochLoss();
-              // next epoch
-              startNewEpoch(randEpoch);
-            }
+            loss = cfg.trainStep({ state, data, cfg });
           }
+          step += iters;
+          pulseT += 0.06;
 
-          // update UI once per frame
           updateMetrics();
           repaint();
           stopIfConverged();
@@ -1814,7 +1430,7 @@
           running = true;
           root.classList.add('nn-running');
           btnToggle.textContent = '⏸ Pausar';
-          setStatus('entrenando… (mira las épocas)');
+          setStatus('entrenando…');
           scheduleNext();
         }
 
@@ -1832,23 +1448,14 @@
           const rand = mulberry32(seed);
           data = cfg.makeData(rand);
           state = (cfg.kind === 'linear') ? cfg.initState() : cfg.initState(rand);
-
           step = 0;
-          epoch = 0;
-          passInEpoch = 0;
-          order = Array.from({ length: data.length }, (_, i) => i);
-          batchIdxs = [];
-          lossBatch = NaN;
-          lossEpoch = NaN;
-
+          loss = NaN;
           hoverIdx = -1;
           focusLocked = false;
           focusManual = null;
-
           setStatus('listo');
           updateMetrics();
           repaint();
-          if (cfg.kind !== 'linear') setLayer(selectedLayer);
         }
 
         on(btnToggle, 'click', () => (running ? stop() : start()));
@@ -1917,7 +1524,7 @@
           const t = clamp((x - pad) / Math.max(1e-6, (w - 2 * pad)), 0, 1);
           focusManual = xMin + (xMax - xMin) * t;
           focusLocked = true;
-          setStatus('x fijado (doble clic para soltar)');
+          setStatus('x fijado (clic de nuevo para soltar)');
           repaint();
         });
         on(cPlot, 'dblclick', () => {
@@ -1927,16 +1534,9 @@
           repaint();
         });
 
-        // net click: cycle inspected layer (MLP only)
-        on(cNet, 'click', () => {
-          if (cfg.kind === 'linear') return;
-          const i = layersCycle.indexOf(selectedLayer);
-          const next = layersCycle[(i + 1) % layersCycle.length];
-          setLayer(next);
-        });
-
         // resize handling
         const ro = new ResizeObserver(() => {
+          // resize observer fires while hidden too; schedule on next frame
           requestAnimationFrame(() => {
             if (!root.isConnected) return;
             repaint();
@@ -1945,7 +1545,6 @@
         ro.observe(root);
 
         // initial draw
-        if (cfg.kind !== 'linear') setLayer(selectedLayer);
         updateMetrics();
         repaint();
 
@@ -1970,70 +1569,21 @@
     }
 
     /* ===================== */
-    /* Tabs + MkDocs hook     */
+    /* Shared tabs runtime    */
     /* ===================== */
-    function cleanupDetached() {
-      const nodes = document.querySelectorAll('.nn-demo');
-      (window.__NN_DEMOS__ || []).forEach(d => {
-        if (!d.root || !d.root.isConnected) {
-          try { d.destroy(); } catch (_) { }
-        }
-      });
-      window.__NN_DEMOS__ = Array.from(nodes).map(root => ({ root, destroy: () => root.__nnDemo?.destroy?.() }));
-    }
-
-    function initTabs(container) {
-      const tabs = Array.from(container.querySelectorAll('.nn-tab'));
-      const panels = Array.from(container.querySelectorAll('.nn-panel'));
-      const defaultKey = (container.dataset.default || tabs[0]?.dataset.tab || '').trim();
-      let currentKey = null;
-
-      function stopPanel(key) {
-        const panel = panels.find(p => p.dataset.panel === key);
-        if (!panel) return;
-        panel.querySelectorAll('.nn-demo').forEach(d => {
-          try { d.__nnDemo?.stop?.(); } catch (_) { }
-        });
+    const __attachTabbed = (TA) => {
+      TA.registerNamespace('nn', (el, meta2) => initDemo(el, meta2));
+      if (typeof console !== 'undefined' && console.debug) {
+        console.debug('[nn-demo] TabbedAnimations registered', { namespace: 'nn' });
       }
+    };
 
-      function show(key) {
-        if (currentKey && currentKey !== key) stopPanel(currentKey);
-        currentKey = key;
-
-        tabs.forEach(t => {
-          const on = t.dataset.tab === key;
-          t.setAttribute('aria-selected', on ? 'true' : 'false');
-        });
-        panels.forEach(p => {
-          const on = p.dataset.panel === key;
-          if (on) p.removeAttribute('hidden');
-          else p.setAttribute('hidden', '');
-        });
-
-        const panel = panels.find(p => p.dataset.panel === key);
-        if (panel) {
-          panel.querySelectorAll('.nn-demo').forEach(d => {
-            const inst = initDemo(d);
-            requestAnimationFrame(() => inst?.repaint?.());
-          });
-        }
-      }
-
-      tabs.forEach(t => t.addEventListener('click', () => show(t.dataset.tab)));
-      show(defaultKey);
-    }
-
-    function initAll() {
-      cleanupDetached();
-      document.querySelectorAll('.nn-tabs').forEach(initTabs);
-    }
-
-    // MkDocs Material instant navigation
-    if (typeof window.document$ !== 'undefined' && window.document$ && typeof window.document$.subscribe === 'function') {
-      window.document$.subscribe(() => initAll());
+    if (window.TabbedAnimations) {
+      __attachTabbed(window.TabbedAnimations);
+      window.TabbedAnimations.initAll();
     } else {
-      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initAll);
-      else initAll();
+      window.__TAQ__ = window.__TAQ__ || [];
+      window.__TAQ__.push(__attachTabbed);
     }
   })();
 </script>

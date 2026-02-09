@@ -13,3 +13,5 @@ ENV/
 .vscode/
 .idea/
 documentacion_interna/
+node_modules/*
+.node*

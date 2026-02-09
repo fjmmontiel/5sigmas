@@ -1,0 +1,368 @@
+<div class="ai-tabs ta-demo ta-tabs" data-demo="tipos_aprendizaje" data-tabs data-default="sup">
+  <div class="ai-tabs__header">
+    <div class="ai-tabs__title">Como aprenden (y como se convierte en sistema)</div>
+    <div class="ai-tabs__subtitle">Supervisado / No supervisado / Auto-supervisado / RL describen de donde sale el
+      "profesor".</div>
+  </div>
+
+  <div class="ai-tabs__nav ta-tablist" data-role="tablist" aria-label="Tipos de aprendizaje">
+    <button class="tab ta-tab" type="button" data-role="tab" aria-selected="true" data-tab="sup">Supervisado</button>
+    <button class="tab ta-tab" type="button" data-role="tab" aria-selected="false" data-tab="unsup">No
+      supervisado</button>
+    <button class="tab ta-tab" type="button" data-role="tab" aria-selected="false"
+      data-tab="self">Auto-supervisado</button>
+    <button class="tab ta-tab" type="button" data-role="tab" aria-selected="false" data-tab="rl">RL</button>
+    <button class="tab ta-tab" type="button" data-role="tab" aria-selected="false" data-tab="sys">Sistema</button>
+  </div>
+
+  <div class="ai-tabs__content ta-panels">
+    <section class="panel ta-panel" role="tabpanel" data-panel="sup">
+      <div class="panel__k">Idea</div>
+      <div class="panel__p">Tienes ejemplos con etiqueta: <code>x -&gt; y</code>. El modelo aprende a predecir
+        <code>y</code>.</div>
+      <div class="panel__k">Ejemplo</div>
+      <ul class="panel__list">
+        <li><b>Objetivo:</b> detectar spam.</li>
+        <li><b>Datos:</b> emails con etiqueta spam/no spam.</li>
+        <li><b>Salida:</b> probabilidad de spam.</li>
+        <li><b>Feedback:</b> correcciones de usuario -&gt; nuevas etiquetas.</li>
+      </ul>
+      <div class="panel__k">Cuando encaja</div>
+      <div class="panel__p">Cuando puedes conseguir etiquetas fiables y medir el error.</div>
+    </section>
+
+    <section class="panel ta-panel" role="tabpanel" data-panel="unsup" hidden>
+      <div class="panel__k">Idea</div>
+      <div class="panel__p">Solo tienes <code>x</code>. Buscas estructura: grupos, patrones, anomalias.</div>
+      <div class="panel__k">Ejemplo</div>
+      <ul class="panel__list">
+        <li><b>Objetivo:</b> segmentar clientes.</li>
+        <li><b>Datos:</b> comportamiento sin etiquetas.</li>
+        <li><b>Salida:</b> clusters con perfiles similares.</li>
+        <li><b>Feedback:</b> negocio valida y ajusta variables o numero de clusters.</li>
+      </ul>
+      <div class="panel__k">Cuando encaja</div>
+      <div class="panel__p">Cuando no hay etiquetas, pero si quieres organizacion o deteccion de rarezas.</div>
+    </section>
+
+    <section class="panel ta-panel" role="tabpanel" data-panel="self" hidden>
+      <div class="panel__k">Idea</div>
+      <div class="panel__p">El propio dato contiene la respuesta. El sistema se fabrica <code>y*</code> a partir de
+        <code>x</code>.</div>
+      <div class="panel__k">Ejemplo</div>
+      <ul class="panel__list">
+        <li><b>Objetivo:</b> completar frases / modelar contexto.</li>
+        <li><b>Datos:</b> textos sin etiquetar.</li>
+        <li><b>y*:</b> siguiente palabra o fragmento real del texto.</li>
+        <li><b>Feedback:</b> comparacion directa con el token real.</li>
+      </ul>
+      <div class="panel__k">Cuando encaja</div>
+      <div class="panel__p">Cuando tienes mucho dato sin etiquetar y quieres preentrenar un modelo general.</div>
+    </section>
+
+    <section class="panel ta-panel" role="tabpanel" data-panel="rl" hidden>
+      <div class="panel__k">Idea</div>
+      <div class="panel__p">No hay "respuesta correcta" por ejemplo. Hay objetivo y recompensa; se aprende probando
+        acciones.</div>
+      <div class="panel__k">Conceptos</div>
+      <ul class="panel__list">
+        <li><b>Agente</b>, <b>entorno</b>, <b>accion</b>, <b>recompensa</b>, <b>retorno</b>.</li>
+      </ul>
+      <div class="panel__k">Ejemplo</div>
+      <ul class="panel__list">
+        <li><b>Objetivo:</b> mantener un vehiculo en el carril.</li>
+        <li><b>Acciones:</b> girar, acelerar, frenar.</li>
+        <li><b>Recompensa:</b> centrado = +1, salirse = -1.</li>
+      </ul>
+      <div class="panel__k">Cuando encaja</div>
+      <div class="panel__p">Problemas secuenciales: importa el efecto a largo plazo de decisiones.</div>
+    </section>
+
+    <section class="panel ta-panel" role="tabpanel" data-panel="sys" hidden>
+      <div class="panel__k">Idea</div>
+      <div class="panel__p"><b>IA en la practica = sistema</b>: objetivo medible + datos + salida + metricas + feedback.
+      </div>
+      <div class="panel__k">Mini-checklist</div>
+      <ul class="panel__list">
+        <li><b>Objetivo:</b> que optimizas (fraude evitado, precision, coste, latencia...).</li>
+        <li><b>Metricas:</b> como decides si mejora o empeora.</li>
+        <li><b>Feedback:</b> como llegan correcciones (humanas, logs, chargebacks...).</li>
+        <li><b>Ciclo:</b> monitorizar -&gt; ajustar/reentrenar -&gt; validar -&gt; desplegar.</li>
+      </ul>
+      <div class="panel__k">Mensaje clave</div>
+      <div class="panel__p">"Entrene un modelo" != "tengo IA en produccion". Sin operacion y mantenimiento, es una demo.
+      </div>
+    </section>
+  </div>
+</div>
+
+<style>
+  .ai-tabs {
+    --ai-bg: var(--md-default-bg-color, #ffffff);
+    --ai-fg: var(--md-default-fg-color, #0f172a);
+    --ai-muted: color-mix(in srgb, var(--ai-fg) 70%, transparent);
+    --ai-border: color-mix(in srgb, var(--ai-fg) 14%, transparent);
+    --ai-accent: var(--md-primary-fg-color, #26A69A);
+    --ai-surface: color-mix(in srgb, var(--ai-bg) 92%, #ffffff 8%);
+    --ai-panel: color-mix(in srgb, var(--ai-bg) 96%, #ffffff 4%);
+    --ai-shadow: 0 14px 30px rgba(15, 23, 42, 0.12);
+    border: 1px solid var(--ai-border);
+    border-radius: 14px;
+    padding: 14px;
+    background: var(--ai-surface);
+    color: var(--ai-fg);
+  }
+
+  [data-md-color-scheme="slate"] .ai-tabs {
+    --ai-bg: var(--md-default-bg-color, #0f172a);
+    --ai-fg: var(--md-default-fg-color, #e2e8f0);
+    --ai-muted: color-mix(in srgb, var(--ai-fg) 72%, transparent);
+    --ai-border: color-mix(in srgb, var(--ai-fg) 18%, transparent);
+    --ai-surface: color-mix(in srgb, var(--ai-bg) 85%, #111827 15%);
+    --ai-panel: color-mix(in srgb, var(--ai-bg) 78%, #1f2937 22%);
+    --ai-shadow: 0 20px 38px rgba(2, 6, 23, 0.45);
+  }
+
+  .ai-tabs__header {
+    margin-bottom: 10px;
+  }
+
+  .ai-tabs__title {
+    font-weight: 800;
+    font-size: 16px;
+  }
+
+  .ai-tabs__subtitle {
+    font-size: 13px;
+    opacity: .82;
+    margin-top: 4px;
+    color: var(--ai-muted);
+  }
+
+  .ai-tabs__nav {
+    margin: 10px 0 12px 0;
+  }
+
+  .ai-tabs__nav .tab {
+    border: 1px solid var(--ai-border);
+    background: var(--ai-panel);
+    color: var(--ai-fg);
+    transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+  }
+
+  .ai-tabs__nav .tab[aria-selected="true"] {
+    transform: translateY(-1px);
+    border-color: color-mix(in srgb, var(--ai-accent) 55%, var(--ai-border));
+    box-shadow: var(--ai-shadow);
+    font-weight: 700;
+  }
+
+  .panel__k {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    opacity: .78;
+    color: var(--ai-muted);
+    margin: 10px 0 6px;
+  }
+
+  .panel__p {
+    font-size: 14px;
+    line-height: 1.45;
+  }
+
+  .panel__list {
+    margin: 0;
+    padding-left: 18px;
+    font-size: 14px;
+    line-height: 1.45;
+  }
+
+  .panel code {
+    font-size: 0.95em;
+    padding: 1px 6px;
+    border-radius: 8px;
+    border: 1px solid var(--ai-border);
+    background: color-mix(in srgb, var(--ai-bg) 88%, var(--ai-accent) 6%);
+  }
+</style>
+
+<style>
+  .ta-demo {
+    --ta-brand-primary: var(--md-primary-fg-color, #26A69A);
+    --ta-brand-accent: #324AB2;
+    --ta-brand-warm: var(--md-accent-fg-color, #FFB343);
+    --ta-brand-ink: #0F172A;
+    --ta-brand-focus: rgba(50, 74, 178, .24);
+    --ta-brand-active: rgba(50, 74, 178, .14);
+    --ta-brand-active-border: rgba(50, 74, 178, .55);
+    --ta-brand-font: "Avenir Next", "Avenir", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    --ta-footer-border: rgba(15, 23, 42, .16);
+    --ta-footer-fg: rgba(15, 23, 42, .62);
+    position: relative;
+    font-family: var(--ta-brand-font);
+    isolation: isolate;
+  }
+
+  .ta-demo::before {
+    content: "5SIGMAS · Animation Library";
+    position: absolute;
+    left: 12px;
+    right: 138px;
+    bottom: 10px;
+    padding-top: 6px;
+    border-top: 1px solid var(--ta-footer-border);
+    color: var(--ta-footer-fg);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    line-height: 1.2;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .ta-demo::after {
+    content: "";
+    position: absolute;
+    right: 12px;
+    bottom: 8px;
+    width: 120px;
+    height: 30px;
+    background: url("/assets/logo.svg") no-repeat center / contain;
+    opacity: 0.08;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .ta-demo>* {
+    position: relative;
+    z-index: 1;
+  }
+
+  [data-md-color-scheme="slate"] .ta-demo {
+    --ta-brand-accent: #78C8FF;
+    --ta-brand-focus: rgba(120, 200, 255, .28);
+    --ta-brand-active: rgba(120, 200, 255, .16);
+    --ta-brand-active-border: rgba(120, 200, 255, .62);
+    --ta-footer-border: rgba(226, 232, 240, .24);
+    --ta-footer-fg: rgba(226, 232, 240, .72);
+  }
+
+  [data-md-color-scheme="slate"] .ta-demo::after {
+    background-image: url("/assets/logo_white.svg");
+    opacity: 0.10;
+  }
+</style>
+<style>
+  .ta-tabs {
+    margin: 16px 0;
+  }
+
+  .ta-tablist {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 0 0 10px;
+  }
+
+  .ta-tab {
+    appearance: none;
+    border: 1px solid rgba(0, 0, 0, 0.18);
+    background: rgba(0, 0, 0, 0.06);
+    color: rgba(0, 0, 0, 0.92);
+    border-radius: 999px;
+    padding: 8px 12px;
+    font-weight: 800;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .ta-tab[aria-selected="true"],
+  .ta-tab.on {
+    border-color: var(--ta-brand-active-border, rgba(20, 110, 235, 0.65));
+    background: var(--ta-brand-active, rgba(20, 110, 235, 0.12));
+  }
+
+  .ta-tab:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--ta-brand-focus, rgba(20, 110, 235, 0.18));
+  }
+
+  .ta-panels {
+    border-top: 1px dashed color-mix(in srgb, var(--ta-brand-warm, #FFB343) 35%, transparent);
+    padding-top: 12px;
+  }
+
+  .ta-panel[hidden] {
+    display: none;
+  }
+
+  .ta-panel {
+    display: block;
+  }
+
+  .ta-card {
+    border: 1px solid rgba(0, 0, 0, 0.18);
+    border-radius: 12px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .ta-card-k {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    opacity: .78;
+    margin-bottom: 6px;
+  }
+
+  .ta-card-v {
+    font-size: 14px;
+    line-height: 1.45;
+  }
+
+  .ta-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .ta-chip {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid rgba(0, 0, 0, 0.18);
+    border-radius: 999px;
+    padding: 7px 10px;
+    font-size: 13px;
+    font-weight: 800;
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .ta-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  [data-md-color-scheme="slate"] .ta-tab {
+    border-color: rgba(255, 255, 255, 0.16);
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.92);
+  }
+
+  [data-md-color-scheme="slate"] .ta-card,
+  [data-md-color-scheme="slate"] .ta-chip {
+    border-color: rgba(255, 255, 255, 0.16);
+  }
+
+  @media (max-width: 1020px) {
+    .ta-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  // Shared tab runtime handles this demo through [data-tabs].
+</script>

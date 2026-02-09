@@ -1,0 +1,735 @@
+<div class="ai-mat ta-demo ta-tabs" data-demo="ia_ml_dl" data-tabs data-default="ia">
+  <nav class="ai-nav ta-tablist" data-role="tablist" aria-label="IA -> ML -> DL -> GenAI">
+    <button type="button" class="ta-tab" data-role="tab" aria-selected="true" data-tab="ia">IA</button>
+    <button type="button" class="ta-tab" data-role="tab" aria-selected="false" data-tab="ml">ML</button>
+    <button type="button" class="ta-tab" data-role="tab" aria-selected="false" data-tab="dl">DL</button>
+    <button type="button" class="ta-tab" data-role="tab" aria-selected="false" data-tab="gen">GenAI</button>
+  </nav>
+
+  <div class="ta-panels">
+    <section class="ai-panel ta-panel" role="tabpanel" data-panel="ia" aria-label="IA">
+      <div class="ai-title">IA</div>
+      <div class="ai-sub">El paraguas: decidir y planificar</div>
+
+      <div class="ai-card">
+        <div class="ai-card-k">Que es</div>
+        <div class="ai-card-v">Marco amplio: tecnicas para que un sistema razone, planifique o decida. Puede usar
+          reglas, busqueda, optimizacion o (a veces) aprendizaje.</div>
+      </div>
+
+      <div class="ai-io">
+        <div class="ai-card">
+          <div class="ai-card-k">Entrada tipica</div>
+          <div class="ai-card-v">reglas · restricciones · objetivos</div>
+        </div>
+        <div class="ai-card">
+          <div class="ai-card-k">Salida tipica</div>
+          <div class="ai-card-v">decisiones · planes · acciones</div>
+        </div>
+      </div>
+
+      <div class="ai-card">
+        <div class="ai-card-k">Capacidades</div>
+        <div class="ai-chips">
+          <span class="chip n"><span class="x">-</span>Aprende de datos</span>
+          <span class="chip n"><span class="x">-</span>Red neuronal</span>
+          <span class="chip n" data-k="gen"><span class="x">-</span>Genera contenido</span>
+        </div>
+      </div>
+
+      <div class="ai-ex" aria-label="Ejemplos cotidianos">
+        <ul class="ai-grid ta-grid">
+          <li>
+            <div class="ex">
+              <div class="ex-t">Aspiradora robot: ruta eficiente</div>
+              <div class="ex-d">Planifica por donde pasar para cubrir la casa evitando obstaculos.</div>
+            </div>
+          </li>
+          <li>
+            <div class="ex">
+              <div class="ex-t">Sudoku/ajedrez: mejor jugada</div>
+              <div class="ex-d">Explora opciones y elige la que maximiza una puntuacion.</div>
+            </div>
+          </li>
+          <li>
+            <div class="ex">
+              <div class="ex-t">Turnos en una tienda</div>
+              <div class="ex-d">Asigna horarios cumpliendo reglas y restricciones.</div>
+            </div>
+          </li>
+          <li>
+            <div class="ex">
+              <div class="ex-t">Reparto: ruta con varias paradas</div>
+              <div class="ex-d">Optimiza el orden de visita para minimizar tiempo o kilometros.</div>
+            </div>
+          </li>
+          <li>
+            <div class="ex">
+              <div class="ex-t">Soporte por reglas (FAQ)</div>
+              <div class="ex-d">Si detecta X, recomienda Y siguiendo un flujo definido.</div>
+            </div>
+          </li>
+          <li>
+            <div class="ex">
+              <div class="ex-t">Semaforos coordinados</div>
+              <div class="ex-d">Ajusta ciclos con logica de control para reducir atascos.</div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="ai-panel ta-panel" role="tabpanel" data-panel="ml" aria-label="ML" hidden>
+      <div class="ai-title">ML</div>
+      <div class="ai-sub">Aprender patrones desde ejemplos</div>
+      <div class="ai-card">
+        <div class="ai-card-k">Que es</div>
+        <div class="ai-card-v">Rama de IA donde el sistema aprende de datos para generalizar a casos nuevos, sin
+          programar reglas para cada situacion.</div>
+      </div>
+      <div class="ai-io">
+        <div class="ai-card">
+          <div class="ai-card-k">Entrada tipica</div>
+          <div class="ai-card-v">datos (etiquetados o no) · variables · metrica</div>
+        </div>
+        <div class="ai-card">
+          <div class="ai-card-k">Salida tipica</div>
+          <div class="ai-card-v">prediccion · clasificacion · agrupacion</div>
+        </div>
+      </div>
+      <div class="ai-card">
+        <div class="ai-card-k">Capacidades</div>
+        <div class="ai-chips">
+          <span class="chip y"><span class="x">✓</span>Aprende de datos</span>
+          <span class="chip n"><span class="x">-</span>Red neuronal</span>
+          <span class="chip n" data-k="gen"><span class="x">-</span>Genera contenido</span>
+        </div>
+      </div>
+      <div class="ai-ex" aria-label="Ejemplos cotidianos">
+        <ul class="ai-grid ta-grid">
+          <li>
+            <div class="ex">
+              <div class="ex-t">Demanda del super</div>
+              <div class="ex-d">Predice cuantas unidades se venderan para ajustar stock.</div>
+            </div>
+          </li>
+          <li>
+            <div class="ex">
+              <div class="ex-t">Riesgo de impago</div>
+              <div class="ex-d">Estima probabilidad de impago para decidir condiciones.</div>
+            </div>
+          </li>
+          <li>
+            <div class="ex">
+              <div class="ex-t">Fraude en tarjeta</div>
+              <div class="ex-d">Detecta transacciones sospechosas comparando con patrones.</div>
+            </div>
+          </li>
+          <li>
+            <div class="ex">
+              <div class="ex-t">Churn (bajas)</div>
+              <div class="ex-d">Predice quien podria cancelar una suscripcion.</div>
+            </div>
+          </li>
+          <li>
+            <div class="ex">
+              <div class="ex-t">Segmentos de clientes</div>
+              <div class="ex-d">Agrupa perfiles similares para ofertas mas relevantes.</div>
+            </div>
+          </li>
+          <li>
+            <div class="ex">
+              <div class="ex-t">Recomendacion de productos</div>
+              <div class="ex-d">Sugiere articulos segun comportamientos parecidos entre usuarios.</div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="ai-panel ta-panel" role="tabpanel" data-panel="dl" aria-label="DL" hidden>
+      <div class="ai-title">DL</div>
+      <div class="ai-sub">ML con redes neuronales profundas</div>
+      <div class="ai-card">
+        <div class="ai-card-k">Que es</div>
+        <div class="ai-card-v">Subconjunto de ML basado en redes profundas, especialmente util para imagen, audio y
+          lenguaje (datos complejos).</div>
+      </div>
+      <div class="ai-io">
+        <div class="ai-card">
+          <div class="ai-card-k">Entrada tipica</div>
+          <div class="ai-card-v">muchos datos · computo · embeddings</div>
+        </div>
+        <div class="ai-card">
+          <div class="ai-card-k">Salida tipica</div>
+          <div class="ai-card-v">deteccion · reconocimiento · representaciones</div>
+        </div>
+      </div>
+      <div class="ai-card">
+        <div class="ai-card-k">Capacidades</div>
+        <div class="ai-chips">
+          <span class="chip y"><span class="x">✓</span>Aprende de datos</span>
+          <span class="chip y"><span class="x">✓</span>Red neuronal</span>
+          <span class="chip n" data-k="gen"><span class="x">-</span>Genera contenido</span>
+        </div>
+      </div>
+      <div class="ai-ex" aria-label="Ejemplos cotidianos">
+        <ul class="ai-grid ta-grid">
+          <li>
+            <div class="ex">
+              <div class="ex-t">Desbloqueo por cara</div>
+              <div class="ex-d">Reconoce un rostro comparandolo con una representacion aprendida.</div>
+            </div>
+          </li>
+          <li>
+            <div class="ex">
+              <div class="ex-t">Transcribir notas de voz</div>
+              <div class="ex-d">Convierte audio en texto aprendiendo patrones acusticos.</div>
+            </div>
+          </li>
+          <li>
+            <div class="ex">
+              <div class="ex-t">Leer texto en fotos (OCR)</div>
+              <div class="ex-d">Detecta y reconoce letras en imagenes.</div>
+            </div>
+          </li>
+          <li>
+            <div class="ex">
+              <div class="ex-t">Deteccion de objetos</div>
+              <div class="ex-d">Identifica y localiza coches, personas, senales.</div>
+            </div>
+          </li>
+          <li>
+            <div class="ex">
+              <div class="ex-t">Modo noche en camara</div>
+              <div class="ex-d">Reduce ruido y recupera detalle combinando informacion.</div>
+            </div>
+          </li>
+          <li>
+            <div class="ex">
+              <div class="ex-t">Fotos similares en galeria</div>
+              <div class="ex-d">Encuentra imagenes parecidas comparando embeddings visuales.</div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="ai-panel ta-panel" role="tabpanel" data-panel="gen" aria-label="GenAI" hidden>
+      <div class="ai-title">GenAI</div>
+      <div class="ai-sub">DL que genera contenido</div>
+      <div class="ai-card">
+        <div class="ai-card-k">Que es</div>
+        <div class="ai-card-v">Subconjunto (habitual) de DL orientado a crear contenido nuevo: texto, imagen, audio o
+          codigo, condicionado por un objetivo y contexto.</div>
+      </div>
+      <div class="ai-io">
+        <div class="ai-card">
+          <div class="ai-card-k">Entrada tipica</div>
+          <div class="ai-card-v">prompt · contexto · ejemplos</div>
+        </div>
+        <div class="ai-card">
+          <div class="ai-card-k">Salida tipica</div>
+          <div class="ai-card-v">texto · imagenes · audio · codigo</div>
+        </div>
+      </div>
+      <div class="ai-card">
+        <div class="ai-card-k">Capacidades</div>
+        <div class="ai-chips">
+          <span class="chip y"><span class="x">✓</span>Aprende de datos</span>
+          <span class="chip y"><span class="x">✓</span>Red neuronal</span>
+          <span class="chip y" data-k="gen"><span class="x">✓</span>Genera contenido</span>
+        </div>
+      </div>
+      <div class="ai-ex" aria-label="Ejemplos cotidianos">
+        <ul class="ai-grid ta-grid">
+          <li>
+            <div class="ex">
+              <div class="ex-t">Redactar un email</div>
+              <div class="ex-d">Genera un borrador con objetivo y tono especificados.</div>
+            </div>
+          </li>
+          <li>
+            <div class="ex">
+              <div class="ex-t">Resumir un documento</div>
+              <div class="ex-d">Condensa puntos clave en un texto breve y estructurado.</div>
+            </div>
+          </li>
+          <li>
+            <div class="ex">
+              <div class="ex-t">Reescribir con otro tono</div>
+              <div class="ex-d">Ajusta estilo: mas formal, mas breve o mas persuasivo.</div>
+            </div>
+          </li>
+          <li>
+            <div class="ex">
+              <div class="ex-t">Crear una imagen</div>
+              <div class="ex-d">Genera una imagen coherente a partir de una descripcion.</div>
+            </div>
+          </li>
+          <li>
+            <div class="ex">
+              <div class="ex-t">Asistente de codigo</div>
+              <div class="ex-d">Propone funciones, corrige errores y sugiere refactors.</div>
+            </div>
+          </li>
+          <li>
+            <div class="ex">
+              <div class="ex-t">Guion para una presentacion</div>
+              <div class="ex-d">Produce un esquema y notas del ponente a partir del tema.</div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<style>
+  .ai-mat,
+  .ai-mat * {
+    box-sizing: border-box
+  }
+
+  .ai-mat {
+    --bg: var(--md-default-bg-color, #fff);
+    --fg: var(--md-default-fg-color, #0f172a);
+    --a: var(--ta-brand-primary, var(--md-primary-fg-color, #26A69A));
+    --g: var(--ta-brand-warm, var(--md-accent-fg-color, #FFB343));
+    --bd: rgba(15, 23, 42, .22);
+    --mut: rgba(15, 23, 42, .72);
+    --p: clamp(12px, 1.0vw, 15px);
+    --gap: clamp(10px, 1.0vw, 14px);
+    display: block;
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: var(--p);
+    border: 1px solid var(--bd);
+    border-radius: 20px;
+    overflow: hidden;
+    isolation: isolate;
+    background:
+      radial-gradient(140% 140% at 12% 12%, rgba(38, 166, 154, .10), transparent 62%),
+      radial-gradient(140% 140% at 88% 16%, rgba(255, 179, 67, .09), transparent 66%),
+      linear-gradient(180deg, rgba(0, 0, 0, .04), rgba(255, 255, 255, .07));
+    color: var(--fg);
+    font-family: var(--ta-brand-font, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif);
+  }
+
+  [data-md-color-scheme="slate"] .ai-mat {
+    --bg: var(--md-default-bg-color, #0f172a);
+    --fg: var(--md-default-fg-color, #e2e8f0);
+    --bd: rgba(226, 232, 240, .22);
+    --mut: rgba(226, 232, 240, .76);
+    background:
+      radial-gradient(140% 140% at 12% 12%, rgba(38, 166, 154, .14), transparent 62%),
+      radial-gradient(140% 140% at 88% 16%, rgba(255, 179, 67, .12), transparent 66%),
+      linear-gradient(180deg, rgba(255, 255, 255, .04), rgba(17, 24, 39, .44));
+  }
+
+  .ai-nav {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+    margin: 2px 2px 12px;
+  }
+
+  .ai-nav button {
+    appearance: none;
+    -webkit-appearance: none;
+    font: inherit;
+    cursor: pointer;
+    user-select: none;
+    touch-action: manipulation;
+    border: 1px solid var(--bd);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, .04);
+    padding: 12px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    font-weight: 950;
+    letter-spacing: .01em;
+    color: var(--fg);
+    transition: transform .14s ease, box-shadow .14s ease, border-color .14s ease, background-color .14s ease;
+  }
+
+  .ai-nav button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 22px rgba(0, 0, 0, .10)
+  }
+
+  .ai-nav button:focus-visible {
+    outline: none;
+    box-shadow: inset 0 0 0 3px var(--ta-brand-focus, rgba(38, 166, 154, .45))
+  }
+
+  .ai-nav button.on,
+  .ai-nav button[aria-selected="true"] {
+    background: var(--ta-brand-active, rgba(38, 166, 154, .12));
+    border-color: var(--ta-brand-active-border, rgba(38, 166, 154, .45))
+  }
+
+  .ai-nav button[data-tab="gen"].on,
+  .ai-nav button[data-tab="gen"][aria-selected="true"] {
+    background: rgba(255, 179, 67, .14);
+    border-color: rgba(255, 179, 67, .45);
+    background: color-mix(in srgb, var(--g) 18%, transparent);
+    border-color: color-mix(in srgb, var(--g) 46%, transparent)
+  }
+
+  .ai-panel {
+    padding: var(--gap);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 0;
+    background: rgba(255, 255, 255, .02);
+    border-radius: 16px;
+    border: 1px solid rgba(0, 0, 0, .00)
+  }
+
+  [data-md-color-scheme="slate"] .ai-panel {
+    background: rgba(255, 255, 255, .02)
+  }
+
+  .ai-title {
+    font-size: clamp(20px, 2.0vw, 28px);
+    font-weight: 950
+  }
+
+  .ai-sub {
+    font-size: clamp(14.5px, 1.25vw, 16px);
+    font-weight: 850;
+    color: var(--mut);
+    line-height: 1.35
+  }
+
+  .ai-card {
+    border: 1px solid var(--bd);
+    border-radius: 14px;
+    padding: 12px;
+    background: rgba(255, 255, 255, .04)
+  }
+
+  .ai-card-k {
+    font-size: 12px;
+    letter-spacing: .10em;
+    text-transform: uppercase;
+    color: var(--mut);
+    margin-bottom: 6px
+  }
+
+  .ai-card-v {
+    font-size: 14px;
+    line-height: 1.55
+  }
+
+  .ai-io {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px
+  }
+
+  .ai-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--bd);
+    border-radius: 999px;
+    padding: 7px 10px;
+    background: rgba(255, 255, 255, .03);
+    font-weight: 900;
+    font-size: 13px
+  }
+
+  .chip .x {
+    width: 22px;
+    height: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    border: 1px solid var(--bd);
+    background: rgba(255, 255, 255, .02);
+    font-weight: 950
+  }
+
+  .chip.y .x {
+    background: rgba(38, 166, 154, .10);
+    background: color-mix(in srgb, var(--a) 20%, transparent)
+  }
+
+  .chip.y[data-k="gen"] .x {
+    background: rgba(255, 179, 67, .12);
+    background: color-mix(in srgb, var(--g) 22%, transparent)
+  }
+
+  .chip.n {
+    opacity: .60
+  }
+
+  .ai-ex {
+    border: 1px solid var(--bd);
+    border-radius: 14px;
+    padding: 12px;
+    background: rgba(255, 255, 255, .04)
+  }
+
+  .ai-grid {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px
+  }
+
+  .ai-grid>li {
+    padding: 0;
+    border: 0;
+    background: transparent
+  }
+
+  .ai-grid>li::before {
+    content: none !important
+  }
+
+  .ex {
+    border: 1px solid var(--bd);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, .03);
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-height: 74px
+  }
+
+  .ex-t {
+    font-weight: 950;
+    font-size: 14px;
+    line-height: 1.15
+  }
+
+  .ex-d {
+    color: var(--mut);
+    font-size: 13px;
+    line-height: 1.35
+  }
+
+  .ai-note {
+    font-size: clamp(13.5px, 1.2vw, 14.5px);
+    color: var(--mut);
+    border-top: 1px dashed var(--bd);
+    padding-top: 12px
+  }
+
+  @media (max-width:1020px) {
+    .ai-grid {
+      grid-template-columns: 1fr
+    }
+
+    .ai-io {
+      grid-template-columns: 1fr
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ai-nav button {
+      transition: none !important
+    }
+
+    .ai-nav button:hover {
+      transform: none !important
+    }
+  }
+</style>
+
+<style>
+  .ta-demo {
+    --ta-brand-primary: var(--md-primary-fg-color, #26A69A);
+    --ta-brand-accent: #324AB2;
+    --ta-brand-warm: var(--md-accent-fg-color, #FFB343);
+    --ta-brand-ink: #0F172A;
+    --ta-brand-focus: rgba(50, 74, 178, .24);
+    --ta-brand-active: rgba(50, 74, 178, .14);
+    --ta-brand-active-border: rgba(50, 74, 178, .55);
+    --ta-brand-font: "Avenir Next", "Avenir", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    --ta-footer-border: rgba(15, 23, 42, .16);
+    --ta-footer-fg: rgba(15, 23, 42, .62);
+    position: relative;
+    font-family: var(--ta-brand-font);
+    isolation: isolate;
+  }
+
+  .ta-demo::before {
+    content: "5SIGMAS · Animation Library";
+    position: absolute;
+    left: 12px;
+    right: 138px;
+    bottom: 10px;
+    padding-top: 6px;
+    border-top: 1px solid var(--ta-footer-border);
+    color: var(--ta-footer-fg);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    line-height: 1.2;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .ta-demo::after {
+    content: "";
+    position: absolute;
+    right: 12px;
+    bottom: 8px;
+    width: 120px;
+    height: 30px;
+    background: url("/assets/logo.svg") no-repeat center / contain;
+    opacity: 0.08;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .ta-demo>* {
+    position: relative;
+    z-index: 1;
+  }
+
+  [data-md-color-scheme="slate"] .ta-demo {
+    --ta-brand-accent: #78C8FF;
+    --ta-brand-focus: rgba(120, 200, 255, .28);
+    --ta-brand-active: rgba(120, 200, 255, .16);
+    --ta-brand-active-border: rgba(120, 200, 255, .62);
+    --ta-footer-border: rgba(226, 232, 240, .24);
+    --ta-footer-fg: rgba(226, 232, 240, .72);
+  }
+
+  [data-md-color-scheme="slate"] .ta-demo::after {
+    background-image: url("/assets/logo_white.svg");
+    opacity: 0.10;
+  }
+</style>
+<style>
+  .ta-tabs {
+    margin: 16px 0;
+  }
+
+  .ta-tablist {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 0 0 10px;
+  }
+
+  .ta-tab {
+    appearance: none;
+    border: 1px solid rgba(0, 0, 0, 0.18);
+    background: rgba(0, 0, 0, 0.06);
+    color: rgba(0, 0, 0, 0.92);
+    border-radius: 999px;
+    padding: 8px 12px;
+    font-weight: 800;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .ta-tab[aria-selected="true"],
+  .ta-tab.on {
+    border-color: var(--ta-brand-active-border, rgba(20, 110, 235, 0.65));
+    background: var(--ta-brand-active, rgba(20, 110, 235, 0.12));
+  }
+
+  .ta-tab:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--ta-brand-focus, rgba(20, 110, 235, 0.18));
+  }
+
+  .ta-panels {
+    border-top: 1px dashed color-mix(in srgb, var(--ta-brand-warm, #FFB343) 35%, transparent);
+    padding-top: 12px;
+  }
+
+  .ta-panel[hidden] {
+    display: none;
+  }
+
+  .ta-panel {
+    display: block;
+  }
+
+  .ta-card {
+    border: 1px solid rgba(0, 0, 0, 0.18);
+    border-radius: 12px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .ta-card-k {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    opacity: .78;
+    margin-bottom: 6px;
+  }
+
+  .ta-card-v {
+    font-size: 14px;
+    line-height: 1.45;
+  }
+
+  .ta-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .ta-chip {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid rgba(0, 0, 0, 0.18);
+    border-radius: 999px;
+    padding: 7px 10px;
+    font-size: 13px;
+    font-weight: 800;
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .ta-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  [data-md-color-scheme="slate"] .ta-tab {
+    border-color: rgba(255, 255, 255, 0.16);
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.92);
+  }
+
+  [data-md-color-scheme="slate"] .ta-card,
+  [data-md-color-scheme="slate"] .ta-chip {
+    border-color: rgba(255, 255, 255, 0.16);
+  }
+
+  @media (max-width: 1020px) {
+    .ta-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  // Shared tab runtime handles this demo through [data-tabs].
+</script>

@@ -1,0 +1,199 @@
+/* animations.css */
+/* Shared branding and tab styles for 5sigmas animations */
+
+.ta-demo {
+    --ta-brand-primary: var(--md-primary-fg-color, #26A69A);
+    --ta-brand-accent: var(--md-accent-fg-color, #324AB2);
+    --ta-brand-warm: var(--md-accent-fg-color, #FFB343);
+    --ta-brand-ink: var(--md-default-fg-color, #0F172A);
+    --ta-brand-focus: color-mix(in srgb, var(--ta-brand-accent) 24%, transparent);
+    --ta-brand-active: color-mix(in srgb, var(--ta-brand-accent) 14%, transparent);
+    --ta-brand-active-border: color-mix(in srgb, var(--ta-brand-accent) 55%, transparent);
+    --ta-brand-font: "Avenir Next", "Avenir", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    --ta-footer-border: color-mix(in srgb, var(--ta-brand-ink) 16%, transparent);
+    --ta-footer-fg: color-mix(in srgb, var(--ta-brand-ink) 62%, transparent);
+    position: relative;
+    font-family: var(--ta-brand-font);
+    isolation: isolate;
+    margin: 16px 0;
+    border: 1px solid var(--md-default-fg-color--lightest, rgba(0, 0, 0, 0.1));
+    border-radius: 14px;
+    padding: 14px 14px 60px;
+    background: var(--md-default-bg-color, #fff);
+    overflow: hidden;
+}
+
+.ta-demo::before {
+    content: "5SIGMAS · Animation Library";
+    position: absolute;
+    left: 12px;
+    right: 138px;
+    bottom: 10px;
+    padding-top: 6px;
+    border-top: 1px solid var(--ta-footer-border);
+    color: var(--ta-footer-fg);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    line-height: 1.2;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.ta-demo::after {
+    content: "";
+    position: absolute;
+    right: 12px;
+    bottom: 8px;
+    width: 120px;
+    height: 30px;
+    background: url("/assets/logo.svg") no-repeat center / contain;
+    opacity: 0.08;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.ta-demo>* {
+    position: relative;
+    z-index: 1;
+}
+
+[data-md-color-scheme="slate"] .ta-demo {
+    border-color: var(--md-default-fg-color--lightest, rgba(255, 255, 255, 0.1));
+}
+
+[data-md-color-scheme="slate"] .ta-demo::after {
+    background-image: url("/assets/logo_white.svg");
+    opacity: 0.10;
+}
+
+/* Tabs */
+.ta-tabs-header {
+    margin-bottom: 10px;
+}
+
+.ta-tabs-title {
+    font-weight: 900;
+    font-size: 16px;
+    letter-spacing: .01em;
+}
+
+.ta-tabs-subtitle {
+    font-size: 13px;
+    opacity: .85;
+    margin-top: 4px;
+}
+
+.ta-tablist {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 12px 0;
+}
+
+.ta-tab {
+    appearance: none;
+    border: 1px solid rgba(0, 0, 0, 0.18);
+    background: rgba(0, 0, 0, 0.04);
+    color: inherit;
+    border-radius: 999px;
+    padding: 8px 12px;
+    font-weight: 800;
+    cursor: pointer;
+    user-select: none;
+    transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+}
+
+.ta-tab[aria-selected="true"],
+.ta-tab.on {
+    transform: translateY(-1px);
+    border-color: var(--ta-brand-active-border, rgba(50, 74, 178, 0.55));
+    background: var(--ta-brand-active, rgba(50, 74, 178, 0.14));
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.ta-tab:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--ta-brand-focus, rgba(50, 74, 178, 0.24));
+}
+
+[data-md-color-scheme="slate"] .ta-tab {
+    border-color: rgba(255, 255, 255, 0.16);
+    background: rgba(255, 255, 255, 0.06);
+}
+
+/* Panels */
+.ta-panels {
+    border-top: 1px dashed rgba(0, 0, 0, 0.1);
+    padding-top: 12px;
+}
+
+[data-md-color-scheme="slate"] .ta-panels {
+    border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+.ta-panel[hidden] {
+    display: none;
+}
+
+/* Cards & Utilities */
+.ta-card {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.02);
+}
+
+[data-md-color-scheme="slate"] .ta-card {
+    border-color: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.ta-card-k {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    opacity: .7;
+    font-weight: 900;
+    margin-bottom: 4px;
+}
+
+.ta-card-v {
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.ta-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.ta-chip {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 12px;
+    font-weight: 800;
+    background: rgba(0, 0, 0, 0.03);
+}
+
+[data-md-color-scheme="slate"] .ta-chip {
+    border-color: rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.ta-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+@media (max-width: 800px) {
+    .ta-grid {
+        grid-template-columns: 1fr;
+    }
+}

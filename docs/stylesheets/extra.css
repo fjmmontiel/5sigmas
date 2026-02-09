@@ -524,25 +524,6 @@
     margin: 16px 0 24px;
 }
 
-@media (prefers-color-scheme: light) {
-    .sigma-graphic {
-        --panel: rgba(10, 20, 40, .12);
-        --panel2: rgba(10, 20, 40, .18);
-        --text: rgba(10, 20, 40, .96);
-        --muted: rgba(10, 20, 40, .78);
-        --grid: rgba(10, 20, 40, .32);
-        --curve: rgba(10, 20, 40, .96);
-        --tail: rgba(230, 60, 90, .20);
-        --tailStroke: rgba(210, 40, 70, .95);
-        --accent: rgba(0, 120, 255, .90);
-        --shadow: 0 12px 32px rgba(10, 20, 40, .14);
-    }
-
-    .sigma-graphic .card {
-        border-color: rgba(10, 20, 40, .18);
-    }
-}
-
 [data-md-color-scheme="default"] .sigma-graphic {
     --panel: rgba(15, 23, 42, .10);
     --panel2: rgba(15, 23, 42, .16);
@@ -705,6 +686,56 @@
 .sigma-graphic .mono {
     font-family: var(--mono);
     font-weight: 800;
+}
+
+/* Snippet theme sync with native Material palette toggle */
+[data-md-color-scheme="default"] :is(.ta-demo, .nn-demo, .ml-demo, .ai-mat, .ai-tabs, .sigma-graphic, .sigmas-dcspace) {
+    color-scheme: light;
+}
+
+[data-md-color-scheme="slate"] :is(.ta-demo, .nn-demo, .ml-demo, .ai-mat, .ai-tabs, .sigma-graphic, .sigmas-dcspace) {
+    color-scheme: dark;
+}
+
+[data-md-color-scheme="default"] .sigmas-dcspace {
+    border-color: rgba(15, 23, 42, .18);
+    background: linear-gradient(160deg, #F8FBFF, #EEF4FF);
+    box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12);
+    color: rgba(15, 23, 42, 0.94);
+}
+
+[data-md-color-scheme="default"] .sigmas-dcspace .sigmas-dcspace__title {
+    background: linear-gradient(90deg, #0F172A, #324AB2);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+[data-md-color-scheme="default"] .sigmas-dcspace .sigmas-dcspace__sub {
+    color: rgba(15, 23, 42, 0.72);
+}
+
+[data-md-color-scheme="default"] .sigmas-dcspace .sigmas-dcspace__foot {
+    border-top-color: rgba(15, 23, 42, 0.12);
+}
+
+[data-md-color-scheme="default"] .sigmas-dcspace .sigmas-dcspace__sources {
+    color: rgba(15, 23, 42, 0.62);
+}
+
+[data-md-color-scheme="default"] .sigmas-dcspace .sigmas-dcspace__sources a {
+    color: #146EEB;
+    border-bottom-color: rgba(20, 110, 235, 0.35);
+}
+
+[data-md-color-scheme="default"] .sigmas-dcspace .sigmas-dcspace__sources a:hover {
+    color: #0B57D0;
+    border-bottom-color: #0B57D0;
+}
+
+[data-md-color-scheme="default"] .sigmas-dcspace .chip {
+    background: rgba(15, 23, 42, 0.04);
+    border-color: rgba(15, 23, 42, 0.12);
 }
 
 /* Podcast Player Styles */
@@ -1018,4 +1049,68 @@
 .rm-anim-ready .is-visible .roadmap-marker {
     opacity: 1;
     transform: translateY(0);
+}
+
+/* Shared animation shell */
+.anim-brand-shell{
+    --anim-accent: var(--md-primary-fg-color, #26A69A);
+    --anim-accent-2: #324AB2;
+    --anim-warm: var(--md-accent-fg-color, #FFB343);
+    --anim-brand-font: "Avenir Next", "Avenir", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    --anim-bg: var(--md-default-bg-color, #ffffff);
+    --anim-fg: var(--md-default-fg-color, #0f172a);
+    --anim-border: color-mix(in srgb, var(--anim-fg) 14%, transparent);
+    --anim-footer-border: rgba(15,23,42,.16);
+    --anim-footer-fg: rgba(15,23,42,.62);
+    margin: 18px 0;
+    position: relative;
+    isolation: isolate;
+    font-family: var(--anim-brand-font);
+    color: var(--anim-fg);
+}
+
+.anim-brand-shell::before{
+    content: "5SIGMAS · Animation Library";
+    position: absolute;
+    left: 12px;
+    right: 138px;
+    bottom: 10px;
+    padding-top: 6px;
+    border-top: 1px solid var(--anim-footer-border);
+    color: var(--anim-footer-fg);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    line-height: 1.2;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.anim-brand-shell::after{
+    content: "";
+    position: absolute;
+    right: 12px;
+    bottom: 8px;
+    width: 120px;
+    height: 30px;
+    background: url("/assets/logo.svg") no-repeat center / contain;
+    opacity: 0.08;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.anim-brand-shell > *{
+    position: relative;
+    z-index: 1;
+}
+
+[data-md-color-scheme="slate"] .anim-brand-shell::after{
+    background-image: url("/assets/logo_white.svg");
+    opacity: 0.10;
+}
+
+[data-md-color-scheme="slate"] .anim-brand-shell{
+    --anim-footer-border: rgba(226,232,240,.24);
+    --anim-footer-fg: rgba(226,232,240,.72);
 }

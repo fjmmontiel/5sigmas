@@ -1,0 +1,2753 @@
+<!-- Classic ML demos (MkDocs Material embed) — v4
+  Cambios:
+  - Layout 1 columna: fuera el panel “Idea + variables” (solo Visual + métricas compactas).
+  - Árbol: la “estructura” ya NO se colapsa: se renderiza en un canvas aparte con scroll horizontal + cajas adaptativas.
+  - Naive Bayes: al terminar de entrenar, la animación se para (no bucle infinito). “Paso” sigue permitiendo rotar ejemplos.
+  - Al cambiar de tab, se pausa cualquier demo que estuviera animándose en tabs ocultos.
+-->
+
+<div class="ml-tabs ta-tabs" data-tabs data-default="tree">
+  <div class="ml-tablist ta-tablist" data-role="tablist" aria-label="Classic ML demos">
+    <button class="ml-tab ta-tab" type="button" data-role="tab" aria-selected="true" data-tab="tree">Árboles: decidir
+      con preguntas</button>
+    <button class="ml-tab ta-tab" type="button" data-role="tab" aria-selected="false" data-tab="nb">Naive Bayes:
+      clasificar con conteos</button>
+    <button class="ml-tab ta-tab" type="button" data-role="tab" aria-selected="false" data-tab="kmeans">K-means: agrupar
+      sin etiquetas</button>
+  </div>
+
+  <div class="ml-panel ta-panel" role="tabpanel" data-panel="tree">
+    <div class="ml-demo ta-demo" data-demo="ml:tree" data-seed="12" data-stop="0.99"></div>
+  </div>
+
+  <div class="ml-panel ta-panel" role="tabpanel" data-panel="nb" hidden>
+    <div class="ml-demo ta-demo" data-demo="ml:nb" data-seed="4"></div>
+  </div>
+
+  <div class="ml-panel ta-panel" role="tabpanel" data-panel="kmeans" hidden>
+    <div class="ml-demo ta-demo" data-demo="ml:kmeans" data-seed="21"></div>
+  </div>
+</div>
+
+<style>
+  /* ===================== */
+  /* Tabs                  */
+  /* ===================== */
+  .ml-tabs {
+    margin: 18px 0;
+  }
+
+  .ml-tablist {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding: 2px 0 8px;
+    margin: 0 0 10px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .ml-tablist::-webkit-scrollbar {
+    display: none;
+  }
+
+  .ml-tab {
+    appearance: none;
+    border: 1px solid rgba(0, 0, 0, .18);
+    background: rgba(0, 0, 0, .06);
+    color: rgba(0, 0, 0, .92);
+    border-radius: 999px;
+    padding: 8px 13px;
+    font-weight: 850;
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+    flex: 0 0 auto;
+  }
+
+  .ml-tab[aria-selected="true"] {
+    border-color: var(--ta-brand-active-border, rgba(20, 110, 235, .65));
+    background: var(--ta-brand-active, rgba(20, 110, 235, .12));
+  }
+
+  .ml-tab:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--ta-brand-focus, rgba(20, 110, 235, .18));
+  }
+
+  .ml-panel[hidden] {
+    display: none;
+  }
+
+  :root[data-md-color-scheme="slate"] .ml-tab,
+  body[data-md-color-scheme="slate"] .ml-tab,
+  [data-md-color-scheme="slate"] .ml-tab {
+    border: 1px solid rgba(255, 255, 255, .16);
+    background: rgba(255, 255, 255, .06);
+    color: rgba(255, 255, 255, .92);
+  }
+
+  :root[data-md-color-scheme="slate"] .ml-tab[aria-selected="true"],
+  body[data-md-color-scheme="slate"] .ml-tab[aria-selected="true"],
+  [data-md-color-scheme="slate"] .ml-tab[aria-selected="true"] {
+    border-color: var(--ta-brand-active-border, rgba(120, 200, 255, .55));
+    background: var(--ta-brand-active, rgba(120, 200, 255, .14));
+  }
+
+  /* ===================== */
+  /* Demo container         */
+  /* ===================== */
+  .ml-demo {
+    --bg-page: var(--md-default-bg-color, #ffffff);
+    --card: rgba(0, 0, 0, 0.07);
+    --card2: rgba(0, 0, 0, 0.05);
+    --border: rgba(0, 0, 0, 0.18);
+    --text: rgba(0, 0, 0, 0.92);
+    --muted: rgba(0, 0, 0, 0.66);
+    --grid: rgba(0, 0, 0, 0.12);
+    --axis: rgba(0, 0, 0, 0.26);
+    --accent: var(--ta-brand-accent, rgba(20, 110, 235, 0.98));
+    --good: rgba(15, 140, 85, 0.98);
+    --bad: rgba(235, 80, 80, 0.95);
+    --alt: rgba(140, 90, 235, 0.92);
+
+    color-scheme: light dark;
+    color: var(--text);
+    background: var(--bg-page);
+    border: 1px solid var(--border);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    border-radius: 16px;
+    padding: 16px;
+    margin: 0;
+    position: relative;
+
+    font-family: var(--ta-brand-font, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji");
+    font-size: 15.5px;
+    line-height: 1.42;
+    --header-offset: 220px;
+  }
+
+  :root[data-md-color-scheme="slate"] .ml-demo,
+  body[data-md-color-scheme="slate"] .ml-demo,
+  [data-md-color-scheme="slate"] .ml-demo {
+    --card: rgba(255, 255, 255, 0.075);
+    --card2: rgba(255, 255, 255, 0.05);
+    --border: rgba(255, 255, 255, 0.16);
+    --text: rgba(255, 255, 255, 0.92);
+    --muted: rgba(255, 255, 255, 0.68);
+    --grid: rgba(255, 255, 255, 0.10);
+    --axis: rgba(255, 255, 255, 0.22);
+    --accent: var(--ta-brand-accent, rgba(120, 200, 255, 0.95));
+    --good: rgba(110, 240, 170, 0.95);
+    --bad: rgba(255, 120, 120, 0.92);
+    --alt: rgba(190, 150, 255, 0.92);
+  }
+
+  .ml-demo * {
+    box-sizing: border-box;
+  }
+
+  .ml-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 12px;
+  }
+
+  .ml-title {
+    font-weight: 900;
+    font-size: 16px;
+    letter-spacing: .2px;
+    line-height: 1.25;
+  }
+
+  .ml-sub {
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-top: 3px;
+    line-height: 1.35;
+  }
+
+  .ml-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .ml-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 16px;
+    align-items: stretch;
+    min-height: min(680px, calc(100vh - var(--header-offset)));
+  }
+
+  @media (max-width:900px) {
+    .ml-row {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .ml-btn {
+    appearance: none;
+    border: 1px solid var(--border);
+    background: linear-gradient(180deg, var(--card), rgba(0, 0, 0, 0.00));
+    color: var(--text);
+    border-radius: 12px;
+    padding: 8px 12px;
+    font-weight: 850;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .ml-btn:active {
+    transform: translateY(1px);
+  }
+
+  .ml-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-width: 0;
+  }
+
+  .ml-card-detail {
+    overflow: auto;
+  }
+
+  .ml-card+.ml-card {
+    margin-top: 12px;
+  }
+
+  .ml-card>canvas {
+    margin-top: 10px;
+  }
+
+  .ml-card-detail>canvas {
+    margin-top: 12px;
+  }
+
+  @media (max-width:900px) {
+    .ml-card-detail .ml-card-title {
+      position: sticky;
+      top: 0;
+      background: var(--card);
+      padding-top: 6px;
+      z-index: 2;
+    }
+  }
+
+  .ml-card-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10px;
+    margin: 2px 2px 10px;
+  }
+
+  .ml-card-title .t {
+    font-size: 13px;
+    font-weight: 900;
+  }
+
+  .ml-card-title .d {
+    font-size: 12px;
+    color: var(--muted);
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .ml-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 9px;
+    border: 1px solid var(--border);
+    background: var(--card2);
+    border-radius: 999px;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1;
+  }
+
+  .ml-pill strong {
+    color: var(--text);
+    font-weight: 900;
+    margin-left: 6px;
+    font-family: ui-monospace, Menlo, Monaco, Consolas, monospace;
+  }
+
+  @keyframes mlPulse {
+
+    0%,
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    50% {
+      transform: translateY(-1px);
+      opacity: .78;
+    }
+  }
+
+  .ml-demo.ml-running .ml-pill[data-pill="status"] {
+    animation: mlPulse 1.1s ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ml-demo.ml-running .ml-pill[data-pill="status"] {
+      animation: none;
+    }
+  }
+
+  .ml-demo canvas {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 12px;
+  }
+
+  /* Inputs */
+  .ml-inputs-row {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+
+  .ml-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .ml-slider {
+    cursor: pointer;
+    accent-color: var(--accent);
+  }
+
+  .ml-number {
+    width: 72px;
+    padding: 6px 8px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--bg-page);
+    color: var(--text);
+    font-family: ui-monospace, Menlo, Monaco, Consolas, monospace;
+    font-size: 12px;
+  }
+
+  .ml-text-input {
+    flex: 1;
+    min-width: 240px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--bg-page);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 13px;
+    outline: none;
+    transition: border-color .2s;
+  }
+
+  .ml-text-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(20, 110, 235, 0.10);
+  }
+
+  .ml-token-box {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    align-items: center;
+    min-height: 28px;
+  }
+
+  .ml-token {
+    padding: 4px 8px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--card2);
+    font-size: 12px;
+    color: var(--text);
+    font-weight: 700;
+  }
+
+  .ml-token.muted {
+    color: var(--muted);
+    font-weight: 600;
+  }
+
+  .ml-metrics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 4px;
+  }
+
+  .ml-metric {
+    flex: 1 1 120px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    line-height: 1.3;
+  }
+
+  .ml-metric .k {
+    font-weight: 600;
+    color: var(--muted);
+  }
+
+  .ml-metric .v {
+    font-weight: 900;
+  }
+
+  .ml-box {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  .ml-small {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  .ml-outcome {
+    border: 1px solid var(--border);
+    background: var(--card2);
+    border-radius: 14px;
+    padding: 12px;
+    margin: 2px 0 12px;
+  }
+
+  .ml-outcome-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+  }
+
+  .ml-outcome-badge {
+    font-size: 11.5px;
+    font-weight: 800;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: var(--bg-page);
+  }
+
+  .ml-outcome-main {
+    font-size: 18px;
+    font-weight: 900;
+    letter-spacing: .2px;
+  }
+
+  .ml-outcome-sub {
+    font-size: 12.5px;
+    color: var(--muted);
+  }
+
+  .ml-block {
+    margin-bottom: 10px;
+  }
+
+  .ml-block-title {
+    font-size: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: .6px;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  .ml-list {
+    list-style: disc;
+    margin: 0 0 0 18px;
+    padding: 0;
+    font-size: 13px;
+  }
+
+  .ml-list li {
+    margin: 4px 0;
+  }
+
+  .ml-try {
+    font-size: 13px;
+    font-weight: 700;
+    padding: 8px 10px;
+    border: 1px dashed var(--border);
+    border-radius: 10px;
+    background: var(--bg-page);
+  }
+
+  .ml-aux-wrap {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 8px;
+    margin-top: 6px;
+    background: var(--bg-page);
+  }
+
+  .ml-details {
+    margin-top: 10px;
+    border-top: 1px dashed var(--border);
+    padding-top: 8px;
+  }
+
+  .ml-details summary {
+    cursor: pointer;
+    font-size: 12.5px;
+    font-weight: 800;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .ml-spark {
+    width: 100%;
+    height: 64px;
+    border-radius: 10px;
+    display: block;
+    margin-top: 8px;
+  }
+
+  .ml-vocab-list {
+    max-height: 180px;
+    overflow: auto;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 6px 8px;
+    background: var(--bg-page);
+  }
+
+  .ml-vocab-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 12px;
+    padding: 4px 2px;
+  }
+
+  .ml-vocab-row[data-focus="true"] {
+    background: var(--card2);
+    border-radius: 6px;
+  }
+
+  .ml-vocab-row .w {
+    font-weight: 800;
+  }
+
+  .ml-vocab-row .v {
+    font-family: ui-monospace, Menlo, Monaco, Consolas, monospace;
+    color: var(--muted);
+  }
+
+  /* Tree structure: scroll horizontal + canvas con ancho mínimo */
+  .ml-scroll-x {
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 2px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .ml-scroll-x canvas {
+    width: 100%;
+    min-width: 980px;
+  }
+
+  .ml-error {
+    border: 1px solid rgba(235, 80, 80, 0.45);
+    background: rgba(235, 80, 80, 0.10);
+    border-radius: 14px;
+    padding: 12px;
+    margin-top: 10px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 12px;
+    white-space: pre-wrap;
+  }
+</style>
+
+<style>
+  .ta-demo {
+    --ta-brand-primary: var(--md-primary-fg-color, #26A69A);
+    --ta-brand-accent: #324AB2;
+    --ta-brand-warm: var(--md-accent-fg-color, #FFB343);
+    --ta-brand-ink: #0F172A;
+    --ta-brand-focus: rgba(50, 74, 178, .24);
+    --ta-brand-active: rgba(50, 74, 178, .14);
+    --ta-brand-active-border: rgba(50, 74, 178, .55);
+    --ta-brand-font: "Avenir Next", "Avenir", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    --ta-footer-border: rgba(15, 23, 42, .16);
+    --ta-footer-fg: rgba(15, 23, 42, .62);
+    position: relative;
+    font-family: var(--ta-brand-font);
+    isolation: isolate;
+  }
+
+  .ta-demo::before {
+    content: "5SIGMAS · Animation Library";
+    position: absolute;
+    left: 12px;
+    right: 138px;
+    bottom: 10px;
+    padding-top: 6px;
+    border-top: 1px solid var(--ta-footer-border);
+    color: var(--ta-footer-fg);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    line-height: 1.2;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .ta-demo::after {
+    content: "";
+    position: absolute;
+    right: 12px;
+    bottom: 8px;
+    width: 120px;
+    height: 30px;
+    background: url("/assets/logo.svg") no-repeat center / contain;
+    opacity: 0.08;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .ta-demo>* {
+    position: relative;
+    z-index: 1;
+  }
+
+  [data-md-color-scheme="slate"] .ta-demo {
+    --ta-brand-accent: #78C8FF;
+    --ta-brand-focus: rgba(120, 200, 255, .28);
+    --ta-brand-active: rgba(120, 200, 255, .16);
+    --ta-brand-active-border: rgba(120, 200, 255, .62);
+    --ta-footer-border: rgba(226, 232, 240, .24);
+    --ta-footer-fg: rgba(226, 232, 240, .72);
+  }
+
+  [data-md-color-scheme="slate"] .ta-demo::after {
+    background-image: url("/assets/logo_white.svg");
+    opacity: 0.10;
+  }
+</style>
+<style>
+  .ta-tabs {
+    margin: 16px 0;
+  }
+
+  .ta-tablist {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 0 0 10px;
+  }
+
+  .ta-tab {
+    appearance: none;
+    border: 1px solid rgba(0, 0, 0, 0.18);
+    background: rgba(0, 0, 0, 0.06);
+    color: rgba(0, 0, 0, 0.92);
+    border-radius: 999px;
+    padding: 8px 12px;
+    font-weight: 800;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .ta-tab[aria-selected="true"],
+  .ta-tab.on {
+    border-color: var(--ta-brand-active-border, rgba(20, 110, 235, 0.65));
+    background: var(--ta-brand-active, rgba(20, 110, 235, 0.12));
+  }
+
+  .ta-tab:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--ta-brand-focus, rgba(20, 110, 235, 0.18));
+  }
+
+  .ta-panels {
+    border-top: 1px dashed color-mix(in srgb, var(--ta-brand-warm, #FFB343) 35%, transparent);
+    padding-top: 12px;
+  }
+
+  .ta-panel[hidden] {
+    display: none;
+  }
+
+  .ta-panel {
+    display: block;
+  }
+
+  .ta-card {
+    border: 1px solid rgba(0, 0, 0, 0.18);
+    border-radius: 12px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .ta-card-k {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    opacity: .78;
+    margin-bottom: 6px;
+  }
+
+  .ta-card-v {
+    font-size: 14px;
+    line-height: 1.45;
+  }
+
+  .ta-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .ta-chip {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid rgba(0, 0, 0, 0.18);
+    border-radius: 999px;
+    padding: 7px 10px;
+    font-size: 13px;
+    font-weight: 800;
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .ta-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  [data-md-color-scheme="slate"] .ta-tab {
+    border-color: rgba(255, 255, 255, 0.16);
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.92);
+  }
+
+  [data-md-color-scheme="slate"] .ta-card,
+  [data-md-color-scheme="slate"] .ta-chip {
+    border-color: rgba(255, 255, 255, 0.16);
+  }
+
+  @media (max-width: 1020px) {
+    .ta-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  (() => {
+    "use strict";
+
+    /* ===================== */
+    /* Utilities              */
+    /* ===================== */
+    function mulberry32(seed) {
+      let t = seed >>> 0;
+      return function () {
+        t += 0x6D2B79F5;
+        let r = Math.imul(t ^ (t >>> 15), 1 | t);
+        r ^= r + Math.imul(r ^ (r >>> 7), 61 | r);
+        return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+    function clamp(x, a, b) { return Math.max(a, Math.min(b, x)); }
+
+    function setCanvasSize(canvas, cssHeight) {
+      const dpr = Math.max(1, window.devicePixelRatio || 1);
+      const w = Math.max(1, canvas.clientWidth || canvas.parentElement?.clientWidth || 1);
+      const h = cssHeight;
+      canvas.width = Math.max(1, Math.floor(w * dpr));
+      canvas.height = Math.max(1, Math.floor(h * dpr));
+      const ctx = canvas.getContext("2d");
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      return { ctx, w, h };
+    }
+
+    function drawAxes(ctx, w, h, pad, style) {
+      const grid = style.getPropertyValue("--grid").trim() || "rgba(0,0,0,0.12)";
+      const axis = style.getPropertyValue("--axis").trim() || "rgba(0,0,0,0.26)";
+
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = style.getPropertyValue("--card2").trim() || "rgba(0,0,0,0.05)";
+      ctx.fillRect(0, 0, w, h);
+
+      ctx.strokeStyle = grid;
+      ctx.lineWidth = 1;
+      for (let i = 0; i <= 5; i++) {
+        const x = pad + i * (w - 2 * pad) / 5;
+        ctx.beginPath(); ctx.moveTo(x, pad); ctx.lineTo(x, h - pad); ctx.stroke();
+      }
+      for (let i = 0; i <= 4; i++) {
+        const y = pad + i * (h - 2 * pad) / 4;
+        ctx.beginPath(); ctx.moveTo(pad, y); ctx.lineTo(w - pad, y); ctx.stroke();
+      }
+
+      ctx.strokeStyle = axis;
+      ctx.strokeRect(pad, pad, w - 2 * pad, h - 2 * pad);
+    }
+
+    function safeInit(root, fn) {
+      try { fn(); }
+      catch (e) {
+        root.classList.remove("ml-running");
+        root.innerHTML = `
+        <div class="ml-head">
+          <div>
+            <div class="ml-title">Error al inicializar la demo</div>
+            <div class="ml-sub">Revisa la consola del navegador. Abajo tienes el error capturado.</div>
+          </div>
+        </div>
+        <div class="ml-error">${String(e && (e.stack || e.message || e))}</div>
+      `;
+        console.error("[ml-demo] init error", e);
+      }
+    }
+
+    function gauss01(rand) {
+      let s = 0;
+      for (let i = 0; i < 6; i++) s += (rand() * 2 - 1);
+      return s / 6;
+    }
+    function gini(count0, count1) {
+      const n = count0 + count1;
+      if (n <= 0) return 0;
+      const p0 = count0 / n;
+      const p1 = count1 / n;
+      return 1 - (p0 * p0 + p1 * p1);
+    }
+    function tokenize(text) {
+      return String(text || "")
+        .toLowerCase()
+        .replace(/[^\p{L}\p{N}\s]+/gu, " ")
+        .split(/\s+/)
+        .filter(Boolean);
+    }
+    function softSigmoid(x) { return 1 / (1 + Math.exp(-x)); }
+
+    /* ===================== */
+    /* Configs                */
+    /* ===================== */
+    function makeConfig(kind) {
+      if (kind === "tree") {
+        return {
+          kind,
+          title: "Árbol de decisión: aprobar un préstamo con preguntas simples",
+          subtitle: "Clasificación (APROBADO / RECHAZADO). El árbol busca <b>preguntas</b> “¿x &lt; t?” que reduzcan la mezcla (Gini).",
+          plot: {
+            xMin: 0, xMax: 1, yMin: 0, yMax: 1,
+            labelX: "x = ingresos (0=bajos, 1=altos)",
+            labelY: "y = deuda (0=baja, 1=alta)"
+          },
+          maxDepth: 3,
+          minLeaf: 12,
+          splitPreviewFrames: 12,
+          frameDelayMs: 26,
+          stepsPerFrame: 1,
+          stopAcc: 0.99,
+          makeData: (rand) => {
+            const pts = [];
+            for (let i = 0; i < 220; i++) {
+              const x = clamp(0.72 + 0.12 * gauss01(rand), 0, 1);
+              const y = clamp(0.28 + 0.12 * gauss01(rand), 0, 1);
+              pts.push({ x, y, c: 1 });
+            }
+            for (let i = 0; i < 220; i++) {
+              const x = clamp(0.28 + 0.12 * gauss01(rand), 0, 1);
+              const y = clamp(0.72 + 0.12 * gauss01(rand), 0, 1);
+              pts.push({ x, y, c: 0 });
+            }
+            for (let i = 0; i < 48; i++) {
+              const x = clamp(0.50 + 0.16 * gauss01(rand), 0, 1);
+              const y = clamp(0.50 + 0.16 * gauss01(rand), 0, 1);
+              const c = (x > 0.56 && y < 0.56) ? 1 : 0;
+              pts.push({ x, y, c });
+            }
+            for (let i = pts.length - 1; i > 0; i--) {
+              const j = Math.floor(rand() * (i + 1));
+              const tmp = pts[i]; pts[i] = pts[j]; pts[j] = tmp;
+            }
+            return pts;
+          }
+        };
+      }
+
+      if (kind === "nb") {
+        return {
+          kind,
+          title: "Naive Bayes: filtrar SPAM con probabilidades",
+          subtitle: "Clasificación de texto (SPAM / NO-SPAM). Aprende <b>contando palabras</b> y aplica Bayes (sin gradientes).",
+          frameDelayMs: 52,
+          stepsPerFrame: 1,
+          alpha: 1.0,
+          vocab: ["gratis", "premio", "oferta", "descuento", "urgente", "enlace", "reunión", "proyecto", "factura"],
+          trainStream: [
+            { label: "spam", text: "GRATIS premio urgente enlace" },
+            { label: "ham", text: "reunión mañana proyecto" },
+            { label: "spam", text: "oferta descuento enlace" },
+            { label: "ham", text: "factura del mes" },
+            { label: "spam", text: "premio gratis oferta urgente" },
+            { label: "ham", text: "reunión proyecto factura" },
+            { label: "spam", text: "descuento oferta enlace urgente" },
+            { label: "ham", text: "proyecto reunión mañana" },
+            { label: "spam", text: "gratis oferta enlace" },
+            { label: "ham", text: "factura proyecto" }
+          ],
+          testMsgs: [
+            "urgente enlace premio",
+            "reunión proyecto",
+            "factura proyecto",
+            "gratis oferta",
+            "reunión urgente"
+          ]
+        };
+      }
+
+      return {
+        kind: "kmeans",
+        title: "K-means: segmentar clientes sin etiquetas",
+        subtitle: "Clustering (agrupar). No hay “y” real: solo cercanía. Alterna asignar → promediar hasta converger.",
+        plot: {
+          xMin: 0, xMax: 1, yMin: 0, yMax: 1,
+          labelX: "x = frecuencia de compra (0–1)",
+          labelY: "y = gasto medio (0–1)"
+        },
+        K: 3,
+        frameDelayMs: 26,
+        stepsPerFrame: 1,
+        maxIter: 25,
+        stopMoved: 0.004,
+        stableIters: 2,
+        makeData: (rand) => {
+          const pts = [];
+          for (let i = 0; i < 160; i++) {
+            pts.push({ x: clamp(0.25 + 0.10 * gauss01(rand), 0, 1), y: clamp(0.25 + 0.10 * gauss01(rand), 0, 1), a: -1 });
+          }
+          for (let i = 0; i < 160; i++) {
+            pts.push({ x: clamp(0.76 + 0.10 * gauss01(rand), 0, 1), y: clamp(0.50 + 0.12 * gauss01(rand), 0, 1), a: -1 });
+          }
+          for (let i = 0; i < 160; i++) {
+            pts.push({ x: clamp(0.50 + 0.12 * gauss01(rand), 0, 1), y: clamp(0.80 + 0.10 * gauss01(rand), 0, 1), a: -1 });
+          }
+          for (let i = 0; i < 18; i++) pts.push({ x: rand(), y: rand(), a: -1 });
+
+          for (let i = pts.length - 1; i > 0; i--) {
+            const j = Math.floor(rand() * (i + 1));
+            const tmp = pts[i]; pts[i] = pts[j]; pts[j] = tmp;
+          }
+          return pts;
+        }
+      };
+    }
+
+    /* ===================== */
+    /* UI builder             */
+    /* ===================== */
+    function buildUI(root, cfg) {
+      let extra = '';
+
+      if (cfg.kind === 'tree') {
+        extra = `
+        <div class="ml-inputs-row">
+          <label class="ml-label">Ingresos:
+            <input type="range" class="ml-slider" data-input="x" min="0" max="1" step="0.01" value="0.5">
+            <input type="number" class="ml-number" data-input="x-num" min="0" max="1" step="0.01" value="0.50">
+          </label>
+          <label class="ml-label">Deuda:
+            <input type="range" class="ml-slider" data-input="y" min="0" max="1" step="0.01" value="0.5">
+            <input type="number" class="ml-number" data-input="y-num" min="0" max="1" step="0.01" value="0.50">
+          </label>
+          <button class="ml-btn" data-btn="predict">▶ Predecir</button>
+          <div class="ml-pill" data-pill="input-hint" style="margin-left:auto; opacity:.7">ajusta y ejecuta</div>
+        </div>
+      `;
+      } else if (cfg.kind === 'nb') {
+        extra = `
+        <div class="ml-inputs-row">
+          <input type="text" class="ml-text-input" data-input="msg"
+            placeholder="Escribe un mensaje (ej: oferta urgente enlace)..."
+            autocomplete="off">
+          <div class="ml-token-box" data-tokens></div>
+        </div>
+      `;
+      } else if (cfg.kind === 'kmeans') {
+        extra = `
+        <div class="ml-inputs-row">
+          <label class="ml-label">K:
+            <select class="ml-number" data-input="k">
+              <option value="2">2</option>
+              <option value="3" selected>3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+          </label>
+          <div class="ml-pill" data-pill="input-hint" style="margin-left:auto; opacity:.7">elige K y reinicia</div>
+        </div>
+      `;
+      }
+
+      root.innerHTML = `
+      <div class="ml-head">
+        <div>
+          <div class="ml-title">${cfg.title}</div>
+          <div class="ml-sub">${cfg.subtitle}</div>
+        </div>
+        <div class="ml-actions">
+          <button class="ml-btn" data-btn="toggle">▶ Animar</button>
+          <button class="ml-btn" data-btn="step">⤼ Paso</button>
+          <button class="ml-btn" data-btn="reset">↺ Reiniciar</button>
+        </div>
+      </div>
+
+      ${extra}
+
+      <div class="ml-row">
+        <div class="ml-card ml-card-visual">
+          <div class="ml-card-title">
+            <div class="t">Visual</div>
+            <div class="d">
+              <span class="ml-pill" data-pill="status">listo</span>
+              <span class="ml-pill" data-pill="hint">—</span>
+            </div>
+          </div>
+          <canvas data-canvas="plot"></canvas>
+        </div>
+
+        <div class="ml-card ml-card-detail">
+          <div class="ml-card-title">
+            <div class="t" data-aux-title>Guía</div>
+            <div class="d" data-aux-sub>estado y por qué</div>
+          </div>
+
+          <div class="ml-outcome" data-outcome>
+            <div class="ml-outcome-row">
+              <span class="ml-outcome-badge" data-outcome-badge>listo</span>
+              <div class="ml-outcome-main" data-outcome-main>—</div>
+            </div>
+            <div class="ml-outcome-sub" data-outcome-sub>—</div>
+            <canvas class="ml-spark" data-canvas="spark" aria-hidden="true"></canvas>
+          </div>
+
+          <div class="ml-block">
+            <div class="ml-block-title">Cómo funciona</div>
+            <ul class="ml-list" data-how></ul>
+          </div>
+
+          <div class="ml-block">
+            <div class="ml-block-title">Por qué ahora</div>
+            <ul class="ml-list" data-why></ul>
+          </div>
+
+          <div class="ml-block">
+          <div class="ml-block-title">Try this</div>
+          <div class="ml-try" data-try></div>
+        </div>
+
+        <div class="ml-aux-wrap" data-aux-wrap>
+          <canvas data-canvas="aux"></canvas>
+          <div data-aux-html></div>
+        </div>
+
+          <details class="ml-details" data-detail="advanced">
+            <summary>Ver métricas</summary>
+            <div class="ml-metrics" data-metrics></div>
+            <div style="height:8px"></div>
+            <div class="ml-box" data-explain></div>
+            <div data-advanced></div>
+          </details>
+        </div>
+      </div>
+    `;
+    }
+
+    /* ===================== */
+    /* Drawing helpers        */
+    /* ===================== */
+    function toPx(pad, w, h, cfgPlot, x, y) {
+      const { xMin, xMax, yMin, yMax } = cfgPlot;
+      const X = pad + ((x - xMin) / (xMax - xMin)) * (w - 2 * pad);
+      const Y = (h - pad) - ((y - yMin) / (yMax - yMin)) * (h - 2 * pad);
+      return { X, Y };
+    }
+
+    function drawLegend(ctx, x, y, style, items) {
+      const muted = style.getPropertyValue("--muted").trim() || "rgba(0,0,0,0.66)";
+      ctx.save();
+      ctx.font = "12px ui-sans-serif, system-ui";
+      ctx.fillStyle = muted;
+      ctx.fillText("Leyenda:", x, y);
+      let yy = y + 16;
+      for (const it of items) {
+        ctx.fillStyle = it.color || muted;
+        ctx.fillText(it.label, x, yy);
+        yy += 16;
+      }
+      ctx.restore();
+    }
+
+    function drawPlotTree(root, cfg, st) {
+      const style = getComputedStyle(root);
+      const c = root.querySelector('[data-canvas="plot"]');
+      const { ctx, w, h } = setCanvasSize(c, cfg.plotH || 420);
+      const pad = 38;
+
+      drawAxes(ctx, w, h, pad, style);
+
+      ctx.save();
+      ctx.fillStyle = style.getPropertyValue("--muted").trim() || "rgba(0,0,0,0.66)";
+      ctx.font = "12px ui-sans-serif, system-ui";
+      ctx.fillText(cfg.plot.labelX, pad, h - 10);
+      ctx.save();
+      ctx.translate(12, h / 2);
+      ctx.rotate(-Math.PI / 2);
+      ctx.fillText(cfg.plot.labelY, 0, 0);
+      ctx.restore();
+      ctx.restore();
+
+      // splits
+      ctx.save();
+      ctx.strokeStyle = style.getPropertyValue("--axis").trim() || "rgba(0,0,0,0.26)";
+      ctx.lineWidth = 2;
+      for (const s of st.splits) {
+        if (s.f === 0) {
+          const p = toPx(pad, w, h, cfg.plot, s.t, cfg.plot.yMin);
+          const pT = toPx(pad, w, h, cfg.plot, s.t, cfg.plot.yMax);
+          ctx.beginPath(); ctx.moveTo(p.X, p.Y); ctx.lineTo(pT.X, pT.Y); ctx.stroke();
+        } else {
+          const p = toPx(pad, w, h, cfg.plot, cfg.plot.xMin, s.t);
+          const pR = toPx(pad, w, h, cfg.plot, cfg.plot.xMax, s.t);
+          ctx.beginPath(); ctx.moveTo(p.X, p.Y); ctx.lineTo(pR.X, pR.Y); ctx.stroke();
+        }
+      }
+      ctx.restore();
+
+      // path highlight
+      if (st.pathSplits && st.pathSplits.length) {
+        const last = st.pathSplits[st.pathSplits.length - 1];
+        if (last && st.demoPoint) {
+          ctx.save();
+          ctx.fillStyle = style.getPropertyValue("--accent").trim() || "rgba(20,110,235,0.98)";
+          ctx.globalAlpha = 0.06;
+          if (last.f === 0) {
+            const xLine = toPx(pad, w, h, cfg.plot, last.t, cfg.plot.yMin).X;
+            const left = st.demoPoint.x < last.t;
+            if (left) ctx.fillRect(pad, pad, Math.max(0, xLine - pad), h - 2 * pad);
+            else ctx.fillRect(xLine, pad, Math.max(0, (w - pad) - xLine), h - 2 * pad);
+          } else {
+            const yLine = toPx(pad, w, h, cfg.plot, cfg.plot.xMin, last.t).Y;
+            const below = st.demoPoint.y < last.t;
+            if (below) ctx.fillRect(pad, yLine, w - 2 * pad, Math.max(0, (h - pad) - yLine));
+            else ctx.fillRect(pad, pad, w - 2 * pad, Math.max(0, yLine - pad));
+          }
+          ctx.restore();
+        }
+        ctx.save();
+        ctx.strokeStyle = style.getPropertyValue("--accent").trim() || "rgba(20,110,235,0.98)";
+        ctx.lineWidth = 3.2;
+        ctx.globalAlpha = 0.7;
+        for (const sp of st.pathSplits) {
+          if (sp.f === 0) {
+            const p = toPx(pad, w, h, cfg.plot, sp.t, cfg.plot.yMin);
+            const pT = toPx(pad, w, h, cfg.plot, sp.t, cfg.plot.yMax);
+            ctx.beginPath(); ctx.moveTo(p.X, p.Y); ctx.lineTo(pT.X, pT.Y); ctx.stroke();
+          } else {
+            const p = toPx(pad, w, h, cfg.plot, cfg.plot.xMin, sp.t);
+            const pR = toPx(pad, w, h, cfg.plot, cfg.plot.xMax, sp.t);
+            ctx.beginPath(); ctx.moveTo(p.X, p.Y); ctx.lineTo(pR.X, pR.Y); ctx.stroke();
+          }
+        }
+        ctx.restore();
+      }
+
+      // pending split preview
+      if (st.pending && st.pending.split) {
+        const sp = st.pending.split;
+        ctx.save();
+        ctx.strokeStyle = style.getPropertyValue("--accent").trim() || "rgba(20,110,235,0.98)";
+        ctx.lineWidth = 2.6;
+        ctx.setLineDash([8, 5]);
+        ctx.globalAlpha = 0.9;
+        if (sp.f === 0) {
+          const p = toPx(pad, w, h, cfg.plot, sp.t, cfg.plot.yMin);
+          const pT = toPx(pad, w, h, cfg.plot, sp.t, cfg.plot.yMax);
+          ctx.beginPath(); ctx.moveTo(p.X, p.Y); ctx.lineTo(pT.X, pT.Y); ctx.stroke();
+        } else {
+          const p = toPx(pad, w, h, cfg.plot, cfg.plot.xMin, sp.t);
+          const pR = toPx(pad, w, h, cfg.plot, cfg.plot.xMax, sp.t);
+          ctx.beginPath(); ctx.moveTo(p.X, p.Y); ctx.lineTo(pR.X, pR.Y); ctx.stroke();
+        }
+        ctx.restore();
+      }
+
+      if (st.splits && st.splits.length) {
+        const sp = st.splits[st.splits.length - 1];
+        const label = sp.f === 0
+          ? `ingresos < ${sp.t.toFixed(2)}`
+          : `deuda < ${sp.t.toFixed(2)}`;
+        ctx.save();
+        ctx.font = "11px ui-sans-serif, system-ui";
+        ctx.fillStyle = style.getPropertyValue("--bg-page").trim() || "#fff";
+        ctx.strokeStyle = style.getPropertyValue("--border").trim() || "rgba(0,0,0,0.18)";
+        const metrics = ctx.measureText(label);
+        const boxW = metrics.width + 14;
+        const boxH = 18;
+        if (sp.f === 0) {
+          const xLine = toPx(pad, w, h, cfg.plot, sp.t, cfg.plot.yMin).X;
+          const bx = clamp(xLine - boxW / 2, pad + 2, w - pad - boxW - 2);
+          const by = pad + 6;
+          ctx.beginPath(); ctx.roundRect(bx, by, boxW, boxH, 6); ctx.fill(); ctx.stroke();
+          ctx.fillStyle = style.getPropertyValue("--text").trim() || "rgba(0,0,0,0.92)";
+          ctx.fillText(label, bx + 7, by + 12);
+        } else {
+          const yLine = toPx(pad, w, h, cfg.plot, cfg.plot.xMin, sp.t).Y;
+          const bx = w - pad - boxW - 4;
+          const by = clamp(yLine - 26, pad + 4, h - pad - boxH - 4);
+          ctx.beginPath(); ctx.roundRect(bx, by, boxW, boxH, 6); ctx.fill(); ctx.stroke();
+          ctx.fillStyle = style.getPropertyValue("--text").trim() || "rgba(0,0,0,0.92)";
+          ctx.fillText(label, bx + 7, by + 12);
+        }
+        ctx.restore();
+      }
+
+      const col0 = style.getPropertyValue("--bad").trim() || "rgba(235,80,80,0.95)";
+      const col1 = style.getPropertyValue("--good").trim() || "rgba(15,140,85,0.98)";
+
+      // points
+      ctx.save();
+      for (const p of st.data) {
+        const { X, Y } = toPx(pad, w, h, cfg.plot, p.x, p.y);
+        ctx.fillStyle = (p.c === 1) ? col1 : col0;
+        ctx.globalAlpha = 0.80;
+        ctx.beginPath(); ctx.arc(X, Y, 3.2, 0, Math.PI * 2); ctx.fill();
+      }
+      ctx.restore();
+
+      // demo point
+      if (st.demoPoint) {
+        const dp = st.demoPoint;
+        const { X, Y } = toPx(pad, w, h, cfg.plot, dp.x, dp.y);
+        ctx.save();
+        ctx.strokeStyle = style.getPropertyValue("--accent").trim() || "rgba(20,110,235,0.98)";
+        ctx.lineWidth = 2.2;
+        ctx.globalAlpha = 0.95;
+        ctx.beginPath(); ctx.arc(X, Y, 10.5, 0, Math.PI * 2); ctx.stroke();
+
+        ctx.fillStyle = style.getPropertyValue("--bg-page").trim() || "#fff";
+        ctx.beginPath(); ctx.arc(X, Y, 4.4, 0, Math.PI * 2); ctx.fill();
+
+        ctx.fillStyle = style.getPropertyValue("--text").trim() || "rgba(0,0,0,0.92)";
+        ctx.font = "12px ui-sans-serif, system-ui";
+        ctx.textAlign = "left";
+        const label = (dp.pred === 1) ? "→ APROBAR" : "→ RECHAZAR";
+        ctx.fillText(`Ejemplo: ingresos=${dp.x.toFixed(2)}  deuda=${dp.y.toFixed(2)}  ${label}`, pad + 8, pad + 18);
+        ctx.restore();
+      }
+
+      const legendX = Math.max(pad + 8, w - 170);
+      drawLegend(ctx, legendX, pad + 14, style, [
+        { label: "● APROBADO (1)", color: col1 },
+        { label: "● RECHAZADO (0)", color: col0 },
+        { label: "— línea = pregunta aprendida", color: style.getPropertyValue("--muted").trim() || "rgba(0,0,0,0.66)" }
+      ]);
+    }
+
+    function drawAuxTree(root, cfg, st) {
+      const style = getComputedStyle(root);
+      const c = root.querySelector('[data-canvas="aux"]');
+      if (!c) return;
+      const { ctx, w, h } = setCanvasSize(c, cfg.auxH || 360);
+
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = style.getPropertyValue('--card2').trim() || 'rgba(0,0,0,0.05)';
+      ctx.fillRect(0, 0, w, h);
+
+      const border = style.getPropertyValue('--border').trim() || 'rgba(0,0,0,0.18)';
+      const txt = style.getPropertyValue('--text').trim() || 'rgba(0,0,0,0.92)';
+      const muted = style.getPropertyValue('--muted').trim() || 'rgba(0,0,0,0.66)';
+      const accent = style.getPropertyValue('--accent').trim() || 'rgba(20,110,235,0.98)';
+      const good = style.getPropertyValue('--good').trim() || 'rgba(15,140,85,0.98)';
+      const bad = style.getPropertyValue('--bad').trim() || 'rgba(235,80,80,0.95)';
+
+      const nodes = st.nodes;
+
+      const maxDepth = nodes.reduce((m, n) => Math.max(m, n.depth || 0), 0);
+      const totalH = maxDepth * 64 + 56;
+      const topPad = Math.max(24, (h - totalH) / 2);
+      function nodePos(depth, index) {
+        const levelY = topPad + depth * 64;
+        const span = Math.max(1, Math.pow(2, depth));
+        const x = 14 + (w - 28) * ((index + 0.5) / span);
+        return { x, y: levelY, span };
+      }
+
+      if (nodes.length === 1 && nodes[0].isLeaf) {
+        ctx.save();
+        ctx.strokeStyle = border;
+        ctx.setLineDash([6, 4]);
+        const boxW = Math.min(220, w - 28);
+        const boxH = 60;
+        const x = (w - boxW) / 2;
+        const y = (h - boxH) / 2;
+        ctx.strokeRect(x, y, boxW, boxH);
+        ctx.fillStyle = txt;
+        ctx.font = "12px ui-sans-serif, system-ui";
+        ctx.textAlign = "center";
+        ctx.fillText("Aún no hay preguntas (cortes)", w / 2, y + 24);
+        ctx.fillStyle = muted;
+        ctx.fillText("Pulsa Animar o Paso", w / 2, y + 42);
+        ctx.restore();
+        return;
+      }
+
+      // Edges
+      ctx.save();
+      ctx.strokeStyle = accent;
+      ctx.globalAlpha = 0.22;
+      ctx.lineWidth = 1.6;
+      for (const n of nodes) {
+        if (n.parent == null) continue;
+        const p = nodes[n.parent];
+        const ppos = nodePos(p.depth, p.index);
+        const npos = nodePos(n.depth, n.index);
+        ctx.beginPath();
+        ctx.moveTo(ppos.x, ppos.y + 16);
+        ctx.lineTo(npos.x, npos.y - 16);
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      // Nodes
+      for (let i = 0; i < nodes.length; i++) {
+        const n = nodes[i];
+        const pos = nodePos(n.depth, n.index);
+
+        const avail = (w - 28) / Math.max(1, pos.span);
+        const boxW = clamp(avail * 0.92, 64, 112);
+        const boxH = 34;
+
+        const isLeaf = n.isLeaf;
+        const isPath = st.pathNodeIds && st.pathNodeIds.has(i);
+        const compact = boxW < 84;
+
+        const fill = style.getPropertyValue('--bg-page').trim() || '#fff';
+        const stroke = isPath ? accent : (isLeaf ? (n.pred === 1 ? good : bad) : border);
+
+        ctx.save();
+        ctx.fillStyle = fill;
+        ctx.strokeStyle = stroke;
+        ctx.lineWidth = isPath ? 2.8 : (isLeaf ? 2.2 : 1.5);
+        ctx.beginPath();
+        ctx.roundRect(pos.x - boxW / 2, pos.y - boxH / 2, boxW, boxH, 10);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = txt;
+        const fontSize = compact ? 9.5 : 11;
+        ctx.font = `${fontSize}px ui-monospace, Menlo, Monaco, Consolas, monospace`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+
+        let label;
+        if (isLeaf) {
+          if (n.pred === 1) label = compact ? 'APROBAR' : 'hoja: APROBAR';
+          else label = compact ? 'RECHAZAR' : 'hoja: RECHAZAR';
+        } else {
+          const q = (n.split.f === 0 ? 'x<' : 'y<') + n.split.t.toFixed(2) + '?';
+          label = compact ? q : ((n.split.f === 0 ? '¿x < ' : '¿y < ') + n.split.t.toFixed(2) + '?');
+        }
+        ctx.fillText(label, pos.x, pos.y - (compact ? 0 : 1));
+
+        if (!compact) {
+          ctx.fillStyle = muted;
+          ctx.font = '10px ui-sans-serif, system-ui';
+          ctx.fillText(`n=${n.n}  Gini=${n.impurity.toFixed(2)}`, pos.x, pos.y + 22);
+        }
+        ctx.restore();
+      }
+
+      ctx.save();
+      ctx.fillStyle = muted;
+      ctx.font = '12px ui-sans-serif, system-ui';
+      ctx.textAlign = 'left';
+      ctx.fillText('Cajas: preguntas. Hojas: decisión final.', 10, h - 12);
+      ctx.restore();
+    }
+
+    function drawPlotKMeans(root, cfg, st) {
+      const style = getComputedStyle(root);
+      const c = root.querySelector('[data-canvas="plot"]');
+      const { ctx, w, h } = setCanvasSize(c, cfg.plotH || 420);
+      const pad = 38;
+
+      drawAxes(ctx, w, h, pad, style);
+
+      ctx.save();
+      ctx.fillStyle = style.getPropertyValue("--muted").trim() || "rgba(0,0,0,0.66)";
+      ctx.font = "12px ui-sans-serif, system-ui";
+      ctx.fillText(cfg.plot.labelX, pad, h - 10);
+      ctx.save();
+      ctx.translate(12, h / 2);
+      ctx.rotate(-Math.PI / 2);
+      ctx.fillText(cfg.plot.labelY, 0, 0);
+      ctx.restore();
+      ctx.restore();
+
+      const colA = style.getPropertyValue("--accent").trim() || "rgba(20,110,235,0.98)";
+      const colB = style.getPropertyValue("--good").trim() || "rgba(15,140,85,0.98)";
+      const colC = style.getPropertyValue("--alt").trim() || "rgba(140,90,235,0.92)";
+      const cols = [colA, colB, colC];
+
+      ctx.save();
+      for (let i = 0; i < st.data.length; i++) {
+        const p = st.data[i];
+        const { X, Y } = toPx(pad, w, h, cfg.plot, p.x, p.y);
+        const k = p.a;
+        const col = (k >= 0) ? cols[k] : (style.getPropertyValue("--muted").trim() || "rgba(0,0,0,0.66)");
+        ctx.fillStyle = col;
+        ctx.globalAlpha = (k < 0) ? 0.30 : 0.74;
+        ctx.beginPath(); ctx.arc(X, Y, 3.1, 0, Math.PI * 2); ctx.fill();
+
+        if (st.phase === "assign" && i % 26 === 0 && k >= 0) {
+          const c0 = st.centers[k];
+          const C = toPx(pad, w, h, cfg.plot, c0.x, c0.y);
+          ctx.strokeStyle = col;
+          ctx.globalAlpha = 0.16;
+          ctx.lineWidth = 1.2;
+          ctx.beginPath(); ctx.moveTo(X, Y); ctx.lineTo(C.X, C.Y); ctx.stroke();
+        }
+      }
+      ctx.restore();
+
+      if (st.prevCenters) {
+        ctx.save();
+        ctx.strokeStyle = style.getPropertyValue("--axis").trim() || "rgba(0,0,0,0.26)";
+        ctx.globalAlpha = 0.35;
+        ctx.lineWidth = 2;
+        for (let k = 0; k < st.centers.length; k++) {
+          const p0 = st.prevCenters[k];
+          const p1 = st.centers[k];
+          if (!p0 || !p1) continue;
+          const a0 = toPx(pad, w, h, cfg.plot, p0.x, p0.y);
+          const a1 = toPx(pad, w, h, cfg.plot, p1.x, p1.y);
+          ctx.beginPath(); ctx.moveTo(a0.X, a0.Y); ctx.lineTo(a1.X, a1.Y); ctx.stroke();
+        }
+        ctx.restore();
+      }
+
+      ctx.save();
+      for (let k = 0; k < st.centers.length; k++) {
+        const c0 = st.centers[k];
+        const { X, Y } = toPx(pad, w, h, cfg.plot, c0.x, c0.y);
+
+        ctx.strokeStyle = cols[k];
+        ctx.fillStyle = style.getPropertyValue("--bg-page").trim() || "#fff";
+        ctx.lineWidth = 3;
+        ctx.globalAlpha = 0.95;
+        ctx.beginPath(); ctx.arc(X, Y, 8.2, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+
+        ctx.fillStyle = cols[k];
+        ctx.font = "12px ui-monospace, Menlo, Monaco, Consolas, monospace";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(String(k + 1), X, Y - 0.5);
+      }
+      ctx.restore();
+
+      ctx.save();
+      ctx.fillStyle = style.getPropertyValue("--text").trim() || "rgba(0,0,0,0.92)";
+      ctx.font = "12px ui-sans-serif, system-ui";
+      const phaseTxt = (st.phase === "assign")
+        ? "Paso 1/2: asignar cada cliente al centro más cercano"
+        : "Paso 2/2: mover centros al promedio (media) del grupo";
+      ctx.fillText(phaseTxt, pad + 8, pad + 18);
+      ctx.restore();
+
+      drawLegend(ctx, pad + 8, pad + 44, style, [
+        { label: "● clientes coloreados por cluster" },
+        { label: "○ centro (media) del cluster" },
+        { label: "líneas (algunas): asignación por cercanía" }
+      ]);
+    }
+
+    function drawSparkline(root, st) {
+      const c = root.querySelector('[data-canvas="spark"]');
+      if (!c) return;
+      const style = getComputedStyle(root);
+      const { ctx, w, h } = setCanvasSize(c, 64);
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = style.getPropertyValue("--card2").trim() || "rgba(0,0,0,0.05)";
+      ctx.fillRect(0, 0, w, h);
+      const hist = (st.inertiaHistory || []).slice(-15);
+      if (hist.length < 2) {
+        ctx.fillStyle = style.getPropertyValue("--muted").trim() || "rgba(0,0,0,0.66)";
+        ctx.font = "11px ui-sans-serif, system-ui";
+        ctx.fillText("historial de inercia", 8, h / 2 + 4);
+        return;
+      }
+      const min = Math.min(...hist);
+      const max = Math.max(...hist);
+      const range = Math.max(1e-9, max - min);
+      ctx.strokeStyle = style.getPropertyValue("--accent").trim() || "rgba(20,110,235,0.98)";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      hist.forEach((v, i) => {
+        const x = 8 + (w - 16) * (i / (hist.length - 1));
+        const y = 8 + (h - 16) * (1 - (v - min) / range);
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+    }
+
+    function drawPlotNB(root, cfg, st) {
+      const style = getComputedStyle(root);
+      const c = root.querySelector('[data-canvas="plot"]');
+      const { ctx, w, h } = setCanvasSize(c, cfg.plotH || 420);
+
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = style.getPropertyValue("--card2").trim() || "rgba(0,0,0,0.05)";
+      ctx.fillRect(0, 0, w, h);
+
+      const txt = style.getPropertyValue("--text").trim() || "rgba(0,0,0,0.92)";
+      const muted = style.getPropertyValue("--muted").trim() || "rgba(0,0,0,0.66)";
+      const spamC = style.getPropertyValue("--bad").trim() || "rgba(235,80,80,0.95)";
+      const hamC = style.getPropertyValue("--good").trim() || "rgba(15,140,85,0.98)";
+
+      ctx.save();
+      ctx.fillStyle = txt;
+      ctx.font = "14px ui-sans-serif, system-ui";
+      ctx.fillText("Entrenamiento: contar palabras por clase", 12, 22);
+
+      ctx.fillStyle = muted;
+      ctx.font = "12px ui-sans-serif, system-ui";
+      const ex = (st.trainIdx < cfg.trainStream.length) ? cfg.trainStream[st.trainIdx] : null;
+      const shown = ex
+        ? `ejemplo #${st.trainIdx + 1}: "${ex.text}" → ${ex.label === "spam" ? "SPAM" : "NO-SPAM"}`
+        : "entrenamiento completo (prueba tu propio mensaje)";
+      ctx.fillText(shown, 12, 42);
+      ctx.restore();
+
+      const padX = 12;
+      const top = 70;
+      const rowH = 28;
+
+      const labelW = 112;
+      const leftBars = padX + labelW + 14;
+      const barW = Math.max(140, w - leftBars - 12);
+      const half = barW / 2;
+
+      ctx.save();
+      ctx.font = "12px ui-sans-serif, system-ui";
+      ctx.fillStyle = muted;
+      ctx.fillText("P(palabra | SPAM)", leftBars, top - 12);
+      ctx.fillText("P(palabra | NO-SPAM)", leftBars + half + 10, top - 12);
+      ctx.restore();
+
+      for (let i = 0; i < cfg.vocab.length; i++) {
+        const word = cfg.vocab[i];
+        const y = top + i * rowH;
+
+        const ps = st.pWordSpam[word] || 0;
+        const ph = st.pWordHam[word] || 0;
+
+        const inTest = st.testTokens && st.testTokens.has(word);
+        const focus = st.focusToken && st.focusToken === word;
+        if (inTest) {
+          ctx.save();
+          ctx.fillStyle = style.getPropertyValue("--accent").trim() || "rgba(20,110,235,0.98)";
+          ctx.globalAlpha = 0.08;
+          ctx.fillRect(10, y - 10, w - 20, rowH);
+          ctx.restore();
+        }
+        if (focus) {
+          ctx.save();
+          ctx.strokeStyle = style.getPropertyValue("--accent").trim() || "rgba(20,110,235,0.98)";
+          ctx.globalAlpha = 0.6;
+          ctx.strokeRect(10, y - 10, w - 20, rowH);
+          ctx.restore();
+        }
+
+        ctx.save();
+        ctx.fillStyle = txt;
+        ctx.font = "12px ui-monospace, Menlo, Monaco, Consolas, monospace";
+        ctx.fillText(word, padX, y + 8);
+        ctx.restore();
+
+        ctx.save();
+        ctx.strokeStyle = style.getPropertyValue("--border").trim() || "rgba(0,0,0,0.18)";
+        ctx.globalAlpha = 0.35;
+        ctx.strokeRect(leftBars, y - 4, (half - 16), 12);
+        ctx.strokeRect(leftBars + half + 10, y - 4, (half - 16), 12);
+        ctx.restore();
+
+        ctx.save();
+        ctx.fillStyle = spamC;
+        ctx.globalAlpha = 0.22;
+        ctx.fillRect(leftBars, y - 4, (half - 16) * clamp(ps, 0, 1), 12);
+        ctx.restore();
+
+        ctx.save();
+        ctx.fillStyle = hamC;
+        ctx.globalAlpha = 0.22;
+        ctx.fillRect(leftBars + half + 10, y - 4, (half - 16) * clamp(ph, 0, 1), 12);
+        ctx.restore();
+
+        ctx.save();
+        ctx.fillStyle = muted;
+        ctx.font = "11px ui-monospace, Menlo, Monaco, Consolas, monospace";
+        ctx.fillText(ps.toFixed(2), leftBars + (half - 16) + 6, y + 6);
+        ctx.fillText(ph.toFixed(2), leftBars + half + 10 + (half - 16) + 6, y + 6);
+        ctx.restore();
+      }
+
+      const yG = h - 54;
+      const gW = w - 24;
+      const t = clamp(softSigmoid(st.logOdds), 0, 1);
+
+      ctx.save();
+      ctx.strokeStyle = style.getPropertyValue("--border").trim() || "rgba(0,0,0,0.18)";
+      ctx.fillStyle = style.getPropertyValue("--bg-page").trim() || "#fff";
+      ctx.lineWidth = 1.2;
+      ctx.beginPath(); ctx.roundRect(12, yG, gW, 18, 8);
+      ctx.fill(); ctx.stroke();
+
+      ctx.fillStyle = spamC;
+      ctx.globalAlpha = 0.18;
+      ctx.beginPath(); ctx.roundRect(12, yG, gW * t, 18, 8);
+      ctx.fill();
+
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = txt;
+      ctx.font = "12px ui-sans-serif, system-ui";
+      const verdict = (st.logOdds > 0) ? "SPAM" : "NO-SPAM";
+      const msgLabel = st.userOverride ? "Mensaje (usuario)" : "Mensaje (demo)";
+      ctx.fillText(`${msgLabel}: "${st.testMsg}"`, 12, yG - 10);
+
+      ctx.fillStyle = muted;
+      ctx.font = "12px ui-monospace, Menlo, Monaco, Consolas, monospace";
+      ctx.fillText(`score=${st.logOdds.toFixed(2)} → ${verdict}`, 12, yG + 34);
+      ctx.restore();
+    }
+
+    /* ===================== */
+    /* Algorithms (state)     */
+    /* ===================== */
+    function initStateTree(cfg, rand) {
+      const data = cfg.makeData(rand);
+
+      const rootNode = {
+        parent: null, depth: 0, index: 0,
+        isLeaf: true, split: null, left: null, right: null,
+        region: { x0: cfg.plot.xMin, x1: cfg.plot.xMax, y0: cfg.plot.yMin, y1: cfg.plot.yMax },
+        idx: data.map((_, i) => i),
+        pred: 0, n: data.length, n0: 0, n1: 0, impurity: 0
+      };
+
+      function updateStats(node) {
+        let n0 = 0, n1 = 0;
+        for (const i of node.idx) { if (data[i].c === 1) n1++; else n0++; }
+        node.n0 = n0; node.n1 = n1; node.n = n0 + n1;
+        node.pred = (n1 >= n0) ? 1 : 0;
+        node.impurity = gini(n0, n1);
+      }
+      updateStats(rootNode);
+
+      function newDemoPoint() {
+        const x = clamp(0.12 + 0.80 * rand(), 0, 1);
+        const y = clamp(0.12 + 0.80 * rand(), 0, 1);
+        return { x, y, pred: 0 };
+      }
+
+      return {
+        data,
+        nodes: [rootNode],
+        leaves: [0],
+        splits: [],
+        builtSplits: 0,
+        pending: null,
+        accuracy: 0,
+        step: 0,
+        demoPoint: newDemoPoint(),
+        demoCooldown: 0
+      };
+    }
+
+    function bestSplitForNode(cfg, st, node) {
+      const data = st.data;
+      const idx = node.idx;
+      const n = idx.length;
+      if (n < cfg.minLeaf * 2) return null;
+
+      let n0 = 0, n1 = 0;
+      for (const i of idx) { if (data[i].c === 1) n1++; else n0++; }
+      const base = gini(n0, n1);
+      if (base <= 1e-9) return null;
+
+      let best = null;
+
+      function candidates(values) {
+        values.sort((a, b) => a - b);
+        const out = [];
+        const qs = [0.12, 0.24, 0.36, 0.48, 0.60, 0.72, 0.84];
+        for (const q of qs) {
+          const j = Math.floor((values.length - 1) * q);
+          const v = values[j];
+          if (Number.isFinite(v)) out.push(v);
+        }
+        const uniq = [];
+        out.sort((a, b) => a - b);
+        for (const v of out) {
+          if (!uniq.length || Math.abs(v - uniq[uniq.length - 1]) > 1e-6) uniq.push(v);
+        }
+        return uniq;
+      }
+
+      const xs = idx.map(i => data[i].x);
+      const ys = idx.map(i => data[i].y);
+      const candX = candidates(xs);
+      const candY = candidates(ys);
+
+      function evalSplit(f, t) {
+        let L0 = 0, L1 = 0, R0 = 0, R1 = 0;
+        for (const i of idx) {
+          const p = data[i];
+          const left = (f === 0) ? (p.x < t) : (p.y < t);
+          if (left) { if (p.c === 1) L1++; else L0++; }
+          else { if (p.c === 1) R1++; else R0++; }
+        }
+        const nL = L0 + L1, nR = R0 + R1;
+        if (nL < cfg.minLeaf || nR < cfg.minLeaf) return null;
+
+        const gL = gini(L0, L1);
+        const gR = gini(R0, R1);
+        const weighted = (nL / n) * gL + (nR / n) * gR;
+        const gain = base - weighted;
+        return { f, t, gain, base, gL, gR };
+      }
+
+      for (const t of candX) {
+        const r = evalSplit(0, t);
+        if (r && (!best || r.gain > best.gain)) best = r;
+      }
+      for (const t of candY) {
+        const r = evalSplit(1, t);
+        if (r && (!best || r.gain > best.gain)) best = r;
+      }
+      return best;
+    }
+
+    function applySplitTree(cfg, st, leafId, sp) {
+      const parentNode = st.nodes[leafId];
+      if (!parentNode || !parentNode.isLeaf) return;
+
+      const data = st.data;
+      const idx = parentNode.idx;
+      const leftIdx = [], rightIdx = [];
+      for (const i of idx) {
+        const p = data[i];
+        const left = (sp.f === 0) ? (p.x < sp.t) : (p.y < sp.t);
+        (left ? leftIdx : rightIdx).push(i);
+      }
+
+      const depth = parentNode.depth + 1;
+
+      function mkChild(isLeft) {
+        const region = { ...parentNode.region };
+        if (sp.f === 0) {
+          if (isLeft) region.x1 = sp.t; else region.x0 = sp.t;
+        } else {
+          if (isLeft) region.y1 = sp.t; else region.y0 = sp.t;
+        }
+        const idxs = isLeft ? leftIdx : rightIdx;
+        let n0 = 0, n1 = 0;
+        for (const i of idxs) { if (data[i].c === 1) n1++; else n0++; }
+        return {
+          parent: leafId,
+          depth,
+          index: parentNode.index * 2 + (isLeft ? 0 : 1),
+          isLeaf: true, split: null, left: null, right: null,
+          region,
+          idx: idxs,
+          pred: (n1 >= n0) ? 1 : 0,
+          n: idxs.length,
+          impurity: gini(n0, n1)
+        };
+      }
+
+      const leftNode = mkChild(true);
+      const rightNode = mkChild(false);
+
+      const leftId = st.nodes.length;
+      const rightId = st.nodes.length + 1;
+
+      parentNode.isLeaf = false;
+      parentNode.split = { f: sp.f, t: sp.t, gain: sp.gain };
+      parentNode.left = leftId;
+      parentNode.right = rightId;
+
+      st.nodes.push(leftNode, rightNode);
+
+      st.leaves = st.leaves.filter(id => id !== leafId);
+      st.leaves.push(leftId, rightId);
+
+      st.splits.push({ f: sp.f, t: sp.t, gain: sp.gain });
+      st.builtSplits += 1;
+    }
+
+    function predictTree(st, x, y) {
+      let id = 0;
+      while (true) {
+        const n = st.nodes[id];
+        if (!n || n.isLeaf) return (n ? n.pred : 0);
+        const left = (n.split.f === 0) ? (x < n.split.t) : (y < n.split.t);
+        id = left ? n.left : n.right;
+        if (id == null) return (n.pred || 0);
+      }
+    }
+
+    function computeAccTree(st) {
+      let ok = 0;
+      for (const p of st.data) {
+        const yhat = predictTree(st, p.x, p.y);
+        if (yhat === p.c) ok++;
+      }
+      return ok / Math.max(1, st.data.length);
+    }
+
+    function initStateNB(cfg) {
+      const vocabSet = new Set(cfg.vocab);
+      const wordCountsSpam = Object.fromEntries(cfg.vocab.map(w => [w, 0]));
+      const wordCountsHam = Object.fromEntries(cfg.vocab.map(w => [w, 0]));
+      return {
+        step: 0,
+        trainIdx: 0,
+        nSpam: 0, nHam: 0,
+        totalWordsSpam: 0, totalWordsHam: 0,
+        wordCountsSpam, wordCountsHam,
+        pWordSpam: Object.fromEntries(cfg.vocab.map(w => [w, 0])),
+        pWordHam: Object.fromEntries(cfg.vocab.map(w => [w, 0])),
+        logOdds: 0,
+        vocabSet,
+        testIdx: 0,
+        testMsg: cfg.testMsgs[0],
+        testTokens: new Set(),
+        allTokens: [],
+        focusToken: null,
+        userOverride: false
+      };
+    }
+
+    function recomputeNB(cfg, st) {
+      const V = cfg.vocab.length;
+      const a = cfg.alpha;
+
+      for (const w of cfg.vocab) {
+        st.pWordSpam[w] = (st.wordCountsSpam[w] + a) / (st.totalWordsSpam + a * V || (a * V));
+        st.pWordHam[w] = (st.wordCountsHam[w] + a) / (st.totalWordsHam + a * V || (a * V));
+      }
+
+      const all = tokenize(st.testMsg);
+      st.allTokens = all;
+      st.testTokens = new Set(all.filter(t => st.vocabSet.has(t)));
+
+      const total = st.nSpam + st.nHam;
+      const pSpam = total ? st.nSpam / total : 0.5;
+      const pHam = total ? st.nHam / total : 0.5;
+
+      let ls = Math.log(Math.max(1e-12, pSpam)) - Math.log(Math.max(1e-12, pHam));
+      for (const t of st.testTokens) {
+        ls += Math.log(Math.max(1e-12, st.pWordSpam[t])) - Math.log(Math.max(1e-12, st.pWordHam[t]));
+      }
+      st.logOdds = ls;
+    }
+
+    function stepNB(cfg, st, mode) {
+      // Entrenamiento: se procesa 1 ejemplo por paso
+      if (st.trainIdx < cfg.trainStream.length) {
+        const ex = cfg.trainStream[st.trainIdx];
+        const tokens = tokenize(ex.text).filter(t => st.vocabSet.has(t));
+
+        if (ex.label === "spam") {
+          st.nSpam += 1;
+          for (const t of tokens) { st.wordCountsSpam[t] += 1; st.totalWordsSpam += 1; }
+        } else {
+          st.nHam += 1;
+          for (const t of tokens) { st.wordCountsHam[t] += 1; st.totalWordsHam += 1; }
+        }
+
+        st.trainIdx += 1;
+        recomputeNB(cfg, st);
+
+        // Si acabamos de terminar entrenamiento, devolvemos “trainedNow”
+        return (st.trainIdx >= cfg.trainStream.length);
+      }
+
+      // Tras entrenar: SOLO cicla ejemplos si el usuario pulsa “Paso” y no ha escrito un msg propio
+      if (mode === "manual" && !st.userOverride) {
+        st.testIdx = (st.testIdx + 1) % cfg.testMsgs.length;
+        st.testMsg = cfg.testMsgs[st.testIdx];
+        recomputeNB(cfg, st);
+      }
+
+      return false;
+    }
+
+    function initStateKMeans(cfg, rand) {
+      const data = cfg.makeData(rand);
+      const centers = [];
+      for (let k = 0; k < cfg.K; k++) {
+        const p = data[Math.floor(rand() * data.length)];
+        centers.push({ x: p.x, y: p.y });
+      }
+      return {
+        data,
+        centers,
+        prevCenters: null,
+        iter: 0,
+        inertia: 0,
+        inertia0: 1,
+        inertiaHistory: [],
+        moved: 0,
+        phase: "assign",
+        phaseHold: 0,
+        stableCount: 0
+      };
+    }
+
+    function assignKMeans(st) {
+      let inertia = 0;
+      for (const p of st.data) {
+        let best = 0, bestD2 = Infinity;
+        for (let k = 0; k < st.centers.length; k++) {
+          const dx = p.x - st.centers[k].x;
+          const dy = p.y - st.centers[k].y;
+          const d2 = dx * dx + dy * dy;
+          if (d2 < bestD2) { bestD2 = d2; best = k; }
+        }
+        p.a = best;
+        inertia += bestD2;
+      }
+      st.inertia = inertia / Math.max(1, st.data.length);
+      if (!st.inertiaHistory) st.inertiaHistory = [];
+      st.inertiaHistory.push(st.inertia);
+      if (st.inertiaHistory.length > 15) st.inertiaHistory.shift();
+    }
+
+    function updateCentersKMeans(st) {
+      const K = st.centers.length;
+      const sumX = new Array(K).fill(0);
+      const sumY = new Array(K).fill(0);
+      const cnt = new Array(K).fill(0);
+
+      for (const p of st.data) {
+        const k = p.a;
+        if (k == null || k < 0) continue;
+        sumX[k] += p.x; sumY[k] += p.y; cnt[k] += 1;
+      }
+
+      st.prevCenters = st.centers.map(c => ({ x: c.x, y: c.y }));
+      let moved = 0;
+
+      for (let k = 0; k < K; k++) {
+        if (cnt[k] > 0) {
+          const nx = sumX[k] / cnt[k];
+          const ny = sumY[k] / cnt[k];
+          const dx = nx - st.centers[k].x;
+          const dy = ny - st.centers[k].y;
+          moved += Math.sqrt(dx * dx + dy * dy);
+          st.centers[k].x = nx;
+          st.centers[k].y = ny;
+        }
+      }
+      st.moved = moved;
+    }
+
+    function stepKMeans(cfg, st) {
+      if (st.phase === "assign") {
+        assignKMeans(st);
+        if (st.iter === 0 && st.inertia0 === 1) st.inertia0 = Math.max(1e-9, st.inertia);
+        st.phaseHold += 1;
+        if (st.phaseHold >= 2) { st.phase = "move"; st.phaseHold = 0; }
+        return { done: false };
+      }
+
+      st.iter += 1;
+      updateCentersKMeans(st);
+
+      const eps = cfg.stopMoved || 0.004;
+      if (st.moved < eps) st.stableCount += 1;
+      else st.stableCount = 0;
+
+      st.phaseHold += 1;
+      if (st.phaseHold >= 2) { st.phase = "assign"; st.phaseHold = 0; }
+
+      const maxIter = cfg.maxIter || 25;
+      const stableIters = cfg.stableIters || 2;
+
+      if (st.iter >= maxIter) return { done: true, reason: "maxIter" };
+      if (st.stableCount >= stableIters) return { done: true, reason: "stable" };
+      return { done: false };
+    }
+
+    /* ===================== */
+    /* Runtime per demo       */
+    /* ===================== */
+    function initDemo(root, meta) {
+      if (root.__mlDemo && root.__mlDemo.__inited) return root.__mlDemo;
+
+      safeInit(root, () => {
+        const kind = (meta && meta.kind) ? meta.kind : (() => {
+          const raw = (root.dataset.demo || "tree").trim();
+          const i = raw.indexOf(":");
+          return i >= 0 ? raw.slice(i + 1) : raw;
+        })();
+        const cfg = makeConfig(kind);
+
+        if (cfg.kind === "tree") {
+          cfg.plotH = 360;
+          cfg.auxH = 360;
+          cfg.useCaseHtml = `
+          <b>Caso de uso:</b> decisión de préstamo.<br>
+          <span class="ml-small">Entradas: <b>x</b>=ingresos (0–1) y <b>y</b>=deuda (0–1). El árbol aprende cortes tipo “x&lt;t” / “y&lt;t” para separar <b>APROBAR</b> vs <b>RECHAZAR</b>.</span>
+        `;
+        } else if (cfg.kind === "nb") {
+          cfg.plotH = 360;
+          cfg.auxH = 260;
+          cfg.useCaseHtml = `
+          <b>Caso de uso:</b> filtro de SPAM.<br>
+          <span class="ml-small">Aprende contando palabras por clase (SPAM/NO-SPAM) y suma evidencias (log) para clasificar un mensaje.</span>
+        `;
+        } else { // kmeans
+          cfg.plotH = 380;
+          cfg.auxH = 260;
+          cfg.useCaseHtml = `
+          <b>Caso de uso:</b> segmentación de clientes (clustering).<br>
+          <span class="ml-small">Variables: <b>x</b>=frecuencia compra (0–1), <b>y</b>=gasto medio (0–1). K-means alterna asignar → promediar hasta converger.</span>
+        `;
+        }
+
+        const seed = parseInt(root.dataset.seed || "1", 10) || 1;
+        const stopAcc = Number.isFinite(Number(root.dataset.stop))
+          ? Number(root.dataset.stop)
+          : (cfg.stopAcc || 0.99);
+
+        buildUI(root, cfg);
+        const syncDisclosure = () => {
+          const details = root.querySelector('[data-detail="advanced"]');
+          if (!details || typeof window === "undefined") return;
+          if (window.matchMedia && window.matchMedia("(max-width:900px)").matches) {
+            details.removeAttribute("open");
+          } else {
+            details.setAttribute("open", "");
+          }
+        };
+        syncDisclosure();
+
+        const btnToggle = root.querySelector('[data-btn="toggle"]');
+        const btnStep = root.querySelector('[data-btn="step"]');
+        const btnReset = root.querySelector('[data-btn="reset"]');
+        const btnPredict = root.querySelector('[data-btn="predict"]');
+
+        const statusPill = root.querySelector('[data-pill="status"]');
+        const hintPill = root.querySelector('[data-pill="hint"]');
+        const metricsEl = root.querySelector('[data-metrics]');
+        const explainEl = root.querySelector('[data-explain]');
+        const outcomeBadge = root.querySelector('[data-outcome-badge]');
+        const outcomeMain = root.querySelector('[data-outcome-main]');
+        const outcomeSub = root.querySelector('[data-outcome-sub]');
+        const howEl = root.querySelector('[data-how]');
+        const whyEl = root.querySelector('[data-why]');
+        const tryEl = root.querySelector('[data-try]');
+        const advancedEl = root.querySelector('[data-advanced]');
+        const auxWrap = root.querySelector('[data-aux-wrap]');
+        const auxHtml = root.querySelector('[data-aux-html]');
+        const auxCanvas = root.querySelector('[data-canvas="aux"]');
+        const sparkCanvas = root.querySelector('[data-canvas="spark"]');
+
+        const inpX = root.querySelector('[data-input="x"]');
+        const inpY = root.querySelector('[data-input="y"]');
+        const inpXNum = root.querySelector('[data-input="x-num"]');
+        const inpYNum = root.querySelector('[data-input="y-num"]');
+        const inpMsg = root.querySelector('[data-input="msg"]');
+        const inpK = root.querySelector('[data-input="k"]');
+        const tokensEl = root.querySelector('[data-tokens]');
+
+        const ac = new AbortController();
+        const on = (el, ev, fn, opts = {}) => el && el.addEventListener(ev, fn, { ...opts, signal: ac.signal });
+
+        let running = false;
+        let raf = null;
+        let to = null;
+
+        if (auxWrap && cfg.kind === "tree") auxWrap.classList.add("ml-scroll-x");
+
+        const rand = mulberry32(seed);
+
+        let st;
+        if (cfg.kind === "tree") st = initStateTree(cfg, rand);
+        else if (cfg.kind === "nb") st = initStateNB(cfg);
+        else st = initStateKMeans(cfg, rand);
+
+        if (cfg.kind === "kmeans") {
+          assignKMeans(st);
+          st.inertia0 = Math.max(1e-9, st.inertia);
+        }
+
+        // Ajuste de ancho mínimo del canvas de estructura del árbol (evita colapso)
+        function tuneTreeCanvasWidth() {
+          if (cfg.kind !== "tree") return;
+          const aux = root.querySelector('[data-canvas="aux"]');
+          if (!aux) return;
+          const needed = Math.max(980, Math.ceil(120 * Math.pow(2, cfg.maxDepth)));
+          aux.style.width = "100%";
+          aux.style.minWidth = needed + "px";
+        }
+        tuneTreeCanvasWidth();
+
+        // Inputs
+        if (inpX && inpY) {
+          const readVal = (v) => clamp(Number.isFinite(Number(v)) ? Number(v) : 0.5, 0, 1);
+          const syncInputs = (x, y) => {
+            if (inpX) inpX.value = x.toFixed(2);
+            if (inpY) inpY.value = y.toFixed(2);
+            if (inpXNum) inpXNum.value = x.toFixed(2);
+            if (inpYNum) inpYNum.value = y.toFixed(2);
+          };
+          const h = (ev) => {
+            st.userOverride = true;
+            const x = readVal(inpXNum && ev && ev.target === inpXNum ? inpXNum.value : inpX.value);
+            const y = readVal(inpYNum && ev && ev.target === inpYNum ? inpYNum.value : inpY.value);
+            st.demoPoint.x = x;
+            st.demoPoint.y = y;
+            syncInputs(x, y);
+            repaint();
+            updateMetrics();
+          };
+          on(inpX, "input", h);
+          on(inpY, "input", h);
+          on(inpXNum, "input", h);
+          on(inpYNum, "input", h);
+        }
+        if (inpK) {
+          inpK.value = String(cfg.K);
+          on(inpK, "change", () => {
+            const nextK = clamp(parseInt(inpK.value, 10) || cfg.K, 2, 6);
+            cfg.K = nextK;
+            reset();
+          });
+        }
+
+        function updateTokensUI() {
+          if (!tokensEl) return;
+          const tokens = Array.from(st.allTokens || []);
+          if (!tokens.length) {
+            tokensEl.innerHTML = `<span class="ml-token muted">sin palabras del vocabulario</span>`;
+            return;
+          }
+          tokensEl.innerHTML = tokens.map(t => {
+            const inVocab = st.vocabSet && st.vocabSet.has(t);
+            const cls = inVocab ? "ml-token" : "ml-token muted";
+            return `<span class="${cls}" data-token="${t}">${t}</span>`;
+          }).join("");
+        }
+
+        if (inpMsg) {
+          on(inpMsg, "input", () => {
+            st.userOverride = true;
+            st.testMsg = inpMsg.value;
+            recomputeNB(cfg, st);
+            updateTokensUI();
+            repaint();
+            updateMetrics();
+          });
+        }
+        if (tokensEl) {
+          on(tokensEl, "click", (ev) => {
+            const tok = ev && ev.target && ev.target.dataset ? ev.target.dataset.token : null;
+            if (!tok) return;
+            st.focusToken = tok;
+            const list = root.querySelector('[data-vocab-list]');
+            const row = list ? list.querySelector(`[data-word="${tok}"]`) : null;
+            if (row) row.scrollIntoView({ block: "nearest" });
+            repaint();
+            updateMetrics();
+          });
+        }
+
+        function setStatus(t) { if (statusPill) statusPill.textContent = t; }
+        function setHint(t) { if (hintPill) hintPill.textContent = t; }
+        function setOutcomeBadge(t) { if (outcomeBadge) outcomeBadge.textContent = t; }
+        function setOutcome(main, sub) {
+          if (outcomeMain) outcomeMain.textContent = main;
+          if (outcomeSub) outcomeSub.textContent = sub;
+        }
+        function setList(el, items) {
+          if (!el) return;
+          el.innerHTML = (items && items.length)
+            ? items.map(t => `<li>${t}</li>`).join("")
+            : `<li>—</li>`;
+        }
+
+        function setAuxHeader(title, sub) {
+          const titleEl = root.querySelector('[data-aux-title]');
+          const subEl = root.querySelector('[data-aux-sub]');
+          if (titleEl) titleEl.textContent = title;
+          if (subEl) subEl.textContent = sub;
+        }
+
+        function updateMetrics() {
+          if (cfg.kind === "tree") {
+            st.accuracy = computeAccTree(st);
+            const rows = [
+              ["Cortes", String(st.builtSplits)],
+              ["Hojas", String(st.leaves.length)],
+              ["Acc.", (st.accuracy * 100).toFixed(1) + "%"],
+              ["Paso", String(st.step)],
+            ];
+            if (metricsEl) {
+              metricsEl.innerHTML = rows.map(([k, v]) =>
+                `<div class="ml-metric"><div class="k">${k}</div><div class="v">${v}</div></div>`
+              ).join("");
+            }
+
+            const p = st.demoPoint;
+            const pred = predictTree(st, p.x, p.y);
+            p.pred = pred;
+
+            const path = [];
+            const pathNodeIds = new Set();
+            const pathSplits = [];
+            let id = 0;
+            while (true) {
+              const n = st.nodes[id];
+              if (!n || n.isLeaf) break;
+              pathNodeIds.add(id);
+              pathSplits.push({ f: n.split.f, t: n.split.t });
+              const goLeft = (n.split.f === 0) ? (p.x < n.split.t) : (p.y < n.split.t);
+              path.push(n.split.f === 0
+                ? `x<${n.split.t.toFixed(2)} → ${goLeft ? 'sí' : 'no'}`
+                : `y<${n.split.t.toFixed(2)} → ${goLeft ? 'sí' : 'no'}`
+              );
+              id = goLeft ? n.left : n.right;
+              if (id == null) break;
+            }
+            if (id != null) pathNodeIds.add(id);
+            st.pathSplits = pathSplits;
+            st.pathNodeIds = pathNodeIds;
+
+            const verdict = (pred === 1) ? 'APROBAR' : 'RECHAZAR';
+            const pendingTxt = (st.pending && st.pending.split)
+              ? (st.pending.split.f === 0 ? `probando corte x<${st.pending.split.t.toFixed(2)}` : `probando corte y<${st.pending.split.t.toFixed(2)}`)
+              : 'listo';
+            const lastSplit = st.splits && st.splits.length ? st.splits[st.splits.length - 1] : null;
+            const splitLabel = lastSplit
+              ? (lastSplit.f === 0 ? `ingresos < ${lastSplit.t.toFixed(2)}` : `deuda < ${lastSplit.t.toFixed(2)}`)
+              : 'sin preguntas aún';
+            const gainTxt = lastSplit && Number.isFinite(lastSplit.gain)
+              ? (lastSplit.gain * 100).toFixed(1) + "%"
+              : "—";
+            const hasSplits = st.builtSplits > 0;
+
+            setOutcomeBadge(hasSplits ? "predicción" : "sin entrenar");
+            setOutcome(verdict, hasSplits ? `Pregunta elegida: ${splitLabel}` : "Árbol sin cortes: hoja única");
+            setList(howEl, [
+              "Qué aprende: preguntas.",
+              "Cómo decide: ruta a hoja.",
+              "Qué significa el gráfico: regiones."
+            ]);
+            setList(whyEl, hasSplits ? [
+              `Pregunta elegida: ${splitLabel}.`,
+              `Reduce mezcla (Gini) en ${gainTxt}.`,
+              `Ruta: ${path.length ? path.join(" → ") : "root"}.`
+            ] : [
+              "Árbol sin cortes: todo cae en una sola hoja.",
+              "Pulsa Animar o Paso para crear la primera pregunta."
+            ]);
+            if (tryEl) tryEl.textContent = "Sube deuda y baja ingresos, pulsa Predecir.";
+            if (auxWrap) auxWrap.style.display = "";
+            if (auxCanvas) auxCanvas.style.display = "";
+            if (auxHtml) auxHtml.innerHTML = "";
+            if (advancedEl) advancedEl.innerHTML = "";
+            if (sparkCanvas) sparkCanvas.style.display = "none";
+
+            if (explainEl) {
+              explainEl.innerHTML = `
+              <div>${cfg.useCaseHtml}</div>
+              <div style="height:10px"></div>
+              <div class="ml-small">
+                <b>Ejemplo actual:</b> ingresos=${p.x.toFixed(2)}, deuda=${p.y.toFixed(2)} → <b>${verdict}</b><br>
+                <span class="ml-small">Ruta por el árbol: ${path.length ? path.join(' · ') : '— (aún no hay cortes)'}.</span>
+              </div>
+              <div style="height:8px"></div>
+              <div class="ml-small">Diagrama: cajas superiores = <b>preguntas</b>; hojas = <b>decisión final</b> (verde aprobar, rojo rechazar).</div>
+            `;
+            }
+            setHint(pendingTxt);
+            setAuxHeader('Estructura del árbol', 'preguntas → hojas');
+            return;
+          }
+
+          if (cfg.kind === "nb") {
+            const total = st.nSpam + st.nHam;
+            const pSpam = total ? st.nSpam / total : 0.5;
+            const verdict = (st.logOdds > 0) ? 'SPAM' : 'NO-SPAM';
+            const rows = [
+              ['Train', `${Math.min(st.trainIdx, cfg.trainStream.length)}/${cfg.trainStream.length}`],
+              ['P(SPAM)', pSpam.toFixed(2)],
+              ['score', st.logOdds.toFixed(2)],
+              ['Pred.', verdict],
+            ];
+            if (metricsEl) {
+              metricsEl.innerHTML = rows.map(([k, v]) =>
+                `<div class="ml-metric"><div class="k">${k}</div><div class="v">${v}</div></div>`
+              ).join("");
+            }
+
+            const contribs = Array.from(st.testTokens || []).map(t => {
+              const d = Math.log(Math.max(1e-12, st.pWordSpam[t])) - Math.log(Math.max(1e-12, st.pWordHam[t]));
+              const sign = d >= 0 ? '+' : '';
+              return { t, d, label: `${t} (${sign}${d.toFixed(2)})` };
+            });
+            contribs.sort((a, b) => Math.abs(b.d) - Math.abs(a.d));
+
+            const trained = (st.trainIdx >= cfg.trainStream.length);
+            const untrained = (st.trainIdx === 0);
+            setHint(trained ? 'entrenado (prueba mensajes)' : (untrained ? 'sin entrenar' : 'entrenando…'));
+            setAuxHeader('Priors + suavizado', 'por qué decide');
+
+            const probSpam = softSigmoid(st.logOdds);
+            setOutcomeBadge(untrained ? "sin entrenar" : (trained ? "entrenado" : "entrenando"));
+            setOutcome(verdict, `P(SPAM) ≈ ${probSpam.toFixed(2)}${untrained ? " (solo prior)" : ""}`);
+            setList(howEl, [
+              "Qué aprende: probabilidades de palabras.",
+              "Cómo decide: sumar evidencias.",
+              "Qué significa el gráfico: contribuciones."
+            ]);
+            setList(whyEl, (contribs.length ? contribs.slice(0, 6).map(c => c.label) : [
+              untrained ? "Sin entrenar → se usa solo el prior (50/50)." : "No hay palabras del vocabulario."
+            ]));
+            if (tryEl) tryEl.textContent = "Escribe “gratis premio enlace” y mira contribuciones.";
+            if (auxWrap) {
+              const allContribs = cfg.vocab.map(w => {
+                const d = Math.log(Math.max(1e-12, st.pWordSpam[w])) - Math.log(Math.max(1e-12, st.pWordHam[w]));
+                return { w, d };
+              }).sort((a, b) => Math.abs(b.d) - Math.abs(a.d));
+              const top = allContribs.slice(0, 8).map(it => {
+                const sign = it.d >= 0 ? '+' : '';
+                return `<div class="ml-vocab-row"><span class="w">${it.w}</span><span class="v">${sign}${it.d.toFixed(2)}</span></div>`;
+              }).join("");
+              auxWrap.style.display = "";
+              if (auxCanvas) auxCanvas.style.display = "none";
+              if (auxHtml) auxHtml.innerHTML = `
+              <div class="ml-small"><b>Top 8 palabras (|contribución|)</b></div>
+              <div class="ml-vocab-list">${top || "—"}</div>
+            `;
+            }
+            if (sparkCanvas) sparkCanvas.style.display = "none";
+
+            if (advancedEl) {
+              const allRows = cfg.vocab.map(w => {
+                const d = Math.log(Math.max(1e-12, st.pWordSpam[w])) - Math.log(Math.max(1e-12, st.pWordHam[w]));
+                const sign = d >= 0 ? '+' : '';
+                const focus = st.focusToken && st.focusToken === w;
+                return `<div class="ml-vocab-row" data-word="${w}" data-focus="${focus ? 'true' : 'false'}"><span class="w">${w}</span><span class="v">${sign}${d.toFixed(2)}</span></div>`;
+              }).join("");
+              advancedEl.innerHTML = `
+              <details>
+                <summary>Ver tabla completa</summary>
+                <div class="ml-vocab-list" data-vocab-list>${allRows}</div>
+              </details>
+              <details>
+                <summary>Ver fórmula</summary>
+                <div class="ml-small">log-odds = log P(SPAM) - log P(NO-SPAM) + Σ log P(w|SPAM) - log P(w|NO-SPAM)</div>
+              </details>
+            `;
+            }
+
+            if (explainEl) {
+              const testTokens = Array.from(st.testTokens || []);
+              explainEl.innerHTML = `
+              <div>${cfg.useCaseHtml}</div>
+              <div style="height:10px"></div>
+              <div class="ml-small">
+                <b>Mensaje:</b> "${st.testMsg || ''}"<br>
+                <b>Palabras detectadas (del vocabulario):</b> ${testTokens.join(', ') || '—'}<br>
+                <b>Evidencia (log):</b> ${contribs.map(c => c.label).join(' · ') || '—'}
+              </div>
+              <div style="height:8px"></div>
+              <div class="ml-small">
+                Lectura rápida: si el <b>score</b> &gt; 0 → SPAM; si &lt; 0 → NO-SPAM.
+                ${trained ? ' Escribe tu propio texto (arriba) para fijar el mensaje.' : ''}
+              </div>
+            `;
+            }
+            return;
+          }
+
+          const rows = [
+            ['Iter', String(st.iter)],
+            ['Fase', (st.phase === 'assign') ? 'asignar' : 'mover'],
+            ['Inercia', st.inertia.toFixed(3)],
+            ['K', String(cfg.K)],
+          ];
+          if (metricsEl) {
+            metricsEl.innerHTML = rows.map(([k, v]) =>
+              `<div class="ml-metric"><div class="k">${k}</div><div class="v">${v}</div></div>`
+            ).join("");
+          }
+
+          setHint((st.phase === 'assign') ? 'asignando…' : 'moviendo centros…');
+          setAuxHeader('Centros y tamaños', 'medias del grupo');
+
+          const hist = st.inertiaHistory || [];
+          const delta = hist.length >= 2 ? (hist[hist.length - 1] - hist[hist.length - 2]) : 0;
+          const phaseTxt = (st.phase === 'assign') ? 'asignar' : 'promediar';
+          setOutcomeBadge("iteración " + st.iter);
+          setOutcome(`${phaseTxt.toUpperCase()}`, `Inercia: ${st.inertia.toFixed(3)} (${delta >= 0 ? "+" : ""}${delta.toFixed(3)})`);
+          setList(howEl, [
+            "Qué aprende: centros.",
+            "Cómo decide: asignar al centro más cercano.",
+            "Qué significa el gráfico: grupos y centros."
+          ]);
+          const clusterItems = st.centers.map((c, i) => {
+            const size = st.data.filter(p => p.a === i).length;
+            return `C${i + 1}: n=${size}, centro (${c.x.toFixed(2)}, ${c.y.toFixed(2)})`;
+          });
+          setList(whyEl, [
+            `Fase actual: ${phaseTxt}.`,
+            `Inercia ${delta < 0 ? "↓" : "↑"} ${Math.abs(delta).toFixed(3)}.`,
+            ...clusterItems.slice(0, 3)
+          ]);
+          if (tryEl) tryEl.textContent = "Cambia K y mira cómo baja la inercia.";
+          if (auxWrap) auxWrap.style.display = "none";
+          if (advancedEl) advancedEl.innerHTML = "";
+          if (sparkCanvas) sparkCanvas.style.display = "";
+
+          if (explainEl) {
+            explainEl.innerHTML = `
+            <div>${cfg.useCaseHtml}</div>
+            <div style="height:10px"></div>
+            <div class="ml-small">
+              <b>Cómo converge:</b> (1) cada punto → centro más cercano, (2) el centro se mueve al promedio de su grupo.
+              Se repite hasta que los centros casi no se mueven (movimiento pequeño varias iteraciones).
+            </div>
+            <div style="height:8px"></div>
+            <div class="ml-small">
+              Interpretación: cada color = un “tipo” de cliente encontrado sin etiquetas (solo por similitud).
+            </div>
+          `;
+          }
+        }
+
+        function repaint() {
+          if (cfg.kind === "tree") {
+            drawPlotTree(root, cfg, st);
+            drawAuxTree(root, cfg, st);
+          } else if (cfg.kind === "nb") {
+            drawPlotNB(root, cfg, st);
+          } else {
+            drawPlotKMeans(root, cfg, st);
+            drawSparkline(root, st);
+          }
+        }
+
+        function clearTimers() {
+          if (raf !== null) { cancelAnimationFrame(raf); raf = null; }
+          if (to !== null) { clearTimeout(to); to = null; }
+        }
+
+        function scheduleNext() {
+          if (!running) { raf = null; to = null; return; }
+          const delay = cfg.frameDelayMs || 0;
+          if (delay > 0) {
+            to = setTimeout(() => {
+              to = null;
+              raf = requestAnimationFrame(tick);
+            }, delay);
+          } else {
+            raf = requestAnimationFrame(tick);
+          }
+        }
+
+        // roundedRect polyfill
+        if (!CanvasRenderingContext2D.prototype.roundRect) {
+          CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
+            const rr = Math.min(r, w / 2, h / 2);
+            this.beginPath();
+            this.moveTo(x + rr, y);
+            this.arcTo(x + w, y, x + w, y + h, rr);
+            this.arcTo(x + w, y + h, x, y + h, rr);
+            this.arcTo(x, y + h, x, y, rr);
+            this.arcTo(x, y, x + w, y, rr);
+            this.closePath();
+            return this;
+          };
+        }
+
+        function oneStep(mode = "auto") {
+          if (cfg.kind === "tree") {
+            if (!st.userOverride) {
+              st.demoCooldown -= 1;
+              if (st.demoCooldown <= 0) {
+                const r = mulberry32(seed + st.step + 17);
+                st.demoPoint.x = clamp(0.12 + 0.80 * r(), 0, 1);
+                st.demoPoint.y = clamp(0.12 + 0.80 * r(), 0, 1);
+                st.demoCooldown = 24;
+
+                if (inpX) inpX.value = st.demoPoint.x.toFixed(2);
+                if (inpY) inpY.value = st.demoPoint.y.toFixed(2);
+                if (inpXNum) inpXNum.value = st.demoPoint.x.toFixed(2);
+                if (inpYNum) inpYNum.value = st.demoPoint.y.toFixed(2);
+              }
+            }
+
+            st.accuracy = computeAccTree(st);
+            if (st.accuracy >= stopAcc && st.builtSplits > 0) return { done: true, reason: "acc" };
+
+            const candidates = st.leaves
+              .map(id => ({ id, n: st.nodes[id], imp: st.nodes[id].impurity }))
+              .filter(x => x.n.depth < cfg.maxDepth && x.n.impurity > 1e-9 && x.n.idx.length >= cfg.minLeaf * 2);
+
+            candidates.sort((a, b) => (b.imp - a.imp) || (a.n.depth - b.n.depth));
+            if (candidates.length === 0) return { done: true, reason: "complete" };
+
+            const leafId = candidates[0].id;
+            const leaf = st.nodes[leafId];
+
+            if (!st.pending) {
+              const sp = bestSplitForNode(cfg, st, leaf);
+              if (!sp) {
+                leaf.impurity = 0;
+              } else {
+                st.pending = {
+                  leafId,
+                  split: { f: sp.f, t: sp.t, gain: sp.gain },
+                  framesLeft: cfg.splitPreviewFrames,
+                  region: leaf.region,
+                };
+              }
+            } else {
+              st.pending.framesLeft -= 1;
+              if (st.pending.framesLeft <= 0) {
+                applySplitTree(cfg, st, st.pending.leafId, st.pending.split);
+                st.pending = null;
+              }
+            }
+
+            st.step += 1;
+            return { done: false };
+          }
+
+          if (cfg.kind === "nb") {
+            const trainedNow = stepNB(cfg, st, mode);
+            st.step += 1;
+
+            if (trainedNow && mode === "auto") return { done: true, reason: "trained" };
+            return { done: false };
+          }
+
+          return stepKMeans(cfg, st);
+        }
+
+        function tick() {
+          if (!running) { clearTimers(); return; }
+
+          const iters = cfg.stepsPerFrame || 1;
+          let done = false, reason = null;
+
+          for (let i = 0; i < iters; i++) {
+            const r = oneStep("auto");
+            if (r && r.done) {
+              done = true; reason = r.reason;
+              break;
+            }
+          }
+
+          updateMetrics();
+          repaint();
+
+          if (done) {
+            running = false;
+            root.classList.remove("ml-running");
+            btnToggle.textContent = "▶ Animar";
+
+            if (cfg.kind === "nb" && reason === "trained") setStatus("entrenado");
+            else if (cfg.kind === "kmeans") setStatus(reason === "stable" ? "convergió" : "fin");
+            else if (reason === "acc") setStatus(`Acc. ≥ ${(stopAcc * 100).toFixed(0)}%`);
+            else setStatus("fin");
+
+            clearTimers();
+            updateMetrics();
+            repaint();
+            return;
+          }
+
+          scheduleNext();
+        }
+
+        function start() {
+          if (running) return;
+          running = true;
+          root.classList.add("ml-running");
+          btnToggle.textContent = "⏸ Pausar";
+          setStatus("animando…");
+          scheduleNext();
+        }
+
+        function stop() {
+          running = false;
+          root.classList.remove("ml-running");
+          btnToggle.textContent = "▶ Animar";
+          setStatus("pausado");
+          clearTimers();
+          repaint();
+          updateMetrics();
+        }
+
+        function reset() {
+          stop();
+          const r = mulberry32(seed);
+          if (cfg.kind === "tree") st = initStateTree(cfg, r);
+          else if (cfg.kind === "nb") st = initStateNB(cfg);
+          else st = initStateKMeans(cfg, r);
+
+          if (cfg.kind === "kmeans") {
+            assignKMeans(st);
+            st.inertia0 = Math.max(1e-9, st.inertia);
+          }
+
+          setStatus("listo");
+          setHint("—");
+
+          if (cfg.kind === "tree" && inpX && inpY) {
+            const x = st.demoPoint.x;
+            const y = st.demoPoint.y;
+            inpX.value = x.toFixed(2);
+            inpY.value = y.toFixed(2);
+            if (inpXNum) inpXNum.value = x.toFixed(2);
+            if (inpYNum) inpYNum.value = y.toFixed(2);
+          }
+
+          if (cfg.kind === "nb") {
+            recomputeNB(cfg, st);
+            updateTokensUI();
+          }
+
+          tuneTreeCanvasWidth();
+          updateMetrics();
+          repaint();
+        }
+
+        on(btnToggle, "click", () => (running ? stop() : start()));
+        on(btnReset, "click", reset);
+
+        // “Paso”: en NB, tras entrenar rota ejemplos (sin animación infinita)
+        on(btnStep, "click", () => {
+          if (running) return;
+          setStatus("paso");
+          const r = oneStep("manual");
+          // NB: si está entrenado, este click solo cambia demo-msg (si userOverride=false)
+          if (cfg.kind === "nb" && r && r.done && r.reason === "trained") {
+            setStatus("entrenado");
+          }
+          updateMetrics();
+          repaint();
+        });
+
+        if (btnPredict) {
+          on(btnPredict, "click", () => {
+            if (!inpX || !inpY) return;
+            const x = clamp(Number(inpX.value), 0, 1);
+            const y = clamp(Number(inpY.value), 0, 1);
+            st.userOverride = true;
+            st.demoPoint.x = x;
+            st.demoPoint.y = y;
+            setStatus("predicho");
+            updateMetrics();
+            repaint();
+          });
+        }
+
+        // Resize -> repaint + re-ajustar ancho del árbol
+        const ro = new ResizeObserver(() => {
+          requestAnimationFrame(() => {
+            if (!root.isConnected) return;
+            syncDisclosure();
+            tuneTreeCanvasWidth();
+            repaint();
+          });
+        });
+        ro.observe(root);
+
+        // init
+        setStatus("listo");
+        setHint("—");
+        if (cfg.kind === "nb") { recomputeNB(cfg, st); updateTokensUI(); }
+        updateMetrics();
+        repaint();
+
+        root.__mlDemo = {
+          __inited: true,
+          kind,
+          repaint,
+          reset,
+          start,
+          stop,
+          destroy: () => {
+            running = false;
+            clearTimers();
+            ro.disconnect();
+            try { ac.abort(); } catch (_) { }
+          }
+        };
+      });
+
+      return root.__mlDemo;
+    }
+
+    /* ===================== */
+    /* Shared tabs runtime    */
+    /* ===================== */
+    const __attachTabbed = (TA) => {
+      TA.registerNamespace('ml', (el, meta2) => initDemo(el, meta2));
+      if (typeof console !== "undefined" && console.debug) {
+        console.debug("[ml-demo] TabbedAnimations registered", { namespace: "ml" });
+      }
+    };
+
+    if (window.TabbedAnimations) {
+      __attachTabbed(window.TabbedAnimations);
+      window.TabbedAnimations.initAll();
+    } else {
+      window.__TAQ__ = window.__TAQ__ || [];
+      window.__TAQ__.push(__attachTabbed);
+    }
+
+  })();
+</script>
