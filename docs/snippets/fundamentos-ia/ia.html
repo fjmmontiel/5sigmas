@@ -1,0 +1,593 @@
+<!-- SNIPPET 2/2 — IA / Software 2.0 (standalone, sin tabs) -->
+<div class="ta-demo s2 s2-ai" data-anim-contrast="force">
+  <div class="ta-tabs-header">
+    <div class="ta-tabs-title">IA / Software 2.0</div>
+    <div class="ta-tabs-subtitle">Datos de entrada + datos de salida → reglas aprendidas (el “código” es el modelo).</div>
+  </div>
+
+  <div class="s2-inner">
+    <div class="ta-grid">
+      <div class="ta-viz">
+        <div class="s2-vizwrap">
+          <div class="s2-controls" aria-label="Controles del ejemplo IA">
+            <div class="s2-row">
+              <label class="s2-label">
+                Fahrenheit <span class="s2-pill" data-s2="fAIVal">98</span>
+              </label>
+              <button class="s2-btn" type="button" data-s2="retrainBtn" aria-label="Reentrenar modelo">
+                Reentrenar
+              </button>
+            </div>
+            <input data-s2="fAI" type="range" min="-40" max="212" value="98" step="1" aria-label="Fahrenheit" />
+            <div class="s2-readout">
+              <span class="s2-muted">Salida (Celsius):</span>
+              <span class="s2-big" data-s2="cAIVal">≈ 36.7</span>
+              <span class="s2-mini" data-s2="weights">w≈0.56 · b≈-17.8</span>
+            </div>
+          </div>
+
+          <svg
+            class="s2-svg"
+            data-s2="svg"
+            viewBox="0 0 820 320"
+            preserveAspectRatio="xMidYMid meet"
+            aria-label="Diagrama IA: datos (entrada+salida) alimentan entrenamiento y producen reglas aprendidas"
+            role="img"
+          >
+            <defs>
+              <linearGradient id="s2Warm" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="var(--ta-brand-warm)" stop-opacity="0.95"></stop>
+                <stop offset="1" stop-color="var(--ta-brand-primary)" stop-opacity="0.85"></stop>
+              </linearGradient>
+
+              <filter id="s2GlowFilter" x="-40%" y="-40%" width="180%" height="180%">
+                <feGaussianBlur stdDeviation="3.5" result="blur" />
+                <feColorMatrix
+                  type="matrix"
+                  values="
+                    1 0 0 0 0
+                    0 1 0 0 0
+                    0 0 1 0 0
+                    0 0 0 0.9 0"
+                  result="glow"
+                />
+                <feMerge>
+                  <feMergeNode in="glow" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+
+              <pattern id="s2Grid2" width="16" height="16" patternUnits="userSpaceOnUse">
+                <path d="M16 0H0V16" fill="none" class="s2-gridline" />
+              </pattern>
+            </defs>
+
+            <!-- Background -->
+            <rect x="16" y="16" width="788" height="288" rx="18" fill="url(#s2Grid2)" class="s2-bg" />
+            <rect x="16" y="16" width="788" height="288" rx="18" fill="none" class="s2-frame" />
+
+            <!-- Blocks -->
+            <g>
+              <rect x="44" y="54" width="230" height="88" rx="16" class="s2-node s2-node--data" />
+              <rect x="44" y="154" width="230" height="120" rx="16" class="s2-node s2-node--data" />
+              <rect x="304" y="92" width="210" height="156" rx="16" class="s2-node s2-node--train" />
+              <rect x="546" y="92" width="230" height="156" rx="16" class="s2-node s2-node--model" />
+            </g>
+
+            <text x="66" y="86" class="s2-h">Datos de entrada</text>
+            <text x="66" y="112" class="s2-t">F (Fahrenheit)</text>
+
+            <text x="66" y="186" class="s2-h">Datos de salida</text>
+            <text x="66" y="212" class="s2-t">C (Celsius)</text>
+            <text x="66" y="242" class="s2-mutedText">pares (F,C) → dataset</text>
+
+            <text x="326" y="124" class="s2-h">Entrenamiento</text>
+            <text x="326" y="148" class="s2-mutedText">ajusta parámetros para</text>
+            <text x="326" y="170" class="s2-mutedText">minimizar el error</text>
+
+            <text x="568" y="124" class="s2-h">Reglas aprendidas</text>
+            <text x="568" y="148" class="s2-mutedText">“el algoritmo emerge”</text>
+
+            <!-- Arrows -->
+            <path d="M274 98 C 295 98, 295 98, 304 98" class="s2-arrow s2-arrow--warm" />
+            <path d="M274 214 C 295 214, 295 214, 304 214" class="s2-arrow s2-arrow--warm" />
+            <path d="M514 170 C 535 170, 535 170, 546 170" class="s2-arrow s2-arrow--warm" />
+
+            <!-- Mini chart -->
+            <g transform="translate(314, 192)">
+              <rect x="-6" y="-6" width="190" height="92" rx="14" class="s2-inset" />
+              <text x="8" y="14" class="s2-insetTitle">Ajuste (ej.: lineal)</text>
+
+              <path d="M18 74 L18 24 L170 24" class="s2-axis" />
+              <text x="20" y="84" class="s2-axisText">F</text>
+              <text x="6" y="30" class="s2-axisText">C</text>
+
+              <g data-s2="scatter"></g>
+              <path data-s2="line" d="M18 70 L170 30" class="s2-line" />
+            </g>
+
+            <!-- Model formula -->
+            <g transform="translate(566, 174)">
+              <rect x="0" y="0" width="196" height="56" rx="14" class="s2-codebox s2-codebox--warm" />
+              <text x="14" y="26" class="s2-mono s2-code">C ≈ w·F + b</text>
+              <text x="14" y="46" class="s2-mono s2-code s2-code--dim" data-s2="wbText">w=0.20, b=0.0</text>
+            </g>
+
+            <!-- Gear -->
+            <g transform="translate(330, 106)">
+              <circle cx="164" cy="34" r="14" class="s2-gearRing" />
+              <path
+                data-s2="gear"
+                d="M164 22 L168 22 L169 18 L175 20 L173 23 L176 26 L180 25 L182 31 L178 32 L178 36 L182 38 L180 44 L176 43 L173 46 L175 49 L169 50 L168 46 L164 46 L162 50 L156 49 L157 46 L154 43 L150 44 L148 38 L152 36 L152 32 L148 31 L150 25 L154 26 L157 23 L156 20 L162 18 Z"
+                class="s2-gear"
+              />
+            </g>
+
+            <!-- Packets -->
+            <g data-s2="aiPackets" filter="url(#s2GlowFilter)">
+              <circle r="6" class="s2-packet s2-packet--warm"></circle>
+              <circle r="4" class="s2-packet s2-packet--warm2"></circle>
+              <circle r="5" class="s2-packet s2-packet--warm3"></circle>
+            </g>
+
+            <!-- Insight -->
+            <g class="s2-chip" transform="translate(40, 28)">
+              <rect x="0" y="0" width="420" height="34" rx="17" class="s2-chipbg" />
+              <circle cx="18" cy="17" r="6" fill="url(#s2Warm)"></circle>
+              <text x="34" y="22" class="s2-chiptext">Datos (entrada+salida) → entrenamiento → reglas aprendidas</text>
+            </g>
+
+            <!-- Trained badge -->
+            <g data-s2="trainedBadge" transform="translate(610, 88)" opacity="0">
+              <rect x="0" y="0" width="150" height="30" rx="15" class="s2-badge" />
+              <text x="16" y="20" class="s2-badgeText">Regla aprendida ✓</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <div class="ta-copy">
+        <div class="ta-card">
+          <div class="ta-card-k">Qué está pasando</div>
+          <div class="ta-card-v">
+            <ul class="s2-list">
+              <li><b>Entrada + salida</b>: ejemplos (F,C) como dataset.</li>
+              <li><b>Entrenamiento</b>: ajusta parámetros para reducir el error.</li>
+              <li><b>Reglas</b>: aparecen como un modelo (pesos <span class="s2-monoInline">w, b</span>).</li>
+            </ul>
+            <div class="ta-chips">
+              <span class="ta-chip">Reglas implícitas</span>
+              <span class="ta-chip">Generaliza</span>
+              <span class="ta-chip">El “código” es el modelo</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="ta-card" style="margin-top: 12px;">
+          <div class="ta-card-k">Cómo leerlo</div>
+          <div class="ta-card-v">
+            El mini-gráfico muestra cómo el modelo ajusta una línea a ejemplos. Al final, las <b>reglas aprendidas</b> sustituyen
+            al bloque de “código”.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .s2 {
+      --s2-ink: color-mix(in srgb, var(--md-default-fg-color, #1f2937) 90%, transparent);
+      --s2-sub: color-mix(in srgb, var(--md-default-fg-color, #1f2937) 62%, transparent);
+      --s2-frame: color-mix(in srgb, var(--md-default-fg-color, #1f2937) 14%, transparent);
+      --s2-grid: color-mix(in srgb, var(--md-default-fg-color, #1f2937) 10%, transparent);
+
+      --s2-card: color-mix(in srgb, var(--md-default-bg-color, #ffffff) 92%, #0b1220 8%);
+      --s2-node: color-mix(in srgb, var(--md-default-bg-color, #ffffff) 86%, #0b1220 14%);
+      --s2-node2: color-mix(in srgb, var(--md-default-bg-color, #ffffff) 82%, #0b1220 18%);
+
+      --s2-teal: var(--ta-brand-primary, #14b8a6);
+      --s2-blue: var(--ta-brand-accent, #60a5fa);
+      --s2-warm: var(--ta-brand-warm, #fb923c);
+    }
+
+    [data-md-color-scheme="slate"] .s2 {
+      --s2-card: color-mix(in srgb, var(--md-default-bg-color, #0b1220) 84%, #ffffff 16%);
+      --s2-node: color-mix(in srgb, var(--md-default-bg-color, #0b1220) 78%, #ffffff 22%);
+      --s2-node2: color-mix(in srgb, var(--md-default-bg-color, #0b1220) 74%, #ffffff 26%);
+      --s2-frame: color-mix(in srgb, #e5e7eb 18%, transparent);
+      --s2-grid: color-mix(in srgb, #e5e7eb 12%, transparent);
+      --s2-ink: color-mix(in srgb, #e5e7eb 92%, transparent);
+      --s2-sub: color-mix(in srgb, #e5e7eb 68%, transparent);
+    }
+
+    .s2-inner { max-width: 1160px; margin: 0 auto; padding: 10px 6px 0; }
+    .s2 .ta-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      grid-auto-flow: row;
+      align-items: start;
+    }
+    .s2 .ta-viz, .s2 .ta-copy { min-width: 0; }
+    .s2 .ta-viz {
+      position: static !important;
+      inset: auto !important;
+      grid-area: auto !important;
+      max-width: 100%;
+    }
+    .s2 .ta-copy {
+      position: static !important;
+      inset: auto !important;
+      grid-area: auto !important;
+      max-width: 100%;
+    }
+    @media (max-width: 1020px) { .s2 .ta-grid { grid-template-columns: 1fr; } }
+
+    .s2 .ta-card {
+      background: color-mix(in srgb, var(--s2-card) 92%, transparent);
+      border: 1px solid var(--s2-frame);
+      border-radius: 16px;
+      padding: 12px;
+    }
+    .s2 .ta-card-k { font-weight: 900; letter-spacing: -0.01em; color: var(--s2-ink); margin-bottom: 6px; }
+    .s2 .ta-card-v { color: color-mix(in srgb, var(--s2-ink) 92%, transparent); }
+
+    .s2-vizwrap {
+      background:
+        radial-gradient(1200px 420px at 18% 10%, color-mix(in srgb, var(--s2-teal) 14%, transparent), transparent 58%),
+        radial-gradient(1000px 420px at 84% 20%, color-mix(in srgb, var(--s2-warm) 13%, transparent), transparent 60%);
+      border-radius: 18px;
+      padding: 12px;
+      border: 1px solid var(--s2-frame);
+    }
+
+    .s2-controls {
+      display: grid; gap: 8px;
+      padding: 10px 10px 12px;
+      border-radius: 14px;
+      background: color-mix(in srgb, var(--s2-card) 92%, transparent);
+      border: 1px solid var(--s2-frame);
+      margin-bottom: 10px;
+    }
+    .s2-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+    .s2-label { font-weight: 800; color: var(--s2-ink); display: inline-flex; align-items: center; gap: 10px; line-height: 1; }
+    .s2-pill {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 46px; padding: 4px 10px; border-radius: 999px;
+      font-weight: 900;
+      background: color-mix(in srgb, var(--s2-teal) 18%, transparent);
+      border: 1px solid color-mix(in srgb, var(--s2-teal) 30%, transparent);
+      color: var(--s2-ink);
+    }
+    .s2-controls input[type="range"] { width: 100%; accent-color: var(--s2-teal); }
+    .s2-readout { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    .s2-muted { color: var(--s2-sub); font-weight: 650; }
+    .s2-big { font-weight: 950; font-size: 20px; letter-spacing: -0.02em; color: var(--s2-ink); }
+    .s2-mini { color: var(--s2-sub); font-weight: 650; font-size: 12px; }
+
+    .s2-btn {
+      appearance: none;
+      border: 1px solid color-mix(in srgb, var(--s2-warm) 34%, var(--s2-frame));
+      background: color-mix(in srgb, var(--s2-warm) 18%, transparent);
+      color: var(--s2-ink);
+      font-weight: 900;
+      padding: 8px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: transform 0.08s ease, filter 0.2s ease, background 0.2s ease;
+      user-select: none;
+    }
+    .s2-btn:hover { filter: brightness(1.05); }
+    .s2-btn:active { transform: translateY(1px) scale(0.99); }
+
+    .s2-svg { width: 100%; height: auto; display: block; }
+
+    .s2-bg { fill: transparent; }
+    .s2-gridline { stroke: var(--s2-grid); stroke-width: 1; opacity: 1; }
+    .s2-frame { stroke: var(--s2-frame); stroke-width: 1.2; }
+
+    .s2-node { fill: var(--s2-node); stroke: var(--s2-frame); stroke-width: 1.2; }
+    .s2-node--data { fill: color-mix(in srgb, var(--s2-blue) 10%, var(--s2-node)); }
+    .s2-node--train { fill: color-mix(in srgb, var(--s2-warm) 10%, var(--s2-node2)); }
+    .s2-node--model { fill: color-mix(in srgb, var(--s2-teal) 10%, var(--s2-node2)); }
+
+    .s2-h { font-weight: 950; font-size: 16px; fill: var(--s2-ink); letter-spacing: -0.01em; }
+    .s2-t { font-weight: 750; font-size: 14px; fill: var(--s2-sub); }
+    .s2-mutedText { font-weight: 650; font-size: 12px; fill: var(--s2-sub); }
+
+    .s2-mono, .s2-monoInline {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+    .s2-monoInline {
+      padding: 0 6px; border-radius: 8px;
+      border: 1px solid var(--s2-frame);
+      background: color-mix(in srgb, var(--s2-node2) 72%, transparent);
+    }
+
+    .s2-codebox {
+      fill: color-mix(in srgb, var(--s2-blue) 10%, var(--s2-node2));
+      stroke: color-mix(in srgb, var(--s2-blue) 22%, var(--s2-frame));
+      stroke-width: 1.2;
+    }
+    .s2-codebox--warm {
+      fill: color-mix(in srgb, var(--s2-warm) 12%, var(--s2-node2));
+      stroke: color-mix(in srgb, var(--s2-warm) 26%, var(--s2-frame));
+    }
+    .s2-code { font-size: 12.5px; font-weight: 900; fill: var(--s2-ink); }
+    .s2-code--dim { opacity: 0.65; font-weight: 750; }
+
+    .s2-arrow {
+      fill: none;
+      stroke: color-mix(in srgb, var(--s2-warm) 62%, var(--s2-frame));
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-dasharray: 7 10;
+      animation: s2Flow 1.35s linear infinite;
+      opacity: 0.9;
+    }
+    @keyframes s2Flow { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -34; } }
+
+    .s2-inset { fill: color-mix(in srgb, var(--s2-card) 80%, transparent); stroke: var(--s2-frame); stroke-width: 1.1; }
+    .s2-insetTitle { font-size: 11.5px; font-weight: 900; fill: var(--s2-sub); }
+    .s2-axis { fill: none; stroke: var(--s2-frame); stroke-width: 1.2; opacity: 0.9; }
+    .s2-axisText { font-size: 10.5px; font-weight: 800; fill: var(--s2-sub); }
+    .s2-line {
+      fill: none;
+      stroke: color-mix(in srgb, var(--s2-teal) 70%, var(--s2-blue) 30%);
+      stroke-width: 2.8;
+      stroke-linecap: round;
+      opacity: 0.95;
+    }
+
+    .s2-gearRing { fill: none; stroke: color-mix(in srgb, var(--s2-warm) 52%, var(--s2-frame)); stroke-width: 2.4; opacity: 0.9; }
+    .s2-gear {
+      fill: color-mix(in srgb, var(--s2-warm) 38%, transparent);
+      stroke: color-mix(in srgb, var(--s2-warm) 50%, var(--s2-frame));
+      stroke-width: 1.2;
+      transform-origin: 164px 34px;
+    }
+
+    .s2-packet--warm { fill: url(#s2Warm); }
+    .s2-packet--warm2 { fill: color-mix(in srgb, var(--s2-warm) 62%, #fff 38%); opacity: 0.85; }
+    .s2-packet--warm3 { fill: color-mix(in srgb, var(--s2-teal) 55%, #fff 45%); opacity: 0.8; }
+
+    .s2-chipbg { fill: color-mix(in srgb, var(--s2-card) 88%, transparent); stroke: var(--s2-frame); stroke-width: 1.2; }
+    .s2-chiptext { font-size: 12.5px; font-weight: 900; fill: var(--s2-ink); }
+
+    .s2-badge {
+      fill: color-mix(in srgb, var(--s2-teal) 18%, transparent);
+      stroke: color-mix(in srgb, var(--s2-teal) 32%, var(--s2-frame));
+      stroke-width: 1.2;
+    }
+    .s2-badgeText { font-size: 12px; font-weight: 950; fill: var(--s2-ink); }
+
+    .s2-list { margin: 0; padding-left: 18px; color: color-mix(in srgb, var(--md-default-fg-color, #1f2937) 86%, transparent); }
+    .s2-list li { margin: 6px 0; }
+  </style>
+
+  <script>
+    (function () {
+      const root = document.currentScript.closest(".ta-demo.s2-ai");
+      if (!root) return;
+
+      const svg = root.querySelector('[data-s2="svg"]');
+
+      // --- Scope SVG ids (avoid collisions across multiple instances) ---
+      function scopeSvgIds(svgEl, ids) {
+        if (!svgEl) return;
+        const uid = "s2-" + Math.random().toString(16).slice(2, 10);
+        const map = new Map();
+        for (const oldId of ids) {
+          const el = svgEl.querySelector("#" + CSS.escape(oldId));
+          if (!el) continue;
+          const newId = uid + "-" + oldId;
+          el.setAttribute("id", newId);
+          map.set(oldId, newId);
+        }
+        const attrs = ["fill", "stroke", "filter", "clip-path", "mask", "href", "xlink:href"];
+        for (const node of svgEl.querySelectorAll("*")) {
+          for (const a of attrs) {
+            const v = node.getAttribute(a);
+            if (!v) continue;
+            let out = v;
+            for (const [oldId, newId] of map) out = out.replaceAll(`url(#${oldId})`, `url(#${newId})`).replaceAll(`#${oldId}`, `#${newId}`);
+            if (out !== v) node.setAttribute(a, out);
+          }
+        }
+      }
+      scopeSvgIds(svg, ["s2Warm", "s2GlowFilter", "s2Grid2"]);
+
+      // ---------- Utilities ----------
+      const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+      const lerp = (a, b, t) => a + (b - a) * t;
+      const fmt1 = (x) => (Math.round(x * 10) / 10).toFixed(1);
+
+      function polyPoint(points, t) {
+        let lengths = [], total = 0;
+        for (let i = 0; i < points.length - 1; i++) {
+          const dx = points[i + 1].x - points[i].x;
+          const dy = points[i + 1].y - points[i].y;
+          const d = Math.hypot(dx, dy);
+          lengths.push(d); total += d;
+        }
+        let dist = t * total;
+        for (let i = 0; i < lengths.length; i++) {
+          if (dist <= lengths[i]) {
+            const local = lengths[i] === 0 ? 0 : dist / lengths[i];
+            return { x: lerp(points[i].x, points[i + 1].x, local), y: lerp(points[i].y, points[i + 1].y, local) };
+          }
+          dist -= lengths[i];
+        }
+        return points[points.length - 1];
+      }
+
+      const ui = {
+        slider: root.querySelector('[data-s2="fAI"]'),
+        fVal: root.querySelector('[data-s2="fAIVal"]'),
+        cVal: root.querySelector('[data-s2="cAIVal"]'),
+        weights: root.querySelector('[data-s2="weights"]'),
+        wbText: root.querySelector('[data-s2="wbText"]'),
+        scatter: root.querySelector('[data-s2="scatter"]'),
+        line: root.querySelector('[data-s2="line"]'),
+        gear: root.querySelector('[data-s2="gear"]'),
+        packets: root.querySelector('[data-s2="aiPackets"]'),
+        retrainBtn: root.querySelector('[data-s2="retrainBtn"]'),
+        trainedBadge: root.querySelector('[data-s2="trainedBadge"]'),
+      };
+
+      // Packet paths
+      const packetPaths = [
+        [ { x: 274, y: 98 },  { x: 304, y: 98 },  { x: 340, y: 110 } ],
+        [ { x: 274, y: 214 }, { x: 304, y: 214 }, { x: 340, y: 210 } ],
+        [ { x: 514, y: 170 }, { x: 546, y: 170 }, { x: 592, y: 182 } ],
+      ];
+
+      // Inset coords
+      const inset = { x0: 18, x1: 170, y0: 74, y1: 24 };
+      function fToX(F) { return lerp(inset.x0, inset.x1, clamp((F + 40) / (212 + 40), 0, 1)); }
+      function cToY(C) { return lerp(inset.y0, inset.y1, clamp((C + 40) / 140, 0, 1)); }
+
+      function trueC(F) { return (F - 32) * (5 / 9); }
+
+      let dataset = [];
+      let w = 0.2, b = 0.0;
+      let w0 = 0.2, b0 = 0.0;
+      let wt = 0.56, bt = -17.8;
+      let progress = 0;
+      let trained = false;
+
+      function makeDataset() {
+        dataset = [];
+        const n = 16;
+        for (let i = 0; i < n; i++) {
+          const F = -20 + (240 * i) / (n - 1);
+          const noise = (Math.sin(i * 1.7) + Math.cos(i * 0.9)) * 0.8;
+          dataset.push({ F, C: trueC(F) + noise });
+        }
+      }
+
+      function olsFit(points) {
+        let sumF = 0, sumC = 0;
+        for (const p of points) { sumF += p.F; sumC += p.C; }
+        const n = points.length || 1;
+        const meanF = sumF / n, meanC = sumC / n;
+
+        let cov = 0, varF = 0;
+        for (const p of points) {
+          const dF = p.F - meanF;
+          const dC = p.C - meanC;
+          cov += dF * dC;
+          varF += dF * dF;
+        }
+        const ww = varF === 0 ? 0 : cov / varF;
+        const bb = meanC - ww * meanF;
+        return { w: ww, b: bb };
+      }
+
+      function renderScatter() {
+        if (!ui.scatter) return;
+        ui.scatter.innerHTML = "";
+        for (const p of dataset) {
+          const dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+          dot.setAttribute("cx", fToX(p.F));
+          dot.setAttribute("cy", cToY(p.C));
+          dot.setAttribute("r", "2.6");
+          dot.setAttribute("fill", "var(--s2-warm)");
+          dot.setAttribute("opacity", "0.78");
+          ui.scatter.appendChild(dot);
+        }
+      }
+
+      function predictC(F) { return w * F + b; }
+
+      function updateLine() {
+        const F0 = -40, F1 = 212;
+        const x0 = fToX(F0), y0 = cToY(predictC(F0));
+        const x1 = fToX(F1), y1 = cToY(predictC(F1));
+        ui.line?.setAttribute("d", `M${x0} ${y0} L${x1} ${y1}`);
+      }
+
+      function updateReadout() {
+        const F = Number(ui.slider.value);
+        const C = predictC(F);
+        ui.fVal.textContent = String(F);
+        ui.cVal.textContent = "≈ " + fmt1(C);
+        ui.weights.textContent = `w≈${fmt1(w)} · b≈${fmt1(b)}`;
+        ui.wbText.textContent = `w=${fmt1(w)}, b=${fmt1(b)}`;
+      }
+
+      function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+
+      function resetTraining() {
+        makeDataset();
+        renderScatter();
+        const fit = olsFit(dataset);
+        wt = fit.w; bt = fit.b;
+
+        w0 = 0.2 + (Math.random() - 0.5) * 0.35;
+        b0 = (Math.random() - 0.5) * 10;
+        w = w0; b = b0;
+
+        progress = 0;
+        trained = false;
+        ui.trainedBadge?.setAttribute("opacity", "0");
+        updateLine();
+        updateReadout();
+      }
+
+      let rafId = null;
+      let t0 = performance.now();
+
+      function animate(now) {
+        const dt = Math.min(40, now - t0);
+        t0 = now;
+
+        if (!trained) {
+          progress = clamp(progress + dt / 1600, 0, 1);
+          const t = easeOutCubic(progress);
+          w = lerp(w0, wt, t);
+          b = lerp(b0, bt, t);
+          if (progress >= 1) {
+            trained = true;
+            ui.trainedBadge?.setAttribute("opacity", "1");
+          }
+        }
+
+        updateLine();
+        updateReadout();
+
+        if (ui.gear) {
+          const speed = trained ? 0.04 : 0.14;
+          ui.gear.style.transform = `rotate(${(now * speed) % 360}deg)`;
+        }
+
+        if (ui.packets) {
+          const kids = ui.packets.children;
+          const ph = (now * 0.00026) % 1;
+          const a = polyPoint(packetPaths[0], ph);
+          const b2 = polyPoint(packetPaths[1], (ph + 0.33) % 1);
+          const c = polyPoint(packetPaths[2], (ph + 0.66) % 1);
+          if (kids[0]) { kids[0].setAttribute("cx", a.x); kids[0].setAttribute("cy", a.y); kids[0].setAttribute("opacity", trained ? "0.55" : "0.95"); }
+          if (kids[1]) { kids[1].setAttribute("cx", b2.x); kids[1].setAttribute("cy", b2.y); kids[1].setAttribute("opacity", trained ? "0.55" : "0.9"); }
+          if (kids[2]) { kids[2].setAttribute("cx", c.x); kids[2].setAttribute("cy", c.y); kids[2].setAttribute("opacity", trained ? "0.9" : "0.85"); }
+        }
+
+        rafId = requestAnimationFrame(animate);
+      }
+
+      ui.slider?.addEventListener("input", updateReadout);
+      ui.retrainBtn?.addEventListener("click", resetTraining);
+
+      resetTraining();
+      rafId = requestAnimationFrame(animate);
+
+      const ro = new MutationObserver(() => {
+        if (!document.body.contains(root)) {
+          cancelAnimationFrame(rafId);
+          ro.disconnect();
+        }
+      });
+      ro.observe(document.body, { childList: true, subtree: true });
+    })();
+  </script>
+</div>

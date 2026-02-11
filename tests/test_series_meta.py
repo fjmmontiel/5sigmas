@@ -58,19 +58,37 @@ class TestSeriesMetaCounts(unittest.TestCase):
 
     def test_ai_snippets_include_theme_overrides(self):
         snippets_dir = os.path.join(os.path.dirname(main.__file__), "docs/snippets")
-        for filename in ("ia_ml_dl.html", "tipos_aprendizaje.html"):
-            path = os.path.join(snippets_dir, filename)
-            self.assertTrue(os.path.isfile(path))
-            with open(path, "r", encoding="utf-8") as f:
-                content = f.read()
-            self.assertIn("data-md-color-scheme", content)
-            self.assertTrue("--ai-" in content or ".ai-mat{" in content)
+        ia_path = os.path.join(snippets_dir, "fundamentos-ia/ia_ml_dl.html")
+        tipos_path = os.path.join(snippets_dir, "fundamentos-ia/tipos_aprendizaje.html")
 
-    def test_include_animation_macro_defined(self):
+        self.assertTrue(os.path.isfile(ia_path))
+        self.assertTrue(os.path.isfile(tipos_path))
+
+        with open(ia_path, "r", encoding="utf-8") as f:
+            ia_content = f.read()
+        with open(tipos_path, "r", encoding="utf-8") as f:
+            tipos_content = f.read()
+
+        self.assertIn("data-md-color-scheme", ia_content)
+        self.assertIn("data-md-color-scheme", tipos_content)
+        self.assertIn(".ai-mat", ia_content)
+        self.assertIn("ta-learn", tipos_content)
+
+    def test_ia_ml_dl_snippet_has_balanced_section_closure(self):
+        path = os.path.join(
+            os.path.dirname(main.__file__),
+            "docs/snippets/fundamentos-ia/ia_ml_dl.html",
+        )
+        self.assertTrue(os.path.isfile(path))
+        with open(path, "r", encoding="utf-8") as f:
+            content = f.read()
+        self.assertNotIn("      </div>\n      </div>\n    </section>", content)
+
+    def test_include_html_macro_defined(self):
         path = os.path.join(os.path.dirname(main.__file__), "main.py")
         with open(path, "r", encoding="utf-8") as f:
             content = f.read()
-        self.assertIn("def include_animation(", content)
+        self.assertIn("def include_html(", content)
 
     def test_animation_shell_styles_defined(self):
         path = os.path.join(os.path.dirname(main.__file__), "docs/stylesheets/extra.css")
@@ -78,7 +96,7 @@ class TestSeriesMetaCounts(unittest.TestCase):
             content = f.read()
         self.assertIn(".anim-brand-shell", content)
 
-    def test_pages_use_include_animation_macro(self):
+    def test_pages_use_include_html_macro_for_animation_snippets(self):
         base = os.path.dirname(main.__file__)
         targets = (
             os.path.join(base, "docs/series/fundamentos-ia-iag/01_draft.md"),
@@ -88,9 +106,10 @@ class TestSeriesMetaCounts(unittest.TestCase):
         for path in targets:
             with open(path, "r", encoding="utf-8") as f:
                 content = f.read()
-            self.assertIn("include_animation(", content)
+            self.assertIn("include_html(", content)
+            self.assertNotIn("include_animation(", content)
 
-    def test_animation_snippets_not_included_with_include_html(self):
+    def test_docs_do_not_use_legacy_include_animation_macro(self):
         base = os.path.dirname(main.__file__)
         docs_dir = os.path.join(base, "docs")
         for root, _, files in os.walk(docs_dir):
@@ -100,11 +119,66 @@ class TestSeriesMetaCounts(unittest.TestCase):
                 path = os.path.join(root, filename)
                 with open(path, "r", encoding="utf-8") as f:
                     content = f.read()
-                self.assertNotIn('include_html("snippets/animaciones/', content)
-                self.assertNotIn('include_html("snippets/series_energy_ai_', content)
-                self.assertNotIn('include_html("snippets/dc_space_pressure_anim.html")', content)
-                self.assertNotIn('include_html("snippets/ia_ml_dl.html")', content)
-                self.assertNotIn('include_html("snippets/tipos_aprendizaje.html")', content)
+                self.assertNotIn("include_animation(", content)
+
+    def test_drafts_do_not_use_legacy_include_animation_macro(self):
+        base = os.path.dirname(main.__file__)
+        drafts_dir = os.path.join(base, "drafts")
+        if not os.path.isdir(drafts_dir):
+            return
+        for root, _, files in os.walk(drafts_dir):
+            for filename in files:
+                if not filename.endswith(".md"):
+                    continue
+                path = os.path.join(root, filename)
+                with open(path, "r", encoding="utf-8") as f:
+                    content = f.read()
+                self.assertNotIn("include_animation(", content)
+
+    def test_wrap_animation_shell_adds_viewport_and_toolbar(self):
+        wrapped = main._wrap_animation_shell("<div>demo</div>", variant="x", fullscreen="on")
+        self.assertIn('data-anim-shell', wrapped)
+        self.assertIn('data-anim-variant="x"', wrapped)
+        self.assertIn('data-anim-fullscreen="on"', wrapped)
+        self.assertIn('data-anim-contrast="force"', wrapped)
+        self.assertIn('anim-brand-shell__toolbar', wrapped)
+        self.assertIn('anim-brand-shell__viewport', wrapped)
+        self.assertIn('data-anim-shell-open', wrapped)
+
+    def test_resolve_fullscreen_mode_detects_data_attr(self):
+        html = '<div class="demo" data-anim-fullscreen="on"></div>'
+        mode = main._resolve_fullscreen_mode(html, explicit_value=None)
+        self.assertEqual(mode, "on")
+
+    def test_resolve_fullscreen_mode_defaults_to_on(self):
+        html = '<div class="demo"></div>'
+        mode = main._resolve_fullscreen_mode(html, explicit_value=None)
+        self.assertEqual(mode, "on")
+
+    def test_resolve_fullscreen_mode_respects_explicit_off(self):
+        html = '<div class="demo" data-anim-fullscreen="on"></div>'
+        mode = main._resolve_fullscreen_mode(html, explicit_value="off")
+        self.assertEqual(mode, "off")
+
+    def test_resolve_fullscreen_mode_detects_snippet_off(self):
+        html = '<div class="demo" data-anim-fullscreen="off"></div>'
+        mode = main._resolve_fullscreen_mode(html, explicit_value=None)
+        self.assertEqual(mode, "off")
+
+    def test_resolve_fullscreen_mode_explicit_on_overrides_snippet_off(self):
+        html = '<div class="demo" data-anim-fullscreen="off"></div>'
+        mode = main._resolve_fullscreen_mode(html, explicit_value="on")
+        self.assertEqual(mode, "on")
+
+    def test_should_wrap_with_shell_for_free_snippet_html(self):
+        path = "snippets/animaciones/demo_libre.html"
+        html = '<div class="demo">contenido</div>'
+        self.assertTrue(main._should_wrap_with_shell(path, html, shell_mode="auto"))
+
+    def test_should_not_wrap_excluded_snippets(self):
+        path = "snippets/series_meta.html"
+        html = '<div class="series-meta"></div>'
+        self.assertFalse(main._should_wrap_with_shell(path, html, shell_mode="auto"))
 
 
 if __name__ == "__main__":

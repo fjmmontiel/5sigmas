@@ -1,0 +1,37 @@
+<!--
+  5SIGMAS Animation Boilerplate (Generic)
+  Include with: {{ include_html("snippets/<path>.html") }}
+  Fullscreen is on by default. Set data-anim-fullscreen="off" to disable.
+-->
+
+<div class="ta-demo ta-generic demo-slug" data-anim-fullscreen="on" data-anim-contrast="force">
+  <section class="ta-section ta-section--header">
+    <div class="ta-tabs-title">Titulo de la animacion</div>
+    <div class="ta-tabs-subtitle">Contexto corto y objetivo pedagogico.</div>
+  </section>
+
+  <section class="ta-section ta-section--viewport">
+    <div class="ta-vizbox">Contenido HTML/SVG/Canvas principal</div>
+  </section>
+
+  <section class="ta-section ta-section--insights ta-grid">
+    <article class="ta-card">
+      <div class="ta-card-k">Que observar</div>
+      <div class="ta-card-v">Explica los elementos clave para leer la animacion.</div>
+    </article>
+    <article class="ta-card">
+      <div class="ta-card-k">Lectura rapida</div>
+      <div class="ta-card-v">Incluye una interpretacion en 1-2 frases.</div>
+    </article>
+  </section>
+
+  <section class="ta-section ta-section--sources">
+    <div class="ta-card-k">Fuentes o supuestos</div>
+    <div class="ta-card-v">Anota datasets, referencias o reglas de construccion.</div>
+  </section>
+</div>
+
+<!--
+  If you add custom CSS, scope every selector with `.demo-slug` to avoid cross-snippet style leakage.
+  Example: `.demo-slug .demo-node { ... }`
+-->

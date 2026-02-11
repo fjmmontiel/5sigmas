@@ -1,0 +1,733 @@
+<!-- Tipos de aprendizaje (5SIGMAS / MkDocs Material) — v4
+  Fixes:
+  - Reparada la estructura DOM (secciones/paneles) → tabs coherentes.
+  - RL rediseñado (diagrama + mini-entorno) para que se entienda de un vistazo.
+  - Sin “Sistema” y sin tarjetas superiores.
+-->
+
+<div class="ta-learn ai-tabs ta-demo ta-tabs" data-demo="tipos_aprendizaje" data-anim-tabs data-default="sup">
+  <div class="ai-tabs__header">
+    <div class="ai-tabs__title">¿Cómo aprenden los modelos?</div>
+    <div class="ai-tabs__subtitle">Cada pestaña resume la <b>señal de aprendizaje</b> y la <b>clave</b> en una sola mirada.</div>
+  </div>
+
+  <div class="ai-tabs__nav ta-tablist" role="tablist" aria-label="Tipos de aprendizaje">
+    <button class="tab ta-tab" type="button" role="tab" aria-selected="true" data-tab="sup">Supervisado</button>
+    <button class="tab ta-tab" type="button" role="tab" aria-selected="false" data-tab="unsup">No supervisado</button>
+    <button class="tab ta-tab" type="button" role="tab" aria-selected="false" data-tab="self">Auto-supervisado</button>
+    <button class="tab ta-tab" type="button" role="tab" aria-selected="false" data-tab="rl">RL</button>
+  </div>
+
+  <div class="ai-tabs__content ta-panels">
+
+    <!-- SUPERVISADO -->
+    <section class="panel ta-panel" role="tabpanel" data-panel="sup">
+      <div class="ta-panel-grid">
+        <div class="ta-topbar" aria-label="Resumen supervisado">
+          <div class="ta-topbar__lead"><b>Señal de aprendizaje:</b> etiquetas humanas <code>x→y</code> (alguien te dice la respuesta correcta).</div>
+          <div class="ta-topbar__key"><b>Clave:</b> comparar <i>predicción</i> vs <i>etiqueta correcta</i>.</div>
+        </div>
+
+        <div class="ta-viz" role="img" aria-label="Supervisado: aprendes con etiquetas correctas">
+          <div class="ta-viz__top">
+            <span class="ta-pill">Profesor: <b>humano</b></span>
+          </div>
+          <div class="ta-flow">
+            <div class="ta-node">
+              <div class="ta-node__k">Entrada</div>
+              <div class="ta-node__v"><b>x</b> (email)</div>
+            </div>
+            <div class="ta-arrow" aria-hidden="true"></div>
+            <div class="ta-node ta-node--accent">
+              <div class="ta-node__k">Modelo</div>
+              <div class="ta-node__v">aprende <code>x→y</code></div>
+            </div>
+            <div class="ta-arrow" aria-hidden="true"></div>
+            <div class="ta-node">
+              <div class="ta-node__k">Salida</div>
+              <div class="ta-node__v">P(spam)</div>
+            </div>
+          </div>
+          <div class="ta-loop" aria-hidden="true">
+            <div class="ta-loop__row">
+              <span class="ta-chip">Feedback</span>
+              <span class="ta-loop__txt">Si un usuario corrige “no era spam” → nueva etiqueta</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="ta-copy">
+          <div class="panel__k">Idea</div>
+          <div class="panel__p">Tienes ejemplos con etiqueta: <code>entrada x</code> entonces <code>respuesta y</code>. El modelo aprende a predecir <code>y</code>.</div>
+
+          <div class="panel__k">Ejemplo</div>
+          <ul class="panel__list">
+            <li><b>Objetivo:</b> predecir si un email es spam.</li>
+            <li><b>Datos:</b> emails con etiqueta <i>spam / no spam</i> puesta por humanos.</li>
+            <li><b>Salida:</b> probabilidad de spam.</li>
+            <li><b>Feedback:</b> cuando un usuario corrige “no era spam”, eso se convierte en nueva etiqueta.</li>
+          </ul>
+
+          <div class="panel__k">Cuándo encaja</div>
+          <div class="panel__p">Cuando puedes conseguir etiquetas fiables y medir el error.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NO SUPERVISADO -->
+    <section class="panel ta-panel" role="tabpanel" data-panel="unsup" hidden>
+      <div class="ta-panel-grid">
+        <div class="ta-topbar" aria-label="Resumen no supervisado">
+          <div class="ta-topbar__lead"><b>Señal de aprendizaje:</b> solo <code>x</code> → buscas <b>estructura</b> (grupos, anomalías, patrones).</div>
+          <div class="ta-topbar__key"><b>Clave:</b> encontrar organización útil sin “respuesta correcta”.</div>
+        </div>
+
+        <div class="ta-viz" role="img" aria-label="No supervisado: buscas estructura sin etiquetas">
+          <div class="ta-viz__top">
+            <span class="ta-pill">Profesor: <b>nadie</b></span>
+          </div>
+          <div class="ta-flow">
+            <div class="ta-node">
+              <div class="ta-node__k">Entrada</div>
+              <div class="ta-node__v"><b>x</b> (compras)</div>
+            </div>
+            <div class="ta-arrow" aria-hidden="true"></div>
+            <div class="ta-node ta-node--accent">
+              <div class="ta-node__k">Algoritmo</div>
+              <div class="ta-node__v">encuentra patrones</div>
+            </div>
+            <div class="ta-arrow" aria-hidden="true"></div>
+            <div class="ta-node">
+              <div class="ta-node__k">Salida</div>
+              <div class="ta-node__v">clusters / anomalías</div>
+            </div>
+          </div>
+          <div class="ta-mini">
+            <div class="ta-mini__dots" aria-hidden="true">
+              <span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span>
+              <span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span>
+            </div>
+            <div class="ta-mini__txt">La “respuesta” es un mapa: quién se parece a quién.</div>
+          </div>
+          <div class="ta-loop" aria-hidden="true">
+            <div class="ta-loop__row">
+              <span class="ta-chip">Feedback</span>
+              <span class="ta-loop__txt">Negocio valida si los grupos tienen sentido → ajusta variables o nº de clusters</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="ta-copy">
+          <div class="panel__k">Idea</div>
+          <div class="panel__p">Solo tienes <code>x</code>. El sistema no aprende “la etiqueta correcta”, sino <b>patrones</b> dentro de los datos (grupos, anomalías, estructura interna).</div>
+
+          <div class="panel__k">Ejemplo</div>
+          <ul class="panel__list">
+            <li><b>Objetivo:</b> segmentar clientes para campañas.</li>
+            <li><b>Datos:</b> comportamiento de compra (sin etiquetas).</li>
+            <li><b>Salida:</b> grupos (clusters) con perfiles similares.</li>
+            <li><b>Feedback:</b> negocio valida si los grupos tienen sentido y ajusta variables o número de clusters.</li>
+          </ul>
+
+          <div class="panel__k">Cuándo encaja</div>
+          <div class="panel__p">Cuando no hay etiquetas, pero sí quieres organización, compresión o detección de rarezas.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AUTO-SUPERVISADO -->
+    <section class="panel ta-panel" role="tabpanel" data-panel="self" hidden>
+      <div class="ta-panel-grid">
+        <div class="ta-topbar" aria-label="Resumen auto-supervisado">
+          <div class="ta-topbar__lead"><b>Señal de aprendizaje:</b> el propio dato fabrica <code>y*</code> (p. ej., siguiente palabra).</div>
+          <div class="ta-topbar__key"><b>Clave:</b> el “profesor” está <i>dentro del dato</i>.</div>
+        </div>
+
+        <div class="ta-viz" role="img" aria-label="Auto-supervisado: el dato se fabrica la etiqueta y*">
+          <div class="ta-viz__top">
+            <span class="ta-pill">Profesor: <b>el propio dato</b></span>
+          </div>
+          <div class="ta-flow ta-flow--wide">
+            <div class="ta-node">
+              <div class="ta-node__k">Texto</div>
+              <div class="ta-node__v">“Me tomo un …”</div>
+            </div>
+            <div class="ta-arrow" aria-hidden="true"></div>
+            <div class="ta-node ta-node--accent">
+              <div class="ta-node__k">Tarea</div>
+              <div class="ta-node__v">predecir siguiente palabra</div>
+            </div>
+            <div class="ta-arrow" aria-hidden="true"></div>
+            <div class="ta-node">
+              <div class="ta-node__k">y*</div>
+              <div class="ta-node__v">“… café” (real)</div>
+            </div>
+          </div>
+          <div class="ta-mini">
+            <div class="ta-mini__bar" aria-hidden="true">
+              <span class="t"></span><span class="t"></span><span class="t"></span><span class="t"></span><span class="t"></span>
+              <span class="t"></span><span class="t"></span><span class="t"></span><span class="t"></span><span class="t"></span>
+            </div>
+            <div class="ta-mini__txt">Repites la tarea millones de veces → aprendes gramática, hechos y contexto.</div>
+          </div>
+          <div class="ta-loop" aria-hidden="true">
+            <div class="ta-loop__row">
+              <span class="ta-chip">Feedback</span>
+              <span class="ta-loop__txt">Comparación directa con la palabra real (sin humanos etiquetando)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="ta-copy">
+          <div class="panel__k">Idea</div>
+          <div class="panel__p">El propio dato contiene la respuesta. El sistema <b>se fabrica sus propias etiquetas</b> a partir del contenido disponible.</div>
+
+          <div class="panel__k">Ejemplo mundano</div>
+          <ul class="panel__list">
+            <li><b>Objetivo:</b> aprender a completar frases.</li>
+            <li><b>Datos:</b> textos sin etiquetar.</li>
+            <li><b>y*:</b> el siguiente fragmento del propio texto.</li>
+            <li><b>Feedback:</b> comparación directa con la palabra real.</li>
+          </ul>
+
+          <div class="panel__k">Cuándo encaja</div>
+          <div class="panel__p">Cuando tienes grandes volúmenes de datos sin etiquetar y quieres preentrenar un modelo general.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RL -->
+    <section class="panel ta-panel" role="tabpanel" data-panel="rl" hidden>
+      <div class="ta-panel-grid">
+        <div class="ta-topbar" aria-label="Resumen refuerzo">
+          <div class="ta-topbar__lead"><b>Señal de aprendizaje:</b> recompensa por acciones (objetivo + consecuencias).</div>
+          <div class="ta-topbar__key"><b>Clave:</b> maximizar <i>retorno</i> a largo plazo (no etiquetas).</div>
+        </div>
+
+        <div class="ta-viz ta-viz--rl" role="img" aria-label="Refuerzo: agente actúa, entorno responde con estado y recompensa">
+          <div class="ta-viz__top">
+            <span class="ta-pill">Profesor: <b>recompensa</b></span>
+            <span class="ta-pill">Objetivo: <b>mantenerse centrado</b></span>
+          </div>
+
+          <div class="ta-rlviz">
+            <div class="ta-rlviz__loop" aria-hidden="true">
+              <div class="rl-node rl-node--agent">
+                <div class="rl-k">Agente</div>
+                <div class="rl-v">política</div>
+              </div>
+              <div class="rl-edge rl-edge--a">acción</div>
+              <div class="rl-node rl-node--env">
+                <div class="rl-k">Entorno</div>
+                <div class="rl-v">estado</div>
+              </div>
+              <div class="rl-edge rl-edge--r">recompensa</div>
+            </div>
+
+            <div class="ta-rlviz__env" aria-hidden="true">
+              <div class="ta-lane">
+                <div class="ta-lane__line"></div>
+                <div class="ta-car"></div>
+                <div class="ta-gate ta-gate--left"></div>
+                <div class="ta-gate ta-gate--right"></div>
+              </div>
+              <div class="ta-rlhud">
+                <div class="ta-rlhud__chip"><b>Acción</b>: girar ± · acelerar · frenar</div>
+                <div class="ta-rlhud__chip"><b>Recompensa</b>: centrado +1 · salirse −1</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ta-loop" aria-hidden="true">
+            <div class="ta-loop__row">
+              <span class="ta-chip">Secuencial</span>
+              <span class="ta-loop__txt">aprende por prueba‑error: acción → consecuencia → repetir (retorno acumulado)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="ta-copy">
+          <div class="panel__k">Idea</div>
+          <div class="panel__p">Aquí no hay una respuesta “correcta” por ejemplo. Hay un <b>objetivo</b>, y el sistema aprende <b>probando acciones</b> y observando consecuencias.</div>
+
+          <div class="panel__k">Conceptos básicos</div>
+          <ul class="panel__list">
+            <li><b>Agente:</b> quien decide.</li>
+            <li><b>Entorno:</b> el mundo con el que interactúa.</li>
+            <li><b>Acción:</b> lo que hace.</li>
+            <li><b>Recompensa:</b> feedback inmediato.</li>
+            <li><b>Retorno:</b> recompensa acumulada en el tiempo.</li>
+          </ul>
+
+          <div class="panel__k">Ejemplos</div>
+          <ul class="panel__list">
+            <li><b>Humano:</b> aprender a montar en bici: nadie te dice qué mover exactamente, aprendes por caerte o avanzar.</li>
+            <li><b>Sistema:</b> mantener un vehículo en el carril.</li>
+            <li><b>Acciones:</b> girar, acelerar, frenar.</li>
+            <li><b>Recompensa:</b> centrado = +1, salirse = -1.</li>
+          </ul>
+
+          <div class="panel__k">Encaje</div>
+          <div class="panel__p">Problemas <b>secuenciales</b>, donde importa el efecto a largo plazo de las decisiones.</div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<style>
+  /* Container + theme tokens */
+  .ta-learn.ai-tabs{
+    --bg: var(--md-default-bg-color, #ffffff);
+    --fg: var(--md-default-fg-color, #0f172a);
+    --muted: color-mix(in srgb, var(--fg) 70%, transparent);
+    --border: color-mix(in srgb, var(--fg) 14%, transparent);
+    --accent: var(--md-primary-fg-color, #26A69A);
+    --accent2: color-mix(in srgb, var(--accent) 55%, #324AB2 45%);
+    --surface: color-mix(in srgb, var(--bg) 92%, #ffffff 8%);
+    --panel: color-mix(in srgb, var(--bg) 96%, #ffffff 4%);
+    --shadow: 0 14px 30px rgba(15, 23, 42, 0.12);
+
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 14px 60px;
+    background: var(--surface);
+    color: var(--fg);
+    position: relative;
+    overflow: hidden;
+  }
+  [data-md-color-scheme="slate"] .ta-learn.ai-tabs{
+    --bg: var(--md-default-bg-color, #0f172a);
+    --fg: var(--md-default-fg-color, #e2e8f0);
+    --muted: color-mix(in srgb, var(--fg) 74%, transparent);
+    --border: color-mix(in srgb, var(--fg) 18%, transparent);
+    --surface: color-mix(in srgb, var(--bg) 85%, #111827 15%);
+    --panel: color-mix(in srgb, var(--bg) 78%, #1f2937 22%);
+    --shadow: 0 20px 38px rgba(2, 6, 23, 0.45);
+  }
+
+  .ai-tabs__header{ margin-bottom: 10px; }
+  .ai-tabs__title{ font-weight: 900; font-size: 16px; letter-spacing: .01em; }
+  .ai-tabs__subtitle{ font-size: 13px; opacity: .85; margin-top: 4px; color: var(--muted); }
+
+  /* Tabs */
+  .ai-tabs__nav{ margin: 12px 0 12px 0; }
+  .ta-tablist{ display: flex; gap: 8px; flex-wrap: wrap; }
+  .ta-tab{
+    appearance: none;
+    border: 1px solid var(--border);
+    background: var(--panel);
+    color: var(--fg);
+    border-radius: 999px;
+    padding: 8px 12px;
+    font-weight: 900;
+    cursor: pointer;
+    user-select: none;
+    transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+  }
+  .ta-tab[aria-selected="true"], .ta-tab.on{
+    transform: translateY(-1px);
+    border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
+    box-shadow: var(--shadow);
+  }
+  .ta-tab:focus-visible{ outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 28%, transparent); }
+
+  /* Panels */
+  .ta-panels{ border-top: 1px dashed color-mix(in srgb, var(--accent) 30%, transparent); padding-top: 12px; }
+  .ta-panel[hidden]{ display: none; }
+
+  .ta-panel-grid{
+    display: grid;
+    grid-template-columns: minmax(320px, 1fr) minmax(340px, 1fr);
+    gap: 16px;
+    align-items: start;
+  }
+  @media (max-width: 980px){
+    .ta-panel-grid{ grid-template-columns: 1fr; }
+  }
+
+  /* RL: dar más aire a la columna de texto */
+  .ta-panel[data-panel="rl"] .ta-panel-grid{
+    grid-template-columns: minmax(320px, 0.92fr) minmax(420px, 1.08fr);
+  }
+
+  /* Topbar (señal + clave) */
+  .ta-topbar{
+    grid-column: 1 / -1;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 10px 12px;
+    background: linear-gradient(135deg,
+      color-mix(in srgb, var(--accent) 8%, var(--panel)),
+      var(--panel)
+    );
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+  .ta-topbar__lead,
+  .ta-topbar__key{
+    font-size: 13px;
+    line-height: 1.35;
+    color: color-mix(in srgb, var(--fg) 86%, transparent);
+  }
+  .ta-topbar__lead b,
+  .ta-topbar__key b{ font-weight: 950; }
+  .ta-topbar__key{ color: color-mix(in srgb, var(--fg) 82%, transparent); }
+  @media (min-width: 860px){
+    .ta-topbar{ grid-template-columns: 1.15fr 0.85fr; align-items: baseline; }
+    .ta-topbar__key{ justify-self: end; text-align: right; }
+  }
+
+  /* Copy */
+  .panel__k{
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    opacity: .78;
+    color: var(--muted);
+    margin: 10px 0 6px;
+    font-weight: 900;
+  }
+  .panel__p{ font-size: 14px; line-height: 1.5; }
+  .panel__list{ margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.5; }
+  .ta-learn code{
+    font-size: .95em;
+    padding: 1px 6px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: color-mix(in srgb, var(--bg) 88%, var(--accent) 6%);
+  }
+
+  /* Viz card */
+  .ta-viz{
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 12px;
+    background: linear-gradient(135deg,
+      color-mix(in srgb, var(--accent) 10%, var(--panel)),
+      color-mix(in srgb, var(--panel) 96%, transparent)
+    );
+    box-shadow: 0 1px 0 color-mix(in srgb, var(--fg) 7%, transparent) inset;
+  }
+  .ta-viz__top{ display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+  .ta-pill{
+    border: 1px solid var(--border);
+    background: color-mix(in srgb, var(--bg) 84%, transparent);
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 12px;
+    color: color-mix(in srgb, var(--fg) 86%, transparent);
+    font-weight: 800;
+  }
+
+  /* Flow */
+  .ta-flow{ display: grid; grid-template-columns: 1fr 18px 1fr 18px 1fr; gap: 8px; align-items: stretch; }
+  .ta-flow--wide{ grid-template-columns: 1.05fr 18px 1.25fr 18px 0.9fr; }
+  @media (max-width: 980px){ .ta-flow, .ta-flow--wide{ grid-template-columns: 1fr; } .ta-arrow{ display: none; } }
+
+  .ta-node{
+    border: 1px solid var(--border);
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    border-radius: 14px;
+    padding: 10px;
+    min-height: 72px;
+    display: grid;
+    align-content: center;
+    gap: 4px;
+  }
+  .ta-node--accent{
+    background: linear-gradient(180deg,
+      color-mix(in srgb, var(--accent2) 16%, var(--bg)),
+      color-mix(in srgb, var(--accent) 10%, var(--panel))
+    );
+    border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+  }
+  .ta-node__k{ font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 900; }
+  .ta-node__v{ font-size: 13px; font-weight: 900; }
+
+  .ta-arrow{ position: relative; width: 18px; }
+  .ta-arrow::before{ content: ""; position: absolute; top: 50%; left: 2px; right: 2px; height: 2px; background: color-mix(in srgb, var(--fg) 24%, transparent); transform: translateY(-50%); }
+  .ta-arrow::after{ content: ""; position: absolute; top: 50%; right: 2px; width: 8px; height: 8px; border-right: 2px solid color-mix(in srgb, var(--fg) 28%, transparent); border-top: 2px solid color-mix(in srgb, var(--fg) 28%, transparent); transform: translateY(-50%) rotate(45deg); }
+
+  /* Loop row */
+  .ta-loop{ margin-top: 10px; border-top: 1px dashed color-mix(in srgb, var(--fg) 18%, transparent); padding-top: 10px; }
+  .ta-loop__row{ display: flex; gap: 10px; align-items: baseline; }
+  .ta-chip{ display: inline-flex; align-items: center; border: 1px solid var(--border); border-radius: 999px; padding: 6px 10px; font-size: 12px; font-weight: 900; background: color-mix(in srgb, var(--bg) 84%, transparent); }
+  .ta-loop__txt{ font-size: 13px; color: color-mix(in srgb, var(--fg) 78%, transparent); line-height: 1.35; }
+
+  /* Mini visuals */
+  .ta-mini{ margin-top: 10px; display: grid; gap: 8px; }
+  .ta-mini__txt{ font-size: 13px; color: color-mix(in srgb, var(--fg) 78%, transparent); line-height: 1.35; }
+  .ta-mini__dots{ display: grid; grid-template-columns: repeat(10, 10px); gap: 6px; padding: 10px; border: 1px solid var(--border); border-radius: 14px; background: color-mix(in srgb, var(--bg) 86%, transparent); }
+  .ta-mini__dots .d{ width: 10px; height: 10px; border-radius: 999px; background: radial-gradient(circle at 30% 30%, color-mix(in srgb, var(--accent) 55%, #fff 45%), color-mix(in srgb, var(--accent2) 60%, #000 0%)); opacity: .9; }
+  .ta-mini__bar{ display: flex; gap: 6px; padding: 10px; border: 1px solid var(--border); border-radius: 14px; background: color-mix(in srgb, var(--bg) 86%, transparent); flex-wrap: wrap; }
+  .ta-mini__bar .t{ width: 14px; height: 8px; border-radius: 6px; background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 70%, transparent), color-mix(in srgb, var(--accent2) 65%, transparent)); opacity: .9; }
+
+  /* RL: upgraded */
+  .ta-viz--rl{
+    background: linear-gradient(135deg,
+      color-mix(in srgb, var(--accent2) 12%, var(--panel)),
+      color-mix(in srgb, var(--accent) 8%, var(--panel))
+    );
+  }
+  .ta-rlviz{
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: 12px;
+    align-items: stretch;
+  }
+  @media (max-width: 980px){
+    .ta-rlviz{ grid-template-columns: 1fr; }
+  }
+
+  .ta-rlviz__loop{
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 12px;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
+  }
+  .ta-rlviz__loop::before{
+    content: "";
+    position: absolute;
+    inset: -20px;
+    background:
+      radial-gradient(circle at 15% 20%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 55%),
+      radial-gradient(circle at 85% 80%, color-mix(in srgb, var(--accent2) 18%, transparent), transparent 55%);
+    opacity: .9;
+    pointer-events: none;
+  }
+  .ta-rlviz__loop > *{ position: relative; z-index: 1; }
+
+  .rl-node{
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 10px;
+    background: color-mix(in srgb, var(--bg) 92%, transparent);
+    display: grid;
+    gap: 4px;
+  }
+  .rl-node--agent{ border-color: color-mix(in srgb, var(--accent2) 45%, var(--border)); }
+  .rl-node--env{ border-color: color-mix(in srgb, var(--accent) 45%, var(--border)); }
+  .rl-k{ font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 950; }
+  .rl-v{ font-size: 13px; font-weight: 950; }
+
+  .rl-edge{
+    font-size: 12px;
+    color: color-mix(in srgb, var(--fg) 78%, transparent);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding-left: 2px;
+  }
+  .rl-edge::before{
+    content: "";
+    width: 16px;
+    height: 2px;
+    background: color-mix(in srgb, var(--fg) 22%, transparent);
+    border-radius: 2px;
+    position: relative;
+  }
+  .rl-edge::after{
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-right: 2px solid color-mix(in srgb, var(--fg) 28%, transparent);
+    border-top: 2px solid color-mix(in srgb, var(--fg) 28%, transparent);
+    transform: rotate(45deg);
+    margin-left: -10px;
+  }
+  .rl-edge--r::after{ transform: rotate(225deg); margin-left: 0; }
+  .rl-edge--r::before{ margin-left: 0; }
+
+  .ta-rlviz__env{
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 12px;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    display: grid;
+    gap: 10px;
+  }
+  .ta-lane{
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    height: 120px;
+    position: relative;
+    background:
+      linear-gradient(180deg, color-mix(in srgb, var(--bg) 88%, transparent), color-mix(in srgb, var(--bg) 82%, transparent));
+    overflow: hidden;
+  }
+  .ta-lane__line{
+    position: absolute;
+    top: 10px; bottom: 10px;
+    left: 50%;
+    width: 2px;
+    transform: translateX(-50%);
+    background: repeating-linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--fg) 22%, transparent) 0 10px,
+      transparent 10px 18px
+    );
+    opacity: .85;
+  }
+  .ta-gate{
+    position: absolute;
+    top: 14px; bottom: 14px;
+    width: 10px;
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--fg) 10%, transparent);
+  }
+  .ta-gate--left{ left: 18px; }
+  .ta-gate--right{ right: 18px; }
+
+  .ta-car{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 18px;
+    height: 28px;
+    transform: translate(-50%, -50%);
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 55%, var(--border));
+    background: linear-gradient(180deg,
+      color-mix(in srgb, var(--accent2) 18%, var(--bg)),
+      color-mix(in srgb, var(--accent) 10%, var(--panel))
+    );
+    box-shadow: 0 10px 22px rgba(15, 23, 42, 0.10);
+  }
+  .ta-car::before{
+    content: "";
+    position: absolute;
+    inset: 5px 4px auto 4px;
+    height: 6px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--bg) 80%, transparent);
+    opacity: .65;
+  }
+
+  .ta-rlhud{ display: grid; gap: 8px; }
+  .ta-rlhud__chip{
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 8px 10px;
+    background: color-mix(in srgb, var(--bg) 90%, transparent);
+    font-size: 12px;
+    color: color-mix(in srgb, var(--fg) 82%, transparent);
+  }
+  .ta-rlhud__chip b{ font-weight: 950; }
+
+  @media (prefers-reduced-motion: no-preference){
+    .ta-car{ animation: taCarWobble 2.6s ease-in-out infinite; }
+    .ta-lane__line{ animation: taLineFlow 1.8s linear infinite; }
+  }
+  @keyframes taCarWobble{
+    0%,100%{ transform: translate(-50%, -50%) translateX(0px); }
+    50%{ transform: translate(-50%, -50%) translateX(18px); }
+  }
+  @keyframes taLineFlow{
+    0%{ background-position: 0 0; }
+    100%{ background-position: 0 18px; }
+  }
+
+  /* Footer brand mark */
+  .ta-demo{
+    --ta-footer-border: rgba(15,23,42,.16);
+    --ta-footer-fg: rgba(15,23,42,.62);
+    font-family: "Avenir Next", "Avenir", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    isolation: isolate;
+  }
+  .ta-demo::before{
+    content: "5SIGMAS · Animation Library";
+    position: absolute;
+    left: 12px;
+    right: 138px;
+    bottom: 10px;
+    padding-top: 6px;
+    border-top: 1px solid var(--ta-footer-border);
+    color: var(--ta-footer-fg);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    line-height: 1.2;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .ta-demo::after{
+    content: "";
+    position: absolute;
+    right: 12px;
+    bottom: 8px;
+    width: 120px;
+    height: 30px;
+    background: url("/assets/logo.svg") no-repeat center / contain;
+    opacity: 0.08;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .ta-demo > *{ position: relative; z-index: 1; }
+  [data-md-color-scheme="slate"] .ta-demo{
+    --ta-footer-border: rgba(226,232,240,.24);
+    --ta-footer-fg: rgba(226,232,240,.72);
+  }
+  [data-md-color-scheme="slate"] .ta-demo::after{ background-image: url("/assets/logo_white.svg"); opacity: 0.10; }
+</style>
+
+<script>
+  // Tabs local (Canvas/preview). Idempotente y multi-instancia safe.
+  (function(){
+    const roots = document.querySelectorAll('.ta-learn[data-demo="tipos_aprendizaje"][data-anim-tabs]');
+    roots.forEach((root)=>{
+      if(root.__taTabsBound) return;
+      root.__taTabsBound = true;
+
+      const tabs = Array.from(root.querySelectorAll('.ta-tab[data-tab]'));
+      const panels = Array.from(root.querySelectorAll('.ta-panel[data-panel]'));
+      if(!tabs.length || !panels.length) return;
+
+      const setActive = (id, focusBtn=false) => {
+        tabs.forEach((b)=>{
+          const on = b.getAttribute('data-tab') === id;
+          b.setAttribute('aria-selected', on ? 'true' : 'false');
+          b.classList.toggle('on', on);
+          b.tabIndex = on ? 0 : -1;
+        });
+        panels.forEach((p)=>{
+          const on = p.getAttribute('data-panel') === id;
+          if(on) p.removeAttribute('hidden');
+          else p.setAttribute('hidden','');
+        });
+        if(focusBtn){
+          const btn = tabs.find(b=>b.getAttribute('data-tab') === id);
+          btn && btn.focus();
+        }
+      };
+
+      tabs.forEach((btn)=>{
+        btn.addEventListener('click', ()=> setActive(btn.getAttribute('data-tab')));
+        btn.addEventListener('keydown', (e)=>{
+          const k = e.key;
+          if(!['ArrowLeft','ArrowRight','Home','End'].includes(k)) return;
+          e.preventDefault();
+          const cur = Math.max(0, tabs.findIndex(b=>b.getAttribute('aria-selected')==='true'));
+          let nxt = cur;
+          if(k==='ArrowRight') nxt = (cur + 1) % tabs.length;
+          if(k==='ArrowLeft') nxt = (cur - 1 + tabs.length) % tabs.length;
+          if(k==='Home') nxt = 0;
+          if(k==='End') nxt = tabs.length - 1;
+          setActive(tabs[nxt].getAttribute('data-tab'), true);
+        });
+      });
+
+      const def = root.getAttribute('data-default') || 'sup';
+      const preset = tabs.find(b=>b.getAttribute('aria-selected')==='true')?.getAttribute('data-tab') || def;
+      setActive(preset);
+    });
+  })();
+</script>

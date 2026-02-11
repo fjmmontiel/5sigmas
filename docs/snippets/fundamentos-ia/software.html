@@ -1,0 +1,373 @@
+<!-- SNIPPET 1/2 — Software clásico (standalone, sin tabs) -->
+<div class="ta-demo s2 s2-classic" data-anim-contrast="force">
+  <div class="ta-tabs-header">
+    <div class="ta-tabs-title">Software clásico</div>
+    <div class="ta-tabs-subtitle">Datos de entrada + reglas escritas por humanos → salida.</div>
+  </div>
+
+  <div class="s2-inner">
+    <div class="ta-grid">
+      <div class="ta-viz">
+        <div class="s2-vizwrap">
+          <div class="s2-controls" aria-label="Controles del ejemplo clásico">
+            <label class="s2-label">
+              Fahrenheit <span class="s2-pill" data-s2="fClassicVal">98</span>
+            </label>
+            <input data-s2="fClassic" type="range" min="-40" max="212" value="98" step="1" aria-label="Fahrenheit" />
+            <div class="s2-readout">
+              <span class="s2-muted">Salida (Celsius):</span>
+              <span class="s2-big" data-s2="cClassicVal">36.7</span>
+            </div>
+          </div>
+
+          <svg
+            class="s2-svg"
+            data-s2="svg"
+            viewBox="0 0 820 320"
+            preserveAspectRatio="xMidYMid meet"
+            aria-label="Flujo software clásico: dato + reglas humanas → salida"
+            role="img"
+          >
+            <defs>
+              <linearGradient id="s2Glow" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="var(--ta-brand-accent)" stop-opacity="0.9"></stop>
+                <stop offset="1" stop-color="var(--ta-brand-primary)" stop-opacity="0.9"></stop>
+              </linearGradient>
+
+              <filter id="s2SoftShadow" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="rgba(0,0,0,0.28)" />
+              </filter>
+
+              <filter id="s2GlowFilter" x="-40%" y="-40%" width="180%" height="180%">
+                <feGaussianBlur stdDeviation="3.2" result="blur" />
+                <feColorMatrix
+                  type="matrix"
+                  values="
+                    1 0 0 0 0
+                    0 1 0 0 0
+                    0 0 1 0 0
+                    0 0 0 0.85 0"
+                  result="glow"
+                />
+                <feMerge>
+                  <feMergeNode in="glow" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+
+              <pattern id="s2Grid" width="16" height="16" patternUnits="userSpaceOnUse">
+                <path d="M16 0H0V16" fill="none" class="s2-gridline" />
+              </pattern>
+            </defs>
+
+            <!-- Background -->
+            <rect x="16" y="16" width="788" height="288" rx="18" fill="url(#s2Grid)" class="s2-bg" />
+            <rect x="16" y="16" width="788" height="288" rx="18" fill="none" class="s2-frame" />
+
+            <!-- Nodes -->
+            <g filter="url(#s2SoftShadow)">
+              <rect x="60" y="92" width="210" height="136" rx="16" class="s2-node" />
+              <rect x="305" y="82" width="250" height="156" rx="16" class="s2-node s2-node--code" />
+              <rect x="590" y="92" width="170" height="136" rx="16" class="s2-node" />
+            </g>
+
+            <!-- Titles -->
+            <text x="82" y="124" class="s2-h">Datos de entrada</text>
+            <text x="82" y="152" class="s2-t">Fahrenheit</text>
+            <text x="82" y="188" class="s2-mutedText">valor:</text>
+            <text x="130" y="190" class="s2-mono s2-value" data-s2="classicFText">98</text>
+
+            <text x="328" y="116" class="s2-h">Reglas escritas</text>
+            <text x="328" y="142" class="s2-mutedText">por humanos</text>
+
+            <!-- Code -->
+            <rect x="330" y="160" width="200" height="60" rx="12" class="s2-codebox" />
+            <text x="346" y="186" class="s2-mono s2-code">C = (F − 32) × 5/9</text>
+            <text x="346" y="208" class="s2-mono s2-code s2-code--dim">// regla fija</text>
+
+            <text x="612" y="124" class="s2-h">Salida</text>
+            <text x="612" y="152" class="s2-t">Celsius</text>
+            <text x="612" y="188" class="s2-mutedText">valor:</text>
+            <text x="660" y="190" class="s2-mono s2-value" data-s2="classicCText">36.7</text>
+
+            <!-- Arrows -->
+            <path d="M270 160 C 295 160, 295 160, 305 160" class="s2-arrow" />
+            <path d="M555 160 C 580 160, 580 160, 590 160" class="s2-arrow" />
+
+            <!-- Animated packets -->
+            <g data-s2="classicPackets" filter="url(#s2GlowFilter)">
+              <circle r="7" class="s2-packet s2-packet--a"></circle>
+              <circle r="5" class="s2-packet s2-packet--b"></circle>
+            </g>
+
+            <!-- Legend -->
+            <g class="s2-chip" transform="translate(40, 28)">
+              <rect x="0" y="0" width="320" height="34" rx="17" class="s2-chipbg" />
+              <circle cx="18" cy="17" r="6" fill="url(#s2Glow)"></circle>
+              <text x="34" y="22" class="s2-chiptext">Datos + reglas humanas → salida (determinista)</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <div class="ta-copy">
+        <div class="ta-card">
+          <div class="ta-card-k">Qué está pasando</div>
+          <div class="ta-card-v">
+            <ul class="s2-list">
+              <li><b>Entrada</b>: un dato (F).</li>
+              <li><b>Reglas</b>: código escrito por personas (la fórmula).</li>
+              <li><b>Salida</b>: resultado calculado al aplicar reglas.</li>
+            </ul>
+            <div class="ta-chips">
+              <span class="ta-chip">Reglas explícitas</span>
+              <span class="ta-chip">Reproducible</span>
+              <span class="ta-chip">Misma entrada → misma salida</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .s2 {
+      --s2-ink: color-mix(in srgb, var(--md-default-fg-color, #1f2937) 90%, transparent);
+      --s2-sub: color-mix(in srgb, var(--md-default-fg-color, #1f2937) 62%, transparent);
+      --s2-frame: color-mix(in srgb, var(--md-default-fg-color, #1f2937) 14%, transparent);
+      --s2-grid: color-mix(in srgb, var(--md-default-fg-color, #1f2937) 10%, transparent);
+
+      --s2-card: color-mix(in srgb, var(--md-default-bg-color, #ffffff) 92%, #0b1220 8%);
+      --s2-node: color-mix(in srgb, var(--md-default-bg-color, #ffffff) 86%, #0b1220 14%);
+      --s2-node2: color-mix(in srgb, var(--md-default-bg-color, #ffffff) 82%, #0b1220 18%);
+
+      --s2-teal: var(--ta-brand-primary, #14b8a6);
+      --s2-blue: var(--ta-brand-accent, #60a5fa);
+    }
+
+    [data-md-color-scheme="slate"] .s2 {
+      --s2-card: color-mix(in srgb, var(--md-default-bg-color, #0b1220) 84%, #ffffff 16%);
+      --s2-node: color-mix(in srgb, var(--md-default-bg-color, #0b1220) 78%, #ffffff 22%);
+      --s2-node2: color-mix(in srgb, var(--md-default-bg-color, #0b1220) 74%, #ffffff 26%);
+      --s2-frame: color-mix(in srgb, #e5e7eb 18%, transparent);
+      --s2-grid: color-mix(in srgb, #e5e7eb 12%, transparent);
+      --s2-ink: color-mix(in srgb, #e5e7eb 92%, transparent);
+      --s2-sub: color-mix(in srgb, #e5e7eb 68%, transparent);
+    }
+
+    .s2-inner { max-width: 1160px; margin: 0 auto; padding: 10px 6px 0; }
+    .s2 .ta-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      grid-auto-flow: row;
+      align-items: start;
+    }
+    .s2 .ta-viz, .s2 .ta-copy { min-width: 0; }
+    .s2 .ta-viz {
+      position: static !important;
+      inset: auto !important;
+      grid-area: auto !important;
+      max-width: 100%;
+    }
+    .s2 .ta-copy {
+      position: static !important;
+      inset: auto !important;
+      grid-area: auto !important;
+      max-width: 100%;
+    }
+    @media (max-width: 1020px) { .s2 .ta-grid { grid-template-columns: 1fr; } }
+
+    .s2 .ta-card {
+      background: color-mix(in srgb, var(--s2-card) 92%, transparent);
+      border: 1px solid var(--s2-frame);
+      border-radius: 16px;
+      padding: 12px;
+    }
+    .s2 .ta-card-k { font-weight: 900; letter-spacing: -0.01em; color: var(--s2-ink); margin-bottom: 6px; }
+    .s2 .ta-card-v { color: color-mix(in srgb, var(--s2-ink) 92%, transparent); }
+
+    .s2-vizwrap {
+      background:
+        radial-gradient(1200px 420px at 18% 10%, color-mix(in srgb, var(--s2-teal) 14%, transparent), transparent 58%),
+        radial-gradient(1000px 420px at 84% 20%, color-mix(in srgb, var(--s2-blue) 13%, transparent), transparent 60%);
+      border-radius: 18px;
+      padding: 12px;
+      border: 1px solid var(--s2-frame);
+    }
+
+    .s2-controls {
+      display: grid; gap: 8px;
+      padding: 10px 10px 12px;
+      border-radius: 14px;
+      background: color-mix(in srgb, var(--s2-card) 92%, transparent);
+      border: 1px solid var(--s2-frame);
+      margin-bottom: 10px;
+    }
+    .s2-label { font-weight: 800; color: var(--s2-ink); display: inline-flex; align-items: center; gap: 10px; line-height: 1; }
+    .s2-pill {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 46px; padding: 4px 10px; border-radius: 999px;
+      font-weight: 900;
+      background: color-mix(in srgb, var(--s2-teal) 18%, transparent);
+      border: 1px solid color-mix(in srgb, var(--s2-teal) 30%, transparent);
+      color: var(--s2-ink);
+    }
+    .s2-controls input[type="range"] { width: 100%; accent-color: var(--s2-teal); }
+    .s2-readout { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    .s2-muted { color: var(--s2-sub); font-weight: 650; }
+    .s2-big { font-weight: 950; font-size: 20px; letter-spacing: -0.02em; color: var(--s2-ink); }
+
+    .s2-svg { width: 100%; height: auto; display: block; }
+
+    .s2-bg { fill: transparent; }
+    .s2-gridline { stroke: var(--s2-grid); stroke-width: 1; opacity: 1; }
+    .s2-frame { stroke: var(--s2-frame); stroke-width: 1.2; }
+    .s2-node { fill: var(--s2-node); stroke: var(--s2-frame); stroke-width: 1.2; }
+    .s2-node--code { fill: var(--s2-node2); }
+
+    .s2-h { font-weight: 950; font-size: 16px; fill: var(--s2-ink); letter-spacing: -0.01em; }
+    .s2-t { font-weight: 750; font-size: 14px; fill: var(--s2-sub); }
+    .s2-mutedText { font-weight: 650; font-size: 12px; fill: var(--s2-sub); }
+    .s2-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+    .s2-value { font-weight: 950; font-size: 18px; fill: var(--s2-ink); }
+
+    .s2-codebox {
+      fill: color-mix(in srgb, var(--s2-blue) 10%, var(--s2-node2));
+      stroke: color-mix(in srgb, var(--s2-blue) 22%, var(--s2-frame));
+      stroke-width: 1.2;
+    }
+    .s2-code { font-size: 12.5px; font-weight: 900; fill: var(--s2-ink); }
+    .s2-code--dim { opacity: 0.65; font-weight: 750; }
+
+    .s2-arrow {
+      fill: none;
+      stroke: color-mix(in srgb, var(--s2-blue) 55%, var(--s2-frame));
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-dasharray: 7 9;
+      animation: s2Flow 1.6s linear infinite;
+      opacity: 0.9;
+    }
+    @keyframes s2Flow { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -34; } }
+
+    .s2-packet--a { fill: url(#s2Glow); }
+    .s2-packet--b { fill: color-mix(in srgb, var(--s2-blue) 60%, #fff 40%); opacity: 0.75; }
+
+    .s2-chipbg { fill: color-mix(in srgb, var(--s2-card) 88%, transparent); stroke: var(--s2-frame); stroke-width: 1.2; }
+    .s2-chiptext { font-size: 12.5px; font-weight: 900; fill: var(--s2-ink); }
+
+    .s2-list { margin: 0; padding-left: 18px; color: color-mix(in srgb, var(--md-default-fg-color, #1f2937) 86%, transparent); }
+    .s2-list li { margin: 6px 0; }
+  </style>
+
+  <script>
+    (function () {
+      const root = document.currentScript.closest(".ta-demo.s2-classic");
+      if (!root) return;
+
+      const svg = root.querySelector('[data-s2="svg"]');
+
+      // --- Scope SVG ids (avoid collisions across multiple instances) ---
+      function scopeSvgIds(svgEl, ids) {
+        if (!svgEl) return;
+        const uid = "s2-" + Math.random().toString(16).slice(2, 10);
+        const map = new Map();
+        for (const oldId of ids) {
+          const el = svgEl.querySelector("#" + CSS.escape(oldId));
+          if (!el) continue;
+          const newId = uid + "-" + oldId;
+          el.setAttribute("id", newId);
+          map.set(oldId, newId);
+        }
+        const attrs = ["fill", "stroke", "filter", "clip-path", "mask", "href", "xlink:href"];
+        for (const node of svgEl.querySelectorAll("*")) {
+          for (const a of attrs) {
+            const v = node.getAttribute(a);
+            if (!v) continue;
+            let out = v;
+            for (const [oldId, newId] of map) out = out.replaceAll(`url(#${oldId})`, `url(#${newId})`).replaceAll(`#${oldId}`, `#${newId}`);
+            if (out !== v) node.setAttribute(a, out);
+          }
+        }
+      }
+      scopeSvgIds(svg, ["s2Glow", "s2SoftShadow", "s2GlowFilter", "s2Grid"]);
+
+      // ---------- Utilities ----------
+      const lerp = (a, b, t) => a + (b - a) * t;
+      const fmt1 = (x) => (Math.round(x * 10) / 10).toFixed(1);
+
+      function polyPoint(points, t) {
+        let lengths = [], total = 0;
+        for (let i = 0; i < points.length - 1; i++) {
+          const dx = points[i + 1].x - points[i].x;
+          const dy = points[i + 1].y - points[i].y;
+          const d = Math.hypot(dx, dy);
+          lengths.push(d); total += d;
+        }
+        let dist = t * total;
+        for (let i = 0; i < lengths.length; i++) {
+          if (dist <= lengths[i]) {
+            const local = lengths[i] === 0 ? 0 : dist / lengths[i];
+            return { x: lerp(points[i].x, points[i + 1].x, local), y: lerp(points[i].y, points[i + 1].y, local) };
+          }
+          dist -= lengths[i];
+        }
+        return points[points.length - 1];
+      }
+
+      const ui = {
+        slider: root.querySelector('[data-s2="fClassic"]'),
+        fVal: root.querySelector('[data-s2="fClassicVal"]'),
+        cVal: root.querySelector('[data-s2="cClassicVal"]'),
+        fText: root.querySelector('[data-s2="classicFText"]'),
+        cText: root.querySelector('[data-s2="classicCText"]'),
+        packets: root.querySelector('[data-s2="classicPackets"]'),
+      };
+
+      const path = [
+        { x: 250, y: 160 },
+        { x: 305, y: 160 },
+        { x: 555, y: 160 },
+        { x: 590, y: 160 },
+      ];
+
+      function CfromF(F) { return (F - 32) * (5 / 9); }
+
+      function update() {
+        const F = Number(ui.slider.value);
+        const C = CfromF(F);
+        ui.fVal.textContent = String(F);
+        ui.cVal.textContent = fmt1(C);
+        ui.fText.textContent = String(F);
+        ui.cText.textContent = fmt1(C);
+      }
+
+      let rafId = null;
+
+      function animate(now) {
+        if (ui.packets) {
+          const phase = (now * 0.00022) % 1;
+          const pA = polyPoint(path, phase);
+          const pB = polyPoint(path, (phase + 0.42) % 1);
+          const kids = ui.packets.children;
+          if (kids[0]) { kids[0].setAttribute("cx", pA.x); kids[0].setAttribute("cy", pA.y); }
+          if (kids[1]) { kids[1].setAttribute("cx", pB.x); kids[1].setAttribute("cy", pB.y); }
+        }
+        rafId = requestAnimationFrame(animate);
+      }
+
+      ui.slider?.addEventListener("input", update);
+      update();
+      rafId = requestAnimationFrame(animate);
+
+      const ro = new MutationObserver(() => {
+        if (!document.body.contains(root)) {
+          cancelAnimationFrame(rafId);
+          ro.disconnect();
+        }
+      });
+      ro.observe(document.body, { childList: true, subtree: true });
+    })();
+  </script>
+</div>

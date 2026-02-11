@@ -9,7 +9,7 @@
        - data-seed="..."   (deterministic init)
 -->
 
-<div class="nn-tabs ta-tabs" data-tabs data-default="linear">
+<div class="nn-tabs ta-tabs" data-anim-tabs data-default="linear" data-anim-contrast="auto">
   <div class="nn-tablist ta-tablist" data-role="tablist" aria-label="Neural network demos">
     <button class="nn-tab ta-tab" type="button" data-role="tab" aria-selected="true" data-tab="linear">Linear: °C →
       °F</button>
@@ -19,15 +19,15 @@
       tan(x/2)</button>
   </div>
 
-  <div class="nn-panel ta-panel" role="tabpanel" data-panel="linear">
+  <div class="nn-panel ta-panel" data-panel="linear">
     <div class="nn-demo ta-demo" data-demo="nn:linear" data-seed="42" data-stop="0.1" data-focus="20"></div>
   </div>
 
-  <div class="nn-panel ta-panel" role="tabpanel" data-panel="sine" hidden>
+  <div class="nn-panel ta-panel" data-panel="sine" hidden>
     <div class="nn-demo ta-demo" data-demo="nn:sine" data-seed="7" data-stop="1e-6" data-focus="1.57079632679"></div>
   </div>
 
-  <div class="nn-panel ta-panel" role="tabpanel" data-panel="exptan" hidden>
+  <div class="nn-panel ta-panel" data-panel="exptan" hidden>
     <div class="nn-demo ta-demo" data-demo="nn:exptan" data-seed="13" data-stop="1e-2" data-focus="1.0"></div>
   </div>
 </div>
@@ -797,7 +797,7 @@
         return {
           kind,
           title: 'Entrenamiento visible: aprender °C → °F',
-          subtitle: 'Modelo: <b>F̂ = a·C + b</b> · Real: <b>F = 1.8·C + 32</b>',
+          subtitle: 'Qué se ajusta: pesos y sesgos · Señal: pérdida (MSE) · Actualización: gradiente + Adam · Modelo: <b>F̂ = a·C + b</b> · Real: <b>F = 1.8·C + 32</b>',
           plot: { xMin: -10, xMax: 40, yMin: fTrue(-10) - 5, yMax: fTrue(40) + 5, labelX: 'C (°C)', labelY: 'F (°F)', trueLegend: '1.8·C+32', modelLegend: 'F̂', samples: 220 },
           net: { layers: [1, 1, 1], labels: ['Entrada', 'Red', 'Salida'] },
           minSteps: 25,
@@ -853,7 +853,7 @@
         return {
           kind,
           title: 'Entrenamiento visible: aproximar sin(x)',
-          subtitle: 'Ejemplo: <b>x = π/2</b> → <b>y = 1</b> · Modelo: <b>MLP 1–10–10–1 (tanh)</b>',
+          subtitle: 'Qué se ajusta: pesos y sesgos · Señal: pérdida (MSE) · Actualización: gradiente + Adam · Ejemplo: <b>x = π/2</b> → <b>y = 1</b> · Modelo: <b>MLP 1–10–10–1 (tanh)</b>',
           plot: { xMin: -Math.PI, xMax: Math.PI, yMin: -1.25, yMax: 1.25, labelX: 'x', labelY: 'y', trueLegend: 'sin x', modelLegend: 'ŷ', samples: 300 },
           net: { layers: [1, 10, 10, 1], labels: ['Entrada', 'Red (1)', 'Red (2)', 'Salida'] },
           minSteps: 300,
@@ -895,7 +895,7 @@
       return {
         kind,
         title: 'Entrenamiento visible: aproximar e^x · tan(x/2)',
-        subtitle: 'Ejemplo: <b>x = 1</b> → y ≈ <b>e·tan(0.5)</b> · Modelo: <b>MLP 1–18–18–1 (tanh)</b> (con normalización)',
+        subtitle: 'Qué se ajusta: pesos y sesgos · Señal: pérdida (MSE) · Actualización: gradiente + Adam · Ejemplo: <b>x = 1</b> → y ≈ <b>e·tan(0.5)</b> · Modelo: <b>MLP 1–18–18–1 (tanh)</b> (con normalización)',
         plot: { xMin, xMax, yMin: -6, yMax: 32, labelX: 'x', labelY: 'y', trueLegend: 'e^x·tan(x/2)', modelLegend: 'ŷ', samples: 340 },
         net: { layers: [1, 18, 18, 1], labels: ['Entrada', 'Red (1)', 'Red (2)', 'Salida'] },
         minSteps: 520,

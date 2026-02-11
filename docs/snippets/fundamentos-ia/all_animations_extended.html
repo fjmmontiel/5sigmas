@@ -6,8 +6,8 @@
   - Al cambiar de tab, se pausa cualquier demo que estuviera animándose en tabs ocultos.
 -->
 
-<div class="ml-tabs ta-tabs" data-tabs data-default="tree">
-  <div class="ml-tablist ta-tablist" data-role="tablist" aria-label="Classic ML demos">
+<div class="ml-tabs ta-tabs" data-anim-tabs data-default="tree" data-anim-contrast="auto">
+  <div class="ml-tablist ta-tablist" role="tablist" data-role="tablist" aria-label="Classic ML demos">
     <button class="ml-tab ta-tab" type="button" data-role="tab" aria-selected="true" data-tab="tree">Árboles: decidir
       con preguntas</button>
     <button class="ml-tab ta-tab" type="button" data-role="tab" aria-selected="false" data-tab="nb">Naive Bayes:
@@ -2711,6 +2711,12 @@
         if (cfg.kind === "nb") { recomputeNB(cfg, st); updateTokensUI(); }
         updateMetrics();
         repaint();
+        requestAnimationFrame(() => {
+          if (!root.isConnected) return;
+          tuneTreeCanvasWidth();
+          updateMetrics();
+          repaint();
+        });
 
         root.__mlDemo = {
           __inited: true,

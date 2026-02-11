@@ -1,5 +1,5 @@
 <!-- Paste this whole block as-is. It includes the updated SVG + CSS + JS. -->
-<div class="sigmas-dcspace" data-animate="off">
+<div class="sigmas-dcspace" data-animate="off" data-anim-contrast="auto">
   <div class="sigmas-dcspace__head">
     <div class="sigmas-dcspace__title">Infografía: El Futuro de la IA y el Límite Térmico de la Tierra</div>
     <div class="sigmas-dcspace__sub">
@@ -179,12 +179,15 @@
   .sigmas-dcspace {
     border: 1px solid rgba(160, 190, 255, .15);
     border-radius: 28px;
-    padding: 28px;
+    padding: 24px;
     background: linear-gradient(160deg, #080C1C, #04060E);
     backdrop-filter: blur(20px);
     box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6);
-    margin: 35px 0;
-    font-family: system-ui, -apple-system, sans-serif;
+    margin: 0;
+    width: 100%;
+    max-width: none;
+    box-sizing: border-box;
+    font-family: var(--ta-brand-font, "Avenir Next", "Avenir", "Segoe UI", "Helvetica Neue", Arial, sans-serif);
     color: #E8F0FF;
     overflow: hidden;
     position: relative;
@@ -210,6 +213,9 @@
 
   .sigmas-dcspace__viz {
     margin-top: 16px;
+    border-radius: 18px;
+    overflow: auto;
+    border: 1px solid rgba(160, 190, 255, 0.18);
   }
 
   .sigmas-dcspace__viz svg {
@@ -217,7 +223,7 @@
     height: auto;
     display: block;
     filter: saturate(1.15);
-    border-radius: 16px;
+    min-width: 760px;
   }
 
   .sigmas-dcspace__foot {
@@ -287,6 +293,10 @@
 
     .sigmas-dcspace__sub {
       font-size: 13px;
+    }
+
+    .sigmas-dcspace__viz svg {
+      min-width: 640px;
     }
   }
 </style>
