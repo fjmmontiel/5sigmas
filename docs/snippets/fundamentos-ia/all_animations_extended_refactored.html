@@ -6,7 +6,7 @@
   - Al cambiar de tab, se pausa cualquier demo que estuviera animándose en tabs ocultos.
 -->
 
-<div class="ml-tabs" data-tabs data-default="tree">
+<div class="ml-tabs" data-anim-tabs data-default="tree" data-anim-contrast="auto">
   <div class="ml-tablist" data-role="tablist" aria-label="Classic ML demos">
     <button class="ml-tab" type="button" data-role="tab" aria-selected="true" data-tab="tree">Árboles: decidir con
       preguntas</button>
@@ -16,15 +16,15 @@
       etiquetas</button>
   </div>
 
-  <div class="ml-panel" role="tabpanel" data-panel="tree">
+  <div class="ml-panel" data-panel="tree">
     <div class="ml-demo" data-demo="ml:tree" data-seed="12" data-stop="0.99"></div>
   </div>
 
-  <div class="ml-panel" role="tabpanel" data-panel="nb" hidden>
+  <div class="ml-panel" data-panel="nb" hidden>
     <div class="ml-demo" data-demo="ml:nb" data-seed="4"></div>
   </div>
 
-  <div class="ml-panel" role="tabpanel" data-panel="kmeans" hidden>
+  <div class="ml-panel" data-panel="kmeans" hidden>
     <div class="ml-demo" data-demo="ml:kmeans" data-seed="21"></div>
   </div>
 </div>
@@ -683,7 +683,7 @@
         return {
           kind,
           title: "Árbol de decisión: aprobar un préstamo con preguntas simples",
-          subtitle: "Clasificación (APROBADO / RECHAZADO). El árbol busca <b>preguntas</b> “¿x &lt; t?” que reduzcan la mezcla (Gini).",
+          subtitle: "Aprende cortes (preguntas) que reducen mezcla (Gini). Clasificación (APROBADO / RECHAZADO).",
           plot: {
             xMin: 0, xMax: 1, yMin: 0, yMax: 1,
             labelX: "x = ingresos (0=bajos, 1=altos)",
@@ -726,7 +726,7 @@
         return {
           kind,
           title: "Naive Bayes: filtrar SPAM con probabilidades",
-          subtitle: "Clasificación de texto (SPAM / NO-SPAM). Aprende <b>contando palabras</b> y aplica Bayes (sin gradientes).",
+          subtitle: "Aprende conteos → probabilidades (Bayes). Clasificación de texto (SPAM / NO-SPAM).",
           frameDelayMs: 52,
           stepsPerFrame: 1,
           alpha: 1.0,
@@ -756,7 +756,7 @@
       return {
         kind: "kmeans",
         title: "K-means: segmentar clientes sin etiquetas",
-        subtitle: "Clustering (agrupar). No hay “y” real: solo cercanía. Alterna asignar → promediar hasta converger.",
+        subtitle: "Aprende centros minimizando inercia. Clustering (agrupar): alterna asignar → promediar hasta converger.",
         plot: {
           xMin: 0, xMax: 1, yMin: 0, yMax: 1,
           labelX: "x = frecuencia de compra (0–1)",
@@ -2535,6 +2535,12 @@
         if (cfg.kind === "nb") { recomputeNB(cfg, st); updateTokensUI(); }
         updateMetrics();
         repaint();
+        requestAnimationFrame(() => {
+          if (!root.isConnected) return;
+          tuneTreeCanvasWidth();
+          updateMetrics();
+          repaint();
+        });
 
         root.__mlDemo = {
           __inited: true,

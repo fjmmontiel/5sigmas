@@ -1,0 +1,51 @@
+<!--
+  5SIGMAS Animation Boilerplate (Tabs)
+  Include with: {{ include_html("snippets/<path>.html") }}
+  Fullscreen is on by default. Set data-anim-fullscreen="off" to disable.
+-->
+
+<div class="ta-demo ta-tabs demo-slug" data-anim-tabs data-default="tab1" data-anim-fullscreen="on" data-anim-contrast="force">
+  <section class="ta-section ta-section--header">
+    <div class="ta-tabs-title">Titulo de la animacion</div>
+    <div class="ta-tabs-subtitle">Resumen breve de lo que explica esta demo.</div>
+  </section>
+
+  <section class="ta-section ta-section--tabs">
+    <div class="ta-tablist" role="tablist" aria-label="Secciones de la animacion">
+      <button class="ta-tab" type="button" role="tab" aria-selected="true" data-tab="tab1">Tab 1</button>
+      <button class="ta-tab" type="button" role="tab" aria-selected="false" data-tab="tab2">Tab 2</button>
+    </div>
+
+    <div class="ta-panels">
+      <section class="ta-panel" role="tabpanel" data-panel="tab1">
+        <div class="ta-grid">
+          <div class="ta-vizbox">Visual principal</div>
+          <div class="ta-card">
+            <div class="ta-card-k">Interpretacion</div>
+            <div class="ta-card-v">Explica el comportamiento de la animacion en este tab.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="ta-panel" role="tabpanel" data-panel="tab2" hidden>
+        <div class="ta-grid">
+          <div class="ta-vizbox">Visual alternativo</div>
+          <div class="ta-card">
+            <div class="ta-card-k">Comparativa</div>
+            <div class="ta-card-v">Describe que cambia respecto al primer tab.</div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <section class="ta-section ta-section--notes">
+    <div class="ta-card-k">Notas</div>
+    <div class="ta-card-v">Puedes anadir notas operativas, supuestos o limitaciones.</div>
+  </section>
+</div>
+
+<!--
+  If you add custom CSS, scope every selector with `.demo-slug` to avoid cross-snippet style leakage.
+  Example: `.demo-slug .demo-copy { ... }`
+-->

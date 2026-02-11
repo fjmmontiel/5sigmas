@@ -5,7 +5,7 @@
 // - Compatible with MkDocs Material "instant navigation" via document$.subscribe.
 //
 // Contract:
-//   - Tabs container: [data-tabs] (recommended). Back-compat: .nn-tabs, .ml-tabs
+//   - Tabs container: [data-anim-tabs]
 //   - Tab buttons:   [data-tab] (aria-selected handled)
 //   - Panels:        [data-panel] (hidden toggled)
 //   - Demo roots:    [data-demo]  (supports "ns:kind" or "kind")
@@ -207,8 +207,7 @@
     flushQueue();
     cleanupDetached();
 
-    // Explicit opt-in recommended: [data-tabs]
-    document.querySelectorAll("[data-tabs], .nn-tabs, .ml-tabs").forEach(initTabs);
+    document.querySelectorAll("[data-anim-tabs]").forEach(initTabs);
   }
 
   // Listen for color palette changes

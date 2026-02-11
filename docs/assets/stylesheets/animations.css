@@ -197,3 +197,91 @@
         grid-template-columns: 1fr;
     }
 }
+
+.ta-generic {
+    display: grid;
+    gap: 12px;
+}
+
+.ta-section {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.02);
+}
+
+[data-md-color-scheme="slate"] .ta-section {
+    border-color: rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.ta-section--header {
+    padding-bottom: 8px;
+}
+
+.ta-vizbox {
+    border: 1px dashed rgba(0, 0, 0, 0.18);
+    border-radius: 10px;
+    min-height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.03);
+    font-size: 13px;
+    color: rgba(0, 0, 0, 0.66);
+    text-align: center;
+    padding: 10px;
+}
+
+[data-md-color-scheme="slate"] .ta-vizbox {
+    border-color: rgba(255, 255, 255, 0.22);
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.76);
+}
+
+/* Animation Shell (Fullscreen wrapper) */
+.anim-brand-shell {
+    position: relative;
+    display: block;
+}
+
+.anim-brand-shell__viewport {
+    position: relative;
+    width: 100%;
+}
+
+/* Open button (hidden by default, shown by JS if fullscreen=on) */
+[data-anim-shell-open] {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 20;
+    appearance: none;
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    color: #0f172a;
+    backdrop-filter: blur(4px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+}
+
+[data-anim-shell-open]:hover {
+    background: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+[data-md-color-scheme="slate"] [data-anim-shell-open] {
+    background: rgba(15, 23, 42, 0.85);
+    border-color: rgba(255, 255, 255, 0.15);
+    color: #e2e8f0;
+}
+
+[data-md-color-scheme="slate"] [data-anim-shell-open]:hover {
+    background: #1e293b;
+}

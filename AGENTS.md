@@ -17,19 +17,16 @@ Construir y mantener una librería de animaciones HTML reutilizable para explica
 - `docs/snippets/`: snippets HTML embebibles; aquí viven animaciones consumidas por Markdown.
 - `docs/assets/`: logos, JS/CSS compartidos y recursos visuales.
 - `docs/series/`: series en Markdown (no alterar contenido editorial sin pedido).
-- `drafts/`: fuentes de trabajo y componentes de animaciones en evolución.
-- `library/sources/`: fuentes HTML base por animación.
-- `library/components/shared/`: estilo corporativo compartido.
-- `library/components/animations/<nombre>/`: componentes reutilizables (`markup/style/script`).
-- `scripts/`: herramientas de composición y validación (`compose_animations.py`, `validate_animation_branding.py`, etc.).
+- `drafts/`: fuentes de trabajo y prototipos en evolución.
+- `docs/assets/templates/`: plantillas base para nuevas animaciones/snippets.
+- `scripts/`: herramientas de scaffold y validación (`scaffold_tabbed_animation.py`, `validate_animation_branding.py`).
 - `tests/`: pruebas unitarias y de regresión de snippets/scripts.
-- `Makefile`: flujo estándar de instalación, build, composición y checks.
+- `Makefile`: flujo estándar de instalación, validación y build.
 
 ## Uso operativo con Makefile
 - `make install`: crea `.venv` e instala dependencias base.
-- `make compose-animations`: compone snippets de animaciones desde componentes.
 - `make check-animation-branding`: valida branding e inclusión correcta de snippets de animación.
-- `make build`: ejecuta composición + checks + `mkdocs build --strict`.
+- `make build`: ejecuta checks + `mkdocs build --strict`.
 - `make serve`: levanta servidor local MkDocs.
 
 ## Estándar de librería de animaciones (company style)
@@ -38,53 +35,97 @@ Toda animación nueva o refactorizada debe:
 - compartir paleta corporativa (variables/tokens comunes),
 - incluir watermark de logo,
 - incluir footer corporativo consistente,
-- ser reusable vía componentes (`markup/style/script`) y/o utilidades de composición.
+- ser reusable como snippet HTML independiente e incluible vía macro.
 
-## Guía enfocada: crear animaciones con componentes
+## Guía enfocada: crear animaciones HTML con include_html
 ### Objetivo de este flujo
 - Construir animaciones tipo tab (selector + contenido) reutilizables, consistentes y compatibles con MkDocs.
-- Garantizar inyección automática de branding y soporte light/dark desde componentes compartidos.
+- Garantizar inyección automática de branding y soporte light/dark con el toggle nativo de Material.
 
 ### Estructura actual obligatoria
-- Fuentes base: `library/sources/<nombre>.html`
-- Componentes por animación:
-  - `library/components/animations/<nombre>/markup.html`
-  - `library/components/animations/<nombre>/style.html`
-  - `library/components/animations/<nombre>/script.html`
-- Branding compartido inyectado:
-  - `library/components/shared/style.html`
-- Snippets compuestos de salida:
-  - `docs/snippets/ia_ml_dl.html` (caso especial)
-  - `docs/snippets/animaciones/<nombre>.html` (resto)
+- Snippet fuente:
+  - `docs/snippets/<dominio>/<nombre>.html`
+- Plantilla base:
+  - `docs/assets/templates/animation_boilerplate_tabs.html`
+  - `docs/assets/templates/animation_boilerplate_generic.html`
+- Branding compartido inyectado por macro:
+  - `main.py` (`include_html(...)` envuelve snippets de animación en `anim-brand-shell`)
+- Estilos compartidos:
+  - `docs/stylesheets/extra.css`
+  - `docs/assets/stylesheets/animations.css`
 
 ### Reglas de implementación de nuevas animaciones
+- Las animaciones deben consumirse exclusivamente vía `include_html(...)` en Markdown.
 - El patrón de UI debe ser tab-like:
   - contenedor de tabs con `role="tablist"`,
   - selector por tab (`data-tab`),
   - panel de contenido por tab (`data-panel`).
-- El contenedor visual de la demo debe usar clase `ta-demo` para heredar branding común.
-- No duplicar branding en cada animación (tipografía, watermark, footer): se define en `components/shared/style.html`.
+- El snippet no debe duplicar shell corporativo global; el branding se inyecta desde `include_html(...)`.
+- Fullscreen es `on` por defecto y puede controlarse con `anim_fullscreen` en `include_html(...)` o con `data-anim-fullscreen` en el snippet.
+- Precedencia de fullscreen: `anim_fullscreen` (include) > `data-anim-fullscreen` (snippet) > default `on`.
 - Reutilizar tokens de marca (`--ta-*`) para acentos/focus/estado activo y dark mode.
 - Mantener compatibilidad con tema oscuro usando selectores `[data-md-color-scheme="slate"]`.
 
 ### Flujo operativo recomendado
-1. Crear la animación desde componentes (o usar scaffold).
-2. Componer snippets:
-   - `python3 scripts/compose_animations.py`
-3. Validar branding/tab-pattern:
+1. Crear/editar el snippet HTML en `docs/snippets/...` (o usar scaffold).
+2. Validar branding/tab-pattern:
    - `python3 scripts/validate_animation_branding.py`
-4. Validar build completo:
+3. Validar build completo:
    - `make build`
-5. Incluir en Markdown usando:
-   - `{{ include_animation("snippets/animaciones/<nombre>.html") }}`
+4. Incluir en Markdown usando:
+   - `{{ include_html("snippets/<dominio>/<nombre>.html") }}`
 
 ### Auto-descubrimiento y pipeline
-- `scripts/compose_animations.py` descubre automáticamente animaciones nuevas en `library/sources` y `library/components/animations`.
-- No se debe mantener una lista manual de animaciones en el script.
 - CI/CD y build local deben ejecutar siempre `make build` para forzar:
-  - composición,
   - validación de branding,
   - build MkDocs estricto.
+
+## Generación y gestión de cualquier HTML
+### Vías permitidas de creación
+- Boilerplate tabs: `docs/assets/templates/animation_boilerplate_tabs.html`
+- Boilerplate generic: `docs/assets/templates/animation_boilerplate_generic.html`
+- Camino libre: snippet HTML propio en `docs/snippets/<dominio>/<nombre>.html` (sin duplicar shell global).
+
+### Scaffold recomendado
+- Crear snippet con plantilla tabs:
+  - `python3 scripts/scaffold_tabbed_animation.py --name <nombre> --kind tabs`
+- Crear snippet con plantilla generic:
+  - `python3 scripts/scaffold_tabbed_animation.py --name <nombre> --kind generic`
+
+### Contrato mínimo de snippet
+- El root del snippet debe declarar:
+  - `data-anim-fullscreen="off"` (o `"on"` si se habilita modal global).
+  - `data-anim-contrast="force"` para contraste automático robusto.
+- No insertar logos/footer manuales.
+- No usar estilos/JS globales fuera del scope del snippet.
+
+### Contrato de include_html y shell global
+- Todo snippet HTML de `docs/snippets/**` se inyecta por `include_html(...)`.
+- El shell global (`anim-brand-shell`) añade:
+  - viewport estándar de contenido,
+  - footer "5SIGMAS · Animation Library",
+  - tipografía/tokens corporativos,
+  - soporte light/dark nativo Material,
+  - fullscreen opcional por `data-anim-fullscreen="on"`.
+- Snippets estructurales excluidos del shell por defecto:
+  - `snippets/5sigma.html`
+  - `snippets/series_cards.html`
+  - `snippets/series_meta.html`
+- La lista de descartadas/excluidas se mantiene en `main.py` (`SHELL_EXCLUDED_SNIPPETS`) y AGENTS debe reflejarla sin divergencias.
+- Overrides disponibles en macro:
+  - `anim_shell="on|off|auto"`
+  - `anim_fullscreen="on|off"`
+  - `anim_contrast="force|auto|off"`
+
+### Gestión, migración y mantenimiento
+- Si un snippet legado no cumple el contrato, migrarlo manualmente y validar antes de merge.
+- Si cambia el esquema global del shell, migrar snippets afectados en la misma iteración.
+- No mezclar refactor visual masivo con cambios funcionales sin aprobación explícita.
+
+### Checklist obligatorio por cambio
+1. `python3 scripts/validate_animation_branding.py`
+2. `make build`
+3. Tests relevantes (`.venv/bin/python -m pytest -q` o subset justificable)
 
 ## Regla de implementación
 - Cambios mínimos, diffs pequeños y verificables.
@@ -111,24 +152,22 @@ Una tarea se considera terminada cuando:
 - Define tabs mínimas necesarias (sin sobrecargar): cada tab debe responder una pregunta clara.
 - Mantén nombres consistentes para `data-demo`, `data-tab`, `data-panel`.
 
-### 2) Estructura obligatoria de componentes
+### 2) Estructura obligatoria de archivos
 - Crea/edita siempre en:
-  - `library/components/animations/<nombre>/markup.html`
-  - `library/components/animations/<nombre>/style.html`
-  - `library/components/animations/<nombre>/script.html`
-- Usa `library/sources/<nombre>.html` como fuente base/backup para bootstrap.
-- No mezclar lógica nueva directamente en `docs/snippets/*` (son outputs compuestos).
+  - `docs/snippets/<dominio>/<nombre>.html`
+  - opcionalmente partir de `docs/assets/templates/animation_boilerplate_tabs.html` o `docs/assets/templates/animation_boilerplate_generic.html`
+- El snippet en `docs/snippets/*` es fuente de verdad, no output generado.
 
 ### 3) Patrón UI recomendado (tab-like)
 - Debe existir:
   - contenedor con `role="tablist"`,
   - botones/tab con `data-tab`,
   - paneles con `data-panel`.
-- Integra con runtime compartido cuando aplique (`data-tabs`) para comportamiento uniforme.
+- Integra con runtime compartido cuando aplique (`data-anim-tabs`) para comportamiento uniforme.
 
 ### 4) Branding y tema (no duplicar)
-- Toda demo debe incluir clase `ta-demo` en el contenedor raíz de la animación.
-- Reutiliza tokens de branding `--ta-*` desde `library/components/shared/style.html`.
+- El branding shell global se inyecta con `include_html(...)`; no replicarlo manualmente dentro del snippet.
+- Reutiliza tokens de branding `--ta-*` desde los estilos compartidos.
 - No hardcodear paleta/estados de focus/active si ya existe token equivalente.
 - Soporte dark mode obligatorio con `[data-md-color-scheme="slate"]`.
 
@@ -144,12 +183,10 @@ Una tarea se considera terminada cuando:
 - Mantén contraste suficiente en light/dark.
 
 ### 7) Flujo operativo de desarrollo
-1. Implementar cambios en `library/components/animations/<nombre>/...`.
-2. Componer outputs:
-   - `python3 scripts/compose_animations.py`
-3. Validar reglas branding/tabs/dark mode:
+1. Implementar cambios en `docs/snippets/<dominio>/<nombre>.html`.
+2. Validar reglas branding/tabs/dark mode:
    - `python3 scripts/validate_animation_branding.py`
-4. Validar pipeline completo:
+3. Validar pipeline completo:
    - `make build`
 
 ### 8) Testing y Definition of Done
@@ -161,8 +198,8 @@ Una tarea se considera terminada cuando:
 - Si falla una validación, no cerrar tarea hasta corregir componente + documentación.
 
 ### 9) Anti-patrones a evitar
-- Editar manualmente `docs/snippets/...` como fuente principal.
 - Duplicar CSS de branding en cada animación.
+- Incluir shell manual dentro del snippet (`anim-brand-shell`, `data-anim-shell`, `data-anim-shell-open`) en animaciones no descartadas.
 - Introducir variaciones visuales fuera de los tokens compartidos sin aprobación.
 - Cambiar estructura de carpetas o contratos del pipeline sin actualizar `AGENTS.md` y tests.
 - Intervenir el toggle de tema nativo de MkDocs Material con hacks/custom JS sin aprobación explícita.

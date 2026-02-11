@@ -1,4 +1,5 @@
-<div class="mlops-walkthrough" data-mk="root" data-default="datos" data-autoplay="true" data-interval="3400">
+<div class="mlops-walkthrough" data-mk="root" data-default="datos" data-autoplay="true" data-interval="3400"
+  data-anim-contrast="auto">
   <style>
     .mlops-walkthrough {
       --bg: #0b1220;
@@ -11,8 +12,8 @@
       --chip: rgba(255, 255, 255, .04);
       --chip2: rgba(255, 255, 255, .08);
       --hint: rgba(255, 255, 255, .62);
-      --accent: #86efac;
-      --accent2: #60a5fa;
+      --accent: color-mix(in srgb, var(--ta-brand-primary, #26A69A) 70%, #86efac 30%);
+      --accent2: var(--ta-brand-accent, #324AB2);
       --warn: #fbbf24;
       --glowTop: rgba(255, 255, 255, .07);
       --glowBot: rgba(255, 255, 255, .03);
@@ -41,7 +42,7 @@
       padding: 14px;
       box-shadow: 0 10px 30px var(--shadow);
       overflow: hidden;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      font-family: var(--ta-brand-font, "Avenir Next", "Avenir", "Segoe UI", "Helvetica Neue", Arial, sans-serif);
     }
 
     .mlops-walkthrough[data-theme="light"] {
@@ -461,21 +462,21 @@
   </div>
 
   <div class="mlops-steps" data-role="tablist" aria-label="Pasos de MLOps">
-    <button class="mlops-step" type="button" data-role="tab" data-step="datos" aria-selected="true"><span
+    <button class="mlops-step" type="button" data-step="datos" aria-selected="true"><span
         class="n">1</span><span>Datos</span></button>
-    <button class="mlops-step" type="button" data-role="tab" data-step="preparar" aria-selected="false"><span
+    <button class="mlops-step" type="button" data-step="preparar" aria-selected="false"><span
         class="n">2</span><span>Preparar</span></button>
-    <button class="mlops-step" type="button" data-role="tab" data-step="entrenar" aria-selected="false"><span
+    <button class="mlops-step" type="button" data-step="entrenar" aria-selected="false"><span
         class="n">3</span><span>Entrenar</span></button>
-    <button class="mlops-step" type="button" data-role="tab" data-step="evaluar" aria-selected="false"><span
+    <button class="mlops-step" type="button" data-step="evaluar" aria-selected="false"><span
         class="n">4</span><span>Evaluar</span></button>
-    <button class="mlops-step" type="button" data-role="tab" data-step="registrar" aria-selected="false"><span
+    <button class="mlops-step" type="button" data-step="registrar" aria-selected="false"><span
         class="n">5</span><span>Versionar</span></button>
-    <button class="mlops-step" type="button" data-role="tab" data-step="desplegar" aria-selected="false"><span
+    <button class="mlops-step" type="button" data-step="desplegar" aria-selected="false"><span
         class="n">6</span><span>Desplegar</span></button>
-    <button class="mlops-step" type="button" data-role="tab" data-step="monitorizar" aria-selected="false"><span
+    <button class="mlops-step" type="button" data-step="monitorizar" aria-selected="false"><span
         class="n">7</span><span>Monitorizar</span></button>
-    <button class="mlops-step" type="button" data-role="tab" data-step="feedback" aria-selected="false"><span
+    <button class="mlops-step" type="button" data-step="feedback" aria-selected="false"><span
         class="n">8</span><span>Feedback</span></button>
   </div>
 
@@ -546,7 +547,7 @@
 
     </div>
 
-    <div class="mlops-panel" role="tabpanel" aria-live="polite" data-mk="panel">
+    <div class="mlops-panel" aria-live="polite" data-mk="panel">
       <h4 data-mk="h">Paso</h4>
       <p data-mk="p">Descripción</p>
 

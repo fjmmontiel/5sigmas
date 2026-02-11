@@ -7,9 +7,9 @@ def _read():
     return FILE.read_text(encoding="utf-8")
 
 
-def test_tabs_container_has_data_tabs():
+def test_tabs_container_has_data_anim_tabs():
     content = _read()
-    assert 'class="nn-tabs" data-tabs' in content
+    assert 'class="nn-tabs" data-anim-tabs' in content
 
 
 def test_demo_keys_namespaced():

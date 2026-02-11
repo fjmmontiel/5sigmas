@@ -40,6 +40,7 @@ nav:
   - Series:
       - Fundamentos de IA e IA generativa:
           - Presentación: series/fundamentos-ia-iag/00_presentacion_serie.md
+          - ¿Qué es la IA?: series/fundamentos-ia-iag/01_draft.md
       - De las cavernas a la AGI:
           - Presentación: series/from-cave-to-agi/00_presentacion_serie.md
       - Multimodalidad en IA Generativa:
@@ -77,7 +78,9 @@ markdown_extensions:
 
 extra_javascript:
   - javascripts/external-links.js
+  - assets/javascripts/animation-shell.js
   - assets/javascripts/site-demos.js
+  - assets/javascripts/tabbed-animations.js
   - https://unpkg.com/mermaid@10/dist/mermaid.min.js
   - javascripts/mermaid-init.js
   - javascripts/mathjax.js
@@ -86,6 +89,7 @@ extra_javascript:
   - assets/javascripts/series_energy_ai_local.js
 extra_css:
   - stylesheets/extra.css
+  - assets/stylesheets/animations.css
   - assets/stylesheets/series_energy_ai_preview.css
 
 plugins:

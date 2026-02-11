@@ -6,6 +6,129 @@ except ModuleNotFoundError:
 import math
 import re
 
+ANIMATION_SNIPPET_PREFIXES = (
+    "snippets/fundamentos-ia/",
+    "snippets/ia-pib-energia/",
+    "snippets/datacenters-espacio/",
+    "snippets/animaciones/",
+)
+SHELL_EXCLUDED_SNIPPETS = {
+    "snippets/5sigma.html",
+    "snippets/series_cards.html",
+    "snippets/series_meta.html",
+}
+
+
+def _is_animation_snippet(path):
+    if not path:
+        return False
+    normalized = str(path).strip().replace("\\", "/")
+    if any(normalized.startswith(prefix) for prefix in ANIMATION_SNIPPET_PREFIXES):
+        return True
+    return normalized.endswith("_anim.html")
+
+
+def _normalize_on_off(value, default="off"):
+    if value is None:
+        return default
+    normalized = str(value).strip().lower()
+    if normalized in ("on", "true", "1", "yes"):
+        return "on"
+    if normalized in ("off", "false", "0", "no"):
+        return "off"
+    return default
+
+
+def _normalize_shell_mode(value, default="auto"):
+    if value is None:
+        return default
+    normalized = str(value).strip().lower()
+    if normalized in ("auto", "on", "off"):
+        return normalized
+    if normalized in ("true", "1", "yes"):
+        return "on"
+    if normalized in ("false", "0", "no"):
+        return "off"
+    return default
+
+
+def _normalize_contrast_mode(value, default="force"):
+    if value is None:
+        return default
+    normalized = str(value).strip().lower()
+    if normalized in ("force", "auto", "off"):
+        return normalized
+    return default
+
+
+def _resolve_fullscreen_mode(html, explicit_value=None):
+    if explicit_value is not None:
+        return _normalize_on_off(explicit_value, default="on")
+    if re.search(r'data-anim-fullscreen\s*=\s*["\']?(off|false|0)["\']?', html, flags=re.IGNORECASE):
+        return "off"
+    if re.search(r'data-anim-fullscreen\s*=\s*["\']?(on|true|1)["\']?', html, flags=re.IGNORECASE):
+        return "on"
+    return "on"
+
+
+def _resolve_contrast_mode(html, explicit_value=None):
+    if explicit_value is not None:
+        return _normalize_contrast_mode(explicit_value, default="force")
+    match = re.search(r'data-anim-contrast\s*=\s*["\']?([a-z]+)["\']?', html, flags=re.IGNORECASE)
+    if match:
+        return _normalize_contrast_mode(match.group(1), default="force")
+    return "force"
+
+
+def _is_html_snippet(path):
+    normalized = str(path or "").strip().replace("\\", "/")
+    return normalized.startswith("snippets/") and normalized.endswith(".html")
+
+
+def _has_existing_shell(html):
+    checks = (
+        "data-anim-shell",
+        "class=\"anim-brand-shell",
+        "class='anim-brand-shell",
+    )
+    return any(marker in html for marker in checks)
+
+
+def _is_shell_excluded_snippet(path):
+    normalized = str(path or "").strip().replace("\\", "/")
+    return normalized in SHELL_EXCLUDED_SNIPPETS
+
+
+def _should_wrap_with_shell(path, html, shell_mode="auto"):
+    mode = _normalize_shell_mode(shell_mode, default="auto")
+    if mode == "off":
+        return False
+    if _has_existing_shell(html):
+        return False
+    if mode == "on":
+        return True
+    if _is_shell_excluded_snippet(path):
+        return False
+    return _is_html_snippet(path) or _is_animation_snippet(path)
+
+
+def _wrap_animation_shell(html, variant="default", fullscreen="off", contrast="force"):
+    safe_variant = re.sub(r"[^a-zA-Z0-9_-]", "", str(variant or "default")) or "default"
+    safe_fullscreen = _normalize_on_off(fullscreen, default="off")
+    safe_contrast = _normalize_contrast_mode(contrast, default="force")
+    button_hidden_attr = "" if safe_fullscreen == "on" else " hidden"
+    return (
+        f'<section class="anim-brand-shell" data-anim-shell data-anim-variant="{safe_variant}" '
+        f'data-anim-fullscreen="{safe_fullscreen}" data-anim-contrast="{safe_contrast}">'
+        '<div class="anim-brand-shell__toolbar">'
+        f'<button type="button" class="anim-brand-shell__btn" data-anim-shell-open '
+        f'aria-label="Abrir animacion en pantalla completa"{button_hidden_attr}>Pantalla completa</button>'
+        "</div>"
+        f'<div class="anim-brand-shell__viewport">{html}</div>'
+        "</section>"
+    )
+
+
 def _count_series_total(series_dirname):
     series_dirname = series_dirname.lower()
     base_dir = os.path.join(os.path.dirname(__file__), "docs/series", series_dirname)
@@ -167,27 +290,44 @@ def define_env(env):
         if not os.path.isfile(snippet_path):
             return f"<!-- Snippet not found: {path} -->"
 
+        template_kwargs = dict(kwargs)
+        anim_variant = template_kwargs.pop("anim_variant", "default")
+        anim_fullscreen = template_kwargs.pop("anim_fullscreen", None)
+        anim_shell = template_kwargs.pop("anim_shell", "auto")
+        anim_contrast = template_kwargs.pop("anim_contrast", None)
+
         with open(snippet_path, "r", encoding="utf-8") as f:
             html = f.read()
 
-        if kwargs:
-            if "series_dir" in kwargs:
-                done = _count_series_done(kwargs["series_dir"])
-                total = _count_series_total(kwargs["series_dir"])
-                total = max(total, done)
-                if total == 0:
-                    progress_text = "0/0"
-                    aria_max = 1
-                else:
-                    progress_text = f"{done}/{total}"
-                    aria_max = total
-                kwargs.setdefault("progress_done", done)
-                kwargs.setdefault("progress_total", total)
-                kwargs.setdefault("progress_text", progress_text)
-                kwargs.setdefault("data_progress", progress_text)
-                kwargs.setdefault("aria_valuenow", done)
-                kwargs.setdefault("aria_valuemax", aria_max)
-            return _render_template(html, kwargs)
+        if template_kwargs and "series_dir" in template_kwargs:
+            done = _count_series_done(template_kwargs["series_dir"])
+            total = _count_series_total(template_kwargs["series_dir"])
+            total = max(total, done)
+            if total == 0:
+                progress_text = "0/0"
+                aria_max = 1
+            else:
+                progress_text = f"{done}/{total}"
+                aria_max = total
+            template_kwargs.setdefault("progress_done", done)
+            template_kwargs.setdefault("progress_total", total)
+            template_kwargs.setdefault("progress_text", progress_text)
+            template_kwargs.setdefault("data_progress", progress_text)
+            template_kwargs.setdefault("aria_valuenow", done)
+            template_kwargs.setdefault("aria_valuemax", aria_max)
+
+        if template_kwargs:
+            html = _render_template(html, template_kwargs)
+
+        if _should_wrap_with_shell(path, html, shell_mode=anim_shell):
+            fullscreen_mode = _resolve_fullscreen_mode(html, explicit_value=anim_fullscreen)
+            contrast_mode = _resolve_contrast_mode(html, explicit_value=anim_contrast)
+            return _wrap_animation_shell(
+                html,
+                variant=anim_variant,
+                fullscreen=fullscreen_mode,
+                contrast=contrast_mode,
+            )
 
         return html
 
