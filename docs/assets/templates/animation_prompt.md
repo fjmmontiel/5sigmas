@@ -15,11 +15,12 @@ Use the following prompt when you want to generate a new animation for the 5sigm
 **Technical Requirements:**
 1. **Single File**: Output a single HTML snippet (no external files except the global assets).
 2. **Include Policy**: The snippet must be consumed via `include_html(...)` only; do not use or suggest the legacy `include_animation` macro.
-3. **Global Assets**: Do NOT include CSS for tabs, branding shell, modal, or core layout. These are provided by `animations.css`, `extra.css`, `tabbed-animations.js`, and `animation-shell.js`.
+3. **Global Assets**: You may rely on shared assets when embedded in MkDocs, but the snippet must still render/behave when opened standalone (`file://`), using local fallback CSS/JS where needed.
 4. **Internal Logic**: You can include a `<script>` tag for specific visualization logic (SVG animations, counters, canvas) and a `<style>` tag for styles *unique* to this specific visualization.
-5. **Dark Mode**: Use `[data-md-color-scheme="slate"]` selectors and shared tokens to ensure automatic adaptation with Material native toggle.
-6. **Responsive**: The layout must work on mobile (use `ta-grid` or `flex-wrap`).
-7. **Style Scope (critical)**: Scope every snippet-specific selector under a unique root class for that snippet (e.g., `.demo-fund-ml ...`). Never define bare global selectors like `.ta-copy`, `.ta-viz`, `.ta-card`, `.ta-grid`, `svg`, `button`.
+5. **Portability**: The snippet must be usable standalone. If it uses tabs and depends on a shared runtime, include a local fallback init path when `window.TabbedAnimations` is absent.
+6. **Dark Mode**: Use `[data-md-color-scheme="slate"]` selectors and shared tokens to ensure automatic adaptation with Material native toggle.
+7. **Responsive**: The layout must work on mobile (use `ta-grid` or `flex-wrap`).
+8. **Style Scope (critical)**: Scope every snippet-specific selector under a unique root class for that snippet (e.g., `.demo-fund-ml ...`). Never define bare global selectors like `.ta-copy`, `.ta-viz`, `.ta-card`, `.ta-grid`, `svg`, `button`.
 
 ---
 
@@ -98,6 +99,9 @@ Use this for single infographics:
 **Critical: Branding, Footer & Fullscreen**
 - The global shell is injected by `include_html(...)` and guarantees the footer "5SIGMAS · Animation Library".
 - Never embed `anim-brand-shell`, `data-anim-shell`, or `data-anim-shell-open` manually inside the snippet.
+- Never embed footer/logo branding manually (`.ta-demo::before`, `.ta-demo::after`, `/assets/logo.svg`, `/assets/logo_white.svg`).
+- Do not implement a local fullscreen button, overlay, or modal inside the snippet; fullscreen is centralized in the global shell.
+- For tabs, include keyboard/click behavior in the snippet itself or via an explicit local fallback block.
 - Keep content inside your snippet container (`ta-demo` + `ta-section`); do not rely on fixed positioning to paint outside.
 - Fullscreen is enabled by default; use `anim_fullscreen="off"` in `include_html(...)` or `data-anim-fullscreen="off"` in snippet only when needed.
 - Fullscreen precedence is: include arg `anim_fullscreen` > snippet `data-anim-fullscreen` > default `on`.

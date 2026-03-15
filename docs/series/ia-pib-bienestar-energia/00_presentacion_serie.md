@@ -1,6 +1,6 @@
 ---
 title: IA, PIB, bienestar y energía
-description: Cómo energía e IA afectan productividad, bienestar y métricas reales.
+description: Impacto cuantitativo de la IA en energía, productividad y bienestar. Análisis con datos reales del Banco Mundial, IEA y Penn World Table, sin proyecciones especulativas.
 ---
 # IA, PIB, bienestar y energía
 

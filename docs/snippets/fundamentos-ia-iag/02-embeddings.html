@@ -1,0 +1,308 @@
+<div class="emb-wrap" data-demo="02-embeddings">
+  <div class="emb-hd">
+    <div class="emb-title">El significado como geometría</div>
+    <div class="emb-sub">Cada palabra se convierte en un vector — una posición en un espacio de significado aprendido. Palabras con contextos similares acaban cerca. Palabras distintas, lejos.</div>
+  </div>
+
+  <div class="emb-clusters">
+    <div class="emb-cluster emb-cluster--royals">
+      <div class="emb-cluster-label">Realeza</div>
+      <div class="emb-cluster-words">
+        <span class="emb-word">Rey</span>
+        <span class="emb-word">Reina</span>
+        <span class="emb-word">Príncipe</span>
+        <span class="emb-word">Corona</span>
+      </div>
+    </div>
+    <div class="emb-gap">
+      <div class="emb-gap-line"></div>
+      <div class="emb-gap-label">lejos</div>
+      <div class="emb-gap-line"></div>
+    </div>
+    <div class="emb-cluster emb-cluster--tech">
+      <div class="emb-cluster-label">Tecnología</div>
+      <div class="emb-cluster-words">
+        <span class="emb-word">Ordenador</span>
+        <span class="emb-word">Software</span>
+        <span class="emb-word">Datos</span>
+        <span class="emb-word">Algoritmo</span>
+      </div>
+    </div>
+    <div class="emb-gap">
+      <div class="emb-gap-line"></div>
+      <div class="emb-gap-label">lejos</div>
+      <div class="emb-gap-line"></div>
+    </div>
+    <div class="emb-cluster emb-cluster--nature">
+      <div class="emb-cluster-label">Minería</div>
+      <div class="emb-cluster-words">
+        <span class="emb-word">Carbón</span>
+        <span class="emb-word">Mineral</span>
+        <span class="emb-word">Mina</span>
+        <span class="emb-word">Piedra</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="emb-arith">
+    <div class="emb-arith-hd">Aritmética vectorial</div>
+    <div class="emb-eq">
+      <span class="emb-tok emb-tok--b">Rey</span>
+      <span class="emb-op">−</span>
+      <span class="emb-tok">hombre</span>
+      <span class="emb-op">+</span>
+      <span class="emb-tok">mujer</span>
+      <span class="emb-op">≈</span>
+      <span class="emb-tok emb-tok--b emb-tok--result">Reina</span>
+    </div>
+    <div class="emb-arith-note">El modelo no entiende estas palabras. Aprende que coexisten en contextos similares y les asigna posiciones vecinas en el espacio vectorial.</div>
+  </div>
+
+  <div class="emb-cards">
+    <div class="emb-card">
+      <div class="emb-card-k">Embedding</div>
+      <p>Una lista de números que codifica la posición de una palabra en el espacio de significado aprendido durante el entrenamiento.</p>
+    </div>
+    <div class="emb-card emb-card--hl">
+      <div class="emb-card-k">Por que funciona</div>
+      <p>Palabras en contextos parecidos acaban con vectores cercanos. La geometría emerge sola de millones de ejemplos.</p>
+    </div>
+    <div class="emb-card">
+      <div class="emb-card-k">Base universal</div>
+      <p>Texto, imágenes y audio se convierten a vectores antes de procesarse. Una misma arquitectura sirve para modalidades distintas.</p>
+    </div>
+  </div>
+</div>
+
+<style>
+.emb-wrap, .emb-wrap * { box-sizing: border-box; }
+
+.emb-wrap {
+  --ea: var(--md-primary-fg-color, #26A69A);
+  --eb: #324AB2;
+  --eg: var(--md-accent-fg-color, #FFB343);
+  --ebg: var(--md-default-bg-color, #fff);
+  --efg: var(--md-default-fg-color, #0f172a);
+  --ebd: rgba(15,23,42,.16);
+  --emut: rgba(15,23,42,.60);
+  --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid;
+  gap: 12px;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--ebd);
+  border-radius: 20px;
+  background:
+    radial-gradient(110% 140% at 10% 0%, color-mix(in srgb,var(--eb) 8%,transparent), transparent 52%),
+    radial-gradient(90% 120% at 90% 0%, color-mix(in srgb,var(--eg) 8%,transparent), transparent 54%),
+    var(--ebg);
+  color: var(--efg);
+  font-family: var(--ef);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-md-color-scheme="slate"] .emb-wrap {
+  --ebg: var(--md-default-bg-color, #0f172a);
+  --efg: var(--md-default-fg-color, #e2e8f0);
+  --ebd: rgba(226,232,240,.16);
+  --emut: rgba(226,232,240,.60);
+}
+
+.emb-hd { display: grid; gap: 5px; }
+
+.emb-title {
+  font-size: clamp(17px,2.2vw,24px);
+  font-weight: 900;
+  letter-spacing: -.02em;
+  line-height: 1.1;
+}
+
+.emb-sub {
+  font-size: 14px;
+  color: var(--emut);
+  line-height: 1.5;
+  max-width: 72ch;
+}
+
+/* Clusters */
+.emb-clusters {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr;
+  gap: 8px;
+  align-items: stretch;
+  border: 1px solid var(--ebd);
+  border-radius: 16px;
+  padding: 14px;
+  background: color-mix(in srgb, var(--ebg) 88%, #0f172a 12%);
+}
+
+.emb-cluster {
+  border: 1px solid var(--ebd);
+  border-radius: 14px;
+  padding: 12px;
+  display: grid;
+  gap: 8px;
+  align-content: start;
+}
+
+.emb-cluster--royals {
+  border-color: color-mix(in srgb,var(--eb) 34%,var(--ebd));
+  background: color-mix(in srgb,var(--eb) 9%,var(--ebg));
+}
+.emb-cluster--tech {
+  border-color: color-mix(in srgb,var(--ea) 34%,var(--ebd));
+  background: color-mix(in srgb,var(--ea) 9%,var(--ebg));
+}
+.emb-cluster--nature {
+  border-color: color-mix(in srgb,var(--eg) 34%,var(--ebd));
+  background: color-mix(in srgb,var(--eg) 9%,var(--ebg));
+}
+
+.emb-cluster-label {
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--emut);
+}
+
+.emb-cluster-words {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.emb-word {
+  padding: 4px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--ebd);
+  background: color-mix(in srgb, var(--ebg) 88%, transparent);
+  font-size: 12.5px;
+  font-weight: 700;
+}
+
+.emb-gap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 0 2px;
+}
+
+.emb-gap-line {
+  flex: 1;
+  width: 1px;
+  background: var(--ebd);
+  min-height: 12px;
+}
+
+.emb-gap-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--emut);
+  white-space: nowrap;
+  writing-mode: vertical-rl;
+}
+
+/* Arithmetic */
+.emb-arith {
+  border: 1px solid var(--ebd);
+  border-radius: 14px;
+  padding: 14px 16px;
+  background: color-mix(in srgb, var(--ebg) 92%, #0f172a 8%);
+  display: grid;
+  gap: 10px;
+}
+
+.emb-arith-hd {
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--emut);
+}
+
+.emb-eq {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.emb-tok {
+  padding: 6px 13px;
+  border-radius: 999px;
+  border: 1px solid var(--ebd);
+  background: color-mix(in srgb, var(--ebg) 86%, transparent);
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.emb-tok--b {
+  border-color: color-mix(in srgb,var(--eb) 40%,var(--ebd));
+  background: color-mix(in srgb,var(--eb) 12%,var(--ebg));
+}
+
+.emb-tok--result {
+  box-shadow: 0 0 0 2px color-mix(in srgb,var(--eb) 36%,transparent);
+  font-weight: 900;
+}
+
+.emb-op {
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--emut);
+}
+
+.emb-arith-note {
+  font-size: 13px;
+  color: var(--emut);
+  line-height: 1.45;
+  font-style: italic;
+}
+
+/* Cards */
+.emb-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 10px;
+}
+
+.emb-card {
+  border: 1px solid var(--ebd);
+  border-radius: 14px;
+  padding: 14px;
+  background: color-mix(in srgb, var(--ebg) 94%, #0f172a 6%);
+}
+
+.emb-card--hl {
+  border-color: color-mix(in srgb,var(--eb) 28%,var(--ebd));
+  background:
+    linear-gradient(135deg, color-mix(in srgb,var(--eb) 9%,transparent), transparent 68%),
+    color-mix(in srgb, var(--ebg) 94%, #0f172a 6%);
+}
+
+.emb-card-k {
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--emut);
+  margin-bottom: 7px;
+}
+
+.emb-card p { margin: 0; font-size: 13.5px; line-height: 1.5; }
+
+@media (max-width: 620px) {
+  .emb-clusters { grid-template-columns: 1fr; }
+  .emb-gap { flex-direction: row; }
+  .emb-gap-label { writing-mode: horizontal-tb; }
+  .emb-gap-line { flex: 1; height: 1px; width: auto; min-height: unset; }
+  .emb-cards { grid-template-columns: 1fr; }
+}
+</style>

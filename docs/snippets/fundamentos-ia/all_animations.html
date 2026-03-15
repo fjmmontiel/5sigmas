@@ -10,12 +10,12 @@
 -->
 
 <div class="nn-tabs ta-tabs" data-anim-tabs data-default="linear" data-anim-contrast="auto">
-  <div class="nn-tablist ta-tablist" data-role="tablist" aria-label="Neural network demos">
-    <button class="nn-tab ta-tab" type="button" data-role="tab" aria-selected="true" data-tab="linear">Linear: °C →
+  <div class="nn-tablist ta-tablist" data-role="tablist" aria-label="Demos de redes neuronales">
+    <button class="nn-tab ta-tab" type="button" data-role="tab" aria-selected="true" data-tab="linear">Lineal: °C →
       °F</button>
-    <button class="nn-tab ta-tab" type="button" data-role="tab" aria-selected="false" data-tab="sine">Non-linear:
+    <button class="nn-tab ta-tab" type="button" data-role="tab" aria-selected="false" data-tab="sine">No lineal:
       sin(x)</button>
-    <button class="nn-tab ta-tab" type="button" data-role="tab" aria-selected="false" data-tab="exptan">Complex: e^x ·
+    <button class="nn-tab ta-tab" type="button" data-role="tab" aria-selected="false" data-tab="exptan">Complejo: e^x ·
       tan(x/2)</button>
   </div>
 
@@ -366,73 +366,6 @@
   }
 </style>
 
-<style>
-  .ta-demo {
-    --ta-brand-primary: var(--md-primary-fg-color, #26A69A);
-    --ta-brand-accent: #324AB2;
-    --ta-brand-warm: var(--md-accent-fg-color, #FFB343);
-    --ta-brand-ink: #0F172A;
-    --ta-brand-focus: rgba(50, 74, 178, .24);
-    --ta-brand-active: rgba(50, 74, 178, .14);
-    --ta-brand-active-border: rgba(50, 74, 178, .55);
-    --ta-brand-font: "Avenir Next", "Avenir", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-    --ta-footer-border: rgba(15, 23, 42, .16);
-    --ta-footer-fg: rgba(15, 23, 42, .62);
-    position: relative;
-    font-family: var(--ta-brand-font);
-    isolation: isolate;
-  }
-
-  .ta-demo::before {
-    content: "5SIGMAS · Animation Library";
-    position: absolute;
-    left: 12px;
-    right: 138px;
-    bottom: 10px;
-    padding-top: 6px;
-    border-top: 1px solid var(--ta-footer-border);
-    color: var(--ta-footer-fg);
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-    line-height: 1.2;
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  .ta-demo::after {
-    content: "";
-    position: absolute;
-    right: 12px;
-    bottom: 8px;
-    width: 120px;
-    height: 30px;
-    background: url("/assets/logo.svg") no-repeat center / contain;
-    opacity: 0.08;
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  .ta-demo>* {
-    position: relative;
-    z-index: 1;
-  }
-
-  [data-md-color-scheme="slate"] .ta-demo {
-    --ta-brand-accent: #78C8FF;
-    --ta-brand-focus: rgba(120, 200, 255, .28);
-    --ta-brand-active: rgba(120, 200, 255, .16);
-    --ta-brand-active-border: rgba(120, 200, 255, .62);
-    --ta-footer-border: rgba(226, 232, 240, .24);
-    --ta-footer-fg: rgba(226, 232, 240, .72);
-  }
-
-  [data-md-color-scheme="slate"] .ta-demo::after {
-    background-image: url("/assets/logo_white.svg");
-    opacity: 0.10;
-  }
-</style>
 <style>
   .ta-tabs {
     margin: 16px 0;
@@ -1578,12 +1511,84 @@
       }
     };
 
+    const __portableTabsFallback = (() => {
+      function parseMeta(el) {
+        const raw = String((el && el.dataset && el.dataset.demo) || "").trim();
+        const idx = raw.indexOf(":");
+        if (idx >= 0) return { key: raw, ns: raw.slice(0, idx), kind: raw.slice(idx + 1) };
+        return { key: raw, ns: "", kind: raw };
+      }
+
+      function ensureDemo(el) {
+        if (!el || el.__portableNNInited) return;
+        const meta = parseMeta(el);
+        if (meta.ns && meta.ns !== "nn") return;
+        initDemo(el, meta);
+        el.__portableNNInited = true;
+      }
+
+      function showPanel(container, key) {
+        const tabs = Array.from(container.querySelectorAll("[data-tab]"));
+        const panels = Array.from(container.querySelectorAll("[data-panel]"));
+        tabs.forEach((tab) => {
+          const on = tab.dataset.tab === key;
+          tab.setAttribute("aria-selected", on ? "true" : "false");
+        });
+        panels.forEach((panel) => {
+          const on = panel.dataset.panel === key;
+          panel.hidden = !on;
+          if (on) panel.querySelectorAll("[data-demo]").forEach(ensureDemo);
+        });
+      }
+
+      function bindTabs(container) {
+        if (!container || container.__portableTabsInited) return;
+        container.__portableTabsInited = true;
+
+        const tabs = Array.from(container.querySelectorAll("[data-tab]"));
+        if (!tabs.length) return;
+        const defaultKey = (container.dataset.default || tabs[0].dataset.tab || "").trim();
+
+        container.addEventListener("click", (ev) => {
+          const btn = ev.target.closest("[data-tab]");
+          if (!btn || !container.contains(btn)) return;
+          showPanel(container, btn.dataset.tab || defaultKey);
+        });
+
+        container.addEventListener("keydown", (ev) => {
+          const btn = ev.target.closest("[data-tab]");
+          if (!btn || !container.contains(btn)) return;
+          const i = tabs.indexOf(btn);
+          if (i < 0) return;
+          let j = -1;
+          if (ev.key === "ArrowRight") j = (i + 1) % tabs.length;
+          else if (ev.key === "ArrowLeft") j = (i - 1 + tabs.length) % tabs.length;
+          else if (ev.key === "Home") j = 0;
+          else if (ev.key === "End") j = tabs.length - 1;
+          else return;
+          ev.preventDefault();
+          tabs[j].focus();
+          showPanel(container, tabs[j].dataset.tab || defaultKey);
+        });
+
+        showPanel(container, defaultKey);
+      }
+
+      function initAll() {
+        document.querySelectorAll("[data-anim-tabs]").forEach((container) => {
+          if (!container.querySelector('[data-demo^="nn:"]')) return;
+          bindTabs(container);
+        });
+      }
+
+      return { initAll };
+    })();
+
     if (window.TabbedAnimations) {
       __attachTabbed(window.TabbedAnimations);
       window.TabbedAnimations.initAll();
     } else {
-      window.__TAQ__ = window.__TAQ__ || [];
-      window.__TAQ__.push(__attachTabbed);
+      __portableTabsFallback.initAll();
     }
   })();
 </script>

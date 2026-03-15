@@ -1,6 +1,6 @@
 ---
 title: Datacenters en el espacio
-description: Qué problemas resuelve (y cuáles no) la computación fuera de la Tierra.
+description: Análisis técnico de los datacenters en órbita: disipación de calor, latencia, coste de lanzamiento y viabilidad real frente a la infraestructura terrestre.
 hide:
   - toc
 ---

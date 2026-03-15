@@ -2,6 +2,8 @@
   5SIGMAS Animation Boilerplate (Generic)
   Include with: {{ include_html("snippets/<path>.html") }}
   Fullscreen is on by default. Set data-anim-fullscreen="off" to disable.
+  The fullscreen button/modal belong to the global include_html shell; do not add local fullscreen UI here.
+  Branding (footer/logo/shell) is injected by include_html(...), do not embed it here.
 -->
 
 <div class="ta-demo ta-generic demo-slug" data-anim-fullscreen="on" data-anim-contrast="force">

@@ -1,0 +1,616 @@
+<div class="nn3-root" data-anim-tabs data-default="linear">
+
+  <!-- ── Tabs ── -->
+  <div class="nn3-tablist" role="tablist" aria-label="Cómo aprende una red neuronal">
+    <button class="nn3-tab" type="button" role="tab" data-role="tab" data-tab="linear"  aria-selected="true">1 neurona</button>
+    <button class="nn3-tab" type="button" role="tab" data-role="tab" data-tab="sine"    aria-selected="false">1 capa oculta</button>
+    <button class="nn3-tab" type="button" role="tab" data-role="tab" data-tab="complex" aria-selected="false">Más capacidad</button>
+  </div>
+
+  <!-- ── Panel 1: Linear ── -->
+  <div class="nn3-panel" data-panel="linear">
+    <div class="nn3-intro">
+      <span class="nn3-kicker">Paso 1 · 1 neurona</span>
+      <h3 class="nn3-h">Una sola neurona aprende relaciones lineales</h3>
+      <p class="nn3-sub">Ajusta únicamente un peso (pendiente) y un sesgo (desplazamiento). Suficiente cuando los datos siguen una línea recta.</p>
+    </div>
+    <div class="nn3-body">
+      <div class="nn3-chart-col">
+        <svg class="nn3-chart" data-chart="linear" viewBox="0 0 360 220" aria-hidden="true"></svg>
+        <p class="nn3-chart-cap">Temperatura: °C → °F · puntos reales · <span class="nn3-legend-curve">— modelo aprendido</span></p>
+      </div>
+      <div class="nn3-side">
+        <svg class="nn3-net" viewBox="0 0 300 110" aria-hidden="true">
+          <!-- input -->
+          <circle cx="34" cy="55" r="20" class="nn3-ni"/>
+          <text x="34" y="60" class="nn3-nl">C</text>
+          <!-- edge in -->
+          <line x1="54" y1="55" x2="118" y2="55" class="nn3-ne"/>
+          <text x="88" y="47" class="nn3-nw">w</text>
+          <!-- neuron -->
+          <circle cx="148" cy="55" r="30" class="nn3-nn"/>
+          <text x="148" y="51" class="nn3-ns">∑</text>
+          <text x="148" y="66" class="nn3-ns2">relu</text>
+          <!-- edge out -->
+          <line x1="178" y1="55" x2="242" y2="55" class="nn3-ne"/>
+          <!-- output -->
+          <circle cx="266" cy="55" r="20" class="nn3-no"/>
+          <text x="266" y="60" class="nn3-nl">F</text>
+          <!-- formula -->
+          <text x="150" y="100" class="nn3-nf">F = 1.8 · C + 32</text>
+        </svg>
+        <div class="nn3-cards">
+          <div class="nn3-card">
+            <span class="nn3-ck">Qué ajusta</span>
+            <span class="nn3-cv">1 peso + 1 sesgo → 2 parámetros</span>
+          </div>
+          <div class="nn3-card">
+            <span class="nn3-ck">Límite</span>
+            <span class="nn3-cv">Solo puede aprender líneas rectas</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Panel 2: Sine ── -->
+  <div class="nn3-panel" data-panel="sine" hidden>
+    <div class="nn3-intro">
+      <span class="nn3-kicker">Paso 2 · 1 capa oculta</span>
+      <h3 class="nn3-h">Una capa oculta permite aprender curvas</h3>
+      <p class="nn3-sub">Varias neuronas en paralelo combinan señales y crean funciones no lineales. Ya puede aproximar ondas y formas curvas.</p>
+    </div>
+    <div class="nn3-body">
+      <div class="nn3-chart-col">
+        <svg class="nn3-chart" data-chart="sine" viewBox="0 0 360 220" aria-hidden="true"></svg>
+        <p class="nn3-chart-cap">Función sin(x) · puntos reales · <span class="nn3-legend-curve">— modelo aprendido</span></p>
+      </div>
+      <div class="nn3-side">
+        <svg class="nn3-net" viewBox="0 0 300 130" aria-hidden="true">
+          <!-- input -->
+          <circle cx="28" cy="65" r="17" class="nn3-ni"/>
+          <text x="28" y="70" class="nn3-nl">x</text>
+          <!-- edges in -->
+          <line x1="45" y1="65" x2="103" y2="20" class="nn3-ne"/>
+          <line x1="45" y1="65" x2="103" y2="45" class="nn3-ne"/>
+          <line x1="45" y1="65" x2="103" y2="70" class="nn3-ne"/>
+          <line x1="45" y1="65" x2="103" y2="95" class="nn3-ne"/>
+          <line x1="45" y1="65" x2="103" y2="118" class="nn3-ne"/>
+          <!-- hidden layer -->
+          <circle cx="117" cy="20"  r="14" class="nn3-nh"/>
+          <circle cx="117" cy="45"  r="14" class="nn3-nh"/>
+          <circle cx="117" cy="70"  r="14" class="nn3-nh"/>
+          <circle cx="117" cy="95"  r="14" class="nn3-nh"/>
+          <circle cx="117" cy="118" r="14" class="nn3-nh"/>
+          <!-- edges out -->
+          <line x1="131" y1="20"  x2="247" y2="65" class="nn3-ne"/>
+          <line x1="131" y1="45"  x2="247" y2="65" class="nn3-ne"/>
+          <line x1="131" y1="70"  x2="247" y2="65" class="nn3-ne"/>
+          <line x1="131" y1="95"  x2="247" y2="65" class="nn3-ne"/>
+          <line x1="131" y1="118" x2="247" y2="65" class="nn3-ne"/>
+          <!-- output -->
+          <circle cx="264" cy="65" r="17" class="nn3-no"/>
+          <text x="264" y="70" class="nn3-nl">ŷ</text>
+          <!-- labels -->
+          <text x="117" y="25" class="nn3-ns" style="font-size:8px">h</text>
+        </svg>
+        <div class="nn3-cards">
+          <div class="nn3-card">
+            <span class="nn3-ck">Qué ajusta</span>
+            <span class="nn3-cv">5×2 pesos en capas → 10+ parámetros</span>
+          </div>
+          <div class="nn3-card">
+            <span class="nn3-ck">Qué gana</span>
+            <span class="nn3-cv">Puede aprender curvas, ondas y formas no lineales</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Panel 3: Complex ── -->
+  <div class="nn3-panel" data-panel="complex" hidden>
+    <div class="nn3-intro">
+      <span class="nn3-kicker">Paso 3 · Múltiples capas</span>
+      <h3 class="nn3-h">Más capas = patrones cada vez más complejos</h3>
+      <p class="nn3-sub">Cada capa transforma la representación del dato. Apilarlas permite reconocer texturas, formas, palabras o estilos que ninguna capa sola podría capturar.</p>
+    </div>
+    <div class="nn3-body">
+      <div class="nn3-chart-col">
+        <svg class="nn3-chart" data-chart="complex" viewBox="0 0 360 220" aria-hidden="true"></svg>
+        <p class="nn3-chart-cap">Función compleja · puntos reales · <span class="nn3-legend-curve">— modelo aprendido</span></p>
+      </div>
+      <div class="nn3-side">
+        <svg class="nn3-net" viewBox="0 0 300 130" aria-hidden="true">
+          <!-- input -->
+          <circle cx="22" cy="65" r="14" class="nn3-ni"/>
+          <text x="22" y="70" class="nn3-nl" style="font-size:9px">x</text>
+          <!-- edges in to h1 -->
+          <line x1="36" y1="65" x2="82" y2="12"  class="nn3-ne nn3-ne-t"/>
+          <line x1="36" y1="65" x2="82" y2="33"  class="nn3-ne nn3-ne-t"/>
+          <line x1="36" y1="65" x2="82" y2="54"  class="nn3-ne nn3-ne-t"/>
+          <line x1="36" y1="65" x2="82" y2="75"  class="nn3-ne nn3-ne-t"/>
+          <line x1="36" y1="65" x2="82" y2="96"  class="nn3-ne nn3-ne-t"/>
+          <line x1="36" y1="65" x2="82" y2="117" class="nn3-ne nn3-ne-t"/>
+          <!-- h1 -->
+          <circle cx="94"  cy="12"  r="12" class="nn3-nh"/>
+          <circle cx="94"  cy="33"  r="12" class="nn3-nh"/>
+          <circle cx="94"  cy="54"  r="12" class="nn3-nh"/>
+          <circle cx="94"  cy="75"  r="12" class="nn3-nh"/>
+          <circle cx="94"  cy="96"  r="12" class="nn3-nh"/>
+          <circle cx="94"  cy="117" r="12" class="nn3-nh"/>
+          <!-- edges h1→h2 -->
+          <line x1="106" y1="12"  x2="168" y2="12"  class="nn3-ne nn3-ne-t"/>
+          <line x1="106" y1="33"  x2="168" y2="33"  class="nn3-ne nn3-ne-t"/>
+          <line x1="106" y1="54"  x2="168" y2="54"  class="nn3-ne nn3-ne-t"/>
+          <line x1="106" y1="75"  x2="168" y2="75"  class="nn3-ne nn3-ne-t"/>
+          <line x1="106" y1="96"  x2="168" y2="96"  class="nn3-ne nn3-ne-t"/>
+          <line x1="106" y1="117" x2="168" y2="117" class="nn3-ne nn3-ne-t"/>
+          <!-- h2 -->
+          <circle cx="180" cy="12"  r="12" class="nn3-nh2"/>
+          <circle cx="180" cy="33"  r="12" class="nn3-nh2"/>
+          <circle cx="180" cy="54"  r="12" class="nn3-nh2"/>
+          <circle cx="180" cy="75"  r="12" class="nn3-nh2"/>
+          <circle cx="180" cy="96"  r="12" class="nn3-nh2"/>
+          <circle cx="180" cy="117" r="12" class="nn3-nh2"/>
+          <!-- edges h2→output -->
+          <line x1="192" y1="12"  x2="256" y2="65" class="nn3-ne nn3-ne-t"/>
+          <line x1="192" y1="33"  x2="256" y2="65" class="nn3-ne nn3-ne-t"/>
+          <line x1="192" y1="54"  x2="256" y2="65" class="nn3-ne nn3-ne-t"/>
+          <line x1="192" y1="75"  x2="256" y2="65" class="nn3-ne nn3-ne-t"/>
+          <line x1="192" y1="96"  x2="256" y2="65" class="nn3-ne nn3-ne-t"/>
+          <line x1="192" y1="117" x2="256" y2="65" class="nn3-ne nn3-ne-t"/>
+          <!-- output -->
+          <circle cx="270" cy="65" r="14" class="nn3-no"/>
+          <text x="270" y="70" class="nn3-nl" style="font-size:9px">ŷ</text>
+        </svg>
+        <div class="nn3-cards">
+          <div class="nn3-card">
+            <span class="nn3-ck">Qué ajusta</span>
+            <span class="nn3-cv">Cientos o millones de pesos en capas apiladas</span>
+          </div>
+          <div class="nn3-card">
+            <span class="nn3-ck">Dónde se aplica</span>
+            <span class="nn3-cv">Imágenes, texto, voz — GPT, ResNet, Whisper</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<style>
+  .nn3-root, .nn3-root * { box-sizing: border-box; }
+
+  .nn3-root {
+    --nn3-bg:     color-mix(in srgb, var(--md-default-bg-color,#fff) 96%, #0f172a 4%);
+    --nn3-card:   color-mix(in srgb, var(--md-default-bg-color,#fff) 91%, #0f172a 9%);
+    --nn3-border: color-mix(in srgb, var(--md-default-fg-color,#0f172a) 13%, transparent);
+    --nn3-fg:     color-mix(in srgb, var(--md-default-fg-color,#0f172a) 90%, transparent);
+    --nn3-muted:  color-mix(in srgb, var(--md-default-fg-color,#0f172a) 52%, transparent);
+    --nn3-a:  #26A69A;
+    --nn3-b:  #324AB2;
+    --nn3-c:  #FFB343;
+    --nn3-font: var(--md-text-font-family, system-ui, sans-serif);
+
+    /* chart colours (used in JS) */
+    --nn3-data-fill:   #26A69A;
+    --nn3-data-stroke: #26A69A;
+    --nn3-curve:       #324AB2;
+    --nn3-axis:        rgba(15,23,42,.18);
+    --nn3-grid:        rgba(15,23,42,.07);
+
+    margin: 18px 0;
+    font-family: var(--nn3-font);
+    color: var(--nn3-fg);
+  }
+
+  [data-md-color-scheme="slate"] .nn3-root {
+    --nn3-bg:     color-mix(in srgb, var(--md-default-bg-color,#0b1220) 88%, #fff 12%);
+    --nn3-card:   color-mix(in srgb, var(--md-default-bg-color,#0b1220) 80%, #fff 20%);
+    --nn3-border: color-mix(in srgb, #e2e8f0 14%, transparent);
+    --nn3-fg:     color-mix(in srgb, #f8fafc 90%, transparent);
+    --nn3-muted:  color-mix(in srgb, #f8fafc 50%, transparent);
+    --nn3-data-fill:   #26A69A;
+    --nn3-data-stroke: #4dd0c4;
+    --nn3-curve:       #7cc7ff;
+    --nn3-axis:        rgba(226,232,240,.20);
+    --nn3-grid:        rgba(226,232,240,.08);
+  }
+
+  /* ── Tabs ── */
+  .nn3-tablist {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+
+  .nn3-tab {
+    appearance: none;
+    border: 1px solid var(--nn3-border);
+    background: var(--nn3-bg);
+    color: var(--nn3-muted);
+    border-radius: 999px;
+    padding: 8px 14px;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: background .18s, color .18s, border-color .18s;
+  }
+
+  .nn3-tab[aria-selected="true"] {
+    color: var(--nn3-fg);
+    border-color: color-mix(in srgb, var(--nn3-b) 44%, transparent);
+    background: color-mix(in srgb, var(--nn3-b) 12%, var(--nn3-bg));
+  }
+
+  .nn3-panel[hidden] { display: none; }
+
+  /* ── Layout ── */
+  .nn3-intro {
+    background: var(--nn3-card);
+    border: 1px solid var(--nn3-border);
+    border-radius: 18px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+  }
+
+  .nn3-kicker {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--nn3-border);
+    color: var(--nn3-b);
+    background: color-mix(in srgb, var(--nn3-b) 10%, transparent);
+    margin-bottom: 10px;
+  }
+
+  [data-md-color-scheme="slate"] .nn3-kicker {
+    color: color-mix(in srgb, var(--nn3-b) 75%, #fff 25%);
+  }
+
+  .nn3-h {
+    margin: 0 0 6px;
+    font-size: clamp(17px, 2.2vw, 24px);
+    line-height: 1.15;
+    letter-spacing: -.03em;
+  }
+
+  .nn3-sub {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--nn3-muted);
+  }
+
+  .nn3-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  @media (max-width: 640px) {
+    .nn3-body { grid-template-columns: 1fr; }
+  }
+
+  /* ── Chart ── */
+  .nn3-chart-col {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .nn3-chart {
+    width: 100%;
+    height: auto;
+    background: var(--nn3-card);
+    border: 1px solid var(--nn3-border);
+    border-radius: 14px;
+    overflow: visible;
+  }
+
+  .nn3-chart-cap {
+    margin: 0;
+    font-size: 11px;
+    color: var(--nn3-muted);
+    line-height: 1.4;
+  }
+
+  .nn3-legend-curve {
+    color: var(--nn3-b);
+    font-weight: 700;
+  }
+
+  [data-md-color-scheme="slate"] .nn3-legend-curve {
+    color: #7cc7ff;
+  }
+
+  /* ── Side ── */
+  .nn3-side {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .nn3-net {
+    width: 100%;
+    height: auto;
+    background: var(--nn3-card);
+    border: 1px solid var(--nn3-border);
+    border-radius: 14px;
+    padding: 4px;
+    flex: 1;
+  }
+
+  /* SVG node classes */
+  .nn3-ni { fill: color-mix(in srgb,#324AB2 14%,var(--nn3-card)); stroke: #324AB2; stroke-width:2; }
+  .nn3-nn { fill: color-mix(in srgb,#26A69A 14%,var(--nn3-card)); stroke: #26A69A; stroke-width:2; }
+  .nn3-nh { fill: color-mix(in srgb,#26A69A 12%,var(--nn3-card)); stroke: #26A69A; stroke-width:1.5; }
+  .nn3-nh2{ fill: color-mix(in srgb,#FFB343 12%,var(--nn3-card)); stroke: #FFB343; stroke-width:1.5; }
+  .nn3-no { fill: color-mix(in srgb,#FFB343 14%,var(--nn3-card)); stroke: #FFB343; stroke-width:2; }
+  .nn3-ne { stroke: var(--nn3-border); stroke-width:1.2; fill:none; }
+  .nn3-ne-t{ stroke-width:0.9; }
+
+  .nn3-nl {
+    fill: var(--nn3-fg);
+    font-size: 11px;
+    font-weight: 800;
+    font-family: var(--nn3-font);
+    text-anchor: middle;
+    dominant-baseline: middle;
+  }
+
+  .nn3-ns {
+    fill: color-mix(in srgb,#26A69A 90%,transparent);
+    font-size: 13px;
+    font-weight: 700;
+    font-family: var(--nn3-font);
+    text-anchor: middle;
+    dominant-baseline: middle;
+  }
+
+  .nn3-ns2 {
+    fill: var(--nn3-muted);
+    font-size: 8px;
+    font-weight: 600;
+    font-family: var(--nn3-font);
+    text-anchor: middle;
+    dominant-baseline: middle;
+  }
+
+  .nn3-nw {
+    fill: var(--nn3-muted);
+    font-size: 11px;
+    font-weight: 600;
+    font-family: var(--nn3-font);
+    text-anchor: middle;
+  }
+
+  .nn3-nf {
+    fill: color-mix(in srgb,#26A69A 80%,transparent);
+    font-size: 11px;
+    font-weight: 700;
+    font-family: var(--nn3-font);
+    text-anchor: middle;
+  }
+
+  /* ── Cards ── */
+  .nn3-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .nn3-card {
+    background: var(--nn3-card);
+    border: 1px solid var(--nn3-border);
+    border-radius: 12px;
+    padding: 10px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .nn3-ck {
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--nn3-muted);
+  }
+
+  .nn3-cv {
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--nn3-fg);
+  }
+</style>
+
+<script>
+(function () {
+  const KEY = "nn3-v1";
+  if (window[KEY]) return;
+  window[KEY] = true;
+
+  /* ── Colour helpers ── */
+  function colors(root) {
+    const s = getComputedStyle(root);
+    return {
+      data:   s.getPropertyValue("--nn3-data-fill").trim()  || "#26A69A",
+      curve:  s.getPropertyValue("--nn3-curve").trim()      || "#324AB2",
+      axis:   s.getPropertyValue("--nn3-axis").trim()       || "rgba(15,23,42,.18)",
+      grid:   s.getPropertyValue("--nn3-grid").trim()       || "rgba(15,23,42,.07)",
+      muted:  s.getPropertyValue("--nn3-muted").trim()      || "rgba(15,23,42,.5)",
+      card:   s.getPropertyValue("--nn3-card").trim()       || "#f1f5f9",
+    };
+  }
+
+  /* ── SVG helpers ── */
+  const NS = "http://www.w3.org/2000/svg";
+  function el(tag, attrs) {
+    const e = document.createElementNS(NS, tag);
+    for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+    return e;
+  }
+
+  /* ── Chart renderer ── */
+  function renderChart(svg) {
+    const kind = svg.dataset.chart;
+    const root = svg.closest(".nn3-root");
+    if (!root) return;
+    const C = colors(root);
+
+    // Clear
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+
+    // Dimensions (viewBox 360×220)
+    const px = { x0:44, x1:328, y0:18, y1:194 };
+    const pw = px.x1 - px.x0;
+    const ph = px.y1 - px.y0;
+
+    // Data for each chart
+    const datasets = {
+      linear: {
+        xd: [-20,100], yd: [-8,220],
+        data: [[-20,-3.1],[-10,17.8],[0,31.3],[10,52.5],[25,78.2],[35,95.7],[50,123.1],[65,149.8],[80,177.5],[100,210.3]],
+        curve: [[-20,-4],[100,212]],
+        xl: "C°", yl: "F°",
+      },
+      sine: {
+        xd: [-3.15,3.15], yd: [-1.25,1.25],
+        data: [[-3.14,0.05],[-2.5,-0.61],[-1.95,-0.93],[-1.35,-0.97],[-0.75,-0.68],[-0.2,-0.20],[0.2,0.20],[0.75,0.68],[1.35,0.97],[1.95,0.93],[2.5,0.61],[3.14,-0.04]],
+        curve: [[-3.15,0],[-2.8,-0.335],[-2.4,-0.675],[-2,-0.909],[-1.6,-0.9996],[-1.2,-0.932],[-0.8,-0.717],[-0.4,-0.389],[0,0],[0.4,0.389],[0.8,0.717],[1.2,0.932],[1.6,0.9996],[2,0.909],[2.4,0.675],[2.8,0.335],[3.15,0]],
+        xl: "x", yl: "sin(x)",
+      },
+      complex: {
+        xd: [-2,2], yd: [-0.98,0.55],
+        data: [[-2,-0.05],[-1.6,-0.27],[-1.1,-0.70],[-0.8,-0.68],[-0.5,-0.37],[-0.2,0.09],[0.1,0.36],[0.4,0.50],[0.7,0.30],[1.0,0.20],[1.3,0.08],[2,-0.05]],
+        curve: [[-2,-0.091],[-1.7,-0.015],[-1.4,-0.314],[-1.1,-0.700],[-0.8,-0.721],[-0.5,-0.400],[-0.2,0.053],[0.1,0.387],[0.4,0.468],[0.7,0.340],[1.0,0.158],[1.3,0.052],[1.6,-0.003],[1.9,-0.054],[2,-0.091]],
+        xl: "x", yl: "f(x)",
+      },
+    };
+
+    const ds = datasets[kind];
+    if (!ds) return;
+
+    const [xMin, xMax] = ds.xd;
+    const [yMin, yMax] = ds.yd;
+    function xPx(x) { return px.x0 + (x - xMin) / (xMax - xMin) * pw; }
+    function yPx(y) { return px.y1 - (y - yMin) / (yMax - yMin) * ph; }
+
+    // Grid lines (4 horizontal)
+    for (let i = 1; i <= 3; i++) {
+      const y = px.y0 + (ph / 4) * i;
+      svg.appendChild(el("line", { x1: px.x0, y1: y, x2: px.x1, y2: y, stroke: C.grid, "stroke-width": "1" }));
+    }
+    // 4 vertical
+    for (let i = 1; i <= 3; i++) {
+      const x = px.x0 + (pw / 4) * i;
+      svg.appendChild(el("line", { x1: x, y1: px.y0, x2: x, y2: px.y1, stroke: C.grid, "stroke-width": "1" }));
+    }
+
+    // Axes
+    const axisAttrs = { stroke: C.axis, "stroke-width": "1.5", fill: "none" };
+    const axBox = el("rect", { x: px.x0, y: px.y0, width: pw, height: ph, ...axisAttrs, rx: "4" });
+    svg.appendChild(axBox);
+
+    // Axis labels
+    const xl = el("text", { x: px.x1 - 4, y: px.y1 + 14, fill: C.muted, "font-size": "11", "text-anchor": "end", "font-weight": "700" });
+    xl.textContent = ds.xl;
+    svg.appendChild(xl);
+    const yl = el("text", { x: px.x0 - 6, y: px.y0 + 4, fill: C.muted, "font-size": "11", "text-anchor": "end", "font-weight": "700" });
+    yl.textContent = ds.yl;
+    svg.appendChild(yl);
+
+    // Clip path for data+curve
+    const clipId = "nn3-clip-" + kind;
+    const defs = el("defs", {});
+    const cp   = el("clipPath", { id: clipId });
+    cp.appendChild(el("rect", { x: px.x0, y: px.y0, width: pw, height: ph }));
+    defs.appendChild(cp);
+    svg.appendChild(defs);
+
+    const g = el("g", { "clip-path": `url(#${clipId})` });
+
+    // Fitted curve
+    const curvePts = ds.curve.map(([x, y]) => `${xPx(x).toFixed(1)},${yPx(y).toFixed(1)}`).join(" L");
+    const curvePath = el("polyline", {
+      points: ds.curve.map(([x, y]) => `${xPx(x).toFixed(1)},${yPx(y).toFixed(1)}`).join(" "),
+      stroke: C.curve,
+      "stroke-width": "2.5",
+      fill: "none",
+      "stroke-linecap": "round",
+      "stroke-linejoin": "round",
+    });
+    g.appendChild(curvePath);
+
+    // Data scatter dots
+    for (const [x, y] of ds.data) {
+      const cx = xPx(x);
+      const cy = yPx(y);
+      if (cx < px.x0 - 8 || cx > px.x1 + 8 || cy < px.y0 - 8 || cy > px.y1 + 8) continue;
+      const circle = el("circle", {
+        cx: cx.toFixed(1),
+        cy: cy.toFixed(1),
+        r: "4.5",
+        fill: C.data,
+        stroke: C.card,
+        "stroke-width": "1.5",
+      });
+      g.appendChild(circle);
+    }
+
+    svg.appendChild(g);
+  }
+
+  /* ── Tabs ── */
+  function initTabs(root) {
+    if (!root || root.dataset.nn3Ready) return;
+    root.dataset.nn3Ready = "true";
+
+    const tabs   = Array.from(root.querySelectorAll(".nn3-tab"));
+    const panels = Array.from(root.querySelectorAll(".nn3-panel"));
+
+    function show(key) {
+      tabs.forEach(t => t.setAttribute("aria-selected", t.dataset.tab === key ? "true" : "false"));
+      panels.forEach(p => (p.dataset.panel === key ? p.removeAttribute("hidden") : p.setAttribute("hidden", "")));
+    }
+
+    tabs.forEach(t => {
+      t.addEventListener("click", () => show(t.dataset.tab));
+    });
+
+    const def = root.dataset.default || (tabs[0] && tabs[0].dataset.tab) || "";
+    show(def);
+  }
+
+  /* ── Init ── */
+  function init(scope) {
+    scope.querySelectorAll(".nn3-root").forEach(root => {
+      if (!root.dataset.nn3Ready) initTabs(root);
+      root.querySelectorAll(".nn3-chart").forEach(renderChart);
+    });
+  }
+
+  function boot() {
+    init(document);
+    if (typeof document$ !== "undefined" && document$.subscribe) {
+      document$.subscribe(() => init(document));
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", boot);
+  } else {
+    boot();
+  }
+})();
+</script>

@@ -1,0 +1,453 @@
+<div class="rnn-root">
+
+  <!-- 01 · La neurona -->
+  <div class="rnn-card">
+    <div class="rnn-card-head">
+      <span class="rnn-num">01</span>
+      <span class="rnn-title">La neurona</span>
+    </div>
+    <p class="rnn-desc">Recibe señales, multiplica cada una por un <strong>peso</strong> y produce una salida. Entrenar = ajustar los pesos para equivocarse menos.</p>
+    <svg class="rnn-svg" viewBox="0 0 320 112" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+      <!-- inputs -->
+      <circle class="rnn-n rnn-ni" cx="28" cy="22" r="14"/>
+      <circle class="rnn-n rnn-ni" cx="28" cy="56" r="14"/>
+      <circle class="rnn-n rnn-ni" cx="28" cy="90" r="14"/>
+      <text class="rnn-nt" x="28" y="26">x₁</text>
+      <text class="rnn-nt" x="28" y="60">x₂</text>
+      <text class="rnn-nt" x="28" y="94">x₃</text>
+      <!-- animated edges -->
+      <path class="rnn-e rnn-e1" d="M42,24 L148,50" pathLength="100"/>
+      <path class="rnn-e rnn-e2" d="M42,56 L148,56" pathLength="100"/>
+      <path class="rnn-e rnn-e3" d="M42,88 L148,62" pathLength="100"/>
+      <!-- weight labels -->
+      <text class="rnn-wt" x="82" y="30">w₁</text>
+      <text class="rnn-wt" x="82" y="52">w₂</text>
+      <text class="rnn-wt" x="82" y="82">w₃</text>
+      <!-- neuron body -->
+      <circle class="rnn-n rnn-nc" cx="165" cy="56" r="26"/>
+      <text class="rnn-sigma" x="165" y="63">∑</text>
+      <!-- output edge -->
+      <path class="rnn-e rnn-eout" d="M191,56 L292,56" pathLength="100"/>
+      <!-- output node -->
+      <circle class="rnn-n rnn-no" cx="306" cy="56" r="14"/>
+      <text class="rnn-nt" x="306" y="60">ŷ</text>
+    </svg>
+    <div class="rnn-pill">Lo que cambia al entrenar: <strong>w₁ · w₂ · w₃</strong></div>
+  </div>
+
+  <!-- 02 · El bucle -->
+  <div class="rnn-card">
+    <div class="rnn-card-head">
+      <span class="rnn-num">02</span>
+      <span class="rnn-title">El bucle</span>
+    </div>
+    <p class="rnn-desc">Cada iteración reduce el error un poco. En una red real se repite millones de veces.</p>
+    <div class="rnn-cycle">
+      <div class="rnn-cs" data-s="0">
+        <span class="rnn-cs-dot"></span>
+        <span class="rnn-cs-label">Predice</span>
+      </div>
+      <div class="rnn-ca">↓</div>
+      <div class="rnn-cs" data-s="1">
+        <span class="rnn-cs-dot"></span>
+        <span class="rnn-cs-label">Mide el error</span>
+      </div>
+      <div class="rnn-ca">↓</div>
+      <div class="rnn-cs" data-s="2">
+        <span class="rnn-cs-dot"></span>
+        <span class="rnn-cs-label">Ajusta pesos</span>
+      </div>
+      <div class="rnn-ca rnn-ca-loop">↑ repite</div>
+    </div>
+    <div class="rnn-pill">Aprender = equivocarse menos cada vuelta</div>
+  </div>
+
+  <!-- 03 · Profundidad -->
+  <div class="rnn-card rnn-card-wide">
+    <div class="rnn-card-head">
+      <span class="rnn-num">03</span>
+      <span class="rnn-title">Más capas, más potencia</span>
+    </div>
+    <p class="rnn-desc">Cada capa aplica una transformación. Apilarlas permite aprender patrones cada vez más complejos.</p>
+    <div class="rnn-drow">
+
+      <div class="rnn-di">
+        <svg viewBox="0 0 72 80" class="rnn-dsvg" aria-hidden="true">
+          <circle cx="12" cy="30" r="10" class="rnn-dn rnn-ddi"/>
+          <circle cx="12" cy="54" r="10" class="rnn-dn rnn-ddi"/>
+          <circle cx="60" cy="42" r="10" class="rnn-dn rnn-ddo"/>
+          <line x1="22" y1="31" x2="50" y2="42" class="rnn-dl"/>
+          <line x1="22" y1="53" x2="50" y2="43" class="rnn-dl"/>
+        </svg>
+        <div class="rnn-dlabel"><strong>1 capa</strong><br><span>relaciones simples</span></div>
+      </div>
+
+      <div class="rnn-di">
+        <svg viewBox="0 0 90 80" class="rnn-dsvg" aria-hidden="true">
+          <circle cx="10" cy="28" r="8" class="rnn-dn rnn-ddi"/>
+          <circle cx="10" cy="52" r="8" class="rnn-dn rnn-ddi"/>
+          <circle cx="45" cy="14" r="7" class="rnn-dn rnn-ddh"/>
+          <circle cx="45" cy="34" r="7" class="rnn-dn rnn-ddh"/>
+          <circle cx="45" cy="54" r="7" class="rnn-dn rnn-ddh"/>
+          <circle cx="45" cy="70" r="7" class="rnn-dn rnn-ddh"/>
+          <circle cx="80" cy="42" r="8" class="rnn-dn rnn-ddo"/>
+          <line x1="18" y1="28" x2="38" y2="15" class="rnn-dl"/>
+          <line x1="18" y1="28" x2="38" y2="34" class="rnn-dl"/>
+          <line x1="18" y1="52" x2="38" y2="54" class="rnn-dl"/>
+          <line x1="18" y1="52" x2="38" y2="69" class="rnn-dl"/>
+          <line x1="52" y1="15" x2="72" y2="41" class="rnn-dl"/>
+          <line x1="52" y1="34" x2="72" y2="42" class="rnn-dl"/>
+          <line x1="52" y1="54" x2="72" y2="43" class="rnn-dl"/>
+          <line x1="52" y1="69" x2="72" y2="44" class="rnn-dl"/>
+        </svg>
+        <div class="rnn-dlabel"><strong>2 capas</strong><br><span>curvas y grupos</span></div>
+      </div>
+
+      <div class="rnn-di">
+        <svg viewBox="0 0 108 80" class="rnn-dsvg" aria-hidden="true">
+          <circle cx="10" cy="28" r="7" class="rnn-dn rnn-ddi"/>
+          <circle cx="10" cy="52" r="7" class="rnn-dn rnn-ddi"/>
+          <circle cx="34" cy="14" r="6" class="rnn-dn rnn-ddh"/>
+          <circle cx="34" cy="30" r="6" class="rnn-dn rnn-ddh"/>
+          <circle cx="34" cy="50" r="6" class="rnn-dn rnn-ddh"/>
+          <circle cx="34" cy="66" r="6" class="rnn-dn rnn-ddh"/>
+          <circle cx="58" cy="14" r="6" class="rnn-dn rnn-ddh2"/>
+          <circle cx="58" cy="30" r="6" class="rnn-dn rnn-ddh2"/>
+          <circle cx="58" cy="50" r="6" class="rnn-dn rnn-ddh2"/>
+          <circle cx="58" cy="66" r="6" class="rnn-dn rnn-ddh2"/>
+          <circle cx="95" cy="40" r="8" class="rnn-dn rnn-ddo"/>
+          <line x1="17" y1="28" x2="28" y2="15" class="rnn-dl rnn-dl-t"/>
+          <line x1="17" y1="28" x2="28" y2="30" class="rnn-dl rnn-dl-t"/>
+          <line x1="17" y1="52" x2="28" y2="50" class="rnn-dl rnn-dl-t"/>
+          <line x1="17" y1="52" x2="28" y2="65" class="rnn-dl rnn-dl-t"/>
+          <line x1="40" y1="14" x2="52" y2="14" class="rnn-dl rnn-dl-t"/>
+          <line x1="40" y1="30" x2="52" y2="30" class="rnn-dl rnn-dl-t"/>
+          <line x1="40" y1="50" x2="52" y2="50" class="rnn-dl rnn-dl-t"/>
+          <line x1="40" y1="66" x2="52" y2="66" class="rnn-dl rnn-dl-t"/>
+          <line x1="64" y1="14" x2="87" y2="40" class="rnn-dl rnn-dl-t"/>
+          <line x1="64" y1="30" x2="87" y2="40" class="rnn-dl rnn-dl-t"/>
+          <line x1="64" y1="50" x2="87" y2="41" class="rnn-dl rnn-dl-t"/>
+          <line x1="64" y1="66" x2="87" y2="42" class="rnn-dl rnn-dl-t"/>
+        </svg>
+        <div class="rnn-dlabel"><strong>Muchas capas</strong><br><span>imagen, texto, voz</span></div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<style>
+  .rnn-root, .rnn-root * { box-sizing: border-box; }
+
+  .rnn-root {
+    --rnn-bg:      color-mix(in srgb, var(--md-default-bg-color, #fff) 97%, #0f172a 3%);
+    --rnn-card:    color-mix(in srgb, var(--md-default-bg-color, #fff) 93%, #0f172a 7%);
+    --rnn-border:  color-mix(in srgb, var(--md-default-fg-color, #0f172a) 12%, transparent);
+    --rnn-fg:      color-mix(in srgb, var(--md-default-fg-color, #0f172a) 92%, transparent);
+    --rnn-muted:   color-mix(in srgb, var(--md-default-fg-color, #0f172a) 55%, transparent);
+    --rnn-a:       #26A69A;
+    --rnn-b:       #324AB2;
+    --rnn-c:       #FFB343;
+    --rnn-font:    var(--md-text-font-family, system-ui, sans-serif);
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 12px;
+    margin: 18px 0;
+    font-family: var(--rnn-font);
+    color: var(--rnn-fg);
+  }
+
+  [data-md-color-scheme="slate"] .rnn-root {
+    --rnn-bg:    color-mix(in srgb, var(--md-default-bg-color, #0b1220) 90%, #fff 10%);
+    --rnn-card:  color-mix(in srgb, var(--md-default-bg-color, #0b1220) 82%, #fff 18%);
+    --rnn-border: color-mix(in srgb, #e2e8f0 14%, transparent);
+    --rnn-fg:    color-mix(in srgb, #f8fafc 92%, transparent);
+    --rnn-muted: color-mix(in srgb, #f8fafc 55%, transparent);
+  }
+
+  .rnn-card {
+    background: var(--rnn-card);
+    border: 1px solid var(--rnn-border);
+    border-radius: 18px;
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .rnn-card-wide {
+    grid-column: 1 / -1;
+  }
+
+  .rnn-card-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .rnn-num {
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: 4px 9px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--rnn-b) 14%, transparent);
+    border: 1px solid color-mix(in srgb, var(--rnn-b) 28%, transparent);
+    color: var(--rnn-b);
+  }
+
+  [data-md-color-scheme="slate"] .rnn-num {
+    color: color-mix(in srgb, var(--rnn-b) 80%, #fff 20%);
+  }
+
+  .rnn-title {
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: -.02em;
+  }
+
+  .rnn-desc {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--rnn-muted);
+  }
+
+  .rnn-pill {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--rnn-a) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--rnn-a) 22%, transparent);
+    color: var(--rnn-a);
+    align-self: flex-start;
+  }
+
+  /* ── Neuron SVG ── */
+  .rnn-svg {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .rnn-n { fill: var(--rnn-card); stroke: var(--rnn-border); stroke-width: 1.5; }
+  .rnn-ni { stroke: color-mix(in srgb, var(--rnn-b) 50%, transparent); }
+  .rnn-nc {
+    fill: color-mix(in srgb, var(--rnn-a) 16%, var(--rnn-card));
+    stroke: color-mix(in srgb, var(--rnn-a) 60%, transparent);
+    stroke-width: 1.5;
+    animation: rnn-pulse 2.4s ease-in-out infinite;
+  }
+  .rnn-no { stroke: color-mix(in srgb, var(--rnn-c) 60%, transparent); }
+
+  @keyframes rnn-pulse {
+    0%, 100% { filter: drop-shadow(0 0 0 transparent); }
+    50% { filter: drop-shadow(0 0 6px color-mix(in srgb, var(--rnn-a) 60%, transparent)); }
+  }
+
+  .rnn-nt {
+    fill: var(--rnn-fg);
+    font-size: 11px;
+    font-weight: 700;
+    font-family: var(--rnn-font);
+    text-anchor: middle;
+    dominant-baseline: middle;
+  }
+
+  .rnn-wt {
+    fill: var(--rnn-muted);
+    font-size: 10px;
+    font-weight: 600;
+    font-family: var(--rnn-font);
+    text-anchor: middle;
+  }
+
+  .rnn-sigma {
+    fill: var(--rnn-a);
+    font-size: 18px;
+    font-weight: 700;
+    font-family: var(--rnn-font);
+    text-anchor: middle;
+    dominant-baseline: middle;
+  }
+
+  .rnn-e {
+    fill: none;
+    stroke: color-mix(in srgb, var(--rnn-b) 55%, transparent);
+    stroke-width: 1.8;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    stroke-linecap: round;
+    animation: rnn-flow 2.2s linear infinite;
+  }
+
+  .rnn-e1 { animation-delay: 0s; }
+  .rnn-e2 { animation-delay: 0.35s; }
+  .rnn-e3 { animation-delay: 0.7s; }
+  .rnn-eout {
+    stroke: color-mix(in srgb, var(--rnn-c) 70%, transparent);
+    animation-delay: 1.2s;
+  }
+
+  @keyframes rnn-flow {
+    0%   { stroke-dashoffset: 100; opacity: 0; }
+    12%  { opacity: 1; }
+    80%  { opacity: 1; }
+    100% { stroke-dashoffset: 0;   opacity: 0; }
+  }
+
+  /* ── Cycle ── */
+  .rnn-cycle {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+  }
+
+  .rnn-cs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: 12px;
+    border: 1px solid var(--rnn-border);
+    background: color-mix(in srgb, var(--rnn-card) 80%, transparent);
+    font-size: 13px;
+    font-weight: 700;
+    transition: background .3s, border-color .3s, color .3s;
+    color: var(--rnn-muted);
+  }
+
+  .rnn-cs.rnn-cs-active {
+    background: color-mix(in srgb, var(--rnn-a) 14%, var(--rnn-card));
+    border-color: color-mix(in srgb, var(--rnn-a) 40%, transparent);
+    color: var(--rnn-fg);
+  }
+
+  .rnn-cs-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--rnn-muted);
+    flex-shrink: 0;
+    transition: background .3s;
+  }
+
+  .rnn-cs.rnn-cs-active .rnn-cs-dot {
+    background: var(--rnn-a);
+    box-shadow: 0 0 6px color-mix(in srgb, var(--rnn-a) 60%, transparent);
+  }
+
+  .rnn-ca {
+    font-size: 18px;
+    line-height: 1;
+    color: var(--rnn-muted);
+    padding-left: 16px;
+  }
+
+  .rnn-ca-loop {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .03em;
+    color: color-mix(in srgb, var(--rnn-b) 70%, transparent);
+  }
+
+  /* ── Depth ── */
+  .rnn-drow {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .rnn-di {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .rnn-dsvg {
+    width: 100%;
+    max-width: 110px;
+    height: auto;
+  }
+
+  .rnn-dlabel {
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.4;
+    color: var(--rnn-fg);
+  }
+
+  .rnn-dlabel span {
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--rnn-muted);
+  }
+
+  .rnn-dn { fill: var(--rnn-card); stroke-width: 1.2; }
+  .rnn-ddi { stroke: color-mix(in srgb, var(--rnn-b) 55%, transparent); }
+  .rnn-ddh { stroke: color-mix(in srgb, var(--rnn-a) 70%, transparent); fill: color-mix(in srgb, var(--rnn-a) 10%, var(--rnn-card)); }
+  .rnn-ddh2 { stroke: color-mix(in srgb, var(--rnn-c) 60%, transparent); fill: color-mix(in srgb, var(--rnn-c) 10%, var(--rnn-card)); }
+  .rnn-ddo { stroke: color-mix(in srgb, var(--rnn-c) 70%, transparent); fill: color-mix(in srgb, var(--rnn-c) 14%, var(--rnn-card)); }
+
+  .rnn-dl {
+    stroke: color-mix(in srgb, var(--rnn-border) 80%, transparent);
+    stroke-width: 1.2;
+    stroke-linecap: round;
+  }
+
+  .rnn-dl-t { stroke-width: 0.9; }
+
+  /* ── Responsive ── */
+  @media (max-width: 640px) {
+    .rnn-root {
+      grid-template-columns: 1fr;
+    }
+    .rnn-card-wide {
+      grid-column: 1;
+    }
+    .rnn-dsvg {
+      max-width: 90px;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    const KEY = "rnn-v1";
+    if (window[KEY]) return;
+    window[KEY] = true;
+
+    function init(root) {
+      if (!root || root.dataset.rnnReady) return;
+      root.dataset.rnnReady = "true";
+      const steps = Array.from(root.querySelectorAll(".rnn-cs"));
+      if (!steps.length) return;
+      let i = 0;
+      function tick() {
+        steps.forEach((s, j) => s.classList.toggle("rnn-cs-active", j === i));
+        i = (i + 1) % steps.length;
+      }
+      tick();
+      setInterval(tick, 1300);
+    }
+
+    function initAll(scope) {
+      scope.querySelectorAll(".rnn-root").forEach(init);
+    }
+
+    initAll(document);
+
+    if (typeof document$ !== "undefined" && document$.subscribe) {
+      document$.subscribe(() => initAll(document));
+    }
+  })();
+</script>

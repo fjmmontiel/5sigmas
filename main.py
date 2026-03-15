@@ -168,6 +168,62 @@ def _render_template(html, context):
         return str(context[key])
     return re.sub(r"{{\s*([a-zA-Z0-9_]+)\s*}}", repl, html)
 
+
+def render_include_html(path, **kwargs):
+    """
+    Render a docs snippet using the same contract as the include_html macro.
+    Useful for scripts that need parity with MkDocs rendering.
+    """
+    if not path or ".." in path:
+        return "<!-- Invalid snippet path -->"
+
+    base_dir = os.path.join(os.path.dirname(__file__), "docs")
+    snippet_path = os.path.join(base_dir, path)
+
+    if not os.path.isfile(snippet_path):
+        return f"<!-- Snippet not found: {path} -->"
+
+    template_kwargs = dict(kwargs)
+    anim_variant = template_kwargs.pop("anim_variant", "default")
+    anim_fullscreen = template_kwargs.pop("anim_fullscreen", None)
+    anim_shell = template_kwargs.pop("anim_shell", "auto")
+    anim_contrast = template_kwargs.pop("anim_contrast", None)
+
+    with open(snippet_path, "r", encoding="utf-8") as f:
+        html = f.read()
+
+    if template_kwargs and "series_dir" in template_kwargs:
+        done = _count_series_done(template_kwargs["series_dir"])
+        total = _count_series_total(template_kwargs["series_dir"])
+        total = max(total, done)
+        if total == 0:
+            progress_text = "0/0"
+            aria_max = 1
+        else:
+            progress_text = f"{done}/{total}"
+            aria_max = total
+        template_kwargs.setdefault("progress_done", done)
+        template_kwargs.setdefault("progress_total", total)
+        template_kwargs.setdefault("progress_text", progress_text)
+        template_kwargs.setdefault("data_progress", progress_text)
+        template_kwargs.setdefault("aria_valuenow", done)
+        template_kwargs.setdefault("aria_valuemax", aria_max)
+
+    if template_kwargs:
+        html = _render_template(html, template_kwargs)
+
+    if _should_wrap_with_shell(path, html, shell_mode=anim_shell):
+        fullscreen_mode = _resolve_fullscreen_mode(html, explicit_value=anim_fullscreen)
+        contrast_mode = _resolve_contrast_mode(html, explicit_value=anim_contrast)
+        return _wrap_animation_shell(
+            html,
+            variant=anim_variant,
+            fullscreen=fullscreen_mode,
+            contrast=contrast_mode,
+        )
+
+    return html
+
 def define_env(env):
     """
     This is the hook for defining variables, macros and filters.
@@ -281,55 +337,7 @@ def define_env(env):
         """
         Includes raw HTML snippets from the docs directory.
         """
-        if not path or ".." in path:
-            return "<!-- Invalid snippet path -->"
-
-        base_dir = os.path.join(os.path.dirname(__file__), "docs")
-        snippet_path = os.path.join(base_dir, path)
-
-        if not os.path.isfile(snippet_path):
-            return f"<!-- Snippet not found: {path} -->"
-
-        template_kwargs = dict(kwargs)
-        anim_variant = template_kwargs.pop("anim_variant", "default")
-        anim_fullscreen = template_kwargs.pop("anim_fullscreen", None)
-        anim_shell = template_kwargs.pop("anim_shell", "auto")
-        anim_contrast = template_kwargs.pop("anim_contrast", None)
-
-        with open(snippet_path, "r", encoding="utf-8") as f:
-            html = f.read()
-
-        if template_kwargs and "series_dir" in template_kwargs:
-            done = _count_series_done(template_kwargs["series_dir"])
-            total = _count_series_total(template_kwargs["series_dir"])
-            total = max(total, done)
-            if total == 0:
-                progress_text = "0/0"
-                aria_max = 1
-            else:
-                progress_text = f"{done}/{total}"
-                aria_max = total
-            template_kwargs.setdefault("progress_done", done)
-            template_kwargs.setdefault("progress_total", total)
-            template_kwargs.setdefault("progress_text", progress_text)
-            template_kwargs.setdefault("data_progress", progress_text)
-            template_kwargs.setdefault("aria_valuenow", done)
-            template_kwargs.setdefault("aria_valuemax", aria_max)
-
-        if template_kwargs:
-            html = _render_template(html, template_kwargs)
-
-        if _should_wrap_with_shell(path, html, shell_mode=anim_shell):
-            fullscreen_mode = _resolve_fullscreen_mode(html, explicit_value=anim_fullscreen)
-            contrast_mode = _resolve_contrast_mode(html, explicit_value=anim_contrast)
-            return _wrap_animation_shell(
-                html,
-                variant=anim_variant,
-                fullscreen=fullscreen_mode,
-                contrast=contrast_mode,
-            )
-
-        return html
+        return render_include_html(path, **kwargs)
 
 def on_pre_page_macros(env):
     """

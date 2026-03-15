@@ -1,0 +1,273 @@
+<div class="lops-wrap" data-demo="02-llmops">
+  <div class="lops-hd">
+    <div class="lops-title">LLMOps: el ciclo completo para GenAI en producción</div>
+    <div class="lops-sub">Un modelo fundacional no es un producto. Para que funcione de forma fiable hace falta un ciclo de ingeniería completo. Si falta un paso, normalmente tienes una demo, no un sistema.</div>
+  </div>
+
+  <div class="lops-steps">
+    <div class="lops-step lops-step--1">
+      <div class="lops-step-num">1</div>
+      <div class="lops-step-body">
+        <div class="lops-step-k">Seleccionar modelo base</div>
+        <p>Elegir qué modelo fundacional usar: tamaño, proveedor, licencia, coste por consulta.</p>
+      </div>
+    </div>
+    <div class="lops-connector"></div>
+    <div class="lops-step lops-step--2">
+      <div class="lops-step-num">2</div>
+      <div class="lops-step-body">
+        <div class="lops-step-k">Curar datos de adaptación</div>
+        <p>Si hay ajuste fino, preparar ejemplos de alta calidad. La calidad pesa más que la cantidad.</p>
+      </div>
+    </div>
+    <div class="lops-connector"></div>
+    <div class="lops-step lops-step--3">
+      <div class="lops-step-num">3</div>
+      <div class="lops-step-body">
+        <div class="lops-step-k">Adaptar <span class="lops-opt">opcional</span></div>
+        <p>Ajuste fino supervisado, alineación con feedback humano, o diseño del prompt base con ejemplos representativos.</p>
+      </div>
+    </div>
+    <div class="lops-connector"></div>
+    <div class="lops-step lops-step--4">
+      <div class="lops-step-num">4</div>
+      <div class="lops-step-body">
+        <div class="lops-step-k">Construir el contexto</div>
+        <p>Si aplica RAG: cómo se trocean los documentos, cómo se representan y cómo se recupera la información relevante por consulta.</p>
+      </div>
+    </div>
+    <div class="lops-connector"></div>
+    <div class="lops-step lops-step--5">
+      <div class="lops-step-num">5</div>
+      <div class="lops-step-body">
+        <div class="lops-step-k">Evaluar</div>
+        <p>Métricas automáticas, revisión humana sobre muestra representativa, y usar otro modelo para evaluar respuestas según criterios definidos.</p>
+        <div class="lops-callout">El paso más subestimado. Sin una forma de medir, no puedes iterar con criterio.</div>
+      </div>
+    </div>
+    <div class="lops-connector"></div>
+    <div class="lops-step lops-step--6">
+      <div class="lops-step-num">6</div>
+      <div class="lops-step-body">
+        <div class="lops-step-k">Desplegar</div>
+        <p>API con control de versiones de prompts, monitorización de coste y latencia desde el primer día.</p>
+      </div>
+    </div>
+    <div class="lops-connector"></div>
+    <div class="lops-step lops-step--7">
+      <div class="lops-step-num">7</div>
+      <div class="lops-step-body">
+        <div class="lops-step-k">Monitorizar y mejorar</div>
+        <p>Cambios en los temas que llegan, calidad de respuestas, feedback de usuarios. Ajuste de prompts o reentrenamiento según la señal.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="lops-diff">
+    <div class="lops-diff-title">Diferencias clave respecto a MLOps clásico</div>
+    <div class="lops-diff-grid">
+      <div class="lops-diff-item">
+        <div class="lops-diff-k">Sin etiquetas limpias</div>
+        <p>"Fue buena esa respuesta?" es difícil de medir automáticamente con precisión.</p>
+      </div>
+      <div class="lops-diff-item">
+        <div class="lops-diff-k">Comportamiento probabilístico</div>
+        <p>El mismo prompt puede dar respuestas distintas en ejecuciones distintas.</p>
+      </div>
+      <div class="lops-diff-item">
+        <div class="lops-diff-k">El prompt es parte del sistema</div>
+        <p>Cambiar las instrucciones cambia el comportamiento tanto como cambiar el modelo.</p>
+      </div>
+      <div class="lops-diff-item">
+        <div class="lops-diff-k">Deriva semántica</div>
+        <p>Los datos no cambian de forma, cambia el tipo de preguntas que llegan y los temas que emergen.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.lops-wrap, .lops-wrap * { box-sizing: border-box; }
+
+.lops-wrap {
+  --la: var(--md-primary-fg-color, #26A69A);
+  --lb: #324AB2;
+  --lg: var(--md-accent-fg-color, #FFB343);
+  --lbg: var(--md-default-bg-color, #fff);
+  --lfg: var(--md-default-fg-color, #0f172a);
+  --lbd: rgba(15,23,42,.16);
+  --lmut: rgba(15,23,42,.60);
+  --lf: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid;
+  gap: 14px;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--lbd);
+  border-radius: 20px;
+  background:
+    radial-gradient(120% 130% at 6% 0%, color-mix(in srgb,var(--la) 8%,transparent), transparent 50%),
+    radial-gradient(80% 110% at 94% 100%, color-mix(in srgb,var(--lb) 8%,transparent), transparent 54%),
+    var(--lbg);
+  color: var(--lfg);
+  font-family: var(--lf);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-md-color-scheme="slate"] .lops-wrap {
+  --lbg: var(--md-default-bg-color, #0f172a);
+  --lfg: var(--md-default-fg-color, #e2e8f0);
+  --lbd: rgba(226,232,240,.16);
+  --lmut: rgba(226,232,240,.60);
+}
+
+.lops-hd { display: grid; gap: 5px; }
+
+.lops-title {
+  font-size: clamp(17px,2.2vw,24px);
+  font-weight: 900;
+  letter-spacing: -.02em;
+  line-height: 1.1;
+}
+
+.lops-sub {
+  font-size: 14px;
+  color: var(--lmut);
+  line-height: 1.5;
+  max-width: 74ch;
+}
+
+/* Steps */
+.lops-steps {
+  display: grid;
+  gap: 0;
+}
+
+.lops-step {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  border: 1px solid var(--lbd);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--lbg) 93%, #0f172a 7%);
+  position: relative;
+  z-index: 1;
+}
+
+.lops-connector {
+  width: 2px;
+  height: 12px;
+  background: linear-gradient(180deg, var(--lbd), var(--lbd));
+  margin-left: 24px;
+}
+
+.lops-step-num {
+  min-width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  border: 1px solid var(--lbd);
+  background: color-mix(in srgb, var(--lbg) 80%, #0f172a 20%);
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+.lops-step-body { display: grid; gap: 4px; flex: 1; }
+
+.lops-step-k {
+  font-size: 14px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  line-height: 1.2;
+}
+
+.lops-opt {
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--lbd);
+  color: var(--lmut);
+  background: color-mix(in srgb, var(--lbg) 88%, transparent);
+}
+
+.lops-step p { margin: 0; font-size: 13.5px; line-height: 1.45; color: var(--lmut); }
+
+/* Color coding by step */
+.lops-step--1 .lops-step-num { background: color-mix(in srgb, var(--lb) 16%, var(--lbg)); border-color: color-mix(in srgb, var(--lb) 34%, var(--lbd)); }
+.lops-step--2 .lops-step-num { background: color-mix(in srgb, var(--lb) 12%, var(--lbg)); border-color: color-mix(in srgb, var(--lb) 26%, var(--lbd)); }
+.lops-step--3 .lops-step-num { background: color-mix(in srgb, var(--la) 16%, var(--lbg)); border-color: color-mix(in srgb, var(--la) 34%, var(--lbd)); }
+.lops-step--4 .lops-step-num { background: color-mix(in srgb, var(--la) 14%, var(--lbg)); border-color: color-mix(in srgb, var(--la) 28%, var(--lbd)); }
+.lops-step--5 .lops-step-num { background: color-mix(in srgb, var(--lg) 18%, var(--lbg)); border-color: color-mix(in srgb, var(--lg) 38%, var(--lbd)); }
+.lops-step--6 .lops-step-num { background: color-mix(in srgb, var(--la) 14%, var(--lbg)); border-color: color-mix(in srgb, var(--la) 28%, var(--lbd)); }
+.lops-step--7 .lops-step-num { background: color-mix(in srgb, var(--lb) 14%, var(--lbg)); border-color: color-mix(in srgb, var(--lb) 28%, var(--lbd)); }
+
+.lops-step--5 {
+  border-color: color-mix(in srgb, var(--lg) 30%, var(--lbd));
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--lg) 8%, transparent), transparent 60%),
+    color-mix(in srgb, var(--lbg) 93%, #0f172a 7%);
+}
+
+.lops-callout {
+  font-size: 12.5px;
+  font-weight: 700;
+  font-style: italic;
+  color: color-mix(in srgb, var(--lg) 70%, var(--lfg));
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--lg) 30%, var(--lbd));
+  background: color-mix(in srgb, var(--lg) 8%, var(--lbg));
+  line-height: 1.4;
+}
+
+/* Differences */
+.lops-diff {
+  border: 1px solid var(--lbd);
+  border-radius: 14px;
+  padding: 14px;
+  background: color-mix(in srgb, var(--lbg) 90%, #0f172a 10%);
+}
+
+.lops-diff-title {
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--lmut);
+  margin-bottom: 10px;
+}
+
+.lops-diff-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 8px;
+}
+
+.lops-diff-item {
+  border: 1px solid var(--lbd);
+  border-radius: 10px;
+  padding: 11px;
+  background: color-mix(in srgb, var(--lbg) 94%, transparent);
+  display: grid;
+  gap: 4px;
+}
+
+.lops-diff-k {
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.lops-diff-item p { margin: 0; font-size: 13px; line-height: 1.45; color: var(--lmut); }
+
+@media (max-width: 620px) {
+  .lops-diff-grid { grid-template-columns: 1fr; }
+}
+</style>

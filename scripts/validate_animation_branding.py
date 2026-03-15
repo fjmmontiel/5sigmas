@@ -12,6 +12,8 @@ MAIN = ROOT / "main.py"
 EXTRA_CSS = DOCS / "stylesheets" / "extra.css"
 ANIM_CSS = DOCS / "assets" / "stylesheets" / "animations.css"
 SHELL_JS = DOCS / "assets" / "javascripts" / "animation-shell.js"
+SERIES_PREVIEW_JS = DOCS / "assets" / "javascripts" / "series_energy_ai_preview.js"
+SERIES_PREVIEW_CSS = DOCS / "assets" / "stylesheets" / "series_energy_ai_preview.css"
 MKDOCS = ROOT / "mkdocs.yml"
 TEMPLATE_GENERIC = DOCS / "assets" / "templates" / "animation_boilerplate_generic.html"
 TEMPLATE_TABS = DOCS / "assets" / "templates" / "animation_boilerplate_tabs.html"
@@ -20,8 +22,16 @@ SHELL_EXCLUDED_SNIPPETS = {
     "snippets/series_cards.html",
     "snippets/series_meta.html",
 }
+EMBEDDED_BRANDING_MARKERS = (
+    "5SIGMAS · Animation Library",
+    "logo.svg",
+    "logo_white.svg",
+    ".ta-demo::before",
+    ".ta-demo::after",
+)
 
 INCLUDE_ANIM_RE = re.compile(r'\{\{\s*include_animation\(\s*"([^"]+)"')
+INCLUDE_HTML_RE = re.compile(r'\{\{\s*include_html\(\s*"([^"]+)"')
 
 
 def _is_animation_snippet(path: str) -> bool:
@@ -50,6 +60,16 @@ def _check_required_text(path: Path, needles: list[str], errors: list[str]) -> N
             errors.append(f"missing '{needle}' in {path}")
 
 
+def _check_absent_text(path: Path, needles: list[str], errors: list[str]) -> None:
+    if not path.exists():
+        errors.append(f"missing file: {path}")
+        return
+    text = path.read_text(encoding="utf-8")
+    for needle in needles:
+        if needle in text:
+            errors.append(f"unexpected legacy marker '{needle}' in {path}")
+
+
 def _check_markdown_includes(errors: list[str]) -> None:
     for base in (DOCS, DRAFTS):
         if not base.exists():
@@ -62,6 +82,22 @@ def _check_markdown_includes(errors: list[str]) -> None:
                 errors.append(
                     f"{md}: legacy include_animation(...) is not allowed, use include_html(...) for '{path}'"
                 )
+
+
+def _check_include_html_targets(errors: list[str]) -> None:
+    for base in (DOCS, DRAFTS):
+        if not base.exists():
+            continue
+        for md in base.rglob("*.md"):
+            content = md.read_text(encoding="utf-8")
+            for path in INCLUDE_HTML_RE.findall(content):
+                normalized = path.strip().replace("\\", "/")
+                if not normalized:
+                    errors.append(f"{md}: include_html(...) has an empty path")
+                    continue
+                target = DOCS / normalized
+                if not target.is_file():
+                    errors.append(f"{md}: include_html(...) target not found: '{normalized}'")
 
 
 def _check_animation_snippets(errors: list[str]) -> None:
@@ -88,6 +124,11 @@ def _check_animation_snippets(errors: list[str]) -> None:
 
         if "anim-brand-shell" in text or "data-anim-shell" in text:
             errors.append(f"{path}: manual anim-brand-shell is not allowed, use include_html(...) shell")
+
+        for marker in EMBEDDED_BRANDING_MARKERS:
+            if marker in text:
+                errors.append(f"{path}: embedded branding marker not allowed ('{marker}'), rely on include_html shell")
+                break
         
         # Guardrail: avoid collision with Material's native tab runtime.
         if "data-tabs" in text:
@@ -102,6 +143,14 @@ def _check_animation_snippets(errors: list[str]) -> None:
             panel_keys = {k for k in re.findall(r'data-panel="([^"]+)"', text) if "${" not in k}
             if tab_keys and panel_keys and tab_keys != panel_keys:
                 errors.append(f"{path}: tab/panel keys mismatch (tabs={sorted(tab_keys)}, panels={sorted(panel_keys)})")
+
+            has_tabs_runtime = (
+                "__portableTabsFallback" in text
+                or "window.TabbedAnimations" in text
+                or re.search(r'document\.querySelectorAll\([^)]*data-anim-tabs', text) is not None
+            )
+            if not has_tabs_runtime:
+                errors.append(f"{path}: data-anim-tabs requires local portability init/fallback markers")
 
 
 def _check_templates(errors: list[str]) -> None:
@@ -167,10 +216,36 @@ def main() -> int:
         ],
         errors,
     )
+    _check_absent_text(
+        ANIM_CSS,
+        [
+            ".anim-brand-shell",
+            ".anim-brand-shell__viewport",
+            "[data-anim-shell-open]",
+        ],
+        errors,
+    )
     _check_required_text(SHELL_JS, ["data-anim-shell-open", "anim-shell-modal", "data-anim-fullscreen"], errors)
+    _check_absent_text(
+        SERIES_PREVIEW_CSS,
+        [
+            ".sp-fullscreen",
+            ".sp-fullscreen-btn",
+        ],
+        errors,
+    )
+    _check_absent_text(
+        SERIES_PREVIEW_JS,
+        [
+            "sp-fullscreen",
+            "sp-fullscreen-btn",
+        ],
+        errors,
+    )
     _check_required_text(MKDOCS, ["assets/javascripts/animation-shell.js"], errors)
 
     _check_markdown_includes(errors)
+    _check_include_html_targets(errors)
     _check_animation_snippets(errors)
     _check_templates(errors)
 

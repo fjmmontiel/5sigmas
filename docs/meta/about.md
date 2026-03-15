@@ -1,4 +1,6 @@
 ---
+title: Sobre 5sigmas — Francisco Maldonado
+description: Ingeniero de sistemas de IA en tiempo real, doble graduado en Física y Matemáticas. Escribe sobre IA con rigor técnico para profesionales y decisores.
 hide:
   - navigation
   - toc

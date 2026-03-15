@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+  {{ super() }}
+  {% if page %}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    {% if page.url in ["", "index.html"] %}
+    "@type": "WebSite",
+    "name": "{{ config.site_name | e }}",
+    "description": "{{ config.site_description | e }}",
+    "url": "{{ config.site_url }}",
+    "author": {
+      "@type": "Person",
+      "name": "Francisco Maldonado",
+      "url": "{{ config.site_url }}meta/about/"
+    }
+    {% elif "meta/about" in page.url %}
+    "@type": "ProfilePage",
+    "name": "Sobre Francisco Maldonado — 5sigmas",
+    "url": "{{ page.canonical_url }}",
+    "mainEntity": {
+      "@type": "Person",
+      "name": "Francisco Maldonado",
+      "jobTitle": "Ingeniero de sistemas de IA en tiempo real",
+      "description": "Doble graduado en Física y Matemáticas. Diseña y construye sistemas de IA en producción: asistentes de voz, visión artificial y sistemas en tiempo real.",
+      "url": "{{ page.canonical_url }}",
+      "sameAs": ["https://www.linkedin.com/in/fjmm1998/"]
+    }
+    {% else %}
+    "@type": "TechArticle",
+    "headline": "{{ page.title | e }}",
+    "description": "{{ page.meta.description | default(config.site_description) | e }}",
+    "url": "{{ page.canonical_url }}",
+    "inLanguage": "es",
+    "author": {
+      "@type": "Person",
+      "name": "Francisco Maldonado",
+      "url": "{{ config.site_url }}meta/about/",
+      "sameAs": ["https://www.linkedin.com/in/fjmm1998/"]
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "{{ config.site_name | e }}",
+      "url": "{{ config.site_url }}"
+    }
+    {% endif %}
+  }
+  </script>
+  {% endif %}
+{% endblock %}

@@ -1,6 +1,6 @@
 ---
 title: 5sigmas
-description: La evolución de las matemáticas, filosofía e ingeniería en el camino a la AGI
+description: Divulgación técnica sobre IA en español. Análisis riguroso de Inteligencia Artificial, IA generativa y AGI — sin hype, con contexto y fuentes primarias.
 hide:
   - navigation
 ---

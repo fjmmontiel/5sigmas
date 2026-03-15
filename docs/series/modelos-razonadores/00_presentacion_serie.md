@@ -1,7 +1,7 @@
 ---
 
 title: Modelos razonadores
-description: Razonamiento como proceso, costes y diseño de sistemas con tiempo físico.
+description: Cómo razonan los modelos de IA: cadenas de pensamiento, árbol de ideas y razonamiento como proceso con coste computacional real. Análisis técnico sin hype.
 ---
 
 # Modelos razonadores

@@ -33,8 +33,7 @@ Construir y mantener una librería de animaciones HTML reutilizable para explica
 Toda animación nueva o refactorizada debe:
 - compartir tipografía corporativa,
 - compartir paleta corporativa (variables/tokens comunes),
-- incluir watermark de logo,
-- incluir footer corporativo consistente,
+- ser portable como HTML standalone (abrible directo por `file://`),
 - ser reusable como snippet HTML independiente e incluible vía macro.
 
 ## Guía enfocada: crear animaciones HTML con include_html
@@ -61,6 +60,7 @@ Toda animación nueva o refactorizada debe:
   - selector por tab (`data-tab`),
   - panel de contenido por tab (`data-panel`).
 - El snippet no debe duplicar shell corporativo global; el branding se inyecta desde `include_html(...)`.
+- El snippet debe funcionar standalone. Si usa `data-anim-tabs`, debe incluir fallback local cuando `window.TabbedAnimations` no esté disponible.
 - Fullscreen es `on` por defecto y puede controlarse con `anim_fullscreen` en `include_html(...)` o con `data-anim-fullscreen` en el snippet.
 - Precedencia de fullscreen: `anim_fullscreen` (include) > `data-anim-fullscreen` (snippet) > default `on`.
 - Reutilizar tokens de marca (`--ta-*`) para acentos/focus/estado activo y dark mode.
@@ -74,6 +74,18 @@ Toda animación nueva o refactorizada debe:
    - `make build`
 4. Incluir en Markdown usando:
    - `{{ include_html("snippets/<dominio>/<nombre>.html") }}`
+
+### Operativa Playwright para este repo
+- Para inspección visual real, preferir Playwright MCP cuando la sesión responda correctamente.
+- Si se usa MkDocs local, navegar siempre primero a la URL final servida (por ejemplo `http://127.0.0.1:8010/series/...`) antes de inspeccionar o interactuar.
+- Hacer `snapshot` después de cada navegación o cambio grande de UI antes de referenciar elementos.
+- Si el MCP reutiliza una sesión persistente y se queda en `about:blank`, o falla por conflicto de sesión, usar como fallback oficial el wrapper CLI de la skill Playwright:
+  - `export CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"`
+  - `export PWCLI="$CODEX_HOME/skills/playwright/scripts/playwright_cli.sh"`
+  - `"$PWCLI" kill-all`
+  - `"$PWCLI" open http://127.0.0.1:8010/series/...`
+  - `"$PWCLI" snapshot`
+- Cuando se use ese fallback, dejar constancia de ello en el resumen de la subtarea.
 
 ### Auto-descubrimiento y pipeline
 - CI/CD y build local deben ejecutar siempre `make build` para forzar:
@@ -98,6 +110,7 @@ Toda animación nueva o refactorizada debe:
   - `data-anim-contrast="force"` para contraste automático robusto.
 - No insertar logos/footer manuales.
 - No usar estilos/JS globales fuera del scope del snippet.
+- Si el snippet usa tabs (`data-anim-tabs`), incluir inicialización portable local (click/teclado) o fallback explícito.
 
 ### Contrato de include_html y shell global
 - Todo snippet HTML de `docs/snippets/**` se inyecta por `include_html(...)`.
@@ -176,6 +189,7 @@ Una tarea se considera terminada cuando:
 - Diseña para múltiples instancias por página.
 - Mantén compatibilidad con navegación instantánea de MkDocs Material.
 - Evita side effects globales fuera del namespace de la animación.
+- Para tabs, añade fallback local cuando no exista `window.TabbedAnimations` (portabilidad standalone).
 
 ### 6) Accesibilidad mínima
 - Usa `role="tablist"` y estados `aria-selected` en tabs.
@@ -200,6 +214,7 @@ Una tarea se considera terminada cuando:
 ### 9) Anti-patrones a evitar
 - Duplicar CSS de branding en cada animación.
 - Incluir shell manual dentro del snippet (`anim-brand-shell`, `data-anim-shell`, `data-anim-shell-open`) en animaciones no descartadas.
+- Depender exclusivamente de runtime global para tabs sin fallback local portable.
 - Introducir variaciones visuales fuera de los tokens compartidos sin aprobación.
 - Cambiar estructura de carpetas o contratos del pipeline sin actualizar `AGENTS.md` y tests.
 - Intervenir el toggle de tema nativo de MkDocs Material con hacks/custom JS sin aprobación explícita.

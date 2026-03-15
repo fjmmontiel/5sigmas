@@ -1,0 +1,486 @@
+<div class="dif-wrap" data-demo="03-cinco-diferencias" data-anim-tabs data-default="io">
+  <div class="dif-hd">
+    <div class="dif-title">IA clásica vs IA Generativa: cinco diferencias</div>
+    <div class="dif-sub">Confundirlas lleva a decisiones equivocadas. Conocer en qué difieren es la base para elegir la tecnología correcta.</div>
+  </div>
+
+  <nav class="dif-nav" data-role="tablist" aria-label="Cinco diferencias ML vs GenAI">
+    <button type="button" data-role="tab" data-tab="io" aria-selected="true">Entradas y salidas</button>
+    <button type="button" data-role="tab" data-tab="det" aria-selected="false">Determinismo</button>
+    <button type="button" data-role="tab" data-tab="exp" aria-selected="false">Explicabilidad</button>
+    <button type="button" data-role="tab" data-tab="eval" aria-selected="false">Evaluación</button>
+    <button type="button" data-role="tab" data-tab="riesgos" aria-selected="false">Riesgos</button>
+  </nav>
+
+  <div class="dif-panels">
+
+    <!-- 1: IO -->
+    <section class="dif-panel" data-panel="io">
+      <div class="dif-compare">
+        <div class="dif-col dif-col--ml">
+          <div class="dif-col-label">IA clásica (ML)</div>
+          <div class="dif-item">
+            <div class="dif-item-k">Entrada típica</div>
+            <div class="dif-chips">
+              <span class="dif-chip">Tabla de datos</span>
+              <span class="dif-chip">Imagen</span>
+              <span class="dif-chip">Datos estructurados</span>
+            </div>
+          </div>
+          <div class="dif-item">
+            <div class="dif-item-k">Salida típica</div>
+            <div class="dif-chips">
+              <span class="dif-chip">Etiqueta</span>
+              <span class="dif-chip">Número</span>
+              <span class="dif-chip">Probabilidad</span>
+            </div>
+          </div>
+          <div class="dif-item">
+            <div class="dif-item-k">Espacio de salida</div>
+            <div class="dif-badge dif-badge--ok">Finito y definido antes de entrenar</div>
+          </div>
+        </div>
+        <div class="dif-col dif-col--gen">
+          <div class="dif-col-label">IA Generativa (GenAI)</div>
+          <div class="dif-item">
+            <div class="dif-item-k">Entrada típica</div>
+            <div class="dif-chips">
+              <span class="dif-chip">Texto</span>
+              <span class="dif-chip">Imagen</span>
+              <span class="dif-chip">Audio / Documento</span>
+            </div>
+          </div>
+          <div class="dif-item">
+            <div class="dif-item-k">Salida típica</div>
+            <div class="dif-chips">
+              <span class="dif-chip">Texto generado</span>
+              <span class="dif-chip">Imagen generada</span>
+              <span class="dif-chip">Código</span>
+            </div>
+          </div>
+          <div class="dif-item">
+            <div class="dif-item-k">Espacio de salida</div>
+            <div class="dif-badge dif-badge--warn">Prácticamente ilimitado</div>
+          </div>
+        </div>
+      </div>
+      <div class="dif-takeaway">Un clasificador de fraude devuelve "fraude / no fraude". Un LLM puede devolver cualquier respuesta en texto. Esa diferencia tiene consecuencias sobre todo lo que viene después.</div>
+    </section>
+
+    <!-- 2: Determinism -->
+    <section class="dif-panel" data-panel="det" hidden>
+      <div class="dif-compare">
+        <div class="dif-col dif-col--ml">
+          <div class="dif-col-label">IA clásica (ML)</div>
+          <div class="dif-item">
+            <div class="dif-item-k">Comportamiento</div>
+            <div class="dif-badge dif-badge--ok">Determinista</div>
+          </div>
+          <p class="dif-col-p">Dado el mismo input, el mismo modelo produce siempre la misma salida. El comportamiento es reproducible.</p>
+          <div class="dif-item">
+            <div class="dif-item-k">Ventaja en</div>
+            <p>Sistemas donde la trazabilidad y la auditoría importan. Producción con requisito de reproducibilidad.</p>
+          </div>
+        </div>
+        <div class="dif-col dif-col--gen">
+          <div class="dif-col-label">IA Generativa (GenAI)</div>
+          <div class="dif-item">
+            <div class="dif-item-k">Comportamiento</div>
+            <div class="dif-badge dif-badge--warn">Probabilístico por diseño</div>
+          </div>
+          <p class="dif-col-p">Dado el mismo prompt, el modelo puede producir respuestas distintas. La "temperatura" controla cuánta variabilidad hay.</p>
+          <div class="dif-item">
+            <div class="dif-item-k">Ventaja en</div>
+            <p>Creatividad, exploración, generación de variantes. Riesgo en decisiones críticas que requieren reproducibilidad.</p>
+          </div>
+        </div>
+      </div>
+      <div class="dif-takeaway">El determinismo de ML es una ventaja donde la trazabilidad importa. La variabilidad de GenAI es una característica en creatividad y un riesgo en decisiones críticas.</div>
+    </section>
+
+    <!-- 3: Explainability -->
+    <section class="dif-panel" data-panel="exp" hidden>
+      <div class="dif-compare">
+        <div class="dif-col dif-col--ml">
+          <div class="dif-col-label">IA clásica (ML)</div>
+          <div class="dif-item">
+            <div class="dif-item-k">Modelos simples</div>
+            <p>Árboles, regresión logística: directamente interpretables. "Rechazado porque ingresos &lt; X y ratio deuda > Y."</p>
+          </div>
+          <div class="dif-item">
+            <div class="dif-item-k">Modelos complejos</div>
+            <p>SHAP y LIME calculan la contribución de cada variable a cada decisión concreta. Técnicas establecidas.</p>
+          </div>
+          <div class="dif-badge dif-badge--ok" style="margin-top:6px">Explicabilidad técnica disponible</div>
+        </div>
+        <div class="dif-col dif-col--gen">
+          <div class="dif-col-label">IA Generativa (GenAI)</div>
+          <div class="dif-item">
+            <div class="dif-item-k">LLMs</div>
+            <p>El proceso interno es opaco. El modelo genera texto fluido que parece razonado, pero el "por qué" no es accesible.</p>
+          </div>
+          <div class="dif-item">
+            <div class="dif-item-k">Alucinaciones</div>
+            <p>El síntoma más visible de esa opacidad: el modelo produce la continuación más probable aunque no sea verdad.</p>
+          </div>
+          <div class="dif-badge dif-badge--warn" style="margin-top:6px">Problema abierto del campo</div>
+        </div>
+      </div>
+      <div class="dif-takeaway">Alucinacion: el modelo no miente — produce la continuación estadísticamente más probable. Es una consecuencia del mecanismo de generación, no un defecto eliminable.</div>
+    </section>
+
+    <!-- 4: Evaluation -->
+    <section class="dif-panel" data-panel="eval" hidden>
+      <div class="dif-compare">
+        <div class="dif-col dif-col--ml">
+          <div class="dif-col-label">IA clásica (ML)</div>
+          <div class="dif-item">
+            <div class="dif-item-k">Criterio de calidad</div>
+            <div class="dif-badge dif-badge--ok">Objetiva y automatizable</div>
+          </div>
+          <div class="dif-chips" style="margin-top:4px">
+            <span class="dif-chip">Precisión</span>
+            <span class="dif-chip">Exhaustividad</span>
+            <span class="dif-chip">AUC-ROC</span>
+          </div>
+          <p class="dif-col-p" style="margin-top:8px">Se calculan con datos etiquetados, se reproducen sin ambigüedad. El criterio de "funciona" es claro.</p>
+        </div>
+        <div class="dif-col dif-col--gen">
+          <div class="dif-col-label">IA Generativa (GenAI)</div>
+          <div class="dif-item">
+            <div class="dif-item-k">Criterio de calidad</div>
+            <div class="dif-badge dif-badge--warn">Difícil de medir</div>
+          </div>
+          <p class="dif-col-p" style="margin-top:8px">Las métricas automáticas clásicas son aproximaciones pobres. La práctica combina modelo-evaluador, revisión humana y métricas de tarea específica.</p>
+        </div>
+      </div>
+      <div class="dif-takeaway">La evaluación es el cuello de botella de la mayoría de proyectos de GenAI. Construir el sistema de evaluación antes que el sistema en sí es la práctica más subestimada del campo.</div>
+    </section>
+
+    <!-- 5: Risks -->
+    <section class="dif-panel" data-panel="riesgos" hidden>
+      <div class="dif-risk-grid">
+        <div class="dif-risk-col">
+          <div class="dif-risk-head dif-risk-head--ml">ML clásico</div>
+          <div class="dif-risk-item">
+            <div class="dif-risk-k">Riesgo principal</div>
+            <p>Deriva de datos: el mundo cambia, el modelo no. El rendimiento cae de forma silenciosa.</p>
+          </div>
+          <div class="dif-risk-item">
+            <div class="dif-risk-k">Confianza excesiva</div>
+            <p>Modelo que funciona bien en pruebas pero falla en producción cuando los patrones cambian.</p>
+          </div>
+          <div class="dif-risk-item">
+            <div class="dif-risk-k">Superficie de ataque</div>
+            <p>Inputs manipulados para engañar al modelo (adversarial examples).</p>
+          </div>
+          <div class="dif-risk-item">
+            <div class="dif-risk-k">Marco regulatorio</div>
+            <p>Decisiones automatizadas (GDPR Art. 22, AI Act riesgo alto).</p>
+          </div>
+        </div>
+        <div class="dif-risk-col">
+          <div class="dif-risk-head dif-risk-head--gen">GenAI</div>
+          <div class="dif-risk-item">
+            <div class="dif-risk-k">Riesgo principal</div>
+            <p>Alucinaciones, sesgos amplificados, salidas impredecibles. Texto fluido que parece correcto pero no lo es.</p>
+          </div>
+          <div class="dif-risk-item">
+            <div class="dif-risk-k">Confianza excesiva</div>
+            <p>El usuario interpreta fluidez lingüística como fiabilidad factual. No son lo mismo.</p>
+          </div>
+          <div class="dif-risk-item">
+            <div class="dif-risk-k">Superficie de ataque</div>
+            <p>Prompt injection: instrucciones ocultas en el texto que introduce el usuario para manipular el modelo.</p>
+          </div>
+          <div class="dif-risk-item">
+            <div class="dif-risk-k">Marco regulatorio</div>
+            <p>Contenido generado, derechos de autor, deepfakes, difusión de información falsa.</p>
+          </div>
+        </div>
+      </div>
+      <div class="dif-takeaway">Ninguna familia es más segura en abstracto. Los riesgos son distintos y requieren mitigaciones distintas.</div>
+    </section>
+
+  </div>
+</div>
+
+<style>
+.dif-wrap, .dif-wrap * { box-sizing: border-box; }
+
+.dif-wrap {
+  --da: var(--md-primary-fg-color, #26A69A);
+  --db: #324AB2;
+  --dg: var(--md-accent-fg-color, #FFB343);
+  --dbg: var(--md-default-bg-color, #fff);
+  --dfg: var(--md-default-fg-color, #0f172a);
+  --dbd: rgba(15,23,42,.16);
+  --dmut: rgba(15,23,42,.60);
+  --df: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid;
+  gap: 12px;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--dbd);
+  border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--db) 7%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 0%, color-mix(in srgb,var(--da) 7%,transparent), transparent 52%),
+    var(--dbg);
+  color: var(--dfg);
+  font-family: var(--df);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-md-color-scheme="slate"] .dif-wrap {
+  --dbg: var(--md-default-bg-color, #0f172a);
+  --dfg: var(--md-default-fg-color, #e2e8f0);
+  --dbd: rgba(226,232,240,.16);
+  --dmut: rgba(226,232,240,.60);
+}
+
+.dif-hd { display: grid; gap: 5px; }
+
+.dif-title {
+  font-size: clamp(17px,2.2vw,24px);
+  font-weight: 900;
+  letter-spacing: -.02em;
+  line-height: 1.1;
+}
+
+.dif-sub {
+  font-size: 14px;
+  color: var(--dmut);
+  line-height: 1.5;
+  max-width: 72ch;
+}
+
+/* Nav */
+.dif-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.dif-nav button {
+  appearance: none;
+  border: 1px solid var(--dbd);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--dbg) 90%, #0f172a 10%);
+  color: var(--dmut);
+  padding: 8px 13px;
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: border-color .14s, background .14s, color .14s;
+}
+
+.dif-nav button[aria-selected="true"] {
+  border-color: color-mix(in srgb, var(--db) 44%, transparent);
+  background: color-mix(in srgb, var(--db) 12%, var(--dbg));
+  color: var(--dfg);
+}
+
+.dif-nav button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--db) 22%, transparent);
+}
+
+.dif-panel[hidden] { display: none; }
+
+/* Compare layout */
+.dif-compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.dif-col {
+  border: 1px solid var(--dbd);
+  border-radius: 14px;
+  padding: 14px;
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  background: color-mix(in srgb, var(--dbg) 90%, #0f172a 10%);
+}
+
+.dif-col--ml {
+  border-color: color-mix(in srgb, var(--db) 28%, var(--dbd));
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--db) 7%, transparent), transparent 60%),
+    color-mix(in srgb, var(--dbg) 90%, #0f172a 10%);
+}
+
+.dif-col--gen {
+  border-color: color-mix(in srgb, var(--da) 28%, var(--dbd));
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--da) 7%, transparent), transparent 60%),
+    color-mix(in srgb, var(--dbg) 90%, #0f172a 10%);
+}
+
+.dif-col-label {
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--dmut);
+}
+
+.dif-col-p { margin: 0; font-size: 13.5px; line-height: 1.5; }
+
+.dif-item { display: grid; gap: 5px; }
+
+.dif-item-k {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--dmut);
+}
+
+.dif-item p { margin: 0; font-size: 13.5px; line-height: 1.5; }
+
+.dif-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.dif-chip {
+  padding: 4px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--dbd);
+  background: color-mix(in srgb, var(--dbg) 88%, transparent);
+  font-size: 12.5px;
+  font-weight: 700;
+}
+
+.dif-badge {
+  display: inline-flex;
+  padding: 5px 11px;
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 800;
+  border: 1px solid var(--dbd);
+}
+
+.dif-badge--ok {
+  border-color: color-mix(in srgb, var(--da) 38%, var(--dbd));
+  background: color-mix(in srgb, var(--da) 10%, var(--dbg));
+  color: color-mix(in srgb, var(--da) 80%, var(--dfg));
+}
+
+.dif-badge--warn {
+  border-color: color-mix(in srgb, var(--dg) 38%, var(--dbd));
+  background: color-mix(in srgb, var(--dg) 10%, var(--dbg));
+  color: color-mix(in srgb, var(--dg) 60%, var(--dfg));
+}
+
+.dif-takeaway {
+  font-size: 13.5px;
+  line-height: 1.5;
+  font-style: italic;
+  color: var(--dmut);
+  border-left: 3px solid color-mix(in srgb, var(--db) 36%, transparent);
+  padding-left: 12px;
+}
+
+/* Risk grid */
+.dif-risk-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.dif-risk-col {
+  border: 1px solid var(--dbd);
+  border-radius: 14px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--dbg) 90%, #0f172a 10%);
+}
+
+.dif-risk-head {
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--dbd);
+}
+
+.dif-risk-head--ml {
+  color: color-mix(in srgb, var(--db) 80%, var(--dfg));
+  background: color-mix(in srgb, var(--db) 10%, var(--dbg));
+}
+
+.dif-risk-head--gen {
+  color: color-mix(in srgb, var(--da) 80%, var(--dfg));
+  background: color-mix(in srgb, var(--da) 10%, var(--dbg));
+}
+
+.dif-risk-item {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--dbd);
+  display: grid;
+  gap: 3px;
+}
+
+.dif-risk-item:last-child { border-bottom: none; }
+
+.dif-risk-k {
+  font-size: 11.5px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--dmut);
+}
+
+.dif-risk-item p { margin: 0; font-size: 13px; line-height: 1.45; }
+
+@media (max-width: 640px) {
+  .dif-compare, .dif-risk-grid { grid-template-columns: 1fr; }
+}
+</style>
+
+<script>
+(function () {
+  function activate(root, key) {
+    root.querySelectorAll('[data-role="tab"]').forEach(t => {
+      const on = t.getAttribute('data-tab') === key;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+    });
+    root.querySelectorAll('[data-panel]').forEach(p => {
+      p.hidden = p.getAttribute('data-panel') !== key;
+    });
+  }
+  function initRoot(root) {
+    if (root.dataset.difReady === '1') return;
+    root.dataset.difReady = '1';
+    const tabs = Array.from(root.querySelectorAll('[data-role="tab"]'));
+    const first = root.getAttribute('data-default') || (tabs[0] && tabs[0].getAttribute('data-tab'));
+    tabs.forEach(tab => {
+      tab.tabIndex = -1;
+      tab.addEventListener('click', () => activate(root, tab.getAttribute('data-tab')));
+      tab.addEventListener('keydown', e => {
+        const cur = tabs.indexOf(tab);
+        let next = cur;
+        if (e.key === 'ArrowRight') next = (cur + 1) % tabs.length;
+        if (e.key === 'ArrowLeft') next = (cur - 1 + tabs.length) % tabs.length;
+        if (e.key === 'Home') next = 0;
+        if (e.key === 'End') next = tabs.length - 1;
+        if (next !== cur) { e.preventDefault(); tabs[next].focus(); activate(root, tabs[next].getAttribute('data-tab')); }
+      });
+    });
+    activate(root, first);
+  }
+  function boot() { document.querySelectorAll('[data-demo="03-cinco-diferencias"]').forEach(initRoot); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
+  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
+})();
+</script>

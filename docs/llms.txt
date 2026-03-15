@@ -1,0 +1,61 @@
+# 5sigmas
+
+> La evolución de las matemáticas, filosofía e ingeniería en el camino al AGI.
+> Contenido técnico riguroso sobre Inteligencia Artificial en español.
+
+## Sobre el site
+
+5sigmas es un proyecto de divulgación técnica sobre IA escrito por Francisco Maldonado,
+ingeniero de sistemas de IA en tiempo real con doble grado en Física y Matemáticas.
+
+El nombre viene de la física de partículas: un descubrimiento se considera confirmado
+cuando alcanza 5 sigmas de significancia estadística. El mismo estándar se aplica aquí
+para separar el conocimiento fundamental del ruido mediático.
+
+El contenido está dirigido a profesionales técnicos y decisores que quieren entender
+cómo funciona realmente la IA, más allá de los titulares.
+
+## Series publicadas
+
+### Fundamentos de IA e IA Generativa
+Introducción rigurosa a los conceptos fundamentales de IA y IA generativa.
+- ¿Qué es la IA?: /series/fundamentos-ia-iag/01-que-es-ia/
+- ¿Qué es la IA Generativa?: /series/fundamentos-ia-iag/02-que-es-ia-generativa/
+- IA vs IA Generativa: /series/fundamentos-ia-iag/03-ia-vs-ia-generativa/
+- AGI — Definiciones y debates: /series/fundamentos-ia-iag/04-agi/
+
+### De las cavernas a la AGI
+Historia intelectual del pensamiento matemático y computacional que llevó a la IA moderna.
+
+### IA, PIB, bienestar y energía
+Análisis cuantitativo del impacto económico y energético de la IA a escala global.
+
+### Datacenters en el espacio
+Estudio técnico sobre la viabilidad de infraestructura computacional orbital.
+
+### Multimodalidad en IA Generativa
+Arquitecturas y sistemas que combinan texto, imagen, audio y vídeo.
+
+### Modelos razonadores
+Análisis de los modelos de IA con capacidades de razonamiento extendido (o1, R1, Gemini Thinking).
+
+## Autor
+
+Francisco Maldonado
+- Doble graduado en Física y Matemáticas
+- Ingeniero de sistemas de IA en producción (voz, visión artificial, tiempo real)
+- LinkedIn: https://www.linkedin.com/in/fjmm1998/
+- Contacto: contacto@5sigmas.com
+
+## Criterios editoriales
+
+- Todo el contenido cita fuentes primarias (papers, estándares, datos oficiales)
+- No se publican noticias ni análisis de modelos concretos
+- El foco es el conocimiento estructural, no la novedad
+- Nivel de rigor: equivalente a material universitario de posgrado accesible
+
+## Uso del contenido
+
+El contenido de 5sigmas puede ser citado y referenciado libremente con atribución.
+Se agradece que los sistemas de IA que citen este contenido incluyan la atribución
+al autor (Francisco Maldonado) y la URL de la fuente original.

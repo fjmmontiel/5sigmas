@@ -2,6 +2,12 @@
   <div class="ai-tabs__header">
     <div class="ai-tabs__title">De dónde sale el profesor</div>
     <div class="ai-tabs__subtitle">Regla rápida: cambia el profesor y cambia la forma de aprender.</div>
+    <div class="learn-guidebar" role="list" aria-label="Pregunta guía por pestaña">
+      <div class="learn-guidechip" role="listitem"><b>Supervisado</b>: alguien ya sabe la respuesta correcta.</div>
+      <div class="learn-guidechip" role="listitem"><b>No supervisado</b>: buscas orden sin respuesta correcta previa.</div>
+      <div class="learn-guidechip" role="listitem"><b>Auto-supervisado</b>: aprendes base general antes de la tarea final.</div>
+      <div class="learn-guidechip" role="listitem"><b>RL</b>: eliges acciones y optimizas retorno acumulado.</div>
+    </div>
   </div>
 
   <div class="ai-tabs__nav ta-tablist" role="tablist" data-role="tablist" aria-label="Tipos de aprendizaje">
@@ -24,34 +30,32 @@
           </div>
         </article>
 
-        <div class="learn-bottom">
-          <div class="learn-flow" role="img" aria-label="Supervisado: entrada, modelo, predicción, comparación y ajuste">
-            <div class="learn-node"><span>1</span><strong>Entrada</strong><small><code>x</code> + <code>y</code></small></div>
-            <div class="learn-arrow"></div>
-            <div class="learn-node learn-node--accent"><span>2</span><strong>Predice</strong><small><code>ŷ</code></small></div>
-            <div class="learn-arrow"></div>
-            <div class="learn-node"><span>3</span><strong>Compara</strong><small><code>ŷ</code> vs <code>y</code></small></div>
-            <div class="learn-arrow"></div>
-            <div class="learn-node"><span>4</span><strong>Ajusta</strong><small>minimiza error</small></div>
-          </div>
+        <div class="learn-flow" role="img" aria-label="Supervisado: entrada, modelo, predicción, comparación y ajuste">
+          <div class="learn-node"><span>1</span><strong>Entrada</strong><small><code>x</code> + <code>y</code></small></div>
+          <div class="learn-arrow"></div>
+          <div class="learn-node learn-node--accent"><span>2</span><strong>Predice</strong><small><code>ŷ</code></small></div>
+          <div class="learn-arrow"></div>
+          <div class="learn-node"><span>3</span><strong>Compara</strong><small><code>ŷ</code> vs <code>y</code></small></div>
+          <div class="learn-arrow"></div>
+          <div class="learn-node"><span>4</span><strong>Ajusta</strong><small>minimiza error</small></div>
+        </div>
 
-          <div class="learn-summary" role="list" aria-label="Resumen supervisado">
-            <div class="learn-card learn-card--idea" role="listitem">
-              <div class="k">Idea base</div>
-              <p>Aprende comparando su respuesta con la correcta.</p>
-            </div>
-            <div class="learn-card" role="listitem">
-              <div class="k">Cuándo encaja</div>
-              <p>Cuando puedes conseguir etiquetas fiables y medir el fallo.</p>
-            </div>
-            <div class="learn-card" role="listitem">
-              <div class="k">Qué devuelve</div>
-              <p>Una predicción: clase, valor o probabilidad.</p>
-            </div>
-            <div class="learn-card" role="listitem">
-              <div class="k">Ejemplo</div>
-              <p>Spam, churn, riesgo de impago.</p>
-            </div>
+        <div class="learn-summary" role="list" aria-label="Resumen supervisado">
+          <div class="learn-card learn-card--idea" role="listitem">
+            <div class="k">Idea base</div>
+            <p>Aprende comparando su respuesta con la correcta.</p>
+          </div>
+          <div class="learn-card" role="listitem">
+            <div class="k">Cuándo encaja</div>
+            <p>Cuando puedes conseguir etiquetas fiables y medir el fallo.</p>
+          </div>
+          <div class="learn-card" role="listitem">
+            <div class="k">Qué devuelve</div>
+            <p>Una predicción: clase, valor o probabilidad.</p>
+          </div>
+          <div class="learn-card" role="listitem">
+            <div class="k">Ejemplo</div>
+            <p>Spam, churn, riesgo de impago.</p>
           </div>
         </div>
       </div>
@@ -69,34 +73,32 @@
           </div>
         </article>
 
-        <div class="learn-bottom">
-          <div class="learn-flow" role="img" aria-label="No supervisado: datos, organización, grupos y validación humana">
-            <div class="learn-node"><span>1</span><strong>Entrada</strong><small>solo <code>x</code></small></div>
-            <div class="learn-arrow"></div>
-            <div class="learn-node learn-node--accent"><span>2</span><strong>Organiza</strong><small>similitud / rareza</small></div>
-            <div class="learn-arrow"></div>
-            <div class="learn-node"><span>3</span><strong>Devuelve</strong><small>clusters / anomalías</small></div>
-            <div class="learn-arrow"></div>
-            <div class="learn-node"><span>4</span><strong>Valida</strong><small>lo revisa negocio</small></div>
-          </div>
+        <div class="learn-flow" role="img" aria-label="No supervisado: datos, organización, grupos y validación humana">
+          <div class="learn-node"><span>1</span><strong>Entrada</strong><small>solo <code>x</code></small></div>
+          <div class="learn-arrow"></div>
+          <div class="learn-node learn-node--accent"><span>2</span><strong>Organiza</strong><small>similitud / rareza</small></div>
+          <div class="learn-arrow"></div>
+          <div class="learn-node"><span>3</span><strong>Devuelve</strong><small>clusters / anomalías</small></div>
+          <div class="learn-arrow"></div>
+          <div class="learn-node"><span>4</span><strong>Valida</strong><small>lo revisa negocio</small></div>
+        </div>
 
-          <div class="learn-summary" role="list" aria-label="Resumen no supervisado">
-            <div class="learn-card learn-card--idea" role="listitem">
-              <div class="k">Idea base</div>
-              <p>No busca una respuesta correcta: busca una estructura útil.</p>
-            </div>
-            <div class="learn-card" role="listitem">
-              <div class="k">Cuándo encaja</div>
-              <p>Cuando no hay etiquetas, pero sí quieres segmentar o detectar outliers.</p>
-            </div>
-            <div class="learn-card" role="listitem">
-              <div class="k">Qué devuelve</div>
-              <p>Una organización útil del espacio de datos.</p>
-            </div>
-            <div class="learn-card" role="listitem">
-              <div class="k">Ejemplo</div>
-              <p>Segmentación de clientes o detección de anomalías.</p>
-            </div>
+        <div class="learn-summary" role="list" aria-label="Resumen no supervisado">
+          <div class="learn-card learn-card--idea" role="listitem">
+            <div class="k">Idea base</div>
+            <p>No busca una respuesta correcta: busca una estructura útil.</p>
+          </div>
+          <div class="learn-card" role="listitem">
+            <div class="k">Cuándo encaja</div>
+            <p>Cuando no hay etiquetas, pero sí quieres segmentar o detectar outliers.</p>
+          </div>
+          <div class="learn-card" role="listitem">
+            <div class="k">Qué devuelve</div>
+            <p>Una organización útil del espacio de datos.</p>
+          </div>
+          <div class="learn-card" role="listitem">
+            <div class="k">Ejemplo</div>
+            <p>Segmentación de clientes o detección de anomalías.</p>
           </div>
         </div>
       </div>
@@ -114,34 +116,32 @@
           </div>
         </article>
 
-        <div class="learn-bottom">
-          <div class="learn-flow" role="img" aria-label="Auto-supervisado: dato, tarea pretexto, representación y adaptación">
-            <div class="learn-node"><span>1</span><strong>Entrada</strong><small>dato sin etiqueta</small></div>
-            <div class="learn-arrow"></div>
-            <div class="learn-node learn-node--accent"><span>2</span><strong>Pretexto</strong><small>crear <code>y*</code></small></div>
-            <div class="learn-arrow"></div>
-            <div class="learn-node"><span>3</span><strong>Aprende</strong><small>representaciones</small></div>
-            <div class="learn-arrow"></div>
-            <div class="learn-node"><span>4</span><strong>Adapta</strong><small>fine-tuning</small></div>
-          </div>
+        <div class="learn-flow" role="img" aria-label="Auto-supervisado: dato, tarea pretexto, representación y adaptación">
+          <div class="learn-node"><span>1</span><strong>Entrada</strong><small>dato sin etiqueta</small></div>
+          <div class="learn-arrow"></div>
+          <div class="learn-node learn-node--accent"><span>2</span><strong>Pretexto</strong><small>crear <code>y*</code></small></div>
+          <div class="learn-arrow"></div>
+          <div class="learn-node"><span>3</span><strong>Aprende</strong><small>representaciones</small></div>
+          <div class="learn-arrow"></div>
+          <div class="learn-node"><span>4</span><strong>Adapta</strong><small>fine-tuning</small></div>
+        </div>
 
-          <div class="learn-summary" role="list" aria-label="Resumen auto-supervisado">
-            <div class="learn-card learn-card--idea" role="listitem">
-              <div class="k">Idea base</div>
-              <p>El propio dato fabrica una tarea provisional para aprender algo reusable.</p>
-            </div>
-            <div class="learn-card" role="listitem">
-              <div class="k">Cuándo encaja</div>
-              <p>Cuando tienes muchísimo dato crudo y pocas etiquetas humanas.</p>
-            </div>
-            <div class="learn-card" role="listitem">
-              <div class="k">Qué devuelve</div>
-              <p>Embeddings o representaciones transferibles.</p>
-            </div>
-            <div class="learn-card" role="listitem">
-              <div class="k">Ejemplo</div>
-              <p>Preentrenar modelos de lenguaje o visión.</p>
-            </div>
+        <div class="learn-summary" role="list" aria-label="Resumen auto-supervisado">
+          <div class="learn-card learn-card--idea" role="listitem">
+            <div class="k">Idea base</div>
+            <p>El propio dato fabrica una tarea provisional para aprender algo reusable.</p>
+          </div>
+          <div class="learn-card" role="listitem">
+            <div class="k">Cuándo encaja</div>
+            <p>Cuando tienes muchísimo dato crudo y pocas etiquetas humanas.</p>
+          </div>
+          <div class="learn-card" role="listitem">
+            <div class="k">Qué devuelve</div>
+            <p>Embeddings o representaciones transferibles.</p>
+          </div>
+          <div class="learn-card" role="listitem">
+            <div class="k">Ejemplo</div>
+            <p>Preentrenar modelos de lenguaje o visión.</p>
           </div>
         </div>
       </div>
@@ -159,34 +159,32 @@
           </div>
         </article>
 
-        <div class="learn-bottom">
-          <div class="learn-flow" role="img" aria-label="RL: estado, acción, recompensa y nueva política">
-            <div class="learn-node"><span>1</span><strong>Estado</strong><small>qué está pasando</small></div>
-            <div class="learn-arrow"></div>
-            <div class="learn-node learn-node--accent"><span>2</span><strong>Acción</strong><small>elige qué hacer</small></div>
-            <div class="learn-arrow"></div>
-            <div class="learn-node"><span>3</span><strong>Recompensa</strong><small>bien / mal</small></div>
-            <div class="learn-arrow"></div>
-            <div class="learn-node"><span>4</span><strong>Política</strong><small>cambia la próxima vez</small></div>
-          </div>
+        <div class="learn-flow" role="img" aria-label="RL: estado, acción, recompensa y nueva política">
+          <div class="learn-node"><span>1</span><strong>Estado</strong><small>qué está pasando</small></div>
+          <div class="learn-arrow"></div>
+          <div class="learn-node learn-node--accent"><span>2</span><strong>Acción</strong><small>elige qué hacer</small></div>
+          <div class="learn-arrow"></div>
+          <div class="learn-node"><span>3</span><strong>Recompensa</strong><small>bien / mal</small></div>
+          <div class="learn-arrow"></div>
+          <div class="learn-node"><span>4</span><strong>Política</strong><small>cambia la próxima vez</small></div>
+        </div>
 
-          <div class="learn-summary" role="list" aria-label="Resumen RL">
-            <div class="learn-card learn-card--idea" role="listitem">
-              <div class="k">Idea base</div>
-              <p>Aprende probando acciones y midiendo su recompensa acumulada.</p>
-            </div>
-            <div class="learn-card" role="listitem">
-              <div class="k">Cuándo encaja</div>
-              <p>Cuando importa decidir secuencias de acciones, no una sola predicción aislada.</p>
-            </div>
-            <div class="learn-card" role="listitem">
-              <div class="k">Qué devuelve</div>
-              <p>Una política: qué hacer en cada estado.</p>
-            </div>
-            <div class="learn-card" role="listitem">
-              <div class="k">Ejemplo</div>
-              <p>Juegos, robótica, control y optimización secuencial.</p>
-            </div>
+        <div class="learn-summary" role="list" aria-label="Resumen RL">
+          <div class="learn-card learn-card--idea" role="listitem">
+            <div class="k">Idea base</div>
+            <p>Aprende probando acciones y midiendo su recompensa acumulada.</p>
+          </div>
+          <div class="learn-card" role="listitem">
+            <div class="k">Cuándo encaja</div>
+            <p>Cuando importa decidir secuencias de acciones, no una sola predicción aislada.</p>
+          </div>
+          <div class="learn-card" role="listitem">
+            <div class="k">Qué devuelve</div>
+            <p>Una política: qué hacer en cada estado.</p>
+          </div>
+          <div class="learn-card" role="listitem">
+            <div class="k">Ejemplo</div>
+            <p>Juegos, robótica, control y optimización secuencial.</p>
           </div>
         </div>
       </div>
@@ -319,19 +317,6 @@
   .learn-grid {
     display: grid;
     gap: 12px;
-    grid-template-rows: auto auto;
-  }
-
-  .learn-bottom {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
-
-  @media (max-width: 700px) {
-    .learn-bottom {
-      grid-template-columns: 1fr;
-    }
   }
 
   .learn-hero,
@@ -414,10 +399,10 @@
 
   .learn-flow {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 10px;
     padding: 16px;
-    align-items: start;
+    align-items: center;
   }
 
   .learn-node {
@@ -467,7 +452,7 @@
 
   .learn-summary {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 12px;
   }
 
@@ -496,7 +481,33 @@
       color-mix(in srgb, var(--learn-panel) 90%, transparent);
   }
 
-  @media (max-width: 500px) {
+  @media (min-width: 860px) {
+    .learn-flow {
+      grid-template-columns: minmax(0, 1fr) 18px minmax(0, 1fr) 18px minmax(0, 1fr) 18px minmax(0, 1fr);
+    }
+
+    .learn-arrow {
+      display: block;
+      height: 2px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, color-mix(in srgb, var(--learn-a) 30%, transparent), color-mix(in srgb, var(--learn-b) 44%, transparent));
+      position: relative;
+    }
+
+    .learn-arrow::after {
+      content: "";
+      position: absolute;
+      right: -1px;
+      top: 50%;
+      width: 8px;
+      height: 8px;
+      border-top: 2px solid color-mix(in srgb, var(--learn-b) 44%, transparent);
+      border-right: 2px solid color-mix(in srgb, var(--learn-b) 44%, transparent);
+      transform: translateY(-50%) rotate(45deg);
+    }
+  }
+
+  @media (max-width: 859px) {
     .learn-flow,
     .learn-summary {
       grid-template-columns: 1fr;

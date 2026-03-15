@@ -1,6 +1,6 @@
 ---
 title: Fundamentos de IA e IA generativa
-description: Serie de entrada para entender IA y GenAI con criterio y contexto.
+description: Serie introductoria sobre IA e IA generativa: qué son, cómo funcionan, en qué se diferencian y qué es la AGI. Para profesionales técnicos y decisores.
 ---
 # Fundamentos de IA e IA generativa
 

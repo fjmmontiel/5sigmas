@@ -1,0 +1,357 @@
+<div class="mx-wrap" data-demo="03-matriz-operacional" data-anim-tabs data-default="reglas">
+  <div class="mx-hd">
+    <div class="mx-title">La matriz operacional</div>
+    <div class="mx-sub">Cinco tecnologías en espectro de complejidad. Avanzar a la derecha = más capacidad, más coste, más superficie de fallo. Lo correcto es usar la tecnología más simple que resuelve el problema.</div>
+  </div>
+
+  <div class="mx-spectrum" aria-label="Espectro de tecnologias">
+    <button type="button" class="mx-sp-node" data-tab="reglas" aria-pressed="true">Reglas</button>
+    <div class="mx-sp-arrow">→</div>
+    <button type="button" class="mx-sp-node" data-tab="ml" aria-pressed="false">ML clásico</button>
+    <div class="mx-sp-arrow">→</div>
+    <button type="button" class="mx-sp-node" data-tab="llm" aria-pressed="false">LLM puro</button>
+    <div class="mx-sp-arrow">→</div>
+    <button type="button" class="mx-sp-node" data-tab="rag" aria-pressed="false">LLM + RAG</button>
+    <div class="mx-sp-arrow">→</div>
+    <button type="button" class="mx-sp-node" data-tab="agente" aria-pressed="false">Agente</button>
+  </div>
+  <div class="mx-spectrum-labels">
+    <span>Más simple</span>
+    <span>Más complejo</span>
+  </div>
+
+  <div class="mx-panels">
+
+    <div class="mx-panel" data-panel="reglas">
+      <div class="mx-panel-head mx-panel-head--reglas">Reglas explícitas</div>
+      <div class="mx-panel-body">
+        <div class="mx-prop">
+          <div class="mx-prop-k">Cuando usarlo</div>
+          <p>El problema está bien definido, los casos son enumerables y la lógica no cambia. Descuento del 10% a clientes con más de dos años, bloquear transacción si supera el límite.</p>
+        </div>
+        <div class="mx-prop">
+          <div class="mx-prop-k">Ventaja</div>
+          <p>Más barato, más auditable y más fiable que cualquier modelo para ese tipo de problema.</p>
+        </div>
+        <div class="mx-prop">
+          <div class="mx-prop-k">Límite</div>
+          <p>Las excepciones se multiplican hasta que el sistema de reglas ya no lo puede mantener nadie.</p>
+        </div>
+        <div class="mx-metrics">
+          <div class="mx-metric"><span class="mx-metric-k">Evaluación</span><span class="mx-val mx-val--good">Trivial</span></div>
+          <div class="mx-metric"><span class="mx-metric-k">Coste operativo</span><span class="mx-val mx-val--good">Mínimo</span></div>
+          <div class="mx-metric"><span class="mx-metric-k">Fiabilidad</span><span class="mx-val mx-val--good">Alta</span></div>
+          <div class="mx-metric"><span class="mx-metric-k">Datos etiquetados</span><span class="mx-val mx-val--no">No necesita</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mx-panel" data-panel="ml" hidden>
+      <div class="mx-panel-head mx-panel-head--ml">ML clásico</div>
+      <div class="mx-panel-body">
+        <div class="mx-prop">
+          <div class="mx-prop-k">Cuando usarlo</div>
+          <p>Hay datos etiquetados disponibles y la salida es una etiqueta o un número. Detección de fraude, puntuación de riesgo, clasificación de incidencias, predicción de churn.</p>
+        </div>
+        <div class="mx-prop">
+          <div class="mx-prop-k">Ventaja</div>
+          <p>Métricas claras, evaluación automatizable, resultado reproducible y explicable. La opción más sólida para clasificación y predicción estructurada.</p>
+        </div>
+        <div class="mx-prop">
+          <div class="mx-prop-k">Límite</div>
+          <p>No adecuado cuando la entrada es texto libre variable, el contexto cambia mucho entre casos, o se necesita generar contenido.</p>
+        </div>
+        <div class="mx-metrics">
+          <div class="mx-metric"><span class="mx-metric-k">Evaluación</span><span class="mx-val mx-val--good">Clara y automatizable</span></div>
+          <div class="mx-metric"><span class="mx-metric-k">Coste operativo</span><span class="mx-val mx-val--good">Bajo</span></div>
+          <div class="mx-metric"><span class="mx-metric-k">Fiabilidad</span><span class="mx-val mx-val--good">Alta</span></div>
+          <div class="mx-metric"><span class="mx-metric-k">Datos etiquetados</span><span class="mx-val mx-val--req">Necesarios</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mx-panel" data-panel="llm" hidden>
+      <div class="mx-panel-head mx-panel-head--llm">LLM puro</div>
+      <div class="mx-panel-body">
+        <div class="mx-prop">
+          <div class="mx-prop-k">Cuando usarlo</div>
+          <p>La tarea es lingüística y el conocimiento general del modelo es suficiente: redacción, resumen, traducción, generación de código, explicación de conceptos.</p>
+        </div>
+        <div class="mx-prop">
+          <div class="mx-prop-k">Ventaja</div>
+          <p>Un modelo de base sirve para muchas tareas sin reentrenar. La adaptación es barata vía prompt o ajuste fino ligero.</p>
+        </div>
+        <div class="mx-prop">
+          <div class="mx-prop-k">Límite</div>
+          <p>Conocimiento estático con fecha de corte. No accede a documentos propios ni a información posterior al entrenamiento.</p>
+        </div>
+        <div class="mx-metrics">
+          <div class="mx-metric"><span class="mx-metric-k">Evaluación</span><span class="mx-val mx-val--warn">Difícil</span></div>
+          <div class="mx-metric"><span class="mx-metric-k">Coste operativo</span><span class="mx-val">Medio</span></div>
+          <div class="mx-metric"><span class="mx-metric-k">Fiabilidad</span><span class="mx-val">Media</span></div>
+          <div class="mx-metric"><span class="mx-metric-k">Datos etiquetados</span><span class="mx-val mx-val--no">No necesita</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mx-panel" data-panel="rag" hidden>
+      <div class="mx-panel-head mx-panel-head--rag">LLM + RAG</div>
+      <div class="mx-panel-body">
+        <div class="mx-prop">
+          <div class="mx-prop-k">Cuando usarlo</div>
+          <p>El modelo necesita razonar sobre documentos actuales o propios sin reentrenarlo. Preguntas sobre documentación técnica interna, bases de conocimiento propias, normativa cambiante.</p>
+        </div>
+        <div class="mx-prop">
+          <div class="mx-prop-k">Ventaja</div>
+          <p>El modelo puede responder con precisión sobre información que no estaba en su entrenamiento porque la lee en cada consulta.</p>
+        </div>
+        <div class="mx-prop">
+          <div class="mx-prop-k">Límite</div>
+          <p>Mayor latencia y coste. Si los documentos son muy especializados o la recuperación falla, la respuesta también falla.</p>
+        </div>
+        <div class="mx-metrics">
+          <div class="mx-metric"><span class="mx-metric-k">Evaluación</span><span class="mx-val mx-val--warn">Difícil</span></div>
+          <div class="mx-metric"><span class="mx-metric-k">Coste operativo</span><span class="mx-val">Medio-alto</span></div>
+          <div class="mx-metric"><span class="mx-metric-k">Fiabilidad</span><span class="mx-val">Media</span></div>
+          <div class="mx-metric"><span class="mx-metric-k">Conocimiento externo</span><span class="mx-val mx-val--req">Sí</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mx-panel" data-panel="agente" hidden>
+      <div class="mx-panel-head mx-panel-head--agente">Agente</div>
+      <div class="mx-panel-body">
+        <div class="mx-prop">
+          <div class="mx-prop-k">Cuando usarlo</div>
+          <p>La tarea requiere múltiples pasos, herramientas externas o actuar sobre sistemas reales. Automatización compleja: buscar, ejecutar código, llamar APIs, ajustar el plan según resultados.</p>
+        </div>
+        <div class="mx-prop">
+          <div class="mx-prop-k">Ventaja</div>
+          <p>Capaz de cosas que ningún modelo solo podría hacer. Adecuado para análisis profundo de casos complejos o investigación multi-fuente.</p>
+        </div>
+        <div class="mx-prop">
+          <div class="mx-prop-k">Límite</div>
+          <p>Cada paso puede fallar y los fallos en cadena son difíciles de detectar. Cuanto más larga la cadena, menos fiable el resultado final.</p>
+        </div>
+        <div class="mx-metrics">
+          <div class="mx-metric"><span class="mx-metric-k">Evaluación</span><span class="mx-val mx-val--bad">Muy difícil</span></div>
+          <div class="mx-metric"><span class="mx-metric-k">Coste operativo</span><span class="mx-val mx-val--bad">Alto</span></div>
+          <div class="mx-metric"><span class="mx-metric-k">Fiabilidad</span><span class="mx-val">Variable</span></div>
+          <div class="mx-metric"><span class="mx-metric-k">Acción en el mundo</span><span class="mx-val mx-val--req">Sí</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<style>
+.mx-wrap, .mx-wrap * { box-sizing: border-box; }
+
+.mx-wrap {
+  --ma: var(--md-primary-fg-color, #26A69A);
+  --mb: #324AB2;
+  --mg: var(--md-accent-fg-color, #FFB343);
+  --mr: #ef4444;
+  --mbg: var(--md-default-bg-color, #fff);
+  --mfg: var(--md-default-fg-color, #0f172a);
+  --mbd: rgba(15,23,42,.16);
+  --mmut: rgba(15,23,42,.60);
+  --mf: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid;
+  gap: 12px;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--mbd);
+  border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--mb) 7%,transparent), transparent 50%),
+    radial-gradient(90% 110% at 95% 0%, color-mix(in srgb,var(--mg) 7%,transparent), transparent 52%),
+    var(--mbg);
+  color: var(--mfg);
+  font-family: var(--mf);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-md-color-scheme="slate"] .mx-wrap {
+  --mbg: var(--md-default-bg-color, #0f172a);
+  --mfg: var(--md-default-fg-color, #e2e8f0);
+  --mbd: rgba(226,232,240,.16);
+  --mmut: rgba(226,232,240,.60);
+}
+
+.mx-hd { display: grid; gap: 5px; }
+
+.mx-title {
+  font-size: clamp(17px,2.2vw,24px);
+  font-weight: 900;
+  letter-spacing: -.02em;
+  line-height: 1.1;
+}
+
+.mx-sub {
+  font-size: 14px;
+  color: var(--mmut);
+  line-height: 1.5;
+  max-width: 74ch;
+}
+
+/* Spectrum */
+.mx-spectrum {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 12px;
+  border: 1px solid var(--mbd);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--mbg) 88%, #0f172a 12%);
+}
+
+.mx-sp-node {
+  appearance: none;
+  border: 1px solid var(--mbd);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--mbg) 86%, transparent);
+  color: var(--mfg);
+  padding: 8px 12px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: border-color .14s, background .14s, box-shadow .14s;
+  flex: 1;
+  min-width: 70px;
+  text-align: center;
+}
+
+.mx-sp-node[aria-pressed="true"] {
+  border-color: color-mix(in srgb, var(--mb) 44%, transparent);
+  background: color-mix(in srgb, var(--mb) 14%, var(--mbg));
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--mb) 22%, transparent);
+}
+
+.mx-sp-node:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--mb) 24%, transparent);
+}
+
+.mx-sp-arrow {
+  font-size: 16px;
+  font-weight: 900;
+  color: var(--mmut);
+  flex-shrink: 0;
+}
+
+.mx-spectrum-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--mmut);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  padding: 0 4px;
+}
+
+/* Panels */
+.mx-panel[hidden] { display: none; }
+
+.mx-panel {
+  border: 1px solid var(--mbd);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.mx-panel-head {
+  font-size: 14px;
+  font-weight: 900;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--mbd);
+}
+
+.mx-panel-head--reglas { background: color-mix(in srgb, var(--ma) 8%, var(--mbg)); color: color-mix(in srgb, var(--ma) 80%, var(--mfg)); border-color: color-mix(in srgb, var(--ma) 22%, var(--mbd)); }
+.mx-panel-head--ml { background: color-mix(in srgb, var(--mb) 8%, var(--mbg)); color: color-mix(in srgb, var(--mb) 80%, var(--mfg)); border-color: color-mix(in srgb, var(--mb) 22%, var(--mbd)); }
+.mx-panel-head--llm { background: color-mix(in srgb, color-mix(in srgb,var(--ma) 50%,var(--mb)) 8%, var(--mbg)); color: color-mix(in srgb, var(--mb) 70%, var(--mfg)); border-color: color-mix(in srgb, var(--mb) 18%, var(--mbd)); }
+.mx-panel-head--rag { background: color-mix(in srgb, var(--mg) 10%, var(--mbg)); color: color-mix(in srgb, var(--mg) 60%, var(--mfg)); border-color: color-mix(in srgb, var(--mg) 28%, var(--mbd)); }
+.mx-panel-head--agente { background: color-mix(in srgb, var(--mr) 8%, var(--mbg)); color: color-mix(in srgb, var(--mr) 70%, var(--mfg)); border-color: color-mix(in srgb, var(--mr) 22%, var(--mbd)); }
+
+.mx-panel-body {
+  padding: 14px;
+  display: grid;
+  gap: 10px;
+  background: color-mix(in srgb, var(--mbg) 92%, #0f172a 8%);
+}
+
+.mx-prop { display: grid; gap: 4px; }
+
+.mx-prop-k {
+  font-size: 11.5px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--mmut);
+}
+
+.mx-prop p { margin: 0; font-size: 13.5px; line-height: 1.5; }
+
+.mx-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 7px;
+}
+
+.mx-metric {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 7px 10px;
+  border: 1px solid var(--mbd);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--mbg) 88%, transparent);
+  font-size: 12.5px;
+}
+
+.mx-metric-k { font-weight: 700; color: var(--mmut); }
+
+.mx-val { font-weight: 800; font-size: 12px; }
+.mx-val--good { color: color-mix(in srgb, var(--ma) 80%, var(--mfg)); }
+.mx-val--warn { color: color-mix(in srgb, var(--mg) 70%, var(--mfg)); }
+.mx-val--bad  { color: color-mix(in srgb, var(--mr) 70%, var(--mfg)); }
+.mx-val--no   { color: var(--mmut); }
+.mx-val--req  { color: color-mix(in srgb, var(--mb) 70%, var(--mfg)); }
+
+@media (max-width: 540px) {
+  .mx-spectrum { gap: 3px; }
+  .mx-sp-node { padding: 7px 6px; font-size: 11.5px; min-width: 50px; }
+  .mx-metrics { grid-template-columns: 1fr; }
+}
+</style>
+
+<script>
+(function () {
+  function activate(root, key) {
+    root.querySelectorAll('.mx-sp-node').forEach(n => {
+      n.setAttribute('aria-pressed', n.getAttribute('data-tab') === key ? 'true' : 'false');
+    });
+    root.querySelectorAll('[data-panel]').forEach(p => {
+      p.hidden = p.getAttribute('data-panel') !== key;
+    });
+  }
+  function initRoot(root) {
+    if (root.dataset.mxReady === '1') return;
+    root.dataset.mxReady = '1';
+    const nodes = Array.from(root.querySelectorAll('.mx-sp-node'));
+    const first = root.getAttribute('data-default') || (nodes[0] && nodes[0].getAttribute('data-tab'));
+    nodes.forEach(n => n.addEventListener('click', () => activate(root, n.getAttribute('data-tab'))));
+    activate(root, first);
+  }
+  function boot() { document.querySelectorAll('[data-demo="03-matriz-operacional"]').forEach(initRoot); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
+  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
+})();
+</script>

@@ -5,6 +5,8 @@
     overlay: null,
     body: null,
     isOpen: false,
+    activeShell: null,
+    placeholder: null,
   };
 
   function onReady(fn) {
@@ -22,9 +24,15 @@
     if (!state.overlay) return;
     state.overlay.classList.remove("is-open");
     state.overlay.setAttribute("aria-hidden", "true");
+    if (state.activeShell && state.placeholder && state.placeholder.parentNode) {
+      state.activeShell.removeAttribute("data-anim-shell-live");
+      state.placeholder.replaceWith(state.activeShell);
+    }
     if (state.body) state.body.innerHTML = "";
     document.body.classList.remove("anim-shell-modal-open");
     state.isOpen = false;
+    state.activeShell = null;
+    state.placeholder = null;
   }
 
   function ensureModal() {
@@ -74,15 +82,19 @@
   function openModalFromShell(shell) {
     if (!shell) return;
     ensureModal();
+    if (state.isOpen) closeModal();
 
-    const viewport = shell.querySelector(".anim-brand-shell__viewport");
-    if (!viewport || !state.body) return;
+    if (!state.body) return;
 
     state.body.innerHTML = "";
+    const placeholder = document.createElement("div");
+    placeholder.hidden = true;
+    shell.after(placeholder);
+    shell.setAttribute("data-anim-shell-live", "modal");
+    state.body.appendChild(shell);
     state.body.dataset.animContrast = shell.getAttribute("data-anim-contrast") || "force";
-    const clone = viewport.cloneNode(true);
-    clone.querySelectorAll("[data-anim-shell-open]").forEach((btn) => btn.remove());
-    state.body.appendChild(clone);
+    state.activeShell = shell;
+    state.placeholder = placeholder;
 
     state.overlay.classList.add("is-open");
     state.overlay.setAttribute("aria-hidden", "false");
@@ -118,6 +130,7 @@
   }
 
   function init() {
+    if (state.isOpen) closeModal();
     bindShells(document);
   }
 

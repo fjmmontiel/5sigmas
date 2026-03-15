@@ -1,0 +1,191 @@
+<div class="imp-wrap" data-demo="04-impacto-agi">
+  <div class="imp-hd">
+    <div class="imp-title">Si llegara: cuatro impactos</div>
+    <div class="imp-sub">La pregunta no es si lo que tenemos hoy es AGI — no lo es por ninguna definición razonable. La pregunta es qué implicaría que llegara.</div>
+  </div>
+
+  <div class="imp-cards">
+
+    <div class="imp-card imp-card--eco">
+      <div class="imp-card-header">
+        <div class="imp-card-icon">Económico</div>
+      </div>
+      <div class="imp-card-body">
+        <p>Automatización del trabajo cognitivo a escala: no solo tareas repetitivas, sino análisis, diseño, investigación y toma de decisiones complejas.</p>
+        <div class="imp-stat">20-60% de empleos con exposición alta a automatización en 10-20 años — con la IA actual. (McKinsey, Goldman Sachs, MIT)</div>
+        <div class="imp-callout">La distribución importa tanto como el impacto total: quién captura el valor producido y cómo se redistribuye.</div>
+      </div>
+    </div>
+
+    <div class="imp-card imp-card--sci">
+      <div class="imp-card-header">
+        <div class="imp-card-icon">Científico</div>
+      </div>
+      <div class="imp-card-body">
+        <p>Un sistema capaz de leer toda la literatura disponible, identificar contradicciones, proponer hipótesis testables y diseñar experimentos.</p>
+        <div class="imp-stat">AlphaFold resolvió en meses un problema de plegamiento de proteínas que llevaba 50 años sin solución. Es un atisbo de lo posible.</div>
+        <div class="imp-callout">La compresión del tiempo entre descubrimiento y aplicación podría redefinir campos enteros de la medicina, química y física en una generación.</div>
+      </div>
+    </div>
+
+    <div class="imp-card imp-card--geo">
+      <div class="imp-card-header">
+        <div class="imp-card-icon">Geopolítico</div>
+      </div>
+      <div class="imp-card-body">
+        <p>El control de los sistemas más capaces concentra poder de forma inédita. Los debates sobre regulación, control de chips y política de exportación ya reflejan esa tensión.</p>
+        <div class="imp-stat">Un sistema AGI en manos de un solo actor cambiaría el equilibrio de poder global de formas difíciles de predecir.</div>
+        <div class="imp-callout">Esto ocurre antes de que exista AGI. La carrera por la ventaja ya ha comenzado.</div>
+      </div>
+    </div>
+
+    <div class="imp-card imp-card--aln">
+      <div class="imp-card-header">
+        <div class="imp-card-icon">Alineación</div>
+      </div>
+      <div class="imp-card-body">
+        <p>El mayor riesgo no es que una AGI sea malévola. Es que sea muy capaz y optimice para un objetivo que no captura exactamente lo que queremos.</p>
+        <div class="imp-stat">Specification gaming: sistema de IA entrenado para maximizar tiempo en un videojuego aprendió a bloquear la pantalla de "game over" en lugar de jugar. Optimizó la métrica, destruyó el objetivo.</div>
+        <div class="imp-callout">La alineación no tiene solución completa conocida hoy. El campo de AI Safety existe porque los investigadores más serios lo reconocen.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<style>
+.imp-wrap, .imp-wrap * { box-sizing: border-box; }
+
+.imp-wrap {
+  --ia: var(--md-primary-fg-color, #26A69A);
+  --ib: #324AB2;
+  --ig: var(--md-accent-fg-color, #FFB343);
+  --ir: #ef4444;
+  --ip: #7c3aed;
+  --ibg: var(--md-default-bg-color, #fff);
+  --ifg: var(--md-default-fg-color, #0f172a);
+  --ibd: rgba(15,23,42,.16);
+  --imut: rgba(15,23,42,.60);
+  --if: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid;
+  gap: 12px;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--ibd);
+  border-radius: 20px;
+  background:
+    radial-gradient(100% 130% at 5% 0%, color-mix(in srgb,var(--ib) 7%,transparent), transparent 48%),
+    radial-gradient(90% 110% at 95% 100%, color-mix(in srgb,var(--ir) 6%,transparent), transparent 50%),
+    var(--ibg);
+  color: var(--ifg);
+  font-family: var(--if);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-md-color-scheme="slate"] .imp-wrap {
+  --ibg: var(--md-default-bg-color, #0f172a);
+  --ifg: var(--md-default-fg-color, #e2e8f0);
+  --ibd: rgba(226,232,240,.16);
+  --imut: rgba(226,232,240,.60);
+}
+
+.imp-hd { display: grid; gap: 5px; }
+
+.imp-title {
+  font-size: clamp(17px,2.2vw,24px);
+  font-weight: 900;
+  letter-spacing: -.02em;
+  line-height: 1.1;
+}
+
+.imp-sub {
+  font-size: 14px;
+  color: var(--imut);
+  line-height: 1.5;
+  max-width: 72ch;
+}
+
+/* Cards */
+.imp-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 10px;
+}
+
+.imp-card {
+  border: 1px solid var(--ibd);
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.imp-card--eco { border-color: color-mix(in srgb, var(--ia) 28%, var(--ibd)); }
+.imp-card--sci { border-color: color-mix(in srgb, var(--ib) 28%, var(--ibd)); }
+.imp-card--geo { border-color: color-mix(in srgb, var(--ig) 32%, var(--ibd)); }
+.imp-card--aln { border-color: color-mix(in srgb, var(--ir) 24%, var(--ibd)); }
+
+.imp-card-header {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--ibd);
+}
+
+.imp-card--eco .imp-card-header { background: color-mix(in srgb, var(--ia) 9%, var(--ibg)); }
+.imp-card--sci .imp-card-header { background: color-mix(in srgb, var(--ib) 9%, var(--ibg)); }
+.imp-card--geo .imp-card-header { background: color-mix(in srgb, var(--ig) 10%, var(--ibg)); }
+.imp-card--aln .imp-card-header { background: color-mix(in srgb, var(--ir) 7%, var(--ibg)); }
+
+.imp-card-icon {
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+.imp-card--eco .imp-card-icon { color: color-mix(in srgb, var(--ia) 80%, var(--ifg)); }
+.imp-card--sci .imp-card-icon { color: color-mix(in srgb, var(--ib) 80%, var(--ifg)); }
+.imp-card--geo .imp-card-icon { color: color-mix(in srgb, var(--ig) 60%, var(--ifg)); }
+.imp-card--aln .imp-card-icon { color: color-mix(in srgb, var(--ir) 70%, var(--ifg)); }
+
+.imp-card-body {
+  padding: 12px 14px;
+  display: grid;
+  gap: 8px;
+  flex: 1;
+  background: color-mix(in srgb, var(--ibg) 92%, #0f172a 8%);
+}
+
+.imp-card-body p { margin: 0; font-size: 13.5px; line-height: 1.5; }
+
+.imp-stat {
+  font-size: 12.5px;
+  font-weight: 700;
+  line-height: 1.45;
+  padding: 9px 11px;
+  border-radius: 10px;
+  border: 1px solid var(--ibd);
+  background: color-mix(in srgb, var(--ibg) 86%, #0f172a 14%);
+  color: var(--imut);
+  font-style: italic;
+}
+
+.imp-callout {
+  font-size: 12.5px;
+  font-weight: 700;
+  line-height: 1.4;
+  padding: 8px 11px;
+  border-radius: 10px;
+  border-left: 3px solid;
+}
+
+.imp-card--eco .imp-callout { border-color: color-mix(in srgb, var(--ia) 44%, transparent); background: color-mix(in srgb, var(--ia) 7%, var(--ibg)); }
+.imp-card--sci .imp-callout { border-color: color-mix(in srgb, var(--ib) 44%, transparent); background: color-mix(in srgb, var(--ib) 7%, var(--ibg)); }
+.imp-card--geo .imp-callout { border-color: color-mix(in srgb, var(--ig) 44%, transparent); background: color-mix(in srgb, var(--ig) 7%, var(--ibg)); }
+.imp-card--aln .imp-callout { border-color: color-mix(in srgb, var(--ir) 40%, transparent); background: color-mix(in srgb, var(--ir) 6%, var(--ibg)); }
+
+@media (max-width: 640px) {
+  .imp-cards { grid-template-columns: 1fr; }
+}
+</style>

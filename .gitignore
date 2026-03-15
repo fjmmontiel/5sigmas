@@ -13,6 +13,17 @@ ENV/
 .vscode/
 .idea/
 documentacion_interna/
+posts/
+plantillas/
+drafts/
 node_modules/*
 .node*
+.exports/*
+*playwright*
+output/*
 exports/*
+test/*
+
+# Animation export artifacts
+output/playwright/
+exports/

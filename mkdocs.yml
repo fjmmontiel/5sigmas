@@ -3,6 +3,7 @@ site_description: La evolución de las matemáticas, filosofía e ingeniería en
 site_url: "https://5sigmas.com"
 theme:
   name: material
+  custom_dir: overrides
   language: es
   logo: assets/logo.svg
   favicon: assets/logo.svg
@@ -40,7 +41,10 @@ nav:
   - Series:
       - Fundamentos de IA e IA generativa:
           - Presentación: series/fundamentos-ia-iag/00_presentacion_serie.md
-          - ¿Qué es la IA?: series/fundamentos-ia-iag/01_draft.md
+          - ¿Qué es la IA?: series/fundamentos-ia-iag/01-que-es-ia.md
+          # - ¿Qué es IA Generativa?: series/fundamentos-ia-iag/02-que-es-ia-generativa.md
+          # - IA vs IA Generativa: series/fundamentos-ia-iag/03-ia-vs-ia-generativa.md
+          # - AGI: series/fundamentos-ia-iag/04-agi.md
       - De las cavernas a la AGI:
           - Presentación: series/from-cave-to-agi/00_presentacion_serie.md
       - Multimodalidad en IA Generativa:

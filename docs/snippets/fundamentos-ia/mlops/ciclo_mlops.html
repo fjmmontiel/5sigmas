@@ -1,40 +1,39 @@
-<div class="mlops-walkthrough" data-mk="root" data-default="datos" data-autoplay="true" data-interval="3400"
-  data-anim-contrast="auto">
+<div class="mlops-walkthrough ta-demo" data-mk="root" data-default="datos" data-autoplay="true" data-interval="4200"
+  data-anim-fullscreen="on" data-anim-contrast="force">
   <style>
     .mlops-walkthrough {
-      --bg: #0b1220;
+      --bg: var(--md-default-bg-color, #ffffff);
       --card: rgba(255, 255, 255, .06);
       --card2: rgba(255, 255, 255, .09);
-      --txt: rgba(255, 255, 255, .92);
-      --muted: rgba(255, 255, 255, .74);
-      --line: rgba(255, 255, 255, .14);
-      --shadow: rgba(0, 0, 0, .25);
+      --txt: rgba(0, 0, 0, .92);
+      --muted: rgba(0, 0, 0, .68);
+      --line: rgba(0, 0, 0, .14);
+      --shadow: rgba(0, 0, 0, .10);
       --chip: rgba(255, 255, 255, .04);
       --chip2: rgba(255, 255, 255, .08);
-      --hint: rgba(255, 255, 255, .62);
+      --hint: rgba(0, 0, 0, .56);
       --accent: color-mix(in srgb, var(--ta-brand-primary, #26A69A) 70%, #86efac 30%);
       --accent2: var(--ta-brand-accent, #324AB2);
       --warn: #fbbf24;
-      --glowTop: rgba(255, 255, 255, .07);
-      --glowBot: rgba(255, 255, 255, .03);
+      --glowTop: rgba(20, 110, 235, .08);
+      --glowBot: rgba(0, 0, 0, .02);
 
-      --svgText: rgba(255, 255, 255, .88);
-      --svgOrbit: rgba(255, 255, 255, .22);
-      --svgNode: rgba(255, 255, 255, .08);
-      --svgNodeStroke: rgba(255, 255, 255, .22);
+      --svgText: rgba(0, 0, 0, .84);
+      --svgOrbit: rgba(0, 0, 0, .18);
+      --svgNode: rgba(0, 0, 0, .05);
+      --svgNodeStroke: rgba(0, 0, 0, .18);
 
-      --doneFill: rgba(96, 165, 250, .14);
-      --doneStroke: rgba(96, 165, 250, .55);
-      --activeFill: rgba(134, 239, 172, .22);
-      --activeStroke: rgba(134, 239, 172, .78);
+      --doneFill: rgba(37, 99, 235, .14);
+      --doneStroke: rgba(37, 99, 235, .55);
+      --activeFill: rgba(34, 197, 94, .18);
+      --activeStroke: rgba(34, 197, 94, .70);
 
       --radius: 16px;
 
       color: var(--txt);
       color-scheme: light dark;
       background:
-        radial-gradient(1200px 600px at 10% 0%, rgba(96, 165, 250, .18), transparent 55%),
-        radial-gradient(900px 520px at 70% 10%, rgba(134, 239, 172, .14), transparent 55%),
+        radial-gradient(760px 300px at 0% 0%, rgba(20, 110, 235, .10), transparent 62%),
         linear-gradient(180deg, var(--glowTop), var(--glowBot)),
         var(--bg);
       border: 1px solid var(--line);
@@ -42,7 +41,7 @@
       padding: 14px;
       box-shadow: 0 10px 30px var(--shadow);
       overflow: hidden;
-      font-family: var(--ta-brand-font, "Avenir Next", "Avenir", "Segoe UI", "Helvetica Neue", Arial, sans-serif);
+      font-family: var(--md-text-font-family, inherit);
     }
 
     .mlops-walkthrough[data-theme="light"] {
@@ -97,7 +96,9 @@
       }
     }
 
-    html[data-md-color-scheme="default"] .mlops-walkthrough:not([data-theme]) {
+    :root[data-md-color-scheme="default"] .mlops-walkthrough:not([data-theme]),
+    body[data-md-color-scheme="default"] .mlops-walkthrough:not([data-theme]),
+    [data-md-color-scheme="default"] .mlops-walkthrough:not([data-theme]) {
       --bg: #f7fafc;
       --card: rgba(2, 6, 23, .04);
       --card2: rgba(2, 6, 23, .06);
@@ -122,7 +123,9 @@
       --activeStroke: rgba(34, 197, 94, .70);
     }
 
-    html[data-md-color-scheme="slate"] .mlops-walkthrough:not([data-theme]) {
+    :root[data-md-color-scheme="slate"] .mlops-walkthrough:not([data-theme]),
+    body[data-md-color-scheme="slate"] .mlops-walkthrough:not([data-theme]),
+    [data-md-color-scheme="slate"] .mlops-walkthrough:not([data-theme]) {
       --bg: #0b1220;
       --card: rgba(255, 255, 255, .06);
       --card2: rgba(255, 255, 255, .09);
@@ -175,6 +178,26 @@
       display: flex;
       gap: 10px;
       align-items: center;
+    }
+
+    .mlops-summary {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0 0 12px;
+    }
+
+    .mlops-summary-pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 7px 11px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--chip);
+      font-size: 12.5px;
+      font-weight: 800;
+      line-height: 1.25;
     }
 
     .mlops-auto {
@@ -451,14 +474,19 @@
   <div class="mlops-top">
     <div class="mlops-title">
       <b>MLOps en una mirada</b>
+      <span>Entrenar no basta: hace falta ciclo completo.</span>
     </div>
-
     <div class="mlops-controls">
       <button class="mlops-auto" type="button" data-mk="auto" aria-pressed="false" title="Reproducción automática">
         <span class="ico" aria-hidden="true" data-mk="autoIco"></span>
         <span data-mk="autoLbl">Auto</span>
       </button>
     </div>
+  </div>
+
+  <div class="mlops-summary" role="list" aria-label="Claves de lectura">
+    <span class="mlops-summary-pill" role="listitem">Primero preparas y entrenas.</span>
+    <span class="mlops-summary-pill" role="listitem">Después despliegas, vigilas y vuelves a iterar.</span>
   </div>
 
   <div class="mlops-steps" data-role="tablist" aria-label="Pasos de MLOps">
@@ -584,12 +612,12 @@
         root.__mlops_init = true;
 
         const steps = [
-          { id: "datos", title: "1) Datos — capturar señales", desc: "Aquí juntas la información que describe lo que está pasando. Piensa en ello como “tomar apuntes” del mundo real.", ex: "Cada pago se guarda con sus pistas: importe, país, comercio, hora, dispositivo, historial…", out: "Un conjunto de datos fiable (tablas) que representa la realidad.", risk: "Si faltan campos o hay errores, el sistema aprende mal y después es difícil explicar por qué decide así." },
-          { id: "preparar", title: "2) Preparar — ordenar y convertir", desc: "Limpias y conviertes los datos en señales fáciles de usar. Es como pasar de notas sueltas a una lista clara de “pistas”.", ex: "Creas señales como: compras últimas 24h, distancia a sitios habituales, cambio de móvil.", out: "Variables/‘features’ listas para entrenar y también para usar en producción igual.", risk: "Si preparas distinto en entrenamiento y en producción, el modelo se vuelve incoherente sin que lo notes." },
+          { id: "datos", title: "1) Datos — capturar señales", desc: "Aquí juntas la información que describe lo que está pasando. Piensa en ello como &ldquo;tomar apuntes&rdquo; del mundo real.", ex: "Cada pago se guarda con sus pistas: importe, país, comercio, hora, dispositivo, historial…", out: "Un conjunto de datos fiable (tablas) que representa la realidad.", risk: "Si faltan campos o hay errores, el sistema aprende mal y después es difícil explicar por qué decide así." },
+          { id: "preparar", title: "2) Preparar — ordenar y convertir", desc: "Limpias y conviertes los datos en señales fáciles de usar. Es como pasar de notas sueltas a una lista clara de &ldquo;pistas&rdquo;.", ex: "Creas señales como: compras últimas 24h, distancia a sitios habituales, cambio de móvil.", out: "Variables/&lsquo;features&rsquo; listas para entrenar y también para usar en producción igual.", risk: "Si preparas distinto en entrenamiento y en producción, el modelo se vuelve incoherente sin que lo notes." },
           { id: "entrenar", title: "3) Entrenar — aprender con ejemplos", desc: "Le enseñas al sistema con casos del pasado para que aprenda patrones. Aprende por repetición.", ex: "Con miles de pagos etiquetados, aprende qué combinaciones suelen acabar siendo fraude.", out: "Un modelo que, dado un pago, devuelve un nivel de riesgo.", risk: "Si hay sesgo o pocas etiquetas, puede aprender reglas equivocadas." },
           { id: "evaluar", title: "4) Evaluar — comprobar antes de usarlo", desc: "Verificas con datos que el modelo no ha visto si funciona de verdad y qué errores comete.", ex: "Mides: fraudes detectados vs falsos positivos (bloqueos a gente legítima).", out: "Métricas + decisión: umbral para bloquear, revisar o dejar pasar.", risk: "Sin evaluación puedes empeorar la experiencia o el negocio sin darte cuenta." },
-          { id: "registrar", title: "5) Versionar — saber qué está corriendo", desc: "Dejas todo registrado para poder repetirlo o volver atrás: modelo, datos, código y configuración.", ex: "Queda guardado: “modelo v12, datos hasta enero, este código y estos parámetros”.", out: "Una versión trazable (vX) y el modelo asociado.", risk: "Si hay un incidente y no sabes qué versión está en producción, arreglar se vuelve lento." },
-          { id: "desplegar", title: "6) Desplegar — ponerlo a funcionar", desc: "Lo conectas al producto real y lo activas con control, poco a poco si puedes.", ex: "Primero corre en ‘shadow’ (sin decidir) y luego lo activas para un 5% del tráfico.", out: "Un servicio en producción que responde rápido y estable.", risk: "Un cambio brusco puede causar bloqueos masivos o decisiones incorrectas." },
+          { id: "registrar", title: "5) Versionar — saber qué está corriendo", desc: "Dejas todo registrado para poder repetirlo o volver atrás: modelo, datos, código y configuración.", ex: "Queda guardado: &ldquo;modelo v12, datos hasta enero, este código y estos parámetros&rdquo;.", out: "Una versión trazable (vX) y el modelo asociado.", risk: "Si hay un incidente y no sabes qué versión está en producción, arreglar se vuelve lento." },
+          { id: "desplegar", title: "6) Desplegar — ponerlo a funcionar", desc: "Lo conectas al producto real y lo activas con control, poco a poco si puedes.", ex: "Primero corre en &lsquo;shadow&rsquo; (sin decidir) y luego lo activas para un 5% del tráfico.", out: "Un servicio en producción que responde rápido y estable.", risk: "Un cambio brusco puede causar bloqueos masivos o decisiones incorrectas." },
           { id: "monitorizar", title: "7) Monitorizar — vigilar con el tiempo", desc: "Compruebas que el sistema sigue yendo bien y que los datos no han cambiado demasiado.", ex: "Alertas por latencia, errores, costes y cambios de patrón (drift).", out: "Paneles y alertas para detectar degradación.", risk: "La degradación suele ser silenciosa: el sistema funciona… pero decide peor." },
           { id: "feedback", title: "8) Feedback — aprender de la realidad", desc: "Cuando llega la verdad (confirmación), la usas para mejorar: reentrenar, ajustar o volver atrás.", ex: "Semanas después confirmas fraude/no fraude y esos casos alimentan el siguiente entrenamiento.", out: "Nuevos ejemplos correctos para la siguiente vuelta.", risk: "Sin feedback, el sistema se queda obsoleto." }
         ];

@@ -280,51 +280,6 @@
       linear-gradient(180deg, rgba(255, 255, 255, .04), rgba(17, 24, 39, .44));
   }
 
-  /* Footer watermark */
-  .ta-demo { position: relative; }
-  .ta-demo::before {
-    content: "5SIGMAS · Animation Library";
-    position: absolute;
-    left: 12px;
-    right: 138px;
-    bottom: 12px;
-    padding-top: 6px;
-    border-top: 1px solid rgba(15, 23, 42, .16);
-    color: rgba(15, 23, 42, .62);
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-    line-height: 1.2;
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  .ta-demo::after {
-    content: "";
-    position: absolute;
-    right: 12px;
-    bottom: 10px;
-    width: 120px;
-    height: 30px;
-    background: url("/assets/logo.svg") no-repeat center / contain;
-    opacity: 0.08;
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  .ta-demo > * { position: relative; z-index: 1; }
-
-  [data-md-color-scheme="slate"] .ta-demo::before {
-    border-top-color: rgba(226, 232, 240, .24);
-    color: rgba(226, 232, 240, .72);
-  }
-
-  [data-md-color-scheme="slate"] .ta-demo::after {
-    background-image: url("/assets/logo_white.svg");
-    opacity: 0.10;
-  }
-
   /* Tabs */
   .ai-nav {
     --flow-w: 0px;

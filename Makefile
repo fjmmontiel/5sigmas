@@ -22,7 +22,8 @@ serve: install
 	$(MKDOCS) serve
 
 
-build-and-update: build
+build-and-update:
+	$(MKDOCS) build
 	-lsof -ti:8000 | xargs kill -9 || true
 	$(MKDOCS) serve
 

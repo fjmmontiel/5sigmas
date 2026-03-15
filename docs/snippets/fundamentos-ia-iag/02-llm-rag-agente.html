@@ -1,0 +1,481 @@
+<div class="sys-wrap" data-demo="02-llm-rag-agente" data-anim-tabs data-default="llm">
+  <div class="sys-hd">
+    <div class="sys-title">Tres configuraciones sobre un modelo fundacional</div>
+    <div class="sys-sub">Más a la derecha no significa mejor: significa más capacidad, más coste operativo y mayor superficie de fallo.</div>
+  </div>
+
+  <nav class="sys-nav" data-role="tablist" aria-label="Sistemas GenAI">
+    <button type="button" data-role="tab" data-tab="llm" aria-selected="true">LLM puro</button>
+    <button type="button" data-role="tab" data-tab="rag" aria-selected="false">LLM + RAG</button>
+    <button type="button" data-role="tab" data-tab="agente" aria-selected="false">Agente</button>
+  </nav>
+
+  <div class="sys-panels">
+
+    <!-- LLM puro -->
+    <section class="sys-panel" data-panel="llm">
+      <div class="sys-arch">
+        <div class="sys-flow">
+          <div class="sys-node sys-node--in">Prompt del usuario</div>
+          <div class="sys-arrow">→</div>
+          <div class="sys-node sys-node--model">Modelo<br><small>parámetros</small></div>
+          <div class="sys-arrow">→</div>
+          <div class="sys-node sys-node--out">Respuesta generada</div>
+        </div>
+        <div class="sys-arch-note">Todo el conocimiento está en los parámetros aprendidos durante el preentrenamiento.</div>
+      </div>
+      <div class="sys-props">
+        <div class="sys-prop sys-prop--good">
+          <div class="sys-prop-k">Para que funciona bien</div>
+          <p>Redacción, resumen, traducción, generación de código, análisis de texto. Cualquier tarea donde el conocimiento general es suficiente.</p>
+        </div>
+        <div class="sys-prop sys-prop--bad">
+          <div class="sys-prop-k">Limitacion principal</div>
+          <p>Conocimiento estático con fecha de corte. No sabe lo que ocurrió después del entrenamiento ni puede acceder a documentos propios.</p>
+        </div>
+        <div class="sys-prop">
+          <div class="sys-prop-k">Complejidad operativa</div>
+          <div class="sys-meter"><div class="sys-meter-fill" style="width:25%"></div></div>
+          <span class="sys-meter-label">Baja</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- RAG -->
+    <section class="sys-panel" data-panel="rag" hidden>
+      <div class="sys-arch">
+        <div class="sys-flow sys-flow--rag">
+          <div class="sys-node sys-node--in">Consulta</div>
+          <div class="sys-arrow">→</div>
+          <div class="sys-node sys-node--retrieval">Recuperar<br><small>documentos relevantes</small></div>
+          <div class="sys-arrow">→</div>
+          <div class="sys-node sys-node--model">Modelo<br><small>parámetros + contexto</small></div>
+          <div class="sys-arrow">→</div>
+          <div class="sys-node sys-node--out">Respuesta con documentos</div>
+        </div>
+        <div class="sys-arch-note">Antes de generar, se recuperan los documentos relevantes y se incluyen en el contexto. El modelo razona con información actual o propia.</div>
+      </div>
+      <div class="sys-props">
+        <div class="sys-prop sys-prop--good">
+          <div class="sys-prop-k">Para que funciona bien</div>
+          <p>Preguntas sobre documentación interna, bases de conocimiento que cambian frecuentemente, dominios donde la precisión factual es crítica.</p>
+        </div>
+        <div class="sys-prop sys-prop--bad">
+          <div class="sys-prop-k">Limitacion principal</div>
+          <p>Mayor latencia y coste. Si los documentos son muy especializados o la recuperación falla, la respuesta también falla.</p>
+        </div>
+        <div class="sys-prop">
+          <div class="sys-prop-k">Complejidad operativa</div>
+          <div class="sys-meter"><div class="sys-meter-fill sys-meter-fill--mid" style="width:55%"></div></div>
+          <span class="sys-meter-label">Media</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Agente -->
+    <section class="sys-panel" data-panel="agente" hidden>
+      <div class="sys-arch">
+        <div class="sys-flow sys-flow--agent">
+          <div class="sys-node sys-node--in">Tarea compleja</div>
+          <div class="sys-arrow">→</div>
+          <div class="sys-node sys-node--model sys-node--agent">Modelo<br><small>planifica + ejecuta</small></div>
+          <div class="sys-arrow sys-arrow--loop">bucle</div>
+          <div class="sys-node sys-node--tools">Herramientas<br><small>web · código · APIs</small></div>
+        </div>
+        <div class="sys-arch-note">El modelo puede planificar, usar herramientas y actuar en bucles. Cada paso puede fallar y los fallos se propagan. A mayor cadena, menor fiabilidad.</div>
+      </div>
+      <div class="sys-props">
+        <div class="sys-prop sys-prop--good">
+          <div class="sys-prop-k">Para que funciona bien</div>
+          <p>Automatización de tareas complejas multi-paso: investigar, ejecutar código, llamar APIs, leer resultados y ajustar el plan en consecuencia.</p>
+        </div>
+        <div class="sys-prop sys-prop--bad">
+          <div class="sys-prop-k">Limitacion principal</div>
+          <p>Fallos en cadena difíciles de detectar. Cuanto más larga la cadena de pasos, más probabilidad de que un error se propague al resultado final.</p>
+        </div>
+        <div class="sys-prop">
+          <div class="sys-prop-k">Complejidad operativa</div>
+          <div class="sys-meter"><div class="sys-meter-fill sys-meter-fill--hi" style="width:88%"></div></div>
+          <span class="sys-meter-label">Alta</span>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="sys-table" aria-label="Comparativa de sistemas">
+    <div class="sys-table-hd" aria-hidden="true">
+      <span></span>
+      <span>LLM puro</span>
+      <span>LLM + RAG</span>
+      <span>Agente</span>
+    </div>
+    <div class="sys-table-row">
+      <span class="sys-row-k">Conocimiento</span>
+      <span>Parámetros</span>
+      <span>Parámetros + docs</span>
+      <span>Parámetros + docs + herramientas</span>
+    </div>
+    <div class="sys-table-row">
+      <span class="sys-row-k">Acción en el mundo</span>
+      <span class="sys-no">No</span>
+      <span class="sys-no">No</span>
+      <span class="sys-yes">Sí (bucles)</span>
+    </div>
+    <div class="sys-table-row">
+      <span class="sys-row-k">Coste operativo</span>
+      <span>Bajo</span>
+      <span>Medio</span>
+      <span>Alto</span>
+    </div>
+  </div>
+</div>
+
+<style>
+.sys-wrap, .sys-wrap * { box-sizing: border-box; }
+
+.sys-wrap {
+  --sa: var(--md-primary-fg-color, #26A69A);
+  --sb: #324AB2;
+  --sg: var(--md-accent-fg-color, #FFB343);
+  --sbg: var(--md-default-bg-color, #fff);
+  --sfg: var(--md-default-fg-color, #0f172a);
+  --sbd: rgba(15,23,42,.16);
+  --smut: rgba(15,23,42,.60);
+  --sf: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid;
+  gap: 12px;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--sbd);
+  border-radius: 20px;
+  background:
+    radial-gradient(120% 130% at 6% 0%, color-mix(in srgb,var(--sa) 8%,transparent), transparent 52%),
+    radial-gradient(80% 110% at 94% 0%, color-mix(in srgb,var(--sg) 8%,transparent), transparent 54%),
+    var(--sbg);
+  color: var(--sfg);
+  font-family: var(--sf);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-md-color-scheme="slate"] .sys-wrap {
+  --sbg: var(--md-default-bg-color, #0f172a);
+  --sfg: var(--md-default-fg-color, #e2e8f0);
+  --sbd: rgba(226,232,240,.16);
+  --smut: rgba(226,232,240,.60);
+}
+
+.sys-hd { display: grid; gap: 5px; }
+
+.sys-title {
+  font-size: clamp(17px,2.2vw,24px);
+  font-weight: 900;
+  letter-spacing: -.02em;
+  line-height: 1.1;
+}
+
+.sys-sub {
+  font-size: 14px;
+  color: var(--smut);
+  line-height: 1.5;
+  max-width: 72ch;
+}
+
+/* Nav */
+.sys-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.sys-nav button {
+  appearance: none;
+  border: 1px solid var(--sbd);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--sbg) 90%, #0f172a 10%);
+  color: var(--smut);
+  padding: 9px 16px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: border-color .14s, background .14s, color .14s;
+}
+
+.sys-nav button[aria-selected="true"] {
+  border-color: color-mix(in srgb, var(--sa) 44%, transparent);
+  background: color-mix(in srgb, var(--sa) 13%, var(--sbg));
+  color: var(--sfg);
+}
+
+.sys-nav button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--sa) 22%, transparent);
+}
+
+.sys-panel[hidden] { display: none; }
+
+/* Architecture flow */
+.sys-arch {
+  border: 1px solid var(--sbd);
+  border-radius: 14px;
+  padding: 14px;
+  background: color-mix(in srgb, var(--sbg) 88%, #0f172a 12%);
+  display: grid;
+  gap: 10px;
+}
+
+.sys-flow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.sys-node {
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--sbd);
+  background: color-mix(in srgb, var(--sbg) 84%, transparent);
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.3;
+  text-align: center;
+}
+
+.sys-node small {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--smut);
+}
+
+.sys-node--in {
+  border-color: color-mix(in srgb, var(--sb) 34%, var(--sbd));
+  background: color-mix(in srgb, var(--sb) 10%, var(--sbg));
+}
+
+.sys-node--model {
+  border-color: color-mix(in srgb, var(--sa) 38%, var(--sbd));
+  background: color-mix(in srgb, var(--sa) 12%, var(--sbg));
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--sa) 20%, transparent);
+}
+
+.sys-node--agent {
+  border-color: color-mix(in srgb, var(--sg) 38%, var(--sbd));
+  background: color-mix(in srgb, var(--sg) 12%, var(--sbg));
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--sg) 20%, transparent);
+}
+
+.sys-node--retrieval {
+  border-color: color-mix(in srgb, var(--sb) 34%, var(--sbd));
+  background: color-mix(in srgb, var(--sb) 10%, var(--sbg));
+}
+
+.sys-node--tools {
+  border-color: color-mix(in srgb, var(--sg) 34%, var(--sbd));
+  background: color-mix(in srgb, var(--sg) 10%, var(--sbg));
+}
+
+.sys-node--out {
+  border-color: color-mix(in srgb, var(--sa) 28%, var(--sbd));
+  background: color-mix(in srgb, var(--sa) 8%, var(--sbg));
+}
+
+.sys-arrow {
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--smut);
+}
+
+.sys-arrow--loop {
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: color-mix(in srgb, var(--sg) 70%, var(--smut));
+  border: 1px dashed color-mix(in srgb, var(--sg) 40%, transparent);
+  padding: 4px 8px;
+  border-radius: 999px;
+}
+
+.sys-arch-note {
+  font-size: 13px;
+  color: var(--smut);
+  line-height: 1.45;
+  font-style: italic;
+  border-left: 2px solid color-mix(in srgb, var(--sa) 36%, transparent);
+  padding-left: 10px;
+}
+
+/* Props */
+.sys-props {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.sys-prop {
+  border: 1px solid var(--sbd);
+  border-radius: 12px;
+  padding: 12px;
+  background: color-mix(in srgb, var(--sbg) 92%, #0f172a 8%);
+  display: grid;
+  gap: 6px;
+  align-content: start;
+}
+
+.sys-prop--good {
+  border-color: color-mix(in srgb, var(--sa) 30%, var(--sbd));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--sa) 8%, transparent), transparent 65%),
+    color-mix(in srgb, var(--sbg) 92%, #0f172a 8%);
+}
+
+.sys-prop--bad {
+  border-color: color-mix(in srgb, #ef4444 24%, var(--sbd));
+  background: linear-gradient(135deg, color-mix(in srgb, #ef4444 6%, transparent), transparent 65%),
+    color-mix(in srgb, var(--sbg) 92%, #0f172a 8%);
+}
+
+.sys-prop:last-child {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.sys-prop-k {
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--smut);
+}
+
+.sys-prop p { margin: 0; font-size: 13.5px; line-height: 1.5; }
+
+.sys-meter {
+  flex: 1;
+  height: 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--sbg) 72%, #0f172a 28%);
+  overflow: hidden;
+  min-width: 80px;
+}
+
+.sys-meter-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--sa), color-mix(in srgb, var(--sa) 60%, var(--sb)));
+}
+
+.sys-meter-fill--mid {
+  background: linear-gradient(90deg, var(--sa), color-mix(in srgb, var(--sg) 60%, var(--sa)));
+}
+
+.sys-meter-fill--hi {
+  background: linear-gradient(90deg, var(--sa), var(--sg));
+}
+
+.sys-meter-label {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--smut);
+  white-space: nowrap;
+}
+
+/* Table */
+.sys-table {
+  border: 1px solid var(--sbd);
+  border-radius: 14px;
+  overflow: hidden;
+  font-size: 13px;
+}
+
+.sys-table-hd,
+.sys-table-row {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1.4fr;
+  border-bottom: 1px solid var(--sbd);
+}
+
+.sys-table-row:last-child { border-bottom: none; }
+
+.sys-table-hd {
+  background: color-mix(in srgb, var(--sbg) 82%, #0f172a 18%);
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--smut);
+}
+
+.sys-table-hd > span,
+.sys-table-row > span {
+  padding: 10px 12px;
+  border-right: 1px solid var(--sbd);
+  line-height: 1.4;
+}
+
+.sys-table-hd > span:last-child,
+.sys-table-row > span:last-child { border-right: none; }
+
+.sys-row-k { font-weight: 800; }
+
+.sys-yes { color: color-mix(in srgb, var(--sa) 80%, var(--sfg)); font-weight: 800; }
+.sys-no { color: var(--smut); }
+
+.sys-table-row:nth-child(odd) {
+  background: color-mix(in srgb, var(--sbg) 92%, #0f172a 8%);
+}
+
+@media (max-width: 640px) {
+  .sys-props { grid-template-columns: 1fr; }
+  .sys-prop:last-child { grid-column: auto; }
+  .sys-table-hd, .sys-table-row { grid-template-columns: 1fr 1fr; }
+  .sys-table-hd > span:nth-child(1),
+  .sys-table-row > span:nth-child(1) { grid-column: 1 / -1; font-weight: 900; }
+}
+</style>
+
+<script>
+(function () {
+  function activate(root, key) {
+    root.querySelectorAll('[data-role="tab"]').forEach(t => {
+      const on = t.getAttribute('data-tab') === key;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+    });
+    root.querySelectorAll('[data-panel]').forEach(p => {
+      p.hidden = p.getAttribute('data-panel') !== key;
+    });
+  }
+  function initRoot(root) {
+    if (root.dataset.sysReady === '1') return;
+    root.dataset.sysReady = '1';
+    const tabs = Array.from(root.querySelectorAll('[data-role="tab"]'));
+    const first = root.getAttribute('data-default') || (tabs[0] && tabs[0].getAttribute('data-tab'));
+    tabs.forEach(tab => {
+      tab.tabIndex = -1;
+      tab.addEventListener('click', () => activate(root, tab.getAttribute('data-tab')));
+      tab.addEventListener('keydown', e => {
+        const cur = tabs.indexOf(tab);
+        let next = cur;
+        if (e.key === 'ArrowRight') next = (cur + 1) % tabs.length;
+        if (e.key === 'ArrowLeft') next = (cur - 1 + tabs.length) % tabs.length;
+        if (e.key === 'Home') next = 0;
+        if (e.key === 'End') next = tabs.length - 1;
+        if (next !== cur) { e.preventDefault(); tabs[next].focus(); activate(root, tabs[next].getAttribute('data-tab')); }
+      });
+    });
+    activate(root, first);
+  }
+  function boot() { document.querySelectorAll('[data-demo="02-llm-rag-agente"]').forEach(initRoot); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
+  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
+})();
+</script>
