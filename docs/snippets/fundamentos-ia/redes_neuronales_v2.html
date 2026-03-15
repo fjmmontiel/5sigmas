@@ -17,7 +17,11 @@
     <div class="nn3-body">
       <div class="nn3-chart-col">
         <svg class="nn3-chart" data-chart="linear" viewBox="0 0 360 220" aria-hidden="true"></svg>
-        <p class="nn3-chart-cap">Temperatura: °C → °F · puntos reales · <span class="nn3-legend-curve">— modelo aprendido</span></p>
+        <div class="nn3-train-bar">
+          <button class="nn3-train-btn" type="button" data-chart="linear" data-btn="train">▶ Entrenar</button>
+          <span class="nn3-train-status" data-chart="linear"></span>
+        </div>
+        <p class="nn3-chart-cap">Temperatura: °C → °F · puntos reales · <span class="nn3-legend-curve">— curva ajustada</span></p>
       </div>
       <div class="nn3-side">
         <svg class="nn3-net" viewBox="0 0 300 110" aria-hidden="true">
@@ -63,7 +67,11 @@
     <div class="nn3-body">
       <div class="nn3-chart-col">
         <svg class="nn3-chart" data-chart="sine" viewBox="0 0 360 220" aria-hidden="true"></svg>
-        <p class="nn3-chart-cap">Función sin(x) · puntos reales · <span class="nn3-legend-curve">— modelo aprendido</span></p>
+        <div class="nn3-train-bar">
+          <button class="nn3-train-btn" type="button" data-chart="sine" data-btn="train">▶ Entrenar</button>
+          <span class="nn3-train-status" data-chart="sine"></span>
+        </div>
+        <p class="nn3-chart-cap">Función sin(x) · puntos reales · <span class="nn3-legend-curve">— curva ajustada</span></p>
       </div>
       <div class="nn3-side">
         <svg class="nn3-net" viewBox="0 0 300 130" aria-hidden="true">
@@ -118,7 +126,11 @@
     <div class="nn3-body">
       <div class="nn3-chart-col">
         <svg class="nn3-chart" data-chart="complex" viewBox="0 0 360 220" aria-hidden="true"></svg>
-        <p class="nn3-chart-cap">Función compleja · puntos reales · <span class="nn3-legend-curve">— modelo aprendido</span></p>
+        <div class="nn3-train-bar">
+          <button class="nn3-train-btn" type="button" data-chart="complex" data-btn="train">▶ Entrenar</button>
+          <span class="nn3-train-status" data-chart="complex"></span>
+        </div>
+        <p class="nn3-chart-cap">Función compleja · puntos reales · <span class="nn3-legend-curve">— curva ajustada</span></p>
       </div>
       <div class="nn3-side">
         <svg class="nn3-net" viewBox="0 0 300 130" aria-hidden="true">
@@ -177,6 +189,12 @@
       </div>
     </div>
   </div>
+
+  <!-- ── Info note: época / pérdida ── -->
+  <p class="nn3-info">
+    <strong>Época</strong> — una pasada completa por todos los datos de entrenamiento.
+    <strong>Pérdida</strong> — qué tan alejadas están las predicciones de los valores reales; cuanto más baja, mejor ajuste.
+  </p>
 
 </div>
 
@@ -432,28 +450,76 @@
     line-height: 1.4;
     color: var(--nn3-fg);
   }
+
+  /* ── Train bar ── */
+  .nn3-train-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 4px 0 2px;
+  }
+
+  .nn3-train-btn {
+    appearance: none;
+    border: 1px solid color-mix(in srgb, var(--nn3-b) 40%, transparent);
+    background: color-mix(in srgb, var(--nn3-b) 10%, var(--nn3-bg));
+    color: var(--nn3-b);
+    border-radius: 999px;
+    padding: 5px 14px;
+    font: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .15s;
+    white-space: nowrap;
+  }
+
+  .nn3-train-btn:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--nn3-b) 18%, var(--nn3-bg));
+  }
+
+  .nn3-train-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  [data-md-color-scheme="slate"] .nn3-train-btn {
+    color: color-mix(in srgb, var(--nn3-b) 80%, #fff 20%);
+    border-color: color-mix(in srgb, var(--nn3-b) 35%, transparent);
+  }
+
+  .nn3-train-status {
+    font-size: 11px;
+    color: var(--nn3-muted);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ── Info note ── */
+  .nn3-info {
+    margin: 10px 0 0;
+    font-size: 12px;
+    line-height: 1.55;
+    color: var(--nn3-muted);
+    padding: 9px 14px;
+    background: color-mix(in srgb, var(--nn3-b) 7%, var(--nn3-bg));
+    border: 1px solid color-mix(in srgb, var(--nn3-b) 18%, transparent);
+    border-radius: 10px;
+  }
+
+  .nn3-info strong {
+    color: var(--nn3-fg);
+    font-weight: 700;
+  }
 </style>
 
 <script>
 (function () {
-  const KEY = "nn3-v1";
+  const KEY = "nn3-v2";
   if (window[KEY]) return;
   window[KEY] = true;
 
-  /* ── Colour helpers ── */
-  function colors(root) {
-    const s = getComputedStyle(root);
-    return {
-      data:   s.getPropertyValue("--nn3-data-fill").trim()  || "#26A69A",
-      curve:  s.getPropertyValue("--nn3-curve").trim()      || "#324AB2",
-      axis:   s.getPropertyValue("--nn3-axis").trim()       || "rgba(15,23,42,.18)",
-      grid:   s.getPropertyValue("--nn3-grid").trim()       || "rgba(15,23,42,.07)",
-      muted:  s.getPropertyValue("--nn3-muted").trim()      || "rgba(15,23,42,.5)",
-      card:   s.getPropertyValue("--nn3-card").trim()       || "#f1f5f9",
-    };
-  }
-
-  /* ── SVG helpers ── */
+  /* ── SVG helper ── */
   const NS = "http://www.w3.org/2000/svg";
   function el(tag, attrs) {
     const e = document.createElementNS(NS, tag);
@@ -461,156 +527,280 @@
     return e;
   }
 
-  /* ── Chart renderer ── */
-  function renderChart(svg) {
+  /* ── Colour helpers ── */
+  function colors(root) {
+    const s = getComputedStyle(root);
+    return {
+      data:  s.getPropertyValue("--nn3-data-fill").trim() || "#26A69A",
+      curve: s.getPropertyValue("--nn3-curve").trim()     || "#324AB2",
+      axis:  s.getPropertyValue("--nn3-axis").trim()      || "rgba(15,23,42,.18)",
+      grid:  s.getPropertyValue("--nn3-grid").trim()      || "rgba(15,23,42,.07)",
+      muted: s.getPropertyValue("--nn3-muted").trim()     || "rgba(15,23,42,.5)",
+      card:  s.getPropertyValue("--nn3-card").trim()      || "#f1f5f9",
+    };
+  }
+
+  /* ── Datasets ── */
+  const DATASETS = {
+    linear: {
+      xd: [-20, 100], yd: [-8, 220],
+      data: [[-20,-3.1],[-10,17.8],[0,31.3],[10,52.5],[25,78.2],[35,95.7],[50,123.1],[65,149.8],[80,177.5],[100,210.3]],
+      xl: "C°", yl: "F°",
+    },
+    sine: {
+      xd: [-3.15, 3.15], yd: [-1.25, 1.25],
+      data: [[-3.14,0.05],[-2.5,-0.61],[-1.95,-0.93],[-1.35,-0.97],[-0.75,-0.68],[-0.2,-0.20],[0.2,0.20],[0.75,0.68],[1.35,0.97],[1.95,0.93],[2.5,0.61],[3.14,-0.04]],
+      xl: "x", yl: "sin(x)",
+    },
+    complex: {
+      xd: [-2, 2], yd: [-0.98, 0.55],
+      data: [[-2,-0.05],[-1.6,-0.27],[-1.1,-0.70],[-0.8,-0.68],[-0.5,-0.37],[-0.2,0.09],[0.1,0.36],[0.4,0.50],[0.7,0.30],[1.0,0.20],[1.3,0.08],[2,-0.05]],
+      xl: "x", yl: "f(x)",
+    },
+  };
+
+  /* ── Chart base (static: grid, axes, data points) ── */
+  const PX = { x0: 44, x1: 328, y0: 18, y1: 194 };
+
+  function renderChartBase(svg) {
     const kind = svg.dataset.chart;
     const root = svg.closest(".nn3-root");
-    if (!root) return;
-    const C = colors(root);
+    const ds = DATASETS[kind];
+    if (!root || !ds) return;
 
-    // Clear
     while (svg.firstChild) svg.removeChild(svg.firstChild);
+    const C = colors(root);
+    const pw = PX.x1 - PX.x0, ph = PX.y1 - PX.y0;
+    const [xMin, xMax] = ds.xd, [yMin, yMax] = ds.yd;
+    const xPx = x => PX.x0 + (x - xMin) / (xMax - xMin) * pw;
+    const yPx = y => PX.y1 - (y - yMin) / (yMax - yMin) * ph;
 
-    // Dimensions (viewBox 360×220)
-    const px = { x0:44, x1:328, y0:18, y1:194 };
-    const pw = px.x1 - px.x0;
-    const ph = px.y1 - px.y0;
-
-    // Data for each chart
-    const datasets = {
-      linear: {
-        xd: [-20,100], yd: [-8,220],
-        data: [[-20,-3.1],[-10,17.8],[0,31.3],[10,52.5],[25,78.2],[35,95.7],[50,123.1],[65,149.8],[80,177.5],[100,210.3]],
-        curve: [[-20,-4],[100,212]],
-        xl: "C°", yl: "F°",
-      },
-      sine: {
-        xd: [-3.15,3.15], yd: [-1.25,1.25],
-        data: [[-3.14,0.05],[-2.5,-0.61],[-1.95,-0.93],[-1.35,-0.97],[-0.75,-0.68],[-0.2,-0.20],[0.2,0.20],[0.75,0.68],[1.35,0.97],[1.95,0.93],[2.5,0.61],[3.14,-0.04]],
-        curve: [[-3.15,0],[-2.8,-0.335],[-2.4,-0.675],[-2,-0.909],[-1.6,-0.9996],[-1.2,-0.932],[-0.8,-0.717],[-0.4,-0.389],[0,0],[0.4,0.389],[0.8,0.717],[1.2,0.932],[1.6,0.9996],[2,0.909],[2.4,0.675],[2.8,0.335],[3.15,0]],
-        xl: "x", yl: "sin(x)",
-      },
-      complex: {
-        xd: [-2,2], yd: [-0.98,0.55],
-        data: [[-2,-0.05],[-1.6,-0.27],[-1.1,-0.70],[-0.8,-0.68],[-0.5,-0.37],[-0.2,0.09],[0.1,0.36],[0.4,0.50],[0.7,0.30],[1.0,0.20],[1.3,0.08],[2,-0.05]],
-        curve: [[-2,-0.091],[-1.7,-0.015],[-1.4,-0.314],[-1.1,-0.700],[-0.8,-0.721],[-0.5,-0.400],[-0.2,0.053],[0.1,0.387],[0.4,0.468],[0.7,0.340],[1.0,0.158],[1.3,0.052],[1.6,-0.003],[1.9,-0.054],[2,-0.091]],
-        xl: "x", yl: "f(x)",
-      },
-    };
-
-    const ds = datasets[kind];
-    if (!ds) return;
-
-    const [xMin, xMax] = ds.xd;
-    const [yMin, yMax] = ds.yd;
-    function xPx(x) { return px.x0 + (x - xMin) / (xMax - xMin) * pw; }
-    function yPx(y) { return px.y1 - (y - yMin) / (yMax - yMin) * ph; }
-
-    // Grid lines (4 horizontal)
+    // Grid
     for (let i = 1; i <= 3; i++) {
-      const y = px.y0 + (ph / 4) * i;
-      svg.appendChild(el("line", { x1: px.x0, y1: y, x2: px.x1, y2: y, stroke: C.grid, "stroke-width": "1" }));
+      svg.appendChild(el("line", { x1: PX.x0, y1: PX.y0 + (ph/4)*i, x2: PX.x1, y2: PX.y0 + (ph/4)*i, stroke: C.grid, "stroke-width": "1" }));
+      svg.appendChild(el("line", { x1: PX.x0 + (pw/4)*i, y1: PX.y0, x2: PX.x0 + (pw/4)*i, y2: PX.y1, stroke: C.grid, "stroke-width": "1" }));
     }
-    // 4 vertical
-    for (let i = 1; i <= 3; i++) {
-      const x = px.x0 + (pw / 4) * i;
-      svg.appendChild(el("line", { x1: x, y1: px.y0, x2: x, y2: px.y1, stroke: C.grid, "stroke-width": "1" }));
-    }
+    svg.appendChild(el("rect", { x: PX.x0, y: PX.y0, width: pw, height: ph, stroke: C.axis, "stroke-width": "1.5", fill: "none", rx: "4" }));
 
-    // Axes
-    const axisAttrs = { stroke: C.axis, "stroke-width": "1.5", fill: "none" };
-    const axBox = el("rect", { x: px.x0, y: px.y0, width: pw, height: ph, ...axisAttrs, rx: "4" });
-    svg.appendChild(axBox);
+    const xlEl = el("text", { x: PX.x1-4, y: PX.y1+14, fill: C.muted, "font-size": "11", "text-anchor": "end", "font-weight": "700" });
+    xlEl.textContent = ds.xl; svg.appendChild(xlEl);
+    const ylEl = el("text", { x: PX.x0-6, y: PX.y0+4, fill: C.muted, "font-size": "11", "text-anchor": "end", "font-weight": "700" });
+    ylEl.textContent = ds.yl; svg.appendChild(ylEl);
 
-    // Axis labels
-    const xl = el("text", { x: px.x1 - 4, y: px.y1 + 14, fill: C.muted, "font-size": "11", "text-anchor": "end", "font-weight": "700" });
-    xl.textContent = ds.xl;
-    svg.appendChild(xl);
-    const yl = el("text", { x: px.x0 - 6, y: px.y0 + 4, fill: C.muted, "font-size": "11", "text-anchor": "end", "font-weight": "700" });
-    yl.textContent = ds.yl;
-    svg.appendChild(yl);
-
-    // Clip path for data+curve
-    const clipId = "nn3-clip-" + kind;
-    const defs = el("defs", {});
-    const cp   = el("clipPath", { id: clipId });
-    cp.appendChild(el("rect", { x: px.x0, y: px.y0, width: pw, height: ph }));
-    defs.appendChild(cp);
-    svg.appendChild(defs);
+    // Clip path
+    const clipId = "nn3-clip-" + kind + "-" + Math.random().toString(36).slice(2, 7);
+    const defs = el("defs", {}), cp = el("clipPath", { id: clipId });
+    cp.appendChild(el("rect", { x: PX.x0, y: PX.y0, width: pw, height: ph }));
+    defs.appendChild(cp); svg.appendChild(defs);
 
     const g = el("g", { "clip-path": `url(#${clipId})` });
 
-    // Fitted curve
-    const curvePts = ds.curve.map(([x, y]) => `${xPx(x).toFixed(1)},${yPx(y).toFixed(1)}`).join(" L");
-    const curvePath = el("polyline", {
-      points: ds.curve.map(([x, y]) => `${xPx(x).toFixed(1)},${yPx(y).toFixed(1)}`).join(" "),
-      stroke: C.curve,
-      "stroke-width": "2.5",
-      fill: "none",
-      "stroke-linecap": "round",
-      "stroke-linejoin": "round",
-    });
-    g.appendChild(curvePath);
-
-    // Data scatter dots
-    for (const [x, y] of ds.data) {
-      const cx = xPx(x);
-      const cy = yPx(y);
-      if (cx < px.x0 - 8 || cx > px.x1 + 8 || cy < px.y0 - 8 || cy > px.y1 + 8) continue;
-      const circle = el("circle", {
-        cx: cx.toFixed(1),
-        cy: cy.toFixed(1),
-        r: "4.5",
-        fill: C.data,
-        stroke: C.card,
-        "stroke-width": "1.5",
-      });
-      g.appendChild(circle);
-    }
+    // Data points (drawn on top of curve later — append after g)
+    const dotEls = ds.data.map(([x, y]) => {
+      const cx = xPx(x), cy = yPx(y);
+      if (cx < PX.x0-8 || cx > PX.x1+8 || cy < PX.y0-8 || cy > PX.y1+8) return null;
+      return el("circle", { cx: cx.toFixed(1), cy: cy.toFixed(1), r: "4.5", fill: C.data, stroke: C.card, "stroke-width": "1.5" });
+    }).filter(Boolean);
 
     svg.appendChild(g);
+    dotEls.forEach(d => svg.appendChild(d)); // dots above curve
+
+    svg._nn3 = { xPx, yPx, C, g, curveLine: null };
+  }
+
+  /* ── Curve update (creates or updates the polyline) ── */
+  function setCurve(svg, pts) {
+    if (!svg._nn3) return;
+    const { xPx, yPx, C, g } = svg._nn3;
+    const str = pts.map(([x, y]) => `${xPx(x).toFixed(1)},${yPx(y).toFixed(1)}`).join(" ");
+    if (!svg._nn3.curveLine) {
+      svg._nn3.curveLine = el("polyline", { points: str, stroke: C.curve, "stroke-width": "2.5", fill: "none", "stroke-linecap": "round", "stroke-linejoin": "round" });
+      g.appendChild(svg._nn3.curveLine);
+    } else {
+      svg._nn3.curveLine.setAttribute("points", str);
+    }
+  }
+
+  /* ── Adam optimizer ── */
+  class Adam {
+    constructor(lr) { this.lr = lr; this.b1 = 0.9; this.b2 = 0.999; this.eps = 1e-8; this.t = 0; this.m = null; this.v = null; }
+    update(params, grads) {
+      this.t++;
+      if (!this.m) { this.m = new Float64Array(params.length); this.v = new Float64Array(params.length); }
+      for (let i = 0; i < params.length; i++) {
+        this.m[i] = this.b1 * this.m[i] + (1 - this.b1) * grads[i];
+        this.v[i] = this.b2 * this.v[i] + (1 - this.b2) * grads[i] ** 2;
+        const mh = this.m[i] / (1 - this.b1 ** this.t);
+        const vh = this.v[i] / (1 - this.b2 ** this.t);
+        params[i] -= this.lr * mh / (Math.sqrt(vh) + this.eps);
+      }
+    }
+  }
+
+  /* ── Linear model: y = w·x + b ── */
+  function linearStep(params, data, adam) {
+    const n = data.length;
+    let dw = 0, db = 0, loss = 0;
+    for (const [x, y] of data) {
+      const e = params[0] * x + params[1] - y;
+      dw += 2 * e * x / n; db += 2 * e / n; loss += e * e / n;
+    }
+    adam.update(params, [dw, db]);
+    return loss;
+  }
+  function linearCurve(params, xMin, xMax) {
+    return [[xMin, params[0]*xMin + params[1]], [xMax, params[0]*xMax + params[1]]];
+  }
+
+  /* ── MLP: 1 hidden layer, tanh, H neurons ──
+     params layout: W1[H] | b1[H] | W2[H] | b2  (total 3H+1) */
+  function mlpForward(params, x, H) {
+    let out = params[3*H];
+    for (let i = 0; i < H; i++) out += params[2*H+i] * Math.tanh(params[i]*x + params[H+i]);
+    return out;
+  }
+  function mlpStep(params, data, adam, H) {
+    const n = data.length;
+    const grads = new Float64Array(params.length);
+    let loss = 0;
+    for (const [x, y] of data) {
+      const z = [], a = [];
+      for (let i = 0; i < H; i++) { z[i] = params[i]*x + params[H+i]; a[i] = Math.tanh(z[i]); }
+      let yhat = params[3*H];
+      for (let i = 0; i < H; i++) yhat += params[2*H+i] * a[i];
+      const e = yhat - y, dout = 2*e/n;
+      loss += e*e/n;
+      grads[3*H] += dout;
+      for (let i = 0; i < H; i++) {
+        grads[2*H+i] += a[i] * dout;
+        const dz = params[2*H+i] * dout * (1 - a[i]*a[i]);
+        grads[i] += x * dz; grads[H+i] += dz;
+      }
+    }
+    adam.update(params, grads);
+    return loss;
+  }
+  function mlpCurve(params, xMin, xMax, H, n = 80) {
+    return Array.from({ length: n }, (_, i) => {
+      const x = xMin + (xMax - xMin) * i / (n - 1);
+      return [x, mlpForward(params, x, H)];
+    });
+  }
+
+  /* ── Training config ── */
+  const TRAIN_CFG = {
+    linear:  { type: "linear",       maxSteps: 500,  spf: 5,  lr: 0.5  },
+    sine:    { type: "mlp", H: 8,    maxSteps: 2000, spf: 15, lr: 0.05 },
+    complex: { type: "mlp", H: 14,   maxSteps: 3000, spf: 20, lr: 0.05 },
+  };
+
+  function startTraining(svg, btnEl, statusEl) {
+    const kind = svg.dataset.chart;
+    const cfg = TRAIN_CFG[kind];
+    if (!cfg || !svg._nn3) return;
+
+    const { xd, data } = svg._nn3.ds || DATASETS[kind];
+    const [xMin, xMax] = DATASETS[kind].xd;
+    let params, stepFn, curveFn, adam;
+
+    if (cfg.type === "linear") {
+      params = new Float64Array([0, 0]);
+      adam = new Adam(cfg.lr);
+      stepFn = p => linearStep(p, data, adam);
+      curveFn = p => linearCurve(p, xMin, xMax);
+    } else {
+      const H = cfg.H;
+      params = new Float64Array(3*H + 1);
+      for (let i = 0; i < H; i++) {
+        params[i]     = (Math.random() - 0.5) * 0.8;  // W1
+        params[2*H+i] = (Math.random() - 0.5) * 0.8;  // W2
+      }
+      adam = new Adam(cfg.lr);
+      stepFn = p => mlpStep(p, DATASETS[kind].data, adam, H);
+      curveFn = p => mlpCurve(p, xMin, xMax, H);
+    }
+
+    setCurve(svg, curveFn(params));
+    btnEl.disabled = true;
+    if (statusEl) statusEl.textContent = "Entrenando…";
+    const root = svg.closest(".nn3-root");
+    if (root) root.classList.add("nn-running");
+
+    let step = 0, loss = Infinity, raf = null;
+
+    function frame() {
+      for (let i = 0; i < cfg.spf && step < cfg.maxSteps; i++, step++) {
+        loss = stepFn(params);
+      }
+      setCurve(svg, curveFn(params));
+      if (statusEl) statusEl.textContent = `Época ${step} · pérdida ${loss.toFixed(5)}`;
+
+      if (step < cfg.maxSteps) {
+        raf = requestAnimationFrame(frame);
+      } else {
+        if (root) root.classList.remove("nn-running");
+        btnEl.textContent = "↺ Reiniciar";
+        btnEl.disabled = false;
+        btnEl.dataset.trained = "true";
+        if (statusEl) statusEl.textContent = `✓ ${step} épocas · pérdida ${loss.toFixed(5)}`;
+      }
+    }
+    raf = requestAnimationFrame(frame);
+    btnEl._cancelRaf = () => { if (raf) cancelAnimationFrame(raf); if (root) root.classList.remove("nn-running"); };
+  }
+
+  /* ── Per-chart init ── */
+  function initChart(svg) {
+    renderChartBase(svg);
+    const kind = svg.dataset.chart;
+    const col = svg.closest(".nn3-chart-col");
+    if (!col) return;
+    const btnEl    = col.querySelector(`.nn3-train-btn[data-chart="${kind}"]`);
+    const statusEl = col.querySelector(`.nn3-train-status[data-chart="${kind}"]`);
+    if (!btnEl) return;
+
+    btnEl.addEventListener("click", () => {
+      if (btnEl.dataset.trained === "true") {
+        // Reset
+        if (btnEl._cancelRaf) btnEl._cancelRaf();
+        btnEl.dataset.trained = "";
+        btnEl.textContent = "▶ Entrenar";
+        if (statusEl) statusEl.textContent = "";
+        if (svg._nn3?.curveLine) { svg._nn3.curveLine.remove(); svg._nn3.curveLine = null; }
+      } else {
+        startTraining(svg, btnEl, statusEl);
+      }
+    });
   }
 
   /* ── Tabs ── */
   function initTabs(root) {
-    if (!root || root.dataset.nn3Ready) return;
+    if (root.dataset.nn3Ready) return;
     root.dataset.nn3Ready = "true";
-
     const tabs   = Array.from(root.querySelectorAll(".nn3-tab"));
     const panels = Array.from(root.querySelectorAll(".nn3-panel"));
-
     function show(key) {
       tabs.forEach(t => t.setAttribute("aria-selected", t.dataset.tab === key ? "true" : "false"));
-      panels.forEach(p => (p.dataset.panel === key ? p.removeAttribute("hidden") : p.setAttribute("hidden", "")));
+      panels.forEach(p => p.dataset.panel === key ? p.removeAttribute("hidden") : p.setAttribute("hidden", ""));
     }
-
-    tabs.forEach(t => {
-      t.addEventListener("click", () => show(t.dataset.tab));
-    });
-
-    const def = root.dataset.default || (tabs[0] && tabs[0].dataset.tab) || "";
-    show(def);
+    tabs.forEach(t => t.addEventListener("click", () => show(t.dataset.tab)));
+    show(root.dataset.default || tabs[0]?.dataset.tab || "");
   }
 
-  /* ── Init ── */
+  /* ── Boot ── */
   function init(scope) {
     scope.querySelectorAll(".nn3-root").forEach(root => {
       if (!root.dataset.nn3Ready) initTabs(root);
-      root.querySelectorAll(".nn3-chart").forEach(renderChart);
+      root.querySelectorAll(".nn3-chart").forEach(initChart);
     });
   }
-
   function boot() {
     init(document);
     if (typeof document$ !== "undefined" && document$.subscribe) {
       document$.subscribe(() => init(document));
     }
   }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", boot);
-  } else {
-    boot();
-  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+  else boot();
 })();
 </script>

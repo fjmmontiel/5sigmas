@@ -175,10 +175,7 @@ Piensa en cada algoritmo como una máquina con un tipo de **parámetros**. Entre
 * La red combina señales con pesos, pasa por activaciones y produce una puntuación/probabilidad.
 * Si falla, ajusta pesos/sesgos para que la próxima vez "gratis" pese más o menos, etc.
 
-<details markdown="1">
-<summary><strong>Clic aquí para entrenar tus primeras redes neuronales</strong></summary>
 {{ include_html("snippets/fundamentos-ia/redes_neuronales_v2.html") }}
-</details>
 
 Estos tres ejes (**familia tecnológica, tipo de aprendizaje, mecanismo de ajuste**) permiten describir cualquier sistema de IA moderno. Pero todos comparten algo: de dónde viene la lógica que los hace funcionar.
 
