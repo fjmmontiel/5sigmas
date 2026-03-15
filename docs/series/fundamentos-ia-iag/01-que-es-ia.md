@@ -177,6 +177,21 @@ Piensa en cada algoritmo como una máquina con un tipo de **parámetros**. Entre
 
 {{ include_html("snippets/fundamentos-ia/redes_neuronales_v2.html") }}
 
+---
+
+### 3.4 Para qué tipo de datos sirve cada familia
+
+No todas las familias son igual de adecuadas para cualquier problema. El tipo de dato es muchas veces el primer filtro de decisión:
+
+| Familia | Datos donde funciona bien | Dónde falla o no es la primera opción |
+|---------|--------------------------|---------------------------------------|
+| **Árboles** (Decision Tree, Random Forest, XGBoost) | Tabular estructurado: números, categorías, variables mixtas. El favorito para datos de negocio y competiciones de Kaggle con tablas. | Imágenes, audio, texto crudo sin preprocesar. |
+| **Naive Bayes** | Texto (bolsa de palabras, frecuencias de tokens), datos categóricos con pocas correlaciones entre variables. Muy rápido con poco dato. | Datos continuos muy correlacionados entre sí; relaciones complejas entre variables. |
+| **K-means** (clustering) | Numérico continuo donde la distancia euclidiana tiene sentido: coordenadas, métricas de comportamiento escaladas. | Texto, datos de alta dimensión sin reducción previa, variables categóricas puras. |
+| **Redes neuronales** | Imágenes, audio, texto, series temporales, vídeo. Brillan cuando el volumen de datos es grande y el patrón es complejo. | Datos tabulares pequeños: suelen ganar los árboles con menos coste computacional. |
+
+> **Estas cuatro familias ilustran el espectro de mecanismos de ajuste, no todo el mapa.** Existen decenas más: SVMs, regresión logística/lineal, modelos de mezclas gaussianas, redes bayesianas, modelos de series temporales (ARIMA, Prophet), métodos de ensemble, etc. Elegir algoritmo empieza siempre por entender el tipo de dato y el objetivo del problema.
+
 Estos tres ejes (**familia tecnológica, tipo de aprendizaje, mecanismo de ajuste**) permiten describir cualquier sistema de IA moderno. Pero todos comparten algo: de dónde viene la lógica que los hace funcionar.
 
 ## 4. Software clásico vs IA

@@ -742,6 +742,7 @@
         btnEl.textContent = "↺ Reiniciar";
         btnEl.disabled = false;
         btnEl.dataset.trained = "true";
+        btnEl.dataset.btn = "reset";
         if (statusEl) statusEl.textContent = `✓ ${step} épocas · pérdida ${loss.toFixed(5)}`;
       }
     }
@@ -764,6 +765,7 @@
         // Reset
         if (btnEl._cancelRaf) btnEl._cancelRaf();
         btnEl.dataset.trained = "";
+        btnEl.dataset.btn = "train";
         btnEl.textContent = "▶ Entrenar";
         if (statusEl) statusEl.textContent = "";
         if (svg._nn3?.curveLine) { svg._nn3.curveLine.remove(); svg._nn3.curveLine = null; }

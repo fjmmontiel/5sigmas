@@ -319,6 +319,12 @@ def _build_table(spec: dict, t: dict, n: int, total: int) -> str:
             )
         rows_html += f'<tr style="background:{bg};">{cells}</tr>'
 
+    note = spec.get("note", "")
+    note_html = (
+        f'<p style="margin:18px 0 0;font-size:14px;color:{t["muted"]};'
+        f'font-style:italic;line-height:1.5;">{note}</p>'
+    ) if note else ""
+
     content = f"""
     <div style="padding:32px 64px 28px;">
       <div class="divider"></div>
@@ -327,6 +333,7 @@ def _build_table(spec: dict, t: dict, n: int, total: int) -> str:
         <thead><tr>{th_html}</tr></thead>
         <tbody>{rows_html}</tbody>
       </table>
+      {note_html}
     </div>"""
     return _page_wrap(_top_bar(spec["label"], n, total) + content, t)
 
@@ -740,117 +747,9 @@ POSTS = [
         ],
     },
 
-    # ── POST 2 — Cómo aprende una IA por dentro ─────────────────────────────
+    # ── POST 2 — Tipos de aprendizaje ───────────────────────────────────────
     {
         "post": 2,
-        "slug": "mecanismos_internos",
-        "slides": [
-            {
-                "id": "01_hook",
-                "type": "hook",
-                "theme": "dark",
-                "label": "Cómo aprende una IA por dentro",
-                "headline": "\"La IA aprende\nde los datos.\"",
-                "highlight": "¿Pero qué cambia exactamente dentro?",
-                "lead": "Depende del algoritmo. Y la diferencia importa. →",
-            },
-            {
-                "id": "02_bucle",
-                "type": "steps",
-                "theme": "dark",
-                "label": "El bucle universal del aprendizaje",
-                "title": "Todos aprenden igual.\nLo que cambia es qué ajustan.",
-                "items": [
-                    {"bold": "Predice", "text": "con los parámetros actuales"},
-                    {"bold": "Mide el error", "text": "con los ejemplos reales"},
-                    {"bold": "Ajusta", "text": "algo interno para reducirlo"},
-                    {"bold": "Repite", "text": "miles o millones de veces"},
-                ],
-                "note": "Aprender = ajustar parámetros internos para equivocarse menos con datos parecidos.",
-            },
-            {
-                "id": "03_arboles",
-                "type": "snippet",
-                "theme": "dark",
-                "label": "Árboles de decisión",
-                "img": "fundamentos-ia/algoritmos/arboles_decision/dark/arboles_decision_li.png",
-                "tag": "Algoritmo 1/4",
-                "caption": "Aprenden preguntas y umbrales. El mejor cuestionario para separar casos.",
-            },
-            {
-                "id": "04_bayes",
-                "type": "snippet",
-                "theme": "dark",
-                "label": "Naive Bayes",
-                "img": "fundamentos-ia/algoritmos/naive_bayes_vnext/dark/naive_bayes_vnext_li.png",
-                "tag": "Algoritmo 2/4",
-                "caption": "Aprenden probabilidades por conteo. Una tabla de evidencias que se actualiza.",
-            },
-            {
-                "id": "05_kmeans",
-                "type": "snippet",
-                "theme": "dark",
-                "label": "K-means",
-                "img": "fundamentos-ia/algoritmos/kmeans_vnext/dark/kmeans_vnext_li.png",
-                "tag": "Algoritmo 3/4",
-                "caption": "Aprenden la posición de centros de grupos. Imanes que se mueven en el mapa de datos.",
-            },
-            {
-                "id": "06_redes_1",
-                "type": "snippet",
-                "theme": "dark",
-                "label": "Redes neuronales — 1 neurona",
-                "img": "fundamentos-ia/redes_neuronales_v2/dark/1_linear_li.png",
-                "tag": "Algoritmo 4/4 · Paso 1",
-                "caption": "Una neurona ajusta peso y sesgo. Aprende relaciones lineales: entra °C, sale °F.",
-            },
-            {
-                "id": "06_redes_2",
-                "type": "snippet",
-                "theme": "dark",
-                "label": "Redes neuronales — 1 capa oculta",
-                "img": "fundamentos-ia/redes_neuronales_v2/dark/2_sine_li.png",
-                "tag": "Algoritmo 4/4 · Paso 2",
-                "caption": "Varias neuronas en paralelo permiten curvar la respuesta. Ya puede aprender formas no lineales.",
-            },
-            {
-                "id": "06_redes_3",
-                "type": "snippet",
-                "theme": "dark",
-                "label": "Redes neuronales — Más capas",
-                "img": "fundamentos-ia/redes_neuronales_v2/dark/3_complex_li.png",
-                "tag": "Algoritmo 4/4 · Paso 3",
-                "caption": "Más capas apiladas = mayor capacidad. Así funcionan GPT, ResNet y Whisper.",
-            },
-            {
-                "id": "07_resumen",
-                "type": "table",
-                "theme": "dark",
-                "label": "Los 4 mecanismos — resumen",
-                "title": "Cada familia ajusta algo distinto.",
-                "headers": ["Familia", "Qué ajusta", "Intuición"],
-                "rows": [
-                    ["Árboles", "Preguntas y umbrales", "El mejor cuestionario"],
-                    ["Naive Bayes", "Probabilidades por conteo", "Tabla de evidencias"],
-                    ["K-means", "Posición de centros", "Imanes en el mapa"],
-                    ["Redes neuronales", "Pesos en capas", "Redistribuir influencia"],
-                ],
-            },
-            {
-                "id": "08_cta",
-                "type": "cta",
-                "theme": "dark",
-                "label": "Cómo aprende una IA por dentro",
-                "headline": "El artículo tiene\nsimuladores interactivos\npara ver cada uno en acción.",
-                "sub": "Fundamentos de IA · Capítulo 1",
-                "url_text": "5sigmas.com →",
-            },
-        ],
-    },
-
-    # ── POST 3 — Tipos de aprendizaje ───────────────────────────────────────
-    {
-        "post": 3,
         "slug": "tipos_aprendizaje",
         "slides": [
             {
@@ -938,6 +837,115 @@ POSTS = [
                 "theme": "dark",
                 "label": "Tipos de aprendizaje",
                 "headline": "Artículo completo con\nanimaciones interactivas\npor tipo de aprendizaje.",
+                "sub": "Fundamentos de IA · Capítulo 1",
+                "url_text": "5sigmas.com →",
+            },
+        ],
+    },
+
+    # ── POST 3 — Cómo aprende una IA por dentro ─────────────────────────────
+    {
+        "post": 3,
+        "slug": "mecanismos_internos",
+        "slides": [
+            {
+                "id": "01_hook",
+                "type": "hook",
+                "theme": "dark",
+                "label": "Cómo aprende una IA por dentro",
+                "headline": "\"La IA aprende\nde los datos.\"",
+                "highlight": "¿Pero qué cambia exactamente dentro?",
+                "lead": "Depende del algoritmo. Y la diferencia importa. →",
+            },
+            {
+                "id": "02_bucle",
+                "type": "steps",
+                "theme": "dark",
+                "label": "El bucle universal del aprendizaje",
+                "title": "Todos aprenden igual.\nLo que cambia es qué ajustan.",
+                "items": [
+                    {"bold": "Predice", "text": "con los parámetros actuales"},
+                    {"bold": "Mide el error", "text": "con los ejemplos reales"},
+                    {"bold": "Ajusta", "text": "algo interno para reducirlo"},
+                    {"bold": "Repite", "text": "miles o millones de veces"},
+                ],
+                "note": "Aprender = ajustar parámetros internos para equivocarse menos con datos parecidos.",
+            },
+            {
+                "id": "03_arboles",
+                "type": "snippet",
+                "theme": "dark",
+                "label": "Árboles de decisión",
+                "img": "fundamentos-ia/algoritmos/arboles_decision/dark/arboles_decision_li.png",
+                "tag": "Algoritmo 1/4",
+                "caption": "Aprenden preguntas y umbrales. El mejor cuestionario para separar casos.",
+            },
+            {
+                "id": "04_bayes",
+                "type": "snippet",
+                "theme": "dark",
+                "label": "Naive Bayes",
+                "img": "fundamentos-ia/algoritmos/naive_bayes_vnext/dark/naive_bayes_vnext_li.png",
+                "tag": "Algoritmo 2/4",
+                "caption": "Aprenden probabilidades por conteo. Una tabla de evidencias que se actualiza.",
+            },
+            {
+                "id": "05_kmeans",
+                "type": "snippet",
+                "theme": "dark",
+                "label": "K-means",
+                "img": "fundamentos-ia/algoritmos/kmeans_vnext/dark/kmeans_vnext_li.png",
+                "tag": "Algoritmo 3/4",
+                "caption": "Aprenden la posición de centros de grupos. Imanes que se mueven en el mapa de datos.",
+            },
+            {
+                "id": "06_redes_1",
+                "type": "snippet",
+                "theme": "dark",
+                "label": "Redes neuronales — 1 neurona",
+                "img": "fundamentos-ia/redes_neuronales_v2/dark/1_linear_li.png",
+                "tag": "Algoritmo 4/4 · Paso 1",
+                "caption": "Una neurona ajusta peso y sesgo. Aprende relaciones lineales: entra °C, sale °F.",
+            },
+            {
+                "id": "06_redes_2",
+                "type": "snippet",
+                "theme": "dark",
+                "label": "Redes neuronales — 1 capa oculta",
+                "img": "fundamentos-ia/redes_neuronales_v2/dark/2_sine_li.png",
+                "tag": "Algoritmo 4/4 · Paso 2",
+                "caption": "Varias neuronas en paralelo permiten curvar la respuesta. Ya puede aprender formas no lineales.",
+            },
+            {
+                "id": "06_redes_3",
+                "type": "snippet",
+                "theme": "dark",
+                "label": "Redes neuronales — Más capas",
+                "img": "fundamentos-ia/redes_neuronales_v2/dark/3_complex_li.png",
+                "tag": "Algoritmo 4/4 · Paso 3",
+                "caption": "Más capas apiladas = mayor capacidad. Así funcionan GPT, ResNet y Whisper.",
+            },
+            {
+                "id": "07_resumen",
+                "type": "table",
+                "theme": "dark",
+                "label": "Los 4 mecanismos — resumen",
+                "title": "Cada familia ajusta algo distinto\ny sirve para datos distintos.",
+                "headers": ["Familia", "Qué ajusta", "Datos ideales"],
+                "rows": [
+                    ["Árboles · RF · XGBoost", "Preguntas y umbrales", "Tabular estructurado: números y categorías"],
+                    ["Naive Bayes", "Probabilidades por conteo", "Texto, frecuencias, categorías independientes"],
+                    ["K-means", "Posición de centros", "Numérico continuo con distancia euclidiana"],
+                    ["Redes neuronales", "Pesos en capas", "Imágenes, audio, texto, series temporales"],
+                ],
+                "note": "Hay decenas de familias más. El tipo de dato es el primer filtro para elegir.",
+            },
+            {
+                "id": "08_cta",
+                "type": "cta",
+                "theme": "dark",
+                "label": "Cómo aprende una IA por dentro",
+                "headline": "El artículo tiene\nsimuladores interactivos\npara ver cada uno en acción.",
                 "sub": "Fundamentos de IA · Capítulo 1",
                 "url_text": "5sigmas.com →",
             },
