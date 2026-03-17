@@ -1,6 +1,7 @@
 ---
 title: Multimodalidad en IA generativa
 description: Cómo funcionan los sistemas multimodales de IA generativa: representaciones de texto, imagen y audio, arquitecturas de entrenamiento y aplicaciones reales.
+robots: noindex
 ---
 # Multimodalidad en IA generativa
 

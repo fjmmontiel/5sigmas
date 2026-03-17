@@ -1,77 +1,198 @@
 <div class="emb-wrap" data-demo="02-embeddings">
+
   <div class="emb-hd">
-    <div class="emb-title">El significado como geometría</div>
-    <div class="emb-sub">Cada palabra se convierte en un vector — una posición en un espacio de significado aprendido. Palabras con contextos similares acaban cerca. Palabras distintas, lejos.</div>
+    <div class="emb-title">De texto a significado en tres pasos</div>
+    <div class="emb-sub">El modelo no procesa palabras: procesa números. Este pipeline convierte texto crudo en una representación matemática donde la posición tiene semántica.</div>
   </div>
 
-  <div class="emb-clusters">
-    <div class="emb-cluster emb-cluster--royals">
-      <div class="emb-cluster-label">Realeza</div>
-      <div class="emb-cluster-words">
-        <span class="emb-word">Rey</span>
-        <span class="emb-word">Reina</span>
-        <span class="emb-word">Príncipe</span>
-        <span class="emb-word">Corona</span>
-      </div>
+  <!-- Step indicator -->
+  <div class="emb-steps">
+    <div class="emb-step emb-step--active" data-s="0">
+      <div class="emb-step-num">1</div>
+      <div class="emb-step-name">Token</div>
     </div>
-    <div class="emb-gap">
-      <div class="emb-gap-line"></div>
-      <div class="emb-gap-label">lejos</div>
-      <div class="emb-gap-line"></div>
+    <div class="emb-step-line"></div>
+    <div class="emb-step" data-s="1">
+      <div class="emb-step-num">2</div>
+      <div class="emb-step-name">Vector</div>
     </div>
-    <div class="emb-cluster emb-cluster--tech">
-      <div class="emb-cluster-label">Tecnología</div>
-      <div class="emb-cluster-words">
-        <span class="emb-word">Ordenador</span>
-        <span class="emb-word">Software</span>
-        <span class="emb-word">Datos</span>
-        <span class="emb-word">Algoritmo</span>
-      </div>
-    </div>
-    <div class="emb-gap">
-      <div class="emb-gap-line"></div>
-      <div class="emb-gap-label">lejos</div>
-      <div class="emb-gap-line"></div>
-    </div>
-    <div class="emb-cluster emb-cluster--nature">
-      <div class="emb-cluster-label">Minería</div>
-      <div class="emb-cluster-words">
-        <span class="emb-word">Carbón</span>
-        <span class="emb-word">Mineral</span>
-        <span class="emb-word">Mina</span>
-        <span class="emb-word">Piedra</span>
-      </div>
+    <div class="emb-step-line"></div>
+    <div class="emb-step" data-s="2">
+      <div class="emb-step-num">3</div>
+      <div class="emb-step-name">Embedding</div>
     </div>
   </div>
 
+  <!-- Panels -->
+  <div class="emb-stage">
+
+    <!-- Panel 0: Tokenización -->
+    <div class="emb-panel emb-panel--active" data-panel="0">
+      <div class="emb-panel-intro">
+        <strong>Token</strong> es la unidad mínima que el modelo procesa. Antes de cualquier cálculo, el texto se fragmenta. Un token puede ser una palabra, una sílaba o un signo de puntuación.
+      </div>
+      <div class="emb-tok-vis">
+        <div class="emb-raw">"El <em>rey</em> co·me pan"</div>
+        <div class="emb-arrow-label">↓ tokenizar</div>
+        <div class="emb-chips">
+          <span class="emb-chip emb-anim" style="--d:0ms">El</span>
+          <span class="emb-chip emb-chip--focus emb-anim" style="--d:100ms">rey</span>
+          <span class="emb-chip emb-anim" style="--d:200ms">co</span>
+          <span class="emb-chip emb-anim" style="--d:300ms">me</span>
+          <span class="emb-chip emb-anim" style="--d:400ms">pan</span>
+        </div>
+        <div class="emb-footnote">5 tokens — «come» se divide en «co» + «me» según el vocabulario del tokenizador. Cada token recibirá un ID numérico antes de entrar al modelo.</div>
+      </div>
+    </div>
+
+    <!-- Panel 1: Vector -->
+    <div class="emb-panel" data-panel="1">
+      <div class="emb-panel-intro">
+        <strong>Vector</strong> es la representación numérica de un token: una lista de miles de números. En este punto los valores son arbitrarios — sin geometría semántica. El formato existe, la semántica todavía no.
+      </div>
+      <div class="emb-vec-vis">
+        <div class="emb-vec-row">
+          <span class="emb-vec-tok">rey</span>
+          <span class="emb-vec-sep">→</span>
+          <span class="emb-vec-bracket">[</span>
+          <span class="emb-vec-num emb-anim" style="--d:0ms">0.82</span>
+          <span class="emb-vec-num emb-anim" style="--d:55ms">−0.34</span>
+          <span class="emb-vec-num emb-anim" style="--d:110ms">0.51</span>
+          <span class="emb-vec-num emb-anim" style="--d:165ms">0.19</span>
+          <span class="emb-vec-num emb-anim" style="--d:220ms">0.73</span>
+          <span class="emb-vec-num emb-anim" style="--d:275ms">−0.62</span>
+          <span class="emb-vec-more emb-anim" style="--d:330ms">… +1530</span>
+          <span class="emb-vec-bracket">]</span>
+        </div>
+        <div class="emb-vec-row emb-vec-row--muted">
+          <span class="emb-vec-tok">reina</span>
+          <span class="emb-vec-sep">→</span>
+          <span class="emb-vec-bracket">[</span>
+          <span class="emb-vec-num">0.79</span>
+          <span class="emb-vec-num">−0.31</span>
+          <span class="emb-vec-num">0.48</span>
+          <span class="emb-vec-num">0.22</span>
+          <span class="emb-vec-num">0.68</span>
+          <span class="emb-vec-num">−0.59</span>
+          <span class="emb-vec-more">… +1530</span>
+          <span class="emb-vec-bracket">]</span>
+        </div>
+        <div class="emb-vec-row emb-vec-row--muted">
+          <span class="emb-vec-tok">carbón</span>
+          <span class="emb-vec-sep">→</span>
+          <span class="emb-vec-bracket">[</span>
+          <span class="emb-vec-num">−0.41</span>
+          <span class="emb-vec-num">0.87</span>
+          <span class="emb-vec-num">−0.23</span>
+          <span class="emb-vec-num">0.64</span>
+          <span class="emb-vec-num">−0.18</span>
+          <span class="emb-vec-num">0.92</span>
+          <span class="emb-vec-more">… +1530</span>
+          <span class="emb-vec-bracket">]</span>
+        </div>
+        <div class="emb-footnote">GPT-4 usa vectores de 12 288 dimensiones. Los valores de «rey» y «reina» ya parecen cercanos, pero eso lo pone el entrenamiento — no el formato vectorial.</div>
+      </div>
+    </div>
+
+    <!-- Panel 2: Embedding space -->
+    <div class="emb-panel" data-panel="2">
+      <div class="emb-panel-intro">
+        <strong>Embedding</strong> es el vector ya ajustado por el entrenamiento: su posición en el espacio matemático refleja significado. Palabras con contextos similares quedan geométricamente cerca. Esa geometría emergió sola de los datos.
+      </div>
+      <div class="emb-space-vis">
+        <svg class="emb-svg" viewBox="0 0 420 220" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="gR2" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#324AB2" stop-opacity=".2"/>
+              <stop offset="100%" stop-color="#324AB2" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="gT2" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#26A69A" stop-opacity=".2"/>
+              <stop offset="100%" stop-color="#26A69A" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="gM2" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#FFB343" stop-opacity=".24"/>
+              <stop offset="100%" stop-color="#FFB343" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+
+          <!-- Cluster halos -->
+          <ellipse cx="88" cy="68" rx="56" ry="44" fill="url(#gR2)" class="emb-anim" style="--d:80ms"/>
+          <ellipse cx="320" cy="62" rx="56" ry="44" fill="url(#gT2)" class="emb-anim" style="--d:280ms"/>
+          <ellipse cx="210" cy="168" rx="56" ry="38" fill="url(#gM2)" class="emb-anim" style="--d:480ms"/>
+
+          <!-- Distance lines -->
+          <line x1="88" y1="68" x2="210" y2="168" stroke="currentColor" stroke-opacity=".1" stroke-width="1.2" stroke-dasharray="4 4"/>
+          <line x1="320" y1="62" x2="210" y2="168" stroke="currentColor" stroke-opacity=".1" stroke-width="1.2" stroke-dasharray="4 4"/>
+          <line x1="88" y1="68" x2="320" y2="62" stroke="currentColor" stroke-opacity=".07" stroke-width="1" stroke-dasharray="4 4"/>
+
+          <!-- Cluster labels -->
+          <text class="emb-svg-lbl emb-svg-lbl--royal emb-anim" style="--d:160ms" x="88" y="16">Realeza</text>
+          <text class="emb-svg-lbl emb-svg-lbl--tech emb-anim"  style="--d:360ms" x="320" y="14">Tecnología</text>
+          <text class="emb-svg-lbl emb-svg-lbl--mine emb-anim"  style="--d:560ms" x="210" y="212">Minería</text>
+
+          <!-- Royals -->
+          <circle class="emb-sv-dot emb-sv-dot--royal emb-anim" style="--d:120ms" cx="72"  cy="52" r="6"/>
+          <text   class="emb-sv-word emb-anim" style="--d:140ms" x="81"  y="56">Rey</text>
+          <circle class="emb-sv-dot emb-sv-dot--royal emb-anim" style="--d:160ms" cx="104" cy="62" r="6"/>
+          <text   class="emb-sv-word emb-anim" style="--d:180ms" x="113" y="66">Reina</text>
+          <circle class="emb-sv-dot emb-sv-dot--royal emb-anim" style="--d:200ms" cx="62"  cy="78" r="5"/>
+          <text   class="emb-sv-word emb-anim" style="--d:220ms" x="70"  y="82">Príncipe</text>
+          <circle class="emb-sv-dot emb-sv-dot--royal emb-anim" style="--d:240ms" cx="96"  cy="84" r="5"/>
+          <text   class="emb-sv-word emb-anim" style="--d:260ms" x="104" y="88">Corona</text>
+
+          <!-- Tech -->
+          <circle class="emb-sv-dot emb-sv-dot--tech emb-anim" style="--d:320ms" cx="306" cy="46" r="6"/>
+          <text   class="emb-sv-word emb-anim" style="--d:340ms" x="315" y="50">Datos</text>
+          <circle class="emb-sv-dot emb-sv-dot--tech emb-anim" style="--d:360ms" cx="338" cy="58" r="6"/>
+          <text   class="emb-sv-word emb-anim" style="--d:380ms" x="347" y="62">Modelo</text>
+          <circle class="emb-sv-dot emb-sv-dot--tech emb-anim" style="--d:400ms" cx="296" cy="72" r="5"/>
+          <text   class="emb-sv-word emb-anim" style="--d:420ms" x="304" y="76">Código</text>
+          <circle class="emb-sv-dot emb-sv-dot--tech emb-anim" style="--d:440ms" cx="330" cy="78" r="5"/>
+          <text   class="emb-sv-word emb-anim" style="--d:460ms" x="338" y="82">Red</text>
+
+          <!-- Mining -->
+          <circle class="emb-sv-dot emb-sv-dot--mine emb-anim" style="--d:520ms" cx="192" cy="154" r="6"/>
+          <text   class="emb-sv-word emb-anim" style="--d:540ms" x="201" y="158">Carbón</text>
+          <circle class="emb-sv-dot emb-sv-dot--mine emb-anim" style="--d:560ms" cx="228" cy="164" r="6"/>
+          <text   class="emb-sv-word emb-anim" style="--d:580ms" x="237" y="168">Mina</text>
+          <circle class="emb-sv-dot emb-sv-dot--mine emb-anim" style="--d:600ms" cx="182" cy="176" r="5"/>
+          <text   class="emb-sv-word emb-anim" style="--d:620ms" x="191" y="180">Mineral</text>
+          <circle class="emb-sv-dot emb-sv-dot--mine emb-anim" style="--d:640ms" cx="218" cy="182" r="5"/>
+          <text   class="emb-sv-word emb-anim" style="--d:660ms" x="227" y="186">Piedra</text>
+        </svg>
+        <div class="emb-footnote">Vista 2D simplificada — el espacio real tiene miles de dimensiones. La geometría semántica emerge sola de millones de ejemplos de entrenamiento.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Navigation -->
+  <div class="emb-nav">
+    <button class="emb-btn" id="emb-prev" disabled>← Anterior</button>
+    <div class="emb-pips">
+      <span class="emb-pip emb-pip--on" data-n="0"></span>
+      <span class="emb-pip" data-n="1"></span>
+      <span class="emb-pip" data-n="2"></span>
+    </div>
+    <button class="emb-btn" id="emb-next">Siguiente →</button>
+  </div>
+
+  <!-- Arithmetic -->
   <div class="emb-arith">
-    <div class="emb-arith-hd">Aritmética vectorial</div>
+    <div class="emb-arith-hd">Aritmética vectorial — cuando los embeddings capturan relaciones</div>
     <div class="emb-eq">
-      <span class="emb-tok emb-tok--b">Rey</span>
-      <span class="emb-op">−</span>
-      <span class="emb-tok">hombre</span>
-      <span class="emb-op">+</span>
-      <span class="emb-tok">mujer</span>
-      <span class="emb-op">≈</span>
-      <span class="emb-tok emb-tok--b emb-tok--result">Reina</span>
+      <span class="emb-etok emb-etok--royal">Rey</span>
+      <span class="emb-eop">−</span>
+      <span class="emb-etok">hombre</span>
+      <span class="emb-eop">+</span>
+      <span class="emb-etok">mujer</span>
+      <span class="emb-eop">≈</span>
+      <span class="emb-etok emb-etok--royal emb-etok--result">Reina</span>
     </div>
-    <div class="emb-arith-note">El modelo no entiende estas palabras. Aprende que coexisten en contextos similares y les asigna posiciones vecinas en el espacio vectorial.</div>
+    <div class="emb-arith-note">La distancia geométrica en el espacio de embeddings captura relaciones semánticas. Esto no se programó: emergió del entrenamiento sobre millones de textos.</div>
   </div>
 
-  <div class="emb-cards">
-    <div class="emb-card">
-      <div class="emb-card-k">Embedding</div>
-      <p>Una lista de números que codifica la posición de una palabra en el espacio de significado aprendido durante el entrenamiento.</p>
-    </div>
-    <div class="emb-card emb-card--hl">
-      <div class="emb-card-k">Por que funciona</div>
-      <p>Palabras en contextos parecidos acaban con vectores cercanos. La geometría emerge sola de millones de ejemplos.</p>
-    </div>
-    <div class="emb-card">
-      <div class="emb-card-k">Base universal</div>
-      <p>Texto, imágenes y audio se convierten a vectores antes de procesarse. Una misma arquitectura sirve para modalidades distintas.</p>
-    </div>
-  </div>
 </div>
 
 <style>
@@ -83,14 +204,13 @@
   --eg: var(--md-accent-fg-color, #FFB343);
   --ebg: var(--md-default-bg-color, #fff);
   --efg: var(--md-default-fg-color, #0f172a);
-  --ebd: rgba(15,23,42,.16);
-  --emut: rgba(15,23,42,.60);
+  --ebd: rgba(15,23,42,.14);
+  --emut: rgba(15,23,42,.52);
   --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
 
   display: grid;
-  gap: 12px;
-  max-width: 960px;
-  margin: 0 auto;
+  gap: 14px;
+  width: 100%;
   padding: clamp(14px,2vw,22px);
   border: 1px solid var(--ebd);
   border-radius: 20px;
@@ -106,10 +226,11 @@
 [data-md-color-scheme="slate"] .emb-wrap {
   --ebg: var(--md-default-bg-color, #0f172a);
   --efg: var(--md-default-fg-color, #e2e8f0);
-  --ebd: rgba(226,232,240,.16);
-  --emut: rgba(226,232,240,.60);
+  --ebd: rgba(226,232,240,.14);
+  --emut: rgba(226,232,240,.55);
 }
 
+/* Header */
 .emb-hd { display: grid; gap: 5px; }
 
 .emb-title {
@@ -126,95 +247,322 @@
   max-width: 72ch;
 }
 
-/* Clusters */
-.emb-clusters {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr auto 1fr;
+/* Step indicator */
+.emb-steps {
+  display: flex;
+  align-items: center;
+}
+
+.emb-step {
+  display: flex;
+  align-items: center;
   gap: 8px;
-  align-items: stretch;
+  padding: 8px 14px;
+  border-radius: 12px;
   border: 1px solid var(--ebd);
-  border-radius: 16px;
-  padding: 14px;
-  background: color-mix(in srgb, var(--ebg) 88%, #0f172a 12%);
+  background: color-mix(in srgb, var(--ebg) 90%, transparent);
+  opacity: .4;
+  transition: opacity .3s, border-color .3s, background .3s;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
 }
 
-.emb-cluster {
-  border: 1px solid var(--ebd);
-  border-radius: 14px;
-  padding: 12px;
-  display: grid;
-  gap: 8px;
-  align-content: start;
+.emb-step:hover { opacity: .7; }
+
+.emb-step--active {
+  opacity: 1;
+  border-color: color-mix(in srgb, var(--eb) 44%, var(--ebd));
+  background: color-mix(in srgb, var(--eb) 8%, var(--ebg));
 }
 
-.emb-cluster--royals {
-  border-color: color-mix(in srgb,var(--eb) 34%,var(--ebd));
-  background: color-mix(in srgb,var(--eb) 9%,var(--ebg));
-}
-.emb-cluster--tech {
-  border-color: color-mix(in srgb,var(--ea) 34%,var(--ebd));
-  background: color-mix(in srgb,var(--ea) 9%,var(--ebg));
-}
-.emb-cluster--nature {
-  border-color: color-mix(in srgb,var(--eg) 34%,var(--ebd));
-  background: color-mix(in srgb,var(--eg) 9%,var(--ebg));
-}
-
-.emb-cluster-label {
+.emb-step-num {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--ebd);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 11px;
   font-weight: 900;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  color: var(--emut);
+  flex-shrink: 0;
+  transition: background .3s, color .3s;
 }
 
-.emb-cluster-words {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
+.emb-step--active .emb-step-num {
+  background: var(--eb);
+  color: #fff;
 }
 
-.emb-word {
-  padding: 4px 9px;
-  border-radius: 999px;
+.emb-step-name { font-size: 13px; font-weight: 700; }
+
+.emb-step-line {
+  flex: 1;
+  height: 1px;
+  background: var(--ebd);
+  min-width: 8px;
+}
+
+/* Stage */
+.emb-stage { position: relative; }
+
+.emb-panel {
+  display: none;
   border: 1px solid var(--ebd);
-  background: color-mix(in srgb, var(--ebg) 88%, transparent);
-  font-size: 12.5px;
-  font-weight: 700;
+  border-radius: 16px;
+  padding: 16px 18px;
+  background: color-mix(in srgb, var(--ebg) 91%, #0f172a 9%);
 }
 
-.emb-gap {
+.emb-panel--active {
+  display: block;
+  animation: embIn .32s ease both;
+}
+
+@keyframes embIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.emb-panel-intro {
+  font-size: 14px;
+  line-height: 1.6;
+  border-left: 3px solid color-mix(in srgb, var(--eb) 55%, transparent);
+  padding-left: 12px;
+  margin-bottom: 18px;
+}
+
+.emb-footnote {
+  font-size: 12px;
+  color: var(--emut);
+  font-style: italic;
+  line-height: 1.5;
+  margin-top: 14px;
+}
+
+/* ── Panel 0: Tokenization ── */
+.emb-tok-vis {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 4px;
-  padding: 0 2px;
+  gap: 12px;
 }
 
-.emb-gap-line {
-  flex: 1;
-  width: 1px;
-  background: var(--ebd);
-  min-height: 12px;
+.emb-raw {
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: .01em;
+  color: var(--emut);
 }
 
-.emb-gap-label {
-  font-size: 10px;
+.emb-raw em {
+  font-style: normal;
+  color: var(--efg);
+}
+
+.emb-arrow-label {
+  font-size: 11px;
   font-weight: 800;
-  letter-spacing: .05em;
+  letter-spacing: .07em;
   text-transform: uppercase;
   color: var(--emut);
-  white-space: nowrap;
-  writing-mode: vertical-rl;
 }
 
-/* Arithmetic */
+.emb-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+.emb-chip {
+  padding: 6px 15px;
+  border-radius: 999px;
+  border: 1px solid var(--ebd);
+  background: color-mix(in srgb, var(--ebg) 80%, transparent);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.emb-chip--focus {
+  border-color: color-mix(in srgb, var(--eb) 54%, var(--ebd));
+  background: color-mix(in srgb, var(--eb) 12%, var(--ebg));
+  color: color-mix(in srgb, var(--eb) 80%, var(--efg));
+}
+
+/* ── Panel 1: Vector ── */
+.emb-vec-vis { display: grid; gap: 8px; }
+
+.emb-vec-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--ebd);
+  background: color-mix(in srgb, var(--ebg) 78%, #0f172a 22%);
+}
+
+.emb-vec-row--muted { opacity: .4; }
+
+.emb-vec-tok {
+  font-size: 14px;
+  font-weight: 800;
+  color: color-mix(in srgb, var(--eb) 75%, var(--efg));
+  min-width: 52px;
+}
+
+.emb-vec-sep {
+  font-size: 14px;
+  color: var(--emut);
+  font-weight: 700;
+  margin: 0 2px;
+}
+
+.emb-vec-bracket {
+  font-size: 22px;
+  color: var(--emut);
+  font-weight: 300;
+  line-height: 1;
+}
+
+.emb-vec-num {
+  font-family: "SF Mono","Fira Code","Fira Mono","Roboto Mono",monospace;
+  font-size: 12px;
+  padding: 2px 5px;
+  border-radius: 5px;
+  background: color-mix(in srgb, var(--ea) 12%, transparent);
+  color: var(--efg);
+}
+
+.emb-vec-more {
+  font-family: "SF Mono","Fira Code","Fira Mono","Roboto Mono",monospace;
+  font-size: 11px;
+  color: var(--emut);
+}
+
+/* ── Panel 2: Embedding space ── */
+.emb-space-vis {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.emb-svg {
+  width: 100%;
+  max-width: 440px;
+  height: auto;
+  overflow: visible;
+}
+
+.emb-svg-lbl {
+  font-family: var(--ef);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  text-anchor: middle;
+  fill: var(--emut);
+}
+
+.emb-svg-lbl--royal { fill: color-mix(in srgb, var(--eb) 72%, var(--emut)); }
+.emb-svg-lbl--tech  { fill: color-mix(in srgb, var(--ea) 72%, var(--emut)); }
+.emb-svg-lbl--mine  { fill: color-mix(in srgb, var(--eg) 60%, var(--emut)); }
+
+.emb-sv-dot { }
+.emb-sv-dot--royal { fill: var(--eb); }
+.emb-sv-dot--tech  { fill: var(--ea); }
+.emb-sv-dot--mine  { fill: var(--eg); }
+
+.emb-sv-word {
+  font-family: var(--ef);
+  font-size: 10px;
+  font-weight: 700;
+  fill: var(--efg);
+}
+
+/* ── Animations ── */
+/* Applied to .emb-anim elements when panel is active */
+.emb-panel--active .emb-anim {
+  animation: embItemIn .35s ease var(--d, 0ms) both;
+}
+
+@keyframes embItemIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* SVG elements need different transform origin */
+.emb-panel--active svg .emb-anim {
+  animation: embSvgIn .4s ease var(--d, 0ms) both;
+}
+
+@keyframes embSvgIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── Navigation ── */
+.emb-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.emb-btn {
+  padding: 7px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--ebd);
+  background: color-mix(in srgb, var(--ebg) 85%, transparent);
+  color: var(--efg);
+  font-family: var(--ef);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .2s, border-color .2s, opacity .2s;
+  white-space: nowrap;
+}
+
+.emb-btn:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--eb) 44%, var(--ebd));
+  background: color-mix(in srgb, var(--eb) 10%, var(--ebg));
+}
+
+.emb-btn:disabled {
+  opacity: .3;
+  cursor: default;
+}
+
+.emb-pips {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.emb-pip {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ebd);
+  transition: background .25s, transform .25s;
+  cursor: pointer;
+}
+
+.emb-pip--on {
+  background: var(--eb);
+  transform: scale(1.3);
+}
+
+/* ── Arithmetic ── */
 .emb-arith {
   border: 1px solid var(--ebd);
   border-radius: 14px;
   padding: 14px 16px;
-  background: color-mix(in srgb, var(--ebg) 92%, #0f172a 8%);
+  background: color-mix(in srgb, var(--ebg) 91%, #0f172a 9%);
   display: grid;
   gap: 10px;
 }
@@ -234,26 +582,26 @@
   gap: 8px;
 }
 
-.emb-tok {
-  padding: 6px 13px;
+.emb-etok {
+  padding: 6px 14px;
   border-radius: 999px;
   border: 1px solid var(--ebd);
-  background: color-mix(in srgb, var(--ebg) 86%, transparent);
+  background: color-mix(in srgb, var(--ebg) 84%, transparent);
   font-size: 15px;
   font-weight: 800;
 }
 
-.emb-tok--b {
-  border-color: color-mix(in srgb,var(--eb) 40%,var(--ebd));
-  background: color-mix(in srgb,var(--eb) 12%,var(--ebg));
+.emb-etok--royal {
+  border-color: color-mix(in srgb, var(--eb) 44%, var(--ebd));
+  background: color-mix(in srgb, var(--eb) 12%, var(--ebg));
 }
 
-.emb-tok--result {
-  box-shadow: 0 0 0 2px color-mix(in srgb,var(--eb) 36%,transparent);
+.emb-etok--result {
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--eb) 36%, transparent);
   font-weight: 900;
 }
 
-.emb-op {
+.emb-eop {
   font-size: 20px;
   font-weight: 900;
   color: var(--emut);
@@ -262,47 +610,66 @@
 .emb-arith-note {
   font-size: 13px;
   color: var(--emut);
-  line-height: 1.45;
+  line-height: 1.5;
   font-style: italic;
 }
 
-/* Cards */
-.emb-cards {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0,1fr));
-  gap: 10px;
-}
-
-.emb-card {
-  border: 1px solid var(--ebd);
-  border-radius: 14px;
-  padding: 14px;
-  background: color-mix(in srgb, var(--ebg) 94%, #0f172a 6%);
-}
-
-.emb-card--hl {
-  border-color: color-mix(in srgb,var(--eb) 28%,var(--ebd));
-  background:
-    linear-gradient(135deg, color-mix(in srgb,var(--eb) 9%,transparent), transparent 68%),
-    color-mix(in srgb, var(--ebg) 94%, #0f172a 6%);
-}
-
-.emb-card-k {
-  font-size: 11px;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: .08em;
-  color: var(--emut);
-  margin-bottom: 7px;
-}
-
-.emb-card p { margin: 0; font-size: 13.5px; line-height: 1.5; }
-
-@media (max-width: 620px) {
-  .emb-clusters { grid-template-columns: 1fr; }
-  .emb-gap { flex-direction: row; }
-  .emb-gap-label { writing-mode: horizontal-tb; }
-  .emb-gap-line { flex: 1; height: 1px; width: auto; min-height: unset; }
-  .emb-cards { grid-template-columns: 1fr; }
+/* ── Responsive ── */
+@media (max-width: 560px) {
+  .emb-step-name { display: none; }
+  .emb-step { padding: 8px 10px; }
+  .emb-vec-row { gap: 4px; }
+  .emb-svg { max-width: 100%; }
 }
 </style>
+
+<script>
+(function () {
+  const wrap  = document.currentScript.previousElementSibling.previousElementSibling.previousElementSibling;
+  // Walk up to find .emb-wrap
+  let root = document.currentScript;
+  while (root && !root.classList?.contains('emb-wrap')) root = root.previousElementSibling || root.parentElement;
+  if (!root) return;
+
+  const panels  = Array.from(root.querySelectorAll('.emb-panel'));
+  const steps   = Array.from(root.querySelectorAll('.emb-step'));
+  const pips    = Array.from(root.querySelectorAll('.emb-pip'));
+  const btnPrev = root.querySelector('#emb-prev');
+  const btnNext = root.querySelector('#emb-next');
+  let current   = 0;
+
+  function goTo(n) {
+    if (n < 0 || n >= panels.length) return;
+
+    // Deactivate current
+    panels[current].classList.remove('emb-panel--active');
+    steps[current].classList.remove('emb-step--active');
+    pips[current].classList.remove('emb-pip--on');
+
+    current = n;
+
+    // Activate new
+    const panel = panels[current];
+
+    // Restart .emb-anim elements
+    panel.querySelectorAll('.emb-anim').forEach(el => {
+      el.style.animation = 'none';
+      void el.offsetWidth;
+      el.style.animation = '';
+    });
+
+    panel.classList.add('emb-panel--active');
+    steps[current].classList.add('emb-step--active');
+    pips[current].classList.add('emb-pip--on');
+
+    btnPrev.disabled = current === 0;
+    btnNext.disabled = current === panels.length - 1;
+  }
+
+  btnPrev.addEventListener('click', () => goTo(current - 1));
+  btnNext.addEventListener('click', () => goTo(current + 1));
+
+  pips.forEach(pip => pip.addEventListener('click', () => goTo(+pip.dataset.n)));
+  steps.forEach(step => step.addEventListener('click', () => goTo(+step.dataset.s)));
+})();
+</script>

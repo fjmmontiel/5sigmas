@@ -1,143 +1,115 @@
-<div class="tr-wrap" data-demo="02-transformer" data-anim-tabs data-default="atencion">
+<div class="tr-wrap" data-demo="02-transformer">
+
   <div class="tr-hd">
-    <div class="tr-title">El Transformer: atención sobre contexto completo</div>
-    <div class="tr-sub">Antes del Transformer el texto se procesaba en orden, token a token. El Transformer calcula en paralelo cuánta relevancia tiene cada token respecto a todos los demás.</div>
+    <div class="tr-title">El Transformer: de secuencial a paralelo</div>
+    <div class="tr-sub">Dos problemas resueltos con un solo cambio de arquitectura.</div>
   </div>
 
-  <nav class="tr-nav" data-role="tablist" aria-label="Transformers: conceptos">
-    <button type="button" data-role="tab" data-tab="atencion" aria-selected="true">Mecanismo de atención</button>
-    <button type="button" data-role="tab" data-tab="antes" aria-selected="false">Antes del Transformer</button>
-    <button type="button" data-role="tab" data-tab="impacto" aria-selected="false">Por que importa</button>
-  </nav>
-
-  <div class="tr-panels">
-
-    <!-- Panel 1: Attention -->
-    <section class="tr-panel" data-panel="atencion">
-      <div class="tr-section-label">Ejemplo: desambiguacion de "banco"</div>
-      <div class="tr-sentence" aria-label="Frase de ejemplo con tokens">
-        <span class="tr-tok" data-w="el">El</span>
-        <span class="tr-tok tr-tok--focus" data-w="banco">banco</span>
-        <span class="tr-tok" data-w="donde">donde</span>
-        <span class="tr-tok tr-tok--hi1" data-w="me">me</span>
-        <span class="tr-tok tr-tok--hi1" data-w="sente">senté</span>
-        <span class="tr-tok" data-w="estaba">estaba</span>
-        <span class="tr-tok tr-tok--hi2" data-w="mojado">mojado</span>
+  <!-- Before / After -->
+  <div class="tr-compare">
+    <div class="tr-col tr-col--old">
+      <div class="tr-col-head">Antes — RNN</div>
+      <div class="tr-flow-seq">
+        <span class="tr-seq-tok">El</span>
+        <span class="tr-seq-arr">→</span>
+        <span class="tr-seq-tok">banco</span>
+        <span class="tr-seq-arr">→</span>
+        <span class="tr-seq-tok">donde</span>
+        <span class="tr-seq-arr">→</span>
+        <span class="tr-seq-tok">me</span>
+        <span class="tr-seq-arr">→</span>
+        <span class="tr-seq-tok tr-seq-tok--fade">senté…</span>
       </div>
-      <div class="tr-attn-legend">
-        <span class="tr-leg tr-leg--focus">Palabra analizada</span>
-        <span class="tr-leg tr-leg--hi1">Atención alta</span>
-        <span class="tr-leg tr-leg--hi2">Atención alta</span>
-        <span class="tr-leg tr-leg--lo">Atención baja</span>
+      <div class="tr-items">
+        <div class="tr-item tr-item--bad">No paralelizable — token a token</div>
+        <div class="tr-item tr-item--bad">El contexto del inicio se olvida</div>
+        <div class="tr-item tr-item--bad">Entrenamiento lento</div>
       </div>
-      <div class="tr-attn-bars" aria-label="Pesos de atención desde banco">
-        <div class="tr-bar-row">
-          <div class="tr-bar-label">El</div>
-          <div class="tr-bar-track"><div class="tr-bar-fill" style="width:8%"></div></div>
-          <div class="tr-bar-val">8%</div>
+    </div>
+    <div class="tr-col tr-col--new">
+      <div class="tr-col-head">Transformer (2017)</div>
+      <div class="tr-flow-par">
+        <div class="tr-par-row">
+          <span class="tr-par-tok">El</span>
+          <span class="tr-par-tok tr-par-tok--hl">banco</span>
+          <span class="tr-par-tok">donde</span>
+          <span class="tr-par-tok tr-par-tok--hl">me</span>
+          <span class="tr-par-tok tr-par-tok--hl">senté</span>
+          <span class="tr-par-tok">estaba</span>
+          <span class="tr-par-tok tr-par-tok--hl">mojado</span>
         </div>
-        <div class="tr-bar-row tr-bar-row--focus">
-          <div class="tr-bar-label">banco</div>
-          <div class="tr-bar-track"><div class="tr-bar-fill tr-bar-fill--focus" style="width:12%"></div></div>
-          <div class="tr-bar-val">12%</div>
-        </div>
-        <div class="tr-bar-row">
-          <div class="tr-bar-label">donde</div>
-          <div class="tr-bar-track"><div class="tr-bar-fill" style="width:6%"></div></div>
-          <div class="tr-bar-val">6%</div>
-        </div>
-        <div class="tr-bar-row tr-bar-row--hi1">
-          <div class="tr-bar-label">me</div>
-          <div class="tr-bar-track"><div class="tr-bar-fill tr-bar-fill--hi" style="width:28%"></div></div>
-          <div class="tr-bar-val">28%</div>
-        </div>
-        <div class="tr-bar-row tr-bar-row--hi1">
-          <div class="tr-bar-label">senté</div>
-          <div class="tr-bar-track"><div class="tr-bar-fill tr-bar-fill--hi" style="width:22%"></div></div>
-          <div class="tr-bar-val">22%</div>
-        </div>
-        <div class="tr-bar-row">
-          <div class="tr-bar-label">estaba</div>
-          <div class="tr-bar-track"><div class="tr-bar-fill" style="width:9%"></div></div>
-          <div class="tr-bar-val">9%</div>
-        </div>
-        <div class="tr-bar-row tr-bar-row--hi2">
-          <div class="tr-bar-label">mojado</div>
-          <div class="tr-bar-track"><div class="tr-bar-fill tr-bar-fill--hi2" style="width:15%"></div></div>
-          <div class="tr-bar-val">15%</div>
-        </div>
+        <div class="tr-par-note">Todos los tokens a la vez</div>
       </div>
-      <div class="tr-note">Conectar "banco" con "senté" y "mojado" determina que es un mueble, no una entidad financiera. No hay regla escrita: el modelo aprende estos pesos de millones de textos.</div>
-    </section>
-
-    <!-- Panel 2: Before -->
-    <section class="tr-panel" data-panel="antes" hidden>
-      <div class="tr-compare">
-        <div class="tr-compare-col tr-compare-col--old">
-          <div class="tr-compare-head">Antes del Transformer (RNN)</div>
-          <div class="tr-flow-seq">
-            <div class="tr-seq-tok">El</div>
-            <div class="tr-seq-arr">→</div>
-            <div class="tr-seq-tok">banco</div>
-            <div class="tr-seq-arr">→</div>
-            <div class="tr-seq-tok">donde</div>
-            <div class="tr-seq-arr">→</div>
-            <div class="tr-seq-tok">me</div>
-            <div class="tr-seq-arr">→</div>
-            <div class="tr-seq-tok tr-seq-tok--fade">senté...</div>
-          </div>
-          <div class="tr-compare-items">
-            <div class="tr-cmp-item tr-cmp-item--bad">Procesamiento secuencial — no paralelizable</div>
-            <div class="tr-cmp-item tr-cmp-item--bad">El contexto del inicio se "olvida" en secuencias largas</div>
-            <div class="tr-cmp-item tr-cmp-item--bad">Entrenamiento lento: depende del paso anterior</div>
-          </div>
-        </div>
-        <div class="tr-compare-col tr-compare-col--new">
-          <div class="tr-compare-head">Transformer (2017)</div>
-          <div class="tr-flow-par">
-            <div class="tr-par-row">
-              <span class="tr-par-tok">El</span>
-              <span class="tr-par-tok tr-par-tok--hl">banco</span>
-              <span class="tr-par-tok">donde</span>
-              <span class="tr-par-tok tr-par-tok--hl">me</span>
-              <span class="tr-par-tok tr-par-tok--hl">senté</span>
-              <span class="tr-par-tok">estaba</span>
-              <span class="tr-par-tok tr-par-tok--hl">mojado</span>
-            </div>
-            <div class="tr-par-note">Todos los tokens en paralelo</div>
-          </div>
-          <div class="tr-compare-items">
-            <div class="tr-cmp-item tr-cmp-item--good">Procesamiento paralelo — escalable con GPUs</div>
-            <div class="tr-cmp-item tr-cmp-item--good">Acceso directo a cualquier posicion del contexto</div>
-            <div class="tr-cmp-item tr-cmp-item--good">Entrenamiento masivo viable con datos a escala</div>
-          </div>
-        </div>
+      <div class="tr-items">
+        <div class="tr-item tr-item--good">Procesamiento paralelo — escala con GPUs</div>
+        <div class="tr-item tr-item--good">Acceso directo a cualquier posición del contexto</div>
+        <div class="tr-item tr-item--good">Entrenamiento masivo viable</div>
       </div>
-    </section>
-
-    <!-- Panel 3: Why it matters -->
-    <section class="tr-panel" data-panel="impacto" hidden>
-      <div class="tr-impact-cards">
-        <div class="tr-impact-card tr-impact-card--a">
-          <div class="tr-impact-k">Arquitectura general</div>
-          <p>La misma base sirve para texto, imágenes, audio, video y código. GPT, BERT, DALL-E, Stable Diffusion, Gemini y Claude comparten esta arquitectura.</p>
-        </div>
-        <div class="tr-impact-card tr-impact-card--b">
-          <div class="tr-impact-k">Escala</div>
-          <p>El paralelismo permite entrenar con miles de GPUs a la vez. Sin eso, los modelos fundacionales de hoy no serían viables.</p>
-        </div>
-        <div class="tr-impact-card tr-impact-card--c">
-          <div class="tr-impact-k">Contexto largo</div>
-          <p>La atención conecta cualquier par de tokens sin importar la distancia. Los modelos actuales manejan ventanas de cientos de miles de tokens.</p>
-        </div>
-        <div class="tr-impact-card tr-impact-card--d">
-          <div class="tr-impact-k">La arquitectura sola no bastó</div>
-          <p>Lo que desató el salto fue combinar Transformer + escala masiva de datos y cómputo. La arquitectura abrió la puerta; los datos y el hardware la cruzaron.</p>
-        </div>
-      </div>
-    </section>
-
+    </div>
   </div>
+
+  <!-- Attention mechanism -->
+  <div class="tr-attn-wrap">
+    <div class="tr-attn-label">Mecanismo de atención — ejemplo: desambiguando "banco"</div>
+
+    <div class="tr-sentence">
+      <span class="tr-tok">El</span>
+      <span class="tr-tok tr-tok--focus">banco</span>
+      <span class="tr-tok">donde</span>
+      <span class="tr-tok tr-tok--hi1">me</span>
+      <span class="tr-tok tr-tok--hi1">senté</span>
+      <span class="tr-tok">estaba</span>
+      <span class="tr-tok tr-tok--hi2">mojado</span>
+    </div>
+
+    <div class="tr-legend">
+      <span class="tr-leg tr-leg--focus">Palabra analizada</span>
+      <span class="tr-leg tr-leg--hi1">Atención alta</span>
+      <span class="tr-leg tr-leg--hi2">Atención alta</span>
+      <span class="tr-leg">Atención baja</span>
+    </div>
+
+    <div class="tr-bars">
+      <div class="tr-bar-row">
+        <span class="tr-bar-lbl">El</span>
+        <div class="tr-bar-track"><div class="tr-bar-fill" data-w="8%"></div></div>
+        <span class="tr-bar-val">8%</span>
+      </div>
+      <div class="tr-bar-row tr-bar-row--focus">
+        <span class="tr-bar-lbl">banco</span>
+        <div class="tr-bar-track"><div class="tr-bar-fill tr-bar-fill--focus" data-w="12%"></div></div>
+        <span class="tr-bar-val">12%</span>
+      </div>
+      <div class="tr-bar-row">
+        <span class="tr-bar-lbl">donde</span>
+        <div class="tr-bar-track"><div class="tr-bar-fill" data-w="6%"></div></div>
+        <span class="tr-bar-val">6%</span>
+      </div>
+      <div class="tr-bar-row tr-bar-row--hi1">
+        <span class="tr-bar-lbl">me</span>
+        <div class="tr-bar-track"><div class="tr-bar-fill tr-bar-fill--hi1" data-w="28%"></div></div>
+        <span class="tr-bar-val">28%</span>
+      </div>
+      <div class="tr-bar-row tr-bar-row--hi1">
+        <span class="tr-bar-lbl">senté</span>
+        <div class="tr-bar-track"><div class="tr-bar-fill tr-bar-fill--hi1" data-w="22%"></div></div>
+        <span class="tr-bar-val">22%</span>
+      </div>
+      <div class="tr-bar-row">
+        <span class="tr-bar-lbl">estaba</span>
+        <div class="tr-bar-track"><div class="tr-bar-fill" data-w="9%"></div></div>
+        <span class="tr-bar-val">9%</span>
+      </div>
+      <div class="tr-bar-row tr-bar-row--hi2">
+        <span class="tr-bar-lbl">mojado</span>
+        <div class="tr-bar-track"><div class="tr-bar-fill tr-bar-fill--hi2" data-w="15%"></div></div>
+        <span class="tr-bar-val">15%</span>
+      </div>
+    </div>
+
+    <div class="tr-note">Conectar "banco" con "senté" y "mojado" determina que es un mueble, no una entidad financiera. No hay regla escrita: el modelo aprende estos pesos de millones de textos.</div>
+  </div>
+
 </div>
 
 <style>
@@ -147,17 +119,15 @@
   --ta: var(--md-primary-fg-color, #26A69A);
   --tb: #324AB2;
   --tg: var(--md-accent-fg-color, #FFB343);
-  --td: #7c3aed;
   --tbg: var(--md-default-bg-color, #fff);
   --tfg: var(--md-default-fg-color, #0f172a);
-  --tbd: rgba(15,23,42,.16);
-  --tmut: rgba(15,23,42,.60);
+  --tbd: rgba(15,23,42,.14);
+  --tmut: rgba(15,23,42,.52);
   --tf: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
 
   display: grid;
-  gap: 12px;
-  max-width: 960px;
-  margin: 0 auto;
+  gap: 14px;
+  width: 100%;
   padding: clamp(14px,2vw,22px);
   border: 1px solid var(--tbd);
   border-radius: 20px;
@@ -173,245 +143,40 @@
 [data-md-color-scheme="slate"] .tr-wrap {
   --tbg: var(--md-default-bg-color, #0f172a);
   --tfg: var(--md-default-fg-color, #e2e8f0);
-  --tbd: rgba(226,232,240,.16);
-  --tmut: rgba(226,232,240,.60);
+  --tbd: rgba(226,232,240,.14);
+  --tmut: rgba(226,232,240,.55);
 }
 
-.tr-hd { display: grid; gap: 5px; }
+.tr-hd { display: grid; gap: 4px; }
 
-.tr-title {
-  font-size: clamp(17px,2.2vw,24px);
-  font-weight: 900;
-  letter-spacing: -.02em;
-  line-height: 1.1;
-}
+.tr-title { font-size: clamp(17px,2.2vw,24px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.tr-sub   { font-size: 14px; color: var(--tmut); line-height: 1.5; }
 
-.tr-sub {
-  font-size: 14px;
-  color: var(--tmut);
-  line-height: 1.5;
-  max-width: 74ch;
-}
-
-/* Nav */
-.tr-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.tr-nav button {
-  appearance: none;
-  border: 1px solid var(--tbd);
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--tbg) 90%, #0f172a 10%);
-  color: var(--tmut);
-  padding: 8px 14px;
-  font: inherit;
-  font-size: 13px;
-  font-weight: 800;
-  cursor: pointer;
-  transition: border-color .14s, background .14s, color .14s;
-}
-
-.tr-nav button[aria-selected="true"] {
-  border-color: color-mix(in srgb, var(--tb) 44%, transparent);
-  background: color-mix(in srgb, var(--tb) 13%, var(--tbg));
-  color: var(--tfg);
-}
-
-.tr-nav button:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--tb) 22%, transparent);
-}
-
-.tr-panels { min-height: 0; }
-
-.tr-panel[hidden] { display: none; }
-
-/* Section label */
-.tr-section-label {
-  font-size: 11px;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: .08em;
-  color: var(--tmut);
-  margin-bottom: 10px;
-}
-
-/* Sentence */
-.tr-sentence {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
-  align-items: center;
-  padding: 14px;
-  border: 1px solid var(--tbd);
-  border-radius: 14px;
-  background: color-mix(in srgb, var(--tbg) 88%, #0f172a 12%);
-  margin-bottom: 10px;
-}
-
-.tr-tok {
-  padding: 5px 12px;
-  border-radius: 999px;
-  border: 1px solid var(--tbd);
-  background: color-mix(in srgb, var(--tbg) 86%, transparent);
-  font-size: 15px;
-  font-weight: 700;
-}
-
-.tr-tok--focus {
-  border-color: color-mix(in srgb, var(--tg) 50%, transparent);
-  background: color-mix(in srgb, var(--tg) 16%, var(--tbg));
-  font-weight: 900;
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--tg) 28%, transparent);
-}
-
-.tr-tok--hi1 {
-  border-color: color-mix(in srgb, var(--tb) 44%, transparent);
-  background: color-mix(in srgb, var(--tb) 14%, var(--tbg));
-}
-
-.tr-tok--hi2 {
-  border-color: color-mix(in srgb, var(--ta) 44%, transparent);
-  background: color-mix(in srgb, var(--ta) 14%, var(--tbg));
-}
-
-/* Legend */
-.tr-attn-legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-
-.tr-leg {
-  padding: 4px 10px;
-  border-radius: 999px;
-  border: 1px solid var(--tbd);
-  font-size: 12px;
-  font-weight: 700;
-  background: color-mix(in srgb, var(--tbg) 88%, transparent);
-}
-
-.tr-leg--focus {
-  border-color: color-mix(in srgb, var(--tg) 44%, transparent);
-  background: color-mix(in srgb, var(--tg) 12%, var(--tbg));
-}
-
-.tr-leg--hi1 {
-  border-color: color-mix(in srgb, var(--tb) 40%, transparent);
-  background: color-mix(in srgb, var(--tb) 10%, var(--tbg));
-}
-
-.tr-leg--hi2 {
-  border-color: color-mix(in srgb, var(--ta) 40%, transparent);
-  background: color-mix(in srgb, var(--ta) 10%, var(--tbg));
-}
-
-.tr-leg--lo { opacity: .6; }
-
-/* Bars */
-.tr-attn-bars {
-  display: grid;
-  gap: 6px;
-  margin-bottom: 10px;
-}
-
-.tr-bar-row {
-  display: grid;
-  grid-template-columns: 70px 1fr 40px;
-  gap: 8px;
-  align-items: center;
-}
-
-.tr-bar-label {
-  font-size: 13px;
-  font-weight: 700;
-  text-align: right;
-  color: var(--tmut);
-}
-
-.tr-bar-track {
-  height: 18px;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--tbg) 80%, #0f172a 20%);
-  overflow: hidden;
-}
-
-.tr-bar-fill {
-  height: 100%;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--tbd) 80%, transparent);
-  transition: width .4s ease;
-}
-
-.tr-bar-fill--hi {
-  background: linear-gradient(90deg,
-    color-mix(in srgb, var(--tb) 60%, transparent),
-    color-mix(in srgb, var(--tb) 44%, transparent));
-}
-
-.tr-bar-fill--hi2 {
-  background: linear-gradient(90deg,
-    color-mix(in srgb, var(--ta) 60%, transparent),
-    color-mix(in srgb, var(--ta) 44%, transparent));
-}
-
-.tr-bar-fill--focus {
-  background: linear-gradient(90deg,
-    color-mix(in srgb, var(--tg) 60%, transparent),
-    color-mix(in srgb, var(--tg) 44%, transparent));
-}
-
-.tr-bar-val {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--tmut);
-}
-
-.tr-bar-row--hi1 .tr-bar-label { color: var(--tfg); }
-.tr-bar-row--hi2 .tr-bar-label { color: var(--tfg); }
-
-.tr-note {
-  font-size: 13px;
-  color: var(--tmut);
-  line-height: 1.5;
-  font-style: italic;
-  border-left: 2px solid color-mix(in srgb, var(--tb) 38%, transparent);
-  padding-left: 12px;
-}
-
-/* Compare */
+/* Before / After */
 .tr-compare {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: 10px;
 }
 
-.tr-compare-col {
+.tr-col {
   border: 1px solid var(--tbd);
   border-radius: 14px;
   padding: 14px;
   display: grid;
-  gap: 12px;
+  gap: 10px;
   align-content: start;
   background: color-mix(in srgb, var(--tbg) 92%, #0f172a 8%);
 }
 
-.tr-compare-col--new {
+.tr-col--new {
   border-color: color-mix(in srgb, var(--ta) 34%, var(--tbd));
   background:
     linear-gradient(135deg, color-mix(in srgb, var(--ta) 8%, transparent), transparent 60%),
     color-mix(in srgb, var(--tbg) 92%, #0f172a 8%);
 }
 
-.tr-compare-head {
-  font-size: 13px;
-  font-weight: 900;
-  letter-spacing: -.01em;
-}
+.tr-col-head { font-size: 13px; font-weight: 900; }
 
 .tr-flow-seq {
   display: flex;
@@ -431,29 +196,17 @@
   font-size: 12px;
   font-weight: 700;
 }
-
-.tr-seq-tok--fade { opacity: .4; }
-
-.tr-seq-arr {
-  font-size: 14px;
-  color: var(--tmut);
-  font-weight: 700;
-}
+.tr-seq-tok--fade { opacity: .35; }
+.tr-seq-arr { font-size: 14px; color: var(--tmut); font-weight: 700; }
 
 .tr-flow-par {
   padding: 10px;
   background: color-mix(in srgb, var(--tbg) 80%, #0f172a 20%);
   border-radius: 10px;
   display: grid;
-  gap: 6px;
+  gap: 5px;
 }
-
-.tr-par-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-}
-
+.tr-par-row { display: flex; flex-wrap: wrap; gap: 4px; }
 .tr-par-tok {
   padding: 4px 9px;
   border-radius: 8px;
@@ -462,76 +215,134 @@
   font-size: 12px;
   font-weight: 700;
 }
-
 .tr-par-tok--hl {
   border-color: color-mix(in srgb, var(--ta) 42%, transparent);
   background: color-mix(in srgb, var(--ta) 12%, var(--tbg));
 }
+.tr-par-note { font-size: 11px; color: var(--tmut); font-weight: 700; text-align: center; }
 
-.tr-par-note {
-  font-size: 11px;
-  color: var(--tmut);
-  font-weight: 700;
-  text-align: center;
-}
-
-.tr-compare-items { display: grid; gap: 6px; }
-
-.tr-cmp-item {
-  padding: 8px 10px;
-  border-radius: 10px;
+.tr-items { display: grid; gap: 5px; }
+.tr-item {
+  padding: 7px 10px;
+  border-radius: 9px;
   border: 1px solid var(--tbd);
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 600;
-  line-height: 1.4;
+  line-height: 1.35;
   background: color-mix(in srgb, var(--tbg) 88%, transparent);
 }
+.tr-item--bad  { border-color: color-mix(in srgb,#ef4444 28%,var(--tbd)); background: color-mix(in srgb,#ef4444 7%,var(--tbg)); }
+.tr-item--good { border-color: color-mix(in srgb,var(--ta) 32%,var(--tbd)); background: color-mix(in srgb,var(--ta) 7%,var(--tbg)); }
 
-.tr-cmp-item--bad {
-  border-color: color-mix(in srgb, #ef4444 28%, var(--tbd));
-  background: color-mix(in srgb, #ef4444 7%, var(--tbg));
-}
-
-.tr-cmp-item--good {
-  border-color: color-mix(in srgb, var(--ta) 32%, var(--tbd));
-  background: color-mix(in srgb, var(--ta) 7%, var(--tbg));
-}
-
-/* Impact cards */
-.tr-impact-cards {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0,1fr));
-  gap: 10px;
-}
-
-.tr-impact-card {
+/* Attention */
+.tr-attn-wrap {
   border: 1px solid var(--tbd);
   border-radius: 14px;
-  padding: 14px;
-  background: color-mix(in srgb, var(--tbg) 92%, #0f172a 8%);
+  padding: 14px 16px;
+  background: color-mix(in srgb, var(--tbg) 91%, #0f172a 9%);
+  display: grid;
+  gap: 12px;
 }
 
-.tr-impact-card--a { border-color: color-mix(in srgb,var(--tb) 28%,var(--tbd)); background: linear-gradient(135deg, color-mix(in srgb,var(--tb) 8%,transparent), transparent 65%), color-mix(in srgb, var(--tbg) 92%, #0f172a 8%); }
-.tr-impact-card--b { border-color: color-mix(in srgb,var(--ta) 28%,var(--tbd)); background: linear-gradient(135deg, color-mix(in srgb,var(--ta) 8%,transparent), transparent 65%), color-mix(in srgb, var(--tbg) 92%, #0f172a 8%); }
-.tr-impact-card--c { border-color: color-mix(in srgb,var(--tg) 28%,var(--tbd)); background: linear-gradient(135deg, color-mix(in srgb,var(--tg) 8%,transparent), transparent 65%), color-mix(in srgb, var(--tbg) 92%, #0f172a 8%); }
-.tr-impact-card--d { border-color: color-mix(in srgb,var(--td) 28%,var(--tbd)); background: linear-gradient(135deg, color-mix(in srgb,var(--td) 8%,transparent), transparent 65%), color-mix(in srgb, var(--tbg) 92%, #0f172a 8%); }
-
-.tr-impact-k {
+.tr-attn-label {
   font-size: 11px;
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: .08em;
   color: var(--tmut);
-  margin-bottom: 7px;
 }
 
-.tr-impact-card p { margin: 0; font-size: 13.5px; line-height: 1.5; }
+.tr-sentence {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  align-items: center;
+}
 
-@media (max-width: 640px) {
+.tr-tok {
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--tbd);
+  background: color-mix(in srgb, var(--tbg) 86%, transparent);
+  font-size: 14px;
+  font-weight: 700;
+}
+.tr-tok--focus {
+  border-color: color-mix(in srgb, var(--tg) 50%, transparent);
+  background: color-mix(in srgb, var(--tg) 16%, var(--tbg));
+  font-weight: 900;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--tg) 28%, transparent);
+}
+.tr-tok--hi1 {
+  border-color: color-mix(in srgb, var(--tb) 44%, transparent);
+  background: color-mix(in srgb, var(--tb) 14%, var(--tbg));
+}
+.tr-tok--hi2 {
+  border-color: color-mix(in srgb, var(--ta) 44%, transparent);
+  background: color-mix(in srgb, var(--ta) 14%, var(--tbg));
+}
+
+.tr-legend { display: flex; flex-wrap: wrap; gap: 6px; }
+.tr-leg {
+  padding: 3px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--tbd);
+  font-size: 11.5px;
+  font-weight: 700;
+  background: color-mix(in srgb, var(--tbg) 88%, transparent);
+  color: var(--tmut);
+}
+.tr-leg--focus { border-color: color-mix(in srgb,var(--tg) 44%,transparent); background: color-mix(in srgb,var(--tg) 10%,var(--tbg)); color: var(--tfg); }
+.tr-leg--hi1   { border-color: color-mix(in srgb,var(--tb) 40%,transparent); background: color-mix(in srgb,var(--tb) 10%,var(--tbg)); color: var(--tfg); }
+.tr-leg--hi2   { border-color: color-mix(in srgb,var(--ta) 40%,transparent); background: color-mix(in srgb,var(--ta) 10%,var(--tbg)); color: var(--tfg); }
+
+.tr-bars { display: grid; gap: 5px; }
+
+.tr-bar-row {
+  display: grid;
+  grid-template-columns: 60px 1fr 36px;
+  gap: 8px;
+  align-items: center;
+}
+
+.tr-bar-lbl { font-size: 13px; font-weight: 700; text-align: right; color: var(--tmut); }
+.tr-bar-row--hi1 .tr-bar-lbl,
+.tr-bar-row--hi2 .tr-bar-lbl,
+.tr-bar-row--focus .tr-bar-lbl { color: var(--tfg); }
+
+.tr-bar-track {
+  height: 16px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--tbg) 80%, #0f172a 20%);
+  overflow: hidden;
+}
+
+.tr-bar-fill {
+  height: 100%;
+  width: 0;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--tbd) 80%, transparent);
+  transition: width .55s ease;
+}
+.tr-bar-fill--focus { background: linear-gradient(90deg,color-mix(in srgb,var(--tg) 60%,transparent),color-mix(in srgb,var(--tg) 40%,transparent)); }
+.tr-bar-fill--hi1   { background: linear-gradient(90deg,color-mix(in srgb,var(--tb) 60%,transparent),color-mix(in srgb,var(--tb) 40%,transparent)); }
+.tr-bar-fill--hi2   { background: linear-gradient(90deg,color-mix(in srgb,var(--ta) 60%,transparent),color-mix(in srgb,var(--ta) 40%,transparent)); }
+
+.tr-bar-val { font-size: 11.5px; font-weight: 700; color: var(--tmut); }
+
+.tr-note {
+  font-size: 13px;
+  color: var(--tmut);
+  line-height: 1.5;
+  font-style: italic;
+  border-left: 2px solid color-mix(in srgb, var(--tb) 38%, transparent);
+  padding-left: 12px;
+  margin-top: 2px;
+}
+
+@media (max-width: 560px) {
   .tr-compare { grid-template-columns: 1fr; }
-  .tr-impact-cards { grid-template-columns: 1fr; }
 }
-
 @media (prefers-reduced-motion: reduce) {
   .tr-bar-fill { transition: none; }
 }
@@ -539,40 +350,30 @@
 
 <script>
 (function () {
-  const KEY = '02-transformer';
-  function activate(root, key) {
-    root.querySelectorAll('[data-role="tab"]').forEach(t => {
-      const on = t.getAttribute('data-tab') === key;
-      t.setAttribute('aria-selected', on ? 'true' : 'false');
-      t.tabIndex = on ? 0 : -1;
-    });
-    root.querySelectorAll('[data-panel]').forEach(p => {
-      p.hidden = p.getAttribute('data-panel') !== key;
+  function animateBars(root) {
+    root.querySelectorAll('.tr-bar-fill[data-w]').forEach((el, i) => {
+      el.style.width = '0';
+      setTimeout(() => { el.style.width = el.dataset.w; }, 120 + i * 50);
     });
   }
-  function initRoot(root) {
-    if (root.dataset.trReady === '1') return;
-    root.dataset.trReady = '1';
-    const tabs = Array.from(root.querySelectorAll('[data-role="tab"]'));
-    const first = root.getAttribute('data-default') || (tabs[0] && tabs[0].getAttribute('data-tab'));
-    tabs.forEach(tab => {
-      tab.tabIndex = -1;
-      tab.addEventListener('click', () => activate(root, tab.getAttribute('data-tab')));
-      tab.addEventListener('keydown', e => {
-        const cur = tabs.indexOf(tab);
-        let next = cur;
-        if (e.key === 'ArrowRight') next = (cur + 1) % tabs.length;
-        if (e.key === 'ArrowLeft') next = (cur - 1 + tabs.length) % tabs.length;
-        if (e.key === 'Home') next = 0;
-        if (e.key === 'End') next = tabs.length - 1;
-        if (next !== cur) { e.preventDefault(); tabs[next].focus(); activate(root, tabs[next].getAttribute('data-tab')); }
-      });
-    });
-    activate(root, first);
-  }
+
   function boot() {
-    document.querySelectorAll('[data-demo="02-transformer"]').forEach(initRoot);
+    document.querySelectorAll('[data-demo="02-transformer"]').forEach(root => {
+      if (root.dataset.trReady) return;
+      root.dataset.trReady = '1';
+
+      // Animate bars when visible
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver(entries => {
+          entries.forEach(e => { if (e.isIntersecting) { animateBars(root); io.disconnect(); } });
+        }, { threshold: 0.3 });
+        io.observe(root);
+      } else {
+        animateBars(root);
+      }
+    });
   }
+
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
   else boot();
   if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
