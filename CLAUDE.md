@@ -5,6 +5,47 @@ Cuando el usuario corrija algo, **actualiza CLAUDE.md y MEMORY.md inmediatamente
 
 ---
 
+## Estilo editorial de los artículos
+
+Reglas fijas para cualquier texto que escribas o edites en `docs/series/`:
+
+- **Sin em dashes (—) en prosa.** Son el marcador más visible de texto generado por IA. Si necesitas un inciso, usa comas, paréntesis o restructura la frase.
+- **Sin punto y coma innecesarios.** Cuando dos cláusulas podrían separarse con punto y coma, úsalas con conjunciones compuestas: `pero`, `aunque`, `mientras que`, `lo que`, `sin embargo`.
+- **Frases compuestas, no telegráficas.** Evita frases de 4-5 palabras en serie. Prefiere una frase más larga con subordinada antes que dos frases cortas yuxtapuestas.
+- **Sin over-structuring.** No conviertas prosa en listas de bullets si en el original había párrafo. Las listas son para pasos o enumeraciones reales.
+- **Voz directa.** Sin relleno ("es importante destacar que", "cabe mencionar", "en este sentido"). Cada frase va al punto.
+
+Estos principios aplican también a los captions y bullets de los slides de LinkedIn, con la salvedad de que ahí los bullets cortos sí son válidos por el formato visual.
+
+---
+
+## Búsqueda en internet
+
+**WebFetch falla** en este entorno (páginas JS-rendered devuelven contenido vacío). Usar siempre el script compartido:
+
+```bash
+# Fetch básico — texto del body, sin nav/footer
+~/.claude/scripts/fetch_web.sh "https://example.com"
+
+# Extraer elemento concreto
+~/.claude/scripts/fetch_web.sh "https://arcprize.org/leaderboard" --selector ".leaderboard"
+
+# Más texto + screenshot para debug visual
+~/.claude/scripts/fetch_web.sh "https://deepmind.google/blog/..." --chars 12000 --screenshot /tmp/page.png
+```
+
+Para PDFs descargados: `pdftotext -layout archivo.pdf /tmp/salida.txt` (poppler disponible vía brew).
+
+Para páginas estáticas sin JS (fallback rápido):
+```python
+import urllib.request
+req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+with urllib.request.urlopen(req, timeout=15) as r:
+    print(r.read().decode("utf-8", errors="replace")[:6000])
+```
+
+---
+
 ## Posts LinkedIn
 
 ### Scripts
@@ -215,7 +256,7 @@ Referencia visual: `fundamentos-ia-cap1/post_1_marco_ia/` es el estándar de fac
 
 Solo cuando el usuario ha confirmado los KPIs de Fase 4.
 
-Estructura exacta del `post.md` (plantilla: `fundamentos-ia-cap1/post_1_marco_ia/post.md`):
+Estructura exacta del `post.md` (para cap2 en adelante):
 
 ```markdown
 # Post N — <título completo>
@@ -223,17 +264,6 @@ Estructura exacta del `post.md` (plantilla: `fundamentos-ia-cap1/post_1_marco_ia
 **Publicar:** Semana N
 **Audiencia:** <perfil objetivo>
 **Tema visual:** Dark
-
----
-
-## Checklist de publicación
-
-- [ ] Abrir LinkedIn → Crear publicación → Añadir documento
-- [ ] Subir las N diapositivas en el orden de la tabla
-- [ ] Pegar el caption completo
-- [ ] Añadir los hashtags al final del caption
-- [ ] Primera hora: responder comentarios para favorecer alcance
-- [ ] Anclar el artículo completo en el primer comentario
 
 ---
 
@@ -250,25 +280,11 @@ Estructura exacta del `post.md` (plantilla: `fundamentos-ia-cap1/post_1_marco_ia
 
 ## Caption
 
-\`\`\`
-<caption completo — texto LinkedIn, sin hashtags, 150-250 palabras>
-\`\`\`
+<caption completo — texto LinkedIn, 150-250 palabras>
 
----
+Artículo completo con animaciones interactivas: https://5sigmas.com/series/<serie>/<cap>/
 
-## Hashtags
-
-\`\`\`
 #Tag1 #Tag2 #Tag3 #Tag4 #Tag5
-\`\`\`
-
----
-
-## Primer comentario (anclar)
-
-\`\`\`
-<texto + URL completa del artículo en 5sigmas.com>
-\`\`\`
 ```
 
 Reglas del caption:
@@ -276,12 +292,16 @@ Reglas del caption:
 - Empieza con la tensión o dato que engancha — no con el título del artículo
 - Máximo 250 palabras
 - Sin bullet points (LinkedIn los aplana)
-- La URL va solo en el primer comentario, no en el caption
+- La URL va al final del caption, en la última línea, antes de los hashtags
+- Los hashtags van pegados al bloque de caption, sin separador `---`
 
 Reglas de hashtags:
-- Entre 3 y 6 hashtags
-- 1-2 amplios (`#InteligenciaArtificial`) + 2-3 específicos del tema
-- Sin genéricos tipo `#LinkedIn` o `#Contenido`
+- Entre 3 y 5 hashtags
+- `#InteligenciaArtificial` siempre fijo (el grande, más masa)
+- Los 2-4 restantes se proponen y se deciden con el usuario antes de cerrar el post
+- Mezclar inglés y español: términos técnicos (`#LLM`, `#MachineLearning`) tienen más masa en inglés
+- Sin genéricos vacíos: `#Innovacion`, `#Tecnologia`, `#IA` solos no aportan
+- Evitar hashtags de nicho sin masa real en LinkedIn (`#ModelosFundacionales`, `#NLP` en español)
 
 ---
 

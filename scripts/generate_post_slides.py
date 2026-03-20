@@ -92,17 +92,18 @@ async def run(series: str | None, post_filter: str | None, preview: bool):
 
     async with async_playwright() as pw:
         browser = await pw.chromium.launch(headless=True)
-        context = await browser.new_context(
-            viewport={"width": SLIDE_W, "height": 2000},
-            device_scale_factor=2.0,
-        )
-        page = await context.new_page()
+        try:
+            context = await browser.new_context(
+                viewport={"width": SLIDE_W, "height": 2000},
+                device_scale_factor=2.0,
+            )
+            page = await context.new_page()
 
-        for i, carousel_path in enumerate(carousels, 1):
-            print(f"  [{i}/{total}] {carousel_path.parent.relative_to(POSTS_DIR)}")
-            await _render_carousel(page, carousel_path, preview)
-
-        await browser.close()
+            for i, carousel_path in enumerate(carousels, 1):
+                print(f"  [{i}/{total}] {carousel_path.parent.relative_to(POSTS_DIR)}")
+                await _render_carousel(page, carousel_path, preview)
+        finally:
+            await browser.close()
 
     print(f"\n[render] Listo\n")
 

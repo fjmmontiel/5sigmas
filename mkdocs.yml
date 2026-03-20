@@ -43,7 +43,7 @@ nav:
           - Presentación: series/fundamentos-ia-iag/00_presentacion_serie.md
           - ¿Qué es la IA?: series/fundamentos-ia-iag/01-que-es-ia.md
           - ¿Qué es IA Generativa?: series/fundamentos-ia-iag/02-que-es-ia-generativa.md
-          # - IA vs IA Generativa: series/fundamentos-ia-iag/03-ia-vs-ia-generativa.md
+          - IA vs IA Generativa: series/fundamentos-ia-iag/03-ia-vs-ia-generativa.md
           # - AGI: series/fundamentos-ia-iag/04-agi.md
       - De las cavernas a la AGI:
           - Presentación: series/from-cave-to-agi/00_presentacion_serie.md
@@ -95,6 +95,9 @@ extra_css:
   - stylesheets/extra.css
   - assets/stylesheets/animations.css
   - assets/stylesheets/series_energy_ai_preview.css
+
+hooks:
+  - hooks/reading_time.py
 
 plugins:
   - search

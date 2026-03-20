@@ -87,6 +87,10 @@ El modelo puede aprender a ejecutar una tarea nueva viendo solo dos o tres ejemp
 
 </details>
 
+{{ include_html("snippets/fundamentos-ia-iag/02-escalas-curva.html") }}
+
+La misma curva se hace concreta cuando recorremos la familia GPT modelo a modelo: de 117 millones de parámetros en GPT-1 a 175.000 millones en GPT-3, donde el umbral emergente se cruzó.
+
 {{ include_html("snippets/fundamentos-ia-iag/02-escalas.html") }}
 
 ### Modelos fundacionales
@@ -157,7 +161,7 @@ En MLOps clásico el artefacto central es el modelo, mientras que en LLMOps bás
 
 **Prompts**: el equivalente al código de tu sistema, donde una instrucción mal formulada degrada el rendimiento igual que un bug, y por eso se versionan, se testean y se despliegan como cualquier artefacto de software.
 
-**Contexto**: system prompt, historial de conversación, documentos RAG; todo lo que entra en cada llamada determina la calidad de la respuesta y, al mismo tiempo, el coste, porque pagas por cada token que entra y sale.
+**Contexto**: system prompt, historial de conversación, documentos RAG: todo lo que entra en cada llamada determina la calidad de la respuesta y, al mismo tiempo, el coste, porque pagas por cada token que entra y sale.
 
 **Evaluación**: no puedes reentrenar para corregir un error, así que la única palanca disponible es el prompt y el contexto, y sin evaluación (automática, humana o mediante otro modelo como LLM-as-judge) no puedes iterar con criterio, lo que la convierte en el paso más subestimado y el más crítico de todo el ciclo.
 
@@ -214,6 +218,8 @@ La elección no es técnica sino de negocio: velocidad de iteración, volumen de
 Muchos equipos empiezan con API externa y migran partes a open-source cuando el volumen lo justifica o la regulación lo exige.
 
 {{ include_html("snippets/fundamentos-ia-iag/02-llmops-rutas.html") }}
+
+[Capítulo 3 — IA vs IA Generativa →](./03-ia-vs-ia-generativa.md){ .md-button .md-button--primary }
 
 ---
 
