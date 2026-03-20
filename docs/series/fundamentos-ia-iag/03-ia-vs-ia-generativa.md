@@ -5,7 +5,10 @@ description: Comparativa técnica entre IA clásica e IA generativa: entradas, s
 
 # Capítulo 3 — IA vs IA Generativa
 
-Los dos capítulos anteriores describieron dos familias tecnológicas que comparten nombre pero funcionan de formas muy distintas.
+!!! info "Prerrequisitos"
+    Este capítulo asume que has leído el [Capítulo 1 — Qué es IA](./01-que-es-ia.md) y el [Capítulo 2 — Qué es IA Generativa](./02-que-es-ia-generativa.md).
+
+Los dos capítulos anteriores ([IA clásica](./01-que-es-ia.md) e [IA generativa](./02-que-es-ia-generativa.md)) describieron dos familias tecnológicas que comparten nombre pero funcionan de formas muy distintas.
 
 Confundirlas lleva a decisiones equivocadas: elegir un LLM para clasificar datos etiquetados, o usar ML clásico para generar texto con contexto variable, son errores frecuentes y costosos. Uno por exceso de complejidad, otro por no llegar al problema.
 

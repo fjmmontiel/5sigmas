@@ -5,7 +5,10 @@ description: Cómo funciona la IA generativa: del embedding y el Transformer a l
 
 # Capítulo 2 — Qué es IA Generativa
 
-En el capítulo anterior vimos las diferentes capas dentro de la IA, y ahora vamos a hacer una profundización sobre un aspecto concreto del DL, la IA generativa.
+!!! info "Prerrequisitos"
+    Este capítulo asume que conoces el marco general de la IA descrito en el [Capítulo 1 — Qué es IA](./01-que-es-ia.md).
+
+En el [capítulo anterior](./01-que-es-ia.md) vimos las diferentes capas dentro de la IA, y ahora vamos a hacer una profundización sobre un aspecto concreto del DL, la IA generativa.
 
 La IA generativa genera texto, imagen, código, audio y vídeo en lugar de clasificar entradas o discriminar entre diferentes clases.
 

@@ -26,7 +26,7 @@ theme:
   features:
     - navigation.tabs
     - navigation.sections
-    - navigation.instant
+    - navigation.prune
     - content.code.copy
     - content.action.edit
 
@@ -85,10 +85,12 @@ extra_javascript:
   - assets/javascripts/animation-shell.js
   - assets/javascripts/site-demos.js
   - assets/javascripts/tabbed-animations.js
-  - https://unpkg.com/mermaid@10/dist/mermaid.min.js
+  - path: https://unpkg.com/mermaid@10/dist/mermaid.min.js
+    defer: true
   - javascripts/mermaid-init.js
   - javascripts/mathjax.js
-  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
+  - path: https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
+    defer: true
   - assets/javascripts/series_energy_ai_preview.js
   - assets/javascripts/series_energy_ai_local.js
 extra_css:

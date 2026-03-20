@@ -3,7 +3,7 @@ PYTHON := $(VENV)/bin/python
 PIP := $(VENV)/bin/pip
 MKDOCS := $(VENV)/bin/mkdocs
 
-.PHONY: install build serve deploy build-and-update clean check-animation-branding
+.PHONY: install build serve deploy build-and-update up clean check-animation-branding
 
 # Crear venv e instalar dependencias
 install: $(MKDOCS)
@@ -22,9 +22,10 @@ serve: install
 	$(MKDOCS) serve
 
 
-build-and-update:
-	$(MKDOCS) build
-	-lsof -ti:8000 | xargs kill -9 || true
+up: build-and-update
+
+build-and-update: install
+	-lsof -ti:8000 | xargs kill -9 2>/dev/null || true
 	$(MKDOCS) serve
 
 
