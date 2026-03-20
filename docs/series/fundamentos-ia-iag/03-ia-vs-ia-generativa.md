@@ -35,7 +35,7 @@ Esto acerca parcialmente a los LLMs a la predictibilidad del ML clásico en cuan
 Salvo que verifiques la salida con esquemas Pydantic y retroalimentes el error en bucle hasta obtener la salida deseada.
 </details>
 
-Esa diferencia tiene consecuencias sobre todo lo que se construya usando de base a estas tecnología.
+Esa diferencia tiene consecuencias en todo sistema que use cualquiera de las dos como base.
 
 ### 1.2 Determinismo
 
@@ -67,8 +67,10 @@ Temperatura 0 reduce la variabilidad pero **no garantiza salidas 100% determinis
 ### 1.3 Explicabilidad
 
 En ML clásico, los modelos más simples (árboles, regresión logística) son directamente interpretables: "Rechazado porque ingresos < X y ratio de deuda > Y."
-Los modelos más complejos tienen técnicas establecidas para explicar sus resultados: LIME ajusta un modelo simple alrededor de cada predicción para estimar qué variables importaron, y SHAP calcula la contribución de cada variable considerando todas sus combinaciones posibles, con mayor rigor matemático pero más coste computacional.
-Las redes neuronales profundas ya son más opacas, aunque el espacio de salida sigue siendo limitado y conocido.
+
+Para modelos más complejos existen técnicas establecidas para aproximar esa explicación. LIME ajusta un modelo simple alrededor de cada predicción para estimar qué variables importaron. SHAP calcula la contribución de cada variable usando valores de Shapley, con más rigor matemático pero mayor coste computacional.
+
+Las redes neuronales profundas son más opacas, aunque el espacio de salida sigue siendo finito y conocido.
 
 En los LLMs, la explicabilidad es el problema abierto más difícil del campo. El modelo genera texto fluido que parece razonado, pero el proceso interno es opaco. Las alucinaciones son el síntoma más visible de esa opacidad.
 
@@ -77,9 +79,9 @@ En los LLMs, la explicabilidad es el problema abierto más difícil del campo. E
 
 ### 1.4 Evaluación
 
-En ML clásico, la evaluación es objetiva y automatizable. Hay métricas bien definidas (precisión, exhaustividad, área bajo la curva de rendimiento (ROC)) que se calculan con datos etiquetados y se reproducen sin ambigüedad.
+En ML clásico, la evaluación es objetiva y automatizable: hay métricas bien definidas (precisión, exhaustividad, área bajo la curva ROC) que se calculan sobre datos etiquetados y se reproducen sin ambigüedad.
 
-En GenAI, evaluar la calidad de texto generado es difícil. Las métricas automáticas clásicas son aproximaciones pobres que no capturan calidad real. Los enfoques prácticos combinan el uso de otro modelo de lenguaje para evaluar las respuestas según criterios definidos (LLM-as-judge), revisión humana sobre una muestra representativa y métricas de tarea específica cuando la tarea lo permite (exactitud factual, coherencia, cobertura).
+En GenAI, evaluar la calidad del texto generado es el problema no resuelto del campo. Las métricas automáticas clásicas son aproximaciones pobres que no capturan calidad real. Los enfoques prácticos combinan tres vías: un modelo de lenguaje que evalúa las respuestas según criterios definidos (LLM-as-judge), revisión humana sobre una muestra representativa, y métricas de tarea específica cuando la naturaleza del problema lo permite.
 
 > La evaluación es el cuello de botella de la mayoría de proyectos de GenAI. Sin un criterio claro de "bueno", no puedes iterar con criterio. Construir el sistema de evaluación antes que el sistema en sí es la práctica más subestimada del campo.
 
@@ -141,7 +143,7 @@ Para hacer esos criterios concretos, vale la pena recorrer la matriz con un caso
 
 No hay tecnología correcta en abstracto. Hay la correcta para cada dato, problema y contexto.
 
-El capítulo siguiente lleva ese espectro hasta su límite: qué es la Inteligencia Artificial General y qué separa lo que existe hoy de lo que todavía no.
+El capítulo siguiente lleva ese espectro hasta su límite: qué es la Inteligencia Artificial General, y qué separa lo que existe hoy de lo que todavía no existe.
 
 <!-- [Capítulo 4 — Inteligencia Artificial General →](./04-agi.md){ .md-button .md-button--primary } -->
 
