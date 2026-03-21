@@ -1,251 +1,260 @@
 <div class="ivh-wrap" data-demo="04-ia-vs-humanos">
 
   <div class="ivh-hd">
-    <div class="ivh-title">IA vs. humanos: dominios superados y en progreso</div>
-    <div class="ivh-sub">Cada dominio tiene un listón de referencia humano. La línea verde marca ese listón. Las barras muestran la progresión de la IA y el año en que lo cruzó — o cuánto falta.</div>
+    <div class="ivh-title">IA vs. humanos</div>
+    <div class="ivh-sub">Dominios donde la IA ya supera al humano de referencia — y dominios donde el gap todavía está abierto.</div>
   </div>
 
-  <!-- SECTION: YA SUPERADOS -->
-  <div class="ivh-section-label ivh-section-label--done">✓ IA ya supera al humano de referencia</div>
-
-  <div class="ivh-grid">
-
-    <div class="ivh-card ivh-card--done">
-      <div class="ivh-card-hd">
-        <div class="ivh-card-icon">♟</div>
-        <div class="ivh-card-info">
-          <div class="ivh-card-title">Ajedrez</div>
-          <div class="ivh-card-ref">Referencia: campeón del mundo</div>
-        </div>
-        <div class="ivh-crossed-badge">Superado 1997</div>
-      </div>
-      <div class="ivh-bar-wrap">
-        <div class="ivh-bar-human" style="--hp:100"></div>
-        <div class="ivh-bar-ai ivh-bar-ai--done" style="--ap:100" title="Deep Blue 1997 · Stockfish hoy: inaccesible para humanos"></div>
-        <div class="ivh-bar-labels">
-          <span class="ivh-label-ai">IA actual: nivel inaccesible</span>
-          <span class="ivh-label-human">▲ humano top</span>
-        </div>
-      </div>
-      <div class="ivh-card-note">Deep Blue (IBM, 1997). Hoy Stockfish/AlphaZero supera al mejor humano en ~4000 Elo vs. ~2900 Elo.</div>
-    </div>
-
-    <div class="ivh-card ivh-card--done">
-      <div class="ivh-card-hd">
-        <div class="ivh-card-icon">⬟</div>
-        <div class="ivh-card-info">
-          <div class="ivh-card-title">Go</div>
-          <div class="ivh-card-ref">Referencia: campeón del mundo</div>
-        </div>
-        <div class="ivh-crossed-badge">Superado 2016</div>
-      </div>
-      <div class="ivh-bar-wrap">
-        <div class="ivh-bar-human" style="--hp:100"></div>
-        <div class="ivh-bar-ai ivh-bar-ai--done" style="--ap:100" title="AlphaGo 2016 · AlphaZero 2017"></div>
-        <div class="ivh-bar-labels">
-          <span class="ivh-label-ai">IA actual: nivel inaccesible</span>
-          <span class="ivh-label-human">▲ humano top</span>
-        </div>
-      </div>
-      <div class="ivh-card-note">AlphaGo (DeepMind, 2016) venció a Lee Sedol 4-1. AlphaZero, entrenado sin datos humanos, supera a AlphaGo.</div>
-    </div>
-
-    <div class="ivh-card ivh-card--done">
-      <div class="ivh-card-hd">
-        <div class="ivh-card-icon">🖼</div>
-        <div class="ivh-card-info">
-          <div class="ivh-card-title">Reconocimiento de imágenes</div>
-          <div class="ivh-card-ref">Referencia: error humano en ImageNet (~5%)</div>
-        </div>
-        <div class="ivh-crossed-badge">Superado 2015</div>
-      </div>
-      <div class="ivh-bar-wrap">
-        <div class="ivh-bar-human" style="--hp:95"></div>
-        <div class="ivh-bar-ai ivh-bar-ai--done" style="--ap:100" title="ResNet 2015 · modelos actuales ~99%+"></div>
-        <div class="ivh-bar-labels">
-          <span class="ivh-label-ai">IA actual: ~99%</span>
-          <span class="ivh-label-human">▲ ~95% humano (error 5%)</span>
-        </div>
-      </div>
-      <div class="ivh-card-note">ResNet (Microsoft, 2015) cruzó el error humano del 5% en ImageNet. Los modelos actuales superan el 99% de precisión.</div>
-    </div>
-
-    <div class="ivh-card ivh-card--done">
-      <div class="ivh-card-hd">
-        <div class="ivh-card-icon">🧬</div>
-        <div class="ivh-card-info">
-          <div class="ivh-card-title">Predicción de estructura de proteínas</div>
-          <div class="ivh-card-ref">Referencia: mejor método experimental (CASP)</div>
-        </div>
-        <div class="ivh-crossed-badge">Superado 2020</div>
-      </div>
-      <div class="ivh-bar-wrap">
-        <div class="ivh-bar-human" style="--hp:72"></div>
-        <div class="ivh-bar-ai ivh-bar-ai--done" style="--ap:92" title="AlphaFold2 2020 · GDT score ~92 vs. ~72 humano"></div>
-        <div class="ivh-bar-labels">
-          <span class="ivh-label-ai">AlphaFold2: ~92 GDT</span>
-          <span class="ivh-label-human">▲ mejor humano: ~72 GDT</span>
-        </div>
-      </div>
-      <div class="ivh-card-note">AlphaFold2 (DeepMind, 2020) resolvió CASP14 con precisión atómica. Nobel de Química 2024 (Hassabis & Baker).</div>
-    </div>
-
-    <div class="ivh-card ivh-card--done">
-      <div class="ivh-card-hd">
-        <div class="ivh-card-icon">∑</div>
-        <div class="ivh-card-info">
-          <div class="ivh-card-title">Matemáticas olímpicas (AIME)</div>
-          <div class="ivh-card-ref">Referencia: mediana estudiantes olímpicos</div>
-        </div>
-        <div class="ivh-crossed-badge">Superado 2024</div>
-      </div>
-      <div class="ivh-bar-wrap">
-        <div class="ivh-bar-human" style="--hp:60"></div>
-        <div class="ivh-bar-ai ivh-bar-ai--done" style="--ap:92" title="o3-high AIME 2024 ~92.3%"></div>
-        <div class="ivh-bar-labels">
-          <span class="ivh-label-ai">o3-high: ~92%</span>
-          <span class="ivh-label-human">▲ mediana competidores: ~60%</span>
-        </div>
-      </div>
-      <div class="ivh-card-note">o3-high (OpenAI, dic 2024) alcanza el 92,3% en AIME 2024. Los mejores matemáticos humanos del mundo puntúan ~60% de mediana.</div>
-    </div>
-
-    <div class="ivh-card ivh-card--done">
-      <div class="ivh-card-hd">
-        <div class="ivh-card-icon">⚗</div>
-        <div class="ivh-card-info">
-          <div class="ivh-card-title">Ciencia PhD — GPQA Diamond</div>
-          <div class="ivh-card-ref">Referencia: mediana expertos PhD (~70%)</div>
-        </div>
-        <div class="ivh-crossed-badge">Superado 2024</div>
-      </div>
-      <div class="ivh-bar-wrap">
-        <div class="ivh-bar-human" style="--hp:70"></div>
-        <div class="ivh-bar-ai ivh-bar-ai--done" style="--ap:94.3" title="Gemini 3.1 Pro 94.3% GPQA Diamond · feb 2026"></div>
-        <div class="ivh-bar-labels">
-          <span class="ivh-label-ai">Gemini 3.1 Pro: 94,3%</span>
-          <span class="ivh-label-human">▲ PhD experto: ~70%</span>
-        </div>
-      </div>
-      <div class="ivh-card-note">Preguntas diseñadas por doctorandos para ser «irresolubles por Google». Gemini 3.1 Pro: 94,3% (feb 2026). Los modelos frontier superan la mediana PhD desde 2024.</div>
-    </div>
-
-    <div class="ivh-card ivh-card--done">
-      <div class="ivh-card-hd">
-        <div class="ivh-card-icon">∑</div>
-        <div class="ivh-card-info">
-          <div class="ivh-card-title">Olimpiadas científicas (IMO · IPhO · IChO)</div>
-          <div class="ivh-card-ref">Referencia: medalla de oro olímpica</div>
-        </div>
-        <div class="ivh-crossed-badge">Superado 2025-2026</div>
-      </div>
-      <div class="ivh-bar-wrap">
-        <div class="ivh-bar-human" style="--hp:100"></div>
-        <div class="ivh-bar-ai ivh-bar-ai--done" style="--ap:100" title="Gemini 3 Deep Think · medalla de oro IMO 2025 · IPhO · IChO"></div>
-        <div class="ivh-bar-labels">
-          <span class="ivh-label-ai">Gemini 3 Deep Think: nivel medalla de oro</span>
-          <span class="ivh-label-human">▲ medalla de oro olímpica</span>
-        </div>
-      </div>
-      <div class="ivh-card-note">Gemini 3 Deep Think (feb 2026) consigue nivel de medalla de oro en el IMO 2025 (matemáticas), IPhO 2025 (física, sección escrita) e IChO 2025 (química, sección escrita). Codeforces Elo: 3455.</div>
-    </div>
-
+  <div class="ivh-tabs" role="tablist">
+    <button class="ivh-tab ivh-tab--active" data-ivh-tab="done" role="tab" aria-selected="true">
+      <span class="ivh-tab-dot ivh-tab-dot--done"></span>
+      Superados
+      <span class="ivh-tab-count">7</span>
+    </button>
+    <button class="ivh-tab" data-ivh-tab="open" role="tab" aria-selected="false">
+      <span class="ivh-tab-dot ivh-tab-dot--open"></span>
+      En progreso
+      <span class="ivh-tab-count">4</span>
+    </button>
   </div>
 
-  <!-- SECTION: EN PROGRESO -->
-  <div class="ivh-section-label ivh-section-label--open">◈ IA en progreso — gap humano todavía abierto</div>
+  <!-- ==================== PANEL: SUPERADOS ==================== -->
+  <div class="ivh-panel" data-ivh-panel="done">
+    <div class="ivh-grid ivh-grid--done">
 
-  <div class="ivh-grid">
+      <div class="ivh-card ivh-card--done">
+        <div class="ivh-card-hd">
+          <div class="ivh-card-icon">♟</div>
+          <div class="ivh-card-info">
+            <div class="ivh-card-title">Ajedrez</div>
+            <div class="ivh-card-ref">Referencia: campeón del mundo</div>
+          </div>
+          <div class="ivh-crossed-badge">Superado 1997</div>
+        </div>
+        <div class="ivh-bar-wrap">
+          <div class="ivh-bar-human" style="--hp:100"></div>
+          <div class="ivh-bar-ai ivh-bar-ai--done" style="--ap:100"></div>
+          <div class="ivh-bar-labels">
+            <span class="ivh-label-ai">Stockfish: nivel inaccesible</span>
+            <span class="ivh-label-human">▲ humano top</span>
+          </div>
+        </div>
+        <div class="ivh-card-note">Deep Blue (1997). Hoy ~4000 Elo vs. ~2900 del mejor humano.</div>
+      </div>
 
-    <div class="ivh-card ivh-card--open">
-      <div class="ivh-card-hd">
-        <div class="ivh-card-icon">⌨</div>
-        <div class="ivh-card-info">
-          <div class="ivh-card-title">Ingeniería de software real</div>
-          <div class="ivh-card-ref">Referencia: ingeniero senior (SWE-bench Verified)</div>
+      <div class="ivh-card ivh-card--done">
+        <div class="ivh-card-hd">
+          <div class="ivh-card-icon">⬟</div>
+          <div class="ivh-card-info">
+            <div class="ivh-card-title">Go</div>
+            <div class="ivh-card-ref">Referencia: campeón del mundo</div>
+          </div>
+          <div class="ivh-crossed-badge">Superado 2016</div>
         </div>
-        <div class="ivh-open-badge">~77% · 2026</div>
-      </div>
-      <div class="ivh-bar-wrap">
-        <div class="ivh-bar-human" style="--hp:100"></div>
-        <div class="ivh-bar-ai ivh-bar-ai--open" style="--ap:76.8" title="Claude 4.5 Opus 76.8% SWE-bench Verified · SOTA oficial mini-SWE-agent v2 · feb 2026"></div>
-        <div class="ivh-bar-labels">
-          <span class="ivh-label-ai">Claude 4.5 Opus: 76,8% (SOTA oficial)</span>
-          <span class="ivh-label-human">▲ ing. senior: ~100%</span>
+        <div class="ivh-bar-wrap">
+          <div class="ivh-bar-human" style="--hp:100"></div>
+          <div class="ivh-bar-ai ivh-bar-ai--done" style="--ap:100"></div>
+          <div class="ivh-bar-labels">
+            <span class="ivh-label-ai">AlphaZero: nivel inaccesible</span>
+            <span class="ivh-label-human">▲ humano top</span>
+          </div>
         </div>
+        <div class="ivh-card-note">AlphaGo venció a Lee Sedol 4-1. AlphaZero supera a AlphaGo.</div>
       </div>
-      <div class="ivh-progress-bar"><div class="ivh-progress-fill" style="--pp:76.8"></div></div>
-      <div class="ivh-card-note">SWE-bench Verified (500 bugs reales de GitHub), evaluación estándar con mini-SWE-agent v2.0.0. Claude 4.5 Opus: 76,8% · Claude Opus 4.6: 75,6% · GPT-5-2: 72,8% · Gemini 3 Pro: 69,6%. SWE-bench Pro (variante más dura) ya tiene scores ~30-55% — el benchmark sube cuando el anterior se satura.</div>
+
+      <div class="ivh-card ivh-card--done">
+        <div class="ivh-card-hd">
+          <div class="ivh-card-icon">🖼</div>
+          <div class="ivh-card-info">
+            <div class="ivh-card-title">Reconocimiento de imágenes</div>
+            <div class="ivh-card-ref">Referencia: error humano en ImageNet (~5%)</div>
+          </div>
+          <div class="ivh-crossed-badge">Superado 2015</div>
+        </div>
+        <div class="ivh-bar-wrap">
+          <div class="ivh-bar-human" style="--hp:95"></div>
+          <div class="ivh-bar-ai ivh-bar-ai--done" style="--ap:100"></div>
+          <div class="ivh-bar-labels">
+            <span class="ivh-label-ai">IA actual: ~99%</span>
+            <span class="ivh-label-human">▲ ~95% humano</span>
+          </div>
+        </div>
+        <div class="ivh-card-note">ResNet (2015) cruzó el error humano del 5% en ImageNet.</div>
+      </div>
+
+      <div class="ivh-card ivh-card--done">
+        <div class="ivh-card-hd">
+          <div class="ivh-card-icon">🧬</div>
+          <div class="ivh-card-info">
+            <div class="ivh-card-title">Estructura de proteínas</div>
+            <div class="ivh-card-ref">Referencia: mejor método experimental (CASP)</div>
+          </div>
+          <div class="ivh-crossed-badge">Superado 2020</div>
+        </div>
+        <div class="ivh-bar-wrap">
+          <div class="ivh-bar-human" style="--hp:72"></div>
+          <div class="ivh-bar-ai ivh-bar-ai--done" style="--ap:92"></div>
+          <div class="ivh-bar-labels">
+            <span class="ivh-label-ai">AlphaFold2: ~92 GDT</span>
+            <span class="ivh-label-human">▲ mejor humano: ~72 GDT</span>
+          </div>
+        </div>
+        <div class="ivh-card-note">AlphaFold2 resolvió CASP14 con precisión atómica. Nobel de Química 2024.</div>
+      </div>
+
+      <div class="ivh-card ivh-card--done">
+        <div class="ivh-card-hd">
+          <div class="ivh-card-icon">∑</div>
+          <div class="ivh-card-info">
+            <div class="ivh-card-title">Matemáticas olímpicas (AIME)</div>
+            <div class="ivh-card-ref">Referencia: mediana competidores olímpicos (~60%)</div>
+          </div>
+          <div class="ivh-crossed-badge">Superado 2024</div>
+        </div>
+        <div class="ivh-bar-wrap">
+          <div class="ivh-bar-human" style="--hp:60"></div>
+          <div class="ivh-bar-ai ivh-bar-ai--done" style="--ap:92"></div>
+          <div class="ivh-bar-labels">
+            <span class="ivh-label-ai">o3-high: ~92%</span>
+            <span class="ivh-label-human">▲ mediana: ~60%</span>
+          </div>
+        </div>
+        <div class="ivh-card-note">o3-high (dic 2024): 92,3% en AIME. Mediana humana: ~60%.</div>
+      </div>
+
+      <div class="ivh-card ivh-card--done">
+        <div class="ivh-card-hd">
+          <div class="ivh-card-icon">⚗</div>
+          <div class="ivh-card-info">
+            <div class="ivh-card-title">Ciencia PhD — GPQA Diamond</div>
+            <div class="ivh-card-ref">Referencia: mediana expertos PhD (~70%)</div>
+          </div>
+          <div class="ivh-crossed-badge">Superado 2024</div>
+        </div>
+        <div class="ivh-bar-wrap">
+          <div class="ivh-bar-human" style="--hp:70"></div>
+          <div class="ivh-bar-ai ivh-bar-ai--done" style="--ap:94.3"></div>
+          <div class="ivh-bar-labels">
+            <span class="ivh-label-ai">Gemini 3.1 Pro: 94,3%</span>
+            <span class="ivh-label-human">▲ PhD experto: ~70%</span>
+          </div>
+        </div>
+        <div class="ivh-card-note">Preguntas diseñadas para ser irresolubles por Google. Modelos frontier superan la mediana PhD desde 2024.</div>
+      </div>
+
+      <div class="ivh-card ivh-card--done">
+        <div class="ivh-card-hd">
+          <div class="ivh-card-icon">∑</div>
+          <div class="ivh-card-info">
+            <div class="ivh-card-title">Olimpiadas científicas</div>
+            <div class="ivh-card-ref">IMO · IPhO · IChO — medalla de oro</div>
+          </div>
+          <div class="ivh-crossed-badge">Superado 2025-2026</div>
+        </div>
+        <div class="ivh-bar-wrap">
+          <div class="ivh-bar-human" style="--hp:100"></div>
+          <div class="ivh-bar-ai ivh-bar-ai--done" style="--ap:100"></div>
+          <div class="ivh-bar-labels">
+            <span class="ivh-label-ai">Gemini 3 Deep Think: oro</span>
+            <span class="ivh-label-human">▲ medalla de oro</span>
+          </div>
+        </div>
+        <div class="ivh-card-note">Gemini 3 Deep Think (feb 2026): medalla de oro en IMO 2025, IPhO 2025 e IChO 2025.</div>
+      </div>
+
     </div>
+  </div>
 
-    <div class="ivh-card ivh-card--open">
-      <div class="ivh-card-hd">
-        <div class="ivh-card-icon">◈</div>
-        <div class="ivh-card-info">
-          <div class="ivh-card-title">Razonamiento fluido (ARC-AGI-2)</div>
-          <div class="ivh-card-ref">Referencia: cualquier humano adulto (~98%)</div>
+  <!-- ==================== PANEL: EN PROGRESO ==================== -->
+  <div class="ivh-panel ivh-panel--hidden" data-ivh-panel="open">
+    <div class="ivh-grid ivh-grid--open">
+
+      <div class="ivh-card ivh-card--open">
+        <div class="ivh-card-hd">
+          <div class="ivh-card-icon">⌨</div>
+          <div class="ivh-card-info">
+            <div class="ivh-card-title">Ingeniería de software real</div>
+            <div class="ivh-card-ref">Referencia: ingeniero senior (SWE-bench Verified)</div>
+          </div>
+          <div class="ivh-open-badge">~77% · 2026</div>
         </div>
-        <div class="ivh-open-badge">84,6% · feb 2026</div>
-      </div>
-      <div class="ivh-bar-wrap">
-        <div class="ivh-bar-human" style="--hp:98"></div>
-        <div class="ivh-bar-ai ivh-bar-ai--open" style="--ap:84.6" title="Gemini 3 Deep Think 84.6% · verificado ARC Prize Foundation · feb 2026"></div>
-        <div class="ivh-bar-labels">
-          <span class="ivh-label-ai">Gemini 3 Deep Think: 84,6%</span>
-          <span class="ivh-label-human">▲ humano: ~98%</span>
+        <div class="ivh-bar-wrap">
+          <div class="ivh-bar-human" style="--hp:100"></div>
+          <div class="ivh-bar-ai ivh-bar-ai--open" style="--ap:76.8"></div>
+          <div class="ivh-bar-labels">
+            <span class="ivh-label-ai">Claude 4.5 Opus: 76,8%</span>
+            <span class="ivh-label-human">▲ ing. senior: ~100%</span>
+          </div>
         </div>
+        <div class="ivh-card-note">Claude 4.5 Opus 76,8% · Opus 4.6 75,6% · GPT-5-2 72,8% (feb 2026, mini-SWE-agent v2). SWE-bench Pro: ~30-55%.</div>
       </div>
-      <div class="ivh-progress-bar"><div class="ivh-progress-fill ivh-progress-fill--fast" style="--pp:84.6"></div></div>
-      <div class="ivh-card-note">Lanzado en marzo 2025 con 4% de techo. En menos de un año: 84,6% (Gemini 3 Deep Think, verificado ARC Prize Foundation, feb 2026). El umbral para vencer el benchmark es ~85%. Progreso a 10× la velocidad de ARC-AGI-1.</div>
+
+      <div class="ivh-card ivh-card--open">
+        <div class="ivh-card-hd">
+          <div class="ivh-card-icon">◈</div>
+          <div class="ivh-card-info">
+            <div class="ivh-card-title">Razonamiento fluido (ARC-AGI-2)</div>
+            <div class="ivh-card-ref">Referencia: cualquier humano adulto (~98%)</div>
+          </div>
+          <div class="ivh-open-badge">84,6% · feb 2026</div>
+        </div>
+        <div class="ivh-bar-wrap">
+          <div class="ivh-bar-human" style="--hp:98"></div>
+          <div class="ivh-bar-ai ivh-bar-ai--open" style="--ap:84.6"></div>
+          <div class="ivh-bar-labels">
+            <span class="ivh-label-ai">Gemini 3 Deep Think: 84,6%</span>
+            <span class="ivh-label-human">▲ humano: ~98%</span>
+          </div>
+        </div>
+        <div class="ivh-card-note">De 4% en mar 2025 a 84,6% en feb 2026, verificado por ARC Prize Foundation. Umbral de victoria: ~85%.</div>
+      </div>
+
+      <div class="ivh-card ivh-card--open">
+        <div class="ivh-card-hd">
+          <div class="ivh-card-icon">⏱</div>
+          <div class="ivh-card-info">
+            <div class="ivh-card-title">Autonomía en tareas largas (METR)</div>
+            <div class="ivh-card-ref">Referencia: trabajador del conocimiento (días/semanas)</div>
+          </div>
+          <div class="ivh-open-badge">~2h 15min · 2025</div>
+        </div>
+        <div class="ivh-bar-wrap">
+          <div class="ivh-bar-human" style="--hp:100"></div>
+          <div class="ivh-bar-ai ivh-bar-ai--open" style="--ap:24"></div>
+          <div class="ivh-bar-labels">
+            <span class="ivh-label-ai">GPT-5-thinking: ~2h 15min</span>
+            <span class="ivh-label-human">▲ jornada laboral: 8h+</span>
+          </div>
+        </div>
+        <div class="ivh-card-note">Se duplica cada ~7 meses. En 2021 era 1-2 min; en 2025 son 2h 15min. Proyección 2026: 4-8h.</div>
+      </div>
+
+      <div class="ivh-card ivh-card--open">
+        <div class="ivh-card-hd">
+          <div class="ivh-card-icon">🤖</div>
+          <div class="ivh-card-info">
+            <div class="ivh-card-title">Computer use</div>
+            <div class="ivh-card-ref">Referencia: empleado de oficina, tareas no rutinarias</div>
+          </div>
+          <div class="ivh-open-badge">Cerca del umbral · 2026</div>
+        </div>
+        <div class="ivh-bar-wrap">
+          <div class="ivh-bar-human" style="--hp:100"></div>
+          <div class="ivh-bar-ai ivh-bar-ai--open" style="--ap:78"></div>
+          <div class="ivh-bar-labels">
+            <span class="ivh-label-ai">Claude Sonnet 4.6 / GPT 5.4: SOTA</span>
+            <span class="ivh-label-human">▲ empleado de oficina</span>
+          </div>
+        </div>
+        <div class="ivh-card-note">Operan interfaces gráficas y ejecutan flujos completos en el navegador. Gap residual en variaciones no previstas.</div>
+      </div>
+
     </div>
-
-    <div class="ivh-card ivh-card--open">
-      <div class="ivh-card-hd">
-        <div class="ivh-card-icon">⏱</div>
-        <div class="ivh-card-info">
-          <div class="ivh-card-title">Autonomía en tareas largas (METR)</div>
-          <div class="ivh-card-ref">Referencia: trabajador del conocimiento (días/semanas)</div>
-        </div>
-        <div class="ivh-open-badge">~2h 15min · 2025</div>
-      </div>
-      <div class="ivh-bar-wrap">
-        <div class="ivh-bar-human" style="--hp:100"></div>
-        <div class="ivh-bar-ai ivh-bar-ai--open" style="--ap:24" title="GPT-5-thinking ~2h15min de 8h jornada laboral"></div>
-        <div class="ivh-bar-labels">
-          <span class="ivh-label-ai">GPT-5-thinking: ~2h 15min</span>
-          <span class="ivh-label-human">▲ jornada laboral: 8h+</span>
-        </div>
-      </div>
-      <div class="ivh-progress-bar"><div class="ivh-progress-fill" style="--pp:24"></div></div>
-      <div class="ivh-card-note">METR mide el horizonte de tarea con 50% de fiabilidad. Se duplica cada ~7 meses. En 2021 era 1-2 min; hoy 2h 15min. La proyección al año apunta a 4-8h.</div>
-    </div>
-
-    <div class="ivh-card ivh-card--open">
-      <div class="ivh-card-hd">
-        <div class="ivh-card-icon">🤖</div>
-        <div class="ivh-card-info">
-          <div class="ivh-card-title">Computer use — control de interfaces</div>
-          <div class="ivh-card-ref">Referencia: empleado de oficina, tareas no rutinarias</div>
-        </div>
-        <div class="ivh-open-badge">Baja fiabilidad · 2026</div>
-      </div>
-      <div class="ivh-bar-wrap">
-        <div class="ivh-bar-human" style="--hp:100"></div>
-        <div class="ivh-bar-ai ivh-bar-ai--open" style="--ap:28" title="Claude Sonnet 4.6 computer use — SOTA pero baja fiabilidad en tareas no rutinarias"></div>
-        <div class="ivh-bar-labels">
-          <span class="ivh-label-ai">Claude Sonnet 4.6: SOTA · fiabilidad &lt;30% no rutinario</span>
-          <span class="ivh-label-human">▲ empleado de oficina</span>
-        </div>
-      </div>
-      <div class="ivh-progress-bar"><div class="ivh-progress-fill" style="--pp:28"></div></div>
-      <div class="ivh-card-note">Los modelos operan interfaces gráficas y navegan la web. Muy fiables en flujos rutinarios; fiabilidad baja en cualquier variación no prevista. Área de mejora activa en 2026.</div>
-    </div>
-
   </div>
 
   <div class="ivh-footer">
-    <div class="ivh-footer-insight">El ritmo de progreso importa tanto como el estado actual. Los dominios que parecían décadas lejos de los humanos están cayendo en años. La pregunta no es <em>si</em> caerán los restantes, sino <em>cuándo</em> y con qué consecuencias.</div>
-    <div class="ivh-footer-src">Fuentes: ARC Prize Foundation (arcprize.org, 18 mar 2026) · METR (mar 2025) · OpenAI GPT-5 System Card (ago 2025) · DeepMind CASP14 · ImageNet (2015) · AIME 2024 · GPQA Diamond</div>
+    <div class="ivh-footer-insight">El ritmo de progreso importa tanto como el estado actual. Dominios que parecían décadas lejos están cayendo en años.</div>
+    <div class="ivh-footer-src">Fuentes: ARC Prize Foundation · METR (mar 2025) · OpenAI GPT-5 System Card · DeepMind CASP14 · ImageNet · AIME 2024 · GPQA Diamond</div>
   </div>
 
 </div>
@@ -256,7 +265,33 @@
     document.querySelectorAll('[data-demo="04-ia-vs-humanos"]').forEach(function(root) {
       if (root.dataset.ivhReady === '1') return;
       root.dataset.ivhReady = '1';
-      root.querySelectorAll('.ivh-bar-ai, .ivh-progress-fill').forEach(function(el) {
+
+      const tabs   = Array.from(root.querySelectorAll('[data-ivh-tab]'));
+      const panels = Array.from(root.querySelectorAll('[data-ivh-panel]'));
+
+      function activate(key) {
+        tabs.forEach(t => {
+          const on = t.getAttribute('data-ivh-tab') === key;
+          t.setAttribute('aria-selected', on ? 'true' : 'false');
+          t.classList.toggle('ivh-tab--active', on);
+        });
+        panels.forEach(p => {
+          const on = p.getAttribute('data-ivh-panel') === key;
+          p.classList.toggle('ivh-panel--hidden', !on);
+          if (on) {
+            p.querySelectorAll('.ivh-bar-ai').forEach(function(el) {
+              el.classList.remove('ivh-animated');
+              void el.offsetWidth;
+              el.classList.add('ivh-animated');
+            });
+          }
+        });
+      }
+
+      tabs.forEach(t => t.addEventListener('click', () => activate(t.getAttribute('data-ivh-tab'))));
+
+      // Trigger initial animation
+      root.querySelectorAll('.ivh-bar-ai').forEach(function(el) {
         el.classList.remove('ivh-animated');
         void el.offsetWidth;
         el.classList.add('ivh-animated');
@@ -285,10 +320,10 @@
   --ivh-f:     "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
 
   display: grid;
-  gap: 14px;
+  gap: 18px;
   max-width: 960px;
   margin: 0 auto;
-  padding: clamp(14px,2vw,22px);
+  padding: clamp(16px,2vw,24px);
   border: 1px solid var(--ivh-bd);
   border-radius: 20px;
   background:
@@ -312,47 +347,76 @@
 .ivh-title { font-size: clamp(17px,2.2vw,24px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
 .ivh-sub { font-size: 14px; color: var(--ivh-mut); line-height: 1.5; max-width: 72ch; }
 
-/* Section labels */
-.ivh-section-label {
-  font-size: 11.5px;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: .08em;
-  padding: 6px 12px;
-  border-radius: 999px;
-  width: fit-content;
-}
-.ivh-section-label--done {
-  background: color-mix(in srgb,var(--ivh-done) 10%,transparent);
-  border: 1px solid color-mix(in srgb,var(--ivh-done) 36%,transparent);
-  color: color-mix(in srgb,var(--ivh-done) 85%,var(--ivh-fg));
-}
-.ivh-section-label--open {
-  background: color-mix(in srgb,var(--ivh-open) 10%,transparent);
-  border: 1px solid color-mix(in srgb,var(--ivh-open) 40%,transparent);
-  color: color-mix(in srgb,var(--ivh-open) 85%,var(--ivh-fg));
+/* Tabs */
+.ivh-tabs {
+  display: flex;
+  gap: 8px;
 }
 
-/* Grid */
-.ivh-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 9px; }
+.ivh-tab {
+  appearance: none;
+  border: 1px solid var(--ivh-bd);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ivh-bg) 88%, #0f172a 12%);
+  color: var(--ivh-mut);
+  padding: 8px 16px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  transition: border-color .15s, background .15s, color .15s;
+}
+
+.ivh-tab--active {
+  color: var(--ivh-fg);
+  border-color: color-mix(in srgb, var(--ivh-ai) 40%, var(--ivh-bd));
+  background: color-mix(in srgb, var(--ivh-ai) 8%, var(--ivh-bg));
+}
+
+.ivh-tab-dot {
+  width: 8px; height: 8px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+.ivh-tab-dot--done { background: var(--ivh-done); }
+.ivh-tab-dot--open { background: var(--ivh-open); }
+
+.ivh-tab-count {
+  padding: 1px 7px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 900;
+  background: color-mix(in srgb, var(--ivh-fg) 10%, transparent);
+}
+
+/* Panel */
+.ivh-panel--hidden { display: none; }
+
+/* Grids */
+.ivh-grid { display: grid; gap: 14px; }
+.ivh-grid--done { grid-template-columns: repeat(3, minmax(0,1fr)); }
+.ivh-grid--open { grid-template-columns: repeat(2, minmax(0,1fr)); }
 
 /* Card */
 .ivh-card {
   border: 1px solid var(--ivh-bd);
   border-radius: 14px;
-  padding: 13px;
+  padding: 15px;
   display: grid;
-  gap: 10px;
+  gap: 12px;
   background: color-mix(in srgb,var(--ivh-bg) 92%,#0f172a 8%);
   align-content: start;
 }
 .ivh-card--done {
-  border-color: color-mix(in srgb,var(--ivh-done) 26%,var(--ivh-bd));
-  background: linear-gradient(135deg,color-mix(in srgb,var(--ivh-done) 6%,transparent),transparent 55%),
+  border-color: color-mix(in srgb,var(--ivh-done) 24%,var(--ivh-bd));
+  background: linear-gradient(135deg,color-mix(in srgb,var(--ivh-done) 5%,transparent),transparent 55%),
               color-mix(in srgb,var(--ivh-bg) 92%,#0f172a 8%);
 }
 .ivh-card--open {
-  border-color: color-mix(in srgb,var(--ivh-open) 26%,var(--ivh-bd));
+  border-color: color-mix(in srgb,var(--ivh-open) 24%,var(--ivh-bd));
   background: linear-gradient(135deg,color-mix(in srgb,var(--ivh-open) 5%,transparent),transparent 55%),
               color-mix(in srgb,var(--ivh-bg) 92%,#0f172a 8%);
 }
@@ -360,109 +424,69 @@
 /* Card header */
 .ivh-card-hd { display: flex; align-items: flex-start; gap: 8px; flex-wrap: wrap; }
 .ivh-card-icon { font-size: 18px; line-height: 1; flex-shrink: 0; padding-top: 1px; }
-.ivh-card-info { flex: 1; display: grid; gap: 1px; }
+.ivh-card-info { flex: 1; display: grid; gap: 1px; min-width: 0; }
 .ivh-card-title { font-size: 12.5px; font-weight: 900; line-height: 1.2; }
 .ivh-card-ref { font-size: 10.5px; color: var(--ivh-mut); font-weight: 600; }
 
 .ivh-crossed-badge {
-  padding: 2px 8px;
-  border-radius: 999px;
-  font-size: 10px;
-  font-weight: 900;
-  background: color-mix(in srgb,var(--ivh-done) 14%,transparent);
-  border: 1px solid color-mix(in srgb,var(--ivh-done) 40%,transparent);
+  padding: 2px 8px; border-radius: 999px; font-size: 10px; font-weight: 900;
+  background: color-mix(in srgb,var(--ivh-done) 12%,transparent);
+  border: 1px solid color-mix(in srgb,var(--ivh-done) 36%,transparent);
   color: color-mix(in srgb,var(--ivh-done) 90%,var(--ivh-fg));
-  white-space: nowrap;
-  flex-shrink: 0;
+  white-space: nowrap; flex-shrink: 0;
 }
 .ivh-open-badge {
-  padding: 2px 8px;
-  border-radius: 999px;
-  font-size: 10px;
-  font-weight: 900;
-  background: color-mix(in srgb,var(--ivh-open) 12%,transparent);
-  border: 1px solid color-mix(in srgb,var(--ivh-open) 40%,transparent);
+  padding: 2px 8px; border-radius: 999px; font-size: 10px; font-weight: 900;
+  background: color-mix(in srgb,var(--ivh-open) 10%,transparent);
+  border: 1px solid color-mix(in srgb,var(--ivh-open) 36%,transparent);
   color: color-mix(in srgb,var(--ivh-open) 90%,var(--ivh-fg));
-  white-space: nowrap;
-  flex-shrink: 0;
+  white-space: nowrap; flex-shrink: 0;
 }
 
-/* Bar area */
-.ivh-bar-wrap { position: relative; height: 28px; border-radius: 7px; overflow: visible; background: color-mix(in srgb,var(--ivh-bg) 68%,#0f172a 32%); }
+/* Bar */
+.ivh-bar-wrap { position: relative; height: 26px; border-radius: 7px; overflow: visible; background: color-mix(in srgb,var(--ivh-bg) 68%,#0f172a 32%); }
 .ivh-bar-human {
-  position: absolute;
-  top: 0; left: 0; bottom: 0;
+  position: absolute; top: 0; left: 0; bottom: 0;
   width: calc(var(--hp) * 1%);
-  background: color-mix(in srgb,var(--ivh-done) 20%,transparent);
+  background: color-mix(in srgb,var(--ivh-done) 18%,transparent);
   border-radius: 7px;
-  border-right: 2px solid color-mix(in srgb,var(--ivh-done) 70%,transparent);
+  border-right: 2px solid color-mix(in srgb,var(--ivh-done) 65%,transparent);
 }
 .ivh-bar-ai {
-  position: absolute;
-  top: 3px; bottom: 3px; left: 0;
-  width: 0%;
-  border-radius: 5px;
+  position: absolute; top: 3px; bottom: 3px; left: 0;
+  width: 0%; border-radius: 5px;
 }
-.ivh-bar-ai--done {
-  background: var(--ivh-done);
-}
-.ivh-bar-ai--open {
-  background: color-mix(in srgb,var(--ivh-open) 90%,var(--ivh-ai));
-}
+.ivh-bar-ai--done { background: var(--ivh-done); }
+.ivh-bar-ai--open { background: color-mix(in srgb,var(--ivh-open) 90%,var(--ivh-ai)); }
 .ivh-bar-ai.ivh-animated { animation: ivhBarGrow .8s cubic-bezier(.22,.68,0,1.2) forwards; }
 @keyframes ivhBarGrow { from { width:0%; } to { width:calc(var(--ap)*1%); } }
+
 .ivh-bar-labels {
-  position: absolute;
-  bottom: -20px;
-  left: 0; right: 0;
-  display: flex;
-  justify-content: space-between;
-  font-size: 9.5px;
-  font-weight: 700;
-  color: var(--ivh-mut);
-  white-space: nowrap;
-  pointer-events: none;
+  position: absolute; bottom: -20px; left: 0; right: 0;
+  display: flex; justify-content: space-between;
+  font-size: 9.5px; font-weight: 700; color: var(--ivh-mut);
+  white-space: nowrap; pointer-events: none;
 }
 .ivh-label-ai { color: color-mix(in srgb,var(--ivh-ai) 80%,var(--ivh-fg)); }
 
-/* Progress bar (thin, below bar-wrap) */
-.ivh-progress-bar {
-  height: 4px;
-  border-radius: 999px;
-  background: color-mix(in srgb,var(--ivh-bg) 60%,#0f172a 40%);
-  margin-top: 24px;
-  overflow: hidden;
-}
-.ivh-progress-fill {
-  height: 100%;
-  width: 0%;
-  border-radius: 999px;
-  background: color-mix(in srgb,var(--ivh-open) 80%,var(--ivh-ai));
-}
-.ivh-progress-fill--fast { background: color-mix(in srgb,var(--ivh-fast) 70%,var(--ivh-open)); }
-.ivh-progress-fill.ivh-animated { animation: ivhProgGrow .9s .2s cubic-bezier(.22,.68,0,1.2) forwards; }
-@keyframes ivhProgGrow { from { width:0%; } to { width:calc(var(--pp)*1%); } }
-
 /* Note */
-.ivh-card-note { font-size: 11px; line-height: 1.45; color: var(--ivh-mut); margin-top: 4px; }
+.ivh-card-note { font-size: 11.5px; line-height: 1.45; color: var(--ivh-mut); margin-top: 8px; }
 
 /* Footer */
-.ivh-footer { display: grid; gap: 6px; border-top: 1px solid var(--ivh-bd); padding-top: 10px; }
-.ivh-footer-insight { font-size: 13px; line-height: 1.55; color: var(--ivh-fg); font-weight: 600; }
-.ivh-footer-insight em { font-style: italic; color: color-mix(in srgb,var(--ivh-open) 80%,var(--ivh-fg)); }
+.ivh-footer { display: grid; gap: 5px; border-top: 1px solid var(--ivh-bd); padding-top: 12px; }
+.ivh-footer-insight { font-size: 13px; line-height: 1.5; color: var(--ivh-fg); font-weight: 600; }
 .ivh-footer-src { font-size: 11px; color: var(--ivh-mut); font-style: italic; }
 
 /* Responsive */
 @media (max-width: 760px) {
-  .ivh-grid { grid-template-columns: repeat(2,1fr); }
+  .ivh-grid--done { grid-template-columns: repeat(2,1fr); }
+  .ivh-grid--open { grid-template-columns: 1fr; }
 }
 @media (max-width: 500px) {
-  .ivh-grid { grid-template-columns: 1fr; }
+  .ivh-grid--done { grid-template-columns: 1fr; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ivh-bar-ai, .ivh-progress-fill { animation: none !important; }
-  .ivh-bar-ai     { width: calc(var(--ap,0) * 1%) !important; }
-  .ivh-progress-fill { width: calc(var(--pp,0) * 1%) !important; }
+  .ivh-bar-ai { animation: none !important; width: calc(var(--ap,0) * 1%) !important; }
 }
 </style>
