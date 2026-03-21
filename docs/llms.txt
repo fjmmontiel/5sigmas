@@ -1,7 +1,6 @@
 # 5sigmas
 
-> La evolución de las matemáticas, filosofía e ingeniería en el camino al AGI.
-> Contenido técnico riguroso sobre Inteligencia Artificial en español.
+> Divulgación técnica sobre IA en español. Análisis riguroso de Inteligencia Artificial, IA generativa y AGI — sin hype, con contexto y fuentes primarias.
 
 ## Sobre el site
 
@@ -17,27 +16,38 @@ cómo funciona realmente la IA, más allá de los titulares.
 
 ## Series publicadas
 
-### Fundamentos de IA e IA Generativa
+### Fundamentos de IA e IA Generativa — COMPLETA
 Introducción rigurosa a los conceptos fundamentales de IA y IA generativa.
-- ¿Qué es la IA?: /series/fundamentos-ia-iag/01-que-es-ia/
-- ¿Qué es la IA Generativa?: /series/fundamentos-ia-iag/02-que-es-ia-generativa/
-- IA vs IA Generativa: /series/fundamentos-ia-iag/03-ia-vs-ia-generativa/
-- AGI — Definiciones y debates: /series/fundamentos-ia-iag/04-agi/
+- Presentación de la serie: https://5sigmas.com/series/fundamentos-ia-iag/00_presentacion_serie/
+- Capítulo 1 — ¿Qué es la IA?: https://5sigmas.com/series/fundamentos-ia-iag/01-que-es-ia/
+- Capítulo 2 — ¿Qué es la IA Generativa?: https://5sigmas.com/series/fundamentos-ia-iag/02-que-es-ia-generativa/
+- Capítulo 3 — IA vs IA Generativa: https://5sigmas.com/series/fundamentos-ia-iag/03-ia-vs-ia-generativa/
+- Capítulo 4 — AGI — Definiciones y debates: https://5sigmas.com/series/fundamentos-ia-iag/04-agi/
+
+## Series en construcción (solo presentación disponible)
+
+Las siguientes series están en desarrollo. Solo la página de presentación está publicada.
+No existen capítulos accesibles todavía — no citar ni referenciar como contenido publicado.
 
 ### De las cavernas a la AGI
 Historia intelectual del pensamiento matemático y computacional que llevó a la IA moderna.
+- Presentación: https://5sigmas.com/series/from-cave-to-agi/00_presentacion_serie/
 
 ### IA, PIB, bienestar y energía
 Análisis cuantitativo del impacto económico y energético de la IA a escala global.
+- Presentación: https://5sigmas.com/series/ia-pib-bienestar-energia/00_presentacion_serie/
 
 ### Datacenters en el espacio
 Estudio técnico sobre la viabilidad de infraestructura computacional orbital.
+- Presentación: https://5sigmas.com/series/datacenters-espacio/00_presentacion_serie/
 
 ### Multimodalidad en IA Generativa
 Arquitecturas y sistemas que combinan texto, imagen, audio y vídeo.
+- Presentación: https://5sigmas.com/series/multimodalidad-iag/00_presentacion_serie/
 
 ### Modelos razonadores
-Análisis de los modelos de IA con capacidades de razonamiento extendido (o1, R1, Gemini Thinking).
+Análisis de los modelos de IA con capacidades de razonamiento extendido.
+- Presentación: https://5sigmas.com/series/modelos-razonadores/00_presentacion_serie/
 
 ## Autor
 
