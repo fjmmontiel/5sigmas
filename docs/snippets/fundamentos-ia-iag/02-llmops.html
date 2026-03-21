@@ -10,6 +10,18 @@
       --chip:  rgba(0,0,0,.05);
       --chip2: rgba(0,0,0,.08);
 
+      /* dim fills — node labels inactive */
+      --dim-fg:    rgba(2,6,23,.32);
+      --dim-blue:  rgba(74,108,247,.62);
+      --dim-teal:  rgba(38,166,154,.62);
+      --dim-amber: rgba(185,130,0,.65);
+      --dim-green: rgba(21,128,61,.62);
+      /* active fills — node labels */
+      --act-blue:  var(--c-blue);
+      --act-teal:  var(--c-teal);
+      --act-amber: #b88200;
+      --act-green: #16a34a;
+
       /* type palette */
       --c-blue:   #4a6cf7;
       --c-teal:   #26A69A;
@@ -55,6 +67,15 @@
       --line:  rgba(255,255,255,.13);
       --chip:  rgba(255,255,255,.05);
       --chip2: rgba(255,255,255,.09);
+      --dim-fg:    rgba(255,255,255,.28);
+      --dim-blue:  rgba(122,168,255,.42);
+      --dim-teal:  rgba(77,217,204,.42);
+      --dim-amber: rgba(255,200,100,.42);
+      --dim-green: rgba(74,222,128,.42);
+      --act-blue:  var(--l-blue);
+      --act-teal:  var(--l-teal);
+      --act-amber: var(--l-amber);
+      --act-green: var(--l-green);
     }
 
     /* Top row */
@@ -202,13 +223,13 @@
     .lops-station--green .lops-dotNode { fill: rgba(34,197,94,.12);   stroke: rgba(34,197,94,.40);   }
 
     /* Node text — inactive: dim */
-    .lops-dotNum { font-size: 12px; font-weight: 800; fill: rgba(255,255,255,.30); transition: fill .25s; }
-    .lops-dotLbl { font-size: 10px; font-weight: 700; fill: rgba(255,255,255,.30); transition: fill .25s; }
+    .lops-dotNum { font-size: 12px; font-weight: 800; fill: var(--dim-fg); transition: fill .25s; }
+    .lops-dotLbl { font-size: 10px; font-weight: 700; fill: var(--dim-fg); transition: fill .25s; }
 
-    .lops-station--blue  .lops-dotNum, .lops-station--blue  .lops-dotLbl { fill: rgba(122,168,255,.40); }
-    .lops-station--teal  .lops-dotNum, .lops-station--teal  .lops-dotLbl { fill: rgba(77,217,204,.40); }
-    .lops-station--amber .lops-dotNum, .lops-station--amber .lops-dotLbl { fill: rgba(255,200,100,.40); }
-    .lops-station--green .lops-dotNum, .lops-station--green .lops-dotLbl { fill: rgba(74,222,128,.40); }
+    .lops-station--blue  .lops-dotNum, .lops-station--blue  .lops-dotLbl { fill: var(--dim-blue); }
+    .lops-station--teal  .lops-dotNum, .lops-station--teal  .lops-dotLbl { fill: var(--dim-teal); }
+    .lops-station--amber .lops-dotNum, .lops-station--amber .lops-dotLbl { fill: var(--dim-amber); }
+    .lops-station--green .lops-dotNum, .lops-station--green .lops-dotLbl { fill: var(--dim-green); }
 
     /* Active node */
     .lops-station--blue.is-active  .lops-dotNode { fill: rgba(74,108,247,.38);  stroke: #4a6cf7;  filter: drop-shadow(0 0 10px rgba(74,108,247,.45)); }
@@ -216,12 +237,17 @@
     .lops-station--amber.is-active .lops-dotNode { fill: rgba(255,179,67,.38);  stroke: #FFB343;  filter: drop-shadow(0 0 10px rgba(255,179,67,.45)); }
     .lops-station--green.is-active .lops-dotNode { fill: rgba(34,197,94,.38);   stroke: #22c55e;  filter: drop-shadow(0 0 10px rgba(34,197,94,.45));  }
 
-    .lops-station--blue.is-active  .lops-dotNum, .lops-station--blue.is-active  .lops-dotLbl { fill: #7ca8ff; }
-    .lops-station--teal.is-active  .lops-dotNum, .lops-station--teal.is-active  .lops-dotLbl { fill: #4dd9cc; }
-    .lops-station--amber.is-active .lops-dotNum, .lops-station--amber.is-active .lops-dotLbl { fill: #ffc864; }
-    .lops-station--green.is-active .lops-dotNum, .lops-station--green.is-active .lops-dotLbl { fill: #4ade80; }
+    .lops-station--blue.is-active  .lops-dotNum, .lops-station--blue.is-active  .lops-dotLbl { fill: var(--act-blue); }
+    .lops-station--teal.is-active  .lops-dotNum, .lops-station--teal.is-active  .lops-dotLbl { fill: var(--act-teal); }
+    .lops-station--amber.is-active .lops-dotNum, .lops-station--amber.is-active .lops-dotLbl { fill: var(--act-amber); }
+    .lops-station--green.is-active .lops-dotNum, .lops-station--green.is-active .lops-dotLbl { fill: var(--act-green); }
 
     .lops-station { cursor: pointer; }
+
+    /* Orbit ring & center text — theme-aware */
+    .lops-orbit    { stroke: var(--line); }
+    .lops-ctr-main { fill: var(--txt); opacity: .60; }
+    .lops-ctr-sub  { fill: var(--muted); }
 
     /* Panel */
     .lops-panel { min-height: 260px; }
@@ -312,7 +338,7 @@
         </defs>
 
         <!-- Base orbit ring -->
-        <circle cx="260" cy="175" r="120" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="1.8"/>
+        <circle cx="260" cy="175" r="120" class="lops-orbit" fill="none" stroke-width="1.8"/>
 
         <!-- Colored arc segments (always visible, clockwise) -->
         <!-- Arc 5→0: blue  -->
@@ -366,8 +392,8 @@
         </g>
 
         <!-- Center label -->
-        <text x="260" y="168" text-anchor="middle" fill="rgba(255,255,255,.55)" font-size="18" font-weight="900" letter-spacing="-.5">6 pasos</text>
-        <text x="260" y="185" text-anchor="middle" fill="rgba(255,255,255,.28)" font-size="10">El prompt lo controla todo.</text>
+        <text x="260" y="168" text-anchor="middle" class="lops-ctr-main" font-size="18" font-weight="900" letter-spacing="-.5">6 pasos</text>
+        <text x="260" y="185" text-anchor="middle" class="lops-ctr-sub"  font-size="10">El prompt lo controla todo.</text>
       </svg>
 
       <div class="lops-hint">
