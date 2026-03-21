@@ -26,7 +26,9 @@ theme:
   features:
     - navigation.tabs
     - navigation.sections
+    - navigation.indexes
     - navigation.prune
+    - navigation.path
     - content.code.copy
     - content.action.edit
 
@@ -44,7 +46,7 @@ nav:
           - ¿Qué es la IA?: series/fundamentos-ia-iag/01-que-es-ia.md
           - ¿Qué es IA Generativa?: series/fundamentos-ia-iag/02-que-es-ia-generativa.md
           - IA vs IA Generativa: series/fundamentos-ia-iag/03-ia-vs-ia-generativa.md
-          # - AGI: series/fundamentos-ia-iag/04-agi.md
+          - AGI: series/fundamentos-ia-iag/04-agi.md
       - De las cavernas a la AGI:
           - Presentación: series/from-cave-to-agi/00_presentacion_serie.md
       - Multimodalidad en IA Generativa:
@@ -81,6 +83,7 @@ markdown_extensions:
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
 
 extra_javascript:
+  - javascripts/nav-gradient.js
   - javascripts/external-links.js
   - assets/javascripts/animation-shell.js
   - assets/javascripts/site-demos.js
@@ -114,6 +117,6 @@ plugins:
       enabled: true
   # - blog        # optional – see below
 exclude_docs: |
-  - drafts/
-  - drafts/**
-  - assets/templates/**
+  drafts/
+  drafts/**
+  assets/templates/**

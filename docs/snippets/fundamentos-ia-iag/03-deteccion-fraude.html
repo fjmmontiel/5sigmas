@@ -1,0 +1,462 @@
+<div class="fd-wrap" data-demo="03-deteccion-fraude" data-default="reglas">
+  <div class="fd-hd">
+    <div class="fd-title">Detección de fraude a través de la matriz</div>
+    <div class="fd-sub">Ninguna tecnología cubre todo bien. La respuesta real combina cuatro capas, cada una haciendo lo que hace mejor.</div>
+  </div>
+
+  <div class="fd-pipeline" role="tablist" aria-label="Capas de detección de fraude">
+    <div class="fd-event">
+      <div class="fd-event-icon">
+        <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="1" y="4" width="18" height="13" rx="2" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M1 8h18" stroke="currentColor" stroke-width="1.5"/>
+          <rect x="3.5" y="11" width="4" height="2" rx=".5" fill="currentColor" opacity=".5"/>
+        </svg>
+      </div>
+      <div class="fd-event-label">Transacción</div>
+    </div>
+    <div class="fd-arrow" aria-hidden="true">→</div>
+
+    <button type="button" class="fd-node fd-node--reglas" data-tab="reglas" aria-selected="true" role="tab">
+      <div class="fd-node-num">1</div>
+      <div class="fd-node-label">Reglas</div>
+      <div class="fd-node-sub">Filtro rápido</div>
+    </button>
+    <div class="fd-arrow" aria-hidden="true">→</div>
+
+    <button type="button" class="fd-node fd-node--ml" data-tab="ml" aria-selected="false" role="tab">
+      <div class="fd-node-num">2</div>
+      <div class="fd-node-label">ML clásico</div>
+      <div class="fd-node-sub">Puntuación</div>
+    </button>
+    <div class="fd-arrow" aria-hidden="true">→</div>
+
+    <button type="button" class="fd-node fd-node--rag" data-tab="rag" aria-selected="false" role="tab">
+      <div class="fd-node-num">3</div>
+      <div class="fd-node-label">LLM + RAG</div>
+      <div class="fd-node-sub">Explicación</div>
+    </button>
+    <div class="fd-arrow" aria-hidden="true">→</div>
+
+    <button type="button" class="fd-node fd-node--agente" data-tab="agente" aria-selected="false" role="tab">
+      <div class="fd-node-num">4</div>
+      <div class="fd-node-label">Agente</div>
+      <div class="fd-node-sub">Investigación</div>
+    </button>
+  </div>
+
+  <div class="fd-panels">
+
+    <div class="fd-panel" data-panel="reglas">
+      <div class="fd-panel-head fd-panel-head--reglas">Reglas explícitas — filtro inicial</div>
+      <div class="fd-panel-body">
+        <div class="fd-row">
+          <div class="fd-col">
+            <div class="fd-prop-k">Qué hace</div>
+            <p>Bloquear automáticamente si el importe supera 3× la media del usuario en esa categoría comercial, o si la transacción viene de una ubicación nueva con importe alto.</p>
+          </div>
+          <div class="fd-col">
+            <div class="fd-prop-k">Por qué funciona</div>
+            <p>Instantáneo, sin coste por transacción, auditable. Para patrones estables y conocidos es más fiable y más barato que cualquier modelo.</p>
+          </div>
+          <div class="fd-col">
+            <div class="fd-prop-k">Dónde falla</div>
+            <p>Los fraudadores aprenden a mantenerse por debajo del umbral. Cuando los patrones evolucionan, las reglas quedan obsoletas y nadie las puede mantener al día.</p>
+          </div>
+        </div>
+        <div class="fd-badge-row">
+          <span class="fd-badge fd-badge--good">Coste: mínimo</span>
+          <span class="fd-badge fd-badge--good">Latencia: &lt; 1 ms</span>
+          <span class="fd-badge fd-badge--warn">Cobertura: patrones conocidos</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="fd-panel" data-panel="ml" hidden>
+      <div class="fd-panel-head fd-panel-head--ml">ML clásico — núcleo operativo a escala</div>
+      <div class="fd-panel-body">
+        <div class="fd-row">
+          <div class="fd-col">
+            <div class="fd-prop-k">Qué hace</div>
+            <p>Puntúa cada transacción de 0 a 100 en riesgo de fraude, entrenado sobre miles de transacciones etiquetadas (fraude / no fraude). Captura combinaciones complejas de señales que las reglas no pueden enumerar.</p>
+          </div>
+          <div class="fd-col">
+            <div class="fd-prop-k">Por qué es el núcleo</div>
+            <p>Métricas claras y automatizables (AUC-ROC, precisión, exhaustividad). Escala a millones de transacciones diarias. Resultado reproducible y explicable con SHAP.</p>
+          </div>
+          <div class="fd-col">
+            <div class="fd-prop-k">Mantenimiento necesario</div>
+            <p>Necesita reentrenarse periódicamente cuando los patrones de fraude evolucionan. Sin monitorización de deriva, el rendimiento cae de forma silenciosa.</p>
+          </div>
+        </div>
+        <div class="fd-badge-row">
+          <span class="fd-badge fd-badge--good">Coste: bajo por transacción</span>
+          <span class="fd-badge fd-badge--good">Escala: millones/día</span>
+          <span class="fd-badge fd-badge--warn">Requiere: datos etiquetados + reentrenamiento</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="fd-panel" data-panel="rag" hidden>
+      <div class="fd-panel-head fd-panel-head--rag">LLM + RAG — explicación al analista</div>
+      <div class="fd-panel-body">
+        <div class="fd-row">
+          <div class="fd-col">
+            <div class="fd-prop-k">Qué hace</div>
+            <p>Cuando el modelo de ML puntúa alto una transacción y se crea una alerta, el analista pregunta: "¿por qué se disparó esta alerta?" El sistema busca en manuales de procedimiento internos y normativa y devuelve una explicación contextualizada.</p>
+          </div>
+          <div class="fd-col">
+            <div class="fd-prop-k">Por qué no es el núcleo</div>
+            <p>El coste y la latencia son prohibitivos para millones de transacciones diarias. No reemplaza al clasificador de ML; lo complementa para la capa de revisión humana.</p>
+          </div>
+          <div class="fd-col">
+            <div class="fd-prop-k">Cuándo aporta valor</div>
+            <p>Documentación interna que cambia frecuentemente, bases de conocimiento de tipologías de fraude, explicación de alertas a equipos de cumplimiento.</p>
+          </div>
+        </div>
+        <div class="fd-badge-row">
+          <span class="fd-badge fd-badge--warn">Coste: medio por consulta</span>
+          <span class="fd-badge fd-badge--warn">Latencia: segundos</span>
+          <span class="fd-badge fd-badge--good">Sin reentrenamiento: lee docs actuales</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="fd-panel" data-panel="agente" hidden>
+      <div class="fd-panel-head fd-panel-head--agente">Agente — investigación de casos complejos</div>
+      <div class="fd-panel-body">
+        <div class="fd-row">
+          <div class="fd-col">
+            <div class="fd-prop-k">Qué hace</div>
+            <p>Para casos de alto riesgo que superan el umbral del ML: consulta el historial completo del cliente, cruza con bases de datos de patrones de fraude conocidos, verifica datos externos y redacta un informe de decisión con trazabilidad.</p>
+          </div>
+          <div class="fd-col">
+            <div class="fd-prop-k">Cuándo es adecuado</div>
+            <p>Análisis profundo de casos donde la cantidad en riesgo justifica el coste del proceso. No para el volumen masivo de transacciones; para la revisión de los casos más complejos.</p>
+          </div>
+          <div class="fd-col">
+            <div class="fd-prop-k">Riesgo a gestionar</div>
+            <p>Cada paso puede fallar y los fallos en cadena son difíciles de detectar. La cadena de razonamiento necesita supervisión humana antes de tomar decisiones finales.</p>
+          </div>
+        </div>
+        <div class="fd-badge-row">
+          <span class="fd-badge fd-badge--bad">Coste: alto por caso</span>
+          <span class="fd-badge fd-badge--bad">Latencia: minutos</span>
+          <span class="fd-badge fd-badge--good">Capacidad: razonamiento multi-fuente</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="fd-takeaway">
+    La respuesta real combina las cuatro capas: reglas para filtros instantáneos, ML clásico para puntuar todo el volumen, LLM+RAG para explicar alertas al analista, y agente para investigar los casos más complejos de alto riesgo.
+  </div>
+</div>
+
+<style>
+.fd-wrap, .fd-wrap * { box-sizing: border-box; }
+
+.fd-wrap {
+  --fa: var(--md-primary-fg-color, #26A69A);
+  --fb: #324AB2;
+  --fg: var(--md-accent-fg-color, #FFB343);
+  --fr: #ef4444;
+  --fbg: var(--md-default-bg-color, #fff);
+  --ffg: var(--md-default-fg-color, #0f172a);
+  --fbd: rgba(15,23,42,.16);
+  --fmut: rgba(15,23,42,.60);
+  --ff: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid;
+  gap: 14px;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--fbd);
+  border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--fb) 7%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 0%, color-mix(in srgb,var(--fr) 6%,transparent), transparent 52%),
+    var(--fbg);
+  color: var(--ffg);
+  font-family: var(--ff);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-md-color-scheme="slate"] .fd-wrap {
+  --fbg: var(--md-default-bg-color, #0f172a);
+  --ffg: var(--md-default-fg-color, #e2e8f0);
+  --fbd: rgba(226,232,240,.16);
+  --fmut: rgba(226,232,240,.60);
+}
+
+.fd-hd { display: grid; gap: 5px; }
+
+.fd-title {
+  font-size: clamp(17px,2.2vw,24px);
+  font-weight: 900;
+  letter-spacing: -.02em;
+  line-height: 1.1;
+}
+
+.fd-sub {
+  font-size: 14px;
+  color: var(--fmut);
+  line-height: 1.5;
+  max-width: 74ch;
+}
+
+/* Pipeline */
+.fd-pipeline {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 12px;
+  border: 1px solid var(--fbd);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--fbg) 88%, #0f172a 12%);
+}
+
+.fd-event {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 8px;
+  flex-shrink: 0;
+}
+
+.fd-event-icon {
+  width: 28px;
+  height: 28px;
+  color: var(--fmut);
+}
+
+.fd-event-icon svg { width: 100%; height: 100%; }
+
+.fd-event-label {
+  font-size: 10.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--fmut);
+}
+
+.fd-arrow {
+  font-size: 16px;
+  font-weight: 900;
+  color: var(--fmut);
+  flex-shrink: 0;
+}
+
+.fd-node {
+  appearance: none;
+  border: 1.5px solid var(--fbd);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--fbg) 86%, transparent);
+  color: var(--ffg);
+  padding: 8px 10px;
+  font: inherit;
+  cursor: pointer;
+  transition: border-color .14s, background .14s, box-shadow .14s;
+  flex: 1;
+  min-width: 80px;
+  text-align: center;
+  display: grid;
+  gap: 2px;
+}
+
+.fd-node-num {
+  font-size: 10px;
+  font-weight: 900;
+  color: var(--fmut);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+.fd-node-label {
+  font-size: 12.5px;
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.fd-node-sub {
+  font-size: 10.5px;
+  color: var(--fmut);
+  font-weight: 600;
+}
+
+.fd-node--reglas[aria-selected="true"] {
+  border-color: color-mix(in srgb, var(--fa) 50%, transparent);
+  background: color-mix(in srgb, var(--fa) 14%, var(--fbg));
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--fa) 22%, transparent);
+}
+.fd-node--ml[aria-selected="true"] {
+  border-color: color-mix(in srgb, var(--fb) 50%, transparent);
+  background: color-mix(in srgb, var(--fb) 14%, var(--fbg));
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--fb) 22%, transparent);
+}
+.fd-node--rag[aria-selected="true"] {
+  border-color: color-mix(in srgb, var(--fg) 50%, transparent);
+  background: color-mix(in srgb, var(--fg) 14%, var(--fbg));
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--fg) 22%, transparent);
+}
+.fd-node--agente[aria-selected="true"] {
+  border-color: color-mix(in srgb, var(--fr) 50%, transparent);
+  background: color-mix(in srgb, var(--fr) 14%, var(--fbg));
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--fr) 22%, transparent);
+}
+
+.fd-node:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--fb) 24%, transparent);
+}
+
+/* Panels */
+.fd-panel[hidden] { display: none; }
+
+.fd-panel {
+  border: 1px solid var(--fbd);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.fd-panel-head {
+  font-size: 13.5px;
+  font-weight: 900;
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--fbd);
+}
+
+.fd-panel-head--reglas {
+  background: color-mix(in srgb, var(--fa) 10%, var(--fbg));
+  color: color-mix(in srgb, var(--fa) 80%, var(--ffg));
+  border-color: color-mix(in srgb, var(--fa) 24%, var(--fbd));
+}
+.fd-panel-head--ml {
+  background: color-mix(in srgb, var(--fb) 10%, var(--fbg));
+  color: color-mix(in srgb, var(--fb) 80%, var(--ffg));
+  border-color: color-mix(in srgb, var(--fb) 24%, var(--fbd));
+}
+.fd-panel-head--rag {
+  background: color-mix(in srgb, var(--fg) 10%, var(--fbg));
+  color: color-mix(in srgb, var(--fg) 60%, var(--ffg));
+  border-color: color-mix(in srgb, var(--fg) 30%, var(--fbd));
+}
+.fd-panel-head--agente {
+  background: color-mix(in srgb, var(--fr) 10%, var(--fbg));
+  color: color-mix(in srgb, var(--fr) 70%, var(--ffg));
+  border-color: color-mix(in srgb, var(--fr) 24%, var(--fbd));
+}
+
+.fd-panel-body {
+  padding: 14px;
+  display: grid;
+  gap: 12px;
+  background: color-mix(in srgb, var(--fbg) 92%, #0f172a 8%);
+}
+
+.fd-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.fd-col { display: grid; gap: 5px; align-content: start; }
+
+.fd-prop-k {
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--fmut);
+}
+
+.fd-col p { margin: 0; font-size: 13px; line-height: 1.5; }
+
+.fd-badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.fd-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 800;
+  border: 1px solid var(--fbd);
+}
+
+.fd-badge--good {
+  border-color: color-mix(in srgb, var(--fa) 38%, var(--fbd));
+  background: color-mix(in srgb, var(--fa) 10%, var(--fbg));
+  color: color-mix(in srgb, var(--fa) 80%, var(--ffg));
+}
+.fd-badge--warn {
+  border-color: color-mix(in srgb, var(--fg) 38%, var(--fbd));
+  background: color-mix(in srgb, var(--fg) 10%, var(--fbg));
+  color: color-mix(in srgb, var(--fg) 60%, var(--ffg));
+}
+.fd-badge--bad {
+  border-color: color-mix(in srgb, var(--fr) 38%, var(--fbd));
+  background: color-mix(in srgb, var(--fr) 10%, var(--fbg));
+  color: color-mix(in srgb, var(--fr) 70%, var(--ffg));
+}
+
+.fd-takeaway {
+  font-size: 13.5px;
+  line-height: 1.5;
+  font-style: italic;
+  color: var(--fmut);
+  border-left: 3px solid color-mix(in srgb, var(--fb) 36%, transparent);
+  padding-left: 12px;
+}
+
+@media (max-width: 640px) {
+  .fd-pipeline { gap: 4px; }
+  .fd-node { padding: 7px 6px; min-width: 60px; }
+  .fd-node-label { font-size: 11px; }
+  .fd-row { grid-template-columns: 1fr; }
+}
+</style>
+
+<script>
+(function () {
+  function activate(root, key) {
+    root.querySelectorAll('.fd-node').forEach(n => {
+      n.setAttribute('aria-selected', n.getAttribute('data-tab') === key ? 'true' : 'false');
+    });
+    root.querySelectorAll('[data-panel]').forEach(p => {
+      p.hidden = p.getAttribute('data-panel') !== key;
+    });
+  }
+  function initRoot(root) {
+    if (root.dataset.fdReady === '1') return;
+    root.dataset.fdReady = '1';
+    const nodes = Array.from(root.querySelectorAll('.fd-node'));
+    const first = root.getAttribute('data-default') || (nodes[0] && nodes[0].getAttribute('data-tab'));
+    nodes.forEach(n => {
+      n.addEventListener('click', () => activate(root, n.getAttribute('data-tab')));
+      n.addEventListener('keydown', e => {
+        const cur = nodes.indexOf(n);
+        let next = cur;
+        if (e.key === 'ArrowRight') next = (cur + 1) % nodes.length;
+        if (e.key === 'ArrowLeft')  next = (cur - 1 + nodes.length) % nodes.length;
+        if (e.key === 'Home') next = 0;
+        if (e.key === 'End')  next = nodes.length - 1;
+        if (next !== cur) { e.preventDefault(); nodes[next].focus(); activate(root, nodes[next].getAttribute('data-tab')); }
+      });
+    });
+    activate(root, first);
+  }
+  function boot() { document.querySelectorAll('[data-demo="03-deteccion-fraude"]').forEach(initRoot); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
+  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
+})();
+</script>

@@ -1,369 +1,520 @@
-<div class="lops-wrap" data-demo="02-llmops">
+<div class="lops-wrap lops-demo" data-mk="root" data-default="modelo" data-autoplay="true" data-interval="4200">
+  <style>
+    .lops-demo {
+      --bg:    var(--md-default-bg-color, #ffffff);
+      --card:  rgba(255,255,255,.06);
+      --card2: rgba(255,255,255,.09);
+      --txt:   rgba(0,0,0,.92);
+      --muted: rgba(0,0,0,.65);
+      --line:  rgba(0,0,0,.12);
+      --chip:  rgba(0,0,0,.05);
+      --chip2: rgba(0,0,0,.08);
 
-  <div class="lops-hd">
-    <div class="lops-title">LLMOps: el ciclo operativo</div>
-    <div class="lops-sub">El modelo es un servicio externo. Lo que gestionas son el prompt, el contexto y la evaluación. Pulsa cada paso para ver el detalle.</div>
+      /* type palette */
+      --c-blue:   #4a6cf7;
+      --c-teal:   #26A69A;
+      --c-amber:  #FFB343;
+      --c-green:  #22c55e;
+      --l-blue:   #7ca8ff;
+      --l-teal:   #4dd9cc;
+      --l-amber:  #ffc864;
+      --l-green:  #4ade80;
+
+      color: var(--txt);
+      background:
+        radial-gradient(700px 280px at 0% 0%, rgba(50,74,178,.07), transparent 60%),
+        radial-gradient(500px 220px at 100% 100%, rgba(20,184,166,.05), transparent 60%),
+        var(--bg);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 14px;
+      box-shadow: 0 8px 28px rgba(0,0,0,.08);
+      font-family: var(--md-text-font-family, "Avenir Next", "Segoe UI", Arial, sans-serif);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    :root[data-md-color-scheme="default"] .lops-demo,
+    [data-md-color-scheme="default"] .lops-demo {
+      --bg:    #f7fafc;
+      --card:  rgba(2,6,23,.04);
+      --card2: rgba(2,6,23,.07);
+      --txt:   rgba(2,6,23,.92);
+      --muted: rgba(2,6,23,.62);
+      --line:  rgba(2,6,23,.11);
+      --chip:  rgba(2,6,23,.04);
+      --chip2: rgba(2,6,23,.08);
+    }
+
+    :root[data-md-color-scheme="slate"] .lops-demo,
+    [data-md-color-scheme="slate"] .lops-demo {
+      --bg:    #0b1220;
+      --card:  rgba(255,255,255,.055);
+      --card2: rgba(255,255,255,.09);
+      --txt:   rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.70);
+      --line:  rgba(255,255,255,.13);
+      --chip:  rgba(255,255,255,.05);
+      --chip2: rgba(255,255,255,.09);
+    }
+
+    /* Top row */
+    .lops-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .lops-title { display: flex; flex-direction: column; gap: 3px; }
+    .lops-title b   { font-size: 15px; letter-spacing: .2px; }
+    .lops-title span { color: var(--muted); font-size: 12.5px; }
+
+    /* Autoplay button */
+    .lops-auto {
+      appearance: none;
+      border: 1px solid var(--line);
+      background: var(--chip);
+      color: var(--txt);
+      border-radius: 999px;
+      padding: 6px 10px;
+      cursor: pointer;
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      user-select: none;
+      transition: background .15s, border-color .15s, transform .08s;
+      font-size: 12.5px;
+      line-height: 1;
+      font-family: inherit;
+    }
+    .lops-auto:active { transform: scale(.98); }
+    .lops-auto[aria-pressed="true"] {
+      border-color: rgba(74,108,247,.40);
+      background:   rgba(74,108,247,.10);
+    }
+    .lops-auto .ico { width: 16px; height: 16px; display: inline-block; }
+
+    /* Step pills */
+    .lops-steps {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin: 10px 0 12px;
+    }
+
+    .lops-step {
+      appearance: none;
+      border: 1px solid var(--line);
+      background: var(--chip);
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 6px 11px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      transition: transform .08s, background .15s, border-color .15s, color .15s;
+      user-select: none;
+      white-space: nowrap;
+      font-family: inherit;
+    }
+    .lops-step:active { transform: scale(.97); }
+
+    .lops-step .n {
+      width: 17px; height: 17px;
+      border-radius: 5px;
+      display: inline-grid;
+      place-items: center;
+      background: var(--chip2);
+      border: 1px solid var(--line);
+      font-size: 10px;
+      flex: 0 0 auto;
+      transition: background .15s, border-color .15s, color .15s;
+    }
+
+    /* Type colors on step pills */
+    .lops-step[data-step="modelo"]                              { --sc: var(--c-blue);  --sl: var(--l-blue);  }
+    .lops-step[data-step="prompt"],
+    .lops-step[data-step="contexto"]                            { --sc: var(--c-teal);  --sl: var(--l-teal);  }
+    .lops-step[data-step="evaluar"]                             { --sc: var(--c-amber); --sl: var(--l-amber); }
+    .lops-step[data-step="desplegar"],
+    .lops-step[data-step="monitorizar"]                         { --sc: var(--c-green); --sl: var(--l-green); }
+
+    .lops-step[aria-selected="true"] {
+      border-color: color-mix(in srgb, var(--sc) 45%, var(--line));
+      background:   color-mix(in srgb, var(--sc) 12%, var(--bg));
+      color: var(--txt);
+    }
+    .lops-step[aria-selected="true"] .n {
+      background:   color-mix(in srgb, var(--sc) 20%, var(--bg));
+      border-color: color-mix(in srgb, var(--sc) 45%, var(--line));
+      color: var(--sl);
+    }
+
+    /* Body grid */
+    .lops-body {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .lops-viz,
+    .lops-panel {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      padding: 12px;
+      position: relative;
+    }
+
+    .lops-viz {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 260px;
+    }
+
+    .lops-viz svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* SVG node type classes */
+    .lops-station--blue  { --nc: var(--c-blue);  --nl: var(--l-blue);  }
+    .lops-station--teal  { --nc: var(--c-teal);  --nl: var(--l-teal);  }
+    .lops-station--amber { --nc: var(--c-amber); --nl: var(--l-amber); }
+    .lops-station--green { --nc: var(--c-green); --nl: var(--l-green); }
+
+    /* Node circle — inactive: dim */
+    .lops-dotNode {
+      fill:         rgba(255,255,255,.04);
+      stroke:       rgba(255,255,255,.18);
+      stroke-width: 1.8;
+      transition:   fill .3s, stroke .3s, filter .3s;
+    }
+    .lops-station--blue  .lops-dotNode { fill: rgba(74,108,247,.12);  stroke: rgba(74,108,247,.40);  }
+    .lops-station--teal  .lops-dotNode { fill: rgba(38,166,154,.12);  stroke: rgba(38,166,154,.40);  }
+    .lops-station--amber .lops-dotNode { fill: rgba(255,179,67,.12);  stroke: rgba(255,179,67,.40);  }
+    .lops-station--green .lops-dotNode { fill: rgba(34,197,94,.12);   stroke: rgba(34,197,94,.40);   }
+
+    /* Node text — inactive: dim */
+    .lops-dotNum { font-size: 12px; font-weight: 800; fill: rgba(255,255,255,.30); transition: fill .25s; }
+    .lops-dotLbl { font-size: 10px; font-weight: 700; fill: rgba(255,255,255,.30); transition: fill .25s; }
+
+    .lops-station--blue  .lops-dotNum, .lops-station--blue  .lops-dotLbl { fill: rgba(122,168,255,.40); }
+    .lops-station--teal  .lops-dotNum, .lops-station--teal  .lops-dotLbl { fill: rgba(77,217,204,.40); }
+    .lops-station--amber .lops-dotNum, .lops-station--amber .lops-dotLbl { fill: rgba(255,200,100,.40); }
+    .lops-station--green .lops-dotNum, .lops-station--green .lops-dotLbl { fill: rgba(74,222,128,.40); }
+
+    /* Active node */
+    .lops-station--blue.is-active  .lops-dotNode { fill: rgba(74,108,247,.38);  stroke: #4a6cf7;  filter: drop-shadow(0 0 10px rgba(74,108,247,.45)); }
+    .lops-station--teal.is-active  .lops-dotNode { fill: rgba(38,166,154,.38);  stroke: #26A69A;  filter: drop-shadow(0 0 10px rgba(38,166,154,.45)); }
+    .lops-station--amber.is-active .lops-dotNode { fill: rgba(255,179,67,.38);  stroke: #FFB343;  filter: drop-shadow(0 0 10px rgba(255,179,67,.45)); }
+    .lops-station--green.is-active .lops-dotNode { fill: rgba(34,197,94,.38);   stroke: #22c55e;  filter: drop-shadow(0 0 10px rgba(34,197,94,.45));  }
+
+    .lops-station--blue.is-active  .lops-dotNum, .lops-station--blue.is-active  .lops-dotLbl { fill: #7ca8ff; }
+    .lops-station--teal.is-active  .lops-dotNum, .lops-station--teal.is-active  .lops-dotLbl { fill: #4dd9cc; }
+    .lops-station--amber.is-active .lops-dotNum, .lops-station--amber.is-active .lops-dotLbl { fill: #ffc864; }
+    .lops-station--green.is-active .lops-dotNum, .lops-station--green.is-active .lops-dotLbl { fill: #4ade80; }
+
+    .lops-station { cursor: pointer; }
+
+    /* Panel */
+    .lops-panel { min-height: 260px; }
+    .lops-panel h4 { margin: 0 0 8px; font-size: 13.5px; letter-spacing: .15px; }
+    .lops-panel p  { margin: 0 0 10px; color: var(--muted); font-size: 13px; line-height: 1.52; }
+
+    .lops-cards { display: grid; gap: 9px; }
+
+    .lops-card {
+      background: var(--card2);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 9px 10px;
+    }
+    .lops-card b    { display: block; font-size: 12.5px; margin-bottom: 3px; }
+    .lops-card span { color: var(--muted); font-size: 12.5px; line-height: 1.45; display: block; }
+
+    /* Hint */
+    .lops-hint {
+      position: absolute;
+      left: 12px;
+      bottom: 9px;
+      color: var(--muted);
+      font-size: 11px;
+      display: flex;
+      gap: 7px;
+      align-items: center;
+      pointer-events: none;
+      opacity: .7;
+    }
+    .lops-dot {
+      width: 7px; height: 7px;
+      border-radius: 999px;
+      background: rgba(94,234,212,.55);
+      box-shadow: 0 0 0 3px rgba(94,234,212,.12);
+    }
+
+    /* Focus */
+    .lops-demo :is(button,[role="button"]):focus { outline: none; }
+    .lops-demo :is(button,[role="button"]):focus-visible {
+      box-shadow: 0 0 0 3px rgba(74,108,247,.28);
+      border-color: rgba(74,108,247,.55);
+    }
+
+    @media (max-width: 860px) {
+      .lops-body { grid-template-columns: 1fr; }
+      .lops-viz  { min-height: 220px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .lops-step, .lops-auto { transition: none; }
+      .lops-dotNode, .lops-dotNum, .lops-dotLbl { transition: none; }
+    }
+  </style>
+
+  <div class="lops-top">
+    <div class="lops-title">
+      <b>LLMOps: el ciclo operativo</b>
+      <span>El modelo es un servicio externo. Gestionas el prompt, el contexto y la evaluación.</span>
+    </div>
+    <div>
+      <button class="lops-auto" type="button" data-mk="auto" aria-pressed="false" title="Reproducción automática">
+        <span class="ico" aria-hidden="true" data-mk="autoIco"></span>
+        <span data-mk="autoLbl">Auto</span>
+      </button>
+    </div>
   </div>
 
-  <div class="lops-callout">
-    <span class="lops-ci" aria-hidden="true">↯</span>
-    <span>Lo que antes era "reentrenar" aquí es "reescribir las instrucciones". El <strong>prompt</strong> y el <strong>contexto</strong> son los artefactos centrales, no el modelo.</span>
+  <div class="lops-steps" role="tablist" aria-label="Pasos del ciclo LLMOps">
+    <button class="lops-step" type="button" data-step="modelo"      aria-selected="true" ><span class="n">1</span><span>Modelo</span></button>
+    <button class="lops-step" type="button" data-step="prompt"      aria-selected="false"><span class="n">2</span><span>Prompt</span></button>
+    <button class="lops-step" type="button" data-step="contexto"    aria-selected="false"><span class="n">3</span><span>Contexto</span></button>
+    <button class="lops-step" type="button" data-step="evaluar"     aria-selected="false"><span class="n">4</span><span>Evaluar</span></button>
+    <button class="lops-step" type="button" data-step="desplegar"   aria-selected="false"><span class="n">5</span><span>Desplegar</span></button>
+    <button class="lops-step" type="button" data-step="monitorizar" aria-selected="false"><span class="n">6</span><span>Monitorizar</span></button>
   </div>
 
-  <!-- Pipeline -->
-  <div class="lops-pipeline" role="tablist" aria-label="Pasos del ciclo LLMOps">
-    <button class="lops-pip lops-pip--active" data-step="1" role="tab" aria-selected="true" aria-controls="lops-pane-1">
-      <div class="lops-pip-n">1</div>
-      <div class="lops-pip-l">Modelo</div>
-    </button>
-    <div class="lops-pip-line" aria-hidden="true"></div>
-    <button class="lops-pip" data-step="2" role="tab" aria-selected="false" aria-controls="lops-pane-2">
-      <div class="lops-pip-n">2</div>
-      <div class="lops-pip-l">Prompt</div>
-    </button>
-    <div class="lops-pip-line" aria-hidden="true"></div>
-    <button class="lops-pip" data-step="3" role="tab" aria-selected="false" aria-controls="lops-pane-3">
-      <div class="lops-pip-n">3</div>
-      <div class="lops-pip-l">Contexto</div>
-    </button>
-    <div class="lops-pip-line" aria-hidden="true"></div>
-    <button class="lops-pip lops-pip--critical" data-step="4" role="tab" aria-selected="false" aria-controls="lops-pane-4">
-      <div class="lops-pip-n">4</div>
-      <div class="lops-pip-l">Evaluar</div>
-    </button>
-    <div class="lops-pip-line" aria-hidden="true"></div>
-    <button class="lops-pip" data-step="5" role="tab" aria-selected="false" aria-controls="lops-pane-5">
-      <div class="lops-pip-n">5</div>
-      <div class="lops-pip-l">Desplegar</div>
-    </button>
-    <div class="lops-pip-line" aria-hidden="true"></div>
-    <button class="lops-pip" data-step="6" role="tab" aria-selected="false" aria-controls="lops-pane-6">
-      <div class="lops-pip-n">6</div>
-      <div class="lops-pip-l">Monitorizar</div>
-    </button>
-  </div>
+  <div class="lops-body">
 
-  <!-- Detail panels -->
-  <div class="lops-stage">
+    <!-- SVG cycle diagram -->
+    <div class="lops-viz">
+      <svg data-mk="svg" viewBox="0 0 520 340" role="img" aria-label="Ciclo LLMOps — 6 pasos">
+        <defs>
+          <marker id="lops-ab" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0 0 L8 3 L0 6 Z" fill="#4a6cf7"/></marker>
+          <marker id="lops-at" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0 0 L8 3 L0 6 Z" fill="#26A69A"/></marker>
+          <marker id="lops-aa" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0 0 L8 3 L0 6 Z" fill="#FFB343"/></marker>
+          <marker id="lops-ag" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0 0 L8 3 L0 6 Z" fill="#22c55e"/></marker>
+        </defs>
 
-    <div class="lops-pane lops-pane--active" id="lops-pane-1" role="tabpanel">
-      <div class="lops-pane-title">Seleccionar modelo y proveedor</div>
-      <p>GPT-4o, Claude, Gemini, Llama (self-hosted), Mistral. Evalúas: capacidad para tu tarea, coste por token, latencia, límites de contexto, política de datos. La elección es operativa, no solo técnica.</p>
-      <div class="lops-tags">
-        <span class="lops-tag">Coste por token</span>
-        <span class="lops-tag">Ventana de contexto</span>
-        <span class="lops-tag">Política de privacidad</span>
-        <span class="lops-tag">Latencia</span>
+        <!-- Base orbit ring -->
+        <circle cx="260" cy="175" r="120" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="1.8"/>
+
+        <!-- Colored arc segments (always visible, clockwise) -->
+        <!-- Arc 5→0: blue  -->
+        <path d="M 164 103 A 120 120 0 0 1 245 56" fill="none" stroke="#4a6cf7" stroke-width="2.2" marker-end="url(#lops-ab)" opacity=".75"/>
+        <!-- Arc 0→1: teal  -->
+        <path d="M 275 56  A 120 120 0 0 1 356 103" fill="none" stroke="#26A69A" stroke-width="2.2" marker-end="url(#lops-at)" opacity=".75"/>
+        <!-- Arc 1→2: teal  -->
+        <path d="M 371 128 A 120 120 0 0 1 371 222" fill="none" stroke="#26A69A" stroke-width="2.2" marker-end="url(#lops-at)" opacity=".75"/>
+        <!-- Arc 2→3: amber -->
+        <path d="M 356 248 A 120 120 0 0 1 275 294" fill="none" stroke="#FFB343" stroke-width="2.2" marker-end="url(#lops-aa)" opacity=".75"/>
+        <!-- Arc 3→4: green -->
+        <path d="M 245 294 A 120 120 0 0 1 164 248" fill="none" stroke="#22c55e" stroke-width="2.2" marker-end="url(#lops-ag)" opacity=".75"/>
+        <!-- Arc 4→5: green -->
+        <path d="M 149 222 A 120 120 0 0 1 149 128" fill="none" stroke="#22c55e" stroke-width="2.2" marker-end="url(#lops-ag)" opacity=".75"/>
+
+        <!-- Nodes — JS translates each via data-idx -->
+        <g data-node="modelo"      data-idx="0" class="lops-station lops-station--blue"  tabindex="0" role="button" aria-label="Paso 1: Modelo">
+          <circle class="lops-dotNode" cx="260" cy="55"  r="22"/>
+          <text   class="lops-dotNum"  x="260" y="60"  text-anchor="middle">1</text>
+          <text   class="lops-dotLbl"  x="260" y="17"  text-anchor="middle">Modelo</text>
+        </g>
+
+        <g data-node="prompt"      data-idx="1" class="lops-station lops-station--teal"  tabindex="0" role="button" aria-label="Paso 2: Prompt">
+          <circle class="lops-dotNode" cx="364" cy="115" r="22"/>
+          <text   class="lops-dotNum"  x="364" y="120" text-anchor="middle">2</text>
+          <text   class="lops-dotLbl"  x="406" y="119" text-anchor="start">Prompt</text>
+        </g>
+
+        <g data-node="contexto"    data-idx="2" class="lops-station lops-station--teal"  tabindex="0" role="button" aria-label="Paso 3: Contexto">
+          <circle class="lops-dotNode" cx="364" cy="235" r="22"/>
+          <text   class="lops-dotNum"  x="364" y="240" text-anchor="middle">3</text>
+          <text   class="lops-dotLbl"  x="406" y="239" text-anchor="start">Contexto</text>
+        </g>
+
+        <g data-node="evaluar"     data-idx="3" class="lops-station lops-station--amber" tabindex="0" role="button" aria-label="Paso 4: Evaluar">
+          <circle class="lops-dotNode" cx="260" cy="295" r="25"/>
+          <text   class="lops-dotNum"  x="260" y="300" text-anchor="middle">4</text>
+          <text   class="lops-dotLbl"  x="260" y="332" text-anchor="middle">Evaluar</text>
+        </g>
+
+        <g data-node="desplegar"   data-idx="4" class="lops-station lops-station--green" tabindex="0" role="button" aria-label="Paso 5: Desplegar">
+          <circle class="lops-dotNode" cx="156" cy="235" r="22"/>
+          <text   class="lops-dotNum"  x="156" y="240" text-anchor="middle">5</text>
+          <text   class="lops-dotLbl"  x="114" y="239" text-anchor="end">Desplegar</text>
+        </g>
+
+        <g data-node="monitorizar" data-idx="5" class="lops-station lops-station--green" tabindex="0" role="button" aria-label="Paso 6: Monitorizar">
+          <circle class="lops-dotNode" cx="156" cy="115" r="22"/>
+          <text   class="lops-dotNum"  x="156" y="120" text-anchor="middle">6</text>
+          <text   class="lops-dotLbl"  x="114" y="119" text-anchor="end">Monitorizar</text>
+        </g>
+
+        <!-- Center label -->
+        <text x="260" y="168" text-anchor="middle" fill="rgba(255,255,255,.55)" font-size="18" font-weight="900" letter-spacing="-.5">6 pasos</text>
+        <text x="260" y="185" text-anchor="middle" fill="rgba(255,255,255,.28)" font-size="10">El prompt lo controla todo.</text>
+      </svg>
+
+      <div class="lops-hint">
+        <div class="lops-dot"></div>
+        <span>Pulsa cualquier nodo</span>
       </div>
     </div>
 
-    <div class="lops-pane" id="lops-pane-2" role="tabpanel" hidden>
-      <div class="lops-pane-title">Diseñar el system prompt</div>
-      <p>Es el código de tu sistema. Define el comportamiento, el tono, los límites y el formato de salida. Una instrucción mal formulada degrada el rendimiento igual que un bug. Se versiona, se testea y se despliega como cualquier artefacto de software.</p>
-      <div class="lops-tags">
-        <span class="lops-tag lops-tag--key">Artefacto central</span>
-        <span class="lops-tag">Versionado</span>
-        <span class="lops-tag">Tests de regresión</span>
-      </div>
-    </div>
-
-    <div class="lops-pane" id="lops-pane-3" role="tabpanel" hidden>
-      <div class="lops-pane-title">Construir el contexto <span class="lops-opt">si aplica RAG</span></div>
-      <p>Si el modelo necesita documentación interna o datos actualizados, se añade una capa de recuperación. Cómo se trocean los documentos, cómo se vectorizan y cómo se seleccionan por consulta determina directamente la calidad de la respuesta.</p>
-      <div class="lops-tags">
-        <span class="lops-tag">Chunking</span>
-        <span class="lops-tag">Embeddings</span>
-        <span class="lops-tag">Vector store</span>
-        <span class="lops-tag">Retrieval</span>
-      </div>
-    </div>
-
-    <div class="lops-pane" id="lops-pane-4" role="tabpanel" hidden>
-      <div class="lops-pane-title">Evaluar <span class="lops-badge">paso crítico</span></div>
-      <p>El paso más subestimado y el más decisivo. Como no puedes reentrenar el modelo para corregir un error, la única palanca de mejora es el prompt y el contexto. Sin una forma de medir no puedes iterar con criterio.</p>
-      <p>Tres enfoques complementarios: métricas automáticas, revisión humana sobre una muestra, y un modelo evaluador que puntúa respuestas según criterios definidos (LLM-as-judge).</p>
-      <div class="lops-tags">
-        <span class="lops-tag lops-tag--key">LLM-as-judge</span>
-        <span class="lops-tag lops-tag--key">Revisión humana</span>
-        <span class="lops-tag">Métricas automáticas</span>
-        <span class="lops-tag">Dataset de evaluación</span>
-      </div>
-    </div>
-
-    <div class="lops-pane" id="lops-pane-5" role="tabpanel" hidden>
-      <div class="lops-pane-title">Desplegar</div>
-      <p>Exposición vía API con control de versiones de prompts desde el primer día. Los cambios de prompt se despliegan igual que cambios de código: revisión, test y rollback posible si algo se rompe.</p>
-      <div class="lops-tags">
-        <span class="lops-tag">Versionado de prompts</span>
-        <span class="lops-tag">Control de coste</span>
-        <span class="lops-tag">Rate limiting</span>
-        <span class="lops-tag">Rollback</span>
-      </div>
-    </div>
-
-    <div class="lops-pane" id="lops-pane-6" role="tabpanel" hidden>
-      <div class="lops-pane-title">Monitorizar y mejorar el prompt</div>
-      <p>En producción el mundo cambia: los temas derivan, emergen casos que no estaban en los tests, el modelo del proveedor se actualiza. La mejora aquí es iterar sobre el prompt y el contexto. Un cambio de prompt puede romper el sistema silenciosamente si no hay evaluación automatizada.</p>
-      <div class="lops-tags">
-        <span class="lops-tag">Deriva semántica</span>
-        <span class="lops-tag">Feedback de usuarios</span>
-        <span class="lops-tag">Evaluación continua</span>
-        <span class="lops-tag">A/B de prompts</span>
+    <!-- Detail panel -->
+    <div class="lops-panel" aria-live="polite" data-mk="panel">
+      <h4 data-mk="h">Paso</h4>
+      <p  data-mk="p">Descripción</p>
+      <div class="lops-cards">
+        <div class="lops-card"><b>Idea clave</b><span data-mk="clave">...</span></div>
+        <div class="lops-card"><b>Lo que controlas</b><span data-mk="controlas">...</span></div>
+        <div class="lops-card"><b>Si falla</b><span data-mk="falla">...</span></div>
       </div>
     </div>
 
   </div>
 
-</div>
+  <script>
+  (function () {
+    const AUTO_ICONS = {
+      play:  '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>',
+      pause: '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg>'
+    };
 
-<style>
-.lops-wrap, .lops-wrap * { box-sizing: border-box; }
+    const STEPS = [
+      { id:"modelo",      title:"1 · Modelo y proveedor",   desc:"Seleccionas el modelo base y el proveedor. Es la única decisión que no iteras continuamente: el resto del ciclo opera sobre ella.",                                                          clave:"La elección no es técnica sino operativa: privacidad, coste por token y latencia pesan tanto como la capacidad del modelo.",                               controlas:"Proveedor, modelo base, temperatura, ventana de contexto.",                           falla:"Un modelo con política de privacidad inadecuada o coste insostenible invalida el proyecto antes de empezar." },
+      { id:"prompt",      title:"2 · System prompt",        desc:"Diseñas las instrucciones que definen el comportamiento del sistema. Es el artefacto central: define tono, límites y formato de salida.",                                                      clave:"El prompt es el código de tu sistema. Lo que antes era «reentrenar» aquí es «reescribir las instrucciones».",                                              controlas:"System prompt, instrucciones de tarea, formato de salida, guardrails.",               falla:"Una instrucción mal formulada degrada el rendimiento igual que un bug. Sin versionarlo no puedes revertir." },
+      { id:"contexto",    title:"3 · Contexto (RAG)",       desc:"Si el modelo necesita información interna o actualizada, añades una capa de recuperación. Cómo se trocea y selecciona determina la calidad de la respuesta.",                                  clave:"La calidad del retrieval importa más que la capacidad del modelo en la mayoría de aplicaciones RAG.",                                                       controlas:"Chunking, embeddings, vector store, estrategia de retrieval.",                        falla:"Un retrieval pobre devuelve contexto irrelevante y el modelo alucina aunque el prompt sea perfecto." },
+      { id:"evaluar",     title:"4 · Evaluar — paso crítico", desc:"Mides si el sistema funciona según los criterios definidos. Sin evaluación no puedes iterar con criterio: no sabes si un cambio de prompt mejoró o empeoró.",                              clave:"Construir el sistema de evaluación antes que el sistema en sí es la práctica más subestimada del campo.",                                                   controlas:"Dataset de evaluación, criterios de calidad, LLM-as-judge, revisión humana.",        falla:"Sin evaluación iteras a ciegas: los cambios de prompt pueden mejorar un caso y romper cinco sin que lo notes." },
+      { id:"desplegar",   title:"5 · Desplegar",             desc:"Expones el sistema vía API con control de versiones del prompt. Los cambios se despliegan igual que cambios de código: revisión, test y rollback.",                                          clave:"Los prompts son artefactos de software. Versionarlos desde el primer día evita regresiones silenciosas.",                                                  controlas:"Versión del prompt, rate limiting, control de coste, rollback.",                      falla:"Un cambio de prompt sin control de versiones puede romper el sistema sin forma de volver atrás." },
+      { id:"monitorizar", title:"6 · Monitorizar e iterar", desc:"En producción el mundo cambia: los temas derivan, emergen casos nuevos, el modelo del proveedor se actualiza. Iteras sobre el prompt y el contexto.",                                         clave:"El ciclo vuelve al prompt. La mejora en LLMOps es reescribir instrucciones con evidencia de producción.",                                                   controlas:"Deriva semántica, feedback de usuarios, A/B de prompts, evaluación continua.",        falla:"Sin monitorización la degradación es silenciosa: el sistema funciona pero decide peor con el tiempo." }
+    ];
 
-.lops-wrap {
-  --la: var(--md-primary-fg-color, #26A69A);
-  --lb: #324AB2;
-  --lg: var(--md-accent-fg-color, #FFB343);
-  --lbg: var(--md-default-bg-color, #fff);
-  --lfg: var(--md-default-fg-color, #0f172a);
-  --lbd: rgba(15,23,42,.14);
-  --lmut: rgba(15,23,42,.52);
-  --lf: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+    const N = STEPS.length;
+    const byId = Object.fromEntries(STEPS.map((s,i) => [s.id, i]));
 
-  display: grid;
-  gap: 14px;
-  width: 100%;
-  padding: clamp(14px,2vw,22px);
-  border: 1px solid var(--lbd);
-  border-radius: 20px;
-  background:
-    radial-gradient(120% 130% at 6% 0%, color-mix(in srgb,var(--la) 8%,transparent), transparent 50%),
-    radial-gradient(80% 110% at 94% 100%, color-mix(in srgb,var(--lb) 8%,transparent), transparent 54%),
-    var(--lbg);
-  color: var(--lfg);
-  font-family: var(--lf);
-  -webkit-font-smoothing: antialiased;
-}
+    function prefersReduced() {
+      return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    }
 
-[data-md-color-scheme="slate"] .lops-wrap {
-  --lbg: var(--md-default-bg-color, #0f172a);
-  --lfg: var(--md-default-fg-color, #e2e8f0);
-  --lbd: rgba(226,232,240,.14);
-  --lmut: rgba(226,232,240,.55);
-}
+    function init(root) {
+      if (!root || root.__lops_init) return;
+      root.__lops_init = true;
 
-.lops-hd { display: grid; gap: 4px; }
-.lops-title { font-size: clamp(17px,2.2vw,24px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
-.lops-sub   { font-size: 14px; color: var(--lmut); line-height: 1.5; max-width: 72ch; }
+      const stepBtns  = Array.from(root.querySelectorAll('.lops-step'));
+      const panelH    = root.querySelector('[data-mk="h"]');
+      const panelP    = root.querySelector('[data-mk="p"]');
+      const panelCl   = root.querySelector('[data-mk="clave"]');
+      const panelCo   = root.querySelector('[data-mk="controlas"]');
+      const panelFa   = root.querySelector('[data-mk="falla"]');
+      const stations  = Array.from(root.querySelectorAll('[data-node]'));
+      const autoBtn   = root.querySelector('[data-mk="auto"]');
+      const autoIco   = root.querySelector('[data-mk="autoIco"]');
+      const autoLbl   = root.querySelector('[data-mk="autoLbl"]');
 
-.lops-callout {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 11px 13px;
-  border-radius: 12px;
-  border: 1px solid color-mix(in srgb, var(--lb) 28%, var(--lbd));
-  background: color-mix(in srgb, var(--lb) 7%, var(--lbg));
-  font-size: 13.5px;
-  line-height: 1.5;
-}
+      let timer = null, inView = true;
 
-.lops-ci { font-size: 17px; font-weight: 900; color: color-mix(in srgb,var(--lb) 70%,var(--lfg)); flex-shrink: 0; line-height: 1.3; }
-
-/* Pipeline */
-.lops-pipeline {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0;
-  padding: 12px 14px;
-  border: 1px solid var(--lbd);
-  border-radius: 14px;
-  background: color-mix(in srgb, var(--lbg) 90%, #0f172a 10%);
-}
-
-.lops-pip {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-  padding: 8px 12px;
-  border-radius: 12px;
-  border: 1px solid transparent;
-  background: none;
-  cursor: pointer;
-  font: inherit;
-  color: var(--lmut);
-  transition: background .15s, border-color .15s, color .15s;
-  flex-shrink: 0;
-}
-
-.lops-pip:hover { background: color-mix(in srgb,var(--la) 8%,transparent); color: var(--lfg); }
-
-.lops-pip--active {
-  border-color: color-mix(in srgb,var(--la) 44%,var(--lbd));
-  background: color-mix(in srgb,var(--la) 10%,var(--lbg));
-  color: var(--lfg);
-}
-
-.lops-pip--active .lops-pip-n {
-  background: var(--la);
-  color: #fff;
-  border-color: var(--la);
-}
-
-.lops-pip--critical .lops-pip-n {
-  border-color: color-mix(in srgb,var(--lg) 60%,var(--lbd));
-  background: color-mix(in srgb,var(--lg) 16%,var(--lbg));
-}
-
-.lops-pip--critical.lops-pip--active .lops-pip-n {
-  background: var(--lg);
-  border-color: var(--lg);
-  color: #000;
-}
-
-.lops-pip-n {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  border: 1px solid var(--lbd);
-  background: color-mix(in srgb,var(--lbg) 76%,#0f172a 24%);
-  display: grid;
-  place-items: center;
-  font-size: 13px;
-  font-weight: 900;
-  transition: background .15s, color .15s, border-color .15s;
-}
-
-.lops-pip-l { font-size: 11px; font-weight: 800; white-space: nowrap; }
-
-.lops-pip-line {
-  flex: 1;
-  height: 1px;
-  background: var(--lbd);
-  min-width: 6px;
-}
-
-/* Stage */
-.lops-stage { position: relative; }
-
-.lops-pane {
-  border: 1px solid var(--lbd);
-  border-radius: 14px;
-  padding: 16px 18px;
-  background: color-mix(in srgb, var(--lbg) 92%, #0f172a 8%);
-  display: grid;
-  gap: 10px;
-  animation: lopsIn .25s ease both;
-}
-
-.lops-pane[hidden] { display: none; }
-
-@keyframes lopsIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-.lops-pane-title {
-  font-size: 15px;
-  font-weight: 900;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.lops-pane p { margin: 0; font-size: 13.5px; line-height: 1.55; color: var(--lmut); }
-
-.lops-opt {
-  font-size: 11px;
-  font-weight: 700;
-  padding: 2px 7px;
-  border-radius: 999px;
-  border: 1px solid var(--lbd);
-  color: var(--lmut);
-  background: color-mix(in srgb,var(--lbg) 88%,transparent);
-}
-
-.lops-badge {
-  font-size: 10px;
-  font-weight: 900;
-  padding: 2px 8px;
-  border-radius: 999px;
-  border: 1px solid color-mix(in srgb,var(--lg) 40%,var(--lbd));
-  background: color-mix(in srgb,var(--lg) 14%,var(--lbg));
-  color: color-mix(in srgb,var(--lg) 70%,var(--lfg));
-  text-transform: uppercase;
-  letter-spacing: .05em;
-}
-
-.lops-tags { display: flex; flex-wrap: wrap; gap: 5px; }
-
-.lops-tag {
-  padding: 3px 9px;
-  border-radius: 999px;
-  border: 1px solid var(--lbd);
-  background: color-mix(in srgb,var(--lbg) 86%,transparent);
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.lops-tag--key {
-  border-color: color-mix(in srgb,var(--la) 36%,var(--lbd));
-  background: color-mix(in srgb,var(--la) 9%,var(--lbg));
-}
-
-@media (max-width: 560px) {
-  .lops-pipeline { gap: 2px; padding: 10px; }
-  .lops-pip { padding: 6px 8px; }
-  .lops-pip-l { display: none; }
-  .lops-pip-line { min-width: 4px; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .lops-pane { animation: none; }
-  .lops-pip  { transition: none; }
-}
-</style>
-
-<script>
-(function () {
-  function boot() {
-    document.querySelectorAll('[data-demo="02-llmops"]').forEach(root => {
-      if (root.dataset.lopsReady) return;
-      root.dataset.lopsReady = '1';
-
-      const pips   = Array.from(root.querySelectorAll('.lops-pip'));
-      const panes  = Array.from(root.querySelectorAll('.lops-pane'));
-
-      function activate(idx) {
-        pips.forEach((p, i) => {
-          p.classList.toggle('lops-pip--active', i === idx);
-          p.setAttribute('aria-selected', i === idx ? 'true' : 'false');
-        });
-        panes.forEach((p, i) => {
-          const on = i === idx;
-          if (on) {
-            p.style.animation = 'none';
-            void p.offsetWidth;
-            p.style.animation = '';
-          }
-          p.hidden = !on;
-        });
+      function stopTimer() { if (timer) { clearInterval(timer); timer = null; } }
+      function startTimer() {
+        stopTimer();
+        if (!root.__lops_auto || prefersReduced() || !inView) return;
+        const ms = Math.max(1400, parseInt(root.getAttribute('data-interval') || '4200', 10));
+        timer = setInterval(() => next(+1), ms);
       }
 
-      pips.forEach((pip, idx) => {
-        pip.addEventListener('click', () => activate(idx));
-        pip.addEventListener('keydown', e => {
-          if (e.key === 'ArrowRight') { e.preventDefault(); activate(Math.min(idx + 1, pips.length - 1)); pips[Math.min(idx + 1, pips.length - 1)].focus(); }
-          if (e.key === 'ArrowLeft')  { e.preventDefault(); activate(Math.max(idx - 1, 0)); pips[Math.max(idx - 1, 0)].focus(); }
+      function setAuto(on) {
+        root.__lops_auto = !!on;
+        if (autoBtn) autoBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+        if (autoLbl) autoLbl.textContent = on ? 'Auto' : 'Manual';
+        if (autoIco) autoIco.innerHTML = on ? AUTO_ICONS.pause : AUTO_ICONS.play;
+        if (on) startTimer(); else stopTimer();
+      }
+
+      function setActive(id, opts) {
+        const silent = !!(opts && opts.silent);
+        const idx = byId[id] ?? 0;
+        const s = STEPS[idx] || STEPS[0];
+
+        stepBtns.forEach(b => b.setAttribute('aria-selected', b.getAttribute('data-step') === id ? 'true' : 'false'));
+        stations.forEach(g => g.classList.toggle('is-active', g.getAttribute('data-node') === id));
+
+        if (panelH)  panelH.textContent  = s.title;
+        if (panelP)  panelP.textContent  = s.desc;
+        if (panelCl) panelCl.textContent = s.clave;
+        if (panelCo) panelCo.textContent = s.controlas;
+        if (panelFa) panelFa.textContent = s.falla;
+
+        root.dataset.active = id;
+        if (!silent) setAuto(false);
+      }
+
+      function next(delta) {
+        const cur = byId[root.dataset.active || STEPS[0].id] ?? 0;
+        setActive(STEPS[(cur + delta + N) % N].id, { silent: true });
+      }
+
+      stepBtns.forEach(b => {
+        b.addEventListener('click', () => setActive(b.getAttribute('data-step')));
+        b.addEventListener('keydown', e => {
+          if (e.key === 'ArrowRight') { e.preventDefault(); next(+1); }
+          if (e.key === 'ArrowLeft')  { e.preventDefault(); next(-1); }
         });
       });
-    });
-  }
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
-  else boot();
-  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
-})();
-</script>
+      stations.forEach(g => {
+        const id = g.getAttribute('data-node');
+        g.addEventListener('click', () => setActive(id));
+        g.addEventListener('keydown', e => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActive(id); }
+        });
+      });
+
+      if (autoBtn) autoBtn.addEventListener('click', () => setAuto(!root.__lops_auto));
+
+      let resumeOnLeave = false;
+      root.addEventListener('pointerenter', () => { resumeOnLeave = !!root.__lops_auto; stopTimer(); });
+      root.addEventListener('pointerleave', () => { if (resumeOnLeave) startTimer(); });
+      root.addEventListener('focusin',  () => { resumeOnLeave = !!root.__lops_auto; stopTimer(); });
+      root.addEventListener('focusout', () => { if (resumeOnLeave) startTimer(); });
+
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(entries => {
+          for (const ent of entries) {
+            if (ent.target !== root) continue;
+            inView = ent.isIntersecting;
+            if (!inView) stopTimer(); else startTimer();
+          }
+        }, { threshold: 0.15 }).observe(root);
+      }
+
+      const def = root.getAttribute('data-default') || STEPS[0].id;
+      setActive(def, { silent: true });
+      const wantAuto = (root.getAttribute('data-autoplay') || 'true') !== 'false';
+      setAuto(wantAuto && !prefersReduced());
+    }
+
+    function boot() {
+      document.querySelectorAll('.lops-demo[data-mk="root"]').forEach(init);
+    }
+
+    if (window.document$ && typeof window.document$.subscribe === 'function') window.document$.subscribe(boot);
+    else if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+    else boot();
+  })();
+  </script>
+</div>

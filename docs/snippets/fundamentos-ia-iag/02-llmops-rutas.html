@@ -1,0 +1,311 @@
+<div class="rut-wrap" data-demo="02-llmops-rutas">
+
+  <div class="rut-hd">
+    <div class="rut-title">Dos rutas para poner un LLM en producción</div>
+    <div class="rut-sub">El ciclo LLMOps es el mismo en ambos casos. Lo que cambia es qué capas de la pila gestionas tú.</div>
+  </div>
+
+  <div class="rut-cols">
+
+    <!-- API externa -->
+    <div class="rut-col rut-col--api">
+      <div class="rut-col-hd">
+        <div class="rut-col-label">API externa</div>
+        <div class="rut-providers">
+          <span class="rut-provider">OpenAI</span>
+          <span class="rut-provider">Anthropic</span>
+          <span class="rut-provider">Google</span>
+          <span class="rut-provider">Mistral API</span>
+        </div>
+      </div>
+
+      <div class="rut-stack">
+        <div class="rut-layer rut-layer--ext">
+          <div class="rut-layer-lbl">Lo gestiona el proveedor</div>
+          <div class="rut-layer-items">
+            <span class="rut-item rut-item--ext">Pesos del modelo</span>
+            <span class="rut-item rut-item--ext">Entrenamiento</span>
+            <span class="rut-item rut-item--ext">Infraestructura GPU</span>
+            <span class="rut-item rut-item--ext">Servidor de inferencia</span>
+            <span class="rut-item rut-item--ext">Actualizaciones del modelo</span>
+          </div>
+        </div>
+        <div class="rut-layer rut-layer--own">
+          <div class="rut-layer-lbl">Lo gestionas tú</div>
+          <div class="rut-layer-items">
+            <span class="rut-item rut-item--own">System prompt</span>
+            <span class="rut-item rut-item--own">Contexto y RAG</span>
+            <span class="rut-item rut-item--own">Evaluación</span>
+            <span class="rut-item rut-item--own">Monitorización</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rut-facts">
+        <div class="rut-fact">
+          <span class="rut-fact-k">Coste</span>
+          <span class="rut-fact-v">Variable — pagas por token</span>
+        </div>
+        <div class="rut-fact rut-fact--warn">
+          <span class="rut-fact-k">Datos</span>
+          <span class="rut-fact-v">Salen de tu infra en cada llamada</span>
+        </div>
+        <div class="rut-fact">
+          <span class="rut-fact-k">Control del modelo</span>
+          <span class="rut-fact-v">Ninguno — el proveedor decide versión y cambios</span>
+        </div>
+        <div class="rut-fact rut-fact--good">
+          <span class="rut-fact-k">Velocidad de arranque</span>
+          <span class="rut-fact-v">Alta — sin infraestructura propia</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Open-source propio -->
+    <div class="rut-col rut-col--oss">
+      <div class="rut-col-hd">
+        <div class="rut-col-label">Open-source propio</div>
+        <div class="rut-providers">
+          <span class="rut-provider rut-provider--oss">Llama</span>
+          <span class="rut-provider rut-provider--oss">Mistral</span>
+          <span class="rut-provider rut-provider--oss">Deepseek</span>
+          <span class="rut-provider rut-provider--oss">Qwen</span>
+          <span class="rut-provider rut-provider--oss">Phi</span>
+        </div>
+      </div>
+
+      <div class="rut-stack">
+        <div class="rut-layer rut-layer--own rut-layer--full">
+          <div class="rut-layer-lbl">Lo gestionas tú — todo</div>
+          <div class="rut-layer-items">
+            <span class="rut-item rut-item--own">System prompt</span>
+            <span class="rut-item rut-item--own">Contexto y RAG</span>
+            <span class="rut-item rut-item--own">Evaluación</span>
+            <span class="rut-item rut-item--own">Monitorización</span>
+            <span class="rut-item rut-item--ops">Pesos del modelo</span>
+            <span class="rut-item rut-item--ops">Servidor de inferencia</span>
+            <span class="rut-item rut-item--ops">GPUs / hardware</span>
+            <span class="rut-item rut-item--ops">Escalado y actualizaciones</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rut-facts">
+        <div class="rut-fact rut-fact--good">
+          <span class="rut-fact-k">Coste</span>
+          <span class="rut-fact-v">Fijo — hardware propio o cloud dedicado</span>
+        </div>
+        <div class="rut-fact rut-fact--good">
+          <span class="rut-fact-k">Datos</span>
+          <span class="rut-fact-v">No salen de tu infraestructura</span>
+        </div>
+        <div class="rut-fact rut-fact--good">
+          <span class="rut-fact-k">Control del modelo</span>
+          <span class="rut-fact-v">Total — versión, fine-tuning, configuración</span>
+        </div>
+        <div class="rut-fact rut-fact--warn">
+          <span class="rut-fact-k">Ops adicionales</span>
+          <span class="rut-fact-v">Alta — servidor, escalado, hardware</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="rut-footer">
+    La elección no es técnica sino de negocio: velocidad de arranque, volumen de llamadas, requisitos de privacidad y coste a escala. Muchos equipos empiezan con API externa y migran partes a open-source cuando el volumen lo justifica o la regulación lo exige.
+  </div>
+
+</div>
+
+<style>
+.rut-wrap, .rut-wrap * { box-sizing: border-box; }
+
+.rut-wrap {
+  --ra: var(--md-primary-fg-color, #26A69A);
+  --rb: #324AB2;
+  --rg: var(--md-accent-fg-color, #FFB343);
+  --rr: #ef4444;
+  --rbg: var(--md-default-bg-color, #fff);
+  --rfg: var(--md-default-fg-color, #0f172a);
+  --rbd: rgba(15,23,42,.14);
+  --rmut: rgba(15,23,42,.52);
+  --rf: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid;
+  gap: 14px;
+  width: 100%;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--rbd);
+  border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 0% 0%, color-mix(in srgb,var(--rb) 7%,transparent), transparent 55%),
+    radial-gradient(110% 130% at 100% 0%, color-mix(in srgb,var(--ra) 7%,transparent), transparent 55%),
+    var(--rbg);
+  color: var(--rfg);
+  font-family: var(--rf);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-md-color-scheme="slate"] .rut-wrap {
+  --rbg: var(--md-default-bg-color, #0f172a);
+  --rfg: var(--md-default-fg-color, #e2e8f0);
+  --rbd: rgba(226,232,240,.14);
+  --rmut: rgba(226,232,240,.55);
+}
+
+.rut-hd { display: grid; gap: 4px; }
+.rut-title { font-size: clamp(17px,2.2vw,24px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.rut-sub   { font-size: 14px; color: var(--rmut); line-height: 1.5; }
+
+/* Columns */
+.rut-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.rut-col {
+  border: 1px solid var(--rbd);
+  border-radius: 16px;
+  padding: 14px;
+  display: grid;
+  gap: 12px;
+  align-content: start;
+  background: color-mix(in srgb, var(--rbg) 91%, #0f172a 9%);
+}
+
+.rut-col--api {
+  border-color: color-mix(in srgb, var(--rb) 30%, var(--rbd));
+  background: linear-gradient(160deg, color-mix(in srgb,var(--rb) 6%,transparent), transparent 55%),
+    color-mix(in srgb, var(--rbg) 91%, #0f172a 9%);
+}
+
+.rut-col--oss {
+  border-color: color-mix(in srgb, var(--ra) 30%, var(--rbd));
+  background: linear-gradient(160deg, color-mix(in srgb,var(--ra) 6%,transparent), transparent 55%),
+    color-mix(in srgb, var(--rbg) 91%, #0f172a 9%);
+}
+
+.rut-col-hd { display: grid; gap: 8px; }
+
+.rut-col-label { font-size: 15px; font-weight: 900; }
+
+.rut-providers { display: flex; flex-wrap: wrap; gap: 5px; }
+
+.rut-provider {
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--rb) 30%, var(--rbd));
+  background: color-mix(in srgb, var(--rb) 8%, var(--rbg));
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.rut-provider--oss {
+  border-color: color-mix(in srgb, var(--ra) 30%, var(--rbd));
+  background: color-mix(in srgb, var(--ra) 8%, var(--rbg));
+}
+
+/* Stack */
+.rut-stack { display: grid; gap: 6px; }
+
+.rut-layer {
+  border: 1px solid var(--rbd);
+  border-radius: 12px;
+  padding: 10px 12px;
+  display: grid;
+  gap: 7px;
+  background: color-mix(in srgb, var(--rbg) 88%, transparent);
+}
+
+.rut-layer--ext {
+  border-color: color-mix(in srgb, var(--rmut) 30%, var(--rbd));
+  background: color-mix(in srgb, var(--rbg) 84%, #0f172a 16%);
+}
+
+.rut-layer--own {
+  border-color: color-mix(in srgb, var(--ra) 30%, var(--rbd));
+  background: color-mix(in srgb, var(--ra) 5%, var(--rbg));
+}
+
+.rut-layer--full { background: color-mix(in srgb, var(--ra) 5%, var(--rbg)); }
+
+.rut-layer-lbl {
+  font-size: 10.5px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--rmut);
+}
+
+.rut-layer-items { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.rut-item {
+  padding: 3px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--rbd);
+  font-size: 12px;
+  font-weight: 700;
+  background: color-mix(in srgb, var(--rbg) 84%, transparent);
+}
+
+.rut-item--ext {
+  color: var(--rmut);
+  border-color: var(--rbd);
+  background: color-mix(in srgb, var(--rbg) 78%, #0f172a 22%);
+}
+
+.rut-item--own {
+  border-color: color-mix(in srgb, var(--ra) 36%, var(--rbd));
+  background: color-mix(in srgb, var(--ra) 9%, var(--rbg));
+}
+
+.rut-item--ops {
+  border-color: color-mix(in srgb, var(--rg) 36%, var(--rbd));
+  background: color-mix(in srgb, var(--rg) 8%, var(--rbg));
+}
+
+/* Facts */
+.rut-facts { display: grid; gap: 5px; }
+
+.rut-fact {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--rbd);
+  background: color-mix(in srgb, var(--rbg) 90%, transparent);
+  font-size: 12.5px;
+  align-items: start;
+}
+
+.rut-fact--good {
+  border-color: color-mix(in srgb, var(--ra) 28%, var(--rbd));
+  background: color-mix(in srgb, var(--ra) 6%, var(--rbg));
+}
+
+.rut-fact--warn {
+  border-color: color-mix(in srgb, var(--rr) 22%, var(--rbd));
+  background: color-mix(in srgb, var(--rr) 5%, var(--rbg));
+}
+
+.rut-fact-k { font-weight: 900; color: var(--rfg); }
+.rut-fact-v { color: var(--rmut); line-height: 1.4; }
+
+/* Footer */
+.rut-footer {
+  font-size: 13px;
+  color: var(--rmut);
+  line-height: 1.55;
+  font-style: italic;
+  border-left: 3px solid color-mix(in srgb, var(--ra) 40%, transparent);
+  padding-left: 12px;
+}
+
+@media (max-width: 600px) {
+  .rut-cols { grid-template-columns: 1fr; }
+  .rut-fact { grid-template-columns: 1fr; gap: 2px; }
+}
+</style>

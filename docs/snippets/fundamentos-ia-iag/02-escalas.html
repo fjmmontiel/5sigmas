@@ -1,0 +1,446 @@
+<div class="sc-wrap" data-demo="02-escalas">
+
+  <div class="sc-hd">
+    <div class="sc-title">Leyes de escala: cuando la cantidad se convierte en calidad</div>
+    <div class="sc-sub">Rendimiento y escala siguen una relación predecible. Lo inesperado fue que a cierta escala emergieran capacidades que nadie había programado. Selecciona un modelo para verlas.</div>
+  </div>
+
+  <div class="sc-levers">
+    <div class="sc-lever sc-lever--a">
+      <div class="sc-lever-k">Parámetros</div>
+      <p>Capacidad del modelo para almacenar y combinar patrones aprendidos durante el entrenamiento.</p>
+    </div>
+    <div class="sc-lever sc-lever--b">
+      <div class="sc-lever-k">Datos</div>
+      <p>Volumen y diversidad del texto del que emerge la señal de aprendizaje. Más datos amplían el rango de conocimiento.</p>
+    </div>
+    <div class="sc-lever sc-lever--c">
+      <div class="sc-lever-k">Cómputo</div>
+      <p>Potencia de cálculo total invertida. Los tres factores deben escalar juntos en la proporción correcta.</p>
+    </div>
+  </div>
+
+  <div class="sc-prog" role="group" aria-label="Progresión de escala de modelos">
+    <button class="sc-pt" data-sc="gpt1" aria-pressed="false">
+      <div class="sc-pt-track"><div class="sc-pt-bar" style="width:12%"></div></div>
+      <div class="sc-pt-name">GPT-1</div>
+      <div class="sc-pt-meta">117 M parámetros · 2018</div>
+    </button>
+    <button class="sc-pt" data-sc="gpt2" aria-pressed="false">
+      <div class="sc-pt-track"><div class="sc-pt-bar" style="width:34%"></div></div>
+      <div class="sc-pt-name">GPT-2</div>
+      <div class="sc-pt-meta">1,5 B parámetros · 2019</div>
+    </button>
+    <div class="sc-threshold" aria-hidden="true">
+      <div class="sc-thr-line"></div>
+      <div class="sc-thr-badge">umbral emergente</div>
+      <div class="sc-thr-line"></div>
+    </div>
+    <button class="sc-pt sc-pt--hl" data-sc="gpt3" aria-pressed="true">
+      <div class="sc-pt-track"><div class="sc-pt-bar sc-pt-bar--hl" style="width:70%"></div></div>
+      <div class="sc-pt-name">GPT-3 <span class="sc-pt-badge">emergente</span></div>
+      <div class="sc-pt-meta">175 B parámetros · 2020</div>
+    </button>
+    <button class="sc-pt" data-sc="hoy" aria-pressed="false">
+      <div class="sc-pt-track"><div class="sc-pt-bar sc-pt-bar--max" style="width:100%"></div></div>
+      <div class="sc-pt-name">Modelos actuales</div>
+      <div class="sc-pt-meta">200 B – 1 T+ · 2023–hoy</div>
+    </button>
+  </div>
+
+  <div class="sc-detail" id="sc-detail" aria-live="polite"></div>
+
+</div>
+
+<script>
+(function () {
+  const DATA = {
+    gpt1: {
+      era: 'Primera generación (2018)',
+      desc: 'GPT-1 demostró que el aprendizaje auto-supervisado sobre texto funciona. Podía completar frases y generar párrafos coherentes a corto plazo, pero las capacidades eran estrechas y dependían fuertemente del formato de la entrada.',
+      caps: [
+        { text: 'Completar texto corto', emergent: false },
+        { text: 'Resumir con contexto limitado', emergent: false },
+        { text: 'Clasificación básica con formato explícito', emergent: false },
+      ],
+      missing: 'Sin instrucciones en lenguaje natural, sin aritmética, sin traducción robusta, sin código.'
+    },
+    gpt2: {
+      era: 'Escala inicial (2019)',
+      desc: 'Con 1,5B de parámetros, GPT-2 generaba párrafos mucho más coherentes y podía mantener el hilo de un tema durante más texto. Mejoró cualitativamente, pero las capacidades eran aún el resultado de completar patrones aprendidos, no de generalizar a nuevas tareas.',
+      caps: [
+        { text: 'Generación de párrafos coherentes', emergent: false },
+        { text: 'Resumen básico de textos cortos', emergent: false },
+        { text: 'Respuesta a preguntas simples con contexto en el prompt', emergent: false },
+      ],
+      missing: 'Aún sin few-shot learning, sin aritmética fiable, sin seguimiento de instrucciones complejas.'
+    },
+    gpt3: {
+      era: 'Umbral de capacidades emergentes (2020)',
+      desc: 'GPT-3 fue el primer modelo en el que aparecieron capacidades que nadie había programado explícitamente. A 175B de parámetros, el modelo generalizó a tareas nuevas sin reentrenamiento, usando solo ejemplos en el prompt.',
+      caps: [
+        { text: 'Few-shot learning: generaliza con 2–5 ejemplos en el prompt', emergent: true },
+        { text: 'Aritmética básica sin entrenamiento específico', emergent: true },
+        { text: 'Traducción entre idiomas', emergent: true },
+        { text: 'Síntesis de código a partir de descripciones', emergent: true },
+        { text: 'Seguimiento de instrucciones en lenguaje natural', emergent: true },
+        { text: 'Resumen, clasificación y extracción de información', emergent: false },
+      ],
+      missing: null
+    },
+    hoy: {
+      era: 'Modelos fundacionales actuales (2023–hoy)',
+      desc: 'Los modelos actuales combinan escala masiva con ajuste fino mediante feedback humano (RLHF). El resultado son sistemas que siguen instrucciones complejas con alta fidelidad, razonan en múltiples pasos y se integran con herramientas externas.',
+      caps: [
+        { text: 'Razonamiento multi-paso con cadena de pensamiento', emergent: false },
+        { text: 'Instrucciones complejas de alta fidelidad', emergent: false },
+        { text: 'Programación avanzada (debug, refactor, diseño de sistemas)', emergent: false },
+        { text: 'Entrada multimodal: texto + imágenes + documentos', emergent: false },
+        { text: 'Uso de herramientas externas (function calling, APIs)', emergent: false },
+        { text: 'Seguimiento de instrucciones de alta fidelidad (via RLHF en entrenamiento)', emergent: false },
+      ],
+      missing: null
+    }
+  };
+
+  function render(root, key) {
+    const d = DATA[key];
+    if (!d) return;
+    const panel = root.querySelector('#sc-detail');
+    const missingHtml = d.missing
+      ? `<div class="sc-missing">${d.missing}</div>`
+      : '';
+    panel.innerHTML = `
+      <div class="sc-det-era">${d.era}</div>
+      <p class="sc-det-desc">${d.desc}</p>
+      <div class="sc-caps-grid">
+        ${d.caps.map(c => `
+          <div class="sc-cap${c.emergent ? ' sc-cap--em' : ''}">
+            ${c.emergent ? '<span class="sc-cap-star" aria-label="capacidad emergente">✦</span>' : ''}
+            ${c.text}
+          </div>
+        `).join('')}
+      </div>
+      ${missingHtml}
+    `;
+  }
+
+  function initRoot(root) {
+    if (root.dataset.scReady === '1') return;
+    root.dataset.scReady = '1';
+    const pts = Array.from(root.querySelectorAll('[data-sc]'));
+    function activate(key) {
+      pts.forEach(p => {
+        const on = p.getAttribute('data-sc') === key;
+        p.setAttribute('aria-pressed', on ? 'true' : 'false');
+        p.classList.toggle('sc-pt--active', on);
+      });
+      render(root, key);
+    }
+    pts.forEach(pt => {
+      pt.addEventListener('click', () => activate(pt.getAttribute('data-sc')));
+    });
+    const initial = (pts.find(p => p.getAttribute('aria-pressed') === 'true') || pts[0]).getAttribute('data-sc');
+    activate(initial);
+  }
+
+  function boot() {
+    document.querySelectorAll('[data-demo="02-escalas"]').forEach(initRoot);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
+  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
+})();
+</script>
+
+<style>
+.sc-wrap, .sc-wrap * { box-sizing: border-box; }
+
+.sc-wrap {
+  --sa: var(--md-primary-fg-color, #26A69A);
+  --sb: #324AB2;
+  --sg: var(--md-accent-fg-color, #FFB343);
+  --sp: #7c3aed;
+  --sbg: var(--md-default-bg-color, #fff);
+  --sfg: var(--md-default-fg-color, #0f172a);
+  --sbd: rgba(15,23,42,.16);
+  --smut: rgba(15,23,42,.60);
+  --sf: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid;
+  gap: 12px;
+  width: 100%;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--sbd);
+  border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 10% 0%, color-mix(in srgb,var(--sp) 8%,transparent), transparent 52%),
+    radial-gradient(80% 110% at 90% 0%, color-mix(in srgb,var(--sg) 8%,transparent), transparent 54%),
+    var(--sbg);
+  color: var(--sfg);
+  font-family: var(--sf);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-md-color-scheme="slate"] .sc-wrap {
+  --sbg: var(--md-default-bg-color, #0f172a);
+  --sfg: var(--md-default-fg-color, #e2e8f0);
+  --sbd: rgba(226,232,240,.16);
+  --smut: rgba(226,232,240,.60);
+}
+
+.sc-hd { display: grid; gap: 5px; }
+
+.sc-title {
+  font-size: clamp(17px,2.2vw,24px);
+  font-weight: 900;
+  letter-spacing: -.02em;
+  line-height: 1.1;
+}
+
+.sc-sub {
+  font-size: 14px;
+  color: var(--smut);
+  line-height: 1.5;
+  max-width: 74ch;
+}
+
+/* Levers */
+.sc-levers {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 8px;
+}
+
+.sc-lever {
+  border: 1px solid var(--sbd);
+  border-radius: 14px;
+  padding: 13px;
+  background: color-mix(in srgb, var(--sbg) 93%, #0f172a 7%);
+  display: grid;
+  gap: 5px;
+  align-content: start;
+}
+
+.sc-lever--a { border-color: color-mix(in srgb,var(--sb) 28%,var(--sbd)); background: linear-gradient(135deg,color-mix(in srgb,var(--sb) 8%,transparent),transparent 65%), color-mix(in srgb,var(--sbg) 93%,#0f172a 7%); }
+.sc-lever--b { border-color: color-mix(in srgb,var(--sa) 28%,var(--sbd)); background: linear-gradient(135deg,color-mix(in srgb,var(--sa) 8%,transparent),transparent 65%), color-mix(in srgb,var(--sbg) 93%,#0f172a 7%); }
+.sc-lever--c { border-color: color-mix(in srgb,var(--sp) 28%,var(--sbd)); background: linear-gradient(135deg,color-mix(in srgb,var(--sp) 8%,transparent),transparent 65%), color-mix(in srgb,var(--sbg) 93%,#0f172a 7%); }
+
+.sc-lever-k {
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--smut);
+}
+
+.sc-lever p { margin: 0; font-size: 13px; line-height: 1.45; }
+
+/* Scale progression */
+.sc-prog {
+  display: flex;
+  align-items: stretch;
+  gap: 6px;
+  border: 1px solid var(--sbd);
+  border-radius: 16px;
+  padding: 14px;
+  background: color-mix(in srgb, var(--sbg) 88%, #0f172a 12%);
+}
+
+.sc-pt {
+  flex: 1;
+  appearance: none;
+  border: 1px solid var(--sbd);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--sbg) 88%, transparent);
+  color: var(--sfg);
+  padding: 10px 10px 8px;
+  cursor: pointer;
+  font: inherit;
+  display: grid;
+  gap: 6px;
+  align-content: start;
+  transition: border-color .14s, background .14s, box-shadow .14s;
+  text-align: left;
+}
+
+.sc-pt:hover {
+  border-color: color-mix(in srgb, var(--sa) 36%, var(--sbd));
+  background: color-mix(in srgb, var(--sa) 6%, var(--sbg));
+}
+
+.sc-pt--active,
+.sc-pt[aria-pressed="true"] {
+  border-color: color-mix(in srgb, var(--sa) 50%, transparent);
+  background: color-mix(in srgb, var(--sa) 10%, var(--sbg));
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--sa) 22%, transparent);
+}
+
+.sc-pt--hl.sc-pt--active,
+.sc-pt--hl[aria-pressed="true"] {
+  border-color: color-mix(in srgb, var(--sp) 50%, transparent);
+  background: color-mix(in srgb, var(--sp) 10%, var(--sbg));
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--sp) 22%, transparent);
+}
+
+.sc-pt:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--sa) 30%, transparent);
+}
+
+.sc-pt-track {
+  height: 6px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--sbg) 70%, #0f172a 30%);
+  overflow: hidden;
+}
+
+.sc-pt-bar {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--sa), color-mix(in srgb,var(--sa) 60%,var(--sb)));
+  transition: width .3s ease;
+}
+
+.sc-pt-bar--hl {
+  background: linear-gradient(90deg, var(--sp), color-mix(in srgb,var(--sp) 60%,var(--sg)));
+}
+
+.sc-pt-bar--max {
+  background: linear-gradient(90deg, var(--sb), var(--sa));
+}
+
+.sc-pt-name {
+  font-size: 13px;
+  font-weight: 900;
+  line-height: 1.2;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.sc-pt-badge {
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--sp) 15%, var(--sbg));
+  border: 1px solid color-mix(in srgb, var(--sp) 34%, transparent);
+  color: color-mix(in srgb, var(--sp) 80%, var(--sfg));
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.sc-pt-meta {
+  font-size: 11px;
+  color: var(--smut);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+/* Threshold separator */
+.sc-threshold {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 0 2px;
+  flex-shrink: 0;
+}
+
+.sc-thr-line {
+  flex: 1;
+  min-height: 10px;
+  border-left: 1px dashed color-mix(in srgb, var(--sp) 50%, transparent);
+}
+
+.sc-thr-badge {
+  font-size: 9px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: color-mix(in srgb, var(--sp) 70%, var(--smut));
+  white-space: nowrap;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  padding: 4px 0;
+}
+
+/* Detail panel */
+.sc-detail {
+  border: 1px solid var(--sbd);
+  border-radius: 14px;
+  padding: 15px;
+  background: color-mix(in srgb, var(--sbg) 91%, #0f172a 9%);
+  min-height: 120px;
+}
+
+.sc-det-era {
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--smut);
+  margin-bottom: 6px;
+}
+
+.sc-det-desc {
+  margin: 0 0 12px;
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+.sc-caps-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.sc-cap {
+  padding: 5px 11px;
+  border-radius: 999px;
+  border: 1px solid var(--sbd);
+  background: color-mix(in srgb, var(--sbg) 86%, transparent);
+  font-size: 12.5px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.sc-cap--em {
+  border-color: color-mix(in srgb, var(--sp) 36%, var(--sbd));
+  background: color-mix(in srgb, var(--sp) 9%, var(--sbg));
+  font-weight: 700;
+}
+
+.sc-cap-star {
+  color: color-mix(in srgb, var(--sp) 80%, var(--sfg));
+  font-size: 11px;
+}
+
+.sc-missing {
+  font-size: 12.5px;
+  color: var(--smut);
+  font-style: italic;
+  border-left: 2px solid var(--sbd);
+  padding-left: 10px;
+  margin-top: 6px;
+  line-height: 1.4;
+}
+
+@media (max-width: 620px) {
+  .sc-levers { grid-template-columns: 1fr; }
+  .sc-prog { flex-direction: column; }
+  .sc-threshold { flex-direction: row; writing-mode: unset; }
+  .sc-thr-line { flex: 1; min-height: unset; border-left: none; border-top: 1px dashed color-mix(in srgb, var(--sp) 50%, transparent); }
+  .sc-thr-badge { writing-mode: horizontal-tb; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sc-pt, .sc-pt-bar { transition: none; }
+}
+</style>

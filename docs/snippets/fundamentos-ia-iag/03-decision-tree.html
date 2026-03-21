@@ -1,0 +1,482 @@
+<div class="dt-wrap" data-demo="03-decision-tree">
+  <div class="dt-hd">
+    <div class="dt-title">¿Qué tecnología necesitas?</div>
+    <div class="dt-sub">Responde las preguntas para encontrar la opción más simple que resuelve tu problema.</div>
+  </div>
+  <div class="dt-path-row" id="dt-path-row" aria-live="polite" aria-label="Decisiones tomadas"></div>
+  <div class="dt-stage" id="dt-stage"></div>
+</div>
+
+<style>
+.dt-wrap, .dt-wrap * { box-sizing: border-box; }
+
+.dt-wrap {
+  --ta: var(--md-primary-fg-color, #26A69A);
+  --tb: #324AB2;
+  --tc: #6d5fd5;
+  --tg: var(--md-accent-fg-color, #FFB343);
+  --tr: #ef4444;
+  --tbg: var(--md-default-bg-color, #fff);
+  --tfg: var(--md-default-fg-color, #0f172a);
+  --tbd: rgba(15,23,42,.16);
+  --tmut: rgba(15,23,42,.55);
+  --tf: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid;
+  gap: 14px;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--tbd);
+  border-radius: 20px;
+  background:
+    radial-gradient(110% 140% at 10% 0%, color-mix(in srgb,var(--tb) 7%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 90% 100%, color-mix(in srgb,var(--tr) 6%,transparent), transparent 52%),
+    var(--tbg);
+  color: var(--tfg);
+  font-family: var(--tf);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-md-color-scheme="slate"] .dt-wrap {
+  --tbg: var(--md-default-bg-color, #0f172a);
+  --tfg: var(--md-default-fg-color, #e2e8f0);
+  --tbd: rgba(226,232,240,.16);
+  --tmut: rgba(226,232,240,.55);
+}
+
+.dt-hd { display: grid; gap: 5px; }
+
+.dt-title {
+  font-size: clamp(17px,2.2vw,24px);
+  font-weight: 900;
+  letter-spacing: -.02em;
+  line-height: 1.1;
+}
+
+.dt-sub {
+  font-size: 14px;
+  color: var(--tmut);
+  line-height: 1.5;
+  max-width: 68ch;
+}
+
+/* Path breadcrumb */
+.dt-path-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  min-height: 28px;
+}
+
+.dt-crumb {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--tbd);
+  background: color-mix(in srgb, var(--tbg) 88%, #0f172a 12%);
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--tmut);
+  cursor: default;
+}
+
+.dt-crumb-arrow {
+  font-size: 13px;
+  color: var(--tmut);
+  opacity: .55;
+}
+
+.dt-crumb-ans {
+  font-weight: 900;
+  color: var(--tfg);
+}
+
+.dt-crumb-ans--yes { color: color-mix(in srgb, var(--ta) 80%, var(--tfg)); }
+.dt-crumb-ans--no  { color: color-mix(in srgb, var(--tr) 70%, var(--tfg)); }
+
+/* Question card */
+.dt-qcard {
+  border: 1px solid var(--tbd);
+  border-radius: 16px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--tbg) 92%, #0f172a 8%);
+}
+
+.dt-qcard-body {
+  padding: 22px 22px 16px;
+  display: grid;
+  gap: 10px;
+}
+
+.dt-qstep {
+  font-size: 10.5px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--tmut);
+}
+
+.dt-qtext {
+  font-size: clamp(16px,2vw,20px);
+  font-weight: 800;
+  line-height: 1.3;
+  letter-spacing: -.01em;
+}
+
+.dt-qhint {
+  font-size: 13px;
+  color: var(--tmut);
+  line-height: 1.5;
+  border-left: 2px solid var(--tbd);
+  padding-left: 10px;
+}
+
+.dt-qactions {
+  display: flex;
+  gap: 10px;
+  padding: 14px 22px 18px;
+  border-top: 1px solid var(--tbd);
+  background: color-mix(in srgb, var(--tbg) 96%, #0f172a 4%);
+}
+
+.dt-btn {
+  appearance: none;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  padding: 10px 22px;
+  border: 1.5px solid var(--tbd);
+  transition: background .12s, border-color .12s, box-shadow .12s;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.dt-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--tb) 28%, transparent);
+}
+
+.dt-btn--no {
+  background: color-mix(in srgb, var(--tbg) 85%, #0f172a 15%);
+  color: var(--tmut);
+}
+
+.dt-btn--no:hover {
+  border-color: color-mix(in srgb, var(--tr) 42%, var(--tbd));
+  background: color-mix(in srgb, var(--tr) 8%, var(--tbg));
+  color: color-mix(in srgb, var(--tr) 70%, var(--tfg));
+}
+
+.dt-btn--yes {
+  background: color-mix(in srgb, var(--tb) 12%, var(--tbg));
+  border-color: color-mix(in srgb, var(--tb) 38%, var(--tbd));
+  color: color-mix(in srgb, var(--tb) 80%, var(--tfg));
+}
+
+.dt-btn--yes:hover {
+  background: color-mix(in srgb, var(--tb) 18%, var(--tbg));
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--tb) 18%, transparent);
+}
+
+/* Result card */
+.dt-result {
+  border: 1.5px solid var(--tbd);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.dt-result-head {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--tbd);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dt-result-label {
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  opacity: .7;
+}
+
+.dt-result-name {
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: -.02em;
+}
+
+.dt-result-body {
+  padding: 18px 20px;
+  display: grid;
+  gap: 14px;
+  background: color-mix(in srgb, var(--tbg) 92%, #0f172a 8%);
+}
+
+.dt-result-why {
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.dt-result-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.dt-rbadge {
+  display: inline-flex;
+  padding: 4px 11px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  border: 1px solid var(--tbd);
+  background: color-mix(in srgb, var(--tbg) 86%, transparent);
+}
+
+.dt-result-footer {
+  padding: 12px 20px;
+  border-top: 1px solid var(--tbd);
+  display: flex;
+  justify-content: flex-end;
+  background: color-mix(in srgb, var(--tbg) 96%, #0f172a 4%);
+}
+
+.dt-restart {
+  appearance: none;
+  border: 1.5px solid var(--tbd);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--tbg) 84%, #0f172a 16%);
+  color: var(--tmut);
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 800;
+  padding: 7px 16px;
+  cursor: pointer;
+  transition: border-color .12s, color .12s, background .12s;
+}
+
+.dt-restart:hover {
+  border-color: color-mix(in srgb, var(--tb) 36%, var(--tbd));
+  color: color-mix(in srgb, var(--tb) 80%, var(--tfg));
+  background: color-mix(in srgb, var(--tb) 8%, var(--tbg));
+}
+
+.dt-restart:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--tb) 24%, transparent);
+}
+
+/* color themes for results */
+.dt-theme-a .dt-result-head { background: color-mix(in srgb, var(--ta) 10%, var(--tbg)); border-color: color-mix(in srgb, var(--ta) 26%, var(--tbd)); }
+.dt-theme-a .dt-result-name, .dt-theme-a .dt-result-label { color: color-mix(in srgb, var(--ta) 80%, var(--tfg)); }
+.dt-theme-a .dt-result { border-color: color-mix(in srgb, var(--ta) 28%, var(--tbd)); }
+.dt-theme-a .dt-rbadge { border-color: color-mix(in srgb, var(--ta) 32%, var(--tbd)); color: color-mix(in srgb, var(--ta) 75%, var(--tfg)); background: color-mix(in srgb, var(--ta) 8%, var(--tbg)); }
+
+.dt-theme-b .dt-result-head { background: color-mix(in srgb, var(--tb) 10%, var(--tbg)); border-color: color-mix(in srgb, var(--tb) 26%, var(--tbd)); }
+.dt-theme-b .dt-result-name, .dt-theme-b .dt-result-label { color: color-mix(in srgb, var(--tb) 80%, var(--tfg)); }
+.dt-theme-b .dt-result { border-color: color-mix(in srgb, var(--tb) 28%, var(--tbd)); }
+.dt-theme-b .dt-rbadge { border-color: color-mix(in srgb, var(--tb) 32%, var(--tbd)); color: color-mix(in srgb, var(--tb) 75%, var(--tfg)); background: color-mix(in srgb, var(--tb) 8%, var(--tbg)); }
+
+.dt-theme-c .dt-result-head { background: color-mix(in srgb, var(--tc) 10%, var(--tbg)); border-color: color-mix(in srgb, var(--tc) 26%, var(--tbd)); }
+.dt-theme-c .dt-result-name, .dt-theme-c .dt-result-label { color: color-mix(in srgb, var(--tc) 80%, var(--tfg)); }
+.dt-theme-c .dt-result { border-color: color-mix(in srgb, var(--tc) 28%, var(--tbd)); }
+.dt-theme-c .dt-rbadge { border-color: color-mix(in srgb, var(--tc) 32%, var(--tbd)); color: color-mix(in srgb, var(--tc) 75%, var(--tfg)); background: color-mix(in srgb, var(--tc) 8%, var(--tbg)); }
+
+.dt-theme-g .dt-result-head { background: color-mix(in srgb, var(--tg) 12%, var(--tbg)); border-color: color-mix(in srgb, var(--tg) 32%, var(--tbd)); }
+.dt-theme-g .dt-result-name, .dt-theme-g .dt-result-label { color: color-mix(in srgb, var(--tg) 60%, var(--tfg)); }
+.dt-theme-g .dt-result { border-color: color-mix(in srgb, var(--tg) 34%, var(--tbd)); }
+.dt-theme-g .dt-rbadge { border-color: color-mix(in srgb, var(--tg) 36%, var(--tbd)); color: color-mix(in srgb, var(--tg) 55%, var(--tfg)); background: color-mix(in srgb, var(--tg) 10%, var(--tbg)); }
+
+.dt-theme-r .dt-result-head { background: color-mix(in srgb, var(--tr) 10%, var(--tbg)); border-color: color-mix(in srgb, var(--tr) 26%, var(--tbd)); }
+.dt-theme-r .dt-result-name, .dt-theme-r .dt-result-label { color: color-mix(in srgb, var(--tr) 70%, var(--tfg)); }
+.dt-theme-r .dt-result { border-color: color-mix(in srgb, var(--tr) 28%, var(--tbd)); }
+.dt-theme-r .dt-rbadge { border-color: color-mix(in srgb, var(--tr) 32%, var(--tbd)); color: color-mix(in srgb, var(--tr) 70%, var(--tfg)); background: color-mix(in srgb, var(--tr) 8%, var(--tbg)); }
+
+@media (max-width: 520px) {
+  .dt-qactions { flex-direction: column; }
+  .dt-btn { flex: unset; }
+}
+</style>
+
+<script>
+(function () {
+  const TREE = {
+    q1: {
+      step: 'Pregunta 1 de 4',
+      text: '¿El problema tiene casos bien definidos y lógica que no cambia?',
+      hint: 'Reglas de negocio estables, validaciones fijas, descuentos por criterio conocido, bloqueos por límite.',
+      label: 'Casos fijos',
+      yes: { result: 'reglas' },
+      no: 'q2',
+    },
+    q2: {
+      step: 'Pregunta 2 de 4',
+      text: '¿Tienes datos etiquetados y la salida es una etiqueta, número o categoría?',
+      hint: 'Fraude / no fraude, puntuación de riesgo, categoría de incidencia, predicción de churn.',
+      label: 'Datos etiquetados',
+      yes: { result: 'ml' },
+      no: 'q3',
+    },
+    q3: {
+      step: 'Pregunta 3 de 4',
+      text: '¿La tarea es lingüística y el conocimiento general del modelo es suficiente?',
+      hint: 'Redacción, resumen, traducción, código, explicación de conceptos. Sin documentos propios ni información actualizada.',
+      label: 'Tarea lingüística',
+      yes: { result: 'llm' },
+      no: 'q4',
+    },
+    q4: {
+      step: 'Pregunta 4 de 4',
+      text: '¿El modelo necesita razonar sobre documentos propios o información actualizada?',
+      hint: 'Documentación técnica interna, bases de conocimiento propias, normativa que cambia frecuentemente.',
+      label: 'Documentos propios',
+      yes: { result: 'rag' },
+      no: { result: 'agente' },
+    },
+  };
+
+  const RESULTS = {
+    reglas: {
+      theme: 'a',
+      name: 'Reglas explícitas',
+      why: 'El problema es enumerable y la lógica es estable. Para este tipo de caso, las reglas son más baratas, más auditables y más fiables que cualquier modelo. El límite aparecerá cuando las excepciones se multipliquen hasta que nadie las pueda mantener.',
+      badges: ['Coste: mínimo', 'Evaluación: trivial', 'Fiabilidad: alta', 'Sin modelo necesario'],
+    },
+    ml: {
+      theme: 'b',
+      name: 'ML clásico',
+      why: 'Tienes datos etiquetados y una salida bien definida. ML clásico es la opción más sólida: métricas claras, evaluación automatizable y resultado reproducible y explicable. Escala a millones de predicciones sin coste por llamada.',
+      badges: ['Requiere: datos etiquetados', 'Evaluación: clara', 'Alta escala', 'Resultado reproducible'],
+    },
+    llm: {
+      theme: 'c',
+      name: 'LLM puro',
+      why: 'La tarea es lingüística y el conocimiento general del modelo es suficiente. Un solo modelo sirve para redacción, resumen, traducción y código. La adaptación es barata vía prompt. La limitación: conocimiento estático con fecha de corte.',
+      badges: ['Sin datos etiquetados', 'Evaluación: difícil', 'Adaptación vía prompt', 'Conocimiento estático'],
+    },
+    rag: {
+      theme: 'g',
+      name: 'LLM + RAG',
+      why: 'El modelo necesita razonar sobre información que no está en su entrenamiento. RAG recupera los documentos relevantes en cada consulta y los incluye como contexto. El modelo responde con precisión sin reentrenarse.',
+      badges: ['Conocimiento actualizado', 'Sin reentrenamiento', 'Latencia mayor', 'Evaluación: difícil'],
+    },
+    agente: {
+      theme: 'r',
+      name: 'Agente',
+      why: 'La tarea requiere múltiples pasos, herramientas externas o actuar sobre sistemas reales. El agente puede planificar, ejecutar código, llamar APIs y ajustar el plan según los resultados. La contrapartida: los fallos en cadena son difíciles de detectar.',
+      badges: ['Acción en el mundo', 'Evaluación: muy difícil', 'Coste: alto', 'Requiere supervisión'],
+    },
+  };
+
+  function initRoot(root) {
+    if (root.dataset.dtReady === '1') return;
+    root.dataset.dtReady = '1';
+
+    const pathRow = root.querySelector('#dt-path-row') || root.parentElement.querySelector('#dt-path-row');
+    const stage   = root.querySelector('#dt-stage')    || root.parentElement.querySelector('#dt-stage');
+
+    // Use scoped IDs by replacing with direct element refs (already done above)
+    let currentKey = 'q1';
+    const history = []; // [{label, answer, answerKey}]
+
+    function renderPath() {
+      pathRow.innerHTML = '';
+      history.forEach((h, i) => {
+        const chip = document.createElement('span');
+        chip.className = 'dt-crumb';
+        const yesNo = h.answer === 'yes' ? 'Sí' : 'No';
+        const cls   = h.answer === 'yes' ? 'dt-crumb-ans--yes' : 'dt-crumb-ans--no';
+        chip.innerHTML = `${h.label}: <span class="dt-crumb-ans ${cls}">${yesNo}</span>`;
+        pathRow.appendChild(chip);
+        if (i < history.length - 1) {
+          const arrow = document.createElement('span');
+          arrow.className = 'dt-crumb-arrow';
+          arrow.setAttribute('aria-hidden', 'true');
+          arrow.textContent = '→';
+          pathRow.appendChild(arrow);
+        }
+      });
+    }
+
+    function renderQuestion(key) {
+      const q = TREE[key];
+      stage.innerHTML = `
+        <div class="dt-qcard">
+          <div class="dt-qcard-body">
+            <div class="dt-qstep">${q.step}</div>
+            <div class="dt-qtext">${q.text}</div>
+            <div class="dt-qhint">${q.hint}</div>
+          </div>
+          <div class="dt-qactions">
+            <button type="button" class="dt-btn dt-btn--no" data-ans="no">No</button>
+            <button type="button" class="dt-btn dt-btn--yes" data-ans="yes">Sí →</button>
+          </div>
+        </div>`;
+
+      stage.querySelectorAll('.dt-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const ans = btn.getAttribute('data-ans');
+          history.push({ label: q.label, answer: ans });
+          renderPath();
+          const next = ans === 'yes' ? q.yes : q.no;
+          if (next.result) {
+            renderResult(next.result);
+          } else {
+            currentKey = next;
+            renderQuestion(next);
+          }
+        });
+      });
+    }
+
+    function renderResult(key) {
+      const r = RESULTS[key];
+      const badges = r.badges.map(b => `<span class="dt-rbadge">${b}</span>`).join('');
+      stage.innerHTML = `
+        <div class="dt-result dt-theme-${r.theme}">
+          <div class="dt-result-head">
+            <div>
+              <div class="dt-result-label">Tecnología recomendada</div>
+              <div class="dt-result-name">${r.name}</div>
+            </div>
+          </div>
+          <div class="dt-result-body">
+            <p class="dt-result-why">${r.why}</p>
+            <div class="dt-result-badges">${badges}</div>
+          </div>
+          <div class="dt-result-footer">
+            <button type="button" class="dt-restart">← Reiniciar</button>
+          </div>
+        </div>`;
+
+      stage.querySelector('.dt-restart').addEventListener('click', () => {
+        history.length = 0;
+        currentKey = 'q1';
+        renderPath();
+        renderQuestion('q1');
+      });
+    }
+
+    renderQuestion('q1');
+  }
+
+  function boot() {
+    document.querySelectorAll('[data-demo="03-decision-tree"]').forEach(initRoot);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
+  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
+})();
+</script>

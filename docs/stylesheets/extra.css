@@ -1454,6 +1454,61 @@ body.anim-shell-modal-open {
     padding: clamp(8px, 1vw, 14px);
 }
 
+/* ─── Left navigation sidebar ─────────────────────────────────────────────── */
+
+/* Series section headers: compact, muted, uppercase label style */
+.md-nav--primary .md-nav__item--section > .md-nav__link {
+    font-size: 0.67rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    padding-top: 1rem;
+    padding-bottom: 0.25rem;
+    border-top: 1px solid color-mix(in srgb, var(--md-default-fg-color) 7%, transparent);
+    opacity: 1 !important;
+}
+
+/* No top border on the first series */
+.md-nav--primary .md-nav__item--section:first-of-type > .md-nav__link {
+    border-top: none;
+    padding-top: 0.35rem;
+}
+
+/* Series colors are assigned dynamically by javascripts/nav-gradient.js */
+
+/* Chapter links: indented, muted, with a thin left rail */
+.md-nav--primary .md-nav__item--section .md-nav .md-nav__link {
+    font-size: 0.78rem;
+    padding-left: 0.85rem;
+    border-left: 2px solid transparent;
+    color: color-mix(in srgb, var(--md-default-fg-color) 62%, transparent);
+    transition: border-color 0.15s, color 0.15s;
+}
+
+/* Hover */
+.md-nav--primary .md-nav__item--section .md-nav .md-nav__link:hover {
+    border-left-color: color-mix(in srgb, var(--md-default-fg-color) 20%, transparent);
+    color: color-mix(in srgb, var(--md-default-fg-color) 88%, transparent);
+}
+
+/* Active chapter — soft accent line, no loud color change */
+.md-nav--primary .md-nav__item--section .md-nav .md-nav__item--active > .md-nav__link {
+    border-left-color: var(--md-primary-fg-color);
+    color: var(--md-default-fg-color) !important;
+    font-weight: 600;
+}
+
+/* "SERIES" top-level eyebrow label */
+.md-nav--primary > .md-nav__title {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--md-default-fg-color) 38%, transparent);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────── */
+
 @media (max-width: 900px) {
     .anim-brand-shell {
         padding: 8px 8px 48px;

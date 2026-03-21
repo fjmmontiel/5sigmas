@@ -1,0 +1,375 @@
+<div class="slc-wrap" data-demo="02-escalas-curva">
+
+  <div class="slc-hd">
+    <div class="slc-title">La ley de escala: más cómputo → más rendimiento</div>
+    <div class="slc-sub"><strong>L</strong> (pérdida — cuánto se equivoca el modelo; menos es mejor) cae al aumentar <strong>C</strong> (cómputo de entrenamiento, medido en FLOPs). La relación sigue una ley de potencia — L&thinsp;∝&thinsp;C<sup>−0.050</sup> (Kaplan et al., 2020) — y en escala log-log es una línea recta predecible. La zona sombreada marca dónde GPT-3 cruzó el umbral emergente. Pulsa cada modelo para ver sus datos.</div>
+  </div>
+
+  <div class="slc-chart-wrap" aria-label="Gráfico de ley de escala log-log">
+    <!--
+      X-axis: 10^18 to 10^26 (8 decades, 76.5 px/decade), left=70, right=682
+      Tick positions: 10^18→70, 10^20→223, 10^22→376, 10^24→529, 10^26→682
+      Model x (log FLOPs from Kaplan 2020 / Brown 2020 / Epoch AI):
+        GPT-1 (~10^18)    : x = 70
+        GPT-2 (~10^20)    : x = 223
+        GPT-3 (3.14×10^23): log_norm=5.497 decades → x = 491
+        Hoy   (~10^25)    : log_norm=7 decades      → x = 606
+      Y-axis: loss decreases top→bottom; high loss at top (y=32), low at bottom (y=210)
+        GPT-1: y≈50  (loss_norm≈0.90)
+        GPT-2: y≈85  (loss_norm≈0.70)
+        GPT-3: y≈148 (loss_norm≈0.35)
+        Hoy  : y≈192 (loss_norm≈0.10)
+    -->
+    <svg class="slc-svg" viewBox="0 0 700 258" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="slcCG" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%"   stop-color="#26A69A"/>
+          <stop offset="48%"  stop-color="#324AB2"/>
+          <stop offset="100%" stop-color="#7c3aed"/>
+        </linearGradient>
+        <linearGradient id="slcAG" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%"   stop-color="#26A69A" stop-opacity="0.10"/>
+          <stop offset="100%" stop-color="#7c3aed" stop-opacity="0.03"/>
+        </linearGradient>
+        <linearGradient id="slcEG" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%"   stop-color="#7c3aed" stop-opacity="0.22"/>
+          <stop offset="100%" stop-color="#7c3aed" stop-opacity="0.03"/>
+        </linearGradient>
+      </defs>
+
+      <!-- Horizontal grid lines (6 y-levels) -->
+      <line x1="70" y1="32"  x2="682" y2="32"  class="slc-gl"/>
+      <line x1="70" y1="68"  x2="682" y2="68"  class="slc-gl"/>
+      <line x1="70" y1="104" x2="682" y2="104" class="slc-gl"/>
+      <line x1="70" y1="140" x2="682" y2="140" class="slc-gl"/>
+      <line x1="70" y1="176" x2="682" y2="176" class="slc-gl"/>
+      <line x1="70" y1="210" x2="682" y2="210" class="slc-gl"/>
+
+      <!-- X axis ticks (every 2 decades: 10^18, 10^20, 10^22, 10^24, 10^26) -->
+      <line x1="70"  y1="208" x2="70"  y2="212" class="slc-ax"/>
+      <line x1="223" y1="208" x2="223" y2="212" class="slc-ax"/>
+      <line x1="376" y1="208" x2="376" y2="212" class="slc-ax"/>
+      <line x1="529" y1="208" x2="529" y2="212" class="slc-ax"/>
+      <line x1="682" y1="208" x2="682" y2="212" class="slc-ax"/>
+
+      <!-- X tick labels -->
+      <text x="70"  y="224" class="slc-tick" text-anchor="middle">10¹⁸</text>
+      <text x="223" y="224" class="slc-tick" text-anchor="middle">10²⁰</text>
+      <text x="376" y="224" class="slc-tick" text-anchor="middle">10²²</text>
+      <text x="529" y="224" class="slc-tick" text-anchor="middle">10²⁴</text>
+      <text x="682" y="224" class="slc-tick" text-anchor="middle">10²⁶</text>
+
+      <!-- Y tick labels (loss norm: 1.0 at top = high error, 0.0 at bottom = low error) -->
+      <text x="62" y="36"  class="slc-tick" text-anchor="end">1,0</text>
+      <text x="62" y="72"  class="slc-tick" text-anchor="end">0,8</text>
+      <text x="62" y="108" class="slc-tick" text-anchor="end">0,6</text>
+      <text x="62" y="144" class="slc-tick" text-anchor="end">0,4</text>
+      <text x="62" y="180" class="slc-tick" text-anchor="end">0,2</text>
+      <text x="62" y="214" class="slc-tick" text-anchor="end">0,0</text>
+
+      <!-- Axis titles -->
+      <text x="18" y="121" class="slc-ax-lbl" text-anchor="middle" transform="rotate(-90 18 121)">RENDIMIENTO (NORM.) ↑ mejor</text>
+      <text x="376" y="242" class="slc-ax-lbl" text-anchor="middle">CÓMPUTO DE ENTRENAMIENTO (FLOPs) →</text>
+
+      <!-- Emergent zone band — GPT-3 at x=491, zone ±40px → x=451 to x=531 -->
+      <rect x="451" y="32" width="80" height="178" fill="url(#slcEG)"/>
+      <line x1="451" y1="32" x2="451" y2="210" class="slc-el"/>
+      <line x1="531" y1="32" x2="531" y2="210" class="slc-el slc-el--r"/>
+      <text x="491" y="24" class="slc-em-lbl">UMBRAL EMERGENTE</text>
+
+      <!-- Axes -->
+      <line x1="70" y1="32"  x2="70"  y2="210" class="slc-ax"/>
+      <line x1="70" y1="210" x2="682" y2="210" class="slc-ax"/>
+
+      <!-- Area fill under the power-law curve (between curve and bottom) -->
+      <path d="M 70,192
+               C 118,185 172,169 223,157
+               C 318,137 416,113 491,94
+               C 544,81 580,63 606,50
+               C 632,42 658,38 682,36
+               L 682,210 L 70,210 Z"
+            fill="url(#slcAG)"/>
+
+      <!-- Power-law curve: bottom-left (low perf, low compute) → top-right (high perf, high compute) -->
+      <path class="slc-curve"
+            d="M 70,192
+               C 118,185 172,169 223,157
+               C 318,137 416,113 491,94
+               C 544,81 580,63 606,50
+               C 632,42 658,38 682,36"
+            fill="none" stroke="url(#slcCG)" stroke-width="2.5" stroke-linecap="round"/>
+
+      <!-- GPT-1  x=70, y=192  (~10^18 FLOPs, Radford 2018) -->
+      <g class="slc-mg" data-model="gpt1">
+        <circle cx="70"  cy="192" r="15" class="slc-mh slc-mh--1"/>
+        <circle cx="70"  cy="192" r="6"  class="slc-md slc-md--1"/>
+        <text x="70"  y="175" class="slc-mn slc-mn--1" text-anchor="middle">GPT-1</text>
+        <text x="70"  y="164" class="slc-mm"            text-anchor="middle">117 M · 2018</text>
+      </g>
+
+      <!-- GPT-2  x=223, y=157  (~10^20 FLOPs, Radford 2019) -->
+      <g class="slc-mg" data-model="gpt2">
+        <circle cx="223" cy="157" r="15" class="slc-mh slc-mh--2"/>
+        <circle cx="223" cy="157" r="6"  class="slc-md slc-md--2"/>
+        <text x="223" y="140" class="slc-mn slc-mn--2" text-anchor="middle">GPT-2</text>
+        <text x="223" y="129" class="slc-mm"            text-anchor="middle">1,5 B · 2019</text>
+      </g>
+
+      <!-- GPT-3  x=491, y=94  (3.14×10^23 FLOPs, Brown 2020) — emergent -->
+      <g class="slc-mg slc-mg--em" data-model="gpt3">
+        <circle cx="491" cy="94"  r="20" class="slc-mh slc-mh--3"/>
+        <circle cx="491" cy="94"  r="7"  class="slc-md slc-md--3"/>
+        <text x="491" y="77"  class="slc-mn slc-mn--3" text-anchor="middle">GPT-3 ✦</text>
+        <text x="491" y="66"  class="slc-mm"           text-anchor="middle">175 B · 2020</text>
+      </g>
+
+      <!-- Hoy  x=606, y=50  (~10^25 FLOPs, Epoch AI 2024) -->
+      <g class="slc-mg" data-model="hoy">
+        <circle cx="606" cy="50"  r="15" class="slc-mh slc-mh--4"/>
+        <circle cx="606" cy="50"  r="6"  class="slc-md slc-md--4"/>
+        <text x="606" y="68"  class="slc-mn slc-mn--4" text-anchor="middle">2023–24</text>
+        <text x="606" y="79"  class="slc-mm"           text-anchor="middle">GPT-4 · Llama 3 · 2024</text>
+      </g>
+
+    </svg>
+  </div>
+
+  <div class="slc-detail" aria-live="polite"></div>
+
+</div>
+
+<script>
+(function () {
+  /*
+   * Fuentes de datos:
+   *  GPT-1        : Radford et al. (2018) — openai.com/research/language-unsupervised
+   *  GPT-2        : Radford et al. (2019) — openai.com/research/better-language-models
+   *  GPT-3        : Brown et al. (2020)   — arXiv:2005.14165
+   *  Scaling Laws : Kaplan et al. (2020)  — arXiv:2001.08361 · L ∝ C^{−0.050}
+   *  Compute est. : Epoch AI, ML Compute Trends (2024)
+   */
+  var DATA = {
+    gpt1: {
+      title: 'GPT-1 · Primera generación (2018)',
+      ref: 'Radford et al. (2018) — openai.com/research/language-unsupervised',
+      stats: '117 M parámetros · ~1 B tokens (BooksCorpus) · cómputo estimado ~10¹⁸ FLOPs',
+      desc: 'Demostró que el aprendizaje auto-supervisado sobre texto funciona a escala. Genera texto coherente y permite fine-tuning para clasificación. Capacidades estrechas, dependientes del formato.',
+      caps: ['Completar texto corto', 'Clasificación con fine-tuning explícito', 'Preguntas simples con contexto directo'],
+      missing: 'Sin instrucciones en lenguaje natural, sin aritmética, sin traducción robusta, sin síntesis de código.'
+    },
+    gpt2: {
+      title: 'GPT-2 · Escala inicial (2019)',
+      ref: 'Radford et al. (2019) — openai.com/research/better-language-models',
+      stats: '1,5 B parámetros · ~10 B tokens (WebText, 40 GB) · cómputo estimado ~10²⁰ FLOPs',
+      desc: 'El salto de 13× en parámetros produce textos más largos y coherentes. Mejora cuantitativa notable, pero sin salto cualitativo: sigue completando patrones, no generalizando a nuevas tareas.',
+      caps: ['Generación de párrafos coherentes y extensos', 'Resumen básico de textos cortos', 'Respuesta a preguntas con contexto en el prompt'],
+      missing: 'Aún sin few-shot learning, sin aritmética fiable, sin instrucciones complejas.'
+    },
+    gpt3: {
+      title: 'GPT-3 · Umbral emergente (2020)',
+      ref: 'Brown et al. (2020) — arXiv:2005.14165',
+      stats: '175 B parámetros · 570 GB datos (Common Crawl filtrado + WebText2 + Books) · 3,14×10²³ FLOPs',
+      desc: 'A 175 B parámetros emergen capacidades que nadie había programado. El modelo generaliza a tareas nuevas con solo 2-5 ejemplos en el prompt, sin reentrenamiento ni ajuste fino (few-shot learning).',
+      caps: ['✦ Few-shot learning (2–5 ejemplos en el prompt)', '✦ Aritmética básica sin entrenamiento específico', '✦ Traducción entre idiomas sin fine-tuning', '✦ Síntesis de código desde descripciones', '✦ Instrucciones en lenguaje natural'],
+      missing: null,
+      emergent: true
+    },
+    hoy: {
+      title: 'Frontera 2023–2024 · GPT-4, Llama 3.1, Gemini',
+      ref: 'GPT-4 (OpenAI, mar 2023) · Llama 3.1 405B (Meta, jul 2024) · Gemini 1.5 Pro (Google, 2024) · Epoch AI — ML Compute Trends (2024)',
+      stats: 'Llama 3.1 405B: ~3,8×10²⁵ FLOPs (Meta, 2024). GPT-4: ~2×10²⁵ FLOPs est. (Epoch AI). Modelos post-2024: compute no publicado.',
+      desc: 'Escala masiva más ajuste fino con feedback humano (RLHF). La ley de escala continúa. Para modelos de 2025 en adelante (o3, Claude 3.7, Llama 4…) el compute de entrenamiento no está disponible públicamente.',
+      caps: ['Razonamiento multi-paso con cadena de pensamiento', 'Programación avanzada (debug, refactor, arquitectura)', 'Entrada multimodal: texto, imagen, audio, documentos', 'Uso de herramientas externas (function calling, agentes)'],
+      missing: null
+    }
+  };
+
+  function render(root, key) {
+    var d = DATA[key];
+    if (!d) return;
+    var panel = root.querySelector('.slc-detail');
+    if (!panel) return;
+    var missingHtml = d.missing
+      ? '<div class="slc-missing">' + d.missing + '</div>'
+      : '';
+    panel.innerHTML =
+      '<div class="slc-det-title' + (d.emergent ? ' slc-det-title--em' : '') + '">' + d.title + '</div>' +
+      '<div class="slc-det-stats">' + d.stats + '</div>' +
+      '<p class="slc-det-desc">' + d.desc + '</p>' +
+      '<div class="slc-caps">' +
+        d.caps.map(function(c) {
+          return '<span class="slc-cap' + (d.emergent ? ' slc-cap--em' : '') + '">' + c + '</span>';
+        }).join('') +
+      '</div>' +
+      missingHtml +
+      '<div class="slc-ref">Fuente: ' + d.ref + '</div>';
+  }
+
+  function initRoot(root) {
+    if (root.dataset.slcReady === '1') return;
+    root.dataset.slcReady = '1';
+    var groups = Array.from(root.querySelectorAll('.slc-mg'));
+    function activate(key) {
+      groups.forEach(function(g) { g.classList.toggle('slc-mg--active', g.dataset.model === key); });
+      render(root, key);
+    }
+    groups.forEach(function(g) { g.addEventListener('click', function() { activate(g.dataset.model); }); });
+    activate('gpt3');
+  }
+
+  function boot() {
+    document.querySelectorAll('[data-demo="02-escalas-curva"]').forEach(initRoot);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
+  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
+})();
+</script>
+
+<style>
+.slc-wrap, .slc-wrap * { box-sizing: border-box; }
+
+.slc-wrap {
+  --slc-bg:     var(--md-default-bg-color, #0f172a);
+  --slc-fg:     var(--md-default-fg-color, #e2e8f0);
+  --slc-muted:  rgba(148,163,184,.65);
+  --slc-grid:   rgba(148,163,184,.10);
+  --slc-axis:   rgba(148,163,184,.22);
+  --slc-border: rgba(148,163,184,.14);
+  --slc-c1: #26A69A;
+  --slc-c2: #7cc7ff;
+  --slc-c3: #a78bfa;
+  --slc-c4: #FFB343;
+  --slc-f: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid;
+  gap: 12px;
+  width: 100%;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--slc-border);
+  border-radius: 20px;
+  background: var(--slc-bg);
+  color: var(--slc-fg);
+  font-family: var(--slc-f);
+  -webkit-font-smoothing: antialiased;
+}
+
+.slc-hd { display: grid; gap: 5px; }
+
+.slc-title {
+  font-size: clamp(15px,2vw,22px);
+  font-weight: 900;
+  letter-spacing: -.02em;
+  line-height: 1.1;
+}
+
+.slc-sub {
+  font-size: 13px;
+  color: var(--slc-muted);
+  line-height: 1.5;
+  max-width: 78ch;
+}
+
+.slc-chart-wrap { width: 100%; overflow: visible; }
+.slc-svg { width: 100%; height: auto; display: block; overflow: visible; }
+
+.slc-gl  { stroke: var(--slc-grid); stroke-width: 1; }
+.slc-ax  { stroke: var(--slc-axis); stroke-width: 1; }
+.slc-el  { stroke: rgba(124,58,237,.28); stroke-width: 1; stroke-dasharray: 4 3; }
+.slc-el--r { stroke: rgba(124,58,237,.14); }
+
+.slc-em-lbl {
+  font-size: 8px; font-weight: 800; letter-spacing: .07em;
+  text-transform: uppercase; fill: rgba(124,58,237,.72); text-anchor: middle;
+}
+
+.slc-ax-lbl {
+  font-size: 8px; font-weight: 700; letter-spacing: .05em;
+  text-transform: uppercase; fill: var(--slc-muted);
+}
+
+.slc-tick { font-size: 9.5px; font-weight: 600; fill: var(--slc-muted); dominant-baseline: middle; }
+
+/* Markers */
+.slc-mg { cursor: pointer; }
+.slc-mh { fill-opacity: 0; stroke-width: 1.5; transition: fill-opacity .15s; }
+.slc-mh--1 { stroke: var(--slc-c1); stroke-opacity: .4; }
+.slc-mh--2 { stroke: var(--slc-c2); stroke-opacity: .4; }
+.slc-mh--3 { stroke: var(--slc-c3); stroke-opacity: .5; }
+.slc-mh--4 { stroke: var(--slc-c4); stroke-opacity: .4; }
+
+.slc-md { stroke: var(--slc-bg); stroke-width: 2; }
+.slc-md--1 { fill: var(--slc-c1); }
+.slc-md--2 { fill: var(--slc-c2); }
+.slc-md--3 { fill: var(--slc-c3); }
+.slc-md--4 { fill: var(--slc-c4); }
+
+.slc-mn { font-size: 10px; font-weight: 800; opacity: .65; transition: opacity .15s; }
+.slc-mn--1 { fill: var(--slc-c1); }
+.slc-mn--2 { fill: var(--slc-c2); }
+.slc-mn--3 { fill: var(--slc-c3); }
+.slc-mn--4 { fill: var(--slc-c4); }
+
+.slc-mm { font-size: 9px; fill: var(--slc-muted); }
+
+/* GPT-1 labels are BELOW the dot (dot is near top, open space below) */
+/* GPT-2, GPT-3, Hoy labels are ABOVE the dot (they descend along the curve) */
+
+.slc-mg--em .slc-mh { fill-opacity: .14; }
+.slc-mg--em .slc-mn { opacity: 1; }
+.slc-mg--active .slc-mh { fill-opacity: .16; }
+.slc-mg--active .slc-mn { opacity: 1; }
+.slc-mg:hover .slc-mh { fill-opacity: .08; }
+.slc-mg:hover .slc-mn { opacity: 1; }
+
+/* Detail panel */
+.slc-detail {
+  border: 1px solid var(--slc-border);
+  border-radius: 14px;
+  padding: 14px 16px;
+  background: color-mix(in srgb, var(--slc-bg) 92%, #000 8%);
+  min-height: 72px;
+}
+
+.slc-det-title {
+  font-size: 10.5px; font-weight: 900; text-transform: uppercase;
+  letter-spacing: .07em; color: var(--slc-muted); margin-bottom: 4px;
+}
+.slc-det-title--em { color: var(--slc-c3); }
+
+.slc-det-stats {
+  font-size: 11px; font-weight: 600; color: var(--slc-muted);
+  margin-bottom: 8px; font-variant-numeric: tabular-nums;
+}
+
+.slc-det-desc { margin: 0 0 10px; font-size: 13px; line-height: 1.5; }
+
+.slc-caps { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 8px; }
+
+.slc-cap {
+  font-size: 12px; font-weight: 600; padding: 3px 10px;
+  border-radius: 999px; border: 1px solid var(--slc-border);
+  background: color-mix(in srgb, var(--slc-bg) 86%, transparent);
+}
+
+.slc-cap--em {
+  border-color: rgba(124,58,237,.34);
+  background: rgba(124,58,237,.09);
+  color: var(--slc-c3);
+}
+
+.slc-missing {
+  font-size: 12px; color: var(--slc-muted); font-style: italic;
+  border-left: 2px solid var(--slc-border);
+  padding-left: 10px; margin-bottom: 8px; line-height: 1.4;
+}
+
+.slc-ref {
+  font-size: 10.5px; color: var(--slc-muted); opacity: .7;
+  border-top: 1px solid var(--slc-border); padding-top: 6px; margin-top: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slc-mh, .slc-mn { transition: none; }
+}
+</style>
