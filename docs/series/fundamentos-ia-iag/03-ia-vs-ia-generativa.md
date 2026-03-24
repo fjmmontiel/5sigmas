@@ -148,7 +148,7 @@ No hay tecnología correcta en abstracto. Hay la correcta para cada dato, proble
 
 El capítulo siguiente lleva ese espectro hasta su límite: qué es la Inteligencia Artificial General, y qué separa lo que existe hoy de lo que todavía no existe.
 
-<!-- [Capítulo 4 — Inteligencia Artificial General →](./04-agi.md){ .md-button .md-button--primary } -->
+[Capítulo 4 — Inteligencia Artificial General →](./04-agi.md){ .md-button .md-button--primary }
 
 ---
 
