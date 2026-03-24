@@ -41,11 +41,11 @@ El problema con esta definición es que "cualquier tarea intelectual humana" es 
 OpenAI define AGI como **"sistemas altamente autónomos que superan a los humanos en la mayor parte del trabajo económicamente valioso"** ([OpenAI Charter][r3]).
 A diferencia de la definición cognitiva, esta es medible: puede contrastarse contra benchmarks laborales y de productividad.
 
-El cambio de foco es significativo: de "inteligencia general" a "utilidad económica general", un listón diferente y más bajo en algunos aspectos. El problema es que el 80% del trabajo cognitivo con valor económico podría automatizarse sin que el sistema alcance el listón de la definición clásica. ¿Sería eso AGI?
+El cambio de foco es significativo: de "inteligencia general" a "utilidad económica general", un listón diferente y más bajo en algunos aspectos. El problema es que una parte sustancial del trabajo cognitivo con valor económico podría transformarse o automatizarse sin que el sistema alcance el listón de la definición clásica. ¿Sería eso AGI?
 
-### 2.3 El espectro de capacidades: cinco niveles
+### 2.3 El espectro de capacidades: seis niveles
 
-DeepMind propuso tratar la AGI no como un umbral binario sino como un **espectro de cinco niveles de capacidad**:
+DeepMind propuso tratar la AGI no como un umbral binario sino como un **espectro de seis niveles de capacidad**, numerados del 0 al 5:
 
 | Nivel | Descripción | Referencia aproximada |
 |---|---|---|
@@ -90,7 +90,7 @@ Los modelos actuales tienen capacidades que impresionan tanto a quienes los usan
 * **Generalización fuera de lo conocido**: funcionan bien en dominios del entrenamiento y fallan de forma impredecible en variaciones alejadas de lo visto.
 * **Saber cuándo no saben**: no reconocen con fiabilidad los límites de su propio conocimiento, de ahí las alucinaciones.
 
-> Superar el test de Turing en una conversación corta no implica inteligencia general. Un modelo puede generar texto que parece humano durante minutos y fallar en un problema de razonamiento de sentido común que cualquier niño de ocho años resolvería.
+> Superar el test de Turing en una conversación corta no implica inteligencia general. Un modelo puede generar texto que parece humano durante minutos y fallar en problemas de razonamiento causal o de sentido común que un humano sin entrenamiento específico resolvería sin dificultad.
 
 <details markdown="1">
 <summary><strong>La diferencia entre comprensión lingüística y comprensión del mundo</strong></summary>
@@ -123,7 +123,7 @@ La distribución del impacto importa tanto como el impacto total: quién captura
 
 ### Impacto científico
 
-AlphaFold da un atisbo de lo que sería posible: resolvió en meses un problema que la comunidad científica llevaba cincuenta años intentando resolver. 
+AlphaFold da un atisbo de lo que sería posible: dio un salto decisivo en un problema que la comunidad científica llevaba cincuenta años intentando resolver, reconocido con el Nobel de Química 2024.
 
 Un sistema capaz de leer toda la literatura disponible, identificar contradicciones, proponer hipótesis testables y diseñar experimentos cambiaría la velocidad del descubrimiento de forma radical. La compresión del tiempo entre descubrimiento y aplicación podría redefinir campos enteros de la medicina, la química y la física en una sola generación.
 
@@ -168,7 +168,7 @@ Eso es lo que esta serie ha intentado construir: un mapa mental estable que func
 
 | Clave | Fuente | Descripción breve |
 | --- | --- | --- |
-| R1 | **Morris et al. (2023)** — *Levels of AGI: Operationalizing Progress on the Path to AGI* ([arXiv][r1]) | El marco de cinco niveles de DeepMind para operacionalizar AGI. |
+| R1 | **Morris et al. (2023)** — *Levels of AGI: Operationalizing Progress on the Path to AGI* ([arXiv][r1]) | El marco de seis niveles (0-5) de DeepMind para operacionalizar AGI. |
 | R2 | **Bubeck et al. (2023)** — *Sparks of Artificial General Intelligence: Early experiments with GPT-4* ([arXiv][r2]) | Evaluación sistemática de GPT-4 frente al listón de AGI cognitiva. |
 | R3 | **OpenAI (2023)** — *OpenAI Charter* ([OpenAI][r3]) | Definición canónica de AGI de OpenAI: "sistemas altamente autónomos que superan a los humanos en la mayor parte del trabajo económicamente valioso". |
 | R4 | **Russell, S. (2019)** — *Human Compatible: Artificial Intelligence and the Problem of Control* (libro, Basic Books) | Argumento central sobre el problema de alineación y el diseño de IA compatible con valores humanos. |

@@ -33,7 +33,7 @@ Una forma efectiva de visualizar la jerarquía es la siguiente:
 * **Inteligencia Artificial Generativa (GenAI):** una parte del DL orientada a **generar contenido** (texto, imagen, audio, código).
 
 > IA / ML / DL describen la **familia tecnológica** del sistema.
-> "Generativa" describe **el tipo de salida**, no el tipo de modelo.
+> En esta serie, "generativa" se usa como etiqueta práctica para sistemas cuyo output principal es **contenido nuevo**, aunque técnicamente también remite a una familia de modelos generativos que modelan distribuciones y generan muestras.
 
 {{ include_html("snippets/fundamentos-ia/ia_ml_dl.html") }}
 

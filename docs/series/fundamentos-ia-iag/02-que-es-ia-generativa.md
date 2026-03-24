@@ -63,7 +63,7 @@ Por cada token que procesa, el modelo calcula cuánta relevancia tiene cada otro
 
 Internamente funciona con el mismo principio que las redes neuronales, pesos que se ajustan para reducir el error. Lo que cambia es la arquitectura de esas conexiones, porque la atención relaciona todos los tokens del contexto a la vez, en lugar de hacerlo en orden.
 
-Lo que hace al Transformer tan valioso no es solo que resuelva esos dos problemas, sino que la arquitectura es **general**, funciona para texto, imágenes, audio, vídeo y código. GPTs, DALL-E, Stable Diffusion, Gemini y Claude parten de la misma base. 
+Lo que hace al Transformer tan valioso no es solo que resuelva esos dos problemas, sino que la arquitectura es **general**: funciona para texto, imágenes, audio, vídeo y código. El Transformer domina el stack de los modelos de lenguaje (GPT, Claude, Gemini, Llama) y parte importante del stack multimodal moderno, aunque no toda la IA generativa comparte exactamente la misma arquitectura: Stable Diffusion, por ejemplo, es un modelo de difusión latente, no un Transformer puro.
 
 {{ include_html("snippets/fundamentos-ia-iag/02-transformer.html") }}
 
@@ -79,9 +79,9 @@ En 2020, OpenAI publicó ([Scaling Laws][r3]) que el rendimiento de los modelos 
 
 > **Ley de escala**: Dicta que duplicar la potencia de cálculo con la proporción correcta de datos y parámetros produce una mejora predecible y consistente en el rendimiento. Es decir, a mayor cantidad de datos y cómputo, mejores modelos de IA.
 
-Lo inesperado no fue que los modelos mejoraran, sino que **a cierta escala emergieran capacidades que nadie había programado**: few-shot learning, aritmética, traducción, síntesis de código, seguimiento de instrucciones complejas. 
+Lo inesperado no fue que los modelos mejoraran, sino que **a cierta escala aparecieran capacidades que nadie había programado**: few-shot learning, aritmética, traducción, síntesis de código, seguimiento de instrucciones complejas.
 
-A estas capacidades se las llama **capacidades emergentes** porque no estaban en el diseño de nadie.
+A estas capacidades se las llama **capacidades emergentes** porque no estaban en el diseño de nadie. La literatura posterior discute cuánto de esa emergencia es un cambio real en el modelo y cuánto es un artefacto de la métrica usada para medirla, pero el salto práctico en utilidad a escala es innegable.
 
 <details markdown="1">
 <summary><strong>¿Qué es el few-shot learning?</strong></summary>

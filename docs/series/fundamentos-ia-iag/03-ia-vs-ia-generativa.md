@@ -42,7 +42,7 @@ Esa diferencia tiene consecuencias en todo sistema que use cualquiera de las dos
 
 ### 1.2 Determinismo
 
-El ML clásico es determinista: dado el mismo input, el mismo modelo produce siempre la misma salida. El comportamiento es estable y permite construir sobre una base sólida.
+En inferencia, con modelo y pipeline fijos, el ML clásico es mucho más reproducible que la IA generativa: dado el mismo input produce habitualmente la misma salida y el comportamiento es estable. En entrenamiento, en cambio, sí existen fuentes de aleatoriedad (semillas, orden de los datos, entornos distribuidos) que hacen que el resultado no sea trivialmente reproducible.
 
 La IA generativa no es determinista. Dado el mismo prompt, el modelo puede producir respuestas distintas en ejecuciones distintas, porque el comportamiento es probabilístico por la propia naturaleza de los Transformers. Un parámetro llamado "temperatura" controla cuánta variabilidad tiene la salida.
 
@@ -118,7 +118,7 @@ Conocer las diferencias no resuelve la decisión de qué tecnología usar. Para 
 
 ## 2. La matriz operacional
 
-Cinco tecnologías forman el espectro completo, de menor a mayor complejidad: reglas explícitas, ML clásico, LLM puro, LLM + RAG y agente. 
+Seis configuraciones forman el espectro completo, de menor a mayor complejidad: reglas explícitas, ML clásico, LLM puro, LLM + RAG, workflow orquestado y agente. Entre RAG y un agente autónomo existe un espacio amplio de pipelines orquestados y composicionales, donde el LLM ejecuta pasos definidos por el diseñador sin tomar decisiones de planificación propias. Añadir esa casilla es importante porque la mayoría de aplicaciones reales hoy viven ahí, no en el extremo agéntico.
 
 Puedes usar esta matriz de decisión para ver qué tecnología aplica mejor a tu caso:
 
