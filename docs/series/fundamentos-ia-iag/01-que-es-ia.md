@@ -1,6 +1,6 @@
 ---
 title: Fundamentos de IA
-description: Qué es la Inteligencia Artificial, cómo funciona y cómo ha evolucionado: desde heurísticas y Machine Learning hasta redes neuronales y modelos fundacionales.
+description: "Qué es la Inteligencia Artificial, cómo funciona y cómo ha evolucionado: desde heurísticas y Machine Learning hasta redes neuronales y modelos fundacionales."
 ---
 
 # Capítulo 1 — Qué es IA

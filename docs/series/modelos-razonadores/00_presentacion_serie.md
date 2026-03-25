@@ -1,6 +1,6 @@
 ---
 title: Modelos razonadores
-description: Cómo razonan los modelos de IA: cadenas de pensamiento, árbol de ideas y razonamiento como proceso con coste computacional real. Análisis técnico sin hype.
+description: "Cómo razonan los modelos de IA: cadenas de pensamiento, árbol de ideas y razonamiento como proceso con coste computacional real. Análisis técnico sin hype."
 robots: noindex
 ---
 
