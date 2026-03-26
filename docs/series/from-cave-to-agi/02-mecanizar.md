@@ -59,9 +59,58 @@ Ese enlace fue decisivo. Ya no se trataba solo de razonar sobre verdadero y fals
 
 En 1936, Alan Turing publica *[On Computable Numbers, with an Application to the Entscheidungsproblem](https://www.cs.virginia.edu/~robins/Turing_Paper_1936.pdf)*. Su contribución no fue describir una máquina concreta, sino aislar lo esencial de cualquier proceso mecánico de cálculo: leer símbolos, escribir símbolos, cambiar de estado y seguir reglas finitas paso a paso.
 
-La potencia de esta abstracción es enorme. Por un lado, la máquina de Turing ofrece un modelo general de computación. Por otro, deja claro que la computación también tiene fronteras. El problema de la parada muestra que no existe un procedimiento general capaz de decidir para cualquier programa y cualquier entrada si la ejecución terminará o continuará indefinidamente.
+La potencia de esta abstracción es enorme. Por un lado, la máquina de Turing ofrece un modelo general de computación. Por otro, deja claro que la computación también tiene fronteras. No existe un procedimiento general capaz de decidir, para cualquier programa y cualquier entrada, si esa ejecución terminará o continuará indefinidamente. Ese resultado, conocido hoy como *halting problem*, marca uno de los límites formales más importantes de la computación.
 
-XXXXXXXXXXXXX HTML de regla de la parada
+<details class="s5-optional">
+  <summary>Ampliación opcional: por qué no podemos saber siempre si un programa terminará</summary>
+
+  <div class="s5-optional__body">
+    <p>
+      Aquí no hablamos de un caso práctico aislado, como un programa mal escrito que entra en un bucle infinito.
+      La afirmación es mucho más fuerte: no existe un método general que, recibiendo cualquier programa y cualquier entrada,
+      pueda decidir siempre y en tiempo finito si esa ejecución terminará o seguirá indefinidamente.
+    </p>
+
+    <p>
+      La intuición puede parecer engañosa al principio. En muchos casos concretos sí podemos razonar sobre la terminación.
+      Podemos ver, por ejemplo, que un contador baja hasta cero, o que una recursión tiene un caso base claro.
+      Lo que Turing demuestra es que no puede existir un verificador universal válido para todos los programas posibles.
+    </p>
+
+    <p>
+      La idea de la demostración consiste en suponer que sí existe ese verificador general. Imaginemos una función
+      <code>TERMINA(programa, entrada)</code> que responde siempre correctamente:
+    </p>
+
+    <pre><code>TERMINA(programa, entrada) =
+  "sí"  si el programa acaba
+  "no"  si el programa no acaba nunca</code></pre>
+
+    <p>
+      A partir de ahí puede construirse otro programa que use ese verificador para comportarse justamente al revés de lo predicho
+      cuando se analiza a sí mismo. Si el verificador dice que terminará, entra en bucle. Si el verificador dice que no terminará,
+      entonces se detiene.
+    </p>
+
+    <pre><code>PARADOJA(x):
+  si TERMINA(x, x) = "sí":
+    repetir para siempre
+  si TERMINA(x, x) = "no":
+    terminar</code></pre>
+
+    <p>
+      El problema aparece cuando ese programa se ejecuta sobre su propio código, es decir, cuando evaluamos <code>PARADOJA(PARADOJA)</code>.
+      Si el verificador predice que termina, entonces el programa entra en bucle. Si predice que entra en bucle, entonces termina.
+      En ambos casos aparece una contradicción.
+    </p>
+
+    <p>
+      La conclusión no es que nunca podamos demostrar que un programa concreto termina.
+      La conclusión es más precisa y más importante: no existe un procedimiento único, automático y universal que resuelva esa pregunta para todos los casos.
+      Ahí aparece una de las primeras fronteras formales de la computación.
+    </p>
+  </div>
+</details>
 
 Ese resultado cambia el tono de toda la disciplina. La computación deja de ser solo una promesa de automatización ilimitada y pasa a tener límites demostrables. No todo problema difícil es simplemente una cuestión de más tiempo o más hardware. Hay fronteras que nacen de la propia estructura matemática del problema.
 
