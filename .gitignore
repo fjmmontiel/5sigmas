@@ -27,3 +27,5 @@ test/*
 # Animation export artifacts
 output/playwright/
 exports/
+CLAUDE.md
+AGENTS.md
