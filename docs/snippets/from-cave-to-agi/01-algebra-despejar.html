@@ -1,0 +1,484 @@
+<div class="alg-wrap" data-demo="01-algebra-despejar">
+  <div class="alg-hd">
+    <div class="alg-title">Álgebra: razonar sobre lo que aún no se sabe</div>
+    <div class="alg-sub">Al-Khwarizmi formalizó que se puede operar sobre una cantidad desconocida como si fuera conocida, aplicar reglas y obtener el valor. Eso es un algoritmo.</div>
+  </div>
+
+  <div class="alg-contrast">
+    <div class="alg-cont-col">
+      <div class="alg-cont-label">Antes del álgebra</div>
+      <div class="alg-cont-body">«Si el doble de cierta cantidad más cinco es trece, ¿cuál es esa cantidad?» Solo adivinando o probando valores.</div>
+      <div class="alg-cont-method">Prueba y error · sin garantías · no generalizable</div>
+    </div>
+    <div class="alg-cont-arrow">→</div>
+    <div class="alg-cont-col alg-cont-col--b">
+      <div class="alg-cont-label">Con álgebra</div>
+      <div class="alg-cont-body">Llamamos <em>x</em> a la cantidad desconocida. Escribimos las relaciones. Aplicamos reglas formales. El resultado es consecuencia inevitable.</div>
+      <div class="alg-cont-method">Reglas formales · garantía de corrección · generalizable a cualquier problema de esa forma</div>
+    </div>
+  </div>
+
+  <!-- Step stepper -->
+  <div class="alg-stepper" id="alg-stepper">
+    <div class="alg-s-item alg-s-item--active" data-s="0">
+      <div class="alg-s-dot alg-s-dot--active"></div>
+      <div class="alg-s-lbl">Problema</div>
+    </div>
+    <div class="alg-s-line"></div>
+    <div class="alg-s-item" data-s="1">
+      <div class="alg-s-dot"></div>
+      <div class="alg-s-lbl">Aislar x</div>
+    </div>
+    <div class="alg-s-line"></div>
+    <div class="alg-s-item" data-s="2">
+      <div class="alg-s-dot"></div>
+      <div class="alg-s-lbl">Simplificar</div>
+    </div>
+    <div class="alg-s-line"></div>
+    <div class="alg-s-item" data-s="3">
+      <div class="alg-s-dot"></div>
+      <div class="alg-s-lbl">Verificar</div>
+    </div>
+  </div>
+
+  <div class="alg-board">
+
+    <!-- Panel 0 -->
+    <div class="alg-panel alg-panel--active" data-panel="0">
+      <div class="alg-p-tag">El punto de partida</div>
+      <div class="alg-eq-row">
+        <div class="alg-eq-side alg-eq-side--left">
+          <span class="alg-tok alg-tok--coef">2</span><span class="alg-tok alg-tok--x">x</span>
+          <span class="alg-tok alg-tok--op">+</span>
+          <span class="alg-tok alg-tok--const">5</span>
+        </div>
+        <div class="alg-eq-sign">=</div>
+        <div class="alg-eq-side alg-eq-side--right">
+          <span class="alg-tok alg-tok--result">13</span>
+        </div>
+      </div>
+      <div class="alg-p-explain">
+        <span class="alg-tok-key alg-tk--x">x</span> = cantidad desconocida (el objetivo)
+        <br>
+        <span class="alg-tok-key alg-tk--coef">2</span> = coeficiente (cuántas veces aparece x)
+        <br>
+        <span class="alg-tok-key alg-tk--const">5</span> = término independiente (no contiene x)
+      </div>
+      <div class="alg-p-insight">La clave del álgebra: tratamos <em>x</em> como un objeto que podemos mover, dividir o multiplicar, aunque no sepamos aún su valor.</div>
+    </div>
+
+    <!-- Panel 1 -->
+    <div class="alg-panel" data-panel="1">
+      <div class="alg-p-tag">Paso 1 — eliminar el término independiente</div>
+      <div class="alg-eq-row">
+        <div class="alg-eq-side alg-eq-side--left">
+          <span class="alg-tok alg-tok--coef">2</span><span class="alg-tok alg-tok--x">x</span>
+          <span class="alg-tok alg-tok--op">+</span>
+          <span class="alg-tok alg-tok--const alg-tok--cancel">5</span>
+          <span class="alg-tok alg-tok--op">−</span>
+          <span class="alg-tok alg-tok--op-new">5</span>
+        </div>
+        <div class="alg-eq-sign">=</div>
+        <div class="alg-eq-side alg-eq-side--right">
+          <span class="alg-tok alg-tok--result">13</span>
+          <span class="alg-tok alg-tok--op">−</span>
+          <span class="alg-tok alg-tok--op-new">5</span>
+        </div>
+      </div>
+      <div class="alg-op-label">Operación: restar 5 a ambos lados</div>
+      <div class="alg-eq-row alg-eq-row--result">
+        <div class="alg-eq-side alg-eq-side--left">
+          <span class="alg-tok alg-tok--coef">2</span><span class="alg-tok alg-tok--x">x</span>
+        </div>
+        <div class="alg-eq-sign">=</div>
+        <div class="alg-eq-side alg-eq-side--right">
+          <span class="alg-tok alg-tok--result">8</span>
+        </div>
+      </div>
+      <div class="alg-rule-box">
+        <span class="alg-rule-icon">⚖</span>
+        <span><strong>Regla de la balanza</strong>: lo que se hace a un lado debe hacerse al otro. La igualdad se mantiene.</span>
+      </div>
+    </div>
+
+    <!-- Panel 2 -->
+    <div class="alg-panel" data-panel="2">
+      <div class="alg-p-tag">Paso 2 — aislar x completamente</div>
+      <div class="alg-eq-row">
+        <div class="alg-eq-side alg-eq-side--left">
+          <span class="alg-tok alg-tok--coef alg-tok--cancel">2</span><span class="alg-tok alg-tok--x">x</span>
+          <span class="alg-tok alg-tok--op">÷</span>
+          <span class="alg-tok alg-tok--op-new">2</span>
+        </div>
+        <div class="alg-eq-sign">=</div>
+        <div class="alg-eq-side alg-eq-side--right">
+          <span class="alg-tok alg-tok--result">8</span>
+          <span class="alg-tok alg-tok--op">÷</span>
+          <span class="alg-tok alg-tok--op-new">2</span>
+        </div>
+      </div>
+      <div class="alg-op-label">Operación: dividir ambos lados entre 2</div>
+      <div class="alg-eq-row alg-eq-row--result alg-eq-row--big">
+        <div class="alg-eq-side alg-eq-side--left">
+          <span class="alg-tok alg-tok--x">x</span>
+        </div>
+        <div class="alg-eq-sign">=</div>
+        <div class="alg-eq-side alg-eq-side--right">
+          <span class="alg-tok alg-tok--answer">4</span>
+        </div>
+      </div>
+      <div class="alg-rule-box">
+        <span class="alg-rule-icon">✓</span>
+        <span>La cantidad desconocida ha quedado sola. Aplicar reglas es suficiente: no se necesita intuición ni adivinanza.</span>
+      </div>
+    </div>
+
+    <!-- Panel 3 -->
+    <div class="alg-panel" data-panel="3">
+      <div class="alg-p-tag">Verificación — la prueba de que el proceso es correcto</div>
+      <div class="alg-verify">
+        <div class="alg-verify-step">
+          <span class="alg-verify-lbl">Sustituir x = 4:</span>
+          <span class="alg-verify-eq">2 · <strong>4</strong> + 5 = 8 + 5 = <strong>13</strong></span>
+        </div>
+        <div class="alg-verify-check">
+          <span class="alg-check-icon">✓</span>
+          <span>13 = 13 — la solución es correcta</span>
+        </div>
+      </div>
+      <div class="alg-generalize">
+        <div class="alg-gen-label">La misma forma, cualquier problema:</div>
+        <div class="alg-gen-formula">ax + b = c &nbsp;→&nbsp; x = (c − b) / a</div>
+        <div class="alg-gen-note">Al-Khwarizmi describió procedimientos generales para resolver todas las ecuaciones de una variable. La palabra <em>algoritmo</em> viene de su nombre latinizado: <em>Algoritmi</em>.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="alg-nav">
+    <button class="alg-btn" id="alg-prev">← Anterior</button>
+    <button class="alg-btn" id="alg-next">Siguiente →</button>
+  </div>
+</div>
+
+<style>
+.alg-wrap, .alg-wrap * { box-sizing: border-box; }
+
+.alg-wrap {
+  --ea: var(--md-primary-fg-color, #26A69A);
+  --eb: #324AB2;
+  --eg: var(--md-accent-fg-color, #FFB343);
+  --ebg: var(--md-default-bg-color, #fff);
+  --efg: var(--md-default-fg-color, #0f172a);
+  --ebd: rgba(15,23,42,.13);
+  --emut: rgba(15,23,42,.56);
+  --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid;
+  gap: 14px;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--ebd);
+  border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 0% 100%, color-mix(in srgb,var(--eg) 5%,transparent), transparent 50%),
+    radial-gradient(90% 110% at 100% 0%, color-mix(in srgb,var(--ea) 5%,transparent), transparent 52%),
+    var(--ebg);
+  color: var(--efg);
+  font-family: var(--ef);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-md-color-scheme="slate"] .alg-wrap {
+  --ebg: var(--md-default-bg-color, #0f172a);
+  --efg: var(--md-default-fg-color, #e2e8f0);
+  --ebd: rgba(226,232,240,.13);
+  --emut: rgba(226,232,240,.56);
+}
+
+.alg-hd { display: grid; gap: 4px; }
+.alg-title { font-size: clamp(15px,2vw,20px); font-weight: 900; letter-spacing: -.02em; line-height: 1.15; }
+.alg-sub { font-size: 13px; color: var(--emut); line-height: 1.5; max-width: 68ch; }
+
+/* Contrast */
+.alg-contrast {
+  display: flex;
+  gap: 0;
+  border-radius: 13px;
+  border: 1px solid var(--ebd);
+  overflow: hidden;
+}
+.alg-cont-col {
+  flex: 1;
+  padding: 12px 15px;
+  display: grid;
+  gap: 5px;
+  align-content: start;
+  background: color-mix(in srgb, var(--ebg) 70%, #0f172a 30%);
+}
+.alg-cont-col--b {
+  background: color-mix(in srgb, var(--ea) 5%, color-mix(in srgb, var(--ebg) 70%, #0f172a 30%));
+  border-left: 1px solid var(--ebd);
+}
+.alg-cont-arrow {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--emut);
+  padding: 0 6px;
+  background: color-mix(in srgb, var(--ebg) 70%, #0f172a 30%);
+}
+.alg-cont-label { font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--emut); }
+.alg-cont-body { font-size: 12px; color: var(--emut); line-height: 1.45; font-style: italic; }
+.alg-cont-method { font-size: 10.5px; color: var(--emut); line-height: 1.4; opacity: .75; }
+
+/* Stepper */
+.alg-stepper {
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--ebd);
+  background: color-mix(in srgb, var(--ebg) 70%, #0f172a 30%);
+  overflow-x: auto;
+}
+.alg-s-item {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 60px;
+  cursor: pointer;
+}
+.alg-s-dot {
+  width: 11px; height: 11px;
+  border-radius: 999px;
+  border: 2px solid var(--ebd);
+  background: transparent;
+  transition: background .2s, border-color .2s, transform .2s;
+}
+.alg-s-dot--active { background: var(--ea); border-color: var(--ea); transform: scale(1.25); }
+.alg-s-lbl { font-size: 10px; font-weight: 700; color: var(--emut); text-align: center; }
+.alg-s-item--active .alg-s-lbl { color: var(--efg); }
+.alg-s-line { flex: 0 0 20px; height: 2px; background: var(--ebd); margin-bottom: 16px; }
+
+/* Board */
+.alg-board {
+  padding: 16px 18px;
+  border-radius: 13px;
+  border: 1px solid var(--ebd);
+  background: color-mix(in srgb, var(--ebg) 75%, #0f172a 25%);
+  min-height: 240px;
+}
+.alg-panel { display: none; }
+.alg-panel--active { display: grid; gap: 12px; align-content: start; animation: algIn .25s ease; }
+@keyframes algIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+.alg-p-tag { font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; color: color-mix(in srgb, var(--ea) 80%, var(--emut)); }
+
+/* Equation display */
+.alg-eq-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--ebg) 50%, #0f172a 50%);
+  border: 1px solid var(--ebd);
+}
+.alg-eq-row--result {
+  background: color-mix(in srgb, var(--ea) 6%, transparent);
+  border-color: color-mix(in srgb, var(--ea) 25%, transparent);
+}
+.alg-eq-row--big .alg-tok--x, .alg-eq-row--big .alg-tok--answer { font-size: 28px; }
+.alg-eq-side { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+.alg-eq-sign { font-size: 22px; font-weight: 900; color: var(--emut); }
+
+.alg-tok {
+  font-size: 20px;
+  font-weight: 900;
+  font-family: "Georgia", "Times New Roman", serif;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 4px;
+  border-radius: 5px;
+  transition: background .2s;
+}
+.alg-tok--x { color: color-mix(in srgb, var(--ea) 85%, var(--efg)); }
+.alg-tok--coef { color: color-mix(in srgb, var(--eb) 85%, var(--efg)); }
+.alg-tok--const { color: color-mix(in srgb, var(--eg) 80%, var(--efg)); }
+.alg-tok--op { color: var(--emut); font-size: 16px; }
+.alg-tok--op-new {
+  color: color-mix(in srgb, #ef4444 80%, var(--efg));
+  font-size: 16px;
+  text-decoration: underline;
+}
+.alg-tok--result { color: var(--efg); }
+.alg-tok--answer {
+  color: color-mix(in srgb, var(--ea) 90%, var(--efg));
+  background: color-mix(in srgb, var(--ea) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ea) 35%, transparent);
+  border-radius: 8px;
+  padding: 3px 10px;
+}
+.alg-tok--cancel {
+  text-decoration: line-through;
+  opacity: .4;
+}
+
+.alg-op-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--emut);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  text-align: center;
+}
+
+.alg-p-explain {
+  font-size: 12px;
+  color: var(--emut);
+  line-height: 1.7;
+}
+.alg-tok-key {
+  font-weight: 900;
+  font-family: "Georgia", serif;
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+.alg-tk--x { background: color-mix(in srgb, var(--ea) 14%, transparent); color: color-mix(in srgb, var(--ea) 85%, var(--efg)); }
+.alg-tk--coef { background: color-mix(in srgb, var(--eb) 12%, transparent); color: color-mix(in srgb, var(--eb) 85%, var(--efg)); }
+.alg-tk--const { background: color-mix(in srgb, var(--eg) 12%, transparent); color: color-mix(in srgb, var(--eg) 80%, var(--efg)); }
+
+.alg-p-insight {
+  font-size: 12px;
+  font-style: italic;
+  color: var(--emut);
+  line-height: 1.5;
+  border-left: 2px solid color-mix(in srgb, var(--ea) 40%, transparent);
+  padding-left: 9px;
+}
+
+.alg-rule-box {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  font-size: 12px;
+  color: var(--emut);
+  line-height: 1.5;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--ea) 6%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ea) 18%, transparent);
+}
+.alg-rule-icon { font-size: 14px; flex-shrink: 0; }
+
+/* Verify */
+.alg-verify { display: grid; gap: 10px; }
+.alg-verify-step {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  flex-wrap: wrap;
+  font-size: 13px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--ebg) 50%, #0f172a 50%);
+  border: 1px solid var(--ebd);
+}
+.alg-verify-lbl { font-size: 10.5px; font-weight: 700; text-transform: uppercase; color: var(--emut); flex-shrink: 0; }
+.alg-verify-eq { font-family: "Georgia", serif; font-size: 16px; }
+.alg-verify-check {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--ea) 85%, var(--efg));
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--ea) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ea) 30%, transparent);
+}
+.alg-check-icon { font-size: 18px; }
+
+.alg-generalize { display: grid; gap: 8px; margin-top: 4px; }
+.alg-gen-label { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--emut); }
+.alg-gen-formula {
+  font-family: "Georgia", serif;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--eg) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--eg) 22%, transparent);
+  color: color-mix(in srgb, var(--eg) 80%, var(--efg));
+}
+.alg-gen-note { font-size: 11.5px; color: var(--emut); line-height: 1.5; font-style: italic; }
+
+/* Nav */
+.alg-nav { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.alg-btn {
+  padding: 7px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--ebd);
+  background: transparent;
+  color: var(--emut);
+  font-family: var(--ef);
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .18s, color .18s, border-color .18s;
+}
+.alg-btn:hover {
+  background: color-mix(in srgb, var(--ea) 10%, transparent);
+  border-color: color-mix(in srgb, var(--ea) 30%, var(--ebd));
+  color: var(--efg);
+}
+.alg-btn:disabled { opacity: .35; cursor: default; pointer-events: none; }
+</style>
+
+<script>
+(function () {
+  function boot() {
+    var wrap = document.querySelector('[data-demo="01-algebra-despejar"]');
+    if (!wrap || wrap.dataset.algReady) return;
+    wrap.dataset.algReady = '1';
+
+    var sItems = wrap.querySelectorAll('.alg-s-item');
+    var panels = wrap.querySelectorAll('.alg-panel');
+    var btnPrev = wrap.querySelector('#alg-prev');
+    var btnNext = wrap.querySelector('#alg-next');
+    var current = 0;
+
+    function go(idx) {
+      if (idx < 0 || idx >= panels.length) return;
+      current = idx;
+      sItems.forEach(function(s, i) {
+        s.classList.toggle('alg-s-item--active', i === idx);
+        var dot = s.querySelector('.alg-s-dot');
+        if (dot) dot.classList.toggle('alg-s-dot--active', i === idx);
+      });
+      panels.forEach(function(p, i) { p.classList.toggle('alg-panel--active', i === idx); });
+      btnPrev.disabled = idx === 0;
+      btnNext.disabled = idx === panels.length - 1;
+    }
+
+    sItems.forEach(function(s, i) { s.addEventListener('click', function() { go(i); }); });
+    btnPrev.addEventListener('click', function() { go(current - 1); });
+    btnNext.addEventListener('click', function() { go(current + 1); });
+    btnPrev.disabled = true;
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
+  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
+})();
+</script>

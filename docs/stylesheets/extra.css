@@ -1248,9 +1248,6 @@
     position: relative;
     z-index: 1;
     overflow: auto;
-    border-radius: 12px;
-    border: 1px solid color-mix(in srgb, var(--anim-fg) 14%, transparent);
-    background: var(--anim-surface);
     padding: clamp(6px, 0.9vw, 10px);
     color: var(--anim-content-fg);
     color-scheme: light;
@@ -1263,6 +1260,7 @@
 }
 
 .anim-brand-shell__viewport>* {
+    width: 100%;
     max-width: 100%;
 }
 
@@ -1399,6 +1397,25 @@
 .anim-shell-modal__body>* {
     margin: 0;
     width: 100%;
+}
+
+.anim-shell-modal__body>.anim-brand-shell {
+    display: flex;
+    flex-direction: column;
+}
+
+.anim-shell-modal__body .anim-brand-shell__viewport {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.anim-scale-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
 }
 
 .anim-shell-modal__body[data-anim-contrast="force"] {

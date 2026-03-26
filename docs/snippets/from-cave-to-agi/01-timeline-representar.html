@@ -1,0 +1,706 @@
+<div class="rep-wrap" data-demo="01-timeline-representar">
+
+  <div class="rep-header">
+    <div class="rep-hd-title">Del símbolo al cálculo: 40 000 años en 7 pasos</div>
+    <div class="rep-hd-sub">Cada hito resuelve el problema que el anterior dejó abierto. Navega para ver cómo cada pieza hace posible la siguiente.</div>
+  </div>
+
+  <div class="rep-card-wrap">
+    <div class="rep-card" id="repCard">
+      <div class="rep-visual" id="repVisual"></div>
+      <div class="rep-content">
+        <div class="rep-meta">
+          <span class="rep-step-chip" id="repChip"></span>
+          <span class="rep-era" id="repEra"></span>
+        </div>
+        <div class="rep-date" id="repDate"></div>
+        <div class="rep-title" id="repTitle"></div>
+        <p class="rep-desc" id="repDesc"></p>
+        <div class="rep-key" id="repKey"></div>
+        <div class="rep-bridge" id="repBridge">
+          <span class="rep-bridge-label">Hace posible →</span>
+          <span class="rep-bridge-text" id="repBridgeText"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rep-nav">
+    <button class="rep-btn" id="repPrev">← Anterior</button>
+    <div class="rep-dots" id="repDots"></div>
+    <button class="rep-btn rep-btn--fwd" id="repNext">Siguiente →</button>
+  </div>
+
+</div>
+
+<style>
+.rep-wrap, .rep-wrap * { box-sizing: border-box; }
+.rep-wrap {
+  --ra: var(--md-primary-fg-color, #26A69A);
+  --rb: #324AB2;
+  --rg: #FFB343;
+  --rbg: var(--md-default-bg-color, #fff);
+  --rfg: var(--md-default-fg-color, #0f172a);
+  --rbd: rgba(15,23,42,.14);
+  --rmut: rgba(15,23,42,.56);
+  --rf: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  --rstep: #26A69A;
+
+  display: grid;
+  gap: 14px;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--rbd);
+  border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--rb) 7%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 100%, color-mix(in srgb,var(--ra) 6%,transparent), transparent 52%),
+    var(--rbg);
+  color: var(--rfg);
+  font-family: var(--rf);
+  -webkit-font-smoothing: antialiased;
+}
+[data-md-color-scheme="slate"] .rep-wrap {
+  --rbg: var(--md-default-bg-color, #0f172a);
+  --rfg: var(--md-default-fg-color, #e2e8f0);
+  --rbd: rgba(226,232,240,.14);
+  --rmut: rgba(226,232,240,.58);
+}
+
+.rep-hd-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.rep-hd-sub { font-size: 13.5px; color: var(--rmut); line-height: 1.5; max-width: 68ch; margin-top: 4px; }
+
+/* ── Card ── */
+.rep-card-wrap { position: relative; min-height: 220px; }
+.rep-card {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 20px;
+  border: 1px solid var(--rbd);
+  border-radius: 16px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--rbg) 88%, #0f172a 12%);
+  transition: opacity .25s ease, transform .25s ease;
+}
+.rep-card.rep-card--out { opacity: 0; transform: translateX(18px); }
+.rep-card.rep-card--in  { opacity: 1; transform: translateX(0); }
+
+@media (max-width: 580px) {
+  .rep-card { grid-template-columns: 1fr; }
+}
+
+/* ── Visual side ── */
+.rep-visual {
+  background: color-mix(in srgb, var(--rstep) 9%, transparent);
+  border-right: 1px solid color-mix(in srgb, var(--rstep) 18%, var(--rbd));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 14px;
+  min-height: 200px;
+  transition: background .35s ease;
+}
+@media (max-width: 580px) {
+  .rep-visual { min-height: 140px; border-right: none; border-bottom: 1px solid var(--rbd); }
+}
+
+/* ── Content side ── */
+.rep-content {
+  padding: 18px 18px 18px 4px;
+  display: grid;
+  gap: 8px;
+  align-content: start;
+}
+@media (max-width: 580px) { .rep-content { padding: 14px; } }
+
+.rep-meta { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+.rep-step-chip {
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--rstep) 40%, transparent);
+  background: color-mix(in srgb, var(--rstep) 12%, transparent);
+  color: color-mix(in srgb, var(--rstep) 90%, var(--rfg));
+  transition: background .3s, border-color .3s, color .3s;
+}
+.rep-era {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--rmut);
+}
+
+.rep-date {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--rmut);
+  letter-spacing: .03em;
+}
+.rep-title { font-size: clamp(14px,1.8vw,18px); font-weight: 900; letter-spacing: -.01em; line-height: 1.2; }
+.rep-desc { margin: 0; font-size: 13px; color: var(--rmut); line-height: 1.55; }
+.rep-key {
+  display: inline-block;
+  width: fit-content;
+  font-size: 11.5px;
+  font-weight: 800;
+  padding: 5px 11px;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--rstep) 30%, var(--rbd));
+  background: color-mix(in srgb, var(--rstep) 9%, var(--rbg));
+  color: color-mix(in srgb, var(--rstep) 80%, var(--rfg));
+  line-height: 1.3;
+  transition: background .3s, border-color .3s, color .3s;
+}
+.rep-bridge {
+  display: flex;
+  align-items: flex-start;
+  gap: 5px;
+  font-size: 11.5px;
+  color: var(--rmut);
+  line-height: 1.4;
+  padding-top: 4px;
+  border-top: 1px solid var(--rbd);
+  margin-top: 2px;
+}
+.rep-bridge-label { font-weight: 800; color: var(--rfg); flex-shrink: 0; font-size: 11px; }
+.rep-bridge-text { flex: 1; }
+
+/* ── Navigation ── */
+.rep-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.rep-btn {
+  font-family: var(--rf);
+  font-size: 12.5px;
+  font-weight: 700;
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--rbd);
+  background: color-mix(in srgb, var(--rbg) 80%, #0f172a 20%);
+  color: var(--rfg);
+  cursor: pointer;
+  transition: background .15s, border-color .15s, opacity .15s;
+}
+.rep-btn:hover { background: color-mix(in srgb, var(--rstep) 10%, var(--rbg)); border-color: color-mix(in srgb, var(--rstep) 35%, var(--rbd)); }
+.rep-btn:disabled { opacity: .35; cursor: default; pointer-events: none; }
+.rep-btn--fwd {
+  background: color-mix(in srgb, var(--rstep) 12%, var(--rbg));
+  border-color: color-mix(in srgb, var(--rstep) 35%, var(--rbd));
+}
+
+.rep-dots {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.rep-dot {
+  width: 7px; height: 7px;
+  border-radius: 999px;
+  border: 1.5px solid color-mix(in srgb, var(--rstep) 40%, var(--rbd));
+  background: transparent;
+  cursor: pointer;
+  transition: background .2s, border-color .2s, transform .2s;
+}
+.rep-dot--active {
+  background: var(--rstep);
+  border-color: var(--rstep);
+  transform: scale(1.3);
+}
+
+/* ── Visual components ── */
+
+/* TALLY */
+.rv-tally { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.rv-tally-bone {
+  display: flex;
+  gap: 3px;
+  align-items: flex-end;
+  padding: 8px 10px;
+  background: color-mix(in srgb, var(--rbd) 60%, transparent);
+  border-radius: 10px;
+  border: 1px solid var(--rbd);
+}
+.rv-mark {
+  width: 3px;
+  height: 22px;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--rstep) 70%, var(--rfg));
+}
+.rv-mark-gap { width: 5px; }
+.rv-mark-cross {
+  width: 20px; height: 3px;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--rstep) 70%, var(--rfg));
+  transform: rotate(-20deg);
+  margin: 0 -11px;
+  align-self: center;
+}
+.rv-tally-arrow { font-size: 18px; color: var(--rmut); line-height: 1; }
+.rv-tally-result { display: flex; align-items: center; gap: 8px; }
+.rv-tally-eq { font-size: 11px; color: var(--rmut); font-weight: 700; }
+.rv-tally-num {
+  font-size: 36px; font-weight: 900; letter-spacing: -.03em;
+  color: color-mix(in srgb, var(--rstep) 90%, var(--rfg));
+  line-height: 1;
+}
+.rv-tally-note { font-size: 10px; color: var(--rmut); text-align: center; font-style: italic; }
+
+/* ARITHMETIC */
+.rv-arith { display: grid; gap: 8px; align-items: center; }
+.rv-arith-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; justify-content: center; }
+.rv-sym-box {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--rbd);
+  background: color-mix(in srgb, var(--rbg) 70%, #0f172a 30%);
+  font-size: 14px;
+  font-weight: 800;
+  min-width: 36px;
+  text-align: center;
+}
+.rv-sym-box--result {
+  background: color-mix(in srgb, var(--rstep) 14%, var(--rbg));
+  border-color: color-mix(in srgb, var(--rstep) 38%, transparent);
+  color: color-mix(in srgb, var(--rstep) 90%, var(--rfg));
+}
+.rv-op-sym { font-size: 16px; font-weight: 900; color: var(--rmut); }
+.rv-arith-note {
+  text-align: center;
+  font-size: 10px;
+  color: var(--rmut);
+  font-style: italic;
+  border-top: 1px solid var(--rbd);
+  padding-top: 6px;
+}
+
+/* GEOMETRY */
+.rv-geo { display: grid; gap: 5px; }
+.rv-geo-chain { display: grid; gap: 3px; }
+.rv-geo-step {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.rv-geo-box {
+  padding: 4px 8px;
+  border-radius: 7px;
+  font-size: 11px;
+  font-weight: 700;
+  border: 1px solid var(--rbd);
+  background: color-mix(in srgb, var(--rbg) 70%, #0f172a 30%);
+  white-space: nowrap;
+}
+.rv-geo-box--axiom { border-color: color-mix(in srgb, var(--rstep) 38%, transparent); background: color-mix(in srgb, var(--rstep) 10%, var(--rbg)); }
+.rv-geo-box--conc {
+  border-color: color-mix(in srgb, var(--rstep) 60%, transparent);
+  background: color-mix(in srgb, var(--rstep) 16%, var(--rbg));
+  color: color-mix(in srgb, var(--rstep) 85%, var(--rfg));
+  font-size: 12px;
+  font-weight: 900;
+}
+.rv-geo-arrow { font-size: 12px; color: var(--rmut); flex-shrink: 0; }
+.rv-geo-note { font-size: 10px; color: var(--rmut); font-style: italic; text-align: center; border-top: 1px solid var(--rbd); padding-top: 5px; margin-top: 2px; }
+
+/* ALGEBRA */
+.rv-alg { display: grid; gap: 8px; }
+.rv-eq-box {
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--rbd);
+  background: color-mix(in srgb, var(--rbg) 70%, #0f172a 30%);
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: .01em;
+  text-align: center;
+  font-family: "JetBrains Mono", monospace;
+}
+.rv-eq-box--q { font-size: 13px; }
+.rv-eq-box--a {
+  border-color: color-mix(in srgb, var(--rstep) 40%, transparent);
+  background: color-mix(in srgb, var(--rstep) 12%, var(--rbg));
+}
+.rv-x { color: color-mix(in srgb, var(--rstep) 90%, var(--rfg)); font-weight: 900; }
+.rv-alg-arrow { text-align: center; font-size: 11px; color: var(--rmut); font-weight: 700; }
+.rv-alg-note { font-size: 10px; color: var(--rmut); font-style: italic; text-align: center; border-top: 1px solid var(--rbd); padding-top: 5px; }
+
+/* ZERO */
+.rv-zero { display: grid; gap: 7px; }
+.rv-pos-rows { display: grid; gap: 3px; }
+.rv-pos-row {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.rv-digit-cell {
+  width: 30px; height: 30px;
+  border-radius: 6px;
+  border: 1px solid var(--rbd);
+  background: color-mix(in srgb, var(--rbg) 70%, #0f172a 30%);
+  font-size: 13px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.rv-digit-cell--zero {
+  border-color: color-mix(in srgb, var(--rstep) 50%, transparent);
+  background: color-mix(in srgb, var(--rstep) 18%, var(--rbg));
+  color: color-mix(in srgb, var(--rstep) 90%, var(--rfg));
+}
+.rv-digit-cell--empty { background: transparent; border-color: transparent; }
+.rv-pos-eq { font-size: 12px; font-weight: 900; margin-left: 6px; }
+.rv-zero-note { font-size: 10px; color: var(--rmut); font-style: italic; text-align: center; border-top: 1px solid var(--rbd); padding-top: 5px; }
+
+/* COORDINATES */
+.rv-coord { display: grid; gap: 8px; align-items: center; }
+.rv-axes-wrap {
+  position: relative;
+  width: 130px;
+  height: 100px;
+  margin: 0 auto;
+}
+.rv-axis-y {
+  position: absolute;
+  left: 30px; top: 0;
+  width: 2px; height: 100%;
+  background: color-mix(in srgb, var(--rfg) 30%, transparent);
+  border-radius: 1px;
+}
+.rv-axis-x {
+  position: absolute;
+  left: 0; bottom: 20px;
+  width: 100%; height: 2px;
+  background: color-mix(in srgb, var(--rfg) 30%, transparent);
+  border-radius: 1px;
+}
+.rv-axis-lbl {
+  position: absolute;
+  font-size: 11px; font-weight: 800;
+  color: var(--rmut);
+}
+.rv-axis-lbl--y { top: 0; left: 34px; }
+.rv-axis-lbl--x { bottom: 4px; right: 0; }
+.rv-curve-point {
+  position: absolute;
+  width: 8px; height: 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--rstep) 90%, var(--rfg));
+  border: 1.5px solid color-mix(in srgb, var(--rstep) 60%, var(--rfg));
+}
+.rv-coord-note { font-size: 10px; color: var(--rmut); font-style: italic; text-align: center; }
+.rv-coord-formula {
+  text-align: center;
+  font-size: 13px;
+  font-weight: 800;
+  font-family: "JetBrains Mono", monospace;
+  padding: 5px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--rbd);
+  background: color-mix(in srgb, var(--rbg) 70%, #0f172a 30%);
+}
+
+/* CALCULUS */
+.rv-calc { display: grid; gap: 7px; }
+.rv-calc-formulas { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
+.rv-formula-chip {
+  padding: 5px 10px;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--rstep) 35%, transparent);
+  background: color-mix(in srgb, var(--rstep) 10%, var(--rbg));
+  font-size: 14px;
+  font-weight: 800;
+  font-family: "JetBrains Mono", monospace;
+  color: color-mix(in srgb, var(--rstep) 85%, var(--rfg));
+}
+.rv-calc-chain { display: grid; gap: 3px; }
+.rv-calc-step {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10.5px;
+  color: var(--rmut);
+}
+.rv-calc-dot {
+  width: 5px; height: 5px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--rstep) 60%, transparent);
+  flex-shrink: 0;
+}
+.rv-calc-step--final .rv-calc-dot { background: var(--rstep); }
+.rv-calc-step--final { font-weight: 700; color: var(--rfg); }
+
+@media (prefers-reduced-motion: reduce) {
+  .rep-card { transition: none; }
+}
+</style>
+
+<script>
+(function () {
+
+  var STEPS = [
+    {
+      era: 'Paleolítico · África del Sur',
+      date: '≈ 43 000 a. C.',
+      color: '#FFB343',
+      title: 'Los primeros contadores',
+      desc: 'Muescas en hueso (hueso de Ishango, República Democrática del Congo). Primera separación entre objeto y símbolo: una marca no es la cosa contada, sino su representación abstracta, transferible, acumulable y comunicable.',
+      key: 'Representación simbólica de cantidad',
+      next: 'Permite construir reglas para operar sobre los símbolos — hace posible la aritmética',
+      visual: function(c) {
+        return '<div class="rv-tally">' +
+          '<div class="rv-tally-bone">' +
+            '<div class="rv-mark"></div><div class="rv-mark"></div><div class="rv-mark"></div><div class="rv-mark"></div>' +
+            '<div class="rv-mark-gap"></div><div class="rv-mark-cross"></div>' +
+            '<div class="rv-mark-gap"></div>' +
+            '<div class="rv-mark"></div><div class="rv-mark"></div><div class="rv-mark"></div>' +
+          '</div>' +
+          '<div class="rv-tally-arrow">↓</div>' +
+          '<div class="rv-tally-result"><div class="rv-tally-eq">cantidad =</div><div class="rv-tally-num">8</div></div>' +
+          '<div class="rv-tally-note">la marca no es la cosa — es su representación</div>' +
+        '</div>';
+      }
+    },
+    {
+      era: 'Mesopotamia / Egipto',
+      date: '≈ 3 000 a. C.',
+      color: '#f59e0b',
+      title: 'Aritmética formal',
+      desc: 'Babilonios y egipcios desarrollan sistemas de numeración y reglas aritméticas para comercio, astronomía y construcción. La clave: cualquiera que siga las mismas reglas llega al mismo resultado. El cálculo es reproducible e impersonal.',
+      key: 'Reglas formales para manipular símbolos',
+      next: 'Permite el álgebra: operar sobre cantidades desconocidas con las mismas reglas',
+      visual: function(c) {
+        return '<div class="rv-arith">' +
+          '<div class="rv-arith-row">' +
+            '<div class="rv-sym-box">XIV</div>' +
+            '<div class="rv-op-sym">+</div>' +
+            '<div class="rv-sym-box">VII</div>' +
+            '<div class="rv-op-sym">=</div>' +
+            '<div class="rv-sym-box rv-sym-box--result">XXI</div>' +
+          '</div>' +
+          '<div class="rv-arith-row">' +
+            '<div class="rv-sym-box">60²</div>' +
+            '<div class="rv-op-sym">+</div>' +
+            '<div class="rv-sym-box">25</div>' +
+            '<div class="rv-op-sym">=</div>' +
+            '<div class="rv-sym-box rv-sym-box--result">3 625</div>' +
+          '</div>' +
+          '<div class="rv-arith-note">mismas reglas → mismo resultado → siempre, para cualquiera</div>' +
+        '</div>';
+      }
+    },
+    {
+      era: 'Grecia · Alejandría',
+      date: '≈ 300 a. C.',
+      color: '#22c55e',
+      title: 'Geometría deductiva (Euclides)',
+      desc: 'Elementos: axiomas + pasos de deducción válidos = conclusiones necesariamente verdaderas. Por primera vez el conocimiento se produce mediante un proceso formal reproducible, no por autoridad ni experiencia. El modelo que sigue vigente en matemáticas hoy.',
+      key: 'La verdad puede derivarse de reglas formales',
+      next: 'Permite la lógica formal: base de la programación y la verificación de algoritmos',
+      visual: function(c) {
+        return '<div class="rv-geo">' +
+          '<div class="rv-geo-chain">' +
+            '<div class="rv-geo-step"><div class="rv-geo-box rv-geo-box--axiom">Axioma 1</div><div class="rv-geo-arrow">→</div><div class="rv-geo-box">Proposición</div></div>' +
+            '<div class="rv-geo-step" style="padding-left:20px"><div class="rv-geo-arrow">↓</div></div>' +
+            '<div class="rv-geo-step"><div class="rv-geo-box">Lema</div><div class="rv-geo-arrow">→</div><div class="rv-geo-box rv-geo-box--conc">∴ Teorema</div></div>' +
+          '</div>' +
+          '<div class="rv-geo-note">si los axiomas son verdad y los pasos válidos → la conclusión es necesaria</div>' +
+        '</div>';
+      }
+    },
+    {
+      era: 'Bagdad — Casa de la Sabiduría',
+      date: '≈ 825',
+      color: '#26A69A',
+      title: 'Álgebra y el algoritmo (Al-Khwarizmi)',
+      desc: 'Al-Kitāb al-mukhtaṣar fī ḥisāb al-jabr wal-muqābala. Métodos sistemáticos para resolver ecuaciones con incógnitas. "Algoritmo" viene de la latinización de su nombre; "álgebra" de al-jabr. Primer tratamiento formal del procedimiento como objeto en sí mismo.',
+      key: 'Razonar sobre lo desconocido siguiendo pasos definidos',
+      next: 'El algoritmo como instrucción reproducible: semilla directa de la programación',
+      visual: function(c) {
+        return '<div class="rv-alg">' +
+          '<div class="rv-eq-box rv-eq-box--q">a<span class="rv-x">x</span> + b = c</div>' +
+          '<div class="rv-alg-arrow">↓ despejar <span class="rv-x">x</span> con reglas formales</div>' +
+          '<div class="rv-eq-box rv-eq-box--a"><span class="rv-x">x</span> = (c − b) / a</div>' +
+          '<div class="rv-alg-note">lo desconocido se calcula siguiendo el mismo procedimiento siempre</div>' +
+        '</div>';
+      }
+    },
+    {
+      era: 'India — Período clásico',
+      date: 'Siglos V – VII',
+      color: '#3b82f6',
+      title: 'El cero como número',
+      desc: 'Brahmagupta formaliza el cero y sus reglas aritméticas (Brahmasphutasiddhanta, 628 d.C.). El cero completa el sistema posicional: cualquier cantidad representable con solo diez dígitos, cualquier operación mediante las mismas reglas uniformes.',
+      key: 'Representación posicional completa y uniforme',
+      next: 'Hace posible la aritmética moderna y — 1 300 años después — la numeración binaria',
+      visual: function(c) {
+        return '<div class="rv-zero">' +
+          '<div class="rv-pos-rows">' +
+            '<div class="rv-pos-row">' +
+              '<div class="rv-digit-cell rv-digit-cell--empty"></div>' +
+              '<div class="rv-digit-cell rv-digit-cell--empty"></div>' +
+              '<div class="rv-digit-cell">1</div>' +
+              '<div class="rv-pos-eq">= 1</div>' +
+            '</div>' +
+            '<div class="rv-pos-row">' +
+              '<div class="rv-digit-cell rv-digit-cell--empty"></div>' +
+              '<div class="rv-digit-cell">1</div>' +
+              '<div class="rv-digit-cell rv-digit-cell--zero">0</div>' +
+              '<div class="rv-pos-eq">= 10</div>' +
+            '</div>' +
+            '<div class="rv-pos-row">' +
+              '<div class="rv-digit-cell">1</div>' +
+              '<div class="rv-digit-cell rv-digit-cell--zero">0</div>' +
+              '<div class="rv-digit-cell rv-digit-cell--zero">0</div>' +
+              '<div class="rv-pos-eq">= 100</div>' +
+            '</div>' +
+          '</div>' +
+          '<div class="rv-zero-note">el 0 no vale nada — pero vale todo según dónde esté</div>' +
+        '</div>';
+      }
+    },
+    {
+      era: 'Francia',
+      date: '≈ 1637',
+      color: '#8b5cf6',
+      title: 'Geometría analítica (Descartes)',
+      desc: 'La Géométrie de Descartes unifica álgebra y geometría: una curva es una ecuación, una posición es un par de números. El espacio geométrico se convierte en un sistema algebraico calculable. El mundo físico, por primera vez, es manipulable con reglas.',
+      key: 'El espacio geométrico como sistema algebraico',
+      next: 'Hace posible el cálculo diferencial: describir cómo cambia una función en cada punto',
+      visual: function(c) {
+        return '<div class="rv-coord">' +
+          '<div class="rv-axes-wrap">' +
+            '<div class="rv-axis-y"></div>' +
+            '<div class="rv-axis-x"></div>' +
+            '<div class="rv-axis-lbl rv-axis-lbl--y">y</div>' +
+            '<div class="rv-axis-lbl rv-axis-lbl--x">x</div>' +
+            '<div class="rv-curve-point" style="left:48px;bottom:55px"></div>' +
+            '<div class="rv-curve-point" style="left:72px;bottom:68px;opacity:.7"></div>' +
+            '<div class="rv-curve-point" style="left:96px;bottom:55px;opacity:.4"></div>' +
+          '</div>' +
+          '<div class="rv-coord-formula">y = f(x)</div>' +
+          '<div class="rv-coord-note">una curva en el espacio = una ecuación algebraica</div>' +
+        '</div>';
+      }
+    },
+    {
+      era: 'Europa — Newton / Leibniz',
+      date: '≈ 1666 – 1676',
+      color: '#324AB2',
+      title: 'El cálculo diferencial e integral',
+      desc: 'Herramientas para describir el cambio de magnitudes en cada punto. Sin cálculo no hay gradiente. Sin gradiente no hay descenso de gradiente. Sin descenso de gradiente no hay entrenamiento de redes neuronales. La IA actual hereda directamente este trabajo.',
+      key: 'Descripción matemática del cambio — fundamento del entrenamiento de IA',
+      next: '→ directamente al backpropagation y los LLMs actuales (350 años después)',
+      final: true,
+      visual: function(c) {
+        return '<div class="rv-calc">' +
+          '<div class="rv-calc-formulas">' +
+            '<div class="rv-formula-chip">dy/dx</div>' +
+            '<div class="rv-formula-chip">∫ f(x) dx</div>' +
+          '</div>' +
+          '<div class="rv-calc-chain">' +
+            '<div class="rv-calc-step"><div class="rv-calc-dot"></div>Cálculo → gradiente</div>' +
+            '<div class="rv-calc-step"><div class="rv-calc-dot"></div>Gradiente → descenso de gradiente</div>' +
+            '<div class="rv-calc-step"><div class="rv-calc-dot"></div>Descenso → backpropagation</div>' +
+            '<div class="rv-calc-step rv-calc-step--final"><div class="rv-calc-dot"></div>Backprop → redes neuronales modernas</div>' +
+          '</div>' +
+        '</div>';
+      }
+    }
+  ];
+
+  var current = 0;
+
+  function boot() {
+    var wrap = document.querySelector('[data-demo="01-timeline-representar"]');
+    if (!wrap || wrap.dataset.repReady) return;
+    wrap.dataset.repReady = '1';
+
+    var card   = wrap.querySelector('#repCard');
+    var visual = wrap.querySelector('#repVisual');
+    var chip   = wrap.querySelector('#repChip');
+    var era    = wrap.querySelector('#repEra');
+    var date   = wrap.querySelector('#repDate');
+    var title  = wrap.querySelector('#repTitle');
+    var desc   = wrap.querySelector('#repDesc');
+    var key    = wrap.querySelector('#repKey');
+    var bridge = wrap.querySelector('#repBridgeText');
+    var dots   = wrap.querySelector('#repDots');
+    var prev   = wrap.querySelector('#repPrev');
+    var next   = wrap.querySelector('#repNext');
+
+    // Build dots
+    dots.innerHTML = '';
+    STEPS.forEach(function(_, i) {
+      var d = document.createElement('button');
+      d.className = 'rep-dot' + (i === 0 ? ' rep-dot--active' : '');
+      d.setAttribute('aria-label', 'Paso ' + (i + 1));
+      d.addEventListener('click', function() { go(i); });
+      dots.appendChild(d);
+    });
+
+    function setColor(color) {
+      wrap.style.setProperty('--rstep', color);
+    }
+
+    function render(idx, dir) {
+      var s = STEPS[idx];
+      setColor(s.color);
+
+      if (dir) {
+        card.classList.add('rep-card--out');
+      }
+
+      setTimeout(function() {
+        chip.textContent   = 'Paso ' + (idx + 1) + ' / ' + STEPS.length;
+        era.textContent    = s.era;
+        date.textContent   = s.date;
+        title.textContent  = s.title;
+        desc.textContent   = s.desc;
+        key.textContent    = s.key;
+        bridge.textContent = s.next;
+        visual.innerHTML   = s.visual(s.color);
+
+        if (s.final) {
+          wrap.querySelector('#repBridge').style.borderTopColor = 'color-mix(in srgb,' + s.color + ' 30%, var(--rbd))';
+        }
+
+        // Update dots
+        dots.querySelectorAll('.rep-dot').forEach(function(d, i) {
+          d.classList.toggle('rep-dot--active', i === idx);
+        });
+
+        prev.disabled = idx === 0;
+        next.textContent = s.final ? '← Inicio' : 'Siguiente →';
+
+        card.classList.remove('rep-card--out');
+        card.classList.add('rep-card--in');
+        setTimeout(function() { card.classList.remove('rep-card--in'); }, 300);
+      }, dir ? 220 : 0);
+    }
+
+    function go(idx) {
+      var dir = idx > current ? 1 : -1;
+      current = Math.max(0, Math.min(STEPS.length - 1, idx));
+      render(current, dir);
+    }
+
+    prev.addEventListener('click', function() { if (current > 0) go(current - 1); });
+    next.addEventListener('click', function() {
+      if (current < STEPS.length - 1) go(current + 1);
+      else go(0);
+    });
+
+    render(0, null);
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
+  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
+})();
+</script>

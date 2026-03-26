@@ -1,0 +1,461 @@
+<div class="num-wrap" data-demo="01-sistemas-numeracion">
+  <div class="num-hd">
+    <div class="num-title">Cuatro sistemas, cuatro mundos distintos</div>
+    <div class="num-sub">La misma cantidad expresada de formas radicalmente distintas. Lo que cambia no son los números, sino qué operaciones se vuelven posibles.</div>
+  </div>
+
+  <div class="num-tabs" role="tablist">
+    <button class="num-tab num-tab--active" data-tab="tally" role="tab">Marcas de conteo</button>
+    <button class="num-tab" data-tab="roman" role="tab">Romano</button>
+    <button class="num-tab" data-tab="decimal" role="tab">Decimal posicional</button>
+    <button class="num-tab" data-tab="binary" role="tab">Binario</button>
+  </div>
+
+  <!-- Tally -->
+  <div class="num-panel num-panel--active" data-panel="tally">
+    <div class="num-panel-grid">
+      <div class="num-panel-left">
+        <div class="num-era">Paleolítico · ≈ 40 000 a.C.</div>
+        <div class="num-system-name">Marcas de conteo</div>
+        <div class="num-desc">Un trazo por unidad. No hay símbolo para "cero" ni para cantidades abstractas: cada marca representa un objeto concreto.</div>
+        <div class="num-example-label">Ejemplo — el número 7:</div>
+        <div class="num-tally-visual">
+          <span class="num-tally-group">
+            <span class="num-tally-mark">|</span><span class="num-tally-mark">|</span><span class="num-tally-mark">|</span><span class="num-tally-mark">|</span><span class="num-tally-mark num-tally-cross">/</span>
+          </span>
+          <span class="num-tally-group">
+            <span class="num-tally-mark">|</span><span class="num-tally-mark">|</span>
+          </span>
+        </div>
+      </div>
+      <div class="num-panel-right">
+        <div class="num-can">
+          <div class="num-can-title num-can-title--yes">Permite</div>
+          <ul class="num-can-list">
+            <li>Contar objetos concretos</li>
+            <li>Comparar dos cantidades visualmente</li>
+            <li>Registrar inventarios simples</li>
+          </ul>
+        </div>
+        <div class="num-can">
+          <div class="num-can-title num-can-title--no">No permite</div>
+          <ul class="num-can-list">
+            <li>Aritmética (sumar 47 + 83 requiere volver a contar todo)</li>
+            <li>Representar cantidades grandes de forma compacta</li>
+            <li>Operar con lo desconocido</li>
+          </ul>
+        </div>
+        <div class="num-insight">El salto conceptual fue separar el símbolo del objeto: la muesca no <em>es</em> la oveja, la <em>representa</em>.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Roman -->
+  <div class="num-panel" data-panel="roman">
+    <div class="num-panel-grid">
+      <div class="num-panel-left">
+        <div class="num-era">Imperio Romano · ≈ siglo IV a.C. – s. XIV d.C.</div>
+        <div class="num-system-name">Numeración romana</div>
+        <div class="num-desc">Sistema aditivo con símbolos fijos para valores clave. La posición tiene importancia (IV ≠ VI) pero no es posicional en el sentido moderno.</div>
+        <div class="num-example-label">Cómo se construye un número:</div>
+        <div class="num-roman-grid">
+          <div class="num-roman-row"><span class="num-roman-sym">I</span><span class="num-roman-val">1</span></div>
+          <div class="num-roman-row"><span class="num-roman-sym">V</span><span class="num-roman-val">5</span></div>
+          <div class="num-roman-row"><span class="num-roman-sym">X</span><span class="num-roman-val">10</span></div>
+          <div class="num-roman-row"><span class="num-roman-sym">L</span><span class="num-roman-val">50</span></div>
+          <div class="num-roman-row"><span class="num-roman-sym">C</span><span class="num-roman-val">100</span></div>
+          <div class="num-roman-row"><span class="num-roman-sym">D</span><span class="num-roman-val">500</span></div>
+          <div class="num-roman-row"><span class="num-roman-sym">M</span><span class="num-roman-val">1 000</span></div>
+        </div>
+        <div class="num-example-eq">1994 = MCMXCIV</div>
+      </div>
+      <div class="num-panel-right">
+        <div class="num-can">
+          <div class="num-can-title num-can-title--yes">Permite</div>
+          <ul class="num-can-list">
+            <li>Representar cantidades grandes de forma compacta</li>
+            <li>Lectura rápida de valores aproximados</li>
+            <li>Suma mediante agrupación de símbolos</li>
+          </ul>
+        </div>
+        <div class="num-can">
+          <div class="num-can-title num-can-title--no">No permite</div>
+          <ul class="num-can-list">
+            <li>Multiplicación y división razonables (XLII × XXIII es un calvario)</li>
+            <li>Representar fracciones</li>
+            <li>El concepto de cero</li>
+          </ul>
+        </div>
+        <div class="num-insight">Sin cero ni posición, la aritmética era tan lenta que había profesionales especializados en calcular. El cálculo era trabajo manual.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Decimal -->
+  <div class="num-panel" data-panel="decimal">
+    <div class="num-panel-grid">
+      <div class="num-panel-left">
+        <div class="num-era">India · siglos V–VII · llegó a Europa vía Al-Juarismi</div>
+        <div class="num-system-name">Sistema decimal posicional</div>
+        <div class="num-desc">10 dígitos (0–9) y un principio posicional: el valor de cada dígito depende de su posición. El cero no es ausencia sino un símbolo activo que desplaza posiciones.</div>
+        <div class="num-example-label">El mismo dígito, tres valores distintos:</div>
+        <div class="num-pos-visual">
+          <div class="num-pos-row">
+            <div class="num-pos-cell num-pos-cell--hi">3</div>
+            <div class="num-pos-cell">0</div>
+            <div class="num-pos-cell">0</div>
+            <div class="num-pos-label">= 300</div>
+          </div>
+          <div class="num-pos-row">
+            <div class="num-pos-cell">0</div>
+            <div class="num-pos-cell num-pos-cell--hi">3</div>
+            <div class="num-pos-cell">0</div>
+            <div class="num-pos-label">= 30</div>
+          </div>
+          <div class="num-pos-row">
+            <div class="num-pos-cell">0</div>
+            <div class="num-pos-cell">0</div>
+            <div class="num-pos-cell num-pos-cell--hi">3</div>
+            <div class="num-pos-label">= 3</div>
+          </div>
+        </div>
+      </div>
+      <div class="num-panel-right">
+        <div class="num-can">
+          <div class="num-can-title num-can-title--yes">Permite</div>
+          <ul class="num-can-list">
+            <li>Aritmética mediante reglas formales (algoritmos)</li>
+            <li>Representar cualquier número con solo 10 símbolos</li>
+            <li>Fracciones decimales, notación científica</li>
+            <li>Razonar sobre lo desconocido (álgebra)</li>
+          </ul>
+        </div>
+        <div class="num-can">
+          <div class="num-can-title num-can-title--no">Desventaja</div>
+          <ul class="num-can-list">
+            <li>No es eficiente en hardware electrónico (múltiples voltajes)</li>
+          </ul>
+        </div>
+        <div class="num-insight">Con este sistema, seguir las reglas garantiza el resultado correcto. El cálculo dejó de requerir intuición o verificación manual.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Binary -->
+  <div class="num-panel" data-panel="binary">
+    <div class="num-panel-grid">
+      <div class="num-panel-left">
+        <div class="num-era">Leibniz 1679 · adoptado en computación s. XX</div>
+        <div class="num-system-name">Sistema binario</div>
+        <div class="num-desc">Solo dos dígitos (0 y 1). La posición multiplica por potencias de 2. El valor práctico es físico: 0 y 1 se implementan como apagado/encendido en un circuito eléctrico.</div>
+        <div class="num-example-label">Contar en binario:</div>
+        <div class="num-bin-table">
+          <div class="num-bin-row num-bin-row--hd">
+            <span>Decimal</span><span>Binario</span><span>Patrón</span>
+          </div>
+          <div class="num-bin-row"><span>0</span><span class="num-bin-code">0</span><span class="num-bin-dots"><span class="num-bin-dot"></span></span></div>
+          <div class="num-bin-row"><span>1</span><span class="num-bin-code">1</span><span class="num-bin-dots"><span class="num-bin-dot num-bin-dot--on"></span></span></div>
+          <div class="num-bin-row"><span>2</span><span class="num-bin-code">10</span><span class="num-bin-dots"><span class="num-bin-dot num-bin-dot--on"></span><span class="num-bin-dot"></span></span></div>
+          <div class="num-bin-row"><span>3</span><span class="num-bin-code">11</span><span class="num-bin-dots"><span class="num-bin-dot num-bin-dot--on"></span><span class="num-bin-dot num-bin-dot--on"></span></span></div>
+          <div class="num-bin-row"><span>5</span><span class="num-bin-code">101</span><span class="num-bin-dots"><span class="num-bin-dot num-bin-dot--on"></span><span class="num-bin-dot"></span><span class="num-bin-dot num-bin-dot--on"></span></span></div>
+          <div class="num-bin-row"><span>13</span><span class="num-bin-code">1101</span><span class="num-bin-dots"><span class="num-bin-dot num-bin-dot--on"></span><span class="num-bin-dot num-bin-dot--on"></span><span class="num-bin-dot"></span><span class="num-bin-dot num-bin-dot--on"></span></span></div>
+        </div>
+      </div>
+      <div class="num-panel-right">
+        <div class="num-can">
+          <div class="num-can-title num-can-title--yes">Permite</div>
+          <ul class="num-can-list">
+            <li>Implementación directa en hardware (transistor: encendido/apagado)</li>
+            <li>Operaciones lógicas (AND, OR, NOT) sobre los mismos dígitos</li>
+            <li>Transmisión fiable con mínimo error de señal</li>
+          </ul>
+        </div>
+        <div class="num-can">
+          <div class="num-can-title num-can-title--no">Desventaja</div>
+          <ul class="num-can-list">
+            <li>Representaciones más largas (13 necesita 4 dígitos frente a 2 en decimal)</li>
+            <li>Difícil de leer directamente por humanos</li>
+          </ul>
+        </div>
+        <div class="num-insight">El binario convierte el número en señal física. Eso conecta el mundo de las matemáticas abstractas con el de los circuitos electrónicos.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.num-wrap, .num-wrap * { box-sizing: border-box; }
+
+.num-wrap {
+  --ea: var(--md-primary-fg-color, #26A69A);
+  --eb: #324AB2;
+  --eg: var(--md-accent-fg-color, #FFB343);
+  --ebg: var(--md-default-bg-color, #fff);
+  --efg: var(--md-default-fg-color, #0f172a);
+  --ebd: rgba(15,23,42,.13);
+  --emut: rgba(15,23,42,.56);
+  --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid;
+  gap: 14px;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--ebd);
+  border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--ea) 6%,transparent), transparent 50%),
+    radial-gradient(90% 110% at 95% 100%, color-mix(in srgb,var(--eb) 5%,transparent), transparent 52%),
+    var(--ebg);
+  color: var(--efg);
+  font-family: var(--ef);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-md-color-scheme="slate"] .num-wrap {
+  --ebg: var(--md-default-bg-color, #0f172a);
+  --efg: var(--md-default-fg-color, #e2e8f0);
+  --ebd: rgba(226,232,240,.13);
+  --emut: rgba(226,232,240,.56);
+}
+
+.num-hd { display: grid; gap: 4px; }
+.num-title { font-size: clamp(15px,2vw,20px); font-weight: 900; letter-spacing: -.02em; line-height: 1.15; }
+.num-sub { font-size: 13px; color: var(--emut); line-height: 1.5; max-width: 68ch; }
+
+/* Tabs */
+.num-tabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.num-tab {
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--ebd);
+  background: transparent;
+  color: var(--emut);
+  font-family: var(--ef);
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .18s, color .18s, border-color .18s;
+}
+.num-tab:hover {
+  background: color-mix(in srgb, var(--ea) 10%, transparent);
+  border-color: color-mix(in srgb, var(--ea) 30%, var(--ebd));
+  color: var(--efg);
+}
+.num-tab--active {
+  background: color-mix(in srgb, var(--ea) 14%, transparent);
+  border-color: color-mix(in srgb, var(--ea) 50%, transparent);
+  color: var(--efg);
+}
+
+/* Panels */
+.num-panel { display: none; }
+.num-panel--active { display: block; }
+
+.num-panel-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+@media (max-width: 580px) { .num-panel-grid { grid-template-columns: 1fr; } }
+
+.num-panel-left, .num-panel-right {
+  padding: 14px 16px;
+  border-radius: 13px;
+  border: 1px solid var(--ebd);
+  background: color-mix(in srgb, var(--ebg) 75%, #0f172a 25%);
+  display: grid;
+  gap: 10px;
+  align-content: start;
+}
+
+.num-era { font-size: 10px; font-weight: 700; color: var(--emut); text-transform: uppercase; letter-spacing: .06em; }
+.num-system-name { font-size: 16px; font-weight: 900; letter-spacing: -.01em; line-height: 1.2; }
+.num-desc { font-size: 12px; color: var(--emut); line-height: 1.5; }
+.num-example-label { font-size: 10.5px; font-weight: 700; color: var(--emut); text-transform: uppercase; letter-spacing: .04em; }
+
+/* Tally */
+.num-tally-visual {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 10px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--ea) 6%, transparent);
+}
+.num-tally-group { display: flex; gap: 3px; }
+.num-tally-mark {
+  font-size: 22px;
+  font-weight: 900;
+  color: color-mix(in srgb, var(--ea) 80%, var(--efg));
+  line-height: 1;
+}
+.num-tally-cross {
+  transform: rotate(-20deg);
+  display: inline-block;
+  color: color-mix(in srgb, var(--ea) 50%, var(--efg));
+}
+
+/* Roman */
+.num-roman-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+.num-roman-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 5px 3px;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--eb) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--eb) 20%, transparent);
+}
+.num-roman-sym { font-size: 14px; font-weight: 900; color: color-mix(in srgb, var(--eb) 80%, var(--efg)); }
+.num-roman-val { font-size: 8px; color: var(--emut); }
+.num-example-eq {
+  font-size: 13px;
+  font-weight: 800;
+  font-family: "Courier New", monospace;
+  color: color-mix(in srgb, var(--eb) 80%, var(--efg));
+  background: color-mix(in srgb, var(--eb) 8%, transparent);
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+
+/* Decimal positional */
+.num-pos-visual { display: grid; gap: 5px; }
+.num-pos-row { display: flex; align-items: center; gap: 4px; }
+.num-pos-cell {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 900;
+  border-radius: 7px;
+  border: 1px solid var(--ebd);
+  background: color-mix(in srgb, var(--ebg) 50%, #0f172a 50%);
+  color: var(--emut);
+  flex-shrink: 0;
+}
+.num-pos-cell--hi {
+  background: color-mix(in srgb, var(--ea) 18%, transparent);
+  border-color: color-mix(in srgb, var(--ea) 50%, transparent);
+  color: color-mix(in srgb, var(--ea) 90%, var(--efg));
+}
+.num-pos-label { font-size: 12px; font-weight: 800; margin-left: 8px; color: var(--emut); }
+
+/* Binary */
+.num-bin-table { display: grid; gap: 4px; }
+.num-bin-row {
+  display: grid;
+  grid-template-columns: 50px 80px 1fr;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  padding: 3px 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--ebd) 50%, transparent);
+}
+.num-bin-row--hd {
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--emut);
+  border-bottom: 1px solid var(--ebd);
+  padding-bottom: 5px;
+}
+.num-bin-code { font-family: "Courier New", monospace; font-weight: 800; color: color-mix(in srgb, var(--eg) 80%, var(--efg)); }
+.num-bin-dots { display: flex; gap: 4px; }
+.num-bin-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  border: 1px solid var(--ebd);
+  background: transparent;
+}
+.num-bin-dot--on { background: color-mix(in srgb, var(--eg) 70%, transparent); border-color: color-mix(in srgb, var(--eg) 60%, transparent); }
+
+/* Can/Cannot */
+.num-can { display: grid; gap: 6px; }
+.num-can-title {
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 999px;
+  width: fit-content;
+}
+.num-can-title--yes {
+  background: color-mix(in srgb, var(--ea) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ea) 35%, transparent);
+  color: color-mix(in srgb, var(--ea) 80%, var(--efg));
+}
+.num-can-title--no {
+  background: color-mix(in srgb, #ef4444 10%, transparent);
+  border: 1px solid color-mix(in srgb, #ef4444 30%, transparent);
+  color: color-mix(in srgb, #ef4444 75%, var(--efg));
+}
+.num-can-list {
+  margin: 0; padding: 0; list-style: none; display: grid; gap: 3px;
+}
+.num-can-list li {
+  font-size: 11.5px;
+  color: var(--emut);
+  padding-left: 12px;
+  position: relative;
+  line-height: 1.4;
+}
+.num-can-list li::before {
+  content: '·';
+  position: absolute;
+  left: 3px;
+  font-weight: 900;
+  color: color-mix(in srgb, var(--ea) 60%, var(--emut));
+}
+
+.num-insight {
+  font-size: 11.5px;
+  font-style: italic;
+  color: var(--emut);
+  line-height: 1.5;
+  border-left: 2px solid color-mix(in srgb, var(--ea) 40%, transparent);
+  padding-left: 9px;
+}
+</style>
+
+<script>
+(function () {
+  function boot() {
+    var wrap = document.querySelector('[data-demo="01-sistemas-numeracion"]');
+    if (!wrap || wrap.dataset.numReady) return;
+    wrap.dataset.numReady = '1';
+
+    var tabs = wrap.querySelectorAll('.num-tab');
+    var panels = wrap.querySelectorAll('.num-panel');
+
+    tabs.forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        var target = tab.dataset.tab;
+        tabs.forEach(function(t) { t.classList.remove('num-tab--active'); });
+        panels.forEach(function(p) { p.classList.remove('num-panel--active'); });
+        tab.classList.add('num-tab--active');
+        var panel = wrap.querySelector('[data-panel="' + target + '"]');
+        if (panel) panel.classList.add('num-panel--active');
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
+  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
+})();
+</script>

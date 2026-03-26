@@ -1,0 +1,439 @@
+<div class="ded-wrap" data-demo="01-cadena-deductiva">
+  <div class="ded-hd">
+    <div class="ded-title">La cadena deductiva: cómo Euclides garantizaba la verdad</div>
+    <div class="ded-sub">Cada paso se apoya en el anterior. Si los cimientos son sólidos y los pasos son válidos, la conclusión es inevitable. Dos mil años de geometría funcionaron exactamente así.</div>
+  </div>
+
+  <div class="ded-stepper">
+    <div class="ded-step ded-step--active" data-step="0">
+      <div class="ded-step-dot ded-step-dot--active"></div>
+      <div class="ded-step-label">Axiomas</div>
+    </div>
+    <div class="ded-connector"></div>
+    <div class="ded-step" data-step="1">
+      <div class="ded-step-dot"></div>
+      <div class="ded-step-label">Definiciones</div>
+    </div>
+    <div class="ded-connector"></div>
+    <div class="ded-step" data-step="2">
+      <div class="ded-step-dot"></div>
+      <div class="ded-step-label">Proposición</div>
+    </div>
+    <div class="ded-connector"></div>
+    <div class="ded-step" data-step="3">
+      <div class="ded-step-dot"></div>
+      <div class="ded-step-label">Corolario</div>
+    </div>
+  </div>
+
+  <div class="ded-card" id="ded-card">
+
+    <!-- Step 0: Axiomas -->
+    <div class="ded-panel ded-panel--active" data-panel="0">
+      <div class="ded-panel-tag">Punto de partida</div>
+      <div class="ded-panel-title">Axiomas — verdades aceptadas sin demostración</div>
+      <div class="ded-panel-desc">Euclides comenzó con cinco postulados. No los demostró: los declaró como base. Todo lo demás se construye sobre ellos.</div>
+      <div class="ded-axioms">
+        <div class="ded-axiom">
+          <span class="ded-axiom-num">1</span>
+          <span class="ded-axiom-text">Entre dos puntos cualesquiera puede trazarse una línea recta.</span>
+        </div>
+        <div class="ded-axiom">
+          <span class="ded-axiom-num">2</span>
+          <span class="ded-axiom-text">Una línea finita puede prolongarse indefinidamente en una recta.</span>
+        </div>
+        <div class="ded-axiom">
+          <span class="ded-axiom-num">3</span>
+          <span class="ded-axiom-text">Con centro en un punto y radio dado puede describirse un círculo.</span>
+        </div>
+        <div class="ded-axiom">
+          <span class="ded-axiom-num">4</span>
+          <span class="ded-axiom-text">Todos los ángulos rectos son iguales entre sí.</span>
+        </div>
+        <div class="ded-axiom">
+          <span class="ded-axiom-num">5</span>
+          <span class="ded-axiom-text">Por un punto exterior a una recta solo puede trazarse una paralela a esa recta. <span class="ded-note">(Postulado de las paralelas — el más debatido en la historia)</span></span>
+        </div>
+      </div>
+      <div class="ded-bridge">
+        <span class="ded-bridge-label">Hace posible →</span>
+        <span class="ded-bridge-text">definir con precisión los objetos sobre los que razonamos</span>
+      </div>
+    </div>
+
+    <!-- Step 1: Definiciones -->
+    <div class="ded-panel" data-panel="1">
+      <div class="ded-panel-tag">Vocabulario formal</div>
+      <div class="ded-panel-title">Definiciones — qué queremos decir exactamente</div>
+      <div class="ded-panel-desc">Antes de demostrar nada, Euclides define sus objetos con precisión. Sin definición clara, la lógica resbala.</div>
+      <div class="ded-defs">
+        <div class="ded-def">
+          <div class="ded-def-term">Punto</div>
+          <div class="ded-def-body">Lo que no tiene partes. Sin extensión, sin tamaño: pura posición abstracta.</div>
+          <div class="ded-def-visual">
+            <svg viewBox="0 0 60 40" width="60" height="40"><circle cx="30" cy="20" r="4" fill="currentColor" opacity=".7"/></svg>
+          </div>
+        </div>
+        <div class="ded-def">
+          <div class="ded-def-term">Línea recta</div>
+          <div class="ded-def-body">Longitud sin anchura: extensión en una sola dimensión entre dos puntos.</div>
+          <div class="ded-def-visual">
+            <svg viewBox="0 0 80 20" width="80" height="20"><line x1="5" y1="10" x2="75" y2="10" stroke="currentColor" stroke-width="2" opacity=".7"/><circle cx="5" cy="10" r="3" fill="currentColor" opacity=".7"/><circle cx="75" cy="10" r="3" fill="currentColor" opacity=".7"/></svg>
+          </div>
+        </div>
+        <div class="ded-def">
+          <div class="ded-def-term">Ángulo recto</div>
+          <div class="ded-def-body">El ángulo que resulta cuando una recta intercepta a otra de modo que los dos ángulos adyacentes son iguales.</div>
+          <div class="ded-def-visual">
+            <svg viewBox="0 0 40 40" width="40" height="40"><line x1="5" y1="35" x2="35" y2="35" stroke="currentColor" stroke-width="2" opacity=".7"/><line x1="20" y1="35" x2="20" y2="5" stroke="currentColor" stroke-width="2" opacity=".7"/><rect x="20" y="27" width="8" height="8" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".5"/></svg>
+          </div>
+        </div>
+      </div>
+      <div class="ded-bridge">
+        <span class="ded-bridge-label">Hace posible →</span>
+        <span class="ded-bridge-text">razonar sobre los objetos con lógica precisa, sin ambigüedad</span>
+      </div>
+    </div>
+
+    <!-- Step 2: Proposición -->
+    <div class="ded-panel" data-panel="2">
+      <div class="ded-panel-tag">Verdad derivada</div>
+      <div class="ded-panel-title">Proposición — conclusión forzada por la lógica</div>
+      <div class="ded-panel-desc">El Teorema de Pitágoras no fue observado: fue deducido. Euclides lo demostró en la proposición 47 del Libro I partiendo solo de axiomas y definiciones.</div>
+      <div class="ded-theorem">
+        <div class="ded-thm-visual">
+          <svg viewBox="0 0 120 100" width="120" height="100" class="ded-thm-svg">
+            <!-- Right triangle -->
+            <polygon points="20,80 80,80 80,20" fill="none" stroke="currentColor" stroke-width="2" opacity=".5"/>
+            <!-- Right angle marker -->
+            <rect x="70" y="70" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".4"/>
+            <!-- Square on hypotenuse -->
+            <polygon points="20,80 0,20 60,-40 80,20" fill="none" stroke="color-mix(in srgb,#26A69A 70%,currentColor)" stroke-width="1.5" stroke-dasharray="3,2" opacity=".6"/>
+            <!-- Square on a -->
+            <polygon points="80,80 80,20 110,20 110,80" fill="none" stroke="color-mix(in srgb,#324AB2 70%,currentColor)" stroke-width="1.5" stroke-dasharray="3,2" opacity=".6"/>
+            <!-- Square on b -->
+            <polygon points="20,80 80,80 80,100 20,100" fill="none" stroke="color-mix(in srgb,#FFB343 70%,currentColor)" stroke-width="1.5" stroke-dasharray="3,2" opacity=".6"/>
+            <!-- Labels -->
+            <text x="37" y="22" font-size="11" fill="color-mix(in srgb,#26A69A 80%,currentColor)" font-weight="700" font-family="serif">c²</text>
+            <text x="98" y="55" font-size="11" fill="color-mix(in srgb,#324AB2 80%,currentColor)" font-weight="700" font-family="serif">a²</text>
+            <text x="45" y="97" font-size="11" fill="color-mix(in srgb,#FFB343 80%,currentColor)" font-weight="700" font-family="serif">b²</text>
+          </svg>
+        </div>
+        <div class="ded-thm-text">
+          <div class="ded-thm-eq">a² + b² = c²</div>
+          <div class="ded-thm-name">Teorema de Pitágoras · Proposición I.47 de los Elementos</div>
+          <div class="ded-thm-proof">
+            <div class="ded-proof-step"><span class="ded-ps-num">1.</span> <span>Se parte de un triángulo rectángulo (definición 22)</span></div>
+            <div class="ded-proof-step"><span class="ded-ps-num">2.</span> <span>Se construyen cuadrados sobre cada lado (postulado 3)</span></div>
+            <div class="ded-proof-step"><span class="ded-ps-num">3.</span> <span>Por congruencia de triángulos (prop. I.4 y I.41): las áreas son iguales</span></div>
+            <div class="ded-proof-step"><span class="ded-ps-num">∴</span> <span>El cuadrado de la hipotenusa = suma de cuadrados de los catetos</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="ded-bridge">
+        <span class="ded-bridge-label">Hace posible →</span>
+        <span class="ded-bridge-text">derivar consecuencias adicionales — los corolarios</span>
+      </div>
+    </div>
+
+    <!-- Step 3: Corolario -->
+    <div class="ded-panel" data-panel="3">
+      <div class="ded-panel-tag">Consecuencia</div>
+      <div class="ded-panel-title">Corolario — lo que sigue sin esfuerzo adicional</div>
+      <div class="ded-panel-desc">Un corolario no requiere demostración propia: se desprende directamente del teorema anterior. La cadena se extiende.</div>
+      <div class="ded-corollaries">
+        <div class="ded-cor">
+          <div class="ded-cor-name">Corolario 1 — Identificar triángulos rectángulos</div>
+          <div class="ded-cor-body">Si en un triángulo se cumple a² + b² = c², entonces el ángulo opuesto a c es recto. No hace falta medir el ángulo: basta con calcular.</div>
+          <div class="ded-cor-use">Usado por arquitectos e ingenieros desde Egipto antiguo (regla 3-4-5).</div>
+        </div>
+        <div class="ded-cor">
+          <div class="ded-cor-name">Corolario 2 — Distancias en el plano</div>
+          <div class="ded-cor-body">La distancia entre dos puntos (x₁,y₁) y (x₂,y₂) es √[(x₂−x₁)² + (y₂−y₁)²]. El Teorema de Pitágoras aplicado a coordenadas.</div>
+          <div class="ded-cor-use">Base de la geometría analítica, los gráficos por computadora y el aprendizaje automático (distancia euclidiana entre vectores).</div>
+        </div>
+      </div>
+      <div class="ded-chain-note">
+        <span class="ded-chain-icon">⟳</span>
+        <span>Cada corolario puede convertirse en premisa de un nuevo teorema. La cadena no termina: la geometría moderna, la topología y el álgebra lineal son extensiones de este mismo método.</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="ded-nav">
+    <button class="ded-btn" id="ded-prev">← Anterior</button>
+    <button class="ded-btn" id="ded-next">Siguiente →</button>
+  </div>
+</div>
+
+<style>
+.ded-wrap, .ded-wrap * { box-sizing: border-box; }
+
+.ded-wrap {
+  --ea: var(--md-primary-fg-color, #26A69A);
+  --eb: #324AB2;
+  --eg: var(--md-accent-fg-color, #FFB343);
+  --ebg: var(--md-default-bg-color, #fff);
+  --efg: var(--md-default-fg-color, #0f172a);
+  --ebd: rgba(15,23,42,.13);
+  --emut: rgba(15,23,42,.56);
+  --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  --estep: 0;
+
+  display: grid;
+  gap: 16px;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--ebd);
+  border-radius: 20px;
+  background:
+    radial-gradient(100% 120% at 90% 0%, color-mix(in srgb,var(--eb) 6%,transparent), transparent 50%),
+    radial-gradient(80% 100% at 5% 95%, color-mix(in srgb,var(--ea) 5%,transparent), transparent 52%),
+    var(--ebg);
+  color: var(--efg);
+  font-family: var(--ef);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-md-color-scheme="slate"] .ded-wrap {
+  --ebg: var(--md-default-bg-color, #0f172a);
+  --efg: var(--md-default-fg-color, #e2e8f0);
+  --ebd: rgba(226,232,240,.13);
+  --emut: rgba(226,232,240,.56);
+}
+
+.ded-hd { display: grid; gap: 4px; }
+.ded-title { font-size: clamp(15px,2vw,20px); font-weight: 900; letter-spacing: -.02em; line-height: 1.15; }
+.ded-sub { font-size: 13px; color: var(--emut); line-height: 1.5; max-width: 68ch; }
+
+/* Stepper */
+.ded-stepper {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--ebd);
+  background: color-mix(in srgb, var(--ebg) 70%, #0f172a 30%);
+  overflow-x: auto;
+}
+.ded-step {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  min-width: 80px;
+  cursor: pointer;
+}
+.ded-step-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  border: 2px solid var(--ebd);
+  background: transparent;
+  transition: background .2s, border-color .2s, transform .2s;
+}
+.ded-step-dot--active {
+  background: var(--ea);
+  border-color: var(--ea);
+  transform: scale(1.3);
+}
+.ded-step-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  text-align: center;
+  color: var(--emut);
+  transition: color .2s;
+}
+.ded-step--active .ded-step-label { color: var(--efg); }
+.ded-connector {
+  flex: 0 0 24px;
+  height: 2px;
+  background: var(--ebd);
+  margin-bottom: 18px;
+  transition: background .3s;
+}
+.ded-connector--active { background: color-mix(in srgb, var(--ea) 50%, var(--ebd)); }
+
+/* Card */
+.ded-card {
+  padding: 18px 20px;
+  border-radius: 14px;
+  border: 1px solid var(--ebd);
+  background: color-mix(in srgb, var(--ebg) 75%, #0f172a 25%);
+  min-height: 260px;
+}
+
+.ded-panel { display: none; animation: dedIn .28s ease; }
+.ded-panel--active { display: grid; gap: 12px; align-content: start; }
+@keyframes dedIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+.ded-panel-tag {
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--ea) 80%, var(--emut));
+}
+.ded-panel-title { font-size: 16px; font-weight: 900; letter-spacing: -.01em; line-height: 1.25; }
+.ded-panel-desc { font-size: 12.5px; color: var(--emut); line-height: 1.5; }
+
+/* Axioms */
+.ded-axioms { display: grid; gap: 6px; }
+.ded-axiom {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--ea) 6%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ea) 16%, transparent);
+}
+.ded-axiom-num {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ea) 18%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ea) 40%, transparent);
+  color: color-mix(in srgb, var(--ea) 80%, var(--efg));
+  font-size: 10px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ded-axiom-text { font-size: 12px; color: var(--emut); line-height: 1.45; }
+.ded-note { font-style: italic; font-size: 10.5px; opacity: .75; }
+
+/* Definitions */
+.ded-defs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+@media (max-width: 500px) { .ded-defs { grid-template-columns: 1fr; } }
+.ded-def {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--ebd);
+  background: color-mix(in srgb, var(--eb) 5%, transparent);
+  display: grid;
+  gap: 4px;
+}
+.ded-def-term { font-size: 13px; font-weight: 900; }
+.ded-def-body { font-size: 11px; color: var(--emut); line-height: 1.4; }
+.ded-def-visual { opacity: .6; }
+.ded-def-visual svg { color: var(--efg); }
+
+/* Theorem */
+.ded-theorem { display: flex; gap: 16px; align-items: flex-start; flex-wrap: wrap; }
+.ded-thm-visual { flex-shrink: 0; }
+.ded-thm-svg { color: var(--efg); opacity: .85; }
+.ded-thm-text { flex: 1 1 200px; display: grid; gap: 8px; }
+.ded-thm-eq { font-size: 22px; font-weight: 900; font-family: "Georgia", serif; letter-spacing: .02em; }
+.ded-thm-name { font-size: 10.5px; font-weight: 700; color: var(--emut); text-transform: uppercase; letter-spacing: .04em; }
+.ded-proof-step { display: flex; gap: 8px; font-size: 11.5px; color: var(--emut); line-height: 1.45; padding: 3px 0; border-bottom: 1px solid color-mix(in srgb, var(--ebd) 60%, transparent); }
+.ded-ps-num { flex-shrink: 0; font-weight: 800; color: color-mix(in srgb, var(--ea) 70%, var(--emut)); width: 16px; }
+
+/* Corollaries */
+.ded-corollaries { display: grid; gap: 10px; }
+.ded-cor {
+  padding: 11px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--ebd);
+  background: color-mix(in srgb, var(--eg) 5%, transparent);
+  display: grid;
+  gap: 5px;
+}
+.ded-cor-name { font-size: 12.5px; font-weight: 900; }
+.ded-cor-body { font-size: 12px; color: var(--emut); line-height: 1.45; }
+.ded-cor-use { font-size: 11px; font-style: italic; color: color-mix(in srgb, var(--eg) 70%, var(--emut)); border-left: 2px solid color-mix(in srgb, var(--eg) 40%, transparent); padding-left: 7px; }
+
+.ded-chain-note {
+  display: flex;
+  gap: 9px;
+  align-items: flex-start;
+  font-size: 12px;
+  color: var(--emut);
+  line-height: 1.5;
+  padding: 10px 13px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--ea) 6%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ea) 16%, transparent);
+}
+.ded-chain-icon { font-size: 16px; flex-shrink: 0; color: color-mix(in srgb, var(--ea) 70%, var(--emut)); }
+
+/* Bridge */
+.ded-bridge {
+  display: flex;
+  gap: 7px;
+  align-items: baseline;
+  font-size: 11.5px;
+  color: var(--emut);
+  padding: 6px 10px;
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--ea) 7%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ea) 20%, transparent);
+}
+.ded-bridge-label { font-weight: 800; font-size: 10px; text-transform: uppercase; letter-spacing: .05em; color: color-mix(in srgb, var(--ea) 80%, var(--efg)); flex-shrink: 0; }
+.ded-bridge-text { font-style: italic; }
+
+/* Navigation */
+.ded-nav { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.ded-btn {
+  padding: 7px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--ebd);
+  background: transparent;
+  color: var(--emut);
+  font-family: var(--ef);
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .18s, color .18s, border-color .18s;
+}
+.ded-btn:hover {
+  background: color-mix(in srgb, var(--ea) 10%, transparent);
+  border-color: color-mix(in srgb, var(--ea) 30%, var(--ebd));
+  color: var(--efg);
+}
+.ded-btn:disabled { opacity: .35; cursor: default; pointer-events: none; }
+</style>
+
+<script>
+(function () {
+  function boot() {
+    var wrap = document.querySelector('[data-demo="01-cadena-deductiva"]');
+    if (!wrap || wrap.dataset.dedReady) return;
+    wrap.dataset.dedReady = '1';
+
+    var steps = wrap.querySelectorAll('.ded-step');
+    var panels = wrap.querySelectorAll('.ded-panel');
+    var connectors = wrap.querySelectorAll('.ded-connector');
+    var btnPrev = wrap.querySelector('#ded-prev');
+    var btnNext = wrap.querySelector('#ded-next');
+    var current = 0;
+
+    function go(idx) {
+      if (idx < 0 || idx >= steps.length) return;
+      current = idx;
+      steps.forEach(function(s, i) { s.classList.toggle('ded-step--active', i === idx); });
+      panels.forEach(function(p, i) { p.classList.toggle('ded-panel--active', i === idx); });
+      connectors.forEach(function(c, i) { c.classList.toggle('ded-connector--active', i < idx); });
+      var stepDots = wrap.querySelectorAll('.ded-step-dot');
+      stepDots.forEach(function(d, i) { d.classList.toggle('ded-step-dot--active', i === idx); });
+      btnPrev.disabled = idx === 0;
+      btnNext.disabled = idx === steps.length - 1;
+    }
+
+    steps.forEach(function(s, i) { s.addEventListener('click', function() { go(i); }); });
+    btnPrev.addEventListener('click', function() { go(current - 1); });
+    btnNext.addEventListener('click', function() { go(current + 1); });
+    btnPrev.disabled = true;
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
+  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
+})();
+</script>
