@@ -1,0 +1,268 @@
+<div class="calc-wrap" data-demo="02-limite-calculadoras">
+  <div class="calc-hd">
+    <div class="calc-title">El límite de las calculadoras mecánicas</div>
+    <div class="calc-sub">Pascal y Leibniz construyeron máquinas que sumaban y multiplicaban. Calculaban, pero no podían decidir. Ese salto tardó dos siglos más.</div>
+  </div>
+
+  <div class="calc-tabs">
+    <button class="calc-tab calc-tab--active" data-ctab="pascal">Pascalina · 1642</button>
+    <button class="calc-tab" data-ctab="leibniz">Rueda de Leibniz · 1674</button>
+    <button class="calc-tab" data-ctab="limite">El límite</button>
+  </div>
+
+  <!-- Pascalina -->
+  <div class="calc-panel calc-panel--active" data-cpanel="pascal">
+    <div class="calc-machine">
+      <div class="calc-m-visual">
+        <div class="calc-gear-row">
+          <div class="calc-gear" style="--rot:0deg">&#9918;</div>
+          <div class="calc-gear" style="--rot:40deg">&#9918;</div>
+          <div class="calc-gear" style="--rot:80deg">&#9918;</div>
+          <div class="calc-gear" style="--rot:120deg">&#9918;</div>
+          <div class="calc-gear" style="--rot:160deg">&#9918;</div>
+        </div>
+        <div class="calc-display">
+          <div class="calc-d-wheel">4</div>
+          <div class="calc-d-wheel">2</div>
+          <div class="calc-d-wheel">7</div>
+          <div class="calc-d-wheel">3</div>
+          <div class="calc-d-wheel">1</div>
+        </div>
+      </div>
+      <div class="calc-m-desc">Ruedas dentadas de 10 posiciones. Cuando una pasa de 9 a 0, empuja la siguiente (acarreo mecánico). Brillante, pero solo conoce una operación.</div>
+      <div class="calc-m-ops">
+        <div class="calc-op calc-op--yes">Suma</div>
+        <div class="calc-op calc-op--yes">Resta</div>
+        <div class="calc-op calc-op--no">Multiplicación</div>
+        <div class="calc-op calc-op--no">Lógica condicional</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Leibniz -->
+  <div class="calc-panel" data-cpanel="leibniz">
+    <div class="calc-machine">
+      <div class="calc-m-visual">
+        <div class="calc-stepped-wheel">
+          <div class="calc-sw-shaft">
+            <div class="calc-sw-tooth" style="height:8px"></div>
+            <div class="calc-sw-tooth" style="height:14px"></div>
+            <div class="calc-sw-tooth" style="height:20px"></div>
+            <div class="calc-sw-tooth" style="height:26px"></div>
+            <div class="calc-sw-tooth" style="height:32px"></div>
+            <div class="calc-sw-tooth" style="height:38px"></div>
+            <div class="calc-sw-tooth" style="height:44px"></div>
+            <div class="calc-sw-tooth" style="height:50px"></div>
+            <div class="calc-sw-tooth" style="height:56px"></div>
+          </div>
+        </div>
+        <div class="calc-d-label">Rueda escalonada — dientes de longitud variable</div>
+      </div>
+      <div class="calc-m-desc">La rueda escalonada permite multiplicar repitiendo sumas mecánicas. El operador giraba la manivela el número de veces correcto. Más versátil, pero sigue sin poder decidir.</div>
+      <div class="calc-m-ops">
+        <div class="calc-op calc-op--yes">Suma</div>
+        <div class="calc-op calc-op--yes">Resta</div>
+        <div class="calc-op calc-op--yes">Multiplicación</div>
+        <div class="calc-op calc-op--yes">División</div>
+        <div class="calc-op calc-op--no">Lógica condicional</div>
+        <div class="calc-op calc-op--no">Bucles o repetición</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- El límite -->
+  <div class="calc-panel" data-cpanel="limite">
+    <div class="calc-wall">
+      <div class="calc-wall-title">El muro infranqueable: la lógica condicional</div>
+      <div class="calc-wall-body">Ambas máquinas podían calcular <em>si se les decía exactamente qué calcular</em>. Lo que no podían hacer era tomar decisiones:</div>
+      <div class="calc-wall-ex">
+        <div class="calc-wall-ex-label">Imposible para cualquiera de ellas</div>
+        <div class="calc-wall-ex-code">SI resultado &gt; 100 ENTONCES hacer A, SI NO hacer B</div>
+        <div class="calc-wall-ex-note">Requiere leer el resultado, compararlo y elegir un camino. Ninguna máquina mecánica podía alterar su propio proceso de ejecución.</div>
+      </div>
+      <div class="calc-wall-next">
+        <div class="calc-wn-label">Lo que hizo falta</div>
+        <div class="calc-wn-items">
+          <div class="calc-wn-item">
+            <div class="calc-wn-name">Instrucciones separadas del mecanismo</div>
+            <div class="calc-wn-who">Jacquard (tarjetas, 1805) · Babbage (Analytical Engine, 1837)</div>
+          </div>
+          <div class="calc-wn-item">
+            <div class="calc-wn-name">Lógica booleana en circuitos</div>
+            <div class="calc-wn-who">Boole (álgebra lógica, 1854) · Shannon (circuitos, 1937)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.calc-wrap, .calc-wrap * { box-sizing: border-box; }
+
+.calc-wrap {
+  --ea: var(--md-primary-fg-color, #26A69A);
+  --eb: #324AB2;
+  --eg: var(--md-accent-fg-color, #FFB343);
+  --ebg: var(--md-default-bg-color, #fff);
+  --efg: var(--md-default-fg-color, #0f172a);
+  --ebd: rgba(15,23,42,.13);
+  --emut: rgba(15,23,42,.56);
+  --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid;
+  gap: 14px;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--ebd);
+  border-radius: 20px;
+  background:
+    radial-gradient(100% 120% at 0% 0%, color-mix(in srgb,var(--eb) 6%,transparent), transparent 50%),
+    radial-gradient(80% 100% at 100% 100%, color-mix(in srgb,var(--ea) 5%,transparent), transparent 52%),
+    var(--ebg);
+  color: var(--efg);
+  font-family: var(--ef);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-md-color-scheme="slate"] .calc-wrap {
+  --ebg: var(--md-default-bg-color, #0f172a);
+  --efg: var(--md-default-fg-color, #e2e8f0);
+  --ebd: rgba(226,232,240,.13);
+  --emut: rgba(226,232,240,.56);
+}
+
+.calc-hd { display: grid; gap: 4px; }
+.calc-title { font-size: clamp(15px,2vw,20px); font-weight: 900; letter-spacing: -.02em; line-height: 1.15; }
+.calc-sub { font-size: 13px; color: var(--emut); line-height: 1.5; max-width: 68ch; }
+
+/* Tabs */
+.calc-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.calc-tab {
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--ebd);
+  background: transparent;
+  color: var(--emut);
+  font-family: var(--ef);
+  font-size: 12.5px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background .18s, color .18s, border-color .18s;
+}
+.calc-tab:hover { background: color-mix(in srgb, var(--ea) 10%, transparent); border-color: color-mix(in srgb, var(--ea) 30%, var(--ebd)); color: var(--efg); }
+.calc-tab--active { background: color-mix(in srgb, var(--ea) 14%, transparent); border-color: color-mix(in srgb, var(--ea) 50%, transparent); color: var(--efg); }
+
+.calc-panel { display: none; }
+.calc-panel--active { display: block; }
+
+/* Machine card */
+.calc-machine {
+  padding: 16px 18px;
+  border-radius: 13px;
+  border: 1px solid var(--ebd);
+  background: color-mix(in srgb, var(--ebg) 75%, #0f172a 25%);
+  display: grid;
+  gap: 12px;
+}
+
+.calc-m-visual {
+  padding: 12px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--ebg) 40%, #0f172a 60%);
+  border: 1px solid var(--ebd);
+  display: grid;
+  gap: 8px;
+  align-items: center;
+}
+.calc-gear-row { display: flex; gap: 4px; justify-content: center; }
+.calc-gear {
+  font-size: 22px;
+  color: color-mix(in srgb, var(--eg) 60%, var(--emut));
+  transform: rotate(var(--rot));
+  line-height: 1;
+}
+.calc-display { display: flex; gap: 4px; justify-content: center; }
+.calc-d-wheel {
+  width: 32px; height: 32px;
+  border-radius: 5px;
+  border: 1px solid var(--ebd);
+  background: color-mix(in srgb, var(--eg) 12%, transparent);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; font-weight: 900;
+  font-family: "Courier New", monospace;
+  color: color-mix(in srgb, var(--eg) 80%, var(--efg));
+}
+
+.calc-stepped-wheel { display: flex; justify-content: center; align-items: flex-end; padding: 8px 0; }
+.calc-sw-shaft { display: flex; gap: 3px; align-items: flex-end; }
+.calc-sw-tooth { width: 10px; border-radius: 2px 2px 0 0; background: color-mix(in srgb, var(--ea) 55%, var(--emut)); }
+.calc-d-label { font-size: 10px; color: var(--emut); text-align: center; font-style: italic; }
+
+.calc-m-desc { font-size: 12.5px; color: var(--emut); line-height: 1.5; }
+
+.calc-m-ops { display: flex; flex-wrap: wrap; gap: 5px; }
+.calc-op { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 999px; }
+.calc-op--yes { background: color-mix(in srgb, var(--ea) 12%, transparent); border: 1px solid color-mix(in srgb, var(--ea) 30%, transparent); color: color-mix(in srgb, var(--ea) 80%, var(--efg)); }
+.calc-op--no  { background: color-mix(in srgb, #ef4444 8%, transparent); border: 1px solid color-mix(in srgb, #ef4444 22%, transparent); color: color-mix(in srgb, #ef4444 70%, var(--emut)); }
+
+/* Wall tab */
+.calc-wall {
+  padding: 16px 18px;
+  border-radius: 13px;
+  border: 1px solid color-mix(in srgb, #ef4444 20%, var(--ebd));
+  background: color-mix(in srgb, #ef4444 4%, color-mix(in srgb, var(--ebg) 75%, #0f172a 25%));
+  display: grid;
+  gap: 13px;
+}
+.calc-wall-title { font-size: 14px; font-weight: 900; }
+.calc-wall-body { font-size: 12.5px; color: var(--emut); line-height: 1.5; }
+
+.calc-wall-ex {
+  padding: 11px 13px;
+  border-radius: 9px;
+  display: grid;
+  gap: 6px;
+  background: color-mix(in srgb, #ef4444 6%, transparent);
+  border: 1px solid color-mix(in srgb, #ef4444 20%, transparent);
+}
+.calc-wall-ex-label { font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: color-mix(in srgb, #ef4444 70%, var(--emut)); }
+.calc-wall-ex-code { font-family: "Courier New", monospace; font-size: 12.5px; font-weight: 700; color: var(--efg); padding: 6px 9px; border-radius: 5px; background: color-mix(in srgb, var(--ebg) 50%, #0f172a 50%); }
+.calc-wall-ex-note { font-size: 11px; color: var(--emut); line-height: 1.4; }
+
+.calc-wall-next { border-top: 1px solid var(--ebd); padding-top: 12px; display: grid; gap: 8px; }
+.calc-wn-label { font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .07em; color: var(--emut); }
+.calc-wn-items { display: grid; gap: 7px; }
+.calc-wn-item { display: grid; gap: 2px; padding: 8px 11px; border-radius: 8px; border: 1px solid color-mix(in srgb, var(--ea) 20%, var(--ebd)); background: color-mix(in srgb, var(--ea) 5%, transparent); }
+.calc-wn-name { font-size: 12px; font-weight: 800; }
+.calc-wn-who  { font-size: 10.5px; color: color-mix(in srgb, var(--ea) 70%, var(--emut)); font-style: italic; }
+</style>
+
+<script>
+(function () {
+  function boot() {
+    var wrap = document.querySelector('[data-demo="02-limite-calculadoras"]');
+    if (!wrap || wrap.dataset.calcReady) return;
+    wrap.dataset.calcReady = '1';
+
+    var tabs = wrap.querySelectorAll('.calc-tab');
+    var panels = wrap.querySelectorAll('.calc-panel');
+
+    tabs.forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        var target = tab.dataset.ctab;
+        tabs.forEach(function(t) { t.classList.remove('calc-tab--active'); });
+        panels.forEach(function(p) { p.classList.remove('calc-panel--active'); });
+        tab.classList.add('calc-tab--active');
+        var panel = wrap.querySelector('[data-cpanel="' + target + '"]');
+        if (panel) panel.classList.add('calc-panel--active');
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
+  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
+})();
+</script>

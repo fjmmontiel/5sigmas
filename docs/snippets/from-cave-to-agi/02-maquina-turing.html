@@ -1,0 +1,410 @@
+<div class="tur-wrap" data-demo="02-maquina-turing">
+  <div class="tur-hd">
+    <div class="tur-title">La Máquina de Turing: qué significa computar</div>
+    <div class="tur-sub">Un modelo abstracto con tres elementos — cinta, cabezal y tabla de reglas — capaz de simular cualquier cálculo posible. Y también de demostrar qué cálculos son imposibles.</div>
+  </div>
+
+  <div class="tur-anatomy">
+    <div class="tur-part">
+      <div class="tur-part-icon">📜</div>
+      <div>
+        <div class="tur-part-name">Cinta</div>
+        <div class="tur-part-desc">Celdas con símbolos: 0, 1 o vacío. Es la memoria.</div>
+      </div>
+    </div>
+    <div class="tur-part">
+      <div class="tur-part-icon">🔍</div>
+      <div>
+        <div class="tur-part-name">Cabezal</div>
+        <div class="tur-part-desc">Lee, escribe y se mueve izquierda o derecha.</div>
+      </div>
+    </div>
+    <div class="tur-part">
+      <div class="tur-part-icon">📋</div>
+      <div>
+        <div class="tur-part-name">Reglas (programa)</div>
+        <div class="tur-part-desc">Estado + símbolo leído → qué escribir, hacia dónde moverse, nuevo estado.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tape simulation -->
+  <div class="tur-sim">
+    <div class="tur-sim-title">Simulación — sumar 1 en binario</div>
+    <div class="tur-sim-sub">La máquina lee una cadena binaria de derecha a izquierda y añade 1, propagando el acarreo. Pulsa Paso a paso o Ejecutar.</div>
+
+    <div class="tur-tape-area">
+      <div class="tur-head-indicator">▼</div>
+      <div class="tur-tape" id="tur-tape"></div>
+    </div>
+
+    <div class="tur-status-row">
+      <div class="tur-state-badge">Estado: <span id="tur-state-label">q0 — buscando fin</span></div>
+      <div class="tur-step-badge">Paso: <span id="tur-step-num">0</span></div>
+    </div>
+
+    <div class="tur-rule-display" id="tur-rule-display">
+      <span class="tur-rule-lbl">Regla aplicada:</span>
+      <span class="tur-rule-body" id="tur-rule-body">— (sin iniciar)</span>
+    </div>
+
+    <div class="tur-controls">
+      <button class="tur-btn" id="tur-reset">↺ Reiniciar</button>
+      <button class="tur-btn tur-btn--primary" id="tur-step">Paso →</button>
+      <button class="tur-btn" id="tur-run">▶ Ejecutar</button>
+    </div>
+  </div>
+
+  <div class="tur-insight">
+    <div class="tur-ins-cols">
+      <div class="tur-ins-col">
+        <div class="tur-ins-name">Lo que demostró</div>
+        <div class="tur-ins-body">Cualquier proceso de cálculo mecánico puede describirse con estas tres piezas. Si un algoritmo existe, una Máquina de Turing puede ejecutarlo.</div>
+      </div>
+      <div class="tur-ins-col tur-ins-col--b">
+        <div class="tur-ins-name">El Problema de la Parada</div>
+        <div class="tur-ins-body">No existe ningún algoritmo que determine, para cualquier programa y entrada, si ese programa terminará alguna vez. Los límites de la computación son matemáticos, no prácticos.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.tur-wrap, .tur-wrap * { box-sizing: border-box; }
+
+.tur-wrap {
+  --ea: var(--md-primary-fg-color, #26A69A);
+  --eb: #324AB2;
+  --eg: var(--md-accent-fg-color, #FFB343);
+  --ebg: var(--md-default-bg-color, #fff);
+  --efg: var(--md-default-fg-color, #0f172a);
+  --ebd: rgba(15,23,42,.13);
+  --emut: rgba(15,23,42,.56);
+  --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid;
+  gap: 14px;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--ebd);
+  border-radius: 20px;
+  background:
+    radial-gradient(100% 120% at 5% 5%, color-mix(in srgb,var(--eb) 6%,transparent), transparent 50%),
+    radial-gradient(80% 100% at 95% 95%, color-mix(in srgb,var(--ea) 5%,transparent), transparent 52%),
+    var(--ebg);
+  color: var(--efg);
+  font-family: var(--ef);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-md-color-scheme="slate"] .tur-wrap {
+  --ebg: var(--md-default-bg-color, #0f172a);
+  --efg: var(--md-default-fg-color, #e2e8f0);
+  --ebd: rgba(226,232,240,.13);
+  --emut: rgba(226,232,240,.56);
+}
+
+.tur-hd { display: grid; gap: 4px; }
+.tur-title { font-size: clamp(15px,2vw,20px); font-weight: 900; letter-spacing: -.02em; line-height: 1.15; }
+.tur-sub { font-size: 13px; color: var(--emut); line-height: 1.5; max-width: 68ch; }
+
+/* Anatomy */
+.tur-anatomy {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 8px;
+}
+@media (max-width: 500px) { .tur-anatomy { grid-template-columns: 1fr; } }
+.tur-part {
+  padding: 11px 13px;
+  border-radius: 11px;
+  border: 1px solid var(--ebd);
+  background: color-mix(in srgb, var(--ebg) 70%, #0f172a 30%);
+  display: flex;
+  gap: 9px;
+  align-items: flex-start;
+}
+.tur-part-icon { font-size: 18px; flex-shrink: 0; }
+.tur-part-name { font-size: 12px; font-weight: 900; margin-bottom: 3px; }
+.tur-part-desc { font-size: 11px; color: var(--emut); line-height: 1.4; }
+
+/* Sim */
+.tur-sim {
+  padding: 14px 16px;
+  border-radius: 13px;
+  border: 1px solid var(--ebd);
+  background: color-mix(in srgb, var(--ebg) 75%, #0f172a 25%);
+  display: grid;
+  gap: 12px;
+}
+.tur-sim-title { font-size: 13px; font-weight: 900; }
+.tur-sim-sub { font-size: 11.5px; color: var(--emut); line-height: 1.4; }
+
+.tur-tape-area { display: grid; gap: 2px; justify-items: center; }
+.tur-head-indicator {
+  font-size: 18px;
+  color: color-mix(in srgb, var(--eg) 80%, var(--efg));
+  transition: transform .22s ease;
+}
+
+.tur-tape {
+  display: flex;
+  gap: 3px;
+  padding: 6px 4px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--ebg) 40%, #0f172a 60%);
+  border: 1px solid var(--ebd);
+  overflow-x: auto;
+  justify-content: center;
+}
+.tur-cell {
+  width: 32px;
+  height: 32px;
+  border-radius: 5px;
+  border: 1.5px solid var(--ebd);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 900;
+  font-family: "Courier New", monospace;
+  color: var(--efg);
+  background: color-mix(in srgb, var(--ebg) 60%, #0f172a 40%);
+  transition: background .2s, border-color .2s;
+  flex-shrink: 0;
+}
+.tur-cell--head {
+  background: color-mix(in srgb, var(--eg) 22%, transparent);
+  border-color: color-mix(in srgb, var(--eg) 55%, transparent);
+  color: color-mix(in srgb, var(--eg) 85%, var(--efg));
+}
+.tur-cell--changed {
+  background: color-mix(in srgb, var(--ea) 18%, transparent);
+  border-color: color-mix(in srgb, var(--ea) 45%, transparent);
+}
+.tur-cell--blank { color: var(--emut); font-size: 11px; }
+
+.tur-status-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.tur-state-badge, .tur-step-badge {
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--eb) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--eb) 30%, transparent);
+  color: color-mix(in srgb, var(--eb) 80%, var(--efg));
+}
+
+.tur-rule-display {
+  font-size: 11.5px;
+  color: var(--emut);
+  padding: 6px 10px;
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--ebg) 50%, #0f172a 50%);
+  border: 1px solid var(--ebd);
+}
+.tur-rule-lbl { font-weight: 700; margin-right: 6px; }
+.tur-rule-body { font-family: "Courier New", monospace; color: color-mix(in srgb, var(--ea) 80%, var(--efg)); }
+
+.tur-controls { display: flex; gap: 8px; flex-wrap: wrap; }
+.tur-btn {
+  padding: 7px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--ebd);
+  background: transparent;
+  color: var(--emut);
+  font-family: var(--ef);
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .18s, color .18s, border-color .18s;
+}
+.tur-btn:hover {
+  background: color-mix(in srgb, var(--ea) 10%, transparent);
+  border-color: color-mix(in srgb, var(--ea) 30%, var(--ebd));
+  color: var(--efg);
+}
+.tur-btn--primary {
+  background: color-mix(in srgb, var(--ea) 16%, transparent);
+  border-color: color-mix(in srgb, var(--ea) 45%, transparent);
+  color: color-mix(in srgb, var(--ea) 85%, var(--efg));
+}
+.tur-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+/* Rule table */
+.tur-rules-section { display: grid; gap: 8px; }
+.tur-rules-title { font-size: 12px; font-weight: 800; color: var(--emut); text-transform: uppercase; letter-spacing: .05em; }
+.tur-table-scroll { overflow-x: auto; }
+.tur-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11.5px;
+}
+.tur-table th {
+  font-size: 9.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--emut);
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--ebd);
+  text-align: left;
+  white-space: nowrap;
+}
+.tur-table td {
+  padding: 5px 10px;
+  border-bottom: 1px solid color-mix(in srgb, var(--ebd) 50%, transparent);
+  color: var(--emut);
+  line-height: 1.4;
+}
+.tur-sym {
+  font-family: "Courier New", monospace;
+  font-weight: 900;
+  color: var(--efg);
+}
+.tur-table tr[data-rule].tur-row--active td {
+  background: color-mix(in srgb, var(--ea) 10%, transparent);
+  color: var(--efg);
+}
+
+/* Insight */
+.tur-insight {
+  padding: 13px 15px;
+  border-radius: 12px;
+  border: 1px solid var(--ebd);
+  background: color-mix(in srgb, var(--ebg) 70%, #0f172a 30%);
+}
+.tur-ins-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 500px) { .tur-ins-cols { grid-template-columns: 1fr; } }
+.tur-ins-col { display: grid; gap: 5px; padding: 10px; border-radius: 8px; background: color-mix(in srgb, var(--ea) 5%, transparent); border: 1px solid color-mix(in srgb, var(--ea) 15%, transparent); }
+.tur-ins-col--b { background: color-mix(in srgb, #ef4444 4%, transparent); border-color: color-mix(in srgb, #ef4444 14%, transparent); }
+.tur-ins-name { font-size: 12px; font-weight: 900; }
+.tur-ins-body { font-size: 11.5px; color: var(--emut); line-height: 1.45; }
+</style>
+
+<script>
+(function () {
+  var TAPE_INIT = ['_','_','1','0','1','1','_','_'];
+  var RULES = {
+    'q0-0': { write:'0', move:1, next:'q0', label:'Lee 0 → sigue buscando extremo derecho' },
+    'q0-1': { write:'1', move:1, next:'q0', label:'Lee 1 → sigue buscando extremo derecho' },
+    'q0-B': { write:'_', move:-1, next:'q1', label:'Llegó al final → retrocede, va a sumar' },
+    'q1-0': { write:'1', move:0, next:'qH', label:'Lee 0 → escribe 1 (0+1=1), termina' },
+    'q1-1': { write:'0', move:-1, next:'q1', label:'Lee 1 → escribe 0, propaga acarreo a la izquierda' },
+    'q1-B': { write:'1', move:0, next:'qH', label:'Celda vacía → escribe 1 (acarreo final), termina' },
+    'qH-0': { write:'0', move:0, next:'qH', label:'HALT' },
+    'qH-1': { write:'1', move:0, next:'qH', label:'HALT' },
+    'qH-B': { write:'_', move:0, next:'qH', label:'HALT' },
+  };
+  var STATE_LABELS = {
+    'q0': 'q0 — buscando extremo derecho',
+    'q1': 'q1 — sumando (acarreo)',
+    'qH': 'qH — HALT (terminado)',
+  };
+
+  function boot() {
+    var wrap = document.querySelector('[data-demo="02-maquina-turing"]');
+    if (!wrap || wrap.dataset.turReady) return;
+    wrap.dataset.turReady = '1';
+
+    var tapeEl = wrap.querySelector('#tur-tape');
+    var stateLabel = wrap.querySelector('#tur-state-label');
+    var stepNum = wrap.querySelector('#tur-step-num');
+    var ruleBody = wrap.querySelector('#tur-rule-body');
+    var headIndicator = wrap.querySelector('.tur-head-indicator');
+    var btnStep = wrap.querySelector('#tur-step');
+    var btnRun = wrap.querySelector('#tur-run');
+    var btnReset = wrap.querySelector('#tur-reset');
+    var ruleRows = wrap.querySelectorAll('[data-rule]');
+
+    var tape, head, state, step, running, runTimer;
+
+    function symKey(s) { return s === '_' ? 'B' : s; }
+
+    function reset() {
+      tape = TAPE_INIT.slice();
+      head = 2; // start at first data cell
+      state = 'q0';
+      step = 0;
+      running = false;
+      clearInterval(runTimer);
+      renderTape();
+      stateLabel.textContent = STATE_LABELS[state] || state;
+      stepNum.textContent = step;
+      ruleBody.textContent = '— (sin iniciar)';
+      btnStep.disabled = false;
+      btnRun.disabled = false;
+      highlightRule(null);
+    }
+
+    function renderTape() {
+      tapeEl.innerHTML = '';
+      tape.forEach(function(sym, i) {
+        var cell = document.createElement('div');
+        cell.className = 'tur-cell' + (sym === '_' ? ' tur-cell--blank' : '') + (i === head ? ' tur-cell--head' : '');
+        cell.textContent = sym === '_' ? '□' : sym;
+        tapeEl.appendChild(cell);
+      });
+      // Move head indicator
+      var cellW = 35; // approx cell width + gap
+      var offset = head * cellW;
+      headIndicator.style.marginLeft = offset + 'px';
+    }
+
+    function highlightRule(ruleKey) {
+      ruleRows.forEach(function(r) { r.classList.remove('tur-row--active'); });
+      if (ruleKey) {
+        var row = wrap.querySelector('[data-rule="' + ruleKey + '"]');
+        if (row) row.classList.add('tur-row--active');
+      }
+    }
+
+    function doStep() {
+      if (state === 'qH') {
+        btnStep.disabled = true;
+        btnRun.disabled = true;
+        return false;
+      }
+      var sym = tape[head] || '_';
+      var key = state + '-' + symKey(sym);
+      var rule = RULES[key];
+      if (!rule) return false;
+      tape[head] = rule.write;
+      head += rule.move;
+      if (head < 0) { tape.unshift('_'); head = 0; }
+      if (head >= tape.length) { tape.push('_'); }
+      state = rule.next;
+      step++;
+      renderTape();
+      stateLabel.textContent = STATE_LABELS[state] || state;
+      stepNum.textContent = step;
+      ruleBody.textContent = rule.label;
+      highlightRule(key);
+      if (state === 'qH') { btnStep.disabled = true; btnRun.disabled = true; clearInterval(runTimer); }
+      return true;
+    }
+
+    btnStep.addEventListener('click', doStep);
+    btnReset.addEventListener('click', reset);
+    btnRun.addEventListener('click', function() {
+      running = !running;
+      if (running) {
+        btnRun.textContent = '⏸ Pausar';
+        runTimer = setInterval(function() {
+          if (!doStep()) { clearInterval(runTimer); btnRun.textContent = '▶ Ejecutar'; }
+        }, 600);
+      } else {
+        clearInterval(runTimer);
+        btnRun.textContent = '▶ Ejecutar';
+      }
+    });
+
+    reset();
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
+  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
+})();
+</script>

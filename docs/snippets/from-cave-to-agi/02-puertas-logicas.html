@@ -1,0 +1,520 @@
+<div class="gate-wrap" data-demo="02-puertas-logicas">
+  <div class="gate-hd">
+    <div class="gate-title">Puertas lógicas: del pensamiento a los circuitos</div>
+    <div class="gate-sub">Boole demostró que la lógica es álgebra. Shannon demostró que esa álgebra puede implementarse con interruptores eléctricos. Con solo tres puertas básicas se construye cualquier circuito digital.</div>
+  </div>
+
+  <div class="gate-tabs">
+    <button class="gate-tab gate-tab--active" data-gtab="and">AND</button>
+    <button class="gate-tab" data-gtab="or">OR</button>
+    <button class="gate-tab" data-gtab="not">NOT</button>
+    <button class="gate-tab" data-gtab="combo">Combinación</button>
+  </div>
+
+  <!-- AND -->
+  <div class="gate-panel gate-panel--active" data-gpanel="and">
+    <div class="gate-grid">
+      <div class="gate-left">
+        <div class="gate-name">Puerta AND</div>
+        <div class="gate-desc">La salida es 1 solo cuando <em>todas</em> las entradas son 1. El interruptor se abre solo si dos personas pulsan a la vez.</div>
+        <div class="gate-svg-area">
+          <svg viewBox="0 0 120 80" class="gate-svg" id="and-svg">
+            <!-- Inputs -->
+            <line x1="5" y1="25" x2="40" y2="25" stroke-width="2.5" class="gate-wire" id="and-wa"/>
+            <line x1="5" y1="55" x2="40" y2="55" stroke-width="2.5" class="gate-wire" id="and-wb"/>
+            <!-- Body (AND shape) -->
+            <path d="M40,15 L40,65 L65,65 Q90,65 90,40 Q90,15 65,15 Z" class="gate-body"/>
+            <!-- Output -->
+            <line x1="90" y1="40" x2="115" y2="40" stroke-width="2.5" class="gate-wire" id="and-wout"/>
+            <!-- Labels -->
+            <text x="2" y="28" class="gate-io-lbl" id="and-la">A</text>
+            <text x="2" y="58" class="gate-io-lbl" id="and-lb">B</text>
+            <text x="108" y="44" class="gate-io-lbl" id="and-lo">Q</text>
+            <text x="58" y="44" class="gate-body-lbl">&amp;</text>
+          </svg>
+        </div>
+        <div class="gate-inputs">
+          <button class="gate-input-btn" id="and-a" data-val="0">A = 0</button>
+          <button class="gate-input-btn" id="and-b" data-val="0">B = 0</button>
+        </div>
+        <div class="gate-output" id="and-out">
+          Salida: <span class="gate-out-val gate-out-val--0">0</span>
+        </div>
+      </div>
+      <div class="gate-right">
+        <div class="gate-tt-title">Tabla de verdad</div>
+        <table class="gate-tt">
+          <thead><tr><th>A</th><th>B</th><th>A AND B</th></tr></thead>
+          <tbody>
+            <tr class="gate-tt-active" data-and-row="00"><td>0</td><td>0</td><td class="gate-tt-val">0</td></tr>
+            <tr data-and-row="01"><td>0</td><td>1</td><td class="gate-tt-val">0</td></tr>
+            <tr data-and-row="10"><td>1</td><td>0</td><td class="gate-tt-val">0</td></tr>
+            <tr data-and-row="11"><td>1</td><td>1</td><td class="gate-tt-val gate-tt-val--1">1</td></tr>
+          </tbody>
+        </table>
+        <div class="gate-formula">A · B</div>
+        <div class="gate-use">Uso real: selector de condición — la CPU activa una operación solo cuando dos condiciones se cumplen a la vez.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OR -->
+  <div class="gate-panel" data-gpanel="or">
+    <div class="gate-grid">
+      <div class="gate-left">
+        <div class="gate-name">Puerta OR</div>
+        <div class="gate-desc">La salida es 1 cuando <em>al menos una</em> entrada es 1. El interruptor se abre si cualquiera de las dos personas pulsa.</div>
+        <div class="gate-svg-area">
+          <svg viewBox="0 0 120 80" class="gate-svg">
+            <line x1="5" y1="25" x2="38" y2="25" stroke-width="2.5" class="gate-wire" id="or-wa"/>
+            <line x1="5" y1="55" x2="38" y2="55" stroke-width="2.5" class="gate-wire" id="or-wb"/>
+            <path d="M38,15 Q55,40 38,65 L65,65 Q95,50 95,40 Q95,30 65,15 Z" class="gate-body"/>
+            <path d="M38,15 Q50,40 38,65" fill="none" class="gate-body" stroke-width="0"/>
+            <line x1="95" y1="40" x2="115" y2="40" stroke-width="2.5" class="gate-wire" id="or-wout"/>
+            <text x="2" y="28" class="gate-io-lbl" id="or-la">A</text>
+            <text x="2" y="58" class="gate-io-lbl" id="or-lb">B</text>
+            <text x="108" y="44" class="gate-io-lbl" id="or-lo">Q</text>
+            <text x="60" y="44" class="gate-body-lbl">≥1</text>
+          </svg>
+        </div>
+        <div class="gate-inputs">
+          <button class="gate-input-btn" id="or-a" data-val="0">A = 0</button>
+          <button class="gate-input-btn" id="or-b" data-val="0">B = 0</button>
+        </div>
+        <div class="gate-output" id="or-out">Salida: <span class="gate-out-val gate-out-val--0">0</span></div>
+      </div>
+      <div class="gate-right">
+        <div class="gate-tt-title">Tabla de verdad</div>
+        <table class="gate-tt">
+          <thead><tr><th>A</th><th>B</th><th>A OR B</th></tr></thead>
+          <tbody>
+            <tr class="gate-tt-active" data-or-row="00"><td>0</td><td>0</td><td class="gate-tt-val">0</td></tr>
+            <tr data-or-row="01"><td>0</td><td>1</td><td class="gate-tt-val gate-tt-val--1">1</td></tr>
+            <tr data-or-row="10"><td>1</td><td>0</td><td class="gate-tt-val gate-tt-val--1">1</td></tr>
+            <tr data-or-row="11"><td>1</td><td>1</td><td class="gate-tt-val gate-tt-val--1">1</td></tr>
+          </tbody>
+        </table>
+        <div class="gate-formula">A + B</div>
+        <div class="gate-use">Uso real: detección de errores — una alarma se activa si cualquier sensor detecta un problema.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOT -->
+  <div class="gate-panel" data-gpanel="not">
+    <div class="gate-grid gate-grid--not">
+      <div class="gate-left">
+        <div class="gate-name">Puerta NOT (inversor)</div>
+        <div class="gate-desc">Una sola entrada: invierte su valor. 0 se convierte en 1, y 1 en 0. Es la negación lógica.</div>
+        <div class="gate-svg-area">
+          <svg viewBox="0 0 120 80" class="gate-svg">
+            <line x1="5" y1="40" x2="30" y2="40" stroke-width="2.5" class="gate-wire" id="not-wa"/>
+            <polygon points="30,20 30,60 75,40" class="gate-body"/>
+            <circle cx="80" cy="40" r="5" class="gate-body gate-body--circle"/>
+            <line x1="85" y1="40" x2="115" y2="40" stroke-width="2.5" class="gate-wire" id="not-wout"/>
+            <text x="2" y="44" class="gate-io-lbl" id="not-la">A</text>
+            <text x="108" y="44" class="gate-io-lbl" id="not-lo">Q</text>
+            <text x="46" y="44" class="gate-body-lbl" style="font-size:10px">1</text>
+          </svg>
+        </div>
+        <div class="gate-inputs">
+          <button class="gate-input-btn gate-input-btn--single" id="not-a" data-val="0">A = 0</button>
+        </div>
+        <div class="gate-output" id="not-out">Salida: <span class="gate-out-val gate-out-val--1">1</span></div>
+      </div>
+      <div class="gate-right">
+        <div class="gate-tt-title">Tabla de verdad</div>
+        <table class="gate-tt">
+          <thead><tr><th>A</th><th>NOT A</th></tr></thead>
+          <tbody>
+            <tr class="gate-tt-active" data-not-row="0"><td>0</td><td class="gate-tt-val gate-tt-val--1">1</td></tr>
+            <tr data-not-row="1"><td>1</td><td class="gate-tt-val">0</td></tr>
+          </tbody>
+        </table>
+        <div class="gate-formula">Ā</div>
+        <div class="gate-use">Uso real: complemento — NAND = AND + NOT, base de todos los chips modernos por su eficiencia en silicio.</div>
+        <div class="gate-insight">Con solo puertas NAND (AND seguido de NOT) puede construirse cualquier circuito digital. Los chips modernos están hechos de millones de NAND.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Combo -->
+  <div class="gate-panel" data-gpanel="combo">
+    <div class="gate-combo-title">Sumador de 1 bit — puertas combinadas</div>
+    <div class="gate-combo-desc">A + B produce un bit de <strong>suma (S)</strong> y un bit de <strong>acarreo (C)</strong>. Dos puertas, cuatro posibles combinaciones.</div>
+
+    <div class="gate-combo-layout">
+      <!-- Inputs -->
+      <div class="gcc-inputs">
+        <button class="gate-input-btn gcc-btn" id="add-a" data-val="0">A = 0</button>
+        <button class="gate-input-btn gcc-btn" id="add-b" data-val="0">B = 0</button>
+      </div>
+
+      <!-- SVG: 2 filas independientes, sin cruces de cables -->
+      <svg id="combo-svg" viewBox="0 0 200 108" class="gcc-svg">
+        <!-- ─ Fila 1: XOR ─ -->
+        <text x="2" y="17" class="gcc-io">A</text>
+        <text x="2" y="31" class="gcc-io">B</text>
+        <line id="gcc-wa-xor" x1="14" y1="18" x2="48" y2="18" stroke-width="2.5" class="cw"/>
+        <line id="gcc-wb-xor" x1="14" y1="32" x2="48" y2="32" stroke-width="2.5" class="cw"/>
+        <!-- XOR gate: cuerpo OR + arco extra de entrada -->
+        <path d="M50,8 Q63,25 50,42 L75,42 Q97,42 97,25 Q97,8 75,8 Z" class="gcc-body gcc-body--xor" id="g-xor"/>
+        <path d="M46,8 Q59,25 46,42" fill="none" stroke-width="1.5" class="gcc-arc"/>
+        <text x="73" y="29" class="gcc-glbl">XOR</text>
+        <line id="gcc-xor-out" x1="97" y1="25" x2="138" y2="25" stroke-width="2.5" class="cw"/>
+        <rect id="rect-s" x="140" y="11" width="58" height="28" rx="5" class="gcc-out-rect"/>
+        <text x="169" y="22" class="gcc-out-tag">S (suma)</text>
+        <text id="svg-s" x="169" y="34" class="gcc-out-num">0</text>
+
+        <!-- ─ Separador ─ -->
+        <line x1="0" y1="54" x2="200" y2="54" stroke-width="1" class="gcc-divider"/>
+
+        <!-- ─ Fila 2: AND ─ -->
+        <text x="2" y="73" class="gcc-io">A</text>
+        <text x="2" y="87" class="gcc-io">B</text>
+        <line id="gcc-wa-and" x1="14" y1="74" x2="52" y2="74" stroke-width="2.5" class="cw"/>
+        <line id="gcc-wb-and" x1="14" y1="88" x2="52" y2="88" stroke-width="2.5" class="cw"/>
+        <!-- AND gate: D-shape -->
+        <path d="M52,64 L52,98 L75,98 Q97,98 97,81 Q97,64 75,64 Z" class="gcc-body gcc-body--and" id="g-and"/>
+        <text x="72" y="85" class="gcc-glbl">AND</text>
+        <line id="gcc-and-out" x1="97" y1="81" x2="138" y2="81" stroke-width="2.5" class="cw"/>
+        <rect id="rect-c" x="140" y="67" width="58" height="28" rx="5" class="gcc-out-rect"/>
+        <text x="169" y="78" class="gcc-out-tag">C (acarreo)</text>
+        <text id="svg-c" x="169" y="90" class="gcc-out-num">0</text>
+      </svg>
+
+      <!-- Truth table -->
+      <div class="gcc-truth">
+        <table class="gate-tt">
+          <thead><tr><th>A</th><th>B</th><th>S</th><th>C</th></tr></thead>
+          <tbody>
+            <tr data-add-row="00" class="gate-tt-active"><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+            <tr data-add-row="01"><td>0</td><td>1</td><td class="gate-tt-val--1">1</td><td>0</td></tr>
+            <tr data-add-row="10"><td>1</td><td>0</td><td class="gate-tt-val--1">1</td><td>0</td></tr>
+            <tr data-add-row="11"><td>1</td><td>1</td><td>0</td><td class="gate-tt-val--1">1</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="gate-combo-note">Encadenando sumadores de 1 bit se suman números de cualquier longitud. La CPU contiene miles de millones de estas puertas.</div>
+  </div>
+</div>
+
+<style>
+.gate-wrap, .gate-wrap * { box-sizing: border-box; }
+
+.gate-wrap {
+  --ea: var(--md-primary-fg-color, #26A69A);
+  --eb: #324AB2;
+  --eg: var(--md-accent-fg-color, #FFB343);
+  --ebg: var(--md-default-bg-color, #fff);
+  --efg: var(--md-default-fg-color, #0f172a);
+  --ebd: rgba(15,23,42,.13);
+  --emut: rgba(15,23,42,.56);
+  --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid;
+  gap: 14px;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--ebd);
+  border-radius: 20px;
+  background:
+    radial-gradient(100% 120% at 100% 0%, color-mix(in srgb,var(--eg) 6%,transparent), transparent 50%),
+    radial-gradient(80% 100% at 0% 100%, color-mix(in srgb,var(--ea) 5%,transparent), transparent 52%),
+    var(--ebg);
+  color: var(--efg);
+  font-family: var(--ef);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-md-color-scheme="slate"] .gate-wrap {
+  --ebg: var(--md-default-bg-color, #0f172a);
+  --efg: var(--md-default-fg-color, #e2e8f0);
+  --ebd: rgba(226,232,240,.13);
+  --emut: rgba(226,232,240,.56);
+}
+
+.gate-hd { display: grid; gap: 4px; }
+.gate-title { font-size: clamp(15px,2vw,20px); font-weight: 900; letter-spacing: -.02em; line-height: 1.15; }
+.gate-sub { font-size: 13px; color: var(--emut); line-height: 1.5; max-width: 68ch; }
+
+.gate-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.gate-tab {
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--ebd);
+  background: transparent;
+  color: var(--emut);
+  font-family: var(--ef);
+  font-size: 12.5px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background .18s, color .18s, border-color .18s;
+}
+.gate-tab:hover { background: color-mix(in srgb, var(--ea) 10%, transparent); border-color: color-mix(in srgb, var(--ea) 30%, var(--ebd)); color: var(--efg); }
+.gate-tab--active { background: color-mix(in srgb, var(--ea) 14%, transparent); border-color: color-mix(in srgb, var(--ea) 50%, transparent); color: var(--efg); }
+
+.gate-panel { display: none; }
+.gate-panel--active { display: block; }
+
+.gate-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.gate-grid--not { grid-template-columns: 1.2fr 1fr; }
+@media (max-width: 560px) { .gate-grid, .gate-grid--not { grid-template-columns: 1fr; } }
+
+.gate-left, .gate-right {
+  padding: 13px 15px;
+  border-radius: 12px;
+  border: 1px solid var(--ebd);
+  background: color-mix(in srgb, var(--ebg) 75%, #0f172a 25%);
+  display: grid;
+  gap: 10px;
+  align-content: start;
+}
+.gate-name { font-size: 15px; font-weight: 900; }
+.gate-desc { font-size: 12px; color: var(--emut); line-height: 1.45; }
+
+.gate-svg-area { display: flex; justify-content: center; }
+.gate-svg { width: 100%; max-width: 180px; height: auto; }
+.gate-wire { stroke: color-mix(in srgb, var(--ea) 70%, var(--emut)); fill: none; }
+.gate-wire--active { stroke: color-mix(in srgb, var(--eg) 80%, var(--efg)); }
+.gate-body { fill: color-mix(in srgb, var(--eb) 18%, transparent); stroke: color-mix(in srgb, var(--eb) 60%, transparent); stroke-width: 1.5; }
+.gate-body--circle { fill: color-mix(in srgb, var(--ebg) 80%, #0f172a 20%); }
+.gate-body-lbl { font-size: 14px; font-weight: 900; fill: color-mix(in srgb, var(--eb) 80%, var(--efg)); font-family: sans-serif; }
+.gate-io-lbl { font-size: 11px; font-weight: 900; fill: var(--efg); font-family: sans-serif; }
+.gate-io-lbl--active { fill: color-mix(in srgb, var(--eg) 85%, var(--efg)); }
+
+.gate-inputs { display: flex; gap: 7px; flex-wrap: wrap; }
+.gate-input-btn {
+  padding: 6px 14px;
+  border-radius: 7px;
+  border: 1.5px solid var(--ebd);
+  background: color-mix(in srgb, var(--ebg) 50%, #0f172a 50%);
+  color: var(--emut);
+  font-family: var(--ef);
+  font-size: 13px;
+  font-weight: 800;
+  font-family: "Courier New", monospace;
+  cursor: pointer;
+  transition: all .18s;
+  min-width: 64px;
+}
+.gate-input-btn--single { min-width: 80px; }
+.gate-input-btn--active {
+  background: color-mix(in srgb, var(--eg) 18%, transparent);
+  border-color: color-mix(in srgb, var(--eg) 55%, transparent);
+  color: color-mix(in srgb, var(--eg) 85%, var(--efg));
+}
+
+.gate-output {
+  font-size: 13px;
+  font-weight: 700;
+  padding: 7px 11px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--ebg) 40%, #0f172a 60%);
+  border: 1px solid var(--ebd);
+}
+.gate-out-val {
+  font-family: "Courier New", monospace;
+  font-size: 17px;
+  font-weight: 900;
+  padding: 2px 8px;
+  border-radius: 5px;
+  margin-left: 4px;
+}
+.gate-out-val--0 { background: color-mix(in srgb, var(--emut) 14%, transparent); color: var(--emut); }
+.gate-out-val--1 { background: color-mix(in srgb, var(--eg) 20%, transparent); color: color-mix(in srgb, var(--eg) 85%, var(--efg)); border: 1px solid color-mix(in srgb, var(--eg) 45%, transparent); }
+
+.gate-tt-title { font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: var(--emut); }
+.gate-tt { width: 100%; border-collapse: collapse; }
+.gate-tt th {
+  font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em;
+  color: var(--emut); padding: 5px 8px; border-bottom: 1px solid var(--ebd); text-align: center;
+}
+.gate-tt td { padding: 4px 8px; text-align: center; font-size: 12px; color: var(--emut); border-bottom: 1px solid color-mix(in srgb, var(--ebd) 50%, transparent); font-family: "Courier New", monospace; font-weight: 700; }
+.gate-tt tr.gate-tt-active td { background: color-mix(in srgb, var(--ea) 8%, transparent); color: var(--efg); }
+.gate-tt-val { color: var(--emut); }
+.gate-tt-val--1 { color: color-mix(in srgb, var(--eg) 80%, var(--efg)); font-weight: 900; }
+
+.gate-formula {
+  font-family: "Georgia", serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--eb) 80%, var(--efg));
+  text-align: center;
+  padding: 8px;
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--eb) 7%, transparent);
+  border: 1px solid color-mix(in srgb, var(--eb) 18%, transparent);
+}
+.gate-use { font-size: 11.5px; color: var(--emut); line-height: 1.4; font-style: italic; }
+.gate-insight {
+  font-size: 11.5px;
+  color: var(--emut);
+  line-height: 1.45;
+  border-left: 2px solid color-mix(in srgb, var(--ea) 40%, transparent);
+  padding-left: 8px;
+}
+
+/* Combo panel */
+.gate-combo-title { font-size: 14px; font-weight: 900; }
+.gate-combo-desc { font-size: 12.5px; color: var(--emut); line-height: 1.5; }
+
+.gate-combo-layout {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 14px;
+  border-radius: 11px;
+  border: 1px solid var(--ebd);
+  background: color-mix(in srgb, var(--ebg) 70%, #0f172a 30%);
+}
+@media (max-width: 560px) { .gate-combo-layout { grid-template-columns: 1fr; } }
+
+.gcc-inputs { display: flex; flex-direction: column; gap: 8px; }
+.gcc-btn { min-width: 72px; }
+
+.gcc-svg-wrap { flex: 1; display: flex; justify-content: center; }
+.gcc-svg { width: 100%; max-width: 280px; height: auto; overflow: visible; }
+
+/* SVG elements */
+.cw { stroke: color-mix(in srgb, var(--emut) 45%, transparent); fill: none; transition: stroke .2s; }
+.cw--active { stroke: color-mix(in srgb, var(--eg) 85%, var(--efg)); }
+
+.gcc-svg { width: 100%; max-width: 220px; height: auto; overflow: visible; }
+.gcc-io { font-size: 10px; font-weight: 900; fill: var(--efg); font-family: sans-serif; }
+.gcc-glbl { font-size: 8.5px; font-weight: 900; fill: var(--efg); font-family: sans-serif; text-anchor: middle; }
+.gcc-body { stroke-width: 1.5; fill: color-mix(in srgb, var(--ea) 14%, transparent); stroke: color-mix(in srgb, var(--ea) 55%, transparent); transition: fill .2s, stroke .2s; }
+.gcc-body--and { fill: color-mix(in srgb, var(--eb) 14%, transparent); stroke: color-mix(in srgb, var(--eb) 55%, transparent); }
+.gcc-body--active { fill: color-mix(in srgb, var(--eg) 20%, transparent); stroke: color-mix(in srgb, var(--eg) 65%, transparent); }
+.gcc-arc { stroke: color-mix(in srgb, var(--ea) 55%, transparent); fill: none; transition: stroke .2s; }
+.gcc-arc--active { stroke: color-mix(in srgb, var(--eg) 65%, transparent); }
+.gcc-divider { stroke: var(--ebd); }
+.gcc-out-rect { fill: color-mix(in srgb, var(--ebg) 50%, #0f172a 50%); stroke: var(--ebd); stroke-width: 1; transition: fill .2s, stroke .2s; }
+.gcc-out-rect--active { stroke: color-mix(in srgb, var(--eg) 55%, transparent); fill: color-mix(in srgb, var(--eg) 12%, transparent); }
+.gcc-out-tag { font-size: 6.5px; font-weight: 700; fill: var(--emut); font-family: sans-serif; text-anchor: middle; }
+.gcc-out-num { font-size: 11px; font-weight: 900; fill: var(--emut); font-family: "Courier New", monospace; text-anchor: middle; transition: fill .2s; }
+.gcc-out-num--active { fill: color-mix(in srgb, var(--eg) 85%, var(--efg)); }
+
+.gate-combo-note { font-size: 11.5px; color: var(--emut); line-height: 1.45; font-style: italic; border-left: 2px solid color-mix(in srgb, var(--ea) 35%, transparent); padding-left: 8px; }
+</style>
+
+<script>
+(function () {
+  function boot() {
+    var wrap = document.querySelector('[data-demo="02-puertas-logicas"]');
+    if (!wrap || wrap.dataset.gateReady) return;
+    wrap.dataset.gateReady = '1';
+
+    // Tab switching
+    var tabs = wrap.querySelectorAll('.gate-tab');
+    var panels = wrap.querySelectorAll('.gate-panel');
+    tabs.forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        var target = tab.dataset.gtab;
+        tabs.forEach(function(t) { t.classList.remove('gate-tab--active'); });
+        panels.forEach(function(p) { p.classList.remove('gate-panel--active'); });
+        tab.classList.add('gate-tab--active');
+        var panel = wrap.querySelector('[data-gpanel="' + target + '"]');
+        if (panel) panel.classList.add('gate-panel--active');
+      });
+    });
+
+    function setOutVal(el, val) {
+      el.textContent = val;
+      el.className = 'gate-out-val gate-out-val--' + val;
+    }
+
+    function highlightTTRow(rowAttr, key) {
+      wrap.querySelectorAll('[data-' + rowAttr + ']').forEach(function(r) { r.classList.remove('gate-tt-active'); });
+      var row = wrap.querySelector('[data-' + rowAttr + '="' + key + '"]');
+      if (row) row.classList.add('gate-tt-active');
+    }
+
+    // AND
+    var andA = wrap.querySelector('#and-a'), andB = wrap.querySelector('#and-b');
+    var andOut = wrap.querySelector('#and-out').querySelector('span');
+    function updateAnd() {
+      var a = parseInt(andA.dataset.val), b = parseInt(andB.dataset.val);
+      var q = a & b;
+      setOutVal(andOut, q);
+      highlightTTRow('and-row', '' + a + b);
+    }
+    function toggleBtn(btn) {
+      var v = btn.dataset.val === '0' ? '1' : '0';
+      btn.dataset.val = v;
+      btn.textContent = btn.id.split('-').slice(-1)[0].toUpperCase() + ' = ' + v;
+      btn.classList.toggle('gate-input-btn--active', v === '1');
+    }
+    andA.addEventListener('click', function() { toggleBtn(andA); updateAnd(); });
+    andB.addEventListener('click', function() { toggleBtn(andB); updateAnd(); });
+
+    // OR
+    var orA = wrap.querySelector('#or-a'), orB = wrap.querySelector('#or-b');
+    var orOut = wrap.querySelector('#or-out').querySelector('span');
+    function updateOr() {
+      var a = parseInt(orA.dataset.val), b = parseInt(orB.dataset.val);
+      setOutVal(orOut, a | b);
+      highlightTTRow('or-row', '' + a + b);
+    }
+    orA.addEventListener('click', function() { toggleBtn(orA); updateOr(); });
+    orB.addEventListener('click', function() { toggleBtn(orB); updateOr(); });
+
+    // NOT
+    var notA = wrap.querySelector('#not-a');
+    var notOut = wrap.querySelector('#not-out').querySelector('span');
+    function updateNot() {
+      var a = parseInt(notA.dataset.val);
+      setOutVal(notOut, a === 0 ? 1 : 0);
+      highlightTTRow('not-row', '' + a);
+    }
+    notA.addEventListener('click', function() { toggleBtn(notA); updateNot(); });
+    notOut.className = 'gate-out-val gate-out-val--1';
+    highlightTTRow('not-row', '0');
+
+    // Combo adder
+    var addA = wrap.querySelector('#add-a'), addB = wrap.querySelector('#add-b');
+    var svgS = wrap.querySelector('#svg-s'), svgC = wrap.querySelector('#svg-c');
+    var gXor = wrap.querySelector('#g-xor'), gAnd = wrap.querySelector('#g-and');
+    var gArc = wrap.querySelector('.gcc-arc');
+    var rectS = wrap.querySelector('#rect-s'), rectC = wrap.querySelector('#rect-c');
+
+    function setW(id, active) {
+      var el = wrap.querySelector('#' + id);
+      if (el) el.classList.toggle('cw--active', active);
+    }
+
+    function updateAdder() {
+      var a = parseInt(addA.dataset.val), b = parseInt(addB.dataset.val);
+      var s = a ^ b, c = a & b;
+      setW('gcc-wa-xor', a === 1); setW('gcc-wb-xor', b === 1);
+      setW('gcc-wa-and', a === 1); setW('gcc-wb-and', b === 1);
+      setW('gcc-xor-out', s === 1); setW('gcc-and-out', c === 1);
+      gXor.classList.toggle('gcc-body--active', s === 1);
+      if (gArc) gArc.classList.toggle('gcc-arc--active', s === 1);
+      gAnd.classList.toggle('gcc-body--active', c === 1);
+      rectS.classList.toggle('gcc-out-rect--active', s === 1);
+      rectC.classList.toggle('gcc-out-rect--active', c === 1);
+      svgS.textContent = s;
+      svgS.classList.toggle('gcc-out-num--active', s === 1);
+      svgC.textContent = c;
+      svgC.classList.toggle('gcc-out-num--active', c === 1);
+      highlightTTRow('add-row', '' + a + b);
+    }
+    addA.addEventListener('click', function() { toggleBtn(addA); updateAdder(); });
+    addB.addEventListener('click', function() { toggleBtn(addB); updateAdder(); });
+    updateAdder();
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
+  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
+})();
+</script>

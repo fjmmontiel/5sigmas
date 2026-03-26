@@ -50,7 +50,7 @@ nav:
       - De las cavernas a la AGI:
           - Presentación: series/from-cave-to-agi/00_presentacion_serie.md
           - "Representar": series/from-cave-to-agi/01-representar.md
-          # - "Mecanizar": series/from-cave-to-agi/02-mecanizar.md
+          - "Mecanizar": series/from-cave-to-agi/02-mecanizar.md
           # - "Aprender": series/from-cave-to-agi/03-aprender.md
           # - "Escalar": series/from-cave-to-agi/04-escalar.md
       - Multimodalidad en IA Generativa:

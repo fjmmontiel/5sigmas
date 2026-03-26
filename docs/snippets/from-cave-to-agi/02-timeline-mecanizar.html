@@ -1,0 +1,360 @@
+<div class="mec-wrap" data-demo="02-timeline-mecanizar">
+
+  <div class="mec-hd">
+    <div class="mec-title">De los engranajes al ordenador universal</div>
+    <div class="mec-sub">Tres siglos de intentos por mecanizar el pensamiento. Cada era resuelve un problema distinto: primero la máquina, luego la teoría, finalmente la unión de ambas.</div>
+  </div>
+
+  <!-- Era tabs -->
+  <div class="mec-epochs">
+    <div class="mec-epoch mec-epoch--mec mec-epoch--active" data-era="mec" role="button">
+      <div class="mec-epoch-label">Era mecánica</div>
+      <div class="mec-epoch-range">1642 – 1805</div>
+      <div class="mec-epoch-note">Máquinas que calculan, pero sin programa</div>
+    </div>
+    <div class="mec-epoch-sep">→</div>
+    <div class="mec-epoch mec-epoch--teo" data-era="teo" role="button">
+      <div class="mec-epoch-label">Era teórica</div>
+      <div class="mec-epoch-range">1836 – 1948</div>
+      <div class="mec-epoch-note">Qué puede computarse, y sus límites</div>
+    </div>
+    <div class="mec-epoch-sep">→</div>
+    <div class="mec-epoch mec-epoch--dig" data-era="dig" role="button">
+      <div class="mec-epoch-label">Nace la IA</div>
+      <div class="mec-epoch-range">1945 – 1956</div>
+      <div class="mec-epoch-note">Máquina + programa + hipótesis de inteligencia</div>
+    </div>
+  </div>
+
+  <!-- Timeline (items rendered by JS, animated on scroll) -->
+  <div class="mec-timeline" id="mecTimeline">
+    <!-- populated by JS -->
+  </div>
+
+</div>
+
+<style>
+.mec-wrap, .mec-wrap * { box-sizing: border-box; }
+
+.mec-wrap {
+  --ma: var(--md-primary-fg-color, #26A69A);
+  --mb: #324AB2;
+  --mg: #FFB343;
+  --mbg: var(--md-default-bg-color, #fff);
+  --mfg: var(--md-default-fg-color, #0f172a);
+  --mbd: rgba(15,23,42,.14);
+  --mmut: rgba(15,23,42,.58);
+  --mf: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid;
+  gap: 16px;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--mbd);
+  border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--ma) 7%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 100%, color-mix(in srgb,var(--mb) 5%,transparent), transparent 52%),
+    var(--mbg);
+  color: var(--mfg);
+  font-family: var(--mf);
+  -webkit-font-smoothing: antialiased;
+}
+[data-md-color-scheme="slate"] .mec-wrap {
+  --mbg: var(--md-default-bg-color, #0f172a);
+  --mfg: var(--md-default-fg-color, #e2e8f0);
+  --mbd: rgba(226,232,240,.14);
+  --mmut: rgba(226,232,240,.58);
+}
+
+.mec-hd { display: grid; gap: 4px; }
+.mec-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.mec-sub { font-size: 13.5px; color: var(--mmut); line-height: 1.5; max-width: 68ch; }
+
+/* ── Epochs ── */
+.mec-epochs {
+  display: flex;
+  align-items: stretch;
+  gap: 6px;
+  padding: 12px;
+  border: 1px solid var(--mbd);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--mbg) 70%, #0f172a 30%);
+  flex-wrap: wrap;
+}
+.mec-epoch {
+  flex: 1 1 160px;
+  padding: 9px 12px;
+  border-radius: 10px;
+  display: grid;
+  gap: 3px;
+  cursor: pointer;
+  transition: opacity .18s, box-shadow .18s;
+  opacity: .65;
+}
+.mec-epoch:hover { opacity: .85; }
+.mec-epoch--active { opacity: 1; box-shadow: 0 0 0 2px currentColor; }
+.mec-epoch--mec { background: color-mix(in srgb, var(--ma) 10%, transparent); border: 1px solid color-mix(in srgb, var(--ma) 25%, transparent); color: color-mix(in srgb, var(--ma) 80%, var(--mfg)); }
+.mec-epoch--teo { background: color-mix(in srgb, var(--mb) 10%, transparent); border: 1px solid color-mix(in srgb, var(--mb) 25%, transparent); color: color-mix(in srgb, var(--mb) 80%, var(--mfg)); }
+.mec-epoch--dig { background: color-mix(in srgb, var(--mg) 10%, transparent); border: 1px solid color-mix(in srgb, var(--mg) 25%, transparent); color: color-mix(in srgb, var(--mg) 80%, var(--mfg)); }
+
+.mec-epoch-label { font-size: 12px; font-weight: 900; }
+.mec-epoch-range { font-size: 10.5px; font-weight: 800; color: var(--mmut); }
+.mec-epoch-note  { font-size: 10px; color: var(--mmut); line-height: 1.35; }
+.mec-epoch-sep { flex: 0 0 auto; align-self: center; font-size: 16px; color: var(--mmut); font-weight: 700; }
+
+/* ── Concept panel ── */
+.mec-concept {
+  border: 1px solid var(--mbd);
+  border-radius: 14px;
+  padding: 13px 15px;
+  background: color-mix(in srgb, var(--mbg) 80%, #0f172a 20%);
+  display: grid;
+  gap: 10px;
+}
+.mec-concept-label {
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--mmut);
+}
+.mec-concept-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.mec-concept-box {
+  flex: 1 1 160px;
+  padding: 10px 13px;
+  border-radius: 10px;
+  display: grid;
+  gap: 4px;
+}
+.mec-concept-box--before {
+  border: 1px solid color-mix(in srgb, #ef4444 28%, var(--mbd));
+  background: color-mix(in srgb, #ef4444 7%, var(--mbg));
+}
+.mec-concept-box--after {
+  border: 1px solid color-mix(in srgb, var(--ma) 35%, var(--mbd));
+  background: color-mix(in srgb, var(--ma) 8%, var(--mbg));
+}
+.mec-concept-name { font-size: 12.5px; font-weight: 900; line-height: 1.2; }
+.mec-concept-ex   { font-size: 11px; color: var(--mmut); line-height: 1.4; }
+.mec-concept-limit {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--mmut);
+  padding: 3px 7px;
+  border-radius: 6px;
+  border: 1px solid var(--mbd);
+  background: color-mix(in srgb, var(--mbg) 60%, transparent);
+  width: fit-content;
+  line-height: 1.35;
+}
+.mec-concept-arrow {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.mec-concept-arrow-line {
+  width: 2px;
+  height: 30px;
+  background: color-mix(in srgb, var(--ma) 40%, var(--mbd));
+  border-radius: 1px;
+}
+.mec-concept-arrow-label {
+  font-size: 9px;
+  color: var(--mmut);
+  text-align: center;
+  line-height: 1.4;
+  font-weight: 700;
+}
+
+/* ── Timeline ── */
+.mec-timeline {
+  display: grid;
+  gap: 0;
+  padding-left: 20px;
+  border-left: 2px solid color-mix(in srgb, var(--ma) 22%, var(--mbd));
+}
+
+.mec-item {
+  display: grid;
+  grid-template-columns: 86px 1fr;
+  gap: 12px;
+  position: relative;
+  padding-bottom: 14px;
+  opacity: 0;
+  transform: translateX(16px);
+  transition: opacity .4s ease, transform .4s ease;
+}
+.mec-item.mec-item--visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+.mec-item:last-child { padding-bottom: 0; }
+
+/* Dot */
+.mec-item::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  width: 12px; height: 12px;
+  border-radius: 999px;
+  border: 2px solid;
+  transition: background .3s, border-color .3s;
+}
+.mec-item[data-type="hardware"]::before  { left: -27px; border-color: color-mix(in srgb, var(--ma) 55%, transparent); background: color-mix(in srgb, var(--ma) 16%, var(--mbg)); }
+.mec-item[data-type="theory"]::before   { left: -27px; border-color: color-mix(in srgb, var(--mb) 55%, transparent); background: color-mix(in srgb, var(--mb) 16%, var(--mbg)); }
+.mec-item[data-type="milestone"]::before { left: -28px; width: 14px; height: 14px; top: 3px; border-color: color-mix(in srgb, var(--mg) 70%, transparent); background: color-mix(in srgb, var(--mg) 22%, var(--mbg)); }
+
+.mec-item-when {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--mmut);
+  padding-top: 3px;
+  text-align: right;
+  line-height: 1.3;
+}
+
+.mec-item-body {
+  border: 1px solid var(--mbd);
+  border-radius: 12px;
+  padding: 10px 13px;
+  background: color-mix(in srgb, var(--mbg) 88%, #0f172a 12%);
+  display: grid;
+  gap: 5px;
+  align-content: start;
+  transition: border-color .2s, background .2s;
+}
+.mec-item-body:hover {
+  border-color: color-mix(in srgb, var(--ma) 25%, var(--mbd));
+  background: color-mix(in srgb, var(--ma) 4%, var(--mbg));
+}
+.mec-item[data-type="theory"] .mec-item-body:hover { border-color: color-mix(in srgb, var(--mb) 25%, var(--mbd)); background: color-mix(in srgb, var(--mb) 4%, var(--mbg)); }
+.mec-item[data-type="milestone"] .mec-item-body { border-color: color-mix(in srgb, var(--mg) 18%, var(--mbd)); background: linear-gradient(135deg, color-mix(in srgb, var(--mg) 5%, transparent), transparent 60%), color-mix(in srgb, var(--mbg) 88%, #0f172a 12%); }
+
+.mec-item-top { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.mec-item-title { font-size: 13.5px; font-weight: 900; line-height: 1.2; flex: 1; }
+.mec-type-badge {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+.mec-type-badge--hardware { background: color-mix(in srgb, var(--ma) 14%, transparent); border: 1px solid color-mix(in srgb, var(--ma) 34%, transparent); color: color-mix(in srgb, var(--ma) 80%, var(--mfg)); }
+.mec-type-badge--theory   { background: color-mix(in srgb, var(--mb) 14%, transparent); border: 1px solid color-mix(in srgb, var(--mb) 34%, transparent); color: color-mix(in srgb, var(--mb) 80%, var(--mfg)); }
+.mec-type-badge--milestone { background: color-mix(in srgb, var(--mg) 14%, transparent); border: 1px solid color-mix(in srgb, var(--mg) 34%, transparent); color: color-mix(in srgb, var(--mg) 70%, var(--mfg)); }
+
+.mec-item-body p { margin: 0; font-size: 12.5px; color: var(--mmut); line-height: 1.48; }
+
+.mec-item-key {
+  display: inline-block;
+  width: fit-content;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 3px 9px;
+  border-radius: 7px;
+  border: 1px solid color-mix(in srgb, var(--ma) 22%, var(--mbd));
+  background: color-mix(in srgb, var(--ma) 7%, var(--mbg));
+  color: color-mix(in srgb, var(--ma) 75%, var(--mfg));
+}
+.mec-item[data-type="theory"] .mec-item-key { border-color: color-mix(in srgb, var(--mb) 22%, var(--mbd)); background: color-mix(in srgb, var(--mb) 7%, var(--mbg)); color: color-mix(in srgb, var(--mb) 75%, var(--mfg)); }
+.mec-item[data-type="milestone"] .mec-item-key { border-color: color-mix(in srgb, var(--mg) 22%, var(--mbd)); background: color-mix(in srgb, var(--mg) 7%, var(--mbg)); color: color-mix(in srgb, var(--mg) 70%, var(--mfg)); }
+
+@media (prefers-reduced-motion: reduce) {
+  .mec-item { opacity: 1; transform: none; transition: none; }
+}
+</style>
+
+<script>
+(function () {
+
+  var ITEMS = [
+    { year: '1642 – 1673', era: 'mec', type: 'hardware', title: 'Primeras calculadoras mecánicas',
+      text: 'Pascal y Leibniz automatizan sumas y multiplicaciones con engranajes. Calculan, pero no pueden tomar decisiones ni cambiar de tarea.',
+      key: null },
+    { year: '1805', era: 'mec', type: 'milestone', title: 'Telar de Jacquard',
+      text: 'Tarjetas perforadas controlan el patrón del tejido: el mecanismo y las instrucciones se separan por primera vez.',
+      key: 'Hardware vs. instrucciones: la idea nace aquí' },
+    { year: '1837 – 1843', era: 'mec', type: 'milestone', title: 'Máquina Analítica (Babbage) y primer algoritmo (Lovelace)',
+      text: 'Babbage diseña un ordenador general con aritmética, memoria y bifurcación. Lovelace escribe el primer algoritmo publicado. Nunca construida, pero ya completa en papel.',
+      key: 'Primer ordenador de propósito general (en papel)' },
+    { year: '1854', era: 'teo', type: 'theory', title: 'Lógica booleana (Boole)',
+      text: 'El razonamiento lógico se convierte en álgebra binaria: verdadero/falso, AND, OR, NOT. Shannon usará esto décadas después para diseñar circuitos.',
+      key: 'El razonamiento se vuelve calculable' },
+    { year: '1936', era: 'teo', type: 'milestone', title: 'Máquina de Turing',
+      text: 'Turing define qué significa computar con un modelo abstracto mínimo. Y demuestra que hay problemas que ninguna máquina podrá resolver jamás.',
+      key: 'Qué es computable, y qué no puede serlo nunca' },
+    { year: '1948', era: 'teo', type: 'theory', title: 'Teoría de la información (Shannon)',
+      text: 'La información es una magnitud medible: bits, compresión, transmisión fiable. La comunicación tiene leyes matemáticas.',
+      key: 'La información se vuelve cuantificable' },
+    { year: '1945', era: 'dig', type: 'hardware', title: 'Arquitectura Von Neumann',
+      text: 'Datos e instrucciones comparten la misma memoria. Cambiar de programa ya no exige recablear la máquina.',
+      key: null },
+    { year: '1956', era: 'dig', type: 'milestone', title: 'Conferencia de Dartmouth — nace la IA',
+      text: 'McCarthy, Minsky y Shannon apuestan: la inteligencia es describible con suficiente precisión para simularla en una máquina. Hipótesis, no demostración, pero el campo arranca.',
+      key: 'Inicio formal del campo de la inteligencia artificial' }
+  ];
+
+  function typeLabel(t) {
+    if (t === 'hardware')  return '<span class="mec-type-badge mec-type-badge--hardware">Máquina</span>';
+    if (t === 'theory')    return '<span class="mec-type-badge mec-type-badge--theory">Teoría</span>';
+    if (t === 'milestone') return '<span class="mec-type-badge mec-type-badge--milestone">Hito</span>';
+    return '';
+  }
+
+  function renderItems(tl, era) {
+    var filtered = ITEMS.filter(function(i) { return i.era === era; });
+    tl.innerHTML = filtered.map(function(item) {
+      return '<div class="mec-item mec-item--visible" data-type="' + item.type + '">' +
+        '<div class="mec-item-when">' + item.year + '</div>' +
+        '<div class="mec-item-body">' +
+          '<div class="mec-item-top">' +
+            '<div class="mec-item-title">' + item.title + '</div>' +
+            typeLabel(item.type) +
+          '</div>' +
+          '<p>' + item.text + '</p>' +
+          (item.key ? '<div class="mec-item-key">' + item.key + '</div>' : '') +
+        '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  function boot() {
+    var wrap = document.querySelector('[data-demo="02-timeline-mecanizar"]');
+    if (!wrap || wrap.dataset.mecReady) return;
+    wrap.dataset.mecReady = '1';
+
+    var tl = wrap.querySelector('#mecTimeline');
+    var epochs = wrap.querySelectorAll('.mec-epoch[data-era]');
+    var activeEra = 'mec';
+
+    function activateEra(era) {
+      activeEra = era;
+      epochs.forEach(function(ep) {
+        ep.classList.toggle('mec-epoch--active', ep.dataset.era === era);
+      });
+      renderItems(tl, era);
+    }
+
+    epochs.forEach(function(ep) {
+      ep.addEventListener('click', function() { activateEra(ep.dataset.era); });
+    });
+
+    activateEra('mec');
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
+  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
+})();
+</script>

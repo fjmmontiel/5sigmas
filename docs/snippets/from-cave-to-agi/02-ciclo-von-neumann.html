@@ -1,0 +1,357 @@
+<div class="vn-wrap" data-demo="02-ciclo-von-neumann">
+  <div class="vn-hd">
+    <div class="vn-title">El ciclo de Von Neumann: cómo ejecuta una instrucción el procesador</div>
+    <div class="vn-sub">Cuatro fases que se repiten miles de millones de veces por segundo. La arquitectura que describe este ciclo es la base de casi todos los procesadores actuales.</div>
+  </div>
+
+  <!-- Phase display -->
+  <div class="vn-phase-strip">
+    <div class="vn-phase-item vn-phase-item--active" data-phase="fetch" id="ph-fetch">
+      <div class="vn-ph-num">1</div>
+      <div class="vn-ph-name">FETCH</div>
+    </div>
+    <div class="vn-phase-conn" id="conn-12"></div>
+    <div class="vn-phase-item" data-phase="decode" id="ph-decode">
+      <div class="vn-ph-num">2</div>
+      <div class="vn-ph-name">DECODE</div>
+    </div>
+    <div class="vn-phase-conn" id="conn-23"></div>
+    <div class="vn-phase-item" data-phase="execute" id="ph-execute">
+      <div class="vn-ph-num">3</div>
+      <div class="vn-ph-name">EXECUTE</div>
+    </div>
+    <div class="vn-phase-conn" id="conn-34"></div>
+    <div class="vn-phase-item" data-phase="writeback" id="ph-writeback">
+      <div class="vn-ph-num">4</div>
+      <div class="vn-ph-name">WRITE-BACK</div>
+    </div>
+  </div>
+
+  <div class="vn-detail-card" id="vn-detail">
+    <div class="vn-detail-phase" id="vn-detail-phase">Fase 1 — FETCH</div>
+    <div class="vn-detail-title" id="vn-detail-title">Leer la instrucción</div>
+    <div class="vn-detail-body" id="vn-detail-body">La unidad de control lee la dirección del registro PC (Program Counter), busca la instrucción almacenada en esa dirección de memoria y la carga en el registro IR (Instruction Register). El PC se incrementa en 1 para apuntar a la siguiente instrucción.</div>
+    <div class="vn-detail-active" id="vn-detail-active">Activo: Memoria + Unidad de control + Registros (PC, IR)</div>
+    <div class="vn-detail-example">
+      <div class="vn-ex-label">Ejemplo — instrucción ADD R1, R2:</div>
+      <div class="vn-ex-code" id="vn-ex-code">PC=42 → Memoria[42] → IR = "ADD R1, R2" · PC = 43</div>
+    </div>
+  </div>
+
+  <div class="vn-controls">
+    <button class="vn-btn" id="vn-prev">← Fase anterior</button>
+    <div class="vn-dots" id="vn-dots">
+      <div class="vn-dot vn-dot--active" data-vdot="0"></div>
+      <div class="vn-dot" data-vdot="1"></div>
+      <div class="vn-dot" data-vdot="2"></div>
+      <div class="vn-dot" data-vdot="3"></div>
+    </div>
+    <button class="vn-btn vn-btn--primary" id="vn-next">Fase siguiente →</button>
+  </div>
+
+</div>
+
+<style>
+.vn-wrap, .vn-wrap * { box-sizing: border-box; }
+
+.vn-wrap {
+  --ea: var(--md-primary-fg-color, #26A69A);
+  --eb: #324AB2;
+  --eg: var(--md-accent-fg-color, #FFB343);
+  --ebg: var(--md-default-bg-color, #fff);
+  --efg: var(--md-default-fg-color, #0f172a);
+  --ebd: rgba(15,23,42,.13);
+  --emut: rgba(15,23,42,.56);
+  --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid;
+  gap: 14px;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--ebd);
+  border-radius: 20px;
+  background:
+    radial-gradient(100% 120% at 50% 0%, color-mix(in srgb,var(--eb) 6%,transparent), transparent 50%),
+    var(--ebg);
+  color: var(--efg);
+  font-family: var(--ef);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-md-color-scheme="slate"] .vn-wrap {
+  --ebg: var(--md-default-bg-color, #0f172a);
+  --efg: var(--md-default-fg-color, #e2e8f0);
+  --ebd: rgba(226,232,240,.13);
+  --emut: rgba(226,232,240,.56);
+}
+
+.vn-hd { display: grid; gap: 4px; }
+.vn-title { font-size: clamp(15px,2vw,20px); font-weight: 900; letter-spacing: -.02em; line-height: 1.15; }
+.vn-sub { font-size: 13px; color: var(--emut); line-height: 1.5; max-width: 68ch; }
+
+/* Diagram */
+.vn-diagram {
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--ebd);
+  background: color-mix(in srgb, var(--ebg) 70%, #0f172a 30%);
+}
+.vn-components {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.vn-comp {
+  padding: 11px 14px;
+  border-radius: 11px;
+  border: 2px solid var(--ebd);
+  display: grid;
+  gap: 4px;
+  align-content: start;
+  text-align: center;
+  transition: border-color .25s, background .25s;
+  min-width: 130px;
+}
+.vn-comp--mem { background: color-mix(in srgb, var(--ea) 8%, transparent); }
+.vn-comp--cpu {
+  background: color-mix(in srgb, var(--eb) 8%, transparent);
+  flex: 0 0 auto;
+  min-width: 180px;
+}
+.vn-comp-icon { font-size: 22px; }
+.vn-comp-name { font-size: 13px; font-weight: 900; }
+.vn-comp-desc { font-size: 10px; color: var(--emut); }
+
+.vn-comp--mem.vn-comp--active { border-color: color-mix(in srgb, var(--ea) 60%, transparent); background: color-mix(in srgb, var(--ea) 14%, transparent); }
+.vn-comp--cpu.vn-comp--active { border-color: color-mix(in srgb, var(--eb) 60%, transparent); background: color-mix(in srgb, var(--eb) 14%, transparent); }
+
+.vn-sub-comps { display: flex; gap: 4px; margin-top: 6px; flex-wrap: wrap; justify-content: center; }
+.vn-sub {
+  padding: 3px 8px;
+  border-radius: 5px;
+  font-size: 9.5px;
+  font-weight: 700;
+  border: 1px solid var(--ebd);
+  color: var(--emut);
+  transition: all .25s;
+}
+.vn-sub--cu { background: color-mix(in srgb, var(--eb) 10%, transparent); border-color: color-mix(in srgb, var(--eb) 25%, transparent); }
+.vn-sub--alu { background: color-mix(in srgb, #ef4444 8%, transparent); border-color: color-mix(in srgb, #ef4444 20%, transparent); }
+.vn-sub--reg { background: color-mix(in srgb, var(--eg) 10%, transparent); border-color: color-mix(in srgb, var(--eg) 25%, transparent); }
+.vn-sub--active { border-color: color-mix(in srgb, var(--eg) 70%, transparent); color: color-mix(in srgb, var(--eg) 85%, var(--efg)); background: color-mix(in srgb, var(--eg) 18%, transparent); }
+
+.vn-arrows-h { display: flex; flex-direction: column; gap: 8px; align-items: center; }
+.vn-arr {
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--ebd);
+  transition: color .25s;
+  line-height: 1;
+}
+.vn-arr--active { color: color-mix(in srgb, var(--ea) 80%, var(--efg)); }
+
+/* Phase strip */
+.vn-phase-strip {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  overflow-x: auto;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--ebd);
+  background: color-mix(in srgb, var(--ebg) 70%, #0f172a 30%);
+}
+.vn-phase-item {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 70px;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 8px;
+  transition: background .2s;
+}
+.vn-phase-item:hover { background: color-mix(in srgb, var(--ea) 8%, transparent); }
+.vn-phase-item--active { background: color-mix(in srgb, var(--ea) 14%, transparent); }
+.vn-ph-num {
+  width: 22px; height: 22px;
+  border-radius: 999px;
+  border: 2px solid var(--ebd);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 900; color: var(--emut);
+  transition: all .22s;
+}
+.vn-phase-item--active .vn-ph-num {
+  background: var(--ea);
+  border-color: var(--ea);
+  color: white;
+}
+.vn-ph-name { font-size: 10px; font-weight: 800; color: var(--emut); letter-spacing: .04em; }
+.vn-phase-item--active .vn-ph-name { color: var(--efg); }
+.vn-phase-conn {
+  flex: 0 0 20px;
+  height: 2px;
+  background: var(--ebd);
+  margin-bottom: 16px;
+  transition: background .3s;
+}
+.vn-phase-conn--done { background: color-mix(in srgb, var(--ea) 45%, var(--ebd)); }
+
+/* Detail card */
+.vn-detail-card {
+  padding: 14px 16px;
+  border-radius: 13px;
+  border: 1px solid color-mix(in srgb, var(--ea) 25%, var(--ebd));
+  background: color-mix(in srgb, var(--ea) 5%, color-mix(in srgb, var(--ebg) 75%, #0f172a 25%));
+  display: grid;
+  gap: 8px;
+  animation: vnIn .25s ease;
+}
+@keyframes vnIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+.vn-detail-phase { font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; color: color-mix(in srgb, var(--ea) 80%, var(--emut)); }
+.vn-detail-title { font-size: 16px; font-weight: 900; }
+.vn-detail-body { font-size: 12.5px; color: var(--emut); line-height: 1.55; }
+.vn-detail-active {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--ea) 80%, var(--emut));
+  padding: 4px 9px;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--ea) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ea) 22%, transparent);
+}
+.vn-detail-example { display: grid; gap: 4px; }
+.vn-ex-label { font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--emut); }
+.vn-ex-code {
+  font-family: "Courier New", monospace;
+  font-size: 11.5px;
+  color: color-mix(in srgb, var(--eg) 80%, var(--efg));
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--ebg) 40%, #0f172a 60%);
+  border: 1px solid var(--ebd);
+}
+
+/* Controls */
+.vn-controls { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.vn-btn {
+  padding: 7px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--ebd);
+  background: transparent;
+  color: var(--emut);
+  font-family: var(--ef);
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .18s, color .18s, border-color .18s;
+}
+.vn-btn:hover { background: color-mix(in srgb, var(--ea) 10%, transparent); border-color: color-mix(in srgb, var(--ea) 30%, var(--ebd)); color: var(--efg); }
+.vn-btn--primary { background: color-mix(in srgb, var(--ea) 14%, transparent); border-color: color-mix(in srgb, var(--ea) 40%, transparent); color: color-mix(in srgb, var(--ea) 85%, var(--efg)); }
+.vn-dots { display: flex; gap: 6px; }
+.vn-dot { width: 7px; height: 7px; border-radius: 999px; border: 1.5px solid var(--ebd); background: transparent; cursor: pointer; transition: all .2s; }
+.vn-dot--active { background: var(--ea); border-color: var(--ea); }
+
+/* Insight */
+.vn-insight {
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--ebd);
+  background: color-mix(in srgb, var(--ebg) 70%, #0f172a 30%);
+}
+.vn-ins-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 500px) { .vn-ins-row { grid-template-columns: 1fr; } }
+.vn-ins-item { display: grid; gap: 5px; }
+.vn-ins-name { font-size: 12px; font-weight: 900; }
+.vn-ins-body { font-size: 11.5px; color: var(--emut); line-height: 1.45; }
+</style>
+
+<script>
+(function () {
+  var PHASES = [
+    {
+      id: 'fetch',
+      label: 'Fase 1 — FETCH',
+      title: 'Leer la instrucción desde memoria',
+      body: 'La unidad de control lee la dirección almacenada en el PC (Program Counter), accede a Memoria[PC] y carga la instrucción en el IR (Instruction Register). El PC se incrementa para apuntar a la siguiente instrucción.',
+      active: 'Activo: Memoria + Unidad de control + Registros (PC, IR)',
+      code: 'PC=42 → leer Memoria[42] → IR = "ADD R1, R2" · PC = 43',
+      mem: true, cpu: true, cu: true, alu: false, reg: true, arrFetch: true, arrWrite: false
+    },
+    {
+      id: 'decode',
+      label: 'Fase 2 — DECODE',
+      title: 'Interpretar la instrucción',
+      body: 'La unidad de control descompone el contenido del IR en sus campos: código de operación (opcode), registros fuente y registro destino. Determina qué operación realizará la ALU y qué registros necesita.',
+      active: 'Activo: Unidad de control + Registros',
+      code: 'IR = "ADD R1, R2" → opcode=ADD, src1=R1, src2=R2, dest=R1',
+      mem: false, cpu: true, cu: true, alu: false, reg: true, arrFetch: false, arrWrite: false
+    },
+    {
+      id: 'execute',
+      label: 'Fase 3 — EXECUTE',
+      title: 'Ejecutar la operación en la ALU',
+      body: 'La ALU (Arithmetic Logic Unit) recibe los operandos de los registros especificados y realiza la operación determinada en la fase de decode. El resultado queda en un registro temporal. Para instrucciones de salto, también se actualiza el PC.',
+      active: 'Activo: ALU + Registros',
+      code: 'ALU: R1 + R2 = 5 + 3 = 8 · resultado → registro temporal T',
+      mem: false, cpu: true, cu: false, alu: true, reg: true, arrFetch: false, arrWrite: false
+    },
+    {
+      id: 'writeback',
+      label: 'Fase 4 — WRITE-BACK',
+      title: 'Guardar el resultado',
+      body: 'El resultado del registro temporal T se escribe en el registro destino especificado en la instrucción. Si la instrucción accede a memoria (STORE), el resultado se escribe también en la dirección de memoria correspondiente.',
+      active: 'Activo: Registros + (opcionalmente) Memoria',
+      code: 'R1 ← T = 8 · R1 ahora vale 8 · listo para la siguiente instrucción',
+      mem: false, cpu: true, cu: false, alu: false, reg: true, arrFetch: false, arrWrite: false
+    }
+  ];
+
+  function boot() {
+    var wrap = document.querySelector('[data-demo="02-ciclo-von-neumann"]');
+    if (!wrap || wrap.dataset.vnReady) return;
+    wrap.dataset.vnReady = '1';
+
+    var phaseItems = wrap.querySelectorAll('.vn-phase-item');
+    var conns = wrap.querySelectorAll('.vn-phase-conn');
+    var dots = wrap.querySelectorAll('.vn-dot');
+    var btnPrev = wrap.querySelector('#vn-prev');
+    var btnNext = wrap.querySelector('#vn-next');
+    var detailPhase = wrap.querySelector('#vn-detail-phase');
+    var detailTitle = wrap.querySelector('#vn-detail-title');
+    var detailBody = wrap.querySelector('#vn-detail-body');
+    var detailActive = wrap.querySelector('#vn-detail-active');
+    var exCode = wrap.querySelector('#vn-ex-code');
+    var current = 0;
+
+    function go(idx) {
+      if (idx < 0 || idx >= PHASES.length) return;
+      current = idx;
+      var p = PHASES[idx];
+      phaseItems.forEach(function(i, n) { i.classList.toggle('vn-phase-item--active', n === idx); });
+      conns.forEach(function(c, n) { c.classList.toggle('vn-phase-conn--done', n < idx); });
+      dots.forEach(function(d, n) { d.classList.toggle('vn-dot--active', n === idx); });
+      detailPhase.textContent = p.label;
+      detailTitle.textContent = p.title;
+      detailBody.textContent = p.body;
+      detailActive.textContent = p.active;
+      exCode.textContent = p.code;
+    }
+
+    phaseItems.forEach(function(item, i) { item.addEventListener('click', function() { go(i); }); });
+    dots.forEach(function(d, i) { d.addEventListener('click', function() { go(i); }); });
+    btnPrev.addEventListener('click', function() { go(current - 1); });
+    btnNext.addEventListener('click', function() { go((current + 1) % PHASES.length); });
+    go(0);
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
+  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
+})();
+</script>
