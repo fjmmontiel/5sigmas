@@ -1,0 +1,440 @@
+<div class="xor-wrap" data-demo="03-problema-xor">
+  <div class="xor-hd">
+    <div class="xor-title">Por qué un perceptrón no puede aprender XOR</div>
+    <div class="xor-sub">Un perceptrón clasifica trazando una línea recta. XOR tiene cuatro casos dispuestos de forma que ninguna línea puede separarlos. Esa incompatibilidad es geométrica, no algorítmica.</div>
+  </div>
+
+  <div class="xor-stepper">
+    <div class="xor-step xor-step--active" data-s="0"><div class="xor-dot xor-dot--active"></div><div class="xor-lbl">La tarea</div></div>
+    <div class="xor-con"></div>
+    <div class="xor-step" data-s="1"><div class="xor-dot"></div><div class="xor-lbl">El perceptrón</div></div>
+    <div class="xor-con"></div>
+    <div class="xor-step" data-s="2"><div class="xor-dot"></div><div class="xor-lbl">El problema</div></div>
+    <div class="xor-con"></div>
+    <div class="xor-step" data-s="3"><div class="xor-dot"></div><div class="xor-lbl">La prueba</div></div>
+    <div class="xor-con"></div>
+    <div class="xor-step" data-s="4"><div class="xor-dot"></div><div class="xor-lbl">La solución</div></div>
+  </div>
+
+  <div class="xor-card">
+
+    <!-- Paso 1: La tarea -->
+    <div class="xor-panel xor-panel--active" data-p="0">
+      <div class="xor-tag">XOR · La función</div>
+      <div class="xor-title-p">Separar con una línea significa: todos los 0s a un lado, todos los 1s al otro</div>
+      <div class="xor-desc">Un perceptrón clasifica trazando una línea en el plano de entrada. Para que funcione, todos los puntos de cada clase deben quedar en lados opuestos de esa línea. La función AND lo permite: sus cuatro casos tienen los 1s agrupados en una esquina. XOR no: sus 0s y sus 1s están en esquinas alternas, en diagonal.</div>
+      <div class="xor-compare">
+        <div class="xor-cmp-col">
+          <div class="xor-cmp-label xor-cmp-label--ok">AND — separable ✓</div>
+          <svg class="xor-plot" viewBox="0 0 170 160">
+            <!-- región 0 (izquierda/abajo) -->
+            <polygon points="18,142 18,10 105,10 18,142" class="xor-region-shade-0"/>
+            <!-- región 1 (arriba derecha) -->
+            <polygon points="105,10 155,10 155,142 18,142" class="xor-region-shade-1"/>
+            <!-- línea separadora -->
+            <line x1="105" y1="10" x2="18" y2="142" class="xor-sep-ok"/>
+            <line x1="18" y1="142" x2="155" y2="142" class="xor-axis"/>
+            <line x1="18" y1="142" x2="18"  y2="10"  class="xor-axis"/>
+            <text x="86" y="156" class="xor-ax-lbl">A</text>
+            <text x="7"  y="78"  class="xor-ax-lbl">B</text>
+            <text x="28" y="155" class="xor-tick">0</text>
+            <text x="118" y="155" class="xor-tick">1</text>
+            <text x="8"  y="146" class="xor-tick">0</text>
+            <text x="8"  y="44"  class="xor-tick">1</text>
+            <!-- AND: (0,0)→0  (1,0)→0  (0,1)→0  (1,1)→1 -->
+            <circle cx="28"  cy="142" r="13" class="xor-pt xor-pt--0"/><text x="28"  y="146" class="xor-pt-lbl">0</text>
+            <circle cx="118" cy="142" r="13" class="xor-pt xor-pt--0"/><text x="118" y="146" class="xor-pt-lbl">0</text>
+            <circle cx="28"  cy="38"  r="13" class="xor-pt xor-pt--0"/><text x="28"  y="42"  class="xor-pt-lbl">0</text>
+            <circle cx="118" cy="38"  r="13" class="xor-pt xor-pt--1"/><text x="118" y="42"  class="xor-pt-lbl">1</text>
+          </svg>
+        </div>
+        <div class="xor-cmp-col">
+          <div class="xor-cmp-label xor-cmp-label--fail">XOR — no separable ✗</div>
+          <svg class="xor-plot" viewBox="0 0 170 160">
+            <line x1="18" y1="142" x2="155" y2="142" class="xor-axis"/>
+            <line x1="18" y1="142" x2="18"  y2="10"  class="xor-axis"/>
+            <text x="86" y="156" class="xor-ax-lbl">A</text>
+            <text x="7"  y="78"  class="xor-ax-lbl">B</text>
+            <text x="28" y="155" class="xor-tick">0</text>
+            <text x="118" y="155" class="xor-tick">1</text>
+            <text x="8"  y="146" class="xor-tick">0</text>
+            <text x="8"  y="44"  class="xor-tick">1</text>
+            <!-- XOR: (0,0)→0  (1,0)→1  (0,1)→1  (1,1)→0 -->
+            <circle cx="28"  cy="142" r="13" class="xor-pt xor-pt--0"/><text x="28"  y="146" class="xor-pt-lbl">0</text>
+            <circle cx="118" cy="142" r="13" class="xor-pt xor-pt--1"/><text x="118" y="146" class="xor-pt-lbl">1</text>
+            <circle cx="28"  cy="38"  r="13" class="xor-pt xor-pt--1"/><text x="28"  y="42"  class="xor-pt-lbl">1</text>
+            <circle cx="118" cy="38"  r="13" class="xor-pt xor-pt--0"/><text x="118" y="42"  class="xor-pt-lbl">0</text>
+            <!-- interrogación: ¿dónde va la línea? -->
+            <text x="86" y="94" class="xor-qmark">?</text>
+          </svg>
+        </div>
+      </div>
+      <div class="xor-bridge"><span class="xor-bl">El problema →</span><span>en AND los tres 0s están juntos y el único 1 está aislado: la línea diagonal los separa limpiamente. En XOR los 0s y los 1s se alternan en diagonal, sin ningún lado donde agruparse.</span></div>
+    </div>
+
+    <!-- Paso 2: El perceptrón -->
+    <div class="xor-panel" data-p="1">
+      <div class="xor-tag">El perceptrón · Cómo clasifica</div>
+      <div class="xor-title-p">Un perceptrón suma las entradas con pesos y aplica un umbral. Eso es una línea recta.</div>
+      <div class="xor-desc">Un perceptrón toma las entradas A y B, las multiplica por unos pesos w₁ y w₂, suma un término de sesgo b, y decide: si el resultado supera 0, predice clase 1; si no, clase 0. Esa regla de decisión divide el plano en exactamente dos regiones separadas por una línea recta. El aprendizaje consiste en ajustar w₁, w₂ y b para que esa línea separe bien las clases.</div>
+      <div class="xor-formula-block">
+        <div class="xor-formula-label">Lo que calcula el perceptrón</div>
+        <div class="xor-formula-eq">w₁·A + w₂·B + b</div>
+        <div class="xor-formula-rule">
+          <span class="xor-rule-item xor-rule--1">si &gt; 0 → clase 1</span>
+          <span class="xor-rule-sep">·</span>
+          <span class="xor-rule-item xor-rule--0">si ≤ 0 → clase 0</span>
+        </div>
+        <div class="xor-formula-note">Cada combinación de pesos define una línea diferente. El aprendizaje busca la que mejor separa las clases.</div>
+      </div>
+      <svg class="xor-halfplane" viewBox="0 0 360 160">
+        <!-- región clase 0 (izquierda/abajo de la línea) -->
+        <polygon points="0,160 0,0 200,0 360,160" class="xor-region-0"/>
+        <!-- región clase 1 (derecha/arriba de la línea) -->
+        <polygon points="200,0 360,0 360,160" class="xor-region-1"/>
+        <!-- línea separadora -->
+        <line x1="200" y1="0" x2="360" y2="160" class="xor-sep-line"/>
+        <!-- etiquetas de región -->
+        <text x="70"  y="100" class="xor-region-lbl">clase 0</text>
+        <text x="290" y="60"  class="xor-region-lbl">clase 1</text>
+        <!-- fórmula en la línea -->
+        <text x="240" y="90" class="xor-line-lbl" transform="rotate(45, 240, 90)">w₁·A + w₂·B + b = 0</text>
+      </svg>
+      <div class="xor-bridge"><span class="xor-bl">El límite →</span><span>los pesos pueden cambiar la inclinación y posición de la línea, pero siempre es una línea. El perceptrón no tiene más grados de libertad que esos.</span></div>
+    </div>
+
+    <!-- Paso 3: El problema geométrico -->
+    <div class="xor-panel" data-p="2">
+      <div class="xor-tag">No linealmenente separable · El problema geométrico</div>
+      <div class="xor-title-p">Cualquier línea que intentes deja al menos un punto en el lado incorrecto</div>
+      <div class="xor-desc">El patrón en diagonal de XOR hace que este problema sea irresoluble para cualquier frontera lineal. Da igual el ángulo: una línea horizontal separa por valor de B pero mezcla los 0s y los 1s de cada fila. Una vertical hace lo mismo por columnas. Una diagonal pone a (0,0) y (1,1) separados de (0,1) y (1,0), pero eso no coincide con XOR. No hay ángulo que funcione.</div>
+      <div class="xor-tries">
+        <div class="xor-try">
+          <div class="xor-try-label">Línea horizontal</div>
+          <svg class="xor-try-plot" viewBox="0 0 140 130">
+            <line x1="18" y1="108" x2="130" y2="108" class="xor-axis"/>
+            <line x1="18" y1="108" x2="18"  y2="10"  class="xor-axis"/>
+            <!-- línea separadora horizontal -->
+            <line x1="5" y1="72" x2="138" y2="72" class="xor-try-line"/>
+            <!-- puntos -->
+            <circle cx="28"  cy="108" r="12" class="xor-pt xor-pt--0"/><text x="28"  y="112" class="xor-pt-lbl">0</text>
+            <circle cx="100" cy="108" r="12" class="xor-pt xor-pt--1"/><text x="100" y="112" class="xor-pt-lbl">1</text>
+            <circle cx="28"  cy="36"  r="12" class="xor-pt xor-pt--1"/><text x="28"  y="40"  class="xor-pt-lbl">1</text>
+            <circle cx="100" cy="36"  r="12" class="xor-pt xor-pt--0"/><text x="100" y="40"  class="xor-pt-lbl">0</text>
+            <!-- fallo: (1,1)→0 queda arriba junto a los 1s -->
+            <text x="114" y="30" class="xor-fail-mark">✗</text>
+            <!-- fallo: (1,0)→1 queda abajo junto a los 0s -->
+            <text x="114" y="105" class="xor-fail-mark">✗</text>
+          </svg>
+        </div>
+        <div class="xor-try">
+          <div class="xor-try-label">Línea vertical</div>
+          <svg class="xor-try-plot" viewBox="0 0 140 130">
+            <line x1="18" y1="108" x2="130" y2="108" class="xor-axis"/>
+            <line x1="18" y1="108" x2="18"  y2="10"  class="xor-axis"/>
+            <!-- línea separadora vertical -->
+            <line x1="64" y1="5" x2="64" y2="125" class="xor-try-line"/>
+            <!-- puntos -->
+            <circle cx="28"  cy="108" r="12" class="xor-pt xor-pt--0"/><text x="28"  y="112" class="xor-pt-lbl">0</text>
+            <circle cx="100" cy="108" r="12" class="xor-pt xor-pt--1"/><text x="100" y="112" class="xor-pt-lbl">1</text>
+            <circle cx="28"  cy="36"  r="12" class="xor-pt xor-pt--1"/><text x="28"  y="40"  class="xor-pt-lbl">1</text>
+            <circle cx="100" cy="36"  r="12" class="xor-pt xor-pt--0"/><text x="100" y="40"  class="xor-pt-lbl">0</text>
+            <!-- fallo: (0,1)→1 queda izquierda junto al 0 -->
+            <text x="12" y="30" class="xor-fail-mark">✗</text>
+            <!-- fallo: (1,1)→0 queda derecha junto al 1 -->
+            <text x="114" y="30" class="xor-fail-mark">✗</text>
+          </svg>
+        </div>
+        <div class="xor-try">
+          <div class="xor-try-label">Línea diagonal</div>
+          <svg class="xor-try-plot" viewBox="0 0 140 130">
+            <line x1="18" y1="108" x2="130" y2="108" class="xor-axis"/>
+            <line x1="18" y1="108" x2="18"  y2="10"  class="xor-axis"/>
+            <!-- línea diagonal -->
+            <line x1="10" y1="125" x2="130" y2="10" class="xor-try-line"/>
+            <!-- puntos -->
+            <circle cx="28"  cy="108" r="12" class="xor-pt xor-pt--0"/><text x="28"  y="112" class="xor-pt-lbl">0</text>
+            <circle cx="100" cy="108" r="12" class="xor-pt xor-pt--1"/><text x="100" y="112" class="xor-pt-lbl">1</text>
+            <circle cx="28"  cy="36"  r="12" class="xor-pt xor-pt--1"/><text x="28"  y="40"  class="xor-pt-lbl">1</text>
+            <circle cx="100" cy="36"  r="12" class="xor-pt xor-pt--0"/><text x="100" y="40"  class="xor-pt-lbl">0</text>
+            <!-- la diagonal separa (0,0) de (1,1) pero ambos son 0: no sirve -->
+            <text x="12"  y="105" class="xor-fail-mark">✗</text>
+            <text x="114" y="30"  class="xor-fail-mark">✗</text>
+          </svg>
+        </div>
+      </div>
+      <div class="xor-bridge"><span class="xor-bl">La conclusión →</span><span>no es que el perceptrón no encuentre la línea correcta. Es que esa línea no existe. XOR requiere una frontera que se doble, y un perceptrón de una capa solo puede trazar una recta.</span></div>
+    </div>
+
+    <!-- Paso 4: La prueba algebraica -->
+    <div class="xor-panel" data-p="3">
+      <div class="xor-tag">Prueba algebraica · La contradicción</div>
+      <div class="xor-title-p">Las cuatro condiciones que XOR exige son matemáticamente incompatibles</div>
+      <div class="xor-desc">Si existiera una solución (w₁, w₂, b), tendría que clasificar los cuatro casos a la vez. Cada caso impone una desigualdad sobre los pesos. Sumar las dos condiciones de los casos con salida 1 produce algo que contradice directamente la condición del caso (1,1).</div>
+      <div class="xor-cond-grid">
+        <div class="xor-cond xor-cond--0">
+          <span class="xor-cond-in">(0,0) → 0</span>
+          <span class="xor-cond-eq">b &lt; 0</span>
+        </div>
+        <div class="xor-cond xor-cond--1">
+          <span class="xor-cond-in">(0,1) → 1</span>
+          <span class="xor-cond-eq">w₂ + b &gt; 0</span>
+        </div>
+        <div class="xor-cond xor-cond--1">
+          <span class="xor-cond-in">(1,0) → 1</span>
+          <span class="xor-cond-eq">w₁ + b &gt; 0</span>
+        </div>
+        <div class="xor-cond xor-cond--0">
+          <span class="xor-cond-in">(1,1) → 0</span>
+          <span class="xor-cond-eq">w₁ + w₂ + b &lt; 0</span>
+        </div>
+      </div>
+      <div class="xor-contra">
+        <div class="xor-contra-step">Suma (0,1) + (1,0)&#58; &nbsp;<span class="xor-contra-hl">w₁ + w₂ + 2b &gt; 0</span></div>
+        <div class="xor-contra-arrow">↓ &nbsp;como b &lt; 0, entonces −2b &gt; −b</div>
+        <div class="xor-contra-step">se deduce&#58; &nbsp;<span class="xor-contra-hl">w₁ + w₂ &gt; −2b &gt; −b</span></div>
+        <div class="xor-contra-arrow">↓ &nbsp;pero (1,1) exige lo contrario</div>
+        <div class="xor-contra-bang">w₁ + w₂ + b &lt; 0 &nbsp;→&nbsp; w₁ + w₂ &lt; −b &nbsp;&nbsp;✗ &nbsp;contradicción</div>
+      </div>
+      <div class="xor-bridge"><span class="xor-bl">Consecuencia →</span><span>no es que el optimizador no encuentre la solución. No existe ningún (w₁, w₂, b) que satisfaga las cuatro condiciones. La imposibilidad es matemática, no computacional.</span></div>
+    </div>
+
+    <!-- Paso 5: La solución -->
+    <div class="xor-panel" data-p="4">
+      <div class="xor-tag">Redes multicapa · La solución</div>
+      <div class="xor-title-p">Dos neuronas ocultas doblan el espacio. La salida sigue siendo una línea recta.</div>
+      <div class="xor-desc">Cada neurona oculta traza su propia frontera en el espacio de entrada: una actúa como OR (se activa si al menos una entrada es 1) y otra como AND (solo si las dos son 1). Juntas crean una franja donde viven exactamente los dos casos XOR=1. Al proyectar al nuevo espacio, esos dos puntos colapsan en la misma posición y una sola recta basta.</div>
+      <div class="xor-transform">
+        <div class="xor-transform-col">
+          <div class="xor-transform-label">Espacio original — dos fronteras</div>
+          <svg class="xor-transform-plot" viewBox="0 0 170 160">
+            <line x1="18" y1="142" x2="150" y2="142" class="xor-axis"/>
+            <line x1="18" y1="142" x2="18"  y2="10"  class="xor-axis"/>
+            <text x="86"  y="156" class="xor-ax-lbl">A</text>
+            <text x="7"   y="76"  class="xor-ax-lbl">B</text>
+            <text x="18"  y="156" class="xor-tick">0</text>
+            <text x="136" y="156" class="xor-tick">1</text>
+            <text x="7"   y="145" class="xor-tick">0</text>
+            <text x="7"   y="27"  class="xor-tick">1</text>
+            <!-- franja entre h₁ y h₂ = zona XOR=1 -->
+            <polygon points="0,65 82,147 152,99 67,14" class="xor-band"/>
+            <!-- h₁: A+B=0.5, y=x+65 -->
+            <line x1="0" y1="65" x2="82" y2="147" class="xor-h1-line"/>
+            <text x="4" y="57" class="xor-hn-lbl xor-hn-lbl--1">h₁</text>
+            <!-- h₂: A+B=1.5, y=x−53 -->
+            <line x1="67" y1="14" x2="152" y2="99" class="xor-h2-line"/>
+            <text x="149" y="107" class="xor-hn-lbl xor-hn-lbl--2">h₂</text>
+            <!-- puntos XOR -->
+            <circle cx="18"  cy="142" r="11" class="xor-pt xor-pt--0"/><text x="18"  y="146" class="xor-pt-lbl">0</text>
+            <circle cx="136" cy="142" r="11" class="xor-pt xor-pt--1"/><text x="136" y="146" class="xor-pt-lbl">1</text>
+            <circle cx="18"  cy="24"  r="11" class="xor-pt xor-pt--1"/><text x="18"  y="28"  class="xor-pt-lbl">1</text>
+            <circle cx="136" cy="24"  r="11" class="xor-pt xor-pt--0"/><text x="136" y="28"  class="xor-pt-lbl">0</text>
+          </svg>
+        </div>
+        <div class="xor-transform-arrow">→</div>
+        <div class="xor-transform-col">
+          <div class="xor-transform-label">Espacio oculto — una frontera</div>
+          <svg class="xor-transform-plot" viewBox="0 0 170 160">
+            <line x1="18" y1="142" x2="150" y2="142" class="xor-axis"/>
+            <line x1="18" y1="142" x2="18"  y2="10"  class="xor-axis"/>
+            <text x="86"  y="156" class="xor-ax-lbl">h₁ (OR)</text>
+            <text x="7"   y="76"  class="xor-ax-lbl">h₂</text>
+            <text x="18"  y="156" class="xor-tick">0</text>
+            <text x="136" y="156" class="xor-tick">1</text>
+            <text x="7"   y="145" class="xor-tick">0</text>
+            <text x="7"   y="27"  class="xor-tick">1</text>
+            <!-- separador: h₁−h₂=0.5, y=219−x -->
+            <line x1="70" y1="149" x2="150" y2="69" class="xor-sep-ok"/>
+            <!-- (0,0) class 0 → (18,142) -->
+            <circle cx="18"  cy="142" r="11" class="xor-pt xor-pt--0"/><text x="18"  y="146" class="xor-pt-lbl">0</text>
+            <!-- (0,1) y (1,0) class 1 → colapsan en (136,142) -->
+            <circle cx="136" cy="142" r="16" class="xor-pt-outer"/>
+            <circle cx="136" cy="142" r="11" class="xor-pt xor-pt--1"/><text x="136" y="146" class="xor-pt-lbl">1</text>
+            <text x="136" y="127" class="xor-collapse-lbl">×2</text>
+            <!-- (1,1) class 0 → (136,24) -->
+            <circle cx="136" cy="24"  r="11" class="xor-pt xor-pt--0"/><text x="136" y="28"  class="xor-pt-lbl">0</text>
+          </svg>
+        </div>
+      </div>
+      <div class="xor-bridge"><span class="xor-bl">La clave →</span><span>(0,1) y (1,0) colapsan al mismo punto en el espacio oculto. La capa oculta no clasifica: transforma. La neurona de salida sigue siendo una línea recta, pero trazada en un espacio que la capa oculta ya dobló.</span></div>
+    </div>
+
+  </div>
+
+  <div class="xor-nav">
+    <button class="xor-btn" id="xor-prev">← Anterior</button>
+    <button class="xor-btn" id="xor-next">Siguiente →</button>
+  </div>
+</div>
+
+<style>
+.xor-wrap, .xor-wrap * { box-sizing: border-box; }
+.xor-wrap {
+  --ea: var(--md-primary-fg-color, #26A69A);
+  --eb: #324AB2;
+  --eg: var(--md-accent-fg-color, #FFB343);
+  --ebg: var(--md-default-bg-color, #fff);
+  --efg: var(--md-default-fg-color, #0f172a);
+  --ebd: rgba(15,23,42,.13);
+  --emut: rgba(15,23,42,.56);
+  --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  display: grid; gap: 16px; max-width: 860px; margin: 0 auto;
+  padding: clamp(14px,2vw,22px); border: 1px solid var(--ebd); border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 0% 100%, color-mix(in srgb,var(--ea) 5%,transparent), transparent 50%),
+    radial-gradient(90% 110% at 100% 0%, color-mix(in srgb,var(--eg) 5%,transparent), transparent 52%),
+    var(--ebg);
+  color: var(--efg); font-family: var(--ef); -webkit-font-smoothing: antialiased;
+}
+[data-md-color-scheme="slate"] .xor-wrap {
+  --ebg: var(--md-default-bg-color, #0f172a); --efg: var(--md-default-fg-color, #e2e8f0);
+  --ebd: rgba(226,232,240,.13); --emut: rgba(226,232,240,.56);
+}
+.xor-hd { display: grid; gap: 4px; }
+.xor-title { font-size: clamp(15px,2vw,20px); font-weight: 900; letter-spacing: -.02em; line-height: 1.15; }
+.xor-sub { font-size: 13px; color: var(--emut); line-height: 1.5; max-width: 68ch; }
+
+/* Stepper */
+.xor-stepper { display: flex; align-items: center; padding: 12px 16px; border-radius: 12px; border: 1px solid var(--ebd); background: color-mix(in srgb, var(--ebg) 70%, #0f172a 30%); overflow-x: auto; }
+.xor-step { flex: 1 1 0; display: flex; flex-direction: column; align-items: center; gap: 5px; min-width: 80px; cursor: pointer; }
+.xor-dot { width: 12px; height: 12px; border-radius: 999px; border: 2px solid var(--ebd); background: transparent; transition: background .2s, border-color .2s, transform .2s; }
+.xor-dot--active { background: var(--ea); border-color: var(--ea); transform: scale(1.3); }
+.xor-lbl { font-size: 10.5px; font-weight: 700; color: var(--emut); transition: color .2s; }
+.xor-step--active .xor-lbl { color: var(--efg); }
+.xor-con { flex: 0 0 24px; height: 2px; background: var(--ebd); margin-bottom: 18px; transition: background .3s; }
+.xor-con--active { background: color-mix(in srgb, var(--ea) 50%, var(--ebd)); }
+
+/* Card */
+.xor-card { padding: 18px 20px; border-radius: 14px; border: 1px solid var(--ebd); background: color-mix(in srgb, var(--ebg) 75%, #0f172a 25%); min-height: 260px; }
+.xor-panel { display: none; }
+.xor-panel--active { display: grid; gap: 12px; align-content: start; animation: xorIn .25s ease; }
+@keyframes xorIn { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } }
+
+.xor-tag { font-size: 9.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: color-mix(in srgb, var(--ea) 80%, var(--emut)); }
+.xor-title-p { font-size: 16px; font-weight: 900; letter-spacing: -.01em; line-height: 1.25; }
+.xor-desc { font-size: 12.5px; color: var(--emut); line-height: 1.5; }
+
+/* Paso 1: comparación AND vs XOR */
+.xor-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 480px) { .xor-compare { grid-template-columns: 1fr; } }
+.xor-cmp-col { display: grid; gap: 6px; padding: 10px 12px; border-radius: 11px; border: 1px solid var(--ebd); background: color-mix(in srgb, var(--ebg) 50%, #0f172a 50%); }
+.xor-cmp-label { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; text-align: center; }
+.xor-cmp-label--ok   { color: color-mix(in srgb, var(--ea) 80%, var(--emut)); }
+.xor-cmp-label--fail { color: color-mix(in srgb, #ef4444 70%, var(--emut)); }
+.xor-region-shade-0 { fill: color-mix(in srgb, var(--eb) 9%, transparent); }
+.xor-region-shade-1 { fill: color-mix(in srgb, var(--ea) 9%, transparent); }
+.xor-sep-ok { stroke: color-mix(in srgb, var(--ea) 55%, transparent); stroke-width: 2; fill: none; }
+.xor-qmark { font-size: 32px; font-weight: 900; fill: color-mix(in srgb, var(--emut) 40%, transparent); font-family: sans-serif; text-anchor: middle; dominant-baseline: middle; }
+
+/* Paso 2: fórmula + half-plane */
+.xor-formula-block { display: grid; gap: 8px; padding: 14px 16px; border-radius: 11px; border: 1px solid color-mix(in srgb, var(--eb) 22%, var(--ebd)); background: color-mix(in srgb, var(--eb) 5%, color-mix(in srgb, var(--ebg) 55%, #0f172a 45%)); }
+.xor-formula-label { font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .07em; color: var(--emut); }
+.xor-formula-eq { font-family: "JetBrains Mono","Courier New",monospace; font-size: clamp(20px,3vw,30px); font-weight: 900; color: color-mix(in srgb, var(--eb) 85%, var(--efg)); letter-spacing: .02em; }
+.xor-formula-rule { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.xor-rule-item { font-size: 11.5px; font-weight: 800; font-family: "Courier New", monospace; padding: 3px 9px; border-radius: 6px; }
+.xor-rule--1 { background: color-mix(in srgb, var(--ea) 12%, transparent); border: 1px solid color-mix(in srgb, var(--ea) 28%, transparent); color: color-mix(in srgb, var(--ea) 85%, var(--efg)); }
+.xor-rule--0 { background: color-mix(in srgb, var(--eb) 12%, transparent); border: 1px solid color-mix(in srgb, var(--eb) 28%, transparent); color: color-mix(in srgb, var(--eb) 80%, var(--efg)); }
+.xor-rule-sep { color: var(--emut); font-weight: 700; }
+.xor-formula-note { font-size: 10.5px; color: var(--emut); line-height: 1.4; font-style: italic; }
+.xor-halfplane { width: 100%; max-width: 400px; height: auto; display: block; margin: 0 auto; border-radius: 10px; border: 1px solid var(--ebd); }
+.xor-region-0 { fill: color-mix(in srgb, var(--eb) 10%, transparent); }
+.xor-region-1 { fill: color-mix(in srgb, var(--ea) 10%, transparent); }
+.xor-sep-line { stroke: color-mix(in srgb, var(--emut) 60%, transparent); stroke-width: 2; fill: none; stroke-dasharray: 5,3; }
+.xor-region-lbl { font-size: 13px; font-weight: 800; font-family: sans-serif; fill: var(--emut); text-anchor: middle; }
+.xor-line-lbl { font-size: 9px; font-family: "Courier New", monospace; fill: var(--emut); text-anchor: middle; opacity: .65; }
+
+/* Paso 3: tres intentos */
+.xor-tries { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+@media (max-width: 480px) { .xor-tries { grid-template-columns: 1fr; } }
+.xor-try { display: grid; gap: 5px; padding: 10px 10px 8px; border-radius: 10px; border: 1px solid var(--ebd); background: color-mix(in srgb, var(--ebg) 50%, #0f172a 50%); }
+.xor-try-label { font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: var(--emut); text-align: center; }
+.xor-try-plot { width: 100%; height: auto; display: block; border-radius: 7px; background: color-mix(in srgb, var(--ebg) 25%, #0f172a 75%); border: 1px solid var(--ebd); }
+.xor-try-line { stroke: color-mix(in srgb, var(--emut) 55%, transparent); stroke-width: 1.5; fill: none; stroke-dasharray: 5,3; }
+.xor-fail-mark { font-size: 13px; fill: color-mix(in srgb, #ef4444 80%, transparent); font-family: sans-serif; text-anchor: middle; font-weight: 900; }
+
+/* SVG shared */
+.xor-plot { width: 100%; height: auto; display: block; border-radius: 8px; background: color-mix(in srgb, var(--ebg) 25%, #0f172a 75%); border: 1px solid var(--ebd); }
+.xor-axis { stroke: var(--emut); stroke-width: 1.5; fill: none; opacity: .45; }
+.xor-pt { stroke: none; }
+.xor-pt--0 { fill: color-mix(in srgb, var(--eb) 65%, transparent); }
+.xor-pt--1 { fill: color-mix(in srgb, var(--ea) 65%, transparent); }
+.xor-pt-lbl { font-size: 9px; font-weight: 900; fill: #fff; font-family: sans-serif; text-anchor: middle; dominant-baseline: middle; }
+.xor-ax-lbl { font-size: 9px; font-weight: 700; fill: var(--emut); font-family: sans-serif; text-anchor: middle; }
+.xor-tick { font-size: 8.5px; fill: var(--emut); font-family: sans-serif; text-anchor: middle; }
+.xor-corner-lbl { font-size: 11px; font-weight: 900; font-family: sans-serif; text-anchor: middle; opacity: .35; }
+
+/* Paso 4: prueba algebraica */
+.xor-cond-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.xor-cond { display: flex; flex-direction: column; gap: 3px; padding: 9px 12px; border-radius: 9px; border: 1px solid var(--ebd); background: color-mix(in srgb, var(--ebg) 50%, #0f172a 50%); }
+.xor-cond--0 { border-color: color-mix(in srgb, var(--eb) 28%, var(--ebd)); background: color-mix(in srgb, var(--eb) 6%, color-mix(in srgb, var(--ebg) 50%, #0f172a 50%)); }
+.xor-cond--1 { border-color: color-mix(in srgb, var(--ea) 28%, var(--ebd)); background: color-mix(in srgb, var(--ea) 6%, color-mix(in srgb, var(--ebg) 50%, #0f172a 50%)); }
+.xor-cond-in { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--emut); font-family: monospace; }
+.xor-cond-eq { font-size: clamp(13px,2vw,17px); font-weight: 900; font-family: "JetBrains Mono","Courier New",monospace; }
+.xor-cond--0 .xor-cond-eq { color: color-mix(in srgb, var(--eb) 85%, var(--efg)); }
+.xor-cond--1 .xor-cond-eq { color: color-mix(in srgb, var(--ea) 85%, var(--efg)); }
+.xor-contra { display: grid; gap: 3px; padding: 12px 14px; border-radius: 10px; border: 1px solid color-mix(in srgb, #ef4444 20%, var(--ebd)); background: color-mix(in srgb, #ef4444 4%, color-mix(in srgb, var(--ebg) 50%, #0f172a 50%)); }
+.xor-contra-step { font-size: 12px; color: var(--emut); font-family: "Courier New",monospace; }
+.xor-contra-arrow { font-size: 10.5px; color: var(--emut); padding-left: 10px; opacity: .65; }
+.xor-contra-hl { color: var(--efg); font-weight: 900; }
+.xor-contra-bang { font-size: 13px; font-weight: 900; font-family: "Courier New",monospace; color: color-mix(in srgb, #ef4444 80%, var(--efg)); padding: 6px 10px; border-radius: 6px; background: color-mix(in srgb, #ef4444 10%, transparent); border: 1px solid color-mix(in srgb, #ef4444 25%, transparent); margin-top: 3px; }
+
+/* Paso 5: solución */
+.xor-transform { display: grid; grid-template-columns: 1fr auto 1fr; gap: 8px; align-items: center; }
+@media (max-width: 500px) { .xor-transform { grid-template-columns: 1fr; } }
+.xor-transform-arrow { font-size: 24px; font-weight: 900; color: var(--emut); text-align: center; }
+.xor-transform-col { display: grid; gap: 5px; }
+.xor-transform-label { font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--emut); text-align: center; }
+.xor-transform-plot { width: 100%; height: auto; display: block; border-radius: 9px; background: color-mix(in srgb, var(--ebg) 25%, #0f172a 75%); border: 1px solid var(--ebd); }
+.xor-h1-line { stroke: color-mix(in srgb, #26A69A 65%, transparent); stroke-width: 1.8; fill: none; stroke-dasharray: 5,3; }
+.xor-h2-line { stroke: color-mix(in srgb, #FFB343 65%, transparent); stroke-width: 1.8; fill: none; stroke-dasharray: 5,3; }
+.xor-hn-lbl { font-size: 9px; font-weight: 900; font-family: monospace; }
+.xor-hn-lbl--1 { fill: color-mix(in srgb, #26A69A 90%, white); }
+.xor-hn-lbl--2 { fill: color-mix(in srgb, #FFB343 90%, white); }
+.xor-band { fill: color-mix(in srgb, #26A69A 10%, transparent); }
+.xor-pt-outer { fill: none; stroke: color-mix(in srgb, #26A69A 55%, transparent); stroke-width: 2.5; }
+.xor-collapse-lbl { font-size: 9px; font-weight: 900; fill: color-mix(in srgb, #26A69A 85%, white); font-family: sans-serif; text-anchor: middle; }
+
+/* Bridge */
+.xor-bridge { display: flex; gap: 7px; align-items: baseline; font-size: 11.5px; color: var(--emut); padding: 7px 11px; border-radius: 8px; background: color-mix(in srgb, var(--ea) 7%, transparent); border: 1px solid color-mix(in srgb, var(--ea) 20%, transparent); }
+.xor-bl { font-weight: 800; font-size: 10px; text-transform: uppercase; letter-spacing: .05em; color: color-mix(in srgb, var(--ea) 80%, var(--efg)); flex-shrink: 0; }
+
+.xor-nav { display: flex; justify-content: space-between; gap: 12px; }
+.xor-btn { padding: 7px 16px; border-radius: 8px; border: 1px solid var(--ebd); background: transparent; color: var(--emut); font-family: var(--ef); font-size: 12.5px; font-weight: 700; cursor: pointer; transition: background .18s, color .18s, border-color .18s; }
+.xor-btn:hover { background: color-mix(in srgb, var(--ea) 10%, transparent); border-color: color-mix(in srgb, var(--ea) 30%, var(--ebd)); color: var(--efg); }
+.xor-btn:disabled { opacity: .35; cursor: default; pointer-events: none; }
+</style>
+
+<script>
+(function () {
+  function boot() {
+    var wrap = document.querySelector('[data-demo="03-problema-xor"]');
+    if (!wrap || wrap.dataset.xorReady) return;
+    wrap.dataset.xorReady = '1';
+    var steps = wrap.querySelectorAll('.xor-step');
+    var panels = wrap.querySelectorAll('.xor-panel');
+    var cons = wrap.querySelectorAll('.xor-con');
+    var prev = wrap.querySelector('#xor-prev');
+    var next = wrap.querySelector('#xor-next');
+    var cur = 0;
+    function go(i) {
+      if (i < 0 || i >= steps.length) return;
+      cur = i;
+      steps.forEach(function(s, j) {
+        s.classList.toggle('xor-step--active', j === i);
+        s.querySelector('.xor-dot').classList.toggle('xor-dot--active', j === i);
+      });
+      panels.forEach(function(p, j) { p.classList.toggle('xor-panel--active', j === i); });
+      cons.forEach(function(c, j) { c.classList.toggle('xor-con--active', j < i); });
+      prev.disabled = i === 0;
+      next.disabled = i === steps.length - 1;
+    }
+    steps.forEach(function(s, i) { s.addEventListener('click', function() { go(i); }); });
+    prev.addEventListener('click', function() { go(cur - 1); });
+    next.addEventListener('click', function() { go(cur + 1); });
+    prev.disabled = true;
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
+  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
+})();
+</script>

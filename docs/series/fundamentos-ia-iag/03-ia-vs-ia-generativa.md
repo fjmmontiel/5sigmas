@@ -144,7 +144,7 @@ Para hacer esos criterios concretos, vale la pena recorrer la matriz con un caso
 
 > La respuesta real para fraude a escala combina las cuatro. Reglas para filtros rápidos, ML clásico para puntuar todas las transacciones, y agente para la revisión de casos complejos de alto riesgo. No hay una sola tecnología que cubra todo bien.
 
-No hay tecnología correcta en abstracto. Hay la correcta para cada dato, problema y contexto.
+La tecnología correcta no existe en abstracto, sino en relación con el dato, el problema y el contexto concretos.
 
 El capítulo siguiente lleva ese espectro hasta su límite: qué es la Inteligencia Artificial General, y qué separa lo que existe hoy de lo que todavía no existe.
 

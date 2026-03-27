@@ -58,8 +58,7 @@ Esto cambia el tipo de pensamiento que se puede hacer. Con buena notación, una 
 Los griegos añadieron algo que va más allá del cálculo práctico: un estándar de justificación. En los *Elementos*, Euclides organiza resultados a partir de definiciones, postulados y demostraciones encadenadas. 
 No se trata solo de llegar a una conclusión correcta, sino de mostrar por qué esa conclusión se sigue de forma necesaria a partir de supuestos aceptados ([Britannica: Elements](https://www.britannica.com/topic/Elements-by-Euclid), [Britannica: Euclid](https://www.britannica.com/biography/Euclid-Greek-mathematician), [Britannica: Euclidean geometry](https://www.britannica.com/science/Euclidean-geometry)).
 
-Ese ideal deductivo cambia la naturaleza del conocimiento matemático. Dentro del sistema, la autoridad ya no está en la tradición, ni en la intuición, ni en la experiencia inmediata. Está en la cadena de inferencias. 
-Cada paso puede revisarse y cada conclusión puede reconstruirse.
+Ese ideal deductivo cambia la naturaleza del conocimiento matemático. Dentro del sistema, la autoridad ya no está en la tradición, ni en la intuición, ni en la experiencia inmediata, sino en la cadena de inferencias. Cada paso puede revisarse y cada conclusión puede reconstruirse.
 
 {{ include_html("snippets/from-cave-to-agi/01-cadena-deductiva.html") }}
 
@@ -88,7 +87,7 @@ El cálculo aparece en ese contexto. Newton desarrolla sus métodos en la segund
 
 Lo que aporta el cálculo es un lenguaje para describir variación continua. Permite formalizar tasas de cambio y acumulaciones. Gracias a él, fenómenos como la caída de los cuerpos, las órbitas, la velocidad cambiante o la propagación de magnitudes físicas dejan de ser solo observables y pasan a ser calculables con antelación.
 
-Ese poder predictivo marca un antes y un después. La matemática ya no solo sirve para contar, medir o demostrar. Sirve también para modelar procesos.
+Ese poder predictivo amplía lo que la matemática puede hacer: ya no solo sirve para contar, medir o demostrar, sino también para modelar procesos.
 
 {{ include_html("snippets/from-cave-to-agi/01-timeline-representar.html") }}
 

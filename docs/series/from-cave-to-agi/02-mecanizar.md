@@ -51,7 +51,7 @@ El valor de este paso no está solo en la elegancia matemática. Está en que co
 
 Durante décadas, el álgebra de Boole fue una construcción brillante con poca traducción práctica. El puente llegó con Claude Shannon. En su tesis de máster de 1937, publicada después como *[A Symbolic Analysis of Relay and Switching Circuits](https://dspace.mit.edu/handle/1721.1/11173)*, mostró que el álgebra booleana podía aplicarse al diseño de circuitos de conmutación.
 
-Ese enlace fue decisivo. Ya no se trataba solo de razonar sobre verdadero y falso en un papel, sino de construir dispositivos físicos que implementaran operaciones lógicas. Ahí nace la lógica digital como base material de la computación moderna. La proposición lógica deja de ser solo una forma de pensar. Se convierte en una forma de cablear.
+Ese enlace fue decisivo. Ya no se trataba solo de razonar sobre verdadero y falso en un papel, sino de construir dispositivos físicos que implementaran operaciones lógicas. Ahí nace la lógica digital como base material de la computación moderna. La proposición lógica deja de ser solo una forma de pensar y pasa a ser una forma de cablear.
 
 {{ include_html("snippets/from-cave-to-agi/02-puertas-logicas.html") }}
 
@@ -112,7 +112,7 @@ La potencia de esta abstracción es enorme. Por un lado, la máquina de Turing o
   </div>
 </details>
 
-Ese resultado cambia el tono de toda la disciplina. La computación deja de ser solo una promesa de automatización ilimitada y pasa a tener límites demostrables. No todo problema difícil es simplemente una cuestión de más tiempo o más hardware. Hay fronteras que nacen de la propia estructura matemática del problema.
+Ese resultado cambia el tono de toda la disciplina. La computación deja de ser solo una promesa de automatización ilimitada y pasa a tener límites demostrables. No todo problema difícil es simplemente una cuestión de más tiempo o más hardware, porque hay fronteras que nacen de la propia estructura matemática del problema.
 
 {{ include_html("snippets/from-cave-to-agi/02-maquina-turing.html") }}
 
@@ -140,7 +140,7 @@ Conviene distinguir bien los hitos porque suelen mezclarse. [ENIAC](https://www.
 
 El [Manchester Baby](https://www.computerhistory.org/revolution/birth-of-the-computer/4/87) fue en 1948 la primera máquina en ejecutar un programa almacenado desde memoria. Era una demostración experimental, no un servicio estable de computación, pero marcó el cambio de régimen.
 
-[EDSAC](https://www.britannica.com/technology/EDSAC), operativa en 1949 en Cambridge, convirtió ese principio en una máquina útil para usuarios reales. Ahí empieza de verdad el ordenador programable como infraestructura práctica, no solo como prueba de concepto.
+[EDSAC](https://www.britannica.com/technology/EDSAC), operativa en 1949 en Cambridge, convirtió ese principio en una máquina útil para usuarios reales: el ordenador programable como infraestructura práctica, ya no solo como demostración experimental.
 
 {{ include_html("snippets/from-cave-to-agi/02-ciclo-von-neumann.html") }}
 

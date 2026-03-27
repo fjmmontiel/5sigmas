@@ -1,0 +1,493 @@
+<div class="tri-wrap" data-demo="03-triada-aprendizaje">
+
+  <div class="tri-hd">
+    <div class="tri-title">La tríada del aprendizaje automático</div>
+    <div class="tri-sub">Tres componentes que, combinados, son el motor de todo el aprendizaje moderno — incluyendo los LLMs actuales. Explorar cada uno y por qué tardó tanto en funcionar.</div>
+  </div>
+
+  <div class="tri-tabs" role="tablist">
+    <button class="tri-tab tri-tab--active" data-tri="triada" role="tab">La tríada</button>
+    <button class="tri-tab" data-tri="inviernos" role="tab">Los inviernos de la IA</button>
+    <button class="tri-tab" data-tri="renacer" role="tab">El renacimiento — 2012</button>
+  </div>
+
+  <!-- ── PANEL: La tríada ── -->
+  <div class="tri-panel tri-panel--active" data-panel="triada">
+
+    <div class="tri-nodes">
+      <div class="tri-node" id="triNodeProb">
+        <div class="tri-node-icon">P</div>
+        <div class="tri-node-name">Probabilidad</div>
+        <div class="tri-node-desc">Bayes, distribuciones, generalización e incertidumbre cuantificable. Permite que el modelo sepa cuánto sabe y con qué confianza.</div>
+        <div class="tri-node-role" id="triRoleProb">mide el error → calcula la pérdida</div>
+      </div>
+      <div class="tri-node" id="triNodeBack">
+        <div class="tri-node-icon">∂</div>
+        <div class="tri-node-name">Backpropagation</div>
+        <div class="tri-node-desc">Regla de la cadena aplicada a redes multicapa. Distribuye el crédito del error hacia atrás a través de todos los parámetros de la red.</div>
+        <div class="tri-node-role" id="triRoleBack">propaga el error → gradiente por parámetro</div>
+      </div>
+      <div class="tri-node" id="triNodeOpt">
+        <div class="tri-node-icon">∇</div>
+        <div class="tri-node-name">Optimización</div>
+        <div class="tri-node-desc">Descenso de gradiente estocástico (SGD), Adam, regularización. El motor que ajusta los parámetros en la dirección que reduce el error.</div>
+        <div class="tri-node-role" id="triRoleOpt">usa el gradiente → ajusta los pesos</div>
+      </div>
+    </div>
+
+    <div class="tri-loop-section">
+      <div class="tri-loop-label">El bucle universal de entrenamiento</div>
+      <div class="tri-loop" id="triLoop">
+        <div class="tri-ls" id="triLs0">Datos de entrada</div>
+        <div class="tri-la">→</div>
+        <div class="tri-ls" id="triLs1">Predecir</div>
+        <div class="tri-la">→</div>
+        <div class="tri-ls tri-ls--prob" id="triLs2">Medir error <span class="tri-ls-attr">(Prob.)</span></div>
+        <div class="tri-la">→</div>
+        <div class="tri-ls tri-ls--back" id="triLs3">Propagar <span class="tri-ls-attr">(Backprop)</span></div>
+        <div class="tri-la">→</div>
+        <div class="tri-ls tri-ls--opt" id="triLs4">Ajustar <span class="tri-ls-attr">(Opt.)</span></div>
+        <div class="tri-la">→</div>
+        <div class="tri-ls tri-ls--repeat" id="triLs5">Repetir ↺</div>
+      </div>
+      <div class="tri-loop-note">Este bucle es idéntico en una regresión logística de 1980 y en el entrenamiento de GPT-4. La escala cambia; el mecanismo no.</div>
+    </div>
+
+  </div>
+
+  <!-- ── PANEL: Los inviernos ── -->
+  <div class="tri-panel" data-panel="inviernos">
+    <div class="tri-winters">
+      <div class="tri-w-item tri-w-item--boom">
+        <div class="tri-w-period">1956 – 1969</div>
+        <div class="tri-w-name">Primer verano de la IA</div>
+        <div class="tri-w-desc">Dartmouth 1956: arranque del campo. Redes neuronales (perceptrón de Rosenblatt, 1958). Optimismo desbordante — Minsky predice IA general en 20 años.</div>
+        <div class="tri-w-bar"><div class="tri-w-fill tri-w-fill--boom" style="--pct:80"></div></div>
+        <div class="tri-w-trigger tri-w-trigger--down">Minsky demuestra que el perceptrón no puede resolver XOR → colapso de financiación</div>
+      </div>
+      <div class="tri-w-item tri-w-item--cold">
+        <div class="tri-w-period">1970 – 1980</div>
+        <div class="tri-w-name">Primer invierno</div>
+        <div class="tri-w-desc">Recorte drástico de fondos. Los sistemas no escalan. Los problemas "sencillos" resultan insolubles. La traducción automática prometida en 1954 no llega.</div>
+        <div class="tri-w-bar"><div class="tri-w-fill tri-w-fill--cold" style="--pct:15"></div></div>
+        <div class="tri-w-trigger tri-w-trigger--up">Sistemas expertos: conocimiento explícito codificado a mano → breve renacimiento</div>
+      </div>
+      <div class="tri-w-item tri-w-item--warm">
+        <div class="tri-w-period">1980 – 1987</div>
+        <div class="tri-w-name">Sistemas expertos</div>
+        <div class="tri-w-desc">MYCIN, XCON, R1: reglas If-Then escritas a mano por expertos. Funcionan en dominios cerrados. El mercado de IA alcanza $1B. Boom de inversión.</div>
+        <div class="tri-w-bar"><div class="tri-w-fill tri-w-fill--warm" style="--pct:60"></div></div>
+        <div class="tri-w-trigger tri-w-trigger--down">El mantenimiento de las reglas no escala. La base del conocimiento se vuelve inmanejable → colapso</div>
+      </div>
+      <div class="tri-w-item tri-w-item--cold">
+        <div class="tri-w-period">1987 – 1993</div>
+        <div class="tri-w-name">Segundo invierno</div>
+        <div class="tri-w-desc">Mercado de IA colapsa. DARPA recorta proyectos. Los sistemas expertos son demasiado frágiles y costosos. El campo se fragmenta en subcampos sin comunicación.</div>
+        <div class="tri-w-bar"><div class="tri-w-fill tri-w-fill--cold" style="--pct:12"></div></div>
+        <div class="tri-w-trigger tri-w-trigger--up">Internet genera datos masivos. GPUs baratas. Backprop funciona en redes profundas → convergencia lenta hacia 2012</div>
+      </div>
+      <div class="tri-w-item tri-w-item--boom">
+        <div class="tri-w-period">2000 – 2012</div>
+        <div class="tri-w-name">Acumulación silenciosa</div>
+        <div class="tri-w-desc">La tríada funciona pero falta escala. LeCun entrena CNNs en MNIST (1998). La web genera datos sin precedente. Las GPUs bajan de precio. El terreno se prepara.</div>
+        <div class="tri-w-bar"><div class="tri-w-fill tri-w-fill--build" style="--pct:45"></div></div>
+        <div class="tri-w-trigger tri-w-trigger--up">AlexNet gana ImageNet 2012 con margen brutal → el Deep Learning moderno arranca</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PANEL: Renacimiento ── -->
+  <div class="tri-panel" data-panel="renacer">
+    <div class="tri-ren">
+      <div class="tri-ren-intro">En 2012, la tríada ya existía. Lo que cambió fue la disponibilidad simultánea de tres factores:</div>
+      <div class="tri-ren-factors">
+        <div class="tri-rf">
+          <div class="tri-rf-top">
+            <div class="tri-rf-num">1</div>
+            <div class="tri-rf-name">Datos a escala masiva</div>
+          </div>
+          <p>Internet y la digitalización generaron volúmenes sin precedente. ImageNet: 1,2 millones de imágenes etiquetadas. Common Crawl: terabytes de texto. La tríada necesita ejemplos — y por primera vez los hay en cantidad suficiente.</p>
+          <div class="tri-rf-bar-wrap">
+            <div class="tri-rf-label">Volumen de datos disponibles 2000→2012</div>
+            <div class="tri-rf-track"><div class="tri-rf-fill tri-rf-fill--data" data-pct="88"></div></div>
+            <div class="tri-rf-val">×10 000</div>
+          </div>
+        </div>
+        <div class="tri-rf">
+          <div class="tri-rf-top">
+            <div class="tri-rf-num">2</div>
+            <div class="tri-rf-name">GPUs y paralelismo masivo</div>
+          </div>
+          <p>Las tarjetas gráficas, diseñadas para videojuegos, son perfectas para multiplicaciones matriciales masivas en paralelo. Krizhevsky entrena AlexNet en dos GTX 580. Los tiempos caen de semanas a días.</p>
+          <div class="tri-rf-bar-wrap">
+            <div class="tri-rf-label">Reducción tiempo de entrenamiento</div>
+            <div class="tri-rf-track"><div class="tri-rf-fill tri-rf-fill--gpu" data-pct="75"></div></div>
+            <div class="tri-rf-val">÷ 40×</div>
+          </div>
+        </div>
+        <div class="tri-rf">
+          <div class="tri-rf-top">
+            <div class="tri-rf-num">3</div>
+            <div class="tri-rf-name">Benchmarks competitivos</div>
+          </div>
+          <p>ImageNet Large Scale Visual Recognition Challenge: una competición anual con métricas objetivas y públicas. Creó competencia real y medición del progreso. El campo dejó de debatir sobre si las redes funcionaban — y empezó a medir cuánto mejoraban cada año.</p>
+          <div class="tri-rf-bar-wrap">
+            <div class="tri-rf-label">Tasa de mejora anual en ImageNet</div>
+            <div class="tri-rf-track"><div class="tri-rf-fill tri-rf-fill--bench" data-pct="62"></div></div>
+            <div class="tri-rf-val">×3 en 5 años</div>
+          </div>
+        </div>
+      </div>
+      <div class="tri-ren-result">
+        <div class="tri-ren-result-label">Resultado: AlexNet 2012</div>
+        <div class="tri-ren-result-stats">
+          <div class="tri-rs"><span class="tri-rs-v">25,8%</span><span class="tri-rs-l">Error top-5 anterior</span></div>
+          <div class="tri-rs-arr">→</div>
+          <div class="tri-rs"><span class="tri-rs-v tri-rs-v--good">15,3%</span><span class="tri-rs-l">AlexNet — −40% de golpe</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<style>
+.tri-wrap, .tri-wrap * { box-sizing: border-box; }
+
+.tri-wrap {
+  --ta: var(--md-primary-fg-color, #26A69A);
+  --tb: #324AB2;
+  --tg: #FFB343;
+  --tbg: var(--md-default-bg-color, #fff);
+  --tfg: var(--md-default-fg-color, #0f172a);
+  --tbd: rgba(15,23,42,.14);
+  --tmut: rgba(15,23,42,.58);
+  --tf: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid;
+  gap: 14px;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--tbd);
+  border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--tb) 7%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 100%, color-mix(in srgb,var(--ta) 6%,transparent), transparent 52%),
+    var(--tbg);
+  color: var(--tfg);
+  font-family: var(--tf);
+  -webkit-font-smoothing: antialiased;
+}
+[data-md-color-scheme="slate"] .tri-wrap {
+  --tbg: var(--md-default-bg-color, #0f172a);
+  --tfg: var(--md-default-fg-color, #e2e8f0);
+  --tbd: rgba(226,232,240,.14);
+  --tmut: rgba(226,232,240,.58);
+}
+
+.tri-hd { display: grid; gap: 4px; }
+.tri-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.tri-sub { font-size: 13.5px; color: var(--tmut); line-height: 1.5; max-width: 68ch; }
+
+/* ── Tabs ── */
+.tri-tabs { display: flex; gap: 5px; flex-wrap: wrap; }
+.tri-tab {
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--tbd);
+  background: transparent;
+  color: var(--tmut);
+  font-family: var(--tf);
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s;
+}
+.tri-tab:hover { border-color: color-mix(in srgb,var(--ta) 40%,var(--tbd)); color: var(--tfg); }
+.tri-tab--active {
+  background: color-mix(in srgb,var(--ta) 13%,transparent);
+  border-color: color-mix(in srgb,var(--ta) 50%,var(--tbd));
+  color: var(--tfg);
+}
+
+/* ── Panels ── */
+.tri-panel { display: none; }
+.tri-panel--active { display: grid; gap: 12px; }
+
+/* ── TRÍADA nodes ── */
+.tri-nodes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+@media (max-width: 560px) { .tri-nodes { grid-template-columns: 1fr; } }
+
+.tri-node {
+  border: 1px solid var(--tbd);
+  border-radius: 14px;
+  padding: 14px;
+  display: grid;
+  gap: 6px;
+  align-content: start;
+  background: color-mix(in srgb, var(--tbg) 88%, #0f172a 12%);
+  transition: border-color .3s, background .3s, box-shadow .3s;
+}
+.tri-node.tri-node--active {
+  border-color: color-mix(in srgb, var(--ta) 50%, transparent);
+  background: color-mix(in srgb, var(--ta) 8%, var(--tbg));
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--ta) 18%, transparent);
+}
+.tri-node-icon {
+  width: 32px; height: 32px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--ta) 15%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ta) 30%, transparent);
+  font-size: 15px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: color-mix(in srgb, var(--ta) 85%, var(--tfg));
+  font-family: "JetBrains Mono", monospace;
+}
+.tri-node-name { font-size: 14px; font-weight: 900; }
+.tri-node-desc { font-size: 12px; color: var(--tmut); line-height: 1.45; }
+.tri-node-role {
+  font-size: 10.5px;
+  font-weight: 800;
+  color: color-mix(in srgb, var(--ta) 75%, var(--tfg));
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid color-mix(in srgb, var(--ta) 20%, var(--tbd));
+  background: color-mix(in srgb, var(--ta) 6%, transparent);
+  transition: opacity .3s;
+  opacity: .6;
+}
+.tri-node.tri-node--active .tri-node-role { opacity: 1; }
+
+/* ── Training loop ── */
+.tri-loop-section {
+  border: 1px solid var(--tbd);
+  border-radius: 14px;
+  padding: 14px;
+  background: color-mix(in srgb, var(--tbg) 85%, #0f172a 15%);
+  display: grid;
+  gap: 10px;
+}
+.tri-loop-label { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--tmut); }
+.tri-loop { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.tri-ls {
+  padding: 7px 11px;
+  border-radius: 10px;
+  border: 1px solid var(--tbd);
+  background: color-mix(in srgb, var(--tbg) 82%, #0f172a 18%);
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  transition: background .3s, border-color .3s, transform .2s;
+  white-space: nowrap;
+}
+.tri-ls.tri-ls--active { transform: scale(1.06); }
+.tri-ls--prob.tri-ls--active { background: color-mix(in srgb, var(--ta) 16%, var(--tbg)); border-color: color-mix(in srgb, var(--ta) 45%, transparent); }
+.tri-ls--back.tri-ls--active { background: color-mix(in srgb, var(--tb) 16%, var(--tbg)); border-color: color-mix(in srgb, var(--tb) 45%, transparent); }
+.tri-ls--opt.tri-ls--active  { background: color-mix(in srgb, var(--tg) 16%, var(--tbg)); border-color: color-mix(in srgb, var(--tg) 45%, transparent); }
+.tri-ls--repeat { background: color-mix(in srgb, var(--ta) 10%, var(--tbg)); border-color: color-mix(in srgb, var(--ta) 25%, transparent); font-weight: 900; }
+.tri-ls-attr { font-size: 10px; font-weight: 600; color: var(--tmut); }
+.tri-la { font-size: 14px; color: var(--tmut); flex-shrink: 0; }
+.tri-loop-note { font-size: 12px; color: var(--tmut); line-height: 1.5; font-style: italic; border-left: 2px solid color-mix(in srgb, var(--ta) 35%, transparent); padding-left: 10px; }
+
+/* ── WINTERS panel ── */
+.tri-winters { display: grid; gap: 8px; }
+.tri-w-item {
+  border: 1px solid var(--tbd);
+  border-radius: 13px;
+  padding: 12px 14px;
+  display: grid;
+  gap: 6px;
+  background: color-mix(in srgb, var(--tbg) 85%, #0f172a 15%);
+}
+.tri-w-item--boom   { border-color: color-mix(in srgb, var(--tg) 28%, var(--tbd)); background: linear-gradient(135deg, color-mix(in srgb,var(--tg) 6%,transparent), transparent 50%), color-mix(in srgb, var(--tbg) 85%, #0f172a 15%); }
+.tri-w-item--cold   { border-color: color-mix(in srgb, #60a5fa 22%, var(--tbd)); background: linear-gradient(135deg, color-mix(in srgb,#60a5fa 5%,transparent), transparent 50%), color-mix(in srgb, var(--tbg) 85%, #0f172a 15%); }
+.tri-w-item--warm   { border-color: color-mix(in srgb, #22c55e 22%, var(--tbd)); background: linear-gradient(135deg, color-mix(in srgb,#22c55e 5%,transparent), transparent 50%), color-mix(in srgb, var(--tbg) 85%, #0f172a 15%); }
+
+.tri-w-period { font-size: 11px; font-weight: 800; color: var(--tmut); }
+.tri-w-name   { font-size: 14px; font-weight: 900; }
+.tri-w-desc   { font-size: 12px; color: var(--tmut); line-height: 1.45; }
+
+.tri-w-bar { height: 5px; border-radius: 999px; background: color-mix(in srgb, var(--tbg) 60%, #0f172a 40%); overflow: hidden; }
+.tri-w-fill { height: 100%; border-radius: 999px; width: 0; transition: width .6s ease; }
+.tri-w-fill--boom  { background: linear-gradient(90deg, color-mix(in srgb,var(--tg) 70%,transparent), color-mix(in srgb,var(--tg) 45%,transparent)); }
+.tri-w-fill--cold  { background: linear-gradient(90deg, color-mix(in srgb,#60a5fa 55%,transparent), color-mix(in srgb,#60a5fa 35%,transparent)); }
+.tri-w-fill--warm  { background: linear-gradient(90deg, color-mix(in srgb,#22c55e 55%,transparent), color-mix(in srgb,#22c55e 35%,transparent)); }
+.tri-w-fill--build { background: linear-gradient(90deg, color-mix(in srgb,var(--ta) 55%,transparent), color-mix(in srgb,var(--ta) 35%,transparent)); }
+
+.tri-w-trigger {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--tmut);
+  padding: 4px 10px;
+  border-radius: 7px;
+  border: 1px solid var(--tbd);
+  background: color-mix(in srgb, var(--tbg) 70%, #0f172a 30%);
+  line-height: 1.4;
+}
+.tri-w-trigger--down::before { content: '↓ '; color: #ef4444; }
+.tri-w-trigger--up::before   { content: '↑ '; color: var(--ta); }
+
+/* ── RENACIMIENTO panel ── */
+.tri-ren { display: grid; gap: 14px; }
+.tri-ren-intro { font-size: 13.5px; color: var(--tmut); line-height: 1.55; }
+.tri-ren-factors { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+@media (max-width: 580px) { .tri-ren-factors { grid-template-columns: 1fr; } }
+
+.tri-rf {
+  border: 1px solid var(--tbd);
+  border-radius: 13px;
+  padding: 13px;
+  background: color-mix(in srgb, var(--tbg) 85%, #0f172a 15%);
+  display: grid;
+  gap: 7px;
+  align-content: start;
+}
+.tri-rf-top { display: flex; align-items: center; gap: 8px; }
+.tri-rf-num {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--ta) 18%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ta) 40%, transparent);
+  font-size: 12px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: color-mix(in srgb, var(--ta) 90%, var(--tfg));
+  flex-shrink: 0;
+}
+.tri-rf-name { font-size: 13px; font-weight: 900; line-height: 1.2; }
+.tri-rf p { margin: 0; font-size: 12px; color: var(--tmut); line-height: 1.48; }
+
+.tri-rf-bar-wrap { display: grid; gap: 4px; }
+.tri-rf-label { font-size: 9.5px; color: var(--tmut); font-weight: 700; }
+.tri-rf-track { height: 6px; border-radius: 999px; background: color-mix(in srgb, var(--tbg) 50%, #0f172a 50%); overflow: hidden; }
+.tri-rf-fill { height: 100%; border-radius: 999px; width: 0; transition: width .7s ease; }
+.tri-rf-fill--data  { background: linear-gradient(90deg, color-mix(in srgb,var(--ta) 70%,transparent), color-mix(in srgb,var(--ta) 45%,transparent)); }
+.tri-rf-fill--gpu   { background: linear-gradient(90deg, color-mix(in srgb,var(--tb) 70%,transparent), color-mix(in srgb,var(--tb) 45%,transparent)); }
+.tri-rf-fill--bench { background: linear-gradient(90deg, color-mix(in srgb,var(--tg) 70%,transparent), color-mix(in srgb,var(--tg) 45%,transparent)); }
+.tri-rf-val { font-size: 10px; font-weight: 800; color: var(--tmut); }
+
+.tri-ren-result {
+  border: 1px solid color-mix(in srgb, var(--ta) 28%, var(--tbd));
+  border-radius: 12px;
+  padding: 12px 14px;
+  background: color-mix(in srgb, var(--ta) 6%, var(--tbg));
+  display: grid;
+  gap: 8px;
+}
+.tri-ren-result-label { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; color: var(--tmut); }
+.tri-ren-result-stats { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.tri-rs { display: grid; gap: 3px; }
+.tri-rs-v { font-size: 22px; font-weight: 900; letter-spacing: -.02em; line-height: 1; }
+.tri-rs-v--good { color: color-mix(in srgb, var(--ta) 90%, var(--tfg)); }
+.tri-rs-l { font-size: 11px; color: var(--tmut); line-height: 1.3; }
+.tri-rs-arr { font-size: 20px; color: var(--tmut); font-weight: 700; }
+
+@media (prefers-reduced-motion: reduce) {
+  .tri-ls { transition: none; }
+  .tri-node { transition: none; }
+  .tri-w-fill, .tri-rf-fill { transition: none; }
+}
+</style>
+
+<script>
+(function () {
+
+  // Animation sequence for training loop: [prob, back, opt]
+  var LOOP_STEPS = [
+    { loop: 2, nodes: ['triNodeProb'], ls: 'tri-ls--prob' },
+    { loop: 3, nodes: ['triNodeBack'], ls: 'tri-ls--back' },
+    { loop: 4, nodes: ['triNodeOpt'],  ls: 'tri-ls--opt'  },
+  ];
+
+  var loopTimer = null;
+  var loopIdx = 0;
+
+  function clearLoopHighlights(wrap) {
+    wrap.querySelectorAll('.tri-ls').forEach(function(el) { el.classList.remove('tri-ls--active'); });
+    wrap.querySelectorAll('.tri-node').forEach(function(el) { el.classList.remove('tri-node--active'); });
+  }
+
+  function loopTick(wrap) {
+    clearLoopHighlights(wrap);
+    var step = LOOP_STEPS[loopIdx % LOOP_STEPS.length];
+    var ls = wrap.querySelector('#triLs' + step.loop);
+    if (ls) ls.classList.add('tri-ls--active');
+    step.nodes.forEach(function(id) {
+      var n = wrap.querySelector('#' + id);
+      if (n) n.classList.add('tri-node--active');
+    });
+    loopIdx++;
+    loopTimer = setTimeout(function() { loopTick(wrap); }, 900);
+  }
+
+  function stopLoop() {
+    if (loopTimer) { clearTimeout(loopTimer); loopTimer = null; }
+  }
+
+  function animateBars(panel) {
+    panel.querySelectorAll('[data-pct]').forEach(function(el, i) {
+      var pct = el.dataset.pct;
+      el.style.width = '0';
+      setTimeout(function() { el.style.width = pct + '%'; }, 100 + i * 120);
+    });
+  }
+
+  function boot() {
+    var wrap = document.querySelector('[data-demo="03-triada-aprendizaje"]');
+    if (!wrap || wrap.dataset.triReady) return;
+    wrap.dataset.triReady = '1';
+
+    var tabs   = wrap.querySelectorAll('.tri-tab');
+    var panels = wrap.querySelectorAll('.tri-panel');
+
+    function switchTab(target) {
+      stopLoop();
+      tabs.forEach(function(t) { t.classList.remove('tri-tab--active'); });
+      panels.forEach(function(p) { p.classList.remove('tri-panel--active'); });
+      var btn = wrap.querySelector('.tri-tab[data-tri="' + target + '"]');
+      var panel = wrap.querySelector('.tri-panel[data-panel="' + target + '"]');
+      if (btn) btn.classList.add('tri-tab--active');
+      if (panel) {
+        panel.classList.add('tri-panel--active');
+        animateBars(panel);
+      }
+      if (target === 'triada') loopTick(wrap);
+    }
+
+    tabs.forEach(function(btn) {
+      btn.addEventListener('click', function() { switchTab(btn.dataset.tri); });
+    });
+
+    // Start loop when visible
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) {
+          if (e.isIntersecting) {
+            loopTick(wrap);
+            io.disconnect();
+          }
+        });
+      }, { threshold: 0.3 });
+      io.observe(wrap);
+    } else {
+      loopTick(wrap);
+    }
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
+  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
+})();
+</script>

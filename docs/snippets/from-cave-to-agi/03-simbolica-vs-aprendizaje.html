@@ -1,0 +1,458 @@
+<div class="sva-wrap" data-demo="03-simbolica-vs-aprendizaje">
+  <div class="sva-hd">
+    <div class="sva-title">Dos paradigmas de IA: codificar conocimiento vs. aprenderlo</div>
+    <div class="sva-sub">La IA simbólica intentó escribir el conocimiento a mano. El aprendizaje automático extrae ese conocimiento de los datos. El cambio entre paradigmas no fue gradual: fue una ruptura.</div>
+  </div>
+
+  <div class="sva-tabs">
+    <button class="sva-tab sva-tab--active" data-stab="symbolic">IA Simbólica</button>
+    <button class="sva-tab" data-stab="ml">Aprendizaje automático</button>
+    <button class="sva-tab" data-stab="compare">Comparativa</button>
+  </div>
+
+  <!-- Symbolic AI -->
+  <div class="sva-panel sva-panel--active" data-spanel="symbolic">
+    <div class="sva-flow">
+      <div class="sva-flow-node sva-fn--expert">
+        <div class="sva-fn-icon">👨‍💼</div>
+        <div class="sva-fn-label">Experto humano</div>
+        <div class="sva-fn-desc">Médico, ingeniero, abogado</div>
+      </div>
+      <div class="sva-flow-arr">→</div>
+      <div class="sva-flow-node sva-fn--rules">
+        <div class="sva-fn-icon">📋</div>
+        <div class="sva-fn-label">Reglas manuales</div>
+        <div class="sva-fn-desc">SI fiebre &gt; 38 Y tos ENTONCES gripe</div>
+      </div>
+      <div class="sva-flow-arr">→</div>
+      <div class="sva-flow-node sva-fn--system">
+        <div class="sva-fn-icon">🖥</div>
+        <div class="sva-fn-label">Sistema experto</div>
+        <div class="sva-fn-desc">Motor de inferencia + base de conocimiento</div>
+      </div>
+      <div class="sva-flow-arr">→</div>
+      <div class="sva-flow-node sva-fn--output">
+        <div class="sva-fn-icon">💬</div>
+        <div class="sva-fn-label">Decisión</div>
+        <div class="sva-fn-desc">Con trazabilidad: cada regla aplicada es visible</div>
+      </div>
+    </div>
+    <div class="sva-example">
+      <div class="sva-ex-title">Ejemplo — sistema de diagnóstico MYCIN (1976)</div>
+      <div class="sva-rules">
+        <div class="sva-rule">
+          <span class="sva-rule-id">R001</span>
+          <span class="sva-rule-body">SI el organismo es gram-positivo Y el sitio de infección es sangre ENTONCES considerar Staphylococcus (0.7)</span>
+        </div>
+        <div class="sva-rule">
+          <span class="sva-rule-id">R002</span>
+          <span class="sva-rule-body">SI fiebre &gt; 38.5 Y cultivo negativo ENTONCES considerar antibióticos de amplio espectro (0.65)</span>
+        </div>
+        <div class="sva-rule sva-rule--more">+ 450 reglas más, todas escritas a mano por médicos</div>
+      </div>
+    </div>
+    <div class="sva-props">
+      <div class="sva-prop sva-prop--yes">
+        <div class="sva-prop-lbl">Ventajas</div>
+        <ul class="sva-prop-list">
+          <li>Explicable: cada decisión puede auditarse paso a paso</li>
+          <li>Funciona bien en dominios muy acotados y bien definidos</li>
+          <li>No necesita datos: el conocimiento viene del experto</li>
+        </ul>
+      </div>
+      <div class="sva-prop sva-prop--no">
+        <div class="sva-prop-lbl">Límites</div>
+        <ul class="sva-prop-list">
+          <li>No escala: actualizar reglas es costoso y propenso a errores</li>
+          <li>Frágil fuera de su dominio — falla ante situaciones no previstas</li>
+          <li>El conocimiento del mundo real no tiene la estructura limpia de los teoremas</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Machine Learning -->
+  <div class="sva-panel" data-spanel="ml">
+    <div class="sva-flow">
+      <div class="sva-flow-node sva-fn--data">
+        <div class="sva-fn-icon">📊</div>
+        <div class="sva-fn-label">Datos históricos</div>
+        <div class="sva-fn-desc">Millones de ejemplos etiquetados</div>
+      </div>
+      <div class="sva-flow-arr">→</div>
+      <div class="sva-flow-node sva-fn--train">
+        <div class="sva-fn-icon">⚙</div>
+        <div class="sva-fn-label">Entrenamiento</div>
+        <div class="sva-fn-desc">Optimización iterativa de parámetros</div>
+      </div>
+      <div class="sva-flow-arr">→</div>
+      <div class="sva-flow-node sva-fn--model">
+        <div class="sva-fn-icon">🧠</div>
+        <div class="sva-fn-label">Modelo aprendido</div>
+        <div class="sva-fn-desc">Millones de parámetros ajustados desde los datos</div>
+      </div>
+      <div class="sva-flow-arr">→</div>
+      <div class="sva-flow-node sva-fn--output">
+        <div class="sva-fn-icon">💬</div>
+        <div class="sva-fn-label">Predicción</div>
+        <div class="sva-fn-desc">Con probabilidad — no con trazabilidad de reglas</div>
+      </div>
+    </div>
+    <div class="sva-example">
+      <div class="sva-ex-title">Ejemplo — clasificador de spam (enfoque ML)</div>
+      <div class="sva-ml-vis">
+        <div class="sva-ml-input">
+          <div class="sva-ml-email">
+            <div class="sva-ml-subj">Asunto: ¡¡¡GANA 1.000.000€ HOY!!!</div>
+            <div class="sva-ml-body">Haz clic aquí para reclamar tu premio exclusivo...</div>
+          </div>
+        </div>
+        <div class="sva-ml-arrow">→</div>
+        <div class="sva-ml-features">
+          <div class="sva-feat sva-feat--hi">mayúsculas: alta</div>
+          <div class="sva-feat sva-feat--hi">exclamaciones: alta</div>
+          <div class="sva-feat sva-feat--hi">"clic aquí": sí</div>
+          <div class="sva-feat sva-feat--hi">€ en asunto: sí</div>
+        </div>
+        <div class="sva-ml-arrow">→</div>
+        <div class="sva-ml-result">
+          <div class="sva-ml-label">SPAM</div>
+          <div class="sva-ml-conf">99.4% confianza</div>
+          <div class="sva-ml-note">Sin una sola regla escrita a mano</div>
+        </div>
+      </div>
+    </div>
+    <div class="sva-props">
+      <div class="sva-prop sva-prop--yes">
+        <div class="sva-prop-lbl">Ventajas</div>
+        <ul class="sva-prop-list">
+          <li>Escala: más datos → mejor modelo, automáticamente</li>
+          <li>Generaliza a situaciones no vistas explícitamente en el entrenamiento</li>
+          <li>No requiere que nadie entienda todas las reglas del dominio</li>
+        </ul>
+      </div>
+      <div class="sva-prop sva-prop--no">
+        <div class="sva-prop-lbl">Límites</div>
+        <ul class="sva-prop-list">
+          <li>Necesita datos etiquetados — costosos de obtener</li>
+          <li>Caja negra: difícil explicar por qué tomó una decisión concreta</li>
+          <li>Puede aprender sesgos presentes en los datos de entrenamiento</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Compare -->
+  <div class="sva-panel" data-spanel="compare">
+    <div class="sva-compare-table">
+      <div class="sva-ct-hd">
+        <div></div>
+        <div class="sva-ct-col-hd sva-ct-col-hd--sym">IA Simbólica</div>
+        <div class="sva-ct-col-hd sva-ct-col-hd--ml">Aprendizaje automático</div>
+      </div>
+      <div class="sva-ct-row">
+        <div class="sva-ct-dim">Fuente de conocimiento</div>
+        <div class="sva-ct-val">Experto humano escribe reglas</div>
+        <div class="sva-ct-val sva-ct-val--ml">Datos de entrenamiento etiquetados</div>
+      </div>
+      <div class="sva-ct-row">
+        <div class="sva-ct-dim">Generalización</div>
+        <div class="sva-ct-val">Dentro del dominio definido</div>
+        <div class="sva-ct-val sva-ct-val--ml">Hacia ejemplos no vistos del mismo problema</div>
+      </div>
+      <div class="sva-ct-row">
+        <div class="sva-ct-dim">Escalabilidad</div>
+        <div class="sva-ct-val">Difícil: cada nueva regla es manual</div>
+        <div class="sva-ct-val sva-ct-val--ml">Alta: más datos → mejor rendimiento</div>
+      </div>
+      <div class="sva-ct-row">
+        <div class="sva-ct-dim">Explicabilidad</div>
+        <div class="sva-ct-val sva-ct-val--good">Alta: cada decisión es trazable</div>
+        <div class="sva-ct-val">Limitada: los parámetros no son interpretables</div>
+      </div>
+      <div class="sva-ct-row">
+        <div class="sva-ct-dim">Robustez ante ruido</div>
+        <div class="sva-ct-val">Baja: las reglas fallan ante excepciones</div>
+        <div class="sva-ct-val sva-ct-val--ml">Alta: aprende a ignorar ruido estadísticamente</div>
+      </div>
+      <div class="sva-ct-row">
+        <div class="sva-ct-dim">Ejemplo</div>
+        <div class="sva-ct-val">MYCIN (1976), XCON (1980)</div>
+        <div class="sva-ct-val sva-ct-val--ml">AlexNet (2012), GPT-4 (2023)</div>
+      </div>
+    </div>
+    <div class="sva-shift-note">
+      <div class="sva-sn-label">El cambio de paradigma</div>
+      <div class="sva-sn-body">Los sistemas expertos dominaron la IA de los años 70 y 80. El cambio no fue ideológico sino empírico: cuando llegaron los datos y el cómputo suficientes, el aprendizaje automático superó a las mejores reglas manuales en casi todos los dominios donde podía medirse. El campo no eligió el paradigma por razones filosóficas, sino porque los números lo forzaron.</div>
+    </div>
+  </div>
+</div>
+
+<style>
+.sva-wrap, .sva-wrap * { box-sizing: border-box; }
+
+.sva-wrap {
+  --ea: var(--md-primary-fg-color, #26A69A);
+  --eb: #324AB2;
+  --eg: var(--md-accent-fg-color, #FFB343);
+  --ebg: var(--md-default-bg-color, #fff);
+  --efg: var(--md-default-fg-color, #0f172a);
+  --ebd: rgba(15,23,42,.13);
+  --emut: rgba(15,23,42,.56);
+  --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid;
+  gap: 14px;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--ebd);
+  border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--eb) 5%,transparent), transparent 50%),
+    radial-gradient(90% 110% at 95% 100%, color-mix(in srgb,var(--ea) 5%,transparent), transparent 52%),
+    var(--ebg);
+  color: var(--efg);
+  font-family: var(--ef);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-md-color-scheme="slate"] .sva-wrap {
+  --ebg: var(--md-default-bg-color, #0f172a);
+  --efg: var(--md-default-fg-color, #e2e8f0);
+  --ebd: rgba(226,232,240,.13);
+  --emut: rgba(226,232,240,.56);
+}
+
+.sva-hd { display: grid; gap: 4px; }
+.sva-title { font-size: clamp(15px,2vw,20px); font-weight: 900; letter-spacing: -.02em; line-height: 1.15; }
+.sva-sub { font-size: 13px; color: var(--emut); line-height: 1.5; max-width: 68ch; }
+
+.sva-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.sva-tab {
+  padding: 6px 14px; border-radius: 8px; border: 1px solid var(--ebd);
+  background: transparent; color: var(--emut); font-family: var(--ef);
+  font-size: 12.5px; font-weight: 700; cursor: pointer;
+  transition: background .18s, color .18s, border-color .18s;
+}
+.sva-tab:hover { background: color-mix(in srgb, var(--ea) 10%, transparent); border-color: color-mix(in srgb, var(--ea) 30%, var(--ebd)); color: var(--efg); }
+.sva-tab--active { background: color-mix(in srgb, var(--ea) 14%, transparent); border-color: color-mix(in srgb, var(--ea) 50%, transparent); color: var(--efg); }
+
+.sva-panel { display: none; }
+.sva-panel--active { display: grid; gap: 12px; animation: svaIn .25s ease; }
+@keyframes svaIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Flow */
+.sva-flow {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--ebd);
+  background: color-mix(in srgb, var(--ebg) 70%, #0f172a 30%);
+}
+.sva-flow-node {
+  flex: 1 1 100px;
+  padding: 9px 11px;
+  border-radius: 10px;
+  border: 1px solid var(--ebd);
+  background: color-mix(in srgb, var(--ebg) 60%, #0f172a 40%);
+  display: grid;
+  gap: 3px;
+  align-content: start;
+  text-align: center;
+}
+.sva-fn--expert { border-color: color-mix(in srgb, var(--eb) 30%, transparent); background: color-mix(in srgb, var(--eb) 8%, transparent); }
+.sva-fn--rules, .sva-fn--train { border-color: color-mix(in srgb, var(--eg) 30%, transparent); background: color-mix(in srgb, var(--eg) 7%, transparent); }
+.sva-fn--system, .sva-fn--model { border-color: color-mix(in srgb, var(--ea) 30%, transparent); background: color-mix(in srgb, var(--ea) 8%, transparent); }
+.sva-fn--data { border-color: color-mix(in srgb, var(--eb) 30%, transparent); background: color-mix(in srgb, var(--eb) 8%, transparent); }
+.sva-fn-icon { font-size: 18px; }
+.sva-fn-label { font-size: 11px; font-weight: 900; }
+.sva-fn-desc { font-size: 9.5px; color: var(--emut); line-height: 1.35; }
+.sva-flow-arr { font-size: 18px; color: var(--emut); flex-shrink: 0; }
+
+/* Example */
+.sva-example {
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--ebd);
+  background: color-mix(in srgb, var(--ebg) 75%, #0f172a 25%);
+  display: grid;
+  gap: 9px;
+}
+.sva-ex-title { font-size: 11px; font-weight: 700; color: var(--emut); text-transform: uppercase; letter-spacing: .05em; }
+
+.sva-rules { display: grid; gap: 6px; }
+.sva-rule {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  font-size: 11.5px;
+  padding: 6px 9px;
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--ebg) 40%, #0f172a 60%);
+  border: 1px solid var(--ebd);
+}
+.sva-rule-id {
+  font-family: "Courier New", monospace;
+  font-size: 9.5px;
+  font-weight: 800;
+  color: color-mix(in srgb, var(--eb) 70%, var(--emut));
+  flex-shrink: 0;
+}
+.sva-rule-body { color: var(--emut); line-height: 1.4; }
+.sva-rule--more { font-style: italic; font-size: 10.5px; color: var(--emut); opacity: .7; justify-content: center; }
+
+/* ML visual */
+.sva-ml-vis {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.sva-ml-email {
+  flex: 1 1 150px;
+  padding: 8px 11px;
+  border-radius: 7px;
+  border: 1px solid var(--ebd);
+  background: color-mix(in srgb, var(--ebg) 40%, #0f172a 60%);
+}
+.sva-ml-subj { font-size: 11px; font-weight: 800; color: color-mix(in srgb, #ef4444 80%, var(--efg)); margin-bottom: 3px; }
+.sva-ml-body { font-size: 10.5px; color: var(--emut); }
+.sva-ml-arrow { font-size: 18px; color: var(--emut); flex-shrink: 0; }
+.sva-ml-features { display: flex; flex-direction: column; gap: 4px; flex: 0 0 auto; }
+.sva-feat {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 999px;
+}
+.sva-feat--hi {
+  background: color-mix(in srgb, #ef4444 12%, transparent);
+  border: 1px solid color-mix(in srgb, #ef4444 28%, transparent);
+  color: color-mix(in srgb, #ef4444 75%, var(--efg));
+}
+.sva-ml-result {
+  flex: 0 0 auto;
+  padding: 10px 14px;
+  border-radius: 9px;
+  background: color-mix(in srgb, #ef4444 10%, transparent);
+  border: 1px solid color-mix(in srgb, #ef4444 25%, transparent);
+  text-align: center;
+  display: grid;
+  gap: 3px;
+}
+.sva-ml-label { font-size: 18px; font-weight: 900; color: color-mix(in srgb, #ef4444 85%, var(--efg)); }
+.sva-ml-conf { font-size: 11px; font-weight: 800; color: var(--emut); }
+.sva-ml-note { font-size: 9.5px; color: var(--emut); font-style: italic; }
+
+/* Props */
+.sva-props { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+@media (max-width: 500px) { .sva-props { grid-template-columns: 1fr; } }
+.sva-prop {
+  padding: 10px 13px;
+  border-radius: 10px;
+  display: grid;
+  gap: 6px;
+}
+.sva-prop--yes { background: color-mix(in srgb, var(--ea) 7%, transparent); border: 1px solid color-mix(in srgb, var(--ea) 20%, transparent); }
+.sva-prop--no { background: color-mix(in srgb, #ef4444 5%, transparent); border: 1px solid color-mix(in srgb, #ef4444 15%, transparent); }
+.sva-prop-lbl {
+  font-size: 9.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--emut);
+}
+.sva-prop-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; }
+.sva-prop-list li {
+  font-size: 11.5px;
+  color: var(--emut);
+  padding-left: 12px;
+  position: relative;
+  line-height: 1.4;
+}
+.sva-prop-list li::before {
+  content: '·';
+  position: absolute;
+  left: 3px;
+  font-weight: 900;
+  color: color-mix(in srgb, var(--ea) 60%, var(--emut));
+}
+
+/* Compare table */
+.sva-compare-table { display: grid; gap: 2px; border-radius: 11px; overflow: hidden; border: 1px solid var(--ebd); }
+.sva-ct-hd { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 2px; }
+.sva-ct-col-hd {
+  padding: 8px 12px;
+  font-size: 11px;
+  font-weight: 900;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+.sva-ct-col-hd--sym { background: color-mix(in srgb, var(--eb) 12%, transparent); color: color-mix(in srgb, var(--eb) 80%, var(--efg)); }
+.sva-ct-col-hd--ml { background: color-mix(in srgb, var(--ea) 12%, transparent); color: color-mix(in srgb, var(--ea) 80%, var(--efg)); }
+.sva-ct-row {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  gap: 2px;
+  background: transparent;
+}
+.sva-ct-row:hover .sva-ct-dim, .sva-ct-row:hover .sva-ct-val { background: color-mix(in srgb, var(--ea) 4%, color-mix(in srgb, var(--ebg) 70%, #0f172a 30%)); }
+.sva-ct-dim {
+  padding: 7px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--emut);
+  background: color-mix(in srgb, var(--ebg) 70%, #0f172a 30%);
+  line-height: 1.3;
+}
+.sva-ct-val {
+  padding: 7px 12px;
+  font-size: 11px;
+  color: var(--emut);
+  background: color-mix(in srgb, var(--ebg) 75%, #0f172a 25%);
+  line-height: 1.3;
+}
+.sva-ct-val--ml { background: color-mix(in srgb, var(--ea) 5%, color-mix(in srgb, var(--ebg) 75%, #0f172a 25%)); color: color-mix(in srgb, var(--ea) 70%, var(--emut)); }
+.sva-ct-val--good { color: color-mix(in srgb, var(--ea) 70%, var(--emut)); font-weight: 700; }
+
+.sva-shift-note {
+  padding: 12px 14px;
+  border-radius: 11px;
+  border: 1px solid var(--ebd);
+  background: color-mix(in srgb, var(--ebg) 75%, #0f172a 25%);
+  display: grid;
+  gap: 5px;
+}
+.sva-sn-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: var(--emut); }
+.sva-sn-body { font-size: 12px; color: var(--emut); line-height: 1.55; font-style: italic; }
+</style>
+
+<script>
+(function () {
+  function boot() {
+    var wrap = document.querySelector('[data-demo="03-simbolica-vs-aprendizaje"]');
+    if (!wrap || wrap.dataset.svaReady) return;
+    wrap.dataset.svaReady = '1';
+    var tabs = wrap.querySelectorAll('.sva-tab');
+    var panels = wrap.querySelectorAll('.sva-panel');
+    tabs.forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        var target = tab.dataset.stab;
+        tabs.forEach(function(t) { t.classList.remove('sva-tab--active'); });
+        panels.forEach(function(p) { p.classList.remove('sva-panel--active'); });
+        tab.classList.add('sva-tab--active');
+        var panel = wrap.querySelector('[data-spanel="' + target + '"]');
+        if (panel) panel.classList.add('sva-panel--active');
+      });
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
+  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
+})();
+</script>
