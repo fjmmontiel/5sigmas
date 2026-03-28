@@ -3,6 +3,11 @@
 {% block extrahead %}
   {{ super() }}
   {% if page %}
+
+  {% if page.meta.keywords %}
+  <meta name="keywords" content="{{ page.meta.keywords | e }}">
+  {% endif %}
+
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -34,6 +39,8 @@
     "description": "{{ page.meta.description | default(config.site_description) | e }}",
     "url": "{{ page.canonical_url }}",
     "inLanguage": "es",
+    {% if page.meta.keywords %}"keywords": "{{ page.meta.keywords | e }}",{% endif %}
+    {% if page.meta.date %}"datePublished": "{{ page.meta.date }}",{% endif %}
     "author": {
       "@type": "Person",
       "name": "Francisco Maldonado",
@@ -48,5 +55,20 @@
     {% endif %}
   }
   </script>
+
+  {% if page.parent %}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type": "ListItem", "position": 1, "name": "Inicio", "item": "{{ config.site_url }}"},
+      {"@type": "ListItem", "position": 2, "name": "{{ page.parent.title | e }}", "item": "{{ config.site_url ~ (page.parent.url or '') }}"},
+      {"@type": "ListItem", "position": 3, "name": "{{ page.title | e }}", "item": "{{ page.canonical_url }}"}
+    ]
+  }
+  </script>
+  {% endif %}
+
   {% endif %}
 {% endblock %}

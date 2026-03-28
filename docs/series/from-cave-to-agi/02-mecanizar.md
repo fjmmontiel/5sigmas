@@ -1,6 +1,8 @@
 ---
 title: Mecanizar — de Babbage a Turing
 description: "Cómo la humanidad automatizó el cálculo: de los primeros mecanismos físicos a la separación de programa y hardware, y los fundamentos teóricos de la computación moderna."
+date: 2026-03-26
+keywords: "historia computación, Alan Turing, Charles Babbage, máquina de Turing, ENIAC, Von Neumann, historia ordenadores, automatización cálculo, computación teórica"
 ---
 
 # Capítulo 2: Mecanizar (≈ 1640 - 1956)

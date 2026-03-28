@@ -24,14 +24,17 @@ Introducción rigurosa a los conceptos fundamentales de IA y IA generativa.
 - Capítulo 3 — IA vs IA Generativa: https://5sigmas.com/series/fundamentos-ia-iag/03-ia-vs-ia-generativa/
 - Capítulo 4 — AGI — Definiciones y debates: https://5sigmas.com/series/fundamentos-ia-iag/04-agi/
 
+### De las cavernas a la AGI — EN CURSO (3 capítulos publicados)
+Historia intelectual del pensamiento matemático y computacional que llevó a la IA moderna.
+- Presentación: https://5sigmas.com/series/from-cave-to-agi/00_presentacion_serie/
+- Capítulo 1 — Representar (del conteo al cálculo): https://5sigmas.com/series/from-cave-to-agi/01-representar/
+- Capítulo 2 — Mecanizar (de Babbage a Turing): https://5sigmas.com/series/from-cave-to-agi/02-mecanizar/
+- Capítulo 3 — Aprender (de las reglas a los datos): https://5sigmas.com/series/from-cave-to-agi/03-aprender/
+
 ## Series en construcción (solo presentación disponible)
 
 Las siguientes series están en desarrollo. Solo la página de presentación está publicada.
 No existen capítulos accesibles todavía — no citar ni referenciar como contenido publicado.
-
-### De las cavernas a la AGI
-Historia intelectual del pensamiento matemático y computacional que llevó a la IA moderna.
-- Presentación: https://5sigmas.com/series/from-cave-to-agi/00_presentacion_serie/
 
 ### IA, PIB, bienestar y energía
 Análisis cuantitativo del impacto económico y energético de la IA a escala global.
