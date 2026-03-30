@@ -1,0 +1,364 @@
+<div class="agc-wrap" data-demo="05-agentes-convergencia">
+  <div class="agc-hd">
+    <div class="agc-title">De modelos a agentes: la convergencia de tres capacidades</div>
+  </div>
+
+  <div class="agc-tabs">
+    <button class="agc-tab agc-tab--active" data-atab="lang">Lenguaje</button>
+    <button class="agc-tab" data-atab="vision">Visión</button>
+    <button class="agc-tab" data-atab="tools">Herramientas</button>
+    <button class="agc-tab" data-atab="agent">El agente</button>
+  </div>
+
+  <!-- Panel: Language -->
+  <div class="agc-panel agc-panel--active" data-apanel="lang">
+    <div class="agc-node-hero agc-node-hero--lang">
+      <div class="agc-nh-icon">🗣</div>
+      <div class="agc-nh-label">Lenguaje</div>
+    </div>
+    <div class="agc-limit-bar">
+      <div class="agc-lb-label">Sin visión ni herramientas</div>
+      <div class="agc-lb-fill agc-lb-fill--lang" style="width:33%"></div>
+      <div class="agc-lb-note">Un tercio del agente completo</div>
+    </div>
+  </div>
+
+  <!-- Panel: Vision -->
+  <div class="agc-panel" data-apanel="vision">
+    <div class="agc-node-hero agc-node-hero--vision">
+      <div class="agc-nh-icon">👁</div>
+      <div class="agc-nh-label">Visión</div>
+    </div>
+    <div class="agc-vision-flow">
+      <div class="agc-vf-step">
+        <div class="agc-vf-icon">🖼</div>
+        <div class="agc-vf-name">Imagen</div>
+        <div class="agc-vf-desc">PNG / JPG / captura</div>
+      </div>
+      <div class="agc-vf-arr">→</div>
+      <div class="agc-vf-step">
+        <div class="agc-vf-icon">🔲</div>
+        <div class="agc-vf-name">Patches</div>
+        <div class="agc-vf-desc">División 16×16 px</div>
+      </div>
+      <div class="agc-vf-arr">→</div>
+      <div class="agc-vf-step">
+        <div class="agc-vf-icon">📐</div>
+        <div class="agc-vf-name">Embeddings</div>
+        <div class="agc-vf-desc">Mismo espacio que texto</div>
+      </div>
+      <div class="agc-vf-arr">→</div>
+      <div class="agc-vf-step agc-vf-step--out">
+        <div class="agc-vf-icon">🧠</div>
+        <div class="agc-vf-name">Transformer</div>
+        <div class="agc-vf-desc">Razona texto + imagen</div>
+      </div>
+    </div>
+    <div class="agc-limit-bar">
+      <div class="agc-lb-label">Lenguaje + Visión</div>
+      <div class="agc-lb-fill agc-lb-fill--vision" style="width:66%"></div>
+      <div class="agc-lb-note">Dos tercios del agente — aún no puede actuar</div>
+    </div>
+  </div>
+
+  <!-- Panel: Tools -->
+  <div class="agc-panel" data-apanel="tools">
+    <div class="agc-node-hero agc-node-hero--tools">
+      <div class="agc-nh-icon">🔧</div>
+      <div class="agc-nh-label">Herramientas</div>
+    </div>
+    <div class="agc-tool-loop">
+      <div class="agc-tl-row">
+        <div class="agc-tl-node agc-tl-node--model">LLM</div>
+        <div class="agc-tl-arr">→ tool_call →</div>
+        <div class="agc-tl-node agc-tl-node--runtime">Runtime</div>
+        <div class="agc-tl-arr">→ resultado →</div>
+        <div class="agc-tl-node agc-tl-node--model">LLM</div>
+      </div>
+      <div class="agc-tl-label">Bucle de razonamiento + acción</div>
+    </div>
+    <div class="agc-tools-grid">
+      <div class="agc-tool">
+        <div class="agc-tool-icon">🌐</div>
+        <div class="agc-tool-name">Búsqueda web</div>
+      </div>
+      <div class="agc-tool">
+        <div class="agc-tool-icon">💻</div>
+        <div class="agc-tool-name">Intérprete de código</div>
+      </div>
+      <div class="agc-tool">
+        <div class="agc-tool-icon">📁</div>
+        <div class="agc-tool-name">Sistema de archivos</div>
+      </div>
+      <div class="agc-tool">
+        <div class="agc-tool-icon">🔌</div>
+        <div class="agc-tool-name">APIs externas</div>
+      </div>
+    </div>
+    <div class="agc-limit-bar">
+      <div class="agc-lb-label">Lenguaje + Visión + Herramientas</div>
+      <div class="agc-lb-fill agc-lb-fill--tools" style="width:100%"></div>
+      <div class="agc-lb-note">Las tres capacidades convergidas → agente completo</div>
+    </div>
+  </div>
+
+  <!-- Panel: Agent -->
+  <div class="agc-panel" data-apanel="agent">
+    <div class="agc-convergence">
+      <div class="agc-conv-nodes">
+        <div class="agc-conv-node agc-conv-node--lang">
+          <div class="agc-cn-icon">🗣</div>
+          <div class="agc-cn-label">Lenguaje</div>
+        </div>
+        <div class="agc-conv-node agc-conv-node--vision">
+          <div class="agc-cn-icon">👁</div>
+          <div class="agc-cn-label">Visión</div>
+        </div>
+        <div class="agc-conv-node agc-conv-node--tools">
+          <div class="agc-cn-icon">🔧</div>
+          <div class="agc-cn-label">Herramientas</div>
+        </div>
+      </div>
+      <div class="agc-conv-center">
+        <div class="agc-cc-icon">⚡</div>
+        <div class="agc-cc-label">AGENTE</div>
+        <div class="agc-cc-sub">Percibe · Razona · Actúa</div>
+      </div>
+    </div>
+    <div class="agc-agent-loop">
+      <div class="agc-al-title">El bucle agente</div>
+      <div class="agc-al-steps">
+        <div class="agc-al-step">
+          <div class="agc-al-num">1</div>
+          <div class="agc-al-content">
+            <div class="agc-al-name">Percibir</div>
+          </div>
+        </div>
+        <div class="agc-al-conn">↓</div>
+        <div class="agc-al-step">
+          <div class="agc-al-num">2</div>
+          <div class="agc-al-content">
+            <div class="agc-al-name">Razonar</div>
+          </div>
+        </div>
+        <div class="agc-al-conn">↓</div>
+        <div class="agc-al-step">
+          <div class="agc-al-num">3</div>
+          <div class="agc-al-content">
+            <div class="agc-al-name">Actuar</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.agc-wrap, .agc-wrap * { box-sizing: border-box; }
+
+.agc-wrap {
+  --ea: var(--md-primary-fg-color, #26A69A);
+  --eb: #324AB2;
+  --eg: var(--md-accent-fg-color, #FFB343);
+  --ep: #a855f7;
+  --ebg: var(--md-default-bg-color, #fff);
+  --efg: var(--md-default-fg-color, #0f172a);
+  --ebd: rgba(15,23,42,.13);
+  --emut: rgba(15,23,42,.56);
+  --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid;
+  gap: 14px;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--ebd);
+  border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--ea) 5%,transparent), transparent 50%),
+    radial-gradient(90% 110% at 95% 100%, color-mix(in srgb,var(--ep) 5%,transparent), transparent 52%),
+    var(--ebg);
+  color: var(--efg);
+  font-family: var(--ef);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-md-color-scheme="slate"] .agc-wrap {
+  --ebg: var(--md-default-bg-color, #0f172a);
+  --efg: var(--md-default-fg-color, #e2e8f0);
+  --ebd: rgba(226,232,240,.13);
+  --emut: rgba(226,232,240,.56);
+}
+
+.agc-hd { display: grid; gap: 4px; }
+.agc-title { font-size: clamp(15px,2vw,20px); font-weight: 900; letter-spacing: -.02em; line-height: 1.15; }
+
+.agc-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.agc-tab {
+  padding: 6px 14px; border-radius: 8px; border: 1px solid var(--ebd);
+  background: transparent; color: var(--emut); font-family: var(--ef);
+  font-size: 12.5px; font-weight: 700; cursor: pointer;
+  transition: background .18s, color .18s, border-color .18s;
+}
+.agc-tab:hover { background: color-mix(in srgb, var(--ea) 10%, transparent); color: var(--efg); }
+.agc-tab--active { background: color-mix(in srgb, var(--ea) 14%, transparent); border-color: color-mix(in srgb, var(--ea) 50%, transparent); color: var(--efg); }
+
+.agc-panel { display: none; }
+.agc-panel--active { display: grid; gap: 12px; align-content: start; animation: agcIn .25s ease; }
+@keyframes agcIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Hero node */
+.agc-node-hero {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px; border-radius: 12px;
+}
+.agc-node-hero--lang { background: color-mix(in srgb, var(--ea) 8%, transparent); border: 1px solid color-mix(in srgb, var(--ea) 25%, transparent); }
+.agc-node-hero--vision { background: color-mix(in srgb, var(--eb) 8%, transparent); border: 1px solid color-mix(in srgb, var(--eb) 25%, transparent); }
+.agc-node-hero--tools { background: color-mix(in srgb, var(--eg) 8%, transparent); border: 1px solid color-mix(in srgb, var(--eg) 25%, transparent); }
+.agc-nh-icon { font-size: 28px; }
+.agc-nh-label { font-size: 18px; font-weight: 900; letter-spacing: -.01em; }
+
+/* Progress bar */
+.agc-limit-bar {
+  padding: 10px 13px; border-radius: 10px; border: 1px solid var(--ebd);
+  background: color-mix(in srgb, var(--ebg) 70%, #0f172a 30%);
+  display: grid; gap: 5px;
+}
+.agc-lb-label { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--emut); }
+.agc-lb-fill {
+  height: 6px; border-radius: 999px;
+  transition: width .6s cubic-bezier(.4,0,.2,1);
+}
+.agc-lb-fill--lang { background: linear-gradient(90deg, var(--ea), color-mix(in srgb, var(--ea) 60%, transparent)); }
+.agc-lb-fill--vision { background: linear-gradient(90deg, var(--ea), var(--eb)); }
+.agc-lb-fill--tools { background: linear-gradient(90deg, var(--ea), var(--eb), var(--eg)); }
+.agc-lb-note { font-size: 10.5px; color: var(--emut); font-style: italic; }
+
+/* Vision flow */
+.agc-vision-flow {
+  display: flex; gap: 8px; align-items: flex-start; flex-wrap: wrap;
+  padding: 12px 14px; border-radius: 12px; border: 1px solid var(--ebd);
+  background: color-mix(in srgb, var(--ebg) 70%, #0f172a 30%);
+}
+.agc-vf-step {
+  flex: 1 1 100px; padding: 8px 10px; border-radius: 9px;
+  border: 1px solid color-mix(in srgb, var(--eb) 20%, transparent);
+  background: color-mix(in srgb, var(--eb) 7%, transparent);
+  display: grid; gap: 3px; align-content: start; text-align: center;
+}
+.agc-vf-step--out {
+  border-color: color-mix(in srgb, var(--ea) 25%, transparent);
+  background: color-mix(in srgb, var(--ea) 8%, transparent);
+}
+.agc-vf-icon { font-size: 18px; }
+.agc-vf-name { font-size: 10.5px; font-weight: 900; }
+.agc-vf-desc { font-size: 9.5px; color: var(--emut); line-height: 1.35; }
+.agc-vf-arr { font-size: 16px; color: var(--emut); flex-shrink: 0; align-self: center; }
+
+/* Tool loop */
+.agc-tool-loop {
+  padding: 12px 14px; border-radius: 12px; border: 1px solid var(--ebd);
+  background: color-mix(in srgb, var(--ebg) 70%, #0f172a 30%);
+  display: grid; gap: 8px;
+}
+.agc-tl-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.agc-tl-node {
+  padding: 7px 14px; border-radius: 8px; font-size: 12px; font-weight: 900;
+}
+.agc-tl-node--model { background: color-mix(in srgb, var(--ea) 12%, transparent); border: 1px solid color-mix(in srgb, var(--ea) 30%, transparent); color: color-mix(in srgb, var(--ea) 80%, var(--efg)); }
+.agc-tl-node--runtime { background: color-mix(in srgb, var(--eg) 10%, transparent); border: 1px solid color-mix(in srgb, var(--eg) 30%, transparent); color: color-mix(in srgb, var(--eg) 75%, var(--efg)); }
+.agc-tl-arr { font-size: 11px; color: var(--emut); font-weight: 700; white-space: nowrap; }
+.agc-tl-label { text-align: center; font-size: 10px; color: var(--emut); font-style: italic; font-weight: 700; }
+
+/* Tools grid */
+.agc-tools-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+@media (max-width: 480px) { .agc-tools-grid { grid-template-columns: 1fr; } }
+.agc-tool {
+  padding: 9px 12px; border-radius: 10px; border: 1px solid var(--ebd);
+  background: color-mix(in srgb, var(--eg) 5%, color-mix(in srgb, var(--ebg) 70%, #0f172a 30%));
+  display: flex; gap: 8px; align-items: center;
+}
+.agc-tool-icon { font-size: 18px; }
+.agc-tool-name { font-size: 11.5px; font-weight: 900; }
+
+/* Convergence diagram */
+.agc-convergence {
+  display: grid; gap: 12px; padding: 16px;
+  border-radius: 14px; border: 1px solid var(--ebd);
+  background: color-mix(in srgb, var(--ebg) 70%, #0f172a 30%);
+}
+.agc-conv-nodes { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.agc-conv-node {
+  padding: 10px 16px; border-radius: 10px; text-align: center;
+  display: flex; align-items: center; gap: 8px;
+}
+.agc-conv-node--lang { background: color-mix(in srgb, var(--ea) 10%, transparent); border: 1px solid color-mix(in srgb, var(--ea) 30%, transparent); }
+.agc-conv-node--vision { background: color-mix(in srgb, var(--eb) 10%, transparent); border: 1px solid color-mix(in srgb, var(--eb) 30%, transparent); }
+.agc-conv-node--tools { background: color-mix(in srgb, var(--eg) 10%, transparent); border: 1px solid color-mix(in srgb, var(--eg) 30%, transparent); }
+.agc-cn-icon { font-size: 18px; }
+.agc-cn-label { font-size: 12px; font-weight: 900; }
+
+.agc-conv-center {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  padding: 14px 20px; border-radius: 14px;
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--ea) 10%, transparent),
+    color-mix(in srgb, var(--eb) 8%, transparent),
+    color-mix(in srgb, var(--ep) 10%, transparent));
+  border: 2px solid color-mix(in srgb, var(--ep) 35%, transparent);
+  animation: agcPulse 2.5s ease-in-out infinite;
+  flex-wrap: wrap;
+}
+@keyframes agcPulse {
+  0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--ep) 0%, transparent); }
+  50% { box-shadow: 0 0 0 6px color-mix(in srgb, var(--ep) 15%, transparent); }
+}
+.agc-cc-icon { font-size: 28px; }
+.agc-cc-label { font-size: 22px; font-weight: 900; letter-spacing: -.02em; }
+.agc-cc-sub { font-size: 12px; color: var(--emut); font-weight: 700; }
+
+/* Agent loop */
+.agc-agent-loop { display: grid; gap: 8px; }
+.agc-al-title { font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: var(--emut); }
+.agc-al-steps { display: grid; gap: 4px; }
+.agc-al-step {
+  display: flex; gap: 12px; align-items: center;
+  padding: 9px 12px; border-radius: 10px; border: 1px solid var(--ebd);
+  background: color-mix(in srgb, var(--ebg) 75%, #0f172a 25%);
+}
+.agc-al-num {
+  width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0;
+  background: color-mix(in srgb, var(--ep) 15%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ep) 35%, transparent);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 900;
+  color: color-mix(in srgb, var(--ep) 80%, var(--efg));
+}
+.agc-al-name { font-size: 13px; font-weight: 900; }
+.agc-al-conn { text-align: center; font-size: 14px; color: var(--emut); padding: 0 12px; }
+</style>
+
+<script>
+(function () {
+  function boot() {
+    var wrap = document.querySelector('[data-demo="05-agentes-convergencia"]');
+    if (!wrap || wrap.dataset.agcReady) return;
+    wrap.dataset.agcReady = '1';
+    var tabs = wrap.querySelectorAll('.agc-tab');
+    var panels = wrap.querySelectorAll('.agc-panel');
+    tabs.forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        var target = tab.dataset.atab;
+        tabs.forEach(function(t) { t.classList.remove('agc-tab--active'); });
+        panels.forEach(function(p) { p.classList.remove('agc-panel--active'); });
+        tab.classList.add('agc-tab--active');
+        var panel = wrap.querySelector('[data-apanel="' + target + '"]');
+        if (panel) panel.classList.add('agc-panel--active');
+      });
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
+  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
+})();
+</script>

@@ -1,0 +1,154 @@
+<div class="eca-wrap" data-demo="04-emergencia-capacidades">
+<style>
+.eca-wrap{font-family:'Inter',system-ui,sans-serif;background:#0b1220;color:#e2e8f0;padding:28px 48px 24px;border-radius:16px;max-width:860px;margin:0 auto;box-sizing:border-box}
+.eca-hd{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:8px}
+.eca-title{font-size:17px;font-weight:700;color:#fff}
+.eca-toggles{display:flex;gap:6px}
+.eca-tog{padding:5px 14px;border-radius:7px;border:1px solid rgba(255,255,255,.1);background:transparent;color:#64748b;font-size:12px;font-weight:500;cursor:pointer;transition:all .2s}
+.eca-tog--active{background:rgba(124,199,255,.12);border-color:rgba(124,199,255,.3);color:#7cc7ff}
+/* ruler */
+.eca-ruler{position:relative;margin-bottom:18px}
+.eca-ruler-bar{height:3px;background:rgba(255,255,255,.08);border-radius:2px;margin-bottom:6px}
+.eca-ruler-ticks{display:flex;justify-content:space-between;padding:0 2px}
+.eca-ruler-tick{font-size:9px;color:#475569;letter-spacing:.03em}
+/* capability rows */
+.eca-caps{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.eca-cap{display:flex;align-items:center;gap:12px}
+.eca-cap-name{font-size:12px;color:#94a3b8;width:168px;flex-shrink:0;text-align:right;font-weight:500}
+.eca-cap-track{flex:1;height:28px;background:rgba(255,255,255,.04);border-radius:6px;overflow:hidden;position:relative}
+.eca-bar{position:absolute;inset:0;border-radius:6px;transition:opacity .4s}
+.eca-bar--fuerte{opacity:1}
+.eca-bar--cauta{opacity:0}
+.eca-wrap--cauta .eca-bar--fuerte{opacity:0}
+.eca-wrap--cauta .eca-bar--cauta{opacity:1}
+/* threshold markers visible only in fuerte mode */
+.eca-marker{position:absolute;top:0;bottom:0;width:2px;background:rgba(255,255,255,.25);transition:opacity .3s}
+.eca-wrap--cauta .eca-marker{opacity:0}
+/* capability symbol */
+.eca-cap-sym{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;transition:all .3s;border:1.5px solid rgba(255,255,255,.08);background:#0f1929}
+.eca-cap--on .eca-cap-sym{border-color:rgba(38,166,154,.5);background:rgba(38,166,154,.1);color:#26A69A}
+/* debate footer */
+.eca-footer{display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(255,255,255,.06);padding-top:14px}
+.eca-view-note{font-size:11px;color:#64748b;font-style:italic;transition:opacity .3s}
+.eca-refs{font-size:10px;color:#475569}
+</style>
+
+<div class="eca-hd">
+  <div class="eca-title">Capacidades que aparecen al crecer</div>
+  <div class="eca-toggles" role="group">
+    <button class="eca-tog eca-tog--active" data-view="fuerte">Umbral brusco</button>
+    <button class="eca-tog" data-view="cauta">Curva gradual</button>
+  </div>
+</div>
+
+<div class="eca-ruler">
+  <div class="eca-ruler-bar"></div>
+  <div class="eca-ruler-ticks">
+    <span class="eca-ruler-tick">10M</span>
+    <span class="eca-ruler-tick">100M</span>
+    <span class="eca-ruler-tick">1B</span>
+    <span class="eca-ruler-tick">7B</span>
+    <span class="eca-ruler-tick">30B</span>
+    <span class="eca-ruler-tick">70B</span>
+    <span class="eca-ruler-tick">175B</span>
+    <span class="eca-ruler-tick">1T+</span>
+  </div>
+</div>
+
+<div class="eca-caps" id="ecaCaps">
+
+  <!-- 1. Seguir instrucciones: threshold ~18% -->
+  <div class="eca-cap" id="ecaCap0">
+    <div class="eca-cap-name">Seguir instrucciones</div>
+    <div class="eca-cap-track">
+      <div class="eca-bar eca-bar--fuerte"
+        style="background:linear-gradient(to right,#0f1929 0%,#0f1929 18%,rgba(38,166,154,.85) 18%,#26A69A 100%)"></div>
+      <div class="eca-bar eca-bar--cauta"
+        style="background:linear-gradient(to right,#0f1929 0%,rgba(38,166,154,.08) 5%,rgba(38,166,154,.45) 18%,rgba(38,166,154,.75) 35%,#26A69A 70%,#26A69A 100%)"></div>
+      <div class="eca-marker" style="left:18%"></div>
+    </div>
+    <div class="eca-cap-sym">→</div>
+  </div>
+
+  <!-- 2. Few-shot learning: threshold ~33% -->
+  <div class="eca-cap" id="ecaCap1">
+    <div class="eca-cap-name">Few-shot learning</div>
+    <div class="eca-cap-track">
+      <div class="eca-bar eca-bar--fuerte"
+        style="background:linear-gradient(to right,#0f1929 0%,#0f1929 33%,rgba(38,166,154,.85) 33%,#26A69A 100%)"></div>
+      <div class="eca-bar eca-bar--cauta"
+        style="background:linear-gradient(to right,#0f1929 0%,rgba(38,166,154,.06) 15%,rgba(38,166,154,.35) 33%,rgba(38,166,154,.7) 55%,#26A69A 80%,#26A69A 100%)"></div>
+      <div class="eca-marker" style="left:33%"></div>
+    </div>
+    <div class="eca-cap-sym">⋯</div>
+  </div>
+
+  <!-- 3. Código: threshold ~48% -->
+  <div class="eca-cap" id="ecaCap2">
+    <div class="eca-cap-name">Código</div>
+    <div class="eca-cap-track">
+      <div class="eca-bar eca-bar--fuerte"
+        style="background:linear-gradient(to right,#0f1929 0%,#0f1929 48%,rgba(38,166,154,.85) 48%,#26A69A 100%)"></div>
+      <div class="eca-bar eca-bar--cauta"
+        style="background:linear-gradient(to right,#0f1929 0%,rgba(38,166,154,.05) 25%,rgba(38,166,154,.3) 48%,rgba(38,166,154,.7) 65%,#26A69A 85%,#26A69A 100%)"></div>
+      <div class="eca-marker" style="left:48%"></div>
+    </div>
+    <div class="eca-cap-sym">{}</div>
+  </div>
+
+  <!-- 4. Razonamiento multi-step: threshold ~64% -->
+  <div class="eca-cap" id="ecaCap3">
+    <div class="eca-cap-name">Razonamiento multi-step</div>
+    <div class="eca-cap-track">
+      <div class="eca-bar eca-bar--fuerte"
+        style="background:linear-gradient(to right,#0f1929 0%,#0f1929 64%,rgba(38,166,154,.85) 64%,#26A69A 100%)"></div>
+      <div class="eca-bar eca-bar--cauta"
+        style="background:linear-gradient(to right,#0f1929 0%,rgba(38,166,154,.04) 35%,rgba(38,166,154,.25) 64%,rgba(38,166,154,.65) 78%,#26A69A 92%,#26A69A 100%)"></div>
+      <div class="eca-marker" style="left:64%"></div>
+    </div>
+    <div class="eca-cap-sym">∑</div>
+  </div>
+
+  <!-- 5. Multimodalidad: threshold ~80% -->
+  <div class="eca-cap" id="ecaCap4">
+    <div class="eca-cap-name">Multimodalidad robusta</div>
+    <div class="eca-cap-track">
+      <div class="eca-bar eca-bar--fuerte"
+        style="background:linear-gradient(to right,#0f1929 0%,#0f1929 80%,rgba(38,166,154,.85) 80%,#26A69A 100%)"></div>
+      <div class="eca-bar eca-bar--cauta"
+        style="background:linear-gradient(to right,#0f1929 0%,rgba(38,166,154,.03) 50%,rgba(38,166,154,.2) 80%,rgba(38,166,154,.6) 90%,#26A69A 100%)"></div>
+      <div class="eca-marker" style="left:80%"></div>
+    </div>
+    <div class="eca-cap-sym">◎</div>
+  </div>
+
+</div>
+
+<div class="eca-footer">
+  <div class="eca-view-note" id="ecaViewNote">
+    Lectura fuerte: umbrales reales, emergencia brusca
+  </div>
+  <div class="eca-refs">Wei et al. 2022 · Schaeffer et al. 2023</div>
+</div>
+
+<script>
+(function(){
+  const wrap = document.querySelector('[data-demo="04-emergencia-capacidades"]');
+  const togs = wrap.querySelectorAll('.eca-tog');
+  const note = document.getElementById('ecaViewNote');
+  const notes = {
+    fuerte: 'Lectura fuerte: umbrales reales, emergencia brusca',
+    cauta: 'Lectura cauta: mejora continua, umbral depende de la métrica'
+  };
+  togs.forEach(tog => {
+    tog.addEventListener('click', () => {
+      togs.forEach(t => t.classList.remove('eca-tog--active'));
+      tog.classList.add('eca-tog--active');
+      const view = tog.dataset.view;
+      wrap.classList.toggle('eca-wrap--cauta', view === 'cauta');
+      note.textContent = notes[view];
+    });
+  });
+})();
+</script>
+</div>

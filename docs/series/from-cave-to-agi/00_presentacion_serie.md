@@ -32,8 +32,14 @@ En esta serie exploraremos: <br>
 - **Antes de la era LLM:** perceptrón y límites, auge/caída de IA simbólica, NLP estadístico (n-grams, HMM/CRF) y renacimiento neuronal impulsado por datos, GPUs, benchmarks y escala.<br>
 
 
-### 4. Escalar (≈ 2012 – hoy)
+### 4. Escalar (≈ 2012 – 2024)
 - **Escala como multiplicador:** deep learning despega por más datos/cómputo y mejores representaciones. 2012 marca el cambio de régimen.
 - **Transformers y modelos fundacionales:** la atención habilita preentrenamiento masivo y reutilización generalista. Las leyes de escalado y el alineamiento con el humano lo convierte en un punto de inflexión que deriva en el nacimiento de ChatGPT.
-- **De “responder” a “actuar” y unificar modalidades:** herramientas/agentes, multimodalidad (texto/imagen/audio)
-- **Proximos pasos**: modelos del mundo (simulación/planificación) y líneas post-Transformer (Titans, nested learning, etc.).<br>
+- **De “responder” a “actuar” y unificar modalidades:** herramientas/agentes, multimodalidad (texto/imagen/audio).<br>
+
+
+### 5. Más allá del Transformer (≈ 2022 – Q1 2026)
+- **Los límites del escalado puro:** por qué el Transformer no basta solo para describir hacia dónde se mueve la frontera.
+- **Memoria e inferencia activa:** contexto largo, memoria externa y test-time compute como nuevas palancas más allá de los parámetros.
+- **Agentes, herramientas y búsqueda:** sistemas que actúan, planifican y recuperan información del mundo real.
+- **Modelos del mundo y robótica fundacional:** representaciones internas que simulan y predicen, aplicadas al control físico.<br>

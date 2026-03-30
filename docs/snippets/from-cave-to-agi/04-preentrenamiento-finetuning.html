@@ -1,0 +1,325 @@
+<div class="pft-wrap" data-demo="04-preentrenamiento-finetuning">
+  <div class="pft-hd">
+    <div class="pft-title">El paradigma preentrenamiento + fine-tuning</div>
+  </div>
+
+  <div class="pft-tabs">
+    <button class="pft-tab pft-tab--active" data-ptab="pretrain">Fase 1 — Preentrenamiento</button>
+    <button class="pft-tab" data-ptab="finetune">Fase 2 — Fine-tuning</button>
+    <button class="pft-tab" data-ptab="why">Por qué funciona</button>
+  </div>
+
+  <!-- Phase 1: Pretraining -->
+  <div class="pft-panel pft-panel--active" data-ppanel="pretrain">
+    <div class="pft-phase-badge pft-phase-badge--pre">Fase 1</div>
+    <div class="pft-phase-title">Preentrenamiento masivo no supervisado</div>
+
+    <div class="pft-flow">
+      <div class="pft-data-sources">
+        <div class="pft-ds-title">Corpus de entrenamiento</div>
+        <div class="pft-ds-grid">
+          <div class="pft-ds-item">📚 Libros<div class="pft-ds-vol">~100B tokens</div></div>
+          <div class="pft-ds-item">🌐 Web<div class="pft-ds-vol">~1T+ tokens</div></div>
+          <div class="pft-ds-item">💻 Código<div class="pft-ds-vol">~200B tokens</div></div>
+          <div class="pft-ds-item">📰 Artículos<div class="pft-ds-vol">~50B tokens</div></div>
+        </div>
+      </div>
+      <div class="pft-flow-arr">→</div>
+      <div class="pft-train-box">
+        <div class="pft-train-title">Entrenamiento</div>
+        <div class="pft-train-objective">Objetivo: predecir el token siguiente</div>
+        <div class="pft-pred-example">
+          <div class="pft-pred-row">
+            <div class="pft-pred-ctx">La capital de Francia es</div>
+            <div class="pft-pred-target">→ <span class="pft-pred-word">París</span></div>
+          </div>
+          <div class="pft-pred-row">
+            <div class="pft-pred-ctx">def fibonacci(n): if n &lt;= 1:</div>
+            <div class="pft-pred-target">→ <span class="pft-pred-word">return</span></div>
+          </div>
+        </div>
+        <div class="pft-train-scale">GPUs · semanas · billones de operaciones</div>
+      </div>
+      <div class="pft-flow-arr">→</div>
+      <div class="pft-base-model">
+        <div class="pft-bm-icon">🧠</div>
+        <div class="pft-bm-title">Modelo base</div>
+        <div class="pft-bm-desc">Billones de parámetros que capturan conocimiento general del lenguaje y del mundo</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 2: Fine-tuning -->
+  <div class="pft-panel" data-ppanel="finetune">
+    <div class="pft-phase-badge pft-phase-badge--ft">Fase 2</div>
+    <div class="pft-phase-title">Fine-tuning — especialización con pocos datos</div>
+
+    <div class="pft-ft-grid">
+      <div class="pft-ft-center">
+        <div class="pft-bm-icon">🧠</div>
+        <div class="pft-ft-center-lbl">Modelo base</div>
+        <div class="pft-ft-center-sub">Mismos pesos de partida</div>
+      </div>
+      <div class="pft-ft-tasks">
+        <div class="pft-ft-task">
+          <div class="pft-ft-task-hd pft-ft-task-hd--chat">
+            <div class="pft-ft-task-icon">💬</div>
+            <div class="pft-ft-task-name">ChatGPT / Claude</div>
+          </div>
+        </div>
+        <div class="pft-ft-task">
+          <div class="pft-ft-task-hd pft-ft-task-hd--code">
+            <div class="pft-ft-task-icon">💻</div>
+            <div class="pft-ft-task-name">Copilot / Codex</div>
+          </div>
+        </div>
+        <div class="pft-ft-task">
+          <div class="pft-ft-task-hd pft-ft-task-hd--med">
+            <div class="pft-ft-task-icon">🏥</div>
+            <div class="pft-ft-task-name">Med-PaLM / BioGPT</div>
+          </div>
+        </div>
+        <div class="pft-ft-task">
+          <div class="pft-ft-task-hd pft-ft-task-hd--legal">
+            <div class="pft-ft-task-icon">⚖</div>
+            <div class="pft-ft-task-name">Harvey / LexGPT</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pft-cost-compare">
+      <div class="pft-cc-col pft-cc-col--pre">
+        <div class="pft-cc-label">Preentrenamiento</div>
+        <div class="pft-cc-val">$10M – $100M</div>
+      </div>
+      <div class="pft-cc-vs">vs</div>
+      <div class="pft-cc-col pft-cc-col--ft">
+        <div class="pft-cc-label">Fine-tuning</div>
+        <div class="pft-cc-val">$1K – $100K</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Why it works -->
+  <div class="pft-panel" data-ppanel="why">
+    <div class="pft-phase-badge pft-phase-badge--why">Concepto clave</div>
+    <div class="pft-phase-title">Por qué funciona: transferencia de representaciones</div>
+
+    <div class="pft-layers">
+      <div class="pft-layer-title">Qué aprende cada nivel de la red</div>
+      <div class="pft-layer-vis">
+        <div class="pft-layer pft-layer--surface">
+          <div class="pft-layer-name">Capas superficiales</div>
+          <div class="pft-layer-learns">Sintaxis · tokens · morfología · n-gramas frecuentes</div>
+        </div>
+        <div class="pft-layer pft-layer--middle">
+          <div class="pft-layer-name">Capas intermedias</div>
+          <div class="pft-layer-learns">Semántica · correferencia · relaciones entre entidades · estructura del discurso</div>
+        </div>
+        <div class="pft-layer pft-layer--deep">
+          <div class="pft-layer-name">Capas profundas</div>
+          <div class="pft-layer-learns">Razonamiento · conocimiento del mundo · relaciones causales · sentido común</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pft-why-grid">
+      <div class="pft-why-item">
+        <div class="pft-why-name">Regularización gratuita</div>
+      </div>
+      <div class="pft-why-item">
+        <div class="pft-why-name">Pocos datos suficientes</div>
+      </div>
+      <div class="pft-why-item">
+        <div class="pft-why-name">Reutilizabilidad del capital</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.pft-wrap, .pft-wrap * { box-sizing: border-box; }
+
+.pft-wrap {
+  --ea: var(--md-primary-fg-color, #26A69A);
+  --eb: #324AB2;
+  --eg: var(--md-accent-fg-color, #FFB343);
+  --ebg: var(--md-default-bg-color, #fff);
+  --efg: var(--md-default-fg-color, #0f172a);
+  --ebd: rgba(15,23,42,.13);
+  --emut: rgba(15,23,42,.56);
+  --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid;
+  gap: 14px;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--ebd);
+  border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--ea) 5%,transparent), transparent 50%),
+    radial-gradient(90% 110% at 95% 100%, color-mix(in srgb,var(--eb) 5%,transparent), transparent 52%),
+    var(--ebg);
+  color: var(--efg);
+  font-family: var(--ef);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-md-color-scheme="slate"] .pft-wrap {
+  --ebg: var(--md-default-bg-color, #0f172a);
+  --efg: var(--md-default-fg-color, #e2e8f0);
+  --ebd: rgba(226,232,240,.13);
+  --emut: rgba(226,232,240,.56);
+}
+
+.pft-hd { display: grid; gap: 4px; }
+.pft-title { font-size: clamp(15px,2vw,20px); font-weight: 900; letter-spacing: -.02em; line-height: 1.15; }
+.pft-sub { font-size: 13px; color: var(--emut); line-height: 1.5; max-width: 68ch; }
+
+.pft-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.pft-tab {
+  padding: 6px 14px; border-radius: 8px; border: 1px solid var(--ebd);
+  background: transparent; color: var(--emut); font-family: var(--ef);
+  font-size: 12px; font-weight: 700; cursor: pointer;
+  transition: background .18s, color .18s, border-color .18s;
+}
+.pft-tab:hover { background: color-mix(in srgb, var(--ea) 10%, transparent); color: var(--efg); }
+.pft-tab--active { background: color-mix(in srgb, var(--ea) 14%, transparent); border-color: color-mix(in srgb, var(--ea) 50%, transparent); color: var(--efg); }
+
+.pft-panel { display: none; }
+.pft-panel--active { display: grid; gap: 12px; align-content: start; animation: pftIn .25s ease; }
+@keyframes pftIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+.pft-phase-badge {
+  font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .08em;
+  padding: 3px 10px; border-radius: 999px; width: fit-content;
+}
+.pft-phase-badge--pre { background: color-mix(in srgb, var(--ea) 14%, transparent); border: 1px solid color-mix(in srgb, var(--ea) 35%, transparent); color: color-mix(in srgb, var(--ea) 80%, var(--efg)); }
+.pft-phase-badge--ft { background: color-mix(in srgb, var(--eb) 12%, transparent); border: 1px solid color-mix(in srgb, var(--eb) 30%, transparent); color: color-mix(in srgb, var(--eb) 80%, var(--efg)); }
+.pft-phase-badge--why { background: color-mix(in srgb, var(--eg) 12%, transparent); border: 1px solid color-mix(in srgb, var(--eg) 30%, transparent); color: color-mix(in srgb, var(--eg) 75%, var(--efg)); }
+.pft-phase-title { font-size: 15px; font-weight: 900; }
+.pft-phase-desc { font-size: 12.5px; color: var(--emut); line-height: 1.5; }
+
+/* Pretraining flow */
+.pft-flow { display: flex; gap: 10px; align-items: flex-start; flex-wrap: wrap; }
+.pft-data-sources, .pft-train-box, .pft-base-model {
+  flex: 1 1 160px;
+  padding: 11px 13px;
+  border-radius: 11px;
+  border: 1px solid var(--ebd);
+  background: color-mix(in srgb, var(--ebg) 70%, #0f172a 30%);
+  display: grid;
+  gap: 7px;
+  align-content: start;
+}
+.pft-flow-arr { font-size: 22px; color: var(--emut); flex-shrink: 0; align-self: center; }
+.pft-ds-title, .pft-train-title, .pft-bm-title { font-size: 11px; font-weight: 900; }
+.pft-ds-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+.pft-ds-item {
+  padding: 5px 7px; border-radius: 7px;
+  font-size: 11px; font-weight: 700;
+  background: color-mix(in srgb, var(--ea) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ea) 18%, transparent);
+  color: var(--emut);
+}
+.pft-ds-vol { font-size: 9px; color: color-mix(in srgb, var(--ea) 60%, var(--emut)); margin-top: 2px; }
+.pft-ds-total { font-size: 9.5px; color: var(--emut); font-style: italic; }
+.pft-train-objective { font-size: 10.5px; font-weight: 700; color: color-mix(in srgb, var(--eg) 75%, var(--emut)); }
+.pft-pred-example { display: grid; gap: 4px; }
+.pft-pred-row { display: flex; gap: 6px; align-items: baseline; flex-wrap: wrap; }
+.pft-pred-ctx { font-size: 10px; font-family: "Courier New", monospace; color: var(--emut); }
+.pft-pred-target { font-size: 10px; color: var(--emut); }
+.pft-pred-word { font-weight: 900; color: color-mix(in srgb, var(--ea) 85%, var(--efg)); font-family: "Courier New", monospace; }
+.pft-train-scale { font-size: 9.5px; color: var(--emut); font-style: italic; }
+.pft-bm-icon { font-size: 24px; text-align: center; }
+.pft-bm-desc { font-size: 11px; color: var(--emut); line-height: 1.4; }
+.pft-bm-note { font-size: 10px; color: color-mix(in srgb, #ef4444 65%, var(--emut)); font-style: italic; border-left: 2px solid color-mix(in srgb, #ef4444 30%, transparent); padding-left: 6px; }
+
+/* Fine-tuning grid */
+.pft-ft-grid { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.pft-ft-center {
+  flex: 0 0 auto;
+  padding: 14px 18px;
+  border-radius: 12px;
+  border: 2px solid color-mix(in srgb, var(--ea) 35%, transparent);
+  background: color-mix(in srgb, var(--ea) 8%, transparent);
+  text-align: center;
+  display: grid;
+  gap: 4px;
+}
+.pft-ft-center-lbl { font-size: 12px; font-weight: 900; }
+.pft-ft-center-sub { font-size: 9.5px; color: var(--emut); }
+.pft-ft-tasks { flex: 1 1 300px; display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+.pft-ft-task {
+  padding: 9px 11px; border-radius: 10px; border: 1px solid var(--ebd);
+  background: color-mix(in srgb, var(--ebg) 70%, #0f172a 30%);
+  display: grid; gap: 4px; align-content: start;
+}
+.pft-ft-task-hd { display: flex; gap: 6px; align-items: center; }
+.pft-ft-task-icon { font-size: 14px; }
+.pft-ft-task-name { font-size: 11px; font-weight: 900; }
+.pft-ft-task-hd--chat { color: color-mix(in srgb, var(--ea) 80%, var(--efg)); }
+.pft-ft-task-hd--code { color: color-mix(in srgb, var(--eb) 80%, var(--efg)); }
+.pft-ft-task-hd--med { color: color-mix(in srgb, #22c55e 70%, var(--efg)); }
+.pft-ft-task-hd--legal { color: color-mix(in srgb, var(--eg) 75%, var(--efg)); }
+.pft-ft-task-data { font-size: 9.5px; color: var(--emut); }
+.pft-ft-task-result { font-size: 10px; color: var(--emut); line-height: 1.35; font-style: italic; }
+
+.pft-cost-compare {
+  display: flex; gap: 0; border-radius: 11px; border: 1px solid var(--ebd); overflow: hidden;
+}
+.pft-cc-col { flex: 1; padding: 11px 14px; display: grid; gap: 5px; align-content: start; }
+.pft-cc-col--pre { background: color-mix(in srgb, var(--eb) 7%, color-mix(in srgb, var(--ebg) 70%, #0f172a 30%)); }
+.pft-cc-col--ft { background: color-mix(in srgb, var(--ea) 7%, color-mix(in srgb, var(--ebg) 70%, #0f172a 30%)); border-left: 1px solid var(--ebd); }
+.pft-cc-vs { flex: 0 0 auto; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 900; color: var(--emut); padding: 0 8px; background: color-mix(in srgb, var(--ebg) 70%, #0f172a 30%); }
+.pft-cc-label { font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--emut); }
+.pft-cc-val { font-size: 18px; font-weight: 900; letter-spacing: -.01em; }
+.pft-cc-note { font-size: 10.5px; color: var(--emut); line-height: 1.4; font-style: italic; }
+
+/* Layers */
+.pft-layers { display: grid; gap: 9px; }
+.pft-layer-title { font-size: 10.5px; font-weight: 800; text-transform: uppercase; color: var(--emut); }
+.pft-layer-vis { display: grid; gap: 5px; }
+.pft-layer {
+  padding: 9px 13px; border-radius: 9px; display: flex; gap: 10px; align-items: baseline;
+}
+.pft-layer--surface { background: color-mix(in srgb, var(--ea) 7%, transparent); border: 1px solid color-mix(in srgb, var(--ea) 18%, transparent); }
+.pft-layer--middle { background: color-mix(in srgb, var(--eb) 6%, transparent); border: 1px solid color-mix(in srgb, var(--eb) 16%, transparent); }
+.pft-layer--deep { background: color-mix(in srgb, var(--eg) 6%, transparent); border: 1px solid color-mix(in srgb, var(--eg) 16%, transparent); }
+.pft-layer-name { font-size: 11px; font-weight: 900; flex-shrink: 0; min-width: 130px; }
+.pft-layer-learns { font-size: 11.5px; color: var(--emut); line-height: 1.4; }
+
+/* Why grid */
+.pft-why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; }
+@media (max-width: 580px) { .pft-why-grid { grid-template-columns: 1fr; } }
+.pft-why-item { padding: 10px 13px; border-radius: 10px; border: 1px solid var(--ebd); background: color-mix(in srgb, var(--ebg) 75%, #0f172a 25%); display: grid; gap: 6px; }
+.pft-why-name { font-size: 12px; font-weight: 900; }
+.pft-why-body { font-size: 11.5px; color: var(--emut); line-height: 1.45; }
+</style>
+
+<script>
+(function () {
+  function boot() {
+    var wrap = document.querySelector('[data-demo="04-preentrenamiento-finetuning"]');
+    if (!wrap || wrap.dataset.pftReady) return;
+    wrap.dataset.pftReady = '1';
+    var tabs = wrap.querySelectorAll('.pft-tab');
+    var panels = wrap.querySelectorAll('.pft-panel');
+    tabs.forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        var target = tab.dataset.ptab;
+        tabs.forEach(function(t) { t.classList.remove('pft-tab--active'); });
+        panels.forEach(function(p) { p.classList.remove('pft-panel--active'); });
+        tab.classList.add('pft-tab--active');
+        var panel = wrap.querySelector('[data-ppanel="' + target + '"]');
+        if (panel) panel.classList.add('pft-panel--active');
+      });
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
+  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
+})();
+</script>

@@ -1,0 +1,205 @@
+<div class="les-wrap" data-demo="04-leyes-escala">
+<style>
+.les-wrap{font-family:'Inter',system-ui,sans-serif;background:#0b1220;color:#e2e8f0;padding:32px 48px 28px;border-radius:16px;max-width:860px;margin:0 auto;box-sizing:border-box}
+.les-hd{margin-bottom:20px}
+.les-title{font-size:18px;font-weight:700;color:#fff;margin-bottom:6px}
+.les-sub{font-size:13px;color:#94a3b8;line-height:1.55;max-width:720px}
+.les-tabs{display:flex;gap:8px;margin-bottom:20px}
+.les-tab{padding:7px 18px;border-radius:8px;border:1px solid rgba(255,255,255,.1);background:transparent;color:#94a3b8;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s}
+.les-tab--active{background:rgba(124,199,255,.12);border-color:rgba(124,199,255,.3);color:#7cc7ff}
+.les-body{display:grid;grid-template-columns:1fr 180px;gap:20px;align-items:start}
+.les-chart-box{position:relative}
+.les-svg{width:100%;display:block}
+.les-ylab{position:absolute;left:-38px;top:50%;transform:translateY(-50%) rotate(-90deg);font-size:10px;color:#64748b;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+.les-info{display:flex;flex-direction:column;gap:10px}
+.les-formula-box{background:rgba(124,199,255,.06);border:1px solid rgba(124,199,255,.15);border-radius:12px;padding:16px}
+.les-formula-label{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#64748b;margin-bottom:8px}
+.les-formula-eq{font-family:monospace;font-size:14px;font-weight:700;color:#7cc7ff;margin-bottom:4px;line-height:1.4}
+.les-formula-alpha{font-family:monospace;font-size:22px;font-weight:900;color:#7cc7ff;display:block}
+.les-formula-ref{font-size:10px;color:#64748b}
+</style>
+
+<div class="les-hd">
+  <div class="les-title">Leyes de escala: el error baja de forma predecible</div>
+</div>
+
+<div class="les-tabs" role="tablist">
+  <button class="les-tab les-tab--active" data-ltab="params" role="tab">Parámetros</button>
+  <button class="les-tab" data-ltab="data" role="tab">Datos</button>
+  <button class="les-tab" data-ltab="compute" role="tab">Cómputo</button>
+</div>
+
+<div class="les-body">
+  <div class="les-chart-box">
+    <div class="les-ylab">Pérdida (log)</div>
+    <svg class="les-svg" viewBox="0 0 500 260" xmlns="http://www.w3.org/2000/svg">
+      <!-- grid horizontals -->
+      <line x1="64" y1="28" x2="488" y2="28" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
+      <line x1="64" y1="70" x2="488" y2="70" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
+      <line x1="64" y1="118" x2="488" y2="118" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
+      <line x1="64" y1="168" x2="488" y2="168" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
+      <line x1="64" y1="218" x2="488" y2="218" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
+      <!-- grid verticals -->
+      <line x1="124" y1="28" x2="124" y2="232" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+      <line x1="184" y1="28" x2="184" y2="232" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+      <line x1="244" y1="28" x2="244" y2="232" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+      <line x1="304" y1="28" x2="304" y2="232" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+      <line x1="364" y1="28" x2="364" y2="232" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+      <line x1="424" y1="28" x2="424" y2="232" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+      <!-- axes -->
+      <line x1="64" y1="28" x2="64" y2="232" stroke="rgba(255,255,255,.2)" stroke-width="1.5"/>
+      <line x1="64" y1="232" x2="488" y2="232" stroke="rgba(255,255,255,.2)" stroke-width="1.5"/>
+      <!-- y-axis labels -->
+      <text x="58" y="32" text-anchor="end" font-size="9" fill="#64748b">4.0</text>
+      <text x="58" y="74" text-anchor="end" font-size="9" fill="#64748b">3.0</text>
+      <text x="58" y="122" text-anchor="end" font-size="9" fill="#64748b">2.0</text>
+      <text x="58" y="172" text-anchor="end" font-size="9" fill="#64748b">1.5</text>
+      <text x="58" y="222" text-anchor="end" font-size="9" fill="#64748b">1.2</text>
+      <!-- x-axis labels (change via JS) -->
+      <text class="les-x0" x="64" y="246" text-anchor="middle" font-size="9" fill="#64748b">10M</text>
+      <text class="les-x1" x="124" y="246" text-anchor="middle" font-size="9" fill="#64748b">100M</text>
+      <text class="les-x2" x="184" y="246" text-anchor="middle" font-size="9" fill="#64748b">1B</text>
+      <text class="les-x3" x="244" y="246" text-anchor="middle" font-size="9" fill="#64748b">10B</text>
+      <text class="les-x4" x="304" y="246" text-anchor="middle" font-size="9" fill="#64748b">100B</text>
+      <text class="les-x5" x="364" y="246" text-anchor="middle" font-size="9" fill="#64748b">1T</text>
+      <text class="les-x6" x="424" y="246" text-anchor="middle" font-size="9" fill="#64748b">10T</text>
+      <!-- power law lines (3 tabs) -->
+      <!-- compute (orange, gentle): alpha=0.050 -->
+      <line id="lesLineCompute" x1="64" y1="28" x2="488" y2="142"
+        stroke="#FFB343" stroke-width="2" stroke-dasharray="6,4"
+        opacity="0.22"/>
+      <!-- params (blue, moderate): alpha=0.076 -->
+      <line id="lesLineParams" x1="64" y1="28" x2="488" y2="188"
+        stroke="#7cc7ff" stroke-width="2.5"
+        opacity="1"/>
+      <!-- data (teal, steeper): alpha=0.095 -->
+      <line id="lesLineData" x1="64" y1="28" x2="488" y2="214"
+        stroke="#26A69A" stroke-width="2" stroke-dasharray="6,4"
+        opacity="0.22"/>
+      <!-- reference dots (params, shown by default) -->
+      <g id="lesDots">
+        <!-- GPT-1 117M -->
+        <circle cx="130" cy="68" r="5" fill="#FFB343"/>
+        <text x="138" y="65" font-size="9" fill="#FFB343" font-weight="600">GPT-1</text>
+        <!-- GPT-2 1.5B -->
+        <circle cx="192" cy="97" r="5" fill="#FFB343"/>
+        <text x="200" y="94" font-size="9" fill="#FFB343" font-weight="600">GPT-2</text>
+        <!-- GPT-3 175B -->
+        <circle cx="314" cy="152" r="5" fill="#FFB343"/>
+        <text x="322" y="149" font-size="9" fill="#FFB343" font-weight="600">GPT-3</text>
+        <!-- Frontier -->
+        <circle cx="390" cy="177" r="5" fill="#FFB343"/>
+        <text x="398" y="174" font-size="9" fill="#FFB343" font-weight="600">Frontier</text>
+      </g>
+      <!-- x-axis title -->
+      <text id="lesXTitle" x="276" y="260" text-anchor="middle" font-size="10" fill="#64748b" font-style="italic">Número de parámetros (log)</text>
+    </svg>
+  </div>
+
+  <div class="les-info">
+    <div class="les-formula-box">
+      <div class="les-formula-label">Ley de escala</div>
+      <div class="les-formula-eq">L(x) <span style="font-size:16px">~</span> x<sup>-α</sup></div>
+      <div class="les-formula-alpha" id="lesEq">α = 0.076</div>
+      <div class="les-formula-ref" id="lesRef">Kaplan et al., 2020 · Parámetros</div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const tabs = document.querySelectorAll('.les-tab');
+  const lineParams = document.getElementById('lesLineParams');
+  const lineData = document.getElementById('lesLineData');
+  const lineCompute = document.getElementById('lesLineCompute');
+  const dots = document.getElementById('lesDots');
+  const eq = document.getElementById('lesEq');
+  const ref = document.getElementById('lesRef');
+  const xTitle = document.getElementById('lesXTitle');
+  const xLabels = [
+    document.querySelector('.les-x0'),
+    document.querySelector('.les-x1'),
+    document.querySelector('.les-x2'),
+    document.querySelector('.les-x3'),
+    document.querySelector('.les-x4'),
+    document.querySelector('.les-x5'),
+    document.querySelector('.les-x6'),
+  ];
+
+  const config = {
+    params: {
+      eq: 'α = 0.076',
+      ref: 'Kaplan et al., 2020 · Parámetros',
+      xTitle: 'Número de parámetros (log)',
+      xLabs: ['10M','100M','1B','10B','100B','1T','10T'],
+      dotsHTML: `
+        <circle cx="130" cy="68" r="5" fill="#FFB343"/>
+        <text x="138" y="65" font-size="9" fill="#FFB343" font-weight="600">GPT-1</text>
+        <circle cx="192" cy="97" r="5" fill="#FFB343"/>
+        <text x="200" y="94" font-size="9" fill="#FFB343" font-weight="600">GPT-2</text>
+        <circle cx="314" cy="152" r="5" fill="#FFB343"/>
+        <text x="322" y="149" font-size="9" fill="#FFB343" font-weight="600">GPT-3</text>
+        <circle cx="390" cy="177" r="5" fill="#FFB343"/>
+        <text x="398" y="174" font-size="9" fill="#FFB343" font-weight="600">Frontier</text>`,
+      active: lineParams, others: [lineData, lineCompute]
+    },
+    data: {
+      eq: 'α = 0.095',
+      ref: 'Kaplan et al., 2020 · Tokens',
+      xTitle: 'Tokens de entrenamiento (log)',
+      xLabs: ['1B','10B','100B','1T','10T','100T','1Q'],
+      dotsHTML: `
+        <circle cx="184" cy="105" r="5" fill="#FFB343"/>
+        <text x="192" y="102" font-size="9" fill="#FFB343" font-weight="600">C4</text>
+        <circle cx="244" cy="128" r="5" fill="#FFB343"/>
+        <text x="252" y="125" font-size="9" fill="#FFB343" font-weight="600">GPT-3</text>
+        <circle cx="304" cy="158" r="5" fill="#FFB343"/>
+        <text x="312" y="155" font-size="9" fill="#FFB343" font-weight="600">Chinchilla</text>
+        <circle cx="380" cy="194" r="5" fill="#FFB343"/>
+        <text x="388" y="191" font-size="9" fill="#FFB343" font-weight="600">Llama-3</text>`,
+      active: lineData, others: [lineParams, lineCompute]
+    },
+    compute: {
+      eq: 'α = 0.050',
+      ref: 'Kaplan et al., 2020 · FLOPs',
+      xTitle: 'Cómputo de entrenamiento (log FLOPs)',
+      xLabs: ['10¹⁸','10²⁰','10²²','10²³','10²⁴','10²⁵','10²⁶'],
+      dotsHTML: `
+        <circle cx="154" cy="60" r="5" fill="#FFB343"/>
+        <text x="162" y="57" font-size="9" fill="#FFB343" font-weight="600">BERT</text>
+        <circle cx="244" cy="82" r="5" fill="#FFB343"/>
+        <text x="252" y="79" font-size="9" fill="#FFB343" font-weight="600">GPT-3</text>
+        <circle cx="274" cy="90" r="5" fill="#FFB343"/>
+        <text x="282" y="87" font-size="9" fill="#FFB343" font-weight="600">Chinchilla</text>
+        <circle cx="364" cy="118" r="5" fill="#FFB343"/>
+        <text x="372" y="115" font-size="9" fill="#FFB343" font-weight="600">GPT-4</text>`,
+      active: lineCompute, others: [lineParams, lineData]
+    }
+  };
+
+  function applyTab(key) {
+    const c = config[key];
+    // update lines
+    c.active.setAttribute('opacity','1');
+    c.active.setAttribute('stroke-dasharray','none');
+    c.active.setAttribute('stroke-width','2.5');
+    c.others.forEach(l => { l.setAttribute('opacity','0.18'); l.setAttribute('stroke-dasharray','6,4'); l.setAttribute('stroke-width','1.5'); });
+    // update dots
+    dots.innerHTML = c.dotsHTML;
+    // update info
+    eq.textContent = c.eq;
+    ref.textContent = c.ref;
+    xTitle.textContent = c.xTitle;
+    xLabels.forEach((el,i) => { el.textContent = c.xLabs[i]; });
+  }
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('les-tab--active'));
+      tab.classList.add('les-tab--active');
+      applyTab(tab.dataset.ltab);
+    });
+  });
+})();
+</script>
+</div>
