@@ -1,0 +1,235 @@
+<div class="esp-wrap" data-demo="04-escala-producto">
+
+  <div class="esp-hd">
+    <div class="esp-title">La escala sale del laboratorio y entra en producto</div>
+    <div class="esp-sub">GPT-3 demostró que la escala funcionaba. ChatGPT demostró que la escala podía llegar a cien millones de personas. El paso entre ambos no fue más cómputo: fue alineamiento.</div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="esp-tabs" role="tablist">
+    <button class="esp-tab esp-tab--active" data-tab="gpt3">GPT-3: el paper</button>
+    <button class="esp-tab" data-tab="gap">El gap técnico</button>
+    <button class="esp-tab" data-tab="chatgpt">ChatGPT: el producto</button>
+  </div>
+
+  <!-- Panel: GPT-3 -->
+  <div class="esp-panel esp-panel--active" data-panel="gpt3">
+    <div class="esp-claim">175 mil millones de parámetros. La escala reveló capacidades que no existían en modelos menores: traducción, resumen, código, razonamiento simple, sin fine-tuning específico.</div>
+    <div class="esp-stat-row">
+      <div class="esp-stat">
+        <div class="esp-stat-tag">PARÁMETROS</div>
+        <div class="esp-stat-num">175B</div>
+        <div class="esp-stat-note">×1.590 respecto a GPT-2 en 2 años</div>
+      </div>
+      <div class="esp-stat">
+        <div class="esp-stat-tag">TOKENS DE ENTRENAMIENTO</div>
+        <div class="esp-stat-num">300B</div>
+        <div class="esp-stat-note">CommonCrawl, libros, Wikipedia, código</div>
+      </div>
+      <div class="esp-stat">
+        <div class="esp-stat-tag">ACCESO</div>
+        <div class="esp-stat-num">API</div>
+        <div class="esp-stat-note">Solo investigadores y empresas seleccionadas</div>
+      </div>
+    </div>
+    <div class="esp-panel-note">GPT-3 era impresionante pero inestable. Sus respuestas dependían mucho de cómo se formulaba la instrucción. No era usable por el público general.</div>
+  </div>
+
+  <!-- Panel: El gap -->
+  <div class="esp-panel" data-panel="gap">
+    <div class="esp-claim">Entre un buen modelo base y un buen asistente hay un abismo. El alineamiento fue la pieza que faltaba: enseñar al modelo qué respuesta prefieren los humanos, no solo qué respuesta es probable.</div>
+    <div class="esp-gap-flow">
+      <div class="esp-gap-step esp-gap-step--raw">
+        <div class="esp-gap-tag">MODELO BASE</div>
+        <div class="esp-gap-title">Predictor de texto</div>
+        <div class="esp-gap-desc">Completa secuencias con alta probabilidad. No distingue entre respuestas útiles, dañinas o simplemente raras.</div>
+        <div class="esp-gap-example">"¿Cómo hago X?" → continúa con probabilidades de lenguaje, puede generar cualquier cosa plausible</div>
+      </div>
+      <div class="esp-gap-arrow">
+        <div class="esp-gap-tech">RLHF</div>
+        <div class="esp-gap-tech-note">Reinforcement Learning from Human Feedback</div>
+      </div>
+      <div class="esp-gap-step esp-gap-step--aligned">
+        <div class="esp-gap-tag esp-gap-tag--aligned">MODELO ALINEADO</div>
+        <div class="esp-gap-title">Asistente</div>
+        <div class="esp-gap-desc">Aprende las preferencias humanas a través de comparaciones. Sigue instrucciones, evita respuestas dañinas, mantiene el formato conversacional.</div>
+        <div class="esp-gap-example">"¿Cómo hago X?" → respuesta estructurada, segura, en el tono adecuado</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel: ChatGPT -->
+  <div class="esp-panel" data-panel="chatgpt">
+    <div class="esp-claim">ChatGPT no fue el modelo más potente de su momento. Fue el primero que cualquier persona podía usar de forma natural. La velocidad de adopción no tuvo precedentes.</div>
+    <div class="esp-adopt-chart">
+      <div class="esp-adopt-label">Tiempo en alcanzar 100 millones de usuarios activos</div>
+      <div class="esp-adopt-bars">
+        <div class="esp-adopt-row">
+          <div class="esp-adopt-name">Netflix</div>
+          <div class="esp-adopt-track"><div class="esp-adopt-fill" data-w="100" style="background:rgba(100,116,139,.35)"></div></div>
+          <div class="esp-adopt-val">3,5 años</div>
+        </div>
+        <div class="esp-adopt-row">
+          <div class="esp-adopt-name">Instagram</div>
+          <div class="esp-adopt-track"><div class="esp-adopt-fill" data-w="71" style="background:rgba(100,116,139,.3)"></div></div>
+          <div class="esp-adopt-val">2,5 años</div>
+        </div>
+        <div class="esp-adopt-row">
+          <div class="esp-adopt-name">TikTok</div>
+          <div class="esp-adopt-track"><div class="esp-adopt-fill" data-w="37" style="background:rgba(100,116,139,.25)"></div></div>
+          <div class="esp-adopt-val">9 meses</div>
+        </div>
+        <div class="esp-adopt-row esp-adopt-row--hl">
+          <div class="esp-adopt-name">ChatGPT</div>
+          <div class="esp-adopt-track"><div class="esp-adopt-fill" data-w="5" style="background:linear-gradient(90deg,rgba(38,166,154,.8),rgba(38,166,154,.5))"></div></div>
+          <div class="esp-adopt-val esp-adopt-val--hl">2 meses</div>
+        </div>
+      </div>
+      <div class="esp-adopt-note">Fuente: UBS/Similarweb citado por Reuters, enero 2023. La métrica exacta varía según la fuente, pero el orden de magnitud es indiscutible.</div>
+    </div>
+    <div class="esp-verdict">La escala dejó de ser un resultado en un paper. Se convirtió en una interfaz pública.</div>
+  </div>
+
+</div>
+
+<style>
+.esp-wrap, .esp-wrap * { box-sizing: border-box; }
+
+.esp-wrap {
+  --ea: #26A69A;
+  --eb: #324AB2;
+  --eg: #FFB343;
+  --ebg: var(--md-default-bg-color, #fff);
+  --efg: var(--md-default-fg-color, #0f172a);
+  --ebd: rgba(15,23,42,.13);
+  --emut: rgba(15,23,42,.56);
+  --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid;
+  gap: 14px;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--ebd);
+  border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--eb) 6%,transparent), transparent 50%),
+    radial-gradient(90% 110% at 95% 100%, color-mix(in srgb,var(--ea) 6%,transparent), transparent 52%),
+    var(--ebg);
+  color: var(--efg);
+  font-family: var(--ef);
+  -webkit-font-smoothing: antialiased;
+}
+[data-md-color-scheme="slate"] .esp-wrap {
+  --ebg: var(--md-default-bg-color, #0f172a);
+  --efg: var(--md-default-fg-color, #e2e8f0);
+  --ebd: rgba(226,232,240,.13);
+  --emut: rgba(226,232,240,.56);
+}
+
+.esp-hd { display: grid; gap: 4px; }
+.esp-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.esp-sub { font-size: 13px; color: var(--emut); line-height: 1.55; max-width: 72ch; }
+
+.esp-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.esp-tab {
+  padding: 6px 14px; border-radius: 8px; border: 1px solid var(--ebd);
+  background: transparent; color: var(--emut);
+  font-family: var(--ef); font-size: 12px; font-weight: 700; cursor: pointer;
+  transition: background .18s, color .18s, border-color .18s;
+}
+.esp-tab:hover { background: color-mix(in srgb,var(--eb) 10%,transparent); color: var(--efg); }
+.esp-tab--active { background: color-mix(in srgb,var(--eb) 12%,transparent); border-color: color-mix(in srgb,var(--eb) 40%,transparent); color: var(--efg); }
+
+.esp-panel { display: none; }
+.esp-panel--active { display: grid; gap: 12px; animation: espIn .22s ease; }
+@keyframes espIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+.esp-claim { font-size: 14px; font-weight: 800; line-height: 1.4; padding: 10px 14px; border-radius: 10px; background: color-mix(in srgb,var(--eb) 8%,transparent); border-left: 3px solid color-mix(in srgb,var(--eb) 55%,transparent); }
+
+/* Stats row */
+.esp-stat-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+@media (max-width: 580px) { .esp-stat-row { grid-template-columns: 1fr; } }
+.esp-stat { border-radius: 12px; padding: 12px 13px; background: color-mix(in srgb,var(--ebg) 78%,#0f172a 22%); border: 1px solid var(--ebd); display: grid; gap: 4px; }
+.esp-stat-tag { font-size: 9px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--emut); }
+.esp-stat-num { font-family: monospace; font-size: 30px; font-weight: 900; color: color-mix(in srgb,var(--eb) 80%,var(--efg)); line-height: 1; }
+.esp-stat-note { font-size: 10.5px; color: var(--emut); line-height: 1.4; }
+.esp-panel-note { font-size: 12px; color: var(--emut); line-height: 1.5; font-style: italic; padding: 8px 12px; border-radius: 8px; background: color-mix(in srgb,var(--ebg) 80%,#0f172a 20%); border: 1px solid var(--ebd); }
+
+/* Gap flow */
+.esp-gap-flow { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: center; }
+@media (max-width: 580px) { .esp-gap-flow { grid-template-columns: 1fr; } }
+.esp-gap-step { border-radius: 12px; padding: 13px; display: grid; gap: 7px; align-content: start; }
+.esp-gap-step--raw { background: rgba(100,116,139,.07); border: 1px solid rgba(100,116,139,.18); }
+.esp-gap-step--aligned { background: rgba(38,166,154,.07); border: 1px solid rgba(38,166,154,.22); }
+.esp-gap-tag { font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--emut); }
+.esp-gap-tag--aligned { color: color-mix(in srgb,var(--ea) 75%,var(--emut)); }
+.esp-gap-title { font-size: 14px; font-weight: 900; }
+.esp-gap-desc { font-size: 11.5px; color: var(--emut); line-height: 1.5; }
+.esp-gap-example { font-family: monospace; font-size: 10px; color: var(--emut); background: rgba(0,0,0,.04); border-radius: 6px; padding: 6px 8px; line-height: 1.5; }
+[data-md-color-scheme="slate"] .esp-gap-example { background: rgba(255,255,255,.04); }
+.esp-gap-arrow { display: flex; flex-direction: column; align-items: center; gap: 4px; flex-shrink: 0; }
+.esp-gap-tech { font-family: monospace; font-size: 13px; font-weight: 900; color: var(--eg); background: color-mix(in srgb,var(--eg) 12%,transparent); border: 1px solid color-mix(in srgb,var(--eg) 30%,transparent); border-radius: 7px; padding: 4px 10px; }
+.esp-gap-tech-note { font-size: 9px; color: var(--emut); text-align: center; max-width: 100px; line-height: 1.3; }
+
+/* Adopt chart */
+.esp-adopt-chart { border: 1px solid var(--ebd); border-radius: 12px; padding: 12px 14px; background: color-mix(in srgb,var(--ebg) 80%,#0f172a 20%); display: grid; gap: 8px; }
+.esp-adopt-label { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; color: var(--emut); }
+.esp-adopt-bars { display: grid; gap: 7px; }
+.esp-adopt-row { display: grid; grid-template-columns: 80px 1fr 70px; gap: 8px; align-items: center; }
+.esp-adopt-name { font-size: 11.5px; font-weight: 600; color: var(--emut); }
+.esp-adopt-row--hl .esp-adopt-name { color: var(--efg); font-weight: 800; }
+.esp-adopt-track { height: 10px; border-radius: 999px; background: color-mix(in srgb,var(--ebg) 55%,#0f172a 45%); overflow: hidden; }
+.esp-adopt-fill { height: 100%; border-radius: 999px; width: 0; transition: width .65s ease; }
+.esp-adopt-val { font-size: 11px; font-weight: 800; color: var(--emut); text-align: right; }
+.esp-adopt-val--hl { color: var(--efg); }
+.esp-adopt-note { font-size: 10px; color: var(--emut); font-style: italic; line-height: 1.4; border-top: 1px solid var(--ebd); padding-top: 6px; }
+.esp-verdict { font-size: 13px; font-weight: 800; color: var(--efg); line-height: 1.4; padding: 10px 14px; border-radius: 9px; background: color-mix(in srgb,var(--ea) 8%,transparent); border-left: 3px solid color-mix(in srgb,var(--ea) 50%,transparent); }
+</style>
+
+<script>
+(function () {
+  function boot() {
+    var wrap = document.querySelector('[data-demo="04-escala-producto"]');
+    if (!wrap || wrap.dataset.espReady) return;
+    wrap.dataset.espReady = '1';
+    var tabs = wrap.querySelectorAll('.esp-tab');
+    var panels = wrap.querySelectorAll('.esp-panel');
+
+    function animateBars(panel) {
+      panel.querySelectorAll('.esp-adopt-fill[data-w]').forEach(function(el, i) {
+        var w = parseFloat(el.dataset.w);
+        el.style.width = '0';
+        setTimeout(function() { el.style.width = w + '%'; }, 80 + i * 90);
+      });
+    }
+
+    function switchTab(key) {
+      tabs.forEach(function(t) { t.classList.remove('esp-tab--active'); });
+      panels.forEach(function(p) { p.classList.remove('esp-panel--active'); });
+      var btn = wrap.querySelector('.esp-tab[data-tab="' + key + '"]');
+      var panel = wrap.querySelector('.esp-panel[data-panel="' + key + '"]');
+      if (btn) btn.classList.add('esp-tab--active');
+      if (panel) { panel.classList.add('esp-panel--active'); animateBars(panel); }
+    }
+
+    tabs.forEach(function(btn) {
+      btn.addEventListener('click', function() { switchTab(btn.dataset.tab); });
+    });
+
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) {
+          if (e.isIntersecting) { animateBars(wrap.querySelector('.esp-panel--active')); io.disconnect(); }
+        });
+      }, { threshold: 0.3 });
+      io.observe(wrap);
+    } else {
+      animateBars(wrap.querySelector('.esp-panel--active'));
+    }
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
+  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
+})();
+</script>

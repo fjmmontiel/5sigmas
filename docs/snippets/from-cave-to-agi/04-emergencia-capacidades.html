@@ -1,154 +1,224 @@
 <div class="eca-wrap" data-demo="04-emergencia-capacidades">
+
+  <div class="eca-hd">
+    <div class="eca-title">¿Emergencia real o artefacto de medición?</div>
+    <div class="eca-sub">Algunas capacidades parecen aparecer de golpe cuando un modelo alcanza cierto tamaño. Pero si ese umbral brusco es real o depende de cómo medimos es una pregunta abierta con consecuencias importantes.</div>
+  </div>
+
+  <!-- The concrete task first -->
+  <div class="eca-task-section">
+    <div class="eca-section-label">Una tarea concreta a distintas escalas</div>
+    <div class="eca-task-desc">Pregunta: "¿Cuántas r hay en la palabra strawberry?"</div>
+
+    <div class="eca-scale-row">
+      <div class="eca-scale-item eca-scale--fail">
+        <div class="eca-scale-tag">~1B parámetros</div>
+        <div class="eca-scale-output">"La palabra strawberry tiene 2 letras r."</div>
+        <div class="eca-scale-verdict eca-verdict--fail">✗ Incorrecto</div>
+        <div class="eca-scale-why">El modelo no cuenta caracteres; predice la respuesta más probable por distribución de texto.</div>
+      </div>
+      <div class="eca-scale-item eca-scale--fail">
+        <div class="eca-scale-tag">~7B parámetros</div>
+        <div class="eca-scale-output">"Strawberry tiene 3 letras r: s-t-r-a-w-b-e-r-r-y."</div>
+        <div class="eca-scale-verdict eca-verdict--fail">✗ Incorrecto (confunde posiciones)</div>
+        <div class="eca-scale-why">Mejora, pero sigue fallando sistemáticamente en tareas de conteo de caracteres.</div>
+      </div>
+      <div class="eca-scale-item eca-scale--ok">
+        <div class="eca-scale-tag">~70B parámetros</div>
+        <div class="eca-scale-output">"Hay 3 letras r en strawberry: en la posición 3, 8 y 9."</div>
+        <div class="eca-scale-verdict eca-verdict--ok">✓ Correcto con razonamiento</div>
+        <div class="eca-scale-why">A esta escala aparece la capacidad de razonar sobre la estructura interna de palabras.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- The debate: is this emergence real? -->
+  <div class="eca-debate-section">
+    <div class="eca-section-label">El debate: ¿cómo lees esa mejora?</div>
+
+    <div class="eca-views">
+      <div class="eca-view eca-view--fuerte">
+        <div class="eca-view-header">
+          <div class="eca-view-tag eca-view-tag--fuerte">Lectura fuerte · Wei et al. 2022</div>
+          <div class="eca-view-claim">Emergencia real: la capacidad no existe por debajo del umbral y aparece de golpe</div>
+        </div>
+        <div class="eca-view-body">
+          <!-- Bar chart showing step function -->
+          <div class="eca-chart">
+            <div class="eca-chart-label">Rendimiento en la tarea</div>
+            <div class="eca-chart-bars">
+              <div class="eca-cbar">
+                <div class="eca-cbar-fill" style="height:8%;background:rgba(239,68,68,.5)"></div>
+                <div class="eca-cbar-label">1B</div>
+              </div>
+              <div class="eca-cbar">
+                <div class="eca-cbar-fill" style="height:10%;background:rgba(239,68,68,.5)"></div>
+                <div class="eca-cbar-label">7B</div>
+              </div>
+              <div class="eca-cbar">
+                <div class="eca-cbar-fill" style="height:12%;background:rgba(239,68,68,.5)"></div>
+                <div class="eca-cbar-label">13B</div>
+              </div>
+              <div class="eca-cbar">
+                <div class="eca-cbar-fill" style="height:85%;background:rgba(38,166,154,.7)"></div>
+                <div class="eca-cbar-label">70B</div>
+              </div>
+              <div class="eca-cbar">
+                <div class="eca-cbar-fill" style="height:91%;background:rgba(38,166,154,.7)"></div>
+                <div class="eca-cbar-label">175B</div>
+              </div>
+            </div>
+            <div class="eca-chart-metric">Métrica: correcto / incorrecto (binario)</div>
+          </div>
+          <div class="eca-view-note">Con métrica binaria (correcto o no), el salto parece abrupto. El modelo "no puede" y de repente "puede".</div>
+          <div class="eca-view-implication eca-impl--fuerte">Implicación: hay umbrales reales de capacidad que no se pueden extrapolar desde escalas menores.</div>
+        </div>
+      </div>
+
+      <div class="eca-view eca-view--cauta">
+        <div class="eca-view-header">
+          <div class="eca-view-tag eca-view-tag--cauta">Lectura cauta · Schaeffer et al. 2023</div>
+          <div class="eca-view-claim">Artefacto de métrica: la mejora es gradual pero la métrica binaria la hace parecer brusca</div>
+        </div>
+        <div class="eca-view-body">
+          <!-- Smoother chart -->
+          <div class="eca-chart">
+            <div class="eca-chart-label">Rendimiento en la tarea</div>
+            <div class="eca-chart-bars">
+              <div class="eca-cbar">
+                <div class="eca-cbar-fill" style="height:18%;background:rgba(255,179,67,.5)"></div>
+                <div class="eca-cbar-label">1B</div>
+              </div>
+              <div class="eca-cbar">
+                <div class="eca-cbar-fill" style="height:32%;background:rgba(255,179,67,.55)"></div>
+                <div class="eca-cbar-label">7B</div>
+              </div>
+              <div class="eca-cbar">
+                <div class="eca-cbar-fill" style="height:48%;background:rgba(255,179,67,.65)"></div>
+                <div class="eca-cbar-label">13B</div>
+              </div>
+              <div class="eca-cbar">
+                <div class="eca-cbar-fill" style="height:76%;background:rgba(38,166,154,.65)"></div>
+                <div class="eca-cbar-label">70B</div>
+              </div>
+              <div class="eca-cbar">
+                <div class="eca-cbar-fill" style="height:90%;background:rgba(38,166,154,.7)"></div>
+                <div class="eca-cbar-label">175B</div>
+              </div>
+            </div>
+            <div class="eca-chart-metric">Métrica: crédito parcial (cuántas r detecta correctamente)</div>
+          </div>
+          <div class="eca-view-note">Con crédito parcial, el progreso es continuo. El modelo mejora en cada escala, aunque no llega al 100% hasta escalas grandes.</div>
+          <div class="eca-view-implication eca-impl--cauta">Implicación: no hay "magia" en los umbrales grandes. La emergencia puede ser un artefacto de elegir métricas que no capturan mejoras parciales.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Why it matters -->
+  <div class="eca-footer-note">
+    <div class="eca-footer-label">Por qué importa este debate</div>
+    <div class="eca-footer-text">Si la emergencia es real, no puedes predecir cuándo aparecerá una capacidad peligrosa en modelos más grandes. Si es artefacto de métrica, puedes rastrear el progreso gradual y anticiparte. La diferencia tiene consecuencias directas para la seguridad y la planificación del campo.</div>
+  </div>
+
+</div>
+
 <style>
-.eca-wrap{font-family:'Inter',system-ui,sans-serif;background:#0b1220;color:#e2e8f0;padding:28px 48px 24px;border-radius:16px;max-width:860px;margin:0 auto;box-sizing:border-box}
-.eca-hd{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:8px}
-.eca-title{font-size:17px;font-weight:700;color:#fff}
-.eca-toggles{display:flex;gap:6px}
-.eca-tog{padding:5px 14px;border-radius:7px;border:1px solid rgba(255,255,255,.1);background:transparent;color:#64748b;font-size:12px;font-weight:500;cursor:pointer;transition:all .2s}
-.eca-tog--active{background:rgba(124,199,255,.12);border-color:rgba(124,199,255,.3);color:#7cc7ff}
-/* ruler */
-.eca-ruler{position:relative;margin-bottom:18px}
-.eca-ruler-bar{height:3px;background:rgba(255,255,255,.08);border-radius:2px;margin-bottom:6px}
-.eca-ruler-ticks{display:flex;justify-content:space-between;padding:0 2px}
-.eca-ruler-tick{font-size:9px;color:#475569;letter-spacing:.03em}
-/* capability rows */
-.eca-caps{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
-.eca-cap{display:flex;align-items:center;gap:12px}
-.eca-cap-name{font-size:12px;color:#94a3b8;width:168px;flex-shrink:0;text-align:right;font-weight:500}
-.eca-cap-track{flex:1;height:28px;background:rgba(255,255,255,.04);border-radius:6px;overflow:hidden;position:relative}
-.eca-bar{position:absolute;inset:0;border-radius:6px;transition:opacity .4s}
-.eca-bar--fuerte{opacity:1}
-.eca-bar--cauta{opacity:0}
-.eca-wrap--cauta .eca-bar--fuerte{opacity:0}
-.eca-wrap--cauta .eca-bar--cauta{opacity:1}
-/* threshold markers visible only in fuerte mode */
-.eca-marker{position:absolute;top:0;bottom:0;width:2px;background:rgba(255,255,255,.25);transition:opacity .3s}
-.eca-wrap--cauta .eca-marker{opacity:0}
-/* capability symbol */
-.eca-cap-sym{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;transition:all .3s;border:1.5px solid rgba(255,255,255,.08);background:#0f1929}
-.eca-cap--on .eca-cap-sym{border-color:rgba(38,166,154,.5);background:rgba(38,166,154,.1);color:#26A69A}
-/* debate footer */
-.eca-footer{display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(255,255,255,.06);padding-top:14px}
-.eca-view-note{font-size:11px;color:#64748b;font-style:italic;transition:opacity .3s}
-.eca-refs{font-size:10px;color:#475569}
+.eca-wrap, .eca-wrap * { box-sizing: border-box; }
+
+.eca-wrap {
+  --ea: #26A69A;
+  --eb: #324AB2;
+  --eg: #FFB343;
+  --ec: #7cc7ff;
+  --ebg: var(--md-default-bg-color, #fff);
+  --efg: var(--md-default-fg-color, #0f172a);
+  --ebd: rgba(15,23,42,.13);
+  --emut: rgba(15,23,42,.56);
+  --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid;
+  gap: 16px;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--ebd);
+  border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--eg) 6%,transparent), transparent 50%),
+    radial-gradient(90% 110% at 95% 100%, color-mix(in srgb,var(--ea) 5%,transparent), transparent 52%),
+    var(--ebg);
+  color: var(--efg);
+  font-family: var(--ef);
+  -webkit-font-smoothing: antialiased;
+}
+[data-md-color-scheme="slate"] .eca-wrap {
+  --ebg: var(--md-default-bg-color, #0f172a);
+  --efg: var(--md-default-fg-color, #e2e8f0);
+  --ebd: rgba(226,232,240,.13);
+  --emut: rgba(226,232,240,.56);
+}
+
+.eca-hd { display: grid; gap: 4px; }
+.eca-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.eca-sub { font-size: 13px; color: var(--emut); line-height: 1.55; max-width: 72ch; }
+
+.eca-section-label { font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--emut); margin-bottom: 8px; }
+
+/* Task section */
+.eca-task-section { display: grid; gap: 10px; }
+.eca-task-desc { font-size: 12.5px; font-weight: 800; padding: 9px 13px; border-radius: 9px; background: color-mix(in srgb,var(--ec) 7%,transparent); border: 1px solid color-mix(in srgb,var(--ec) 18%,transparent); font-style: italic; }
+
+.eca-scale-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+@media (max-width: 600px) { .eca-scale-row { grid-template-columns: 1fr; } }
+
+.eca-scale-item { border-radius: 12px; padding: 12px 13px; display: grid; gap: 6px; align-content: start; }
+.eca-scale--fail { background: rgba(100,116,139,.06); border: 1px solid rgba(100,116,139,.18); }
+.eca-scale--ok   { background: rgba(38,166,154,.06); border: 1px solid rgba(38,166,154,.2); }
+
+.eca-scale-tag { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--emut); }
+.eca-scale-output { font-family: "Courier New", monospace; font-size: 10.5px; line-height: 1.5; padding: 6px 8px; border-radius: 6px; background: rgba(0,0,0,.04); color: var(--emut); }
+[data-md-color-scheme="slate"] .eca-scale-output { background: rgba(255,255,255,.04); }
+.eca-scale-verdict { font-size: 11px; font-weight: 800; }
+.eca-verdict--fail { color: rgba(239,68,68,.75); }
+.eca-verdict--ok   { color: color-mix(in srgb,var(--ea) 75%,var(--emut)); }
+.eca-scale-why { font-size: 10.5px; color: var(--emut); line-height: 1.45; }
+
+/* Debate section */
+.eca-debate-section { display: grid; gap: 10px; }
+.eca-views { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 580px) { .eca-views { grid-template-columns: 1fr; } }
+
+.eca-view { border-radius: 14px; overflow: hidden; }
+.eca-view--fuerte { border: 1px solid rgba(239,68,68,.2); }
+.eca-view--cauta  { border: 1px solid rgba(255,179,67,.22); }
+
+.eca-view-header { padding: 10px 13px; display: grid; gap: 5px; }
+.eca-view--fuerte .eca-view-header { background: rgba(239,68,68,.06); border-bottom: 1px solid rgba(239,68,68,.12); }
+.eca-view--cauta .eca-view-header  { background: rgba(255,179,67,.06); border-bottom: 1px solid rgba(255,179,67,.12); }
+.eca-view-tag { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; }
+.eca-view-tag--fuerte { color: rgba(239,68,68,.75); }
+.eca-view-tag--cauta  { color: color-mix(in srgb,var(--eg) 75%,var(--emut)); }
+.eca-view-claim { font-size: 12px; font-weight: 800; line-height: 1.35; }
+
+.eca-view-body { padding: 12px 13px; display: grid; gap: 8px; background: color-mix(in srgb,var(--ebg) 82%,#0f172a 18%); }
+
+/* Mini bar chart */
+.eca-chart { display: grid; gap: 6px; }
+.eca-chart-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--emut); }
+.eca-chart-bars { display: flex; gap: 4px; align-items: flex-end; height: 70px; border-bottom: 1px solid var(--ebd); padding-bottom: 4px; }
+.eca-cbar { display: flex; flex-direction: column; align-items: center; gap: 3px; flex: 1; height: 100%; justify-content: flex-end; }
+.eca-cbar-fill { width: 100%; border-radius: 3px 3px 0 0; transition: height .4s ease; }
+.eca-cbar-label { font-size: 8.5px; color: var(--emut); font-weight: 600; }
+.eca-chart-metric { font-size: 9px; color: var(--emut); font-style: italic; }
+
+.eca-view-note { font-size: 11.5px; color: var(--emut); line-height: 1.5; }
+.eca-view-implication { font-size: 11px; font-weight: 700; line-height: 1.45; padding: 7px 10px; border-radius: 7px; }
+.eca-impl--fuerte { background: rgba(239,68,68,.06); border: 1px solid rgba(239,68,68,.14); }
+.eca-impl--cauta  { background: rgba(255,179,67,.06); border: 1px solid rgba(255,179,67,.14); }
+
+/* Footer */
+.eca-footer-note { border-radius: 12px; padding: 12px 15px; background: color-mix(in srgb,var(--ebg) 80%,#0f172a 20%); border: 1px solid var(--ebd); display: grid; gap: 4px; }
+.eca-footer-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--emut); }
+.eca-footer-text { font-size: 12px; color: var(--emut); line-height: 1.55; }
 </style>
-
-<div class="eca-hd">
-  <div class="eca-title">Capacidades que aparecen al crecer</div>
-  <div class="eca-toggles" role="group">
-    <button class="eca-tog eca-tog--active" data-view="fuerte">Umbral brusco</button>
-    <button class="eca-tog" data-view="cauta">Curva gradual</button>
-  </div>
-</div>
-
-<div class="eca-ruler">
-  <div class="eca-ruler-bar"></div>
-  <div class="eca-ruler-ticks">
-    <span class="eca-ruler-tick">10M</span>
-    <span class="eca-ruler-tick">100M</span>
-    <span class="eca-ruler-tick">1B</span>
-    <span class="eca-ruler-tick">7B</span>
-    <span class="eca-ruler-tick">30B</span>
-    <span class="eca-ruler-tick">70B</span>
-    <span class="eca-ruler-tick">175B</span>
-    <span class="eca-ruler-tick">1T+</span>
-  </div>
-</div>
-
-<div class="eca-caps" id="ecaCaps">
-
-  <!-- 1. Seguir instrucciones: threshold ~18% -->
-  <div class="eca-cap" id="ecaCap0">
-    <div class="eca-cap-name">Seguir instrucciones</div>
-    <div class="eca-cap-track">
-      <div class="eca-bar eca-bar--fuerte"
-        style="background:linear-gradient(to right,#0f1929 0%,#0f1929 18%,rgba(38,166,154,.85) 18%,#26A69A 100%)"></div>
-      <div class="eca-bar eca-bar--cauta"
-        style="background:linear-gradient(to right,#0f1929 0%,rgba(38,166,154,.08) 5%,rgba(38,166,154,.45) 18%,rgba(38,166,154,.75) 35%,#26A69A 70%,#26A69A 100%)"></div>
-      <div class="eca-marker" style="left:18%"></div>
-    </div>
-    <div class="eca-cap-sym">→</div>
-  </div>
-
-  <!-- 2. Few-shot learning: threshold ~33% -->
-  <div class="eca-cap" id="ecaCap1">
-    <div class="eca-cap-name">Few-shot learning</div>
-    <div class="eca-cap-track">
-      <div class="eca-bar eca-bar--fuerte"
-        style="background:linear-gradient(to right,#0f1929 0%,#0f1929 33%,rgba(38,166,154,.85) 33%,#26A69A 100%)"></div>
-      <div class="eca-bar eca-bar--cauta"
-        style="background:linear-gradient(to right,#0f1929 0%,rgba(38,166,154,.06) 15%,rgba(38,166,154,.35) 33%,rgba(38,166,154,.7) 55%,#26A69A 80%,#26A69A 100%)"></div>
-      <div class="eca-marker" style="left:33%"></div>
-    </div>
-    <div class="eca-cap-sym">⋯</div>
-  </div>
-
-  <!-- 3. Código: threshold ~48% -->
-  <div class="eca-cap" id="ecaCap2">
-    <div class="eca-cap-name">Código</div>
-    <div class="eca-cap-track">
-      <div class="eca-bar eca-bar--fuerte"
-        style="background:linear-gradient(to right,#0f1929 0%,#0f1929 48%,rgba(38,166,154,.85) 48%,#26A69A 100%)"></div>
-      <div class="eca-bar eca-bar--cauta"
-        style="background:linear-gradient(to right,#0f1929 0%,rgba(38,166,154,.05) 25%,rgba(38,166,154,.3) 48%,rgba(38,166,154,.7) 65%,#26A69A 85%,#26A69A 100%)"></div>
-      <div class="eca-marker" style="left:48%"></div>
-    </div>
-    <div class="eca-cap-sym">{}</div>
-  </div>
-
-  <!-- 4. Razonamiento multi-step: threshold ~64% -->
-  <div class="eca-cap" id="ecaCap3">
-    <div class="eca-cap-name">Razonamiento multi-step</div>
-    <div class="eca-cap-track">
-      <div class="eca-bar eca-bar--fuerte"
-        style="background:linear-gradient(to right,#0f1929 0%,#0f1929 64%,rgba(38,166,154,.85) 64%,#26A69A 100%)"></div>
-      <div class="eca-bar eca-bar--cauta"
-        style="background:linear-gradient(to right,#0f1929 0%,rgba(38,166,154,.04) 35%,rgba(38,166,154,.25) 64%,rgba(38,166,154,.65) 78%,#26A69A 92%,#26A69A 100%)"></div>
-      <div class="eca-marker" style="left:64%"></div>
-    </div>
-    <div class="eca-cap-sym">∑</div>
-  </div>
-
-  <!-- 5. Multimodalidad: threshold ~80% -->
-  <div class="eca-cap" id="ecaCap4">
-    <div class="eca-cap-name">Multimodalidad robusta</div>
-    <div class="eca-cap-track">
-      <div class="eca-bar eca-bar--fuerte"
-        style="background:linear-gradient(to right,#0f1929 0%,#0f1929 80%,rgba(38,166,154,.85) 80%,#26A69A 100%)"></div>
-      <div class="eca-bar eca-bar--cauta"
-        style="background:linear-gradient(to right,#0f1929 0%,rgba(38,166,154,.03) 50%,rgba(38,166,154,.2) 80%,rgba(38,166,154,.6) 90%,#26A69A 100%)"></div>
-      <div class="eca-marker" style="left:80%"></div>
-    </div>
-    <div class="eca-cap-sym">◎</div>
-  </div>
-
-</div>
-
-<div class="eca-footer">
-  <div class="eca-view-note" id="ecaViewNote">
-    Lectura fuerte: umbrales reales, emergencia brusca
-  </div>
-  <div class="eca-refs">Wei et al. 2022 · Schaeffer et al. 2023</div>
-</div>
-
-<script>
-(function(){
-  const wrap = document.querySelector('[data-demo="04-emergencia-capacidades"]');
-  const togs = wrap.querySelectorAll('.eca-tog');
-  const note = document.getElementById('ecaViewNote');
-  const notes = {
-    fuerte: 'Lectura fuerte: umbrales reales, emergencia brusca',
-    cauta: 'Lectura cauta: mejora continua, umbral depende de la métrica'
-  };
-  togs.forEach(tog => {
-    tog.addEventListener('click', () => {
-      togs.forEach(t => t.classList.remove('eca-tog--active'));
-      tog.classList.add('eca-tog--active');
-      const view = tog.dataset.view;
-      wrap.classList.toggle('eca-wrap--cauta', view === 'cauta');
-      note.textContent = notes[view];
-    });
-  });
-})();
-</script>
-</div>

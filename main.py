@@ -160,6 +160,43 @@ def _count_series_done(series_dirname):
             done += 1
     return done
 
+
+_READING_WPM = 230  # must match hooks/reading_time.py
+
+def _series_reading_time(series_dirname):
+    """Return a formatted reading time string (e.g. '~50 min') for published
+    articles in the series, using the same word-count logic as reading_time.py.
+    Only counts articles that exist on disk (published), not planned chapters."""
+    series_dirname = series_dirname.lower()
+    base_dir = os.path.join(os.path.dirname(__file__), "docs/series", series_dirname)
+    if not os.path.isdir(base_dir):
+        return "—"
+
+    total_words = 0
+    for root, _, files in os.walk(base_dir):
+        for filename in sorted(files):
+            if not filename.endswith(".md"):
+                continue
+            if filename == "00_presentacion_serie.md":
+                continue
+            filepath = os.path.join(root, filename)
+            with open(filepath, "r", encoding="utf-8") as f:
+                text = f.read()
+            # Strip the same content as reading_time.py
+            text = re.sub(r'<details[\s\S]*?</details>', '', text, flags=re.IGNORECASE)
+            text = re.sub(r'\{\{[^}]+\}\}', '', text)
+            text = re.sub(r'```[\s\S]*?```', '', text)
+            text = re.sub(r'<[^>]+>', '', text)
+            text = re.sub(r'\[([^\]]+)\]\([^)]+\)', r'\1', text)
+            total_words += len(text.split())
+
+    if total_words == 0:
+        return "—"
+    minutes = max(1, round(total_words / _READING_WPM))
+    # Round to nearest 5 for cleaner display
+    rounded = max(5, round(minutes / 5) * 5)
+    return f"~{rounded} min"
+
 def _render_template(html, context):
     def repl(match):
         key = match.group(1).strip()
@@ -208,6 +245,8 @@ def render_include_html(path, **kwargs):
         template_kwargs.setdefault("data_progress", progress_text)
         template_kwargs.setdefault("aria_valuenow", done)
         template_kwargs.setdefault("aria_valuemax", aria_max)
+        template_kwargs.setdefault("data_time", _series_reading_time(template_kwargs["series_dir"]))
+        template_kwargs.setdefault("extra_rows", "")
 
     if template_kwargs:
         html = _render_template(html, template_kwargs)
@@ -315,22 +354,22 @@ def define_env(env):
     def reading_time():
         """
         Returns a string with the estimated reading time of the current page.
+        Uses the same stripping logic and WPM as hooks/reading_time.py so that
+        per-article times are consistent with the series widget total.
         """
         markdown = env.markdown
         if not markdown:
             return ""
 
-        # Count words (simple implementation)
-        clean_text = re.sub(r'[#*`\-]', '', markdown)
-        words = len(clean_text.split())
-        
-        # Average reading speed: 200 words per minute
-        time = math.ceil(words / 200)
-        
-        if time < 1:
-            time = 1
-            
-        return f"> ⏱️ **Tiempo de lectura:** {time} min\n\n"
+        text = re.sub(r'<details[\s\S]*?</details>', '', markdown, flags=re.IGNORECASE)
+        text = re.sub(r'\{\{[^}]+\}\}', '', text)
+        text = re.sub(r'```[\s\S]*?```', '', text)
+        text = re.sub(r'<[^>]+>', '', text)
+        text = re.sub(r'\[([^\]]+)\]\([^)]+\)', r'\1', text)
+        words = len(text.split())
+        minutes = max(1, round(words / _READING_WPM))
+
+        return f"> ⏱️ **Tiempo de lectura:** {minutes} min\n\n"
 
     @env.macro
     def include_html(path, **kwargs):

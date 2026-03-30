@@ -5,7 +5,7 @@ robots: noindex
 ---
 # Multimodalidad en IA generativa
 
-{{ include_html("snippets/series_meta.html", series_dir="multimodalidad-iag", data_state="construction", data_level="general", data_read="6", status_label="En construcción", level_label="General", glow_hidden="true", extra_rows="<div class=\"series-meta-row\"><span class=\"series-meta-label\">Prerequisitos</span><span class=\"series-meta-value\"><a href=\"/series/fundamentos-ia-iag/00_presentacion_serie/\">Fundamentos de IA e IA generativa</a></span></div>") }}
+{{ include_html("snippets/series_meta.html", series_dir="multimodalidad-iag", data_state="construction", data_level="general", status_label="En construcción", level_label="General", extra_rows="<div class=\"series-meta-row\"><span class=\"series-meta-label\">Prerequisitos</span><span class=\"series-meta-value\"><a href=\"/series/fundamentos-ia-iag/00_presentacion_serie/\">Fundamentos de IA e IA generativa</a></span></div>") }}
 
 La multimodalidad es el salto de “hablar con una IA” a **interactuar con un sistema que puede combinar texto con imágenes, audio o vídeo**. <br> El cambio importante no es añadir entradas/salidas nuevas, sino que el modelo pueda **cruzar información** entre lo que “lee” en lenguaje natural con lo que “observa” en una imagen o lo que “escucha” en un audio.
 

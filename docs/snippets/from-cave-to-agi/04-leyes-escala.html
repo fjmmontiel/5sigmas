@@ -1,205 +1,281 @@
 <div class="les-wrap" data-demo="04-leyes-escala">
-<style>
-.les-wrap{font-family:'Inter',system-ui,sans-serif;background:#0b1220;color:#e2e8f0;padding:32px 48px 28px;border-radius:16px;max-width:860px;margin:0 auto;box-sizing:border-box}
-.les-hd{margin-bottom:20px}
-.les-title{font-size:18px;font-weight:700;color:#fff;margin-bottom:6px}
-.les-sub{font-size:13px;color:#94a3b8;line-height:1.55;max-width:720px}
-.les-tabs{display:flex;gap:8px;margin-bottom:20px}
-.les-tab{padding:7px 18px;border-radius:8px;border:1px solid rgba(255,255,255,.1);background:transparent;color:#94a3b8;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s}
-.les-tab--active{background:rgba(124,199,255,.12);border-color:rgba(124,199,255,.3);color:#7cc7ff}
-.les-body{display:grid;grid-template-columns:1fr 180px;gap:20px;align-items:start}
-.les-chart-box{position:relative}
-.les-svg{width:100%;display:block}
-.les-ylab{position:absolute;left:-38px;top:50%;transform:translateY(-50%) rotate(-90deg);font-size:10px;color:#64748b;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
-.les-info{display:flex;flex-direction:column;gap:10px}
-.les-formula-box{background:rgba(124,199,255,.06);border:1px solid rgba(124,199,255,.15);border-radius:12px;padding:16px}
-.les-formula-label{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#64748b;margin-bottom:8px}
-.les-formula-eq{font-family:monospace;font-size:14px;font-weight:700;color:#7cc7ff;margin-bottom:4px;line-height:1.4}
-.les-formula-alpha{font-family:monospace;font-size:22px;font-weight:900;color:#7cc7ff;display:block}
-.les-formula-ref{font-size:10px;color:#64748b}
-</style>
 
-<div class="les-hd">
-  <div class="les-title">Leyes de escala: el error baja de forma predecible</div>
-</div>
-
-<div class="les-tabs" role="tablist">
-  <button class="les-tab les-tab--active" data-ltab="params" role="tab">Parámetros</button>
-  <button class="les-tab" data-ltab="data" role="tab">Datos</button>
-  <button class="les-tab" data-ltab="compute" role="tab">Cómputo</button>
-</div>
-
-<div class="les-body">
-  <div class="les-chart-box">
-    <div class="les-ylab">Pérdida (log)</div>
-    <svg class="les-svg" viewBox="0 0 500 260" xmlns="http://www.w3.org/2000/svg">
-      <!-- grid horizontals -->
-      <line x1="64" y1="28" x2="488" y2="28" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
-      <line x1="64" y1="70" x2="488" y2="70" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
-      <line x1="64" y1="118" x2="488" y2="118" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
-      <line x1="64" y1="168" x2="488" y2="168" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
-      <line x1="64" y1="218" x2="488" y2="218" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
-      <!-- grid verticals -->
-      <line x1="124" y1="28" x2="124" y2="232" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
-      <line x1="184" y1="28" x2="184" y2="232" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
-      <line x1="244" y1="28" x2="244" y2="232" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
-      <line x1="304" y1="28" x2="304" y2="232" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
-      <line x1="364" y1="28" x2="364" y2="232" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
-      <line x1="424" y1="28" x2="424" y2="232" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
-      <!-- axes -->
-      <line x1="64" y1="28" x2="64" y2="232" stroke="rgba(255,255,255,.2)" stroke-width="1.5"/>
-      <line x1="64" y1="232" x2="488" y2="232" stroke="rgba(255,255,255,.2)" stroke-width="1.5"/>
-      <!-- y-axis labels -->
-      <text x="58" y="32" text-anchor="end" font-size="9" fill="#64748b">4.0</text>
-      <text x="58" y="74" text-anchor="end" font-size="9" fill="#64748b">3.0</text>
-      <text x="58" y="122" text-anchor="end" font-size="9" fill="#64748b">2.0</text>
-      <text x="58" y="172" text-anchor="end" font-size="9" fill="#64748b">1.5</text>
-      <text x="58" y="222" text-anchor="end" font-size="9" fill="#64748b">1.2</text>
-      <!-- x-axis labels (change via JS) -->
-      <text class="les-x0" x="64" y="246" text-anchor="middle" font-size="9" fill="#64748b">10M</text>
-      <text class="les-x1" x="124" y="246" text-anchor="middle" font-size="9" fill="#64748b">100M</text>
-      <text class="les-x2" x="184" y="246" text-anchor="middle" font-size="9" fill="#64748b">1B</text>
-      <text class="les-x3" x="244" y="246" text-anchor="middle" font-size="9" fill="#64748b">10B</text>
-      <text class="les-x4" x="304" y="246" text-anchor="middle" font-size="9" fill="#64748b">100B</text>
-      <text class="les-x5" x="364" y="246" text-anchor="middle" font-size="9" fill="#64748b">1T</text>
-      <text class="les-x6" x="424" y="246" text-anchor="middle" font-size="9" fill="#64748b">10T</text>
-      <!-- power law lines (3 tabs) -->
-      <!-- compute (orange, gentle): alpha=0.050 -->
-      <line id="lesLineCompute" x1="64" y1="28" x2="488" y2="142"
-        stroke="#FFB343" stroke-width="2" stroke-dasharray="6,4"
-        opacity="0.22"/>
-      <!-- params (blue, moderate): alpha=0.076 -->
-      <line id="lesLineParams" x1="64" y1="28" x2="488" y2="188"
-        stroke="#7cc7ff" stroke-width="2.5"
-        opacity="1"/>
-      <!-- data (teal, steeper): alpha=0.095 -->
-      <line id="lesLineData" x1="64" y1="28" x2="488" y2="214"
-        stroke="#26A69A" stroke-width="2" stroke-dasharray="6,4"
-        opacity="0.22"/>
-      <!-- reference dots (params, shown by default) -->
-      <g id="lesDots">
-        <!-- GPT-1 117M -->
-        <circle cx="130" cy="68" r="5" fill="#FFB343"/>
-        <text x="138" y="65" font-size="9" fill="#FFB343" font-weight="600">GPT-1</text>
-        <!-- GPT-2 1.5B -->
-        <circle cx="192" cy="97" r="5" fill="#FFB343"/>
-        <text x="200" y="94" font-size="9" fill="#FFB343" font-weight="600">GPT-2</text>
-        <!-- GPT-3 175B -->
-        <circle cx="314" cy="152" r="5" fill="#FFB343"/>
-        <text x="322" y="149" font-size="9" fill="#FFB343" font-weight="600">GPT-3</text>
-        <!-- Frontier -->
-        <circle cx="390" cy="177" r="5" fill="#FFB343"/>
-        <text x="398" y="174" font-size="9" fill="#FFB343" font-weight="600">Frontier</text>
-      </g>
-      <!-- x-axis title -->
-      <text id="lesXTitle" x="276" y="260" text-anchor="middle" font-size="10" fill="#64748b" font-style="italic">Número de parámetros (log)</text>
-    </svg>
+  <div class="les-hd">
+    <div class="les-title">Escalar tiene retorno predecible</div>
+    <div class="les-sub">Antes de las leyes de escala, nadie sabía si doblar el compute produciría un modelo mejor. Las leyes de escala dijeron que sí, y exactamente cuánto mejor: la mejora sigue una curva de potencia consistente en parámetros, datos y cómputo.</div>
   </div>
 
-  <div class="les-info">
-    <div class="les-formula-box">
-      <div class="les-formula-label">Ley de escala</div>
-      <div class="les-formula-eq">L(x) <span style="font-size:16px">~</span> x<sup>-α</sup></div>
-      <div class="les-formula-alpha" id="lesEq">α = 0.076</div>
-      <div class="les-formula-ref" id="lesRef">Kaplan et al., 2020 · Parámetros</div>
+  <!-- Main concept: the insight = predictability -->
+  <div class="les-insight-row">
+    <div class="les-insight-card les-insight-card--before">
+      <div class="les-insight-tag">ANTES · 2019</div>
+      <div class="les-insight-q">"¿Vale la pena invertir 10× más compute?"</div>
+      <div class="les-insight-a les-insight-a--unk">Desconocido. Se probaba y se veía.</div>
+    </div>
+    <div class="les-insight-arrow">→</div>
+    <div class="les-insight-card les-insight-card--after">
+      <div class="les-insight-tag les-insight-tag--after">DESPUÉS · Kaplan et al. 2020</div>
+      <div class="les-insight-q">"¿Vale la pena invertir 10× más compute?"</div>
+      <div class="les-insight-a les-insight-a--ok">Sí. La pérdida baja en un factor predecible. Puedes planificarlo antes de entrenar.</div>
     </div>
   </div>
+
+  <!-- Interactive: move scale → see what the model can do -->
+  <div class="les-explorer">
+    <div class="les-explorer-label">Explora qué cambia al escalar</div>
+    <div class="les-scale-tabs" role="tablist">
+      <button class="les-stab les-stab--active" data-scale="1">10M–100M parámetros</button>
+      <button class="les-stab" data-scale="2">1B–10B parámetros</button>
+      <button class="les-stab" data-scale="3">70B–175B parámetros</button>
+      <button class="les-stab" data-scale="4">Frontera actual</button>
+    </div>
+
+    <div class="les-scale-panels">
+
+      <!-- Scale 1: 10M-100M -->
+      <div class="les-spanel les-spanel--active" data-spanel="1">
+        <div class="les-spanel-header">
+          <div class="les-spanel-badge les-badge--1">Escala pequeña</div>
+          <div class="les-spanel-loss">Pérdida: ~3.5–4.0</div>
+        </div>
+        <div class="les-examples">
+          <div class="les-example">
+            <div class="les-ex-prompt">Pregunta: ¿Cuál es la capital de Francia?</div>
+            <div class="les-ex-out les-ex-out--bad">Respuesta del modelo: "Francia es un país. Los países tienen capitales. Una capital es una ciudad. Ciudades como Londres son capitales."</div>
+            <div class="les-ex-label les-label--bad">Incoherente · no responde</div>
+          </div>
+          <div class="les-example">
+            <div class="les-ex-prompt">Tarea: Traduce "Hello" al español</div>
+            <div class="les-ex-out les-ex-out--bad">Respuesta del modelo: "Hola. Es una palabra. Saludar es importante. Las palabras cambian entre idiomas."</div>
+            <div class="les-ex-label les-label--bad">No sigue la instrucción</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scale 2: 1B-10B -->
+      <div class="les-spanel" data-spanel="2">
+        <div class="les-spanel-header">
+          <div class="les-spanel-badge les-badge--2">Escala media</div>
+          <div class="les-spanel-loss">Pérdida: ~2.5–3.0</div>
+        </div>
+        <div class="les-examples">
+          <div class="les-example">
+            <div class="les-ex-prompt">Pregunta: ¿Cuál es la capital de Francia?</div>
+            <div class="les-ex-out les-ex-out--mid">Respuesta del modelo: "La capital de Francia es París, una ciudad importante en Europa."</div>
+            <div class="les-ex-label les-label--mid">Correcto · responde a la instrucción</div>
+          </div>
+          <div class="les-example">
+            <div class="les-ex-prompt">Tarea: Escribe código Python que sume dos números</div>
+            <div class="les-ex-out les-ex-out--mid">Respuesta del modelo: "def suma(a, b): resultado = a + b. return resultado si a es mayor que b."</div>
+            <div class="les-ex-label les-label--mid">Código parcial · errores de sintaxis</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scale 3: 70B-175B -->
+      <div class="les-spanel" data-spanel="3">
+        <div class="les-spanel-header">
+          <div class="les-spanel-badge les-badge--3">Escala grande</div>
+          <div class="les-spanel-loss">Pérdida: ~1.8–2.2</div>
+        </div>
+        <div class="les-examples">
+          <div class="les-example">
+            <div class="les-ex-prompt">Tarea: Explica por qué los aviones vuelan en términos simples</div>
+            <div class="les-ex-out les-ex-out--good">Respuesta del modelo: "Los aviones vuelan porque las alas están diseñadas para que el aire pase más rápido por encima que por debajo, creando una diferencia de presión que genera sustentación hacia arriba."</div>
+            <div class="les-ex-label les-label--good">Explicación correcta y clara</div>
+          </div>
+          <div class="les-example">
+            <div class="les-ex-prompt">Tarea: Escribe una función que invierta una cadena en Python</div>
+            <div class="les-ex-out les-ex-out--good">Respuesta del modelo: "def invertir(s): return s[::-1]"</div>
+            <div class="les-ex-label les-label--good">Código correcto y eficiente</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scale 4: Frontier -->
+      <div class="les-spanel" data-spanel="4">
+        <div class="les-spanel-header">
+          <div class="les-spanel-badge les-badge--4">Frontera actual</div>
+          <div class="les-spanel-loss">Pérdida: ~1.2–1.5</div>
+        </div>
+        <div class="les-examples">
+          <div class="les-example">
+            <div class="les-ex-prompt">Tarea: Razona paso a paso: si María tiene 3 hermanos y cada hermano tiene 2 hijos, ¿cuántos sobrinos tiene María?</div>
+            <div class="les-ex-out les-ex-out--great">Respuesta del modelo: "Cada uno de los 3 hermanos tiene 2 hijos, por lo que el número total de hijos de los hermanos es 3 × 2 = 6. Todos esos niños son sobrinos de María. María tiene 6 sobrinos."</div>
+            <div class="les-ex-label les-label--great">Razonamiento multi-paso correcto</div>
+          </div>
+          <div class="les-example">
+            <div class="les-ex-prompt">Tarea: Escribe un test unitario para la función invertir(s) anterior</div>
+            <div class="les-ex-out les-ex-out--great">Respuesta del modelo: "def test_invertir(): assert invertir('hola') == 'aloh'; assert invertir('') == ''; assert invertir('a') == 'a'"</div>
+            <div class="les-ex-label les-label--great">Casos de test completos y correctos</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Key takeaway -->
+  <div class="les-takeaway">
+    <div class="les-takeaway-label">Por qué importa la predictabilidad</div>
+    <div class="les-takeaway-row">
+      <div class="les-tk-card">
+        <div class="les-tk-sym">📊</div>
+        <div class="les-tk-body">
+          <div class="les-tk-title">Planificación de inversión</div>
+          <div class="les-tk-text">Antes de entrenar, los laboratorios pueden estimar cuánto compute necesitan para alcanzar un nivel de pérdida objetivo. El capex se vuelve calculable.</div>
+        </div>
+      </div>
+      <div class="les-tk-card">
+        <div class="les-tk-sym">⚖</div>
+        <div class="les-tk-body">
+          <div class="les-tk-title">Trade-off parámetros vs datos</div>
+          <div class="les-tk-text">Las leyes de escala también dicen cuándo vale más añadir datos vs parámetros para un budget fijo. Chinchilla (2022) reequilibró este trade-off.</div>
+        </div>
+      </div>
+      <div class="les-tk-card">
+        <div class="les-tk-sym">⚠</div>
+        <div class="les-tk-body">
+          <div class="les-tk-title">Límite: no predicen emergencia</div>
+          <div class="les-tk-text">Las leyes de escala predicen pérdida promedio, no qué capacidades aparecerán ni cuándo. Eso es el problema de la siguiente animación.</div>
+        </div>
+      </div>
+    </div>
+    <div class="les-formula-note">La ley de potencia: L(x) ~ x<sup>−α</sup> · El exponente α varía según qué escales (α ≈ 0.076 parámetros, ≈ 0.095 datos, ≈ 0.050 cómputo). Es un ajuste empírico, no una ley universal.</div>
+  </div>
+
 </div>
+
+<style>
+.les-wrap, .les-wrap * { box-sizing: border-box; }
+
+.les-wrap {
+  --ea: #26A69A;
+  --eb: #324AB2;
+  --eg: #FFB343;
+  --ec: #7cc7ff;
+  --ebg: var(--md-default-bg-color, #fff);
+  --efg: var(--md-default-fg-color, #0f172a);
+  --ebd: rgba(15,23,42,.13);
+  --emut: rgba(15,23,42,.56);
+  --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid;
+  gap: 16px;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--ebd);
+  border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--ec) 6%,transparent), transparent 50%),
+    radial-gradient(90% 110% at 95% 100%, color-mix(in srgb,var(--ea) 5%,transparent), transparent 52%),
+    var(--ebg);
+  color: var(--efg);
+  font-family: var(--ef);
+  -webkit-font-smoothing: antialiased;
+}
+[data-md-color-scheme="slate"] .les-wrap {
+  --ebg: var(--md-default-bg-color, #0f172a);
+  --efg: var(--md-default-fg-color, #e2e8f0);
+  --ebd: rgba(226,232,240,.13);
+  --emut: rgba(226,232,240,.56);
+}
+
+.les-hd { display: grid; gap: 4px; }
+.les-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.les-sub { font-size: 13px; color: var(--emut); line-height: 1.55; max-width: 72ch; }
+
+/* Insight row */
+.les-insight-row { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: center; }
+@media (max-width: 560px) { .les-insight-row { grid-template-columns: 1fr; } }
+.les-insight-card { border-radius: 12px; padding: 12px 14px; display: grid; gap: 6px; }
+.les-insight-card--before { background: rgba(100,116,139,.07); border: 1px solid rgba(100,116,139,.18); }
+.les-insight-card--after  { background: rgba(38,166,154,.07); border: 1px solid rgba(38,166,154,.22); }
+.les-insight-tag { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--emut); }
+.les-insight-tag--after { color: color-mix(in srgb,var(--ea) 75%,var(--emut)); }
+.les-insight-q { font-size: 12px; font-weight: 800; line-height: 1.35; font-style: italic; }
+.les-insight-a { font-size: 11.5px; line-height: 1.5; padding: 6px 9px; border-radius: 7px; }
+.les-insight-a--unk { background: rgba(239,68,68,.06); border: 1px solid rgba(239,68,68,.15); color: var(--emut); }
+.les-insight-a--ok  { background: rgba(38,166,154,.06); border: 1px solid rgba(38,166,154,.18); }
+.les-insight-arrow { font-size: 20px; color: var(--emut); text-align: center; }
+@media (max-width: 560px) { .les-insight-arrow { display: none; } }
+
+/* Explorer */
+.les-explorer { border: 1px solid var(--ebd); border-radius: 14px; overflow: hidden; }
+.les-explorer-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--emut); padding: 10px 14px 8px; background: color-mix(in srgb,var(--ebg) 85%,#0f172a 15%); border-bottom: 1px solid var(--ebd); }
+.les-scale-tabs { display: flex; gap: 0; flex-wrap: wrap; border-bottom: 1px solid var(--ebd); background: color-mix(in srgb,var(--ebg) 85%,#0f172a 15%); }
+.les-stab {
+  padding: 8px 14px; border: none; border-right: 1px solid var(--ebd);
+  background: transparent; color: var(--emut);
+  font-family: var(--ef); font-size: 11px; font-weight: 700; cursor: pointer;
+  transition: background .18s, color .18s;
+}
+.les-stab:hover { color: var(--efg); }
+.les-stab--active { background: color-mix(in srgb,var(--ec) 10%,transparent); color: var(--efg); }
+
+.les-scale-panels { padding: 14px; }
+.les-spanel { display: none; }
+.les-spanel--active { display: grid; gap: 10px; animation: lesIn .2s ease; }
+@keyframes lesIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+.les-spanel-header { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.les-spanel-badge { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; padding: 3px 10px; border-radius: 999px; }
+.les-badge--1 { background: rgba(100,116,139,.12); border: 1px solid rgba(100,116,139,.25); color: rgba(100,116,139,.9); }
+.les-badge--2 { background: rgba(255,179,67,.1); border: 1px solid rgba(255,179,67,.25); color: color-mix(in srgb,var(--eg) 80%,var(--efg)); }
+.les-badge--3 { background: rgba(38,166,154,.1); border: 1px solid rgba(38,166,154,.28); color: color-mix(in srgb,var(--ea) 80%,var(--efg)); }
+.les-badge--4 { background: rgba(124,199,255,.1); border: 1px solid rgba(124,199,255,.28); color: color-mix(in srgb,var(--ec) 80%,var(--efg)); }
+.les-spanel-loss { font-family: monospace; font-size: 11.5px; font-weight: 700; color: var(--emut); }
+
+.les-examples { display: grid; gap: 8px; }
+.les-example { border-radius: 10px; padding: 11px 13px; background: color-mix(in srgb,var(--ebg) 80%,#0f172a 20%); border: 1px solid var(--ebd); display: grid; gap: 6px; }
+.les-ex-prompt { font-size: 11.5px; font-weight: 700; color: var(--efg); }
+.les-ex-out { font-family: "Courier New", monospace; font-size: 11px; line-height: 1.5; padding: 8px 10px; border-radius: 7px; }
+.les-ex-out--bad   { background: rgba(239,68,68,.06); border: 1px solid rgba(239,68,68,.14); color: var(--emut); }
+.les-ex-out--mid   { background: rgba(255,179,67,.06); border: 1px solid rgba(255,179,67,.16); color: var(--emut); }
+.les-ex-out--good  { background: rgba(38,166,154,.06); border: 1px solid rgba(38,166,154,.18); color: var(--emut); }
+.les-ex-out--great { background: rgba(124,199,255,.06); border: 1px solid rgba(124,199,255,.18); color: var(--emut); }
+.les-ex-label { font-size: 10px; font-weight: 700; letter-spacing: .04em; }
+.les-label--bad   { color: rgba(239,68,68,.7); }
+.les-label--mid   { color: color-mix(in srgb,var(--eg) 70%,var(--emut)); }
+.les-label--good  { color: color-mix(in srgb,var(--ea) 70%,var(--emut)); }
+.les-label--great { color: color-mix(in srgb,var(--ec) 70%,var(--emut)); }
+
+/* Takeaway */
+.les-takeaway { display: grid; gap: 10px; }
+.les-takeaway-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--emut); }
+.les-takeaway-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+@media (max-width: 620px) { .les-takeaway-row { grid-template-columns: 1fr; } }
+.les-tk-card { border-radius: 12px; padding: 12px 13px; background: color-mix(in srgb,var(--ebg) 80%,#0f172a 20%); border: 1px solid var(--ebd); display: flex; gap: 10px; align-items: flex-start; }
+.les-tk-sym { font-size: 18px; flex-shrink: 0; padding-top: 1px; }
+.les-tk-body { display: grid; gap: 4px; }
+.les-tk-title { font-size: 12px; font-weight: 800; }
+.les-tk-text { font-size: 11px; color: var(--emut); line-height: 1.5; }
+.les-formula-note { font-size: 10.5px; color: var(--emut); font-style: italic; line-height: 1.5; padding: 8px 12px; border-radius: 8px; background: color-mix(in srgb,var(--ec) 5%,transparent); border: 1px solid color-mix(in srgb,var(--ec) 12%,transparent); }
+</style>
 
 <script>
-(function(){
-  const tabs = document.querySelectorAll('.les-tab');
-  const lineParams = document.getElementById('lesLineParams');
-  const lineData = document.getElementById('lesLineData');
-  const lineCompute = document.getElementById('lesLineCompute');
-  const dots = document.getElementById('lesDots');
-  const eq = document.getElementById('lesEq');
-  const ref = document.getElementById('lesRef');
-  const xTitle = document.getElementById('lesXTitle');
-  const xLabels = [
-    document.querySelector('.les-x0'),
-    document.querySelector('.les-x1'),
-    document.querySelector('.les-x2'),
-    document.querySelector('.les-x3'),
-    document.querySelector('.les-x4'),
-    document.querySelector('.les-x5'),
-    document.querySelector('.les-x6'),
-  ];
-
-  const config = {
-    params: {
-      eq: 'α = 0.076',
-      ref: 'Kaplan et al., 2020 · Parámetros',
-      xTitle: 'Número de parámetros (log)',
-      xLabs: ['10M','100M','1B','10B','100B','1T','10T'],
-      dotsHTML: `
-        <circle cx="130" cy="68" r="5" fill="#FFB343"/>
-        <text x="138" y="65" font-size="9" fill="#FFB343" font-weight="600">GPT-1</text>
-        <circle cx="192" cy="97" r="5" fill="#FFB343"/>
-        <text x="200" y="94" font-size="9" fill="#FFB343" font-weight="600">GPT-2</text>
-        <circle cx="314" cy="152" r="5" fill="#FFB343"/>
-        <text x="322" y="149" font-size="9" fill="#FFB343" font-weight="600">GPT-3</text>
-        <circle cx="390" cy="177" r="5" fill="#FFB343"/>
-        <text x="398" y="174" font-size="9" fill="#FFB343" font-weight="600">Frontier</text>`,
-      active: lineParams, others: [lineData, lineCompute]
-    },
-    data: {
-      eq: 'α = 0.095',
-      ref: 'Kaplan et al., 2020 · Tokens',
-      xTitle: 'Tokens de entrenamiento (log)',
-      xLabs: ['1B','10B','100B','1T','10T','100T','1Q'],
-      dotsHTML: `
-        <circle cx="184" cy="105" r="5" fill="#FFB343"/>
-        <text x="192" y="102" font-size="9" fill="#FFB343" font-weight="600">C4</text>
-        <circle cx="244" cy="128" r="5" fill="#FFB343"/>
-        <text x="252" y="125" font-size="9" fill="#FFB343" font-weight="600">GPT-3</text>
-        <circle cx="304" cy="158" r="5" fill="#FFB343"/>
-        <text x="312" y="155" font-size="9" fill="#FFB343" font-weight="600">Chinchilla</text>
-        <circle cx="380" cy="194" r="5" fill="#FFB343"/>
-        <text x="388" y="191" font-size="9" fill="#FFB343" font-weight="600">Llama-3</text>`,
-      active: lineData, others: [lineParams, lineCompute]
-    },
-    compute: {
-      eq: 'α = 0.050',
-      ref: 'Kaplan et al., 2020 · FLOPs',
-      xTitle: 'Cómputo de entrenamiento (log FLOPs)',
-      xLabs: ['10¹⁸','10²⁰','10²²','10²³','10²⁴','10²⁵','10²⁶'],
-      dotsHTML: `
-        <circle cx="154" cy="60" r="5" fill="#FFB343"/>
-        <text x="162" y="57" font-size="9" fill="#FFB343" font-weight="600">BERT</text>
-        <circle cx="244" cy="82" r="5" fill="#FFB343"/>
-        <text x="252" y="79" font-size="9" fill="#FFB343" font-weight="600">GPT-3</text>
-        <circle cx="274" cy="90" r="5" fill="#FFB343"/>
-        <text x="282" y="87" font-size="9" fill="#FFB343" font-weight="600">Chinchilla</text>
-        <circle cx="364" cy="118" r="5" fill="#FFB343"/>
-        <text x="372" y="115" font-size="9" fill="#FFB343" font-weight="600">GPT-4</text>`,
-      active: lineCompute, others: [lineParams, lineData]
+(function () {
+  function boot() {
+    var wrap = document.querySelector('[data-demo="04-leyes-escala"]');
+    if (!wrap || wrap.dataset.lesReady) return;
+    wrap.dataset.lesReady = '1';
+    var tabs = wrap.querySelectorAll('.les-stab');
+    var panels = wrap.querySelectorAll('.les-spanel');
+    function switchTab(n) {
+      tabs.forEach(function(t) { t.classList.remove('les-stab--active'); });
+      panels.forEach(function(p) { p.classList.remove('les-spanel--active'); });
+      var tab = wrap.querySelector('.les-stab[data-scale="' + n + '"]');
+      var panel = wrap.querySelector('.les-spanel[data-spanel="' + n + '"]');
+      if (tab) tab.classList.add('les-stab--active');
+      if (panel) panel.classList.add('les-spanel--active');
     }
-  };
-
-  function applyTab(key) {
-    const c = config[key];
-    // update lines
-    c.active.setAttribute('opacity','1');
-    c.active.setAttribute('stroke-dasharray','none');
-    c.active.setAttribute('stroke-width','2.5');
-    c.others.forEach(l => { l.setAttribute('opacity','0.18'); l.setAttribute('stroke-dasharray','6,4'); l.setAttribute('stroke-width','1.5'); });
-    // update dots
-    dots.innerHTML = c.dotsHTML;
-    // update info
-    eq.textContent = c.eq;
-    ref.textContent = c.ref;
-    xTitle.textContent = c.xTitle;
-    xLabels.forEach((el,i) => { el.textContent = c.xLabs[i]; });
-  }
-
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      tabs.forEach(t => t.classList.remove('les-tab--active'));
-      tab.classList.add('les-tab--active');
-      applyTab(tab.dataset.ltab);
+    tabs.forEach(function(btn) {
+      btn.addEventListener('click', function() { switchTab(btn.dataset.scale); });
     });
-  });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
+  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
 })();
 </script>
-</div>

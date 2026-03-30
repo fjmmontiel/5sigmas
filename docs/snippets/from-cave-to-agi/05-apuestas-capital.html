@@ -1,200 +1,109 @@
 <div class="cap-wrap" data-demo="05-apuestas-capital">
+
   <div class="cap-hd">
-    <div class="cap-title">Las apuestas en capital: quién invierte y en qué alternativa</div>
+    <div class="cap-title">La frontera ya no escala solo en modelo</div>
+    <div class="cap-sub">El capital se está distribuyendo entre cuatro capas: modelos, chips, energía y robótica. La tesis implícita: el siguiente salto requiere infraestructura, no solo más parámetros.</div>
   </div>
 
-  <!-- Scale bar -->
-  <div class="cap-scale">
-    <div class="cap-scale-label">Capital comprometido por categoría (USD)</div>
-    <div class="cap-scale-rows">
-      <div class="cap-scale-row">
-        <div class="cap-scale-name">Inteligencia encarnada</div>
-        <div class="cap-scale-track"><div class="cap-scale-fill cap-scale-fill--teal" data-pct="55"></div></div>
-        <div class="cap-scale-val">~$1,66B</div>
-      </div>
-      <div class="cap-scale-row">
-        <div class="cap-scale-name">Hardware alternativo</div>
-        <div class="cap-scale-track"><div class="cap-scale-fill cap-scale-fill--blue" data-pct="28"></div></div>
-        <div class="cap-scale-val">~$1,01B</div>
-      </div>
-      <div class="cap-scale-row">
-        <div class="cap-scale-name">Energía nuclear para IA</div>
-        <div class="cap-scale-track"><div class="cap-scale-fill cap-scale-fill--amber" data-pct="16"></div></div>
-        <div class="cap-scale-val">~$500M+</div>
-      </div>
-      <div class="cap-scale-row">
-        <div class="cap-scale-name">Modelos alternativos y seguridad</div>
-        <div class="cap-scale-track"><div class="cap-scale-fill cap-scale-fill--purple" data-pct="100"></div></div>
-        <div class="cap-scale-val">&gt;$21B</div>
-      </div>
-    </div>
-    <div class="cap-scale-note">* La categoría "Modelos alternativos" incluye rondas de Anthropic ($14B+) y xAI ($6B) — escala radicalmente distinta al resto</div>
-  </div>
-
+  <!-- Small multiples: 4 categories -->
   <div class="cap-grid">
 
-    <!-- ── Inteligencia encarnada ── -->
-    <div class="cap-cat">
-      <div class="cap-cat-hd" style="--cc:#26A69A">
-        <div class="cap-cat-icon">🌍</div>
-        <div>
-          <div class="cap-cat-name">Inteligencia encarnada</div>
-          <div class="cap-cat-sub">World models · robots · experiencia física</div>
+    <div class="cap-cat cap-cat--models">
+      <div class="cap-cat-header">
+        <div class="cap-cat-icon">🧠</div>
+        <div class="cap-cat-info">
+          <div class="cap-cat-name">Modelos</div>
+          <div class="cap-cat-sub">Fronteras, alternativas al Transformer, multimodalidad</div>
         </div>
       </div>
-      <div class="cap-bets">
-        <div class="cap-bet">
-          <div class="cap-bet-top">
-            <span class="cap-co">AMI Labs</span>
-            <span class="cap-amt cap-amt--teal">$1.030M</span>
-            <span class="cap-yr">2026</span>
-          </div>
-          <div class="cap-bet-thesis">LeCun (presidente ejecutivo) · París · «La inteligencia real no empieza en el lenguaje. Empieza en el mundo.»</div>
-        </div>
-        <div class="cap-bet">
-          <div class="cap-bet-top">
-            <span class="cap-co">World Labs</span>
-            <span class="cap-amt cap-amt--teal">$230M</span>
-            <span class="cap-yr">2024</span>
-          </div>
-          <div class="cap-bet-thesis">Fei-Fei Li · Comprensión y generación de entornos 3D a partir de imágenes únicas</div>
-        </div>
-        <div class="cap-bet">
-          <div class="cap-bet-top">
-            <span class="cap-co">Physical Intelligence (π)</span>
-            <span class="cap-amt cap-amt--teal">$400M</span>
-            <span class="cap-yr">2024</span>
-          </div>
-          <div class="cap-bet-thesis">Ex-Google Brain, CMU, Stanford · Robots generalistas mediante modelos fundacionales VLA (Vision-Language-Action)</div>
-        </div>
+      <div class="cap-cat-bar-wrap">
+        <div class="cap-cat-bar" style="--bw:85%"></div>
+        <div class="cap-cat-bar-label">$10B+ (OpenAI, Anthropic, xAI, DeepMind)</div>
+      </div>
+      <div class="cap-bets-mini">
+        <div class="cap-bet-mini"><span class="cap-co">OpenAI</span><span class="cap-amt">$6.6B</span><span class="cap-yr">2024</span></div>
+        <div class="cap-bet-mini"><span class="cap-co">Anthropic</span><span class="cap-amt">$4B</span><span class="cap-yr">2023–24</span></div>
+        <div class="cap-bet-mini"><span class="cap-co">xAI</span><span class="cap-amt">$6B</span><span class="cap-yr">2024</span></div>
+        <div class="cap-bet-mini"><span class="cap-co">Mistral / Cohere</span><span class="cap-amt">~$1B</span><span class="cap-yr">2023–24</span></div>
       </div>
     </div>
 
-    <!-- ── Hardware alternativo ── -->
-    <div class="cap-cat">
-      <div class="cap-cat-hd" style="--cc:#324AB2">
+    <div class="cap-cat cap-cat--chips">
+      <div class="cap-cat-header">
         <div class="cap-cat-icon">⚡</div>
-        <div>
-          <div class="cap-cat-name">Hardware alternativo</div>
-          <div class="cap-cat-sub">Chips especializados · inferencia ultra-rápida</div>
+        <div class="cap-cat-info">
+          <div class="cap-cat-name">Chips e infraestructura</div>
+          <div class="cap-cat-sub">Alternativas a NVIDIA, aceleración personalizada</div>
         </div>
       </div>
-      <div class="cap-bets">
-        <div class="cap-bet">
-          <div class="cap-bet-top">
-            <span class="cap-co">Groq</span>
-            <span class="cap-amt cap-amt--blue">$640M</span>
-            <span class="cap-yr">2024</span>
-          </div>
-          <div class="cap-bet-thesis">LPU (Language Processing Unit) · inferencia determinista sin memoria de KV-cache · 10× más rápida que GPU convencional</div>
-        </div>
-        <div class="cap-bet">
-          <div class="cap-bet-top">
-            <span class="cap-co">Etched</span>
-            <span class="cap-amt cap-amt--blue">$120M</span>
-            <span class="cap-yr">2024</span>
-          </div>
-          <div class="cap-bet-thesis">ASIC «Sohu» diseñado exclusivamente para inferencia de Transformers · 10-20× más eficiente que GPU de propósito general</div>
-        </div>
-        <div class="cap-bet">
-          <div class="cap-bet-top">
-            <span class="cap-co">Cerebras Systems</span>
-            <span class="cap-amt cap-amt--blue">$250M+</span>
-            <span class="cap-yr">2024</span>
-          </div>
-          <div class="cap-bet-thesis">Wafer Scale Engine (WSE-3) · 4 billones de transistores en un solo chip · elimina cuellos de botella entre GPUs</div>
-        </div>
+      <div class="cap-cat-bar-wrap">
+        <div class="cap-cat-bar cap-cat-bar--chips" style="--bw:70%"></div>
+        <div class="cap-cat-bar-label">$5B+ (Cerebras, Groq, SambaNova, Intel Gaudi)</div>
+      </div>
+      <div class="cap-bets-mini">
+        <div class="cap-bet-mini"><span class="cap-co">Cerebras Systems</span><span class="cap-amt">$850M</span><span class="cap-yr">2024</span></div>
+        <div class="cap-bet-mini"><span class="cap-co">Groq</span><span class="cap-amt">$640M</span><span class="cap-yr">2024</span></div>
+        <div class="cap-bet-mini"><span class="cap-co">SambaNova</span><span class="cap-amt">$676M</span><span class="cap-yr">acum.</span></div>
+        <div class="cap-bet-mini"><span class="cap-co">Nvidia capex</span><span class="cap-amt">$14B</span><span class="cap-yr">2024</span></div>
       </div>
     </div>
 
-    <!-- ── Energía nuclear para IA ── -->
-    <div class="cap-cat">
-      <div class="cap-cat-hd" style="--cc:#f59e0b">
-        <div class="cap-cat-icon">☢</div>
-        <div>
-          <div class="cap-cat-name">Energía nuclear para IA</div>
-          <div class="cap-cat-sub">Fusión · fisión modular · demanda eléctrica</div>
+    <div class="cap-cat cap-cat--energy">
+      <div class="cap-cat-header">
+        <div class="cap-cat-icon">🔋</div>
+        <div class="cap-cat-info">
+          <div class="cap-cat-name">Energía para compute</div>
+          <div class="cap-cat-sub">Nuclear, solar, eficiencia energética para datacenters</div>
         </div>
       </div>
-      <div class="cap-bets">
-        <div class="cap-bet">
-          <div class="cap-bet-top">
-            <span class="cap-co">Helion Energy</span>
-            <span class="cap-amt cap-amt--amber">$500M</span>
-            <span class="cap-yr">2021</span>
-          </div>
-          <div class="cap-bet-thesis">Altman (inversor principal) · Acuerdo de compra de energía con Microsoft (2028) · Fusión nuclear para alimentar centros de datos de IA</div>
-        </div>
-        <div class="cap-bet">
-          <div class="cap-bet-top">
-            <span class="cap-co">Oklo</span>
-            <span class="cap-amt cap-amt--amber">SPAC</span>
-            <span class="cap-yr">2024</span>
-          </div>
-          <div class="cap-bet-thesis">Altman (presidente del consejo) · Micro-reactores de fisión para alimentar clústeres de GPU de forma distribuida</div>
-        </div>
-        <div class="cap-bet">
-          <div class="cap-bet-top">
-            <span class="cap-co">Kairos Power</span>
-            <span class="cap-amt cap-amt--amber">PPA Google</span>
-            <span class="cap-yr">2030</span>
-          </div>
-          <div class="cap-bet-thesis">Contrato de compra con Google · Small Modular Reactors (SMR) para centros de datos · primer reactor previsto en 2030</div>
-        </div>
+      <div class="cap-cat-bar-wrap">
+        <div class="cap-cat-bar cap-cat-bar--energy" style="--bw:55%"></div>
+        <div class="cap-cat-bar-label">$3B+ comprometidos (Microsoft, Google, Amazon)</div>
+      </div>
+      <div class="cap-bets-mini">
+        <div class="cap-bet-mini"><span class="cap-co">Microsoft + Constellation</span><span class="cap-amt">20 años</span><span class="cap-yr">Three Mile Island</span></div>
+        <div class="cap-bet-mini"><span class="cap-co">Google + Kairos Power</span><span class="cap-amt">SMR</span><span class="cap-yr">2030+</span></div>
+        <div class="cap-bet-mini"><span class="cap-co">Amazon + X-energy</span><span class="cap-amt">$500M</span><span class="cap-yr">2024</span></div>
       </div>
     </div>
 
-    <!-- ── Modelos alternativos ── -->
-    <div class="cap-cat">
-      <div class="cap-cat-hd" style="--cc:#a855f7">
-        <div class="cap-cat-icon">🔬</div>
-        <div>
-          <div class="cap-cat-name">Modelos alternativos y seguridad</div>
-          <div class="cap-cat-sub">Safety-first · open weights · diversidad de enfoques</div>
+    <div class="cap-cat cap-cat--robotics">
+      <div class="cap-cat-header">
+        <div class="cap-cat-icon">🤖</div>
+        <div class="cap-cat-info">
+          <div class="cap-cat-name">Robótica fundacional</div>
+          <div class="cap-cat-sub">Inteligencia encarnada, world models físicos</div>
         </div>
       </div>
-      <div class="cap-bets">
-        <div class="cap-bet">
-          <div class="cap-bet-top">
-            <span class="cap-co">Anthropic</span>
-            <span class="cap-amt cap-amt--purple">$14B+</span>
-            <span class="cap-yr">2023-24</span>
-          </div>
-          <div class="cap-bet-thesis">Amazon + Google · Constitutional AI · Responsible Scaling Policy · interpretabilidad mecanicista como apuesta diferenciadora</div>
-        </div>
-        <div class="cap-bet">
-          <div class="cap-bet-top">
-            <span class="cap-co">Mistral AI</span>
-            <span class="cap-amt cap-amt--purple">€1.1B</span>
-            <span class="cap-yr">2024</span>
-          </div>
-          <div class="cap-bet-thesis">Open weights de referencia · alternativa europea a modelos propietarios · eficiencia por parámetro como ventaja competitiva</div>
-        </div>
-        <div class="cap-bet">
-          <div class="cap-bet-top">
-            <span class="cap-co">xAI (Grok)</span>
-            <span class="cap-amt cap-amt--purple">$6B</span>
-            <span class="cap-yr">2024</span>
-          </div>
-          <div class="cap-bet-thesis">Elon Musk · corpus de X/Twitter · clúster «Coloso» en Memphis (200K H100) · alternativa a OpenAI con datos de red social en tiempo real</div>
-        </div>
+      <div class="cap-cat-bar-wrap">
+        <div class="cap-cat-bar cap-cat-bar--robotics" style="--bw:42%"></div>
+        <div class="cap-cat-bar-label">$2.4B+ (AMI Labs, Physical Intelligence, Figure)</div>
+      </div>
+      <div class="cap-bets-mini">
+        <div class="cap-bet-mini"><span class="cap-co">AMI Labs (LeCun)</span><span class="cap-amt">$1.03B</span><span class="cap-yr">2026</span></div>
+        <div class="cap-bet-mini"><span class="cap-co">Physical Intelligence (π)</span><span class="cap-amt">$400M</span><span class="cap-yr">2024</span></div>
+        <div class="cap-bet-mini"><span class="cap-co">Figure AI</span><span class="cap-amt">$675M</span><span class="cap-yr">2024</span></div>
+        <div class="cap-bet-mini"><span class="cap-co">1X Technologies</span><span class="cap-amt">$100M</span><span class="cap-yr">2024</span></div>
       </div>
     </div>
 
   </div>
 
-  <div class="cap-footer">
-    Fuentes: TechCrunch, Bloomberg, The Information, CNBC, SEC filings · Cifras en USD salvo indicación contraria · 2024-2026
+  <div class="cap-verdict">
+    <div class="cap-verdict-label">La tesis que el capital señala</div>
+    <div class="cap-verdict-text">El cómputo tiene precio. La energía tiene límite. Los chips son un cuello de botella. Y la inteligencia sin cuerpo no puede actuar en el mundo físico. Quien controle estas cuatro capas simultáneamente controlará la frontera, no solo quien entrene el mejor modelo.</div>
   </div>
+
 </div>
 
 <style>
 .cap-wrap, .cap-wrap * { box-sizing: border-box; }
 
 .cap-wrap {
-  --ea: var(--md-primary-fg-color, #26A69A);
+  --ea: #26A69A;
   --eb: #324AB2;
-  --eg: var(--md-accent-fg-color, #FFB343);
+  --eg: #FFB343;
+  --ec: #7cc7ff;
   --ebg: var(--md-default-bg-color, #fff);
   --efg: var(--md-default-fg-color, #0f172a);
   --ebd: rgba(15,23,42,.13);
@@ -210,13 +119,12 @@
   border-radius: 20px;
   background:
     radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--eb) 6%,transparent), transparent 50%),
-    radial-gradient(90% 110% at 95% 100%, color-mix(in srgb,var(--ea) 5%,transparent), transparent 52%),
+    radial-gradient(90% 110% at 95% 100%, color-mix(in srgb,var(--eg) 5%,transparent), transparent 52%),
     var(--ebg);
   color: var(--efg);
   font-family: var(--ef);
   -webkit-font-smoothing: antialiased;
 }
-
 [data-md-color-scheme="slate"] .cap-wrap {
   --ebg: var(--md-default-bg-color, #0f172a);
   --efg: var(--md-default-fg-color, #e2e8f0);
@@ -225,144 +133,51 @@
 }
 
 .cap-hd { display: grid; gap: 4px; }
-.cap-title { font-size: clamp(15px,2vw,20px); font-weight: 900; letter-spacing: -.02em; line-height: 1.15; }
-.cap-sub { font-size: 13px; color: var(--emut); line-height: 1.5; max-width: 68ch; }
+.cap-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.cap-sub { font-size: 13px; color: var(--emut); line-height: 1.55; max-width: 72ch; }
 
-/* ── Grid ── */
-.cap-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-}
+/* Small multiples grid */
+.cap-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 @media (max-width: 580px) { .cap-grid { grid-template-columns: 1fr; } }
 
-/* ── Category ── */
 .cap-cat {
-  border: 1px solid var(--ebd);
-  border-radius: 14px;
-  overflow: hidden;
-  background: color-mix(in srgb, var(--ebg) 75%, #0f172a 25%);
+  border-radius: 14px; border: 1px solid var(--ebd); padding: 13px; display: grid; gap: 9px;
+  background: color-mix(in srgb,var(--ebg) 80%,#0f172a 20%);
 }
-.cap-cat-hd {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 11px 14px;
-  background: color-mix(in srgb, var(--cc, var(--ea)) 12%, transparent);
-  border-bottom: 1px solid color-mix(in srgb, var(--cc, var(--ea)) 20%, var(--ebd));
-}
-.cap-cat-icon { font-size: 18px; flex-shrink: 0; }
-.cap-cat-name { font-size: 12.5px; font-weight: 900; line-height: 1.2; }
-.cap-cat-sub { font-size: 10px; color: var(--emut); margin-top: 2px; line-height: 1.3; }
+.cap-cat--models  { border-color: color-mix(in srgb,var(--eb) 25%,var(--ebd)); }
+.cap-cat--chips   { border-color: color-mix(in srgb,var(--ec) 25%,var(--ebd)); }
+.cap-cat--energy  { border-color: color-mix(in srgb,var(--eg) 25%,var(--ebd)); }
+.cap-cat--robotics { border-color: color-mix(in srgb,var(--ea) 25%,var(--ebd)); }
 
-/* ── Bets list ── */
-.cap-bets { display: grid; gap: 0; }
-.cap-bet {
-  padding: 10px 14px;
-  border-bottom: 1px solid var(--ebd);
-  display: grid;
-  gap: 4px;
-}
-.cap-bet:last-child { border-bottom: none; }
-.cap-bet-top {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  flex-wrap: wrap;
-}
-.cap-co {
-  font-size: 12.5px;
-  font-weight: 900;
-  flex: 1 1 auto;
-}
-.cap-amt {
-  font-size: 11px;
-  font-weight: 800;
-  padding: 2px 8px;
-  border-radius: 999px;
-  flex-shrink: 0;
-}
-.cap-amt--teal {
-  background: color-mix(in srgb, #26A69A 16%, transparent);
-  border: 1px solid color-mix(in srgb, #26A69A 40%, transparent);
-  color: color-mix(in srgb, #26A69A 90%, var(--efg));
-}
-.cap-amt--blue {
-  background: color-mix(in srgb, #324AB2 16%, transparent);
-  border: 1px solid color-mix(in srgb, #324AB2 40%, transparent);
-  color: color-mix(in srgb, #324AB2 90%, var(--efg));
-}
-.cap-amt--amber {
-  background: color-mix(in srgb, #f59e0b 14%, transparent);
-  border: 1px solid color-mix(in srgb, #f59e0b 38%, transparent);
-  color: color-mix(in srgb, #f59e0b 85%, var(--efg));
-}
-.cap-amt--purple {
-  background: color-mix(in srgb, #a855f7 14%, transparent);
-  border: 1px solid color-mix(in srgb, #a855f7 38%, transparent);
-  color: color-mix(in srgb, #a855f7 85%, var(--efg));
-}
-.cap-yr { font-size: 10px; font-weight: 700; color: var(--emut); flex-shrink: 0; }
-.cap-bet-thesis { font-size: 11px; color: var(--emut); line-height: 1.45; }
+.cap-cat-header { display: flex; gap: 10px; align-items: flex-start; }
+.cap-cat-icon { font-size: 20px; flex-shrink: 0; padding-top: 1px; }
+.cap-cat-name { font-size: 13px; font-weight: 900; }
+.cap-cat-sub { font-size: 10.5px; color: var(--emut); line-height: 1.35; }
 
-/* ── Scale bar ── */
-.cap-scale {
-  border: 1px solid var(--ebd);
-  border-radius: 13px;
-  padding: 12px 14px;
-  background: color-mix(in srgb, var(--ebg) 75%, #0f172a 25%);
-  display: grid;
-  gap: 9px;
+/* Bar */
+.cap-cat-bar-wrap { display: grid; gap: 4px; }
+.cap-cat-bar {
+  height: 8px; border-radius: 999px; width: var(--bw);
+  background: linear-gradient(90deg, color-mix(in srgb,var(--eb) 60%,transparent), color-mix(in srgb,var(--eb) 35%,transparent));
 }
-.cap-scale-label { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--emut); }
-.cap-scale-rows { display: grid; gap: 6px; }
-.cap-scale-row { display: grid; grid-template-columns: 180px 1fr 60px; gap: 8px; align-items: center; }
-@media (max-width: 500px) { .cap-scale-row { grid-template-columns: 1fr; gap: 3px; } }
-.cap-scale-name { font-size: 11px; font-weight: 700; color: var(--emut); line-height: 1.3; }
-.cap-scale-track { height: 10px; border-radius: 999px; background: color-mix(in srgb, var(--ebg) 50%, #0f172a 50%); overflow: hidden; }
-.cap-scale-fill { height: 100%; border-radius: 999px; width: 0; transition: width .65s ease; }
-.cap-scale-fill--teal   { background: linear-gradient(90deg, color-mix(in srgb,#26A69A 70%,transparent), color-mix(in srgb,#26A69A 45%,transparent)); }
-.cap-scale-fill--blue   { background: linear-gradient(90deg, color-mix(in srgb,#324AB2 70%,transparent), color-mix(in srgb,#324AB2 45%,transparent)); }
-.cap-scale-fill--amber  { background: linear-gradient(90deg, color-mix(in srgb,#f59e0b 70%,transparent), color-mix(in srgb,#f59e0b 45%,transparent)); }
-.cap-scale-fill--purple { background: linear-gradient(90deg, color-mix(in srgb,#a855f7 70%,transparent), color-mix(in srgb,#a855f7 45%,transparent)); }
-.cap-scale-val { font-size: 10.5px; font-weight: 800; color: var(--emut); text-align: right; }
-.cap-scale-note { font-size: 9.5px; color: var(--emut); font-style: italic; line-height: 1.4; opacity: .75; }
+.cap-cat-bar--chips   { background: linear-gradient(90deg, color-mix(in srgb,var(--ec) 60%,transparent), color-mix(in srgb,var(--ec) 35%,transparent)); }
+.cap-cat-bar--energy  { background: linear-gradient(90deg, color-mix(in srgb,var(--eg) 60%,transparent), color-mix(in srgb,var(--eg) 35%,transparent)); }
+.cap-cat-bar--robotics { background: linear-gradient(90deg, color-mix(in srgb,var(--ea) 60%,transparent), color-mix(in srgb,var(--ea) 35%,transparent)); }
+.cap-cat-bar-label { font-size: 9.5px; color: var(--emut); font-style: italic; }
 
-/* ── Footer ── */
-.cap-footer {
-  font-size: 10px;
-  color: var(--emut);
-  text-align: right;
-  opacity: .7;
-}
+/* Mini bets */
+.cap-bets-mini { display: grid; gap: 4px; border-top: 1px solid var(--ebd); padding-top: 7px; }
+.cap-bet-mini { display: flex; gap: 6px; align-items: baseline; flex-wrap: wrap; }
+.cap-co { font-size: 10.5px; font-weight: 700; flex: 1; min-width: 100px; }
+.cap-amt { font-family: monospace; font-size: 11px; font-weight: 900; }
+.cap-cat--models .cap-amt  { color: color-mix(in srgb,var(--eb) 75%,var(--efg)); }
+.cap-cat--chips .cap-amt   { color: color-mix(in srgb,var(--ec) 75%,var(--efg)); }
+.cap-cat--energy .cap-amt  { color: color-mix(in srgb,var(--eg) 75%,var(--efg)); }
+.cap-cat--robotics .cap-amt { color: color-mix(in srgb,var(--ea) 75%,var(--efg)); }
+.cap-yr { font-size: 9.5px; color: var(--emut); }
+
+/* Verdict */
+.cap-verdict { border-radius: 12px; padding: 12px 15px; background: color-mix(in srgb,var(--ea) 7%,transparent); border: 1px solid color-mix(in srgb,var(--ea) 22%,transparent); display: grid; gap: 4px; }
+.cap-verdict-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: color-mix(in srgb,var(--ea) 70%,var(--emut)); }
+.cap-verdict-text { font-size: 12.5px; font-weight: 700; line-height: 1.5; }
 </style>
-
-<script>
-(function () {
-  function boot() {
-    var wrap = document.querySelector('[data-demo="05-apuestas-capital"]');
-    if (!wrap || wrap.dataset.capReady) return;
-    wrap.dataset.capReady = '1';
-
-    function animateBars() {
-      wrap.querySelectorAll('.cap-scale-fill[data-pct]').forEach(function(el, i) {
-        var pct = el.dataset.pct;
-        setTimeout(function() { el.style.width = pct + '%'; }, 80 + i * 120);
-      });
-    }
-
-    if ('IntersectionObserver' in window) {
-      var io = new IntersectionObserver(function(entries) {
-        entries.forEach(function(e) { if (e.isIntersecting) { animateBars(); io.disconnect(); } });
-      }, { threshold: 0.25 });
-      io.observe(wrap);
-    } else {
-      animateBars();
-    }
-  }
-
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
-  else boot();
-  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
-})();
-</script>

@@ -1,0 +1,228 @@
+<div class="mem-wrap" data-demo="05-memoria-tipos">
+
+  <div class="mem-hd">
+    <div class="mem-title">Tres tipos de memoria, tres lógicas distintas</div>
+    <div class="mem-sub">Ventana larga ≠ memoria viva ≠ aprendizaje permanente. Confundirlos lleva a expectativas incorrectas sobre qué puede recordar un agente y cuándo.</div>
+  </div>
+
+  <!-- Three lanes -->
+  <div class="mem-lanes">
+
+    <!-- Lane 1: Immediate context -->
+    <div class="mem-lane mem-lane--ctx">
+      <div class="mem-lane-header">
+        <div class="mem-lane-num">1</div>
+        <div class="mem-lane-info">
+          <div class="mem-lane-name">Contexto inmediato</div>
+          <div class="mem-lane-sub">Lo que está activo en la ventana ahora mismo</div>
+        </div>
+      </div>
+      <div class="mem-lane-body">
+        <div class="mem-visual mem-visual--ctx">
+          <div class="mem-ctx-bar">
+            <div class="mem-ctx-seg mem-ctx-seg--system">instrucción del sistema</div>
+            <div class="mem-ctx-seg mem-ctx-seg--hist">historial de conversación</div>
+            <div class="mem-ctx-seg mem-ctx-seg--docs">documentos adjuntos</div>
+            <div class="mem-ctx-seg mem-ctx-seg--now">consulta actual</div>
+          </div>
+          <div class="mem-ctx-label">Ventana de contexto (ej: 128K tokens)</div>
+        </div>
+        <div class="mem-props">
+          <div class="mem-prop mem-prop--ok">Acceso instantáneo y sin latencia</div>
+          <div class="mem-prop mem-prop--warn">Se borra al terminar la sesión</div>
+          <div class="mem-prop mem-prop--warn">Coste computacional crece con el tamaño</div>
+        </div>
+      </div>
+      <div class="mem-lane-verdict">El modelo "ve" todo lo que hay en la ventana, pero no lo aprende ni lo retiene.</div>
+    </div>
+
+    <!-- Lane 2: External memory -->
+    <div class="mem-lane mem-lane--ext">
+      <div class="mem-lane-header">
+        <div class="mem-lane-num">2</div>
+        <div class="mem-lane-info">
+          <div class="mem-lane-name">Memoria externa</div>
+          <div class="mem-lane-sub">Lo que se recupera de fuera en tiempo de uso</div>
+        </div>
+      </div>
+      <div class="mem-lane-body">
+        <div class="mem-visual mem-visual--ext">
+          <div class="mem-ext-db">
+            <div class="mem-ext-icon">🗄</div>
+            <div class="mem-ext-label">Base vectorial / RAG</div>
+          </div>
+          <div class="mem-ext-arrow">
+            <svg viewBox="0 0 60 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="60" height="24">
+              <line x1="4" y1="12" x2="52" y2="12" stroke="rgba(255,179,67,.5)" stroke-width="1.5" stroke-dasharray="4 3"/>
+              <polygon points="46,8 54,12 46,16" fill="rgba(255,179,67,.6)"/>
+            </svg>
+            <div class="mem-ext-arrow-label">búsqueda por similitud</div>
+          </div>
+          <div class="mem-ext-context">
+            <div class="mem-ext-icon">📄</div>
+            <div class="mem-ext-label">fragmentos recuperados → ventana</div>
+          </div>
+        </div>
+        <div class="mem-props">
+          <div class="mem-prop mem-prop--ok">Persiste entre sesiones</div>
+          <div class="mem-prop mem-prop--ok">Escala a millones de documentos</div>
+          <div class="mem-prop mem-prop--warn">Solo accesible si se recupera activamente</div>
+        </div>
+      </div>
+      <div class="mem-lane-verdict">El modelo no "recuerda" documentos; los consulta cuando se los acercan. La recuperación puede fallar.</div>
+    </div>
+
+    <!-- Lane 3: Parametric memory -->
+    <div class="mem-lane mem-lane--param">
+      <div class="mem-lane-header">
+        <div class="mem-lane-num">3</div>
+        <div class="mem-lane-info">
+          <div class="mem-lane-name">Memoria paramétrica</div>
+          <div class="mem-lane-sub">Lo que el modelo incorporó durante el entrenamiento</div>
+        </div>
+      </div>
+      <div class="mem-lane-body">
+        <div class="mem-visual mem-visual--param">
+          <div class="mem-param-grid">
+            <div class="mem-param-node"></div><div class="mem-param-node"></div><div class="mem-param-node"></div>
+            <div class="mem-param-node"></div><div class="mem-param-node"></div><div class="mem-param-node"></div>
+            <div class="mem-param-node"></div><div class="mem-param-node"></div><div class="mem-param-node"></div>
+          </div>
+          <div class="mem-param-label">Pesos del modelo (fijos en inferencia)</div>
+        </div>
+        <div class="mem-props">
+          <div class="mem-prop mem-prop--ok">Siempre disponible, sin recuperación</div>
+          <div class="mem-prop mem-prop--ok">Conocimiento comprimido del entrenamiento</div>
+          <div class="mem-prop mem-prop--warn">Congelado: no aprende nada nuevo en uso</div>
+          <div class="mem-prop mem-prop--warn">Sujeto a alucinaciones y corte de datos</div>
+        </div>
+      </div>
+      <div class="mem-lane-verdict">Lo que el modelo "sabe" intrínsecamente. No puede actualizarse sin reentrenar.</div>
+    </div>
+
+  </div>
+
+  <!-- Contrast note -->
+  <div class="mem-contrast">
+    <div class="mem-contrast-label">El error más común</div>
+    <div class="mem-contrast-text">Ampliar la ventana de contexto no convierte el contexto inmediato en memoria persistente. Y recuperar documentos con RAG no equivale a que el modelo haya aprendido su contenido. Son tres mecanismos distintos con propiedades distintas.</div>
+  </div>
+
+</div>
+
+<style>
+.mem-wrap, .mem-wrap * { box-sizing: border-box; }
+
+.mem-wrap {
+  --ea: #26A69A;
+  --eb: #324AB2;
+  --eg: #FFB343;
+  --ec: #7cc7ff;
+  --ebg: var(--md-default-bg-color, #fff);
+  --efg: var(--md-default-fg-color, #0f172a);
+  --ebd: rgba(15,23,42,.13);
+  --emut: rgba(15,23,42,.56);
+  --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid;
+  gap: 16px;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--ebd);
+  border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--ec) 5%,transparent), transparent 50%),
+    radial-gradient(90% 110% at 95% 100%, color-mix(in srgb,var(--ea) 6%,transparent), transparent 52%),
+    var(--ebg);
+  color: var(--efg);
+  font-family: var(--ef);
+  -webkit-font-smoothing: antialiased;
+}
+[data-md-color-scheme="slate"] .mem-wrap {
+  --ebg: var(--md-default-bg-color, #0f172a);
+  --efg: var(--md-default-fg-color, #e2e8f0);
+  --ebd: rgba(226,232,240,.13);
+  --emut: rgba(226,232,240,.56);
+}
+
+.mem-hd { display: grid; gap: 4px; }
+.mem-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.mem-sub { font-size: 13px; color: var(--emut); line-height: 1.55; max-width: 72ch; }
+
+/* Three lanes */
+.mem-lanes { display: grid; gap: 10px; }
+
+.mem-lane { border-radius: 14px; border: 1px solid var(--ebd); overflow: hidden; }
+.mem-lane--ctx   { border-color: color-mix(in srgb,var(--ec) 28%,var(--ebd)); }
+.mem-lane--ext   { border-color: color-mix(in srgb,var(--eg) 28%,var(--ebd)); }
+.mem-lane--param { border-color: color-mix(in srgb,var(--ea) 28%,var(--ebd)); }
+
+.mem-lane-header {
+  display: flex; gap: 10px; align-items: center; padding: 10px 14px;
+  border-bottom: 1px solid var(--ebd);
+}
+.mem-lane--ctx .mem-lane-header   { background: color-mix(in srgb,var(--ec) 7%,transparent); }
+.mem-lane--ext .mem-lane-header   { background: color-mix(in srgb,var(--eg) 7%,transparent); }
+.mem-lane--param .mem-lane-header { background: color-mix(in srgb,var(--ea) 7%,transparent); }
+
+.mem-lane-num {
+  width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 900; flex-shrink: 0;
+}
+.mem-lane--ctx .mem-lane-num   { background: color-mix(in srgb,var(--ec) 15%,transparent); color: color-mix(in srgb,var(--ec) 80%,var(--efg)); border: 1px solid color-mix(in srgb,var(--ec) 30%,transparent); }
+.mem-lane--ext .mem-lane-num   { background: color-mix(in srgb,var(--eg) 15%,transparent); color: color-mix(in srgb,var(--eg) 80%,var(--efg)); border: 1px solid color-mix(in srgb,var(--eg) 30%,transparent); }
+.mem-lane--param .mem-lane-num { background: color-mix(in srgb,var(--ea) 15%,transparent); color: color-mix(in srgb,var(--ea) 80%,var(--efg)); border: 1px solid color-mix(in srgb,var(--ea) 30%,transparent); }
+
+.mem-lane-name { font-size: 14px; font-weight: 900; }
+.mem-lane-sub { font-size: 11px; color: var(--emut); }
+
+.mem-lane-body { display: grid; grid-template-columns: 1fr auto; gap: 14px; padding: 12px 14px; align-items: start; }
+@media (max-width: 560px) { .mem-lane-body { grid-template-columns: 1fr; } }
+
+/* Context visual */
+.mem-visual { display: flex; flex-direction: column; gap: 6px; }
+.mem-ctx-bar { display: flex; border-radius: 7px; overflow: hidden; height: 28px; border: 1px solid rgba(124,199,255,.2); }
+.mem-ctx-seg { display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; text-align: center; padding: 0 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mem-ctx-seg--system { background: rgba(50,74,178,.25); color: rgba(124,199,255,.9); flex: 1.4; }
+.mem-ctx-seg--hist   { background: rgba(124,199,255,.12); color: rgba(124,199,255,.7); flex: 2; }
+.mem-ctx-seg--docs   { background: rgba(124,199,255,.08); color: rgba(124,199,255,.6); flex: 1.8; }
+.mem-ctx-seg--now    { background: rgba(38,166,154,.25); color: rgba(38,166,154,.9); flex: 1; }
+.mem-ctx-label { font-size: 9.5px; color: var(--emut); font-style: italic; }
+
+/* External memory visual */
+.mem-visual--ext { flex-direction: row; align-items: center; gap: 8px; flex-wrap: wrap; }
+.mem-ext-db, .mem-ext-context { border-radius: 9px; padding: 8px 10px; display: grid; gap: 3px; text-align: center; }
+.mem-ext-db      { background: rgba(255,179,67,.08); border: 1px solid rgba(255,179,67,.2); }
+.mem-ext-context { background: rgba(124,199,255,.06); border: 1px solid rgba(124,199,255,.15); }
+.mem-ext-icon { font-size: 18px; }
+.mem-ext-label { font-size: 9px; color: var(--emut); font-weight: 600; line-height: 1.3; max-width: 80px; }
+.mem-ext-arrow { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.mem-ext-arrow-label { font-size: 8.5px; color: var(--emut); text-align: center; white-space: nowrap; }
+
+/* Parametric visual */
+.mem-param-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 4px; padding: 6px; background: rgba(38,166,154,.04); border-radius: 8px; border: 1px solid rgba(38,166,154,.12); width: fit-content; }
+.mem-param-node { width: 16px; height: 16px; border-radius: 3px; background: rgba(38,166,154,.2); border: 1px solid rgba(38,166,154,.3); }
+.mem-param-label { font-size: 9.5px; color: var(--emut); font-style: italic; }
+
+/* Props list */
+.mem-props { display: grid; gap: 5px; }
+.mem-prop { font-size: 11px; padding: 4px 9px; border-radius: 6px; position: relative; padding-left: 20px; }
+.mem-prop::before { content: ''; position: absolute; left: 7px; top: 8px; width: 7px; height: 7px; border-radius: 50%; }
+.mem-prop--ok   { background: rgba(38,166,154,.06); border: 1px solid rgba(38,166,154,.14); color: var(--emut); }
+.mem-prop--ok::before { background: rgba(38,166,154,.6); }
+.mem-prop--warn { background: rgba(239,68,68,.04); border: 1px solid rgba(239,68,68,.12); color: var(--emut); }
+.mem-prop--warn::before { background: rgba(239,68,68,.55); }
+
+.mem-lane-verdict { font-size: 11.5px; font-weight: 700; color: var(--efg); padding: 8px 14px 10px; border-top: 1px solid var(--ebd); font-style: italic; }
+
+/* Contrast note */
+.mem-contrast {
+  border-radius: 12px; padding: 12px 16px;
+  background: color-mix(in srgb,#ef4444 5%,transparent);
+  border: 1px solid rgba(239,68,68,.18);
+  display: grid; gap: 4px;
+}
+.mem-contrast-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: rgba(239,68,68,.7); }
+.mem-contrast-text { font-size: 12.5px; color: var(--emut); line-height: 1.55; }
+</style>

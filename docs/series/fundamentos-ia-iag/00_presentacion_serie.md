@@ -4,7 +4,7 @@ description: "Serie introductoria sobre IA e IA generativa: qué son, cómo func
 ---
 # Fundamentos de IA e IA generativa
 
-{{ include_html("snippets/series_meta.html", series_dir="fundamentos-ia-iag", data_state="complete", data_level="general", data_read="6", status_label="Completa", level_label="General", glow_hidden="false", extra_rows="") }}
+{{ include_html("snippets/series_meta.html", series_dir="fundamentos-ia-iag", data_state="complete", data_level="general", status_label="Completa", level_label="General") }}
 
 Bienvenidos a esta serie introductoria diseñada para desmitificar el mundo de la Inteligencia Artificial. <br>
 El objetivo de la serie es entender qué es realmente la IA y la IA generativa (IAG, GenAI), qué capacidades tienen estas tecnologías y cómo pueden usarse. <br>

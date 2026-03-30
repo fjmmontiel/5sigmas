@@ -43,15 +43,13 @@ La genealogía reciente de esta idea se entiende mejor si se ordena con cuidado.
 
 Esa lógica reaparece más tarde en otros contextos. En 2022, [ReAct](https://arxiv.org/abs/2210.03629) mostró que incluso en agentes basados en lenguaje el rendimiento mejora cuando el sistema alterna razonamiento y acción, consulta herramientas externas, observa el resultado y usa esa información para decidir el paso siguiente. No es un descendiente directo de AlphaGo en sentido arquitectónico, pero sí participa del mismo giro más amplio: dejar atrás la idea de que un modelo útil se limita a producir una respuesta en un solo paso.
 
-La línea de DeepMind sí puede contarse ya de forma continua. En julio de 2024, [AlphaProof y AlphaGeometry 2](https://deepmind.google/blog/ai-solves-imo-problems-at-silver-medal-level/) mostraron que una combinación de modelos de lenguaje, búsqueda y aprendizaje por refuerzo podía alcanzar nivel de medalla de plata en la Olimpiada Internacional de Matemáticas. En mayo de 2025, [AlphaEvolve](https://deepmind.google/blog/alphaevolve-a-gemini-powered-coding-agent-for-designing-advanced-algorithms/) llevó esa idea al descubrimiento algorítmico: modelos Gemini, evaluadores automáticos y un marco evolutivo trabajando juntos para mejorar código y encontrar algoritmos nuevos.
+La línea de DeepMind sí puede contarse ya de forma continua. En julio de 2024, [AlphaProof y AlphaGeometry 2](https://deepmind.google/blog/ai-solves-imo-problems-at-silver-medal-level/) mostraron que una combinación de modelos de lenguaje, búsqueda y aprendizaje por refuerzo podía alcanzar nivel de medalla de plata en la Olimpiada Internacional de Matemáticas. En mayo de 2025, [AlphaEvolve](https://deepmind.google/blog/alphaevolve-a-gemini-powered-coding-agent-for-designing-advanced-algorithms/) llevó esa idea al descubrimiento algorítmico: modelos Gemini, evaluadores automáticos y un marco evolutivo trabajando juntos para mejorar código y encontrar algoritmos nuevos. Ese mismo año, en la evaluación oficial de la IMO 2025, Gemini Deep Think alcanzó nivel de medalla de oro, consolidando la idea de que la combinación de modelo base, búsqueda activa y verificación formal puede superar el umbral de los mejores competidores humanos en matemáticas olímpicas.
 
 La retrospectiva de DeepMind publicada en marzo de 2026 sobre los diez años de AlphaGo hace explícita esta genealogía. Allí presenta tanto AlphaProof como AlphaEvolve como continuaciones de la misma intuición que hizo potente a AlphaGo y AlphaZero: combinar modelos capaces con búsqueda, verificación y planificación para recorrer espacios enormes donde responder bien una sola vez no basta.
 
 Lo que empieza a aparecer aquí es un cambio de unidad básica. El sistema útil ya no es solo el modelo, sino el modelo más búsqueda, más herramientas y más evaluación.
 
 {{ include_html("snippets/from-cave-to-agi/05-busqueda-solucion.html") }}
-
-{{ include_html("snippets/from-cave-to-agi/05-agentes-convergencia.html") }}
 
 ## 3. Memoria más allá de la ventana de contexto
 
@@ -89,6 +87,8 @@ En paralelo, [I-JEPA](https://arxiv.org/abs/2301.08243) empuja una intuición di
 
 [Genie 2](https://deepmind.google/blog/genie-2-a-large-scale-foundation-world-model/) lleva esta dirección a un terreno especialmente sugerente: generar entornos 3D jugables y controlables a partir de una sola imagen de entrada. Todavía estamos en una fase temprana y demostrativa, pero la tesis ya es visible: si un sistema puede modelar dinámicas de mundo suficientemente bien, entonces puede servir no solo para responder preguntas, sino para entrenar agentes y explorar espacios de acción.
 
+{{ include_html("snippets/from-cave-to-agi/05-world-models-ecosystem.html") }}
+
 ### 4.1 La tesis ya mueve capital
 
 Esta idea ha dejado de ser solo una línea académica. En marzo de 2026, Reuters informó de que [AMI](https://www.reuters.com/business/ex-meta-ai-chief-yann-lecuns-ami-raises-103-billion-alternative-ai-approach-2026-03-10/), la startup de Yann LeCun, recaudó 1.030 millones de dólares para desarrollar sistemas centrados en razonamiento, planificación y modelado del mundo real. Un mes antes, Reuters informó de que [World Labs](https://www.reuters.com/business/ai-pioneer-fei-fei-lis-world-labs-raises-1-billion-funding-2026-02-18/) de Fei-Fei Li levantó 1.000 millones para avanzar en “spatial intelligence”.
@@ -96,8 +96,6 @@ Esta idea ha dejado de ser solo una línea académica. En marzo de 2026, Reuters
 El dato no prueba que esa sea la vía ganadora. Pero sí muestra que una parte relevante del ecosistema cree que el siguiente salto no llegará solo por escalar lenguaje, sino por modelar mejor la estructura espacial, causal e interactiva del mundo.
 
 {{ include_html("snippets/from-cave-to-agi/05-apuestas-capital.html") }}
-
-{{ include_html("snippets/from-cave-to-agi/05-world-models-ecosystem.html") }}
 
 ---
 

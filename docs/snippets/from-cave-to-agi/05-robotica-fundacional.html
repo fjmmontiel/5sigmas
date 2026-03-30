@@ -1,204 +1,168 @@
 <div class="rob-wrap" data-demo="05-robotica-fundacional">
+
   <div class="rob-hd">
-    <div class="rob-title">De robots de tarea única a robots fundacionales</div>
-    <div class="rob-sub">La robótica hereda la lógica de los modelos fundacionales: una misma base que intenta transferirse a muchas tareas distintas.</div>
+    <div class="rob-title">Robótica: escala de madurez real</div>
+    <div class="rob-sub">En robótica, "avance" puede significar cosas muy distintas. Esta escala permite comparar sistemas con honestidad: no es lo mismo una demo controlada que un despliegue documentado en entorno real.</div>
   </div>
 
-  <!-- Timeline -->
-  <div class="rob-timeline">
-    <div class="rob-tl-item rob-tl-item--past">
-      <div class="rob-tl-dot"></div>
-      <div class="rob-tl-label">Tarea única</div>
-      <div class="rob-tl-year">2000s</div>
-      <div class="rob-tl-note">Programado por tarea · entorno controlado</div>
-    </div>
-    <div class="rob-tl-line"></div>
-    <div class="rob-tl-item rob-tl-item--mid">
-      <div class="rob-tl-dot"></div>
-      <div class="rob-tl-label">RT-1 / SayCan</div>
-      <div class="rob-tl-year">2022</div>
-      <div class="rob-tl-note">Primeras instrucciones en lenguaje natural</div>
-    </div>
-    <div class="rob-tl-line"></div>
-    <div class="rob-tl-item rob-tl-item--now">
-      <div class="rob-tl-dot"></div>
-      <div class="rob-tl-label">Robot fundacional</div>
-      <div class="rob-tl-year">2023–25</div>
-      <div class="rob-tl-note">VLA · múltiples morfologías · generalización</div>
-    </div>
-    <div class="rob-tl-line rob-tl-line--dash"></div>
-    <div class="rob-tl-item rob-tl-item--future">
-      <div class="rob-tl-dot rob-tl-dot--future"></div>
-      <div class="rob-tl-label">Robot generalista</div>
-      <div class="rob-tl-year">???</div>
-      <div class="rob-tl-note">Cualquier tarea · entorno arbitrario</div>
-    </div>
-  </div>
+  <!-- Maturity ladder -->
+  <div class="rob-ladder">
 
-  <!-- 4 cards -->
-  <div class="rob-cards">
-
-    <div class="rob-card">
-      <div class="rob-card-hd">
-        <span class="rob-org rob-org--dm">Google DeepMind</span>
-        <span class="rob-yr">2023</span>
+    <!-- Rung 4: Documented deployment (top) -->
+    <div class="rob-rung rob-rung--4">
+      <div class="rob-rung-left">
+        <div class="rob-rung-num">4</div>
+        <div class="rob-rung-line"></div>
       </div>
-      <div class="rob-name">RT-2</div>
-      <div class="rob-fact">Primer VLA que transfiere conocimiento web a control robótico sin reentrenamiento por tarea</div>
-      <div class="rob-desc">Interpreta instrucciones en lenguaje natural y las traduce directamente en acciones físicas. Capacidad emergente con objetos nunca vistos en contexto robótico.</div>
+      <div class="rob-rung-body">
+        <div class="rob-rung-name">Despliegue documentado</div>
+        <div class="rob-rung-desc">Operación continua en entorno real no controlado. Métricas de rendimiento, tasa de fallos y cobertura publicadas o verificables independientemente.</div>
+        <div class="rob-rung-examples">
+          <span class="rob-ex rob-ex--4">Líneas de montaje industrial en producción</span>
+          <span class="rob-ex rob-ex--4">Robots de almacén Amazon (entornos dedicados)</span>
+        </div>
+      </div>
     </div>
 
-    <div class="rob-card">
-      <div class="rob-card-hd">
-        <span class="rob-org rob-org--pi">Physical Intelligence</span>
-        <span class="rob-yr">2024</span>
+    <!-- Rung 3: Industrial pilot -->
+    <div class="rob-rung rob-rung--3">
+      <div class="rob-rung-left">
+        <div class="rob-rung-num">3</div>
+        <div class="rob-rung-line"></div>
       </div>
-      <div class="rob-name">π₀</div>
-      <div class="rob-fact">Una arquitectura opera brazos industriales, manos articuladas y plataformas móviles sin reentrenamiento completo</div>
-      <div class="rob-desc">Entrena sobre datos heterogéneos de múltiples tipos de robot. Fine-tuning con pocas demostraciones para tareas específicas.</div>
+      <div class="rob-rung-body">
+        <div class="rob-rung-name">Piloto industrial</div>
+        <div class="rob-rung-desc">Funcionando en entorno real pero bajo supervisión activa. El sistema realiza tareas útiles; los errores están documentados y mitigados por operadores humanos.</div>
+        <div class="rob-rung-examples">
+          <span class="rob-ex rob-ex--3">Optimus (Tesla), pilotos internos en fábrica</span>
+          <span class="rob-ex rob-ex--3">Figure 02, pruebas con BMW</span>
+          <span class="rob-ex rob-ex--3">Physical Intelligence (π), cocina / almacén</span>
+        </div>
+      </div>
     </div>
 
-    <div class="rob-card">
-      <div class="rob-card-hd">
-        <span class="rob-org rob-org--fig">Figure AI</span>
-        <span class="rob-yr">2025</span>
+    <!-- Rung 2: Benchmark / semi-structured -->
+    <div class="rob-rung rob-rung--2">
+      <div class="rob-rung-left">
+        <div class="rob-rung-num">2</div>
+        <div class="rob-rung-line"></div>
       </div>
-      <div class="rob-name">Helix</div>
-      <div class="rob-fact">VLA generalista para humanoides con despliegue industrial documentado en fábricas BMW</div>
-      <div class="rob-desc">Controla el cuerpo superior completo y coordina dos robots en tareas compartidas. Métricas públicas de producción real.</div>
+      <div class="rob-rung-body">
+        <div class="rob-rung-name">Benchmark / entorno semi-estructurado</div>
+        <div class="rob-rung-desc">El sistema supera pruebas estándar o funciona en entornos parcialmente controlados. Los resultados son reproducibles pero en condiciones favorables para el sistema.</div>
+        <div class="rob-rung-examples">
+          <span class="rob-ex rob-ex--2">RT-2 (Google), multitarea en laboratorio</span>
+          <span class="rob-ex rob-ex--2">OpenVLA, benchmarks de manipulación</span>
+          <span class="rob-ex rob-ex--2">Spot (Boston Dynamics), inspección industrial</span>
+        </div>
+      </div>
     </div>
 
-    <div class="rob-card">
-      <div class="rob-card-hd">
-        <span class="rob-org rob-org--nv">NVIDIA</span>
-        <span class="rob-yr">2024</span>
+    <!-- Rung 1: Controlled demo (bottom) -->
+    <div class="rob-rung rob-rung--1">
+      <div class="rob-rung-left">
+        <div class="rob-rung-num">1</div>
       </div>
-      <div class="rob-name">GR00T</div>
-      <div class="rob-fact">Modelo fundacional abierto adoptado como backbone por múltiples fabricantes de humanoides</div>
-      <div class="rob-desc">Entrena sobre movimiento y vídeo humano. Corre sobre Jetson Thor. La apuesta de plataforma: un backbone para todo el ecosistema.</div>
+      <div class="rob-rung-body">
+        <div class="rob-rung-name">Demo controlada</div>
+        <div class="rob-rung-desc">Demostración impresionante en condiciones diseñadas para el sistema. El entorno está calibrado, los objetos son conocidos y las condiciones de fallo están evitadas.</div>
+        <div class="rob-rung-examples">
+          <span class="rob-ex rob-ex--1">Vídeos de robótica en entornos de laboratorio</span>
+          <span class="rob-ex rob-ex--1">Generalizacion "zero-shot" en objetos muy similares a los de entrenamiento</span>
+        </div>
+      </div>
     </div>
 
   </div>
+
+  <div class="rob-note">
+    <div class="rob-note-label">Por qué importa esta distinción</div>
+    <div class="rob-note-text">La mayoría de los titulares sobre robótica de IA corresponden al peldaño 1 o 2. Llegar al 3 o 4 requiere resolver problemas de fiabilidad, seguridad y coste que no aparecen en demos. El salto entre peldaños es donde están los retos reales del campo.</div>
+  </div>
+
 </div>
 
 <style>
 .rob-wrap, .rob-wrap * { box-sizing: border-box; }
 
 .rob-wrap {
-  --ea: var(--md-primary-fg-color, #26A69A);
+  --ea: #26A69A;
   --eb: #324AB2;
-  --eg: var(--md-accent-fg-color, #FFB343);
+  --eg: #FFB343;
   --ebg: var(--md-default-bg-color, #fff);
   --efg: var(--md-default-fg-color, #0f172a);
   --ebd: rgba(15,23,42,.13);
-  --emut: rgba(15,23,42,.58);
+  --emut: rgba(15,23,42,.56);
   --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
 
-  display: grid; gap: 16px; max-width: 860px; margin: 0 auto;
-  padding: clamp(14px,2vw,22px); border: 1px solid var(--ebd); border-radius: 20px;
+  display: grid;
+  gap: 16px;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--ebd);
+  border-radius: 20px;
   background:
-    radial-gradient(100% 120% at 2% 0%, color-mix(in srgb,var(--ea) 6%,transparent), transparent 50%),
-    radial-gradient(80% 100% at 98% 100%, color-mix(in srgb,var(--eb) 5%,transparent), transparent 52%),
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--ea) 6%,transparent), transparent 50%),
+    radial-gradient(90% 110% at 95% 100%, color-mix(in srgb,var(--eg) 5%,transparent), transparent 52%),
     var(--ebg);
-  color: var(--efg); font-family: var(--ef); -webkit-font-smoothing: antialiased;
+  color: var(--efg);
+  font-family: var(--ef);
+  -webkit-font-smoothing: antialiased;
 }
-
 [data-md-color-scheme="slate"] .rob-wrap {
-  --ebg: var(--md-default-bg-color, #0f172a); --efg: var(--md-default-fg-color, #e2e8f0);
-  --ebd: rgba(226,232,240,.13); --emut: rgba(226,232,240,.58);
+  --ebg: var(--md-default-bg-color, #0f172a);
+  --efg: var(--md-default-fg-color, #e2e8f0);
+  --ebd: rgba(226,232,240,.13);
+  --emut: rgba(226,232,240,.56);
 }
 
 .rob-hd { display: grid; gap: 4px; }
-.rob-title { font-size: clamp(15px,2vw,20px); font-weight: 900; letter-spacing: -.02em; line-height: 1.15; }
-.rob-sub { font-size: 13px; color: var(--emut); line-height: 1.5; max-width: 68ch; }
+.rob-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.rob-sub { font-size: 13px; color: var(--emut); line-height: 1.55; max-width: 72ch; }
 
-/* Timeline */
-.rob-timeline {
-  display: flex; align-items: flex-start; gap: 0;
-  padding: 12px 14px; border-radius: 12px; border: 1px solid var(--ebd);
-  background: color-mix(in srgb, var(--ebg) 70%, #0f172a 30%);
-  overflow-x: auto;
-}
-.rob-tl-item { flex: 1 1 0; min-width: 90px; display: grid; gap: 3px; position: relative; padding-top: 22px; }
-.rob-tl-dot {
-  position: absolute; top: 6px; left: 50%; transform: translateX(-50%);
-  width: 10px; height: 10px; border-radius: 999px;
-  background: color-mix(in srgb, var(--ea) 50%, var(--ebd));
-  border: 2px solid color-mix(in srgb, var(--ea) 70%, var(--ebd));
-}
-.rob-tl-item--now .rob-tl-dot { width: 14px; height: 14px; top: 4px; background: color-mix(in srgb, var(--ea) 80%, transparent); border-color: var(--ea); }
-.rob-tl-dot--future { background: transparent !important; border-style: dashed !important; border-color: var(--emut) !important; }
-.rob-tl-line { flex: 0 0 20px; height: 2px; background: color-mix(in srgb, var(--ea) 25%, var(--ebd)); margin-top: 10px; align-self: flex-start; }
-.rob-tl-line--dash { background: repeating-linear-gradient(90deg, var(--emut) 0px, var(--emut) 4px, transparent 4px, transparent 8px); opacity: .4; }
-.rob-tl-label { font-size: 10px; font-weight: 800; text-align: center; line-height: 1.2; }
-.rob-tl-year { font-size: 9px; font-weight: 700; color: var(--emut); text-align: center; }
-.rob-tl-note { font-size: 8.5px; color: var(--emut); text-align: center; line-height: 1.35; }
-.rob-tl-item--future .rob-tl-label, .rob-tl-item--future .rob-tl-year, .rob-tl-item--future .rob-tl-note { opacity: .55; }
+/* Ladder */
+.rob-ladder { display: grid; gap: 0; }
 
-/* Cards */
-.rob-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 9px; }
-@media (max-width: 560px) { .rob-cards { grid-template-columns: 1fr; } }
-
-.rob-card {
-  padding: 14px 16px; border-radius: 13px; border: 1px solid var(--ebd);
-  background: color-mix(in srgb, var(--ebg) 75%, #0f172a 25%);
-  display: grid; gap: 7px; align-content: start;
-  opacity: 0; transform: translateY(10px);
-  transition: opacity .35s ease, transform .35s ease, border-color .2s, box-shadow .2s;
-}
-.rob-card.rob-card--visible { opacity: 1; transform: translateY(0); }
-.rob-card:hover { border-color: color-mix(in srgb, var(--ea) 30%, var(--ebd)); box-shadow: 0 4px 16px color-mix(in srgb, var(--ea) 10%, transparent); }
-@media (prefers-reduced-motion: reduce) { .rob-card { opacity: 1; transform: none; transition: none; } }
-
-.rob-card-hd { display: flex; align-items: center; justify-content: space-between; gap: 4px; }
-.rob-org {
-  font-size: 8.5px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase;
-  padding: 2px 6px; border-radius: 999px;
-}
-.rob-org--dm { background: color-mix(in srgb, var(--eb) 16%, transparent); border: 1px solid color-mix(in srgb, var(--eb) 38%, transparent); color: color-mix(in srgb, var(--eb) 90%, var(--efg)); }
-.rob-org--pi { background: color-mix(in srgb, #22c55e 13%, transparent); border: 1px solid color-mix(in srgb, #22c55e 34%, transparent); color: color-mix(in srgb, #22c55e 85%, var(--efg)); }
-.rob-org--fig { background: color-mix(in srgb, #a855f7 13%, transparent); border: 1px solid color-mix(in srgb, #a855f7 34%, transparent); color: color-mix(in srgb, #a855f7 85%, var(--efg)); }
-.rob-org--nv { background: color-mix(in srgb, #22c55e 13%, transparent); border: 1px solid color-mix(in srgb, #22c55e 34%, transparent); color: color-mix(in srgb, #22c55e 85%, var(--efg)); }
-.rob-yr { font-size: 9.5px; font-weight: 700; color: var(--emut); flex-shrink: 0; }
-
-.rob-name { font-size: 17px; font-weight: 900; letter-spacing: -.01em; line-height: 1.2; }
-
-.rob-fact {
-  font-size: 12px; font-weight: 700; line-height: 1.45; color: var(--efg);
-  padding: 7px 10px; border-radius: 8px;
-  background: color-mix(in srgb, var(--ea) 6%, transparent);
-  border-left: 3px solid color-mix(in srgb, var(--ea) 50%, transparent);
+.rob-rung {
+  display: flex;
+  gap: 14px;
+  padding: 14px 14px 14px 0;
+  border-radius: 12px;
+  margin-bottom: 6px;
 }
 
-.rob-desc { font-size: 11px; color: var(--emut); line-height: 1.5; }
+/* Colors per rung (1=gray/problem, 2=orange/mid, 3=teal-mid, 4=teal/solution) */
+.rob-rung--1 { background: rgba(100,116,139,.06); border: 1px solid rgba(100,116,139,.18); }
+.rob-rung--2 { background: rgba(255,179,67,.06);  border: 1px solid rgba(255,179,67,.2); }
+.rob-rung--3 { background: rgba(38,166,154,.06);  border: 1px solid rgba(38,166,154,.18); }
+.rob-rung--4 { background: rgba(38,166,154,.10);  border: 2px solid rgba(38,166,154,.3); }
+
+.rob-rung-left { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; padding-left: 14px; }
+.rob-rung-num {
+  width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 900; flex-shrink: 0;
+}
+.rob-rung--1 .rob-rung-num { background: rgba(100,116,139,.15); border: 1.5px solid rgba(100,116,139,.3); color: rgba(100,116,139,.9); }
+.rob-rung--2 .rob-rung-num { background: rgba(255,179,67,.15); border: 1.5px solid rgba(255,179,67,.35); color: color-mix(in srgb,var(--eg) 80%,var(--efg)); }
+.rob-rung--3 .rob-rung-num { background: rgba(38,166,154,.15); border: 1.5px solid rgba(38,166,154,.35); color: color-mix(in srgb,var(--ea) 80%,var(--efg)); }
+.rob-rung--4 .rob-rung-num { background: rgba(38,166,154,.25); border: 2px solid rgba(38,166,154,.5); color: color-mix(in srgb,var(--ea) 90%,var(--efg)); }
+
+.rob-rung-line { width: 2px; flex: 1; background: rgba(100,116,139,.12); margin-top: 6px; min-height: 20px; display: none; }
+
+.rob-rung-body { display: grid; gap: 7px; padding-top: 2px; }
+.rob-rung-name { font-size: 14px; font-weight: 900; line-height: 1.2; }
+.rob-rung-desc { font-size: 12px; color: var(--emut); line-height: 1.5; }
+.rob-rung-examples { display: flex; flex-wrap: wrap; gap: 5px; }
+
+.rob-ex { font-size: 10.5px; font-weight: 700; padding: 3px 9px; border-radius: 6px; }
+.rob-ex--1 { background: rgba(100,116,139,.09); border: 1px solid rgba(100,116,139,.2); color: var(--emut); }
+.rob-ex--2 { background: rgba(255,179,67,.08); border: 1px solid rgba(255,179,67,.2); color: color-mix(in srgb,var(--eg) 70%,var(--emut)); }
+.rob-ex--3 { background: rgba(38,166,154,.08); border: 1px solid rgba(38,166,154,.2); color: color-mix(in srgb,var(--ea) 70%,var(--emut)); }
+.rob-ex--4 { background: rgba(38,166,154,.12); border: 1px solid rgba(38,166,154,.28); color: color-mix(in srgb,var(--ea) 80%,var(--efg)); }
+
+/* Note */
+.rob-note { border-radius: 12px; padding: 12px 15px; background: color-mix(in srgb,var(--ebg) 80%,#0f172a 20%); border: 1px solid var(--ebd); display: grid; gap: 4px; }
+.rob-note-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--emut); }
+.rob-note-text { font-size: 12px; color: var(--emut); line-height: 1.55; }
 </style>
-
-<script>
-(function () {
-  function boot() {
-    var wrap = document.querySelector('[data-demo="05-robotica-fundacional"]');
-    if (!wrap || wrap.dataset.robReady) return;
-    wrap.dataset.robReady = '1';
-
-    var cards = wrap.querySelectorAll('.rob-card');
-    if ('IntersectionObserver' in window) {
-      var io = new IntersectionObserver(function(entries) {
-        entries.forEach(function(e) {
-          if (e.isIntersecting) {
-            var idx = Array.prototype.indexOf.call(cards, e.target);
-            setTimeout(function() { e.target.classList.add('rob-card--visible'); }, idx * 80);
-            io.unobserve(e.target);
-          }
-        });
-      }, { threshold: 0.1 });
-      cards.forEach(function(c) { io.observe(c); });
-    } else {
-      cards.forEach(function(c) { c.classList.add('rob-card--visible'); });
-    }
-  }
-
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
-  else boot();
-  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
-})();
-</script>

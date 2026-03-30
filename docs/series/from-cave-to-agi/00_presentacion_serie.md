@@ -5,7 +5,7 @@ robots: noindex
 ---
 # De las cavernas a la AGI
 
-{{ include_html("snippets/series_meta.html", series_dir="from-cave-to-agi", data_state="construction", data_level="general", data_read="7", status_label="En construcción", level_label="General", glow_hidden="true", extra_rows="") }}
+{{ include_html("snippets/series_meta.html", series_dir="from-cave-to-agi", data_state="construction", data_level="general", status_label="En construcción", level_label="General") }}
 
 Esta serie es un viaje histórico desde los primeros intentos de la humanidad por abstraer el mundo mediante símbolos hasta la creación de modelos de lenguaje masivos que *parecen entenderlo*.<br>
 

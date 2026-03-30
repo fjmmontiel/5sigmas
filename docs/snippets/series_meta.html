@@ -1,28 +1,205 @@
-<div class="series-meta" data-progress="{{ data_progress }}" data-state="{{ data_state }}" data-level="{{ data_level }}" data-read="{{ data_read }}">
-<div class="series-meta-head">
-<span class="series-meta-chip chip--status">
-<span class="chip-dot" aria-hidden="true"></span>
-<span class="chip-k">Estado</span>
-<span class="chip-v">{{ status_label }}</span>
-</span>
+<div class="sm-wrap" data-state="{{ data_state }}" data-level="{{ data_level }}">
+  <div class="sm-chips">
 
-<span class="series-meta-chip chip--level">
-<span class="chip-dot" aria-hidden="true"></span>
-<span class="chip-k">Nivel</span>
-<span class="chip-v">{{ level_label }}</span>
-</span>
+    <span class="sm-chip sm-chip--status">
+      <span class="sm-dot" aria-hidden="true"></span>
+      <span class="sm-chip-label">{{ status_label }}</span>
+    </span>
 
+    <span class="sm-chip sm-chip--level">
+      <svg class="sm-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <rect x="2" y="10" width="2.5" height="4" rx=".5" fill="currentColor"/>
+        <rect x="6.75" y="7" width="2.5" height="7" rx=".5" fill="currentColor"/>
+        <rect x="11.5" y="4" width="2.5" height="10" rx=".5" fill="currentColor"/>
+      </svg>
+      <span class="sm-chip-label">{{ level_label }}</span>
+    </span>
+
+    <span class="sm-chip sm-chip--time">
+      <svg class="sm-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.4"/>
+        <path d="M8 5v3.5l2 1.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+      </svg>
+      <span class="sm-chip-label">{{ data_time }}</span>
+    </span>
+
+    <span class="sm-chip sm-chip--count">
+      <svg class="sm-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <rect x="2" y="3" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.4"/>
+        <path d="M5 7h6M5 10h4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+      </svg>
+      <span class="sm-chip-label">{{ progress_total }} capítulos</span>
+    </span>
+
+  </div>
+  {{ extra_rows }}
 </div>
 
-<div class="series-meta-row">
-<span class="series-meta-label">Progreso</span>
-<div class="series-meta-progress" role="group" aria-label="Progreso de la serie">
-<div class="series-meta-bar" role="progressbar" aria-valuemin="0" aria-valuemax="{{ aria_valuemax }}" aria-valuenow="{{ aria_valuenow }}">
-<span class="series-meta-bar-fill"></span>
-<span class="series-meta-bar-glow" aria-hidden="{{ glow_hidden }}"></span>
-</div>
-<span class="series-meta-progress-text">{{ progress_text }}</span>
-</div>
-</div>
-{{ extra_rows }}
-</div>
+<style>
+.sm-wrap {
+  --sm-a: var(--md-primary-fg-color, #26A69A);
+  --sm-b: #324AB2;
+  --sm-g: var(--md-accent-fg-color, #FFB343);
+  --sm-ok: #26A69A;
+  --sm-wip: #FFB343;
+  --sm-bg: var(--md-default-bg-color, #fff);
+  --sm-fg: var(--md-default-fg-color, #0f172a);
+  --sm-bd: rgba(15,23,42,.12);
+  --sm-muted: rgba(15,23,42,.52);
+  --sm-f: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  margin: 0 0 1.4rem;
+  padding: 10px 14px;
+  border: 1px solid var(--sm-bd);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--sm-bg) 97%, #0f172a 3%);
+  font-family: var(--sm-f);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-md-color-scheme="slate"] .sm-wrap {
+  --sm-bg: var(--md-default-bg-color, #0f172a);
+  --sm-fg: var(--md-default-fg-color, #e2e8f0);
+  --sm-bd: rgba(226,232,240,.12);
+  --sm-muted: rgba(226,232,240,.52);
+}
+
+.sm-wrap[data-state="complete"] {
+  border-color: color-mix(in srgb, var(--sm-ok) 22%, var(--sm-bd));
+  background: color-mix(in srgb, var(--sm-ok) 3%, var(--sm-bg));
+}
+
+.sm-wrap[data-state="construction"] {
+  border-color: color-mix(in srgb, var(--sm-wip) 20%, var(--sm-bd));
+  background: color-mix(in srgb, var(--sm-wip) 2%, var(--sm-bg));
+}
+
+.sm-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.sm-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px 4px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--sm-bd);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--sm-muted);
+  background: color-mix(in srgb, var(--sm-bg) 90%, transparent);
+  letter-spacing: .01em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.sm-icon {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+  opacity: .7;
+}
+
+/* Status chip */
+.sm-chip--status {
+  padding-left: 9px;
+}
+
+.sm-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.sm-wrap[data-state="complete"] .sm-chip--status {
+  color: color-mix(in srgb, var(--sm-ok) 75%, var(--sm-fg));
+  border-color: color-mix(in srgb, var(--sm-ok) 28%, var(--sm-bd));
+  background: color-mix(in srgb, var(--sm-ok) 8%, var(--sm-bg));
+}
+
+.sm-wrap[data-state="complete"] .sm-dot {
+  background: var(--sm-ok);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--sm-ok) 22%, transparent);
+}
+
+.sm-wrap[data-state="construction"] .sm-chip--status {
+  color: color-mix(in srgb, var(--sm-wip) 65%, var(--sm-fg));
+  border-color: color-mix(in srgb, var(--sm-wip) 28%, var(--sm-bd));
+  background: color-mix(in srgb, var(--sm-wip) 8%, var(--sm-bg));
+}
+
+.sm-wrap[data-state="construction"] .sm-dot {
+  background: var(--sm-wip);
+  animation: sm-pulse 2s ease-in-out infinite;
+}
+
+@keyframes sm-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--sm-wip) 40%, transparent); }
+  50% { box-shadow: 0 0 0 3px color-mix(in srgb, var(--sm-wip) 0%, transparent); }
+}
+
+/* Level chip */
+.sm-wrap[data-level="general"] .sm-chip--level {
+  color: color-mix(in srgb, var(--sm-b) 65%, var(--sm-fg));
+  border-color: color-mix(in srgb, var(--sm-b) 22%, var(--sm-bd));
+  background: color-mix(in srgb, var(--sm-b) 6%, var(--sm-bg));
+}
+
+.sm-wrap[data-level="tecnico"] .sm-chip--level {
+  color: color-mix(in srgb, #7c3aed 65%, var(--sm-fg));
+  border-color: color-mix(in srgb, #7c3aed 20%, var(--sm-bd));
+  background: color-mix(in srgb, #7c3aed 5%, var(--sm-bg));
+}
+
+/* Time chip — accented */
+.sm-chip--time {
+  color: var(--sm-fg);
+  border-color: var(--sm-bd);
+}
+
+/* Count chip — neutral */
+.sm-chip--count {
+  color: var(--sm-muted);
+}
+
+/* Extra rows (prerequisites, etc.) */
+.sm-wrap .series-meta-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--sm-bd);
+  font-size: 12px;
+}
+
+.sm-wrap .series-meta-label {
+  font-weight: 700;
+  color: var(--sm-muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.sm-wrap .series-meta-value {
+  color: var(--sm-fg);
+}
+
+.sm-wrap .series-meta-value a {
+  color: color-mix(in srgb, var(--sm-a) 75%, var(--sm-fg));
+  text-decoration: none;
+}
+
+.sm-wrap .series-meta-value a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+  .sm-chips { gap: 5px; }
+  .sm-chip { font-size: 11px; padding: 3px 8px 3px 7px; }
+}
+</style>

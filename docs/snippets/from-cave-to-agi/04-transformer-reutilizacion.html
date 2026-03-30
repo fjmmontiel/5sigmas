@@ -1,0 +1,251 @@
+<div class="trr-wrap" data-demo="04-transformer-reutilizacion">
+
+  <div class="trr-hd">
+    <div class="trr-title">La atención desbloquea reutilización</div>
+    <div class="trr-sub">El Transformer no solo fue más preciso. Fue la primera arquitectura que permitía entrenar una base general y reutilizarla en decenas de tareas distintas sin reentrenar desde cero.</div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="trr-tabs" role="tablist">
+    <button class="trr-tab trr-tab--active" data-tab="limite">El límite anterior</button>
+    <button class="trr-tab" data-tab="mecanismo">El mecanismo</button>
+    <button class="trr-tab" data-tab="reutilizacion">La reutilización</button>
+  </div>
+
+  <!-- Panel: El límite -->
+  <div class="trr-panel trr-panel--active" data-panel="limite">
+    <div class="trr-claim">Las RNNs procesaban tokens en secuencia. Eso impedía paralelizar y limitaba cuánto contexto podía integrar el modelo a la vez.</div>
+    <div class="trr-bifold">
+      <div class="trr-side trr-side--old">
+        <div class="trr-side-tag">ANTES · RNN/LSTM</div>
+        <div class="trr-seq">
+          <div class="trr-seq-token">t₁</div>
+          <div class="trr-seq-arr">→</div>
+          <div class="trr-seq-token">t₂</div>
+          <div class="trr-seq-arr">→</div>
+          <div class="trr-seq-token">t₃</div>
+          <div class="trr-seq-arr">→</div>
+          <div class="trr-seq-token">t₄</div>
+        </div>
+        <div class="trr-side-note">Secuencial. El token 4 no ve el 1 directamente. Contexto largo = degradación de gradiente.</div>
+      </div>
+      <div class="trr-side trr-side--new">
+        <div class="trr-side-tag trr-side-tag--new">DESPUÉS · Transformer</div>
+        <div class="trr-attn-grid">
+          <div class="trr-attn-tok">t₁</div>
+          <div class="trr-attn-tok">t₂</div>
+          <div class="trr-attn-tok">t₃</div>
+          <div class="trr-attn-tok">t₄</div>
+        </div>
+        <div class="trr-attn-lines">
+          <svg viewBox="0 0 200 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <line x1="25" y1="5" x2="75" y2="35" stroke="rgba(38,166,154,.4)" stroke-width="1.2"/>
+            <line x1="25" y1="5" x2="125" y2="35" stroke="rgba(38,166,154,.3)" stroke-width="1.2"/>
+            <line x1="25" y1="5" x2="175" y2="35" stroke="rgba(38,166,154,.25)" stroke-width="1.2"/>
+            <line x1="75" y1="5" x2="25" y2="35" stroke="rgba(38,166,154,.35)" stroke-width="1.2"/>
+            <line x1="75" y1="5" x2="125" y2="35" stroke="rgba(38,166,154,.45)" stroke-width="1.2"/>
+            <line x1="125" y1="5" x2="175" y2="35" stroke="rgba(38,166,154,.4)" stroke-width="1.2"/>
+            <line x1="175" y1="5" x2="25" y2="35" stroke="rgba(38,166,154,.2)" stroke-width="1.2"/>
+          </svg>
+        </div>
+        <div class="trr-side-note">Cada token atiende a todos los demás a la vez. Paralelizable. Contexto completo sin degradación.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel: El mecanismo -->
+  <div class="trr-panel" data-panel="mecanismo">
+    <div class="trr-claim">La autoatención permite que cualquier token consulte directamente a cualquier otro. El modelo aprende qué relaciones importan, sin instrucciones explícitas.</div>
+    <div class="trr-mech-flow">
+      <div class="trr-mech-step">
+        <div class="trr-mstep-num">1</div>
+        <div class="trr-mstep-body">
+          <div class="trr-mstep-title">Preentrenamiento a escala</div>
+          <div class="trr-mstep-desc">Miles de millones de tokens. El objetivo es simple: predecir el siguiente. La red aprende la estructura del lenguaje y del mundo como efecto secundario.</div>
+        </div>
+      </div>
+      <div class="trr-mech-divider"></div>
+      <div class="trr-mech-step">
+        <div class="trr-mstep-num">2</div>
+        <div class="trr-mstep-body">
+          <div class="trr-mstep-title">Representaciones transferibles</div>
+          <div class="trr-mstep-desc">Cada capa codifica patrones de distinto nivel de abstracción. Esas representaciones no son específicas de una tarea: son generales.</div>
+        </div>
+      </div>
+      <div class="trr-mech-divider"></div>
+      <div class="trr-mech-step">
+        <div class="trr-mstep-num">3</div>
+        <div class="trr-mstep-body">
+          <div class="trr-mstep-title">Reutilización downstream</div>
+          <div class="trr-mstep-desc">La misma base sirve para traducción, resumen, código, análisis de imágenes y más. El coste del preentrenamiento se amortiza en cada uso.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel: La reutilización -->
+  <div class="trr-panel" data-panel="reutilizacion">
+    <div class="trr-claim">Una sola inversión en preentrenamiento se convierte en la base de muchas aplicaciones distintas. Cada downstream cuesta una fracción del original.</div>
+    <div class="trr-reuse">
+      <div class="trr-base">
+        <div class="trr-base-tag">PREENTRENAMIENTO</div>
+        <div class="trr-base-cost">$10M – $100M</div>
+        <div class="trr-base-label">Modelo base</div>
+        <div class="trr-base-desc">Una inversión única. Aprendizaje general del lenguaje, el código y el mundo.</div>
+      </div>
+      <div class="trr-reuse-branches">
+        <div class="trr-branch trr-branch--1">
+          <div class="trr-branch-tag">ADAPTACIÓN</div>
+          <div class="trr-branch-name">Asistente conversacional</div>
+          <div class="trr-branch-cost">$1K – $100K</div>
+        </div>
+        <div class="trr-branch trr-branch--2">
+          <div class="trr-branch-tag">ADAPTACIÓN</div>
+          <div class="trr-branch-name">Asistente de código</div>
+          <div class="trr-branch-cost">$1K – $100K</div>
+        </div>
+        <div class="trr-branch trr-branch--3">
+          <div class="trr-branch-tag">ADAPTACIÓN</div>
+          <div class="trr-branch-name">Medicina / Legal / Ciencia</div>
+          <div class="trr-branch-cost">$1K – $100K</div>
+        </div>
+        <div class="trr-branch trr-branch--4">
+          <div class="trr-branch-tag">ADAPTACIÓN</div>
+          <div class="trr-branch-name">Visión + lenguaje</div>
+          <div class="trr-branch-cost">$1K – $100K</div>
+        </div>
+      </div>
+    </div>
+    <div class="trr-reuse-note">Lo decisivo no fue solo rendir más en un benchmark. Fue cambiar la lógica económica del desarrollo de IA: una base, muchas aplicaciones.</div>
+  </div>
+
+</div>
+
+<style>
+.trr-wrap, .trr-wrap * { box-sizing: border-box; }
+
+.trr-wrap {
+  --ea: #26A69A;
+  --eb: #324AB2;
+  --eg: #FFB343;
+  --ebg: var(--md-default-bg-color, #fff);
+  --efg: var(--md-default-fg-color, #0f172a);
+  --ebd: rgba(15,23,42,.13);
+  --emut: rgba(15,23,42,.56);
+  --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid;
+  gap: 14px;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--ebd);
+  border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--ea) 7%,transparent), transparent 50%),
+    radial-gradient(90% 110% at 95% 100%, color-mix(in srgb,var(--eb) 6%,transparent), transparent 52%),
+    var(--ebg);
+  color: var(--efg);
+  font-family: var(--ef);
+  -webkit-font-smoothing: antialiased;
+}
+[data-md-color-scheme="slate"] .trr-wrap {
+  --ebg: var(--md-default-bg-color, #0f172a);
+  --efg: var(--md-default-fg-color, #e2e8f0);
+  --ebd: rgba(226,232,240,.13);
+  --emut: rgba(226,232,240,.56);
+}
+
+.trr-hd { display: grid; gap: 4px; }
+.trr-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.trr-sub { font-size: 13px; color: var(--emut); line-height: 1.55; max-width: 72ch; }
+
+.trr-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.trr-tab {
+  padding: 6px 14px; border-radius: 8px; border: 1px solid var(--ebd);
+  background: transparent; color: var(--emut);
+  font-family: var(--ef); font-size: 12px; font-weight: 700; cursor: pointer;
+  transition: background .18s, color .18s, border-color .18s;
+}
+.trr-tab:hover { background: color-mix(in srgb, var(--ea) 10%, transparent); color: var(--efg); }
+.trr-tab--active { background: color-mix(in srgb, var(--ea) 14%, transparent); border-color: color-mix(in srgb, var(--ea) 50%, transparent); color: var(--efg); }
+
+.trr-panel { display: none; }
+.trr-panel--active { display: grid; gap: 12px; animation: trrIn .22s ease; }
+@keyframes trrIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+.trr-claim { font-size: 14px; font-weight: 800; line-height: 1.4; padding: 10px 14px; border-radius: 10px; background: color-mix(in srgb,var(--ea) 8%,transparent); border-left: 3px solid color-mix(in srgb,var(--ea) 60%,transparent); }
+
+/* Bifold (límite) */
+.trr-bifold { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 560px) { .trr-bifold { grid-template-columns: 1fr; } }
+.trr-side { border-radius: 12px; padding: 13px 14px; display: grid; gap: 8px; align-content: start; }
+.trr-side--old { background: rgba(100,116,139,.07); border: 1px solid rgba(100,116,139,.18); }
+.trr-side--new { background: rgba(38,166,154,.07); border: 1px solid rgba(38,166,154,.22); }
+.trr-side-tag { font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--emut); }
+.trr-side-tag--new { color: color-mix(in srgb,var(--ea) 75%,var(--emut)); }
+.trr-side-note { font-size: 11px; color: var(--emut); line-height: 1.45; }
+
+.trr-seq { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.trr-seq-token { font-family: monospace; font-size: 14px; font-weight: 700; padding: 4px 8px; border-radius: 6px; background: rgba(100,116,139,.12); border: 1px solid rgba(100,116,139,.2); color: var(--emut); }
+.trr-seq-arr { font-size: 14px; color: var(--emut); }
+
+.trr-attn-grid { display: flex; gap: 6px; flex-wrap: wrap; }
+.trr-attn-tok { font-family: monospace; font-size: 14px; font-weight: 700; padding: 4px 8px; border-radius: 6px; background: rgba(38,166,154,.12); border: 1px solid rgba(38,166,154,.25); color: color-mix(in srgb,var(--ea) 75%,var(--efg)); }
+.trr-attn-lines { margin: 0 -4px; }
+.trr-attn-lines svg { width: 100%; height: 44px; }
+
+/* Mechanism flow */
+.trr-mech-flow { display: grid; gap: 0; border: 1px solid var(--ebd); border-radius: 14px; overflow: hidden; background: color-mix(in srgb,var(--ebg) 80%,#0f172a 20%); }
+.trr-mech-step { display: flex; gap: 14px; align-items: flex-start; padding: 14px 16px; }
+.trr-mech-divider { height: 1px; background: var(--ebd); }
+.trr-mstep-num { width: 28px; height: 28px; border-radius: 50%; background: color-mix(in srgb,var(--ea) 15%,transparent); border: 1px solid color-mix(in srgb,var(--ea) 35%,transparent); color: color-mix(in srgb,var(--ea) 85%,var(--efg)); font-size: 13px; font-weight: 900; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.trr-mstep-body { display: grid; gap: 4px; }
+.trr-mstep-title { font-size: 13px; font-weight: 800; }
+.trr-mstep-desc { font-size: 12px; color: var(--emut); line-height: 1.5; }
+
+/* Reuse */
+.trr-reuse { display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: start; }
+@media (max-width: 580px) { .trr-reuse { grid-template-columns: 1fr; } }
+.trr-base { border-radius: 14px; padding: 16px; background: color-mix(in srgb,var(--eb) 9%,transparent); border: 2px solid color-mix(in srgb,var(--eb) 30%,transparent); display: grid; gap: 4px; min-width: 160px; align-content: start; }
+.trr-base-tag { font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: color-mix(in srgb,var(--eb) 70%,var(--emut)); }
+.trr-base-cost { font-family: monospace; font-size: 18px; font-weight: 900; color: color-mix(in srgb,var(--eb) 80%,var(--efg)); }
+.trr-base-label { font-size: 13px; font-weight: 900; }
+.trr-base-desc { font-size: 11px; color: var(--emut); line-height: 1.45; }
+.trr-reuse-branches { display: grid; gap: 7px; }
+.trr-branch { border-radius: 10px; padding: 10px 12px; display: grid; gap: 2px; }
+.trr-branch--1 { background: rgba(38,166,154,.07); border: 1px solid rgba(38,166,154,.2); }
+.trr-branch--2 { background: rgba(50,74,178,.07); border: 1px solid rgba(50,74,178,.2); }
+.trr-branch--3 { background: rgba(255,179,67,.07); border: 1px solid rgba(255,179,67,.2); }
+.trr-branch--4 { background: rgba(139,92,246,.07); border: 1px solid rgba(139,92,246,.2); }
+.trr-branch-tag { font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--emut); }
+.trr-branch-name { font-size: 12px; font-weight: 800; }
+.trr-branch-cost { font-family: monospace; font-size: 11px; font-weight: 700; color: color-mix(in srgb,var(--ea) 75%,var(--emut)); }
+.trr-reuse-note { font-size: 12.5px; font-weight: 700; color: var(--efg); line-height: 1.45; padding: 10px 14px; border-radius: 9px; background: color-mix(in srgb,var(--ea) 8%,transparent); border-left: 3px solid color-mix(in srgb,var(--ea) 50%,transparent); }
+</style>
+
+<script>
+(function () {
+  function boot() {
+    var wrap = document.querySelector('[data-demo="04-transformer-reutilizacion"]');
+    if (!wrap || wrap.dataset.trrReady) return;
+    wrap.dataset.trrReady = '1';
+    var tabs = wrap.querySelectorAll('.trr-tab');
+    var panels = wrap.querySelectorAll('.trr-panel');
+    function switchTab(key) {
+      tabs.forEach(function(t) { t.classList.remove('trr-tab--active'); });
+      panels.forEach(function(p) { p.classList.remove('trr-panel--active'); });
+      var btn = wrap.querySelector('.trr-tab[data-tab="' + key + '"]');
+      var panel = wrap.querySelector('.trr-panel[data-panel="' + key + '"]');
+      if (btn) btn.classList.add('trr-tab--active');
+      if (panel) panel.classList.add('trr-panel--active');
+    }
+    tabs.forEach(function(btn) {
+      btn.addEventListener('click', function() { switchTab(btn.dataset.tab); });
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
+  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
+})();
+</script>

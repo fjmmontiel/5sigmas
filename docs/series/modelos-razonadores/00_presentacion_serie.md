@@ -6,7 +6,7 @@ robots: noindex
 
 # Modelos razonadores
 
-{{ include_html("snippets/series_meta.html", series_dir="modelos-razonadores", data_state="construction", data_level="tecnico", data_read="6", status_label="En construcción", level_label="Técnico", glow_hidden="true", extra_rows="<div class=\"series-meta-row\"><span class=\"series-meta-label\">Prerequisitos</span><span class=\"series-meta-value\"><a href=\"/series/fundamentos-ia-iag/00_presentacion_serie/\">Fundamentos de IA e IA generativa</a></span></div>") }}
+{{ include_html("snippets/series_meta.html", series_dir="modelos-razonadores", data_state="construction", data_level="tecnico", status_label="En construcción", level_label="Técnico", extra_rows="<div class=\"series-meta-row\"><span class=\"series-meta-label\">Prerequisitos</span><span class=\"series-meta-value\"><a href=\"/series/fundamentos-ia-iag/00_presentacion_serie/\">Fundamentos de IA e IA generativa</a></span></div>") }}
 
 Los LLMs pueden *parecer* que razonan, pero “razonar” es una cualidad inherentemente humana. Lo podemos definir como un **proceso** con diferentes pasos que ejecutarlos consume **tiempo físico** (latencia), energía mental (**cómputo**) y no es infalible (**alucinaciones**).<br>
 

@@ -1,150 +1,118 @@
 <div class="pft-wrap" data-demo="04-preentrenamiento-finetuning">
+
   <div class="pft-hd">
-    <div class="pft-title">El paradigma preentrenamiento + fine-tuning</div>
+    <div class="pft-title">Del dato en bruto al producto: tres plantas</div>
+    <div class="pft-sub">Un modelo fundacional no es un producto terminado. Entre el preentrenamiento y el uso real hay dos etapas más, cada una con su propia lógica, su coste y sus limitaciones.</div>
   </div>
 
-  <div class="pft-tabs">
-    <button class="pft-tab pft-tab--active" data-ptab="pretrain">Fase 1 — Preentrenamiento</button>
-    <button class="pft-tab" data-ptab="finetune">Fase 2 — Fine-tuning</button>
-    <button class="pft-tab" data-ptab="why">Por qué funciona</button>
-  </div>
+  <!-- Factory: 3 plants stacked vertically -->
+  <div class="pft-factory">
 
-  <!-- Phase 1: Pretraining -->
-  <div class="pft-panel pft-panel--active" data-ppanel="pretrain">
-    <div class="pft-phase-badge pft-phase-badge--pre">Fase 1</div>
-    <div class="pft-phase-title">Preentrenamiento masivo no supervisado</div>
-
-    <div class="pft-flow">
-      <div class="pft-data-sources">
-        <div class="pft-ds-title">Corpus de entrenamiento</div>
-        <div class="pft-ds-grid">
-          <div class="pft-ds-item">📚 Libros<div class="pft-ds-vol">~100B tokens</div></div>
-          <div class="pft-ds-item">🌐 Web<div class="pft-ds-vol">~1T+ tokens</div></div>
-          <div class="pft-ds-item">💻 Código<div class="pft-ds-vol">~200B tokens</div></div>
-          <div class="pft-ds-item">📰 Artículos<div class="pft-ds-vol">~50B tokens</div></div>
-        </div>
+    <!-- Plant 1: Pretraining -->
+    <div class="pft-plant pft-plant--1">
+      <div class="pft-plant-header">
+        <div class="pft-plant-num">Planta 1</div>
+        <div class="pft-plant-name">Preentrenamiento</div>
+        <div class="pft-plant-cost">$10M – $100M · semanas de cómputo</div>
       </div>
-      <div class="pft-flow-arr">→</div>
-      <div class="pft-train-box">
-        <div class="pft-train-title">Entrenamiento</div>
-        <div class="pft-train-objective">Objetivo: predecir el token siguiente</div>
-        <div class="pft-pred-example">
-          <div class="pft-pred-row">
-            <div class="pft-pred-ctx">La capital de Francia es</div>
-            <div class="pft-pred-target">→ <span class="pft-pred-word">París</span></div>
+      <div class="pft-plant-body">
+        <div class="pft-plant-left">
+          <div class="pft-input-label">Entra</div>
+          <div class="pft-inputs">
+            <div class="pft-inp">📚 Libros</div>
+            <div class="pft-inp">🌐 Web</div>
+            <div class="pft-inp">💻 Código</div>
+            <div class="pft-inp">📰 Artículos</div>
           </div>
-          <div class="pft-pred-row">
-            <div class="pft-pred-ctx">def fibonacci(n): if n &lt;= 1:</div>
-            <div class="pft-pred-target">→ <span class="pft-pred-word">return</span></div>
-          </div>
+          <div class="pft-obj">Objetivo: predecir el token siguiente</div>
         </div>
-        <div class="pft-train-scale">GPUs · semanas · billones de operaciones</div>
-      </div>
-      <div class="pft-flow-arr">→</div>
-      <div class="pft-base-model">
-        <div class="pft-bm-icon">🧠</div>
-        <div class="pft-bm-title">Modelo base</div>
-        <div class="pft-bm-desc">Billones de parámetros que capturan conocimiento general del lenguaje y del mundo</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Phase 2: Fine-tuning -->
-  <div class="pft-panel" data-ppanel="finetune">
-    <div class="pft-phase-badge pft-phase-badge--ft">Fase 2</div>
-    <div class="pft-phase-title">Fine-tuning — especialización con pocos datos</div>
-
-    <div class="pft-ft-grid">
-      <div class="pft-ft-center">
-        <div class="pft-bm-icon">🧠</div>
-        <div class="pft-ft-center-lbl">Modelo base</div>
-        <div class="pft-ft-center-sub">Mismos pesos de partida</div>
-      </div>
-      <div class="pft-ft-tasks">
-        <div class="pft-ft-task">
-          <div class="pft-ft-task-hd pft-ft-task-hd--chat">
-            <div class="pft-ft-task-icon">💬</div>
-            <div class="pft-ft-task-name">ChatGPT / Claude</div>
-          </div>
-        </div>
-        <div class="pft-ft-task">
-          <div class="pft-ft-task-hd pft-ft-task-hd--code">
-            <div class="pft-ft-task-icon">💻</div>
-            <div class="pft-ft-task-name">Copilot / Codex</div>
-          </div>
-        </div>
-        <div class="pft-ft-task">
-          <div class="pft-ft-task-hd pft-ft-task-hd--med">
-            <div class="pft-ft-task-icon">🏥</div>
-            <div class="pft-ft-task-name">Med-PaLM / BioGPT</div>
-          </div>
-        </div>
-        <div class="pft-ft-task">
-          <div class="pft-ft-task-hd pft-ft-task-hd--legal">
-            <div class="pft-ft-task-icon">⚖</div>
-            <div class="pft-ft-task-name">Harvey / LexGPT</div>
+        <div class="pft-plant-right">
+          <div class="pft-output-label">Sale</div>
+          <div class="pft-output pft-output--base">
+            <div class="pft-out-icon">🧠</div>
+            <div class="pft-out-name">Modelo base</div>
+            <div class="pft-out-desc">Billones de parámetros. Conocimiento general del lenguaje y del mundo. Potente pero no instruccionable de forma confiable.</div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="pft-cost-compare">
-      <div class="pft-cc-col pft-cc-col--pre">
-        <div class="pft-cc-label">Preentrenamiento</div>
-        <div class="pft-cc-val">$10M – $100M</div>
+    <div class="pft-arrow-down">↓</div>
+
+    <!-- Plant 2: Alignment -->
+    <div class="pft-plant pft-plant--2">
+      <div class="pft-plant-header">
+        <div class="pft-plant-num">Planta 2</div>
+        <div class="pft-plant-name">Alineamiento</div>
+        <div class="pft-plant-cost">$100K – $10M · interacción humana</div>
       </div>
-      <div class="pft-cc-vs">vs</div>
-      <div class="pft-cc-col pft-cc-col--ft">
-        <div class="pft-cc-label">Fine-tuning</div>
-        <div class="pft-cc-val">$1K – $100K</div>
+      <div class="pft-plant-body">
+        <div class="pft-plant-left">
+          <div class="pft-input-label">Entra</div>
+          <div class="pft-inputs pft-inputs--align">
+            <div class="pft-inp pft-inp--align">👤 Instrucciones humanas</div>
+            <div class="pft-inp pft-inp--align">⚖ Preferencias comparadas</div>
+            <div class="pft-inp pft-inp--align">🔄 RLHF / DPO</div>
+          </div>
+          <div class="pft-obj">Objetivo: seguir instrucciones y evitar daños</div>
+        </div>
+        <div class="pft-plant-right">
+          <div class="pft-output-label">Sale</div>
+          <div class="pft-output pft-output--aligned">
+            <div class="pft-out-icon">🤝</div>
+            <div class="pft-out-name">Modelo alineado</div>
+            <div class="pft-out-desc">Sigue instrucciones, mantiene tono, evita respuestas dañinas. Listo para interacción humana directa.</div>
+          </div>
+        </div>
       </div>
     </div>
+
+    <div class="pft-arrow-down">↓</div>
+
+    <!-- Plant 3: Real use -->
+    <div class="pft-plant pft-plant--3">
+      <div class="pft-plant-header">
+        <div class="pft-plant-num">Planta 3</div>
+        <div class="pft-plant-name">Uso real</div>
+        <div class="pft-plant-cost">Variable · por llamada o despliegue</div>
+      </div>
+      <div class="pft-plant-body">
+        <div class="pft-plant-left">
+          <div class="pft-input-label">Entra en tiempo de uso</div>
+          <div class="pft-inputs pft-inputs--runtime">
+            <div class="pft-inp pft-inp--runtime">🔧 Herramientas externas</div>
+            <div class="pft-inp pft-inp--runtime">📄 Documentos / RAG</div>
+            <div class="pft-inp pft-inp--runtime">🧩 Memoria temporal</div>
+            <div class="pft-inp pft-inp--runtime">🎯 Instrucción de sistema</div>
+          </div>
+        </div>
+        <div class="pft-plant-right">
+          <div class="pft-output-label">Sale</div>
+          <div class="pft-output pft-output--product">
+            <div class="pft-out-icon">🚀</div>
+            <div class="pft-out-name">Producto</div>
+            <div class="pft-out-desc">El modelo alineado orquestado con contexto, herramientas y memoria. Esto es lo que el usuario experimenta.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
-  <!-- Why it works -->
-  <div class="pft-panel" data-ppanel="why">
-    <div class="pft-phase-badge pft-phase-badge--why">Concepto clave</div>
-    <div class="pft-phase-title">Por qué funciona: transferencia de representaciones</div>
-
-    <div class="pft-layers">
-      <div class="pft-layer-title">Qué aprende cada nivel de la red</div>
-      <div class="pft-layer-vis">
-        <div class="pft-layer pft-layer--surface">
-          <div class="pft-layer-name">Capas superficiales</div>
-          <div class="pft-layer-learns">Sintaxis · tokens · morfología · n-gramas frecuentes</div>
-        </div>
-        <div class="pft-layer pft-layer--middle">
-          <div class="pft-layer-name">Capas intermedias</div>
-          <div class="pft-layer-learns">Semántica · correferencia · relaciones entre entidades · estructura del discurso</div>
-        </div>
-        <div class="pft-layer pft-layer--deep">
-          <div class="pft-layer-name">Capas profundas</div>
-          <div class="pft-layer-learns">Razonamiento · conocimiento del mundo · relaciones causales · sentido común</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="pft-why-grid">
-      <div class="pft-why-item">
-        <div class="pft-why-name">Regularización gratuita</div>
-      </div>
-      <div class="pft-why-item">
-        <div class="pft-why-name">Pocos datos suficientes</div>
-      </div>
-      <div class="pft-why-item">
-        <div class="pft-why-name">Reutilizabilidad del capital</div>
-      </div>
-    </div>
+  <div class="pft-footer-note">
+    El modelo fundacional es una base necesaria, no suficiente. Un asistente, un agente o un sistema RAG son la Planta 3: usan el modelo como motor, pero añaden capas que el preentrenamiento no puede proporcionar.
   </div>
+
 </div>
 
 <style>
 .pft-wrap, .pft-wrap * { box-sizing: border-box; }
 
 .pft-wrap {
-  --ea: var(--md-primary-fg-color, #26A69A);
+  --ea: #26A69A;
   --eb: #324AB2;
-  --eg: var(--md-accent-fg-color, #FFB343);
+  --eg: #FFB343;
+  --ep: #8b5cf6;
   --ebg: var(--md-default-bg-color, #fff);
   --efg: var(--md-default-fg-color, #0f172a);
   --ebd: rgba(15,23,42,.13);
@@ -152,21 +120,20 @@
   --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
 
   display: grid;
-  gap: 14px;
+  gap: 16px;
   max-width: 860px;
   margin: 0 auto;
   padding: clamp(14px,2vw,22px);
   border: 1px solid var(--ebd);
   border-radius: 20px;
   background:
-    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--ea) 5%,transparent), transparent 50%),
-    radial-gradient(90% 110% at 95% 100%, color-mix(in srgb,var(--eb) 5%,transparent), transparent 52%),
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--eb) 5%,transparent), transparent 50%),
+    radial-gradient(90% 110% at 95% 100%, color-mix(in srgb,var(--ea) 6%,transparent), transparent 52%),
     var(--ebg);
   color: var(--efg);
   font-family: var(--ef);
   -webkit-font-smoothing: antialiased;
 }
-
 [data-md-color-scheme="slate"] .pft-wrap {
   --ebg: var(--md-default-bg-color, #0f172a);
   --efg: var(--md-default-fg-color, #e2e8f0);
@@ -175,151 +142,77 @@
 }
 
 .pft-hd { display: grid; gap: 4px; }
-.pft-title { font-size: clamp(15px,2vw,20px); font-weight: 900; letter-spacing: -.02em; line-height: 1.15; }
-.pft-sub { font-size: 13px; color: var(--emut); line-height: 1.5; max-width: 68ch; }
+.pft-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.pft-sub { font-size: 13px; color: var(--emut); line-height: 1.55; max-width: 72ch; }
 
-.pft-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
-.pft-tab {
-  padding: 6px 14px; border-radius: 8px; border: 1px solid var(--ebd);
-  background: transparent; color: var(--emut); font-family: var(--ef);
-  font-size: 12px; font-weight: 700; cursor: pointer;
-  transition: background .18s, color .18s, border-color .18s;
-}
-.pft-tab:hover { background: color-mix(in srgb, var(--ea) 10%, transparent); color: var(--efg); }
-.pft-tab--active { background: color-mix(in srgb, var(--ea) 14%, transparent); border-color: color-mix(in srgb, var(--ea) 50%, transparent); color: var(--efg); }
+/* Factory */
+.pft-factory { display: grid; gap: 0; }
+.pft-arrow-down { text-align: center; font-size: 22px; color: var(--emut); line-height: 1.2; padding: 2px 0; }
 
-.pft-panel { display: none; }
-.pft-panel--active { display: grid; gap: 12px; align-content: start; animation: pftIn .25s ease; }
-@keyframes pftIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-
-.pft-phase-badge {
-  font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .08em;
-  padding: 3px 10px; border-radius: 999px; width: fit-content;
-}
-.pft-phase-badge--pre { background: color-mix(in srgb, var(--ea) 14%, transparent); border: 1px solid color-mix(in srgb, var(--ea) 35%, transparent); color: color-mix(in srgb, var(--ea) 80%, var(--efg)); }
-.pft-phase-badge--ft { background: color-mix(in srgb, var(--eb) 12%, transparent); border: 1px solid color-mix(in srgb, var(--eb) 30%, transparent); color: color-mix(in srgb, var(--eb) 80%, var(--efg)); }
-.pft-phase-badge--why { background: color-mix(in srgb, var(--eg) 12%, transparent); border: 1px solid color-mix(in srgb, var(--eg) 30%, transparent); color: color-mix(in srgb, var(--eg) 75%, var(--efg)); }
-.pft-phase-title { font-size: 15px; font-weight: 900; }
-.pft-phase-desc { font-size: 12.5px; color: var(--emut); line-height: 1.5; }
-
-/* Pretraining flow */
-.pft-flow { display: flex; gap: 10px; align-items: flex-start; flex-wrap: wrap; }
-.pft-data-sources, .pft-train-box, .pft-base-model {
-  flex: 1 1 160px;
-  padding: 11px 13px;
-  border-radius: 11px;
+.pft-plant {
+  border-radius: 14px;
   border: 1px solid var(--ebd);
-  background: color-mix(in srgb, var(--ebg) 70%, #0f172a 30%);
-  display: grid;
-  gap: 7px;
-  align-content: start;
+  overflow: hidden;
 }
-.pft-flow-arr { font-size: 22px; color: var(--emut); flex-shrink: 0; align-self: center; }
-.pft-ds-title, .pft-train-title, .pft-bm-title { font-size: 11px; font-weight: 900; }
-.pft-ds-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
-.pft-ds-item {
-  padding: 5px 7px; border-radius: 7px;
+.pft-plant--1 { border-color: color-mix(in srgb,var(--eb) 30%,var(--ebd)); }
+.pft-plant--2 { border-color: color-mix(in srgb,var(--eg) 30%,var(--ebd)); }
+.pft-plant--3 { border-color: color-mix(in srgb,var(--ea) 30%,var(--ebd)); }
+
+.pft-plant-header {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--ebd);
+  flex-wrap: wrap;
+}
+.pft-plant--1 .pft-plant-header { background: color-mix(in srgb,var(--eb) 7%,transparent); }
+.pft-plant--2 .pft-plant-header { background: color-mix(in srgb,var(--eg) 7%,transparent); }
+.pft-plant--3 .pft-plant-header { background: color-mix(in srgb,var(--ea) 7%,transparent); }
+
+.pft-plant-num { font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--emut); }
+.pft-plant-name { font-size: 14px; font-weight: 900; flex: 1; }
+.pft-plant-cost { font-size: 10.5px; color: var(--emut); font-style: italic; }
+
+.pft-plant-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  padding: 14px;
+  align-items: start;
+}
+@media (max-width: 560px) { .pft-plant-body { grid-template-columns: 1fr; } }
+
+.pft-input-label, .pft-output-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--emut); margin-bottom: 6px; }
+
+.pft-inputs { display: flex; flex-wrap: wrap; gap: 5px; }
+.pft-inp {
   font-size: 11px; font-weight: 700;
-  background: color-mix(in srgb, var(--ea) 8%, transparent);
-  border: 1px solid color-mix(in srgb, var(--ea) 18%, transparent);
+  padding: 4px 9px; border-radius: 7px;
+  background: color-mix(in srgb,var(--eb) 8%,transparent);
+  border: 1px solid color-mix(in srgb,var(--eb) 20%,transparent);
   color: var(--emut);
 }
-.pft-ds-vol { font-size: 9px; color: color-mix(in srgb, var(--ea) 60%, var(--emut)); margin-top: 2px; }
-.pft-ds-total { font-size: 9.5px; color: var(--emut); font-style: italic; }
-.pft-train-objective { font-size: 10.5px; font-weight: 700; color: color-mix(in srgb, var(--eg) 75%, var(--emut)); }
-.pft-pred-example { display: grid; gap: 4px; }
-.pft-pred-row { display: flex; gap: 6px; align-items: baseline; flex-wrap: wrap; }
-.pft-pred-ctx { font-size: 10px; font-family: "Courier New", monospace; color: var(--emut); }
-.pft-pred-target { font-size: 10px; color: var(--emut); }
-.pft-pred-word { font-weight: 900; color: color-mix(in srgb, var(--ea) 85%, var(--efg)); font-family: "Courier New", monospace; }
-.pft-train-scale { font-size: 9.5px; color: var(--emut); font-style: italic; }
-.pft-bm-icon { font-size: 24px; text-align: center; }
-.pft-bm-desc { font-size: 11px; color: var(--emut); line-height: 1.4; }
-.pft-bm-note { font-size: 10px; color: color-mix(in srgb, #ef4444 65%, var(--emut)); font-style: italic; border-left: 2px solid color-mix(in srgb, #ef4444 30%, transparent); padding-left: 6px; }
-
-/* Fine-tuning grid */
-.pft-ft-grid { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
-.pft-ft-center {
-  flex: 0 0 auto;
-  padding: 14px 18px;
-  border-radius: 12px;
-  border: 2px solid color-mix(in srgb, var(--ea) 35%, transparent);
-  background: color-mix(in srgb, var(--ea) 8%, transparent);
-  text-align: center;
-  display: grid;
-  gap: 4px;
+.pft-inp--align {
+  background: color-mix(in srgb,var(--eg) 8%,transparent);
+  border-color: color-mix(in srgb,var(--eg) 20%,transparent);
 }
-.pft-ft-center-lbl { font-size: 12px; font-weight: 900; }
-.pft-ft-center-sub { font-size: 9.5px; color: var(--emut); }
-.pft-ft-tasks { flex: 1 1 300px; display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
-.pft-ft-task {
-  padding: 9px 11px; border-radius: 10px; border: 1px solid var(--ebd);
-  background: color-mix(in srgb, var(--ebg) 70%, #0f172a 30%);
-  display: grid; gap: 4px; align-content: start;
+.pft-inp--runtime {
+  background: color-mix(in srgb,var(--ea) 7%,transparent);
+  border-color: color-mix(in srgb,var(--ea) 18%,transparent);
 }
-.pft-ft-task-hd { display: flex; gap: 6px; align-items: center; }
-.pft-ft-task-icon { font-size: 14px; }
-.pft-ft-task-name { font-size: 11px; font-weight: 900; }
-.pft-ft-task-hd--chat { color: color-mix(in srgb, var(--ea) 80%, var(--efg)); }
-.pft-ft-task-hd--code { color: color-mix(in srgb, var(--eb) 80%, var(--efg)); }
-.pft-ft-task-hd--med { color: color-mix(in srgb, #22c55e 70%, var(--efg)); }
-.pft-ft-task-hd--legal { color: color-mix(in srgb, var(--eg) 75%, var(--efg)); }
-.pft-ft-task-data { font-size: 9.5px; color: var(--emut); }
-.pft-ft-task-result { font-size: 10px; color: var(--emut); line-height: 1.35; font-style: italic; }
+.pft-obj { font-size: 10.5px; color: var(--emut); font-style: italic; margin-top: 8px; }
 
-.pft-cost-compare {
-  display: flex; gap: 0; border-radius: 11px; border: 1px solid var(--ebd); overflow: hidden;
+.pft-output { border-radius: 10px; padding: 11px 13px; display: grid; gap: 5px; }
+.pft-output--base    { background: color-mix(in srgb,var(--eb) 7%,transparent); border: 1px solid color-mix(in srgb,var(--eb) 22%,transparent); }
+.pft-output--aligned { background: color-mix(in srgb,var(--eg) 7%,transparent); border: 1px solid color-mix(in srgb,var(--eg) 22%,transparent); }
+.pft-output--product { background: color-mix(in srgb,var(--ea) 7%,transparent); border: 1px solid color-mix(in srgb,var(--ea) 22%,transparent); }
+.pft-out-icon { font-size: 20px; }
+.pft-out-name { font-size: 13px; font-weight: 900; }
+.pft-out-desc { font-size: 11.5px; color: var(--emut); line-height: 1.5; }
+
+.pft-footer-note {
+  font-size: 12.5px; color: var(--emut); line-height: 1.55; font-style: italic;
+  border-top: 1px solid var(--ebd); padding-top: 12px;
 }
-.pft-cc-col { flex: 1; padding: 11px 14px; display: grid; gap: 5px; align-content: start; }
-.pft-cc-col--pre { background: color-mix(in srgb, var(--eb) 7%, color-mix(in srgb, var(--ebg) 70%, #0f172a 30%)); }
-.pft-cc-col--ft { background: color-mix(in srgb, var(--ea) 7%, color-mix(in srgb, var(--ebg) 70%, #0f172a 30%)); border-left: 1px solid var(--ebd); }
-.pft-cc-vs { flex: 0 0 auto; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 900; color: var(--emut); padding: 0 8px; background: color-mix(in srgb, var(--ebg) 70%, #0f172a 30%); }
-.pft-cc-label { font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--emut); }
-.pft-cc-val { font-size: 18px; font-weight: 900; letter-spacing: -.01em; }
-.pft-cc-note { font-size: 10.5px; color: var(--emut); line-height: 1.4; font-style: italic; }
-
-/* Layers */
-.pft-layers { display: grid; gap: 9px; }
-.pft-layer-title { font-size: 10.5px; font-weight: 800; text-transform: uppercase; color: var(--emut); }
-.pft-layer-vis { display: grid; gap: 5px; }
-.pft-layer {
-  padding: 9px 13px; border-radius: 9px; display: flex; gap: 10px; align-items: baseline;
-}
-.pft-layer--surface { background: color-mix(in srgb, var(--ea) 7%, transparent); border: 1px solid color-mix(in srgb, var(--ea) 18%, transparent); }
-.pft-layer--middle { background: color-mix(in srgb, var(--eb) 6%, transparent); border: 1px solid color-mix(in srgb, var(--eb) 16%, transparent); }
-.pft-layer--deep { background: color-mix(in srgb, var(--eg) 6%, transparent); border: 1px solid color-mix(in srgb, var(--eg) 16%, transparent); }
-.pft-layer-name { font-size: 11px; font-weight: 900; flex-shrink: 0; min-width: 130px; }
-.pft-layer-learns { font-size: 11.5px; color: var(--emut); line-height: 1.4; }
-
-/* Why grid */
-.pft-why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; }
-@media (max-width: 580px) { .pft-why-grid { grid-template-columns: 1fr; } }
-.pft-why-item { padding: 10px 13px; border-radius: 10px; border: 1px solid var(--ebd); background: color-mix(in srgb, var(--ebg) 75%, #0f172a 25%); display: grid; gap: 6px; }
-.pft-why-name { font-size: 12px; font-weight: 900; }
-.pft-why-body { font-size: 11.5px; color: var(--emut); line-height: 1.45; }
 </style>
-
-<script>
-(function () {
-  function boot() {
-    var wrap = document.querySelector('[data-demo="04-preentrenamiento-finetuning"]');
-    if (!wrap || wrap.dataset.pftReady) return;
-    wrap.dataset.pftReady = '1';
-    var tabs = wrap.querySelectorAll('.pft-tab');
-    var panels = wrap.querySelectorAll('.pft-panel');
-    tabs.forEach(function(tab) {
-      tab.addEventListener('click', function() {
-        var target = tab.dataset.ptab;
-        tabs.forEach(function(t) { t.classList.remove('pft-tab--active'); });
-        panels.forEach(function(p) { p.classList.remove('pft-panel--active'); });
-        tab.classList.add('pft-tab--active');
-        var panel = wrap.querySelector('[data-ppanel="' + target + '"]');
-        if (panel) panel.classList.add('pft-panel--active');
-      });
-    });
-  }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
-  else boot();
-  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
-})();
-</script>

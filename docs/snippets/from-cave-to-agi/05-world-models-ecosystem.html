@@ -1,250 +1,171 @@
 <div class="wm-wrap" data-demo="05-world-models-ecosystem">
+
   <div class="wm-hd">
-    <div class="wm-title">Modelos del mundo: aprender estructura, no solo secuencias</div>
-    <div class="wm-sub">La apuesta de fondo: la inteligencia general requiere modelar el entorno, no solo predecir el siguiente token.</div>
+    <div class="wm-title">World models: simular antes de actuar</div>
+    <div class="wm-sub">Un modelo secuencial predice el siguiente estado. Un world model simula varios futuros posibles antes de elegir qué hacer. La diferencia es la capacidad de anticipar, no solo de continuar.</div>
   </div>
 
-  <!-- Contrast: paradigma LLM vs World Model -->
-  <div class="wm-contrast">
-    <div class="wm-cont-side">
-      <div class="wm-cont-label wm-cont-label--llm">Paradigma LLM</div>
-      <div class="wm-cont-flow">
-        <div class="wm-cf-step">
-          <div class="wm-cf-icon">📄</div>
-          <div class="wm-cf-name">Texto</div>
-        </div>
-        <div class="wm-cf-arr">→</div>
-        <div class="wm-cf-step">
-          <div class="wm-cf-icon">🔢</div>
-          <div class="wm-cf-name">Tokens</div>
-        </div>
-        <div class="wm-cf-arr">→</div>
-        <div class="wm-cf-step wm-cf-step--out">
-          <div class="wm-cf-icon">📊</div>
-          <div class="wm-cf-name">Siguiente token</div>
-        </div>
-      </div>
-      <div class="wm-cont-note">Predice distribuciones · no modela causas</div>
-    </div>
-    <div class="wm-cont-vs">vs</div>
-    <div class="wm-cont-side">
-      <div class="wm-cont-label wm-cont-label--wm">Modelo del mundo</div>
-      <div class="wm-cont-flow">
-        <div class="wm-cf-step wm-cf-step--wm">
-          <div class="wm-cf-icon">👁</div>
-          <div class="wm-cf-name">Observar</div>
-        </div>
-        <div class="wm-cf-arr">→</div>
-        <div class="wm-cf-step wm-cf-step--wm">
-          <div class="wm-cf-icon">🧩</div>
-          <div class="wm-cf-name">Estado latente</div>
-        </div>
-        <div class="wm-cf-arr">→</div>
-        <div class="wm-cf-step wm-cf-step--wm wm-cf-step--out-wm">
-          <div class="wm-cf-icon">🎯</div>
-          <div class="wm-cf-name">Planificar · actuar</div>
-        </div>
-      </div>
-      <div class="wm-cont-note">Aprende estructura causal · planifica sin ejecutar</div>
-    </div>
-  </div>
+  <!-- Toy world bifold -->
+  <div class="wm-bifold">
 
-  <!-- 3 cards: DreamerV3, I-JEPA, Genie 2 -->
-  <div class="wm-cards">
+    <!-- Left: sequential model -->
+    <div class="wm-side wm-side--seq">
+      <div class="wm-side-tag">MODELO SECUENCIAL</div>
+      <div class="wm-side-title">Predice el siguiente estado</div>
 
-    <div class="wm-card">
-      <div class="wm-card-hd">
-        <span class="wm-org wm-org--dm">DeepMind</span>
-        <span class="wm-year">2023</span>
+      <!-- Simple physics scene: ball, wall -->
+      <div class="wm-scene">
+        <svg viewBox="0 0 220 140" fill="none" xmlns="http://www.w3.org/2000/svg" class="wm-svg">
+          <!-- Floor -->
+          <line x1="10" y1="120" x2="210" y2="120" stroke="rgba(100,116,139,.3)" stroke-width="1.5"/>
+          <!-- Wall on right -->
+          <rect x="185" y="30" width="8" height="90" rx="2" fill="rgba(100,116,139,.2)" stroke="rgba(100,116,139,.3)" stroke-width="1"/>
+          <!-- Ball trajectory (one arrow, linear) -->
+          <circle cx="40" cy="105" r="10" fill="rgba(100,116,139,.15)" stroke="rgba(100,116,139,.35)" stroke-width="1.5"/>
+          <text x="40" y="109" text-anchor="middle" font-size="10" fill="rgba(100,116,139,.7)" font-family="serif">●</text>
+          <!-- Arrow to next state only -->
+          <path d="M 52 105 H 90" stroke="rgba(100,116,139,.4)" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#wmarr1)"/>
+          <circle cx="110" cy="105" r="10" fill="rgba(100,116,139,.12)" stroke="rgba(100,116,139,.25)" stroke-width="1" opacity=".6"/>
+          <!-- Label: only one step -->
+          <text x="110" y="136" text-anchor="middle" font-size="8.5" fill="rgba(100,116,139,.6)" font-family="sans-serif">siguiente estado</text>
+          <defs>
+            <marker id="wmarr1" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+              <path d="M0,0.5 L5.5,3 L0,5.5 Z" fill="rgba(100,116,139,.5)"/>
+            </marker>
+          </defs>
+        </svg>
+        <div class="wm-scene-note">El modelo predice paso a paso. No puede evaluar consecuencias antes de actuar.</div>
       </div>
-      <div class="wm-name">DreamerV3</div>
-      <div class="wm-metric">150+<span class="wm-metric-unit"> tareas</span></div>
-      <div class="wm-desc">Misma arquitectura, sin ajustar hiperparámetros entre tareas — incluida la recolección de diamantes en Minecraft desde cero.</div>
+
+      <div class="wm-side-verdict wm-side-verdict--seq">Solo continúa la secuencia. Sin simulación interna del entorno.</div>
     </div>
 
-    <div class="wm-card">
-      <div class="wm-card-hd">
-        <span class="wm-org wm-org--meta">Meta AI / LeCun</span>
-        <span class="wm-year">2023</span>
-      </div>
-      <div class="wm-name">I-JEPA</div>
-      <div class="wm-metric">86,9%<span class="wm-metric-unit"> ImageNet</span></div>
-      <div class="wm-desc">Predice representaciones semánticas en espacio latente, sin reconstruir píxeles. Aprende lo esencial, ignora el ruido.</div>
-    </div>
+    <div class="wm-vs">vs</div>
 
-    <div class="wm-card">
-      <div class="wm-card-hd">
-        <span class="wm-org wm-org--dm">DeepMind</span>
-        <span class="wm-year">dic 2024</span>
+    <!-- Right: world model -->
+    <div class="wm-side wm-side--wm">
+      <div class="wm-side-tag wm-side-tag--wm">WORLD MODEL</div>
+      <div class="wm-side-title">Simula varios futuros posibles</div>
+
+      <!-- Same scene but with multiple trajectories -->
+      <div class="wm-scene">
+        <svg viewBox="0 0 220 140" fill="none" xmlns="http://www.w3.org/2000/svg" class="wm-svg">
+          <!-- Floor -->
+          <line x1="10" y1="120" x2="210" y2="120" stroke="rgba(100,116,139,.3)" stroke-width="1.5"/>
+          <!-- Wall on right -->
+          <rect x="185" y="30" width="8" height="90" rx="2" fill="rgba(38,166,154,.15)" stroke="rgba(38,166,154,.25)" stroke-width="1"/>
+          <!-- Ball start -->
+          <circle cx="40" cy="105" r="10" fill="rgba(38,166,154,.15)" stroke="rgba(38,166,154,.45)" stroke-width="1.5"/>
+          <!-- Trajectory 1: straight to wall, bounce back (selected) -->
+          <path d="M 52 105 H 183" stroke="rgba(38,166,154,.55)" stroke-width="1.8" marker-end="url(#wmarr2)"/>
+          <path d="M 183 105 H 140" stroke="rgba(38,166,154,.35)" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#wmarr2)"/>
+          <circle cx="155" cy="105" r="6" fill="rgba(38,166,154,.2)" stroke="rgba(38,166,154,.4)" stroke-width="1"/>
+          <!-- Trajectory 2: arc over (rejected) -->
+          <path d="M 52 102 Q 110 50 172 98" stroke="rgba(255,179,67,.35)" stroke-width="1.5" stroke-dasharray="3 3"/>
+          <!-- Trajectory 3: stop (rejected) -->
+          <path d="M 52 107 H 95" stroke="rgba(239,68,68,.25)" stroke-width="1.5" stroke-dasharray="3 3"/>
+          <text x="100" y="111" font-size="10" fill="rgba(239,68,68,.4)" font-family="serif">✕</text>
+          <!-- Labels -->
+          <text x="110" y="136" text-anchor="middle" font-size="8.5" fill="rgba(38,166,154,.7)" font-family="sans-serif">trayectoria elegida</text>
+          <defs>
+            <marker id="wmarr2" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+              <path d="M0,0.5 L5.5,3 L0,5.5 Z" fill="rgba(38,166,154,.6)"/>
+            </marker>
+          </defs>
+        </svg>
+        <div class="wm-scene-note">El modelo simula colisión, rebote y alternativas antes de actuar. Elige la trayectoria con mejor resultado anticipado.</div>
       </div>
-      <div class="wm-name">Genie 2</div>
-      <div class="wm-metric">1 imagen<span class="wm-metric-unit"> → mundo 3D</span></div>
-      <div class="wm-desc">Genera entornos 3D jugables y controlables a partir de una sola imagen. La física emerge del modelo, sin ingeniería manual.</div>
+
+      <div class="wm-side-verdict wm-side-verdict--wm">Anticipa dinámicas del entorno. Planifica antes de comprometerse con una acción.</div>
     </div>
 
   </div>
+
+  <!-- Key difference explanation -->
+  <div class="wm-keys">
+    <div class="wm-key">
+      <div class="wm-key-tag">IMPLICACIÓN 1</div>
+      <div class="wm-key-text">Un world model puede rechazar acciones antes de ejecutarlas, porque sabe que llevan a un estado indeseable. Un modelo secuencial solo puede aprender de lo que ya ocurrió.</div>
+    </div>
+    <div class="wm-key">
+      <div class="wm-key-tag">IMPLICACIÓN 2</div>
+      <div class="wm-key-text">Para robótica, conducción autónoma o agentes que actúan en el mundo físico, simular consecuencias antes de actuar es una capacidad necesaria, no opcional.</div>
+    </div>
+    <div class="wm-key">
+      <div class="wm-key-tag">ESTADO DEL ARTE</div>
+      <div class="wm-key-text">Modelos como DreamerV3 o los modelos de JEPA de LeCun apuntan en esta dirección. El debate es si los LLMs ya tienen representaciones implícitas de world model o si se necesita una arquitectura distinta.</div>
+    </div>
+  </div>
+
 </div>
 
 <style>
 .wm-wrap, .wm-wrap * { box-sizing: border-box; }
 
 .wm-wrap {
-  --ea: var(--md-primary-fg-color, #26A69A);
+  --ea: #26A69A;
   --eb: #324AB2;
-  --eg: var(--md-accent-fg-color, #FFB343);
+  --eg: #FFB343;
   --ebg: var(--md-default-bg-color, #fff);
   --efg: var(--md-default-fg-color, #0f172a);
   --ebd: rgba(15,23,42,.13);
-  --emut: rgba(15,23,42,.58);
+  --emut: rgba(15,23,42,.56);
   --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
 
-  display: grid; gap: 14px; max-width: 860px; margin: 0 auto;
-  padding: clamp(14px,2vw,22px); border: 1px solid var(--ebd); border-radius: 20px;
+  display: grid;
+  gap: 16px;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--ebd);
+  border-radius: 20px;
   background:
-    radial-gradient(100% 120% at 95% 5%, color-mix(in srgb,var(--ea) 7%,transparent), transparent 50%),
-    radial-gradient(80% 100% at 5% 95%, color-mix(in srgb,var(--eg) 5%,transparent), transparent 52%),
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--ea) 7%,transparent), transparent 50%),
+    radial-gradient(90% 110% at 95% 100%, color-mix(in srgb,var(--eb) 5%,transparent), transparent 52%),
     var(--ebg);
-  color: var(--efg); font-family: var(--ef); -webkit-font-smoothing: antialiased;
+  color: var(--efg);
+  font-family: var(--ef);
+  -webkit-font-smoothing: antialiased;
 }
-
 [data-md-color-scheme="slate"] .wm-wrap {
-  --ebg: var(--md-default-bg-color, #0f172a); --efg: var(--md-default-fg-color, #e2e8f0);
-  --ebd: rgba(226,232,240,.13); --emut: rgba(226,232,240,.58);
+  --ebg: var(--md-default-bg-color, #0f172a);
+  --efg: var(--md-default-fg-color, #e2e8f0);
+  --ebd: rgba(226,232,240,.13);
+  --emut: rgba(226,232,240,.56);
 }
 
 .wm-hd { display: grid; gap: 4px; }
-.wm-title { font-size: clamp(15px,2vw,20px); font-weight: 900; letter-spacing: -.02em; line-height: 1.15; }
-.wm-sub { font-size: 13px; color: var(--emut); line-height: 1.5; max-width: 68ch; }
+.wm-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.wm-sub { font-size: 13px; color: var(--emut); line-height: 1.55; max-width: 72ch; }
 
-/* Contrast */
-.wm-contrast {
-  display: flex; gap: 0; border-radius: 14px; border: 1px solid var(--ebd); overflow: hidden;
-}
-.wm-cont-side {
-  flex: 1; padding: 14px 16px; display: grid; gap: 10px; align-content: start;
-  background: color-mix(in srgb, var(--ebg) 70%, #0f172a 30%);
-}
-.wm-cont-side:last-child {
-  border-left: 1px solid var(--ebd);
-  background: color-mix(in srgb, var(--ea) 4%, color-mix(in srgb, var(--ebg) 70%, #0f172a 30%));
-}
-.wm-cont-vs {
-  flex: 0 0 auto; display: flex; align-items: center; justify-content: center;
-  font-size: 12px; font-weight: 900; color: var(--emut); padding: 0 6px;
-  background: color-mix(in srgb, var(--ebg) 70%, #0f172a 30%);
-}
-.wm-cont-label {
-  font-size: 10px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase;
-  padding: 2px 8px; border-radius: 999px; width: fit-content;
-}
-.wm-cont-label--llm {
-  background: color-mix(in srgb, var(--eb) 14%, transparent);
-  border: 1px solid color-mix(in srgb, var(--eb) 35%, transparent);
-  color: color-mix(in srgb, var(--eb) 90%, var(--efg));
-}
-.wm-cont-label--wm {
-  background: color-mix(in srgb, var(--ea) 14%, transparent);
-  border: 1px solid color-mix(in srgb, var(--ea) 35%, transparent);
-  color: color-mix(in srgb, var(--ea) 80%, var(--efg));
-}
+/* Bifold */
+.wm-bifold { display: grid; grid-template-columns: 1fr auto 1fr; gap: 12px; align-items: start; }
+@media (max-width: 580px) { .wm-bifold { grid-template-columns: 1fr; } }
 
-.wm-cont-flow { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-.wm-cf-step {
-  display: flex; flex-direction: column; align-items: center; gap: 2px;
-  padding: 6px 8px; border-radius: 9px; text-align: center; min-width: 60px;
-  background: color-mix(in srgb, var(--eb) 8%, transparent);
-  border: 1px solid color-mix(in srgb, var(--eb) 20%, transparent);
-}
-.wm-cf-step--wm {
-  background: color-mix(in srgb, var(--ea) 8%, transparent);
-  border-color: color-mix(in srgb, var(--ea) 22%, transparent);
-}
-.wm-cf-step--out {
-  background: color-mix(in srgb, var(--eb) 14%, transparent);
-  border-color: color-mix(in srgb, var(--eb) 30%, transparent);
-}
-.wm-cf-step--out-wm {
-  background: color-mix(in srgb, var(--ea) 14%, transparent);
-  border-color: color-mix(in srgb, var(--ea) 35%, transparent);
-}
-.wm-cf-icon { font-size: 16px; line-height: 1; }
-.wm-cf-name { font-size: 9.5px; font-weight: 700; line-height: 1.2; color: var(--emut); }
-.wm-cf-arr { font-size: 14px; color: var(--emut); flex-shrink: 0; }
-.wm-cont-note { font-size: 10.5px; color: var(--emut); font-style: italic; line-height: 1.35; }
+.wm-side { border-radius: 14px; padding: 14px; display: grid; gap: 10px; align-content: start; }
+.wm-side--seq { background: rgba(100,116,139,.06); border: 1px solid rgba(100,116,139,.18); }
+.wm-side--wm  { background: rgba(38,166,154,.06);  border: 1px solid rgba(38,166,154,.22); }
 
-/* Cards */
-.wm-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; }
-@media (max-width: 640px) { .wm-cards { grid-template-columns: 1fr; } }
-@media (min-width: 641px) and (max-width: 820px) { .wm-cards { grid-template-columns: repeat(2, 1fr); } }
+.wm-side-tag { font-size: 9px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--emut); }
+.wm-side-tag--wm { color: color-mix(in srgb,var(--ea) 75%,var(--emut)); }
+.wm-side-title { font-size: 14px; font-weight: 900; line-height: 1.2; }
 
-.wm-card {
-  padding: 14px 16px; border-radius: 13px; border: 1px solid var(--ebd);
-  background: color-mix(in srgb, var(--ebg) 75%, #0f172a 25%);
-  display: grid; gap: 6px; align-content: start;
-  opacity: 0; transform: translateY(10px);
-  transition: opacity .38s ease, transform .38s ease, border-color .2s, box-shadow .2s;
-}
-.wm-card.wm-card--visible { opacity: 1; transform: translateY(0); }
-.wm-card:hover {
-  border-color: color-mix(in srgb, var(--ea) 30%, var(--ebd));
-  box-shadow: 0 4px 18px color-mix(in srgb, var(--ea) 10%, transparent);
-}
-@media (prefers-reduced-motion: reduce) { .wm-card { opacity: 1; transform: none; transition: none; } }
+.wm-scene { display: grid; gap: 6px; }
+.wm-svg { width: 100%; height: auto; display: block; background: rgba(0,0,0,.02); border-radius: 10px; border: 1px solid var(--ebd); }
+[data-md-color-scheme="slate"] .wm-svg { background: rgba(255,255,255,.02); }
+.wm-scene-note { font-size: 10.5px; color: var(--emut); line-height: 1.45; font-style: italic; }
 
-.wm-card-hd { display: flex; align-items: center; justify-content: space-between; gap: 5px; }
-.wm-org {
-  font-size: 9px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase;
-  padding: 2px 7px; border-radius: 999px;
-}
-.wm-org--dm {
-  background: color-mix(in srgb, var(--eb) 18%, transparent);
-  border: 1px solid color-mix(in srgb, var(--eb) 40%, transparent);
-  color: color-mix(in srgb, var(--eb) 90%, var(--efg));
-}
-.wm-org--meta {
-  background: color-mix(in srgb, #3b82f6 15%, transparent);
-  border: 1px solid color-mix(in srgb, #3b82f6 38%, transparent);
-  color: color-mix(in srgb, #3b82f6 90%, var(--efg));
-}
-.wm-year { font-size: 10px; font-weight: 700; color: var(--emut); }
+.wm-side-verdict { font-size: 12px; font-weight: 700; line-height: 1.4; padding: 8px 11px; border-radius: 8px; }
+.wm-side-verdict--seq { background: rgba(100,116,139,.08); border: 1px solid rgba(100,116,139,.15); color: var(--emut); }
+.wm-side-verdict--wm  { background: rgba(38,166,154,.08); border: 1px solid rgba(38,166,154,.2); }
 
-.wm-name { font-size: 16px; font-weight: 900; letter-spacing: -.01em; line-height: 1.2; }
+.wm-vs { font-size: 18px; font-weight: 900; color: var(--emut); align-self: center; padding-top: 60px; }
+@media (max-width: 580px) { .wm-vs { display: none; } }
 
-.wm-metric {
-  font-size: 26px; font-weight: 900; letter-spacing: -.03em; line-height: 1.1;
-  color: color-mix(in srgb, var(--ea) 90%, var(--efg));
-}
-.wm-metric-unit { font-size: 13px; font-weight: 700; color: var(--emut); letter-spacing: 0; }
-
-.wm-desc { font-size: 11.5px; color: var(--emut); line-height: 1.5; }
+/* Key differences */
+.wm-keys { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+@media (max-width: 620px) { .wm-keys { grid-template-columns: 1fr; } }
+.wm-key { border-radius: 12px; padding: 12px 13px; background: color-mix(in srgb,var(--ebg) 80%,#0f172a 20%); border: 1px solid var(--ebd); display: grid; gap: 6px; align-content: start; }
+.wm-key-tag { font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--emut); }
+.wm-key-text { font-size: 11.5px; color: var(--emut); line-height: 1.5; }
 </style>
-
-<script>
-(function () {
-  function boot() {
-    var wrap = document.querySelector('[data-demo="05-world-models-ecosystem"]');
-    if (!wrap || wrap.dataset.wmReady) return;
-    wrap.dataset.wmReady = '1';
-
-    var cards = wrap.querySelectorAll('.wm-card');
-    if ('IntersectionObserver' in window) {
-      var io = new IntersectionObserver(function(entries) {
-        entries.forEach(function(e) {
-          if (e.isIntersecting) {
-            var idx = Array.prototype.indexOf.call(cards, e.target);
-            setTimeout(function() { e.target.classList.add('wm-card--visible'); }, idx * 90);
-            io.unobserve(e.target);
-          }
-        });
-      }, { threshold: 0.12 });
-      cards.forEach(function(c) { io.observe(c); });
-    } else {
-      cards.forEach(function(c) { c.classList.add('wm-card--visible'); });
-    }
-  }
-
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
-  else boot();
-  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
-})();
-</script>
