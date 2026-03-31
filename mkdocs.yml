@@ -31,6 +31,7 @@ theme:
     - navigation.path
     - content.code.copy
     - content.action.edit
+    - content.tooltips
 
 extra:
   generator: false  # quita “Made with Material for MkDocs”
@@ -49,11 +50,11 @@ nav:
           - AGI: series/fundamentos-ia-iag/04-agi.md
       - De las cavernas a la AGI:
           - Presentación: series/from-cave-to-agi/00_presentacion_serie.md
-          - "Representar": series/from-cave-to-agi/01-representar.md
-          - "Mecanizar": series/from-cave-to-agi/02-mecanizar.md
-          - "Aprender": series/from-cave-to-agi/03-aprender.md
-          - "Escalar": series/from-cave-to-agi/04-escalar.md
-          - "Más allá de escalar": series/from-cave-to-agi/05-mas-alla.md
+          - Representar: series/from-cave-to-agi/01-representar.md
+          - Mecanizar: series/from-cave-to-agi/02-mecanizar.md
+          - Aprender: series/from-cave-to-agi/03-aprender.md
+          - Escalar: series/from-cave-to-agi/04-escalar.md
+          - Más allá de escalar: series/from-cave-to-agi/05-mas-alla.md
       - Multimodalidad en IA Generativa:
           - Presentación: series/multimodalidad-iag/00_presentacion_serie.md
       - Modelos razonadores:
