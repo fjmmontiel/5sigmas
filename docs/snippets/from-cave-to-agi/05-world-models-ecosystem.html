@@ -73,18 +73,28 @@
   <!-- Panel: Por qué importa -->
   <div class="wm-panel" data-wpanel="keys">
     <div class="wm-keys">
-      <div class="wm-key">
-        <div class="wm-key-tag">IMPLICACIÓN 1</div>
-        <div class="wm-key-text">Un world model puede rechazar acciones antes de ejecutarlas, porque sabe que llevan a un estado indeseable. Un modelo secuencial solo puede aprender de lo que ya ocurrió.</div>
+
+      <div class="wm-key wm-key--teal">
+        <div class="wm-key-icon">🚫</div>
+        <div class="wm-key-tag wm-key-tag--teal">IMPLICACIÓN 1 · PREVENCIÓN</div>
+        <div class="wm-key-title">Rechazar antes de actuar</div>
+        <div class="wm-key-text">Un world model puede descartar acciones que llevan a un estado indeseable antes de ejecutarlas. Un modelo secuencial solo puede aprender de lo que ya ocurrió.</div>
       </div>
-      <div class="wm-key">
-        <div class="wm-key-tag">IMPLICACIÓN 2</div>
-        <div class="wm-key-text">Para robótica, conducción autónoma o agentes que actúan en el mundo físico, simular consecuencias antes de actuar es una capacidad necesaria, no opcional.</div>
+
+      <div class="wm-key wm-key--gold">
+        <div class="wm-key-icon">🤖</div>
+        <div class="wm-key-tag wm-key-tag--gold">IMPLICACIÓN 2 · AGENTES FÍSICOS</div>
+        <div class="wm-key-title">Necesario, no opcional</div>
+        <div class="wm-key-text">Para robótica, conducción autónoma o agentes en el mundo físico, simular consecuencias antes de actuar es una capacidad estructural, no un añadido.</div>
       </div>
-      <div class="wm-key">
-        <div class="wm-key-tag">ESTADO DEL ARTE</div>
-        <div class="wm-key-text">Modelos como DreamerV3 o los modelos de JEPA de LeCun apuntan en esta dirección. El debate es si los LLMs ya tienen representaciones implícitas de world model o si se necesita una arquitectura distinta.</div>
+
+      <div class="wm-key wm-key--blue">
+        <div class="wm-key-icon">🔬</div>
+        <div class="wm-key-tag wm-key-tag--blue">ESTADO DEL ARTE · DEBATE ABIERTO</div>
+        <div class="wm-key-title">¿Arquitectura distinta o LLM?</div>
+        <div class="wm-key-text">DreamerV3 y los modelos JEPA de LeCun apuntan en esta dirección. El debate es si los LLMs ya contienen representaciones implícitas de world model o si hace falta una arquitectura distinta.</div>
       </div>
+
     </div>
   </div>
 
@@ -172,11 +182,53 @@
 @media (max-width: 580px) { .wm-vs { display: none; } }
 
 /* Key differences */
-.wm-keys { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+.wm-keys { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
 @media (max-width: 620px) { .wm-keys { grid-template-columns: 1fr; } }
-.wm-key { border-radius: 12px; padding: 12px 13px; background: color-mix(in srgb,var(--ebg) 80%,#0f172a 20%); border: 1px solid var(--ebd); display: grid; gap: 6px; align-content: start; }
-.wm-key-tag { font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--emut); }
-.wm-key-text { font-size: 11.5px; color: var(--emut); line-height: 1.5; }
+
+.wm-key {
+  border-radius: 14px; padding: 16px 15px;
+  display: grid; gap: 7px; align-content: start;
+  position: relative; overflow: hidden;
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.wm-key:hover { transform: translateY(-2px); }
+
+/* Teal — Implicación 1 */
+.wm-key--teal {
+  background: color-mix(in srgb,#26A69A 10%,var(--ebg));
+  border: 1px solid color-mix(in srgb,#26A69A 35%,transparent);
+  box-shadow: 0 0 0 0 color-mix(in srgb,#26A69A 20%,transparent);
+}
+.wm-key--teal:hover { box-shadow: 0 4px 20px color-mix(in srgb,#26A69A 18%,transparent); }
+
+/* Gold — Implicación 2 */
+.wm-key--gold {
+  background: color-mix(in srgb,#FFB343 10%,var(--ebg));
+  border: 1px solid color-mix(in srgb,#FFB343 35%,transparent);
+}
+.wm-key--gold:hover { box-shadow: 0 4px 20px color-mix(in srgb,#FFB343 18%,transparent); }
+
+/* Blue — Estado del arte */
+.wm-key--blue {
+  background: color-mix(in srgb,#324AB2 10%,var(--ebg));
+  border: 1px solid color-mix(in srgb,#324AB2 35%,transparent);
+}
+.wm-key--blue:hover { box-shadow: 0 4px 20px color-mix(in srgb,#324AB2 18%,transparent); }
+
+.wm-key-icon {
+  font-size: 28px; line-height: 1;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,.15));
+}
+
+.wm-key-tag {
+  font-size: 8.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+}
+.wm-key-tag--teal { color: color-mix(in srgb,#26A69A 85%,var(--efg)); }
+.wm-key-tag--gold { color: color-mix(in srgb,#FFB343 90%,var(--efg)); }
+.wm-key-tag--blue { color: color-mix(in srgb,#7b9fff 90%,var(--efg)); }
+
+.wm-key-title { font-size: 13px; font-weight: 800; line-height: 1.25; letter-spacing: -.01em; }
+.wm-key-text  { font-size: 11.5px; color: var(--emut); line-height: 1.55; }
 </style>
 
 <script>

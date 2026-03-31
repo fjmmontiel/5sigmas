@@ -39,19 +39,19 @@ Dicho eso, también sería excesivo convertir esta idea en una condena absoluta 
 
 Una de las líneas más importantes de esta nueva fase consiste en volver a tomarse en serio algo que el auge de los LLMs había dejado un poco en segundo plano: la búsqueda.
 
-La genealogía reciente de esta idea se entiende mejor si se ordena con cuidado. En 2016, [AlphaGo](https://storage.googleapis.com/deepmind-media/alphago/AlphaGoNaturePaper.pdf) mostró que una red neuronal muy potente no bastaba por sí sola: el sistema combinaba redes, búsqueda en árbol y aprendizaje por refuerzo para navegar un espacio de juego inmenso. En 2017, [AlphaZero](https://arxiv.org/abs/1712.01815) generalizó ese enfoque a Go, ajedrez y shogi partiendo solo de las reglas del juego. La idea de fondo ya estaba ahí: en ciertos problemas, la inteligencia práctica no consiste solo en predecir bien una respuesta, sino en explorar activamente un espacio de posibilidades y evaluar trayectorias prometedoras.
+En 2016, [AlphaGo](https://storage.googleapis.com/deepmind-media/alphago/AlphaGoNaturePaper.pdf) mostró que una red neuronal muy potente no bastaba por sí sola: el sistema combinaba redes, búsqueda en árbol y aprendizaje por refuerzo para navegar un espacio de juego inmenso. En 2017, [AlphaZero](https://arxiv.org/abs/1712.01815) generalizó ese enfoque a Go, ajedrez y shogi partiendo solo de las reglas del juego. La idea de fondo ya estaba ahí: en ciertos problemas, la inteligencia práctica no consiste solo en predecir bien una respuesta, sino en explorar activamente un espacio de posibilidades y evaluar trayectorias prometedoras.
 
 Esa lógica reaparece más tarde en otros contextos. En 2022, [ReAct](https://arxiv.org/abs/2210.03629) mostró que incluso en agentes basados en lenguaje el rendimiento mejora cuando el sistema alterna razonamiento y acción, consulta herramientas externas, observa el resultado y usa esa información para decidir el paso siguiente. No es un descendiente directo de AlphaGo en sentido arquitectónico, pero sí participa del mismo giro más amplio: dejar atrás la idea de que un modelo útil se limita a producir una respuesta en un solo paso.
 
+{{ include_html("snippets/from-cave-to-agi/05-agentes-convergencia.html") }}
+
 La línea de DeepMind sí puede contarse ya de forma continua. En julio de 2024, [AlphaProof y AlphaGeometry 2](https://deepmind.google/blog/ai-solves-imo-problems-at-silver-medal-level/) mostraron que una combinación de modelos de lenguaje, búsqueda y aprendizaje por refuerzo podía alcanzar nivel de medalla de plata en la Olimpiada Internacional de Matemáticas. En mayo de 2025, [AlphaEvolve](https://deepmind.google/blog/alphaevolve-a-gemini-powered-coding-agent-for-designing-advanced-algorithms/) llevó esa idea al descubrimiento algorítmico: modelos Gemini, evaluadores automáticos y un marco evolutivo trabajando juntos para mejorar código y encontrar algoritmos nuevos. Ese mismo año, en la evaluación oficial de la IMO 2025, Gemini Deep Think alcanzó nivel de medalla de oro, consolidando la idea de que la combinación de modelo base, búsqueda activa y verificación formal puede superar el umbral de los mejores competidores humanos en matemáticas olímpicas.
 
-La retrospectiva de DeepMind publicada en marzo de 2026 sobre los diez años de AlphaGo hace explícita esta genealogía. Allí presenta tanto AlphaProof como AlphaEvolve como continuaciones de la misma intuición que hizo potente a AlphaGo y AlphaZero: combinar modelos capaces con búsqueda, verificación y planificación para recorrer espacios enormes donde responder bien una sola vez no basta.
+La [retrospectiva de DeepMind publicada en marzo de 2026](https://deepmind.google/blog/10-years-of-alphago/) sobre los diez años de AlphaGo hace explícita esta genealogía. Allí presenta tanto AlphaProof como AlphaEvolve como continuaciones de la misma intuición que hizo potente a AlphaGo y AlphaZero: combinar modelos capaces con búsqueda, verificación y planificación para recorrer espacios enormes donde responder bien una sola vez no basta.
 
 Lo que empieza a aparecer aquí es un cambio de unidad básica. El sistema útil ya no es solo el modelo, sino el modelo más búsqueda, más herramientas y más evaluación.
 
 {{ include_html("snippets/from-cave-to-agi/05-busqueda-solucion.html") }}
-
-{{ include_html("snippets/from-cave-to-agi/05-agentes-convergencia.html") }}
 
 ## 3. Memoria más allá de la ventana de contexto
 
@@ -61,7 +61,9 @@ Otra frontera clara es la memoria. Los LLMs han ampliado mucho su contexto, pero
 
 ### 3.1 Mamba y el regreso de los State Space Models
 
-[Mamba](https://arxiv.org/abs/2312.00752) recuperó la tradición de los state space models con una idea clave: hacer que parte de sus parámetros dependan del input para mejorar la selección de información relevante y conseguir escalado lineal en longitud de secuencia. El punto no era solo acelerar. Era intentar conservar capacidad de razonamiento sobre secuencias largas sin pagar siempre el coste de atención completa.
+Los <abbr title="Familia de modelos de secuencia procedentes de la teoría de control clásica. En lugar de calcular atención entre todos los pares de tokens, mantienen un vector de estado oculto compacto que se actualiza en cada paso de la secuencia. Eso les permite procesar secuencias largas con coste computacional lineal O(N) en vez del cuadrático O(N²) que impone la atención estándar del Transformer.">state space models</abbr> (SSM) son una familia de arquitecturas con raíces en la teoría de control clásica: en lugar de calcular atención entre todos los pares de tokens del contexto, mantienen un vector de estado oculto compacto que se actualiza en cada paso de la secuencia, lo que les permite procesar secuencias largas con coste lineal en lugar del cuadrático que impone la atención estándar.
+
+[Mamba](https://arxiv.org/abs/2312.00752) recuperó esa tradición con una idea clave: hacer que parte de sus parámetros dependan del input para mejorar la selección de información relevante y conseguir escalado lineal en longitud de secuencia. El punto no era solo acelerar. Era intentar conservar capacidad de razonamiento sobre secuencias largas sin pagar siempre el coste de atención completa.
 
 [Mamba-2](https://arxiv.org/abs/2405.21060) fue más lejos y mostró una relación matemática profunda entre atención y state space models, proponiendo una capa refinada más rápida y competitiva. El mensaje de fondo es importante: quizá no estemos ante una ruptura total con el Transformer, sino ante una familia más amplia de mecanismos de memoria y secuencia.
 
@@ -99,6 +101,13 @@ Esta idea ha dejado de ser solo una línea académica. En marzo de 2026, Reuters
 
 El dato no prueba que esa sea la vía ganadora. Pero sí muestra que una parte relevante del ecosistema cree que el siguiente salto no llegará solo por escalar lenguaje, sino por modelar mejor la estructura espacial, causal e interactiva del mundo.
 
+Ya no estamos viendo apuestas de laboratorio que se midan en cientos de millones. Solo en 2026, OpenAI anunció **$110.000 millones** de nueva inversión, Anthropic cerró **$30.000 millones** y xAI otros **$20.000 millones**. En paralelo, las grandes tecnológicas planean alrededor de **$635.000 millones** de gasto de capital en IA solo en 2026.
+
+La señal es difícil de ignorar: la frontera dejó de ser únicamente un problema de algoritmo. El dinero se está desplazando hacia cuatro cuellos de botella concretos: **modelos, cómputo, energía y mundo físico** porque entrenar mejor ya no basta. 
+
+Ahora también hay que desplegar, alimentar y dar percepción y acción espacial a esos sistemas en el mundo real.
+
+
 {{ include_html("snippets/from-cave-to-agi/05-apuestas-capital.html") }}
 
 ---
@@ -126,11 +135,12 @@ Todavía no estamos ante robots generalistas fiables en cualquier entorno. Pero 
 Visto en conjunto, el movimiento es claro. El escalado del Transformer produjo sistemas muy potentes, pero también dejó visibles varios límites: memoria corta en relación con tareas de larga duración, poca adaptación interna durante la inferencia, planificación todavía débil en ciertos dominios y comprensión incompleta del mundo físico.
 
 Las líneas que hoy parecen más prometedoras intentan atacar precisamente esos puntos:
-- búsqueda y verificación sobre espacios de soluciones,
-- memoria selectiva durante la inferencia,
-- aprendizaje continuo en múltiples escalas temporales,
-- modelos internos del entorno,
-- y sistemas capaces de percibir y actuar en el mundo físico.
+
+- Búsqueda y verificación sobre espacios de soluciones,
+- Memoria selectiva durante la inferencia,
+- Aprendizaje continuo en múltiples escalas temporales,
+- Modelos internos del entorno,
+- Sistemas capaces de percibir y actuar en el mundo físico.
 
 No sabemos todavía qué combinación acabará imponiéndose. Lo que sí parece claro es que el futuro de la IA no se juega solo en modelos más grandes, sino en sistemas mejor organizados y más capaces de interactuar con el mundo.
 
@@ -139,7 +149,7 @@ No sabemos todavía qué combinación acabará imponiéndose. Lo que sí parece 
 ## 7. Referencias
 
 <details markdown="1">
-<summary><strong>Fuentes base</strong></summary>
+<summary>**Fuentes base**</summary>
 
 | Clave | Fuente | Descripción breve |
 | --- | --- | --- |
