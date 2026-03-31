@@ -5,95 +5,86 @@
     <div class="wm-sub">Un modelo secuencial predice el siguiente estado. Un world model simula varios futuros posibles antes de elegir qué hacer. La diferencia es la capacidad de anticipar, no solo de continuar.</div>
   </div>
 
-  <!-- Toy world bifold -->
-  <div class="wm-bifold">
-
-    <!-- Left: sequential model -->
-    <div class="wm-side wm-side--seq">
-      <div class="wm-side-tag">MODELO SECUENCIAL</div>
-      <div class="wm-side-title">Predice el siguiente estado</div>
-
-      <!-- Simple physics scene: ball, wall -->
-      <div class="wm-scene">
-        <svg viewBox="0 0 220 140" fill="none" xmlns="http://www.w3.org/2000/svg" class="wm-svg">
-          <!-- Floor -->
-          <line x1="10" y1="120" x2="210" y2="120" stroke="rgba(100,116,139,.3)" stroke-width="1.5"/>
-          <!-- Wall on right -->
-          <rect x="185" y="30" width="8" height="90" rx="2" fill="rgba(100,116,139,.2)" stroke="rgba(100,116,139,.3)" stroke-width="1"/>
-          <!-- Ball trajectory (one arrow, linear) -->
-          <circle cx="40" cy="105" r="10" fill="rgba(100,116,139,.15)" stroke="rgba(100,116,139,.35)" stroke-width="1.5"/>
-          <text x="40" y="109" text-anchor="middle" font-size="10" fill="rgba(100,116,139,.7)" font-family="serif">●</text>
-          <!-- Arrow to next state only -->
-          <path d="M 52 105 H 90" stroke="rgba(100,116,139,.4)" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#wmarr1)"/>
-          <circle cx="110" cy="105" r="10" fill="rgba(100,116,139,.12)" stroke="rgba(100,116,139,.25)" stroke-width="1" opacity=".6"/>
-          <!-- Label: only one step -->
-          <text x="110" y="136" text-anchor="middle" font-size="8.5" fill="rgba(100,116,139,.6)" font-family="sans-serif">siguiente estado</text>
-          <defs>
-            <marker id="wmarr1" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-              <path d="M0,0.5 L5.5,3 L0,5.5 Z" fill="rgba(100,116,139,.5)"/>
-            </marker>
-          </defs>
-        </svg>
-        <div class="wm-scene-note">El modelo predice paso a paso. No puede evaluar consecuencias antes de actuar.</div>
-      </div>
-
-      <div class="wm-side-verdict wm-side-verdict--seq">Solo continúa la secuencia. Sin simulación interna del entorno.</div>
-    </div>
-
-    <div class="wm-vs">vs</div>
-
-    <!-- Right: world model -->
-    <div class="wm-side wm-side--wm">
-      <div class="wm-side-tag wm-side-tag--wm">WORLD MODEL</div>
-      <div class="wm-side-title">Simula varios futuros posibles</div>
-
-      <!-- Same scene but with multiple trajectories -->
-      <div class="wm-scene">
-        <svg viewBox="0 0 220 140" fill="none" xmlns="http://www.w3.org/2000/svg" class="wm-svg">
-          <!-- Floor -->
-          <line x1="10" y1="120" x2="210" y2="120" stroke="rgba(100,116,139,.3)" stroke-width="1.5"/>
-          <!-- Wall on right -->
-          <rect x="185" y="30" width="8" height="90" rx="2" fill="rgba(38,166,154,.15)" stroke="rgba(38,166,154,.25)" stroke-width="1"/>
-          <!-- Ball start -->
-          <circle cx="40" cy="105" r="10" fill="rgba(38,166,154,.15)" stroke="rgba(38,166,154,.45)" stroke-width="1.5"/>
-          <!-- Trajectory 1: straight to wall, bounce back (selected) -->
-          <path d="M 52 105 H 183" stroke="rgba(38,166,154,.55)" stroke-width="1.8" marker-end="url(#wmarr2)"/>
-          <path d="M 183 105 H 140" stroke="rgba(38,166,154,.35)" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#wmarr2)"/>
-          <circle cx="155" cy="105" r="6" fill="rgba(38,166,154,.2)" stroke="rgba(38,166,154,.4)" stroke-width="1"/>
-          <!-- Trajectory 2: arc over (rejected) -->
-          <path d="M 52 102 Q 110 50 172 98" stroke="rgba(255,179,67,.35)" stroke-width="1.5" stroke-dasharray="3 3"/>
-          <!-- Trajectory 3: stop (rejected) -->
-          <path d="M 52 107 H 95" stroke="rgba(239,68,68,.25)" stroke-width="1.5" stroke-dasharray="3 3"/>
-          <text x="100" y="111" font-size="10" fill="rgba(239,68,68,.4)" font-family="serif">✕</text>
-          <!-- Labels -->
-          <text x="110" y="136" text-anchor="middle" font-size="8.5" fill="rgba(38,166,154,.7)" font-family="sans-serif">trayectoria elegida</text>
-          <defs>
-            <marker id="wmarr2" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-              <path d="M0,0.5 L5.5,3 L0,5.5 Z" fill="rgba(38,166,154,.6)"/>
-            </marker>
-          </defs>
-        </svg>
-        <div class="wm-scene-note">El modelo simula colisión, rebote y alternativas antes de actuar. Elige la trayectoria con mejor resultado anticipado.</div>
-      </div>
-
-      <div class="wm-side-verdict wm-side-verdict--wm">Anticipa dinámicas del entorno. Planifica antes de comprometerse con una acción.</div>
-    </div>
-
+  <div class="wm-tabs" role="tablist">
+    <button class="wm-tab wm-tab--active" data-wtab="compare">Comparación</button>
+    <button class="wm-tab" data-wtab="keys">Por qué importa</button>
   </div>
 
-  <!-- Key difference explanation -->
-  <div class="wm-keys">
-    <div class="wm-key">
-      <div class="wm-key-tag">IMPLICACIÓN 1</div>
-      <div class="wm-key-text">Un world model puede rechazar acciones antes de ejecutarlas, porque sabe que llevan a un estado indeseable. Un modelo secuencial solo puede aprender de lo que ya ocurrió.</div>
+  <!-- Panel: Comparación -->
+  <div class="wm-panel wm-panel--active" data-wpanel="compare">
+    <div class="wm-bifold">
+
+      <!-- Left: sequential model -->
+      <div class="wm-side wm-side--seq">
+        <div class="wm-side-tag">MODELO SECUENCIAL</div>
+        <div class="wm-side-title">Predice el siguiente estado</div>
+        <div class="wm-scene">
+          <svg viewBox="0 0 220 140" fill="none" xmlns="http://www.w3.org/2000/svg" class="wm-svg">
+            <line x1="10" y1="120" x2="210" y2="120" stroke="rgba(100,116,139,.3)" stroke-width="1.5"/>
+            <rect x="185" y="30" width="8" height="90" rx="2" fill="rgba(100,116,139,.2)" stroke="rgba(100,116,139,.3)" stroke-width="1"/>
+            <circle cx="40" cy="105" r="10" fill="rgba(100,116,139,.15)" stroke="rgba(100,116,139,.35)" stroke-width="1.5"/>
+            <text x="40" y="109" text-anchor="middle" font-size="10" fill="rgba(100,116,139,.7)" font-family="serif">●</text>
+            <path d="M 52 105 H 90" stroke="rgba(100,116,139,.4)" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#wmarr1)"/>
+            <circle cx="110" cy="105" r="10" fill="rgba(100,116,139,.12)" stroke="rgba(100,116,139,.25)" stroke-width="1" opacity=".6"/>
+            <text x="110" y="136" text-anchor="middle" font-size="8.5" fill="rgba(100,116,139,.6)" font-family="sans-serif">siguiente estado</text>
+            <defs>
+              <marker id="wmarr1" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                <path d="M0,0.5 L5.5,3 L0,5.5 Z" fill="rgba(100,116,139,.5)"/>
+              </marker>
+            </defs>
+          </svg>
+          <div class="wm-scene-note">El modelo predice paso a paso. No puede evaluar consecuencias antes de actuar.</div>
+        </div>
+        <div class="wm-side-verdict wm-side-verdict--seq">Solo continúa la secuencia. Sin simulación interna del entorno.</div>
+      </div>
+
+      <div class="wm-vs">vs</div>
+
+      <!-- Right: world model -->
+      <div class="wm-side wm-side--wm">
+        <div class="wm-side-tag wm-side-tag--wm">WORLD MODEL</div>
+        <div class="wm-side-title">Simula varios futuros posibles</div>
+        <div class="wm-scene">
+          <svg viewBox="0 0 220 140" fill="none" xmlns="http://www.w3.org/2000/svg" class="wm-svg">
+            <line x1="10" y1="120" x2="210" y2="120" stroke="rgba(100,116,139,.3)" stroke-width="1.5"/>
+            <rect x="185" y="30" width="8" height="90" rx="2" fill="rgba(38,166,154,.15)" stroke="rgba(38,166,154,.25)" stroke-width="1"/>
+            <circle cx="40" cy="105" r="10" fill="rgba(38,166,154,.15)" stroke="rgba(38,166,154,.45)" stroke-width="1.5"/>
+            <path d="M 52 105 H 183" stroke="rgba(38,166,154,.55)" stroke-width="1.8" marker-end="url(#wmarr2)"/>
+            <path d="M 183 105 H 140" stroke="rgba(38,166,154,.35)" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#wmarr2)"/>
+            <circle cx="155" cy="105" r="6" fill="rgba(38,166,154,.2)" stroke="rgba(38,166,154,.4)" stroke-width="1"/>
+            <path d="M 52 102 Q 110 50 172 98" stroke="rgba(255,179,67,.35)" stroke-width="1.5" stroke-dasharray="3 3"/>
+            <path d="M 52 107 H 95" stroke="rgba(239,68,68,.25)" stroke-width="1.5" stroke-dasharray="3 3"/>
+            <text x="100" y="111" font-size="10" fill="rgba(239,68,68,.4)" font-family="serif">✕</text>
+            <text x="110" y="136" text-anchor="middle" font-size="8.5" fill="rgba(38,166,154,.7)" font-family="sans-serif">trayectoria elegida</text>
+            <defs>
+              <marker id="wmarr2" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                <path d="M0,0.5 L5.5,3 L0,5.5 Z" fill="rgba(38,166,154,.6)"/>
+              </marker>
+            </defs>
+          </svg>
+          <div class="wm-scene-note">El modelo simula colisión, rebote y alternativas antes de actuar. Elige la trayectoria con mejor resultado anticipado.</div>
+        </div>
+        <div class="wm-side-verdict wm-side-verdict--wm">Anticipa dinámicas del entorno. Planifica antes de comprometerse con una acción.</div>
+      </div>
+
     </div>
-    <div class="wm-key">
-      <div class="wm-key-tag">IMPLICACIÓN 2</div>
-      <div class="wm-key-text">Para robótica, conducción autónoma o agentes que actúan en el mundo físico, simular consecuencias antes de actuar es una capacidad necesaria, no opcional.</div>
-    </div>
-    <div class="wm-key">
-      <div class="wm-key-tag">ESTADO DEL ARTE</div>
-      <div class="wm-key-text">Modelos como DreamerV3 o los modelos de JEPA de LeCun apuntan en esta dirección. El debate es si los LLMs ya tienen representaciones implícitas de world model o si se necesita una arquitectura distinta.</div>
+  </div>
+
+  <!-- Panel: Por qué importa -->
+  <div class="wm-panel" data-wpanel="keys">
+    <div class="wm-keys">
+      <div class="wm-key">
+        <div class="wm-key-tag">IMPLICACIÓN 1</div>
+        <div class="wm-key-text">Un world model puede rechazar acciones antes de ejecutarlas, porque sabe que llevan a un estado indeseable. Un modelo secuencial solo puede aprender de lo que ya ocurrió.</div>
+      </div>
+      <div class="wm-key">
+        <div class="wm-key-tag">IMPLICACIÓN 2</div>
+        <div class="wm-key-text">Para robótica, conducción autónoma o agentes que actúan en el mundo físico, simular consecuencias antes de actuar es una capacidad necesaria, no opcional.</div>
+      </div>
+      <div class="wm-key">
+        <div class="wm-key-tag">ESTADO DEL ARTE</div>
+        <div class="wm-key-text">Modelos como DreamerV3 o los modelos de JEPA de LeCun apuntan en esta dirección. El debate es si los LLMs ya tienen representaciones implícitas de world model o si se necesita una arquitectura distinta.</div>
+      </div>
     </div>
   </div>
 
@@ -113,7 +104,7 @@
   --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
 
   display: grid;
-  gap: 16px;
+  gap: 14px;
   max-width: 860px;
   margin: 0 auto;
   padding: clamp(14px,2vw,22px);
@@ -137,6 +128,24 @@
 .wm-hd { display: grid; gap: 4px; }
 .wm-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
 .wm-sub { font-size: 13px; color: var(--emut); line-height: 1.55; max-width: 72ch; }
+
+.wm-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.wm-tab {
+  padding: 5px 13px; border-radius: 999px; border: 1px solid var(--ebd);
+  background: transparent; color: var(--emut); font-family: var(--ef);
+  font-size: 12px; font-weight: 700; cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s;
+}
+.wm-tab:hover { border-color: color-mix(in srgb,var(--ea) 50%,var(--ebd)); color: var(--efg); }
+.wm-tab--active {
+  background: color-mix(in srgb,var(--ea) 14%,transparent);
+  border-color: color-mix(in srgb,var(--ea) 55%,var(--ebd));
+  color: var(--efg);
+}
+
+.wm-panel { display: none; }
+.wm-panel--active { display: grid; gap: 12px; animation: wmIn .2s ease; }
+@keyframes wmIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 
 /* Bifold */
 .wm-bifold { display: grid; grid-template-columns: 1fr auto 1fr; gap: 12px; align-items: start; }
@@ -169,3 +178,27 @@
 .wm-key-tag { font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--emut); }
 .wm-key-text { font-size: 11.5px; color: var(--emut); line-height: 1.5; }
 </style>
+
+<script>
+(function () {
+  function boot() {
+    var wrap = document.querySelector('[data-demo="05-world-models-ecosystem"]');
+    if (!wrap || wrap.dataset.wmReady) return;
+    wrap.dataset.wmReady = '1';
+    var tabs = wrap.querySelectorAll('.wm-tab');
+    var panels = wrap.querySelectorAll('.wm-panel');
+    tabs.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        tabs.forEach(function(t) { t.classList.remove('wm-tab--active'); });
+        panels.forEach(function(p) { p.classList.remove('wm-panel--active'); });
+        btn.classList.add('wm-tab--active');
+        var panel = wrap.querySelector('[data-wpanel="' + btn.dataset.wtab + '"]');
+        if (panel) panel.classList.add('wm-panel--active');
+      });
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
+  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
+})();
+</script>

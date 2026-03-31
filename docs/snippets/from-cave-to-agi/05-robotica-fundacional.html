@@ -5,74 +5,60 @@
     <div class="rob-sub">En robótica, "avance" puede significar cosas muy distintas. Esta escala permite comparar sistemas con honestidad: no es lo mismo una demo controlada que un despliegue documentado en entorno real.</div>
   </div>
 
-  <!-- Maturity ladder -->
-  <div class="rob-ladder">
+  <!-- Tab strip: 4 rungs -->
+  <div class="rob-tabs" role="tablist">
+    <button class="rob-tab rob-tab--active" data-rtab="1">1 · Demo</button>
+    <button class="rob-tab" data-rtab="2">2 · Benchmark</button>
+    <button class="rob-tab" data-rtab="3">3 · Piloto</button>
+    <button class="rob-tab" data-rtab="4">4 · Despliegue</button>
+  </div>
 
-    <!-- Rung 4: Documented deployment (top) -->
-    <div class="rob-rung rob-rung--4">
-      <div class="rob-rung-left">
-        <div class="rob-rung-num">4</div>
-        <div class="rob-rung-line"></div>
-      </div>
-      <div class="rob-rung-body">
-        <div class="rob-rung-name">Despliegue documentado</div>
-        <div class="rob-rung-desc">Operación continua en entorno real no controlado. Métricas de rendimiento, tasa de fallos y cobertura publicadas o verificables independientemente.</div>
-        <div class="rob-rung-examples">
-          <span class="rob-ex rob-ex--4">Líneas de montaje industrial en producción</span>
-          <span class="rob-ex rob-ex--4">Robots de almacén Amazon (entornos dedicados)</span>
-        </div>
-      </div>
+  <!-- Progress scale -->
+  <div class="rob-scale">
+    <div class="rob-scale-track"><div class="rob-scale-fill" data-fill></div></div>
+    <div class="rob-scale-labels">
+      <span>Menor madurez</span>
+      <span>Mayor madurez</span>
     </div>
+  </div>
 
-    <!-- Rung 3: Industrial pilot -->
-    <div class="rob-rung rob-rung--3">
-      <div class="rob-rung-left">
-        <div class="rob-rung-num">3</div>
-        <div class="rob-rung-line"></div>
-      </div>
-      <div class="rob-rung-body">
-        <div class="rob-rung-name">Piloto industrial</div>
-        <div class="rob-rung-desc">Funcionando en entorno real pero bajo supervisión activa. El sistema realiza tareas útiles; los errores están documentados y mitigados por operadores humanos.</div>
-        <div class="rob-rung-examples">
-          <span class="rob-ex rob-ex--3">Optimus (Tesla), pilotos internos en fábrica</span>
-          <span class="rob-ex rob-ex--3">Figure 02, pruebas con BMW</span>
-          <span class="rob-ex rob-ex--3">Physical Intelligence (π), cocina / almacén</span>
-        </div>
-      </div>
+  <!-- Rung panels -->
+  <div class="rob-panel rob-panel--1 rob-panel--active" data-rpanel="1">
+    <div class="rob-rung-name">Demo controlada</div>
+    <div class="rob-rung-desc">Demostración impresionante en condiciones diseñadas para el sistema. El entorno está calibrado, los objetos son conocidos y las condiciones de fallo están evitadas.</div>
+    <div class="rob-rung-examples">
+      <span class="rob-ex rob-ex--1">Vídeos de robótica en entornos de laboratorio</span>
+      <span class="rob-ex rob-ex--1">Generalización "zero-shot" en objetos muy similares a los de entrenamiento</span>
     </div>
+  </div>
 
-    <!-- Rung 2: Benchmark / semi-structured -->
-    <div class="rob-rung rob-rung--2">
-      <div class="rob-rung-left">
-        <div class="rob-rung-num">2</div>
-        <div class="rob-rung-line"></div>
-      </div>
-      <div class="rob-rung-body">
-        <div class="rob-rung-name">Benchmark / entorno semi-estructurado</div>
-        <div class="rob-rung-desc">El sistema supera pruebas estándar o funciona en entornos parcialmente controlados. Los resultados son reproducibles pero en condiciones favorables para el sistema.</div>
-        <div class="rob-rung-examples">
-          <span class="rob-ex rob-ex--2">RT-2 (Google), multitarea en laboratorio</span>
-          <span class="rob-ex rob-ex--2">OpenVLA, benchmarks de manipulación</span>
-          <span class="rob-ex rob-ex--2">Spot (Boston Dynamics), inspección industrial</span>
-        </div>
-      </div>
+  <div class="rob-panel rob-panel--2" data-rpanel="2">
+    <div class="rob-rung-name">Benchmark / entorno semi-estructurado</div>
+    <div class="rob-rung-desc">El sistema supera pruebas estándar o funciona en entornos parcialmente controlados. Los resultados son reproducibles pero en condiciones favorables para el sistema.</div>
+    <div class="rob-rung-examples">
+      <span class="rob-ex rob-ex--2">RT-2 (Google), multitarea en laboratorio</span>
+      <span class="rob-ex rob-ex--2">OpenVLA, benchmarks de manipulación</span>
+      <span class="rob-ex rob-ex--2">Spot (Boston Dynamics), inspección industrial</span>
     </div>
+  </div>
 
-    <!-- Rung 1: Controlled demo (bottom) -->
-    <div class="rob-rung rob-rung--1">
-      <div class="rob-rung-left">
-        <div class="rob-rung-num">1</div>
-      </div>
-      <div class="rob-rung-body">
-        <div class="rob-rung-name">Demo controlada</div>
-        <div class="rob-rung-desc">Demostración impresionante en condiciones diseñadas para el sistema. El entorno está calibrado, los objetos son conocidos y las condiciones de fallo están evitadas.</div>
-        <div class="rob-rung-examples">
-          <span class="rob-ex rob-ex--1">Vídeos de robótica en entornos de laboratorio</span>
-          <span class="rob-ex rob-ex--1">Generalizacion "zero-shot" en objetos muy similares a los de entrenamiento</span>
-        </div>
-      </div>
+  <div class="rob-panel rob-panel--3" data-rpanel="3">
+    <div class="rob-rung-name">Piloto industrial</div>
+    <div class="rob-rung-desc">Funcionando en entorno real pero bajo supervisión activa. El sistema realiza tareas útiles; los errores están documentados y mitigados por operadores humanos.</div>
+    <div class="rob-rung-examples">
+      <span class="rob-ex rob-ex--3">Optimus (Tesla), pilotos internos en fábrica</span>
+      <span class="rob-ex rob-ex--3">Figure 02, pruebas con BMW</span>
+      <span class="rob-ex rob-ex--3">Physical Intelligence (π), cocina / almacén</span>
     </div>
+  </div>
 
+  <div class="rob-panel rob-panel--4" data-rpanel="4">
+    <div class="rob-rung-name">Despliegue documentado</div>
+    <div class="rob-rung-desc">Operación continua en entorno real no controlado. Métricas de rendimiento, tasa de fallos y cobertura publicadas o verificables independientemente.</div>
+    <div class="rob-rung-examples">
+      <span class="rob-ex rob-ex--4">Líneas de montaje industrial en producción</span>
+      <span class="rob-ex rob-ex--4">Robots de almacén Amazon (entornos dedicados)</span>
+    </div>
   </div>
 
   <div class="rob-note">
@@ -96,7 +82,7 @@
   --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
 
   display: grid;
-  gap: 16px;
+  gap: 14px;
   max-width: 860px;
   margin: 0 auto;
   padding: clamp(14px,2vw,22px);
@@ -121,38 +107,48 @@
 .rob-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
 .rob-sub { font-size: 13px; color: var(--emut); line-height: 1.55; max-width: 72ch; }
 
-/* Ladder */
-.rob-ladder { display: grid; gap: 0; }
-
-.rob-rung {
-  display: flex;
-  gap: 14px;
-  padding: 14px 14px 14px 0;
-  border-radius: 12px;
-  margin-bottom: 6px;
+/* Tabs */
+.rob-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.rob-tab {
+  padding: 5px 13px; border-radius: 999px; border: 1px solid var(--ebd);
+  background: transparent; color: var(--emut); font-family: var(--ef);
+  font-size: 12px; font-weight: 700; cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s;
 }
+.rob-tab:hover { color: var(--efg); }
+.rob-tab[data-rtab="1"].rob-tab--active { background: rgba(100,116,139,.12); border-color: rgba(100,116,139,.35); color: var(--efg); }
+.rob-tab[data-rtab="2"].rob-tab--active { background: rgba(255,179,67,.12); border-color: rgba(255,179,67,.4); color: var(--efg); }
+.rob-tab[data-rtab="3"].rob-tab--active { background: rgba(38,166,154,.12); border-color: rgba(38,166,154,.4); color: var(--efg); }
+.rob-tab[data-rtab="4"].rob-tab--active { background: rgba(38,166,154,.18); border-color: rgba(38,166,154,.55); color: var(--efg); }
 
-/* Colors per rung (1=gray/problem, 2=orange/mid, 3=teal-mid, 4=teal/solution) */
-.rob-rung--1 { background: rgba(100,116,139,.06); border: 1px solid rgba(100,116,139,.18); }
-.rob-rung--2 { background: rgba(255,179,67,.06);  border: 1px solid rgba(255,179,67,.2); }
-.rob-rung--3 { background: rgba(38,166,154,.06);  border: 1px solid rgba(38,166,154,.18); }
-.rob-rung--4 { background: rgba(38,166,154,.10);  border: 2px solid rgba(38,166,154,.3); }
-
-.rob-rung-left { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; padding-left: 14px; }
-.rob-rung-num {
-  width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-  font-size: 14px; font-weight: 900; flex-shrink: 0;
+/* Progress scale */
+.rob-scale { display: grid; gap: 5px; }
+.rob-scale-track {
+  height: 6px; border-radius: 999px;
+  background: color-mix(in srgb,var(--ebg) 80%,#0f172a 20%);
+  border: 1px solid var(--ebd);
+  overflow: hidden;
 }
-.rob-rung--1 .rob-rung-num { background: rgba(100,116,139,.15); border: 1.5px solid rgba(100,116,139,.3); color: rgba(100,116,139,.9); }
-.rob-rung--2 .rob-rung-num { background: rgba(255,179,67,.15); border: 1.5px solid rgba(255,179,67,.35); color: color-mix(in srgb,var(--eg) 80%,var(--efg)); }
-.rob-rung--3 .rob-rung-num { background: rgba(38,166,154,.15); border: 1.5px solid rgba(38,166,154,.35); color: color-mix(in srgb,var(--ea) 80%,var(--efg)); }
-.rob-rung--4 .rob-rung-num { background: rgba(38,166,154,.25); border: 2px solid rgba(38,166,154,.5); color: color-mix(in srgb,var(--ea) 90%,var(--efg)); }
+.rob-scale-fill {
+  height: 100%; border-radius: 999px;
+  background: linear-gradient(90deg, rgba(100,116,139,.5), rgba(255,179,67,.6), rgba(38,166,154,.8));
+  width: 25%;
+  transition: width .3s ease;
+}
+.rob-scale-labels { display: flex; justify-content: space-between; font-size: 9px; color: var(--emut); font-weight: 600; letter-spacing: .02em; }
 
-.rob-rung-line { width: 2px; flex: 1; background: rgba(100,116,139,.12); margin-top: 6px; min-height: 20px; display: none; }
+/* Rung panels */
+.rob-panel { display: none; border-radius: 14px; padding: 16px; gap: 10px; }
+.rob-panel--active { display: grid; animation: robIn .22s ease; }
+@keyframes robIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 
-.rob-rung-body { display: grid; gap: 7px; padding-top: 2px; }
-.rob-rung-name { font-size: 14px; font-weight: 900; line-height: 1.2; }
-.rob-rung-desc { font-size: 12px; color: var(--emut); line-height: 1.5; }
+.rob-panel--1 { background: rgba(100,116,139,.06); border: 1px solid rgba(100,116,139,.2); }
+.rob-panel--2 { background: rgba(255,179,67,.06);  border: 1px solid rgba(255,179,67,.22); }
+.rob-panel--3 { background: rgba(38,166,154,.06);  border: 1px solid rgba(38,166,154,.2); }
+.rob-panel--4 { background: rgba(38,166,154,.10);  border: 2px solid rgba(38,166,154,.32); }
+
+.rob-rung-name { font-size: 15px; font-weight: 900; line-height: 1.2; }
+.rob-rung-desc { font-size: 12.5px; color: var(--emut); line-height: 1.55; }
 .rob-rung-examples { display: flex; flex-wrap: wrap; gap: 5px; }
 
 .rob-ex { font-size: 10.5px; font-weight: 700; padding: 3px 9px; border-radius: 6px; }
@@ -166,3 +162,32 @@
 .rob-note-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--emut); }
 .rob-note-text { font-size: 12px; color: var(--emut); line-height: 1.55; }
 </style>
+
+<script>
+(function () {
+  var fillWidths = { '1': '25%', '2': '50%', '3': '75%', '4': '100%' };
+  function boot() {
+    var wrap = document.querySelector('[data-demo="05-robotica-fundacional"]');
+    if (!wrap || wrap.dataset.robReady) return;
+    wrap.dataset.robReady = '1';
+    var tabs = wrap.querySelectorAll('.rob-tab');
+    var panels = wrap.querySelectorAll('.rob-panel');
+    var fill = wrap.querySelector('[data-fill]');
+    function activate(key) {
+      tabs.forEach(function(t) { t.classList.remove('rob-tab--active'); });
+      panels.forEach(function(p) { p.classList.remove('rob-panel--active'); });
+      var btn = wrap.querySelector('.rob-tab[data-rtab="' + key + '"]');
+      var panel = wrap.querySelector('[data-rpanel="' + key + '"]');
+      if (btn) btn.classList.add('rob-tab--active');
+      if (panel) panel.classList.add('rob-panel--active');
+      if (fill) fill.style.width = fillWidths[key] || '25%';
+    }
+    tabs.forEach(function(btn) {
+      btn.addEventListener('click', function() { activate(btn.dataset.rtab); });
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
+  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
+})();
+</script>

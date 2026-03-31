@@ -19,7 +19,7 @@ Lo importante es entender bien qué demostró ese resultado. AlexNet no inventó
 
 La lección de 2012 tampoco fue que la arquitectura dejara de importar. Fue más bien que una arquitectura buena puede permanecer durante años por debajo de su potencial y despegar de pronto cuando el hardware y el volumen de datos dejan de ser el cuello de botella.
 
-{{ include_html("snippets/from-cave-to-agi/04-hitos-escalar.html") }}
+{{ include_html("snippets/from-cave-to-agi/04-shock-2012.html") }}
 
 ---
 
@@ -29,11 +29,13 @@ El siguiente gran giro llegó con [Attention Is All You Need](https://papers.neu
 
 A partir de ahí se abrieron dos trayectorias especialmente influyentes. Por un lado, [BERT](https://aclanthology.org/N19-1423.pdf) mostró la fuerza del preentrenamiento bidireccional y del fine-tuning posterior sobre tareas concretas. Por otro, [GPT-2](https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf) y después [GPT-3](https://proceedings.neurips.cc/paper/2020/file/1457c0d6bfcb4967418bfb8ac142f64a-Paper.pdf) enseñaron que un modelo autoregresivo suficientemente grande podía transferirse a tareas nuevas directamente desde el contexto, primero de forma llamativa en zero-shot y después con capacidades mucho más sólidas de few-shot e in-context learning.
 
+{{ include_html("snippets/from-cave-to-agi/04-transformer-reutilizacion.html") }}
+
 Ese cambio alteró la lógica del progreso. Durante mucho tiempo, cada tarea importante exigía su propio modelo, su propio pipeline y sus propios datos anotados. Con el preentrenamiento a gran escala empezó a resultar más eficaz entrenar una base general y después adaptarla, afinarla o condicionarla para usos concretos.
 
 La misma familia de ideas se extendió además fuera del texto. [Vision Transformer](https://arxiv.org/pdf/2010.11929) llevó el paradigma a visión. [CLIP](https://proceedings.mlr.press/v139/radford21a/radford21a.pdf) alineó imagen y lenguaje a gran escala. [DALL·E](https://proceedings.mlr.press/v139/ramesh21a/ramesh21a.pdf) y los [latent diffusion models](https://openaccess.thecvf.com/content/CVPR2022/papers/Rombach_High-Resolution_Image_Synthesis_With_Latent_Diffusion_Models_CVPR_2022_paper.pdf) mostraron nuevas formas de generar imágenes a partir de lenguaje. Y sistemas multimodales posteriores, como [Gemini 1.5](https://storage.googleapis.com/deepmind-media/gemini/gemini_v1_5_report.pdf), reforzaron la idea de un modelo capaz de trabajar con texto, imagen, audio y vídeo dentro de un mismo sistema.
 
-{{ include_html("snippets/from-cave-to-agi/04-preentrenamiento-finetuning.html") }}
+{{ include_html("snippets/from-cave-to-agi/04-escala-producto.html") }}
 
 ---
 
@@ -41,11 +43,12 @@ La misma familia de ideas se extendió además fuera del texto. [Vision Transfor
 
 La idea de que el rendimiento mejora de forma relativamente predecible al aumentar parámetros, datos y cómputo no nació con los LLMs, pero se volvió central con ellos. Trabajos como [Deep Learning Scaling is Predictable, Empirically](https://arxiv.org/abs/1712.00409), [Scaling Laws for Neural Language Models](https://arxiv.org/abs/2001.08361) y [Training Compute-Optimal Large Language Models](https://arxiv.org/pdf/2203.15556) fueron dando forma a una intuición cada vez más fuerte: en muchos regímenes, el error cae siguiendo relaciones de potencia estables, y el progreso depende tanto de cómo escalas como de qué escalas.
 
+{{ include_html("snippets/from-cave-to-agi/04-leyes-escala.html") }}
+
+
 Eso no significa que la escala lo explique todo. Significa que, una vez que una arquitectura y un objetivo de entrenamiento son suficientemente buenos, aumentar recursos deja de ser una cuestión secundaria y pasa a formar parte de la teoría práctica del sistema.
 
 En este punto conviene introducir una cautela importante. La literatura sobre [capacidades emergentes](https://arxiv.org/pdf/2206.07682) ha sido influyente porque describe saltos bruscos de rendimiento en ciertas tareas cuando el modelo supera determinados tamaños. Pero trabajos posteriores, como [Are Emergent Abilities of Large Language Models a Mirage?](https://arxiv.org/pdf/2304.15004), sostienen que parte de esa brusquedad puede depender de la métrica elegida o del modo de evaluar. Lo más prudente, por tanto, no es afirmar que toda capacidad nueva emerge de forma misteriosa, sino reconocer que la escala ha traído capacidades nuevas o mucho más robustas mientras la interpretación fuerte de esa emergencia sigue abierta.
-
-{{ include_html("snippets/from-cave-to-agi/04-leyes-escala.html") }}
 
 {{ include_html("snippets/from-cave-to-agi/04-emergencia-capacidades.html") }}
 
@@ -58,6 +61,8 @@ A partir de ahí aparece el marco de los [modelos fundacionales](https://crfm.st
 Este cambio tiene una consecuencia técnica y económica enorme. El mismo modelo base puede servir como infraestructura reutilizable para redactar, resumir, traducir, clasificar, extraer información, generar código, recuperar conocimiento y trabajar en varias modalidades con ajustes relativamente pequeños en comparación con entrenar un sistema nuevo para cada tarea.
 
 Aquí está el giro profundo de este periodo. Durante décadas, la IA avanzó como una colección de sistemas especializados. Con los modelos fundacionales, el centro de gravedad se desplazó hacia bases generales preentrenadas que luego se adaptan, se alinean o se encadenan para usos concretos.
+
+{{ include_html("snippets/from-cave-to-agi/04-preentrenamiento-finetuning.html") }}
 
 ---
 

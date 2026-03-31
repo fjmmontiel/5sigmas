@@ -115,34 +115,7 @@
     </div>
   </div>
 
-  <!-- Key takeaway -->
-  <div class="les-takeaway">
-    <div class="les-takeaway-label">Por qué importa la predictabilidad</div>
-    <div class="les-takeaway-row">
-      <div class="les-tk-card">
-        <div class="les-tk-sym">📊</div>
-        <div class="les-tk-body">
-          <div class="les-tk-title">Planificación de inversión</div>
-          <div class="les-tk-text">Antes de entrenar, los laboratorios pueden estimar cuánto compute necesitan para alcanzar un nivel de pérdida objetivo. El capex se vuelve calculable.</div>
-        </div>
-      </div>
-      <div class="les-tk-card">
-        <div class="les-tk-sym">⚖</div>
-        <div class="les-tk-body">
-          <div class="les-tk-title">Trade-off parámetros vs datos</div>
-          <div class="les-tk-text">Las leyes de escala también dicen cuándo vale más añadir datos vs parámetros para un budget fijo. Chinchilla (2022) reequilibró este trade-off.</div>
-        </div>
-      </div>
-      <div class="les-tk-card">
-        <div class="les-tk-sym">⚠</div>
-        <div class="les-tk-body">
-          <div class="les-tk-title">Límite: no predicen emergencia</div>
-          <div class="les-tk-text">Las leyes de escala predicen pérdida promedio, no qué capacidades aparecerán ni cuándo. Eso es el problema de la siguiente animación.</div>
-        </div>
-      </div>
-    </div>
-    <div class="les-formula-note">La ley de potencia: L(x) ~ x<sup>−α</sup> · El exponente α varía según qué escales (α ≈ 0.076 parámetros, ≈ 0.095 datos, ≈ 0.050 cómputo). Es un ajuste empírico, no una ley universal.</div>
-  </div>
+  <div class="les-formula-note"><span class="les-formula-eq">L(x) ~ x<sup>−α</sup></span> El exponente α varía según qué escales: parámetros (≈0.076), datos (≈0.095), cómputo (≈0.050). Ajuste empírico, no ley universal. Las leyes predicen pérdida promedio, no qué capacidades concretas aparecerán al escalar.</div>
 
 </div>
 
@@ -225,12 +198,12 @@
 .les-badge--2 { background: rgba(255,179,67,.1); border: 1px solid rgba(255,179,67,.25); color: color-mix(in srgb,var(--eg) 80%,var(--efg)); }
 .les-badge--3 { background: rgba(38,166,154,.1); border: 1px solid rgba(38,166,154,.28); color: color-mix(in srgb,var(--ea) 80%,var(--efg)); }
 .les-badge--4 { background: rgba(124,199,255,.1); border: 1px solid rgba(124,199,255,.28); color: color-mix(in srgb,var(--ec) 80%,var(--efg)); }
-.les-spanel-loss { font-family: monospace; font-size: 11.5px; font-weight: 700; color: var(--emut); }
+.les-spanel-loss { font-family: "SF Mono","JetBrains Mono","Courier New",monospace; font-size: 11.5px; font-weight: 700; color: var(--emut); }
 
 .les-examples { display: grid; gap: 8px; }
 .les-example { border-radius: 10px; padding: 11px 13px; background: color-mix(in srgb,var(--ebg) 80%,#0f172a 20%); border: 1px solid var(--ebd); display: grid; gap: 6px; }
 .les-ex-prompt { font-size: 11.5px; font-weight: 700; color: var(--efg); }
-.les-ex-out { font-family: "Courier New", monospace; font-size: 11px; line-height: 1.5; padding: 8px 10px; border-radius: 7px; }
+.les-ex-out { font-family: "SF Mono","JetBrains Mono","Courier New",monospace; font-size: 11px; line-height: 1.5; padding: 8px 10px; border-radius: 7px; }
 .les-ex-out--bad   { background: rgba(239,68,68,.06); border: 1px solid rgba(239,68,68,.14); color: var(--emut); }
 .les-ex-out--mid   { background: rgba(255,179,67,.06); border: 1px solid rgba(255,179,67,.16); color: var(--emut); }
 .les-ex-out--good  { background: rgba(38,166,154,.06); border: 1px solid rgba(38,166,154,.18); color: var(--emut); }
@@ -241,17 +214,8 @@
 .les-label--good  { color: color-mix(in srgb,var(--ea) 70%,var(--emut)); }
 .les-label--great { color: color-mix(in srgb,var(--ec) 70%,var(--emut)); }
 
-/* Takeaway */
-.les-takeaway { display: grid; gap: 10px; }
-.les-takeaway-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--emut); }
-.les-takeaway-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
-@media (max-width: 620px) { .les-takeaway-row { grid-template-columns: 1fr; } }
-.les-tk-card { border-radius: 12px; padding: 12px 13px; background: color-mix(in srgb,var(--ebg) 80%,#0f172a 20%); border: 1px solid var(--ebd); display: flex; gap: 10px; align-items: flex-start; }
-.les-tk-sym { font-size: 18px; flex-shrink: 0; padding-top: 1px; }
-.les-tk-body { display: grid; gap: 4px; }
-.les-tk-title { font-size: 12px; font-weight: 800; }
-.les-tk-text { font-size: 11px; color: var(--emut); line-height: 1.5; }
-.les-formula-note { font-size: 10.5px; color: var(--emut); font-style: italic; line-height: 1.5; padding: 8px 12px; border-radius: 8px; background: color-mix(in srgb,var(--ec) 5%,transparent); border: 1px solid color-mix(in srgb,var(--ec) 12%,transparent); }
+.les-formula-note { font-size: 10.5px; color: var(--emut); font-style: italic; line-height: 1.55; padding: 8px 12px; border-radius: 8px; background: color-mix(in srgb,var(--ec) 5%,transparent); border: 1px solid color-mix(in srgb,var(--ec) 12%,transparent); }
+.les-formula-eq { font-family: "SF Mono","JetBrains Mono","Courier New",monospace; font-style: normal; font-weight: 800; color: var(--ec); margin-right: 6px; }
 </style>
 
 <script>

@@ -5,10 +5,14 @@
     <div class="mem-sub">Ventana larga ≠ memoria viva ≠ aprendizaje permanente. Confundirlos lleva a expectativas incorrectas sobre qué puede recordar un agente y cuándo.</div>
   </div>
 
-  <!-- Three lanes -->
-  <div class="mem-lanes">
+  <div class="mem-tabs" role="tablist">
+    <button class="mem-tab mem-tab--active" data-mtab="ctx">Contexto inmediato</button>
+    <button class="mem-tab" data-mtab="ext">Memoria externa</button>
+    <button class="mem-tab" data-mtab="param">Memoria paramétrica</button>
+  </div>
 
-    <!-- Lane 1: Immediate context -->
+  <!-- Panel 1: Immediate context -->
+  <div class="mem-panel mem-panel--active" data-mpanel="ctx">
     <div class="mem-lane mem-lane--ctx">
       <div class="mem-lane-header">
         <div class="mem-lane-num">1</div>
@@ -35,8 +39,10 @@
       </div>
       <div class="mem-lane-verdict">El modelo "ve" todo lo que hay en la ventana, pero no lo aprende ni lo retiene.</div>
     </div>
+  </div>
 
-    <!-- Lane 2: External memory -->
+  <!-- Panel 2: External memory -->
+  <div class="mem-panel" data-mpanel="ext">
     <div class="mem-lane mem-lane--ext">
       <div class="mem-lane-header">
         <div class="mem-lane-num">2</div>
@@ -71,8 +77,10 @@
       </div>
       <div class="mem-lane-verdict">El modelo no "recuerda" documentos; los consulta cuando se los acercan. La recuperación puede fallar.</div>
     </div>
+  </div>
 
-    <!-- Lane 3: Parametric memory -->
+  <!-- Panel 3: Parametric memory -->
+  <div class="mem-panel" data-mpanel="param">
     <div class="mem-lane mem-lane--param">
       <div class="mem-lane-header">
         <div class="mem-lane-num">3</div>
@@ -99,10 +107,9 @@
       </div>
       <div class="mem-lane-verdict">Lo que el modelo "sabe" intrínsecamente. No puede actualizarse sin reentrenar.</div>
     </div>
-
   </div>
 
-  <!-- Contrast note -->
+  <!-- Contrast note — always visible -->
   <div class="mem-contrast">
     <div class="mem-contrast-label">El error más común</div>
     <div class="mem-contrast-text">Ampliar la ventana de contexto no convierte el contexto inmediato en memoria persistente. Y recuperar documentos con RAG no equivale a que el modelo haya aprendido su contenido. Son tres mecanismos distintos con propiedades distintas.</div>
@@ -125,7 +132,7 @@
   --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
 
   display: grid;
-  gap: 16px;
+  gap: 14px;
   max-width: 860px;
   margin: 0 auto;
   padding: clamp(14px,2vw,22px);
@@ -150,9 +157,25 @@
 .mem-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
 .mem-sub { font-size: 13px; color: var(--emut); line-height: 1.55; max-width: 72ch; }
 
-/* Three lanes */
-.mem-lanes { display: grid; gap: 10px; }
+/* Tabs */
+.mem-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.mem-tab {
+  padding: 5px 13px; border-radius: 999px; border: 1px solid var(--ebd);
+  background: transparent; color: var(--emut); font-family: var(--ef);
+  font-size: 12px; font-weight: 700; cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s;
+}
+.mem-tab:hover { color: var(--efg); }
+.mem-tab[data-mtab="ctx"].mem-tab--active  { background: color-mix(in srgb,var(--ec) 12%,transparent); border-color: color-mix(in srgb,var(--ec) 45%,transparent); color: var(--efg); }
+.mem-tab[data-mtab="ext"].mem-tab--active  { background: color-mix(in srgb,var(--eg) 12%,transparent); border-color: color-mix(in srgb,var(--eg) 45%,transparent); color: var(--efg); }
+.mem-tab[data-mtab="param"].mem-tab--active { background: color-mix(in srgb,var(--ea) 12%,transparent); border-color: color-mix(in srgb,var(--ea) 45%,transparent); color: var(--efg); }
 
+/* Panels */
+.mem-panel { display: none; }
+.mem-panel--active { display: block; animation: memIn .2s ease; }
+@keyframes memIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Lane */
 .mem-lane { border-radius: 14px; border: 1px solid var(--ebd); overflow: hidden; }
 .mem-lane--ctx   { border-color: color-mix(in srgb,var(--ec) 28%,var(--ebd)); }
 .mem-lane--ext   { border-color: color-mix(in srgb,var(--eg) 28%,var(--ebd)); }
@@ -226,3 +249,27 @@
 .mem-contrast-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: rgba(239,68,68,.7); }
 .mem-contrast-text { font-size: 12.5px; color: var(--emut); line-height: 1.55; }
 </style>
+
+<script>
+(function () {
+  function boot() {
+    var wrap = document.querySelector('[data-demo="05-memoria-tipos"]');
+    if (!wrap || wrap.dataset.memReady) return;
+    wrap.dataset.memReady = '1';
+    var tabs = wrap.querySelectorAll('.mem-tab');
+    var panels = wrap.querySelectorAll('.mem-panel');
+    tabs.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        tabs.forEach(function(t) { t.classList.remove('mem-tab--active'); });
+        panels.forEach(function(p) { p.classList.remove('mem-panel--active'); });
+        btn.classList.add('mem-tab--active');
+        var panel = wrap.querySelector('[data-mpanel="' + btn.dataset.mtab + '"]');
+        if (panel) panel.classList.add('mem-panel--active');
+      });
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
+  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
+})();
+</script>

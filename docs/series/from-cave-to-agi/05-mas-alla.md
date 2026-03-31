@@ -51,9 +51,13 @@ Lo que empieza a aparecer aquí es un cambio de unidad básica. El sistema útil
 
 {{ include_html("snippets/from-cave-to-agi/05-busqueda-solucion.html") }}
 
+{{ include_html("snippets/from-cave-to-agi/05-agentes-convergencia.html") }}
+
 ## 3. Memoria más allá de la ventana de contexto
 
 Otra frontera clara es la memoria. Los LLMs han ampliado mucho su contexto, pero una ventana larga no es lo mismo que una memoria persistente y selectiva.
+
+{{ include_html("snippets/from-cave-to-agi/05-memoria-tipos.html") }}
 
 ### 3.1 Mamba y el regreso de los State Space Models
 
@@ -81,13 +85,13 @@ No es todavía un nuevo estándar del campo. Pero sí señala algo importante: e
 
 Otra línea fuerte intenta ir más allá de la predicción del siguiente token y aprender representaciones internas de cómo evoluciona un entorno.
 
+{{ include_html("snippets/from-cave-to-agi/05-world-models-ecosystem.html") }}
+
 [DreamerV3](https://arxiv.org/abs/2301.04104), y después su versión publicada en [Nature](https://www.nature.com/articles/s41586-025-08744-2), mostró que un world model puede aprender a imaginar futuros posibles y reutilizar esa capacidad para resolver más de 150 tareas con una sola configuración, incluyendo la recolección de diamantes en Minecraft desde cero. La clave no es solo el rendimiento, sino el tipo de enfoque: el sistema aprende un modelo latente del entorno y planifica dentro de él.
 
 En paralelo, [I-JEPA](https://arxiv.org/abs/2301.08243) empuja una intuición distinta pero cercana. En vez de reconstruir todos los píxeles, propone predecir representaciones semánticas en un espacio latente. No es un world model completo en el sentido de Dreamer, pero sí pertenece a la misma familia de ideas que priorizan estructura sobre reconstrucción literal.
 
 [Genie 2](https://deepmind.google/blog/genie-2-a-large-scale-foundation-world-model/) lleva esta dirección a un terreno especialmente sugerente: generar entornos 3D jugables y controlables a partir de una sola imagen de entrada. Todavía estamos en una fase temprana y demostrativa, pero la tesis ya es visible: si un sistema puede modelar dinámicas de mundo suficientemente bien, entonces puede servir no solo para responder preguntas, sino para entrenar agentes y explorar espacios de acción.
-
-{{ include_html("snippets/from-cave-to-agi/05-world-models-ecosystem.html") }}
 
 ### 4.1 La tesis ya mueve capital
 

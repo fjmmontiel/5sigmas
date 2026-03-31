@@ -1,106 +1,108 @@
 <div class="pft-wrap" data-demo="04-preentrenamiento-finetuning">
 
   <div class="pft-hd">
-    <div class="pft-title">Del dato en bruto al producto: tres plantas</div>
+    <div class="pft-title">Del dato en bruto al producto: tres etapas</div>
     <div class="pft-sub">Un modelo fundacional no es un producto terminado. Entre el preentrenamiento y el uso real hay dos etapas más, cada una con su propia lógica, su coste y sus limitaciones.</div>
   </div>
 
-  <!-- Factory: 3 plants stacked vertically -->
-  <div class="pft-factory">
+  <!-- Tabs -->
+  <div class="pft-tabs" role="tablist">
+    <button class="pft-tab pft-tab--active pft-tab--1" data-tab="1" role="tab">
+      <span class="pft-tab-num">Etapa 1</span>
+      <span class="pft-tab-name">Preentrenamiento</span>
+    </button>
+    <button class="pft-tab pft-tab--2" data-tab="2" role="tab">
+      <span class="pft-tab-num">Etapa 2</span>
+      <span class="pft-tab-name">Alineamiento</span>
+    </button>
+    <button class="pft-tab pft-tab--3" data-tab="3" role="tab">
+      <span class="pft-tab-num">Etapa 3</span>
+      <span class="pft-tab-name">Uso real</span>
+    </button>
+  </div>
 
-    <!-- Plant 1: Pretraining -->
-    <div class="pft-plant pft-plant--1">
-      <div class="pft-plant-header">
-        <div class="pft-plant-num">Planta 1</div>
-        <div class="pft-plant-name">Preentrenamiento</div>
-        <div class="pft-plant-cost">$10M – $100M · semanas de cómputo</div>
-      </div>
-      <div class="pft-plant-body">
-        <div class="pft-plant-left">
-          <div class="pft-input-label">Entra</div>
-          <div class="pft-inputs">
-            <div class="pft-inp">📚 Libros</div>
-            <div class="pft-inp">🌐 Web</div>
-            <div class="pft-inp">💻 Código</div>
-            <div class="pft-inp">📰 Artículos</div>
-          </div>
-          <div class="pft-obj">Objetivo: predecir el token siguiente</div>
+  <!-- Panel 1: Preentrenamiento -->
+  <div class="pft-panel pft-panel--active pft-panel--1" data-panel="1">
+    <div class="pft-panel-meta">
+      <div class="pft-panel-cost pft-cost--1">$10M – $100M · semanas de cómputo</div>
+      <div class="pft-panel-obj">Objetivo: predecir el token siguiente</div>
+    </div>
+    <div class="pft-plant-body">
+      <div class="pft-plant-left">
+        <div class="pft-input-label">Entra</div>
+        <div class="pft-inputs">
+          <div class="pft-inp">📚 Libros</div>
+          <div class="pft-inp">🌐 Web</div>
+          <div class="pft-inp">💻 Código</div>
+          <div class="pft-inp">📰 Artículos</div>
         </div>
-        <div class="pft-plant-right">
-          <div class="pft-output-label">Sale</div>
-          <div class="pft-output pft-output--base">
-            <div class="pft-out-icon">🧠</div>
-            <div class="pft-out-name">Modelo base</div>
-            <div class="pft-out-desc">Billones de parámetros. Conocimiento general del lenguaje y del mundo. Potente pero no instruccionable de forma confiable.</div>
-          </div>
+      </div>
+      <div class="pft-plant-right">
+        <div class="pft-output-label">Sale</div>
+        <div class="pft-output pft-output--base">
+          <div class="pft-out-icon">🧠</div>
+          <div class="pft-out-name">Modelo base</div>
+          <div class="pft-out-desc">Billones de parámetros. Conocimiento general del lenguaje y del mundo. Potente pero no instruccionable de forma confiable.</div>
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="pft-arrow-down">↓</div>
-
-    <!-- Plant 2: Alignment -->
-    <div class="pft-plant pft-plant--2">
-      <div class="pft-plant-header">
-        <div class="pft-plant-num">Planta 2</div>
-        <div class="pft-plant-name">Alineamiento</div>
-        <div class="pft-plant-cost">$100K – $10M · interacción humana</div>
-      </div>
-      <div class="pft-plant-body">
-        <div class="pft-plant-left">
-          <div class="pft-input-label">Entra</div>
-          <div class="pft-inputs pft-inputs--align">
-            <div class="pft-inp pft-inp--align">👤 Instrucciones humanas</div>
-            <div class="pft-inp pft-inp--align">⚖ Preferencias comparadas</div>
-            <div class="pft-inp pft-inp--align">🔄 RLHF / DPO</div>
-          </div>
-          <div class="pft-obj">Objetivo: seguir instrucciones y evitar daños</div>
+  <!-- Panel 2: Alineamiento -->
+  <div class="pft-panel pft-panel--2" data-panel="2">
+    <div class="pft-panel-meta">
+      <div class="pft-panel-cost pft-cost--2">$100K – $10M · interacción humana</div>
+      <div class="pft-panel-obj">Objetivo: seguir instrucciones y evitar daños</div>
+    </div>
+    <div class="pft-plant-body">
+      <div class="pft-plant-left">
+        <div class="pft-input-label">Entra</div>
+        <div class="pft-inputs pft-inputs--align">
+          <div class="pft-inp pft-inp--align">👤 Instrucciones humanas</div>
+          <div class="pft-inp pft-inp--align">⚖ Preferencias comparadas</div>
+          <div class="pft-inp pft-inp--align">🔄 RLHF / DPO</div>
         </div>
-        <div class="pft-plant-right">
-          <div class="pft-output-label">Sale</div>
-          <div class="pft-output pft-output--aligned">
-            <div class="pft-out-icon">🤝</div>
-            <div class="pft-out-name">Modelo alineado</div>
-            <div class="pft-out-desc">Sigue instrucciones, mantiene tono, evita respuestas dañinas. Listo para interacción humana directa.</div>
-          </div>
+      </div>
+      <div class="pft-plant-right">
+        <div class="pft-output-label">Sale</div>
+        <div class="pft-output pft-output--aligned">
+          <div class="pft-out-icon">🤝</div>
+          <div class="pft-out-name">Modelo alineado</div>
+          <div class="pft-out-desc">Sigue instrucciones, mantiene tono, evita respuestas dañinas. Listo para interacción humana directa.</div>
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="pft-arrow-down">↓</div>
-
-    <!-- Plant 3: Real use -->
-    <div class="pft-plant pft-plant--3">
-      <div class="pft-plant-header">
-        <div class="pft-plant-num">Planta 3</div>
-        <div class="pft-plant-name">Uso real</div>
-        <div class="pft-plant-cost">Variable · por llamada o despliegue</div>
-      </div>
-      <div class="pft-plant-body">
-        <div class="pft-plant-left">
-          <div class="pft-input-label">Entra en tiempo de uso</div>
-          <div class="pft-inputs pft-inputs--runtime">
-            <div class="pft-inp pft-inp--runtime">🔧 Herramientas externas</div>
-            <div class="pft-inp pft-inp--runtime">📄 Documentos / RAG</div>
-            <div class="pft-inp pft-inp--runtime">🧩 Memoria temporal</div>
-            <div class="pft-inp pft-inp--runtime">🎯 Instrucción de sistema</div>
-          </div>
+  <!-- Panel 3: Uso real -->
+  <div class="pft-panel pft-panel--3" data-panel="3">
+    <div class="pft-panel-meta">
+      <div class="pft-panel-cost pft-cost--3">Variable · por llamada o despliegue</div>
+      <div class="pft-panel-obj">El modelo alineado orquestado con contexto y herramientas</div>
+    </div>
+    <div class="pft-plant-body">
+      <div class="pft-plant-left">
+        <div class="pft-input-label">Entra en tiempo de uso</div>
+        <div class="pft-inputs pft-inputs--runtime">
+          <div class="pft-inp pft-inp--runtime">🔧 Herramientas externas</div>
+          <div class="pft-inp pft-inp--runtime">📄 Documentos / RAG</div>
+          <div class="pft-inp pft-inp--runtime">🧩 Memoria temporal</div>
+          <div class="pft-inp pft-inp--runtime">🎯 Instrucción de sistema</div>
         </div>
-        <div class="pft-plant-right">
-          <div class="pft-output-label">Sale</div>
-          <div class="pft-output pft-output--product">
-            <div class="pft-out-icon">🚀</div>
-            <div class="pft-out-name">Producto</div>
-            <div class="pft-out-desc">El modelo alineado orquestado con contexto, herramientas y memoria. Esto es lo que el usuario experimenta.</div>
-          </div>
+      </div>
+      <div class="pft-plant-right">
+        <div class="pft-output-label">Sale</div>
+        <div class="pft-output pft-output--product">
+          <div class="pft-out-icon">🚀</div>
+          <div class="pft-out-name">Producto</div>
+          <div class="pft-out-desc">El modelo alineado orquestado con contexto, herramientas y memoria. Esto es lo que el usuario experimenta.</div>
         </div>
       </div>
     </div>
-
   </div>
 
   <div class="pft-footer-note">
-    El modelo fundacional es una base necesaria, no suficiente. Un asistente, un agente o un sistema RAG son la Planta 3: usan el modelo como motor, pero añaden capas que el preentrenamiento no puede proporcionar.
+    El modelo fundacional es una base necesaria, no suficiente. Un asistente, un agente o un sistema RAG son la Etapa 3: usan el modelo como motor, pero añaden capas que el preentrenamiento no puede proporcionar.
   </div>
 
 </div>
@@ -145,40 +147,50 @@
 .pft-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
 .pft-sub { font-size: 13px; color: var(--emut); line-height: 1.55; max-width: 72ch; }
 
-/* Factory */
-.pft-factory { display: grid; gap: 0; }
-.pft-arrow-down { text-align: center; font-size: 22px; color: var(--emut); line-height: 1.2; padding: 2px 0; }
-
-.pft-plant {
-  border-radius: 14px;
-  border: 1px solid var(--ebd);
-  overflow: hidden;
+/* Tabs */
+.pft-tabs { display: flex; gap: 5px; flex-wrap: wrap; }
+.pft-tab {
+  display: grid; gap: 1px;
+  padding: 7px 14px; border-radius: 10px; border: 1px solid var(--ebd);
+  background: color-mix(in srgb,var(--ebg) 70%,#0f172a 30%); color: var(--emut);
+  font-family: var(--ef); cursor: pointer;
+  transition: background .15s, border-color .15s, color .15s;
+  text-align: left;
 }
-.pft-plant--1 { border-color: color-mix(in srgb,var(--eb) 30%,var(--ebd)); }
-.pft-plant--2 { border-color: color-mix(in srgb,var(--eg) 30%,var(--ebd)); }
-.pft-plant--3 { border-color: color-mix(in srgb,var(--ea) 30%,var(--ebd)); }
+.pft-tab-num { font-size: 9px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; }
+.pft-tab-name { font-size: 12px; font-weight: 700; }
+.pft-tab:hover { color: var(--efg); }
 
-.pft-plant-header {
-  display: flex;
-  gap: 10px;
-  align-items: baseline;
-  padding: 9px 14px;
-  border-bottom: 1px solid var(--ebd);
-  flex-wrap: wrap;
-}
-.pft-plant--1 .pft-plant-header { background: color-mix(in srgb,var(--eb) 7%,transparent); }
-.pft-plant--2 .pft-plant-header { background: color-mix(in srgb,var(--eg) 7%,transparent); }
-.pft-plant--3 .pft-plant-header { background: color-mix(in srgb,var(--ea) 7%,transparent); }
+.pft-tab--active.pft-tab--1 { background: color-mix(in srgb,var(--eb) 12%,var(--ebg)); border-color: color-mix(in srgb,var(--eb) 45%,var(--ebd)); color: var(--efg); }
+.pft-tab--active.pft-tab--1 .pft-tab-num { color: color-mix(in srgb,var(--eb) 85%,var(--efg)); }
 
-.pft-plant-num { font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--emut); }
-.pft-plant-name { font-size: 14px; font-weight: 900; flex: 1; }
-.pft-plant-cost { font-size: 10.5px; color: var(--emut); font-style: italic; }
+.pft-tab--active.pft-tab--2 { background: color-mix(in srgb,var(--eg) 12%,var(--ebg)); border-color: color-mix(in srgb,var(--eg) 45%,var(--ebd)); color: var(--efg); }
+.pft-tab--active.pft-tab--2 .pft-tab-num { color: color-mix(in srgb,var(--eg) 85%,var(--efg)); }
 
+.pft-tab--active.pft-tab--3 { background: color-mix(in srgb,var(--ea) 12%,var(--ebg)); border-color: color-mix(in srgb,var(--ea) 45%,var(--ebd)); color: var(--efg); }
+.pft-tab--active.pft-tab--3 .pft-tab-num { color: color-mix(in srgb,var(--ea) 85%,var(--efg)); }
+
+/* Panels */
+.pft-panel { display: none; }
+.pft-panel--active { display: grid; gap: 12px; animation: pftIn .2s ease; }
+@keyframes pftIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+.pft-panel-meta { display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap; padding: 9px 14px; border-radius: 10px; }
+.pft-panel--1 .pft-panel-meta { background: color-mix(in srgb,var(--eb) 7%,transparent); border: 1px solid color-mix(in srgb,var(--eb) 22%,transparent); }
+.pft-panel--2 .pft-panel-meta { background: color-mix(in srgb,var(--eg) 7%,transparent); border: 1px solid color-mix(in srgb,var(--eg) 22%,transparent); }
+.pft-panel--3 .pft-panel-meta { background: color-mix(in srgb,var(--ea) 7%,transparent); border: 1px solid color-mix(in srgb,var(--ea) 22%,transparent); }
+
+.pft-panel-cost { font-family: "SF Mono","JetBrains Mono","Courier New",monospace; font-size: 12px; font-weight: 800; }
+.pft-cost--1 { color: color-mix(in srgb,var(--eb) 80%,var(--efg)); }
+.pft-cost--2 { color: color-mix(in srgb,var(--eg) 80%,var(--efg)); }
+.pft-cost--3 { color: color-mix(in srgb,var(--ea) 80%,var(--efg)); }
+.pft-panel-obj { font-size: 11.5px; color: var(--emut); font-style: italic; }
+
+/* Plant body (shared across panels) */
 .pft-plant-body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 14px;
-  padding: 14px;
   align-items: start;
 }
 @media (max-width: 560px) { .pft-plant-body { grid-template-columns: 1fr; } }
@@ -201,7 +213,6 @@
   background: color-mix(in srgb,var(--ea) 7%,transparent);
   border-color: color-mix(in srgb,var(--ea) 18%,transparent);
 }
-.pft-obj { font-size: 10.5px; color: var(--emut); font-style: italic; margin-top: 8px; }
 
 .pft-output { border-radius: 10px; padding: 11px 13px; display: grid; gap: 5px; }
 .pft-output--base    { background: color-mix(in srgb,var(--eb) 7%,transparent); border: 1px solid color-mix(in srgb,var(--eb) 22%,transparent); }
@@ -216,3 +227,31 @@
   border-top: 1px solid var(--ebd); padding-top: 12px;
 }
 </style>
+
+<script>
+(function () {
+  function boot() {
+    var wrap = document.querySelector('[data-demo="04-preentrenamiento-finetuning"]');
+    if (!wrap || wrap.dataset.pftReady) return;
+    wrap.dataset.pftReady = '1';
+    var tabs = wrap.querySelectorAll('.pft-tab');
+    var panels = wrap.querySelectorAll('.pft-panel');
+
+    function switchTab(n) {
+      tabs.forEach(function(t) { t.classList.remove('pft-tab--active'); });
+      panels.forEach(function(p) { p.classList.remove('pft-panel--active'); });
+      var tab = wrap.querySelector('.pft-tab[data-tab="' + n + '"]');
+      var panel = wrap.querySelector('.pft-panel[data-panel="' + n + '"]');
+      if (tab) tab.classList.add('pft-tab--active');
+      if (panel) panel.classList.add('pft-panel--active');
+    }
+
+    tabs.forEach(function(btn) {
+      btn.addEventListener('click', function() { switchTab(btn.dataset.tab); });
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
+  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
+})();
+</script>

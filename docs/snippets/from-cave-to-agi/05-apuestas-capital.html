@@ -5,7 +5,11 @@
     <div class="cap-sub">El capital se está distribuyendo entre cuatro capas: modelos, chips, energía y robótica. La tesis implícita: el siguiente salto requiere infraestructura, no solo más parámetros.</div>
   </div>
 
-  <!-- Small multiples: 4 categories -->
+  <div class="cap-tabs" role="tablist">
+    <button class="cap-tab cap-tab--active" data-ctab="overview">Distribución</button>
+    <button class="cap-tab" data-ctab="detail">Apuestas concretas</button>
+  </div>
+
   <div class="cap-grid">
 
     <div class="cap-cat cap-cat--models">
@@ -111,7 +115,7 @@
   --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
 
   display: grid;
-  gap: 16px;
+  gap: 14px;
   max-width: 860px;
   margin: 0 auto;
   padding: clamp(14px,2vw,22px);
@@ -135,6 +139,21 @@
 .cap-hd { display: grid; gap: 4px; }
 .cap-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
 .cap-sub { font-size: 13px; color: var(--emut); line-height: 1.55; max-width: 72ch; }
+
+/* Tabs */
+.cap-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.cap-tab {
+  padding: 5px 13px; border-radius: 999px; border: 1px solid var(--ebd);
+  background: transparent; color: var(--emut); font-family: var(--ef);
+  font-size: 12px; font-weight: 700; cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s;
+}
+.cap-tab:hover { border-color: color-mix(in srgb,var(--eb) 50%,var(--ebd)); color: var(--efg); }
+.cap-tab--active {
+  background: color-mix(in srgb,var(--eb) 12%,transparent);
+  border-color: color-mix(in srgb,var(--eb) 45%,var(--ebd));
+  color: var(--efg);
+}
 
 /* Small multiples grid */
 .cap-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -165,11 +184,13 @@
 .cap-cat-bar--robotics { background: linear-gradient(90deg, color-mix(in srgb,var(--ea) 60%,transparent), color-mix(in srgb,var(--ea) 35%,transparent)); }
 .cap-cat-bar-label { font-size: 9.5px; color: var(--emut); font-style: italic; }
 
-/* Mini bets */
-.cap-bets-mini { display: grid; gap: 4px; border-top: 1px solid var(--ebd); padding-top: 7px; }
+/* Mini bets — hidden by default, shown in detail tab */
+.cap-bets-mini { display: none; gap: 4px; border-top: 1px solid var(--ebd); padding-top: 7px; }
+.cap-wrap--detail .cap-bets-mini { display: grid; }
+
 .cap-bet-mini { display: flex; gap: 6px; align-items: baseline; flex-wrap: wrap; }
 .cap-co { font-size: 10.5px; font-weight: 700; flex: 1; min-width: 100px; }
-.cap-amt { font-family: monospace; font-size: 11px; font-weight: 900; }
+.cap-amt { font-family: "SF Mono","JetBrains Mono","Courier New",monospace; font-size: 11px; font-weight: 900; }
 .cap-cat--models .cap-amt  { color: color-mix(in srgb,var(--eb) 75%,var(--efg)); }
 .cap-cat--chips .cap-amt   { color: color-mix(in srgb,var(--ec) 75%,var(--efg)); }
 .cap-cat--energy .cap-amt  { color: color-mix(in srgb,var(--eg) 75%,var(--efg)); }
@@ -181,3 +202,28 @@
 .cap-verdict-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: color-mix(in srgb,var(--ea) 70%,var(--emut)); }
 .cap-verdict-text { font-size: 12.5px; font-weight: 700; line-height: 1.5; }
 </style>
+
+<script>
+(function () {
+  function boot() {
+    var wrap = document.querySelector('[data-demo="05-apuestas-capital"]');
+    if (!wrap || wrap.dataset.capReady) return;
+    wrap.dataset.capReady = '1';
+    var tabs = wrap.querySelectorAll('.cap-tab');
+    tabs.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        tabs.forEach(function(t) { t.classList.remove('cap-tab--active'); });
+        btn.classList.add('cap-tab--active');
+        if (btn.dataset.ctab === 'detail') {
+          wrap.classList.add('cap-wrap--detail');
+        } else {
+          wrap.classList.remove('cap-wrap--detail');
+        }
+      });
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
+  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
+})();
+</script>
