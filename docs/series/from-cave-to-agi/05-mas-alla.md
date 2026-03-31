@@ -101,7 +101,7 @@ Esta idea ha dejado de ser solo una línea académica. En marzo de 2026, Reuters
 
 El dato no prueba que esa sea la vía ganadora. Pero sí muestra que una parte relevante del ecosistema cree que el siguiente salto no llegará solo por escalar lenguaje, sino por modelar mejor la estructura espacial, causal e interactiva del mundo.
 
-Ya no estamos viendo apuestas de laboratorio que se midan en cientos de millones. Solo en 2026, OpenAI anunció **$110.000 millones** de nueva inversión, Anthropic cerró **$30.000 millones** y xAI otros **$20.000 millones**. En paralelo, las grandes tecnológicas planean alrededor de **$635.000 millones** de gasto de capital en IA solo en 2026.
+Ya no estamos viendo apuestas de laboratorio que se midan en cientos de millones. Solo en 2026, OpenAI anunció **\$110.000 millones** de nueva inversión, Anthropic cerró **\$30.000 millones** y xAI otros **\$20.000 millones**. En paralelo, las grandes tecnológicas planean alrededor de **\$635.000 millones** de gasto de capital en IA solo en 2026.
 
 La señal es difícil de ignorar: la frontera dejó de ser únicamente un problema de algoritmo. El dinero se está desplazando hacia cuatro cuellos de botella concretos: **modelos, cómputo, energía y mundo físico** porque entrenar mejor ya no basta. 
 
