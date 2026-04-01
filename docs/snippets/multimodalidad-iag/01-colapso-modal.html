@@ -1,0 +1,395 @@
+<div class="cmd-wrap" data-demo="01-colapso-modal">
+  <div class="cmd-hd">
+    <div class="cmd-title">Colapso modal: cuando el prior textual eclipsa la señal visual</div>
+    <div class="cmd-sub">En sistemas con distribuciones desbalanceadas, el modelo aprende a ignorar la modalidad minoritaria cuando el prior estadístico es suficientemente fuerte.</div>
+  </div>
+
+  <div class="cmd-tabs">
+    <button class="cmd-tab active" data-tab="1">Grounding correcto</button>
+    <button class="cmd-tab" data-tab="2">Colapso modal</button>
+    <button class="cmd-tab" data-tab="3">Por qué ocurre</button>
+  </div>
+
+  <!-- TAB 1: Grounding correcto -->
+  <div class="cmd-panel" data-panel="1">
+    <div class="cmd-scenario">
+      <div class="cmd-question">
+        <div class="cmd-q-tag">Pregunta</div>
+        <div class="cmd-q-text">"¿De qué color es la fruta de la imagen?"</div>
+      </div>
+
+      <div class="cmd-bifold">
+        <div class="cmd-signal cmd-signal--vis cmd-signal--active">
+          <div class="cmd-sig-tag">Señal visual</div>
+          <div class="cmd-sig-icon">
+            <svg viewBox="0 0 80 80" width="80" height="80">
+              <circle cx="40" cy="40" r="28" fill="rgba(239,68,68,.55)" stroke="rgba(239,68,68,.8)" stroke-width="1.5"/>
+              <ellipse cx="40" cy="14" rx="3" ry="5" fill="rgba(38,166,154,.7)" transform="rotate(-10 40 14)"/>
+              <text x="40" y="58" text-anchor="middle" font-family="SF Mono,JetBrains Mono,Courier New,monospace" font-size="9" fill="rgba(255,255,255,.8)">roja</text>
+            </svg>
+          </div>
+          <div class="cmd-sig-label">fruta <strong>roja</strong> en imagen</div>
+          <div class="cmd-sig-weight">
+            <div class="cmd-weight-bar" style="width:75%"></div>
+            <span>peso alto</span>
+          </div>
+        </div>
+
+        <div class="cmd-plus">+</div>
+
+        <div class="cmd-signal cmd-signal--txt cmd-signal--dimmed">
+          <div class="cmd-sig-tag">Prior textual</div>
+          <div class="cmd-sig-icon cmd-sig-icon--txt">
+            <span class="cmd-prior-word">"manzana"</span>
+            <span class="cmd-prior-assoc">≈ roja (82%)</span>
+          </div>
+          <div class="cmd-sig-label">prior: manzana → roja</div>
+          <div class="cmd-sig-weight">
+            <div class="cmd-weight-bar cmd-weight-bar--txt" style="width:40%"></div>
+            <span>confirmatorio</span>
+          </div>
+        </div>
+
+        <div class="cmd-result cmd-result--ok">
+          <div class="cmd-res-tag">Respuesta</div>
+          <div class="cmd-res-ans">"roja"</div>
+          <div class="cmd-res-reason">señal visual + prior coinciden</div>
+          <div class="cmd-res-badge cmd-res-badge--ok">correcto · bien anclado</div>
+        </div>
+      </div>
+
+      <div class="cmd-note cmd-note--teal">
+        La señal visual tiene peso dominante. Incluso si el prior apuntase en otra dirección, el modelo puede corregir usando la evidencia perceptiva.
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: Colapso modal -->
+  <div class="cmd-panel" data-panel="2" style="display:none">
+    <div class="cmd-scenario">
+      <div class="cmd-question">
+        <div class="cmd-q-tag">Misma pregunta — fruta inusual</div>
+        <div class="cmd-q-text">"¿De qué color es la fruta de la imagen?"</div>
+      </div>
+
+      <div class="cmd-bifold">
+        <div class="cmd-signal cmd-signal--vis cmd-signal--ignored">
+          <div class="cmd-sig-tag">Señal visual</div>
+          <div class="cmd-sig-icon">
+            <svg viewBox="0 0 80 80" width="80" height="80">
+              <circle cx="40" cy="40" r="28" fill="rgba(255,179,67,.55)" stroke="rgba(255,179,67,.8)" stroke-width="1.5"/>
+              <ellipse cx="40" cy="14" rx="3" ry="5" fill="rgba(38,166,154,.7)" transform="rotate(-10 40 14)"/>
+              <text x="40" y="58" text-anchor="middle" font-family="SF Mono,JetBrains Mono,Courier New,monospace" font-size="9" fill="rgba(255,255,255,.8)">naranja</text>
+              <!-- ignored overlay -->
+              <line x1="12" y1="12" x2="68" y2="68" stroke="rgba(239,68,68,.6)" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="68" y1="12" x2="12" y2="68" stroke="rgba(239,68,68,.6)" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="cmd-sig-label">fruta <strong>naranja</strong> en imagen</div>
+          <div class="cmd-sig-weight cmd-sig-weight--ignored">
+            <div class="cmd-weight-bar" style="width:8%"></div>
+            <span>ignorada</span>
+          </div>
+        </div>
+
+        <div class="cmd-plus">+</div>
+
+        <div class="cmd-signal cmd-signal--txt cmd-signal--dominant">
+          <div class="cmd-sig-tag">Prior textual</div>
+          <div class="cmd-sig-icon cmd-sig-icon--txt">
+            <span class="cmd-prior-word">"manzana"</span>
+            <span class="cmd-prior-assoc cmd-prior-assoc--strong">≈ roja (82%)</span>
+          </div>
+          <div class="cmd-sig-label">prior domina sin corrección</div>
+          <div class="cmd-sig-weight">
+            <div class="cmd-weight-bar cmd-weight-bar--dom" style="width:92%"></div>
+            <span>dominante</span>
+          </div>
+        </div>
+
+        <div class="cmd-result cmd-result--bad">
+          <div class="cmd-res-tag">Respuesta</div>
+          <div class="cmd-res-ans">"roja"</div>
+          <div class="cmd-res-reason">prior textual sin corrección visual</div>
+          <div class="cmd-res-badge cmd-res-badge--bad">incorrecto · sin grounding</div>
+        </div>
+      </div>
+
+      <div class="cmd-note cmd-note--red">
+        La respuesta suena razonable y fluida. El modelo no sabe que está fallando. Los benchmarks estándar no detectan este patrón si la distribución de test coincide con el prior.
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: Por qué ocurre -->
+  <div class="cmd-panel" data-panel="3" style="display:none">
+    <div class="cmd-why">
+      <div class="cmd-why-cards">
+        <div class="cmd-why-card cmd-why-card--cause">
+          <div class="cmd-wc-tag">Causa raíz</div>
+          <div class="cmd-wc-title">Desbalance en entrenamiento</div>
+          <div class="cmd-wc-body">
+            <div class="cmd-wc-bar-wrap">
+              <div class="cmd-wc-bar-label">Texto</div>
+              <div class="cmd-wc-bar-track"><div class="cmd-wc-bar-fill cmd-wc-bar-fill--txt" style="width:88%"></div></div>
+              <div class="cmd-wc-bar-pct">88%</div>
+            </div>
+            <div class="cmd-wc-bar-wrap">
+              <div class="cmd-wc-bar-label">Imagen</div>
+              <div class="cmd-wc-bar-track"><div class="cmd-wc-bar-fill cmd-wc-bar-fill--img" style="width:12%"></div></div>
+              <div class="cmd-wc-bar-pct">12%</div>
+            </div>
+          </div>
+          <div class="cmd-wc-desc">El modelo ve texto 7× más que imágenes. El prior textual se vuelve una ruta de mínimo esfuerzo que generaliza bien en media pero falla en casos fuera de distribución.</div>
+        </div>
+
+        <div class="cmd-why-card cmd-why-card--effect">
+          <div class="cmd-wc-tag">Efecto en inferencia</div>
+          <div class="cmd-wc-title">Atajo estadístico</div>
+          <div class="cmd-wc-body cmd-wc-body--mono">
+            P(roja | "manzana") = 0.82<br>
+            P(naranja | imagen) ≪ prior<br>
+            → modelo elige prior
+          </div>
+          <div class="cmd-wc-desc">El modelo maximiza probabilidad esperada sobre su distribución de entrenamiento, no sobre la señal actual. La imagen es ignorada porque añade incertidumbre al prior fuerte.</div>
+        </div>
+
+        <div class="cmd-why-card cmd-why-card--detect">
+          <div class="cmd-wc-tag">Cómo detectarlo</div>
+          <div class="cmd-wc-title">Ablación sin imagen</div>
+          <div class="cmd-wc-body cmd-wc-body--test">
+            <div class="cmd-wc-test">
+              <span class="cmd-wc-test-label">Con imagen</span>
+              <span class="cmd-wc-test-acc">82% acc</span>
+            </div>
+            <div class="cmd-wc-test">
+              <span class="cmd-wc-test-label">Sin imagen</span>
+              <span class="cmd-wc-test-acc cmd-wc-test-acc--warn">79% acc</span>
+            </div>
+          </div>
+          <div class="cmd-wc-desc">Si eliminar la imagen apenas cambia la exactitud, el modelo no usa la señal visual. La diferencia de 3 pp revela que el prior domina la respuesta.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.cmd-wrap, .cmd-wrap * { box-sizing: border-box; }
+
+.cmd-wrap {
+  --aa: #26A69A;
+  --ab: #324AB2;
+  --ag: #FFB343;
+  --ar: #e04c4c;
+  --al: #7cc7ff;
+  --abg: var(--md-default-bg-color, #fff);
+  --afg: var(--md-default-fg-color, #0f172a);
+  --abd: rgba(15,23,42,.14);
+  --amut: rgba(15,23,42,.58);
+  --af: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid; gap: 14px; max-width: 900px; margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--abd); border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--ar) 6%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 100%, color-mix(in srgb,var(--aa) 5%,transparent), transparent 52%),
+    var(--abg);
+  color: var(--afg); font-family: var(--af); -webkit-font-smoothing: antialiased;
+}
+
+[data-md-color-scheme="slate"] .cmd-wrap {
+  --abg: var(--md-default-bg-color, #0f172a);
+  --afg: var(--md-default-fg-color, #e2e8f0);
+  --abd: rgba(226,232,240,.14);
+  --amut: rgba(226,232,240,.58);
+}
+
+.cmd-hd { display: grid; gap: 5px; }
+.cmd-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.cmd-sub { font-size: 14px; color: var(--amut); line-height: 1.5; max-width: 68ch; }
+
+.cmd-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.cmd-tab {
+  padding: 6px 14px; border-radius: 999px; border: 1px solid var(--abd);
+  background: transparent; color: var(--amut);
+  font-family: var(--af); font-size: 12.5px; font-weight: 700;
+  cursor: pointer; transition: background .15s, color .15s, border-color .15s; white-space: nowrap;
+}
+.cmd-tab:hover { background: color-mix(in srgb,var(--ar) 7%,var(--abg)); color: var(--afg); }
+.cmd-tab.active {
+  background: color-mix(in srgb,var(--ar) 10%,var(--abg));
+  border-color: color-mix(in srgb,var(--ar) 35%,var(--abd));
+  color: color-mix(in srgb,var(--ar) 70%,var(--afg));
+}
+
+.cmd-panel { display: flex; flex-direction: column; gap: 12px; min-height: 260px; }
+.cmd-scenario { display: flex; flex-direction: column; gap: 10px; flex: 1; }
+
+.cmd-question {
+  padding: 8px 14px; border-radius: 10px;
+  border: 1px solid color-mix(in srgb,var(--ab) 20%,var(--abd));
+  background: color-mix(in srgb,var(--ab) 4%,var(--abg));
+  display: flex; align-items: center; gap: 10px;
+}
+.cmd-q-tag {
+  font-size: 9px; font-weight: 900; text-transform: uppercase;
+  letter-spacing: .07em; color: var(--amut); flex-shrink: 0;
+}
+.cmd-q-text { font-size: 13px; font-weight: 700; font-style: italic; }
+
+.cmd-bifold { display: flex; gap: 8px; align-items: stretch; flex: 1; }
+.cmd-plus {
+  font-size: 20px; font-weight: 900; color: var(--amut);
+  align-self: center; flex-shrink: 0;
+}
+
+.cmd-signal {
+  flex: 1; padding: 12px; border-radius: 12px; border: 1px solid var(--abd);
+  display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center;
+  transition: opacity .3s;
+}
+.cmd-signal--vis { border-color: color-mix(in srgb,var(--al) 22%,var(--abd)); background: color-mix(in srgb,var(--al) 4%,var(--abg)); }
+.cmd-signal--txt { border-color: color-mix(in srgb,var(--ab) 20%,var(--abd)); background: color-mix(in srgb,var(--ab) 4%,var(--abg)); }
+.cmd-signal--active { }
+.cmd-signal--dimmed { opacity: .65; }
+.cmd-signal--ignored { opacity: .5; border-style: dashed; }
+.cmd-signal--dominant { border-color: color-mix(in srgb,var(--ar) 30%,var(--abd)); background: color-mix(in srgb,var(--ar) 5%,var(--abg)); }
+
+.cmd-sig-tag { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--amut); }
+.cmd-sig-icon { display: flex; align-items: center; justify-content: center; }
+.cmd-sig-icon--txt {
+  flex-direction: column; gap: 3px;
+  width: 100%; padding: 10px 8px; border-radius: 8px;
+  background: color-mix(in srgb,var(--ab) 6%,var(--abg));
+  border: 1px solid color-mix(in srgb,var(--ab) 16%,var(--abd));
+}
+.cmd-prior-word {
+  font-family: "SF Mono","JetBrains Mono","Courier New",monospace;
+  font-size: 12px; font-weight: 900;
+  color: color-mix(in srgb,var(--ab) 75%,var(--afg));
+}
+.cmd-prior-assoc { font-size: 10.5px; color: var(--amut); }
+.cmd-prior-assoc--strong { color: color-mix(in srgb,var(--ar) 65%,var(--afg)); font-weight: 700; }
+
+.cmd-sig-label { font-size: 11px; font-weight: 700; }
+
+.cmd-sig-weight {
+  width: 100%; display: flex; align-items: center; gap: 6px;
+  font-size: 10px; color: var(--amut);
+}
+.cmd-sig-weight--ignored { opacity: .6; }
+.cmd-weight-bar {
+  height: 4px; border-radius: 99px;
+  background: color-mix(in srgb,var(--al) 55%,transparent);
+  transition: width .4s;
+}
+.cmd-weight-bar--txt { background: color-mix(in srgb,var(--ab) 55%,transparent); }
+.cmd-weight-bar--dom { background: color-mix(in srgb,var(--ar) 60%,transparent); }
+
+.cmd-result {
+  flex: 0 0 auto; width: 140px;
+  padding: 12px; border-radius: 12px; border: 1px solid var(--abd);
+  display: flex; flex-direction: column; gap: 6px; align-items: center; text-align: center;
+  align-self: stretch;
+}
+.cmd-result--ok { border-color: color-mix(in srgb,var(--aa) 28%,var(--abd)); background: color-mix(in srgb,var(--aa) 5%,var(--abg)); }
+.cmd-result--bad { border-color: color-mix(in srgb,var(--ar) 28%,var(--abd)); background: color-mix(in srgb,var(--ar) 6%,var(--abg)); }
+
+.cmd-res-tag { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--amut); }
+.cmd-res-ans {
+  font-size: 24px; font-weight: 900; letter-spacing: -.02em;
+  color: color-mix(in srgb,var(--aa) 75%,var(--afg));
+}
+.cmd-result--bad .cmd-res-ans { color: color-mix(in srgb,var(--ar) 70%,var(--afg)); }
+.cmd-res-reason { font-size: 10.5px; color: var(--amut); line-height: 1.3; }
+.cmd-res-badge {
+  font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: .05em;
+  padding: 3px 8px; border-radius: 999px;
+}
+.cmd-res-badge--ok {
+  color: color-mix(in srgb,var(--aa) 70%,var(--afg));
+  background: color-mix(in srgb,var(--aa) 10%,var(--abg));
+  border: 1px solid color-mix(in srgb,var(--aa) 22%,var(--abd));
+}
+.cmd-res-badge--bad {
+  color: color-mix(in srgb,var(--ar) 70%,var(--afg));
+  background: color-mix(in srgb,var(--ar) 10%,var(--abg));
+  border: 1px solid color-mix(in srgb,var(--ar) 25%,var(--abd));
+}
+
+/* TAB 3 */
+.cmd-why { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+.cmd-why-cards { display: flex; gap: 10px; flex: 1; }
+.cmd-why-card {
+  flex: 1; padding: 12px; border-radius: 14px; border: 1px solid var(--abd);
+  display: flex; flex-direction: column; gap: 8px;
+}
+.cmd-why-card--cause { border-color: color-mix(in srgb,var(--ar) 22%,var(--abd)); background: color-mix(in srgb,var(--ar) 4%,var(--abg)); }
+.cmd-why-card--effect { border-color: color-mix(in srgb,var(--ag) 22%,var(--abd)); background: color-mix(in srgb,var(--ag) 4%,var(--abg)); }
+.cmd-why-card--detect { border-color: color-mix(in srgb,var(--aa) 22%,var(--abd)); background: color-mix(in srgb,var(--aa) 4%,var(--abg)); }
+
+.cmd-wc-tag { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--amut); }
+.cmd-wc-title { font-size: 13px; font-weight: 900; line-height: 1.2; }
+.cmd-wc-desc { font-size: 11px; color: var(--amut); line-height: 1.4; margin-top: auto; }
+
+.cmd-wc-body { display: flex; flex-direction: column; gap: 6px; }
+.cmd-wc-bar-wrap { display: flex; align-items: center; gap: 6px; }
+.cmd-wc-bar-label { font-size: 10px; font-weight: 700; width: 46px; flex-shrink: 0; }
+.cmd-wc-bar-track { flex: 1; height: 6px; border-radius: 99px; background: var(--abd); overflow: hidden; }
+.cmd-wc-bar-fill { height: 100%; border-radius: 99px; }
+.cmd-wc-bar-fill--txt { background: color-mix(in srgb,var(--ab) 60%,transparent); }
+.cmd-wc-bar-fill--img { background: color-mix(in srgb,var(--al) 65%,transparent); }
+.cmd-wc-bar-pct { font-size: 10px; font-weight: 700; width: 28px; text-align: right; color: var(--amut); }
+
+.cmd-wc-body--mono {
+  font-family: "SF Mono","JetBrains Mono","Courier New",monospace;
+  font-size: 11px; line-height: 1.6;
+  padding: 8px 10px; border-radius: 8px;
+  background: color-mix(in srgb,var(--ag) 6%,var(--abg));
+  border: 1px solid color-mix(in srgb,var(--ag) 18%,var(--abd));
+  color: color-mix(in srgb,var(--ag) 80%,var(--afg));
+  white-space: pre;
+}
+
+.cmd-wc-body--test { display: flex; flex-direction: column; gap: 5px; }
+.cmd-wc-test { display: flex; justify-content: space-between; align-items: center;
+  padding: 5px 8px; border-radius: 7px; border: 1px solid var(--abd);
+  background: color-mix(in srgb,var(--abg) 90%,#0f172a 10%);
+}
+.cmd-wc-test-label { font-size: 11px; font-weight: 700; }
+.cmd-wc-test-acc {
+  font-family: "SF Mono","JetBrains Mono","Courier New",monospace;
+  font-size: 11px; font-weight: 900;
+  color: color-mix(in srgb,var(--aa) 75%,var(--afg));
+}
+.cmd-wc-test-acc--warn { color: color-mix(in srgb,var(--ar) 65%,var(--afg)); }
+
+.cmd-note {
+  padding: 10px 14px; border-radius: 10px; border: 1px solid;
+  font-size: 12.5px; line-height: 1.5; color: var(--afg);
+}
+.cmd-note--teal { border-color: color-mix(in srgb,var(--aa) 22%,var(--abd)); background: color-mix(in srgb,var(--aa) 5%,var(--abg)); }
+.cmd-note--red { border-color: color-mix(in srgb,var(--ar) 22%,var(--abd)); background: color-mix(in srgb,var(--ar) 5%,var(--abg)); }
+
+@media (max-width: 600px) {
+  .cmd-bifold { flex-direction: column; }
+  .cmd-result { width: 100%; }
+  .cmd-why-cards { flex-direction: column; }
+}
+</style>
+
+<script>
+(function(){
+  document.querySelectorAll('[data-demo="01-colapso-modal"] button[data-tab]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var wrap = btn.closest('[data-demo="01-colapso-modal"]');
+      wrap.querySelectorAll('button[data-tab]').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      wrap.querySelectorAll('[data-panel]').forEach(function(p){ p.style.display = 'none'; });
+      wrap.querySelector('[data-panel="' + btn.dataset.tab + '"]').style.display = '';
+    });
+  });
+})();
+</script>

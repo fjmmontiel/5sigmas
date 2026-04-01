@@ -21,9 +21,14 @@ Formatos de carousel.html soportados:
 
 import argparse
 import asyncio
+import sys
 from pathlib import Path
 
 from playwright.async_api import async_playwright
+
+# Importar validador para ejecutarlo antes de renderizar
+sys.path.insert(0, str(Path(__file__).parent))
+from validate_carousels import validate_file
 
 ROOT = Path(__file__).resolve().parents[1]
 POSTS_DIR = ROOT / "documentacion_interna" / "posts"
@@ -76,7 +81,21 @@ async def _render_carousel(page, carousel_path: Path, preview: bool):
         print(f"    → {out_path.relative_to(ROOT)}")
 
 
-async def run(series: str | None, post_filter: str | None, preview: bool):
+def _validate_all(carousels: list[Path]) -> bool:
+    """Valida todos los carousels. Retorna True si todos pasan."""
+    print(f"\n[validate] Verificando {len(carousels)} carousel(s)...\n")
+    total_fails = 0
+    for c in carousels:
+        fails, _ = validate_file(c)
+        total_fails += fails
+    if total_fails:
+        print(f"\n[validate] ✗ {total_fails} error(s) encontrado(s). Corrige antes de renderizar.\n")
+        return False
+    print(f"[validate] ✓ Todo correcto — iniciando render\n")
+    return True
+
+
+async def run(series: str | None, post_filter: str | None, preview: bool, skip_validation: bool):
     search_dir = POSTS_DIR / series if series else POSTS_DIR
     carousels = sorted(search_dir.rglob("carousel.html"))
 
@@ -86,6 +105,9 @@ async def run(series: str | None, post_filter: str | None, preview: bool):
     if not carousels:
         print(f"No se encontraron carousel.html en {search_dir}")
         return
+
+    if not skip_validation and not _validate_all(carousels):
+        sys.exit(1)
 
     total = len(carousels)
     print(f"\n[render] {total} carousel(s) encontrado(s)\n")
@@ -115,9 +137,10 @@ def main():
     parser.add_argument("--series", default=None, help="Filtrar por serie (ej: fundamentos-ia-cap2)")
     parser.add_argument("--post", default=None, help="Filtrar por nombre de carpeta de post")
     parser.add_argument("--preview", action="store_true", help="Solo primer slide de cada post")
+    parser.add_argument("--skip-validation", action="store_true", help="Omitir validación previa (no recomendado)")
     args = parser.parse_args()
 
-    asyncio.run(run(args.series, args.post, args.preview))
+    asyncio.run(run(args.series, args.post, args.preview, args.skip_validation))
 
 
 if __name__ == "__main__":

@@ -1,0 +1,406 @@
+<div class="ec-wrap" data-demo="01-espacio-comun">
+  <div class="ec-hd">
+    <div class="ec-title">Integrar modalidades sin reducirlas demasiado pronto</div>
+    <div class="ec-sub">Tres niveles de integración, cinco capacidades y por qué el campo sigue siendo difícil en 2026.</div>
+  </div>
+
+  <div class="ec-tabs">
+    <button class="ec-tab active" data-tab="1">Los tres niveles</button>
+    <button class="ec-tab" data-tab="2">Cinco capacidades</button>
+    <button class="ec-tab" data-tab="3">Por qué sigue siendo difícil</button>
+  </div>
+
+  <!-- TAB 1: Los tres niveles -->
+  <div class="ec-panel" data-panel="1">
+    <div class="ec-chain">
+      <div class="ec-lv ec-lv--r">
+        <div class="ec-lv-tag">Nivel 1 · Traducción</div>
+        <div class="ec-lv-name">Traducción</div>
+        <div class="ec-lv-desc">La señal no-textual se convierte a texto antes de cualquier razonamiento. La descripción reemplaza la imagen.</div>
+        <div class="ec-lv-box">imagen → "un perro corre por la calle"</div>
+        <div class="ec-lv-meta">
+          <div class="ec-lv-lose">pierde: posición, relaciones espaciales</div>
+          <div class="ec-lv-sys">pipelines de caption</div>
+        </div>
+      </div>
+      <div class="ec-chain-arr">→</div>
+      <div class="ec-lv ec-lv--b">
+        <div class="ec-lv-tag">Nivel 2 · Alineamiento</div>
+        <div class="ec-lv-name">Alineamiento</div>
+        <div class="ec-lv-desc">Dos señales distintas aprenden a caer en la misma geometría semántica cuando hablan del mismo contenido.</div>
+        <div class="ec-lv-box">sim(v<sub>T</sub>, v<sub>I</sub>) ↑ par correcto</div>
+        <div class="ec-lv-meta">
+          <div class="ec-lv-keep">preserva: semántica compartida</div>
+          <div class="ec-lv-sys">CLIP · ImageBind · Gemini Embedding 2</div>
+        </div>
+      </div>
+      <div class="ec-chain-arr">→</div>
+      <div class="ec-lv ec-lv--a">
+        <div class="ec-lv-tag">Nivel 3 · Copresencia operativa</div>
+        <div class="ec-lv-name">Copresencia operativa</div>
+        <div class="ec-lv-desc">Varias modalidades permanecen activas durante toda la inferencia y la generación, sin quedar reducidas a texto.</div>
+        <div class="ec-lv-box">audio + texto → respuesta en streaming</div>
+        <div class="ec-lv-meta">
+          <div class="ec-lv-keep">preserva: temporalidad, tono, sincronía</div>
+          <div class="ec-lv-sys">Flamingo · Qwen2.5-Omni · Gemini 2.5</div>
+        </div>
+      </div>
+    </div>
+    <div class="ec-t1-note">Las tres estrategias son válidas. La elección depende de qué información puede perderse sin que la tarea falle.</div>
+  </div>
+
+  <!-- TAB 2: Cinco capacidades -->
+  <div class="ec-panel" data-panel="2" style="display:none">
+    <div class="ec-caps">
+      <div class="ec-cap ec-cap--a">
+        <div class="ec-cap-sym">◉</div>
+        <div class="ec-cap-name">Percibir</div>
+        <div class="ec-cap-body">Convertir señal heterogénea en representación útil: documento, audio, imagen, vídeo, sensor.</div>
+        <div class="ec-cap-note">OCRBench v2 y MMAU revelan que sigue siendo difícil en documentos complejos y audio experto</div>
+      </div>
+      <div class="ec-cap ec-cap--b">
+        <div class="ec-cap-sym">⇄</div>
+        <div class="ec-cap-name">Alinear</div>
+        <div class="ec-cap-body">Aprender cuándo dos señales distintas hablan del mismo contenido para recuperación cruzada.</div>
+        <div class="ec-cap-note">Gemini Embedding 2: texto, imagen, vídeo, audio y documentos en un espacio unificado</div>
+      </div>
+      <div class="ec-cap ec-cap--g">
+        <div class="ec-cap-sym">⊙</div>
+        <div class="ec-cap-name">Razonar</div>
+        <div class="ec-cap-body">Operar sobre las señales alineadas: comparar, localizar, verificar, seguir dependencias temporales.</div>
+        <div class="ec-cap-note">Flamingo, Gemini 3: más allá del matching, razonamiento multimodal profundo</div>
+      </div>
+      <div class="ec-cap ec-cap--l">
+        <div class="ec-cap-sym">►</div>
+        <div class="ec-cap-name">Generar</div>
+        <div class="ec-cap-body">Producir salidas en modalidades distintas al texto bajo restricciones de latencia real.</div>
+        <div class="ec-cap-note">Gemini 2.5 Native Audio, Qwen2.5-Omni: voz y texto en streaming</div>
+      </div>
+      <div class="ec-cap ec-cap--r">
+        <div class="ec-cap-sym">⚡</div>
+        <div class="ec-cap-name">Actuar</div>
+        <div class="ec-cap-body">Usar herramientas o entrar en un entorno físico. Decisión situada, no solo comprensión.</div>
+        <div class="ec-cap-note">PaLM-E: lenguaje + observación + estado continuo para planificación robótica</div>
+      </div>
+    </div>
+    <div class="ec-t2-foot">La mayoría de sistemas actuales cubren bien 1–3. Las capacidades 4–5 son el frente activo del campo.</div>
+  </div>
+
+  <!-- TAB 3: Por qué sigue siendo difícil -->
+  <div class="ec-panel" data-panel="3" style="display:none">
+    <div class="ec-diff-grid">
+      <div class="ec-diff ec-diff--r">
+        <div class="ec-diff-box ec-diff-box--r">palabra ≠ parche ≠ frame</div>
+        <div class="ec-diff-name">Granularidad</div>
+        <div class="ec-diff-body">Texto, imagen, audio y documentos no tienen unidades naturalmente equivalentes. Las correspondencias entre modalidades se aprenden de forma incompleta y sesgada por los datos disponibles.</div>
+      </div>
+      <div class="ec-diff ec-diff--g">
+        <div class="ec-diff-box ec-diff-box--g">t₁ → t₂ → t₃ → ...</div>
+        <div class="ec-diff-name">Temporalidad</div>
+        <div class="ec-diff-body">En audio y vídeo el orden forma parte del significado: ritmo, interrupción, cambio de tono. No son "más tokens" sino sincronía y contexto conversacional que el modelo debe preservar.</div>
+      </div>
+      <div class="ec-diff ec-diff--l">
+        <div class="ec-diff-box ec-diff-box--l">P(resp) ≠ P(evidencia)</div>
+        <div class="ec-diff-name">Grounding</div>
+        <div class="ec-diff-body">Una respuesta estadísticamente plausible puede estar mal sustentada en la señal perceptiva. OCRBench v2 y MMAU revelan ese límite de forma sistemática en documentos y audio.</div>
+      </div>
+      <div class="ec-diff ec-diff--b">
+        <div class="ec-diff-box ec-diff-box--b">any-to-any ≠ realidad</div>
+        <div class="ec-diff-name">Asimetría</div>
+        <div class="ec-diff-body">La aspiración es any-to-any. El estado real en 2026: fuerte en embeddings y descripción visual, variable en generación, limitado en audio experto, desigual en vídeo.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.ec-wrap, .ec-wrap * { box-sizing: border-box; }
+
+.ec-wrap {
+  --ea: var(--md-primary-fg-color, #26A69A);
+  --eb: #324AB2;
+  --eg: var(--md-accent-fg-color, #FFB343);
+  --er: #e04c4c;
+  --el: #7cc7ff;
+  --ebg: var(--md-default-bg-color, #fff);
+  --efg: var(--md-default-fg-color, #0f172a);
+  --ebd: rgba(15,23,42,.16);
+  --emut: rgba(15,23,42,.60);
+  --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid;
+  gap: 14px;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--ebd);
+  border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--eb) 8%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 100%, color-mix(in srgb,var(--ea) 5%,transparent), transparent 52%),
+    var(--ebg);
+  color: var(--efg);
+  font-family: var(--ef);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-md-color-scheme="slate"] .ec-wrap {
+  --ebg: var(--md-default-bg-color, #0f172a);
+  --efg: var(--md-default-fg-color, #e2e8f0);
+  --ebd: rgba(226,232,240,.16);
+  --emut: rgba(226,232,240,.60);
+}
+
+.ec-hd { display: grid; gap: 5px; }
+.ec-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.ec-sub { font-size: 14px; color: var(--emut); line-height: 1.5; max-width: 68ch; }
+
+/* TABS */
+.ec-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+
+.ec-tab {
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--ebd);
+  background: transparent;
+  color: var(--emut);
+  font-family: var(--ef);
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s;
+  white-space: nowrap;
+}
+.ec-tab:hover {
+  background: color-mix(in srgb, var(--eb) 8%, var(--ebg));
+  border-color: color-mix(in srgb, var(--eb) 25%, var(--ebd));
+  color: var(--efg);
+}
+.ec-tab.active {
+  background: color-mix(in srgb, var(--eb) 15%, var(--ebg));
+  border-color: color-mix(in srgb, var(--eb) 40%, var(--ebd));
+  color: color-mix(in srgb, var(--eb) 80%, var(--efg));
+}
+
+/* PANELS */
+.ec-panel { min-height: 280px; display: flex; flex-direction: column; gap: 12px; }
+
+/* ─── TAB 1: Los tres niveles ─── */
+.ec-chain {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  flex: 1;
+}
+
+.ec-chain-arr {
+  font-size: 20px;
+  color: var(--emut);
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 0 8px;
+}
+
+.ec-lv {
+  flex: 1;
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid var(--ebd);
+  align-content: start;
+}
+
+.ec-lv--r {
+  border-color: color-mix(in srgb, var(--er) 28%, var(--ebd));
+  background: color-mix(in srgb, var(--er) 4%, var(--ebg));
+}
+.ec-lv--b {
+  border-color: color-mix(in srgb, var(--eb) 28%, var(--ebd));
+  background: color-mix(in srgb, var(--eb) 4%, var(--ebg));
+}
+.ec-lv--a {
+  border-color: color-mix(in srgb, var(--ea) 28%, var(--ebd));
+  background: color-mix(in srgb, var(--ea) 4%, var(--ebg));
+}
+
+.ec-lv-tag {
+  font-size: 9px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+.ec-lv--r .ec-lv-tag { color: color-mix(in srgb, var(--er) 60%, var(--emut)); }
+.ec-lv--b .ec-lv-tag { color: color-mix(in srgb, var(--eb) 60%, var(--emut)); }
+.ec-lv--a .ec-lv-tag { color: color-mix(in srgb, var(--ea) 60%, var(--emut)); }
+
+.ec-lv-name { font-size: 16px; font-weight: 900; line-height: 1.1; }
+.ec-lv-desc { font-size: 12px; color: var(--emut); line-height: 1.45; }
+
+.ec-lv-box {
+  font-family: "SF Mono","JetBrains Mono","Courier New",monospace;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--ebg) 78%, #0f172a 22%);
+  border: 1px solid var(--ebd);
+  text-align: center;
+  line-height: 1.4;
+}
+
+.ec-lv-meta { display: grid; gap: 4px; margin-top: 2px; }
+
+.ec-lv-lose, .ec-lv-keep {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  display: inline-block;
+  width: fit-content;
+}
+.ec-lv-lose {
+  color: color-mix(in srgb, var(--er) 70%, var(--efg));
+  background: color-mix(in srgb, var(--er) 8%, var(--ebg));
+  border: 1px solid color-mix(in srgb, var(--er) 20%, var(--ebd));
+}
+.ec-lv-keep {
+  color: color-mix(in srgb, var(--ea) 70%, var(--efg));
+  background: color-mix(in srgb, var(--ea) 8%, var(--ebg));
+  border: 1px solid color-mix(in srgb, var(--ea) 20%, var(--ebd));
+}
+
+.ec-lv-sys {
+  font-size: 10px;
+  font-family: "SF Mono","JetBrains Mono","Courier New",monospace;
+  color: var(--emut);
+}
+
+.ec-t1-note {
+  font-size: 13px;
+  color: var(--emut);
+  font-style: italic;
+  line-height: 1.5;
+  border-left: 3px solid color-mix(in srgb, var(--eb) 36%, transparent);
+  padding-left: 12px;
+}
+
+/* ─── TAB 2: Cinco capacidades ─── */
+.ec-caps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 8px;
+  flex: 1;
+}
+
+.ec-cap {
+  border: 1px solid var(--ebd);
+  border-radius: 12px;
+  padding: 12px;
+  display: grid;
+  gap: 6px;
+  align-content: start;
+  background: color-mix(in srgb, var(--ebg) 90%, #0f172a 10%);
+}
+
+.ec-cap--a { border-color: color-mix(in srgb, var(--ea) 28%, var(--ebd)); }
+.ec-cap--b { border-color: color-mix(in srgb, var(--eb) 28%, var(--ebd)); }
+.ec-cap--g { border-color: color-mix(in srgb, var(--eg) 28%, var(--ebd)); }
+.ec-cap--l { border-color: color-mix(in srgb, var(--el) 28%, var(--ebd)); }
+.ec-cap--r { border-color: color-mix(in srgb, var(--er) 28%, var(--ebd)); }
+
+.ec-cap-sym {
+  font-size: 22px;
+  line-height: 1;
+}
+.ec-cap--a .ec-cap-sym { color: var(--ea); }
+.ec-cap--b .ec-cap-sym { color: color-mix(in srgb, var(--eb) 70%, var(--efg)); }
+.ec-cap--g .ec-cap-sym { color: var(--eg); }
+.ec-cap--l .ec-cap-sym { color: var(--el); }
+.ec-cap--r .ec-cap-sym { color: var(--er); }
+
+.ec-cap-name { font-size: 14px; font-weight: 900; }
+.ec-cap-body { font-size: 11.5px; color: var(--emut); line-height: 1.45; }
+
+.ec-cap-note {
+  font-size: 10.5px;
+  color: var(--emut);
+  font-style: italic;
+  line-height: 1.35;
+  padding-top: 6px;
+  border-top: 1px solid var(--ebd);
+}
+
+.ec-t2-foot {
+  font-size: 13px;
+  color: var(--emut);
+  font-style: italic;
+  line-height: 1.5;
+  border-left: 3px solid color-mix(in srgb, var(--ea) 36%, transparent);
+  padding-left: 12px;
+}
+
+/* ─── TAB 3: Por qué sigue siendo difícil ─── */
+.ec-diff-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  flex: 1;
+}
+
+.ec-diff {
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid var(--ebd);
+  background: color-mix(in srgb, var(--ebg) 90%, #0f172a 10%);
+  display: grid;
+  gap: 8px;
+  align-content: start;
+}
+
+.ec-diff--r { border-color: color-mix(in srgb, var(--er) 25%, var(--ebd)); }
+.ec-diff--g { border-color: color-mix(in srgb, var(--eg) 25%, var(--ebd)); }
+.ec-diff--l { border-color: color-mix(in srgb, var(--el) 22%, var(--ebd)); }
+.ec-diff--b { border-color: color-mix(in srgb, var(--eb) 25%, var(--ebd)); }
+
+.ec-diff-box {
+  font-family: "SF Mono","JetBrains Mono","Courier New",monospace;
+  font-size: 12px;
+  font-weight: 900;
+  padding: 8px 12px;
+  border-radius: 8px;
+  text-align: center;
+  line-height: 1.3;
+}
+.ec-diff-box--r { color: color-mix(in srgb, var(--er) 75%, var(--efg)); background: color-mix(in srgb, var(--er) 8%, var(--ebg)); border: 1px solid color-mix(in srgb, var(--er) 18%, var(--ebd)); }
+.ec-diff-box--g { color: color-mix(in srgb, var(--eg) 70%, var(--efg)); background: color-mix(in srgb, var(--eg) 8%, var(--ebg)); border: 1px solid color-mix(in srgb, var(--eg) 18%, var(--ebd)); }
+.ec-diff-box--l { color: color-mix(in srgb, var(--el) 75%, var(--efg)); background: color-mix(in srgb, var(--el) 8%, var(--ebg)); border: 1px solid color-mix(in srgb, var(--el) 18%, var(--ebd)); }
+.ec-diff-box--b { color: color-mix(in srgb, var(--el) 75%, var(--efg)); background: color-mix(in srgb, var(--eb) 8%, var(--ebg)); border: 1px solid color-mix(in srgb, var(--eb) 18%, var(--ebd)); }
+
+.ec-diff-name { font-size: 15px; font-weight: 900; }
+.ec-diff-body { font-size: 12px; color: var(--emut); line-height: 1.45; }
+
+@media (max-width: 640px) {
+  .ec-chain { flex-direction: column; }
+  .ec-chain-arr { transform: rotate(90deg); padding: 4px 0; align-self: center; }
+  .ec-caps { grid-template-columns: 1fr 1fr; }
+  .ec-diff-grid { grid-template-columns: 1fr; }
+}
+</style>
+
+<script>
+(function(){
+  document.querySelectorAll('[data-demo="01-espacio-comun"] button[data-tab]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var wrap = btn.closest('[data-demo="01-espacio-comun"]');
+      wrap.querySelectorAll('button[data-tab]').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      wrap.querySelectorAll('[data-panel]').forEach(function(p) { p.style.display = 'none'; });
+      wrap.querySelector('[data-panel="' + btn.dataset.tab + '"]').style.display = '';
+    });
+  });
+})();
+</script>

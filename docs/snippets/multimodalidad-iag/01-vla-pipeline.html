@@ -1,0 +1,533 @@
+<div class="vla-wrap" data-demo="01-vla-pipeline">
+  <div class="vla-hd">
+    <div class="vla-title">Del lenguaje a la acción física</div>
+    <div class="vla-sub">Los modelos VLA convierten observación visual e instrucción textual directamente en comandos motores. El mismo proceso que genera texto genera acción.</div>
+  </div>
+
+  <div class="vla-tabs">
+    <button class="vla-tab active" data-tab="1">Observación</button>
+    <button class="vla-tab" data-tab="2">Codificación conjunta</button>
+    <button class="vla-tab" data-tab="3">Token de acción</button>
+    <button class="vla-tab" data-tab="4">Loop cerrado</button>
+  </div>
+
+  <!-- TAB 1: Observación -->
+  <div class="vla-panel" data-panel="1">
+    <div class="vla-two-col">
+      <div class="vla-input-block vla-input-block--vis">
+        <div class="vla-block-tag">Entrada visual</div>
+        <div class="vla-block-icon">
+          <svg viewBox="0 0 120 90" width="120" height="90">
+            <rect x="4" y="4" width="112" height="82" rx="8" fill="rgba(124,199,255,.06)" stroke="rgba(124,199,255,.18)" stroke-width="1.5"/>
+            <!-- table surface -->
+            <rect x="14" y="54" width="92" height="6" rx="3" fill="rgba(124,199,255,.25)"/>
+            <!-- cup object -->
+            <rect x="42" y="32" width="24" height="22" rx="4" fill="rgba(38,166,154,.35)" stroke="rgba(38,166,154,.6)" stroke-width="1.2"/>
+            <rect x="46" y="26" width="16" height="8" rx="2" fill="rgba(38,166,154,.25)" stroke="rgba(38,166,154,.5)" stroke-width="1"/>
+            <!-- robot arm suggestion -->
+            <line x1="90" y1="60" x2="90" y2="35" stroke="rgba(255,179,67,.5)" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="90" y1="35" x2="76" y2="42" stroke="rgba(255,179,67,.5)" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="90" cy="60" r="3.5" fill="#FFB343" opacity=".8"/>
+            <!-- label -->
+            <text x="60" y="84" text-anchor="middle" font-family="SF Mono,JetBrains Mono,Courier New,monospace" font-size="8" fill="rgba(124,199,255,.7)">entorno real · 30 fps</text>
+          </svg>
+        </div>
+        <div class="vla-block-label">Imagen del entorno en tiempo real</div>
+        <div class="vla-block-desc">El modelo ve la escena: objetos, posiciones, estado actual del brazo. Toda la evidencia espacial está disponible.</div>
+      </div>
+
+      <div class="vla-plus">+</div>
+
+      <div class="vla-input-block vla-input-block--txt">
+        <div class="vla-block-tag">Entrada textual</div>
+        <div class="vla-block-icon vla-block-icon--text">
+          <div class="vla-cmd">"Coloca el vaso encima de la caja azul"</div>
+        </div>
+        <div class="vla-block-label">Instrucción en lenguaje natural</div>
+        <div class="vla-block-desc">El operador describe el objetivo en texto. No hay coordenadas, no hay código de control: solo lenguaje.</div>
+      </div>
+    </div>
+    <div class="vla-note vla-note--neutral">
+      <div class="vla-note-label">Punto de partida</div>
+      En un sistema clásico de robótica, la instrucción y la escena se procesan por pipelines separados. El VLA los recibe como una sola secuencia de entrada.
+    </div>
+  </div>
+
+  <!-- TAB 2: Codificación conjunta -->
+  <div class="vla-panel" data-panel="2" style="display:none">
+    <div class="vla-encoder-flow">
+      <div class="vla-enc-block vla-enc-block--vis">
+        <div class="vla-enc-tag">Encoder visual</div>
+        <div class="vla-enc-name">Tokens visuales</div>
+        <div class="vla-enc-mono">v₁ v₂ … v₂₅₆</div>
+        <div class="vla-enc-desc">La imagen se divide en patches y se proyecta al espacio de tokens. Cada token visual lleva información espacial de su región.</div>
+      </div>
+
+      <div class="vla-enc-join">
+        <div class="vla-enc-join-line"></div>
+        <div class="vla-enc-join-label">secuencia unificada</div>
+        <div class="vla-enc-join-line"></div>
+      </div>
+
+      <div class="vla-enc-block vla-enc-block--unified">
+        <div class="vla-enc-tag">Transformer</div>
+        <div class="vla-enc-name">Representación conjunta</div>
+        <div class="vla-enc-mono">[v₁…v₂₅₆ | "coloca" "el" "vaso" …]</div>
+        <div class="vla-enc-desc">El transformer procesa tokens visuales y textuales juntos. La atención cruza libremente entre modalidades: cada token textual puede atender a cualquier región visual.</div>
+      </div>
+
+      <div class="vla-enc-join">
+        <div class="vla-enc-join-line"></div>
+        <div class="vla-enc-join-label">decodificación</div>
+        <div class="vla-enc-join-line"></div>
+      </div>
+
+      <div class="vla-enc-block vla-enc-block--txt">
+        <div class="vla-enc-tag">Encoder textual</div>
+        <div class="vla-enc-name">Tokens de instrucción</div>
+        <div class="vla-enc-mono">"coloca" "el" "vaso" "encima" …</div>
+        <div class="vla-enc-desc">La instrucción se tokeniza igual que en un LLM estándar. Los tokens de texto llevan la semántica del objetivo.</div>
+      </div>
+    </div>
+    <div class="vla-note vla-note--blue">
+      <div class="vla-note-label">La diferencia clave respecto a un VLM convencional</div>
+      Un VLM convencional genera tokens de texto como salida. El VLA genera el siguiente token del <em>vocabulario de acciones</em>, no del vocabulario de palabras.
+    </div>
+  </div>
+
+  <!-- TAB 3: Token de acción -->
+  <div class="vla-panel" data-panel="3" style="display:none">
+    <div class="vla-action-center">
+      <div class="vla-action-compare">
+        <div class="vla-ac-side vla-ac-side--llm">
+          <div class="vla-ac-tag">LLM convencional</div>
+          <div class="vla-ac-out">
+            <div class="vla-ac-arrow">→</div>
+            <div class="vla-ac-token vla-ac-token--text">"El vaso está cerca de la caja"</div>
+          </div>
+          <div class="vla-ac-label">token de texto</div>
+          <div class="vla-ac-desc">La salida es una descripción. El sistema informa pero no actúa.</div>
+        </div>
+
+        <div class="vla-ac-vs">vs</div>
+
+        <div class="vla-ac-side vla-ac-side--vla">
+          <div class="vla-ac-tag">VLA (RT-2, PaLM-E)</div>
+          <div class="vla-ac-out">
+            <div class="vla-ac-arrow">→</div>
+            <div class="vla-ac-token vla-ac-token--action">
+              <span class="vla-ac-token-label">acción</span>
+              <span class="vla-ac-token-val">Δx: +3.2cm · Δy: −1.1cm · gripper: open</span>
+            </div>
+          </div>
+          <div class="vla-ac-label">token de comando motor</div>
+          <div class="vla-ac-desc">La salida es un vector de movimiento ejecutable directamente por el actuador.</div>
+        </div>
+      </div>
+
+      <div class="vla-action-vocab">
+        <div class="vla-av-label">Vocabulario de acciones (discretizado)</div>
+        <div class="vla-av-tokens">
+          <span class="vla-av-tok">move_x_+1</span>
+          <span class="vla-av-tok">move_x_−1</span>
+          <span class="vla-av-tok">move_z_+1</span>
+          <span class="vla-av-tok">gripper_open</span>
+          <span class="vla-av-tok">gripper_close</span>
+          <span class="vla-av-tok">rotate_yaw</span>
+          <span class="vla-av-tok vla-av-tok--more">+ 250 tokens</span>
+        </div>
+        <div class="vla-av-desc">Los comandos motores se discretizan en un vocabulario finito. El modelo elige el siguiente token de acción igual que elegiría la siguiente palabra.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 4: Loop cerrado -->
+  <div class="vla-panel" data-panel="4" style="display:none">
+    <div class="vla-loop">
+      <div class="vla-loop-step vla-loop-step--obs">
+        <div class="vla-loop-num">1</div>
+        <div class="vla-loop-content">
+          <div class="vla-loop-name">Observar</div>
+          <div class="vla-loop-desc">Nueva imagen del entorno. El estado del mundo ha cambiado respecto al paso anterior.</div>
+        </div>
+      </div>
+      <div class="vla-loop-arr vla-loop-arr--down">↓</div>
+
+      <div class="vla-loop-step vla-loop-step--enc">
+        <div class="vla-loop-num">2</div>
+        <div class="vla-loop-content">
+          <div class="vla-loop-name">Codificar y razonar</div>
+          <div class="vla-loop-desc">Imagen + instrucción + historial de acciones → representación conjunta → predicción del siguiente token de acción.</div>
+        </div>
+      </div>
+      <div class="vla-loop-arr vla-loop-arr--down">↓</div>
+
+      <div class="vla-loop-step vla-loop-step--act">
+        <div class="vla-loop-num">3</div>
+        <div class="vla-loop-content">
+          <div class="vla-loop-name">Actuar</div>
+          <div class="vla-loop-desc">El comando motor se envía al actuador. El brazo se mueve. El entorno cambia.</div>
+        </div>
+      </div>
+      <div class="vla-loop-arr vla-loop-arr--back">↺ vuelve al paso 1</div>
+    </div>
+
+    <div class="vla-loop-key">
+      <div class="vla-lk-item">
+        <div class="vla-lk-val">~10 Hz</div>
+        <div class="vla-lk-desc">frecuencia del loop en RT-2</div>
+      </div>
+      <div class="vla-lk-sep"></div>
+      <div class="vla-lk-item">
+        <div class="vla-lk-val">sin re-entrenamiento</div>
+        <div class="vla-lk-desc">el conocimiento web del LLM transfiere directamente</div>
+      </div>
+      <div class="vla-lk-sep"></div>
+      <div class="vla-lk-item">
+        <div class="vla-lk-val">generalización 0-shot</div>
+        <div class="vla-lk-desc">tareas nuevas descritas en lenguaje natural</div>
+      </div>
+    </div>
+
+    <div class="vla-note vla-note--teal">
+      <div class="vla-note-label">Por qué esto cambia el análisis de riesgo</div>
+      El mismo razonamiento que en un LLM produce una respuesta incorrecta descartable, en un VLA produce una acción física con efectos sobre el entorno. Una alucinación perceptiva en el paso 1 se convierte en un comando motor equivocado en el paso 3.
+    </div>
+  </div>
+</div>
+
+<style>
+.vla-wrap, .vla-wrap * { box-sizing: border-box; }
+
+.vla-wrap {
+  --aa: #26A69A;
+  --ab: #324AB2;
+  --ag: #FFB343;
+  --ar: #e04c4c;
+  --al: #7cc7ff;
+  --abg: var(--md-default-bg-color, #fff);
+  --afg: var(--md-default-fg-color, #0f172a);
+  --abd: rgba(15,23,42,.14);
+  --amut: rgba(15,23,42,.58);
+  --af: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid;
+  gap: 14px;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--abd);
+  border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--al) 5%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 100%, color-mix(in srgb,var(--aa) 5%,transparent), transparent 52%),
+    var(--abg);
+  color: var(--afg);
+  font-family: var(--af);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-md-color-scheme="slate"] .vla-wrap {
+  --abg: var(--md-default-bg-color, #0f172a);
+  --afg: var(--md-default-fg-color, #e2e8f0);
+  --abd: rgba(226,232,240,.14);
+  --amut: rgba(226,232,240,.58);
+}
+
+.vla-hd { display: grid; gap: 5px; }
+.vla-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.vla-sub { font-size: 14px; color: var(--amut); line-height: 1.5; max-width: 68ch; }
+
+.vla-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.vla-tab {
+  padding: 6px 14px; border-radius: 999px; border: 1px solid var(--abd);
+  background: transparent; color: var(--amut);
+  font-family: var(--af); font-size: 12.5px; font-weight: 700;
+  cursor: pointer; transition: background .15s, color .15s, border-color .15s; white-space: nowrap;
+}
+.vla-tab:hover {
+  background: color-mix(in srgb,var(--al) 7%,var(--abg));
+  border-color: color-mix(in srgb,var(--al) 25%,var(--abd));
+  color: var(--afg);
+}
+.vla-tab.active {
+  background: color-mix(in srgb,var(--al) 10%,var(--abg));
+  border-color: color-mix(in srgb,var(--al) 35%,var(--abd));
+  color: color-mix(in srgb,var(--al) 70%,var(--afg));
+}
+
+.vla-panel { display: flex; flex-direction: column; gap: 12px; min-height: 260px; }
+
+/* TAB 1 */
+.vla-two-col { display: flex; gap: 12px; align-items: stretch; }
+.vla-plus {
+  font-size: 22px; font-weight: 900; color: var(--amut);
+  align-self: center; flex-shrink: 0;
+}
+.vla-input-block {
+  flex: 1; padding: 14px; border-radius: 14px; border: 1px solid var(--abd);
+  display: flex; flex-direction: column; gap: 8px; align-items: center; text-align: center;
+}
+.vla-input-block--vis {
+  border-color: color-mix(in srgb,var(--al) 25%,var(--abd));
+  background: color-mix(in srgb,var(--al) 4%,var(--abg));
+}
+.vla-input-block--txt {
+  border-color: color-mix(in srgb,var(--aa) 25%,var(--abd));
+  background: color-mix(in srgb,var(--aa) 4%,var(--abg));
+}
+.vla-block-tag {
+  font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--amut);
+}
+.vla-block-icon { display: flex; align-items: center; justify-content: center; }
+.vla-block-icon--text {
+  width: 100%; padding: 12px;
+  background: color-mix(in srgb,var(--aa) 6%,var(--abg));
+  border: 1px solid color-mix(in srgb,var(--aa) 20%,var(--abd));
+  border-radius: 10px;
+}
+.vla-cmd {
+  font-family: "SF Mono","JetBrains Mono","Courier New",monospace;
+  font-size: 12px; font-weight: 700;
+  color: color-mix(in srgb,var(--aa) 80%,var(--afg));
+  line-height: 1.4;
+}
+.vla-block-label { font-size: 12px; font-weight: 700; }
+.vla-block-desc { font-size: 11.5px; color: var(--amut); line-height: 1.4; }
+
+/* TAB 2 */
+.vla-encoder-flow {
+  display: flex; align-items: center; gap: 0; flex: 1;
+}
+.vla-enc-block {
+  flex: 1; padding: 12px; border-radius: 12px; border: 1px solid var(--abd);
+  display: grid; gap: 5px;
+}
+.vla-enc-block--vis {
+  border-color: color-mix(in srgb,var(--al) 25%,var(--abd));
+  background: color-mix(in srgb,var(--al) 5%,var(--abg));
+}
+.vla-enc-block--txt {
+  border-color: color-mix(in srgb,var(--aa) 22%,var(--abd));
+  background: color-mix(in srgb,var(--aa) 4%,var(--abg));
+}
+.vla-enc-block--unified {
+  border-color: color-mix(in srgb,var(--ab) 25%,var(--abd));
+  background: color-mix(in srgb,var(--ab) 5%,var(--abg));
+}
+.vla-enc-tag {
+  font-size: 9.5px; font-weight: 900; text-transform: uppercase;
+  letter-spacing: .07em; color: var(--amut);
+}
+.vla-enc-name { font-size: 13px; font-weight: 900; line-height: 1.2; }
+.vla-enc-mono {
+  font-family: "SF Mono","JetBrains Mono","Courier New",monospace;
+  font-size: 10.5px; color: color-mix(in srgb,var(--al) 70%,var(--afg));
+  background: color-mix(in srgb,var(--al) 5%,var(--abg));
+  padding: 4px 7px; border-radius: 6px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.vla-enc-desc { font-size: 11px; color: var(--amut); line-height: 1.4; }
+
+.vla-enc-join {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 4px; padding: 0 8px; flex-shrink: 0;
+}
+.vla-enc-join-line { width: 1px; height: 24px; background: var(--abd); }
+.vla-enc-join-label {
+  font-size: 9px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .06em; color: var(--amut); white-space: nowrap;
+  writing-mode: vertical-rl; text-orientation: mixed;
+}
+
+/* TAB 3 */
+.vla-action-center { display: flex; flex-direction: column; gap: 14px; flex: 1; }
+.vla-action-compare { display: flex; gap: 12px; align-items: stretch; }
+.vla-ac-vs {
+  font-size: 14px; font-weight: 900; color: var(--amut);
+  align-self: center; flex-shrink: 0;
+}
+.vla-ac-side {
+  flex: 1; padding: 12px; border-radius: 14px; border: 1px solid var(--abd);
+  display: flex; flex-direction: column; gap: 8px;
+}
+.vla-ac-side--llm {
+  border-color: color-mix(in srgb,var(--amut) 25%,var(--abd));
+  background: color-mix(in srgb,var(--abg) 90%,#0f172a 10%);
+  opacity: .8;
+}
+.vla-ac-side--vla {
+  border-color: color-mix(in srgb,var(--aa) 30%,var(--abd));
+  background: color-mix(in srgb,var(--aa) 5%,var(--abg));
+}
+.vla-ac-tag {
+  font-size: 9.5px; font-weight: 900; text-transform: uppercase;
+  letter-spacing: .07em; color: var(--amut);
+}
+.vla-ac-out { display: flex; align-items: center; gap: 8px; }
+.vla-ac-arrow { font-size: 18px; font-weight: 900; color: var(--amut); flex-shrink: 0; }
+.vla-ac-token {
+  padding: 8px 10px; border-radius: 8px;
+  font-size: 12px; font-weight: 700; flex: 1;
+}
+.vla-ac-token--text {
+  background: color-mix(in srgb,var(--amut) 8%,var(--abg));
+  border: 1px solid var(--abd);
+  color: var(--amut);
+  font-style: italic;
+}
+.vla-ac-token--action {
+  background: color-mix(in srgb,var(--aa) 8%,var(--abg));
+  border: 1px solid color-mix(in srgb,var(--aa) 28%,var(--abd));
+  display: flex; flex-direction: column; gap: 3px;
+}
+.vla-ac-token-label {
+  font-size: 8.5px; font-weight: 900; text-transform: uppercase;
+  letter-spacing: .07em; color: color-mix(in srgb,var(--aa) 65%,var(--amut));
+}
+.vla-ac-token-val {
+  font-family: "SF Mono","JetBrains Mono","Courier New",monospace;
+  font-size: 11px; font-weight: 700;
+  color: color-mix(in srgb,var(--aa) 80%,var(--afg));
+}
+.vla-ac-label { font-size: 10.5px; color: var(--amut); font-weight: 700; }
+.vla-ac-desc { font-size: 11.5px; color: var(--amut); line-height: 1.4; }
+
+.vla-action-vocab {
+  padding: 12px 14px; border-radius: 12px;
+  border: 1px solid color-mix(in srgb,var(--ab) 20%,var(--abd));
+  background: color-mix(in srgb,var(--ab) 4%,var(--abg));
+  display: grid; gap: 8px;
+}
+.vla-av-label {
+  font-size: 10px; font-weight: 900; text-transform: uppercase;
+  letter-spacing: .07em; color: color-mix(in srgb,var(--ab) 55%,var(--amut));
+}
+.vla-av-tokens { display: flex; flex-wrap: wrap; gap: 5px; }
+.vla-av-tok {
+  font-family: "SF Mono","JetBrains Mono","Courier New",monospace;
+  font-size: 10.5px; font-weight: 700;
+  padding: 3px 8px; border-radius: 6px;
+  background: color-mix(in srgb,var(--ab) 8%,var(--abg));
+  border: 1px solid color-mix(in srgb,var(--ab) 18%,var(--abd));
+  color: color-mix(in srgb,var(--ab) 70%,var(--afg));
+}
+.vla-av-tok--more {
+  background: transparent; border-color: var(--abd);
+  color: var(--amut); font-style: italic;
+}
+.vla-av-desc { font-size: 11.5px; color: var(--amut); line-height: 1.4; }
+
+/* TAB 4 */
+.vla-loop { display: flex; flex-direction: column; gap: 0; flex: 1; }
+.vla-loop-step {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 10px 14px; border-radius: 12px; border: 1px solid var(--abd);
+}
+.vla-loop-step--obs {
+  border-color: color-mix(in srgb,var(--al) 25%,var(--abd));
+  background: color-mix(in srgb,var(--al) 5%,var(--abg));
+}
+.vla-loop-step--enc {
+  border-color: color-mix(in srgb,var(--ab) 22%,var(--abd));
+  background: color-mix(in srgb,var(--ab) 4%,var(--abg));
+}
+.vla-loop-step--act {
+  border-color: color-mix(in srgb,var(--aa) 25%,var(--abd));
+  background: color-mix(in srgb,var(--aa) 5%,var(--abg));
+}
+.vla-loop-num {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: color-mix(in srgb,var(--al) 15%,var(--abg));
+  border: 1.5px solid color-mix(in srgb,var(--al) 35%,var(--abd));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 900; flex-shrink: 0;
+  color: color-mix(in srgb,var(--al) 80%,var(--afg));
+}
+.vla-loop-step--enc .vla-loop-num {
+  background: color-mix(in srgb,var(--ab) 12%,var(--abg));
+  border-color: color-mix(in srgb,var(--ab) 30%,var(--abd));
+  color: color-mix(in srgb,var(--ab) 80%,var(--afg));
+}
+.vla-loop-step--act .vla-loop-num {
+  background: color-mix(in srgb,var(--aa) 14%,var(--abg));
+  border-color: color-mix(in srgb,var(--aa) 32%,var(--abd));
+  color: color-mix(in srgb,var(--aa) 80%,var(--afg));
+}
+.vla-loop-content { display: grid; gap: 4px; }
+.vla-loop-name { font-size: 13px; font-weight: 900; }
+.vla-loop-desc { font-size: 11.5px; color: var(--amut); line-height: 1.4; }
+
+.vla-loop-arr {
+  text-align: center; font-size: 14px; font-weight: 900; color: var(--amut);
+  padding: 3px 0;
+}
+.vla-loop-arr--back {
+  font-size: 12px;
+  color: color-mix(in srgb,var(--aa) 60%,var(--amut));
+  font-style: italic;
+  padding: 6px 0 0;
+}
+
+.vla-loop-key {
+  display: flex; gap: 0; border: 1px solid var(--abd); border-radius: 12px; overflow: hidden;
+}
+.vla-lk-item {
+  flex: 1; padding: 10px 12px; display: grid; gap: 3px; text-align: center;
+}
+.vla-lk-sep { width: 1px; background: var(--abd); flex-shrink: 0; }
+.vla-lk-val {
+  font-family: "SF Mono","JetBrains Mono","Courier New",monospace;
+  font-size: 12px; font-weight: 900;
+  color: color-mix(in srgb,var(--aa) 75%,var(--afg));
+}
+.vla-lk-desc { font-size: 10.5px; color: var(--amut); line-height: 1.3; }
+
+/* NOTE */
+.vla-note {
+  padding: 10px 14px; border-radius: 10px; border: 1px solid;
+  font-size: 12.5px; line-height: 1.5; color: var(--afg);
+  display: grid; gap: 4px;
+}
+.vla-note--neutral {
+  border-color: color-mix(in srgb,var(--amut) 18%,var(--abd));
+  background: color-mix(in srgb,var(--abg) 90%,#0f172a 10%);
+}
+.vla-note--blue {
+  border-color: color-mix(in srgb,var(--ab) 22%,var(--abd));
+  background: color-mix(in srgb,var(--ab) 5%,var(--abg));
+}
+.vla-note--teal {
+  border-color: color-mix(in srgb,var(--aa) 25%,var(--abd));
+  background: color-mix(in srgb,var(--aa) 5%,var(--abg));
+}
+.vla-note-label {
+  font-size: 9.5px; font-weight: 900; text-transform: uppercase;
+  letter-spacing: .07em; color: var(--amut);
+}
+
+@media (max-width: 640px) {
+  .vla-two-col { flex-direction: column; }
+  .vla-plus { align-self: center; }
+  .vla-action-compare { flex-direction: column; }
+  .vla-ac-vs { align-self: center; }
+  .vla-encoder-flow { flex-direction: column; }
+  .vla-enc-join { flex-direction: row; writing-mode: initial; }
+  .vla-enc-join-line { width: 24px; height: 1px; }
+  .vla-enc-join-label { writing-mode: initial; }
+}
+</style>
+
+<script>
+(function(){
+  document.querySelectorAll('[data-demo="01-vla-pipeline"] button[data-tab]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var wrap = btn.closest('[data-demo="01-vla-pipeline"]');
+      wrap.querySelectorAll('button[data-tab]').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      wrap.querySelectorAll('[data-panel]').forEach(function(p){ p.style.display = 'none'; });
+      wrap.querySelector('[data-panel="' + btn.dataset.tab + '"]').style.display = '';
+    });
+  });
+})();
+</script>
