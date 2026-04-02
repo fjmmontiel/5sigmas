@@ -1,0 +1,598 @@
+<div class="ib-wrap" data-demo="02-imagebind-transitividad">
+  <style>
+    .ib-wrap {
+      --ea: #26A69A;
+      --eb: #324AB2;
+      --eg: #FFB343;
+      --el: #7cc7ff;
+      --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+      --bg: #0b1220;
+      --bg2: rgba(255,255,255,.04);
+      --border: rgba(255,255,255,.10);
+      font-family: var(--ef);
+      background: var(--bg);
+      color: rgba(255,255,255,.90);
+      border-radius: 14px;
+      padding: 0 0 24px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .ib-hd {
+      padding: 28px 36px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .ib-title {
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -.01em;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .ib-sub {
+      font-size: 13px;
+      line-height: 1.55;
+      color: rgba(255,255,255,.52);
+    }
+
+    /* Tabs */
+    .ib-tabs {
+      display: flex;
+      gap: 8px;
+      padding: 20px 36px 0;
+      flex-wrap: wrap;
+    }
+    .ib-tab {
+      font-family: var(--ef);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: rgba(255,255,255,.50);
+      cursor: pointer;
+      transition: all .18s ease;
+    }
+    .ib-tab.active {
+      background: rgba(124,199,255,.12);
+      border-color: rgba(124,199,255,.35);
+      color: var(--el);
+    }
+    .ib-tab:hover:not(.active) {
+      border-color: rgba(255,255,255,.22);
+      color: rgba(255,255,255,.75);
+    }
+
+    /* Panels */
+    .ib-panel {
+      display: none;
+      padding: 24px 36px 8px;
+    }
+    .ib-panel.active { display: block; }
+
+    /* ── TAB 1 ── */
+    .ib-pair-diagram {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      margin: 24px auto 28px;
+      max-width: 680px;
+    }
+    .ib-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .ib-node-circle {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .01em;
+    }
+    .ib-node-circle--text {
+      background: rgba(50,74,178,.18);
+      border: 2px solid #324AB2;
+      color: var(--el);
+    }
+    .ib-node-circle--image {
+      background: rgba(255,179,67,.15);
+      border: 2px solid var(--eg);
+      color: var(--eg);
+    }
+    .ib-node-circle--grey {
+      background: rgba(255,255,255,.05);
+      border: 2px solid rgba(255,255,255,.14);
+      color: rgba(255,255,255,.28);
+      font-size: 11px;
+    }
+    .ib-node-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .ib-node--active .ib-node-label { color: rgba(255,255,255,.80); }
+    .ib-node--grey .ib-node-label  { color: rgba(255,255,255,.25); }
+
+    .ib-connector {
+      flex: 0 0 48px;
+      height: 2px;
+      background: #26A69A;
+      position: relative;
+      margin-bottom: 20px;
+    }
+    .ib-connector::after {
+      content: "par directo";
+      position: absolute;
+      top: -18px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--ea);
+      white-space: nowrap;
+    }
+
+    .ib-t1-grid {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+    .ib-t1-grey-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .ib-note {
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.09);
+      border-radius: 10px;
+      padding: 14px 18px;
+      font-size: 12.5px;
+      line-height: 1.6;
+      color: rgba(255,255,255,.58);
+      margin-top: 4px;
+    }
+    .ib-note strong { color: rgba(255,255,255,.80); font-weight: 600; }
+
+    /* ── TAB 2 ── */
+    .ib-hub-wrap {
+      position: relative;
+      width: 340px;
+      height: 340px;
+      margin: 20px auto 8px;
+    }
+    .ib-hub-center {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: rgba(255,179,67,.18);
+      border: 2.5px solid var(--eg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      color: var(--eg);
+      text-align: center;
+      line-height: 1.2;
+      z-index: 2;
+    }
+    .ib-hub-spoke {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+    .ib-spoke-node {
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: .03em;
+      text-transform: uppercase;
+      text-align: center;
+      line-height: 1.2;
+    }
+    .ib-spoke-label {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.38);
+      text-align: center;
+      white-space: nowrap;
+    }
+    /* Spoke colors */
+    .ib-spoke--texto    { background: rgba(50,74,178,.18);  border: 1.5px solid #324AB2; color: var(--el); }
+    .ib-spoke--audio    { background: rgba(38,166,154,.15); border: 1.5px solid var(--ea); color: var(--ea); }
+    .ib-spoke--prof     { background: rgba(100,130,230,.15);border: 1.5px solid #6482e6; color: #a0b4ff; }
+    .ib-spoke--termico  { background: rgba(239,100,68,.15); border: 1.5px solid #ef6444; color: #ff9980; }
+    .ib-spoke--imu      { background: rgba(180,130,255,.15);border: 1.5px solid #b482ff; color: #d4b4ff; }
+    .ib-spoke--video    { background: rgba(50,180,140,.15); border: 1.5px solid #32b48c; color: #7de8c8; }
+
+    .ib-transit-note {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(50,74,178,.08);
+      border: 1px solid rgba(50,74,178,.22);
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin: 0 0 12px;
+    }
+    .ib-transit-note svg { flex-shrink: 0; }
+    .ib-transit-note span {
+      font-size: 12.5px;
+      line-height: 1.55;
+      color: rgba(255,255,255,.60);
+    }
+    .ib-transit-note strong { color: var(--el); }
+
+    .ib-t2-caption {
+      font-size: 12.5px;
+      line-height: 1.6;
+      color: rgba(255,255,255,.52);
+      text-align: center;
+      padding: 0 12px;
+      margin-bottom: 4px;
+    }
+
+    /* ── TAB 3 ── */
+    .ib-t3-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 20px 0 20px;
+    }
+    .ib-col-card {
+      border-radius: 12px;
+      padding: 20px 20px 18px;
+    }
+    .ib-col-card--left {
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.09);
+    }
+    .ib-col-card--right {
+      background: rgba(38,166,154,.06);
+      border: 1px solid rgba(38,166,154,.22);
+    }
+    .ib-col-tag {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .ib-col-tag--left  { color: rgba(255,255,255,.35); }
+    .ib-col-tag--right { color: var(--ea); }
+    .ib-col-title {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 14px;
+      line-height: 1.3;
+    }
+    .ib-col-card--left .ib-col-title  { color: rgba(255,255,255,.75); }
+    .ib-col-card--right .ib-col-title { color: #fff; }
+    .ib-col-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .ib-col-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 5px;
+    }
+    .ib-col-dot--left  { background: rgba(255,255,255,.25); }
+    .ib-col-dot--right { background: var(--ea); }
+    .ib-col-text {
+      font-size: 12.5px;
+      line-height: 1.55;
+    }
+    .ib-col-card--left  .ib-col-text { color: rgba(255,255,255,.52); }
+    .ib-col-card--right .ib-col-text { color: rgba(255,255,255,.72); }
+
+    .ib-formula-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255,255,255,.07);
+    }
+    .ib-formula-box {
+      flex: 1;
+      background: rgba(255,255,255,.04);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-family: "SF Mono","JetBrains Mono","Courier New",monospace;
+      font-size: 13px;
+      font-weight: 700;
+      text-align: center;
+    }
+    .ib-formula-box--left  { color: rgba(255,255,255,.40); border: 1px solid rgba(255,255,255,.08); }
+    .ib-formula-box--right { color: var(--ea); border: 1px solid rgba(38,166,154,.25); }
+    .ib-formula-label {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.30);
+      margin-bottom: 4px;
+      text-align: center;
+    }
+
+    .ib-modal-count {
+      display: flex;
+      gap: 4px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    .ib-modal-pill {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 999px;
+    }
+    .ib-modal-pill--grey  { background: rgba(255,255,255,.07); color: rgba(255,255,255,.35); }
+    .ib-modal-pill--teal  { background: rgba(38,166,154,.12);  color: var(--ea); border: 1px solid rgba(38,166,154,.25); }
+    .ib-modal-pill--blue  { background: rgba(124,199,255,.10); color: var(--el); border: 1px solid rgba(124,199,255,.22); }
+
+    .ib-t3-footnote {
+      background: rgba(255,179,67,.05);
+      border: 1px solid rgba(255,179,67,.14);
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 12px;
+      line-height: 1.6;
+      color: rgba(255,255,255,.52);
+    }
+    .ib-t3-footnote strong { color: var(--eg); }
+  </style>
+
+  <div class="ib-hd">
+    <div class="ib-title">Alineamiento por transitividad — de par imagen-texto a seis modalidades</div>
+    <div class="ib-sub">Cómo ImageBind aprende un espacio compartido sin necesitar pares directos entre modalidades no visuales.</div>
+  </div>
+
+  <div class="ib-tabs">
+    <button class="ib-tab active" data-tab="1">El problema del par imagen-texto</button>
+    <button class="ib-tab" data-tab="2">La imagen como ancla</button>
+    <button class="ib-tab" data-tab="3">Qué cambia con alineamiento nativo</button>
+  </div>
+
+  <!-- TAB 1 -->
+  <div class="ib-panel active" data-panel="1">
+    <div class="ib-pair-diagram">
+      <div class="ib-node ib-node--active">
+        <div class="ib-node-circle ib-node-circle--text">TEXTO</div>
+        <div class="ib-node-label" style="color:var(--el);">Texto</div>
+      </div>
+      <div class="ib-connector"></div>
+      <div class="ib-node ib-node--active">
+        <div class="ib-node-circle ib-node-circle--image">IMAGEN</div>
+        <div class="ib-node-label" style="color:var(--eg);">Imagen</div>
+      </div>
+    </div>
+
+    <div class="ib-t1-grey-group" style="margin-bottom:24px;">
+      <div class="ib-node ib-node--grey">
+        <div class="ib-node-circle ib-node-circle--grey">AUDIO</div>
+        <div class="ib-node-label">Audio</div>
+      </div>
+      <div class="ib-node ib-node--grey">
+        <div class="ib-node-circle ib-node-circle--grey">PROF</div>
+        <div class="ib-node-label">Profundidad</div>
+      </div>
+      <div class="ib-node ib-node--grey">
+        <div class="ib-node-circle ib-node-circle--grey">TERM</div>
+        <div class="ib-node-label">Térmico</div>
+      </div>
+      <div class="ib-node ib-node--grey">
+        <div class="ib-node-circle ib-node-circle--grey">IMU</div>
+        <div class="ib-node-label">IMU</div>
+      </div>
+      <div class="ib-node ib-node--grey">
+        <div class="ib-node-circle ib-node-circle--grey">VÍDEO</div>
+        <div class="ib-node-label">Vídeo</div>
+      </div>
+    </div>
+
+    <div class="ib-note">
+      <strong>Millones de pares naturales</strong> existen para texto&nbsp;+&nbsp;imagen: pies de foto, descripciones de productos, artículos con imágenes. Para <strong>audio-texto</strong>: escasos y caros de etiquetar. Para <strong>profundidad-layout</strong>: requieren sensores especializados y trabajo humano. Las modalidades fuera del par texto-imagen quedan sin conexión en el espacio de representación.
+    </div>
+  </div>
+
+  <!-- TAB 2 -->
+  <div class="ib-panel" data-panel="2">
+    <!-- Hub-and-spoke SVG diagram -->
+    <div class="ib-hub-wrap">
+      <svg style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;" viewBox="0 0 340 340" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Spokes — solid lines image to each modality -->
+        <line x1="170" y1="170" x2="170" y2="46"  stroke="#FFB343" stroke-width="1.5" opacity=".55"/>
+        <line x1="170" y1="170" x2="294" y2="108" stroke="#FFB343" stroke-width="1.5" opacity=".55"/>
+        <line x1="170" y1="170" x2="294" y2="232" stroke="#FFB343" stroke-width="1.5" opacity=".55"/>
+        <line x1="170" y1="170" x2="170" y2="294" stroke="#FFB343" stroke-width="1.5" opacity=".55"/>
+        <line x1="170" y1="170" x2="46"  y2="232" stroke="#FFB343" stroke-width="1.5" opacity=".55"/>
+        <line x1="170" y1="170" x2="46"  y2="108" stroke="#FFB343" stroke-width="1.5" opacity=".55"/>
+        <!-- Transitivity arc: dashed line between two non-image nodes -->
+        <path d="M 170 46 Q 320 46 294 108" stroke="#7cc7ff" stroke-width="1.2" stroke-dasharray="5,3" opacity=".45"/>
+        <!-- Transitivity label -->
+        <text x="270" y="62" font-size="8" fill="#7cc7ff" font-family="'SF Mono','JetBrains Mono','Courier New',monospace" text-anchor="middle" opacity=".70">transitividad</text>
+        <!-- "par de entrenamiento" labels on spokes -->
+        <text x="170" y="102" font-size="7.5" fill="#FFB343" font-family="'SF Mono','JetBrains Mono','Courier New',monospace" text-anchor="middle" opacity=".55">par</text>
+        <text x="244" y="131" font-size="7.5" fill="#FFB343" font-family="'SF Mono','JetBrains Mono','Courier New',monospace" text-anchor="middle" opacity=".55">par</text>
+        <text x="244" y="217" font-size="7.5" fill="#FFB343" font-family="'SF Mono','JetBrains Mono','Courier New',monospace" text-anchor="middle" opacity=".55">par</text>
+        <text x="170" y="258" font-size="7.5" fill="#FFB343" font-family="'SF Mono','JetBrains Mono','Courier New',monospace" text-anchor="middle" opacity=".55">par</text>
+        <text x="96"  y="217" font-size="7.5" fill="#FFB343" font-family="'SF Mono','JetBrains Mono','Courier New',monospace" text-anchor="middle" opacity=".55">par</text>
+        <text x="96"  y="131" font-size="7.5" fill="#FFB343" font-family="'SF Mono','JetBrains Mono','Courier New',monospace" text-anchor="middle" opacity=".55">par</text>
+      </svg>
+
+      <!-- Center node -->
+      <div class="ib-hub-center">IMAGEN<br><span style="font-size:8px;font-weight:600;color:rgba(255,179,67,.65);">ancla</span></div>
+
+      <!-- Spoke nodes positioned around circle (r≈124px from center 170,170) -->
+      <!-- Top: TEXTO @ 170,46 -->
+      <div class="ib-hub-spoke" style="top:10px;left:50%;transform:translateX(-50%);">
+        <div class="ib-spoke-node ib-spoke--texto">TEXTO</div>
+        <div class="ib-spoke-label">Texto</div>
+      </div>
+      <!-- Top-right: AUDIO @ 294,108 -->
+      <div class="ib-hub-spoke" style="top:68px;right:8px;align-items:center;">
+        <div class="ib-spoke-node ib-spoke--audio">AUDIO</div>
+        <div class="ib-spoke-label">Audio</div>
+      </div>
+      <!-- Bottom-right: PROF @ 294,232 -->
+      <div class="ib-hub-spoke" style="bottom:68px;right:8px;align-items:center;">
+        <div class="ib-spoke-node ib-spoke--prof">PROF</div>
+        <div class="ib-spoke-label">Profundidad</div>
+      </div>
+      <!-- Bottom: TÉRMICO @ 170,294 -->
+      <div class="ib-hub-spoke" style="bottom:10px;left:50%;transform:translateX(-50%);">
+        <div class="ib-spoke-node ib-spoke--termico">TERM</div>
+        <div class="ib-spoke-label">Térmico</div>
+      </div>
+      <!-- Bottom-left: IMU @ 46,232 -->
+      <div class="ib-hub-spoke" style="bottom:68px;left:8px;align-items:center;">
+        <div class="ib-spoke-node ib-spoke--imu">IMU</div>
+        <div class="ib-spoke-label">IMU</div>
+      </div>
+      <!-- Top-left: VIDEO @ 46,108 -->
+      <div class="ib-hub-spoke" style="top:68px;left:8px;align-items:center;">
+        <div class="ib-spoke-node ib-spoke--video">VÍDEO</div>
+        <div class="ib-spoke-label">Vídeo</div>
+      </div>
+    </div>
+
+    <div class="ib-transit-note">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="9" cy="9" r="8" stroke="#7cc7ff" stroke-width="1.5" opacity=".6"/>
+        <line x1="5" y1="9" x2="13" y2="9" stroke="#7cc7ff" stroke-width="1.5" stroke-dasharray="3,2"/>
+      </svg>
+      <span><strong>Alineamiento por transitividad</strong> (línea punteada): ImageBind (2023) aprende el espacio usando solo los 5 tipos de pares que incluyen imagen. El modelo nunca ve un par audio↔texto directo, pero como ambos están alineados con imagen, quedan alineados entre sí.</span>
+    </div>
+
+    <div class="ib-t2-caption">
+      Una consulta textual puede recuperar audio. Una imagen puede recuperar profundidad o térmico. Todas las modalidades quedan conectadas sin haberlo entrenado explícitamente.
+    </div>
+  </div>
+
+  <!-- TAB 3 -->
+  <div class="ib-panel" data-panel="3">
+    <div class="ib-t3-cols">
+      <div class="ib-col-card ib-col-card--left">
+        <div class="ib-col-tag ib-col-tag--left">CLIP / Par imagen-texto</div>
+        <div class="ib-col-title">Alineamiento binario</div>
+
+        <div class="ib-col-row">
+          <div class="ib-col-dot ib-col-dot--left"></div>
+          <div class="ib-col-text">Solo recuperación imagen↔texto</div>
+        </div>
+        <div class="ib-col-row">
+          <div class="ib-col-dot ib-col-dot--left"></div>
+          <div class="ib-col-text">N modalidades → N(N−1)/2 pares para conectarlas todas</div>
+        </div>
+        <div class="ib-col-row">
+          <div class="ib-col-dot ib-col-dot--left"></div>
+          <div class="ib-col-text">2 modalidades conectadas</div>
+        </div>
+
+        <div class="ib-modal-count">
+          <div class="ib-modal-pill ib-modal-pill--grey">TEXTO</div>
+          <div class="ib-modal-pill ib-modal-pill--grey">IMAGEN</div>
+        </div>
+
+        <div style="margin-top:12px;">
+          <div class="ib-formula-label">pares necesarios para N=6</div>
+          <div class="ib-formula-box ib-formula-box--left">N(N−1)/2 = 15</div>
+        </div>
+      </div>
+
+      <div class="ib-col-card ib-col-card--right">
+        <div class="ib-col-tag ib-col-tag--right">ImageBind / Gemini Embedding 2</div>
+        <div class="ib-col-title">Alineamiento nativo multimodal</div>
+
+        <div class="ib-col-row">
+          <div class="ib-col-dot ib-col-dot--right"></div>
+          <div class="ib-col-text">Recuperación cruzada entre cualquier par de modalidades</div>
+        </div>
+        <div class="ib-col-row">
+          <div class="ib-col-dot ib-col-dot--right"></div>
+          <div class="ib-col-text">N modalidades → N pares (todos a través del ancla)</div>
+        </div>
+        <div class="ib-col-row">
+          <div class="ib-col-dot ib-col-dot--right"></div>
+          <div class="ib-col-text">6+ modalidades conectadas</div>
+        </div>
+        <div class="ib-col-row">
+          <div class="ib-col-dot ib-col-dot--right"></div>
+          <div class="ib-col-text" style="color:rgba(255,255,255,.60);font-size:11.5px;">Gemini Embedding 2 (2026): texto, imagen, vídeo, audio y documentos como primitiva nativa</div>
+        </div>
+
+        <div class="ib-modal-count">
+          <div class="ib-modal-pill ib-modal-pill--teal">TEXTO</div>
+          <div class="ib-modal-pill ib-modal-pill--teal">IMAGEN</div>
+          <div class="ib-modal-pill ib-modal-pill--teal">AUDIO</div>
+          <div class="ib-modal-pill ib-modal-pill--teal">PROF</div>
+          <div class="ib-modal-pill ib-modal-pill--blue">VÍDEO</div>
+          <div class="ib-modal-pill ib-modal-pill--blue">IMU</div>
+        </div>
+
+        <div style="margin-top:12px;">
+          <div class="ib-formula-label">pares necesarios para N=6</div>
+          <div class="ib-formula-box ib-formula-box--right">N = 6</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ib-t3-footnote">
+      <strong>Nota:</strong> La asimetría en disponibilidad de datos explica la asimetría de capacidades. Los modelos comprenden imágenes mejor que audio, y audio mejor que documentos con layout complejo, porque los pares de entrenamiento de alta calidad son mucho más abundantes para imagen que para las otras modalidades.
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      var wrap = document.querySelector('[data-demo="02-imagebind-transitividad"]');
+      if (!wrap) return;
+      var tabs   = wrap.querySelectorAll('.ib-tab');
+      var panels = wrap.querySelectorAll('.ib-panel');
+      tabs.forEach(function(tab) {
+        tab.addEventListener('click', function() {
+          var t = this.dataset.tab;
+          tabs.forEach(function(tb) { tb.classList.remove('active'); });
+          panels.forEach(function(p)  { p.classList.remove('active'); });
+          this.classList.add('active');
+          wrap.querySelector('.ib-panel[data-panel="' + t + '"]').classList.add('active');
+        });
+      });
+    })();
+  </script>
+</div>

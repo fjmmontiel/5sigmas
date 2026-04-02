@@ -1,0 +1,875 @@
+<div class="da-wrap" data-demo="02-datos-alineamiento">
+  <div class="da-hd">
+    <div class="da-title">Progresión del entrenamiento multimodal</div>
+    <div class="da-sub">Tres etapas con requisitos de datos distintos. Los fallos de cada etapa se propagan a las siguientes: datos ruidosos en la base producen representaciones frágiles que el ajuste fino no puede corregir.</div>
+  </div>
+
+  <div class="da-tabs">
+    <button class="da-tab active" data-tab="1">Etapa 1 — Preentrenamiento</button>
+    <button class="da-tab" data-tab="2">Etapa 2 — Ajuste fino</button>
+    <button class="da-tab" data-tab="3">Etapa 3 — RLHF</button>
+  </div>
+
+  <!-- TAB 1: Preentrenamiento con pares -->
+  <div class="da-panel" data-panel="1">
+    <div class="da-stage-badge da-stage-badge--blue">Preentrenamiento con pares imagen-texto</div>
+    <div class="da-p1-layout">
+      <div class="da-contrastive">
+        <div class="da-ct-title">Aprendizaje contrastivo</div>
+        <div class="da-ct-pairs">
+          <div class="da-ct-pair da-ct-pair--ok">
+            <div class="da-ct-pair-hd">
+              <span class="da-ct-dot da-ct-dot--img">I₁</span>
+              <span class="da-ct-sep">·</span>
+              <span class="da-ct-dot da-ct-dot--txt">T₁</span>
+              <span class="da-ct-badge da-ct-badge--ok">par correcto</span>
+            </div>
+            <div class="da-ct-distance da-ct-distance--close">
+              <svg viewBox="0 0 120 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="24" cy="14" r="8" fill="rgba(255,179,67,.15)" stroke="#FFB343" stroke-width="1.5"/>
+                <text x="24" y="18" font-size="9" fill="#FFB343" font-family="'Courier New',monospace" text-anchor="middle">I₁</text>
+                <circle cx="96" cy="14" r="8" fill="rgba(50,74,178,.15)" stroke="#324AB2" stroke-width="1.5"/>
+                <text x="96" y="18" font-size="9" fill="#7cc7ff" font-family="'Courier New',monospace" text-anchor="middle">T₁</text>
+                <line x1="32" y1="14" x2="88" y2="14" stroke="#26A69A" stroke-width="1.5" stroke-dasharray="3,2"/>
+                <text x="60" y="10" font-size="8" fill="#26A69A" font-family="'Courier New',monospace" text-anchor="middle">↔ cerca</text>
+              </svg>
+            </div>
+            <div class="da-ct-action da-ct-action--ok">sim(v<sub>I</sub>, v<sub>T</sub>) ↑ — acercar en el espacio</div>
+          </div>
+
+          <div class="da-ct-pair da-ct-pair--bad">
+            <div class="da-ct-pair-hd">
+              <span class="da-ct-dot da-ct-dot--img">I₁</span>
+              <span class="da-ct-sep">·</span>
+              <span class="da-ct-dot da-ct-dot--txt-bad">T₂</span>
+              <span class="da-ct-badge da-ct-badge--bad">par incorrecto</span>
+            </div>
+            <div class="da-ct-distance da-ct-distance--far">
+              <svg viewBox="0 0 120 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="14" cy="14" r="8" fill="rgba(255,179,67,.15)" stroke="#FFB343" stroke-width="1.5"/>
+                <text x="14" y="18" font-size="9" fill="#FFB343" font-family="'Courier New',monospace" text-anchor="middle">I₁</text>
+                <circle cx="106" cy="14" r="8" fill="rgba(224,76,76,.12)" stroke="#e04c4c" stroke-width="1.5"/>
+                <text x="106" y="18" font-size="9" fill="#e04c4c" font-family="'Courier New',monospace" text-anchor="middle">T₂</text>
+                <line x1="22" y1="14" x2="98" y2="14" stroke="#e04c4c" stroke-width="1.5" stroke-dasharray="4,3" opacity=".6"/>
+                <text x="60" y="10" font-size="8" fill="#e04c4c" font-family="'Courier New',monospace" text-anchor="middle">↔ lejos</text>
+              </svg>
+            </div>
+            <div class="da-ct-action da-ct-action--bad">sim(v<sub>I</sub>, v<sub>T'</sub>) ↓ — alejar en el espacio</div>
+          </div>
+        </div>
+        <div class="da-ct-scale">
+          <span class="da-scale-tag">CLIP</span> 400M pares ·
+          <span class="da-scale-tag">ALIGN</span> 1.800M pares — alta escala, baja precisión por par
+        </div>
+      </div>
+
+      <div class="da-p1-risk-col">
+        <div class="da-risk-block">
+          <div class="da-risk-title">Qué sale bien</div>
+          <div class="da-risk-body">Categorías frecuentes aprenden representaciones sólidas. "perro", "ciudad", "comida" aparecen millones de veces en combinaciones distintas.</div>
+          <div class="da-bar-row">
+            <span class="da-bar-label">Categorías frecuentes</span>
+            <div class="da-bar-track"><div class="da-bar-fill da-bar-fill--good" style="width:88%"></div></div>
+            <span class="da-bar-pct">robusto</span>
+          </div>
+        </div>
+        <div class="da-risk-block da-risk-block--danger">
+          <div class="da-risk-title">Qué falla</div>
+          <div class="da-risk-body">Pares ruidosos (pie de foto irrelevante, imagen de contexto) y categorías infrecuentes producen representaciones frágiles que el ajuste fino no puede corregir.</div>
+          <div class="da-bar-row">
+            <span class="da-bar-label">Categorías raras</span>
+            <div class="da-bar-track"><div class="da-bar-fill da-bar-fill--bad" style="width:28%"></div></div>
+            <span class="da-bar-pct da-bar-pct--bad">frágil</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="da-cascade">
+      <span class="da-cascade-icon">⤷</span>
+      Datos ruidosos aquí → representaciones frágiles → el ajuste fino trabaja sobre una base débil
+    </div>
+  </div>
+
+  <!-- TAB 2: Ajuste fino por instrucción -->
+  <div class="da-panel" data-panel="2" style="display:none">
+    <div class="da-stage-badge da-stage-badge--teal">Ajuste fino supervisado por instrucción visual</div>
+    <div class="da-p2-layout">
+      <div class="da-triple-block">
+        <div class="da-triple-label">Unidad de datos: triple</div>
+        <div class="da-triple">
+          <div class="da-triple-item da-triple-item--img">
+            <div class="da-ti-icon">
+              <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="2" y="2" width="24" height="24" rx="4" stroke="#FFB343" stroke-width="1.6"/>
+                <circle cx="10" cy="10" r="3" stroke="#FFB343" stroke-width="1.4"/>
+                <path d="M2 20 L8 14 L14 18 L20 11 L26 18" stroke="#FFB343" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="da-ti-tag">Imagen</div>
+            <div class="da-ti-ex">entrada visual</div>
+          </div>
+          <div class="da-triple-plus">+</div>
+          <div class="da-triple-item da-triple-item--inst">
+            <div class="da-ti-icon">
+              <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 8 L24 8 M4 14 L18 14 M4 20 L21 20" stroke="#7cc7ff" stroke-width="1.8" stroke-linecap="round"/>
+                <circle cx="24" cy="20" r="3" stroke="#7cc7ff" stroke-width="1.4"/>
+              </svg>
+            </div>
+            <div class="da-ti-tag">Instrucción</div>
+            <div class="da-ti-ex">"¿qué hay en el cuadro?"</div>
+          </div>
+          <div class="da-triple-arrow">→</div>
+          <div class="da-triple-item da-triple-item--resp">
+            <div class="da-ti-icon">
+              <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 6 L24 6 L24 18 L14 18 L8 24 L8 18 L4 18 Z" stroke="#26A69A" stroke-width="1.6" stroke-linejoin="round"/>
+                <path d="M9 11 L19 11 M9 14.5 L15 14.5" stroke="#26A69A" stroke-width="1.4" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="da-ti-tag">Respuesta</div>
+            <div class="da-ti-ex">texto generado</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="da-sources">
+        <div class="da-source-card da-source-card--human">
+          <div class="da-sc-tag">Anotación humana</div>
+          <div class="da-sc-attrs">
+            <div class="da-sc-attr da-sc-attr--good">Alta calidad</div>
+            <div class="da-sc-attr da-sc-attr--bad">Lenta y cara</div>
+            <div class="da-sc-attr da-sc-attr--bad">Difícil de escalar</div>
+          </div>
+          <div class="da-sc-body">Evaluadores humanos crean o validan instrucción + respuesta para cada imagen. Gold standard, pero no escala.</div>
+        </div>
+
+        <div class="da-source-vs">vs</div>
+
+        <div class="da-source-card da-source-card--synth">
+          <div class="da-sc-tag">Generación sintética</div>
+          <div class="da-sc-attrs">
+            <div class="da-sc-attr da-sc-attr--good">Escalable</div>
+            <div class="da-sc-attr da-sc-attr--good">Barata</div>
+            <div class="da-sc-attr da-sc-attr--bad">Hereda sesgos del generador</div>
+          </div>
+          <div class="da-sc-body">LLaVA usó GPT-4 para generar los datos de instrucción visual. Rápido, pero los puntos ciegos del modelo generador se reproducen en el dataset.</div>
+        </div>
+      </div>
+
+      <div class="da-inheritance">
+        <div class="da-inh-title">Riesgo de herencia</div>
+        <div class="da-inh-chain">
+          <div class="da-inh-node da-inh-node--gen">
+            <div class="da-ihn-name">Modelo generador</div>
+            <div class="da-ihn-flaw">punto ciego X</div>
+          </div>
+          <div class="da-inh-arrow">→</div>
+          <div class="da-inh-node da-inh-node--data">
+            <div class="da-ihn-name">Dataset sintético</div>
+            <div class="da-ihn-flaw">reproduce X</div>
+          </div>
+          <div class="da-inh-arrow">→</div>
+          <div class="da-inh-node da-inh-node--model">
+            <div class="da-ihn-name">Modelo entrenado</div>
+            <div class="da-ihn-flaw">hereda X</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="da-cascade">
+      <span class="da-cascade-icon">⤷</span>
+      Puntos ciegos heredados aquí → el RLHF solo puede pulir estilo, no corregir errores de fondo
+    </div>
+  </div>
+
+  <!-- TAB 3: RLHF -->
+  <div class="da-panel" data-panel="3" style="display:none">
+    <div class="da-stage-badge da-stage-badge--amber">Alineamiento con preferencias humanas (RLHF)</div>
+
+    <div class="da-rlhf-chain">
+      <div class="da-rlhf-node da-rlhf-node--gen">
+        <div class="da-rlhf-node-num">1</div>
+        <div class="da-rlhf-node-title">Modelo genera dos respuestas</div>
+        <div class="da-rlhf-node-detail">opción A (detallada) y opción B (breve)</div>
+      </div>
+      <div class="da-rlhf-chain-arr">→</div>
+      <div class="da-rlhf-node da-rlhf-node--eval">
+        <div class="da-rlhf-node-num">2</div>
+        <div class="da-rlhf-node-title">Evaluador humano prefiere A</div>
+        <div class="da-rlhf-node-detail">señal de preferencia → reward model</div>
+      </div>
+      <div class="da-rlhf-chain-arr">→</div>
+      <div class="da-rlhf-node da-rlhf-node--update">
+        <div class="da-rlhf-node-num">3</div>
+        <div class="da-rlhf-node-title">Modelo se actualiza</div>
+        <div class="da-rlhf-node-detail">formato · tono · longitud · completitud</div>
+      </div>
+    </div>
+
+    <div class="da-rlhf-scope">
+      <div class="da-scope-col da-scope-col--can">
+        <div class="da-scope-header">✓ Puede</div>
+        <div class="da-scope-item">Ajustar formato, longitud y tono de respuesta</div>
+        <div class="da-scope-item">Reducir respuestas evasivas o innecesariamente largas</div>
+        <div class="da-scope-item">Capturar preferencias que el entrenamiento supervisado no modela</div>
+      </div>
+      <div class="da-scope-divider"></div>
+      <div class="da-scope-col da-scope-col--cant">
+        <div class="da-scope-header">✗ No puede</div>
+        <div class="da-scope-item">Corregir errores factuales del preentrenamiento</div>
+        <div class="da-scope-item">Eliminar puntos ciegos del dataset sintético heredado</div>
+        <div class="da-scope-item">Evitar que los sesgos del evaluador se codifiquen en el modelo</div>
+      </div>
+    </div>
+
+    <div class="da-note">
+      La calidad de los datos manda sobre la arquitectura. Un modelo con datos limpios y arquitectura sencilla supera en robustez a uno con arquitectura avanzada y datos ruidosos.
+    </div>
+  </div>
+</div>
+
+<style>
+.da-wrap, .da-wrap * { box-sizing: border-box; }
+
+.da-wrap {
+  --aa: var(--md-primary-fg-color, #26A69A);
+  --ab: #324AB2;
+  --ag: var(--md-accent-fg-color, #FFB343);
+  --ar: #e04c4c;
+  --al: #7cc7ff;
+  --abg: var(--md-default-bg-color, #fff);
+  --afg: var(--md-default-fg-color, #0f172a);
+  --abd: rgba(15,23,42,.16);
+  --amut: rgba(15,23,42,.60);
+  --af: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid;
+  gap: 14px;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--abd);
+  border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--ab) 8%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 100%, color-mix(in srgb,var(--aa) 5%,transparent), transparent 52%),
+    var(--abg);
+  color: var(--afg);
+  font-family: var(--af);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-md-color-scheme="slate"] .da-wrap {
+  --abg: var(--md-default-bg-color, #0f172a);
+  --afg: var(--md-default-fg-color, #e2e8f0);
+  --abd: rgba(226,232,240,.16);
+  --amut: rgba(226,232,240,.60);
+}
+
+.da-hd { display: grid; gap: 5px; }
+.da-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.da-sub { font-size: 14px; color: var(--amut); line-height: 1.5; max-width: 68ch; }
+
+/* TABS */
+.da-tabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.da-tab {
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--abd);
+  background: transparent;
+  color: var(--amut);
+  font-family: var(--af);
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s;
+  white-space: nowrap;
+}
+
+.da-tab:hover {
+  background: color-mix(in srgb, var(--ab) 8%, var(--abg));
+  border-color: color-mix(in srgb, var(--ab) 25%, var(--abd));
+  color: var(--afg);
+}
+
+.da-tab.active {
+  background: color-mix(in srgb, var(--ab) 15%, var(--abg));
+  border-color: color-mix(in srgb, var(--ab) 40%, var(--abd));
+  color: color-mix(in srgb, var(--ab) 80%, var(--afg));
+}
+
+/* PANELS */
+.da-panel {
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* STAGE BADGE */
+.da-stage-badge {
+  display: inline-flex;
+  align-self: flex-start;
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid;
+}
+
+.da-stage-badge--blue {
+  background: color-mix(in srgb, var(--ab) 10%, var(--abg));
+  border-color: color-mix(in srgb, var(--ab) 28%, var(--abd));
+  color: color-mix(in srgb, var(--ab) 80%, var(--afg));
+}
+
+.da-stage-badge--teal {
+  background: color-mix(in srgb, var(--aa) 8%, var(--abg));
+  border-color: color-mix(in srgb, var(--aa) 28%, var(--abd));
+  color: color-mix(in srgb, var(--aa) 70%, var(--afg));
+}
+
+.da-stage-badge--amber {
+  background: color-mix(in srgb, var(--ag) 8%, var(--abg));
+  border-color: color-mix(in srgb, var(--ag) 25%, var(--abd));
+  color: color-mix(in srgb, var(--ag) 60%, var(--afg));
+}
+
+/* ─── TAB 1 ─── */
+.da-p1-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  flex: 1;
+}
+
+.da-contrastive {
+  border: 1px solid color-mix(in srgb, var(--ab) 25%, var(--abd));
+  border-radius: 14px;
+  padding: 12px;
+  background: color-mix(in srgb, var(--ab) 4%, var(--abg));
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.da-ct-title {
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: color-mix(in srgb, var(--ab) 60%, var(--afg));
+}
+
+.da-ct-pairs {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.da-ct-pair {
+  border: 1px solid var(--abd);
+  border-radius: 10px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.da-ct-pair--ok { border-color: color-mix(in srgb, var(--aa) 28%, var(--abd)); background: color-mix(in srgb, var(--aa) 4%, var(--abg)); }
+.da-ct-pair--bad { border-color: color-mix(in srgb, var(--ar) 22%, var(--abd)); background: color-mix(in srgb, var(--ar) 3%, var(--abg)); }
+
+.da-ct-pair-hd {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.da-ct-dot {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; font-weight: 900; font-family:"SF Mono","JetBrains Mono","Courier New",monospace;
+  border: 1px solid;
+}
+
+.da-ct-dot--img {
+  background: color-mix(in srgb, var(--ag) 12%, var(--abg));
+  color: color-mix(in srgb, var(--ag) 65%, var(--afg));
+  border-color: color-mix(in srgb, var(--ag) 28%, var(--abd));
+}
+
+.da-ct-dot--txt {
+  background: color-mix(in srgb, var(--ab) 12%, var(--abg));
+  color: color-mix(in srgb, var(--ab) 70%, var(--afg));
+  border-color: color-mix(in srgb, var(--ab) 28%, var(--abd));
+}
+
+.da-ct-dot--txt-bad {
+  background: color-mix(in srgb, var(--ar) 8%, var(--abg));
+  color: color-mix(in srgb, var(--ar) 65%, var(--afg));
+  border-color: color-mix(in srgb, var(--ar) 28%, var(--abd));
+}
+
+.da-ct-sep { color: var(--amut); font-size: 14px; }
+
+.da-ct-badge {
+  margin-left: auto;
+  font-size: 9px;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 999px;
+  border: 1px solid;
+}
+
+.da-ct-badge--ok {
+  background: color-mix(in srgb, var(--aa) 8%, var(--abg));
+  border-color: color-mix(in srgb, var(--aa) 25%, var(--abd));
+  color: color-mix(in srgb, var(--aa) 65%, var(--afg));
+}
+
+.da-ct-badge--bad {
+  background: color-mix(in srgb, var(--ar) 6%, var(--abg));
+  border-color: color-mix(in srgb, var(--ar) 22%, var(--abd));
+  color: color-mix(in srgb, var(--ar) 60%, var(--afg));
+}
+
+.da-ct-distance svg {
+  width: 100%;
+  height: 28px;
+}
+
+.da-ct-action {
+  font-size: 10.5px;
+  font-family:"SF Mono","JetBrains Mono","Courier New",monospace;
+  font-weight: 700;
+}
+
+.da-ct-action--ok { color: color-mix(in srgb, var(--aa) 65%, var(--afg)); }
+.da-ct-action--bad { color: color-mix(in srgb, var(--ar) 60%, var(--afg)); }
+
+.da-ct-scale {
+  font-size: 11.5px;
+  color: var(--amut);
+  line-height: 1.5;
+  padding-top: 4px;
+  border-top: 1px solid var(--abd);
+}
+
+.da-scale-tag {
+  font-weight: 900;
+  font-family:"SF Mono","JetBrains Mono","Courier New",monospace;
+  color: color-mix(in srgb, var(--ab) 70%, var(--afg));
+}
+
+.da-p1-risk-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.da-risk-block {
+  border: 1px solid var(--abd);
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: color-mix(in srgb, var(--abg) 90%, #0f172a 10%);
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  flex: 1;
+}
+
+.da-risk-block--danger {
+  border-color: color-mix(in srgb, var(--ar) 20%, var(--abd));
+  background: color-mix(in srgb, var(--ar) 3%, var(--abg));
+}
+
+.da-risk-title {
+  font-size: 10.5px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--amut);
+}
+
+.da-risk-body {
+  font-size: 12px;
+  color: var(--amut);
+  line-height: 1.45;
+  flex: 1;
+}
+
+.da-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.da-bar-label {
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.da-bar-track {
+  flex: 1;
+  height: 6px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--abg) 80%, #0f172a 20%);
+  overflow: hidden;
+}
+
+.da-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+}
+
+.da-bar-fill--good { background: var(--aa); }
+.da-bar-fill--bad { background: var(--ar); }
+
+.da-bar-pct {
+  font-size: 10px;
+  font-weight: 800;
+  color: color-mix(in srgb, var(--aa) 65%, var(--afg));
+  white-space: nowrap;
+}
+
+.da-bar-pct--bad { color: color-mix(in srgb, var(--ar) 60%, var(--afg)); }
+
+.da-cascade {
+  font-size: 12px;
+  color: color-mix(in srgb, var(--ar) 55%, var(--afg));
+  font-style: italic;
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  border-left: 2px solid color-mix(in srgb, var(--ar) 35%, transparent);
+  padding-left: 10px;
+}
+
+.da-cascade-icon { font-size: 14px; flex-shrink: 0; }
+
+/* ─── TAB 2 ─── */
+.da-p2-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+}
+
+.da-triple-block {
+  border: 1px solid color-mix(in srgb, var(--aa) 25%, var(--abd));
+  border-radius: 12px;
+  padding: 12px;
+  background: color-mix(in srgb, var(--aa) 4%, var(--abg));
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.da-triple-label {
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: color-mix(in srgb, var(--aa) 60%, var(--afg));
+}
+
+.da-triple {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.da-triple-item {
+  border: 1px solid var(--abd);
+  border-radius: 10px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: color-mix(in srgb, var(--abg) 88%, #0f172a 12%);
+  flex-shrink: 0;
+}
+
+.da-triple-item--img { border-color: color-mix(in srgb, var(--ag) 28%, var(--abd)); }
+.da-triple-item--inst { border-color: color-mix(in srgb, var(--al) 20%, var(--abd)); }
+.da-triple-item--resp { border-color: color-mix(in srgb, var(--aa) 28%, var(--abd)); }
+
+.da-ti-icon {
+  width: 28px; height: 28px; flex-shrink: 0;
+}
+.da-ti-icon svg { width: 100%; height: 100%; }
+
+.da-ti-tag {
+  font-size: 9.5px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--amut);
+}
+
+.da-ti-ex {
+  font-size: 11.5px;
+  font-style: italic;
+  color: var(--afg);
+  font-weight: 600;
+}
+
+.da-triple-plus, .da-triple-arrow {
+  font-size: 18px;
+  color: var(--amut);
+  flex-shrink: 0;
+  font-weight: 700;
+}
+
+.da-sources {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.da-source-card {
+  flex: 1;
+  border: 1px solid var(--abd);
+  border-radius: 12px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  background: color-mix(in srgb, var(--abg) 90%, #0f172a 10%);
+}
+
+.da-source-card--human { border-color: color-mix(in srgb, var(--al) 22%, var(--abd)); }
+.da-source-card--synth { border-color: color-mix(in srgb, var(--ag) 22%, var(--abd)); }
+
+.da-sc-tag {
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--amut);
+}
+
+.da-sc-attrs { display: flex; flex-direction: column; gap: 3px; }
+
+.da-sc-attr {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.da-sc-attr::before { content: ""; width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.da-sc-attr--good::before { background: var(--aa); }
+.da-sc-attr--bad::before { background: var(--ar); }
+.da-sc-attr--good { color: color-mix(in srgb, var(--aa) 65%, var(--afg)); }
+.da-sc-attr--bad { color: color-mix(in srgb, var(--ar) 60%, var(--afg)); }
+
+.da-sc-body {
+  font-size: 11.5px;
+  color: var(--amut);
+  line-height: 1.45;
+  margin-top: auto;
+}
+
+.da-source-vs {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 900;
+  color: var(--amut);
+  flex-shrink: 0;
+}
+
+.da-inheritance {
+  border: 1px solid color-mix(in srgb, var(--ar) 20%, var(--abd));
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: color-mix(in srgb, var(--ar) 4%, var(--abg));
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.da-inh-title {
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: color-mix(in srgb, var(--ar) 55%, var(--afg));
+}
+
+.da-inh-chain {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.da-inh-node {
+  flex: 1;
+  border: 1px solid var(--abd);
+  border-radius: 9px;
+  padding: 8px 10px;
+  display: grid;
+  gap: 4px;
+  background: color-mix(in srgb, var(--abg) 88%, #0f172a 12%);
+  min-width: 110px;
+}
+
+.da-inh-node--gen { border-color: color-mix(in srgb, var(--ag) 25%, var(--abd)); }
+.da-inh-node--data { border-color: color-mix(in srgb, var(--ar) 22%, var(--abd)); }
+.da-inh-node--model { border-color: color-mix(in srgb, var(--ar) 28%, var(--abd)); background: color-mix(in srgb, var(--ar) 5%, var(--abg)); }
+
+.da-ihn-name { font-size: 11px; font-weight: 900; }
+
+.da-ihn-flaw {
+  font-size: 10.5px;
+  font-family:"SF Mono","JetBrains Mono","Courier New",monospace;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--ar) 60%, var(--afg));
+}
+
+.da-inh-arrow {
+  font-size: 18px;
+  color: color-mix(in srgb, var(--ar) 50%, var(--amut));
+  flex-shrink: 0;
+}
+
+/* ─── TAB 3 ─── */
+.da-rlhf-chain {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+}
+
+.da-rlhf-node {
+  flex: 1;
+  padding: 12px 14px;
+  border: 1px solid var(--abd);
+  background: color-mix(in srgb, var(--abg) 90%, #0f172a 10%);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.da-rlhf-node:first-child { border-radius: 12px 0 0 12px; }
+.da-rlhf-node:last-child  { border-radius: 0 12px 12px 0; }
+.da-rlhf-node--gen    { border-color: color-mix(in srgb, var(--ab) 25%, var(--abd)); background: color-mix(in srgb, var(--ab) 5%, var(--abg)); }
+.da-rlhf-node--eval   { border-color: color-mix(in srgb, var(--ag) 22%, var(--abd)); background: color-mix(in srgb, var(--ag) 5%, var(--abg)); }
+.da-rlhf-node--update { border-color: color-mix(in srgb, var(--aa) 25%, var(--abd)); background: color-mix(in srgb, var(--aa) 5%, var(--abg)); }
+
+.da-rlhf-node-num {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 900;
+  flex-shrink: 0;
+}
+.da-rlhf-node--gen .da-rlhf-node-num {
+  background: color-mix(in srgb, var(--ab) 15%, var(--abg));
+  border: 1px solid color-mix(in srgb, var(--ab) 30%, var(--abd));
+  color: color-mix(in srgb, var(--ab) 70%, var(--afg));
+}
+.da-rlhf-node--eval .da-rlhf-node-num {
+  background: color-mix(in srgb, var(--ag) 15%, var(--abg));
+  border: 1px solid color-mix(in srgb, var(--ag) 30%, var(--abd));
+  color: color-mix(in srgb, var(--ag) 70%, var(--afg));
+}
+.da-rlhf-node--update .da-rlhf-node-num {
+  background: color-mix(in srgb, var(--aa) 15%, var(--abg));
+  border: 1px solid color-mix(in srgb, var(--aa) 30%, var(--abd));
+  color: color-mix(in srgb, var(--aa) 70%, var(--afg));
+}
+
+.da-rlhf-node-title { font-size: 12.5px; font-weight: 900; line-height: 1.2; }
+.da-rlhf-node-detail { font-size: 10.5px; color: var(--amut); line-height: 1.35; }
+
+.da-rlhf-chain-arr {
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--amut);
+  align-self: center;
+  flex-shrink: 0;
+  padding: 0 6px;
+}
+
+.da-rlhf-scope {
+  display: flex;
+  border: 1px solid var(--abd);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.da-scope-col {
+  flex: 1;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.da-scope-col--can  { background: color-mix(in srgb, var(--aa) 5%, var(--abg)); }
+.da-scope-col--cant { background: color-mix(in srgb, var(--ar) 4%, var(--abg)); }
+
+.da-scope-header {
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  margin-bottom: 2px;
+}
+.da-scope-col--can  .da-scope-header { color: color-mix(in srgb, var(--aa) 65%, var(--afg)); }
+.da-scope-col--cant .da-scope-header { color: color-mix(in srgb, var(--ar) 60%, var(--afg)); }
+
+.da-scope-item { font-size: 12px; color: var(--afg); line-height: 1.4; }
+
+.da-scope-divider { width: 1px; background: var(--abd); flex-shrink: 0; }
+
+/* NOTE */
+.da-note {
+  font-size: 13.5px;
+  color: var(--amut);
+  line-height: 1.5;
+  font-style: italic;
+  border-left: 3px solid color-mix(in srgb, var(--aa) 36%, transparent);
+  padding-left: 12px;
+}
+
+@media (max-width: 640px) {
+  .da-p1-layout { grid-template-columns: 1fr; }
+  .da-rlhf-chain { flex-direction: column; }
+  .da-rlhf-node:first-child { border-radius: 12px 12px 0 0; }
+  .da-rlhf-node:last-child  { border-radius: 0 0 12px 12px; }
+  .da-rlhf-chain-arr { align-self: center; transform: rotate(90deg); padding: 4px 0; }
+  .da-rlhf-scope { flex-direction: column; }
+  .da-scope-divider { width: 100%; height: 1px; }
+  .da-sources { flex-direction: column; }
+  .da-source-vs { justify-content: center; }
+}
+</style>
+
+<script>
+(function(){
+  document.querySelectorAll('[data-demo="02-datos-alineamiento"] button[data-tab]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var wrap = btn.closest('[data-demo="02-datos-alineamiento"]');
+      wrap.querySelectorAll('button[data-tab]').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      wrap.querySelectorAll('[data-panel]').forEach(function(p) { p.style.display = 'none'; });
+      wrap.querySelector('[data-panel="' + btn.dataset.tab + '"]').style.display = '';
+    });
+  });
+})();
+</script>

@@ -1,0 +1,471 @@
+<div class="cdp-wrap" data-demo="02-calidad-datos-perfil">
+  <div class="cdp-hd">
+    <div class="cdp-title">Calidad de datos y perfil de capacidades</div>
+    <div class="cdp-sub">La distribución del conjunto de entrenamiento determina qué sabe hacer el modelo. Las debilidades de la base se amplifican en cada etapa posterior.</div>
+  </div>
+
+  <div class="cdp-tabs">
+    <button class="cdp-tab active" data-tab="1">Datos → capacidades</button>
+    <button class="cdp-tab" data-tab="2">El efecto de cascada</button>
+  </div>
+
+  <!-- TAB 1: Datos → capacidades -->
+  <div class="cdp-panel" data-panel="1">
+    <div class="cdp-compare">
+      <div class="cdp-col cdp-col--ok">
+        <div class="cdp-col-header">
+          <div class="cdp-col-tag">Categorías frecuentes en entrenamiento</div>
+        </div>
+        <div class="cdp-col-body">
+          <div class="cdp-row-group">
+            <div class="cdp-cat-row">
+              <div class="cdp-cat-label">personas</div>
+              <div class="cdp-bars">
+                <div class="cdp-bar-wrap">
+                  <div class="cdp-bar-tag">datos</div>
+                  <div class="cdp-bar-track"><div class="cdp-bar cdp-bar--ok" style="width:90%"></div></div>
+                </div>
+                <div class="cdp-bar-wrap">
+                  <div class="cdp-bar-tag">modelo</div>
+                  <div class="cdp-bar-track"><div class="cdp-bar cdp-bar--ok" style="width:88%"></div></div>
+                </div>
+              </div>
+            </div>
+            <div class="cdp-cat-row">
+              <div class="cdp-cat-label">vehículos</div>
+              <div class="cdp-bars">
+                <div class="cdp-bar-wrap">
+                  <div class="cdp-bar-tag">datos</div>
+                  <div class="cdp-bar-track"><div class="cdp-bar cdp-bar--ok" style="width:80%"></div></div>
+                </div>
+                <div class="cdp-bar-wrap">
+                  <div class="cdp-bar-tag">modelo</div>
+                  <div class="cdp-bar-track"><div class="cdp-bar cdp-bar--ok" style="width:79%"></div></div>
+                </div>
+              </div>
+            </div>
+            <div class="cdp-cat-row">
+              <div class="cdp-cat-label">animales domésticos</div>
+              <div class="cdp-bars">
+                <div class="cdp-bar-wrap">
+                  <div class="cdp-bar-tag">datos</div>
+                  <div class="cdp-bar-track"><div class="cdp-bar cdp-bar--ok" style="width:75%"></div></div>
+                </div>
+                <div class="cdp-bar-wrap">
+                  <div class="cdp-bar-tag">modelo</div>
+                  <div class="cdp-bar-track"><div class="cdp-bar cdp-bar--ok" style="width:73%"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cdp-vs">≠</div>
+
+      <div class="cdp-col cdp-col--bad">
+        <div class="cdp-col-header">
+          <div class="cdp-col-tag">Categorías infrecuentes en entrenamiento</div>
+        </div>
+        <div class="cdp-col-body">
+          <div class="cdp-row-group">
+            <div class="cdp-cat-row">
+              <div class="cdp-cat-label">dispositivos médicos</div>
+              <div class="cdp-bars">
+                <div class="cdp-bar-wrap">
+                  <div class="cdp-bar-tag">datos</div>
+                  <div class="cdp-bar-track"><div class="cdp-bar cdp-bar--bad" style="width:18%"></div></div>
+                </div>
+                <div class="cdp-bar-wrap">
+                  <div class="cdp-bar-tag">modelo</div>
+                  <div class="cdp-bar-track"><div class="cdp-bar cdp-bar--bad" style="width:22%"></div></div>
+                </div>
+              </div>
+            </div>
+            <div class="cdp-cat-row">
+              <div class="cdp-cat-label">arte especializado</div>
+              <div class="cdp-bars">
+                <div class="cdp-bar-wrap">
+                  <div class="cdp-bar-tag">datos</div>
+                  <div class="cdp-bar-track"><div class="cdp-bar cdp-bar--bad" style="width:14%"></div></div>
+                </div>
+                <div class="cdp-bar-wrap">
+                  <div class="cdp-bar-tag">modelo</div>
+                  <div class="cdp-bar-track"><div class="cdp-bar cdp-bar--bad" style="width:17%"></div></div>
+                </div>
+              </div>
+            </div>
+            <div class="cdp-cat-row">
+              <div class="cdp-cat-label">documentos técnicos</div>
+              <div class="cdp-bars">
+                <div class="cdp-bar-wrap">
+                  <div class="cdp-bar-tag">datos</div>
+                  <div class="cdp-bar-track"><div class="cdp-bar cdp-bar--bad" style="width:10%"></div></div>
+                </div>
+                <div class="cdp-bar-wrap">
+                  <div class="cdp-bar-tag">modelo</div>
+                  <div class="cdp-bar-track"><div class="cdp-bar cdp-bar--bad" style="width:12%"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cdp-insight">
+      <div class="cdp-insight-label">Observación de Radford et al. (CLIP, 2021)</div>
+      <div class="cdp-insight-text">La distribución de los datos de entrenamiento se refleja directamente en el perfil de capacidades del modelo. CLIP generalizaba bien en categorías comunes y sistemáticamente peor en categorías infrecuentes, aunque la calidad de las imágenes fuera equivalente. La corrección requería reequilibrar los datos, no cambiar la arquitectura.</div>
+    </div>
+  </div>
+
+  <!-- TAB 2: El efecto de cascada -->
+  <div class="cdp-panel" data-panel="2" style="display:none">
+    <div class="cdp-cascade">
+      <div class="cdp-stage cdp-stage--1">
+        <div class="cdp-stage-badge cdp-stage-badge--1">Etapa 1 · Preentrenamiento</div>
+        <div class="cdp-stage-body">
+          <div class="cdp-stage-left">
+            <div class="cdp-stage-title">Representaciones</div>
+            <div class="cdp-stage-desc">Con datos ruidosos o categorías subrepresentadas, el modelo aprende representaciones estadísticamente sólidas pero frágiles en los detalles.</div>
+          </div>
+          <div class="cdp-stage-status cdp-stage-status--bad">fallo en la base</div>
+        </div>
+      </div>
+
+      <div class="cdp-cascade-arr">
+        <div class="cdp-cascade-line"></div>
+        <div class="cdp-cascade-label">construye sobre lo que recibe</div>
+        <div class="cdp-cascade-arrow">↓</div>
+      </div>
+
+      <div class="cdp-stage cdp-stage--2">
+        <div class="cdp-stage-badge cdp-stage-badge--2">Etapa 2 · Ajuste fino con instrucción visual</div>
+        <div class="cdp-stage-body">
+          <div class="cdp-stage-left">
+            <div class="cdp-stage-title">Datos de instrucción</div>
+            <div class="cdp-stage-desc">El modelo aprende a seguir instrucciones, pero no puede corregir las representaciones débiles de la etapa anterior. Los datos sintéticos generados con GPT-4 heredan además los puntos ciegos del modelo generador.</div>
+          </div>
+          <div class="cdp-stage-status cdp-stage-status--mid">hereda las debilidades</div>
+        </div>
+      </div>
+
+      <div class="cdp-cascade-arr">
+        <div class="cdp-cascade-line"></div>
+        <div class="cdp-cascade-label">mismo modelo, una capa más</div>
+        <div class="cdp-cascade-arrow">↓</div>
+      </div>
+
+      <div class="cdp-stage cdp-stage--3">
+        <div class="cdp-stage-badge cdp-stage-badge--3">Etapa 3 · RLHF</div>
+        <div class="cdp-stage-body">
+          <div class="cdp-stage-left">
+            <div class="cdp-stage-title">Preferencias humanas</div>
+            <div class="cdp-stage-desc">Captura preferencias sobre formato y estilo de respuesta, pero no puede corregir la debilidad de percepción base. Puede introducir además sesgos adicionales según los criterios de los evaluadores.</div>
+          </div>
+          <div class="cdp-stage-status cdp-stage-status--bad">amplificación final</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cdp-cascade-note">
+      <span class="cdp-note-strong">La lección más consistente del campo:</span> un modelo con arquitectura subóptima entrenado con datos de alta calidad supera a uno con arquitectura de vanguardia entrenado con datos ruidosos. La corrección de debilidades requiere reequilibrar los datos en la etapa correspondiente, no añadir etapas encima.
+    </div>
+  </div>
+</div>
+
+<style>
+.cdp-wrap, .cdp-wrap * { box-sizing: border-box; }
+
+.cdp-wrap {
+  --ca: var(--md-primary-fg-color, #26A69A);
+  --cb: #324AB2;
+  --cg: var(--md-accent-fg-color, #FFB343);
+  --cr: #e04c4c;
+  --cl: #7cc7ff;
+  --cbg: var(--md-default-bg-color, #fff);
+  --cfg: var(--md-default-fg-color, #0f172a);
+  --cbd: rgba(15,23,42,.16);
+  --cmut: rgba(15,23,42,.60);
+  --cf: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid;
+  gap: 14px;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--cbd);
+  border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--cb) 8%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 100%, color-mix(in srgb,var(--ca) 5%,transparent), transparent 52%),
+    var(--cbg);
+  color: var(--cfg);
+  font-family: var(--cf);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-md-color-scheme="slate"] .cdp-wrap {
+  --cbg: var(--md-default-bg-color, #0f172a);
+  --cfg: var(--md-default-fg-color, #e2e8f0);
+  --cbd: rgba(226,232,240,.16);
+  --cmut: rgba(226,232,240,.60);
+}
+
+.cdp-hd { display: grid; gap: 5px; }
+.cdp-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.cdp-sub { font-size: 14px; color: var(--cmut); line-height: 1.5; max-width: 68ch; }
+
+/* TABS */
+.cdp-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+
+.cdp-tab {
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--cbd);
+  background: transparent;
+  color: var(--cmut);
+  font-family: var(--cf);
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s;
+  white-space: nowrap;
+}
+.cdp-tab:hover {
+  background: color-mix(in srgb, var(--cb) 8%, var(--cbg));
+  border-color: color-mix(in srgb, var(--cb) 25%, var(--cbd));
+  color: var(--cfg);
+}
+.cdp-tab.active {
+  background: color-mix(in srgb, var(--cb) 15%, var(--cbg));
+  border-color: color-mix(in srgb, var(--cb) 40%, var(--cbd));
+  color: color-mix(in srgb, var(--cb) 80%, var(--cfg));
+}
+
+/* PANELS */
+.cdp-panel { min-height: 280px; display: flex; flex-direction: column; gap: 12px; }
+
+/* ─── TAB 1 ─── */
+.cdp-compare {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  flex: 1;
+}
+
+.cdp-col {
+  flex: 1;
+  border-radius: 14px;
+  border: 1px solid var(--cbd);
+  overflow: hidden;
+}
+.cdp-col--ok { border-color: color-mix(in srgb, var(--ca) 28%, var(--cbd)); }
+.cdp-col--bad { border-color: color-mix(in srgb, var(--cr) 28%, var(--cbd)); }
+
+.cdp-col-header {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--cbd);
+  background: color-mix(in srgb, var(--cbg) 80%, #0f172a 20%);
+}
+.cdp-col-tag {
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  line-height: 1.3;
+}
+.cdp-col--ok .cdp-col-tag { color: color-mix(in srgb, var(--ca) 65%, var(--cfg)); }
+.cdp-col--bad .cdp-col-tag { color: color-mix(in srgb, var(--cr) 60%, var(--cfg)); }
+
+.cdp-col-body { padding: 12px; }
+
+.cdp-row-group { display: grid; gap: 10px; }
+
+.cdp-cat-row { display: grid; gap: 4px; }
+
+.cdp-cat-label {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--cfg);
+}
+
+.cdp-bars { display: grid; gap: 3px; }
+
+.cdp-bar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cdp-bar-tag {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--cmut);
+  width: 44px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.cdp-bar-track {
+  flex: 1;
+  height: 8px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--cbg) 80%, #0f172a 20%);
+  overflow: hidden;
+}
+
+.cdp-bar {
+  height: 100%;
+  border-radius: 4px;
+  transition: width .3s ease;
+}
+.cdp-bar--ok { background: color-mix(in srgb, var(--ca) 70%, transparent); }
+.cdp-bar--bad { background: color-mix(in srgb, var(--cr) 60%, transparent); }
+
+.cdp-vs {
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--cmut);
+  align-self: center;
+  flex-shrink: 0;
+  padding: 0 4px;
+}
+
+.cdp-insight {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--cb) 20%, var(--cbd));
+  background: color-mix(in srgb, var(--cb) 5%, var(--cbg));
+  display: grid;
+  gap: 4px;
+}
+
+.cdp-insight-label {
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: color-mix(in srgb, var(--cb) 60%, var(--cmut));
+}
+
+.cdp-insight-text {
+  font-size: 12.5px;
+  color: var(--cfg);
+  line-height: 1.5;
+}
+
+/* ─── TAB 2 ─── */
+.cdp-cascade {
+  display: grid;
+  gap: 0;
+  flex: 1;
+}
+
+.cdp-stage {
+  border-radius: 12px;
+  border: 1px solid var(--cbd);
+  overflow: hidden;
+}
+.cdp-stage--1 { border-color: color-mix(in srgb, var(--cb) 25%, var(--cbd)); }
+.cdp-stage--2 { border-color: color-mix(in srgb, var(--cg) 22%, var(--cbd)); }
+.cdp-stage--3 { border-color: color-mix(in srgb, var(--cr) 22%, var(--cbd)); }
+
+.cdp-stage-badge {
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--cbd);
+}
+.cdp-stage-badge--1 {
+  color: color-mix(in srgb, var(--cb) 60%, var(--cfg));
+  background: color-mix(in srgb, var(--cb) 8%, var(--cbg));
+}
+.cdp-stage-badge--2 {
+  color: color-mix(in srgb, var(--cg) 55%, var(--cfg));
+  background: color-mix(in srgb, var(--cg) 6%, var(--cbg));
+}
+.cdp-stage-badge--3 {
+  color: color-mix(in srgb, var(--cr) 60%, var(--cfg));
+  background: color-mix(in srgb, var(--cr) 6%, var(--cbg));
+}
+
+.cdp-stage-body {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: color-mix(in srgb, var(--cbg) 90%, #0f172a 10%);
+}
+
+.cdp-stage-left { flex: 1; display: grid; gap: 4px; }
+.cdp-stage-title { font-size: 13px; font-weight: 900; }
+.cdp-stage-desc { font-size: 11.5px; color: var(--cmut); line-height: 1.4; }
+
+.cdp-stage-status {
+  flex-shrink: 0;
+  font-size: 9.5px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+.cdp-stage-status--bad {
+  color: color-mix(in srgb, var(--cr) 70%, var(--cfg));
+  background: color-mix(in srgb, var(--cr) 8%, var(--cbg));
+  border-color: color-mix(in srgb, var(--cr) 22%, var(--cbd));
+}
+.cdp-stage-status--mid {
+  color: color-mix(in srgb, var(--cg) 65%, var(--cfg));
+  background: color-mix(in srgb, var(--cg) 8%, var(--cbg));
+  border-color: color-mix(in srgb, var(--cg) 22%, var(--cbd));
+}
+
+.cdp-cascade-arr {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 0;
+}
+.cdp-cascade-line { width: 1px; height: 6px; background: var(--cmut); opacity: .4; }
+.cdp-cascade-label { font-size: 9.5px; color: var(--cmut); font-style: italic; }
+.cdp-cascade-arrow { font-size: 16px; color: var(--cmut); font-weight: 900; line-height: 1; }
+
+.cdp-cascade-note {
+  font-size: 13px;
+  color: var(--cmut);
+  line-height: 1.5;
+  border-left: 3px solid color-mix(in srgb, var(--ca) 36%, transparent);
+  padding-left: 12px;
+  font-style: italic;
+}
+
+.cdp-note-strong { color: var(--cfg); font-style: normal; font-weight: 700; }
+
+@media (max-width: 640px) {
+  .cdp-compare { flex-direction: column; }
+  .cdp-vs { align-self: center; transform: rotate(90deg); }
+}
+</style>
+
+<script>
+(function(){
+  document.querySelectorAll('[data-demo="02-calidad-datos-perfil"] button[data-tab]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var wrap = btn.closest('[data-demo="02-calidad-datos-perfil"]');
+      wrap.querySelectorAll('button[data-tab]').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      wrap.querySelectorAll('[data-panel]').forEach(function(p) { p.style.display = 'none'; });
+      wrap.querySelector('[data-panel="' + btn.dataset.tab + '"]').style.display = '';
+    });
+  });
+})();
+</script>

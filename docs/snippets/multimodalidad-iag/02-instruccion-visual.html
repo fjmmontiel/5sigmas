@@ -1,0 +1,390 @@
+<div class="ivs-wrap" data-demo="02-instruccion-visual">
+  <div class="ivs-hd">
+    <div class="ivs-title">De pares a triples: instrucción visual</div>
+    <div class="ivs-sub">Los pares imagen-texto enseñan representaciones. Los triples de instrucción enseñan comportamiento. Son etapas distintas y no pueden sustituirse.</div>
+  </div>
+
+  <div class="ivs-tabs">
+    <button class="ivs-tab active" data-tab="1">Pares vs triples</button>
+    <button class="ivs-tab" data-tab="2">Generación sintética con GPT-4</button>
+  </div>
+
+  <!-- TAB 1: Pares vs triples -->
+  <div class="ivs-panel" data-panel="1">
+    <div class="ivs-bifold">
+
+      <!-- Card: Preentrenamiento contrastivo -->
+      <div class="ivs-card ivs-card--pre">
+        <div class="ivs-card-hd">
+          <span class="ivs-card-type ivs-card-type--pre">Preentrenamiento contrastivo</span>
+          <span class="ivs-card-models">CLIP · ALIGN · ImageBind</span>
+        </div>
+        <div class="ivs-inputs">
+          <div class="ivs-inp ivs-inp--img"><span class="ivs-inp-ico">🖼</span><span class="ivs-inp-lbl">Imagen</span></div>
+          <div class="ivs-inp-op">+</div>
+          <div class="ivs-inp ivs-inp--txt"><span class="ivs-inp-ico">📝</span><span class="ivs-inp-lbl">Texto descriptivo</span></div>
+        </div>
+        <div class="ivs-down-arr">↓</div>
+        <div class="ivs-proc ivs-proc--pre">
+          <div class="ivs-proc-name">Contrastive learning</div>
+          <div class="ivs-proc-sub">acercar pares correctos · alejar pares incorrectos</div>
+        </div>
+        <div class="ivs-down-arr">↓</div>
+        <div class="ivs-out ivs-out--pre">Representación compartida</div>
+        <div class="ivs-key ivs-key--pre">Aprende a reconocer — qué cosas hablan del mismo contenido</div>
+      </div>
+
+      <div class="ivs-sep-arr">→</div>
+
+      <!-- Card: Ajuste fino de instrucción -->
+      <div class="ivs-card ivs-card--ft">
+        <div class="ivs-card-hd">
+          <span class="ivs-card-type ivs-card-type--ft">Ajuste fino de instrucción</span>
+          <span class="ivs-card-models">LLaVA · InstructBLIP</span>
+        </div>
+        <div class="ivs-inputs">
+          <div class="ivs-inp ivs-inp--img"><span class="ivs-inp-ico">🖼</span><span class="ivs-inp-lbl">Imagen</span></div>
+          <div class="ivs-inp-op">+</div>
+          <div class="ivs-inp ivs-inp--inst"><span class="ivs-inp-ico">❓</span><span class="ivs-inp-lbl">Instrucción</span></div>
+          <div class="ivs-inp-op">+</div>
+          <div class="ivs-inp ivs-inp--resp"><span class="ivs-inp-ico">✓</span><span class="ivs-inp-lbl">Respuesta</span></div>
+        </div>
+        <div class="ivs-down-arr">↓</div>
+        <div class="ivs-proc ivs-proc--ft">
+          <div class="ivs-proc-name">Supervised fine-tuning</div>
+          <div class="ivs-proc-sub">minimizar error en la respuesta esperada</div>
+        </div>
+        <div class="ivs-down-arr">↓</div>
+        <div class="ivs-out ivs-out--ft">Modelo que sigue instrucciones</div>
+        <div class="ivs-key ivs-key--ft">Aprende a responder — cómo actuar ante una instrucción específica</div>
+      </div>
+    </div>
+
+    <div class="ivs-note">
+      <div class="ivs-note-text">El par aprende a reconocer. El triple aprende a responder. Un modelo con solo pares sabe qué cosas se parecen, pero no sabe seguir instrucciones. Uno con solo triples no tiene representaciones de base suficientemente robustas para generalizar fuera de las instrucciones vistas en el ajuste fino.</div>
+    </div>
+  </div>
+
+  <!-- TAB 2: Generación sintética -->
+  <div class="ivs-panel" data-panel="2" style="display:none">
+    <div class="ivs-chain">
+      <div class="ivs-chain-node ivs-chain-node--img">
+        <div class="ivs-chain-tag">Entrada</div>
+        <div class="ivs-chain-title">🖼 Imagen</div>
+        <div class="ivs-chain-desc">cualquier imagen del dataset base</div>
+      </div>
+      <div class="ivs-chain-arr">→</div>
+      <div class="ivs-chain-node ivs-chain-node--desc">
+        <div class="ivs-chain-tag">Paso 1</div>
+        <div class="ivs-chain-title">Descripción textual</div>
+        <div class="ivs-chain-desc">la imagen se describe en texto para pasarla al modelo generador</div>
+        <div class="ivs-chain-mono">caption · bbox · tags</div>
+      </div>
+      <div class="ivs-chain-arr">→</div>
+      <div class="ivs-chain-node ivs-chain-node--gpt">
+        <div class="ivs-chain-tag">Paso 2</div>
+        <div class="ivs-chain-title">GPT-4 genera</div>
+        <div class="ivs-chain-desc">instrucción plausible y respuesta esperada para la imagen</div>
+        <div class="ivs-chain-mono">pregunta + respuesta</div>
+      </div>
+      <div class="ivs-chain-arr">→</div>
+      <div class="ivs-chain-node ivs-chain-node--data">
+        <div class="ivs-chain-tag">Paso 3</div>
+        <div class="ivs-chain-title">Dataset sintético</div>
+        <div class="ivs-chain-desc">miles de triples (imagen, instrucción, respuesta) sin coste de anotación humana</div>
+        <div class="ivs-chain-mono">escala</div>
+      </div>
+      <div class="ivs-chain-arr">→</div>
+      <div class="ivs-chain-node ivs-chain-node--model">
+        <div class="ivs-chain-tag">Resultado</div>
+        <div class="ivs-chain-title">Modelo entrenado</div>
+        <div class="ivs-chain-desc">capaz de seguir instrucciones visuales con calidad notable</div>
+      </div>
+    </div>
+
+    <div class="ivs-insight-row">
+      <div class="ivs-insight ivs-insight--ok">
+        <div class="ivs-insight-label">Ventaja demostrada</div>
+        <div class="ivs-insight-text">LLaVA (2023) demostró que la generación sintética con GPT-4 produce modelos capaces de seguir instrucciones visuales con calidad notable dado el coste de generación de los datos. El enfoque se ha extendido como práctica habitual en proyectos sin presupuesto para anotación humana a gran escala.</div>
+      </div>
+      <div class="ivs-insight ivs-insight--risk">
+        <div class="ivs-insight-label">Riesgo estructural</div>
+        <div class="ivs-insight-text">Si el modelo que genera los datos tiene puntos ciegos, el modelo que se entrena con ellos los hereda. La calidad del resultado queda acotada por la calidad del generador. Los sesgos no están en los datos visuales sino en las instrucciones y respuestas que GPT-4 construye a partir de ellos.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.ivs-wrap, .ivs-wrap * { box-sizing: border-box; }
+
+.ivs-wrap {
+  --ia: #26A69A;
+  --ib: #324AB2;
+  --ig: #FFB343;
+  --ir: #e04c4c;
+  --il: #7cc7ff;
+  --ibg: var(--md-default-bg-color, #fff);
+  --ifg: var(--md-default-fg-color, #0f172a);
+  --ibd: rgba(15,23,42,.16);
+  --imut: rgba(15,23,42,.60);
+  --if: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid;
+  gap: 14px;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--ibd);
+  border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--ib) 7%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 100%, color-mix(in srgb,var(--ia) 5%,transparent), transparent 52%),
+    var(--ibg);
+  color: var(--ifg);
+  font-family: var(--if);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-md-color-scheme="slate"] .ivs-wrap {
+  --ibg: var(--md-default-bg-color, #0f172a);
+  --ifg: var(--md-default-fg-color, #e2e8f0);
+  --ibd: rgba(226,232,240,.16);
+  --imut: rgba(226,232,240,.60);
+}
+
+.ivs-hd { display: grid; gap: 5px; }
+.ivs-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.ivs-sub { font-size: 14px; color: var(--imut); line-height: 1.5; max-width: 68ch; }
+
+/* TABS */
+.ivs-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+
+.ivs-tab {
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--ibd);
+  background: transparent;
+  color: var(--imut);
+  font-family: var(--if);
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s;
+  white-space: nowrap;
+}
+.ivs-tab:hover {
+  background: color-mix(in srgb, var(--ia) 8%, var(--ibg));
+  border-color: color-mix(in srgb, var(--ia) 25%, var(--ibd));
+  color: var(--ifg);
+}
+.ivs-tab.active {
+  background: color-mix(in srgb, var(--ia) 12%, var(--ibg));
+  border-color: color-mix(in srgb, var(--ia) 38%, var(--ibd));
+  color: color-mix(in srgb, var(--ia) 75%, var(--ifg));
+}
+
+/* PANELS */
+.ivs-panel { min-height: 0; display: flex; flex-direction: column; gap: 8px; }
+
+/* ─── TAB 1 ─── */
+.ivs-bifold { display: flex; gap: 10px; align-items: stretch; }
+
+.ivs-sep-arr {
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--imut);
+  align-self: center;
+  flex-shrink: 0;
+  padding: 0 2px;
+}
+
+.ivs-card {
+  flex: 1;
+  border-radius: 14px;
+  border: 1px solid var(--ibd);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ivs-card--pre { border-color: color-mix(in srgb, var(--ib) 25%, var(--ibd)); background: color-mix(in srgb, var(--ib) 3%, var(--ibg)); }
+.ivs-card--ft  { border-color: color-mix(in srgb, var(--ia) 25%, var(--ibd)); background: color-mix(in srgb, var(--ia) 3%, var(--ibg)); }
+
+.ivs-card-hd { display: flex; flex-direction: column; gap: 2px; margin-bottom: 2px; }
+.ivs-card-type { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; }
+.ivs-card-type--pre { color: color-mix(in srgb, var(--ib) 65%, var(--ifg)); }
+.ivs-card-type--ft  { color: color-mix(in srgb, var(--ia) 65%, var(--ifg)); }
+.ivs-card-models { font-size: 10px; color: var(--imut); font-weight: 600; }
+
+.ivs-inputs { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+
+.ivs-inp {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--ibd);
+  background: color-mix(in srgb, var(--ibg) 88%, #0f172a 12%);
+}
+.ivs-inp--img  { border-color: color-mix(in srgb, var(--ib) 18%, var(--ibd)); }
+.ivs-inp--txt  { border-color: color-mix(in srgb, var(--ia) 18%, var(--ibd)); }
+.ivs-inp--inst { border-color: color-mix(in srgb, var(--ig) 22%, var(--ibd)); background: color-mix(in srgb, var(--ig) 5%, var(--ibg)); }
+.ivs-inp--resp { border-color: color-mix(in srgb, var(--ia) 22%, var(--ibd)); background: color-mix(in srgb, var(--ia) 5%, var(--ibg)); }
+
+.ivs-inp-ico { font-size: 13px; flex-shrink: 0; }
+.ivs-inp-lbl { font-size: 11.5px; font-weight: 700; }
+.ivs-inp-op  { font-size: 14px; font-weight: 900; color: var(--imut); flex-shrink: 0; }
+
+.ivs-down-arr { font-size: 16px; color: var(--imut); text-align: center; line-height: 1.2; }
+
+.ivs-proc {
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--ibd);
+  text-align: center;
+  display: grid;
+  gap: 3px;
+}
+.ivs-proc--pre { border-color: color-mix(in srgb, var(--ib) 22%, var(--ibd)); background: color-mix(in srgb, var(--ib) 6%, var(--ibg)); }
+.ivs-proc--ft  { border-color: color-mix(in srgb, var(--ia) 22%, var(--ibd)); background: color-mix(in srgb, var(--ia) 6%, var(--ibg)); }
+
+.ivs-proc-name { font-size: 13px; font-weight: 900; }
+.ivs-proc--pre .ivs-proc-name { color: color-mix(in srgb, var(--ib) 65%, var(--ifg)); }
+.ivs-proc--ft  .ivs-proc-name { color: color-mix(in srgb, var(--ia) 65%, var(--ifg)); }
+.ivs-proc-sub { font-size: 10px; color: var(--imut); }
+
+.ivs-out {
+  padding: 9px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--ibd);
+  font-size: 14px;
+  font-weight: 900;
+  text-align: center;
+}
+.ivs-out--pre { border-color: color-mix(in srgb, var(--ib) 22%, var(--ibd)); background: color-mix(in srgb, var(--ib) 6%, var(--ibg)); color: color-mix(in srgb, var(--ib) 65%, var(--ifg)); }
+.ivs-out--ft  { border-color: color-mix(in srgb, var(--ia) 22%, var(--ibd)); background: color-mix(in srgb, var(--ia) 6%, var(--ibg)); color: color-mix(in srgb, var(--ia) 65%, var(--ifg)); }
+
+.ivs-key {
+  padding: 7px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--ibd);
+  background: color-mix(in srgb, var(--ibg) 88%, #0f172a 12%);
+  font-size: 11.5px;
+  line-height: 1.4;
+  margin-top: auto;
+}
+
+/* Note */
+.ivs-note {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--ia) 20%, var(--ibd));
+  background: color-mix(in srgb, var(--ia) 4%, var(--ibg));
+}
+.ivs-note-text { font-size: 12.5px; color: var(--ifg); line-height: 1.5; }
+
+/* ─── TAB 2 ─── */
+.ivs-chain {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  overflow-x: auto;
+  flex: 1;
+}
+
+.ivs-chain-node {
+  flex: 1;
+  min-width: 110px;
+  padding: 11px 10px;
+  border: 1px solid var(--ibd);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background: color-mix(in srgb, var(--ibg) 88%, #0f172a 12%);
+}
+.ivs-chain-node:first-child { border-radius: 12px 0 0 12px; }
+.ivs-chain-node:last-child  { border-radius: 0 12px 12px 0; }
+
+.ivs-chain-node--img  { border-color: color-mix(in srgb, var(--imut) 30%, var(--ibd)); }
+.ivs-chain-node--desc { border-color: color-mix(in srgb, var(--ib) 22%, var(--ibd)); background: color-mix(in srgb, var(--ib) 4%, var(--ibg)); }
+.ivs-chain-node--gpt  { border-color: color-mix(in srgb, var(--ig) 22%, var(--ibd)); background: color-mix(in srgb, var(--ig) 5%, var(--ibg)); }
+.ivs-chain-node--data { border-color: color-mix(in srgb, var(--ia) 22%, var(--ibd)); background: color-mix(in srgb, var(--ia) 5%, var(--ibg)); }
+.ivs-chain-node--model { border-color: color-mix(in srgb, var(--ia) 30%, var(--ibd)); background: color-mix(in srgb, var(--ia) 9%, var(--ibg)); }
+
+.ivs-chain-tag { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--imut); }
+.ivs-chain-title { font-size: 12.5px; font-weight: 900; line-height: 1.2; }
+.ivs-chain-desc { font-size: 10.5px; color: var(--imut); line-height: 1.35; flex: 1; }
+
+.ivs-chain-mono {
+  font-family: "SF Mono","JetBrains Mono","Courier New",monospace;
+  font-size: 9.5px;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--ia) 55%, var(--imut));
+  margin-top: auto;
+}
+
+.ivs-chain-arr {
+  font-size: 16px;
+  color: var(--imut);
+  font-weight: 900;
+  flex-shrink: 0;
+  align-self: center;
+  padding: 0 3px;
+}
+
+.ivs-insight-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.ivs-insight {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--ibd);
+  display: grid;
+  gap: 5px;
+  align-content: start;
+}
+.ivs-insight--ok  { border-color: color-mix(in srgb, var(--ia) 22%, var(--ibd)); background: color-mix(in srgb, var(--ia) 5%, var(--ibg)); }
+.ivs-insight--risk { border-color: color-mix(in srgb, var(--ir) 22%, var(--ibd)); background: color-mix(in srgb, var(--ir) 5%, var(--ibg)); }
+
+.ivs-insight-label {
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+}
+.ivs-insight--ok   .ivs-insight-label { color: color-mix(in srgb, var(--ia) 65%, var(--ifg)); }
+.ivs-insight--risk .ivs-insight-label { color: color-mix(in srgb, var(--ir) 60%, var(--ifg)); }
+
+.ivs-insight-text { font-size: 12px; color: var(--imut); line-height: 1.45; }
+
+@media (max-width: 640px) {
+  .ivs-bifold { flex-direction: column; }
+  .ivs-sep-arr { align-self: center; transform: rotate(90deg); }
+  .ivs-inputs { flex-wrap: wrap; }
+  .ivs-chain { flex-direction: column; }
+  .ivs-chain-node { min-width: 0; }
+  .ivs-chain-node:first-child { border-radius: 12px 12px 0 0; }
+  .ivs-chain-node:last-child  { border-radius: 0 0 12px 12px; }
+  .ivs-chain-arr { transform: rotate(90deg); align-self: center; }
+  .ivs-insight-row { grid-template-columns: 1fr; }
+}
+</style>
+
+<script>
+(function(){
+  document.querySelectorAll('[data-demo="02-instruccion-visual"] button[data-tab]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var wrap = btn.closest('[data-demo="02-instruccion-visual"]');
+      wrap.querySelectorAll('button[data-tab]').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      wrap.querySelectorAll('[data-panel]').forEach(function(p) { p.style.display = 'none'; });
+      wrap.querySelector('[data-panel="' + btn.dataset.tab + '"]').style.display = '';
+    });
+  });
+})();
+</script>
