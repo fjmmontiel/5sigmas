@@ -1,0 +1,111 @@
+<div class="trd-wrap" data-demo="03-tradeoffs">
+  <div class="trd-hd">
+    <div class="trd-title">Tradeoffs en producción — las cuatro familias</div>
+    <div class="trd-sub">Para la mayoría de equipos, la elección práctica es entre variantes del enfoque encoder+conector. Las diferencias en coste operacional son frecuentemente más determinantes que los números de los benchmarks.</div>
+  </div>
+
+  <div class="trd-grid">
+    <div class="trd-hdr"></div>
+    <div class="trd-hdr trd-hdr--enc">Encoder + conector</div>
+    <div class="trd-hdr trd-hdr--cross">Cross-attention</div>
+    <div class="trd-hdr trd-hdr--nat">Nativo</div>
+    <div class="trd-hdr trd-hdr--omni">Omni / streaming</div>
+
+    <div class="trd-rl">Coste de entrenamiento</div>
+    <div class="trd-cell trd-good">Bajo</div>
+    <div class="trd-cell trd-mid">Medio</div>
+    <div class="trd-cell trd-bad">Muy alto</div>
+    <div class="trd-cell trd-bad">Muy alto</div>
+
+    <div class="trd-rl">Calidad razonamiento visual</div>
+    <div class="trd-cell trd-mid">Media</div>
+    <div class="trd-cell trd-good">Alta</div>
+    <div class="trd-cell trd-good">Alta</div>
+    <div class="trd-cell trd-good">Alta</div>
+
+    <div class="trd-rl">Latencia en inferencia</div>
+    <div class="trd-cell trd-good">Predecible</div>
+    <div class="trd-cell trd-mid">Mayor overhead</div>
+    <div class="trd-cell trd-mid">Variable</div>
+    <div class="trd-cell trd-mid">Variable</div>
+
+    <div class="trd-rl">Accesibilidad para equipos</div>
+    <div class="trd-cell trd-good">Alta</div>
+    <div class="trd-cell trd-mid">Media</div>
+    <div class="trd-cell trd-bad">Muy baja</div>
+    <div class="trd-cell trd-bad">Muy baja</div>
+
+    <div class="trd-rl">Generación multimodal</div>
+    <div class="trd-cell trd-bad">No</div>
+    <div class="trd-cell trd-bad">No</div>
+    <div class="trd-cell trd-good">Sí</div>
+    <div class="trd-cell trd-good">Nativa</div>
+
+    <div class="trd-rl">Latencia primera respuesta</div>
+    <div class="trd-cell trd-good">Baja</div>
+    <div class="trd-cell trd-mid">Media</div>
+    <div class="trd-cell trd-mid">Variable</div>
+    <div class="trd-cell trd-bad">Crítica</div>
+  </div>
+</div>
+
+<style>
+.trd-wrap, .trd-wrap * { box-sizing: border-box; }
+.trd-wrap {
+  --aa: #26A69A; --ab: #324AB2; --ag: #FFB343; --ar: #e04c4c; --al: #7cc7ff;
+  --abg: var(--md-default-bg-color, #fff);
+  --afg: var(--md-default-fg-color, #0f172a);
+  --abd: rgba(15,23,42,.14); --amut: rgba(15,23,42,.58);
+  --af: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  display: grid; gap: 14px; max-width: 900px; margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--abd); border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--ab) 6%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 100%, color-mix(in srgb,var(--aa) 4%,transparent), transparent 52%),
+    var(--abg);
+  color: var(--afg); font-family: var(--af); -webkit-font-smoothing: antialiased;
+}
+[data-md-color-scheme="slate"] .trd-wrap {
+  --abg: var(--md-default-bg-color, #0f172a);
+  --afg: var(--md-default-fg-color, #e2e8f0);
+  --abd: rgba(226,232,240,.14); --amut: rgba(226,232,240,.58);
+}
+.trd-hd { display: grid; gap: 5px; }
+.trd-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.trd-sub { font-size: 14px; color: var(--amut); line-height: 1.5; max-width: 68ch; }
+
+.trd-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr;
+  gap: 1px;
+  border: 1px solid var(--abd); border-radius: 14px; overflow: hidden;
+  background: var(--abd);
+}
+.trd-hdr {
+  padding: 9px 10px; font-size: 11.5px; font-weight: 900; text-align: center;
+  background: color-mix(in srgb,var(--abg) 80%,#0f172a 20%);
+  color: var(--amut); line-height: 1.3;
+}
+.trd-hdr--enc   { color: color-mix(in srgb,var(--ab) 65%,var(--amut)); }
+.trd-hdr--cross { color: color-mix(in srgb,var(--aa) 65%,var(--amut)); }
+.trd-hdr--nat   { color: color-mix(in srgb,var(--ag) 60%,var(--amut)); }
+.trd-hdr--omni  { color: color-mix(in srgb,var(--al) 65%,var(--amut)); }
+
+.trd-rl {
+  padding: 9px 12px; font-size: 12.5px; font-weight: 700; background: var(--abg); line-height: 1.3;
+}
+.trd-cell {
+  padding: 9px 10px; font-size: 12px; font-weight: 800; text-align: center;
+  background: var(--abg);
+}
+.trd-good { color: color-mix(in srgb,var(--aa) 72%,var(--afg)); }
+.trd-mid  { color: color-mix(in srgb,var(--ag) 60%,var(--afg)); }
+.trd-bad  { color: color-mix(in srgb,var(--ar) 65%,var(--afg)); }
+
+@media (max-width: 640px) {
+  .trd-grid { grid-template-columns: 1fr 1fr; }
+  .trd-hdr:nth-child(4), .trd-hdr:nth-child(5),
+  .trd-cell:nth-child(5n-1), .trd-cell:nth-child(5n) { display: none; }
+}
+</style>

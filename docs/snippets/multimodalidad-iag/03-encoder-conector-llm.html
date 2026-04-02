@@ -1,0 +1,406 @@
+<div class="ecl-wrap" data-demo="03-encoder-conector-llm">
+  <div class="ecl-hd">
+    <div class="ecl-title">El conector: punto de diseño crítico</div>
+    <div class="ecl-sub">En la arquitectura encoder-conector-LLM, el conector determina cuánta información visual llega al modelo de lenguaje y con qué coste. Dos variantes dominan en la práctica con filosofías opuestas.</div>
+  </div>
+
+  <div class="ecl-tabs">
+    <button class="ecl-tab active" data-tab="1">Pipeline completo</button>
+    <button class="ecl-tab" data-tab="2">Q-Former — compresión fija</button>
+    <button class="ecl-tab" data-tab="3">Proyección lineal — sin compresión</button>
+  </div>
+
+  <!-- TAB 1: Pipeline completo -->
+  <div class="ecl-panel" data-panel="1">
+    <div class="ecl-flow">
+      <div class="ecl-block ecl-block--img">
+        <div class="ecl-btag">Entrada</div>
+        <div class="ecl-bname">Imagen</div>
+        <svg viewBox="0 0 52 40" width="44" height="34" style="margin-top:4px">
+          <rect x="1" y="1" width="50" height="38" rx="4" fill="rgba(255,179,67,.07)" stroke="rgba(255,179,67,.25)" stroke-width="1.5"/>
+          <rect x="5"  y="5"  width="12" height="12" rx="2" fill="rgba(255,179,67,.42)"/>
+          <rect x="20" y="5"  width="12" height="12" rx="2" fill="rgba(38,166,154,.38)"/>
+          <rect x="35" y="5"  width="12" height="12" rx="2" fill="rgba(50,74,178,.38)"/>
+          <rect x="5"  y="21" width="12" height="12" rx="2" fill="rgba(124,199,255,.32)"/>
+          <rect x="20" y="21" width="12" height="12" rx="2" fill="rgba(255,179,67,.22)"/>
+          <rect x="35" y="21" width="12" height="12" rx="2" fill="rgba(38,166,154,.22)"/>
+        </svg>
+      </div>
+      <div class="ecl-arr">→</div>
+      <div class="ecl-block ecl-block--enc">
+        <div class="ecl-btag">Visión</div>
+        <div class="ecl-bname">Encoder visual</div>
+        <div class="ecl-bex">EVA-CLIP · ViT</div>
+        <div class="ecl-prow">
+          <span class="ecl-pc ecl-pc--v">p₁</span><span class="ecl-pc ecl-pc--v">p₂</span><span class="ecl-pc ecl-pc--v ecl-pc--m">…</span><span class="ecl-pc ecl-pc--v">p₁₉₆</span>
+        </div>
+      </div>
+      <div class="ecl-arr">→</div>
+      <div class="ecl-block ecl-block--con">
+        <div class="ecl-btag ecl-btag--crit">Punto crítico</div>
+        <div class="ecl-bname">Conector</div>
+        <div class="ecl-bex">Q-Former · lineal</div>
+      </div>
+      <div class="ecl-arr">→</div>
+      <div class="ecl-block ecl-block--llm">
+        <div class="ecl-btag">Lenguaje</div>
+        <div class="ecl-bname">LLM</div>
+        <div class="ecl-bex">Vicuna · Llama</div>
+      </div>
+      <div class="ecl-arr">→</div>
+      <div class="ecl-block ecl-block--out">
+        <div class="ecl-btag">Salida</div>
+        <div class="ecl-bname">Texto</div>
+        <div class="ecl-prow" style="margin-top:6px">
+          <span class="ecl-ttok">La</span><span class="ecl-ttok">imagen</span><span class="ecl-ttok">muestra</span><span class="ecl-ttok ecl-pc--m">…</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ecl-insight">
+      <div class="ecl-il">Característica arquitectónica fundamental</div>
+      La imagen se procesa completamente antes de que comience la generación. El LLM recibe una representación fija: no puede volver a la imagen durante la generación para buscar detalles adicionales.
+    </div>
+
+    <div class="ecl-stats">
+      <div class="ecl-stat">
+        <div class="ecl-sv">3 componentes</div>
+        <div class="ecl-sd">entrenables de forma independiente</div>
+      </div>
+      <div class="ecl-sep"></div>
+      <div class="ecl-stat">
+        <div class="ecl-sv">coste bajo</div>
+        <div class="ecl-sd">encoder y LLM preentrenados; solo el conector se ajusta</div>
+      </div>
+      <div class="ecl-sep"></div>
+      <div class="ecl-stat">
+        <div class="ecl-sv">predecible</div>
+        <div class="ecl-sd">latencia de inferencia independiente de la longitud de respuesta</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: Q-Former -->
+  <div class="ecl-panel" data-panel="2" style="display:none">
+    <div class="ecl-diagram">
+      <!-- Zone IN -->
+      <div class="ecl-dz ecl-dz--in">
+        <div class="ecl-dztag">ENTRADA</div>
+        <div class="ecl-dzname">196 patches</div>
+        <div class="ecl-dzchips">
+          <span class="ecl-pc ecl-pc--v">p₁</span>
+          <span class="ecl-pc ecl-pc--v">p₂</span>
+          <span class="ecl-pc ecl-pc--v">p₃</span>
+          <span class="ecl-pc ecl-pc--v">p₄</span>
+          <span class="ecl-pc ecl-pc--v">p₅</span>
+          <span class="ecl-pc ecl-pc--v">p₆</span>
+          <span class="ecl-pc ecl-pc--v ecl-pc--m">…</span>
+        </div>
+        <div class="ecl-dznote">encoder visual · imagen 224×224</div>
+      </div>
+
+      <!-- Bridge: cross-attention -->
+      <div class="ecl-dbridge ecl-dbridge--ca">
+        <div class="ecl-dbr-arr">↔</div>
+        <div class="ecl-dbr-lbl">cross-attention</div>
+      </div>
+
+      <!-- Zone Q-Former -->
+      <div class="ecl-dz ecl-dz--qf">
+        <div class="ecl-dztag">Q-FORMER · BLIP-2</div>
+        <div class="ecl-dzname">32 Q tokens</div>
+        <div class="ecl-dzchips">
+          <span class="ecl-pc ecl-pc--q">Q₁</span>
+          <span class="ecl-pc ecl-pc--q">Q₂</span>
+          <span class="ecl-pc ecl-pc--q">Q₃</span>
+          <span class="ecl-pc ecl-pc--q ecl-pc--m">…</span>
+          <span class="ecl-pc ecl-pc--q">Q₃₂</span>
+        </div>
+        <div class="ecl-dznote">aprendidos en el entrenamiento</div>
+      </div>
+
+      <!-- Output arrow -->
+      <div class="ecl-darr">→</div>
+
+      <!-- Zone OUT -->
+      <div class="ecl-dz ecl-dz--out">
+        <div class="ecl-dztag">SALIDA → LLM</div>
+        <div class="ecl-dzname">32 tokens</div>
+        <div class="ecl-dzchips">
+          <span class="ecl-pc ecl-pc--o">Q₁'</span>
+          <span class="ecl-pc ecl-pc--o">Q₂'</span>
+          <span class="ecl-pc ecl-pc--o">Q₃'</span>
+          <span class="ecl-pc ecl-pc--o ecl-pc--m">…</span>
+          <span class="ecl-pc ecl-pc--o">Q₃₂'</span>
+        </div>
+        <div class="ecl-dznote">tamaño fijo, siempre</div>
+      </div>
+    </div>
+
+    <div class="ecl-compression">
+      <span class="ecl-cin">196 patches</span>
+      <span class="ecl-carr">→</span>
+      <span class="ecl-cout">32 tokens</span>
+      <span class="ecl-cnote">compresión fija: el LLM recibe siempre el mismo número de tokens sin importar la resolución de la imagen</span>
+    </div>
+
+    <div class="ecl-insight ecl-insight--blue">
+      <div class="ecl-il">Por qué el tamaño fijo es una ventaja en producción</div>
+      Una imagen de 224×224 y una de 1024×1024 producen exactamente 32 tokens de entrada al LLM. El coste de inferencia es predecible con independencia de la imagen.
+    </div>
+  </div>
+
+  <!-- TAB 3: Proyección lineal -->
+  <div class="ecl-panel" data-panel="3" style="display:none">
+    <div class="ecl-diagram">
+      <!-- Zone IN -->
+      <div class="ecl-dz ecl-dz--in">
+        <div class="ecl-dztag">ENTRADA</div>
+        <div class="ecl-dzname">N patches</div>
+        <div class="ecl-dzchips">
+          <span class="ecl-pc ecl-pc--v">p₁</span>
+          <span class="ecl-pc ecl-pc--v">p₂</span>
+          <span class="ecl-pc ecl-pc--v">p₃</span>
+          <span class="ecl-pc ecl-pc--v">p₄</span>
+          <span class="ecl-pc ecl-pc--v ecl-pc--m">…</span>
+        </div>
+        <div class="ecl-dznote">encoder visual · ViT</div>
+      </div>
+
+      <!-- Bridge: linear transform -->
+      <div class="ecl-dbridge ecl-dbridge--lin">
+        <div class="ecl-dbr-formula">tᵢ = W · pᵢ</div>
+        <div class="ecl-dbr-arr-lin">→</div>
+      </div>
+
+      <!-- Zone OUT -->
+      <div class="ecl-dz ecl-dz--out">
+        <div class="ecl-dztag">SALIDA → LLM</div>
+        <div class="ecl-dzname">N tokens</div>
+        <div class="ecl-dzchips">
+          <span class="ecl-pc ecl-pc--o">t₁</span>
+          <span class="ecl-pc ecl-pc--o">t₂</span>
+          <span class="ecl-pc ecl-pc--o">t₃</span>
+          <span class="ecl-pc ecl-pc--o">t₄</span>
+          <span class="ecl-pc ecl-pc--o ecl-pc--m">…</span>
+        </div>
+        <div class="ecl-dznote">uno por patch — sin compresión</div>
+      </div>
+    </div>
+
+    <div class="ecl-lin-compare">
+      <div class="ecl-lc ecl-lc--qf">
+        <div class="ecl-lctag">Q-Former (BLIP-2)</div>
+        <div class="ecl-lcval">32 tokens</div>
+        <div class="ecl-lcdesc">Compresión fija. Coste predecible. Cuello de botella explícito.</div>
+      </div>
+      <div class="ecl-lcvs">vs</div>
+      <div class="ecl-lc ecl-lc--llava">
+        <div class="ecl-lctag">Proyección lineal (LLaVA)</div>
+        <div class="ecl-lcval">N tokens</div>
+        <div class="ecl-lcdesc">Sin compresión. Información espacial completa. El LLM interpreta.</div>
+      </div>
+    </div>
+
+    <div class="ecl-insight ecl-insight--teal">
+      <div class="ecl-il">La apuesta de LLaVA</div>
+      Un conector más simple es deliberado: el LLM es suficientemente potente para aprender a interpretar las representaciones visuales proyectadas durante el ajuste fino, sin necesidad de un módulo de compresión complejo.
+    </div>
+  </div>
+</div>
+
+<style>
+.ecl-wrap, .ecl-wrap * { box-sizing: border-box; }
+.ecl-wrap {
+  --aa: #26A69A; --ab: #324AB2; --ag: #FFB343; --ar: #e04c4c; --al: #7cc7ff;
+  --abg: var(--md-default-bg-color, #fff);
+  --afg: var(--md-default-fg-color, #0f172a);
+  --abd: rgba(15,23,42,.14); --amut: rgba(15,23,42,.58);
+  --af: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  display: grid; gap: 14px; max-width: 900px; margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--abd); border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--ag) 5%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 100%, color-mix(in srgb,var(--ab) 4%,transparent), transparent 52%),
+    var(--abg);
+  color: var(--afg); font-family: var(--af); -webkit-font-smoothing: antialiased;
+}
+[data-md-color-scheme="slate"] .ecl-wrap {
+  --abg: var(--md-default-bg-color, #0f172a);
+  --afg: var(--md-default-fg-color, #e2e8f0);
+  --abd: rgba(226,232,240,.14); --amut: rgba(226,232,240,.58);
+}
+.ecl-hd { display: grid; gap: 5px; }
+.ecl-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.ecl-sub { font-size: 14px; color: var(--amut); line-height: 1.5; max-width: 68ch; }
+
+.ecl-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.ecl-tab {
+  padding: 6px 14px; border-radius: 999px; border: 1px solid var(--abd);
+  background: transparent; color: var(--amut);
+  font-family: var(--af); font-size: 12.5px; font-weight: 700;
+  cursor: pointer; transition: background .15s, color .15s; white-space: nowrap;
+}
+.ecl-tab:hover { background: color-mix(in srgb,var(--ag) 7%,var(--abg)); color: var(--afg); }
+.ecl-tab.active {
+  background: color-mix(in srgb,var(--ag) 10%,var(--abg));
+  border-color: color-mix(in srgb,var(--ag) 35%,var(--abd));
+  color: color-mix(in srgb,var(--ag) 70%,var(--afg));
+}
+.ecl-panel { min-height: 220px; display: flex; flex-direction: column; gap: 12px; }
+
+/* ── TAB 1: FLOW ── */
+.ecl-flow {
+  display: flex; align-items: stretch; gap: 6px; flex-wrap: wrap;
+  padding: 14px; border: 1px solid var(--abd); border-radius: 14px;
+  background: color-mix(in srgb,var(--abg) 90%,#0f172a 10%);
+}
+.ecl-arr { font-size: 18px; font-weight: 900; color: var(--amut); align-self: center; flex-shrink: 0; padding: 0 2px; }
+.ecl-block {
+  flex: 1; min-width: 72px; padding: 8px 10px; border-radius: 10px;
+  border: 1px solid var(--abd); display: flex; flex-direction: column; gap: 4px; align-items: center; text-align: center;
+}
+.ecl-block--img { border-color: color-mix(in srgb,var(--ag) 22%,var(--abd)); background: color-mix(in srgb,var(--ag) 5%,var(--abg)); }
+.ecl-block--enc { border-color: color-mix(in srgb,var(--al) 22%,var(--abd)); background: color-mix(in srgb,var(--al) 4%,var(--abg)); }
+.ecl-block--con { border-color: color-mix(in srgb,var(--ar) 22%,var(--abd)); background: color-mix(in srgb,var(--ar) 4%,var(--abg)); }
+.ecl-block--llm { border-color: color-mix(in srgb,var(--ab) 22%,var(--abd)); background: color-mix(in srgb,var(--ab) 5%,var(--abg)); }
+.ecl-block--out { border-color: color-mix(in srgb,var(--aa) 22%,var(--abd)); background: color-mix(in srgb,var(--aa) 5%,var(--abg)); }
+.ecl-btag { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--amut); }
+.ecl-btag--crit { color: color-mix(in srgb,var(--ar) 65%,var(--amut)); }
+.ecl-bname { font-size: 12px; font-weight: 900; line-height: 1.2; }
+.ecl-bex { font-size: 10px; color: var(--amut); }
+.ecl-prow { display: flex; gap: 2px; flex-wrap: wrap; justify-content: center; }
+.ecl-ttok {
+  font-size: 9.5px; font-weight: 700; padding: 2px 5px; border-radius: 4px;
+  background: color-mix(in srgb,var(--aa) 10%,var(--abg));
+  border: 1px solid color-mix(in srgb,var(--aa) 22%,var(--abd));
+  color: color-mix(in srgb,var(--aa) 70%,var(--afg));
+}
+
+/* ── SHARED CHIPS ── */
+.ecl-pc {
+  font-family: "SF Mono","JetBrains Mono","Courier New",monospace;
+  font-size: 9px; font-weight: 800; padding: 2px 5px; border-radius: 4px;
+}
+.ecl-pc--v  { background: color-mix(in srgb,var(--ag) 10%,var(--abg)); border: 1px solid color-mix(in srgb,var(--ag) 22%,var(--abd)); color: color-mix(in srgb,var(--ag) 70%,var(--afg)); }
+.ecl-pc--q  { background: color-mix(in srgb,var(--ab) 10%,var(--abg)); border: 1px solid color-mix(in srgb,var(--ab) 24%,var(--abd)); color: color-mix(in srgb,var(--ab) 70%,var(--afg)); }
+.ecl-pc--o  { background: color-mix(in srgb,var(--aa) 10%,var(--abg)); border: 1px solid color-mix(in srgb,var(--aa) 22%,var(--abd)); color: color-mix(in srgb,var(--aa) 70%,var(--afg)); }
+.ecl-pc--m  { background: transparent; border: 1px solid var(--abd); color: var(--amut); }
+
+/* ── TABS 2 & 3: HORIZONTAL DIAGRAM ── */
+.ecl-diagram {
+  display: flex; align-items: stretch; gap: 6px; flex-wrap: wrap;
+  padding: 14px; border: 1px solid var(--abd); border-radius: 14px;
+  background: color-mix(in srgb,var(--abg) 90%,#0f172a 10%);
+}
+.ecl-dz {
+  flex: 1; min-width: 90px; padding: 10px; border-radius: 10px;
+  border: 1px solid var(--abd); display: flex; flex-direction: column; gap: 7px; align-items: center; text-align: center;
+}
+.ecl-dz--in  { border-color: color-mix(in srgb,var(--ag) 22%,var(--abd)); background: color-mix(in srgb,var(--ag) 5%,var(--abg)); }
+.ecl-dz--qf  { border-color: color-mix(in srgb,var(--ab) 22%,var(--abd)); background: color-mix(in srgb,var(--ab) 5%,var(--abg)); }
+.ecl-dz--out { border-color: color-mix(in srgb,var(--aa) 22%,var(--abd)); background: color-mix(in srgb,var(--aa) 5%,var(--abg)); }
+.ecl-dztag  { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--amut); }
+.ecl-dzname { font-size: 14px; font-weight: 900; line-height: 1.1; }
+.ecl-dzchips { display: flex; gap: 3px; flex-wrap: wrap; justify-content: center; }
+.ecl-dznote { font-size: 10px; color: var(--amut); line-height: 1.3; }
+
+/* Bridge: cross-attention */
+.ecl-dbridge {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 0 8px; flex-shrink: 0; gap: 4px;
+}
+.ecl-dbridge--ca .ecl-dbr-arr {
+  font-size: 22px; font-weight: 900;
+  color: color-mix(in srgb,var(--aa) 65%,var(--afg));
+}
+.ecl-dbridge--ca .ecl-dbr-lbl {
+  font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em;
+  color: color-mix(in srgb,var(--aa) 55%,var(--amut)); text-align: center; line-height: 1.3;
+}
+/* Bridge: linear */
+.ecl-dbridge--lin { gap: 6px; }
+.ecl-dbr-formula {
+  font-family: "SF Mono","JetBrains Mono","Courier New",monospace;
+  font-size: 13px; font-weight: 800;
+  color: color-mix(in srgb,var(--ab) 70%,var(--afg));
+  padding: 6px 10px; border-radius: 7px;
+  border: 1px solid color-mix(in srgb,var(--ab) 20%,var(--abd));
+  background: color-mix(in srgb,var(--ab) 5%,var(--abg));
+}
+.ecl-dbr-arr-lin { font-size: 18px; font-weight: 900; color: var(--amut); }
+
+/* Arrow between Q-Former and output */
+.ecl-darr { font-size: 18px; font-weight: 900; color: var(--amut); display: flex; align-items: center; padding: 0 3px; flex-shrink: 0; }
+
+/* Compression bar */
+.ecl-compression {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  padding: 8px 14px; border-radius: 8px;
+  background: color-mix(in srgb,var(--abg) 85%,#0f172a 15%);
+  border: 1px solid var(--abd);
+}
+.ecl-cin  { font-family: "SF Mono","JetBrains Mono","Courier New",monospace; font-size: 12px; font-weight: 900; color: color-mix(in srgb,var(--ag) 70%,var(--afg)); }
+.ecl-carr { font-size: 16px; font-weight: 900; color: var(--amut); }
+.ecl-cout { font-family: "SF Mono","JetBrains Mono","Courier New",monospace; font-size: 12px; font-weight: 900; color: color-mix(in srgb,var(--aa) 70%,var(--afg)); }
+.ecl-cnote { font-size: 11px; color: var(--amut); line-height: 1.3; }
+
+/* Linear compare */
+.ecl-lin-compare { display: flex; align-items: stretch; gap: 8px; }
+.ecl-lc {
+  flex: 1; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--abd);
+  display: grid; gap: 4px; text-align: center;
+}
+.ecl-lc--qf   { border-color: color-mix(in srgb,var(--ab) 20%,var(--abd)); background: color-mix(in srgb,var(--ab) 4%,var(--abg)); }
+.ecl-lc--llava { border-color: color-mix(in srgb,var(--aa) 20%,var(--abd)); background: color-mix(in srgb,var(--aa) 4%,var(--abg)); }
+.ecl-lctag { font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--amut); }
+.ecl-lcval { font-family: "SF Mono","JetBrains Mono","Courier New",monospace; font-size: 18px; font-weight: 900; }
+.ecl-lcdesc { font-size: 11px; color: var(--amut); line-height: 1.4; }
+.ecl-lcvs { font-size: 12px; font-weight: 900; color: var(--amut); align-self: center; flex-shrink: 0; }
+
+/* INSIGHT */
+.ecl-insight {
+  padding: 10px 14px; border-radius: 10px;
+  border: 1px solid color-mix(in srgb,var(--ag) 22%,var(--abd));
+  background: color-mix(in srgb,var(--ag) 4%,var(--abg));
+  font-size: 12.5px; line-height: 1.5; display: grid; gap: 4px;
+}
+.ecl-insight--blue { border-color: color-mix(in srgb,var(--ab) 22%,var(--abd)); background: color-mix(in srgb,var(--ab) 4%,var(--abg)); }
+.ecl-insight--teal { border-color: color-mix(in srgb,var(--aa) 22%,var(--abd)); background: color-mix(in srgb,var(--aa) 4%,var(--abg)); }
+.ecl-il { font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--amut); }
+
+/* STATS (Tab 1) */
+.ecl-stats { display: flex; border: 1px solid var(--abd); border-radius: 12px; overflow: hidden; }
+.ecl-stat { flex: 1; padding: 10px 12px; display: grid; gap: 3px; text-align: center; }
+.ecl-sep { width: 1px; background: var(--abd); flex-shrink: 0; }
+.ecl-sv { font-family: "SF Mono","JetBrains Mono","Courier New",monospace; font-size: 12px; font-weight: 900; color: color-mix(in srgb,var(--ag) 70%,var(--afg)); }
+.ecl-sd { font-size: 10.5px; color: var(--amut); line-height: 1.3; }
+
+@media (max-width: 640px) {
+  .ecl-flow { flex-direction: column; align-items: stretch; }
+  .ecl-arr { align-self: center; transform: rotate(90deg); }
+  .ecl-diagram { flex-direction: column; }
+  .ecl-dbridge { flex-direction: row; padding: 4px 0; }
+  .ecl-dbridge--ca .ecl-dbr-arr { transform: rotate(90deg); }
+  .ecl-darr { align-self: center; transform: rotate(90deg); }
+  .ecl-stats { flex-direction: column; }
+  .ecl-sep { width: 100%; height: 1px; }
+  .ecl-lin-compare { flex-direction: column; }
+  .ecl-lcvs { align-self: center; }
+}
+</style>
+
+<script>
+(function(){
+  document.querySelectorAll('[data-demo="03-encoder-conector-llm"] button[data-tab]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var wrap = btn.closest('[data-demo="03-encoder-conector-llm"]');
+      wrap.querySelectorAll('button[data-tab]').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      wrap.querySelectorAll('[data-panel]').forEach(function(p){ p.style.display = 'none'; });
+      wrap.querySelector('[data-panel="' + btn.dataset.tab + '"]').style.display = '';
+    });
+  });
+})();
+</script>

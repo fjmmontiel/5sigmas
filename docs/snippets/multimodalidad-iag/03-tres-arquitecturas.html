@@ -1,0 +1,751 @@
+<div class="arc-wrap" data-demo="03-tres-arquitecturas">
+  <div class="arc-hd">
+    <div class="arc-title">Cuatro familias de arquitectura multimodal</div>
+    <div class="arc-sub">Cada familia resuelve la integración de forma distinta. El embedding multimodal y la generación multimodal no son la misma capa del sistema.</div>
+  </div>
+
+  <div class="arc-tabs">
+    <button class="arc-tab active" data-tab="1">Encoder + conector + LLM</button>
+    <button class="arc-tab" data-tab="2">Fusión por cross-attention</button>
+    <button class="arc-tab" data-tab="3">Tokenización nativa</button>
+    <button class="arc-tab" data-tab="4">Modelos omni y streaming</button>
+  </div>
+
+  <!-- TAB 1: Encoder + conector + LLM -->
+  <div class="arc-panel" data-panel="1">
+    <div class="arc-panel-inner">
+      <div class="arc-flow-section">
+        <div class="arc-flow-label">Flujo de procesamiento</div>
+        <div class="arc-flow">
+          <div class="arc-flow-block arc-flow-block--vis">
+            <div class="arc-flow-tag">Visión</div>
+            <div class="arc-flow-name">Encoder visual</div>
+            <div class="arc-flow-ex">EVA-CLIP, ViT</div>
+          </div>
+          <div class="arc-flow-arr">→</div>
+          <div class="arc-flow-block arc-flow-block--mid">
+            <div class="arc-flow-tag">Conexión</div>
+            <div class="arc-flow-name">Conector</div>
+            <div class="arc-flow-ex">Q-Former / lineal</div>
+          </div>
+          <div class="arc-flow-arr">→</div>
+          <div class="arc-flow-block arc-flow-block--llm">
+            <div class="arc-flow-tag">Lenguaje</div>
+            <div class="arc-flow-name">LLM</div>
+            <div class="arc-flow-ex">Vicuna, Llama</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arc-variants">
+        <div class="arc-variant-label">Dos variantes del conector</div>
+        <div class="arc-variant-row">
+          <div class="arc-variant arc-variant--qformer">
+            <div class="arc-variant-name">Q-Former <span class="arc-variant-model">(BLIP-2)</span></div>
+            <div class="arc-variant-desc">Conector complejo con N tokens fijos de consulta que comprimen la representación visual antes de pasarla al LLM</div>
+          </div>
+          <div class="arc-variant arc-variant--proj">
+            <div class="arc-variant-name">Proyección lineal <span class="arc-variant-model">(LLaVA)</span></div>
+            <div class="arc-variant-desc">Transformación directa de tokens visuales al espacio del LLM. Simple, eficiente y sorprendentemente competitivo</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arc-traits-row">
+        <div class="arc-trait-group arc-trait-group--ok">
+          <div class="arc-trait-group-label">Ventajas</div>
+          <div class="arc-trait arc-trait--ok">Reutiliza componentes preentrenados independientemente</div>
+          <div class="arc-trait arc-trait--ok">Coste de entrenamiento reducido</div>
+          <div class="arc-trait arc-trait--ok">Latencia predecible en producción</div>
+        </div>
+        <div class="arc-trait-group arc-trait-group--lim">
+          <div class="arc-trait-group-label">Limitaciones</div>
+          <div class="arc-trait arc-trait--lim">Procesamiento visual fijo: no puede "volver" a la imagen durante la generación</div>
+          <div class="arc-trait arc-trait--lim">Cuello de botella en el conector</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: Cross-attention -->
+  <div class="arc-panel" data-panel="2" style="display:none">
+    <div class="arc-panel-inner">
+      <div class="arc-flow-section">
+        <div class="arc-flow-label">Flujo de procesamiento</div>
+        <div class="arc-flow arc-flow--cross">
+          <div class="arc-flow-block arc-flow-block--vis">
+            <div class="arc-flow-tag">Visión</div>
+            <div class="arc-flow-name">Encoder visual</div>
+            <div class="arc-flow-ex">representación visual</div>
+          </div>
+          <div class="arc-cross-connector">
+            <div class="arc-cross-arrow">↕</div>
+            <div class="arc-cross-label">cross-attention<br>en cada capa</div>
+          </div>
+          <div class="arc-flow-block arc-flow-block--llm arc-flow-block--augmented">
+            <div class="arc-flow-tag">Lenguaje</div>
+            <div class="arc-flow-name">LLM con capas aumentadas</div>
+            <div class="arc-flow-ex">Flamingo, Idefics2</div>
+            <div class="arc-llm-layers">
+              <div class="arc-layer">capa texto</div>
+              <div class="arc-layer arc-layer--cross">capa cross-att ↔ visual</div>
+              <div class="arc-layer">capa texto</div>
+              <div class="arc-layer arc-layer--cross">capa cross-att ↔ visual</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arc-key-insight">
+        <div class="arc-insight-label">Diferencia clave respecto al encoder+conector</div>
+        <div class="arc-insight-text">El LLM puede atender a tokens visuales <strong>en cualquier capa durante toda la generación</strong>, no solo al inicio. Esto permite razonamiento más profundo sobre el contenido visual.</div>
+      </div>
+
+      <div class="arc-traits-row">
+        <div class="arc-trait-group arc-trait-group--ok">
+          <div class="arc-trait-group-label">Ventajas</div>
+          <div class="arc-trait arc-trait--ok">Acceso dinámico a la imagen en toda la generación</div>
+          <div class="arc-trait arc-trait--ok">Mayor calidad en razonamiento espacial y localización</div>
+          <div class="arc-trait arc-trait--ok">Competitivo en few-shot visual</div>
+        </div>
+        <div class="arc-trait-group arc-trait-group--lim">
+          <div class="arc-trait-group-label">Limitaciones</div>
+          <div class="arc-trait arc-trait--lim">Overhead en inferencia por capas adicionales</div>
+          <div class="arc-trait arc-trait--lim">Escalado horizontal más complejo</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: Tokenización nativa -->
+  <div class="arc-panel" data-panel="3" style="display:none">
+    <div class="arc-panel-inner">
+      <div class="arc-flow-section">
+        <div class="arc-flow-label">Flujo de procesamiento</div>
+        <div class="arc-native-flow">
+          <div class="arc-native-inputs">
+            <div class="arc-native-source arc-native-source--img">imagen</div>
+            <div class="arc-native-source arc-native-source--txt">texto</div>
+            <div class="arc-native-source arc-native-source--aud">audio</div>
+          </div>
+          <div class="arc-native-arr">↓</div>
+          <div class="arc-native-tokenizer">
+            <div class="arc-native-tok-label">Tokenizador multimodal unificado</div>
+            <div class="arc-native-tokens">
+              <span class="arc-tok arc-tok--t">T</span>
+              <span class="arc-tok arc-tok--i">I</span>
+              <span class="arc-tok arc-tok--i">I</span>
+              <span class="arc-tok arc-tok--t">T</span>
+              <span class="arc-tok arc-tok--t">T</span>
+              <span class="arc-tok arc-tok--i">I</span>
+              <span class="arc-tok arc-tok--a">A</span>
+              <span class="arc-tok arc-tok--t">T</span>
+            </div>
+            <div class="arc-native-tok-sub">mismo espacio de tokens para todas las modalidades</div>
+          </div>
+          <div class="arc-native-arr">↓</div>
+          <div class="arc-flow-block arc-flow-block--unified">
+            <div class="arc-flow-tag">Modelo unificado</div>
+            <div class="arc-flow-name">Transformer sin distinción de modalidad</div>
+            <div class="arc-flow-ex">Gemini, Chameleon</div>
+          </div>
+          <div class="arc-native-arr">↓</div>
+          <div class="arc-native-output">
+            <div class="arc-native-out-label">Puede generar en cualquier modalidad</div>
+            <div class="arc-native-out-tokens">
+              <span class="arc-tok arc-tok--t">T</span>
+              <span class="arc-tok arc-tok--t">T</span>
+              <span class="arc-tok arc-tok--i">I</span>
+              <span class="arc-tok arc-tok--i">I</span>
+              <span class="arc-tok arc-tok--t">T</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arc-traits-row">
+        <div class="arc-trait-group arc-trait-group--ok">
+          <div class="arc-trait-group-label">Ventajas</div>
+          <div class="arc-trait arc-trait--ok">Sin cuello de botella de conector: relaciones cross-modal aprendidas desde el preentrenamiento</div>
+          <div class="arc-trait arc-trait--ok">Puede generar tokens de imagen, no solo texto</div>
+          <div class="arc-trait arc-trait--ok">Mayor potencial a largo plazo</div>
+        </div>
+        <div class="arc-trait-group arc-trait-group--lim">
+          <div class="arc-trait-group-label">Limitaciones</div>
+          <div class="arc-trait arc-trait--lim">Preentrenamiento masivo necesario desde cero</div>
+          <div class="arc-trait arc-trait--lim">Solo accesible para laboratorios con recursos máximos</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 4: Modelos omni y streaming -->
+  <div class="arc-panel" data-panel="4" style="display:none">
+    <div class="arc-panel-inner">
+      <div class="arc-key-insight">
+        <div class="arc-insight-label">Qué distingue a esta familia</div>
+        <div class="arc-insight-text">Los modelos omni no son solo nativamente multimodales: están diseñados para <strong>entrada y salida multimodal bajo restricciones de latencia real</strong>. La conversación hablada, la generación de voz simultánea con texto y el procesamiento en streaming imponen requisitos arquitectónicos cualitativamente distintos a los tres enfoques anteriores.</div>
+      </div>
+
+      <div class="arc-flow-section">
+        <div class="arc-flow-label">Tres sistemas representativos</div>
+        <div class="arc-flow" style="flex-direction:column; gap:8px">
+          <div class="arc-flow-block" style="min-width:unset; background:color-mix(in srgb,var(--ag) 6%,var(--abg)); border-color:color-mix(in srgb,var(--ag) 22%,var(--abd))">
+            <div class="arc-flow-tag" style="color:color-mix(in srgb,var(--ag) 60%,var(--afg))">Punto de inflexión · 2024</div>
+            <div class="arc-flow-name">GPT-4o</div>
+            <div class="arc-flow-ex">Primer modelo omni de escala masiva con entrada y salida en texto, audio e imagen. Entrenado de extremo a extremo. Marca la transición de la etapa VLM a la etapa omni.</div>
+          </div>
+          <div class="arc-flow-block" style="min-width:unset; background:color-mix(in srgb,var(--ab) 6%,var(--abg)); border-color:color-mix(in srgb,var(--ab) 22%,var(--abd))">
+            <div class="arc-flow-tag" style="color:color-mix(in srgb,var(--ab) 60%,var(--afg))">Audio nativo · 2025</div>
+            <div class="arc-flow-name">Gemini 2.5 Native Audio</div>
+            <div class="arc-flow-ex">Diálogo hablado en tiempo real, gestión de interrupciones, uso de herramientas durante la conversación. El eje de audio nativo y latencia de primera respuesta.</div>
+          </div>
+          <div class="arc-flow-block" style="min-width:unset; background:color-mix(in srgb,var(--aa) 6%,var(--abg)); border-color:color-mix(in srgb,var(--aa) 22%,var(--abd))">
+            <div class="arc-flow-tag" style="color:color-mix(in srgb,var(--aa) 60%,var(--afg))">Streaming multimodal · 2025</div>
+            <div class="arc-flow-name">Qwen2.5-Omni</div>
+            <div class="arc-flow-ex">Comprensión y generación de texto, imagen, audio y vídeo en streaming. Genera texto y voz simultáneamente con alineación temporal explícita durante la inferencia.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arc-traits-row">
+        <div class="arc-trait-group arc-trait-group--ok">
+          <div class="arc-trait-group-label">Ventajas</div>
+          <div class="arc-trait arc-trait--ok">Entrada y salida nativas en múltiples modalidades</div>
+          <div class="arc-trait arc-trait--ok">Procesamiento en tiempo real con baja latencia</div>
+          <div class="arc-trait arc-trait--ok">Coherencia entre modalidades de salida simultáneas</div>
+        </div>
+        <div class="arc-trait-group arc-trait-group--lim">
+          <div class="arc-trait-group-label">Limitaciones</div>
+          <div class="arc-trait arc-trait--lim">Sin benchmarks establecidos para calidad de respuesta oral en tiempo real</div>
+          <div class="arc-trait arc-trait--lim">Requisitos de arquitectura dominados por cola de generación y contexto activo, no por calidad de representación</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<style>
+.arc-wrap, .arc-wrap * { box-sizing: border-box; }
+
+.arc-wrap {
+  --aa: var(--md-primary-fg-color, #26A69A);
+  --ab: #324AB2;
+  --ag: var(--md-accent-fg-color, #FFB343);
+  --ar: #e04c4c;
+  --abg: var(--md-default-bg-color, #fff);
+  --afg: var(--md-default-fg-color, #0f172a);
+  --abd: rgba(15,23,42,.16);
+  --amut: rgba(15,23,42,.60);
+  --af: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid;
+  gap: 14px;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--abd);
+  border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--ab) 8%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 100%, color-mix(in srgb,var(--aa) 5%,transparent), transparent 52%),
+    var(--abg);
+  color: var(--afg);
+  font-family: var(--af);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-md-color-scheme="slate"] .arc-wrap {
+  --abg: var(--md-default-bg-color, #0f172a);
+  --afg: var(--md-default-fg-color, #e2e8f0);
+  --abd: rgba(226,232,240,.16);
+  --amut: rgba(226,232,240,.60);
+}
+
+.arc-hd { display: grid; gap: 5px; }
+.arc-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.arc-sub { font-size: 14px; color: var(--amut); line-height: 1.5; max-width: 68ch; }
+
+/* TABS */
+.arc-tabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.arc-tab {
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--abd);
+  background: transparent;
+  color: var(--amut);
+  font-family: var(--af);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .15s;
+  white-space: nowrap;
+}
+
+.arc-tab:hover {
+  color: var(--afg);
+  border-color: color-mix(in srgb, var(--aa) 40%, var(--abd));
+}
+
+.arc-tab.active {
+  background: color-mix(in srgb, var(--aa) 12%, var(--abg));
+  border-color: color-mix(in srgb, var(--aa) 40%, var(--abd));
+  color: color-mix(in srgb, var(--aa) 75%, var(--afg));
+}
+
+/* PANELS */
+.arc-panel { min-height: 280px; }
+.arc-panel-inner { display: grid; gap: 14px; }
+
+/* FLOW */
+.arc-flow-section { display: grid; gap: 8px; }
+.arc-flow-label {
+  font-size: 10.5px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--amut);
+}
+
+.arc-flow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 16px;
+  border: 1px solid var(--abd);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--abg) 90%, #0f172a 10%);
+}
+
+.arc-flow--cross {
+  align-items: stretch;
+  gap: 0;
+}
+
+.arc-flow-arr {
+  font-size: 18px;
+  color: var(--amut);
+  font-weight: 900;
+  flex-shrink: 0;
+  padding: 0 4px;
+}
+
+.arc-flow-block {
+  flex: 1;
+  min-width: 110px;
+  display: grid;
+  gap: 4px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--abd);
+  align-content: start;
+}
+
+.arc-flow-tag {
+  font-size: 9px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+.arc-flow-name {
+  font-size: 13px;
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.arc-flow-ex {
+  font-size: 11px;
+  color: var(--amut);
+}
+
+.arc-flow-block--vis {
+  background: color-mix(in srgb, var(--ag) 8%, var(--abg));
+  border-color: color-mix(in srgb, var(--ag) 22%, var(--abd));
+}
+.arc-flow-block--vis .arc-flow-tag { color: color-mix(in srgb, var(--ag) 60%, var(--afg)); }
+
+.arc-flow-block--mid {
+  background: color-mix(in srgb, var(--amut) 6%, var(--abg));
+}
+.arc-flow-block--mid .arc-flow-tag { color: var(--amut); }
+
+.arc-flow-block--llm {
+  background: color-mix(in srgb, var(--ab) 8%, var(--abg));
+  border-color: color-mix(in srgb, var(--ab) 22%, var(--abd));
+}
+.arc-flow-block--llm .arc-flow-tag { color: color-mix(in srgb, var(--ab) 65%, var(--afg)); }
+
+.arc-flow-block--augmented { display: flex; flex-direction: column; }
+
+.arc-flow-block--unified {
+  background: color-mix(in srgb, var(--aa) 8%, var(--abg));
+  border-color: color-mix(in srgb, var(--aa) 22%, var(--abd));
+}
+.arc-flow-block--unified .arc-flow-tag { color: color-mix(in srgb, var(--aa) 65%, var(--afg)); }
+
+/* CROSS ATTENTION specific */
+.arc-cross-connector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.arc-cross-arrow {
+  font-size: 22px;
+  font-weight: 900;
+  color: color-mix(in srgb, var(--aa) 60%, var(--afg));
+  line-height: 1;
+}
+
+.arc-cross-label {
+  font-size: 9px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: color-mix(in srgb, var(--aa) 55%, var(--amut));
+  text-align: center;
+  line-height: 1.3;
+}
+
+.arc-llm-layers {
+  display: grid;
+  gap: 3px;
+  margin-top: 8px;
+}
+
+.arc-layer {
+  font-size: 9.5px;
+  font-weight: 700;
+  padding: 3px 6px;
+  border-radius: 5px;
+  border: 1px solid var(--abd);
+  background: color-mix(in srgb, var(--abg) 85%, #0f172a 15%);
+  color: var(--amut);
+  text-align: center;
+}
+
+.arc-layer--cross {
+  background: color-mix(in srgb, var(--aa) 8%, var(--abg));
+  border-color: color-mix(in srgb, var(--aa) 25%, var(--abd));
+  color: color-mix(in srgb, var(--aa) 65%, var(--afg));
+}
+
+/* VARIANTS */
+.arc-variants { display: grid; gap: 8px; }
+
+.arc-variant-label {
+  font-size: 10.5px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--amut);
+}
+
+.arc-variant-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+.arc-variant {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--abd);
+  background: color-mix(in srgb, var(--abg) 90%, #0f172a 10%);
+  display: grid;
+  gap: 5px;
+}
+
+.arc-variant--qformer { border-color: color-mix(in srgb, var(--ab) 20%, var(--abd)); }
+.arc-variant--proj { border-color: color-mix(in srgb, var(--aa) 20%, var(--abd)); }
+
+.arc-variant-name {
+  font-size: 12.5px;
+  font-weight: 900;
+}
+
+.arc-variant-model {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--amut);
+}
+
+.arc-variant-desc {
+  font-size: 12px;
+  color: var(--amut);
+  line-height: 1.45;
+}
+
+/* KEY INSIGHT */
+.arc-key-insight {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--aa) 25%, var(--abd));
+  background: color-mix(in srgb, var(--aa) 6%, var(--abg));
+  display: grid;
+  gap: 4px;
+}
+
+.arc-insight-label {
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: color-mix(in srgb, var(--aa) 60%, var(--amut));
+}
+
+.arc-insight-text {
+  font-size: 13px;
+  color: var(--afg);
+  line-height: 1.5;
+}
+
+/* NATIVE FLOW */
+.arc-native-flow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+  border: 1px solid var(--abd);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--abg) 90%, #0f172a 10%);
+}
+
+.arc-native-inputs {
+  display: flex;
+  gap: 8px;
+}
+
+.arc-native-source {
+  padding: 5px 14px;
+  border-radius: 7px;
+  border: 1px solid var(--abd);
+  font-size: 11.5px;
+  font-weight: 800;
+}
+
+.arc-native-source--img {
+  background: color-mix(in srgb, var(--ag) 8%, var(--abg));
+  border-color: color-mix(in srgb, var(--ag) 22%, var(--abd));
+  color: color-mix(in srgb, var(--ag) 60%, var(--afg));
+}
+
+.arc-native-source--txt {
+  background: color-mix(in srgb, var(--ab) 8%, var(--abg));
+  border-color: color-mix(in srgb, var(--ab) 22%, var(--abd));
+  color: color-mix(in srgb, var(--ab) 65%, var(--afg));
+}
+
+.arc-native-source--aud {
+  background: color-mix(in srgb, var(--aa) 8%, var(--abg));
+  border-color: color-mix(in srgb, var(--aa) 22%, var(--abd));
+  color: color-mix(in srgb, var(--aa) 65%, var(--afg));
+}
+
+.arc-native-arr {
+  font-size: 18px;
+  color: var(--amut);
+  font-weight: 900;
+}
+
+.arc-native-tokenizer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--abd);
+  background: color-mix(in srgb, var(--abg) 85%, #0f172a 15%);
+  width: 100%;
+}
+
+.arc-native-tok-label {
+  font-size: 10.5px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--amut);
+}
+
+.arc-native-tokens { display: flex; gap: 4px; flex-wrap: wrap; justify-content: center; }
+
+.arc-tok {
+  width: 26px;
+  height: 26px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 900;
+  border: 1px solid var(--abd);
+}
+
+.arc-tok--t {
+  background: color-mix(in srgb, var(--ab) 10%, var(--abg));
+  color: color-mix(in srgb, var(--ab) 65%, var(--afg));
+  border-color: color-mix(in srgb, var(--ab) 22%, var(--abd));
+}
+
+.arc-tok--i {
+  background: color-mix(in srgb, var(--ag) 10%, var(--abg));
+  color: color-mix(in srgb, var(--ag) 55%, var(--afg));
+  border-color: color-mix(in srgb, var(--ag) 22%, var(--abd));
+}
+
+.arc-tok--a {
+  background: color-mix(in srgb, var(--aa) 10%, var(--abg));
+  color: color-mix(in srgb, var(--aa) 65%, var(--afg));
+  border-color: color-mix(in srgb, var(--aa) 22%, var(--abd));
+}
+
+.arc-native-tok-sub {
+  font-size: 10.5px;
+  color: var(--amut);
+}
+
+.arc-native-output {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.arc-native-out-label {
+  font-size: 10.5px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: color-mix(in srgb, var(--aa) 60%, var(--amut));
+}
+
+.arc-native-out-tokens { display: flex; gap: 4px; }
+
+/* TRAITS */
+.arc-traits-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.arc-trait-group {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--abd);
+  display: grid;
+  gap: 5px;
+  align-content: start;
+}
+
+.arc-trait-group--ok { border-color: color-mix(in srgb, var(--aa) 20%, var(--abd)); }
+.arc-trait-group--lim { border-color: color-mix(in srgb, var(--ar) 18%, var(--abd)); }
+
+.arc-trait-group-label {
+  font-size: 9.5px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--amut);
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--abd);
+}
+
+.arc-trait {
+  font-size: 12px;
+  padding: 2px 0;
+  line-height: 1.4;
+}
+
+.arc-trait--ok { color: color-mix(in srgb, var(--aa) 70%, var(--afg)); }
+.arc-trait--ok::before { content: "✓ "; font-weight: 900; }
+.arc-trait--lim { color: var(--amut); }
+.arc-trait--lim::before { content: "· "; font-weight: 900; }
+
+/* COMPARISON TABLE */
+.arc-compare-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr 1fr;
+  gap: 1px;
+  border: 1px solid var(--abd);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--abd);
+}
+
+.arc-cmp-hdr {
+  padding: 8px 10px;
+  font-size: 11px;
+  font-weight: 900;
+  background: color-mix(in srgb, var(--abg) 80%, #0f172a 20%);
+  color: var(--amut);
+  text-align: center;
+}
+
+.arc-cmp-hdr--enc { color: color-mix(in srgb, var(--ab) 60%, var(--amut)); }
+.arc-cmp-hdr--cross { color: color-mix(in srgb, var(--aa) 60%, var(--amut)); }
+.arc-cmp-hdr--nat { color: color-mix(in srgb, var(--ag) 55%, var(--amut)); }
+.arc-cmp-hdr--omni { color: color-mix(in srgb, var(--aa) 60%, var(--amut)); }
+
+.arc-cmp-row-label {
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  background: var(--abg);
+  line-height: 1.3;
+}
+
+.arc-cmp-cell {
+  padding: 8px 10px;
+  font-size: 11.5px;
+  font-weight: 800;
+  text-align: center;
+  background: var(--abg);
+}
+
+.arc-cmp--good { color: color-mix(in srgb, var(--aa) 70%, var(--afg)); }
+.arc-cmp--mid { color: color-mix(in srgb, var(--ag) 55%, var(--afg)); }
+.arc-cmp--bad { color: color-mix(in srgb, var(--ar) 60%, var(--afg)); }
+
+/* NOTE */
+.arc-note {
+  font-size: 13px;
+  color: var(--amut);
+  line-height: 1.55;
+  font-style: italic;
+  border-left: 3px solid color-mix(in srgb, var(--ab) 36%, transparent);
+  padding-left: 12px;
+}
+
+@media (max-width: 640px) {
+  .arc-variant-row { grid-template-columns: 1fr; }
+  .arc-traits-row { grid-template-columns: 1fr; }
+  .arc-flow { flex-direction: column; align-items: stretch; }
+  .arc-flow--cross { flex-direction: column; }
+  .arc-compare-grid { grid-template-columns: 1fr 1fr; }
+  .arc-cmp-hdr:nth-child(4), .arc-cmp-hdr:nth-child(5), .arc-cmp-cell:nth-child(5n-1), .arc-cmp-cell:nth-child(5n) { display: none; }
+}
+</style>
+
+<script>
+(function(){
+  document.querySelectorAll('[data-demo="03-tres-arquitecturas"] button[data-tab]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const wrap = btn.closest('[data-demo="03-tres-arquitecturas"]');
+      wrap.querySelectorAll('button[data-tab]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      wrap.querySelectorAll('[data-panel]').forEach(p => p.style.display = 'none');
+      wrap.querySelector('[data-panel="' + btn.dataset.tab + '"]').style.display = '';
+    });
+  });
+})();
+</script>

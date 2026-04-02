@@ -1,0 +1,331 @@
+<div class="cxa-wrap" data-demo="03-cross-attention-acceso">
+  <div class="cxa-hd">
+    <div class="cxa-title">Cuándo accede el modelo a la imagen</div>
+    <div class="cxa-sub">La diferencia clave entre encoder-conector y cross-attention no está en la arquitectura sino en el momento del acceso: una procesa la imagen una sola vez antes de generar; la otra la consulta en cada capa durante toda la generación.</div>
+  </div>
+
+  <div class="cxa-tabs">
+    <button class="cxa-tab active" data-tab="1">Representación fija — encoder + conector</button>
+    <button class="cxa-tab" data-tab="2">Acceso dinámico — cross-attention (Flamingo)</button>
+  </div>
+
+  <!-- TAB 1: Fixed representation -->
+  <div class="cxa-panel" data-panel="1">
+
+    <!-- Pre-gen flow -->
+    <div class="cxa-section cxa-section--pre">
+      <div class="cxa-stag">Pre-generación — la imagen se procesa una sola vez</div>
+      <div class="cxa-flow">
+        <div class="cxa-mini cxa-mini--img">Imagen</div>
+        <div class="cxa-marr">→</div>
+        <div class="cxa-mini cxa-mini--enc">Encoder</div>
+        <div class="cxa-marr">→</div>
+        <div class="cxa-mini cxa-mini--con">Conector</div>
+        <div class="cxa-marr">→</div>
+        <div class="cxa-blob">
+          <div class="cxa-blob-label">REPRESENTACIÓN FIJA</div>
+          <div class="cxa-blob-row">
+            <span class="cxa-vt cxa-vt--fix">v₁</span>
+            <span class="cxa-vt cxa-vt--fix">v₂</span>
+            <span class="cxa-vt cxa-vt--fix cxa-vt--m">…</span>
+            <span class="cxa-vt cxa-vt--fix">vₙ</span>
+          </div>
+          <div class="cxa-blob-note">inmutable</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Generation phase -->
+    <div class="cxa-section cxa-section--gen">
+      <div class="cxa-stag">Durante la generación — todos los tokens leen el mismo blob</div>
+      <div class="cxa-gen-row">
+        <div class="cxa-gtok-group">
+          <div class="cxa-gtoken"><span class="cxa-gt">t₁</span><span class="cxa-gnote">← representación fija</span></div>
+          <div class="cxa-gtoken"><span class="cxa-gt">t₂</span><span class="cxa-gnote">← representación fija</span></div>
+          <div class="cxa-gtoken"><span class="cxa-gt">t₃</span><span class="cxa-gnote">← representación fija</span></div>
+          <div class="cxa-gtoken cxa-gtoken--mute"><span class="cxa-gt cxa-gt--m">…</span><span class="cxa-gnote cxa-gnote--m">el modelo no puede volver a la imagen original</span></div>
+        </div>
+        <div class="cxa-lock-col">
+          <div class="cxa-lock-label">Blob inmutable</div>
+          <div class="cxa-lock-box">
+            <span class="cxa-vt cxa-vt--fix">v₁</span>
+            <span class="cxa-vt cxa-vt--fix">v₂</span>
+            <span class="cxa-vt cxa-vt--fix cxa-vt--m">…</span>
+            <span class="cxa-vt cxa-vt--fix">vₙ</span>
+          </div>
+          <div class="cxa-lock-note">no cambia durante la generación</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cxa-insight cxa-insight--lim">
+      <div class="cxa-il">Limitación en razonamiento visual fino</div>
+      Si el modelo necesita verificar un detalle espacial durante la generación, no puede. Toda la información visual disponible estaba ya en el blob fijo capturado antes del primer token generado.
+    </div>
+  </div>
+
+  <!-- TAB 2: Dynamic cross-attention -->
+  <div class="cxa-panel" data-panel="2" style="display:none">
+
+    <!-- Pre-processing flow -->
+    <div class="cxa-section cxa-section--pre-dyn">
+      <div class="cxa-stag">Pre-procesamiento — imagen codificada como pool accesible</div>
+      <div class="cxa-flow">
+        <div class="cxa-mini cxa-mini--img">Imagen</div>
+        <div class="cxa-marr">→</div>
+        <div class="cxa-mini cxa-mini--enc">Encoder visual</div>
+        <div class="cxa-marr">→</div>
+        <div class="cxa-pool">
+          <div class="cxa-pool-label">POOL DE TOKENS VISUALES</div>
+          <div class="cxa-pool-row">
+            <span class="cxa-vt cxa-vt--pool">v₁</span>
+            <span class="cxa-vt cxa-vt--pool">v₂</span>
+            <span class="cxa-vt cxa-vt--pool">v₃</span>
+            <span class="cxa-vt cxa-vt--pool cxa-vt--m">…</span>
+            <span class="cxa-vt cxa-vt--pool">v₁₉₆</span>
+          </div>
+          <div class="cxa-pool-note">siempre accesible</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dynamic generation -->
+    <div class="cxa-section cxa-section--dyn">
+      <div class="cxa-stag">Durante la generación — cada capa de cross-attention consulta el pool</div>
+      <div class="cxa-layers-layout">
+        <div class="cxa-layers">
+          <div class="cxa-layer cxa-layer--txt">Capa de texto</div>
+          <div class="cxa-layer cxa-layer--cross">
+            <span>Cross-attention</span>
+            <span class="cxa-layer-arr">——→ pool</span>
+          </div>
+          <div class="cxa-layer cxa-layer--txt">Capa de texto</div>
+          <div class="cxa-layer cxa-layer--cross">
+            <span>Cross-attention</span>
+            <span class="cxa-layer-arr">——→ pool</span>
+          </div>
+          <div class="cxa-layer cxa-layer--txt">Capa de texto</div>
+        </div>
+        <div class="cxa-pool-side">
+          <div class="cxa-pool-side-label">Pool visual (permanente)</div>
+          <div class="cxa-pool-side-box">
+            <span class="cxa-vt cxa-vt--pool">v₁</span>
+            <span class="cxa-vt cxa-vt--pool">v₂</span>
+            <span class="cxa-vt cxa-vt--pool">v₃</span>
+            <span class="cxa-vt cxa-vt--pool cxa-vt--m">…</span>
+            <span class="cxa-vt cxa-vt--pool">v₁₉₆</span>
+          </div>
+          <div class="cxa-pool-side-note">consultado dinámicamente en cada capa de cross-attention</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cxa-tradeoff">
+      <div class="cxa-td cxa-td--pro">
+        <div class="cxa-td-tag">Ventaja</div>
+        <div class="cxa-td-val">Razonamiento espacial más preciso</div>
+        <div class="cxa-td-desc">El modelo accede al detalle visual relevante en el momento exacto en que lo necesita, no solo al inicio</div>
+      </div>
+      <div class="cxa-td-sep"></div>
+      <div class="cxa-td cxa-td--con">
+        <div class="cxa-td-tag">Coste</div>
+        <div class="cxa-td-val">Overhead en inferencia</div>
+        <div class="cxa-td-desc">Las capas adicionales de cross-attention aumentan el coste por token y dificultan el escalado horizontal</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.cxa-wrap, .cxa-wrap * { box-sizing: border-box; }
+.cxa-wrap {
+  --aa: #26A69A; --ab: #324AB2; --ag: #FFB343; --ar: #e04c4c; --al: #7cc7ff;
+  --abg: var(--md-default-bg-color, #fff);
+  --afg: var(--md-default-fg-color, #0f172a);
+  --abd: rgba(15,23,42,.14); --amut: rgba(15,23,42,.58);
+  --af: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  display: grid; gap: 14px; max-width: 900px; margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--abd); border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--aa) 5%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 100%, color-mix(in srgb,var(--ab) 5%,transparent), transparent 52%),
+    var(--abg);
+  color: var(--afg); font-family: var(--af); -webkit-font-smoothing: antialiased;
+}
+[data-md-color-scheme="slate"] .cxa-wrap {
+  --abg: var(--md-default-bg-color, #0f172a);
+  --afg: var(--md-default-fg-color, #e2e8f0);
+  --abd: rgba(226,232,240,.14); --amut: rgba(226,232,240,.58);
+}
+.cxa-hd { display: grid; gap: 5px; }
+.cxa-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.cxa-sub { font-size: 14px; color: var(--amut); line-height: 1.5; max-width: 68ch; }
+
+.cxa-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.cxa-tab {
+  padding: 6px 14px; border-radius: 999px; border: 1px solid var(--abd);
+  background: transparent; color: var(--amut);
+  font-family: var(--af); font-size: 12.5px; font-weight: 700;
+  cursor: pointer; transition: background .15s, color .15s; white-space: nowrap;
+}
+.cxa-tab:hover { background: color-mix(in srgb,var(--aa) 7%,var(--abg)); color: var(--afg); }
+.cxa-tab.active {
+  background: color-mix(in srgb,var(--aa) 10%,var(--abg));
+  border-color: color-mix(in srgb,var(--aa) 35%,var(--abd));
+  color: color-mix(in srgb,var(--aa) 70%,var(--afg));
+}
+.cxa-panel { min-height: 220px; display: flex; flex-direction: column; gap: 10px; }
+
+/* SECTIONS */
+.cxa-section {
+  padding: 12px 14px; border-radius: 12px; border: 1px solid var(--abd);
+  display: grid; gap: 10px;
+}
+.cxa-section--pre      { border-color: color-mix(in srgb,var(--ag) 20%,var(--abd)); background: color-mix(in srgb,var(--ag) 3%,var(--abg)); }
+.cxa-section--gen      { border-color: color-mix(in srgb,var(--ab) 18%,var(--abd)); background: color-mix(in srgb,var(--ab) 2%,var(--abg)); }
+.cxa-section--pre-dyn  { border-color: color-mix(in srgb,var(--ag) 20%,var(--abd)); background: color-mix(in srgb,var(--ag) 3%,var(--abg)); }
+.cxa-section--dyn      { border-color: color-mix(in srgb,var(--aa) 20%,var(--abd)); background: color-mix(in srgb,var(--aa) 3%,var(--abg)); }
+.cxa-stag { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--amut); }
+
+/* FLOW ROW */
+.cxa-flow { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.cxa-marr { font-size: 16px; font-weight: 900; color: var(--amut); flex-shrink: 0; }
+.cxa-mini {
+  padding: 6px 10px; border-radius: 8px; border: 1px solid var(--abd);
+  font-size: 12px; font-weight: 800; flex-shrink: 0;
+}
+.cxa-mini--img { background: color-mix(in srgb,var(--ag) 10%,var(--abg)); border-color: color-mix(in srgb,var(--ag) 22%,var(--abd)); color: color-mix(in srgb,var(--ag) 60%,var(--afg)); }
+.cxa-mini--enc { background: color-mix(in srgb,var(--al) 8%,var(--abg)); border-color: color-mix(in srgb,var(--al) 20%,var(--abd)); color: color-mix(in srgb,var(--al) 60%,var(--afg)); }
+.cxa-mini--con { background: color-mix(in srgb,var(--amut) 6%,var(--abg)); border-color: var(--abd); color: var(--amut); }
+
+/* FIXED BLOB */
+.cxa-blob {
+  padding: 8px 12px; border-radius: 10px; display: grid; gap: 5px; text-align: center;
+  border: 1.5px dashed color-mix(in srgb,var(--ar) 25%,var(--abd));
+  background: color-mix(in srgb,var(--ar) 3%,var(--abg));
+}
+.cxa-blob-label { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: color-mix(in srgb,var(--ar) 55%,var(--amut)); }
+.cxa-blob-row { display: flex; gap: 3px; justify-content: center; flex-wrap: wrap; }
+.cxa-blob-note { font-size: 9.5px; color: var(--amut); }
+
+/* POOL */
+.cxa-pool {
+  padding: 8px 12px; border-radius: 10px; display: grid; gap: 5px; text-align: center;
+  border: 1.5px solid color-mix(in srgb,var(--aa) 28%,var(--abd));
+  background: color-mix(in srgb,var(--aa) 7%,var(--abg));
+}
+.cxa-pool-label { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: color-mix(in srgb,var(--aa) 60%,var(--amut)); }
+.cxa-pool-row { display: flex; gap: 3px; justify-content: center; flex-wrap: wrap; }
+.cxa-pool-note { font-size: 9.5px; color: var(--amut); }
+
+/* VISUAL TOKENS */
+.cxa-vt {
+  font-family: "SF Mono","JetBrains Mono","Courier New",monospace;
+  font-size: 9.5px; font-weight: 800; padding: 2px 5px; border-radius: 4px;
+}
+.cxa-vt--fix  { background: color-mix(in srgb,var(--ar) 8%,var(--abg)); border: 1px solid color-mix(in srgb,var(--ar) 18%,var(--abd)); color: color-mix(in srgb,var(--ar) 55%,var(--afg)); }
+.cxa-vt--pool { background: color-mix(in srgb,var(--aa) 12%,var(--abg)); border: 1px solid color-mix(in srgb,var(--aa) 26%,var(--abd)); color: color-mix(in srgb,var(--aa) 70%,var(--afg)); }
+.cxa-vt--m    { opacity: .4; }
+
+/* GENERATION (Tab 1) */
+.cxa-gen-row { display: flex; gap: 12px; align-items: stretch; }
+.cxa-gtok-group { flex: 1; display: grid; gap: 5px; }
+.cxa-gtoken { display: flex; align-items: center; gap: 8px; }
+.cxa-gtoken--mute { opacity: .55; }
+.cxa-gt {
+  font-family: "SF Mono","JetBrains Mono","Courier New",monospace;
+  font-size: 11px; font-weight: 900; padding: 3px 8px; border-radius: 6px;
+  background: color-mix(in srgb,var(--ab) 10%,var(--abg));
+  border: 1px solid color-mix(in srgb,var(--ab) 22%,var(--abd));
+  color: color-mix(in srgb,var(--ab) 70%,var(--afg));
+  flex-shrink: 0;
+}
+.cxa-gt--m { background: transparent; border-color: var(--abd); color: var(--amut); }
+.cxa-gnote { font-size: 11px; color: var(--amut); }
+.cxa-gnote--m { font-style: italic; font-size: 10.5px; }
+
+.cxa-lock-col {
+  flex-shrink: 0; min-width: 120px; display: grid; gap: 5px;
+  padding: 10px 12px; border-radius: 10px; text-align: center;
+  border: 1.5px dashed color-mix(in srgb,var(--ar) 25%,var(--abd));
+  background: color-mix(in srgb,var(--ar) 3%,var(--abg));
+  align-content: center;
+}
+.cxa-lock-label { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: color-mix(in srgb,var(--ar) 55%,var(--amut)); }
+.cxa-lock-box { display: flex; gap: 3px; flex-wrap: wrap; justify-content: center; }
+.cxa-lock-note { font-size: 9.5px; color: var(--amut); }
+
+/* DYNAMIC LAYERS (Tab 2) */
+.cxa-layers-layout { display: flex; gap: 12px; align-items: stretch; }
+.cxa-layers { flex: 1; display: grid; gap: 5px; }
+.cxa-layer {
+  padding: 7px 12px; border-radius: 7px; border: 1px solid var(--abd);
+  background: color-mix(in srgb,var(--abg) 85%,#0f172a 15%);
+  font-size: 12px; font-weight: 700; color: var(--amut);
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+}
+.cxa-layer--cross {
+  background: color-mix(in srgb,var(--aa) 9%,var(--abg));
+  border-color: color-mix(in srgb,var(--aa) 28%,var(--abd));
+  color: color-mix(in srgb,var(--aa) 65%,var(--afg));
+  font-weight: 800;
+}
+.cxa-layer-arr {
+  font-family: "SF Mono","JetBrains Mono","Courier New",monospace;
+  font-size: 11px; font-weight: 900; flex-shrink: 0;
+  color: color-mix(in srgb,var(--aa) 75%,var(--afg));
+}
+
+.cxa-pool-side {
+  flex-shrink: 0; min-width: 130px; display: grid; gap: 6px;
+  padding: 10px 12px; border-radius: 10px; text-align: center;
+  border: 1.5px solid color-mix(in srgb,var(--aa) 30%,var(--abd));
+  background: color-mix(in srgb,var(--aa) 8%,var(--abg));
+  align-content: center;
+}
+.cxa-pool-side-label { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: color-mix(in srgb,var(--aa) 60%,var(--amut)); }
+.cxa-pool-side-box { display: flex; gap: 3px; flex-wrap: wrap; justify-content: center; }
+.cxa-pool-side-note { font-size: 9.5px; color: var(--amut); line-height: 1.4; }
+
+/* INSIGHT */
+.cxa-insight {
+  padding: 10px 14px; border-radius: 10px;
+  font-size: 12.5px; line-height: 1.5; display: grid; gap: 4px;
+}
+.cxa-insight--lim { border: 1px solid color-mix(in srgb,var(--ar) 20%,var(--abd)); background: color-mix(in srgb,var(--ar) 4%,var(--abg)); }
+.cxa-il { font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--amut); }
+
+/* TRADEOFF */
+.cxa-tradeoff { display: flex; border: 1px solid var(--abd); border-radius: 12px; overflow: hidden; }
+.cxa-td { flex: 1; padding: 12px 14px; display: grid; gap: 4px; }
+.cxa-td--pro { background: color-mix(in srgb,var(--aa) 5%,var(--abg)); border-right: 1px solid var(--abd); }
+.cxa-td--con { background: color-mix(in srgb,var(--abg) 90%,#0f172a 10%); }
+.cxa-td-sep { width: 0; }
+.cxa-td-tag { font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--amut); }
+.cxa-td-val { font-size: 13px; font-weight: 900; }
+.cxa-td-desc { font-size: 11.5px; color: var(--amut); line-height: 1.45; }
+
+@media (max-width: 640px) {
+  .cxa-flow { flex-direction: column; align-items: flex-start; }
+  .cxa-marr { transform: rotate(90deg); }
+  .cxa-gen-row { flex-direction: column; }
+  .cxa-layers-layout { flex-direction: column; }
+  .cxa-tradeoff { flex-direction: column; }
+  .cxa-td--pro { border-right: none; border-bottom: 1px solid var(--abd); }
+}
+</style>
+
+<script>
+(function(){
+  document.querySelectorAll('[data-demo="03-cross-attention-acceso"] button[data-tab]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var wrap = btn.closest('[data-demo="03-cross-attention-acceso"]');
+      wrap.querySelectorAll('button[data-tab]').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      wrap.querySelectorAll('[data-panel]').forEach(function(p){ p.style.display = 'none'; });
+      wrap.querySelector('[data-panel="' + btn.dataset.tab + '"]').style.display = '';
+    });
+  });
+})();
+</script>

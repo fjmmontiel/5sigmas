@@ -1,0 +1,434 @@
+<div class="tkd-wrap" data-demo="03-tokenizacion-discreta">
+  <div class="tkd-hd">
+    <div class="tkd-title">Tokenización nativa en la práctica</div>
+    <div class="tkd-sub">VQ-VAE convierte imágenes en tokens discretos. Mixture of Experts activa solo los parámetros relevantes por modalidad. Juntos hacen viable la tokenización nativa a escala masiva.</div>
+  </div>
+
+  <div class="tkd-tabs">
+    <button class="tkd-tab active" data-tab="1">VQ-VAE — imagen a tokens discretos</button>
+    <button class="tkd-tab" data-tab="2">MoE — routing por modalidad</button>
+  </div>
+
+  <!-- TAB 1: VQ-VAE -->
+  <div class="tkd-panel" data-panel="1">
+    <div class="tkd-vq-flow">
+      <div class="tkd-vq-step tkd-vq-step--img">
+        <div class="tkd-vq-tag">Entrada</div>
+        <div class="tkd-vq-name">Imagen original</div>
+        <div class="tkd-vq-vis">
+          <svg viewBox="0 0 80 60" width="80" height="60">
+            <rect x="2" y="2" width="76" height="56" rx="5" fill="rgba(124,199,255,.08)" stroke="rgba(124,199,255,.2)" stroke-width="1"/>
+            <rect x="8" y="8" width="18" height="18" rx="3" fill="rgba(255,179,67,.4)"/>
+            <rect x="31" y="8" width="18" height="18" rx="3" fill="rgba(38,166,154,.4)"/>
+            <rect x="54" y="8" width="18" height="18" rx="3" fill="rgba(239,68,68,.4)"/>
+            <rect x="8" y="32" width="18" height="18" rx="3" fill="rgba(50,74,178,.4)"/>
+            <rect x="31" y="32" width="18" height="18" rx="3" fill="rgba(124,199,255,.4)"/>
+            <rect x="54" y="32" width="18" height="18" rx="3" fill="rgba(255,179,67,.35)"/>
+          </svg>
+        </div>
+        <div class="tkd-vq-desc">Imagen continua en espacio de píxeles. No puede mezclarse directamente con tokens de texto.</div>
+      </div>
+
+      <div class="tkd-vq-arr">→</div>
+
+      <div class="tkd-vq-step tkd-vq-step--enc">
+        <div class="tkd-vq-tag">Encoder</div>
+        <div class="tkd-vq-name">Patches → vectores</div>
+        <div class="tkd-vq-vis">
+          <div class="tkd-vq-patches">
+            <div class="tkd-vq-patch">p₁<br><span class="tkd-vq-vec">[0.82, −0.31, …]</span></div>
+            <div class="tkd-vq-patch">p₂<br><span class="tkd-vq-vec">[−0.14, 0.67, …]</span></div>
+            <div class="tkd-vq-patch tkd-vq-patch--more">…</div>
+          </div>
+        </div>
+        <div class="tkd-vq-desc">Cada patch de la imagen se proyecta a un vector continuo de alta dimensión.</div>
+      </div>
+
+      <div class="tkd-vq-arr">→</div>
+
+      <div class="tkd-vq-step tkd-vq-step--codebook">
+        <div class="tkd-vq-tag">Codebook</div>
+        <div class="tkd-vq-name">Búsqueda del vecino más próximo</div>
+        <div class="tkd-vq-vis">
+          <div class="tkd-vq-cb">
+            <div class="tkd-vq-cb-row">
+              <span class="tkd-vq-cb-idx">0</span><div class="tkd-vq-cb-vec"></div>
+              <span class="tkd-vq-cb-idx">1</span><div class="tkd-vq-cb-vec tkd-vq-cb-vec--match"></div>
+              <span class="tkd-vq-cb-idx">2</span><div class="tkd-vq-cb-vec"></div>
+            </div>
+            <div class="tkd-vq-cb-label">↑ entrada más cercana: índice 1</div>
+          </div>
+        </div>
+        <div class="tkd-vq-desc">El vector continuo se mapea al código discreto más cercano en el codebook aprendido (8192 entradas en VQGAN).</div>
+      </div>
+
+      <div class="tkd-vq-arr">→</div>
+
+      <div class="tkd-vq-step tkd-vq-step--tokens">
+        <div class="tkd-vq-tag">Tokens</div>
+        <div class="tkd-vq-name">Secuencia discreta</div>
+        <div class="tkd-vq-vis">
+          <div class="tkd-vq-seq">
+            <span class="tkd-vq-tok tkd-vq-tok--img">1</span>
+            <span class="tkd-vq-tok tkd-vq-tok--img">847</span>
+            <span class="tkd-vq-tok tkd-vq-tok--img">23</span>
+            <span class="tkd-vq-tok tkd-vq-tok--img">512</span>
+            <span class="tkd-vq-sep">|</span>
+            <span class="tkd-vq-tok tkd-vq-tok--txt">la</span>
+            <span class="tkd-vq-tok tkd-vq-tok--txt">imagen</span>
+            <span class="tkd-vq-tok tkd-vq-tok--txt">muestra</span>
+          </div>
+          <div class="tkd-vq-seq-label">tokens de imagen · tokens de texto · procesados juntos</div>
+        </div>
+        <div class="tkd-vq-desc">Los índices discretos ocupan el mismo espacio de tokens que el texto. El transformer los procesa sin distinción de modalidad.</div>
+      </div>
+    </div>
+
+    <div class="tkd-compare">
+      <div class="tkd-cmp-item tkd-cmp-item--old">
+        <div class="tkd-cmp-tag">Arquitectura clásica</div>
+        <div class="tkd-cmp-desc">Imagen → encoder visual continuo → conector → LLM. La imagen nunca es un token; siempre requiere un módulo de adaptación.</div>
+      </div>
+      <div class="tkd-cmp-vs">vs</div>
+      <div class="tkd-cmp-item tkd-cmp-item--new">
+        <div class="tkd-cmp-tag">Tokenización nativa (Chameleon)</div>
+        <div class="tkd-cmp-desc">Imagen → VQ-VAE → índices → mismo transformer que el texto. Sin conector, sin módulo separado. Una sola secuencia heterogénea.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: MoE routing -->
+  <div class="tkd-panel" data-panel="2" style="display:none">
+    <div class="tkd-moe">
+      <div class="tkd-moe-top">
+        <div class="tkd-moe-input">
+          <div class="tkd-moe-in-label">Secuencia de entrada mixta</div>
+          <div class="tkd-moe-in-legend">
+            <span class="tkd-moe-leg"><span class="tkd-moe-tok tkd-moe-tok--img" style="font-size:9px;padding:1px 6px">847</span> índice de imagen</span>
+            <span class="tkd-moe-leg"><span class="tkd-moe-tok tkd-moe-tok--txt" style="font-size:9px;padding:1px 6px">la</span> token de texto</span>
+          </div>
+          <div class="tkd-moe-in-seq">
+            <span class="tkd-moe-tok tkd-moe-tok--img">847</span>
+            <span class="tkd-moe-tok tkd-moe-tok--txt">la</span>
+            <span class="tkd-moe-tok tkd-moe-tok--img">23</span>
+            <span class="tkd-moe-tok tkd-moe-tok--txt">imagen</span>
+            <span class="tkd-moe-tok tkd-moe-tok--img">512</span>
+            <span class="tkd-moe-tok tkd-moe-tok--txt">muestra</span>
+          </div>
+        </div>
+
+        <div class="tkd-moe-arrow-down">↓</div>
+
+        <div class="tkd-moe-router">
+          <div class="tkd-moe-router-label">Router (red ligera)</div>
+          <div class="tkd-moe-router-desc">Para cada token, el router calcula una distribución de probabilidad sobre los expertos y selecciona los top-k (típicamente k=2).</div>
+        </div>
+      </div>
+
+      <div class="tkd-moe-experts-grid">
+        <div class="tkd-moe-expert tkd-moe-expert--active-img">
+          <div class="tkd-moe-exp-tag">Experto 1 — activo</div>
+          <div class="tkd-moe-exp-name">Visual</div>
+          <div class="tkd-moe-exp-tokens">
+            <span class="tkd-moe-etok tkd-moe-etok--img">847</span>
+            <span class="tkd-moe-etok tkd-moe-etok--img">23</span>
+            <span class="tkd-moe-etok tkd-moe-etok--img">512</span>
+          </div>
+          <div class="tkd-moe-exp-load">
+            <div class="tkd-moe-load-bar" style="width:75%"></div>
+          </div>
+          <div class="tkd-moe-exp-desc">Especializado en patches de imagen. Parámetros ajustados durante preentrenamiento visual.</div>
+        </div>
+
+        <div class="tkd-moe-expert tkd-moe-expert--active-txt">
+          <div class="tkd-moe-exp-tag">Experto 2 — activo</div>
+          <div class="tkd-moe-exp-name">Lingüístico</div>
+          <div class="tkd-moe-exp-tokens">
+            <span class="tkd-moe-etok tkd-moe-etok--txt">la</span>
+            <span class="tkd-moe-etok tkd-moe-etok--txt">imagen</span>
+            <span class="tkd-moe-etok tkd-moe-etok--txt">muestra</span>
+          </div>
+          <div class="tkd-moe-load-bar" style="width:60%"></div>
+          <div class="tkd-moe-exp-desc">Especializado en tokens de texto. Parámetros ajustados durante preentrenamiento textual.</div>
+        </div>
+
+        <div class="tkd-moe-expert tkd-moe-expert--inactive">
+          <div class="tkd-moe-exp-tag">Experto 3 — inactivo</div>
+          <div class="tkd-moe-exp-name">Audio / otro</div>
+          <div class="tkd-moe-exp-tokens tkd-moe-exp-tokens--none">—</div>
+          <div class="tkd-moe-load-bar" style="width:0%"></div>
+          <div class="tkd-moe-exp-desc">No recibe tokens en esta inferencia. Sus parámetros no se computan ni se actualizan en el forward pass.</div>
+        </div>
+
+        <div class="tkd-moe-expert tkd-moe-expert--inactive">
+          <div class="tkd-moe-exp-tag">Experto 4 — inactivo</div>
+          <div class="tkd-moe-exp-name">Código / estructurado</div>
+          <div class="tkd-moe-exp-tokens tkd-moe-exp-tokens--none">—</div>
+          <div class="tkd-moe-load-bar" style="width:0%"></div>
+          <div class="tkd-moe-exp-desc">Disponible pero no seleccionado. El modelo tiene capacidad latente sin coste en inferencia.</div>
+        </div>
+      </div>
+
+      <div class="tkd-moe-stats">
+        <div class="tkd-moe-stat">
+          <div class="tkd-moe-stat-val">2 / 8</div>
+          <div class="tkd-moe-stat-desc">expertos activos por token (Gemini 1.5)</div>
+        </div>
+        <div class="tkd-moe-stat-sep"></div>
+        <div class="tkd-moe-stat">
+          <div class="tkd-moe-stat-val">~25%</div>
+          <div class="tkd-moe-stat-desc">parámetros computados por inferencia</div>
+        </div>
+        <div class="tkd-moe-stat-sep"></div>
+        <div class="tkd-moe-stat">
+          <div class="tkd-moe-stat-val">1M tokens</div>
+          <div class="tkd-moe-stat-desc">contexto viable en producción gracias a MoE</div>
+        </div>
+      </div>
+
+      <div class="tkd-note">
+        <div class="tkd-note-label">Por qué MoE cambia el análisis de coste</div>
+        Un modelo denso con N parámetros activa todos N en cada forward pass. Un MoE con N parámetros totales activa solo N/k por token. El coste de inferencia escala con los parámetros activos, no con los totales: la capacidad del modelo es mayor de lo que el coste sugiere.
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.tkd-wrap, .tkd-wrap * { box-sizing: border-box; }
+
+.tkd-wrap {
+  --aa: #26A69A;
+  --ab: #324AB2;
+  --ag: #FFB343;
+  --ar: #e04c4c;
+  --al: #7cc7ff;
+  --abg: var(--md-default-bg-color, #fff);
+  --afg: var(--md-default-fg-color, #0f172a);
+  --abd: rgba(15,23,42,.14);
+  --amut: rgba(15,23,42,.58);
+  --af: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid; gap: 14px; max-width: 900px; margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--abd); border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--ab) 6%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 100%, color-mix(in srgb,var(--al) 5%,transparent), transparent 52%),
+    var(--abg);
+  color: var(--afg); font-family: var(--af); -webkit-font-smoothing: antialiased;
+}
+[data-md-color-scheme="slate"] .tkd-wrap {
+  --abg: var(--md-default-bg-color, #0f172a);
+  --afg: var(--md-default-fg-color, #e2e8f0);
+  --abd: rgba(226,232,240,.14);
+  --amut: rgba(226,232,240,.58);
+}
+
+.tkd-hd { display: grid; gap: 5px; }
+.tkd-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.tkd-sub { font-size: 14px; color: var(--amut); line-height: 1.5; max-width: 68ch; }
+
+.tkd-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.tkd-tab {
+  padding: 6px 14px; border-radius: 999px; border: 1px solid var(--abd);
+  background: transparent; color: var(--amut);
+  font-family: var(--af); font-size: 12.5px; font-weight: 700;
+  cursor: pointer; transition: background .15s, color .15s; white-space: nowrap;
+}
+.tkd-tab:hover { background: color-mix(in srgb,var(--ab) 7%,var(--abg)); color: var(--afg); }
+.tkd-tab.active {
+  background: color-mix(in srgb,var(--ab) 10%,var(--abg));
+  border-color: color-mix(in srgb,var(--ab) 35%,var(--abd));
+  color: color-mix(in srgb,var(--ab) 70%,var(--afg));
+}
+
+.tkd-panel { min-height: 280px; display: flex; flex-direction: column; gap: 12px; }
+
+/* VQ-VAE */
+.tkd-vq-flow { display: flex; align-items: flex-start; gap: 6px; flex: 1; overflow-x: auto; }
+.tkd-vq-arr {
+  font-size: 18px; font-weight: 900; color: var(--amut);
+  align-self: center; flex-shrink: 0; padding: 0 2px;
+}
+.tkd-vq-step {
+  flex: 1; min-width: 110px; padding: 10px; border-radius: 12px;
+  border: 1px solid var(--abd); display: flex; flex-direction: column; gap: 7px; align-items: center; text-align: center;
+}
+.tkd-vq-step--img { border-color: color-mix(in srgb,var(--al) 22%,var(--abd)); background: color-mix(in srgb,var(--al) 4%,var(--abg)); }
+.tkd-vq-step--enc { border-color: color-mix(in srgb,var(--ag) 22%,var(--abd)); background: color-mix(in srgb,var(--ag) 4%,var(--abg)); }
+.tkd-vq-step--codebook { border-color: color-mix(in srgb,var(--ab) 22%,var(--abd)); background: color-mix(in srgb,var(--ab) 4%,var(--abg)); }
+.tkd-vq-step--tokens { border-color: color-mix(in srgb,var(--aa) 22%,var(--abd)); background: color-mix(in srgb,var(--aa) 4%,var(--abg)); }
+
+.tkd-vq-tag { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--amut); }
+.tkd-vq-name { font-size: 12px; font-weight: 900; line-height: 1.2; }
+.tkd-vq-desc { font-size: 10.5px; color: var(--amut); line-height: 1.4; }
+
+.tkd-vq-patches { display: flex; flex-direction: column; gap: 4px; width: 100%; }
+.tkd-vq-patch {
+  font-family: "SF Mono","JetBrains Mono","Courier New",monospace;
+  font-size: 10px; font-weight: 700; padding: 4px 6px; border-radius: 6px;
+  background: color-mix(in srgb,var(--ag) 8%,var(--abg));
+  border: 1px solid color-mix(in srgb,var(--ag) 18%,var(--abd));
+  color: color-mix(in srgb,var(--ag) 80%,var(--afg));
+}
+.tkd-vq-vec { font-size: 9px; font-weight: 400; color: var(--amut); display: block; }
+.tkd-vq-patch--more { background: transparent; border-color: var(--abd); color: var(--amut); }
+
+.tkd-vq-cb { width: 100%; display: flex; flex-direction: column; gap: 4px; }
+.tkd-vq-cb-row { display: flex; align-items: center; gap: 4px; }
+.tkd-vq-cb-idx { font-family: "SF Mono","JetBrains Mono","Courier New",monospace; font-size: 9px; font-weight: 700; width: 12px; flex-shrink: 0; color: var(--amut); }
+.tkd-vq-cb-vec {
+  flex: 1; height: 8px; border-radius: 4px;
+  background: color-mix(in srgb,var(--ab) 20%,var(--abd));
+}
+.tkd-vq-cb-vec--match {
+  background: color-mix(in srgb,var(--ab) 65%,transparent);
+  box-shadow: 0 0 0 2px color-mix(in srgb,var(--ab) 35%,transparent);
+}
+.tkd-vq-cb-label { font-size: 9px; color: color-mix(in srgb,var(--ab) 65%,var(--amut)); font-weight: 700; }
+
+.tkd-vq-seq { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; }
+.tkd-vq-tok {
+  font-family: "SF Mono","JetBrains Mono","Courier New",monospace;
+  font-size: 10px; font-weight: 900; padding: 3px 6px; border-radius: 5px;
+}
+.tkd-vq-tok--img {
+  background: color-mix(in srgb,var(--al) 12%,var(--abg));
+  border: 1px solid color-mix(in srgb,var(--al) 28%,var(--abd));
+  color: color-mix(in srgb,var(--al) 70%,var(--afg));
+}
+.tkd-vq-tok--txt {
+  background: color-mix(in srgb,var(--aa) 10%,var(--abg));
+  border: 1px solid color-mix(in srgb,var(--aa) 25%,var(--abd));
+  color: color-mix(in srgb,var(--aa) 70%,var(--afg));
+}
+.tkd-vq-sep { font-size: 14px; font-weight: 900; color: var(--amut); align-self: center; }
+.tkd-vq-seq-label { font-size: 9px; color: var(--amut); }
+
+.tkd-compare { display: flex; gap: 8px; align-items: stretch; }
+.tkd-cmp-vs { font-size: 12px; font-weight: 900; color: var(--amut); align-self: center; flex-shrink: 0; }
+.tkd-cmp-item {
+  flex: 1; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--abd);
+  display: grid; gap: 5px;
+}
+.tkd-cmp-item--old { border-color: color-mix(in srgb,var(--amut) 20%,var(--abd)); background: color-mix(in srgb,var(--abg) 90%,#0f172a 10%); opacity: .75; }
+.tkd-cmp-item--new { border-color: color-mix(in srgb,var(--aa) 25%,var(--abd)); background: color-mix(in srgb,var(--aa) 5%,var(--abg)); }
+.tkd-cmp-tag { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--amut); }
+.tkd-cmp-desc { font-size: 11.5px; color: var(--afg); line-height: 1.4; }
+
+/* MoE */
+.tkd-moe { display: flex; flex-direction: column; gap: 12px; flex: 1; }
+.tkd-moe-top { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.tkd-moe-input { display: flex; flex-direction: column; gap: 6px; align-items: center; width: 100%; }
+.tkd-moe-in-label { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--amut); }
+.tkd-moe-in-seq { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; }
+.tkd-moe-tok {
+  font-family: "SF Mono","JetBrains Mono","Courier New",monospace;
+  font-size: 11px; font-weight: 900; padding: 4px 8px; border-radius: 6px;
+}
+.tkd-moe-tok--img {
+  background: rgba(255,179,67,.22);
+  border: 1px solid rgba(255,179,67,.55);
+  color: #FFB343;
+  font-weight: 900;
+}
+.tkd-moe-tok--txt {
+  background: rgba(38,166,154,.18);
+  border: 1px solid rgba(38,166,154,.50);
+  color: #26A69A;
+}
+.tkd-moe-in-legend {
+  display: flex; gap: 14px; flex-wrap: wrap;
+  font-size: 10.5px; font-weight: 700; align-items: center;
+}
+.tkd-moe-leg { display: flex; align-items: center; gap: 5px; color: var(--amut); }
+.tkd-moe-arrow-down { font-size: 16px; font-weight: 900; color: var(--amut); }
+.tkd-moe-router {
+  padding: 8px 14px; border-radius: 10px; text-align: center;
+  border: 1px solid color-mix(in srgb,var(--ab) 22%,var(--abd));
+  background: color-mix(in srgb,var(--ab) 5%,var(--abg));
+  display: grid; gap: 4px; width: 100%;
+}
+.tkd-moe-router-label { font-size: 11px; font-weight: 900; color: color-mix(in srgb,var(--ab) 70%,var(--afg)); }
+.tkd-moe-router-desc { font-size: 11px; color: var(--amut); }
+
+.tkd-moe-experts-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; }
+.tkd-moe-expert {
+  padding: 10px; border-radius: 12px; border: 1px solid var(--abd);
+  display: flex; flex-direction: column; gap: 6px;
+}
+.tkd-moe-expert--active-img { border-color: color-mix(in srgb,var(--al) 30%,var(--abd)); background: color-mix(in srgb,var(--al) 6%,var(--abg)); }
+.tkd-moe-expert--active-txt { border-color: color-mix(in srgb,var(--aa) 28%,var(--abd)); background: color-mix(in srgb,var(--aa) 5%,var(--abg)); }
+.tkd-moe-expert--inactive { border-color: color-mix(in srgb,var(--amut) 12%,var(--abd)); background: color-mix(in srgb,var(--abg) 90%,#0f172a 10%); opacity: .55; }
+
+.tkd-moe-exp-tag { font-size: 8.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--amut); }
+.tkd-moe-exp-name { font-size: 12px; font-weight: 900; }
+.tkd-moe-exp-tokens { display: flex; flex-wrap: wrap; gap: 3px; min-height: 22px; }
+.tkd-moe-etok {
+  font-family: "SF Mono","JetBrains Mono","Courier New",monospace;
+  font-size: 9.5px; font-weight: 700; padding: 2px 5px; border-radius: 4px;
+  background: color-mix(in srgb,var(--afg) 6%,var(--abg));
+  border: 1px solid var(--abd);
+}
+.tkd-moe-etok--img {
+  background: rgba(255,179,67,.20);
+  border: 1px solid rgba(255,179,67,.50);
+  color: #FFB343;
+}
+.tkd-moe-etok--txt {
+  background: rgba(38,166,154,.16);
+  border: 1px solid rgba(38,166,154,.45);
+  color: #26A69A;
+}
+.tkd-moe-exp-tokens--none { color: var(--amut); font-size: 14px; display: flex; align-items: center; }
+.tkd-moe-exp-desc { font-size: 10px; color: var(--amut); line-height: 1.4; }
+.tkd-moe-load-bar {
+  height: 3px; border-radius: 99px; background: color-mix(in srgb,var(--al) 50%,transparent);
+  transition: width .4s;
+}
+.tkd-moe-expert--active-txt .tkd-moe-load-bar { background: color-mix(in srgb,var(--aa) 55%,transparent); }
+.tkd-moe-expert--inactive .tkd-moe-load-bar { background: var(--abd); }
+
+.tkd-moe-stats {
+  display: flex; border: 1px solid var(--abd); border-radius: 12px; overflow: hidden;
+}
+.tkd-moe-stat { flex: 1; padding: 10px 12px; display: grid; gap: 3px; text-align: center; }
+.tkd-moe-stat-sep { width: 1px; background: var(--abd); flex-shrink: 0; }
+.tkd-moe-stat-val {
+  font-family: "SF Mono","JetBrains Mono","Courier New",monospace;
+  font-size: 13px; font-weight: 900;
+  color: color-mix(in srgb,var(--ab) 75%,var(--afg));
+}
+.tkd-moe-stat-desc { font-size: 10.5px; color: var(--amut); line-height: 1.3; }
+
+.tkd-note {
+  padding: 10px 14px; border-radius: 10px;
+  border: 1px solid color-mix(in srgb,var(--ab) 20%,var(--abd));
+  background: color-mix(in srgb,var(--ab) 4%,var(--abg));
+  font-size: 12.5px; line-height: 1.5; color: var(--afg); display: grid; gap: 4px;
+}
+.tkd-note-label { font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--amut); }
+
+@media (max-width: 700px) {
+  .tkd-vq-flow { flex-direction: column; }
+  .tkd-vq-arr { align-self: center; transform: rotate(90deg); }
+  .tkd-moe-experts-grid { grid-template-columns: repeat(2,1fr); }
+  .tkd-compare { flex-direction: column; }
+  .tkd-cmp-vs { align-self: center; }
+}
+</style>
+
+<script>
+(function(){
+  document.querySelectorAll('[data-demo="03-tokenizacion-discreta"] button[data-tab]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var wrap = btn.closest('[data-demo="03-tokenizacion-discreta"]');
+      wrap.querySelectorAll('button[data-tab]').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      wrap.querySelectorAll('[data-panel]').forEach(function(p){ p.style.display = 'none'; });
+      wrap.querySelector('[data-panel="' + btn.dataset.tab + '"]').style.display = '';
+    });
+  });
+})();
+</script>

@@ -59,7 +59,7 @@ nav:
           - Presentación: series/multimodalidad-iag/00_presentacion_serie.md
           - El problema: series/multimodalidad-iag/01-el-problema.md
           - Alineamiento: series/multimodalidad-iag/02-alineamiento.md
-          # - Arquitecturas: series/multimodalidad-iag/03-arquitecturas.md
+          - Arquitecturas: series/multimodalidad-iag/03-arquitecturas.md
           # - Evaluación: series/multimodalidad-iag/04-evaluacion.md
           # - Riesgos: series/multimodalidad-iag/05-riesgos.md
       - Modelos razonadores:
@@ -87,6 +87,10 @@ markdown_extensions:
       pygments_lang_class: true
   - pymdownx.arithmatex:
       generic: true   # hace que MathJax procese los bloques marcados
+  - pymdownx.snippets:
+      auto_append:
+        - docs/includes/abbreviations.md
+  - abbr
   - attr_list
   - md_in_html
   - pymdownx.emoji:
