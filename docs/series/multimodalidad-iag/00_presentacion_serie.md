@@ -1,7 +1,6 @@
 ---
 title: Multimodalidad en IA generativa
 description: "Qué significa construir sistemas capaces de percibir, alinear, razonar, generar y actuar entre texto, imagen, audio, vídeo, documentos y otras señales del mundo."
-robots: noindex
 ---
 # Multimodalidad en IA generativa
 

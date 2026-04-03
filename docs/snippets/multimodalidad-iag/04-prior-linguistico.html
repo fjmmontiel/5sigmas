@@ -1,0 +1,304 @@
+<div class="prl-wrap" data-demo="04-prior-linguistico">
+  <div class="prl-hd">
+    <div class="prl-title">Prior lingüístico: responder por probabilidad, no por evidencia</div>
+    <div class="prl-sub">La tendencia de los modelos a generar respuestas estadísticamente probables dado el texto de la pregunta, con independencia del contenido real de la imagen.</div>
+  </div>
+
+  <div class="prl-tabs">
+    <button class="prl-tab active" data-tab="1">El mecanismo</button>
+    <button class="prl-tab" data-tab="2">Experimento de ablación</button>
+    <button class="prl-tab" data-tab="3">Categorías más vulnerables</button>
+  </div>
+
+  <!-- TAB 1 -->
+  <div class="prl-panel" data-panel="1">
+    <div class="prl-panel-inner">
+      <div class="prl-def">
+        <div class="prl-def-label">Qué es el prior lingüístico</div>
+        <div class="prl-def-text">Durante el preentrenamiento, el modelo aprende distribuciones de respuesta para cada tipo de pregunta. Esas distribuciones actúan como atajos: ante preguntas cuya respuesta es muy predecible, el modelo la genera directamente desde el prior sin necesitar la imagen.</div>
+      </div>
+
+      <div class="prl-dist-label">¿De qué color es el coche?</div>
+      <div class="prl-dist-wrap">
+        <div class="prl-dist-note">Distribución de respuesta aprendida (sin ver la imagen)</div>
+        <div class="prl-bars">
+          <div class="prl-bar-row">
+            <div class="prl-bar-label">blanco</div>
+            <div class="prl-bar-track">
+              <div class="prl-bar-fill" style="width:42%">42%</div>
+            </div>
+          </div>
+          <div class="prl-bar-row">
+            <div class="prl-bar-label">gris</div>
+            <div class="prl-bar-track">
+              <div class="prl-bar-fill prl-bar-fill--2" style="width:26%">26%</div>
+            </div>
+          </div>
+          <div class="prl-bar-row">
+            <div class="prl-bar-label">negro</div>
+            <div class="prl-bar-track">
+              <div class="prl-bar-fill prl-bar-fill--3" style="width:17%">17%</div>
+            </div>
+          </div>
+          <div class="prl-bar-row">
+            <div class="prl-bar-label">rojo</div>
+            <div class="prl-bar-track">
+              <div class="prl-bar-fill prl-bar-fill--4" style="width:8%">8%</div>
+            </div>
+          </div>
+          <div class="prl-bar-row">
+            <div class="prl-bar-label">otros</div>
+            <div class="prl-bar-track">
+              <div class="prl-bar-fill prl-bar-fill--5" style="width:7%">7%</div>
+            </div>
+          </div>
+        </div>
+        <div class="prl-dist-verdict">
+          <div class="prl-verdict-tag">Resultado</div>
+          <div class="prl-verdict-text">El modelo responde <strong>"blanco"</strong> aunque el coche de la imagen sea rojo. Cuando el prior es suficientemente fuerte, el modelo no necesita consultar la imagen para generar la respuesta más probable.</div>
+        </div>
+      </div>
+
+      <div class="prl-effect">
+        <div class="prl-effect-label">Por qué es difícil de detectar</div>
+        <div class="prl-effect-text">El error es invisible cuando la distribución estadística coincide con la distribución de respuestas correctas. En benchmarks donde la mayoría de los coches son blancos o grises, un modelo sin visión real puede obtener puntuaciones altas usando solo el prior.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2 -->
+  <div class="prl-panel" data-panel="2" style="display:none">
+    <div class="prl-panel-inner">
+      <div class="prl-def">
+        <div class="prl-def-label">La herramienta de diagnóstico</div>
+        <div class="prl-def-text">El experimento de ablación consiste en presentar la misma pregunta al modelo con y sin imagen. Si la distribución de respuestas no cambia significativamente, el prior lingüístico domina la generación y la imagen no está contribuyendo a la respuesta.</div>
+      </div>
+
+      <div class="prl-abl">
+        <div class="prl-abl-col prl-abl-col--ctx">
+          <div class="prl-abl-tag">Escenario real</div>
+          <div class="prl-abl-img">
+            <svg viewBox="0 0 80 56" width="80" height="56">
+              <rect x="1" y="1" width="78" height="54" rx="6" fill="rgba(38,166,154,.06)" stroke="rgba(38,166,154,.2)" stroke-width="1.2"/>
+              <!-- car body -->
+              <rect x="10" y="28" width="60" height="18" rx="4" fill="rgba(224,76,76,.6)" stroke="rgba(224,76,76,.8)" stroke-width="1.2"/>
+              <!-- car roof -->
+              <path d="M20 28 Q30 16 50 16 Q60 16 65 28Z" fill="rgba(224,76,76,.45)" stroke="rgba(224,76,76,.65)" stroke-width="1"/>
+              <!-- wheels -->
+              <circle cx="24" cy="46" r="5" fill="rgba(30,30,40,.7)" stroke="rgba(255,255,255,.25)" stroke-width="0.8"/>
+              <circle cx="56" cy="46" r="5" fill="rgba(30,30,40,.7)" stroke="rgba(255,255,255,.25)" stroke-width="0.8"/>
+              <!-- windshield -->
+              <path d="M30 27 Q35 20 48 20 Q56 20 60 27Z" fill="rgba(124,199,255,.2)" stroke="rgba(124,199,255,.3)" stroke-width="0.8"/>
+            </svg>
+          </div>
+          <div class="prl-abl-caption">coche rojo en la imagen</div>
+          <div class="prl-abl-q">"¿De qué color es el coche?"</div>
+        </div>
+
+        <div class="prl-abl-col prl-abl-col--with">
+          <div class="prl-abl-tag">Modelo + imagen</div>
+          <div class="prl-abl-status prl-abl-status--on">imagen activa</div>
+          <div class="prl-abl-process">↓</div>
+          <div class="prl-abl-ans">"Blanco"</div>
+          <div class="prl-abl-note">responde por prior, no por imagen</div>
+          <div class="prl-abl-verdict prl-abl-verdict--warn">prior domina</div>
+        </div>
+
+        <div class="prl-abl-col prl-abl-col--without">
+          <div class="prl-abl-tag">Modelo sin imagen</div>
+          <div class="prl-abl-status prl-abl-status--off">imagen eliminada</div>
+          <div class="prl-abl-process">↓</div>
+          <div class="prl-abl-ans">"Blanco"</div>
+          <div class="prl-abl-note">misma respuesta sin ver nada</div>
+          <div class="prl-abl-verdict prl-abl-verdict--bad">prior confirmado</div>
+        </div>
+      </div>
+
+      <div class="prl-abl-conclusion">
+        <div class="prl-abl-concl-label">Interpretación del resultado</div>
+        <div class="prl-abl-concl-text">Si la respuesta es la misma con y sin imagen, la imagen no está contribuyendo a la generación. El modelo no está "viendo": está generando desde la distribución estadística aprendida durante el entrenamiento. Un resultado diferente entre ambas condiciones es evidencia necesaria (pero no suficiente) de que la imagen influye en la respuesta.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3 -->
+  <div class="prl-panel" data-panel="3" style="display:none">
+    <div class="prl-panel-inner">
+      <div class="prl-def">
+        <div class="prl-def-label">Dónde el prior es más fuerte</div>
+        <div class="prl-def-text">El efecto es especialmente marcado en categorías donde las distribuciones de entrenamiento están sesgadas. En esas categorías, la respuesta estadísticamente más probable es tan dominante que el modelo prescinde de la evidencia visual aunque esté presente.</div>
+      </div>
+
+      <div class="prl-vuln-grid">
+        <div class="prl-vuln-card">
+          <div class="prl-vuln-sym">
+            <svg viewBox="0 0 36 36" width="36" height="36">
+              <circle cx="18" cy="18" r="14" fill="rgba(255,179,67,.15)" stroke="rgba(255,179,67,.5)" stroke-width="1.5"/>
+              <circle cx="18" cy="18" r="8" fill="rgba(255,179,67,.4)"/>
+            </svg>
+          </div>
+          <div class="prl-vuln-name">Colores de objetos frecuentes</div>
+          <div class="prl-vuln-q">"¿De qué color es el coche?"</div>
+          <div class="prl-vuln-why">Los coches en datasets de imágenes cotidianas son predominantemente blancos, grises y negros. El prior de "blanco" es tan fuerte que supera la evidencia para colores inusuales.</div>
+          <div class="prl-vuln-fix">Benchmark robusto: incluir objetos con colores deliberadamente inusuales para ese tipo de objeto.</div>
+        </div>
+
+        <div class="prl-vuln-card">
+          <div class="prl-vuln-sym">
+            <svg viewBox="0 0 36 36" width="36" height="36">
+              <circle cx="18" cy="18" r="14" fill="rgba(124,199,255,.1)" stroke="rgba(124,199,255,.4)" stroke-width="1.5"/>
+              <path d="M12 22 L18 12 L24 22Z" fill="rgba(124,199,255,.5)" stroke="rgba(124,199,255,.6)" stroke-width="1"/>
+              <rect x="14" y="22" width="8" height="6" rx="1" fill="rgba(124,199,255,.4)" stroke="rgba(124,199,255,.55)" stroke-width="1"/>
+            </svg>
+          </div>
+          <div class="prl-vuln-name">Especies de animales</div>
+          <div class="prl-vuln-q">"¿Qué animal hay en la imagen?"</div>
+          <div class="prl-vuln-why">Si hay un solo animal visible, el prior de "cuál es la especie más representada en escenas similares" es muy fuerte. El perro domina en imágenes domésticas, el gato le sigue. Especies raras se pierden.</div>
+          <div class="prl-vuln-fix">Benchmark robusto: incluir especies poco frecuentes en el corpus en contextos domésticos o urbanos.</div>
+        </div>
+
+        <div class="prl-vuln-card">
+          <div class="prl-vuln-sym">
+            <svg viewBox="0 0 36 36" width="36" height="36">
+              <circle cx="18" cy="18" r="14" fill="rgba(38,166,154,.1)" stroke="rgba(38,166,154,.45)" stroke-width="1.5"/>
+              <text x="18" y="23" text-anchor="middle" font-family="SF Mono,JetBrains Mono,Courier New,monospace" font-size="13" font-weight="900" fill="rgba(38,166,154,.8)">3</text>
+            </svg>
+          </div>
+          <div class="prl-vuln-name">Conteo de elementos</div>
+          <div class="prl-vuln-q">"¿Cuántos objetos hay en la imagen?"</div>
+          <div class="prl-vuln-why">El rango 2-4 domina en imágenes de datasets cotidianos. Cuando se pregunta por el número de elementos, el modelo tiende a responder en ese rango independientemente de lo que muestre la imagen.</div>
+          <div class="prl-vuln-fix">Benchmark robusto: incluir imágenes con cantidades que violen el rango estadístico habitual (0, 1, 7, 12, 20).</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.prl-wrap, .prl-wrap * { box-sizing: border-box; }
+
+.prl-wrap {
+  --ea: #26A69A; --eb: #324AB2; --eg: #FFB343; --er: #e04c4c; --al: #7cc7ff;
+  --ebg: var(--md-default-bg-color, #fff);
+  --efg: var(--md-default-fg-color, #0f172a);
+  --ebd: rgba(15,23,42,.15);
+  --emut: rgba(15,23,42,.58);
+  --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  display: grid; gap: 14px; max-width: 900px; margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--ebd); border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--eg) 6%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 100%, color-mix(in srgb,var(--ea) 5%,transparent), transparent 52%),
+    var(--ebg);
+  color: var(--efg); font-family: var(--ef); -webkit-font-smoothing: antialiased;
+}
+[data-md-color-scheme="slate"] .prl-wrap {
+  --ebg: var(--md-default-bg-color, #0f172a);
+  --efg: var(--md-default-fg-color, #e2e8f0);
+  --ebd: rgba(226,232,240,.15);
+  --emut: rgba(226,232,240,.58);
+}
+
+.prl-hd { display: grid; gap: 5px; }
+.prl-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.prl-sub { font-size: 14px; color: var(--emut); line-height: 1.5; max-width: 66ch; }
+
+.prl-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.prl-tab {
+  padding: 7px 14px; border-radius: 999px; border: 1px solid var(--ebd);
+  background: transparent; color: var(--emut);
+  font-family: var(--ef); font-size: 13px; font-weight: 700;
+  cursor: pointer; transition: all .15s; white-space: nowrap;
+}
+.prl-tab:hover { color: var(--efg); border-color: color-mix(in srgb,var(--eg) 40%,var(--ebd)); }
+.prl-tab.active {
+  background: color-mix(in srgb,var(--eg) 11%,var(--ebg));
+  border-color: color-mix(in srgb,var(--eg) 40%,var(--ebd));
+  color: color-mix(in srgb,var(--eg) 65%,var(--efg));
+}
+
+.prl-panel { min-height: 280px; }
+.prl-panel-inner { display: grid; gap: 12px; }
+
+.prl-def { padding: 10px 14px; border-radius: 10px; border: 1px solid var(--ebd); background: color-mix(in srgb,var(--ebg) 90%,#0f172a 10%); display: grid; gap: 4px; }
+.prl-def-label { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--emut); }
+.prl-def-text { font-size: 13.5px; line-height: 1.5; }
+
+/* DISTRIBUTION CHART */
+.prl-dist-label { font-size: 12px; font-weight: 900; font-style: italic; color: var(--emut); }
+.prl-dist-wrap { border: 1px solid var(--ebd); border-radius: 12px; background: color-mix(in srgb,var(--ebg) 90%,#0f172a 10%); padding: 12px 14px; display: grid; gap: 10px; }
+.prl-dist-note { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; color: var(--emut); }
+.prl-bars { display: grid; gap: 6px; }
+.prl-bar-row { display: flex; align-items: center; gap: 8px; }
+.prl-bar-label { font-family: "SF Mono","JetBrains Mono","Courier New",monospace; font-size: 11px; font-weight: 700; width: 44px; flex-shrink: 0; color: var(--efg); }
+.prl-bar-track { flex: 1; height: 22px; background: color-mix(in srgb,var(--efg) 5%,transparent); border-radius: 4px; overflow: hidden; border: 1px solid var(--ebd); }
+.prl-bar-fill { height: 100%; border-radius: 4px; background: color-mix(in srgb,var(--eg) 55%,transparent); display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; font-family: "SF Mono","JetBrains Mono","Courier New",monospace; font-size: 11px; font-weight: 900; color: color-mix(in srgb,var(--eg) 90%,var(--efg)); }
+.prl-bar-fill--2 { background: color-mix(in srgb,var(--eg) 38%,transparent); color: color-mix(in srgb,var(--eg) 75%,var(--efg)); }
+.prl-bar-fill--3 { background: color-mix(in srgb,var(--eg) 26%,transparent); color: color-mix(in srgb,var(--eg) 60%,var(--efg)); }
+.prl-bar-fill--4 { background: color-mix(in srgb,var(--ea) 30%,transparent); color: color-mix(in srgb,var(--ea) 65%,var(--efg)); }
+.prl-bar-fill--5 { background: color-mix(in srgb,var(--ebd) 80%,transparent); color: var(--emut); }
+
+.prl-dist-verdict { border-top: 1px solid var(--ebd); padding-top: 8px; display: grid; gap: 3px; }
+.prl-verdict-tag { font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--emut); }
+.prl-verdict-text { font-size: 12.5px; line-height: 1.45; color: var(--efg); }
+.prl-verdict-text strong { color: color-mix(in srgb,var(--er) 65%,var(--efg)); }
+
+.prl-effect { padding: 10px 14px; border-radius: 9px; border: 1px solid color-mix(in srgb,var(--er) 18%,var(--ebd)); background: color-mix(in srgb,var(--er) 4%,var(--ebg)); display: grid; gap: 4px; }
+.prl-effect-label { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: color-mix(in srgb,var(--er) 55%,var(--emut)); }
+.prl-effect-text { font-size: 12.5px; line-height: 1.45; color: var(--efg); }
+
+/* ABLATION */
+.prl-abl { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.prl-abl-col { border-radius: 10px; border: 1px solid var(--ebd); padding: 10px 12px; display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; }
+.prl-abl-col--ctx     { border-color: color-mix(in srgb,var(--eb) 22%,var(--ebd)); background: color-mix(in srgb,var(--eb) 4%,var(--ebg)); }
+.prl-abl-col--with    { border-color: color-mix(in srgb,var(--eg) 22%,var(--ebd)); background: color-mix(in srgb,var(--eg) 4%,var(--ebg)); }
+.prl-abl-col--without { border-color: color-mix(in srgb,var(--er) 22%,var(--ebd)); background: color-mix(in srgb,var(--er) 4%,var(--ebg)); }
+
+.prl-abl-tag { font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--emut); }
+.prl-abl-img { display: flex; justify-content: center; }
+.prl-abl-caption { font-family: "SF Mono","JetBrains Mono","Courier New",monospace; font-size: 10px; color: var(--emut); }
+.prl-abl-q { font-size: 11px; font-style: italic; color: var(--efg); line-height: 1.3; }
+
+.prl-abl-status { font-size: 9.5px; font-weight: 700; padding: 2px 8px; border-radius: 999px; }
+.prl-abl-status--on  { background: color-mix(in srgb,var(--eg) 10%,var(--ebg)); border: 1px solid color-mix(in srgb,var(--eg) 25%,var(--ebd)); color: color-mix(in srgb,var(--eg) 60%,var(--efg)); }
+.prl-abl-status--off { background: color-mix(in srgb,var(--er) 10%,var(--ebg)); border: 1px solid color-mix(in srgb,var(--er) 25%,var(--ebd)); color: color-mix(in srgb,var(--er) 65%,var(--efg)); }
+.prl-abl-process { font-size: 18px; color: var(--emut); font-weight: 900; line-height: 1; }
+.prl-abl-ans { font-size: 20px; font-weight: 900; color: var(--efg); }
+.prl-abl-note { font-size: 10px; color: var(--emut); line-height: 1.3; }
+.prl-abl-verdict { font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .05em; padding: 3px 8px; border-radius: 999px; }
+.prl-abl-verdict--warn { background: color-mix(in srgb,var(--eg) 10%,var(--ebg)); border: 1px solid color-mix(in srgb,var(--eg) 25%,var(--ebd)); color: color-mix(in srgb,var(--eg) 58%,var(--efg)); }
+.prl-abl-verdict--bad  { background: color-mix(in srgb,var(--er) 10%,var(--ebg)); border: 1px solid color-mix(in srgb,var(--er) 25%,var(--ebd)); color: color-mix(in srgb,var(--er) 65%,var(--efg)); }
+
+.prl-abl-conclusion { padding: 10px 14px; border-radius: 10px; border: 1px solid color-mix(in srgb,var(--ea) 20%,var(--ebd)); background: color-mix(in srgb,var(--ea) 4%,var(--ebg)); display: grid; gap: 4px; }
+.prl-abl-concl-label { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--emut); }
+.prl-abl-concl-text { font-size: 12.5px; line-height: 1.5; color: var(--efg); }
+
+/* VULNERABILITY GRID */
+.prl-vuln-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.prl-vuln-card { padding: 12px; border-radius: 12px; border: 1px solid var(--ebd); background: color-mix(in srgb,var(--ebg) 88%,#0f172a 12%); display: grid; gap: 8px; align-content: start; }
+.prl-vuln-sym { display: flex; justify-content: center; }
+.prl-vuln-name { font-size: 13px; font-weight: 900; text-align: center; line-height: 1.2; }
+.prl-vuln-q { font-size: 11px; font-style: italic; color: var(--emut); text-align: center; line-height: 1.3; padding: 4px 8px; border-radius: 6px; background: color-mix(in srgb,var(--efg) 4%,transparent); border: 1px solid var(--ebd); }
+.prl-vuln-why { font-size: 11.5px; color: var(--emut); line-height: 1.4; }
+.prl-vuln-fix { font-size: 11px; color: color-mix(in srgb,var(--ea) 60%,var(--emut)); line-height: 1.4; border-top: 1px solid var(--ebd); padding-top: 6px; }
+
+@media (max-width: 640px) {
+  .prl-abl { grid-template-columns: 1fr; }
+  .prl-vuln-grid { grid-template-columns: 1fr; }
+}
+</style>
+
+<script>
+(function(){
+  document.querySelectorAll('[data-demo="04-prior-linguistico"] button[data-tab]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var wrap = btn.closest('[data-demo="04-prior-linguistico"]');
+      wrap.querySelectorAll('button[data-tab]').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      wrap.querySelectorAll('[data-panel]').forEach(function(p){ p.style.display = 'none'; });
+      wrap.querySelector('[data-panel="' + btn.dataset.tab + '"]').style.display = '';
+    });
+  });
+})();
+</script>

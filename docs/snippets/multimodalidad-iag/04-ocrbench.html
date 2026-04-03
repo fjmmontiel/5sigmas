@@ -1,0 +1,360 @@
+<div class="ocr-wrap" data-demo="04-ocrbench">
+  <div class="ocr-hd">
+    <div class="ocr-title">OCRBench v2: "leer" un documento ≠ "razonar sobre" él</div>
+    <div class="ocr-sub">Los modelos que leen texto limpio con alta precisión tropiezan ante el layout real de documentos. OCRBench v2 mide la brecha entre ambos regímenes.</div>
+  </div>
+
+  <div class="ocr-tabs">
+    <button class="ocr-tab active" data-tab="1">Texto en línea recta</button>
+    <button class="ocr-tab" data-tab="2">Layout complejo</button>
+    <button class="ocr-tab" data-tab="3">Razonamiento cruzado</button>
+  </div>
+
+  <!-- TAB 1: SIMPLE OCR -->
+  <div class="ocr-panel" data-panel="1">
+    <div class="ocr-panel-inner">
+      <div class="ocr-regime">
+        <div class="ocr-regime-badge ocr-regime-badge--ok">Caso resuelto</div>
+        <div class="ocr-regime-title">Texto estándar en orientación horizontal</div>
+      </div>
+
+      <div class="ocr-main">
+        <div class="ocr-doc">
+          <div class="ocr-doc-tag">Documento de entrada</div>
+          <div class="ocr-doc-vis">
+            <svg viewBox="0 0 200 140" width="100%" style="max-width:200px">
+              <rect x="1" y="1" width="198" height="138" rx="6" fill="rgba(124,199,255,.04)" stroke="rgba(124,199,255,.15)" stroke-width="1.2"/>
+              <!-- clean horizontal text lines -->
+              <rect x="14" y="18" width="120" height="7" rx="2" fill="rgba(255,255,255,.7)"/>
+              <rect x="14" y="32" width="165" height="7" rx="2" fill="rgba(255,255,255,.65)"/>
+              <rect x="14" y="46" width="148" height="7" rx="2" fill="rgba(255,255,255,.65)"/>
+              <rect x="14" y="60" width="140" height="7" rx="2" fill="rgba(255,255,255,.6)"/>
+              <line x1="14" y1="76" x2="186" y2="76" stroke="rgba(255,255,255,.15)" stroke-width="0.8"/>
+              <rect x="14" y="86" width="100" height="7" rx="2" fill="rgba(255,255,255,.7)"/>
+              <rect x="14" y="100" width="160" height="7" rx="2" fill="rgba(255,255,255,.6)"/>
+              <rect x="14" y="114" width="130" height="7" rx="2" fill="rgba(255,255,255,.55)"/>
+              <!-- scan indicators -->
+              <rect x="14" y="18" width="120" height="7" rx="2" fill="none" stroke="rgba(38,166,154,.5)" stroke-width="1" stroke-dasharray="0"/>
+              <rect x="14" y="32" width="165" height="7" rx="2" fill="none" stroke="rgba(38,166,154,.4)" stroke-width="0.8"/>
+            </svg>
+          </div>
+          <div class="ocr-doc-cap">Fuente estándar · orientación horizontal · sin estructura compleja</div>
+        </div>
+
+        <div class="ocr-result">
+          <div class="ocr-result-tag">Resultado del modelo</div>
+          <div class="ocr-result-block ocr-result-block--ok">
+            <div class="ocr-result-label">Extracción de texto</div>
+            <div class="ocr-result-code">Texto extraído con alta fidelidad. Errores tipográficos menores ocasionales en caracteres poco frecuentes.</div>
+            <div class="ocr-perf">
+              <div class="ocr-perf-label">Precisión típica</div>
+              <div class="ocr-perf-bar">
+                <div class="ocr-perf-fill ocr-perf-fill--high" style="width:90%">~90%</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ocr-tasks">
+            <div class="ocr-tasks-label">Tareas bien resueltas</div>
+            <div class="ocr-task ocr-task--ok">Transcribir párrafos de texto continuo</div>
+            <div class="ocr-task ocr-task--ok">Leer números y fechas en formato estándar</div>
+            <div class="ocr-task ocr-task--ok">Identificar títulos y secciones con formato claro</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ocr-insight ocr-insight--ok">
+        <div class="ocr-insight-label">Por qué funciona bien aquí</div>
+        <div class="ocr-insight-text">El texto en orientación horizontal con fuente estándar está bien representado en los datos de preentrenamiento de los modelos. El modelo puede aplicar su capacidad de reconocimiento de patrones directamente sin necesitar razonar sobre estructura.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: COMPLEX LAYOUT -->
+  <div class="ocr-panel" data-panel="2" style="display:none">
+    <div class="ocr-panel-inner">
+      <div class="ocr-regime">
+        <div class="ocr-regime-badge ocr-regime-badge--warn">Zona de dificultad</div>
+        <div class="ocr-regime-title">Layout complejo: estructura que rompe el parsing lineal</div>
+      </div>
+
+      <div class="ocr-main">
+        <div class="ocr-doc">
+          <div class="ocr-doc-tag">Documento de entrada</div>
+          <div class="ocr-doc-vis">
+            <svg viewBox="0 0 200 140" width="100%" style="max-width:200px">
+              <rect x="1" y="1" width="198" height="138" rx="6" fill="rgba(255,179,67,.04)" stroke="rgba(255,179,67,.18)" stroke-width="1.2"/>
+              <!-- table with merged cells -->
+              <rect x="10" y="8" width="180" height="70" rx="3" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="1"/>
+              <!-- header row merged -->
+              <rect x="10" y="8" width="180" height="16" rx="3" fill="rgba(50,74,178,.2)"/>
+              <text x="100" y="20" text-anchor="middle" font-family="SF Mono,JetBrains Mono,Courier New,monospace" font-size="7" fill="rgba(255,255,255,.75)">INFORME ANUAL — Celda fusionada →</text>
+              <!-- vertical dividers -->
+              <line x1="70" y1="24" x2="70" y2="78" stroke="rgba(255,255,255,.2)" stroke-width="0.8"/>
+              <line x1="130" y1="24" x2="130" y2="78" stroke="rgba(255,255,255,.2)" stroke-width="0.8"/>
+              <!-- row dividers -->
+              <line x1="10" y1="40" x2="190" y2="40" stroke="rgba(255,255,255,.15)" stroke-width="0.8"/>
+              <line x1="10" y1="56" x2="190" y2="56" stroke="rgba(255,255,255,.15)" stroke-width="0.8"/>
+              <!-- cell content -->
+              <text x="40" y="35" text-anchor="middle" font-family="SF Mono,JetBrains Mono,Courier New,monospace" font-size="7" fill="rgba(255,255,255,.6)">Q1</text>
+              <text x="100" y="35" text-anchor="middle" font-family="SF Mono,JetBrains Mono,Courier New,monospace" font-size="7" fill="rgba(255,255,255,.6)">Q2</text>
+              <text x="160" y="35" text-anchor="middle" font-family="SF Mono,JetBrains Mono,Courier New,monospace" font-size="7" fill="rgba(255,255,255,.6)">TOTAL</text>
+              <!-- merged cell spanning 2 rows on left -->
+              <rect x="10" y="40" width="60" height="32" fill="rgba(50,74,178,.12)"/>
+              <text x="40" y="58" text-anchor="middle" font-family="SF Mono,JetBrains Mono,Courier New,monospace" font-size="7" fill="rgba(50,74,178,.8)" transform="rotate(-90 40 58)">NORTE</text>
+              <!-- values -->
+              <text x="100" y="52" text-anchor="middle" font-family="SF Mono,JetBrains Mono,Courier New,monospace" font-size="7" fill="rgba(255,255,255,.65)">1.248</text>
+              <text x="160" y="52" text-anchor="middle" font-family="SF Mono,JetBrains Mono,Courier New,monospace" font-size="7" fill="rgba(255,179,67,.8)">2.891</text>
+              <!-- rotated text label -->
+              <text x="18" y="115" font-family="SF Mono,JetBrains Mono,Courier New,monospace" font-size="8" fill="rgba(255,179,67,.55)" transform="rotate(-35 18 115)">CONFIDENCIAL</text>
+              <!-- formula inline -->
+              <rect x="10" y="88" width="180" height="40" rx="3" fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.12)" stroke-width="0.8"/>
+              <text x="20" y="103" font-family="SF Mono,JetBrains Mono,Courier New,monospace" font-size="7.5" fill="rgba(255,255,255,.65)">Crecimiento = (Q2−Q1)/Q1 × 100</text>
+              <text x="20" y="118" font-family="SF Mono,JetBrains Mono,Courier New,monospace" font-size="7" fill="rgba(255,255,255,.5)">Aplicar a cada región por separado</text>
+            </svg>
+          </div>
+          <div class="ocr-doc-cap">Celdas fusionadas · texto rotado · fórmula integrada en flujo</div>
+        </div>
+
+        <div class="ocr-result">
+          <div class="ocr-result-tag">Resultado del modelo</div>
+          <div class="ocr-result-block ocr-result-block--warn">
+            <div class="ocr-result-label">Problemas frecuentes</div>
+            <div class="ocr-result-code">Confusión en la asignación de valores a columnas con celdas fusionadas. Texto rotado ignorado o mal transcrito. Fórmulas descontextualizadas del flujo de datos.</div>
+            <div class="ocr-perf">
+              <div class="ocr-perf-label">Precisión típica</div>
+              <div class="ocr-perf-bar">
+                <div class="ocr-perf-fill ocr-perf-fill--med" style="width:54%">~54%</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ocr-tasks">
+            <div class="ocr-tasks-label">Rendimiento degradado</div>
+            <div class="ocr-task ocr-task--warn">Leer texto en orientación no estándar</div>
+            <div class="ocr-task ocr-task--bad">Asignar valores a filas en tablas con celdas fusionadas</div>
+            <div class="ocr-task ocr-task--bad">Extraer fórmulas integradas en texto narrativo</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ocr-insight ocr-insight--warn">
+        <div class="ocr-insight-label">Por qué falla aquí</div>
+        <div class="ocr-insight-text">El modelo procesa el documento como secuencia de texto, no como estructura con relaciones espaciales entre celdas. Las celdas fusionadas, el texto rotado y las fórmulas requieren interpretar el layout como semántico, no solo extraer cadenas de caracteres.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: CROSS-REGION REASONING -->
+  <div class="ocr-panel" data-panel="3" style="display:none">
+    <div class="ocr-panel-inner">
+      <div class="ocr-regime">
+        <div class="ocr-regime-badge ocr-regime-badge--bad">Límite principal</div>
+        <div class="ocr-regime-title">Razonamiento cruzado entre regiones del documento</div>
+      </div>
+
+      <div class="ocr-main">
+        <div class="ocr-doc">
+          <div class="ocr-doc-tag">Documento de entrada</div>
+          <div class="ocr-doc-vis">
+            <svg viewBox="0 0 200 140" width="100%" style="max-width:200px">
+              <rect x="1" y="1" width="198" height="138" rx="6" fill="rgba(224,76,76,.04)" stroke="rgba(224,76,76,.18)" stroke-width="1.2"/>
+              <!-- region A: top left (base imponible) -->
+              <rect x="8" y="8" width="88" height="56" rx="4" fill="rgba(50,74,178,.12)" stroke="rgba(50,74,178,.4)" stroke-width="1.2"/>
+              <text x="14" y="22" font-family="SF Mono,JetBrains Mono,Courier New,monospace" font-size="7" fill="rgba(124,199,255,.7)" font-weight="700">REGIÓN A</text>
+              <text x="14" y="34" font-family="SF Mono,JetBrains Mono,Courier New,monospace" font-size="7" fill="rgba(255,255,255,.6)">Base imponible:</text>
+              <text x="14" y="46" font-family="SF Mono,JetBrains Mono,Courier New,monospace" font-size="9" fill="rgba(255,255,255,.85)" font-weight="700">€1.458,53</text>
+              <text x="14" y="58" font-family="SF Mono,JetBrains Mono,Courier New,monospace" font-size="6.5" fill="rgba(255,255,255,.45)">pág. 1, secc. 2.1</text>
+              <!-- region B: bottom right (IVA) -->
+              <rect x="104" y="72" width="88" height="56" rx="4" fill="rgba(255,179,67,.1)" stroke="rgba(255,179,67,.4)" stroke-width="1.2"/>
+              <text x="110" y="86" font-family="SF Mono,JetBrains Mono,Courier New,monospace" font-size="7" fill="rgba(255,179,67,.8)" font-weight="700">REGIÓN B</text>
+              <text x="110" y="98" font-family="SF Mono,JetBrains Mono,Courier New,monospace" font-size="7" fill="rgba(255,255,255,.6)">IVA declarado:</text>
+              <text x="110" y="110" font-family="SF Mono,JetBrains Mono,Courier New,monospace" font-size="9" fill="rgba(255,255,255,.85)" font-weight="700">€388,97</text>
+              <text x="110" y="122" font-family="SF Mono,JetBrains Mono,Courier New,monospace" font-size="6.5" fill="rgba(255,255,255,.45)">pág. 3, secc. 5.4</text>
+              <!-- arrow connecting regions -->
+              <line x1="52" y1="65" x2="148" y2="72" stroke="rgba(224,76,76,.5)" stroke-width="1.2" stroke-dasharray="4,2"/>
+              <polygon points="145,68 152,72 145,76" fill="rgba(224,76,76,.6)"/>
+              <!-- question marker -->
+              <text x="95" y="58" text-anchor="middle" font-family="SF Mono,JetBrains Mono,Courier New,monospace" font-size="13" fill="rgba(224,76,76,.6)" font-weight="900">?</text>
+              <text x="95" y="72" text-anchor="middle" font-family="SF Mono,JetBrains Mono,Courier New,monospace" font-size="6.5" fill="rgba(224,76,76,.5)">21%?</text>
+            </svg>
+          </div>
+          <div class="ocr-doc-cap">Dos regiones del documento a páginas de distancia</div>
+        </div>
+
+        <div class="ocr-result">
+          <div class="ocr-result-tag">La pregunta que falla</div>
+          <div class="ocr-result-block ocr-result-block--bad">
+            <div class="ocr-result-label">Pregunta de razonamiento cruzado</div>
+            <div class="ocr-result-code">"¿El IVA declarado en la sección 5.4 coincide con el 21% de la base imponible indicada en la sección 2.1?"</div>
+          </div>
+
+          <div class="ocr-chain">
+            <div class="ocr-chain-label">Pasos necesarios</div>
+            <div class="ocr-chain-steps">
+              <div class="ocr-chain-step">
+                <div class="ocr-chain-n">1</div>
+                <div class="ocr-chain-txt">Localizar "base imponible" en región A → €1.458,53</div>
+              </div>
+              <div class="ocr-chain-step">
+                <div class="ocr-chain-n">2</div>
+                <div class="ocr-chain-txt">Localizar "IVA" en región B → €388,97</div>
+              </div>
+              <div class="ocr-chain-step">
+                <div class="ocr-chain-n">3</div>
+                <div class="ocr-chain-txt">Calcular: €1.458,53 × 0,21 = €306,29</div>
+              </div>
+              <div class="ocr-chain-step ocr-chain-step--conclusion">
+                <div class="ocr-chain-n ocr-chain-n--bad">!</div>
+                <div class="ocr-chain-txt">€388,97 ≠ €306,29 → discrepancia. El modelo frecuentemente no llega aquí.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ocr-tasks">
+            <div class="ocr-tasks-label">Rendimiento crítico</div>
+            <div class="ocr-task ocr-task--bad">Vincular información de regiones distantes en el documento</div>
+            <div class="ocr-task ocr-task--bad">Verificar consistencia numérica entre secciones</div>
+            <div class="ocr-task ocr-task--warn">Razonar sobre la estructura lógica del documento</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ocr-insight ocr-insight--bad">
+        <div class="ocr-insight-label">La brecha que reveló OCRBench v2</div>
+        <div class="ocr-insight-text">La diferencia entre "leer" y "razonar sobre" un documento sigue siendo sustancial. Un modelo puede extraer texto con alta precisión y aun así fallar ante preguntas que requieren cruzar información de regiones distintas, porque eso exige mantener coherencia lógica a través de la estructura del documento, no solo reconocer caracteres.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.ocr-wrap, .ocr-wrap * { box-sizing: border-box; }
+
+.ocr-wrap {
+  --ea: #26A69A; --eb: #324AB2; --eg: #FFB343; --er: #e04c4c; --al: #7cc7ff;
+  --ebg: var(--md-default-bg-color, #fff);
+  --efg: var(--md-default-fg-color, #0f172a);
+  --ebd: rgba(15,23,42,.15);
+  --emut: rgba(15,23,42,.58);
+  --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  display: grid; gap: 14px; max-width: 900px; margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--ebd); border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--eb) 5%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 100%, color-mix(in srgb,var(--er) 5%,transparent), transparent 52%),
+    var(--ebg);
+  color: var(--efg); font-family: var(--ef); -webkit-font-smoothing: antialiased;
+}
+[data-md-color-scheme="slate"] .ocr-wrap {
+  --ebg: var(--md-default-bg-color, #0f172a);
+  --efg: var(--md-default-fg-color, #e2e8f0);
+  --ebd: rgba(226,232,240,.15);
+  --emut: rgba(226,232,240,.58);
+}
+
+.ocr-hd { display: grid; gap: 5px; }
+.ocr-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.ocr-sub { font-size: 14px; color: var(--emut); line-height: 1.5; max-width: 66ch; }
+
+.ocr-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.ocr-tab {
+  padding: 7px 14px; border-radius: 999px; border: 1px solid var(--ebd);
+  background: transparent; color: var(--emut);
+  font-family: var(--ef); font-size: 13px; font-weight: 700;
+  cursor: pointer; transition: all .15s; white-space: nowrap;
+}
+.ocr-tab:hover { color: var(--efg); }
+.ocr-tab.active {
+  background: color-mix(in srgb,var(--eb) 10%,var(--ebg));
+  border-color: color-mix(in srgb,var(--eb) 38%,var(--ebd));
+  color: color-mix(in srgb,var(--eb) 70%,var(--efg));
+}
+
+.ocr-panel { min-height: 280px; }
+.ocr-panel-inner { display: grid; gap: 12px; }
+
+/* REGIME */
+.ocr-regime { display: flex; align-items: center; gap: 10px; }
+.ocr-regime-badge { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; padding: 3px 10px; border-radius: 999px; flex-shrink: 0; }
+.ocr-regime-badge--ok   { background: color-mix(in srgb,var(--ea) 14%,var(--ebg)); border: 1px solid color-mix(in srgb,var(--ea) 28%,var(--ebd)); color: color-mix(in srgb,var(--ea) 65%,var(--efg)); }
+.ocr-regime-badge--warn { background: color-mix(in srgb,var(--eg) 14%,var(--ebg)); border: 1px solid color-mix(in srgb,var(--eg) 28%,var(--ebd)); color: color-mix(in srgb,var(--eg) 60%,var(--efg)); }
+.ocr-regime-badge--bad  { background: color-mix(in srgb,var(--er) 12%,var(--ebg)); border: 1px solid color-mix(in srgb,var(--er) 28%,var(--ebd)); color: color-mix(in srgb,var(--er) 65%,var(--efg)); }
+.ocr-regime-title { font-size: 13px; font-weight: 900; }
+
+/* MAIN LAYOUT */
+.ocr-main { display: flex; gap: 14px; align-items: flex-start; }
+.ocr-doc { flex: 0 0 auto; width: 220px; display: flex; flex-direction: column; gap: 8px; }
+.ocr-doc-tag { font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--emut); }
+.ocr-doc-vis { display: flex; justify-content: center; padding: 8px; border-radius: 10px; border: 1px solid rgba(124,199,255,.2); background: rgba(10,18,36,.88); }
+.ocr-doc-cap { font-size: 10.5px; color: var(--emut); text-align: center; line-height: 1.3; }
+
+.ocr-result { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+.ocr-result-tag { font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--emut); }
+
+.ocr-result-block { padding: 10px 12px; border-radius: 10px; border: 1px solid var(--ebd); display: grid; gap: 8px; }
+.ocr-result-block--ok   { border-color: color-mix(in srgb,var(--ea) 22%,var(--ebd)); background: color-mix(in srgb,var(--ea) 5%,var(--ebg)); }
+.ocr-result-block--warn { border-color: color-mix(in srgb,var(--eg) 22%,var(--ebd)); background: color-mix(in srgb,var(--eg) 5%,var(--ebg)); }
+.ocr-result-block--bad  { border-color: color-mix(in srgb,var(--er) 22%,var(--ebd)); background: color-mix(in srgb,var(--er) 5%,var(--ebg)); }
+.ocr-result-label { font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--emut); }
+.ocr-result-code { font-size: 12.5px; line-height: 1.5; color: var(--efg); font-family: "SF Mono","JetBrains Mono","Courier New",monospace; }
+
+/* PERFORMANCE BAR */
+.ocr-perf { display: grid; gap: 4px; }
+.ocr-perf-label { font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--emut); }
+.ocr-perf-bar { height: 24px; border-radius: 6px; background: color-mix(in srgb,var(--efg) 5%,transparent); border: 1px solid var(--ebd); overflow: hidden; }
+.ocr-perf-fill { height: 100%; border-radius: 5px; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; font-family: "SF Mono","JetBrains Mono","Courier New",monospace; font-size: 11px; font-weight: 900; }
+.ocr-perf-fill--high { background: color-mix(in srgb,var(--ea) 55%,transparent); color: color-mix(in srgb,var(--ea) 90%,var(--efg)); }
+.ocr-perf-fill--med  { background: color-mix(in srgb,var(--eg) 50%,transparent); color: color-mix(in srgb,var(--eg) 80%,var(--efg)); }
+.ocr-perf-fill--bad  { background: color-mix(in srgb,var(--er) 50%,transparent); color: color-mix(in srgb,var(--er) 80%,var(--efg)); }
+
+/* TASKS */
+.ocr-tasks { display: flex; flex-direction: column; gap: 5px; }
+.ocr-tasks-label { font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--emut); }
+.ocr-task { padding: 5px 10px; border-radius: 7px; font-size: 11.5px; font-weight: 600; border: 1px solid var(--ebd); display: flex; align-items: center; gap: 8px; }
+.ocr-task::before { font-size: 13px; flex-shrink: 0; }
+.ocr-task--ok   { border-color: color-mix(in srgb,var(--ea) 20%,var(--ebd)); background: color-mix(in srgb,var(--ea) 4%,var(--ebg)); }
+.ocr-task--ok::before   { content: "✓"; color: color-mix(in srgb,var(--ea) 70%,var(--efg)); }
+.ocr-task--warn { border-color: color-mix(in srgb,var(--eg) 22%,var(--ebd)); background: color-mix(in srgb,var(--eg) 4%,var(--ebg)); }
+.ocr-task--warn::before { content: "~"; color: color-mix(in srgb,var(--eg) 65%,var(--efg)); }
+.ocr-task--bad  { border-color: color-mix(in srgb,var(--er) 20%,var(--ebd)); background: color-mix(in srgb,var(--er) 4%,var(--ebg)); }
+.ocr-task--bad::before  { content: "✗"; color: color-mix(in srgb,var(--er) 65%,var(--efg)); }
+
+/* INSIGHT */
+.ocr-insight { padding: 10px 14px; border-radius: 10px; border: 1px solid var(--ebd); display: grid; gap: 4px; }
+.ocr-insight--ok   { border-color: color-mix(in srgb,var(--ea) 20%,var(--ebd)); background: color-mix(in srgb,var(--ea) 4%,var(--ebg)); }
+.ocr-insight--warn { border-color: color-mix(in srgb,var(--eg) 18%,var(--ebd)); background: color-mix(in srgb,var(--eg) 4%,var(--ebg)); }
+.ocr-insight--bad  { border-color: color-mix(in srgb,var(--er) 18%,var(--ebd)); background: color-mix(in srgb,var(--er) 4%,var(--ebg)); }
+.ocr-insight-label { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--emut); }
+.ocr-insight-text { font-size: 13px; line-height: 1.5; color: var(--efg); }
+
+/* CHAIN (TAB 3) */
+.ocr-chain { display: grid; gap: 6px; }
+.ocr-chain-label { font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--emut); }
+.ocr-chain-steps { display: grid; gap: 5px; }
+.ocr-chain-step { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 8px; border: 1px solid var(--ebd); background: color-mix(in srgb,var(--ebg) 88%,#0f172a 12%); }
+.ocr-chain-step--conclusion { border-color: color-mix(in srgb,var(--er) 22%,var(--ebd)); background: color-mix(in srgb,var(--er) 5%,var(--ebg)); }
+.ocr-chain-n { width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 900; font-family: "SF Mono","JetBrains Mono","Courier New",monospace; background: color-mix(in srgb,var(--eb) 14%,var(--ebg)); border: 1px solid color-mix(in srgb,var(--eb) 28%,var(--ebd)); color: color-mix(in srgb,var(--eb) 65%,var(--efg)); }
+.ocr-chain-n--bad { background: color-mix(in srgb,var(--er) 14%,var(--ebg)); border-color: color-mix(in srgb,var(--er) 28%,var(--ebd)); color: color-mix(in srgb,var(--er) 70%,var(--efg)); }
+.ocr-chain-txt { font-size: 12px; line-height: 1.35; font-family: "SF Mono","JetBrains Mono","Courier New",monospace; color: var(--efg); }
+
+@media (max-width: 640px) {
+  .ocr-main { flex-direction: column; }
+  .ocr-doc { width: 100%; }
+}
+</style>
+
+<script>
+(function(){
+  document.querySelectorAll('[data-demo="04-ocrbench"] button[data-tab]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var wrap = btn.closest('[data-demo="04-ocrbench"]');
+      wrap.querySelectorAll('button[data-tab]').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      wrap.querySelectorAll('[data-panel]').forEach(function(p){ p.style.display = 'none'; });
+      wrap.querySelector('[data-panel="' + btn.dataset.tab + '"]').style.display = '';
+    });
+  });
+})();
+</script>

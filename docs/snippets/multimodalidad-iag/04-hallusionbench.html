@@ -1,0 +1,341 @@
+<div class="hbl-wrap" data-demo="04-hallusionbench">
+  <div class="hbl-hd">
+    <div class="hbl-title">HallusionBench: tres patrones de alucinación visual</div>
+    <div class="hbl-sub">La alucinación visual no es un fenómeno marginal. HallusionBench identificó tres patrones distintos y consistentes en todos los modelos evaluados, incluyendo los más capaces.</div>
+  </div>
+
+  <div class="hbl-tabs">
+    <button class="hbl-tab active" data-tab="1">Afirmar lo ausente</button>
+    <button class="hbl-tab" data-tab="2">Negar lo presente</button>
+    <button class="hbl-tab" data-tab="3">Relación espacial errónea</button>
+  </div>
+
+  <!-- TAB 1: Afirmar ausente -->
+  <div class="hbl-panel" data-panel="1">
+    <div class="hbl-case">
+      <div class="hbl-scene">
+        <div class="hbl-scene-tag">Imagen real</div>
+        <div class="hbl-scene-vis">
+          <svg viewBox="0 0 220 140" width="100%" style="max-width:220px">
+            <rect x="2" y="2" width="216" height="136" rx="8" fill="rgba(124,199,255,.05)" stroke="rgba(124,199,255,.15)" stroke-width="1.5"/>
+            <!-- table surface -->
+            <rect x="8" y="91" width="204" height="5" rx="2" fill="rgba(124,199,255,.22)"/>
+            <rect x="8" y="96" width="204" height="38" rx="0" fill="rgba(124,199,255,.05)"/>
+            <!-- glass shadow on table -->
+            <ellipse cx="110" cy="94" rx="15" ry="3" fill="rgba(0,0,0,.1)"/>
+            <!-- glass body (trapezoid) -->
+            <path d="M96 56 L100 91 L120 91 L124 56 Z" fill="rgba(124,199,255,.14)" stroke="rgba(124,199,255,.55)" stroke-width="1.5"/>
+            <!-- glass highlight -->
+            <line x1="101" y1="62" x2="103" y2="88" stroke="rgba(255,255,255,.45)" stroke-width="1.2"/>
+            <!-- glass top rim -->
+            <ellipse cx="110" cy="56" rx="14" ry="3.5" fill="rgba(124,199,255,.18)" stroke="rgba(124,199,255,.55)" stroke-width="1.2"/>
+            <!-- glass label -->
+            <text x="110" y="78" text-anchor="middle" font-family="SF Mono,JetBrains Mono,Courier New,monospace" font-size="8" fill="rgba(255,255,255,.8)">vaso</text>
+            <!-- empty area left – dashed border -->
+            <rect x="10" y="44" width="74" height="44" rx="6" fill="rgba(239,68,68,.03)" stroke="rgba(239,68,68,.28)" stroke-width="1" stroke-dasharray="4,3"/>
+            <text x="47" y="63" text-anchor="middle" font-family="SF Mono,JetBrains Mono,Courier New,monospace" font-size="7.5" fill="rgba(239,68,68,.4)">sin objetos</text>
+            <!-- empty area right – dashed border -->
+            <rect x="136" y="44" width="74" height="44" rx="6" fill="rgba(239,68,68,.03)" stroke="rgba(239,68,68,.28)" stroke-width="1" stroke-dasharray="4,3"/>
+            <text x="173" y="63" text-anchor="middle" font-family="SF Mono,JetBrains Mono,Courier New,monospace" font-size="7.5" fill="rgba(239,68,68,.4)">sin objetos</text>
+          </svg>
+        </div>
+        <div class="hbl-scene-caption">Solo hay un vaso en la imagen</div>
+      </div>
+
+      <div class="hbl-responses">
+        <div class="hbl-question">
+          <div class="hbl-q-tag">Pregunta</div>
+          <div class="hbl-q-text">"¿Hay algún libro en la imagen?"</div>
+        </div>
+
+        <div class="hbl-response hbl-response--bad">
+          <div class="hbl-resp-tag">Modelo hallucinating</div>
+          <div class="hbl-resp-text">"Sí, en la parte izquierda de la imagen hay un libro de tapa roja apoyado contra la pared."</div>
+          <div class="hbl-resp-badge hbl-resp-badge--bad">alucinación · elemento inexistente</div>
+        </div>
+
+        <div class="hbl-response hbl-response--ok">
+          <div class="hbl-resp-tag">Respuesta correcta</div>
+          <div class="hbl-resp-text">"No, no hay ningún libro en la imagen. Solo aparece un vaso sobre la mesa."</div>
+          <div class="hbl-resp-badge hbl-resp-badge--ok">correcto · grounding real</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hbl-mechanism">
+      <div class="hbl-mec-label">Mecanismo subyacente</div>
+      <div class="hbl-mec-text">El modelo genera un objeto plausible para la escena descrita (mesa + vaso → libro es coherente con una escena doméstica) usando su prior sobre decorados típicos, sin verificar la evidencia visual. La respuesta es fluida y convincente.</div>
+    </div>
+  </div>
+
+  <!-- TAB 2: Negar presente -->
+  <div class="hbl-panel" data-panel="2" style="display:none">
+    <div class="hbl-case">
+      <div class="hbl-scene">
+        <div class="hbl-scene-tag">Imagen real</div>
+        <div class="hbl-scene-vis">
+          <svg viewBox="0 0 220 140" width="100%" style="max-width:220px">
+            <rect x="2" y="2" width="216" height="136" rx="8" fill="rgba(124,199,255,.05)" stroke="rgba(124,199,255,.15)" stroke-width="1.5"/>
+            <!-- document background -->
+            <rect x="30" y="15" width="160" height="110" rx="5" fill="rgba(255,255,255,.12)" stroke="rgba(255,255,255,.2)" stroke-width="1"/>
+            <!-- text lines -->
+            <text x="45" y="35" font-family="SF Mono,JetBrains Mono,Courier New,monospace" font-size="10" fill="rgba(255,255,255,.85)" font-weight="700">TOTAL: €1.847,50</text>
+            <line x1="45" y1="42" x2="175" y2="42" stroke="rgba(255,255,255,.25)" stroke-width="0.8"/>
+            <text x="45" y="56" font-family="SF Mono,JetBrains Mono,Courier New,monospace" font-size="8.5" fill="rgba(255,255,255,.7)">Factura #2024-0891</text>
+            <text x="45" y="70" font-family="SF Mono,JetBrains Mono,Courier New,monospace" font-size="8.5" fill="rgba(255,255,255,.7)">Cliente: Empresa XYZ S.L.</text>
+            <text x="45" y="84" font-family="SF Mono,JetBrains Mono,Courier New,monospace" font-size="8.5" fill="rgba(255,255,255,.7)">IVA: €388,97</text>
+            <text x="45" y="98" font-family="SF Mono,JetBrains Mono,Courier New,monospace" font-size="8.5" fill="rgba(255,255,255,.7)">Base imponible: €1.458,53</text>
+            <text x="45" y="112" font-family="SF Mono,JetBrains Mono,Courier New,monospace" font-size="8.5" fill="rgba(255,255,255,.6)">Vencimiento: 30-04-2024</text>
+          </svg>
+        </div>
+        <div class="hbl-scene-caption">Documento con cifras claramente visibles</div>
+      </div>
+
+      <div class="hbl-responses">
+        <div class="hbl-question">
+          <div class="hbl-q-tag">Pregunta</div>
+          <div class="hbl-q-text">"¿Aparece alguna cifra de IVA en este documento?"</div>
+        </div>
+
+        <div class="hbl-response hbl-response--bad">
+          <div class="hbl-resp-tag">Modelo hallucinating</div>
+          <div class="hbl-resp-text">"La imagen no contiene información numérica suficientemente clara para identificar cifras de IVA con certeza."</div>
+          <div class="hbl-resp-badge hbl-resp-badge--bad">alucinación · elemento presente negado</div>
+        </div>
+
+        <div class="hbl-response hbl-response--ok">
+          <div class="hbl-resp-tag">Respuesta correcta</div>
+          <div class="hbl-resp-text">"Sí. El documento muestra IVA: €388,97 sobre una base imponible de €1.458,53."</div>
+          <div class="hbl-resp-badge hbl-resp-badge--ok">correcto · grounding real</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hbl-mechanism">
+      <div class="hbl-mec-label">Mecanismo subyacente</div>
+      <div class="hbl-mec-text">El modelo expresa incertidumbre sobre contenido que sí está presente, posiblemente porque el documento tiene una tipografía o un layout fuera de su distribución de entrenamiento. La alucinación es inversa: en lugar de generar algo que no existe, niega algo que sí existe.</div>
+    </div>
+  </div>
+
+  <!-- TAB 3: Relación espacial errónea -->
+  <div class="hbl-panel" data-panel="3" style="display:none">
+    <div class="hbl-case">
+      <div class="hbl-scene">
+        <div class="hbl-scene-tag">Imagen real</div>
+        <div class="hbl-scene-vis">
+          <svg viewBox="0 0 220 140" width="100%" style="max-width:220px">
+            <rect x="2" y="2" width="216" height="136" rx="8" fill="rgba(124,199,255,.05)" stroke="rgba(124,199,255,.15)" stroke-width="1.5"/>
+            <!-- sphere on bottom (the real arrangement: cube ON TOP of sphere) -->
+            <!-- sphere -->
+            <circle cx="110" cy="100" r="28" fill="rgba(50,74,178,.5)" stroke="rgba(50,74,178,.8)" stroke-width="1.5"/>
+            <text x="110" y="105" text-anchor="middle" font-family="SF Mono,JetBrains Mono,Courier New,monospace" font-size="8" fill="rgba(255,255,255,.8)">esfera</text>
+            <!-- cube on top of sphere -->
+            <rect x="84" y="50" width="52" height="42" rx="4" fill="rgba(38,166,154,.5)" stroke="rgba(38,166,154,.8)" stroke-width="1.5"/>
+            <text x="110" y="76" text-anchor="middle" font-family="SF Mono,JetBrains Mono,Courier New,monospace" font-size="8" fill="rgba(255,255,255,.8)">cubo</text>
+            <!-- real relation arrow -->
+            <text x="165" y="68" font-family="SF Mono,JetBrains Mono,Courier New,monospace" font-size="8" fill="rgba(38,166,154,.7)">cubo</text>
+            <text x="162" y="80" font-family="SF Mono,JetBrains Mono,Courier New,monospace" font-size="8" fill="rgba(124,199,255,.5)">encima</text>
+            <text x="165" y="92" font-family="SF Mono,JetBrains Mono,Courier New,monospace" font-size="8" fill="rgba(50,74,178,.7)">esfera</text>
+          </svg>
+        </div>
+        <div class="hbl-scene-caption">El cubo está encima de la esfera</div>
+      </div>
+
+      <div class="hbl-responses">
+        <div class="hbl-question">
+          <div class="hbl-q-tag">Pregunta</div>
+          <div class="hbl-q-text">"¿Qué objeto está encima: el cubo o la esfera?"</div>
+        </div>
+
+        <div class="hbl-response hbl-response--bad">
+          <div class="hbl-resp-tag">Modelo hallucinating</div>
+          <div class="hbl-resp-text">"La esfera está encima del cubo. La esfera azul reposa sobre la superficie superior del cubo verde."</div>
+          <div class="hbl-resp-badge hbl-resp-badge--bad">alucinación · relación espacial invertida</div>
+        </div>
+
+        <div class="hbl-response hbl-response--ok">
+          <div class="hbl-resp-tag">Respuesta correcta</div>
+          <div class="hbl-resp-text">"El cubo está encima. La esfera está en la parte inferior y el cubo descansa sobre ella."</div>
+          <div class="hbl-resp-badge hbl-resp-badge--ok">correcto · grounding real</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hbl-mechanism">
+      <div class="hbl-mec-label">Mecanismo subyacente</div>
+      <div class="hbl-mec-text">Las esferas son más livianas y se asocian con estar encima en el corpus de entrenamiento (globos, pelotas sobre superficies). El prior estadístico de "esfera encima" es más fuerte que la evidencia visual de la disposición real, especialmente cuando ambos objetos son reconocibles individualmente.</div>
+    </div>
+
+    <div class="hbl-summary">
+      <div class="hbl-sum-label">Patrón común a los tres tipos</div>
+      <div class="hbl-sum-cards">
+        <div class="hbl-sum-card">
+          <div class="hbl-sum-n">1</div>
+          <div class="hbl-sum-txt">Afirmar ausente</div>
+        </div>
+        <div class="hbl-sum-card">
+          <div class="hbl-sum-n">2</div>
+          <div class="hbl-sum-txt">Negar presente</div>
+        </div>
+        <div class="hbl-sum-card">
+          <div class="hbl-sum-n">3</div>
+          <div class="hbl-sum-txt">Relación espacial errónea</div>
+        </div>
+      </div>
+      <div class="hbl-sum-note">En todos los casos el prior lingüístico supera la evidencia visual. La respuesta suena confiada y fluida aunque sea factualmente incorrecta. Los benchmarks estándar de VQA no detectan estos patrones porque no están diseñados para hacerlo.</div>
+    </div>
+  </div>
+</div>
+
+<style>
+.hbl-wrap, .hbl-wrap * { box-sizing: border-box; }
+
+.hbl-wrap {
+  --aa: #26A69A;
+  --ab: #324AB2;
+  --ag: #FFB343;
+  --ar: #e04c4c;
+  --al: #7cc7ff;
+  --abg: var(--md-default-bg-color, #fff);
+  --afg: var(--md-default-fg-color, #0f172a);
+  --abd: rgba(15,23,42,.14);
+  --amut: rgba(15,23,42,.58);
+  --af: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid; gap: 14px; max-width: 900px; margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--abd); border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--ag) 6%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 100%, color-mix(in srgb,var(--ar) 5%,transparent), transparent 52%),
+    var(--abg);
+  color: var(--afg); font-family: var(--af); -webkit-font-smoothing: antialiased;
+}
+[data-md-color-scheme="slate"] .hbl-wrap {
+  --abg: var(--md-default-bg-color, #0f172a);
+  --afg: var(--md-default-fg-color, #e2e8f0);
+  --abd: rgba(226,232,240,.14);
+  --amut: rgba(226,232,240,.58);
+}
+
+.hbl-hd { display: grid; gap: 5px; }
+.hbl-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.hbl-sub { font-size: 14px; color: var(--amut); line-height: 1.5; max-width: 68ch; }
+
+.hbl-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.hbl-tab {
+  padding: 6px 14px; border-radius: 999px; border: 1px solid var(--abd);
+  background: transparent; color: var(--amut);
+  font-family: var(--af); font-size: 12.5px; font-weight: 700;
+  cursor: pointer; transition: background .15s, color .15s; white-space: nowrap;
+}
+.hbl-tab:hover { background: color-mix(in srgb,var(--ag) 8%,var(--abg)); color: var(--afg); }
+.hbl-tab.active {
+  background: color-mix(in srgb,var(--ag) 12%,var(--abg));
+  border-color: color-mix(in srgb,var(--ag) 40%,var(--abd));
+  color: color-mix(in srgb,var(--ag) 70%,var(--afg));
+}
+
+.hbl-panel { min-height: 260px; display: flex; flex-direction: column; gap: 12px; }
+
+.hbl-case { display: flex; gap: 14px; align-items: flex-start; flex: 1; }
+.hbl-scene {
+  flex: 0 0 auto; width: 240px; display: flex; flex-direction: column; gap: 8px; align-items: center;
+}
+.hbl-scene-tag { font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--amut); }
+.hbl-scene-vis {
+  width: 100%; padding: 10px; border-radius: 12px;
+  border: 1px solid rgba(124,199,255,.2);
+  background: rgba(10,18,36,.88);
+  display: flex; justify-content: center;
+}
+.hbl-scene-caption { font-size: 11px; color: var(--amut); text-align: center; }
+
+.hbl-responses { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+.hbl-question {
+  padding: 8px 12px; border-radius: 9px;
+  border: 1px solid color-mix(in srgb,var(--ab) 20%,var(--abd));
+  background: color-mix(in srgb,var(--ab) 4%,var(--abg));
+  display: flex; align-items: center; gap: 8px;
+}
+.hbl-q-tag { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--amut); flex-shrink: 0; }
+.hbl-q-text { font-size: 13px; font-weight: 700; font-style: italic; }
+
+.hbl-response {
+  padding: 10px 12px; border-radius: 10px; border: 1px solid var(--abd);
+  display: flex; flex-direction: column; gap: 6px; flex: 1;
+}
+.hbl-response--bad {
+  border-color: color-mix(in srgb,var(--ar) 28%,var(--abd));
+  background: color-mix(in srgb,var(--ar) 5%,var(--abg));
+}
+.hbl-response--ok {
+  border-color: color-mix(in srgb,var(--aa) 25%,var(--abd));
+  background: color-mix(in srgb,var(--aa) 4%,var(--abg));
+}
+.hbl-resp-tag { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--amut); }
+.hbl-resp-text { font-size: 12.5px; line-height: 1.5; font-style: italic; }
+.hbl-resp-badge {
+  font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: .05em;
+  padding: 3px 9px; border-radius: 999px; display: inline-block; width: fit-content;
+}
+.hbl-resp-badge--bad {
+  color: color-mix(in srgb,var(--ar) 70%,var(--afg));
+  background: color-mix(in srgb,var(--ar) 10%,var(--abg));
+  border: 1px solid color-mix(in srgb,var(--ar) 25%,var(--abd));
+}
+.hbl-resp-badge--ok {
+  color: color-mix(in srgb,var(--aa) 70%,var(--afg));
+  background: color-mix(in srgb,var(--aa) 10%,var(--abg));
+  border: 1px solid color-mix(in srgb,var(--aa) 22%,var(--abd));
+}
+
+.hbl-mechanism {
+  padding: 10px 14px; border-radius: 10px;
+  border: 1px solid color-mix(in srgb,var(--ag) 22%,var(--abd));
+  background: color-mix(in srgb,var(--ag) 5%,var(--abg));
+  display: grid; gap: 4px;
+}
+.hbl-mec-label { font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--amut); }
+.hbl-mec-text { font-size: 12.5px; line-height: 1.5; color: var(--afg); }
+
+.hbl-summary { display: flex; flex-direction: column; gap: 8px; }
+.hbl-sum-label { font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--amut); }
+.hbl-sum-cards { display: flex; gap: 6px; }
+.hbl-sum-card {
+  flex: 1; padding: 8px 10px; border-radius: 9px;
+  border: 1px solid color-mix(in srgb,var(--ar) 22%,var(--abd));
+  background: color-mix(in srgb,var(--ar) 5%,var(--abg));
+  display: flex; align-items: center; gap: 8px;
+}
+.hbl-sum-n {
+  width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0;
+  background: color-mix(in srgb,var(--ar) 15%,var(--abg));
+  border: 1px solid color-mix(in srgb,var(--ar) 30%,var(--abd));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 900;
+  color: color-mix(in srgb,var(--ar) 70%,var(--afg));
+}
+.hbl-sum-txt { font-size: 11.5px; font-weight: 700; }
+.hbl-sum-note { font-size: 12px; color: var(--amut); line-height: 1.5; }
+
+@media (max-width: 640px) {
+  .hbl-case { flex-direction: column; }
+  .hbl-scene { width: 100%; }
+  .hbl-sum-cards { flex-direction: column; }
+}
+</style>
+
+<script>
+(function(){
+  document.querySelectorAll('[data-demo="04-hallusionbench"] button[data-tab]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var wrap = btn.closest('[data-demo="04-hallusionbench"]');
+      wrap.querySelectorAll('button[data-tab]').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      wrap.querySelectorAll('[data-panel]').forEach(function(p){ p.style.display = 'none'; });
+      wrap.querySelector('[data-panel="' + btn.dataset.tab + '"]').style.display = '';
+    });
+  });
+})();
+</script>

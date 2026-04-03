@@ -1,0 +1,359 @@
+<div class="grn-wrap" data-demo="04-grounding-concepto">
+  <div class="grn-hd">
+    <div class="grn-title">Grounding: qué significa que un modelo "vea" de verdad</div>
+    <div class="grn-sub">La diferencia entre responder desde la evidencia visual y responder desde la distribución estadística aprendida durante el entrenamiento.</div>
+  </div>
+
+  <div class="grn-tabs">
+    <button class="grn-tab active" data-tab="1">Qué es el grounding</button>
+    <button class="grn-tab" data-tab="2">Cuándo falla en silencio</button>
+    <button class="grn-tab" data-tab="3">Qué hacen los buenos benchmarks</button>
+  </div>
+
+  <!-- TAB 1 -->
+  <div class="grn-panel" data-panel="1">
+    <div class="grn-panel-inner">
+      <div class="grn-def">
+        <div class="grn-def-label">La pregunta central de la evaluación</div>
+        <div class="grn-def-text">Cuando un modelo responde correctamente, ¿lo hace porque procesó la imagen o porque la respuesta era estadísticamente probable independientemente de ella?</div>
+      </div>
+
+      <div class="grn-compare">
+        <div class="grn-col grn-col--bad">
+          <div class="grn-col-hd">
+            <div class="grn-col-tag">Sin grounding</div>
+            <div class="grn-col-sub">La imagen no determina la respuesta</div>
+          </div>
+          <div class="grn-col-body">
+            <div class="grn-step-icon">
+              <svg viewBox="0 0 56 40" width="56" height="40">
+                <rect x="1" y="1" width="54" height="38" rx="5" fill="rgba(239,68,68,.07)" stroke="rgba(239,68,68,.3)" stroke-width="1.5"/>
+                <rect x="8" y="7" width="40" height="26" rx="3" fill="rgba(239,68,68,.08)"/>
+                <line x1="12" y1="11" x2="44" y2="33" stroke="rgba(239,68,68,.55)" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="44" y1="11" x2="12" y2="33" stroke="rgba(239,68,68,.55)" stroke-width="2.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="grn-step-lbl">imagen ignorada</div>
+            <div class="grn-arr">↓</div>
+            <div class="grn-box grn-box--bad">
+              <div class="grn-box-name">Prior estadístico</div>
+              <div class="grn-box-desc">distribución aprendida en el entrenamiento</div>
+            </div>
+            <div class="grn-arr">↓</div>
+            <div class="grn-resp grn-resp--bad">
+              <div class="grn-resp-ans">"Blanco"</div>
+              <div class="grn-resp-note">respuesta más frecuente en el corpus</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grn-vs">vs</div>
+
+        <div class="grn-col grn-col--ok">
+          <div class="grn-col-hd">
+            <div class="grn-col-tag">Con grounding</div>
+            <div class="grn-col-sub">La imagen determina la respuesta</div>
+          </div>
+          <div class="grn-col-body">
+            <div class="grn-step-icon">
+              <svg viewBox="0 0 56 40" width="56" height="40">
+                <rect x="1" y="1" width="54" height="38" rx="5" fill="rgba(38,166,154,.07)" stroke="rgba(38,166,154,.3)" stroke-width="1.5"/>
+                <rect x="8" y="7" width="40" height="26" rx="3" fill="rgba(38,166,154,.1)"/>
+                <circle cx="28" cy="20" r="9" fill="rgba(38,166,154,.5)" stroke="rgba(38,166,154,.75)" stroke-width="1.5"/>
+                <circle cx="28" cy="20" r="4" fill="rgba(38,166,154,.9)"/>
+                <line x1="34" y1="26" x2="42" y2="32" stroke="rgba(38,166,154,.55)" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="grn-step-lbl">imagen analizada</div>
+            <div class="grn-arr">↓</div>
+            <div class="grn-box grn-box--ok">
+              <div class="grn-box-name">Evidencia visual</div>
+              <div class="grn-box-desc">contenido real de la imagen procesado</div>
+            </div>
+            <div class="grn-arr">↓</div>
+            <div class="grn-resp grn-resp--ok">
+              <div class="grn-resp-ans">"Rojo"</div>
+              <div class="grn-resp-note">color real del objeto en la imagen</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grn-note">
+        <div class="grn-note-label">Pregunta de referencia en ambas columnas</div>
+        <div class="grn-note-text">"¿De qué color es el coche de la imagen?" — El coche real es rojo, pero en el corpus de entrenamiento los coches son mayoritariamente blancos o grises.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2 -->
+  <div class="grn-panel" data-panel="2" style="display:none">
+    <div class="grn-panel-inner">
+      <div class="grn-def">
+        <div class="grn-def-label">El problema de fondo</div>
+        <div class="grn-def-text">El fallo solo es detectable cuando el prior estadístico y la respuesta correcta divergen. Si la imagen muestra lo más probable, el modelo sin grounding y el modelo con grounding producen la misma respuesta, y el benchmark no puede distinguirlos.</div>
+      </div>
+
+      <div class="grn-scenarios">
+        <div class="grn-scenario grn-scenario--neutral">
+          <div class="grn-sc-hd">
+            <div class="grn-sc-tag grn-sc-tag--warn">Fallo invisible</div>
+            <div class="grn-sc-title">Prior coincide con la imagen</div>
+          </div>
+          <div class="grn-sc-row">
+            <div class="grn-sc-item">
+              <div class="grn-sc-label">Imagen real</div>
+              <div class="grn-sc-val">coche blanco</div>
+            </div>
+            <div class="grn-sc-plus">+</div>
+            <div class="grn-sc-item">
+              <div class="grn-sc-label">Prior más fuerte</div>
+              <div class="grn-sc-val">"blanco"</div>
+            </div>
+            <div class="grn-sc-arr2">→</div>
+            <div class="grn-sc-item">
+              <div class="grn-sc-label">Resultado</div>
+              <div class="grn-sc-val grn-sc-val--ok">"Blanco" ✓</div>
+            </div>
+          </div>
+          <div class="grn-sc-note">El modelo acierta, pero pudo hacerlo sin mirar la imagen. El benchmark no detecta nada.</div>
+        </div>
+
+        <div class="grn-scenario grn-scenario--bad">
+          <div class="grn-sc-hd">
+            <div class="grn-sc-tag grn-sc-tag--bad">Fallo visible</div>
+            <div class="grn-sc-title">Prior diverge de la imagen</div>
+          </div>
+          <div class="grn-sc-row">
+            <div class="grn-sc-item">
+              <div class="grn-sc-label">Imagen real</div>
+              <div class="grn-sc-val">coche rojo</div>
+            </div>
+            <div class="grn-sc-plus">+</div>
+            <div class="grn-sc-item">
+              <div class="grn-sc-label">Prior más fuerte</div>
+              <div class="grn-sc-val">"blanco"</div>
+            </div>
+            <div class="grn-sc-arr2">→</div>
+            <div class="grn-sc-item">
+              <div class="grn-sc-label">Resultado</div>
+              <div class="grn-sc-val grn-sc-val--bad">"Blanco" ✗</div>
+            </div>
+          </div>
+          <div class="grn-sc-note">El modelo falla. Solo este caso permite detectar la ausencia de grounding real.</div>
+        </div>
+      </div>
+
+      <div class="grn-insight">
+        <div class="grn-insight-label">Implicación para el diseño de benchmarks</div>
+        <div class="grn-insight-text">Un benchmark sin casos del segundo tipo no puede distinguir un modelo con comprensión visual real de uno que adivina por probabilidad. Los resultados solo serán válidos si el conjunto de evaluación incluye sistemáticamente ejemplos donde el prior estadístico falla.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3 -->
+  <div class="grn-panel" data-panel="3" style="display:none">
+    <div class="grn-panel-inner">
+      <div class="grn-def">
+        <div class="grn-def-label">La solución: contraejemplos diseñados</div>
+        <div class="grn-def-text">Los benchmarks que corrigen este problema incluyen sistemáticamente imágenes donde la respuesta correcta viola las expectativas estadísticas más frecuentes del corpus de entrenamiento.</div>
+      </div>
+
+      <div class="grn-principles">
+        <div class="grn-principle">
+          <div class="grn-principle-n">1</div>
+          <div class="grn-principle-body">
+            <div class="grn-principle-title">Objetos con propiedades atípicas</div>
+            <div class="grn-principle-text">Un plátano azul, un coche verde brillante, un edificio triangular. Si el modelo responde con el color o la forma más habitual, el fallo es inequívoco y no puede atribuirse al azar.</div>
+          </div>
+        </div>
+        <div class="grn-principle">
+          <div class="grn-principle-n">2</div>
+          <div class="grn-principle-body">
+            <div class="grn-principle-title">Conteos que violan la norma estadística</div>
+            <div class="grn-principle-text">Si "2 o 3" domina en el corpus, el benchmark incluye imágenes con 7, 11 o 14 elementos del mismo tipo. Un modelo sin grounding cae en el rango estadístico habitual aunque la imagen muestre otra cosa.</div>
+          </div>
+        </div>
+        <div class="grn-principle">
+          <div class="grn-principle-n">3</div>
+          <div class="grn-principle-body">
+            <div class="grn-principle-title">Configuraciones espaciales infrecuentes</div>
+            <div class="grn-principle-text">La esfera debajo del cubo. La taza a la izquierda del plato cuando el prior de entrenamiento es "a la derecha". Casos donde la configuración real invierte la expectativa estadística.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grn-benchmarks">
+        <div class="grn-bench">
+          <div class="grn-bench-name">MMStar</div>
+          <div class="grn-bench-desc">Diseñado con contraejemplos donde el prior estadístico lleva sistemáticamente al error. Chen et al., 2024.</div>
+        </div>
+        <div class="grn-bench">
+          <div class="grn-bench-name">SEEDBench</div>
+          <div class="grn-bench-desc">Evalúa consistencia y razonamiento espacial, no solo exactitud en respuesta final. Li et al., 2023.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.grn-wrap, .grn-wrap * { box-sizing: border-box; }
+
+.grn-wrap {
+  --ea: #26A69A; --eb: #324AB2; --eg: #FFB343; --er: #e04c4c; --al: #7cc7ff;
+  --ebg: var(--md-default-bg-color, #fff);
+  --efg: var(--md-default-fg-color, #0f172a);
+  --ebd: rgba(15,23,42,.15);
+  --emut: rgba(15,23,42,.58);
+  --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  display: grid; gap: 14px; max-width: 900px; margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--ebd); border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 8% 0%, color-mix(in srgb,var(--ea) 6%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 92% 100%, color-mix(in srgb,var(--eb) 5%,transparent), transparent 52%),
+    var(--ebg);
+  color: var(--efg); font-family: var(--ef); -webkit-font-smoothing: antialiased;
+}
+[data-md-color-scheme="slate"] .grn-wrap {
+  --ebg: var(--md-default-bg-color, #0f172a);
+  --efg: var(--md-default-fg-color, #e2e8f0);
+  --ebd: rgba(226,232,240,.15);
+  --emut: rgba(226,232,240,.58);
+}
+
+.grn-hd { display: grid; gap: 5px; }
+.grn-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.grn-sub { font-size: 14px; color: var(--emut); line-height: 1.5; max-width: 66ch; }
+
+.grn-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.grn-tab {
+  padding: 7px 14px; border-radius: 999px; border: 1px solid var(--ebd);
+  background: transparent; color: var(--emut);
+  font-family: var(--ef); font-size: 13px; font-weight: 700;
+  cursor: pointer; transition: all .15s; white-space: nowrap;
+}
+.grn-tab:hover { color: var(--efg); border-color: color-mix(in srgb,var(--ea) 40%,var(--ebd)); }
+.grn-tab.active {
+  background: color-mix(in srgb,var(--ea) 11%,var(--ebg));
+  border-color: color-mix(in srgb,var(--ea) 40%,var(--ebd));
+  color: color-mix(in srgb,var(--ea) 75%,var(--efg));
+}
+
+.grn-panel { min-height: 280px; }
+.grn-panel-inner { display: grid; gap: 12px; }
+
+.grn-def {
+  padding: 10px 14px; border-radius: 10px; border: 1px solid var(--ebd);
+  background: color-mix(in srgb,var(--ebg) 90%,#0f172a 10%); display: grid; gap: 4px;
+}
+.grn-def-label { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--emut); }
+.grn-def-text { font-size: 13.5px; line-height: 1.5; }
+
+/* COMPARE */
+.grn-compare { display: flex; gap: 12px; align-items: flex-start; }
+.grn-col { flex: 1; border-radius: 12px; border: 1px solid var(--ebd); overflow: hidden; }
+.grn-col--bad { border-color: color-mix(in srgb,var(--er) 28%,var(--ebd)); }
+.grn-col--ok  { border-color: color-mix(in srgb,var(--ea) 28%,var(--ebd)); }
+
+.grn-col-hd { padding: 8px 12px; border-bottom: 1px solid var(--ebd); background: color-mix(in srgb,var(--ebg) 80%,#0f172a 20%); display: grid; gap: 2px; }
+.grn-col-tag { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; }
+.grn-col--bad .grn-col-tag { color: color-mix(in srgb,var(--er) 65%,var(--efg)); }
+.grn-col--ok  .grn-col-tag { color: color-mix(in srgb,var(--ea) 65%,var(--efg)); }
+.grn-col-sub { font-size: 11px; color: var(--emut); }
+
+.grn-col-body { padding: 12px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.grn-step-icon { display: flex; justify-content: center; }
+.grn-step-lbl { font-size: 10px; font-weight: 700; color: var(--emut); text-transform: uppercase; letter-spacing: .05em; }
+.grn-arr { font-size: 18px; color: var(--emut); font-weight: 900; line-height: 1; }
+
+.grn-box { width: 100%; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--ebd); display: grid; gap: 3px; text-align: center; }
+.grn-box--bad { border-color: color-mix(in srgb,var(--er) 22%,var(--ebd)); background: color-mix(in srgb,var(--er) 5%,var(--ebg)); }
+.grn-box--ok  { border-color: color-mix(in srgb,var(--ea) 22%,var(--ebd)); background: color-mix(in srgb,var(--ea) 5%,var(--ebg)); }
+.grn-box-name { font-size: 12px; font-weight: 900; }
+.grn-box--bad .grn-box-name { color: color-mix(in srgb,var(--er) 65%,var(--efg)); }
+.grn-box--ok  .grn-box-name { color: color-mix(in srgb,var(--ea) 65%,var(--efg)); }
+.grn-box-desc { font-size: 10.5px; color: var(--emut); line-height: 1.3; }
+
+.grn-resp { width: 100%; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--ebd); display: grid; gap: 3px; text-align: center; }
+.grn-resp--bad { border-color: color-mix(in srgb,var(--er) 25%,var(--ebd)); background: color-mix(in srgb,var(--er) 6%,var(--ebg)); }
+.grn-resp--ok  { border-color: color-mix(in srgb,var(--ea) 25%,var(--ebd)); background: color-mix(in srgb,var(--ea) 6%,var(--ebg)); }
+.grn-resp-ans { font-size: 18px; font-weight: 900; }
+.grn-resp--bad .grn-resp-ans { color: color-mix(in srgb,var(--er) 70%,var(--efg)); }
+.grn-resp--ok  .grn-resp-ans { color: color-mix(in srgb,var(--ea) 70%,var(--efg)); }
+.grn-resp-note { font-size: 10px; color: var(--emut); line-height: 1.3; }
+
+.grn-vs { font-size: 13px; font-weight: 900; color: var(--emut); padding: 0 4px; align-self: center; flex-shrink: 0; }
+
+.grn-note {
+  padding: 8px 14px; border-radius: 9px; border: 1px solid color-mix(in srgb,var(--eb) 18%,var(--ebd));
+  background: color-mix(in srgb,var(--eb) 4%,var(--ebg)); display: grid; gap: 3px;
+}
+.grn-note-label { font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--emut); }
+.grn-note-text { font-size: 12px; color: var(--efg); line-height: 1.45; font-style: italic; }
+
+/* SCENARIOS */
+.grn-scenarios { display: grid; gap: 8px; }
+.grn-scenario { padding: 12px 14px; border-radius: 12px; border: 1px solid var(--ebd); display: grid; gap: 8px; }
+.grn-scenario--neutral { border-color: color-mix(in srgb,var(--eg) 22%,var(--ebd)); background: color-mix(in srgb,var(--eg) 4%,var(--ebg)); }
+.grn-scenario--bad { border-color: color-mix(in srgb,var(--er) 22%,var(--ebd)); background: color-mix(in srgb,var(--er) 4%,var(--ebg)); }
+
+.grn-sc-hd { display: flex; align-items: center; gap: 8px; }
+.grn-sc-tag { font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; padding: 2px 8px; border-radius: 999px; }
+.grn-sc-tag--warn { background: color-mix(in srgb,var(--eg) 14%,var(--ebg)); border: 1px solid color-mix(in srgb,var(--eg) 30%,var(--ebd)); color: color-mix(in srgb,var(--eg) 60%,var(--efg)); }
+.grn-sc-tag--bad  { background: color-mix(in srgb,var(--er) 14%,var(--ebg)); border: 1px solid color-mix(in srgb,var(--er) 30%,var(--ebd)); color: color-mix(in srgb,var(--er) 65%,var(--efg)); }
+.grn-sc-title { font-size: 13px; font-weight: 900; }
+
+.grn-sc-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.grn-sc-item { display: grid; gap: 2px; }
+.grn-sc-label { font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; color: var(--emut); }
+.grn-sc-val { font-size: 13px; font-weight: 700; padding: 4px 10px; border-radius: 7px; border: 1px solid var(--ebd); background: color-mix(in srgb,var(--ebg) 85%,#0f172a 15%); }
+.grn-sc-val--ok  { color: color-mix(in srgb,var(--ea) 70%,var(--efg)); border-color: color-mix(in srgb,var(--ea) 25%,var(--ebd)); background: color-mix(in srgb,var(--ea) 8%,var(--ebg)); }
+.grn-sc-val--bad { color: color-mix(in srgb,var(--er) 70%,var(--efg)); border-color: color-mix(in srgb,var(--er) 25%,var(--ebd)); background: color-mix(in srgb,var(--er) 8%,var(--ebg)); }
+.grn-sc-plus, .grn-sc-arr2 { font-size: 16px; font-weight: 900; color: var(--emut); flex-shrink: 0; }
+.grn-sc-note { font-size: 11.5px; color: var(--emut); line-height: 1.4; border-top: 1px solid color-mix(in srgb,var(--ebd) 80%,transparent); padding-top: 6px; }
+
+.grn-insight {
+  padding: 10px 14px; border-radius: 10px;
+  border: 1px solid color-mix(in srgb,var(--ea) 20%,var(--ebd));
+  background: color-mix(in srgb,var(--ea) 5%,var(--ebg)); display: grid; gap: 4px;
+}
+.grn-insight-label { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: color-mix(in srgb,var(--ea) 60%,var(--emut)); }
+.grn-insight-text { font-size: 13px; line-height: 1.5; color: var(--efg); }
+
+/* PRINCIPLES */
+.grn-principles { display: grid; gap: 8px; }
+.grn-principle { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--ebd); background: color-mix(in srgb,var(--ebg) 90%,#0f172a 10%); }
+.grn-principle-n { width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 900; background: color-mix(in srgb,var(--ea) 15%,var(--ebg)); border: 1px solid color-mix(in srgb,var(--ea) 30%,var(--ebd)); color: color-mix(in srgb,var(--ea) 70%,var(--efg)); }
+.grn-principle-body { display: grid; gap: 3px; }
+.grn-principle-title { font-size: 13px; font-weight: 900; }
+.grn-principle-text { font-size: 12px; color: var(--emut); line-height: 1.45; }
+
+/* BENCHMARKS */
+.grn-benchmarks { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.grn-bench { padding: 10px 12px; border-radius: 9px; border: 1px solid color-mix(in srgb,var(--ea) 20%,var(--ebd)); background: color-mix(in srgb,var(--ea) 5%,var(--ebg)); display: grid; gap: 4px; }
+.grn-bench-name { font-size: 13px; font-weight: 900; color: color-mix(in srgb,var(--ea) 70%,var(--efg)); }
+.grn-bench-desc { font-size: 11.5px; color: var(--emut); line-height: 1.4; }
+
+@media (max-width: 640px) {
+  .grn-compare { flex-direction: column; }
+  .grn-vs { transform: rotate(90deg); align-self: center; }
+  .grn-sc-row { flex-direction: column; align-items: flex-start; }
+  .grn-benchmarks { grid-template-columns: 1fr; }
+}
+</style>
+
+<script>
+(function(){
+  document.querySelectorAll('[data-demo="04-grounding-concepto"] button[data-tab]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var wrap = btn.closest('[data-demo="04-grounding-concepto"]');
+      wrap.querySelectorAll('button[data-tab]').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      wrap.querySelectorAll('[data-panel]').forEach(function(p){ p.style.display = 'none'; });
+      wrap.querySelector('[data-panel="' + btn.dataset.tab + '"]').style.display = '';
+    });
+  });
+})();
+</script>

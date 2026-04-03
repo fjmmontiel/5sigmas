@@ -1,0 +1,297 @@
+<div class="ctn-wrap" data-demo="04-contaminacion">
+  <div class="ctn-hd">
+    <div class="ctn-title">Contaminación de benchmarks: cuando el examen ya fue visto</div>
+    <div class="ctn-sub">Las imágenes de evaluación aparecen en los datos de preentrenamiento. La puntuación refleja memorización, no capacidad real de generalización.</div>
+  </div>
+
+  <div class="ctn-tabs">
+    <button class="ctn-tab active" data-tab="1">El mecanismo</button>
+    <button class="ctn-tab" data-tab="2">Por qué es más grave en multimodalidad</button>
+    <button class="ctn-tab" data-tab="3">Qué hacen los laboratorios rigurosos</button>
+  </div>
+
+  <!-- TAB 1 -->
+  <div class="ctn-panel" data-panel="1">
+    <div class="ctn-panel-inner">
+      <div class="ctn-def">
+        <div class="ctn-def-label">El problema</div>
+        <div class="ctn-def-text">Los modelos fundacionales se preentrenan con cantidades masivas de datos de internet. No hay garantías de que los pares imagen-descripción usados para evaluación no aparecieran en esos datos. Si el modelo ya ha visto las imágenes del benchmark durante el entrenamiento, la puntuación no mide generalización.</div>
+      </div>
+
+      <div class="ctn-flow-label">Mecanismo de contaminación</div>
+      <div class="ctn-flow">
+        <div class="ctn-node ctn-node--src">
+          <div class="ctn-node-icon">
+            <svg viewBox="0 0 28 28" width="28" height="28">
+              <circle cx="14" cy="14" r="12" fill="rgba(50,74,178,.15)" stroke="rgba(50,74,178,.5)" stroke-width="1.5"/>
+              <path d="M8 14 Q14 8 20 14 Q14 20 8 14Z" fill="rgba(50,74,178,.5)" stroke="rgba(50,74,178,.7)" stroke-width="1"/>
+              <line x1="14" y1="8" x2="14" y2="20" stroke="rgba(50,74,178,.4)" stroke-width="0.8"/>
+            </svg>
+          </div>
+          <div class="ctn-node-name">Internet</div>
+          <div class="ctn-node-desc">fotografías públicas con etiquetas · datasets publicados · pares imagen-texto</div>
+        </div>
+
+        <div class="ctn-flow-split">
+          <div class="ctn-branch">
+            <div class="ctn-branch-arr">→</div>
+            <div class="ctn-node ctn-node--train">
+              <div class="ctn-node-name">Preentrenamiento</div>
+              <div class="ctn-node-desc">datos de entrenamiento del modelo</div>
+            </div>
+          </div>
+          <div class="ctn-branch">
+            <div class="ctn-branch-arr">→</div>
+            <div class="ctn-node ctn-node--bench">
+              <div class="ctn-node-name">Benchmark</div>
+              <div class="ctn-node-desc">imágenes de evaluación (posiblemente ya vistas)</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ctn-flow-merge">
+          <div class="ctn-branch-arr">→</div>
+          <div class="ctn-node ctn-node--result">
+            <div class="ctn-node-name">Puntuación inflada</div>
+            <div class="ctn-node-desc">no refleja capacidad real de generalización</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ctn-quote">Sin análisis de contaminación, los resultados publicados son una cota superior de la capacidad real del modelo en ese benchmark, no una medida directa.</div>
+    </div>
+  </div>
+
+  <!-- TAB 2 -->
+  <div class="ctn-panel" data-panel="2" style="display:none">
+    <div class="ctn-panel-inner">
+      <div class="ctn-def">
+        <div class="ctn-def-label">La diferencia clave respecto al texto</div>
+        <div class="ctn-def-text">La contaminación en texto ya es un problema documentado. En multimodalidad el problema es estructuralmente mayor: las imágenes de benchmark son con frecuencia fotografías públicas que pudieron aparecer en el preentrenamiento junto con sus descripciones, etiquetas y contexto textual circundante.</div>
+      </div>
+
+      <div class="ctn-compare">
+        <div class="ctn-comp-col ctn-comp-col--text">
+          <div class="ctn-comp-hd">
+            <div class="ctn-comp-tag">Contaminación en texto</div>
+          </div>
+          <div class="ctn-comp-body">
+            <div class="ctn-comp-item">
+              <div class="ctn-comp-item-tag">Vector de contaminación</div>
+              <div class="ctn-comp-item-val">Respuestas correctas del benchmark aparecen en datos de entrenamiento</div>
+            </div>
+            <div class="ctn-comp-item">
+              <div class="ctn-comp-item-tag">Señal de alerta</div>
+              <div class="ctn-comp-item-val">El modelo recita respuestas cuando se le da el ID del problema</div>
+            </div>
+            <div class="ctn-comp-item">
+              <div class="ctn-comp-item-tag">Detección</div>
+              <div class="ctn-comp-item-val">Búsqueda de cadenas de texto en los datos de entrenamiento</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ctn-comp-col ctn-comp-col--mm">
+          <div class="ctn-comp-hd">
+            <div class="ctn-comp-tag">Contaminación multimodal</div>
+            <div class="ctn-comp-badge">más grave</div>
+          </div>
+          <div class="ctn-comp-body">
+            <div class="ctn-comp-item">
+              <div class="ctn-comp-item-tag">Vector de contaminación</div>
+              <div class="ctn-comp-item-val">La imagen completa + su caption + texto circundante pueden estar en preentrenamiento</div>
+            </div>
+            <div class="ctn-comp-item">
+              <div class="ctn-comp-item-tag">Problema adicional</div>
+              <div class="ctn-comp-item-val">Los benchmarks de imágenes usan frecuentemente fotos públicas existentes antes del modelo</div>
+            </div>
+            <div class="ctn-comp-item">
+              <div class="ctn-comp-item-tag">Detección</div>
+              <div class="ctn-comp-item-val">Búsqueda de imágenes similares (perceptual hash) en datos de entrenamiento — más costosa</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ctn-implication">
+        <div class="ctn-impl-label">Implicación práctica</div>
+        <div class="ctn-impl-text">Los benchmarks más antiguos son los más sospechosos: más tiempo disponibles en internet significa más probabilidad de que sus imágenes estén en los datos de preentrenamiento de los modelos actuales. Los resultados son más fiables cuanto más reciente y más protegido de la indexación es el benchmark.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3 -->
+  <div class="ctn-panel" data-panel="3" style="display:none">
+    <div class="ctn-panel-inner">
+      <div class="ctn-def">
+        <div class="ctn-def-label">Mitigación en la práctica</div>
+        <div class="ctn-def-text">Los laboratorios más rigurosos realizan análisis de contaminación antes de publicar resultados. Sin este análisis, los resultados son una cota superior de la capacidad real, no una medida directa.</div>
+      </div>
+
+      <div class="ctn-steps">
+        <div class="ctn-step">
+          <div class="ctn-step-n">1</div>
+          <div class="ctn-step-body">
+            <div class="ctn-step-title">Búsqueda de similitud perceptual</div>
+            <div class="ctn-step-text">Calcular hashes perceptuales de las imágenes del benchmark y buscar coincidencias en los datos de preentrenamiento. La similitud exacta no es necesaria: imágenes casi idénticas ya constituyen contaminación.</div>
+          </div>
+        </div>
+        <div class="ctn-step">
+          <div class="ctn-step-n">2</div>
+          <div class="ctn-step-body">
+            <div class="ctn-step-title">Exclusión del análisis final</div>
+            <div class="ctn-step-text">Las imágenes con coincidencias en los datos de entrenamiento se excluyen del análisis de resultados. Los resultados publicados indican qué porcentaje del benchmark fue excluido por esta razón.</div>
+          </div>
+        </div>
+        <div class="ctn-step">
+          <div class="ctn-step-n">3</div>
+          <div class="ctn-step-body">
+            <div class="ctn-step-title">Uso de benchmarks con datos no indexados</div>
+            <div class="ctn-step-text">La solución más robusta es usar benchmarks creados con datos que no existían en internet en el momento del preentrenamiento del modelo, o que están protegidos de la indexación pública.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ctn-rule">
+        <div class="ctn-rule-label">Regla de interpretación</div>
+        <div class="ctn-rule-text">El escepticismo sobre los resultados debe ser mayor cuanto más antiguo es el benchmark, más masivo es el preentrenamiento del modelo y más accesibles públicamente estaban las imágenes del benchmark en el momento del entrenamiento.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.ctn-wrap, .ctn-wrap * { box-sizing: border-box; }
+
+.ctn-wrap {
+  --ea: #26A69A; --eb: #324AB2; --eg: #FFB343; --er: #e04c4c; --al: #7cc7ff;
+  --ebg: var(--md-default-bg-color, #fff);
+  --efg: var(--md-default-fg-color, #0f172a);
+  --ebd: rgba(15,23,42,.15);
+  --emut: rgba(15,23,42,.58);
+  --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  display: grid; gap: 14px; max-width: 900px; margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--ebd); border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--er) 5%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 100%, color-mix(in srgb,var(--eb) 5%,transparent), transparent 52%),
+    var(--ebg);
+  color: var(--efg); font-family: var(--ef); -webkit-font-smoothing: antialiased;
+}
+[data-md-color-scheme="slate"] .ctn-wrap {
+  --ebg: var(--md-default-bg-color, #0f172a);
+  --efg: var(--md-default-fg-color, #e2e8f0);
+  --ebd: rgba(226,232,240,.15);
+  --emut: rgba(226,232,240,.58);
+}
+
+.ctn-hd { display: grid; gap: 5px; }
+.ctn-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.ctn-sub { font-size: 14px; color: var(--emut); line-height: 1.5; max-width: 66ch; }
+
+.ctn-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.ctn-tab {
+  padding: 7px 14px; border-radius: 999px; border: 1px solid var(--ebd);
+  background: transparent; color: var(--emut);
+  font-family: var(--ef); font-size: 13px; font-weight: 700;
+  cursor: pointer; transition: all .15s; white-space: nowrap;
+}
+.ctn-tab:hover { color: var(--efg); border-color: color-mix(in srgb,var(--er) 35%,var(--ebd)); }
+.ctn-tab.active {
+  background: color-mix(in srgb,var(--er) 9%,var(--ebg));
+  border-color: color-mix(in srgb,var(--er) 35%,var(--ebd));
+  color: color-mix(in srgb,var(--er) 70%,var(--efg));
+}
+
+.ctn-panel { min-height: 280px; }
+.ctn-panel-inner { display: grid; gap: 12px; }
+
+.ctn-def { padding: 10px 14px; border-radius: 10px; border: 1px solid var(--ebd); background: color-mix(in srgb,var(--ebg) 90%,#0f172a 10%); display: grid; gap: 4px; }
+.ctn-def-label { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--emut); }
+.ctn-def-text { font-size: 13.5px; line-height: 1.5; }
+
+/* FLOW */
+.ctn-flow-label { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--emut); }
+.ctn-flow {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  padding: 14px; border: 1px solid var(--ebd); border-radius: 12px;
+  background: color-mix(in srgb,var(--ebg) 90%,#0f172a 10%);
+}
+.ctn-node {
+  flex: 1; min-width: 110px; padding: 10px 12px; border-radius: 9px;
+  border: 1px solid var(--ebd); background: var(--ebg);
+  display: grid; gap: 3px;
+}
+.ctn-node-icon { margin-bottom: 2px; }
+.ctn-node-name { font-size: 13px; font-weight: 900; }
+.ctn-node-desc { font-size: 10.5px; color: var(--emut); line-height: 1.3; }
+.ctn-node--src  { border-color: color-mix(in srgb,var(--eb) 22%,var(--ebd)); background: color-mix(in srgb,var(--eb) 5%,var(--ebg)); }
+.ctn-node--train { border-color: color-mix(in srgb,var(--ea) 22%,var(--ebd)); }
+.ctn-node--bench { border-color: color-mix(in srgb,var(--eg) 22%,var(--ebd)); background: color-mix(in srgb,var(--eg) 4%,var(--ebg)); }
+.ctn-node--result { border-color: color-mix(in srgb,var(--er) 28%,var(--ebd)); background: color-mix(in srgb,var(--er) 6%,var(--ebg)); }
+.ctn-node--result .ctn-node-name { color: color-mix(in srgb,var(--er) 65%,var(--efg)); }
+
+.ctn-flow-split { display: flex; flex-direction: column; gap: 6px; flex: 2; }
+.ctn-branch { display: flex; align-items: center; gap: 8px; }
+.ctn-branch-arr { font-size: 16px; color: var(--emut); font-weight: 900; flex-shrink: 0; }
+.ctn-flow-merge { display: flex; align-items: center; gap: 8px; flex: 1.2; }
+
+.ctn-quote {
+  font-size: 13px; font-style: italic; color: var(--emut);
+  border-left: 3px solid color-mix(in srgb,var(--er) 38%,transparent);
+  padding-left: 12px; line-height: 1.5;
+}
+
+/* COMPARE */
+.ctn-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.ctn-comp-col { border-radius: 12px; border: 1px solid var(--ebd); overflow: hidden; }
+.ctn-comp-col--text { border-color: color-mix(in srgb,var(--eb) 20%,var(--ebd)); }
+.ctn-comp-col--mm   { border-color: color-mix(in srgb,var(--er) 25%,var(--ebd)); }
+
+.ctn-comp-hd { padding: 8px 12px; border-bottom: 1px solid var(--ebd); background: color-mix(in srgb,var(--ebg) 80%,#0f172a 20%); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.ctn-comp-tag { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; }
+.ctn-comp-col--text .ctn-comp-tag { color: color-mix(in srgb,var(--eb) 65%,var(--efg)); }
+.ctn-comp-col--mm   .ctn-comp-tag { color: color-mix(in srgb,var(--er) 65%,var(--efg)); }
+.ctn-comp-badge { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: .05em; padding: 2px 7px; border-radius: 999px; background: color-mix(in srgb,var(--er) 14%,var(--ebg)); border: 1px solid color-mix(in srgb,var(--er) 30%,var(--ebd)); color: color-mix(in srgb,var(--er) 65%,var(--efg)); }
+
+.ctn-comp-body { padding: 10px 12px; display: grid; gap: 8px; }
+.ctn-comp-item { display: grid; gap: 2px; }
+.ctn-comp-item-tag { font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; color: var(--emut); }
+.ctn-comp-item-val { font-size: 12px; line-height: 1.45; color: var(--efg); }
+
+.ctn-implication { padding: 10px 14px; border-radius: 10px; border: 1px solid color-mix(in srgb,var(--eg) 20%,var(--ebd)); background: color-mix(in srgb,var(--eg) 5%,var(--ebg)); display: grid; gap: 4px; }
+.ctn-impl-label { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--emut); }
+.ctn-impl-text { font-size: 13px; line-height: 1.5; color: var(--efg); }
+
+/* STEPS */
+.ctn-steps { display: grid; gap: 8px; }
+.ctn-step { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--ebd); background: color-mix(in srgb,var(--ebg) 90%,#0f172a 10%); }
+.ctn-step-n { width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 900; background: color-mix(in srgb,var(--ea) 15%,var(--ebg)); border: 1px solid color-mix(in srgb,var(--ea) 30%,var(--ebd)); color: color-mix(in srgb,var(--ea) 70%,var(--efg)); }
+.ctn-step-body { display: grid; gap: 3px; }
+.ctn-step-title { font-size: 13px; font-weight: 900; }
+.ctn-step-text { font-size: 12px; color: var(--emut); line-height: 1.45; }
+
+.ctn-rule { padding: 10px 14px; border-radius: 10px; border-left: 3px solid color-mix(in srgb,var(--ea) 40%,transparent); border-top: 1px solid var(--ebd); border-right: 1px solid var(--ebd); border-bottom: 1px solid var(--ebd); background: color-mix(in srgb,var(--ea) 4%,var(--ebg)); display: grid; gap: 4px; }
+.ctn-rule-label { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--emut); }
+.ctn-rule-text { font-size: 13px; line-height: 1.5; color: var(--efg); }
+
+@media (max-width: 640px) {
+  .ctn-flow { flex-direction: column; align-items: stretch; }
+  .ctn-compare { grid-template-columns: 1fr; }
+}
+</style>
+
+<script>
+(function(){
+  document.querySelectorAll('[data-demo="04-contaminacion"] button[data-tab]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var wrap = btn.closest('[data-demo="04-contaminacion"]');
+      wrap.querySelectorAll('button[data-tab]').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      wrap.querySelectorAll('[data-panel]').forEach(function(p){ p.style.display = 'none'; });
+      wrap.querySelector('[data-panel="' + btn.dataset.tab + '"]').style.display = '';
+    });
+  });
+})();
+</script>

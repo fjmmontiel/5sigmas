@@ -1,0 +1,359 @@
+<div class="vdg-wrap" data-demo="04-video-degradacion">
+  <div class="vdg-hd">
+    <div class="vdg-title">Video-MME: la comprensión de vídeo no escala con la duración</div>
+    <div class="vdg-sub">Los modelos que comprenden bien vídeos cortos fallan en versiones largas de las mismas tareas. La coherencia de atención se degrada a escala de minutos u horas.</div>
+  </div>
+
+  <div class="vdg-tabs">
+    <button class="vdg-tab active" data-tab="1">Vídeo corto (≤2 min)</button>
+    <button class="vdg-tab" data-tab="2">Vídeo medio (15–30 min)</button>
+    <button class="vdg-tab" data-tab="3">Vídeo largo (≥60 min)</button>
+  </div>
+
+  <!-- TAB 1 -->
+  <div class="vdg-panel" data-panel="1">
+    <div class="vdg-main">
+      <div class="vdg-visual">
+        <div class="vdg-meter-label">Exactitud en preguntas temporales</div>
+        <div class="vdg-meter">
+          <div class="vdg-meter-fill" style="width:78%">78%</div>
+        </div>
+        <div class="vdg-meter-ctx">mejor resultado en Video-MME (segmento corto)</div>
+
+        <div class="vdg-timeline">
+          <div class="vdg-tl-track">
+            <div class="vdg-tl-seg vdg-tl-seg--active" style="width:100%"></div>
+          </div>
+          <div class="vdg-tl-labels">
+            <span>0:00</span>
+            <span>1:30</span>
+          </div>
+          <div class="vdg-tl-window">
+            <div class="vdg-tl-win-box" style="left:10%;width:80%">
+              <span class="vdg-tl-win-label">ventana de atención activa</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="vdg-attn-map">
+          <div class="vdg-attn-label">Densidad de atención temporal</div>
+          <svg viewBox="0 0 280 60" width="100%">
+            <defs>
+              <linearGradient id="attn1" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#26A69A" stop-opacity=".7"/>
+                <stop offset="100%" stop-color="#26A69A" stop-opacity=".65"/>
+              </linearGradient>
+            </defs>
+            <rect x="10" y="10" width="260" height="40" rx="6" fill="rgba(38,166,154,.08)" stroke="rgba(38,166,154,.18)" stroke-width="1"/>
+            <rect x="14" y="14" width="252" height="32" rx="4" fill="url(#attn1)" opacity=".7"/>
+            <text x="140" y="34" text-anchor="middle" font-family="SF Mono,JetBrains Mono,Courier New,monospace" font-size="9" fill="rgba(255,255,255,.9)">coherencia alta · todo el vídeo en contexto</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="vdg-explanation">
+        <div class="vdg-exp-block vdg-exp-block--ok">
+          <div class="vdg-exp-tag">Situación</div>
+          <div class="vdg-exp-title">Toda la información cabe en el contexto activo</div>
+          <div class="vdg-exp-body">El modelo puede atender a cualquier frame del vídeo con la misma eficacia. Las preguntas que requieren vincular el inicio con el final del clip son manejables porque la distancia en tokens es pequeña.</div>
+        </div>
+
+        <div class="vdg-exp-tasks">
+          <div class="vdg-exp-tasks-label">Tareas bien resueltas</div>
+          <div class="vdg-exp-task vdg-exp-task--ok">Identificar el objeto que aparece primero</div>
+          <div class="vdg-exp-task vdg-exp-task--ok">Contar acciones en el clip</div>
+          <div class="vdg-exp-task vdg-exp-task--ok">Describir la secuencia de eventos</div>
+          <div class="vdg-exp-task vdg-exp-task--ok">Verificar si algo cambia entre inicio y final</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2 -->
+  <div class="vdg-panel" data-panel="2" style="display:none">
+    <div class="vdg-main">
+      <div class="vdg-visual">
+        <div class="vdg-meter-label">Exactitud en preguntas temporales</div>
+        <div class="vdg-meter">
+          <div class="vdg-meter-fill vdg-meter-fill--med" style="width:54%">54%</div>
+        </div>
+        <div class="vdg-meter-ctx">caída de 24 pp respecto a vídeo corto</div>
+
+        <div class="vdg-timeline">
+          <div class="vdg-tl-track">
+            <div class="vdg-tl-seg vdg-tl-seg--active" style="width:40%"></div>
+            <div class="vdg-tl-seg vdg-tl-seg--fade" style="width:60%"></div>
+          </div>
+          <div class="vdg-tl-labels">
+            <span>0:00</span>
+            <span>7:30</span>
+            <span>15:00</span>
+          </div>
+          <div class="vdg-tl-window">
+            <div class="vdg-tl-win-box vdg-tl-win-box--partial" style="left:60%;width:35%">
+              <span class="vdg-tl-win-label">contexto activo (últimos frames)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="vdg-attn-map">
+          <div class="vdg-attn-label">Densidad de atención temporal</div>
+          <svg viewBox="0 0 280 60" width="100%">
+            <defs>
+              <linearGradient id="attn2" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#FFB343" stop-opacity=".15"/>
+                <stop offset="45%" stop-color="#FFB343" stop-opacity=".3"/>
+                <stop offset="100%" stop-color="#FFB343" stop-opacity=".75"/>
+              </linearGradient>
+            </defs>
+            <rect x="10" y="10" width="260" height="40" rx="6" fill="rgba(255,179,67,.06)" stroke="rgba(255,179,67,.18)" stroke-width="1"/>
+            <rect x="14" y="14" width="252" height="32" rx="4" fill="url(#attn2)"/>
+            <text x="80" y="34" text-anchor="middle" font-family="SF Mono,JetBrains Mono,Courier New,monospace" font-size="9" fill="rgba(255,179,67,.4)">inicio ignorado</text>
+            <text x="210" y="34" text-anchor="middle" font-family="SF Mono,JetBrains Mono,Courier New,monospace" font-size="9" fill="rgba(255,179,67,.85)">final activo</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="vdg-explanation">
+        <div class="vdg-exp-block vdg-exp-block--warn">
+          <div class="vdg-exp-tag">Situación</div>
+          <div class="vdg-exp-title">El contexto no cubre todo el vídeo</div>
+          <div class="vdg-exp-body">El modelo tiene que comprimir o descartar frames del inicio para mantener el vídeo en el contexto. Las preguntas que vinculan información del principio y el final del vídeo fallan porque una de las referencias está comprimida o descartada.</div>
+        </div>
+
+        <div class="vdg-exp-tasks">
+          <div class="vdg-exp-tasks-label">Rendimiento degradado</div>
+          <div class="vdg-exp-task vdg-exp-task--ok">Describir la segunda mitad del vídeo</div>
+          <div class="vdg-exp-task vdg-exp-task--warn">Comparar algo del inicio con el final</div>
+          <div class="vdg-exp-task vdg-exp-task--bad">Contar cuántas veces aparece X a lo largo del vídeo</div>
+          <div class="vdg-exp-task vdg-exp-task--bad">Verificar si el estado inicial se mantuvo</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3 -->
+  <div class="vdg-panel" data-panel="3" style="display:none">
+    <div class="vdg-main">
+      <div class="vdg-visual">
+        <div class="vdg-meter-label">Exactitud en preguntas temporales</div>
+        <div class="vdg-meter">
+          <div class="vdg-meter-fill vdg-meter-fill--bad" style="width:38%">38%</div>
+        </div>
+        <div class="vdg-meter-ctx">caída de 40 pp respecto a vídeo corto · apenas supera nivel aleatorio</div>
+
+        <div class="vdg-timeline">
+          <div class="vdg-tl-track">
+            <div class="vdg-tl-seg vdg-tl-seg--dead" style="width:75%"></div>
+            <div class="vdg-tl-seg vdg-tl-seg--active" style="width:25%"></div>
+          </div>
+          <div class="vdg-tl-labels">
+            <span>0:00</span>
+            <span>30 min</span>
+            <span>60 min</span>
+          </div>
+          <div class="vdg-tl-window">
+            <div class="vdg-tl-win-box vdg-tl-win-box--tiny" style="left:74%;width:22%">
+              <span class="vdg-tl-win-label">solo final</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="vdg-attn-map">
+          <div class="vdg-attn-label">Densidad de atención temporal</div>
+          <svg viewBox="0 0 280 60" width="100%">
+            <defs>
+              <linearGradient id="attn3" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#e04c4c" stop-opacity=".05"/>
+                <stop offset="70%" stop-color="#e04c4c" stop-opacity=".08"/>
+                <stop offset="100%" stop-color="#e04c4c" stop-opacity=".65"/>
+              </linearGradient>
+            </defs>
+            <rect x="10" y="10" width="260" height="40" rx="6" fill="rgba(239,68,68,.05)" stroke="rgba(239,68,68,.18)" stroke-width="1"/>
+            <rect x="14" y="14" width="252" height="32" rx="4" fill="url(#attn3)"/>
+            <text x="100" y="34" text-anchor="middle" font-family="SF Mono,JetBrains Mono,Courier New,monospace" font-size="9" fill="rgba(239,68,68,.25)">75% del vídeo fuera de contexto</text>
+            <text x="245" y="34" text-anchor="middle" font-family="SF Mono,JetBrains Mono,Courier New,monospace" font-size="8" fill="rgba(239,68,68,.7)">final</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="vdg-explanation">
+        <div class="vdg-exp-block vdg-exp-block--bad">
+          <div class="vdg-exp-tag">Situación</div>
+          <div class="vdg-exp-title">La mayor parte del vídeo es inaccesible</div>
+          <div class="vdg-exp-body">El modelo solo tiene acceso coherente a los últimos minutos del vídeo. Las preguntas sobre eventos anteriores se responden por prior o se inventan. El modelo no sabe qué ha perdido: genera respuestas con la misma confianza que en vídeos cortos.</div>
+        </div>
+
+        <div class="vdg-exp-tasks">
+          <div class="vdg-exp-tasks-label">Rendimiento crítico</div>
+          <div class="vdg-exp-task vdg-exp-task--warn">Resumir el vídeo completo</div>
+          <div class="vdg-exp-task vdg-exp-task--bad">Identificar el personaje que aparece en el minuto 12</div>
+          <div class="vdg-exp-task vdg-exp-task--bad">Verificar si una afirmación es consistente con el vídeo entero</div>
+          <div class="vdg-exp-task vdg-exp-task--bad">Describir la evolución de un tema a lo largo de la hora</div>
+        </div>
+
+        <div class="vdg-implication">
+          <div class="vdg-impl-label">Implicación para sistemas en producción</div>
+          <div class="vdg-impl-text">Los sistemas que analizan reuniones largas, películas o conferencias completas están en este régimen. Los benchmarks de vídeo corto no predicen su rendimiento real. Un modelo con 78% en clips cortos puede estar cerca del nivel aleatorio en vídeos de una hora.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.vdg-wrap, .vdg-wrap * { box-sizing: border-box; }
+
+.vdg-wrap {
+  --aa: #26A69A;
+  --ab: #324AB2;
+  --ag: #FFB343;
+  --ar: #e04c4c;
+  --al: #7cc7ff;
+  --abg: var(--md-default-bg-color, #fff);
+  --afg: var(--md-default-fg-color, #0f172a);
+  --abd: rgba(15,23,42,.14);
+  --amut: rgba(15,23,42,.58);
+  --af: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid; gap: 14px; max-width: 900px; margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--abd); border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--aa) 5%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 100%, color-mix(in srgb,var(--ar) 5%,transparent), transparent 52%),
+    var(--abg);
+  color: var(--afg); font-family: var(--af); -webkit-font-smoothing: antialiased;
+}
+[data-md-color-scheme="slate"] .vdg-wrap {
+  --abg: var(--md-default-bg-color, #0f172a);
+  --afg: var(--md-default-fg-color, #e2e8f0);
+  --abd: rgba(226,232,240,.14);
+  --amut: rgba(226,232,240,.58);
+}
+
+.vdg-hd { display: grid; gap: 5px; }
+.vdg-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.vdg-sub { font-size: 14px; color: var(--amut); line-height: 1.5; max-width: 68ch; }
+
+.vdg-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.vdg-tab {
+  padding: 6px 14px; border-radius: 999px; border: 1px solid var(--abd);
+  background: transparent; color: var(--amut);
+  font-family: var(--af); font-size: 12.5px; font-weight: 700;
+  cursor: pointer; transition: background .15s; white-space: nowrap;
+}
+.vdg-tab:hover { background: color-mix(in srgb,var(--aa) 7%,var(--abg)); color: var(--afg); }
+.vdg-tab.active {
+  background: color-mix(in srgb,var(--aa) 10%,var(--abg));
+  border-color: color-mix(in srgb,var(--aa) 35%,var(--abd));
+  color: color-mix(in srgb,var(--aa) 70%,var(--afg));
+}
+
+.vdg-panel { min-height: 280px; display: flex; flex-direction: column; gap: 12px; }
+.vdg-main { display: flex; gap: 14px; flex: 1; align-items: flex-start; }
+
+.vdg-visual { flex: 0 0 280px; display: flex; flex-direction: column; gap: 10px; }
+
+.vdg-meter-label { font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--amut); }
+.vdg-meter {
+  height: 32px; border-radius: 8px; overflow: hidden;
+  background: color-mix(in srgb,var(--afg) 6%,var(--abg));
+  border: 1px solid var(--abd);
+}
+.vdg-meter-fill {
+  height: 100%; border-radius: 7px;
+  background: color-mix(in srgb,var(--aa) 65%,transparent);
+  display: flex; align-items: center; justify-content: flex-end;
+  padding-right: 10px; font-size: 13px; font-weight: 900;
+  color: color-mix(in srgb,var(--aa) 90%,var(--afg));
+  font-family: "SF Mono","JetBrains Mono","Courier New",monospace;
+  transition: width .5s ease;
+}
+.vdg-meter-fill--med {
+  background: color-mix(in srgb,var(--ag) 60%,transparent);
+  color: color-mix(in srgb,var(--ag) 90%,var(--afg));
+}
+.vdg-meter-fill--bad {
+  background: color-mix(in srgb,var(--ar) 60%,transparent);
+  color: color-mix(in srgb,var(--ar) 85%,var(--afg));
+}
+.vdg-meter-ctx { font-size: 10.5px; color: var(--amut); }
+
+.vdg-timeline { display: flex; flex-direction: column; gap: 4px; }
+.vdg-tl-track { display: flex; height: 8px; border-radius: 99px; overflow: hidden; border: 1px solid var(--abd); }
+.vdg-tl-seg { height: 100%; }
+.vdg-tl-seg--active { background: color-mix(in srgb,var(--aa) 55%,transparent); }
+.vdg-tl-seg--fade { background: color-mix(in srgb,var(--ag) 25%,transparent); }
+.vdg-tl-seg--dead { background: color-mix(in srgb,var(--ar) 15%,transparent); }
+.vdg-tl-labels { display: flex; justify-content: space-between; font-size: 9px; color: var(--amut); font-family: "SF Mono","JetBrains Mono","Courier New",monospace; }
+
+.vdg-tl-window { position: relative; height: 24px; }
+.vdg-tl-win-box {
+  position: absolute; top: 2px; height: 20px;
+  border: 1.5px solid color-mix(in srgb,var(--aa) 50%,transparent);
+  border-radius: 4px;
+  background: color-mix(in srgb,var(--aa) 8%,transparent);
+  display: flex; align-items: center; padding: 0 4px;
+}
+.vdg-tl-win-box--partial { border-color: color-mix(in srgb,var(--ag) 50%,transparent); background: color-mix(in srgb,var(--ag) 8%,transparent); }
+.vdg-tl-win-box--tiny { border-color: color-mix(in srgb,var(--ar) 50%,transparent); background: color-mix(in srgb,var(--ar) 8%,transparent); }
+.vdg-tl-win-label { font-size: 8px; white-space: nowrap; color: var(--amut); }
+
+.vdg-attn-map { display: flex; flex-direction: column; gap: 4px; }
+.vdg-attn-label { font-size: 9px; font-weight: 700; color: var(--amut); }
+
+.vdg-explanation { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+.vdg-exp-block {
+  padding: 10px 12px; border-radius: 10px; border: 1px solid var(--abd); display: grid; gap: 5px;
+}
+.vdg-exp-block--ok { border-color: color-mix(in srgb,var(--aa) 25%,var(--abd)); background: color-mix(in srgb,var(--aa) 5%,var(--abg)); }
+.vdg-exp-block--warn { border-color: color-mix(in srgb,var(--ag) 25%,var(--abd)); background: color-mix(in srgb,var(--ag) 5%,var(--abg)); }
+.vdg-exp-block--bad { border-color: color-mix(in srgb,var(--ar) 25%,var(--abd)); background: color-mix(in srgb,var(--ar) 5%,var(--abg)); }
+
+.vdg-exp-tag { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--amut); }
+.vdg-exp-title { font-size: 13px; font-weight: 900; line-height: 1.2; }
+.vdg-exp-body { font-size: 12px; color: var(--afg); line-height: 1.5; }
+
+.vdg-exp-tasks { display: flex; flex-direction: column; gap: 5px; }
+.vdg-exp-tasks-label { font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--amut); }
+.vdg-exp-task {
+  padding: 5px 10px; border-radius: 7px; font-size: 11.5px; font-weight: 600;
+  border: 1px solid var(--abd); display: flex; align-items: center; gap: 8px;
+}
+.vdg-exp-task::before { font-size: 13px; flex-shrink: 0; }
+.vdg-exp-task--ok { border-color: color-mix(in srgb,var(--aa) 20%,var(--abd)); background: color-mix(in srgb,var(--aa) 4%,var(--abg)); }
+.vdg-exp-task--ok::before { content: "✓"; color: color-mix(in srgb,var(--aa) 70%,var(--afg)); }
+.vdg-exp-task--warn { border-color: color-mix(in srgb,var(--ag) 22%,var(--abd)); background: color-mix(in srgb,var(--ag) 4%,var(--abg)); }
+.vdg-exp-task--warn::before { content: "~"; color: color-mix(in srgb,var(--ag) 70%,var(--afg)); }
+.vdg-exp-task--bad { border-color: color-mix(in srgb,var(--ar) 20%,var(--abd)); background: color-mix(in srgb,var(--ar) 4%,var(--abg)); }
+.vdg-exp-task--bad::before { content: "✗"; color: color-mix(in srgb,var(--ar) 65%,var(--afg)); }
+
+.vdg-implication {
+  padding: 10px 12px; border-radius: 10px;
+  border: 1px solid color-mix(in srgb,var(--ar) 22%,var(--abd));
+  background: color-mix(in srgb,var(--ar) 5%,var(--abg));
+  display: grid; gap: 4px; margin-top: auto;
+}
+.vdg-impl-label { font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--amut); }
+.vdg-impl-text { font-size: 12px; line-height: 1.5; color: var(--afg); }
+
+@media (max-width: 640px) {
+  .vdg-main { flex-direction: column; }
+  .vdg-visual { flex: none; width: 100%; }
+}
+</style>
+
+<script>
+(function(){
+  document.querySelectorAll('[data-demo="04-video-degradacion"] button[data-tab]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var wrap = btn.closest('[data-demo="04-video-degradacion"]');
+      wrap.querySelectorAll('button[data-tab]').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      wrap.querySelectorAll('[data-panel]').forEach(function(p){ p.style.display = 'none'; });
+      wrap.querySelector('[data-panel="' + btn.dataset.tab + '"]').style.display = '';
+    });
+  });
+})();
+</script>

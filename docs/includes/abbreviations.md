@@ -18,3 +18,7 @@
 *[VLM]: Visual Language Model: modelo que combina comprensión visual y lingüística para razonar sobre imágenes y texto de forma conjunta
 *[MoE]: Mixture of Experts: arquitectura donde distintos subconjuntos de parámetros se activan según la entrada, escalando capacidad sin escalar coste de inferencia proporcionalmente
 *[MMAU]: Massive Multitask Audio Understanding: benchmark que evalúa comprensión de audio en tareas diversas
+*[benchmark]: prueba estandarizada que mide el rendimiento de un modelo en una tarea concreta para compararlo con otros sistemas
+*[benchmarks]: pruebas estandarizadas que miden el rendimiento de modelos en tareas concretas para compararlos entre sí
+*[grounding]: capacidad de un modelo para anclar sus respuestas en información verificable del mundo real, reduciendo alucinaciones
+*[prior]: creencia inicial sobre cómo es el mundo antes de ver datos; en modelos de lenguaje, sesgos aprendidos durante el entrenamiento que influyen en sus respuestas

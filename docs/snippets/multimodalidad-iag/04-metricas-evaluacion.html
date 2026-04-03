@@ -1,0 +1,391 @@
+<div class="met-wrap" data-demo="04-metricas-evaluacion">
+  <div class="met-hd">
+    <div class="met-title">Cuatro dimensiones que la exactitud no captura</div>
+    <div class="met-sub">Un modelo puede acertar en el benchmark por razones equivocadas. Estas cuatro métricas revelan si la comprensión visual es real o aparente.</div>
+  </div>
+
+  <div class="met-tabs">
+    <button class="met-tab active" data-tab="1">Grounding</button>
+    <button class="met-tab" data-tab="2">Consistencia</button>
+    <button class="met-tab" data-tab="3">Localización</button>
+    <button class="met-tab" data-tab="4">Calibración</button>
+  </div>
+
+  <!-- TAB 1: GROUNDING -->
+  <div class="met-panel" data-panel="1">
+    <div class="met-panel-inner">
+      <div class="met-metric-hd">
+        <div class="met-sym met-sym--ea">⊙</div>
+        <div class="met-metric-info">
+          <div class="met-metric-name">Grounding</div>
+          <div class="met-metric-q">¿La respuesta está anclada en el contenido real de la imagen?</div>
+        </div>
+      </div>
+
+      <div class="met-explanation">
+        <div class="met-exp-block met-exp-block--ea">
+          <div class="met-exp-tag">Qué mide</div>
+          <div class="met-exp-text">Si la respuesta del modelo depende del contenido real de la imagen o del prior estadístico aprendido durante el entrenamiento. Un modelo con grounding produce respuestas distintas ante imágenes distintas aunque la pregunta sea la misma.</div>
+        </div>
+      </div>
+
+      <div class="met-contrast">
+        <div class="met-contrast-col met-contrast-col--bad">
+          <div class="met-contrast-tag">Fallo de grounding</div>
+          <div class="met-contrast-body">
+            <div class="met-contrast-img">
+              <svg viewBox="0 0 60 44" width="60" height="44">
+                <rect x="1" y="1" width="58" height="42" rx="5" fill="rgba(239,68,68,.06)" stroke="rgba(239,68,68,.25)" stroke-width="1.2"/>
+                <!-- image A: orange object -->
+                <rect x="18" y="12" width="24" height="20" rx="4" fill="rgba(255,140,0,.55)" stroke="rgba(255,140,0,.7)" stroke-width="1"/>
+                <text x="30" y="27" text-anchor="middle" font-family="SF Mono,JetBrains Mono,Courier New,monospace" font-size="7" fill="rgba(255,255,255,.75)">naranja</text>
+              </svg>
+            </div>
+            <div class="met-contrast-arr">↓</div>
+            <div class="met-contrast-ans met-contrast-ans--bad">"blanco"</div>
+            <div class="met-contrast-note">responde el color más frecuente en el corpus, ignora la imagen</div>
+          </div>
+        </div>
+
+        <div class="met-contrast-col met-contrast-col--ok">
+          <div class="met-contrast-tag">Con grounding</div>
+          <div class="met-contrast-body">
+            <div class="met-contrast-img">
+              <svg viewBox="0 0 60 44" width="60" height="44">
+                <rect x="1" y="1" width="58" height="42" rx="5" fill="rgba(38,166,154,.06)" stroke="rgba(38,166,154,.25)" stroke-width="1.2"/>
+                <rect x="18" y="12" width="24" height="20" rx="4" fill="rgba(255,140,0,.55)" stroke="rgba(255,140,0,.7)" stroke-width="1"/>
+                <text x="30" y="27" text-anchor="middle" font-family="SF Mono,JetBrains Mono,Courier New,monospace" font-size="7" fill="rgba(255,255,255,.75)">naranja</text>
+                <circle cx="44" cy="8" r="5" fill="rgba(38,166,154,.6)" stroke="rgba(38,166,154,.8)" stroke-width="1"/>
+                <circle cx="44" cy="8" r="2.5" fill="rgba(38,166,154,.9)"/>
+              </svg>
+            </div>
+            <div class="met-contrast-arr">↓</div>
+            <div class="met-contrast-ans met-contrast-ans--ok">"naranja"</div>
+            <div class="met-contrast-note">responde desde la evidencia visual real</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="met-signal met-signal--ea">
+        <div class="met-signal-label">Test diagnóstico</div>
+        <div class="met-signal-text">Experimento de ablación: presentar la misma pregunta sin imagen. Si la respuesta no cambia, el prior domina y el grounding es aparente, no real.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: CONSISTENCIA -->
+  <div class="met-panel" data-panel="2" style="display:none">
+    <div class="met-panel-inner">
+      <div class="met-metric-hd">
+        <div class="met-sym met-sym--eb">⇄</div>
+        <div class="met-metric-info">
+          <div class="met-metric-name">Consistencia</div>
+          <div class="met-metric-q">¿Responde igual a parafraseos semánticamente equivalentes?</div>
+        </div>
+      </div>
+
+      <div class="met-explanation">
+        <div class="met-exp-block met-exp-block--eb">
+          <div class="met-exp-tag">Qué mide</div>
+          <div class="met-exp-text">Un modelo con comprensión robusta debería producir la misma respuesta ante formulaciones distintas de la misma pregunta sobre la misma imagen. Cuando la respuesta cambia drásticamente ante una reformulación semánticamente equivalente, el modelo es sensible a la forma superficial del texto, no al contenido visual.</div>
+        </div>
+      </div>
+
+      <div class="met-paraphrase">
+        <div class="met-para-label">Misma imagen · misma pregunta · formulaciones distintas</div>
+        <div class="met-para-rows">
+          <div class="met-para-row">
+            <div class="met-para-q">"¿Cuántas personas hay en la imagen?"</div>
+            <div class="met-para-ans met-para-ans--ok">"Tres"</div>
+          </div>
+          <div class="met-para-row">
+            <div class="met-para-q">"¿Qué número de personas aparece en la escena?"</div>
+            <div class="met-para-ans met-para-ans--ok">"Tres personas"</div>
+          </div>
+          <div class="met-para-row met-para-row--bad">
+            <div class="met-para-q">"En la imagen, ¿se pueden contar cuántas personas hay?"</div>
+            <div class="met-para-ans met-para-ans--bad">"Sí, hay cuatro"</div>
+            <div class="met-para-badge">inconsistencia</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="met-signal met-signal--eb">
+        <div class="met-signal-label">Señal de fallo</div>
+        <div class="met-signal-text">La respuesta cambia al reformular sin cambiar el contenido. El modelo no tiene una representación estable del contenido visual: responde en función de cómo está formulada la pregunta, no de lo que muestra la imagen.</div>
+      </div>
+
+      <div class="met-bench met-bench--eb">
+        <div class="met-bench-name">SEEDBench</div>
+        <div class="met-bench-desc">Incluye evaluación de consistencia sobre la misma imagen con preguntas reformuladas. Li et al., 2023.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: LOCALIZACIÓN -->
+  <div class="met-panel" data-panel="3" style="display:none">
+    <div class="met-panel-inner">
+      <div class="met-metric-hd">
+        <div class="met-sym met-sym--eg">◎</div>
+        <div class="met-metric-info">
+          <div class="met-metric-name">Localización</div>
+          <div class="met-metric-q">¿Puede señalar dónde en la imagen está el elemento relevante?</div>
+        </div>
+      </div>
+
+      <div class="met-explanation">
+        <div class="met-exp-block met-exp-block--eg">
+          <div class="met-exp-tag">Qué mide</div>
+          <div class="met-exp-text">Para tareas donde la respuesta depende de la posición de elementos en la imagen, la evaluación debería verificar no solo si la respuesta final es correcta sino también si el modelo puede delimitar dónde se encuentra el elemento relevante. Ambos tipos de comprensión son distintos y los dos importan en aplicaciones reales.</div>
+        </div>
+      </div>
+
+      <div class="met-loc-compare">
+        <div class="met-loc-col met-loc-col--low">
+          <div class="met-loc-tag">Comprensión parcial</div>
+          <div class="met-loc-scene">
+            <svg viewBox="0 0 140 90" width="140" height="90">
+              <rect x="1" y="1" width="138" height="88" rx="6" fill="rgba(255,179,67,.05)" stroke="rgba(255,179,67,.2)" stroke-width="1.2"/>
+              <!-- three cars scattered -->
+              <rect x="10" y="55" width="30" height="18" rx="3" fill="rgba(50,74,178,.35)" stroke="rgba(50,74,178,.55)" stroke-width="1"/>
+              <rect x="55" y="25" width="30" height="18" rx="3" fill="rgba(38,166,154,.35)" stroke="rgba(38,166,154,.55)" stroke-width="1"/>
+              <rect x="98" y="58" width="30" height="18" rx="3" fill="rgba(224,76,76,.35)" stroke="rgba(224,76,76,.55)" stroke-width="1"/>
+            </svg>
+          </div>
+          <div class="met-loc-ans">"Hay tres coches"</div>
+          <div class="met-loc-note">respuesta correcta · sin localización</div>
+        </div>
+
+        <div class="met-loc-col met-loc-col--high">
+          <div class="met-loc-tag">Comprensión con localización</div>
+          <div class="met-loc-scene">
+            <svg viewBox="0 0 140 90" width="140" height="90">
+              <rect x="1" y="1" width="138" height="88" rx="6" fill="rgba(38,166,154,.05)" stroke="rgba(38,166,154,.2)" stroke-width="1.2"/>
+              <!-- three cars with bounding boxes -->
+              <rect x="10" y="55" width="30" height="18" rx="3" fill="rgba(50,74,178,.35)" stroke="rgba(50,74,178,.55)" stroke-width="1"/>
+              <rect x="8" y="53" width="34" height="22" rx="4" fill="none" stroke="rgba(38,166,154,.8)" stroke-width="1.5" stroke-dasharray="3,2"/>
+              <rect x="55" y="25" width="30" height="18" rx="3" fill="rgba(38,166,154,.35)" stroke="rgba(38,166,154,.55)" stroke-width="1"/>
+              <rect x="53" y="23" width="34" height="22" rx="4" fill="none" stroke="rgba(38,166,154,.8)" stroke-width="1.5" stroke-dasharray="3,2"/>
+              <rect x="98" y="58" width="30" height="18" rx="3" fill="rgba(224,76,76,.35)" stroke="rgba(224,76,76,.55)" stroke-width="1"/>
+              <rect x="96" y="56" width="34" height="22" rx="4" fill="none" stroke="rgba(38,166,154,.8)" stroke-width="1.5" stroke-dasharray="3,2"/>
+            </svg>
+          </div>
+          <div class="met-loc-ans">"Tres coches: izq, centro-arr, der"</div>
+          <div class="met-loc-note">respuesta + delimitación espacial</div>
+        </div>
+      </div>
+
+      <div class="met-signal met-signal--eg">
+        <div class="met-signal-label">Por qué importa en producción</div>
+        <div class="met-signal-text">Un sistema de detección de objetos, análisis de escenas o asistencia en tiempo real necesita saber dónde están los elementos, no solo que existen. La localización es la dimensión que distingue "saber qué hay" de "saber dónde está".</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 4: CALIBRACIÓN -->
+  <div class="met-panel" data-panel="4" style="display:none">
+    <div class="met-panel-inner">
+      <div class="met-metric-hd">
+        <div class="met-sym met-sym--er">≈</div>
+        <div class="met-metric-info">
+          <div class="met-metric-name">Calibración</div>
+          <div class="met-metric-q">¿Expresa incertidumbre ante imágenes ambiguas o preguntas sin respuesta posible?</div>
+        </div>
+      </div>
+
+      <div class="met-explanation">
+        <div class="met-exp-block met-exp-block--er">
+          <div class="met-exp-tag">Qué mide</div>
+          <div class="met-exp-text">Un modelo bien calibrado expresa incertidumbre cuando el contenido visual es ambiguo o cuando la pregunta no tiene respuesta clara dado el contenido disponible. En producción, un modelo que siempre responde con alta confianza genera afirmaciones falsamente definitivas donde debería abstenerse o pedir aclaración.</div>
+        </div>
+      </div>
+
+      <div class="met-calib-cases">
+        <div class="met-calib-case met-calib-case--bad">
+          <div class="met-calib-hd">
+            <div class="met-calib-tag">Modelo mal calibrado</div>
+          </div>
+          <div class="met-calib-body">
+            <div class="met-calib-q">"¿Qué marca de coche es ese?" <span class="met-calib-ctx">[imagen borrosa, logo irreconocible]</span></div>
+            <div class="met-calib-ans">"Es un Toyota Corolla de 2019."</div>
+            <div class="met-calib-verdict met-calib-verdict--bad">confianza alta · sin evidencia · alucinación</div>
+          </div>
+        </div>
+
+        <div class="met-calib-case met-calib-case--ok">
+          <div class="met-calib-hd">
+            <div class="met-calib-tag">Modelo bien calibrado</div>
+          </div>
+          <div class="met-calib-body">
+            <div class="met-calib-q">"¿Qué marca de coche es ese?" <span class="met-calib-ctx">[imagen borrosa, logo irreconocible]</span></div>
+            <div class="met-calib-ans">"La imagen no tiene suficiente resolución para identificar la marca con certeza. El vehículo parece un sedán de tamaño mediano, pero no puedo precisar más."</div>
+            <div class="met-calib-verdict met-calib-verdict--ok">incertidumbre expresada · respuesta ajustada a la evidencia</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="met-signal met-signal--er">
+        <div class="met-signal-label">Señal de fallo en producción</div>
+        <div class="met-signal-text">Un modelo que siempre genera una respuesta con alta confianza, incluso ante imágenes ambiguas o preguntas sin respuesta posible dado el contenido disponible, no está calibrado. En producción eso se traduce en respuestas falsamente definitivas donde el sistema debería abstenerse o escalar la incertidumbre al usuario.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.met-wrap, .met-wrap * { box-sizing: border-box; }
+
+.met-wrap {
+  --ea: #26A69A; --eb: #324AB2; --eg: #FFB343; --er: #e04c4c; --al: #7cc7ff;
+  --ebg: var(--md-default-bg-color, #fff);
+  --efg: var(--md-default-fg-color, #0f172a);
+  --ebd: rgba(15,23,42,.15);
+  --emut: rgba(15,23,42,.58);
+  --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  display: grid; gap: 14px; max-width: 900px; margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--ebd); border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--ea) 5%,transparent), transparent 48%),
+    radial-gradient(90% 120% at 95% 100%, color-mix(in srgb,var(--eb) 5%,transparent), transparent 50%),
+    var(--ebg);
+  color: var(--efg); font-family: var(--ef); -webkit-font-smoothing: antialiased;
+}
+[data-md-color-scheme="slate"] .met-wrap {
+  --ebg: var(--md-default-bg-color, #0f172a);
+  --efg: var(--md-default-fg-color, #e2e8f0);
+  --ebd: rgba(226,232,240,.15);
+  --emut: rgba(226,232,240,.58);
+}
+
+.met-hd { display: grid; gap: 5px; }
+.met-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.met-sub { font-size: 14px; color: var(--emut); line-height: 1.5; max-width: 66ch; }
+
+.met-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.met-tab {
+  padding: 7px 14px; border-radius: 999px; border: 1px solid var(--ebd);
+  background: transparent; color: var(--emut);
+  font-family: var(--ef); font-size: 13px; font-weight: 700;
+  cursor: pointer; transition: all .15s; white-space: nowrap;
+}
+.met-tab:hover { color: var(--efg); }
+.met-tab.active {
+  background: color-mix(in srgb,var(--ea) 11%,var(--ebg));
+  border-color: color-mix(in srgb,var(--ea) 40%,var(--ebd));
+  color: color-mix(in srgb,var(--ea) 75%,var(--efg));
+}
+
+.met-panel { min-height: 300px; }
+.met-panel-inner { display: grid; gap: 12px; }
+
+/* METRIC HEADER */
+.met-metric-hd { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 12px; border: 1px solid var(--ebd); background: color-mix(in srgb,var(--ebg) 90%,#0f172a 10%); }
+.met-sym { font-size: 28px; line-height: 1; flex-shrink: 0; }
+.met-sym--ea { color: color-mix(in srgb,var(--ea) 75%,var(--efg)); }
+.met-sym--eb { color: color-mix(in srgb,var(--eb) 75%,var(--efg)); }
+.met-sym--eg { color: color-mix(in srgb,var(--eg) 70%,var(--efg)); }
+.met-sym--er { color: color-mix(in srgb,var(--er) 70%,var(--efg)); }
+.met-metric-info { display: grid; gap: 2px; }
+.met-metric-name { font-size: 20px; font-weight: 900; letter-spacing: -.01em; }
+.met-metric-q { font-size: 13px; color: var(--emut); font-style: italic; }
+
+/* EXP BLOCK */
+.met-exp-block { padding: 10px 14px; border-radius: 10px; border: 1px solid var(--ebd); display: grid; gap: 4px; }
+.met-exp-block--ea { border-color: color-mix(in srgb,var(--ea) 22%,var(--ebd)); background: color-mix(in srgb,var(--ea) 5%,var(--ebg)); }
+.met-exp-block--eb { border-color: color-mix(in srgb,var(--eb) 22%,var(--ebd)); background: color-mix(in srgb,var(--eb) 5%,var(--ebg)); }
+.met-exp-block--eg { border-color: color-mix(in srgb,var(--eg) 22%,var(--ebd)); background: color-mix(in srgb,var(--eg) 5%,var(--ebg)); }
+.met-exp-block--er { border-color: color-mix(in srgb,var(--er) 18%,var(--ebd)); background: color-mix(in srgb,var(--er) 4%,var(--ebg)); }
+.met-exp-tag { font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--emut); }
+.met-exp-text { font-size: 13px; line-height: 1.5; color: var(--efg); }
+
+/* SIGNAL */
+.met-signal { padding: 10px 14px; border-radius: 10px; border: 1px solid var(--ebd); display: grid; gap: 4px; }
+.met-signal--ea { border-color: color-mix(in srgb,var(--ea) 20%,var(--ebd)); background: color-mix(in srgb,var(--ea) 4%,var(--ebg)); }
+.met-signal--eb { border-color: color-mix(in srgb,var(--eb) 20%,var(--ebd)); background: color-mix(in srgb,var(--eb) 4%,var(--ebg)); }
+.met-signal--eg { border-color: color-mix(in srgb,var(--eg) 20%,var(--ebd)); background: color-mix(in srgb,var(--eg) 4%,var(--ebg)); }
+.met-signal--er { border-color: color-mix(in srgb,var(--er) 18%,var(--ebd)); background: color-mix(in srgb,var(--er) 4%,var(--ebg)); }
+.met-signal-label { font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--emut); }
+.met-signal-text { font-size: 13px; line-height: 1.5; color: var(--efg); }
+
+/* CONTRAST (TAB 1) */
+.met-contrast { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.met-contrast-col { border-radius: 12px; border: 1px solid var(--ebd); overflow: hidden; }
+.met-contrast-col--bad { border-color: color-mix(in srgb,var(--er) 25%,var(--ebd)); }
+.met-contrast-col--ok  { border-color: color-mix(in srgb,var(--ea) 25%,var(--ebd)); }
+.met-contrast-tag { padding: 6px 12px; font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; border-bottom: 1px solid var(--ebd); background: color-mix(in srgb,var(--ebg) 80%,#0f172a 20%); }
+.met-contrast-col--bad .met-contrast-tag { color: color-mix(in srgb,var(--er) 65%,var(--efg)); }
+.met-contrast-col--ok  .met-contrast-tag { color: color-mix(in srgb,var(--ea) 65%,var(--efg)); }
+.met-contrast-body { padding: 12px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.met-contrast-img { display: flex; justify-content: center; }
+.met-contrast-arr { font-size: 18px; color: var(--emut); font-weight: 900; }
+.met-contrast-ans { font-size: 17px; font-weight: 900; padding: 6px 12px; border-radius: 8px; }
+.met-contrast-ans--bad { color: color-mix(in srgb,var(--er) 70%,var(--efg)); background: color-mix(in srgb,var(--er) 8%,var(--ebg)); border: 1px solid color-mix(in srgb,var(--er) 22%,var(--ebd)); }
+.met-contrast-ans--ok  { color: color-mix(in srgb,var(--ea) 70%,var(--efg)); background: color-mix(in srgb,var(--ea) 8%,var(--ebg)); border: 1px solid color-mix(in srgb,var(--ea) 22%,var(--ebd)); }
+.met-contrast-note { font-size: 10.5px; color: var(--emut); text-align: center; line-height: 1.3; }
+
+/* PARAPHRASE (TAB 2) */
+.met-paraphrase { border: 1px solid var(--ebd); border-radius: 12px; overflow: hidden; }
+.met-para-label { padding: 7px 12px; font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--emut); border-bottom: 1px solid var(--ebd); background: color-mix(in srgb,var(--ebg) 88%,#0f172a 12%); }
+.met-para-rows { display: grid; }
+.met-para-row { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-bottom: 1px solid var(--ebd); }
+.met-para-row:last-child { border-bottom: none; }
+.met-para-row--bad { background: color-mix(in srgb,var(--er) 4%,var(--ebg)); }
+.met-para-q { flex: 1; font-size: 12px; font-style: italic; color: var(--efg); line-height: 1.35; }
+.met-para-ans { font-size: 13px; font-weight: 900; padding: 4px 10px; border-radius: 7px; flex-shrink: 0; }
+.met-para-ans--ok  { color: color-mix(in srgb,var(--ea) 70%,var(--efg)); background: color-mix(in srgb,var(--ea) 8%,var(--ebg)); border: 1px solid color-mix(in srgb,var(--ea) 20%,var(--ebd)); }
+.met-para-ans--bad { color: color-mix(in srgb,var(--er) 70%,var(--efg)); background: color-mix(in srgb,var(--er) 8%,var(--ebg)); border: 1px solid color-mix(in srgb,var(--er) 20%,var(--ebd)); }
+.met-para-badge { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: .05em; padding: 2px 7px; border-radius: 999px; flex-shrink: 0; background: color-mix(in srgb,var(--er) 12%,var(--ebg)); border: 1px solid color-mix(in srgb,var(--er) 25%,var(--ebd)); color: color-mix(in srgb,var(--er) 65%,var(--efg)); }
+
+.met-bench { padding: 8px 12px; border-radius: 9px; border: 1px solid color-mix(in srgb,var(--eb) 20%,var(--ebd)); background: color-mix(in srgb,var(--eb) 4%,var(--ebg)); display: flex; align-items: baseline; gap: 8px; }
+.met-bench--eb .met-bench-name { color: color-mix(in srgb,var(--eb) 70%,var(--efg)); }
+.met-bench-name { font-size: 13px; font-weight: 900; flex-shrink: 0; }
+.met-bench-desc { font-size: 12px; color: var(--emut); line-height: 1.4; }
+
+/* LOCALIZATION (TAB 3) */
+.met-loc-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.met-loc-col { border-radius: 12px; border: 1px solid var(--ebd); padding: 10px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.met-loc-col--low  { border-color: color-mix(in srgb,var(--eg) 22%,var(--ebd)); background: color-mix(in srgb,var(--eg) 4%,var(--ebg)); }
+.met-loc-col--high { border-color: color-mix(in srgb,var(--ea) 22%,var(--ebd)); background: color-mix(in srgb,var(--ea) 4%,var(--ebg)); }
+.met-loc-tag { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--emut); }
+.met-loc-scene { display: flex; justify-content: center; }
+.met-loc-ans { font-size: 13px; font-weight: 700; text-align: center; }
+.met-loc-note { font-size: 10.5px; color: var(--emut); text-align: center; line-height: 1.3; }
+
+/* CALIBRATION (TAB 4) */
+.met-calib-cases { display: grid; gap: 8px; }
+.met-calib-case { border-radius: 12px; border: 1px solid var(--ebd); overflow: hidden; }
+.met-calib-case--bad { border-color: color-mix(in srgb,var(--er) 25%,var(--ebd)); }
+.met-calib-case--ok  { border-color: color-mix(in srgb,var(--ea) 22%,var(--ebd)); }
+.met-calib-hd { padding: 6px 12px; border-bottom: 1px solid var(--ebd); background: color-mix(in srgb,var(--ebg) 82%,#0f172a 18%); }
+.met-calib-tag { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; }
+.met-calib-case--bad .met-calib-tag { color: color-mix(in srgb,var(--er) 65%,var(--efg)); }
+.met-calib-case--ok  .met-calib-tag { color: color-mix(in srgb,var(--ea) 65%,var(--efg)); }
+.met-calib-body { padding: 10px 12px; display: grid; gap: 6px; }
+.met-calib-q { font-size: 12.5px; font-style: italic; line-height: 1.35; }
+.met-calib-ctx { font-style: normal; font-size: 11px; color: var(--emut); }
+.met-calib-ans { font-size: 12.5px; line-height: 1.45; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--ebd); background: color-mix(in srgb,var(--ebg) 85%,#0f172a 15%); }
+.met-calib-verdict { font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .05em; padding: 3px 9px; border-radius: 999px; display: inline-block; width: fit-content; }
+.met-calib-verdict--bad { background: color-mix(in srgb,var(--er) 10%,var(--ebg)); border: 1px solid color-mix(in srgb,var(--er) 25%,var(--ebd)); color: color-mix(in srgb,var(--er) 65%,var(--efg)); }
+.met-calib-verdict--ok  { background: color-mix(in srgb,var(--ea) 10%,var(--ebg)); border: 1px solid color-mix(in srgb,var(--ea) 22%,var(--ebd)); color: color-mix(in srgb,var(--ea) 65%,var(--efg)); }
+
+@media (max-width: 640px) {
+  .met-contrast { grid-template-columns: 1fr; }
+  .met-loc-compare { grid-template-columns: 1fr; }
+  .met-para-row { flex-direction: column; align-items: flex-start; }
+}
+</style>
+
+<script>
+(function(){
+  document.querySelectorAll('[data-demo="04-metricas-evaluacion"] button[data-tab]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var wrap = btn.closest('[data-demo="04-metricas-evaluacion"]');
+      wrap.querySelectorAll('button[data-tab]').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      wrap.querySelectorAll('[data-panel]').forEach(function(p){ p.style.display = 'none'; });
+      wrap.querySelector('[data-panel="' + btn.dataset.tab + '"]').style.display = '';
+    });
+  });
+})();
+</script>
