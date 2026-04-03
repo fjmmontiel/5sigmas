@@ -1,0 +1,237 @@
+<div class="rmm-wrap" data-demo="05-riesgos-multimodal">
+  <div class="rmm-hd">
+    <div class="rmm-title">Sesgos y regulación en sistemas multimodales</div>
+    <div class="rmm-sub">Los sesgos demográficos codificados en los datos de entrenamiento se amplifican en el alineamiento y son invisibles para los benchmarks genéricos. El EU AI Act clasifica por riesgo y exige garantías específicas para los sistemas que afectan a personas.</div>
+  </div>
+
+  <div class="rmm-tabs">
+    <button class="rmm-tab active" data-tab="1">Sesgos demográficos</button>
+    <button class="rmm-tab" data-tab="2">EU AI Act — clasificación por riesgo</button>
+  </div>
+
+  <!-- TAB 1: Sesgos demográficos -->
+  <div class="rmm-panel" data-panel="1">
+    <div class="rmm-flow">
+      <div class="rmm-fstep rmm-fstep--src">
+        <div class="rmm-fstep-tag">Origen</div>
+        <div class="rmm-fstep-name">Datos de entrenamiento sesgados</div>
+        <div class="rmm-fstep-desc">Las imágenes de internet no representan de forma equitativa demografías, geografías ni contextos culturales. El modelo aprende las distribuciones de los datos, no del mundo real.</div>
+      </div>
+      <div class="rmm-farr">→</div>
+      <div class="rmm-fstep rmm-fstep--amp">
+        <div class="rmm-fstep-tag">Amplificación</div>
+        <div class="rmm-fstep-name">El alineamiento refuerza el sesgo</div>
+        <div class="rmm-fstep-desc">El alineamiento con preferencias humanas puede amplificar los sesgos del preentrenamiento en lugar de corregirlos, si los anotadores comparten los mismos sesgos culturales.</div>
+      </div>
+      <div class="rmm-farr">→</div>
+      <div class="rmm-fstep rmm-fstep--blind">
+        <div class="rmm-fstep-tag">El problema</div>
+        <div class="rmm-fstep-name">Los benchmarks genéricos no lo detectan</div>
+        <div class="rmm-fstep-desc">Un benchmark de capacidad general puede dar puntuación alta aunque el modelo falle sistemáticamente en grupos subrepresentados. El sesgo solo es visible en benchmarks de subgrupos específicos.</div>
+      </div>
+    </div>
+
+    <div class="rmm-high-risk">
+      <div class="rmm-hr-label">Contextos de mayor impacto</div>
+      <div class="rmm-hr-cards">
+        <div class="rmm-hr-card">
+          <div class="rmm-hr-icon">👤</div>
+          <div class="rmm-hr-name">Reconocimiento facial</div>
+          <div class="rmm-hr-note">tasas de error sistemáticamente más altas en personas de piel más oscura y en mujeres</div>
+        </div>
+        <div class="rmm-hr-card">
+          <div class="rmm-hr-icon">📋</div>
+          <div class="rmm-hr-name">Selección de personal</div>
+          <div class="rmm-hr-note">análisis de CV con foto o vídeo puede penalizar rasgos físicos sin relación con el puesto</div>
+        </div>
+        <div class="rmm-hr-card">
+          <div class="rmm-hr-icon">🏥</div>
+          <div class="rmm-hr-name">Evaluación médica</div>
+          <div class="rmm-hr-note">diagnóstico por imagen con representación desigual de grupos en los datos de entrenamiento</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: EU AI Act -->
+  <div class="rmm-panel" data-panel="2" style="display:none">
+    <div class="rmm-tiers">
+      <div class="rmm-tier rmm-tier--min">
+        <div class="rmm-tier-label">Riesgo mínimo</div>
+        <div class="rmm-tier-examples">chatbots genéricos, filtros de spam, recomendaciones de contenido</div>
+        <div class="rmm-tier-req">Sin obligaciones adicionales</div>
+      </div>
+      <div class="rmm-tier rmm-tier--ltd">
+        <div class="rmm-tier-label">Riesgo limitado</div>
+        <div class="rmm-tier-examples">sistemas que interactúan con personas (chatbots con voz, deepfakes declarados)</div>
+        <div class="rmm-tier-req">Obligación de transparencia: el usuario debe saber que habla con IA</div>
+      </div>
+      <div class="rmm-tier rmm-tier--high">
+        <div class="rmm-tier-label">Alto riesgo</div>
+        <div class="rmm-tier-examples">reconocimiento facial, selección de personal, diagnóstico médico, infraestructura crítica</div>
+        <div class="rmm-tier-req">Registro de actividad · evaluación de impacto · supervisión humana obligatoria · auditoría de sesgos</div>
+      </div>
+      <div class="rmm-tier rmm-tier--ban">
+        <div class="rmm-tier-label">Prohibido</div>
+        <div class="rmm-tier-examples">puntuación social, vigilancia biométrica masiva en tiempo real en espacios públicos</div>
+        <div class="rmm-tier-req">Prohibido en la UE sin excepción</div>
+      </div>
+    </div>
+
+    <div class="rmm-note-box">
+      <div class="rmm-note-label">Implicación para equipos de producto</div>
+      <div class="rmm-note-text">Los sistemas multimodales que procesan imágenes, vídeo o audio de personas en contextos de selección, evaluación médica o control de acceso quedan en la categoría de alto riesgo. No basta con que el sistema funcione bien en promedio: el reglamento exige que los resultados sean auditables y que haya un humano en el bucle de decisiones con consecuencias para personas.</div>
+    </div>
+  </div>
+</div>
+
+<style>
+.rmm-wrap, .rmm-wrap * { box-sizing: border-box; }
+
+.rmm-wrap {
+  --ra: #26A69A;
+  --rb: #324AB2;
+  --rg: #FFB343;
+  --rr: #e04c4c;
+  --rl: #7cc7ff;
+  --rbg: var(--md-default-bg-color, #fff);
+  --rfg: var(--md-default-fg-color, #0f172a);
+  --rbd: rgba(15,23,42,.14);
+  --rmut: rgba(15,23,42,.58);
+  --rf: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid; gap: 14px; max-width: 900px; margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--rbd); border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--rg) 6%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 100%, color-mix(in srgb,var(--rb) 5%,transparent), transparent 52%),
+    var(--rbg);
+  color: var(--rfg); font-family: var(--rf); -webkit-font-smoothing: antialiased;
+}
+[data-md-color-scheme="slate"] .rmm-wrap {
+  --rbg: var(--md-default-bg-color, #0f172a);
+  --rfg: var(--md-default-fg-color, #e2e8f0);
+  --rbd: rgba(226,232,240,.14);
+  --rmut: rgba(226,232,240,.58);
+}
+
+.rmm-hd { display: grid; gap: 5px; }
+.rmm-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.rmm-sub { font-size: 14px; color: var(--rmut); line-height: 1.5; max-width: 68ch; }
+
+.rmm-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.rmm-tab {
+  padding: 6px 14px; border-radius: 999px; border: 1px solid var(--rbd);
+  background: transparent; color: var(--rmut);
+  font-family: var(--rf); font-size: 12.5px; font-weight: 700;
+  cursor: pointer; transition: all .15s; white-space: nowrap;
+}
+.rmm-tab:hover { color: var(--rfg); }
+.rmm-tab.active {
+  background: color-mix(in srgb,var(--rb) 10%,var(--rbg));
+  border-color: color-mix(in srgb,var(--rb) 35%,var(--rbd));
+  color: color-mix(in srgb,var(--rb) 70%,var(--rfg));
+}
+
+.rmm-panel { display: grid; gap: 12px; }
+
+/* TAB 1 — FLOW */
+.rmm-flow { display: flex; gap: 8px; align-items: stretch; }
+.rmm-farr {
+  font-size: 18px; font-weight: 900; color: var(--rmut);
+  display: flex; align-items: center; flex-shrink: 0;
+}
+.rmm-fstep {
+  flex: 1; padding: 10px 12px; border-radius: 10px;
+  border: 1px solid var(--rbd); display: grid; gap: 5px; align-content: start;
+}
+.rmm-fstep--src {
+  border-color: color-mix(in srgb,var(--rg) 28%,var(--rbd));
+  background: color-mix(in srgb,var(--rg) 5%,var(--rbg));
+}
+.rmm-fstep--amp {
+  border-color: color-mix(in srgb,var(--rr) 22%,var(--rbd));
+  background: color-mix(in srgb,var(--rr) 4%,var(--rbg));
+}
+.rmm-fstep--blind {
+  border-color: color-mix(in srgb,var(--rb) 22%,var(--rbd));
+  background: color-mix(in srgb,var(--rb) 4%,var(--rbg));
+}
+.rmm-fstep-tag { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--rmut); }
+.rmm-fstep-name { font-size: 12.5px; font-weight: 900; line-height: 1.2; }
+.rmm-fstep-desc { font-size: 11.5px; color: var(--rmut); line-height: 1.4; }
+
+.rmm-high-risk { display: grid; gap: 8px; }
+.rmm-hr-label { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--rmut); }
+.rmm-hr-cards { display: flex; gap: 8px; }
+.rmm-hr-card {
+  flex: 1; padding: 10px 12px; border-radius: 10px;
+  border: 1px solid color-mix(in srgb,var(--rr) 20%,var(--rbd));
+  background: color-mix(in srgb,var(--rr) 4%,var(--rbg));
+  display: grid; gap: 5px; align-content: start;
+}
+.rmm-hr-icon { font-size: 18px; }
+.rmm-hr-name { font-size: 12.5px; font-weight: 900; }
+.rmm-hr-note { font-size: 11px; color: var(--rmut); line-height: 1.35; }
+
+/* TAB 2 — EU AI ACT TIERS */
+.rmm-tiers { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.rmm-tier {
+  padding: 10px 12px; border-radius: 10px; border: 1px solid var(--rbd);
+  display: grid; gap: 6px; align-content: start;
+}
+.rmm-tier--min { background: color-mix(in srgb,var(--ra) 5%,var(--rbg)); border-color: color-mix(in srgb,var(--ra) 22%,var(--rbd)); }
+.rmm-tier--ltd { background: color-mix(in srgb,var(--rg) 5%,var(--rbg)); border-color: color-mix(in srgb,var(--rg) 22%,var(--rbd)); }
+.rmm-tier--high {
+  background: color-mix(in srgb,var(--rr) 6%,var(--rbg));
+  border-color: color-mix(in srgb,var(--rr) 28%,var(--rbd));
+  box-shadow: 0 0 0 1px color-mix(in srgb,var(--rr) 12%,transparent);
+}
+.rmm-tier--ban { background: color-mix(in srgb,var(--rb) 5%,var(--rbg)); border-color: color-mix(in srgb,var(--rb) 22%,var(--rbd)); }
+
+.rmm-tier-label {
+  font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em;
+}
+.rmm-tier--min .rmm-tier-label { color: color-mix(in srgb,var(--ra) 65%,var(--rfg)); }
+.rmm-tier--ltd .rmm-tier-label { color: color-mix(in srgb,var(--rg) 60%,var(--rfg)); }
+.rmm-tier--high .rmm-tier-label { color: color-mix(in srgb,var(--rr) 65%,var(--rfg)); }
+.rmm-tier--ban .rmm-tier-label { color: color-mix(in srgb,var(--rb) 65%,var(--rfg)); }
+
+.rmm-tier-examples { font-size: 11px; color: var(--rmut); line-height: 1.35; }
+.rmm-tier-req {
+  font-size: 10.5px; font-weight: 700; line-height: 1.35;
+  padding-top: 6px; border-top: 1px solid var(--rbd);
+}
+.rmm-tier--high .rmm-tier-req { color: color-mix(in srgb,var(--rr) 60%,var(--rfg)); }
+
+.rmm-note-box {
+  padding: 10px 14px; border-radius: 10px;
+  border: 1px solid color-mix(in srgb,var(--rb) 22%,var(--rbd));
+  background: color-mix(in srgb,var(--rb) 4%,var(--rbg));
+  display: grid; gap: 4px;
+}
+.rmm-note-label { font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--rmut); }
+.rmm-note-text { font-size: 12.5px; line-height: 1.5; color: var(--rfg); }
+
+@media (max-width: 640px) {
+  .rmm-flow { flex-direction: column; }
+  .rmm-farr { display: none; }
+  .rmm-hr-cards { flex-direction: column; }
+  .rmm-tiers { grid-template-columns: 1fr 1fr; }
+}
+</style>
+
+<script>
+(function(){
+  var wrap = document.querySelector('[data-demo="05-riesgos-multimodal"]');
+  wrap.querySelectorAll('button[data-tab]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      wrap.querySelectorAll('button[data-tab]').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      wrap.querySelectorAll('[data-panel]').forEach(function(p){ p.style.display = 'none'; });
+      wrap.querySelector('[data-panel="' + btn.dataset.tab + '"]').style.display = '';
+    });
+  });
+})();
+</script>

@@ -1,0 +1,436 @@
+<div class="hac-wrap" data-demo="05-alucinacion-accion">
+  <div class="hac-hd">
+    <div class="hac-title">Alucinación interna → acción irreversible y bucle infinito</div>
+    <div class="hac-sub">Cuando el sistema actúa, una alucinación perceptiva interna produce consecuencias distintas a una respuesta incorrecta. El bucle infinito agéntico es una variante estructural del mismo problema.</div>
+  </div>
+
+  <div class="hac-tabs">
+    <button class="hac-tab active" data-tab="1">Alucinación → acción</button>
+    <button class="hac-tab" data-tab="2">Conversacional vs. agéntico</button>
+    <button class="hac-tab" data-tab="3">Bucle infinito agéntico</button>
+  </div>
+
+  <!-- TAB 1: Hallucination → action (compact chain) -->
+  <div class="hac-panel" data-panel="1">
+    <div class="hac-chain">
+      <div class="hac-step hac-step--input">
+        <div class="hac-step-tag">Percepción</div>
+        <div class="hac-step-body">
+          <div class="hac-step-name">Alucinación interna</div>
+          <div class="hac-step-desc">El modelo genera una representación incorrecta: "semáforo verde" cuando está en rojo, "formulario vacío" cuando tiene datos.</div>
+        </div>
+        <div class="hac-step-badge hac-step-badge--warn">error interno · no detectable externamente</div>
+      </div>
+
+      <div class="hac-arr">↓</div>
+
+      <div class="hac-step hac-step--reason">
+        <div class="hac-step-tag">Razonamiento</div>
+        <div class="hac-step-body">
+          <div class="hac-step-name">Lógica coherente con la percepción errónea</div>
+          <div class="hac-step-desc">Las inferencias son válidas dado el estado percibido. El error de origen pasa desapercibido.</div>
+        </div>
+      </div>
+
+      <div class="hac-arr">↓</div>
+
+      <div class="hac-step hac-step--action">
+        <div class="hac-step-tag">Acción</div>
+        <div class="hac-step-body">
+          <div class="hac-step-name">Herramienta ejecutada sobre estado equivocado</div>
+          <div class="hac-step-desc">Rellena el formulario borrando datos previos, avanza el proceso en estado incorrecto, envía el registro con datos erróneos.</div>
+        </div>
+        <div class="hac-step-badge hac-step-badge--bad">acción ejecutada · puede ser irreversible</div>
+      </div>
+
+      <div class="hac-arr">↓</div>
+
+      <div class="hac-step hac-step--result">
+        <div class="hac-step-tag">Estado resultante</div>
+        <div class="hac-step-body">
+          <div class="hac-step-name">Fallo sin traza de causa</div>
+          <div class="hac-step-desc">Los logs muestran percepción → razonamiento → acción, todo aparentemente correcto. El origen del error nunca queda registrado.</div>
+        </div>
+        <div class="hac-step-badge hac-step-badge--bad">causa no trazable · diagnóstico difícil</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: Conversational vs. agentic -->
+  <div class="hac-panel" data-panel="2" style="display:none">
+    <div class="hac-compare hac-compare--tall">
+      <div class="hac-cmp-side hac-cmp-side--conv">
+        <div class="hac-cmp-tag">Sistema conversacional</div>
+        <div class="hac-cmp-body">
+          <div class="hac-cmp-item">Alucinación → respuesta incorrecta</div>
+          <div class="hac-cmp-item">El usuario lee → descarta → corrige</div>
+          <div class="hac-cmp-item">No hay efecto persistente</div>
+        </div>
+        <div class="hac-cmp-badge hac-cmp-badge--ok">reversible · impacto local</div>
+      </div>
+
+      <div class="hac-cmp-vs">vs</div>
+
+      <div class="hac-cmp-side hac-cmp-side--agent">
+        <div class="hac-cmp-tag">Sistema agéntico multimodal</div>
+        <div class="hac-cmp-body">
+          <div class="hac-cmp-item">Alucinación → acción ejecutada</div>
+          <div class="hac-cmp-item">Registro modificado, proceso avanzado, dato enviado</div>
+          <div class="hac-cmp-item">Puede no ser reversible. Afecta a terceros.</div>
+        </div>
+        <div class="hac-cmp-badge hac-cmp-badge--bad">potencialmente irreversible · impacto externo</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: Infinite loop -->
+  <div class="hac-panel" data-panel="3" style="display:none">
+    <div class="hac-loop-wrap">
+      <div class="hac-loop-diagram">
+        <div class="hac-ld-title">Estructura del bucle infinito agéntico</div>
+
+        <div class="hac-loop-cycle">
+          <div class="hac-lc-node hac-lc-node--obs">
+            <div class="hac-lc-tag">1 · Observar</div>
+            <div class="hac-lc-name">Lee el estado del entorno</div>
+            <div class="hac-lc-note">Estado post-acción interpretado con prior sesgado</div>
+          </div>
+
+          <div class="hac-lc-arr hac-lc-arr--right">→ percepción sesgada →</div>
+
+          <div class="hac-lc-node hac-lc-node--reason">
+            <div class="hac-lc-tag">2 · Razonar</div>
+            <div class="hac-lc-name">Decide la siguiente acción</div>
+            <div class="hac-lc-note">"El estado sigue sin ser el correcto, repito la acción"</div>
+          </div>
+
+          <div class="hac-lc-arr hac-lc-arr--down">↓ misma acción ↓</div>
+
+          <div class="hac-lc-node hac-lc-node--act">
+            <div class="hac-lc-tag">3 · Actuar</div>
+            <div class="hac-lc-name">Ejecuta la misma acción</div>
+            <div class="hac-lc-note">Acción que no cambia el estado de forma detectable</div>
+          </div>
+
+          <div class="hac-lc-arr hac-lc-arr--left">← nuevo ciclo ←</div>
+        </div>
+
+        <div class="hac-loop-why">
+          <div class="hac-lw-label">Por qué el ciclo no termina</div>
+          <div class="hac-lw-text">El modelo percibe el resultado de la acción de forma consistente con sus expectativas previas: cada vez que actúa, "confirma" que el estado sigue sin estar correcto porque su percepción del estado post-acción está sesgada de la misma manera que la percepción pre-acción. El ciclo se auto-refuerza.</div>
+        </div>
+      </div>
+
+      <div class="hac-loop-conditions">
+        <div class="hac-lco-title">Condiciones para que ocurra</div>
+        <div class="hac-lco-items">
+          <div class="hac-lco-item">
+            <div class="hac-lco-icon">⚙</div>
+            <div class="hac-lco-body">
+              <div class="hac-lco-name">Sin límite de iteraciones</div>
+              <div class="hac-lco-desc">El sistema no tiene un máximo de pasos definido. Puede repetir la acción indefinidamente hasta que agote recursos (tiempo, tokens, API calls).</div>
+            </div>
+          </div>
+          <div class="hac-lco-item">
+            <div class="hac-lco-icon">👁</div>
+            <div class="hac-lco-body">
+              <div class="hac-lco-name">Percepción post-acción sesgada</div>
+              <div class="hac-lco-desc">El modelo no puede distinguir entre "el estado no cambió" y "percibí el cambio incorrectamente". Ambos producen la misma representación interna.</div>
+            </div>
+          </div>
+          <div class="hac-lco-item">
+            <div class="hac-lco-icon">🔒</div>
+            <div class="hac-lco-body">
+              <div class="hac-lco-name">Sin supervisión humana en el loop</div>
+              <div class="hac-lco-desc">Si el ciclo observar-actuar es completamente autónomo, no hay punto donde un humano pueda interrumpir antes de que el sistema agote sus recursos o cause daño acumulado.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hac-lco-mitigations">
+          <div class="hac-mit-label">Mitigaciones de diseño</div>
+          <div class="hac-mit-items">
+            <div class="hac-mit-item hac-mit-item--ok">
+              <span class="hac-mit-icon">✓</span>
+              Límite máximo de iteraciones por tarea (hard stop)
+            </div>
+            <div class="hac-mit-item hac-mit-item--ok">
+              <span class="hac-mit-icon">✓</span>
+              Verificación de cambio de estado antes de repetir acción
+            </div>
+            <div class="hac-mit-item hac-mit-item--ok">
+              <span class="hac-mit-icon">✓</span>
+              Punto de supervisión humana para acciones de alto impacto
+            </div>
+            <div class="hac-mit-item hac-mit-item--ok">
+              <span class="hac-mit-icon">✓</span>
+              Log de estado diferencial (qué cambió realmente entre pasos)
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.hac-wrap, .hac-wrap * { box-sizing: border-box; }
+
+.hac-wrap {
+  --aa: #26A69A;
+  --ab: #324AB2;
+  --ag: #FFB343;
+  --ar: #e04c4c;
+  --al: #7cc7ff;
+  --abg: var(--md-default-bg-color, #fff);
+  --afg: var(--md-default-fg-color, #0f172a);
+  --abd: rgba(15,23,42,.14);
+  --amut: rgba(15,23,42,.58);
+  --af: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid; gap: 14px; max-width: 900px; margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--abd); border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--ar) 6%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 100%, color-mix(in srgb,var(--ab) 5%,transparent), transparent 52%),
+    var(--abg);
+  color: var(--afg); font-family: var(--af); -webkit-font-smoothing: antialiased;
+}
+[data-md-color-scheme="slate"] .hac-wrap {
+  --abg: var(--md-default-bg-color, #0f172a);
+  --afg: var(--md-default-fg-color, #e2e8f0);
+  --abd: rgba(226,232,240,.14);
+  --amut: rgba(226,232,240,.58);
+}
+
+.hac-hd { display: grid; gap: 5px; }
+.hac-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.hac-sub { font-size: 14px; color: var(--amut); line-height: 1.5; max-width: 68ch; }
+
+.hac-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.hac-tab {
+  padding: 6px 14px; border-radius: 999px; border: 1px solid var(--abd);
+  background: transparent; color: var(--amut);
+  font-family: var(--af); font-size: 12.5px; font-weight: 700;
+  cursor: pointer; transition: background .15s; white-space: nowrap;
+}
+.hac-tab:hover { background: color-mix(in srgb,var(--ar) 7%,var(--abg)); color: var(--afg); }
+.hac-tab.active {
+  background: color-mix(in srgb,var(--ar) 10%,var(--abg));
+  border-color: color-mix(in srgb,var(--ar) 35%,var(--abd));
+  color: color-mix(in srgb,var(--ar) 70%,var(--afg));
+}
+
+.hac-panel { min-height: 300px; display: flex; flex-direction: column; gap: 12px; }
+
+/* TAB 1 */
+.hac-chain-wrap { display: flex; flex-direction: column; gap: 14px; flex: 1; }
+.hac-chain { display: flex; flex-direction: column; gap: 0; }
+
+.hac-arr {
+  text-align: center; font-size: 14px; font-weight: 900; color: var(--amut); padding: 3px 0;
+}
+
+.hac-step {
+  padding: 10px 14px; border-radius: 10px; border: 1px solid var(--abd);
+  display: flex; flex-direction: column; gap: 5px;
+}
+.hac-step--input {
+  border-color: color-mix(in srgb,var(--ag) 25%,var(--abd));
+  background: color-mix(in srgb,var(--ag) 4%,var(--abg));
+}
+.hac-step--reason {
+  border-color: color-mix(in srgb,var(--ag) 20%,var(--abd));
+  background: color-mix(in srgb,var(--ag) 3%,var(--abg));
+}
+.hac-step--action {
+  border-color: color-mix(in srgb,var(--ar) 28%,var(--abd));
+  background: color-mix(in srgb,var(--ar) 5%,var(--abg));
+}
+.hac-step--result {
+  border-color: color-mix(in srgb,var(--ar) 32%,var(--abd));
+  background: color-mix(in srgb,var(--ar) 7%,var(--abg));
+}
+
+.hac-step-tag { font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--amut); }
+.hac-step-body { display: grid; gap: 4px; }
+.hac-step-name { font-size: 13px; font-weight: 900; line-height: 1.2; }
+.hac-step--action .hac-step-name, .hac-step--result .hac-step-name {
+  color: color-mix(in srgb,var(--ar) 65%,var(--afg));
+}
+.hac-step-desc { font-size: 11.5px; color: var(--amut); line-height: 1.4; }
+.hac-step-origin { font-size: 10.5px; color: color-mix(in srgb,var(--ag) 60%,var(--amut)); font-style: italic; }
+.hac-step-local { font-size: 10.5px; color: color-mix(in srgb,var(--aa) 60%,var(--amut)); font-style: italic; }
+.hac-step-local::before { content: "✓ "; }
+
+.hac-step-badge {
+  font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .05em;
+  padding: 2px 9px; border-radius: 999px; display: inline-block; width: fit-content;
+}
+.hac-step-badge--warn {
+  color: color-mix(in srgb,var(--ag) 65%,var(--afg));
+  background: color-mix(in srgb,var(--ag) 10%,var(--abg));
+  border: 1px solid color-mix(in srgb,var(--ag) 25%,var(--abd));
+}
+.hac-step-badge--bad {
+  color: color-mix(in srgb,var(--ar) 70%,var(--afg));
+  background: color-mix(in srgb,var(--ar) 10%,var(--abg));
+  border: 1px solid color-mix(in srgb,var(--ar) 28%,var(--abd));
+}
+
+/* Compare */
+.hac-compare { display: flex; gap: 10px; align-items: stretch; }
+.hac-compare--tall { flex: 1; min-height: 220px; }
+.hac-cmp-vs {
+  font-size: 12px; font-weight: 900; color: var(--amut);
+  align-self: center; flex-shrink: 0;
+}
+.hac-cmp-side {
+  flex: 1; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--abd);
+  display: flex; flex-direction: column; gap: 7px;
+}
+.hac-cmp-side--conv {
+  border-color: color-mix(in srgb,var(--aa) 22%,var(--abd));
+  background: color-mix(in srgb,var(--aa) 4%,var(--abg));
+}
+.hac-cmp-side--agent {
+  border-color: color-mix(in srgb,var(--ar) 25%,var(--abd));
+  background: color-mix(in srgb,var(--ar) 5%,var(--abg));
+}
+.hac-cmp-tag { font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--amut); }
+.hac-cmp-body { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+.hac-cmp-item { font-size: 11.5px; padding: 3px 0; border-bottom: 1px solid var(--abd); }
+.hac-cmp-item:last-child { border-bottom: none; }
+.hac-cmp-badge {
+  font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: .05em;
+  padding: 3px 9px; border-radius: 8px; text-align: center;
+}
+.hac-cmp-badge--ok {
+  color: color-mix(in srgb,var(--aa) 70%,var(--afg));
+  background: color-mix(in srgb,var(--aa) 10%,var(--abg));
+  border: 1px solid color-mix(in srgb,var(--aa) 22%,var(--abd));
+}
+.hac-cmp-badge--bad {
+  color: color-mix(in srgb,var(--ar) 70%,var(--afg));
+  background: color-mix(in srgb,var(--ar) 10%,var(--abg));
+  border: 1px solid color-mix(in srgb,var(--ar) 25%,var(--abd));
+}
+
+/* TAB 2 */
+.hac-loop-wrap { display: flex; gap: 14px; flex: 1; align-items: flex-start; }
+.hac-loop-diagram { flex: 1; display: flex; flex-direction: column; gap: 12px; }
+.hac-ld-title { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; color: var(--amut); }
+
+.hac-loop-cycle {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  grid-template-rows: auto auto auto;
+  gap: 6px; align-items: center;
+}
+
+.hac-lc-node {
+  padding: 10px 12px; border-radius: 10px; border: 1px solid var(--abd);
+  display: grid; gap: 4px;
+}
+.hac-lc-node--obs {
+  border-color: color-mix(in srgb,var(--al) 25%,var(--abd));
+  background: color-mix(in srgb,var(--al) 5%,var(--abg));
+  grid-column: 1; grid-row: 1;
+}
+.hac-lc-node--reason {
+  border-color: color-mix(in srgb,var(--ab) 22%,var(--abd));
+  background: color-mix(in srgb,var(--ab) 5%,var(--abg));
+  grid-column: 3; grid-row: 1;
+}
+.hac-lc-node--act {
+  border-color: color-mix(in srgb,var(--ar) 25%,var(--abd));
+  background: color-mix(in srgb,var(--ar) 5%,var(--abg));
+  grid-column: 1 / 4; grid-row: 3;
+}
+
+.hac-lc-arr {
+  font-size: 13px; font-weight: 900; color: color-mix(in srgb,var(--ar) 55%,var(--amut));
+  text-align: center; font-style: italic; white-space: nowrap;
+}
+.hac-lc-arr--right { grid-column: 2; grid-row: 1; padding: 0 4px; }
+.hac-lc-arr--down {
+  grid-column: 1 / 4; grid-row: 2;
+  display: flex; justify-content: center; padding: 4px 0;
+}
+.hac-lc-arr--left {
+  grid-column: 1 / 4; grid-row: 4;
+  display: flex; justify-content: center; padding: 4px 0;
+  font-size: 12px;
+}
+
+.hac-lc-tag { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--amut); }
+.hac-lc-name { font-size: 12.5px; font-weight: 900; line-height: 1.2; }
+.hac-lc-note { font-size: 10.5px; color: var(--amut); font-style: italic; line-height: 1.3; }
+
+.hac-loop-why {
+  padding: 10px 12px; border-radius: 10px;
+  border: 1px solid color-mix(in srgb,var(--ar) 20%,var(--abd));
+  background: color-mix(in srgb,var(--ar) 4%,var(--abg));
+  display: grid; gap: 4px;
+}
+.hac-lw-label { font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--amut); }
+.hac-lw-text { font-size: 12px; line-height: 1.5; color: var(--afg); }
+
+/* Conditions */
+.hac-loop-conditions { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+.hac-lco-title { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; color: var(--amut); }
+.hac-lco-items { display: flex; flex-direction: column; gap: 8px; }
+.hac-lco-item {
+  display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border-radius: 9px;
+  border: 1px solid var(--abd); background: color-mix(in srgb,var(--abg) 88%,#0f172a 12%);
+}
+.hac-lco-icon { font-size: 16px; flex-shrink: 0; }
+.hac-lco-body { display: grid; gap: 3px; }
+.hac-lco-name { font-size: 12px; font-weight: 700; }
+.hac-lco-desc { font-size: 11px; color: var(--amut); line-height: 1.4; }
+
+.hac-lco-mitigations { margin-top: auto; display: grid; gap: 6px; }
+.hac-mit-label { font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--amut); }
+.hac-mit-items { display: flex; flex-direction: column; gap: 5px; }
+.hac-mit-item {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 11.5px; padding: 5px 9px; border-radius: 7px;
+  border: 1px solid var(--abd);
+}
+.hac-mit-item--ok {
+  border-color: color-mix(in srgb,var(--aa) 20%,var(--abd));
+  background: color-mix(in srgb,var(--aa) 4%,var(--abg));
+}
+.hac-mit-icon { color: color-mix(in srgb,var(--aa) 70%,var(--afg)); font-weight: 900; flex-shrink: 0; }
+
+@media (max-width: 640px) {
+  .hac-compare { flex-direction: column; }
+  .hac-cmp-vs { align-self: center; }
+  .hac-loop-wrap { flex-direction: column; }
+  .hac-loop-cycle {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+  .hac-lc-node--obs { grid-column: 1; grid-row: 1; }
+  .hac-lc-arr--right { grid-column: 1; grid-row: 2; }
+  .hac-lc-node--reason { grid-column: 1; grid-row: 3; }
+  .hac-lc-arr--down { grid-column: 1; grid-row: 4; }
+  .hac-lc-node--act { grid-column: 1; grid-row: 5; }
+  .hac-lc-arr--left { grid-column: 1; grid-row: 6; }
+}
+</style>
+
+<script>
+(function(){
+  var wrap = document.querySelector('[data-demo="05-alucinacion-accion"]');
+  wrap.querySelectorAll('button[data-tab]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      wrap.querySelectorAll('button[data-tab]').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      wrap.querySelectorAll('[data-panel]').forEach(function(p){ p.style.display = 'none'; });
+      wrap.querySelector('[data-panel="' + btn.dataset.tab + '"]').style.display = '';
+    });
+  });
+})();
+</script>

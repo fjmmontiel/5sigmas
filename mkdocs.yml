@@ -60,8 +60,8 @@ nav:
           - El problema: series/multimodalidad-iag/01-el-problema.md
           - Alineamiento: series/multimodalidad-iag/02-alineamiento.md
           - Arquitecturas: series/multimodalidad-iag/03-arquitecturas.md
-          # - Evaluación: series/multimodalidad-iag/04-evaluacion.md
-          # - Riesgos: series/multimodalidad-iag/05-riesgos.md
+          - Evaluación: series/multimodalidad-iag/04-evaluacion.md
+          - Riesgos: series/multimodalidad-iag/05-riesgos.md
       - Modelos razonadores:
           - Presentación: series/modelos-razonadores/00_presentacion_serie.md
       - IA, PIB, bienestar y energía:

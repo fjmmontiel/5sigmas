@@ -1,0 +1,362 @@
+<div class="exv-wrap" data-demo="05-exif-privacidad">
+  <div class="exv-hd">
+    <div class="exv-title">Privacidad en imágenes: lo que el sistema recibe más allá de lo visible</div>
+    <div class="exv-sub">Una imagen compartida con un sistema multimodal incluye metadatos EXIF que el usuario no percibe y que el sistema puede almacenar, procesar o filtrar sin que haya consentimiento explícito sobre esos datos secundarios.</div>
+  </div>
+
+  <div class="exv-tabs">
+    <button class="exv-tab active" data-tab="1">Lo que el usuario comparte</button>
+    <button class="exv-tab" data-tab="2">Lo que el sistema recibe</button>
+    <button class="exv-tab" data-tab="3">Consecuencias del almacenamiento sin depuración</button>
+  </div>
+
+  <!-- TAB 1: Lo que el usuario ve -->
+  <div class="exv-panel" data-panel="1">
+    <div class="exv-bifold">
+      <div class="exv-side exv-side--user">
+        <div class="exv-side-tag">Intención del usuario</div>
+        <div class="exv-doc-preview">
+          <div class="exv-doc-icon">🖼</div>
+          <div class="exv-doc-name">documento_identidad.jpg</div>
+          <div class="exv-doc-size">2.4 MB · JPEG</div>
+        </div>
+        <div class="exv-user-think">
+          <div class="exv-think-label">Lo que el usuario cree que comparte</div>
+          <div class="exv-think-items">
+            <div class="exv-think-item exv-think-item--ok">Imagen del documento</div>
+            <div class="exv-think-item exv-think-item--ok">Texto visible en el documento</div>
+          </div>
+        </div>
+      </div>
+      <div class="exv-side exv-side--system">
+        <div class="exv-side-tag">Lo que el usuario NO sabe que hay</div>
+        <div class="exv-hidden-preview">
+          <div class="exv-hidden-icon">⚠</div>
+          <div class="exv-hidden-text">Metadatos EXIF incrustados en el archivo</div>
+          <div class="exv-hidden-sub">No visibles en ninguna interfaz estándar. No eliminados automáticamente por la mayoría de sistemas.</div>
+        </div>
+        <div class="exv-hidden-badge">invisible · pero presente · puede transmitirse</div>
+      </div>
+    </div>
+    <div class="exv-note">
+      <span class="exv-note-label">El problema de los metadatos —</span> el usuario comparte una imagen con un objetivo específico (extraer texto, verificar un dato). El sistema recibe el archivo completo, metadatos incluidos, sin que ninguna interfaz haga visible esa diferencia.
+    </div>
+  </div>
+
+  <!-- TAB 2: Lo que el sistema recibe -->
+  <div class="exv-panel" data-panel="2" style="display:none">
+    <div class="exv-exif-grid">
+      <div class="exv-exif-header">
+        <div class="exv-exif-file">documento_identidad.jpg</div>
+        <div class="exv-exif-subtitle">Metadatos EXIF embebidos en el archivo</div>
+      </div>
+
+      <div class="exv-exif-groups">
+        <div class="exv-exif-group">
+          <div class="exv-group-tag exv-group-tag--loc">Localización</div>
+          <div class="exv-exif-rows">
+            <div class="exv-exif-row">
+              <span class="exv-exif-key">GPS Latitud</span>
+              <span class="exv-exif-val exv-exif-val--warn">40° 24' 53.9" N</span>
+            </div>
+            <div class="exv-exif-row">
+              <span class="exv-exif-key">GPS Longitud</span>
+              <span class="exv-exif-val exv-exif-val--warn">3° 41' 32.1" W</span>
+            </div>
+            <div class="exv-exif-row">
+              <span class="exv-exif-key">GPS Altitud</span>
+              <span class="exv-exif-val exv-exif-val--warn">667 m s.n.m.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="exv-exif-group">
+          <div class="exv-group-tag exv-group-tag--time">Tiempo</div>
+          <div class="exv-exif-rows">
+            <div class="exv-exif-row">
+              <span class="exv-exif-key">Fecha y hora</span>
+              <span class="exv-exif-val exv-exif-val--warn">2024-03-15 14:32:07</span>
+            </div>
+            <div class="exv-exif-row">
+              <span class="exv-exif-key">Zona horaria</span>
+              <span class="exv-exif-val">Europe/Madrid</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="exv-exif-group">
+          <div class="exv-group-tag exv-group-tag--device">Dispositivo</div>
+          <div class="exv-exif-rows">
+            <div class="exv-exif-row">
+              <span class="exv-exif-key">Fabricante</span>
+              <span class="exv-exif-val exv-exif-val--warn">Apple</span>
+            </div>
+            <div class="exv-exif-row">
+              <span class="exv-exif-key">Modelo</span>
+              <span class="exv-exif-val exv-exif-val--warn">iPhone 15 Pro</span>
+            </div>
+            <div class="exv-exif-row">
+              <span class="exv-exif-key">Software</span>
+              <span class="exv-exif-val">iOS 17.4.1</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="exv-exif-group">
+          <div class="exv-group-tag exv-group-tag--cam">Cámara</div>
+          <div class="exv-exif-rows">
+            <div class="exv-exif-row">
+              <span class="exv-exif-key">Focal length</span>
+              <span class="exv-exif-val">6.765 mm</span>
+            </div>
+            <div class="exv-exif-row">
+              <span class="exv-exif-key">Apertura</span>
+              <span class="exv-exif-val">f/1.78</span>
+            </div>
+            <div class="exv-exif-row">
+              <span class="exv-exif-key">ISO</span>
+              <span class="exv-exif-val">80</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="exv-exif-note">
+        Los campos marcados contienen información personal no relacionada con el contenido del documento. El usuario no los introdujo explícitamente: los generó el dispositivo al tomar la foto.
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: Consecuencias -->
+  <div class="exv-panel" data-panel="3" style="display:none">
+    <div class="exv-section-label">Qué se puede inferir si el sistema almacena los metadatos sin depuración</div>
+    <div class="exv-risks">
+      <div class="exv-risk">
+        <div class="exv-risk-icon">📍</div>
+        <div class="exv-risk-content">
+          <div class="exv-risk-name">Localización exacta</div>
+          <div class="exv-risk-desc">Las coordenadas GPS de cada imagen revelan dónde estaba el usuario en el momento exacto de la fotografía. Si el sistema almacena múltiples imágenes, se puede reconstruir un historial de movimientos sin que el usuario haya compartido ninguna información de localización de forma explícita.</div>
+          <div class="exv-risk-badge exv-risk-badge--high">No consentido · Puede revelar domicilio, trabajo o patrones de desplazamiento</div>
+        </div>
+      </div>
+
+      <div class="exv-risk">
+        <div class="exv-risk-icon">⏱</div>
+        <div class="exv-risk-content">
+          <div class="exv-risk-name">Patrón temporal de uso</div>
+          <div class="exv-risk-desc">La marca de tiempo exacta de cada imagen (hora, día de la semana, frecuencia) permite inferir horarios de trabajo, rutinas y patrones de comportamiento. Cruzada con la localización, esta información va mucho más allá del dato original que el usuario quería compartir.</div>
+          <div class="exv-risk-badge exv-risk-badge--med">Correlación no obvia · Inferencia de hábitos sin datos explícitos</div>
+        </div>
+      </div>
+
+      <div class="exv-risk">
+        <div class="exv-risk-icon">📱</div>
+        <div class="exv-risk-content">
+          <div class="exv-risk-name">Identificación de dispositivo</div>
+          <div class="exv-risk-desc">El modelo exacto del dispositivo, combinado con otros metadatos, puede ser un identificador único. Permite correlacionar imágenes subidas en momentos distintos o en plataformas distintas, incluso si el usuario no se ha identificado explícitamente.</div>
+          <div class="exv-risk-badge exv-risk-badge--med">Fingerprinting implícito · Vinculación cross-platform sin login</div>
+        </div>
+      </div>
+    </div>
+    <div class="exv-principle">
+      <div class="exv-principle-label">Principio de minimización de datos — aplicación en sistemas multimodales</div>
+      <div class="exv-principle-steps">
+        <div class="exv-pstep">
+          <div class="exv-pstep-n">1</div>
+          <div class="exv-pstep-text">Eliminar metadatos EXIF antes de almacenar cualquier imagen procesada.</div>
+        </div>
+        <div class="exv-pstep">
+          <div class="exv-pstep-n">2</div>
+          <div class="exv-pstep-text">No almacenar la imagen original si la tarea solo requiere el texto extraído.</div>
+        </div>
+        <div class="exv-pstep">
+          <div class="exv-pstep-n">3</div>
+          <div class="exv-pstep-text">No usar imágenes procesadas para propósitos secundarios sin consentimiento explícito.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.exv-wrap, .exv-wrap * { box-sizing: border-box; }
+
+.exv-wrap {
+  --ea: #26A69A;
+  --eb: #324AB2;
+  --eg: #FFB343;
+  --er: #e04c4c;
+  --el: #7cc7ff;
+  --ebg: var(--md-default-bg-color, #fff);
+  --efg: var(--md-default-fg-color, #0f172a);
+  --ebd: rgba(15,23,42,.15);
+  --emut: rgba(15,23,42,.58);
+  --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  --emono: "SF Mono","JetBrains Mono","Courier New",monospace;
+
+  display: grid; gap: 14px; max-width: 900px; margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--ebd); border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--eg) 5%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 100%, color-mix(in srgb,var(--el) 5%,transparent), transparent 52%),
+    var(--ebg);
+  color: var(--efg); font-family: var(--ef); -webkit-font-smoothing: antialiased;
+}
+[data-md-color-scheme="slate"] .exv-wrap {
+  --ebg: var(--md-default-bg-color, #0f172a);
+  --efg: var(--md-default-fg-color, #e2e8f0);
+  --ebd: rgba(226,232,240,.15);
+  --emut: rgba(226,232,240,.58);
+}
+
+.exv-hd { display: grid; gap: 5px; }
+.exv-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.15; }
+.exv-sub { font-size: 14px; color: var(--emut); line-height: 1.5; max-width: 68ch; }
+
+.exv-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.exv-tab {
+  padding: 6px 14px; border-radius: 999px; border: 1px solid var(--ebd);
+  background: transparent; color: var(--emut); font-family: var(--ef);
+  font-size: 12.5px; font-weight: 700; cursor: pointer; transition: background .15s; white-space: nowrap;
+}
+.exv-tab:hover { background: color-mix(in srgb,var(--eg) 7%,var(--ebg)); color: var(--efg); }
+.exv-tab.active {
+  background: color-mix(in srgb,var(--eg) 10%,var(--ebg));
+  border-color: color-mix(in srgb,var(--eg) 35%,var(--ebd));
+  color: color-mix(in srgb,var(--eg) 80%,var(--efg));
+}
+
+.exv-panel { display: flex; flex-direction: column; gap: 12px; }
+.exv-section-label { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--emut); }
+
+/* TAB 1 */
+.exv-bifold { display: flex; gap: 14px; align-items: flex-start; }
+.exv-side {
+  flex: 1; padding: 12px; border-radius: 14px; border: 1px solid var(--ebd);
+  display: flex; flex-direction: column; gap: 10px;
+}
+.exv-side--user { border-color: color-mix(in srgb,var(--ea) 22%,var(--ebd)); background: color-mix(in srgb,var(--ea) 4%,var(--ebg)); }
+.exv-side--system { border-color: color-mix(in srgb,var(--eg) 25%,var(--ebd)); background: color-mix(in srgb,var(--eg) 4%,var(--ebg)); }
+.exv-side-tag { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--emut); }
+
+.exv-doc-preview {
+  padding: 12px; border-radius: 10px; display: flex; flex-direction: column; align-items: center; gap: 5px; text-align: center;
+  background: color-mix(in srgb,var(--ebg) 85%,#0f172a 15%); border: 1px solid var(--ebd);
+}
+.exv-doc-icon { font-size: 28px; }
+.exv-doc-name { font-size: 11px; font-weight: 700; font-family: var(--emono); }
+.exv-doc-size { font-size: 10px; color: var(--emut); font-family: var(--emono); }
+
+.exv-user-think { display: grid; gap: 6px; }
+.exv-think-label { font-size: 9.5px; font-weight: 700; color: var(--emut); text-transform: uppercase; letter-spacing: .05em; }
+.exv-think-item {
+  font-size: 11.5px; padding: 5px 10px; border-radius: 6px;
+  display: flex; align-items: center; gap: 7px;
+}
+.exv-think-item::before { content: "✓"; font-weight: 900; flex-shrink: 0; }
+.exv-think-item--ok { background: color-mix(in srgb,var(--ea) 7%,var(--ebg)); border: 1px solid color-mix(in srgb,var(--ea) 18%,var(--ebd)); color: color-mix(in srgb,var(--ea) 60%,var(--efg)); }
+.exv-think-item--ok::before { color: color-mix(in srgb,var(--ea) 65%,var(--efg)); }
+
+.exv-hidden-preview {
+  padding: 12px; border-radius: 10px; display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center;
+  background: color-mix(in srgb,var(--er) 6%,var(--ebg)); border: 1px solid color-mix(in srgb,var(--er) 22%,var(--ebd));
+}
+.exv-hidden-icon { font-size: 22px; }
+.exv-hidden-text { font-size: 12px; font-weight: 700; }
+.exv-hidden-sub { font-size: 10.5px; color: var(--emut); line-height: 1.4; }
+.exv-hidden-badge {
+  font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: .05em;
+  color: color-mix(in srgb,var(--er) 65%,var(--efg));
+  background: color-mix(in srgb,var(--er) 8%,var(--ebg));
+  border: 1px solid color-mix(in srgb,var(--er) 20%,var(--ebd));
+  padding: 3px 8px; border-radius: 999px; text-align: center;
+}
+
+.exv-note { padding: 10px 14px; border-radius: 10px; font-size: 12.5px; line-height: 1.5; border: 1px solid color-mix(in srgb,var(--eb) 18%,var(--ebd)); background: color-mix(in srgb,var(--eb) 4%,var(--ebg)); }
+.exv-note-label { font-weight: 900; }
+
+/* TAB 2 */
+.exv-exif-grid {
+  padding: 14px; border-radius: 14px; display: flex; flex-direction: column; gap: 12px;
+  background: rgba(10,18,36,.88); border: 1px solid rgba(124,199,255,.2);
+}
+.exv-exif-header { display: grid; gap: 2px; }
+.exv-exif-file { font-family: var(--emono); font-size: 13px; font-weight: 900; color: rgba(124,199,255,.85); }
+.exv-exif-subtitle { font-size: 10px; color: rgba(226,232,240,.45); text-transform: uppercase; letter-spacing: .06em; }
+
+.exv-exif-groups { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.exv-exif-group { display: flex; flex-direction: column; gap: 5px; }
+.exv-group-tag {
+  font-size: 8.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em;
+  padding: 2px 7px; border-radius: 999px; display: inline-block; width: fit-content;
+}
+.exv-group-tag--loc { color: rgba(224,76,76,.9); background: rgba(224,76,76,.12); border: 1px solid rgba(224,76,76,.25); }
+.exv-group-tag--time { color: rgba(255,179,67,.9); background: rgba(255,179,67,.12); border: 1px solid rgba(255,179,67,.22); }
+.exv-group-tag--device { color: rgba(224,76,76,.9); background: rgba(224,76,76,.10); border: 1px solid rgba(224,76,76,.22); }
+.exv-group-tag--cam { color: rgba(226,232,240,.55); background: rgba(226,232,240,.05); border: 1px solid rgba(226,232,240,.12); }
+
+.exv-exif-rows { display: flex; flex-direction: column; gap: 3px; }
+.exv-exif-row { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+.exv-exif-key { font-size: 10px; color: rgba(226,232,240,.5); flex-shrink: 0; }
+.exv-exif-val { font-family: var(--emono); font-size: 10px; font-weight: 700; color: rgba(226,232,240,.7); text-align: right; }
+.exv-exif-val--warn { color: rgba(255,179,67,.85); }
+
+.exv-exif-note {
+  font-size: 11px; color: rgba(226,232,240,.45); line-height: 1.5;
+  border-top: 1px solid rgba(124,199,255,.1); padding-top: 8px;
+}
+
+/* TAB 3 */
+.exv-risks { display: flex; flex-direction: column; gap: 10px; }
+.exv-risk {
+  display: flex; gap: 12px; padding: 12px; border-radius: 12px;
+  border: 1px solid var(--ebd); background: color-mix(in srgb,var(--ebg) 88%,#0f172a 12%);
+  align-items: flex-start;
+}
+.exv-risk-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+.exv-risk-content { display: grid; gap: 5px; flex: 1; }
+.exv-risk-name { font-size: 13px; font-weight: 900; }
+.exv-risk-desc { font-size: 11.5px; color: var(--emut); line-height: 1.5; }
+.exv-risk-badge {
+  font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: .05em;
+  padding: 2px 8px; border-radius: 999px; display: inline-block; width: fit-content;
+}
+.exv-risk-badge--high { color: color-mix(in srgb,var(--er) 70%,var(--efg)); background: color-mix(in srgb,var(--er) 9%,var(--ebg)); border: 1px solid color-mix(in srgb,var(--er) 22%,var(--ebd)); }
+.exv-risk-badge--med { color: color-mix(in srgb,var(--eg) 75%,var(--efg)); background: color-mix(in srgb,var(--eg) 9%,var(--ebg)); border: 1px solid color-mix(in srgb,var(--eg) 22%,var(--ebd)); }
+
+.exv-principle {
+  padding: 12px 14px; border-radius: 12px; display: grid; gap: 10px;
+  border: 1px solid color-mix(in srgb,var(--ea) 20%,var(--ebd));
+  background: color-mix(in srgb,var(--ea) 4%,var(--ebg));
+}
+.exv-principle-label { font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; color: color-mix(in srgb,var(--ea) 60%,var(--emut)); }
+.exv-principle-steps { display: flex; flex-direction: column; gap: 7px; }
+.exv-pstep { display: flex; gap: 10px; align-items: flex-start; }
+.exv-pstep-n {
+  width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0;
+  background: color-mix(in srgb,var(--ea) 14%,var(--ebg));
+  border: 1px solid color-mix(in srgb,var(--ea) 28%,var(--ebd));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 900; color: color-mix(in srgb,var(--ea) 70%,var(--efg));
+}
+.exv-pstep-text { font-size: 12px; line-height: 1.4; color: var(--efg); padding-top: 2px; }
+
+@media (max-width: 640px) {
+  .exv-bifold { flex-direction: column; }
+  .exv-exif-groups { grid-template-columns: 1fr; }
+}
+</style>
+
+<script>
+(function(){
+  document.querySelectorAll('[data-demo="05-exif-privacidad"] button[data-tab]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var wrap = btn.closest('[data-demo="05-exif-privacidad"]');
+      wrap.querySelectorAll('button[data-tab]').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      wrap.querySelectorAll('[data-panel]').forEach(function(p){ p.style.display = 'none'; });
+      wrap.querySelector('[data-panel="' + btn.dataset.tab + '"]').style.display = '';
+    });
+  });
+})();
+</script>

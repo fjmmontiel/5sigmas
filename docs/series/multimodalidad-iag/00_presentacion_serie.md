@@ -4,7 +4,7 @@ description: "Qué significa construir sistemas capaces de percibir, alinear, ra
 ---
 # Multimodalidad en IA generativa
 
-{{ include_html("snippets/series_meta.html", series_dir="multimodalidad-iag", data_state="construction", data_level="general", status_label="En construcción", level_label="General", extra_rows="<div class=\"series-meta-row\"><span class=\"series-meta-label\">Prerequisitos</span><span class=\"series-meta-value\"><a href=\"/series/fundamentos-ia-iag/00_presentacion_serie/\">Fundamentos de IA e IA generativa</a></span></div>") }}
+{{ include_html("snippets/series_meta.html", series_dir="multimodalidad-iag", data_state="complete", data_level="general", status_label="Completa", level_label="General", extra_rows="<div class=\"series-meta-row\"><span class=\"series-meta-label\">Prerequisitos</span><span class=\"series-meta-value\"><a href=\"/series/fundamentos-ia-iag/00_presentacion_serie/\">Fundamentos de IA e IA generativa</a></span></div>") }}
 
 Durante un tiempo fue razonable contar la multimodalidad como la historia de cómo un modelo de lenguaje empezó a mirar imágenes, pero esa versión ya se ha quedado corta: hoy el campo incluye modelos que combinan texto, imagen, vídeo, audio y documentos en un mismo espacio de representación.
 

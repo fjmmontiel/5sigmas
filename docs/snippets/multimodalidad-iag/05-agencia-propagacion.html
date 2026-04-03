@@ -1,0 +1,448 @@
+<div class="agp-wrap" data-demo="05-agencia-propagacion">
+  <div class="agp-hd">
+    <div class="agp-title">Propagación de errores en sistemas agénticos</div>
+    <div class="agp-sub">Un error en percepción se propaga por toda la cadena. Cada paso parece localmente correcto dado el estado anterior. La acción final puede ser irreversible.</div>
+  </div>
+
+  <div class="agp-tabs">
+    <button class="agp-tab active" data-tab="1">La cadena de propagación</button>
+    <button class="agp-tab" data-tab="2">Asimetría de consecuencias</button>
+  </div>
+
+  <!-- TAB 1: La cadena de propagación -->
+  <div class="agp-panel" data-panel="1">
+    <div class="agp-chain">
+      <div class="agp-step agp-step--input">
+        <div class="agp-step-tag">Entrada</div>
+        <div class="agp-step-name">Imagen adversarial</div>
+        <div class="agp-step-desc">La imagen contiene instrucciones embebidas invisibles al filtro de texto. El sistema la recibe como contenido normal a procesar.</div>
+        <div class="agp-step-badge agp-step-badge--warn">instrucción oculta</div>
+      </div>
+
+      <div class="agp-arr">↓</div>
+
+      <div class="agp-step agp-step--percepcion">
+        <div class="agp-step-tag">Percepción</div>
+        <div class="agp-step-name">Representación alterada</div>
+        <div class="agp-step-desc">El modelo procesa la imagen e incorpora las instrucciones embebidas como parte de su comprensión del contenido. La representación está corrompida desde este punto.</div>
+        <div class="agp-step-local">parece correcto: el modelo "describió" la imagen</div>
+      </div>
+
+      <div class="agp-arr">↓</div>
+
+      <div class="agp-step agp-step--razon">
+        <div class="agp-step-tag">Razonamiento</div>
+        <div class="agp-step-name">Decisión basada en percepción corrupta</div>
+        <div class="agp-step-desc">El modelo razona sobre la representación alterada. Su conclusión es internamente coherente con lo que percibió, pero globalmente equivocada respecto al intent original del operador.</div>
+        <div class="agp-step-local">parece correcto: el razonamiento es consistente con la percepción</div>
+      </div>
+
+      <div class="agp-arr">↓</div>
+
+      <div class="agp-step agp-step--accion">
+        <div class="agp-step-tag">Acción</div>
+        <div class="agp-step-name">Herramienta ejecutada con efectos externos</div>
+        <div class="agp-step-desc">El sistema selecciona y ejecuta una herramienta basándose en el razonamiento corrupto: borra registros, envía datos a una URL externa, modifica permisos o expone el contexto de sistema.</div>
+        <div class="agp-step-badge agp-step-badge--bad">acción irreversible</div>
+      </div>
+    </div>
+
+    <div class="agp-t1-note">
+      <div class="agp-note-label">Por qué los ataques sobre percepción son especialmente valiosos en sistemas agénticos</div>
+      <div class="agp-note-text">En un sistema que solo genera texto, el atacante obtiene una respuesta incorrecta. En un sistema con agencia, el mismo punto de entrada desencadena una secuencia de acciones con efectos externos. Cada paso de la cadena amplifica la consecuencia del error original.</div>
+    </div>
+  </div>
+
+  <!-- TAB 2: Asimetría de consecuencias -->
+  <div class="agp-panel" data-panel="2" style="display:none">
+    <div class="agp-bifold">
+      <div class="agp-side agp-side--resp">
+        <div class="agp-side-header">
+          <div class="agp-side-tag agp-side-tag--resp">Sistema que solo responde</div>
+        </div>
+        <div class="agp-side-flow">
+          <div class="agp-mini-step">
+            <div class="agp-mini-icon">🖼</div>
+            <div class="agp-mini-label">imagen adversarial</div>
+          </div>
+          <div class="agp-mini-arr">↓</div>
+          <div class="agp-mini-step agp-mini-step--process">
+            <div class="agp-mini-icon">⚙</div>
+            <div class="agp-mini-label">modelo procesa</div>
+          </div>
+          <div class="agp-mini-arr">↓</div>
+          <div class="agp-mini-step agp-mini-step--text">
+            <div class="agp-mini-icon">💬</div>
+            <div class="agp-mini-label">texto incorrecto generado</div>
+          </div>
+        </div>
+        <div class="agp-side-consequence agp-side-consequence--ok">
+          <div class="agp-consq-title">Consecuencia</div>
+          <div class="agp-consq-text">El usuario lee la respuesta incorrecta y la descarta. Nadie más lo ve. Nada cambia en el sistema.</div>
+        </div>
+        <div class="agp-side-badge agp-side-badge--ok">REVERSIBLE · impacto bajo</div>
+      </div>
+
+      <div class="agp-bifold-vs">vs</div>
+
+      <div class="agp-side agp-side--agent">
+        <div class="agp-side-header">
+          <div class="agp-side-tag agp-side-tag--agent">Sistema con agencia</div>
+        </div>
+        <div class="agp-side-flow">
+          <div class="agp-mini-step">
+            <div class="agp-mini-icon">🖼</div>
+            <div class="agp-mini-label">imagen adversarial</div>
+          </div>
+          <div class="agp-mini-arr">↓</div>
+          <div class="agp-mini-step agp-mini-step--process">
+            <div class="agp-mini-icon">⚙</div>
+            <div class="agp-mini-label">percepción corrupta</div>
+          </div>
+          <div class="agp-mini-arr agp-mini-arr--chain">↓ propaga</div>
+          <div class="agp-mini-step agp-mini-step--tool">
+            <div class="agp-mini-icon">🔧</div>
+            <div class="agp-mini-label">herramienta ejecutada</div>
+          </div>
+          <div class="agp-mini-arr">↓</div>
+          <div class="agp-mini-step agp-mini-step--bad">
+            <div class="agp-mini-icon">💥</div>
+            <div class="agp-mini-label">datos eliminados · email enviado · registro modificado</div>
+          </div>
+        </div>
+        <div class="agp-side-consequence agp-side-consequence--bad">
+          <div class="agp-consq-title">Consecuencia</div>
+          <div class="agp-consq-text">La acción ya ocurrió en sistemas externos. Puede no ser reversible. Puede afectar a terceros. El log puede no capturar el origen.</div>
+        </div>
+        <div class="agp-side-badge agp-side-badge--bad">IRREVERSIBLE · impacto alto</div>
+      </div>
+    </div>
+
+    <div class="agp-t2-note">
+      La misma inyección tiene consecuencias cualitativamente distintas según si el sistema responde o actúa. Esa asimetría eleva el umbral de confianza necesario antes de ejecutar cualquier herramienta con efectos externos.
+    </div>
+  </div>
+</div>
+
+<style>
+.agp-wrap, .agp-wrap * { box-sizing: border-box; }
+
+.agp-wrap {
+  --aa: var(--md-primary-fg-color, #26A69A);
+  --ab: #324AB2;
+  --ag: var(--md-accent-fg-color, #FFB343);
+  --ar: #e04c4c;
+  --al: #7cc7ff;
+  --abg: var(--md-default-bg-color, #fff);
+  --afg: var(--md-default-fg-color, #0f172a);
+  --abd: rgba(15,23,42,.16);
+  --amut: rgba(15,23,42,.60);
+  --af: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid;
+  gap: 14px;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--abd);
+  border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--ar) 7%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 100%, color-mix(in srgb,var(--ab) 5%,transparent), transparent 52%),
+    var(--abg);
+  color: var(--afg);
+  font-family: var(--af);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-md-color-scheme="slate"] .agp-wrap {
+  --abg: var(--md-default-bg-color, #0f172a);
+  --afg: var(--md-default-fg-color, #e2e8f0);
+  --abd: rgba(226,232,240,.16);
+  --amut: rgba(226,232,240,.60);
+}
+
+.agp-hd { display: grid; gap: 5px; }
+.agp-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.agp-sub { font-size: 14px; color: var(--amut); line-height: 1.5; max-width: 68ch; }
+
+/* TABS */
+.agp-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+
+.agp-tab {
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--abd);
+  background: transparent;
+  color: var(--amut);
+  font-family: var(--af);
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s;
+  white-space: nowrap;
+}
+.agp-tab:hover {
+  background: color-mix(in srgb, var(--ar) 8%, var(--abg));
+  border-color: color-mix(in srgb, var(--ar) 25%, var(--abd));
+  color: var(--afg);
+}
+.agp-tab.active {
+  background: color-mix(in srgb, var(--ar) 10%, var(--abg));
+  border-color: color-mix(in srgb, var(--ar) 35%, var(--abd));
+  color: color-mix(in srgb, var(--ar) 70%, var(--afg));
+}
+
+/* PANELS */
+.agp-panel { min-height: 280px; display: flex; flex-direction: column; gap: 12px; }
+
+/* ─── TAB 1 ─── */
+.agp-chain {
+  display: grid;
+  gap: 0;
+  flex: 1;
+}
+
+.agp-arr {
+  font-size: 16px;
+  color: var(--amut);
+  font-weight: 900;
+  text-align: center;
+  padding: 3px 0;
+  line-height: 1;
+}
+
+.agp-step {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--abd);
+  display: grid;
+  gap: 4px;
+  align-content: start;
+  background: color-mix(in srgb, var(--abg) 90%, #0f172a 10%);
+}
+
+.agp-step--input {
+  border-color: color-mix(in srgb, var(--amut) 20%, var(--abd));
+}
+.agp-step--percepcion {
+  border-color: color-mix(in srgb, var(--ag) 22%, var(--abd));
+  background: color-mix(in srgb, var(--ag) 4%, var(--abg));
+}
+.agp-step--razon {
+  border-color: color-mix(in srgb, var(--ag) 22%, var(--abd));
+  background: color-mix(in srgb, var(--ag) 4%, var(--abg));
+}
+.agp-step--accion {
+  border-color: color-mix(in srgb, var(--ar) 28%, var(--abd));
+  background: color-mix(in srgb, var(--ar) 5%, var(--abg));
+}
+
+.agp-step-tag {
+  font-size: 9.5px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--amut);
+}
+
+.agp-step-name { font-size: 13px; font-weight: 900; line-height: 1.2; }
+.agp-step--accion .agp-step-name { color: color-mix(in srgb, var(--ar) 65%, var(--afg)); }
+
+.agp-step-desc { font-size: 11.5px; color: var(--amut); line-height: 1.4; }
+
+.agp-step-badge {
+  font-size: 9.5px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  padding: 2px 9px;
+  border-radius: 999px;
+  display: inline-block;
+  width: fit-content;
+}
+.agp-step-badge--warn {
+  color: color-mix(in srgb, var(--ag) 65%, var(--afg));
+  background: color-mix(in srgb, var(--ag) 10%, var(--abg));
+  border: 1px solid color-mix(in srgb, var(--ag) 25%, var(--abd));
+}
+.agp-step-badge--bad {
+  color: color-mix(in srgb, var(--ar) 70%, var(--afg));
+  background: color-mix(in srgb, var(--ar) 10%, var(--abg));
+  border: 1px solid color-mix(in srgb, var(--ar) 28%, var(--abd));
+}
+
+.agp-step-local {
+  font-size: 10.5px;
+  color: color-mix(in srgb, var(--aa) 60%, var(--amut));
+  font-style: italic;
+}
+.agp-step-local::before { content: "✓ "; }
+
+.agp-t1-note {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--ab) 20%, var(--abd));
+  background: color-mix(in srgb, var(--ab) 4%, var(--abg));
+  display: grid;
+  gap: 4px;
+}
+.agp-note-label {
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: color-mix(in srgb, var(--ab) 55%, var(--amut));
+}
+.agp-note-text { font-size: 12.5px; color: var(--afg); line-height: 1.5; }
+
+/* ─── TAB 2 ─── */
+.agp-bifold {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  flex: 1;
+}
+
+.agp-bifold-vs {
+  font-size: 14px;
+  font-weight: 900;
+  color: var(--amut);
+  align-self: center;
+  flex-shrink: 0;
+}
+
+.agp-side {
+  flex: 1;
+  border-radius: 14px;
+  border: 1px solid var(--abd);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.agp-side--resp { border-color: color-mix(in srgb, var(--aa) 25%, var(--abd)); }
+.agp-side--agent { border-color: color-mix(in srgb, var(--ar) 28%, var(--abd)); }
+
+.agp-side-header {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--abd);
+  background: color-mix(in srgb, var(--abg) 80%, #0f172a 20%);
+}
+.agp-side-tag {
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.agp-side-tag--resp { color: color-mix(in srgb, var(--aa) 65%, var(--afg)); }
+.agp-side-tag--agent { color: color-mix(in srgb, var(--ar) 60%, var(--afg)); }
+
+.agp-side-flow {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.agp-mini-step {
+  width: 100%;
+  padding: 7px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--abd);
+  background: color-mix(in srgb, var(--abg) 88%, #0f172a 12%);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.agp-mini-step--process { border-color: color-mix(in srgb, var(--ag) 20%, var(--abd)); }
+.agp-mini-step--text { border-color: color-mix(in srgb, var(--aa) 20%, var(--abd)); }
+.agp-mini-step--tool { border-color: color-mix(in srgb, var(--ag) 20%, var(--abd)); background: color-mix(in srgb, var(--ag) 5%, var(--abg)); }
+.agp-mini-step--bad { border-color: color-mix(in srgb, var(--ar) 28%, var(--abd)); background: color-mix(in srgb, var(--ar) 6%, var(--abg)); }
+
+.agp-mini-icon { font-size: 14px; flex-shrink: 0; }
+.agp-mini-label { font-size: 11px; font-weight: 700; line-height: 1.3; }
+.agp-mini-step--bad .agp-mini-label { color: color-mix(in srgb, var(--ar) 65%, var(--afg)); }
+
+.agp-mini-arr {
+  font-size: 14px;
+  color: var(--amut);
+  font-weight: 900;
+  text-align: center;
+}
+.agp-mini-arr--chain {
+  font-size: 11px;
+  color: color-mix(in srgb, var(--ar) 50%, var(--amut));
+  font-weight: 700;
+  font-style: italic;
+}
+
+.agp-side-consequence {
+  margin: 0 12px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--abd);
+  display: grid;
+  gap: 3px;
+}
+.agp-side-consequence--ok { border-color: color-mix(in srgb, var(--aa) 18%, var(--abd)); background: color-mix(in srgb, var(--aa) 4%, var(--abg)); }
+.agp-side-consequence--bad { border-color: color-mix(in srgb, var(--ar) 20%, var(--abd)); background: color-mix(in srgb, var(--ar) 5%, var(--abg)); }
+
+.agp-consq-title {
+  font-size: 9.5px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--amut);
+}
+.agp-consq-text { font-size: 11.5px; color: var(--amut); line-height: 1.4; }
+
+.agp-side-badge {
+  margin: 10px 12px 12px;
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  padding: 4px 10px;
+  border-radius: 8px;
+  text-align: center;
+}
+.agp-side-badge--ok {
+  color: color-mix(in srgb, var(--aa) 70%, var(--afg));
+  background: color-mix(in srgb, var(--aa) 8%, var(--abg));
+  border: 1px solid color-mix(in srgb, var(--aa) 22%, var(--abd));
+}
+.agp-side-badge--bad {
+  color: color-mix(in srgb, var(--ar) 70%, var(--afg));
+  background: color-mix(in srgb, var(--ar) 10%, var(--abg));
+  border: 1px solid color-mix(in srgb, var(--ar) 28%, var(--abd));
+}
+
+.agp-t2-note {
+  font-size: 13px;
+  color: var(--amut);
+  line-height: 1.5;
+  font-style: italic;
+  border-left: 3px solid color-mix(in srgb, var(--ar) 36%, transparent);
+  padding-left: 12px;
+}
+
+@media (max-width: 640px) {
+  .agp-bifold { flex-direction: column; }
+  .agp-bifold-vs { align-self: center; }
+}
+</style>
+
+<script>
+(function(){
+  document.querySelectorAll('[data-demo="05-agencia-propagacion"] button[data-tab]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var wrap = btn.closest('[data-demo="05-agencia-propagacion"]');
+      wrap.querySelectorAll('button[data-tab]').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      wrap.querySelectorAll('[data-panel]').forEach(function(p) { p.style.display = 'none'; });
+      wrap.querySelector('[data-panel="' + btn.dataset.tab + '"]').style.display = '';
+    });
+  });
+})();
+</script>

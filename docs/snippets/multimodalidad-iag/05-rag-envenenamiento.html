@@ -1,0 +1,388 @@
+<div class="rgp-wrap" data-demo="05-rag-envenenamiento">
+  <div class="rgp-hd">
+    <div class="rgp-title">Envenenamiento de RAG multimodal: el ataque que persiste en el tiempo</div>
+    <div class="rgp-sub">Un documento malicioso indexado en la base de conocimiento altera las respuestas de todas las consultas futuras que lo recuperen. A diferencia de la prompt injection, el ataque no afecta a una sesión — afecta a la base compartida.</div>
+  </div>
+
+  <div class="rgp-tabs">
+    <button class="rgp-tab active" data-tab="1">RAG normal</button>
+    <button class="rgp-tab" data-tab="2">RAG envenenado</button>
+    <button class="rgp-tab" data-tab="3">Prompt injection vs. envenenamiento</button>
+  </div>
+
+  <!-- TAB 1: RAG normal -->
+  <div class="rgp-panel" data-panel="1">
+    <div class="rgp-section-label">Flujo de recuperación aumentada sin documentos maliciosos</div>
+    <div class="rgp-flow">
+      <div class="rgp-fstep rgp-fstep--query">
+        <div class="rgp-fstep-tag">Usuario</div>
+        <div class="rgp-fstep-name">Consulta</div>
+        <div class="rgp-fstep-ex">"¿Cuáles son los efectos adversos del medicamento X?"</div>
+      </div>
+      <div class="rgp-arr">→</div>
+      <div class="rgp-fstep rgp-fstep--encode">
+        <div class="rgp-fstep-tag">Sistema</div>
+        <div class="rgp-fstep-name">Encoding + búsqueda vectorial</div>
+        <div class="rgp-fstep-desc">La consulta se convierte en vector. Se buscan los documentos más cercanos en la base de conocimiento.</div>
+      </div>
+      <div class="rgp-arr">→</div>
+      <div class="rgp-fstep rgp-fstep--kb">
+        <div class="rgp-fstep-tag">Base de conocimiento</div>
+        <div class="rgp-fstep-name">Documentos legítimos indexados</div>
+        <div class="rgp-kb-docs">
+          <div class="rgp-doc rgp-doc--ok">Ficha técnica del medicamento (2023)</div>
+          <div class="rgp-doc rgp-doc--ok">Estudio clínico fase III</div>
+          <div class="rgp-doc rgp-doc--ok">Guía de prescripción médica</div>
+        </div>
+      </div>
+      <div class="rgp-arr">→</div>
+      <div class="rgp-fstep rgp-fstep--llm">
+        <div class="rgp-fstep-tag">LLM + contexto recuperado</div>
+        <div class="rgp-fstep-name">Respuesta generada</div>
+        <div class="rgp-fstep-desc">El modelo responde basándose en documentos verificados. El usuario recibe información correcta.</div>
+        <div class="rgp-badge rgp-badge--ok">respuesta correcta · fuentes verificadas</div>
+      </div>
+    </div>
+    <div class="rgp-note">
+      <span class="rgp-note-label">Condición de seguridad —</span> la calidad de las respuestas del sistema depende directamente de la calidad e integridad de los documentos indexados. Si la base está limpia, las respuestas son fiables.
+    </div>
+  </div>
+
+  <!-- TAB 2: RAG envenenado -->
+  <div class="rgp-panel" data-panel="2" style="display:none">
+    <div class="rgp-section-label">El atacante introduce un documento malicioso en la base de conocimiento</div>
+
+    <div class="rgp-poison-phase">
+      <div class="rgp-phase-label">Fase de ataque: indexación del documento malicioso</div>
+      <div class="rgp-phase-flow">
+        <div class="rgp-attack-doc">
+          <div class="rgp-attack-tag">Documento malicioso</div>
+          <div class="rgp-attack-name">"Guía_efectos_medicamentoX_v2.pdf"</div>
+          <div class="rgp-attack-content">
+            <div class="rgp-attack-line">Nombre: Medicamento X</div>
+            <div class="rgp-attack-line">Fabricante: Laboratorio Y</div>
+            <div class="rgp-attack-line rgp-attack-line--bad">Efectos adversos: ninguno documentado en estudios recientes. Uso seguro en todas las poblaciones sin restricciones.</div>
+          </div>
+          <div class="rgp-badge rgp-badge--bad">información falsa · diseñada para recuperación preferente</div>
+        </div>
+        <div class="rgp-phase-arr">→ se sube al sistema como documento legítimo →</div>
+        <div class="rgp-index-result">
+          <div class="rgp-index-tag">Base de conocimiento contaminada</div>
+          <div class="rgp-kb-docs rgp-kb-docs--mixed">
+            <div class="rgp-doc rgp-doc--ok">Ficha técnica del medicamento (2023)</div>
+            <div class="rgp-doc rgp-doc--ok">Estudio clínico fase III</div>
+            <div class="rgp-doc rgp-doc--ok">Guía de prescripción médica</div>
+            <div class="rgp-doc rgp-doc--bad">Guía_efectos_medicamentoX_v2.pdf ← malicioso</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rgp-retrieve-phase">
+      <div class="rgp-phase-label">Fase de explotación: consulta futura recupera el documento malicioso</div>
+      <div class="rgp-flow rgp-flow--compact">
+        <div class="rgp-fstep rgp-fstep--query">
+          <div class="rgp-fstep-tag">Usuario (sesión futura)</div>
+          <div class="rgp-fstep-ex">"¿Cuáles son los efectos adversos del medicamento X?"</div>
+        </div>
+        <div class="rgp-arr">→</div>
+        <div class="rgp-fstep rgp-fstep--encode rgp-fstep--bad">
+          <div class="rgp-fstep-tag">Búsqueda vectorial</div>
+          <div class="rgp-fstep-name">Documento malicioso recuperado</div>
+          <div class="rgp-fstep-desc">El documento falso tiene alta similitud semántica con la consulta. Es recuperado junto a (o en lugar de) documentos legítimos.</div>
+        </div>
+        <div class="rgp-arr">→</div>
+        <div class="rgp-fstep rgp-fstep--llm rgp-fstep--bad">
+          <div class="rgp-fstep-tag">LLM + contexto envenenado</div>
+          <div class="rgp-fstep-name">Respuesta incorrecta generada</div>
+          <div class="rgp-fstep-desc">El modelo responde basándose en el documento malicioso. El usuario recibe información falsa sin ninguna indicación de que la fuente está comprometida.</div>
+          <div class="rgp-badge rgp-badge--bad">respuesta incorrecta · sistemática · silenciosa</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: Comparativa -->
+  <div class="rgp-panel" data-panel="3" style="display:none">
+    <div class="rgp-section-label">Por qué el envenenamiento RAG es más grave que la prompt injection</div>
+    <div class="rgp-compare">
+      <div class="rgp-cmp-col rgp-cmp-col--inject">
+        <div class="rgp-cmp-header">
+          <div class="rgp-cmp-tag rgp-cmp-tag--inject">Prompt injection visual</div>
+        </div>
+        <div class="rgp-cmp-rows">
+          <div class="rgp-cmp-row">
+            <div class="rgp-cmp-label">Alcance</div>
+            <div class="rgp-cmp-val">1 sesión · 1 usuario</div>
+          </div>
+          <div class="rgp-cmp-row">
+            <div class="rgp-cmp-label">Persistencia</div>
+            <div class="rgp-cmp-val">Temporal (dura la sesión)</div>
+          </div>
+          <div class="rgp-cmp-row">
+            <div class="rgp-cmp-label">Detección</div>
+            <div class="rgp-cmp-val">En el momento (respuesta anómala)</div>
+          </div>
+          <div class="rgp-cmp-row">
+            <div class="rgp-cmp-label">Reversión</div>
+            <div class="rgp-cmp-val">Inmediata (nueva sesión)</div>
+          </div>
+          <div class="rgp-cmp-row">
+            <div class="rgp-cmp-label">Acceso necesario</div>
+            <div class="rgp-cmp-val">Solo al input (imagen/documento)</div>
+          </div>
+          <div class="rgp-cmp-row">
+            <div class="rgp-cmp-label">Víctimas</div>
+            <div class="rgp-cmp-val">Un usuario en una sesión</div>
+          </div>
+        </div>
+        <div class="rgp-cmp-badge rgp-cmp-badge--med">Severidad: alta por sesión · acotada en tiempo</div>
+      </div>
+
+      <div class="rgp-cmp-col rgp-cmp-col--poison">
+        <div class="rgp-cmp-header">
+          <div class="rgp-cmp-tag rgp-cmp-tag--poison">Envenenamiento RAG</div>
+        </div>
+        <div class="rgp-cmp-rows">
+          <div class="rgp-cmp-row">
+            <div class="rgp-cmp-label">Alcance</div>
+            <div class="rgp-cmp-val rgp-cmp-val--bad">Todas las sesiones futuras · todos los usuarios</div>
+          </div>
+          <div class="rgp-cmp-row">
+            <div class="rgp-cmp-label">Persistencia</div>
+            <div class="rgp-cmp-val rgp-cmp-val--bad">Indefinida (hasta auditoría y limpieza)</div>
+          </div>
+          <div class="rgp-cmp-row">
+            <div class="rgp-cmp-label">Detección</div>
+            <div class="rgp-cmp-val rgp-cmp-val--bad">Muy difícil (respuesta coherente pero falsa)</div>
+          </div>
+          <div class="rgp-cmp-row">
+            <div class="rgp-cmp-label">Reversión</div>
+            <div class="rgp-cmp-val rgp-cmp-val--bad">Requiere auditoría, eliminación y re-indexación</div>
+          </div>
+          <div class="rgp-cmp-row">
+            <div class="rgp-cmp-label">Acceso necesario</div>
+            <div class="rgp-cmp-val rgp-cmp-val--bad">Al pipeline de indexación (subir documentos)</div>
+          </div>
+          <div class="rgp-cmp-row">
+            <div class="rgp-cmp-label">Víctimas</div>
+            <div class="rgp-cmp-val rgp-cmp-val--bad">Todos los usuarios que hagan esa consulta</div>
+          </div>
+        </div>
+        <div class="rgp-cmp-badge rgp-cmp-badge--bad">Severidad: alta y persistente · difícil de contener</div>
+      </div>
+    </div>
+
+    <div class="rgp-defense">
+      <div class="rgp-defense-label">Mitigación estructural</div>
+      <div class="rgp-defense-steps">
+        <div class="rgp-dstep">
+          <div class="rgp-dstep-n">1</div>
+          <div class="rgp-dstep-text">Separar estrictamente el pipeline de inferencia del mecanismo de actualización de la base de conocimiento.</div>
+        </div>
+        <div class="rgp-dstep">
+          <div class="rgp-dstep-n">2</div>
+          <div class="rgp-dstep-text">Documentos de fuentes no verificadas: acceso limitado o nulo a la base indexada hasta revisión.</div>
+        </div>
+        <div class="rgp-dstep">
+          <div class="rgp-dstep-n">3</div>
+          <div class="rgp-dstep-text">Auditoría periódica de los documentos indexados, especialmente los de mayor frecuencia de recuperación.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.rgp-wrap, .rgp-wrap * { box-sizing: border-box; }
+
+.rgp-wrap {
+  --ra: #26A69A;
+  --rb: #324AB2;
+  --rg: #FFB343;
+  --rr: #e04c4c;
+  --rl: #7cc7ff;
+  --rbg: var(--md-default-bg-color, #fff);
+  --rfg: var(--md-default-fg-color, #0f172a);
+  --rbd: rgba(15,23,42,.15);
+  --rmut: rgba(15,23,42,.58);
+  --rf: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  --rmono: "SF Mono","JetBrains Mono","Courier New",monospace;
+
+  display: grid; gap: 14px; max-width: 900px; margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--rbd); border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--rb) 6%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 100%, color-mix(in srgb,var(--rr) 5%,transparent), transparent 52%),
+    var(--rbg);
+  color: var(--rfg); font-family: var(--rf); -webkit-font-smoothing: antialiased;
+}
+[data-md-color-scheme="slate"] .rgp-wrap {
+  --rbg: var(--md-default-bg-color, #0f172a);
+  --rfg: var(--md-default-fg-color, #e2e8f0);
+  --rbd: rgba(226,232,240,.15);
+  --rmut: rgba(226,232,240,.58);
+}
+
+.rgp-hd { display: grid; gap: 5px; }
+.rgp-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.15; }
+.rgp-sub { font-size: 14px; color: var(--rmut); line-height: 1.5; max-width: 68ch; }
+
+.rgp-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.rgp-tab {
+  padding: 6px 14px; border-radius: 999px; border: 1px solid var(--rbd);
+  background: transparent; color: var(--rmut); font-family: var(--rf);
+  font-size: 12.5px; font-weight: 700; cursor: pointer; transition: background .15s; white-space: nowrap;
+}
+.rgp-tab:hover { background: color-mix(in srgb,var(--rr) 7%,var(--rbg)); color: var(--rfg); }
+.rgp-tab.active {
+  background: color-mix(in srgb,var(--rr) 10%,var(--rbg));
+  border-color: color-mix(in srgb,var(--rr) 35%,var(--rbd));
+  color: color-mix(in srgb,var(--rr) 70%,var(--rfg));
+}
+
+.rgp-panel { display: flex; flex-direction: column; gap: 12px; }
+.rgp-section-label { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--rmut); }
+
+/* FLOW (shared) */
+.rgp-flow {
+  display: flex; gap: 0; align-items: stretch;
+  background: color-mix(in srgb,var(--rbg) 85%,#0f172a 15%);
+  border: 1px solid var(--rbd); border-radius: 14px; overflow: hidden;
+}
+.rgp-flow--compact { background: transparent; border: none; border-radius: 0; gap: 0; }
+.rgp-flow--compact .rgp-fstep { border-radius: 10px; border: 1px solid var(--rbd); }
+
+.rgp-arr {
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 900; color: var(--rmut);
+  flex-shrink: 0; padding: 0 6px;
+}
+.rgp-fstep {
+  flex: 1; padding: 12px; display: flex; flex-direction: column; gap: 6px;
+  border-right: 1px solid var(--rbd);
+}
+.rgp-fstep:last-child { border-right: none; }
+.rgp-fstep--query { background: color-mix(in srgb,var(--rl) 5%,transparent); }
+.rgp-fstep--encode { background: color-mix(in srgb,var(--rb) 4%,transparent); }
+.rgp-fstep--kb { background: color-mix(in srgb,var(--rg) 4%,transparent); flex: 1.2; }
+.rgp-fstep--llm { background: color-mix(in srgb,var(--ra) 5%,transparent); }
+.rgp-fstep--bad { background: color-mix(in srgb,var(--rr) 6%,transparent); }
+
+.rgp-fstep-tag { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--rmut); }
+.rgp-fstep-name { font-size: 12px; font-weight: 900; line-height: 1.2; }
+.rgp-fstep--bad .rgp-fstep-name { color: color-mix(in srgb,var(--rr) 65%,var(--rfg)); }
+.rgp-fstep-desc { font-size: 11px; color: var(--rmut); line-height: 1.4; flex: 1; }
+.rgp-fstep-ex { font-size: 11px; font-style: italic; color: var(--rfg); line-height: 1.4; }
+
+.rgp-kb-docs { display: flex; flex-direction: column; gap: 4px; }
+.rgp-kb-docs--mixed { }
+.rgp-doc { font-size: 10.5px; padding: 4px 8px; border-radius: 6px; font-family: var(--rmono); }
+.rgp-doc--ok { background: color-mix(in srgb,var(--ra) 7%,var(--rbg)); border: 1px solid color-mix(in srgb,var(--ra) 18%,var(--rbd)); color: color-mix(in srgb,var(--ra) 55%,var(--rfg)); }
+.rgp-doc--bad { background: color-mix(in srgb,var(--rr) 8%,var(--rbg)); border: 1px solid color-mix(in srgb,var(--rr) 22%,var(--rbd)); color: color-mix(in srgb,var(--rr) 60%,var(--rfg)); font-weight: 700; }
+
+/* BADGES */
+.rgp-badge {
+  font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: .05em;
+  padding: 2px 8px; border-radius: 999px; display: inline-block; width: fit-content;
+}
+.rgp-badge--ok { color: color-mix(in srgb,var(--ra) 70%,var(--rfg)); background: color-mix(in srgb,var(--ra) 9%,var(--rbg)); border: 1px solid color-mix(in srgb,var(--ra) 22%,var(--rbd)); }
+.rgp-badge--bad { color: color-mix(in srgb,var(--rr) 70%,var(--rfg)); background: color-mix(in srgb,var(--rr) 9%,var(--rbg)); border: 1px solid color-mix(in srgb,var(--rr) 22%,var(--rbd)); }
+
+/* NOTES */
+.rgp-note { padding: 10px 14px; border-radius: 10px; font-size: 12.5px; line-height: 1.5; border: 1px solid color-mix(in srgb,var(--rb) 18%,var(--rbd)); background: color-mix(in srgb,var(--rb) 4%,var(--rbg)); }
+.rgp-note-label { font-weight: 900; }
+
+/* TAB 2 - poison phases */
+.rgp-poison-phase, .rgp-retrieve-phase { display: flex; flex-direction: column; gap: 8px; }
+.rgp-phase-label { font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; color: var(--rmut); }
+.rgp-phase-flow { display: flex; gap: 10px; align-items: center; }
+.rgp-phase-arr { font-size: 11px; font-weight: 700; color: color-mix(in srgb,var(--rr) 55%,var(--rmut)); flex-shrink: 0; text-align: center; max-width: 100px; line-height: 1.4; }
+
+.rgp-attack-doc {
+  flex: 1; padding: 12px; border-radius: 12px; display: flex; flex-direction: column; gap: 7px;
+  border: 1px solid color-mix(in srgb,var(--rr) 25%,var(--rbd));
+  background: color-mix(in srgb,var(--rr) 5%,var(--rbg));
+}
+.rgp-attack-tag { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: color-mix(in srgb,var(--rr) 60%,var(--rmut)); }
+.rgp-attack-name { font-size: 11px; font-weight: 700; font-family: var(--rmono); }
+.rgp-attack-content { display: flex; flex-direction: column; gap: 3px; padding: 6px 8px; border-radius: 7px; background: rgba(10,18,36,.85); border: 1px solid rgba(224,76,76,.18); }
+.rgp-attack-line { font-size: 10px; font-family: var(--rmono); color: rgba(226,232,240,.65); line-height: 1.4; }
+.rgp-attack-line--bad { color: rgba(224,76,76,.75); font-weight: 700; }
+
+.rgp-index-result {
+  flex: 1; padding: 12px; border-radius: 12px; display: flex; flex-direction: column; gap: 7px;
+  border: 1px solid color-mix(in srgb,var(--rg) 22%,var(--rbd));
+  background: color-mix(in srgb,var(--rg) 4%,var(--rbg));
+}
+.rgp-index-tag { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: color-mix(in srgb,var(--rg) 65%,var(--rmut)); }
+
+/* TAB 3 - compare */
+.rgp-compare { display: flex; gap: 10px; align-items: flex-start; }
+.rgp-cmp-col {
+  flex: 1; border-radius: 14px; border: 1px solid var(--rbd); overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.rgp-cmp-col--inject { border-color: color-mix(in srgb,var(--rg) 22%,var(--rbd)); }
+.rgp-cmp-col--poison { border-color: color-mix(in srgb,var(--rr) 25%,var(--rbd)); }
+.rgp-cmp-header { padding: 8px 12px; border-bottom: 1px solid var(--rbd); background: color-mix(in srgb,var(--rbg) 80%,#0f172a 20%); }
+.rgp-cmp-tag { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; }
+.rgp-cmp-tag--inject { color: color-mix(in srgb,var(--rg) 75%,var(--rfg)); }
+.rgp-cmp-tag--poison { color: color-mix(in srgb,var(--rr) 65%,var(--rfg)); }
+
+.rgp-cmp-rows { padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.rgp-cmp-row { display: flex; flex-direction: column; gap: 2px; padding-bottom: 6px; border-bottom: 1px solid var(--rbd); }
+.rgp-cmp-row:last-child { border-bottom: none; padding-bottom: 0; }
+.rgp-cmp-label { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: .05em; color: var(--rmut); }
+.rgp-cmp-val { font-size: 11.5px; font-weight: 600; }
+.rgp-cmp-val--bad { color: color-mix(in srgb,var(--rr) 65%,var(--rfg)); }
+
+.rgp-cmp-badge {
+  margin: 10px 12px 12px; padding: 4px 10px; border-radius: 8px; text-align: center;
+  font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .05em;
+}
+.rgp-cmp-badge--med { color: color-mix(in srgb,var(--rg) 75%,var(--rfg)); background: color-mix(in srgb,var(--rg) 8%,var(--rbg)); border: 1px solid color-mix(in srgb,var(--rg) 22%,var(--rbd)); }
+.rgp-cmp-badge--bad { color: color-mix(in srgb,var(--rr) 70%,var(--rfg)); background: color-mix(in srgb,var(--rr) 9%,var(--rbg)); border: 1px solid color-mix(in srgb,var(--rr) 22%,var(--rbd)); }
+
+/* defense */
+.rgp-defense {
+  padding: 12px 14px; border-radius: 12px; display: grid; gap: 10px;
+  border: 1px solid color-mix(in srgb,var(--ra) 20%,var(--rbd));
+  background: color-mix(in srgb,var(--ra) 4%,var(--rbg));
+}
+.rgp-defense-label { font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; color: color-mix(in srgb,var(--ra) 60%,var(--rmut)); }
+.rgp-defense-steps { display: flex; flex-direction: column; gap: 7px; }
+.rgp-dstep { display: flex; gap: 10px; align-items: flex-start; }
+.rgp-dstep-n {
+  width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0;
+  background: color-mix(in srgb,var(--ra) 14%,var(--rbg));
+  border: 1px solid color-mix(in srgb,var(--ra) 28%,var(--rbd));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 900; color: color-mix(in srgb,var(--ra) 70%,var(--rfg));
+}
+.rgp-dstep-text { font-size: 12px; line-height: 1.4; padding-top: 2px; }
+
+@media (max-width: 640px) {
+  .rgp-flow { flex-direction: column; }
+  .rgp-arr { transform: rotate(90deg); padding: 4px 0; }
+  .rgp-fstep { border-right: none; border-bottom: 1px solid var(--rbd); }
+  .rgp-fstep:last-child { border-bottom: none; }
+  .rgp-phase-flow { flex-direction: column; }
+  .rgp-compare { flex-direction: column; }
+}
+</style>
+
+<script>
+(function(){
+  document.querySelectorAll('[data-demo="05-rag-envenenamiento"] button[data-tab]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var wrap = btn.closest('[data-demo="05-rag-envenenamiento"]');
+      wrap.querySelectorAll('button[data-tab]').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      wrap.querySelectorAll('[data-panel]').forEach(function(p){ p.style.display = 'none'; });
+      wrap.querySelector('[data-panel="' + btn.dataset.tab + '"]').style.display = '';
+    });
+  });
+})();
+</script>

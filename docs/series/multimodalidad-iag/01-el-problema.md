@@ -25,7 +25,7 @@ Llamamos modalidad a una forma distinta de codificar información sobre el mundo
 
 En robótica aparece además una familia de señales que no encajan bien en la intuición clásica de "contenido": estado del entorno, profundidad, observaciones parciales o telemetría continua. 
 
-ImageBind lo mostró de forma explícita al unir imágenes, texto, audio, profundidad, y mapa térmico en un único espacio de representación [ImageBind][r4], mientras que PaLM-E llevó esa lógica a observaciones visuales y estado continuo para tareas de planificación y manipulación [PaLM-E][r5]. Gemini Embedding 2 incorpora ya texto, imágenes, vídeo, audio y documentos como primitiva nativa de producto.
+ImageBind lo mostró de forma explícita al unir imágenes, texto, audio, profundidad, mapa térmico e IMU (datos inerciales) en un único espacio de representación [ImageBind][r4], mientras que PaLM-E llevó esa lógica a observaciones visuales y estado continuo para tareas de planificación y manipulación [PaLM-E][r5]. Gemini Embedding 2 incorpora ya texto, imágenes, vídeo, audio y documentos como primitiva nativa de producto.
 
 Conviene insistir en esto porque una parte importante de la confusión nace aquí. Cuando se habla de multimodalidad, muchas veces se habla en realidad de visión-lenguaje. 
 
