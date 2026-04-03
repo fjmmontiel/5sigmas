@@ -118,6 +118,8 @@ extra_css:
 
 hooks:
   - hooks/reading_time.py
+  - hooks/og_article_type.py
+  - hooks/serve_md_versions.py
 
 plugins:
   - search

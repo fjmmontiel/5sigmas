@@ -1,6 +1,8 @@
 ---
 title: Escalar - de AlexNet a los modelos fundacionales
 description: Cómo datos, cómputo y arquitecturas escalables cambiaron la IA desde 2012. AlexNet, Transformer, preentrenamiento, leyes de escala y el nacimiento de los modelos fundacionales.
+date: 2026-03-30
+keywords: "escalar IA, AlexNet, Transformer, leyes de escala, modelos fundacionales, preentrenamiento, GPT historia, historia deep learning, ImageNet, BERT"
 ---
 
 # Capítulo 4: Escalar (≈ 2012 - 2024)

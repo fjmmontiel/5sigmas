@@ -1,6 +1,8 @@
 ---
 title: Arquitecturas de sistemas multimodales
 description: Las cuatro familias de arquitectura multimodal, sus diferencias en calidad, coste y latencia, y por qué el embedding multimodal y la generación multimodal no son la misma capa del sistema.
+date: 2026-04-02
+keywords: "arquitecturas multimodales, fusión temprana tardía, ViT, encoder multimodal, decoder multimodal, LLaVA, GPT-4V, arquitectura IA generativa, visión transformer"
 ---
 
 # Capítulo 3 — Arquitecturas: espacios compartidos, conectores y modelos omni

@@ -4,22 +4,37 @@
   {{ super() }}
   {% if page %}
 
+  {# Preconnect para recursos externos críticos #}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://unpkg.com">
+
   {% if page.meta.keywords %}
   <meta name="keywords" content="{{ page.meta.keywords | e }}">
   {% endif %}
 
+  {# Canonical URL explícita #}
+  <link rel="canonical" href="{{ page.canonical_url }}">
+
+  {# Schema.org principal #}
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     {% if page.url in ["", "index.html"] %}
     "@type": "WebSite",
     "name": "{{ config.site_name | e }}",
+    "alternateName": "5sigmas",
     "description": "{{ config.site_description | e }}",
     "url": "{{ config.site_url }}",
+    "inLanguage": "es",
+    "sameAs": [
+      "https://www.linkedin.com/in/fjmm1998/"
+    ],
     "author": {
       "@type": "Person",
       "name": "Francisco Maldonado",
-      "url": "{{ config.site_url }}meta/about/"
+      "url": "{{ config.site_url }}meta/about/",
+      "sameAs": ["https://www.linkedin.com/in/fjmm1998/"]
     }
     {% elif "meta/about" in page.url %}
     "@type": "ProfilePage",
@@ -39,8 +54,25 @@
     "description": "{{ page.meta.description | default(config.site_description) | e }}",
     "url": "{{ page.canonical_url }}",
     "inLanguage": "es",
+    "image": "{{ config.site_url }}assets/images/social/{{ page.url.rstrip('/') }}.png",
     {% if page.meta.keywords %}"keywords": "{{ page.meta.keywords | e }}",{% endif %}
-    {% if page.meta.date %}"datePublished": "{{ page.meta.date }}",{% endif %}
+    {% if page.meta.proficiency_level %}"proficiencyLevel": "{{ page.meta.proficiency_level | e }}",{% endif %}
+    {% if page.meta.prerequisites %}"dependencies": "{{ page.meta.prerequisites | e }}",{% endif %}
+    {% if page.meta.date %}
+    "datePublished": "{{ page.meta.date }}",
+    "dateModified": "{{ page.meta.date_modified | default(page.meta.date) }}",
+    {% endif %}
+    "speakable": {
+      "@type": "SpeakableSpecification",
+      "cssSelector": [".md-content__inner h1", ".md-content__inner p"]
+    },
+    {% if page.parent %}
+    "isPartOf": {
+      "@type": "CreativeWorkSeries",
+      "name": "{{ page.parent.title | e }}",
+      "url": "{{ config.site_url ~ (page.parent.url or '') }}"
+    },
+    {% endif %}
     "author": {
       "@type": "Person",
       "name": "Francisco Maldonado",

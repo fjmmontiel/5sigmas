@@ -1,6 +1,8 @@
 ---
 title: Evaluación de sistemas multimodales
 description: Por qué medir la capacidad multimodal exige algo más que exactitud en preguntas sobre imágenes, qué revelan OCRBench v2 y MMAU sobre los límites reales del campo, y los dos problemas sistemáticos que hacen que los benchmarks actuales sobrestimen las capacidades reales.
+date: 2026-04-03
+keywords: "evaluación modelos multimodales, benchmarks multimodales, OCRBench, MMAU, VQA, MMMU, capacidades IA real, evaluación LLM multimodal, métricas IA generativa"
 ---
 
 # Capítulo 4 — Evaluación: medir sin autoengañarse
