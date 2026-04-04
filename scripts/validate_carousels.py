@@ -123,6 +123,28 @@ def check_file(html: str, path: Path) -> list[Result]:
         f"encontrado: {bad_vars}" if bad_vars else ""
     ))
 
+    # F9 — body font-family declara "Inter" como primera fuente
+    inter_first = bool(re.search(
+        r'html,\s*body\s*\{[^}]*font-family:\s*"Inter"',
+        html
+    ))
+    results.append(Result(
+        'F9 · body font-family empieza por "Inter"',
+        inter_first,
+        'cambiar a font-family:"Inter","Avenir Next","Segoe UI",Arial,sans-serif' if not inter_first else ""
+    ))
+
+    # F10 — Google Fonts Inter cargado vía <link>
+    inter_link = bool(re.search(
+        r'fonts\.googleapis\.com/css2\?family=Inter',
+        html
+    ))
+    results.append(Result(
+        "F10 · Google Fonts Inter cargado vía <link>",
+        inter_link,
+        'añadir <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=block" rel="stylesheet">' if not inter_link else ""
+    ))
+
     # F7 — número de dots coincide con número de slides
     slides = extract_slides(html)
     n_slides = len(slides)
