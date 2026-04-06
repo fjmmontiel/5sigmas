@@ -17,15 +17,15 @@ En esta serie exploraremos: <br>
 - Explicaremos la IA como los diferentes sistemas que, bajo datos y objetivos, permiten predecir, clasificar, decidir o controlar. Es decir, que funcionan como expertos de una tarea concreta<br>
 - Veremos la evolución desde las primeras reglas heurísticas a Machine learning y redes neuronales, evolucionando al aprendizaje profundo y desembocando finalmente en modelos fundacionales<br>
 - Haremos un despiece general de cómo es un sistema real de una solución de IA y su ciclo de vida (MLOps) <br>
-- Veremos los diferentes casos de éxito que ha tenido esta tecnología y como está presente en nuestro día a día <br>
+- Veremos los diferentes casos de éxito que ha tenido esta tecnología y cómo está presente en nuestro día a día <br>
 ###  2. **Qué es IA generativa exactamente**
-- Veremos como nace esta nueva tecnología, desde los embeddings al transformer y la Ley de escala<br>
+- Veremos cómo nace esta nueva tecnología, desde los embeddings al transformer y la Ley de escala<br>
 - Veremos el impacto de que un único modelo fundacional de IA generativa puede usarse para múltiples tareas simultáneas<br>
 - Haremos un despiece general de cómo es un sistema real de una solución de IA generativa y su ciclo de vida (LLMOps) <br>
 - Entenderemos las diferencias entre LLM, LLM + RAG y agente: RAG y agentes no son el modelo, sino configuraciones del sistema construido sobre él <br>
 ### 3. **IA vs IA generativa**
  - La diferencia entre entradas y salidas, determinismo, explicabilidad, evaluación y riesgos. <br>
- - Matriz operacional de cuando usar reglas vs ML vs LLM vs (LLM + RAG) vs agentes basados en LLMs <br>
+ - Matriz operacional de cuándo usar reglas vs ML vs LLM vs (LLM + RAG) vs agentes basados en LLMs <br>
 
 ### 4. **Inteligencia Artificial General: AGI**
 - Navegaremos por las diferentes definiciones de esta futura tecnología y el impacto que tendría conseguirla<br>

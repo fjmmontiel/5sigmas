@@ -8,7 +8,7 @@ keywords: "agi, inteligencia artificial general, qué es agi, agi definición, d
 # Capítulo 4 — AGI: Inteligencia Artificial General
 
 !!! info "Prerrequisitos"
-    Este capítulo cierra la serie. Es necesario que haberse leído los tres capítulos anteriores: [Capítulo 1 — Qué es IA](./01-que-es-ia.md), [Capítulo 2 — Qué es IA Generativa](./02-que-es-ia-generativa.md) y [Capítulo 3 — IA vs IA Generativa](./03-ia-vs-ia-generativa.md).
+    Este capítulo cierra la serie. Para sacar el máximo provecho, conviene haber leído los tres capítulos anteriores: [Capítulo 1 — Qué es IA](./01-que-es-ia.md), [Capítulo 2 — Qué es IA Generativa](./02-que-es-ia-generativa.md) y [Capítulo 3 — IA vs IA Generativa](./03-ia-vs-ia-generativa.md).
 
 Un detector de fraude no puede explicarte termodinámica, un modelo de visión por computador no sabe jugar al ajedrez y un LLM genera texto fluido pero no puede conducir un coche, reparar un grifo ni recordar lo que aprendió en la conversación de ayer. Imaginemos ahora un sistema que tuviese todas estas capacidades a la vez.
 

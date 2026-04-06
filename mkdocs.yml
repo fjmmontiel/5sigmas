@@ -55,7 +55,7 @@ nav:
           - Mecanizar: series/from-cave-to-agi/02-mecanizar.md
           - Aprender: series/from-cave-to-agi/03-aprender.md
           - Escalar: series/from-cave-to-agi/04-escalar.md
-          - Más allá de escalar: series/from-cave-to-agi/05-mas-alla.md
+          - Más allá del Transformer: series/from-cave-to-agi/05-mas-alla.md
       - Multimodalidad en IA Generativa:
           - Presentación: series/multimodalidad-iag/00_presentacion_serie.md
           - El problema: series/multimodalidad-iag/01-el-problema.md
@@ -122,6 +122,7 @@ hooks:
   - hooks/og_article_type.py
   - hooks/serve_md_versions.py
   - hooks/jsonld_article.py
+  - hooks/wip_series.py
 
 plugins:
   - search
@@ -139,3 +140,4 @@ exclude_docs: |
   drafts/
   drafts/**
   assets/templates/**
+  includes/

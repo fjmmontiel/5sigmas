@@ -7,7 +7,7 @@ keywords: "multimodalidad IA, sistemas multimodales, LLM multimodal, IA texto im
 
 # Capítulo 1 — El problema real: integrar modalidades distintas sin reducirlas demasiado pronto
 
-La multimodalidad suele explicarse como si fuera el momento en que un modelo de lenguaje dejó de trabajar solo con texto y empezó a recibir imágenes. Esto no es falso, pero sí demasiado estrechao para describir el campo tal como existe hoy. 
+La multimodalidad suele explicarse como si fuera el momento en que un modelo de lenguaje dejó de trabajar solo con texto y empezó a recibir imágenes. Esto no es falso, pero sí demasiado estrecho para describir el campo tal como existe hoy. 
 
 En 2026 ya convivimos con modelos que representan texto, imagen, vídeo, audio y documentos en un mismo espacio de embedding, con sistemas que mantienen diálogo hablado de forma nativa, con arquitecturas que procesan secuencias intercaladas de texto, imagen y vídeo y con modelos que introducen señales continuas del mundo físico dentro del proceso de inferencia. 
 

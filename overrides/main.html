@@ -13,6 +13,10 @@
   <meta name="keywords" content="{{ page.meta.keywords | e }}">
   {% endif %}
 
+  {% if page.meta.robots %}
+  <meta name="robots" content="{{ page.meta.robots | e }}">
+  {% endif %}
+
   {# Canonical URL explícita #}
   <link rel="canonical" href="{{ page.canonical_url }}">
 
