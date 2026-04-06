@@ -224,8 +224,6 @@ Muchos equipos empiezan con API externa y migran partes a open-source cuando el 
 
 {{ include_html("snippets/fundamentos-ia-iag/02-llmops-rutas.html") }}
 
-[Capítulo 3 — IA vs IA Generativa →](./03-ia-vs-ia-generativa.md){ .md-button .md-button--primary }
-
 ---
 
 ## 6. Referencias

@@ -270,8 +270,6 @@ La forma más clara de entender MLOps es verlo como una cadena de 8 pasos. Si fa
 
 {{ include_html("snippets/fundamentos-ia/mlops/ciclo_mlops.html")}}
 
-[Capítulo 2 — IA Generativa y LLMs →](./02-que-es-ia-generativa.md){ .md-button .md-button--primary }
-
 ## 7. Referencias
 
 <details markdown="1">

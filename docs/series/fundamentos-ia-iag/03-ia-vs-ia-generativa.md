@@ -150,8 +150,6 @@ La tecnología correcta no existe en abstracto, sino en relación con el dato, e
 
 El capítulo siguiente lleva ese espectro hasta su límite: qué es la Inteligencia Artificial General, y qué separa lo que existe hoy de lo que todavía no existe.
 
-[Capítulo 4 — Inteligencia Artificial General →](./04-agi.md){ .md-button .md-button--primary }
-
 ---
 
 ## 4. Referencias

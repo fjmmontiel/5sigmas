@@ -121,6 +121,7 @@ hooks:
   - hooks/reading_time.py
   - hooks/og_article_type.py
   - hooks/serve_md_versions.py
+  - hooks/jsonld_article.py
 
 plugins:
   - search
