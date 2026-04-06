@@ -65,7 +65,6 @@ nav:
           - Riesgos: series/multimodalidad-iag/05-riesgos.md
       - Modelos razonadores:
           - Presentación: series/modelos-razonadores/00_presentacion_serie.md
-          - Qué es "razonar": series/modelos-razonadores/01-que-es-razonar.md
       - IA, PIB, bienestar y energía:
           - Presentación: series/ia-pib-bienestar-energia/00_presentacion_serie.md
       - Datacenters en el espacio:
