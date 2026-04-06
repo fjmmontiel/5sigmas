@@ -1407,7 +1407,7 @@
 .anim-shell-modal__body .anim-brand-shell__viewport {
     flex: 1;
     min-height: 0;
-    overflow: hidden;
+    overflow: auto;
 }
 
 .anim-scale-wrapper {
