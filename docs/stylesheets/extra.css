@@ -1247,12 +1247,11 @@
 .anim-brand-shell__viewport {
     position: relative;
     z-index: 1;
-    overflow: auto;
+    overflow: hidden;
     padding: clamp(6px, 0.9vw, 10px);
     color: var(--anim-content-fg);
     color-scheme: light;
-    overscroll-behavior: contain;
-    scrollbar-gutter: stable both-edges;
+    touch-action: pan-y;
 }
 
 [data-md-color-scheme="slate"] .anim-brand-shell__viewport {
