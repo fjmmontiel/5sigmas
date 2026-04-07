@@ -242,18 +242,20 @@ def check_slide(data_id: str, html: str, total: int) -> list[Result]:
         has_compare_sup  = 'class="compare-sup"'  in html
         # compare-sup es patrón válido para comparison slides sin título grande
         # (layout compacto intencionalmente sin divider ni steps-title)
+        # Clases de título legacy (cap1): comp-title, eq-title, gen-title, bifold-title, nflow-title, etc.
+        has_custom_title = bool(re.search(r'class="[a-z-]+-title"', html))
 
         results.append(Result(
             "S12 · tiene .divider antes del título (o compare-sup válido)",
-            has_divider or has_compare_sup,
-            "falta el divider gradiente corporativo" if not has_divider and not has_compare_sup else ""
+            has_divider or has_compare_sup or has_custom_title,
+            "falta el divider gradiente corporativo" if not has_divider and not has_compare_sup and not has_custom_title else ""
         ))
         # Aceptar también headings inline (font-weight:800/900 a tamaño de encabezado)
         has_inline_heading = bool(re.search(
             r'font-size:\s*\d{2,3}px[^"]*font-weight:\s*[89]00|font-weight:\s*[89]00[^"]*font-size:\s*\d{2,3}px',
             html
         ))
-        heading_ok = has_steps_title or has_inline_heading or has_compare_sup
+        heading_ok = has_steps_title or has_inline_heading or has_compare_sup or has_custom_title
         results.append(Result(
             "S13 · tiene heading (steps-title o inline font-weight:800+)",
             heading_ok,

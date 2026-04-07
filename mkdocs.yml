@@ -66,15 +66,7 @@ nav:
           - Arquitecturas: series/multimodalidad-iag/03-arquitecturas.md
           - Evaluación: series/multimodalidad-iag/04-evaluacion.md
           - Riesgos: series/multimodalidad-iag/05-riesgos.md
-      - Modelos razonadores:
-          - Presentación: series/modelos-razonadores/00_presentacion_serie.md
-      - IA, PIB, bienestar y energía:
-          - Presentación: series/ia-pib-bienestar-energia/00_presentacion_serie.md
-      - Datacenters en el espacio:
-          - Presentación: series/datacenters-espacio/00_presentacion_serie.md
-  - Rutas de lectura: roadmaps.md
   - Próximamente: proximamente.md
-  - Temas: tags.md
   - Sobre 5sigmas: meta/about.md
 markdown_extensions:
   - meta

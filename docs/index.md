@@ -50,5 +50,5 @@ Este proyecto aplica ese mismo criterio a la divulgación sobre IA: separar el c
 ---
 
 [Ver todas las series](/series/){ .md-button .md-button--primary }
-[Rutas de lectura](/roadmaps/){ .md-button }
+[Próximamente](/proximamente/){ .md-button }
 [Sobre el proyecto](/meta/about/){ .md-button }
