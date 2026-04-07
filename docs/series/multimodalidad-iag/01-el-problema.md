@@ -11,7 +11,10 @@ La multimodalidad suele explicarse como si fuera el momento en que un modelo de 
 
 En 2026 ya convivimos con modelos que representan texto, imagen, vídeo, audio y documentos en un mismo espacio de embedding, con sistemas que mantienen diálogo hablado de forma nativa, con arquitecturas que procesan secuencias intercaladas de texto, imagen y vídeo y con modelos que introducen señales continuas del mundo físico dentro del proceso de inferencia. 
 
-La multimodalidad, no es solo qué pasa cuando un LLM "ve" una imagen, sino cómo se construyen sistemas capaces de trabajar con señales heterogéneas sin obligarlas a perder su estructura demasiado pronto.
+La multimodalidad no es solo qué pasa cuando un LLM "ve" una imagen, sino cómo se construyen sistemas capaces de trabajar con señales heterogéneas sin obligarlas a perder su estructura demasiado pronto.
+
+!!! abstract "Idea clave"
+    El problema central de la multimodalidad no es juntar modalidades, sino decidir cuándo y cómo integrarlas sin destruir lo que cada una aporta por separado.
 
 Esta diferencia importa porque no todas las soluciones hacen el mismo trabajo. 
 
@@ -121,6 +124,9 @@ Lo que sigue en la serie responde a una pregunta más general: cómo se alinean 
 {{ include_html("snippets/multimodalidad-iag/01-espacio-comun.html") }}
 
 ---
+
+!!! tip "Siguiente capítulo"
+    [Capítulo 2 — Alineamiento →](./02-alineamiento.md) — Cómo se aprende que dos señales distintas hablan del mismo contenido, qué cambia cuando el alineamiento va más allá del par imagen-texto, y por qué la calidad del dato determina la robustez de las representaciones.
 
 ## 7. Referencias
 

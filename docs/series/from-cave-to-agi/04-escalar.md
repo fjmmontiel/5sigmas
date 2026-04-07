@@ -74,6 +74,9 @@ Al llegar a 2024, el campo ya había cambiado de forma estructural. La IA dejó 
 
 Ese cambio deja preparado el terreno de la siguiente etapa. La escala ya no se entiende solo como una cuestión de más parámetros o más datos, sino como la base sobre la que empiezan a aparecer problemas nuevos: memoria más eficaz, mejor uso de herramientas, búsqueda más activa y una relación más rica con el mundo fuera del texto.
 
+!!! tip "Siguiente capítulo"
+    [Capítulo 5 — Más allá del Transformer →](./05-mas-alla.md) — Qué límites dejó visibles el escalado puro y las líneas que el campo está abriendo: memoria durante la inferencia, búsqueda activa, modelos del mundo y robótica.
+
 ---
 
 ## 6. Referencias

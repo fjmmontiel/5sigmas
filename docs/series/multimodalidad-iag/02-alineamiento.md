@@ -90,6 +90,9 @@ El riesgo es que las preferencias de los evaluadores no son uniformes y pueden i
 
 ---
 
+!!! tip "Siguiente capítulo"
+    [Capítulo 3 — Arquitecturas →](./03-arquitecturas.md) — Las cuatro familias de arquitectura multimodal, sus diferencias en calidad, coste y latencia, y por qué el embedding multimodal y la generación multimodal no son la misma capa del sistema.
+
 ## 6. Referencias
 
 <details markdown="1">

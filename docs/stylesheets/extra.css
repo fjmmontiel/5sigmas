@@ -1,3 +1,9 @@
+/* Fuentes del proyecto — stacks con fallback a sistema */
+:root {
+    --md-text-font: "Inter", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    --md-code-font: "JetBrains Mono", "SF Mono", "Courier New", monospace;
+}
+
 :root {
     --md-primary-fg-color: #26A69A;
     --md-primary-fg-color--light: #4DB6AC;
@@ -616,9 +622,11 @@
     justify-content: space-between;
 }
 
-.sigma-graphic h1 {
+.sigma-graphic h1,
+.sigma-graphic .sigma-label {
     margin: 0;
     font-size: 20px;
+    font-weight: 700;
     letter-spacing: .2px;
     line-height: 1.15;
 }

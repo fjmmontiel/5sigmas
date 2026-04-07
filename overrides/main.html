@@ -4,10 +4,15 @@
   {{ super() }}
   {% if page %}
 
-  {# Preconnect para recursos externos críticos #}
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+  {# Fuentes — carga no bloqueante (preload + swap) #}
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://unpkg.com">
+  <link rel="preload" as="style"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono:wght@400;700&display=swap"
+    onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono:wght@400;700&display=swap">
+  </noscript>
 
   {% if page.meta.keywords %}
   <meta name="keywords" content="{{ page.meta.keywords | e }}">

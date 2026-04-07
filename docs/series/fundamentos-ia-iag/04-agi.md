@@ -159,6 +159,13 @@ La velocidad de progreso en los últimos cinco años no tiene precedentes. Las c
 
 La pregunta más útil no es "¿cuándo llega la AGI?" Nadie lo sabe con honestidad. La pregunta es qué criterios para pensar y qué marcos para evaluar te hacen más robusto en un entorno donde la IA mejora rápido y el panorama cambia cada pocos meses.
 
+!!! abstract "Resumen de posición"
+    **Qué sí sabemos:** los sistemas actuales superan a expertos humanos en dominios concretos y acotados. El horizonte de tareas autónomas crece de forma predecible. Los benchmarks de razonamiento general mejoran más rápido de lo esperado.
+
+    **Qué no sabemos:** si las capacidades emergentes con la escala convergen hacia algo que merezca llamarse AGI o si hay un techo que no conocemos. Si la alineación es un problema técnico resoluble antes de llegar a sistemas mucho más capaces. Si los saltos cualitativos observados en benchmarks se traducen en generalización real fuera del laboratorio.
+
+    **Qué implicaría alcanzarla:** una reorganización de la división de trabajo cognitivo más profunda que la industrialización. Compresión del tiempo entre descubrimiento y aplicación científica. Y la necesidad de resolver la alineación antes de que el sistema sea lo suficientemente capaz como para que los errores sean irreversibles.
+
 Eso es lo que esta serie ha intentado construir: un mapa mental estable que funcione aunque los modelos cambien.
 
 ---

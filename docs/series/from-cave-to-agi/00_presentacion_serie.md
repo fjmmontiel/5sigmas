@@ -1,7 +1,6 @@
 ---
 title: De las cavernas a la AGI
 description: "Historia intelectual de la IA: desde las primeras abstracciones matemáticas hasta los modelos fundacionales. Matemáticas, filosofía y computación en contexto."
-robots: noindex
 ---
 # De las cavernas a la AGI
 
@@ -10,6 +9,8 @@ robots: noindex
 Esta serie es un viaje histórico desde los primeros intentos de la humanidad por abstraer el mundo mediante símbolos hasta la creación de modelos de lenguaje masivos que *parecen entenderlo*.<br>
 
 Exploraremos cómo la necesidad de contar llevó al cálculo, cómo el deseo de mecanizar el razonamiento llevó a la computación, y cómo el intento de imitar el cerebro nos trajo a la era de la IA generativa.<br>
+
+La historia importa porque los sistemas de IA generativa que usamos hoy no son artefactos sin pasado. Son el resultado directo de cinco siglos de notación matemática, ocho décadas de computación y más de medio siglo de aprendizaje automático. Seguir esa cadena desde el principio cambia la forma de entender por qué la IA funciona como funciona, dónde están sus límites reales y qué vendrá a continuación. Sin ese contexto, los avances recientes parecen magia. Con él, tienen una lógica que se puede seguir.<br>
 
 ## Índice
 En esta serie exploraremos: <br>

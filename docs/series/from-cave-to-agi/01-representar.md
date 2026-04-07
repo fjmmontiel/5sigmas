@@ -9,7 +9,7 @@ keywords: "historia de las matemáticas, representación simbólica, álgebra, c
 
 En este capítulo recorremos un proceso larguísimo y decisivo: cómo la humanidad pasó de marcar cantidades en objetos físicos a construir un lenguaje matemático capaz de describir relaciones, demostrar conclusiones y anticipar el comportamiento del mundo.
 
-No es solo una historia de números, es la historia de como los seres humanos aplicamos la abstracción. 
+No es solo una historia de números, es la historia de cómo los seres humanos aplicamos la abstracción. 
 
 El cambio profundo llegó cuando aceptamos que una marca podía sustituir a una cosa, que una letra podía representar una cantidad desconocida y que una deducción podía ser válida aunque no tocara directamente ningún objeto físico. En esa distancia entre el mundo y su representación nace una parte esencial de la historia intelectual que más tarde hará posible la computación.
 
@@ -107,6 +107,9 @@ Al final de este periodo, la humanidad ya dispone de varias piezas que más tard
 Ninguna de estas piezas nació pensando en ordenadores. Aún faltaban siglos para eso. Pero sin ellas no habría forma de imaginar la siguiente etapa: convertir estas representaciones y estas reglas en procedimientos mecánicos ejecutables.
 
 El siguiente capítulo entra justo ahí: en el momento en que la humanidad deja de limitarse a pensar con símbolos y empieza a intentar que una máquina los manipule por nosotros.
+
+!!! tip "Siguiente capítulo"
+    [Capítulo 2 — Mecanizar →](./02-mecanizar.md) — De Babbage a Turing: cómo se pasó de automatizar cuentas concretas a diseñar máquinas de propósito general capaces de ejecutar cualquier programa.
 
 ---
 

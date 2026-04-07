@@ -98,6 +98,9 @@ Para la mayoría de aplicaciones actuales, la elección práctica se reduce a va
 
 ---
 
+!!! tip "Siguiente capítulo"
+    [Capítulo 4 — Evaluación →](./04-evaluacion.md) — Por qué medir la capacidad multimodal exige más que exactitud en preguntas sobre imágenes, qué revelan OCRBench v2 y MMAU sobre los límites reales del campo, y los dos problemas sistemáticos que hacen que los benchmarks actuales sobrestimen las capacidades reales.
+
 ## 6. Referencias
 
 <details markdown="1">

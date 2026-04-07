@@ -95,6 +95,9 @@ La evaluación de multimodalidad ha estado dominada por VQA y tareas de groundin
 
 ---
 
+!!! tip "Siguiente capítulo"
+    [Capítulo 5 — Riesgos →](./05-riesgos.md) — Qué riesgos son específicos de la multimodalidad, por qué el grounding deficiente tiene consecuencias distintas según la modalidad, y cómo cambia el perfil de riesgo cuando percepción y acción quedan acopladas en el mismo sistema.
+
 ## 6. Referencias
 
 <details markdown="1">

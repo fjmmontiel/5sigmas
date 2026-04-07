@@ -14,6 +14,12 @@ Los dos capítulos anteriores ([IA clásica](./01-que-es-ia.md) e [IA generativa
 
 Confundirlas lleva a decisiones equivocadas: elegir un LLM para clasificar datos etiquetados, o usar ML clásico para generar texto con contexto variable, son errores frecuentes y costosos. Uno por exceso de complejidad, otro por no llegar al problema.
 
+Tres reglas de decisión rápida antes de entrar en los detalles:
+
+- **Usa ML clásico** cuando la salida es predecible, el espacio de respuestas es finito y necesitas trazabilidad o auditoría formal.
+- **Usa GenAI (LLM o multimodal)** cuando la entrada es lenguaje natural, la salida debe ser abierta o generativa, o el contexto cambia en cada llamada.
+- **Usa agente** cuando la tarea requiere planificación en múltiples pasos, acceso a herramientas externas o bucles de verificación que un solo prompt no puede resolver.
+
 ---
 
 ## 1. Las cinco diferencias
@@ -148,7 +154,8 @@ Para hacer esos criterios concretos, vale la pena recorrer la matriz con un caso
 
 La tecnología correcta no existe en abstracto, sino en relación con el dato, el problema y el contexto concretos.
 
-El capítulo siguiente lleva ese espectro hasta su límite: qué es la Inteligencia Artificial General, y qué separa lo que existe hoy de lo que todavía no existe.
+!!! tip "Siguiente lectura"
+    El capítulo siguiente lleva ese espectro hasta su límite: qué es la AGI, qué la distingue de los sistemas actuales y por qué el debate importa ahora más que nunca: [Capítulo 4 — AGI →](./04-agi.md)
 
 ---
 

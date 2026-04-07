@@ -164,6 +164,9 @@ Al llegar a 1956, la humanidad ya no solo sabía representar el mundo con símbo
 
 Ese cambio lo transforma todo. A partir de aquí, la gran cuestión ya no será cómo mecanizar el cálculo, sino cómo conseguir que la máquina ajuste su comportamiento a partir de experiencia, datos y objetivos. Ese es el punto de partida del siguiente capítulo.
 
+!!! tip "Siguiente capítulo"
+    [Capítulo 3 — Aprender →](./03-aprender.md) — Cómo se consigue que una máquina mejore a partir de datos: del perceptrón y los sistemas expertos al renacimiento del deep learning antes de 2012.
+
 ---
 
 ## 5. Referencias

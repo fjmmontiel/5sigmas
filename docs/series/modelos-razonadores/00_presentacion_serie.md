@@ -8,7 +8,7 @@ robots: noindex
 
 {{ include_html("snippets/series_meta.html", series_dir="modelos-razonadores", data_state="construction", data_level="tecnico", status_label="En construcción", level_label="Técnico", extra_rows="<div class=\"series-meta-row\"><span class=\"series-meta-label\">Prerequisitos</span><span class=\"series-meta-value\"><a href=\"/series/fundamentos-ia-iag/00_presentacion_serie/\">Fundamentos de IA e IA generativa</a></span></div>") }}
 
-Los LLMs pueden *parecer* que razonan, pero “razonar” es una cualidad inherentemente humana. Lo podemos definir como un **proceso** con diferentes pasos que ejecutarlos consume **tiempo físico** (latencia), energía mental (**cómputo**) y no es infalible (**alucinaciones**).<br>
+Los LLMs pueden *parecer* que razonar, pero “razonar” es una cualidad inherentemente humana. Lo podemos definir como un **proceso** con diferentes pasos cuyo recorrido consume **tiempo físico** (latencia), energía mental (**cómputo**) y no es infalible (**alucinaciones**).<br>
 
 En esta serie explicaremos que si el razonamiento es un proceso, entonces el tiempo de ejecución es una variable más. Puedes **pagar más pasos**, más muestras, más verificación o más interacción con herramientas para **mejorar la calidad de la respuesta**.<br>
 
@@ -16,7 +16,7 @@ En esta serie explicaremos que si el razonamiento es un proceso, entonces el tie
 
 ### 1. **Qué es “razonar” para un LLM**
 - Veremos qué definiciones de razonamiento pueden encajar en el contexto de los LLMs. 
-- Nacimiento de los modelos razonadores: o1 de OpenAI como punto de salida.
+- Nacimiento de los modelos razonadores: o1 de OpenAI como punto de partida.
 - Repaso del paper de Apple sobre "The illusion of thinking" y la respuesta de Anthropic<br>
 
 ### 2. **Cómo se ven los fallos de estos sistemas**
@@ -31,7 +31,7 @@ En esta serie explicaremos que si el razonamiento es un proceso, entonces el tie
 ### 4. **Tiempo físico: latencia, streaming, interacción humana**
 - Veremos cómo “pensar más” en un paper es barato. En un producto, significa: El usuario espera, la sesión es más cara y el sistema tiene más puntos posibles de rotura. 
 - ¿Dónde está el umbral de latencia aceptable para esta tarea y este usuario? (Lanzamiento de GPT-5 como enrutador)
-- Veremos que patrones nos pueden ayudar a optimizar al máximo los beneficios del test-time compute.
+- Veremos qué patrones nos pueden ayudar a optimizar al máximo los beneficios del test-time compute.
 
 ### 5. **Riesgos: overthinking, coste, ataques, alineamiento**
 - Veremos por qué con **más Test-Time Compute** puede aparecer **sobrepensamiento**, bucles improductivos y degradación de la calidad.

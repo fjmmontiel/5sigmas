@@ -100,7 +100,7 @@ La misma curva se hace concreta cuando recorremos la familia GPT modelo a modelo
 
 ### Modelos fundacionales
 
-El resultado de estas capacidades emergentes, son los **modelos fundacionales** ([Foundation Models][r6]), modelos preentrenados sobre grandes volúmenes de texto, adaptables a múltiples tareas sin reentrenarse desde cero.
+El resultado de estas capacidades emergentes son los **modelos fundacionales** ([Foundation Models][r6]), modelos preentrenados sobre grandes volúmenes de texto, adaptables a múltiples tareas sin reentrenarse desde cero.
 
 Un solo modelo puede redactar, resumir, traducir, clasificar, extraer información y generar código. En este punto es donde se hace efectiva la verdadera utilidad de la IA Generativa, ahora tenemos un único modelo que nos sirve para múltiples tareas.
 
@@ -225,6 +225,9 @@ Muchos equipos empiezan con API externa y migran partes a open-source cuando el 
 {{ include_html("snippets/fundamentos-ia-iag/02-llmops-rutas.html") }}
 
 ---
+
+!!! tip "Siguiente lectura"
+    El capítulo siguiente compara IA clásica e IA generativa en cinco ejes concretos y proporciona una matriz operacional para decidir qué tecnología usar en cada caso: [Capítulo 3 — IA vs IA Generativa →](./03-ia-vs-ia-generativa.md)
 
 ## 6. Referencias
 

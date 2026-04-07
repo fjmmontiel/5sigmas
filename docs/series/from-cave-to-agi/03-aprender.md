@@ -144,6 +144,9 @@ Al llegar a 2012, la IA había cambiado de forma profunda. No había abandonado 
 
 Ese desplazamiento deja preparado el terreno del siguiente capítulo, donde la historia ya no gira tanto sobre si una máquina puede aprender de los datos, sino sobre lo que ocurre cuando ese aprendizaje encuentra suficiente escala.
 
+!!! tip "Siguiente capítulo"
+    [Capítulo 4 — Escalar →](./04-escalar.md) — AlexNet, el Transformer y las leyes de escala: qué pasó cuando el aprendizaje encontró datos masivos, GPUs y arquitecturas nuevas.
+
 ---
 
 ## 7. Referencias

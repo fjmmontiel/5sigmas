@@ -7,6 +7,9 @@ keywords: "más allá del Transformer, test-time compute, memoria IA, modelos de
 
 # Capítulo 5: Más allá del Transformer (≈ 2022 - Q1 2026)
 
+!!! note "Actualización"
+    Este capítulo cubre el estado del campo hasta Q1 2026. Los apartados sobre modelos concretos, capital invertido y benchmarks están sujetos a cambio rápido, los apartados sobre limitaciones estructurales del Transformer son estables.
+
 Este capítulo no llega después del anterior solo en sentido cronológico. Llega después en sentido conceptual. El escalado del Transformer sigue siendo una fuerza central, pero ya no basta por sí solo para describir hacia dónde se mueve la frontera.
 
 Durante los últimos años han ido apareciendo varias intuiciones nuevas. Algunas intentan resolver límites prácticos del propio Transformer, como el coste de contexto largo y la memoria. Otras amplían el tipo de sistema que construimos: modelos que usan herramientas, buscan activamente soluciones, aprenden durante la inferencia o intentan construir representaciones internas del mundo en lugar de limitarse a predecir la siguiente pieza de texto.
@@ -145,6 +148,9 @@ Las líneas que hoy parecen más prometedoras intentan atacar precisamente esos 
 - Sistemas capaces de percibir y actuar en el mundo físico.
 
 No sabemos todavía qué combinación acabará imponiéndose. Lo que sí parece claro es que el futuro de la IA no se juega solo en modelos más grandes, sino en sistemas mejor organizados y más capaces de interactuar con el mundo.
+
+!!! tip "Siguiente serie"
+    Este capítulo cierra la historia de cómo llegamos hasta aquí. La siguiente serie entra en uno de los frentes más activos del presente: [Multimodalidad en IA Generativa →](/series/multimodalidad-iag/00_presentacion_serie/)
 
 ---
 

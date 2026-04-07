@@ -6,9 +6,11 @@ description: "Serie introductoria sobre IA e IA generativa: qué son, cómo func
 
 {{ include_html("snippets/series_meta.html", series_dir="fundamentos-ia-iag", data_state="complete", data_level="general", status_label="Completa", level_label="General") }}
 
-Bienvenidos a esta serie introductoria diseñada para desmitificar el mundo de la Inteligencia Artificial. <br>
-El objetivo de la serie es entender qué es realmente la IA y la IA generativa (IAG, GenAI), qué capacidades tienen estas tecnologías y cómo pueden usarse. <br>
-Además, exploraremos las definiciones de la Inteligencia Artificial General (AGI), un término bastante disputado.<br>
+Una serie introductoria para entender qué es la IA, qué es la IA generativa, en qué se diferencian y qué significa AGI, sin depender de titulares ni de marketing.
+
+**Para quién es.** Para profesionales técnicos y decisores que quieren un mapa conceptual sólido: saber exactamente qué hace cada tecnología, cuándo tiene sentido usarla y qué esperar de ella. No hace falta experiencia previa en IA, pero sí disposición a trabajar con los conceptos en serio.
+
+**Qué aprenderás.** Al terminar la serie tendrás claro qué diferencia la IA tradicional de la generativa, cuándo usar cada tipo de sistema, por qué los LLMs son distintos de los agentes y el RAG, y qué significan los distintos marcos de definición de AGI. Más importante: tendrás un esquema mental que funciona aunque los modelos cambien.
 
 ## Índice
 En esta serie exploraremos: <br>

@@ -7,9 +7,7 @@ theme:
   language: es
   logo: assets/logo.svg
   favicon: assets/logo.svg
-  font:
-    text: Inter
-    code: JetBrains Mono
+  font: false
   palette:
     - scheme: default
       primary: cyan
@@ -77,17 +75,11 @@ markdown_extensions:
   - toc:
       permalink: true
   - pymdownx.superfences:
-      custom_fences:
-        - name: mermaid
-          class: mermaid
-          format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.highlight:
       auto_title: true
       anchor_linenums: true
       line_spans: __span
       pygments_lang_class: true
-  - pymdownx.arithmatex:
-      generic: true   # hace que MathJax procese los bloques marcados
   - pymdownx.snippets:
       auto_append:
         - docs/includes/abbreviations.md
@@ -99,19 +91,20 @@ markdown_extensions:
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
 
 extra_javascript:
-  - javascripts/nav-gradient.js
-  - javascripts/external-links.js
-  - assets/javascripts/animation-shell.js
-  - assets/javascripts/site-demos.js
-  - assets/javascripts/tabbed-animations.js
-  - path: https://unpkg.com/mermaid@10/dist/mermaid.min.js
+  - path: javascripts/nav-gradient.js
     defer: true
-  - javascripts/mermaid-init.js
-  - javascripts/mathjax.js
-  - path: https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
+  - path: javascripts/external-links.js
     defer: true
-  - assets/javascripts/series_energy_ai_preview.js
-  - assets/javascripts/series_energy_ai_local.js
+  - path: assets/javascripts/animation-shell.js
+    defer: true
+  - path: assets/javascripts/site-demos.js
+    defer: true
+  - path: assets/javascripts/tabbed-animations.js
+    defer: true
+  - path: assets/javascripts/series_energy_ai_preview.js
+    defer: true
+  - path: assets/javascripts/series_energy_ai_local.js
+    defer: true
 extra_css:
   - stylesheets/extra.css
   - assets/stylesheets/animations.css
@@ -127,6 +120,11 @@ hooks:
 plugins:
   - search
   - macros
+  - redirects:
+      enabled: !ENV [MKDOCS_REDIRECTS, true]
+      redirect_maps:
+        # Canonical URL legacy — uppercase slug indexado por Google
+        'series/fundamentos-IA-IAG/00_presentacion_serie.md': 'series/fundamentos-ia-iag/00_presentacion_serie.md'
   - social:
       cards_layout: clean
       cards_layout_options:

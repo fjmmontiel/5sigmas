@@ -4,14 +4,13 @@ description: "Qué significa construir sistemas capaces de percibir, alinear, ra
 ---
 # Multimodalidad en IA generativa
 
-{{ include_html("snippets/series_meta.html", series_dir="multimodalidad-iag", data_state="complete", data_level="general", status_label="Completa", level_label="General", extra_rows="<div class=\"series-meta-row\"><span class=\"series-meta-label\">Prerequisitos</span><span class=\"series-meta-value\"><a href=\"/series/fundamentos-ia-iag/00_presentacion_serie/\">Fundamentos de IA e IA generativa</a></span></div>") }}
-
 Durante un tiempo fue razonable contar la multimodalidad como la historia de cómo un modelo de lenguaje empezó a mirar imágenes, pero esa versión ya se ha quedado corta: hoy el campo incluye modelos que combinan texto, imagen, vídeo, audio y documentos en un mismo espacio de representación.
 
 Gemini se presentó desde el inicio como una familia multimodal en texto, audio, imagen, vídeo y código. Gemini Embedding 2 convierte además el embedding multimodal en una primitiva nativa sobre texto, imágenes, vídeo, audio y documentos. Qwen2.5-Omni empuja el frente de entrada y salida multimodal en streaming, y PaLM-E recuerda que, en cuanto aparece robótica o estado del entorno, la frontera del problema vuelve a moverse.
 
 Por eso esta serie trata la multimodalidad no como un apéndice de los LLMs ni como un catálogo de pares texto-imagen, sino como un problema más general: cómo hacer que un sistema preserve evidencia procedente de modalidades distintas, la alinee cuando hablan de lo mismo, razone con ella sin destruirla por el camino y, en algunos casos, produzca salidas también multimodales o actúe sobre herramientas y sobre el entorno.
 
+{{ include_html("snippets/series_meta.html", series_dir="multimodalidad-iag", data_state="complete", data_level="general", status_label="Completa", level_label="General", extra_rows="<div class=\"series-meta-row\"><span class=\"series-meta-label\">Prerequisitos</span><span class=\"series-meta-value\"><a href=\"/series/fundamentos-ia-iag/00_presentacion_serie/\">Fundamentos de IA e IA generativa</a></span></div>") }}
 
 ## Índice
 

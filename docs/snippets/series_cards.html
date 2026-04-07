@@ -1,138 +1,485 @@
-<div class="roadmap-unified">
-<div class="roadmap-line">
-<div class="roadmap-rail"></div>
-<div id="rm-progress" class="roadmap-progress"></div>
-</div>
-<div class="roadmap-step step-1">
-<div class="roadmap-marker">1</div>
-<a href="/series/fundamentos-ia-iag/00_presentacion_serie/" class="series-card available"
-title="Empezar por: Fundamentos de IA e IA generativa">
-<div class="series-card-inner">
-<div class="series-card-front">
-<div class="icon-wrapper">
-<span class="series-icon">🏛</span>
-</div>
-<h3 class="series-title">Fundamentos de IA e IA generativa</h3>
-<div class="status-pill available">Empieza aquí</div>
-</div>
-<div class="series-card-back">
-<h3 class="series-title-back">Fundamentos de IA e IA generativa</h3>
-<p class="series-long-desc">
-Aprende fundamentos de IA y GenAI para distinguir ruido, método y límites.
-</p>
-<span class="cta-link">Ver presentación &rarr;</span>
-</div>
-</div>
-</a>
-</div>
-<div class="roadmap-step step-2">
-<div class="roadmap-marker">2</div>
-<a href="/series/from-cave-to-agi/00_presentacion_serie/" class="series-card available"
-title="Terminada: De las cavernas a la AGI">
-<div class="series-card-inner">
-<div class="series-card-front">
-<div class="icon-wrapper">
-<span class="series-icon">🧠</span>
-</div>
-<h3 class="series-title">De las cavernas a la AGI</h3>
-<div class="status-pill available">Terminada</div>
-</div>
-<div class="series-card-back">
-<h3 class="series-title-back">De las cavernas a la AGI</h3>
-<p class="series-long-desc">
-Recorrido histórico que conecta ciencia, computación y filosofía hasta los modelos actuales.
-</p>
-<span class="cta-link">Ver presentación &rarr;</span>
-</div>
-</div>
-</a>
-</div>
-<div class="roadmap-step step-3">
-<div class="roadmap-marker">3</div>
-<a href="/series/multimodalidad-iag/00_presentacion_serie/" class="series-card available"
-title="Completa: Multimodalidad en IA Generativa">
-<div class="series-card-inner">
-<div class="series-card-front">
-<div class="icon-wrapper">
-<span class="series-icon">🎛</span>
-</div>
-<h3 class="series-title">Multimodalidad en IA Generativa</h3>
-<div class="status-pill available">Completa</div>
-</div>
-<div class="series-card-back">
-<h3 class="series-title-back">Multimodalidad en IA Generativa</h3>
-<p class="series-long-desc">
-Arquitecturas y entrenamiento para texto, imagen, audio y vídeo en un solo sistema.
-</p>
-<span class="cta-link">Ver presentación &rarr;</span>
-</div>
-</div>
-</a>
-</div>
-<div class="roadmap-step step-4">
-<div class="roadmap-marker">4</div>
-<a href="/series/modelos-razonadores/00_presentacion_serie/" class="series-card available"
-title="En construcción: Modelos razonadores">
-<div class="series-card-inner">
-<div class="series-card-front">
-<div class="icon-wrapper">
-<span class="series-icon">⏱</span>
-</div>
-<h3 class="series-title">Modelos razonadores</h3>
-<div class="status-pill available">En construcción</div>
-</div>
-<div class="series-card-back">
-<h3 class="series-title-back">Modelos razonadores</h3>
-<p class="series-long-desc">
-Qué es razonar, qué cuesta, y cómo diseñar sistemas con tiempo físico.
-</p>
-<span class="cta-link">En construcción &rarr;</span>
-</div>
-</div>
-</a>
-</div>
-<div class="roadmap-step step-5">
-<div class="roadmap-marker">5</div>
-<a href="/series/ia-pib-bienestar-energia/00_presentacion_serie/" class="series-card available"
-title="En construcción: IA, PIB, bienestar y energía">
-<div class="series-card-inner">
-<div class="series-card-front">
-<div class="icon-wrapper">
-<span class="series-icon">⚡</span>
-</div>
-<h3 class="series-title">IA, PIB, bienestar y energía</h3>
-<div class="status-pill available">En construcción</div>
-</div>
-<div class="series-card-back">
-<h3 class="series-title-back">IA, PIB, bienestar y energía</h3>
-<p class="series-long-desc">
-Cómo energía e IA afectan productividad, bienestar y medidas reales de progreso.
-</p>
-<span class="cta-link">En construcción &rarr;</span>
-</div>
-</div>
-</a>
-</div>
-<div class="roadmap-step step-6">
-<div class="roadmap-marker">6</div>
-<a href="/series/datacenters-espacio/00_presentacion_serie/" class="series-card available"
-title="En construcción: Datacenters en el espacio">
-<div class="series-card-inner">
-<div class="series-card-front">
-<div class="icon-wrapper">
-<span class="series-icon">🛰</span>
-</div>
-<h3 class="series-title">Datacenters en el espacio</h3>
-<div class="status-pill available">En construcción</div>
-</div>
-<div class="series-card-back">
-<h3 class="series-title-back">Datacenters en el espacio</h3>
-<p class="series-long-desc">
-Física, costes y límites de llevar cómputo fuera de la Tierra.
-</p>
-<span class="cta-link">En construcción &rarr;</span>
-</div>
-</div>
-</a>
-</div>
-</div>
+<style>
+/* ── Infinite scroll carousel ── */
+.sc-wrap {
+  font-family: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  margin: 32px 0 48px;
+}
+
+.sc-marquee-outer {
+  position: relative;
+  overflow: hidden;
+  /* Fade edges */
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 6%,
+    black 94%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 6%,
+    black 94%,
+    transparent 100%
+  );
+}
+
+.sc-track {
+  display: flex;
+  gap: 16px;
+  width: max-content;
+  animation: sc-scroll 55s linear infinite;
+  padding: 8px 0 16px; /* bottom for shadow */
+}
+
+.sc-marquee-outer:hover .sc-track {
+  animation-play-state: paused;
+}
+
+@keyframes sc-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ── Card ── */
+.sc-card {
+  width: 252px;
+  flex-shrink: 0;
+  background: var(--md-default-bg-color, #fff);
+  border: 1px solid color-mix(in srgb, var(--md-default-fg-color, #111) 10%, transparent);
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform .16s ease, box-shadow .16s ease;
+  text-decoration: none !important;
+  color: inherit !important;
+  cursor: pointer;
+}
+
+.sc-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 30px rgba(0,0,0,.10);
+}
+
+/* Future (no link) cards */
+.sc-card-future {
+  cursor: default;
+  border-style: dashed;
+  opacity: .72;
+}
+
+.sc-card-future:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.sc-bar {
+  height: 4px;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.sc-body {
+  padding: 18px 18px 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.sc-icon {
+  font-size: 24px;
+  line-height: 1;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.sc-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: -.01em;
+  color: var(--md-default-fg-color, #111);
+  margin-bottom: 7px;
+  line-height: 1.35;
+}
+
+.sc-desc {
+  font-size: 12px;
+  line-height: 1.6;
+  color: color-mix(in srgb, var(--md-default-fg-color, #111) 58%, transparent);
+  flex: 1;
+  margin-bottom: 14px;
+}
+
+.sc-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.sc-pill {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.sc-pill-done   { background: rgba(38,166,154,.12);  color: #26A69A; }
+.sc-pill-wip    { background: rgba(255,179,67,.12);  color: #cc8a00; }
+.sc-pill-next   { background: rgba(90,114,153,.12);  color: #5a7299; }
+
+[data-md-color-scheme="slate"] .sc-pill-wip  { color: #FFB343; }
+[data-md-color-scheme="slate"] .sc-pill-next { color: #7ca8cc; }
+
+.sc-cta {
+  font-size: 11.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+  opacity: .9;
+}
+</style>
+
+<div class="sc-wrap">
+<div class="sc-marquee-outer">
+<div class="sc-track">
+
+  <!-- ── SET 1 ── -->
+
+  <!-- TERMINADAS -->
+  <a href="/series/fundamentos-ia-iag/00_presentacion_serie/" class="sc-card">
+    <div class="sc-bar" style="background:#324AB2;"></div>
+    <div class="sc-body">
+      <span class="sc-icon">🏛</span>
+      <div class="sc-title">Fundamentos de IA e IA generativa</div>
+      <div class="sc-desc">Las bases para distinguir señal de ruido. IA clásica, generativa y AGI sin simplificaciones.</div>
+      <div class="sc-footer">
+        <span class="sc-pill sc-pill-done">Completa</span>
+        <span class="sc-cta" style="color:#324AB2;">Leer →</span>
+      </div>
+    </div>
+  </a>
+
+  <a href="/series/from-cave-to-agi/00_presentacion_serie/" class="sc-card">
+    <div class="sc-bar" style="background:#26A69A;"></div>
+    <div class="sc-body">
+      <span class="sc-icon">🧠</span>
+      <div class="sc-title">De las cavernas a la AGI</div>
+      <div class="sc-desc">Recorrido histórico desde los primeros conceptos matemáticos hasta los modelos fundacionales.</div>
+      <div class="sc-footer">
+        <span class="sc-pill sc-pill-done">Terminada</span>
+        <span class="sc-cta" style="color:#26A69A;">Leer →</span>
+      </div>
+    </div>
+  </a>
+
+  <a href="/series/multimodalidad-iag/00_presentacion_serie/" class="sc-card">
+    <div class="sc-bar" style="background:#7cc7ff;"></div>
+    <div class="sc-body">
+      <span class="sc-icon">🎛</span>
+      <div class="sc-title">Multimodalidad en IA Generativa</div>
+      <div class="sc-desc">Texto, imagen, audio y vídeo en un solo sistema. Arquitecturas, alineamiento y límites reales.</div>
+      <div class="sc-footer">
+        <span class="sc-pill sc-pill-done">Terminada</span>
+        <span class="sc-cta" style="color:#7cc7ff;">Leer →</span>
+      </div>
+    </div>
+  </a>
+
+  <!-- EN CONSTRUCCIÓN -->
+  <a href="/series/modelos-razonadores/00_presentacion_serie/" class="sc-card">
+    <div class="sc-bar" style="background:#FFB343;"></div>
+    <div class="sc-body">
+      <span class="sc-icon">⏱</span>
+      <div class="sc-title">Modelos razonadores</div>
+      <div class="sc-desc">Qué significa razonar para un LLM, cuánto cuesta y cómo diseñar con el cómputo de inferencia como variable.</div>
+      <div class="sc-footer">
+        <span class="sc-pill sc-pill-wip">En construcción</span>
+        <span class="sc-cta" style="color:#FFB343;">Ver →</span>
+      </div>
+    </div>
+  </a>
+
+  <a href="/series/ia-pib-bienestar-energia/00_presentacion_serie/" class="sc-card">
+    <div class="sc-bar" style="background:#e06c75;"></div>
+    <div class="sc-body">
+      <span class="sc-icon">⚡</span>
+      <div class="sc-title">IA, PIB, bienestar y energía</div>
+      <div class="sc-desc">Energía, productividad y bienestar real más allá del PIB. La IA como tecnología eléctrica del siglo XXI.</div>
+      <div class="sc-footer">
+        <span class="sc-pill sc-pill-wip">En construcción</span>
+        <span class="sc-cta" style="color:#e06c75;">Ver →</span>
+      </div>
+    </div>
+  </a>
+
+  <a href="/series/datacenters-espacio/00_presentacion_serie/" class="sc-card">
+    <div class="sc-bar" style="background:#98c379;"></div>
+    <div class="sc-body">
+      <span class="sc-icon">🛰</span>
+      <div class="sc-title">Datacenters en el espacio</div>
+      <div class="sc-desc">Física, costes y viabilidad de llevar cómputo fuera de la Tierra. Qué resuelve y qué sigue sin resolver.</div>
+      <div class="sc-footer">
+        <span class="sc-pill sc-pill-wip">En construcción</span>
+        <span class="sc-cta" style="color:#98c379;">Ver →</span>
+      </div>
+    </div>
+  </a>
+
+  <!-- PRÓXIMAMENTE -->
+  <div class="sc-card sc-card-future">
+    <div class="sc-bar" style="background:#6366F1; opacity:.6;"></div>
+    <div class="sc-body">
+      <span class="sc-icon">📊</span>
+      <div class="sc-title">Evaluación de modelos de IA</div>
+      <div class="sc-desc">Benchmarks vs rendimiento real, LLM-as-judge y red-teaming. Cómo saber de verdad qué funciona.</div>
+      <div class="sc-footer">
+        <span class="sc-pill sc-pill-next">Próximamente</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sc-card sc-card-future">
+    <div class="sc-bar" style="background:#8B5CF6; opacity:.6;"></div>
+    <div class="sc-body">
+      <span class="sc-icon">🌀</span>
+      <div class="sc-title">El problema de la alucinación</div>
+      <div class="sc-desc">Por qué alucinan los LLMs, los límites del grounding y hasta dónde llega el RAG.</div>
+      <div class="sc-footer">
+        <span class="sc-pill sc-pill-next">Próximamente</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sc-card sc-card-future">
+    <div class="sc-bar" style="background:#EC4899; opacity:.6;"></div>
+    <div class="sc-body">
+      <span class="sc-icon">🧪</span>
+      <div class="sc-title">Fine-tuning y adaptación de modelos</div>
+      <div class="sc-desc">Cuándo hacer fine-tuning vs prompt engineering vs RAG, y qué coste y riesgo implica cada opción.</div>
+      <div class="sc-footer">
+        <span class="sc-pill sc-pill-next">Próximamente</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sc-card sc-card-future">
+    <div class="sc-bar" style="background:#F59E0B; opacity:.6;"></div>
+    <div class="sc-body">
+      <span class="sc-icon">💼</span>
+      <div class="sc-title">IA en el trabajo</div>
+      <div class="sc-desc">Evidencia real de productividad, augmentation vs sustitución, y cómo cambia el trabajo cualificado.</div>
+      <div class="sc-footer">
+        <span class="sc-pill sc-pill-next">Próximamente</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sc-card sc-card-future">
+    <div class="sc-bar" style="background:#3B82F6; opacity:.6;"></div>
+    <div class="sc-body">
+      <span class="sc-icon">🌐</span>
+      <div class="sc-title">Geopolítica de la IA</div>
+      <div class="sc-desc">Chips, TSMC, control de exportaciones y la carrera entre EEUU, China y la UE por la frontera tecnológica.</div>
+      <div class="sc-footer">
+        <span class="sc-pill sc-pill-next">Próximamente</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sc-card sc-card-future">
+    <div class="sc-bar" style="background:#10B981; opacity:.6;"></div>
+    <div class="sc-body">
+      <span class="sc-icon">🤖</span>
+      <div class="sc-title">Agentes de IA</div>
+      <div class="sc-desc">Cómo los LLMs pasan de responder a actuar. Bucles de razonamiento, herramientas y límites reales de la autonomía.</div>
+      <div class="sc-footer">
+        <span class="sc-pill sc-pill-next">Próximamente</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sc-card sc-card-future">
+    <div class="sc-bar" style="background:#7C3AED; opacity:.6;"></div>
+    <div class="sc-body">
+      <span class="sc-icon">📚</span>
+      <div class="sc-title">RAG: Retrieval-Augmented Generation</div>
+      <div class="sc-desc">Cómo conectar un LLM a fuentes externas de conocimiento. Arquitectura, evaluación y trampas habituales.</div>
+      <div class="sc-footer">
+        <span class="sc-pill sc-pill-next">Próximamente</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SET 2 (duplicate for seamless loop) ── -->
+
+  <a href="/series/fundamentos-ia-iag/00_presentacion_serie/" class="sc-card">
+    <div class="sc-bar" style="background:#324AB2;"></div>
+    <div class="sc-body">
+      <span class="sc-icon">🏛</span>
+      <div class="sc-title">Fundamentos de IA e IA generativa</div>
+      <div class="sc-desc">Las bases para distinguir señal de ruido. IA clásica, generativa y AGI sin simplificaciones.</div>
+      <div class="sc-footer">
+        <span class="sc-pill sc-pill-done">Completa</span>
+        <span class="sc-cta" style="color:#324AB2;">Leer →</span>
+      </div>
+    </div>
+  </a>
+
+  <a href="/series/from-cave-to-agi/00_presentacion_serie/" class="sc-card">
+    <div class="sc-bar" style="background:#26A69A;"></div>
+    <div class="sc-body">
+      <span class="sc-icon">🧠</span>
+      <div class="sc-title">De las cavernas a la AGI</div>
+      <div class="sc-desc">Recorrido histórico desde los primeros conceptos matemáticos hasta los modelos fundacionales.</div>
+      <div class="sc-footer">
+        <span class="sc-pill sc-pill-done">Terminada</span>
+        <span class="sc-cta" style="color:#26A69A;">Leer →</span>
+      </div>
+    </div>
+  </a>
+
+  <a href="/series/multimodalidad-iag/00_presentacion_serie/" class="sc-card">
+    <div class="sc-bar" style="background:#7cc7ff;"></div>
+    <div class="sc-body">
+      <span class="sc-icon">🎛</span>
+      <div class="sc-title">Multimodalidad en IA Generativa</div>
+      <div class="sc-desc">Texto, imagen, audio y vídeo en un solo sistema. Arquitecturas, alineamiento y límites reales.</div>
+      <div class="sc-footer">
+        <span class="sc-pill sc-pill-done">Terminada</span>
+        <span class="sc-cta" style="color:#7cc7ff;">Leer →</span>
+      </div>
+    </div>
+  </a>
+
+  <a href="/series/modelos-razonadores/00_presentacion_serie/" class="sc-card">
+    <div class="sc-bar" style="background:#FFB343;"></div>
+    <div class="sc-body">
+      <span class="sc-icon">⏱</span>
+      <div class="sc-title">Modelos razonadores</div>
+      <div class="sc-desc">Qué significa razonar para un LLM, cuánto cuesta y cómo diseñar con el cómputo de inferencia como variable.</div>
+      <div class="sc-footer">
+        <span class="sc-pill sc-pill-wip">En construcción</span>
+        <span class="sc-cta" style="color:#FFB343;">Ver →</span>
+      </div>
+    </div>
+  </a>
+
+  <a href="/series/ia-pib-bienestar-energia/00_presentacion_serie/" class="sc-card">
+    <div class="sc-bar" style="background:#e06c75;"></div>
+    <div class="sc-body">
+      <span class="sc-icon">⚡</span>
+      <div class="sc-title">IA, PIB, bienestar y energía</div>
+      <div class="sc-desc">Energía, productividad y bienestar real más allá del PIB. La IA como tecnología eléctrica del siglo XXI.</div>
+      <div class="sc-footer">
+        <span class="sc-pill sc-pill-wip">En construcción</span>
+        <span class="sc-cta" style="color:#e06c75;">Ver →</span>
+      </div>
+    </div>
+  </a>
+
+  <a href="/series/datacenters-espacio/00_presentacion_serie/" class="sc-card">
+    <div class="sc-bar" style="background:#98c379;"></div>
+    <div class="sc-body">
+      <span class="sc-icon">🛰</span>
+      <div class="sc-title">Datacenters en el espacio</div>
+      <div class="sc-desc">Física, costes y viabilidad de llevar cómputo fuera de la Tierra. Qué resuelve y qué sigue sin resolver.</div>
+      <div class="sc-footer">
+        <span class="sc-pill sc-pill-wip">En construcción</span>
+        <span class="sc-cta" style="color:#98c379;">Ver →</span>
+      </div>
+    </div>
+  </a>
+
+  <div class="sc-card sc-card-future">
+    <div class="sc-bar" style="background:#6366F1; opacity:.6;"></div>
+    <div class="sc-body">
+      <span class="sc-icon">📊</span>
+      <div class="sc-title">Evaluación de modelos de IA</div>
+      <div class="sc-desc">Benchmarks vs rendimiento real, LLM-as-judge y red-teaming. Cómo saber de verdad qué funciona.</div>
+      <div class="sc-footer">
+        <span class="sc-pill sc-pill-next">Próximamente</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sc-card sc-card-future">
+    <div class="sc-bar" style="background:#8B5CF6; opacity:.6;"></div>
+    <div class="sc-body">
+      <span class="sc-icon">🌀</span>
+      <div class="sc-title">El problema de la alucinación</div>
+      <div class="sc-desc">Por qué alucinan los LLMs, los límites del grounding y hasta dónde llega el RAG.</div>
+      <div class="sc-footer">
+        <span class="sc-pill sc-pill-next">Próximamente</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sc-card sc-card-future">
+    <div class="sc-bar" style="background:#EC4899; opacity:.6;"></div>
+    <div class="sc-body">
+      <span class="sc-icon">🧪</span>
+      <div class="sc-title">Fine-tuning y adaptación de modelos</div>
+      <div class="sc-desc">Cuándo hacer fine-tuning vs prompt engineering vs RAG, y qué coste y riesgo implica cada opción.</div>
+      <div class="sc-footer">
+        <span class="sc-pill sc-pill-next">Próximamente</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sc-card sc-card-future">
+    <div class="sc-bar" style="background:#F59E0B; opacity:.6;"></div>
+    <div class="sc-body">
+      <span class="sc-icon">💼</span>
+      <div class="sc-title">IA en el trabajo</div>
+      <div class="sc-desc">Evidencia real de productividad, augmentation vs sustitución, y cómo cambia el trabajo cualificado.</div>
+      <div class="sc-footer">
+        <span class="sc-pill sc-pill-next">Próximamente</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sc-card sc-card-future">
+    <div class="sc-bar" style="background:#3B82F6; opacity:.6;"></div>
+    <div class="sc-body">
+      <span class="sc-icon">🌐</span>
+      <div class="sc-title">Geopolítica de la IA</div>
+      <div class="sc-desc">Chips, TSMC, control de exportaciones y la carrera entre EEUU, China y la UE por la frontera tecnológica.</div>
+      <div class="sc-footer">
+        <span class="sc-pill sc-pill-next">Próximamente</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sc-card sc-card-future">
+    <div class="sc-bar" style="background:#10B981; opacity:.6;"></div>
+    <div class="sc-body">
+      <span class="sc-icon">🤖</span>
+      <div class="sc-title">Agentes de IA</div>
+      <div class="sc-desc">Cómo los LLMs pasan de responder a actuar. Bucles de razonamiento, herramientas y límites reales de la autonomía.</div>
+      <div class="sc-footer">
+        <span class="sc-pill sc-pill-next">Próximamente</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sc-card sc-card-future">
+    <div class="sc-bar" style="background:#7C3AED; opacity:.6;"></div>
+    <div class="sc-body">
+      <span class="sc-icon">📚</span>
+      <div class="sc-title">RAG: Retrieval-Augmented Generation</div>
+      <div class="sc-desc">Cómo conectar un LLM a fuentes externas de conocimiento. Arquitectura, evaluación y trampas habituales.</div>
+      <div class="sc-footer">
+        <span class="sc-pill sc-pill-next">Próximamente</span>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end .sc-track -->
+</div><!-- end .sc-marquee-outer -->
+</div><!-- end .sc-wrap -->
