@@ -3,6 +3,9 @@ title: Representar — del conteo al cálculo
 description: "Cómo la humanidad aprendió a representar el mundo con símbolos manipulables: desde las primeras muescas de hueso hasta el álgebra, el cálculo diferencial y la notación que hizo posible la IA moderna."
 date: 2026-03-26
 keywords: "historia de las matemáticas, representación simbólica, álgebra, cálculo diferencial, historia computación, Leibniz Newton, notación matemática, origen inteligencia artificial"
+tags:
+  - IA
+  - Historia
 ---
 
 # Capítulo 1: Representar (≈ 43 000 a. C. hasta 1700)

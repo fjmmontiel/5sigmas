@@ -3,6 +3,10 @@ title: Qué es la Inteligencia Artificial
 description: "Qué es la Inteligencia Artificial, cómo funciona y cómo ha evolucionado: desde heurísticas y Machine Learning hasta redes neuronales y modelos fundacionales."
 date: 2026-03-15
 keywords: "inteligencia artificial, qué es la inteligencia artificial, machine learning, deep learning, ia generativa, aprendizaje automático, redes neuronales, modelos fundacionales"
+tags:
+  - IA
+  - LLMs
+  - GenAI
 ---
 
 # Capítulo 1 — Qué es IA

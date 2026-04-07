@@ -1,6 +1,10 @@
 site_name: 5sigmas - Más señal, menos ruido
 site_description: Divulgación técnica sobre IA en español. Análisis riguroso de Inteligencia Artificial, IA generativa y AGI — sin hype, con contexto y fuentes primarias.
 site_url: "https://5sigmas.com"
+validation:
+  links:
+    absolute_links: ignore
+    unrecognized_links: ignore
 theme:
   name: material
   custom_dir: overrides
@@ -41,6 +45,7 @@ extra:
 nav:
   - Inicio: index.md
   - Series:
+      - series/index.md
       - Fundamentos de IA e IA generativa:
           - Presentación: series/fundamentos-ia-iag/00_presentacion_serie.md
           - ¿Qué es la IA?: series/fundamentos-ia-iag/01-que-es-ia.md
@@ -67,6 +72,9 @@ nav:
           - Presentación: series/ia-pib-bienestar-energia/00_presentacion_serie.md
       - Datacenters en el espacio:
           - Presentación: series/datacenters-espacio/00_presentacion_serie.md
+  - Rutas de lectura: roadmaps.md
+  - Próximamente: proximamente.md
+  - Temas: tags.md
   - Sobre 5sigmas: meta/about.md
 markdown_extensions:
   - meta
@@ -119,6 +127,7 @@ hooks:
 
 plugins:
   - search
+  - tags:
   - macros
   - redirects:
       enabled: !ENV [MKDOCS_REDIRECTS, true]

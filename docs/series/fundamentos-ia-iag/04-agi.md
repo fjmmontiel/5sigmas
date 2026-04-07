@@ -3,6 +3,10 @@ title: AGI — Inteligencia Artificial General
 description: "Qué es la Inteligencia Artificial General: definiciones en conflicto, niveles propuestos por Google DeepMind y OpenAI, y qué implicaría alcanzarla realmente."
 date: 2026-03-20
 keywords: "agi, inteligencia artificial general, qué es agi, agi definición, deepmind niveles agi, superinteligencia, alineamiento ia, agi openai, agi riesgos"
+tags:
+  - IA
+  - AGI
+  - Alineamiento
 ---
 
 # Capítulo 4 — AGI: Inteligencia Artificial General

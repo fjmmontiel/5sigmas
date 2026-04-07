@@ -1,10 +1,18 @@
 ---
 title: De las cavernas a la AGI
 description: "Historia intelectual de la IA: desde las primeras abstracciones matemáticas hasta los modelos fundacionales. Matemáticas, filosofía y computación en contexto."
+keywords: historia inteligencia artificial, IA historia, Transformer, modelos fundacionales, AGI, deep learning
+tags:
+  - IA
+  - AGI
+  - LLMs
+  - Historia
+hide:
+  - toc
 ---
 # De las cavernas a la AGI
 
-{{ include_html("snippets/series_meta.html", series_dir="from-cave-to-agi", data_state="complete", data_level="general", status_label="Terminada", level_label="General") }}
+{{ include_html("snippets/series_meta.html", series_dir="from-cave-to-agi", data_state="complete", data_level="general", status_label="Terminada", level_label="General", progress_total="5") }}
 
 Esta serie es un viaje histórico desde los primeros intentos de la humanidad por abstraer el mundo mediante símbolos hasta la creación de modelos de lenguaje masivos que *parecen entenderlo*.<br>
 
@@ -44,3 +52,9 @@ En esta serie exploraremos: <br>
 - **Memoria e inferencia activa:** contexto largo, memoria externa y test-time compute como nuevas palancas más allá de los parámetros.
 - **Agentes, herramientas y búsqueda:** sistemas que actúan, planifican y recuperan información del mundo real.
 - **Modelos del mundo y robótica fundacional:** representaciones internas que simulan y predicen, aplicadas al control físico.<br>
+
+---
+
+**Siguiente serie recomendada:** [Multimodalidad en IA generativa](/series/multimodalidad-iag/00_presentacion_serie/) — qué significa unificar texto, imagen, audio y vídeo en un mismo sistema.
+
+[Ver todas las series](/series/){ .md-button }

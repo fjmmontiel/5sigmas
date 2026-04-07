@@ -1,7 +1,16 @@
 ---
 title: Modelos razonadores
 description: "Cómo razonan los modelos de IA: cadenas de pensamiento, árbol de ideas y razonamiento como proceso con coste computacional real. Análisis técnico sin hype."
+keywords: modelos razonadores, test-time compute, chain of thought, razonamiento LLM, inferencia IA
 robots: noindex
+tags:
+  - IA
+  - GenAI
+  - LLMs
+  - Razonamiento
+  - Inferencia
+hide:
+  - toc
 ---
 
 # Modelos razonadores

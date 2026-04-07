@@ -3,6 +3,10 @@ title: IA clásica vs IA Generativa
 description: "Comparativa técnica entre IA clásica e IA generativa: entradas, salidas, determinismo, explicabilidad y cuándo usar reglas, ML, LLM, RAG o agentes."
 date: 2026-03-20
 keywords: "ia clásica vs ia generativa, diferencias ia, cuándo usar llm, RAG, agentes ia, determinismo ia, explicabilidad ia, ia vs llm, matriz operacional ia"
+tags:
+  - IA
+  - GenAI
+  - LLMs
 ---
 
 # Capítulo 3 — IA vs IA Generativa

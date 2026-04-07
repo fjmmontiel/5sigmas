@@ -3,6 +3,11 @@ title: Alineamiento de pares a interacciones multimodales
 description: Cómo se aprende que dos señales distintas hablan del mismo contenido, qué cambia cuando el alineamiento va más allá del par imagen-texto, y por qué la calidad y estructura del dato determinan la robustez de las representaciones aprendidas.
 date: 2026-04-02
 keywords: "alineamiento multimodal, CLIP, contrastive learning, ImageBind, embedding multimodal, representaciones imagen texto, entrenamiento multimodal, aprendizaje contrastivo"
+tags:
+  - IA
+  - GenAI
+  - Multimodalidad
+  - Alineamiento
 ---
 
 # Capítulo 2 — Alineamiento: de pares a interacciones

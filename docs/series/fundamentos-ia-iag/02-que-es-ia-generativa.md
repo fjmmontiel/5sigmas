@@ -3,6 +3,10 @@ title: Qué es IA Generativa
 description: "Cómo funciona la IA generativa: del embedding y el Transformer a los modelos fundacionales. Leyes de escala, LLMOps y diferencias entre LLM, RAG y agentes."
 date: 2026-03-17
 keywords: "ia generativa, qué es ia generativa, transformer, modelos de lenguaje, LLM, embedding, leyes de escala, GPT, modelos fundacionales, RLHF, fine-tuning"
+tags:
+  - IA
+  - GenAI
+  - LLMs
 ---
 
 # Capítulo 2 — Qué es IA Generativa

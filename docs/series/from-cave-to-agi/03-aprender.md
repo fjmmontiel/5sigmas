@@ -3,6 +3,10 @@ title: Aprender — de las reglas a los datos
 description: "Cómo la IA pasó de escribir el conocimiento a mano a ajustarlo con datos: de la IA simbólica y los sistemas expertos al aprendizaje estadístico y el renacimiento neuronal que desembocó en AlexNet en 2012."
 date: 2026-03-27
 keywords: "historia machine learning, sistemas expertos, MYCIN, aprendizaje automático historia, backpropagation, AlexNet, inviernos ia, ia simbólica, perceptrón, deep learning historia"
+tags:
+  - IA
+  - Historia
+  - LLMs
 ---
 
 # Capítulo 3 — Aprender (≈ 1956 – 2012)

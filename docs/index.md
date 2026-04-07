@@ -3,6 +3,7 @@ title: 5sigmas
 description: Divulgación técnica sobre IA en español. Análisis riguroso de Inteligencia Artificial, IA generativa y AGI — sin hype, con contexto y fuentes primarias.
 hide:
   - navigation
+  - footer
 ---
 
 5sigmas explica la IA con contexto, historia y fuentes primarias. No persigue el hype del día: construye el mapa mental que necesitas para entender qué está pasando y qué importa de verdad.
@@ -48,9 +49,6 @@ Este proyecto aplica ese mismo criterio a la divulgación sobre IA: separar el c
 
 ---
 
-## Hoja de ruta
-
-{{ include_html("snippets/series_cards.html") }}
-
-[Empezar por Fundamentos](/series/fundamentos-ia-iag/00_presentacion_serie/){ .md-button .md-button--primary }
+[Ver todas las series](/series/){ .md-button .md-button--primary }
+[Rutas de lectura](/roadmaps/){ .md-button }
 [Sobre el proyecto](/meta/about/){ .md-button }

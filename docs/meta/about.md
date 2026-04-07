@@ -4,6 +4,7 @@ description: Ingeniero de sistemas de IA en tiempo real, doble graduado en Físi
 hide:
   - navigation
   - toc
+  - footer
 ---
 
 5sigmas es una publicación técnica sobre IA escrita desde la lógica de la ingeniería: separar señal de ruido, distinguir hecho de interpretación y priorizar fuentes primarias sobre narrativa comercial.

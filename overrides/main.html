@@ -109,6 +109,17 @@
     ]
   }
   </script>
+  {% elif page.url not in ["", "index.html"] and "meta/about" not in page.url %}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type": "ListItem", "position": 1, "name": "Inicio", "item": "{{ config.site_url }}"},
+      {"@type": "ListItem", "position": 2, "name": "{{ page.title | e }}", "item": "{{ page.canonical_url }}"}
+    ]
+  }
+  </script>
   {% endif %}
 
   {% endif %}

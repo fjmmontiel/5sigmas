@@ -1,7 +1,14 @@
 ---
 title: Datacenters en el espacio
 description: "Análisis técnico de los datacenters en órbita: disipación de calor, latencia, coste de lanzamiento y viabilidad real frente a la infraestructura terrestre."
+keywords: datacenters espacio, computación orbital, infraestructura IA, energía cómputo, satélites computación
 robots: noindex
+tags:
+  - IA
+  - Energía
+  - Infraestructura
+hide:
+  - toc
 ---
 # Datacenters en el espacio
 
