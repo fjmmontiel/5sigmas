@@ -7,6 +7,7 @@ tags:
   - GenAI
   - LLMs
   - AGI
+robots: noindex, follow
 hide:
   - toc
 ---

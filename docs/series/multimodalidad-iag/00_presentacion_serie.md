@@ -7,6 +7,7 @@ tags:
   - GenAI
   - LLMs
   - Multimodalidad
+robots: noindex, follow
 hide:
   - toc
 ---

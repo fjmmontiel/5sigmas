@@ -119,6 +119,7 @@ hooks:
   - hooks/jsonld_article.py
   - hooks/wip_series.py
   - hooks/nosnippet.py
+  - hooks/sitemap_noindex.py
 
 plugins:
   - search
@@ -127,8 +128,9 @@ plugins:
   - redirects:
       enabled: !ENV [MKDOCS_REDIRECTS, true]
       redirect_maps:
-        # Canonical URL legacy — uppercase slug indexado por Google
+        # Canonical URL legacy — uppercase slugs indexados por Google
         'series/fundamentos-IA-IAG/00_presentacion_serie.md': 'series/fundamentos-ia-iag/00_presentacion_serie.md'
+        'series/from-cave-to-AGI/00_presentacion_serie.md': 'series/from-cave-to-agi/00_presentacion_serie.md'
   - social:
       cards_layout: clean
       cards_layout_options:

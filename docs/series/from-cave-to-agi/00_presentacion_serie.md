@@ -7,6 +7,7 @@ tags:
   - AGI
   - LLMs
   - Historia
+robots: noindex, follow
 hide:
   - toc
 ---

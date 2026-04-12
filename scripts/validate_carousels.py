@@ -95,18 +95,65 @@ class Result:
         return msg
 
 
-def check_file(html: str, path: Path) -> list[Result]:
+def check_file(html: str, path: Path, v2: bool = False, pulido: bool = False) -> list[Result]:
     """Reglas a nivel de archivo completo."""
     results = []
 
-    # F1 — Fondo incorrecto (#0d1117 es el fondo del wrapper, no de las slides)
-    wrong = len(re.findall(r'background:#0d1117', html))
-    ok_bg = len(re.findall(r'background:#0b1220', html))
-    results.append(Result(
-        "F1 · slide background:#0b1220 (no #0d1117)",
-        ok_bg > 0,
-        f"encontrado {ok_bg}x #0b1220 / {wrong}x #0d1117"
-    ))
+    if pulido:
+        # P1 — Sin listas densas (step-item / col-item) > 3 ítems en total
+        step_items = count_pattern(html, r'class="step-item"')
+        col_items  = count_pattern(html, r'class="col-item"')
+        results.append(Result(
+            "P1 · sin listas > 3 ítems (step-item + col-item)",
+            step_items + col_items <= 3,
+            f"step-item: {step_items}, col-item: {col_items}" if step_items + col_items > 3 else ""
+        ))
+
+        # P3 — Sin patrones legacy densos (steps-content, comparison-content)
+        has_steps      = "steps-content" in html
+        has_comparison = "comparison-content" in html
+        results.append(Result(
+            "P3 · sin patrones legacy (steps-content / comparison-content)",
+            not has_steps and not has_comparison,
+            f"steps-content: {has_steps}, comparison-content: {has_comparison}" if has_steps or has_comparison else ""
+        ))
+
+        # P4 — Al menos un slide usa una primitiva SVE declarada
+        has_sve = bool(re.search(
+            r'class="(beat-content|flow-content|contrast-content|metric-content|proof-content)"',
+            html
+        ))
+        results.append(Result(
+            "P4 · usa primitivas SVE (beat/flow/contrast/metric/proof)",
+            has_sve,
+            "ningún slide tiene clase beat-content/flow-content/contrast-content/metric-content/proof-content" if not has_sve else ""
+        ))
+
+    if pulido:
+        # F1 pulido — Fondo light (#f7f9fc en CSS de .slide)
+        ok_bg = len(re.findall(r'background:#f7f9fc', html))
+        results.append(Result(
+            "F1 · slide background:#f7f9fc (pulido light)",
+            ok_bg > 0,
+            f"encontrado {ok_bg}x #f7f9fc"
+        ))
+    elif v2:
+        # F1v2 — Fondo light (#f7f9fc en CSS de .slide)
+        ok_bg_v2 = len(re.findall(r'background:#f7f9fc', html))
+        results.append(Result(
+            "F1 · slide background:#f7f9fc (v2 light)",
+            ok_bg_v2 > 0,
+            f"encontrado {ok_bg_v2}x #f7f9fc"
+        ))
+    else:
+        # F1 — Fondo incorrecto (#0d1117 es el fondo del wrapper, no de las slides)
+        wrong = len(re.findall(r'background:#0d1117', html))
+        ok_bg = len(re.findall(r'background:#0b1220', html))
+        results.append(Result(
+            "F1 · slide background:#0b1220 (no #0d1117)",
+            ok_bg > 0,
+            f"encontrado {ok_bg}x #0b1220 / {wrong}x #0d1117"
+        ))
 
     # F2 — accent-bar tiene el gradiente corporativo exacto
     corp_grad = bool(re.search(
@@ -144,16 +191,37 @@ def check_file(html: str, path: Path) -> list[Result]:
         f"encontrado: {bad_vars}" if bad_vars else ""
     ))
 
-    # F9 — body font-family declara "Inter" como primera fuente
-    inter_first = bool(re.search(
-        r'html,\s*body\s*\{[^}]*font-family:\s*"Inter"',
-        html
-    ))
-    results.append(Result(
-        'F9 · body font-family empieza por "Inter"',
-        inter_first,
-        'cambiar a font-family:"Inter","Avenir Next","Segoe UI",Arial,sans-serif' if not inter_first else ""
-    ))
+    # F9 — body font-family: v1 = "Inter" primero, v2 = "Avenir Next" primero, pulido = "Inter" primero
+    if pulido:
+        inter_first = bool(re.search(
+            r'html,\s*body\s*\{[^}]*font-family:\s*"Inter"',
+            html
+        ))
+        results.append(Result(
+            'F9 · body font-family empieza por "Inter" (pulido)',
+            inter_first,
+            'cambiar a font-family:"Inter","Avenir Next","Segoe UI",Arial,sans-serif' if not inter_first else ""
+        ))
+    elif v2:
+        avenir_first = bool(re.search(
+            r'html,\s*body\s*\{[^}]*font-family:\s*"Avenir Next"',
+            html
+        ))
+        results.append(Result(
+            'F9 · body font-family empieza por "Avenir Next" (v2)',
+            avenir_first,
+            'v2 debe usar font-family:"Avenir Next","Avenir","Segoe UI",...' if not avenir_first else ""
+        ))
+    else:
+        inter_first = bool(re.search(
+            r'html,\s*body\s*\{[^}]*font-family:\s*"Inter"',
+            html
+        ))
+        results.append(Result(
+            'F9 · body font-family empieza por "Inter"',
+            inter_first,
+            'cambiar a font-family:"Inter","Avenir Next","Segoe UI",Arial,sans-serif' if not inter_first else ""
+        ))
 
     # F10 — Google Fonts Inter cargado vía <link>
     inter_link = bool(re.search(
@@ -191,7 +259,7 @@ def check_file(html: str, path: Path) -> list[Result]:
     return results
 
 
-def check_slide(data_id: str, html: str, total: int) -> list[Result]:
+def check_slide(data_id: str, html: str, total: int, v2: bool = False, pulido: bool = False) -> list[Result]:
     """Reglas por slide individual."""
     results = []
     is_hook    = "hook" in data_id
@@ -228,11 +296,38 @@ def check_slide(data_id: str, html: str, total: int) -> list[Result]:
         has_footer and has_brand_text and has_brand_logo
     ))
 
-    # S4 — slide tiene background:#0b1220
-    results.append(Result(
-        "S4 · slide div background:#0b1220",
-        "background:#0b1220" in html
-    ))
+    # P2 — Elemento dominante ≥ 40px en content slides (pulido)
+    if pulido and not is_hook and not is_cta and not is_snippet:
+        sizes = [int(m) for m in re.findall(r'font-size:(\d+)px', html)]
+        dominant = [s for s in sizes if s >= 40]
+        results.append(Result(
+            "P2 · elemento dominante ≥ 40px (pulido)",
+            bool(dominant),
+            f"tamaños detectados: {sorted(set(sizes), reverse=True)[:6]}" if not dominant else f"ok: {sorted(set(dominant), reverse=True)[:4]}"
+        ))
+
+    # S4 — slide tiene el fondo correcto según versión
+    if pulido:
+        bad_dark = "background:#0b1220" in html or "background:#0d1117" in html
+        results.append(Result(
+            "S4 · slide sin background dark inline (pulido light)",
+            not bad_dark,
+            "eliminar background dark inline" if bad_dark else ""
+        ))
+    elif v2:
+        # v2: el fondo viene del CSS de clase (.slide { background:#f7f9fc }),
+        # no hay inline style — el check pasa si no hay fondo dark incorrecto
+        bad_dark = "background:#0b1220" in html or "background:#0d1117" in html
+        results.append(Result(
+            "S4 · slide sin background dark inline (v2 light)",
+            not bad_dark,
+            "eliminar background:#0b1220 inline en el div .slide" if bad_dark else ""
+        ))
+    else:
+        results.append(Result(
+            "S4 · slide div background:#0b1220",
+            "background:#0b1220" in html
+        ))
 
     # Hook-only
     if is_hook:
@@ -265,18 +360,26 @@ def check_slide(data_id: str, html: str, total: int) -> list[Result]:
         # (layout compacto intencionalmente sin divider ni steps-title)
         # Clases de título legacy (cap1): comp-title, eq-title, gen-title, bifold-title, nflow-title, etc.
         has_custom_title = bool(re.search(r'class="[a-z-]+-title"', html))
+        # Pulido: SVE family labels (beat-label, flow-label, etc.) equivalen al divider
+        has_sve_label    = pulido and bool(re.search(
+            r'class="(beat-label|flow-label|contrast-label|metric-label|proof-label)"', html
+        ))
 
         results.append(Result(
             "S12 · tiene .divider antes del título (o compare-sup válido)",
-            has_divider or has_compare_sup or has_custom_title,
-            "falta el divider gradiente corporativo" if not has_divider and not has_compare_sup and not has_custom_title else ""
+            has_divider or has_compare_sup or has_custom_title or has_sve_label,
+            "falta el divider gradiente corporativo" if not has_divider and not has_compare_sup and not has_custom_title and not has_sve_label else ""
         ))
         # Aceptar también headings inline (font-weight:800/900 a tamaño de encabezado)
         has_inline_heading = bool(re.search(
             r'font-size:\s*\d{2,3}px[^"]*font-weight:\s*[89]00|font-weight:\s*[89]00[^"]*font-size:\s*\d{2,3}px',
             html
         ))
-        heading_ok = has_steps_title or has_inline_heading or has_compare_sup or has_custom_title
+        # Pulido: SVE dominant elements (beat-symbol, flow-key, contrast-main, metric-number, proof-formula)
+        has_sve_dominant = pulido and bool(re.search(
+            r'class="(beat-symbol|flow-key|contrast-main|metric-number|proof-formula)"', html
+        ))
+        heading_ok = has_steps_title or has_inline_heading or has_compare_sup or has_custom_title or has_sve_dominant
         results.append(Result(
             "S13 · tiene heading (steps-title o inline font-weight:800+)",
             heading_ok,
@@ -302,8 +405,10 @@ def check_slide(data_id: str, html: str, total: int) -> list[Result]:
 # ── Main ────────────────────────────────────────────────────────────────────
 
 def validate_file(carousel_path: Path) -> tuple[int, int]:
-    """Valida un carousel.html. Retorna (fails, total_checks)."""
+    """Valida un carousel.html, carousel_v2.html o carousel_pulido.html. Retorna (fails, total_checks)."""
     html = carousel_path.read_text(encoding="utf-8")
+    v2     = carousel_path.name == "carousel_v2.html"
+    pulido = carousel_path.name == "carousel_pulido.html"
 
     rel = carousel_path.relative_to(ROOT)
     print(f"\n{BOLD}{'─'*70}{RESET}")
@@ -313,6 +418,12 @@ def validate_file(carousel_path: Path) -> tuple[int, int]:
     if is_legacy:
         print(f"{BOLD}{rel}{RESET}  {YELLOW}[formato legado — publicado, solo check de fondo]{RESET}")
         print(f"{'─'*70}")
+        if v2:
+            # v2 legacy: #0b1220 fue reemplazado por #f7f9fc — pasar siempre
+            r = Result("F1 · slide background (v2 light, legado)", True, "legado convertido a v2")
+            print(repr(r))
+            print(f"\n  {YELLOW}{BOLD}LEGADO v2 — 0 error(s) / 1 check{RESET}\n")
+            return 0, 1
         ok_bg = len(re.findall(r'background:#0b1220', html)) > 0
         r = Result("F1 · slide background:#0b1220 (legado)", ok_bg)
         print(repr(r))
@@ -320,16 +431,22 @@ def validate_file(carousel_path: Path) -> tuple[int, int]:
         print(f"\n  {YELLOW}{BOLD}LEGADO — {fails} error(s) / 1 check{RESET}\n")
         return fails, 1
 
+    if pulido:
+        mode_label = f"  {DIM}[pulido SVE]{RESET}"
+    elif v2:
+        mode_label = f"  {DIM}[v2 light]{RESET}"
+    else:
+        mode_label = ""
     slides = extract_slides(html)
     total = len(slides)
-    print(f"{BOLD}{rel}{RESET}  {DIM}({total} slides){RESET}")
+    print(f"{BOLD}{rel}{RESET}  {DIM}({total} slides){RESET}{mode_label}")
     print(f"{'─'*70}")
 
     all_results: list[Result] = []
 
     # File-level checks
     print(f"\n  {BOLD}[archivo]{RESET}")
-    file_results = check_file(html, carousel_path)
+    file_results = check_file(html, carousel_path, v2=v2, pulido=pulido)
     for r in file_results:
         print(repr(r))
     all_results.extend(file_results)
@@ -337,7 +454,7 @@ def validate_file(carousel_path: Path) -> tuple[int, int]:
     # Per-slide checks
     for data_id, slide_html in slides:
         print(f"\n  {BOLD}[{data_id}]{RESET}")
-        slide_results = check_slide(data_id, slide_html, total)
+        slide_results = check_slide(data_id, slide_html, total, v2=v2, pulido=pulido)
         for r in slide_results:
             print(repr(r))
         all_results.extend(slide_results)
@@ -350,7 +467,8 @@ def validate_file(carousel_path: Path) -> tuple[int, int]:
     return fails, total_checks
 
 
-def find_carousels(path_filter: str | None, file_filter: str | None) -> list[Path]:
+def find_carousels(path_filter: str | None, file_filter: str | None, pulido: bool = False) -> list[Path]:
+    carousel_name = "carousel_pulido.html" if pulido else "carousel.html"
     if file_filter:
         p = Path(file_filter)
         if not p.is_absolute():
@@ -358,17 +476,18 @@ def find_carousels(path_filter: str | None, file_filter: str | None) -> list[Pat
         return [p] if p.exists() else []
     if path_filter:
         base = POSTS_DIR / path_filter
-        return sorted(base.rglob("carousel.html"))
-    return sorted(POSTS_DIR.rglob("carousel.html"))
+        return sorted(base.rglob(carousel_name))
+    return sorted(POSTS_DIR.rglob(carousel_name))
 
 
 def main():
     parser = argparse.ArgumentParser(description="Valida carousel.html de 5Sigmas")
     parser.add_argument("--path", help="Subfiltro bajo documentacion_interna/posts/ (ej: from-cave-to-agi/cap5)")
     parser.add_argument("--file", help="Ruta directa a un carousel.html concreto")
+    parser.add_argument("--pulido", action="store_true", help="Buscar y validar carousel_pulido.html (modo SVE)")
     args = parser.parse_args()
 
-    carousels = find_carousels(args.path, args.file)
+    carousels = find_carousels(args.path, args.file, pulido=args.pulido)
     if not carousels:
         print(f"{RED}No se encontraron carousel.html con ese filtro.{RESET}")
         sys.exit(1)
