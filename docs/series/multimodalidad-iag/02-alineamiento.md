@@ -12,6 +12,8 @@ tags:
 
 # Capítulo 2 — Alineamiento: de pares a interacciones
 
+Este artículo explica cómo los sistemas multimodales aprenden que dos señales distintas hablan del mismo contenido: el proceso de alineamiento. Al leerlo entenderás qué tipo de datos se necesitan para construir representaciones compartidas, qué ocurre cuando el alineamiento se extiende más allá del par imagen-texto (como hace ImageBind con seis modalidades), y por qué la calidad del dato de entrenamiento importa más que la arquitectura para determinar dónde falla un sistema en producción. El artículo es útil tanto si tienes base técnica en aprendizaje automático como si solo quieres entender por qué los modelos comprenden bien algunas imágenes y fallan sistemáticamente en otras.
+
 El capítulo anterior estableció que la multimodalidad no se agota en el par texto-imagen ni en la existencia de un único espacio de representación compartida. Este capítulo describe cómo se construye el alineamiento entre modalidades: qué tipo de datos se necesitan, cómo evoluciona el problema cuando las modalidades son más de dos, y qué sucede cuando los datos son de baja calidad o están mal estructurados.
 
 La progresión no es arbitraria. Los sistemas multimodales se entrenan en etapas, cada una construyendo sobre la anterior, de forma que los problemas que aparecen en las etapas finales casi siempre tienen su raíz en debilidades de las etapas previas.
@@ -124,3 +126,19 @@ El riesgo es que las preferencias de los evaluadores no son uniformes y pueden i
 [r6]: https://blog.google/innovation-and-ai/technology/developers-tools/gemini-embedding-2/ "Gemini Embedding 2 — Google DeepMind 2026"
 [r7]: https://arxiv.org/abs/2303.15343 "SigLIP — Zhai et al. 2023"
 [r8]: https://arxiv.org/abs/2304.07193 "DINOv2 — Oquab et al. 2023"
+
+---
+
+## Preguntas frecuentes
+
+**¿Por qué el aprendizaje contrastivo es más eficiente que enseñar al modelo a describir imágenes?**
+Aprender a emparejar imágenes con textos que ya existen en internet es mucho más barato que predecir cada palabra de una descripción generada. El método fuerza a los codificadores visual y textual a construir un espacio compartido donde conceptos similares quedan representados por vectores cercanos, sin necesidad de generar texto nuevo ni anotar imágenes a mano.
+
+**¿Para qué sirve el módulo conector entre el encoder visual y el modelo de lenguaje?**
+Actúa como puente entre dos mundos con representaciones distintas. Si el conector es demasiado simple, no traslada la riqueza de la señal visual al modelo de lenguaje. Si es demasiado complejo, necesita más datos y más cómputo para entrenarse. El diseño del conector es el punto más crítico de esta arquitectura porque de él depende cuánta información visual llega al razonamiento.
+
+**¿En qué consiste el ajuste por instrucción visual que popularizó LLaVA?**
+Consiste en entrenar al modelo con tríos de imagen, instrucción textual y respuesta esperada, de forma que aprenda a seguir órdenes complejas sobre contenido visual y no solo a describir lo que ve. LLaVA demostró que estos datos pueden generarse sintéticamente con un modelo de lenguaje potente, aunque el modelo entrenado hereda los puntos ciegos del modelo que los generó.
+
+**¿Qué diferencia hay entre aprender con pares imagen-texto y construir un espacio de representación compartido entre seis modalidades como hace ImageBind?**
+Con pares imagen-texto solo se alinean esas dos modalidades. ImageBind usa la imagen como ancla común y aprende alineamiento entre audio, profundidad, señal térmica e IMU sin haber visto nunca pares directos entre esas modalidades: si audio e imagen están alineados, y texto e imagen también, entonces audio y texto quedan alineados por transitividad. El resultado es que una consulta textual puede recuperar audio aunque nunca se hayan emparejado directamente.

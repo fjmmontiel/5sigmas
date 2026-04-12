@@ -10,6 +10,8 @@ tags:
 
 # Capítulo 2: Mecanizar (≈ 1640 - 1956)
 
+Este capítulo explica cómo la humanidad pasó de calcular con máquinas físicas a diseñar ordenadores de propósito general capaces de ejecutar cualquier programa. Al terminarlo entenderás por qué la separación entre instrucciones y mecanismo fue el giro conceptual decisivo de toda la historia de la computación, cómo Alan Turing definió qué significa computar antes de que existiera ningún ordenador moderno y de qué forma la lógica booleana dejó de ser filosofía y se convirtió en ingeniería de circuitos. No se necesita base técnica previa, aunque conocer el capítulo anterior ayuda. La historia recorre tres siglos en los que cada avance revela que el límite no era el hardware, sino la pregunta que alguien se atrevió a plantear.
+
 En el capítulo anterior vimos cómo la humanidad aprendió a representar cantidades, relaciones y cambios con símbolos. Una vez que esos símbolos podían manipularse mediante reglas, la siguiente pregunta surgía casi sola: si un procedimiento está bien definido, ¿puede ejecutarlo una máquina?
 
 La respuesta no apareció de golpe. Llegó en capas. Primero automatizamos operaciones concretas. Después aprendimos a codificar instrucciones fuera de la máquina. Más tarde comprendimos que la lógica también podía expresarse de forma mecánica. Y, finalmente, construimos dispositivos capaces de almacenar programas, ejecutar operaciones en base a condiciones y tratar la información como una magnitud formal.
@@ -196,3 +198,19 @@ Ese cambio lo transforma todo. A partir de aquí, la gran cuestión ya no será 
 | R15 | [Stanford / John McCarthy — Dartmouth proposal](https://www-formal.stanford.edu/jmc/history/dartmouth/dartmouth.html) | Texto fundacional del proyecto de verano de 1956. |
 
 </details>
+
+---
+
+## Preguntas frecuentes
+
+**¿En qué se diferencia automatizar de programar?**
+Automatizar significa reproducir mecánicamente una operación concreta y fija, como sumaba la Pascalina mediante ruedas dentadas. Programar implica separar el mecanismo que opera del procedimiento que debe seguir, de forma que la misma máquina pueda ejecutar procedimientos distintos sin recablear físicamente nada. Esa separación es el giro conceptual que lleva de la calculadora al ordenador, y Babbage ya la intuía en el diseño de su Máquina Analítica décadas antes de que existiera el hardware capaz de sostenerla.
+
+**¿Qué demostró Turing con la máquina de Turing antes de que hubiera ordenadores?**
+Demostró que era posible aislar lo esencial de cualquier proceso mecánico de cálculo (leer símbolos, escribir símbolos, cambiar de estado y seguir reglas finitas) y al mismo tiempo demostró que esa misma estructura tiene límites formales. El halting problem no es una limitación práctica del hardware, sino un resultado matemático: no puede existir un procedimiento general que decida siempre si cualquier programa terminará o continuará indefinidamente.
+
+**¿Por qué fue tan importante que instrucciones y datos compartan la misma memoria?**
+Porque convirtió el cambio de tarea en una operación de contenido, no de estructura física. Antes del programa almacenado, reprogramar una máquina como ENIAC implicaba días de recableado de paneles. Con el principio de von Neumann, basta con cambiar lo que está escrito en memoria, y eso hace posible los ordenadores de propósito general: la misma arquitectura física ejecuta programas radicalmente distintos.
+
+**¿Qué problema real resolvió el ordenador de programa almacenado que las calculadoras anteriores no podían?**
+Las calculadoras mecanizaban operaciones concretas y predefinidas, útiles para cálculos repetitivos pero incapaces de adaptar su comportamiento a estados intermedios o de ejecutar lógica condicional. El ordenador de programa almacenado, como EDSAC en 1949, permitió a investigadores reales presentar un problema, describirlo en instrucciones almacenadas en memoria y obtener resultados sin reconstruir nada físico, convirtiendo la computación en una infraestructura práctica reutilizable.

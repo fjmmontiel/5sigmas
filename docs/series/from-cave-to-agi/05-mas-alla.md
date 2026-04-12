@@ -12,6 +12,8 @@ tags:
 
 # Capítulo 5: Más allá del Transformer (≈ 2022 - Q1 2026)
 
+Este capítulo describe los límites que el escalado puro del Transformer ha dejado visibles y las líneas que el campo está abriendo para superarlos. Al terminarlo entenderás por qué una ventana de contexto larga no es lo mismo que memoria persistente, qué aportan arquitecturas como Mamba frente a la atención estándar, y de qué forma la búsqueda activa sobre espacios de soluciones, ejemplificada por AlphaGo y sus descendientes, está cambiando el tipo de sistemas que construimos. El artículo cubre también modelos del mundo, robótica fundacional y las apuestas de capital que señalan hacia dónde cree el ecosistema que está la siguiente frontera. Está pensado para quienes ya entienden qué es un modelo fundacional y quieren entender hacia dónde va el campo más allá del escalado.
+
 !!! note "Actualización"
     Este capítulo cubre el estado del campo hasta Q1 2026. Los apartados sobre modelos concretos, capital invertido y benchmarks están sujetos a cambio rápido, los apartados sobre limitaciones estructurales del Transformer son estables.
 
@@ -199,3 +201,19 @@ No sabemos todavía qué combinación acabará imponiéndose. Lo que sí parece 
 | R31 | [Farquhar et al. (2024) — *Detecting hallucinations in large language models using semantic entropy*](https://www.nature.com/articles/s41586-024-07421-0) | Detección de alucinaciones mediante incertidumbre. |
 
 </details>
+
+---
+
+## Preguntas frecuentes
+
+**¿Por qué la búsqueda activa en tiempo de inferencia es relevante si los LLMs ya razonan?**
+Porque la inteligencia práctica en problemas complejos no consiste en predecir el siguiente token en un solo paso, sino en explorar activamente un espacio de soluciones y evaluar trayectorias alternativas. Sistemas como AlphaProof combinan modelo base, búsqueda y verificación formal para superar el rendimiento de una respuesta directa, lo que muestra que cuánto computa el modelo en el momento de responder puede ser tan determinante como cuánto aprendió durante el entrenamiento.
+
+**¿Si ya existen ventanas de contexto masivas, qué problema resuelven Mamba o Titans?**
+Las ventanas largas tienen coste cuadrático y se descartan al terminar la sesión. Mamba propone escalado lineal para secuencias largas, manteniendo un estado oculto compacto que se actualiza en cada paso a un coste mucho menor, aunque comprimiendo la historia. Titans va más lejos: introduce una memoria neuronal que se actualiza durante la propia inferencia y mantiene persistencia selectiva entre sesiones, sin depender de reentrenamiento ni de escalar la ventana de contexto indefinidamente.
+
+**¿Cuál es la diferencia fundamental entre un LLM y un modelo del mundo?**
+Un LLM predice estadísticamente la siguiente pieza de una secuencia sin construir una representación causal del entorno en el que opera. Un modelo del mundo aprende representaciones internas de cómo evoluciona ese entorno, lo que le permite simular futuros posibles y descartar consecuencias indeseables antes de actuar. DreamerV3 es el ejemplo más desarrollado: aprende un modelo latente y lo usa para resolver más de 150 tareas distintas con una sola configuración.
+
+**¿Cómo cambia la robótica con los modelos VLA?**
+Los modelos visión-lenguaje-acción permiten transferir conocimiento general extraído de datos web a tareas de control físico mediante instrucciones en lenguaje natural. Eso elimina la necesidad de programar cada movimiento manualmente: una misma base se generaliza a múltiples tareas sin reprogramación total. Figure 02 ya ha publicado métricas reales de despliegue en planta de BMW, lo que sitúa este enfoque más allá de la demostración experimental y muestra que la robótica empieza a heredar la lógica de los modelos fundacionales.

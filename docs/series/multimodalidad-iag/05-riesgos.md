@@ -12,6 +12,8 @@ tags:
 
 # Capítulo 5 — Riesgos: prompt injection visual, acción y seguridad operacional
 
+Este artículo describe los riesgos de seguridad específicos de los sistemas multimodales: aquellos que no existen en modelos de texto puro porque la amenaza entra por una modalidad que los filtros habituales no analizan. Al leerlo entenderás cómo funciona el prompt injection visual (y su equivalente en audio documentado por WhisperInject), qué ocurre cuando un sistema con herramientas recibe una inyección exitosa, qué problemas de privacidad introduce el procesamiento de imágenes y documentos, y por qué el perfil de riesgo cambia cualitativamente cuando el sistema no solo responde sino que actúa. El artículo es útil para cualquier equipo que diseña o despliega sistemas multimodales en producción, con o sin base previa en seguridad de IA.
+
 Los sistemas multimodales introducen superficies de ataque que no existen en los modelos de texto puro. Cuando un sistema puede leer imágenes, documentos escaneados o fragmentos de audio, se abre la posibilidad de que contenido malicioso en esas modalidades altere su comportamiento de formas que los filtros diseñados para texto no detectan, porque esos filtros operan sobre el input explícito del usuario y no sobre lo que el modelo extrae de una imagen al procesarla. 
 
 Cada categoría de riesgo tiene su propio mecanismo y sus propios criterios de diseño defensivo, pero todas comparten esa característica: la amenaza entra por una modalidad que el sistema no analiza con las mismas herramientas que usa para el texto.
@@ -140,3 +142,19 @@ El marco regulatorio europeo aborda parte de este problema de forma directa. El 
 [r5]: https://www.ncsc.gov.uk/blog-post/prompt-injection-is-not-sql-injection "Prompt injection is not SQL injection — NCSC"
 [r6]: https://arxiv.org/abs/2601.21181 "When Good Sounds Go Adversarial — 2026"
 [r7]: https://eur-lex.europa.eu/legal-content/ES/TXT/?uri=CELEX:32024R1689 "EU AI Act — Reglamento (UE) 2024/1689"
+
+---
+
+## Preguntas frecuentes
+
+**¿Por qué el prompt injection es más difícil de filtrar en sistemas multimodales que en sistemas de texto puro?**
+Porque las instrucciones maliciosas viajan dentro de la imagen como contenido visual, no como texto explícito en el input del usuario. Los filtros de texto no las ven porque no existen como texto hasta que el modelo las procesa internamente. Además pueden estar ofuscadas de formas que el OCR estándar no detecta pero el modelo sí interpreta, lo que amplía la superficie de ataque sin necesidad de eludir ningún filtro explícito.
+
+**¿Qué riesgo concreto introduce una alucinación en un sistema que puede actuar sobre el entorno?**
+A diferencia de un sistema conversacional donde una alucinación produce una respuesta incorrecta que el usuario puede descartar, un sistema con herramientas que alucina puede ejecutar una acción con efectos externos e irreversibles: borrar un registro, enviar datos a una URL o llamar a una API. Si la imagen que provocó el fallo no aparece de forma obvia en los logs, el origen del problema es difícil de rastrear después.
+
+**¿Qué significa que un sistema multimodal pueda inferir rasgos sensibles a partir de señales visuales o auditivas no relacionadas con esos rasgos?**
+Que el modelo puede atribuir características como el estatus socioeconómico o el historial de un usuario a partir de pistas en la imagen o el audio que no contienen esa información de forma objetiva. Ese comportamiento amplifica estereotipos presentes en los datos de entrenamiento y puede derivar en trato discriminatorio automatizado sin que haya una decisión humana explícita de por medio.
+
+**¿Qué cambia en el perfil de riesgo cuando el sistema no solo responde sino que ejecuta pasos autónomos encadenados?**
+El cambio fundamental es la irreversibilidad: cada transición de percepción a razonamiento a acción puede propagar un error inicial a través de toda la cadena, y cada paso puede producir efectos que no pueden deshacerse. A mayor longitud de la cadena de pasos autónomos, mayor probabilidad de que un fallo en la capa de percepción se propague y comprometa el resultado completo, porque cada paso siguiente parte del estado incorrecto que el anterior dejó.

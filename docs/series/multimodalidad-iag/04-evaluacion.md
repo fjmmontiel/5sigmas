@@ -11,6 +11,8 @@ tags:
 
 # Capítulo 4 — Evaluación: medir sin autoengañarse
 
+Este artículo analiza por qué medir la capacidad real de un sistema multimodal es más difícil de lo que sugieren los rankings de benchmarks. Al leerlo entenderás qué son el grounding y el sesgo lingüístico (y por qué el segundo hace que un modelo pueda responder bien sin haber procesado realmente la imagen), cómo la contaminación de datos de evaluación infla artificialmente los resultados publicados, y qué revelan benchmarks como OCRBench v2, MMAU, ZeroBench y HallusionBench sobre los límites reales del campo en documentos, audio, vídeo largo y razonamiento espacial. El artículo es útil tanto para lectores técnicos que evalúan modelos como para cualquiera que quiera interpretar con rigor las comparativas que circulan en el sector.
+
 Evaluar si un modelo de lenguaje produce respuestas precisas y útiles es ya un problema complejo, pero cuando se añade la dimensión visual o auditiva la dificultad se multiplica de dos formas distintas. 
 
 La primera es que los benchmarks actuales de multimodalidad tienen dos problemas sistemáticos que llevan a sobrestimar las capacidades reales (la contaminación de datos de evaluación y la dominancia del texto en los benchmarks). 
@@ -134,3 +136,19 @@ La evaluación de multimodalidad ha estado dominada por VQA y tareas de groundin
 [r9]: https://arxiv.org/abs/2310.14566 "HallusionBench — Liu et al. 2023"
 [r10]: https://arxiv.org/abs/2412.07626 "OmniDocBench — Ouyang et al. 2024"
 [r11]: https://arxiv.org/abs/2502.09696 "ZeroBench — Roberts et al. 2025"
+
+---
+
+## Preguntas frecuentes
+
+**¿Por qué un modelo puede obtener una puntuación alta en un benchmark visual sin haber procesado realmente la imagen?**
+Por el sesgo lingüístico: el modelo responde basándose en la distribución estadística de respuestas probables dado el texto de la pregunta, no en el contenido visual. El efecto es invisible cuando ese sesgo estadístico coincide con la respuesta correcta, porque el modelo acierta por razones equivocadas y ningún benchmark de exactitud lo distingue de uno que sí ha procesado la imagen.
+
+**¿Cómo se detecta si un sistema realmente razona sobre la secuencia temporal de un vídeo?**
+Con lo que el artículo describe como la prueba de desordenamiento: se pasan los fotogramas del vídeo al modelo en orden aleatorio antes de hacer la pregunta. Si la puntuación no varía o incluso mejora con el desorden, el sistema no tiene razonamiento temporal dinámico y está respondiendo a partir de pistas semánticas presentes en fotogramas individuales, no de la secuencia.
+
+**¿Qué hace que MMMU sea más exigente que los benchmarks de descripción de imágenes?**
+MMMU usa preguntas de exámenes universitarios en 30 asignaturas donde la imagen no es ilustración sino que contiene la evidencia decisiva: diagramas de circuito, gráficos de laboratorio, radiografías. No basta con leer bien la imagen, el modelo tiene que saber qué significa lo que ve. Los mejores modelos actuales siguen quedando significativamente por debajo del rendimiento humano experto en las categorías más técnicas.
+
+**¿Por qué el rendimiento de los modelos cae tanto al pasar de texto estándar a documentos con layout complejo?**
+Porque sus representaciones están optimizadas para fotografías naturales, no para integrar estructura espacial y semántica al mismo tiempo. OCRBench v2 y OmniDocBench muestran que sistemas con el 80-90% de precisión en texto estándar caen al 36,9% en reconstrucción de layouts con columnas múltiples, tablas con celdas fusionadas o fórmulas integradas en flujo de texto.

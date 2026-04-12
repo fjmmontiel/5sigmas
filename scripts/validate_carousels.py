@@ -34,16 +34,37 @@ DIM    = "\033[2m"
 # ── HTML helpers ────────────────────────────────────────────────────────────
 
 def extract_slides(html: str) -> list[tuple[str, str]]:
-    """Return [(data_id, slide_html), ...] para cada .slide-section."""
+    """Return [(data_id, slide_html), ...] para cada .slide-section.
+
+    Soporta dos formatos:
+    - Actual:  <div class="slide-section" data-id="...">
+    - Legado:  <div class="slide-section" id="sN" data-index="N">
+    """
     slides = []
+    # Intentar formato actual (data-id)
     parts = re.split(r'<div\s+class="slide-section"\s+data-id="', html)
+    if len(parts) > 1:
+        for part in parts[1:]:
+            m = re.match(r'([^"]+)"', part)
+            if not m:
+                continue
+            data_id = m.group(1)
+            boundary = re.search(
+                r'(?=<div\s+class="slide-section"|<div\s+class="dots-bar")', part
+            )
+            content = part[: boundary.start()] if boundary else part
+            slides.append((data_id, content))
+        return slides
+
+    # Fallback: formato legado (<section> o <div> con data-index)
+    parts = re.split(r'<(?:div|section)\s+class="slide-section"[^>]+data-index="', html)
     for part in parts[1:]:
-        m = re.match(r'([^"]+)"', part)
+        m = re.match(r'(\d+)"', part)
         if not m:
             continue
-        data_id = m.group(1)
+        data_id = f"slide_{m.group(1)}"
         boundary = re.search(
-            r'(?=<div\s+class="slide-section"|<div\s+class="dots-bar")', part
+            r'(?=<(?:div|section)\s+class="slide-section"|<div\s+class="dots-bar")', part
         )
         content = part[: boundary.start()] if boundary else part
         slides.append((data_id, content))
@@ -176,7 +197,7 @@ def check_slide(data_id: str, html: str, total: int) -> list[Result]:
     is_hook    = "hook" in data_id
     is_cta     = "cta"  in data_id
     is_snippet = 'class="snippet-img-area"' in html or "snippet-img-area" in html
-    is_content = not is_hook and not is_cta
+    is_content = not is_hook and not is_cta and not is_snippet
 
     # S1 — accent-bar presente
     results.append(Result(
@@ -283,11 +304,24 @@ def check_slide(data_id: str, html: str, total: int) -> list[Result]:
 def validate_file(carousel_path: Path) -> tuple[int, int]:
     """Valida un carousel.html. Retorna (fails, total_checks)."""
     html = carousel_path.read_text(encoding="utf-8")
-    slides = extract_slides(html)
-    total = len(slides)
 
     rel = carousel_path.relative_to(ROOT)
     print(f"\n{BOLD}{'─'*70}{RESET}")
+
+    # Detectar formato legado (<section class="slide-section" data-index="...">)
+    is_legacy = bool(re.search(r'<section\s+class="slide-section"', html))
+    if is_legacy:
+        print(f"{BOLD}{rel}{RESET}  {YELLOW}[formato legado — publicado, solo check de fondo]{RESET}")
+        print(f"{'─'*70}")
+        ok_bg = len(re.findall(r'background:#0b1220', html)) > 0
+        r = Result("F1 · slide background:#0b1220 (legado)", ok_bg)
+        print(repr(r))
+        fails = 0 if ok_bg else 1
+        print(f"\n  {YELLOW}{BOLD}LEGADO — {fails} error(s) / 1 check{RESET}\n")
+        return fails, 1
+
+    slides = extract_slides(html)
+    total = len(slides)
     print(f"{BOLD}{rel}{RESET}  {DIM}({total} slides){RESET}")
     print(f"{'─'*70}")
 

@@ -11,6 +11,8 @@ tags:
 
 # Capítulo 2 — Qué es IA Generativa
 
+Este capítulo explica cómo funciona la IA generativa desde sus piezas fundamentales hasta los sistemas que se usan hoy en producción. Al terminarlo, el lector entenderá qué son los embeddings y por qué permiten que el texto se trate matemáticamente, cómo el Transformer resolvió los problemas de los modelos anteriores mediante el mecanismo de atención, y qué son las leyes de escala y las capacidades emergentes. El capítulo también cubre las tres configuraciones prácticas principales (LLM puro, RAG y agente) y el ciclo de LLMOps que hace posible operar cualquiera de ellas en producción. Se recomienda haber leído el Capítulo 1 antes de continuar.
+
 !!! info "Prerrequisitos"
     Este capítulo asume que conoces el marco general de la IA descrito en el [Capítulo 1 — Qué es IA](./01-que-es-ia.md).
 
@@ -257,3 +259,19 @@ Muchos equipos empiezan con API externa y migran partes a open-source cuando el 
 [r5]: https://arxiv.org/abs/2005.11401 "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks"
 [r6]: https://arxiv.org/abs/2108.07258 "On the Opportunities and Risks of Foundation Models"
 [r7]: https://arxiv.org/abs/2203.02155 "Training language models to follow instructions with human feedback"
+
+---
+
+## Preguntas frecuentes
+
+**¿Qué diferencia hay entre un vector cualquiera y un embedding?**
+Un vector es una lista de números sin semántica propia: el formato existe, pero el sentido no. El embedding es ese mismo vector ya ajustado por el entrenamiento, con la posición en el espacio reflejando significado. Palabras con contextos similares quedan geométricamente cerca, lo que permite operaciones como `rey − hombre + mujer ≈ reina`.
+
+**¿Por qué el Transformer se considera una arquitectura general?**
+Porque funciona para texto, imágenes, audio, vídeo y código, usando el mismo mecanismo de atención que relaciona todos los tokens del contexto a la vez. Es el componente central de los LLMs modernos (GPT, Claude, Gemini, Llama) y parte importante del stack multimodal, lo que lo hace la arquitectura dominante de la IA generativa actual.
+
+**¿Qué es el few-shot learning que emerge con la escala?**
+Es la capacidad de aprender a ejecutar una tarea nueva viendo solo dos o tres ejemplos en el propio prompt, sin reentrenar el modelo. GPT-3 lo demostró en 2020 y nadie lo había anticipado: la señal de entrenamiento era predecir el siguiente token, y de ahí emergió la capacidad de generalizar desde ejemplos mínimos.
+
+**¿Cuál es el riesgo principal de usar un agente en lugar de solo RAG?**
+El agente puede planificar y ejecutar herramientas externas, lo que amplía lo que puede resolver, pero los fallos se propagan en cadena: cuanto más larga la secuencia de pasos, más difícil detectar dónde se torció el resultado. Con RAG, el modelo solo lee fragmentos relevantes y responde; con un agente, cada acción intermedia es un punto de fallo adicional.

@@ -20,6 +20,8 @@
 
   {% if page.meta.robots %}
   <meta name="robots" content="{{ page.meta.robots | e }}">
+  {% else %}
+  <meta name="robots" content="max-image-preview:large">
   {% endif %}
 
   {# Canonical URL explícita #}

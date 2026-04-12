@@ -13,6 +13,7 @@ ENV/
 .vscode/
 .idea/
 documentacion_interna/
+remotion/
 posts/
 plantillas/
 drafts/
@@ -23,7 +24,19 @@ node_modules/*
 output/*
 exports/*
 test/*
-
+tools/
+!tools/
+!tools/remotion/
+!tools/remotion/package.json
+!tools/remotion/package-lock.json
+!tools/remotion/public/
+!tools/remotion/public/**
+!tools/remotion/scripts/
+!tools/remotion/scripts/*.mjs
+!tools/remotion/src/
+!tools/remotion/src/**
+tools/remotion/node_modules/
+video*
 # Animation export artifacts
 output/playwright/
 exports/

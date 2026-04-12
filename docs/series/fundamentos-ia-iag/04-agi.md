@@ -11,6 +11,8 @@ tags:
 
 # Capítulo 4 — AGI: Inteligencia Artificial General
 
+Este capítulo cierra la serie examinando el concepto de Inteligencia Artificial General: qué significa, por qué no existe una definición consensuada y qué implicaría alcanzarla. Al terminarlo, el lector conocerá las tres definiciones principales en disputa (cognitiva, económica y el espectro de seis niveles de DeepMind), entenderá con precisión qué pueden y qué no pueden hacer los sistemas actuales, y tendrá un mapa claro de los impactos económicos, científicos y de alineación que haría necesario resolver antes de llegar a sistemas mucho más capaces. Para sacar el máximo provecho conviene haber leído los tres capítulos anteriores de la serie.
+
 !!! info "Prerrequisitos"
     Este capítulo cierra la serie. Para sacar el máximo provecho, conviene haber leído los tres capítulos anteriores: [Capítulo 1 — Qué es IA](./01-que-es-ia.md), [Capítulo 2 — Qué es IA Generativa](./02-que-es-ia-generativa.md) y [Capítulo 3 — IA vs IA Generativa](./03-ia-vs-ia-generativa.md).
 
@@ -216,3 +218,19 @@ Eso es lo que esta serie ha intentado construir: un mapa mental estable que func
 [r_arc]: https://arcprize.org/blog/announcing-arc-agi-2-and-arc-prize-2025 "Announcing ARC-AGI-2 and ARC Prize 2025"
 [r_rsp]: https://www-cdn.anthropic.com/17310f6d70ae5627f55313ed067afc1a762a4068.pdf "Anthropic Responsible Scaling Policy v2.1"
 [r_swe]: https://openai.com/index/why-we-no-longer-evaluate-swe-bench-verified/ "Why SWE-bench Verified no longer measures frontier coding capabilities"
+
+---
+
+## Preguntas frecuentes
+
+**¿Cuáles son los niveles que definen el camino hacia la AGI según DeepMind?**
+DeepMind propone un espectro de seis niveles numerados del 0 al 5: desde sin IA hasta Superinteligencia. Los modelos frontier de 2025-2026 se sitúan en la frontera entre IA competente e IA experta en dominios concretos, pero no han alcanzado generalidad de nivel experto en la mayoría de tareas cognitivas, que sería el umbral del nivel 3 en ese marco.
+
+**¿En qué se diferencia la definición económica de AGI de la cognitiva clásica?**
+La definición cognitiva exige realizar cualquier tarea intelectual humana, un listón difuso porque los humanos también tienen sesgos y límites. La definición económica de OpenAI se centra en superar a los humanos en la mayor parte del trabajo con valor económico, un listón medible con benchmarks laborales aunque más bajo en algunos aspectos, porque una parte del trabajo cognitivo podría automatizarse sin que el sistema alcance generalidad cognitiva real.
+
+**¿Cuál es el criterio que más preocupa a los investigadores de seguridad al hablar de AGI?**
+Para ellos, la línea crítica no es el rendimiento en tareas sino la mejora recursiva: un sistema que mejora su propio diseño para producir sistemas sucesivamente más capaces. Si ese umbral se cruzara, la velocidad del cambio excedería la capacidad humana de entender y controlar lo que está pasando, independientemente de si el sistema cumple la definición cognitiva o económica.
+
+**¿Qué mide el horizonte temporal de tareas (METR) y por qué importa para la autonomía?**
+Mide el tiempo máximo de tarea que un agente completa con fiabilidad del 50%, no el tiempo que tarda en responder preguntas sino en ejecutar trabajo sostenido con múltiples pasos. En marzo de 2025 ese horizonte era de aproximadamente dos horas y cuarto para los modelos más capaces, y la tendencia es de duplicación cada siete meses. El siguiente umbral significativo es el salto a días o semanas, donde aparecen los riesgos de autonomía real.

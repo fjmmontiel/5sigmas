@@ -17,6 +17,17 @@ SHELL_EXCLUDED_SNIPPETS = {
     "snippets/series_cards.html",
     "snippets/series_meta.html",
 }
+PUBLIC_VIDEO_VARIANT_SUFFIXES = (
+    "-signal",
+    "-deck",
+    "-pressure",
+    "-orbit",
+    "-cascade",
+    "-pulse",
+    "-pulse-core",
+    "-pulse-orbit",
+    "-pulse-cascade",
+)
 
 
 def _is_animation_snippet(path):
@@ -97,6 +108,30 @@ def _has_existing_shell(html):
 def _is_shell_excluded_snippet(path):
     normalized = str(path or "").strip().replace("\\", "/")
     return normalized in SHELL_EXCLUDED_SNIPPETS
+
+
+def _is_public_video_file(filename, series_dirname):
+    normalized = str(filename or "").strip().lower()
+    if not normalized.endswith((".mp4", ".webm", ".mov")):
+        return False
+    stem = normalized.rsplit(".", 1)[0]
+    if not stem.endswith("-teaser"):
+        return False
+
+    base = stem[: -len("-teaser")]
+    if base == str(series_dirname or "").strip().lower():
+        return True
+
+    return not any(base.endswith(suffix) for suffix in PUBLIC_VIDEO_VARIANT_SUFFIXES)
+
+
+def _public_video_files(video_files, series_dirname):
+    selected = [
+        filename
+        for filename in sorted(video_files)
+        if _is_public_video_file(filename, series_dirname)
+    ]
+    return selected
 
 
 def _should_wrap_with_shell(path, html, shell_mode="auto"):
@@ -323,11 +358,10 @@ def define_env(env):
         if not os.path.exists(videos_dir_abs):
             return f"<!-- No videos directory found at {videos_dir_rel} -->"
 
-        video_files = [f for f in os.listdir(videos_dir_abs) if f.lower().endswith(('.mp4', '.webm', '.mov'))]
-        video_files.sort()
+        video_files = _public_video_files(os.listdir(videos_dir_abs), series_dirname)
 
         if not video_files:
-            return f"<!-- No video files found in {videos_dir_rel} -->"
+            return f"<!-- No public video files found in {videos_dir_rel} -->"
 
         html = '<div class="video-gallery" style="display: grid; gap: 20px; margin-top: 20px;">'
         for vid in video_files:

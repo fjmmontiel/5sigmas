@@ -10,6 +10,8 @@ tags:
 
 # Capítulo 1: Representar (≈ 43 000 a. C. hasta 1700)
 
+Este capítulo cuenta cómo la humanidad construyó el lenguaje matemático que más tarde haría posible la computación, desde las primeras muescas en hueso hasta el cálculo diferencial de Newton y Leibniz. Al terminarlo entenderás por qué la notación importa tanto como los conceptos que describe, cómo el álgebra convirtió las incógnitas en objetos manipulables y de qué forma el ideal deductivo griego sentó las bases del razonamiento verificable paso a paso. No se necesita ninguna base previa en matemáticas, solo curiosidad por entender de dónde vienen las herramientas que hoy los ordenadores ejecutan millones de veces por segundo. El hilo conductor es siempre el mismo: cada vez que la humanidad encontró una forma de comprimir una idea en un símbolo, ganó la capacidad de razonar sobre ella sin tener que tocarla.
+
 En este capítulo recorremos un proceso larguísimo y decisivo: cómo la humanidad pasó de marcar cantidades en objetos físicos a construir un lenguaje matemático capaz de describir relaciones, demostrar conclusiones y anticipar el comportamiento del mundo.
 
 No es solo una historia de números, es la historia de cómo los seres humanos aplicamos la abstracción. 
@@ -140,3 +142,19 @@ El siguiente capítulo entra justo ahí: en el momento en que la humanidad deja 
 | R15 | [Britannica — *Newton and Leibniz*](https://www.britannica.com/science/mathematics/Newton-and-Leibniz) | Desarrollo independiente del cálculo y cronología básica. |
 
 </details>
+
+---
+
+## Preguntas frecuentes
+
+**¿Por qué la notación importa si el concepto matemático ya existe?**
+Porque la notación cambia lo que es posible pensar, no solo lo que es cómodo escribir. Cuando Viète introdujo letras para variables y Descartes conectó ecuaciones con geometría, no simplificaron la escritura: abrieron territorios conceptuales que antes eran inaccesibles. Una idea que cabe en símbolos compactos puede transformarse, combinarse con otras ideas y generalizarse de formas que el lenguaje verbal no permite.
+
+**¿Qué aportó el álgebra que el razonamiento verbal o geométrico no podía dar?**
+La capacidad de operar con lo que todavía no se conoce. Las matemáticas anteriores a al-Khwarizmi resolvían casos concretos, pero para cada uno había que razonar de nuevo desde el principio. El álgebra introduce un cambio conceptual decisivo: se puede transformar una expresión paso a paso, siguiendo reglas generales, hasta despejar una incógnita que al inicio ni siquiera tiene nombre.
+
+**¿Para qué sirvió el ideal deductivo griego en la historia de la computación?**
+Para fijar un estándar de justificación que la computación heredará siglos después. Euclides no solo organizó resultados: impuso que cada conclusión se siguiera de forma necesaria a partir de supuestos aceptados y mediante pasos verificables. Ese modelo de razonamiento como cadena de inferencias revisables es exactamente lo que Turing formalizará cuando describa qué significa computar.
+
+**¿Qué tiene que ver el cálculo diferencial con el entrenamiento de redes neuronales?**
+Una conexión directa. El descenso de gradiente, que es el mecanismo central para ajustar los parámetros de un modelo, es una aplicación directa del cálculo diferencial: requiere calcular cómo varía el error cuando se modifica cada peso, y eso son derivadas. Sin el lenguaje del cálculo que Newton y Leibniz desarrollaron para describir variación continua, no existiría el algoritmo que entrena los modelos actuales.

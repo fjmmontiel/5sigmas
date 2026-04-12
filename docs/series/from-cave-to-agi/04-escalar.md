@@ -11,6 +11,8 @@ tags:
 
 # Capítulo 4: Escalar (≈ 2012 - 2024)
 
+Este capítulo explica qué ocurrió cuando el aprendizaje profundo encontró suficiente escala: más datos, más cómputo y arquitecturas diseñadas para aprovecharlos. Al terminarlo entenderás por qué el Transformer reorganizó toda la disciplina al hacer el entrenamiento radicalmente más paralelizable, qué son las leyes de escala y por qué convirtieron el escalado en una metodología científica con predicciones verificables, y de qué forma el preentrenamiento masivo dio lugar a los modelos fundacionales, una base general reutilizable para cientos de tareas distintas. El artículo es accesible con una comprensión básica del aprendizaje automático y está especialmente indicado para quienes quieren entender la lógica de por qué GPT-3, BERT o Gemini funcionan como lo hacen.
+
 Los tres capítulos anteriores dejaron preparadas las piezas necesarias: representar el mundo con símbolos, mecanizar procedimientos y aprender a partir de datos. A partir de 2012, esas piezas dejaron de avanzar por separado. Datos, cómputo, optimización y arquitectura empezaron a reforzarse mutuamente a una escala inédita.
 
 Este capítulo recorre ese cambio de régimen. No trata solo del auge del deep learning. Trata del momento en que el progreso empezó a depender cada vez más de una combinación sistemática de escala, reutilización y transferencia, hasta producir modelos que ya no resolvían una sola tarea, sino familias enteras de tareas.
@@ -108,3 +110,19 @@ Ese cambio deja preparado el terreno de la siguiente etapa. La escala ya no se e
 | R16 | [Gemini Team (2024) — *Gemini 1.5 report*](https://storage.googleapis.com/deepmind-media/gemini/gemini_v1_5_report.pdf) | Multimodalidad y contexto de millones de tokens. |
 
 </details>
+
+---
+
+## Preguntas frecuentes
+
+**¿Por qué el éxito de AlexNet en 2012 se considera un cambio de régimen y no solo un hito más?**
+Antes de AlexNet, la visión artificial dependía de características diseñadas a mano por expertos humanos: el modelo aprendía a partir de esas representaciones pero no aprendía la representación en sí. AlexNet demostró que una red profunda entrenada directamente sobre píxeles podía superar a esos sistemas por un margen tan grande (15,3% frente a 26,2% de error top-5 en ImageNet) que cambió la percepción del campo entero y mostró que datos y cómputo, no el diseño manual de características, eran las palancas dominantes.
+
+**¿Qué ventaja arquitectónica tiene el Transformer frente a las redes recurrentes?**
+Las redes recurrentes procesaban la secuencia de forma estrictamente lineal, lo que impedía paralelizar el entrenamiento y degradaba la señal en contextos largos porque cada paso dependía del anterior. El Transformer, con su mecanismo de autoatención, permite que cada token consulte a todos los demás simultáneamente: el entrenamiento se paraleliza masivamente y cualquier posición del contexto es accesible sin degradación, lo que hizo posible entrenar sobre volúmenes de datos que antes habrían sido impracticables.
+
+**¿Qué implican las leyes de escala para la inversión en IA?**
+Que el progreso deja de depender únicamente de mejoras arquitectónicas puntuales y pasa a tener una lógica predecible: el error cae siguiendo una relación de potencia en función de parámetros, datos y cómputo. Eso permite planificar inversiones multimillonarias con cierta certeza de que el rendimiento mejorará antes de iniciar el entrenamiento, algo que no era posible cuando el avance dependía de intuiciones arquitectónicas caso a caso.
+
+**¿Por qué un modelo fundacional se considera infraestructura y no solo un avance técnico?**
+Porque se entrena una vez como base general y después se reutiliza para decenas de tareas distintas con ajustes mínimos, lo que amortiza el altísimo coste del preentrenamiento en múltiples aplicaciones. Los modelos anteriores solían entrenarse para una tarea específica y no se reutilizaban fuera de ese dominio. El cambio es tanto técnico como económico: la misma base sirve para redactar, traducir, clasificar, generar código y trabajar en varias modalidades, alterando la lógica del desarrollo de software.

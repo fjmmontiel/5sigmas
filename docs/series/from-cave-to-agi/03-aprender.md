@@ -11,6 +11,8 @@ tags:
 
 # Capítulo 3 — Aprender (≈ 1956 – 2012)
 
+Este capítulo explica cómo la IA pasó de escribir el conocimiento experto a mano, regla por regla, a inferirlo automáticamente a partir de datos. Al terminarlo entenderás por qué los sistemas expertos funcionaron bien durante años y luego tocaron techo, qué giro conceptual introdujo el aprendizaje estadístico al reformular el problema como optimización en lugar de formalización, y de qué forma el backpropagation convirtió las redes neuronales multicapa en algo entrenable de forma sistemática. El artículo cubre desde la IA simbólica y los inviernos del campo hasta AlexNet en 2012, y es accesible sin base técnica previa aunque ayuda haber leído los capítulos anteriores sobre representación y mecanización.
+
 La Conferencia de Dartmouth no inauguró una tecnología acabada, sino un programa de investigación. La hipótesis era ambiciosa: si el razonamiento humano podía describirse con suficiente precisión, una máquina también podría ejecutarlo. Las décadas siguientes demostraron que esa idea no era absurda, pero sí mucho más difícil de lo que parecía al principio.
 
 Este capítulo recorre el momento en que la IA dejó de apoyarse sobre todo en reglas escritas a mano y empezó a girar, poco a poco, hacia datos, estadística y optimización. El cambio no fue limpio ni instantáneo. Durante mucho tiempo convivieron enfoques distintos, con éxitos parciales y límites muy diferentes. Aun así, la dirección general sí acabó siendo nítida: el campo fue dejando de preguntarse cómo enumerar explícitamente el razonamiento correcto y empezó a interesarse por cómo podía una máquina extraer regularidades útiles a partir de ejemplos.
@@ -182,3 +184,19 @@ Ese desplazamiento deja preparado el terreno del siguiente capítulo, donde la h
 | R20 | [LeCun, Bengio & Hinton (2015) — *Deep Learning*](https://www.nature.com/articles/nature14539) | Revisión histórica y técnica del auge del aprendizaje profundo. |
 
 </details>
+
+---
+
+## Preguntas frecuentes
+
+**¿Por qué los sistemas expertos funcionaron bien y luego tocaron techo?**
+Funcionaron bien mientras el dominio era estable y acotado, como el diagnóstico de infecciones bacterianas en MYCIN o la configuración de sistemas VAX en XCON. El problema no era el rendimiento inicial, sino el mantenimiento: a medida que el dominio crecía en complejidad, la base de reglas requería revisiones constantes, generaba conflictos entre reglas y absorbía excepciones sin un mecanismo sistemático para resolverlas. El cuello de botella no era computacional sino humano: extraer y formalizar conocimiento experto era costoso, lento y frágil.
+
+**¿Qué cambio conceptual introdujo el aprendizaje estadístico frente a la IA simbólica?**
+El giro no fue solo usar más datos, sino desplazar la pregunta central. La IA simbólica preguntaba qué reglas había que escribir para resolver una tarea. El aprendizaje estadístico preguntaba qué regularidades podía inferir un modelo si se le mostraban suficientes ejemplos. El aprendizaje pasó a formularse como un problema de optimización: ajustar parámetros para reducir error, en lugar de formalizar conocimiento experto en una base de reglas.
+
+**¿Qué hizo que el backpropagation desbloqueara las redes neuronales?**
+Dio una receta operativa general donde antes solo había intuiciones. El paper de Rumelhart, Hinton y Williams de 1986 mostró cómo propagar el error desde la salida hacia atrás para estimar cómo debía modificarse cada peso en cada capa de la red. Antes existían ideas sobre entrenar redes multicapa, pero sin un procedimiento sistemático y reproducible las redes profundas no podían entrenarse de forma fiable, lo que limitaba el campo a modelos de una o pocas capas.
+
+**¿Por qué los inviernos de la IA ocurrieron si las ideas básicas eran correctas?**
+Porque la brecha entre lo que el campo prometía y lo que podía entregar en la práctica era demasiado grande para los recursos disponibles en ese momento. El primer invierno respondió a expectativas desmesuradas y barreras de complejidad que informes como el Lighthill de 1973 hicieron explícitas. El segundo, a finales de los 80, llegó cuando los sistemas expertos demostraron sus límites de escala y el mercado de hardware especializado en IA colapsó. Las ideas no estaban equivocadas, pero los datos, el cómputo y los algoritmos de entrenamiento aún no estaban a la altura de lo que esas ideas requerían.

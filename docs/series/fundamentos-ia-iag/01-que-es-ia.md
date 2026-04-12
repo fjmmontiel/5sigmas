@@ -11,6 +11,8 @@ tags:
 
 # Capítulo 1 — Qué es IA
 
+Este capítulo presenta un marco para entender cualquier sistema de inteligencia artificial moderno, desde un filtro de spam hasta un modelo de lenguaje a gran escala. Al terminarlo, el lector sabrá distinguir las cuatro familias tecnológicas principales (IA, ML, DL y GenAI), entenderá de dónde sale la señal que hace aprender a un sistema y conocerá qué cambia internamente en cada tipo de algoritmo durante el entrenamiento. No hace falta experiencia técnica previa, aunque familiarizarse con los términos ayuda a seguir los capítulos siguientes. El capítulo cierra con el concepto de MLOps, la ingeniería que convierte un modelo entrenado en un producto que funciona de forma fiable en el mundo real.
+
 La inteligencia artificial **no es una "mente" ni una entidad autónoma**.
 Es una familia de **sistemas construidos para optimizar una tarea** a partir de datos, con un objetivo medible, y con capacidad de mejorar mediante algún mecanismo de "aprendizaje".
 
@@ -354,3 +356,19 @@ La forma más clara de entender MLOps es verlo como una cadena de 8 pasos. Si fa
 [hito-turing2014]: https://archive.reading.ac.uk/news-events/2014/June/pr583836.html "Turing Test success marks milestone in computing history"
 [hito-alphago-doc]: https://www.youtube.com/watch?v=WXuK6gekU1Y "AlphaGo — The Movie (2017)"
 [hito-alphafold-doc]: https://www.youtube.com/watch?v=gg7WjuFs8F4 "AlphaFold: The making of a scientific breakthrough — DeepMind"
+
+---
+
+## Preguntas frecuentes
+
+**¿Cuál es la diferencia entre Deep Learning y Machine Learning?**
+El Deep Learning es un tipo especializado de Machine Learning que usa redes neuronales de muchas capas para manejar datos complejos como imágenes, audio o lenguaje. El ML aprende patrones para generalizar; el DL emula la estructura de conexiones neuronales del cerebro para tareas de percepción avanzada donde los otros algoritmos no llegan.
+
+**¿Cómo puede un sistema aprender sin que nadie le diga cuál es la respuesta correcta?**
+Por dos vías distintas. En el aprendizaje no supervisado, el sistema busca estructura en los datos sin etiqueta, como agrupar clientes por comportamiento. En el aprendizaje auto-supervisado, el propio dato fabrica la señal: por ejemplo, un modelo de lenguaje predice el siguiente token usando el texto anterior como "respuesta", sin que ningún humano la haya anotado.
+
+**¿Por qué en IA la lógica se aprende en lugar de escribirse?**
+En el software tradicional el programador define las reglas explícitamente. En IA, los datos de entrada y salida hacen que la lógica emerja del entrenamiento: el programador diseña el proceso de aprendizaje, pero la lógica concreta que resuelve el problema la descubre el modelo solo. No escribes la fórmula, la aprendes.
+
+**¿Qué cambia físicamente dentro de una red neuronal cuando el modelo aprende?**
+Se ajustan millones de pesos numéricos repartidos en las conexiones entre capas. La propagación hacia atrás (backpropagation) reparte la culpa del error entre esos pesos y el optimizador decide cuánto mover cada uno en cada paso para reducir el fallo acumulado.

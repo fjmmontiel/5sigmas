@@ -40,4 +40,27 @@ Divulgación técnica sobre IA organizada en series temáticas. Cada serie es un
 
 </div>
 
+<div style="margin:2rem 0 1rem">
+
+### Por dónde empezar
+
+Si es tu primer contacto con la IA, la serie [Fundamentos de IA e IA generativa](/series/fundamentos-ia-iag/00_presentacion_serie/) establece el vocabulario y las distinciones básicas que las otras series dan por supuestas. Si ya tienes base conceptual y quieres entender cómo llegamos hasta aquí, [De las cavernas a la AGI](/series/from-cave-to-agi/00_presentacion_serie/) ofrece el contexto histórico y técnico completo. Si te interesa la frontera actual de modelos que procesan texto, imagen y audio al mismo tiempo, empieza por [Multimodalidad en IA generativa](/series/multimodalidad-iag/00_presentacion_serie/).
+
+</div>
+
+<div style="margin:1.5rem 0 2rem">
+
+### Conceptos clave cubiertos
+
+<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.75rem">
+<a href="/temas/llms/" style="text-decoration:none;border-radius:20px;border:1px solid rgba(50,74,178,.35);padding:.3rem .85rem;font-size:.82rem;color:#324AB2;font-weight:600;white-space:nowrap">LLMs</a>
+<a href="/temas/ia-generativa/" style="text-decoration:none;border-radius:20px;border:1px solid rgba(50,74,178,.35);padding:.3rem .85rem;font-size:.82rem;color:#324AB2;font-weight:600;white-space:nowrap">IA Generativa</a>
+<a href="/temas/agi/" style="text-decoration:none;border-radius:20px;border:1px solid rgba(38,166,154,.35);padding:.3rem .85rem;font-size:.82rem;color:#26A69A;font-weight:600;white-space:nowrap">AGI</a>
+<a href="/temas/multimodalidad/" style="text-decoration:none;border-radius:20px;border:1px solid rgba(124,199,255,.35);padding:.3rem .85rem;font-size:.82rem;color:#7cc7ff;font-weight:600;white-space:nowrap">Multimodalidad</a>
+<a href="/temas/transformer/" style="text-decoration:none;border-radius:20px;border:1px solid rgba(38,166,154,.35);padding:.3rem .85rem;font-size:.82rem;color:#26A69A;font-weight:600;white-space:nowrap">Transformer</a>
+<a href="/temas/evaluacion-modelos/" style="text-decoration:none;border-radius:20px;border:1px solid rgba(255,179,67,.35);padding:.3rem .85rem;font-size:.82rem;color:#FFB343;font-weight:600;white-space:nowrap">Evaluación de modelos</a>
+</div>
+
+</div>
+
 [Próximamente](/proximamente/){ .md-button }

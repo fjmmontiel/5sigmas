@@ -11,6 +11,8 @@ tags:
 
 # Capítulo 1 — El problema real: integrar modalidades distintas sin reducirlas demasiado pronto
 
+Este artículo describe qué significa realmente la multimodalidad en IA: no solo que un modelo "vea" imágenes, sino el problema más amplio de integrar texto, imagen, audio, vídeo y señales continuas sin destruir lo que cada una aporta. Al terminarlo entenderás por qué el campo va mucho más allá de los modelos visión-lenguaje, qué diferencia hay entre traducir una modalidad a texto y mantenerla activa en el razonamiento, y cómo se ordenan las cinco capacidades (percepción, alineamiento, razonamiento, generación y acción) que definen hoy a un sistema verdaderamente multimodal. El artículo es accesible si tienes algo de base en modelos de lenguaje, aunque no requiere conocimientos previos en visión por computador ni en procesamiento de audio.
+
 La multimodalidad suele explicarse como si fuera el momento en que un modelo de lenguaje dejó de trabajar solo con texto y empezó a recibir imágenes. Esto no es falso, pero sí demasiado estrecho para describir el campo tal como existe hoy. 
 
 En 2026 ya convivimos con modelos que representan texto, imagen, vídeo, audio y documentos en un mismo espacio de embedding, con sistemas que mantienen diálogo hablado de forma nativa, con arquitecturas que procesan secuencias intercaladas de texto, imagen y vídeo y con modelos que introducen señales continuas del mundo físico dentro del proceso de inferencia. 
@@ -160,3 +162,19 @@ Lo que sigue en la serie responde a una pregunta más general: cómo se alinean 
 [r7]: https://arxiv.org/abs/2501.00321 "OCRBench v2 — Liu et al. 2024"
 [r8]: https://research.adobe.com/publication/mmau-a-massive-multi-task-audio-understanding-and-reasoning-benchmark/ "MMAU — Sakshi et al. 2024"
 [r9]: https://arxiv.org/abs/2307.15818 "RT-2 — Brohan et al. 2023"
+
+---
+
+## Preguntas frecuentes
+
+**¿Por qué el texto y las imágenes no se pueden procesar con la misma estructura sin conversión previa?**
+El lenguaje es una secuencia discreta de símbolos con estructura semántica directa. Las imágenes son señales continuas de alta dimensionalidad con estructura espacial, sin unidades naturales equivalentes a las palabras. Para que un sistema opere con ambas, tiene que aprender correspondencias que no vienen dadas de antemano, y muchas veces las aprende de forma incompleta o sesgada.
+
+**¿Cuál es la diferencia entre reducir una modalidad a texto y mantenerla activa en el razonamiento?**
+Reducir una imagen a su descripción textual es útil cuando lo que importa es el contenido semántico grueso. El problema aparece cuando lo importante es dónde está algo, qué cambia entre dos imágenes, o qué matiz del habla altera el sentido de una frase: en esos casos, reducir demasiado pronto la señal original deja de ser elegante y pasa a ser una fuente de error. Mantener la señal activa en el razonamiento es precisamente la distinción entre traducción y copresencia operativa.
+
+**¿Qué significa que un modelo tenga problemas de grounding y qué consecuencias tiene?**
+El grounding es la capacidad de sustentar una respuesta en la evidencia real de la señal perceptiva y no solo en inferencias estadísticas sobre qué respuesta es probable. Cuando falla, el modelo puede producir una respuesta verbalmente correcta que no está fundamentada en la imagen o el audio que recibió: suena razonable pero contradice la evidencia física.
+
+**¿Por qué un sistema puede parecer multimodal y en la práctica apoyarse casi solo en el texto?**
+Es el efecto del colapso modal: cuando los datos de entrenamiento están muy desbalanceados entre modalidades, el modelo tiende a apoyarse casi exclusivamente en la modalidad más representada, aunque otra sea más informativa para la tarea concreta. El texto tiene mucha mayor densidad semántica por byte que una imagen ruidosa, así que en sistemas mal equilibrados el modelo aprende a responder desde sesgos lingüísticos previos y a ignorar la información visual.

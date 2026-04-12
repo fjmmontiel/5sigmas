@@ -116,6 +116,7 @@ hooks:
   - hooks/serve_md_versions.py
   - hooks/jsonld_article.py
   - hooks/wip_series.py
+  - hooks/nosnippet.py
 
 plugins:
   - search

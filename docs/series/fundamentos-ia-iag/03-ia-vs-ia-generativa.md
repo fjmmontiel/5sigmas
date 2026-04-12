@@ -11,6 +11,8 @@ tags:
 
 # Capítulo 3 — IA vs IA Generativa
 
+Este capítulo compara IA clásica e IA generativa en cinco ejes concretos y proporciona una matriz operacional para decidir qué tecnología usar en cada situación real. Al terminarlo, el lector entenderá en qué se diferencian en cuanto a tipos de entrada y salida, determinismo, explicabilidad, evaluación y riesgos característicos, y dispondrá de criterios claros para elegir entre reglas explícitas, ML clásico, LLM, RAG y agente. Se recomienda haber leído los dos capítulos anteriores. El capítulo termina con un ejemplo concreto de detección de fraude que recorre toda la matriz para hacer los criterios operativos.
+
 !!! info "Prerrequisitos"
     Este capítulo asume que has leído el [Capítulo 1 — Qué es IA](./01-que-es-ia.md) y el [Capítulo 2 — Qué es IA Generativa](./02-que-es-ia-generativa.md).
 
@@ -186,3 +188,19 @@ La tecnología correcta no existe en abstracto, sino en relación con el dato, e
 [r5]: https://arxiv.org/abs/1705.07874 "A Unified Approach to Interpreting Model Predictions"
 [r6]: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689 "Regulation (EU) 2024/1689 — AI Act"
 [gdpr22]: https://eur-lex.europa.eu/legal-content/ES/TXT/HTML/?uri=CELEX:32016R0679#d1e3816-1-1 "GDPR Artículo 22 — Decisiones individuales automatizadas"
+
+---
+
+## Preguntas frecuentes
+
+**¿Por qué forzar salida estructurada (JSON) si el modelo sigue siendo probabilístico?**
+El formato garantiza validez programática, pero no el contenido: el modelo puede alucinar valores correctamente formateados. Forzar JSON estabiliza el continente (el esquema de la respuesta) sin tocar el contenido, que sigue siendo probabilístico y auditable solo si verificas los valores con esquemas como Pydantic y retroalimentas los errores en bucle.
+
+**¿Por qué temperatura 0 no garantiza salidas 100% deterministas?**
+Por tres razones que el artículo detalla: la aritmética en punto flotante de las GPUs no es asociativa, de forma que el orden de ejecución entre llamadas puede variar; el servidor puede agrupar tu petición con otras en un batch, lo que cambia el orden de acumulación; y algunos proveedores aplican top-k o top-p incluso a temperatura 0, introduciendo variabilidad residual en empates.
+
+**¿Por qué las alucinaciones son consecuencia del diseño y no un fallo a eliminar?**
+El LLM no tiene noción de veracidad: produce la continuación estadísticamente más probable dado su contexto. La alucinación no es un error de ejecución, es el resultado natural de un proceso probabilístico que prioriza coherencia lingüística sobre fidelidad a los hechos. No se puede eliminar del diseño base sin cambiar el mecanismo de generación.
+
+**¿Cuándo es técnicamente superior el ML clásico a un LLM en clasificación?**
+Cuando hay datos etiquetados suficientes, la salida es predecible y el espacio de respuestas es finito, cuando se necesita trazabilidad o auditoría formal, y cuando los datos son tabulares estructurados. En esos casos los árboles de decisión y sus variantes ofrecen métricas claras, evaluación automatizable y explicabilidad mediante herramientas como SHAP o LIME, con un coste operativo mucho menor.

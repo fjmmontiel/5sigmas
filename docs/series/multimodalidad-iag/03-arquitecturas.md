@@ -11,6 +11,8 @@ tags:
 
 # Capítulo 3 — Arquitecturas: espacios compartidos, conectores y modelos omni
 
+Este artículo describe las cuatro familias de arquitectura que organizan hoy el campo multimodal: encoder visual con conector, fusión por cross-attention, tokenización nativa y modelos omni con streaming. Al leerlo entenderás qué diferencias prácticas implica cada diseño en calidad de razonamiento, coste de entrenamiento y latencia de producción, y por qué el embedding multimodal y la generación multimodal no son la misma capa del sistema aunque convivan en el mismo modelo. Es útil para cualquier lector con base técnica que quiera tomar decisiones de selección de arquitectura más informadas que las que ofrecen los rankings de benchmarks.
+
 Los sistemas multimodales no tienen una única arquitectura estándar. Hay cuatro formas distintas de conectar modalidades diferentes dentro de un sistema, y cada una tiene consecuencias específicas en qué tareas puede realizar el modelo, qué coste computacional tiene en producción y qué latencia introduce en las respuestas. 
 
 Una distinción que conviene hacer desde el inicio: el embedding multimodal y la generación multimodal son capas distintas del sistema. Un modelo puede ser muy fuerte en representación y recuperación cruzada y débil en generación multimodal, o al revés, porque esas capacidades no emergen de la misma arquitectura ni del mismo tipo de entrenamiento.
@@ -134,3 +136,18 @@ Para la mayoría de aplicaciones actuales, la elección práctica se reduce a va
 [r8]: https://arxiv.org/abs/2405.09818 "Chameleon — Team Chameleon 2024"
 [r9]: https://arxiv.org/abs/2403.05530 "Gemini 1.5 — Team Gemini 2024"
 
+---
+
+## Preguntas frecuentes
+
+**¿Cuál es la diferencia fundamental entre la arquitectura encoder-conector-LLM y la fusión mediante cross-attention?**
+En la arquitectura encoder-conector-LLM, la imagen se procesa antes que el texto y su representación queda fija desde el inicio: el modelo de lenguaje la recibe como input pero no puede volver a la imagen durante la generación. Con cross-attention, como en Flamingo, el modelo puede acceder a los tokens visuales en cualquier punto de la generación, lo que mejora la calidad en tareas que requieren localización fina o inspección iterativa aunque aumenta el coste computacional de la inferencia.
+
+**¿Qué ventaja ofrece una arquitectura de mezcla de expertos en modelos como Gemini 1.5?**
+Permite escalar el modelo a cientos de miles de millones de parámetros sin escalar el coste de inferencia de forma proporcional, porque solo activa una fracción de los parámetros para cada token. Eso hace posible procesar contextos de hasta un millón de tokens multimodales en producción, una escala que sería computacionalmente inviable con una arquitectura densa equivalente.
+
+**¿Por qué se usa un módulo de compresión como el Q-Former en lugar de proyectar cada parche visual directamente?**
+Proyectar cada parche genera demasiados tokens visuales, lo que encarece la inferencia y puede saturar el contexto del modelo de lenguaje. Un módulo de compresión usa un número fijo de consultas aprendibles para extraer solo las características visuales más relevantes para el lenguaje, reduciendo la representación a un tamaño predecible con independencia del tamaño de la imagen.
+
+**¿Qué distingue a los modelos omni del resto de arquitecturas multimodales?**
+No es solo que generen en varias modalidades, sino que lo hacen bajo restricciones temporales duras: el modelo tiene que percibir, procesar y responder mientras el audio o el vídeo sigue llegando. Eso impone requisitos cualitativamente distintos al diseño de la atención, al tamaño del contexto activo y al decoder, lo que convierte a los modelos omni en una familia separada y no simplemente en una extensión de la tokenización nativa.
