@@ -2,6 +2,8 @@ site_name: 5sigmas - Más señal, menos ruido
 site_description: Divulgación técnica sobre IA en español. Análisis riguroso de Inteligencia Artificial, IA generativa y AGI — sin hype, con contexto y fuentes primarias.
 site_url: "https://5sigmas.com"
 validation:
+  nav:
+    omitted_files: ignore
   links:
     absolute_links: ignore
     unrecognized_links: ignore

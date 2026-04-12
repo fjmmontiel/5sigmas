@@ -40,7 +40,7 @@ Divulgación técnica sobre IA organizada en series temáticas. Cada serie es un
 
 </div>
 
-<div style="margin:2rem 0 1rem">
+<div style="margin:2rem 0 1rem" markdown="1">
 
 ### Por dónde empezar
 
@@ -48,7 +48,7 @@ Si es tu primer contacto con la IA, la serie [Fundamentos de IA e IA generativa]
 
 </div>
 
-<div style="margin:1.5rem 0 2rem">
+<div style="margin:1.5rem 0 2rem" markdown="1">
 
 ### Conceptos clave cubiertos
 
