@@ -1,4 +1,7 @@
 .venv/
+5sigmas.html
+CALENDAR.html
+TODO.html
 __pycache__/
 *.py[cod]
 *$py.class

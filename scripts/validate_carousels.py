@@ -386,6 +386,42 @@ def check_slide(data_id: str, html: str, total: int, v2: bool = False, pulido: b
             "añadir steps-title o heading inline con font-weight:800+" if not heading_ok else ""
         ))
 
+    # S15 — Pulido: flow-key overflow y límite de cajas (SVE: max 3)
+    if pulido and is_content and 'class="flow-chain"' in html:
+        n_boxes = len(re.findall(r'class="flow-box"', html))
+        # S15a — SVE rule: max 3 cajas en un flow
+        if n_boxes > 3:
+            results.append(Result(
+                f"S15a · flow máximo 3 cajas (SVE)",
+                False,
+                f"encontrado {n_boxes} cajas — dividir en 3 o fusionar pasos"
+            ))
+        elif n_boxes >= 2:
+            # S15b — Overflow: palabra individual demasiado larga para el ancho disponible
+            # Geometry: slide=1080px, h-padding=88px each, arrow=36px each
+            # Inter 900 char_width ≈ 0.62 × font_px (calibrado vs CONFIRMACIÓN visible overflow)
+            chain_width = 1080 - 88 * 2  # 904px
+            arrow_width = 36 * (n_boxes - 1)
+            per_box = (chain_width - arrow_width) / n_boxes - 44  # 22px padding each side
+            flow_key_matches = re.findall(
+                r'class="flow-key"[^>]*style="[^"]*font-size:(\d+)px[^"]*"[^>]*>(.*?)</div>',
+                html, re.DOTALL
+            )
+            overflow_words = []
+            for fsize_str, content in flow_key_matches:
+                fsize = int(fsize_str)
+                char_width = 0.62 * fsize
+                text = re.sub(r'<[^>]+>', '', content).strip()
+                for word in text.split():
+                    est_width = len(word) * char_width
+                    if est_width > per_box:
+                        overflow_words.append(f'"{word}" (~{int(est_width)}px > {int(per_box)}px avail)')
+            results.append(Result(
+                f"S15b · flow-key sin overflow ({n_boxes} cajas, ~{int(per_box)}px/caja)",
+                not overflow_words,
+                f"palabras largas: {overflow_words}" if overflow_words else ""
+            ))
+
     # Snippet-only
     if is_snippet:
         caption_tags = re.findall(r'class="caption-tag"[^>]*>(.*?)</\w+>', html, re.DOTALL)

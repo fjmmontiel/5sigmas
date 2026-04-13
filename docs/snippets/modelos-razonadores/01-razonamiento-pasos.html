@@ -1,0 +1,278 @@
+<div class="raz-wrap" data-demo="01-razonamiento-pasos" data-default="proceso">
+  <div class="raz-hd">
+    <div class="raz-title">Qué es "razonar" para un LLM</div>
+    <div class="raz-sub">Un proceso con pasos y coste real. Los benchmarks cuantifican lo que el razonamiento extendido produce que la respuesta directa no consigue.</div>
+  </div>
+
+  <nav class="raz-nav" data-role="tablist" aria-label="Secciones">
+    <button type="button" data-role="tab" data-tab="proceso" aria-selected="true">El proceso</button>
+    <button type="button" data-role="tab" data-tab="benchmarks" aria-selected="false">Los benchmarks</button>
+  </nav>
+
+  <div class="raz-panels">
+
+    <!-- TAB 1: El proceso -->
+    <section class="raz-panel" data-panel="proceso">
+      <div class="raz-compare">
+        <div class="raz-col raz-col--direct">
+          <div class="raz-col-label">Respuesta directa</div>
+          <div class="raz-step raz-step--input">Prompt</div>
+          <div class="raz-arr">↓</div>
+          <div class="raz-step raz-step--output">Respuesta</div>
+          <div class="raz-col-note">Rápido · Barato · Funciona bien en tareas de patrón conocido</div>
+        </div>
+        <div class="raz-col raz-col--chain">
+          <div class="raz-col-label">Con cadena de pensamiento</div>
+          <div class="raz-step raz-step--input">Prompt</div>
+          <div class="raz-arr">↓</div>
+          <div class="raz-chain">
+            <div class="raz-chain-step">Descomponer el problema</div>
+            <div class="raz-chain-step">Resolver subproblema 1</div>
+            <div class="raz-chain-step">Resolver subproblema 2</div>
+            <div class="raz-chain-step">Verificar coherencia</div>
+            <div class="raz-chain-step">Sintetizar respuesta</div>
+          </div>
+          <div class="raz-arr">↓</div>
+          <div class="raz-step raz-step--output raz-step--better">Respuesta</div>
+          <div class="raz-col-note">Más lento · Más caro · Mejor en problemas de múltiples pasos</div>
+        </div>
+      </div>
+      <div class="raz-props">
+        <div class="raz-prop">
+          <div class="raz-prop-tag">pasos</div>
+          <div class="raz-prop-name">Con pasos encadenados</div>
+          <p>Cada paso depende de los anteriores. La calidad final depende de la calidad de la cadena completa.</p>
+        </div>
+        <div class="raz-prop">
+          <div class="raz-prop-tag">coste</div>
+          <div class="raz-prop-name">Consume recursos</div>
+          <p>Más pasos implica más tokens generados, más latencia y mayor coste por consulta.</p>
+        </div>
+        <div class="raz-prop">
+          <div class="raz-prop-tag">fallo</div>
+          <div class="raz-prop-name">No infalible</div>
+          <p>Los fallos tienen patrones predecibles según el tipo de problema y la distribución del entrenamiento.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: Los benchmarks -->
+    <section class="raz-panel" data-panel="benchmarks" hidden>
+      <div class="raz-bench-intro">
+        <div class="raz-bench-lead">Impacto de o1 en benchmarks de razonamiento · septiembre 2024</div>
+        <p>El mismo patrón en tres dominios distintos: gastar más cómputo en el momento de generar produce mejoras que no se obtienen solo con un modelo más grande.</p>
+      </div>
+      <div class="raz-benchmarks">
+        <div class="raz-bench">
+          <div class="raz-bench-name">AIME 2024</div>
+          <div class="raz-bench-sub">Matemáticas de competición universitaria</div>
+          <div class="raz-bars">
+            <div class="raz-bar-row">
+              <div class="raz-bar-lbl">GPT-4o</div>
+              <div class="raz-bar-track"><div class="raz-bar raz-bar--lo" style="width:13%"></div></div>
+              <div class="raz-bar-val">13%</div>
+            </div>
+            <div class="raz-bar-row">
+              <div class="raz-bar-lbl">o1 · 1 muestra</div>
+              <div class="raz-bar-track"><div class="raz-bar raz-bar--mid" style="width:74%"></div></div>
+              <div class="raz-bar-val">74%</div>
+            </div>
+            <div class="raz-bar-row">
+              <div class="raz-bar-lbl">o1 · 64 muestras</div>
+              <div class="raz-bar-track"><div class="raz-bar raz-bar--hi" style="width:83%"></div></div>
+              <div class="raz-bar-val">83%</div>
+            </div>
+          </div>
+        </div>
+        <div class="raz-bench">
+          <div class="raz-bench-name">Codeforces</div>
+          <div class="raz-bench-sub">Competición de programación</div>
+          <div class="raz-bars">
+            <div class="raz-bar-row">
+              <div class="raz-bar-lbl">GPT-4o</div>
+              <div class="raz-bar-track"><div class="raz-bar raz-bar--lo" style="width:11%"></div></div>
+              <div class="raz-bar-val">P11</div>
+            </div>
+            <div class="raz-bar-row">
+              <div class="raz-bar-lbl">o1</div>
+              <div class="raz-bar-track"><div class="raz-bar raz-bar--hi" style="width:89%"></div></div>
+              <div class="raz-bar-val">P89</div>
+            </div>
+          </div>
+        </div>
+        <div class="raz-bench">
+          <div class="raz-bench-name">GPQA Diamond</div>
+          <div class="raz-bench-sub">Ciencia de nivel PhD · física, química, biología</div>
+          <div class="raz-bars">
+            <div class="raz-bar-row">
+              <div class="raz-bar-lbl">Expertos PhD</div>
+              <div class="raz-bar-track"><div class="raz-bar raz-bar--mid" style="width:69%"></div></div>
+              <div class="raz-bar-val">~69%</div>
+            </div>
+            <div class="raz-bar-row">
+              <div class="raz-bar-lbl">o1</div>
+              <div class="raz-bar-track"><div class="raz-bar raz-bar--hi" style="width:78%"></div></div>
+              <div class="raz-bar-val">78%</div>
+            </div>
+          </div>
+          <div class="raz-bench-note">Primera vez que un modelo supera a expertos humanos en este benchmark</div>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /raz-panels -->
+</div>
+
+<style>
+.raz-wrap, .raz-wrap * { box-sizing: border-box; }
+
+.raz-wrap {
+  --ra: #26A69A;
+  --rb: #324AB2;
+  --rg: #FFB343;
+  --rr: #e04c4c;
+  --rbg: var(--md-default-bg-color, #fff);
+  --rfg: var(--md-default-fg-color, #0f172a);
+  --rbd: rgba(15,23,42,.16);
+  --rmut: rgba(15,23,42,.60);
+  --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  display: grid; gap: 16px;
+  max-width: 900px; margin: 0 auto;
+  padding: clamp(16px,2vw,28px);
+  border: 1px solid var(--rbd); border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--rb) 7%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 0%, color-mix(in srgb,var(--ra) 7%,transparent), transparent 52%),
+    var(--rbg);
+  color: var(--rfg); font-family: var(--ef); -webkit-font-smoothing: antialiased;
+}
+[data-md-color-scheme="slate"] .raz-wrap {
+  --rbg: var(--md-default-bg-color, #0f172a);
+  --rfg: var(--md-default-fg-color, #e2e8f0);
+  --rbd: rgba(226,232,240,.16); --rmut: rgba(226,232,240,.60);
+}
+
+.raz-hd { display: grid; gap: 5px; }
+.raz-title { font-size: clamp(17px,2.1vw,23px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.raz-sub { font-size: 14.5px; color: var(--rmut); line-height: 1.5; max-width: 72ch; }
+
+.raz-nav { display: flex; flex-wrap: wrap; gap: 7px; }
+.raz-nav button {
+  appearance: none; border: 1px solid var(--rbd); border-radius: 999px;
+  background: color-mix(in srgb,var(--rbg) 90%,#0f172a 10%); color: var(--rmut);
+  padding: 7px 14px; font: inherit; font-size: 13px; font-weight: 800; cursor: pointer;
+  transition: border-color .14s, background .14s, color .14s;
+}
+.raz-nav button[aria-selected="true"] {
+  border-color: color-mix(in srgb,var(--rb) 44%,transparent);
+  background: color-mix(in srgb,var(--rb) 10%,var(--rbg)); color: var(--rfg);
+}
+.raz-panel[hidden] { display: none; }
+
+/* TAB 1 */
+.raz-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.raz-col {
+  border: 1px solid var(--rbd); border-radius: 14px; padding: 16px;
+  display: flex; flex-direction: column; align-items: center; gap: 9px;
+  background: color-mix(in srgb,var(--rbg) 90%,#0f172a 10%);
+}
+.raz-col--chain {
+  border-color: color-mix(in srgb,var(--rb) 28%,var(--rbd));
+  background: linear-gradient(180deg,color-mix(in srgb,var(--rb) 5%,transparent),transparent 50%),
+              color-mix(in srgb,var(--rbg) 90%,#0f172a 10%);
+}
+.raz-col-label { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--rmut); align-self: flex-start; }
+.raz-step { padding: 9px 16px; border-radius: 10px; border: 1px solid var(--rbd); font-size: 14px; font-weight: 800; text-align: center; width: 100%; background: color-mix(in srgb,var(--rbg) 85%,#0f172a 15%); }
+.raz-step--output { background: color-mix(in srgb,var(--rmut) 10%,var(--rbg)); }
+.raz-step--better { background: color-mix(in srgb,var(--ra) 12%,var(--rbg)); border-color: color-mix(in srgb,var(--ra) 30%,var(--rbd)); color: color-mix(in srgb,var(--ra) 80%,var(--rfg)); }
+.raz-arr { font-size: 18px; color: var(--rmut); line-height: 1; }
+.raz-chain { display: flex; flex-direction: column; gap: 5px; width: 100%; }
+.raz-chain-step { padding: 7px 12px; border-radius: 8px; border: 1px solid color-mix(in srgb,var(--rb) 20%,var(--rbd)); background: color-mix(in srgb,var(--rb) 8%,var(--rbg)); font-size: 13px; font-weight: 700; text-align: center; }
+.raz-col-note { font-size: 12.5px; color: var(--rmut); text-align: center; line-height: 1.4; font-style: italic; align-self: flex-end; width: 100%; }
+
+.raz-props { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+.raz-prop { border: 1px solid var(--rbd); border-radius: 12px; padding: 13px 14px; background: color-mix(in srgb,var(--rbg) 88%,#0f172a 12%); display: grid; gap: 5px; }
+.raz-prop-tag { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; padding: 3px 8px; border-radius: 999px; border: 1px solid color-mix(in srgb,var(--rb) 25%,var(--rbd)); background: color-mix(in srgb,var(--rb) 9%,var(--rbg)); color: color-mix(in srgb,var(--rb) 70%,var(--rfg)); width: fit-content; }
+.raz-prop-name { font-size: 14px; font-weight: 900; }
+.raz-prop p { margin: 0; font-size: 13.5px; color: var(--rmut); line-height: 1.5; }
+
+/* TAB 2 */
+.raz-bench-intro { display: grid; gap: 5px; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--rbd); background: color-mix(in srgb,var(--rbg) 88%,#0f172a 12%); }
+.raz-bench-lead { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--rmut); }
+.raz-bench-intro p { margin: 0; font-size: 14px; line-height: 1.5; }
+.raz-benchmarks { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+.raz-bench { border: 1px solid var(--rbd); border-radius: 12px; padding: 14px 16px; background: color-mix(in srgb,var(--rbg) 88%,#0f172a 12%); display: grid; gap: 8px; align-content: start; }
+.raz-bench-name { font-size: 15px; font-weight: 900; }
+.raz-bench-sub { font-size: 12.5px; color: var(--rmut); line-height: 1.3; }
+.raz-bars { display: grid; gap: 6px; }
+.raz-bar-row { display: grid; grid-template-columns: 120px 1fr 40px; align-items: center; gap: 6px; }
+.raz-bar-lbl { font-size: 12px; font-weight: 700; color: var(--rmut); }
+.raz-bar-track { height: 8px; background: color-mix(in srgb,var(--rfg) 8%,transparent); border-radius: 999px; overflow: hidden; }
+.raz-bar { height: 100%; border-radius: 999px; transition: width .4s; }
+.raz-bar--lo  { background: color-mix(in srgb,var(--rr) 55%,var(--rmut)); }
+.raz-bar--mid { background: color-mix(in srgb,var(--rg) 70%,var(--rfg)); }
+.raz-bar--hi  { background: var(--ra); }
+.raz-bar-val { font-size: 12px; font-weight: 900; text-align: right; }
+.raz-bench-note { font-size: 12px; color: color-mix(in srgb,var(--ra) 70%,var(--rfg)); font-style: italic; border-top: 1px solid var(--rbd); padding-top: 6px; }
+
+/* TAB 3 (unused panel, kept for completeness) */
+.raz-debate { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: start; }
+.raz-debate-vs { font-size: 12px; font-weight: 900; color: var(--rmut); align-self: center; }
+.raz-side { border: 1px solid var(--rbd); border-radius: 14px; padding: 12px; display: grid; gap: 8px; background: color-mix(in srgb,var(--rbg) 88%,#0f172a 12%); }
+.raz-side--apple    { border-color: color-mix(in srgb,var(--rr) 24%,var(--rbd)); }
+.raz-side--rebuttal { border-color: color-mix(in srgb,var(--ra) 24%,var(--rbd)); }
+.raz-side-who { font-size: 10.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; color: var(--rmut); }
+.raz-side-title { font-size: 14px; font-weight: 900; line-height: 1.3; }
+.raz-side--apple .raz-side-title    { color: color-mix(in srgb,var(--rr) 70%,var(--rfg)); }
+.raz-side--rebuttal .raz-side-title { color: color-mix(in srgb,var(--ra) 70%,var(--rfg)); }
+.raz-claims { display: grid; gap: 6px; }
+.raz-claim { padding: 8px 10px; border-radius: 9px; border: 1px solid var(--rbd); background: color-mix(in srgb,var(--rbg) 85%,transparent); display: grid; gap: 3px; }
+.raz-claim-k { font-size: 12px; font-weight: 900; }
+.raz-claim p { margin: 0; font-size: 12.5px; color: var(--rmut); line-height: 1.4; }
+.raz-debate-footer { font-size: 13.5px; color: var(--rmut); font-style: italic; border-left: 3px solid color-mix(in srgb,var(--rb) 36%,transparent); padding-left: 12px; }
+
+@media (max-width: 660px) {
+  .raz-compare    { grid-template-columns: 1fr; }
+  .raz-props      { grid-template-columns: 1fr; }
+  .raz-benchmarks { grid-template-columns: 1fr; }
+  .raz-debate     { grid-template-columns: 1fr; }
+  .raz-debate-vs  { display: none; }
+  .raz-bar-row    { grid-template-columns: 90px 1fr 36px; }
+}
+</style>
+
+<script>
+(function () {
+  function activate(root, key) {
+    root.querySelectorAll('[data-role="tab"]').forEach(t => {
+      const on = t.getAttribute('data-tab') === key;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+    });
+    root.querySelectorAll('[data-panel]').forEach(p => {
+      p.hidden = p.getAttribute('data-panel') !== key;
+    });
+  }
+  function initRoot(root) {
+    if (root.dataset.razReady === '1') return;
+    root.dataset.razReady = '1';
+    const tabs = Array.from(root.querySelectorAll('[data-role="tab"]'));
+    const first = root.getAttribute('data-default') || (tabs[0] && tabs[0].getAttribute('data-tab'));
+    tabs.forEach(tab => {
+      tab.tabIndex = -1;
+      tab.addEventListener('click', () => activate(root, tab.getAttribute('data-tab')));
+      tab.addEventListener('keydown', e => {
+        const cur = tabs.indexOf(tab); let next = cur;
+        if (e.key === 'ArrowRight') next = (cur + 1) % tabs.length;
+        if (e.key === 'ArrowLeft') next = (cur - 1 + tabs.length) % tabs.length;
+        if (next !== cur) { e.preventDefault(); tabs[next].focus(); activate(root, tabs[next].getAttribute('data-tab')); }
+      });
+    });
+    activate(root, first);
+  }
+  function boot() { document.querySelectorAll('[data-demo="01-razonamiento-pasos"]').forEach(initRoot); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
+  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
+})();
+</script>

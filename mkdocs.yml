@@ -68,6 +68,9 @@ nav:
           - Arquitecturas: series/multimodalidad-iag/03-arquitecturas.md
           - Evaluación: series/multimodalidad-iag/04-evaluacion.md
           - Riesgos: series/multimodalidad-iag/05-riesgos.md
+      - Modelos razonadores:
+          - Presentación: series/modelos-razonadores/00_presentacion_serie.md
+          - Qué es razonar: series/modelos-razonadores/01-que-es-razonar.md
   - Próximamente: proximamente.md
   - Sobre 5sigmas: meta/about.md
 markdown_extensions:

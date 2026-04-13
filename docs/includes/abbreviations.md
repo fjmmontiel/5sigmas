@@ -22,3 +22,16 @@
 *[benchmarks]: pruebas estandarizadas que miden el rendimiento de modelos en tareas concretas para compararlos entre sí
 *[grounding]: capacidad de un modelo para anclar sus respuestas en información verificable del mundo real, reduciendo alucinaciones
 *[prior]: creencia inicial sobre cómo es el mundo antes de ver datos; en modelos de lenguaje, sesgos aprendidos durante el entrenamiento que influyen en sus respuestas
+
+<!-- Modelos razonadores -->
+*[RLVR]: Reinforcement Learning with Verifiable Rewards: variante de RL donde la señal de recompensa es una verificación automática de corrección, sin depender de evaluadores humanos
+*[GRPO]: Group Relative Policy Optimization: algoritmo de entrenamiento que elimina el modelo crítico generando varios intentos del mismo problema y calculando ventajas relativas al grupo
+*[CoT]: Chain-of-Thought: técnica donde el modelo genera pasos intermedios explícitos antes de producir la respuesta final
+*[TTC]: Test-Time Compute: cómputo invertido en el momento de generar una respuesta, en contraposición al cómputo de entrenamiento
+*[PRM]: Process Reward Model: modelo evaluador que puntúa cada paso intermedio de la cadena de razonamiento, no solo la respuesta final
+*[ORM]: Outcome Reward Model: modelo evaluador que puntúa únicamente la respuesta final, sin evaluar los pasos intermedios
+*[TTFT]: Time To First Token: tiempo desde que el usuario envía la consulta hasta que recibe el primer carácter de la respuesta
+*[SLO]: Service Level Objective: objetivo medible de nivel de servicio, normalmente expresado como percentil de latencia (p. ej. p95 < 5 s)
+*[SLOs]: Service Level Objectives: objetivos medibles de nivel de servicio, normalmente expresados como percentiles de latencia
+*[AIME]: American Invitational Mathematics Examination: examen de matemáticas de competición universitaria ampliamente usado como benchmark de razonamiento en LLMs
+*[GPQA]: Graduate-Level Google-Proof Q&A: benchmark de preguntas de ciencia a nivel de doctorado diseñadas para ser irreproducibles con búsqueda web

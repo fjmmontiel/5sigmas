@@ -37,21 +37,42 @@ ROOT = Path(__file__).resolve().parents[1]
 POSTS_DIR = ROOT / "documentacion_interna" / "posts"
 PDFS_DIR = ROOT / "exports" / "pdfs"
 PDFS_V2_DIR = ROOT / "exports" / "pdfs_v2"
-PDFS_PULIDO_DIR = ROOT / "exports" / "pdfs_pulido"
+
+SERIES_PREFIX = {
+    "from-cave-to-agi": "cave-agi",
+    "multimodalidad-iag": "mm-iag",
+}
+
+
+def _pulido_pdf_name(carousel_path: Path) -> str:
+    """Derive canonical PDF filename from post path.
+
+    Pattern: <prefix>_cNpN_slug.pdf
+    Example: mm-iag_c2p2_imagebind-transitividad.pdf
+    """
+    rel = carousel_path.parent.relative_to(POSTS_DIR)
+    parts = rel.parts  # e.g. ('multimodalidad-iag', 'cap1', 'post_1_mapa_campo')
+    if len(parts) < 3:
+        return f"{rel.name}.pdf"
+    series, cap, post = parts[0], parts[1], parts[2]
+    prefix = SERIES_PREFIX.get(series, series[:8])
+    cap_n = cap.replace("cap", "")
+    post_parts = post.split("_", 2)  # ['post', '1', 'slug']
+    post_n = post_parts[1] if len(post_parts) > 1 else "1"
+    slug = post_parts[2].replace("_", "-") if len(post_parts) > 2 else post
+    return f"{prefix}_c{cap_n}p{post_n}_{slug}.pdf"
 SLIDE_W = 1080
 
 
 async def _render_carousel(page, carousel_path: Path, preview: bool, v2: bool = False, pulido: bool = False):
     """Screenshot every slide in a carousel → PNGs.
     v2=True    → salida en <post>/v2/
-    pulido=True → salida en <post>/pulido/"""
-    if pulido:
-        out_dir = carousel_path.parent / "pulido"
-    elif v2:
+    pulido=True → salida en <post>/  (misma carpeta que carousel_pulido.html)"""
+    if v2:
         out_dir = carousel_path.parent / "v2"
     else:
         out_dir = carousel_path.parent
-    if v2 or pulido:
+    if v2:
         out_dir.mkdir(exist_ok=True)
     slides = await _collect_slides(page, carousel_path)
 
@@ -103,22 +124,24 @@ async def _render_carousel_pdf(page, carousel_path: Path, v2: bool = False, puli
 
     Output (v1):     exports/pdfs/<serie>/<cap>/<post>.pdf
     Output (v2):     exports/pdfs_v2/<serie>/<cap>/<post>.pdf
-    Output (pulido): exports/pdfs_pulido/<serie>/<cap>/<post>.pdf
+    Output (pulido): <post>/<prefix>_cNpN_slug.pdf  (junto al carousel_pulido.html)
     Each slide is rendered in an isolated HTML page to guarantee correct
     1080×1080 layout — no position:fixed tricks that break in Chromium print mode.
     """
     from pypdf import PdfReader, PdfWriter
 
     if pulido:
-        pdfs_dir = PDFS_PULIDO_DIR
+        out_path = carousel_path.parent / _pulido_pdf_name(carousel_path)
     elif v2:
-        pdfs_dir = PDFS_V2_DIR
+        rel = carousel_path.parent.relative_to(POSTS_DIR)
+        out_dir = PDFS_V2_DIR / rel.parent
+        out_dir.mkdir(parents=True, exist_ok=True)
+        out_path = out_dir / f"{rel.name}.pdf"
     else:
-        pdfs_dir = PDFS_DIR
-    rel = carousel_path.parent.relative_to(POSTS_DIR)  # e.g. multimodalidad-iag/cap1/post_1_mapa_campo
-    out_dir = pdfs_dir / rel.parent
-    out_dir.mkdir(parents=True, exist_ok=True)
-    out_path = out_dir / f"{rel.name}.pdf"
+        rel = carousel_path.parent.relative_to(POSTS_DIR)
+        out_dir = PDFS_DIR / rel.parent
+        out_dir.mkdir(parents=True, exist_ok=True)
+        out_path = out_dir / f"{rel.name}.pdf"
 
     # Load original page to extract CSS and slide HTML
     await page.goto(carousel_path.as_uri(), wait_until="networkidle", timeout=30_000)

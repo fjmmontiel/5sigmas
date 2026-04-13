@@ -1,0 +1,282 @@
+<div class="eco-wrap" data-demo="01-ecosistema-modelos" data-default="timeline">
+  <div class="eco-hd">
+    <div class="eco-title">El ecosistema de modelos razonadores</div>
+    <div class="eco-sub">De o1 a los modelos actuales: arquitecturas, apertura y rendimiento comparativo.</div>
+  </div>
+
+  <nav class="eco-nav" data-role="tablist" aria-label="Secciones">
+    <button type="button" data-role="tab" data-tab="timeline" aria-selected="true">Cronología</button>
+    <button type="button" data-role="tab" data-tab="apertura" aria-selected="false">Apertura</button>
+    <button type="button" data-role="tab" data-tab="benchmarks" aria-selected="false">Benchmarks</button>
+  </nav>
+
+  <div class="eco-panels">
+
+    <!-- TAB 1: Timeline -->
+    <section class="eco-panel" data-panel="timeline">
+      <div class="eco-tl-intro">De la cadena de pensamiento privada al entrenamiento abierto — en menos de un año.</div>
+      <div class="eco-tl">
+
+        <div class="eco-event eco-event--o1">
+          <div class="eco-event-dot"></div>
+          <div class="eco-event-date">Sep 2024</div>
+          <div class="eco-event-card">
+            <div class="eco-event-tag" style="background:rgba(38,166,154,.12);color:#26A69A;border-color:rgba(38,166,154,.25)">OpenAI</div>
+            <div class="eco-event-name">o1-preview</div>
+            <div class="eco-event-desc">Primer modelo con cadena de pensamiento interna autónoma. CoT oculta al usuario. Entrenado con RL sobre razonamiento matemático y código.</div>
+            <div class="eco-event-bench">AIME 2024: <strong>74%</strong> · GPQA: <strong>78%</strong></div>
+          </div>
+        </div>
+
+        <div class="eco-event eco-event--ds">
+          <div class="eco-event-dot"></div>
+          <div class="eco-event-date">Ene 2025</div>
+          <div class="eco-event-card">
+            <div class="eco-event-tag" style="background:rgba(50,74,178,.12);color:#7cc7ff;border-color:rgba(124,199,255,.25)">DeepSeek</div>
+            <div class="eco-event-name">DeepSeek R1</div>
+            <div class="eco-event-desc">Primer modelo razonador open-source de nivel frontera. Entrenado con GRPO (sin modelo crítico). CoT pública y legible. 671B parámetros.</div>
+            <div class="eco-event-bench">AIME 2024: <strong>79.8%</strong> · GPQA: <strong>71.5%</strong></div>
+          </div>
+        </div>
+
+        <div class="eco-event eco-event--cl">
+          <div class="eco-event-dot"></div>
+          <div class="eco-event-date">Feb 2025</div>
+          <div class="eco-event-card">
+            <div class="eco-event-tag" style="background:rgba(255,179,67,.12);color:#FFB343;border-color:rgba(255,179,67,.25)">Anthropic</div>
+            <div class="eco-event-name">Claude 3.7 Sonnet</div>
+            <div class="eco-event-desc">Modo híbrido: razonamiento estándar o extendido en el mismo modelo. CoT visible y legible por diseño. Budget de thinking tokens configurable.</div>
+            <div class="eco-event-bench">AIME 2024: <strong>80%</strong> · GPQA: <strong>84.8%</strong> (256×)</div>
+          </div>
+        </div>
+
+        <div class="eco-event eco-event--gm">
+          <div class="eco-event-dot"></div>
+          <div class="eco-event-date">Mar 2025</div>
+          <div class="eco-event-card">
+            <div class="eco-event-tag" style="background:rgba(50,74,178,.12);color:#7cc7ff;border-color:rgba(124,199,255,.25)">Google</div>
+            <div class="eco-event-name">Gemini 2.5 Pro</div>
+            <div class="eco-event-desc">Mayor ventana de contexto nativa (1M tokens). Razonamiento integrado con capacidades multimodales. Pensamiento configurable desde la API.</div>
+            <div class="eco-event-bench">AIME 2024: <strong>92%</strong> · GPQA: <strong>~87%</strong></div>
+          </div>
+        </div>
+
+        <div class="eco-event eco-event--o3">
+          <div class="eco-event-dot"></div>
+          <div class="eco-event-date">Abr 2025</div>
+          <div class="eco-event-card">
+            <div class="eco-event-tag" style="background:rgba(38,166,154,.12);color:#26A69A;border-color:rgba(38,166,154,.25)">OpenAI</div>
+            <div class="eco-event-name">o3</div>
+            <div class="eco-event-desc">Razonamiento profundo con búsqueda interna extendida. Máxima precisión en matemáticas y código. Coste y latencia muy elevados en modo máximo esfuerzo.</div>
+            <div class="eco-event-bench">AIME 2024: <strong>91.6%</strong> · SWE-bench: <strong>71.7%</strong></div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TAB 2: Apertura -->
+    <section class="eco-panel" data-panel="apertura" hidden>
+      <div class="eco-grid-intro">Los modelos razonadores difieren en qué parte del proceso muestran — con implicaciones distintas para auditoría, seguridad y confianza.</div>
+      <div class="eco-grid">
+        <div class="eco-col-hd"></div>
+        <div class="eco-col-hd">CoT visible</div>
+        <div class="eco-col-hd">Legibilidad</div>
+        <div class="eco-col-hd">Pesos abiertos</div>
+        <div class="eco-col-hd">Configurable</div>
+
+        <div class="eco-row-label">o1 / o3</div>
+        <div class="eco-cell eco-cell--no">No — oculta</div>
+        <div class="eco-cell eco-cell--na">N/A</div>
+        <div class="eco-cell eco-cell--no">No</div>
+        <div class="eco-cell eco-cell--partial">Esfuerzo bajo/medio/alto</div>
+
+        <div class="eco-row-label">DeepSeek R1</div>
+        <div class="eco-cell eco-cell--yes">Sí — completa</div>
+        <div class="eco-cell eco-cell--partial">Alta (salvo fragmentos RL)</div>
+        <div class="eco-cell eco-cell--yes">Sí — 671B</div>
+        <div class="eco-cell eco-cell--no">No</div>
+
+        <div class="eco-row-label">Claude 3.7</div>
+        <div class="eco-cell eco-cell--yes">Sí — completa</div>
+        <div class="eco-cell eco-cell--yes">Alta por diseño</div>
+        <div class="eco-cell eco-cell--no">No</div>
+        <div class="eco-cell eco-cell--yes">Budget de tokens</div>
+
+        <div class="eco-row-label">Gemini 2.5</div>
+        <div class="eco-cell eco-cell--partial">Parcial (resumen)</div>
+        <div class="eco-cell eco-cell--partial">Media</div>
+        <div class="eco-cell eco-cell--no">No</div>
+        <div class="eco-cell eco-cell--yes">Nivel de pensamiento</div>
+      </div>
+      <div class="eco-note">La CoT visible no garantiza fidelidad al proceso interno — pero sí permite auditoría externa y detección de patrones de fallo.</div>
+    </section>
+
+    <!-- TAB 3: Benchmarks -->
+    <section class="eco-panel" data-panel="benchmarks" hidden>
+      <div class="eco-bench-intro">Rendimiento comparativo en los tres benchmarks más informativos para razonamiento complejo. Números de septiembre 2025 (pass@1 salvo indicado).</div>
+      <div class="eco-bench-grid">
+        <div class="eco-bcard">
+          <div class="eco-bcard-name">AIME 2024</div>
+          <div class="eco-bcard-sub">Matemáticas de competición · 30 problemas · no saturado</div>
+          <div class="eco-bars">
+            <div class="eco-bar-row"><span class="eco-blbl">GPT-4o</span><div class="eco-btrack"><div class="eco-bfill" style="width:12%;background:rgba(224,76,76,.7)"></div></div><span class="eco-bval">12%</span></div>
+            <div class="eco-bar-row"><span class="eco-blbl">o1</span><div class="eco-btrack"><div class="eco-bfill" style="width:74.4%;background:#26A69A"></div></div><span class="eco-bval">74%</span></div>
+            <div class="eco-bar-row"><span class="eco-blbl">DeepSeek R1</span><div class="eco-btrack"><div class="eco-bfill" style="width:79.8%;background:#7cc7ff"></div></div><span class="eco-bval">80%</span></div>
+            <div class="eco-bar-row"><span class="eco-blbl">Claude 3.7</span><div class="eco-btrack"><div class="eco-bfill" style="width:80%;background:#FFB343"></div></div><span class="eco-bval">80%</span></div>
+            <div class="eco-bar-row"><span class="eco-blbl">o3</span><div class="eco-btrack"><div class="eco-bfill" style="width:91.6%;background:#26A69A"></div></div><span class="eco-bval">92%</span></div>
+            <div class="eco-bar-row"><span class="eco-blbl">Gemini 2.5 Pro</span><div class="eco-btrack"><div class="eco-bfill" style="width:92%;background:#7cc7ff"></div></div><span class="eco-bval">92%</span></div>
+          </div>
+        </div>
+        <div class="eco-bcard">
+          <div class="eco-bcard-name">GPQA Diamond</div>
+          <div class="eco-bcard-sub">Ciencia PhD · física, química, biología · no saturado</div>
+          <div class="eco-bars">
+            <div class="eco-bar-row"><span class="eco-blbl">Expertos PhD</span><div class="eco-btrack"><div class="eco-bfill" style="width:69%;background:rgba(255,179,67,.5)"></div></div><span class="eco-bval">~69%</span></div>
+            <div class="eco-bar-row"><span class="eco-blbl">o1</span><div class="eco-btrack"><div class="eco-bfill" style="width:77.3%;background:#26A69A"></div></div><span class="eco-bval">77%</span></div>
+            <div class="eco-bar-row"><span class="eco-blbl">DeepSeek R1</span><div class="eco-btrack"><div class="eco-bfill" style="width:71.5%;background:#7cc7ff"></div></div><span class="eco-bval">72%</span></div>
+            <div class="eco-bar-row"><span class="eco-blbl">Claude 3.7 ×256</span><div class="eco-btrack"><div class="eco-bfill" style="width:84.8%;background:#FFB343"></div></div><span class="eco-bval">85%</span></div>
+            <div class="eco-bar-row"><span class="eco-blbl">Gemini 2.5 Pro</span><div class="eco-btrack"><div class="eco-bfill" style="width:87%;background:#7cc7ff"></div></div><span class="eco-bval">87%</span></div>
+          </div>
+        </div>
+        <div class="eco-bcard">
+          <div class="eco-bcard-name">SWE-bench Verified</div>
+          <div class="eco-bcard-sub">Ingeniería de software real · issues de GitHub · no saturado</div>
+          <div class="eco-bars">
+            <div class="eco-bar-row"><span class="eco-blbl">GPT-4o</span><div class="eco-btrack"><div class="eco-bfill" style="width:38%;background:rgba(224,76,76,.7)"></div></div><span class="eco-bval">38%</span></div>
+            <div class="eco-bar-row"><span class="eco-blbl">DeepSeek R1</span><div class="eco-btrack"><div class="eco-bfill" style="width:49.2%;background:#7cc7ff"></div></div><span class="eco-bval">49%</span></div>
+            <div class="eco-bar-row"><span class="eco-blbl">Claude 3.7</span><div class="eco-btrack"><div class="eco-bfill" style="width:70.3%;background:#FFB343"></div></div><span class="eco-bval">70%</span></div>
+            <div class="eco-bar-row"><span class="eco-blbl">o3</span><div class="eco-btrack"><div class="eco-bfill" style="width:71.7%;background:#26A69A"></div></div><span class="eco-bval">72%</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /eco-panels -->
+</div>
+
+<style>
+.eco-wrap, .eco-wrap * { box-sizing: border-box; }
+.eco-wrap {
+  --ea: #26A69A; --eb: #324AB2; --eg: #FFB343; --ec: #7cc7ff; --er: #e04c4c;
+  --ebg: var(--md-default-bg-color, #fff);
+  --efg: var(--md-default-fg-color, #0f172a);
+  --ebd: rgba(15,23,42,.14); --emut: rgba(15,23,42,.58);
+  --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  display: grid; gap: 16px; max-width: 940px; margin: 0 auto;
+  padding: clamp(16px,2vw,28px);
+  border: 1px solid var(--ebd); border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--eb) 6%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 0%, color-mix(in srgb,var(--ea) 6%,transparent), transparent 52%),
+    var(--ebg);
+  color: var(--efg); font-family: var(--ef); -webkit-font-smoothing: antialiased;
+}
+[data-md-color-scheme="slate"] .eco-wrap {
+  --ebg: var(--md-default-bg-color, #0f172a);
+  --efg: var(--md-default-fg-color, #e2e8f0);
+  --ebd: rgba(226,232,240,.15); --emut: rgba(226,232,240,.58);
+}
+.eco-hd { display: grid; gap: 5px; }
+.eco-title { font-size: clamp(17px,2vw,23px); font-weight: 900; letter-spacing: -.02em; }
+.eco-sub { font-size: 14.5px; color: var(--emut); line-height: 1.5; }
+
+.eco-nav { display: flex; flex-wrap: wrap; gap: 7px; }
+.eco-nav button {
+  appearance: none; border: 1px solid var(--ebd); border-radius: 999px;
+  background: color-mix(in srgb,var(--ebg) 90%,#0f172a 10%); color: var(--emut);
+  padding: 7px 16px; font: inherit; font-size: 13px; font-weight: 800; cursor: pointer;
+  transition: border-color .14s, background .14s, color .14s;
+}
+.eco-nav button[aria-selected="true"] {
+  border-color: color-mix(in srgb,var(--eb) 44%,transparent);
+  background: color-mix(in srgb,var(--eb) 10%,var(--ebg)); color: var(--efg);
+}
+.eco-panel[hidden] { display: none; }
+
+/* TIMELINE */
+.eco-tl-intro { font-size: 14px; color: var(--emut); font-style: italic; padding-left: 12px; border-left: 3px solid color-mix(in srgb,var(--eb) 36%,transparent); }
+.eco-tl { display: grid; gap: 10px; padding-top: 4px; }
+.eco-event { display: grid; grid-template-columns: 12px 86px 1fr; gap: 0 12px; align-items: start; }
+.eco-event-dot { width: 12px; height: 12px; border-radius: 50%; margin-top: 4px; border: 2px solid var(--ebg); }
+.eco-event--o1 .eco-event-dot { background: #26A69A; }
+.eco-event--ds .eco-event-dot { background: #7cc7ff; }
+.eco-event--cl .eco-event-dot { background: #FFB343; }
+.eco-event--gm .eco-event-dot { background: #7cc7ff; }
+.eco-event--o3 .eco-event-dot { background: #26A69A; }
+.eco-event-date { font-size: 11.5px; font-weight: 900; color: var(--emut); text-transform: uppercase; letter-spacing: .05em; padding-top: 1px; }
+.eco-event-card { border: 1px solid var(--ebd); border-radius: 12px; padding: 12px 16px; background: color-mix(in srgb,var(--ebg) 88%,#0f172a 12%); display: grid; gap: 6px; }
+.eco-event-tag { font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; padding: 2px 8px; border-radius: 999px; border: 1px solid; width: fit-content; }
+.eco-event-name { font-size: 15.5px; font-weight: 900; }
+.eco-event-desc { font-size: 13.5px; color: var(--emut); line-height: 1.5; }
+.eco-event-bench { font-size: 12px; font-family: "SF Mono","JetBrains Mono","Courier New",monospace; color: var(--emut); border-top: 1px solid var(--ebd); padding-top: 6px; }
+.eco-event-bench strong { color: var(--efg); }
+
+/* APERTURA */
+.eco-grid-intro { font-size: 14px; color: var(--emut); font-style: italic; padding-left: 12px; border-left: 3px solid color-mix(in srgb,var(--ea) 36%,transparent); }
+.eco-grid { display: grid; grid-template-columns: 120px repeat(4,1fr); gap: 4px; }
+.eco-col-hd { font-size: 10.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; color: var(--emut); padding: 6px 8px; text-align: center; }
+.eco-row-label { font-size: 13px; font-weight: 900; padding: 7px 8px; display: flex; align-items: center; }
+.eco-cell { font-size: 12.5px; padding: 7px 8px; border-radius: 8px; text-align: center; border: 1px solid var(--ebd); background: color-mix(in srgb,var(--ebg) 90%,#0f172a 10%); display: flex; align-items: center; justify-content: center; line-height: 1.3; }
+.eco-cell--yes { background: color-mix(in srgb,var(--ea) 9%,var(--ebg)); border-color: color-mix(in srgb,var(--ea) 25%,var(--ebd)); color: color-mix(in srgb,var(--ea) 80%,var(--efg)); font-weight: 700; }
+.eco-cell--no { background: color-mix(in srgb,var(--er) 8%,var(--ebg)); border-color: color-mix(in srgb,var(--er) 20%,var(--ebd)); color: color-mix(in srgb,var(--er) 70%,var(--efg)); }
+.eco-cell--partial { background: color-mix(in srgb,var(--eg) 9%,var(--ebg)); border-color: color-mix(in srgb,var(--eg) 25%,var(--ebd)); color: color-mix(in srgb,var(--eg) 80%,var(--efg)); font-weight: 700; }
+.eco-cell--na { color: var(--emut); }
+.eco-note { font-size: 13px; color: var(--emut); font-style: italic; border-left: 3px solid color-mix(in srgb,var(--eg) 36%,transparent); padding-left: 10px; }
+
+/* BENCHMARKS */
+.eco-bench-intro { font-size: 14px; color: var(--emut); font-style: italic; }
+.eco-bench-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+.eco-bcard { border: 1px solid var(--ebd); border-radius: 14px; padding: 14px 16px; background: color-mix(in srgb,var(--ebg) 88%,#0f172a 12%); display: grid; gap: 8px; align-content: start; }
+.eco-bcard-name { font-size: 15px; font-weight: 900; }
+.eco-bcard-sub { font-size: 12px; color: var(--emut); line-height: 1.3; }
+.eco-bars { display: grid; gap: 6px; }
+.eco-bar-row { display: grid; grid-template-columns: 110px 1fr 40px; align-items: center; gap: 6px; }
+.eco-blbl { font-size: 11.5px; font-weight: 700; color: var(--emut); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.eco-btrack { height: 8px; background: color-mix(in srgb,var(--efg) 8%,transparent); border-radius: 999px; overflow: hidden; }
+.eco-bfill { height: 100%; border-radius: 999px; }
+.eco-bval { font-size: 12px; font-weight: 900; text-align: right; font-family: "SF Mono","JetBrains Mono","Courier New",monospace; }
+
+@media (max-width: 680px) {
+  .eco-bench-grid { grid-template-columns: 1fr; }
+  .eco-grid { grid-template-columns: 100px repeat(4,1fr); font-size: 10.5px; }
+  .eco-event { grid-template-columns: 10px 64px 1fr; gap: 0 8px; }
+  .eco-bar-row { grid-template-columns: 90px 1fr 36px; }
+}
+</style>
+
+<script>
+(function () {
+  function activate(root, key) {
+    root.querySelectorAll('[data-role="tab"]').forEach(t => {
+      const on = t.getAttribute('data-tab') === key;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+    });
+    root.querySelectorAll('[data-panel]').forEach(p => {
+      p.hidden = p.getAttribute('data-panel') !== key;
+    });
+  }
+  function initRoot(root) {
+    if (root.dataset.ecoReady === '1') return;
+    root.dataset.ecoReady = '1';
+    const tabs = Array.from(root.querySelectorAll('[data-role="tab"]'));
+    const first = root.getAttribute('data-default') || (tabs[0] && tabs[0].getAttribute('data-tab'));
+    tabs.forEach(tab => {
+      tab.tabIndex = -1;
+      tab.addEventListener('click', () => activate(root, tab.getAttribute('data-tab')));
+      tab.addEventListener('keydown', e => {
+        const cur = tabs.indexOf(tab); let next = cur;
+        if (e.key === 'ArrowRight') next = (cur + 1) % tabs.length;
+        if (e.key === 'ArrowLeft') next = (cur - 1 + tabs.length) % tabs.length;
+        if (next !== cur) { e.preventDefault(); tabs[next].focus(); activate(root, tabs[next].getAttribute('data-tab')); }
+      });
+    });
+    activate(root, first);
+  }
+  function boot() { document.querySelectorAll('[data-demo="01-ecosistema-modelos"]').forEach(initRoot); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
+  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
+})();
+</script>
