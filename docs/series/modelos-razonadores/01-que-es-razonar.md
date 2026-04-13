@@ -103,9 +103,6 @@ La posición práctica útil es tratar el razonamiento de los LLMs como un proce
 
 ---
 
-!!! tip "Siguiente lectura"
-    Los fallos de los modelos razonadores no son aleatorios: tienen patrones bien definidos que se pueden documentar, detectar y mitigar. El capítulo siguiente los estudia: [Capítulo 2 — Cómo se ven los fallos de los modelos razonadores →](./02-fallos.md)
-
 ## 6. Referencias
 
 <details markdown="1">
