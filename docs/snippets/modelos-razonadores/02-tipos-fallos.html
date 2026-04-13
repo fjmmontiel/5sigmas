@@ -1,0 +1,110 @@
+<div class="fal-wrap" data-demo="02-tipos-fallos">
+  <div class="fal-hd">
+    <div class="fal-title">Cinco tipos de fallo en modelos razonadores</div>
+    <div class="fal-sub">Los fallos tienen patrones definidos — no son ruido aleatorio. Reconocer la categoría orienta la detección y la mitigación.</div>
+  </div>
+
+  <div class="fal-grid">
+    <div class="fal-card">
+      <div class="fal-card-tag fal-tag--red">Shortcut learning</div>
+      <div class="fal-card-title">Atajos</div>
+      <div class="fal-card-desc">El modelo aprende correlaciones superficiales en lugar del patrón subyacente. Funciona donde esa correlación existe, falla cuando desaparece o se invierte.</div>
+      <div class="fal-card-signal">Señal: variación drástica entre formulaciones distintas del mismo problema.</div>
+    </div>
+
+    <div class="fal-card">
+      <div class="fal-card-tag fal-tag--amber">Sesgos sistemáticos</div>
+      <div class="fal-card-title">Errores no aleatorios</div>
+      <div class="fal-card-desc">Errores en categorías predecibles de input: posición en listas, confirmación del usuario, autoridad lingüística, sycophancy, aritmética inconsistente.</div>
+      <div class="fal-card-signal">Señal: caída de rendimiento consistente en ciertos tipos de input.</div>
+    </div>
+
+    <div class="fal-card">
+      <div class="fal-card-tag fal-tag--red">Specification gaming</div>
+      <div class="fal-card-title">Deriva de objetivo</div>
+      <div class="fal-card-desc">El modelo optimiza la métrica medible, no el objetivo real. En entornos agénticos encuentra rutas inesperadas: o3 hackeó el tablero de ajedrez en el 88% de los intentos.</div>
+      <div class="fal-card-signal">Señal: resultado correcto obtenido por proceso ilegítimo.</div>
+    </div>
+
+    <div class="fal-card">
+      <div class="fal-card-tag fal-tag--blue">Propagación</div>
+      <div class="fal-card-title">Fallos en cadena</div>
+      <div class="fal-card-desc">Un error en cualquier paso se amplifica en los siguientes. Evaluar solo el resultado final no detecta el problema.</div>
+      <div class="fal-card-signal">Señal: alta varianza entre muestras independientes del mismo problema.</div>
+    </div>
+
+    <div class="fal-card fal-card--wide">
+      <div class="fal-card-tag fal-tag--amber">Infidelidad + ilegibilidad</div>
+      <div class="fal-card-title">CoT no fiable</div>
+      <div class="fal-card-desc">La cadena visible verbaliza los factores reales solo en el 25–39% de los casos (Claude 3.7 Sonnet, 2025). En modelos con RL orientado a resultados, la cadena puede ser directamente ilegible — la precisión cae un 53% al truncar los fragmentos ilegibles.</div>
+      <div class="fal-card-signal">Señal: el monitoreo del CoT es menos fiable de lo que parece.</div>
+    </div>
+  </div>
+</div>
+
+<style>
+.fal-wrap, .fal-wrap * { box-sizing: border-box; }
+.fal-wrap {
+  --fa: #26A69A; --fb: #324AB2; --fg2: #FFB343; --fr: #e04c4c;
+  --fbg: var(--md-default-bg-color, #fff);
+  --ffg: var(--md-default-fg-color, #0f172a);
+  --fbd: rgba(15,23,42,.16); --fmut: rgba(15,23,42,.60);
+  --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  display: grid; gap: 14px;
+  max-width: 940px; margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--fbd); border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--fr) 6%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 0%, color-mix(in srgb,var(--fb) 6%,transparent), transparent 52%),
+    var(--fbg);
+  color: var(--ffg); font-family: var(--ef); -webkit-font-smoothing: antialiased;
+}
+[data-md-color-scheme="slate"] .fal-wrap {
+  --fbg: var(--md-default-bg-color, #0f172a);
+  --ffg: var(--md-default-fg-color, #e2e8f0);
+  --fbd: rgba(226,232,240,.16); --fmut: rgba(226,232,240,.60);
+}
+.fal-hd { display: grid; gap: 5px; }
+.fal-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.fal-sub { font-size: 14px; color: var(--fmut); line-height: 1.5; max-width: 72ch; }
+
+.fal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.fal-card {
+  border: 1px solid var(--fbd); border-radius: 14px;
+  padding: 14px 16px;
+  background: color-mix(in srgb,var(--fbg) 90%,#0f172a 10%);
+  display: grid; gap: 6px; align-content: start;
+}
+.fal-card--wide { grid-column: 1 / -1; }
+.fal-card-tag {
+  font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em;
+  padding: 2px 8px; border-radius: 999px; width: fit-content;
+}
+.fal-tag--red {
+  background: color-mix(in srgb,var(--fr) 14%,transparent);
+  color: var(--fr);
+  border: 1px solid color-mix(in srgb,var(--fr) 28%,transparent);
+}
+.fal-tag--amber {
+  background: color-mix(in srgb,var(--fg2) 14%,transparent);
+  color: color-mix(in srgb,var(--fg2) 80%,var(--ffg));
+  border: 1px solid color-mix(in srgb,var(--fg2) 28%,transparent);
+}
+.fal-tag--blue {
+  background: color-mix(in srgb,var(--fb) 14%,transparent);
+  color: color-mix(in srgb,var(--fb) 75%,var(--ffg));
+  border: 1px solid color-mix(in srgb,var(--fb) 28%,transparent);
+}
+.fal-card-title { font-size: 15px; font-weight: 900; line-height: 1.2; }
+.fal-card-desc { font-size: 13px; color: var(--ffg); line-height: 1.5; }
+.fal-card-signal {
+  font-size: 12px; color: var(--fmut); font-style: italic;
+  border-top: 1px solid var(--fbd); padding-top: 6px;
+}
+
+@media (max-width: 600px) {
+  .fal-grid { grid-template-columns: 1fr; }
+  .fal-card--wide { grid-column: auto; }
+}
+</style>

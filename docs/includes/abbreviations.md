@@ -24,6 +24,12 @@
 *[prior]: creencia inicial sobre cómo es el mundo antes de ver datos; en modelos de lenguaje, sesgos aprendidos durante el entrenamiento que influyen en sus respuestas
 
 <!-- Modelos razonadores -->
+*[MCTS]: Monte Carlo Tree Search: método de búsqueda en árbol que usa muestreo aleatorio para explorar ramas y evaluar su prometimiento, aplicado a razonamiento para explorar múltiples caminos de solución en paralelo antes de comprometerse con uno
+*[LPU]: Language Processing Unit: procesador diseñado específicamente para inferencia de modelos de lenguaje, optimizando la velocidad de generación de tokens y reduciendo la latencia en secuencias largas
+*[LPUs]: Language Processing Units: procesadores diseñados específicamente para inferencia de modelos de lenguaje, optimizando la velocidad de generación de tokens y reduciendo la latencia en secuencias largas
+*[PPO]: Proximal Policy Optimization: algoritmo estándar de aprendizaje por refuerzo para ajuste fino de LLMs; GRPO es una variante que elimina la necesidad de un modelo crítico separado
+*[GSM8K]: Grade School Math 8K: benchmark de ~8.500 problemas de matemáticas de nivel escolar para evaluar el razonamiento aritmético en LLMs; ampliamente saturado por los modelos de frontera actuales (>95% de precisión)
+*[sycophancy]: tendencia de los modelos de lenguaje a validar las preferencias del usuario incluso cuando están equivocados, anteponiendo la aprobación a la precisión factual
 *[RLVR]: Reinforcement Learning with Verifiable Rewards: variante de RL donde la señal de recompensa es una verificación automática de corrección, sin depender de evaluadores humanos
 *[GRPO]: Group Relative Policy Optimization: algoritmo de entrenamiento que elimina el modelo crítico generando varios intentos del mismo problema y calculando ventajas relativas al grupo
 *[CoT]: Chain-of-Thought: técnica donde el modelo genera pasos intermedios explícitos antes de producir la respuesta final

@@ -1,0 +1,346 @@
+<div class="esc-wrap" data-demo="03-escala-complementaria" data-default="datos">
+  <div class="esc-hd">
+    <div class="esc-title">Escala de entrenamiento y cómputo en inferencia: dos ejes distintos</div>
+    <div class="esc-sub">Más parámetros y más tiempo de razonamiento mejoran el rendimiento de formas distintas y complementarias. El coste ya no depende solo del tamaño del modelo.</div>
+  </div>
+
+  <nav class="esc-nav" data-role="tablist" aria-label="Secciones">
+    <button type="button" data-role="tab" data-tab="datos" aria-selected="true">Evidencia empírica</button>
+    <button type="button" data-role="tab" data-tab="tesis" aria-selected="false">Dos dimensiones</button>
+    <button type="button" data-role="tab" data-tab="implicacion" aria-selected="false">Implicación de diseño</button>
+  </nav>
+
+  <div class="esc-panels">
+
+    <!-- TAB 1: DOS DIMENSIONES -->
+    <section class="esc-panel" data-panel="tesis" hidden>
+      <div class="esc-panel-body">
+        <div class="esc-axes">
+          <div class="esc-axis esc-axis--train">
+            <div class="esc-axis-icon">training</div>
+            <div class="esc-axis-name">Cómputo de entrenamiento</div>
+            <div class="esc-axis-desc">Coste que se paga una vez. Determina qué conocimiento y capacidades quedan codificados en los pesos del modelo.</div>
+            <div class="esc-axis-items">
+              <div class="esc-axis-item">Más parámetros → más capacidad expresiva</div>
+              <div class="esc-axis-item">Más datos → mejor generalización</div>
+              <div class="esc-axis-item">Más epochs → convergencia más fina</div>
+            </div>
+            <div class="esc-axis-limit">Límite: rendimiento converge con datos y parámetros (curvas de escala de Chinchilla)</div>
+          </div>
+          <div class="esc-axis-plus">+</div>
+          <div class="esc-axis esc-axis--infer">
+            <div class="esc-axis-icon">inferencia</div>
+            <div class="esc-axis-name">Cómputo en inferencia (TTC)</div>
+            <div class="esc-axis-desc">Coste que se paga en cada consulta. Permite que el modelo revise, verifique y refine antes de responder.</div>
+            <div class="esc-axis-items">
+              <div class="esc-axis-item">Más tokens de razonamiento → más pasos de verificación</div>
+              <div class="esc-axis-item">Best-of-N → selección del mejor candidato</div>
+              <div class="esc-axis-item">Búsqueda en árbol → exploración de ramas</div>
+            </div>
+            <div class="esc-axis-limit">Límite: overthinking, coste por consulta y latencia crecientes</div>
+          </div>
+          <div class="esc-axis-eq">=</div>
+          <div class="esc-axis esc-axis--result">
+            <div class="esc-axis-icon">resultado</div>
+            <div class="esc-axis-name">Calidad máxima</div>
+            <div class="esc-axis-desc">Ninguno de los dos ejes por sí solo produce el rendimiento óptimo. La combinación de ambos es lo que empuja los benchmarks a niveles expertos.</div>
+            <div class="esc-axis-note">Scaling + Reasoning = State of the art</div>
+          </div>
+        </div>
+        <div class="esc-key">
+          <div class="esc-key-label">Por qué importa la distinción</div>
+          <p>Un modelo pequeño con mucho TTC puede superar a un modelo grande con poco TTC en tareas de razonamiento. Eso cambia las decisiones de arquitectura: no se compra siempre más capacidad de entrenamiento, también se puede comprar más presupuesto de inferencia.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: EVIDENCIA EMPÍRICA -->
+    <section class="esc-panel" data-panel="datos">
+      <div class="esc-panel-body">
+        <div class="esc-section-label">AIME 2024 — mismo benchmark, distintos presupuestos</div>
+        <div class="esc-bars">
+          <div class="esc-bar-row">
+            <div class="esc-bar-meta">
+              <div class="esc-bar-model">GPT-4o</div>
+              <div class="esc-bar-detail">Sin razonamiento extendido</div>
+            </div>
+            <div class="esc-bar-track">
+              <div class="esc-bar-fill esc-bar--lo" style="width:13%"></div>
+            </div>
+            <div class="esc-bar-val">13%</div>
+          </div>
+          <div class="esc-bar-row">
+            <div class="esc-bar-meta">
+              <div class="esc-bar-model">o1</div>
+              <div class="esc-bar-detail">Razonamiento extendido · 1 candidato</div>
+            </div>
+            <div class="esc-bar-track">
+              <div class="esc-bar-fill esc-bar--mid" style="width:74%"></div>
+            </div>
+            <div class="esc-bar-val">74%</div>
+          </div>
+          <div class="esc-bar-row">
+            <div class="esc-bar-meta">
+              <div class="esc-bar-model">o1 × 64 candidatos</div>
+              <div class="esc-bar-detail">Consensus vote con 64 trazas · máximo TTC</div>
+            </div>
+            <div class="esc-bar-track">
+              <div class="esc-bar-fill esc-bar--hi" style="width:83%"></div>
+            </div>
+            <div class="esc-bar-val">83%</div>
+          </div>
+          <div class="esc-bar-row">
+            <div class="esc-bar-meta">
+              <div class="esc-bar-model">s1-32B</div>
+              <div class="esc-bar-detail">Budget forcing · 32B params · 26 min entrenamiento</div>
+            </div>
+            <div class="esc-bar-track">
+              <div class="esc-bar-fill esc-bar--s1" style="width:56.7%"></div>
+            </div>
+            <div class="esc-bar-val">56,7%</div>
+          </div>
+        </div>
+        <div class="esc-insight">
+          <div class="esc-insight-label">Lo que muestran los datos</div>
+          <div class="esc-insight-grid">
+            <div class="esc-insight-item">
+              <div class="esc-insight-tag">↑ TTC</div>
+              <div class="esc-insight-text">De GPT-4o a o1 (mismo laboratorio, más razonamiento): +61 pp en AIME 2024</div>
+            </div>
+            <div class="esc-insight-item">
+              <div class="esc-insight-tag">↑ candidatos</div>
+              <div class="esc-insight-text">De o1×1 a o1×64: +9 pp adicionales con el mismo modelo, más búsqueda</div>
+            </div>
+            <div class="esc-insight-item">
+              <div class="esc-insight-tag">eficiencia</div>
+              <div class="esc-insight-text">s1-32B supera a o1-preview (44,6%) con solo 1000 ejemplos y 26 minutos de finetuning</div>
+            </div>
+          </div>
+        </div>
+        <div class="esc-section-label" style="margin-top:4px">GPQA Diamond — nivel experto</div>
+        <div class="esc-gpqa">
+          <div class="esc-gpqa-row">
+            <div class="esc-gpqa-label">Expertos en PhD (humanos)</div>
+            <div class="esc-gpqa-track"><div class="esc-gpqa-fill" style="width:69%"></div></div>
+            <div class="esc-gpqa-val">~69%</div>
+          </div>
+          <div class="esc-gpqa-row">
+            <div class="esc-gpqa-label">o1</div>
+            <div class="esc-gpqa-track"><div class="esc-gpqa-fill esc-gpqa-fill--hi" style="width:78%"></div></div>
+            <div class="esc-gpqa-val">78%</div>
+          </div>
+        </div>
+        <div class="esc-src">Fuentes: OpenAI o1 System Card (2024) · Muennighoff et al. (2025) arXiv:2501.19393 · Rein et al. (2023) GPQA</div>
+      </div>
+    </section>
+
+    <!-- TAB 3: IMPLICACIÓN -->
+    <section class="esc-panel" data-panel="implicacion" hidden>
+      <div class="esc-panel-body">
+        <div class="esc-shift">
+          <div class="esc-shift-label">El cambio en la curva de coste</div>
+          <div class="esc-shift-cols">
+            <div class="esc-shift-col esc-shift-col--before">
+              <div class="esc-shift-era">Antes</div>
+              <div class="esc-shift-body">
+                <div class="esc-shift-eq">Coste ∝ N<sub>params</sub></div>
+                <div class="esc-shift-desc">El coste de una respuesta era proporcional al tamaño del modelo. Modelos más grandes → más caros en todas las consultas por igual.</div>
+              </div>
+            </div>
+            <div class="esc-shift-arr">→</div>
+            <div class="esc-shift-col esc-shift-col--after">
+              <div class="esc-shift-era">Ahora</div>
+              <div class="esc-shift-body">
+                <div class="esc-shift-eq">Coste ∝ N<sub>params</sub> × T<sub>tokens</sub></div>
+                <div class="esc-shift-desc">El coste depende de la combinación: mismo modelo, coste variable por consulta según el presupuesto de razonamiento asignado.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="esc-decisions">
+          <div class="esc-decisions-label">Decisiones que cambian con esta lógica</div>
+          <div class="esc-decision-grid">
+            <div class="esc-decision">
+              <div class="esc-decision-tag">arquitectura</div>
+              <div class="esc-decision-name">Modelo + presupuesto, no solo modelo</div>
+              <p>La elección del modelo ya no es suficiente. Hay que especificar también el presupuesto de TTC por tipo de consulta. Un modelo 7B con presupuesto alto puede superar a un 70B con presupuesto mínimo en tareas de razonamiento.</p>
+            </div>
+            <div class="esc-decision">
+              <div class="esc-decision-tag">economía</div>
+              <div class="esc-decision-name">Coste por consulta impredecible</div>
+              <p>Con TTC variable, la factura de inferencia deja de ser plana. Sin presupuestos duros por consulta, una pregunta compleja puede costar 3-10× más que una simple en el mismo sistema.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<style>
+.esc-wrap, .esc-wrap * { box-sizing: border-box; }
+
+.esc-wrap {
+  --ea: var(--md-primary-fg-color, #26A69A);
+  --eb: #324AB2;
+  --eg: var(--md-accent-fg-color, #FFB343);
+  --er: #e04c4c;
+  --ebg: var(--md-default-bg-color, #fff);
+  --efg: var(--md-default-fg-color, #0f172a);
+  --ebd: rgba(15,23,42,.16);
+  --emut: rgba(15,23,42,.60);
+  --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  display: grid; gap: 12px;
+  max-width: 940px; margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--ebd); border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--ea) 7%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 0%, color-mix(in srgb,var(--eb) 5%,transparent), transparent 52%),
+    var(--ebg);
+  color: var(--efg); font-family: var(--ef); -webkit-font-smoothing: antialiased;
+}
+[data-md-color-scheme="slate"] .esc-wrap {
+  --ebg: var(--md-default-bg-color, #0f172a);
+  --efg: var(--md-default-fg-color, #e2e8f0);
+  --ebd: rgba(226,232,240,.16); --emut: rgba(226,232,240,.60);
+}
+.esc-hd { display: grid; gap: 5px; }
+.esc-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.esc-sub { font-size: 14px; color: var(--emut); line-height: 1.5; max-width: 72ch; }
+
+.esc-nav { display: flex; flex-wrap: wrap; gap: 7px; }
+.esc-nav button {
+  appearance: none; border: 1px solid var(--ebd); border-radius: 999px;
+  background: color-mix(in srgb,var(--ebg) 90%,#0f172a 10%); color: var(--emut);
+  padding: 7px 14px; font: inherit; font-size: 12.5px; font-weight: 800; cursor: pointer;
+  transition: border-color .14s, background .14s, color .14s;
+}
+.esc-nav button[aria-selected="true"] {
+  border-color: color-mix(in srgb,var(--ea) 44%,transparent);
+  background: color-mix(in srgb,var(--ea) 10%,var(--ebg)); color: var(--efg);
+}
+.esc-panel[hidden] { display: none; }
+.esc-panel-body { border: 1px solid var(--ebd); border-radius: 14px; padding: 14px; background: color-mix(in srgb,var(--ebg) 90%,#0f172a 10%); display: grid; gap: 14px; }
+
+/* Axes */
+.esc-axes { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 10px; align-items: start; }
+.esc-axis-plus, .esc-axis-eq { font-size: 22px; font-weight: 900; color: var(--emut); align-self: center; text-align: center; }
+.esc-axis { border: 1px solid var(--ebd); border-radius: 13px; padding: 12px; background: color-mix(in srgb,var(--ebg) 85%,transparent); display: grid; gap: 7px; }
+.esc-axis--train { border-color: color-mix(in srgb,var(--eb) 22%,var(--ebd)); }
+.esc-axis--infer { border-color: color-mix(in srgb,var(--eg) 22%,var(--ebd)); }
+.esc-axis--result { border-color: color-mix(in srgb,var(--ea) 22%,var(--ebd)); background: color-mix(in srgb,var(--ea) 5%,var(--ebg)); }
+.esc-axis-icon { font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; padding: 3px 8px; border-radius: 999px; width: fit-content; }
+.esc-axis--train .esc-axis-icon { background: color-mix(in srgb,var(--eb) 12%,var(--ebg)); border: 1px solid color-mix(in srgb,var(--eb) 25%,var(--ebd)); color: color-mix(in srgb,var(--eb) 70%,var(--efg)); }
+.esc-axis--infer .esc-axis-icon { background: color-mix(in srgb,var(--eg) 12%,var(--ebg)); border: 1px solid color-mix(in srgb,var(--eg) 25%,var(--ebd)); color: color-mix(in srgb,var(--eg) 55%,var(--efg)); }
+.esc-axis--result .esc-axis-icon { background: color-mix(in srgb,var(--ea) 12%,var(--ebg)); border: 1px solid color-mix(in srgb,var(--ea) 28%,var(--ebd)); color: color-mix(in srgb,var(--ea) 70%,var(--efg)); }
+.esc-axis-name { font-size: 13px; font-weight: 900; line-height: 1.2; }
+.esc-axis-desc { font-size: 12px; color: var(--emut); line-height: 1.45; }
+.esc-axis-items { display: grid; gap: 4px; }
+.esc-axis-item { font-size: 11.5px; padding: 5px 8px; border-radius: 7px; border: 1px solid var(--ebd); background: color-mix(in srgb,var(--ebg) 82%,transparent); line-height: 1.35; }
+.esc-axis-limit { font-size: 11px; color: var(--emut); font-style: italic; border-top: 1px solid var(--ebd); padding-top: 6px; line-height: 1.4; }
+.esc-axis-note { font-family: "SF Mono","JetBrains Mono","Courier New",monospace; font-size: 11px; font-weight: 900; padding: 7px 10px; border-radius: 8px; background: color-mix(in srgb,var(--ea) 8%,var(--ebg)); border: 1px solid color-mix(in srgb,var(--ea) 18%,var(--ebd)); color: color-mix(in srgb,var(--ea) 75%,var(--efg)); text-align: center; }
+
+.esc-key { display: grid; gap: 5px; border-left: 3px solid color-mix(in srgb,var(--eb) 36%,transparent); padding-left: 12px; }
+.esc-key-label { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--emut); }
+.esc-key p { margin: 0; font-size: 13px; line-height: 1.5; color: var(--emut); }
+
+/* Bars */
+.esc-section-label { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--emut); }
+.esc-bars { display: grid; gap: 7px; }
+.esc-bar-row { display: grid; grid-template-columns: 1fr 2fr auto; gap: 8px; align-items: center; }
+.esc-bar-meta { display: grid; gap: 2px; }
+.esc-bar-model { font-size: 12.5px; font-weight: 900; }
+.esc-bar-detail { font-size: 11px; color: var(--emut); }
+.esc-bar-track { height: 10px; border-radius: 999px; background: color-mix(in srgb,var(--efg) 8%,transparent); overflow: hidden; }
+.esc-bar-fill { height: 100%; border-radius: 999px; }
+.esc-bar--lo { background: color-mix(in srgb,var(--er) 55%,var(--emut)); }
+.esc-bar--mid { background: color-mix(in srgb,var(--eg) 65%,var(--ea)); }
+.esc-bar--hi { background: var(--ea); }
+.esc-bar--s1 { background: color-mix(in srgb,var(--eb) 65%,var(--ea)); }
+.esc-bar-val { font-family: "SF Mono","JetBrains Mono","Courier New",monospace; font-size: 12px; font-weight: 900; text-align: right; min-width: 42px; }
+
+.esc-insight { display: grid; gap: 7px; }
+.esc-insight-label { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--emut); }
+.esc-insight-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 7px; }
+.esc-insight-item { border: 1px solid var(--ebd); border-radius: 10px; padding: 9px 11px; background: color-mix(in srgb,var(--ebg) 85%,transparent); display: grid; gap: 5px; }
+.esc-insight-tag { font-family: "SF Mono","JetBrains Mono","Courier New",monospace; font-size: 11.5px; font-weight: 900; color: color-mix(in srgb,var(--ea) 70%,var(--efg)); }
+.esc-insight-text { font-size: 12px; color: var(--emut); line-height: 1.4; }
+
+/* GPQA */
+.esc-gpqa { display: grid; gap: 5px; }
+.esc-gpqa-row { display: grid; grid-template-columns: 1fr 2fr auto; gap: 8px; align-items: center; }
+.esc-gpqa-label { font-size: 12.5px; font-weight: 700; }
+.esc-gpqa-track { height: 10px; border-radius: 999px; background: color-mix(in srgb,var(--efg) 8%,transparent); overflow: hidden; }
+.esc-gpqa-fill { height: 100%; border-radius: 999px; background: color-mix(in srgb,var(--emut) 50%,var(--ebd)); }
+.esc-gpqa-fill--hi { background: var(--ea); }
+.esc-gpqa-val { font-family: "SF Mono","JetBrains Mono","Courier New",monospace; font-size: 12px; font-weight: 900; text-align: right; min-width: 38px; }
+
+.esc-src { font-size: 11px; color: var(--emut); font-style: italic; border-top: 1px solid var(--ebd); padding-top: 7px; line-height: 1.4; }
+
+/* Implicaciones */
+.esc-shift { display: grid; gap: 8px; }
+.esc-shift-label { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--emut); }
+.esc-shift-cols { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: center; }
+.esc-shift-arr { font-size: 18px; color: var(--emut); text-align: center; }
+.esc-shift-col { border: 1px solid var(--ebd); border-radius: 12px; padding: 12px; background: color-mix(in srgb,var(--ebg) 85%,transparent); display: grid; gap: 7px; }
+.esc-shift-col--after { border-color: color-mix(in srgb,var(--ea) 22%,var(--ebd)); background: color-mix(in srgb,var(--ea) 5%,var(--ebg)); }
+.esc-shift-era { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--emut); }
+.esc-shift-eq { font-family: "SF Mono","JetBrains Mono","Courier New",monospace; font-size: 16px; font-weight: 900; color: color-mix(in srgb,var(--ea) 70%,var(--efg)); }
+.esc-shift-desc { font-size: 12.5px; color: var(--emut); line-height: 1.45; }
+
+.esc-decisions { display: grid; gap: 7px; }
+.esc-decisions-label { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--emut); }
+.esc-decision-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.esc-decision { border: 1px solid var(--ebd); border-radius: 12px; padding: 11px 13px; background: color-mix(in srgb,var(--ebg) 88%,#0f172a 12%); display: grid; gap: 4px; }
+.esc-decision-tag { font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; padding: 3px 8px; border-radius: 999px; width: fit-content; border: 1px solid color-mix(in srgb,var(--ea) 28%,var(--ebd)); background: color-mix(in srgb,var(--ea) 10%,var(--ebg)); color: color-mix(in srgb,var(--ea) 70%,var(--efg)); }
+.esc-decision-name { font-size: 13px; font-weight: 900; line-height: 1.2; }
+.esc-decision p { margin: 0; font-size: 12.5px; color: var(--emut); line-height: 1.45; }
+
+@media (max-width: 700px) {
+  .esc-axes { grid-template-columns: 1fr; }
+  .esc-axis-plus, .esc-axis-eq { display: none; }
+  .esc-insight-grid { grid-template-columns: 1fr; }
+  .esc-shift-cols { grid-template-columns: 1fr; }
+  .esc-shift-arr { display: none; }
+  .esc-decision-grid { grid-template-columns: 1fr; }
+  .esc-bar-row { grid-template-columns: 1fr 1.5fr auto; }
+}
+</style>
+
+<script>
+(function () {
+  function activate(root, key) {
+    root.querySelectorAll('[data-role="tab"]').forEach(t => {
+      const on = t.getAttribute('data-tab') === key;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+    });
+    root.querySelectorAll('[data-panel]').forEach(p => {
+      p.hidden = p.getAttribute('data-panel') !== key;
+    });
+  }
+  function initRoot(root) {
+    if (root.dataset.escReady === '1') return;
+    root.dataset.escReady = '1';
+    const tabs = Array.from(root.querySelectorAll('[data-role="tab"]'));
+    const first = root.getAttribute('data-default') || (tabs[0] && tabs[0].getAttribute('data-tab'));
+    tabs.forEach(tab => {
+      tab.tabIndex = -1;
+      tab.addEventListener('click', () => activate(root, tab.getAttribute('data-tab')));
+      tab.addEventListener('keydown', e => {
+        const cur = tabs.indexOf(tab); let next = cur;
+        if (e.key === 'ArrowRight') next = (cur + 1) % tabs.length;
+        if (e.key === 'ArrowLeft') next = (cur - 1 + tabs.length) % tabs.length;
+        if (next !== cur) { e.preventDefault(); tabs[next].focus(); activate(root, tabs[next].getAttribute('data-tab')); }
+      });
+    });
+    activate(root, first);
+  }
+  function boot() { document.querySelectorAll('[data-demo="03-escala-complementaria"]').forEach(initRoot); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
+  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
+})();
+</script>

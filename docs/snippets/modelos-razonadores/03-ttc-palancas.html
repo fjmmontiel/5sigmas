@@ -1,0 +1,289 @@
+<div class="ttc-wrap" data-demo="03-ttc-palancas" data-default="pasos">
+  <div class="ttc-hd">
+    <div class="ttc-title">Las tres palancas del test-time compute</div>
+    <div class="ttc-sub">Más cómputo en tiempo de inferencia produce mejores respuestas en problemas de razonamiento. Cada palanca tiene un perfil de calidad, coste y latencia distinto.</div>
+  </div>
+
+  <nav class="ttc-nav" data-role="tablist" aria-label="Palancas TTC">
+    <button type="button" data-role="tab" data-tab="pasos" aria-selected="true">1 · Más pasos</button>
+    <button type="button" data-role="tab" data-tab="candidatos" aria-selected="false">2 · Más candidatos</button>
+    <button type="button" data-role="tab" data-tab="estructura" aria-selected="false">3 · Más estructura</button>
+  </nav>
+
+  <div class="ttc-panels">
+
+    <!-- TAB 1: MÁS PASOS -->
+    <section class="ttc-panel" data-panel="pasos">
+      <div class="ttc-panel-body">
+        <div class="ttc-tag ttc-tag--teal">Chain-of-thought</div>
+        <p class="ttc-intro">El modelo genera pasos intermedios que descomponen el problema antes de dar la respuesta final. Cada paso ocupa tokens en el contexto, pero la respuesta se beneficia de haber resuelto los subproblemas de forma explícita.</p>
+        <div class="ttc-flow">
+          <div class="ttc-flow-item ttc-flow-item--neutral">Prompt</div>
+          <div class="ttc-flow-arr">→</div>
+          <div class="ttc-flow-item ttc-flow-item--think">Paso 1</div>
+          <div class="ttc-flow-arr">→</div>
+          <div class="ttc-flow-item ttc-flow-item--think">Paso 2</div>
+          <div class="ttc-flow-arr">→</div>
+          <div class="ttc-flow-item ttc-flow-item--think">Paso N</div>
+          <div class="ttc-flow-arr">→</div>
+          <div class="ttc-flow-item ttc-flow-item--out">Respuesta</div>
+        </div>
+        <div class="ttc-metrics">
+          <div class="ttc-metric ttc-metric--ok">Mejor en: razonamiento encadenado, matemáticas, código con dependencias complejas</div>
+          <div class="ttc-metric ttc-metric--warn">Coste: proporcional al número de tokens generados internamente</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: MÁS CANDIDATOS -->
+    <section class="ttc-panel" data-panel="candidatos" hidden>
+      <div class="ttc-panel-body">
+        <div class="ttc-tag ttc-tag--blue">Best-of-N · Self-Consistency</div>
+        <p class="ttc-intro">En lugar de una sola respuesta, el modelo genera N respuestas independientes y selecciona la mejor. El principio es estadístico: si cada respuesta individual tiene probabilidad p de ser correcta y son suficientemente independientes, N candidatos aumentan la probabilidad de que al menos una sea correcta.</p>
+        <div class="ttc-cands-viz">
+          <div class="ttc-cand ttc-cand--try">R1</div>
+          <div class="ttc-cand ttc-cand--try">R2</div>
+          <div class="ttc-cand ttc-cand--try">R3</div>
+          <div class="ttc-cand ttc-cand--try">R4</div>
+          <div class="ttc-cand ttc-cand--best">R5 ✓</div>
+          <div class="ttc-cand-note">Selección por mayoría o por modelo de puntuación</div>
+        </div>
+        <div class="ttc-metrics">
+          <div class="ttc-metric ttc-metric--ok">Mejor en: problemas donde la respuesta es verificable (código ejecutable, matemáticas)</div>
+          <div class="ttc-metric ttc-metric--warn">Coste: N × coste de una respuesta individual</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: MÁS ESTRUCTURA -->
+    <section class="ttc-panel" data-panel="estructura" hidden>
+      <div class="ttc-panel-body">
+        <div class="ttc-tag ttc-tag--amber">Tree of Thoughts · MCTS</div>
+        <p class="ttc-intro">En lugar de una cadena lineal, el modelo explora múltiples ramificaciones del razonamiento en paralelo, evalúa el progreso de cada rama y descarta las menos prometedoras antes de continuar. El resultado es una exploración más amplia del espacio de soluciones.</p>
+        <div class="ttc-tree">
+          <div class="ttc-tree-root">Problema</div>
+          <div class="ttc-tree-level">
+            <div class="ttc-branch">
+              <div class="ttc-branch-node">Rama A</div>
+              <div class="ttc-branch-children">
+                <div class="ttc-leaf ttc-leaf--pruned">A1 ✗</div>
+                <div class="ttc-leaf ttc-leaf--ok">A2 ✓</div>
+              </div>
+            </div>
+            <div class="ttc-branch">
+              <div class="ttc-branch-node ttc-branch-node--pruned">Rama B ✗</div>
+            </div>
+            <div class="ttc-branch">
+              <div class="ttc-branch-node ttc-branch-node--pruned">Rama C ✗</div>
+            </div>
+          </div>
+        </div>
+        <div class="ttc-tree-legend">
+          <div class="ttc-leg-item"><span class="ttc-leg-dot ttc-leg-dot--ok"></span>Rama explorada</div>
+          <div class="ttc-leg-item"><span class="ttc-leg-dot ttc-leg-dot--pruned"></span>Rama descartada (pruning)</div>
+          <div class="ttc-leg-item"><span class="ttc-leg-dot ttc-leg-dot--win"></span>Solución encontrada</div>
+        </div>
+        <div class="ttc-metrics">
+          <div class="ttc-metric ttc-metric--ok">Mejor en: planificación compleja, optimización, problemas con espacio de búsqueda amplio</div>
+          <div class="ttc-metric ttc-metric--warn">Coste: órdenes de magnitud mayor que la cadena lineal — requiere PRMs para ser eficiente</div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<style>
+.ttc-wrap, .ttc-wrap * { box-sizing: border-box; }
+
+.ttc-wrap {
+  --ta: var(--md-primary-fg-color, #26A69A);
+  --tb: #324AB2;
+  --tg: var(--md-accent-fg-color, #FFB343);
+  --tr: #e04c4c;
+  --tbg: var(--md-default-bg-color, #fff);
+  --tfg: var(--md-default-fg-color, #0f172a);
+  --tbd: rgba(15,23,42,.16);
+  --tmut: rgba(15,23,42,.60);
+  --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  display: grid; gap: 12px;
+  max-width: 980px; margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--tbd); border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--tb) 7%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 0%, color-mix(in srgb,var(--ta) 6%,transparent), transparent 52%),
+    var(--tbg);
+  color: var(--tfg); font-family: var(--ef); -webkit-font-smoothing: antialiased;
+}
+[data-md-color-scheme="slate"] .ttc-wrap {
+  --tbg: var(--md-default-bg-color, #0f172a);
+  --tfg: var(--md-default-fg-color, #e2e8f0);
+  --tbd: rgba(226,232,240,.16); --tmut: rgba(226,232,240,.60);
+}
+
+.ttc-hd { display: grid; gap: 5px; }
+.ttc-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.ttc-sub { font-size: 14px; color: var(--tmut); line-height: 1.5; max-width: 72ch; }
+
+.ttc-nav { display: flex; flex-wrap: wrap; gap: 7px; }
+.ttc-nav button {
+  appearance: none; border: 1px solid var(--tbd); border-radius: 999px;
+  background: color-mix(in srgb,var(--tbg) 90%,#0f172a 10%); color: var(--tmut);
+  padding: 7px 14px; font: inherit; font-size: 12.5px; font-weight: 800; cursor: pointer;
+  transition: border-color .14s, background .14s, color .14s;
+}
+.ttc-nav button[aria-selected="true"] {
+  border-color: color-mix(in srgb,var(--ta) 44%,transparent);
+  background: color-mix(in srgb,var(--ta) 10%,var(--tbg)); color: var(--tfg);
+}
+.ttc-panel[hidden] { display: none; }
+.ttc-panel-body { border: 1px solid var(--tbd); border-radius: 14px; padding: 14px; background: color-mix(in srgb,var(--tbg) 90%,#0f172a 10%); display: grid; gap: 12px; }
+
+.ttc-tag { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--tbd); width: fit-content; }
+.ttc-tag--teal { background: color-mix(in srgb,var(--ta) 10%,var(--tbg)); border-color: color-mix(in srgb,var(--ta) 28%,var(--tbd)); color: color-mix(in srgb,var(--ta) 70%,var(--tfg)); }
+.ttc-tag--blue { background: color-mix(in srgb,var(--tb) 10%,var(--tbg)); border-color: color-mix(in srgb,var(--tb) 28%,var(--tbd)); color: color-mix(in srgb,var(--tb) 70%,var(--tfg)); }
+.ttc-tag--amber { background: color-mix(in srgb,var(--tg) 10%,var(--tbg)); border-color: color-mix(in srgb,var(--tg) 28%,var(--tbd)); color: color-mix(in srgb,var(--tg) 55%,var(--tfg)); }
+.ttc-intro { margin: 0; font-size: 13.5px; line-height: 1.6; color: var(--tmut); }
+
+/* Chain flow */
+.ttc-flow { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; justify-content: center; padding: 10px; background: color-mix(in srgb,var(--tbg) 85%,#0f172a 15%); border-radius: 10px; border: 1px solid var(--tbd); }
+.ttc-flow-item { padding: 6px 12px; border-radius: 8px; border: 1px solid var(--tbd); font-size: 12px; font-weight: 800; background: color-mix(in srgb,var(--tbg) 85%,transparent); }
+.ttc-flow-item--think { background: color-mix(in srgb,var(--ta) 10%,var(--tbg)); border-color: color-mix(in srgb,var(--ta) 25%,var(--tbd)); }
+.ttc-flow-item--out { background: color-mix(in srgb,var(--tb) 12%,var(--tbg)); border-color: color-mix(in srgb,var(--tb) 28%,var(--tbd)); }
+.ttc-flow-arr { font-size: 11px; color: var(--tmut); }
+
+.ttc-sub-section { display: grid; gap: 8px; }
+.ttc-sub-label { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--tmut); }
+
+/* Budget forcing */
+.ttc-bf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.ttc-bf-card { border: 1px solid var(--tbd); border-radius: 10px; padding: 11px 12px; background: color-mix(in srgb,var(--tbg) 85%,transparent); display: grid; gap: 7px; }
+.ttc-bf-card--min { border-color: color-mix(in srgb,var(--ta) 22%,var(--tbd)); }
+.ttc-bf-card--max { border-color: color-mix(in srgb,var(--tr) 22%,var(--tbd)); }
+.ttc-bf-card-title { font-size: 12.5px; font-weight: 900; }
+.ttc-bf-flow { display: flex; flex-direction: column; gap: 5px; align-items: flex-start; }
+.ttc-bf-step { font-size: 12px; padding: 5px 9px; border-radius: 7px; border: 1px solid var(--tbd); background: color-mix(in srgb,var(--tbg) 85%,transparent); }
+.ttc-bf-step--ok { background: color-mix(in srgb,var(--ta) 10%,var(--tbg)); border-color: color-mix(in srgb,var(--ta) 25%,var(--tbd)); }
+.ttc-bf-arrow { font-size: 11.5px; color: var(--tmut); padding-left: 4px; }
+.ttc-bf-wait { font-family: "SF Mono","JetBrains Mono","Courier New",monospace; font-size: 14px; font-weight: 900; padding: 6px 14px; border-radius: 8px; background: color-mix(in srgb,var(--tg) 12%,var(--tbg)); border: 1px solid color-mix(in srgb,var(--tg) 28%,var(--tbd)); color: color-mix(in srgb,var(--tg) 60%,var(--tfg)); }
+.ttc-bf-result { padding: 10px 12px; border-radius: 10px; border: 1px solid var(--tbd); background: color-mix(in srgb,var(--tbg) 85%,transparent); display: grid; gap: 7px; }
+.ttc-bf-result-k { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; color: var(--tmut); }
+.ttc-bf-bars { display: grid; gap: 5px; }
+.ttc-bf-bar-row { display: grid; grid-template-columns: 120px 1fr 40px; align-items: center; gap: 7px; }
+.ttc-bf-bar-lbl { font-size: 11.5px; font-weight: 700; color: var(--tmut); }
+.ttc-bf-bar-track { height: 8px; background: color-mix(in srgb,var(--tfg) 8%,transparent); border-radius: 999px; overflow: hidden; }
+.ttc-bf-bar { height: 100%; background: color-mix(in srgb,var(--tmut) 40%,transparent); border-radius: 999px; }
+.ttc-bf-bar--hi { background: var(--ta); }
+.ttc-bf-bar--ref { background: color-mix(in srgb,var(--tg) 60%,var(--tmut)); }
+.ttc-bf-bar-val { font-size: 12px; font-weight: 900; text-align: right; }
+.ttc-bf-caption { font-size: 11.5px; color: var(--tmut); font-style: italic; }
+
+/* Candidates */
+.ttc-cands-viz { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; padding: 10px; background: color-mix(in srgb,var(--tbg) 85%,#0f172a 15%); border-radius: 10px; border: 1px solid var(--tbd); }
+.ttc-cand { padding: 7px 12px; border-radius: 8px; border: 1px solid var(--tbd); font-size: 13px; font-weight: 800; background: color-mix(in srgb,var(--tbg) 85%,transparent); }
+.ttc-cand--best { background: color-mix(in srgb,var(--tb) 12%,var(--tbg)); border-color: color-mix(in srgb,var(--tb) 30%,var(--tbd)); color: color-mix(in srgb,var(--tb) 80%,var(--tfg)); }
+.ttc-cand-note { font-size: 11.5px; color: var(--tmut); font-style: italic; flex-basis: 100%; }
+
+.ttc-rm-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.ttc-rm-card { border: 1px solid var(--tbd); border-radius: 10px; padding: 11px 12px; background: color-mix(in srgb,var(--tbg) 85%,transparent); display: grid; gap: 7px; }
+.ttc-rm-card--prm { border-color: color-mix(in srgb,var(--ta) 25%,var(--tbd)); }
+.ttc-rm-card--orm { border-color: color-mix(in srgb,var(--tmut) 25%,var(--tbd)); }
+.ttc-rm-name { font-size: 12.5px; font-weight: 900; }
+.ttc-rm-body { display: grid; gap: 6px; }
+.ttc-rm-row { display: flex; gap: 4px; flex-wrap: wrap; }
+.ttc-rm-step { font-size: 11px; font-weight: 700; padding: 4px 8px; border-radius: 6px; border: 1px solid var(--tbd); background: color-mix(in srgb,var(--tbg) 85%,transparent); }
+.ttc-rm-step--score { background: color-mix(in srgb,var(--ta) 9%,var(--tbg)); border-color: color-mix(in srgb,var(--ta) 22%,var(--tbd)); }
+.ttc-rm-step--err { background: color-mix(in srgb,var(--tr) 10%,var(--tbg)); border-color: color-mix(in srgb,var(--tr) 28%,var(--tbd)); color: color-mix(in srgb,var(--tr) 65%,var(--tfg)); }
+.ttc-rm-step--final { background: color-mix(in srgb,var(--tmut) 12%,var(--tbg)); font-weight: 900; }
+.ttc-rm-desc { font-size: 12px; color: var(--tmut); line-height: 1.45; }
+.ttc-rm-note { font-size: 12.5px; color: var(--tmut); line-height: 1.5; border-left: 3px solid color-mix(in srgb,var(--tb) 36%,transparent); padding-left: 10px; }
+
+/* Tree */
+.ttc-tree { display: grid; gap: 8px; padding: 12px; background: color-mix(in srgb,var(--tbg) 85%,#0f172a 15%); border-radius: 10px; border: 1px solid var(--tbd); }
+.ttc-tree-root { padding: 7px 16px; border-radius: 9px; border: 1px solid var(--tbd); font-size: 12.5px; font-weight: 900; background: color-mix(in srgb,var(--tbg) 85%,transparent); text-align: center; width: fit-content; margin: 0 auto; }
+.ttc-tree-level { display: flex; gap: 10px; justify-content: center; }
+.ttc-branch { display: grid; gap: 6px; align-items: start; }
+.ttc-branch-node { padding: 6px 12px; border-radius: 8px; border: 1px solid color-mix(in srgb,var(--tg) 25%,var(--tbd)); font-size: 12px; font-weight: 800; background: color-mix(in srgb,var(--tg) 8%,var(--tbg)); text-align: center; }
+.ttc-branch-node--pruned { opacity: .4; border-color: var(--tbd); background: color-mix(in srgb,var(--tbg) 85%,transparent); }
+.ttc-branch-children { display: flex; gap: 5px; }
+.ttc-leaf { flex: 1; padding: 5px 8px; border-radius: 7px; border: 1px solid var(--tbd); font-size: 11px; font-weight: 800; text-align: center; background: color-mix(in srgb,var(--tbg) 85%,transparent); }
+.ttc-leaf--ok { background: color-mix(in srgb,var(--ta) 10%,var(--tbg)); border-color: color-mix(in srgb,var(--ta) 25%,var(--tbd)); }
+.ttc-leaf--pruned { opacity: .4; }
+.ttc-tree-legend { display: flex; gap: 14px; flex-wrap: wrap; }
+.ttc-leg-item { display: flex; align-items: center; gap: 5px; font-size: 11.5px; color: var(--tmut); }
+.ttc-leg-dot { width: 9px; height: 9px; border-radius: 999px; flex-shrink: 0; }
+.ttc-leg-dot--ok { background: color-mix(in srgb,var(--tg) 70%,var(--tbg)); }
+.ttc-leg-dot--pruned { background: color-mix(in srgb,var(--tmut) 40%,transparent); }
+.ttc-leg-dot--win { background: var(--ta); }
+
+/* Benchmarks tab */
+.ttc-bench-intro { display: grid; gap: 5px; }
+.ttc-bench-intro p { margin: 0; font-size: 13.5px; line-height: 1.55; color: var(--tmut); }
+.ttc-bench-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.ttc-bench-card { border: 1px solid var(--tbd); border-radius: 12px; padding: 12px 14px; background: color-mix(in srgb,var(--tbg) 88%,#0f172a 12%); display: grid; gap: 8px; align-content: start; }
+.ttc-bench-name { font-size: 15px; font-weight: 900; }
+.ttc-bench-sub { font-size: 12px; color: var(--tmut); }
+.ttc-bench-bars { display: grid; gap: 5px; }
+.ttc-bb-row { display: grid; grid-template-columns: 120px 1fr 44px; align-items: center; gap: 7px; }
+.ttc-bb-lbl { font-size: 11.5px; font-weight: 700; color: var(--tmut); }
+.ttc-bb-track { height: 8px; background: color-mix(in srgb,var(--tfg) 8%,transparent); border-radius: 999px; overflow: hidden; }
+.ttc-bb-bar { height: 100%; border-radius: 999px; }
+.ttc-bb-bar--lo { background: color-mix(in srgb,var(--tr) 55%,var(--tmut)); }
+.ttc-bb-bar--mid { background: color-mix(in srgb,var(--tg) 70%,var(--tfg)); }
+.ttc-bb-bar--hi { background: var(--ta); }
+.ttc-bb-val { font-size: 12px; font-weight: 900; text-align: right; }
+.ttc-bench-note { font-size: 11px; color: color-mix(in srgb,var(--ta) 65%,var(--tfg)); font-style: italic; border-top: 1px solid var(--tbd); padding-top: 6px; }
+.ttc-bench-insight { padding: 12px 14px; border-radius: 12px; border: 1px solid color-mix(in srgb,var(--tb) 22%,var(--tbd)); background: color-mix(in srgb,var(--tb) 5%,var(--tbg)); display: grid; gap: 5px; }
+.ttc-insight-k { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: color-mix(in srgb,var(--tb) 60%,var(--tfg)); }
+.ttc-bench-insight p { margin: 0; font-size: 13.5px; line-height: 1.55; }
+
+.ttc-metrics { display: grid; gap: 5px; }
+.ttc-metric { font-size: 12.5px; padding: 7px 10px; border-radius: 8px; border: 1px solid var(--tbd); line-height: 1.4; }
+.ttc-metric--ok { background: color-mix(in srgb,var(--ta) 8%,var(--tbg)); border-color: color-mix(in srgb,var(--ta) 20%,var(--tbd)); }
+.ttc-metric--warn { background: color-mix(in srgb,var(--tg) 8%,var(--tbg)); border-color: color-mix(in srgb,var(--tg) 20%,var(--tbd)); }
+
+@media (max-width: 660px) {
+  .ttc-bf-grid { grid-template-columns: 1fr; }
+  .ttc-rm-grid { grid-template-columns: 1fr; }
+  .ttc-bench-cards { grid-template-columns: 1fr; }
+  .ttc-bf-bar-row { grid-template-columns: 90px 1fr 36px; }
+  .ttc-bb-row { grid-template-columns: 90px 1fr 36px; }
+}
+</style>
+
+<script>
+(function () {
+  function activate(root, key) {
+    root.querySelectorAll('[data-role="tab"]').forEach(t => {
+      const on = t.getAttribute('data-tab') === key;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+    });
+    root.querySelectorAll('[data-panel]').forEach(p => {
+      p.hidden = p.getAttribute('data-panel') !== key;
+    });
+  }
+  function initRoot(root) {
+    if (root.dataset.ttcReady === '1') return;
+    root.dataset.ttcReady = '1';
+    const tabs = Array.from(root.querySelectorAll('[data-role="tab"]'));
+    const first = root.getAttribute('data-default') || (tabs[0] && tabs[0].getAttribute('data-tab'));
+    tabs.forEach(tab => {
+      tab.tabIndex = -1;
+      tab.addEventListener('click', () => activate(root, tab.getAttribute('data-tab')));
+      tab.addEventListener('keydown', e => {
+        const cur = tabs.indexOf(tab); let next = cur;
+        if (e.key === 'ArrowRight') next = (cur + 1) % tabs.length;
+        if (e.key === 'ArrowLeft') next = (cur - 1 + tabs.length) % tabs.length;
+        if (next !== cur) { e.preventDefault(); tabs[next].focus(); activate(root, tabs[next].getAttribute('data-tab')); }
+      });
+    });
+    activate(root, first);
+  }
+  function boot() { document.querySelectorAll('[data-demo="03-ttc-palancas"]').forEach(initRoot); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
+  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
+})();
+</script>
