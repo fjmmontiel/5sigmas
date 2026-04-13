@@ -39,7 +39,9 @@ tools/
 !tools/remotion/src/
 !tools/remotion/src/**
 tools/remotion/node_modules/
-video*
+videos/output/
+videos/frames/
+videos/assets/
 # Animation export artifacts
 output/playwright/
 exports/

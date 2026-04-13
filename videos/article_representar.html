@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    background: #0b1220;
+    font-family: "Avenir Next", "Avenir", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    color: #f0f4ff;
+  }
+
+  /* ── Beat sections ─────────────────────────────────────── */
+  .beat { display: none; --c: #26A69A; }
+  .beat.active {
+    display: flex;
+    flex-direction: column;
+    width: 1920px;
+    height: 1080px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Corner ambient glow */
+  .beat.active::before {
+    content: ''; position: absolute; bottom: -80px; right: -80px;
+    width: 720px; height: 720px; border-radius: 50%;
+    background: radial-gradient(circle, var(--c) 0%, transparent 68%);
+    opacity: .06; pointer-events: none;
+  }
+
+  /* Subtle dot-grid texture */
+  .beat.active::after {
+    content: ''; position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(240,244,255,.035) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+  }
+
+  /* ── Accent top bar ────────────────────────────────────── */
+  .accent-bar {
+    height: 6px;
+    width: 100%;
+    background: linear-gradient(90deg, #26A69A 0%, #324AB2 45%, #FFB343 100%);
+    flex-shrink: 0;
+    transform-origin: left center;
+  }
+
+  /* ── Layout zones ──────────────────────────────────────── */
+  .beat-inner {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 160px;
+    gap: 0;
+  }
+
+  /* ── Epoch label ───────────────────────────────────────── */
+  .epoch {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--c);
+    margin-bottom: 40px;
+  }
+
+  /* ── Divider ───────────────────────────────────────────── */
+  .divider {
+    width: 72px;
+    height: 4px;
+    border-radius: 2px;
+    margin-bottom: 48px;
+    transform-origin: left center;
+  }
+
+  /* ── Headline ──────────────────────────────────────────── */
+  .headline {
+    font-size: 88px;
+    font-weight: 800;
+    line-height: 1.05;
+    color: #f0f4ff;
+    margin-bottom: 48px;
+    max-width: 1400px;
+    letter-spacing: -.02em;
+  }
+
+  /* ── Body text ─────────────────────────────────────────── */
+  .body {
+    font-size: 28px;
+    line-height: 1.55;
+    color: rgba(240,244,255,.72);
+    max-width: 960px;
+    font-weight: 400;
+  }
+
+  /* ── Accent decoration (right side) ───────────────────── */
+  .deco {
+    position: absolute;
+    right: 120px;
+    bottom: 100px;
+    font-size: 280px;
+    font-weight: 900;
+    line-height: 1;
+    opacity: .14;
+    font-family: "SF Mono", "JetBrains Mono", "Courier New", monospace;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  /* ── Footer ────────────────────────────────────────────── */
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 160px 48px;
+    flex-shrink: 0;
+  }
+  .footer-label {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .15em;
+    color: rgba(240,244,255,.3);
+    text-transform: uppercase;
+  }
+  .footer-logo {
+    font-size: 36px;
+    font-weight: 800;
+    letter-spacing: -3px;
+    background: linear-gradient(135deg, #26A69A 0%, #324AB2 40%, #FFB343 80%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ── Opening beat specific ─────────────────────────────── */
+  .opening .beat-inner { justify-content: center; align-items: flex-start; }
+  .opening .series-tag {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: rgba(240,244,255,.4);
+    margin-bottom: 24px;
+  }
+  .opening .main-title {
+    font-size: 160px;
+    font-weight: 900;
+    letter-spacing: -.04em;
+    line-height: .95;
+    color: #f0f4ff;
+    margin-bottom: 32px;
+  }
+  .opening .subtitle {
+    font-size: 32px;
+    color: rgba(240,244,255,.55);
+    font-weight: 400;
+    margin-bottom: 0;
+  }
+  .opening .date-range {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: .1em;
+    color: var(--c);
+    margin-top: 48px;
+  }
+
+  /* ── CTA beat specific ─────────────────────────────────── */
+  .cta-beat .beat-inner { align-items: flex-start; }
+  .cta-beat .cta-headline {
+    font-size: 100px;
+    font-weight: 900;
+    line-height: 1.0;
+    color: #FFB343;
+    margin-bottom: 40px;
+    letter-spacing: -.03em;
+  }
+  .cta-beat .cta-body {
+    font-size: 26px;
+    color: rgba(240,244,255,.65);
+    max-width: 800px;
+    line-height: 1.6;
+    margin-bottom: 52px;
+  }
+  .cta-beat .cta-url {
+    font-size: 24px;
+    font-weight: 700;
+    color: #7cc7ff;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+  }
+  .cta-beat .deco { opacity: .14; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════
+  BEAT 1 — Opening
+══════════════════════════════════════════════════════════ -->
+<div class="beat opening" data-id="01_opening" data-type="opening" style="--c:#26A69A;">
+  <div class="accent-bar"></div>
+  <div class="beat-inner">
+    <div class="series-tag">De la cueva a la AGI · Capítulo 1</div>
+    <div class="main-title">Representar</div>
+    <div class="subtitle">Del conteo al cálculo: 43.000 años de abstracción</div>
+    <div class="date-range">≈ 43.000 a.C. — 1700 d.C.</div>
+  </div>
+  <div class="deco" style="color:#26A69A;">R</div>
+  <div class="footer">
+    <span class="footer-label">5Sigmas · Divulgación de IA sin hype</span>
+    <span class="footer-logo">5σ</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+  BEAT 2 — La primera abstracción
+══════════════════════════════════════════════════════════ -->
+<div class="beat" data-id="02_abstraccion" data-type="content" style="--c:#FFB343;">
+  <div class="accent-bar"></div>
+  <div class="beat-inner">
+    <div class="epoch">Paleolítico · ≈ 43.000 a.C.</div>
+    <div class="divider" style="background:#FFB343;"></div>
+    <div class="headline">Una muesca no es una oveja.</div>
+    <div class="body">Pero puede hablar en nombre de ella. El hueso de Ishango no prueba matemática formal, prueba algo más profundo: grupos humanos ya usaban marcas para representar cantidades ausentes.<br><br>Esa es la abstracción original. <strong style="color:#f0f4ff;">Pensar operando sobre símbolos.</strong></div>
+  </div>
+  <div class="deco" style="color:#FFB343;">|||</div>
+  <div class="footer">
+    <span class="footer-label">5Sigmas · Representar</span>
+    <span class="footer-logo">5σ</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+  BEAT 3 — El cero
+══════════════════════════════════════════════════════════ -->
+<div class="beat" data-id="03_cero" data-type="content" style="--c:#26A69A;">
+  <div class="accent-bar"></div>
+  <div class="beat-inner">
+    <div class="epoch">India · Siglos V–VII d.C.</div>
+    <div class="divider" style="background:#26A69A;"></div>
+    <div class="headline">Tratar la ausencia<br>como un número.</div>
+    <div class="body">Marcar que falta algo es un paso. Darle reglas aritméticas es otro completamente distinto.<br><br>Brahmagupta formalizó el cero como número con el que se puede operar. Con eso, el mismo símbolo "3" vale <strong style="color:#FFB343;">3, 30 o 3.000</strong> según su posición. La notación posicional nació ahí.</div>
+  </div>
+  <div class="deco" style="color:#26A69A;">0</div>
+  <div class="footer">
+    <span class="footer-label">5Sigmas · Representar</span>
+    <span class="footer-logo">5σ</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+  BEAT 4 — El algoritmo
+══════════════════════════════════════════════════════════ -->
+<div class="beat" data-id="04_algoritmo" data-type="content" style="--c:#7cc7ff;">
+  <div class="accent-bar"></div>
+  <div class="beat-inner">
+    <div class="epoch">Bagdad · Siglo IX d.C.</div>
+    <div class="divider" style="background:#7cc7ff;"></div>
+    <div class="headline">Operar con lo que<br>todavía no sabemos.</div>
+    <div class="body">Al-Khwarizmi sistematizó las ecuaciones. De <em style="color:#7cc7ff;">al-jabr</em> viene álgebra. De su nombre latinizado: <strong style="color:#f0f4ff;">algoritmo</strong>.<br><br>Por primera vez se podía transformar una expresión paso a paso, siguiendo reglas generales, hasta despejar una incógnita que al inicio ni siquiera tenía nombre.</div>
+  </div>
+  <div class="deco" style="color:#7cc7ff;">x</div>
+  <div class="footer">
+    <span class="footer-label">5Sigmas · Representar</span>
+    <span class="footer-logo">5σ</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+  BEAT 5 — La notación
+══════════════════════════════════════════════════════════ -->
+<div class="beat" data-id="05_notacion" data-type="content" style="--c:#FFB343;">
+  <div class="accent-bar"></div>
+  <div class="beat-inner">
+    <div class="epoch">Europa · Siglos XVI–XVII</div>
+    <div class="divider" style="background:#FFB343;"></div>
+    <div class="headline">La notación comprime<br>el pensamiento.</div>
+    <div class="body">Viète introdujo letras para variables. Descartes conectó ecuaciones y geometría. Una curva dejó de ser solo una figura para convertirse también en una relación expresable.<br><br>Cuando una idea cabe en símbolos compactos, se puede transformar, combinar y generalizar. <strong style="color:#f0f4ff;">La notación no simplifica: abre territorios.</strong></div>
+  </div>
+  <div class="deco" style="color:#FFB343;">f(x)</div>
+  <div class="footer">
+    <span class="footer-label">5Sigmas · Representar</span>
+    <span class="footer-logo">5σ</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+  BEAT 6 — El ideal deductivo
+══════════════════════════════════════════════════════════ -->
+<div class="beat" data-id="06_deduccion" data-type="content" style="--c:#26A69A;">
+  <div class="accent-bar"></div>
+  <div class="beat-inner">
+    <div class="epoch">Grecia · ≈ 300 a.C.</div>
+    <div class="divider" style="background:#26A69A;"></div>
+    <div class="headline">Cada paso puede revisarse.</div>
+    <div class="body">Euclides impuso un estándar: cada conclusión debe seguirse de forma necesaria a partir de supuestos aceptados mediante pasos verificables.<br><br>Ese modelo de razonamiento como cadena de inferencias revisables es exactamente lo que Turing formalizará <strong style="color:#FFB343;">2.200 años después</strong> cuando describa qué significa computar.</div>
+  </div>
+  <div class="deco" style="color:#26A69A;">∴</div>
+  <div class="footer">
+    <span class="footer-label">5Sigmas · Representar</span>
+    <span class="footer-logo">5σ</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+  BEAT 7 — El cálculo
+══════════════════════════════════════════════════════════ -->
+<div class="beat" data-id="07_calculo" data-type="content" style="--c:#7cc7ff;">
+  <div class="accent-bar"></div>
+  <div class="beat-inner">
+    <div class="epoch">Cambridge · 1666 &nbsp;/&nbsp; Hannover · 1684</div>
+    <div class="divider" style="background:#7cc7ff;"></div>
+    <div class="headline">Un lenguaje para<br>el cambio continuo.</div>
+    <div class="body">Newton y Leibniz desarrollaron el cálculo diferencial de forma independiente. Leibniz fijó la notación que usamos hoy.<br><br>El descenso de gradiente, el mecanismo que entrena las redes neuronales actuales, es aplicación directa de ese cálculo. <strong style="color:#7cc7ff;">∂L/∂W</strong> es una derivada. Igual que en 1684.</div>
+  </div>
+  <div class="deco" style="color:#7cc7ff;">∂</div>
+  <div class="footer">
+    <span class="footer-label">5Sigmas · Representar</span>
+    <span class="footer-logo">5σ</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+  BEAT 8 — CTA
+══════════════════════════════════════════════════════════ -->
+<div class="beat cta-beat" data-id="08_cta" data-type="cta" style="--c:#FFB343;">
+  <div class="accent-bar"></div>
+  <div class="beat-inner">
+    <div class="epoch">5Sigmas.com</div>
+    <div class="divider" style="background:#FFB343;"></div>
+    <div class="cta-headline">Lee el artículo<br>completo.</div>
+    <div class="cta-body">Con animaciones interactivas que muestran cómo evolucionaron los sistemas de numeración, el álgebra y el cálculo — el contexto que hace entendible la IA de hoy.</div>
+    <div class="cta-url">5sigmas.com/series/from-cave-to-agi/01-representar →</div>
+  </div>
+  <div class="deco" style="color:#FFB343;">→</div>
+  <div class="footer">
+    <span class="footer-label">De la cueva a la AGI · Capítulo 1</span>
+    <span class="footer-logo">5σ</span>
+  </div>
+</div>
+
+</body>
+</html>

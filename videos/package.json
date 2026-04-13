@@ -1,0 +1,9 @@
+{
+  "name": "5sigmas-video-pipeline",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "5Sigmas article & series video pipeline — calls html-to-video framework",
+  "dependencies": {
+    "@anthropic-ai/vertex-sdk": "^0.16.0"
+  }
+}

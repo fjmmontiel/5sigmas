@@ -1,0 +1,7 @@
+node_modules/
+frames/
+output/
+*.png
+# Generated intermediate HTMLs (recreated by md-to-article-html.mjs / md-series-to-html.mjs)
+article_[0-9]*.html
+series_*.html
