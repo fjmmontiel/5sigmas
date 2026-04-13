@@ -2,6 +2,7 @@ VENV := .venv
 PYTHON := $(VENV)/bin/python
 PIP := $(VENV)/bin/pip
 MKDOCS := $(VENV)/bin/mkdocs
+MKDOCS_ENV := DISABLE_MKDOCS_2_WARNING=true NO_MKDOCS_2_WARNING=true
 
 .PHONY: install build serve deploy build-and-update up clean check-animation-branding video-notebooklm-jobs video-article-payloads video-render-articles video-catalog video-audit video-suite-manifests video-render-suite video-suite video-datacenter-options video-render-datacenter-options video-feedback-frames video-datacenter-feedback video-iteration-bundle video-all
 
@@ -11,22 +12,22 @@ install: $(MKDOCS)
 $(MKDOCS):
 	python3 -m venv $(VENV)
 	$(PIP) install --upgrade pip
-	$(PIP) install mkdocs mkdocs-material pymdown-extensions mkdocs-macros-plugin watchdog
+	$(PIP) install -r requirements.txt watchdog==6.0.0
 
 # Compilar la web a HTML estático (en ./site)
 build: install check-animation-branding
-	$(MKDOCS) build --strict
+	$(MKDOCS_ENV) $(MKDOCS) build --strict
 
 # Servir en local (http://127.0.0.1:8000)
 serve: install
-	$(MKDOCS) serve
+	$(MKDOCS_ENV) $(MKDOCS) serve
 
 
 up: build-and-update
 
 build-and-update: install
 	-lsof -ti:8000 | xargs kill -9 2>/dev/null || true
-	MKDOCS_REDIRECTS=false DISABLE_MKDOCS_2_WARNING=true WATCHDOG_FORCE_POLLING=1 $(MKDOCS) serve --dirty
+	$(MKDOCS_ENV) MKDOCS_REDIRECTS=false WATCHDOG_FORCE_POLLING=1 $(MKDOCS) serve --dirty
 
 
 
