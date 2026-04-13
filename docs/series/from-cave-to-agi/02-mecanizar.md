@@ -6,6 +6,7 @@ keywords: "historia computación, Alan Turing, Charles Babbage, máquina de Turi
 tags:
   - IA
   - Historia
+video: "02-mecanizar.mp4"
 ---
 
 # Capítulo 2: Mecanizar (≈ 1640 - 1956)

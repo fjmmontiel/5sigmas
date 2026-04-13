@@ -7,6 +7,7 @@ tags:
   - IA
   - AGI
   - Alineamiento
+video: "04-agi.mp4"
 ---
 
 # Capítulo 4 — AGI: Inteligencia Artificial General

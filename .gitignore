@@ -42,6 +42,15 @@ tools/remotion/node_modules/
 videos/output/
 videos/frames/
 videos/assets/
+# Video output — ignore everywhere except published series (served from same domain)
+*.mp4
+*.webm
+!docs/series/**/*.mp4
+# Poster frames — same rule: ignore except published series
+*.jpg
+!docs/series/**/*.jpg
+docs/**/videos/
+docs/assets/videos/
 # Animation export artifacts
 output/playwright/
 exports/

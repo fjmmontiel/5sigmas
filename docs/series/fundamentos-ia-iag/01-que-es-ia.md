@@ -7,6 +7,7 @@ tags:
   - IA
   - LLMs
   - GenAI
+video: "01-que-es-ia.mp4"
 ---
 
 # Capítulo 1 — Qué es IA

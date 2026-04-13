@@ -80,6 +80,29 @@ if (!PROJECT) {
 // ─── Brand palette (rotating) ─────────────────────────────────────────────────
 const COLORS = ["#26A69A", "#FFB343", "#7cc7ff", "#26A69A", "#FFB343", "#7cc7ff", "#26A69A", "#FFB343"];
 
+// ─── Deco symbol pools per article ────────────────────────────────────────────
+// Derived from the carousel_pulido.html posts for each chapter.
+// Each article beat must draw its deco from this pool (no repeats, no generics).
+const DECO_POOLS = {
+  // from-cave-to-agi
+  "01-representar":       ["0", "∞", "∂"],
+  "02-mecanizar":         ["⚙", "⑁", "∞", "⊡"],
+  "03-aprender":          ["⊞", "∇", "★"],
+  "04-escalar":           ["⑂", "$", "⚡", "▲"],
+  "05-mas-alla":          ["→", "⊗", "◉", "⬡"],
+  // fundamentos-ia-iag
+  "01-que-es-ia":         ["→", "∿", "◈", "⊕"],
+  "02-que-es-ia-generativa": ["∑", "⚡", "∞", "⚙", "λ"],
+  "03-ia-vs-ia-generativa":  ["≠", "⟷", "⊘", "↔"],
+  "04-agi":               ["?", "▲", "⚖", "↑", "∞", "!"],
+  // multimodalidad-iag
+  "01-el-problema":       ["◎", "⚡", "⊞", "∿"],
+  "02-alineamiento":      ["⟷", "◈", "⊗", "↔"],
+  "03-arquitecturas":     ["⚡", "◉", "⊕", "⬡"],
+  "04-evaluacion":        ["⚠", "⊘", "⬡", "≠"],
+  "05-riesgos":           ["⚠", "⚙", "↺", "⊗"],
+};
+
 // ─── Parse markdown ───────────────────────────────────────────────────────────
 function parseMarkdown(raw) {
   // Extract frontmatter
@@ -168,9 +191,10 @@ Style rules:
 
 EPOCH: location · period (e.g. "Bagdad · Siglo IX d.C.", "Grecia · ≈ 300 a.C.", "India · Siglos V–VII d.C.")
 
-DECO: single character/symbol that IS the concept (not describes it):
-- zero → "0", algebra → "x", calculus → "∂", logic → "∴", tally → "|||", function → "f(x)"
-- Each deco must be DIFFERENT from the others — no repeats across beats
+DECO: use ONLY the symbols provided in the user message under "Deco pool".
+- Assign a different symbol to each beat — no two consecutive beats may share the same deco
+- If the pool has fewer symbols than beats, rotate but still avoid consecutive repeats
+- Never invent symbols outside the pool
 
 COLORS — alternate strictly through the palette:
 - deco_color: #26A69A | #FFB343 | #7cc7ff (rotate, never two consecutive beats same color)
@@ -414,9 +438,16 @@ async function main() {
   console.log(`  Title: ${title}`);
   console.log(`  Body:  ${body.length} chars → sending to Claude...`);
 
+  const decoPool = DECO_POOLS[slug] || [];
+  const decoLine = decoPool.length
+    ? `Deco pool (use ONLY these, no repeats per beat): ${decoPool.join("  ")}`
+    : `Deco pool: choose unique symbols that ARE the concept (one per beat, no repeats)`;
+
   const userContent = `Article title: ${title}
 Article description: ${fm.description || ""}
 Article date: ${fm.date || ""}
+
+${decoLine}
 
 Full article body (cleaned):
 ---

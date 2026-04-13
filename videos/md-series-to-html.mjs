@@ -69,6 +69,25 @@ const vertexClient = new AnthropicVertex({ projectId: PROJECT, region: REGION })
 // ─── Brand palette ────────────────────────────────────────────────────────────
 const COLORS = ["#26A69A", "#FFB343", "#7cc7ff", "#26A69A", "#FFB343", "#7cc7ff", "#26A69A", "#FFB343"];
 
+// ─── Primary deco per article (first symbol of each chapter's pool) ───────────
+// Keep in sync with DECO_POOLS in md-to-article-html.mjs
+const CHAPTER_DECO = {
+  "01-representar":           "0",
+  "02-mecanizar":             "⚙",
+  "03-aprender":              "⊞",
+  "04-escalar":               "⑂",
+  "05-mas-alla":              "→",
+  "01-que-es-ia":             "→",
+  "02-que-es-ia-generativa":  "∑",
+  "03-ia-vs-ia-generativa":   "≠",
+  "04-agi":                   "▲",
+  "01-el-problema":           "◎",
+  "02-alineamiento":          "⟷",
+  "03-arquitecturas":         "⚡",
+  "04-evaluacion":            "⚠",
+  "05-riesgos":               "↺",
+};
+
 // ─── Parse markdown (minimal: frontmatter + first paragraphs) ─────────────────
 function parseMarkdown(raw) {
   const fmMatch = raw.match(/^---\n([\s\S]*?)\n---\n/);
@@ -132,7 +151,7 @@ BEAT RULES (same as article beats):
   - P1 (16–22 words): context, what the chapter is about
   - P2 (12–18 words): the key punchline. End with <strong style="color:#f0f4ff;">key concept</strong>
 - epoch: location · period matching the chapter's historical setting
-- deco: single character/symbol that IS the chapter's concept (e.g. "0", "x", "∂", "∴")
+- deco: use EXACTLY the symbol specified per article in the user message — do not change it
 - deco_color: rotate strictly through #26A69A | #FFB343 | #7cc7ff — no two consecutive same
 - divider_color: same palette, always different from deco_color of that beat
 - id: "0N_<shortname>" (e.g. "02_cero", "03_algoritmo")
@@ -347,19 +366,23 @@ async function main() {
   articleData.forEach(a => console.log(`    - ${a.slug}: ${a.fm.title || "(no title)"}`));
 
   // Build user prompt: series description + all articles summary
-  const articlesBlock = articleData.map((a, i) =>
-    `--- Article ${i+1}: ${a.slug} ---
+  const articlesBlock = articleData.map((a, i) => {
+    const deco = CHAPTER_DECO[a.slug] || "·";
+    return `--- Article ${i+1}: ${a.slug} ---
 Title: ${a.fm.title || a.slug}
 Description: ${a.fm.description || ""}
 Date: ${a.fm.date || ""}
+Deco symbol for this beat: ${deco}
 Body excerpt:
 ${a.body}
-`).join("\n");
+`;
+  }).join("\n");
 
   const userContent = `Series name: ${seriesTitle}
 Series description: ${presentationData.fm.description || ""}
 
 This series has ${articleData.length} articles. Generate exactly ${articleData.length} content beats (one per article), in order.
+Each beat's "deco" field must use the exact symbol specified for that article — do not change or invent.
 
 ${articlesBlock}
 

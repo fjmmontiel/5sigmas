@@ -8,6 +8,7 @@ tags:
   - GenAI
   - Multimodalidad
   - Alineamiento
+video: "02-alineamiento.mp4"
 ---
 
 # Capítulo 2 — Alineamiento: de pares a interacciones

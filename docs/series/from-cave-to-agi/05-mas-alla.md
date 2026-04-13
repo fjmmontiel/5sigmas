@@ -8,6 +8,7 @@ tags:
   - LLMs
   - Razonamiento
   - Inferencia
+video: "05-mas-alla.mp4"
 ---
 
 # Capítulo 5: Más allá del Transformer (≈ 2022 - Q1 2026)

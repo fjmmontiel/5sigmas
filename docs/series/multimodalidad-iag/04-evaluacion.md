@@ -7,6 +7,7 @@ tags:
   - IA
   - Evaluación
   - Multimodalidad
+video: "04-evaluacion.mp4"
 ---
 
 # Capítulo 4 — Evaluación: medir sin autoengañarse

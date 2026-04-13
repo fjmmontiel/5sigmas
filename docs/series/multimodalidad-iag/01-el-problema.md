@@ -7,6 +7,7 @@ tags:
   - IA
   - GenAI
   - Multimodalidad
+video: "01-el-problema.mp4"
 ---
 
 # Capítulo 1 — El problema real: integrar modalidades distintas sin reducirlas demasiado pronto

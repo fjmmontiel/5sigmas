@@ -7,6 +7,7 @@ tags:
   - IA
   - GenAI
   - LLMs
+video: "03-ia-vs-ia-generativa.mp4"
 ---
 
 # Capítulo 3 — IA vs IA Generativa

@@ -6,6 +6,7 @@ keywords: "historia de las matemáticas, representación simbólica, álgebra, c
 tags:
   - IA
   - Historia
+video: "01-representar.mp4"
 ---
 
 # Capítulo 1: Representar (≈ 43 000 a. C. hasta 1700)

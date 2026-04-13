@@ -71,6 +71,7 @@ nav:
       - Modelos razonadores:
           - Presentación: series/modelos-razonadores/00_presentacion_serie.md
           - Qué es razonar: series/modelos-razonadores/01-que-es-razonar.md
+          - Fallos de los modelos razonadores: series/modelos-razonadores/02-fallos.md
   - Próximamente: proximamente.md
   - Sobre 5sigmas: meta/about.md
 markdown_extensions:
@@ -120,6 +121,7 @@ hooks:
   - hooks/og_article_type.py
   - hooks/serve_md_versions.py
   - hooks/jsonld_article.py
+  - hooks/video_embed.py
   - hooks/wip_series.py
   - hooks/nosnippet.py
   - hooks/sitemap_noindex.py

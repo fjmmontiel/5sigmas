@@ -1635,3 +1635,22 @@ body.anim-shell-modal-open {
     font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     font-size: 0.9em;
 }
+
+/* ── Article / series video embed ───────────────────────────────────────────── */
+.s5-video-embed {
+    margin: 1.75rem 0 2.25rem;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #000;
+    /* Subtle border visible on both light and dark themes */
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--md-default-fg-color) 12%, transparent),
+                0 4px 20px color-mix(in srgb, var(--md-default-fg-color) 6%, transparent);
+}
+
+.s5-video-embed video {
+    display: block;
+    width: 100%;
+    height: auto;
+    /* Prevents any gap below the video element */
+    vertical-align: bottom;
+}

@@ -10,6 +10,7 @@ tags:
 robots: noindex, follow
 hide:
   - toc
+video: "00_presentacion_serie.mp4"
 ---
 # Fundamentos de IA e IA generativa
 

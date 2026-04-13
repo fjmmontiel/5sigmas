@@ -38,12 +38,20 @@ const NO_CTA     = !args.includes("--linkedin");
 const SERIES_ROOT = path.resolve(__dirname, "../docs/series");
 const SCRIPT      = path.join(__dirname, "md-to-article-html.mjs");
 
+// Keep in sync with hooks/wip_series.py — no videos for incomplete series
+const WIP_SERIES = new Set([
+  "modelos-razonadores",
+  "ia-pib-bienestar-energia",
+  "datacenters-espacio",
+]);
+
 // ─── Discover series ──────────────────────────────────────────────────────────
 function discoverSeries() {
   return fs.readdirSync(SERIES_ROOT, { withFileTypes: true })
     .filter(e => e.isDirectory())
     .map(e => e.name)
     .filter(name => !SERIES_ARG || name === SERIES_ARG)
+    .filter(name => !WIP_SERIES.has(name))
     .sort();
 }
 

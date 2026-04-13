@@ -7,6 +7,7 @@ tags:
   - IA
   - GenAI
   - Multimodalidad
+video: "03-arquitecturas.mp4"
 ---
 
 # Capítulo 3 — Arquitecturas: espacios compartidos, conectores y modelos omni

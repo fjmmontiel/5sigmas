@@ -7,6 +7,7 @@ tags:
   - IA
   - LLMs
   - Historia
+video: "04-escalar.mp4"
 ---
 
 # Capítulo 4: Escalar (≈ 2012 - 2024)

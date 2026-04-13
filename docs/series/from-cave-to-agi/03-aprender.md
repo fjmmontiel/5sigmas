@@ -7,6 +7,7 @@ tags:
   - IA
   - Historia
   - LLMs
+video: "03-aprender.mp4"
 ---
 
 # Capítulo 3 — Aprender (≈ 1956 – 2012)
