@@ -125,6 +125,7 @@ hooks:
   - hooks/wip_series.py
   - hooks/nosnippet.py
   - hooks/sitemap_noindex.py
+  - hooks/video_sitemap.py
 
 plugins:
   - search
