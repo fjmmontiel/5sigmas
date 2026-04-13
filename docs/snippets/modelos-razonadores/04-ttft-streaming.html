@@ -1,0 +1,341 @@
+<div class="tf-wrap" data-demo="04-ttft-streaming" data-default="comparacion">
+  <div class="tf-hd">
+    <div class="tf-title">TTFT y latencia total: dos métricas, dos percepciones</div>
+    <div class="tf-sub">Time To First Token define si el usuario percibe la respuesta como instantánea o lenta, incluso cuando el tiempo total es idéntico.</div>
+  </div>
+
+  <nav class="tf-nav" data-role="tablist" aria-label="Secciones">
+    <button type="button" data-role="tab" data-tab="comparacion" aria-selected="true">TTFT vs latencia total</button>
+    <button type="button" data-role="tab" data-tab="streaming" aria-selected="false">Streaming y percepción</button>
+    <button type="button" data-role="tab" data-tab="razonadores" aria-selected="false">El problema con los razonadores</button>
+  </nav>
+
+  <div class="tf-panels">
+
+    <!-- TAB 1: Comparación -->
+    <section class="tf-panel" data-panel="comparacion">
+      <div class="tf-intro">Dos modelos, misma respuesta completa. El tiempo de generación es similar, pero la experiencia del usuario es radicalmente distinta.</div>
+      <div class="tf-compare">
+
+        <div class="tf-model">
+          <div class="tf-model-tag tf-model-tag--a">Modelo A — bajo TTFT</div>
+          <div class="tf-timeline">
+            <div class="tf-tl-row">
+              <div class="tf-tl-label">Tiempo →</div>
+              <div class="tf-tl-track">
+                <div class="tf-tl-seg tf-tl-seg--wait" style="width:5%"></div>
+                <div class="tf-tl-seg tf-tl-seg--gen" style="width:95%"></div>
+              </div>
+            </div>
+            <div class="tf-tl-annot">
+              <div class="tf-annot" style="left:5%">
+                <div class="tf-annot-line"></div>
+                <div class="tf-annot-label">TTFT: <strong>0.3s</strong></div>
+              </div>
+              <div class="tf-annot" style="left:100%">
+                <div class="tf-annot-line"></div>
+                <div class="tf-annot-label">Total: <strong>4.2s</strong></div>
+              </div>
+            </div>
+          </div>
+          <div class="tf-tokens">
+            <div class="tf-token tf-token--appear">Los</div>
+            <div class="tf-token tf-token--appear">modelos</div>
+            <div class="tf-token tf-token--appear">razonadores</div>
+            <div class="tf-token tf-token--appear">generan</div>
+            <div class="tf-token tf-token--appear">primero</div>
+            <div class="tf-token tf-token--appear">su</div>
+            <div class="tf-token tf-token--appear">cadena...</div>
+          </div>
+          <div class="tf-model-verdict tf-model-verdict--ok">✓ El usuario ve texto desde los primeros 300ms — percepción inmediata</div>
+        </div>
+
+        <div class="tf-model">
+          <div class="tf-model-tag tf-model-tag--b">Modelo B — alto TTFT (razonador sin streaming de CoT)</div>
+          <div class="tf-timeline">
+            <div class="tf-tl-row">
+              <div class="tf-tl-label">Tiempo →</div>
+              <div class="tf-tl-track">
+                <div class="tf-tl-seg tf-tl-seg--think" style="width:80%"></div>
+                <div class="tf-tl-seg tf-tl-seg--gen" style="width:20%"></div>
+              </div>
+            </div>
+            <div class="tf-tl-annot">
+              <div class="tf-annot" style="left:80%">
+                <div class="tf-annot-line"></div>
+                <div class="tf-annot-label">TTFT: <strong>3.5s</strong></div>
+              </div>
+              <div class="tf-annot" style="left:100%">
+                <div class="tf-annot-line"></div>
+                <div class="tf-annot-label">Total: <strong>4.4s</strong></div>
+              </div>
+            </div>
+          </div>
+          <div class="tf-thinking">
+            <div class="tf-thinking-dots"><span></span><span></span><span></span></div>
+            <div class="tf-thinking-label">Pensando... (razonamiento interno oculto)</div>
+          </div>
+          <div class="tf-model-verdict tf-model-verdict--bad">✗ 3.5s de pantalla en blanco — el usuario percibe lentitud aunque el total sea similar</div>
+        </div>
+
+      </div>
+      <div class="tf-key">
+        <div class="tf-key-item"><div class="tf-key-dot tf-key-dot--wait"></div>Espera (pre-primer token)</div>
+        <div class="tf-key-item"><div class="tf-key-dot tf-key-dot--think"></div>Razonamiento interno (CoT oculta)</div>
+        <div class="tf-key-item"><div class="tf-key-dot tf-key-dot--gen"></div>Generación de respuesta visible</div>
+      </div>
+    </section>
+
+    <!-- TAB 2: Streaming -->
+    <section class="tf-panel" data-panel="streaming" hidden>
+      <div class="tf-intro">El streaming reduce la latencia percibida aunque no cambie la latencia real. Es la misma cantidad de trabajo distribuida de forma que el usuario recibe feedback inmediato.</div>
+      <div class="tf-stream-flow">
+        <div class="tf-stream-model">
+          <div class="tf-sm-tag">Con streaming de CoT visible (Claude 3.7, DeepSeek R1)</div>
+          <div class="tf-sm-body">
+            <div class="tf-stream-phase">
+              <div class="tf-sp-label tf-sp-label--cot">Cadena de pensamiento (visible, streamed)</div>
+              <div class="tf-sp-text tf-sp-text--cot">"Necesito analizar si el usuario pide A o B... si es A, el enfoque sería... si es B, habría que considerar... voy con A porque..."</div>
+            </div>
+            <div class="tf-stream-phase">
+              <div class="tf-sp-label tf-sp-label--ans">Respuesta final (streamed tras CoT)</div>
+              <div class="tf-sp-text">"La respuesta es X porque..."</div>
+            </div>
+          </div>
+          <div class="tf-sm-verdict tf-sm-verdict--ok">TTFT bajo (primer token de CoT inmediato) + sensación de "modelo pensando en tiempo real"</div>
+        </div>
+        <div class="tf-stream-model">
+          <div class="tf-sm-tag">Sin streaming (CoT oculta, respuesta completa de golpe)</div>
+          <div class="tf-sm-body">
+            <div class="tf-stream-phase">
+              <div class="tf-sp-label tf-sp-label--wait">Procesamiento interno (oculto, no streamed)</div>
+              <div class="tf-sp-text tf-sp-text--wait">[ silencio ] ... [ silencio ] ... [ silencio ]</div>
+            </div>
+            <div class="tf-stream-phase">
+              <div class="tf-sp-label tf-sp-label--ans">Respuesta completa (aparece toda de golpe)</div>
+              <div class="tf-sp-text">"La respuesta es X porque..."</div>
+            </div>
+          </div>
+          <div class="tf-sm-verdict tf-sm-verdict--bad">TTFT alto + experiencia de "tiempo de espera" percibido como lentitud del modelo</div>
+        </div>
+      </div>
+      <div class="tf-stream-note">La UX del razonamiento visible no es solo transparencia intelectual — tiene un impacto directo en la percepción de rendimiento del sistema.</div>
+    </section>
+
+    <!-- TAB 3: Problema con razonadores -->
+    <section class="tf-panel" data-panel="razonadores" hidden>
+      <div class="tf-intro">Los modelos razonadores tienen un conflicto inherente entre profundidad de razonamiento y TTFT. Cuanto más razonan, más tarde empieza la respuesta visible.</div>
+      <div class="tf-tradeoff">
+        <div class="tf-trade-row">
+          <div class="tf-trade-label">Budget bajo<br><span class="tf-trade-sub">(razonamiento corto)</span></div>
+          <div class="tf-trade-bars">
+            <div class="tf-trade-bar-row">
+              <div class="tf-trade-bar-label">TTFT</div>
+              <div class="tf-trade-btrack"><div class="tf-trade-bfill" style="width:15%;background:#26A69A"></div></div>
+              <div class="tf-trade-bval">0.4s</div>
+            </div>
+            <div class="tf-trade-bar-row">
+              <div class="tf-trade-bar-label">Calidad</div>
+              <div class="tf-trade-btrack"><div class="tf-trade-bfill" style="width:52%;background:#FFB343"></div></div>
+              <div class="tf-trade-bval">52%</div>
+            </div>
+          </div>
+        </div>
+        <div class="tf-trade-row">
+          <div class="tf-trade-label">Budget medio<br><span class="tf-trade-sub">(razonamiento estándar)</span></div>
+          <div class="tf-trade-bars">
+            <div class="tf-trade-bar-row">
+              <div class="tf-trade-bar-label">TTFT</div>
+              <div class="tf-trade-btrack"><div class="tf-trade-bfill" style="width:45%;background:#FFB343"></div></div>
+              <div class="tf-trade-bval">2.1s</div>
+            </div>
+            <div class="tf-trade-bar-row">
+              <div class="tf-trade-bar-label">Calidad</div>
+              <div class="tf-trade-btrack"><div class="tf-trade-bfill" style="width:78%;background:#26A69A"></div></div>
+              <div class="tf-trade-bval">78%</div>
+            </div>
+          </div>
+        </div>
+        <div class="tf-trade-row">
+          <div class="tf-trade-label">Budget alto<br><span class="tf-trade-sub">(razonamiento extendido)</span></div>
+          <div class="tf-trade-bars">
+            <div class="tf-trade-bar-row">
+              <div class="tf-trade-bar-label">TTFT</div>
+              <div class="tf-trade-btrack"><div class="tf-trade-bfill" style="width:88%;background:#e04c4c"></div></div>
+              <div class="tf-trade-bval">8.5s</div>
+            </div>
+            <div class="tf-trade-bar-row">
+              <div class="tf-trade-bar-label">Calidad</div>
+              <div class="tf-trade-btrack"><div class="tf-trade-bfill" style="width:91%;background:#26A69A"></div></div>
+              <div class="tf-trade-bval">91%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tf-solutions">
+        <div class="tf-sol">
+          <div class="tf-sol-k">Solución 1: streaming de CoT</div>
+          <div class="tf-sol-v">Mostrar el razonamiento mientras se genera. El TTFT sigue siendo el del primer token de CoT (bajo), aunque el usuario espere a la respuesta final. La percepción es completamente distinta.</div>
+        </div>
+        <div class="tf-sol">
+          <div class="tf-sol-k">Solución 2: routing dinámico</div>
+          <div class="tf-sol-v">Clasificar la query antes de enviarla al modelo. Preguntas simples van a un modelo rápido (bajo TTFT, bajo coste). Solo las complejas activan el razonamiento extendido.</div>
+        </div>
+        <div class="tf-sol">
+          <div class="tf-sol-k">Solución 3: budget configurable</div>
+          <div class="tf-sol-v">El cliente especifica el máximo de tokens de razonamiento. Las APIs de Claude y Gemini exponen este parámetro, permitiendo ajustar el tradeoff TTFT/calidad por caso de uso.</div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<style>
+.tf-wrap, .tf-wrap * { box-sizing: border-box; }
+.tf-wrap {
+  --ta: #26A69A; --tb: #324AB2; --tg: #FFB343; --tc: #7cc7ff; --tr: #e04c4c;
+  --tbg: var(--md-default-bg-color, #fff);
+  --tfg: var(--md-default-fg-color, #0f172a);
+  --tbd: rgba(15,23,42,.14); --tmut: rgba(15,23,42,.58);
+  --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  display: grid; gap: 14px; max-width: 940px; margin: 0 auto;
+  padding: clamp(14px,2vw,24px);
+  border: 1px solid var(--tbd); border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--tc) 5%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 0%, color-mix(in srgb,var(--tb) 5%,transparent), transparent 52%),
+    var(--tbg);
+  color: var(--tfg); font-family: var(--ef); -webkit-font-smoothing: antialiased;
+}
+[data-md-color-scheme="slate"] .tf-wrap {
+  --tbg: var(--md-default-bg-color, #0f172a);
+  --tfg: var(--md-default-fg-color, #e2e8f0);
+  --tbd: rgba(226,232,240,.15); --tmut: rgba(226,232,240,.58);
+}
+.tf-hd { display: grid; gap: 4px; }
+.tf-title { font-size: clamp(15px,2vw,21px); font-weight: 900; letter-spacing: -.02em; }
+.tf-sub { font-size: 13.5px; color: var(--tmut); line-height: 1.5; }
+.tf-nav { display: flex; flex-wrap: wrap; gap: 7px; }
+.tf-nav button {
+  appearance: none; border: 1px solid var(--tbd); border-radius: 999px;
+  background: color-mix(in srgb,var(--tbg) 90%,#0f172a 10%); color: var(--tmut);
+  padding: 7px 16px; font: inherit; font-size: 12.5px; font-weight: 800; cursor: pointer;
+  transition: border-color .14s, background .14s, color .14s;
+}
+.tf-nav button[aria-selected="true"] {
+  border-color: color-mix(in srgb,var(--tc) 44%,transparent);
+  background: color-mix(in srgb,var(--tc) 10%,var(--tbg)); color: var(--tfg);
+}
+.tf-panel[hidden] { display: none; }
+.tf-intro { font-size: 13px; color: var(--tmut); font-style: italic; border-left: 3px solid color-mix(in srgb,var(--tc) 36%,transparent); padding-left: 12px; }
+
+/* TAB 1: COMPARACIÓN */
+.tf-compare { display: grid; gap: 14px; }
+.tf-model { display: grid; gap: 8px; border: 1px solid var(--tbd); border-radius: 14px; padding: 12px 14px; background: color-mix(in srgb,var(--tbg) 88%,#0f172a 12%); }
+.tf-model-tag { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; padding: 3px 10px; border-radius: 999px; width: fit-content; }
+.tf-model-tag--a { background: color-mix(in srgb,var(--ta) 12%,transparent); color: var(--ta); border: 1px solid color-mix(in srgb,var(--ta) 30%,transparent); }
+.tf-model-tag--b { background: color-mix(in srgb,var(--tr) 10%,transparent); color: var(--tr); border: 1px solid color-mix(in srgb,var(--tr) 25%,transparent); }
+.tf-timeline { display: grid; gap: 6px; }
+.tf-tl-row { display: grid; grid-template-columns: 60px 1fr; gap: 8px; align-items: center; }
+.tf-tl-label { font-size: 10px; color: var(--tmut); font-weight: 700; }
+.tf-tl-track { display: flex; height: 18px; border-radius: 999px; overflow: hidden; border: 1px solid var(--tbd); }
+.tf-tl-seg { height: 100%; }
+.tf-tl-seg--wait { background: color-mix(in srgb,var(--tc) 25%,transparent); }
+.tf-tl-seg--think { background: color-mix(in srgb,var(--tr) 40%,transparent); }
+.tf-tl-seg--gen { background: color-mix(in srgb,var(--ta) 50%,transparent); }
+.tf-tl-annot { position: relative; height: 28px; margin-left: 68px; }
+.tf-annot { position: absolute; transform: translateX(-50%); }
+.tf-annot-line { width: 1px; height: 8px; background: var(--tmut); margin: 0 auto; }
+.tf-annot-label { font-size: 9.5px; color: var(--tmut); white-space: nowrap; font-family: "SF Mono","JetBrains Mono","Courier New",monospace; }
+.tf-annot-label strong { color: var(--tfg); }
+.tf-tokens { display: flex; flex-wrap: wrap; gap: 5px; }
+.tf-token { padding: 3px 8px; border-radius: 6px; font-size: 12px; background: color-mix(in srgb,var(--ta) 12%,transparent); border: 1px solid color-mix(in srgb,var(--ta) 25%,transparent); color: color-mix(in srgb,var(--ta) 80%,var(--tfg)); font-family: "SF Mono","JetBrains Mono","Courier New",monospace; }
+.tf-thinking { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 8px; background: color-mix(in srgb,var(--tr) 6%,transparent); border: 1px solid color-mix(in srgb,var(--tr) 15%,transparent); }
+.tf-thinking-dots { display: flex; gap: 4px; }
+.tf-thinking-dots span { width: 7px; height: 7px; border-radius: 50%; background: var(--tr); opacity: .4; animation: dot-pulse 1.2s infinite; }
+.tf-thinking-dots span:nth-child(2) { animation-delay: .4s; }
+.tf-thinking-dots span:nth-child(3) { animation-delay: .8s; }
+@keyframes dot-pulse { 0%,100%{opacity:.3} 50%{opacity:1} }
+.tf-thinking-label { font-size: 12px; color: var(--tmut); font-style: italic; }
+.tf-model-verdict { font-size: 12px; padding: 7px 10px; border-radius: 8px; font-weight: 700; }
+.tf-model-verdict--ok { background: color-mix(in srgb,var(--ta) 8%,transparent); color: color-mix(in srgb,var(--ta) 80%,var(--tfg)); border: 1px solid color-mix(in srgb,var(--ta) 20%,transparent); }
+.tf-model-verdict--bad { background: color-mix(in srgb,var(--tr) 8%,transparent); color: color-mix(in srgb,var(--tr) 80%,var(--tfg)); border: 1px solid color-mix(in srgb,var(--tr) 20%,transparent); }
+.tf-key { display: flex; gap: 16px; flex-wrap: wrap; }
+.tf-key-item { display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--tmut); }
+.tf-key-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+.tf-key-dot--wait { background: color-mix(in srgb,var(--tc) 25%,transparent); border: 1px solid color-mix(in srgb,var(--tc) 40%,transparent); }
+.tf-key-dot--think { background: color-mix(in srgb,var(--tr) 40%,transparent); border: 1px solid color-mix(in srgb,var(--tr) 50%,transparent); }
+.tf-key-dot--gen { background: color-mix(in srgb,var(--ta) 50%,transparent); border: 1px solid color-mix(in srgb,var(--ta) 60%,transparent); }
+
+/* TAB 2: STREAMING */
+.tf-stream-flow { display: grid; gap: 10px; }
+.tf-stream-model { border: 1px solid var(--tbd); border-radius: 12px; padding: 12px 14px; background: color-mix(in srgb,var(--tbg) 88%,#0f172a 12%); display: grid; gap: 8px; }
+.tf-sm-tag { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; color: var(--tmut); }
+.tf-sm-body { display: grid; gap: 6px; }
+.tf-stream-phase { display: grid; gap: 4px; }
+.tf-sp-label { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; padding: 2px 8px; border-radius: 999px; width: fit-content; }
+.tf-sp-label--cot { background: color-mix(in srgb,var(--tc) 12%,transparent); color: color-mix(in srgb,var(--tc) 80%,var(--tfg)); border: 1px solid color-mix(in srgb,var(--tc) 25%,transparent); }
+.tf-sp-label--ans { background: color-mix(in srgb,var(--ta) 12%,transparent); color: var(--ta); border: 1px solid color-mix(in srgb,var(--ta) 25%,transparent); }
+.tf-sp-label--wait { background: color-mix(in srgb,var(--tr) 12%,transparent); color: var(--tr); border: 1px solid color-mix(in srgb,var(--tr) 25%,transparent); }
+.tf-sp-text { font-size: 12px; font-style: italic; color: var(--tmut); padding: 6px 10px; border-radius: 8px; background: color-mix(in srgb,var(--tbg) 80%,transparent); border: 1px solid var(--tbd); }
+.tf-sp-text--cot { color: color-mix(in srgb,var(--tc) 70%,var(--tmut)); font-style: normal; font-family: "SF Mono","JetBrains Mono","Courier New",monospace; font-size: 11px; }
+.tf-sp-text--wait { color: var(--tr); }
+.tf-sm-verdict { font-size: 12px; padding: 6px 10px; border-radius: 8px; font-weight: 700; }
+.tf-sm-verdict--ok { background: color-mix(in srgb,var(--ta) 8%,transparent); color: color-mix(in srgb,var(--ta) 80%,var(--tfg)); }
+.tf-sm-verdict--bad { background: color-mix(in srgb,var(--tr) 8%,transparent); color: color-mix(in srgb,var(--tr) 80%,var(--tfg)); }
+.tf-stream-note { font-size: 13px; color: var(--tmut); font-style: italic; border-left: 3px solid color-mix(in srgb,var(--tc) 36%,transparent); padding-left: 12px; }
+
+/* TAB 3: TRADEOFF */
+.tf-tradeoff { display: grid; gap: 8px; border: 1px solid var(--tbd); border-radius: 14px; padding: 14px; background: color-mix(in srgb,var(--tbg) 88%,#0f172a 12%); }
+.tf-trade-row { display: grid; grid-template-columns: 140px 1fr; gap: 12px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--tbd); }
+.tf-trade-row:last-child { border-bottom: none; }
+.tf-trade-label { font-size: 12px; font-weight: 900; }
+.tf-trade-sub { font-size: 10px; font-weight: 400; color: var(--tmut); }
+.tf-trade-bars { display: grid; gap: 5px; }
+.tf-trade-bar-row { display: grid; grid-template-columns: 56px 1fr 44px; align-items: center; gap: 8px; }
+.tf-trade-bar-label { font-size: 10px; font-weight: 700; color: var(--tmut); }
+.tf-trade-btrack { height: 8px; background: color-mix(in srgb,var(--tfg) 8%,transparent); border-radius: 999px; overflow: hidden; }
+.tf-trade-bfill { height: 100%; border-radius: 999px; }
+.tf-trade-bval { font-size: 11px; font-weight: 900; font-family: "SF Mono","JetBrains Mono","Courier New",monospace; text-align: right; }
+.tf-solutions { display: grid; gap: 7px; }
+.tf-sol { border: 1px solid var(--tbd); border-radius: 10px; padding: 10px 12px; background: color-mix(in srgb,var(--tbg) 88%,#0f172a 12%); display: grid; gap: 4px; }
+.tf-sol-k { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .05em; color: var(--tmut); }
+.tf-sol-v { font-size: 12.5px; color: var(--tfg); line-height: 1.45; }
+</style>
+
+<script>
+(function () {
+  function activate(root, key) {
+    root.querySelectorAll('[data-role="tab"]').forEach(t => {
+      const on = t.getAttribute('data-tab') === key;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+    });
+    root.querySelectorAll('[data-panel]').forEach(p => {
+      p.hidden = p.getAttribute('data-panel') !== key;
+    });
+  }
+  function initRoot(root) {
+    if (root.dataset.tfReady === '1') return;
+    root.dataset.tfReady = '1';
+    const tabs = Array.from(root.querySelectorAll('[data-role="tab"]'));
+    const first = root.getAttribute('data-default') || (tabs[0] && tabs[0].getAttribute('data-tab'));
+    tabs.forEach(tab => {
+      tab.tabIndex = -1;
+      tab.addEventListener('click', () => activate(root, tab.getAttribute('data-tab')));
+      tab.addEventListener('keydown', e => {
+        const cur = tabs.indexOf(tab); let next = cur;
+        if (e.key === 'ArrowRight') next = (cur + 1) % tabs.length;
+        if (e.key === 'ArrowLeft') next = (cur - 1 + tabs.length) % tabs.length;
+        if (next !== cur) { e.preventDefault(); tabs[next].focus(); activate(root, tabs[next].getAttribute('data-tab')); }
+      });
+    });
+    activate(root, first);
+  }
+  function boot() { document.querySelectorAll('[data-demo="04-ttft-streaming"]').forEach(initRoot); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
+  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
+})();
+</script>

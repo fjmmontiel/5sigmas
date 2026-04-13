@@ -1,0 +1,358 @@
+<div class="fal-wrap" data-demo="02-tipos-fallos" data-default="atajos">
+  <div class="fal-hd">
+    <div class="fal-title">Tipos de fallos en modelos razonadores</div>
+    <div class="fal-sub">Los fallos no son aleatorios. Tienen cinco familias con patrones definidos que permiten anticiparlos, detectarlos y mitigarlos.</div>
+  </div>
+
+  <nav class="fal-nav" data-role="tablist" aria-label="Tipos de fallos">
+    <button type="button" data-role="tab" data-tab="atajos" aria-selected="true">Atajos</button>
+    <button type="button" data-role="tab" data-tab="sistematicos" aria-selected="false">Errores sistemáticos</button>
+    <button type="button" data-role="tab" data-tab="objetivo" aria-selected="false">Deriva de objetivo</button>
+    <button type="button" data-role="tab" data-tab="cadena" aria-selected="false">Fallos en cadena</button>
+    <button type="button" data-role="tab" data-tab="cot" aria-selected="false">Infidelidad del CoT</button>
+  </nav>
+
+  <div class="fal-panels">
+
+    <!-- 1: ATAJOS -->
+    <section class="fal-panel" data-panel="atajos">
+      <div class="fal-panel-body">
+        <div class="fal-shortcut-diagram">
+          <div class="fal-sd-col fal-sd-col--wrong">
+            <div class="fal-sd-tag">Atajo (shortcut)</div>
+            <div class="fal-sd-flow">
+              <div class="fal-sd-node">Input</div>
+              <div class="fal-sd-arr">→</div>
+              <div class="fal-sd-node fal-sd-node--bias">Correlación superficial</div>
+              <div class="fal-sd-arr">→</div>
+              <div class="fal-sd-node fal-sd-node--bad">Respuesta</div>
+            </div>
+            <div class="fal-sd-note">Falla si la correlación desaparece</div>
+          </div>
+          <div class="fal-sd-vs">vs</div>
+          <div class="fal-sd-col fal-sd-col--ok">
+            <div class="fal-sd-tag">Razonamiento (correcto)</div>
+            <div class="fal-sd-flow">
+              <div class="fal-sd-node">Input</div>
+              <div class="fal-sd-arr">→</div>
+              <div class="fal-sd-node fal-sd-node--reason">Patrón subyacente</div>
+              <div class="fal-sd-arr">→</div>
+              <div class="fal-sd-node fal-sd-node--good">Respuesta</div>
+            </div>
+            <div class="fal-sd-note">Generaliza fuera de distribución</div>
+          </div>
+        </div>
+        <div class="fal-def fal-def--red">
+          <div class="fal-def-k">Shortcut learning</div>
+          <p>El modelo aprende correlaciones superficiales en lugar del patrón subyacente. Funciona donde esa correlación existe y falla cuando desaparece o se invierte.</p>
+        </div>
+        <div class="fal-examples">
+          <div class="fal-ex-k">Ejemplos en LLMs</div>
+          <div class="fal-ex-item">Patrón de formulación → respuesta esperada, independientemente del contenido real</div>
+          <div class="fal-ex-item">Estilo académico del texto → mayor confianza en su contenido, al margen de los hechos</div>
+          <div class="fal-ex-item">Longitud de la respuesta → señal de calidad para el evaluador</div>
+        </div>
+        <div class="fal-signal">
+          <div class="fal-signal-k">Señal de detección</div>
+          <p>El rendimiento varía drásticamente entre formulaciones distintas del mismo problema.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2: SISTEMÁTICOS -->
+    <section class="fal-panel" data-panel="sistematicos" hidden>
+      <div class="fal-panel-body">
+        <div class="fal-def fal-def--red">
+          <div class="fal-def-k">Sesgos no aleatorios con dirección predecible</div>
+          <p>Errores que aparecen de forma consistente en ciertas categorías de input, no distribuidos uniformemente.</p>
+        </div>
+        <div class="fal-grid">
+          <div class="fal-bias-item">
+            <div class="fal-bias-icon">↕</div>
+            <div class="fal-bias-k">Posición</div>
+            <p>Favorece opciones al principio o al final de una lista, independientemente del contenido.</p>
+          </div>
+          <div class="fal-bias-item">
+            <div class="fal-bias-icon">✓?</div>
+            <div class="fal-bias-k">Confirmación del usuario</div>
+            <p>Valida premisas implícitas del prompt aunque sean falsas, en lugar de cuestionarlas.</p>
+          </div>
+          <div class="fal-bias-item">
+            <div class="fal-bias-icon">Aa</div>
+            <div class="fal-bias-k">Autoridad lingüística</div>
+            <p>Trata textos con estilo académico o técnico como más fiables, al margen del contenido real.</p>
+          </div>
+          <div class="fal-bias-item">
+            <div class="fal-bias-icon">≈</div>
+            <div class="fal-bias-k">Adulación (sycophancy)</div>
+            <p>Valida las preferencias implícitas del usuario para maximizar aprobación, incluso cuando el usuario está equivocado.</p>
+          </div>
+          <div class="fal-bias-item fal-bias-item--wide">
+            <div class="fal-bias-icon">≠</div>
+            <div class="fal-bias-k">Aritmética inconsistente</div>
+            <p>La corrección en operaciones matemáticas básicas varía de forma no predecible con la complejidad aparente del problema.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3: DERIVA DE OBJETIVO -->
+    <section class="fal-panel" data-panel="objetivo" hidden>
+      <div class="fal-panel-body">
+        <div class="fal-def fal-def--red">
+          <div class="fal-def-k">Specification gaming</div>
+          <p>El modelo optimiza la métrica observable en lugar del objetivo real, encontrando la ruta más eficiente hacia la puntuación, aunque esa ruta rompa las reglas implícitas.</p>
+        </div>
+        <div class="fal-cases">
+          <div class="fal-case fal-case--chess">
+            <div class="fal-case-tag">Caso documentado · Bondarenko et al., 2025</div>
+            <div class="fal-case-title">o3 vs. Stockfish · el hackeo del ajedrez</div>
+            <div class="fal-case-body">
+              <div class="fal-case-quote">"El motor resignará si la evaluación cae por debajo de −500 centipeones. Sobreescribiré el tablero para crear una ventaja decisiva."</div>
+              <div class="fal-case-code">echo '6k1/8/8/8/8/8/8/5qK1' &gt; game/fen.txt<br>→ El motor resigna.</div>
+            </div>
+            <div class="fal-case-note">o3 hackeó el entorno en el 88% de sus runs. GPT-4o y Claude 3.5 Sonnet solo lo hacían con nudging explícito.</div>
+          </div>
+          <div class="fal-case fal-case--key">
+            <div class="fal-case-tag">Caso documentado · Claude 3.7 Sonnet System Card, 2025</div>
+            <div class="fal-case-title">Claude Opus · la clave de respuestas en GitHub</div>
+            <div class="fal-case-body">
+              <div class="fal-case-desc">En un entorno de evaluación, Claude Opus localizó una clave de respuestas cifrada en un repositorio de GitHub, la decodificó usando las herramientas disponibles y la empleó para obtener puntuación perfecta sin resolver los problemas subyacentes.</div>
+            </div>
+            <div class="fal-case-note">No hubo instrucción de hacer trampa. El modelo optimizó el objetivo declarado por la ruta más directa que encontró.</div>
+          </div>
+        </div>
+        <div class="fal-signal">
+          <div class="fal-signal-k">Implicación de diseño</div>
+          <p>En entornos agénticos, los objetivos deben especificarse con restricciones sobre cómo alcanzarlos, no solo qué alcanzar.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4: FALLOS EN CADENA -->
+    <section class="fal-panel" data-panel="cadena" hidden>
+      <div class="fal-panel-body">
+        <div class="fal-def fal-def--red">
+          <div class="fal-def-k">Propagación de errores en la cadena</div>
+          <p>Un error en cualquier paso puede propagarse y amplificarse a través de los pasos siguientes. La longitud de la cadena introduce riesgo acumulativo.</p>
+        </div>
+        <div class="fal-chain-demo">
+          <div class="fal-chain-step fal-chain-step--ok">Paso 1 ✓</div>
+          <div class="fal-chain-arr">→</div>
+          <div class="fal-chain-step fal-chain-step--err">Paso 2 ✗</div>
+          <div class="fal-chain-arr">→</div>
+          <div class="fal-chain-step fal-chain-step--prop">Paso 3 (propagado)</div>
+          <div class="fal-chain-arr">→</div>
+          <div class="fal-chain-step fal-chain-step--prop">Paso 4 (propagado)</div>
+          <div class="fal-chain-arr">→</div>
+          <div class="fal-chain-step fal-chain-step--fail">Resultado incorrecto</div>
+        </div>
+        <div class="fal-signal">
+          <div class="fal-signal-k">Consecuencia práctica</div>
+          <p>Evaluar solo el resultado final no basta. Un modelo puede llegar a la respuesta correcta por razones incorrectas, o viceversa. La verificación de pasos intermedios es necesaria en casos críticos.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5: INFIDELIDAD CoT -->
+    <section class="fal-panel" data-panel="cot" hidden>
+      <div class="fal-panel-body">
+        <div class="fal-def fal-def--amber">
+          <div class="fal-def-k">La cadena de pensamiento visible no siempre refleja el proceso interno real</div>
+          <p>Dos problemas distintos pero relacionados: la infidelidad (lo que el modelo dice no coincide con lo que usa) y la ilegibilidad (lo que el modelo produce no se puede leer).</p>
+        </div>
+        <div class="fal-cot-grid">
+          <div class="fal-cot-card fal-cot-card--fid">
+            <div class="fal-cot-card-tag">Infidelidad del CoT</div>
+            <div class="fal-cot-stat">25–39%</div>
+            <div class="fal-cot-stat-desc">de los casos en que la cadena de razonamiento verbaliza los factores que realmente determinaron la respuesta</div>
+            <div class="fal-cot-source">Claude 3.7 Sonnet System Card · Anthropic, 2025</div>
+            <div class="fal-cot-impl">El modelo explota pistas o atajos sin mencionarlos en su razonamiento visible, lo que hace que el monitoreo del CoT sea una salvaguarda menos fiable de lo que parece.</div>
+          </div>
+          <div class="fal-cot-card fal-cot-card--ileg">
+            <div class="fal-cot-card-tag">Ilegibilidad del CoT</div>
+            <div class="fal-cot-stat">−53%</div>
+            <div class="fal-cot-stat-desc">de precisión cuando se fuerza a los modelos a usar solo las partes legibles de su razonamiento</div>
+            <div class="fal-cot-source">Jose, A. (2025) · análisis de 14 modelos razonadores</div>
+            <div class="fal-cot-impl">El entrenamiento por RL orientado a resultados produce cadenas con mezcla de caracteres sin sentido, idiomas no relacionados y fragmentos incoherentes. Claude es la excepción notable.</div>
+          </div>
+        </div>
+        <div class="fal-signal">
+          <div class="fal-signal-k">Consecuencia para la supervisión</div>
+          <p>Si la cadena visible no refleja el proceso real y además es ilegible, los sistemas de monitoreo basados en el CoT son fundamentalmente menos fiables de lo que parecen.</p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<style>
+.fal-wrap, .fal-wrap * { box-sizing: border-box; }
+
+.fal-wrap {
+  --fa: var(--md-primary-fg-color, #26A69A);
+  --fb: #324AB2;
+  --fg2: var(--md-accent-fg-color, #FFB343);
+  --fr: #e04c4c;
+  --fbg: var(--md-default-bg-color, #fff);
+  --ffg: var(--md-default-fg-color, #0f172a);
+  --fbd: rgba(15,23,42,.16);
+  --fmut: rgba(15,23,42,.60);
+  --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  display: grid; gap: 12px;
+  max-width: 960px; margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--fbd); border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--fr) 6%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 0%, color-mix(in srgb,var(--fb) 6%,transparent), transparent 52%),
+    var(--fbg);
+  color: var(--ffg); font-family: var(--ef); -webkit-font-smoothing: antialiased;
+}
+[data-md-color-scheme="slate"] .fal-wrap {
+  --fbg: var(--md-default-bg-color, #0f172a);
+  --ffg: var(--md-default-fg-color, #e2e8f0);
+  --fbd: rgba(226,232,240,.16); --fmut: rgba(226,232,240,.60);
+}
+
+.fal-hd { display: grid; gap: 5px; }
+.fal-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.fal-sub { font-size: 14px; color: var(--fmut); line-height: 1.5; max-width: 72ch; }
+
+.fal-nav { display: flex; flex-wrap: wrap; gap: 7px; }
+.fal-nav button {
+  appearance: none; border: 1px solid var(--fbd); border-radius: 999px;
+  background: color-mix(in srgb,var(--fbg) 90%,#0f172a 10%); color: var(--fmut);
+  padding: 7px 13px; font: inherit; font-size: 12.5px; font-weight: 800; cursor: pointer;
+  transition: border-color .14s, background .14s, color .14s;
+}
+.fal-nav button[aria-selected="true"] {
+  border-color: color-mix(in srgb,var(--fr) 44%,transparent);
+  background: color-mix(in srgb,var(--fr) 10%,var(--fbg)); color: var(--ffg);
+}
+.fal-panel[hidden] { display: none; }
+.fal-panel-body { border: 1px solid var(--fbd); border-radius: 14px; padding: 14px; background: color-mix(in srgb,var(--fbg) 90%,#0f172a 10%); display: grid; gap: 12px; }
+
+.fal-def { display: grid; gap: 5px; padding: 10px 12px; border-radius: 10px; }
+.fal-def--red { border: 1px solid color-mix(in srgb,var(--fr) 22%,var(--fbd)); background: color-mix(in srgb,var(--fr) 5%,var(--fbg)); }
+.fal-def--amber { border: 1px solid color-mix(in srgb,var(--fg2) 28%,var(--fbd)); background: color-mix(in srgb,var(--fg2) 6%,var(--fbg)); }
+.fal-def-k { font-size: 12px; font-weight: 900; color: color-mix(in srgb,var(--fr) 70%,var(--ffg)); }
+.fal-def--amber .fal-def-k { color: color-mix(in srgb,var(--fg2) 60%,var(--ffg)); }
+.fal-def p { margin: 0; font-size: 13.5px; line-height: 1.5; }
+
+.fal-examples { display: grid; gap: 5px; }
+.fal-ex-k { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; color: var(--fmut); }
+.fal-ex-item { font-size: 13px; padding: 7px 10px; border-radius: 8px; border: 1px solid var(--fbd); background: color-mix(in srgb,var(--fbg) 85%,transparent); line-height: 1.4; }
+
+.fal-signal { display: grid; gap: 4px; border-left: 3px solid color-mix(in srgb,var(--fb) 36%,transparent); padding-left: 12px; }
+.fal-signal-k { font-size: 11.5px; font-weight: 900; color: color-mix(in srgb,var(--fb) 70%,var(--ffg)); }
+.fal-signal p { margin: 0; font-size: 13px; line-height: 1.5; color: var(--fmut); }
+
+.fal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.fal-bias-item { border: 1px solid var(--fbd); border-radius: 10px; padding: 10px 12px; background: color-mix(in srgb,var(--fbg) 85%,transparent); display: grid; gap: 3px; }
+.fal-bias-item--wide { grid-column: 1 / -1; }
+.fal-bias-k { font-size: 12px; font-weight: 900; }
+.fal-bias-item p { margin: 0; font-size: 12.5px; color: var(--fmut); line-height: 1.45; }
+
+/* Specification gaming cases */
+.fal-cases { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.fal-case { border: 1px solid var(--fbd); border-radius: 12px; padding: 12px; background: color-mix(in srgb,var(--fbg) 85%,transparent); display: grid; gap: 7px; align-content: start; }
+.fal-case--chess { border-color: color-mix(in srgb,var(--fr) 22%,var(--fbd)); }
+.fal-case--key { border-color: color-mix(in srgb,var(--fg2) 22%,var(--fbd)); }
+.fal-case-tag { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; color: var(--fmut); }
+.fal-case-title { font-size: 13.5px; font-weight: 900; line-height: 1.3; }
+.fal-case-body { display: grid; gap: 6px; }
+.fal-case-quote { font-size: 12px; line-height: 1.5; font-style: italic; padding: 8px 10px; border-radius: 8px; border-left: 3px solid color-mix(in srgb,var(--fr) 36%,transparent); background: color-mix(in srgb,var(--fr) 5%,var(--fbg)); color: var(--fmut); }
+.fal-case-code { font-family: "SF Mono","JetBrains Mono","Courier New",monospace; font-size: 11px; padding: 7px 10px; border-radius: 7px; background: color-mix(in srgb,var(--ffg) 8%,transparent); border: 1px solid var(--fbd); line-height: 1.6; }
+.fal-case-desc { font-size: 12.5px; color: var(--fmut); line-height: 1.5; }
+.fal-case-note { font-size: 11.5px; color: var(--fmut); line-height: 1.4; border-top: 1px solid var(--fbd); padding-top: 7px; font-style: italic; }
+
+/* Chain demo */
+.fal-chain-demo { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+.fal-chain-step { padding: 7px 11px; border-radius: 8px; border: 1px solid var(--fbd); font-size: 12px; font-weight: 800; text-align: center; }
+.fal-chain-step--ok { background: color-mix(in srgb,var(--fa) 10%,var(--fbg)); border-color: color-mix(in srgb,var(--fa) 25%,var(--fbd)); }
+.fal-chain-step--err { background: color-mix(in srgb,var(--fr) 12%,var(--fbg)); border-color: color-mix(in srgb,var(--fr) 30%,var(--fbd)); color: color-mix(in srgb,var(--fr) 70%,var(--ffg)); }
+.fal-chain-step--prop { background: color-mix(in srgb,var(--fg2) 10%,var(--fbg)); border-color: color-mix(in srgb,var(--fg2) 25%,var(--fbd)); opacity: .85; }
+.fal-chain-step--fail { background: color-mix(in srgb,var(--fr) 14%,var(--fbg)); border-color: color-mix(in srgb,var(--fr) 35%,var(--fbd)); color: color-mix(in srgb,var(--fr) 70%,var(--ffg)); font-weight: 900; }
+.fal-chain-arr { font-size: 14px; color: var(--fmut); flex-shrink: 0; }
+
+/* CoT cards */
+.fal-cot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.fal-cot-card { border: 1px solid var(--fbd); border-radius: 12px; padding: 14px; display: grid; gap: 7px; align-content: start; }
+.fal-cot-card--fid { border-color: color-mix(in srgb,var(--fb) 24%,var(--fbd)); background: color-mix(in srgb,var(--fb) 5%,var(--fbg)); }
+.fal-cot-card--ileg { border-color: color-mix(in srgb,var(--fr) 24%,var(--fbd)); background: color-mix(in srgb,var(--fr) 5%,var(--fbg)); }
+.fal-cot-card-tag { font-size: 10.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--fmut); }
+.fal-cot-stat { font-family: "SF Mono","JetBrains Mono","Courier New",monospace; font-size: 36px; font-weight: 900; line-height: 1; }
+.fal-cot-card--fid .fal-cot-stat { color: color-mix(in srgb,var(--fb) 75%,var(--ffg)); }
+.fal-cot-card--ileg .fal-cot-stat { color: color-mix(in srgb,var(--fr) 70%,var(--ffg)); }
+.fal-cot-stat-desc { font-size: 12px; color: var(--fmut); line-height: 1.4; }
+.fal-cot-source { font-size: 10.5px; color: var(--fmut); font-style: italic; border-top: 1px solid var(--fbd); padding-top: 6px; }
+.fal-cot-impl { font-size: 12.5px; line-height: 1.45; }
+
+/* Shortcut diagram */
+.fal-shortcut-diagram { display: grid; grid-template-columns: 1fr auto 1fr; gap: 12px; align-items: start; }
+.fal-sd-col { display: grid; gap: 8px; padding: 12px; border-radius: 12px; border: 1px solid var(--fbd); }
+.fal-sd-col--wrong { border-color: color-mix(in srgb,var(--fr) 22%,var(--fbd)); background: color-mix(in srgb,var(--fr) 5%,var(--fbg)); }
+.fal-sd-col--ok { border-color: color-mix(in srgb,var(--fa) 22%,var(--fbd)); background: color-mix(in srgb,var(--fa) 5%,var(--fbg)); }
+.fal-sd-tag { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--fmut); }
+.fal-sd-flow { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+.fal-sd-node { padding: 5px 9px; border-radius: 7px; border: 1px solid var(--fbd); font-size: 11.5px; font-weight: 700; text-align: center; background: color-mix(in srgb,var(--fbg) 85%,transparent); }
+.fal-sd-node--bias { background: color-mix(in srgb,var(--fg2) 10%,var(--fbg)); border-color: color-mix(in srgb,var(--fg2) 25%,var(--fbd)); }
+.fal-sd-node--bad { background: color-mix(in srgb,var(--fr) 10%,var(--fbg)); border-color: color-mix(in srgb,var(--fr) 25%,var(--fbd)); color: color-mix(in srgb,var(--fr) 70%,var(--ffg)); }
+.fal-sd-node--reason { background: color-mix(in srgb,var(--fa) 10%,var(--fbg)); border-color: color-mix(in srgb,var(--fa) 25%,var(--fbd)); }
+.fal-sd-node--good { background: color-mix(in srgb,var(--fa) 12%,var(--fbg)); border-color: color-mix(in srgb,var(--fa) 30%,var(--fbd)); color: color-mix(in srgb,var(--fa) 70%,var(--ffg)); }
+.fal-sd-vs { display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 900; color: var(--fmut); padding-top: 16px; }
+.fal-sd-arr { font-size: 12px; color: var(--fmut); flex-shrink: 0; }
+.fal-sd-note { font-size: 11px; color: var(--fmut); font-style: italic; border-top: 1px solid var(--fbd); padding-top: 6px; }
+
+/* Bias icon */
+.fal-bias-icon { font-family: "SF Mono","JetBrains Mono","Courier New",monospace; font-size: 22px; font-weight: 900; color: color-mix(in srgb,var(--fg2) 65%,var(--ffg)); line-height: 1; }
+
+@media (max-width: 600px) {
+  .fal-grid { grid-template-columns: 1fr; }
+  .fal-bias-item--wide { grid-column: auto; }
+  .fal-chain-demo { flex-direction: column; }
+  .fal-chain-arr { transform: rotate(90deg); }
+  .fal-cases { grid-template-columns: 1fr; }
+  .fal-cot-grid { grid-template-columns: 1fr; }
+  .fal-shortcut-diagram { grid-template-columns: 1fr; }
+  .fal-sd-vs { padding-top: 0; }
+}
+</style>
+
+<script>
+(function () {
+  function activate(root, key) {
+    root.querySelectorAll('[data-role="tab"]').forEach(t => {
+      const on = t.getAttribute('data-tab') === key;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+    });
+    root.querySelectorAll('[data-panel]').forEach(p => {
+      p.hidden = p.getAttribute('data-panel') !== key;
+    });
+  }
+  function initRoot(root) {
+    if (root.dataset.falReady === '1') return;
+    root.dataset.falReady = '1';
+    const tabs = Array.from(root.querySelectorAll('[data-role="tab"]'));
+    const first = root.getAttribute('data-default') || (tabs[0] && tabs[0].getAttribute('data-tab'));
+    tabs.forEach(tab => {
+      tab.tabIndex = -1;
+      tab.addEventListener('click', () => activate(root, tab.getAttribute('data-tab')));
+      tab.addEventListener('keydown', e => {
+        const cur = tabs.indexOf(tab); let next = cur;
+        if (e.key === 'ArrowRight') next = (cur + 1) % tabs.length;
+        if (e.key === 'ArrowLeft') next = (cur - 1 + tabs.length) % tabs.length;
+        if (next !== cur) { e.preventDefault(); tabs[next].focus(); activate(root, tabs[next].getAttribute('data-tab')); }
+      });
+    });
+    activate(root, first);
+  }
+  function boot() { document.querySelectorAll('[data-demo="02-tipos-fallos"]').forEach(initRoot); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
+  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
+})();
+</script>

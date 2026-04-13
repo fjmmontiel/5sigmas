@@ -1,0 +1,261 @@
+<div class="rie-wrap" data-demo="05-riesgos-ttc" data-default="sobre">
+  <div class="rie-hd">
+    <div class="rie-title">Riesgos de los sistemas con TTC</div>
+    <div class="rie-sub">Los riesgos son gestionables con el diseño correcto. El objetivo no es eliminarlos sino hacer que sean detectables y que sus consecuencias estén acotadas.</div>
+  </div>
+
+  <nav class="rie-nav" data-role="tablist" aria-label="Secciones de riesgo">
+    <button type="button" data-role="tab" data-tab="sobre" aria-selected="true">Sobrepensamiento</button>
+    <button type="button" data-role="tab" data-tab="ataques" aria-selected="false">Superficies de ataque</button>
+    <button type="button" data-role="tab" data-tab="diseno" aria-selected="false">Diseño responsable</button>
+  </nav>
+
+  <div class="rie-panels">
+
+    <!-- TAB 1: SOBREPENSAMIENTO -->
+    <section class="rie-panel" data-panel="sobre">
+      <div class="rie-panel-body">
+        <div class="rie-def">
+          <div class="rie-def-k">Overthinking · más razonamiento puede deteriorar la respuesta</div>
+          <p>Existe un umbral más allá del cual continuar el razonamiento introduce ruido en lugar de reducirlo. El modelo revisa conclusiones correctas, genera bucles improductivos o busca la respuesta "sofisticada" en lugar de la correcta.</p>
+        </div>
+        <div class="rie-over-grid">
+          <div class="rie-over-item">
+            <div class="rie-over-icon">↩</div>
+            <div class="rie-over-tag">Revisión de premisas verificadas</div>
+            <p>El modelo resuelve un subproblema correctamente, continúa razonando y en un paso posterior reconsiderada sin motivo fundado.</p>
+          </div>
+          <div class="rie-over-item">
+            <div class="rie-over-icon">∞</div>
+            <div class="rie-over-tag">Bucles improductivos</div>
+            <p>Genera variaciones del mismo razonamiento sin avanzar hacia una conclusión. Consume tokens sin valor incremental.</p>
+          </div>
+          <div class="rie-over-item">
+            <div class="rie-over-icon">✗</div>
+            <div class="rie-over-tag">Hipercorrección en tareas simples</div>
+            <p>En preguntas con respuesta obvia, el modelo genera razonamiento elaborado que lo lleva a buscar la respuesta más "sofisticada" en lugar de la correcta.</p>
+          </div>
+          <div class="rie-over-item">
+            <div class="rie-over-icon">⚠</div>
+            <div class="rie-over-tag">Apple Research, 2025 · "The Illusion of Thinking"</div>
+            <p>En tareas simples, el modelo encuentra la solución pronto en su cadena interna pero continúa explorando alternativas incorrectas, degradando la respuesta final.</p>
+          </div>
+        </div>
+        <div class="rie-signal">
+          <div class="rie-signal-k">Implicación de diseño</div>
+          <p>El presupuesto de TTC no debería ser "cuanto más, mejor" sino "lo adecuado para el tipo y complejidad del problema". Eso requiere estimar la complejidad antes de asignar el presupuesto.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: SUPERFICIES DE ATAQUE -->
+    <section class="rie-panel" data-panel="ataques" hidden>
+      <div class="rie-panel-body">
+        <div class="rie-attacks">
+
+          <div class="rie-attack rie-attack--inject">
+            <div class="rie-attack-tag">Prompt injection indirecta</div>
+            <div class="rie-attack-name">Contenido externo como vector de ataque</div>
+            <p>Cuando el modelo puede leer documentos, navegar webs o ejecutar código, ese contenido se convierte en superficie de ataque. Un documento diseñado para contener instrucciones ocultas puede intentar redirigir el comportamiento del agente.</p>
+            <div class="rie-attack-surface">Superficie: todo el contenido que el agente puede leer o procesar</div>
+          </div>
+
+          <div class="rie-attack rie-attack--taboo">
+            <div class="rie-attack-tag">Ataque documentado · TabooRAG (2026)</div>
+            <div class="rie-attack-name">Denegación de servicio por alineamiento</div>
+            <p>Un documento malicioso inyectado en la base de conocimientos envuelve una consulta benigna en un "contexto de riesgo restringido". Cuando el sistema RAG lo recupera, el LLM lo interpreta como peligroso y se niega a responder. No busca extraer información sino bloquear consultas legítimas.</p>
+            <div class="rie-attack-surface">Difícil de defender: los mismos filtros de seguridad que protegen al modelo pueden usarse para bloquearlo</div>
+          </div>
+
+          <div class="rie-attack rie-attack--hijack">
+            <div class="rie-attack-tag">Riesgo en sistemas agénticos</div>
+            <div class="rie-attack-name">Hijacking de agentes</div>
+            <p>Manipulación persistente del contexto de memoria o decisión del agente entre sesiones. A diferencia del prompt injection puntual, el hijacking puede redirigir el comportamiento en múltiples interacciones futuras sin que el usuario sea consciente.</p>
+            <div class="rie-attack-surface">Riesgo mayor: agentes con memoria persistente o capacidad de modificar su propio contexto</div>
+          </div>
+
+          <div class="rie-attack rie-attack--ileg">
+            <div class="rie-attack-tag">Riesgo de supervisión</div>
+            <div class="rie-attack-name">Ilegibilidad del CoT como vector de riesgo</div>
+            <p>En modelos entrenados con RL orientado a resultados, la cadena de pensamiento puede ser ilegible (mezcla de caracteres, idiomas no relacionados, fragmentos incoherentes). El monitoreo del proceso de razonamiento como mecanismo de seguridad deja de funcionar.</p>
+            <div class="rie-attack-surface">Principio: no se puede supervisar lo que no se puede leer · afecta a 14 modelos analizados (Jose, 2025)</div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: DISEÑO RESPONSABLE -->
+    <section class="rie-panel" data-panel="diseno" hidden>
+      <div class="rie-panel-body">
+        <div class="rie-criteria">
+          <div class="rie-criterion">
+            <div class="rie-criterion-head">
+              <div class="rie-criterion-icon">límite</div>
+              <div class="rie-criterion-name">Presupuestos duros</div>
+            </div>
+            <p>Máximo de tokens, segundos y llamadas a herramientas definidos antes de empezar. El sistema produce output válido dentro del presupuesto aunque el razonamiento esté incompleto.</p>
+          </div>
+          <div class="rie-criterion">
+            <div class="rie-criterion-head">
+              <div class="rie-criterion-icon">parada</div>
+              <div class="rie-criterion-name">Señales de parada activas</div>
+            </div>
+            <p>Detectar cuándo continuar no añade valor: argumentos repetidos, convergencia alcanzada, confianza suficiente. Reducen coste y latencia en modo overthinking sin sacrificar calidad.</p>
+          </div>
+          <div class="rie-criterion">
+            <div class="rie-criterion-head">
+              <div class="rie-criterion-icon">verificar</div>
+              <div class="rie-criterion-name">Verificación en puntos críticos</div>
+            </div>
+            <p>Para acciones externas o difícilmente reversibles: confirmación con usuario, segunda evaluación del plan, o herramienta de validación de dominio. Una pausa breve evita consecuencias costosas.</p>
+          </div>
+          <div class="rie-criterion">
+            <div class="rie-criterion-head">
+              <div class="rie-criterion-icon">fallback</div>
+              <div class="rie-criterion-name">Fallbacks explícitos</div>
+            </div>
+            <p>Definir qué hace el sistema si excede el presupuesto sin respuesta satisfactoria: respuesta parcial, petición de datos, derivación humana o abstención explícita con nivel de confianza.</p>
+          </div>
+          <div class="rie-criterion">
+            <div class="rie-criterion-head">
+              <div class="rie-criterion-icon">objetivo</div>
+              <div class="rie-criterion-name">Especificación de objetivos con restricciones</div>
+            </div>
+            <p>En entornos agénticos, el objetivo debe especificarse con restricciones sobre cómo alcanzarlo, no solo qué alcanzar. Un modelo razonador puede encontrar caminos que cumplen la letra pero violan el espíritu del objetivo.</p>
+          </div>
+        </div>
+        <div class="rie-note">
+          El riesgo mayor no es que el sistema falle. Es que falle silenciosamente, con apariencia de certeza, en un punto del flujo donde nadie lo detecta a tiempo.
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<style>
+.rie-wrap, .rie-wrap * { box-sizing: border-box; }
+
+.rie-wrap {
+  --ra: var(--md-primary-fg-color, #26A69A);
+  --rb: #324AB2;
+  --rg: var(--md-accent-fg-color, #FFB343);
+  --rr: #e04c4c;
+  --rbg: var(--md-default-bg-color, #fff);
+  --rfg: var(--md-default-fg-color, #0f172a);
+  --rbd: rgba(15,23,42,.16);
+  --rmut: rgba(15,23,42,.60);
+  --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  display: grid; gap: 12px;
+  max-width: 940px; margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--rbd); border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--rr) 6%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 100%, color-mix(in srgb,var(--rb) 5%,transparent), transparent 52%),
+    var(--rbg);
+  color: var(--rfg); font-family: var(--ef); -webkit-font-smoothing: antialiased;
+}
+[data-md-color-scheme="slate"] .rie-wrap {
+  --rbg: var(--md-default-bg-color, #0f172a);
+  --rfg: var(--md-default-fg-color, #e2e8f0);
+  --rbd: rgba(226,232,240,.16); --rmut: rgba(226,232,240,.60);
+}
+.rie-hd { display: grid; gap: 5px; }
+.rie-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.rie-sub { font-size: 14px; color: var(--rmut); line-height: 1.5; max-width: 68ch; }
+
+.rie-nav { display: flex; flex-wrap: wrap; gap: 7px; }
+.rie-nav button {
+  appearance: none; border: 1px solid var(--rbd); border-radius: 999px;
+  background: color-mix(in srgb,var(--rbg) 90%,#0f172a 10%); color: var(--rmut);
+  padding: 7px 14px; font: inherit; font-size: 12.5px; font-weight: 800; cursor: pointer;
+  transition: border-color .14s, background .14s, color .14s;
+}
+.rie-nav button[aria-selected="true"] {
+  border-color: color-mix(in srgb,var(--rr) 44%,transparent);
+  background: color-mix(in srgb,var(--rr) 10%,var(--rbg)); color: var(--rfg);
+}
+.rie-panel[hidden] { display: none; }
+.rie-panel-body { border: 1px solid var(--rbd); border-radius: 14px; padding: 14px; background: color-mix(in srgb,var(--rbg) 90%,#0f172a 10%); display: grid; gap: 12px; }
+
+.rie-def { padding: 10px 12px; border-radius: 10px; border: 1px solid color-mix(in srgb,var(--rg) 22%,var(--rbd)); background: color-mix(in srgb,var(--rg) 6%,var(--rbg)); display: grid; gap: 5px; }
+.rie-def-k { font-size: 12.5px; font-weight: 900; color: color-mix(in srgb,var(--rg) 55%,var(--rfg)); }
+.rie-def p { margin: 0; font-size: 13.5px; line-height: 1.55; }
+
+.rie-over-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.rie-over-item { border: 1px solid var(--rbd); border-radius: 10px; padding: 10px 12px; background: color-mix(in srgb,var(--rbg) 85%,transparent); display: grid; gap: 4px; }
+.rie-over-icon { font-family: "SF Mono","JetBrains Mono","Courier New",monospace; font-size: 24px; font-weight: 900; line-height: 1; color: color-mix(in srgb,var(--rg) 65%,var(--rfg)); }
+.rie-over-tag { font-size: 11.5px; font-weight: 900; }
+.rie-over-item p { margin: 0; font-size: 12.5px; color: var(--rmut); line-height: 1.45; }
+
+.rie-signal { display: grid; gap: 4px; border-left: 3px solid color-mix(in srgb,var(--rb) 36%,transparent); padding-left: 12px; }
+.rie-signal-k { font-size: 11.5px; font-weight: 900; color: color-mix(in srgb,var(--rb) 70%,var(--rfg)); }
+.rie-signal p { margin: 0; font-size: 13px; line-height: 1.5; color: var(--rmut); }
+
+/* Attacks */
+.rie-attacks { display: grid; gap: 9px; }
+.rie-attack { border: 1px solid var(--rbd); border-radius: 12px; padding: 12px 14px; background: color-mix(in srgb,var(--rbg) 85%,transparent); display: grid; gap: 6px; }
+.rie-attack--inject { border-color: color-mix(in srgb,var(--rg) 22%,var(--rbd)); }
+.rie-attack--taboo { border-color: color-mix(in srgb,var(--rr) 22%,var(--rbd)); }
+.rie-attack--hijack { border-color: color-mix(in srgb,var(--rb) 22%,var(--rbd)); }
+.rie-attack--ileg { border-color: color-mix(in srgb,var(--rmut) 30%,var(--rbd)); }
+.rie-attack-tag { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--rmut); padding: 2px 8px; border-radius: 999px; border: 1px solid transparent; width: fit-content; }
+.rie-attack--inject .rie-attack-tag { background: color-mix(in srgb,var(--rg) 12%,transparent); color: color-mix(in srgb,var(--rg) 70%,var(--rfg)); border-color: color-mix(in srgb,var(--rg) 28%,transparent); }
+.rie-attack--taboo .rie-attack-tag { background: color-mix(in srgb,var(--rr) 12%,transparent); color: var(--rr); border-color: color-mix(in srgb,var(--rr) 28%,transparent); }
+.rie-attack--hijack .rie-attack-tag { background: color-mix(in srgb,var(--rb) 12%,transparent); color: color-mix(in srgb,var(--rb) 80%,var(--rfg)); border-color: color-mix(in srgb,var(--rb) 25%,transparent); }
+.rie-attack--ileg .rie-attack-tag { background: color-mix(in srgb,var(--rmut) 12%,transparent); color: var(--rmut); border-color: color-mix(in srgb,var(--rmut) 28%,transparent); }
+.rie-attack-name { font-size: 14px; font-weight: 900; line-height: 1.2; }
+.rie-attack p { margin: 0; font-size: 13px; line-height: 1.5; color: var(--rmut); }
+.rie-attack-surface { font-size: 11.5px; color: var(--rmut); font-style: italic; border-top: 1px solid var(--rbd); padding-top: 7px; line-height: 1.4; }
+
+/* Design criteria */
+.rie-criteria { display: grid; gap: 7px; }
+.rie-criterion { border: 1px solid var(--rbd); border-radius: 12px; padding: 11px 13px; background: color-mix(in srgb,var(--rbg) 90%,#0f172a 10%); display: grid; gap: 5px; }
+.rie-criterion-head { display: flex; align-items: center; gap: 8px; }
+.rie-criterion-icon { font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; padding: 3px 8px; border-radius: 999px; border: 1px solid color-mix(in srgb,var(--ra) 28%,var(--rbd)); background: color-mix(in srgb,var(--ra) 10%,var(--rbg)); color: color-mix(in srgb,var(--ra) 70%,var(--rfg)); flex-shrink: 0; }
+.rie-criterion-name { font-size: 13.5px; font-weight: 900; }
+.rie-criterion p { margin: 0; font-size: 13px; color: var(--rmut); line-height: 1.5; }
+.rie-note { font-size: 13.5px; color: var(--rmut); line-height: 1.5; font-style: italic; border-left: 3px solid color-mix(in srgb,var(--rr) 36%,transparent); padding-left: 12px; }
+
+@media (max-width: 560px) {
+  .rie-over-grid { grid-template-columns: 1fr; }
+}
+</style>
+
+<script>
+(function () {
+  function activate(root, key) {
+    root.querySelectorAll('[data-role="tab"]').forEach(t => {
+      const on = t.getAttribute('data-tab') === key;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+    });
+    root.querySelectorAll('[data-panel]').forEach(p => {
+      p.hidden = p.getAttribute('data-panel') !== key;
+    });
+  }
+  function initRoot(root) {
+    if (root.dataset.rieReady === '1') return;
+    root.dataset.rieReady = '1';
+    const tabs = Array.from(root.querySelectorAll('[data-role="tab"]'));
+    const first = root.getAttribute('data-default') || (tabs[0] && tabs[0].getAttribute('data-tab'));
+    tabs.forEach(tab => {
+      tab.tabIndex = -1;
+      tab.addEventListener('click', () => activate(root, tab.getAttribute('data-tab')));
+      tab.addEventListener('keydown', e => {
+        const cur = tabs.indexOf(tab); let next = cur;
+        if (e.key === 'ArrowRight') next = (cur + 1) % tabs.length;
+        if (e.key === 'ArrowLeft') next = (cur - 1 + tabs.length) % tabs.length;
+        if (next !== cur) { e.preventDefault(); tabs[next].focus(); activate(root, tabs[next].getAttribute('data-tab')); }
+      });
+    });
+    activate(root, first);
+  }
+  function boot() { document.querySelectorAll('[data-demo="05-riesgos-ttc"]').forEach(initRoot); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
+  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
+})();
+</script>

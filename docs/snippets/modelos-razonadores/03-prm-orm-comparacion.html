@@ -1,0 +1,321 @@
+<div class="po-wrap" data-demo="03-prm-orm-comparacion" data-default="prm">
+  <div class="po-hd">
+    <div class="po-title">PRMs vs ORMs: dos formas de enseñar a razonar</div>
+    <div class="po-sub">Process Reward Models evalúan cada paso. Outcome Reward Models evalúan solo el resultado. La diferencia es más profunda de lo que parece.</div>
+  </div>
+
+  <nav class="po-nav" data-role="tablist" aria-label="Secciones">
+    <button type="button" data-role="tab" data-tab="prm" aria-selected="true">PRM — por pasos</button>
+    <button type="button" data-role="tab" data-tab="orm" aria-selected="false">ORM — por resultado</button>
+    <button type="button" data-role="tab" data-tab="diferencia" aria-selected="false">Cuándo importa la diferencia</button>
+  </nav>
+
+  <div class="po-panels">
+
+    <!-- TAB 1: PRM -->
+    <section class="po-panel" data-panel="prm">
+      <div class="po-intro">El PRM asigna una recompensa a cada paso intermedio de la cadena, no solo al final. Esto permite detectar y penalizar el razonamiento incorrecto aunque la respuesta final sea correcta por suerte.</div>
+      <div class="po-chain">
+        <div class="po-chain-label">Cadena de razonamiento del modelo</div>
+        <div class="po-steps">
+          <div class="po-step">
+            <div class="po-step-content">
+              <div class="po-step-n">P1</div>
+              <div class="po-step-text">"Necesito factorizar el denominador: x²-4 = (x-2)(x+2)"</div>
+            </div>
+            <div class="po-reward po-reward--high">
+              <div class="po-reward-label">PRM</div>
+              <div class="po-reward-val">+0.95</div>
+              <div class="po-reward-bar"><div class="po-bar-fill" style="width:95%;background:#26A69A"></div></div>
+              <div class="po-reward-note">Correcto</div>
+            </div>
+          </div>
+          <div class="po-step">
+            <div class="po-step-content">
+              <div class="po-step-n">P2</div>
+              <div class="po-step-text">"Las raíces son x=2 y x=-2, que son singularidades"</div>
+            </div>
+            <div class="po-reward po-reward--high">
+              <div class="po-reward-label">PRM</div>
+              <div class="po-reward-val">+0.91</div>
+              <div class="po-reward-bar"><div class="po-bar-fill" style="width:91%;background:#26A69A"></div></div>
+              <div class="po-reward-note">Correcto</div>
+            </div>
+          </div>
+          <div class="po-step">
+            <div class="po-step-content">
+              <div class="po-step-n">P3</div>
+              <div class="po-step-text">"Aplico fracciones parciales: A/(x-2) + B/(x+2), resolviendo A=1, B=1"</div>
+            </div>
+            <div class="po-reward po-reward--low">
+              <div class="po-reward-label">PRM</div>
+              <div class="po-reward-val">+0.31</div>
+              <div class="po-reward-bar"><div class="po-bar-fill" style="width:31%;background:#e04c4c"></div></div>
+              <div class="po-reward-note">Error detectado en P3</div>
+            </div>
+          </div>
+          <div class="po-step">
+            <div class="po-step-content">
+              <div class="po-step-n">P4</div>
+              <div class="po-step-text">"Integro cada fracción: ln|x-2| + ln|x+2| + C"</div>
+            </div>
+            <div class="po-reward po-reward--mid">
+              <div class="po-reward-label">PRM</div>
+              <div class="po-reward-val">+0.58</div>
+              <div class="po-reward-bar"><div class="po-bar-fill" style="width:58%;background:#FFB343"></div></div>
+              <div class="po-reward-note">Forma correcta, coeficientes erróneos</div>
+            </div>
+          </div>
+          <div class="po-step">
+            <div class="po-step-content">
+              <div class="po-step-n">Resp.</div>
+              <div class="po-step-text">"ln|x-2| + ln|x+2| + C"</div>
+            </div>
+            <div class="po-reward po-reward--mid">
+              <div class="po-reward-label">ORM</div>
+              <div class="po-reward-val">+0.70</div>
+              <div class="po-reward-bar"><div class="po-bar-fill" style="width:70%;background:#FFB343"></div></div>
+              <div class="po-reward-note">ORM: "parece una integral"</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="po-prm-note">El PRM detectó el error en P3 aunque la respuesta final sea plausible. El ORM lo pasaría por alto si la forma general parece correcta.</div>
+    </section>
+
+    <!-- TAB 2: ORM -->
+    <section class="po-panel" data-panel="orm" hidden>
+      <div class="po-intro">El ORM solo observa la respuesta final. Si es correcta, todo el proceso se refuerza — incluyendo atajos y razonamientos incorrectos que llegaron al resultado correcto por suerte.</div>
+      <div class="po-orm-cases">
+        <div class="po-case">
+          <div class="po-case-tag po-case-tag--ok">Caso 1 — ORM funciona bien</div>
+          <div class="po-case-body">
+            <div class="po-case-chain">
+              <div class="po-cstep po-cstep--ok">Razonamiento correcto</div>
+              <div class="po-carr">→</div>
+              <div class="po-cstep po-cstep--ok">Respuesta correcta</div>
+              <div class="po-carr">→</div>
+              <div class="po-creward po-creward--ok">+1 ✓</div>
+            </div>
+            <div class="po-case-desc">El razonamiento correcto produce la respuesta correcta y se refuerza. ORM funciona bien.</div>
+          </div>
+        </div>
+        <div class="po-case">
+          <div class="po-case-tag po-case-tag--warn">Caso 2 — ORM falla silenciosamente</div>
+          <div class="po-case-body">
+            <div class="po-case-chain">
+              <div class="po-cstep po-cstep--err">Atajo / error</div>
+              <div class="po-carr">→</div>
+              <div class="po-cstep po-cstep--ok">Respuesta correcta</div>
+              <div class="po-carr">→</div>
+              <div class="po-creward po-creward--ok">+1 ✓</div>
+            </div>
+            <div class="po-case-desc">El razonamiento incorrecto llegó al resultado correcto "por suerte". El ORM lo refuerza igualmente. El modelo aprende el atajo.</div>
+          </div>
+        </div>
+        <div class="po-case">
+          <div class="po-case-tag po-case-tag--err">Caso 3 — ORM penaliza injustamente</div>
+          <div class="po-case-body">
+            <div class="po-case-chain">
+              <div class="po-cstep po-cstep--ok">Razonamiento correcto</div>
+              <div class="po-carr">→</div>
+              <div class="po-cstep po-cstep--err">Error de cómputo final</div>
+              <div class="po-carr">→</div>
+              <div class="po-creward po-creward--err">0 ✗</div>
+            </div>
+            <div class="po-case-desc">El razonamiento era correcto pero un error de cálculo al final produce la respuesta incorrecta. El ORM penaliza todo el proceso, incluyendo los pasos correctos.</div>
+          </div>
+        </div>
+      </div>
+      <div class="po-orm-summary">En los tres casos, el ORM toma decisiones con información incompleta. La señal binaria correcta/incorrecta no discrimina entre los procesos que merecen refuerzo y los que no.</div>
+    </section>
+
+    <!-- TAB 3: Cuándo importa -->
+    <section class="po-panel" data-panel="diferencia" hidden>
+      <div class="po-intro">La elección entre PRM y ORM no es siempre clara. Ambos tienen dominios donde son superiores.</div>
+      <div class="po-compare">
+        <div class="po-col">
+          <div class="po-col-tag" style="background:rgba(38,166,154,.1);border-color:rgba(38,166,154,.3);color:#26A69A">PRM — Process Reward Model</div>
+          <div class="po-col-items">
+            <div class="po-item po-item--win">
+              <div class="po-item-k">Dominio ideal</div>
+              <div class="po-item-v">Matemáticas formales, lógica, código con tests parciales — donde la corrección de cada paso es verificable</div>
+            </div>
+            <div class="po-item po-item--win">
+              <div class="po-item-k">Ventaja principal</div>
+              <div class="po-item-v">Detecta atajos y razonamientos incorrectos que llegan al resultado correcto. Refuerza el proceso, no solo el outcome</div>
+            </div>
+            <div class="po-item po-item--win">
+              <div class="po-item-k">Best-of-N search</div>
+              <div class="po-item-v">Permite seleccionar el mejor paso en cada punto de la cadena (beam search), no solo la mejor respuesta final</div>
+            </div>
+            <div class="po-item">
+              <div class="po-item-k">Coste</div>
+              <div class="po-item-v">Requiere anotar o verificar pasos intermedios — mucho más caro de construir que los ORMs</div>
+            </div>
+            <div class="po-item">
+              <div class="po-item-k">Límite</div>
+              <div class="po-item-v">Difícil de aplicar en dominios donde la "corrección" de pasos intermedios es ambigua o subjetiva</div>
+            </div>
+          </div>
+        </div>
+        <div class="po-col">
+          <div class="po-col-tag" style="background:rgba(124,199,255,.1);border-color:rgba(124,199,255,.3);color:#7cc7ff">ORM — Outcome Reward Model</div>
+          <div class="po-col-items">
+            <div class="po-item po-item--win">
+              <div class="po-item-k">Dominio ideal</div>
+              <div class="po-item-v">Cualquier tarea con respuesta verificable objetivamente — matemáticas básicas, código, preguntas factuales</div>
+            </div>
+            <div class="po-item po-item--win">
+              <div class="po-item-k">Ventaja principal</div>
+              <div class="po-item-v">Escala sin necesidad de etiquetas de pasos intermedios. Señal de entrenamiento barata y escalable</div>
+            </div>
+            <div class="po-item po-item--win">
+              <div class="po-item-k">GRPO</div>
+              <div class="po-item-v">DeepSeek R1 usa un ORM binario — correcto o incorrecto — y consiguió resultados de frontera sin PRMs ni datos de CoT humanos</div>
+            </div>
+            <div class="po-item">
+              <div class="po-item-k">Riesgo</div>
+              <div class="po-item-v">Puede reforzar atajos si el dominio permite llegar a resultados correctos sin razonar bien</div>
+            </div>
+            <div class="po-item">
+              <div class="po-item-k">Límite</div>
+              <div class="po-item-v">Señal escasa y retrasada — el gradiente llega solo al final de la cadena, no por cada paso</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<style>
+.po-wrap, .po-wrap * { box-sizing: border-box; }
+.po-wrap {
+  --oa: #26A69A; --ob: #324AB2; --og: #FFB343; --oc: #7cc7ff; --or: #e04c4c;
+  --obg: var(--md-default-bg-color, #fff);
+  --ofg: var(--md-default-fg-color, #0f172a);
+  --obd: rgba(15,23,42,.14); --omut: rgba(15,23,42,.58);
+  --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  display: grid; gap: 14px; max-width: 940px; margin: 0 auto;
+  padding: clamp(14px,2vw,24px);
+  border: 1px solid var(--obd); border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--oa) 6%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 0%, color-mix(in srgb,var(--oc) 6%,transparent), transparent 52%),
+    var(--obg);
+  color: var(--ofg); font-family: var(--ef); -webkit-font-smoothing: antialiased;
+}
+[data-md-color-scheme="slate"] .po-wrap {
+  --obg: var(--md-default-bg-color, #0f172a);
+  --ofg: var(--md-default-fg-color, #e2e8f0);
+  --obd: rgba(226,232,240,.15); --omut: rgba(226,232,240,.58);
+}
+.po-hd { display: grid; gap: 4px; }
+.po-title { font-size: clamp(15px,2vw,21px); font-weight: 900; letter-spacing: -.02em; }
+.po-sub { font-size: 13.5px; color: var(--omut); line-height: 1.5; }
+
+.po-nav { display: flex; flex-wrap: wrap; gap: 7px; }
+.po-nav button {
+  appearance: none; border: 1px solid var(--obd); border-radius: 999px;
+  background: color-mix(in srgb,var(--obg) 90%,#0f172a 10%); color: var(--omut);
+  padding: 7px 16px; font: inherit; font-size: 12.5px; font-weight: 800; cursor: pointer;
+  transition: border-color .14s, background .14s, color .14s;
+}
+.po-nav button[aria-selected="true"] {
+  border-color: color-mix(in srgb,var(--oa) 44%,transparent);
+  background: color-mix(in srgb,var(--oa) 10%,var(--obg)); color: var(--ofg);
+}
+.po-panel[hidden] { display: none; }
+.po-intro { font-size: 13px; color: var(--omut); font-style: italic; border-left: 3px solid color-mix(in srgb,var(--ob) 36%,transparent); padding-left: 12px; }
+
+/* PRM chain */
+.po-chain { display: grid; gap: 8px; }
+.po-chain-label { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--omut); }
+.po-steps { display: grid; gap: 6px; }
+.po-step { display: grid; grid-template-columns: 1fr 160px; gap: 10px; align-items: center; border: 1px solid var(--obd); border-radius: 10px; padding: 8px 12px; background: color-mix(in srgb,var(--obg) 88%,#0f172a 12%); }
+.po-step-content { display: grid; grid-template-columns: 36px 1fr; gap: 8px; align-items: center; }
+.po-step-n { font-size: 10px; font-weight: 900; font-family: "SF Mono","JetBrains Mono","Courier New",monospace; color: var(--omut); }
+.po-step-text { font-size: 12px; line-height: 1.4; font-family: "SF Mono","JetBrains Mono","Courier New",monospace; }
+.po-reward { display: grid; gap: 3px; }
+.po-reward-label { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; color: var(--omut); }
+.po-reward-val { font-size: 16px; font-weight: 900; font-family: "SF Mono","JetBrains Mono","Courier New",monospace; }
+.po-reward--high .po-reward-val { color: var(--oa); }
+.po-reward--mid .po-reward-val { color: var(--og); }
+.po-reward--low .po-reward-val { color: var(--or); }
+.po-reward-bar { height: 5px; background: color-mix(in srgb,var(--ofg) 8%,transparent); border-radius: 999px; overflow: hidden; }
+.po-bar-fill { height: 100%; border-radius: 999px; transition: width .3s; }
+.po-reward-note { font-size: 10px; color: var(--omut); }
+.po-prm-note { font-size: 12.5px; color: var(--omut); font-style: italic; border-left: 3px solid color-mix(in srgb,var(--oa) 36%,transparent); padding-left: 10px; }
+
+/* ORM */
+.po-orm-cases { display: grid; gap: 8px; }
+.po-case { border: 1px solid var(--obd); border-radius: 12px; padding: 12px 14px; background: color-mix(in srgb,var(--obg) 88%,#0f172a 12%); display: grid; gap: 8px; }
+.po-case-tag { font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; padding: 3px 10px; border-radius: 999px; border: 1px solid; width: fit-content; }
+.po-case-tag--ok { background: color-mix(in srgb,var(--oa) 12%,transparent); color: var(--oa); border-color: color-mix(in srgb,var(--oa) 30%,transparent); }
+.po-case-tag--warn { background: color-mix(in srgb,var(--og) 12%,transparent); color: color-mix(in srgb,var(--og) 80%,var(--ofg)); border-color: color-mix(in srgb,var(--og) 30%,transparent); }
+.po-case-tag--err { background: color-mix(in srgb,var(--or) 12%,transparent); color: var(--or); border-color: color-mix(in srgb,var(--or) 30%,transparent); }
+.po-case-body { display: grid; gap: 7px; }
+.po-case-chain { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.po-cstep { padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; }
+.po-cstep--ok { background: color-mix(in srgb,var(--oa) 12%,transparent); color: color-mix(in srgb,var(--oa) 80%,var(--ofg)); }
+.po-cstep--err { background: color-mix(in srgb,var(--or) 12%,transparent); color: color-mix(in srgb,var(--or) 80%,var(--ofg)); }
+.po-carr { font-size: 18px; color: var(--omut); }
+.po-creward { padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 900; font-family: "SF Mono","JetBrains Mono","Courier New",monospace; }
+.po-creward--ok { background: color-mix(in srgb,var(--oa) 15%,transparent); color: var(--oa); }
+.po-creward--err { background: color-mix(in srgb,var(--or) 15%,transparent); color: var(--or); }
+.po-case-desc { font-size: 12px; color: var(--omut); line-height: 1.4; }
+.po-orm-summary { font-size: 13px; color: var(--omut); font-style: italic; border-left: 3px solid color-mix(in srgb,var(--oc) 36%,transparent); padding-left: 10px; }
+
+/* COMPARE */
+.po-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.po-col { border: 1px solid var(--obd); border-radius: 14px; padding: 14px; background: color-mix(in srgb,var(--obg) 88%,#0f172a 12%); display: grid; gap: 10px; align-content: start; }
+.po-col-tag { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; padding: 3px 10px; border-radius: 999px; border: 1px solid; width: fit-content; }
+.po-col-items { display: grid; gap: 7px; }
+.po-item { padding: 8px 10px; border-radius: 9px; border: 1px solid var(--obd); background: color-mix(in srgb,var(--obg) 85%,transparent); display: grid; gap: 3px; }
+.po-item--win { border-color: color-mix(in srgb,var(--oa) 20%,var(--obd)); background: color-mix(in srgb,var(--oa) 5%,var(--obg)); }
+.po-item-k { font-size: 10.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .05em; color: var(--omut); }
+.po-item-v { font-size: 12.5px; color: var(--ofg); line-height: 1.4; }
+
+@media (max-width: 680px) {
+  .po-step { grid-template-columns: 1fr; }
+  .po-compare { grid-template-columns: 1fr; }
+}
+</style>
+
+<script>
+(function () {
+  function activate(root, key) {
+    root.querySelectorAll('[data-role="tab"]').forEach(t => {
+      const on = t.getAttribute('data-tab') === key;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+    });
+    root.querySelectorAll('[data-panel]').forEach(p => {
+      p.hidden = p.getAttribute('data-panel') !== key;
+    });
+  }
+  function initRoot(root) {
+    if (root.dataset.poReady === '1') return;
+    root.dataset.poReady = '1';
+    const tabs = Array.from(root.querySelectorAll('[data-role="tab"]'));
+    const first = root.getAttribute('data-default') || (tabs[0] && tabs[0].getAttribute('data-tab'));
+    tabs.forEach(tab => {
+      tab.tabIndex = -1;
+      tab.addEventListener('click', () => activate(root, tab.getAttribute('data-tab')));
+      tab.addEventListener('keydown', e => {
+        const cur = tabs.indexOf(tab); let next = cur;
+        if (e.key === 'ArrowRight') next = (cur + 1) % tabs.length;
+        if (e.key === 'ArrowLeft') next = (cur - 1 + tabs.length) % tabs.length;
+        if (next !== cur) { e.preventDefault(); tabs[next].focus(); activate(root, tabs[next].getAttribute('data-tab')); }
+      });
+    });
+    activate(root, first);
+  }
+  function boot() { document.querySelectorAll('[data-demo="03-prm-orm-comparacion"]').forEach(initRoot); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
+  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
+})();
+</script>

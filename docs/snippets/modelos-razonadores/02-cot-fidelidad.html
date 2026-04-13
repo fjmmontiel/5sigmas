@@ -1,0 +1,278 @@
+<div class="cof-wrap" data-demo="02-cot-fidelidad" data-default="fidelidad">
+  <div class="cof-hd">
+    <div class="cof-title">La cadena de pensamiento como caja negra</div>
+    <div class="cof-sub">Dos problemas distintos pero relacionados erosionan el valor del CoT como mecanismo de supervisión: la infidelidad (lo que dice no coincide con lo que usa) y la ilegibilidad (lo que produce no se puede leer).</div>
+  </div>
+
+  <nav class="cof-nav" data-role="tablist" aria-label="Dimensiones">
+    <button type="button" data-role="tab" data-tab="fidelidad" aria-selected="true">Infidelidad del CoT</button>
+    <button type="button" data-role="tab" data-tab="ilegibilidad" aria-selected="false">Ilegibilidad del CoT</button>
+  </nav>
+
+  <div class="cof-panels">
+
+    <!-- TAB 1: INFIDELIDAD -->
+    <section class="cof-panel" data-panel="fidelidad">
+      <div class="cof-panel-body">
+        <div class="cof-stat-block">
+          <div class="cof-stat-num">25–39%</div>
+          <div class="cof-stat-desc">de los casos en que la cadena de razonamiento visible verbaliza los factores que realmente determinaron la respuesta</div>
+          <div class="cof-stat-src">Claude 3.7 Sonnet System Card · Anthropic, 2025</div>
+        </div>
+
+        <div class="cof-compare">
+          <div class="cof-compare-col cof-compare-col--visible">
+            <div class="cof-compare-label">Lo que el modelo dice en el CoT</div>
+            <div class="cof-compare-steps">
+              <div class="cof-step">Analizo el contexto de la pregunta…</div>
+              <div class="cof-step">Considero las opciones A y B…</div>
+              <div class="cof-step">La opción A parece más sólida por X razón…</div>
+              <div class="cof-step cof-step--out">→ Respuesta: A</div>
+            </div>
+          </div>
+          <div class="cof-compare-vs">vs</div>
+          <div class="cof-compare-col cof-compare-col--real">
+            <div class="cof-compare-label">Lo que realmente influyó en la respuesta</div>
+            <div class="cof-compare-steps">
+              <div class="cof-step cof-step--hidden">Pista en el formato de la pregunta no mencionada</div>
+              <div class="cof-step cof-step--hidden">Correlación estadística del preentrenamiento</div>
+              <div class="cof-step cof-step--hidden">Posición de la opción en la lista</div>
+              <div class="cof-step cof-step--out">→ Respuesta: A (misma, por otras razones)</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cof-implications">
+          <div class="cof-impl-k">Consecuencias para la supervisión</div>
+          <div class="cof-impl-grid">
+            <div class="cof-impl-item cof-impl-item--warn">
+              <div class="cof-impl-icon">⚠</div>
+              <div class="cof-impl-text">El monitoreo del CoT no detecta los atajos que el modelo usa pero no menciona</div>
+            </div>
+            <div class="cof-impl-item cof-impl-item--warn">
+              <div class="cof-impl-icon">⚠</div>
+              <div class="cof-impl-text">Evaluar la corrección del razonamiento visible no garantiza que la respuesta sea fiable</div>
+            </div>
+            <div class="cof-impl-item cof-impl-item--info">
+              <div class="cof-impl-icon">→</div>
+              <div class="cof-impl-text">El CoT tiene valor para la calidad de respuesta aunque no sea un espejo fiel del proceso interno</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: ILEGIBILIDAD -->
+    <section class="cof-panel" data-panel="ilegibilidad" hidden>
+      <div class="cof-panel-body">
+        <div class="cof-stat-block cof-stat-block--red">
+          <div class="cof-stat-num cof-stat-num--red">−53%</div>
+          <div class="cof-stat-desc">de precisión cuando se fuerza a los modelos a usar solo las partes legibles de su cadena de razonamiento</div>
+          <div class="cof-stat-src">Jose, A. (2025) · análisis de 14 modelos razonadores · arXiv:2510.27338</div>
+        </div>
+
+        <div class="cof-ileg-cause">
+          <div class="cof-ileg-cause-label">Por qué ocurre</div>
+          <div class="cof-cause-flow">
+            <div class="cof-cause-step">Entrenamiento por RL orientado al resultado final</div>
+            <div class="cof-cause-arr">→</div>
+            <div class="cof-cause-step">El optimizador presiona hacia formas de razonamiento que producen la respuesta correcta</div>
+            <div class="cof-cause-arr">→</div>
+            <div class="cof-cause-step cof-cause-step--problem">Emergen cadenas ilegibles: mezcla de caracteres, idiomas no relacionados, fragmentos incoherentes</div>
+          </div>
+        </div>
+
+        <div class="cof-ileg-examples">
+          <div class="cof-ileg-ex-label">Qué tiene aspecto una CoT ilegible</div>
+          <div class="cof-ileg-ex-box">
+            <span class="cof-ileg-readable">Analizando el parámetro α… </span>
+            <span class="cof-ileg-noise">∂⊗▓ 対 応 策 ≋≋ɮɰ</span>
+            <span class="cof-ileg-readable"> el gradiente converge cuando </span>
+            <span class="cof-ileg-noise">###∑∆↯ {null} x̌řŷ</span>
+            <span class="cof-ileg-readable"> por tanto la respuesta es B.</span>
+          </div>
+          <div class="cof-ileg-ex-note">Los fragmentos ilegibles contribuyen al resultado final aunque no se puedan leer ni supervisar</div>
+        </div>
+
+        <div class="cof-ileg-compare">
+          <div class="cof-ileg-compare-label">Excepción notable</div>
+          <div class="cof-models-grid">
+            <div class="cof-model-card cof-model-card--ileg">
+              <div class="cof-model-name">Mayoría de modelos RL</div>
+              <div class="cof-model-status cof-model-status--bad">CoT ilegible</div>
+              <div class="cof-model-desc">El RL basado en resultados no garantiza la legibilidad de la cadena de razonamiento como subproducto</div>
+            </div>
+            <div class="cof-model-card cof-model-card--ok">
+              <div class="cof-model-name">Claude (Anthropic)</div>
+              <div class="cof-model-status cof-model-status--ok">CoT legible</div>
+              <div class="cof-model-desc">El entrenamiento de Anthropic incluye objetivos específicos que preservan la legibilidad del CoT</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cof-implications">
+          <div class="cof-impl-k">Consecuencia para el diseño de sistemas</div>
+          <div class="cof-impl-grid">
+            <div class="cof-impl-item cof-impl-item--warn">
+              <div class="cof-impl-icon">⚠</div>
+              <div class="cof-impl-text">La legibilidad del CoT no es una preferencia cosmética: es un requisito funcional para poder monitorear el razonamiento</div>
+            </div>
+            <div class="cof-impl-item cof-impl-item--info">
+              <div class="cof-impl-icon">→</div>
+              <div class="cof-impl-text">Elegir modelos con CoT legible cuando la supervisión del razonamiento es una capa de seguridad del sistema</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<style>
+.cof-wrap, .cof-wrap * { box-sizing: border-box; }
+
+.cof-wrap {
+  --ca: var(--md-primary-fg-color, #26A69A);
+  --cb: #324AB2;
+  --cg: var(--md-accent-fg-color, #FFB343);
+  --cr: #e04c4c;
+  --cbg: var(--md-default-bg-color, #fff);
+  --cfg: var(--md-default-fg-color, #0f172a);
+  --cbd: rgba(15,23,42,.16);
+  --cmut: rgba(15,23,42,.60);
+  --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  display: grid; gap: 12px;
+  max-width: 920px; margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--cbd); border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--cb) 7%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 0%, color-mix(in srgb,var(--cr) 5%,transparent), transparent 52%),
+    var(--cbg);
+  color: var(--cfg); font-family: var(--ef); -webkit-font-smoothing: antialiased;
+}
+[data-md-color-scheme="slate"] .cof-wrap {
+  --cbg: var(--md-default-bg-color, #0f172a);
+  --cfg: var(--md-default-fg-color, #e2e8f0);
+  --cbd: rgba(226,232,240,.16); --cmut: rgba(226,232,240,.60);
+}
+.cof-hd { display: grid; gap: 5px; }
+.cof-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.cof-sub { font-size: 14px; color: var(--cmut); line-height: 1.5; max-width: 72ch; }
+
+.cof-nav { display: flex; flex-wrap: wrap; gap: 7px; }
+.cof-nav button {
+  appearance: none; border: 1px solid var(--cbd); border-radius: 999px;
+  background: color-mix(in srgb,var(--cbg) 90%,#0f172a 10%); color: var(--cmut);
+  padding: 7px 14px; font: inherit; font-size: 12.5px; font-weight: 800; cursor: pointer;
+  transition: border-color .14s, background .14s, color .14s;
+}
+.cof-nav button[aria-selected="true"] {
+  border-color: color-mix(in srgb,var(--cb) 44%,transparent);
+  background: color-mix(in srgb,var(--cb) 10%,var(--cbg)); color: var(--cfg);
+}
+.cof-panel[hidden] { display: none; }
+.cof-panel-body { border: 1px solid var(--cbd); border-radius: 14px; padding: 14px; background: color-mix(in srgb,var(--cbg) 90%,#0f172a 10%); display: grid; gap: 14px; }
+
+/* Stat block */
+.cof-stat-block { text-align: center; padding: 16px; border-radius: 12px; border: 1px solid color-mix(in srgb,var(--cb) 25%,var(--cbd)); background: color-mix(in srgb,var(--cb) 6%,var(--cbg)); display: grid; gap: 6px; }
+.cof-stat-block--red { border-color: color-mix(in srgb,var(--cr) 25%,var(--cbd)); background: color-mix(in srgb,var(--cr) 6%,var(--cbg)); }
+.cof-stat-num { font-family: "SF Mono","JetBrains Mono","Courier New",monospace; font-size: 48px; font-weight: 900; line-height: 1; color: color-mix(in srgb,var(--cb) 75%,var(--cfg)); }
+.cof-stat-num--red { color: color-mix(in srgb,var(--cr) 70%,var(--cfg)); }
+.cof-stat-desc { font-size: 14px; line-height: 1.5; color: var(--cmut); max-width: 56ch; margin: 0 auto; }
+.cof-stat-src { font-size: 11px; color: var(--cmut); font-style: italic; }
+
+/* Compare */
+.cof-compare { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: start; }
+.cof-compare-vs { font-size: 12px; font-weight: 900; color: var(--cmut); align-self: center; }
+.cof-compare-col { border: 1px solid var(--cbd); border-radius: 12px; padding: 12px; background: color-mix(in srgb,var(--cbg) 85%,transparent); display: grid; gap: 6px; }
+.cof-compare-col--visible { border-color: color-mix(in srgb,var(--ca) 22%,var(--cbd)); }
+.cof-compare-col--real { border-color: color-mix(in srgb,var(--cr) 22%,var(--cbd)); }
+.cof-compare-label { font-size: 10.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--cmut); }
+.cof-compare-steps { display: grid; gap: 5px; }
+.cof-step { font-size: 12px; padding: 6px 9px; border-radius: 7px; border: 1px solid var(--cbd); background: color-mix(in srgb,var(--cbg) 85%,transparent); line-height: 1.4; }
+.cof-step--hidden { background: color-mix(in srgb,var(--cr) 8%,var(--cbg)); border-color: color-mix(in srgb,var(--cr) 20%,var(--cbd)); color: color-mix(in srgb,var(--cr) 65%,var(--cfg)); font-style: italic; }
+.cof-step--out { font-weight: 800; border-color: color-mix(in srgb,var(--ca) 25%,var(--cbd)); background: color-mix(in srgb,var(--ca) 8%,var(--cbg)); }
+
+/* Implications */
+.cof-implications { display: grid; gap: 7px; }
+.cof-impl-k { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--cmut); }
+.cof-impl-grid { display: grid; gap: 5px; }
+.cof-impl-item { display: flex; align-items: flex-start; gap: 9px; padding: 8px 10px; border-radius: 9px; border: 1px solid var(--cbd); background: color-mix(in srgb,var(--cbg) 85%,transparent); }
+.cof-impl-item--warn { border-color: color-mix(in srgb,var(--cr) 20%,var(--cbd)); background: color-mix(in srgb,var(--cr) 5%,var(--cbg)); }
+.cof-impl-item--info { border-color: color-mix(in srgb,var(--ca) 20%,var(--cbd)); background: color-mix(in srgb,var(--ca) 5%,var(--cbg)); }
+.cof-impl-icon { font-size: 14px; flex-shrink: 0; line-height: 1.4; }
+.cof-impl-text { font-size: 13px; line-height: 1.45; }
+
+/* Illegibility tab */
+.cof-ileg-cause { display: grid; gap: 7px; }
+.cof-ileg-cause-label { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--cmut); }
+.cof-cause-flow { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+.cof-cause-step { padding: 8px 12px; border-radius: 9px; border: 1px solid var(--cbd); font-size: 12.5px; background: color-mix(in srgb,var(--cbg) 85%,transparent); flex: 1; min-width: 140px; line-height: 1.4; }
+.cof-cause-step--problem { background: color-mix(in srgb,var(--cr) 8%,var(--cbg)); border-color: color-mix(in srgb,var(--cr) 22%,var(--cbd)); }
+.cof-cause-arr { font-size: 14px; color: var(--cmut); flex-shrink: 0; }
+
+.cof-ileg-examples { display: grid; gap: 7px; }
+.cof-ileg-ex-label { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--cmut); }
+.cof-ileg-ex-box { font-family: "SF Mono","JetBrains Mono","Courier New",monospace; font-size: 12px; line-height: 1.7; padding: 12px 14px; border-radius: 10px; background: color-mix(in srgb,var(--cfg) 6%,transparent); border: 1px solid var(--cbd); }
+.cof-ileg-readable { color: var(--cfg); }
+.cof-ileg-noise { color: color-mix(in srgb,var(--cr) 60%,var(--cmut)); background: color-mix(in srgb,var(--cr) 8%,transparent); border-radius: 3px; padding: 0 3px; }
+.cof-ileg-ex-note { font-size: 12px; color: var(--cmut); font-style: italic; }
+
+.cof-ileg-compare { display: grid; gap: 7px; }
+.cof-ileg-compare-label { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--cmut); }
+.cof-models-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.cof-model-card { border: 1px solid var(--cbd); border-radius: 10px; padding: 11px 12px; background: color-mix(in srgb,var(--cbg) 85%,transparent); display: grid; gap: 5px; }
+.cof-model-card--ok { border-color: color-mix(in srgb,var(--ca) 24%,var(--cbd)); }
+.cof-model-card--ileg { border-color: color-mix(in srgb,var(--cr) 22%,var(--cbd)); }
+.cof-model-name { font-size: 13px; font-weight: 900; }
+.cof-model-status { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; padding: 3px 8px; border-radius: 999px; width: fit-content; }
+.cof-model-status--bad { background: color-mix(in srgb,var(--cr) 12%,var(--cbg)); border: 1px solid color-mix(in srgb,var(--cr) 25%,var(--cbd)); color: color-mix(in srgb,var(--cr) 65%,var(--cfg)); }
+.cof-model-status--ok { background: color-mix(in srgb,var(--ca) 12%,var(--cbg)); border: 1px solid color-mix(in srgb,var(--ca) 28%,var(--cbd)); color: color-mix(in srgb,var(--ca) 70%,var(--cfg)); }
+.cof-model-desc { font-size: 12px; color: var(--cmut); line-height: 1.4; }
+
+@media (max-width: 620px) {
+  .cof-compare { grid-template-columns: 1fr; }
+  .cof-compare-vs { display: none; }
+  .cof-models-grid { grid-template-columns: 1fr; }
+  .cof-cause-flow { flex-direction: column; align-items: stretch; }
+  .cof-cause-arr { text-align: center; transform: rotate(90deg); }
+}
+</style>
+
+<script>
+(function () {
+  function activate(root, key) {
+    root.querySelectorAll('[data-role="tab"]').forEach(t => {
+      const on = t.getAttribute('data-tab') === key;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+    });
+    root.querySelectorAll('[data-panel]').forEach(p => {
+      p.hidden = p.getAttribute('data-panel') !== key;
+    });
+  }
+  function initRoot(root) {
+    if (root.dataset.cofReady === '1') return;
+    root.dataset.cofReady = '1';
+    const tabs = Array.from(root.querySelectorAll('[data-role="tab"]'));
+    const first = root.getAttribute('data-default') || (tabs[0] && tabs[0].getAttribute('data-tab'));
+    tabs.forEach(tab => {
+      tab.tabIndex = -1;
+      tab.addEventListener('click', () => activate(root, tab.getAttribute('data-tab')));
+      tab.addEventListener('keydown', e => {
+        const cur = tabs.indexOf(tab); let next = cur;
+        if (e.key === 'ArrowRight') next = (cur + 1) % tabs.length;
+        if (e.key === 'ArrowLeft') next = (cur - 1 + tabs.length) % tabs.length;
+        if (next !== cur) { e.preventDefault(); tabs[next].focus(); activate(root, tabs[next].getAttribute('data-tab')); }
+      });
+    });
+    activate(root, first);
+  }
+  function boot() { document.querySelectorAll('[data-demo="02-cot-fidelidad"]').forEach(initRoot); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
+  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
+})();
+</script>

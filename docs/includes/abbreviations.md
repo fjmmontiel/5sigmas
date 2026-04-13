@@ -24,6 +24,7 @@
 *[prior]: creencia inicial sobre cómo es el mundo antes de ver datos; en modelos de lenguaje, sesgos aprendidos durante el entrenamiento que influyen en sus respuestas
 
 <!-- Modelos razonadores -->
+*[sycophancy]: tendencia de los modelos de lenguaje a validar las preferencias del usuario incluso cuando están equivocados, anteponiendo la aprobación a la precisión factual
 *[RLVR]: Reinforcement Learning with Verifiable Rewards: variante de RL donde la señal de recompensa es una verificación automática de corrección, sin depender de evaluadores humanos
 *[GRPO]: Group Relative Policy Optimization: algoritmo de entrenamiento que elimina el modelo crítico generando varios intentos del mismo problema y calculando ventajas relativas al grupo
 *[CoT]: Chain-of-Thought: técnica donde el modelo genera pasos intermedios explícitos antes de producir la respuesta final
