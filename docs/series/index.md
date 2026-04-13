@@ -38,13 +38,20 @@ Divulgación técnica sobre IA organizada en series temáticas. Cada serie es un
   <div style="margin-top:auto;padding-top:.5rem;font-size:.85rem;color:#7cc7ff;font-weight:600">Leer →</div>
 </a>
 
+<a href="/series/modelos-razonadores/00_presentacion_serie/" style="flex:1;min-width:220px;text-decoration:none;border-radius:12px;border:1px solid rgba(255,179,67,.3);padding:1.25rem 1.25rem 1rem;display:flex;flex-direction:column;gap:.5rem;color:inherit">
+  <div style="font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:#FFB343;font-weight:700">Terminada · Técnico · 5 capítulos</div>
+  <div style="font-weight:600;font-size:1rem;line-height:1.3">Modelos razonadores</div>
+  <div style="font-size:.88rem;opacity:.75;line-height:1.45">Test-time compute, cadenas de pensamiento y los costes reales de razonar en producción. Qué ganas y qué pagas cuando un modelo "piensa más".</div>
+  <div style="margin-top:auto;padding-top:.5rem;font-size:.85rem;color:#FFB343;font-weight:600">Leer →</div>
+</a>
+
 </div>
 
 <div style="margin:2rem 0 1rem" markdown="1">
 
 ### Por dónde empezar
 
-Si es tu primer contacto con la IA, la serie [Fundamentos de IA e IA generativa](/series/fundamentos-ia-iag/00_presentacion_serie/) establece el vocabulario y las distinciones básicas que las otras series dan por supuestas. Si ya tienes base conceptual y quieres entender cómo llegamos hasta aquí, [De las cavernas a la AGI](/series/from-cave-to-agi/00_presentacion_serie/) ofrece el contexto histórico y técnico completo. Si te interesa la frontera actual de modelos que procesan texto, imagen y audio al mismo tiempo, empieza por [Multimodalidad en IA generativa](/series/multimodalidad-iag/00_presentacion_serie/).
+Si es tu primer contacto con la IA, la serie [Fundamentos de IA e IA generativa](/series/fundamentos-ia-iag/00_presentacion_serie/) establece el vocabulario y las distinciones básicas que las otras series dan por supuestas. Si ya tienes base conceptual y quieres entender cómo llegamos hasta aquí, [De las cavernas a la AGI](/series/from-cave-to-agi/00_presentacion_serie/) ofrece el contexto histórico y técnico completo. Si te interesa la frontera actual de modelos que procesan texto, imagen y audio al mismo tiempo, empieza por [Multimodalidad en IA generativa](/series/multimodalidad-iag/00_presentacion_serie/). Si quieres entender cómo y por qué los modelos razonadores son distintos, qué es el test-time compute y qué costes reales introduce en producción, sigue con [Modelos razonadores](/series/modelos-razonadores/00_presentacion_serie/).
 
 </div>
 
@@ -59,6 +66,7 @@ Si es tu primer contacto con la IA, la serie [Fundamentos de IA e IA generativa]
 <a href="/temas/multimodalidad/" style="text-decoration:none;border-radius:20px;border:1px solid rgba(124,199,255,.35);padding:.3rem .85rem;font-size:.82rem;color:#7cc7ff;font-weight:600;white-space:nowrap">Multimodalidad</a>
 <a href="/temas/transformer/" style="text-decoration:none;border-radius:20px;border:1px solid rgba(38,166,154,.35);padding:.3rem .85rem;font-size:.82rem;color:#26A69A;font-weight:600;white-space:nowrap">Transformer</a>
 <a href="/temas/evaluacion-modelos/" style="text-decoration:none;border-radius:20px;border:1px solid rgba(255,179,67,.35);padding:.3rem .85rem;font-size:.82rem;color:#FFB343;font-weight:600;white-space:nowrap">Evaluación de modelos</a>
+<a href="/temas/razonamiento/" style="text-decoration:none;border-radius:20px;border:1px solid rgba(255,179,67,.35);padding:.3rem .85rem;font-size:.82rem;color:#FFB343;font-weight:600;white-space:nowrap">Razonamiento</a>
 </div>
 
 </div>

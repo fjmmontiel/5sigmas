@@ -1,8 +1,8 @@
 ---
 title: Test-Time Compute
-description: "Test-time compute como nueva ley de escala para los modelos razonadores. Las tres palancas para aprovecharlo (más pasos, más candidatos, más estructura) y su relación con calidad, coste y latencia."
+description: "Test-time compute como segunda ley de escala. Las tres palancas (más pasos, más candidatos, más estructura) y su perfil de calidad, coste y latencia en modelos razonadores."
 date: 2026-04-10
-keywords: "test-time compute, razonamiento LLM, best-of-N, chain of thought, PRM, ORM, leyes de escala, razonamiento extendido, budget forcing, DeepSeek R1"
+keywords: "test-time compute, razonamiento LLM, best-of-N, chain of thought, PRM, ORM, leyes de escala, razonamiento extendido, budget forcing, DeepSeek R1, MCTS, self-consistency, Tree of Thoughts"
 tags:
   - IA
   - LLMs

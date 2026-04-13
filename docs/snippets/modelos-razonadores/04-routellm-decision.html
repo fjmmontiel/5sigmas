@@ -1,0 +1,342 @@
+<div class="rl-wrap" data-demo="04-routellm-decision" data-default="flujo">
+  <div class="rl-hd">
+    <div class="rl-title">RouteLLM: enrutar cada query al modelo correcto</div>
+    <div class="rl-sub">Un clasificador ligero decide qué nivel de compute necesita cada petición. Las sencillas van a modelos rápidos y baratos; solo las complejas activan el razonamiento profundo.</div>
+  </div>
+
+  <nav class="rl-nav" data-role="tablist" aria-label="Secciones">
+    <button type="button" data-role="tab" data-tab="flujo" aria-selected="true">Flujo de decisión</button>
+    <button type="button" data-role="tab" data-tab="clasificador" aria-selected="false">El clasificador</button>
+    <button type="button" data-role="tab" data-tab="impacto" aria-selected="false">Impacto en coste</button>
+  </nav>
+
+  <div class="rl-panels">
+
+    <!-- TAB 1: Flujo -->
+    <section class="rl-panel" data-panel="flujo">
+      <div class="rl-intro">El router opera antes de que la query llegue al modelo de inferencia. Añade latencia mínima (~50ms) pero puede reducir el coste total en un 60-80%.</div>
+      <div class="rl-flow">
+
+        <div class="rl-node rl-node--query">
+          <div class="rl-node-icon">📥</div>
+          <div class="rl-node-label">Query de usuario</div>
+          <div class="rl-node-examples">
+            <div class="rl-eg rl-eg--simple">"¿Cuánto es 15% de 240?"</div>
+            <div class="rl-eg rl-eg--medium">"Resume este artículo en 3 puntos"</div>
+            <div class="rl-eg rl-eg--complex">"Analiza los fallos de razonamiento en este argumento filosófico"</div>
+          </div>
+        </div>
+
+        <div class="rl-arr">↓</div>
+
+        <div class="rl-node rl-node--router">
+          <div class="rl-node-icon">🔀</div>
+          <div class="rl-node-label">Router (clasificador ligero)</div>
+          <div class="rl-node-desc">Modelo pequeño (~1B parámetros) que predice la dificultad de la query. Opera en ~50ms, mucho menos que el tiempo de inferencia del modelo destino.</div>
+          <div class="rl-score-bar">
+            <div class="rl-score-label">Puntuación de complejidad</div>
+            <div class="rl-score-track">
+              <div class="rl-score-fill"></div>
+              <div class="rl-score-cursor"></div>
+            </div>
+            <div class="rl-score-labels">
+              <span>Simple</span>
+              <span>Medio</span>
+              <span>Complejo</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="rl-fork">
+          <div class="rl-fork-branch rl-fork-branch--left">
+            <div class="rl-fork-arr">↙</div>
+            <div class="rl-fork-label">Complejidad baja</div>
+          </div>
+          <div class="rl-fork-branch rl-fork-branch--center">
+            <div class="rl-fork-arr">↓</div>
+            <div class="rl-fork-label">Complejidad media</div>
+          </div>
+          <div class="rl-fork-branch rl-fork-branch--right">
+            <div class="rl-fork-arr">↘</div>
+            <div class="rl-fork-label">Complejidad alta</div>
+          </div>
+        </div>
+
+        <div class="rl-destinations">
+          <div class="rl-dest rl-dest--fast">
+            <div class="rl-dest-icon">⚡</div>
+            <div class="rl-dest-name">Modelo rápido</div>
+            <div class="rl-dest-ex">GPT-4o Mini, Haiku</div>
+            <div class="rl-dest-stats">
+              <div class="rl-stat-row"><span>Latencia</span><strong class="rl-stat--good">0.3s</strong></div>
+              <div class="rl-stat-row"><span>Coste</span><strong class="rl-stat--good">$0.15/M</strong></div>
+              <div class="rl-stat-row"><span>Queries</span><strong>~60%</strong></div>
+            </div>
+          </div>
+          <div class="rl-dest rl-dest--mid">
+            <div class="rl-dest-icon">🔧</div>
+            <div class="rl-dest-name">Modelo estándar</div>
+            <div class="rl-dest-ex">GPT-4o, Claude Sonnet</div>
+            <div class="rl-dest-stats">
+              <div class="rl-stat-row"><span>Latencia</span><strong class="rl-stat--mid">1.2s</strong></div>
+              <div class="rl-stat-row"><span>Coste</span><strong class="rl-stat--mid">$2.5/M</strong></div>
+              <div class="rl-stat-row"><span>Queries</span><strong>~30%</strong></div>
+            </div>
+          </div>
+          <div class="rl-dest rl-dest--heavy">
+            <div class="rl-dest-icon">🧠</div>
+            <div class="rl-dest-name">Modelo razonador</div>
+            <div class="rl-dest-ex">o3, Claude 3.7, R1</div>
+            <div class="rl-dest-stats">
+              <div class="rl-stat-row"><span>Latencia</span><strong class="rl-stat--bad">8–45s</strong></div>
+              <div class="rl-stat-row"><span>Coste</span><strong class="rl-stat--bad">$15–60/M</strong></div>
+              <div class="rl-stat-row"><span>Queries</span><strong>~10%</strong></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TAB 2: Clasificador -->
+    <section class="rl-panel" data-panel="clasificador" hidden>
+      <div class="rl-intro">El clasificador no necesita ser perfecto — solo necesita ser bueno suficiente para que el ahorro de coste supere los errores de clasificación.</div>
+      <div class="rl-thresh">
+        <div class="rl-thresh-title">Umbral de enrutamiento — calibrado hacia el modelo fuerte</div>
+        <div class="rl-tv-track">
+          <div class="rl-tv-fast">
+            <span class="rl-tv-model">Rápido ⚡</span>
+            <span class="rl-tv-pct">~65%</span>
+          </div>
+          <div class="rl-tv-strong">
+            <span class="rl-tv-model">Razonador 🧠</span>
+            <span class="rl-tv-pct">~35%</span>
+          </div>
+        </div>
+        <div class="rl-tv-errs">
+          <div class="rl-tv-err rl-tv-err--i">
+            <div class="rl-tv-err-k">Error tipo I</div>
+            <div class="rl-tv-err-v">Query simple va al razonador: coste extra, respuesta correcta</div>
+          </div>
+          <div class="rl-tv-err rl-tv-err--ii">
+            <div class="rl-tv-err-k">Error tipo II</div>
+            <div class="rl-tv-err-v">Query compleja va al rápido: respuesta de menor calidad</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: Impacto -->
+    <section class="rl-panel" data-panel="impacto" hidden>
+      <div class="rl-intro">El paper de RouteLLM (2024) reporta reducciones de coste del 85% manteniendo el 95% del rendimiento del modelo fuerte en benchmarks estándar.</div>
+      <div class="rl-impact-bars">
+        <div class="rl-impact-row">
+          <div class="rl-impact-label">Sin routing — todo al modelo fuerte</div>
+          <div class="rl-impact-bars-inner">
+            <div class="rl-impact-bar-row">
+              <div class="rl-ib-label">Coste</div>
+              <div class="rl-ib-track"><div class="rl-ib-fill" style="width:100%;background:#e04c4c"></div></div>
+              <div class="rl-ib-val">100% (baseline)</div>
+            </div>
+            <div class="rl-impact-bar-row">
+              <div class="rl-ib-label">Rendimiento</div>
+              <div class="rl-ib-track"><div class="rl-ib-fill" style="width:100%;background:#26A69A"></div></div>
+              <div class="rl-ib-val">100%</div>
+            </div>
+          </div>
+        </div>
+        <div class="rl-impact-row">
+          <div class="rl-impact-label">Con routing (umbral conservador)</div>
+          <div class="rl-impact-bars-inner">
+            <div class="rl-impact-bar-row">
+              <div class="rl-ib-label">Coste</div>
+              <div class="rl-ib-track"><div class="rl-ib-fill" style="width:35%;background:#FFB343"></div></div>
+              <div class="rl-ib-val">35%</div>
+            </div>
+            <div class="rl-impact-bar-row">
+              <div class="rl-ib-label">Rendimiento</div>
+              <div class="rl-ib-track"><div class="rl-ib-fill" style="width:98%;background:#26A69A"></div></div>
+              <div class="rl-ib-val">98%</div>
+            </div>
+          </div>
+        </div>
+        <div class="rl-impact-row">
+          <div class="rl-impact-label">Con routing (umbral agresivo)</div>
+          <div class="rl-impact-bars-inner">
+            <div class="rl-impact-bar-row">
+              <div class="rl-ib-label">Coste</div>
+              <div class="rl-ib-track"><div class="rl-ib-fill" style="width:15%;background:#26A69A"></div></div>
+              <div class="rl-ib-val">15%</div>
+            </div>
+            <div class="rl-impact-bar-row">
+              <div class="rl-ib-label">Rendimiento</div>
+              <div class="rl-ib-track"><div class="rl-ib-fill" style="width:95%;background:#FFB343"></div></div>
+              <div class="rl-ib-val">95%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="rl-impact-note">El routing no es solo una optimización de infraestructura — es una decisión de producto. Implica decidir qué tipo de errores el sistema está dispuesto a aceptar y cuánto cuesta la fiabilidad adicional.</div>
+    </section>
+
+  </div>
+</div>
+
+<style>
+.rl-wrap, .rl-wrap * { box-sizing: border-box; }
+.rl-wrap {
+  --la: #26A69A; --lb: #324AB2; --lg: #FFB343; --lc: #7cc7ff; --lr: #e04c4c;
+  --lbg: var(--md-default-bg-color, #fff);
+  --lfg: var(--md-default-fg-color, #0f172a);
+  --lbd: rgba(15,23,42,.14); --lmut: rgba(15,23,42,.58);
+  --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  display: grid; gap: 14px; max-width: 940px; margin: 0 auto;
+  padding: clamp(14px,2vw,24px);
+  border: 1px solid var(--lbd); border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--lc) 5%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 0%, color-mix(in srgb,var(--la) 5%,transparent), transparent 52%),
+    var(--lbg);
+  color: var(--lfg); font-family: var(--ef); -webkit-font-smoothing: antialiased;
+}
+[data-md-color-scheme="slate"] .rl-wrap {
+  --lbg: var(--md-default-bg-color, #0f172a);
+  --lfg: var(--md-default-fg-color, #e2e8f0);
+  --lbd: rgba(226,232,240,.15); --lmut: rgba(226,232,240,.58);
+}
+.rl-hd { display: grid; gap: 4px; }
+.rl-title { font-size: clamp(15px,2vw,21px); font-weight: 900; letter-spacing: -.02em; }
+.rl-sub { font-size: 13.5px; color: var(--lmut); line-height: 1.5; }
+.rl-nav { display: flex; flex-wrap: wrap; gap: 7px; }
+.rl-nav button {
+  appearance: none; border: 1px solid var(--lbd); border-radius: 999px;
+  background: color-mix(in srgb,var(--lbg) 90%,#0f172a 10%); color: var(--lmut);
+  padding: 7px 16px; font: inherit; font-size: 12.5px; font-weight: 800; cursor: pointer;
+  transition: border-color .14s, background .14s, color .14s;
+}
+.rl-nav button[aria-selected="true"] {
+  border-color: color-mix(in srgb,var(--lc) 44%,transparent);
+  background: color-mix(in srgb,var(--lc) 10%,var(--lbg)); color: var(--lfg);
+}
+.rl-panel[hidden] { display: none; }
+.rl-intro { font-size: 13px; color: var(--lmut); font-style: italic; border-left: 3px solid color-mix(in srgb,var(--lc) 36%,transparent); padding-left: 12px; }
+
+/* FLUJO */
+.rl-flow { display: grid; gap: 8px; }
+.rl-node { border: 1px solid var(--lbd); border-radius: 14px; padding: 12px 14px; background: color-mix(in srgb,var(--lbg) 88%,#0f172a 12%); display: grid; gap: 8px; }
+.rl-node--query { border-color: color-mix(in srgb,var(--lc) 25%,var(--lbd)); }
+.rl-node--router { border-color: color-mix(in srgb,var(--lg) 25%,var(--lbd)); }
+.rl-node-icon { font-size: 22px; line-height: 1; }
+.rl-node-label { font-size: 14px; font-weight: 900; }
+.rl-node-desc { font-size: 12px; color: var(--lmut); line-height: 1.4; }
+.rl-node-examples { display: grid; gap: 5px; }
+.rl-eg { padding: 5px 10px; border-radius: 8px; font-size: 12px; font-style: italic; }
+.rl-eg--simple { background: color-mix(in srgb,var(--la) 8%,transparent); border-left: 3px solid var(--la); }
+.rl-eg--medium { background: color-mix(in srgb,var(--lg) 8%,transparent); border-left: 3px solid var(--lg); }
+.rl-eg--complex { background: color-mix(in srgb,var(--lr) 8%,transparent); border-left: 3px solid var(--lr); }
+.rl-score-bar { display: grid; gap: 4px; }
+.rl-score-label { font-size: 10px; font-weight: 700; color: var(--lmut); }
+.rl-score-track { height: 12px; background: linear-gradient(90deg, color-mix(in srgb,var(--la) 40%,transparent) 0%, color-mix(in srgb,var(--lg) 40%,transparent) 50%, color-mix(in srgb,var(--lr) 40%,transparent) 100%); border-radius: 999px; position: relative; border: 1px solid var(--lbd); }
+.rl-score-cursor { position: absolute; left: 82%; top: 50%; transform: translate(-50%,-50%); width: 16px; height: 16px; border-radius: 50%; background: var(--lr); border: 2px solid var(--lbg); box-shadow: 0 0 0 2px var(--lr); }
+.rl-score-labels { display: flex; justify-content: space-between; font-size: 9px; color: var(--lmut); font-weight: 700; }
+.rl-arr { text-align: center; font-size: 20px; color: var(--lmut); }
+.rl-fork { display: grid; grid-template-columns: 1fr 1fr 1fr; }
+.rl-fork-branch { display: grid; gap: 2px; }
+.rl-fork-branch--left { text-align: left; }
+.rl-fork-branch--center { text-align: center; }
+.rl-fork-branch--right { text-align: right; }
+.rl-fork-arr { font-size: 20px; color: var(--lmut); }
+.rl-fork-label { font-size: 10px; color: var(--lmut); font-weight: 700; }
+.rl-destinations { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.rl-dest { border: 1px solid var(--lbd); border-radius: 12px; padding: 10px 12px; background: color-mix(in srgb,var(--lbg) 88%,#0f172a 12%); display: grid; gap: 6px; align-content: start; }
+.rl-dest--fast { border-color: color-mix(in srgb,var(--la) 25%,var(--lbd)); }
+.rl-dest--mid { border-color: color-mix(in srgb,var(--lg) 25%,var(--lbd)); }
+.rl-dest--heavy { border-color: color-mix(in srgb,var(--lr) 20%,var(--lbd)); }
+.rl-dest-icon { font-size: 20px; }
+.rl-dest-name { font-size: 13px; font-weight: 900; }
+.rl-dest-ex { font-size: 10.5px; color: var(--lmut); }
+.rl-dest-stats { display: grid; gap: 3px; }
+.rl-stat-row { display: flex; justify-content: space-between; font-size: 11px; }
+.rl-stat-row span { color: var(--lmut); }
+.rl-stat--good { color: var(--la); }
+.rl-stat--mid { color: var(--lg); }
+.rl-stat--bad { color: var(--lr); }
+
+/* CLASIFICADOR */
+.rl-clf-methods { display: grid; gap: 8px; }
+/* Threshold viz */
+.rl-thresh { display: grid; gap: 8px; }
+.rl-thresh-title { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; color: var(--lmut); }
+.rl-tv-track { display: flex; height: 44px; border-radius: 10px; overflow: hidden; border: 1px solid var(--lbd); }
+.rl-tv-fast { flex: 65; display: flex; align-items: center; justify-content: space-between; padding: 0 12px; background: color-mix(in srgb,var(--la) 10%,var(--lbg)); border-right: 2px solid var(--lfg); }
+.rl-tv-strong { flex: 35; display: flex; align-items: center; justify-content: space-between; padding: 0 12px; background: color-mix(in srgb,var(--lr) 8%,var(--lbg)); }
+.rl-tv-model { font-size: 11px; font-weight: 900; }
+.rl-tv-pct { font-family: "SF Mono","JetBrains Mono","Courier New",monospace; font-size: 12px; font-weight: 900; color: var(--lmut); }
+.rl-tv-errs { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+.rl-tv-err { border: 1px solid var(--lbd); border-radius: 9px; padding: 8px 10px; display: grid; gap: 3px; }
+.rl-tv-err--i { background: color-mix(in srgb,var(--lg) 6%,var(--lbg)); border-color: color-mix(in srgb,var(--lg) 20%,var(--lbd)); }
+.rl-tv-err--ii { background: color-mix(in srgb,var(--lr) 6%,var(--lbg)); border-color: color-mix(in srgb,var(--lr) 20%,var(--lbd)); }
+.rl-tv-err-k { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; color: var(--lmut); }
+.rl-tv-err-v { font-size: 12px; line-height: 1.4; }
+.rl-method { border: 1px solid var(--lbd); border-radius: 12px; padding: 12px 14px; background: color-mix(in srgb,var(--lbg) 88%,#0f172a 12%); display: grid; gap: 6px; }
+.rl-method-tag { font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; padding: 3px 10px; border-radius: 999px; border: 1px solid; width: fit-content; }
+.rl-method-desc { font-size: 12.5px; line-height: 1.45; }
+.rl-method-why { font-size: 12px; color: var(--lmut); font-style: italic; }
+.rl-clf-tradeoff { display: grid; gap: 7px; }
+.rl-clf-item { border: 1px solid var(--lbd); border-radius: 10px; padding: 10px 12px; background: color-mix(in srgb,var(--lbg) 88%,#0f172a 12%); display: grid; gap: 4px; }
+.rl-clf-item--note { border-color: color-mix(in srgb,var(--lc) 25%,var(--lbd)); background: color-mix(in srgb,var(--lc) 5%,var(--lbg)); }
+.rl-clf-k { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .05em; color: var(--lmut); }
+.rl-clf-v { font-size: 12.5px; color: var(--lfg); line-height: 1.45; }
+
+/* IMPACTO */
+.rl-impact-bars { display: grid; gap: 10px; }
+.rl-impact-row { border: 1px solid var(--lbd); border-radius: 12px; padding: 12px 14px; background: color-mix(in srgb,var(--lbg) 88%,#0f172a 12%); display: grid; gap: 8px; }
+.rl-impact-label { font-size: 12px; font-weight: 900; }
+.rl-impact-bars-inner { display: grid; gap: 6px; }
+.rl-impact-bar-row { display: grid; grid-template-columns: 80px 1fr 80px; align-items: center; gap: 10px; }
+.rl-ib-label { font-size: 11px; font-weight: 700; color: var(--lmut); }
+.rl-ib-track { height: 8px; background: color-mix(in srgb,var(--lfg) 8%,transparent); border-radius: 999px; overflow: hidden; }
+.rl-ib-fill { height: 100%; border-radius: 999px; }
+.rl-ib-val { font-size: 11px; font-weight: 900; font-family: "SF Mono","JetBrains Mono","Courier New",monospace; text-align: right; }
+.rl-impact-note { font-size: 13px; color: var(--lmut); font-style: italic; border-left: 3px solid color-mix(in srgb,var(--lc) 36%,transparent); padding-left: 12px; }
+
+@media (max-width: 680px) {
+  .rl-destinations { grid-template-columns: 1fr; }
+}
+</style>
+
+<script>
+(function () {
+  function activate(root, key) {
+    root.querySelectorAll('[data-role="tab"]').forEach(t => {
+      const on = t.getAttribute('data-tab') === key;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+    });
+    root.querySelectorAll('[data-panel]').forEach(p => {
+      p.hidden = p.getAttribute('data-panel') !== key;
+    });
+  }
+  function initRoot(root) {
+    if (root.dataset.rlReady === '1') return;
+    root.dataset.rlReady = '1';
+    const tabs = Array.from(root.querySelectorAll('[data-role="tab"]'));
+    const first = root.getAttribute('data-default') || (tabs[0] && tabs[0].getAttribute('data-tab'));
+    tabs.forEach(tab => {
+      tab.tabIndex = -1;
+      tab.addEventListener('click', () => activate(root, tab.getAttribute('data-tab')));
+      tab.addEventListener('keydown', e => {
+        const cur = tabs.indexOf(tab); let next = cur;
+        if (e.key === 'ArrowRight') next = (cur + 1) % tabs.length;
+        if (e.key === 'ArrowLeft') next = (cur - 1 + tabs.length) % tabs.length;
+        if (next !== cur) { e.preventDefault(); tabs[next].focus(); activate(root, tabs[next].getAttribute('data-tab')); }
+      });
+    });
+    activate(root, first);
+  }
+  function boot() { document.querySelectorAll('[data-demo="04-routellm-decision"]').forEach(initRoot); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
+  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
+})();
+</script>

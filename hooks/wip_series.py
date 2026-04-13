@@ -11,7 +11,6 @@ import re
 # Series cuyos artículos no deben indexarse todavía.
 # Actualizar aquí cuando una serie pase a completa.
 WIP_SERIES = {
-    "modelos-razonadores",
     "ia-pib-bienestar-energia",
     "datacenters-espacio",
 }

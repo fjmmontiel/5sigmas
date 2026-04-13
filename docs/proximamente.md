@@ -162,15 +162,6 @@ hide:
 
 <div class="prox-grid">
 
-<a href="/series/modelos-razonadores/00_presentacion_serie/" class="prox-card prox-card-amber">
-  <div class="prox-badge" style="color:#FFB343">
-    <span class="prox-dot" style="background:#FFB343"></span>En construcción · Técnico
-  </div>
-  <div class="prox-title">Modelos razonadores</div>
-  <div class="prox-desc">Test-time compute, cadenas de pensamiento y los costes reales de razonar en producción. Qué ganas y qué pagas cuando un modelo "piensa más".</div>
-  <div class="prox-cta" style="color:#FFB343">Ver presentación →</div>
-</a>
-
 <a href="/series/ia-pib-bienestar-energia/00_presentacion_serie/" class="prox-card prox-card-red">
   <div class="prox-badge" style="color:#e06c75">
     <span class="prox-dot" style="background:#e06c75"></span>En construcción · General

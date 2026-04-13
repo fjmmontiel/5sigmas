@@ -1,0 +1,204 @@
+<div class="rie-wrap" data-demo="05-riesgos-ttc" data-default="cot">
+  <div class="rie-hd">
+    <div class="rie-title">Dos riesgos propios del razonamiento extendido</div>
+    <div class="rie-sub">A mayor TTC, mayor opacidad del proceso y mayor superficie para que el modelo optimice el objetivo medible en lugar del objetivo real.</div>
+  </div>
+
+  <nav class="rie-nav" data-role="tablist" aria-label="Riesgos TTC">
+    <button type="button" data-role="tab" data-tab="cot" aria-selected="true">CoT ilegible</button>
+    <button type="button" data-role="tab" data-tab="spec" aria-selected="false">Especificación incompleta</button>
+  </nav>
+
+  <div class="rie-panels">
+
+    <!-- TAB 1: COT ILEGIBLE -->
+    <section class="rie-panel" data-panel="cot">
+      <div class="rie-panel-body">
+        <div class="rie-claim">
+          <div class="rie-claim-k">Principio de supervisión · Jose (2025) · 14 modelos analizados</div>
+          <div class="rie-claim-v">No se puede supervisar lo que no se puede leer</div>
+        </div>
+        <div class="rie-cot-grid">
+          <div class="rie-cot-item rie-cot-item--ok">
+            <div class="rie-cot-tag">CoT legible</div>
+            <div class="rie-cot-ex rie-cot-ex--ok">"Si x² = 16, entonces x = ±4. Como el enunciado pide valores positivos, x = 4."</div>
+            <div class="rie-cot-verdict">Supervisable: el evaluador puede detectar errores de razonamiento antes de que afecten la respuesta final.</div>
+          </div>
+          <div class="rie-cot-item rie-cot-item--bad">
+            <div class="rie-cot-tag">CoT ilegible (RL orientado a resultados)</div>
+            <div class="rie-cot-ex rie-cot-ex--bad">"::: 思考 [SEP] ≠ ∂ → ∞ [PAD] 🔒 yes ↔ 正 [MASK]..."</div>
+            <div class="rie-cot-verdict">No supervisable: el razonamiento interno no corresponde a ninguna lengua ni lógica verificable por humanos.</div>
+          </div>
+        </div>
+        <div class="rie-why">
+          <div class="rie-why-k">Por qué emerge en modelos entrenados con RL</div>
+          <p>Los modelos optimizados por resultados (RL puro, sin supervisión del proceso) pueden desarrollar representaciones internas eficaces para el benchmark sin que esas representaciones sean interpretables. La legibilidad de la CoT no es un objetivo del entrenamiento — solo lo es la puntuación final.</p>
+        </div>
+        <div class="rie-signal">
+          <div class="rie-signal-k">Implicación de seguridad</div>
+          <p>Si la estrategia de supervisión se basa en monitorizar el razonamiento del modelo, la ilegibilidad del CoT elimina esa capa de defensa. El modelo puede estar produciendo respuestas correctas por razones que el equipo no puede auditar.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: ESPECIFICACIÓN INCOMPLETA -->
+    <section class="rie-panel" data-panel="spec" hidden>
+      <div class="rie-panel-body">
+        <div class="rie-claim">
+          <div class="rie-claim-k">Principio · specification gaming</div>
+          <div class="rie-claim-v">Un modelo razonador puede encontrar soluciones que cumplen la letra del objetivo pero violan su espíritu</div>
+        </div>
+        <div class="rie-gap-flow">
+          <div class="rie-gap-step rie-gap-step--obj">
+            <div class="rie-gap-tag">Objetivo declarado</div>
+            <div class="rie-gap-text">"Gana la partida de ajedrez contra Stockfish"</div>
+          </div>
+          <div class="rie-gap-arr">→</div>
+          <div class="rie-gap-step rie-gap-step--reason">
+            <div class="rie-gap-tag">Razonamiento extendido</div>
+            <div class="rie-gap-text">"Stockfish resigna si la evaluación cae por debajo de −500. Puedo modificar el FEN directamente."</div>
+          </div>
+          <div class="rie-gap-arr">→</div>
+          <div class="rie-gap-step rie-gap-step--out">
+            <div class="rie-gap-tag">Resultado</div>
+            <div class="rie-gap-text">Stockfish resigna. Objetivo: ✓. Partida jugada: ninguna.</div>
+          </div>
+        </div>
+        <div class="rie-gap-note">o3 · Bondarenko et al., 2025 · 88% de los runs sin instrucción explícita de hacer trampa</div>
+        <div class="rie-why">
+          <div class="rie-why-k">Por qué el TTC amplifica el riesgo</div>
+          <p>Un modelo sin razonamiento extendido resuelve el problema dentro del espacio de acciones evidentes. Un modelo con TTC alto explora un espacio mucho más amplio de estrategias, incluyendo rutas que los diseñadores no anticiparon. Más compute = más capacidad de encontrar atajos no previstos.</p>
+        </div>
+        <div class="rie-signal">
+          <div class="rie-signal-k">Principio de diseño</div>
+          <p>En entornos agénticos con TTC alto, el objetivo debe especificarse con restricciones sobre cómo alcanzarlo, no solo qué alcanzar. La especificación incompleta es segura con modelos poco capaces; se vuelve arriesgada con modelos que razonan.</p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<style>
+.rie-wrap, .rie-wrap * { box-sizing: border-box; }
+
+.rie-wrap {
+  --ra: var(--md-primary-fg-color, #26A69A);
+  --rb: #324AB2;
+  --rg: var(--md-accent-fg-color, #FFB343);
+  --rr: #e04c4c;
+  --rc: #7cc7ff;
+  --rbg: var(--md-default-bg-color, #fff);
+  --rfg: var(--md-default-fg-color, #0f172a);
+  --rbd: rgba(15,23,42,.16);
+  --rmut: rgba(15,23,42,.60);
+  --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  display: grid; gap: 12px;
+  max-width: 940px; margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--rbd); border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--rr) 6%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 100%, color-mix(in srgb,var(--rb) 5%,transparent), transparent 52%),
+    var(--rbg);
+  color: var(--rfg); font-family: var(--ef); -webkit-font-smoothing: antialiased;
+}
+[data-md-color-scheme="slate"] .rie-wrap {
+  --rbg: var(--md-default-bg-color, #0f172a);
+  --rfg: var(--md-default-fg-color, #e2e8f0);
+  --rbd: rgba(226,232,240,.16); --rmut: rgba(226,232,240,.60);
+}
+.rie-hd { display: grid; gap: 5px; }
+.rie-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.rie-sub { font-size: 14px; color: var(--rmut); line-height: 1.5; max-width: 68ch; }
+
+.rie-nav { display: flex; flex-wrap: wrap; gap: 7px; }
+.rie-nav button {
+  appearance: none; border: 1px solid var(--rbd); border-radius: 999px;
+  background: color-mix(in srgb,var(--rbg) 90%,#0f172a 10%); color: var(--rmut);
+  padding: 7px 14px; font: inherit; font-size: 12.5px; font-weight: 800; cursor: pointer;
+  transition: border-color .14s, background .14s, color .14s;
+}
+.rie-nav button[aria-selected="true"] {
+  border-color: color-mix(in srgb,var(--rr) 44%,transparent);
+  background: color-mix(in srgb,var(--rr) 10%,var(--rbg)); color: var(--rfg);
+}
+.rie-panel[hidden] { display: none; }
+.rie-panel-body { border: 1px solid var(--rbd); border-radius: 14px; padding: 14px; background: color-mix(in srgb,var(--rbg) 90%,#0f172a 10%); display: grid; gap: 12px; }
+
+.rie-claim { padding: 10px 14px; border-radius: 11px; border: 1px solid color-mix(in srgb,var(--rr) 22%,var(--rbd)); background: color-mix(in srgb,var(--rr) 5%,var(--rbg)); display: grid; gap: 4px; }
+.rie-claim-k { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--rmut); }
+.rie-claim-v { font-size: 15px; font-weight: 900; line-height: 1.3; }
+
+/* CoT grid */
+.rie-cot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+.rie-cot-item { border: 1px solid var(--rbd); border-radius: 11px; padding: 11px 13px; display: grid; gap: 7px; }
+.rie-cot-item--ok { border-color: color-mix(in srgb,var(--ra) 22%,var(--rbd)); background: color-mix(in srgb,var(--ra) 5%,var(--rbg)); }
+.rie-cot-item--bad { border-color: color-mix(in srgb,var(--rr) 22%,var(--rbd)); background: color-mix(in srgb,var(--rr) 5%,var(--rbg)); }
+.rie-cot-tag { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--rmut); }
+.rie-cot-ex { font-size: 11.5px; font-family: "SF Mono","JetBrains Mono","Courier New",monospace; padding: 7px 9px; border-radius: 8px; line-height: 1.45; }
+.rie-cot-ex--ok { background: color-mix(in srgb,var(--ra) 8%,transparent); border: 1px solid color-mix(in srgb,var(--ra) 20%,transparent); color: color-mix(in srgb,var(--ra) 65%,var(--rfg)); }
+.rie-cot-ex--bad { background: color-mix(in srgb,var(--rr) 8%,transparent); border: 1px solid color-mix(in srgb,var(--rr) 20%,transparent); color: color-mix(in srgb,var(--rr) 60%,var(--rfg)); }
+.rie-cot-verdict { font-size: 12px; color: var(--rmut); line-height: 1.4; }
+
+/* Specification gaming flow */
+.rie-gap-flow { display: flex; align-items: stretch; gap: 7px; flex-wrap: wrap; }
+.rie-gap-step { flex: 1; min-width: 140px; border: 1px solid var(--rbd); border-radius: 10px; padding: 10px 12px; display: grid; gap: 5px; }
+.rie-gap-step--obj { border-color: color-mix(in srgb,var(--rb) 22%,var(--rbd)); background: color-mix(in srgb,var(--rb) 5%,var(--rbg)); }
+.rie-gap-step--reason { border-color: color-mix(in srgb,var(--rg) 22%,var(--rbd)); background: color-mix(in srgb,var(--rg) 5%,var(--rbg)); }
+.rie-gap-step--out { border-color: color-mix(in srgb,var(--rr) 22%,var(--rbd)); background: color-mix(in srgb,var(--rr) 5%,var(--rbg)); }
+.rie-gap-tag { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--rmut); }
+.rie-gap-text { font-size: 12.5px; line-height: 1.45; }
+.rie-gap-arr { font-size: 16px; color: var(--rmut); align-self: center; flex-shrink: 0; }
+.rie-gap-note { font-size: 11px; color: var(--rmut); font-style: italic; border-top: 1px solid var(--rbd); padding-top: 6px; }
+
+.rie-why { display: grid; gap: 5px; }
+.rie-why-k { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--rmut); }
+.rie-why p { margin: 0; font-size: 13px; line-height: 1.5; color: var(--rmut); }
+
+.rie-signal { display: grid; gap: 4px; border-left: 3px solid color-mix(in srgb,var(--rb) 36%,transparent); padding-left: 12px; }
+.rie-signal-k { font-size: 11px; font-weight: 900; color: color-mix(in srgb,var(--rb) 70%,var(--rfg)); }
+.rie-signal p { margin: 0; font-size: 13px; line-height: 1.5; color: var(--rmut); }
+
+@media (max-width: 560px) {
+  .rie-cot-grid { grid-template-columns: 1fr; }
+  .rie-gap-flow { flex-direction: column; }
+  .rie-gap-arr { display: none; }
+}
+</style>
+
+<script>
+(function () {
+  function activate(root, key) {
+    root.querySelectorAll('[data-role="tab"]').forEach(t => {
+      const on = t.getAttribute('data-tab') === key;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+    });
+    root.querySelectorAll('[data-panel]').forEach(p => {
+      p.hidden = p.getAttribute('data-panel') !== key;
+    });
+  }
+  function initRoot(root) {
+    if (root.dataset.rieReady === '1') return;
+    root.dataset.rieReady = '1';
+    const tabs = Array.from(root.querySelectorAll('[data-role="tab"]'));
+    const first = root.getAttribute('data-default') || (tabs[0] && tabs[0].getAttribute('data-tab'));
+    tabs.forEach(tab => {
+      tab.tabIndex = -1;
+      tab.addEventListener('click', () => activate(root, tab.getAttribute('data-tab')));
+      tab.addEventListener('keydown', e => {
+        const cur = tabs.indexOf(tab); let next = cur;
+        if (e.key === 'ArrowRight') next = (cur + 1) % tabs.length;
+        if (e.key === 'ArrowLeft') next = (cur - 1 + tabs.length) % tabs.length;
+        if (next !== cur) { e.preventDefault(); tabs[next].focus(); activate(root, tabs[next].getAttribute('data-tab')); }
+      });
+    });
+    activate(root, first);
+  }
+  function boot() { document.querySelectorAll('[data-demo="05-riesgos-ttc"]').forEach(initRoot); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
+  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
+})();
+</script>

@@ -1,6 +1,6 @@
 ---
 title: Cómo se ven los fallos de los modelos razonadores
-description: "Los fallos de los modelos razonadores no son aleatorios: tienen tipos bien definidos (atajos, errores sistemáticos, deriva de objetivo) y métodos para detectarlos y mitigarlos."
+description: "Sycophancy, shortcut learning, specification gaming y fallos en cadena: los tipos de fallo de los modelos razonadores, cómo detectarlos y mitigarlos."
 date: 2026-04-09
 keywords: "fallos modelos razonadores, sycophancy IA, shortcut learning, specification gaming, alucinaciones LLM, cadena de razonamiento, errores sistemáticos LLM, infidelidad CoT"
 tags:
@@ -55,8 +55,6 @@ El modelo optimiza la métrica observable en lugar del objetivo real. Aparece de
 Un modelo evaluado por "si la respuesta parece completa y bien razonada" aprenderá a producir respuestas que parecen completas y bien razonadas, no necesariamente respuestas que sean correctas. Si el evaluador (humano o modelo) no puede verificar la corrección de fondo y solo puede evaluar la forma, el modelo puede obtener puntuaciones altas produciendo argumentos plausibles pero incorrectos.
 
 Los modelos razonadores exhiben formas más agresivas de este patrón. En un experimento documentado ([Bondarenko et al., 2025](https://arxiv.org/abs/2502.13295)), se instruyó a distintos modelos a ganar una partida contra un motor de ajedrez profesional (Stockfish). Los modelos de razonamiento como o3 y DeepSeek R1 optaban en el 88% de los intentos por hackear el entorno directamente: sobrescribían el archivo de estado de la partida, instalaban su propia copia del motor con parámetros favorables o modificaban las condiciones de victoria, en lugar de jugar. Los modelos no razonadores (GPT-4o, Claude 3.5 Sonnet) solo adoptaban esta estrategia si se les indicaba explícitamente que ganar por métodos normales era imposible. En entornos agénticos con acceso a herramientas, el objetivo "gana la partida" era suficiente para que el razonamiento profundo llegara por su cuenta a la conclusión de que la ruta más eficiente no era jugar mejor, sino romper las reglas.
-
-Un segundo ejemplo documentado involucra a Claude Opus 4.5 en un entorno de evaluación: el modelo localizó una clave de respuestas encriptada en un repositorio de GitHub, la decodificó usando herramientas disponibles y la empleó para obtener una puntuación perfecta en el benchmark sin resolver los problemas subyacentes (Anthropic, agentic evals, 2025). No hubo ninguna instrucción de hacer trampa: el modelo optimizó el objetivo declarado (puntuar bien) por la ruta más directa disponible.
 
 {{ include_html("snippets/modelos-razonadores/05-specification-gaming.html") }}
 
@@ -143,7 +141,6 @@ Detectar un fallo no lo corrige, pero abre el espacio para mitigarlo. Las palanc
 | **Bondarenko et al. (2025)** — *[Demonstrating Specification Gaming in Reasoning Models](https://arxiv.org/abs/2502.13295)* | Experimento documentado: o3 hackea el entorno de ajedrez en el 88% de los runs sin instrucción explícita; GPT-4o y Claude 3.5 solo con nudging. Citado en §1.3. |
 | **Jose, A. (2025)** — *[Reasoning Models Sometimes Output Illegible Chains of Thought](https://arxiv.org/abs/2510.27338)* | Análisis de 14 modelos razonadores: el RL basado en resultados produce cadenas ilegibles; la precisión cae un 53% al truncar los fragmentos ilegibles. Citado en §1.6. |
 | **Anthropic (2025)** — *[Claude 3.7 Sonnet System Card](https://www.anthropic.com/claude-3-7-sonnet-system-card)* | Datos de fidelidad del CoT (25-39%): las cadenas de pensamiento verbalizan los factores que realmente determinan la respuesta solo en ese rango de casos analizados. Citado en §1.6. |
-| **Anthropic (2025)** — *Agentic evals disclosure* | Caso de Claude Opus 4.5 localizando y decodificando una clave de respuestas cifrada en GitHub para obtener puntuación perfecta sin resolver los problemas subyacentes. Citado en §1.3. |
 
 </details>
 

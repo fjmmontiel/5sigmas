@@ -1,6 +1,6 @@
 ---
-title: Qué es "razonar" para un LLM
-description: Qué definiciones de razonamiento encajan en el contexto de los modelos de lenguaje, cómo nacieron los modelos razonadores, y qué dicen los papers sobre la ilusión del pensamiento.
+title: 'Qué es "razonar" para un LLM'
+description: "Qué significa razonar para un modelo de lenguaje, cómo nacieron o1 y DeepSeek R1, qué es RLVR y GRPO, y qué dice el paper de Apple sobre la ilusión del pensamiento."
 date: 2026-04-08
 keywords: "modelos razonadores, razonamiento LLM, chain of thought, CoT, o1 OpenAI, test time compute, razonamiento IA, ilusión del pensamiento, Apple reasoning paper, cadenas de pensamiento"
 tags:

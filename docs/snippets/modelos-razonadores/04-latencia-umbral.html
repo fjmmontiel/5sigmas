@@ -1,0 +1,272 @@
+<div class="lat-wrap" data-demo="04-latencia-umbral" data-default="umbrales">
+  <div class="lat-hd">
+    <div class="lat-title">Latencia, coste y diseño para modelos razonadores</div>
+    <div class="lat-sub">Cuando el test-time compute se convierte en segundos reales de espera, los trade-offs del paper se transforman en decisiones de producto.</div>
+  </div>
+
+  <nav class="lat-nav" data-role="tablist" aria-label="Secciones">
+    <button type="button" data-role="tab" data-tab="umbrales" aria-selected="true">Umbrales de latencia</button>
+    <button type="button" data-role="tab" data-tab="enrutamiento" aria-selected="false">Coste variable</button>
+  </nav>
+
+  <div class="lat-panels">
+
+    <!-- TAB 1: UMBRALES -->
+    <section class="lat-panel" data-panel="umbrales">
+      <div class="lat-panel-body">
+        <div class="lat-bands">
+          <div class="lat-band lat-band--instant">
+            <div class="lat-band-range">&lt; 0,1 s</div>
+            <div class="lat-band-label">Instantáneo</div>
+            <div class="lat-band-desc">El usuario siente respuesta directa. Sin diseño adicional necesario.</div>
+          </div>
+          <div class="lat-band lat-band--ok">
+            <div class="lat-band-range">0,1 – 1 s</div>
+            <div class="lat-band-label">Fluido</div>
+            <div class="lat-band-desc">Pausa perceptible pero el usuario no pierde el hilo de pensamiento.</div>
+          </div>
+          <div class="lat-band lat-band--warn">
+            <div class="lat-band-range">1 – 10 s</div>
+            <div class="lat-band-label">Requiere feedback</div>
+            <div class="lat-band-desc">Spinner o progreso necesario. A los 5-7 s el usuario empieza a desengancharse.</div>
+          </div>
+          <div class="lat-band lat-band--bad">
+            <div class="lat-band-range">&gt; 10 s</div>
+            <div class="lat-band-label">Zona TTC</div>
+            <div class="lat-band-desc">Los modelos razonadores operan aquí. Sin diseño explícito, mala experiencia por defecto.</div>
+          </div>
+        </div>
+
+        <div class="lat-breakdown-box">
+          <div class="lat-breakdown-title">Distribución real de latencia · LLM + herramientas + RAG</div>
+          <div class="lat-breakdown-sub">Una consulta de complejidad media en un sistema agéntico real: ~20 s en total</div>
+          <div class="lat-segments">
+            <div class="lat-seg lat-seg--reason">
+              <div class="lat-seg-bar" style="width:40%"></div>
+              <div class="lat-seg-label">Razonamiento · 7-8 s</div>
+            </div>
+            <div class="lat-seg lat-seg--tools">
+              <div class="lat-seg-bar" style="width:35%"></div>
+              <div class="lat-seg-label">Llamadas a APIs / herramientas · 6-7 s</div>
+            </div>
+            <div class="lat-seg lat-seg--rag">
+              <div class="lat-seg-bar" style="width:25%"></div>
+              <div class="lat-seg-label">Recuperación RAG · 4-5 s</div>
+            </div>
+          </div>
+          <div class="lat-breakdown-note">Implicación: la mejora de latencia puede buscarse tanto en el modelo (menos TTC) como en la arquitectura del sistema (caché de RAG, herramientas más rápidas).</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: COSTE VARIABLE -->
+    <section class="lat-panel" data-panel="enrutamiento" hidden>
+      <div class="lat-panel-body">
+        <div class="lat-cost-section">
+          <div class="lat-section-label">Estructura de coste con razonamiento extendido</div>
+          <div class="lat-cost-cards">
+            <div class="lat-cost-card lat-cost-card--token">
+              <div class="lat-cost-card-tag">Facturación de tokens de pensamiento</div>
+              <div class="lat-cost-card-body">En modelos con pensamiento extendido (Claude 3.7 Sonnet), los tokens de pensamiento se facturan al mismo precio que los tokens de salida.</div>
+              <div class="lat-cost-example">
+                <div class="lat-cost-ex-row">
+                  <span>Tokens de entrada</span>
+                  <span class="lat-cost-price">$3 / M</span>
+                </div>
+                <div class="lat-cost-ex-row">
+                  <span>Tokens de salida (+ thinking)</span>
+                  <span class="lat-cost-price lat-cost-price--hi">$15 / M</span>
+                </div>
+              </div>
+              <div class="lat-cost-note">Una cadena de razonamiento larga tiene coste proporcional al número de tokens internos generados aunque el usuario nunca los vea.</div>
+            </div>
+            <div class="lat-cost-card lat-cost-card--variable">
+              <div class="lat-cost-card-tag">Variabilidad por consulta</div>
+              <div class="lat-cost-card-body">Con modelos razonadores el coste no es predecible por tipo de consulta. Una pregunta simple y una compleja pueden tener perfiles de coste radicalmente distintos.</div>
+              <div class="lat-cost-impact">
+                <div class="lat-cost-impact-item lat-cost-impact-item--lo">Consulta simple · respuesta directa</div>
+                <div class="lat-cost-impact-item lat-cost-impact-item--hi">Consulta compleja · 500 tokens de pensamiento = coste 3× mayor</div>
+              </div>
+              <div class="lat-cost-note">Sin presupuestos por consulta, las facturas de API son impredecibles a escala.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+  </div>
+</div>
+
+<style>
+.lat-wrap, .lat-wrap * { box-sizing: border-box; }
+
+.lat-wrap {
+  --la: var(--md-primary-fg-color, #26A69A);
+  --lb: #324AB2;
+  --lg: var(--md-accent-fg-color, #FFB343);
+  --lr: #e04c4c;
+  --lbg: var(--md-default-bg-color, #fff);
+  --lfg: var(--md-default-fg-color, #0f172a);
+  --lbd: rgba(15,23,42,.16);
+  --lmut: rgba(15,23,42,.60);
+  --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  display: grid; gap: 12px;
+  max-width: 940px; margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--lbd); border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--lb) 7%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 100%, color-mix(in srgb,var(--lr) 5%,transparent), transparent 52%),
+    var(--lbg);
+  color: var(--lfg); font-family: var(--ef); -webkit-font-smoothing: antialiased;
+}
+[data-md-color-scheme="slate"] .lat-wrap {
+  --lbg: var(--md-default-bg-color, #0f172a);
+  --lfg: var(--md-default-fg-color, #e2e8f0);
+  --lbd: rgba(226,232,240,.16); --lmut: rgba(226,232,240,.60);
+}
+.lat-hd { display: grid; gap: 5px; }
+.lat-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.lat-sub { font-size: 14px; color: var(--lmut); line-height: 1.5; max-width: 68ch; }
+
+.lat-nav { display: flex; flex-wrap: wrap; gap: 7px; }
+.lat-nav button {
+  appearance: none; border: 1px solid var(--lbd); border-radius: 999px;
+  background: color-mix(in srgb,var(--lbg) 90%,#0f172a 10%); color: var(--lmut);
+  padding: 7px 14px; font: inherit; font-size: 12.5px; font-weight: 800; cursor: pointer;
+  transition: border-color .14s, background .14s, color .14s;
+}
+.lat-nav button[aria-selected="true"] {
+  border-color: color-mix(in srgb,var(--la) 44%,transparent);
+  background: color-mix(in srgb,var(--la) 10%,var(--lbg)); color: var(--lfg);
+}
+.lat-panel[hidden] { display: none; }
+.lat-panel-body { border: 1px solid var(--lbd); border-radius: 14px; padding: 14px; background: color-mix(in srgb,var(--lbg) 90%,#0f172a 10%); display: grid; gap: 12px; }
+
+/* Latency bands */
+.lat-bands { display: grid; grid-template-columns: repeat(4,1fr); border-radius: 12px; overflow: hidden; border: 1px solid var(--lbd); }
+.lat-band { padding: 12px; border-right: 1px solid var(--lbd); display: grid; gap: 4px; align-content: start; }
+.lat-band:last-child { border-right: none; }
+.lat-band--instant { background: color-mix(in srgb,var(--la) 14%,var(--lbg)); }
+.lat-band--ok { background: color-mix(in srgb,var(--la) 7%,var(--lbg)); }
+.lat-band--warn { background: color-mix(in srgb,var(--lg) 10%,var(--lbg)); }
+.lat-band--bad { background: color-mix(in srgb,var(--lr) 10%,var(--lbg)); }
+.lat-band-range { font-size: 13px; font-weight: 900; }
+.lat-band-label { font-size: 12px; font-weight: 800; }
+.lat-band-desc { font-size: 12px; color: var(--lmut); line-height: 1.4; }
+
+/* Breakdown */
+.lat-breakdown-box { border: 1px solid color-mix(in srgb,var(--lb) 22%,var(--lbd)); border-radius: 12px; padding: 12px 14px; background: color-mix(in srgb,var(--lb) 5%,var(--lbg)); display: grid; gap: 8px; }
+.lat-breakdown-title { font-size: 13px; font-weight: 900; }
+.lat-breakdown-sub { font-size: 12px; color: var(--lmut); }
+.lat-segments { display: grid; gap: 6px; }
+.lat-seg { display: flex; flex-direction: column; gap: 3px; }
+.lat-seg-bar { height: 10px; border-radius: 999px; }
+.lat-seg--reason .lat-seg-bar { background: color-mix(in srgb,var(--la) 65%,var(--lb)); }
+.lat-seg--tools .lat-seg-bar { background: color-mix(in srgb,var(--lg) 55%,var(--lb)); }
+.lat-seg--rag .lat-seg-bar { background: color-mix(in srgb,var(--lb) 50%,var(--lmut)); }
+.lat-seg-label { font-size: 11.5px; color: var(--lmut); font-weight: 700; }
+.lat-breakdown-note { font-size: 12px; color: var(--lmut); line-height: 1.45; border-top: 1px solid var(--lbd); padding-top: 7px; }
+
+/* Routing */
+.lat-section-label { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--lmut); }
+.lat-route-desc { margin: 0; font-size: 13.5px; line-height: 1.55; color: var(--lmut); }
+.lat-route-flow { display: grid; gap: 8px; align-items: center; }
+.lat-route-step { padding: 8px 14px; border-radius: 10px; border: 1px solid var(--lbd); font-size: 13px; font-weight: 800; text-align: center; background: color-mix(in srgb,var(--lbg) 85%,transparent); width: fit-content; margin: 0 auto; }
+.lat-route-step--input { width: auto; }
+.lat-route-step--router { background: color-mix(in srgb,var(--lb) 10%,var(--lbg)); border-color: color-mix(in srgb,var(--lb) 28%,var(--lbd)); }
+.lat-route-arr { text-align: center; font-size: 16px; color: var(--lmut); }
+.lat-route-split { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.lat-route-branch { border: 1px solid var(--lbd); border-radius: 10px; padding: 10px 12px; background: color-mix(in srgb,var(--lbg) 85%,transparent); display: grid; gap: 5px; }
+.lat-route-branch--fast { border-color: color-mix(in srgb,var(--la) 22%,var(--lbd)); }
+.lat-route-branch--slow { border-color: color-mix(in srgb,var(--lg) 22%,var(--lbd)); }
+.lat-route-tag { font-size: 10.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; padding: 3px 8px; border-radius: 999px; width: fit-content; }
+.lat-route-tag--fast { background: color-mix(in srgb,var(--la) 12%,var(--lbg)); border: 1px solid color-mix(in srgb,var(--la) 28%,var(--lbd)); color: color-mix(in srgb,var(--la) 70%,var(--lfg)); }
+.lat-route-tag--slow { background: color-mix(in srgb,var(--lg) 12%,var(--lbg)); border: 1px solid color-mix(in srgb,var(--lg) 28%,var(--lbd)); color: color-mix(in srgb,var(--lg) 55%,var(--lfg)); }
+.lat-route-model { font-size: 13px; font-weight: 900; }
+.lat-route-note { font-size: 12px; color: var(--lmut); }
+
+/* Cost cards */
+.lat-cost-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.lat-cost-card { border: 1px solid var(--lbd); border-radius: 12px; padding: 12px 14px; background: color-mix(in srgb,var(--lbg) 85%,transparent); display: grid; gap: 8px; align-content: start; }
+.lat-cost-card--token { border-color: color-mix(in srgb,var(--lg) 22%,var(--lbd)); }
+.lat-cost-card-tag { font-size: 10.5px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; color: var(--lmut); }
+.lat-cost-card-body { font-size: 13px; line-height: 1.5; color: var(--lmut); }
+.lat-cost-example { border: 1px solid var(--lbd); border-radius: 8px; overflow: hidden; }
+.lat-cost-ex-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 10px; font-size: 12.5px; border-bottom: 1px solid var(--lbd); }
+.lat-cost-ex-row:last-child { border-bottom: none; }
+.lat-cost-price { font-family: "SF Mono","JetBrains Mono","Courier New",monospace; font-weight: 900; font-size: 13px; }
+.lat-cost-price--hi { color: color-mix(in srgb,var(--lg) 60%,var(--lfg)); }
+.lat-cost-note { font-size: 11.5px; color: var(--lmut); line-height: 1.4; font-style: italic; }
+.lat-cost-impact { display: grid; gap: 5px; }
+.lat-cost-impact-item { font-size: 12.5px; padding: 7px 10px; border-radius: 8px; border: 1px solid var(--lbd); line-height: 1.4; }
+.lat-cost-impact-item--lo { background: color-mix(in srgb,var(--la) 8%,var(--lbg)); }
+.lat-cost-impact-item--hi { background: color-mix(in srgb,var(--lr) 8%,var(--lbg)); border-color: color-mix(in srgb,var(--lr) 20%,var(--lbd)); }
+
+/* Pipeline flow */
+.lat-pipe { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; justify-content: center; padding: 8px; border: 1px solid var(--lbd); border-radius: 12px; background: color-mix(in srgb,var(--lbg) 88%,#0f172a 12%); }
+.lat-pipe-node { display: grid; gap: 3px; text-align: center; padding: 8px 14px; border-radius: 10px; border: 1px solid var(--lbd); min-width: 76px; }
+.lat-pipe-node--01 { border-color: color-mix(in srgb,var(--la) 28%,var(--lbd)); background: color-mix(in srgb,var(--la) 8%,var(--lbg)); }
+.lat-pipe-node--02 { border-color: color-mix(in srgb,var(--lg) 28%,var(--lbd)); background: color-mix(in srgb,var(--lg) 8%,var(--lbg)); }
+.lat-pipe-node--03 { border-color: color-mix(in srgb,var(--lb) 28%,var(--lbd)); background: color-mix(in srgb,var(--lb) 8%,var(--lbg)); }
+.lat-pipe-node--04 { border-color: color-mix(in srgb,var(--lr) 22%,var(--lbd)); background: color-mix(in srgb,var(--lr) 6%,var(--lbg)); }
+.lat-pipe-n { font-family: "SF Mono","JetBrains Mono","Courier New",monospace; font-size: 18px; font-weight: 900; line-height: 1; }
+.lat-pipe-node--01 .lat-pipe-n { color: var(--la); }
+.lat-pipe-node--02 .lat-pipe-n { color: color-mix(in srgb,var(--lg) 70%,var(--lfg)); }
+.lat-pipe-node--03 .lat-pipe-n { color: color-mix(in srgb,var(--lb) 80%,var(--lfg)); }
+.lat-pipe-node--04 .lat-pipe-n { color: var(--lr); }
+.lat-pipe-lbl { font-size: 9px; font-weight: 800; color: var(--lmut); text-transform: uppercase; letter-spacing: .04em; }
+.lat-pipe-arr { font-size: 16px; color: var(--lmut); flex-shrink: 0; }
+
+/* Patterns */
+.lat-pattern-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.lat-pattern { border: 1px solid var(--lbd); border-radius: 12px; padding: 12px 14px; background: color-mix(in srgb,var(--lbg) 88%,#0f172a 12%); display: grid; gap: 5px; }
+.lat-pattern-icon { font-family: "SF Mono","JetBrains Mono","Courier New",monospace; font-size: 11px; font-weight: 900; color: color-mix(in srgb,var(--la) 65%,var(--lfg)); }
+.lat-pattern-name { font-size: 13.5px; font-weight: 900; }
+.lat-pattern p { margin: 0; font-size: 12.5px; color: var(--lmut); line-height: 1.45; }
+.lat-rule { font-size: 13.5px; color: var(--lmut); line-height: 1.5; font-style: italic; border-left: 3px solid color-mix(in srgb,var(--la) 36%,transparent); padding-left: 12px; }
+
+@media (max-width: 640px) {
+  .lat-bands { grid-template-columns: 1fr 1fr; }
+  .lat-pattern-grid { grid-template-columns: 1fr; }
+  .lat-cost-cards { grid-template-columns: 1fr; }
+  .lat-route-split { grid-template-columns: 1fr; }
+}
+</style>
+
+<script>
+(function () {
+  function activate(root, key) {
+    root.querySelectorAll('[data-role="tab"]').forEach(t => {
+      const on = t.getAttribute('data-tab') === key;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+    });
+    root.querySelectorAll('[data-panel]').forEach(p => {
+      p.hidden = p.getAttribute('data-panel') !== key;
+    });
+  }
+  function initRoot(root) {
+    if (root.dataset.latReady === '1') return;
+    root.dataset.latReady = '1';
+    const tabs = Array.from(root.querySelectorAll('[data-role="tab"]'));
+    const first = root.getAttribute('data-default') || (tabs[0] && tabs[0].getAttribute('data-tab'));
+    tabs.forEach(tab => {
+      tab.tabIndex = -1;
+      tab.addEventListener('click', () => activate(root, tab.getAttribute('data-tab')));
+      tab.addEventListener('keydown', e => {
+        const cur = tabs.indexOf(tab); let next = cur;
+        if (e.key === 'ArrowRight') next = (cur + 1) % tabs.length;
+        if (e.key === 'ArrowLeft') next = (cur - 1 + tabs.length) % tabs.length;
+        if (next !== cur) { e.preventDefault(); tabs[next].focus(); activate(root, tabs[next].getAttribute('data-tab')); }
+      });
+    });
+    activate(root, first);
+  }
+  function boot() { document.querySelectorAll('[data-demo="04-latencia-umbral"]').forEach(initRoot); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
+  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
+})();
+</script>
