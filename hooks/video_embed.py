@@ -59,6 +59,10 @@ def on_post_page(output: str, page, config, **kwargs) -> str:
     title       = _esc(meta.get("video_title") or page.title or "")
     description = _esc(meta.get("description") or "")
     date        = str(meta.get("date") or "")
+    # Normalize to ISO 8601 with timezone (Google requires it)
+    import re as _re
+    if date and _re.fullmatch(r"\d{4}-\d{2}-\d{2}", date):
+        date = date + "T00:00:00+00:00"
     duration    = str(meta.get("video_duration") or "")
     site_url    = (config.site_url or "").rstrip("/")
 
