@@ -40,7 +40,6 @@ const SCRIPT      = path.join(__dirname, "md-to-article-html.mjs");
 
 // Keep in sync with hooks/wip_series.py — no videos for incomplete series
 const WIP_SERIES = new Set([
-  "modelos-razonadores",
   "ia-pib-bienestar-energia",
   "datacenters-espacio",
 ]);

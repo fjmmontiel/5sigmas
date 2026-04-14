@@ -41,6 +41,7 @@ PDFS_V2_DIR = ROOT / "exports" / "pdfs_v2"
 SERIES_PREFIX = {
     "from-cave-to-agi": "cave-agi",
     "multimodalidad-iag": "mm-iag",
+    "modelos-razonadores": "mod-razon",
 }
 
 

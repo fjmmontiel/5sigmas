@@ -45,7 +45,6 @@ const SCRIPT_ARTICLE = path.join(__dirname, "md-to-article-html.mjs");
 
 // Keep in sync with hooks/wip_series.py
 const WIP_SERIES = new Set([
-  "modelos-razonadores",
   "ia-pib-bienestar-energia",
   "datacenters-espacio",
 ]);
