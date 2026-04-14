@@ -6,6 +6,8 @@ hide:
   - footer
 ---
 
+# Más señal, menos ruido
+
 5sigmas explica la IA con contexto, historia y fuentes primarias. No persigue el hype del día: construye el mapa mental que necesitas para entender qué está pasando y qué importa de verdad.
 
 ---

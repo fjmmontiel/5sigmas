@@ -1,5 +1,13 @@
 {% extends "base.html" %}
 
+{% block htmltitle %}
+  {% if page and page.url in ["", "index.html"] %}
+  <title>5sigmas — Más señal, menos ruido</title>
+  {% else %}
+  {{ super() }}
+  {% endif %}
+{% endblock %}
+
 {% block extrahead %}
   {{ super() }}
   {% if page %}
@@ -26,6 +34,12 @@
 
   {# Canonical URL explícita #}
   <link rel="canonical" href="{{ page.canonical_url }}">
+
+  {# Fecha editorial explícita — refuerza la señal de fecha sobre fechas de ejemplo en demos #}
+  {% if page.meta.date %}
+  <meta property="article:published_time" content="{{ page.meta.date }}T00:00:00+01:00">
+  <meta property="article:modified_time" content="{{ page.meta.date_modified | default(page.meta.date) }}T00:00:00+01:00">
+  {% endif %}
 
   {# Schema.org principal #}
   <script type="application/ld+json">

@@ -2,7 +2,6 @@
 title: Modelos razonadores — test-time compute, cadenas de pensamiento y fallos sistemáticos
 description: "Cinco capítulos sobre cómo razonan los LLMs y qué cuesta ese razonamiento en producción. Test-time compute, sycophancy, specification gaming, latencia real y riesgos de los modelos razonadores con herramientas."
 keywords: modelos razonadores, test-time compute, chain of thought, razonamiento LLM, o1 OpenAI, DeepSeek R1, RLVR, GRPO, sycophancy, PRM, ORM, latencia IA, TTFT, overthinking IA, specification gaming, budget forcing, cadenas de pensamiento, razonamiento extendido, fallos LLM
-robots: noindex, follow
 tags:
   - IA
   - LLMs
@@ -13,9 +12,9 @@ hide:
 
 # Modelos razonadores
 
-{{ include_html("snippets/series_meta.html", series_dir="modelos-razonadores", data_state="complete", data_level="tecnico", status_label="Completa", level_label="Técnico", progress_total="5", extra_rows="<div class=\"series-meta-row\"><span class=\"series-meta-label\">Prerequisitos</span><span class=\"series-meta-value\"><a href=\"/series/fundamentos-ia-iag/00_presentacion_serie/\">Fundamentos de IA e IA generativa</a></span></div>") }}
+{{ include_html("snippets/series_meta.html", series_dir="modelos-razonadores", data_state="complete", data_level="tecnico", status_label="Terminada", level_label="Técnico", progress_total="5", extra_rows="<div class=\"series-meta-row\"><span class=\"series-meta-label\">Prerrequisitos</span><span class=\"series-meta-value\"><a href=\"/series/fundamentos-ia-iag/00_presentacion_serie/\">Fundamentos de IA e IA generativa</a></span></div>") }}
 
-Los LLMs pueden *parecer* que razonar, pero “razonar” es una cualidad inherentemente humana. Lo podemos definir como un **proceso** con diferentes pasos cuyo recorrido consume **tiempo físico** (latencia), energía mental (**cómputo**) y no es infalible (**alucinaciones**).<br>
+Los LLMs pueden *parecer* que razonan, pero “razonar” es una cualidad inherentemente humana. Lo podemos definir como un **proceso** con diferentes pasos cuyo recorrido consume **tiempo físico** (latencia), energía mental (**cómputo**) y no es infalible (**alucinaciones**).<br>
 
 En esta serie explicaremos que si el razonamiento es un proceso, entonces el tiempo de ejecución es una variable más. Puedes **pagar más pasos**, más muestras, más verificación o más interacción con herramientas para **mejorar la calidad de la respuesta**.<br>
 

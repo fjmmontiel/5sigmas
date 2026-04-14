@@ -1,5 +1,5 @@
 ---
-title: Más allá del Transformer - memoria, búsqueda y modelos del mundo
+title: Más allá del Transformer — memoria y modelos del mundo
 description: Cómo el campo intenta ir más allá del puro escalado del Transformer combinando herramientas, búsqueda, memoria en inferencia, modelos del mundo y robótica.
 date: 2026-03-31
 keywords: "más allá del Transformer, test-time compute, memoria IA, modelos del mundo, Mamba, SSM, robótica IA, agentes IA, búsqueda IA, futuro IA"

@@ -215,7 +215,8 @@ hide:
         <div class="pill-title">Geopolítica de la IA</div>
         <div class="pill-desc">Chips, TSMC, control de exportaciones y la carrera entre EEUU, China y la UE.</div>
       </div>
-      <!-- set 2 — copia exacta para el bucle sin corte -->
+      <!-- set 2 — copia exacta para el bucle sin corte (oculto a crawlers) -->
+      <div aria-hidden="true" data-nosnippet>
       <div class="marquee-pill">
         <div class="pill-title">Evaluación de modelos de IA</div>
         <div class="pill-desc">Benchmarks vs rendimiento real, LLM-as-judge y red-teaming.</div>
@@ -243,6 +244,7 @@ hide:
       <div class="marquee-pill">
         <div class="pill-title">Geopolítica de la IA</div>
         <div class="pill-desc">Chips, TSMC, control de exportaciones y la carrera entre EEUU, China y la UE.</div>
+      </div>
       </div>
     </div>
   </div>

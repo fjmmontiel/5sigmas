@@ -7,7 +7,6 @@ tags:
   - GenAI
   - LLMs
   - AGI
-robots: noindex, follow
 hide:
   - toc
 video: "00_presentacion_serie.mp4"
