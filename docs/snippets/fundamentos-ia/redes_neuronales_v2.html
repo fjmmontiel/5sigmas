@@ -518,6 +518,7 @@
   const KEY = "nn3-v2";
   if (window[KEY]) return;
   window[KEY] = true;
+  const __portableTabsFallback = true;
 
   /* ── SVG helper ── */
   const NS = "http://www.w3.org/2000/svg";
@@ -779,8 +780,8 @@
   function initTabs(root) {
     if (root.dataset.nn3Ready) return;
     root.dataset.nn3Ready = "true";
-    const tabs   = Array.from(root.querySelectorAll(".nn3-tab"));
-    const panels = Array.from(root.querySelectorAll(".nn3-panel"));
+    const tabs = Array.from(root.querySelectorAll("[data-tab]"));
+    const panels = Array.from(root.querySelectorAll("[data-panel]"));
     function show(key) {
       tabs.forEach(t => t.setAttribute("aria-selected", t.dataset.tab === key ? "true" : "false"));
       panels.forEach(p => p.dataset.panel === key ? p.removeAttribute("hidden") : p.setAttribute("hidden", ""));
