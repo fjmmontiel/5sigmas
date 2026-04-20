@@ -27,7 +27,7 @@ up: build-and-update
 
 build-and-update: install
 	-lsof -ti:8000 | xargs kill -9 2>/dev/null || true
-	$(MKDOCS_ENV) MKDOCS_REDIRECTS=false WATCHDOG_FORCE_POLLING=1 $(MKDOCS) serve --dirty
+	$(MKDOCS_ENV) MKDOCS_REDIRECTS=false WATCHDOG_FORCE_POLLING=1 $(MKDOCS) serve
 
 
 

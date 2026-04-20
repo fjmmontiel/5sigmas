@@ -41,3 +41,29 @@
 *[SLOs]: Service Level Objectives: objetivos medibles de nivel de servicio, normalmente expresados como percentiles de latencia
 *[AIME]: American Invitational Mathematics Examination: examen de matemáticas de competición universitaria ampliamente usado como benchmark de razonamiento en LLMs
 *[GPQA]: Graduate-Level Google-Proof Q&A: benchmark de preguntas de ciencia a nivel de doctorado diseñadas para ser irreproducibles con búsqueda web
+
+<!-- ia-pib-bienestar-energia -->
+*[PIB]: Producto Interior Bruto: valor total de bienes y servicios producidos en una economía durante un periodo dado
+*[IDH]: Índice de Desarrollo Humano: indicador compuesto que combina esperanza de vida, educación y renta nacional bruta per cápita
+*[MTF]: Multi-Tier Framework: marco de cinco niveles del Banco Mundial para medir el acceso efectivo a energía más allá de la simple conexión a la red
+*[PPA]: Paridad del Poder Adquisitivo: método de conversión monetaria que equipara el poder de compra real entre países para hacer comparables los indicadores de renta
+*[GPI]: Genuine Progress Indicator: indicador alternativo al PIB que suma el valor del trabajo no remunerado y resta los costes de la desigualdad, el crimen y la degradación ambiental
+*[PTF]: Productividad Total de los Factores: medida de eficiencia económica que cuantifica el output generado por unidad combinada de trabajo y capital
+*[TWh]: Teravatio-hora: unidad de energía equivalente a un billón de vatios-hora, usada para medir el consumo eléctrico a escala nacional o de grandes infraestructuras
+*[GWh]: Gigavatio-hora: unidad de energía equivalente a mil millones de vatios-hora, usada para medir el consumo de grandes instalaciones industriales o datacenters
+*[kWh]: Kilovatio-hora: unidad de energía equivalente a mil vatios consumidos durante una hora, referencia habitual para el consumo doméstico e industrial
+*[TPU]: Tensor Processing Unit: acelerador de hardware diseñado por Google específicamente para operaciones matriciales en redes neuronales, alternativa a la GPU para inferencia y entrenamiento
+
+<!-- datacenters-espacio -->
+*[PUE]: Power Usage Effectiveness: ratio entre la potencia total consumida por un datacenter y la que llega efectivamente al equipamiento de cómputo; PUE 1,0 es ideal, PUE 2,0 significa que la mitad de la energía no genera cómputo
+*[WUE]: Water Usage Effectiveness: litros de agua consumidos por kilovatio-hora entregado al cómputo; mide la eficiencia hídrica de un datacenter
+*[TDP]: Thermal Design Power: potencia máxima de disipación de calor para la que está diseñado un chip o componente; determina los requisitos mínimos del sistema de refrigeración
+*[LEO]: Low Earth Orbit: órbita terrestre baja, entre 160 y 2.000 km de altitud; latencia típica de 45-80 ms, vida útil de satélites afectada por resistencia atmosférica y radiación
+*[GEO]: Geostationary Earth Orbit: órbita geoestacionaria a 35.786 km de altitud; el satélite permanece fijo sobre un punto de la Tierra pero introduce latencias de 500-600 ms
+*[TRL]: Technology Readiness Level: escala de 1 a 9 que mide la madurez de una tecnología desde el concepto básico (TRL 1) hasta el sistema demostrado en entorno operacional real (TRL 9)
+*[UPS]: Uninterruptible Power Supply: sistema de alimentación ininterrumpida que protege el equipamiento de cortes y fluctuaciones de red mediante baterías o supercondensadores
+*[NMC]: Nickel-Manganese-Cobalt: química de cátodo de batería de litio-ion que combina níquel, manganeso y cobalto; estándar en baterías de alta densidad energética para UPS de datacenter y vehículos eléctricos
+*[REE]: Rare Earth Elements: grupo de 17 elementos metálicos (lantánidos más escandio e itrio) usados en imanes permanentes, transceptores de fibra y pantallas; el 91% de la refinación global se realiza en China
+*[COTS]: Commercial Off-The-Shelf: hardware o software estándar disponible en el mercado general, sin modificaciones especiales para entornos de alta radiación u otras condiciones extremas
+*[SEU]: Single Event Upset: cambio de estado en un bit de memoria o registro causado por el impacto de una partícula energética (rayo cósmico, protón solar); fuente principal de errores en hardware COTS en órbita
+*[ASM]: Artisanal and Small-scale Mining: minería artesanal y de pequeña escala; extracción manual o con herramientas básicas, predominante en la producción de cobalto en la RDC y tántalo en África central

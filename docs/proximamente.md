@@ -95,12 +95,12 @@ hide:
   margin-top: .25rem;
 }
 
-/* ── Marquee ── */
-.marquee-section {
+/* ── En investigación ── */
+.research-section {
   margin: 0 0 2.5rem;
 }
 
-.marquee-label {
+.research-label {
   font-size: .68rem;
   font-weight: 700;
   letter-spacing: .1em;
@@ -109,48 +109,106 @@ hide:
   margin-bottom: 1.1rem;
 }
 
-.marquee-outer {
+.research-outer {
   overflow: hidden;
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 8%, #000 92%, transparent 100%);
-  mask-image: linear-gradient(to right, transparent 0%, #000 8%, #000 92%, transparent 100%);
+  padding: 0 10px;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 3%, #000 97%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, #000 3%, #000 97%, transparent 100%);
 }
 
-.marquee-track {
+.research-track {
   display: flex;
-  gap: 12px;
+  align-items: stretch;
+  gap: 14px;
   width: max-content;
-  animation: marquee-scroll 40s linear infinite;
+  padding: 0 12px 8px;
+  animation: research-scroll 52s linear infinite;
 }
-.marquee-track:hover { animation-play-state: paused; }
 
-@keyframes marquee-scroll {
+.research-track > [aria-hidden="true"][data-nosnippet] {
+  display: contents;
+}
+
+.research-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes research-scroll {
   from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
+  to { transform: translateX(-50%); }
 }
 
-.marquee-pill {
-  flex-shrink: 0;
-  width: 260px;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,.07);
-  background: rgba(255,255,255,.03);
-  padding: .9rem 1rem .85rem;
+.research-card {
+  --rc: #6366F1;
+  position: relative;
+  flex: 0 0 236px;
+  border-radius: 14px;
+  border: 1px solid color-mix(in srgb, var(--rc) 18%, transparent);
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--rc) 12%, var(--md-default-bg-color, #fff)) 0%,
+      color-mix(in srgb, var(--rc) 4%, var(--md-default-bg-color, #fff)) 100%);
+  padding: 1rem 1rem .95rem;
   display: flex;
   flex-direction: column;
-  gap: .4rem;
-  cursor: default;
+  gap: .55rem;
+  min-height: 188px;
 }
 
-.pill-title {
-  font-size: .88rem;
+.research-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  border-radius: 14px 14px 0 0;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--rc) 82%, white), var(--rc));
+}
+
+.research-badge {
+  font-size: .64rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--rc) 72%, var(--md-default-fg-color, #111));
+  opacity: .95;
+}
+
+.research-title {
+  font-size: 1rem;
   font-weight: 700;
   line-height: 1.3;
+  color: var(--md-default-fg-color, #111);
 }
 
-.pill-desc {
-  font-size: .78rem;
+.research-desc {
+  font-size: .86rem;
   line-height: 1.5;
-  opacity: .5;
+  color: color-mix(in srgb, var(--md-default-fg-color, #111) 68%, transparent);
+}
+
+[data-md-color-scheme="slate"] .research-card {
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--rc) 16%, #0b1220) 0%,
+      color-mix(in srgb, var(--rc) 7%, #0b1220) 100%);
+}
+
+[data-md-color-scheme="default"] .research-card {
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--rc) 10%, #ffffff) 0%,
+      color-mix(in srgb, var(--rc) 3%, #ffffff) 100%);
+}
+
+@media (max-width: 720px) {
+  .prox-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .research-card {
+    flex-basis: 208px;
+    min-height: 176px;
+  }
 }
 </style>
 
@@ -182,69 +240,82 @@ hide:
 
 </div>
 
-<div class="marquee-section">
-  <div class="marquee-label">En investigación — sin fecha de publicación</div>
-  <div class="marquee-outer">
-    <div class="marquee-track">
-      <!-- set 1 -->
-      <div class="marquee-pill">
-        <div class="pill-title">Evaluación de modelos de IA</div>
-        <div class="pill-desc">Benchmarks vs rendimiento real, LLM-as-judge y red-teaming.</div>
+<div class="research-section">
+  <div class="research-label">En investigación — sin fecha de publicación</div>
+  <div class="research-outer">
+    <div class="research-track">
+      <div class="research-card" style="--rc:#6366F1">
+        <div class="research-badge">En investigación</div>
+        <div class="research-title">Evaluación de modelos de IA</div>
+        <div class="research-desc">Benchmarks vs rendimiento real, LLM-as-judge y red-teaming.</div>
       </div>
-      <div class="marquee-pill">
-        <div class="pill-title">RAG: Retrieval-Augmented Generation</div>
-        <div class="pill-desc">Cómo conectar un LLM a fuentes externas. Arquitectura, evaluación y trampas habituales.</div>
+      <div class="research-card" style="--rc:#7C3AED">
+        <div class="research-badge">En investigación</div>
+        <div class="research-title">RAG: Retrieval-Augmented Generation</div>
+        <div class="research-desc">Cómo conectar un LLM a fuentes externas. Arquitectura, evaluación y trampas habituales.</div>
       </div>
-      <div class="marquee-pill">
-        <div class="pill-title">Agentes de IA</div>
-        <div class="pill-desc">Cómo los LLMs pasan de responder a actuar. Bucles de razonamiento y límites reales.</div>
+      <div class="research-card" style="--rc:#10B981">
+        <div class="research-badge">En investigación</div>
+        <div class="research-title">Agentes de IA</div>
+        <div class="research-desc">Cómo los LLMs pasan de responder a actuar. Bucles de razonamiento y límites reales.</div>
       </div>
-      <div class="marquee-pill">
-        <div class="pill-title">El problema de la alucinación</div>
-        <div class="pill-desc">Por qué alucinan los LLMs, los límites del grounding y hasta dónde llega el RAG.</div>
+      <div class="research-card" style="--rc:#8B5CF6">
+        <div class="research-badge">En investigación</div>
+        <div class="research-title">El problema de la alucinación</div>
+        <div class="research-desc">Por qué alucinan los LLMs, los límites del grounding y hasta dónde llega el RAG.</div>
       </div>
-      <div class="marquee-pill">
-        <div class="pill-title">Fine-tuning y adaptación de modelos</div>
-        <div class="pill-desc">Cuándo hacer fine-tuning vs prompt engineering vs RAG, y qué coste implica cada opción.</div>
+      <div class="research-card" style="--rc:#EC4899">
+        <div class="research-badge">En investigación</div>
+        <div class="research-title">Fine-tuning y adaptación de modelos</div>
+        <div class="research-desc">Cuándo hacer fine-tuning vs prompt engineering vs RAG, y qué coste implica cada opción.</div>
       </div>
-      <div class="marquee-pill">
-        <div class="pill-title">IA en el trabajo</div>
-        <div class="pill-desc">Evidencia real de productividad, augmentation vs sustitución y cómo cambia el trabajo cualificado.</div>
+      <div class="research-card" style="--rc:#F59E0B">
+        <div class="research-badge">En investigación</div>
+        <div class="research-title">IA en el trabajo</div>
+        <div class="research-desc">Evidencia real de productividad, augmentation vs sustitución y cómo cambia el trabajo cualificado.</div>
       </div>
-      <div class="marquee-pill">
-        <div class="pill-title">Geopolítica de la IA</div>
-        <div class="pill-desc">Chips, TSMC, control de exportaciones y la carrera entre EEUU, China y la UE.</div>
+      <div class="research-card" style="--rc:#3B82F6">
+        <div class="research-badge">En investigación</div>
+        <div class="research-title">Geopolítica de la IA</div>
+        <div class="research-desc">Chips, TSMC, control de exportaciones y la carrera entre EEUU, China y la UE.</div>
       </div>
-      <!-- set 2 — copia exacta para el bucle sin corte (oculto a crawlers) -->
+
       <div aria-hidden="true" data-nosnippet>
-      <div class="marquee-pill">
-        <div class="pill-title">Evaluación de modelos de IA</div>
-        <div class="pill-desc">Benchmarks vs rendimiento real, LLM-as-judge y red-teaming.</div>
-      </div>
-      <div class="marquee-pill">
-        <div class="pill-title">RAG: Retrieval-Augmented Generation</div>
-        <div class="pill-desc">Cómo conectar un LLM a fuentes externas. Arquitectura, evaluación y trampas habituales.</div>
-      </div>
-      <div class="marquee-pill">
-        <div class="pill-title">Agentes de IA</div>
-        <div class="pill-desc">Cómo los LLMs pasan de responder a actuar. Bucles de razonamiento y límites reales.</div>
-      </div>
-      <div class="marquee-pill">
-        <div class="pill-title">El problema de la alucinación</div>
-        <div class="pill-desc">Por qué alucinan los LLMs, los límites del grounding y hasta dónde llega el RAG.</div>
-      </div>
-      <div class="marquee-pill">
-        <div class="pill-title">Fine-tuning y adaptación de modelos</div>
-        <div class="pill-desc">Cuándo hacer fine-tuning vs prompt engineering vs RAG, y qué coste implica cada opción.</div>
-      </div>
-      <div class="marquee-pill">
-        <div class="pill-title">IA en el trabajo</div>
-        <div class="pill-desc">Evidencia real de productividad, augmentation vs sustitución y cómo cambia el trabajo cualificado.</div>
-      </div>
-      <div class="marquee-pill">
-        <div class="pill-title">Geopolítica de la IA</div>
-        <div class="pill-desc">Chips, TSMC, control de exportaciones y la carrera entre EEUU, China y la UE.</div>
-      </div>
+        <div class="research-card" style="--rc:#6366F1">
+          <div class="research-badge">En investigación</div>
+          <div class="research-title">Evaluación de modelos de IA</div>
+          <div class="research-desc">Benchmarks vs rendimiento real, LLM-as-judge y red-teaming.</div>
+        </div>
+        <div class="research-card" style="--rc:#7C3AED">
+          <div class="research-badge">En investigación</div>
+          <div class="research-title">RAG: Retrieval-Augmented Generation</div>
+          <div class="research-desc">Cómo conectar un LLM a fuentes externas. Arquitectura, evaluación y trampas habituales.</div>
+        </div>
+        <div class="research-card" style="--rc:#10B981">
+          <div class="research-badge">En investigación</div>
+          <div class="research-title">Agentes de IA</div>
+          <div class="research-desc">Cómo los LLMs pasan de responder a actuar. Bucles de razonamiento y límites reales.</div>
+        </div>
+        <div class="research-card" style="--rc:#8B5CF6">
+          <div class="research-badge">En investigación</div>
+          <div class="research-title">El problema de la alucinación</div>
+          <div class="research-desc">Por qué alucinan los LLMs, los límites del grounding y hasta dónde llega el RAG.</div>
+        </div>
+        <div class="research-card" style="--rc:#EC4899">
+          <div class="research-badge">En investigación</div>
+          <div class="research-title">Fine-tuning y adaptación de modelos</div>
+          <div class="research-desc">Cuándo hacer fine-tuning vs prompt engineering vs RAG, y qué coste implica cada opción.</div>
+        </div>
+        <div class="research-card" style="--rc:#F59E0B">
+          <div class="research-badge">En investigación</div>
+          <div class="research-title">IA en el trabajo</div>
+          <div class="research-desc">Evidencia real de productividad, augmentation vs sustitución y cómo cambia el trabajo cualificado.</div>
+        </div>
+        <div class="research-card" style="--rc:#3B82F6">
+          <div class="research-badge">En investigación</div>
+          <div class="research-title">Geopolítica de la IA</div>
+          <div class="research-desc">Chips, TSMC, control de exportaciones y la carrera entre EEUU, China y la UE.</div>
+        </div>
       </div>
     </div>
   </div>

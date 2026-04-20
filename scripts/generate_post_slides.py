@@ -1,11 +1,11 @@
 """
 generate_post_slides.py
 
-Renderizador genérico: encuentra carousel.html en documentacion_interna/posts/
+Renderizador genérico: encuentra carousel.html en distribution/linkedin/posts/
 y exporta cada slide como PNG y/o PDF.
 
 El carousel.html ES la fuente de verdad. Edítalo directamente para cambiar slides.
-Para crear carousel.html desde cero: copiar documentacion_interna/posts/_template.html
+Para crear carousel.html desde cero: copiar distribution/linkedin/templates/_template.html
 y sustituir los .slide-section con el contenido del post. No existe build_carousels.py.
 
 Uso:
@@ -34,7 +34,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 from validate_carousels import validate_file
 
 ROOT = Path(__file__).resolve().parents[1]
-POSTS_DIR = ROOT / "documentacion_interna" / "posts"
+POSTS_DIR = ROOT / "distribution" / "linkedin" / "posts"
 PDFS_DIR = ROOT / "exports" / "pdfs"
 PDFS_V2_DIR = ROOT / "exports" / "pdfs_v2"
 
@@ -67,7 +67,7 @@ SLIDE_W = 1080
 
 async def _render_carousel(page, carousel_path: Path, preview: bool, v2: bool = False, pulido: bool = False):
     """Screenshot every slide in a carousel → PNGs.
-    v2=True    → salida en <post>/v2/
+    v2=True     → salida en <post>/v2/
     pulido=True → salida en <post>/  (misma carpeta que carousel_pulido.html)"""
     if v2:
         out_dir = carousel_path.parent / "v2"
@@ -123,9 +123,9 @@ async def _collect_slides(page, carousel_path: Path):
 async def _render_carousel_pdf(page, carousel_path: Path, v2: bool = False, pulido: bool = False):
     """Render all slides as a single PDF at maximum quality.
 
-    Output (v1):     exports/pdfs/<serie>/<cap>/<post>.pdf
-    Output (v2):     exports/pdfs_v2/<serie>/<cap>/<post>.pdf
-    Output (pulido): <post>/<prefix>_cNpN_slug.pdf  (junto al carousel_pulido.html)
+    Output (default): exports/pdfs/<serie>/<cap>/<post>.pdf
+    Output (v2):      exports/pdfs_v2/<serie>/<cap>/<post>.pdf
+    Output (pulido):  <post>/<prefix>_cNpN_slug.pdf
     Each slide is rendered in an isolated HTML page to guarantee correct
     1080×1080 layout — no position:fixed tricks that break in Chromium print mode.
     """
@@ -353,7 +353,7 @@ def main():
     parser.add_argument("--pdf", action="store_true", help="Generar también carousel.pdf (vector, máxima calidad)")
     parser.add_argument("--pdf-only", action="store_true", help="Generar solo carousel.pdf, sin PNGs")
     parser.add_argument("--v2", action="store_true", help="Usar carousel_v2.html (tema light) — PNGs en <post>/v2/, PDFs en exports/pdfs_v2/")
-    parser.add_argument("--pulido", action="store_true", help="Usar carousel_pulido.html (SVE-native) — PNGs en <post>/pulido/, PDFs en exports/pdfs_pulido/")
+    parser.add_argument("--pulido", action="store_true", help="Usar carousel_pulido.html (SVE-native light) — PNGs en <post>/, PDF <prefix>_cNpN_slug.pdf junto al carousel")
     args = parser.parse_args()
 
     asyncio.run(run(args.series, args.post, args.preview, args.skip_validation, args.pdf, args.pdf_only, args.v2, args.pulido))

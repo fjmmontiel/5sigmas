@@ -10,7 +10,7 @@ Cada animación es un **fichero HTML autocontenido** en `docs/snippets/<serie>/X
 Se inserta en el artículo con la macro de MkDocs:
 
 ```
-{{ include_html("snippets/<serie>/XX-nombre.html") }}
+{{ include_html('snippets/<serie>/XX-nombre.html') }}
 ```
 
 El fichero tiene tres bloques en este orden: `<div>` HTML → `<script>` → `<style>`.

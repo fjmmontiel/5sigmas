@@ -1,5 +1,6 @@
 .venv/
 5sigmas.html
+MEMORY.md
 CALENDAR.html
 TODO.html
 __pycache__/
@@ -10,12 +11,19 @@ site/
 .DS_Store
 env/
 venv/
+scripts/tests/
 ENV/
 .env
 .python-version
 .vscode/
 .idea/
 documentacion_interna/
+tmp/
+distribution/
+ops/
+playbooks/
+research/
+business/
 remotion/
 posts/
 plantillas/
@@ -42,6 +50,10 @@ tools/remotion/node_modules/
 videos/output/
 videos/frames/
 videos/assets/
+videos/batch-render-v2.mjs
+scripts/build_ops_seed.py
+scripts/generate_dashboard_state.py
+scripts/validate_ops_manifests.py
 # Video output — ignore everywhere except published series (served from same domain)
 *.mp4
 *.webm
@@ -54,5 +66,5 @@ docs/assets/videos/
 # Animation export artifacts
 output/playwright/
 exports/
-CLAUDE.md
-AGENTS.md
+CLAUDE*.md
+AGENTS*.md

@@ -8,7 +8,7 @@ Sale con código 0 si todo pasa, 1 si hay algún FAIL.
 Uso:
     .venv/bin/python3.14 scripts/validate_carousels.py
     .venv/bin/python3.14 scripts/validate_carousels.py --path "from-cave-to-agi/cap5"
-    .venv/bin/python3.14 scripts/validate_carousels.py --file documentacion_interna/posts/from-cave-to-agi/cap5/post_4_robotica/carousel.html
+    .venv/bin/python3.14 scripts/validate_carousels.py --file distribution/linkedin/posts/from-cave-to-agi/cap5/post_4_robotica/carousel.html
 """
 
 import argparse
@@ -17,7 +17,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).parent.parent
-POSTS_DIR = ROOT / "documentacion_interna/posts"
+POSTS_DIR = ROOT / "distribution/linkedin/posts"
 
 OK   = "✓"
 FAIL = "✗"
@@ -79,6 +79,12 @@ def count_pattern(html: str, pattern: str) -> int:
     return len(re.findall(pattern, html))
 
 
+def extract_first_block(html: str, class_name: str) -> str | None:
+    pattern = rf'<div\s+class="[^"]*\b{re.escape(class_name)}\b[^"]*"[^>]*>(.*?)</div>'
+    match = re.search(pattern, html, re.DOTALL)
+    return match.group(1) if match else None
+
+
 # ── Rule definitions ────────────────────────────────────────────────────────
 
 class Result:
@@ -120,7 +126,7 @@ def check_file(html: str, path: Path, v2: bool = False, pulido: bool = False) ->
 
         # P4 — Al menos un slide usa una primitiva SVE declarada
         has_sve = bool(re.search(
-            r'class="(beat-content|flow-content|contrast-content|metric-content|proof-content)"',
+            r'class="[^"]*\b(beat-content|flow-content|contrast-content|metric-content|proof-content)\b',
             html
         ))
         results.append(Result(
@@ -300,10 +306,22 @@ def check_slide(data_id: str, html: str, total: int, v2: bool = False, pulido: b
     if pulido and not is_hook and not is_cta and not is_snippet:
         sizes = [int(m) for m in re.findall(r'font-size:(\d+)px', html)]
         dominant = [s for s in sizes if s >= 40]
+        dominant_classes = bool(re.search(
+            r'class="[^"]*\b(beat-symbol|flow-key|contrast-main|metric-number|metric-headline|metric-visual|proof-formula)\b',
+            html
+        ))
         results.append(Result(
             "P2 · elemento dominante ≥ 40px (pulido)",
-            bool(dominant),
-            f"tamaños detectados: {sorted(set(sizes), reverse=True)[:6]}" if not dominant else f"ok: {sorted(set(dominant), reverse=True)[:4]}"
+            bool(dominant) or dominant_classes,
+            (
+                f"tamaños detectados: {sorted(set(sizes), reverse=True)[:6]}"
+                if not dominant and not dominant_classes
+                else (
+                    f"ok: {sorted(set(dominant), reverse=True)[:4]}"
+                    if dominant
+                    else "ok: dominante detectado por clase SVE"
+                )
+            )
         ))
 
     # S4 — slide tiene el fondo correcto según versión
@@ -362,7 +380,7 @@ def check_slide(data_id: str, html: str, total: int, v2: bool = False, pulido: b
         has_custom_title = bool(re.search(r'class="[a-z-]+-title"', html))
         # Pulido: SVE family labels (beat-label, flow-label, etc.) equivalen al divider
         has_sve_label    = pulido and bool(re.search(
-            r'class="(beat-label|flow-label|contrast-label|metric-label|proof-label)"', html
+            r'class="[^"]*\b(beat-label|flow-label|contrast-label|metric-label|proof-label)\b', html
         ))
 
         results.append(Result(
@@ -377,7 +395,7 @@ def check_slide(data_id: str, html: str, total: int, v2: bool = False, pulido: b
         ))
         # Pulido: SVE dominant elements (beat-symbol, flow-key, contrast-main, metric-number, proof-formula)
         has_sve_dominant = pulido and bool(re.search(
-            r'class="(beat-symbol|flow-key|contrast-main|metric-number|proof-formula)"', html
+            r'class="[^"]*\b(beat-symbol|flow-key|contrast-main|metric-number|metric-headline|proof-formula)\b', html
         ))
         heading_ok = has_steps_title or has_inline_heading or has_compare_sup or has_custom_title or has_sve_dominant
         results.append(Result(
@@ -421,6 +439,79 @@ def check_slide(data_id: str, html: str, total: int, v2: bool = False, pulido: b
                 not overflow_words,
                 f"palabras largas: {overflow_words}" if overflow_words else ""
             ))
+
+    # S16 — Pulido: metric visual V2
+    if pulido and is_content and 'metric-content--visual' in html:
+        has_metric_visual = bool(re.search(r'class="[^"]*\bmetric-visual\b', html))
+        results.append(Result(
+            "S16a · metric V2 incluye .metric-visual",
+            has_metric_visual,
+            "añadir contenedor .metric-visual como bloque dominante" if not has_metric_visual else ""
+        ))
+
+        has_takeaway = bool(re.search(r'class="[^"]*\bmetric-takeaway\b', html))
+        results.append(Result(
+            "S16b · metric V2 incluye .metric-takeaway",
+            has_takeaway,
+            "añadir una takeaway única después del visual" if not has_takeaway else ""
+        ))
+
+        visual_idx = html.find("metric-visual")
+        takeaway_idx = html.find("metric-takeaway")
+        results.append(Result(
+            "S16c · metric-visual aparece antes de metric-takeaway",
+            visual_idx != -1 and takeaway_idx != -1 and visual_idx < takeaway_idx,
+            "reordenar la slide para que el visual domine y el takeaway cierre" if visual_idx != -1 and takeaway_idx != -1 and visual_idx > takeaway_idx else ""
+        ))
+
+        visual_block = extract_first_block(html, "metric-visual")
+        small_visuals = []
+        if visual_block:
+            for tag, attr, value in re.findall(r'<(svg|img)\b[^>]*?(width|style)="([^"]+)"', visual_block, re.DOTALL):
+                numeric = None
+                if attr == "width":
+                    width_match = re.search(r'(\d+)', value)
+                    if width_match:
+                        numeric = int(width_match.group(1))
+                else:
+                    width_match = re.search(r'width:\s*(\d+)px', value)
+                    if width_match:
+                        numeric = int(width_match.group(1))
+                if numeric is not None and numeric < 560:
+                    small_visuals.append(f"{tag} width={numeric}")
+        results.append(Result(
+            "S16d · metric V2 sin visuales inline < 560px",
+            not small_visuals,
+            f"visuales demasiado pequeños: {small_visuals}" if small_visuals else ""
+        ))
+
+        takeaway_count = len(re.findall(r'class="[^"]*\bmetric-takeaway\b', html))
+        takeaway_text = re.sub(r'<[^>]+>', ' ', extract_first_block(html, "metric-takeaway") or "")
+        takeaway_text = re.sub(r'\s+', ' ', takeaway_text).strip()
+        short_takeaway = takeaway_count == 1 and len(takeaway_text) <= 220
+        results.append(Result(
+            "S16e · metric V2 tiene una takeaway única y breve",
+            short_takeaway,
+            f"takeaways: {takeaway_count}, longitud: {len(takeaway_text)}" if not short_takeaway else ""
+        ))
+
+        no_metric_context = 'class="metric-context"' not in html
+        results.append(Result(
+            "S16f · metric V2 no usa metric-context largo",
+            no_metric_context,
+            "el contexto largo debe salir de la slide V2" if not no_metric_context else ""
+        ))
+
+        oversized_metric = False
+        for value in re.findall(r'class="metric-number"[^>]*style="[^"]*font-size:(\d+)px', html):
+            if int(value) >= 120:
+                oversized_metric = True
+                break
+        results.append(Result(
+            "S16g · metric-number secundario si existe en V2",
+            not oversized_metric,
+            "reducir metric-number por debajo de 120px o usar metric-headline" if oversized_metric else ""
+        ))
 
     # Snippet-only
     if is_snippet:
@@ -518,9 +609,9 @@ def find_carousels(path_filter: str | None, file_filter: str | None, pulido: boo
 
 def main():
     parser = argparse.ArgumentParser(description="Valida carousel.html de 5Sigmas")
-    parser.add_argument("--path", help="Subfiltro bajo documentacion_interna/posts/ (ej: from-cave-to-agi/cap5)")
+    parser.add_argument("--path", help="Subfiltro bajo distribution/linkedin/posts/ (ej: from-cave-to-agi/cap5)")
     parser.add_argument("--file", help="Ruta directa a un carousel.html concreto")
-    parser.add_argument("--pulido", action="store_true", help="Buscar y validar carousel_pulido.html (modo SVE)")
+    parser.add_argument("--pulido", action="store_true", help="Buscar y validar carousel_pulido.html (modo SVE light)")
     args = parser.parse_args()
 
     carousels = find_carousels(args.path, args.file, pulido=args.pulido)

@@ -19,8 +19,8 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-POSTS_DIR = ROOT / "documentacion_interna" / "posts"
-TEMPLATE_V2 = POSTS_DIR / "_template_v2.html"
+POSTS_DIR = ROOT / "distribution" / "linkedin" / "posts"
+TEMPLATE_V2 = ROOT / "distribution" / "linkedin" / "templates" / "_template_v2.html"
 
 # ──────────────────────────────────────────────────────────────────────────────
 # Color substitutions: dark (v1) → light (v2)

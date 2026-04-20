@@ -18,7 +18,7 @@ import { execSync } from "child_process";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const POSTS_ROOT = path.resolve(__dirname, "../documentacion_interna/posts");
+const POSTS_ROOT = path.resolve(__dirname, "../distribution/linkedin/posts");
 const RENDERER   = path.resolve(__dirname, "../../video-generator/carousel-to-video.mjs");
 
 // CLI args
