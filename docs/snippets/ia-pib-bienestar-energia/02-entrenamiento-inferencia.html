@@ -1,0 +1,134 @@
+<div class="ei2-wrap" data-demo="02-entrenamiento-inferencia">
+  <div class="ei2-hd">
+    <div class="ei2-title">Dos fases con perfiles de consumo radicalmente distintos</div>
+    <div class="ei2-sub">Entrenar un modelo ocurre una vez y concentra energía durante semanas. Servir el modelo ocurre miles de millones de veces al día. El consumo acumulado de la inferencia puede superar al del entrenamiento conforme crece la adopción.</div>
+  </div>
+
+  <div class="ei2-phases">
+    <div class="ei2-phase ei2-phase--train">
+      <div class="ei2-phase-label">Entrenamiento</div>
+      <div class="ei2-phase-badge ei2-badge--train">Episódico · Alta intensidad · Concentrado</div>
+      <div class="ei2-stat">
+        <div class="ei2-stat-val">~42 GWh</div>
+        <div class="ei2-stat-desc">consumo estimado del entrenamiento inicial de GPT-4 — equivalente al consumo anual de varios miles de hogares</div>
+      </div>
+      <div class="ei2-items">
+        <div class="ei2-item">Se ejecuta una vez por versión (semanas o meses de cómputo intensivo)</div>
+        <div class="ei2-item">Miles de aceleradores en paralelo en un mismo centro de datos</div>
+        <div class="ei2-item">Se concentra donde la electricidad es más barata: renovables, regiones con superávit nocturno</div>
+      </div>
+    </div>
+
+    <div class="ei2-vs">vs</div>
+
+    <div class="ei2-phase ei2-phase--infer">
+      <div class="ei2-phase-label">Inferencia</div>
+      <div class="ei2-phase-badge ei2-badge--infer">Continua · Baja por consulta · Distribuida</div>
+      <div class="ei2-stat">
+        <div class="ei2-stat-val">~2,9 Wh</div>
+        <div class="ei2-stat-desc">por consulta a un LLM — ×10 frente a una búsqueda web (0,3 Wh); hasta ×40 por minuto de vídeo generado</div>
+      </div>
+      <div class="ei2-items">
+        <div class="ei2-item">Miles de millones de consultas diarias en producción continua</div>
+        <div class="ei2-item">El consumo acumulado puede superar al entrenamiento con la adopción masiva</div>
+        <div class="ei2-item">Se despliega cerca de los usuarios: la latencia baja requiere proximidad geográfica</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ei2-footnote">Fuente: IEA, Energy and AI, 2025. El dato de ~42 GWh para GPT-4 procede de Epoch AI (2023). El ratio ×10 frente a búsqueda web es la estimación mediana de la IEA para modelos de lenguaje de gran escala en producción.</div>
+</div>
+
+<style>
+.ei2-wrap, .ei2-wrap * { box-sizing: border-box; }
+
+.ei2-wrap {
+  --ea: #26A69A;
+  --eb: #324AB2;
+  --eg: #FFB343;
+  --ebg: var(--md-default-bg-color, #fff);
+  --efg: var(--md-default-fg-color, #0f172a);
+  --ebd: rgba(15,23,42,.16);
+  --emut: rgba(15,23,42,.60);
+  --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  --em: "SF Mono","JetBrains Mono","Courier New",monospace;
+
+  display: grid;
+  gap: 14px;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--ebd);
+  border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--eb) 7%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 100%, color-mix(in srgb,var(--ea) 5%,transparent), transparent 52%),
+    var(--ebg);
+  color: var(--efg);
+  font-family: var(--ef);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-md-color-scheme="slate"] .ei2-wrap {
+  --ebg: var(--md-default-bg-color, #0f172a);
+  --efg: var(--md-default-fg-color, #e2e8f0);
+  --ebd: rgba(226,232,240,.16);
+  --emut: rgba(226,232,240,.60);
+}
+
+.ei2-hd { display: grid; gap: 5px; }
+.ei2-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.ei2-sub { font-size: 14px; color: var(--emut); line-height: 1.5; max-width: 72ch; }
+
+.ei2-phases { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: start; }
+
+.ei2-phase {
+  border: 1px solid var(--ebd);
+  border-radius: 14px;
+  padding: 16px;
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  background: color-mix(in srgb, var(--ebg) 90%, #0f172a 10%);
+}
+
+.ei2-phase--train { border-color: color-mix(in srgb,var(--eb) 30%,var(--ebd)); background: linear-gradient(135deg, color-mix(in srgb,var(--eb) 6%,transparent), transparent 60%), color-mix(in srgb,var(--ebg) 90%,#0f172a 10%); }
+.ei2-phase--infer { border-color: color-mix(in srgb,var(--ea) 30%,var(--ebd)); background: linear-gradient(135deg, color-mix(in srgb,var(--ea) 6%,transparent), transparent 60%), color-mix(in srgb,var(--ebg) 90%,#0f172a 10%); }
+
+.ei2-phase-label { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--emut); }
+
+.ei2-phase-badge {
+  font-size: 11.5px; font-weight: 700;
+  padding: 4px 10px; border-radius: 999px;
+  border: 1px solid var(--ebd);
+  width: fit-content;
+}
+.ei2-badge--train { color: color-mix(in srgb,var(--eb) 75%,var(--efg)); background: color-mix(in srgb,var(--eb) 8%,var(--ebg)); border-color: color-mix(in srgb,var(--eb) 25%,var(--ebd)); }
+.ei2-badge--infer { color: color-mix(in srgb,var(--ea) 80%,var(--efg)); background: color-mix(in srgb,var(--ea) 8%,var(--ebg)); border-color: color-mix(in srgb,var(--ea) 25%,var(--ebd)); }
+
+.ei2-stat {
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid var(--ebd);
+  background: color-mix(in srgb, var(--ebg) 85%, transparent);
+  display: grid;
+  gap: 5px;
+}
+
+.ei2-stat-val { font-size: 26px; font-weight: 900; font-family: var(--em); letter-spacing: -.02em; }
+.ei2-phase--train .ei2-stat-val { color: color-mix(in srgb,var(--eb) 80%,var(--efg)); }
+.ei2-phase--infer .ei2-stat-val { color: color-mix(in srgb,var(--ea) 80%,var(--efg)); }
+.ei2-stat-desc { font-size: 12px; color: var(--emut); line-height: 1.4; }
+
+.ei2-items { display: grid; gap: 5px; }
+.ei2-item { font-size: 12.5px; padding: 7px 10px; border-radius: 8px; border: 1px solid var(--ebd); background: color-mix(in srgb,var(--ebg) 85%,transparent); line-height: 1.4; color: var(--emut); }
+
+.ei2-vs { font-size: 14px; font-weight: 900; color: var(--emut); align-self: center; text-align: center; padding-top: 50px; }
+
+.ei2-footnote { font-size: 12px; color: var(--emut); line-height: 1.5; font-style: italic; border-left: 2px solid color-mix(in srgb,var(--ea) 34%,transparent); padding-left: 10px; }
+
+@media (max-width: 640px) {
+  .ei2-phases { grid-template-columns: 1fr; }
+  .ei2-vs { padding-top: 0; }
+}
+</style>

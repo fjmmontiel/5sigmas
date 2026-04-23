@@ -1,0 +1,121 @@
+<div class="ha-wrap" data-demo="02-huella-ambiental">
+  <div class="ha-hd">
+    <div class="ha-title">Huella real vs declarada: energía, CO₂ y residuos de la IA</div>
+    <div class="ha-sub">Los compromisos de neutralidad climática de las grandes tecnológicas no equivalen a consumo renovable en tiempo real. La contabilidad anual de PPAs oculta las emisiones reales hora a hora.</div>
+  </div>
+
+  <div class="ha-cards">
+    <div class="ha-card ha-card--energy">
+      <div class="ha-card-label">Electricidad IA específica</div>
+      <div class="ha-card-trend">50 → 554 TWh</div>
+      <div class="ha-card-mult">× 11 entre 2023 y 2030</div>
+      <div class="ha-card-detail">La carga de IA crece mucho más rápido que el total de centros de datos. Greenpeace (2025) sitúa ese multiplicador en siete años, no en una década completa.</div>
+    </div>
+    <div class="ha-card ha-card--co2">
+      <div class="ha-card-label">Emisiones CO₂ atribuibles a IA</div>
+      <div class="ha-card-trend">180 → 320 Mt</div>
+      <div class="ha-card-mult">entre 2020 y 2030</div>
+      <div class="ha-card-detail">Las emisiones reales superan entre 1,6 y 7,6 veces las declaradas porque los PPAs se contabilizan anualmente, no hora a hora.</div>
+    </div>
+    <div class="ha-card ha-card--ewaste">
+      <div class="ha-card-label">Residuos electrónicos de IA</div>
+      <div class="ha-card-trend">1,2 – 5 M t</div>
+      <div class="ha-card-mult">estimación para 2030</div>
+      <div class="ha-card-detail">Por encima de la capacidad actual de reciclaje especializado. Producir un wafer de semiconductor de última generación requiere ~2,3 MWh. Greenpeace (2025).</div>
+    </div>
+  </div>
+
+  <div class="ha-ppa">
+    <div class="ha-ppa-k">Por qué los compromisos renovables no equivalen a consumo renovable</div>
+    <div class="ha-ppa-text">Los contratos de compra de energía renovable (PPAs) que firman Google, Microsoft y Amazon garantizan que una cantidad equivalente de energía renovable entra a la red cada año. No garantizan que la electricidad que llega al centro de datos en cada momento sea de origen renovable. Las emisiones se compensan en papel pero no se evitan en tiempo real. Microsoft anunció en 2023 un acuerdo para retomar parte de la producción nuclear de Three Mile Island como respuesta directa a este problema de temporalidad.</div>
+  </div>
+
+  <div class="ha-footnote">Fuente: Greenpeace (2025). Datos de emisiones CO₂: rango basado en mix eléctrico regional y eficiencia de centros de datos. Los PPAs anuales no resuelven la descarbonización horaria.</div>
+</div>
+
+<style>
+.ha-wrap, .ha-wrap * { box-sizing: border-box; }
+
+.ha-wrap {
+  --ha: #26A69A;
+  --hb: #324AB2;
+  --hg: #FFB343;
+  --hr: #e04c4c;
+  --hbg: var(--md-default-bg-color, #fff);
+  --hfg: var(--md-default-fg-color, #0f172a);
+  --hbd: rgba(15,23,42,.16);
+  --hmut: rgba(15,23,42,.60);
+  --hf: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  --hm: "SF Mono","JetBrains Mono","Courier New",monospace;
+
+  display: grid;
+  gap: 14px;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--hbd);
+  border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--hr) 5%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 100%, color-mix(in srgb,var(--hg) 5%,transparent), transparent 52%),
+    var(--hbg);
+  color: var(--hfg);
+  font-family: var(--hf);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-md-color-scheme="slate"] .ha-wrap {
+  --hbg: var(--md-default-bg-color, #0f172a);
+  --hfg: var(--md-default-fg-color, #e2e8f0);
+  --hbd: rgba(226,232,240,.16);
+  --hmut: rgba(226,232,240,.60);
+}
+
+.ha-hd { display: grid; gap: 5px; }
+.ha-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.ha-sub { font-size: 14px; color: var(--hmut); line-height: 1.5; max-width: 72ch; }
+
+.ha-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+
+.ha-card {
+  border: 1px solid var(--hbd);
+  border-radius: 13px;
+  padding: 14px;
+  display: grid;
+  gap: 5px;
+  align-content: start;
+  background: color-mix(in srgb, var(--hbg) 90%, #0f172a 10%);
+}
+
+.ha-card--energy { border-color: color-mix(in srgb,var(--hg) 28%,var(--hbd)); background: linear-gradient(135deg,color-mix(in srgb,var(--hg) 6%,transparent),transparent 60%), color-mix(in srgb,var(--hbg) 90%,#0f172a 10%); }
+.ha-card--co2    { border-color: color-mix(in srgb,var(--hr) 25%,var(--hbd)); background: linear-gradient(135deg,color-mix(in srgb,var(--hr) 5%,transparent),transparent 60%), color-mix(in srgb,var(--hbg) 90%,#0f172a 10%); }
+.ha-card--ewaste { border-color: color-mix(in srgb,var(--hb) 22%,var(--hbd)); background: linear-gradient(135deg,color-mix(in srgb,var(--hb) 5%,transparent),transparent 60%), color-mix(in srgb,var(--hbg) 90%,#0f172a 10%); }
+
+.ha-card-label { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; color: var(--hmut); }
+
+.ha-card-trend { font-size: 20px; font-weight: 900; font-family: var(--hm); letter-spacing: -.02em; }
+.ha-card--energy .ha-card-trend { color: color-mix(in srgb,#a06010 60%,var(--hfg)); }
+.ha-card--co2    .ha-card-trend { color: color-mix(in srgb,var(--hr) 70%,var(--hfg)); }
+.ha-card--ewaste .ha-card-trend { color: color-mix(in srgb,var(--hb) 70%,var(--hfg)); }
+
+.ha-card-mult { font-size: 11px; font-weight: 800; color: var(--hmut); }
+.ha-card-detail { font-size: 12px; color: var(--hmut); line-height: 1.45; }
+
+.ha-ppa {
+  border: 1px solid var(--hbd);
+  border-radius: 12px;
+  padding: 13px 15px;
+  background: color-mix(in srgb, var(--hbg) 90%, #0f172a 10%);
+  display: grid;
+  gap: 6px;
+}
+
+.ha-ppa-k { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; color: var(--hmut); }
+.ha-ppa-text { font-size: 13px; color: var(--hmut); line-height: 1.5; }
+
+.ha-footnote { font-size: 12px; color: var(--hmut); line-height: 1.5; font-style: italic; border-left: 2px solid color-mix(in srgb,var(--hr) 34%,transparent); padding-left: 10px; }
+
+@media (max-width: 680px) {
+  .ha-cards { grid-template-columns: 1fr; }
+}
+</style>

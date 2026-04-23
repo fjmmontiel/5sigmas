@@ -1,0 +1,448 @@
+<div class="kic-wrap" data-demo="01-kwh-idi-curva" data-anim-tabs data-default="1" data-anim-fullscreen="on" data-anim-contrast="force">
+  <div class="kic-hd">
+    <div class="kic-title">La relación entre energía y desarrollo humano no es lineal</div>
+    <div class="kic-sub">Los primeros kilovatios producen saltos de bienestar enormes. A partir de cierto punto, cada kilovatio adicional genera mucho menos retorno. Un umbral concreto separa el acceso básico del desarrollo humano avanzado.</div>
+  </div>
+
+  <div class="kic-tabs" role="tablist" aria-label="Secciones de la curva energía-desarrollo">
+    <button data-tab="1" class="kic-tab active" aria-selected="true">La curva completa</button>
+    <button data-tab="2" class="kic-tab" aria-selected="false">Zona de alta rentabilidad</button>
+    <button data-tab="3" class="kic-tab" aria-selected="false">Rendimientos decrecientes</button>
+    <button data-tab="4" class="kic-tab" aria-selected="false">Umbral 4.000 kWh</button>
+  </div>
+
+  <!-- Tab 1: Full curve -->
+  <div class="kic-panel" data-panel="1">
+    <div class="kic-svg-wrap">
+      <svg viewBox="0 0 600 310" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Curva kWh per cápita anual vs Índice de Desarrollo Humano">
+        <!-- Zone backgrounds -->
+        <rect x="60" y="30" width="35" height="240" fill="#26A69A" opacity="0.13" rx="2"/>
+        <rect x="95" y="30" width="312" height="240" fill="#FFB343" opacity="0.07"/>
+        <rect x="407" y="30" width="173" height="240" fill="#324AB2" opacity="0.10" rx="2"/>
+
+        <!-- Grid lines -->
+        <line x1="60" y1="150" x2="580" y2="150" stroke="currentColor" opacity="0.08" stroke-dasharray="4,4"/>
+        <line x1="60" y1="90" x2="580" y2="90" stroke="currentColor" opacity="0.08" stroke-dasharray="4,4"/>
+        <line x1="60" y1="210" x2="580" y2="210" stroke="currentColor" opacity="0.06" stroke-dasharray="3,5"/>
+
+        <!-- Axes -->
+        <line x1="60" y1="270" x2="580" y2="270" stroke="currentColor" opacity="0.30" stroke-width="1.5"/>
+        <line x1="60" y1="30" x2="60" y2="270" stroke="currentColor" opacity="0.30" stroke-width="1.5"/>
+
+        <!-- Curve -->
+        <polyline points="60,241 69,203 77,166 86,128 95,90 103,88 129,83 164,76 233,61 320,58 407,55 493,52 580,49"
+          fill="none" stroke="#26A69A" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round"/>
+
+        <!-- Zone top labels -->
+        <text x="77" y="24" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="7.5" font-weight="900" fill="#26A69A" text-anchor="middle">ALTA</text>
+        <text x="251" y="24" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="7.5" font-weight="900" fill="#e09a20" text-anchor="middle">RENDIMIENTOS DECRECIENTES</text>
+        <text x="493" y="24" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="7.5" font-weight="900" fill="#324AB2" text-anchor="middle">UMBRAL</text>
+
+        <!-- Threshold line at 4000 kWh -->
+        <line x1="407" y1="30" x2="407" y2="270" stroke="#324AB2" opacity="0.40" stroke-dasharray="5,3" stroke-width="1.5"/>
+        <text x="411" y="48" font-family="'SF Mono','JetBrains Mono','Courier New',monospace" font-size="9" fill="#324AB2" opacity="0.85">4.000 kWh</text>
+
+        <!-- IDH 0.9 line -->
+        <line x1="60" y1="54" x2="580" y2="54" stroke="#324AB2" opacity="0.25" stroke-dasharray="3,4" stroke-width="1"/>
+        <text x="56" y="57" font-family="'SF Mono','JetBrains Mono','Courier New',monospace" font-size="8.5" fill="currentColor" opacity="0.50" text-anchor="end">0,9</text>
+
+        <!-- IDH 0.5 line -->
+        <text x="56" y="153" font-family="'SF Mono','JetBrains Mono','Courier New',monospace" font-size="8.5" fill="currentColor" opacity="0.50" text-anchor="end">0,5</text>
+        <text x="56" y="273" font-family="'SF Mono','JetBrains Mono','Courier New',monospace" font-size="8.5" fill="currentColor" opacity="0.50" text-anchor="end">0</text>
+
+        <!-- X axis ticks -->
+        <text x="60" y="284" font-family="'SF Mono','JetBrains Mono','Courier New',monospace" font-size="8.5" fill="currentColor" opacity="0.50" text-anchor="middle">0</text>
+        <text x="95" y="284" font-family="'SF Mono','JetBrains Mono','Courier New',monospace" font-size="8.5" fill="#26A69A" opacity="0.85" text-anchor="middle">400</text>
+        <text x="147" y="284" font-family="'SF Mono','JetBrains Mono','Courier New',monospace" font-size="8.5" fill="currentColor" opacity="0.45" text-anchor="middle">1.000</text>
+        <text x="407" y="284" font-family="'SF Mono','JetBrains Mono','Courier New',monospace" font-size="8.5" fill="#324AB2" opacity="0.90" text-anchor="middle">4.000</text>
+        <text x="580" y="284" font-family="'SF Mono','JetBrains Mono','Courier New',monospace" font-size="8.5" fill="currentColor" opacity="0.45" text-anchor="middle">6.000</text>
+
+        <!-- Axis labels -->
+        <text x="320" y="302" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="9.5" fill="currentColor" opacity="0.40" text-anchor="middle">kWh per cápita / año</text>
+        <text x="12" y="150" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="9.5" fill="currentColor" opacity="0.40" text-anchor="middle" transform="rotate(-90, 12, 150)">IDH</text>
+
+        <!-- Elasticity annotation (positioned in zone 1 area) -->
+        <g transform="translate(60,110)">
+          <rect x="0" y="-16" width="102" height="46" rx="5" fill="#26A69A" opacity="0.10"/>
+          <rect x="0" y="-16" width="102" height="46" rx="5" fill="none" stroke="#26A69A" opacity="0.30" stroke-width="0.8"/>
+          <text x="51" y="-1" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="7.5" fill="#26A69A" text-anchor="middle" font-weight="700">+1% energía</text>
+          <text x="51" y="13" font-family="'SF Mono','JetBrains Mono','Courier New',monospace" font-size="8.5" fill="#26A69A" text-anchor="middle" font-weight="900">+0,64–0,94%</text>
+          <text x="51" y="25" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="6.2" fill="#26A69A" text-anchor="middle" opacity="0.80">bienestar · 47 países</text>
+        </g>
+
+        <!-- Dot at 4000 kWh / IDH 0.895 -->
+        <circle cx="407" cy="55" r="4" fill="#324AB2" opacity="0.70"/>
+      </svg>
+    </div>
+    <div class="kic-note">La curva no es lineal: el impacto de un kilovatio adicional depende de dónde partes. El dato de elasticidad (0,64–0,94% de bienestar percibido por cada 1% de energía adicional) procede de un panel de 47 países controlando por renta, urbanización y clima. Fuente: Lee et al. (2020), ESMAP/Banco Mundial (2015).</div>
+  </div>
+
+  <!-- Tab 2: High return zone -->
+  <div class="kic-panel" data-panel="2" hidden>
+    <div class="kic-zone-hd">
+      <div class="kic-zone-badge kic-zone-badge--a">Zona 0 – 400 kWh/año</div>
+      <div class="kic-zone-claim">Cada kilovatio aquí puede cambiar la vida de un hogar. La pendiente es máxima: este es el tramo donde el impacto en salud, logística y educación es más pronunciado.</div>
+    </div>
+    <div class="kic-steps">
+      <div class="kic-step">
+        <div class="kic-step-range">0 – 50 kWh</div>
+        <div class="kic-step-body">
+          <div class="kic-step-head">Iluminación y reducción de combustión doméstica</div>
+          <p>Luz artificial nocturna y sustitución de queroseno o leña. Reduce la enfermedad respiratoria crónica (causa principal de mortalidad en hogares de bajos ingresos) y amplía las horas útiles para estudio y trabajo.</p>
+        </div>
+      </div>
+      <div class="kic-step">
+        <div class="kic-step-range">50 – 100 kWh</div>
+        <div class="kic-step-body">
+          <div class="kic-step-head">Refrigeración básica y conectividad inicial</div>
+          <p>Conservación de vacunas, alimentos y medicamentos. Bombeo de agua potable. El primer nivel donde la infraestructura de salud básica puede funcionar de forma fiable.</p>
+        </div>
+      </div>
+      <div class="kic-step">
+        <div class="kic-step-range">100 – 200 kWh</div>
+        <div class="kic-step-body">
+          <div class="kic-step-head">Equipos de diagnóstico y servicios educativos</div>
+          <p>Análisis básicos de laboratorio, cirugías programadas, iluminación de aulas. El Banco Mundial identifica el rango 50-200 kWh como la zona donde los retornos en salud y productividad básica son más pronunciados (Marco Multi-Nivel MTF).</p>
+        </div>
+      </div>
+      <div class="kic-step">
+        <div class="kic-step-range">200 – 400 kWh</div>
+        <div class="kic-step-body">
+          <div class="kic-step-head">Manufactura básica, irrigación y participación económica</div>
+          <p>Maquinaria eléctrica pequeña, bombas de irrigación (2-3× en rendimiento agrícola en zonas con déficit hídrico), integración a redes comerciales. El tramo donde la economía local empieza a conectarse con mercados más amplios.</p>
+        </div>
+      </div>
+    </div>
+    <div class="kic-zone-note">El estudio de Dinkelman (2011) sobre Sudáfrica documentó que las mujeres en zonas electrificadas fueron un 23% más propensas a incorporarse al mercado laboral, atribuible a la reducción de horas en tareas domésticas de subsistencia, no a cambios en la oferta de empleo.</div>
+  </div>
+
+  <!-- Tab 3: Diminishing returns -->
+  <div class="kic-panel" data-panel="3" hidden>
+    <div class="kic-zone-hd">
+      <div class="kic-zone-badge kic-zone-badge--b">Zona 400 – 4.000 kWh/año</div>
+      <div class="kic-zone-claim">La pendiente se aplana. Cada kilovatio adicional sigue sumando, pero la diferencia entre tenerlo o no tenerlo ya no cambia la vida de la misma forma radical que al principio.</div>
+    </div>
+    <div class="kic-compare">
+      <div class="kic-compare-col kic-compare-col--low">
+        <div class="kic-compare-label">En la zona baja (100 → 101 kWh)</div>
+        <div class="kic-compare-icon">↑↑↑</div>
+        <div class="kic-compare-items">
+          <div class="kic-ci">El kilovatio extra puede ser la diferencia entre tener o no tener luz esta noche</div>
+          <div class="kic-ci">Puede conservar o no conservar las vacunas de un centro de salud</div>
+          <div class="kic-ci">Puede hacer funcionar o no una bomba de agua potable para el día</div>
+        </div>
+        <div class="kic-compare-verdict">Impacto potencialmente vital. Umbral cualitativo.</div>
+      </div>
+      <div class="kic-compare-col kic-compare-col--high">
+        <div class="kic-compare-label">En la zona alta (3.000 → 3.001 kWh)</div>
+        <div class="kic-compare-icon">↑</div>
+        <div class="kic-compare-items">
+          <div class="kic-ci">El kilovatio extra puede equivaler a una carga de lavadora adicional a la semana</div>
+          <div class="kic-ci">Un rato más de climatización o iluminación decorativa</div>
+          <div class="kic-ci">Una fracción de tiempo de un servidor de bajo consumo</div>
+        </div>
+        <div class="kic-compare-verdict">Impacto marginal. Mejora de confort, no de capacidad básica.</div>
+      </div>
+    </div>
+    <div class="kic-zone-note">Esto no significa que el consumo energético alto sea irrelevante: la productividad industrial y el PIB siguen correlacionando con el consumo. Pero el impacto en bienestar humano básico es de rendimientos claramente decrecientes a partir de cierto umbral. La política óptima es ampliar acceso, no aumentar consumo donde ya hay excedente.</div>
+  </div>
+
+  <!-- Tab 4: 4000 kWh threshold -->
+  <div class="kic-panel" data-panel="4" hidden>
+    <div class="kic-zone-hd">
+      <div class="kic-zone-badge kic-zone-badge--c">Umbral empírico: 4.000 kWh/año</div>
+      <div class="kic-zone-claim">Dos reglas que emergen de los datos históricos de 190+ países. Juntas describen cuándo la electricidad deja de ser el factor limitante del desarrollo humano.</div>
+    </div>
+    <div class="kic-rules">
+      <div class="kic-rule kic-rule--necessary">
+        <div class="kic-rule-num">01</div>
+        <div class="kic-rule-body">
+          <div class="kic-rule-head">Condición necesaria</div>
+          <div class="kic-rule-stat">Ningún país con IDH ≥ 0,9 tiene menos de 4.000 kWh/cápita/año</div>
+          <p>Ningún caso documentado en más de 60 años de datos del Índice de Desarrollo Humano. Por debajo de este umbral, el desarrollo humano alto no se ha producido en ningún contexto, independientemente de otras variables institucionales o geográficas.</p>
+        </div>
+      </div>
+      <div class="kic-rule kic-rule--sufficient">
+        <div class="kic-rule-num">02</div>
+        <div class="kic-rule-body">
+          <div class="kic-rule-head">Condición no suficiente</div>
+          <div class="kic-rule-stat">No todos los países que superan 4.000 kWh han alcanzado IDH ≥ 0,9</div>
+          <p>La electricidad por encima de ese umbral es necesaria pero no determinante. Los factores que deciden si el potencial energético se traduce en bienestar generalizado son institucionales, distributivos y educativos, no energéticos.</p>
+        </div>
+      </div>
+    </div>
+    <div class="kic-implication">
+      <div class="kic-impl-k">Implicación directa para la IA</div>
+      <p>Si la IA requiere electricidad estable y abundante para funcionar bien, y si ese acceso sigue siendo desigual a escala global, la brecha de bienestar que la electrificación ayudó a reducir puede reproducirse en una nueva forma con la IA como vector.</p>
+    </div>
+  </div>
+</div>
+
+<style>
+.kic-wrap, .kic-wrap * { box-sizing: border-box; }
+
+.kic-wrap {
+  --ka: #26A69A;
+  --kb: #324AB2;
+  --kg: #FFB343;
+  --kbg: var(--md-default-bg-color, #fff);
+  --kfg: var(--md-default-fg-color, #0f172a);
+  --kbd: rgba(15,23,42,.16);
+  --kmut: rgba(15,23,42,.60);
+  --kf: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  --km: "SF Mono","JetBrains Mono","Courier New",monospace;
+
+  display: grid;
+  gap: 14px;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--kbd);
+  border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--kb) 7%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 100%, color-mix(in srgb,var(--ka) 5%,transparent), transparent 52%),
+    var(--kbg);
+  color: var(--kfg);
+  font-family: var(--kf);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-md-color-scheme="slate"] .kic-wrap {
+  --kbg: var(--md-default-bg-color, #0f172a);
+  --kfg: var(--md-default-fg-color, #e2e8f0);
+  --kbd: rgba(226,232,240,.16);
+  --kmut: rgba(226,232,240,.60);
+}
+
+.kic-hd { display: grid; gap: 5px; }
+.kic-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.kic-sub { font-size: 14px; color: var(--kmut); line-height: 1.5; max-width: 72ch; }
+
+/* Tabs */
+.kic-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.kic-tab {
+  font-family: var(--kf);
+  font-size: 12.5px;
+  font-weight: 800;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--kbd);
+  background: transparent;
+  color: var(--kmut);
+  cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s;
+}
+.kic-tab:hover { background: color-mix(in srgb,var(--ka) 8%,var(--kbg)); color: var(--kfg); }
+.kic-tab.active { background: color-mix(in srgb,var(--ka) 14%,var(--kbg)); border-color: color-mix(in srgb,var(--ka) 35%,var(--kbd)); color: color-mix(in srgb,var(--ka) 80%,var(--kfg)); }
+
+/* Panels */
+.kic-panel { display: grid; gap: 12px; }
+.kic-panel[hidden] { display: none; }
+
+/* SVG */
+.kic-svg-wrap {
+  border: 1px solid var(--kbd);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--kbg) 90%, #0f172a 10%);
+  padding: 12px 10px 4px;
+  overflow: hidden;
+}
+.kic-svg-wrap svg { width: 100%; display: block; }
+
+.kic-note {
+  font-size: 12px;
+  color: var(--kmut);
+  line-height: 1.5;
+  font-style: italic;
+  border-left: 2px solid color-mix(in srgb,var(--ka) 34%,transparent);
+  padding-left: 10px;
+}
+
+/* Zone header */
+.kic-zone-hd { display: grid; gap: 8px; }
+.kic-zone-badge {
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  padding: 4px 12px;
+  border-radius: 999px;
+  width: fit-content;
+}
+.kic-zone-badge--a { background: color-mix(in srgb,var(--ka) 12%,var(--kbg)); border: 1px solid color-mix(in srgb,var(--ka) 30%,transparent); color: color-mix(in srgb,var(--ka) 80%,var(--kfg)); }
+.kic-zone-badge--b { background: color-mix(in srgb,var(--kg) 12%,var(--kbg)); border: 1px solid color-mix(in srgb,var(--kg) 30%,transparent); color: color-mix(in srgb,#a06010 60%,var(--kfg)); }
+.kic-zone-badge--c { background: color-mix(in srgb,var(--kb) 12%,var(--kbg)); border: 1px solid color-mix(in srgb,var(--kb) 30%,transparent); color: color-mix(in srgb,var(--kb) 75%,var(--kfg)); }
+
+.kic-zone-claim { font-size: 14px; color: var(--kmut); line-height: 1.5; max-width: 72ch; }
+
+/* Steps (Tab 2) */
+.kic-steps { display: grid; gap: 8px; }
+.kic-step {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 12px;
+  align-items: start;
+  border: 1px solid var(--kbd);
+  border-radius: 12px;
+  padding: 12px 14px;
+  background: color-mix(in srgb,var(--kbg) 90%,#0f172a 10%);
+}
+.kic-step-range {
+  font-family: var(--km);
+  font-size: 11.5px;
+  font-weight: 900;
+  color: color-mix(in srgb,var(--ka) 80%,var(--kfg));
+  padding-top: 2px;
+  line-height: 1.3;
+}
+.kic-step-head { font-size: 13.5px; font-weight: 900; margin-bottom: 4px; }
+.kic-step-body p { margin: 0; font-size: 12.5px; color: var(--kmut); line-height: 1.45; }
+
+.kic-zone-note {
+  font-size: 12.5px;
+  color: var(--kmut);
+  line-height: 1.5;
+  font-style: italic;
+  border-left: 2px solid color-mix(in srgb,var(--ka) 34%,transparent);
+  padding-left: 10px;
+}
+
+/* Compare (Tab 3) */
+.kic-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.kic-compare-col {
+  border: 1px solid var(--kbd);
+  border-radius: 14px;
+  padding: 14px;
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  background: color-mix(in srgb, var(--kbg) 90%, #0f172a 10%);
+}
+.kic-compare-col--low { border-color: color-mix(in srgb,var(--ka) 30%,var(--kbd)); background: linear-gradient(135deg, color-mix(in srgb,var(--ka) 6%,transparent), transparent 60%), color-mix(in srgb,var(--kbg) 90%,#0f172a 10%); }
+.kic-compare-col--high { border-color: color-mix(in srgb,var(--kg) 28%,var(--kbd)); background: linear-gradient(135deg, color-mix(in srgb,var(--kg) 5%,transparent), transparent 60%), color-mix(in srgb,var(--kbg) 90%,#0f172a 10%); }
+
+.kic-compare-label { font-size: 11.5px; font-weight: 900; color: var(--kmut); line-height: 1.3; }
+.kic-compare-icon { font-size: 22px; color: var(--ka); }
+.kic-compare-col--high .kic-compare-icon { color: var(--kg); }
+.kic-compare-items { display: grid; gap: 5px; }
+.kic-ci {
+  font-size: 12.5px;
+  padding: 6px 9px;
+  border-radius: 8px;
+  border: 1px solid var(--kbd);
+  background: color-mix(in srgb,var(--kbg) 85%,transparent);
+  line-height: 1.4;
+  color: var(--kmut);
+}
+.kic-compare-verdict {
+  font-size: 12px;
+  font-weight: 900;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb,var(--ka) 25%,transparent);
+  background: color-mix(in srgb,var(--ka) 8%,var(--kbg));
+  color: color-mix(in srgb,var(--ka) 75%,var(--kfg));
+}
+.kic-compare-col--high .kic-compare-verdict {
+  border-color: color-mix(in srgb,var(--kg) 22%,transparent);
+  background: color-mix(in srgb,var(--kg) 8%,var(--kbg));
+  color: color-mix(in srgb,#a06010 60%,var(--kfg));
+}
+
+/* Rules (Tab 4) */
+.kic-rules { display: grid; gap: 10px; }
+.kic-rule {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: 14px;
+  align-items: start;
+  border: 1px solid var(--kbd);
+  border-radius: 14px;
+  padding: 14px;
+  background: color-mix(in srgb, var(--kbg) 90%, #0f172a 10%);
+}
+.kic-rule--necessary { border-color: color-mix(in srgb,var(--kb) 28%,var(--kbd)); background: linear-gradient(135deg, color-mix(in srgb,var(--kb) 6%,transparent), transparent 60%), color-mix(in srgb,var(--kbg) 90%,#0f172a 10%); }
+.kic-rule--sufficient { border-color: color-mix(in srgb,var(--kg) 25%,var(--kbd)); background: linear-gradient(135deg, color-mix(in srgb,var(--kg) 5%,transparent), transparent 60%), color-mix(in srgb,var(--kbg) 90%,#0f172a 10%); }
+
+.kic-rule-num { font-family: var(--km); font-size: 22px; font-weight: 900; color: var(--kmut); padding-top: 2px; }
+.kic-rule-head { font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: .05em; color: var(--kmut); margin-bottom: 4px; }
+.kic-rule-stat { font-size: 15px; font-weight: 900; margin-bottom: 6px; line-height: 1.25; }
+.kic-rule--necessary .kic-rule-stat { color: color-mix(in srgb,var(--kb) 75%,var(--kfg)); }
+.kic-rule--sufficient .kic-rule-stat { color: color-mix(in srgb,#a06010 60%,var(--kfg)); }
+.kic-rule-body p { margin: 0; font-size: 12.5px; color: var(--kmut); line-height: 1.45; }
+
+.kic-implication {
+  border: 1px solid var(--kbd);
+  border-radius: 12px;
+  padding: 14px;
+  background: color-mix(in srgb, var(--kbg) 90%, #0f172a 10%);
+  display: grid;
+  gap: 6px;
+}
+.kic-impl-k { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; color: var(--kmut); }
+.kic-implication p { margin: 0; font-size: 13px; line-height: 1.5; color: var(--kmut); }
+
+@media (max-width: 600px) {
+  .kic-step { grid-template-columns: 1fr; }
+  .kic-compare { grid-template-columns: 1fr; }
+  .kic-rule { grid-template-columns: 1fr; }
+  .kic-rule-num { display: none; }
+}
+</style>
+
+<script>
+(function() {
+  function bind(root) {
+    if (!root || root.__portableTabsInited) return;
+    root.__portableTabsInited = true;
+    var tabs = Array.from(root.querySelectorAll('[data-tab]'));
+    var panels = Array.from(root.querySelectorAll('[data-panel]'));
+    if (!tabs.length || !panels.length) return;
+    var defaultKey = (root.dataset.default || tabs[0].dataset.tab || '').trim();
+
+    function show(key) {
+      tabs.forEach(function(tab) {
+        var active = tab.dataset.tab === key;
+        tab.classList.toggle('active', active);
+        tab.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+      panels.forEach(function(panel) {
+        panel.hidden = panel.dataset.panel !== key;
+      });
+    }
+
+    root.addEventListener('click', function(ev) {
+      var btn = ev.target.closest('[data-tab]');
+      if (!btn || !root.contains(btn)) return;
+      show(btn.dataset.tab || defaultKey);
+    });
+
+    root.addEventListener('keydown', function(ev) {
+      var btn = ev.target.closest('[data-tab]');
+      if (!btn || !root.contains(btn)) return;
+      var i = tabs.indexOf(btn);
+      if (i < 0) return;
+      var j = -1;
+      if (ev.key === 'ArrowRight') j = (i + 1) % tabs.length;
+      else if (ev.key === 'ArrowLeft') j = (i - 1 + tabs.length) % tabs.length;
+      else if (ev.key === 'Home') j = 0;
+      else if (ev.key === 'End') j = tabs.length - 1;
+      else return;
+      ev.preventDefault();
+      tabs[j].focus();
+      show(tabs[j].dataset.tab || defaultKey);
+    });
+
+    show(defaultKey);
+  }
+
+  if (window.TabbedAnimations && typeof window.TabbedAnimations.initAll === 'function') {
+    window.TabbedAnimations.initAll();
+    return;
+  }
+
+  document.querySelectorAll('[data-demo="01-kwh-idi-curva"][data-anim-tabs]').forEach(bind);
+})();
+</script>

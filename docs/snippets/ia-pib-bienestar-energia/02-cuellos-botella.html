@@ -1,0 +1,202 @@
+<div class="cue-wrap" data-demo="02-cuellos-botella">
+  <div class="cue-hd">
+    <div class="cue-title">Cinco cuellos de botella para la expansión de la IA</div>
+    <div class="cue-sub">La IA no escala solo con dinero. Cada uno de estos recursos limita la velocidad real de crecimiento de forma independiente.</div>
+  </div>
+
+  <div class="cue-grid">
+
+    <div class="cue-item cue-item--energy">
+      <div class="cue-item-head">
+        <div class="cue-item-num">1</div>
+        <div class="cue-item-name">Energía</div>
+        <div class="cue-item-badge cue-item-badge--critical">Crítico hoy</div>
+      </div>
+      <div class="cue-item-body">
+        <p>Las redes eléctricas no tienen capacidad disponible a corto plazo en muchas regiones. Los plazos de ampliación se miden en años, no en meses.</p>
+        <div class="cue-detail">Los grandes actores responden con contratos de renovables a largo plazo, pero los contratos no garantizan disponibilidad exacta cuando y donde se necesita.</div>
+      </div>
+    </div>
+
+    <div class="cue-item cue-item--chips">
+      <div class="cue-item-head">
+        <div class="cue-item-num">2</div>
+        <div class="cue-item-name">Chips</div>
+        <div class="cue-item-badge cue-item-badge--critical">Crítico hoy</div>
+      </div>
+      <div class="cue-item-body">
+        <p>GPUs y TPUs de última generación se producen en pocas fábricas en el mundo. La cadena de suministro es larga, frágil y geopolíticamente sensible.</p>
+        <div class="cue-detail">Los plazos de entrega a gran escala se miden en meses o años. El presupuesto disponible no garantiza acceso inmediato.</div>
+      </div>
+    </div>
+
+    <div class="cue-item cue-item--water">
+      <div class="cue-item-head">
+        <div class="cue-item-num">3</div>
+        <div class="cue-item-name">Agua</div>
+        <div class="cue-item-badge cue-item-badge--growing">Creciente</div>
+      </div>
+      <div class="cue-item-body">
+        <p>La refrigeración de centros de datos consume agua. En zonas con estrés hídrico, genera tensión directa con otros usos y con las comunidades locales.</p>
+        <div class="cue-detail">Las zonas atractivas por clima o coste del suelo suelen coincidir con zonas de estrés hídrico.</div>
+      </div>
+    </div>
+
+    <div class="cue-item cue-item--talent">
+      <div class="cue-item-head">
+        <div class="cue-item-num">4</div>
+        <div class="cue-item-name">Talento</div>
+        <div class="cue-item-badge cue-item-badge--growing">Creciente</div>
+      </div>
+      <div class="cue-item-body">
+        <p>Las personas capaces de diseñar, entrenar y mantener sistemas de IA a escala son pocas respecto a la demanda y se concentran geográficamente.</p>
+        <div class="cue-detail">La escasez de talento limita la velocidad de desarrollo independientemente de la infraestructura disponible.</div>
+      </div>
+    </div>
+
+    <div class="cue-item cue-item--reg">
+      <div class="cue-item-head">
+        <div class="cue-item-num">5</div>
+        <div class="cue-item-name">Regulación</div>
+        <div class="cue-item-badge cue-item-badge--variable">Variable</div>
+      </div>
+      <div class="cue-item-body">
+        <p>El entorno regulatorio varía entre jurisdicciones y cambia con rapidez, añadiendo incertidumbre sobre qué modelos de negocio son viables en cada geografía.</p>
+        <div class="cue-detail">AI Act europeo, restricciones de exportación de chips, debates de soberanía digital: todos condicionan las decisiones de inversión.</div>
+      </div>
+    </div>
+
+  </div>
+
+
+</div>
+
+<style>
+.cue-wrap, .cue-wrap * { box-sizing: border-box; }
+
+.cue-wrap {
+  --ca: var(--md-primary-fg-color, #26A69A);
+  --cb: #324AB2;
+  --cg: var(--md-accent-fg-color, #FFB343);
+  --cr: #e04c4c;
+  --cbg: var(--md-default-bg-color, #fff);
+  --cfg: var(--md-default-fg-color, #0f172a);
+  --cbd: rgba(15,23,42,.16);
+  --cmut: rgba(15,23,42,.60);
+  --cf: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid;
+  gap: 14px;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--cbd);
+  border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--cb) 7%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 100%, color-mix(in srgb,var(--ca) 5%,transparent), transparent 52%),
+    var(--cbg);
+  color: var(--cfg);
+  font-family: var(--cf);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-md-color-scheme="slate"] .cue-wrap {
+  --cbg: var(--md-default-bg-color, #0f172a);
+  --cfg: var(--md-default-fg-color, #e2e8f0);
+  --cbd: rgba(226,232,240,.16);
+  --cmut: rgba(226,232,240,.60);
+}
+
+.cue-hd { display: grid; gap: 5px; }
+.cue-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.cue-sub { font-size: 14px; color: var(--cmut); line-height: 1.5; max-width: 72ch; }
+
+.cue-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 8px;
+}
+
+.cue-item {
+  border: 1px solid var(--cbd);
+  border-radius: 14px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--cbg) 90%, #0f172a 10%);
+}
+
+.cue-item--energy { border-color: color-mix(in srgb, var(--cr) 28%, var(--cbd)); }
+.cue-item--chips { border-color: color-mix(in srgb, var(--cr) 28%, var(--cbd)); }
+.cue-item--water { border-color: color-mix(in srgb, var(--ca) 28%, var(--cbd)); }
+.cue-item--talent { border-color: color-mix(in srgb, var(--ca) 28%, var(--cbd)); }
+.cue-item--reg { border-color: color-mix(in srgb, var(--cg) 28%, var(--cbd)); }
+
+.cue-item-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--cbd);
+  background: color-mix(in srgb, var(--cbg) 80%, #0f172a 20%);
+}
+
+.cue-item-num {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--cb) 12%, var(--cbg));
+  border: 1px solid color-mix(in srgb, var(--cb) 28%, var(--cbd));
+  font-size: 11px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.cue-item-name { font-size: 13.5px; font-weight: 900; flex: 1; }
+
+.cue-item-badge {
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--cbd);
+  white-space: nowrap;
+}
+
+.cue-item-badge--critical {
+  background: color-mix(in srgb, var(--cr) 10%, var(--cbg));
+  border-color: color-mix(in srgb, var(--cr) 30%, var(--cbd));
+  color: color-mix(in srgb, var(--cr) 70%, var(--cfg));
+}
+
+.cue-item-badge--growing {
+  background: color-mix(in srgb, var(--cg) 10%, var(--cbg));
+  border-color: color-mix(in srgb, var(--cg) 30%, var(--cbd));
+  color: color-mix(in srgb, var(--cg) 60%, var(--cfg));
+}
+
+.cue-item-badge--variable {
+  background: color-mix(in srgb, var(--cb) 10%, var(--cbg));
+  border-color: color-mix(in srgb, var(--cb) 30%, var(--cbd));
+  color: color-mix(in srgb, var(--cb) 70%, var(--cfg));
+}
+
+.cue-item-body { padding: 10px 12px; display: grid; gap: 6px; }
+.cue-item-body p { margin: 0; font-size: 13px; line-height: 1.5; }
+
+.cue-detail {
+  font-size: 12px;
+  color: var(--cmut);
+  line-height: 1.45;
+  padding: 7px 10px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--cbg) 85%, #0f172a 15%);
+  border: 1px solid var(--cbd);
+}
+
+@media (max-width: 560px) {
+  .cue-grid { grid-template-columns: 1fr; }
+}
+</style>

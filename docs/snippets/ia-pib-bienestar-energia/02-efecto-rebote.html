@@ -1,0 +1,123 @@
+<div class="er-wrap" data-demo="02-efecto-rebote">
+  <div class="er-hd">
+    <div class="er-title">Por qué la eficiencia no reduce el consumo: el efecto rebote</div>
+    <div class="er-sub">Cuando una tecnología se vuelve más eficiente, su coste por unidad baja. Pero eso incentiva más uso, más casos de uso y modelos más potentes. El resultado neto puede ser mayor consumo total, no menor.</div>
+  </div>
+
+  <div class="er-chain">
+    <div class="er-step">
+      <div class="er-step-tag">Inicio</div>
+      <div class="er-step-title">Chips más eficientes</div>
+      <div class="er-step-body">Cada operación consume menos energía. Menor calor, menores costes de refrigeración, mayor densidad de cómputo por rack.</div>
+    </div>
+    <div class="er-arrow">→</div>
+    <div class="er-step">
+      <div class="er-step-tag">Efecto 1</div>
+      <div class="er-step-title">Menor coste por consulta</div>
+      <div class="er-step-body">Servir un modelo se vuelve más barato. Aplicaciones antes inviables económicamente pasan el umbral de rentabilidad.</div>
+    </div>
+    <div class="er-arrow">→</div>
+    <div class="er-step">
+      <div class="er-step-tag">Efecto 2</div>
+      <div class="er-step-title">Más casos de uso viables</div>
+      <div class="er-step-body">Más sectores y geografías pueden desplegar IA. Más modelos especializados. Más usuarios simultáneos.</div>
+    </div>
+    <div class="er-arrow">→</div>
+    <div class="er-step er-step--end">
+      <div class="er-step-tag er-tag--end">Resultado</div>
+      <div class="er-step-title">Mayor demanda total</div>
+      <div class="er-step-body">El volumen de uso crece más rápido que la mejora de eficiencia. El consumo energético agregado aumenta aunque cada operación consuma menos.</div>
+    </div>
+  </div>
+
+  <div class="er-note">Este patrón tiene nombre: paradoja de Jevons (1865). Formulado para el carbón, aplicado después al petróleo, ahora observable en semiconductores. El consumo eléctrico de centros de datos creció de forma sostenida en los años en que la eficiencia por operación también mejoró de forma sostenida. Ambas tendencias son simultáneamente ciertas.</div>
+</div>
+
+<style>
+.er-wrap, .er-wrap * { box-sizing: border-box; }
+
+.er-wrap {
+  --ea: #26A69A;
+  --eb: #324AB2;
+  --er: #e04c4c;
+  --ebg: var(--md-default-bg-color, #fff);
+  --efg: var(--md-default-fg-color, #0f172a);
+  --ebd: rgba(15,23,42,.16);
+  --emut: rgba(15,23,42,.60);
+  --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid;
+  gap: 14px;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--ebd);
+  border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--ea) 7%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 100%, color-mix(in srgb,var(--er) 5%,transparent), transparent 52%),
+    var(--ebg);
+  color: var(--efg);
+  font-family: var(--ef);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-md-color-scheme="slate"] .er-wrap {
+  --ebg: var(--md-default-bg-color, #0f172a);
+  --efg: var(--md-default-fg-color, #e2e8f0);
+  --ebd: rgba(226,232,240,.16);
+  --emut: rgba(226,232,240,.60);
+}
+
+.er-hd { display: grid; gap: 5px; }
+.er-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.er-sub { font-size: 14px; color: var(--emut); line-height: 1.5; max-width: 72ch; }
+
+.er-chain { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr; gap: 0; align-items: start; }
+
+.er-step {
+  border: 1px solid var(--ebd);
+  border-radius: 12px;
+  padding: 14px;
+  display: grid;
+  gap: 6px;
+  align-content: start;
+  background: color-mix(in srgb,var(--ebg) 90%,#0f172a 10%);
+  height: 100%;
+}
+
+.er-step--end {
+  border-color: color-mix(in srgb,var(--er) 30%,var(--ebd));
+  background: linear-gradient(135deg, color-mix(in srgb,var(--er) 6%,transparent), transparent 60%), color-mix(in srgb,var(--ebg) 90%,#0f172a 10%);
+}
+
+.er-step-tag {
+  font-size: 9px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--emut);
+}
+
+.er-tag--end { color: color-mix(in srgb,var(--er) 70%,var(--efg)); }
+
+.er-step-title { font-size: 13.5px; font-weight: 900; line-height: 1.2; }
+.er-step--end .er-step-title { color: color-mix(in srgb,var(--er) 80%,var(--efg)); }
+.er-step-body { font-size: 12px; color: var(--emut); line-height: 1.45; }
+
+.er-arrow { font-size: 20px; color: var(--emut); align-self: center; padding: 0 6px; padding-top: 20px; opacity: .6; }
+
+.er-note {
+  font-size: 13px;
+  color: var(--emut);
+  line-height: 1.5;
+  font-style: italic;
+  border-left: 2px solid color-mix(in srgb, var(--eb) 34%, transparent);
+  padding-left: 10px;
+}
+
+@media (max-width: 680px) {
+  .er-chain { grid-template-columns: 1fr; }
+  .er-arrow { padding-top: 0; transform: rotate(90deg); justify-self: start; }
+}
+</style>

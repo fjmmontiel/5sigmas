@@ -1,0 +1,331 @@
+<div class="hia-wrap" data-demo="02-huella-ia">
+  <div class="hia-hd">
+    <div class="hia-title">La huella energética real: entrenamiento, inferencia y escala global</div>
+    <div class="hia-sub">Dos fases con perfiles de consumo radicalmente distintos, que juntas reconfiguran la demanda energética de regiones enteras.</div>
+  </div>
+
+  <div class="hia-phases">
+    <div class="hia-phase hia-phase--train">
+      <div class="hia-phase-label">Entrenamiento</div>
+      <div class="hia-phase-mode hia-phase-mode--train">Episódico · Alta intensidad · Geográficamente concentrado</div>
+      <div class="hia-phase-stat">
+        <div class="hia-stat-val">~ 42 GWh</div>
+        <div class="hia-stat-desc">consumo estimado del entrenamiento inicial de GPT-4 — equivalente al consumo anual de varios miles de hogares</div>
+      </div>
+      <div class="hia-phase-items">
+        <div class="hia-pi">Se ejecuta una vez por versión de modelo (semanas o meses)</div>
+        <div class="hia-pi">Miles de aceleradores en paralelo en un mismo centro de datos</div>
+        <div class="hia-pi">Se concentra donde la electricidad es más barata: renovables, mercados nocturnos, regiones con superávit de generación</div>
+      </div>
+    </div>
+
+    <div class="hia-vs">vs</div>
+
+    <div class="hia-phase hia-phase--infer">
+      <div class="hia-phase-label">Inferencia</div>
+      <div class="hia-phase-mode hia-phase-mode--infer">Continua · Baja por consulta · Distribuida globalmente</div>
+      <div class="hia-phase-stat">
+        <div class="hia-stat-val">~ 2,9 Wh</div>
+        <div class="hia-stat-desc">por consulta a un LLM — diez veces más que una búsqueda web (0,3 Wh); hasta 115 Wh por minuto de vídeo generado</div>
+      </div>
+      <div class="hia-phase-items">
+        <div class="hia-pi">Miles de millones de consultas diarias en producción</div>
+        <div class="hia-pi">El consumo acumulado puede superar al entrenamiento conforme crece la adopción</div>
+        <div class="hia-pi">Se despliega cerca de los usuarios: latencia baja requiere proximidad geográfica</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hia-scale">
+    <div class="hia-scale-k">Proyección IEA — consumo eléctrico global de centros de datos</div>
+    <div class="hia-bars">
+      <div class="hia-bar-row">
+        <div class="hia-bar-label">2024</div>
+        <div class="hia-bar-track">
+          <div class="hia-bar-fill hia-bar-fill--24"></div>
+          <div class="hia-bar-val">415 TWh</div>
+        </div>
+        <div class="hia-bar-ref">≈ consumo eléctrico de España</div>
+      </div>
+      <div class="hia-bar-row">
+        <div class="hia-bar-label">2030 base</div>
+        <div class="hia-bar-track">
+          <div class="hia-bar-fill hia-bar-fill--30b"></div>
+          <div class="hia-bar-val">945 TWh</div>
+        </div>
+        <div class="hia-bar-ref">≈ consumo eléctrico de Japón</div>
+      </div>
+      <div class="hia-bar-row">
+        <div class="hia-bar-label">2030 acelerado</div>
+        <div class="hia-bar-track">
+          <div class="hia-bar-fill hia-bar-fill--30h"></div>
+          <div class="hia-bar-val">1 260 TWh</div>
+        </div>
+        <div class="hia-bar-ref">≈ consumo eléctrico de Alemania + Francia</div>
+      </div>
+    </div>
+    <div class="hia-scale-note">Fuente: IEA, Energy and AI, 2025. Escenario base asume adopción sostenida. Escenario acelerado incluye expansión de agentes de IA y edge computing.</div>
+  </div>
+
+  <div class="hia-geo">
+    <div class="hia-geo-k">Geografía en dos niveles: dónde va cada función</div>
+    <div class="hia-geo-cols">
+      <div class="hia-geo-col hia-geo-col--train">
+        <div class="hia-geo-type">Entrenamiento</div>
+        <div class="hia-geo-arrow">↓</div>
+        <div class="hia-geo-driver">Cerca de energía barata</div>
+        <div class="hia-geo-places">
+          <span class="hia-place">Regiones nórdicas</span>
+          <span class="hia-place">Texas</span>
+          <span class="hia-place">Noroeste EE.UU.</span>
+          <span class="hia-place">Sichuan (China)</span>
+        </div>
+        <div class="hia-geo-why">Electricidad barata o con excedentes renovables. La latencia no es crítica para entrenar.</div>
+      </div>
+      <div class="hia-geo-col hia-geo-col--infer">
+        <div class="hia-geo-type">Inferencia</div>
+        <div class="hia-geo-arrow">↓</div>
+        <div class="hia-geo-driver">Cerca de centros de población</div>
+        <div class="hia-geo-places">
+          <span class="hia-place">Virginia Norte</span>
+          <span class="hia-place">Singapur</span>
+          <span class="hia-place">Irlanda</span>
+          <span class="hia-place">Tokio</span>
+        </div>
+        <div class="hia-geo-why">La latencia de respuesta requiere proximidad. La electricidad es más cara pero el mercado lo soporta.</div>
+      </div>
+    </div>
+    <div class="hia-geo-note">Esta diferenciación funcional determina qué regiones compiten por qué tipo de inversión. Formar parte de la geografía del entrenamiento requiere energía barata. Formar parte de la inferencia requiere población y conectividad. El caso de Irlanda ilustra la concentración que eso puede producir a escala nacional: los centros de datos representan ya más del 20% del consumo eléctrico total del país, con proyecciones que sitúan ese porcentaje cerca del 80% para 2030 si la expansión continúa al ritmo previsto.</div>
+  </div>
+
+  <div class="hia-footprint">
+    <div class="hia-footprint-k">Huella real vs declarada: IA, emisiones y residuos</div>
+    <div class="hia-fp-cards">
+      <div class="hia-fp-card hia-fp-card--energy">
+        <div class="hia-fp-label">Electricidad IA específica</div>
+        <div class="hia-fp-trend">50 → 554 TWh</div>
+        <div class="hia-fp-mult">× 11 entre 2020 y 2030</div>
+        <div class="hia-fp-detail">La carga de IA crece mucho más rápido que el total de centros de datos. Greenpeace (2025) estima este factor de multiplicación de once en diez años.</div>
+      </div>
+      <div class="hia-fp-card hia-fp-card--co2">
+        <div class="hia-fp-label">Emisiones CO₂ atribuibles a IA</div>
+        <div class="hia-fp-trend">180 → 320 Mt</div>
+        <div class="hia-fp-mult">entre 2020 y 2030</div>
+        <div class="hia-fp-detail">Aunque las grandes empresas tecnológicas declaren neutralidad climática. Las emisiones reales superan entre 1,6 y 7,6 veces las declaradas porque los PPAs se contabilizan anualmente, no en tiempo real.</div>
+      </div>
+      <div class="hia-fp-card hia-fp-card--ewaste">
+        <div class="hia-fp-label">Residuos electrónicos de IA</div>
+        <div class="hia-fp-trend">1,2 – 5 M t</div>
+        <div class="hia-fp-mult">estimación para 2030</div>
+        <div class="hia-fp-detail">Por encima de la capacidad actual de reciclaje especializado. Producir un wafer de semiconductor de última generación requiere ~2,3 MWh. Greenpeace (2025).</div>
+      </div>
+    </div>
+    <div class="hia-fp-renew">
+      <div class="hia-fp-renew-k">Por qué los compromisos renovables no equivalen a consumo renovable</div>
+      <div class="hia-fp-renew-text">Los contratos de compra de energía renovable (PPAs) que firman Google, Microsoft y Amazon garantizan que una cantidad equivalente de energía renovable entra a la red cada año. No garantizan que la electricidad que llega al centro de datos en cada momento sea de origen renovable. Las emisiones se compensan en papel pero no se evitan en tiempo real. Microsoft anunció en 2023 un acuerdo para retomar parte de la producción nuclear de Three Mile Island como respuesta a este problema de temporalidad.</div>
+    </div>
+  </div>
+</div>
+
+<style>
+.hia-wrap, .hia-wrap * { box-sizing: border-box; }
+
+.hia-wrap {
+  --ha: #26A69A;
+  --hb: #324AB2;
+  --hg: #FFB343;
+  --hr: #e04c4c;
+  --hbg: var(--md-default-bg-color, #fff);
+  --hfg: var(--md-default-fg-color, #0f172a);
+  --hbd: rgba(15,23,42,.16);
+  --hmut: rgba(15,23,42,.60);
+  --hf: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  --hm: "SF Mono","JetBrains Mono","Courier New",monospace;
+
+  display: grid;
+  gap: 16px;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--hbd);
+  border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--hb) 7%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 100%, color-mix(in srgb,var(--ha) 5%,transparent), transparent 52%),
+    var(--hbg);
+  color: var(--hfg);
+  font-family: var(--hf);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-md-color-scheme="slate"] .hia-wrap {
+  --hbg: var(--md-default-bg-color, #0f172a);
+  --hfg: var(--md-default-fg-color, #e2e8f0);
+  --hbd: rgba(226,232,240,.16);
+  --hmut: rgba(226,232,240,.60);
+}
+
+.hia-hd { display: grid; gap: 5px; }
+.hia-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.hia-sub { font-size: 14px; color: var(--hmut); line-height: 1.5; max-width: 72ch; }
+
+/* Phases */
+.hia-phases { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: start; }
+
+.hia-phase {
+  border: 1px solid var(--hbd);
+  border-radius: 14px;
+  padding: 14px;
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  background: color-mix(in srgb, var(--hbg) 90%, #0f172a 10%);
+}
+
+.hia-phase--train { border-color: color-mix(in srgb, var(--hb) 30%, var(--hbd)); background: linear-gradient(135deg, color-mix(in srgb,var(--hb) 6%,transparent), transparent 60%), color-mix(in srgb,var(--hbg) 90%,#0f172a 10%); }
+.hia-phase--infer { border-color: color-mix(in srgb, var(--ha) 30%, var(--hbd)); background: linear-gradient(135deg, color-mix(in srgb,var(--ha) 6%,transparent), transparent 60%), color-mix(in srgb,var(--hbg) 90%,#0f172a 10%); }
+
+.hia-phase-label { font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--hmut); }
+.hia-phase-mode { font-size: 11.5px; font-weight: 700; padding: 4px 8px; border-radius: 999px; border: 1px solid var(--hbd); width: fit-content; }
+.hia-phase-mode--train { color: color-mix(in srgb,var(--hb) 75%,var(--hfg)); background: color-mix(in srgb,var(--hb) 8%,var(--hbg)); border-color: color-mix(in srgb,var(--hb) 25%,var(--hbd)); }
+.hia-phase-mode--infer { color: color-mix(in srgb,var(--ha) 80%,var(--hfg)); background: color-mix(in srgb,var(--ha) 8%,var(--hbg)); border-color: color-mix(in srgb,var(--ha) 25%,var(--hbd)); }
+
+.hia-phase-stat {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--hbd);
+  background: color-mix(in srgb, var(--hbg) 85%, transparent);
+  display: grid;
+  gap: 4px;
+}
+
+.hia-stat-val { font-size: 22px; font-weight: 900; font-family: var(--hm); letter-spacing: -.02em; }
+.hia-phase--train .hia-stat-val { color: color-mix(in srgb,var(--hb) 80%,var(--hfg)); }
+.hia-phase--infer .hia-stat-val { color: color-mix(in srgb,var(--ha) 80%,var(--hfg)); }
+.hia-stat-desc { font-size: 12px; color: var(--hmut); line-height: 1.4; }
+
+.hia-phase-items { display: grid; gap: 5px; }
+.hia-pi { font-size: 12.5px; padding: 6px 9px; border-radius: 8px; border: 1px solid var(--hbd); background: color-mix(in srgb,var(--hbg) 85%,transparent); line-height: 1.4; color: var(--hmut); }
+
+.hia-vs { font-size: 14px; font-weight: 900; color: var(--hmut); align-self: center; text-align: center; padding-top: 60px; }
+
+/* Scale */
+.hia-scale { display: grid; gap: 10px; }
+.hia-scale-k { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--hmut); }
+
+.hia-bars { display: grid; gap: 8px; }
+
+.hia-bar-row { display: grid; grid-template-columns: 90px 1fr 200px; gap: 8px; align-items: center; }
+
+.hia-bar-label { font-size: 12px; font-weight: 800; color: var(--hmut); text-align: right; }
+
+.hia-bar-track {
+  height: 32px;
+  background: color-mix(in srgb, var(--hbg) 85%, #0f172a 15%);
+  border-radius: 8px;
+  border: 1px solid var(--hbd);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.hia-bar-fill {
+  height: 100%;
+  border-radius: 7px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  transition: width .6s ease;
+}
+
+.hia-bar-fill--24 { width: 33%; background: linear-gradient(90deg, color-mix(in srgb,var(--ha) 60%,transparent), var(--ha)); }
+.hia-bar-fill--30b { width: 75%; background: linear-gradient(90deg, color-mix(in srgb,var(--hg) 60%,transparent), var(--hg)); }
+.hia-bar-fill--30h { width: 100%; background: linear-gradient(90deg, color-mix(in srgb,var(--hr) 60%,transparent), var(--hr)); }
+
+.hia-bar-val { position: relative; z-index: 1; font-size: 12.5px; font-weight: 900; font-family: var(--hm); padding: 0 10px; mix-blend-mode: normal; }
+
+.hia-bar-ref { font-size: 11.5px; color: var(--hmut); line-height: 1.3; }
+
+.hia-scale-note { font-size: 12px; color: var(--hmut); line-height: 1.5; font-style: italic; border-left: 2px solid color-mix(in srgb,var(--ha) 34%,transparent); padding-left: 10px; }
+
+/* Geography */
+.hia-geo { display: grid; gap: 10px; }
+.hia-geo-k { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--hmut); }
+
+.hia-geo-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.hia-geo-col {
+  border: 1px solid var(--hbd);
+  border-radius: 12px;
+  padding: 14px;
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  background: color-mix(in srgb, var(--hbg) 90%, #0f172a 10%);
+}
+
+.hia-geo-col--train { border-color: color-mix(in srgb,var(--hb) 28%,var(--hbd)); }
+.hia-geo-col--infer { border-color: color-mix(in srgb,var(--ha) 28%,var(--hbd)); }
+
+.hia-geo-type { font-size: 13.5px; font-weight: 900; }
+.hia-geo-arrow { font-size: 18px; color: var(--hmut); }
+
+.hia-geo-driver { font-size: 12px; font-weight: 900; padding: 4px 10px; border-radius: 999px; width: fit-content; }
+.hia-geo-col--train .hia-geo-driver { background: color-mix(in srgb,var(--hb) 10%,var(--hbg)); border: 1px solid color-mix(in srgb,var(--hb) 25%,var(--hbd)); color: color-mix(in srgb,var(--hb) 75%,var(--hfg)); }
+.hia-geo-col--infer .hia-geo-driver { background: color-mix(in srgb,var(--ha) 10%,var(--hbg)); border: 1px solid color-mix(in srgb,var(--ha) 25%,var(--hbd)); color: color-mix(in srgb,var(--ha) 80%,var(--hfg)); }
+
+.hia-geo-places { display: flex; gap: 5px; flex-wrap: wrap; }
+.hia-place { font-size: 11.5px; font-weight: 700; padding: 3px 8px; border-radius: 999px; border: 1px solid var(--hbd); background: color-mix(in srgb,var(--hbg) 85%,transparent); color: var(--hmut); }
+
+.hia-geo-why { font-size: 12.5px; color: var(--hmut); line-height: 1.45; }
+
+.hia-geo-note { font-size: 13px; color: var(--hmut); line-height: 1.5; font-style: italic; border-left: 2px solid color-mix(in srgb,var(--hb) 34%,transparent); padding-left: 10px; }
+
+/* Footprint */
+.hia-footprint { display: grid; gap: 10px; }
+.hia-footprint-k { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--hmut); }
+
+.hia-fp-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+
+.hia-fp-card {
+  border: 1px solid var(--hbd);
+  border-radius: 13px;
+  padding: 13px;
+  display: grid;
+  gap: 4px;
+  align-content: start;
+  background: color-mix(in srgb, var(--hbg) 90%, #0f172a 10%);
+}
+.hia-fp-card--energy { border-color: color-mix(in srgb,var(--hg) 28%,var(--hbd)); background: linear-gradient(135deg,color-mix(in srgb,var(--hg) 6%,transparent),transparent 60%), color-mix(in srgb,var(--hbg) 90%,#0f172a 10%); }
+.hia-fp-card--co2   { border-color: color-mix(in srgb,var(--hr) 25%,var(--hbd)); background: linear-gradient(135deg,color-mix(in srgb,var(--hr) 5%,transparent),transparent 60%), color-mix(in srgb,var(--hbg) 90%,#0f172a 10%); }
+.hia-fp-card--ewaste { border-color: color-mix(in srgb,var(--hb) 22%,var(--hbd)); background: linear-gradient(135deg,color-mix(in srgb,var(--hb) 5%,transparent),transparent 60%), color-mix(in srgb,var(--hbg) 90%,#0f172a 10%); }
+
+.hia-fp-label { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; color: var(--hmut); }
+.hia-fp-trend { font-size: 18px; font-weight: 900; font-family: var(--hm); letter-spacing: -.02em; }
+.hia-fp-card--energy .hia-fp-trend { color: color-mix(in srgb,#a06010 60%,var(--hfg)); }
+.hia-fp-card--co2   .hia-fp-trend { color: color-mix(in srgb,var(--hr) 70%,var(--hfg)); }
+.hia-fp-card--ewaste .hia-fp-trend { color: color-mix(in srgb,var(--hb) 70%,var(--hfg)); }
+.hia-fp-mult { font-size: 11px; font-weight: 800; color: var(--hmut); }
+.hia-fp-detail { font-size: 11.5px; color: var(--hmut); line-height: 1.4; }
+
+.hia-fp-renew {
+  border: 1px solid var(--hbd);
+  border-radius: 12px;
+  padding: 12px 14px;
+  background: color-mix(in srgb, var(--hbg) 90%, #0f172a 10%);
+  display: grid;
+  gap: 6px;
+}
+.hia-fp-renew-k { font-size: 12px; font-weight: 900; color: var(--hmut); }
+.hia-fp-renew-text { font-size: 12.5px; color: var(--hmut); line-height: 1.5; }
+
+@media (max-width: 680px) {
+  .hia-fp-cards { grid-template-columns: 1fr; }
+  .hia-phases { grid-template-columns: 1fr; }
+  .hia-vs { padding-top: 0; }
+  .hia-bar-row { grid-template-columns: 70px 1fr; }
+  .hia-bar-ref { display: none; }
+  .hia-geo-cols { grid-template-columns: 1fr; }
+}
+</style>

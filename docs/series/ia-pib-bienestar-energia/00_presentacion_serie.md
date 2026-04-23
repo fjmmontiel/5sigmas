@@ -45,7 +45,7 @@ En esta serie exploraremos: <br>
    {{ include_html("snippets/ia-pib-energia/series_energy_ai_04_gdp.html") }}
 
 <!-- ## Fuentes y notas
-- IEA (2025) — *Energy and AI*: https://iea.blob.core.windows.net/assets/601eaec9-ba91-4623-819b-4ded331ec9e8/EnergyandAI.pdf
+- IEA (2025) — *Energy and AI*: https://www.iea.org/reports/energy-and-ai
 - Greenpeace (2025) — *Umweltauswirkungen KI*: https://www.greenpeace.de/publikationen/20250514-greenpeace-studie-umweltauswirkungen-ki-eng.pdf
 - World Bank — *World Development Indicators*: https://databank.worldbank.org/source/world-development-indicators
 - Penn World Table: https://www.rug.nl/ggdc/productivity/pwt/

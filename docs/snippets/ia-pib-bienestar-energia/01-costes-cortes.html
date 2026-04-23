@@ -1,0 +1,120 @@
+<div class="cc2-wrap" data-demo="01-costes-cortes">
+  <div class="cc2-hd">
+    <div class="cc2-title">El coste real de un corte de suministro no es el kWh perdido</div>
+    <div class="cc2-sub">Las interrupciones tienen un coste que no aparece en la factura eléctrica pero sí en los márgenes de cada organización que los soporta. Y para el sector salud el coste no es económico: es en resultados clínicos.</div>
+  </div>
+
+  <div class="cc2-grid">
+    <div class="cc2-card cc2-card--large">
+      <div class="cc2-who">Gran empresa</div>
+      <div class="cc2-pct">5 – 6%</div>
+      <div class="cc2-label">de ingresos anuales</div>
+      <div class="cc2-bar"><div class="cc2-fill cc2-fill--large"></div></div>
+      <div class="cc2-note">Generadores de respaldo, pérdida de producción, renegociación de pedidos. El diferencial frente a competidores con suministro estable actúa como impuesto implícito permanente sobre la competitividad.</div>
+    </div>
+    <div class="cc2-card cc2-card--sme">
+      <div class="cc2-who">Pequeña y mediana empresa</div>
+      <div class="cc2-pct">20%+</div>
+      <div class="cc2-label">de ingresos anuales</div>
+      <div class="cc2-bar"><div class="cc2-fill cc2-fill--sme"></div></div>
+      <div class="cc2-note">Sin capacidad de instalar generación de respaldo propia. Un corte prolongado puede suponer género perdido, clientes cancelados y maquinaria dañada sin posibilidad de recuperación inmediata.</div>
+    </div>
+    <div class="cc2-card cc2-card--health">
+      <div class="cc2-who">Sector salud</div>
+      <div class="cc2-pct">Irreversible</div>
+      <div class="cc2-label">en resultados clínicos</div>
+      <div class="cc2-bar"><div class="cc2-fill cc2-fill--health"></div></div>
+      <div class="cc2-note">Ruptura de cadena de frío de vacunas, cancelación de procedimientos quirúrgicos, mortalidad perinatal correlacionada con frecuencia de cortes. El coste no se mide en euros.</div>
+    </div>
+  </div>
+
+  <div class="cc2-footnote">Fuente: Banco Mundial, Enterprise Surveys. El coste del 5-6% es la mediana para grandes empresas en países con infraestructura inestable; el 20%+ recoge el percentil superior para pymes sin generación propia.</div>
+</div>
+
+<style>
+.cc2-wrap, .cc2-wrap * { box-sizing: border-box; }
+
+.cc2-wrap {
+  --ca: #26A69A;
+  --cb: #324AB2;
+  --cg: #FFB343;
+  --cr: #e04c4c;
+  --cbg: var(--md-default-bg-color, #fff);
+  --cfg: var(--md-default-fg-color, #0f172a);
+  --cbd: rgba(15,23,42,.16);
+  --cmut: rgba(15,23,42,.60);
+  --cf: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid;
+  gap: 14px;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--cbd);
+  border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--cr) 6%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 100%, color-mix(in srgb,var(--cg) 5%,transparent), transparent 52%),
+    var(--cbg);
+  color: var(--cfg);
+  font-family: var(--cf);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-md-color-scheme="slate"] .cc2-wrap {
+  --cbg: var(--md-default-bg-color, #0f172a);
+  --cfg: var(--md-default-fg-color, #e2e8f0);
+  --cbd: rgba(226,232,240,.16);
+  --cmut: rgba(226,232,240,.60);
+}
+
+.cc2-hd { display: grid; gap: 5px; }
+.cc2-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.cc2-sub { font-size: 14px; color: var(--cmut); line-height: 1.5; max-width: 72ch; }
+
+.cc2-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+
+.cc2-card {
+  border: 1px solid var(--cbd);
+  border-radius: 14px;
+  padding: 16px;
+  display: grid;
+  gap: 7px;
+  align-content: start;
+  background: color-mix(in srgb, var(--cbg) 90%, #0f172a 10%);
+}
+
+.cc2-card--large { border-color: color-mix(in srgb,var(--cb) 28%,var(--cbd)); background: linear-gradient(135deg, color-mix(in srgb,var(--cb) 5%,transparent), transparent 60%), color-mix(in srgb,var(--cbg) 90%,#0f172a 10%); }
+.cc2-card--sme   { border-color: color-mix(in srgb,var(--cr) 28%,var(--cbd)); background: linear-gradient(135deg, color-mix(in srgb,var(--cr) 5%,transparent), transparent 60%), color-mix(in srgb,var(--cbg) 90%,#0f172a 10%); }
+.cc2-card--health { border-color: color-mix(in srgb,var(--cg) 28%,var(--cbd)); background: linear-gradient(135deg, color-mix(in srgb,var(--cg) 5%,transparent), transparent 60%), color-mix(in srgb,var(--cbg) 90%,#0f172a 10%); }
+
+.cc2-who { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; color: var(--cmut); }
+
+.cc2-pct { font-size: clamp(26px,3.5vw,38px); font-weight: 900; letter-spacing: -.03em; line-height: 1; font-family: "SF Mono","JetBrains Mono","Courier New",monospace; }
+.cc2-card--large .cc2-pct { color: color-mix(in srgb,var(--cb) 80%,var(--cfg)); }
+.cc2-card--sme   .cc2-pct { color: color-mix(in srgb,var(--cr) 80%,var(--cfg)); }
+.cc2-card--health .cc2-pct { color: color-mix(in srgb,var(--cg) 65%,var(--cfg)); }
+
+.cc2-label { font-size: 12px; color: var(--cmut); font-weight: 700; margin-top: -3px; }
+
+.cc2-bar { height: 6px; border-radius: 999px; background: var(--cbd); overflow: hidden; }
+.cc2-fill { height: 100%; border-radius: 999px; }
+.cc2-fill--large  { width: 30%; background: var(--cb); }
+.cc2-fill--sme    { width: 80%; background: var(--cr); }
+.cc2-fill--health { width: 100%; background: linear-gradient(90deg, var(--cg), var(--cr)); }
+
+.cc2-note { font-size: 12.5px; color: var(--cmut); line-height: 1.45; }
+
+.cc2-footnote {
+  font-size: 12px;
+  color: var(--cmut);
+  line-height: 1.5;
+  font-style: italic;
+  border-left: 2px solid color-mix(in srgb, var(--ca) 34%, transparent);
+  padding-left: 10px;
+}
+
+@media (max-width: 640px) {
+  .cc2-grid { grid-template-columns: 1fr; }
+}
+</style>
