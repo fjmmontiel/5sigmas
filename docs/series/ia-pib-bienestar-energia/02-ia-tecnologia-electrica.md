@@ -7,6 +7,7 @@ tags:
   - Economía
   - Energía
   - IA
+video: "02-ia-tecnologia-electrica.mp4"
 ---
 
 # Capítulo 2 — IA como tecnología eléctrica
@@ -76,6 +77,8 @@ Dentro de ese total, el componente específico de IA crece más rápido que el d
 
 {{ include_html("snippets/ia-pib-bienestar-energia/02-proyeccion-demanda.html") }}
 
+Cuando se usa la comparación con hogares conviene leerla como una equivalencia de orden de magnitud bajo operación continua a lo largo del año. No significa que un centro de datos y 100.000 viviendas consuman exactamente lo mismo en cada instante, sino que ambos suman una energía anual similar si el centro mantiene esa carga de forma sostenida.
+
 En muchas regiones, la red no tiene capacidad disponible a corto plazo, los plazos de ampliación se miden en años, y la estabilidad del suministro depende de una mezcla energética que en muchos países sigue siendo mayoritariamente fósil. Las grandes empresas tecnológicas responden a esto con contratos de energía renovable a largo plazo (PPAs), acuerdos de suministro dedicados y, en los casos más recientes, acuerdos directos con plantas nucleares existentes: Microsoft anunció en 2023 un acuerdo para retomar parte de la producción de Three Mile Island en Pennsylvania, y Amazon y Google han firmado acuerdos similares con operadores de energía nuclear. 
 
 Esos contratos, sin embargo, no equivalen a consumo renovable en tiempo real: garantizan que una cantidad equivalente de energía renovable entra en la red, pero no que la electricidad que llega al centro de datos en cada momento sea de origen renovable. El análisis de Greenpeace (2025) estima que las emisiones reales de las grandes empresas tecnológicas superan entre 1,6 y 7,6 veces las que sus declaraciones de neutralidad climática sugieren, porque los PPAs se contabilizan como compensación anual y no como sustitución directa en tiempo real [Greenpeace (2025)](https://www.greenpeace.de/publikationen/20250514-greenpeace-studie-umweltauswirkungen-ki-eng.pdf).
@@ -93,6 +96,10 @@ Los plazos de entrega de hardware a gran escala oscilan entre 36 y 52 semanas pa
 ### Agua
 
 La refrigeración de los centros de datos consume agua en cantidades que empiezan a aparecer en los debates de planificación local. Un centro de datos de 100 MW puede consumir alrededor de dos millones de litros diarios en sistemas de refrigeración evaporativa, y las estimaciones para el sector en su conjunto apuntan a que el consumo global podría pasar de 560.000 millones de litros en 2024 a 1,2 billones en 2030 [IEA (2025)](https://www.iea.org/reports/energy-and-ai). En zonas con estrés hídrico (que son, paradójicamente, también zonas atractivas para instalar centros de datos por su clima o bajo coste del suelo), este consumo genera tensiones directas con otros usos del agua y con las comunidades locales que los ven como competidores por un recurso escaso.
+
+Conviene, sin embargo, matizar qué comparación se está haciendo. Si se compara instalación con instalación, un centro de datos típico de 100 MW consume bastante más agua que un campo de golf mediano: la IEA sitúa ese centro en torno a dos millones de litros diarios en total, mientras la encuesta 2024 de GCSAA/ASHS para EE.UU. sitúa la mediana por instalación en unos 85 millones de litros al año [(GCSAA/ASHS, 2025)](https://journals.ashs.org/view/journals/horttech/35/5/article-p848.xml). Pero si se mira el agregado sectorial, la foto cambia: la misma encuesta proyecta para los campos de golf de EE.UU. en 2024 alrededor de 2,01 billones de litros de agua aplicada al año, unas 3,6 veces la estimación global de la IEA para data centers en 2024 [(GCSAA, 2025)](https://www.gcsaa.org/docs/default-source/what-we-do/gcep-phase-4-water-report.pdf?sfvrsn=c829dd3e_0)
+
+{{ include_html("snippets/ia-pib-bienestar-energia/02-agua-golf-datacenters.html") }}
 
 ### Talento
 
@@ -154,6 +161,7 @@ Probablemente no en términos absolutos, aunque sí en términos relativos. Las 
 | R4 | **Jevons, W.S. (1865)** — *The Coal Question* | Formulación original de la paradoja de la eficiencia: la mejora tecnológica reduce el coste unitario pero expande el volumen de uso, con demanda total creciente. |
 | R5 | **Strubell, E. et al. (2019)** — *Energy and Policy Considerations for Deep Learning in NLP* ([arXiv][r5]) | Primer análisis sistemático del coste energético y de carbono del entrenamiento de modelos de lenguaje a gran escala. |
 | R6 | **Epoch AI (2023)** — *Trends in Machine Learning* ([Epoch AI][r6]) | Base de datos de modelos notables con estimaciones de compute, coste energético de entrenamiento y tendencias de escala. Fuente para la estimación de ~42 GWh en GPT-4. |
+| R7 | **GCSAA / ASHS (2025)** — *Survey of Water Use and Management Practices on US Golf Courses from 2005 to 2024* | Encuesta nacional y paper revisado por pares sobre agua aplicada en campos de golf de EE.UU.; base para unos 2,01 billones de litros en 2024 y una mediana de unos 85 millones de litros por instalación. |
 
 </details>
 
@@ -163,3 +171,4 @@ Probablemente no en términos absolutos, aunque sí en términos relativos. Las 
 [r4]: https://archive.org/details/coalquestionani00jevogoog "The Coal Question — Jevons (1865)"
 [r5]: https://arxiv.org/abs/1906.02629 "Energy and Policy Considerations for Deep Learning in NLP — arXiv"
 [r6]: https://epoch.ai/data/ai-models "AI Models — Epoch AI"
+[r7]: https://journals.ashs.org/view/journals/horttech/35/5/article-p848.xml "Survey of Water Use and Management Practices on US Golf Courses from 2005 to 2024 — ASHS HortTechnology"

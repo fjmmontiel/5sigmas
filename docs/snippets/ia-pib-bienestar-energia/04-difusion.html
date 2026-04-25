@@ -1,0 +1,232 @@
+<div class="dif2-wrap" data-demo="04-difusion" data-anim-fullscreen="off" data-anim-contrast="force">
+  <div class="dif2-hd">
+    <div class="dif2-title">Por qué el impacto tarda y dónde aparece primero</div>
+    <div class="dif2-sub">La IA no salta del piloto al PIB. Pasa por tres etapas: primero cambia tareas, luego procesos y solo al final los agregados macro.</div>
+  </div>
+
+  <div class="dif2-stages">
+    <section class="dif2-stage dif2-stage--now" aria-label="Etapa actual">
+      <div class="dif2-stage-step">1. Ahora</div>
+      <div class="dif2-stage-name">Adopción y exploración</div>
+      <div class="dif2-stage-items">
+        <div class="dif2-pill">Casos de uso sueltos</div>
+        <div class="dif2-pill">Pilotos y pruebas internas</div>
+      </div>
+      <div class="dif2-stage-tail">El PIB casi no lo ve.</div>
+    </section>
+
+    <div class="dif2-arrow" aria-hidden="true">→</div>
+
+    <section class="dif2-stage dif2-stage--mid" aria-label="Etapa intermedia">
+      <div class="dif2-stage-step">2. Después</div>
+      <div class="dif2-stage-name">Rediseño organizativo</div>
+      <div class="dif2-stage-items">
+        <div class="dif2-pill">Procesos rehechos para IA</div>
+        <div class="dif2-pill">Formación + capital intangible</div>
+      </div>
+      <div class="dif2-stage-tail">Aquí empieza el retorno real.</div>
+    </section>
+
+    <div class="dif2-arrow" aria-hidden="true">→</div>
+
+    <section class="dif2-stage dif2-stage--future" aria-label="Etapa madura">
+      <div class="dif2-stage-step">3. Más tarde</div>
+      <div class="dif2-stage-name">Impacto macro visible</div>
+      <div class="dif2-stage-items">
+        <div class="dif2-pill">Productividad agregada</div>
+        <div class="dif2-pill">Nuevos productos y sectores</div>
+      </div>
+      <div class="dif2-stage-tail">Entonces sí aparece en el PIB.</div>
+    </section>
+  </div>
+
+  <div class="dif2-readout">
+    <div class="dif2-readout-k">Qué mirar antes que el PIB</div>
+    <div class="dif2-readout-grid">
+      <div class="dif2-signal">
+        <div class="dif2-signal-k">Productividad por tarea</div>
+        <p>Ganancias del 20-50% en tareas concretas, antes de que la empresa entera cambie.</p>
+      </div>
+      <div class="dif2-signal">
+        <div class="dif2-signal-k">Adopción profunda</div>
+        <p>No importa “usar IA”, sino rediseñar procesos reales alrededor de ella.</p>
+      </div>
+      <div class="dif2-signal">
+        <div class="dif2-signal-k">Capacidades nuevas</div>
+        <p>AlphaFold x45.000 o IA industrial con -2% a -5% de energía: señales que el sistema ya hace cosas nuevas.</p>
+      </div>
+    </div>
+    <div class="dif2-note">La mejora se nota antes en capacidad, calidad y reorganización que en output agregado. Por eso los usuarios la perciben antes de que el PIB la registre.</div>
+  </div>
+</div>
+
+<style>
+.dif2-wrap, .dif2-wrap * { box-sizing: border-box; }
+
+.dif2-wrap {
+  --da: var(--md-primary-fg-color, #26A69A);
+  --db: #324AB2;
+  --dg: var(--md-accent-fg-color, #FFB343);
+  --dbg: var(--md-default-bg-color, #fff);
+  --dfg: var(--md-default-fg-color, #0f172a);
+  --dbd: rgba(15,23,42,.16);
+  --dmut: rgba(15,23,42,.60);
+  --df: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid;
+  gap: 14px;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--dbd);
+  border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--db) 7%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 100%, color-mix(in srgb,var(--da) 5%,transparent), transparent 52%),
+    var(--dbg);
+  color: var(--dfg);
+  font-family: var(--df);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-md-color-scheme="slate"] .dif2-wrap {
+  --dbg: var(--md-default-bg-color, #0f172a);
+  --dfg: var(--md-default-fg-color, #e2e8f0);
+  --dbd: rgba(226,232,240,.16);
+  --dmut: rgba(226,232,240,.62);
+}
+
+.dif2-hd { display: grid; gap: 5px; }
+.dif2-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.dif2-sub { font-size: 14px; color: var(--dmut); line-height: 1.5; max-width: 66ch; }
+
+.dif2-stages {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 8px;
+  align-items: stretch;
+}
+
+.dif2-stage {
+  border: 1px solid var(--dbd);
+  border-radius: 16px;
+  padding: 14px;
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  background: color-mix(in srgb, var(--dbg) 90%, #0f172a 10%);
+}
+
+.dif2-stage--now {
+  border-color: color-mix(in srgb, var(--da) 30%, var(--dbd));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--da) 7%, transparent), transparent 60%), color-mix(in srgb, var(--dbg) 90%, #0f172a 10%);
+}
+
+.dif2-stage--mid {
+  border-color: color-mix(in srgb, var(--dg) 30%, var(--dbd));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--dg) 7%, transparent), transparent 60%), color-mix(in srgb, var(--dbg) 90%, #0f172a 10%);
+}
+
+.dif2-stage--future {
+  border-color: color-mix(in srgb, var(--db) 30%, var(--dbd));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--db) 7%, transparent), transparent 60%), color-mix(in srgb, var(--dbg) 90%, #0f172a 10%);
+}
+
+.dif2-stage-step {
+  font-size: 10.5px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--dmut);
+}
+
+.dif2-stage-name { font-size: 17px; font-weight: 900; line-height: 1.15; }
+
+.dif2-stage-items { display: grid; gap: 7px; }
+
+.dif2-pill {
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--dbd);
+  background: color-mix(in srgb, var(--dbg) 84%, transparent);
+  font-size: 12.5px;
+  line-height: 1.35;
+}
+
+.dif2-stage-tail {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--dmut);
+  font-style: italic;
+}
+
+.dif2-arrow {
+  display: grid;
+  place-items: center;
+  color: var(--dmut);
+  font-size: 22px;
+  font-weight: 900;
+  padding-top: 8px;
+}
+
+.dif2-readout {
+  border: 1px solid var(--dbd);
+  border-radius: 14px;
+  padding: 14px;
+  background: color-mix(in srgb, var(--dbg) 90%, #0f172a 10%);
+  display: grid;
+  gap: 10px;
+}
+
+.dif2-readout-k {
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--dmut);
+}
+
+.dif2-readout-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.dif2-signal {
+  border: 1px solid var(--dbd);
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: color-mix(in srgb, var(--dbg) 85%, transparent);
+  display: grid;
+  gap: 4px;
+  align-content: start;
+}
+
+.dif2-signal-k { font-size: 12px; font-weight: 900; }
+.dif2-signal p { margin: 0; font-size: 12.5px; color: var(--dmut); line-height: 1.45; }
+
+.dif2-note {
+  font-size: 12.5px;
+  color: var(--dmut);
+  line-height: 1.5;
+  border-left: 2px solid color-mix(in srgb,var(--dg) 45%,transparent);
+  padding-left: 10px;
+}
+
+@media (max-width: 820px) {
+  .dif2-stages {
+    grid-template-columns: 1fr;
+  }
+
+  .dif2-arrow {
+    transform: rotate(90deg);
+    padding: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .dif2-readout-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>

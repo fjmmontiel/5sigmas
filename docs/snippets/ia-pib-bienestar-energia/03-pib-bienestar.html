@@ -1,0 +1,291 @@
+<div class="pib-wrap" data-demo="03-pib-bienestar" data-anim-fullscreen="off" data-anim-contrast="force">
+  <div class="pib-hd">
+    <div class="pib-title">PIB vs bienestar: no responden a la misma pregunta</div>
+    <div class="pib-sub">El PIB mide con precisión la actividad de mercado. El bienestar sirve para ver cómo vive la gente cuando esa actividad se reparte mal o deja costes fuera.</div>
+  </div>
+
+  <div class="pib-main">
+    <section class="pib-side pib-side--gdp" aria-label="Qué mide bien el PIB">
+      <div class="pib-side-top">
+        <div class="pib-label">PIB</div>
+        <div class="pib-side-title">Qué ve bien</div>
+      </div>
+      <div class="pib-points">
+        <div class="pib-point">
+          <div class="pib-point-k">Producción</div>
+          <p>Bienes y servicios que pasan por mercado.</p>
+        </div>
+        <div class="pib-point">
+          <div class="pib-point-k">Precio</div>
+          <p>Transacciones comparables entre países y periodos.</p>
+        </div>
+        <div class="pib-point">
+          <div class="pib-point-k">Ritmo</div>
+          <p>Si la economía acelera, frena o entra en recesión.</p>
+        </div>
+      </div>
+      <div class="pib-tail pib-tail--gdp">Preciso dentro del mundo que tiene precio.</div>
+    </section>
+
+    <div class="pib-divider" aria-hidden="true">
+      <div class="pib-divider-mark">!=</div>
+      <div class="pib-divider-copy">actividad no equivale a vida vivida</div>
+    </div>
+
+    <section class="pib-side pib-side--wb" aria-label="Qué añade el bienestar">
+      <div class="pib-side-top">
+        <div class="pib-label">Bienestar</div>
+        <div class="pib-side-title">Qué añade</div>
+      </div>
+      <div class="pib-points">
+        <div class="pib-point">
+          <div class="pib-point-k">Distribución</div>
+          <p>Quién mejora y quién se queda fuera de la media.</p>
+        </div>
+        <div class="pib-point">
+          <div class="pib-point-k">Calidad de vida</div>
+          <p>Salud, tiempo, seguridad, apoyo social y entorno.</p>
+        </div>
+        <div class="pib-point">
+          <div class="pib-point-k">Experiencia subjetiva</div>
+          <p>Si la gente siente que su vida mejora de verdad.</p>
+        </div>
+      </div>
+      <div class="pib-tail pib-tail--wb">Sirve para medir resultados humanos, no solo movimiento económico.</div>
+    </section>
+  </div>
+
+  <div class="pib-diverge">
+    <div class="pib-diverge-k">Dónde se separan más</div>
+    <div class="pib-diverge-items">
+      <div class="pib-div-item">
+        <div class="pib-div-tag">Desigualdad</div>
+        <p>Sube la media, no la mayoría.</p>
+      </div>
+      <div class="pib-div-item">
+        <div class="pib-div-tag">Externalidades</div>
+        <p>Crecer puede empeorar aire, tiempo o salud.</p>
+      </div>
+      <div class="pib-div-item">
+        <div class="pib-div-tag">Automatización</div>
+        <p>Más output no garantiza propósito ni seguridad.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.pib-wrap, .pib-wrap * { box-sizing: border-box; }
+
+.pib-wrap {
+  --pa: var(--md-primary-fg-color, #26A69A);
+  --pb: #324AB2;
+  --pg: var(--md-accent-fg-color, #FFB343);
+  --pbg: var(--md-default-bg-color, #fff);
+  --pfg: var(--md-default-fg-color, #0f172a);
+  --pbd: rgba(15,23,42,.16);
+  --pmut: rgba(15,23,42,.60);
+  --pf: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid;
+  gap: 14px;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--pbd);
+  border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--pb) 7%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 0%, color-mix(in srgb,var(--pa) 7%,transparent), transparent 52%),
+    var(--pbg);
+  color: var(--pfg);
+  font-family: var(--pf);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-md-color-scheme="slate"] .pib-wrap {
+  --pbg: var(--md-default-bg-color, #0f172a);
+  --pfg: var(--md-default-fg-color, #e2e8f0);
+  --pbd: rgba(226,232,240,.16);
+  --pmut: rgba(226,232,240,.62);
+}
+
+.pib-hd { display: grid; gap: 5px; }
+.pib-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; max-width: 26ch; }
+.pib-sub { font-size: 14px; color: var(--pmut); line-height: 1.5; max-width: 66ch; }
+
+.pib-main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 12px;
+  align-items: stretch;
+}
+
+.pib-side {
+  border: 1px solid var(--pbd);
+  border-radius: 16px;
+  padding: 14px;
+  display: grid;
+  gap: 12px;
+  align-content: start;
+  background: color-mix(in srgb, var(--pbg) 90%, #0f172a 10%);
+}
+
+.pib-side--gdp {
+  border-color: color-mix(in srgb, var(--pb) 28%, var(--pbd));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--pb) 6%, transparent), transparent 60%), color-mix(in srgb, var(--pbg) 90%, #0f172a 10%);
+}
+
+.pib-side--wb {
+  border-color: color-mix(in srgb, var(--pa) 28%, var(--pbd));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--pa) 6%, transparent), transparent 60%), color-mix(in srgb, var(--pbg) 90%, #0f172a 10%);
+}
+
+.pib-side-top { display: grid; gap: 6px; }
+
+.pib-label {
+  width: fit-content;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--pbd);
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--pmut);
+}
+
+.pib-side--gdp .pib-label {
+  border-color: color-mix(in srgb, var(--pb) 30%, var(--pbd));
+  background: color-mix(in srgb, var(--pb) 8%, var(--pbg));
+}
+
+.pib-side--wb .pib-label {
+  border-color: color-mix(in srgb, var(--pa) 30%, var(--pbd));
+  background: color-mix(in srgb, var(--pa) 8%, var(--pbg));
+}
+
+.pib-side-title { font-size: 17px; font-weight: 900; line-height: 1.1; }
+
+.pib-points { display: grid; gap: 8px; }
+
+.pib-point {
+  border: 1px solid var(--pbd);
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: color-mix(in srgb, var(--pbg) 84%, transparent);
+  display: grid;
+  gap: 3px;
+}
+
+.pib-point-k {
+  font-size: 12px;
+  font-weight: 900;
+  color: var(--pmut);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+.pib-point p { margin: 0; font-size: 13px; line-height: 1.42; }
+
+.pib-tail {
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--pmut);
+  padding-top: 2px;
+}
+
+.pib-divider {
+  width: clamp(72px, 8vw, 92px);
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 8px;
+  text-align: center;
+  color: var(--pmut);
+}
+
+.pib-divider-mark {
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  border: 1px solid var(--pbd);
+  background: color-mix(in srgb, var(--pbg) 85%, transparent);
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: -.04em;
+  color: color-mix(in srgb, var(--pb) 50%, var(--pa) 50%);
+}
+
+.pib-divider-copy {
+  font-size: 11.5px;
+  line-height: 1.35;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+.pib-diverge {
+  border: 1px solid var(--pbd);
+  border-radius: 14px;
+  padding: 14px;
+  background: color-mix(in srgb, var(--pbg) 90%, #0f172a 10%);
+  display: grid;
+  gap: 10px;
+}
+
+.pib-diverge-k {
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--pmut);
+}
+
+.pib-diverge-items {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.pib-div-item {
+  border: 1px solid var(--pbd);
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: color-mix(in srgb, var(--pbg) 85%, transparent);
+  display: grid;
+  gap: 6px;
+  align-content: start;
+}
+
+.pib-div-tag {
+  font-size: 11.5px;
+  font-weight: 900;
+  padding: 3px 8px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--pg) 30%, var(--pbd));
+  background: color-mix(in srgb, var(--pg) 10%, var(--pbg));
+  color: color-mix(in srgb, var(--pg) 60%, var(--pfg));
+  width: fit-content;
+}
+
+.pib-div-item p { margin: 0; font-size: 12.5px; line-height: 1.4; color: var(--pmut); }
+
+@media (max-width: 760px) {
+  .pib-main {
+    grid-template-columns: 1fr;
+  }
+
+  .pib-divider {
+    width: auto;
+    grid-auto-flow: column;
+    justify-content: start;
+    padding: 0 4px;
+  }
+}
+
+@media (max-width: 640px) {
+  .pib-diverge-items { grid-template-columns: 1fr; }
+}
+</style>

@@ -7,6 +7,7 @@ tags:
   - IA
   - Energía
   - Productividad
+video: "00_presentacion_serie.mp4"
 hide:
   - toc
 ---

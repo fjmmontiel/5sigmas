@@ -1,0 +1,267 @@
+<div class="dp-wrap" data-demo="04-debate-proyecciones" data-anim-fullscreen="off" data-anim-contrast="force">
+  <div class="dp-hd">
+    <div class="dp-title">El debate macroeconómico: la cifra cambia según lo que creas transformable</div>
+    <div class="dp-sub">Goldman Sachs y Acemoglu no discrepan por una décima. Discrepan sobre cuánta economía puede rehacerse de verdad con la IA actual.</div>
+  </div>
+
+  <div class="dp-poles">
+    <section class="dp-pole dp-pole--opt" aria-label="Escenario optimista">
+      <div class="dp-pole-src">Goldman Sachs · 2023</div>
+      <div class="dp-pole-stance">Optimista</div>
+      <div class="dp-pole-stats">
+        <div class="dp-stat">
+          <div class="dp-stat-val">$7 billones</div>
+          <div class="dp-stat-desc">impacto acumulado en PIB global en una década.</div>
+        </div>
+        <div class="dp-stat">
+          <div class="dp-stat-val">60-70%</div>
+          <div class="dp-stat-desc">ocupaciones con tareas sustancialmente automatizables.</div>
+        </div>
+      </div>
+      <div class="dp-pole-premise">
+        <div class="dp-premise-k">Qué debe ser cierto</div>
+        <div class="dp-premise-v">La mejora por tarea escala a empresa y luego a macro. La difusión es amplia y el rediseño organizativo sí ocurre.</div>
+      </div>
+    </section>
+
+    <div class="dp-vs" aria-hidden="true">vs</div>
+
+    <section class="dp-pole dp-pole--skep" aria-label="Escenario cauteloso">
+      <div class="dp-pole-src">Daron Acemoglu · MIT · 2024</div>
+      <div class="dp-pole-stance">Cauteloso</div>
+      <div class="dp-pole-stats">
+        <div class="dp-stat">
+          <div class="dp-stat-val">&lt;0,53%</div>
+          <div class="dp-stat-desc">impacto acumulado en PTF en una década.</div>
+        </div>
+        <div class="dp-stat">
+          <div class="dp-stat-val">~5%</div>
+          <div class="dp-stat-desc">tareas donde la automatización sería rentable hoy.</div>
+        </div>
+      </div>
+      <div class="dp-pole-premise">
+        <div class="dp-premise-k">Qué frena el salto</div>
+        <div class="dp-premise-v">Muchas mejoras ahorran coste, pero no rehacen suficiente economía ni crean valor nuevo neto al ritmo que exigen las previsiones altas.</div>
+      </div>
+    </section>
+  </div>
+
+  <div class="dp-bottom">
+    <div class="dp-bottom-k">La variable decisiva</div>
+    <div class="dp-bottom-grid">
+      <div class="dp-bottom-item">
+        <div class="dp-bottom-head">1. Tareas expuestas</div>
+        <p>¿Cuántas tareas relevantes puede tocar la IA con fiabilidad económica?</p>
+      </div>
+      <div class="dp-bottom-item">
+        <div class="dp-bottom-head">2. Reorganización real</div>
+        <p>¿Las empresas cambian procesos o solo añaden una capa encima?</p>
+      </div>
+      <div class="dp-bottom-item">
+        <div class="dp-bottom-head">3. Valor nuevo</div>
+        <p>¿La IA crea productos y capacidades nuevas o solo abarata trabajo existente?</p>
+      </div>
+    </div>
+    <div class="dp-range">El rango práctico hoy va desde un escenario alto de <strong>$7T-$15,7T</strong> si la difusión se generaliza, hasta uno mucho menor si la IA se queda en automatizar tareas rutinarias sin rehacer suficiente estructura productiva.</div>
+  </div>
+</div>
+
+<style>
+.dp-wrap, .dp-wrap * { box-sizing: border-box; }
+
+.dp-wrap {
+  --da: #26A69A;
+  --db: #324AB2;
+  --dg: #FFB343;
+  --dr: #e04c4c;
+  --dbg: var(--md-default-bg-color, #fff);
+  --dfg: var(--md-default-fg-color, #0f172a);
+  --dbd: rgba(15,23,42,.16);
+  --dmut: rgba(15,23,42,.60);
+  --df: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  --dm: "SF Mono","JetBrains Mono","Courier New",monospace;
+
+  display: grid;
+  gap: 16px;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--dbd);
+  border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--db) 7%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 100%, color-mix(in srgb,var(--da) 5%,transparent), transparent 52%),
+    var(--dbg);
+  color: var(--dfg);
+  font-family: var(--df);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-md-color-scheme="slate"] .dp-wrap {
+  --dbg: var(--md-default-bg-color, #0f172a);
+  --dfg: var(--md-default-fg-color, #e2e8f0);
+  --dbd: rgba(226,232,240,.16);
+  --dmut: rgba(226,232,240,.62);
+}
+
+.dp-hd { display: grid; gap: 5px; }
+.dp-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; max-width: 28ch; }
+.dp-sub { font-size: 14px; color: var(--dmut); line-height: 1.5; max-width: 66ch; }
+
+.dp-poles {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 10px;
+  align-items: stretch;
+}
+
+.dp-pole {
+  border: 1px solid var(--dbd);
+  border-radius: 14px;
+  padding: 14px;
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  background: color-mix(in srgb, var(--dbg) 90%, #0f172a 10%);
+}
+
+.dp-pole--opt {
+  border-color: color-mix(in srgb,var(--da) 30%,var(--dbd));
+  background: linear-gradient(135deg, color-mix(in srgb,var(--da) 6%,transparent), transparent 60%), color-mix(in srgb,var(--dbg) 90%,#0f172a 10%);
+}
+
+.dp-pole--skep {
+  border-color: color-mix(in srgb,var(--dr) 28%,var(--dbd));
+  background: linear-gradient(135deg, color-mix(in srgb,var(--dr) 5%,transparent), transparent 60%), color-mix(in srgb,var(--dbg) 90%,#0f172a 10%);
+}
+
+.dp-pole-src { font-size: 11px; font-weight: 700; color: var(--dmut); }
+
+.dp-pole-stance {
+  font-size: 12px;
+  font-weight: 900;
+  padding: 3px 10px;
+  border-radius: 999px;
+  width: fit-content;
+}
+
+.dp-pole--opt .dp-pole-stance {
+  background: color-mix(in srgb,var(--da) 12%,var(--dbg));
+  border: 1px solid color-mix(in srgb,var(--da) 28%,var(--dbd));
+  color: color-mix(in srgb,var(--da) 80%,var(--dfg));
+}
+
+.dp-pole--skep .dp-pole-stance {
+  background: color-mix(in srgb,var(--dr) 10%,var(--dbg));
+  border: 1px solid color-mix(in srgb,var(--dr) 25%,var(--dbd));
+  color: color-mix(in srgb,var(--dr) 75%,var(--dfg));
+}
+
+.dp-pole-stats { display: grid; gap: 8px; }
+
+.dp-stat {
+  border: 1px solid var(--dbd);
+  border-radius: 10px;
+  padding: 11px 12px;
+  background: color-mix(in srgb, var(--dbg) 85%, transparent);
+  display: grid;
+  gap: 4px;
+}
+
+.dp-stat-val {
+  font-size: 18px;
+  font-weight: 900;
+  font-family: var(--dm);
+  letter-spacing: -.02em;
+}
+
+.dp-pole--opt .dp-stat-val { color: color-mix(in srgb,var(--da) 80%,var(--dfg)); }
+.dp-pole--skep .dp-stat-val { color: color-mix(in srgb,var(--dr) 75%,var(--dfg)); }
+
+.dp-stat-desc { font-size: 12.5px; color: var(--dmut); line-height: 1.4; }
+
+.dp-pole-premise {
+  border: 1px solid var(--dbd);
+  border-radius: 10px;
+  padding: 11px 12px;
+  background: color-mix(in srgb, var(--dbg) 85%, transparent);
+  display: grid;
+  gap: 4px;
+}
+
+.dp-premise-k {
+  font-size: 10.5px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--dmut);
+}
+
+.dp-premise-v { font-size: 12.5px; color: var(--dmut); line-height: 1.45; }
+
+.dp-vs {
+  display: grid;
+  place-items: center;
+  color: var(--dmut);
+  font-size: 13px;
+  font-weight: 900;
+  padding: 0 6px;
+}
+
+.dp-bottom {
+  border: 1px solid var(--dbd);
+  border-radius: 14px;
+  padding: 14px;
+  background: color-mix(in srgb, var(--dbg) 90%, #0f172a 10%);
+  display: grid;
+  gap: 10px;
+}
+
+.dp-bottom-k {
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--dmut);
+}
+
+.dp-bottom-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.dp-bottom-item {
+  border: 1px solid var(--dbd);
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: color-mix(in srgb, var(--dbg) 85%, transparent);
+  display: grid;
+  gap: 4px;
+}
+
+.dp-bottom-head { font-size: 12px; font-weight: 900; }
+.dp-bottom-item p { margin: 0; font-size: 12.5px; color: var(--dmut); line-height: 1.45; }
+
+.dp-range {
+  font-size: 12.5px;
+  color: var(--dmut);
+  line-height: 1.5;
+  border-left: 2px solid color-mix(in srgb,var(--da) 40%,transparent);
+  padding-left: 10px;
+}
+
+@media (max-width: 760px) {
+  .dp-poles {
+    grid-template-columns: 1fr;
+  }
+
+  .dp-vs {
+    padding: 0;
+  }
+
+  .dp-bottom-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>

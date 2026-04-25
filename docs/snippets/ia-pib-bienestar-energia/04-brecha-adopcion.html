@@ -1,0 +1,110 @@
+<div class="ba-wrap" data-demo="04-brecha-adopcion">
+  <div class="ba-hd">
+    <div class="ba-title">La brecha de adopción: quién capturará las ganancias primero</div>
+    <div class="ba-sub">Si las ganancias de productividad se materializan primero donde la adopción es mayor, el resultado a corto plazo es una concentración en quienes ya tienen ventaja de escala.</div>
+  </div>
+
+  <div class="ba-bars">
+    <div class="ba-row">
+      <div class="ba-who">Gran empresa</div>
+      <div class="ba-track">
+        <div class="ba-fill ba-fill--large"></div>
+        <div class="ba-pct">~55%</div>
+      </div>
+      <div class="ba-desc">Adopción activa con rediseño de procesos</div>
+    </div>
+    <div class="ba-row">
+      <div class="ba-who">Pyme</div>
+      <div class="ba-track">
+        <div class="ba-fill ba-fill--sme"></div>
+        <div class="ba-pct">~25%</div>
+      </div>
+      <div class="ba-desc">Brecha de +30 puntos porcentuales, en ampliación (McKinsey, 2024)</div>
+    </div>
+  </div>
+
+  <div class="ba-maturity">
+    <div class="ba-mat-stat">Solo el <span class="ba-mat-val">1%</span> de las empresas ha alcanzado madurez real en IA</div>
+    <div class="ba-mat-def">McKinsey (2024) define madurez como integración profunda en procesos de negocio con métricas de retorno documentadas. El 99% restante está en exploración, piloto o adopción parcial. Esta cifra es la razón principal por la que el impacto macro todavía no aparece en el PIB.</div>
+  </div>
+</div>
+
+<style>
+.ba-wrap, .ba-wrap * { box-sizing: border-box; }
+
+.ba-wrap {
+  --ba: #26A69A;
+  --bb: #324AB2;
+  --bg: #FFB343;
+  --bbg: var(--md-default-bg-color, #fff);
+  --bfg: var(--md-default-fg-color, #0f172a);
+  --bbd: rgba(15,23,42,.16);
+  --bmut: rgba(15,23,42,.60);
+  --bf: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  --bm: "SF Mono","JetBrains Mono","Courier New",monospace;
+
+  display: grid;
+  gap: 14px;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--bbd);
+  border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--bb) 7%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 100%, color-mix(in srgb,var(--bg) 5%,transparent), transparent 52%),
+    var(--bbg);
+  color: var(--bfg);
+  font-family: var(--bf);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-md-color-scheme="slate"] .ba-wrap {
+  --bbg: var(--md-default-bg-color, #0f172a);
+  --bfg: var(--md-default-fg-color, #e2e8f0);
+  --bbd: rgba(226,232,240,.16);
+  --bmut: rgba(226,232,240,.60);
+}
+
+.ba-hd { display: grid; gap: 5px; }
+.ba-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.ba-sub { font-size: 14px; color: var(--bmut); line-height: 1.5; max-width: 72ch; }
+
+.ba-bars { display: grid; gap: 10px; }
+
+.ba-row { display: grid; grid-template-columns: 90px 1fr; gap: 8px; align-items: center; }
+
+.ba-who { font-size: 12px; font-weight: 800; text-align: right; line-height: 1.3; }
+
+.ba-track {
+  height: 32px;
+  background: color-mix(in srgb, var(--bbg) 85%, #0f172a 15%);
+  border-radius: 8px;
+  border: 1px solid var(--bbd);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.ba-fill { height: 100%; border-radius: 8px; position: absolute; left: 0; top: 0; }
+.ba-fill--large { width: 55%; background: linear-gradient(90deg, color-mix(in srgb,var(--bb) 60%,transparent), var(--bb)); }
+.ba-fill--sme   { width: 25%; background: linear-gradient(90deg, color-mix(in srgb,var(--bg) 60%,transparent), var(--bg)); }
+
+.ba-pct { position: relative; z-index: 1; font-size: 12px; font-weight: 900; font-family: var(--bm); padding: 0 8px; }
+
+.ba-desc { font-size: 12px; color: var(--bmut); line-height: 1.3; grid-column: 2; margin-top: -4px; }
+
+.ba-maturity {
+  border: 1px solid color-mix(in srgb,var(--bg) 25%,var(--bbd));
+  border-radius: 12px;
+  padding: 14px 16px;
+  background: color-mix(in srgb,var(--bg) 5%,var(--bbg));
+  display: grid;
+  gap: 6px;
+}
+
+.ba-mat-stat { font-size: 14px; font-weight: 700; color: var(--bfg); line-height: 1.4; }
+.ba-mat-val { font-family: var(--bm); font-size: 24px; font-weight: 900; color: color-mix(in srgb,var(--bg) 70%,var(--bfg)); }
+.ba-mat-def { font-size: 12.5px; color: var(--bmut); line-height: 1.5; }
+</style>

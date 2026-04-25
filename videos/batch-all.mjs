@@ -9,7 +9,7 @@
  *                input:  docs/series/<name>/ (all .md files)
  *                output: docs/series/<name>/00_presentacion_serie.mp4
  *
- *   "article"  — one per article, from md-to-article-html.mjs --no-cta
+ *   "article"  — one per article, from md-to-article-html.mjs + deco-pipeline.mjs
  *                input:  docs/series/<name>/<slug>.md
  *                output: docs/series/<name>/<slug>.mp4
  *
@@ -42,14 +42,7 @@ const NO_CTA        = !args.includes("--linkedin");  // default: no CTA for site
 
 const SCRIPT_SERIES  = path.join(__dirname, "md-series-to-html.mjs");
 const SCRIPT_ARTICLE = path.join(__dirname, "md-to-article-html.mjs");
-
-// Keep in sync with hooks/wip_series.py
-const WIP_SERIES = new Set([
-  "ia-pib-bienestar-energia",
-  "datacenters-espacio",
-]);
-
-const INCLUDE_WIP = args.includes("--wip");
+const SCRIPT_DECO    = path.join(__dirname, "deco-pipeline.mjs");
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -71,7 +64,6 @@ function discoverJobs() {
     .filter(e => e.isDirectory())
     .map(e => e.name)
     .filter(name => !SERIES_FILTER || name === SERIES_FILTER)
-    .filter(name => INCLUDE_WIP || !WIP_SERIES.has(name))
     .sort();
 
   if (seriesDirs.length === 0) {
@@ -114,7 +106,11 @@ function discoverJobs() {
           type:   "article",
           series,
           label:  `${series}/${slug}`,
-          cmd:    `node "${SCRIPT_ARTICLE}" "${md}" --render${NO_CTA ? " --no-cta" : ""}`,
+          cmd: [
+            `node "${SCRIPT_ARTICLE}" "${md}" "${path.join(__dirname, `article_${series}__${slug}.source.html`)}"${NO_CTA ? " --no-cta" : ""}`,
+            `node "${SCRIPT_DECO}" "${path.join(__dirname, `article_${series}__${slug}.source.html`)}" --out-html="${path.join(__dirname, `article_${series}__${slug}.html`)}" --out-dir="${path.join(__dirname, "deco", series, slug)}" --max-attempts=2`,
+            `node "${path.resolve(__dirname, "../../video-generator/article-to-video.mjs")}" "${path.join(__dirname, `article_${series}__${slug}.html`)}" "${mp4}"`,
+          ].join(" && "),
           mp4,
           stale:  needsRender(mp4, md),
         });
@@ -139,7 +135,6 @@ async function main() {
   console.log(`batch-all — ${jobs.length} total, ${skipped} up-to-date, ${toRun.length} to render`);
   console.log(`  series presentations: ${seriesCount}   article videos: ${articleCount}`);
   console.log(`  CTA: ${NO_CTA ? "omitted (site/article videos)" : "included (--linkedin)"}`);
-  if (!INCLUDE_WIP) console.log(`  WIP series excluded (--wip to include)`);
   if (FORCE)   console.log(`  --force: re-rendering all`);
   if (DRY_RUN) console.log(`  --dry-run: no rendering`);
   console.log(`${"═".repeat(72)}\n`);
@@ -173,7 +168,7 @@ async function main() {
       const poster = job.mp4.replace(/\.mp4$/, ".jpg");
       try {
         execSync(
-          `ffmpeg -ss 1.5 -i "${job.mp4}" -frames:v 1 -q:v 3 -y "${poster}"`,
+          `ffmpeg -ss 1.5 -i "${job.mp4}" -frames:v 1 -update 1 -q:v 3 -y "${poster}"`,
           { stdio: "pipe" }
         );
         console.log(`\n✓ ${path.basename(job.mp4)}  +  ${path.basename(poster)}`);

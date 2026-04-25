@@ -1,0 +1,414 @@
+<div class="jc-wrap" data-demo="04-jcurva-productividad" data-anim-tabs data-default="1" data-anim-fullscreen="on" data-anim-contrast="force">
+  <div class="jc-hd">
+    <div class="jc-title">La productividad cae antes de subir: la J-Curve de las tecnologías de propósito general</div>
+    <div class="jc-sub">Adoptar una tecnología de propósito general genera primero un coste de reorganización visible. El beneficio llega después, cuando los procesos se rediseñan para aprovechar lo que la tecnología hace posible. Así fue con la electricidad. Así es con la IA.</div>
+  </div>
+
+  <div class="jc-tabs" role="tablist" aria-label="Secciones de la curva J de productividad">
+    <button data-tab="1" class="jc-tab active" aria-selected="true">La curva J</button>
+    <button data-tab="2" class="jc-tab" aria-selected="false">Analogía: electrificación industrial</button>
+    <button data-tab="3" class="jc-tab" aria-selected="false">Los cuatro mecanismos del desfase</button>
+    <button data-tab="4" class="jc-tab" aria-selected="false">Dónde estamos ahora</button>
+  </div>
+
+  <!-- Tab 1: J-Curve shape -->
+  <div class="jc-panel" data-panel="1">
+    <div class="jc-svg-wrap">
+      <svg viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Curva J de productividad: caída inicial seguida de recuperación por encima del baseline">
+        <!-- Baseline -->
+        <line x1="55" y1="155" x2="580" y2="155" stroke="currentColor" opacity="0.16" stroke-dasharray="5,4" stroke-width="1"/>
+        <text x="52" y="159" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="9" fill="currentColor" opacity="0.40" text-anchor="end">Baseline</text>
+
+        <!-- Axes -->
+        <line x1="55" y1="275" x2="580" y2="275" stroke="currentColor" opacity="0.28" stroke-width="1.5"/>
+        <line x1="55" y1="25" x2="55" y2="275" stroke="currentColor" opacity="0.28" stroke-width="1.5"/>
+
+        <!-- Phase zones -->
+        <!-- Phase 1: Adoption (55-185) -->
+        <rect x="55" y="25" width="130" height="250" fill="#26A69A" opacity="0.06" rx="0"/>
+        <!-- Phase 2: Trough / Reorganization (185-340) -->
+        <rect x="185" y="25" width="155" height="250" fill="#e04c4c" opacity="0.05" rx="0"/>
+        <!-- Phase 3: Recovery (340-580) -->
+        <rect x="340" y="25" width="240" height="250" fill="#324AB2" opacity="0.07" rx="2"/>
+
+        <!-- J-Curve path -->
+        <path d="M 55,155 C 90,155 120,158 150,168 C 175,178 200,200 225,215 C 245,226 265,230 285,228 C 310,224 335,210 360,190 C 390,165 420,135 460,108 C 500,82 540,65 580,55"
+          fill="none" stroke="#26A69A" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+
+        <!-- Trough marker -->
+        <circle cx="285" cy="228" r="5" fill="#e04c4c" opacity="0.80"/>
+        <text x="285" y="248" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="9" fill="#e04c4c" opacity="0.88" text-anchor="middle">Mínimo</text>
+        <text x="285" y="258" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="8.5" fill="#e04c4c" opacity="0.70" text-anchor="middle">reorganización</text>
+
+        <!-- New equilibrium -->
+        <circle cx="580" cy="55" r="5" fill="#324AB2" opacity="0.80"/>
+        <text x="563" y="47" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="9" fill="#324AB2" opacity="0.88" text-anchor="end">Nuevo equilibrio</text>
+        <text x="563" y="57" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="8.5" fill="#324AB2" opacity="0.70" text-anchor="end">productividad &gt; baseline</text>
+
+        <!-- Phase labels at top -->
+        <text x="120" y="42" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="9" font-weight="800" fill="#26A69A" text-anchor="middle" opacity="0.88">ADOPCIÓN</text>
+        <text x="262" y="42" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="9" font-weight="800" fill="#e04c4c" text-anchor="middle" opacity="0.88">REORGANIZACIÓN</text>
+        <text x="460" y="42" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="9" font-weight="800" fill="#324AB2" text-anchor="middle" opacity="0.88">IMPACTO MADURO</text>
+
+        <!-- Grid (horizontal) -->
+        <line x1="55" y1="95" x2="580" y2="95" stroke="currentColor" opacity="0.07" stroke-dasharray="3,5"/>
+
+        <!-- Axis labels -->
+        <text x="320" y="292" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="9.5" fill="currentColor" opacity="0.38" text-anchor="middle">Tiempo desde adopción</text>
+        <text x="12" y="155" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="9.5" fill="currentColor" opacity="0.38" text-anchor="middle" transform="rotate(-90, 12, 155)">Productividad / PTF</text>
+
+        <!-- Start point marker -->
+        <circle cx="55" cy="155" r="4" fill="#26A69A" opacity="0.70"/>
+
+        <!-- Brynjolfsson citation -->
+        <g transform="translate(57,66)">
+          <rect x="0" y="0" width="182" height="22" rx="4" fill="currentColor" opacity="0.06"/>
+          <text x="91" y="14" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="8" fill="currentColor" opacity="0.50" text-anchor="middle">Brynjolfsson et al. (2021) · J-Curve de la PTF</text>
+        </g>
+      </svg>
+    </div>
+    <div class="jc-note">La productividad total de los factores (PTF) puede parecer estancada o incluso en retroceso durante la fase de adopción de una tecnología de propósito general, porque el capital intangible necesario para complementarla (conocimiento, procesos rediseñados, organización) tarda en acumularse y no se mide bien en las cuentas nacionales.</div>
+  </div>
+
+  <!-- Tab 2: Electrification analogy -->
+  <div class="jc-panel" data-panel="2" hidden>
+    <div class="jc-analogy-hd">
+      <div class="jc-analogy-claim">Las primeras fábricas que instalaron motores eléctricos no cambiaron su productividad de inmediato. El salto llegó 20-30 años después, cuando alguien rediseñó la planta aprovechando lo que la electricidad hacía posible que la transmisión mecánica no podía.</div>
+    </div>
+    <div class="jc-timeline">
+      <div class="jc-era jc-era--before">
+        <div class="jc-era-label">Antes — 1880s</div>
+        <div class="jc-era-name">Transmisión mecánica</div>
+        <div class="jc-era-visual">⚙</div>
+        <div class="jc-era-desc">Una sola fuente de potencia central (vapor o agua) distribuía energía mediante poleas, correas y ejes a todas las máquinas. La disposición de la planta dependía de la geometría de la transmisión mecánica, no de los procesos.</div>
+        <div class="jc-era-tag">PTF: baseline</div>
+      </div>
+      <div class="jc-arrow">→</div>
+      <div class="jc-era jc-era--during">
+        <div class="jc-era-label">Transición — 1890-1910</div>
+        <div class="jc-era-name">Motor eléctrico, misma planta</div>
+        <div class="jc-era-visual">⚡</div>
+        <div class="jc-era-desc">Las primeras fábricas electrificadas simplemente sustituyeron el eje de vapor por un motor eléctrico central, manteniendo la misma disposición. Mismo proceso, energía diferente. El coste de reorganización era real; el beneficio, mínimo.</div>
+        <div class="jc-era-tag jc-era-tag--trough">PTF: igual o inferior (costes de reorganización)</div>
+      </div>
+      <div class="jc-arrow">→</div>
+      <div class="jc-era jc-era--after">
+        <div class="jc-era-label">Madurez — 1910-1930</div>
+        <div class="jc-era-name">Planta rediseñada para la electricidad</div>
+        <div class="jc-era-visual">💡</div>
+        <div class="jc-era-desc">Los ingenieros se dieron cuenta de que la electricidad permitía llevar potencia exactamente donde se necesitaba. Rediseñaron la planta: cada máquina con su propio motor, flujos de trabajo optimizados para el proceso, no para la transmisión. El salto de productividad era ahora posible.</div>
+        <div class="jc-era-tag jc-era-tag--mature">PTF: muy por encima del baseline</div>
+      </div>
+    </div>
+    <div class="jc-analogy-note">Robert Gordon documentó este patrón en "The Rise and Fall of American Growth" (Princeton, 2016). El economista que estudia hoy los datos de productividad de una fábrica de 1895 ve costes sin retorno. El que los estudia en 1925 ve el retorno, 30 años después.</div>
+  </div>
+
+  <!-- Tab 3: Four mechanisms -->
+  <div class="jc-panel" data-panel="3" hidden>
+    <div class="jc-mechanisms-hd">Por qué el desfase ocurre siempre con las tecnologías de propósito general. Cada mecanismo actúa en paralelo y todos deben resolverse para que el impacto macro aparezca.</div>
+    <div class="jc-mechs">
+      <div class="jc-mech">
+        <div class="jc-mech-num">01</div>
+        <div class="jc-mech-body">
+          <div class="jc-mech-head">Difusión lenta</div>
+          <p>Las empresas necesitan tiempo para aprender, evaluar y encontrar los casos de uso donde el retorno es real. La IA generativa lleva disponible de forma amplia desde 2022-2023 y la mayoría de empresas todavía está en fase de exploración, no de despliegue maduro.</p>
+        </div>
+      </div>
+      <div class="jc-mech">
+        <div class="jc-mech-num">02</div>
+        <div class="jc-mech-body">
+          <div class="jc-mech-head">Reorganización de procesos</div>
+          <p>Para capturar el valor de la IA, las empresas necesitan cambiar cómo trabajan, no solo añadir una herramienta a un proceso existente. Eso requiere cambio organizativo, resistencia interna y tiempo. Es el equivalente a rediseñar la planta industrial.</p>
+        </div>
+      </div>
+      <div class="jc-mech">
+        <div class="jc-mech-num">03</div>
+        <div class="jc-mech-body">
+          <div class="jc-mech-head">Capital intangible no medido</div>
+          <p>El valor de la IA en una empresa no está solo en el software, sino en el conocimiento de cómo usarlo, los datos propios que la alimentan y los procesos rediseñados para aprovecharla. Ese capital intangible no aparece en los balances ni en el PIB, lo que hace invisible parte del coste y parte del retorno.</p>
+        </div>
+      </div>
+      <div class="jc-mech">
+        <div class="jc-mech-num">04</div>
+        <div class="jc-mech-body">
+          <div class="jc-mech-head">Complementariedades necesarias</div>
+          <p>La IA crea más valor cuando complementa otras inversiones: formación de los trabajadores, infraestructura de datos, sistemas de gestión. El impacto pleno llega cuando todas esas piezas están en su sitio, no cuando se instala el primer modelo. Esas piezas tardan años en construirse.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab 4: Where we are now -->
+  <div class="jc-panel" data-panel="4" hidden>
+    <div class="jc-now-wrap">
+      <div class="jc-svg-wrap">
+        <svg viewBox="0 0 600 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Curva J con marcador de posición actual de la IA en 2024-2025">
+          <!-- Baseline -->
+          <line x1="55" y1="145" x2="580" y2="145" stroke="currentColor" opacity="0.14" stroke-dasharray="5,4" stroke-width="1"/>
+          <!-- Axes -->
+          <line x1="55" y1="260" x2="580" y2="260" stroke="currentColor" opacity="0.28" stroke-width="1.5"/>
+          <line x1="55" y1="20" x2="55" y2="260" stroke="currentColor" opacity="0.28" stroke-width="1.5"/>
+          <!-- Phase zones (faded) -->
+          <rect x="55" y="20" width="130" height="240" fill="#26A69A" opacity="0.05"/>
+          <rect x="185" y="20" width="155" height="240" fill="#e04c4c" opacity="0.04"/>
+          <rect x="340" y="20" width="240" height="240" fill="#324AB2" opacity="0.05" rx="2"/>
+          <!-- J-Curve (muted) -->
+          <path d="M 55,145 C 90,145 120,148 150,158 C 175,168 200,188 225,203 C 245,214 265,218 285,216 C 310,212 335,198 360,178 C 390,153 420,123 460,96 C 500,70 540,53 580,43"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.25"/>
+          <!-- "We are here" marker — early phase, slight dip beginning -->
+          <circle cx="175" cy="163" r="8" fill="#FFB343" opacity="0.90"/>
+          <line x1="175" y1="163" x2="175" y2="20" stroke="#FFB343" opacity="0.40" stroke-dasharray="4,3" stroke-width="1.2"/>
+          <text x="180" y="36" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="9.5" font-weight="900" fill="#FFB343" opacity="0.95">↑ Estamos aquí</text>
+          <text x="180" y="48" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="9" fill="#FFB343" opacity="0.80">2024-2025</text>
+          <!-- Bright portion of curve shown -->
+          <path d="M 55,145 C 90,145 120,148 150,158 C 165,163 172,165 175,163"
+            fill="none" stroke="#26A69A" stroke-width="2.8" stroke-linecap="round"/>
+          <!-- Phase labels -->
+          <text x="120" y="35" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="9" font-weight="800" fill="#26A69A" text-anchor="middle" opacity="0.85">ADOPCIÓN</text>
+          <text x="262" y="35" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="9" font-weight="800" fill="currentColor" text-anchor="middle" opacity="0.30">REORGANIZACIÓN</text>
+          <text x="460" y="35" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="9" font-weight="800" fill="currentColor" text-anchor="middle" opacity="0.25">IMPACTO MADURO</text>
+          <!-- Axis labels -->
+          <text x="320" y="275" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="9.5" fill="currentColor" opacity="0.35" text-anchor="middle">Tiempo</text>
+        </svg>
+      </div>
+      <div class="jc-now-signals">
+        <div class="jc-now-k">Las señales de dónde estamos realmente</div>
+        <div class="jc-now-items">
+          <div class="jc-ni jc-ni--warn">
+            <div class="jc-ni-head">Solo el 1% de las empresas ha alcanzado madurez</div>
+            <p>McKinsey (2024) define madurez como integración profunda de IA en procesos de negocio con métricas de retorno documentadas. El 99% restante está en exploración, piloto o adopción parcial.</p>
+          </div>
+          <div class="jc-ni jc-ni--ok">
+            <div class="jc-ni-head">Las ganancias a nivel de tarea son reales</div>
+            <p>20-50% de reducción de tiempo en tareas específicas (codificación, análisis, redacción). AlphaFold aceleró la predicción de estructuras proteicas ×45.000. Son señales tempranas del potencial, no del impacto macro todavía.</p>
+          </div>
+          <div class="jc-ni jc-ni--info">
+            <div class="jc-ni-head">La paradoja del bienestar percibido vs productividad medida</div>
+            <p>Encuestas entre usuarios de IA en entornos profesionales muestran ganancias de productividad percibidas significativas, pero cuando esas ganancias se buscan en datos de producción institucionales, los efectos son sistemáticamente menores o no resultan estadísticamente detectables. El tiempo ahorrado se redistribuye hacia tareas que antes no existían, calidad no medida, o reorganización del trabajo.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.jc-wrap, .jc-wrap * { box-sizing: border-box; }
+
+.jc-wrap {
+  --ja: #26A69A;
+  --jb: #324AB2;
+  --jg: #FFB343;
+  --jr: #e04c4c;
+  --jbg: var(--md-default-bg-color, #fff);
+  --jfg: var(--md-default-fg-color, #0f172a);
+  --jbd: rgba(15,23,42,.16);
+  --jmut: rgba(15,23,42,.60);
+  --jf: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  --jm: "SF Mono","JetBrains Mono","Courier New",monospace;
+
+  display: grid;
+  gap: 14px;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--jbd);
+  border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--jb) 7%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 100%, color-mix(in srgb,var(--ja) 5%,transparent), transparent 52%),
+    var(--jbg);
+  color: var(--jfg);
+  font-family: var(--jf);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-md-color-scheme="slate"] .jc-wrap {
+  --jbg: var(--md-default-bg-color, #0f172a);
+  --jfg: var(--md-default-fg-color, #e2e8f0);
+  --jbd: rgba(226,232,240,.16);
+  --jmut: rgba(226,232,240,.60);
+}
+
+.jc-hd { display: grid; gap: 5px; }
+.jc-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.jc-sub { font-size: 14px; color: var(--jmut); line-height: 1.5; max-width: 72ch; }
+
+.jc-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.jc-tab {
+  font-family: var(--jf);
+  font-size: 12.5px;
+  font-weight: 800;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--jbd);
+  background: transparent;
+  color: var(--jmut);
+  cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s;
+}
+.jc-tab:hover { background: color-mix(in srgb,var(--ja) 8%,var(--jbg)); color: var(--jfg); }
+.jc-tab.active { background: color-mix(in srgb,var(--ja) 14%,var(--jbg)); border-color: color-mix(in srgb,var(--ja) 35%,var(--jbd)); color: color-mix(in srgb,var(--ja) 80%,var(--jfg)); }
+
+.jc-panel { display: grid; gap: 12px; }
+.jc-panel[hidden] { display: none; }
+
+/* SVG wrap */
+.jc-svg-wrap {
+  border: 1px solid var(--jbd);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--jbg) 90%, #0f172a 10%);
+  padding: 12px 8px 4px;
+  overflow: hidden;
+}
+.jc-svg-wrap svg { width: 100%; display: block; }
+
+.jc-note {
+  font-size: 12px;
+  color: var(--jmut);
+  line-height: 1.5;
+  font-style: italic;
+  border-left: 2px solid color-mix(in srgb,var(--ja) 34%,transparent);
+  padding-left: 10px;
+}
+
+/* Tab 2: Timeline */
+.jc-analogy-hd { display: grid; gap: 4px; }
+.jc-analogy-claim { font-size: 14px; color: var(--jmut); line-height: 1.5; max-width: 72ch; }
+
+.jc-timeline { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 6px; align-items: start; }
+
+.jc-arrow { font-size: 22px; color: var(--jmut); align-self: center; padding-top: 40px; text-align: center; }
+
+.jc-era {
+  border: 1px solid var(--jbd);
+  border-radius: 14px;
+  padding: 14px;
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  background: color-mix(in srgb, var(--jbg) 90%, #0f172a 10%);
+}
+.jc-era--before { border-color: color-mix(in srgb,var(--jmut) 30%,var(--jbd)); }
+.jc-era--during { border-color: color-mix(in srgb,var(--jr) 28%,var(--jbd)); background: linear-gradient(135deg, color-mix(in srgb,var(--jr) 5%,transparent), transparent 60%), color-mix(in srgb,var(--jbg) 90%,#0f172a 10%); }
+.jc-era--after { border-color: color-mix(in srgb,var(--ja) 28%,var(--jbd)); background: linear-gradient(135deg, color-mix(in srgb,var(--ja) 6%,transparent), transparent 60%), color-mix(in srgb,var(--jbg) 90%,#0f172a 10%); }
+
+.jc-era-label { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; color: var(--jmut); }
+.jc-era-name { font-size: 13.5px; font-weight: 900; line-height: 1.2; }
+.jc-era-visual { font-size: 28px; }
+.jc-era-desc { font-size: 12px; color: var(--jmut); line-height: 1.45; }
+.jc-era-tag { font-size: 11px; font-weight: 800; color: var(--jmut); font-style: italic; }
+.jc-era-tag--trough { color: color-mix(in srgb,var(--jr) 70%,var(--jfg)); }
+.jc-era-tag--mature { color: color-mix(in srgb,var(--ja) 70%,var(--jfg)); }
+
+.jc-analogy-note {
+  font-size: 12.5px;
+  color: var(--jmut);
+  line-height: 1.5;
+  font-style: italic;
+  border-left: 2px solid color-mix(in srgb,var(--jg) 40%,transparent);
+  padding-left: 10px;
+}
+
+/* Tab 3: Mechanisms */
+.jc-mechanisms-hd { font-size: 14px; color: var(--jmut); line-height: 1.5; }
+
+.jc-mechs { display: grid; gap: 8px; }
+.jc-mech {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: 14px;
+  align-items: start;
+  border: 1px solid var(--jbd);
+  border-radius: 12px;
+  padding: 12px 14px;
+  background: color-mix(in srgb,var(--jbg) 90%,#0f172a 10%);
+}
+.jc-mech-num { font-family: var(--jm); font-size: 20px; font-weight: 900; color: color-mix(in srgb,var(--ja) 50%,var(--jmut)); padding-top: 2px; }
+.jc-mech-head { font-size: 14px; font-weight: 900; margin-bottom: 4px; }
+.jc-mech-body p { margin: 0; font-size: 12.5px; color: var(--jmut); line-height: 1.45; }
+
+/* Tab 4: Now */
+.jc-now-wrap { display: grid; gap: 12px; }
+.jc-now-signals { display: grid; gap: 10px; }
+.jc-now-k { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; color: var(--jmut); }
+.jc-now-items { display: grid; gap: 8px; }
+.jc-ni {
+  border: 1px solid var(--jbd);
+  border-radius: 12px;
+  padding: 12px 14px;
+  background: color-mix(in srgb,var(--jbg) 90%,#0f172a 10%);
+  display: grid;
+  gap: 5px;
+}
+.jc-ni--warn { border-color: color-mix(in srgb,var(--jg) 28%,var(--jbd)); border-left: 3px solid var(--jg); }
+.jc-ni--ok { border-color: color-mix(in srgb,var(--ja) 25%,var(--jbd)); border-left: 3px solid var(--ja); }
+.jc-ni--info { border-color: color-mix(in srgb,var(--jb) 22%,var(--jbd)); border-left: 3px solid var(--jb); }
+.jc-ni-head { font-size: 13.5px; font-weight: 900; }
+.jc-ni--warn .jc-ni-head { color: color-mix(in srgb,#a06010 60%,var(--jfg)); }
+.jc-ni--ok .jc-ni-head { color: color-mix(in srgb,var(--ja) 80%,var(--jfg)); }
+.jc-ni--info .jc-ni-head { color: color-mix(in srgb,var(--jb) 70%,var(--jfg)); }
+.jc-ni p { margin: 0; font-size: 12.5px; color: var(--jmut); line-height: 1.45; }
+
+@media (max-width: 680px) {
+  .jc-timeline { grid-template-columns: 1fr; }
+  .jc-arrow { padding-top: 0; font-size: 16px; transform: rotate(90deg); }
+  .jc-mech { grid-template-columns: 1fr; }
+  .jc-mech-num { display: none; }
+}
+</style>
+
+<script>
+(function() {
+  function bind(root) {
+    if (!root || root.__portableTabsInited) return;
+    root.__portableTabsInited = true;
+    var tabs = Array.from(root.querySelectorAll('[data-tab]'));
+    var panels = Array.from(root.querySelectorAll('[data-panel]'));
+    if (!tabs.length || !panels.length) return;
+    var defaultKey = (root.dataset.default || tabs[0].dataset.tab || '').trim();
+
+    function show(key) {
+      tabs.forEach(function(tab) {
+        var active = tab.dataset.tab === key;
+        tab.classList.toggle('active', active);
+        tab.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+      panels.forEach(function(panel) {
+        panel.hidden = panel.dataset.panel !== key;
+      });
+    }
+
+    root.addEventListener('click', function(ev) {
+      var btn = ev.target.closest('[data-tab]');
+      if (!btn || !root.contains(btn)) return;
+      show(btn.dataset.tab || defaultKey);
+    });
+
+    root.addEventListener('keydown', function(ev) {
+      var btn = ev.target.closest('[data-tab]');
+      if (!btn || !root.contains(btn)) return;
+      var i = tabs.indexOf(btn);
+      if (i < 0) return;
+      var j = -1;
+      if (ev.key === 'ArrowRight') j = (i + 1) % tabs.length;
+      else if (ev.key === 'ArrowLeft') j = (i - 1 + tabs.length) % tabs.length;
+      else if (ev.key === 'Home') j = 0;
+      else if (ev.key === 'End') j = tabs.length - 1;
+      else return;
+      ev.preventDefault();
+      tabs[j].focus();
+      show(tabs[j].dataset.tab || defaultKey);
+    });
+
+    show(defaultKey);
+  }
+
+  if (window.TabbedAnimations && typeof window.TabbedAnimations.initAll === 'function') {
+    window.TabbedAnimations.initAll();
+    return;
+  }
+
+  document.querySelectorAll('[data-demo="04-jcurva-productividad"][data-anim-tabs]').forEach(bind);
+})();
+</script>

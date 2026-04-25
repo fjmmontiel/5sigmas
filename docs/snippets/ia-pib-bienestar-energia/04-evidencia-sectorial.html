@@ -1,0 +1,110 @@
+<div class="es-wrap" data-demo="04-evidencia-sectorial">
+  <div class="es-hd">
+    <div class="es-title">Dónde el impacto aparece antes que en el PIB: datos sectoriales observados</div>
+    <div class="es-sub">Las ganancias a nivel de tarea son consistentes y documentadas. La pregunta abierta es si el tiempo ahorrado se redirige a actividades de mayor valor o si el excedente se diluye en reorganización.</div>
+  </div>
+
+  <div class="es-bars">
+    <div class="es-row">
+      <div class="es-label">Servicios legales</div>
+      <div class="es-track">
+        <div class="es-fill es-fill--legal"></div>
+      </div>
+      <div class="es-range">12 – 32% reducción de tiempo en tareas documentales</div>
+    </div>
+    <div class="es-row">
+      <div class="es-label">Desarrollo de software</div>
+      <div class="es-track">
+        <div class="es-fill es-fill--sw"></div>
+      </div>
+      <div class="es-range">+26% en tasa de completitud de tareas con asistente de código (Peng et al., 2023)</div>
+    </div>
+    <div class="es-row">
+      <div class="es-label">Atención al cliente</div>
+      <div class="es-track">
+        <div class="es-fill es-fill--cs"></div>
+      </div>
+      <div class="es-range">14% más casos resueltos por hora (Brynjolfsson et al., 2023)</div>
+    </div>
+    <div class="es-row">
+      <div class="es-label">Diagnóstico por imagen</div>
+      <div class="es-track">
+        <div class="es-fill es-fill--med"></div>
+      </div>
+      <div class="es-range">FDA: de 6 a más de 220 dispositivos aprobados con IA entre 2016 y 2023</div>
+    </div>
+  </div>
+
+  <div class="es-note">Las ganancias a nivel de tarea no se trasladan automáticamente a la economía en el mismo porcentaje: el tiempo ahorrado no siempre se redirige a tareas más productivas. Pero señalan que el potencial físico existe y es medible antes de que aparezca en el PIB agregado.</div>
+</div>
+
+<style>
+.es-wrap, .es-wrap * { box-sizing: border-box; }
+
+.es-wrap {
+  --ea: #26A69A;
+  --eb: #324AB2;
+  --eg: #FFB343;
+  --ebg: var(--md-default-bg-color, #fff);
+  --efg: var(--md-default-fg-color, #0f172a);
+  --ebd: rgba(15,23,42,.16);
+  --emut: rgba(15,23,42,.60);
+  --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+
+  display: grid;
+  gap: 14px;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--ebd);
+  border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--ea) 6%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 100%, color-mix(in srgb,var(--eb) 5%,transparent), transparent 52%),
+    var(--ebg);
+  color: var(--efg);
+  font-family: var(--ef);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-md-color-scheme="slate"] .es-wrap {
+  --ebg: var(--md-default-bg-color, #0f172a);
+  --efg: var(--md-default-fg-color, #e2e8f0);
+  --ebd: rgba(226,232,240,.16);
+  --emut: rgba(226,232,240,.60);
+}
+
+.es-hd { display: grid; gap: 5px; }
+.es-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.es-sub { font-size: 14px; color: var(--emut); line-height: 1.5; max-width: 72ch; }
+
+.es-bars { display: grid; gap: 10px; }
+
+.es-row { display: grid; grid-template-columns: 160px 1fr; gap: 8px; align-items: start; }
+
+.es-label { font-size: 12.5px; font-weight: 800; text-align: right; line-height: 1.3; padding-top: 2px; }
+
+.es-track {
+  height: 12px;
+  background: color-mix(in srgb, var(--ebg) 85%, #0f172a 15%);
+  border-radius: 999px;
+  border: 1px solid var(--ebd);
+  position: relative;
+  overflow: hidden;
+  margin-top: 3px;
+}
+
+.es-fill { height: 100%; border-radius: 999px; position: absolute; left: 0; top: 0; }
+.es-fill--legal { width: 55%; background: linear-gradient(90deg, color-mix(in srgb,var(--eb) 50%,transparent), var(--eb)); }
+.es-fill--sw    { width: 45%; background: linear-gradient(90deg, color-mix(in srgb,var(--ea) 50%,transparent), var(--ea)); }
+.es-fill--cs    { width: 35%; background: linear-gradient(90deg, color-mix(in srgb,var(--eg) 50%,transparent), var(--eg)); }
+.es-fill--med   { width: 90%; background: linear-gradient(90deg, color-mix(in srgb,var(--ea) 40%,transparent), var(--ea), var(--eb)); }
+
+.es-range { font-size: 12px; color: var(--emut); line-height: 1.4; }
+
+.es-note { font-size: 13px; color: var(--emut); line-height: 1.5; font-style: italic; border-left: 2px solid color-mix(in srgb,var(--ea) 34%,transparent); padding-left: 10px; }
+
+@media (max-width: 640px) {
+  .es-row { grid-template-columns: 110px 1fr; }
+}
+</style>

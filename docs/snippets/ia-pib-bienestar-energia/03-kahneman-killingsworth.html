@@ -1,0 +1,428 @@
+<div class="kk-wrap" data-demo="03-kahneman-killingsworth" data-anim-tabs data-default="1" data-anim-fullscreen="on" data-anim-contrast="force">
+  <div class="kk-hd">
+    <div class="kk-title">La paradoja resuelta: bienestar e ingresos no son lo mismo que se pensaba</div>
+    <div class="kk-sub">Kahneman y Killingsworth llegaron a conclusiones contrarias durante décadas. En 2023 publicaron una colaboración adversarial diseñada para reconciliarlas. Ambos tenían razón, pero para personas distintas.</div>
+  </div>
+
+  <div class="kk-tabs" role="tablist" aria-label="Secciones de la paradoja Kahneman-Killingsworth">
+    <button data-tab="1" class="kk-tab active" aria-selected="true">El conflicto</button>
+    <button data-tab="2" class="kk-tab" aria-selected="false">Kahneman: el 20% insatisfecho</button>
+    <button data-tab="3" class="kk-tab" aria-selected="false">Killingsworth: la mayoría</button>
+    <button data-tab="4" class="kk-tab" aria-selected="false">Resolución 2023</button>
+  </div>
+
+  <!-- Tab 1: The conflict -->
+  <div class="kk-panel" data-panel="1">
+    <div class="kk-conflict-intro">El bienestar subjetivo no sigue al ingreso de la misma forma en todas partes. Estos datos del World Happiness Report 2024 ilustran la tensión.</div>
+    <div class="kk-countries">
+      <div class="kk-country">
+        <div class="kk-country-name">Finlandia</div>
+        <div class="kk-country-score">
+          <div class="kk-score-bar" style="--w:77%">
+            <div class="kk-score-fill kk-score-fill--hi"></div>
+          </div>
+          <div class="kk-score-val">7,7 / 10</div>
+        </div>
+        <div class="kk-country-income">~52.000 USD/año PIB per cápita</div>
+        <div class="kk-country-why">Lidera el ranking por séptimo año consecutivo. La diferencia respecto a países de renta similar no se explica por el ingreso: se explica por confianza institucional, redes de apoyo social y percepción de libertad para tomar decisiones vitales.</div>
+      </div>
+      <div class="kk-country">
+        <div class="kk-country-name">España</div>
+        <div class="kk-country-score">
+          <div class="kk-score-bar" style="--w:65%">
+            <div class="kk-score-fill kk-score-fill--mid"></div>
+          </div>
+          <div class="kk-score-val">6,5 / 10</div>
+        </div>
+        <div class="kk-country-income">~30.000 USD/año PIB per cápita</div>
+        <div class="kk-country-why">Renta materialmente inferior a Finlandia, pero la brecha de bienestar (1,2 puntos) no es proporcional a la brecha de renta. Variables no económicas explican la mayor parte de la diferencia.</div>
+      </div>
+      <div class="kk-country">
+        <div class="kk-country-name">EE.UU.</div>
+        <div class="kk-country-score">
+          <div class="kk-score-bar" style="--w:71%">
+            <div class="kk-score-fill kk-score-fill--med"></div>
+          </div>
+          <div class="kk-score-val">7,1 / 10</div>
+        </div>
+        <div class="kk-country-income">~80.000 USD/año PIB per cápita</div>
+        <div class="kk-country-why">Renta muy superior a Finlandia y bienestar menor. El ingreso alto a nivel nacional no garantiza bienestar alto si la distribución es muy desigual y la inseguridad laboral y el acceso a servicios son variables.</div>
+      </div>
+    </div>
+    <div class="kk-conflict-note">La paradoja de Easterlin (1974) documentó este patrón por primera vez: dentro de un país, más ingreso correlaciona con más bienestar. Pero entre países y a lo largo del tiempo, el crecimiento del PIB no produce el mismo aumento en bienestar subjetivo una vez superado un umbral básico.</div>
+  </div>
+
+  <!-- Tab 2: Kahneman finding -->
+  <div class="kk-panel" data-panel="2" hidden>
+    <div class="kk-finding kk-finding--k">
+      <div class="kk-finding-src">Daniel Kahneman · Princeton · hallazgo original 2021</div>
+      <div class="kk-finding-claim">Para las personas que ya reportan bajo bienestar, el ingreso deja de mejorar el estado emocional diario a partir de ~75.000 USD anuales</div>
+    </div>
+    <div class="kk-chart-wrap">
+      <svg viewBox="0 0 500 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Curva de bienestar hedónico vs ingreso para el 20% insatisfecho">
+        <!-- Axes -->
+        <line x1="50" y1="170" x2="470" y2="170" stroke="currentColor" opacity="0.28" stroke-width="1.5"/>
+        <line x1="50" y1="20" x2="50" y2="170" stroke="currentColor" opacity="0.28" stroke-width="1.5"/>
+        <!-- Curve: rises to ~$75k then flattens -->
+        <path d="M 50,155 C 90,140 130,110 175,85 C 210,67 240,60 270,58 C 310,56 380,55 470,55"
+          fill="none" stroke="#e04c4c" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- Plateau marker -->
+        <line x1="175" y1="20" x2="175" y2="170" stroke="#e04c4c" opacity="0.35" stroke-dasharray="4,3" stroke-width="1.2"/>
+        <text x="178" y="32" font-family="'SF Mono','JetBrains Mono','Courier New',monospace" font-size="9" fill="#e04c4c" opacity="0.90">~$75.000/año</text>
+        <text x="178" y="42" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="8" fill="#e04c4c" opacity="0.80">plateau</text>
+        <!-- Labels -->
+        <text x="50" y="186" font-family="'SF Mono','JetBrains Mono','Courier New',monospace" font-size="8" fill="currentColor" opacity="0.45" text-anchor="middle">$0</text>
+        <text x="175" y="186" font-family="'SF Mono','JetBrains Mono','Courier New',monospace" font-size="8" fill="#e04c4c" opacity="0.75" text-anchor="middle">$75k</text>
+        <text x="470" y="186" font-family="'SF Mono','JetBrains Mono','Courier New',monospace" font-size="8" fill="currentColor" opacity="0.45" text-anchor="middle">$200k+</text>
+        <text x="46" y="60" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="8" fill="currentColor" opacity="0.40" text-anchor="end">Alto</text>
+        <text x="46" y="165" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="8" fill="currentColor" opacity="0.40" text-anchor="end">Bajo</text>
+        <text x="260" y="195" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="9" fill="currentColor" opacity="0.38" text-anchor="middle">Ingreso anual</text>
+        <text x="14" y="100" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="9" fill="currentColor" opacity="0.38" text-anchor="middle" transform="rotate(-90, 14, 100)">Bienestar hedónico</text>
+      </svg>
+    </div>
+    <div class="kk-finding-detail">
+      <div class="kk-fd-k">¿Quiénes son estas personas?</div>
+      <div class="kk-fd-items">
+        <div class="kk-fdi">Aproximadamente el 20% de las personas que ya reportan bienestar bajo en su estado emocional diario</div>
+        <div class="kk-fdi">Para este grupo, el ingreso adicional por encima del umbral no produce mejora apreciable en el bienestar hedónico (ausencia de malestar, placer inmediato)</div>
+        <div class="kk-fdi">Hipótesis: cuando el malestar tiene raíces no materiales (salud mental, relaciones, condiciones crónicas), el ingreso adicional no las resuelve</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab 3: Killingsworth finding -->
+  <div class="kk-panel" data-panel="3" hidden>
+    <div class="kk-finding kk-finding--ki">
+      <div class="kk-finding-src">Matthew Killingsworth · Wharton / Penn · hallazgo 2021</div>
+      <div class="kk-finding-claim">Para la mayoría de las personas, el bienestar medido en tiempo real sigue creciendo con el ingreso sin techo aparente. No hay plateau.</div>
+    </div>
+    <div class="kk-chart-wrap">
+      <svg viewBox="0 0 500 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Curva de bienestar vs ingreso para la mayoría satisfecha">
+        <!-- Axes -->
+        <line x1="50" y1="170" x2="470" y2="170" stroke="currentColor" opacity="0.28" stroke-width="1.5"/>
+        <line x1="50" y1="20" x2="50" y2="170" stroke="currentColor" opacity="0.28" stroke-width="1.5"/>
+        <!-- Curve: continuous rise (logarithmic) -->
+        <path d="M 50,158 C 90,140 130,110 185,85 C 240,63 310,48 400,38 C 435,34 455,32 470,30"
+          fill="none" stroke="#26A69A" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- No plateau line -->
+        <text x="395" y="28" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="8.5" fill="#26A69A" opacity="0.90" text-anchor="end">sin techo detectado →</text>
+        <!-- Labels -->
+        <text x="50" y="186" font-family="'SF Mono','JetBrains Mono','Courier New',monospace" font-size="8" fill="currentColor" opacity="0.45" text-anchor="middle">$0</text>
+        <text x="175" y="186" font-family="'SF Mono','JetBrains Mono','Courier New',monospace" font-size="8" fill="currentColor" opacity="0.45" text-anchor="middle">$75k</text>
+        <text x="470" y="186" font-family="'SF Mono','JetBrains Mono','Courier New',monospace" font-size="8" fill="currentColor" opacity="0.45" text-anchor="middle">$200k+</text>
+        <text x="46" y="35" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="8" fill="currentColor" opacity="0.40" text-anchor="end">Alto</text>
+        <text x="46" y="165" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="8" fill="currentColor" opacity="0.40" text-anchor="end">Bajo</text>
+        <text x="260" y="195" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="9" fill="currentColor" opacity="0.38" text-anchor="middle">Ingreso anual</text>
+        <text x="14" y="100" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="9" fill="currentColor" opacity="0.38" text-anchor="middle" transform="rotate(-90, 14, 100)">Bienestar (tiempo real)</text>
+      </svg>
+    </div>
+    <div class="kk-finding-detail">
+      <div class="kk-fd-k">Metodología diferente, resultado diferente</div>
+      <div class="kk-fd-items">
+        <div class="kk-fdi">Killingsworth midió bienestar en tiempo real con la app Track Your Happiness: preguntas en momentos aleatorios durante el día, no evaluaciones retrospectivas</div>
+        <div class="kk-fdi">Para la mayoría de las personas (el ~80% que no reporta bienestar bajo crónico), el bienestar sigue creciendo con el ingreso incluso por encima de $75.000</div>
+        <div class="kk-fdi">La metodología importa: la evaluación en tiempo real captura estados hedónicos distintos de la evaluación de satisfacción vital retrospectiva que usó Kahneman</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab 4: Resolution -->
+  <div class="kk-panel" data-panel="4" hidden>
+    <div class="kk-resolution">
+      <div class="kk-res-title">Colaboración adversarial 2023 — Kahneman + Killingsworth + Barbara Mellers</div>
+      <div class="kk-res-sub">Diseñada explícitamente para reconciliar dos hallazgos contradictorios. Resultado: los dos eran correctos para subpoblaciones distintas.</div>
+    </div>
+    <div class="kk-res-chart-wrap">
+      <svg viewBox="0 0 500 210" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Resolución: dos curvas de bienestar vs ingreso para distintas subpoblaciones">
+        <!-- Axes -->
+        <line x1="50" y1="175" x2="470" y2="175" stroke="currentColor" opacity="0.28" stroke-width="1.5"/>
+        <line x1="50" y1="20" x2="50" y2="175" stroke="currentColor" opacity="0.28" stroke-width="1.5"/>
+        <!-- Threshold -->
+        <line x1="175" y1="20" x2="175" y2="175" stroke="currentColor" opacity="0.15" stroke-dasharray="4,3" stroke-width="1"/>
+        <text x="178" y="30" font-family="'SF Mono','JetBrains Mono','Courier New',monospace" font-size="8" fill="currentColor" opacity="0.45">$75k</text>
+        <!-- Curve majority (teal — continuous rise) -->
+        <path d="M 50,160 C 90,142 130,112 185,88 C 240,66 310,50 400,40 C 440,36 458,34 470,32"
+          fill="none" stroke="#26A69A" stroke-width="2.2" stroke-linecap="round"/>
+        <!-- Curve unhappy 20% (red — flattens) -->
+        <path d="M 50,168 C 90,155 130,138 175,118 C 210,105 240,100 280,100 C 330,100 400,100 470,100"
+          fill="none" stroke="#e04c4c" stroke-width="2.2" stroke-linecap="round"/>
+        <!-- Labels for curves -->
+        <text x="466" y="32" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="8.5" fill="#26A69A" opacity="0.92" text-anchor="end">80% satisfecha</text>
+        <text x="466" y="101" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="8.5" fill="#e04c4c" opacity="0.92" text-anchor="end">20% insatisfecha</text>
+        <!-- X labels -->
+        <text x="50" y="190" font-family="'SF Mono','JetBrains Mono','Courier New',monospace" font-size="8" fill="currentColor" opacity="0.45" text-anchor="middle">$0</text>
+        <text x="470" y="190" font-family="'SF Mono','JetBrains Mono','Courier New',monospace" font-size="8" fill="currentColor" opacity="0.45" text-anchor="end">$200k+</text>
+        <text x="46" y="35" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="8" fill="currentColor" opacity="0.40" text-anchor="end">Alto</text>
+        <text x="46" y="170" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="8" fill="currentColor" opacity="0.40" text-anchor="end">Bajo</text>
+        <text x="260" y="205" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="9" fill="currentColor" opacity="0.38" text-anchor="middle">Ingreso anual</text>
+      </svg>
+    </div>
+    <div class="kk-res-cards">
+      <div class="kk-res-card kk-res-card--a">
+        <div class="kk-res-card-head">La paradoja de Easterlin era correcta</div>
+        <p>Para el 20% de las personas con bienestar bajo crónico, el ingreso por encima de ~$75.000 no produce mejora adicional en el estado emocional diario. El plateau existe para este grupo.</p>
+      </div>
+      <div class="kk-res-card kk-res-card--b">
+        <div class="kk-res-card-head">Killingsworth era correcto</div>
+        <p>Para la mayoría satisfecha, el bienestar en tiempo real sigue creciendo con el ingreso sin techo aparente. El plateau no aplica para ellos.</p>
+      </div>
+      <div class="kk-res-card kk-res-card--c">
+        <div class="kk-res-card-head">Implicación para la IA</div>
+        <p>Si la IA concentra las ganancias en quienes ya tienen ventaja de ingresos y bienestar, el impacto en bienestar subjetivo de la mayoría puede ser neutro o negativo aunque el PIB agregado mejore.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.kk-wrap, .kk-wrap * { box-sizing: border-box; }
+
+.kk-wrap {
+  --ka: #26A69A;
+  --kb: #324AB2;
+  --kg: #FFB343;
+  --kr: #e04c4c;
+  --kbg: var(--md-default-bg-color, #fff);
+  --kfg: var(--md-default-fg-color, #0f172a);
+  --kbd: rgba(15,23,42,.16);
+  --kmut: rgba(15,23,42,.60);
+  --kf: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  --km: "SF Mono","JetBrains Mono","Courier New",monospace;
+
+  display: grid;
+  gap: 14px;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--kbd);
+  border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--kb) 7%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 100%, color-mix(in srgb,var(--ka) 5%,transparent), transparent 52%),
+    var(--kbg);
+  color: var(--kfg);
+  font-family: var(--kf);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-md-color-scheme="slate"] .kk-wrap {
+  --kbg: var(--md-default-bg-color, #0f172a);
+  --kfg: var(--md-default-fg-color, #e2e8f0);
+  --kbd: rgba(226,232,240,.16);
+  --kmut: rgba(226,232,240,.60);
+}
+
+.kk-hd { display: grid; gap: 5px; }
+.kk-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.kk-sub { font-size: 14px; color: var(--kmut); line-height: 1.5; max-width: 72ch; }
+
+.kk-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.kk-tab {
+  font-family: var(--kf);
+  font-size: 12.5px;
+  font-weight: 800;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--kbd);
+  background: transparent;
+  color: var(--kmut);
+  cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s;
+}
+.kk-tab:hover { background: color-mix(in srgb,var(--ka) 8%,var(--kbg)); color: var(--kfg); }
+.kk-tab.active { background: color-mix(in srgb,var(--ka) 14%,var(--kbg)); border-color: color-mix(in srgb,var(--ka) 35%,var(--kbd)); color: color-mix(in srgb,var(--ka) 80%,var(--kfg)); }
+
+.kk-panel { display: grid; gap: 12px; }
+.kk-panel[hidden] { display: none; }
+
+/* Tab 1 */
+.kk-conflict-intro { font-size: 14px; color: var(--kmut); line-height: 1.5; }
+
+.kk-countries { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+.kk-country {
+  border: 1px solid var(--kbd);
+  border-radius: 14px;
+  padding: 14px;
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  background: color-mix(in srgb, var(--kbg) 90%, #0f172a 10%);
+}
+.kk-country-name { font-size: 16px; font-weight: 900; }
+
+.kk-score-bar {
+  height: 10px;
+  background: color-mix(in srgb, var(--kbg) 80%, #0f172a 20%);
+  border-radius: 999px;
+  border: 1px solid var(--kbd);
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+.kk-score-fill {
+  height: 100%;
+  width: var(--w, 50%);
+  border-radius: 999px;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.kk-score-fill--hi { background: linear-gradient(90deg, color-mix(in srgb,var(--ka) 50%,transparent), var(--ka)); }
+.kk-score-fill--mid { background: linear-gradient(90deg, color-mix(in srgb,var(--kg) 50%,transparent), var(--kg)); }
+.kk-score-fill--med { background: linear-gradient(90deg, color-mix(in srgb,var(--kb) 50%,transparent), var(--kb)); }
+
+.kk-score-val { font-family: var(--km); font-size: 13px; font-weight: 900; }
+.kk-country:nth-child(1) .kk-score-val { color: color-mix(in srgb,var(--ka) 80%,var(--kfg)); }
+.kk-country:nth-child(2) .kk-score-val { color: color-mix(in srgb,#a06010 60%,var(--kfg)); }
+.kk-country:nth-child(3) .kk-score-val { color: color-mix(in srgb,var(--kb) 75%,var(--kfg)); }
+
+.kk-country-income { font-family: var(--km); font-size: 11px; color: var(--kmut); }
+.kk-country-why { font-size: 12px; color: var(--kmut); line-height: 1.4; }
+
+.kk-conflict-note {
+  font-size: 12.5px;
+  color: var(--kmut);
+  line-height: 1.5;
+  font-style: italic;
+  border-left: 2px solid color-mix(in srgb,var(--kb) 34%,transparent);
+  padding-left: 10px;
+}
+
+/* Tabs 2-3 */
+.kk-finding {
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid var(--kbd);
+  display: grid;
+  gap: 6px;
+  background: color-mix(in srgb,var(--kbg) 90%,#0f172a 10%);
+}
+.kk-finding--k { border-color: color-mix(in srgb,var(--kr) 28%,var(--kbd)); background: linear-gradient(135deg, color-mix(in srgb,var(--kr) 5%,transparent), transparent 60%), color-mix(in srgb,var(--kbg) 90%,#0f172a 10%); }
+.kk-finding--ki { border-color: color-mix(in srgb,var(--ka) 28%,var(--kbd)); background: linear-gradient(135deg, color-mix(in srgb,var(--ka) 6%,transparent), transparent 60%), color-mix(in srgb,var(--kbg) 90%,#0f172a 10%); }
+
+.kk-finding-src { font-size: 11px; font-weight: 700; color: var(--kmut); }
+.kk-finding-claim { font-size: 15px; font-weight: 900; line-height: 1.3; }
+.kk-finding--k .kk-finding-claim { color: color-mix(in srgb,var(--kr) 75%,var(--kfg)); }
+.kk-finding--ki .kk-finding-claim { color: color-mix(in srgb,var(--ka) 80%,var(--kfg)); }
+
+.kk-chart-wrap {
+  border: 1px solid var(--kbd);
+  border-radius: 12px;
+  background: color-mix(in srgb,var(--kbg) 90%,#0f172a 10%);
+  padding: 10px 8px 2px;
+}
+.kk-chart-wrap svg { width: 100%; display: block; }
+
+.kk-finding-detail {
+  border: 1px solid var(--kbd);
+  border-radius: 12px;
+  padding: 12px 14px;
+  background: color-mix(in srgb,var(--kbg) 90%,#0f172a 10%);
+  display: grid;
+  gap: 8px;
+}
+.kk-fd-k { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; color: var(--kmut); }
+.kk-fd-items { display: grid; gap: 5px; }
+.kk-fdi {
+  font-size: 12.5px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--kbd);
+  background: color-mix(in srgb,var(--kbg) 85%,transparent);
+  line-height: 1.4;
+  color: var(--kmut);
+}
+
+/* Tab 4 */
+.kk-resolution { display: grid; gap: 5px; }
+.kk-res-title { font-size: 14px; font-weight: 900; }
+.kk-res-sub { font-size: 13px; color: var(--kmut); line-height: 1.4; }
+
+.kk-res-chart-wrap {
+  border: 1px solid var(--kbd);
+  border-radius: 12px;
+  background: color-mix(in srgb,var(--kbg) 90%,#0f172a 10%);
+  padding: 10px 12px 2px 8px;
+}
+.kk-res-chart-wrap svg { width: 100%; display: block; }
+
+.kk-res-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+.kk-res-card {
+  border: 1px solid var(--kbd);
+  border-radius: 12px;
+  padding: 12px 14px;
+  background: color-mix(in srgb,var(--kbg) 90%,#0f172a 10%);
+  display: grid;
+  gap: 6px;
+  align-content: start;
+}
+.kk-res-card--a { border-color: color-mix(in srgb,var(--kr) 25%,var(--kbd)); background: linear-gradient(135deg, color-mix(in srgb,var(--kr) 5%,transparent), transparent 60%), color-mix(in srgb,var(--kbg) 90%,#0f172a 10%); }
+.kk-res-card--b { border-color: color-mix(in srgb,var(--ka) 25%,var(--kbd)); background: linear-gradient(135deg, color-mix(in srgb,var(--ka) 5%,transparent), transparent 60%), color-mix(in srgb,var(--kbg) 90%,#0f172a 10%); }
+.kk-res-card--c { border-color: color-mix(in srgb,var(--kb) 22%,var(--kbd)); background: linear-gradient(135deg, color-mix(in srgb,var(--kb) 5%,transparent), transparent 60%), color-mix(in srgb,var(--kbg) 90%,#0f172a 10%); }
+
+.kk-res-card-head { font-size: 12.5px; font-weight: 900; line-height: 1.25; }
+.kk-res-card--a .kk-res-card-head { color: color-mix(in srgb,var(--kr) 75%,var(--kfg)); }
+.kk-res-card--b .kk-res-card-head { color: color-mix(in srgb,var(--ka) 80%,var(--kfg)); }
+.kk-res-card--c .kk-res-card-head { color: color-mix(in srgb,var(--kb) 75%,var(--kfg)); }
+.kk-res-card p { margin: 0; font-size: 12px; color: var(--kmut); line-height: 1.45; }
+
+@media (max-width: 680px) {
+  .kk-countries { grid-template-columns: 1fr; }
+  .kk-res-cards { grid-template-columns: 1fr; }
+}
+</style>
+
+<script>
+(function() {
+  function bind(root) {
+    if (!root || root.__portableTabsInited) return;
+    root.__portableTabsInited = true;
+    var tabs = Array.from(root.querySelectorAll('[data-tab]'));
+    var panels = Array.from(root.querySelectorAll('[data-panel]'));
+    if (!tabs.length || !panels.length) return;
+    var defaultKey = (root.dataset.default || tabs[0].dataset.tab || '').trim();
+
+    function show(key) {
+      tabs.forEach(function(tab) {
+        var active = tab.dataset.tab === key;
+        tab.classList.toggle('active', active);
+        tab.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+      panels.forEach(function(panel) {
+        panel.hidden = panel.dataset.panel !== key;
+      });
+    }
+
+    root.addEventListener('click', function(ev) {
+      var btn = ev.target.closest('[data-tab]');
+      if (!btn || !root.contains(btn)) return;
+      show(btn.dataset.tab || defaultKey);
+    });
+
+    root.addEventListener('keydown', function(ev) {
+      var btn = ev.target.closest('[data-tab]');
+      if (!btn || !root.contains(btn)) return;
+      var i = tabs.indexOf(btn);
+      if (i < 0) return;
+      var j = -1;
+      if (ev.key === 'ArrowRight') j = (i + 1) % tabs.length;
+      else if (ev.key === 'ArrowLeft') j = (i - 1 + tabs.length) % tabs.length;
+      else if (ev.key === 'Home') j = 0;
+      else if (ev.key === 'End') j = tabs.length - 1;
+      else return;
+      ev.preventDefault();
+      tabs[j].focus();
+      show(tabs[j].dataset.tab || defaultKey);
+    });
+
+    show(defaultKey);
+  }
+
+  if (window.TabbedAnimations && typeof window.TabbedAnimations.initAll === 'function') {
+    window.TabbedAnimations.initAll();
+    return;
+  }
+
+  document.querySelectorAll('[data-demo="03-kahneman-killingsworth"][data-anim-tabs]').forEach(bind);
+})();
+</script>

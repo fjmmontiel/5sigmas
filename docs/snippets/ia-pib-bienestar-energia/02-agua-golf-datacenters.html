@@ -1,0 +1,230 @@
+<div class="wg-wrap" data-demo="02-agua-golf-datacenters">
+  <div class="wg-hd">
+    <div class="wg-title">Agua: la comparación depende del perímetro</div>
+    <div class="wg-sub">Por instalación, un hyperscale de 100 MW consume bastante más agua que un campo de golf mediano. En agregado, la irrigación anual de los campos de golf de EE.UU. supera la huella hídrica global que la IEA estima hoy para los data centers.</div>
+  </div>
+
+  <div class="wg-grid">
+    <section class="wg-panel">
+      <div class="wg-panel-k">Instalación vs instalación</div>
+      <div class="wg-row">
+        <div class="wg-label">
+          <div class="wg-name">Campo de golf mediano · EE.UU.</div>
+          <div class="wg-meta">≈ 85 millones de litros/año aplicados en 2024</div>
+        </div>
+        <div class="wg-track">
+          <div class="wg-fill wg-fill--golf-site" style="width:11.6%"></div>
+          <div class="wg-value">85 M L/año</div>
+        </div>
+      </div>
+      <div class="wg-row">
+        <div class="wg-label">
+          <div class="wg-name">Hyperscale típico · 100 MW</div>
+          <div class="wg-meta">IEA · total directo + indirecto, anualizado</div>
+        </div>
+        <div class="wg-track">
+          <div class="wg-fill wg-fill--dc-site" style="width:100%"></div>
+          <div class="wg-value">730 M L/año</div>
+        </div>
+      </div>
+      <div class="wg-note">A esta escala gana claramente el data center: un 100 MW típico equivale a unas 8,6 instalaciones medianas de golf en EE.UU.</div>
+    </section>
+
+    <section class="wg-panel">
+      <div class="wg-panel-k">Sector vs sector</div>
+      <div class="wg-row">
+        <div class="wg-label">
+          <div class="wg-name">Data centers globales · 2024</div>
+          <div class="wg-meta">IEA · consumo total estimado</div>
+        </div>
+        <div class="wg-track">
+          <div class="wg-fill wg-fill--dc-2024" style="width:27.9%"></div>
+          <div class="wg-value">560.000 M L/año</div>
+        </div>
+      </div>
+      <div class="wg-row">
+        <div class="wg-label">
+          <div class="wg-name">Data centers globales · 2030</div>
+          <div class="wg-meta">IEA · escenario base/alto citado en agua</div>
+        </div>
+        <div class="wg-track">
+          <div class="wg-fill wg-fill--dc-2030" style="width:59.7%"></div>
+          <div class="wg-value">1,2 billones L/año</div>
+        </div>
+      </div>
+      <div class="wg-row">
+        <div class="wg-label">
+          <div class="wg-name">Campos de golf · EE.UU. 2024</div>
+          <div class="wg-meta">GCSAA/ASHS · agua aplicada total</div>
+        </div>
+        <div class="wg-track">
+          <div class="wg-fill wg-fill--golf-total" style="width:100%"></div>
+          <div class="wg-value">2,01 billones L/año</div>
+        </div>
+      </div>
+      <div class="wg-note">Aquí gana el golf en agregado: solo la irrigación anual de los campos de golf de EE.UU. equivale a unas 3,6 veces la estimación global 2024 de la IEA para data centers.</div>
+    </section>
+  </div>
+
+  <div class="wg-foot">
+    <div class="wg-foot-title">Cómo leerlo sin trampear</div>
+    <div class="wg-foot-text">No existe aquí una base robusta para afirmar un total mundial de agua de los campos de golf. Por eso la comparación fuerte disponible es EE.UU. golf agregado frente a data centers globales IEA. Además, el dato de golf mide agua de riego aplicada, mientras que el dato IEA para data centers incluye también usos indirectos asociados a electricidad, chips y cadena de suministro.</div>
+  </div>
+
+  <div class="wg-source">Fuentes: GCSAA Phase IV Water Use Survey 2025 y artículo ASHS HortTechnology 2025 para unos 2,01 billones de litros anuales y una mediana de unos 85 millones de litros por instalación; IEA Energy and AI 2025 para ~2 millones de litros/día en un hyperscale de 100 MW y ~560.000 millones / 1,2 billones de litros anuales para el sector global.</div>
+</div>
+
+<style>
+.wg-wrap, .wg-wrap * { box-sizing: border-box; }
+
+.wg-wrap {
+  --wa: #26A69A;
+  --wb: #324AB2;
+  --wg: #FFB343;
+  --wr: #d95d39;
+  --wbg: var(--md-default-bg-color, #fff);
+  --wfg: var(--md-default-fg-color, #0f172a);
+  --wbd: rgba(15,23,42,.16);
+  --wmut: rgba(15,23,42,.60);
+  --wf: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  --wm: "SF Mono","JetBrains Mono","Courier New",monospace;
+
+  display: grid;
+  gap: 14px;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--wbd);
+  border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--wb) 7%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 100%, color-mix(in srgb,var(--wa) 5%,transparent), transparent 52%),
+    var(--wbg);
+  color: var(--wfg);
+  font-family: var(--wf);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-md-color-scheme="slate"] .wg-wrap {
+  --wbg: var(--md-default-bg-color, #0f172a);
+  --wfg: var(--md-default-fg-color, #e2e8f0);
+  --wbd: rgba(226,232,240,.16);
+  --wmut: rgba(226,232,240,.60);
+}
+
+.wg-hd { display: grid; gap: 5px; }
+.wg-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+.wg-sub { font-size: 14px; color: var(--wmut); line-height: 1.5; max-width: 74ch; }
+
+.wg-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.wg-panel,
+.wg-foot {
+  border: 1px solid var(--wbd);
+  border-radius: 14px;
+  padding: 14px;
+  display: grid;
+  gap: 10px;
+  background: color-mix(in srgb, var(--wbg) 90%, #0f172a 10%);
+}
+
+.wg-panel-k,
+.wg-foot-title {
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--wmut);
+}
+
+.wg-row {
+  display: grid;
+  gap: 6px;
+}
+
+.wg-label {
+  display: grid;
+  gap: 2px;
+}
+
+.wg-name {
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.wg-meta {
+  font-size: 11.5px;
+  color: var(--wmut);
+  line-height: 1.4;
+}
+
+.wg-track {
+  position: relative;
+  min-height: 38px;
+  border-radius: 10px;
+  border: 1px solid var(--wbd);
+  background: color-mix(in srgb, var(--wbg) 86%, #0f172a 14%);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.wg-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: 9px;
+}
+
+.wg-fill--golf-site {
+  background: linear-gradient(90deg, color-mix(in srgb,var(--wa) 56%,transparent), var(--wa));
+}
+
+.wg-fill--dc-site {
+  background: linear-gradient(90deg, color-mix(in srgb,var(--wr) 58%,transparent), var(--wr));
+}
+
+.wg-fill--dc-2024 {
+  background: linear-gradient(90deg, color-mix(in srgb,var(--wb) 56%,transparent), var(--wb));
+}
+
+.wg-fill--dc-2030 {
+  background: linear-gradient(90deg, color-mix(in srgb,var(--wg) 56%,transparent), var(--wg));
+}
+
+.wg-fill--golf-total {
+  background: linear-gradient(90deg, color-mix(in srgb,var(--wa) 56%,transparent), var(--wa));
+}
+
+.wg-value {
+  position: relative;
+  z-index: 1;
+  padding: 0 12px;
+  font-size: 13px;
+  font-weight: 900;
+  font-family: var(--wm);
+}
+
+.wg-note,
+.wg-foot-text,
+.wg-source {
+  font-size: 12.5px;
+  color: var(--wmut);
+  line-height: 1.5;
+}
+
+.wg-source {
+  border-left: 2px solid color-mix(in srgb,var(--wa) 34%,transparent);
+  padding-left: 10px;
+  font-style: italic;
+}
+
+@media (max-width: 760px) {
+  .wg-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>

@@ -1,133 +1,554 @@
-<div class="ga-wrap" data-demo="02-geografia-ia">
-  <div class="ga-hd">
-    <div class="ga-title">Geografía de la IA en dos niveles: dónde va cada función</div>
-    <div class="ga-sub">Entrenar y servir un modelo no compiten por el mismo tipo de ubicación. La diferenciación funcional determina qué regiones atraen qué tipo de inversión y qué concentración de consumo.</div>
+<div class="ga-wrap" data-demo="02-geografia-ia" data-anim-fullscreen="off" data-anim-contrast="force">
+  <div class="ga-head">
+    <div class="ga-kicker">La misma IA, dos geografias</div>
+    <div class="ga-title">Entrenar y servir un modelo tiran de infraestructuras distintas</div>
+    <div class="ga-sub">El entrenamiento se desplaza hacia el kWh barato y la capacidad disponible. La inferencia paga por vivir cerca del usuario porque la latencia forma parte del producto.</div>
   </div>
 
-  <div class="ga-cols">
-    <div class="ga-col ga-col--train">
-      <div class="ga-col-type">Entrenamiento</div>
-      <div class="ga-col-arrow">↓</div>
-      <div class="ga-col-driver">Cerca de energía barata</div>
-      <div class="ga-col-places">
-        <span class="ga-place">Regiones nórdicas</span>
+  <div class="ga-banner">
+    <span class="ga-banner-pill ga-banner-pill--train">Cuello de botella: energia</span>
+    <span class="ga-banner-core">Mismo stack de IA. Se separa por la restriccion dominante.</span>
+    <span class="ga-banner-pill ga-banner-pill--infer">Cuello de botella: latencia</span>
+  </div>
+
+  <div class="ga-lanes">
+    <section class="ga-lane ga-lane--train" aria-label="Geografia del entrenamiento">
+      <div class="ga-lane-head">
+        <div class="ga-lane-tag">Entrenamiento</div>
+        <div class="ga-lane-driver">Se instala donde el precio electrico cae y la distancia al usuario no pesa.</div>
+      </div>
+
+      <div class="ga-flow ga-flow--train" aria-hidden="true">
+        <div class="ga-node ga-node--source">
+          <span class="ga-node-kicker">Prioridad</span>
+          <span class="ga-node-value">$ / MWh</span>
+        </div>
+        <div class="ga-track">
+          <span class="ga-track-line"></span>
+          <span class="ga-track-note">la latencia puede viajar</span>
+        </div>
+        <div class="ga-node ga-node--sink">
+          <span class="ga-node-kicker">Cluster</span>
+          <span class="ga-node-value">GPU</span>
+        </div>
+      </div>
+
+      <div class="ga-rows">
+        <div class="ga-row">
+          <span class="ga-row-label">Que compra</span>
+          <span class="ga-row-copy">capacidad masiva, renovables, suelo barato</span>
+        </div>
+        <div class="ga-row">
+          <span class="ga-row-label">Que tolera</span>
+          <span class="ga-row-copy">estar lejos del usuario final si el cluster escala bien</span>
+        </div>
+        <div class="ga-row">
+          <span class="ga-row-label">Donde aparece</span>
+          <span class="ga-row-copy">regiones con excedentes, noche barata o energia abundante</span>
+        </div>
+      </div>
+
+      <div class="ga-places">
+        <span class="ga-place">Regiones nordicas</span>
         <span class="ga-place">Texas</span>
         <span class="ga-place">Noroeste EE.UU.</span>
-        <span class="ga-place">Sichuan (China)</span>
+        <span class="ga-place">Sichuan</span>
       </div>
-      <div class="ga-col-why">Electricidad barata o con excedentes renovables. La latencia no es crítica: no importa si el centro de datos está lejos del usuario final.</div>
-    </div>
-    <div class="ga-col ga-col--infer">
-      <div class="ga-col-type">Inferencia</div>
-      <div class="ga-col-arrow">↓</div>
-      <div class="ga-col-driver">Cerca de centros de población</div>
-      <div class="ga-col-places">
+    </section>
+
+    <section class="ga-lane ga-lane--infer" aria-label="Geografia de la inferencia">
+      <div class="ga-lane-head">
+        <div class="ga-lane-tag">Inferencia</div>
+        <div class="ga-lane-driver">Se pega a nodos de demanda porque unos milisegundos deciden la calidad percibida.</div>
+      </div>
+
+      <div class="ga-flow ga-flow--infer" aria-hidden="true">
+        <div class="ga-node ga-node--source">
+          <span class="ga-node-kicker">Prioridad</span>
+          <span class="ga-node-value">ms</span>
+        </div>
+        <div class="ga-track">
+          <span class="ga-track-line"></span>
+          <span class="ga-track-note">el servicio debe quedar cerca</span>
+        </div>
+        <div class="ga-node ga-node--sink">
+          <span class="ga-node-kicker">Cluster</span>
+          <span class="ga-node-value">PoP</span>
+        </div>
+      </div>
+
+      <div class="ga-rows">
+        <div class="ga-row">
+          <span class="ga-row-label">Que compra</span>
+          <span class="ga-row-copy">proximidad urbana, conectividad y respuesta estable</span>
+        </div>
+        <div class="ga-row">
+          <span class="ga-row-label">Que tolera</span>
+          <span class="ga-row-copy">electricidad mas cara si la experiencia sigue siendo inmediata</span>
+        </div>
+        <div class="ga-row">
+          <span class="ga-row-label">Donde aparece</span>
+          <span class="ga-row-copy">grandes hubs de trafico y mercados con demanda continua</span>
+        </div>
+      </div>
+
+      <div class="ga-places">
         <span class="ga-place">Virginia Norte</span>
         <span class="ga-place">Singapur</span>
         <span class="ga-place">Irlanda</span>
         <span class="ga-place">Tokio</span>
       </div>
-      <div class="ga-col-why">La latencia de respuesta requiere proximidad geográfica al usuario. La electricidad es más cara, pero el mercado lo soporta porque la demanda de baja latencia no es negociable.</div>
-    </div>
+    </section>
   </div>
 
-  <div class="ga-note">Esta diferenciación determina qué regiones compiten por qué tipo de inversión. El caso de Irlanda ilustra la concentración que puede producirse: los centros de datos representan ya más del 20% del consumo eléctrico nacional, con proyecciones que sitúan ese porcentaje cerca del 80% para 2030 si la expansión continúa al ritmo previsto.</div>
+  <div class="ga-impact">
+    <div class="ga-impact-copy">
+      <div class="ga-impact-tag">Concentracion visible</div>
+      <div class="ga-impact-title">Irlanda ensena el efecto de pegar la capacidad a un hub europeo de baja latencia</div>
+      <div class="ga-impact-text">Los centros de datos ya representan mas del 20% del consumo electrico nacional. Si la expansion sigue al ritmo previsto, algunas proyecciones lo acercan al 80% en 2030.</div>
+    </div>
+
+    <div class="ga-impact-stats" aria-label="Impacto electrico en Irlanda">
+      <div class="ga-stat">
+        <div class="ga-stat-value">20%</div>
+        <div class="ga-stat-label">peso actual en la demanda electrica</div>
+      </div>
+      <div class="ga-stat ga-stat--accent">
+        <div class="ga-stat-value">~80%</div>
+        <div class="ga-stat-label">proyeccion para 2030 si continua la expansion</div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <style>
 .ga-wrap, .ga-wrap * { box-sizing: border-box; }
 
 .ga-wrap {
-  --ga: #26A69A;
-  --gb: #324AB2;
-  --gg: #FFB343;
-  --gbg: var(--md-default-bg-color, #fff);
+  --ea: #26A69A;
+  --eb: #324AB2;
+  --eg: #FFB343;
+  --ec: #7cc7ff;
+  --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  --em: "SF Mono","JetBrains Mono","Courier New",monospace;
+  --gbg: var(--md-default-bg-color, #ffffff);
   --gfg: var(--md-default-fg-color, #0f172a);
-  --gbd: rgba(15,23,42,.16);
-  --gmut: rgba(15,23,42,.60);
-  --gf: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  --gmut: rgba(15,23,42,.64);
+  --gbd: rgba(15,23,42,.14);
+  --gpanel: rgba(255,255,255,.88);
 
   display: grid;
-  gap: 14px;
-  max-width: 960px;
+  gap: 16px;
+  max-width: 980px;
   margin: 0 auto;
-  padding: clamp(14px,2vw,22px);
+  padding: clamp(18px, 2.4vw, 26px);
   border: 1px solid var(--gbd);
-  border-radius: 20px;
+  border-radius: 24px;
   background:
-    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--gb) 7%,transparent), transparent 50%),
-    radial-gradient(90% 120% at 95% 100%, color-mix(in srgb,var(--ga) 5%,transparent), transparent 52%),
-    var(--gbg);
+    radial-gradient(120% 120% at 0% 0%, color-mix(in srgb, var(--eb) 10%, transparent), transparent 46%),
+    radial-gradient(90% 120% at 100% 100%, color-mix(in srgb, var(--ea) 9%, transparent), transparent 52%),
+    linear-gradient(180deg, color-mix(in srgb, var(--gbg) 94%, #f8fafc 6%), var(--gbg));
   color: var(--gfg);
-  font-family: var(--gf);
+  font-family: var(--ef);
   -webkit-font-smoothing: antialiased;
 }
 
 [data-md-color-scheme="slate"] .ga-wrap {
-  --gbg: var(--md-default-bg-color, #0f172a);
-  --gfg: var(--md-default-fg-color, #e2e8f0);
-  --gbd: rgba(226,232,240,.16);
-  --gmut: rgba(226,232,240,.60);
+  --gbg: #0b1220;
+  --gfg: #e5eefb;
+  --gmut: rgba(229,238,251,.70);
+  --gbd: rgba(124,199,255,.18);
+  --gpanel: rgba(12,18,32,.84);
 }
 
-.ga-hd { display: grid; gap: 5px; }
-.ga-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
-.ga-sub { font-size: 14px; color: var(--gmut); line-height: 1.5; max-width: 72ch; }
+.ga-head { display: grid; gap: 6px; }
 
-.ga-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-
-.ga-col {
-  border: 1px solid var(--gbd);
-  border-radius: 14px;
-  padding: 16px;
-  display: grid;
-  gap: 10px;
-  align-content: start;
-  background: color-mix(in srgb, var(--gbg) 90%, #0f172a 10%);
-}
-
-.ga-col--train { border-color: color-mix(in srgb,var(--gb) 28%,var(--gbd)); background: linear-gradient(135deg, color-mix(in srgb,var(--gb) 5%,transparent), transparent 60%), color-mix(in srgb,var(--gbg) 90%,#0f172a 10%); }
-.ga-col--infer { border-color: color-mix(in srgb,var(--ga) 28%,var(--gbd)); background: linear-gradient(135deg, color-mix(in srgb,var(--ga) 5%,transparent), transparent 60%), color-mix(in srgb,var(--gbg) 90%,#0f172a 10%); }
-
-.ga-col-type { font-size: 15px; font-weight: 900; }
-.ga-col--train .ga-col-type { color: color-mix(in srgb,var(--gb) 80%,var(--gfg)); }
-.ga-col--infer .ga-col-type { color: color-mix(in srgb,var(--ga) 80%,var(--gfg)); }
-
-.ga-col-arrow { font-size: 18px; color: var(--gmut); }
-
-.ga-col-driver {
-  font-size: 12px;
+.ga-kicker {
+  font-size: 11px;
   font-weight: 900;
-  padding: 4px 12px;
-  border-radius: 999px;
-  width: fit-content;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--gmut);
 }
-.ga-col--train .ga-col-driver { background: color-mix(in srgb,var(--gb) 10%,var(--gbg)); border: 1px solid color-mix(in srgb,var(--gb) 25%,var(--gbd)); color: color-mix(in srgb,var(--gb) 75%,var(--gfg)); }
-.ga-col--infer .ga-col-driver { background: color-mix(in srgb,var(--ga) 10%,var(--gbg)); border: 1px solid color-mix(in srgb,var(--ga) 25%,var(--gbd)); color: color-mix(in srgb,var(--ga) 80%,var(--gfg)); }
 
-.ga-col-places { display: flex; gap: 5px; flex-wrap: wrap; }
-.ga-place {
-  font-size: 11.5px;
+.ga-title {
+  font-size: clamp(22px, 3vw, 34px);
+  line-height: 1.02;
+  letter-spacing: -.03em;
+  font-weight: 900;
+  max-width: 18ch;
+}
+
+.ga-sub {
+  max-width: 72ch;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--gmut);
+}
+
+.ga-banner {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 16px;
+  border: 1px solid var(--gbd);
+  background: color-mix(in srgb, var(--gpanel) 86%, transparent);
+}
+
+.ga-banner-core {
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--gmut);
+  text-align: center;
   font-weight: 700;
-  padding: 3px 9px;
+}
+
+.ga-banner-pill {
+  padding: 6px 10px;
   border-radius: 999px;
   border: 1px solid var(--gbd);
-  background: color-mix(in srgb,var(--gbg) 85%,transparent);
+  font-size: 11px;
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.ga-banner-pill--train {
+  color: color-mix(in srgb, var(--eb) 80%, var(--gfg));
+  border-color: color-mix(in srgb, var(--eb) 38%, var(--gbd));
+  background: color-mix(in srgb, var(--eb) 12%, var(--gbg));
+}
+
+.ga-banner-pill--infer {
+  color: color-mix(in srgb, var(--ea) 82%, var(--gfg));
+  border-color: color-mix(in srgb, var(--ea) 38%, var(--gbd));
+  background: color-mix(in srgb, var(--ea) 12%, var(--gbg));
+}
+
+.ga-lanes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.ga-lane {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+  border-radius: 20px;
+  border: 1px solid var(--gbd);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--gpanel) 94%, transparent), color-mix(in srgb, var(--gpanel) 82%, transparent)),
+    var(--gpanel);
+  min-height: 100%;
+}
+
+.ga-lane--train {
+  border-color: color-mix(in srgb, var(--eb) 34%, var(--gbd));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--eb) 12%, transparent);
+}
+
+.ga-lane--infer {
+  border-color: color-mix(in srgb, var(--ea) 34%, var(--gbd));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ea) 12%, transparent);
+}
+
+.ga-lane-head { display: grid; gap: 6px; }
+
+.ga-lane-tag {
+  width: fit-content;
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  border: 1px solid var(--gbd);
+}
+
+.ga-lane--train .ga-lane-tag {
+  color: color-mix(in srgb, var(--eb) 80%, var(--gfg));
+  border-color: color-mix(in srgb, var(--eb) 38%, var(--gbd));
+  background: color-mix(in srgb, var(--eb) 12%, var(--gbg));
+}
+
+.ga-lane--infer .ga-lane-tag {
+  color: color-mix(in srgb, var(--ea) 84%, var(--gfg));
+  border-color: color-mix(in srgb, var(--ea) 38%, var(--gbd));
+  background: color-mix(in srgb, var(--ea) 12%, var(--gbg));
+}
+
+.ga-lane-driver {
+  font-size: 18px;
+  line-height: 1.15;
+  letter-spacing: -.02em;
+  font-weight: 900;
+  max-width: 22ch;
+}
+
+.ga-flow {
+  display: grid;
+  grid-template-columns: minmax(112px, .92fr) minmax(84px, 1fr) minmax(112px, .92fr);
+  gap: 10px;
+  align-items: center;
+}
+
+.ga-node {
+  min-height: 104px;
+  padding: 14px 14px 12px;
+  border-radius: 16px;
+  border: 1px solid var(--gbd);
+  background: color-mix(in srgb, var(--gbg) 76%, transparent);
+  display: grid;
+  align-content: start;
+  gap: 10px;
+}
+
+.ga-node-kicker {
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: .1em;
+  text-transform: uppercase;
   color: var(--gmut);
 }
 
-.ga-col-why { font-size: 12.5px; color: var(--gmut); line-height: 1.45; }
+.ga-node-value {
+  font-family: var(--em);
+  font-size: clamp(26px, 3vw, 34px);
+  line-height: .95;
+  letter-spacing: -.05em;
+  font-weight: 900;
+}
 
-.ga-note {
-  font-size: 13px;
+.ga-lane--train .ga-node-value { color: color-mix(in srgb, var(--eb) 86%, var(--gfg)); }
+.ga-lane--infer .ga-node-value { color: color-mix(in srgb, var(--ea) 86%, var(--gfg)); }
+
+.ga-track {
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+}
+
+.ga-track-line {
+  width: 100%;
+  height: 12px;
+  border-radius: 999px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--gbd);
+  background:
+    linear-gradient(90deg, transparent, rgba(255,255,255,.24), transparent) 0 0 / 40% 100% no-repeat,
+    color-mix(in srgb, var(--gbg) 72%, transparent);
+}
+
+.ga-track-line::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border-radius: 999px;
+}
+
+.ga-lane--train .ga-track-line::after {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--eb) 22%, transparent), color-mix(in srgb, var(--ec) 72%, transparent));
+}
+
+.ga-lane--infer .ga-track-line::after {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--ec) 68%, transparent), color-mix(in srgb, var(--ea) 60%, transparent));
+}
+
+.ga-track-note {
+  font-size: 11px;
+  line-height: 1.3;
+  font-weight: 700;
+  text-align: center;
   color: var(--gmut);
+  max-width: 12ch;
+}
+
+.ga-rows {
+  display: grid;
+  gap: 8px;
+}
+
+.ga-row {
+  display: grid;
+  gap: 6px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid var(--gbd);
+  background: color-mix(in srgb, var(--gbg) 78%, transparent);
+}
+
+.ga-row-label {
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--gmut);
+}
+
+.ga-row-copy {
+  font-size: 13px;
+  line-height: 1.42;
+  color: var(--gfg);
+}
+
+.ga-places {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.ga-place {
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--gbd);
+  background: color-mix(in srgb, var(--gbg) 76%, transparent);
+  font-size: 12px;
+  line-height: 1;
+  font-weight: 800;
+  color: var(--gmut);
+}
+
+.ga-impact {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(250px, .9fr);
+  gap: 14px;
+  padding: 16px;
+  border-radius: 20px;
+  border: 1px solid color-mix(in srgb, var(--eg) 34%, var(--gbd));
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--eg) 10%, transparent), transparent 55%),
+    color-mix(in srgb, var(--gpanel) 92%, transparent);
+}
+
+.ga-impact-copy {
+  display: grid;
+  gap: 6px;
+  align-content: start;
+}
+
+.ga-impact-tag {
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--eg) 82%, var(--gfg));
+}
+
+.ga-impact-title {
+  font-size: 20px;
+  line-height: 1.08;
+  letter-spacing: -.02em;
+  font-weight: 900;
+  max-width: 26ch;
+}
+
+.ga-impact-text {
+  font-size: 13px;
   line-height: 1.5;
-  font-style: italic;
-  border-left: 2px solid color-mix(in srgb,var(--gb) 34%,transparent);
-  padding-left: 10px;
+  color: var(--gmut);
+  max-width: 60ch;
+}
+
+.ga-impact-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.ga-stat {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  min-height: 100%;
+  padding: 14px 14px 12px;
+  border-radius: 16px;
+  border: 1px solid var(--gbd);
+  background: color-mix(in srgb, var(--gbg) 78%, transparent);
+}
+
+.ga-stat--accent {
+  border-color: color-mix(in srgb, var(--eg) 42%, var(--gbd));
+  background: color-mix(in srgb, var(--eg) 10%, var(--gbg));
+}
+
+.ga-stat-value {
+  font-family: var(--em);
+  font-size: clamp(28px, 3vw, 38px);
+  line-height: .95;
+  font-weight: 900;
+  letter-spacing: -.05em;
+  color: color-mix(in srgb, var(--eg) 88%, var(--gfg));
+}
+
+.ga-stat-label {
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--gmut);
+}
+
+@keyframes ga-flow {
+  from { background-position: -120% 0, 0 0; }
+  to { background-position: 220% 0, 0 0; }
+}
+
+.ga-track-line {
+  animation: ga-flow 4.8s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ga-track-line { animation: none; }
+}
+
+@media (max-width: 860px) {
+  .ga-banner {
+    grid-template-columns: 1fr;
+    justify-items: start;
+  }
+
+  .ga-banner-core {
+    text-align: left;
+  }
+
+  .ga-lanes,
+  .ga-impact {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 640px) {
-  .ga-cols { grid-template-columns: 1fr; }
+  .ga-wrap {
+    padding: 16px;
+    gap: 14px;
+  }
+
+  .ga-title {
+    max-width: 100%;
+  }
+
+  .ga-flow {
+    grid-template-columns: 1fr;
+  }
+
+  .ga-track {
+    order: 3;
+    justify-items: stretch;
+  }
+
+  .ga-track-note {
+    max-width: none;
+  }
+
+  .ga-impact-stats {
+    grid-template-columns: 1fr;
+  }
 }
 </style>

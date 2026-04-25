@@ -1,133 +1,108 @@
-/**
- * batch-articles.mjs
- *
- * Renders article videos for an entire series (or all series).
- * Skips articles where the .mp4 is newer than the .md (idempotent).
- * Output: <series>/<slug>.mp4 — alongside each article .md.
- *
- * Usage:
- *   node batch-articles.mjs                        # all series
- *   node batch-articles.mjs --series from-cave-to-agi
- *   node batch-articles.mjs --series from-cave-to-agi --force   # re-render all
- *   node batch-articles.mjs --dry-run              # show what would run
- *
- * Flags:
- *   --series <name>   Process only this series folder
- *   --force           Re-render even if .mp4 is up-to-date
- *   --dry-run         Print jobs without executing
- *   --no-cta          Omit CTA beat (default for article/site videos)
- *   --linkedin        Include CTA beat (for LinkedIn post videos)
- */
-
-import fs   from "fs";
+import fs from "fs";
 import path from "path";
 import { execSync } from "child_process";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-// ─── Config ───────────────────────────────────────────────────────────────────
-const args       = process.argv.slice(2);
-const SERIES_ARG = args.find(a => a.startsWith("--series="))?.split("=")[1]
-                || (args.includes("--series") ? args[args.indexOf("--series") + 1] : null);
-const FORCE      = args.includes("--force");
-const DRY_RUN    = args.includes("--dry-run");
-// Article videos default to --no-cta; pass --linkedin to keep CTA
-const NO_CTA     = !args.includes("--linkedin");
-
 const SERIES_ROOT = path.resolve(__dirname, "../docs/series");
-const SCRIPT      = path.join(__dirname, "md-to-article-html.mjs");
+const ARTICLE_SCRIPT = path.join(__dirname, "md-to-article-html.mjs");
+const DECO_SCRIPT = path.join(__dirname, "deco-pipeline.mjs");
+const RENDERER = path.resolve(__dirname, "../../video-generator/article-to-video.mjs");
 
-// Keep in sync with hooks/wip_series.py — no videos for incomplete series
-const WIP_SERIES = new Set([
-  "ia-pib-bienestar-energia",
-  "datacenters-espacio",
-]);
+const args = process.argv.slice(2);
+const SERIES_FILTER =
+  args.find((a) => a.startsWith("--series="))?.split("=")[1]
+  || (args.includes("--series") ? args[args.indexOf("--series") + 1] : null);
+const FORCE = args.includes("--force");
+const DRY_RUN = args.includes("--dry-run");
+const INCLUDE_CTA = args.includes("--linkedin");
 
-// ─── Discover series ──────────────────────────────────────────────────────────
 function discoverSeries() {
   return fs.readdirSync(SERIES_ROOT, { withFileTypes: true })
-    .filter(e => e.isDirectory())
-    .map(e => e.name)
-    .filter(name => !SERIES_ARG || name === SERIES_ARG)
-    .filter(name => !WIP_SERIES.has(name))
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => entry.name)
+    .filter((name) => !SERIES_FILTER || name === SERIES_FILTER)
     .sort();
 }
 
-// ─── Discover articles in a series ───────────────────────────────────────────
-function discoverArticles(seriesName) {
-  const dir = path.join(SERIES_ROOT, seriesName);
+function discoverArticles(series) {
+  const dir = path.join(SERIES_ROOT, series);
   return fs.readdirSync(dir)
-    .filter(f => f.endsWith(".md") && !f.startsWith("00_") && f !== "index.md")
+    .filter((file) => file.endsWith(".md") && !file.startsWith("00_") && file !== "index.md")
     .sort()
-    .map(f => ({
-      md:   path.join(dir, f),
-      slug: path.basename(f, ".md"),
-      mp4:  path.join(dir, path.basename(f, ".md") + ".mp4"),
-    }));
+    .map((file) => {
+      const slug = path.basename(file, ".md");
+      return {
+        series,
+        slug,
+        md: path.join(dir, file),
+        sourceHtml: path.join(__dirname, `article_${series}__${slug}.source.html`),
+        html: path.join(__dirname, `article_${series}__${slug}.html`),
+        decoDir: path.join(__dirname, "deco", series, slug),
+        mp4: path.join(dir, `${slug}.mp4`),
+        poster: path.join(dir, `${slug}.jpg`),
+      };
+    });
 }
 
-// ─── Check if render needed ───────────────────────────────────────────────────
-function needsRender({ md, mp4 }) {
+function needsRender(job) {
   if (FORCE) return true;
-  if (!fs.existsSync(mp4)) return true;
-  const mdMtime  = fs.statSync(md).mtimeMs;
-  const mp4Mtime = fs.statSync(mp4).mtimeMs;
-  return mdMtime > mp4Mtime;
+  if (!fs.existsSync(job.mp4)) return true;
+  return fs.statSync(job.md).mtimeMs > fs.statSync(job.mp4).mtimeMs;
 }
 
-// ─── Main ─────────────────────────────────────────────────────────────────────
+function shellEscape(value) {
+  return `"${String(value).replace(/"/g, '\\"')}"`;
+}
+
 async function main() {
   const seriesList = discoverSeries();
-  if (seriesList.length === 0) {
-    console.error(`No series found${SERIES_ARG ? ` matching "${SERIES_ARG}"` : ""}`);
+  if (!seriesList.length) {
+    console.error(`No series found${SERIES_FILTER ? ` matching "${SERIES_FILTER}"` : ""}`);
     process.exit(1);
   }
 
-  const jobs = [];
-  for (const series of seriesList) {
-    const articles = discoverArticles(series);
-    for (const article of articles) {
-      jobs.push({ series, ...article });
-    }
-  }
+  const jobs = seriesList.flatMap(discoverArticles);
+  const toRun = jobs.filter(needsRender);
 
-  const toRender = jobs.filter(needsRender);
-  const skipped  = jobs.length - toRender.length;
-
-  console.log(`\nBatch articles — ${jobs.length} total, ${skipped} up-to-date, ${toRender.length} to render`);
-  console.log(`CTA: ${NO_CTA ? "omitted (site video)" : "included (linkedin)"}\n`);
-
-  if (toRender.length === 0) {
-    console.log("All videos up-to-date. Use --force to re-render.");
+  console.log(`\nBatch articles — ${jobs.length} total, ${jobs.length - toRun.length} up-to-date, ${toRun.length} to render`);
+  console.log(`CTA: ${INCLUDE_CTA ? "included (--linkedin)" : "omitted (site video)"}`);
+  if (!toRun.length) {
+    console.log("All article videos are up-to-date. Use --force to re-render.");
     return;
   }
 
-  for (const job of toRender) {
-    const ctaFlag = NO_CTA ? "--no-cta" : "";
-    const cmd = `node "${SCRIPT}" "${job.md}" --render ${ctaFlag}`.trim();
+  for (const [index, job] of toRun.entries()) {
+    console.log(`\n[${index + 1}/${toRun.length}] ${job.series}/${job.slug}`);
+    console.log(`  md:   ${job.md}`);
+    console.log(`  html: ${job.html}`);
+    console.log(`  mp4:  ${job.mp4}`);
 
-    console.log(`\n[${ toRender.indexOf(job) + 1}/${toRender.length}] ${job.series} / ${job.slug}`);
-    console.log(`  md:  ${job.md}`);
-    console.log(`  mp4: ${job.mp4}`);
+    const steps = [
+      `node ${shellEscape(ARTICLE_SCRIPT)} ${shellEscape(job.md)} ${shellEscape(job.sourceHtml)}${INCLUDE_CTA ? "" : " --no-cta"}`,
+      `node ${shellEscape(DECO_SCRIPT)} ${shellEscape(job.sourceHtml)} --out-html=${shellEscape(job.html)} --out-dir=${shellEscape(job.decoDir)} --max-attempts=2`,
+      `node ${shellEscape(RENDERER)} ${shellEscape(job.html)} ${shellEscape(job.mp4)}`,
+      `ffmpeg -ss 1.5 -i ${shellEscape(job.mp4)} -frames:v 1 -update 1 -q:v 3 -y ${shellEscape(job.poster)}`,
+    ];
 
     if (DRY_RUN) {
-      console.log(`  cmd: ${cmd}`);
+      steps.forEach((step) => console.log(`  ${step}`));
       continue;
     }
 
     try {
-      execSync(cmd, { stdio: "inherit", cwd: __dirname });
-      console.log(`  ✓ done`);
-    } catch (e) {
-      console.error(`  ✗ failed: ${e.message}`);
-      // Continue with next article, don't abort batch
+      execSync(steps[0], { stdio: "inherit", cwd: __dirname });
+      execSync(steps[1], { stdio: "inherit", cwd: __dirname });
+      execSync(steps[2], { stdio: "inherit", cwd: path.dirname(RENDERER) });
+      execSync(steps[3], { stdio: "pipe", cwd: __dirname });
+      console.log("  ✓ done");
+    } catch (error) {
+      console.error(`  ✗ failed: ${error.message}`);
     }
-  }
-
-  if (!DRY_RUN) {
-    console.log(`\n✓ Batch complete — ${toRender.length} rendered, ${skipped} skipped`);
   }
 }
 
-main().catch(e => { console.error(e); process.exit(1); });
+main().catch((error) => {
+  console.error(error);
+  process.exit(1);
+});

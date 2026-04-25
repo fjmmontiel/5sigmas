@@ -20,6 +20,8 @@ import fs   from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import AnthropicVertex from "./node_modules/@anthropic-ai/vertex-sdk/index.js";
+import { renderVideoDeco, videoDecoStyles } from "./video-deco-presets.mjs";
+import { DEFAULT_VIDEO_MOOD, videoMoodStyles } from "./video-moods.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -29,9 +31,10 @@ const SERIES_DIR = args.find(a => !a.startsWith("--"));
 const OUT_HTML   = args.filter(a => !a.startsWith("--"))[1];
 const DO_RENDER  = args.includes("--render");
 const OUT_VIDEO  = args.find(a => a.startsWith("--out="))?.split("=")[1];
+const VIDEO_MOOD = args.find(a => a.startsWith("--mood="))?.split("=")[1] || DEFAULT_VIDEO_MOOD;
 
 if (!SERIES_DIR) {
-  console.error("Usage: node md-series-to-html.mjs <series-dir> [output.html] [--render]");
+  console.error("Usage: node md-series-to-html.mjs <series-dir> [output.html] [--render] [--mood=name]");
   process.exit(1);
 }
 if (!fs.existsSync(SERIES_DIR)) {
@@ -199,16 +202,32 @@ async function callClaude(userContent) {
 // ─── Render HTML ──────────────────────────────────────────────────────────────
 function renderHTML(beatsJson) {
   const { opening, beats } = beatsJson;
+  const scopeKey = `series:${seriesName}`;
 
   const footer_label = opening.series_tag || seriesName;
   const openDecoColor = opening.deco_color || "#26A69A";
   const openDeco      = opening.deco || "5σ";
+  const openingDeco = renderVideoDeco({
+    scopeKey,
+    beatId: "01_opening",
+    beatType: "opening",
+    headline: opening.main_title,
+    glyph: openDeco,
+  });
 
   const beatBlocks = beats.map((b, i) => {
     const id   = b.id || `0${i+2}_beat`;
     const dc   = b.deco_color   || COLORS[i % COLORS.length];
     const divc = b.divider_color || COLORS[(i + 1) % COLORS.length];
     const chapterLabel = b.chapter ? ` · ${b.chapter}` : "";
+    const deco = renderVideoDeco({
+      scopeKey,
+      beatId: id,
+      beatType: "content",
+      beatIndex: i,
+      headline: b.headline,
+      glyph: b.deco || "",
+    });
     return `\n<!-- ═══ BEAT ${i+2} — ${id} ════════════════════════════════════════════ -->
 <div class="beat" data-id="${id}" data-type="content" style="--c:${dc};">
   <div class="accent-bar"></div>
@@ -218,7 +237,7 @@ function renderHTML(beatsJson) {
     <div class="headline">${b.headline.replace(/\\n/g, "<br>")}</div>
     <div class="body">${b.body}</div>
   </div>
-  <div class="deco" style="color:${dc};">${b.deco}</div>
+  <div class="deco" style="color:${dc};">${deco}</div>
   <div class="footer">
     <span class="footer-label">${footer_label}${chapterLabel}</span>
     <span class="footer-logo">5σ</span>
@@ -282,13 +301,8 @@ function renderHTML(beatsJson) {
     background: linear-gradient(135deg, #26A69A 0%, #324AB2 40%, #FFB343 80%);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
   }
-  .deco {
-    position: absolute; right: 120px; bottom: 100px;
-    font-size: 280px; font-weight: 900; line-height: 1; opacity: .16;
-    font-family: "SF Mono","JetBrains Mono","Courier New",monospace;
-    pointer-events: none; user-select: none;
-    text-shadow: 0 0 180px var(--c);
-  }
+${videoDecoStyles()}
+${videoMoodStyles(VIDEO_MOOD)}
 
   /* Opening */
   .opening .beat-inner { justify-content: center; align-items: flex-start; }
@@ -317,15 +331,15 @@ function renderHTML(beatsJson) {
   .divider { width: 48px; height: 4px; border-radius: 2px; margin-bottom: 48px; }
   .headline {
     font-size: 88px; font-weight: 800; line-height: 1.05;
-    letter-spacing: -.02em; color: #f0f4ff; margin-bottom: 48px; max-width: 1400px;
+    letter-spacing: -.02em; color: #f0f4ff; margin-bottom: 48px; max-width: 1080px;
   }
   .body {
     font-size: 28px; font-weight: 400; line-height: 1.55;
-    color: rgba(240,244,255,.75); max-width: 960px;
+    color: rgba(240,244,255,.75); max-width: 900px;
   }
 </style>
 </head>
-<body>
+<body data-video-mood="${VIDEO_MOOD}">
 
 <!-- ═══ BEAT 1 — Opening ═══════════════════════════════════════════════════ -->
 <div class="beat opening" data-id="01_opening" data-type="opening" style="--c:${openDecoColor};">
@@ -336,7 +350,7 @@ function renderHTML(beatsJson) {
     <div class="subtitle">${opening.subtitle}</div>
     <div class="date-range">${opening.date_range}</div>
   </div>
-  <div class="deco" style="color:${openDecoColor};">${openDeco}</div>
+  <div class="deco" style="color:${openDecoColor};">${openingDeco}</div>
   <div class="footer">
     <span class="footer-label">${footer_label}</span>
     <span class="footer-logo">5σ</span>

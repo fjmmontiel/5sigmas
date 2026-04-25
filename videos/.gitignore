@@ -2,6 +2,10 @@ node_modules/
 frames/
 output/
 *.png
-# Generated intermediate HTMLs (recreated by md-to-article-html.mjs / md-series-to-html.mjs)
-article_[0-9]*.html
+# Generated article HTMLs (recreated by md-to-article-html.mjs / md-series-to-html.mjs)
+article_*.html
+article_*.source.html
 series_*.html
+# Generated review/build artifacts from the video pipeline
+deco/
+mood-pilot/

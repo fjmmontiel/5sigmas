@@ -1,8 +1,8 @@
 /**
  * md-to-article-html.mjs
  *
- * Converts a 5Sigmas series article (.md) into a beat-structured HTML
- * ready for article-to-video.mjs rendering.
+ * Converts a 5Sigmas series article (.md) into a beat-structured source HTML
+ * ready for decoration and article-to-video.mjs rendering.
  *
  * Usage:
  *   node md-to-article-html.mjs <path/to/article.md> [output.html]
@@ -22,6 +22,8 @@ import fs   from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import AnthropicVertex from "./node_modules/@anthropic-ai/vertex-sdk/index.js";
+import { renderVideoDeco, videoDecoStyles } from "./video-deco-presets.mjs";
+import { DEFAULT_VIDEO_MOOD, videoMoodStyles } from "./video-moods.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -32,9 +34,10 @@ const OUT_HTML  = args.filter(a => !a.startsWith("--"))[1];
 const DO_RENDER = args.includes("--render");
 const NO_CTA    = args.includes("--no-cta");   // omit CTA beat (for site-embedded article videos)
 const OUT_VIDEO = args.find(a => a.startsWith("--out="))?.split("=")[1];
+const VIDEO_MOOD = args.find(a => a.startsWith("--mood="))?.split("=")[1] || DEFAULT_VIDEO_MOOD;
 
 if (!MD_PATH) {
-  console.error("Usage: node md-to-article-html.mjs <article.md> [output.html] [--render] [--no-cta] [--out=video.mp4]");
+  console.error("Usage: node md-to-article-html.mjs <article.md> [output.source.html] [--render] [--no-cta] [--out=video.mp4] [--mood=name]");
   process.exit(1);
 }
 if (!fs.existsSync(MD_PATH)) {
@@ -42,8 +45,13 @@ if (!fs.existsSync(MD_PATH)) {
   process.exit(1);
 }
 
-const slug    = path.basename(MD_PATH, ".md");
-const outPath = OUT_HTML || path.join(__dirname, `article_${slug}.html`);
+const slug       = path.basename(MD_PATH, ".md");
+const seriesName = path.basename(path.dirname(path.resolve(MD_PATH)));
+const articleKey = `${seriesName}/${slug}`;
+const outPath    = OUT_HTML || path.join(__dirname, `article_${seriesName}__${slug}.source.html`);
+const decoratedPath = outPath.endsWith(".source.html")
+  ? outPath.replace(/\.source\.html$/, ".html")
+  : outPath.replace(/\.html$/, ".decorated.html");
 
 // ─── Vertex / Claude config ───────────────────────────────────────────────────
 function readEnvFile() {
@@ -101,6 +109,7 @@ const DECO_POOLS = {
   "03-arquitecturas":     ["⚡", "◉", "⊕", "⬡"],
   "04-evaluacion":        ["⚠", "⊘", "⬡", "≠"],
   "05-riesgos":           ["⚠", "⚙", "↺", "⊗"],
+  "multimodalidad-iag/05-riesgos": ["⚠", "◉", "⬢", "⊘", "↺"],
 };
 
 // ─── Parse markdown ───────────────────────────────────────────────────────────
@@ -231,8 +240,9 @@ Output ONLY valid JSON, no explanation, no markdown fences. Schema:
 The cta.url is always fixed as "5sigmas.com" — do NOT invent or guess article paths.`;
 
 // ─── Render HTML from beats JSON ──────────────────────────────────────────────
-function renderHTML(beatsJson, slug, { noCta = false } = {}) {
+function renderHTML(beatsJson, slug, { noCta = false, seriesName = "" } = {}) {
   const { opening, beats, cta } = beatsJson;
+  const scopeKey = `article:${seriesName}/${slug}`;
 
   const footer_label_opening = opening.series_tag || "5Sigmas";
   const footer_label_content = opening.main_title || slug;
@@ -243,6 +253,14 @@ function renderHTML(beatsJson, slug, { noCta = false } = {}) {
     const id   = b.id || `0${i+2}_beat`;
     const dc   = b.deco_color  || COLORS[i % COLORS.length];
     const divc = b.divider_color || COLORS[(i + 1) % COLORS.length];
+    const deco = renderVideoDeco({
+      scopeKey,
+      beatId: id,
+      beatType: "content",
+      beatIndex: i,
+      headline: b.headline,
+      glyph: b.deco || "",
+    });
     return `\n<!-- ═══ BEAT ${i+2} — ${id} ════════════════════════════════════════════ -->
 <div class="beat" data-id="${id}" data-type="content" style="--c:${dc};">
   <div class="accent-bar"></div>
@@ -252,7 +270,7 @@ function renderHTML(beatsJson, slug, { noCta = false } = {}) {
     <div class="headline">${b.headline.replace(/\\n/g, "<br>")}</div>
     <div class="body">${b.body}</div>
   </div>
-  <div class="deco" style="color:${dc};">${b.deco}</div>
+  <div class="deco" style="color:${dc};">${deco}</div>
   <div class="footer">
     <span class="footer-label">5Sigmas · ${footer_label_content}</span>
     <span class="footer-logo">5σ</span>
@@ -262,6 +280,13 @@ function renderHTML(beatsJson, slug, { noCta = false } = {}) {
 
   const openDeco      = opening.deco       || slug.charAt(0).toUpperCase();
   const openDecoColor = opening.deco_color || "#26A69A";
+  const openingDeco = renderVideoDeco({
+    scopeKey,
+    beatId: "01_opening",
+    beatType: "opening",
+    headline: opening.main_title,
+    glyph: openDeco,
+  });
 
   return `<!DOCTYPE html>
 <html lang="es">
@@ -326,15 +351,8 @@ function renderHTML(beatsJson, slug, { noCta = false } = {}) {
     background: linear-gradient(135deg, #26A69A 0%, #324AB2 40%, #FFB343 80%);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
   }
-
-  /* ── Deco — glows in beat color ────────────────────────────── */
-  .deco {
-    position: absolute; right: 120px; bottom: 100px;
-    font-size: 280px; font-weight: 900; line-height: 1; opacity: .16;
-    font-family: "SF Mono","JetBrains Mono","Courier New",monospace;
-    pointer-events: none; user-select: none;
-    text-shadow: 0 0 180px var(--c);
-  }
+${videoDecoStyles()}
+${videoMoodStyles(VIDEO_MOOD)}
 
   /* ── Opening beat ──────────────────────────────────────────── */
   .opening .beat-inner { justify-content: center; align-items: flex-start; }
@@ -363,12 +381,12 @@ function renderHTML(beatsJson, slug, { noCta = false } = {}) {
   .divider { width: 48px; height: 4px; border-radius: 2px; margin-bottom: 48px; }
   .headline {
     font-size: 88px; font-weight: 800; line-height: 1.05;
-    letter-spacing: -.02em; color: #f0f4ff; margin-bottom: 48px; max-width: 1400px;
+    letter-spacing: -.02em; color: #f0f4ff; margin-bottom: 48px; max-width: 1080px;
   }
   /* Two-paragraph body: p1 = context, p2 = insight (auto-split on <br><br>) */
   .body {
     font-size: 28px; font-weight: 400; line-height: 1.55;
-    color: rgba(240,244,255,.75); max-width: 960px;
+    color: rgba(240,244,255,.75); max-width: 900px;
   }
 
   /* ── CTA beat ──────────────────────────────────────────────── */
@@ -388,7 +406,7 @@ function renderHTML(beatsJson, slug, { noCta = false } = {}) {
   .cta-beat .deco { color: #FFB343; opacity: .14; }
 </style>
 </head>
-<body>
+<body data-video-mood="${VIDEO_MOOD}">
 
 <!-- ═══ BEAT 1 — Opening ═══════════════════════════════════════════════════ -->
 <div class="beat opening" data-id="01_opening" data-type="opening" style="--c:${openDecoColor};">
@@ -399,7 +417,7 @@ function renderHTML(beatsJson, slug, { noCta = false } = {}) {
     <div class="subtitle">${opening.subtitle}</div>
     <div class="date-range">${opening.date_range}</div>
   </div>
-  <div class="deco" style="color:${openDecoColor};">${openDeco}</div>
+  <div class="deco" style="color:${openDecoColor};">${openingDeco}</div>
   <div class="footer">
     <span class="footer-label">${footer_label_opening}</span>
     <span class="footer-logo">5σ</span>
@@ -417,7 +435,7 @@ ${noCta ? "" : `
     <div class="cta-body">${cta.body}</div>
     <div class="cta-url">5sigmas.com →</div>
   </div>
-  <div class="deco" style="color:#FFB343;">→</div>
+  <div class="deco" style="color:#FFB343;">${renderVideoDeco({ scopeKey, beatId: "cta", beatType: "cta", glyph: "→" })}</div>
   <div class="footer">
     <span class="footer-label">${footer_label_cta}</span>
     <span class="footer-logo">5σ</span>
@@ -438,7 +456,7 @@ async function main() {
   console.log(`  Title: ${title}`);
   console.log(`  Body:  ${body.length} chars → sending to Claude...`);
 
-  const decoPool = DECO_POOLS[slug] || [];
+  const decoPool = DECO_POOLS[articleKey] || DECO_POOLS[slug] || [];
   const decoLine = decoPool.length
     ? `Deco pool (use ONLY these, no repeats per beat): ${decoPool.join("  ")}`
     : `Deco pool: choose unique symbols that ARE the concept (one per beat, no repeats)`;
@@ -483,7 +501,7 @@ For the CTA url field, infer it from the slug/title pattern: 5sigmas.com/series/
   if (!NO_CTA) console.log(`  CTA: ${beatsJson.cta.headline}`);
   if (NO_CTA)  console.log(`  (CTA omitted — --no-cta)`);
 
-  const html = renderHTML(beatsJson, slug, { noCta: NO_CTA });
+  const html = renderHTML(beatsJson, slug, { noCta: NO_CTA, seriesName });
   fs.writeFileSync(outPath, html, "utf8");
   console.log(`\n✓ HTML written: ${outPath}`);
 
@@ -493,9 +511,16 @@ For the CTA url field, infer it from the slug/title pattern: 5sigmas.com/series/
     const mdDir   = path.dirname(path.resolve(MD_PATH));
     const videoOut = OUT_VIDEO || path.join(mdDir, `${slug}.mp4`);
     fs.mkdirSync(path.dirname(videoOut), { recursive: true });
+    const decoPipeline = path.resolve(__dirname, "deco-pipeline.mjs");
+    const decoOutDir = path.join(__dirname, "deco", seriesName, slug);
+    console.log(`\nDecorating HTML → ${decoratedPath}`);
+    exec(`node "${decoPipeline}" "${outPath}" --out-html="${decoratedPath}" --out-dir="${decoOutDir}" --max-attempts=2`, {
+      stdio: "inherit",
+      cwd: __dirname,
+    });
     console.log(`\nRendering video → ${videoOut}`);
     const renderer = path.resolve(__dirname, "../../video-generator/article-to-video.mjs");
-    exec(`node "${renderer}" "${outPath}" "${videoOut}"`, {
+    exec(`node "${renderer}" "${decoratedPath}" "${videoOut}"`, {
       stdio: "inherit",
       cwd:   path.dirname(renderer),
     });
@@ -503,7 +528,8 @@ For the CTA url field, infer it from the slug/title pattern: 5sigmas.com/series/
     const mdDir   = path.dirname(path.resolve(MD_PATH));
     const videoOut = OUT_VIDEO || path.join(mdDir, `${slug}.mp4`);
     console.log(`\nNext step:`);
-    console.log(`  node article-to-video.mjs "${outPath}" "${videoOut}"`);
+    console.log(`  node deco-pipeline.mjs "${outPath}" --out-html="${decoratedPath}"`);
+    console.log(`  node article-to-video.mjs "${decoratedPath}" "${videoOut}"`);
     console.log(`\nOr in one command:`);
     console.log(`  node md-to-article-html.mjs "${MD_PATH}" --render --no-cta`);
   }
