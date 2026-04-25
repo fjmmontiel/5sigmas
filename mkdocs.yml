@@ -75,6 +75,12 @@ nav:
           - Test-Time Compute: series/modelos-razonadores/03-test-time-compute.md
           - Tiempo, latencia, streaming e interacción humana: series/modelos-razonadores/04-latencia-streaming.md
           - Riesgos: series/modelos-razonadores/05-riesgos.md
+      - IA, PIB, bienestar y energía:
+          - Presentación: series/ia-pib-bienestar-energia/00_presentacion_serie.md
+          - Electricidad y bienestar: series/ia-pib-bienestar-energia/01-electricidad-bienestar.md
+          - IA como tecnología eléctrica: series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica.md
+          - Medición — PIB vs bienestar: series/ia-pib-bienestar-energia/03-pib-vs-bienestar.md
+          - IA y PIB hoy: series/ia-pib-bienestar-energia/04-ia-pib-hoy.md
   - Próximamente: proximamente.md
   - Sobre 5sigmas: meta/about.md
 markdown_extensions:

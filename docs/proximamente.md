@@ -220,15 +220,6 @@ hide:
 
 <div class="prox-grid">
 
-<a href="/series/ia-pib-bienestar-energia/00_presentacion_serie/" class="prox-card prox-card-red">
-  <div class="prox-badge" style="color:#e06c75">
-    <span class="prox-dot" style="background:#e06c75"></span>En construcción · General
-  </div>
-  <div class="prox-title">IA, PIB, bienestar y energía</div>
-  <div class="prox-desc">Electricidad, productividad y bienestar más allá del PIB. La IA como tecnología eléctrica del siglo XXI, con datos reales del Banco Mundial e IEA.</div>
-  <div class="prox-cta" style="color:#e06c75">Ver presentación →</div>
-</a>
-
 <a href="/series/datacenters-espacio/00_presentacion_serie/" class="prox-card prox-card-green">
   <div class="prox-badge" style="color:#98c379">
     <span class="prox-dot" style="background:#98c379"></span>En construcción · General
