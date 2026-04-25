@@ -133,28 +133,34 @@
       <div class="kk-res-sub">Diseñada explícitamente para reconciliar dos hallazgos contradictorios. Resultado: los dos eran correctos para subpoblaciones distintas.</div>
     </div>
     <div class="kk-res-chart-wrap">
-      <svg viewBox="0 0 500 210" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Resolución: dos curvas de bienestar vs ingreso para distintas subpoblaciones">
+      <svg viewBox="0 0 500 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Resolución: dos curvas de bienestar vs ingreso para distintas subpoblaciones">
         <!-- Axes -->
-        <line x1="50" y1="175" x2="470" y2="175" stroke="currentColor" opacity="0.28" stroke-width="1.5"/>
-        <line x1="50" y1="20" x2="50" y2="175" stroke="currentColor" opacity="0.28" stroke-width="1.5"/>
+        <line x1="50" y1="180" x2="452" y2="180" stroke="currentColor" opacity="0.28" stroke-width="1.5"/>
+        <line x1="50" y1="24" x2="50" y2="180" stroke="currentColor" opacity="0.28" stroke-width="1.5"/>
         <!-- Threshold -->
-        <line x1="175" y1="20" x2="175" y2="175" stroke="currentColor" opacity="0.15" stroke-dasharray="4,3" stroke-width="1"/>
-        <text x="178" y="30" font-family="'SF Mono','JetBrains Mono','Courier New',monospace" font-size="8" fill="currentColor" opacity="0.45">$75k</text>
+        <line x1="175" y1="24" x2="175" y2="180" stroke="currentColor" opacity="0.15" stroke-dasharray="4,3" stroke-width="1"/>
+        <text x="178" y="36" font-family="'SF Mono','JetBrains Mono','Courier New',monospace" font-size="8" fill="currentColor" opacity="0.45">$75k</text>
         <!-- Curve majority (teal — continuous rise) -->
-        <path d="M 50,160 C 90,142 130,112 185,88 C 240,66 310,50 400,40 C 440,36 458,34 470,32"
-          fill="none" stroke="#26A69A" stroke-width="2.2" stroke-linecap="round"/>
+        <path d="M 50,162 C 90,144 130,114 185,90 C 240,68 304,54 384,46 C 412,43 432,41 442,40"
+          fill="none" stroke="#26A69A" stroke-width="2.4" stroke-linecap="round"/>
         <!-- Curve unhappy 20% (red — flattens) -->
-        <path d="M 50,168 C 90,155 130,138 175,118 C 210,105 240,100 280,100 C 330,100 400,100 470,100"
-          fill="none" stroke="#e04c4c" stroke-width="2.2" stroke-linecap="round"/>
-        <!-- Labels for curves -->
-        <text x="466" y="32" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="8.5" fill="#26A69A" opacity="0.92" text-anchor="end">80% satisfecha</text>
-        <text x="466" y="101" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="8.5" fill="#e04c4c" opacity="0.92" text-anchor="end">20% insatisfecha</text>
+        <path d="M 50,170 C 90,157 130,140 175,120 C 210,107 238,102 276,102 C 322,102 390,102 442,102"
+          fill="none" stroke="#e04c4c" stroke-width="2.4" stroke-linecap="round"/>
+        <!-- Inset labels for curves -->
+        <g transform="translate(366 28)">
+          <rect x="0" y="0" width="90" height="20" rx="10" fill="#26A69A" opacity="0.12" stroke="#26A69A" stroke-opacity="0.22"/>
+          <text x="45" y="13" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="8.8" font-weight="800" fill="#26A69A" opacity="0.96" text-anchor="middle">80% satisfecha</text>
+        </g>
+        <g transform="translate(358 92)">
+          <rect x="0" y="0" width="98" height="20" rx="10" fill="#e04c4c" opacity="0.10" stroke="#e04c4c" stroke-opacity="0.20"/>
+          <text x="49" y="13" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="8.8" font-weight="800" fill="#e04c4c" opacity="0.96" text-anchor="middle">20% insatisfecha</text>
+        </g>
         <!-- X labels -->
-        <text x="50" y="190" font-family="'SF Mono','JetBrains Mono','Courier New',monospace" font-size="8" fill="currentColor" opacity="0.45" text-anchor="middle">$0</text>
-        <text x="470" y="190" font-family="'SF Mono','JetBrains Mono','Courier New',monospace" font-size="8" fill="currentColor" opacity="0.45" text-anchor="end">$200k+</text>
-        <text x="46" y="35" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="8" fill="currentColor" opacity="0.40" text-anchor="end">Alto</text>
-        <text x="46" y="170" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="8" fill="currentColor" opacity="0.40" text-anchor="end">Bajo</text>
-        <text x="260" y="205" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="9" fill="currentColor" opacity="0.38" text-anchor="middle">Ingreso anual</text>
+        <text x="50" y="197" font-family="'SF Mono','JetBrains Mono','Courier New',monospace" font-size="8" fill="currentColor" opacity="0.45" text-anchor="middle">$0</text>
+        <text x="452" y="197" font-family="'SF Mono','JetBrains Mono','Courier New',monospace" font-size="8" fill="currentColor" opacity="0.45" text-anchor="end">$200k+</text>
+        <text x="46" y="42" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="8" fill="currentColor" opacity="0.40" text-anchor="end">Alto</text>
+        <text x="46" y="176" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="8" fill="currentColor" opacity="0.40" text-anchor="end">Bajo</text>
+        <text x="252" y="214" font-family="'Avenir Next','Avenir','Segoe UI',sans-serif" font-size="9" fill="currentColor" opacity="0.38" text-anchor="middle">Ingreso anual</text>
       </svg>
     </div>
     <div class="kk-res-cards">
