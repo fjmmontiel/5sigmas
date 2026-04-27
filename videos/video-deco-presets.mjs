@@ -1458,27 +1458,38 @@ const MOTIFS = {
   `),
 
   groundingVsInstruction: () => scene(`
-    <rect class="deco-fill deco-fill--soft anim-fade" x="100" y="158" width="84" height="102" rx="16" />
-    <path class="deco-stroke deco-stroke--thin anim-draw" pathLength="1" d="M124 190H160M124 218H154" />
-    <path class="deco-stroke anim-draw" pathLength="1" d="M184 210H244" />
-    <path class="deco-stroke anim-draw" pathLength="1" d="M252 146C252 130 264 118 280 118H316C332 118 344 130 344 146V176C344 192 332 204 316 204H296L276 224L280 204H280C264 204 252 192 252 176Z" />
-    <path class="deco-stroke deco-stroke--soft anim-draw" pathLength="1" d="M238 170L332 254" />
+    <rect class="deco-fill deco-fill--soft anim-fade" x="96" y="152" width="94" height="116" rx="18" />
+    <rect class="deco-stroke anim-draw" x="118" y="174" width="50" height="72" rx="10" pathLength="1" />
+    <path class="deco-stroke deco-stroke--thin anim-draw" pathLength="1" d="M128 192H158M128 214H152M128 236H146" />
+    <circle class="deco-fill deco-fill--strong anim-pop" cx="214" cy="210" r="18" />
+    <path class="deco-stroke anim-draw" pathLength="1" d="M190 210H246" />
+    <path class="deco-stroke deco-stroke--soft anim-draw" pathLength="1" d="M214 196L238 170L258 194" />
+    <path class="deco-stroke anim-draw" pathLength="1" d="M258 150C258 134 270 122 286 122H320C336 122 348 134 348 150V184C348 200 336 212 320 212H302L280 236L284 212H286C270 212 258 200 258 184Z" />
+    <rect class="deco-fill deco-fill--strong anim-pop" x="286" y="146" width="42" height="22" rx="8" />
+    <path class="deco-stroke deco-stroke--thin anim-draw" pathLength="1" d="M284 254L332 286M304 214L332 246" />
   `),
 
   dataWins: () => scene(`
-    <rect class="deco-fill deco-fill--soft anim-fade" x="104" y="204" width="50" height="84" rx="12" />
-    <rect class="deco-fill deco-fill--soft anim-fade" x="170" y="182" width="50" height="106" rx="12" />
-    <rect class="deco-fill deco-fill--strong anim-pop" x="254" y="126" width="50" height="162" rx="12" />
-    <path class="deco-stroke anim-draw" pathLength="1" d="M94 304H330" />
-    <path class="deco-stroke deco-stroke--thin anim-draw" pathLength="1" d="M118 180L152 144L182 172M184 156L212 130" />
+    <path class="deco-stroke deco-stroke--soft anim-draw" pathLength="1" d="M92 304H332" />
+    <rect class="deco-fill deco-fill--soft anim-fade" x="104" y="214" width="52" height="74" rx="12" />
+    <rect class="deco-fill deco-fill--soft anim-fade" x="174" y="184" width="52" height="104" rx="12" />
+    <rect class="deco-fill deco-fill--strong anim-pop" x="252" y="126" width="56" height="162" rx="12" />
+    <path class="deco-stroke anim-draw" pathLength="1" d="M108 196L150 154L194 182L236 146L286 118" />
+    <path class="deco-stroke deco-stroke--thin anim-draw" pathLength="1" d="M150 154L152 126M236 146L238 114M286 118L320 86" />
+    <circle class="deco-node anim-pop" cx="150" cy="154" r="8" />
+    <circle class="deco-node anim-pop" cx="236" cy="146" r="8" />
+    <circle class="deco-fill deco-fill--strong anim-pop" cx="320" cy="86" r="14" />
   `),
 
   preferenceBias: () => scene(`
-    <rect class="deco-fill deco-fill--soft anim-fade" x="106" y="164" width="76" height="88" rx="16" />
-    <rect class="deco-fill deco-fill--strong anim-pop" x="238" y="164" width="76" height="88" rx="16" />
-    <path class="deco-stroke deco-stroke--soft anim-draw" pathLength="1" d="M182 208H238" />
-    <circle class="deco-fill deco-fill--strong anim-pop" cx="218" cy="208" r="12" />
-    <path class="deco-stroke deco-stroke--thin anim-draw" pathLength="1" d="M124 190H164M256 190H296" />
+    <rect class="deco-fill deco-fill--soft anim-fade" x="102" y="154" width="86" height="108" rx="18" />
+    <rect class="deco-fill deco-fill--strong anim-pop" x="234" y="154" width="90" height="108" rx="18" />
+    <path class="deco-stroke deco-stroke--thin anim-draw" pathLength="1" d="M126 184H164M126 212H156M126 240H170" />
+    <path class="deco-stroke deco-stroke--thin anim-draw" pathLength="1" d="M258 184H298M258 212H306M258 240H288" />
+    <path class="deco-stroke deco-stroke--soft anim-draw" pathLength="1" d="M188 208H234" />
+    <circle class="deco-stroke anim-draw" cx="214" cy="208" r="22" pathLength="1" />
+    <circle class="deco-fill deco-fill--strong anim-pop" cx="228" cy="208" r="12" />
+    <path class="deco-stroke anim-draw" pathLength="1" d="M214 230C236 246 266 256 304 260" />
   `),
 
   encoderBridge: () => scene(`
@@ -1803,7 +1814,7 @@ export function renderVideoDeco({ scopeKey, beatId, beatType, beatIndex = -1, he
   return stabilizeVideoSvgMarkup(renderer(glyph));
 }
 
-export function stabilizeVideoSvgMarkup(svg, { minFontSize = 8.5 } = {}) {
+export function stabilizeVideoSvgMarkup(svg, { minFontSize = 10 } = {}) {
   const textMatches = [...svg.matchAll(/<text\b[^>]*>([\s\S]*?)<\/text>/gi)];
   const textCount = textMatches.length;
   const numericLabels = textMatches.filter(([, text]) => /\d/.test(String(text || ""))).length;
@@ -1897,11 +1908,11 @@ export function videoDecoStyles() {
   .beat-inner {
     position: relative;
     z-index: 1;
-    padding-right: var(--copy-right-pad, 800px);
+    padding-right: var(--copy-right-pad, 820px);
   }
 
   .opening .beat-inner {
-    padding-right: var(--opening-copy-right-pad, 900px);
+    padding-right: var(--opening-copy-right-pad, 760px);
   }
 
   .cta-beat .beat-inner {
@@ -1923,20 +1934,20 @@ export function videoDecoStyles() {
   }
 
   .opening .deco {
-    top: var(--deco-opening-top, 172px);
-    right: var(--deco-opening-right, 56px);
-    width: var(--deco-opening-size, 500px);
-    height: var(--deco-opening-size, 500px);
-    opacity: 0.96;
+    top: var(--deco-opening-top, 146px);
+    right: var(--deco-opening-right, 36px);
+    width: var(--deco-opening-size, 560px);
+    height: var(--deco-opening-size, 560px);
+    opacity: 0.98;
     overflow: hidden;
   }
 
   .opening .main-title {
-    max-width: var(--opening-title-max, 900px);
+    max-width: var(--opening-title-max, 1020px);
   }
 
   .opening .subtitle {
-    max-width: var(--opening-subtitle-max, 680px);
+    max-width: var(--opening-subtitle-max, 760px);
   }
 
   .deco-scene {
@@ -1945,6 +1956,53 @@ export function videoDecoStyles() {
     height: 100%;
     overflow: hidden;
     border-radius: 52px;
+  }
+
+  .deco-component {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 52px;
+    filter: drop-shadow(0 30px 90px rgba(3, 10, 22, 0.55));
+  }
+
+  .deco-snippet-shell {
+    position: absolute;
+    inset: 24px;
+    border-radius: 40px;
+    overflow: hidden;
+    background: rgba(11, 18, 32, 0.92);
+    border: 1px solid rgba(240, 244, 255, 0.1);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
+  }
+
+  .deco-snippet-shell::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.05) 0%, transparent 16%),
+      radial-gradient(circle at 82% 18%, rgba(124,199,255,.08) 0%, transparent 28%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .deco-snippet-stage {
+    position: absolute;
+    inset: 14px;
+    z-index: 1;
+  }
+
+  .deco-snippet-image {
+    width: 100%;
+    height: 100%;
+    display: block;
+    border-radius: 22px;
+    object-fit: contain;
+    object-position: center center;
+    background: #0b1220;
+    filter: saturate(1.08) contrast(1.12) brightness(1.12);
   }
 
   .deco-svg {
@@ -1970,6 +2028,55 @@ export function videoDecoStyles() {
     height: 660px;
   }
 
+  .beat:not(.opening) .deco:has(.deco-component[data-detail="snippet"]) {
+    right: 18px;
+    top: 244px;
+    width: 720px;
+    height: 640px;
+  }
+
+  .opening .deco:has(.deco-component[data-detail="snippet"]) {
+    top: 138px;
+    right: 28px;
+    width: 760px;
+    height: 660px;
+  }
+
+  .beat:not(.opening) .deco:has(.deco-component[data-layout="wide"]) {
+    right: 8px;
+    top: 248px;
+    width: 820px;
+    height: 612px;
+  }
+
+  .beat:not(.opening) .deco:has(.deco-component[data-layout="square"]) {
+    right: 16px;
+    top: 236px;
+    width: 700px;
+    height: 660px;
+  }
+
+  .beat:not(.opening) .deco:has(.deco-component[data-layout="tall"]) {
+    right: 26px;
+    top: 188px;
+    width: 620px;
+    height: 744px;
+  }
+
+  .opening .deco:has(.deco-component[data-layout="wide"]) {
+    top: 128px;
+    right: 18px;
+    width: 820px;
+    height: 620px;
+  }
+
+  .opening .deco:has(.deco-component[data-layout="square"]) {
+    top: 132px;
+    right: 18px;
+    width: 730px;
+    height: 680px;
+  }
+
   .deco-svg[data-detail="medium"] {
     width: 102%;
     height: 102%;
@@ -1980,6 +2087,11 @@ export function videoDecoStyles() {
     width: 106%;
     height: 106%;
     transform: translate(-3%, -3%);
+  }
+
+  .deco-svg[data-detail="medium"] .deco-grid,
+  .deco-svg[data-detail="dense"] .deco-grid {
+    opacity: 0.42;
   }
 
   .deco-svg text {
@@ -1993,7 +2105,7 @@ export function videoDecoStyles() {
 
   .deco-panel-glow {
     fill: currentColor;
-    fill-opacity: 0.1;
+    fill-opacity: 0.13;
   }
 
   .deco-panel {
@@ -2004,7 +2116,7 @@ export function videoDecoStyles() {
 
   .deco-grid {
     fill: none;
-    stroke: rgba(240, 244, 255, 0.055);
+    stroke: rgba(240, 244, 255, 0.034);
     stroke-width: 1.5;
   }
 
@@ -2012,7 +2124,7 @@ export function videoDecoStyles() {
     fill: none;
     stroke: currentColor;
     stroke-width: 2.5;
-    stroke-opacity: 0.22;
+    stroke-opacity: 0.3;
     stroke-linecap: round;
   }
 
@@ -2027,7 +2139,7 @@ export function videoDecoStyles() {
 
   .deco-stroke--soft {
     stroke-width: 5;
-    stroke-opacity: 0.54;
+    stroke-opacity: 0.64;
   }
 
   .deco-stroke--thin {
@@ -2041,11 +2153,11 @@ export function videoDecoStyles() {
   }
 
   .deco-fill--soft {
-    fill-opacity: 0.08;
+    fill-opacity: 0.11;
   }
 
   .deco-fill--strong {
-    fill-opacity: 0.26;
+    fill-opacity: 0.32;
   }
 
   .deco-node {

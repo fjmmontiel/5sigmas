@@ -60,9 +60,18 @@ function discoverJobs() {
 }
 
 function patchDecoCss(html) {
+  const styles = videoDecoStyles();
+  const replaced = html.replace(
+    /  \.beat-inner \{\s*position: relative;[\s\S]*?^\s*\/\* (?:── )?Opening(?: beat)?/m,
+    `${styles}\n\n  /* Opening`,
+  );
+  if (replaced !== html) return replaced;
+  if (html.includes(".deco-component") && html.includes("padding-right: var(--copy-right-pad")) {
+    return html;
+  }
   return html.replace(
-    /  \.beat-inner \{\s*position: relative;[\s\S]*?^\s*\/\* ── Opening beat/m,
-    `${videoDecoStyles()}\n\n  /* ── Opening beat`,
+    /(\.footer-logo \{[\s\S]*?\n  \})/,
+    `$1\n${styles}`,
   );
 }
 
@@ -74,6 +83,13 @@ function patchEmbeddedSvgs(html) {
 }
 
 function computeAdaptiveDecoVars(textCount, detail) {
+  if (detail === "normal" && textCount <= 2) {
+    return {
+      size: textCount === 0 ? 580 : 560,
+      right: textCount === 0 ? 10 : 18,
+      top: textCount === 0 ? 252 : 266,
+    };
+  }
   if (detail === "dense" || textCount >= 14) {
     const veryDense = textCount >= 18;
     return {

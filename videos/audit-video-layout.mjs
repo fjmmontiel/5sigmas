@@ -10,8 +10,15 @@ const ONLY = args.find((arg) => arg.startsWith("--only="))?.split("=")[1] || "";
 const SCREENSHOT_DIR = args.find((arg) => arg.startsWith("--screenshots="))?.split("=")[1] || "";
 const JSON_OUT = args.find((arg) => arg.startsWith("--json-out="))?.split("=")[1] || "";
 const SAFE_GAP = Number(args.find((arg) => arg.startsWith("--safe-gap="))?.split("=")[1] || "72");
+const EXPLICIT_FILES = (args.find((arg) => arg.startsWith("--file="))?.split("=")[1] || "")
+  .split(",")
+  .map((item) => item.trim())
+  .filter(Boolean);
 
 function discoverHtmlFiles() {
+  if (EXPLICIT_FILES.length) {
+    return EXPLICIT_FILES.map((file) => path.resolve(file)).sort();
+  }
   return fs.readdirSync(__dirname)
     .filter((file) => /^article_.*__.*\.html$/.test(file) || (INCLUDE_SERIES && /^series_.*\.html$/.test(file)))
     .filter((file) => !file.endsWith(".source.html"))
@@ -24,6 +31,11 @@ function round(value) {
 }
 
 function shouldFlag(item) {
+  const lowCoverage =
+    item.beatType === "content"
+    && item.metrics.svgTextCount <= 2
+    && item.metrics.svgContentCoverageRatio !== null
+    && item.metrics.svgContentCoverageRatio < 0.08;
   return item.metrics.safeZoneIntrusionPx > 0
     || item.metrics.safeZoneSvgIntrusionPx > 0
     || item.metrics.decoOverlap.totalPx2 > 0
@@ -31,7 +43,12 @@ function shouldFlag(item) {
     || item.metrics.occlusion.totalDecoTopSamples > 0
     || item.metrics.offFrame.totalPx > 0
     || item.metrics.nearEdgeCount > 0
-    || (item.metrics.minSvgTextPx !== null && item.metrics.minSvgTextPx < 8);
+    || (item.metrics.minSvgTextPx !== null && item.metrics.minSvgTextPx < 8)
+    || item.metrics.svgTextCount > 6
+    || lowCoverage
+    || item.metrics.snippetVisibleWords > 34
+    || (item.metrics.snippetMinTextPx !== null && item.metrics.snippetMinTextPx < 10.5)
+    || (item.metrics.snippetAspectRatio !== null && (item.metrics.snippetAspectRatio < 0.56 || item.metrics.snippetAspectRatio > 2.2));
 }
 
 async function main() {
@@ -173,6 +190,7 @@ async function main() {
         const safeTextUnion = union(safeTextRects);
 
         const decoRect = rectOf(target.querySelector(".deco"));
+        const decoComponent = target.querySelector(".deco-component");
         const svg = target.querySelector(".deco-svg");
         const svgNodes = svg
           ? Array.from(svg.querySelectorAll("text, path, rect, circle, ellipse, line, polyline, polygon"))
@@ -182,6 +200,7 @@ async function main() {
                 return {
                   tag: node.tagName.toLowerCase(),
                   text: (node.textContent || "").trim(),
+                  className: node.getAttribute("class") || "",
                   rect: rect.width || rect.height ? {
                     left: rect.left,
                     top: rect.top,
@@ -202,6 +221,20 @@ async function main() {
           .filter(Boolean);
         const svgUnion = union(visibleSvgRects);
         const svgTextNodes = svgNodes.filter((item) => item.tag === "text" && item.text);
+        const shellNodePattern = /\bdeco-panel-glow\b|\bdeco-panel\b|\bdeco-grid\b|\bdeco-frame\b/;
+        const svgContentCoveragePx2 = decoRect
+          ? svgNodes
+              .filter((item) => !shellNodePattern.test(item.className || ""))
+              .map((item) => ({
+                rect: intersect(item.rect, decoRect),
+                opacity: item.opacity,
+              }))
+              .filter((item) => item.rect)
+              .reduce((sum, item) => sum + (area(item.rect) * Math.max(0.05, item.opacity || 0)), 0)
+          : 0;
+        const svgContentCoverageRatio = decoRect
+          ? svgContentCoveragePx2 / Math.max(1, area(decoRect))
+          : null;
 
         const perPart = {};
         let decoOverlapTotalPx2 = 0;
@@ -280,6 +313,13 @@ async function main() {
             minSvgTextPx: svgTextNodes.length ? round(Math.min(...svgTextNodes.map((item) => item.fontSize || 999))) : null,
             avgSvgTextPx: svgTextNodes.length ? round(svgTextNodes.reduce((sum, item) => sum + (item.fontSize || 0), 0) / svgTextNodes.length) : null,
             svgTextCount: svgTextNodes.length,
+            svgContentCoveragePx2: round(svgContentCoveragePx2),
+            svgContentCoverageRatio: svgContentCoverageRatio === null ? null : round(svgContentCoverageRatio),
+            decoKind: decoComponent ? "snippet" : (svg ? "svg" : "unknown"),
+            snippetVisibleWords: decoComponent ? Number(decoComponent.dataset.previewWordCount || "0") : 0,
+            snippetTextNodeCount: decoComponent ? Number(decoComponent.dataset.previewTextCount || "0") : 0,
+            snippetMinTextPx: decoComponent ? round(Number(decoComponent.dataset.previewMinFont || "0")) || null : null,
+            snippetAspectRatio: decoComponent ? round(Number(decoComponent.dataset.previewAspect || "0")) || null : null,
           },
         };
       }, { id: beat.id, safeGap: SAFE_GAP });
@@ -325,6 +365,10 @@ async function main() {
       decoTopSamples: item.metrics.occlusion.totalDecoTopSamples,
       minSvgTextPx: item.metrics.minSvgTextPx,
       nearEdgeCount: item.metrics.nearEdgeCount,
+      svgTextCount: item.metrics.svgTextCount,
+      snippetVisibleWords: item.metrics.snippetVisibleWords,
+      snippetMinTextPx: item.metrics.snippetMinTextPx,
+      svgContentCoverageRatio: item.metrics.svgContentCoverageRatio,
     }));
 
   const report = {
@@ -341,6 +385,11 @@ async function main() {
         offFrame: flagged.filter((item) => item.metrics.offFrame.totalPx > 0).length,
         nearEdge: flagged.filter((item) => item.metrics.nearEdgeCount > 0).length,
         smallSvgText: flagged.filter((item) => item.metrics.minSvgTextPx !== null && item.metrics.minSvgTextPx < 8).length,
+        denseSvgText: flagged.filter((item) => item.metrics.svgTextCount > 6).length,
+        lowSvgCoverage: flagged.filter((item) => item.beatType === "content" && item.metrics.svgTextCount <= 2 && item.metrics.svgContentCoverageRatio !== null && item.metrics.svgContentCoverageRatio < 0.08).length,
+        denseSnippetText: flagged.filter((item) => item.metrics.snippetVisibleWords > 34).length,
+        smallSnippetText: flagged.filter((item) => item.metrics.snippetMinTextPx !== null && item.metrics.snippetMinTextPx < 10.5).length,
+        awkwardSnippetAspect: flagged.filter((item) => item.metrics.snippetAspectRatio !== null && (item.metrics.snippetAspectRatio < 0.56 || item.metrics.snippetAspectRatio > 2.2)).length,
       },
       worstByIntrusion: sortedByIntrusion,
       filesWithFlags: Object.keys(byFile).length,

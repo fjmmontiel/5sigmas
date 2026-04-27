@@ -81,9 +81,9 @@ const MOOD_THEME = {
   },
   "steel-teal": {
     label: "Steel Teal",
-    bgTop: "#183239",
-    bgBase: "#162b34",
-    bgBottom: "#0f1f28",
+    bgTop: "#1a232b",
+    bgBase: "#161e25",
+    bgBottom: "#11171d",
     accent1: "#59b3a9",
     accent2: "#76b7d8",
     accent3: "#c7ab76",
@@ -94,9 +94,9 @@ const MOOD_THEME = {
   },
   "steel-amber": {
     label: "Steel Amber",
-    bgTop: "#232a34",
-    bgBase: "#1f252f",
-    bgBottom: "#171b24",
+    bgTop: "#22262d",
+    bgBase: "#1d2128",
+    bgBottom: "#16191f",
     accent1: "#8bb8d8",
     accent2: "#c99158",
     accent3: "#6e88ad",
@@ -107,9 +107,9 @@ const MOOD_THEME = {
   },
   "amber-grid": {
     label: "Amber Haze",
-    bgTop: "#1d161a",
-    bgBase: "#181216",
-    bgBottom: "#241916",
+    bgTop: "#201b19",
+    bgBase: "#1b1716",
+    bgBottom: "#171515",
     accent1: "#d8a35d",
     accent2: "#bb7140",
     accent3: "#7aa9d4",
@@ -120,9 +120,9 @@ const MOOD_THEME = {
   },
   "amber-steel": {
     label: "Amber Steel",
-    bgTop: "#241d1d",
-    bgBase: "#1f1a1b",
-    bgBottom: "#191719",
+    bgTop: "#231d1b",
+    bgBase: "#1f1b19",
+    bgBottom: "#191716",
     accent1: "#d39a63",
     accent2: "#8aaece",
     accent3: "#b87549",
@@ -133,9 +133,9 @@ const MOOD_THEME = {
   },
   "teal-slate": {
     label: "Teal Slate",
-    bgTop: "#0d1a1d",
-    bgBase: "#122225",
-    bgBottom: "#182d31",
+    bgTop: "#172224",
+    bgBase: "#141d1f",
+    bgBottom: "#111719",
     accent1: "#3b9f96",
     accent2: "#74b7dd",
     accent3: "#8fd1c1",
@@ -146,9 +146,9 @@ const MOOD_THEME = {
   },
   "teal-amber": {
     label: "Teal Amber",
-    bgTop: "#142427",
-    bgBase: "#172123",
-    bgBottom: "#1c1d1b",
+    bgTop: "#1b2220",
+    bgBase: "#181d1c",
+    bgBottom: "#151817",
     accent1: "#57aaa1",
     accent2: "#d0a060",
     accent3: "#7cb7ce",
@@ -159,9 +159,9 @@ const MOOD_THEME = {
   },
   "signal-bloom": {
     label: "Signal Bloom",
-    bgTop: "#0f1522",
-    bgBase: "#121a28",
-    bgBottom: "#181f31",
+    bgTop: "#151a22",
+    bgBase: "#131821",
+    bgBottom: "#10141b",
     accent1: "#8abede",
     accent2: "#d7a55f",
     accent3: "#3b9f96",
@@ -331,18 +331,18 @@ const MOOD_SCENES = {
   },
   "steel-teal": {
     bodyBg: [
-      "linear-gradient(180deg, rgba(255,255,255,.05) 0%, transparent 18%)",
-      "radial-gradient(circle at 18% 10%, rgba(89,179,169,.10) 0%, transparent 22%)",
-      "radial-gradient(circle at 84% 24%, rgba(118,183,216,.12) 0%, transparent 22%)",
+      "linear-gradient(180deg, rgba(255,255,255,.04) 0%, transparent 18%)",
+      "radial-gradient(circle at 18% 10%, rgba(118,183,216,.08) 0%, transparent 22%)",
+      "radial-gradient(circle at 84% 24%, rgba(89,179,169,.10) 0%, transparent 22%)",
       "linear-gradient(180deg, var(--vm-bg-top) 0%, var(--vm-bg-base) 48%, var(--vm-bg-bottom) 100%)",
     ].join(",\n      "),
     beatBg: [
-      "linear-gradient(145deg, rgba(255,255,255,.05) 0%, rgba(255,255,255,.012) 22%, transparent 36%)",
-      "radial-gradient(circle at 16% 12%, rgba(89,179,169,.08) 0%, transparent 20%)",
-      "linear-gradient(90deg, rgba(118,183,216,.06) 0%, transparent 34%, transparent 100%)",
+      "linear-gradient(145deg, rgba(255,255,255,.04) 0%, rgba(255,255,255,.012) 22%, transparent 36%)",
+      "radial-gradient(circle at 16% 12%, rgba(118,183,216,.06) 0%, transparent 20%)",
+      "linear-gradient(90deg, rgba(89,179,169,.05) 0%, transparent 34%, transparent 100%)",
       "linear-gradient(180deg, var(--vm-bg-top) 0%, var(--vm-bg-base) 48%, var(--vm-bg-bottom) 100%)",
     ].join(",\n      "),
-    auraBg: "radial-gradient(ellipse, rgba(89,179,169,.12) 0%, rgba(118,183,216,.10) 32%, transparent 72%)",
+    auraBg: "radial-gradient(ellipse, rgba(118,183,216,.10) 0%, rgba(89,179,169,.08) 32%, transparent 72%)",
     auraInset: "-130px auto auto -96px",
     auraSize: "780px 540px",
     auraOpacity: ".14",
@@ -352,20 +352,20 @@ const MOOD_SCENES = {
     ].join(",\n      "),
     textureSize: "78px 78px, 100% 100%",
     texturePosition: "0 0, 0 0",
-    frameOverlay: "linear-gradient(118deg, rgba(118,183,216,.02) 0%, transparent 28%, transparent 100%)",
+    frameOverlay: "linear-gradient(118deg, rgba(118,183,216,.018) 0%, transparent 28%, transparent 100%)",
     titleGlow: "0 8px 18px rgba(89,179,169,.03)",
   },
   "steel-amber": {
     bodyBg: [
-      "linear-gradient(180deg, rgba(255,255,255,.05) 0%, transparent 18%)",
-      "radial-gradient(circle at 18% 10%, rgba(139,184,216,.10) 0%, transparent 22%)",
-      "radial-gradient(circle at 84% 78%, rgba(201,145,88,.12) 0%, transparent 24%)",
+      "linear-gradient(180deg, rgba(255,255,255,.04) 0%, transparent 18%)",
+      "radial-gradient(circle at 18% 10%, rgba(139,184,216,.08) 0%, transparent 22%)",
+      "radial-gradient(circle at 84% 78%, rgba(201,145,88,.10) 0%, transparent 24%)",
       "linear-gradient(180deg, var(--vm-bg-top) 0%, var(--vm-bg-base) 48%, var(--vm-bg-bottom) 100%)",
     ].join(",\n      "),
     beatBg: [
-      "linear-gradient(145deg, rgba(255,255,255,.05) 0%, rgba(255,255,255,.012) 22%, transparent 36%)",
-      "radial-gradient(circle at 16% 12%, rgba(139,184,216,.08) 0%, transparent 20%)",
-      "linear-gradient(90deg, rgba(201,145,88,.055) 0%, transparent 34%, transparent 100%)",
+      "linear-gradient(145deg, rgba(255,255,255,.04) 0%, rgba(255,255,255,.012) 22%, transparent 36%)",
+      "radial-gradient(circle at 16% 12%, rgba(139,184,216,.06) 0%, transparent 20%)",
+      "linear-gradient(90deg, rgba(201,145,88,.045) 0%, transparent 34%, transparent 100%)",
       "linear-gradient(180deg, var(--vm-bg-top) 0%, var(--vm-bg-base) 48%, var(--vm-bg-bottom) 100%)",
     ].join(",\n      "),
     auraBg: "radial-gradient(ellipse, rgba(139,184,216,.12) 0%, rgba(201,145,88,.10) 34%, transparent 72%)",
@@ -378,137 +378,137 @@ const MOOD_SCENES = {
     ].join(",\n      "),
     textureSize: "78px 78px, 100% 100%",
     texturePosition: "0 0, 0 0",
-    frameOverlay: "linear-gradient(112deg, rgba(201,145,88,.02) 0%, transparent 26%, transparent 100%)",
+    frameOverlay: "linear-gradient(112deg, rgba(201,145,88,.016) 0%, transparent 26%, transparent 100%)",
     titleGlow: "0 8px 18px rgba(201,145,88,.03)",
   },
   "amber-grid": {
     bodyBg: [
-      "linear-gradient(180deg, rgba(255,179,67,.04) 0%, transparent 16%)",
-      "radial-gradient(circle at 78% 88%, rgba(255,179,67,.26) 0%, transparent 26%)",
-      "linear-gradient(180deg, rgba(232,124,49,.05) 0%, transparent 34%, rgba(255,179,67,.10) 100%)",
+      "linear-gradient(180deg, rgba(216,163,93,.035) 0%, transparent 16%)",
+      "radial-gradient(circle at 78% 88%, rgba(216,163,93,.14) 0%, transparent 24%)",
+      "linear-gradient(180deg, rgba(187,113,64,.04) 0%, transparent 34%, rgba(216,163,93,.05) 100%)",
       "linear-gradient(180deg, var(--vm-bg-top) 0%, var(--vm-bg-base) 52%, var(--vm-bg-bottom) 100%)",
     ].join(",\n      "),
     beatBg: [
-      "linear-gradient(180deg, rgba(255,179,67,.04) 0%, transparent 18%)",
-      "radial-gradient(circle at 80% 76%, rgba(255,179,67,.20) 0%, transparent 25%)",
-      "linear-gradient(0deg, rgba(232,124,49,.10) 0%, transparent 34%)",
+      "linear-gradient(180deg, rgba(216,163,93,.03) 0%, transparent 18%)",
+      "radial-gradient(circle at 80% 76%, rgba(216,163,93,.11) 0%, transparent 22%)",
+      "linear-gradient(0deg, rgba(187,113,64,.05) 0%, transparent 34%)",
       "linear-gradient(180deg, var(--vm-bg-top) 0%, var(--vm-bg-base) 48%, var(--vm-bg-bottom) 100%)",
     ].join(",\n      "),
-    auraBg: "radial-gradient(ellipse, rgba(255,179,67,.44) 0%, rgba(232,124,49,.20) 34%, transparent 72%)",
+    auraBg: "radial-gradient(ellipse, rgba(216,163,93,.18) 0%, rgba(187,113,64,.08) 34%, transparent 72%)",
     auraInset: "auto -140px -100px auto",
     auraSize: "900px 500px",
-    auraOpacity: ".22",
+    auraOpacity: ".16",
     textureBg: [
       "radial-gradient(circle, rgba(255,241,224,.020) 1px, transparent 1px)",
       "radial-gradient(ellipse at 80% 82%, rgba(216,163,93,.08) 0%, transparent 34%)",
     ].join(",\n      "),
     textureSize: "76px 76px, 100% 100%",
     texturePosition: "0 0, 0 0",
-    frameOverlay: "linear-gradient(90deg, transparent 0%, transparent 56%, rgba(216,163,93,.025) 100%)",
+    frameOverlay: "linear-gradient(90deg, transparent 0%, transparent 56%, rgba(216,163,93,.018) 100%)",
     titleGlow: "0 10px 30px rgba(216,163,93,.04)",
   },
   "amber-steel": {
     bodyBg: [
-      "linear-gradient(180deg, rgba(216,163,93,.04) 0%, transparent 16%)",
-      "radial-gradient(circle at 78% 84%, rgba(211,154,99,.16) 0%, transparent 24%)",
-      "radial-gradient(circle at 18% 14%, rgba(138,174,206,.10) 0%, transparent 24%)",
+      "linear-gradient(180deg, rgba(216,163,93,.035) 0%, transparent 16%)",
+      "radial-gradient(circle at 78% 84%, rgba(211,154,99,.12) 0%, transparent 24%)",
+      "radial-gradient(circle at 18% 14%, rgba(138,174,206,.08) 0%, transparent 24%)",
       "linear-gradient(180deg, var(--vm-bg-top) 0%, var(--vm-bg-base) 50%, var(--vm-bg-bottom) 100%)",
     ].join(",\n      "),
     beatBg: [
-      "linear-gradient(180deg, rgba(216,163,93,.04) 0%, transparent 18%)",
-      "radial-gradient(circle at 78% 76%, rgba(211,154,99,.11) 0%, transparent 24%)",
-      "linear-gradient(90deg, rgba(138,174,206,.05) 0%, transparent 30%, transparent 100%)",
+      "linear-gradient(180deg, rgba(216,163,93,.03) 0%, transparent 18%)",
+      "radial-gradient(circle at 78% 76%, rgba(211,154,99,.08) 0%, transparent 22%)",
+      "linear-gradient(90deg, rgba(138,174,206,.04) 0%, transparent 30%, transparent 100%)",
       "linear-gradient(180deg, var(--vm-bg-top) 0%, var(--vm-bg-base) 48%, var(--vm-bg-bottom) 100%)",
     ].join(",\n      "),
     auraBg: "radial-gradient(ellipse, rgba(211,154,99,.14) 0%, rgba(138,174,206,.10) 34%, transparent 72%)",
     auraInset: "auto -126px -96px auto",
     auraSize: "840px 500px",
-    auraOpacity: ".16",
+    auraOpacity: ".14",
     textureBg: [
       "radial-gradient(circle, rgba(245,237,228,.018) 1px, transparent 1px)",
       "radial-gradient(ellipse at 18% 12%, rgba(138,174,206,.045) 0%, transparent 30%)",
     ].join(",\n      "),
     textureSize: "76px 76px, 100% 100%",
     texturePosition: "0 0, 0 0",
-    frameOverlay: "linear-gradient(96deg, transparent 0%, transparent 54%, rgba(211,154,99,.02) 100%)",
+    frameOverlay: "linear-gradient(96deg, transparent 0%, transparent 54%, rgba(211,154,99,.016) 100%)",
     titleGlow: "0 8px 20px rgba(211,154,99,.03)",
   },
   "teal-slate": {
     bodyBg: [
-      "radial-gradient(ellipse at 72% 28%, rgba(38,166,154,.16) 0%, transparent 24%)",
-      "linear-gradient(90deg, rgba(38,166,154,.06) 0%, transparent 24%, transparent 100%)",
+      "radial-gradient(ellipse at 72% 28%, rgba(59,159,150,.10) 0%, transparent 24%)",
+      "linear-gradient(90deg, rgba(59,159,150,.045) 0%, transparent 24%, transparent 100%)",
       "linear-gradient(180deg, rgba(255,255,255,.02) 0%, transparent 18%)",
       "linear-gradient(180deg, var(--vm-bg-top) 0%, var(--vm-bg-base) 52%, var(--vm-bg-bottom) 100%)",
     ].join(",\n      "),
     beatBg: [
-      "linear-gradient(90deg, rgba(38,166,154,.11) 0%, rgba(38,166,154,.03) 18%, transparent 34%)",
-      "radial-gradient(ellipse at 74% 26%, rgba(156,231,214,.10) 0%, transparent 22%)",
+      "linear-gradient(90deg, rgba(59,159,150,.08) 0%, rgba(59,159,150,.02) 18%, transparent 34%)",
+      "radial-gradient(ellipse at 74% 26%, rgba(143,209,193,.07) 0%, transparent 22%)",
       "linear-gradient(180deg, rgba(255,255,255,.018) 0%, transparent 30%)",
       "linear-gradient(180deg, var(--vm-bg-top) 0%, var(--vm-bg-base) 50%, var(--vm-bg-bottom) 100%)",
     ].join(",\n      "),
-    auraBg: "radial-gradient(ellipse, rgba(38,166,154,.34) 0%, rgba(124,199,255,.12) 34%, transparent 72%)",
+    auraBg: "radial-gradient(ellipse, rgba(59,159,150,.16) 0%, rgba(116,183,221,.08) 34%, transparent 72%)",
     auraInset: "100px -180px auto auto",
     auraSize: "540px 840px",
-    auraOpacity: ".20",
+    auraOpacity: ".16",
     textureBg: [
       "radial-gradient(circle, rgba(240,244,255,.018) 1px, transparent 1px)",
       "radial-gradient(ellipse at 72% 30%, rgba(59,159,150,.06) 0%, transparent 34%)",
     ].join(",\n      "),
     textureSize: "84px 84px, 100% 100%",
     texturePosition: "0 0, 0 0",
-    frameOverlay: "linear-gradient(90deg, rgba(59,159,150,.035) 0%, transparent 24%, transparent 100%)",
+    frameOverlay: "linear-gradient(90deg, rgba(59,159,150,.022) 0%, transparent 24%, transparent 100%)",
     titleGlow: "0 10px 28px rgba(59,159,150,.05)",
   },
   "teal-amber": {
     bodyBg: [
-      "radial-gradient(ellipse at 72% 28%, rgba(87,170,161,.12) 0%, transparent 22%)",
-      "radial-gradient(circle at 20% 82%, rgba(208,160,96,.12) 0%, transparent 20%)",
+      "radial-gradient(ellipse at 72% 28%, rgba(87,170,161,.10) 0%, transparent 22%)",
+      "radial-gradient(circle at 20% 82%, rgba(208,160,96,.09) 0%, transparent 20%)",
       "linear-gradient(180deg, rgba(255,255,255,.018) 0%, transparent 18%)",
       "linear-gradient(180deg, var(--vm-bg-top) 0%, var(--vm-bg-base) 50%, var(--vm-bg-bottom) 100%)",
     ].join(",\n      "),
     beatBg: [
-      "linear-gradient(90deg, rgba(87,170,161,.08) 0%, rgba(87,170,161,.02) 18%, transparent 34%)",
-      "radial-gradient(circle at 76% 78%, rgba(208,160,96,.09) 0%, transparent 20%)",
+      "linear-gradient(90deg, rgba(87,170,161,.06) 0%, rgba(87,170,161,.02) 18%, transparent 34%)",
+      "radial-gradient(circle at 76% 78%, rgba(208,160,96,.07) 0%, transparent 20%)",
       "linear-gradient(180deg, rgba(255,255,255,.015) 0%, transparent 28%)",
       "linear-gradient(180deg, var(--vm-bg-top) 0%, var(--vm-bg-base) 50%, var(--vm-bg-bottom) 100%)",
     ].join(",\n      "),
     auraBg: "radial-gradient(ellipse, rgba(87,170,161,.12) 0%, rgba(208,160,96,.09) 34%, transparent 72%)",
     auraInset: "90px -150px auto auto",
     auraSize: "560px 760px",
-    auraOpacity: ".16",
+    auraOpacity: ".14",
     textureBg: [
       "radial-gradient(circle, rgba(238,243,239,.018) 1px, transparent 1px)",
       "radial-gradient(ellipse at 78% 80%, rgba(208,160,96,.04) 0%, transparent 28%)",
     ].join(",\n      "),
     textureSize: "82px 82px, 100% 100%",
     texturePosition: "0 0, 0 0",
-    frameOverlay: "linear-gradient(100deg, rgba(87,170,161,.02) 0%, transparent 26%, rgba(208,160,96,.016) 100%)",
+    frameOverlay: "linear-gradient(100deg, rgba(87,170,161,.016) 0%, transparent 26%, rgba(208,160,96,.014) 100%)",
     titleGlow: "0 8px 18px rgba(87,170,161,.03)",
   },
   "signal-bloom": {
     bodyBg: [
-      "radial-gradient(circle at 82% 16%, rgba(139,214,255,.22) 0%, transparent 22%)",
-      "radial-gradient(circle at 18% 84%, rgba(255,179,67,.18) 0%, transparent 20%)",
+      "radial-gradient(circle at 82% 16%, rgba(138,190,222,.14) 0%, transparent 22%)",
+      "radial-gradient(circle at 18% 84%, rgba(215,165,95,.11) 0%, transparent 20%)",
       "linear-gradient(120deg, rgba(255,255,255,.04) 0%, transparent 24%)",
       "linear-gradient(180deg, var(--vm-bg-top) 0%, var(--vm-bg-base) 50%, var(--vm-bg-bottom) 100%)",
     ].join(",\n      "),
     beatBg: [
-      "radial-gradient(circle at 80% 18%, rgba(139,214,255,.14) 0%, transparent 22%)",
-      "radial-gradient(circle at 24% 78%, rgba(255,179,67,.10) 0%, transparent 18%)",
+      "radial-gradient(circle at 80% 18%, rgba(138,190,222,.10) 0%, transparent 22%)",
+      "radial-gradient(circle at 24% 78%, rgba(215,165,95,.07) 0%, transparent 18%)",
       "linear-gradient(100deg, rgba(255,255,255,.05) 0%, transparent 22%, transparent 100%)",
       "linear-gradient(180deg, var(--vm-bg-top) 0%, var(--vm-bg-base) 48%, var(--vm-bg-bottom) 100%)",
     ].join(",\n      "),
-    auraBg: "radial-gradient(circle, rgba(139,214,255,.38) 0%, rgba(255,179,67,.18) 38%, transparent 70%)",
+    auraBg: "radial-gradient(circle, rgba(138,190,222,.16) 0%, rgba(215,165,95,.10) 38%, transparent 70%)",
     auraInset: "-90px -60px auto auto",
     auraSize: "700px",
-    auraOpacity: ".18",
+    auraOpacity: ".14",
     textureBg: [
       "radial-gradient(circle, rgba(240,244,255,.020) 1px, transparent 1px)",
       "radial-gradient(circle at 80% 18%, rgba(138,190,222,.045) 0%, transparent 30%)",
     ].join(",\n      "),
     textureSize: "74px 74px, 100% 100%",
     texturePosition: "0 0, 0 0",
-    frameOverlay: "linear-gradient(115deg, rgba(255,255,255,.03) 0%, transparent 28%, rgba(138,190,222,.02) 100%)",
+    frameOverlay: "linear-gradient(115deg, rgba(255,255,255,.025) 0%, transparent 28%, rgba(138,190,222,.016) 100%)",
     titleGlow: "0 10px 28px rgba(138,190,222,.05)",
   },
 };
@@ -558,6 +558,45 @@ export const VIDEO_MOOD_SETS = {
   ],
 };
 
+export const VIDEO_SERIES_MOOD_RECIPES = {
+  "datacenters-espacio": {
+    label: "Infraestructura acero con calor contenido",
+    canonical: "steel-harbor",
+    presentation: "steel-harbor",
+    article_rotation: ["steel-harbor", "steel-dawn", "steel-night", "steel-amber", "steel-teal"],
+  },
+  "from-cave-to-agi": {
+    label: "Historia cálida-industrial",
+    canonical: "amber-steel",
+    presentation: "amber-steel",
+    article_rotation: ["amber-steel", "amber-grid", "steel-dawn", "steel-dusk", "steel-harbor"],
+  },
+  "fundamentos-ia-iag": {
+    label: "Editorial claro de base steel",
+    canonical: "steel-dawn",
+    presentation: "steel-dawn",
+    article_rotation: ["steel-dawn", "steel-mist", "steel-harbor", "teal-slate"],
+  },
+  "ia-pib-bienestar-energia": {
+    label: "Economía física con tensión ámbar",
+    canonical: "steel-amber",
+    presentation: "steel-amber",
+    article_rotation: ["steel-amber", "amber-grid", "amber-steel", "steel-harbor", "steel-dawn"],
+  },
+  "modelos-razonadores": {
+    label: "Sobriedad oscura con frío analítico",
+    canonical: "steel-night",
+    presentation: "steel-night",
+    article_rotation: ["steel-night", "deep-night", "steel-teal", "teal-slate", "steel-dusk"],
+  },
+  "multimodalidad-iag": {
+    label: "Frío multimodal con acentos controlados",
+    canonical: "teal-slate",
+    presentation: "teal-slate",
+    article_rotation: ["teal-slate", "steel-teal", "steel-dawn", "signal-bloom", "steel-harbor"],
+  },
+};
+
 export function resolveVideoMood(name = DEFAULT_VIDEO_MOOD) {
   return VIDEO_MOODS[name] || VIDEO_MOODS[DEFAULT_VIDEO_MOOD];
 }
@@ -572,6 +611,33 @@ export function listVideoMoodSets() {
 
 export function resolveVideoMoodSet(name) {
   return VIDEO_MOOD_SETS[name] ? [...VIDEO_MOOD_SETS[name]] : null;
+}
+
+export function listVideoMoodRecipes() {
+  return Object.entries(VIDEO_SERIES_MOOD_RECIPES).map(([series, recipe]) => ({
+    series,
+    ...recipe,
+    article_rotation: [...recipe.article_rotation],
+  }));
+}
+
+export function resolveSeriesVideoRecipe(seriesName) {
+  return VIDEO_SERIES_MOOD_RECIPES[seriesName] || null;
+}
+
+export function resolveSeriesVideoRecipeMoods(seriesName) {
+  const recipe = resolveSeriesVideoRecipe(seriesName);
+  if (!recipe) return [DEFAULT_VIDEO_MOOD];
+  return [...new Set([recipe.canonical, recipe.presentation, ...recipe.article_rotation].filter(Boolean))];
+}
+
+export function resolveSeriesVideoMood(seriesName, options = {}) {
+  const { role = "article" } = options;
+  const recipe = resolveSeriesVideoRecipe(seriesName);
+  if (!recipe) return DEFAULT_VIDEO_MOOD;
+  const canonical = recipe.canonical || recipe.presentation || recipe.article_rotation?.[0] || DEFAULT_VIDEO_MOOD;
+  if (role !== "article") return canonical;
+  return canonical;
 }
 
 function moodScene(id) {

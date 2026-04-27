@@ -1,11 +1,13 @@
 import fs from "fs";
 import path from "path";
 import { execSync } from "child_process";
+import { fileURLToPath } from "url";
 import { chromium } from "playwright-core";
 import {
   applyVideoMoodToHtml,
   DEFAULT_VIDEO_MOOD,
   listVideoMoods,
+  resolveSeriesVideoRecipeMoods,
   listVideoMoodSets,
   resolveVideoMoodSet,
 } from "./video-moods.mjs";
@@ -14,12 +16,15 @@ const args = process.argv.slice(2);
 const inputPath = args.find((arg) => !arg.startsWith("--"));
 const moodsArg = args.find((arg) => arg.startsWith("--moods="))?.split("=")[1];
 const moodSetArg = args.find((arg) => arg.startsWith("--mood-set="))?.split("=")[1];
+const recipeSeriesArg = args.find((arg) => arg.startsWith("--recipe-series="))?.split("=")[1];
 const beatsArg = args.find((arg) => arg.startsWith("--beats="))?.split("=")[1];
 const outDirArg = args.find((arg) => arg.startsWith("--out-dir="))?.split("=")[1];
 const noVideo = args.includes("--no-video");
+const cleanOutDir = args.includes("--clean");
+const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 
 if (!inputPath) {
-  console.error("Usage: node render-mood-pilot.mjs <video.html> [--moods=a,b,c] [--mood-set=name] [--beats=id1,id2] [--out-dir=dir] [--no-video]");
+  console.error("Usage: node render-mood-pilot.mjs <video.html> [--moods=a,b,c] [--mood-set=name] [--recipe-series=serie] [--beats=id1,id2] [--out-dir=dir] [--clean] [--no-video]");
   process.exit(1);
 }
 
@@ -30,10 +35,12 @@ if (!fs.existsSync(inAbs)) {
 }
 
 const slugBase = path.basename(inAbs, ".html");
-const outDir = path.resolve(outDirArg || path.join(path.dirname(inAbs), "mood-pilot", slugBase));
+const outDir = path.resolve(outDirArg || path.join(scriptDir, "../output/video-pilots", slugBase));
 const renderer = path.resolve(path.dirname(inAbs), "../../video-generator/article-to-video.mjs");
 const selectedMoods = moodSetArg
   ? (resolveVideoMoodSet(moodSetArg) || [])
+  : recipeSeriesArg
+    ? resolveSeriesVideoRecipeMoods(recipeSeriesArg)
   : moodsArg
     ? moodsArg.split(",").map((value) => value.trim()).filter(Boolean)
     : listVideoMoods().map((item) => item.id);
@@ -45,6 +52,11 @@ if (!selectedMoods.length) {
 }
 
 function ensureDir(dirPath) {
+  fs.mkdirSync(dirPath, { recursive: true });
+}
+
+function resetDir(dirPath) {
+  fs.rmSync(dirPath, { recursive: true, force: true });
   fs.mkdirSync(dirPath, { recursive: true });
 }
 
@@ -123,12 +135,33 @@ async function screenshotBeat(page, htmlPath, beatId, outPath) {
     if (!target) throw new Error(`Beat not found: ${id}`);
     target.classList.add("active");
     target.style.display = "flex";
+
+    const previewStyle = document.createElement("style");
+    previewStyle.setAttribute("data-mood-pilot-preview", "true");
+    previewStyle.textContent = `
+      .deco .anim-pop,
+      .deco .anim-float,
+      .deco .anim-rotate,
+      .deco .anim-fade {
+        opacity: 1 !important;
+      }
+
+      .deco .anim-draw {
+        opacity: 1 !important;
+        stroke-dashoffset: 0 !important;
+      }
+    `;
+    document.head.appendChild(previewStyle);
   }, beatId);
   await page.screenshot({ path: outPath });
 }
 
 async function main() {
-  ensureDir(outDir);
+  if (cleanOutDir) {
+    resetDir(outDir);
+  } else {
+    ensureDir(outDir);
+  }
   const rawHtml = fs.readFileSync(inAbs, "utf8");
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage({ viewport: { width: 1920, height: 1080 } });

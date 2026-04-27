@@ -85,6 +85,11 @@ def extract_first_block(html: str, class_name: str) -> str | None:
     return match.group(1) if match else None
 
 
+def extract_support_visual_blocks(html: str) -> list[str]:
+    pattern = r'<div\s+class="[^"]*\bsupport-visual\b[^"]*"[^>]*>(.*?)</div>'
+    return re.findall(pattern, html, re.DOTALL)
+
+
 # ── Rule definitions ────────────────────────────────────────────────────────
 
 class Result:
@@ -133,6 +138,24 @@ def check_file(html: str, path: Path, v2: bool = False, pulido: bool = False) ->
             "P4 · usa primitivas SVE (beat/flow/contrast/metric/proof)",
             has_sve,
             "ningún slide tiene clase beat-content/flow-content/contrast-content/metric-content/proof-content" if not has_sve else ""
+        ))
+
+        primitive_css_checks = [
+            ("beat-content", r"\.beat-content\b"),
+            ("flow-content", r"\.flow-content\b"),
+            ("contrast-content", r"\.contrast-content\b"),
+            ("metric-content", r"\.metric-content\b"),
+            ("metric-content--visual", r"\.metric-content--visual\b"),
+            ("proof-content", r"\.proof-content\b"),
+        ]
+        missing_css = [
+            cls for cls, css_pattern in primitive_css_checks
+            if cls in html and not re.search(css_pattern, html)
+        ]
+        results.append(Result(
+            "P5 · toda primitiva usada tiene su CSS local",
+            not missing_css,
+            f"faltan estilos para: {', '.join(missing_css)}" if missing_css else ""
         ))
 
     if pulido:
@@ -402,6 +425,45 @@ def check_slide(data_id: str, html: str, total: int, v2: bool = False, pulido: b
             "S13 · tiene heading (steps-title o inline font-weight:800+)",
             heading_ok,
             "añadir steps-title o heading inline con font-weight:800+" if not heading_ok else ""
+        ))
+
+    if pulido and is_content:
+        support_blocks = extract_support_visual_blocks(html)
+        dominant_supports = len(re.findall(r'class="[^"]*\bsupport-visual--dominant\b', html))
+        results.append(Result(
+            "S14a · máximo 1 support-visual dominante por slide",
+            dominant_supports <= 1,
+            f"dominantes detectados: {dominant_supports}" if dominant_supports > 1 else ""
+        ))
+
+        animated_support = bool(re.search(
+            r'<animate\b|<animateTransform\b|<animateMotion\b|<set\b|@keyframes|animation:',
+            ''.join(support_blocks),
+            re.IGNORECASE,
+        ))
+        results.append(Result(
+            "S14b · support-visual sin animaciones en LinkedIn",
+            not animated_support,
+            "eliminar animate/SMIL/CSS animation dentro del soporte visual" if animated_support else ""
+        ))
+
+        text_nodes = len(re.findall(r'<text\b', ''.join(support_blocks)))
+        too_many_labels = text_nodes > 10
+        results.append(Result(
+            "S14c · support-visual sin densidad excesiva de labels",
+            not too_many_labels,
+            f"text nodes detectados: {text_nodes}" if too_many_labels else ""
+        ))
+
+        tiny_font_sizes = [
+            int(value)
+            for value in re.findall(r'font-size[:=]"?(\d+)', ''.join(support_blocks))
+            if int(value) < 8
+        ]
+        results.append(Result(
+            "S14d · support-visual sin labels microscópicos (<8)",
+            not tiny_font_sizes,
+            f"font-sizes pequeños: {tiny_font_sizes[:6]}" if tiny_font_sizes else ""
         ))
 
     # S15 — Pulido: flow-key overflow y límite de cajas (SVE: max 3)

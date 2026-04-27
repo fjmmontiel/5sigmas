@@ -66,5 +66,6 @@ docs/assets/videos/
 # Animation export artifacts
 output/playwright/
 exports/
+task.md
 CLAUDE*.md
 AGENTS*.md

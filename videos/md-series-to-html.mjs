@@ -21,7 +21,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import AnthropicVertex from "./node_modules/@anthropic-ai/vertex-sdk/index.js";
 import { renderVideoDeco, videoDecoStyles } from "./video-deco-presets.mjs";
-import { DEFAULT_VIDEO_MOOD, videoMoodStyles } from "./video-moods.mjs";
+import { resolveSeriesVideoMood, videoMoodStyles } from "./video-moods.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -31,7 +31,6 @@ const SERIES_DIR = args.find(a => !a.startsWith("--"));
 const OUT_HTML   = args.filter(a => !a.startsWith("--"))[1];
 const DO_RENDER  = args.includes("--render");
 const OUT_VIDEO  = args.find(a => a.startsWith("--out="))?.split("=")[1];
-const VIDEO_MOOD = args.find(a => a.startsWith("--mood="))?.split("=")[1] || DEFAULT_VIDEO_MOOD;
 
 if (!SERIES_DIR) {
   console.error("Usage: node md-series-to-html.mjs <series-dir> [output.html] [--render] [--mood=name]");
@@ -43,6 +42,8 @@ if (!fs.existsSync(SERIES_DIR)) {
 }
 
 const seriesName = path.basename(path.resolve(SERIES_DIR));
+const VIDEO_MOOD = args.find(a => a.startsWith("--mood="))?.split("=")[1]
+  || resolveSeriesVideoMood(seriesName, { role: "series" });
 const outPath    = OUT_HTML || path.join(__dirname, `series_${seriesName}.html`);
 
 // ─── Vertex / Claude config ───────────────────────────────────────────────────

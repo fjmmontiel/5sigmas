@@ -28,6 +28,7 @@ import tempfile
 from pathlib import Path
 
 from playwright.async_api import async_playwright
+from PIL import Image
 
 # Importar validador para ejecutarlo antes de renderizar
 sys.path.insert(0, str(Path(__file__).parent))
@@ -40,6 +41,7 @@ PDFS_V2_DIR = ROOT / "exports" / "pdfs_v2"
 
 SERIES_PREFIX = {
     "from-cave-to-agi": "cave-agi",
+    "ia-pib-bienestar-energia": "ia-pib",
     "multimodalidad-iag": "mm-iag",
     "modelos-razonadores": "mod-razon",
 }
@@ -63,6 +65,17 @@ def _pulido_pdf_name(carousel_path: Path) -> str:
     slug = post_parts[2].replace("_", "-") if len(post_parts) > 2 else post
     return f"{prefix}_c{cap_n}p{post_n}_{slug}.pdf"
 SLIDE_W = 1080
+CSS_PPI = 96
+PNG_DEVICE_SCALE = 3.0
+PDF_DEVICE_SCALE = 3.0
+SCREENSHOT_SCALE = "device"
+PDF_JPEG_QUALITY = 100
+PDF_JPEG_SUBSAMPLING = 0
+
+
+def _pdf_resolution(device_scale_factor: float) -> float:
+    """Map CSS pixels to the same physical page size at higher embedded PPI."""
+    return CSS_PPI * device_scale_factor
 
 
 async def _render_carousel(page, carousel_path: Path, preview: bool, v2: bool = False, pulido: bool = False):
@@ -89,7 +102,11 @@ async def _render_carousel(page, carousel_path: Path, preview: bool, v2: bool = 
             print(f"  [!] Slide '{name}' sin elemento .slide — omitido")
             continue
         out_path = out_dir / f"{name}.png"
-        await slide_el.screenshot(path=str(out_path), animations="disabled")
+        await slide_el.screenshot(
+            path=str(out_path),
+            animations="disabled",
+            scale=SCREENSHOT_SCALE,
+        )
         print(f"    → {out_path.relative_to(ROOT)}")
 
 
@@ -121,15 +138,11 @@ async def _collect_slides(page, carousel_path: Path):
 
 
 async def _render_carousel_pdf(page, carousel_path: Path, v2: bool = False, pulido: bool = False):
-    """Render all slides as a single PDF at maximum quality.
+    """Render all slides as a single PDF using the same bitmap render as the PNGs.
 
-    Output (default): exports/pdfs/<serie>/<cap>/<post>.pdf
-    Output (v2):      exports/pdfs_v2/<serie>/<cap>/<post>.pdf
-    Output (pulido):  <post>/<prefix>_cNpN_slug.pdf
-    Each slide is rendered in an isolated HTML page to guarantee correct
-    1080×1080 layout — no position:fixed tricks that break in Chromium print mode.
+    This avoids divergences between Chromium's PDF print layout and the actual
+    slide render validated in HTML/PNG.
     """
-    from pypdf import PdfReader, PdfWriter
 
     if pulido:
         out_path = carousel_path.parent / _pulido_pdf_name(carousel_path)
@@ -144,115 +157,47 @@ async def _render_carousel_pdf(page, carousel_path: Path, v2: bool = False, puli
         out_dir.mkdir(parents=True, exist_ok=True)
         out_path = out_dir / f"{rel.name}.pdf"
 
-    # Load original page to extract CSS and slide HTML
-    await page.goto(carousel_path.as_uri(), wait_until="networkidle", timeout=30_000)
-    await page.evaluate("() => document.fonts ? document.fonts.ready : Promise.resolve()")
-    await page.wait_for_timeout(500)
-
-    # Grab all stylesheet links + inline <style> blocks from <head>
-    head_css = await page.evaluate("""() =>
-        [...document.querySelectorAll('link, style')].map(el => el.outerHTML).join('\\n')
-    """)
-
-    # Collect slide sections (new format first, then legacy)
-    sections = await page.query_selector_all(".slide-section[data-id]")
-    if sections:
-        slides_data = []
-        for s in sections:
-            name = await s.get_attribute("data-id")
-            html = await page.evaluate("(el) => el.outerHTML", s)
-            slides_data.append((name, html))
-    else:
-        sections = await page.query_selector_all(".slide-section[data-index]")
-        slides_data = []
-        for s in sections:
-            idx = int(await s.get_attribute("data-index"))
-            type_el = await s.query_selector(".si-type")
-            stype = (await type_el.text_content()).strip() if type_el else "slide"
-            html = await page.evaluate("(el) => el.outerHTML", s)
-            slides_data.append((f"{idx:02d}_{stype}", html))
-
-    if not slides_data:
+    slides = await _collect_slides(page, carousel_path)
+    if not slides:
         print(f"  [!] No se encontraron slides en {carousel_path.relative_to(ROOT)}")
         return
+
+    from pypdf import PdfReader, PdfWriter
 
     writer = PdfWriter()
     with tempfile.TemporaryDirectory() as tmpdir:
         tmp = Path(tmpdir)
-        for name, section_html in slides_data:
-            # Build a standalone 1080×1080 HTML page with only this slide.
-            # set_content() keeps the browser context (fonts cached, viewport intact).
-            body_bg = "#f7f9fc" if (v2 or pulido) else "#0b1220"
-            slide_page = f"""<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="utf-8">
-{head_css}
-<style>
-*, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
-html, body {{
-    margin: 0; padding: 0;
-    width: 1080px; height: 1080px;
-    overflow: hidden;
-    background: {body_bg};
-    font-family: "Inter","Avenir Next","Segoe UI",Arial,sans-serif;
-}}
-/* Strip carousel chrome, let slide render at its natural content height */
-.slide-section {{
-    display: flex !important;
-    position: static !important;
-    flex-direction: column !important;
-    align-items: flex-start !important;
-    justify-content: flex-start !important;
-    width: 1080px !important;
-    height: auto !important;
-    min-height: 0 !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    gap: 0 !important;
-}}
-.slide-frame {{
-    width: 1080px !important;
-    transform: none !important;
-    margin: 0 !important;
-    flex-shrink: 0 !important;
-}}
-/* Hide navigation dots and slide-info chrome */
-.dots-bar, .slide-info {{ display: none !important; }}
-</style>
-</head>
-<body>
-{section_html}
-</body>
-</html>"""
-            await page.set_content(slide_page, wait_until="networkidle")
-            await page.evaluate("() => document.fonts ? document.fonts.ready : Promise.resolve()")
-            await page.evaluate("document.documentElement.style.setProperty('--scale', '1')")
-            await page.wait_for_timeout(250)
-
-            # Measure the slide's natural rendered height so the PDF page
-            # matches exactly — same proportions as the PNG screenshots.
-            slide_h = await page.evaluate(
-                "() => document.querySelector('.slide-section')?.getBoundingClientRect().height || 1080"
+        for name, _, slide_el in slides:
+            if slide_el is None:
+                continue
+            tmp_png = tmp / f"{name}.png"
+            await slide_el.screenshot(
+                path=str(tmp_png),
+                animations="disabled",
+                scale=SCREENSHOT_SCALE,
             )
-            slide_h = max(int(slide_h), 100)
-
+            img = Image.open(tmp_png).convert("RGB")
             tmp_pdf = tmp / f"{name}.pdf"
-            await page.pdf(
-                path=str(tmp_pdf),
-                width="1080px",
-                height=f"{slide_h}px",
-                print_background=True,
-                margin={"top": "0", "right": "0", "bottom": "0", "left": "0"},
+            img.save(
+                tmp_pdf,
+                "PDF",
+                resolution=_pdf_resolution(PDF_DEVICE_SCALE),
+                quality=PDF_JPEG_QUALITY,
+                subsampling=PDF_JPEG_SUBSAMPLING,
             )
-
+            img.close()
             reader = PdfReader(str(tmp_pdf))
             if reader.pages:
                 writer.add_page(reader.pages[0])
 
-    with open(out_path, "wb") as f:
-        writer.write(f)
-    print(f"    → {out_path.relative_to(ROOT)} ({len(slides_data)} páginas)")
+        if not writer.pages:
+            print(f"  [!] No se pudieron rasterizar slides en {carousel_path.relative_to(ROOT)}")
+            return
+
+        with open(out_path, "wb") as f:
+            writer.write(f)
+
+    print(f"    → {out_path.relative_to(ROOT)} ({len(slides)} páginas)")
 
 
 def _validate_all(carousels: list[Path]) -> bool:
@@ -305,12 +250,12 @@ async def run(
     async with async_playwright() as pw:
         browser = await pw.chromium.launch(headless=True)
         try:
-            # --- PNG pass (device_scale_factor=2 para alta resolución) ---
+            # --- PNG pass (alta densidad real) ---
             if render_png:
                 print(f"\n[png] {total} carousel(s)\n")
                 context = await browser.new_context(
                     viewport={"width": SLIDE_W, "height": 2000},
-                    device_scale_factor=2.0,
+                    device_scale_factor=PNG_DEVICE_SCALE,
                 )
                 page = await context.new_page()
                 for i, carousel_path in enumerate(carousels, 1):
@@ -318,7 +263,7 @@ async def run(
                     await _render_carousel(page, carousel_path, preview, v2=v2, pulido=pulido)
                 await context.close()
 
-            # --- PDF pass (device_scale_factor=3, máxima calidad de imágenes embebidas) ---
+            # --- PDF pass (misma densidad alta y PPI embebido consistente) ---
             if render_pdf:
                 if pulido:
                     pdf_label = "[pdf_pulido]"
@@ -328,8 +273,8 @@ async def run(
                     pdf_label = "[pdf]"
                 print(f"\n{pdf_label} {total} carousel(s)\n")
                 pdf_context = await browser.new_context(
-                    viewport={"width": SLIDE_W, "height": SLIDE_W},
-                    device_scale_factor=3.0,
+                    viewport={"width": SLIDE_W, "height": 2000},
+                    device_scale_factor=PDF_DEVICE_SCALE,
                 )
                 pdf_page = await pdf_context.new_page()
                 for i, carousel_path in enumerate(carousels, 1):

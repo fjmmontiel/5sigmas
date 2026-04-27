@@ -23,7 +23,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import AnthropicVertex from "./node_modules/@anthropic-ai/vertex-sdk/index.js";
 import { renderVideoDeco, videoDecoStyles } from "./video-deco-presets.mjs";
-import { DEFAULT_VIDEO_MOOD, videoMoodStyles } from "./video-moods.mjs";
+import { resolveSeriesVideoMood, videoMoodStyles } from "./video-moods.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -34,7 +34,6 @@ const OUT_HTML  = args.filter(a => !a.startsWith("--"))[1];
 const DO_RENDER = args.includes("--render");
 const NO_CTA    = args.includes("--no-cta");   // omit CTA beat (for site-embedded article videos)
 const OUT_VIDEO = args.find(a => a.startsWith("--out="))?.split("=")[1];
-const VIDEO_MOOD = args.find(a => a.startsWith("--mood="))?.split("=")[1] || DEFAULT_VIDEO_MOOD;
 
 if (!MD_PATH) {
   console.error("Usage: node md-to-article-html.mjs <article.md> [output.source.html] [--render] [--no-cta] [--out=video.mp4] [--mood=name]");
@@ -48,6 +47,8 @@ if (!fs.existsSync(MD_PATH)) {
 const slug       = path.basename(MD_PATH, ".md");
 const seriesName = path.basename(path.dirname(path.resolve(MD_PATH)));
 const articleKey = `${seriesName}/${slug}`;
+const VIDEO_MOOD = args.find(a => a.startsWith("--mood="))?.split("=")[1]
+  || resolveSeriesVideoMood(seriesName, { slug, role: "article" });
 const outPath    = OUT_HTML || path.join(__dirname, `article_${seriesName}__${slug}.source.html`);
 const decoratedPath = outPath.endsWith(".source.html")
   ? outPath.replace(/\.source\.html$/, ".html")
