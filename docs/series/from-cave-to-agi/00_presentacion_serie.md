@@ -2,6 +2,7 @@
 title: De las cavernas a la AGI
 description: "Historia intelectual de la IA: desde las primeras abstracciones matemáticas hasta los modelos fundacionales. Matemáticas, filosofía y computación en contexto."
 keywords: historia inteligencia artificial, IA historia, Transformer, modelos fundacionales, AGI, deep learning
+date: 2026-03-26
 tags:
   - IA
   - AGI

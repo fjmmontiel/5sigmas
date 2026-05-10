@@ -2,6 +2,7 @@
 title: Modelos razonadores — test-time compute, cadenas de pensamiento y fallos sistemáticos
 description: "Cinco capítulos sobre cómo razonan los LLMs y qué cuesta ese razonamiento en producción. Test-time compute, sycophancy, specification gaming, latencia real y riesgos de los modelos razonadores con herramientas."
 keywords: modelos razonadores, test-time compute, chain of thought, razonamiento LLM, o1 OpenAI, DeepSeek R1, RLVR, GRPO, sycophancy, PRM, ORM, latencia IA, TTFT, overthinking IA, specification gaming, budget forcing, cadenas de pensamiento, razonamiento extendido, fallos LLM
+date: 2026-04-08
 tags:
   - IA
   - LLMs

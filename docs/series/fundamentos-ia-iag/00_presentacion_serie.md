@@ -2,6 +2,7 @@
 title: Fundamentos de IA e IA generativa
 description: "Serie introductoria sobre IA e IA generativa: qué son, cómo funcionan, en qué se diferencian y qué es la AGI. Para profesionales técnicos y decisores."
 keywords: inteligencia artificial, IA generativa, LLMs, AGI, machine learning, fundamentos IA
+date: 2026-03-15
 tags:
   - IA
   - GenAI

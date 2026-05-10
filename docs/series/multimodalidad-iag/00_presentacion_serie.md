@@ -2,6 +2,7 @@
 title: Multimodalidad en IA generativa
 description: "Qué significa construir sistemas capaces de percibir, alinear, razonar, generar y actuar entre texto, imagen, audio, vídeo, documentos y otras señales del mundo."
 keywords: multimodalidad IA, modelos multimodales, CLIP, Flamingo, Gemini, visión lenguaje, audio texto
+date: 2026-04-01
 tags:
   - IA
   - GenAI
