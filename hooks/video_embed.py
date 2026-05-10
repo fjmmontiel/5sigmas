@@ -81,8 +81,7 @@ def on_post_page(output: str, page, config, **kwargs) -> str:
         f'  "name": "{title}",\n'
         f'  "description": "{description}",\n'
         f'  "thumbnailUrl": "{abs_poster}",\n'
-        f'  "contentUrl": "{abs_video}",\n'
-        f'  "embedUrl": "{canonical}",'
+        f'  "contentUrl": "{abs_video}",'
         f"{opt_fields}\n"
         '  "inLanguage": "es",\n'
         '  "author": {\n'

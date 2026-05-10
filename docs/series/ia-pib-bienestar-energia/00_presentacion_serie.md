@@ -2,7 +2,6 @@
 title: IA, PIB, bienestar y energía
 description: Impacto cuantitativo de la IA en energía, productividad y bienestar. Análisis con datos reales del Banco Mundial, IEA y Penn World Table, sin proyecciones especulativas.
 keywords: IA energía, PIB inteligencia artificial, productividad IA, bienestar tecnología, electricidad IA
-robots: noindex
 tags:
   - IA
   - Energía
@@ -13,7 +12,7 @@ hide:
 ---
 # IA, PIB, bienestar y energía
 
-{{ include_html("snippets/series_meta.html", series_dir="ia-pib-bienestar-energia", data_state="construction", data_level="general", status_label="En construcción", level_label="General", extra_rows="<div class=\"series-meta-row\"><span class=\"series-meta-label\">Prerequisitos</span><span class=\"series-meta-value\"><a href=\"/series/fundamentos-ia-iag/00_presentacion_serie/\">Fundamentos de IA e IA generativa</a></span></div>") }}
+{{ include_html("snippets/series_meta.html", series_dir="ia-pib-bienestar-energia", data_state="complete", data_level="general", status_label="Terminada", level_label="General", extra_rows="<div class=\"series-meta-row\"><span class=\"series-meta-label\">Prerequisitos</span><span class=\"series-meta-value\"><a href=\"/series/fundamentos-ia-iag/00_presentacion_serie/\">Fundamentos de IA e IA generativa</a></span></div>") }}
 
 En esta serie veremos la relación entre **electricidad**, **productividad/PIB**, **bienestar** y el papel que juega la **IA** como nueva tecnología intensiva en computación (y por tanto en energía).
 

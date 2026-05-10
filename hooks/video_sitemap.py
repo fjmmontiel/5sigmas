@@ -18,10 +18,17 @@ SITE_URL = "https://5sigmas.com"
 _video_pages: list[dict] = []
 
 
+def on_config(config, **kwargs):
+    _video_pages.clear()
+    return config
+
+
 def on_page_context(context, page, config, nav, **kwargs):
     meta = page.meta or {}
     video_file = meta.get("video")
     if not video_file:
+        return context
+    if "noindex" in str(meta.get("robots", "")).lower():
         return context
 
     # Construir rutas relativas al directorio del .md

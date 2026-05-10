@@ -1,5 +1,5 @@
 ---
-title: AGI: Inteligencia Artificial General
+title: "AGI: Inteligencia Artificial General"
 description: Qué es la AGI, por qué es difícil de definir, cómo se diferencia de la IA estrecha y qué implica su eventual llegada. Análisis técnico en español.
 keywords: AGI, inteligencia artificial general, ANI, ASI, superinteligencia, IA estrecha, GPT AGI, cuándo llegará la AGI
 date: 2026-04-07
