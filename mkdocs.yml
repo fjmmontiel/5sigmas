@@ -81,6 +81,9 @@ nav:
           - IA como tecnología eléctrica: series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica.md
           - Medición — PIB vs bienestar: series/ia-pib-bienestar-energia/03-pib-vs-bienestar.md
           - IA y PIB hoy: series/ia-pib-bienestar-energia/04-ia-pib-hoy.md
+  - Artículos Técnicos:
+      - articulos-tecnicos/index.md
+      - Agente Reactivo, Proactivo y Tool calls: articulos-tecnicos/proactive-reactive-agent-and-tool-calls.md
   - Próximamente: proximamente.md
   - Sobre 5sigmas: meta/about.md
 markdown_extensions:
