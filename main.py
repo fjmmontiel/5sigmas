@@ -198,6 +198,21 @@ def _count_series_done(series_dirname):
 
 _READING_WPM = 230  # must match hooks/reading_time.py
 
+
+def _strip_for_reading_time(markdown):
+    text = markdown or ""
+    text = re.sub(r'<details[\s\S]*?</details>', '', text, flags=re.IGNORECASE)
+    text = re.sub(r'\{\{[^}]+\}\}', '', text)
+    text = re.sub(r'```[\s\S]*?```', '', text)
+    text = re.sub(r'<[^>]+>', '', text)
+    text = re.sub(r'\[([^\]]+)\]\([^)]+\)', r'\1', text)
+    return text
+
+
+def _estimate_reading_minutes(markdown):
+    words = len(_strip_for_reading_time(markdown).split())
+    return max(1, round(words / _READING_WPM))
+
 def _series_reading_time(series_dirname):
     """Return a formatted reading time string (e.g. '~50 min') for published
     articles in the series, using the same word-count logic as reading_time.py.
@@ -217,13 +232,7 @@ def _series_reading_time(series_dirname):
             filepath = os.path.join(root, filename)
             with open(filepath, "r", encoding="utf-8") as f:
                 text = f.read()
-            # Strip the same content as reading_time.py
-            text = re.sub(r'<details[\s\S]*?</details>', '', text, flags=re.IGNORECASE)
-            text = re.sub(r'\{\{[^}]+\}\}', '', text)
-            text = re.sub(r'```[\s\S]*?```', '', text)
-            text = re.sub(r'<[^>]+>', '', text)
-            text = re.sub(r'\[([^\]]+)\]\([^)]+\)', r'\1', text)
-            total_words += len(text.split())
+            total_words += len(_strip_for_reading_time(text).split())
 
     if total_words == 0:
         return "—"
@@ -281,6 +290,7 @@ def render_include_html(path, **kwargs):
         template_kwargs.setdefault("aria_valuenow", done)
         template_kwargs.setdefault("aria_valuemax", aria_max)
         template_kwargs.setdefault("data_time", _series_reading_time(template_kwargs["series_dir"]))
+        template_kwargs.setdefault("count_label", f"{total} capítulos")
         template_kwargs.setdefault("extra_rows", "")
 
     if template_kwargs:
@@ -395,15 +405,48 @@ def define_env(env):
         if not markdown:
             return ""
 
-        text = re.sub(r'<details[\s\S]*?</details>', '', markdown, flags=re.IGNORECASE)
-        text = re.sub(r'\{\{[^}]+\}\}', '', text)
-        text = re.sub(r'```[\s\S]*?```', '', text)
-        text = re.sub(r'<[^>]+>', '', text)
-        text = re.sub(r'\[([^\]]+)\]\([^)]+\)', r'\1', text)
-        words = len(text.split())
-        minutes = max(1, round(words / _READING_WPM))
-
+        minutes = _estimate_reading_minutes(markdown)
         return f"> ⏱️ **Tiempo de lectura:** {minutes} min\n\n"
+
+    @env.macro
+    def tech_article_meta():
+        """
+        Render article metadata using the same visual family as series_meta.
+        """
+        markdown = env.markdown
+        if not markdown:
+            return ""
+
+        page_meta = getattr(env.page, "meta", {}) or {}
+        raw_state = str(
+            page_meta.get("article_state")
+            or page_meta.get("status_label")
+            or page_meta.get("state")
+            or "draft"
+        ).strip().lower()
+        state_map = {
+            "draft": ("draft", "Borrador"),
+            "borrador": ("draft", "Borrador"),
+            "ready": ("ready", "Listo"),
+            "listo": ("ready", "Listo"),
+            "published": ("complete", "Publicado"),
+            "publicado": ("complete", "Publicado"),
+            "complete": ("complete", "Publicado"),
+            "completed": ("complete", "Publicado"),
+        }
+        data_state, status_label = state_map.get(raw_state, ("draft", raw_state.capitalize() or "Borrador"))
+        minutes = _estimate_reading_minutes(markdown)
+        return render_include_html(
+            "snippets/series_meta.html",
+            anim_shell="off",
+            data_state=data_state,
+            data_level="tecnico",
+            status_label=status_label,
+            level_label="Técnico",
+            data_time=f"{minutes} min",
+            count_label="Artículo técnico",
+            extra_rows="",
+        )
 
     @env.macro
     def include_html(path, **kwargs):
@@ -416,22 +459,28 @@ def on_pre_page_macros(env):
     """
     Hook to automatically prepend the reading_time macro to all pages.
     """
-    # Only for pages in series/ directory
-    if not env.page.file.src_path.lower().startswith('series/'):
-        return
+    src_path = env.page.file.src_path.lower()
 
     if env.page.is_homepage:
         return
 
-    # Prepend the macro call if not already present
-    macro_call = "{{ reading_time() }}"
-    if macro_call not in env.markdown:
-        # Match the first H1 title (# Title)
-        match = re.search(r'^#\s+.*$', env.markdown, re.MULTILINE)
-        if match:
-            # Insert after the title line
-            pos = match.end()
-            env.markdown = env.markdown[:pos] + "\n\n" + macro_call + env.markdown[pos:]
-        else:
-            # Fallback to prepending if no H1 found
-            env.markdown = macro_call + "\n\n" + env.markdown
+    if src_path.startswith('series/'):
+        macro_call = "{{ reading_time() }}"
+        if macro_call not in env.markdown:
+            match = re.search(r'^#\s+.*$', env.markdown, re.MULTILINE)
+            if match:
+                pos = match.end()
+                env.markdown = env.markdown[:pos] + "\n\n" + macro_call + env.markdown[pos:]
+            else:
+                env.markdown = macro_call + "\n\n" + env.markdown
+        return
+
+    if src_path.startswith('articulos-tecnicos/') and not src_path.endswith('index.md'):
+        macro_call = "{{ tech_article_meta() }}"
+        if macro_call not in env.markdown:
+            match = re.search(r'^#\s+.*$', env.markdown, re.MULTILINE)
+            if match:
+                pos = match.end()
+                env.markdown = env.markdown[:pos] + "\n\n" + macro_call + env.markdown[pos:]
+            else:
+                env.markdown = macro_call + "\n\n" + env.markdown

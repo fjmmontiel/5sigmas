@@ -403,8 +403,30 @@ function escapeHtml(value) {
 
 function panelFrame() {
   return `
+    <defs>
+      <radialGradient id="deco-panel-ambient" cx="28%" cy="12%" r="82%">
+        <stop offset="0%" stop-color="currentColor" stop-opacity="0.28" />
+        <stop offset="44%" stop-color="currentColor" stop-opacity="0.10" />
+        <stop offset="100%" stop-color="#050b16" stop-opacity="0.02" />
+      </radialGradient>
+      <linearGradient id="deco-panel-glass" x1="70" y1="70" x2="350" y2="340" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#f7fbff" stop-opacity="0.16" />
+        <stop offset="32%" stop-color="currentColor" stop-opacity="0.10" />
+        <stop offset="100%" stop-color="#07101f" stop-opacity="0.22" />
+      </linearGradient>
+      <filter id="deco-soft-depth" x="-35%" y="-35%" width="170%" height="170%">
+        <feDropShadow dx="0" dy="22" stdDeviation="18" flood-color="#020712" flood-opacity="0.45" />
+        <feDropShadow dx="0" dy="0" stdDeviation="10" flood-color="currentColor" flood-opacity="0.16" />
+      </filter>
+      <filter id="deco-node-depth" x="-80%" y="-80%" width="260%" height="260%">
+        <feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#020712" flood-opacity="0.48" />
+        <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="currentColor" flood-opacity="0.42" />
+      </filter>
+    </defs>
+    <rect class="deco-panel-ambient anim-fade" x="18" y="46" width="384" height="326" rx="52" />
     <rect class="deco-panel-glow anim-fade" x="26" y="58" width="368" height="304" rx="44" />
     <rect class="deco-panel anim-fade" x="48" y="78" width="324" height="264" rx="36" />
+    <path class="deco-panel-sheen anim-fade" d="M78 110C142 82 244 82 330 124" />
     <path class="deco-grid anim-fade" d="M92 126H328M92 192H328M92 258H328M126 108V312M210 108V312M294 108V312" />
     <path class="deco-frame anim-fade" d="M82 110H132M82 110V160M338 110H288M338 110V160M82 310H132M82 310V260M338 310H288M338 310V260" />
   `;
@@ -2105,18 +2127,33 @@ export function videoDecoStyles() {
 
   .deco-panel-glow {
     fill: currentColor;
-    fill-opacity: 0.13;
+    fill-opacity: 0.18;
+    filter: url("#deco-soft-depth");
+  }
+
+  .deco-panel-ambient {
+    fill: url("#deco-panel-ambient");
+    opacity: 0.9;
   }
 
   .deco-panel {
-    fill: rgba(16, 26, 46, 0.82);
-    stroke: rgba(240, 244, 255, 0.08);
+    fill: url("#deco-panel-glass");
+    stroke: rgba(240, 244, 255, 0.20);
+    stroke-width: 1.8;
+    filter: url("#deco-soft-depth");
+  }
+
+  .deco-panel-sheen {
+    fill: none;
+    stroke: rgba(240, 244, 255, 0.26);
     stroke-width: 2;
+    stroke-linecap: round;
+    opacity: 0.42;
   }
 
   .deco-grid {
     fill: none;
-    stroke: rgba(240, 244, 255, 0.034);
+    stroke: rgba(240, 244, 255, 0.060);
     stroke-width: 1.5;
   }
 
@@ -2124,8 +2161,9 @@ export function videoDecoStyles() {
     fill: none;
     stroke: currentColor;
     stroke-width: 2.5;
-    stroke-opacity: 0.3;
+    stroke-opacity: 0.36;
     stroke-linecap: round;
+    filter: drop-shadow(0 0 10px rgba(124, 199, 255, 0.14));
   }
 
   .deco-stroke {
@@ -2134,7 +2172,8 @@ export function videoDecoStyles() {
     stroke-width: 7;
     stroke-linecap: round;
     stroke-linejoin: round;
-    stroke-opacity: 0.95;
+    stroke-opacity: 1;
+    filter: drop-shadow(0 0 12px rgba(124, 199, 255, 0.24));
   }
 
   .deco-stroke--soft {
@@ -2149,20 +2188,22 @@ export function videoDecoStyles() {
 
   .deco-fill {
     fill: currentColor;
-    fill-opacity: 0.14;
+    fill-opacity: 0.18;
+    filter: drop-shadow(0 12px 18px rgba(2, 7, 18, 0.30));
   }
 
   .deco-fill--soft {
-    fill-opacity: 0.11;
+    fill-opacity: 0.14;
   }
 
   .deco-fill--strong {
-    fill-opacity: 0.32;
+    fill-opacity: 0.48;
   }
 
   .deco-node {
     fill: currentColor;
     fill-opacity: 0.94;
+    filter: url("#deco-node-depth");
   }
 
   .deco-glyph {

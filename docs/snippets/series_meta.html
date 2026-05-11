@@ -28,7 +28,7 @@
         <rect x="2" y="3" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.4"/>
         <path d="M5 7h6M5 10h4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
       </svg>
-      <span class="sm-chip-label">{{ progress_total }} capítulos</span>
+      <span class="sm-chip-label">{{ count_label }}</span>
     </span>
 
   </div>
@@ -136,6 +136,22 @@
 .sm-wrap[data-state="construction"] .sm-dot {
   background: var(--sm-wip);
   animation: sm-pulse 2s ease-in-out infinite;
+}
+
+.sm-wrap[data-state="draft"] {
+  border-color: color-mix(in srgb, #7c3aed 18%, var(--sm-bd));
+  background: color-mix(in srgb, #7c3aed 2%, var(--sm-bg));
+}
+
+.sm-wrap[data-state="draft"] .sm-chip--status {
+  color: color-mix(in srgb, #7c3aed 65%, var(--sm-fg));
+  border-color: color-mix(in srgb, #7c3aed 22%, var(--sm-bd));
+  background: color-mix(in srgb, #7c3aed 7%, var(--sm-bg));
+}
+
+.sm-wrap[data-state="draft"] .sm-dot {
+  background: #7c3aed;
+  box-shadow: 0 0 0 2px color-mix(in srgb, #7c3aed 20%, transparent);
 }
 
 @keyframes sm-pulse {

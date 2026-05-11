@@ -1399,6 +1399,8 @@
     padding: 10px;
     color-scheme: light;
     display: flex;
+    align-items: flex-start;
+    justify-content: center;
 }
 
 .anim-shell-modal__body>* {
@@ -1468,8 +1470,18 @@ body.anim-shell-modal-open {
     border-radius: 16px;
 }
 
+.anim-shell-modal__body>.anim-brand-shell[data-anim-shell-live="modal"] {
+    min-height: 0;
+    height: auto;
+    align-self: flex-start;
+}
+
 .anim-shell-modal__body>.anim-brand-shell[data-anim-shell-live="modal"] .anim-brand-shell__toolbar {
     display: none;
+}
+
+.anim-shell-modal__body>.anim-brand-shell[data-anim-shell-live="modal"] .anim-brand-shell__viewport {
+    flex: 0 1 auto;
 }
 
 .anim-shell-modal__body>.anim-brand-shell .anim-brand-shell__viewport {
