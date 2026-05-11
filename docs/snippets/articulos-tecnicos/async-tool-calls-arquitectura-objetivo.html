@@ -1,0 +1,221 @@
+<section class="atca-wrap" data-anim-fullscreen="on" data-anim-contrast="force" aria-label="Arquitectura objetivo de Reactive / Proactive Agent">
+  <style>
+    .atca-wrap,.atca-wrap *{box-sizing:border-box}
+    .atca-wrap{
+      font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+      display:grid;
+      gap:10px;
+      margin:28px auto 34px;
+      max-width:1600px;
+    }
+    .anim-shell-modal .atca-wrap{
+      margin:0;
+      max-width:none;
+    }
+    .atca-sheet{
+      position:relative;
+      overflow-x:auto;
+      scrollbar-gutter:stable both-edges;
+      border-radius:26px;
+      border:1px solid rgba(18,35,39,.10);
+      background:
+        radial-gradient(circle at 12% 10%,rgba(35,134,58,.08),transparent 28%),
+        radial-gradient(circle at 86% 12%,rgba(8,127,143,.08),transparent 30%),
+        linear-gradient(180deg,#ffffff 0%,#fbfcfc 100%);
+      box-shadow:0 22px 54px rgba(18,35,39,.12);
+    }
+    .atca-sheet::after{
+      content:"";
+      position:sticky;
+      right:0;
+      display:block;
+      width:34px;
+      height:0;
+      margin-left:auto;
+      box-shadow:-18px 0 24px 16px rgba(255,255,255,.88);
+      pointer-events:none;
+    }
+    .atca-board{
+      display:block;
+      width:100%;
+      height:auto;
+      font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+    }
+    .atca-board .lane{font-size:14px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;fill:#546366}
+    .atca-board .node-title{font-size:26px;font-weight:950;letter-spacing:-.04em;fill:#07191b}
+    .atca-board .node-sub{font-size:15px;font-weight:700;fill:#546366}
+    .atca-board .chip-text{font-size:14px;font-weight:900}
+    .atca-board .small{font-size:13px;font-weight:700;fill:#546366}
+    .atca-board .mono{font-family:"SF Mono","JetBrains Mono","Courier New",monospace;font-size:15px;font-weight:800}
+    .atca-board .soft-green{fill:#eaf6e8;stroke:rgba(35,134,58,.30)}
+    .atca-board .soft-teal{fill:#e7f7f8;stroke:rgba(8,127,143,.28)}
+    .atca-board .soft-amber{fill:#fff3da;stroke:rgba(217,138,0,.30)}
+    .atca-board .soft-slate{fill:#f3f7f7;stroke:rgba(18,35,39,.12)}
+    .atca-board .box{fill:rgba(255,255,255,.92);stroke:rgba(7,25,27,.14);stroke-width:1.7}
+    .atca-board .band{fill:rgba(255,255,255,.72);stroke-width:2}
+    .atca-board .stroke-green{stroke:rgba(35,134,58,.56)}
+    .atca-board .stroke-teal{stroke:rgba(8,127,143,.56)}
+    .atca-board .stroke-amber{stroke:rgba(217,138,0,.58)}
+    .atca-board .stroke-slate{stroke:rgba(84,99,102,.28)}
+    .atca-board .green{fill:#23863a}
+    .atca-board .teal{fill:#087f8f}
+    .atca-board .amber{fill:#d98a00}
+    .atca-board .slate{fill:#546366}
+    .atca-board .flow{fill:none;stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round}
+    .atca-board .flow-thin{stroke-width:2.3}
+    .atca-board .flow-green{stroke:#23863a;marker-end:url(#atcaArrowGreen)}
+    .atca-board .flow-teal{stroke:#087f8f;marker-end:url(#atcaArrowTeal)}
+    .atca-board .flow-amber{stroke:#d98a00;marker-end:url(#atcaArrowAmber)}
+    .atca-board .flow-slate{stroke:#546366;marker-end:url(#atcaArrowSlate)}
+    .atca-board .dash{stroke-dasharray:11 9}
+    @media (max-width:900px){
+      .atca-sheet{
+        border-radius:20px;
+        box-shadow:0 16px 34px rgba(18,35,39,.12);
+      }
+      .atca-sheet::before{
+        content:"Desliza horizontalmente para revisar la lamina completa";
+        position:sticky;
+        left:10px;
+        top:10px;
+        z-index:1;
+        display:inline-flex;
+        margin:10px 0 -2px 10px;
+        padding:7px 10px;
+        border-radius:999px;
+        background:rgba(255,255,255,.92);
+        border:1px solid rgba(18,35,39,.10);
+        color:#546366;
+        font-size:.74rem;
+        font-weight:850;
+        backdrop-filter:blur(8px);
+      }
+      .atca-board{
+        width:1180px;
+        max-width:none;
+      }
+    }
+  </style>
+
+  <div class="atca-sheet">
+    <svg class="atca-board" viewBox="0 0 1500 840" role="img" aria-label="Arquitectura objetivo de Reactive / Proactive Agent">
+      <defs>
+        <marker id="atcaArrowGreen" viewBox="0 0 12 12" refX="10.5" refY="6" markerWidth="10" markerHeight="10" orient="auto"><path d="M1 1 L11 6 L1 11 Z" fill="#23863a"/></marker>
+        <marker id="atcaArrowTeal" viewBox="0 0 12 12" refX="10.5" refY="6" markerWidth="10" markerHeight="10" orient="auto"><path d="M1 1 L11 6 L1 11 Z" fill="#087f8f"/></marker>
+        <marker id="atcaArrowAmber" viewBox="0 0 12 12" refX="10.5" refY="6" markerWidth="10" markerHeight="10" orient="auto"><path d="M1 1 L11 6 L1 11 Z" fill="#d98a00"/></marker>
+        <marker id="atcaArrowSlate" viewBox="0 0 12 12" refX="10.5" refY="6" markerWidth="10" markerHeight="10" orient="auto"><path d="M1 1 L11 6 L1 11 Z" fill="#546366"/></marker>
+      </defs>
+
+      <g transform="translate(0 -6)">
+        <rect x="130" y="68" width="182" height="34" rx="17" class="soft-green"/>
+        <circle cx="154" cy="85" r="7" fill="#23863a"/>
+        <text x="172" y="90" class="chip-text green">visible</text>
+
+        <rect x="330" y="68" width="244" height="34" rx="17" class="soft-teal"/>
+        <circle cx="354" cy="85" r="7" fill="#087f8f"/>
+        <text x="372" y="90" class="chip-text teal">runtime / estado</text>
+
+        <rect x="592" y="68" width="216" height="34" rx="17" class="soft-amber"/>
+        <circle cx="616" cy="85" r="7" fill="#d98a00"/>
+        <text x="634" y="90" class="chip-text amber">entrega diferida</text>
+
+        <rect x="826" y="68" width="186" height="34" rx="17" class="soft-slate"/>
+        <circle cx="850" cy="85" r="7" fill="#546366"/>
+        <text x="868" y="90" class="chip-text slate">infra externa</text>
+
+        <rect x="72" y="134" width="1356" height="202" rx="26" class="band stroke-teal"/>
+        <text x="102" y="166" class="lane">turno visible</text>
+
+        <rect x="120" y="206" width="246" height="92" rx="20" class="box stroke-green"/>
+        <text x="243" y="248" text-anchor="middle" class="node-title green">Browser UI</text>
+        <text x="243" y="274" text-anchor="middle" class="node-sub">chat · polling · cierre</text>
+
+        <rect x="474" y="190" width="336" height="124" rx="24" class="box stroke-teal"/>
+        <text x="642" y="238" text-anchor="middle" class="node-title teal">Reactive Gateway</text>
+        <text x="642" y="264" text-anchor="middle" class="node-sub">turno · prompt · accepted</text>
+        <text x="642" y="287" text-anchor="middle" class="node-sub">respuesta inmediata</text>
+
+        <rect x="924" y="206" width="256" height="92" rx="20" class="box stroke-teal"/>
+        <text x="1052" y="248" text-anchor="middle" class="node-title teal">Model Adapter</text>
+        <text x="1052" y="274" text-anchor="middle" class="node-sub">mock / real mode</text>
+
+        <path d="M366 252 H474" class="flow flow-teal"/>
+        <path d="M810 252 H924" class="flow flow-teal"/>
+        <text x="420" y="236" text-anchor="middle" class="small">turno</text>
+        <text x="867" y="236" text-anchor="middle" class="small">decision</text>
+
+        <rect x="72" y="372" width="1356" height="224" rx="26" class="band stroke-slate"/>
+        <text x="102" y="404" class="lane">estado compartido + ejecucion</text>
+
+        <g transform="translate(146 446)">
+          <ellipse cx="118" cy="18" rx="118" ry="18" class="soft-teal"/>
+          <rect x="0" y="18" width="236" height="88" class="soft-teal"/>
+          <ellipse cx="118" cy="106" rx="118" ry="18" class="soft-teal"/>
+          <text x="118" y="58" text-anchor="middle" class="node-title teal">Redis + Locks</text>
+          <text x="118" y="84" text-anchor="middle" class="node-sub">session state</text>
+        </g>
+
+        <rect x="472" y="442" width="186" height="88" rx="20" class="box stroke-teal"/>
+        <text x="565" y="480" text-anchor="middle" class="node-title teal">Command Queue</text>
+        <text x="565" y="506" text-anchor="middle" class="node-sub">commands</text>
+
+        <rect x="742" y="438" width="196" height="112" rx="20" class="box stroke-teal"/>
+        <text x="840" y="482" text-anchor="middle" class="node-title teal">Async Workers</text>
+        <text x="840" y="508" text-anchor="middle" class="node-sub">HTTP + retries</text>
+
+        <rect x="1018" y="438" width="216" height="112" rx="20" class="box stroke-slate"/>
+        <text x="1126" y="482" text-anchor="middle" class="node-title slate">External APIs</text>
+        <text x="1126" y="508" text-anchor="middle" class="node-sub">429 · 5xx · negocio</text>
+
+        <rect x="746" y="562" width="488" height="42" rx="18" class="box stroke-teal"/>
+        <text x="990" y="590" text-anchor="middle" class="mono teal">Event Bus</text>
+
+        <path d="M658 486 H742" class="flow flow-teal"/>
+        <path d="M938 494 H1018" class="flow flow-slate"/>
+        <path d="M840 550 V562" class="flow flow-teal"/>
+        <path d="M1126 550 V562" class="flow flow-slate"/>
+        <path d="M706 314 V374 H565 V442" class="flow flow-teal flow-thin dash"/>
+        <path d="M584 314 V344 H264 V446" class="flow flow-teal flow-thin dash"/>
+        <path d="M382 518 V686 H664" class="flow flow-teal flow-thin dash"/>
+        <text x="700" y="474" text-anchor="middle" class="small">dispatch</text>
+        <text x="977" y="478" text-anchor="middle" class="small">HTTP</text>
+        <text x="706" y="390" class="small">enqueue</text>
+        <text x="388" y="360" class="small">session state</text>
+        <text x="860" y="560" class="small">outcome</text>
+        <text x="1144" y="560" class="small">events</text>
+        <text x="448" y="674" class="small">pending state</text>
+
+        <rect x="72" y="626" width="1356" height="126" rx="24" class="band stroke-amber"/>
+        <text x="102" y="658" class="lane">entrega + retorno</text>
+
+        <rect x="132" y="674" width="228" height="62" rx="20" class="box stroke-green"/>
+        <text x="246" y="706" text-anchor="middle" class="node-title green">Follow-up</text>
+        <text x="246" y="726" text-anchor="middle" class="node-sub">cierre visible</text>
+
+        <rect x="664" y="662" width="240" height="86" rx="22" class="box stroke-amber"/>
+        <text x="784" y="700" text-anchor="middle" class="node-title amber">Delivery Policy</text>
+        <text x="784" y="724" text-anchor="middle" class="node-sub">deterministic / recovery</text>
+
+        <rect x="1048" y="674" width="224" height="62" rx="20" class="box stroke-teal"/>
+        <text x="1160" y="706" text-anchor="middle" class="node-title teal">Next-turn</text>
+        <text x="1160" y="726" text-anchor="middle" class="node-sub">resync</text>
+
+        <path d="M990 604 V686 H904" class="flow flow-amber"/>
+        <path d="M664 705 H360" class="flow flow-amber"/>
+        <path d="M904 705 H1048" class="flow flow-amber"/>
+        <path d="M132 705 H54 V252 H120" class="flow flow-green flow-thin dash"/>
+        <text x="944" y="650" text-anchor="middle" class="small amber">decision de cierre</text>
+        <text x="120" y="642" class="small green">deterministic follow-up</text>
+
+        <rect x="130" y="774" width="350" height="40" rx="14" class="box"/>
+        <text x="305" y="800" text-anchor="middle" class="small">assistant responde sin esperar la API</text>
+
+        <rect x="568" y="774" width="346" height="40" rx="14" class="box"/>
+        <text x="741" y="800" text-anchor="middle" class="small">el chat visible no guarda mensajes internos</text>
+
+        <rect x="998" y="774" width="372" height="40" rx="14" class="box"/>
+        <text x="1184" y="800" text-anchor="middle" class="small">el cierre vuelve por proactive o next_turn</text>
+      </g>
+    </svg>
+  </div>
+</section>

@@ -1,0 +1,217 @@
+<section class="atcs-wrap" data-anim-fullscreen="on" data-anim-contrast="force" aria-label="Ciclo de vida de una operacion y pending updates">
+  <style>
+    .atcs-wrap,.atcs-wrap *{box-sizing:border-box}
+    .atcs-wrap{
+      font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+      display:grid;
+      gap:10px;
+      margin:28px auto 34px;
+      max-width:1600px;
+    }
+    .anim-shell-modal .atcs-wrap{
+      margin:0;
+      max-width:none;
+    }
+    .atcs-sheet{
+      position:relative;
+      overflow-x:auto;
+      scrollbar-gutter:stable both-edges;
+      border-radius:26px;
+      border:1px solid rgba(18,35,39,.10);
+      background:
+        radial-gradient(circle at 12% 13%,rgba(35,134,58,.09),transparent 27%),
+        radial-gradient(circle at 86% 15%,rgba(217,138,0,.08),transparent 26%),
+        linear-gradient(180deg,#ffffff 0%,#fbfcfc 100%);
+      box-shadow:0 22px 54px rgba(18,35,39,.12);
+    }
+    .atcs-sheet::after{
+      content:"";
+      position:sticky;
+      right:0;
+      display:block;
+      width:34px;
+      height:0;
+      margin-left:auto;
+      box-shadow:-18px 0 24px 16px rgba(255,255,255,.88);
+      pointer-events:none;
+    }
+    .atcs-board{
+      display:block;
+      width:100%;
+      height:auto;
+      font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+    }
+    .atcs-board .small-title{font-size:22px;font-weight:900;letter-spacing:-.35px;fill:#07191b}
+    .atcs-board .body{font-size:17px;fill:#546366;font-weight:520}
+    .atcs-board .body-dark{font-size:17px;fill:#07191b;font-weight:650}
+    .atcs-board .tiny{font-size:14px;fill:#546366;font-weight:600}
+    .atcs-board .mono{font-family:"SF Mono","JetBrains Mono","Courier New",monospace;font-size:15px;font-weight:750}
+    .atcs-board .green{fill:#23863a}
+    .atcs-board .teal{fill:#087f8f}
+    .atcs-board .amber{fill:#d98a00}
+    .atcs-board .red{fill:#c73a31}
+    .atcs-board .box{fill:rgba(255,255,255,.90);stroke:rgba(7,25,27,.14);stroke-width:1.55}
+    .atcs-board .soft-green{fill:#eaf6e8;stroke:rgba(35,134,58,.28)}
+    .atcs-board .soft-teal{fill:#e7f7f8;stroke:rgba(8,127,143,.28)}
+    .atcs-board .soft-amber{fill:#fff3da;stroke:rgba(217,138,0,.30)}
+    .atcs-board .soft-red{fill:#fff0ed;stroke:rgba(199,58,49,.32)}
+    .atcs-board .stroke-green{stroke:rgba(35,134,58,.58)}
+    .atcs-board .stroke-teal{stroke:rgba(8,127,143,.58)}
+    .atcs-board .stroke-amber{stroke:rgba(217,138,0,.60)}
+    .atcs-board .stroke-red{stroke:rgba(199,58,49,.62)}
+    .atcs-board .dash-box{stroke-dasharray:9 8}
+    .atcs-board .num-text{font-size:28px;font-weight:950;fill:#fff}
+    .atcs-board .icon-text{font-size:24px;font-weight:950;letter-spacing:-.6px}
+    .atcs-board .pill-text{font-size:14px;font-weight:900}
+    .atcs-board .flow{fill:none;stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round}
+    .atcs-board .flow-thin{stroke-width:2.35}
+    .atcs-board .flow-green{stroke:#23863a;marker-end:url(#arrowGreen)}
+    .atcs-board .flow-teal{stroke:#087f8f;marker-end:url(#arrowTeal)}
+    .atcs-board .flow-amber{stroke:#d98a00;marker-end:url(#arrowAmber)}
+    .atcs-board .flow-red{stroke:#c73a31;marker-end:url(#arrowRed)}
+    .atcs-board .dash{stroke-dasharray:14 10;animation:atcs-flow 1.15s linear infinite}
+    @keyframes atcs-flow{to{stroke-dashoffset:-48}}
+    @media (max-width:900px){
+      .atcs-sheet{
+        border-radius:20px;
+        box-shadow:0 16px 34px rgba(18,35,39,.12);
+      }
+      .atcs-sheet::before{
+        content:"Desliza horizontalmente para revisar la lamina completa";
+        position:sticky;
+        left:10px;
+        top:10px;
+        z-index:1;
+        display:inline-flex;
+        margin:10px 0 -2px 10px;
+        padding:7px 10px;
+        border-radius:999px;
+        background:rgba(255,255,255,.92);
+        border:1px solid rgba(18,35,39,.10);
+        color:#546366;
+        font-size:.74rem;
+        font-weight:850;
+        backdrop-filter:blur(8px);
+      }
+      .atcs-board{
+        width:920px;
+        max-width:none;
+      }
+    }
+    @media (prefers-reduced-motion:reduce){
+      .atcs-board .dash{animation:none}
+    }
+  </style>
+
+  <div class="atcs-sheet">
+    <svg class="atcs-board" viewBox="0 0 1672 852" role="img" aria-label="Ciclo de vida de una operacion y manejo de pending updates">
+      <defs>
+        <marker id="arrowGreen" viewBox="0 0 12 12" refX="10.5" refY="6" markerWidth="10" markerHeight="10" orient="auto"><path d="M1 1 L11 6 L1 11 Z" fill="#23863a"/></marker>
+        <marker id="arrowTeal" viewBox="0 0 12 12" refX="10.5" refY="6" markerWidth="10" markerHeight="10" orient="auto"><path d="M1 1 L11 6 L1 11 Z" fill="#087f8f"/></marker>
+        <marker id="arrowAmber" viewBox="0 0 12 12" refX="10.5" refY="6" markerWidth="10" markerHeight="10" orient="auto"><path d="M1 1 L11 6 L1 11 Z" fill="#d98a00"/></marker>
+        <marker id="arrowRed" viewBox="0 0 12 12" refX="10.5" refY="6" markerWidth="10" markerHeight="10" orient="auto"><path d="M1 1 L11 6 L1 11 Z" fill="#c73a31"/></marker>
+      </defs>
+
+      <g transform="translate(0 -80)">
+      <g transform="translate(336 140)">
+        <rect width="224" height="34" rx="17" class="soft-green"/><circle cx="22" cy="17" r="7" fill="#23863a"/><text x="40" y="22" class="pill-text green">verde = progreso normal</text>
+        <rect x="242" width="194" height="34" rx="17" class="soft-teal"/><circle cx="264" cy="17" r="7" fill="#087f8f"/><text x="282" y="22" class="pill-text teal">teal = estado interno</text>
+        <rect x="454" width="228" height="34" rx="17" class="soft-amber"/><circle cx="476" cy="17" r="7" fill="#d98a00"/><text x="494" y="22" class="pill-text amber">ambar = espera / retry</text>
+        <rect x="700" width="184" height="34" rx="17" class="soft-red"/><circle cx="722" cy="17" r="7" fill="#c73a31"/><text x="740" y="22" class="pill-text red">rojo = fallo terminal</text>
+      </g>
+
+      <g transform="translate(60 232)">
+        <rect width="204" height="220" rx="18" class="box stroke-green"/>
+        <circle cx="38" cy="36" r="22" fill="#23863a"/><text x="38" y="44" text-anchor="middle" class="num-text" style="font-size:22px">1</text><text x="76" y="44" class="small-title green">Aceptada</text>
+        <circle cx="102" cy="104" r="42" class="soft-green"/><text x="102" y="119" text-anchor="middle" class="icon-text green" style="font-size:32px">OK</text>
+        <text x="102" y="168" text-anchor="middle" class="body"><tspan x="102" dy="0">la peticion se reconoce</tspan><tspan x="102" dy="22">y se responde en el</tspan><tspan x="102" dy="22">turno actual</tspan></text>
+      </g>
+      <g transform="translate(322 232)">
+        <rect width="204" height="220" rx="18" class="box stroke-green"/>
+        <circle cx="38" cy="36" r="22" fill="#23863a"/><text x="38" y="44" text-anchor="middle" class="num-text" style="font-size:22px">2</text><text x="76" y="44" class="small-title green">Registrada</text>
+        <circle cx="102" cy="104" r="42" class="soft-green"/><text x="102" y="119" text-anchor="middle" class="icon-text green" style="font-size:32px">OP</text>
+        <text x="102" y="176" text-anchor="middle" class="body"><tspan x="102" dy="0">se crea la operacion</tspan><tspan x="102" dy="22">y se registra</tspan></text>
+      </g>
+      <g transform="translate(584 232)">
+        <rect width="214" height="220" rx="18" class="box stroke-teal"/>
+        <circle cx="38" cy="36" r="22" fill="#087f8f"/><text x="38" y="44" text-anchor="middle" class="num-text" style="font-size:22px">3</text><text x="76" y="44" class="small-title teal">En curso</text>
+        <circle cx="102" cy="104" r="42" class="soft-teal"/><text x="102" y="119" text-anchor="middle" class="icon-text teal" style="font-size:32px">W</text>
+        <text x="102" y="176" text-anchor="middle" class="body"><tspan x="102" dy="0">worker / tool</tspan><tspan x="102" dy="22">procesando</tspan></text>
+      </g>
+      <g transform="translate(850 232)">
+        <rect width="232" height="220" rx="18" class="box stroke-amber"/>
+        <circle cx="38" cy="36" r="22" fill="#d98a00"/><text x="38" y="44" text-anchor="middle" class="num-text" style="font-size:22px">4</text><text x="76" y="44" class="small-title amber">Reintento</text>
+        <circle cx="110" cy="104" r="42" class="soft-amber"/><text x="110" y="119" text-anchor="middle" class="icon-text amber" style="font-size:32px">↻</text>
+        <text x="110" y="176" text-anchor="middle" class="body"><tspan x="110" dy="0">error recuperable</tspan><tspan x="110" dy="22">o espera</tspan></text>
+      </g>
+      <g transform="translate(1118 232)">
+        <rect width="204" height="220" rx="18" class="box stroke-green"/>
+        <circle cx="38" cy="36" r="22" fill="#23863a"/><text x="38" y="44" text-anchor="middle" class="num-text" style="font-size:22px">5</text><text x="76" y="44" class="small-title green">Finalizada</text>
+        <circle cx="102" cy="104" r="42" class="soft-green"/><text x="102" y="119" text-anchor="middle" class="icon-text green" style="font-size:32px">✓</text>
+        <text x="102" y="176" text-anchor="middle" class="body"><tspan x="102" dy="0">resultado</tspan><tspan x="102" dy="22">disponible</tspan></text>
+      </g>
+      <g transform="translate(1402 232)">
+        <rect width="204" height="220" rx="18" class="box stroke-green"/>
+        <circle cx="38" cy="36" r="22" fill="#23863a"/><text x="38" y="44" text-anchor="middle" class="num-text" style="font-size:22px">6</text><text x="76" y="44" class="small-title green">Entregada</text>
+        <circle cx="102" cy="104" r="42" class="soft-green"/><text x="102" y="119" text-anchor="middle" class="icon-text green" style="font-size:27px">MSG</text>
+        <text x="102" y="176" text-anchor="middle" class="body"><tspan x="102" dy="0">seguimiento enviado</tspan><tspan x="102" dy="22">al usuario</tspan></text>
+      </g>
+
+      <path d="M264 342 H322" class="flow flow-green"/>
+      <path d="M526 342 H584" class="flow flow-green"/>
+      <path d="M798 342 H850" class="flow flow-amber"/>
+      <path d="M1082 342 H1118" class="flow flow-green"/>
+      <path d="M1322 342 H1402" class="flow flow-green"/>
+      <path d="M850 344 H804" class="flow flow-amber dash flow-thin"/>
+
+      <g transform="translate(604 504)">
+        <rect width="320" height="92" rx="16" class="box stroke-red"/>
+        <circle cx="48" cy="46" r="26" class="soft-red"/><text x="48" y="55" text-anchor="middle" class="icon-text red">!</text>
+        <text x="96" y="39" class="small-title red">Fallida / agotada</text>
+        <text x="96" y="62" class="body">sin mas reintentos</text>
+        <text x="96" y="84" class="body">o error terminal</text>
+      </g>
+      <path d="M691 452 V504" class="flow flow-red dash flow-thin"/>
+      <path d="M966 452 V474 H764 V504" class="flow flow-red dash flow-thin"/>
+
+      <rect x="78" y="632" width="1032" height="152" rx="20" class="box stroke-teal"/>
+      <text x="594" y="670" text-anchor="middle" class="small-title teal">Persistencia y estado</text>
+      <g transform="translate(108 704)">
+        <rect width="184" height="58" rx="12" class="box stroke-teal"/><text x="92" y="24" text-anchor="middle" class="body-dark">operation record</text><text x="92" y="45" text-anchor="middle" class="tiny">creacion y registro</text>
+        <path d="M184 29 H214" class="flow flow-teal flow-thin"/>
+        <rect x="226" width="154" height="58" rx="12" class="box stroke-teal"/><text x="303" y="24" text-anchor="middle" class="body-dark">estado actual</text><text x="303" y="45" text-anchor="middle" class="tiny">estado de operacion</text>
+        <path d="M380 29 H410" class="flow flow-teal flow-thin"/>
+        <rect x="422" width="154" height="58" rx="12" class="box stroke-teal"/><text x="499" y="24" text-anchor="middle" class="body-dark">outcome</text><text x="499" y="45" text-anchor="middle" class="tiny">resultado final</text>
+        <path d="M576 29 H606" class="flow flow-teal flow-thin"/>
+        <rect x="618" width="176" height="58" rx="12" class="box stroke-teal"/><text x="706" y="24" text-anchor="middle" class="mono teal">PendingUpdate</text><text x="706" y="45" text-anchor="middle" class="tiny">payload + contexto</text>
+        <path d="M794 29 H824" class="flow flow-teal flow-thin"/>
+        <rect x="836" width="166" height="58" rx="12" class="box stroke-teal"/><text x="919" y="20" text-anchor="middle" class="body-dark">meta entrega</text><text x="919" y="39" text-anchor="middle" class="tiny">intentos · tiempos</text><text x="919" y="55" text-anchor="middle" class="tiny">canal · idem</text>
+      </g>
+      <path d="M162 452 V632" class="flow flow-teal dash flow-thin"/>
+      <path d="M424 452 V632" class="flow flow-teal dash flow-thin"/>
+      <path d="M691 452 V482 H548 V632" class="flow flow-teal dash flow-thin"/>
+      <path d="M966 452 V482 H1038 V632" class="flow flow-teal dash flow-thin"/>
+
+      <g transform="translate(1144 488)">
+        <rect width="258" height="192" rx="18" class="box stroke-amber"/>
+        <text x="129" y="34" text-anchor="middle" class="small-title amber">Policy entrega</text>
+        <rect x="26" y="58" width="206" height="48" rx="12" class="soft-amber"/><text x="129" y="79" text-anchor="middle" class="body-dark amber">follow-up determinista</text><text x="129" y="98" text-anchor="middle" class="tiny">sin fallos finales</text>
+        <rect x="26" y="120" width="206" height="48" rx="12" class="soft-amber"/><text x="129" y="141" text-anchor="middle" class="body-dark amber">failure recovery</text><text x="129" y="160" text-anchor="middle" class="tiny">LLM acotado</text>
+      </g>
+      <path d="M1220 452 V488" class="flow flow-green"/>
+      <path d="M1402 584 H1504 V452" class="flow flow-green"/>
+      <path d="M1402 624 H1456" class="flow flow-amber"/>
+      <g transform="translate(1450 584)">
+        <rect width="158" height="80" rx="16" class="box stroke-amber dash-box"/>
+        <text x="79" y="36" text-anchor="middle" class="body-dark amber">Pendiente</text>
+        <text x="79" y="58" text-anchor="middle" class="body-dark amber">de entrega</text>
+      </g>
+      <path d="M1524 584 V452" class="flow flow-amber dash flow-thin"/>
+
+      <g transform="translate(150 838)"><rect width="410" height="58" rx="15" class="box"/><text x="205" y="36" text-anchor="middle" class="body-dark">el turno visible no se bloquea</text></g>
+      <g transform="translate(612 838)"><rect width="420" height="58" rx="15" class="box"/><text x="210" y="28" text-anchor="middle" class="body-dark">el resultado vive fuera del chat</text><text x="210" y="48" text-anchor="middle" class="body-dark">hasta su entrega</text></g>
+      <g transform="translate(1082 838)"><rect width="430" height="58" rx="15" class="box"/><text x="215" y="28" text-anchor="middle" class="body-dark">PendingUpdate une</text><text x="215" y="48" text-anchor="middle" class="body-dark">outcome y delivery_mode</text></g>
+      </g>
+    </svg>
+  </div>
+</section>

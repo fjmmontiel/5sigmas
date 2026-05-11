@@ -1,0 +1,193 @@
+<section class="atcs-wrap" data-anim-fullscreen="on" data-anim-contrast="force" aria-label="Runtime conversacional y entrega diferida">
+  <style>
+    .atcs-wrap,.atcs-wrap *{box-sizing:border-box}
+    .atcs-wrap{
+      font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+      display:grid;
+      gap:10px;
+      margin:28px auto 34px;
+      max-width:1600px;
+    }
+    .anim-shell-modal .atcs-wrap{
+      margin:0;
+      max-width:none;
+    }
+    .atcs-sheet{
+      position:relative;
+      overflow-x:auto;
+      scrollbar-gutter:stable both-edges;
+      border-radius:26px;
+      border:1px solid rgba(18,35,39,.10);
+      background:
+        radial-gradient(circle at 12% 13%,rgba(35,134,58,.09),transparent 27%),
+        radial-gradient(circle at 86% 15%,rgba(217,138,0,.08),transparent 26%),
+        linear-gradient(180deg,#ffffff 0%,#fbfcfc 100%);
+      box-shadow:0 22px 54px rgba(18,35,39,.12);
+    }
+    .atcs-sheet::after{
+      content:"";
+      position:sticky;
+      right:0;
+      display:block;
+      width:34px;
+      height:0;
+      margin-left:auto;
+      box-shadow:-18px 0 24px 16px rgba(255,255,255,.88);
+      pointer-events:none;
+    }
+    .atcs-board{
+      display:block;
+      width:100%;
+      height:auto;
+      font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+    }
+    .atcs-board .small-title{font-size:22px;font-weight:900;letter-spacing:-.35px;fill:#07191b}
+    .atcs-board .body{font-size:17px;fill:#546366;font-weight:520}
+    .atcs-board .body-dark{font-size:17px;fill:#07191b;font-weight:650}
+    .atcs-board .tiny{font-size:14px;fill:#546366;font-weight:600}
+    .atcs-board .mini{font-size:12.5px;fill:#546366;font-weight:650}
+    .atcs-board .mono{font-family:"SF Mono","JetBrains Mono","Courier New",monospace;font-size:15px;font-weight:750}
+    .atcs-board .green{fill:#23863a}
+    .atcs-board .teal{fill:#087f8f}
+    .atcs-board .amber{fill:#d98a00}
+    .atcs-board .panel{fill:rgba(255,255,255,.78);stroke-width:2.1}
+    .atcs-board .box{fill:rgba(255,255,255,.90);stroke:rgba(7,25,27,.14);stroke-width:1.55}
+    .atcs-board .soft-green{fill:#eaf6e8;stroke:rgba(35,134,58,.28)}
+    .atcs-board .soft-teal{fill:#e7f7f8;stroke:rgba(8,127,143,.28)}
+    .atcs-board .soft-amber{fill:#fff3da;stroke:rgba(217,138,0,.30)}
+    .atcs-board .stroke-green{stroke:rgba(35,134,58,.58)}
+    .atcs-board .stroke-teal{stroke:rgba(8,127,143,.58)}
+    .atcs-board .stroke-amber{stroke:rgba(217,138,0,.60)}
+    .atcs-board .dash-box{stroke-dasharray:9 8}
+    .atcs-board .dash-soft{stroke-dasharray:8 10;stroke-opacity:.72}
+    .atcs-board .num-text{font-size:28px;font-weight:950;fill:#fff}
+    .atcs-board .icon-text{font-size:24px;font-weight:950;letter-spacing:-.6px}
+    .atcs-board .flow{fill:none;stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round}
+    .atcs-board .flow-thin{stroke-width:2.35}
+    .atcs-board .flow-green{stroke:#23863a;marker-end:url(#arrowGreen)}
+    .atcs-board .flow-teal{stroke:#087f8f;marker-end:url(#arrowTeal)}
+    .atcs-board .flow-amber{stroke:#d98a00;marker-end:url(#arrowAmber)}
+    .atcs-board .dash{stroke-dasharray:14 10;animation:atcs-flow 1.15s linear infinite}
+    @keyframes atcs-flow{to{stroke-dashoffset:-48}}
+    @media (max-width:900px){
+      .atcs-sheet{
+        border-radius:20px;
+        box-shadow:0 16px 34px rgba(18,35,39,.12);
+      }
+      .atcs-sheet::before{
+        content:"Desliza horizontalmente para revisar la lamina completa";
+        position:sticky;
+        left:10px;
+        top:10px;
+        z-index:1;
+        display:inline-flex;
+        margin:10px 0 -2px 10px;
+        padding:7px 10px;
+        border-radius:999px;
+        background:rgba(255,255,255,.92);
+        border:1px solid rgba(18,35,39,.10);
+        color:#546366;
+        font-size:.74rem;
+        font-weight:850;
+        backdrop-filter:blur(8px);
+      }
+      .atcs-board{
+        width:980px;
+        max-width:none;
+      }
+    }
+    @media (prefers-reduced-motion:reduce){
+      .atcs-board .dash{animation:none}
+    }
+  </style>
+
+  <div class="atcs-sheet">
+    <svg class="atcs-board" viewBox="0 0 1672 860" role="img" aria-label="Runtime conversacional y entrega diferida">
+      <defs>
+        <marker id="arrowGreen" viewBox="0 0 12 12" refX="10.5" refY="6" markerWidth="10" markerHeight="10" orient="auto"><path d="M1 1 L11 6 L1 11 Z" fill="#23863a"/></marker>
+        <marker id="arrowTeal" viewBox="0 0 12 12" refX="10.5" refY="6" markerWidth="10" markerHeight="10" orient="auto"><path d="M1 1 L11 6 L1 11 Z" fill="#087f8f"/></marker>
+        <marker id="arrowAmber" viewBox="0 0 12 12" refX="10.5" refY="6" markerWidth="10" markerHeight="10" orient="auto"><path d="M1 1 L11 6 L1 11 Z" fill="#d98a00"/></marker>
+      </defs>
+
+      <g transform="translate(0 -82)">
+      <rect x="46" y="158" width="176" height="470" rx="22" class="panel stroke-green"/>
+      <rect x="276" y="158" width="230" height="470" rx="22" class="panel stroke-green"/>
+      <rect x="560" y="158" width="374" height="470" rx="22" class="panel stroke-teal"/>
+      <rect x="984" y="158" width="632" height="244" rx="22" class="box stroke-teal"/>
+      <rect x="984" y="454" width="632" height="114" rx="22" class="box stroke-teal"/>
+
+      <g transform="translate(74 194)"><circle cx="22" cy="22" r="22" fill="#23863a"/><text x="22" y="30" text-anchor="middle" class="num-text" style="font-size:22px">1</text><text x="56" y="30" class="small-title green">Usuario</text></g>
+      <g transform="translate(302 194)"><circle cx="22" cy="22" r="22" fill="#23863a"/><text x="22" y="30" text-anchor="middle" class="num-text" style="font-size:22px">2</text><text x="56" y="30" class="small-title green">Chat visible</text></g>
+      <g transform="translate(592 194)"><circle cx="22" cy="22" r="22" fill="#087f8f"/><text x="22" y="30" text-anchor="middle" class="num-text" style="font-size:22px">3</text><text x="56" y="30" class="small-title teal">Runtime</text></g>
+      <g transform="translate(1016 194)"><circle cx="22" cy="22" r="22" fill="#087f8f"/><text x="22" y="30" text-anchor="middle" class="num-text" style="font-size:22px">4</text><text x="56" y="30" class="small-title teal">Procesamiento interno</text></g>
+      <g transform="translate(1016 474)"><circle cx="22" cy="22" r="22" fill="#087f8f"/><text x="22" y="30" text-anchor="middle" class="num-text" style="font-size:22px">5</text><text x="56" y="30" class="small-title teal">Estado persistente</text></g>
+
+      <circle cx="134" cy="396" r="58" class="soft-green"/><text x="134" y="412" text-anchor="middle" class="icon-text green" style="font-size:42px">U</text><text x="134" y="486" text-anchor="middle" class="body-dark">solicita accion</text>
+      <path d="M222 314 H276" class="flow flow-green"/><rect x="226" y="270" width="78" height="42" rx="14" class="box"/><text x="265" y="288" text-anchor="middle" class="tiny">mensaje /</text><text x="265" y="306" text-anchor="middle" class="tiny">intencion</text>
+
+      <g transform="translate(304 246)"><rect width="174" height="66" rx="14" class="box stroke-green"/><text x="28" y="42" class="icon-text green">IN</text><text x="72" y="29" class="body-dark">Mensaje</text><text x="72" y="51" class="tiny">entrada visible</text></g>
+      <path d="M391 312 V348" class="flow flow-green"/>
+      <g transform="translate(296 352)"><rect width="192" height="66" rx="14" class="box stroke-green"/><text x="28" y="42" class="icon-text green" style="font-size:18px">OK</text><text x="86" y="29" class="body-dark">Respuesta</text><text x="86" y="51" class="tiny">aceptacion</text></g>
+      <path d="M391 418 V454" class="flow flow-green"/>
+      <g transform="translate(286 458)"><rect width="206" height="66" rx="14" class="box stroke-green"/><text x="28" y="42" class="icon-text green" style="font-size:16px">OUT</text><text x="86" y="29" class="body-dark">Seguimiento</text><text x="86" y="51" class="tiny">si hay resultado</text></g>
+      <rect x="304" y="552" width="174" height="36" rx="12" class="soft-green"/><text x="391" y="576" text-anchor="middle" class="body-dark green">solo plano visible</text>
+
+      <path d="M506 390 H560" class="flow flow-green"/>
+      <path d="M560 438 H506" class="flow flow-green dash"/>
+
+      <g transform="translate(602 246)"><rect width="292" height="66" rx="14" class="box stroke-teal"/><text x="36" y="42" class="icon-text teal">RT</text><text x="82" y="28" class="body-dark">Responde ahora</text><text x="82" y="51" class="tiny">o deriva fuera del turno</text></g>
+      <rect x="592" y="342" width="310" height="230" rx="18" class="box stroke-teal dash-box dash-soft"/>
+      <g transform="translate(622 382)"><rect width="118" height="76" rx="13" class="box stroke-teal"/><text x="59" y="31" text-anchor="middle" class="icon-text teal">▦</text><text x="59" y="58" text-anchor="middle" class="tiny">planificador</text></g>
+      <g transform="translate(760 382)"><rect width="118" height="76" rx="13" class="box stroke-teal"/><text x="59" y="31" text-anchor="middle" class="icon-text teal">⚙</text><text x="59" y="52" text-anchor="middle" class="tiny">gestor de</text><text x="59" y="68" text-anchor="middle" class="tiny">ops</text></g>
+      <g transform="translate(622 476)"><rect width="118" height="76" rx="13" class="box stroke-teal"/><text x="59" y="31" text-anchor="middle" class="icon-text teal">P</text><text x="59" y="52" text-anchor="middle" class="tiny">politica de</text><text x="59" y="68" text-anchor="middle" class="tiny">seguimiento</text></g>
+      <g transform="translate(760 476)"><rect width="118" height="76" rx="13" class="box stroke-teal"/><text x="59" y="31" text-anchor="middle" class="icon-text teal">T</text><text x="59" y="52" text-anchor="middle" class="tiny">router de</text><text x="59" y="68" text-anchor="middle" class="tiny">tools</text></g>
+      <path d="M740 420 H760" class="flow flow-teal flow-thin"/><path d="M819 458 V476" class="flow flow-teal flow-thin"/><path d="M760 514 H740" class="flow flow-teal flow-thin"/><path d="M681 476 V458" class="flow flow-teal flow-thin"/>
+
+      <path d="M934 292 H984" class="flow flow-teal"/>
+      <rect x="927" y="246" width="96" height="42" rx="14" class="box"/><text x="975" y="264" text-anchor="middle" class="tiny">batch</text><text x="975" y="282" text-anchor="middle" class="tiny">accesses</text>
+
+      <g transform="translate(1010 240)"><rect width="116" height="76" rx="14" class="box stroke-teal"/><text x="58" y="31" text-anchor="middle" class="icon-text teal">TC</text><text x="58" y="55" text-anchor="middle" class="tiny">tool call</text><text x="58" y="71" text-anchor="middle" class="tiny">aceptada</text></g>
+      <g transform="translate(1154 240)"><rect width="116" height="76" rx="14" class="box stroke-teal"/><text x="58" y="31" text-anchor="middle" class="icon-text teal">Q</text><text x="58" y="55" text-anchor="middle" class="tiny">queue</text><text x="58" y="71" text-anchor="middle" class="tiny">task</text></g>
+      <g transform="translate(1298 240)"><rect width="116" height="76" rx="14" class="box stroke-teal"/><text x="58" y="31" text-anchor="middle" class="icon-text teal">W</text><text x="58" y="55" text-anchor="middle" class="tiny">worker</text></g>
+      <path d="M1126 278 H1154" class="flow flow-teal flow-thin"/>
+      <path d="M1270 278 H1298" class="flow flow-teal flow-thin"/>
+      <g transform="translate(1184 342)"><rect width="270" height="60" rx="16" class="box stroke-teal"/><rect x="14" y="12" width="40" height="36" rx="10" class="soft-teal"/><text x="34" y="36" text-anchor="middle" class="icon-text teal" style="font-size:16px">API</text><text x="70" y="27" class="body-dark">APIs externas</text><text x="70" y="45" class="tiny">timeout · negocio</text></g>
+      <g transform="translate(1472 342)"><rect width="116" height="60" rx="16" class="box stroke-amber"/><circle cx="24" cy="30" r="14" class="soft-amber"/><text x="24" y="36" text-anchor="middle" class="icon-text amber" style="font-size:16px">↻</text><text x="74" y="26" text-anchor="middle" class="tiny">retry</text><text x="74" y="44" text-anchor="middle" class="tiny">429 / 5xx</text></g>
+      <path d="M1356 316 V342" class="flow flow-teal flow-thin"/>
+      <path d="M1454 372 H1472" class="flow flow-amber flow-thin dash"/>
+      <path d="M1319 402 V454" class="flow flow-teal"/>
+      <text x="1344" y="446" class="tiny teal">outcome</text>
+
+      <g transform="translate(1036 518)"><rect width="130" height="38" rx="12" class="box stroke-teal"/><text x="65" y="18" text-anchor="middle" class="body-dark">Operaciones</text><text x="65" y="32" text-anchor="middle" class="tiny">accepted/running</text></g>
+      <g transform="translate(1182 518)"><rect width="128" height="38" rx="12" class="box stroke-teal"/><text x="64" y="18" text-anchor="middle" class="body-dark">Outcome</text><text x="64" y="32" text-anchor="middle" class="tiny">success / retry</text></g>
+      <g transform="translate(1326 518)"><rect width="144" height="38" rx="12" class="box stroke-teal"/><text x="72" y="18" text-anchor="middle" class="mono teal">PendingUpdate</text><text x="72" y="32" text-anchor="middle" class="tiny">resultado listo</text></g>
+      <g transform="translate(1486 518)"><rect width="96" height="38" rx="12" class="box stroke-teal"/><text x="48" y="18" text-anchor="middle" class="body-dark">Delivery</text><text x="48" y="32" text-anchor="middle" class="tiny">mode</text></g>
+      <path d="M1166 537 H1182" class="flow flow-teal flow-thin"/>
+      <path d="M1310 537 H1326" class="flow flow-teal flow-thin"/>
+      <path d="M1470 537 H1486" class="flow flow-teal flow-thin"/>
+
+      <rect x="58" y="650" width="900" height="146" rx="18" class="box"/>
+      <path d="M92 688 H140" class="flow flow-green flow-thin"/>
+      <text x="166" y="692" class="small-title green">Ruta A · turno visible</text>
+      <text x="166" y="717" class="mini">Usuario → Chat → Runtime → respuesta inmediata</text>
+      <path d="M92 748 H140" class="flow flow-amber flow-thin dash"/>
+      <text x="166" y="752" class="small-title amber">Ruta B · trabajo async</text>
+      <text x="166" y="777" class="mini">Runtime → worker → API → outcome → PendingUpdate → follow-up → chat</text>
+
+      <path d="M958 724 H1298" class="flow flow-amber flow-thin dash"/>
+      <path d="M1531 552 V608" class="flow flow-amber flow-thin"/>
+      <rect x="1298" y="610" width="252" height="102" rx="18" class="box stroke-amber"/>
+      <text x="1424" y="640" text-anchor="middle" class="small-title amber">Entrega diferida</text>
+      <text x="1424" y="658" text-anchor="middle" class="tiny">modo · trazas</text>
+      <g transform="translate(1318 668)"><rect width="96" height="38" rx="13" class="soft-amber"/><text x="48" y="16" text-anchor="middle" class="body-dark amber">Enviar</text><text x="48" y="30" text-anchor="middle" class="tiny">ahora</text></g>
+      <g transform="translate(1434 668)"><rect width="96" height="38" rx="13" class="soft-amber"/><text x="48" y="16" text-anchor="middle" class="body-dark amber">Esperar</text><text x="48" y="30" text-anchor="middle" class="tiny">ventana</text></g>
+      <path d="M1424 712 V742" class="flow flow-amber flow-thin"/>
+      <g transform="translate(1342 742)"><rect width="164" height="64" rx="15" class="box stroke-green"/><circle cx="34" cy="32" r="21" class="soft-green"/><text x="34" y="40" text-anchor="middle" class="icon-text green">MSG</text><text x="98" y="27" class="body-dark">Follow-up</text><text x="98" y="47" class="tiny">cierre al usuario</text></g>
+
+      <g transform="translate(120 850)"><rect width="400" height="48" rx="14" class="box"/><text x="200" y="31" text-anchor="middle" class="body-dark">visible separado del estado tecnico</text></g>
+      <g transform="translate(636 850)"><rect width="390" height="48" rx="14" class="box"/><text x="195" y="31" text-anchor="middle" class="body-dark">tools fuera del turno visible</text></g>
+      <g transform="translate(1138 850)"><rect width="420" height="48" rx="14" class="box"/><text x="210" y="31" text-anchor="middle" class="body-dark">delivery guiado por estado y resultado</text></g>
+      </g>
+    </svg>
+  </div>
+</section>
