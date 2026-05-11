@@ -8,6 +8,7 @@ tags:
   - Energía
   - IA
 video: "01-electricidad-bienestar.mp4"
+video_duration: "PT1M15S"
 ---
 
 # Capítulo 1 — Electricidad y bienestar: los mecanismos reales

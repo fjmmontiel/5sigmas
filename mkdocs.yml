@@ -143,7 +143,8 @@ plugins:
   - redirects:
       enabled: !ENV [MKDOCS_REDIRECTS, true]
       redirect_maps:
-        # Canonical URL legacy — uppercase slugs indexados por Google
+        # Canonical URL legacy — uppercase slugs indexados por Google.
+        # These case-only redirects must be built on a case-sensitive filesystem.
         'series/fundamentos-IA-IAG/00_presentacion_serie.md': 'series/fundamentos-ia-iag/00_presentacion_serie.md'
         'series/from-cave-to-AGI/00_presentacion_serie.md': 'series/from-cave-to-agi/00_presentacion_serie.md'
   - social:

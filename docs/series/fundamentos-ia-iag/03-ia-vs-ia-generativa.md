@@ -8,6 +8,7 @@ tags:
   - GenAI
   - LLMs
 video: "03-ia-vs-ia-generativa.mp4"
+video_duration: "PT1M15S"
 ---
 
 # Capítulo 3 — IA vs IA Generativa

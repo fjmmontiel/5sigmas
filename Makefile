@@ -4,7 +4,7 @@ PIP := $(VENV)/bin/pip
 MKDOCS := $(VENV)/bin/mkdocs
 MKDOCS_ENV := DISABLE_MKDOCS_2_WARNING=true NO_MKDOCS_2_WARNING=true
 
-.PHONY: install build serve deploy build-and-update up clean check-animation-branding video-notebooklm-jobs video-article-payloads video-render-articles video-catalog video-audit video-suite-manifests video-render-suite video-suite video-datacenter-options video-render-datacenter-options video-feedback-frames video-datacenter-feedback video-iteration-bundle video-all
+.PHONY: install build serve deploy build-and-update up clean check-animation-branding check-video-indexing video-notebooklm-jobs video-article-payloads video-render-articles video-catalog video-audit video-suite-manifests video-render-suite video-suite video-datacenter-options video-render-datacenter-options video-feedback-frames video-datacenter-feedback video-iteration-bundle video-all
 
 # Crear venv e instalar dependencias
 install: $(MKDOCS)
@@ -16,7 +16,8 @@ $(MKDOCS):
 
 # Compilar la web a HTML estático (en ./site)
 build: install check-animation-branding
-	$(MKDOCS_ENV) $(MKDOCS) build --strict
+	$(MKDOCS_ENV) MKDOCS_REDIRECTS=false $(MKDOCS) build --strict
+	$(PYTHON) scripts/audit_video_indexing.py
 
 # Servir en local (http://127.0.0.1:8000)
 serve: install
@@ -33,6 +34,9 @@ build-and-update: install
 
 check-animation-branding:
 	python3 scripts/validate_animation_branding.py
+
+check-video-indexing:
+	$(PYTHON) scripts/audit_video_indexing.py
 
 # Limpiar artefactos
 clean:

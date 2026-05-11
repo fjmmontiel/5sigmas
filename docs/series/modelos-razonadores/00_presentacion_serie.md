@@ -7,6 +7,8 @@ tags:
   - IA
   - LLMs
   - Razonamiento
+video: "00_presentacion_serie.mp4"
+video_duration: "PT1M15S"
 hide:
   - toc
 ---

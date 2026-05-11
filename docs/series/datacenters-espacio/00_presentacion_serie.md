@@ -8,6 +8,7 @@ tags:
   - Energía
   - Infraestructura
 video: "00_presentacion_serie.mp4"
+video_duration: "PT0M49S"
 hide:
   - toc
 ---

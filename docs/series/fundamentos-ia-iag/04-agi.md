@@ -8,6 +8,7 @@ tags:
   - AGI
   - Alineamiento
 video: "04-agi.mp4"
+video_duration: "PT1M10S"
 ---
 
 # Capítulo 4 — AGI: Inteligencia Artificial General

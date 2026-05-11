@@ -8,6 +8,7 @@ tags:
   - GenAI
   - Multimodalidad
 video: "03-arquitecturas.mp4"
+video_duration: "PT1M27S"
 ---
 
 # Capítulo 3 — Arquitecturas: espacios compartidos, conectores y modelos omni

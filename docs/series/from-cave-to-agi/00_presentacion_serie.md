@@ -11,6 +11,7 @@ tags:
 hide:
   - toc
 video: "00_presentacion_serie.mp4"
+video_duration: "PT1M15S"
 ---
 # De las cavernas a la AGI
 

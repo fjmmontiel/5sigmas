@@ -8,6 +8,7 @@ tags:
   - LLMs
   - GenAI
 video: "01-que-es-ia.mp4"
+video_duration: "PT1M26S"
 ---
 
 # Capítulo 1 — Qué es IA

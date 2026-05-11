@@ -32,6 +32,9 @@ jobs:
       - name: Build site
         run: mkdocs build --clean --strict
 
+      - name: Audit video indexing metadata
+        run: python scripts/audit_video_indexing.py
+
       - uses: actions/configure-pages@v5
 
       - uses: actions/upload-pages-artifact@v3

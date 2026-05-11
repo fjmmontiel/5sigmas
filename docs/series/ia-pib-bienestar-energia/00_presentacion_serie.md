@@ -8,6 +8,7 @@ tags:
   - Energía
   - Productividad
 video: "00_presentacion_serie.mp4"
+video_duration: "PT1M0S"
 hide:
   - toc
 ---

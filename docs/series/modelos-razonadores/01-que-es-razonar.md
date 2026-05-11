@@ -7,6 +7,8 @@ tags:
   - IA
   - LLMs
   - Razonamiento
+video: "01-que-es-razonar.mp4"
+video_duration: "PT1M29S"
 ---
 
 # Capítulo 1 — Qué es "razonar" para un LLM

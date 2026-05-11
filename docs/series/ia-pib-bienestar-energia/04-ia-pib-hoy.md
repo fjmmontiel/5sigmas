@@ -8,6 +8,7 @@ tags:
   - IA
   - Productividad
 video: "04-ia-pib-hoy.mp4"
+video_duration: "PT1M43S"
 ---
 
 # Capítulo 4 — IA y PIB hoy: impacto real, desfases y señales tempranas

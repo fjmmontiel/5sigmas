@@ -36,9 +36,11 @@ def _esc(s: str) -> str:
 # ── Hook ──────────────────────────────────────────────────────────────────────
 
 def on_post_page(output: str, page, config, **kwargs) -> str:
-    video_file = (page.meta or {}).get("video")
+    meta = page.meta or {}
+    video_file = meta.get("video")
     if not video_file:
         return output
+    is_noindex = "noindex" in str(meta.get("robots", "")).lower()
 
     # Derive poster filename from mp4 basename
     base        = video_file.rsplit(".", 1)[0]   # "01-representar"
@@ -55,7 +57,6 @@ def on_post_page(output: str, page, config, **kwargs) -> str:
     abs_poster = parent + poster_file if parent else ""
 
     # Metadata from page frontmatter / config
-    meta        = page.meta or {}
     title       = _esc(meta.get("video_title") or page.title or "")
     description = _esc(meta.get("description") or "")
     date        = str(meta.get("date") or "")
@@ -118,7 +119,8 @@ def on_post_page(output: str, page, config, **kwargs) -> str:
     # Inject video after the first </h1> in the page
     output = re.sub(r"(</h1>)", r"\1\n" + video_html, output, count=1)
 
-    # Inject VideoObject JSON-LD into <head>
-    output = output.replace("</head>", jsonld + "\n</head>", 1)
+    # noindex pages can show the video, but should not emit indexable video markup.
+    if not is_noindex:
+        output = output.replace("</head>", jsonld + "\n</head>", 1)
 
     return output

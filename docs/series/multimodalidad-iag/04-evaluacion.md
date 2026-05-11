@@ -8,6 +8,7 @@ tags:
   - Evaluación
   - Multimodalidad
 video: "04-evaluacion.mp4"
+video_duration: "PT1M14S"
 ---
 
 # Capítulo 4 — Evaluación: medir sin autoengañarse

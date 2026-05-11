@@ -47,6 +47,8 @@ def on_page_context(context, page, config, nav, **kwargs):
     rel = Path(page.file.src_path).parent
     video_url = f"{SITE_URL}/{rel}/{video_file}".replace("//", "/").replace(":/", "://")
     thumb_url = f"{SITE_URL}/{rel}/{slug}.jpg".replace("//", "/").replace(":/", "://")
+    publication_date = _normalize_date(meta.get("date"))
+    duration_seconds = _duration_to_seconds(meta.get("video_duration"))
 
     _video_pages.append({
         "page_url": page_url.rstrip("/") + "/",
@@ -54,6 +56,8 @@ def on_page_context(context, page, config, nav, **kwargs):
         "thumb_url": thumb_url,
         "title": escape(meta.get("title", slug)),
         "description": escape(meta.get("description", "")),
+        "publication_date": publication_date,
+        "duration": duration_seconds,
     })
 
     return context
@@ -70,6 +74,11 @@ def on_post_build(config, **kwargs):
     ]
 
     for entry in _video_pages:
+        optional_video_tags = []
+        if entry["duration"]:
+            optional_video_tags.append(f"      <video:duration>{entry['duration']}</video:duration>")
+        if entry["publication_date"]:
+            optional_video_tags.append(f"      <video:publication_date>{entry['publication_date']}</video:publication_date>")
         lines += [
             "  <url>",
             f"    <loc>{entry['page_url']}</loc>",
@@ -78,6 +87,7 @@ def on_post_build(config, **kwargs):
             f"      <video:title>{entry['title']}</video:title>",
             f"      <video:description>{entry['description']}</video:description>",
             f"      <video:content_loc>{entry['video_url']}</video:content_loc>",
+            *optional_video_tags,
             "    </video:video>",
             "  </url>",
         ]
@@ -87,3 +97,22 @@ def on_post_build(config, **kwargs):
     out = os.path.join(config["site_dir"], "video-sitemap.xml")
     with open(out, "w", encoding="utf-8") as f:
         f.write("\n".join(lines) + "\n")
+
+
+def _normalize_date(value) -> str:
+    date = str(value or "")
+    if re.fullmatch(r"\d{4}-\d{2}-\d{2}", date):
+        return date + "T00:00:00+00:00"
+    return date
+
+
+def _duration_to_seconds(value) -> str:
+    duration = str(value or "")
+    match = re.fullmatch(r"PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?", duration)
+    if not match:
+        return ""
+    hours = int(match.group(1) or 0)
+    minutes = int(match.group(2) or 0)
+    seconds = int(match.group(3) or 0)
+    total = hours * 3600 + minutes * 60 + seconds
+    return str(total) if total else ""

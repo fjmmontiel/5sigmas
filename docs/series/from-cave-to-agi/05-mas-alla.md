@@ -9,6 +9,7 @@ tags:
   - Razonamiento
   - Inferencia
 video: "05-mas-alla.mp4"
+video_duration: "PT1M25S"
 ---
 
 # Capítulo 5: Más allá del Transformer (≈ 2022 - Q1 2026)

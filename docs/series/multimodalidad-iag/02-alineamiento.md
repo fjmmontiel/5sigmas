@@ -9,6 +9,7 @@ tags:
   - Multimodalidad
   - Alineamiento
 video: "02-alineamiento.mp4"
+video_duration: "PT1M29S"
 ---
 
 # Capítulo 2 — Alineamiento: de pares a interacciones

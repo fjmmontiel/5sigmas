@@ -11,6 +11,7 @@ tags:
 hide:
   - toc
 video: "00_presentacion_serie.mp4"
+video_duration: "PT0M59S"
 ---
 # Fundamentos de IA e IA generativa
 

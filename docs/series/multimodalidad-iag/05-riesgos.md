@@ -9,6 +9,7 @@ tags:
   - Multimodalidad
   - Alineamiento
 video: "05-riesgos.mp4"
+video_duration: "PT1M29S"
 ---
 
 # Capítulo 5 — Riesgos: prompt injection visual, acción y seguridad operacional

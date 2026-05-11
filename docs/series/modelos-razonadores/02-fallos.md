@@ -7,6 +7,8 @@ tags:
   - IA
   - LLMs
   - Razonamiento
+video: "02-fallos.mp4"
+video_duration: "PT1M29S"
 ---
 
 # Capítulo 2 — Cómo se ven los fallos de los modelos razonadores

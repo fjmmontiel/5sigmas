@@ -8,6 +8,7 @@ tags:
   - LLMs
   - Historia
 video: "04-escalar.mp4"
+video_duration: "PT1M9S"
 ---
 
 # Capítulo 4: Escalar (≈ 2012 - 2024)

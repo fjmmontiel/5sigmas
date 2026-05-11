@@ -8,6 +8,7 @@ tags:
   - GenAI
   - LLMs
 video: "02-que-es-ia-generativa.mp4"
+video_duration: "PT1M14S"
 ---
 
 # Capítulo 2 — Qué es IA Generativa

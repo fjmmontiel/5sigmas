@@ -7,6 +7,7 @@ tags:
   - IA
   - Historia
 video: "02-mecanizar.mp4"
+video_duration: "PT1M26S"
 ---
 
 # Capítulo 2: Mecanizar (≈ 1640 - 1956)
