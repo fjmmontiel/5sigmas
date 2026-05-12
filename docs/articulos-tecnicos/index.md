@@ -6,7 +6,6 @@ tags:
   - IA
   - Agentes
   - Arquitectura
-robots: noindex
 hide:
   - toc
 ---
@@ -129,23 +128,26 @@ Esta sección no replica el formato de las series de divulgación. Aquí irán a
 
 La idea no es trocear una tesis en capítulos narrativos, sino publicar piezas que puedan leerse solas y que aterricen arquitectura, código, UI y operación sobre un sistema concreto.
 
+En esta capa el formato base se parece más a una `engineering note` que a un ensayo divulgativo: estado del proyecto, contrato técnico, límites reales de la demo y una lectura explícita de qué parte del sistema está resuelta y cuál sigue fuera de alcance.
+
 <div class="tech-grid">
 
 <a href="/articulos-tecnicos/proactive-reactive-agent-and-tool-calls/" class="tech-card">
   <div class="tech-kicker">
     <div class="tech-badge">Artículo técnico</div>
-    <div class="tech-state">draft</div>
+    <div class="tech-state">Publicado</div>
   </div>
   <div class="tech-title">Agente Reactivo, Proactivo y Tool calls</div>
-  <div class="tech-desc">Un recorrido largo por <code>Reactive / Proactive Agent</code> para explicar el concepto que encapsula el código: una sesión que responde en el turno actual, sigue trabajando por debajo y cierra después sin romper el contrato conversacional.</div>
+  <div class="tech-desc">Una nota técnica sobre <code>Reactive / Proactive Agent</code> para explicar un patrón de runtime: aceptación honesta, trabajo en background y cierre proactivo sin convertir el historial visible en la base de datos del sistema.</div>
   <div class="tech-meta">
-    <div class="tech-meta-row"><span class="tech-meta-k">Foco</span><span class="tech-meta-v">agente reactivo/proactivo, runtime conversacional, estado interno, follow-up diferido</span></div>
-    <div class="tech-meta-row"><span class="tech-meta-k">Visual</span><span class="tech-meta-v">ciclo reactivo → async → proactivo, planos de estado y arquitectura actual/futura</span></div>
+    <div class="tech-meta-row"><span class="tech-meta-k">Foco</span><span class="tech-meta-v">contrato conversacional, runtime conversacional, estado interno y follow-up diferido</span></div>
+    <div class="tech-meta-row"><span class="tech-meta-k">Repo</span><span class="tech-meta-v">enlace público en GitHub + demo local base</span></div>
+    <div class="tech-meta-row"><span class="tech-meta-k">Visual</span><span class="tech-meta-v">panorama operativo, lifecycle de la operación y arquitectura objetivo</span></div>
   </div>
 </a>
 
 </div>
 
 <div class="tech-note">
-Esta sección queda abierta a muchos artículos. El primero nace del repositorio <code>Reactive / Proactive Agent</code>, pero el foco editorial no es solo el nombre del repo sino el concepto que cristaliza: agente reactivo, proactivo y tool calls.
+Esta sección queda abierta a muchos artículos. El primero nace del repositorio <code>Reactive / Proactive Agent</code>, pero el foco editorial no es el nombre del repo en sí, sino el patrón que el código cristaliza: conversación visible, ejecución interna y cierre diferido sin romper el contrato con el usuario.
 </div>

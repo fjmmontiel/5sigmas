@@ -1,4 +1,4 @@
-<section class="atca-wrap" data-anim-fullscreen="on" data-anim-contrast="force" aria-label="Arquitectura objetivo de Reactive / Proactive Agent">
+<section class="atca-wrap" data-anim-fullscreen="on" data-anim-contrast="force" aria-label="Siguiente paso hacia producción para Reactive / Proactive Agent">
   <style>
     .atca-wrap,.atca-wrap *{box-sizing:border-box}
     .atca-wrap{
@@ -98,7 +98,7 @@
   </style>
 
   <div class="atca-sheet">
-    <svg class="atca-board" viewBox="0 0 1500 840" role="img" aria-label="Arquitectura objetivo de Reactive / Proactive Agent">
+    <svg class="atca-board" viewBox="0 0 1500 840" role="img" aria-label="Siguiente paso hacia producción para Reactive / Proactive Agent">
       <defs>
         <marker id="atcaArrowGreen" viewBox="0 0 12 12" refX="10.5" refY="6" markerWidth="10" markerHeight="10" orient="auto"><path d="M1 1 L11 6 L1 11 Z" fill="#23863a"/></marker>
         <marker id="atcaArrowTeal" viewBox="0 0 12 12" refX="10.5" refY="6" markerWidth="10" markerHeight="10" orient="auto"><path d="M1 1 L11 6 L1 11 Z" fill="#087f8f"/></marker>
@@ -167,13 +167,17 @@
         <text x="1126" y="482" text-anchor="middle" class="node-title slate">External APIs</text>
         <text x="1126" y="508" text-anchor="middle" class="node-sub">429 · 5xx · negocio</text>
 
-        <rect x="746" y="562" width="488" height="42" rx="18" class="box stroke-teal"/>
-        <text x="990" y="590" text-anchor="middle" class="mono teal">Event Bus</text>
+        <rect x="746" y="562" width="298" height="42" rx="18" class="box stroke-teal"/>
+        <text x="895" y="590" text-anchor="middle" class="mono teal">Completion Stream</text>
+
+        <rect x="1064" y="562" width="170" height="42" rx="18" class="box stroke-amber"/>
+        <text x="1149" y="590" text-anchor="middle" class="mono amber">DLQ / replay</text>
 
         <path d="M658 486 H742" class="flow flow-teal"/>
         <path d="M938 494 H1018" class="flow flow-slate"/>
         <path d="M840 550 V562" class="flow flow-teal"/>
         <path d="M1126 550 V562" class="flow flow-slate"/>
+        <path d="M1126 550 V583 H1064" class="flow flow-amber flow-thin dash"/>
         <path d="M706 314 V374 H565 V442" class="flow flow-teal flow-thin dash"/>
         <path d="M584 314 V344 H264 V446" class="flow flow-teal flow-thin dash"/>
         <path d="M382 518 V686 H664" class="flow flow-teal flow-thin dash"/>
@@ -184,6 +188,7 @@
         <text x="860" y="560" class="small">outcome</text>
         <text x="1144" y="560" class="small">events</text>
         <text x="448" y="674" class="small">pending state</text>
+        <text x="1096" y="544" class="small amber">terminal failures</text>
 
         <rect x="72" y="626" width="1356" height="126" rx="24" class="band stroke-amber"/>
         <text x="102" y="658" class="lane">entrega + retorno</text>
@@ -215,6 +220,12 @@
 
         <rect x="998" y="774" width="372" height="40" rx="14" class="box"/>
         <text x="1184" y="800" text-anchor="middle" class="small">el cierre vuelve por proactive o next_turn</text>
+
+        <rect x="1190" y="442" width="182" height="88" rx="20" class="box stroke-slate"/>
+        <text x="1281" y="476" text-anchor="middle" class="node-title slate">Observability</text>
+        <text x="1281" y="500" text-anchor="middle" class="node-sub">traces · ids · metrics</text>
+        <path d="M938 438 V420 H1281 V442" class="flow flow-slate flow-thin dash"/>
+        <path d="M895 604 V620 H1281 V530" class="flow flow-slate flow-thin dash"/>
       </g>
     </svg>
   </div>
