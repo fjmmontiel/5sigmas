@@ -20,7 +20,7 @@ tags:
 > **Alcance:** contrato conversacional, runtime local, mock service y cierre diferido  
 
 <video controls playsinline preload="metadata" style="width:100%;max-width:980px;border-radius:14px;display:block;margin:1rem 0 1.5rem">
-  <source src="/assets/videos/reactive-proactive-agent-behavior.mp4" type="video/mp4">
+  <source src="./reactive-proactive-agent-behavior.mp4" type="video/mp4">
 </video>
 
 Cuando un agente usa tools contra sistemas externos, la parte difícil no está en llamar a una API externa.
