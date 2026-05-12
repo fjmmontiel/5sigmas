@@ -5,8 +5,8 @@ date: 2026-04-23
 date_modified: 2026-05-11
 keywords: "agente reactivo, agente proactivo, tool calls, async tool calls, runtime conversacional, background tasks, pending updates"
 article_state: published
-video: "reactive-proactive-agent-behavior.mp4"
-video_duration: "PT1M00S"
+video: "reactive-proactive-agent-header-demo.mp4"
+video_duration: "PT20S"
 tags:
   - IA
   - Agentes
