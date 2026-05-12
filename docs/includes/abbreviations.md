@@ -67,3 +67,6 @@
 *[COTS]: Commercial Off-The-Shelf: hardware o software estándar disponible en el mercado general, sin modificaciones especiales para entornos de alta radiación u otras condiciones extremas
 *[SEU]: Single Event Upset: cambio de estado en un bit de memoria o registro causado por el impacto de una partícula energética (rayo cósmico, protón solar); fuente principal de errores en hardware COTS en órbita
 *[ASM]: Artisanal and Small-scale Mining: minería artesanal y de pequeña escala; extracción manual o con herramientas básicas, predominante en la producción de cobalto en la RDC y tántalo en África central
+
+<!-- articulos-tecnicos / proactive-reactive-agent -->
+*[DLQ]: Dead Letter Queue: cola de mensajes fallidos donde se depositan las operaciones que no pudieron procesarse tras agotar todos los reintentos; permite auditoría y reprocesado manual sin perder el trabajo

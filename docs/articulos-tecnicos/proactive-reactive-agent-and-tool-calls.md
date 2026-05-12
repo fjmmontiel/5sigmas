@@ -17,32 +17,32 @@ tags:
 
 # Agente Reactivo, Proactivo y Tool calls
 
-> **Repositorio base:** [`Reactive / Proactive Agent`](https://github.com/fjmmontiel/reactive-proactive-agent)  
+> **Repositorio base:** [`Reactive / Proactive Agent`](https://fjmmontiel.github.io/reactive-proactive-agent/)  
 > **Estado:** publicado en 5sigmas; demo local acotada con repo público asociado  
 > **Alcance:** contrato conversacional, runtime local, mock service y cierre diferido  
 
 Cuando un agente usa tools contra sistemas externos, la parte difícil no está en llamar a una API externa.
-Esta llamada se puede hacer con una función, una cola o una librería HTTP cualquiera. Pero lo que complica el diseño, es que la conversación que mantenemos con el LLM y la operación externa puede hacer que el chat se quede bloqueado o que la política de reintentos en llamadas quede sujeta al comportamiento probabilístico de los LLMs.
+Esta llamada se puede hacer con una función, una cola o una librería HTTP cualquiera. Pero lo que complica el diseño, es que la conversación que mantenemos con el LLM y la operación externa puede hacer que el chat se quede bloqueado.
 
-Además el flujo es: el usuario escribe en la caja del chat o durante una llamada, el modelo decide que necesita una tool para procesar correctamente la petición del usuario y finalmente la operación sale hacia un servicio que puede tardar, reintentar, fallar o terminar cuando el usuario ya ha seguido hablando.
+Además el flujo es: el usuario escribe en la caja del chat, o habla sobre un canal telefónico, el modelo decide que necesita una tool para procesar correctamente la petición del usuario y finalmente la operación sale hacia un servicio que puede tardar, fallar o terminar cuando el usuario ya ha seguido hablando.
 
-`Reactive / Proactive Agent` trabaja precisamente sobre esa fricción. El repositorio es una demo local, deliberadamente acotada, para fijar un contrato conversacional: responder ahora con lo que el sistema sabe, ejecutar la operación fuera del turno visible del chat y devolver el cierre cuando el resultado ya existe.
+[`Reactive / Proactive Agent`](https://fjmmontiel.github.io/reactive-proactive-agent/) trabaja precisamente sobre este problema. 
+
+El repositorio es una demo local acotada, para fijar un contrato conversacional: responder ahora con lo que el sistema sabe, ejecutar la operación fuera del turno visible del chat y devolver el cierre cuando el resultado ya existe.
 
 Con esta idea correctamente implementada tenemos el *componente reactivo* del agente, que acepta la petición sin esperar a la API externa, y el *componente proactivo*, que vuelve más tarde con un cierre único cuando el lote ya está resuelto o queda listo para resincronizarse en el siguiente turno.
 
-El patrón se entiende mejor si se mira como tres responsabilidades que conviven dentro del mismo sistema. La parte reactiva responde al usuario sin bloquear el chat, por lo que se pueden seguir procesando más peticiones. La parte asíncrona mantiene vivo el trabajo técnico fuera del historial visible del chat y la parte proactiva decide cuándo puede volver el resultado sin invadir otro turno ni producir varios cierres para el mismo lote.
-
-La demo usa provisión de accesos porque es un dominio suficientemente concreto para obligar al agente a tocar un sistema externo. La tool activa se llama `provision_access_async`, acepta un batch `accesses` y lanza cada acceso como operación independiente.
+La demo usa provisión de accesos porque es un dominio suficientemente concreto para obligar al agente a tocar un sistema externo.
 
 {{ include_html("snippets/articulos-tecnicos/async-tool-calls-panorama.html") }}
 
 ## El problema no es la tool, es el tiempo
 
-En un chatbot clásico, el turno del usuario y la respuesta del agente forman una unidad casi cerrada. Entra un mensaje, sale una respuesta. Las tools rompen esa comodidad cuando su resultado ya no cabe dentro del mismo turno. Si el agente espera a la API, el chat queda bloqueado. Si responde como si la API ya hubiera confirmado, miente sobre el estado real. Si vuelca cada detalle técnico en la conversación, el historial visible acaba cargando trabajo que pertenece al runtime.
+En un chatbot clásico las tools rompen el flujo conversacional nornmal cuando esa tool implica la ejecución de una API externa. Si el agente espera a la API, el chat queda bloqueado porque la tool no ha terminado y no libera al LLM. Si responde como si la API ya hubiera terminado, miente sobre el estado real, pero si vuelca cada detalle técnico en la conversación, el historial visible acaba cargando detalles técnicos que no son relevantes para el usuario.
 
 La decisión de diseño del repo consiste en separar esos planos sin perder continuidad para el usuario. El agente puede decir que pone en marcha una gestión, pero no debe darla por terminada hasta que el sistema externo cierre. Mientras tanto, el usuario puede preguntar otra cosa o pedir otro acceso. El runtime conserva el estado operativo, los intentos HTTP y los resultados pendientes sin convertirlos en mensajes `system` permanentes dentro del chat.
 
-Esa separación se nota desde el estado en memoria. `RuntimeState` mantiene el historial visible, las operaciones, los pendientes y las trazas en estructuras distintas:
+Esa separación se hace desde el estado en memoria. `RuntimeState` mantiene el historial visible, las operaciones, los pendientes y las trazas en estructuras distintas:
 
 ```python
 class RuntimeState:
@@ -162,7 +162,7 @@ def handle_background_completion(self, conversation_id: str) -> bool:
     return True
 ```
 
-La regla actual es más estricta que “terminó una task, manda un mensaje”. El cierre sale cuando ya no quedan operaciones abiertas para esa sesión. Si hay varias gestiones en el mismo lote, se acumulan. Si la sesión está ocupada, se reintenta. Si la configuración fuerza resincronización, el resultado queda preparado para el siguiente turno. Esa disciplina evita el comportamiento más molesto de muchos agentes con background work: mensajes parciales, duplicados o fuera de contexto.
+La regla actual es más estricta que “terminó una task, manda un mensaje”. El cierre sale cuando ya no quedan operaciones abiertas para esa sesión y si hay varias gestiones en el mismo lote, se acumulan. Si la sesión está ocupada, se reintenta. Si la configuración fuerza resincronización, el resultado queda preparado para el siguiente turno. Esa disciplina evita el comportamiento más molesto de muchos agentes con background work: mensajes parciales, duplicados o fuera de contexto.
 
 Hay otro detalle importante en la rama pública. Cuando todas las operaciones terminan bien, el follow-up no vuelve a llamar al modelo: se construye con `_build_guaranteed_proactive_followup()`. El LLM solo entra en el cierre si hay fallos finales y hace falta convertir varios outcomes en una explicación breve con alternativa concreta. Esa separación reduce variabilidad justo en el punto donde el sistema necesita ser más predecible.
 
@@ -180,36 +180,29 @@ def _build_pending_updates(self, pending_updates: list[PendingUpdate]) -> str | 
     return "\n".join(lines)
 ```
 
-Ese texto interno no es contenido editorial para el usuario. Es una instrucción de continuidad para el modelo. La frontera sigue siendo la misma: el runtime puede usar estado operativo para responder mejor, pero no tiene por qué exponerlo como si fuera parte natural de la conversación.
-
-## La interfaz no es un adorno
-
-Una demo de este patrón falla si solo enseña un chat. El usuario tiene que ver que la conversación sigue siendo limpia mientras las operaciones se mueven por otro carril. Por eso `demo_view.py` convierte el snapshot del runtime en paneles de sesión, operaciones, timeline, intentos HTTP, eventos y trazas. `demo_page.py` monta esa lectura en una UI local que deja comparar el hilo visible con el estado interno sin mezclar ambos planos.
-
-La UI actual no intenta parecer un producto final. Su función es pedagógica: hacer observable el contrato. En el chat se ve lo que el usuario recibiría. En el panel de operaciones se ve lo que el runtime está procesando. En el detalle interno se ve por qué una operación está en retry, acumulada, lista para cierre o ya avisada. También deja ver el modo de modelo: `mock` para una demo plug-and-play sin credenciales y `responses` cuando se configura un proveedor real. Esa separación visual refuerza la separación de estado que ya existe en el código.
-
-El adaptador del modelo cumple otra función de borde. `OpenAIResponsesAdapter` construye payloads compatibles con Responses, separa mensajes de sistema, historial y tools, y parsea tool calls desde la respuesta del proveedor. El mock adapter replica lo suficiente de ese comportamiento para que la demo arranque sin credenciales y siga siendo verificable. Esa decisión práctica importa: el patrón se puede enseñar en modo `mock`, y el modo real queda disponible cuando hay configuración válida.
+Ese texto interno no es una instrucción de continuidad para el modelo. Es decir, el runtime puede usar estado operativo para responder mejor, pero no tiene por qué exponerlo como si fuera parte natural de la conversación.
 
 ## Un siguiente paso razonable hacia producción
 
-El repo actual vive en un único proceso Python, con estado en memoria, servidor demo local, mock service y navegador local. Esa limitación está documentada en el README y conviene respetarla. La demo no persiste estado real, no despliega infraestructura y no pretende cubrir seguridad de producción. Aun así, el código ya separa responsabilidades de una forma suficientemente limpia como para plantear un siguiente paso técnico sin convertirlo en una supuesta arquitectura definitiva.
+El repo actual vive en un único proceso Python, con estado en memoria, servidor demo local, mock service y navegador local. Esa limitación está documentada en el repositorio y conviene respetarla. La demo no persiste estado real, no despliega infraestructura y no pretende cubrir seguridad de producción. Aun así, el código ya separa responsabilidades de una forma suficientemente limpia como para plantear un siguiente paso técnico sin convertirlo en una arquitectura definitiva.
 
-La lectura correcta de la siguiente lámina no es “así se vería el sistema final”, sino algo más concreto: “qué piezas mínimas habría que sacar del proceso local para que este patrón empiece a comportarse como un sistema operable”. El primer cambio sería mover el estado compartido a Redis, no por moda infra, sino para conservar `pending_updates`, `inflight_count`, locks por sesión e idempotencia aunque el proceso que atiende el turno desaparezca. El segundo sería separar la aceptación visible de la ejecución real con una cola y un pool de workers. El tercero sería dejar la política de cierre en un componente explícito que decida si el lote ya puede volver como follow-up o si debe quedar preparado para el siguiente turno.
+La lectura correcta de la siguiente lámina sería “qué piezas mínimas habría que sacar del proceso local para que este patrón empiece a comportarse como un sistema operable”. 
+El primer cambio sería mover el estado compartido a Redis, para conservar `pending_updates`, `inflight_count`, locks por sesión e idempotencia aunque el proceso que atiende el turno desaparezca. 
+El segundo sería separar la aceptación visible de la ejecución real con una cola y un pool de workers. 
+El tercero sería dejar la política de cierre en un componente explícito que decida si el lote ya puede volver como follow-up o si debe quedar preparado para el siguiente turno.
 
 {{ include_html("snippets/articulos-tecnicos/async-tool-calls-arquitectura-objetivo.html") }}
 
-Ese salto intermedio también obliga a endurecer algunas piezas que en local todavía pueden vivir de forma implícita. La primera es la idempotencia: no basta con confiar en el identificador de la API externa; hace falta una clave de intención propia del runtime para no duplicar provisiones ni follow-ups si hay reinicios o replays. La segunda es la gestión de fallo terminal: cuando una operación agota retries, no debería perderse ni quedarse en un limbo, sino pasar a una DLQ con contexto suficiente para inspección, replay o intervención manual. La tercera es la observabilidad: en producción no basta con ver que “algo tardó”, hay que poder reconstruir por qué una sesión quedó agregando resultados, por qué un cierre salió por `proactive` y no por `next_turn`, o en qué punto exacto un lote dejó de avanzar.
+Ese salto intermedio también obliga a endurecer algunas piezas que en local todavía pueden vivir de forma implícita. La primera es la idempotencia: no basta con confiar en el identificador de la API externa, hace falta una clave de intención propia del runtime para no duplicar provisiones ni follow-ups si hay reinicios o replays. 
 
-Por eso conviene presentar esta evolución como un arnés de fiabilidad y no como una gran arquitectura maestra. Redis, cola, workers, política de cierre, DLQ y trazas no convierten la demo en una plataforma completa. La acercan a producción sin romper lo valioso del repo, que es el contrato conversacional. El agente sigue respondiendo sin esperar la API, el historial visible no se convierte en base de datos técnica y el cierre sigue volviendo una sola vez, cuando el lote ya está en condiciones de cerrarse.
+La segunda es la gestión de fallo terminal: cuando una operación agota retries, no debería perderse ni quedarse en un limbo, sino pasar a una DLQ con contexto suficiente para inspección, replay o intervención manual. La tercera es la observabilidad: en producción no basta con ver que “algo tardó”, hay que poder reconstruir por qué una sesión quedó agregando resultados, por qué un cierre salió por `proactive` y no por `next_turn`, o en qué punto exacto un lote dejó de avanzar.
 
-La última lámina mira el mismo patrón desde el recorrido conversacional. No presenta una plataforma nueva. Ordena el sistema en capas: usuario, chat visible, runtime, procesamiento interno, estado persistente y entrega diferida.
+Por eso se presenta esta evolución como un arnés de fiabilidad y no como una gran arquitectura maestra. Redis, cola, workers, política de cierre, DLQ y trazas no convierten la demo en una plataforma completa, pero la acercan a producción sin romper lo valioso del repo, que es el contrato conversacional. El agente sigue respondiendo sin esperar la API, el historial visible no se convierte en base de datos técnica y el cierre sigue volviendo una sola vez, cuando el lote ya está en condiciones de cerrarse.
 
 {{ include_html("snippets/articulos-tecnicos/async-tool-calls-runtime-conversacional.html") }}
 
 ## Qué aporta realmente el repo
 
-El valor de `Reactive / Proactive Agent` no está en descubrir que se puede ejecutar trabajo en background. Eso es una técnica conocida. Lo interesante es que fija el contrato conversacional alrededor de ese trabajo: qué puede prometer el agente ahora, dónde vive el estado técnico, cuándo se acumulan resultados y cómo vuelve el cierre sin ensuciar el hilo.
+El valor de `Reactive / Proactive Agent` no está en descubrir que se puede ejecutar trabajo en background. Eso es una técnica conocida y estándar en el mundo software. Lo interesante es que fija el contrato conversacional alrededor de ese trabajo: qué puede decir el agente ahora, dónde vive el estado técnico, cuándo se acumulan resultados y cómo vuelve a informar al usuario sin ensuciar el hilo.
 
-Esa es una pieza pequeña, pero muy práctica, dentro del diseño de agentes. Muchas demos de tool calling enseñan al modelo llamando una función y recibiendo una respuesta inmediata. Este repo se centra en el caso más incómodo: la operación sigue viva después del turno. Ahí aparecen los problemas que luego pesan en producto real: latencia, retries, mensajes duplicados, estado invisible, interrupciones fuera de orden y conversaciones que pierden honestidad sobre lo que ya ocurrió.
-
-La demo no resuelve producción. Sí deja una forma clara de pensar el contrato. El usuario puede seguir hablando. El sistema puede seguir trabajando. El cierre vuelve cuando hay algo real que contar. Para un agente con tools asíncronas, esa frontera vale más que una llamada HTTP bien envuelta.
+Esta es una pieza pequeña, pero muy práctica, dentro del diseño de agentes. Muchas demos de tool calling enseñan al modelo llamando una función y recibiendo una respuesta inmediata. Este repo se centra en el caso más incómodo: la operación sigue viva después del turno. Ahí aparecen los problemas que luego pesan en producto real: latencia, retries, mensajes duplicados, estado invisible, interrupciones fuera de orden y conversaciones que pierden honestidad sobre lo que ya ocurrió.
