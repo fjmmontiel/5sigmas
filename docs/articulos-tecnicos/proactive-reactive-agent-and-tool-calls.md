@@ -5,6 +5,8 @@ date: 2026-04-23
 date_modified: 2026-05-11
 keywords: "agente reactivo, agente proactivo, tool calls, async tool calls, runtime conversacional, background tasks, pending updates"
 article_state: published
+video: "reactive-proactive-agent-behavior.mp4"
+video_duration: "PT1M00S"
 tags:
   - IA
   - Agentes
@@ -18,10 +20,6 @@ tags:
 > **Repositorio base:** [`Reactive / Proactive Agent`](https://github.com/fjmmontiel/reactive-proactive-agent)  
 > **Estado:** publicado en 5sigmas; demo local acotada con repo público asociado  
 > **Alcance:** contrato conversacional, runtime local, mock service y cierre diferido  
-
-<video controls playsinline preload="metadata" style="width:100%;max-width:980px;border-radius:14px;display:block;margin:1rem 0 1.5rem">
-  <source src="./reactive-proactive-agent-behavior.mp4" type="video/mp4">
-</video>
 
 Cuando un agente usa tools contra sistemas externos, la parte difícil no está en llamar a una API externa.
 Esta llamada se puede hacer con una función, una cola o una librería HTTP cualquiera. Pero lo que complica el diseño, es que la conversación que mantenemos con el LLM y la operación externa puede hacer que el chat se quede bloqueado o que la política de reintentos en llamadas quede sujeta al comportamiento probabilístico de los LLMs.
