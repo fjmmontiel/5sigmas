@@ -58,9 +58,6 @@ videos
 videos/frames/
 videos/assets/
 videos/batch-render-v2.mjs
-scripts/build_ops_seed.py
-scripts/generate_dashboard_state.py
-scripts/validate_ops_manifests.py
 # Video output — ignore everywhere except published series (served from same domain)
 *.mp4
 *.webm
