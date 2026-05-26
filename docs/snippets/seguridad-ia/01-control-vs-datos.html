@@ -1,0 +1,171 @@
+<div class="pidi">
+  <div class="pidi-head">
+    <div class="pidi-title">Dónde nace el problema</div>
+    <div class="pidi-sub">El modelo recibe control y datos dentro del mismo flujo textual. La defensa buena no es "pedirle más obediencia", sino reducir cuánto control operativo puede ganar el contenido no confiable.</div>
+  </div>
+
+  <div class="pidi-grid">
+    <div class="pidi-panel">
+      <div class="pidi-label">Plano ideal</div>
+      <div class="pidi-lane pidi-lane--safe">
+        <div class="pidi-chip pidi-chip--ctrl">control</div>
+        <div class="pidi-arrow">→</div>
+        <div class="pidi-box">reglas del sistema</div>
+      </div>
+      <div class="pidi-lane">
+        <div class="pidi-chip pidi-chip--data">datos</div>
+        <div class="pidi-arrow">→</div>
+        <div class="pidi-box">contenido a procesar</div>
+      </div>
+      <div class="pidi-note">La aplicación sabe qué parte decide y qué parte solo informa.</div>
+    </div>
+
+    <div class="pidi-panel pidi-panel--risk">
+      <div class="pidi-label">Plano real en un LLM</div>
+      <div class="pidi-stream">
+        <div class="pidi-token pidi-token--ctrl">system prompt</div>
+        <div class="pidi-token pidi-token--usr">pregunta usuario</div>
+        <div class="pidi-token pidi-token--ctx">texto recuperado</div>
+        <div class="pidi-token pidi-token--tool">salida de tool</div>
+      </div>
+      <div class="pidi-core">
+        <div class="pidi-core-ring"></div>
+        <div class="pidi-core-text">mismo canal<br>de contexto</div>
+      </div>
+      <div class="pidi-riskline">Si el contenido hostil entra en contexto, compite por mover la decisión.</div>
+    </div>
+  </div>
+</div>
+
+<style>
+.pidi, .pidi * { box-sizing: border-box; }
+.pidi {
+  --teal:#26A69A;
+  --blue:#324AB2;
+  --amber:#FFB343;
+  --risk:#d94d4d;
+  --ink:#0f172a;
+  --muted:#607085;
+  --line:rgba(15,23,42,.12);
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 22px;
+  border-radius: 24px;
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, rgba(255,255,255,.98), rgba(244,247,251,.96));
+}
+.pidi-head { display:grid; gap:7px; }
+.pidi-title {
+  color: var(--ink);
+  font-size: clamp(22px, 3vw, 30px);
+  font-weight: 900;
+  letter-spacing: -.04em;
+}
+.pidi-sub { color: var(--muted); font-size: 14px; line-height: 1.58; max-width: 70ch; }
+.pidi-grid {
+  display:grid;
+  grid-template-columns: minmax(0,1fr) minmax(0,1.1fr);
+  gap: 16px;
+  margin-top: 18px;
+}
+.pidi-panel {
+  padding: 18px;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.84);
+}
+.pidi-panel--risk {
+  background: linear-gradient(180deg, rgba(50,74,178,.05), rgba(255,255,255,.92));
+}
+.pidi-label {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .16em;
+}
+.pidi-lane {
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 16px;
+  background: rgba(244,247,251,.9);
+  border: 1px solid rgba(15,23,42,.08);
+}
+.pidi-lane--safe { margin-top: 14px; }
+.pidi-chip, .pidi-box {
+  padding: 10px 12px;
+  border-radius: 14px;
+  font-size: 12px;
+  font-weight: 800;
+}
+.pidi-chip { color: white; text-transform: uppercase; letter-spacing: .08em; }
+.pidi-chip--ctrl { background: linear-gradient(135deg, var(--blue), #4e6ae0); }
+.pidi-chip--data { background: linear-gradient(135deg, var(--teal), #43c5b8); }
+.pidi-box {
+  color: var(--ink);
+  background: white;
+  border: 1px solid rgba(15,23,42,.08);
+}
+.pidi-arrow { color: var(--amber); font-size: 18px; font-weight: 900; }
+.pidi-note, .pidi-riskline {
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+.pidi-stream {
+  display:flex;
+  flex-wrap:wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+.pidi-token {
+  padding: 10px 12px;
+  border-radius: 999px;
+  color: var(--ink);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  border: 1px solid rgba(15,23,42,.08);
+  background: white;
+}
+.pidi-token--ctrl { background: rgba(50,74,178,.12); }
+.pidi-token--usr { background: rgba(38,166,154,.12); }
+.pidi-token--ctx { background: rgba(255,179,67,.18); }
+.pidi-token--tool { background: rgba(217,77,77,.14); }
+.pidi-core {
+  position: relative;
+  display:grid;
+  place-items:center;
+  min-height: 180px;
+  margin-top: 16px;
+}
+.pidi-core-ring {
+  position:absolute;
+  width: 180px;
+  height: 180px;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at center, rgba(255,255,255,.96) 0 36%, transparent 37%),
+    conic-gradient(from 0deg, rgba(50,74,178,.9), rgba(38,166,154,.9), rgba(255,179,67,.9), rgba(217,77,77,.85), rgba(50,74,178,.9));
+  filter: drop-shadow(0 18px 34px rgba(15,23,42,.1));
+}
+.pidi-core-text {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  color: var(--ink);
+  font-size: 18px;
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -.03em;
+}
+@media (max-width: 760px) {
+  .pidi-grid { grid-template-columns: 1fr; }
+}
+</style>
+

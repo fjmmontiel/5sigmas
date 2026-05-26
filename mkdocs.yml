@@ -75,6 +75,9 @@ nav:
           - Test-Time Compute: series/modelos-razonadores/03-test-time-compute.md
           - Tiempo, latencia, streaming e interacción humana: series/modelos-razonadores/04-latencia-streaming.md
           - Riesgos: series/modelos-razonadores/05-riesgos.md
+      - Seguridad en IA:
+          - Presentación: series/seguridad-ia/00_presentacion_serie.md
+          - Prompt injection: series/seguridad-ia/01-prompt-injection.md
       - IA, PIB, bienestar y energía:
           - Presentación: series/ia-pib-bienestar-energia/00_presentacion_serie.md
           - Electricidad y bienestar: series/ia-pib-bienestar-energia/01-electricidad-bienestar.md

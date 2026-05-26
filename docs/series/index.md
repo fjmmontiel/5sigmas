@@ -45,6 +45,13 @@ Divulgación técnica sobre IA organizada en series temáticas. Cada serie es un
   <div class="si-cta">Leer →</div>
 </a>
 
+<a href="/series/seguridad-ia/00_presentacion_serie/" class="si-card">
+  <div class="si-label">Técnico · 5 capítulos</div>
+  <div class="si-title">Seguridad en IA</div>
+  <div class="si-desc">Prompt injection, jailbreaks, memoria envenenada y controles de producción. Qué cambia cuando un LLM no solo responde, sino que recupera, decide y actúa.</div>
+  <div class="si-cta">Leer →</div>
+</a>
+
 <a href="/series/ia-pib-bienestar-energia/00_presentacion_serie/" class="si-card">
   <div class="si-label">General · 4 capítulos</div>
   <div class="si-title">IA, PIB, bienestar y energía</div>
@@ -58,7 +65,7 @@ Divulgación técnica sobre IA organizada en series temáticas. Cada serie es un
 
 ### Por dónde empezar
 
-Si es tu primer contacto con la IA, la serie [Fundamentos de IA e IA generativa](/series/fundamentos-ia-iag/00_presentacion_serie/) establece el vocabulario y las distinciones básicas que las otras series dan por supuestas. Si ya tienes base conceptual y quieres entender cómo llegamos hasta aquí, [De las cavernas a la AGI](/series/from-cave-to-agi/00_presentacion_serie/) ofrece el contexto histórico y técnico completo. Si te interesa la frontera actual de modelos que procesan texto, imagen y audio al mismo tiempo, empieza por [Multimodalidad en IA generativa](/series/multimodalidad-iag/00_presentacion_serie/). Si quieres entender cómo y por qué los modelos razonadores son distintos, qué es el test-time compute y qué costes reales introduce en producción, sigue con [Modelos razonadores](/series/modelos-razonadores/00_presentacion_serie/). Si te interesa la relación entre electricidad, productividad, crecimiento y calidad de vida, la serie [IA, PIB, bienestar y energía](/series/ia-pib-bienestar-energia/00_presentacion_serie/) completa esa capa económica y material.
+Si es tu primer contacto con la IA, la serie [Fundamentos de IA e IA generativa](/series/fundamentos-ia-iag/00_presentacion_serie/) establece el vocabulario y las distinciones básicas que las otras series dan por supuestas. Si ya tienes base conceptual y quieres entender cómo llegamos hasta aquí, [De las cavernas a la AGI](/series/from-cave-to-agi/00_presentacion_serie/) ofrece el contexto histórico y técnico completo. Si te interesa la frontera actual de modelos que procesan texto, imagen y audio al mismo tiempo, empieza por [Multimodalidad en IA generativa](/series/multimodalidad-iag/00_presentacion_serie/). Si quieres entender cómo y por qué los modelos razonadores son distintos, qué es el test-time compute y qué costes reales introduce en producción, sigue con [Modelos razonadores](/series/modelos-razonadores/00_presentacion_serie/). Si lo que te interesa es la seguridad operativa de RAG, agentes y tool calling, la nueva serie [Seguridad en IA](/series/seguridad-ia/00_presentacion_serie/) abre esa capa. Si te interesa la relación entre electricidad, productividad, crecimiento y calidad de vida, la serie [IA, PIB, bienestar y energía](/series/ia-pib-bienestar-energia/00_presentacion_serie/) completa la dimensión económica y material.
 
 </div>
 

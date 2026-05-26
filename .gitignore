@@ -1,5 +1,6 @@
 .venv/
 5sigmas.html
+business
 MEMORY.md
 CALENDAR.html
 TODO.html
@@ -20,9 +21,13 @@ ENV/
 documentacion_interna/
 tmp/
 distribution/
+distribution
 ops/
+ops
 playbooks/
+playbooks
 research/
+research
 business/
 remotion/
 posts/
@@ -36,6 +41,7 @@ output/*
 exports/*
 test/*
 tools/
+tools
 !tools/
 !tools/remotion/
 !tools/remotion/package.json
@@ -48,6 +54,7 @@ tools/
 !tools/remotion/src/**
 tools/remotion/node_modules/
 videos/output/
+videos
 videos/frames/
 videos/assets/
 videos/batch-render-v2.mjs
