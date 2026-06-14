@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import fnmatch
 import re
 import sys
 import xml.etree.ElementTree as ET
@@ -12,6 +13,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 DOCS = ROOT / "docs"
 SITE = ROOT / "site"
+MKDOCS = ROOT / "mkdocs.yml"
 NS = {
     "sm": "http://www.sitemaps.org/schemas/sitemap/0.9",
     "video": "http://www.google.com/schemas/sitemap-video/1.1",
@@ -42,6 +44,28 @@ def site_html_for_md(path: Path) -> Path:
     return SITE.joinpath(*rel.parts, "index.html")
 
 
+def exclude_patterns() -> list[str]:
+    lines = MKDOCS.read_text(encoding="utf-8").splitlines()
+    patterns: list[str] = []
+    collecting = False
+    for line in lines:
+        if not collecting:
+            if line.startswith("exclude_docs: |"):
+                collecting = True
+            continue
+        if line and not line.startswith("  "):
+            break
+        pattern = line.strip()
+        if pattern:
+            patterns.append(pattern)
+    return patterns
+
+
+def is_excluded(path: Path, patterns: list[str]) -> bool:
+    rel = path.relative_to(DOCS).as_posix()
+    return any(fnmatch.fnmatch(rel, pattern) for pattern in patterns)
+
+
 def fail(message: str, failures: list[str]) -> None:
     failures.append(message)
 
@@ -49,8 +73,11 @@ def fail(message: str, failures: list[str]) -> None:
 def main() -> int:
     failures: list[str] = []
     video_pages: list[tuple[Path, dict[str, str]]] = []
+    excluded = exclude_patterns()
 
     for md in sorted((DOCS / "series").glob("*/*.md")):
+        if is_excluded(md, excluded):
+            continue
         meta = frontmatter(md)
         if not meta or "video" not in meta:
             continue
