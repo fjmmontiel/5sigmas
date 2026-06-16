@@ -1,0 +1,80 @@
+<div class="dcc-cobalt" data-demo="04-cobalto-cadena" data-anim-fullscreen="off" data-anim-contrast="force">
+  <div class="dcc-cobalt__head">
+    <div class="dcc-cobalt__title">El cobalto resume la cadena más incómoda: concentración geográfica, refino y coste humano</div>
+    <div class="dcc-cobalt__sub">
+      No es un mineral abstracto del rack. Es una ruta corta con cuatro estaciones muy concretas y un desequilibrio
+      claro entre dónde se extrae, dónde se refina y dónde se captura el valor final.
+    </div>
+  </div>
+
+  <div class="dcc-cobalt__chain">
+    <div class="dcc-cobalt__step">
+      <span>Origen</span>
+      <strong>RDC · 74%</strong>
+      <small>Extracción concentrada y daños humanos documentados en origen.</small>
+    </div>
+    <div class="dcc-cobalt__arrow"></div>
+    <div class="dcc-cobalt__step">
+      <span>Refino</span>
+      <strong>China · 67%</strong>
+      <small>El cuello industrial se estrecha todavía más.</small>
+    </div>
+    <div class="dcc-cobalt__arrow"></div>
+    <div class="dcc-cobalt__step">
+      <span>Producto</span>
+      <strong>Cátodo NMC</strong>
+      <small>UPS de ion-litio más compacta y longeva que plomo-ácido.</small>
+    </div>
+    <div class="dcc-cobalt__arrow"></div>
+    <div class="dcc-cobalt__step dcc-cobalt__step--dc">
+      <span>Destino</span>
+      <strong>Datacenter / IA</strong>
+      <small>La autonomía eléctrica del centro descansa también en esta cadena.</small>
+    </div>
+  </div>
+
+  <div class="dcc-cobalt__note">
+    El problema no termina en el rack: empieza mucho antes, donde la cadena es más opaca y donde la sustitución rápida
+    casi no existe a escala.
+  </div>
+</div>
+
+<style>
+  .dcc-cobalt, .dcc-cobalt * { box-sizing:border-box; }
+  .dcc-cobalt {
+    --amber:#FFB343; --red:#ff8d7a; --teal:#26A69A; --bg:var(--md-default-bg-color,#fff);
+    --line:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 15%, transparent);
+    --text:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 94%, transparent);
+    --muted:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 63%, transparent);
+    display:grid; gap:14px; max-width:1080px; margin:0 auto; padding:clamp(16px,2vw,24px);
+    border-radius:24px; border:1px solid var(--line);
+    background:
+      radial-gradient(100% 130% at 0% 0%, color-mix(in srgb, var(--red) 10%, transparent), transparent 50%),
+      radial-gradient(90% 110% at 100% 100%, color-mix(in srgb, var(--amber) 8%, transparent), transparent 50%),
+      var(--bg);
+    color:var(--text); font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  }
+  [data-md-color-scheme="slate"] .dcc-cobalt { --line:rgba(226,232,240,.16); --text:rgba(236,244,255,.95); --muted:rgba(236,244,255,.68); }
+  .dcc-cobalt__head { display:grid; gap:6px; max-width:74ch; }
+  .dcc-cobalt__title { font-size:clamp(22px,3vw,30px); font-weight:900; line-height:1.05; letter-spacing:0; }
+  .dcc-cobalt__sub { font-size:14px; line-height:1.55; color:var(--muted); }
+  .dcc-cobalt__chain { display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:10px; align-items:center; }
+  .dcc-cobalt__step {
+    display:grid; gap:8px; padding:16px; border-radius:20px; border:1px solid var(--line);
+    background: color-mix(in srgb, var(--bg) 90%, #09121f 10%);
+  }
+  .dcc-cobalt__step--dc { border-color: color-mix(in srgb, var(--teal) 24%, var(--line)); background: color-mix(in srgb, var(--teal) 8%, transparent); }
+  .dcc-cobalt__step span { font-size:11px; font-weight:900; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); }
+  .dcc-cobalt__step strong { font-size:22px; line-height:1.05; letter-spacing:0; }
+  .dcc-cobalt__step small, .dcc-cobalt__note { font-size:12.8px; line-height:1.5; color:var(--muted); }
+  .dcc-cobalt__arrow { height:2px; background:linear-gradient(90deg, rgba(255,141,122,.2), rgba(255,141,122,.9)); position:relative; }
+  .dcc-cobalt__arrow::after { content:""; position:absolute; right:-2px; top:-4px; border-left:10px solid rgba(255,141,122,.9); border-top:5px solid transparent; border-bottom:5px solid transparent; }
+  .dcc-cobalt__note { padding:12px 14px; border-radius:16px; border:1px solid var(--line); background:rgba(255,255,255,.04); }
+  @media (max-width: 980px) {
+    .dcc-cobalt { overflow-x:auto; overscroll-behavior-x:contain; }
+    .dcc-cobalt__head,
+    .dcc-cobalt__chain,
+    .dcc-cobalt__note { min-width:920px; }
+    .dcc-cobalt__chain { grid-template-columns:1fr 34px 1fr 34px 1fr 34px 1fr; }
+  }
+</style>

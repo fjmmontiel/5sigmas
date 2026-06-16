@@ -1,0 +1,89 @@
+<div class="dmc-minerals" data-demo="04-minerales-cadena" data-anim-fullscreen="off" data-anim-contrast="force">
+  <div class="dmc-minerals__head">
+    <div class="dmc-minerals__title">Un rack de IA es también un mapa de dependencia mineral</div>
+    <div class="dmc-minerals__sub">
+      La dependencia no está “fuera” del datacenter. Entra por interconexión, baterías, transceptores, condensadores
+      y cobre estructural antes de que el primer workload arranque.
+    </div>
+  </div>
+
+  <div class="dmc-minerals__map">
+    <svg viewBox="0 0 920 420" role="img" aria-label="Rack de IA con rutas de dependencia mineral">
+      <defs>
+        <linearGradient id="rack-metal" x1="0" x2="1">
+          <stop offset="0" stop-color="#324AB2" stop-opacity=".16"/>
+          <stop offset="1" stop-color="#26A69A" stop-opacity=".18"/>
+        </linearGradient>
+      </defs>
+      <g class="dmc-minerals__rack">
+        <rect x="56" y="50" width="318" height="320" rx="28"/>
+        <rect x="86" y="84" width="258" height="72" rx="18"/>
+        <rect x="86" y="176" width="258" height="72" rx="18"/>
+        <rect x="86" y="268" width="258" height="72" rx="18"/>
+        <path d="M118 120H312M118 212H312M118 304H312"/>
+        <text x="86" y="34">rack de IA</text>
+      </g>
+      <g class="dmc-minerals__hotspots">
+        <circle cx="330" cy="120" r="12"/><text x="118" y="118">interconnects</text>
+        <circle cx="330" cy="212" r="12"/><text x="118" y="210">transceptores</text>
+        <circle cx="330" cy="304" r="12"/><text x="118" y="302">UPS / power shelf</text>
+      </g>
+      <g class="dmc-minerals__links">
+        <path d="M344 120 C430 102 476 74 540 74"/>
+        <path d="M344 212 C432 204 484 196 540 196"/>
+        <path d="M344 304 C432 316 484 334 540 334"/>
+        <path d="M344 286 C414 260 470 254 540 254"/>
+      </g>
+      <g class="dmc-minerals__materials">
+        <g transform="translate(560 44)">
+          <rect width="294" height="68" rx="18"/><text x="18" y="28">Cobalto</text><text x="18" y="50">RDC 74% extracción · China 67% refino</text>
+        </g>
+        <g transform="translate(560 166)">
+          <rect width="294" height="68" rx="18"/><text x="18" y="28">REE</text><text x="18" y="50">China 91% de la refinación</text>
+        </g>
+        <g transform="translate(560 226)">
+          <rect width="294" height="68" rx="18"/><text x="18" y="28">Tántalo / cobre</text><text x="18" y="50">condensadores, buses y cableado</text>
+        </g>
+        <g transform="translate(560 304)">
+          <rect width="294" height="68" rx="18"/><text x="18" y="28">Litio + cobalto</text><text x="18" y="50">baterías y respaldo eléctrico</text>
+        </g>
+      </g>
+    </svg>
+  </div>
+
+  <div class="dmc-minerals__caption">
+    <strong>Lectura correcta</strong>
+    <span>El riesgo no es un mineral aislado: es que varias piezas críticas del mismo rack dependen de cadenas concentradas a la vez.</span>
+  </div>
+</div>
+
+<style>
+  .dmc-minerals, .dmc-minerals * { box-sizing:border-box; }
+  .dmc-minerals {
+    --teal:#26A69A; --sky:#7cc7ff; --amber:#FFB343; --red:#ff8d7a; --bg:var(--md-default-bg-color,#fff);
+    --line:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 15%, transparent);
+    --text:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 94%, transparent);
+    --muted:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 63%, transparent);
+    display:grid; gap:16px; max-width:980px; margin:0 auto; padding:clamp(16px,2vw,24px);
+    border-radius:24px; border:1px solid var(--line);
+    background:radial-gradient(100% 130% at 0% 0%, color-mix(in srgb, var(--amber) 10%, transparent), transparent 50%), radial-gradient(90% 110% at 100% 100%, color-mix(in srgb, var(--teal) 9%, transparent), transparent 50%), var(--bg);
+    color:var(--text); font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  }
+  [data-md-color-scheme="slate"] .dmc-minerals { --line:rgba(226,232,240,.16); --text:rgba(236,244,255,.95); --muted:rgba(236,244,255,.68); }
+  .dmc-minerals__head { display:grid; gap:6px; max-width:76ch; }
+  .dmc-minerals__title { font-size:clamp(22px,3vw,30px); font-weight:900; line-height:1.05; letter-spacing:0; }
+  .dmc-minerals__sub { font-size:14px; line-height:1.55; color:var(--muted); }
+  .dmc-minerals__map, .dmc-minerals__caption { border:1px solid var(--line); border-radius:20px; background: color-mix(in srgb, var(--bg) 92%, #09121f 8%); }
+  .dmc-minerals__map { padding:10px; overflow:hidden; }
+  .dmc-minerals svg { width:100%; height:auto; min-height:300px; }
+  .dmc-minerals__rack rect:first-child { fill:url(#rack-metal); stroke:var(--line); stroke-width:2; }
+  .dmc-minerals__rack rect:not(:first-child), .dmc-minerals__materials rect { fill:color-mix(in srgb, var(--bg) 88%, #09121f 12%); stroke:var(--line); }
+  .dmc-minerals__rack path { stroke:var(--line); stroke-width:4; stroke-linecap:round; }
+  .dmc-minerals__hotspots circle { fill:#FFB343; stroke:var(--bg); stroke-width:4; }
+  .dmc-minerals__links path { fill:none; stroke:#26A69A; stroke-width:4; stroke-linecap:round; stroke-dasharray:9 8; }
+  .dmc-minerals text { fill:var(--text); font-size:19px; font-weight:900; }
+  .dmc-minerals text + text { fill:var(--muted); font-size:14px; font-weight:800; }
+  .dmc-minerals__caption { padding:14px 16px; }
+  .dmc-minerals__caption strong { display:block; font-size:15px; }
+  .dmc-minerals__caption span { display:block; margin-top:4px; color:var(--muted); font-size:13px; line-height:1.45; }
+</style>

@@ -1,0 +1,107 @@
+<div class="dse-sector" data-demo="04-sector-consumo" data-anim-fullscreen="off" data-anim-contrast="force">
+  <div class="dse-sector__head">
+    <div class="dse-sector__title">El sector crece por escala agregada, no porque el PUE deje de importar</div>
+    <div class="dse-sector__sub">
+      PUE explica la eficiencia de una instalación. La presión sistémica aparece cuando muchos centros eficientes
+      crecen a la vez y la red tiene que absorber el volumen total.
+    </div>
+  </div>
+
+  <div class="dse-sector__viz" aria-label="Trayectoria de consumo eléctrico de datacenters y presión sobre la red">
+    <svg class="dse-sector__chart" viewBox="0 0 860 330" role="img" aria-label="Consumo global de 415 a 945 TWh y participación de Estados Unidos de 4,4 a 12 por ciento">
+      <defs>
+        <linearGradient id="dse-line" x1="0" x2="1">
+          <stop offset="0" stop-color="#7cc7ff"/>
+          <stop offset="1" stop-color="#FFB343"/>
+        </linearGradient>
+        <linearGradient id="dse-fill" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" stop-color="#7cc7ff" stop-opacity=".30"/>
+          <stop offset="1" stop-color="#7cc7ff" stop-opacity=".02"/>
+        </linearGradient>
+      </defs>
+      <g class="dse-sector__gridlines">
+        <path d="M90 56H800"/>
+        <path d="M90 122H800"/>
+        <path d="M90 188H800"/>
+        <path d="M90 254H800"/>
+      </g>
+      <g class="dse-sector__axis">
+        <text x="38" y="60">1.000</text>
+        <text x="48" y="126">750</text>
+        <text x="48" y="192">500</text>
+        <text x="48" y="258">250</text>
+        <text x="92" y="304">2024</text>
+        <text x="754" y="304">2030</text>
+      </g>
+      <path class="dse-sector__area" d="M120 200 C250 190 360 168 470 136 C585 102 680 78 770 60 L770 254 L120 254 Z"/>
+      <path class="dse-sector__line" d="M120 200 C250 190 360 168 470 136 C585 102 680 78 770 60"/>
+      <g class="dse-sector__point dse-sector__point--start">
+        <circle cx="120" cy="200" r="8"/>
+        <rect x="100" y="132" width="142" height="52" rx="16"/>
+        <text x="116" y="154">415 TWh</text>
+        <text x="116" y="172">base 2024</text>
+      </g>
+      <g class="dse-sector__point dse-sector__point--end">
+        <circle cx="770" cy="60" r="9"/>
+        <rect x="618" y="82" width="166" height="62" rx="16"/>
+        <text x="634" y="107">945 TWh</text>
+        <text x="634" y="126">escenario 2030</text>
+      </g>
+      <g class="dse-sector__us">
+        <rect x="496" y="184" width="304" height="66" rx="18"/>
+        <text x="528" y="212">EE. UU.</text>
+        <text x="528" y="238">4,4% → 12% de demanda</text>
+      </g>
+    </svg>
+
+    <div class="dse-sector__flow">
+      <div><strong>Mejor PUE</strong><span>menos overhead por centro</span></div>
+      <div><strong>Más centros</strong><span>más TWh agregados</span></div>
+      <div><strong>Red local</strong><span>permisos, agua, cola y conexión</span></div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .dse-sector, .dse-sector * { box-sizing:border-box; }
+  .dse-sector {
+    --sky:#7cc7ff; --amber:#FFB343; --teal:#26A69A; --bg:var(--md-default-bg-color,#fff);
+    --line:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 15%, transparent);
+    --text:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 94%, transparent);
+    --muted:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 63%, transparent);
+    display:grid; gap:16px; max-width:980px; margin:0 auto; padding:clamp(16px,2vw,24px);
+    border-radius:24px; border:1px solid var(--line);
+    background:
+      radial-gradient(100% 130% at 0% 0%, color-mix(in srgb, var(--sky) 10%, transparent), transparent 50%),
+      radial-gradient(90% 110% at 100% 100%, color-mix(in srgb, var(--amber) 8%, transparent), transparent 50%),
+      var(--bg);
+    color:var(--text); font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  }
+  [data-md-color-scheme="slate"] .dse-sector { --line:rgba(226,232,240,.16); --text:rgba(236,244,255,.95); --muted:rgba(236,244,255,.68); }
+  .dse-sector__head { display:grid; gap:6px; max-width:76ch; }
+  .dse-sector__title { font-size:clamp(22px,3vw,30px); font-weight:900; line-height:1.05; letter-spacing:0; }
+  .dse-sector__sub { font-size:14px; line-height:1.55; color:var(--muted); }
+  .dse-sector__viz { display:grid; gap:12px; padding:14px; border:1px solid var(--line); border-radius:20px; background: color-mix(in srgb, var(--bg) 92%, #09121f 8%); }
+  .dse-sector__chart { width:100%; height:auto; min-height:250px; }
+  .dse-sector__gridlines path { stroke:var(--line); stroke-width:1; stroke-dasharray:5 8; }
+  .dse-sector__axis text { fill:var(--muted); font-size:18px; font-weight:800; }
+  .dse-sector__area { fill:url(#dse-fill); }
+  .dse-sector__line { fill:none; stroke:url(#dse-line); stroke-width:8; stroke-linecap:round; }
+  .dse-sector__point circle { fill:var(--bg); stroke:#7cc7ff; stroke-width:5; }
+  .dse-sector__point--end circle { stroke:#FFB343; }
+  .dse-sector__point rect, .dse-sector__us rect { fill:color-mix(in srgb, var(--bg) 86%, #09121f 14%); stroke:var(--line); }
+  .dse-sector__point text, .dse-sector__us text { fill:var(--text); font-weight:900; font-size:20px; }
+  .dse-sector__point text + text, .dse-sector__us text + text { fill:var(--muted); font-size:15px; font-weight:700; }
+  .dse-sector__flow { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; }
+  .dse-sector__flow div { position:relative; min-height:78px; padding:14px 14px 14px 42px; border:1px solid var(--line); border-radius:18px; background:rgba(255,255,255,.04); }
+  .dse-sector__flow div::before { content:""; position:absolute; left:16px; top:18px; width:13px; height:13px; border-radius:50%; background:linear-gradient(135deg,var(--sky),var(--teal)); box-shadow:0 0 0 7px color-mix(in srgb, var(--sky) 14%, transparent); }
+  .dse-sector__flow strong { display:block; font-size:15px; }
+  .dse-sector__flow span { display:block; margin-top:4px; font-size:12.8px; line-height:1.35; color:var(--muted); }
+  @media (max-width: 860px) {
+    .dse-sector { overflow-x:auto; overscroll-behavior-x:contain; }
+    .dse-sector__head,
+    .dse-sector__chart,
+    .dse-sector__flow { min-width:760px; }
+    .dse-sector__flow { grid-template-columns:repeat(3, minmax(0,1fr)); }
+  }
+</style>

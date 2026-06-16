@@ -11,6 +11,27 @@
 {% block extrahead %}
   {{ super() }}
   {% if page %}
+  {% set page_path = page.url.rstrip('/') %}
+  {% set path_parts = page_path.split('/') if page_path else [] %}
+  {% set series_section_title = none %}
+  {% set series_section_url = none %}
+  {% set breadcrumb_parent_title = none %}
+  {% set breadcrumb_parent_url = none %}
+
+  {% if path_parts and path_parts[0] == "series" %}
+    {% if path_parts|length == 2 %}
+      {% set breadcrumb_parent_title = "Series" %}
+      {% set breadcrumb_parent_url = config.site_url ~ "series/" %}
+    {% elif path_parts|length >= 3 %}
+      {% set series_section_title = page.parent.title if page.parent else path_parts[1].replace('-', ' ') %}
+      {% set series_section_url = config.site_url ~ path_parts[0] ~ "/" ~ path_parts[1] ~ "/" %}
+      {% set breadcrumb_parent_title = series_section_title %}
+      {% set breadcrumb_parent_url = series_section_url %}
+    {% endif %}
+  {% elif page.parent %}
+    {% set breadcrumb_parent_title = page.parent.title %}
+    {% set breadcrumb_parent_url = config.site_url ~ (page.parent.url or '') %}
+  {% endif %}
 
   {# Fuentes — carga no bloqueante (preload + swap) #}
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,9 +52,6 @@
   {% else %}
   <meta name="robots" content="max-image-preview:large">
   {% endif %}
-
-  {# Canonical URL explícita #}
-  <link rel="canonical" href="{{ page.canonical_url }}">
 
   {# Fecha editorial explícita — refuerza la señal de fecha sobre fechas de ejemplo en demos #}
   {% if page.meta.date %}
@@ -91,7 +109,13 @@
       "@type": "SpeakableSpecification",
       "cssSelector": [".md-content__inner h1", ".md-content__inner p"]
     },
-    {% if page.parent %}
+    {% if series_section_title and series_section_url %}
+    "isPartOf": {
+      "@type": "CreativeWorkSeries",
+      "name": "{{ series_section_title | e }}",
+      "url": "{{ series_section_url }}"
+    },
+    {% elif page.parent %}
     "isPartOf": {
       "@type": "CreativeWorkSeries",
       "name": "{{ page.parent.title | e }}",
@@ -113,14 +137,14 @@
   }
   </script>
 
-  {% if page.parent %}
+  {% if breadcrumb_parent_title and breadcrumb_parent_url and page.url not in ["", "index.html"] %}
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     "itemListElement": [
       {"@type": "ListItem", "position": 1, "name": "Inicio", "item": "{{ config.site_url }}"},
-      {"@type": "ListItem", "position": 2, "name": "{{ page.parent.title | e }}", "item": "{{ config.site_url ~ (page.parent.url or '') }}"},
+      {"@type": "ListItem", "position": 2, "name": "{{ breadcrumb_parent_title | e }}", "item": "{{ breadcrumb_parent_url }}"},
       {"@type": "ListItem", "position": 3, "name": "{{ page.title | e }}", "item": "{{ page.canonical_url }}"}
     ]
   }

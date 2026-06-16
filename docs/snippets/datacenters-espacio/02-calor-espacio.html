@@ -1,0 +1,177 @@
+<div class="dct-thermal ta-tabs" data-demo="02-calor-espacio" data-anim-tabs data-default="myth" data-anim-fullscreen="off" data-anim-contrast="force">
+  <div class="dct-thermal__head">
+    <div class="dct-thermal__title">El vacío no enfría gratis: elimina la convección y deja solo radiación</div>
+    <div class="dct-thermal__sub">
+      La diferencia física no es temperatura ambiente. Es el canal de transporte: en tierra hay fluido que se lleva
+      calor; en órbita tienes que convertir el calor en fotones y superficie.
+    </div>
+  </div>
+
+  <div class="dct-thermal__tabs ta-tablist" role="tablist" data-role="tablist" aria-label="Física térmica orbital">
+    <button class="dct-thermal__tab ta-tab" type="button" role="tab" data-role="tab" data-tab="myth" aria-selected="true">Mito frío</button>
+    <button class="dct-thermal__tab ta-tab" type="button" role="tab" data-role="tab" data-tab="paths" aria-selected="false">Qué transfiere</button>
+    <button class="dct-thermal__tab ta-tab" type="button" role="tab" data-role="tab" data-tab="implication" aria-selected="false">Qué implica</button>
+  </div>
+
+  <div class="dct-thermal__panels ta-panels">
+    <section class="dct-thermal__panel ta-panel" data-panel="myth">
+      <svg class="dct-thermal__svg" viewBox="0 0 900 360" role="img" aria-label="Comparación entre enfriamiento terrestre por fluido y enfriamiento orbital por radiación">
+        <defs>
+          <radialGradient id="heat-core" cx=".5" cy=".5" r=".55">
+            <stop offset="0" stop-color="#ff8d7a" stop-opacity=".95"/>
+            <stop offset="1" stop-color="#FFB343" stop-opacity=".10"/>
+          </radialGradient>
+        </defs>
+        <g class="dct-thermal__world" transform="translate(46 46)">
+          <rect width="370" height="238" rx="26"/>
+          <text x="24" y="36">En tierra</text>
+          <circle cx="184" cy="126" r="54" class="heat"/>
+          <rect x="144" y="86" width="80" height="80" rx="18" class="chip"/>
+          <path class="fluid" d="M72 88 C138 28 254 30 302 100"/>
+          <path class="fluid" d="M298 166 C232 226 126 220 72 154"/>
+          <text x="92" y="214">aire o agua transportan calor</text>
+        </g>
+        <g class="dct-thermal__world dct-thermal__world--space" transform="translate(484 46)">
+          <rect width="370" height="238" rx="26"/>
+          <text x="24" y="36">En órbita</text>
+          <circle cx="126" cy="126" r="54" class="heat"/>
+          <rect x="86" y="86" width="80" height="80" rx="18" class="chip"/>
+          <path class="radiation" d="M188 126H318"/>
+          <path class="radiation" d="M176 92 C228 58 272 56 324 82"/>
+          <path class="radiation" d="M176 160 C228 196 272 198 324 170"/>
+          <rect x="286" y="70" width="34" height="112" rx="10" class="radiator"/>
+          <text x="48" y="214">sin fluido, solo radiación al radiador</text>
+        </g>
+      </svg>
+    </section>
+
+    <section class="dct-thermal__panel ta-panel" data-panel="paths" hidden>
+      <svg class="dct-thermal__svg" viewBox="0 0 900 360" role="img" aria-label="Tres canales de transferencia térmica y cuál sobrevive en órbita">
+        <g class="dct-thermal__lane" transform="translate(44 64)">
+          <rect width="244" height="210" rx="24"/><text x="24" y="38">Convección</text>
+          <path class="fluid" d="M54 110 C92 70 154 70 192 110 C154 150 92 150 54 110Z"/>
+          <text x="24" y="174">requiere fluido</text><text x="24" y="198">desaparece en vacío</text>
+        </g>
+        <g class="dct-thermal__lane" transform="translate(328 64)">
+          <rect width="244" height="210" rx="24"/><text x="24" y="38">Evaporación</text>
+          <path class="vent" d="M86 142 C92 92 132 72 154 38"/>
+          <circle cx="86" cy="154" r="38" class="heat"/>
+          <text x="24" y="174">saca calor</text><text x="24" y="198">pero consume masa</text>
+        </g>
+        <g class="dct-thermal__lane dct-thermal__lane--ok" transform="translate(612 64)">
+          <rect width="244" height="210" rx="24"/><text x="24" y="38">Radiación</text>
+          <path class="radiation" d="M72 122H178M76 88C126 60 164 62 206 88M76 156C126 186 164 184 206 156"/>
+          <rect x="180" y="72" width="28" height="112" rx="9" class="radiator"/>
+          <text x="24" y="174">potencia ∝ área × T⁴</text><text x="24" y="198">única vía continua</text>
+        </g>
+      </svg>
+    </section>
+
+    <section class="dct-thermal__panel ta-panel" data-panel="implication" hidden>
+      <div class="dct-thermal__system">
+        <svg viewBox="0 0 900 330" role="img" aria-label="Datacenter orbital diseñado alrededor del radiador">
+          <g class="dct-thermal__compute" transform="translate(74 92)">
+            <rect width="176" height="128" rx="22"/><text x="26" y="56">cómputo</text><text x="26" y="84">MW térmicos</text>
+          </g>
+          <path class="dct-thermal__bus" d="M250 156H386"/>
+          <g class="dct-thermal__spreader" transform="translate(386 76)">
+            <rect width="154" height="160" rx="22"/><text x="24" y="74">spreader</text><text x="24" y="100">estructura</text>
+          </g>
+          <path class="dct-thermal__bus" d="M540 156H654"/>
+          <g class="dct-thermal__radiator" transform="translate(654 44)">
+            <rect width="44" height="224" rx="12"/><rect x="66" width="44" height="224" rx="12"/><rect x="132" width="44" height="224" rx="12"/>
+            <text x="10" y="254">radiadores dominan forma y masa</text>
+          </g>
+        </svg>
+        <div class="dct-thermal__takeaway">
+          <strong>Regla de diseño</strong>
+          <span>El datacenter orbital se dibuja desde el radiador hacia dentro, no desde el rack hacia fuera.</span>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<style>
+  .dct-thermal, .dct-thermal * { box-sizing:border-box; }
+  .dct-thermal {
+    --teal:#26A69A; --sky:#7cc7ff; --amber:#FFB343; --red:#ff8d7a; --bg:var(--md-default-bg-color,#fff);
+    --line:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 15%, transparent);
+    --text:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 94%, transparent);
+    --muted:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 63%, transparent);
+    display:grid; gap:16px; max-width:980px; margin:0 auto; padding:clamp(16px,2vw,24px);
+    border-radius:24px; border:1px solid var(--line);
+    background:radial-gradient(100% 130% at 0% 0%, color-mix(in srgb, var(--sky) 10%, transparent), transparent 50%), radial-gradient(90% 110% at 100% 100%, color-mix(in srgb, var(--amber) 8%, transparent), transparent 50%), var(--bg);
+    color:var(--text); font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  }
+  [data-md-color-scheme="slate"] .dct-thermal { --line:rgba(226,232,240,.16); --text:rgba(236,244,255,.95); --muted:rgba(236,244,255,.68); }
+  .dct-thermal__head { display:grid; gap:6px; max-width:76ch; }
+  .dct-thermal__title { font-size:clamp(22px,3vw,30px); font-weight:900; line-height:1.05; letter-spacing:0; }
+  .dct-thermal__sub { font-size:14px; line-height:1.55; color:var(--muted); }
+  .dct-thermal__tabs { display:flex; flex-wrap:wrap; gap:8px; }
+  .dct-thermal__tab { border-radius:999px; transition:background-color .22s ease-out, border-color .22s ease-out, color .22s ease-out, transform .22s ease-out; }
+  .dct-thermal__tab:hover { transform:translateY(-1px); }
+  .dct-thermal__panel[hidden] { display:none; }
+  .dct-thermal__svg, .dct-thermal__system { width:100%; min-height:280px; padding:10px; border:1px solid var(--line); border-radius:20px; background: color-mix(in srgb, var(--bg) 92%, #09121f 8%); }
+  .dct-thermal svg { width:100%; height:auto; }
+  .dct-thermal text { fill:var(--text); font-size:20px; font-weight:900; }
+  .dct-thermal text + text { fill:var(--muted); font-size:15px; font-weight:800; }
+  .dct-thermal__world rect:first-child, .dct-thermal__lane rect, .dct-thermal__compute rect, .dct-thermal__spreader rect { fill:color-mix(in srgb, var(--bg) 88%, #09121f 12%); stroke:var(--line); }
+  .dct-thermal__world--space rect:first-child { stroke:color-mix(in srgb, var(--sky) 36%, var(--line)); }
+  .heat { fill:url(#heat-core); }
+  .chip { fill:color-mix(in srgb, var(--teal) 62%, #324AB2); stroke:var(--bg); stroke-width:3; }
+  .fluid { fill:none; stroke:#26A69A; stroke-width:7; stroke-linecap:round; stroke-dasharray:13 10; }
+  .radiation { fill:none; stroke:#FFB343; stroke-width:7; stroke-linecap:round; }
+  .radiator, .dct-thermal__radiator rect { fill:color-mix(in srgb, var(--sky) 22%, transparent); stroke:color-mix(in srgb, var(--sky) 50%, var(--line)); }
+  .vent { fill:none; stroke:#ff8d7a; stroke-width:7; stroke-linecap:round; stroke-dasharray:8 10; }
+  .dct-thermal__lane--ok rect { stroke:color-mix(in srgb, var(--amber) 40%, var(--line)); }
+  .dct-thermal__bus { fill:none; stroke:#FFB343; stroke-width:8; stroke-linecap:round; stroke-dasharray:14 10; }
+  .dct-thermal__takeaway { padding:14px 16px; border:1px solid var(--line); border-radius:18px; background:rgba(255,255,255,.04); }
+  .dct-thermal__takeaway strong { display:block; font-size:15px; }
+  .dct-thermal__takeaway span { display:block; margin-top:4px; color:var(--muted); font-size:13px; line-height:1.45; }
+</style>
+<script>
+  (() => {
+    const KEY = "dct-thermal-tabs";
+    if (window.__portableTabsFallback && window.__portableTabsFallback[KEY]) return;
+    window.__portableTabsFallback = window.__portableTabsFallback || {};
+    window.__portableTabsFallback[KEY] = true;
+    function activate(root, key) {
+      root.querySelectorAll('[data-role="tab"], [role="tab"]').forEach((tab) => {
+        const selected = tab.getAttribute("data-tab") === key;
+        tab.setAttribute("aria-selected", selected ? "true" : "false");
+        tab.tabIndex = selected ? 0 : -1;
+      });
+      root.querySelectorAll("[data-panel]").forEach((panel) => {
+        panel.hidden = panel.getAttribute("data-panel") !== key;
+      });
+    }
+    function initRoot(root) {
+      if (!root || root.dataset.tabsReady === "true") return;
+      root.dataset.tabsReady = "true";
+      const tabs = Array.from(root.querySelectorAll('[data-role="tab"], [role="tab"]'));
+      const first = root.getAttribute("data-default") || (tabs[0] && tabs[0].getAttribute("data-tab"));
+      tabs.forEach((tab) => {
+        tab.tabIndex = -1;
+        tab.addEventListener("click", () => activate(root, tab.getAttribute("data-tab")));
+        tab.addEventListener("keydown", (event) => {
+          const current = tabs.indexOf(tab);
+          let next = current;
+          if (event.key === "ArrowRight") next = (current + 1) % tabs.length;
+          if (event.key === "ArrowLeft") next = (current - 1 + tabs.length) % tabs.length;
+          if (event.key === "Home") next = 0;
+          if (event.key === "End") next = tabs.length - 1;
+          if (next !== current) {
+            event.preventDefault();
+            tabs[next].focus();
+            activate(root, tabs[next].getAttribute("data-tab"));
+          }
+        });
+      });
+      activate(root, first);
+    }
+    function initAll(scope) { scope.querySelectorAll('.dct-thermal[data-anim-tabs]').forEach(initRoot); }
+    initAll(document);
+    document.addEventListener("DOMContentLoaded", () => initAll(document), { once: true });
+  })();
+</script>

@@ -1,0 +1,106 @@
+<div class="dop-matrix" data-demo="03-proyectos-orbitales" data-anim-fullscreen="off" data-anim-contrast="force">
+  <div class="dop-matrix__head">
+    <div class="dop-matrix__title">Los proyectos reales validan piezas concretas, no el datacenter orbital completo</div>
+    <div class="dop-matrix__sub">
+      La prueba relevante no es “hay hardware en órbita”. La prueba relevante es qué parte del argumento valida cada
+      proyecto: cómputo, almacenamiento, enlaces, operación continua o escala térmica.
+    </div>
+  </div>
+
+  <div class="dop-matrix__axis" aria-label="Qué valida cada demostración">
+    <span>Cómputo</span>
+    <span>Storage</span>
+    <span>Enlaces</span>
+    <span>Runtime</span>
+    <span>Escala térmica</span>
+  </div>
+
+  <div class="dop-matrix__grid">
+    <article class="dop-matrix__card">
+      <h3>Starcloud</h3>
+      <p>Demostración de compute COTS avanzado en órbita y entrenamiento de un modelo simplificado, no una cloud orbital general.</p>
+      <div class="dop-matrix__tags"><span>Valida: compute COTS</span><span>No valida: MW térmicos</span></div>
+    </article>
+    <article class="dop-matrix__card">
+      <h3>Axiom / Spacebilt</h3>
+      <p>Nodos iniciales ODC y almacenamiento de alta capacidad en LEO. Prueba piezas de infraestructura, no una cloud madura.</p>
+      <div class="dop-matrix__tags"><span>Valida: storage + enlaces</span><span>No valida: cloud general</span></div>
+    </article>
+    <article class="dop-matrix__card">
+      <h3>D-Orbit AIX</h3>
+      <p>Inferencia útil sobre observación, con reducción radical de downlink.</p>
+      <div class="dop-matrix__tags"><span>Valida: data gravity</span><span>No valida: entrenamiento orbital</span></div>
+    </article>
+    <article class="dop-matrix__card">
+      <h3>Three-Body / ADA</h3>
+      <p>Constelación con enlaces láser y cómputo distribuido a escala satelital, conocida sobre todo por cobertura sectorial.</p>
+      <div class="dop-matrix__tags"><span>Valida: mesh + reparto</span><span>No valida: economía final</span></div>
+    </article>
+    <article class="dop-matrix__card">
+      <h3>Tiansuan / BUPT-1</h3>
+      <p>Arquitectura cloud-native temprana para operaciones de software orbital.</p>
+      <div class="dop-matrix__tags"><span>Valida: runtime orbital</span><span>No valida: densidad IA</span></div>
+    </article>
+    <article class="dop-matrix__card dop-matrix__card--summary">
+      <h3>Lectura correcta</h3>
+      <p>El sector ya no vive solo en paperware. Pero sigue lejos de demostrar refrigeración, economía y refresh de hardware a escala datacenter.</p>
+      <div class="dop-matrix__tags"><span>Hoy: piezas validadas</span><span>Falta: sistema completo</span><span>Tono correcto: demo ≠ cloud masiva</span></div>
+    </article>
+  </div>
+</div>
+
+<style>
+  .dop-matrix, .dop-matrix * { box-sizing:border-box; }
+  .dop-matrix {
+    --sky:#7cc7ff; --teal:#26A69A; --amber:#FFB343; --bg:var(--md-default-bg-color,#fff);
+    --line:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 15%, transparent);
+    --text:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 94%, transparent);
+    --muted:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 63%, transparent);
+    display:grid; gap:14px; max-width:980px; margin:0 auto; padding:clamp(16px,2vw,24px);
+    border-radius:24px; border:1px solid var(--line);
+    background:
+      radial-gradient(100% 130% at 0% 0%, color-mix(in srgb, var(--sky) 10%, transparent), transparent 50%),
+      radial-gradient(90% 110% at 100% 100%, color-mix(in srgb, var(--amber) 8%, transparent), transparent 50%),
+      var(--bg);
+    color:var(--text); font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  }
+  [data-md-color-scheme="slate"] .dop-matrix { --line:rgba(226,232,240,.16); --text:rgba(236,244,255,.95); --muted:rgba(236,244,255,.68); }
+  .dop-matrix__head { display:grid; gap:6px; max-width:74ch; }
+  .dop-matrix__title { font-size:clamp(22px,3vw,30px); font-weight:900; line-height:1.05; letter-spacing:0; }
+  .dop-matrix__sub { font-size:14px; line-height:1.55; color:var(--muted); }
+  .dop-matrix__axis {
+    display:grid; grid-template-columns:repeat(5, minmax(0,1fr)); gap:6px; padding:10px;
+    border:1px solid var(--line); border-radius:18px;
+    background:linear-gradient(90deg, color-mix(in srgb, var(--teal) 12%, transparent), color-mix(in srgb, var(--amber) 10%, transparent));
+  }
+  .dop-matrix__axis span {
+    display:grid; place-items:center; min-height:34px; border-radius:12px;
+    background:rgba(255,255,255,.05); color:var(--muted); font-size:11px; font-weight:900; text-transform:uppercase; letter-spacing:.06em;
+  }
+  .dop-matrix__axis span:last-child {
+    color:var(--text); border:1px dashed color-mix(in srgb, var(--amber) 34%, var(--line));
+    background:color-mix(in srgb, var(--amber) 9%, transparent);
+  }
+  .dop-matrix__grid { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:10px; }
+  .dop-matrix__card {
+    display:grid; gap:8px; padding:16px; border-radius:20px; border:1px solid var(--line);
+    background: color-mix(in srgb, var(--bg) 90%, #09121f 10%);
+  }
+  .dop-matrix__card--summary { border-color: color-mix(in srgb, var(--teal) 24%, var(--line)); background: color-mix(in srgb, var(--teal) 8%, transparent); }
+  .dop-matrix__card h3 { margin:0; font-size:20px; line-height:1.12; letter-spacing:0; }
+  .dop-matrix__card p { margin:0; font-size:12.8px; line-height:1.5; color:var(--muted); }
+  .dop-matrix__tags { display:flex; flex-wrap:wrap; gap:8px; }
+  .dop-matrix__tags span {
+    display:inline-flex; padding:7px 10px; border-radius:999px; border:1px solid var(--line);
+    background:rgba(255,255,255,.04); font-size:11.5px; font-weight:800;
+  }
+  @media (max-width: 920px) {
+    .dop-matrix { overflow-x:auto; overscroll-behavior-x:contain; }
+    .dop-matrix__head,
+    .dop-matrix__axis,
+    .dop-matrix__grid { min-width:860px; }
+    .dop-matrix__axis { grid-template-columns:repeat(5, minmax(0,1fr)); }
+    .dop-matrix__axis span { justify-content:center; padding-inline:0; }
+    .dop-matrix__grid { grid-template-columns:repeat(3, minmax(0,1fr)); }
+  }
+</style>

@@ -1,0 +1,203 @@
+<div class="dcr-scale ta-tabs" data-demo="02-radiadores-escala" data-anim-tabs data-default="plate" data-anim-fullscreen="off" data-anim-contrast="force">
+  <div class="dcr-scale__head">
+    <div class="dcr-scale__title">La ley `T⁴` convierte la refrigeración orbital en un problema de área y masa</div>
+    <div class="dcr-scale__sub">
+      Un radiador no se dimensiona como un ventilador grande. Se dimensiona como superficie que emite muy despacio a
+      temperaturas de operación normales. Por eso el salto de kW a MW cambia completamente el objeto.
+    </div>
+  </div>
+
+  <div class="dcr-scale__tabs ta-tablist" role="tablist" data-role="tablist" aria-label="Escala de radiadores">
+    <button class="dcr-scale__tab ta-tab" type="button" role="tab" data-role="tab" data-tab="plate" aria-selected="true">Base: 1 m²</button>
+    <button class="dcr-scale__tab ta-tab" type="button" role="tab" data-role="tab" data-tab="temperature" aria-selected="false">Más temperatura</button>
+    <button class="dcr-scale__tab ta-tab" type="button" role="tab" data-role="tab" data-tab="megawatt" aria-selected="false">Escala 2 MW</button>
+  </div>
+
+  <div class="dcr-scale__panels ta-panels">
+    <section class="dcr-scale__panel ta-panel" data-panel="plate">
+      <div class="dcr-scale__grid">
+        <div class="dcr-scale__plate">
+          <div class="dcr-scale__square">1 m²</div>
+          <div class="dcr-scale__emit">
+            <span>≈ 770–838 W</span>
+            <small>a 20 °C, ambas caras</small>
+          </div>
+        </div>
+        <div class="dcr-scale__facts">
+          <div class="dcr-scale__fact">
+            <span>Comparación</span>
+            <strong>Eso no llega ni a 1 kW por placa</strong>
+          </div>
+          <div class="dcr-scale__fact">
+            <span>Lectura</span>
+            <strong>El radiador sirve, pero no “barre” calor como un sistema de aire</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="dcr-scale__panel ta-panel" data-panel="temperature" hidden>
+      <div class="dcr-scale__temp">
+        <div class="dcr-scale__temp-bar">
+          <span>293 K</span>
+          <strong>placa mayor</strong>
+        </div>
+        <div class="dcr-scale__temp-arrow" aria-hidden="true"></div>
+        <div class="dcr-scale__temp-bar dcr-scale__temp-bar--hot">
+          <span>+20% en Kelvin</span>
+          <strong>menos área / menos masa</strong>
+        </div>
+        <p>Subir la temperatura ayuda porque la potencia radiada crece con `T⁴`, pero sigues dentro de una ingeniería de superficies grandes, no de aire barato.</p>
+      </div>
+    </section>
+
+    <section class="dcr-scale__panel ta-panel" data-panel="megawatt" hidden>
+      <div class="dcr-scale__mw">
+        <div class="dcr-scale__mw-card">
+          <span>Instalación de referencia</span>
+          <strong>2 MW a 320 K</strong>
+          <small>≈ 506 W/m²</small>
+        </div>
+        <div class="dcr-scale__mw-area">
+          <div class="dcr-scale__mw-area-fill" style="width:78%"></div>
+          <div class="dcr-scale__mw-area-label">≈ 3.950 m² de radiadores</div>
+        </div>
+        <div class="dcr-scale__mw-facts">
+          <div class="dcr-scale__mw-fact">
+            <span>Masa térmica</span>
+            <strong>≈ 20–40 t</strong>
+          </div>
+          <div class="dcr-scale__mw-fact">
+            <span>Estado del arte</span>
+            <strong>la validación real sigue en escala de kW</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<style>
+  .dcr-scale, .dcr-scale * { box-sizing:border-box; }
+  .dcr-scale {
+    --amber:#FFB343; --sky:#7cc7ff; --teal:#26A69A; --bg:var(--md-default-bg-color,#fff);
+    --line:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 15%, transparent);
+    --text:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 94%, transparent);
+    --muted:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 63%, transparent);
+    display:grid; gap:14px; max-width:980px; margin:0 auto; padding:clamp(16px,2vw,24px);
+    border-radius:24px; border:1px solid var(--line);
+    background:
+      radial-gradient(100% 130% at 0% 0%, color-mix(in srgb, var(--sky) 10%, transparent), transparent 50%),
+      radial-gradient(90% 110% at 100% 100%, color-mix(in srgb, var(--amber) 8%, transparent), transparent 50%),
+      var(--bg);
+    color:var(--text); font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  }
+  [data-md-color-scheme="slate"] .dcr-scale { --line:rgba(226,232,240,.16); --text:rgba(236,244,255,.95); --muted:rgba(236,244,255,.68); }
+  .dcr-scale__head { display:grid; gap:6px; max-width:72ch; }
+  .dcr-scale__title { font-size:clamp(22px,3vw,30px); font-weight:900; line-height:1.05; letter-spacing:0; }
+  .dcr-scale__sub { font-size:14px; line-height:1.55; color:var(--muted); }
+  .dcr-scale__tabs { display:flex; flex-wrap:wrap; gap:8px; }
+  .dcr-scale__tab { transition:background-color .22s ease-out, border-color .22s ease-out, color .22s ease-out, transform .22s ease-out; }
+  .dcr-scale__tab:hover { transform:translateY(-1px); }
+  .dcr-scale__panel[hidden] { display:none; }
+  .dcr-scale__grid { display:grid; grid-template-columns:minmax(0,1fr) minmax(260px,.9fr); gap:12px; }
+  .dcr-scale__plate, .dcr-scale__facts, .dcr-scale__temp, .dcr-scale__mw {
+    border:1px solid var(--line); border-radius:20px; background: color-mix(in srgb, var(--bg) 90%, #09121f 10%);
+  }
+  .dcr-scale__plate { display:grid; place-items:center; gap:14px; padding:20px; min-height:260px; }
+  .dcr-scale__square {
+    display:grid; place-items:center; width:180px; aspect-ratio:1; border-radius:24px;
+    border:1px solid color-mix(in srgb, var(--amber) 28%, var(--line));
+    background: repeating-linear-gradient(90deg, rgba(255,179,67,.14), rgba(255,179,67,.14) 10px, rgba(255,179,67,.04) 10px, rgba(255,179,67,.04) 20px);
+    font-size:28px; font-weight:900; letter-spacing:0;
+  }
+  .dcr-scale__emit { text-align:center; }
+  .dcr-scale__emit span, .dcr-scale__fact strong, .dcr-scale__mw-card strong, .dcr-scale__mw-fact strong {
+    display:block; font-size:22px; font-weight:900; line-height:1.05; letter-spacing:0;
+  }
+  .dcr-scale__emit small, .dcr-scale__fact span, .dcr-scale__mw-card span, .dcr-scale__mw-fact span {
+    display:block; margin-top:6px; font-size:11px; font-weight:900; text-transform:uppercase; letter-spacing:.08em; color:var(--muted);
+  }
+  .dcr-scale__facts { display:grid; gap:10px; padding:14px; }
+  .dcr-scale__fact, .dcr-scale__mw-card, .dcr-scale__mw-fact {
+    padding:12px; border-radius:16px; border:1px solid var(--line); background:rgba(255,255,255,.04);
+  }
+  .dcr-scale__temp { display:grid; grid-template-columns:minmax(0,1fr) 52px minmax(0,1fr); gap:10px; align-items:center; padding:16px; }
+  .dcr-scale__temp-bar {
+    display:grid; gap:8px; padding:16px; border-radius:18px; border:1px solid var(--line); background:rgba(255,255,255,.04);
+  }
+  .dcr-scale__temp-bar span { font-size:11px; font-weight:900; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); }
+  .dcr-scale__temp-bar strong { font-size:20px; line-height:1.12; letter-spacing:0; }
+  .dcr-scale__temp-bar--hot { border-color: color-mix(in srgb, var(--amber) 28%, var(--line)); background: color-mix(in srgb, var(--amber) 8%, transparent); }
+  .dcr-scale__temp-arrow { position:relative; height:2px; background:linear-gradient(90deg, rgba(124,199,255,.2), rgba(124,199,255,.86)); }
+  .dcr-scale__temp-arrow::after {
+    content:""; position:absolute; right:-2px; top:-4px; border-left:10px solid rgba(124,199,255,.86); border-top:5px solid transparent; border-bottom:5px solid transparent;
+  }
+  .dcr-scale__temp p { grid-column:1 / -1; margin:0; font-size:12.8px; line-height:1.5; color:var(--muted); }
+  .dcr-scale__mw { display:grid; gap:12px; padding:16px; }
+  .dcr-scale__mw-card small { display:block; margin-top:6px; font-size:12px; color:var(--muted); }
+  .dcr-scale__mw-area { position:relative; height:48px; border-radius:999px; border:1px solid var(--line); overflow:hidden; background:rgba(255,255,255,.04); }
+  .dcr-scale__mw-area-fill { position:absolute; inset:0 auto 0 0; border-radius:999px; background:linear-gradient(90deg, rgba(255,179,67,.85), rgba(255,141,122,.62)); }
+  .dcr-scale__mw-area-label { position:absolute; inset:0; display:grid; place-items:center; font-size:13px; font-weight:900; letter-spacing:0; }
+  .dcr-scale__mw-facts { display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:10px; }
+  @media (max-width: 860px) {
+    .dcr-scale { overflow-x:auto; overscroll-behavior-x:contain; }
+    .dcr-scale__head,
+    .dcr-scale__tabs,
+    .dcr-scale__grid,
+    .dcr-scale__temp,
+    .dcr-scale__mw { min-width:760px; }
+    .dcr-scale__grid { grid-template-columns:minmax(0,1fr) minmax(260px,.9fr); }
+    .dcr-scale__temp { grid-template-columns:minmax(0,1fr) 52px minmax(0,1fr); }
+    .dcr-scale__mw-facts { grid-template-columns:repeat(2, minmax(0,1fr)); }
+  }
+</style>
+<script>
+  (() => {
+    const KEY = "dcr-scale-tabs";
+    if (window.__portableTabsFallback && window.__portableTabsFallback[KEY]) return;
+    window.__portableTabsFallback = window.__portableTabsFallback || {};
+    window.__portableTabsFallback[KEY] = true;
+    function activate(root, key) {
+      root.querySelectorAll('[data-role="tab"], [role="tab"]').forEach((tab) => {
+        const selected = tab.getAttribute("data-tab") === key;
+        tab.setAttribute("aria-selected", selected ? "true" : "false");
+        tab.tabIndex = selected ? 0 : -1;
+      });
+      root.querySelectorAll("[data-panel]").forEach((panel) => {
+        panel.hidden = panel.getAttribute("data-panel") !== key;
+      });
+    }
+    function initRoot(root) {
+      if (!root || root.dataset.tabsReady === "true") return;
+      root.dataset.tabsReady = "true";
+      const tabs = Array.from(root.querySelectorAll('[data-role="tab"], [role="tab"]'));
+      const first = root.getAttribute("data-default") || (tabs[0] && tabs[0].getAttribute("data-tab"));
+      tabs.forEach((tab) => {
+        tab.tabIndex = -1;
+        tab.addEventListener("click", () => activate(root, tab.getAttribute("data-tab")));
+        tab.addEventListener("keydown", (event) => {
+          const current = tabs.indexOf(tab);
+          let next = current;
+          if (event.key === "ArrowRight") next = (current + 1) % tabs.length;
+          if (event.key === "ArrowLeft") next = (current - 1 + tabs.length) % tabs.length;
+          if (event.key === "Home") next = 0;
+          if (event.key === "End") next = tabs.length - 1;
+          if (next !== current) {
+            event.preventDefault();
+            tabs[next].focus();
+            activate(root, tabs[next].getAttribute("data-tab"));
+          }
+        });
+      });
+      activate(root, first);
+    }
+    function initAll(scope) { scope.querySelectorAll('.dcr-scale[data-anim-tabs]').forEach(initRoot); }
+    if (window.TabbedAnimations && typeof window.TabbedAnimations.initAll === "function") {
+      window.TabbedAnimations.initAll();
+    } else {
+      initAll(document);
+      document.addEventListener("DOMContentLoaded", () => initAll(document), { once: true });
+    }
+  })();
+</script>

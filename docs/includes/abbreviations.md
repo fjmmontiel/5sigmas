@@ -58,6 +58,7 @@
 *[PUE]: Power Usage Effectiveness: ratio entre la potencia total consumida por un datacenter y la que llega efectivamente al equipamiento de cómputo; PUE 1,0 es ideal, PUE 2,0 significa que la mitad de la energía no genera cómputo
 *[WUE]: Water Usage Effectiveness: litros de agua consumidos por kilovatio-hora entregado al cómputo; mide la eficiencia hídrica de un datacenter
 *[TDP]: Thermal Design Power: potencia máxima de disipación de calor para la que está diseñado un chip o componente; determina los requisitos mínimos del sistema de refrigeración
+*[FLAP-D]: Frankfurt, London, Amsterdam, Paris y Dublin: principales hubs europeos de datacenters y conectividad, usados como referencia del corredor más demandado del continente
 *[LEO]: Low Earth Orbit: órbita terrestre baja, entre 160 y 2.000 km de altitud; latencia típica de 45-80 ms, vida útil de satélites afectada por resistencia atmosférica y radiación
 *[GEO]: Geostationary Earth Orbit: órbita geoestacionaria a 35.786 km de altitud; el satélite permanece fijo sobre un punto de la Tierra pero introduce latencias de 500-600 ms
 *[TRL]: Technology Readiness Level: escala de 1 a 9 que mide la madurez de una tecnología desde el concepto básico (TRL 1) hasta el sistema demostrado en entorno operacional real (TRL 9)
@@ -67,6 +68,7 @@
 *[COTS]: Commercial Off-The-Shelf: hardware o software estándar disponible en el mercado general, sin modificaciones especiales para entornos de alta radiación u otras condiciones extremas
 *[SEU]: Single Event Upset: cambio de estado en un bit de memoria o registro causado por el impacto de una partícula energética (rayo cósmico, protón solar); fuente principal de errores en hardware COTS en órbita
 *[ASM]: Artisanal and Small-scale Mining: minería artesanal y de pequeña escala; extracción manual o con herramientas básicas, predominante en la producción de cobalto en la RDC y tántalo en África central
+*[NIMBY]: Not In My Backyard: rechazo vecinal o político a infraestructuras útiles pero molestas cuando se ubican cerca de zonas habitadas
 
 <!-- articulos-tecnicos / proactive-reactive-agent -->
 *[DLQ]: Dead Letter Queue: cola de mensajes fallidos donde se depositan las operaciones que no pudieron procesarse tras agotar todos los reintentos; permite auditoría y reprocesado manual sin perder el trabajo

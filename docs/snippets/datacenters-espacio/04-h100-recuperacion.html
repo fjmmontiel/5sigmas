@@ -1,0 +1,82 @@
+<div class="dhr-circular" data-demo="04-h100-recuperacion" data-anim-fullscreen="off" data-anim-contrast="force">
+  <div class="dhr-circular__head">
+    <div class="dhr-circular__title">La circularidad ayuda, pero llega después de un refresh mucho más corto que la vida técnica</div>
+    <div class="dhr-circular__sub">
+      La pieza no termina en “se recicla”. El hardware aún puede vivir, el mercado lo reemplaza antes y la recuperación
+      captura una parte del valor material, no la demanda nueva.
+    </div>
+  </div>
+
+  <div class="dhr-circular__loop">
+    <svg viewBox="0 0 900 360" role="img" aria-label="Ciclo de vida de aceleradores: compra, operación, refresh y recuperación material">
+      <defs>
+        <linearGradient id="loop-grad" x1="0" x2="1">
+          <stop offset="0" stop-color="#7cc7ff"/>
+          <stop offset=".55" stop-color="#26A69A"/>
+          <stop offset="1" stop-color="#FFB343"/>
+        </linearGradient>
+      </defs>
+      <path class="dhr-circular__orbit" d="M188 184 C220 72 366 42 474 86 C600 138 584 280 458 310 C318 344 166 296 188 184Z"/>
+      <g class="dhr-circular__node" transform="translate(118 128)">
+        <rect width="166" height="88" rx="20"/><text x="22" y="35">Instalar H100</text><text x="22" y="60">capital y materiales nuevos</text>
+      </g>
+      <g class="dhr-circular__node" transform="translate(368 38)">
+        <rect width="166" height="88" rx="20"/><text x="22" y="35">Operar</text><text x="22" y="60">vida técnica 10+ años</text>
+      </g>
+      <g class="dhr-circular__node dhr-circular__node--warn" transform="translate(530 214)">
+        <rect width="178" height="88" rx="20"/><text x="22" y="35">Refresh 3-5 años</text><text x="22" y="60">salto de rendimiento</text>
+      </g>
+      <g class="dhr-circular__node dhr-circular__node--gold" transform="translate(210 246)">
+        <rect width="188" height="82" rx="20"/><text x="22" y="34">Recuperar materiales</text><text x="22" y="58">metales y componentes</text>
+      </g>
+      <g class="dhr-circular__break">
+        <path d="M708 258 C758 252 782 224 788 188"/>
+        <rect x="642" y="134" width="156" height="36" rx="13"/>
+        <text x="660" y="157">demanda nueva</text>
+      </g>
+      <g class="dhr-circular__ms">
+        <rect x="620" y="42" width="226" height="86" rx="20"/>
+        <text x="642" y="76">Microsoft FY2024</text>
+        <text x="642" y="100">90,9% reutilización/reciclaje</text>
+      </g>
+    </svg>
+  </div>
+
+  <div class="dhr-circular__takeaway">
+    <strong>Lectura correcta</strong>
+    <span>La recuperación baja el pasivo y algo de dependencia marginal, pero no sustituye el flujo de chips nuevos cuando la flota crece.</span>
+  </div>
+</div>
+
+<style>
+  .dhr-circular, .dhr-circular * { box-sizing:border-box; }
+  .dhr-circular {
+    --teal:#26A69A; --sky:#7cc7ff; --amber:#FFB343; --red:#ff8d7a; --bg:var(--md-default-bg-color,#fff);
+    --line:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 15%, transparent);
+    --text:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 94%, transparent);
+    --muted:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 63%, transparent);
+    display:grid; gap:16px; max-width:980px; margin:0 auto; padding:clamp(16px,2vw,24px);
+    border-radius:24px; border:1px solid var(--line);
+    background:radial-gradient(100% 130% at 0% 0%, color-mix(in srgb, var(--amber) 10%, transparent), transparent 50%), radial-gradient(90% 110% at 100% 100%, color-mix(in srgb, var(--teal) 9%, transparent), transparent 50%), var(--bg);
+    color:var(--text); font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  }
+  [data-md-color-scheme="slate"] .dhr-circular { --line:rgba(226,232,240,.16); --text:rgba(236,244,255,.95); --muted:rgba(236,244,255,.68); }
+  .dhr-circular__head { display:grid; gap:6px; max-width:76ch; }
+  .dhr-circular__title { font-size:clamp(22px,3vw,30px); font-weight:900; line-height:1.05; letter-spacing:0; }
+  .dhr-circular__sub { font-size:14px; line-height:1.55; color:var(--muted); }
+  .dhr-circular__loop, .dhr-circular__takeaway { border:1px solid var(--line); border-radius:20px; background: color-mix(in srgb, var(--bg) 92%, #09121f 8%); }
+  .dhr-circular__loop { padding:10px; }
+  .dhr-circular svg { width:100%; height:auto; min-height:270px; }
+  .dhr-circular__orbit { fill:none; stroke:url(#loop-grad); stroke-width:8; stroke-linecap:round; stroke-dasharray:18 14; }
+  .dhr-circular__node rect, .dhr-circular__ms rect { fill:color-mix(in srgb, var(--bg) 88%, #09121f 12%); stroke:var(--line); }
+  .dhr-circular__node--warn rect { stroke:color-mix(in srgb, var(--red) 35%, var(--line)); fill:color-mix(in srgb, var(--red) 7%, var(--bg)); }
+  .dhr-circular__node--gold rect, .dhr-circular__ms rect { stroke:color-mix(in srgb, var(--amber) 36%, var(--line)); fill:color-mix(in srgb, var(--amber) 8%, var(--bg)); }
+  .dhr-circular text { fill:var(--text); font-size:19px; font-weight:900; }
+  .dhr-circular text + text { fill:var(--muted); font-size:14px; font-weight:800; }
+  .dhr-circular__break path { fill:none; stroke:var(--red); stroke-width:5; stroke-linecap:round; stroke-dasharray:10 9; }
+  .dhr-circular__break rect { fill:color-mix(in srgb, var(--bg) 90%, #09121f 10%); stroke:color-mix(in srgb, var(--red) 36%, var(--line)); }
+  .dhr-circular__break text { font-size:15px; }
+  .dhr-circular__takeaway { padding:14px 16px; }
+  .dhr-circular__takeaway strong { display:block; font-size:15px; }
+  .dhr-circular__takeaway span { display:block; margin-top:4px; color:var(--muted); font-size:13px; line-height:1.45; }
+</style>

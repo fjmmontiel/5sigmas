@@ -1,0 +1,109 @@
+<div class="dot-tether" data-demo="03-arquitectura-tether" data-anim-fullscreen="off" data-anim-contrast="force">
+  <div class="dot-tether__head">
+    <div class="dot-tether__title">Arquitectura tethered: repartir calor, paneles y enlaces en vez de concentrarlo todo</div>
+    <div class="dot-tether__sub">
+      La tesis deja de ser un “datacenter flotante” y pasa a ser una topología: potencia, cómputo, radiadores y enlaces
+      ocupan posiciones distintas alrededor de una espina tensada.
+    </div>
+    <div class="dot-tether__badge">Lectura correcta: concepto de arquitectura para repartir restricciones, no despliegue validado a escala datacenter</div>
+  </div>
+
+  <div class="dot-tether__viz">
+    <svg viewBox="0 0 980 430" role="img" aria-label="Arquitectura tethered con paneles solares, nodos de cómputo, radiadores y enlaces láser">
+      <defs>
+        <linearGradient id="tether-line" x1="0" x2="1">
+          <stop offset="0" stop-color="#7cc7ff"/>
+          <stop offset="1" stop-color="#26A69A"/>
+        </linearGradient>
+      </defs>
+      <g class="dot-tether__earth">
+        <circle cx="110" cy="350" r="86"/>
+        <text x="62" y="354">Tierra</text>
+      </g>
+      <g class="dot-tether__solar">
+        <text x="74" y="64">plano solar</text>
+        <path d="M184 100H348"/>
+        <rect x="182" y="76" width="48" height="48" rx="8"/>
+        <rect x="242" y="76" width="48" height="48" rx="8"/>
+        <rect x="302" y="76" width="48" height="48" rx="8"/>
+      </g>
+      <path class="dot-tether__spine" d="M430 62 C460 138 476 238 448 360"/>
+      <g class="dot-tether__nodes">
+        <g transform="translate(392 82)"><rect width="132" height="54" rx="18"/><text x="28" y="34">Nodo 1</text></g>
+        <g transform="translate(430 172)"><rect width="132" height="54" rx="18"/><text x="28" y="34">Nodo 2</text></g>
+        <g transform="translate(404 264)"><rect width="132" height="54" rx="18"/><text x="28" y="34">Nodo 3</text></g>
+      </g>
+      <g class="dot-tether__thermal">
+        <path d="M552 108H664M588 198H708M552 290H664"/>
+        <rect x="666" y="82" width="168" height="54" rx="16"/>
+        <rect x="710" y="172" width="168" height="54" rx="16"/>
+        <rect x="666" y="264" width="168" height="54" rx="16"/>
+        <text x="694" y="116">radiador</text>
+        <text x="738" y="206">spreader</text>
+        <text x="696" y="298">radiador</text>
+      </g>
+      <g class="dot-tether__links">
+        <path d="M534 74 C650 48 778 48 882 74"/>
+        <path d="M536 356 C642 384 770 382 880 350"/>
+        <text x="782" y="396">downlink</text>
+      </g>
+    </svg>
+  </div>
+
+  <div class="dot-tether__notes">
+    <div><strong>Qué gana</strong><span>distribuye superficie térmica y reduce el punto único masivo</span></div>
+    <div><strong>Qué usa</strong><span>geometría y orientación como parte del diseño</span></div>
+    <div><strong>Qué no borra</strong><span>lanzamiento, masa y radiadores siguen mandando</span></div>
+  </div>
+</div>
+
+<style>
+  .dot-tether, .dot-tether * { box-sizing:border-box; }
+  .dot-tether {
+    --sky:#7cc7ff; --teal:#26A69A; --amber:#FFB343; --bg:var(--md-default-bg-color,#fff);
+    --line:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 15%, transparent);
+    --text:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 94%, transparent);
+    --muted:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 63%, transparent);
+    display:grid; gap:16px; max-width:1080px; margin:0 auto; padding:clamp(16px,2vw,24px);
+    border-radius:24px; border:1px solid var(--line);
+    background:radial-gradient(100% 130% at 0% 0%, color-mix(in srgb, var(--sky) 10%, transparent), transparent 50%), radial-gradient(90% 110% at 100% 100%, color-mix(in srgb, var(--teal) 9%, transparent), transparent 50%), var(--bg);
+    color:var(--text); font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  }
+  [data-md-color-scheme="slate"] .dot-tether { --line:rgba(226,232,240,.16); --text:rgba(236,244,255,.95); --muted:rgba(236,244,255,.68); }
+  .dot-tether__head { display:grid; gap:6px; max-width:78ch; }
+  .dot-tether__title { font-size:clamp(22px,3vw,30px); font-weight:900; line-height:1.05; letter-spacing:0; }
+  .dot-tether__sub { font-size:14px; line-height:1.55; color:var(--muted); }
+  .dot-tether__badge {
+    width: fit-content;
+    padding: 8px 12px;
+    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--sky) 28%, var(--line));
+    background: color-mix(in srgb, var(--sky) 8%, transparent);
+    font-size: 11.5px;
+    font-weight: 800;
+    line-height: 1.35;
+  }
+  .dot-tether__viz { padding:10px; border:1px solid var(--line); border-radius:20px; background: color-mix(in srgb, var(--bg) 92%, #09121f 8%); overflow:hidden; }
+  .dot-tether svg { width:100%; height:auto; min-height:300px; }
+  .dot-tether text { fill:var(--text); font-size:20px; font-weight:900; }
+  .dot-tether__earth circle { fill:color-mix(in srgb, var(--sky) 22%, transparent); stroke:color-mix(in srgb, var(--sky) 45%, var(--line)); }
+  .dot-tether__solar rect { fill:color-mix(in srgb, var(--amber) 22%, transparent); stroke:color-mix(in srgb, var(--amber) 48%, var(--line)); }
+  .dot-tether__solar path, .dot-tether__thermal path { fill:none; stroke:var(--line); stroke-width:4; stroke-linecap:round; }
+  .dot-tether__spine { fill:none; stroke:url(#tether-line); stroke-width:7; stroke-linecap:round; }
+  .dot-tether__nodes rect { fill:color-mix(in srgb, var(--bg) 88%, #09121f 12%); stroke:color-mix(in srgb, var(--teal) 38%, var(--line)); }
+  .dot-tether__thermal rect { fill:color-mix(in srgb, var(--amber) 10%, var(--bg)); stroke:color-mix(in srgb, var(--amber) 40%, var(--line)); }
+  .dot-tether__links path { fill:none; stroke:#7cc7ff; stroke-width:4; stroke-linecap:round; stroke-dasharray:10 12; opacity:.78; }
+  .dot-tether__links text, .dot-tether__solar text, .dot-tether__thermal > text { font-size:17px; }
+  .dot-tether__notes { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; }
+  .dot-tether__notes div { padding:14px 16px; border:1px solid var(--line); border-radius:18px; background:rgba(255,255,255,.04); }
+  .dot-tether__notes strong { display:block; font-size:15px; }
+  .dot-tether__notes span { display:block; margin-top:4px; color:var(--muted); font-size:12.8px; line-height:1.35; }
+  @media (max-width: 860px) {
+    .dot-tether { overflow-x:auto; overscroll-behavior-x:contain; }
+    .dot-tether__head,
+    .dot-tether__badge,
+    .dot-tether__viz,
+    .dot-tether__notes { min-width:820px; }
+    .dot-tether__notes { grid-template-columns:repeat(3, minmax(0,1fr)); }
+  }
+</style>

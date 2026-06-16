@@ -1,0 +1,109 @@
+<div class="dcw-context" data-demo="04-agua-comparativa" data-anim-fullscreen="off" data-anim-contrast="force">
+  <div class="dcw-context__head">
+    <div class="dcw-context__title">El agua importa, pero primero hay que calibrar la escala correcta</div>
+    <div class="dcw-context__sub">
+      La magnitud nacional y el conflicto local no cuentan la misma historia. El contexto agregado reduce ruido, y el
+      conflicto local aparece cuando se juntan clima seco, refrigeración evaporativa y mucha potencia concentrada.
+    </div>
+  </div>
+
+  <div class="dcw-context__grid">
+    <section class="dcw-context__panel">
+      <span class="dcw-context__label">EE. UU. — retirada diaria</span>
+      <div class="dcw-context__bar dcw-context__bar--agri">
+        <strong>Agricultura</strong>
+        <span>~800.000 M gal/día</span>
+      </div>
+      <div class="dcw-context__marker">
+        <strong>Campos de golf</strong>
+        <span>~2.000 M gal/día · 4,5× los DCs</span>
+      </div>
+      <div class="dcw-context__marker dcw-context__marker--dc">
+        <strong>Datacenters</strong>
+        <span>449 M gal/día</span>
+      </div>
+    </section>
+
+    <section class="dcw-context__panel dcw-context__panel--az">
+      <span class="dcw-context__label">Qué vuelve tenso el caso local</span>
+      <div class="dcw-context__az">
+        <div class="dcw-context__az-card">
+          <strong>Clima y cuenca</strong>
+          <span>El mismo MW pesa más en regiones áridas o ya tensionadas.</span>
+        </div>
+        <div class="dcw-context__az-ratio">+</div>
+        <div class="dcw-context__az-card dcw-context__az-card--dc">
+          <strong>Arquitectura térmica</strong>
+          <span>El WUE cambia por órdenes de magnitud según la refrigeración elegida.</span>
+        </div>
+      </div>
+      <div class="dcw-context__tax">
+        <strong>Lectura correcta</strong>
+        <span>El agregado nacional contextualiza, y el conflicto político local depende sobre todo de dónde y cómo se refrigera.</span>
+      </div>
+      <div class="dcw-context__tax dcw-context__tax--soft">
+        <strong>Qué no dice este gráfico</strong>
+        <span>Que el agua deje de importar: solo evita confundir magnitud agregada con impacto local.</span>
+      </div>
+    </section>
+  </div>
+</div>
+
+<style>
+  .dcw-context, .dcw-context * { box-sizing:border-box; }
+  .dcw-context {
+    --teal:#26A69A; --sky:#7cc7ff; --amber:#FFB343; --bg:var(--md-default-bg-color,#fff);
+    --line:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 15%, transparent);
+    --text:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 94%, transparent);
+    --muted:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 63%, transparent);
+    display:grid; gap:14px; max-width:980px; margin:0 auto; padding:clamp(16px,2vw,24px);
+    border-radius:24px; border:1px solid var(--line);
+    background:
+      radial-gradient(100% 130% at 0% 0%, color-mix(in srgb, var(--teal) 10%, transparent), transparent 50%),
+      radial-gradient(90% 110% at 100% 100%, color-mix(in srgb, var(--amber) 8%, transparent), transparent 50%),
+      var(--bg);
+    color:var(--text); font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  }
+  [data-md-color-scheme="slate"] .dcw-context { --line:rgba(226,232,240,.16); --text:rgba(236,244,255,.95); --muted:rgba(236,244,255,.68); }
+  .dcw-context__head { display:grid; gap:6px; max-width:74ch; }
+  .dcw-context__title { font-size:clamp(22px,3vw,30px); font-weight:900; line-height:1.05; letter-spacing:0; }
+  .dcw-context__sub { font-size:14px; line-height:1.55; color:var(--muted); }
+  .dcw-context__grid { display:grid; grid-template-columns:1.15fr .85fr; gap:12px; }
+  .dcw-context__panel {
+    display:grid; gap:12px; padding:16px; border-radius:20px; border:1px solid var(--line);
+    background: color-mix(in srgb, var(--bg) 90%, #09121f 10%);
+  }
+  .dcw-context__label {
+    display:block; font-size:11px; font-weight:900; text-transform:uppercase; letter-spacing:.08em; color:var(--muted);
+  }
+  .dcw-context__bar, .dcw-context__marker, .dcw-context__tax, .dcw-context__az-card {
+    padding:12px; border-radius:16px; border:1px solid var(--line); background:rgba(255,255,255,.04);
+  }
+  .dcw-context__bar {
+    min-height:58px; background: linear-gradient(90deg, rgba(255,179,67,.22), rgba(255,179,67,.5)); display:flex; justify-content:space-between; gap:10px; align-items:center;
+  }
+  .dcw-context__marker { margin-left:72%; }
+  .dcw-context__marker--dc { margin-left:84%; border-color: color-mix(in srgb, var(--teal) 24%, var(--line)); background: color-mix(in srgb, var(--teal) 10%, transparent); }
+  .dcw-context__bar strong, .dcw-context__marker strong, .dcw-context__az-card strong, .dcw-context__tax strong {
+    display:block; font-size:16px; line-height:1.12; letter-spacing:0;
+  }
+  .dcw-context__bar span, .dcw-context__marker span, .dcw-context__az-card span, .dcw-context__tax span {
+    display:block; font-size:12px; line-height:1.45; color:var(--muted);
+  }
+  .dcw-context__az { display:grid; grid-template-columns:1fr auto 1fr; gap:10px; align-items:center; }
+  .dcw-context__az-ratio {
+    display:grid; place-items:center; width:68px; aspect-ratio:1; border-radius:50%;
+    border:1px solid color-mix(in srgb, var(--amber) 28%, var(--line)); background: color-mix(in srgb, var(--amber) 10%, transparent); font-size:18px; font-weight:900;
+  }
+  .dcw-context__az-card--dc { border-color: color-mix(in srgb, var(--teal) 24%, var(--line)); background: color-mix(in srgb, var(--teal) 8%, transparent); }
+  .dcw-context__tax--soft { background: color-mix(in srgb, var(--amber) 7%, transparent); }
+  @media (max-width: 860px) {
+    .dcw-context { overflow-x:auto; overscroll-behavior-x:contain; }
+    .dcw-context__head,
+    .dcw-context__grid { min-width:780px; }
+    .dcw-context__grid { grid-template-columns:1.15fr .85fr; }
+    .dcw-context__az { grid-template-columns:1fr auto 1fr; }
+    .dcw-context__marker { margin-left:72%; }
+    .dcw-context__marker--dc { margin-left:84%; }
+  }
+</style>

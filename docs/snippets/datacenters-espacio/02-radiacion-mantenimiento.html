@@ -1,0 +1,100 @@
+<div class="dcm-orbitops" data-demo="02-radiacion-mantenimiento" data-anim-fullscreen="off" data-anim-contrast="force">
+  <div class="dcm-orbitops__head">
+    <div class="dcm-orbitops__title">Operar en órbita significa diseñar para fallar sin reparación y cerrar la misión</div>
+    <div class="dcm-orbitops__sub">
+      En tierra reparas. En órbita diseñas un ciclo: radiación, aislamiento, redundancia degradada y fin de misión.
+      El mantenimiento se convierte en arquitectura.
+    </div>
+  </div>
+
+  <div class="dcm-orbitops__viz">
+    <svg viewBox="0 0 920 410" role="img" aria-label="Ciclo operativo orbital con radiación, aislamiento, redundancia y deorbitado">
+      <defs>
+        <radialGradient id="ops-rad" cx=".5" cy=".5" r=".6">
+          <stop offset="0" stop-color="#FFB343" stop-opacity=".55"/>
+          <stop offset="1" stop-color="#ff8d7a" stop-opacity=".02"/>
+        </radialGradient>
+      </defs>
+      <circle class="dcm-orbitops__belt" cx="210" cy="188" r="126"/>
+      <g class="dcm-orbitops__sat" transform="translate(150 130)">
+        <rect x="40" y="28" width="82" height="82" rx="18"/>
+        <rect x="-28" y="46" width="60" height="18" rx="5"/>
+        <rect x="130" y="46" width="60" height="18" rx="5"/>
+        <rect x="-28" y="76" width="60" height="18" rx="5"/>
+        <rect x="130" y="76" width="60" height="18" rx="5"/>
+        <path d="M60 56H102M60 82H102"/>
+      </g>
+      <g class="dcm-orbitops__rays">
+        <path d="M72 62L132 118"/><path d="M92 264L150 226"/><path d="M304 48L272 112"/><path d="M334 274L276 232"/>
+      </g>
+      <g class="dcm-orbitops__flow">
+        <path d="M344 182H496"/>
+        <path d="M644 182H796"/>
+        <path d="M796 230 C720 326 548 338 456 252"/>
+      </g>
+      <g class="dcm-orbitops__step" transform="translate(492 116)">
+        <rect width="150" height="132" rx="22"/>
+        <text x="22" y="36">Aislar nodo</text>
+        <text x="22" y="62">reiniciar</text>
+        <text x="22" y="88">reencaminar</text>
+      </g>
+      <g class="dcm-orbitops__step dcm-orbitops__step--warn" transform="translate(748 116)">
+        <rect width="150" height="132" rx="22"/>
+        <text x="22" y="36">Margen baja</text>
+        <text x="22" y="62">menos reserva</text>
+        <text x="22" y="88">vida finita</text>
+      </g>
+      <g class="dcm-orbitops__deorbit">
+        <path d="M474 302 C388 362 234 354 150 300"/>
+        <text x="72" y="338">deorbit planificado</text>
+      </g>
+    </svg>
+  </div>
+
+  <div class="dcm-orbitops__timeline">
+    <div><strong>Radiación</strong><span>SEU y daño acumulado</span></div>
+    <div><strong>Operación</strong><span>detectar, aislar y seguir</span></div>
+    <div><strong>Redundancia</strong><span>capacidad de sobra desde el diseño</span></div>
+    <div><strong>Cierre</strong><span>no dejar activos muertos décadas</span></div>
+  </div>
+</div>
+
+<style>
+  .dcm-orbitops, .dcm-orbitops * { box-sizing:border-box; }
+  .dcm-orbitops {
+    --teal:#26A69A; --sky:#7cc7ff; --amber:#FFB343; --red:#ff8d7a; --bg:var(--md-default-bg-color,#fff);
+    --line:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 15%, transparent);
+    --text:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 94%, transparent);
+    --muted:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 63%, transparent);
+    display:grid; gap:16px; max-width:980px; margin:0 auto; padding:clamp(16px,2vw,24px);
+    border-radius:24px; border:1px solid var(--line);
+    background:radial-gradient(100% 130% at 0% 0%, color-mix(in srgb, var(--sky) 10%, transparent), transparent 50%), radial-gradient(90% 110% at 100% 100%, color-mix(in srgb, var(--red) 8%, transparent), transparent 50%), var(--bg);
+    color:var(--text); font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  }
+  [data-md-color-scheme="slate"] .dcm-orbitops { --line:rgba(226,232,240,.16); --text:rgba(236,244,255,.95); --muted:rgba(236,244,255,.68); }
+  .dcm-orbitops__head { display:grid; gap:6px; max-width:76ch; }
+  .dcm-orbitops__title { font-size:clamp(22px,3vw,30px); font-weight:900; line-height:1.05; letter-spacing:0; }
+  .dcm-orbitops__sub { font-size:14px; line-height:1.55; color:var(--muted); }
+  .dcm-orbitops__viz { padding:10px; border:1px solid var(--line); border-radius:20px; background: color-mix(in srgb, var(--bg) 92%, #09121f 8%); overflow:hidden; }
+  .dcm-orbitops svg { width:100%; height:auto; min-height:300px; }
+  .dcm-orbitops__belt { fill:url(#ops-rad); stroke:color-mix(in srgb, var(--amber) 34%, var(--line)); stroke-width:2; stroke-dasharray:10 9; }
+  .dcm-orbitops__sat rect { fill:color-mix(in srgb, var(--bg) 88%, #09121f 12%); stroke:var(--line); }
+  .dcm-orbitops__sat path { stroke:#7cc7ff; stroke-width:4; stroke-linecap:round; }
+  .dcm-orbitops__rays path { stroke:#ff8d7a; stroke-width:5; stroke-linecap:round; }
+  .dcm-orbitops__flow path { fill:none; stroke:#26A69A; stroke-width:5; stroke-linecap:round; stroke-dasharray:13 9; }
+  .dcm-orbitops__deorbit path { fill:none; stroke:#7cc7ff; stroke-width:5; stroke-linecap:round; }
+  .dcm-orbitops__step rect { fill:color-mix(in srgb, var(--bg) 88%, #09121f 12%); stroke:color-mix(in srgb, var(--teal) 38%, var(--line)); }
+  .dcm-orbitops__step--warn rect { stroke:color-mix(in srgb, var(--red) 38%, var(--line)); fill:color-mix(in srgb, var(--red) 7%, var(--bg)); }
+  .dcm-orbitops text { fill:var(--text); font-size:20px; font-weight:900; }
+  .dcm-orbitops__timeline { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; }
+  .dcm-orbitops__timeline div { padding:14px 16px; border:1px solid var(--line); border-radius:18px; background:rgba(255,255,255,.04); }
+  .dcm-orbitops__timeline strong { display:block; font-size:15px; }
+  .dcm-orbitops__timeline span { display:block; margin-top:4px; color:var(--muted); font-size:12.8px; line-height:1.35; }
+  @media (max-width: 860px) {
+    .dcm-orbitops { overflow-x:auto; overscroll-behavior-x:contain; }
+    .dcm-orbitops__head,
+    .dcm-orbitops__viz,
+    .dcm-orbitops__timeline { min-width:760px; }
+    .dcm-orbitops__timeline { grid-template-columns:repeat(4, minmax(0,1fr)); }
+  }
+</style>

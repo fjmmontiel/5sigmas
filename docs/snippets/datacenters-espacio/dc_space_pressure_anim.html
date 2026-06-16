@@ -1,453 +1,515 @@
-<div class="sigmas-dcspace" data-anim-fullscreen="on" data-anim-contrast="force">
-  <div class="sigmas-dcspace__head">
-    <div class="sigmas-dcspace__title">Tierra vs. órbita: dónde se va la energía del cómputo</div>
-    <div class="sigmas-dcspace__sub">
-      El cuello de botella no es solo generar más electricidad, sino cuánto de esa energía acaba en cómputo útil y cuánto se dedica a gestionar calor y potencia.
-      En tierra pagas ese coste con <em>refrigeración</em> y pérdidas eléctricas; en órbita lo cambias por <strong>radiadores</strong>, diseño térmico y energía solar.
+<div class="dcs-hero" data-demo="dc-space-hero" data-anim-fullscreen="off" data-anim-contrast="force">
+  <div class="dcs-hero__head">
+    <div class="dcs-hero__eyebrow">Datacenters en el espacio</div>
+    <div class="dcs-hero__title">Tierra vs. órbita: sube la energía útil, no desaparece la fricción</div>
+    <div class="dcs-hero__sub">
+      La pregunta no es solo cuánta electricidad generas. Es cuánto acaba en cómputo útil y cuánto pagas en soporte térmico y operativo.
     </div>
   </div>
 
-  <div class="sigmas-dcspace__grid">
-    <section class="sigmas-dcspace__card sigmas-dcspace__card--earth" aria-label="Métricas en Tierra">
-      <div class="sigmas-dcspace__card-head">
-        <span class="sigmas-dcspace__eyebrow">Tierra</span>
-        <h3>Métricas en Tierra</h3>
+  <div class="dcs-hero__grid">
+    <section class="dcs-hero__card dcs-hero__card--earth" aria-label="Patrón terrestre">
+      <div class="dcs-hero__card-head">
+        <span class="dcs-hero__chip">Tierra</span>
+        <h3>La red alimenta al rack y a la maquinaria térmica</h3>
       </div>
 
-      <div class="sigmas-dcspace__metric">
-        <div class="sigmas-dcspace__metric-label">Energía estimada para centros de datos (IEA) — año 2030</div>
-        <div class="sigmas-dcspace__metric-value">
-          <strong>950</strong>
-          <span>TWh</span>
+      <div class="dcs-hero__stack">
+        <div class="dcs-hero__stack-bar dcs-hero__stack-bar--it" style="width:60%">
+          <span>IT útil</span>
+          <strong>≈ 60%</strong>
         </div>
-        <div class="sigmas-dcspace__metric-note">Crecimiento → más calor que expulsar</div>
+        <div class="dcs-hero__stack-bar dcs-hero__stack-bar--aux" style="width:40%">
+          <span>Refrigeración + soporte</span>
+          <strong>≈ 40%</strong>
+        </div>
       </div>
 
-      <div class="sigmas-dcspace__panel">
-        <div class="sigmas-dcspace__panel-title">Distribución de energía (aprox.)</div>
-        <div class="sigmas-dcspace__panel-sub">Orden de magnitud: ~60% IT y ~40% infraestructura térmica/servicios</div>
-        <div class="sigmas-dcspace__stack" aria-hidden="true">
-          <span class="sigmas-dcspace__stack-fill sigmas-dcspace__stack-fill--earth-it" style="width:60%"></span>
-          <span class="sigmas-dcspace__stack-fill sigmas-dcspace__stack-fill--earth-aux" style="width:40%"></span>
+      <div class="dcs-hero__systems">
+        <div class="dcs-hero__system">
+          <span class="dcs-hero__system-k">Arriba del rack</span>
+          <p>Compresores, ventiladores, chillers, UPS y distribución AC/DC.</p>
         </div>
-        <div class="sigmas-dcspace__legend">
-          <span class="sigmas-dcspace__legend-item sigmas-dcspace__legend-item--earth-it">IT (cómputo) ≈ 60%</span>
-          <span class="sigmas-dcspace__legend-item sigmas-dcspace__legend-item--earth-aux">Infraestructura + servicios ≈ 40%</span>
+        <div class="dcs-hero__system">
+          <span class="dcs-hero__system-k">Cuello dominante</span>
+          <p>Más electricidad implica más calor que expulsar en suelo, agua y red.</p>
         </div>
-        <ul class="sigmas-dcspace__list">
-          <li>Refrigeración: compresores, ventilación, bombeo</li>
-          <li>Eléctrico: SAI/UPS, conversión AC/DC, distribución</li>
-        </ul>
-      </div>
-
-      <div class="sigmas-dcspace__implication sigmas-dcspace__implication--earth">
-        <div class="sigmas-dcspace__implication-k">Implicación directa</div>
-        <p>Cada punto que reduces en refrigeración y servicios se convierte en más cómputo útil o menos coste operativo.</p>
       </div>
     </section>
 
-    <section class="sigmas-dcspace__card sigmas-dcspace__card--orbit" aria-label="Métricas en Órbita">
-      <div class="sigmas-dcspace__card-head">
-        <span class="sigmas-dcspace__eyebrow">Órbita</span>
-        <h3>Métricas en Órbita</h3>
+    <section class="dcs-hero__rail" aria-label="Cambio de régimen">
+      <div class="dcs-hero__rail-title">Qué se desplaza</div>
+      <div class="dcs-hero__rail-flow">
+        <div class="dcs-hero__rail-item">
+          <span class="dcs-hero__rail-k">Tierra</span>
+          <strong>mueves calor con electricidad</strong>
+        </div>
+        <div class="dcs-hero__rail-arrow" aria-hidden="true"></div>
+        <div class="dcs-hero__rail-item dcs-hero__rail-item--mid">
+          <span class="dcs-hero__rail-k">Cambio clave</span>
+          <strong>sube la energía útil, sube la exigencia térmica</strong>
+        </div>
+        <div class="dcs-hero__rail-arrow" aria-hidden="true"></div>
+        <div class="dcs-hero__rail-item">
+          <span class="dcs-hero__rail-k">Órbita</span>
+          <strong>mueves calor con radiadores y orientación</strong>
+        </div>
+      </div>
+      <div class="dcs-hero__rail-note">
+        La ventaja orbital no elimina el coste auxiliar: cambia compresores por radiadores, superficie y orientación.
+      </div>
+    </section>
+
+    <section class="dcs-hero__card dcs-hero__card--orbit" aria-label="Patrón orbital">
+      <div class="dcs-hero__card-head">
+        <span class="dcs-hero__chip dcs-hero__chip--orbit">Órbita</span>
+        <h3>Más energía llega al cómputo, pero el nodo se diseña alrededor del calor</h3>
       </div>
 
-      <div class="sigmas-dcspace__metric">
-        <div class="sigmas-dcspace__metric-label">Fracción de electricidad que llega a IT (conceptual)</div>
-        <div class="sigmas-dcspace__metric-value">
-          <strong>≈ 90</strong>
-          <span>%</span>
+      <div class="dcs-hero__stack">
+        <div class="dcs-hero__stack-bar dcs-hero__stack-bar--orbit-it" style="width:90%">
+          <span>IT útil</span>
+          <strong>≈ 90%</strong>
         </div>
-        <div class="sigmas-dcspace__metric-note">Menos pérdidas auxiliares → más energía útil para cómputo</div>
+        <div class="dcs-hero__stack-bar dcs-hero__stack-bar--orbit-aux" style="width:10%">
+          <span>Control + térmico auxiliar</span>
+          <strong>≈ 10%</strong>
+        </div>
       </div>
 
-      <div class="sigmas-dcspace__panel">
-        <div class="sigmas-dcspace__panel-title">Distribución de energía (aprox.)</div>
-        <div class="sigmas-dcspace__panel-sub">Orden de magnitud: ~90% IT y ~10% servicios/control</div>
-        <div class="sigmas-dcspace__stack" aria-hidden="true">
-          <span class="sigmas-dcspace__stack-fill sigmas-dcspace__stack-fill--orbit-it" style="width:90%"></span>
-          <span class="sigmas-dcspace__stack-fill sigmas-dcspace__stack-fill--orbit-aux" style="width:10%"></span>
+      <div class="dcs-hero__orbit">
+        <div class="dcs-hero__sun">Solar casi continua</div>
+        <div class="dcs-hero__bus">
+          <span class="dcs-hero__bus-core">Compute node</span>
+          <span class="dcs-hero__bus-link">DC/DC + control</span>
         </div>
-        <div class="sigmas-dcspace__legend">
-          <span class="sigmas-dcspace__legend-item sigmas-dcspace__legend-item--orbit-it">IT (cómputo) ≈ 90%</span>
-          <span class="sigmas-dcspace__legend-item sigmas-dcspace__legend-item--orbit-aux">Servicios + control ≈ 10%</span>
+        <div class="dcs-hero__radiators">
+          <span>Radiador A</span>
+          <span>Radiador B</span>
+          <span>Radiador C</span>
         </div>
-        <ul class="sigmas-dcspace__list">
-          <li>Electricidad: DC/DC, control, comunicaciones</li>
-          <li>Térmico: bombas + radiadores (radiación)</li>
-        </ul>
       </div>
 
-      <div class="sigmas-dcspace__implication sigmas-dcspace__implication--orbit">
-        <div class="sigmas-dcspace__implication-k">Implicación directa</div>
-        <p>El coste no desaparece: se desplaza a diseño térmico, masa y superficie de radiadores.</p>
+      <div class="dcs-hero__systems">
+        <div class="dcs-hero__system">
+          <span class="dcs-hero__system-k">Ganancia física</span>
+          <p>Más continuidad energética por panel y menos edificio auxiliar alrededor del rack.</p>
+        </div>
+        <div class="dcs-hero__system">
+          <span class="dcs-hero__system-k">Precio físico</span>
+          <p>La disipación exige radiadores, orientación solar y tolerancia a fallos sin reparación humana.</p>
+        </div>
       </div>
     </section>
   </div>
 
-  <div class="sigmas-dcspace__change">
-    <div class="sigmas-dcspace__change-k">Cambio clave</div>
-    <p><strong>Tierra:</strong> más electricidad para mover calor. <strong>Órbita:</strong> más radiadores para expulsarlo.</p>
-  </div>
-
-  <div class="sigmas-dcspace__foot">
-    <div class="sigmas-dcspace__notes">
-      <span class="chip error">Tierra: calor + red eléctrica</span>
-      <span class="chip primary">Órbita: radiación + solar</span>
-    </div>
-
-    <div class="sigmas-dcspace__sources">
-      Fuentes:
-      <a href="https://www.iea.org/reports/electricity-2025/executive-summary" target="_blank" rel="noreferrer">IEA 2025</a> ·
-      <a href="https://ntrs.nasa.gov/api/citations/20120006537/downloads/20120006537.pdf" target="_blank" rel="noreferrer">NASA Space Cooling</a>
-    </div>
+  <div class="dcs-hero__footer">
+    <div class="dcs-hero__footer-pill">La tesis no cambia: el espacio no borra fricciones, cambia cuáles mandan.</div>
   </div>
 </div>
 
 <style>
-  .sigmas-dcspace,
-  .sigmas-dcspace * {
+  .dcs-hero,
+  .dcs-hero * {
     box-sizing: border-box;
   }
 
-  .sigmas-dcspace {
-    border: 1px solid rgba(160, 190, 255, .15);
+  .dcs-hero {
+    --earth: #26A69A;
+    --orbit: #7cc7ff;
+    --amber: #FFB343;
+    --danger: #ff8d7a;
+    --bg: #07111f;
+    --panel: rgba(9, 18, 34, 0.86);
+    --line: rgba(171, 201, 255, 0.16);
+    --text: #ecf4ff;
+    --muted: rgba(236, 244, 255, 0.72);
+    --soft: rgba(236, 244, 255, 0.08);
+    display: grid;
+    gap: 18px;
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: clamp(18px, 2.2vw, 28px);
+    border: 1px solid var(--line);
     border-radius: 28px;
-    padding: 24px;
     background:
-      radial-gradient(120% 120% at 10% 0%, rgba(38, 166, 154, 0.08), transparent 42%),
-      radial-gradient(90% 90% at 100% 100%, rgba(255, 179, 67, 0.08), transparent 48%),
-      linear-gradient(160deg, #080C1C, #04060E);
-    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6);
-    margin: 0;
-    width: 100%;
-    max-width: none;
-    font-family: var(--ta-brand-font, "Avenir Next", "Avenir", "Segoe UI", "Helvetica Neue", Arial, sans-serif);
-    color: #E8F0FF;
-    overflow: hidden;
+      radial-gradient(90% 140% at 0% 0%, rgba(38, 166, 154, 0.16), transparent 46%),
+      radial-gradient(90% 120% at 100% 0%, rgba(124, 199, 255, 0.17), transparent 48%),
+      linear-gradient(155deg, #06101c, #040915 72%);
+    color: var(--text);
+    font-family: "Avenir Next", "Avenir", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
   }
 
-  .sigmas-dcspace__head {
+  .dcs-hero__head {
+    display: grid;
+    gap: 8px;
+    max-width: 78ch;
+  }
+
+  .dcs-hero__eyebrow {
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--orbit);
+  }
+
+  .dcs-hero__title {
+    font-size: clamp(26px, 3.4vw, 40px);
+    font-weight: 900;
+    letter-spacing:0;
+    line-height: 1.02;
+  }
+
+  .dcs-hero__sub {
+    font-size: 15px;
+    line-height: 1.58;
+    color: var(--muted);
+  }
+
+  .dcs-hero__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(240px, 0.7fr) minmax(0, 1.15fr);
+    gap: 14px;
+    align-items: stretch;
+  }
+
+  .dcs-hero__card,
+  .dcs-hero__rail {
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent),
+      var(--panel);
+    padding: 16px;
+  }
+
+  .dcs-hero__card {
+    display: grid;
+    gap: 14px;
+  }
+
+  .dcs-hero__card-head {
+    display: grid;
+    gap: 8px;
+  }
+
+  .dcs-hero__card-head h3 {
+    margin: 0;
+    font-size: 22px;
+    line-height: 1.1;
+    letter-spacing:0;
+  }
+
+  .dcs-hero__chip {
+    display: inline-flex;
+    width: fit-content;
+    align-items: center;
+    padding: 6px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(38, 166, 154, 0.32);
+    background: rgba(38, 166, 154, 0.12);
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .dcs-hero__chip--orbit {
+    border-color: rgba(124, 199, 255, 0.3);
+    background: rgba(124, 199, 255, 0.12);
+  }
+
+  .dcs-hero__stack {
+    display: grid;
+    gap: 8px;
+  }
+
+  .dcs-hero__stack-bar {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 46px;
+    padding: 0 14px;
+    border-radius: 14px;
+    overflow: hidden;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+  }
+
+  .dcs-hero__stack-bar::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.16), transparent);
+    transform: translateX(-100%);
+    animation: dcsHeroFlow 5s linear infinite;
+  }
+
+  .dcs-hero__stack-bar span,
+  .dcs-hero__stack-bar strong {
+    position: relative;
+    z-index: 1;
+  }
+
+  .dcs-hero__stack-bar--it {
+    background: linear-gradient(90deg, rgba(38, 166, 154, 0.85), rgba(38, 166, 154, 0.55));
+  }
+
+  .dcs-hero__stack-bar--aux {
+    background: linear-gradient(90deg, rgba(255, 141, 122, 0.9), rgba(255, 179, 67, 0.56));
+  }
+
+  .dcs-hero__stack-bar--orbit-it {
+    background: linear-gradient(90deg, rgba(124, 199, 255, 0.88), rgba(61, 127, 255, 0.58));
+  }
+
+  .dcs-hero__stack-bar--orbit-aux {
+    background: linear-gradient(90deg, rgba(255, 179, 67, 0.88), rgba(255, 122, 97, 0.54));
+  }
+
+  .dcs-hero__systems {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .dcs-hero__system {
+    padding: 12px;
+    border-radius: 16px;
+    border: 1px solid rgba(171, 201, 255, 0.14);
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .dcs-hero__system-k,
+  .dcs-hero__rail-k {
+    display: block;
+    margin-bottom: 6px;
+    font-size:11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+
+  .dcs-hero__system p,
+  .dcs-hero__rail-note {
+    margin: 0;
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+
+  .dcs-hero__rail {
+    display: grid;
+    gap: 14px;
+    align-content: center;
+  }
+
+  .dcs-hero__rail-title {
+    font-size: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--amber);
+  }
+
+  .dcs-hero__rail-flow {
     display: grid;
     gap: 10px;
   }
 
-  .sigmas-dcspace__title {
-    font-size: clamp(22px, 3vw, 28px);
-    font-weight: 900;
-    background: linear-gradient(90deg, #E8F0FF, #9FB7FF);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    letter-spacing: -0.02em;
-    line-height: 1.08;
+  .dcs-hero__rail-item {
+    padding: 12px;
+    border-radius: 16px;
+    border: 1px solid rgba(171, 201, 255, 0.14);
+    background: rgba(255, 255, 255, 0.04);
   }
 
-  .sigmas-dcspace__sub {
-    font-size: 15px;
-    color: rgba(190, 210, 255, 0.78);
-    line-height: 1.65;
-    max-width: 72ch;
+  .dcs-hero__rail-item strong {
+    display: block;
+    font-size: 16px;
+    line-height: 1.25;
+    letter-spacing:0;
   }
 
-  .sigmas-dcspace__grid {
+  .dcs-hero__rail-item--mid {
+    border-color: rgba(255, 179, 67, 0.3);
+    background: rgba(255, 179, 67, 0.08);
+  }
+
+  .dcs-hero__rail-arrow {
+    position: relative;
+    height: 24px;
+  }
+
+  .dcs-hero__rail-arrow::before {
+    content: "";
+    position: absolute;
+    left: 14px;
+    right: 14px;
+    top: 11px;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(124, 199, 255, 0.92));
+  }
+
+  .dcs-hero__rail-arrow::after {
+    content: "";
+    position: absolute;
+    right: 8px;
+    top: 7px;
+    border-left: 10px solid rgba(124, 199, 255, 0.92);
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+  }
+
+  .dcs-hero__orbit {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 14px;
-    margin-top: 18px;
-  }
-
-  .sigmas-dcspace__card {
-    display: grid;
-    gap: 12px;
-    padding: 18px;
-    border-radius: 22px;
-    border: 1px solid rgba(160, 190, 255, 0.14);
+    gap: 10px;
+    padding: 14px;
+    border-radius: 18px;
+    border: 1px solid rgba(124, 199, 255, 0.18);
     background:
-      linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)),
-      rgba(6, 14, 38, 0.92);
-    min-width: 0;
+      radial-gradient(120% 140% at 100% 0%, rgba(124, 199, 255, 0.12), transparent 48%),
+      rgba(255, 255, 255, 0.03);
   }
 
-  .sigmas-dcspace__card--earth {
-    box-shadow: inset 0 0 0 1px rgba(89, 243, 194, 0.06);
-  }
-
-  .sigmas-dcspace__card--orbit {
-    box-shadow: inset 0 0 0 1px rgba(255, 211, 106, 0.06);
-  }
-
-  .sigmas-dcspace__card-head {
-    display: grid;
-    gap: 5px;
-  }
-
-  .sigmas-dcspace__eyebrow {
+  .dcs-hero__sun {
     width: fit-content;
-    padding: 3px 9px;
+    padding: 6px 10px;
     border-radius: 999px;
-    font-size: 10px;
-    font-weight: 800;
+    border: 1px solid rgba(255, 179, 67, 0.28);
+    background: rgba(255, 179, 67, 0.1);
+    font-size: 11px;
+    font-weight: 900;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: rgba(232, 240, 255, 0.72);
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.08);
   }
 
-  .sigmas-dcspace__card h3 {
-    margin: 0;
-    font-size: 19px;
-    font-weight: 900;
-    letter-spacing: -0.02em;
-  }
-
-  .sigmas-dcspace__metric {
+  .dcs-hero__bus {
+    position: relative;
     display: grid;
-    gap: 5px;
-  }
-
-  .sigmas-dcspace__metric-label {
-    font-size: 12px;
-    font-weight: 700;
-    color: #BFD3FF;
-  }
-
-  .sigmas-dcspace__metric-value {
-    display: flex;
-    align-items: baseline;
-    gap: 8px;
-    min-width: 0;
-  }
-
-  .sigmas-dcspace__metric-value strong {
-    font-size: clamp(34px, 5vw, 44px);
-    line-height: 1;
-    font-weight: 900;
-    letter-spacing: -0.04em;
-    font-family: "SF Mono", "JetBrains Mono", "Courier New", monospace;
-  }
-
-  .sigmas-dcspace__metric-value span {
-    font-size: 18px;
-    font-weight: 700;
-    color: #9FB7FF;
-  }
-
-  .sigmas-dcspace__metric-note,
-  .sigmas-dcspace__panel-sub,
-  .sigmas-dcspace__list,
-  .sigmas-dcspace__implication p,
-  .sigmas-dcspace__change p {
-    font-size: 12px;
-    line-height: 1.55;
-    color: rgba(190, 210, 255, 0.76);
-  }
-
-  .sigmas-dcspace__panel {
-    display: grid;
-    gap: 9px;
-    padding: 14px;
-    border-radius: 16px;
-    border: 1px solid rgba(160, 190, 255, 0.12);
-    background: rgba(255, 255, 255, 0.03);
-  }
-
-  .sigmas-dcspace__panel-title {
-    font-size: 13px;
-    font-weight: 900;
-    color: #DCE8FF;
-  }
-
-  .sigmas-dcspace__stack {
-    display: flex;
-    height: 14px;
+    gap: 10px;
+    padding: 18px;
+    border-radius: 18px;
+    border: 1px solid rgba(124, 199, 255, 0.2);
+    background: linear-gradient(135deg, rgba(124, 199, 255, 0.12), rgba(124, 199, 255, 0.04));
     overflow: hidden;
-    border-radius: 999px;
-    background: #0E1730;
-    border: 1px solid #23376B;
   }
 
-  .sigmas-dcspace__stack-fill {
+  .dcs-hero__bus::before,
+  .dcs-hero__bus::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 22%;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(124, 199, 255, 0.1), rgba(124, 199, 255, 0.72));
+  }
+
+  .dcs-hero__bus::before {
+    left: -2px;
+  }
+
+  .dcs-hero__bus::after {
+    right: -2px;
+    transform: scaleX(-1);
+  }
+
+  .dcs-hero__bus-core,
+  .dcs-hero__bus-link {
+    position: relative;
+    z-index: 1;
+  }
+
+  .dcs-hero__bus-core {
+    font-size: 18px;
+    font-weight: 900;
+    letter-spacing:0;
+  }
+
+  .dcs-hero__bus-link {
+    font-size: 12.5px;
+    color: var(--muted);
+  }
+
+  .dcs-hero__radiators {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .dcs-hero__radiators span {
     display: block;
-    height: 100%;
-  }
-
-  .sigmas-dcspace__stack-fill--earth-it,
-  .sigmas-dcspace__legend-item--earth-it {
-    color: #59F3C2;
-    background: #59F3C2;
-  }
-
-  .sigmas-dcspace__stack-fill--earth-aux,
-  .sigmas-dcspace__legend-item--earth-aux {
-    color: #FF8B5C;
-    background: #FF8B5C;
-  }
-
-  .sigmas-dcspace__stack-fill--orbit-it,
-  .sigmas-dcspace__legend-item--orbit-it {
-    color: #59F3C2;
-    background: #59F3C2;
-  }
-
-  .sigmas-dcspace__stack-fill--orbit-aux,
-  .sigmas-dcspace__legend-item--orbit-aux {
-    color: #FFD36A;
-    background: #FFD36A;
-  }
-
-  .sigmas-dcspace__legend {
-    display: grid;
-    gap: 4px;
-  }
-
-  .sigmas-dcspace__legend-item {
+    padding: 12px 8px;
+    border-radius: 14px;
+    text-align: center;
+    border: 1px solid rgba(255, 179, 67, 0.22);
+    background:
+      repeating-linear-gradient(
+        90deg,
+        rgba(255, 179, 67, 0.12),
+        rgba(255, 179, 67, 0.12) 8px,
+        rgba(255, 179, 67, 0.04) 8px,
+        rgba(255, 179, 67, 0.04) 16px
+      );
     font-size: 12px;
-    font-weight: 900;
-    background: none;
+    font-weight: 800;
+    color: #ffe7ba;
   }
 
-  .sigmas-dcspace__list {
-    margin: 0;
-    padding-left: 16px;
-  }
-
-  .sigmas-dcspace__list li + li {
-    margin-top: 2px;
-  }
-
-  .sigmas-dcspace__implication {
-    display: grid;
-    gap: 4px;
-    padding: 12px 14px;
-    border-radius: 16px;
-    border: 1px solid rgba(160, 190, 255, 0.14);
-  }
-
-  .sigmas-dcspace__implication--earth {
-    background: rgba(255, 139, 92, 0.07);
-    border-color: rgba(255, 139, 92, 0.22);
-  }
-
-  .sigmas-dcspace__implication--orbit {
-    background: rgba(89, 243, 194, 0.07);
-    border-color: rgba(89, 243, 194, 0.22);
-  }
-
-  .sigmas-dcspace__implication-k,
-  .sigmas-dcspace__change-k {
-    font-size: 12px;
-    font-weight: 900;
-    letter-spacing: 0.01em;
-  }
-
-  .sigmas-dcspace__implication--earth .sigmas-dcspace__implication-k {
-    color: #FF8B5C;
-  }
-
-  .sigmas-dcspace__implication--orbit .sigmas-dcspace__implication-k {
-    color: #59F3C2;
-  }
-
-  .sigmas-dcspace__implication p,
-  .sigmas-dcspace__change p {
-    margin: 0;
-  }
-
-  .sigmas-dcspace__change {
-    margin-top: 14px;
-    padding: 16px 18px;
-    border-radius: 20px;
-    border: 1px solid rgba(160, 190, 255, 0.12);
-    background: rgba(255, 255, 255, 0.03);
-    display: grid;
-    gap: 6px;
-  }
-
-  .sigmas-dcspace__change-k {
-    color: #BFD3FF;
-  }
-
-  .sigmas-dcspace__change strong {
-    color: #E8F0FF;
-  }
-
-  .sigmas-dcspace__foot {
-    margin-top: 20px;
+  .dcs-hero__footer {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 15px;
-    flex-wrap: wrap;
-    border-top: 1px solid rgba(160, 190, 255, 0.12);
-    padding-top: 20px;
+    justify-content: flex-start;
   }
 
-  .sigmas-dcspace__notes {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-
-  .sigmas-dcspace__sources {
-    font-size: 13px;
-    color: rgba(190, 210, 255, 0.55);
-  }
-
-  .sigmas-dcspace__sources a {
-    color: #26A69A;
-    text-decoration: none;
-    font-weight: 700;
-    border-bottom: 1px solid rgba(38, 166, 154, 0.3);
-  }
-
-  .chip {
-    font-size: 13px;
-    font-weight: 600;
-    padding: 7px 16px;
-    border-radius: 22px;
+  .dcs-hero__footer-pill {
+    max-width: 64ch;
+    padding: 10px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(171, 201, 255, 0.18);
     background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--muted);
   }
 
-  .chip.error {
-    color: #FF8B5C;
-    border-color: rgba(255, 139, 92, 0.35);
-    background: rgba(255, 139, 92, 0.05);
+  @keyframes dcsHeroFlow {
+    from { transform: translateX(-120%); }
+    to { transform: translateX(120%); }
   }
 
-  .chip.primary {
-    color: #59F3C2;
-    border-color: rgba(89, 243, 194, 0.35);
-    background: rgba(89, 243, 194, 0.05);
-  }
+  @media (max-width: 980px) {
+    .dcs-hero {
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+    }
 
-  @media (max-width: 860px) {
-    .sigmas-dcspace__grid {
-      grid-template-columns: 1fr;
+    .dcs-hero__header,
+    .dcs-hero__grid {
+      min-width: 960px;
+    }
+
+    .dcs-hero__systems {
+      grid-template-columns: 1fr 1fr;
     }
   }
 
   @media (max-width: 640px) {
-    .sigmas-dcspace {
-      padding: 18px;
+    .dcs-hero__stack-bar {
+      width: 100% !important;
+      min-height: 56px;
+      gap: 10px;
+      align-items: center;
     }
 
-    .sigmas-dcspace__title {
-      font-size: 20px;
-    }
-
-    .sigmas-dcspace__sub {
-      font-size: 13px;
-    }
-
-    .sigmas-dcspace__card {
-      padding: 14px;
-    }
-
-    .sigmas-dcspace__metric-value strong {
-      font-size: 30px;
+    .dcs-hero__stack-bar span {
+      max-width: min(72%, 16ch);
+      line-height: 1.2;
     }
   }
 </style>

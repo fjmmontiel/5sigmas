@@ -1,0 +1,157 @@
+<div class="dod-gravity ta-tabs" data-demo="03-procesar-donde-nace" data-anim-tabs data-default="raw" data-anim-fullscreen="off" data-anim-contrast="force">
+  <div class="dod-gravity__head">
+    <div class="dod-gravity__title">La gravedad del dato orbital: lo caro no es solo computar, es mover bruto</div>
+    <div class="dod-gravity__sub">
+      Cuando el satélite genera terabytes, el cuello no es únicamente la inferencia. Es tener que bajar todo antes de
+      decidir algo útil. Procesar arriba tiene sentido cuando convierte un diluvio en un resultado compacto.
+    </div>
+  </div>
+
+  <div class="dod-gravity__tabs ta-tablist" role="tablist" data-role="tablist" aria-label="Gravedad del dato orbital">
+    <button class="dod-gravity__tab ta-tab" type="button" role="tab" data-role="tab" data-tab="raw" aria-selected="true">Bajar bruto</button>
+    <button class="dod-gravity__tab ta-tab" type="button" role="tab" data-role="tab" data-tab="process" aria-selected="false">Procesar arriba</button>
+    <button class="dod-gravity__tab ta-tab" type="button" role="tab" data-role="tab" data-tab="send" aria-selected="false">Bajar señal</button>
+  </div>
+
+  <div class="dod-gravity__panels ta-panels">
+    <section class="dod-gravity__panel ta-panel" data-panel="raw">
+      <div class="dod-gravity__flood">
+        <div class="dod-gravity__satellite">Satélite EO</div>
+        <div class="dod-gravity__stream">
+          <span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <div class="dod-gravity__ground">Tierra</div>
+      </div>
+      <div class="dod-gravity__caption">Si bajas toda la imagen o todo el stack SAR, el enlace manda el ritmo operativo.</div>
+    </section>
+
+    <section class="dod-gravity__panel ta-panel" data-panel="process" hidden>
+      <div class="dod-gravity__mid">
+        <div class="dod-gravity__satellite">Sensor</div>
+        <div class="dod-gravity__core">Clasificación / detección / compresión</div>
+        <div class="dod-gravity__satellite dod-gravity__satellite--out">Feature set</div>
+      </div>
+      <div class="dod-gravity__caption">La computación a bordo mueve la decisión antes del downlink, no después.</div>
+    </section>
+
+    <section class="dod-gravity__panel ta-panel" data-panel="send" hidden>
+      <div class="dod-gravity__flood dod-gravity__flood--small">
+        <div class="dod-gravity__satellite">Órbita</div>
+        <div class="dod-gravity__stream dod-gravity__stream--small">
+          <span></span><span></span>
+        </div>
+        <div class="dod-gravity__ground">Resultado útil</div>
+      </div>
+      <div class="dod-gravity__caption">El caso madura cuando bajas anomalías, vectores o recortes, no el volumen bruto completo.</div>
+    </section>
+  </div>
+</div>
+
+<style>
+  .dod-gravity, .dod-gravity * { box-sizing:border-box; }
+  .dod-gravity {
+    --sky:#7cc7ff; --teal:#26A69A; --amber:#FFB343; --bg:var(--md-default-bg-color,#fff);
+    --line:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 15%, transparent);
+    --text:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 94%, transparent);
+    --muted:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 63%, transparent);
+    display:grid; gap:14px; max-width:980px; margin:0 auto; padding:clamp(16px,2vw,24px);
+    border-radius:24px; border:1px solid var(--line);
+    background:
+      radial-gradient(100% 130% at 0% 0%, color-mix(in srgb, var(--sky) 10%, transparent), transparent 50%),
+      radial-gradient(90% 110% at 100% 100%, color-mix(in srgb, var(--teal) 9%, transparent), transparent 50%),
+      var(--bg);
+    color:var(--text); font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  }
+  [data-md-color-scheme="slate"] .dod-gravity { --line:rgba(226,232,240,.16); --text:rgba(236,244,255,.95); --muted:rgba(236,244,255,.68); }
+  .dod-gravity__head { display:grid; gap:6px; max-width:74ch; }
+  .dod-gravity__title { font-size:clamp(22px,3vw,30px); font-weight:900; line-height:1.05; letter-spacing:0; }
+  .dod-gravity__sub { font-size:14px; line-height:1.55; color:var(--muted); }
+  .dod-gravity__tabs { display:flex; flex-wrap:wrap; gap:8px; }
+  .dod-gravity__tab { transition:background-color .22s ease-out, border-color .22s ease-out, color .22s ease-out, transform .22s ease-out; }
+  .dod-gravity__tab:hover { transform:translateY(-1px); }
+  .dod-gravity__panel[hidden] { display:none; }
+  .dod-gravity__flood, .dod-gravity__mid {
+    display:grid; gap:12px; align-items:center; min-height:220px; padding:18px;
+    border:1px solid var(--line); border-radius:20px; background: color-mix(in srgb, var(--bg) 90%, #09121f 10%);
+  }
+  .dod-gravity__flood { grid-template-columns:140px 1fr 140px; }
+  .dod-gravity__flood--small { grid-template-columns:140px .45fr 180px; }
+  .dod-gravity__satellite, .dod-gravity__ground, .dod-gravity__core {
+    display:grid; place-items:center; min-height:82px; padding:12px; border-radius:18px; border:1px solid var(--line);
+    background:rgba(255,255,255,.04); font-size:16px; font-weight:900; text-align:center; line-height:1.2;
+  }
+  .dod-gravity__core {
+    border-color: color-mix(in srgb, var(--teal) 24%, var(--line));
+    background: color-mix(in srgb, var(--teal) 9%, transparent);
+  }
+  .dod-gravity__stream { display:flex; gap:8px; }
+  .dod-gravity__stream span {
+    display:block; width:100%; height:16px; border-radius:999px; background:linear-gradient(90deg, rgba(124,199,255,.28), rgba(124,199,255,.92));
+  }
+  .dod-gravity__stream--small span {
+    background:linear-gradient(90deg, rgba(38,166,154,.28), rgba(38,166,154,.92));
+  }
+  .dod-gravity__caption {
+    margin-top:12px; font-size:12.8px; line-height:1.5; color:var(--muted);
+  }
+  @media (max-width: 860px) {
+    .dod-gravity { overflow-x:auto; overscroll-behavior-x:contain; }
+    .dod-gravity__head,
+    .dod-gravity__tabs,
+    .dod-gravity__flood,
+    .dod-gravity__flood--small,
+    .dod-gravity__mid { min-width:760px; }
+    .dod-gravity__flood,
+    .dod-gravity__flood--small,
+    .dod-gravity__mid { grid-template-columns:1fr 1.2fr 1fr; }
+  }
+</style>
+<script>
+  (() => {
+    const KEY = "dod-gravity-tabs";
+    if (window.__portableTabsFallback && window.__portableTabsFallback[KEY]) return;
+    window.__portableTabsFallback = window.__portableTabsFallback || {};
+    window.__portableTabsFallback[KEY] = true;
+    function activate(root, key) {
+      root.querySelectorAll('[data-role="tab"], [role="tab"]').forEach((tab) => {
+        const selected = tab.getAttribute("data-tab") === key;
+        tab.setAttribute("aria-selected", selected ? "true" : "false");
+        tab.tabIndex = selected ? 0 : -1;
+      });
+      root.querySelectorAll("[data-panel]").forEach((panel) => {
+        panel.hidden = panel.getAttribute("data-panel") !== key;
+      });
+    }
+    function initRoot(root) {
+      if (!root || root.dataset.tabsReady === "true") return;
+      root.dataset.tabsReady = "true";
+      const tabs = Array.from(root.querySelectorAll('[data-role="tab"], [role="tab"]'));
+      const first = root.getAttribute("data-default") || (tabs[0] && tabs[0].getAttribute("data-tab"));
+      tabs.forEach((tab) => {
+        tab.tabIndex = -1;
+        tab.addEventListener("click", () => activate(root, tab.getAttribute("data-tab")));
+        tab.addEventListener("keydown", (event) => {
+          const current = tabs.indexOf(tab);
+          let next = current;
+          if (event.key === "ArrowRight") next = (current + 1) % tabs.length;
+          if (event.key === "ArrowLeft") next = (current - 1 + tabs.length) % tabs.length;
+          if (event.key === "Home") next = 0;
+          if (event.key === "End") next = tabs.length - 1;
+          if (next !== current) {
+            event.preventDefault();
+            tabs[next].focus();
+            activate(root, tabs[next].getAttribute("data-tab"));
+          }
+        });
+      });
+      activate(root, first);
+    }
+    function initAll(scope) { scope.querySelectorAll('.dod-gravity[data-anim-tabs]').forEach(initRoot); }
+    if (window.TabbedAnimations && typeof window.TabbedAnimations.initAll === "function") {
+      window.TabbedAnimations.initAll();
+    } else {
+      initAll(document);
+      document.addEventListener("DOMContentLoaded", () => initAll(document), { once: true });
+    }
+  })();
+</script>

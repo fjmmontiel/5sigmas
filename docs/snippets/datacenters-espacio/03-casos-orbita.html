@@ -1,0 +1,99 @@
+<div class="dov-ladder" data-demo="03-casos-orbita" data-anim-fullscreen="off" data-anim-contrast="force">
+  <div class="dov-ladder__head">
+    <div class="dov-ladder__title">No hay un solo “datacenter espacial”: hay peldaños muy distintos</div>
+    <div class="dov-ladder__sub">
+      Lo viable hoy filtra datos que ya nacen en órbita. El cloud general en el espacio sigue varios escalones por encima.
+    </div>
+  </div>
+
+  <div class="dov-ladder__steps">
+    <article class="dov-ladder__step dov-ladder__step--now">
+      <span class="dov-ladder__time">Hoy</span>
+      <h3>Procesamiento a bordo</h3>
+      <p>Inferencia sobre observación o telemetría para bajar solo la señal útil.</p>
+      <div class="dov-ladder__why">Cuello real: el downlink.</div>
+    </article>
+
+    <article class="dov-ladder__step dov-ladder__step--niche">
+      <span class="dov-ladder__time">Hoy</span>
+      <h3>Archivo resiliente</h3>
+      <p>Backup de último recurso para activos donde perderlo todo pesa más que la latencia.</p>
+      <div class="dov-ladder__why">Caso límite, no uso diario.</div>
+    </article>
+
+    <article class="dov-ladder__step dov-ladder__step--mid">
+      <span class="dov-ladder__time">5–10 años</span>
+      <h3>Edge orbital de constelación</h3>
+      <p>Procesamiento repartido entre nodos de comunicaciones y observación con más enlaces láser.</p>
+      <div class="dov-ladder__why">Depende de topología y costes.</div>
+    </article>
+
+    <article class="dov-ladder__step dov-ladder__step--far">
+      <span class="dov-ladder__time">Décadas / especulativo</span>
+      <h3>Datacenter general en órbita</h3>
+      <p>Infraestructura masiva compitiendo con tierra para cargas arbitrarias de IA.</p>
+      <div class="dov-ladder__why">Hoy no sale en masa ni mantenimiento.</div>
+    </article>
+  </div>
+
+  <div class="dov-ladder__note">
+    El salto difícil no es lanzar más nodos: es pasar de procesar datos nacidos arriba a subir cómputo general solo para escapar de límites terrestres.
+  </div>
+</div>
+
+<style>
+  .dov-ladder, .dov-ladder * { box-sizing:border-box; }
+  .dov-ladder {
+    --teal:#26A69A; --sky:#7cc7ff; --amber:#FFB343; --mutedc:#8090a8; --bg:var(--md-default-bg-color,#fff);
+    --line:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 15%, transparent);
+    --text:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 94%, transparent);
+    --muted:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 63%, transparent);
+    display:grid; gap:14px; max-width:980px; margin:0 auto; padding:clamp(16px,2vw,24px);
+    border-radius:24px; border:1px solid var(--line);
+    background:
+      radial-gradient(100% 130% at 0% 0%, color-mix(in srgb, var(--sky) 10%, transparent), transparent 50%),
+      radial-gradient(90% 110% at 100% 100%, color-mix(in srgb, var(--teal) 9%, transparent), transparent 50%),
+      var(--bg);
+    color:var(--text); font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  }
+  [data-md-color-scheme="slate"] .dov-ladder { --line:rgba(226,232,240,.16); --text:rgba(236,244,255,.95); --muted:rgba(236,244,255,.68); }
+  .dov-ladder__head { display:grid; gap:6px; max-width:74ch; }
+  .dov-ladder__title { font-size:clamp(22px,3vw,30px); font-weight:900; line-height:1.05; letter-spacing:0; }
+  .dov-ladder__sub { font-size:14px; line-height:1.55; color:var(--muted); }
+  .dov-ladder__steps { position:relative; display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:10px; align-items:stretch; }
+  .dov-ladder__steps::before {
+    content:""; position:absolute; left:7%; right:7%; top:34px; height:3px; border-radius:999px;
+    background:linear-gradient(90deg, var(--teal), var(--sky), var(--amber), color-mix(in srgb, var(--mutedc) 70%, transparent));
+    opacity:.58;
+  }
+  .dov-ladder__step {
+    position:relative; display:grid; gap:8px; padding:16px; border-radius:20px; border:1px solid var(--line);
+    background: color-mix(in srgb, var(--bg) 90%, #09121f 10%);
+  }
+  .dov-ladder__step--now { border-color: color-mix(in srgb, var(--teal) 24%, var(--line)); }
+  .dov-ladder__step--niche { border-color: color-mix(in srgb, var(--sky) 26%, var(--line)); }
+  .dov-ladder__step--mid { border-color: color-mix(in srgb, var(--amber) 28%, var(--line)); }
+  .dov-ladder__step--far { border-color: color-mix(in srgb, var(--mutedc) 28%, var(--line)); opacity:.9; }
+  .dov-ladder__time {
+    display:inline-flex; width:fit-content; padding:6px 10px; border-radius:999px; border:1px solid var(--line);
+    font-size:11px; font-weight:900; text-transform:uppercase; letter-spacing:.08em; color:var(--muted);
+  }
+  .dov-ladder__step h3 { margin:0; font-size:20px; line-height:1.12; letter-spacing:0; }
+  .dov-ladder__step p, .dov-ladder__why, .dov-ladder__note {
+    margin:0; font-size:12.8px; line-height:1.5; color:var(--muted);
+  }
+  .dov-ladder__why {
+    padding:10px 12px; border-radius:14px; border:1px solid var(--line); background:rgba(255,255,255,.04);
+  }
+  .dov-ladder__note {
+    padding:12px 14px; border-radius:16px; border:1px solid var(--line); background:rgba(255,255,255,.04);
+  }
+  @media (max-width: 920px) {
+    .dov-ladder { overflow-x:auto; overscroll-behavior-x:contain; }
+    .dov-ladder__head,
+    .dov-ladder__steps,
+    .dov-ladder__note { min-width:860px; }
+    .dov-ladder__steps { grid-template-columns:repeat(4, minmax(0,1fr)); }
+    .dov-ladder__steps::before { left:7%; right:7%; top:34px; bottom:auto; width:auto; height:3px; background:linear-gradient(90deg, var(--teal), var(--sky), var(--amber), color-mix(in srgb, var(--mutedc) 70%, transparent)); }
+  }
+</style>

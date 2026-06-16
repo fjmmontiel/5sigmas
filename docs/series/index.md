@@ -52,13 +52,20 @@ Divulgación técnica sobre IA organizada en series temáticas. Cada serie es un
   <div class="si-cta">Leer →</div>
 </a>
 
+<a href="/series/datacenters-espacio/00_presentacion_serie/" class="si-card">
+  <div class="si-label">General · 4 capítulos</div>
+  <div class="si-title">Datacenters en el espacio</div>
+  <div class="si-desc">Qué tendría que cambiar para que el cómputo orbital tenga sentido: energía solar, disipación de calor, conectividad, costes de lanzamiento y huella material.</div>
+  <div class="si-cta">Leer →</div>
+</a>
+
 </div>
 
 <div style="margin:2rem 0 1rem" markdown="1">
 
 ### Por dónde empezar
 
-Si es tu primer contacto con la IA, la serie [Fundamentos de IA e IA generativa](/series/fundamentos-ia-iag/00_presentacion_serie/) establece el vocabulario y las distinciones básicas que las otras series dan por supuestas. Si ya tienes base conceptual y quieres entender cómo llegamos hasta aquí, [De las cavernas a la AGI](/series/from-cave-to-agi/00_presentacion_serie/) ofrece el contexto histórico y técnico completo. Si te interesa la frontera actual de modelos que procesan texto, imagen y audio al mismo tiempo, empieza por [Multimodalidad en IA generativa](/series/multimodalidad-iag/00_presentacion_serie/). Si quieres entender cómo y por qué los modelos razonadores son distintos, qué es el test-time compute y qué costes reales introduce en producción, sigue con [Modelos razonadores](/series/modelos-razonadores/00_presentacion_serie/). Si te interesa la relación entre electricidad, productividad, crecimiento y calidad de vida, la serie [IA, PIB, bienestar y energía](/series/ia-pib-bienestar-energia/00_presentacion_serie/) completa la dimensión económica y material.
+Si es tu primer contacto con la IA, la serie [Fundamentos de IA e IA generativa](/series/fundamentos-ia-iag/00_presentacion_serie/) establece el vocabulario y las distinciones básicas que las otras series dan por supuestas. Si ya tienes base conceptual y quieres entender cómo llegamos hasta aquí, [De las cavernas a la AGI](/series/from-cave-to-agi/00_presentacion_serie/) ofrece el contexto histórico y técnico completo. Si te interesa la frontera actual de modelos que procesan texto, imagen y audio al mismo tiempo, empieza por [Multimodalidad en IA generativa](/series/multimodalidad-iag/00_presentacion_serie/). Si quieres entender cómo y por qué los modelos razonadores son distintos, qué es el test-time compute y qué costes reales introduce en producción, sigue con [Modelos razonadores](/series/modelos-razonadores/00_presentacion_serie/). Si te interesa la relación entre electricidad, productividad, crecimiento y calidad de vida, la serie [IA, PIB, bienestar y energía](/series/ia-pib-bienestar-energia/00_presentacion_serie/) completa la dimensión económica y material. Para bajar esa discusión a infraestructura física, [Datacenters en el espacio](/series/datacenters-espacio/00_presentacion_serie/) analiza energía, calor, conectividad, agua, materiales y costes de lanzamiento.
 
 </div>
 

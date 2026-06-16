@@ -1,0 +1,327 @@
+<div class="dcp-levers" data-demo="01-por-que-espacio" data-anim-fullscreen="off" data-anim-contrast="force">
+  <div class="dcp-levers__head">
+    <div class="dcp-levers__title">El espacio entra por tres palancas muy concretas, no por una promesa total</div>
+    <div class="dcp-levers__sub">
+      Cada palanca cambia un cuello físico distinto. La pregunta útil no es si el espacio “resuelve” la infraestructura,
+      sino qué fricción sustituye por otra y para qué cargas de trabajo eso compensa.
+    </div>
+  </div>
+
+  <div class="dcp-levers__grid">
+    <article class="dcp-levers__card dcp-levers__card--energy">
+      <div class="dcp-levers__kicker">Energía</div>
+      <h3>La continuidad solar cambia la conversación con la red</h3>
+      <div class="dcp-levers__track">
+        <div class="dcp-levers__track-side">
+          <span class="dcp-levers__track-label">Tierra</span>
+          <strong>15–25%</strong>
+          <small>capacidad útil con noche, nubes y red</small>
+        </div>
+        <div class="dcp-levers__track-arrow" aria-hidden="true"></div>
+        <div class="dcp-levers__track-side dcp-levers__track-side--orbit">
+          <span class="dcp-levers__track-label">Órbita favorable</span>
+          <strong>95–99%</strong>
+          <small>continuidad casi total del panel</small>
+        </div>
+      </div>
+      <p>La ganancia útil no es “más sol” sin más. Es depender menos de la red y más de geometría, masa y orientación.</p>
+    </article>
+
+    <article class="dcp-levers__card dcp-levers__card--data">
+      <div class="dcp-levers__kicker">Datos</div>
+      <h3>Procesar donde nace el dato reduce el downlink bruto</h3>
+      <div class="dcp-levers__packets" aria-hidden="true">
+        <div class="dcp-levers__packet-rain">
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <div class="dcp-levers__packet-core">Filtro / inferencia</div>
+        <div class="dcp-levers__packet-out">
+          <span></span><span></span>
+        </div>
+      </div>
+      <p>Si el dato ya vive en órbita, bajar solo la señal procesada elimina uno de los límites físicos más duros de las constelaciones.</p>
+    </article>
+
+    <article class="dcp-levers__card dcp-levers__card--launch">
+      <div class="dcp-levers__kicker">Lanzamiento</div>
+      <h3>El coste no deja de ser alto, pero sale de la zona absurda</h3>
+      <div class="dcp-levers__bands">
+        <div class="dcp-levers__band dcp-levers__band--old">
+          <span>Shuttle</span>
+          <strong>88.000 $/kg</strong>
+        </div>
+        <div class="dcp-levers__band dcp-levers__band--now">
+          <span>Falcon Heavy</span>
+          <strong>1.400–2.500 $/kg</strong>
+        </div>
+        <div class="dcp-levers__band dcp-levers__band--next">
+          <span>Starship objetivo</span>
+          <strong>&lt; 200 $/kg</strong>
+        </div>
+      </div>
+      <p>La tesis ya no es “gratis en el espacio”, sino “analizable para nichos donde energía o downlink pesan más que la masa”.</p>
+    </article>
+  </div>
+
+  <div class="dcp-levers__footer">
+    <div class="dcp-levers__footer-pill">La serie parte de aquí: qué cuello terrestre cambias y con qué nueva dependencia orbital</div>
+  </div>
+</div>
+
+<style>
+  .dcp-levers,
+  .dcp-levers * {
+    box-sizing: border-box;
+  }
+
+  .dcp-levers {
+    --teal: #26A69A;
+    --blue: #324AB2;
+    --sky: #7cc7ff;
+    --amber: #FFB343;
+    --bg: var(--md-default-bg-color, #fff);
+    --line: color-mix(in srgb, var(--md-default-fg-color, #0f172a) 15%, transparent);
+    --text: color-mix(in srgb, var(--md-default-fg-color, #0f172a) 94%, transparent);
+    --muted: color-mix(in srgb, var(--md-default-fg-color, #0f172a) 63%, transparent);
+    display: grid;
+    gap: 16px;
+    max-width: 980px;
+    margin: 0 auto;
+    padding: clamp(16px, 2vw, 24px);
+    border-radius: 24px;
+    border: 1px solid var(--line);
+    background:
+      radial-gradient(100% 130% at 0% 0%, color-mix(in srgb, var(--teal) 10%, transparent), transparent 52%),
+      radial-gradient(90% 110% at 100% 100%, color-mix(in srgb, var(--amber) 9%, transparent), transparent 50%),
+      var(--bg);
+    color: var(--text);
+    font-family: "Avenir Next", "Avenir", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  }
+
+  [data-md-color-scheme="slate"] .dcp-levers {
+    --line: rgba(226, 232, 240, 0.16);
+    --text: rgba(236, 244, 255, 0.95);
+    --muted: rgba(236, 244, 255, 0.68);
+  }
+
+  .dcp-levers__head {
+    display: grid;
+    gap: 6px;
+    max-width: 76ch;
+  }
+
+  .dcp-levers__title {
+    font-size: clamp(22px, 3vw, 30px);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing:0;
+  }
+
+  .dcp-levers__sub {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--muted);
+  }
+
+  .dcp-levers__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .dcp-levers__card {
+    display: grid;
+    gap: 12px;
+    padding: 16px;
+    border-radius: 20px;
+    border: 1px solid var(--line);
+    background: color-mix(in srgb, var(--bg) 90%, #09121f 10%);
+  }
+
+  .dcp-levers__card h3 {
+    margin: 0;
+    font-size: 20px;
+    line-height: 1.12;
+    letter-spacing:0;
+  }
+
+  .dcp-levers__card p {
+    margin: 0;
+    font-size: 12.8px;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+
+  .dcp-levers__kicker {
+    width: fit-content;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .dcp-levers__card--energy .dcp-levers__kicker {
+    color: var(--teal);
+    border: 1px solid color-mix(in srgb, var(--teal) 28%, var(--line));
+    background: color-mix(in srgb, var(--teal) 8%, transparent);
+  }
+
+  .dcp-levers__card--data .dcp-levers__kicker {
+    color: var(--sky);
+    border: 1px solid color-mix(in srgb, var(--sky) 26%, var(--line));
+    background: color-mix(in srgb, var(--sky) 8%, transparent);
+  }
+
+  .dcp-levers__card--launch .dcp-levers__kicker {
+    color: #d98a19;
+    border: 1px solid color-mix(in srgb, var(--amber) 32%, var(--line));
+    background: color-mix(in srgb, var(--amber) 10%, transparent);
+  }
+
+  .dcp-levers__track {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 40px minmax(0, 1fr);
+    gap: 8px;
+    align-items: center;
+  }
+
+  .dcp-levers__track-side {
+    padding: 12px;
+    border-radius: 16px;
+    border: 1px solid color-mix(in srgb, var(--blue) 18%, var(--line));
+    background: color-mix(in srgb, var(--blue) 6%, transparent);
+  }
+
+  .dcp-levers__track-side--orbit {
+    border-color: color-mix(in srgb, var(--teal) 24%, var(--line));
+    background: color-mix(in srgb, var(--teal) 7%, transparent);
+  }
+
+  .dcp-levers__track-label {
+    display: block;
+    margin-bottom: 6px;
+    font-size:11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+
+  .dcp-levers__track-side strong {
+    display: block;
+    font-size: 22px;
+    line-height: 1;
+    letter-spacing:0;
+  }
+
+  .dcp-levers__track-side small {
+    display: block;
+    margin-top: 6px;
+    font-size: 11.5px;
+    line-height: 1.35;
+    color: var(--muted);
+  }
+
+  .dcp-levers__track-arrow {
+    position: relative;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(50, 74, 178, 0.2), rgba(50, 74, 178, 0.8));
+  }
+
+  .dcp-levers__track-arrow::after {
+    content: "";
+    position: absolute;
+    right: -2px;
+    top: -4px;
+    border-left: 10px solid rgba(50, 74, 178, 0.8);
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+  }
+
+  .dcp-levers__packets {
+    display: grid;
+    gap: 10px;
+  }
+
+  .dcp-levers__packet-rain,
+  .dcp-levers__packet-out {
+    display: flex;
+    gap: 6px;
+  }
+
+  .dcp-levers__packet-rain span,
+  .dcp-levers__packet-out span {
+    display: block;
+    width: 100%;
+    height: 12px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, rgba(124, 199, 255, 0.28), rgba(124, 199, 255, 0.8));
+  }
+
+  .dcp-levers__packet-out span {
+    background: linear-gradient(90deg, rgba(38, 166, 154, 0.25), rgba(38, 166, 154, 0.86));
+  }
+
+  .dcp-levers__packet-core {
+    padding: 14px;
+    border-radius: 18px;
+    border: 1px solid color-mix(in srgb, var(--sky) 26%, var(--line));
+    background:
+      radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--sky) 12%, transparent), transparent 62%),
+      rgba(255, 255, 255, 0.04);
+    font-size: 16px;
+    font-weight: 900;
+    text-align: center;
+    letter-spacing:0;
+  }
+
+  .dcp-levers__bands {
+    display: grid;
+    gap: 8px;
+  }
+
+  .dcp-levers__band {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: baseline;
+    padding: 11px 12px;
+    border-radius: 14px;
+    border: 1px solid var(--line);
+    font-size: 12px;
+  }
+
+  .dcp-levers__band strong {
+    font-size: 17px;
+    line-height: 1;
+    letter-spacing:0;
+  }
+
+  .dcp-levers__band--old { background: rgba(255, 141, 122, 0.08); }
+  .dcp-levers__band--now { background: rgba(255, 179, 67, 0.08); }
+  .dcp-levers__band--next { background: rgba(38, 166, 154, 0.08); }
+
+  .dcp-levers__footer-pill {
+    padding: 10px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.04);
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--muted);
+  }
+
+  @media (max-width: 920px) {
+    .dcp-levers {
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+    }
+
+    .dcp-levers__head,
+    .dcp-levers__grid {
+      min-width: 860px;
+    }
+  }
+</style>

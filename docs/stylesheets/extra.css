@@ -742,11 +742,11 @@
 }
 
 /* Snippet theme sync with native Material palette toggle */
-[data-md-color-scheme="default"] :is(.ta-demo, .nn-demo, .ml-demo, .ai-mat, .ai-tabs, .sigma-graphic, .sigmas-dcspace) {
+[data-md-color-scheme="default"] :is(.ta-demo, .nn-demo, .ml-demo, .ai-mat, .ai-tabs, .sigma-graphic, .sigmas-dcspace, .dcs-hero) {
     color-scheme: light;
 }
 
-[data-md-color-scheme="slate"] :is(.ta-demo, .nn-demo, .ml-demo, .ai-mat, .ai-tabs, .sigma-graphic, .sigmas-dcspace) {
+[data-md-color-scheme="slate"] :is(.ta-demo, .nn-demo, .ml-demo, .ai-mat, .ai-tabs, .sigma-graphic, .sigmas-dcspace, .dcs-hero) {
     color-scheme: dark;
 }
 
@@ -1271,7 +1271,7 @@
     max-width: 100%;
 }
 
-.anim-brand-shell__viewport :is(.ta-demo, .nn-demo, .ml-demo, .ai-mat, .ai-tabs, .nn-tabs, .mlops-walkthrough, .s2, .sigma-graphic, .sigmas-dcspace, .ml-tabs, .ta-tabs) {
+.anim-brand-shell__viewport :is(.ta-demo, .nn-demo, .ml-demo, .ai-mat, .ai-tabs, .nn-tabs, .mlops-walkthrough, .s2, .sigma-graphic, .sigmas-dcspace, .dcs-hero, .ml-tabs, .ta-tabs) {
     font-family: inherit !important;
 }
 
@@ -1574,6 +1574,137 @@ body.anim-shell-modal-open {
         linear-gradient(180deg,
             color-mix(in srgb, var(--series-accent) 16%, #0b1220) 0%,
             color-mix(in srgb, var(--series-accent) 6%, #0b1220) 100%);
+}
+
+/* ─── Reading routes (rutas-de-lectura.md) ───────────────────────────────── */
+
+.rl-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0 1rem;
+}
+
+.rl-card {
+    --route-accent: #324AB2;
+    border: 1px solid color-mix(in srgb, var(--route-accent) 26%, transparent);
+    border-radius: 16px;
+    padding: 1.2rem;
+    background:
+        linear-gradient(180deg,
+            color-mix(in srgb, var(--route-accent) 9%, var(--md-default-bg-color)) 0%,
+            color-mix(in srgb, var(--route-accent) 2%, var(--md-default-bg-color)) 100%);
+    box-shadow: 0 16px 34px color-mix(in srgb, var(--route-accent) 12%, transparent);
+}
+
+.rl-card:nth-child(2) {
+    --route-accent: #FFB343;
+}
+
+.rl-card:nth-child(3) {
+    --route-accent: #2F8FA8;
+}
+
+.rl-card:nth-child(4) {
+    --route-accent: #4D87D9;
+}
+
+.rl-card--wide {
+    grid-column: 1 / -1;
+}
+
+.rl-head h2 {
+    margin: .25rem 0 .35rem;
+    font-size: 1.15rem;
+    line-height: 1.25;
+}
+
+.rl-head p,
+.rl-outcome {
+    margin: 0;
+    color: color-mix(in srgb, var(--md-default-fg-color) 74%, transparent);
+    font-size: .9rem;
+    line-height: 1.5;
+}
+
+.rl-kicker {
+    color: var(--route-accent);
+    font-size: .68rem;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.rl-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .45rem;
+    margin: .9rem 0;
+}
+
+.rl-meta span {
+    border: 1px solid color-mix(in srgb, var(--route-accent) 30%, transparent);
+    border-radius: 999px;
+    padding: .18rem .55rem;
+    color: color-mix(in srgb, var(--route-accent) 80%, var(--md-default-fg-color));
+    font-size: .72rem;
+    font-weight: 700;
+    line-height: 1.35;
+}
+
+.rl-steps {
+    display: grid;
+    gap: .55rem;
+    margin: .9rem 0;
+    padding-left: 1.15rem;
+}
+
+.rl-steps li {
+    padding-left: .15rem;
+}
+
+.rl-steps li::marker {
+    color: var(--route-accent);
+    font-weight: 800;
+}
+
+.rl-steps a {
+    color: color-mix(in srgb, var(--route-accent) 75%, var(--md-typeset-a-color));
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.rl-steps a:hover {
+    text-decoration: underline;
+}
+
+.rl-steps span {
+    display: block;
+    margin-top: .1rem;
+    color: color-mix(in srgb, var(--md-default-fg-color) 62%, transparent);
+    font-size: .78rem;
+    line-height: 1.35;
+}
+
+.rl-actions {
+    margin: 1.5rem 0 2rem;
+}
+
+[data-md-color-scheme="slate"] .rl-card {
+    background:
+        linear-gradient(180deg,
+            color-mix(in srgb, var(--route-accent) 16%, #0b1220) 0%,
+            color-mix(in srgb, var(--route-accent) 5%, #0b1220) 100%);
+}
+
+@media screen and (max-width: 760px) {
+    .rl-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .rl-card--wide {
+        grid-column: auto;
+    }
 }
 
 .sc-card[data-series-slug],

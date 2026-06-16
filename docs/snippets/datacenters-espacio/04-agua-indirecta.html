@@ -1,0 +1,83 @@
+<div class="dwi-water" data-demo="04-agua-indirecta" data-anim-fullscreen="off" data-anim-contrast="force">
+  <div class="dwi-water__head">
+    <div class="dwi-water__title">El agua visible del cooling es solo una parte: la electricidad también arrastra agua</div>
+    <div class="dwi-water__sub">
+      Gran parte del debate mira solo torres y evaporación. Pero una parte grande del agua viaja escondida en la
+      generación eléctrica que alimenta al centro y en el mix energético que lo sostiene.
+    </div>
+  </div>
+
+  <div class="dwi-water__iceberg">
+    <div class="dwi-water__tip">
+      <strong>Agua directa</strong>
+      <span>torres, adiabática, purgas, evaporación local</span>
+    </div>
+    <div class="dwi-water__body">
+      <strong>Agua indirecta</strong>
+      <span>electricidad + suministro energético aguas arriba</span>
+    </div>
+  </div>
+
+  <div class="dwi-water__notes">
+    <div class="dwi-water__note">
+      <strong>Qué cambia con el clima</strong>
+      <span>El mismo diseño empeora en regiones más cálidas y húmedas.</span>
+    </div>
+    <div class="dwi-water__note">
+      <strong>Qué cambia con la energía</strong>
+      <span>Si el mix eléctrico es más intensivo en agua, el WUE visible subestima la huella real.</span>
+    </div>
+    <div class="dwi-water__note">
+      <strong>Por qué importa</strong>
+      <span>Comparar solo litros del cooling puede ocultar dónde se desplaza el consumo hídrico real.</span>
+    </div>
+  </div>
+</div>
+
+<style>
+  .dwi-water, .dwi-water * { box-sizing:border-box; }
+  .dwi-water {
+    --teal:#26A69A; --sky:#7cc7ff; --bg:var(--md-default-bg-color,#fff);
+    --line:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 15%, transparent);
+    --text:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 94%, transparent);
+    --muted:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 63%, transparent);
+    display:grid; gap:14px; max-width:980px; margin:0 auto; padding:clamp(16px,2vw,24px);
+    border-radius:24px; border:1px solid var(--line);
+    background:
+      radial-gradient(100% 130% at 0% 0%, color-mix(in srgb, var(--sky) 10%, transparent), transparent 50%),
+      radial-gradient(90% 110% at 100% 100%, color-mix(in srgb, var(--teal) 9%, transparent), transparent 50%),
+      var(--bg);
+    color:var(--text); font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  }
+  [data-md-color-scheme="slate"] .dwi-water { --line:rgba(226,232,240,.16); --text:rgba(236,244,255,.95); --muted:rgba(236,244,255,.68); }
+  .dwi-water__head { display:grid; gap:6px; max-width:74ch; }
+  .dwi-water__title { font-size:clamp(22px,3vw,30px); font-weight:900; line-height:1.05; letter-spacing:0; }
+  .dwi-water__sub { font-size:14px; line-height:1.55; color:var(--muted); }
+  .dwi-water__iceberg { display:grid; gap:0; }
+  .dwi-water__tip, .dwi-water__body {
+    padding:18px; border:1px solid var(--line); text-align:center;
+  }
+  .dwi-water__tip {
+    border-radius:20px 20px 10px 10px;
+    background: linear-gradient(180deg, rgba(124,199,255,.22), rgba(124,199,255,.08));
+  }
+  .dwi-water__body {
+    border-top:0; border-radius:10px 10px 24px 24px; min-height:180px;
+    background: linear-gradient(180deg, rgba(38,166,154,.2), rgba(38,166,154,.42));
+  }
+  .dwi-water__tip strong, .dwi-water__body strong, .dwi-water__note strong {
+    display:block; font-size:22px; line-height:1.08; letter-spacing:0;
+  }
+  .dwi-water__tip span, .dwi-water__body span, .dwi-water__note span {
+    display:block; margin-top:8px; font-size:12.8px; line-height:1.5; color:var(--muted);
+  }
+  .dwi-water__notes { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:10px; }
+  .dwi-water__note { padding:12px; border-radius:16px; border:1px solid var(--line); background:rgba(255,255,255,.04); }
+  @media (max-width: 860px) {
+    .dwi-water { overflow-x:auto; overscroll-behavior-x:contain; }
+    .dwi-water__head,
+    .dwi-water__stack,
+    .dwi-water__notes { min-width:760px; }
+    .dwi-water__notes { grid-template-columns:repeat(3, minmax(0,1fr)); }
+  }
+</style>
