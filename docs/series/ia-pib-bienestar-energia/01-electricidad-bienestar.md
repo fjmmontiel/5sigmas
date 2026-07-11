@@ -140,22 +140,21 @@ Si la IA requiere infraestructura computacional que depende de electricidad esta
 
 | Clave | Fuente | Descripción breve |
 | --- | --- | --- |
-| R1 | **IEA (2025)** — *Energy and AI* ([IEA][r1]) | Análisis del impacto de la IA en la demanda energética global; referencia para datos de acceso y consumo. |
+| R1 | **IEA (2026)** — *Key Questions on Energy and AI* ([IEA][r1]) | Actualización sobre demanda eléctrica de centros de datos, eficiencia por tarea, crecimiento de cargas de IA y cuellos de botella físicos. |
 | R2 | **Banco Mundial** — *World Development Indicators* ([Banco Mundial][r2]) | Base de datos con indicadores de acceso a electricidad, desarrollo humano y distribución del suministro. |
 | R3 | **Dinkelman, T. (2011)** — *The Effects of Rural Electrification on Employment: New Evidence from South Africa* ([American Economic Review][r3]) | Diseño cuasi-experimental con topografía como variable instrumental. Efectos causales positivos sobre empleo femenino y bienestar en comunidades rurales de Sudáfrica. |
 | R4 | **Lee, K. et al. (2020)** — *Does Household Electrification Supercharge Economic Development?* ([Journal of Economic Perspectives][r4]) | Revisión de la evidencia microeconómica sobre electrificación y desarrollo, incluyendo efectos sobre salud, empleo y bienestar en países en desarrollo. |
-| R5 | **IEA** — *World Energy Outlook 2024* ([IEA][r5]) | Escenarios de acceso energético global (SDG7), demanda futura y análisis de electrificación por regiones. |
+| R5 | **IEA (2025)** — *World Energy Outlook 2025* ([IEA][r5]) | Escenarios actuales de acceso energético global (SDG7), demanda futura y análisis de electrificación por regiones. |
 | R6 | **World Bank / ESMAP (2015)** — *Beyond Connections: Energy Access Redefined* ([Banco Mundial][r6]) | Documento fundacional del Marco Multi-Nivel (MTF). Define los cinco niveles de acceso energético y los umbrales de consumo asociados a cada uno. |
 | R7 | **Banco Mundial** — *Enterprise Surveys* ([Banco Mundial][r7]) | Base de datos de encuestas empresariales en más de 150 países. Fuente primaria para el coste de las interrupciones de suministro como porcentaje de ingresos. |
-| R8 | **IEA (2026)** — *[Key Questions on Energy and AI](https://www.iea.org/reports/key-questions-on-energy-and-ai)* | Actualización sobre demanda eléctrica de centros de datos, eficiencia por tarea, crecimiento de cargas de IA y nuevos cuellos de botella físicos. |
 
 </details>
 
-[r1]: https://www.iea.org/reports/energy-and-ai "Energy and AI — IEA"
+[r1]: https://www.iea.org/reports/key-questions-on-energy-and-ai "Key Questions on Energy and AI — IEA"
 [r2]: https://databank.worldbank.org/source/world-development-indicators "World Development Indicators — Banco Mundial"
 [r3]: https://www.aeaweb.org/articles?id=10.1257/aer.101.7.3078 "The Effects of Rural Electrification on Employment — AER"
 [r4]: https://www.aeaweb.org/articles?id=10.1257/jep.34.1.122 "Does Household Electrification Supercharge Economic Development? — Journal of Economic Perspectives"
-[r5]: https://www.iea.org/reports/world-energy-outlook-2024 "World Energy Outlook 2024 — IEA"
+[r5]: https://www.iea.org/reports/world-energy-outlook-2025 "World Energy Outlook 2025 — IEA"
 [r6]: https://documents.worldbank.org/en/publication/documents-reports/documentdetail/875761468136575589/beyond-connections-energy-access-redefined "Beyond Connections: Energy Access Redefined — ESMAP/World Bank"
 [r7]: https://www.enterprisesurveys.org/ "Enterprise Surveys — Banco Mundial"
 [r8]: https://www.iea.org/reports/key-questions-on-energy-and-ai "Key Questions on Energy and AI — IEA"
