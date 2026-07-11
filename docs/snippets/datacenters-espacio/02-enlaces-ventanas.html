@@ -1,201 +1,25 @@
-<div class="dcn-links ta-tabs" data-demo="02-enlaces-ventanas" data-anim-tabs data-default="bent" data-anim-fullscreen="off" data-anim-contrast="force">
-  <div class="dcn-links__head">
-    <div class="dcn-links__title">La conectividad orbital depende de ventanas, topología y cuánto dato bajas</div>
-    <div class="dcn-links__sub">
-      Dos sistemas pueden tener la misma potencia de cómputo en órbita y comportarse de forma opuesta para el usuario:
-      uno rebota en estaciones terrestres y otro enruta por malla láser. La diferencia está en el carril físico.
-    </div>
+<meta charset="utf-8">
+<div class="dev dcf-snippet" data-demo="02-enlaces-ventanas" data-anim-fullscreen="off" data-anim-contrast="force">
+  <div class="head"><div class="eyebrow">embudo de enlace</div><div class="title">El enlace decide qué datos merece procesar en órbita</div><div class="sub">La ventana de comunicación y el ancho de banda hacen valioso filtrar datos brutos antes de bajarlos a tierra.</div></div>
+  <div class="viz-scroll">
+    <svg class="viz viz-downlink-funnel" viewBox="0 0 960 580" role="img" aria-label="El enlace decide qué datos merece procesar en órbita" xmlns="http://www.w3.org/2000/svg"><defs><marker id="dev-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1 L9 5 L1 9 Z" fill="var(--a)"/></marker><filter id="dev-shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#0f172a" flood-opacity=".14"/></filter><linearGradient id="dev-fade" x1="0" x2="1"><stop offset="0" stop-color="var(--a)" stop-opacity=".22"/><stop offset="1" stop-color="var(--b)" stop-opacity=".12"/></linearGradient></defs><rect class="canvas" x="20" y="35" width="920" height="505" rx="34"/><circle class="clock" cx="700" cy="120" r="64"/><path class="contact" d="M700 120L700 56A64 64 0 0 1 754 86Z"/><path class="funnel" d="M95 170 L430 240 L430 340 L95 410 Z"/><path class="funnel thin" d="M530 260 L850 292 L850 318 L530 340 Z"/><rect class="processor" x="405" y="220" width="150" height="140" rx="30"/><text class="nt" x="480" y="292" text-anchor="middle">IA orbital</text><text class="nd" x="480" y="318" text-anchor="middle">filtra señal</text><g class="node bad" transform="translate(150 130)"><rect x="-92" y="-32" width="184" height="64" rx="16"/><text x="0" y="-5" text-anchor="middle" class="nt">Dato bruto</text><text x="0" y="17" text-anchor="middle" class="nd">demasiado volumen</text></g><g class="node ok" transform="translate(805 230)"><rect x="-92" y="-32" width="184" height="64" rx="16"/><text x="0" y="-5" text-anchor="middle" class="nt">Senal filtrada</text><text x="0" y="17" text-anchor="middle" class="nd">menos datos a bajar</text></g><g class="node warn" transform="translate(700 205)"><rect x="-92" y="-32" width="184" height="64" rx="16"/><text x="0" y="-5" text-anchor="middle" class="nt">Contacto</text><text x="0" y="17" text-anchor="middle" class="nd">ventana breve</text></g></svg>
   </div>
-
-  <div class="dcn-links__tabs ta-tablist" role="tablist" data-role="tablist" aria-label="Topologías de conectividad orbital">
-    <button class="dcn-links__tab ta-tab" type="button" role="tab" data-role="tab" data-tab="bent" aria-selected="true">Bent-pipe</button>
-    <button class="dcn-links__tab ta-tab" type="button" role="tab" data-role="tab" data-tab="mesh" aria-selected="false">Mesh láser</button>
-    <button class="dcn-links__tab ta-tab" type="button" role="tab" data-role="tab" data-tab="filter" aria-selected="false">Filtrar antes de bajar</button>
-  </div>
-
-  <div class="dcn-links__panels ta-panels">
-    <section class="dcn-links__panel ta-panel" data-panel="bent">
-      <div class="dcn-links__route">
-        <div class="dcn-links__hop">Satélite</div>
-        <div class="dcn-links__arrow"></div>
-        <div class="dcn-links__hop">Estación A</div>
-        <div class="dcn-links__arrow"></div>
-        <div class="dcn-links__hop">Red terrestre</div>
-        <div class="dcn-links__arrow"></div>
-        <div class="dcn-links__hop">Estación B</div>
-        <div class="dcn-links__arrow"></div>
-        <div class="dcn-links__hop">Satélite / usuario</div>
-      </div>
-      <div class="dcn-links__summary">
-        <div class="dcn-links__stat"><span>Cuello</span><strong>ventanas de enlace</strong></div>
-        <div class="dcn-links__stat"><span>Problema</span><strong>cada salto depende de ver tierra</strong></div>
-      </div>
-    </section>
-
-    <section class="dcn-links__panel ta-panel" data-panel="mesh" hidden>
-      <div class="dcn-links__mesh">
-        <div class="dcn-links__sat">ODC</div>
-        <div class="dcn-links__sat">Sat 2</div>
-        <div class="dcn-links__sat">Sat 3</div>
-        <div class="dcn-links__sat">Sat 4</div>
-        <div class="dcn-links__laser dcn-links__laser--a"></div>
-        <div class="dcn-links__laser dcn-links__laser--b"></div>
-        <div class="dcn-links__laser dcn-links__laser--c"></div>
-        <div class="dcn-links__laser dcn-links__laser--d"></div>
-      </div>
-      <div class="dcn-links__summary">
-        <div class="dcn-links__stat"><span>Ganancia</span><strong>menos rebote por tierra</strong></div>
-        <div class="dcn-links__stat"><span>Límite</span><strong>sigue haciendo falta bajar algo útil a suelo</strong></div>
-      </div>
-    </section>
-
-    <section class="dcn-links__panel ta-panel" data-panel="filter" hidden>
-      <div class="dcn-links__filter">
-        <div class="dcn-links__flood">
-          <span></span><span></span><span></span><span></span><span></span><span></span>
-        </div>
-        <div class="dcn-links__core">inferencia / compresión</div>
-        <div class="dcn-links__result">
-          <span></span><span></span>
-        </div>
-      </div>
-      <div class="dcn-links__summary">
-        <div class="dcn-links__stat"><span>Cuándo compensa</span><strong>cuando el dato se genera en órbita</strong></div>
-        <div class="dcn-links__stat"><span>Por qué</span><strong>bajas señal útil, no el volumen bruto completo</strong></div>
-      </div>
-    </section>
-  </div>
+  <div class="read"><span>El sensor genera más datos que el enlace</span><span>La inferencia orbital reduce volumen</span><span>La ventana de contacto sigue limitando</span></div>
 </div>
 
 <style>
-  .dcn-links, .dcn-links * { box-sizing:border-box; }
-  .dcn-links {
-    --sky:#7cc7ff; --blue:#324AB2; --teal:#26A69A; --amber:#FFB343; --bg:var(--md-default-bg-color,#fff);
-    --line:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 15%, transparent);
-    --text:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 94%, transparent);
-    --muted:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 63%, transparent);
-    display:grid; gap:14px; max-width:980px; margin:0 auto; padding:clamp(16px,2vw,24px);
-    border-radius:24px; border:1px solid var(--line);
-    background:
-      radial-gradient(100% 130% at 0% 0%, color-mix(in srgb, var(--sky) 10%, transparent), transparent 50%),
-      radial-gradient(90% 110% at 100% 100%, color-mix(in srgb, var(--teal) 9%, transparent), transparent 50%),
-      var(--bg);
-    color:var(--text); font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
-  }
-  [data-md-color-scheme="slate"] .dcn-links { --line:rgba(226,232,240,.16); --text:rgba(236,244,255,.95); --muted:rgba(236,244,255,.68); }
-  .dcn-links__head { display:grid; gap:6px; max-width:74ch; }
-  .dcn-links__title { font-size:clamp(22px,3vw,30px); font-weight:900; line-height:1.05; letter-spacing:0; }
-  .dcn-links__sub { font-size:14px; line-height:1.55; color:var(--muted); }
-  .dcn-links__tabs { display:flex; flex-wrap:wrap; gap:8px; }
-  .dcn-links__tab { transition:background-color .22s ease-out, border-color .22s ease-out, color .22s ease-out, transform .22s ease-out; }
-  .dcn-links__tab:hover { transform:translateY(-1px); }
-  .dcn-links__panel[hidden] { display:none; }
-  .dcn-links__route, .dcn-links__mesh, .dcn-links__filter {
-    position:relative; display:grid; gap:10px; min-height:220px; padding:18px;
-    border:1px solid var(--line); border-radius:20px; background: color-mix(in srgb, var(--bg) 90%, #09121f 10%);
-  }
-  .dcn-links__route { grid-template-columns:repeat(5, minmax(0,1fr)); align-items:center; }
-  .dcn-links__hop, .dcn-links__sat, .dcn-links__core {
-    display:grid; place-items:center; min-height:68px; padding:10px; border-radius:16px; border:1px solid var(--line);
-    background:rgba(255,255,255,.04); font-size:13px; font-weight:900; text-align:center; line-height:1.25;
-  }
-  .dcn-links__arrow {
-    height:2px; background:linear-gradient(90deg, rgba(124,199,255,.2), rgba(124,199,255,.86)); position:relative;
-  }
-  .dcn-links__arrow::after {
-    content:""; position:absolute; right:-2px; top:-4px; border-left:10px solid rgba(124,199,255,.86); border-top:5px solid transparent; border-bottom:5px solid transparent;
-  }
-  .dcn-links__mesh {
-    grid-template-columns:repeat(2, minmax(0,1fr));
-    grid-template-areas:"a b" "c d";
-  }
-  .dcn-links__mesh .dcn-links__sat:nth-child(1){ grid-area:a; }
-  .dcn-links__mesh .dcn-links__sat:nth-child(2){ grid-area:b; }
-  .dcn-links__mesh .dcn-links__sat:nth-child(3){ grid-area:c; }
-  .dcn-links__mesh .dcn-links__sat:nth-child(4){ grid-area:d; }
-  .dcn-links__laser {
-    position:absolute; height:2px; background:linear-gradient(90deg, rgba(124,199,255,.16), rgba(124,199,255,.96)); transform-origin:left center;
-  }
-  .dcn-links__laser--a { left:28%; top:38%; width:44%; transform:rotate(-14deg); }
-  .dcn-links__laser--b { left:28%; top:64%; width:44%; transform:rotate(14deg); }
-  .dcn-links__laser--c { left:18%; top:52%; width:62%; transform:rotate(0deg); }
-  .dcn-links__laser--d { left:32%; top:52%; width:36%; transform:rotate(90deg); }
-  .dcn-links__filter { align-items:center; }
-  .dcn-links__flood, .dcn-links__result { display:flex; gap:8px; }
-  .dcn-links__flood span, .dcn-links__result span {
-    display:block; width:100%; height:16px; border-radius:999px; background:linear-gradient(90deg, rgba(124,199,255,.28), rgba(124,199,255,.86));
-  }
-  .dcn-links__result span { background:linear-gradient(90deg, rgba(38,166,154,.25), rgba(38,166,154,.9)); }
-  .dcn-links__core {
-    min-height:84px; border-color: color-mix(in srgb, var(--teal) 26%, var(--line));
-    background: color-mix(in srgb, var(--teal) 10%, transparent); font-size:18px;
-  }
-  .dcn-links__summary { display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:10px; margin-top:12px; }
-  .dcn-links__stat {
-    padding:12px; border-radius:16px; border:1px solid var(--line); background:rgba(255,255,255,.04);
-  }
-  .dcn-links__stat span {
-    display:block; margin-bottom:6px; font-size:11px; font-weight:900; text-transform:uppercase; letter-spacing:.08em; color:var(--muted);
-  }
-  .dcn-links__stat strong { display:block; font-size:18px; line-height:1.2; letter-spacing:0; }
-  @media (max-width: 860px) {
-    .dcn-links { overflow-x:auto; overscroll-behavior-x:contain; }
-    .dcn-links__head,
-    .dcn-links__tabs,
-    .dcn-links__route,
-    .dcn-links__summary,
-    .dcn-links__mesh,
-    .dcn-links__filter { min-width:760px; }
-    .dcn-links__route, .dcn-links__summary, .dcn-links__mesh { grid-template-columns:repeat(3, minmax(0,1fr)); }
-    .dcn-links__laser { display:block; }
-  }
+.dev, .dev * { box-sizing:border-box; }
+.dev { --a:#26A69A; --b:#7cc7ff; --c:#324AB2; --bad:#ff8d7a; --warn:#FFB343; --ok:#26A69A; --bg:var(--md-default-bg-color,#fff); --fg:color-mix(in srgb,var(--md-default-fg-color,#0f172a) 94%,transparent); --muted:color-mix(in srgb,var(--md-default-fg-color,#0f172a) 62%,transparent); --line:color-mix(in srgb,var(--md-default-fg-color,#0f172a) 15%,transparent); display:grid; gap:14px; width:100%; padding:clamp(16px,2vw,26px); border:1px solid var(--line); border-radius:32px; background:radial-gradient(90% 120% at 0 0,color-mix(in srgb,var(--a) 8%,transparent),transparent 55%),radial-gradient(100% 120% at 100% 100%,color-mix(in srgb,var(--b) 8%,transparent),transparent 55%),var(--bg); color:var(--fg); font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif; }
+[data-md-color-scheme="slate"] .dev { --line:rgba(226,232,240,.16); --fg:rgba(236,244,255,.95); --muted:rgba(236,244,255,.66); }
+.dev .head { display:grid; gap:6px; max-width:78ch; } .dev .eyebrow { width:fit-content; padding:5px 10px; border-radius:999px; border:1px solid color-mix(in srgb,var(--a) 35%,var(--line)); color:var(--a); background:color-mix(in srgb,var(--a) 8%,transparent); font-size:10px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; } .dev .title { font-size:clamp(21px,3vw,31px); line-height:1.05; font-weight:900; } .dev .sub { color:var(--muted); font-size:14px; line-height:1.48; }
+.dev .viz-scroll { max-width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; padding-bottom:4px; } .dev .viz { width:100%; height:auto; display:block; aspect-ratio:960/580; } .dev .canvas { fill:url(#dev-fade); stroke:var(--line); stroke-width:1; }
+.dev .node rect,.dev .pill,.dev .step rect,.dev .evidence path { fill:color-mix(in srgb,var(--bg) 88%,#0f172a 12%); stroke:var(--line); filter:url(#dev-shadow); } .dev .node.bad rect,.dev .left,.dev .hot { fill:color-mix(in srgb,var(--bad) 11%,var(--bg)); stroke:color-mix(in srgb,var(--bad) 40%,var(--line)); } .dev .node.warn rect,.dev .radiator rect,.dev .drop,.dev .over { fill:color-mix(in srgb,var(--warn) 13%,var(--bg)); stroke:color-mix(in srgb,var(--warn) 42%,var(--line)); } .dev .node.ok rect,.dev .right,.dev .bolt,.dev .useful { fill:color-mix(in srgb,var(--ok) 12%,var(--bg)); stroke:color-mix(in srgb,var(--ok) 36%,var(--line)); }
+.dev .flow,.dev .axis,.dev .cool,.dev .heat,.dev .tether,.dev .bigcurve { fill:none; stroke:var(--a); stroke-width:4; stroke-linecap:round; stroke-linejoin:round; } .dev .flow { stroke-dasharray:9 9; animation:dev-dash 3.4s linear infinite; } .dev .flow.alt,.dev .heat { stroke:var(--b); } .dev .axis { stroke:var(--line); stroke-dasharray:none; } .dev .bigcurve { stroke-width:7; }
+.dev .nt,.dev .pt,.dev .lane,.dev .result { fill:var(--fg); font-size:18px; font-weight:900; } .dev .nd,.dev .axistext,.dev .limit { fill:var(--muted); font-size:13px; font-weight:750; } .dev .limit { fill:color-mix(in srgb,var(--bad) 75%,var(--fg)); }
+.dev .planet,.dev .earth,.dev .cloud,.dev .archive { fill:color-mix(in srgb,var(--b) 18%,var(--bg)); stroke:color-mix(in srgb,var(--b) 45%,var(--line)); } .dev .orbit,.dev .orb,.dev .mission,.dev .cycle,.dev .scaleA,.dev .scaleB { fill:none; stroke:color-mix(in srgb,var(--a) 45%,var(--line)); stroke-width:3; stroke-dasharray:12 10; } .dev .sun { fill:color-mix(in srgb,#FFB343 45%,var(--bg)); stroke:#FFB343; } .dev .sat { fill:var(--a); } .dev .ray { stroke:#FFB343; stroke-width:3; opacity:.45; } .dev .terminator,.dev .wire,.dev .steam,.dev .particle { fill:none; stroke:var(--line); stroke-width:3; stroke-linecap:round; } .dev .night { fill:color-mix(in srgb,#0f172a 18%,transparent); } .dev .wing,.dev .plug,.dev .contact,.dev .satcase circle { fill:color-mix(in srgb,var(--a) 22%,var(--bg)); stroke:var(--a); }
+.dev .funnel { fill:color-mix(in srgb,var(--bad) 12%,var(--bg)); stroke:color-mix(in srgb,var(--bad) 38%,var(--line)); } .dev .funnel.thin { fill:color-mix(in srgb,var(--ok) 12%,var(--bg)); stroke:color-mix(in srgb,var(--ok) 38%,var(--line)); } .dev .processor,.dev .chip,.dev .gpu { fill:color-mix(in srgb,var(--a) 20%,var(--bg)); stroke:color-mix(in srgb,var(--a) 45%,var(--line)); } .dev .rad { fill:color-mix(in srgb,var(--b) 20%,var(--bg)); stroke:var(--b); }
+.dev .waterline { stroke:var(--b); stroke-width:4; } .dev .ice.top { fill:color-mix(in srgb,var(--b) 18%,var(--bg)); stroke:var(--b); stroke-width:3; } .dev .ice.bottom { fill:color-mix(in srgb,var(--a) 18%,var(--bg)); stroke:var(--a); stroke-width:3; } .dev .building,.dev .rackframe { fill:color-mix(in srgb,var(--bg) 88%,#0f172a 12%); stroke:var(--line); stroke-width:2; } .dev .rack { fill:color-mix(in srgb,var(--warn) 12%,var(--bg)); stroke:var(--warn); }
+.dev .hourglass,.dev .field,.dev .vacuum,.dev .clock { fill:color-mix(in srgb,var(--c) 10%,transparent); stroke:color-mix(in srgb,var(--c) 42%,var(--line)); stroke-width:3; } .dev .dropicon,.dev .tower,.dev .plant,.dev .turbine { fill:color-mix(in srgb,var(--b) 14%,var(--bg)); stroke:var(--b); stroke-width:3; } .dev .rocket,.dev .sail,.dev .plume { fill:color-mix(in srgb,var(--warn) 18%,var(--bg)); stroke:var(--warn); stroke-width:3; } .dev .flame { fill:color-mix(in srgb,var(--bad) 32%,transparent); stroke:var(--bad); stroke-width:3; } .dev .air { fill:color-mix(in srgb,var(--c) 42%,var(--bg)); } .dev .city { fill:color-mix(in srgb,var(--fg) 8%,transparent); stroke:var(--line); stroke-width:3; }
+.dev .read { display:flex; flex-wrap:wrap; gap:8px; align-items:center; } .dev .read span { padding:8px 11px; border-radius:999px; background:color-mix(in srgb,var(--bg) 90%,#0f172a 10%); border:1px solid var(--line); color:var(--muted); font-size:12.5px; line-height:1.25; }
+@keyframes dev-dash { to { stroke-dashoffset:-36; } } @media(max-width:760px){ .dev { padding:14px; } .dev .viz{ width:760px; max-width:none; } .dev .nt,.dev .pt{ font-size:16px; } .dev .nd{ font-size:12px; } } @media(prefers-reduced-motion:reduce){ .dev .flow{ animation:none!important; } }
 </style>
-<script>
-  (() => {
-    const KEY = "dcn-links-tabs";
-    if (window.__portableTabsFallback && window.__portableTabsFallback[KEY]) return;
-    window.__portableTabsFallback = window.__portableTabsFallback || {};
-    window.__portableTabsFallback[KEY] = true;
-    function activate(root, key) {
-      root.querySelectorAll('[data-role="tab"], [role="tab"]').forEach((tab) => {
-        const selected = tab.getAttribute("data-tab") === key;
-        tab.setAttribute("aria-selected", selected ? "true" : "false");
-        tab.tabIndex = selected ? 0 : -1;
-      });
-      root.querySelectorAll("[data-panel]").forEach((panel) => {
-        panel.hidden = panel.getAttribute("data-panel") !== key;
-      });
-    }
-    function initRoot(root) {
-      if (!root || root.dataset.tabsReady === "true") return;
-      root.dataset.tabsReady = "true";
-      const tabs = Array.from(root.querySelectorAll('[data-role="tab"], [role="tab"]'));
-      const first = root.getAttribute("data-default") || (tabs[0] && tabs[0].getAttribute("data-tab"));
-      tabs.forEach((tab) => {
-        tab.tabIndex = -1;
-        tab.addEventListener("click", () => activate(root, tab.getAttribute("data-tab")));
-        tab.addEventListener("keydown", (event) => {
-          const current = tabs.indexOf(tab);
-          let next = current;
-          if (event.key === "ArrowRight") next = (current + 1) % tabs.length;
-          if (event.key === "ArrowLeft") next = (current - 1 + tabs.length) % tabs.length;
-          if (event.key === "Home") next = 0;
-          if (event.key === "End") next = tabs.length - 1;
-          if (next !== current) {
-            event.preventDefault();
-            tabs[next].focus();
-            activate(root, tabs[next].getAttribute("data-tab"));
-          }
-        });
-      });
-      activate(root, first);
-    }
-    function initAll(scope) { scope.querySelectorAll('.dcn-links[data-anim-tabs]').forEach(initRoot); }
-    if (window.TabbedAnimations && typeof window.TabbedAnimations.initAll === "function") {
-      window.TabbedAnimations.initAll();
-    } else {
-      initAll(document);
-      document.addEventListener("DOMContentLoaded", () => initAll(document), { once: true });
-    }
-  })();
-</script>

@@ -17,6 +17,8 @@ Este capítulo describe los mecanismos por los que el acceso a electricidad prod
 
 La correlación entre electricidad y desarrollo humano aparece en todos los datos con una regularidad que cuesta no relacionar. Los países con mayor acceso a electricidad fiable y barata tienden a tener mejor esperanza de vida, menores tasas de mortalidad infantil, mayor productividad industrial y más capacidad de generar servicios.
 
+La actualización más reciente de la Agencia Internacional de la Energía (IEA) muestra por qué esta relación vuelve a ser central con la IA: el consumo eléctrico de los centros de datos aumentó un 17% en 2025, mientras que el de los centros orientados a IA creció todavía más rápido. Aunque el consumo por tarea está cayendo por las mejoras de eficiencia, el uso total sigue subiendo porque aumentan la adopción y las cargas intensivas, incluidos los agentes. La eficiencia de cada consulta no elimina la necesidad de una red fiable para sostener el conjunto ([IEA, 2026](https://www.iea.org/news/data-centre-electricity-use-surged-in-2025-even-with-tightening-bottlenecks-driving-a-scramble-for-solutions)).
+
 Los datos también permiten cuantificar esa regularidad. Análisis de datos de panel con 47 países estiman que un incremento del 1% en el consumo de energía per cápita se asocia con un aumento de entre 0,64 y 0,94 puntos porcentuales en los índices de bienestar percibido, una relación estadísticamente significativa incluso controlando por renta, urbanización y condiciones climáticas [Lee et al. (2020)](https://www.aeaweb.org/articles?id=10.1257/jep.34.1.122).
 
 El problema es que la correlación no explica el mecanismo. Si no entendemos por qué la electricidad produce esos efectos, tampoco podemos anticipar cuándo deja de producirlos, qué nivel de acceso es suficiente, o qué forma de suministro importa realmente.
@@ -145,6 +147,7 @@ Si la IA requiere infraestructura computacional que depende de electricidad esta
 | R5 | **IEA** — *World Energy Outlook 2024* ([IEA][r5]) | Escenarios de acceso energético global (SDG7), demanda futura y análisis de electrificación por regiones. |
 | R6 | **World Bank / ESMAP (2015)** — *Beyond Connections: Energy Access Redefined* ([Banco Mundial][r6]) | Documento fundacional del Marco Multi-Nivel (MTF). Define los cinco niveles de acceso energético y los umbrales de consumo asociados a cada uno. |
 | R7 | **Banco Mundial** — *Enterprise Surveys* ([Banco Mundial][r7]) | Base de datos de encuestas empresariales en más de 150 países. Fuente primaria para el coste de las interrupciones de suministro como porcentaje de ingresos. |
+| R8 | **IEA (2026)** — *[Key Questions on Energy and AI](https://www.iea.org/reports/key-questions-on-energy-and-ai)* | Actualización sobre demanda eléctrica de centros de datos, eficiencia por tarea, crecimiento de cargas de IA y nuevos cuellos de botella físicos. |
 
 </details>
 
@@ -155,3 +158,4 @@ Si la IA requiere infraestructura computacional que depende de electricidad esta
 [r5]: https://www.iea.org/reports/world-energy-outlook-2024 "World Energy Outlook 2024 — IEA"
 [r6]: https://documents.worldbank.org/en/publication/documents-reports/documentdetail/875761468136575589/beyond-connections-energy-access-redefined "Beyond Connections: Energy Access Redefined — ESMAP/World Bank"
 [r7]: https://www.enterprisesurveys.org/ "Enterprise Surveys — Banco Mundial"
+[r8]: https://www.iea.org/reports/key-questions-on-energy-and-ai "Key Questions on Energy and AI — IEA"

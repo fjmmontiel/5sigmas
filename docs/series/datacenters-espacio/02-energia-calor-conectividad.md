@@ -32,7 +32,7 @@ Por eso allí solo queda una opción, que es expulsarlo radiándolo hacia el ext
 
 ### La escala real de los radiadores
 
-En una instalación de 2 MW trabajando a temperaturas razonables, cada metro cuadrado de radiador apenas expulsa en torno a 500 W. Esto obliga a desplegar casi 4.000 m² de superficie radiadora, algo parecido a medio campo de fútbol cubierto de paneles pensados solo para sacar calor y recordemos tener todo este sistema en *órbita* ([NASA][r1], [LoadPath][r2]).
+En una instalación de 2 MW trabajando a temperaturas razonables, cada metro cuadrado de radiador apenas expulsa en torno a 500 W. Esto obliga a desplegar casi 4.000 m² de superficie radiadora, algo parecido a medio campo de fútbol cubierto de paneles pensados solo para sacar calor, con todo ese sistema además en *órbita* ([NASA][r1], [LoadPath][r2]).
 
 Incluso antes de entrar en el peso exacto del sistema, ya podemos ver que en un datacenter orbital el gran problema no es encender los servidores, sino sacar su calor sin que todo el conjunto se vuelva gigantesco.
 

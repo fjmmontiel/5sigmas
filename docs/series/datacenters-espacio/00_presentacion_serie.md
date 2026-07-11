@@ -1,8 +1,8 @@
 ---
 title: Datacenters en el espacio
 description: "Análisis técnico de los datacenters en órbita: disipación de calor, latencia, coste de lanzamiento y viabilidad real frente a la infraestructura terrestre."
+date: 2026-06-14
 keywords: datacenters espacio, computación orbital, infraestructura IA, energía cómputo, satélites computación
-robots: noindex
 tags:
   - IA
   - Energía
@@ -14,7 +14,7 @@ hide:
 ---
 # Datacenters en el espacio
 
-{{ include_html("snippets/series_meta.html", series_dir="datacenters-espacio", data_state="construction", data_level="general", status_label="En construcción", level_label="General", extra_rows="<div class=\"series-meta-row\"><span class=\"series-meta-label\">Prerrequisitos</span><span class=\"series-meta-value\"><a href=\"/series/fundamentos-ia-iag/00_presentacion_serie/\">Fundamentos de IA e IA generativa</a></span></div>") }}
+{{ include_html("snippets/series_meta.html", series_dir="datacenters-espacio", data_state="published", data_level="general", status_label="Publicada", level_label="General", extra_rows="<div class=\"series-meta-row\"><span class=\"series-meta-label\">Prerrequisitos</span><span class=\"series-meta-value\"><a href=\"/series/fundamentos-ia-iag/00_presentacion_serie/\">Fundamentos de IA e IA generativa</a></span></div>") }}
 
 La demanda de cómputo crece más rápido que la capacidad de construir datacenters en tierra. Esta serie analiza si llevar infraestructura de cómputo al espacio es una solución viable o una apuesta especulativa: qué problemas físicos resuelve el vacío, cuáles crea, y qué proyectos están hoy en fase de prueba, propuesta o demostración.
 

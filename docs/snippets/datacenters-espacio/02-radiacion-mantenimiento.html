@@ -1,100 +1,25 @@
-<div class="dcm-orbitops" data-demo="02-radiacion-mantenimiento" data-anim-fullscreen="off" data-anim-contrast="force">
-  <div class="dcm-orbitops__head">
-    <div class="dcm-orbitops__title">Operar en órbita significa diseñar para fallar sin reparación y cerrar la misión</div>
-    <div class="dcm-orbitops__sub">
-      En tierra reparas. En órbita diseñas un ciclo: radiación, aislamiento, redundancia degradada y fin de misión.
-      El mantenimiento se convierte en arquitectura.
-    </div>
+<meta charset="utf-8">
+<div class="drm dcf-snippet" data-demo="02-radiacion-mantenimiento" data-anim-fullscreen="off" data-anim-contrast="force">
+  <div class="head"><div class="eyebrow">operacion orbital</div><div class="title">La operación orbital debe sobrevivir sin taller cercano</div><div class="sub">Radiación, averías y fin de misión obligan a diseñar redundancia, aislamiento de fallos y retirada orbital desde el inicio.</div></div>
+  <div class="viz-scroll">
+    <svg class="viz viz-mission-failure" viewBox="0 0 960 580" role="img" aria-label="La operación orbital debe sobrevivir sin taller cercano" xmlns="http://www.w3.org/2000/svg"><defs><marker id="drm-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1 L9 5 L1 9 Z" fill="var(--a)"/></marker><filter id="drm-shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#0f172a" flood-opacity=".14"/></filter><linearGradient id="drm-fade" x1="0" x2="1"><stop offset="0" stop-color="var(--a)" stop-opacity=".22"/><stop offset="1" stop-color="var(--b)" stop-opacity=".12"/></linearGradient></defs><rect class="canvas" x="20" y="35" width="920" height="505" rx="34"/><circle class="mission" cx="480" cy="292" r="185"/><path class="particle" d="M240 110l70 82M315 82l45 98M720 105l-65 92"/><path class="sail" d="M268 360l105 34l-86 74Z"/><path class="flow" d="M480 105 A185 185 0 0 1 665 292" marker-end="url(#drm-arr)"/><path class="flow" d="M665 292 A185 185 0 0 1 480 477" marker-end="url(#drm-arr)"/><path class="flow" d="M480 477 A185 185 0 0 1 295 292" marker-end="url(#drm-arr)"/><path class="flow" d="M295 292 A185 185 0 0 1 480 105" marker-end="url(#drm-arr)"/><g class="node bad" transform="translate(480 105)"><rect x="-92" y="-32" width="184" height="64" rx="16"/><text x="0" y="-5" text-anchor="middle" class="nt">Radiacion</text><text x="0" y="17" text-anchor="middle" class="nd">degrada chips</text></g><g class="node ok" transform="translate(665 292)"><rect x="-92" y="-32" width="184" height="64" rx="16"/><text x="0" y="-5" text-anchor="middle" class="nt">Nodo activo</text><text x="0" y="17" text-anchor="middle" class="nd">toma la carga</text></g><g class="node warn" transform="translate(480 477)"><rect x="-92" y="-32" width="184" height="64" rx="16"/><text x="0" y="-5" text-anchor="middle" class="nt">Nodo fallido</text><text x="0" y="17" text-anchor="middle" class="nd">se aisla</text></g><g class="node muted" transform="translate(295 292)"><rect x="-92" y="-32" width="184" height="64" rx="16"/><text x="0" y="-5" text-anchor="middle" class="nt">Retirada orbital</text><text x="0" y="17" text-anchor="middle" class="nd">fin de mision</text></g></svg>
   </div>
-
-  <div class="dcm-orbitops__viz">
-    <svg viewBox="0 0 920 410" role="img" aria-label="Ciclo operativo orbital con radiación, aislamiento, redundancia y deorbitado">
-      <defs>
-        <radialGradient id="ops-rad" cx=".5" cy=".5" r=".6">
-          <stop offset="0" stop-color="#FFB343" stop-opacity=".55"/>
-          <stop offset="1" stop-color="#ff8d7a" stop-opacity=".02"/>
-        </radialGradient>
-      </defs>
-      <circle class="dcm-orbitops__belt" cx="210" cy="188" r="126"/>
-      <g class="dcm-orbitops__sat" transform="translate(150 130)">
-        <rect x="40" y="28" width="82" height="82" rx="18"/>
-        <rect x="-28" y="46" width="60" height="18" rx="5"/>
-        <rect x="130" y="46" width="60" height="18" rx="5"/>
-        <rect x="-28" y="76" width="60" height="18" rx="5"/>
-        <rect x="130" y="76" width="60" height="18" rx="5"/>
-        <path d="M60 56H102M60 82H102"/>
-      </g>
-      <g class="dcm-orbitops__rays">
-        <path d="M72 62L132 118"/><path d="M92 264L150 226"/><path d="M304 48L272 112"/><path d="M334 274L276 232"/>
-      </g>
-      <g class="dcm-orbitops__flow">
-        <path d="M344 182H496"/>
-        <path d="M644 182H796"/>
-        <path d="M796 230 C720 326 548 338 456 252"/>
-      </g>
-      <g class="dcm-orbitops__step" transform="translate(492 116)">
-        <rect width="150" height="132" rx="22"/>
-        <text x="22" y="36">Aislar nodo</text>
-        <text x="22" y="62">reiniciar</text>
-        <text x="22" y="88">reencaminar</text>
-      </g>
-      <g class="dcm-orbitops__step dcm-orbitops__step--warn" transform="translate(748 116)">
-        <rect width="150" height="132" rx="22"/>
-        <text x="22" y="36">Margen baja</text>
-        <text x="22" y="62">menos reserva</text>
-        <text x="22" y="88">vida finita</text>
-      </g>
-      <g class="dcm-orbitops__deorbit">
-        <path d="M474 302 C388 362 234 354 150 300"/>
-        <text x="72" y="338">deorbit planificado</text>
-      </g>
-    </svg>
-  </div>
-
-  <div class="dcm-orbitops__timeline">
-    <div><strong>Radiación</strong><span>SEU y daño acumulado</span></div>
-    <div><strong>Operación</strong><span>detectar, aislar y seguir</span></div>
-    <div><strong>Redundancia</strong><span>capacidad de sobra desde el diseño</span></div>
-    <div><strong>Cierre</strong><span>no dejar activos muertos décadas</span></div>
-  </div>
+  <div class="read"><span>Radiación: degrada componentes</span><span>Fallo: aislar antes de propagar</span><span>Fin de vida: retirar sin basura orbital</span></div>
 </div>
 
 <style>
-  .dcm-orbitops, .dcm-orbitops * { box-sizing:border-box; }
-  .dcm-orbitops {
-    --teal:#26A69A; --sky:#7cc7ff; --amber:#FFB343; --red:#ff8d7a; --bg:var(--md-default-bg-color,#fff);
-    --line:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 15%, transparent);
-    --text:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 94%, transparent);
-    --muted:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 63%, transparent);
-    display:grid; gap:16px; max-width:980px; margin:0 auto; padding:clamp(16px,2vw,24px);
-    border-radius:24px; border:1px solid var(--line);
-    background:radial-gradient(100% 130% at 0% 0%, color-mix(in srgb, var(--sky) 10%, transparent), transparent 50%), radial-gradient(90% 110% at 100% 100%, color-mix(in srgb, var(--red) 8%, transparent), transparent 50%), var(--bg);
-    color:var(--text); font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
-  }
-  [data-md-color-scheme="slate"] .dcm-orbitops { --line:rgba(226,232,240,.16); --text:rgba(236,244,255,.95); --muted:rgba(236,244,255,.68); }
-  .dcm-orbitops__head { display:grid; gap:6px; max-width:76ch; }
-  .dcm-orbitops__title { font-size:clamp(22px,3vw,30px); font-weight:900; line-height:1.05; letter-spacing:0; }
-  .dcm-orbitops__sub { font-size:14px; line-height:1.55; color:var(--muted); }
-  .dcm-orbitops__viz { padding:10px; border:1px solid var(--line); border-radius:20px; background: color-mix(in srgb, var(--bg) 92%, #09121f 8%); overflow:hidden; }
-  .dcm-orbitops svg { width:100%; height:auto; min-height:300px; }
-  .dcm-orbitops__belt { fill:url(#ops-rad); stroke:color-mix(in srgb, var(--amber) 34%, var(--line)); stroke-width:2; stroke-dasharray:10 9; }
-  .dcm-orbitops__sat rect { fill:color-mix(in srgb, var(--bg) 88%, #09121f 12%); stroke:var(--line); }
-  .dcm-orbitops__sat path { stroke:#7cc7ff; stroke-width:4; stroke-linecap:round; }
-  .dcm-orbitops__rays path { stroke:#ff8d7a; stroke-width:5; stroke-linecap:round; }
-  .dcm-orbitops__flow path { fill:none; stroke:#26A69A; stroke-width:5; stroke-linecap:round; stroke-dasharray:13 9; }
-  .dcm-orbitops__deorbit path { fill:none; stroke:#7cc7ff; stroke-width:5; stroke-linecap:round; }
-  .dcm-orbitops__step rect { fill:color-mix(in srgb, var(--bg) 88%, #09121f 12%); stroke:color-mix(in srgb, var(--teal) 38%, var(--line)); }
-  .dcm-orbitops__step--warn rect { stroke:color-mix(in srgb, var(--red) 38%, var(--line)); fill:color-mix(in srgb, var(--red) 7%, var(--bg)); }
-  .dcm-orbitops text { fill:var(--text); font-size:20px; font-weight:900; }
-  .dcm-orbitops__timeline { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; }
-  .dcm-orbitops__timeline div { padding:14px 16px; border:1px solid var(--line); border-radius:18px; background:rgba(255,255,255,.04); }
-  .dcm-orbitops__timeline strong { display:block; font-size:15px; }
-  .dcm-orbitops__timeline span { display:block; margin-top:4px; color:var(--muted); font-size:12.8px; line-height:1.35; }
-  @media (max-width: 860px) {
-    .dcm-orbitops { overflow-x:auto; overscroll-behavior-x:contain; }
-    .dcm-orbitops__head,
-    .dcm-orbitops__viz,
-    .dcm-orbitops__timeline { min-width:760px; }
-    .dcm-orbitops__timeline { grid-template-columns:repeat(4, minmax(0,1fr)); }
-  }
+.drm, .drm * { box-sizing:border-box; }
+.drm { --a:#FFB343; --b:#ff8d7a; --c:#26A69A; --bad:#ff8d7a; --warn:#FFB343; --ok:#26A69A; --bg:var(--md-default-bg-color,#fff); --fg:color-mix(in srgb,var(--md-default-fg-color,#0f172a) 94%,transparent); --muted:color-mix(in srgb,var(--md-default-fg-color,#0f172a) 62%,transparent); --line:color-mix(in srgb,var(--md-default-fg-color,#0f172a) 15%,transparent); display:grid; gap:14px; width:100%; padding:clamp(16px,2vw,26px); border:1px solid var(--line); border-radius:18px; background:radial-gradient(90% 120% at 0 0,color-mix(in srgb,var(--a) 8%,transparent),transparent 55%),radial-gradient(100% 120% at 100% 100%,color-mix(in srgb,var(--b) 8%,transparent),transparent 55%),var(--bg); color:var(--fg); font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif; }
+[data-md-color-scheme="slate"] .drm { --line:rgba(226,232,240,.16); --fg:rgba(236,244,255,.95); --muted:rgba(236,244,255,.66); }
+.drm .head { display:grid; gap:6px; max-width:78ch; } .drm .eyebrow { width:fit-content; padding:5px 10px; border-radius:999px; border:1px solid color-mix(in srgb,var(--a) 35%,var(--line)); color:var(--a); background:color-mix(in srgb,var(--a) 8%,transparent); font-size:10px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; } .drm .title { font-size:clamp(21px,3vw,31px); line-height:1.05; font-weight:900; } .drm .sub { color:var(--muted); font-size:14px; line-height:1.48; }
+.drm .viz-scroll { max-width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; padding-bottom:4px; } .drm .viz { width:100%; height:auto; display:block; aspect-ratio:960/580; } .drm .canvas { fill:url(#drm-fade); stroke:var(--line); stroke-width:1; }
+.drm .node rect,.drm .pill,.drm .step rect,.drm .evidence path { fill:color-mix(in srgb,var(--bg) 88%,#0f172a 12%); stroke:var(--line); filter:url(#drm-shadow); } .drm .node.bad rect,.drm .left,.drm .hot { fill:color-mix(in srgb,var(--bad) 11%,var(--bg)); stroke:color-mix(in srgb,var(--bad) 40%,var(--line)); } .drm .node.warn rect,.drm .radiator rect,.drm .drop,.drm .over { fill:color-mix(in srgb,var(--warn) 13%,var(--bg)); stroke:color-mix(in srgb,var(--warn) 42%,var(--line)); } .drm .node.ok rect,.drm .right,.drm .bolt,.drm .useful { fill:color-mix(in srgb,var(--ok) 12%,var(--bg)); stroke:color-mix(in srgb,var(--ok) 36%,var(--line)); }
+.drm .flow,.drm .axis,.drm .cool,.drm .heat,.drm .tether,.drm .bigcurve { fill:none; stroke:var(--a); stroke-width:4; stroke-linecap:round; stroke-linejoin:round; } .drm .flow { stroke-dasharray:9 9; animation:drm-dash 3.4s linear infinite; } .drm .flow.alt,.drm .heat { stroke:var(--b); } .drm .axis { stroke:var(--line); stroke-dasharray:none; } .drm .bigcurve { stroke-width:7; }
+.drm .nt,.drm .pt,.drm .lane,.drm .result { fill:var(--fg); font-size:18px; font-weight:900; } .drm .nd,.drm .axistext,.drm .limit { fill:var(--muted); font-size:13px; font-weight:750; } .drm .limit { fill:color-mix(in srgb,var(--bad) 75%,var(--fg)); }
+.drm .planet,.drm .earth,.drm .cloud,.drm .archive { fill:color-mix(in srgb,var(--b) 18%,var(--bg)); stroke:color-mix(in srgb,var(--b) 45%,var(--line)); } .drm .orbit,.drm .orb,.drm .mission,.drm .cycle,.drm .scaleA,.drm .scaleB { fill:none; stroke:color-mix(in srgb,var(--a) 45%,var(--line)); stroke-width:3; stroke-dasharray:12 10; } .drm .sun { fill:color-mix(in srgb,#FFB343 45%,var(--bg)); stroke:#FFB343; } .drm .sat { fill:var(--a); } .drm .ray { stroke:#FFB343; stroke-width:3; opacity:.45; } .drm .terminator,.drm .wire,.drm .steam,.drm .particle { fill:none; stroke:var(--line); stroke-width:3; stroke-linecap:round; } .drm .night { fill:color-mix(in srgb,#0f172a 18%,transparent); } .drm .wing,.drm .plug,.drm .contact,.drm .satcase circle { fill:color-mix(in srgb,var(--a) 22%,var(--bg)); stroke:var(--a); }
+.drm .funnel { fill:color-mix(in srgb,var(--bad) 12%,var(--bg)); stroke:color-mix(in srgb,var(--bad) 38%,var(--line)); } .drm .funnel.thin { fill:color-mix(in srgb,var(--ok) 12%,var(--bg)); stroke:color-mix(in srgb,var(--ok) 38%,var(--line)); } .drm .processor,.drm .chip,.drm .gpu { fill:color-mix(in srgb,var(--a) 20%,var(--bg)); stroke:color-mix(in srgb,var(--a) 45%,var(--line)); } .drm .rad { fill:color-mix(in srgb,var(--b) 20%,var(--bg)); stroke:var(--b); }
+.drm .waterline { stroke:var(--b); stroke-width:4; } .drm .ice.top { fill:color-mix(in srgb,var(--b) 18%,var(--bg)); stroke:var(--b); stroke-width:3; } .drm .ice.bottom { fill:color-mix(in srgb,var(--a) 18%,var(--bg)); stroke:var(--a); stroke-width:3; } .drm .building,.drm .rackframe { fill:color-mix(in srgb,var(--bg) 88%,#0f172a 12%); stroke:var(--line); stroke-width:2; } .drm .rack { fill:color-mix(in srgb,var(--warn) 12%,var(--bg)); stroke:var(--warn); }
+.drm .hourglass,.drm .field,.drm .vacuum,.drm .clock { fill:color-mix(in srgb,var(--c) 10%,transparent); stroke:color-mix(in srgb,var(--c) 42%,var(--line)); stroke-width:3; } .drm .dropicon,.drm .tower,.drm .plant,.drm .turbine { fill:color-mix(in srgb,var(--b) 14%,var(--bg)); stroke:var(--b); stroke-width:3; } .drm .rocket,.drm .sail,.drm .plume { fill:color-mix(in srgb,var(--warn) 18%,var(--bg)); stroke:var(--warn); stroke-width:3; } .drm .flame { fill:color-mix(in srgb,var(--bad) 32%,transparent); stroke:var(--bad); stroke-width:3; } .drm .air { fill:color-mix(in srgb,var(--c) 42%,var(--bg)); } .drm .city { fill:color-mix(in srgb,var(--fg) 8%,transparent); stroke:var(--line); stroke-width:3; }
+.drm .read { display:flex; flex-wrap:wrap; gap:8px; align-items:center; } .drm .read span { padding:8px 11px; border-radius:999px; background:color-mix(in srgb,var(--bg) 90%,#0f172a 10%); border:1px solid var(--line); color:var(--muted); font-size:12.5px; line-height:1.25; }
+@keyframes drm-dash { to { stroke-dashoffset:-36; } } @media(max-width:760px){ .drm { padding:14px; } .drm .viz{ width:760px; max-width:none; } .drm .nt,.drm .pt{ font-size:16px; } .drm .nd{ font-size:12px; } } @media(prefers-reduced-motion:reduce){ .drm .flow{ animation:none!important; } }
 </style>

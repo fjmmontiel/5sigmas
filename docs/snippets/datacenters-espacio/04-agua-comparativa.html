@@ -1,109 +1,25 @@
-<div class="dcw-context" data-demo="04-agua-comparativa" data-anim-fullscreen="off" data-anim-contrast="force">
-  <div class="dcw-context__head">
-    <div class="dcw-context__title">El agua importa, pero primero hay que calibrar la escala correcta</div>
-    <div class="dcw-context__sub">
-      La magnitud nacional y el conflicto local no cuentan la misma historia. El contexto agregado reduce ruido, y el
-      conflicto local aparece cuando se juntan clima seco, refrigeración evaporativa y mucha potencia concentrada.
-    </div>
+<meta charset="utf-8">
+<div class="dac dcf-snippet" data-demo="04-agua-comparativa" data-anim-fullscreen="off" data-anim-contrast="force">
+  <div class="head"><div class="eyebrow">doble escala hidrica</div><div class="title">El agua puede ser pequeña en total y crítica en una cuenca</div><div class="sub">Una cifra nacional baja no evita conflictos locales: clima, permisos y disponibilidad cambian el peso de cada litro.</div></div>
+  <div class="viz-scroll">
+    <svg class="viz viz-dual-water-scale" viewBox="0 0 960 580" role="img" aria-label="El agua puede ser pequeña en total y crítica en una cuenca" xmlns="http://www.w3.org/2000/svg"><defs><marker id="dac-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1 L9 5 L1 9 Z" fill="var(--a)"/></marker><filter id="dac-shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#0f172a" flood-opacity=".14"/></filter><linearGradient id="dac-fade" x1="0" x2="1"><stop offset="0" stop-color="var(--a)" stop-opacity=".22"/><stop offset="1" stop-color="var(--b)" stop-opacity=".12"/></linearGradient></defs><rect class="canvas" x="20" y="35" width="920" height="505" rx="34"/><circle class="scaleA" cx="275" cy="290" r="150"/><circle class="scaleB" cx="690" cy="290" r="115"/><path class="flow" d="M425 290H560" marker-end="url(#dac-arr)"/><g class="node ok" transform="translate(275 290)"><rect x="-92" y="-32" width="184" height="64" rx="16"/><text x="0" y="-5" text-anchor="middle" class="nt">Agregado nacional</text><text x="0" y="17" text-anchor="middle" class="nd">parece pequeno</text></g><g class="node bad" transform="translate(690 290)"><rect x="-92" y="-32" width="184" height="64" rx="16"/><text x="0" y="-5" text-anchor="middle" class="nt">Cuenca local</text><text x="0" y="17" text-anchor="middle" class="nd">puede bloquear</text></g><g class="node warn" transform="translate(690 445)"><rect x="-92" y="-32" width="184" height="64" rx="16"/><text x="0" y="-5" text-anchor="middle" class="nt">Arizona / Maricopa</text><text x="0" y="17" text-anchor="middle" class="nd">presion concentrada</text></g></svg>
   </div>
-
-  <div class="dcw-context__grid">
-    <section class="dcw-context__panel">
-      <span class="dcw-context__label">EE. UU. — retirada diaria</span>
-      <div class="dcw-context__bar dcw-context__bar--agri">
-        <strong>Agricultura</strong>
-        <span>~800.000 M gal/día</span>
-      </div>
-      <div class="dcw-context__marker">
-        <strong>Campos de golf</strong>
-        <span>~2.000 M gal/día · 4,5× los DCs</span>
-      </div>
-      <div class="dcw-context__marker dcw-context__marker--dc">
-        <strong>Datacenters</strong>
-        <span>449 M gal/día</span>
-      </div>
-    </section>
-
-    <section class="dcw-context__panel dcw-context__panel--az">
-      <span class="dcw-context__label">Qué vuelve tenso el caso local</span>
-      <div class="dcw-context__az">
-        <div class="dcw-context__az-card">
-          <strong>Clima y cuenca</strong>
-          <span>El mismo MW pesa más en regiones áridas o ya tensionadas.</span>
-        </div>
-        <div class="dcw-context__az-ratio">+</div>
-        <div class="dcw-context__az-card dcw-context__az-card--dc">
-          <strong>Arquitectura térmica</strong>
-          <span>El WUE cambia por órdenes de magnitud según la refrigeración elegida.</span>
-        </div>
-      </div>
-      <div class="dcw-context__tax">
-        <strong>Lectura correcta</strong>
-        <span>El agregado nacional contextualiza, y el conflicto político local depende sobre todo de dónde y cómo se refrigera.</span>
-      </div>
-      <div class="dcw-context__tax dcw-context__tax--soft">
-        <strong>Qué no dice este gráfico</strong>
-        <span>Que el agua deje de importar: solo evita confundir magnitud agregada con impacto local.</span>
-      </div>
-    </section>
-  </div>
+  <div class="read"><span>La escala nacional marca el tamano total</span><span>La cuenca local puede bloquear permisos</span><span>Las dos escalas deben leerse juntas</span></div>
 </div>
 
 <style>
-  .dcw-context, .dcw-context * { box-sizing:border-box; }
-  .dcw-context {
-    --teal:#26A69A; --sky:#7cc7ff; --amber:#FFB343; --bg:var(--md-default-bg-color,#fff);
-    --line:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 15%, transparent);
-    --text:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 94%, transparent);
-    --muted:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 63%, transparent);
-    display:grid; gap:14px; max-width:980px; margin:0 auto; padding:clamp(16px,2vw,24px);
-    border-radius:24px; border:1px solid var(--line);
-    background:
-      radial-gradient(100% 130% at 0% 0%, color-mix(in srgb, var(--teal) 10%, transparent), transparent 50%),
-      radial-gradient(90% 110% at 100% 100%, color-mix(in srgb, var(--amber) 8%, transparent), transparent 50%),
-      var(--bg);
-    color:var(--text); font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
-  }
-  [data-md-color-scheme="slate"] .dcw-context { --line:rgba(226,232,240,.16); --text:rgba(236,244,255,.95); --muted:rgba(236,244,255,.68); }
-  .dcw-context__head { display:grid; gap:6px; max-width:74ch; }
-  .dcw-context__title { font-size:clamp(22px,3vw,30px); font-weight:900; line-height:1.05; letter-spacing:0; }
-  .dcw-context__sub { font-size:14px; line-height:1.55; color:var(--muted); }
-  .dcw-context__grid { display:grid; grid-template-columns:1.15fr .85fr; gap:12px; }
-  .dcw-context__panel {
-    display:grid; gap:12px; padding:16px; border-radius:20px; border:1px solid var(--line);
-    background: color-mix(in srgb, var(--bg) 90%, #09121f 10%);
-  }
-  .dcw-context__label {
-    display:block; font-size:11px; font-weight:900; text-transform:uppercase; letter-spacing:.08em; color:var(--muted);
-  }
-  .dcw-context__bar, .dcw-context__marker, .dcw-context__tax, .dcw-context__az-card {
-    padding:12px; border-radius:16px; border:1px solid var(--line); background:rgba(255,255,255,.04);
-  }
-  .dcw-context__bar {
-    min-height:58px; background: linear-gradient(90deg, rgba(255,179,67,.22), rgba(255,179,67,.5)); display:flex; justify-content:space-between; gap:10px; align-items:center;
-  }
-  .dcw-context__marker { margin-left:72%; }
-  .dcw-context__marker--dc { margin-left:84%; border-color: color-mix(in srgb, var(--teal) 24%, var(--line)); background: color-mix(in srgb, var(--teal) 10%, transparent); }
-  .dcw-context__bar strong, .dcw-context__marker strong, .dcw-context__az-card strong, .dcw-context__tax strong {
-    display:block; font-size:16px; line-height:1.12; letter-spacing:0;
-  }
-  .dcw-context__bar span, .dcw-context__marker span, .dcw-context__az-card span, .dcw-context__tax span {
-    display:block; font-size:12px; line-height:1.45; color:var(--muted);
-  }
-  .dcw-context__az { display:grid; grid-template-columns:1fr auto 1fr; gap:10px; align-items:center; }
-  .dcw-context__az-ratio {
-    display:grid; place-items:center; width:68px; aspect-ratio:1; border-radius:50%;
-    border:1px solid color-mix(in srgb, var(--amber) 28%, var(--line)); background: color-mix(in srgb, var(--amber) 10%, transparent); font-size:18px; font-weight:900;
-  }
-  .dcw-context__az-card--dc { border-color: color-mix(in srgb, var(--teal) 24%, var(--line)); background: color-mix(in srgb, var(--teal) 8%, transparent); }
-  .dcw-context__tax--soft { background: color-mix(in srgb, var(--amber) 7%, transparent); }
-  @media (max-width: 860px) {
-    .dcw-context { overflow-x:auto; overscroll-behavior-x:contain; }
-    .dcw-context__head,
-    .dcw-context__grid { min-width:780px; }
-    .dcw-context__grid { grid-template-columns:1.15fr .85fr; }
-    .dcw-context__az { grid-template-columns:1fr auto 1fr; }
-    .dcw-context__marker { margin-left:72%; }
-    .dcw-context__marker--dc { margin-left:84%; }
-  }
+.dac, .dac * { box-sizing:border-box; }
+.dac { --a:#7cc7ff; --b:#26A69A; --c:#324AB2; --bad:#ff8d7a; --warn:#FFB343; --ok:#26A69A; --bg:var(--md-default-bg-color,#fff); --fg:color-mix(in srgb,var(--md-default-fg-color,#0f172a) 94%,transparent); --muted:color-mix(in srgb,var(--md-default-fg-color,#0f172a) 62%,transparent); --line:color-mix(in srgb,var(--md-default-fg-color,#0f172a) 15%,transparent); display:grid; gap:14px; width:100%; padding:clamp(16px,2vw,26px); border:1px solid var(--line); border-radius:32px; background:radial-gradient(90% 120% at 0 0,color-mix(in srgb,var(--a) 8%,transparent),transparent 55%),radial-gradient(100% 120% at 100% 100%,color-mix(in srgb,var(--b) 8%,transparent),transparent 55%),var(--bg); color:var(--fg); font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif; }
+[data-md-color-scheme="slate"] .dac { --line:rgba(226,232,240,.16); --fg:rgba(236,244,255,.95); --muted:rgba(236,244,255,.66); }
+.dac .head { display:grid; gap:6px; max-width:78ch; } .dac .eyebrow { width:fit-content; padding:5px 10px; border-radius:999px; border:1px solid color-mix(in srgb,var(--a) 35%,var(--line)); color:var(--a); background:color-mix(in srgb,var(--a) 8%,transparent); font-size:10px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; } .dac .title { font-size:clamp(21px,3vw,31px); line-height:1.05; font-weight:900; } .dac .sub { color:var(--muted); font-size:14px; line-height:1.48; }
+.dac .viz-scroll { max-width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; padding-bottom:4px; } .dac .viz { width:100%; height:auto; display:block; aspect-ratio:960/580; } .dac .canvas { fill:url(#dac-fade); stroke:var(--line); stroke-width:1; }
+.dac .node rect,.dac .pill,.dac .step rect,.dac .evidence path { fill:color-mix(in srgb,var(--bg) 88%,#0f172a 12%); stroke:var(--line); filter:url(#dac-shadow); } .dac .node.bad rect,.dac .left,.dac .hot { fill:color-mix(in srgb,var(--bad) 11%,var(--bg)); stroke:color-mix(in srgb,var(--bad) 40%,var(--line)); } .dac .node.warn rect,.dac .radiator rect,.dac .drop,.dac .over { fill:color-mix(in srgb,var(--warn) 13%,var(--bg)); stroke:color-mix(in srgb,var(--warn) 42%,var(--line)); } .dac .node.ok rect,.dac .right,.dac .bolt,.dac .useful { fill:color-mix(in srgb,var(--ok) 12%,var(--bg)); stroke:color-mix(in srgb,var(--ok) 36%,var(--line)); }
+.dac .flow,.dac .axis,.dac .cool,.dac .heat,.dac .tether,.dac .bigcurve { fill:none; stroke:var(--a); stroke-width:4; stroke-linecap:round; stroke-linejoin:round; } .dac .flow { stroke-dasharray:9 9; animation:dac-dash 3.4s linear infinite; } .dac .flow.alt,.dac .heat { stroke:var(--b); } .dac .axis { stroke:var(--line); stroke-dasharray:none; } .dac .bigcurve { stroke-width:7; }
+.dac .nt,.dac .pt,.dac .lane,.dac .result { fill:var(--fg); font-size:18px; font-weight:900; } .dac .nd,.dac .axistext,.dac .limit { fill:var(--muted); font-size:13px; font-weight:750; } .dac .limit { fill:color-mix(in srgb,var(--bad) 75%,var(--fg)); }
+.dac .planet,.dac .earth,.dac .cloud,.dac .archive { fill:color-mix(in srgb,var(--b) 18%,var(--bg)); stroke:color-mix(in srgb,var(--b) 45%,var(--line)); } .dac .orbit,.dac .orb,.dac .mission,.dac .cycle,.dac .scaleA,.dac .scaleB { fill:none; stroke:color-mix(in srgb,var(--a) 45%,var(--line)); stroke-width:3; stroke-dasharray:12 10; } .dac .sun { fill:color-mix(in srgb,#FFB343 45%,var(--bg)); stroke:#FFB343; } .dac .sat { fill:var(--a); } .dac .ray { stroke:#FFB343; stroke-width:3; opacity:.45; } .dac .terminator,.dac .wire,.dac .steam,.dac .particle { fill:none; stroke:var(--line); stroke-width:3; stroke-linecap:round; } .dac .night { fill:color-mix(in srgb,#0f172a 18%,transparent); } .dac .wing,.dac .plug,.dac .contact,.dac .satcase circle { fill:color-mix(in srgb,var(--a) 22%,var(--bg)); stroke:var(--a); }
+.dac .funnel { fill:color-mix(in srgb,var(--bad) 12%,var(--bg)); stroke:color-mix(in srgb,var(--bad) 38%,var(--line)); } .dac .funnel.thin { fill:color-mix(in srgb,var(--ok) 12%,var(--bg)); stroke:color-mix(in srgb,var(--ok) 38%,var(--line)); } .dac .processor,.dac .chip,.dac .gpu { fill:color-mix(in srgb,var(--a) 20%,var(--bg)); stroke:color-mix(in srgb,var(--a) 45%,var(--line)); } .dac .rad { fill:color-mix(in srgb,var(--b) 20%,var(--bg)); stroke:var(--b); }
+.dac .waterline { stroke:var(--b); stroke-width:4; } .dac .ice.top { fill:color-mix(in srgb,var(--b) 18%,var(--bg)); stroke:var(--b); stroke-width:3; } .dac .ice.bottom { fill:color-mix(in srgb,var(--a) 18%,var(--bg)); stroke:var(--a); stroke-width:3; } .dac .building,.dac .rackframe { fill:color-mix(in srgb,var(--bg) 88%,#0f172a 12%); stroke:var(--line); stroke-width:2; } .dac .rack { fill:color-mix(in srgb,var(--warn) 12%,var(--bg)); stroke:var(--warn); }
+.dac .hourglass,.dac .field,.dac .vacuum,.dac .clock { fill:color-mix(in srgb,var(--c) 10%,transparent); stroke:color-mix(in srgb,var(--c) 42%,var(--line)); stroke-width:3; } .dac .dropicon,.dac .tower,.dac .plant,.dac .turbine { fill:color-mix(in srgb,var(--b) 14%,var(--bg)); stroke:var(--b); stroke-width:3; } .dac .rocket,.dac .sail,.dac .plume { fill:color-mix(in srgb,var(--warn) 18%,var(--bg)); stroke:var(--warn); stroke-width:3; } .dac .flame { fill:color-mix(in srgb,var(--bad) 32%,transparent); stroke:var(--bad); stroke-width:3; } .dac .air { fill:color-mix(in srgb,var(--c) 42%,var(--bg)); } .dac .city { fill:color-mix(in srgb,var(--fg) 8%,transparent); stroke:var(--line); stroke-width:3; }
+.dac .read { display:flex; flex-wrap:wrap; gap:8px; align-items:center; } .dac .read span { padding:8px 11px; border-radius:999px; background:color-mix(in srgb,var(--bg) 90%,#0f172a 10%); border:1px solid var(--line); color:var(--muted); font-size:12.5px; line-height:1.25; }
+@keyframes dac-dash { to { stroke-dashoffset:-36; } } @media(max-width:760px){ .dac { padding:14px; } .dac .viz{ width:760px; max-width:none; } .dac .nt,.dac .pt{ font-size:16px; } .dac .nd{ font-size:12px; } } @media(prefers-reduced-motion:reduce){ .dac .flow{ animation:none!important; } }
 </style>

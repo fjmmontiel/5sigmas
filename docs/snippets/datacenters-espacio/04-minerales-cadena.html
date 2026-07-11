@@ -1,89 +1,25 @@
-<div class="dmc-minerals" data-demo="04-minerales-cadena" data-anim-fullscreen="off" data-anim-contrast="force">
-  <div class="dmc-minerals__head">
-    <div class="dmc-minerals__title">Un rack de IA es también un mapa de dependencia mineral</div>
-    <div class="dmc-minerals__sub">
-      La dependencia no está “fuera” del datacenter. Entra por interconexión, baterías, transceptores, condensadores
-      y cobre estructural antes de que el primer workload arranque.
-    </div>
+<meta charset="utf-8">
+<div class="dmc dcf-snippet" data-demo="04-minerales-cadena" data-anim-fullscreen="off" data-anim-contrast="force">
+  <div class="head"><div class="eyebrow">cadena mineral</div><div class="title">Un rack de IA concentra minerales con geografías distintas</div><div class="sub">Cada GPU arrastra extracción, refino y fabricación; mover hardware a órbita no borra esa cadena material.</div></div>
+  <div class="viz-scroll">
+    <svg class="viz viz-rack-hotspot" viewBox="0 0 960 580" role="img" aria-label="Un rack de IA concentra minerales con geografías distintas" xmlns="http://www.w3.org/2000/svg"><defs><marker id="dmc-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1 L9 5 L1 9 Z" fill="var(--a)"/></marker><filter id="dmc-shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#0f172a" flood-opacity=".14"/></filter><linearGradient id="dmc-fade" x1="0" x2="1"><stop offset="0" stop-color="var(--a)" stop-opacity=".22"/><stop offset="1" stop-color="var(--b)" stop-opacity=".12"/></linearGradient></defs><rect class="canvas" x="20" y="35" width="920" height="505" rx="34"/><rect class="rackframe" x="375" y="125" width="210" height="330" rx="28"/><rect class="gpu" x="410" y="170" width="140" height="52" rx="12"/><rect class="gpu" x="410" y="250" width="140" height="52" rx="12"/><rect class="gpu" x="410" y="330" width="140" height="52" rx="12"/><path class="flow" d="M210 160 C290 160 330 190 410 196" marker-end="url(#dmc-arr)"/><path class="flow" d="M210 410 C300 405 335 370 410 356" marker-end="url(#dmc-arr)"/><path class="flow alt" d="M550 275 C660 275 710 295 790 335" marker-end="url(#dmc-arr)"/><g class="node bad" transform="translate(205 160)"><rect x="-92" y="-32" width="184" height="64" rx="16"/><text x="0" y="-5" text-anchor="middle" class="nt">Extraccion</text><text x="0" y="17" text-anchor="middle" class="nd">depende de geografia</text></g><g class="node warn" transform="translate(205 410)"><rect x="-92" y="-32" width="184" height="64" rx="16"/><text x="0" y="-5" text-anchor="middle" class="nt">Refino</text><text x="0" y="17" text-anchor="middle" class="nd">capacidad concentrada</text></g><g class="node ok" transform="translate(790 335)"><rect x="-92" y="-32" width="184" height="64" rx="16"/><text x="0" y="-5" text-anchor="middle" class="nt">Rack IA</text><text x="0" y="17" text-anchor="middle" class="nd">agrega demanda</text></g></svg>
   </div>
-
-  <div class="dmc-minerals__map">
-    <svg viewBox="0 0 920 420" role="img" aria-label="Rack de IA con rutas de dependencia mineral">
-      <defs>
-        <linearGradient id="rack-metal" x1="0" x2="1">
-          <stop offset="0" stop-color="#324AB2" stop-opacity=".16"/>
-          <stop offset="1" stop-color="#26A69A" stop-opacity=".18"/>
-        </linearGradient>
-      </defs>
-      <g class="dmc-minerals__rack">
-        <rect x="56" y="50" width="318" height="320" rx="28"/>
-        <rect x="86" y="84" width="258" height="72" rx="18"/>
-        <rect x="86" y="176" width="258" height="72" rx="18"/>
-        <rect x="86" y="268" width="258" height="72" rx="18"/>
-        <path d="M118 120H312M118 212H312M118 304H312"/>
-        <text x="86" y="34">rack de IA</text>
-      </g>
-      <g class="dmc-minerals__hotspots">
-        <circle cx="330" cy="120" r="12"/><text x="118" y="118">interconnects</text>
-        <circle cx="330" cy="212" r="12"/><text x="118" y="210">transceptores</text>
-        <circle cx="330" cy="304" r="12"/><text x="118" y="302">UPS / power shelf</text>
-      </g>
-      <g class="dmc-minerals__links">
-        <path d="M344 120 C430 102 476 74 540 74"/>
-        <path d="M344 212 C432 204 484 196 540 196"/>
-        <path d="M344 304 C432 316 484 334 540 334"/>
-        <path d="M344 286 C414 260 470 254 540 254"/>
-      </g>
-      <g class="dmc-minerals__materials">
-        <g transform="translate(560 44)">
-          <rect width="294" height="68" rx="18"/><text x="18" y="28">Cobalto</text><text x="18" y="50">RDC 74% extracción · China 67% refino</text>
-        </g>
-        <g transform="translate(560 166)">
-          <rect width="294" height="68" rx="18"/><text x="18" y="28">REE</text><text x="18" y="50">China 91% de la refinación</text>
-        </g>
-        <g transform="translate(560 226)">
-          <rect width="294" height="68" rx="18"/><text x="18" y="28">Tántalo / cobre</text><text x="18" y="50">condensadores, buses y cableado</text>
-        </g>
-        <g transform="translate(560 304)">
-          <rect width="294" height="68" rx="18"/><text x="18" y="28">Litio + cobalto</text><text x="18" y="50">baterías y respaldo eléctrico</text>
-        </g>
-      </g>
-    </svg>
-  </div>
-
-  <div class="dmc-minerals__caption">
-    <strong>Lectura correcta</strong>
-    <span>El riesgo no es un mineral aislado: es que varias piezas críticas del mismo rack dependen de cadenas concentradas a la vez.</span>
-  </div>
+  <div class="read"><span>Extracción: depende de geografía minera</span><span>Refino: concentra capacidad industrial</span><span>Rack IA: agrega demanda de materiales</span></div>
 </div>
 
 <style>
-  .dmc-minerals, .dmc-minerals * { box-sizing:border-box; }
-  .dmc-minerals {
-    --teal:#26A69A; --sky:#7cc7ff; --amber:#FFB343; --red:#ff8d7a; --bg:var(--md-default-bg-color,#fff);
-    --line:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 15%, transparent);
-    --text:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 94%, transparent);
-    --muted:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 63%, transparent);
-    display:grid; gap:16px; max-width:980px; margin:0 auto; padding:clamp(16px,2vw,24px);
-    border-radius:24px; border:1px solid var(--line);
-    background:radial-gradient(100% 130% at 0% 0%, color-mix(in srgb, var(--amber) 10%, transparent), transparent 50%), radial-gradient(90% 110% at 100% 100%, color-mix(in srgb, var(--teal) 9%, transparent), transparent 50%), var(--bg);
-    color:var(--text); font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
-  }
-  [data-md-color-scheme="slate"] .dmc-minerals { --line:rgba(226,232,240,.16); --text:rgba(236,244,255,.95); --muted:rgba(236,244,255,.68); }
-  .dmc-minerals__head { display:grid; gap:6px; max-width:76ch; }
-  .dmc-minerals__title { font-size:clamp(22px,3vw,30px); font-weight:900; line-height:1.05; letter-spacing:0; }
-  .dmc-minerals__sub { font-size:14px; line-height:1.55; color:var(--muted); }
-  .dmc-minerals__map, .dmc-minerals__caption { border:1px solid var(--line); border-radius:20px; background: color-mix(in srgb, var(--bg) 92%, #09121f 8%); }
-  .dmc-minerals__map { padding:10px; overflow:hidden; }
-  .dmc-minerals svg { width:100%; height:auto; min-height:300px; }
-  .dmc-minerals__rack rect:first-child { fill:url(#rack-metal); stroke:var(--line); stroke-width:2; }
-  .dmc-minerals__rack rect:not(:first-child), .dmc-minerals__materials rect { fill:color-mix(in srgb, var(--bg) 88%, #09121f 12%); stroke:var(--line); }
-  .dmc-minerals__rack path { stroke:var(--line); stroke-width:4; stroke-linecap:round; }
-  .dmc-minerals__hotspots circle { fill:#FFB343; stroke:var(--bg); stroke-width:4; }
-  .dmc-minerals__links path { fill:none; stroke:#26A69A; stroke-width:4; stroke-linecap:round; stroke-dasharray:9 8; }
-  .dmc-minerals text { fill:var(--text); font-size:19px; font-weight:900; }
-  .dmc-minerals text + text { fill:var(--muted); font-size:14px; font-weight:800; }
-  .dmc-minerals__caption { padding:14px 16px; }
-  .dmc-minerals__caption strong { display:block; font-size:15px; }
-  .dmc-minerals__caption span { display:block; margin-top:4px; color:var(--muted); font-size:13px; line-height:1.45; }
+.dmc, .dmc * { box-sizing:border-box; }
+.dmc { --a:#FFB343; --b:#324AB2; --c:#ff8d7a; --bad:#ff8d7a; --warn:#FFB343; --ok:#26A69A; --bg:var(--md-default-bg-color,#fff); --fg:color-mix(in srgb,var(--md-default-fg-color,#0f172a) 94%,transparent); --muted:color-mix(in srgb,var(--md-default-fg-color,#0f172a) 62%,transparent); --line:color-mix(in srgb,var(--md-default-fg-color,#0f172a) 15%,transparent); display:grid; gap:14px; width:100%; padding:clamp(16px,2vw,26px); border:1px solid var(--line); border-radius:18px; background:radial-gradient(90% 120% at 0 0,color-mix(in srgb,var(--a) 8%,transparent),transparent 55%),radial-gradient(100% 120% at 100% 100%,color-mix(in srgb,var(--b) 8%,transparent),transparent 55%),var(--bg); color:var(--fg); font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif; }
+[data-md-color-scheme="slate"] .dmc { --line:rgba(226,232,240,.16); --fg:rgba(236,244,255,.95); --muted:rgba(236,244,255,.66); }
+.dmc .head { display:grid; gap:6px; max-width:78ch; } .dmc .eyebrow { width:fit-content; padding:5px 10px; border-radius:999px; border:1px solid color-mix(in srgb,var(--a) 35%,var(--line)); color:var(--a); background:color-mix(in srgb,var(--a) 8%,transparent); font-size:10px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; } .dmc .title { font-size:clamp(21px,3vw,31px); line-height:1.05; font-weight:900; } .dmc .sub { color:var(--muted); font-size:14px; line-height:1.48; }
+.dmc .viz-scroll { max-width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; padding-bottom:4px; } .dmc .viz { width:100%; height:auto; display:block; aspect-ratio:960/580; } .dmc .canvas { fill:url(#dmc-fade); stroke:var(--line); stroke-width:1; }
+.dmc .node rect,.dmc .pill,.dmc .step rect,.dmc .evidence path { fill:color-mix(in srgb,var(--bg) 88%,#0f172a 12%); stroke:var(--line); filter:url(#dmc-shadow); } .dmc .node.bad rect,.dmc .left,.dmc .hot { fill:color-mix(in srgb,var(--bad) 11%,var(--bg)); stroke:color-mix(in srgb,var(--bad) 40%,var(--line)); } .dmc .node.warn rect,.dmc .radiator rect,.dmc .drop,.dmc .over { fill:color-mix(in srgb,var(--warn) 13%,var(--bg)); stroke:color-mix(in srgb,var(--warn) 42%,var(--line)); } .dmc .node.ok rect,.dmc .right,.dmc .bolt,.dmc .useful { fill:color-mix(in srgb,var(--ok) 12%,var(--bg)); stroke:color-mix(in srgb,var(--ok) 36%,var(--line)); }
+.dmc .flow,.dmc .axis,.dmc .cool,.dmc .heat,.dmc .tether,.dmc .bigcurve { fill:none; stroke:var(--a); stroke-width:4; stroke-linecap:round; stroke-linejoin:round; } .dmc .flow { stroke-dasharray:9 9; animation:dmc-dash 3.4s linear infinite; } .dmc .flow.alt,.dmc .heat { stroke:var(--b); } .dmc .axis { stroke:var(--line); stroke-dasharray:none; } .dmc .bigcurve { stroke-width:7; }
+.dmc .nt,.dmc .pt,.dmc .lane,.dmc .result { fill:var(--fg); font-size:18px; font-weight:900; } .dmc .nd,.dmc .axistext,.dmc .limit { fill:var(--muted); font-size:13px; font-weight:750; } .dmc .limit { fill:color-mix(in srgb,var(--bad) 75%,var(--fg)); }
+.dmc .planet,.dmc .earth,.dmc .cloud,.dmc .archive { fill:color-mix(in srgb,var(--b) 18%,var(--bg)); stroke:color-mix(in srgb,var(--b) 45%,var(--line)); } .dmc .orbit,.dmc .orb,.dmc .mission,.dmc .cycle,.dmc .scaleA,.dmc .scaleB { fill:none; stroke:color-mix(in srgb,var(--a) 45%,var(--line)); stroke-width:3; stroke-dasharray:12 10; } .dmc .sun { fill:color-mix(in srgb,#FFB343 45%,var(--bg)); stroke:#FFB343; } .dmc .sat { fill:var(--a); } .dmc .ray { stroke:#FFB343; stroke-width:3; opacity:.45; } .dmc .terminator,.dmc .wire,.dmc .steam,.dmc .particle { fill:none; stroke:var(--line); stroke-width:3; stroke-linecap:round; } .dmc .night { fill:color-mix(in srgb,#0f172a 18%,transparent); } .dmc .wing,.dmc .plug,.dmc .contact,.dmc .satcase circle { fill:color-mix(in srgb,var(--a) 22%,var(--bg)); stroke:var(--a); }
+.dmc .funnel { fill:color-mix(in srgb,var(--bad) 12%,var(--bg)); stroke:color-mix(in srgb,var(--bad) 38%,var(--line)); } .dmc .funnel.thin { fill:color-mix(in srgb,var(--ok) 12%,var(--bg)); stroke:color-mix(in srgb,var(--ok) 38%,var(--line)); } .dmc .processor,.dmc .chip,.dmc .gpu { fill:color-mix(in srgb,var(--a) 20%,var(--bg)); stroke:color-mix(in srgb,var(--a) 45%,var(--line)); } .dmc .rad { fill:color-mix(in srgb,var(--b) 20%,var(--bg)); stroke:var(--b); }
+.dmc .waterline { stroke:var(--b); stroke-width:4; } .dmc .ice.top { fill:color-mix(in srgb,var(--b) 18%,var(--bg)); stroke:var(--b); stroke-width:3; } .dmc .ice.bottom { fill:color-mix(in srgb,var(--a) 18%,var(--bg)); stroke:var(--a); stroke-width:3; } .dmc .building,.dmc .rackframe { fill:color-mix(in srgb,var(--bg) 88%,#0f172a 12%); stroke:var(--line); stroke-width:2; } .dmc .rack { fill:color-mix(in srgb,var(--warn) 12%,var(--bg)); stroke:var(--warn); }
+.dmc .hourglass,.dmc .field,.dmc .vacuum,.dmc .clock { fill:color-mix(in srgb,var(--c) 10%,transparent); stroke:color-mix(in srgb,var(--c) 42%,var(--line)); stroke-width:3; } .dmc .dropicon,.dmc .tower,.dmc .plant,.dmc .turbine { fill:color-mix(in srgb,var(--b) 14%,var(--bg)); stroke:var(--b); stroke-width:3; } .dmc .rocket,.dmc .sail,.dmc .plume { fill:color-mix(in srgb,var(--warn) 18%,var(--bg)); stroke:var(--warn); stroke-width:3; } .dmc .flame { fill:color-mix(in srgb,var(--bad) 32%,transparent); stroke:var(--bad); stroke-width:3; } .dmc .air { fill:color-mix(in srgb,var(--c) 42%,var(--bg)); } .dmc .city { fill:color-mix(in srgb,var(--fg) 8%,transparent); stroke:var(--line); stroke-width:3; }
+.dmc .read { display:flex; flex-wrap:wrap; gap:8px; align-items:center; } .dmc .read span { padding:8px 11px; border-radius:999px; background:color-mix(in srgb,var(--bg) 90%,#0f172a 10%); border:1px solid var(--line); color:var(--muted); font-size:12.5px; line-height:1.25; }
+@keyframes dmc-dash { to { stroke-dashoffset:-36; } } @media(max-width:760px){ .dmc { padding:14px; } .dmc .viz{ width:760px; max-width:none; } .dmc .nt,.dmc .pt{ font-size:16px; } .dmc .nd{ font-size:12px; } } @media(prefers-reduced-motion:reduce){ .dmc .flow{ animation:none!important; } }
 </style>

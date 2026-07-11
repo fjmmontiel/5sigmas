@@ -1,106 +1,25 @@
-<div class="dop-matrix" data-demo="03-proyectos-orbitales" data-anim-fullscreen="off" data-anim-contrast="force">
-  <div class="dop-matrix__head">
-    <div class="dop-matrix__title">Los proyectos reales validan piezas concretas, no el datacenter orbital completo</div>
-    <div class="dop-matrix__sub">
-      La prueba relevante no es “hay hardware en órbita”. La prueba relevante es qué parte del argumento valida cada
-      proyecto: cómputo, almacenamiento, enlaces, operación continua o escala térmica.
-    </div>
+<meta charset="utf-8">
+<div class="dpo dcf-snippet" data-demo="03-proyectos-orbitales" data-anim-fullscreen="off" data-anim-contrast="force">
+  <div class="head"><div class="eyebrow">mapa de evidencia</div><div class="title">Los proyectos reales validan piezas, no el datacenter completo</div><div class="sub">La evidencia actual muestra almacenamiento, cómputo a bordo o pruebas de hardware; no demuestra hiperscala orbital operativa.</div></div>
+  <div class="viz-scroll">
+    <svg class="viz viz-evidence-board" viewBox="0 0 960 580" role="img" aria-label="Los proyectos reales validan piezas, no el datacenter completo" xmlns="http://www.w3.org/2000/svg"><defs><marker id="dpo-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1 L9 5 L1 9 Z" fill="var(--a)"/></marker><filter id="dpo-shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#0f172a" flood-opacity=".14"/></filter><linearGradient id="dpo-fade" x1="0" x2="1"><stop offset="0" stop-color="var(--a)" stop-opacity=".22"/><stop offset="1" stop-color="var(--b)" stop-opacity=".12"/></linearGradient></defs><rect class="canvas" x="20" y="35" width="920" height="505" rx="34"/><g class="evidence"><path d="M125 130h290v120h-290z"/><circle cx="150" cy="155" r="10"/><text class="nt" x="270" y="174" text-anchor="middle">D-Orbit / IRIDE</text><text class="nd" x="270" y="202" text-anchor="middle">valida: filtra datos</text><text class="limit" x="270" y="228" text-anchor="middle">límite: no hiperscala</text></g><g class="evidence"><path d="M545 130h290v120h-290z"/><circle cx="570" cy="155" r="10"/><text class="nt" x="690" y="174" text-anchor="middle">Axiom / Spacebilt</text><text class="nd" x="690" y="202" text-anchor="middle">valida: almacena en orbita</text><text class="limit" x="690" y="228" text-anchor="middle">límite: no nube general</text></g><g class="evidence"><path d="M125 340h290v120h-290z"/><circle cx="150" cy="365" r="10"/><text class="nt" x="270" y="384" text-anchor="middle">Starcloud / H100</text><text class="nd" x="270" y="412" text-anchor="middle">valida: prueba hardware</text><text class="limit" x="270" y="438" text-anchor="middle">límite: no economia probada</text></g><g class="evidence"><path d="M545 340h290v120h-290z"/><circle cx="570" cy="365" r="10"/><text class="nt" x="690" y="384" text-anchor="middle">Tether / SBSP</text><text class="nd" x="690" y="412" text-anchor="middle">valida: propone arquitectura</text><text class="limit" x="690" y="438" text-anchor="middle">límite: no despliegue masivo</text></g></svg>
   </div>
-
-  <div class="dop-matrix__axis" aria-label="Qué valida cada demostración">
-    <span>Cómputo</span>
-    <span>Storage</span>
-    <span>Enlaces</span>
-    <span>Runtime</span>
-    <span>Escala térmica</span>
-  </div>
-
-  <div class="dop-matrix__grid">
-    <article class="dop-matrix__card">
-      <h3>Starcloud</h3>
-      <p>Demostración de compute COTS avanzado en órbita y entrenamiento de un modelo simplificado, no una cloud orbital general.</p>
-      <div class="dop-matrix__tags"><span>Valida: compute COTS</span><span>No valida: MW térmicos</span></div>
-    </article>
-    <article class="dop-matrix__card">
-      <h3>Axiom / Spacebilt</h3>
-      <p>Nodos iniciales ODC y almacenamiento de alta capacidad en LEO. Prueba piezas de infraestructura, no una cloud madura.</p>
-      <div class="dop-matrix__tags"><span>Valida: storage + enlaces</span><span>No valida: cloud general</span></div>
-    </article>
-    <article class="dop-matrix__card">
-      <h3>D-Orbit AIX</h3>
-      <p>Inferencia útil sobre observación, con reducción radical de downlink.</p>
-      <div class="dop-matrix__tags"><span>Valida: data gravity</span><span>No valida: entrenamiento orbital</span></div>
-    </article>
-    <article class="dop-matrix__card">
-      <h3>Three-Body / ADA</h3>
-      <p>Constelación con enlaces láser y cómputo distribuido a escala satelital, conocida sobre todo por cobertura sectorial.</p>
-      <div class="dop-matrix__tags"><span>Valida: mesh + reparto</span><span>No valida: economía final</span></div>
-    </article>
-    <article class="dop-matrix__card">
-      <h3>Tiansuan / BUPT-1</h3>
-      <p>Arquitectura cloud-native temprana para operaciones de software orbital.</p>
-      <div class="dop-matrix__tags"><span>Valida: runtime orbital</span><span>No valida: densidad IA</span></div>
-    </article>
-    <article class="dop-matrix__card dop-matrix__card--summary">
-      <h3>Lectura correcta</h3>
-      <p>El sector ya no vive solo en paperware. Pero sigue lejos de demostrar refrigeración, economía y refresh de hardware a escala datacenter.</p>
-      <div class="dop-matrix__tags"><span>Hoy: piezas validadas</span><span>Falta: sistema completo</span><span>Tono correcto: demo ≠ cloud masiva</span></div>
-    </article>
-  </div>
+  <div class="read"><span>Cada proyecto valida una pieza</span><span>Cada prueba deja un límite claro</span><span>Una visión no equivale a despliegue</span></div>
 </div>
 
 <style>
-  .dop-matrix, .dop-matrix * { box-sizing:border-box; }
-  .dop-matrix {
-    --sky:#7cc7ff; --teal:#26A69A; --amber:#FFB343; --bg:var(--md-default-bg-color,#fff);
-    --line:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 15%, transparent);
-    --text:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 94%, transparent);
-    --muted:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 63%, transparent);
-    display:grid; gap:14px; max-width:980px; margin:0 auto; padding:clamp(16px,2vw,24px);
-    border-radius:24px; border:1px solid var(--line);
-    background:
-      radial-gradient(100% 130% at 0% 0%, color-mix(in srgb, var(--sky) 10%, transparent), transparent 50%),
-      radial-gradient(90% 110% at 100% 100%, color-mix(in srgb, var(--amber) 8%, transparent), transparent 50%),
-      var(--bg);
-    color:var(--text); font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
-  }
-  [data-md-color-scheme="slate"] .dop-matrix { --line:rgba(226,232,240,.16); --text:rgba(236,244,255,.95); --muted:rgba(236,244,255,.68); }
-  .dop-matrix__head { display:grid; gap:6px; max-width:74ch; }
-  .dop-matrix__title { font-size:clamp(22px,3vw,30px); font-weight:900; line-height:1.05; letter-spacing:0; }
-  .dop-matrix__sub { font-size:14px; line-height:1.55; color:var(--muted); }
-  .dop-matrix__axis {
-    display:grid; grid-template-columns:repeat(5, minmax(0,1fr)); gap:6px; padding:10px;
-    border:1px solid var(--line); border-radius:18px;
-    background:linear-gradient(90deg, color-mix(in srgb, var(--teal) 12%, transparent), color-mix(in srgb, var(--amber) 10%, transparent));
-  }
-  .dop-matrix__axis span {
-    display:grid; place-items:center; min-height:34px; border-radius:12px;
-    background:rgba(255,255,255,.05); color:var(--muted); font-size:11px; font-weight:900; text-transform:uppercase; letter-spacing:.06em;
-  }
-  .dop-matrix__axis span:last-child {
-    color:var(--text); border:1px dashed color-mix(in srgb, var(--amber) 34%, var(--line));
-    background:color-mix(in srgb, var(--amber) 9%, transparent);
-  }
-  .dop-matrix__grid { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:10px; }
-  .dop-matrix__card {
-    display:grid; gap:8px; padding:16px; border-radius:20px; border:1px solid var(--line);
-    background: color-mix(in srgb, var(--bg) 90%, #09121f 10%);
-  }
-  .dop-matrix__card--summary { border-color: color-mix(in srgb, var(--teal) 24%, var(--line)); background: color-mix(in srgb, var(--teal) 8%, transparent); }
-  .dop-matrix__card h3 { margin:0; font-size:20px; line-height:1.12; letter-spacing:0; }
-  .dop-matrix__card p { margin:0; font-size:12.8px; line-height:1.5; color:var(--muted); }
-  .dop-matrix__tags { display:flex; flex-wrap:wrap; gap:8px; }
-  .dop-matrix__tags span {
-    display:inline-flex; padding:7px 10px; border-radius:999px; border:1px solid var(--line);
-    background:rgba(255,255,255,.04); font-size:11.5px; font-weight:800;
-  }
-  @media (max-width: 920px) {
-    .dop-matrix { overflow-x:auto; overscroll-behavior-x:contain; }
-    .dop-matrix__head,
-    .dop-matrix__axis,
-    .dop-matrix__grid { min-width:860px; }
-    .dop-matrix__axis { grid-template-columns:repeat(5, minmax(0,1fr)); }
-    .dop-matrix__axis span { justify-content:center; padding-inline:0; }
-    .dop-matrix__grid { grid-template-columns:repeat(3, minmax(0,1fr)); }
-  }
+.dpo, .dpo * { box-sizing:border-box; }
+.dpo { --a:#26A69A; --b:#324AB2; --c:#7cc7ff; --bad:#ff8d7a; --warn:#FFB343; --ok:#26A69A; --bg:var(--md-default-bg-color,#fff); --fg:color-mix(in srgb,var(--md-default-fg-color,#0f172a) 94%,transparent); --muted:color-mix(in srgb,var(--md-default-fg-color,#0f172a) 62%,transparent); --line:color-mix(in srgb,var(--md-default-fg-color,#0f172a) 15%,transparent); display:grid; gap:14px; width:100%; padding:clamp(16px,2vw,26px); border:1px solid var(--line); border-radius:18px; background:radial-gradient(90% 120% at 0 0,color-mix(in srgb,var(--a) 8%,transparent),transparent 55%),radial-gradient(100% 120% at 100% 100%,color-mix(in srgb,var(--b) 8%,transparent),transparent 55%),var(--bg); color:var(--fg); font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif; }
+[data-md-color-scheme="slate"] .dpo { --line:rgba(226,232,240,.16); --fg:rgba(236,244,255,.95); --muted:rgba(236,244,255,.66); }
+.dpo .head { display:grid; gap:6px; max-width:78ch; } .dpo .eyebrow { width:fit-content; padding:5px 10px; border-radius:999px; border:1px solid color-mix(in srgb,var(--a) 35%,var(--line)); color:var(--a); background:color-mix(in srgb,var(--a) 8%,transparent); font-size:10px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; } .dpo .title { font-size:clamp(21px,3vw,31px); line-height:1.05; font-weight:900; } .dpo .sub { color:var(--muted); font-size:14px; line-height:1.48; }
+.dpo .viz-scroll { max-width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; padding-bottom:4px; } .dpo .viz { width:100%; height:auto; display:block; aspect-ratio:960/580; } .dpo .canvas { fill:url(#dpo-fade); stroke:var(--line); stroke-width:1; }
+.dpo .node rect,.dpo .pill,.dpo .step rect,.dpo .evidence path { fill:color-mix(in srgb,var(--bg) 88%,#0f172a 12%); stroke:var(--line); filter:url(#dpo-shadow); } .dpo .node.bad rect,.dpo .left,.dpo .hot { fill:color-mix(in srgb,var(--bad) 11%,var(--bg)); stroke:color-mix(in srgb,var(--bad) 40%,var(--line)); } .dpo .node.warn rect,.dpo .radiator rect,.dpo .drop,.dpo .over { fill:color-mix(in srgb,var(--warn) 13%,var(--bg)); stroke:color-mix(in srgb,var(--warn) 42%,var(--line)); } .dpo .node.ok rect,.dpo .right,.dpo .bolt,.dpo .useful { fill:color-mix(in srgb,var(--ok) 12%,var(--bg)); stroke:color-mix(in srgb,var(--ok) 36%,var(--line)); }
+.dpo .flow,.dpo .axis,.dpo .cool,.dpo .heat,.dpo .tether,.dpo .bigcurve { fill:none; stroke:var(--a); stroke-width:4; stroke-linecap:round; stroke-linejoin:round; } .dpo .flow { stroke-dasharray:9 9; animation:dpo-dash 3.4s linear infinite; } .dpo .flow.alt,.dpo .heat { stroke:var(--b); } .dpo .axis { stroke:var(--line); stroke-dasharray:none; } .dpo .bigcurve { stroke-width:7; }
+.dpo .nt,.dpo .pt,.dpo .lane,.dpo .result { fill:var(--fg); font-size:18px; font-weight:900; } .dpo .nd,.dpo .axistext,.dpo .limit { fill:var(--muted); font-size:13px; font-weight:750; } .dpo .limit { fill:color-mix(in srgb,var(--bad) 75%,var(--fg)); }
+.dpo .planet,.dpo .earth,.dpo .cloud,.dpo .archive { fill:color-mix(in srgb,var(--b) 18%,var(--bg)); stroke:color-mix(in srgb,var(--b) 45%,var(--line)); } .dpo .orbit,.dpo .orb,.dpo .mission,.dpo .cycle,.dpo .scaleA,.dpo .scaleB { fill:none; stroke:color-mix(in srgb,var(--a) 45%,var(--line)); stroke-width:3; stroke-dasharray:12 10; } .dpo .sun { fill:color-mix(in srgb,#FFB343 45%,var(--bg)); stroke:#FFB343; } .dpo .sat { fill:var(--a); } .dpo .ray { stroke:#FFB343; stroke-width:3; opacity:.45; } .dpo .terminator,.dpo .wire,.dpo .steam,.dpo .particle { fill:none; stroke:var(--line); stroke-width:3; stroke-linecap:round; } .dpo .night { fill:color-mix(in srgb,#0f172a 18%,transparent); } .dpo .wing,.dpo .plug,.dpo .contact,.dpo .satcase circle { fill:color-mix(in srgb,var(--a) 22%,var(--bg)); stroke:var(--a); }
+.dpo .funnel { fill:color-mix(in srgb,var(--bad) 12%,var(--bg)); stroke:color-mix(in srgb,var(--bad) 38%,var(--line)); } .dpo .funnel.thin { fill:color-mix(in srgb,var(--ok) 12%,var(--bg)); stroke:color-mix(in srgb,var(--ok) 38%,var(--line)); } .dpo .processor,.dpo .chip,.dpo .gpu { fill:color-mix(in srgb,var(--a) 20%,var(--bg)); stroke:color-mix(in srgb,var(--a) 45%,var(--line)); } .dpo .rad { fill:color-mix(in srgb,var(--b) 20%,var(--bg)); stroke:var(--b); }
+.dpo .waterline { stroke:var(--b); stroke-width:4; } .dpo .ice.top { fill:color-mix(in srgb,var(--b) 18%,var(--bg)); stroke:var(--b); stroke-width:3; } .dpo .ice.bottom { fill:color-mix(in srgb,var(--a) 18%,var(--bg)); stroke:var(--a); stroke-width:3; } .dpo .building,.dpo .rackframe { fill:color-mix(in srgb,var(--bg) 88%,#0f172a 12%); stroke:var(--line); stroke-width:2; } .dpo .rack { fill:color-mix(in srgb,var(--warn) 12%,var(--bg)); stroke:var(--warn); }
+.dpo .hourglass,.dpo .field,.dpo .vacuum,.dpo .clock { fill:color-mix(in srgb,var(--c) 10%,transparent); stroke:color-mix(in srgb,var(--c) 42%,var(--line)); stroke-width:3; } .dpo .dropicon,.dpo .tower,.dpo .plant,.dpo .turbine { fill:color-mix(in srgb,var(--b) 14%,var(--bg)); stroke:var(--b); stroke-width:3; } .dpo .rocket,.dpo .sail,.dpo .plume { fill:color-mix(in srgb,var(--warn) 18%,var(--bg)); stroke:var(--warn); stroke-width:3; } .dpo .flame { fill:color-mix(in srgb,var(--bad) 32%,transparent); stroke:var(--bad); stroke-width:3; } .dpo .air { fill:color-mix(in srgb,var(--c) 42%,var(--bg)); } .dpo .city { fill:color-mix(in srgb,var(--fg) 8%,transparent); stroke:var(--line); stroke-width:3; }
+.dpo .read { display:flex; flex-wrap:wrap; gap:8px; align-items:center; } .dpo .read span { padding:8px 11px; border-radius:999px; background:color-mix(in srgb,var(--bg) 90%,#0f172a 10%); border:1px solid var(--line); color:var(--muted); font-size:12.5px; line-height:1.25; }
+@keyframes dpo-dash { to { stroke-dashoffset:-36; } } @media(max-width:760px){ .dpo { padding:14px; } .dpo .viz{ width:760px; max-width:none; } .dpo .nt,.dpo .pt{ font-size:16px; } .dpo .nd{ font-size:12px; } } @media(prefers-reduced-motion:reduce){ .dpo .flow{ animation:none!important; } }
 </style>

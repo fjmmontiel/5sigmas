@@ -1,150 +1,25 @@
-<div class="dwr-wue ta-tabs" data-demo="04-wue-refrigeracion" data-anim-tabs data-default="air" data-anim-fullscreen="off" data-anim-contrast="force">
-  <div class="dwr-wue__head">
-    <div class="dwr-wue__title">Misma carga IT, WUE radicalmente distinto</div>
-    <div class="dwr-wue__sub">
-      El dato relevante no es el modelo: es cómo resuelves el calor para entregar la misma energía al cómputo.
-    </div>
+<meta charset="utf-8">
+<div class="dwr dcf-snippet" data-demo="04-wue-refrigeracion" data-anim-fullscreen="off" data-anim-contrast="force">
+  <div class="head"><div class="eyebrow">trade-off WUE</div><div class="title">La refrigeración cambia agua directa por energía y complejidad</div><div class="sub">El WUE mide agua directa, pero cada tecnología desplaza el coste hacia electricidad, clima operativo o CAPEX.</div></div>
+  <div class="viz-scroll">
+    <svg class="viz viz-wue-tradeoff" viewBox="0 0 960 580" role="img" aria-label="La refrigeración cambia agua directa por energía y complejidad" xmlns="http://www.w3.org/2000/svg"><defs><marker id="dwr-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1 L9 5 L1 9 Z" fill="var(--a)"/></marker><filter id="dwr-shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#0f172a" flood-opacity=".14"/></filter><linearGradient id="dwr-fade" x1="0" x2="1"><stop offset="0" stop-color="var(--a)" stop-opacity=".22"/><stop offset="1" stop-color="var(--b)" stop-opacity=".12"/></linearGradient></defs><rect class="canvas" x="20" y="35" width="920" height="505" rx="34"/><text class="lane" x="90" y="160">Aire</text><rect class="drop" x="230" y="121" width="210" height="68" rx="34"/><text class="pt" x="335" y="160" text-anchor="middle">menos agua directa</text><path class="flow" d="M455 155H555" marker-end="url(#dwr-arr)"/><rect class="bolt" x="590" y="121" width="230" height="68" rx="18"/><text class="pt" x="705" y="160" text-anchor="middle">mas limite termico</text><text class="lane" x="90" y="295">Evaporativa</text><rect class="drop" x="230" y="256" width="210" height="68" rx="34"/><text class="pt" x="335" y="295" text-anchor="middle">mas agua directa</text><path class="flow" d="M455 290H555" marker-end="url(#dwr-arr)"/><rect class="bolt" x="590" y="256" width="230" height="68" rx="18"/><text class="pt" x="705" y="295" text-anchor="middle">mejor eficiencia</text><text class="lane" x="90" y="430">Circuito cerrado</text><rect class="drop" x="230" y="391" width="210" height="68" rx="34"/><text class="pt" x="335" y="430" text-anchor="middle">menos agua local</text><path class="flow" d="M455 425H555" marker-end="url(#dwr-arr)"/><rect class="bolt" x="590" y="391" width="230" height="68" rx="18"/><text class="pt" x="705" y="430" text-anchor="middle">mas CAPEX y energia</text></svg>
   </div>
-
-  <div class="dwr-wue__tabs ta-tablist" role="tablist" data-role="tablist" aria-label="WUE por tecnología de refrigeración">
-    <button class="dwr-wue__tab ta-tab" type="button" role="tab" data-role="tab" data-tab="air" aria-selected="true">Aire seco</button>
-    <button class="dwr-wue__tab ta-tab" type="button" role="tab" data-role="tab" data-tab="evap" aria-selected="false">Evaporación</button>
-    <button class="dwr-wue__tab ta-tab" type="button" role="tab" data-role="tab" data-tab="closed" aria-selected="false">Circuito cerrado</button>
-  </div>
-
-  <div class="dwr-wue__panels ta-panels">
-    <section class="dwr-wue__panel ta-panel" data-panel="air">
-      <div class="dwr-wue__card">
-        <strong>0,0 L/kWh directos</strong>
-        <span>Sin agua directa, pero con peor encaje en densidades extremas.</span>
-      </div>
-    </section>
-    <section class="dwr-wue__panel ta-panel" data-panel="evap" hidden>
-      <div class="dwr-wue__card dwr-wue__card--evap">
-        <strong>1,5–2,5 L/kWh</strong>
-        <span>Eficiente en energía, pero la evaporación dispara el agua consumida.</span>
-      </div>
-    </section>
-    <section class="dwr-wue__panel ta-panel" data-panel="closed" hidden>
-      <div class="dwr-wue__card dwr-wue__card--closed">
-        <strong>0,19 → ≈ 0 L/kWh</strong>
-        <span>Adiabática afinada, inmersión o cerrado: menos agua directa y mejor encaje en alta densidad.</span>
-      </div>
-    </section>
-  </div>
-
-  <div class="dwr-wue__compare">
-    <div class="dwr-wue__meter">
-      <span>Referencia</span>
-      <strong>1 MWh IT</strong>
-    </div>
-    <div class="dwr-wue__bars">
-      <div class="dwr-wue__bar dwr-wue__bar--evap" style="width:100%">
-        <span>Evaporación</span>
-        <strong>1.500–2.500 L</strong>
-      </div>
-      <div class="dwr-wue__bar dwr-wue__bar--adiabatic" style="width:14%">
-        <span>Adiabática</span>
-        <strong>190 L</strong>
-      </div>
-      <div class="dwr-wue__bar dwr-wue__bar--closed" style="width:6%">
-        <span>Inmersión / cerrado</span>
-        <strong>≈ 0 L directos</strong>
-      </div>
-    </div>
-  </div>
+  <div class="read"><span>Aire: menos agua, más límite térmico</span><span>Evaporativa: más agua, mejor eficiencia</span><span>Circuito cerrado: menos agua local, más complejidad</span></div>
 </div>
 
 <style>
-  .dwr-wue, .dwr-wue * { box-sizing:border-box; }
-  .dwr-wue {
-    --teal:#26A69A; --sky:#7cc7ff; --amber:#FFB343; --red:#ff8d7a; --bg:var(--md-default-bg-color,#fff);
-    --line:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 15%, transparent);
-    --text:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 94%, transparent);
-    --muted:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 63%, transparent);
-    display:grid; gap:14px; max-width:980px; margin:0 auto; padding:clamp(16px,2vw,24px);
-    border-radius:24px; border:1px solid var(--line);
-    background:
-      radial-gradient(100% 130% at 0% 0%, color-mix(in srgb, var(--teal) 10%, transparent), transparent 50%),
-      radial-gradient(90% 110% at 100% 100%, color-mix(in srgb, var(--amber) 8%, transparent), transparent 50%),
-      var(--bg);
-    color:var(--text); font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
-  }
-  [data-md-color-scheme="slate"] .dwr-wue { --line:rgba(226,232,240,.16); --text:rgba(236,244,255,.95); --muted:rgba(236,244,255,.68); }
-  .dwr-wue__head { display:grid; gap:6px; max-width:74ch; }
-  .dwr-wue__title { font-size:clamp(22px,3vw,30px); font-weight:900; line-height:1.05; letter-spacing:0; }
-  .dwr-wue__sub { font-size:14px; line-height:1.55; color:var(--muted); }
-  .dwr-wue__tabs { display:flex; flex-wrap:wrap; gap:8px; }
-  .dwr-wue__tab { transition:background-color .22s ease-out, border-color .22s ease-out, color .22s ease-out, transform .22s ease-out; }
-  .dwr-wue__tab:hover { transform:translateY(-1px); }
-  .dwr-wue__panel[hidden] { display:none; }
-  .dwr-wue__card, .dwr-wue__meter {
-    padding:16px; border-radius:20px; border:1px solid var(--line); background: color-mix(in srgb, var(--bg) 90%, #09121f 10%);
-  }
-  .dwr-wue__card--evap { border-color: color-mix(in srgb, var(--red) 24%, var(--line)); background: color-mix(in srgb, var(--red) 8%, transparent); }
-  .dwr-wue__card--closed { border-color: color-mix(in srgb, var(--teal) 24%, var(--line)); background: color-mix(in srgb, var(--teal) 8%, transparent); }
-  .dwr-wue__card strong, .dwr-wue__meter strong {
-    display:block; font-size:24px; line-height:1.05; letter-spacing:0;
-  }
-  .dwr-wue__card span, .dwr-wue__meter span {
-    display:block; margin-top:8px; font-size:12.8px; line-height:1.5; color:var(--muted);
-  }
-  .dwr-wue__compare { display:grid; gap:10px; }
-  .dwr-wue__bars { display:grid; gap:8px; }
-  .dwr-wue__bar {
-    display:flex; justify-content:space-between; gap:10px; align-items:center; min-height:44px; padding:0 14px;
-    border-radius:999px; color:#fff; font-size:12px; font-weight:800;
-  }
-  .dwr-wue__bar--evap { background:linear-gradient(90deg, rgba(255,141,122,.92), rgba(255,179,67,.82)); }
-  .dwr-wue__bar--adiabatic { background:linear-gradient(90deg, rgba(255,179,67,.88), rgba(255,179,67,.62)); color:#523300; }
-  .dwr-wue__bar--closed { background:linear-gradient(90deg, rgba(38,166,154,.92), rgba(124,199,255,.82)); }
+.dwr, .dwr * { box-sizing:border-box; }
+.dwr { --a:#7cc7ff; --b:#26A69A; --c:#324AB2; --bad:#ff8d7a; --warn:#FFB343; --ok:#26A69A; --bg:var(--md-default-bg-color,#fff); --fg:color-mix(in srgb,var(--md-default-fg-color,#0f172a) 94%,transparent); --muted:color-mix(in srgb,var(--md-default-fg-color,#0f172a) 62%,transparent); --line:color-mix(in srgb,var(--md-default-fg-color,#0f172a) 15%,transparent); display:grid; gap:14px; width:100%; padding:clamp(16px,2vw,26px); border:1px solid var(--line); border-radius:32px; background:radial-gradient(90% 120% at 0 0,color-mix(in srgb,var(--a) 8%,transparent),transparent 55%),radial-gradient(100% 120% at 100% 100%,color-mix(in srgb,var(--b) 8%,transparent),transparent 55%),var(--bg); color:var(--fg); font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif; }
+[data-md-color-scheme="slate"] .dwr { --line:rgba(226,232,240,.16); --fg:rgba(236,244,255,.95); --muted:rgba(236,244,255,.66); }
+.dwr .head { display:grid; gap:6px; max-width:78ch; } .dwr .eyebrow { width:fit-content; padding:5px 10px; border-radius:999px; border:1px solid color-mix(in srgb,var(--a) 35%,var(--line)); color:var(--a); background:color-mix(in srgb,var(--a) 8%,transparent); font-size:10px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; } .dwr .title { font-size:clamp(21px,3vw,31px); line-height:1.05; font-weight:900; } .dwr .sub { color:var(--muted); font-size:14px; line-height:1.48; }
+.dwr .viz-scroll { max-width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; padding-bottom:4px; } .dwr .viz { width:100%; height:auto; display:block; aspect-ratio:960/580; } .dwr .canvas { fill:url(#dwr-fade); stroke:var(--line); stroke-width:1; }
+.dwr .node rect,.dwr .pill,.dwr .step rect,.dwr .evidence path { fill:color-mix(in srgb,var(--bg) 88%,#0f172a 12%); stroke:var(--line); filter:url(#dwr-shadow); } .dwr .node.bad rect,.dwr .left,.dwr .hot { fill:color-mix(in srgb,var(--bad) 11%,var(--bg)); stroke:color-mix(in srgb,var(--bad) 40%,var(--line)); } .dwr .node.warn rect,.dwr .radiator rect,.dwr .drop,.dwr .over { fill:color-mix(in srgb,var(--warn) 13%,var(--bg)); stroke:color-mix(in srgb,var(--warn) 42%,var(--line)); } .dwr .node.ok rect,.dwr .right,.dwr .bolt,.dwr .useful { fill:color-mix(in srgb,var(--ok) 12%,var(--bg)); stroke:color-mix(in srgb,var(--ok) 36%,var(--line)); }
+.dwr .flow,.dwr .axis,.dwr .cool,.dwr .heat,.dwr .tether,.dwr .bigcurve { fill:none; stroke:var(--a); stroke-width:4; stroke-linecap:round; stroke-linejoin:round; } .dwr .flow { stroke-dasharray:9 9; animation:dwr-dash 3.4s linear infinite; } .dwr .flow.alt,.dwr .heat { stroke:var(--b); } .dwr .axis { stroke:var(--line); stroke-dasharray:none; } .dwr .bigcurve { stroke-width:7; }
+.dwr .nt,.dwr .pt,.dwr .lane,.dwr .result { fill:var(--fg); font-size:18px; font-weight:900; } .dwr .nd,.dwr .axistext,.dwr .limit { fill:var(--muted); font-size:13px; font-weight:750; } .dwr .limit { fill:color-mix(in srgb,var(--bad) 75%,var(--fg)); }
+.dwr .planet,.dwr .earth,.dwr .cloud,.dwr .archive { fill:color-mix(in srgb,var(--b) 18%,var(--bg)); stroke:color-mix(in srgb,var(--b) 45%,var(--line)); } .dwr .orbit,.dwr .orb,.dwr .mission,.dwr .cycle,.dwr .scaleA,.dwr .scaleB { fill:none; stroke:color-mix(in srgb,var(--a) 45%,var(--line)); stroke-width:3; stroke-dasharray:12 10; } .dwr .sun { fill:color-mix(in srgb,#FFB343 45%,var(--bg)); stroke:#FFB343; } .dwr .sat { fill:var(--a); } .dwr .ray { stroke:#FFB343; stroke-width:3; opacity:.45; } .dwr .terminator,.dwr .wire,.dwr .steam,.dwr .particle { fill:none; stroke:var(--line); stroke-width:3; stroke-linecap:round; } .dwr .night { fill:color-mix(in srgb,#0f172a 18%,transparent); } .dwr .wing,.dwr .plug,.dwr .contact,.dwr .satcase circle { fill:color-mix(in srgb,var(--a) 22%,var(--bg)); stroke:var(--a); }
+.dwr .funnel { fill:color-mix(in srgb,var(--bad) 12%,var(--bg)); stroke:color-mix(in srgb,var(--bad) 38%,var(--line)); } .dwr .funnel.thin { fill:color-mix(in srgb,var(--ok) 12%,var(--bg)); stroke:color-mix(in srgb,var(--ok) 38%,var(--line)); } .dwr .processor,.dwr .chip,.dwr .gpu { fill:color-mix(in srgb,var(--a) 20%,var(--bg)); stroke:color-mix(in srgb,var(--a) 45%,var(--line)); } .dwr .rad { fill:color-mix(in srgb,var(--b) 20%,var(--bg)); stroke:var(--b); }
+.dwr .waterline { stroke:var(--b); stroke-width:4; } .dwr .ice.top { fill:color-mix(in srgb,var(--b) 18%,var(--bg)); stroke:var(--b); stroke-width:3; } .dwr .ice.bottom { fill:color-mix(in srgb,var(--a) 18%,var(--bg)); stroke:var(--a); stroke-width:3; } .dwr .building,.dwr .rackframe { fill:color-mix(in srgb,var(--bg) 88%,#0f172a 12%); stroke:var(--line); stroke-width:2; } .dwr .rack { fill:color-mix(in srgb,var(--warn) 12%,var(--bg)); stroke:var(--warn); }
+.dwr .hourglass,.dwr .field,.dwr .vacuum,.dwr .clock { fill:color-mix(in srgb,var(--c) 10%,transparent); stroke:color-mix(in srgb,var(--c) 42%,var(--line)); stroke-width:3; } .dwr .dropicon,.dwr .tower,.dwr .plant,.dwr .turbine { fill:color-mix(in srgb,var(--b) 14%,var(--bg)); stroke:var(--b); stroke-width:3; } .dwr .rocket,.dwr .sail,.dwr .plume { fill:color-mix(in srgb,var(--warn) 18%,var(--bg)); stroke:var(--warn); stroke-width:3; } .dwr .flame { fill:color-mix(in srgb,var(--bad) 32%,transparent); stroke:var(--bad); stroke-width:3; } .dwr .air { fill:color-mix(in srgb,var(--c) 42%,var(--bg)); } .dwr .city { fill:color-mix(in srgb,var(--fg) 8%,transparent); stroke:var(--line); stroke-width:3; }
+.dwr .read { display:flex; flex-wrap:wrap; gap:8px; align-items:center; } .dwr .read span { padding:8px 11px; border-radius:999px; background:color-mix(in srgb,var(--bg) 90%,#0f172a 10%); border:1px solid var(--line); color:var(--muted); font-size:12.5px; line-height:1.25; }
+@keyframes dwr-dash { to { stroke-dashoffset:-36; } } @media(max-width:760px){ .dwr { padding:14px; } .dwr .viz{ width:760px; max-width:none; } .dwr .nt,.dwr .pt{ font-size:16px; } .dwr .nd{ font-size:12px; } } @media(prefers-reduced-motion:reduce){ .dwr .flow{ animation:none!important; } }
 </style>
-<script>
-  (() => {
-    const KEY = "dwr-wue-tabs";
-    if (window.__portableTabsFallback && window.__portableTabsFallback[KEY]) return;
-    window.__portableTabsFallback = window.__portableTabsFallback || {};
-    window.__portableTabsFallback[KEY] = true;
-    function activate(root, key) {
-      root.querySelectorAll('[data-role="tab"], [role="tab"]').forEach((tab) => {
-        const selected = tab.getAttribute("data-tab") === key;
-        tab.setAttribute("aria-selected", selected ? "true" : "false");
-        tab.tabIndex = selected ? 0 : -1;
-      });
-      root.querySelectorAll("[data-panel]").forEach((panel) => {
-        panel.hidden = panel.getAttribute("data-panel") !== key;
-      });
-    }
-    function initRoot(root) {
-      if (!root || root.dataset.tabsReady === "true") return;
-      root.dataset.tabsReady = "true";
-      const tabs = Array.from(root.querySelectorAll('[data-role="tab"], [role="tab"]'));
-      const first = root.getAttribute("data-default") || (tabs[0] && tabs[0].getAttribute("data-tab"));
-      tabs.forEach((tab) => {
-        tab.tabIndex = -1;
-        tab.addEventListener("click", () => activate(root, tab.getAttribute("data-tab")));
-        tab.addEventListener("keydown", (event) => {
-          const current = tabs.indexOf(tab);
-          let next = current;
-          if (event.key === "ArrowRight") next = (current + 1) % tabs.length;
-          if (event.key === "ArrowLeft") next = (current - 1 + tabs.length) % tabs.length;
-          if (event.key === "Home") next = 0;
-          if (event.key === "End") next = tabs.length - 1;
-          if (next !== current) {
-            event.preventDefault();
-            tabs[next].focus();
-            activate(root, tabs[next].getAttribute("data-tab"));
-          }
-        });
-      });
-      activate(root, first);
-    }
-    function initAll(scope) { scope.querySelectorAll('.dwr-wue[data-anim-tabs]').forEach(initRoot); }
-    if (window.TabbedAnimations && typeof window.TabbedAnimations.initAll === "function") {
-      window.TabbedAnimations.initAll();
-    } else {
-      initAll(document);
-      document.addEventListener("DOMContentLoaded", () => initAll(document), { once: true });
-    }
-  })();
-</script>

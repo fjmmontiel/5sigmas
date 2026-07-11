@@ -46,7 +46,6 @@ extra:
 
 nav:
   - Inicio: index.md
-  - Rutas de lectura: rutas-de-lectura.md
   - Series:
       - series/index.md
       - Fundamentos de IA e IA generativa:
@@ -119,6 +118,8 @@ extra_javascript:
   - path: javascripts/nav-gradient.js
     defer: true
   - path: javascripts/external-links.js
+    defer: true
+  - path: javascripts/article-audio.js
     defer: true
   - path: assets/javascripts/animation-shell.js
     defer: true

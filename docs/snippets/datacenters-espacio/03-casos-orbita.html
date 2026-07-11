@@ -1,99 +1,25 @@
-<div class="dov-ladder" data-demo="03-casos-orbita" data-anim-fullscreen="off" data-anim-contrast="force">
-  <div class="dov-ladder__head">
-    <div class="dov-ladder__title">No hay un solo “datacenter espacial”: hay peldaños muy distintos</div>
-    <div class="dov-ladder__sub">
-      Lo viable hoy filtra datos que ya nacen en órbita. El cloud general en el espacio sigue varios escalones por encima.
-    </div>
+<meta charset="utf-8">
+<div class="dco dcf-snippet" data-demo="03-casos-orbita" data-anim-fullscreen="off" data-anim-contrast="force">
+  <div class="head"><div class="eyebrow">madurez de casos</div><div class="title">Los casos orbitales no tienen el mismo horizonte de madurez</div><div class="sub">Procesar datos nacidos en satelite ya tiene sentido; usar orbita como datacenter general sigue siendo una hipotesis lejana.</div></div>
+  <div class="viz-scroll">
+    <svg class="viz viz-viability-stair" viewBox="0 0 960 580" role="img" aria-label="Los casos orbitales no tienen el mismo horizonte de madurez" xmlns="http://www.w3.org/2000/svg"><defs><marker id="dco-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1 L9 5 L1 9 Z" fill="var(--a)"/></marker><filter id="dco-shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#0f172a" flood-opacity=".14"/></filter><linearGradient id="dco-fade" x1="0" x2="1"><stop offset="0" stop-color="var(--a)" stop-opacity=".22"/><stop offset="1" stop-color="var(--b)" stop-opacity=".12"/></linearGradient></defs><path class="orbit" d="M95 435C280 310 510 205 855 120"/><g class="satcase"><circle cx="170" cy="410" r="46"/><path d="M132 393h-62v34h62M208 393h62v34h-62"/><text class="nt" x="170" y="495" text-anchor="middle">Hoy: sensor + IA</text></g><g class="archivecase"><path class="archive" d="M370 295h150v100H370zM398 265h94v30h-94z"/><path class="flow" d="M340 350H255" marker-end="url(#dco-arr)"/><text class="nt" x="445" y="440" text-anchor="middle">Borde y archivo resiliente</text></g><g class="cloudcase"><path class="cloud" d="M665 165c20-45 82-45 104-2c36-2 67 22 67 57c0 38-32 61-75 61H645c-43 0-75-22-75-58c0-34 30-58 65-58Z"/><path class="rackframe" d="M680 190h92v70h-92z"/><line x1="695" y1="210" x2="755" y2="210"/><line x1="695" y1="230" x2="755" y2="230"/><text class="nt" x="720" y="335" text-anchor="middle">IA general orbital: lejana</text></g><path class="flow" d="M250 385 C390 330 530 260 620 210" marker-end="url(#dco-arr)"/></svg>
   </div>
-
-  <div class="dov-ladder__steps">
-    <article class="dov-ladder__step dov-ladder__step--now">
-      <span class="dov-ladder__time">Hoy</span>
-      <h3>Procesamiento a bordo</h3>
-      <p>Inferencia sobre observación o telemetría para bajar solo la señal útil.</p>
-      <div class="dov-ladder__why">Cuello real: el downlink.</div>
-    </article>
-
-    <article class="dov-ladder__step dov-ladder__step--niche">
-      <span class="dov-ladder__time">Hoy</span>
-      <h3>Archivo resiliente</h3>
-      <p>Backup de último recurso para activos donde perderlo todo pesa más que la latencia.</p>
-      <div class="dov-ladder__why">Caso límite, no uso diario.</div>
-    </article>
-
-    <article class="dov-ladder__step dov-ladder__step--mid">
-      <span class="dov-ladder__time">5–10 años</span>
-      <h3>Edge orbital de constelación</h3>
-      <p>Procesamiento repartido entre nodos de comunicaciones y observación con más enlaces láser.</p>
-      <div class="dov-ladder__why">Depende de topología y costes.</div>
-    </article>
-
-    <article class="dov-ladder__step dov-ladder__step--far">
-      <span class="dov-ladder__time">Décadas / especulativo</span>
-      <h3>Datacenter general en órbita</h3>
-      <p>Infraestructura masiva compitiendo con tierra para cargas arbitrarias de IA.</p>
-      <div class="dov-ladder__why">Hoy no sale en masa ni mantenimiento.</div>
-    </article>
-  </div>
-
-  <div class="dov-ladder__note">
-    El salto difícil no es lanzar más nodos: es pasar de procesar datos nacidos arriba a subir cómputo general solo para escapar de límites terrestres.
-  </div>
+  <div class="read"><span>Hoy: filtrar datos nacidos en orbita</span><span>Medio plazo: borde y archivo resiliente</span><span>Lejano: IA general orbital especulativa</span></div>
 </div>
 
 <style>
-  .dov-ladder, .dov-ladder * { box-sizing:border-box; }
-  .dov-ladder {
-    --teal:#26A69A; --sky:#7cc7ff; --amber:#FFB343; --mutedc:#8090a8; --bg:var(--md-default-bg-color,#fff);
-    --line:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 15%, transparent);
-    --text:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 94%, transparent);
-    --muted:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 63%, transparent);
-    display:grid; gap:14px; max-width:980px; margin:0 auto; padding:clamp(16px,2vw,24px);
-    border-radius:24px; border:1px solid var(--line);
-    background:
-      radial-gradient(100% 130% at 0% 0%, color-mix(in srgb, var(--sky) 10%, transparent), transparent 50%),
-      radial-gradient(90% 110% at 100% 100%, color-mix(in srgb, var(--teal) 9%, transparent), transparent 50%),
-      var(--bg);
-    color:var(--text); font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
-  }
-  [data-md-color-scheme="slate"] .dov-ladder { --line:rgba(226,232,240,.16); --text:rgba(236,244,255,.95); --muted:rgba(236,244,255,.68); }
-  .dov-ladder__head { display:grid; gap:6px; max-width:74ch; }
-  .dov-ladder__title { font-size:clamp(22px,3vw,30px); font-weight:900; line-height:1.05; letter-spacing:0; }
-  .dov-ladder__sub { font-size:14px; line-height:1.55; color:var(--muted); }
-  .dov-ladder__steps { position:relative; display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:10px; align-items:stretch; }
-  .dov-ladder__steps::before {
-    content:""; position:absolute; left:7%; right:7%; top:34px; height:3px; border-radius:999px;
-    background:linear-gradient(90deg, var(--teal), var(--sky), var(--amber), color-mix(in srgb, var(--mutedc) 70%, transparent));
-    opacity:.58;
-  }
-  .dov-ladder__step {
-    position:relative; display:grid; gap:8px; padding:16px; border-radius:20px; border:1px solid var(--line);
-    background: color-mix(in srgb, var(--bg) 90%, #09121f 10%);
-  }
-  .dov-ladder__step--now { border-color: color-mix(in srgb, var(--teal) 24%, var(--line)); }
-  .dov-ladder__step--niche { border-color: color-mix(in srgb, var(--sky) 26%, var(--line)); }
-  .dov-ladder__step--mid { border-color: color-mix(in srgb, var(--amber) 28%, var(--line)); }
-  .dov-ladder__step--far { border-color: color-mix(in srgb, var(--mutedc) 28%, var(--line)); opacity:.9; }
-  .dov-ladder__time {
-    display:inline-flex; width:fit-content; padding:6px 10px; border-radius:999px; border:1px solid var(--line);
-    font-size:11px; font-weight:900; text-transform:uppercase; letter-spacing:.08em; color:var(--muted);
-  }
-  .dov-ladder__step h3 { margin:0; font-size:20px; line-height:1.12; letter-spacing:0; }
-  .dov-ladder__step p, .dov-ladder__why, .dov-ladder__note {
-    margin:0; font-size:12.8px; line-height:1.5; color:var(--muted);
-  }
-  .dov-ladder__why {
-    padding:10px 12px; border-radius:14px; border:1px solid var(--line); background:rgba(255,255,255,.04);
-  }
-  .dov-ladder__note {
-    padding:12px 14px; border-radius:16px; border:1px solid var(--line); background:rgba(255,255,255,.04);
-  }
-  @media (max-width: 920px) {
-    .dov-ladder { overflow-x:auto; overscroll-behavior-x:contain; }
-    .dov-ladder__head,
-    .dov-ladder__steps,
-    .dov-ladder__note { min-width:860px; }
-    .dov-ladder__steps { grid-template-columns:repeat(4, minmax(0,1fr)); }
-    .dov-ladder__steps::before { left:7%; right:7%; top:34px; bottom:auto; width:auto; height:3px; background:linear-gradient(90deg, var(--teal), var(--sky), var(--amber), color-mix(in srgb, var(--mutedc) 70%, transparent)); }
-  }
+.dco, .dco * { box-sizing:border-box; }
+.dco { --a:#26A69A; --b:#324AB2; --c:#7cc7ff; --bad:#ff8d7a; --warn:#FFB343; --ok:#26A69A; --bg:var(--md-default-bg-color,#fff); --fg:color-mix(in srgb,var(--md-default-fg-color,#0f172a) 94%,transparent); --muted:color-mix(in srgb,var(--md-default-fg-color,#0f172a) 62%,transparent); --line:color-mix(in srgb,var(--md-default-fg-color,#0f172a) 15%,transparent); display:grid; gap:14px; width:100%; padding:clamp(16px,2vw,26px); border:1px solid var(--line); border-radius:18px; background:radial-gradient(90% 120% at 0 0,color-mix(in srgb,var(--a) 8%,transparent),transparent 55%),radial-gradient(100% 120% at 100% 100%,color-mix(in srgb,var(--b) 8%,transparent),transparent 55%),var(--bg); color:var(--fg); font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif; }
+[data-md-color-scheme="slate"] .dco { --line:rgba(226,232,240,.16); --fg:rgba(236,244,255,.95); --muted:rgba(236,244,255,.66); }
+.dco .head { display:grid; gap:6px; max-width:78ch; } .dco .eyebrow { width:fit-content; padding:5px 10px; border-radius:999px; border:1px solid color-mix(in srgb,var(--a) 35%,var(--line)); color:var(--a); background:color-mix(in srgb,var(--a) 8%,transparent); font-size:10px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; } .dco .title { font-size:clamp(21px,3vw,31px); line-height:1.05; font-weight:900; } .dco .sub { color:var(--muted); font-size:14px; line-height:1.48; }
+.dco .viz-scroll { max-width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; padding-bottom:4px; } .dco .viz { width:100%; height:auto; display:block; aspect-ratio:960/580; } .dco .canvas { fill:url(#dco-fade); stroke:var(--line); stroke-width:1; }
+.dco .node rect,.dco .pill,.dco .step rect,.dco .evidence path { fill:color-mix(in srgb,var(--bg) 88%,#0f172a 12%); stroke:var(--line); filter:url(#dco-shadow); } .dco .node.bad rect,.dco .left,.dco .hot { fill:color-mix(in srgb,var(--bad) 11%,var(--bg)); stroke:color-mix(in srgb,var(--bad) 40%,var(--line)); } .dco .node.warn rect,.dco .radiator rect,.dco .drop,.dco .over { fill:color-mix(in srgb,var(--warn) 13%,var(--bg)); stroke:color-mix(in srgb,var(--warn) 42%,var(--line)); } .dco .node.ok rect,.dco .right,.dco .bolt,.dco .useful { fill:color-mix(in srgb,var(--ok) 12%,var(--bg)); stroke:color-mix(in srgb,var(--ok) 36%,var(--line)); }
+.dco .flow,.dco .axis,.dco .cool,.dco .heat,.dco .tether,.dco .bigcurve { fill:none; stroke:var(--a); stroke-width:4; stroke-linecap:round; stroke-linejoin:round; } .dco .flow { stroke-dasharray:9 9; animation:dco-dash 3.4s linear infinite; } .dco .flow.alt,.dco .heat { stroke:var(--b); } .dco .axis { stroke:var(--line); stroke-dasharray:none; } .dco .bigcurve { stroke-width:7; }
+.dco .nt,.dco .pt,.dco .lane,.dco .result { fill:var(--fg); font-size:18px; font-weight:900; } .dco .nd,.dco .axistext,.dco .limit { fill:var(--muted); font-size:13px; font-weight:750; } .dco .limit { fill:color-mix(in srgb,var(--bad) 75%,var(--fg)); }
+.dco .planet,.dco .earth,.dco .cloud,.dco .archive { fill:color-mix(in srgb,var(--b) 18%,var(--bg)); stroke:color-mix(in srgb,var(--b) 45%,var(--line)); } .dco .orbit,.dco .orb,.dco .mission,.dco .cycle,.dco .scaleA,.dco .scaleB { fill:none; stroke:color-mix(in srgb,var(--a) 45%,var(--line)); stroke-width:3; stroke-dasharray:12 10; } .dco .sun { fill:color-mix(in srgb,#FFB343 45%,var(--bg)); stroke:#FFB343; } .dco .sat { fill:var(--a); } .dco .ray { stroke:#FFB343; stroke-width:3; opacity:.45; } .dco .terminator,.dco .wire,.dco .steam,.dco .particle { fill:none; stroke:var(--line); stroke-width:3; stroke-linecap:round; } .dco .night { fill:color-mix(in srgb,#0f172a 18%,transparent); } .dco .wing,.dco .plug,.dco .contact,.dco .satcase circle { fill:color-mix(in srgb,var(--a) 22%,var(--bg)); stroke:var(--a); }
+.dco .funnel { fill:color-mix(in srgb,var(--bad) 12%,var(--bg)); stroke:color-mix(in srgb,var(--bad) 38%,var(--line)); } .dco .funnel.thin { fill:color-mix(in srgb,var(--ok) 12%,var(--bg)); stroke:color-mix(in srgb,var(--ok) 38%,var(--line)); } .dco .processor,.dco .chip,.dco .gpu { fill:color-mix(in srgb,var(--a) 20%,var(--bg)); stroke:color-mix(in srgb,var(--a) 45%,var(--line)); } .dco .rad { fill:color-mix(in srgb,var(--b) 20%,var(--bg)); stroke:var(--b); }
+.dco .waterline { stroke:var(--b); stroke-width:4; } .dco .ice.top { fill:color-mix(in srgb,var(--b) 18%,var(--bg)); stroke:var(--b); stroke-width:3; } .dco .ice.bottom { fill:color-mix(in srgb,var(--a) 18%,var(--bg)); stroke:var(--a); stroke-width:3; } .dco .building,.dco .rackframe { fill:color-mix(in srgb,var(--bg) 88%,#0f172a 12%); stroke:var(--line); stroke-width:2; } .dco .rack { fill:color-mix(in srgb,var(--warn) 12%,var(--bg)); stroke:var(--warn); }
+.dco .hourglass,.dco .field,.dco .vacuum,.dco .clock { fill:color-mix(in srgb,var(--c) 10%,transparent); stroke:color-mix(in srgb,var(--c) 42%,var(--line)); stroke-width:3; } .dco .dropicon,.dco .tower,.dco .plant,.dco .turbine { fill:color-mix(in srgb,var(--b) 14%,var(--bg)); stroke:var(--b); stroke-width:3; } .dco .rocket,.dco .sail,.dco .plume { fill:color-mix(in srgb,var(--warn) 18%,var(--bg)); stroke:var(--warn); stroke-width:3; } .dco .flame { fill:color-mix(in srgb,var(--bad) 32%,transparent); stroke:var(--bad); stroke-width:3; } .dco .air { fill:color-mix(in srgb,var(--c) 42%,var(--bg)); } .dco .city { fill:color-mix(in srgb,var(--fg) 8%,transparent); stroke:var(--line); stroke-width:3; }
+.dco .read { display:flex; flex-wrap:wrap; gap:8px; align-items:center; } .dco .read span { padding:8px 11px; border-radius:999px; background:color-mix(in srgb,var(--bg) 90%,#0f172a 10%); border:1px solid var(--line); color:var(--muted); font-size:12.5px; line-height:1.25; }
+@keyframes dco-dash { to { stroke-dashoffset:-36; } } @media(max-width:760px){ .dco { padding:14px; } .dco .viz{ width:760px; max-width:none; } .dco .nt,.dco .pt{ font-size:16px; } .dco .nd{ font-size:12px; } } @media(prefers-reduced-motion:reduce){ .dco .flow{ animation:none!important; } }
 </style>

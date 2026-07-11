@@ -1,83 +1,25 @@
-<div class="dwi-water" data-demo="04-agua-indirecta" data-anim-fullscreen="off" data-anim-contrast="force">
-  <div class="dwi-water__head">
-    <div class="dwi-water__title">El agua visible del cooling es solo una parte: la electricidad también arrastra agua</div>
-    <div class="dwi-water__sub">
-      Gran parte del debate mira solo torres y evaporación. Pero una parte grande del agua viaja escondida en la
-      generación eléctrica que alimenta al centro y en el mix energético que lo sostiene.
-    </div>
+<meta charset="utf-8">
+<div class="dai dcf-snippet" data-demo="04-agua-indirecta" data-anim-fullscreen="off" data-anim-contrast="force">
+  <div class="head"><div class="eyebrow">iceberg hidrico</div><div class="title">El agua visible de refrigeracion no es toda la huella hidrica</div><div class="sub">El consumo directo de torres es solo la superficie: la electricidad puede arrastrar agua aguas arriba según el mix energético.</div></div>
+  <div class="viz-scroll">
+    <svg class="viz viz-water-iceberg" viewBox="0 0 960 580" role="img" aria-label="El agua visible de refrigeracion no es toda la huella hidrica" xmlns="http://www.w3.org/2000/svg"><defs><marker id="dai-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1 L9 5 L1 9 Z" fill="var(--a)"/></marker><filter id="dai-shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#0f172a" flood-opacity=".14"/></filter><linearGradient id="dai-fade" x1="0" x2="1"><stop offset="0" stop-color="var(--a)" stop-opacity=".22"/><stop offset="1" stop-color="var(--b)" stop-opacity=".12"/></linearGradient></defs><rect class="canvas" x="20" y="35" width="920" height="505" rx="34"/><path class="waterline" d="M145 250H815"/><path class="ice top" d="M330 238L480 90L650 238Z"/><path class="ice bottom" d="M220 270L730 270L585 505L385 470Z"/><path class="tower" d="M420 142h120l-22 96h-76Z"/><path class="steam" d="M448 126c-18-28 22-38 4-66M512 126c-18-28 22-38 4-66"/><path class="plant" d="M300 372h140v74H300zM330 325h28v47M390 305h34v67"/><path class="turbine" d="M605 392m-44 0a44 44 0 1 0 88 0a44 44 0 1 0-88 0M605 392l-30-22M605 392l33-18M605 392l-2 38"/><text class="nt" x="480" y="185" text-anchor="middle">Agua directa</text><text class="nd" x="480" y="212" text-anchor="middle">refrigeracion local</text><text class="nt" x="480" y="365" text-anchor="middle">Agua indirecta</text><text class="nd" x="480" y="395" text-anchor="middle">electricidad del mix</text><path class="flow" d="M700 385C785 365 820 315 795 260" marker-end="url(#dai-arr)"/></svg>
   </div>
-
-  <div class="dwi-water__iceberg">
-    <div class="dwi-water__tip">
-      <strong>Agua directa</strong>
-      <span>torres, adiabática, purgas, evaporación local</span>
-    </div>
-    <div class="dwi-water__body">
-      <strong>Agua indirecta</strong>
-      <span>electricidad + suministro energético aguas arriba</span>
-    </div>
-  </div>
-
-  <div class="dwi-water__notes">
-    <div class="dwi-water__note">
-      <strong>Qué cambia con el clima</strong>
-      <span>El mismo diseño empeora en regiones más cálidas y húmedas.</span>
-    </div>
-    <div class="dwi-water__note">
-      <strong>Qué cambia con la energía</strong>
-      <span>Si el mix eléctrico es más intensivo en agua, el WUE visible subestima la huella real.</span>
-    </div>
-    <div class="dwi-water__note">
-      <strong>Por qué importa</strong>
-      <span>Comparar solo litros del cooling puede ocultar dónde se desplaza el consumo hídrico real.</span>
-    </div>
-  </div>
+  <div class="read"><span>Directa: torres y refrigeración local</span><span>Indirecta: agua usada al generar electricidad</span><span>Comparar solo refrigeracion subestima huella</span></div>
 </div>
 
 <style>
-  .dwi-water, .dwi-water * { box-sizing:border-box; }
-  .dwi-water {
-    --teal:#26A69A; --sky:#7cc7ff; --bg:var(--md-default-bg-color,#fff);
-    --line:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 15%, transparent);
-    --text:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 94%, transparent);
-    --muted:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 63%, transparent);
-    display:grid; gap:14px; max-width:980px; margin:0 auto; padding:clamp(16px,2vw,24px);
-    border-radius:24px; border:1px solid var(--line);
-    background:
-      radial-gradient(100% 130% at 0% 0%, color-mix(in srgb, var(--sky) 10%, transparent), transparent 50%),
-      radial-gradient(90% 110% at 100% 100%, color-mix(in srgb, var(--teal) 9%, transparent), transparent 50%),
-      var(--bg);
-    color:var(--text); font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
-  }
-  [data-md-color-scheme="slate"] .dwi-water { --line:rgba(226,232,240,.16); --text:rgba(236,244,255,.95); --muted:rgba(236,244,255,.68); }
-  .dwi-water__head { display:grid; gap:6px; max-width:74ch; }
-  .dwi-water__title { font-size:clamp(22px,3vw,30px); font-weight:900; line-height:1.05; letter-spacing:0; }
-  .dwi-water__sub { font-size:14px; line-height:1.55; color:var(--muted); }
-  .dwi-water__iceberg { display:grid; gap:0; }
-  .dwi-water__tip, .dwi-water__body {
-    padding:18px; border:1px solid var(--line); text-align:center;
-  }
-  .dwi-water__tip {
-    border-radius:20px 20px 10px 10px;
-    background: linear-gradient(180deg, rgba(124,199,255,.22), rgba(124,199,255,.08));
-  }
-  .dwi-water__body {
-    border-top:0; border-radius:10px 10px 24px 24px; min-height:180px;
-    background: linear-gradient(180deg, rgba(38,166,154,.2), rgba(38,166,154,.42));
-  }
-  .dwi-water__tip strong, .dwi-water__body strong, .dwi-water__note strong {
-    display:block; font-size:22px; line-height:1.08; letter-spacing:0;
-  }
-  .dwi-water__tip span, .dwi-water__body span, .dwi-water__note span {
-    display:block; margin-top:8px; font-size:12.8px; line-height:1.5; color:var(--muted);
-  }
-  .dwi-water__notes { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:10px; }
-  .dwi-water__note { padding:12px; border-radius:16px; border:1px solid var(--line); background:rgba(255,255,255,.04); }
-  @media (max-width: 860px) {
-    .dwi-water { overflow-x:auto; overscroll-behavior-x:contain; }
-    .dwi-water__head,
-    .dwi-water__stack,
-    .dwi-water__notes { min-width:760px; }
-    .dwi-water__notes { grid-template-columns:repeat(3, minmax(0,1fr)); }
-  }
+.dai, .dai * { box-sizing:border-box; }
+.dai { --a:#7cc7ff; --b:#26A69A; --c:#324AB2; --bad:#ff8d7a; --warn:#FFB343; --ok:#26A69A; --bg:var(--md-default-bg-color,#fff); --fg:color-mix(in srgb,var(--md-default-fg-color,#0f172a) 94%,transparent); --muted:color-mix(in srgb,var(--md-default-fg-color,#0f172a) 62%,transparent); --line:color-mix(in srgb,var(--md-default-fg-color,#0f172a) 15%,transparent); display:grid; gap:14px; width:100%; padding:clamp(16px,2vw,26px); border:1px solid var(--line); border-radius:32px; background:radial-gradient(90% 120% at 0 0,color-mix(in srgb,var(--a) 8%,transparent),transparent 55%),radial-gradient(100% 120% at 100% 100%,color-mix(in srgb,var(--b) 8%,transparent),transparent 55%),var(--bg); color:var(--fg); font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif; }
+[data-md-color-scheme="slate"] .dai { --line:rgba(226,232,240,.16); --fg:rgba(236,244,255,.95); --muted:rgba(236,244,255,.66); }
+.dai .head { display:grid; gap:6px; max-width:78ch; } .dai .eyebrow { width:fit-content; padding:5px 10px; border-radius:999px; border:1px solid color-mix(in srgb,var(--a) 35%,var(--line)); color:var(--a); background:color-mix(in srgb,var(--a) 8%,transparent); font-size:10px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; } .dai .title { font-size:clamp(21px,3vw,31px); line-height:1.05; font-weight:900; } .dai .sub { color:var(--muted); font-size:14px; line-height:1.48; }
+.dai .viz-scroll { max-width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; padding-bottom:4px; } .dai .viz { width:100%; height:auto; display:block; aspect-ratio:960/580; } .dai .canvas { fill:url(#dai-fade); stroke:var(--line); stroke-width:1; }
+.dai .node rect,.dai .pill,.dai .step rect,.dai .evidence path { fill:color-mix(in srgb,var(--bg) 88%,#0f172a 12%); stroke:var(--line); filter:url(#dai-shadow); } .dai .node.bad rect,.dai .left,.dai .hot { fill:color-mix(in srgb,var(--bad) 11%,var(--bg)); stroke:color-mix(in srgb,var(--bad) 40%,var(--line)); } .dai .node.warn rect,.dai .radiator rect,.dai .drop,.dai .over { fill:color-mix(in srgb,var(--warn) 13%,var(--bg)); stroke:color-mix(in srgb,var(--warn) 42%,var(--line)); } .dai .node.ok rect,.dai .right,.dai .bolt,.dai .useful { fill:color-mix(in srgb,var(--ok) 12%,var(--bg)); stroke:color-mix(in srgb,var(--ok) 36%,var(--line)); }
+.dai .flow,.dai .axis,.dai .cool,.dai .heat,.dai .tether,.dai .bigcurve { fill:none; stroke:var(--a); stroke-width:4; stroke-linecap:round; stroke-linejoin:round; } .dai .flow { stroke-dasharray:9 9; animation:dai-dash 3.4s linear infinite; } .dai .flow.alt,.dai .heat { stroke:var(--b); } .dai .axis { stroke:var(--line); stroke-dasharray:none; } .dai .bigcurve { stroke-width:7; }
+.dai .nt,.dai .pt,.dai .lane,.dai .result { fill:var(--fg); font-size:18px; font-weight:900; } .dai .nd,.dai .axistext,.dai .limit { fill:var(--muted); font-size:13px; font-weight:750; } .dai .limit { fill:color-mix(in srgb,var(--bad) 75%,var(--fg)); }
+.dai .planet,.dai .earth,.dai .cloud,.dai .archive { fill:color-mix(in srgb,var(--b) 18%,var(--bg)); stroke:color-mix(in srgb,var(--b) 45%,var(--line)); } .dai .orbit,.dai .orb,.dai .mission,.dai .cycle,.dai .scaleA,.dai .scaleB { fill:none; stroke:color-mix(in srgb,var(--a) 45%,var(--line)); stroke-width:3; stroke-dasharray:12 10; } .dai .sun { fill:color-mix(in srgb,#FFB343 45%,var(--bg)); stroke:#FFB343; } .dai .sat { fill:var(--a); } .dai .ray { stroke:#FFB343; stroke-width:3; opacity:.45; } .dai .terminator,.dai .wire,.dai .steam,.dai .particle { fill:none; stroke:var(--line); stroke-width:3; stroke-linecap:round; } .dai .night { fill:color-mix(in srgb,#0f172a 18%,transparent); } .dai .wing,.dai .plug,.dai .contact,.dai .satcase circle { fill:color-mix(in srgb,var(--a) 22%,var(--bg)); stroke:var(--a); }
+.dai .funnel { fill:color-mix(in srgb,var(--bad) 12%,var(--bg)); stroke:color-mix(in srgb,var(--bad) 38%,var(--line)); } .dai .funnel.thin { fill:color-mix(in srgb,var(--ok) 12%,var(--bg)); stroke:color-mix(in srgb,var(--ok) 38%,var(--line)); } .dai .processor,.dai .chip,.dai .gpu { fill:color-mix(in srgb,var(--a) 20%,var(--bg)); stroke:color-mix(in srgb,var(--a) 45%,var(--line)); } .dai .rad { fill:color-mix(in srgb,var(--b) 20%,var(--bg)); stroke:var(--b); }
+.dai .waterline { stroke:var(--b); stroke-width:4; } .dai .ice.top { fill:color-mix(in srgb,var(--b) 18%,var(--bg)); stroke:var(--b); stroke-width:3; } .dai .ice.bottom { fill:color-mix(in srgb,var(--a) 18%,var(--bg)); stroke:var(--a); stroke-width:3; } .dai .building,.dai .rackframe { fill:color-mix(in srgb,var(--bg) 88%,#0f172a 12%); stroke:var(--line); stroke-width:2; } .dai .rack { fill:color-mix(in srgb,var(--warn) 12%,var(--bg)); stroke:var(--warn); }
+.dai .hourglass,.dai .field,.dai .vacuum,.dai .clock { fill:color-mix(in srgb,var(--c) 10%,transparent); stroke:color-mix(in srgb,var(--c) 42%,var(--line)); stroke-width:3; } .dai .dropicon,.dai .tower,.dai .plant,.dai .turbine { fill:color-mix(in srgb,var(--b) 14%,var(--bg)); stroke:var(--b); stroke-width:3; } .dai .rocket,.dai .sail,.dai .plume { fill:color-mix(in srgb,var(--warn) 18%,var(--bg)); stroke:var(--warn); stroke-width:3; } .dai .flame { fill:color-mix(in srgb,var(--bad) 32%,transparent); stroke:var(--bad); stroke-width:3; } .dai .air { fill:color-mix(in srgb,var(--c) 42%,var(--bg)); } .dai .city { fill:color-mix(in srgb,var(--fg) 8%,transparent); stroke:var(--line); stroke-width:3; }
+.dai .read { display:flex; flex-wrap:wrap; gap:8px; align-items:center; } .dai .read span { padding:8px 11px; border-radius:999px; background:color-mix(in srgb,var(--bg) 90%,#0f172a 10%); border:1px solid var(--line); color:var(--muted); font-size:12.5px; line-height:1.25; }
+@keyframes dai-dash { to { stroke-dashoffset:-36; } } @media(max-width:760px){ .dai { padding:14px; } .dai .viz{ width:760px; max-width:none; } .dai .nt,.dai .pt{ font-size:16px; } .dai .nd{ font-size:12px; } } @media(prefers-reduced-motion:reduce){ .dai .flow{ animation:none!important; } }
 </style>

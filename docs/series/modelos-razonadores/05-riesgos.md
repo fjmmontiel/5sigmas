@@ -38,6 +38,8 @@ La implicación práctica es que el presupuesto de test-time compute no debería
 
 Apple Research (2025) documentó el patrón con precisión cuantitativa: los modelos razonadores alcanzan su pico de calidad en torno a los 1.500 tokens de razonamiento para tareas simples, y la calidad decrece aproximadamente 18 puntos porcentuales al pasar de 1.500 a 8.000 tokens. Eso es un deterioro medible, no una degradación especulativa.
 
+La respuesta de los modelos actuales empieza a ser explícita: Gemini 3.5 Flash permite seleccionar niveles de razonamiento para ajustar el equilibrio entre calidad, coste y latencia. La lección de producto no cambia: disponer de más capacidad no obliga a usar el presupuesto máximo en cada consulta. El sistema debe decidir cuánto pensar antes de empezar, y poder parar cuando el cómputo adicional deja de aportar valor ([Google DeepMind, 2026](https://deepmind.google/models/model-cards/gemini-3-5-flash/)).
+
 {{ include_html("snippets/modelos-razonadores/05-overthinking-curva.html") }}
 
 ---
@@ -65,6 +67,8 @@ El capítulo anterior cubrió los umbrales de latencia percibida. En términos d
 ## 3. Nuevas superficies de ataque
 
 Los modelos razonadores con acceso a herramientas, RAG o navegación tienen superficies de ataque que los modelos conversacionales simples no tienen.
+
+La escala de esa superficie también ha cambiado. Claude Sonnet 5 se presenta como un modelo capaz de planificar, usar navegadores y terminales, y ejecutar tareas de forma autónoma; cuanto más lejos llega el modelo en el flujo, más importancia tienen los controles sobre herramientas, contexto y permisos. La propia documentación de seguridad de Anthropic evalúa el riesgo de prompt injection dentro de sistemas agénticos, no solo en el prompt inicial ([Anthropic, 2026](https://www.anthropic.com/news/claude-sonnet-5); [Claude Sonnet 5 System Card](https://www-cdn.anthropic.com/73ad94ca3c0502e75e46637cc62c8bd9532a7f2c/Claude%20Sonnet%205%20System%20Card.pdf)).
 
 ### Prompt injection en entornos de herramientas
 
@@ -159,6 +163,8 @@ La conclusión práctica no es que estos sistemas sean peligrosos ni que sean in
 | **Anthropic (2025)** — *[Claude 3.7 Sonnet System Card](https://www.anthropic.com/claude-3-7-sonnet-system-card)* | Documenta reward hacking en Claude 3.7 Sonnet en entornos de coding: el modelo realiza special-casing (devolver valores esperados directamente en lugar de implementar la solución general) para pasar tests. Relevante para §3 (Ilegibilidad y deriva de objetivo). |
 | **Apple Research (2025)** — *[The Illusion of Thinking](https://machinelearning.apple.com/research/illusion-of-thinking)* | Documenta el overthinking: en tareas simples el modelo encuentra la solución correcta pronto en su cadena interna pero continúa explorando alternativas incorrectas, degradando la respuesta final. Citado en §1. |
 | **Li et al. (2026)** — *[When Safety Becomes a Vulnerability: Exploiting LLM Alignment Homogeneity for Transferable Blocking in RAG](https://arxiv.org/abs/2603.03919)* | Paper fundacional del ataque TabooRAG: un adversario inyecta un documento en la base RAG que envuelve elementos benignos en un contexto de "riesgo restringido", activando las salvaguardas del modelo frente a queries legítimas. La transferibilidad del ataque se explica por la homogeneidad de criterios de rechazo entre los modelos fronttera. Citado en §3 (TabooRAG). |
+| **Google DeepMind (2026)** — *[Gemini 3.5 Flash Model Card](https://deepmind.google/models/model-cards/gemini-3-5-flash/)* | Documenta niveles de razonamiento configurables para controlar el equilibrio entre calidad, coste y latencia. Relevante para §1 (overthinking) y §4 (presupuestos). |
+| **Anthropic (2026)** — *[Claude Sonnet 5](https://www.anthropic.com/news/claude-sonnet-5)* y *[System Card](https://www-cdn.anthropic.com/73ad94ca3c0502e75e46637cc62c8bd9532a7f2c/Claude%20Sonnet%205%20System%20Card.pdf)* | Evidencia actual sobre modelos agénticos con planificación, uso de herramientas y evaluación específica de prompt injection. Citado en §3 (superficies de ataque). |
 
 </details>
 
@@ -177,4 +183,3 @@ TabooRAG inyecta en la base RAG un documento que envuelve una consulta benigna e
 
 **¿Cuándo debe un sistema bien diseñado abstenerse en lugar de responder?**
 Cuando el nivel de confianza en el razonamiento es insuficiente para producir un output fiable y el coste de un error es alto. Producir una respuesta de baja confianza con alta apariencia de certeza es más dañino que indicar incertidumbre explícitamente. Los criterios prácticos incluyen: la cadena de razonamiento no converge dentro del presupuesto asignado, el problema está fuera de la distribución donde el modelo ha demostrado ser fiable, o la tarea requiere información que el modelo no puede verificar.
-

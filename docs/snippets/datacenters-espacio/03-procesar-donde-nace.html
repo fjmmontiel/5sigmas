@@ -1,157 +1,25 @@
-<div class="dod-gravity ta-tabs" data-demo="03-procesar-donde-nace" data-anim-tabs data-default="raw" data-anim-fullscreen="off" data-anim-contrast="force">
-  <div class="dod-gravity__head">
-    <div class="dod-gravity__title">La gravedad del dato orbital: lo caro no es solo computar, es mover bruto</div>
-    <div class="dod-gravity__sub">
-      Cuando el satélite genera terabytes, el cuello no es únicamente la inferencia. Es tener que bajar todo antes de
-      decidir algo útil. Procesar arriba tiene sentido cuando convierte un diluvio en un resultado compacto.
-    </div>
+<meta charset="utf-8">
+<div class="dpn dcf-snippet" data-demo="03-procesar-donde-nace" data-anim-fullscreen="off" data-anim-contrast="force">
+  <div class="head"><div class="eyebrow">compresion de datos</div><div class="title">Procesar donde nace el dato evita bajar ruido</div><div class="sub">El caso fuerte aparece cuando un sensor produce mucho dato bruto y solo una fracción procesada necesita llegar a tierra.</div></div>
+  <div class="viz-scroll">
+    <svg class="viz viz-data-compression" viewBox="0 0 960 580" role="img" aria-label="Procesar donde nace el dato evita bajar ruido" xmlns="http://www.w3.org/2000/svg"><defs><marker id="dpn-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1 L9 5 L1 9 Z" fill="var(--a)"/></marker><filter id="dpn-shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#0f172a" flood-opacity=".14"/></filter><linearGradient id="dpn-fade" x1="0" x2="1"><stop offset="0" stop-color="var(--a)" stop-opacity=".22"/><stop offset="1" stop-color="var(--b)" stop-opacity=".12"/></linearGradient></defs><rect class="canvas" x="20" y="35" width="920" height="505" rx="34"/><circle class="clock" cx="700" cy="120" r="64"/><path class="contact" d="M700 120L700 56A64 64 0 0 1 754 86Z"/><path class="funnel" d="M95 170 L430 240 L430 340 L95 410 Z"/><path class="funnel thin" d="M530 260 L850 292 L850 318 L530 340 Z"/><rect class="processor" x="405" y="220" width="150" height="140" rx="30"/><text class="nt" x="480" y="292" text-anchor="middle">IA orbital</text><text class="nd" x="480" y="318" text-anchor="middle">filtra señal</text><g class="node bad" transform="translate(150 130)"><rect x="-92" y="-32" width="184" height="64" rx="16"/><text x="0" y="-5" text-anchor="middle" class="nt">Dato bruto</text><text x="0" y="17" text-anchor="middle" class="nd">demasiado volumen</text></g><g class="node ok" transform="translate(805 230)"><rect x="-92" y="-32" width="184" height="64" rx="16"/><text x="0" y="-5" text-anchor="middle" class="nt">Senal filtrada</text><text x="0" y="17" text-anchor="middle" class="nd">menos datos a bajar</text></g><g class="node warn" transform="translate(700 205)"><rect x="-92" y="-32" width="184" height="64" rx="16"/><text x="0" y="-5" text-anchor="middle" class="nt">Contacto</text><text x="0" y="17" text-anchor="middle" class="nd">ventana breve</text></g></svg>
   </div>
-
-  <div class="dod-gravity__tabs ta-tablist" role="tablist" data-role="tablist" aria-label="Gravedad del dato orbital">
-    <button class="dod-gravity__tab ta-tab" type="button" role="tab" data-role="tab" data-tab="raw" aria-selected="true">Bajar bruto</button>
-    <button class="dod-gravity__tab ta-tab" type="button" role="tab" data-role="tab" data-tab="process" aria-selected="false">Procesar arriba</button>
-    <button class="dod-gravity__tab ta-tab" type="button" role="tab" data-role="tab" data-tab="send" aria-selected="false">Bajar señal</button>
-  </div>
-
-  <div class="dod-gravity__panels ta-panels">
-    <section class="dod-gravity__panel ta-panel" data-panel="raw">
-      <div class="dod-gravity__flood">
-        <div class="dod-gravity__satellite">Satélite EO</div>
-        <div class="dod-gravity__stream">
-          <span></span><span></span><span></span><span></span><span></span><span></span>
-        </div>
-        <div class="dod-gravity__ground">Tierra</div>
-      </div>
-      <div class="dod-gravity__caption">Si bajas toda la imagen o todo el stack SAR, el enlace manda el ritmo operativo.</div>
-    </section>
-
-    <section class="dod-gravity__panel ta-panel" data-panel="process" hidden>
-      <div class="dod-gravity__mid">
-        <div class="dod-gravity__satellite">Sensor</div>
-        <div class="dod-gravity__core">Clasificación / detección / compresión</div>
-        <div class="dod-gravity__satellite dod-gravity__satellite--out">Feature set</div>
-      </div>
-      <div class="dod-gravity__caption">La computación a bordo mueve la decisión antes del downlink, no después.</div>
-    </section>
-
-    <section class="dod-gravity__panel ta-panel" data-panel="send" hidden>
-      <div class="dod-gravity__flood dod-gravity__flood--small">
-        <div class="dod-gravity__satellite">Órbita</div>
-        <div class="dod-gravity__stream dod-gravity__stream--small">
-          <span></span><span></span>
-        </div>
-        <div class="dod-gravity__ground">Resultado útil</div>
-      </div>
-      <div class="dod-gravity__caption">El caso madura cuando bajas anomalías, vectores o recortes, no el volumen bruto completo.</div>
-    </section>
-  </div>
+  <div class="read"><span>El sensor produce bruto masivo</span><span>La IA orbital filtra señal útil</span><span>A tierra baja menos volumen</span></div>
 </div>
 
 <style>
-  .dod-gravity, .dod-gravity * { box-sizing:border-box; }
-  .dod-gravity {
-    --sky:#7cc7ff; --teal:#26A69A; --amber:#FFB343; --bg:var(--md-default-bg-color,#fff);
-    --line:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 15%, transparent);
-    --text:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 94%, transparent);
-    --muted:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 63%, transparent);
-    display:grid; gap:14px; max-width:980px; margin:0 auto; padding:clamp(16px,2vw,24px);
-    border-radius:24px; border:1px solid var(--line);
-    background:
-      radial-gradient(100% 130% at 0% 0%, color-mix(in srgb, var(--sky) 10%, transparent), transparent 50%),
-      radial-gradient(90% 110% at 100% 100%, color-mix(in srgb, var(--teal) 9%, transparent), transparent 50%),
-      var(--bg);
-    color:var(--text); font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
-  }
-  [data-md-color-scheme="slate"] .dod-gravity { --line:rgba(226,232,240,.16); --text:rgba(236,244,255,.95); --muted:rgba(236,244,255,.68); }
-  .dod-gravity__head { display:grid; gap:6px; max-width:74ch; }
-  .dod-gravity__title { font-size:clamp(22px,3vw,30px); font-weight:900; line-height:1.05; letter-spacing:0; }
-  .dod-gravity__sub { font-size:14px; line-height:1.55; color:var(--muted); }
-  .dod-gravity__tabs { display:flex; flex-wrap:wrap; gap:8px; }
-  .dod-gravity__tab { transition:background-color .22s ease-out, border-color .22s ease-out, color .22s ease-out, transform .22s ease-out; }
-  .dod-gravity__tab:hover { transform:translateY(-1px); }
-  .dod-gravity__panel[hidden] { display:none; }
-  .dod-gravity__flood, .dod-gravity__mid {
-    display:grid; gap:12px; align-items:center; min-height:220px; padding:18px;
-    border:1px solid var(--line); border-radius:20px; background: color-mix(in srgb, var(--bg) 90%, #09121f 10%);
-  }
-  .dod-gravity__flood { grid-template-columns:140px 1fr 140px; }
-  .dod-gravity__flood--small { grid-template-columns:140px .45fr 180px; }
-  .dod-gravity__satellite, .dod-gravity__ground, .dod-gravity__core {
-    display:grid; place-items:center; min-height:82px; padding:12px; border-radius:18px; border:1px solid var(--line);
-    background:rgba(255,255,255,.04); font-size:16px; font-weight:900; text-align:center; line-height:1.2;
-  }
-  .dod-gravity__core {
-    border-color: color-mix(in srgb, var(--teal) 24%, var(--line));
-    background: color-mix(in srgb, var(--teal) 9%, transparent);
-  }
-  .dod-gravity__stream { display:flex; gap:8px; }
-  .dod-gravity__stream span {
-    display:block; width:100%; height:16px; border-radius:999px; background:linear-gradient(90deg, rgba(124,199,255,.28), rgba(124,199,255,.92));
-  }
-  .dod-gravity__stream--small span {
-    background:linear-gradient(90deg, rgba(38,166,154,.28), rgba(38,166,154,.92));
-  }
-  .dod-gravity__caption {
-    margin-top:12px; font-size:12.8px; line-height:1.5; color:var(--muted);
-  }
-  @media (max-width: 860px) {
-    .dod-gravity { overflow-x:auto; overscroll-behavior-x:contain; }
-    .dod-gravity__head,
-    .dod-gravity__tabs,
-    .dod-gravity__flood,
-    .dod-gravity__flood--small,
-    .dod-gravity__mid { min-width:760px; }
-    .dod-gravity__flood,
-    .dod-gravity__flood--small,
-    .dod-gravity__mid { grid-template-columns:1fr 1.2fr 1fr; }
-  }
+.dpn, .dpn * { box-sizing:border-box; }
+.dpn { --a:#26A69A; --b:#324AB2; --c:#7cc7ff; --bad:#ff8d7a; --warn:#FFB343; --ok:#26A69A; --bg:var(--md-default-bg-color,#fff); --fg:color-mix(in srgb,var(--md-default-fg-color,#0f172a) 94%,transparent); --muted:color-mix(in srgb,var(--md-default-fg-color,#0f172a) 62%,transparent); --line:color-mix(in srgb,var(--md-default-fg-color,#0f172a) 15%,transparent); display:grid; gap:14px; width:100%; padding:clamp(16px,2vw,26px); border:1px solid var(--line); border-radius:18px; background:radial-gradient(90% 120% at 0 0,color-mix(in srgb,var(--a) 8%,transparent),transparent 55%),radial-gradient(100% 120% at 100% 100%,color-mix(in srgb,var(--b) 8%,transparent),transparent 55%),var(--bg); color:var(--fg); font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif; }
+[data-md-color-scheme="slate"] .dpn { --line:rgba(226,232,240,.16); --fg:rgba(236,244,255,.95); --muted:rgba(236,244,255,.66); }
+.dpn .head { display:grid; gap:6px; max-width:78ch; } .dpn .eyebrow { width:fit-content; padding:5px 10px; border-radius:999px; border:1px solid color-mix(in srgb,var(--a) 35%,var(--line)); color:var(--a); background:color-mix(in srgb,var(--a) 8%,transparent); font-size:10px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; } .dpn .title { font-size:clamp(21px,3vw,31px); line-height:1.05; font-weight:900; } .dpn .sub { color:var(--muted); font-size:14px; line-height:1.48; }
+.dpn .viz-scroll { max-width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; padding-bottom:4px; } .dpn .viz { width:100%; height:auto; display:block; aspect-ratio:960/580; } .dpn .canvas { fill:url(#dpn-fade); stroke:var(--line); stroke-width:1; }
+.dpn .node rect,.dpn .pill,.dpn .step rect,.dpn .evidence path { fill:color-mix(in srgb,var(--bg) 88%,#0f172a 12%); stroke:var(--line); filter:url(#dpn-shadow); } .dpn .node.bad rect,.dpn .left,.dpn .hot { fill:color-mix(in srgb,var(--bad) 11%,var(--bg)); stroke:color-mix(in srgb,var(--bad) 40%,var(--line)); } .dpn .node.warn rect,.dpn .radiator rect,.dpn .drop,.dpn .over { fill:color-mix(in srgb,var(--warn) 13%,var(--bg)); stroke:color-mix(in srgb,var(--warn) 42%,var(--line)); } .dpn .node.ok rect,.dpn .right,.dpn .bolt,.dpn .useful { fill:color-mix(in srgb,var(--ok) 12%,var(--bg)); stroke:color-mix(in srgb,var(--ok) 36%,var(--line)); }
+.dpn .flow,.dpn .axis,.dpn .cool,.dpn .heat,.dpn .tether,.dpn .bigcurve { fill:none; stroke:var(--a); stroke-width:4; stroke-linecap:round; stroke-linejoin:round; } .dpn .flow { stroke-dasharray:9 9; animation:dpn-dash 3.4s linear infinite; } .dpn .flow.alt,.dpn .heat { stroke:var(--b); } .dpn .axis { stroke:var(--line); stroke-dasharray:none; } .dpn .bigcurve { stroke-width:7; }
+.dpn .nt,.dpn .pt,.dpn .lane,.dpn .result { fill:var(--fg); font-size:18px; font-weight:900; } .dpn .nd,.dpn .axistext,.dpn .limit { fill:var(--muted); font-size:13px; font-weight:750; } .dpn .limit { fill:color-mix(in srgb,var(--bad) 75%,var(--fg)); }
+.dpn .planet,.dpn .earth,.dpn .cloud,.dpn .archive { fill:color-mix(in srgb,var(--b) 18%,var(--bg)); stroke:color-mix(in srgb,var(--b) 45%,var(--line)); } .dpn .orbit,.dpn .orb,.dpn .mission,.dpn .cycle,.dpn .scaleA,.dpn .scaleB { fill:none; stroke:color-mix(in srgb,var(--a) 45%,var(--line)); stroke-width:3; stroke-dasharray:12 10; } .dpn .sun { fill:color-mix(in srgb,#FFB343 45%,var(--bg)); stroke:#FFB343; } .dpn .sat { fill:var(--a); } .dpn .ray { stroke:#FFB343; stroke-width:3; opacity:.45; } .dpn .terminator,.dpn .wire,.dpn .steam,.dpn .particle { fill:none; stroke:var(--line); stroke-width:3; stroke-linecap:round; } .dpn .night { fill:color-mix(in srgb,#0f172a 18%,transparent); } .dpn .wing,.dpn .plug,.dpn .contact,.dpn .satcase circle { fill:color-mix(in srgb,var(--a) 22%,var(--bg)); stroke:var(--a); }
+.dpn .funnel { fill:color-mix(in srgb,var(--bad) 12%,var(--bg)); stroke:color-mix(in srgb,var(--bad) 38%,var(--line)); } .dpn .funnel.thin { fill:color-mix(in srgb,var(--ok) 12%,var(--bg)); stroke:color-mix(in srgb,var(--ok) 38%,var(--line)); } .dpn .processor,.dpn .chip,.dpn .gpu { fill:color-mix(in srgb,var(--a) 20%,var(--bg)); stroke:color-mix(in srgb,var(--a) 45%,var(--line)); } .dpn .rad { fill:color-mix(in srgb,var(--b) 20%,var(--bg)); stroke:var(--b); }
+.dpn .waterline { stroke:var(--b); stroke-width:4; } .dpn .ice.top { fill:color-mix(in srgb,var(--b) 18%,var(--bg)); stroke:var(--b); stroke-width:3; } .dpn .ice.bottom { fill:color-mix(in srgb,var(--a) 18%,var(--bg)); stroke:var(--a); stroke-width:3; } .dpn .building,.dpn .rackframe { fill:color-mix(in srgb,var(--bg) 88%,#0f172a 12%); stroke:var(--line); stroke-width:2; } .dpn .rack { fill:color-mix(in srgb,var(--warn) 12%,var(--bg)); stroke:var(--warn); }
+.dpn .hourglass,.dpn .field,.dpn .vacuum,.dpn .clock { fill:color-mix(in srgb,var(--c) 10%,transparent); stroke:color-mix(in srgb,var(--c) 42%,var(--line)); stroke-width:3; } .dpn .dropicon,.dpn .tower,.dpn .plant,.dpn .turbine { fill:color-mix(in srgb,var(--b) 14%,var(--bg)); stroke:var(--b); stroke-width:3; } .dpn .rocket,.dpn .sail,.dpn .plume { fill:color-mix(in srgb,var(--warn) 18%,var(--bg)); stroke:var(--warn); stroke-width:3; } .dpn .flame { fill:color-mix(in srgb,var(--bad) 32%,transparent); stroke:var(--bad); stroke-width:3; } .dpn .air { fill:color-mix(in srgb,var(--c) 42%,var(--bg)); } .dpn .city { fill:color-mix(in srgb,var(--fg) 8%,transparent); stroke:var(--line); stroke-width:3; }
+.dpn .read { display:flex; flex-wrap:wrap; gap:8px; align-items:center; } .dpn .read span { padding:8px 11px; border-radius:999px; background:color-mix(in srgb,var(--bg) 90%,#0f172a 10%); border:1px solid var(--line); color:var(--muted); font-size:12.5px; line-height:1.25; }
+@keyframes dpn-dash { to { stroke-dashoffset:-36; } } @media(max-width:760px){ .dpn { padding:14px; } .dpn .viz{ width:760px; max-width:none; } .dpn .nt,.dpn .pt{ font-size:16px; } .dpn .nd{ font-size:12px; } } @media(prefers-reduced-motion:reduce){ .dpn .flow{ animation:none!important; } }
 </style>
-<script>
-  (() => {
-    const KEY = "dod-gravity-tabs";
-    if (window.__portableTabsFallback && window.__portableTabsFallback[KEY]) return;
-    window.__portableTabsFallback = window.__portableTabsFallback || {};
-    window.__portableTabsFallback[KEY] = true;
-    function activate(root, key) {
-      root.querySelectorAll('[data-role="tab"], [role="tab"]').forEach((tab) => {
-        const selected = tab.getAttribute("data-tab") === key;
-        tab.setAttribute("aria-selected", selected ? "true" : "false");
-        tab.tabIndex = selected ? 0 : -1;
-      });
-      root.querySelectorAll("[data-panel]").forEach((panel) => {
-        panel.hidden = panel.getAttribute("data-panel") !== key;
-      });
-    }
-    function initRoot(root) {
-      if (!root || root.dataset.tabsReady === "true") return;
-      root.dataset.tabsReady = "true";
-      const tabs = Array.from(root.querySelectorAll('[data-role="tab"], [role="tab"]'));
-      const first = root.getAttribute("data-default") || (tabs[0] && tabs[0].getAttribute("data-tab"));
-      tabs.forEach((tab) => {
-        tab.tabIndex = -1;
-        tab.addEventListener("click", () => activate(root, tab.getAttribute("data-tab")));
-        tab.addEventListener("keydown", (event) => {
-          const current = tabs.indexOf(tab);
-          let next = current;
-          if (event.key === "ArrowRight") next = (current + 1) % tabs.length;
-          if (event.key === "ArrowLeft") next = (current - 1 + tabs.length) % tabs.length;
-          if (event.key === "Home") next = 0;
-          if (event.key === "End") next = tabs.length - 1;
-          if (next !== current) {
-            event.preventDefault();
-            tabs[next].focus();
-            activate(root, tabs[next].getAttribute("data-tab"));
-          }
-        });
-      });
-      activate(root, first);
-    }
-    function initAll(scope) { scope.querySelectorAll('.dod-gravity[data-anim-tabs]').forEach(initRoot); }
-    if (window.TabbedAnimations && typeof window.TabbedAnimations.initAll === "function") {
-      window.TabbedAnimations.initAll();
-    } else {
-      initAll(document);
-      document.addEventListener("DOMContentLoaded", () => initAll(document), { once: true });
-    }
-  })();
-</script>

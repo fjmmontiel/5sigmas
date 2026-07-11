@@ -1,80 +1,25 @@
-<div class="dcc-cobalt" data-demo="04-cobalto-cadena" data-anim-fullscreen="off" data-anim-contrast="force">
-  <div class="dcc-cobalt__head">
-    <div class="dcc-cobalt__title">El cobalto resume la cadena más incómoda: concentración geográfica, refino y coste humano</div>
-    <div class="dcc-cobalt__sub">
-      No es un mineral abstracto del rack. Es una ruta corta con cuatro estaciones muy concretas y un desequilibrio
-      claro entre dónde se extrae, dónde se refina y dónde se captura el valor final.
-    </div>
+<meta charset="utf-8">
+<div class="dcc dcf-snippet" data-demo="04-cobalto-cadena" data-anim-fullscreen="off" data-anim-contrast="force">
+  <div class="head"><div class="eyebrow">cadena de cobalto</div><div class="title">El cobalto concentra origen, refino y riesgo social</div><div class="sub">La cadena combina extracción concentrada, refino industrial y demanda final en baterías o UPS; el riesgo no es solo precio.</div></div>
+  <div class="viz-scroll">
+    <svg class="viz viz-cobalt-chain" viewBox="0 0 960 580" role="img" aria-label="El cobalto concentra origen, refino y riesgo social" xmlns="http://www.w3.org/2000/svg"><defs><marker id="dcc-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1 L9 5 L1 9 Z" fill="var(--a)"/></marker><filter id="dcc-shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#0f172a" flood-opacity=".14"/></filter><linearGradient id="dcc-fade" x1="0" x2="1"><stop offset="0" stop-color="var(--a)" stop-opacity=".22"/><stop offset="1" stop-color="var(--b)" stop-opacity=".12"/></linearGradient></defs><rect class="canvas" x="20" y="35" width="920" height="505" rx="34"/><g class="node bad" transform="translate(145 290)"><rect x="-92" y="-32" width="184" height="64" rx="16"/><text x="0" y="-5" text-anchor="middle" class="nt">Origen minero</text><text x="0" y="17" text-anchor="middle" class="nd">RDC concentra riesgo</text></g><path class="flow" d="M235 290H275" marker-end="url(#dcc-arr)"/><g class="node warn" transform="translate(370 290)"><rect x="-92" y="-32" width="184" height="64" rx="16"/><text x="0" y="-5" text-anchor="middle" class="nt">Refino</text><text x="0" y="17" text-anchor="middle" class="nd">cuello industrial</text></g><path class="flow" d="M460 290H500" marker-end="url(#dcc-arr)"/><g class="node ok" transform="translate(595 290)"><rect x="-92" y="-32" width="184" height="64" rx="16"/><text x="0" y="-5" text-anchor="middle" class="nt">Bateria / UPS</text><text x="0" y="17" text-anchor="middle" class="nd">resiliencia electrica</text></g><path class="flow" d="M685 290H720" marker-end="url(#dcc-arr)"/><g class="node muted" transform="translate(815 290)"><rect x="-92" y="-32" width="184" height="64" rx="16"/><text x="0" y="-5" text-anchor="middle" class="nt">Datacenter IA</text><text x="0" y="17" text-anchor="middle" class="nd">demanda final</text></g></svg>
   </div>
-
-  <div class="dcc-cobalt__chain">
-    <div class="dcc-cobalt__step">
-      <span>Origen</span>
-      <strong>RDC · 74%</strong>
-      <small>Extracción concentrada y daños humanos documentados en origen.</small>
-    </div>
-    <div class="dcc-cobalt__arrow"></div>
-    <div class="dcc-cobalt__step">
-      <span>Refino</span>
-      <strong>China · 67%</strong>
-      <small>El cuello industrial se estrecha todavía más.</small>
-    </div>
-    <div class="dcc-cobalt__arrow"></div>
-    <div class="dcc-cobalt__step">
-      <span>Producto</span>
-      <strong>Cátodo NMC</strong>
-      <small>UPS de ion-litio más compacta y longeva que plomo-ácido.</small>
-    </div>
-    <div class="dcc-cobalt__arrow"></div>
-    <div class="dcc-cobalt__step dcc-cobalt__step--dc">
-      <span>Destino</span>
-      <strong>Datacenter / IA</strong>
-      <small>La autonomía eléctrica del centro descansa también en esta cadena.</small>
-    </div>
-  </div>
-
-  <div class="dcc-cobalt__note">
-    El problema no termina en el rack: empieza mucho antes, donde la cadena es más opaca y donde la sustitución rápida
-    casi no existe a escala.
-  </div>
+  <div class="read"><span>Origen: extracción concentrada</span><span>Refino: cuello industrial</span><span>Demanda final: baterías y resiliencia</span></div>
 </div>
 
 <style>
-  .dcc-cobalt, .dcc-cobalt * { box-sizing:border-box; }
-  .dcc-cobalt {
-    --amber:#FFB343; --red:#ff8d7a; --teal:#26A69A; --bg:var(--md-default-bg-color,#fff);
-    --line:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 15%, transparent);
-    --text:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 94%, transparent);
-    --muted:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 63%, transparent);
-    display:grid; gap:14px; max-width:1080px; margin:0 auto; padding:clamp(16px,2vw,24px);
-    border-radius:24px; border:1px solid var(--line);
-    background:
-      radial-gradient(100% 130% at 0% 0%, color-mix(in srgb, var(--red) 10%, transparent), transparent 50%),
-      radial-gradient(90% 110% at 100% 100%, color-mix(in srgb, var(--amber) 8%, transparent), transparent 50%),
-      var(--bg);
-    color:var(--text); font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
-  }
-  [data-md-color-scheme="slate"] .dcc-cobalt { --line:rgba(226,232,240,.16); --text:rgba(236,244,255,.95); --muted:rgba(236,244,255,.68); }
-  .dcc-cobalt__head { display:grid; gap:6px; max-width:74ch; }
-  .dcc-cobalt__title { font-size:clamp(22px,3vw,30px); font-weight:900; line-height:1.05; letter-spacing:0; }
-  .dcc-cobalt__sub { font-size:14px; line-height:1.55; color:var(--muted); }
-  .dcc-cobalt__chain { display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:10px; align-items:center; }
-  .dcc-cobalt__step {
-    display:grid; gap:8px; padding:16px; border-radius:20px; border:1px solid var(--line);
-    background: color-mix(in srgb, var(--bg) 90%, #09121f 10%);
-  }
-  .dcc-cobalt__step--dc { border-color: color-mix(in srgb, var(--teal) 24%, var(--line)); background: color-mix(in srgb, var(--teal) 8%, transparent); }
-  .dcc-cobalt__step span { font-size:11px; font-weight:900; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); }
-  .dcc-cobalt__step strong { font-size:22px; line-height:1.05; letter-spacing:0; }
-  .dcc-cobalt__step small, .dcc-cobalt__note { font-size:12.8px; line-height:1.5; color:var(--muted); }
-  .dcc-cobalt__arrow { height:2px; background:linear-gradient(90deg, rgba(255,141,122,.2), rgba(255,141,122,.9)); position:relative; }
-  .dcc-cobalt__arrow::after { content:""; position:absolute; right:-2px; top:-4px; border-left:10px solid rgba(255,141,122,.9); border-top:5px solid transparent; border-bottom:5px solid transparent; }
-  .dcc-cobalt__note { padding:12px 14px; border-radius:16px; border:1px solid var(--line); background:rgba(255,255,255,.04); }
-  @media (max-width: 980px) {
-    .dcc-cobalt { overflow-x:auto; overscroll-behavior-x:contain; }
-    .dcc-cobalt__head,
-    .dcc-cobalt__chain,
-    .dcc-cobalt__note { min-width:920px; }
-    .dcc-cobalt__chain { grid-template-columns:1fr 34px 1fr 34px 1fr 34px 1fr; }
-  }
+.dcc, .dcc * { box-sizing:border-box; }
+.dcc { --a:#FFB343; --b:#324AB2; --c:#ff8d7a; --bad:#ff8d7a; --warn:#FFB343; --ok:#26A69A; --bg:var(--md-default-bg-color,#fff); --fg:color-mix(in srgb,var(--md-default-fg-color,#0f172a) 94%,transparent); --muted:color-mix(in srgb,var(--md-default-fg-color,#0f172a) 62%,transparent); --line:color-mix(in srgb,var(--md-default-fg-color,#0f172a) 15%,transparent); display:grid; gap:14px; width:100%; padding:clamp(16px,2vw,26px); border:1px solid var(--line); border-radius:18px; background:radial-gradient(90% 120% at 0 0,color-mix(in srgb,var(--a) 8%,transparent),transparent 55%),radial-gradient(100% 120% at 100% 100%,color-mix(in srgb,var(--b) 8%,transparent),transparent 55%),var(--bg); color:var(--fg); font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif; }
+[data-md-color-scheme="slate"] .dcc { --line:rgba(226,232,240,.16); --fg:rgba(236,244,255,.95); --muted:rgba(236,244,255,.66); }
+.dcc .head { display:grid; gap:6px; max-width:78ch; } .dcc .eyebrow { width:fit-content; padding:5px 10px; border-radius:999px; border:1px solid color-mix(in srgb,var(--a) 35%,var(--line)); color:var(--a); background:color-mix(in srgb,var(--a) 8%,transparent); font-size:10px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; } .dcc .title { font-size:clamp(21px,3vw,31px); line-height:1.05; font-weight:900; } .dcc .sub { color:var(--muted); font-size:14px; line-height:1.48; }
+.dcc .viz-scroll { max-width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; padding-bottom:4px; } .dcc .viz { width:100%; height:auto; display:block; aspect-ratio:960/580; } .dcc .canvas { fill:url(#dcc-fade); stroke:var(--line); stroke-width:1; }
+.dcc .node rect,.dcc .pill,.dcc .step rect,.dcc .evidence path { fill:color-mix(in srgb,var(--bg) 88%,#0f172a 12%); stroke:var(--line); filter:url(#dcc-shadow); } .dcc .node.bad rect,.dcc .left,.dcc .hot { fill:color-mix(in srgb,var(--bad) 11%,var(--bg)); stroke:color-mix(in srgb,var(--bad) 40%,var(--line)); } .dcc .node.warn rect,.dcc .radiator rect,.dcc .drop,.dcc .over { fill:color-mix(in srgb,var(--warn) 13%,var(--bg)); stroke:color-mix(in srgb,var(--warn) 42%,var(--line)); } .dcc .node.ok rect,.dcc .right,.dcc .bolt,.dcc .useful { fill:color-mix(in srgb,var(--ok) 12%,var(--bg)); stroke:color-mix(in srgb,var(--ok) 36%,var(--line)); }
+.dcc .flow,.dcc .axis,.dcc .cool,.dcc .heat,.dcc .tether,.dcc .bigcurve { fill:none; stroke:var(--a); stroke-width:4; stroke-linecap:round; stroke-linejoin:round; } .dcc .flow { stroke-dasharray:9 9; animation:dcc-dash 3.4s linear infinite; } .dcc .flow.alt,.dcc .heat { stroke:var(--b); } .dcc .axis { stroke:var(--line); stroke-dasharray:none; } .dcc .bigcurve { stroke-width:7; }
+.dcc .nt,.dcc .pt,.dcc .lane,.dcc .result { fill:var(--fg); font-size:18px; font-weight:900; } .dcc .nd,.dcc .axistext,.dcc .limit { fill:var(--muted); font-size:13px; font-weight:750; } .dcc .limit { fill:color-mix(in srgb,var(--bad) 75%,var(--fg)); }
+.dcc .planet,.dcc .earth,.dcc .cloud,.dcc .archive { fill:color-mix(in srgb,var(--b) 18%,var(--bg)); stroke:color-mix(in srgb,var(--b) 45%,var(--line)); } .dcc .orbit,.dcc .orb,.dcc .mission,.dcc .cycle,.dcc .scaleA,.dcc .scaleB { fill:none; stroke:color-mix(in srgb,var(--a) 45%,var(--line)); stroke-width:3; stroke-dasharray:12 10; } .dcc .sun { fill:color-mix(in srgb,#FFB343 45%,var(--bg)); stroke:#FFB343; } .dcc .sat { fill:var(--a); } .dcc .ray { stroke:#FFB343; stroke-width:3; opacity:.45; } .dcc .terminator,.dcc .wire,.dcc .steam,.dcc .particle { fill:none; stroke:var(--line); stroke-width:3; stroke-linecap:round; } .dcc .night { fill:color-mix(in srgb,#0f172a 18%,transparent); } .dcc .wing,.dcc .plug,.dcc .contact,.dcc .satcase circle { fill:color-mix(in srgb,var(--a) 22%,var(--bg)); stroke:var(--a); }
+.dcc .funnel { fill:color-mix(in srgb,var(--bad) 12%,var(--bg)); stroke:color-mix(in srgb,var(--bad) 38%,var(--line)); } .dcc .funnel.thin { fill:color-mix(in srgb,var(--ok) 12%,var(--bg)); stroke:color-mix(in srgb,var(--ok) 38%,var(--line)); } .dcc .processor,.dcc .chip,.dcc .gpu { fill:color-mix(in srgb,var(--a) 20%,var(--bg)); stroke:color-mix(in srgb,var(--a) 45%,var(--line)); } .dcc .rad { fill:color-mix(in srgb,var(--b) 20%,var(--bg)); stroke:var(--b); }
+.dcc .waterline { stroke:var(--b); stroke-width:4; } .dcc .ice.top { fill:color-mix(in srgb,var(--b) 18%,var(--bg)); stroke:var(--b); stroke-width:3; } .dcc .ice.bottom { fill:color-mix(in srgb,var(--a) 18%,var(--bg)); stroke:var(--a); stroke-width:3; } .dcc .building,.dcc .rackframe { fill:color-mix(in srgb,var(--bg) 88%,#0f172a 12%); stroke:var(--line); stroke-width:2; } .dcc .rack { fill:color-mix(in srgb,var(--warn) 12%,var(--bg)); stroke:var(--warn); }
+.dcc .hourglass,.dcc .field,.dcc .vacuum,.dcc .clock { fill:color-mix(in srgb,var(--c) 10%,transparent); stroke:color-mix(in srgb,var(--c) 42%,var(--line)); stroke-width:3; } .dcc .dropicon,.dcc .tower,.dcc .plant,.dcc .turbine { fill:color-mix(in srgb,var(--b) 14%,var(--bg)); stroke:var(--b); stroke-width:3; } .dcc .rocket,.dcc .sail,.dcc .plume { fill:color-mix(in srgb,var(--warn) 18%,var(--bg)); stroke:var(--warn); stroke-width:3; } .dcc .flame { fill:color-mix(in srgb,var(--bad) 32%,transparent); stroke:var(--bad); stroke-width:3; } .dcc .air { fill:color-mix(in srgb,var(--c) 42%,var(--bg)); } .dcc .city { fill:color-mix(in srgb,var(--fg) 8%,transparent); stroke:var(--line); stroke-width:3; }
+.dcc .read { display:flex; flex-wrap:wrap; gap:8px; align-items:center; } .dcc .read span { padding:8px 11px; border-radius:999px; background:color-mix(in srgb,var(--bg) 90%,#0f172a 10%); border:1px solid var(--line); color:var(--muted); font-size:12.5px; line-height:1.25; }
+@keyframes dcc-dash { to { stroke-dashoffset:-36; } } @media(max-width:760px){ .dcc { padding:14px; } .dcc .viz{ width:760px; max-width:none; } .dcc .nt,.dcc .pt{ font-size:16px; } .dcc .nd{ font-size:12px; } } @media(prefers-reduced-motion:reduce){ .dcc .flow{ animation:none!important; } }
 </style>

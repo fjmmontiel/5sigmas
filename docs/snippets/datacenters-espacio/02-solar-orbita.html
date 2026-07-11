@@ -1,211 +1,25 @@
-<div class="dco-solar ta-tabs" data-demo="02-solar-orbita" data-anim-tabs data-default="earth" data-anim-fullscreen="off" data-anim-contrast="force">
-  <div class="dco-solar__head">
-    <div class="dco-solar__title">La órbita dawn-dusk no regala energía: regala continuidad</div>
-    <div class="dco-solar__sub">
-      La ventaja orbital aparece cuando el panel deja de alternar día, noche, nubes y red. La pregunta útil es cuánto
-      tiempo útil genera la misma superficie y qué dependencias nuevas introduces para conseguirlo.
-    </div>
+<meta charset="utf-8">
+<div class="dso dcf-snippet" data-demo="02-solar-orbita" data-anim-fullscreen="off" data-anim-contrast="force">
+  <div class="head"><div class="eyebrow">orbita solar</div><div class="title">La ventaja solar orbital es continuidad, no magia térmica</div><div class="sub">Una órbita bien elegida reduce noches y nubes, pero toda la energía consumida vuelve como calor que hay que radiar.</div></div>
+  <div class="viz-scroll">
+    <svg class="viz viz-sun-orbit" viewBox="0 0 960 580" role="img" aria-label="La ventaja solar orbital es continuidad, no magia térmica" xmlns="http://www.w3.org/2000/svg"><defs><marker id="dso-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1 L9 5 L1 9 Z" fill="var(--a)"/></marker><filter id="dso-shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#0f172a" flood-opacity=".14"/></filter><linearGradient id="dso-fade" x1="0" x2="1"><stop offset="0" stop-color="var(--a)" stop-opacity=".22"/><stop offset="1" stop-color="var(--b)" stop-opacity=".12"/></linearGradient></defs><circle class="sun" cx="140" cy="120" r="52"/><circle class="earth" cx="480" cy="300" r="120"/><path class="night" d="M480 180a120 120 0 0 1 0 240a70 120 0 0 0 0-240Z"/><path class="terminator" d="M480 175V425"/><ellipse class="orb" cx="480" cy="300" rx="300" ry="135"/><circle class="sat" cx="760" cy="300" r="28"/><path class="wing" d="M722 282h-74v34h74M798 282h74v34h-74"/><path class="ray" d="M190 120 L745 285"/><path class="ray" d="M190 120 L745 315"/><g class="node bad" transform="translate(220 455)"><rect x="-92" y="-32" width="184" height="64" rx="16"/><text x="0" y="-5" text-anchor="middle" class="nt">Tierra</text><text x="0" y="17" text-anchor="middle" class="nd">noche y clima cortan sol</text></g><g class="node ok" transform="translate(760 390)"><rect x="-92" y="-32" width="184" height="64" rx="16"/><text x="0" y="-5" text-anchor="middle" class="nt">Orbita casi solar</text><text x="0" y="17" text-anchor="middle" class="nd">menos sombra</text></g><g class="node warn" transform="translate(500 95)"><rect x="-92" y="-32" width="184" height="64" rx="16"/><text x="0" y="-5" text-anchor="middle" class="nt">Calor generado</text><text x="0" y="17" text-anchor="middle" class="nd">tambien se radia</text></g></svg>
   </div>
-
-  <div class="dco-solar__tabs ta-tablist" role="tablist" data-role="tablist" aria-label="Solar terrestre vs orbital">
-    <button class="dco-solar__tab ta-tab" type="button" role="tab" data-role="tab" data-tab="earth" aria-selected="true">Tierra intermitente</button>
-    <button class="dco-solar__tab ta-tab" type="button" role="tab" data-role="tab" data-tab="orbit" aria-selected="false">Órbita continua</button>
-    <button class="dco-solar__tab ta-tab" type="button" role="tab" data-role="tab" data-tab="tradeoff" aria-selected="false">Trade-off</button>
-  </div>
-
-  <div class="dco-solar__panels ta-panels">
-    <section class="dco-solar__panel ta-panel" data-panel="earth">
-      <div class="dco-solar__scene">
-        <div class="dco-solar__dayline dco-solar__dayline--earth">
-          <span class="dco-solar__period dco-solar__period--on">Sol útil</span>
-          <span class="dco-solar__period dco-solar__period--off">Noche</span>
-          <span class="dco-solar__period dco-solar__period--cloud">Nubes / clima</span>
-        </div>
-        <div class="dco-solar__metrics">
-          <div class="dco-solar__metric">
-            <span>Factor de capacidad</span>
-            <strong>15–25%</strong>
-          </div>
-          <div class="dco-solar__metric">
-            <span>Fricción dominante</span>
-            <strong>noche + red + meteorología</strong>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="dco-solar__panel ta-panel" data-panel="orbit" hidden>
-      <div class="dco-solar__scene dco-solar__scene--orbit">
-        <div class="dco-solar__orbitmap">
-          <div class="dco-solar__sun">Sol</div>
-          <div class="dco-solar__earth"></div>
-          <div class="dco-solar__ring">
-            <div class="dco-solar__satellite">ODC</div>
-          </div>
-        </div>
-        <div class="dco-solar__metrics">
-          <div class="dco-solar__metric">
-            <span>Factor de capacidad</span>
-            <strong>95–99%</strong>
-          </div>
-          <div class="dco-solar__metric">
-            <span>Lectura correcta</span>
-            <strong>casi siempre iluminado sobre el terminador</strong>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="dco-solar__panel ta-panel" data-panel="tradeoff" hidden>
-      <div class="dco-solar__trade">
-        <article class="dco-solar__trade-card">
-          <span class="dco-solar__metric-label">Qué ganas</span>
-          <strong>Más horas útiles por metro cuadrado</strong>
-          <p>La ventaja útil está en la continuidad, no en una cifra aislada de irradiación máxima.</p>
-        </article>
-        <article class="dco-solar__trade-card">
-          <span class="dco-solar__metric-label">Qué pagas</span>
-          <strong>Masa, radiación y lanzamiento</strong>
-          <p>La red desaparece como cuello directo, pero la sustituyen paneles, protección y arquitectura orbital.</p>
-        </article>
-        <article class="dco-solar__trade-card dco-solar__trade-card--highlight">
-          <span class="dco-solar__metric-label">Conclusión</span>
-          <strong>La energía sí mejora; la ingeniería se complica</strong>
-          <p>Por eso la ventaja orbital sirve sobre todo cuando energía o downlink pesan más que la masa lanzada.</p>
-        </article>
-      </div>
-    </section>
-  </div>
+  <div class="read"><span>Más horas de sol útil</span><span>Menos noche no significa menos calor</span><span>Paneles y radiadores se diseñan juntos</span></div>
 </div>
 
 <style>
-  .dco-solar, .dco-solar * { box-sizing:border-box; }
-  .dco-solar {
-    --teal:#26A69A; --blue:#324AB2; --sky:#7cc7ff; --amber:#FFB343;
-    --bg:var(--md-default-bg-color,#fff);
-    --line:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 15%, transparent);
-    --text:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 94%, transparent);
-    --muted:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 63%, transparent);
-    display:grid; gap:14px; max-width:980px; margin:0 auto; padding:clamp(16px,2vw,24px);
-    border-radius:24px; border:1px solid var(--line);
-    background:
-      radial-gradient(100% 130% at 0% 0%, color-mix(in srgb, var(--amber) 10%, transparent), transparent 50%),
-      radial-gradient(90% 110% at 100% 100%, color-mix(in srgb, var(--sky) 9%, transparent), transparent 50%),
-      var(--bg);
-    color:var(--text); font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
-  }
-  [data-md-color-scheme="slate"] .dco-solar { --line:rgba(226,232,240,.16); --text:rgba(236,244,255,.95); --muted:rgba(236,244,255,.68); }
-  .dco-solar__head { display:grid; gap:6px; max-width:74ch; }
-  .dco-solar__title { font-size:clamp(22px,3vw,30px); font-weight:900; line-height:1.05; letter-spacing:0; }
-  .dco-solar__sub { font-size:14px; line-height:1.55; color:var(--muted); }
-  .dco-solar__tabs { display:flex; flex-wrap:wrap; gap:8px; }
-  .dco-solar__tab { transition:background-color .22s ease-out, border-color .22s ease-out, color .22s ease-out, transform .22s ease-out; }
-  .dco-solar__tab:hover { transform:translateY(-1px); }
-  .dco-solar__panel[hidden] { display:none; }
-  .dco-solar__scene {
-    display:grid; grid-template-columns:minmax(0,1.1fr) minmax(260px,.9fr); gap:12px; align-items:stretch;
-  }
-  .dco-solar__dayline, .dco-solar__orbitmap, .dco-solar__metrics, .dco-solar__trade-card {
-    border:1px solid var(--line); border-radius:20px; background: color-mix(in srgb, var(--bg) 90%, #09121f 10%);
-  }
-  .dco-solar__dayline {
-    display:grid; grid-template-columns:3fr 2fr 2fr; gap:8px; padding:14px; align-items:stretch;
-  }
-  .dco-solar__period {
-    display:grid; place-items:center; min-height:150px; border-radius:16px; font-size:13px; font-weight:900; letter-spacing:0;
-  }
-  .dco-solar__period--on { background: linear-gradient(180deg, rgba(255,179,67,.28), rgba(255,179,67,.58)); }
-  .dco-solar__period--off { background: linear-gradient(180deg, rgba(50,74,178,.28), rgba(50,74,178,.54)); color:#eef5ff; }
-  .dco-solar__period--cloud { background: linear-gradient(180deg, rgba(124,199,255,.2), rgba(124,199,255,.46)); }
-  .dco-solar__metrics { display:grid; gap:10px; padding:14px; }
-  .dco-solar__metric { padding:12px; border-radius:16px; background:rgba(255,255,255,.04); border:1px solid var(--line); }
-  .dco-solar__metric span, .dco-solar__metric-label {
-    display:block; margin-bottom:6px; font-size:11px; font-weight:900; text-transform:uppercase; letter-spacing:.08em; color:var(--muted);
-  }
-  .dco-solar__metric strong { display:block; font-size:20px; line-height:1.15; letter-spacing:0; }
-  .dco-solar__scene--orbit { grid-template-columns:minmax(0,1fr) minmax(260px,.85fr); }
-  .dco-solar__orbitmap { position:relative; min-height:270px; overflow:hidden; }
-  .dco-solar__sun {
-    position:absolute; left:18px; top:18px; width:72px; height:72px; border-radius:50%;
-    display:grid; place-items:center; font-size:12px; font-weight:900; color:#5c3d00;
-    background: radial-gradient(circle at 35% 35%, #fff4c4, #ffb343 72%);
-  }
-  .dco-solar__earth {
-    position:absolute; left:50%; top:54%; width:128px; height:128px; transform:translate(-50%,-50%);
-    border-radius:50%; background: radial-gradient(circle at 35% 30%, #5bd1ff, #1d4f8f 68%); box-shadow:0 0 0 18px rgba(124,199,255,.08);
-  }
-  .dco-solar__ring {
-    position:absolute; inset:28px; border-radius:50%; border:2px dashed rgba(124,199,255,.42);
-  }
-  .dco-solar__satellite {
-    position:absolute; right:18%; top:18%; transform:translate(50%,-50%);
-    padding:10px 14px; border-radius:14px; border:1px solid rgba(38,166,154,.28); background:rgba(38,166,154,.18);
-    font-size:12px; font-weight:900;
-  }
-  .dco-solar__trade { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:12px; }
-  .dco-solar__trade-card { display:grid; gap:8px; padding:16px; }
-  .dco-solar__trade-card strong { font-size:20px; line-height:1.12; letter-spacing:0; }
-  .dco-solar__trade-card p { margin:0; font-size:12.8px; line-height:1.5; color:var(--muted); }
-  .dco-solar__trade-card--highlight { border-color: color-mix(in srgb, var(--teal) 24%, var(--line)); background: color-mix(in srgb, var(--teal) 8%, transparent); }
-  @media (max-width: 860px) {
-    .dco-solar { overflow-x:auto; overscroll-behavior-x:contain; }
-    .dco-solar__head,
-    .dco-solar__tabs,
-    .dco-solar__scene,
-    .dco-solar__scene--orbit,
-    .dco-solar__trade { min-width:760px; }
-    .dco-solar__scene { grid-template-columns:minmax(0,1.1fr) minmax(260px,.9fr); }
-    .dco-solar__scene--orbit { grid-template-columns:minmax(0,1fr) minmax(260px,.85fr); }
-    .dco-solar__trade { grid-template-columns:repeat(3, minmax(0,1fr)); }
-    .dco-solar__dayline { grid-template-columns:3fr 2fr 2fr; }
-  }
+.dso, .dso * { box-sizing:border-box; }
+.dso { --a:#26A69A; --b:#7cc7ff; --c:#324AB2; --bad:#ff8d7a; --warn:#FFB343; --ok:#26A69A; --bg:var(--md-default-bg-color,#fff); --fg:color-mix(in srgb,var(--md-default-fg-color,#0f172a) 94%,transparent); --muted:color-mix(in srgb,var(--md-default-fg-color,#0f172a) 62%,transparent); --line:color-mix(in srgb,var(--md-default-fg-color,#0f172a) 15%,transparent); display:grid; gap:14px; width:100%; padding:clamp(16px,2vw,26px); border:1px solid var(--line); border-radius:32px; background:radial-gradient(90% 120% at 0 0,color-mix(in srgb,var(--a) 8%,transparent),transparent 55%),radial-gradient(100% 120% at 100% 100%,color-mix(in srgb,var(--b) 8%,transparent),transparent 55%),var(--bg); color:var(--fg); font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif; }
+[data-md-color-scheme="slate"] .dso { --line:rgba(226,232,240,.16); --fg:rgba(236,244,255,.95); --muted:rgba(236,244,255,.66); }
+.dso .head { display:grid; gap:6px; max-width:78ch; } .dso .eyebrow { width:fit-content; padding:5px 10px; border-radius:999px; border:1px solid color-mix(in srgb,var(--a) 35%,var(--line)); color:var(--a); background:color-mix(in srgb,var(--a) 8%,transparent); font-size:10px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; } .dso .title { font-size:clamp(21px,3vw,31px); line-height:1.05; font-weight:900; } .dso .sub { color:var(--muted); font-size:14px; line-height:1.48; }
+.dso .viz-scroll { max-width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; padding-bottom:4px; } .dso .viz { width:100%; height:auto; display:block; aspect-ratio:960/580; } .dso .canvas { fill:transparent; stroke:var(--line); stroke-width:0; }
+.dso .node rect,.dso .pill,.dso .step rect,.dso .evidence path { fill:color-mix(in srgb,var(--bg) 88%,#0f172a 12%); stroke:var(--line); filter:url(#dso-shadow); } .dso .node.bad rect,.dso .left,.dso .hot { fill:color-mix(in srgb,var(--bad) 11%,var(--bg)); stroke:color-mix(in srgb,var(--bad) 40%,var(--line)); } .dso .node.warn rect,.dso .radiator rect,.dso .drop,.dso .over { fill:color-mix(in srgb,var(--warn) 13%,var(--bg)); stroke:color-mix(in srgb,var(--warn) 42%,var(--line)); } .dso .node.ok rect,.dso .right,.dso .bolt,.dso .useful { fill:color-mix(in srgb,var(--ok) 12%,var(--bg)); stroke:color-mix(in srgb,var(--ok) 36%,var(--line)); }
+.dso .flow,.dso .axis,.dso .cool,.dso .heat,.dso .tether,.dso .bigcurve { fill:none; stroke:var(--a); stroke-width:4; stroke-linecap:round; stroke-linejoin:round; } .dso .flow { stroke-dasharray:9 9; animation:dso-dash 3.4s linear infinite; } .dso .flow.alt,.dso .heat { stroke:var(--b); } .dso .axis { stroke:var(--line); stroke-dasharray:none; } .dso .bigcurve { stroke-width:7; }
+.dso .nt,.dso .pt,.dso .lane,.dso .result { fill:var(--fg); font-size:18px; font-weight:900; } .dso .nd,.dso .axistext,.dso .limit { fill:var(--muted); font-size:13px; font-weight:750; } .dso .limit { fill:color-mix(in srgb,var(--bad) 75%,var(--fg)); }
+.dso .planet,.dso .earth,.dso .cloud,.dso .archive { fill:color-mix(in srgb,var(--b) 18%,var(--bg)); stroke:color-mix(in srgb,var(--b) 45%,var(--line)); } .dso .orbit,.dso .orb,.dso .mission,.dso .cycle,.dso .scaleA,.dso .scaleB { fill:none; stroke:color-mix(in srgb,var(--a) 45%,var(--line)); stroke-width:3; stroke-dasharray:12 10; } .dso .sun { fill:color-mix(in srgb,#FFB343 45%,var(--bg)); stroke:#FFB343; } .dso .sat { fill:var(--a); } .dso .ray { stroke:#FFB343; stroke-width:3; opacity:.45; } .dso .terminator,.dso .wire,.dso .steam,.dso .particle { fill:none; stroke:var(--line); stroke-width:3; stroke-linecap:round; } .dso .night { fill:color-mix(in srgb,#0f172a 18%,transparent); } .dso .wing,.dso .plug,.dso .contact,.dso .satcase circle { fill:color-mix(in srgb,var(--a) 22%,var(--bg)); stroke:var(--a); }
+.dso .funnel { fill:color-mix(in srgb,var(--bad) 12%,var(--bg)); stroke:color-mix(in srgb,var(--bad) 38%,var(--line)); } .dso .funnel.thin { fill:color-mix(in srgb,var(--ok) 12%,var(--bg)); stroke:color-mix(in srgb,var(--ok) 38%,var(--line)); } .dso .processor,.dso .chip,.dso .gpu { fill:color-mix(in srgb,var(--a) 20%,var(--bg)); stroke:color-mix(in srgb,var(--a) 45%,var(--line)); } .dso .rad { fill:color-mix(in srgb,var(--b) 20%,var(--bg)); stroke:var(--b); }
+.dso .waterline { stroke:var(--b); stroke-width:4; } .dso .ice.top { fill:color-mix(in srgb,var(--b) 18%,var(--bg)); stroke:var(--b); stroke-width:3; } .dso .ice.bottom { fill:color-mix(in srgb,var(--a) 18%,var(--bg)); stroke:var(--a); stroke-width:3; } .dso .building,.dso .rackframe { fill:color-mix(in srgb,var(--bg) 88%,#0f172a 12%); stroke:var(--line); stroke-width:2; } .dso .rack { fill:color-mix(in srgb,var(--warn) 12%,var(--bg)); stroke:var(--warn); }
+.dso .hourglass,.dso .field,.dso .vacuum,.dso .clock { fill:color-mix(in srgb,var(--c) 10%,transparent); stroke:color-mix(in srgb,var(--c) 42%,var(--line)); stroke-width:3; } .dso .dropicon,.dso .tower,.dso .plant,.dso .turbine { fill:color-mix(in srgb,var(--b) 14%,var(--bg)); stroke:var(--b); stroke-width:3; } .dso .rocket,.dso .sail,.dso .plume { fill:color-mix(in srgb,var(--warn) 18%,var(--bg)); stroke:var(--warn); stroke-width:3; } .dso .flame { fill:color-mix(in srgb,var(--bad) 32%,transparent); stroke:var(--bad); stroke-width:3; } .dso .air { fill:color-mix(in srgb,var(--c) 42%,var(--bg)); } .dso .city { fill:color-mix(in srgb,var(--fg) 8%,transparent); stroke:var(--line); stroke-width:3; }
+.dso .read { display:flex; flex-wrap:wrap; gap:8px; align-items:center; } .dso .read span { padding:8px 11px; border-radius:999px; background:color-mix(in srgb,var(--bg) 90%,#0f172a 10%); border:1px solid var(--line); color:var(--muted); font-size:12.5px; line-height:1.25; }
+@keyframes dso-dash { to { stroke-dashoffset:-36; } } @media(max-width:760px){ .dso { padding:14px; } .dso .viz{ width:760px; max-width:none; } .dso .nt,.dso .pt{ font-size:16px; } .dso .nd{ font-size:12px; } } @media(prefers-reduced-motion:reduce){ .dso .flow{ animation:none!important; } }
 </style>
-<script>
-  (() => {
-    const KEY = "dco-solar-tabs";
-    if (window.__portableTabsFallback && window.__portableTabsFallback[KEY]) return;
-    window.__portableTabsFallback = window.__portableTabsFallback || {};
-    window.__portableTabsFallback[KEY] = true;
-    function activate(root, key) {
-      root.querySelectorAll('[data-role="tab"], [role="tab"]').forEach((tab) => {
-        const selected = tab.getAttribute("data-tab") === key;
-        tab.setAttribute("aria-selected", selected ? "true" : "false");
-        tab.tabIndex = selected ? 0 : -1;
-      });
-      root.querySelectorAll("[data-panel]").forEach((panel) => {
-        panel.hidden = panel.getAttribute("data-panel") !== key;
-      });
-    }
-    function initRoot(root) {
-      if (!root || root.dataset.tabsReady === "true") return;
-      root.dataset.tabsReady = "true";
-      const tabs = Array.from(root.querySelectorAll('[data-role="tab"], [role="tab"]'));
-      const first = root.getAttribute("data-default") || (tabs[0] && tabs[0].getAttribute("data-tab"));
-      tabs.forEach((tab) => {
-        tab.tabIndex = -1;
-        tab.addEventListener("click", () => activate(root, tab.getAttribute("data-tab")));
-        tab.addEventListener("keydown", (event) => {
-          const current = tabs.indexOf(tab);
-          let next = current;
-          if (event.key === "ArrowRight") next = (current + 1) % tabs.length;
-          if (event.key === "ArrowLeft") next = (current - 1 + tabs.length) % tabs.length;
-          if (event.key === "Home") next = 0;
-          if (event.key === "End") next = tabs.length - 1;
-          if (next !== current) {
-            event.preventDefault();
-            tabs[next].focus();
-            activate(root, tabs[next].getAttribute("data-tab"));
-          }
-        });
-      });
-      activate(root, first);
-    }
-    function initAll(scope) { scope.querySelectorAll('.dco-solar[data-anim-tabs]').forEach(initRoot); }
-    if (window.TabbedAnimations && typeof window.TabbedAnimations.initAll === "function") {
-      window.TabbedAnimations.initAll();
-    } else {
-      initAll(document);
-      document.addEventListener("DOMContentLoaded", () => initAll(document), { once: true });
-    }
-  })();
-</script>

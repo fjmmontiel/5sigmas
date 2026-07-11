@@ -56,11 +56,11 @@ Entre la teoría y la visión especulativa existe un espacio intermedio que a me
 
 | Empresa | Hardware en órbita | Estado |
 | --- | --- | --- |
-| **Starcloud** (antes Lumen Orbit) | Satélite con Nvidia H100 | Operativo desde nov. 2025 |
-| **Axiom Space** | AxDCU-1 (ISS) + 2 nodos ODC (LEO) | Prototipo en ISS desde otoño 2025, con nodos iniciales ODC desde ene. 2026 |
-| **D-Orbit** | Servicios de compute en órbita / IRIDE-NOX | Operativo en misiones activas |
-| **ADA Space (China)** | Three-Body Constellation (12 satélites) | Operativa desde mayo 2025 |
-| **Tiansuan / BUPT-1** | 1 satélite cloud-native | Operativo desde ene. 2023 |
+| **Starcloud** (antes Lumen Orbit) | Satélite con Nvidia H100 | Operativo desde nov. 2025 ([KPMG][r4]) |
+| **Axiom Space** | AxDCU-1 (ISS) + 2 nodos ODC (LEO) | Prototipo en ISS desde otoño 2025, con nodos iniciales ODC desde ene. 2026 ([Axiom][r2], [ISS National Lab][r3]) |
+| **D-Orbit** | Servicios de compute en órbita / IRIDE-NOX | Operativo en misiones activas ([D-Orbit][r11]) |
+| **ADA Space (China)** | Three-Body Constellation (12 satélites) | Operativa desde mayo 2025 ([SpaceNews][r5]) |
+| **Tiansuan / BUPT-1** | 1 satélite cloud-native | Operativo desde ene. 2023 ([tiansuan.org.cn][r6]) |
 
 {{ include_html("snippets/datacenters-espacio/03-proyectos-orbitales.html") }}
 
@@ -186,7 +186,7 @@ Probablemente no en esta década para cargas arbitrarias. Los costes de lanzamie
 [r8]: https://www.jurist.org/commentary/2026/03/orbital-data-centers-and-the-legal-vacuum-threatening-ai-governance/ "Orbital data centers and the legal vacuum threatening AI governance — JURIST"
 [r9]: https://www.esa.int/Space_in_Member_States/United_Kingdom/ESA_accelerates_the_race_towards_clean_energy_from_space "SOLARIS — ESA"
 [r10]: https://www.spaceinvestments.io/information-communications/orbital-data-centers-technical-validation-and-strategic-positioning-in-the-2025-2030-transition-period "Orbital Data Centers 2025-2030 — Space Investments"
-[r11]: https://www.dorbit.space/advanced-services "Advanced Services — D-Orbit"
+[r11]: https://dorbit.space/advanced-services/ "Advanced Services — D-Orbit"
 [r12]: https://www.unoosa.org/oosa/en/ourwork/spacelaw/treaties/outerspacetreaty.html "Outer Space Treaty — UNOOSA"
 [r13]: https://blog.google/innovation-and-ai/technology/research/google-project-suncatcher/ "Project Suncatcher — Google"
 [r14]: https://www.lonestarlunar.com/press-release/lunar-data-center-achieves-first-success-en-route-to-the-moon "Lunar data center — Lonestar"

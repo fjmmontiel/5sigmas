@@ -51,6 +51,8 @@ Un patrón relevante en este contexto es el enrutamiento dinámico, articulado c
 
 Una pregunta factual simple va a un modelo rápido y barato. Un problema de razonamiento complejo va a un modelo lento y costoso. El usuario recibe la calidad que necesita para cada tipo de consulta sin pagar en latencia o coste la tasa máxima en todas ellas. El enrutador añade latencia marginal por sí mismo, pero el ahorro neto cuando la distribución de consultas es heterogénea puede ser grande. El paper original reporta reducciones de coste del 85% manteniendo el 95% del rendimiento del modelo fuerte.
 
+La versión actual del problema ya no consiste solo en elegir entre dos modelos. Claude Sonnet 5 permite ajustar el nivel de esfuerzo y Gemini 3.5 Flash expone niveles de razonamiento para mover el equilibrio entre calidad, coste y latencia. En producción, el router puede tener que decidir dos cosas: qué modelo activar y cuánto presupuesto de razonamiento asignarle a esa consulta ([Anthropic, 2026](https://www.anthropic.com/news/claude-sonnet-5); [Google DeepMind, 2026](https://deepmind.google/models/model-cards/gemini-3-5-flash/)).
+
 {{ include_html("snippets/modelos-razonadores/04-routellm-decision.html") }}
 
 La idea articulada por RouteLLM encontró su primera implementación comercial a gran escala en agosto de 2025, cuando OpenAI presentó GPT-5. A diferencia de los modelos anteriores (donde el usuario elegía explícitamente entre modo rápido o modo razonador), GPT-5 incorpora un router en tiempo real que decide qué modelo activar en función del tipo de conversación, la complejidad detectada, las herramientas requeridas y la intención explícita del usuario. El sistema combina un modelo rápido para la mayoría de las preguntas con un modelo de razonamiento profundo para los problemas que lo requieren, de forma que el usuario no tiene que elegir modelo ni asignar cómputo de antemano: la selección ocurre de forma invisible en cada consulta ([OpenAI, 2025](https://openai.com/gpt-5/)).
@@ -141,6 +143,8 @@ Definir qué hace el sistema cuando la cadena de razonamiento falla: ¿devuelve 
 | **Anthropic (2025)** — *[Claude 3.7 Sonnet System Card](https://www.anthropic.com/claude-3-7-sonnet-system-card)* | Estructura de facturación de tokens de pensamiento: mismo precio que tokens de salida (15 $/M), lo que hace que las cadenas largas sean significativamente más caras aunque el usuario no las vea. Citado en §3. |
 | **OpenAI (2025)** — *[GPT-5](https://openai.com/gpt-5/)* | Sistema unificado con router en tiempo real: selecciona entre modelo rápido y modelo razonador según tipo de conversación, complejidad detectada, herramientas requeridas e intención explícita del usuario. Primera implementación comercial a escala del patrón de enrutamiento dinámico. Citado en §1. |
 | **Willison, S. (2025)** — *[GPT-5: Key characteristics, pricing and model card](https://simonwillison.net/2025/Aug/7/gpt-5/)* | Análisis del lanzamiento de GPT-5 con cita directa del system card de OpenAI sobre el router e incidente del autoswitcher durante el primer día de despliegue. Citado en §1. |
+| **Anthropic (2026)** — *[Claude Sonnet 5](https://www.anthropic.com/news/claude-sonnet-5)* | Evidencia actual de niveles de esfuerzo configurables y de un equilibrio explícito entre coste, latencia y rendimiento en tareas agénticas. Citado en §1. |
+| **Google DeepMind (2026)** — *[Gemini 3.5 Flash Model Card](https://deepmind.google/models/model-cards/gemini-3-5-flash/)* | Documenta niveles de razonamiento para controlar el equilibrio entre calidad, coste y latencia. Citado en §1. |
 
 </details>
 
@@ -159,4 +163,3 @@ RouteLLM es más útil cuando la distribución de consultas es heterogénea: hay
 
 **¿Cómo se establecen SLOs cuando la latencia es variable?**
 La latencia variable de los modelos razonadores hace que los SLOs basados en latencia media sean poco informativos porque la distribución tiene colas largas. Es más práctico definir percentiles (p95, p99) y establecer mecanismos activos de corte: si la cadena de razonamiento supera un umbral de tiempo o tokens, el sistema produce la mejor respuesta disponible en ese punto con la indicación de que el análisis está incompleto, en lugar de seguir indefinidamente.
-

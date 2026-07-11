@@ -1,107 +1,25 @@
-<div class="dse-sector" data-demo="04-sector-consumo" data-anim-fullscreen="off" data-anim-contrast="force">
-  <div class="dse-sector__head">
-    <div class="dse-sector__title">El sector crece por escala agregada, no porque el PUE deje de importar</div>
-    <div class="dse-sector__sub">
-      PUE explica la eficiencia de una instalación. La presión sistémica aparece cuando muchos centros eficientes
-      crecen a la vez y la red tiene que absorber el volumen total.
-    </div>
+<meta charset="utf-8">
+<div class="dsc dcf-snippet" data-demo="04-sector-consumo" data-anim-fullscreen="off" data-anim-contrast="force">
+  <div class="head"><div class="eyebrow">crecimiento agregado</div><div class="title">La eficiencia local no cancela el crecimiento agregado</div><div class="sub">Aunque cada instalación mejore su PUE, el consumo total puede subir si crecen el parque de centros y la demanda de IA.</div></div>
+  <div class="viz-scroll">
+    <svg class="viz viz-sector-growth" viewBox="0 0 960 580" role="img" aria-label="La eficiencia local no cancela el crecimiento agregado" xmlns="http://www.w3.org/2000/svg"><defs><marker id="dsc-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1 L9 5 L1 9 Z" fill="var(--a)"/></marker><filter id="dsc-shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#0f172a" flood-opacity=".14"/></filter><linearGradient id="dsc-fade" x1="0" x2="1"><stop offset="0" stop-color="var(--a)" stop-opacity=".22"/><stop offset="1" stop-color="var(--b)" stop-opacity=".12"/></linearGradient></defs><rect class="canvas" x="20" y="35" width="920" height="505" rx="34"/><path class="axis" d="M115 480H850M115 480V95"/><path class="city" d="M150 480V360h55v120h38V295h68v185h42V335h58v145"/><path class="city" d="M585 480V250h60v230h45V165h78v315h45V220h54v260"/><path class="bigcurve" d="M180 420 C330 420 330 345 455 330 S650 250 760 210"/><g class="node warn" transform="translate(180 420)"><rect x="-92" y="-32" width="184" height="64" rx="16"/><text x="0" y="-5" text-anchor="middle" class="nt">2024</text><text x="0" y="17" text-anchor="middle" class="nd">base electrica</text></g><g class="node warn" transform="translate(455 330)"><rect x="-92" y="-32" width="184" height="64" rx="16"/><text x="0" y="-5" text-anchor="middle" class="nt">2026</text><text x="0" y="17" text-anchor="middle" class="nd">demanda IA</text></g><g class="node warn" transform="translate(760 210)"><rect x="-92" y="-32" width="184" height="64" rx="16"/><text x="0" y="-5" text-anchor="middle" class="nt">2030</text><text x="0" y="17" text-anchor="middle" class="nd">mas carga en red</text></g></svg>
   </div>
-
-  <div class="dse-sector__viz" aria-label="Trayectoria de consumo eléctrico de datacenters y presión sobre la red">
-    <svg class="dse-sector__chart" viewBox="0 0 860 330" role="img" aria-label="Consumo global de 415 a 945 TWh y participación de Estados Unidos de 4,4 a 12 por ciento">
-      <defs>
-        <linearGradient id="dse-line" x1="0" x2="1">
-          <stop offset="0" stop-color="#7cc7ff"/>
-          <stop offset="1" stop-color="#FFB343"/>
-        </linearGradient>
-        <linearGradient id="dse-fill" x1="0" x2="0" y1="0" y2="1">
-          <stop offset="0" stop-color="#7cc7ff" stop-opacity=".30"/>
-          <stop offset="1" stop-color="#7cc7ff" stop-opacity=".02"/>
-        </linearGradient>
-      </defs>
-      <g class="dse-sector__gridlines">
-        <path d="M90 56H800"/>
-        <path d="M90 122H800"/>
-        <path d="M90 188H800"/>
-        <path d="M90 254H800"/>
-      </g>
-      <g class="dse-sector__axis">
-        <text x="38" y="60">1.000</text>
-        <text x="48" y="126">750</text>
-        <text x="48" y="192">500</text>
-        <text x="48" y="258">250</text>
-        <text x="92" y="304">2024</text>
-        <text x="754" y="304">2030</text>
-      </g>
-      <path class="dse-sector__area" d="M120 200 C250 190 360 168 470 136 C585 102 680 78 770 60 L770 254 L120 254 Z"/>
-      <path class="dse-sector__line" d="M120 200 C250 190 360 168 470 136 C585 102 680 78 770 60"/>
-      <g class="dse-sector__point dse-sector__point--start">
-        <circle cx="120" cy="200" r="8"/>
-        <rect x="100" y="132" width="142" height="52" rx="16"/>
-        <text x="116" y="154">415 TWh</text>
-        <text x="116" y="172">base 2024</text>
-      </g>
-      <g class="dse-sector__point dse-sector__point--end">
-        <circle cx="770" cy="60" r="9"/>
-        <rect x="618" y="82" width="166" height="62" rx="16"/>
-        <text x="634" y="107">945 TWh</text>
-        <text x="634" y="126">escenario 2030</text>
-      </g>
-      <g class="dse-sector__us">
-        <rect x="496" y="184" width="304" height="66" rx="18"/>
-        <text x="528" y="212">EE. UU.</text>
-        <text x="528" y="238">4,4% → 12% de demanda</text>
-      </g>
-    </svg>
-
-    <div class="dse-sector__flow">
-      <div><strong>Mejor PUE</strong><span>menos overhead por centro</span></div>
-      <div><strong>Más centros</strong><span>más TWh agregados</span></div>
-      <div><strong>Red local</strong><span>permisos, agua, cola y conexión</span></div>
-    </div>
-  </div>
+  <div class="read"><span>PUE bajo no garantiza menor consumo total</span><span>Más instalaciones elevan la demanda agregada</span><span>La red recibe la suma, no el promedio</span></div>
 </div>
 
 <style>
-  .dse-sector, .dse-sector * { box-sizing:border-box; }
-  .dse-sector {
-    --sky:#7cc7ff; --amber:#FFB343; --teal:#26A69A; --bg:var(--md-default-bg-color,#fff);
-    --line:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 15%, transparent);
-    --text:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 94%, transparent);
-    --muted:color-mix(in srgb, var(--md-default-fg-color,#0f172a) 63%, transparent);
-    display:grid; gap:16px; max-width:980px; margin:0 auto; padding:clamp(16px,2vw,24px);
-    border-radius:24px; border:1px solid var(--line);
-    background:
-      radial-gradient(100% 130% at 0% 0%, color-mix(in srgb, var(--sky) 10%, transparent), transparent 50%),
-      radial-gradient(90% 110% at 100% 100%, color-mix(in srgb, var(--amber) 8%, transparent), transparent 50%),
-      var(--bg);
-    color:var(--text); font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
-  }
-  [data-md-color-scheme="slate"] .dse-sector { --line:rgba(226,232,240,.16); --text:rgba(236,244,255,.95); --muted:rgba(236,244,255,.68); }
-  .dse-sector__head { display:grid; gap:6px; max-width:76ch; }
-  .dse-sector__title { font-size:clamp(22px,3vw,30px); font-weight:900; line-height:1.05; letter-spacing:0; }
-  .dse-sector__sub { font-size:14px; line-height:1.55; color:var(--muted); }
-  .dse-sector__viz { display:grid; gap:12px; padding:14px; border:1px solid var(--line); border-radius:20px; background: color-mix(in srgb, var(--bg) 92%, #09121f 8%); }
-  .dse-sector__chart { width:100%; height:auto; min-height:250px; }
-  .dse-sector__gridlines path { stroke:var(--line); stroke-width:1; stroke-dasharray:5 8; }
-  .dse-sector__axis text { fill:var(--muted); font-size:18px; font-weight:800; }
-  .dse-sector__area { fill:url(#dse-fill); }
-  .dse-sector__line { fill:none; stroke:url(#dse-line); stroke-width:8; stroke-linecap:round; }
-  .dse-sector__point circle { fill:var(--bg); stroke:#7cc7ff; stroke-width:5; }
-  .dse-sector__point--end circle { stroke:#FFB343; }
-  .dse-sector__point rect, .dse-sector__us rect { fill:color-mix(in srgb, var(--bg) 86%, #09121f 14%); stroke:var(--line); }
-  .dse-sector__point text, .dse-sector__us text { fill:var(--text); font-weight:900; font-size:20px; }
-  .dse-sector__point text + text, .dse-sector__us text + text { fill:var(--muted); font-size:15px; font-weight:700; }
-  .dse-sector__flow { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; }
-  .dse-sector__flow div { position:relative; min-height:78px; padding:14px 14px 14px 42px; border:1px solid var(--line); border-radius:18px; background:rgba(255,255,255,.04); }
-  .dse-sector__flow div::before { content:""; position:absolute; left:16px; top:18px; width:13px; height:13px; border-radius:50%; background:linear-gradient(135deg,var(--sky),var(--teal)); box-shadow:0 0 0 7px color-mix(in srgb, var(--sky) 14%, transparent); }
-  .dse-sector__flow strong { display:block; font-size:15px; }
-  .dse-sector__flow span { display:block; margin-top:4px; font-size:12.8px; line-height:1.35; color:var(--muted); }
-  @media (max-width: 860px) {
-    .dse-sector { overflow-x:auto; overscroll-behavior-x:contain; }
-    .dse-sector__head,
-    .dse-sector__chart,
-    .dse-sector__flow { min-width:760px; }
-    .dse-sector__flow { grid-template-columns:repeat(3, minmax(0,1fr)); }
-  }
+.dsc, .dsc * { box-sizing:border-box; }
+.dsc { --a:#ff8d7a; --b:#FFB343; --c:#324AB2; --bad:#ff8d7a; --warn:#FFB343; --ok:#26A69A; --bg:var(--md-default-bg-color,#fff); --fg:color-mix(in srgb,var(--md-default-fg-color,#0f172a) 94%,transparent); --muted:color-mix(in srgb,var(--md-default-fg-color,#0f172a) 62%,transparent); --line:color-mix(in srgb,var(--md-default-fg-color,#0f172a) 15%,transparent); display:grid; gap:14px; width:100%; padding:clamp(16px,2vw,26px); border:1px solid var(--line); border-radius:18px; background:radial-gradient(90% 120% at 0 0,color-mix(in srgb,var(--a) 8%,transparent),transparent 55%),radial-gradient(100% 120% at 100% 100%,color-mix(in srgb,var(--b) 8%,transparent),transparent 55%),var(--bg); color:var(--fg); font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif; }
+[data-md-color-scheme="slate"] .dsc { --line:rgba(226,232,240,.16); --fg:rgba(236,244,255,.95); --muted:rgba(236,244,255,.66); }
+.dsc .head { display:grid; gap:6px; max-width:78ch; } .dsc .eyebrow { width:fit-content; padding:5px 10px; border-radius:999px; border:1px solid color-mix(in srgb,var(--a) 35%,var(--line)); color:var(--a); background:color-mix(in srgb,var(--a) 8%,transparent); font-size:10px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; } .dsc .title { font-size:clamp(21px,3vw,31px); line-height:1.05; font-weight:900; } .dsc .sub { color:var(--muted); font-size:14px; line-height:1.48; }
+.dsc .viz-scroll { max-width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; padding-bottom:4px; } .dsc .viz { width:100%; height:auto; display:block; aspect-ratio:960/580; } .dsc .canvas { fill:url(#dsc-fade); stroke:var(--line); stroke-width:1; }
+.dsc .node rect,.dsc .pill,.dsc .step rect,.dsc .evidence path { fill:color-mix(in srgb,var(--bg) 88%,#0f172a 12%); stroke:var(--line); filter:url(#dsc-shadow); } .dsc .node.bad rect,.dsc .left,.dsc .hot { fill:color-mix(in srgb,var(--bad) 11%,var(--bg)); stroke:color-mix(in srgb,var(--bad) 40%,var(--line)); } .dsc .node.warn rect,.dsc .radiator rect,.dsc .drop,.dsc .over { fill:color-mix(in srgb,var(--warn) 13%,var(--bg)); stroke:color-mix(in srgb,var(--warn) 42%,var(--line)); } .dsc .node.ok rect,.dsc .right,.dsc .bolt,.dsc .useful { fill:color-mix(in srgb,var(--ok) 12%,var(--bg)); stroke:color-mix(in srgb,var(--ok) 36%,var(--line)); }
+.dsc .flow,.dsc .axis,.dsc .cool,.dsc .heat,.dsc .tether,.dsc .bigcurve { fill:none; stroke:var(--a); stroke-width:4; stroke-linecap:round; stroke-linejoin:round; } .dsc .flow { stroke-dasharray:9 9; animation:dsc-dash 3.4s linear infinite; } .dsc .flow.alt,.dsc .heat { stroke:var(--b); } .dsc .axis { stroke:var(--line); stroke-dasharray:none; } .dsc .bigcurve { stroke-width:7; }
+.dsc .nt,.dsc .pt,.dsc .lane,.dsc .result { fill:var(--fg); font-size:18px; font-weight:900; } .dsc .nd,.dsc .axistext,.dsc .limit { fill:var(--muted); font-size:13px; font-weight:750; } .dsc .limit { fill:color-mix(in srgb,var(--bad) 75%,var(--fg)); }
+.dsc .planet,.dsc .earth,.dsc .cloud,.dsc .archive { fill:color-mix(in srgb,var(--b) 18%,var(--bg)); stroke:color-mix(in srgb,var(--b) 45%,var(--line)); } .dsc .orbit,.dsc .orb,.dsc .mission,.dsc .cycle,.dsc .scaleA,.dsc .scaleB { fill:none; stroke:color-mix(in srgb,var(--a) 45%,var(--line)); stroke-width:3; stroke-dasharray:12 10; } .dsc .sun { fill:color-mix(in srgb,#FFB343 45%,var(--bg)); stroke:#FFB343; } .dsc .sat { fill:var(--a); } .dsc .ray { stroke:#FFB343; stroke-width:3; opacity:.45; } .dsc .terminator,.dsc .wire,.dsc .steam,.dsc .particle { fill:none; stroke:var(--line); stroke-width:3; stroke-linecap:round; } .dsc .night { fill:color-mix(in srgb,#0f172a 18%,transparent); } .dsc .wing,.dsc .plug,.dsc .contact,.dsc .satcase circle { fill:color-mix(in srgb,var(--a) 22%,var(--bg)); stroke:var(--a); }
+.dsc .funnel { fill:color-mix(in srgb,var(--bad) 12%,var(--bg)); stroke:color-mix(in srgb,var(--bad) 38%,var(--line)); } .dsc .funnel.thin { fill:color-mix(in srgb,var(--ok) 12%,var(--bg)); stroke:color-mix(in srgb,var(--ok) 38%,var(--line)); } .dsc .processor,.dsc .chip,.dsc .gpu { fill:color-mix(in srgb,var(--a) 20%,var(--bg)); stroke:color-mix(in srgb,var(--a) 45%,var(--line)); } .dsc .rad { fill:color-mix(in srgb,var(--b) 20%,var(--bg)); stroke:var(--b); }
+.dsc .waterline { stroke:var(--b); stroke-width:4; } .dsc .ice.top { fill:color-mix(in srgb,var(--b) 18%,var(--bg)); stroke:var(--b); stroke-width:3; } .dsc .ice.bottom { fill:color-mix(in srgb,var(--a) 18%,var(--bg)); stroke:var(--a); stroke-width:3; } .dsc .building,.dsc .rackframe { fill:color-mix(in srgb,var(--bg) 88%,#0f172a 12%); stroke:var(--line); stroke-width:2; } .dsc .rack { fill:color-mix(in srgb,var(--warn) 12%,var(--bg)); stroke:var(--warn); }
+.dsc .hourglass,.dsc .field,.dsc .vacuum,.dsc .clock { fill:color-mix(in srgb,var(--c) 10%,transparent); stroke:color-mix(in srgb,var(--c) 42%,var(--line)); stroke-width:3; } .dsc .dropicon,.dsc .tower,.dsc .plant,.dsc .turbine { fill:color-mix(in srgb,var(--b) 14%,var(--bg)); stroke:var(--b); stroke-width:3; } .dsc .rocket,.dsc .sail,.dsc .plume { fill:color-mix(in srgb,var(--warn) 18%,var(--bg)); stroke:var(--warn); stroke-width:3; } .dsc .flame { fill:color-mix(in srgb,var(--bad) 32%,transparent); stroke:var(--bad); stroke-width:3; } .dsc .air { fill:color-mix(in srgb,var(--c) 42%,var(--bg)); } .dsc .city { fill:color-mix(in srgb,var(--fg) 8%,transparent); stroke:var(--line); stroke-width:3; }
+.dsc .read { display:flex; flex-wrap:wrap; gap:8px; align-items:center; } .dsc .read span { padding:8px 11px; border-radius:999px; background:color-mix(in srgb,var(--bg) 90%,#0f172a 10%); border:1px solid var(--line); color:var(--muted); font-size:12.5px; line-height:1.25; }
+@keyframes dsc-dash { to { stroke-dashoffset:-36; } } @media(max-width:760px){ .dsc { padding:14px; } .dsc .viz{ width:760px; max-width:none; } .dsc .nt,.dsc .pt{ font-size:16px; } .dsc .nd{ font-size:12px; } } @media(prefers-reduced-motion:reduce){ .dsc .flow{ animation:none!important; } }
 </style>
