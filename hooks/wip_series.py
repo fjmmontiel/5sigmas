@@ -11,7 +11,6 @@ import re
 # Series cuyos artículos no deben indexarse todavía.
 # Actualizar aquí cuando una serie pase a completa.
 WIP_SERIES = {
-    "datacenters-espacio",
 }
 
 
@@ -31,6 +30,9 @@ def on_page_context(context, page, config, nav, **kwargs):
 
 def on_post_build(config, **kwargs):
     """Elimina URLs WIP del sitemap.xml generado por MkDocs."""
+    if not WIP_SERIES:
+        return
+
     sitemap_path = os.path.join(config["site_dir"], "sitemap.xml")
     if not os.path.exists(sitemap_path):
         return

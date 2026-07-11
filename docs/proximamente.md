@@ -214,22 +214,7 @@ hide:
 
 # Próximamente
 
-<div style="font-size:.95rem;opacity:.6;line-height:1.6;max-width:56ch;margin:.25rem 0 2rem">Series en construcción o en investigación. El orden no implica prioridad de publicación.</div>
-
-<div style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.35;margin-bottom:.9rem">En construcción — artículos en elaboración</div>
-
-<div class="prox-grid">
-
-<a href="/series/datacenters-espacio/00_presentacion_serie/" class="prox-card prox-card-green">
-  <div class="prox-badge" style="color:#98c379">
-    <span class="prox-dot" style="background:#98c379"></span>En construcción · General
-  </div>
-  <div class="prox-title">Datacenters en el espacio</div>
-  <div class="prox-desc">Física, costes y viabilidad de llevar cómputo fuera de la Tierra. Qué resuelve el vacío, qué no resuelve y qué proyectos reales ya están en marcha.</div>
-  <div class="prox-cta" style="color:#98c379">Ver presentación →</div>
-</a>
-
-</div>
+<div style="font-size:.95rem;opacity:.6;line-height:1.6;max-width:56ch;margin:.25rem 0 2rem">Series en investigación. El orden no implica prioridad de publicación.</div>
 
 <div class="research-section">
   <div class="research-label">En investigación — sin fecha de publicación</div>
