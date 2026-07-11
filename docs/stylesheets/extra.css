@@ -760,6 +760,63 @@
     border-color: color-mix(in srgb, var(--anim-content-fg) 18%, transparent) !important;
 }
 
+/* Datacenters en el espacio snippets */
+.anim-brand-shell__viewport .dcf-snippet {
+    border-radius: 16px !important;
+}
+
+.anim-brand-shell__viewport .dcf-snippet .viz-scroll {
+    overflow-x: visible !important;
+}
+
+.anim-brand-shell__viewport .dcf-snippet .viz {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+}
+
+.anim-brand-shell__viewport .dcf-snippet .read span {
+    border-radius: 10px !important;
+}
+
+@media (max-width: 760px) {
+    .anim-brand-shell {
+        margin-left: -0.55rem;
+        margin-right: -0.55rem;
+        padding-left: 6px;
+        padding-right: 6px;
+    }
+
+    .anim-brand-shell__viewport .dcf-snippet {
+        padding: 12px !important;
+        gap: 10px !important;
+    }
+
+    .anim-brand-shell__viewport .dcf-snippet .head {
+        gap: 5px !important;
+    }
+
+    .anim-brand-shell__viewport .dcf-snippet .title {
+        font-size: 19px !important;
+        line-height: 1.08 !important;
+    }
+
+    .anim-brand-shell__viewport .dcf-snippet .sub {
+        font-size: 12.5px !important;
+        line-height: 1.35 !important;
+    }
+
+    .anim-brand-shell__viewport .dcf-snippet .read {
+        display: grid !important;
+        gap: 6px !important;
+    }
+
+    .anim-brand-shell__viewport .dcf-snippet .read span {
+        padding: 7px 9px !important;
+        font-size: 11.5px !important;
+    }
+}
+
 [data-md-color-scheme="slate"] .anim-brand-shell::after {
     background-image: url("/assets/logo_white.svg");
     opacity: var(--anim-logo-opacity);
