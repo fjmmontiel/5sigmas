@@ -189,6 +189,12 @@ def _write_watch_page(site_dir: Path, entry: dict) -> None:
     a {{ color: #78dce8; }}
     h1 {{ font-size: clamp(2rem, 4vw, 3.5rem); line-height: 1.05; margin: 0 0 14px; }}
     p {{ color: #bed0d3; font-size: 1.05rem; line-height: 1.7; max-width: 78ch; }}
+    .advisor {{
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(120,220,232,.22);
+    }}
+    .advisor a {{ font-weight: 700; }}
     video {{
       display: block;
       width: 100%;
@@ -209,6 +215,7 @@ def _write_watch_page(site_dir: Path, entry: dict) -> None:
       <source src="{entry["video_url"]}" type="video/mp4">
       Tu navegador no soporta el elemento de vídeo.
     </video>
+    <p class="advisor">Si este criterio te ayuda a ordenar una decisión de IA, puedes <a href="{SITE_URL}/meta/advisor-ia/">aplicarlo a tu caso</a>.</p>
   </main>
 </body>
 </html>
@@ -263,6 +270,13 @@ def _write_video_index(site_dir: Path, entries: list[dict]) -> None:
     h2 {{ font-size: 1.1rem; line-height: 1.25; margin: 0 0 8px; }}
     p {{ color: #bed0d3; line-height: 1.65; }}
     .intro {{ max-width: 74ch; font-size: 1.05rem; margin-bottom: 30px; }}
+    .advisor {{
+      max-width: 74ch;
+      margin: 0 0 30px;
+      padding: 16px 0 0;
+      border-top: 1px solid rgba(120,220,232,.22);
+    }}
+    .advisor a {{ font-weight: 700; }}
     .grid {{ display: grid; gap: 18px; }}
     .card {{
       display: grid;
@@ -293,6 +307,7 @@ def _write_video_index(site_dir: Path, entries: list[dict]) -> None:
     <p class="meta"><a href="{SITE_URL}/">Volver a 5sigmas</a></p>
     <h1>Vídeos de IA</h1>
     <p class="intro">Páginas dedicadas a los vídeos educativos de 5sigmas. Cada vídeo acompaña a un artículo o capítulo y resume una idea técnica sin separar el aprendizaje del contexto.</p>
+    <p class="advisor">Si quieres llevar este criterio a una decisión de producto, arquitectura o inversión, puedes <a href="{SITE_URL}/meta/advisor-ia/">aplicarlo a tu caso</a>.</p>
     <section class="grid">
 {chr(10).join(cards)}
     </section>
