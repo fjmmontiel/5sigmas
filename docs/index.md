@@ -1,6 +1,6 @@
 ---
 title: 5sigmas
-description: Advisor y consultor técnico de IA. Análisis riguroso para decidir qué sistemas de IA tienen sentido, cómo llevarlos a producción y qué riesgos mirar.
+description: IA explicada con criterio técnico. Aprende inteligencia artificial sin hype, separa señal de ruido y aplica ese criterio a decisiones reales.
 hide:
   - navigation
   - footer
