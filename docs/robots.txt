@@ -3,3 +3,4 @@ Allow: /
 
 # Sitemaps
 Sitemap: https://5sigmas.com/sitemap.xml
+Sitemap: https://5sigmas.com/video-sitemap.xml

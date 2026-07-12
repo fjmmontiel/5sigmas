@@ -1,7 +1,7 @@
 """
 hooks/video_embed.py — MkDocs hook
 
-Injects a <video> embed and VideoObject JSON-LD on pages that declare:
+Injects a <video> embed on pages that declare:
 
     video: "01-representar.mp4"
 
@@ -9,8 +9,7 @@ in their frontmatter. Both the .mp4 and the poster (.jpg, same base name)
 must live alongside the .md file — they'll be copied to the site by MkDocs.
 
 Optional frontmatter fields:
-    video_duration: "PT4M20S"   ISO 8601, used in VideoObject (omitted if missing)
-    video_sitemap: true          opt in only for dedicated video/watch pages
+    video_duration: "PT4M20S"   ISO 8601
 
 The video title and description are taken from the page's own title/description.
 """
@@ -21,18 +20,6 @@ import re
 
 import yaml
 
-# ── URL helpers ───────────────────────────────────────────────────────────────
-
-def _parent_url(canonical: str) -> str:
-    """Return the parent directory URL of the canonical page URL.
-
-    MkDocs pages render as /slug/index.html (use_directory_urls=True), so:
-      https://5sigmas.com/series/from-cave-to-agi/01-representar/
-      → https://5sigmas.com/series/from-cave-to-agi/
-    """
-    url = canonical.rstrip("/")
-    return url.rsplit("/", 1)[0] + "/"
-
 
 def _esc(s: str) -> str:
     return str(s).replace('"', '\\"').replace("\n", " ").strip()
@@ -41,10 +28,6 @@ def _esc(s: str) -> str:
 def _dom_id(prefix: str, value: str) -> str:
     token = re.sub(r"[^a-z0-9]+", "-", str(value).lower()).strip("-")
     return f"{prefix}-{token or 'page'}"
-
-
-def _is_enabled(value) -> bool:
-    return value is True or str(value).strip().lower() == "true"
 
 
 ARTICLE_AUDIO_INDEX = Path(__file__).resolve().parents[1] / "docs" / "series" / "article_audio.yml"
@@ -97,6 +80,11 @@ def _render_article_audio(page, video_dom_id: str) -> str:
     )
 
 
+def _watch_url(site_url: str, src_path: str, video_file: str) -> str:
+    rel = Path(src_path).parent / Path(video_file).stem
+    return f"{site_url}/videos/{rel.as_posix().strip('/')}/"
+
+
 # ── Hook ──────────────────────────────────────────────────────────────────────
 
 def on_post_page(output: str, page, config, **kwargs) -> str:
@@ -104,7 +92,6 @@ def on_post_page(output: str, page, config, **kwargs) -> str:
     video_file = meta.get("video")
     if not video_file:
         return output
-    is_noindex = "noindex" in str(meta.get("robots", "")).lower()
 
     # Derive poster filename from mp4 basename
     base        = video_file.rsplit(".", 1)[0]   # "01-representar"
@@ -114,54 +101,10 @@ def on_post_page(output: str, page, config, **kwargs) -> str:
     rel_video  = f"../{video_file}"
     rel_poster = f"../{poster_file}"
 
-    # Absolute paths for VideoObject (Google requires absolute contentUrl)
-    canonical  = page.canonical_url or ""
-    parent     = _parent_url(canonical) if canonical else ""
-    abs_video  = parent + video_file  if parent else ""
-    abs_poster = parent + poster_file if parent else ""
-
     # Metadata from page frontmatter / config
     title       = _esc(meta.get("video_title") or page.title or "")
-    description = _esc(meta.get("description") or "")
-    date        = str(meta.get("date") or "")
-    # Normalize to ISO 8601 with timezone (Google requires it)
-    import re as _re
-    if date and _re.fullmatch(r"\d{4}-\d{2}-\d{2}", date):
-        date = date + "T00:00:00+00:00"
-    duration    = str(meta.get("video_duration") or "")
     site_url    = (config.site_url or "").rstrip("/")
-
-    # ── VideoObject JSON-LD ───────────────────────────────────────────────────
-    opt_fields = ""
-    if date:
-        opt_fields += f'\n    "uploadDate": "{date}",'
-    if duration:
-        opt_fields += f'\n    "duration": "{duration}",'
-
-    jsonld = (
-        '<script type="application/ld+json">\n'
-        "{\n"
-        '  "@context": "https://schema.org",\n'
-        '  "@type": "VideoObject",\n'
-        f'  "name": "{title}",\n'
-        f'  "description": "{description}",\n'
-        f'  "thumbnailUrl": "{abs_poster}",\n'
-        f'  "contentUrl": "{abs_video}",'
-        f"{opt_fields}\n"
-        '  "inLanguage": "es",\n'
-        '  "author": {\n'
-        '    "@type": "Person",\n'
-        '    "name": "Francisco Maldonado",\n'
-        f'    "url": "{site_url}/meta/about/"\n'
-        "  },\n"
-        '  "publisher": {\n'
-        '    "@type": "Organization",\n'
-        '    "name": "5sigmas",\n'
-        f'    "url": "{site_url}/"\n'
-        "  }\n"
-        "}\n"
-        "</script>"
-    )
+    watch_url   = _watch_url(site_url, page.file.src_path, video_file) if site_url else ""
 
     # ── <video> embed ─────────────────────────────────────────────────────────
     video_dom_id = _dom_id("s5-video", page.file.src_path)
@@ -179,16 +122,12 @@ def on_post_page(output: str, page, config, **kwargs) -> str:
         "  >\n"
         f'    <source src="{rel_video}" type="video/mp4">\n'
         "  </video>\n"
+        f'  <p class="s5-video-embed__watch"><a href="{watch_url}">Ver página del vídeo</a></p>\n'
         "</div>"
     )
     audio_html = _render_article_audio(page, video_dom_id)
 
     # Inject video after the first </h1> in the page
     output = re.sub(r"(</h1>)", r"\1\n" + video_html + ("\n" + audio_html if audio_html else ""), output, count=1)
-
-    # Article pages can show video as supporting content without being watch pages.
-    # Emit VideoObject only for explicit video-indexing/watch-page opt-ins.
-    if not is_noindex and _is_enabled(meta.get("video_sitemap")):
-        output = output.replace("</head>", jsonld + "\n</head>", 1)
 
     return output
