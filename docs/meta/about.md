@@ -42,7 +42,7 @@ Ningún artículo usa referencias de segunda mano como fuente principal de un he
 ## Colaboraciones y contacto
 Si quieres valorar una colaboración de advisory, si has encontrado un error factual o una referencia incorrecta, o simplemente quieres hablar sobre estas tecnologías, contáctame directamente.
 
-[Ver enfoque de advisory](/meta/advisor-ia/){ .md-button .md-button--primary }
+[Evaluar mi caso de IA](/meta/advisor-ia/){ .md-button .md-button--primary }
 
 <div class="contact-grid" markdown="1">
 

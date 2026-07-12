@@ -12,7 +12,7 @@ hide:
 
 Soy Francisco Maldonado, doble graduado en Física y Matemáticas. Trabajo diseñando y construyendo sistemas de IA que operan en tiempo real, desde asistentes de voz hasta visión artificial. Si estás valorando dónde aplicar IA, cómo pasar de prototipo a producción o qué riesgos técnicos conviene mirar antes de invertir, puedo ayudarte como advisor o consultor técnico.
 
-[Hablar sobre advisory](/meta/advisor-ia/){ .md-button .md-button--primary }
+[Evaluar mi caso de IA](/meta/advisor-ia/){ .md-button .md-button--primary }
 [Ver el criterio en las series](/series/){ .md-button }
 
 ---
@@ -79,5 +79,5 @@ Este proyecto aplica ese mismo criterio a la divulgación sobre IA: separar el c
 
 [Ver todas las series](/series/){ .md-button }
 [Próximamente](/proximamente/){ .md-button }
-[Advisor IA](/meta/advisor-ia/){ .md-button .md-button--primary }
+[Evaluar mi caso de IA](/meta/advisor-ia/){ .md-button .md-button--primary }
 [Sobre el proyecto](/meta/about/){ .md-button }
