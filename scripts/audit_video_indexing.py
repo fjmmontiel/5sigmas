@@ -107,6 +107,16 @@ def main() -> int:
     video_sitemap = ET.parse(SITE / "video-sitemap.xml")
     sitemap_locs = {el.text for el in sitemap.findall(".//sm:loc", NS)}
     video_locs = set()
+    video_index_loc = "https://5sigmas.com/videos/"
+    video_index_path = SITE / "videos" / "index.html"
+    video_index_html = ""
+
+    if video_index_loc not in sitemap_locs:
+        fail("video index missing from sitemap.xml", failures)
+    if not video_index_path.exists():
+        fail(f"missing built video index {video_index_path}", failures)
+    else:
+        video_index_html = video_index_path.read_text(encoding="utf-8", errors="ignore")
 
     for url in video_sitemap.findall(".//sm:url", NS):
         loc = url.find("sm:loc", NS).text
@@ -157,6 +167,8 @@ def main() -> int:
         if not watch_html_path.exists():
             fail(f"{md}: missing built watch page {watch_html_path}", failures)
             continue
+        if video_index_html and watch_loc not in video_index_html:
+            fail(f"{md}: watch page missing from video index", failures)
         watch_html = watch_html_path.read_text(encoding="utf-8", errors="ignore")
         if watch_html.count('"@type": "VideoObject"') != 1:
             fail(f"{md}: expected exactly one VideoObject on watch page", failures)

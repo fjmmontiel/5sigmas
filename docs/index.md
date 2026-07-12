@@ -78,6 +78,7 @@ Este proyecto aplica ese mismo criterio a la divulgación sobre IA: separar el c
 ---
 
 [Ver todas las series](/series/){ .md-button }
+[Ver vídeos](/videos/){ .md-button }
 [Próximamente](/proximamente/){ .md-button }
 [Aplicar este criterio a mi caso](/meta/advisor-ia/){ .md-button }
 [Sobre el proyecto](/meta/about/){ .md-button }
