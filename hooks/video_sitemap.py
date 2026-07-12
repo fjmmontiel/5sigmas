@@ -69,7 +69,8 @@ def on_post_build(config, **kwargs):
     site_dir = Path(config["site_dir"])
     for entry in _video_pages:
         _write_watch_page(site_dir, entry)
-    _append_watch_pages_to_sitemap(site_dir, _video_pages)
+    _write_video_index(site_dir, _video_pages)
+    _append_video_pages_to_sitemap(site_dir, _video_pages)
 
     lines = [
         '<?xml version="1.0" encoding="UTF-8"?>',
@@ -215,13 +216,103 @@ def _write_watch_page(site_dir: Path, entry: dict) -> None:
     (out_dir / "index.html").write_text(html, encoding="utf-8")
 
 
-def _append_watch_pages_to_sitemap(site_dir: Path, entries: list[dict]) -> None:
+def _write_video_index(site_dir: Path, entries: list[dict]) -> None:
+    out_dir = site_dir / "videos"
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    cards = []
+    for entry in entries:
+        title = html_escape(entry["title"])
+        description = html_escape(entry["description"])
+        cards.append(
+            f"""      <article class="card">
+        <a class="thumb" href="{entry["watch_url"]}">
+          <img src="{entry["thumb_url"]}" alt="" loading="lazy">
+        </a>
+        <div>
+          <h2><a href="{entry["watch_url"]}">{title}</a></h2>
+          <p>{description}</p>
+          <p class="meta"><a href="{entry["page_url"]}">Leer el artículo</a></p>
+        </div>
+      </article>"""
+        )
+
+    html = f"""<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Vídeos de IA - 5sigmas</title>
+  <meta name="description" content="Vídeos educativos de 5sigmas sobre IA, IA generativa, razonamiento, multimodalidad, energía y sistemas técnicos.">
+  <link rel="canonical" href="{SITE_URL}/videos/">
+  <meta name="robots" content="max-image-preview:large">
+  <style>
+    body {{
+      margin: 0;
+      background: #071114;
+      color: #eef7f8;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }}
+    main {{
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 40px 0 64px;
+    }}
+    a {{ color: #78dce8; }}
+    h1 {{ font-size: clamp(2rem, 4vw, 3.4rem); line-height: 1.05; margin: 0 0 14px; }}
+    h2 {{ font-size: 1.1rem; line-height: 1.25; margin: 0 0 8px; }}
+    p {{ color: #bed0d3; line-height: 1.65; }}
+    .intro {{ max-width: 74ch; font-size: 1.05rem; margin-bottom: 30px; }}
+    .grid {{ display: grid; gap: 18px; }}
+    .card {{
+      display: grid;
+      grid-template-columns: minmax(180px, 280px) 1fr;
+      gap: 18px;
+      align-items: start;
+      padding: 16px;
+      border: 1px solid rgba(120,220,232,.22);
+      border-radius: 10px;
+      background: rgba(255,255,255,.035);
+    }}
+    .thumb img {{
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      border-radius: 8px;
+      background: #020607;
+    }}
+    .meta {{ margin: 10px 0 0; font-size: .95rem; }}
+    @media (max-width: 720px) {{
+      .card {{ grid-template-columns: 1fr; }}
+    }}
+  </style>
+</head>
+<body>
+  <main>
+    <p class="meta"><a href="{SITE_URL}/">Volver a 5sigmas</a></p>
+    <h1>Vídeos de IA</h1>
+    <p class="intro">Páginas dedicadas a los vídeos educativos de 5sigmas. Cada vídeo acompaña a un artículo o capítulo y resume una idea técnica sin separar el aprendizaje del contexto.</p>
+    <section class="grid">
+{chr(10).join(cards)}
+    </section>
+  </main>
+</body>
+</html>
+"""
+    (out_dir / "index.html").write_text(html, encoding="utf-8")
+
+
+def _append_video_pages_to_sitemap(site_dir: Path, entries: list[dict]) -> None:
     sitemap = site_dir / "sitemap.xml"
     if not sitemap.exists() or not entries:
         return
 
     content = sitemap.read_text(encoding="utf-8")
     blocks = []
+    index_url = f"{SITE_URL}/videos/"
+    if f"<loc>{index_url}</loc>" not in content:
+        blocks.append(f"  <url>\n    <loc>{index_url}</loc>\n  </url>")
     for entry in entries:
         if f"<loc>{entry['watch_url']}</loc>" in content:
             continue
