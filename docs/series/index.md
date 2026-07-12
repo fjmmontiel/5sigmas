@@ -85,4 +85,5 @@ Si es tu primer contacto con la IA, la serie [Fundamentos de IA e IA generativa]
 
 </div>
 
+[Advisor IA](/meta/advisor-ia/){ .md-button .md-button--primary }
 [Próximamente](/proximamente/){ .md-button }

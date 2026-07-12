@@ -37,6 +37,18 @@ Primero acoto el problema: qué proceso se quiere mejorar, qué datos existen, q
 
 El resultado debe ser accionable: una recomendación técnica, un mapa de riesgos, una arquitectura posible, una lista de pruebas que conviene ejecutar o una decisión de no avanzar todavía. A veces el mejor advisory no consiste en añadir IA, sino en evitar una implementación que va a ser frágil, cara o difícil de mantener.
 
+## Formas de colaboración
+
+La colaboración puede tomar varias formas según el punto en el que esté el equipo:
+
+- una sesión de diagnóstico para ordenar una decisión antes de avanzar;
+- una revisión técnica de un prototipo, arquitectura o roadmap;
+- un mapa de riesgos y pruebas mínimas antes de producción;
+- acompañamiento puntual para traducir la decisión técnica a dirección o producto;
+- soporte de criterio durante la selección de proveedores, modelos o integraciones.
+
+No hace falta llegar con una solución cerrada. De hecho, suele ser más útil llegar con el problema, las restricciones y las dudas abiertas.
+
 ## Qué aporta 5sigmas
 
 5sigmas muestra públicamente el tipo de criterio que aplico: explicar sistemas complejos sin hype, apoyarme en fuentes primarias y conectar la tecnología con sus límites reales.
@@ -51,3 +63,21 @@ El resultado debe ser accionable: una recomendación técnica, un mapa de riesgo
 Si quieres valorar una colaboración, escríbeme con el contexto mínimo: qué decisión tienes delante, qué se ha probado ya y qué restricción te preocupa más.
 
 [contacto@5sigmas.com](mailto:contacto@5sigmas.com)
+
+## Preguntas frecuentes
+
+### ¿Qué diferencia hay entre advisory y desarrollo?
+
+El advisory ayuda a decidir qué conviene hacer, qué riesgos existen y cómo debería plantearse una implementación. Puede terminar en una arquitectura, una recomendación o una lista de pruebas. El desarrollo entra cuando ya hay una decisión suficientemente clara y toca construir.
+
+### ¿Tiene sentido si mi equipo aún no tiene un caso de uso definido?
+
+Sí, si hay una decisión real que tomar. En esa fase el trabajo suele consistir en separar problemas donde la IA puede aportar valor de automatizaciones más simples, restricciones de datos o ideas que todavía no justifican inversión.
+
+### ¿Trabajas solo con IA generativa?
+
+No. La IA generativa es una parte del mapa. También entran visión artificial, voz, clasificación, recuperación de información, agentes, evaluación, integración con sistemas existentes y criterios de producción.
+
+### ¿Qué debería enviar antes de escribir?
+
+Una descripción breve del problema, qué se ha probado, qué datos o sistemas existen y qué te preocupa más: coste, latencia, calidad, seguridad, dependencia de proveedor, adopción o viabilidad técnica.
