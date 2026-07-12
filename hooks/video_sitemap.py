@@ -1,7 +1,7 @@
 """
 Hook: video_sitemap.py
 Genera video-sitemap.xml con el esquema Google Video Sitemap 1.1.
-Lee el front matter de cada .md que declare `video: <archivo.mp4>`.
+Lee el front matter de cada .md que declare `video_sitemap: true`.
 Requiere que exista un thumbnail .jpg con el mismo slug junto al MP4.
 """
 
@@ -18,6 +18,10 @@ SITE_URL = "https://5sigmas.com"
 _video_pages: list[dict] = []
 
 
+def _is_enabled(value) -> bool:
+    return value is True or str(value).strip().lower() == "true"
+
+
 def on_config(config, **kwargs):
     _video_pages.clear()
     return config
@@ -25,6 +29,8 @@ def on_config(config, **kwargs):
 
 def on_page_context(context, page, config, nav, **kwargs):
     meta = page.meta or {}
+    if not _is_enabled(meta.get("video_sitemap")):
+        return context
     video_file = meta.get("video")
     if not video_file:
         return context
@@ -64,9 +70,6 @@ def on_page_context(context, page, config, nav, **kwargs):
 
 
 def on_post_build(config, **kwargs):
-    if not _video_pages:
-        return
-
     lines = [
         '<?xml version="1.0" encoding="UTF-8"?>',
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"',

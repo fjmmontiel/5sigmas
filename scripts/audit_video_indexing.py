@@ -66,6 +66,10 @@ def is_excluded(path: Path, patterns: list[str]) -> bool:
     return any(fnmatch.fnmatch(rel, pattern) for pattern in patterns)
 
 
+def expects_video_indexing(meta: dict[str, str]) -> bool:
+    return meta.get("video_sitemap", "").lower() == "true"
+
+
 def fail(message: str, failures: list[str]) -> None:
     failures.append(message)
 
@@ -73,6 +77,7 @@ def fail(message: str, failures: list[str]) -> None:
 def main() -> int:
     failures: list[str] = []
     video_pages: list[tuple[Path, dict[str, str]]] = []
+    indexable_video_pages: list[tuple[Path, dict[str, str]]] = []
     excluded = exclude_patterns()
 
     for md in sorted((DOCS / "series").glob("*/*.md")):
@@ -82,13 +87,15 @@ def main() -> int:
         if not meta or "video" not in meta:
             continue
         video_pages.append((md, meta))
+        if expects_video_indexing(meta):
+            indexable_video_pages.append((md, meta))
         video = md.parent / meta["video"]
         poster = video.with_suffix(".jpg")
         if not video.exists():
             fail(f"{md}: missing video file {video.name}", failures)
         if not poster.exists():
             fail(f"{md}: missing poster file {poster.name}", failures)
-        if "noindex" not in meta.get("robots", "").lower():
+        if expects_video_indexing(meta) and "noindex" not in meta.get("robots", "").lower():
             for key in ("title", "description", "date", "video_duration"):
                 if not meta.get(key):
                     fail(f"{md}: indexable video page missing {key}", failures)
@@ -134,15 +141,21 @@ def main() -> int:
 
         if loc not in sitemap_locs:
             fail(f"{md}: missing from sitemap.xml", failures)
-        if loc not in video_locs:
-            fail(f"{md}: missing from video-sitemap.xml", failures)
-        if html.count('"@type": "VideoObject"') != 1:
-            fail(f"{md}: expected exactly one VideoObject", failures)
         if 'class="s5-video-embed"' not in html:
             fail(f"{md}: missing video player", failures)
-        for field in ("name", "description", "thumbnailUrl", "contentUrl", "uploadDate", "duration"):
-            if f'"{field}":' not in html:
-                fail(f"{md}: VideoObject missing {field}", failures)
+        if expects_video_indexing(meta):
+            if loc not in video_locs:
+                fail(f"{md}: missing from video-sitemap.xml", failures)
+            if html.count('"@type": "VideoObject"') != 1:
+                fail(f"{md}: expected exactly one VideoObject", failures)
+            for field in ("name", "description", "thumbnailUrl", "contentUrl", "uploadDate", "duration"):
+                if f'"{field}":' not in html:
+                    fail(f"{md}: VideoObject missing {field}", failures)
+        else:
+            if loc in video_locs:
+                fail(f"{md}: non-watch video page present in video-sitemap.xml", failures)
+            if '"@type": "VideoObject"' in html:
+                fail(f"{md}: non-watch video page emits VideoObject", failures)
 
     if failures:
         print("Video indexing audit failed:", file=sys.stderr)
@@ -150,7 +163,10 @@ def main() -> int:
             print(f"- {item}", file=sys.stderr)
         return 1
 
-    print(f"Video indexing audit passed for {len(video_pages)} video pages.")
+    print(
+        "Video indexing audit passed for "
+        f"{len(video_pages)} video embeds and {len(indexable_video_pages)} indexable video pages."
+    )
     return 0
 
 

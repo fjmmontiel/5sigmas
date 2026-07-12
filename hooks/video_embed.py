@@ -10,6 +10,7 @@ must live alongside the .md file — they'll be copied to the site by MkDocs.
 
 Optional frontmatter fields:
     video_duration: "PT4M20S"   ISO 8601, used in VideoObject (omitted if missing)
+    video_sitemap: true          opt in only for dedicated video/watch pages
 
 The video title and description are taken from the page's own title/description.
 """
@@ -40,6 +41,10 @@ def _esc(s: str) -> str:
 def _dom_id(prefix: str, value: str) -> str:
     token = re.sub(r"[^a-z0-9]+", "-", str(value).lower()).strip("-")
     return f"{prefix}-{token or 'page'}"
+
+
+def _is_enabled(value) -> bool:
+    return value is True or str(value).strip().lower() == "true"
 
 
 ARTICLE_AUDIO_INDEX = Path(__file__).resolve().parents[1] / "docs" / "series" / "article_audio.yml"
@@ -181,8 +186,9 @@ def on_post_page(output: str, page, config, **kwargs) -> str:
     # Inject video after the first </h1> in the page
     output = re.sub(r"(</h1>)", r"\1\n" + video_html + ("\n" + audio_html if audio_html else ""), output, count=1)
 
-    # noindex pages can show the video, but should not emit indexable video markup.
-    if not is_noindex:
+    # Article pages can show video as supporting content without being watch pages.
+    # Emit VideoObject only for explicit video-indexing/watch-page opt-ins.
+    if not is_noindex and _is_enabled(meta.get("video_sitemap")):
         output = output.replace("</head>", jsonld + "\n</head>", 1)
 
     return output

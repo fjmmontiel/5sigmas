@@ -10,6 +10,11 @@ import re
 _noindex_urls: set = set()
 
 
+def on_config(config, **kwargs):
+    _noindex_urls.clear()
+    return config
+
+
 def on_page_context(context, page, config, nav, **kwargs):
     robots = (page.meta or {}).get("robots", "")
     if "noindex" in robots:
