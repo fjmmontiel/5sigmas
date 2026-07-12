@@ -85,5 +85,5 @@ Si es tu primer contacto con la IA, la serie [Fundamentos de IA e IA generativa]
 
 </div>
 
-[Evaluar mi caso de IA](/meta/advisor-ia/){ .md-button .md-button--primary }
+[Aplicar este criterio a mi caso](/meta/advisor-ia/){ .md-button }
 [Próximamente](/proximamente/){ .md-button }

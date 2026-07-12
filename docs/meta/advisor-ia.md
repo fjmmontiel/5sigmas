@@ -9,16 +9,16 @@ hide:
 
 # Advisor de IA para decidir con criterio
 
-La IA deja de ser abstracta cuando alguien tiene que decidir dónde invertir, qué datos tocar, qué proveedor usar y qué riesgo asumir. En ese punto ya no basta con saber qué modelo está de moda. Entran arquitectura, latencia, costes, seguridad, evaluación y adopción.
+Esta página es una salida natural de 5sigmas, no el centro del proyecto. El centro sigue siendo enseñar IA sin hype. A veces, después de entender mejor una tecnología, aparece una pregunta práctica: cómo aplicar ese criterio a una decisión concreta.
 
-Trabajo con equipos y decisores que necesitan ordenar esa decisión antes de gastar más tiempo, presupuesto o reputación interna en una dirección débil. Puedes verlo como advisory estratégico o como consultoría técnica de IA. El objetivo es que la siguiente decisión sea más clara y más defendible.
+Ahí puedo ayudar como advisor o consultor técnico. No para vender una solución prefabricada, sino para ordenar un caso de uso, detectar riesgos y decidir si merece la pena avanzar.
 
-[Escríbeme para evaluar tu caso](mailto:contacto@5sigmas.com){ .md-button .md-button--primary }
+[Aplicar este criterio a mi caso](mailto:contacto@5sigmas.com){ .md-button .md-button--primary }
 [Ver LinkedIn](https://www.linkedin.com/in/fjmm1998/){ .md-button }
 
 ---
 
-## Cuándo tiene sentido
+## Cuándo tiene sentido hablar
 
 Tiene sentido hablar si estás en una de estas situaciones:
 
@@ -49,9 +49,9 @@ La colaboración puede tomar varias formas según el punto en el que esté el eq
 
 No hace falta llegar con una solución cerrada. De hecho, suele ser más útil llegar con el problema, las restricciones y las dudas abiertas.
 
-## Qué aporta 5sigmas
+## Qué aporta el trabajo público de 5sigmas
 
-5sigmas muestra públicamente el tipo de criterio que aplico: explicar sistemas complejos sin hype, apoyarme en fuentes primarias y conectar la tecnología con sus límites reales.
+5sigmas muestra públicamente el tipo de criterio que aplico: explicar sistemas complejos sin hype, apoyarme en fuentes primarias y conectar la tecnología con sus límites reales. Si ese criterio te sirve para aprender, la web ya cumple su función. Si además necesitas llevarlo a una decisión de producto, arquitectura o inversión, podemos hablar.
 
 - [Fundamentos de IA e IA generativa](/series/fundamentos-ia-iag/00_presentacion_serie/) para construir el vocabulario común.
 - [Modelos razonadores](/series/modelos-razonadores/00_presentacion_serie/) para entender coste, latencia y test-time compute.

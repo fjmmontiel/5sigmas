@@ -6,14 +6,14 @@ hide:
   - footer
 ---
 
-# Criterio técnico para decidir con IA
+# IA explicada con criterio técnico
 
-5sigmas es el escaparate público de mi forma de trabajar: separar señal de ruido, entender la tecnología desde sus cimientos y convertir esa claridad en mejores decisiones sobre IA.
+5sigmas existe para enseñar IA sin hype. El objetivo principal es separar señal de ruido, entender la tecnología desde sus cimientos y construir criterio propio antes de comprar una narrativa, una herramienta o una promesa.
 
-Soy Francisco Maldonado, doble graduado en Física y Matemáticas. Trabajo diseñando y construyendo sistemas de IA que operan en tiempo real, desde asistentes de voz hasta visión artificial. Si estás valorando dónde aplicar IA, cómo pasar de prototipo a producción o qué riesgos técnicos conviene mirar antes de invertir, puedo ayudarte como advisor o consultor técnico.
+Soy Francisco Maldonado, doble graduado en Física y Matemáticas. Trabajo diseñando y construyendo sistemas de IA que operan en tiempo real, desde asistentes de voz hasta visión artificial. Este sitio muestra cómo pienso, cómo explico y cómo separo una idea sólida de una moda pasajera.
 
-[Evaluar mi caso de IA](/meta/advisor-ia/){ .md-button .md-button--primary }
-[Ver el criterio en las series](/series/){ .md-button }
+[Empezar por las series](/series/){ .md-button .md-button--primary }
+[Aplicar este criterio a mi caso](/meta/advisor-ia/){ .md-button }
 
 ---
 
@@ -27,13 +27,13 @@ Este proyecto aplica ese mismo criterio a la divulgación sobre IA: separar el c
 
 ---
 
-## Qué puedes evaluar conmigo
+## Cuando el criterio se lleva a una decisión real
 
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin:1.25rem 0">
 
 <div style="border:1px solid rgba(38,166,154,.28);border-radius:8px;padding:1rem">
   <div style="font-weight:700;color:#26A69A;margin-bottom:.35rem">Casos de uso</div>
-  <div style="font-size:.9rem;line-height:1.5;opacity:.82">Distinguir automatizaciones razonables de ideas que suenan bien pero no tienen datos, margen operativo o retorno claro.</div>
+  <div style="font-size:.9rem;line-height:1.5;opacity:.82">Separar automatizaciones razonables de ideas que suenan bien pero no tienen datos, margen operativo o retorno claro.</div>
 </div>
 
 <div style="border:1px solid rgba(50,74,178,.28);border-radius:8px;padding:1rem">
@@ -79,5 +79,5 @@ Este proyecto aplica ese mismo criterio a la divulgación sobre IA: separar el c
 
 [Ver todas las series](/series/){ .md-button }
 [Próximamente](/proximamente/){ .md-button }
-[Evaluar mi caso de IA](/meta/advisor-ia/){ .md-button .md-button--primary }
+[Aplicar este criterio a mi caso](/meta/advisor-ia/){ .md-button }
 [Sobre el proyecto](/meta/about/){ .md-button }
