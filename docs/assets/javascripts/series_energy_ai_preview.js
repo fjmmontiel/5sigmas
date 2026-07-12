@@ -59,16 +59,26 @@
     }
 
     var embedWrap = document.createElement("div");
-    embedWrap.className = "embed";
+    embedWrap.className = "embed sp-card-placeholder";
 
-    var iframe = document.createElement("iframe");
-    iframe.src = embed;
-    iframe.loading = "lazy";
-    iframe.setAttribute("title", title || "OWID preview");
-    iframe.setAttribute("referrerpolicy", "no-referrer-when-downgrade");
-    iframe.allowFullscreen = true;
+    var loadButton = document.createElement("button");
+    loadButton.type = "button";
+    loadButton.className = "sp-card-load";
+    loadButton.textContent = "Cargar gráfico externo";
+    loadButton.addEventListener("click", function () {
+      var iframe = document.createElement("iframe");
+      iframe.src = embed;
+      iframe.loading = "lazy";
+      iframe.setAttribute("title", title || "OWID preview");
+      iframe.setAttribute("referrerpolicy", "no-referrer-when-downgrade");
+      iframe.allowFullscreen = true;
 
-    embedWrap.appendChild(iframe);
+      embedWrap.classList.remove("sp-card-placeholder");
+      embedWrap.innerHTML = "";
+      embedWrap.appendChild(iframe);
+    });
+
+    embedWrap.appendChild(loadButton);
     card.appendChild(embedWrap);
 
     if (caption || href) {

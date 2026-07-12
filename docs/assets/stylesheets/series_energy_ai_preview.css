@@ -51,6 +51,26 @@
   border: 0;
 }
 
+.sp-card[data-sp-embed] .embed.sp-card-placeholder {
+  display: grid;
+  place-items: center;
+}
+
+.sp-card-load {
+  border: 1px solid rgba(38, 166, 154, 0.42);
+  border-radius: 8px;
+  padding: 0.7rem 1rem;
+  background: rgba(38, 166, 154, 0.1);
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.sp-card-load:hover,
+.sp-card-load:focus {
+  background: rgba(38, 166, 154, 0.18);
+}
+
 .sp-card .caption {
   margin: 0.8rem 0 0;
   font-size: 0.85rem;
