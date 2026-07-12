@@ -26,11 +26,11 @@ Los tres capítulos anteriores construyeron el argumento de por qué el espacio 
 
 En Estados Unidos, los centros de datos retiran en conjunto unos 449 millones de galones de agua al día, mientras que los campos de golf retiran aproximadamente 2.000 millones ([MOST][r3]). Ambos volúmenes quedan muy por debajo de la escala agrícola nacional, que sigue dominando el agregado por uno o varios órdenes de magnitud ([MOST][r3]).
 
+{{ include_html("snippets/datacenters-espacio/04-agua-comparativa.html") }}
+
 Esta comparación no pretende zanjar el debate sobre el impacto ambiental de los centros de datos, sino calibrarlo. El problema del agua en este sector existe, pero su lectura correcta es más geográfica que agregada: depende mucho del clima local, del tipo de refrigeración y de si la instalación se ubica en una cuenca ya tensionada. Microsoft, por ejemplo, publica WUE por región precisamente porque el perfil hídrico cambia de forma significativa según el emplazamiento y la arquitectura térmica ([Microsoft Water][r1]).
 
 El punto no es que los campos de golf sean el problema y los centros de datos no. Es que la conversación pública sobre el agua en los centros de datos se produce casi siempre sin ese contexto, lo que dificulta evaluar qué parte de la preocupación es proporcional a la magnitud real del consumo y qué parte responde a otros factores: la visibilidad del sector, la concentración en zonas con problemas hídricos preexistentes, o la asociación con empresas cuya escala general genera desconfianza independientemente del vector ambiental concreto.
-
-{{ include_html("snippets/datacenters-espacio/04-agua-comparativa.html") }}
 
 ---
 
@@ -42,9 +42,9 @@ La métrica que cuantifica esta eficiencia se llama WUE (Water Usage Effectivene
 
 {{ include_html("snippets/datacenters-espacio/04-wue-refrigeracion.html") }}
 
-{{ include_html("snippets/datacenters-espacio/04-agua-indirecta.html") }}
-
 La irrupción de la IA ha añadido una nueva dimensión a este debate que no existía hace cinco años: el consumo por transacción se ha vuelto una cifra visible en el debate público. Pero esas cifras solo son comparables cuando normalizan la misma carga de cómputo. Si una instalación entrega 1 MWh al equipamiento de IA, un centro con evaporación convencional puede consumir entre 1.500 y 2.500 litros de agua, el diseño adiabático de Microsoft Iowa unos 190 litros, y un circuito cerrado o de inmersión prácticamente cero evaporación directa. La diferencia de orden de magnitud nace del WUE de la instalación, no de mezclar consultas o modelos distintos ([Microsoft Iowa][r4], [arXiv][r6]).
+
+{{ include_html("snippets/datacenters-espacio/04-agua-indirecta.html") }}
 
 La tendencia del sector apunta a reducir el peso relativo de la evaporación como mecanismo dominante, no porque los operadores hayan decidido priorizar el medioambiente sobre el coste, sino porque la densidad de calor de los racks de IA de última generación supera el límite de lo que la refrigeración por aire puede gestionar con eficiencia. Eso no significa que la evaporación desaparezca mañana: en muchos diseños sigue apareciendo como apoyo cuando sube la temperatura exterior. Pero sí empuja hacia más circuito cerrado, inmersión y otras arquitecturas donde el agua se usa menos como consumible y más como parte de un ciclo técnico.
 
@@ -62,9 +62,9 @@ La métrica que mide la eficiencia energética del centro de datos como instalac
 
 Lo que ha cambiado con la IA no es principalmente el PUE de la instalación, que los operadores hiperscala han seguido mejorando, sino la densidad de potencia por rack. Un rack de servidores convencionales consumía entre 5 y 15 kW. Los primeros racks de GPU para inferencia de IA se instalaron en el rango de 50 a 100 kW. El rack GB200 NVL72 de Nvidia, que conecta 72 GPUs Blackwell en un único tejido de cómputo, ronda los 120 kW a plena carga, un salto que convierte la refrigeración líquida en requisito práctico de operación ([NVIDIA][r7]). Ningún sistema de aire puede gestionar 120 kW por rack dentro de un edificio convencional con pasillos calientes y fríos.
 
-Esta escalada de densidad obliga a rediseñar no solo los sistemas de refrigeración sino la distribución eléctrica, los suelos técnicos y la propia estructura del edificio. Los centros de datos construidos para cargas de 10 a 20 kW por rack necesitan actualizaciones de infraestructura sustanciales para acomodar hardware de IA de última generación, lo que explica parte del frenesí de construcción nueva y parte de la dificultad para predecir la evolución del consumo energético del sector: no es solo más cómputo, es un tipo de cómputo físicamente diferente.
-
 {{ include_html("snippets/datacenters-espacio/04-energia-densidad.html") }}
+
+Esta escalada de densidad obliga a rediseñar no solo los sistemas de refrigeración sino la distribución eléctrica, los suelos técnicos y la propia estructura del edificio. Los centros de datos construidos para cargas de 10 a 20 kW por rack necesitan actualizaciones de infraestructura sustanciales para acomodar hardware de IA de última generación, lo que explica parte del frenesí de construcción nueva y parte de la dificultad para predecir la evolución del consumo energético del sector: no es solo más cómputo, es un tipo de cómputo físicamente diferente.
 
 ---
 
@@ -76,9 +76,9 @@ Un rack de GPUs de IA no es solo silicio. El silicio ultrapuro del sustrato de l
 
 {{ include_html("snippets/datacenters-espacio/04-minerales-cadena.html") }}
 
-{{ include_html("snippets/datacenters-espacio/04-cobalto-cadena.html") }}
-
 El cobalto es el caso más documentado y más extremo. Aproximadamente el 74 por ciento de la producción mundial procede de la República Democrática del Congo, y alrededor del 67 por ciento de la refinación global se realiza en China ([SFA][r8]). Investigaciones publicadas en 2024 sobre zonas de extracción en la provincia de Lualaba identificaron lo que los autores describen como zonas de sacrificio: comunidades donde la contaminación por minería industrial ha alcanzado niveles que afectan de forma sistemática a la salud de la población local. Las encuestas documentaron que el 56 por ciento de mujeres y niñas en comunidades cercanas a cinco minas importantes reportaban problemas de salud reproductiva y ginecológica, con tasas elevadas de abortos y malformaciones. El 72 por ciento de los residentes informó de enfermedades de piel crónicas vinculadas al contacto con ríos clasificados como hiperácidos por vertidos de ácido sulfúrico y roturas de balsas de residuos mineros ([RAID][r9]).
+
+{{ include_html("snippets/datacenters-espacio/04-cobalto-cadena.html") }}
 
 La industria tecnológica ha puesto en marcha iniciativas como la Fair Cobalt Alliance, cofundada por Apple, Google y Microsoft, que en el primer semestre de 2024 reportó distribución de equipos de protección a lavadoras artesanales, cubrimiento de seis pozos de minería para prevenir colapsos y la incorporación de 18 menores a programas de remediación ([FCA][r14]). Son iniciativas con impacto medible, aunque la escala del problema, con hasta 250.000 personas vinculadas a la minería artesanal en el Congo, las supera con comodidad ([FCA][r14]).
 
