@@ -2,7 +2,7 @@
 
 {% block htmltitle %}
   {% if page and page.url in ["", "index.html"] %}
-  <title>5sigmas — Más señal, menos ruido</title>
+  <title>5sigmas — Advisor y consultor técnico de IA</title>
   {% else %}
   {{ super() }}
   {% endif %}
@@ -76,6 +76,20 @@
     "author": {
       "@type": "Person",
       "name": "Francisco Maldonado",
+      "url": "{{ config.site_url }}meta/about/",
+      "sameAs": ["https://www.linkedin.com/in/fjmm1998/"]
+    }
+    {% elif "meta/advisor-ia" in page.url %}
+    "@type": "Service",
+    "name": "Advisor de IA",
+    "description": "{{ page.meta.description | default(config.site_description) | e }}",
+    "url": "{{ page.canonical_url }}",
+    "areaServed": "ES",
+    "serviceType": "Advisory y consultoría técnica de Inteligencia Artificial",
+    "provider": {
+      "@type": "Person",
+      "name": "Francisco Maldonado",
+      "jobTitle": "Ingeniero de sistemas de IA en tiempo real",
       "url": "{{ config.site_url }}meta/about/",
       "sameAs": ["https://www.linkedin.com/in/fjmm1998/"]
     }

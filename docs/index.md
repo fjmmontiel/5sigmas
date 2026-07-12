@@ -1,14 +1,19 @@
 ---
 title: 5sigmas
-description: Divulgación técnica sobre IA en español. Análisis riguroso de Inteligencia Artificial, IA generativa y AGI — sin hype, con contexto y fuentes primarias.
+description: Advisor y consultor técnico de IA. Análisis riguroso para decidir qué sistemas de IA tienen sentido, cómo llevarlos a producción y qué riesgos mirar.
 hide:
   - navigation
   - footer
 ---
 
-# Más señal, menos ruido
+# Criterio técnico para decidir con IA
 
-5sigmas explica la IA con contexto, historia y fuentes primarias. No persigue el hype del día: construye el mapa mental que necesitas para entender qué está pasando y qué importa de verdad.
+5sigmas es el escaparate público de mi forma de trabajar: separar señal de ruido, entender la tecnología desde sus cimientos y convertir esa claridad en mejores decisiones sobre IA.
+
+Soy Francisco Maldonado, doble graduado en Física y Matemáticas. Trabajo diseñando y construyendo sistemas de IA que operan en tiempo real, desde asistentes de voz hasta visión artificial. Si estás valorando dónde aplicar IA, cómo pasar de prototipo a producción o qué riesgos técnicos conviene mirar antes de invertir, puedo ayudarte como advisor o consultor técnico.
+
+[Hablar sobre advisory](/meta/advisor-ia/){ .md-button .md-button--primary }
+[Ver el criterio en las series](/series/){ .md-button }
 
 ---
 
@@ -21,6 +26,27 @@ En física de partículas, un descubrimiento se considera confirmado cuando alca
 Este proyecto aplica ese mismo criterio a la divulgación sobre IA: separar el conocimiento fundamental del ruido diario.
 
 ---
+
+## Qué puedes evaluar conmigo
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin:1.25rem 0">
+
+<div style="border:1px solid rgba(38,166,154,.28);border-radius:8px;padding:1rem">
+  <div style="font-weight:700;color:#26A69A;margin-bottom:.35rem">Casos de uso</div>
+  <div style="font-size:.9rem;line-height:1.5;opacity:.82">Distinguir automatizaciones razonables de ideas que suenan bien pero no tienen datos, margen operativo o retorno claro.</div>
+</div>
+
+<div style="border:1px solid rgba(50,74,178,.28);border-radius:8px;padding:1rem">
+  <div style="font-weight:700;color:#324AB2;margin-bottom:.35rem">Arquitectura y producción</div>
+  <div style="font-size:.9rem;line-height:1.5;opacity:.82">Bajar una idea a componentes reales: modelos, RAG, agentes, voz, visión, latencia, coste, evaluación y límites de despliegue.</div>
+</div>
+
+<div style="border:1px solid rgba(255,179,67,.32);border-radius:8px;padding:1rem">
+  <div style="font-weight:700;color:#C27A00;margin-bottom:.35rem">Criterio ejecutivo</div>
+  <div style="font-size:.9rem;line-height:1.5;opacity:.82">Traducir la frontera técnica a decisiones entendibles para dirección, producto y equipos que tienen que priorizar.</div>
+</div>
+
+</div>
 
 ## Por dónde empezar
 
@@ -53,4 +79,5 @@ Este proyecto aplica ese mismo criterio a la divulgación sobre IA: separar el c
 
 [Ver todas las series](/series/){ .md-button }
 [Próximamente](/proximamente/){ .md-button }
+[Advisor IA](/meta/advisor-ia/){ .md-button .md-button--primary }
 [Sobre el proyecto](/meta/about/){ .md-button }

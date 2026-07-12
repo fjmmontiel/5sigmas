@@ -1,6 +1,6 @@
 ---
 title: Sobre 5sigmas — Francisco Maldonado
-description: Ingeniero de sistemas de IA en tiempo real, doble graduado en Física y Matemáticas. Escribe sobre IA con rigor técnico para profesionales y decisores.
+description: Francisco Maldonado, advisor y consultor técnico de IA. Ingeniero de sistemas de IA en tiempo real y doble graduado en Física y Matemáticas.
 hide:
   - navigation
   - toc
@@ -27,6 +27,8 @@ Soy **Francisco Maldonado**, doble graduado en Física y Matemáticas. Trabajo d
 
 Escribo para ordenar lo que normalmente queda disperso entre papers, repositorios y benchmarks.
 
+También trabajo como advisor y consultor técnico para equipos y decisores que necesitan evaluar casos de uso de IA, arquitectura, riesgos, costes y paso a producción con criterio técnico.
+
 ## Cómo trabajo
 
 El contenido parte siempre de fuentes primarias: papers, anuncios oficiales, datasets y benchmarks publicados. Cuando hay interpretación o estimación, se señala como tal.
@@ -38,7 +40,9 @@ Ningún artículo usa referencias de segunda mano como fuente principal de un he
 ---
 
 ## Colaboraciones y contacto
-Si quieres proponer una colaboración, si has encontrado un error factual o una referencia incorrecta, o simplemente quieres hablar sobre estas tecnologías, contáctame directamente.
+Si quieres valorar una colaboración de advisory, si has encontrado un error factual o una referencia incorrecta, o simplemente quieres hablar sobre estas tecnologías, contáctame directamente.
+
+[Ver enfoque de advisory](/meta/advisor-ia/){ .md-button .md-button--primary }
 
 <div class="contact-grid" markdown="1">
 

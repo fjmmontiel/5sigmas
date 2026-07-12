@@ -1,5 +1,5 @@
 site_name: 5sigmas
-site_description: Divulgación técnica sobre IA en español. Análisis riguroso de Inteligencia Artificial, IA generativa y AGI — sin hype, con contexto y fuentes primarias.
+site_description: Advisor y consultor técnico de IA en español. Análisis riguroso de Inteligencia Artificial, IA generativa y AGI para separar señal de ruido y decidir con criterio.
 site_url: "https://5sigmas.com"
 validation:
   nav:
@@ -91,6 +91,7 @@ nav:
       - articulos-tecnicos/index.md
       - Agente Reactivo, Proactivo y Tool calls: articulos-tecnicos/proactive-reactive-agent-and-tool-calls.md
   - Próximamente: proximamente.md
+  - Advisor IA: meta/advisor-ia.md
   - Sobre 5sigmas: meta/about.md
 markdown_extensions:
   - meta
