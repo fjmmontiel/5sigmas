@@ -1,6 +1,6 @@
 ---
 title: Próximamente
-description: Series en investigación y planificadas para 5sigmas. Backlog editorial de temas de IA, sistemas GenAI, infraestructura y más.
+description: Backlog editorial público de 5sigmas. Series en preparación, temas en investigación y criterios para convertir una idea en serie.
 robots: noindex
 hide:
   - toc
@@ -9,292 +9,255 @@ hide:
 ---
 
 <style>
-/* ── En construcción — cards ── */
+.prox-hero {
+  margin: .4rem 0 1.8rem;
+  padding: 1.25rem 0 1.35rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--md-default-fg-color) 12%, transparent);
+}
+
+.prox-hero p {
+  max-width: 62ch;
+  margin: .4rem 0 0;
+  color: var(--md-default-fg-color--light);
+  line-height: 1.65;
+}
+
+.prox-lanes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1.2rem 0 2.1rem;
+}
+
+.prox-lane {
+  min-width: 0;
+  border-top: 3px solid var(--lane-color);
+  padding-top: .8rem;
+}
+
+.prox-lane h2 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.prox-lane p {
+  margin: .35rem 0 0;
+  color: var(--md-default-fg-color--light);
+  font-size: .85rem;
+  line-height: 1.5;
+}
+
+.prox-section {
+  margin: 2rem 0 2.4rem;
+}
+
+.prox-section h2 {
+  margin-bottom: .35rem;
+}
+
+.prox-section > p {
+  max-width: 66ch;
+  margin-top: 0;
+  color: var(--md-default-fg-color--light);
+  line-height: 1.6;
+}
+
 .prox-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 16px;
-  margin: 1.5rem 0 3rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: .9rem;
+  margin-top: 1rem;
 }
 
 .prox-card {
+  --card-color: #26A69A;
   position: relative;
-  border-radius: 16px;
-  padding: 1.5rem 1.5rem 1.25rem;
-  display: flex;
-  flex-direction: column;
-  gap: .75rem;
-  text-decoration: none !important;
-  color: inherit !important;
-  overflow: hidden;
-  transition: transform .2s ease, box-shadow .2s ease;
-}
-.prox-card:hover {
-  transform: translateY(-4px);
-}
-.prox-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 16px;
-  padding: 1px;
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-}
-.prox-card-amber { background: rgba(255,179,67,.05); }
-.prox-card-amber::before { background: linear-gradient(135deg, rgba(255,179,67,.5), rgba(255,179,67,.12)); }
-.prox-card-amber:hover { box-shadow: 0 16px 40px rgba(255,179,67,.12); }
-
-.prox-card-red { background: rgba(224,108,117,.05); }
-.prox-card-red::before { background: linear-gradient(135deg, rgba(224,108,117,.5), rgba(224,108,117,.12)); }
-.prox-card-red:hover { box-shadow: 0 16px 40px rgba(224,108,117,.12); }
-
-.prox-card-green { background: rgba(152,195,121,.05); }
-.prox-card-green::before { background: linear-gradient(135deg, rgba(152,195,121,.5), rgba(152,195,121,.12)); }
-.prox-card-green:hover { box-shadow: 0 16px 40px rgba(152,195,121,.12); }
-
-.prox-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: .68rem;
-  font-weight: 700;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-}
-.prox-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  flex-shrink: 0;
-  animation: pulse-dot 2s ease-in-out infinite;
-}
-@keyframes pulse-dot {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: .4; transform: scale(.75); }
-}
-
-.prox-title {
-  font-size: 1.1rem;
-  font-weight: 700;
-  line-height: 1.3;
-}
-
-.prox-desc {
-  font-size: .88rem;
-  line-height: 1.55;
-  opacity: .65;
-  flex: 1;
-}
-
-.prox-cta {
-  font-size: .82rem;
-  font-weight: 700;
-  margin-top: .25rem;
-}
-
-/* ── En investigación ── */
-.research-section {
-  margin: 0 0 2.5rem;
-}
-
-.research-label {
-  font-size: .68rem;
-  font-weight: 700;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  opacity: .35;
-  margin-bottom: 1.1rem;
-}
-
-.research-outer {
-  overflow: hidden;
-  padding: 0 10px;
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 3%, #000 97%, transparent 100%);
-  mask-image: linear-gradient(to right, transparent 0%, #000 3%, #000 97%, transparent 100%);
-}
-
-.research-track {
-  display: flex;
-  align-items: stretch;
-  gap: 14px;
-  width: max-content;
-  padding: 0 12px 8px;
-  animation: research-scroll 52s linear infinite;
-}
-
-.research-track > [aria-hidden="true"][data-nosnippet] {
-  display: contents;
-}
-
-.research-track:hover {
-  animation-play-state: paused;
-}
-
-@keyframes research-scroll {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-
-.research-card {
-  --rc: #6366F1;
-  position: relative;
-  flex: 0 0 236px;
-  border-radius: 14px;
-  border: 1px solid color-mix(in srgb, var(--rc) 18%, transparent);
+  min-width: 0;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--card-color) 24%, transparent);
   background:
     linear-gradient(180deg,
-      color-mix(in srgb, var(--rc) 12%, var(--md-default-bg-color, #fff)) 0%,
-      color-mix(in srgb, var(--rc) 4%, var(--md-default-bg-color, #fff)) 100%);
+      color-mix(in srgb, var(--card-color) 9%, var(--md-default-bg-color)) 0%,
+      color-mix(in srgb, var(--card-color) 3%, var(--md-default-bg-color)) 100%);
   padding: 1rem 1rem .95rem;
-  display: flex;
-  flex-direction: column;
-  gap: .55rem;
-  min-height: 188px;
 }
 
-.research-card::before {
+.prox-card::before {
   content: "";
   position: absolute;
   inset: 0 0 auto;
   height: 3px;
-  border-radius: 14px 14px 0 0;
-  background: linear-gradient(90deg, color-mix(in srgb, var(--rc) 82%, white), var(--rc));
+  border-radius: 8px 8px 0 0;
+  background: var(--card-color);
 }
 
-.research-badge {
-  font-size: .64rem;
-  font-weight: 700;
-  letter-spacing: .08em;
+.prox-kicker {
+  margin: 0 0 .45rem;
+  color: color-mix(in srgb, var(--card-color) 76%, var(--md-default-fg-color));
+  font-size: .68rem;
+  font-weight: 800;
+  letter-spacing: 0;
   text-transform: uppercase;
-  color: color-mix(in srgb, var(--rc) 72%, var(--md-default-fg-color, #111));
-  opacity: .95;
 }
 
-.research-title {
+.prox-title {
+  margin: 0;
   font-size: 1rem;
-  font-weight: 700;
+  font-weight: 800;
   line-height: 1.3;
-  color: var(--md-default-fg-color, #111);
 }
 
-.research-desc {
+.prox-desc {
+  margin: .5rem 0 0;
+  color: var(--md-default-fg-color--light);
   font-size: .86rem;
-  line-height: 1.5;
-  color: color-mix(in srgb, var(--md-default-fg-color, #111) 68%, transparent);
+  line-height: 1.52;
 }
 
-[data-md-color-scheme="slate"] .research-card {
-  background:
-    linear-gradient(180deg,
-      color-mix(in srgb, var(--rc) 16%, #0b1220) 0%,
-      color-mix(in srgb, var(--rc) 7%, #0b1220) 100%);
+.prox-proof {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: .75rem;
+  margin: 1rem 0 1.4rem;
 }
 
-[data-md-color-scheme="default"] .research-card {
-  background:
-    linear-gradient(180deg,
-      color-mix(in srgb, var(--rc) 10%, #ffffff) 0%,
-      color-mix(in srgb, var(--rc) 3%, #ffffff) 100%);
+.prox-proof div {
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--md-default-fg-color) 12%, transparent);
+  padding: .85rem;
+  background: color-mix(in srgb, var(--md-default-fg-color) 3%, var(--md-default-bg-color));
 }
 
-@media (max-width: 720px) {
-  .prox-grid {
+.prox-proof strong {
+  display: block;
+  margin-bottom: .3rem;
+}
+
+.prox-proof span {
+  color: var(--md-default-fg-color--light);
+  font-size: .84rem;
+  line-height: 1.45;
+}
+
+@media (max-width: 760px) {
+  .prox-lanes {
     grid-template-columns: 1fr;
-  }
-
-  .research-card {
-    flex-basis: 208px;
-    min-height: 176px;
   }
 }
 </style>
 
 # Próximamente
 
-<div style="font-size:.95rem;opacity:.6;line-height:1.6;max-width:56ch;margin:.25rem 0 2rem">Series en investigación. El orden no implica prioridad de publicación.</div>
-
-<div class="research-section">
-  <div class="research-label">En investigación — sin fecha de publicación</div>
-  <div class="research-outer">
-    <div class="research-track">
-      <div class="research-card" style="--rc:#6366F1">
-        <div class="research-badge">En investigación</div>
-        <div class="research-title">Evaluación de modelos de IA</div>
-        <div class="research-desc">Benchmarks vs rendimiento real, LLM-as-judge y red-teaming.</div>
-      </div>
-      <div class="research-card" style="--rc:#7C3AED">
-        <div class="research-badge">En investigación</div>
-        <div class="research-title">RAG: Retrieval-Augmented Generation</div>
-        <div class="research-desc">Cómo conectar un LLM a fuentes externas. Arquitectura, evaluación y trampas habituales.</div>
-      </div>
-      <div class="research-card" style="--rc:#10B981">
-        <div class="research-badge">En investigación</div>
-        <div class="research-title">Agentes de IA</div>
-        <div class="research-desc">Cómo los LLMs pasan de responder a actuar. Bucles de razonamiento y límites reales.</div>
-      </div>
-      <div class="research-card" style="--rc:#8B5CF6">
-        <div class="research-badge">En investigación</div>
-        <div class="research-title">El problema de la alucinación</div>
-        <div class="research-desc">Por qué alucinan los LLMs, los límites del grounding y hasta dónde llega el RAG.</div>
-      </div>
-      <div class="research-card" style="--rc:#EC4899">
-        <div class="research-badge">En investigación</div>
-        <div class="research-title">Fine-tuning y adaptación de modelos</div>
-        <div class="research-desc">Cuándo hacer fine-tuning vs prompt engineering vs RAG, y qué coste implica cada opción.</div>
-      </div>
-      <div class="research-card" style="--rc:#F59E0B">
-        <div class="research-badge">En investigación</div>
-        <div class="research-title">IA en el trabajo</div>
-        <div class="research-desc">Evidencia real de productividad, augmentation vs sustitución y cómo cambia el trabajo cualificado.</div>
-      </div>
-      <div class="research-card" style="--rc:#3B82F6">
-        <div class="research-badge">En investigación</div>
-        <div class="research-title">Geopolítica de la IA</div>
-        <div class="research-desc">Chips, TSMC, control de exportaciones y la carrera entre EEUU, China y la UE.</div>
-      </div>
-
-      <div aria-hidden="true" data-nosnippet>
-        <div class="research-card" style="--rc:#6366F1">
-          <div class="research-badge">En investigación</div>
-          <div class="research-title">Evaluación de modelos de IA</div>
-          <div class="research-desc">Benchmarks vs rendimiento real, LLM-as-judge y red-teaming.</div>
-        </div>
-        <div class="research-card" style="--rc:#7C3AED">
-          <div class="research-badge">En investigación</div>
-          <div class="research-title">RAG: Retrieval-Augmented Generation</div>
-          <div class="research-desc">Cómo conectar un LLM a fuentes externas. Arquitectura, evaluación y trampas habituales.</div>
-        </div>
-        <div class="research-card" style="--rc:#10B981">
-          <div class="research-badge">En investigación</div>
-          <div class="research-title">Agentes de IA</div>
-          <div class="research-desc">Cómo los LLMs pasan de responder a actuar. Bucles de razonamiento y límites reales.</div>
-        </div>
-        <div class="research-card" style="--rc:#8B5CF6">
-          <div class="research-badge">En investigación</div>
-          <div class="research-title">El problema de la alucinación</div>
-          <div class="research-desc">Por qué alucinan los LLMs, los límites del grounding y hasta dónde llega el RAG.</div>
-        </div>
-        <div class="research-card" style="--rc:#EC4899">
-          <div class="research-badge">En investigación</div>
-          <div class="research-title">Fine-tuning y adaptación de modelos</div>
-          <div class="research-desc">Cuándo hacer fine-tuning vs prompt engineering vs RAG, y qué coste implica cada opción.</div>
-        </div>
-        <div class="research-card" style="--rc:#F59E0B">
-          <div class="research-badge">En investigación</div>
-          <div class="research-title">IA en el trabajo</div>
-          <div class="research-desc">Evidencia real de productividad, augmentation vs sustitución y cómo cambia el trabajo cualificado.</div>
-        </div>
-        <div class="research-card" style="--rc:#3B82F6">
-          <div class="research-badge">En investigación</div>
-          <div class="research-title">Geopolítica de la IA</div>
-          <div class="research-desc">Chips, TSMC, control de exportaciones y la carrera entre EEUU, China y la UE.</div>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="prox-hero">
+  <p>Esta página no funciona como calendario cerrado. Es una ventana al criterio editorial de 5sigmas: qué temas están tomando forma, cuáles siguen en investigación y qué tiene que ocurrir para que una idea pase a serie pública.</p>
 </div>
 
-[Ver series publicadas](/series/){ .md-button }
+<div class="prox-lanes">
+  <section class="prox-lane" style="--lane-color:#26A69A">
+    <h2>En preparación</h2>
+    <p>Temas con tesis clara, material localizado y estructura probable de serie.</p>
+  </section>
+  <section class="prox-lane" style="--lane-color:#C27A00">
+    <h2>En investigación</h2>
+    <p>Ideas con potencial, pero todavía sin arco narrativo suficientemente cerrado.</p>
+  </section>
+  <section class="prox-lane" style="--lane-color:#6D5BD0">
+    <h2>En vigilancia</h2>
+    <p>Frentes que cambian rápido y necesitan más evidencia antes de publicarse.</p>
+  </section>
+</div>
+
+<section class="prox-section">
+  <h2>En preparación</h2>
+  <p>Son candidatos cercanos, pero todavía no se publican hasta que el contrato de contenido, las fuentes y la gramática visual estén cerrados.</p>
+
+  <div class="prox-grid">
+    <article class="prox-card" style="--card-color:#B23A48">
+      <p class="prox-kicker">Seguridad en IA</p>
+      <h3 class="prox-title">Prompt injection, agentes y defensas por etapas</h3>
+      <p class="prox-desc">Cómo cambia la seguridad cuando el modelo deja de responder en una caja de texto y empieza a leer documentos, usar herramientas y actuar sobre sistemas.</p>
+    </article>
+
+    <article class="prox-card" style="--card-color:#C27A00">
+      <p class="prox-kicker">Infraestructura</p>
+      <h3 class="prox-title">AI factories y la economía física del cómputo</h3>
+      <p class="prox-desc">Capital, energía, chips, red eléctrica y cadena material como parte del sistema de IA, no como un detalle externo al software.</p>
+    </article>
+
+    <article class="prox-card" style="--card-color:#4E9CD6">
+      <p class="prox-kicker">Evaluación</p>
+      <h3 class="prox-title">Medir modelos sin comprar el ranking</h3>
+      <p class="prox-desc">Benchmarks, tareas reales, evaluación humana, LLM-as-judge y red-teaming como señales distintas que no conviene mezclar.</p>
+    </article>
+  </div>
+</section>
+
+<section class="prox-section">
+  <h2>En investigación</h2>
+  <p>Aquí todavía no hay promesa de publicación. Hay preguntas útiles que pueden acabar como serie, artículo técnico o píldora si la evidencia aguanta.</p>
+
+  <div class="prox-grid">
+    <article class="prox-card" style="--card-color:#7C3AED">
+      <p class="prox-kicker">RAG</p>
+      <h3 class="prox-title">Retrieval-Augmented Generation</h3>
+      <p class="prox-desc">Arquitectura, evaluación, recuperación híbrida, chunking, reranking y límites reales del grounding documental.</p>
+    </article>
+
+    <article class="prox-card" style="--card-color:#10B981">
+      <p class="prox-kicker">Agentes</p>
+      <h3 class="prox-title">De responder a operar</h3>
+      <p class="prox-desc">Bucles de planificación, herramientas, memoria, permisos y errores que dejan de ser texto para convertirse en acciones.</p>
+    </article>
+
+    <article class="prox-card" style="--card-color:#8B5CF6">
+      <p class="prox-kicker">Fiabilidad</p>
+      <h3 class="prox-title">El problema de la alucinación</h3>
+      <p class="prox-desc">Por qué aparece, qué reduce el riesgo, qué no lo elimina y cuándo el problema deja de ser lingüístico para ser operativo.</p>
+    </article>
+
+    <article class="prox-card" style="--card-color:#EC4899">
+      <p class="prox-kicker">Adaptación</p>
+      <h3 class="prox-title">Fine-tuning, prompts y modelos propios</h3>
+      <p class="prox-desc">Dónde termina la ingeniería de contexto, cuándo tiene sentido adaptar pesos y qué deuda operativa introduce cada opción.</p>
+    </article>
+
+    <article class="prox-card" style="--card-color:#F59E0B">
+      <p class="prox-kicker">Trabajo</p>
+      <h3 class="prox-title">Productividad real con IA</h3>
+      <p class="prox-desc">Evidencia de tareas concretas, rediseño de procesos, adopción organizativa y diferencias entre ahorro individual y mejora agregada.</p>
+    </article>
+
+    <article class="prox-card" style="--card-color:#3B82F6">
+      <p class="prox-kicker">Geopolítica</p>
+      <h3 class="prox-title">Chips, export controls y soberanía tecnológica</h3>
+      <p class="prox-desc">TSMC, restricciones de exportación, capacidad energética y concentración industrial como límites materiales del despliegue.</p>
+    </article>
+  </div>
+</section>
+
+<section class="prox-section">
+  <h2>Qué convierte una idea en serie</h2>
+  <p>Un tema no entra en 5sigmas por estar de moda. Tiene que poder explicarse con estructura, fuentes y visuales que ayuden a entender el mecanismo.</p>
+
+  <div class="prox-proof">
+    <div>
+      <strong>Tesis defendible</strong>
+      <span>Una pregunta central clara y una posición que pueda sostenerse sin exagerar.</span>
+    </div>
+    <div>
+      <strong>Fuentes suficientes</strong>
+      <span>Material primario, datos o literatura que permitan separar evidencia de opinión.</span>
+    </div>
+    <div>
+      <strong>Arco narrativo</strong>
+      <span>Capítulos que se construyen unos sobre otros, no una lista de temas sueltos.</span>
+    </div>
+    <div>
+      <strong>Gramática visual</strong>
+      <span>Diagramas, mapas o comparativas que expliquen mejor que un bloque de texto.</span>
+    </div>
+  </div>
+</section>
+
+[Ver series publicadas](/series/){ .md-button .md-button--primary }
+[Ver píldoras 5sigmas](/pildoras/){ .md-button }

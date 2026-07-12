@@ -87,6 +87,7 @@ nav:
           - Energía, calor y conectividad: series/datacenters-espacio/02-energia-calor-conectividad.md
           - Qué es un datacenter espacial: series/datacenters-espacio/03-que-es-datacenter-espacio.md
           - La huella real de un datacenter: series/datacenters-espacio/04-huella-real-datacenter.md
+  - Píldoras 5sigmas: pildoras/index.md
   - Artículos Técnicos:
       - articulos-tecnicos/index.md
       - Agente Reactivo, Proactivo y Tool calls: articulos-tecnicos/proactive-reactive-agent-and-tool-calls.md
@@ -121,6 +122,8 @@ extra_javascript:
   - path: javascripts/external-links.js
     defer: true
   - path: javascripts/article-audio.js
+    defer: true
+  - path: javascripts/linkedin-archive.js
     defer: true
   - path: assets/javascripts/animation-shell.js
     defer: true
@@ -161,6 +164,91 @@ plugins:
         'series/modelos-razonadores/index.md': 'series/modelos-razonadores/00_presentacion_serie.md'
         'series/ia-pib-bienestar-energia/index.md': 'series/ia-pib-bienestar-energia/00_presentacion_serie.md'
         'series/datacenters-espacio/index.md': 'series/datacenters-espacio/00_presentacion_serie.md'
+        'linkedin/index.md': 'pildoras/index.md'
+        'linkedin/datacenters-espacio-cap1-post-1-demanda-red-electrica.md': 'pildoras/datacenters-espacio-cap1-post-1-demanda-red-electrica.md'
+        'linkedin/datacenters-espacio-cap1-post-2-seis-cuellos-tierra.md': 'pildoras/datacenters-espacio-cap1-post-2-seis-cuellos-tierra.md'
+        'linkedin/datacenters-espacio-cap1-post-3-coste-lanzamiento.md': 'pildoras/datacenters-espacio-cap1-post-3-coste-lanzamiento.md'
+        'linkedin/datacenters-espacio-cap2-post-1-frio-radiadores.md': 'pildoras/datacenters-espacio-cap2-post-1-frio-radiadores.md'
+        'linkedin/datacenters-espacio-cap2-post-2-solar-orbita.md': 'pildoras/datacenters-espacio-cap2-post-2-solar-orbita.md'
+        'linkedin/datacenters-espacio-cap2-post-3-enlace-no-fibra.md': 'pildoras/datacenters-espacio-cap2-post-3-enlace-no-fibra.md'
+        'linkedin/datacenters-espacio-cap3-post-1-procesar-donde-nace.md': 'pildoras/datacenters-espacio-cap3-post-1-procesar-donde-nace.md'
+        'linkedin/datacenters-espacio-cap3-post-2-hardware-real-orbita.md': 'pildoras/datacenters-espacio-cap3-post-2-hardware-real-orbita.md'
+        'linkedin/datacenters-espacio-cap3-post-3-cloud-orbital-limites.md': 'pildoras/datacenters-espacio-cap3-post-3-cloud-orbital-limites.md'
+        'linkedin/datacenters-espacio-cap4-post-1-agua-local.md': 'pildoras/datacenters-espacio-cap4-post-1-agua-local.md'
+        'linkedin/datacenters-espacio-cap4-post-2-energia-util.md': 'pildoras/datacenters-espacio-cap4-post-2-energia-util.md'
+        'linkedin/datacenters-espacio-cap4-post-3-minerales-lifecycle.md': 'pildoras/datacenters-espacio-cap4-post-3-minerales-lifecycle.md'
+        'linkedin/from-cave-to-agi-cap1-post-1-cero.md': 'pildoras/from-cave-to-agi-cap1-post-1-cero.md'
+        'linkedin/from-cave-to-agi-cap1-post-2-algoritmos.md': 'pildoras/from-cave-to-agi-cap1-post-2-algoritmos.md'
+        'linkedin/from-cave-to-agi-cap1-post-3-calculo.md': 'pildoras/from-cave-to-agi-cap1-post-3-calculo.md'
+        'linkedin/from-cave-to-agi-cap2-post-1-engranajes.md': 'pildoras/from-cave-to-agi-cap2-post-1-engranajes.md'
+        'linkedin/from-cave-to-agi-cap2-post-2-turing-vnm.md': 'pildoras/from-cave-to-agi-cap2-post-2-turing-vnm.md'
+        'linkedin/from-cave-to-agi-cap3-post-1-simbolica.md': 'pildoras/from-cave-to-agi-cap3-post-1-simbolica.md'
+        'linkedin/from-cave-to-agi-cap3-post-2-entrenamiento.md': 'pildoras/from-cave-to-agi-cap3-post-2-entrenamiento.md'
+        'linkedin/from-cave-to-agi-cap3-post-3-2012.md': 'pildoras/from-cave-to-agi-cap3-post-3-2012.md'
+        'linkedin/from-cave-to-agi-cap4-post-1-bifurcacion.md': 'pildoras/from-cave-to-agi-cap4-post-1-bifurcacion.md'
+        'linkedin/from-cave-to-agi-cap4-post-2-economia.md': 'pildoras/from-cave-to-agi-cap4-post-2-economia.md'
+        'linkedin/from-cave-to-agi-cap5-post-1-busqueda.md': 'pildoras/from-cave-to-agi-cap5-post-1-busqueda.md'
+        'linkedin/from-cave-to-agi-cap5-post-2-arquitecturas.md': 'pildoras/from-cave-to-agi-cap5-post-2-arquitecturas.md'
+        'linkedin/from-cave-to-agi-cap5-post-3-world-models.md': 'pildoras/from-cave-to-agi-cap5-post-3-world-models.md'
+        'linkedin/from-cave-to-agi-cap5-post-4-robotica.md': 'pildoras/from-cave-to-agi-cap5-post-4-robotica.md'
+        'linkedin/fundamentos-ia-iag-cap1-post-1-marco-ia.md': 'pildoras/fundamentos-ia-iag-cap1-post-1-marco-ia.md'
+        'linkedin/fundamentos-ia-iag-cap1-post-2-tipos-aprendizaje.md': 'pildoras/fundamentos-ia-iag-cap1-post-2-tipos-aprendizaje.md'
+        'linkedin/fundamentos-ia-iag-cap1-post-3-mecanismos-internos.md': 'pildoras/fundamentos-ia-iag-cap1-post-3-mecanismos-internos.md'
+        'linkedin/fundamentos-ia-iag-cap1-post-4-software-vs-ia.md': 'pildoras/fundamentos-ia-iag-cap1-post-4-software-vs-ia.md'
+        'linkedin/fundamentos-ia-iag-cap1-post-5-mlops.md': 'pildoras/fundamentos-ia-iag-cap1-post-5-mlops.md'
+        'linkedin/fundamentos-ia-iag-cap2-post-1-embeddings.md': 'pildoras/fundamentos-ia-iag-cap2-post-1-embeddings.md'
+        'linkedin/fundamentos-ia-iag-cap2-post-2-transformer.md': 'pildoras/fundamentos-ia-iag-cap2-post-2-transformer.md'
+        'linkedin/fundamentos-ia-iag-cap2-post-3-leyes-escala.md': 'pildoras/fundamentos-ia-iag-cap2-post-3-leyes-escala.md'
+        'linkedin/fundamentos-ia-iag-cap2-post-4-llm-rag-agente.md': 'pildoras/fundamentos-ia-iag-cap2-post-4-llm-rag-agente.md'
+        'linkedin/fundamentos-ia-iag-cap2-post-5-llmops.md': 'pildoras/fundamentos-ia-iag-cap2-post-5-llmops.md'
+        'linkedin/fundamentos-ia-iag-cap3-post-1-cinco-diferencias.md': 'pildoras/fundamentos-ia-iag-cap3-post-1-cinco-diferencias.md'
+        'linkedin/fundamentos-ia-iag-cap3-post-2-matriz-operacional.md': 'pildoras/fundamentos-ia-iag-cap3-post-2-matriz-operacional.md'
+        'linkedin/fundamentos-ia-iag-cap4-post-1-agi-definiciones.md': 'pildoras/fundamentos-ia-iag-cap4-post-1-agi-definiciones.md'
+        'linkedin/fundamentos-ia-iag-cap4-post-2-niveles-agi.md': 'pildoras/fundamentos-ia-iag-cap4-post-2-niveles-agi.md'
+        'linkedin/fundamentos-ia-iag-cap4-post-3-limites.md': 'pildoras/fundamentos-ia-iag-cap4-post-3-limites.md'
+        'linkedin/fundamentos-ia-iag-cap4-post-4-alineacion.md': 'pildoras/fundamentos-ia-iag-cap4-post-4-alineacion.md'
+        'linkedin/fundamentos-ia-iag-cap4-post-5-impacto.md': 'pildoras/fundamentos-ia-iag-cap4-post-5-impacto.md'
+        'linkedin/fundamentos-ia-iag-cap4-post-6-progreso.md': 'pildoras/fundamentos-ia-iag-cap4-post-6-progreso.md'
+        'linkedin/ia-pib-bienestar-energia-cap1-post-1-canales-bienestar.md': 'pildoras/ia-pib-bienestar-energia-cap1-post-1-canales-bienestar.md'
+        'linkedin/ia-pib-bienestar-energia-cap1-post-2-cantidad-vs-calidad.md': 'pildoras/ia-pib-bienestar-energia-cap1-post-2-cantidad-vs-calidad.md'
+        'linkedin/ia-pib-bienestar-energia-cap1-post-3-coste-real-de-los-cortes.md': 'pildoras/ia-pib-bienestar-energia-cap1-post-3-coste-real-de-los-cortes.md'
+        'linkedin/ia-pib-bienestar-energia-cap2-post-1-escala-fisica.md': 'pildoras/ia-pib-bienestar-energia-cap2-post-1-escala-fisica.md'
+        'linkedin/ia-pib-bienestar-energia-cap2-post-2-coste-por-consulta.md': 'pildoras/ia-pib-bienestar-energia-cap2-post-2-coste-por-consulta.md'
+        'linkedin/ia-pib-bienestar-energia-cap2-post-3-agua-y-silicio.md': 'pildoras/ia-pib-bienestar-energia-cap2-post-3-agua-y-silicio.md'
+        'linkedin/ia-pib-bienestar-energia-cap2-post-4-muro-fisico.md': 'pildoras/ia-pib-bienestar-energia-cap2-post-4-muro-fisico.md'
+        'linkedin/ia-pib-bienestar-energia-cap3-post-1-punto-ciego-pib.md': 'pildoras/ia-pib-bienestar-energia-cap3-post-1-punto-ciego-pib.md'
+        'linkedin/ia-pib-bienestar-energia-cap3-post-2-renta-y-bienestar.md': 'pildoras/ia-pib-bienestar-energia-cap3-post-2-renta-y-bienestar.md'
+        'linkedin/ia-pib-bienestar-energia-cap3-post-3-medir-mejor.md': 'pildoras/ia-pib-bienestar-energia-cap3-post-3-medir-mejor.md'
+        'linkedin/ia-pib-bienestar-energia-cap4-post-1-jcurve-productividad.md': 'pildoras/ia-pib-bienestar-energia-cap4-post-1-jcurve-productividad.md'
+        'linkedin/ia-pib-bienestar-energia-cap4-post-2-valor-antes-del-pib.md': 'pildoras/ia-pib-bienestar-energia-cap4-post-2-valor-antes-del-pib.md'
+        'linkedin/ia-pib-bienestar-energia-cap4-post-3-valor-mal-medido.md': 'pildoras/ia-pib-bienestar-energia-cap4-post-3-valor-mal-medido.md'
+        'linkedin/ia-pib-bienestar-energia-cap4-post-4-debate-y-senales.md': 'pildoras/ia-pib-bienestar-energia-cap4-post-4-debate-y-senales.md'
+        'linkedin/modelos-razonadores-cap1-post-1-razonar-o-predecir.md': 'pildoras/modelos-razonadores-cap1-post-1-razonar-o-predecir.md'
+        'linkedin/modelos-razonadores-cap1-post-2-o1-y-rlvr.md': 'pildoras/modelos-razonadores-cap1-post-2-o1-y-rlvr.md'
+        'linkedin/modelos-razonadores-cap1-post-3-ilusion-pensar.md': 'pildoras/modelos-razonadores-cap1-post-3-ilusion-pensar.md'
+        'linkedin/modelos-razonadores-cap2-post-1-sycophancy.md': 'pildoras/modelos-razonadores-cap2-post-1-sycophancy.md'
+        'linkedin/modelos-razonadores-cap2-post-2-specification-gaming.md': 'pildoras/modelos-razonadores-cap2-post-2-specification-gaming.md'
+        'linkedin/modelos-razonadores-cap2-post-3-cot-fidelidad.md': 'pildoras/modelos-razonadores-cap2-post-3-cot-fidelidad.md'
+        'linkedin/modelos-razonadores-cap3-post-1-segunda-escala.md': 'pildoras/modelos-razonadores-cap3-post-1-segunda-escala.md'
+        'linkedin/modelos-razonadores-cap3-post-2-tres-palancas.md': 'pildoras/modelos-razonadores-cap3-post-2-tres-palancas.md'
+        'linkedin/modelos-razonadores-cap4-post-1-suelo-fisico.md': 'pildoras/modelos-razonadores-cap4-post-1-suelo-fisico.md'
+        'linkedin/modelos-razonadores-cap4-post-2-routellm.md': 'pildoras/modelos-razonadores-cap4-post-2-routellm.md'
+        'linkedin/modelos-razonadores-cap5-post-1-overthinking.md': 'pildoras/modelos-razonadores-cap5-post-1-overthinking.md'
+        'linkedin/modelos-razonadores-cap5-post-2-ataques-agentes.md': 'pildoras/modelos-razonadores-cap5-post-2-ataques-agentes.md'
+        'linkedin/multimodalidad-iag-cap1-post-1-mapa-campo.md': 'pildoras/multimodalidad-iag-cap1-post-1-mapa-campo.md'
+        'linkedin/multimodalidad-iag-cap1-post-2-dificultades.md': 'pildoras/multimodalidad-iag-cap1-post-2-dificultades.md'
+        'linkedin/multimodalidad-iag-cap1-post-3-espacio-compartido.md': 'pildoras/multimodalidad-iag-cap1-post-3-espacio-compartido.md'
+        'linkedin/multimodalidad-iag-cap2-post-1-aprendizaje-contrastivo.md': 'pildoras/multimodalidad-iag-cap2-post-1-aprendizaje-contrastivo.md'
+        'linkedin/multimodalidad-iag-cap2-post-2-imagebind-transitividad.md': 'pildoras/multimodalidad-iag-cap2-post-2-imagebind-transitividad.md'
+        'linkedin/multimodalidad-iag-cap3-post-1-encoder-conector-llm.md': 'pildoras/multimodalidad-iag-cap3-post-1-encoder-conector-llm.md'
+        'linkedin/multimodalidad-iag-cap3-post-3-tokenizacion-nativa.md': 'pildoras/multimodalidad-iag-cap3-post-3-tokenizacion-nativa.md'
+        'linkedin/multimodalidad-iag-cap3-post-4-tradeoffs.md': 'pildoras/multimodalidad-iag-cap3-post-4-tradeoffs.md'
+        'linkedin/multimodalidad-iag-cap4-post-1-benchmarks-mienten.md': 'pildoras/multimodalidad-iag-cap4-post-1-benchmarks-mienten.md'
+        'linkedin/multimodalidad-iag-cap4-post-2-mas-alla-exactitud.md': 'pildoras/multimodalidad-iag-cap4-post-2-mas-alla-exactitud.md'
+        'linkedin/multimodalidad-iag-cap4-post-3-dominios-dificiles.md': 'pildoras/multimodalidad-iag-cap4-post-3-dominios-dificiles.md'
+        'linkedin/multimodalidad-iag-cap5-post-1-prompt-injection.md': 'pildoras/multimodalidad-iag-cap5-post-1-prompt-injection.md'
+        'linkedin/multimodalidad-iag-cap5-post-2-herramientas-rag.md': 'pildoras/multimodalidad-iag-cap5-post-2-herramientas-rag.md'
+        'linkedin/multimodalidad-iag-cap5-post-3-agencia-alucinaciones.md': 'pildoras/multimodalidad-iag-cap5-post-3-agencia-alucinaciones.md'
   - social:
       cards_layout: clean
       cards_layout_options:

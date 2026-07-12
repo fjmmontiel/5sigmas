@@ -32,6 +32,7 @@ test/*
 # Poster frames — same rule: ignore except published series
 *.jpg
 !docs/series/**/*.jpg
+!docs/assets/linkedin/**/*.jpg
 docs/**/videos/
 docs/assets/videos/
 # Animation export artifacts
