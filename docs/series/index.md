@@ -59,6 +59,13 @@ Divulgación técnica sobre IA organizada en series temáticas. Cada serie es un
   <div class="si-cta">Leer →</div>
 </a>
 
+<a href="/series/agentes-ia/00_presentacion_serie/" class="si-card">
+  <div class="si-label">Técnico · 5 capítulos</div>
+  <div class="si-title">Agentes de IA</div>
+  <div class="si-desc">De responder a actuar: herramientas, memoria, evaluación, seguridad y las condiciones que hacen operable un agente.</div>
+  <div class="si-cta">Leer →</div>
+</a>
+
 </div>
 
 <div style="margin:2rem 0 1rem" markdown="1">

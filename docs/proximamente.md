@@ -230,11 +230,6 @@ hide:
         <div class="research-title">RAG: Retrieval-Augmented Generation</div>
         <div class="research-desc">Cómo conectar un LLM a fuentes externas. Arquitectura, evaluación y trampas habituales.</div>
       </div>
-      <div class="research-card" style="--rc:#10B981">
-        <div class="research-badge">En investigación</div>
-        <div class="research-title">Agentes de IA</div>
-        <div class="research-desc">Cómo los LLMs pasan de responder a actuar. Bucles de razonamiento y límites reales.</div>
-      </div>
       <div class="research-card" style="--rc:#8B5CF6">
         <div class="research-badge">En investigación</div>
         <div class="research-title">El problema de la alucinación</div>
@@ -266,11 +261,6 @@ hide:
           <div class="research-badge">En investigación</div>
           <div class="research-title">RAG: Retrieval-Augmented Generation</div>
           <div class="research-desc">Cómo conectar un LLM a fuentes externas. Arquitectura, evaluación y trampas habituales.</div>
-        </div>
-        <div class="research-card" style="--rc:#10B981">
-          <div class="research-badge">En investigación</div>
-          <div class="research-title">Agentes de IA</div>
-          <div class="research-desc">Cómo los LLMs pasan de responder a actuar. Bucles de razonamiento y límites reales.</div>
         </div>
         <div class="research-card" style="--rc:#8B5CF6">
           <div class="research-badge">En investigación</div>
