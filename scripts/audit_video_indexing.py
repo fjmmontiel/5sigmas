@@ -124,7 +124,7 @@ def main() -> int:
         video = url.find("video:video", NS)
         if loc not in sitemap_locs:
             fail(f"video sitemap URL not present in sitemap.xml: {loc}", failures)
-        for tag in ("thumbnail_loc", "title", "description", "content_loc"):
+        for tag in ("thumbnail_loc", "title", "description", "content_loc", "player_loc"):
             if video.find(f"video:{tag}", NS) is None:
                 fail(f"{loc}: video sitemap missing {tag}", failures)
         for tag in ("duration", "publication_date"):
@@ -170,6 +170,8 @@ def main() -> int:
         if video_index_html and watch_loc not in video_index_html:
             fail(f"{md}: watch page missing from video index", failures)
         watch_html = watch_html_path.read_text(encoding="utf-8", errors="ignore")
+        if 'name="robots" content="index,follow' not in watch_html:
+            fail(f"{md}: watch page missing explicit indexable robots directive", failures)
         if watch_html.count('"@type": "VideoObject"') != 1:
             fail(f"{md}: expected exactly one VideoObject on watch page", failures)
         if "<video" not in watch_html:

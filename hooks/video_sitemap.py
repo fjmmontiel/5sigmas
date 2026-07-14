@@ -92,6 +92,7 @@ def on_post_build(config, **kwargs):
             f"      <video:title>{escape(entry['title'])}</video:title>",
             f"      <video:description>{escape(entry['description'])}</video:description>",
             f"      <video:content_loc>{entry['video_url']}</video:content_loc>",
+            f"      <video:player_loc allow_embed=\"yes\">{entry['watch_url']}</video:player_loc>",
             *optional_video_tags,
             "    </video:video>",
             "  </url>",
@@ -165,6 +166,7 @@ def _write_watch_page(site_dir: Path, entry: dict) -> None:
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>{title} - Vídeo - 5sigmas</title>
   <meta name="description" content="{description}">
+  <meta name="robots" content="index,follow,max-image-preview:large">
   <link rel="canonical" href="{entry["watch_url"]}">
   <meta property="og:type" content="video.other">
   <meta property="og:title" content="{title}">
