@@ -8,7 +8,7 @@ tags:
   - Agentes
   - Tool Calling
 video: "01-que-es-un-agente.mp4"
-video_duration: "PT1M30S"
+video_duration: "PT58S"
 ---
 
 # Capítulo 1 — Qué es un agente de IA y qué no lo es

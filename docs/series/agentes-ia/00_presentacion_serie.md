@@ -9,7 +9,7 @@ tags:
   - Tool Calling
   - Arquitectura
 video: "00_presentacion_serie.mp4"
-video_duration: "PT1M15S"
+video_duration: "PT56S"
 hide:
   - toc
 ---

@@ -9,7 +9,7 @@ tags:
   - Seguridad
   - Prompt Injection
 video: "04-seguridad-agentes.mp4"
-video_duration: "PT1M35S"
+video_duration: "PT55S"
 ---
 
 # Capítulo 4 — Seguridad: cuando leer datos se convierte en actuar
@@ -74,4 +74,3 @@ La confirmación debe mostrar qué se va a hacer, con qué datos y con qué alca
 - [NIST — Agent hijacking evaluations](https://www.nist.gov/news-events/news/2025/01/technical-blog-strengthening-ai-agent-hijacking-evaluations)
 - [Anthropic — Trustworthy agents in practice](https://www.anthropic.com/research/trustworthy-agents)
 - [NIST — AI Agent Standards Initiative](https://www.nist.gov/news-events/news/2026/02/announcing-ai-agent-standards-initiative-interoperable-and-secure)
-

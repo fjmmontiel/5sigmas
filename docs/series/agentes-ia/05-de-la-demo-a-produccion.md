@@ -9,7 +9,7 @@ tags:
   - Producción
   - Arquitectura
 video: "05-de-la-demo-a-produccion.mp4"
-video_duration: "PT1M40S"
+video_duration: "PT59S"
 ---
 
 # Capítulo 5 — De la demo a un sistema operable
@@ -102,4 +102,3 @@ La respuesta a estas preguntas es más importante que elegir el framework de mod
 - [NIST — AI Agent Standards Initiative](https://www.nist.gov/artificial-intelligence/ai-agent-standards-initiative)
 - [Anthropic — Trustworthy agents in practice](https://www.anthropic.com/research/trustworthy-agents)
 - [OpenAI Agents SDK — tracing and tools](https://openai.github.io/openai-agents-python/)
-
