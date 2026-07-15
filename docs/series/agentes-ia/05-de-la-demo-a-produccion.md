@@ -9,7 +9,7 @@ tags:
   - Producción
   - Arquitectura
 video: "05-de-la-demo-a-produccion.mp4"
-video_duration: "PT59S"
+video_duration: "PT60S"
 ---
 
 # Capítulo 5 — De la demo a un sistema operable

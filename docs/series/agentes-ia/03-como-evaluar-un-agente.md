@@ -9,7 +9,7 @@ tags:
   - Evaluación
   - Observabilidad
 video: "03-como-evaluar-un-agente.mp4"
-video_duration: "PT58S"
+video_duration: "PT60S"
 ---
 
 # Capítulo 3 — Cómo evaluar un agente de IA

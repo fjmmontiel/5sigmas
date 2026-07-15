@@ -9,7 +9,7 @@ tags:
   - Arquitectura
   - Tool Calling
 video: "02-anatomia-de-un-agente.mp4"
-video_duration: "PT56S"
+video_duration: "PT60S"
 ---
 
 # Capítulo 2 — La anatomía de un agente

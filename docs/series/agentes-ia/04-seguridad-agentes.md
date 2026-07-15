@@ -9,7 +9,7 @@ tags:
   - Seguridad
   - Prompt Injection
 video: "04-seguridad-agentes.mp4"
-video_duration: "PT55S"
+video_duration: "PT59S"
 ---
 
 # Capítulo 4 — Seguridad: cuando leer datos se convierte en actuar
