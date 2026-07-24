@@ -1,8 +1,4 @@
 import os
-try:
-    import yaml
-except ModuleNotFoundError:
-    yaml = None
 import math
 import re
 
@@ -10,26 +6,12 @@ ANIMATION_SNIPPET_PREFIXES = (
     "snippets/fundamentos-ia/",
     "snippets/ia-pib-energia/",
     "snippets/datacenters-espacio/",
-    "snippets/animaciones/",
 )
 SHELL_EXCLUDED_SNIPPETS = {
     "snippets/5sigma.html",
     "snippets/series_cards.html",
     "snippets/series_meta.html",
 }
-PUBLIC_VIDEO_VARIANT_SUFFIXES = (
-    "-signal",
-    "-deck",
-    "-pressure",
-    "-orbit",
-    "-cascade",
-    "-pulse",
-    "-pulse-core",
-    "-pulse-orbit",
-    "-pulse-cascade",
-)
-
-
 def _is_animation_snippet(path):
     if not path:
         return False
@@ -108,30 +90,6 @@ def _has_existing_shell(html):
 def _is_shell_excluded_snippet(path):
     normalized = str(path or "").strip().replace("\\", "/")
     return normalized in SHELL_EXCLUDED_SNIPPETS
-
-
-def _is_public_video_file(filename, series_dirname):
-    normalized = str(filename or "").strip().lower()
-    if not normalized.endswith((".mp4", ".webm", ".mov")):
-        return False
-    stem = normalized.rsplit(".", 1)[0]
-    if not stem.endswith("-teaser"):
-        return False
-
-    base = stem[: -len("-teaser")]
-    if base == str(series_dirname or "").strip().lower():
-        return True
-
-    return not any(base.endswith(suffix) for suffix in PUBLIC_VIDEO_VARIANT_SUFFIXES)
-
-
-def _public_video_files(video_files, series_dirname):
-    selected = [
-        filename
-        for filename in sorted(video_files)
-        if _is_public_video_file(filename, series_dirname)
-    ]
-    return selected
 
 
 def _should_wrap_with_shell(path, html, shell_mode="auto"):
@@ -315,84 +273,6 @@ def define_env(env):
     - variables: the dictionary that contains the environment variables
     - macro: a decorator function, to declare a macro.
     """
-
-    # Load podcasts data
-    podcasts_file = os.path.join(os.path.dirname(__file__), 'docs/series/podcasts.yml')
-    try:
-        if yaml is None:
-            raise ModuleNotFoundError("PyYAML is not installed")
-        with open(podcasts_file, 'r', encoding='utf-8') as f:
-            podcasts_data = yaml.safe_load(f)
-    except Exception as e:
-        print(f"Error loading podcasts.yml: {e}")
-        podcasts_data = {}
-
-    @env.macro
-    def podcast_player(series_id):
-        """
-        Generates the HTML for the podcast player for a given series.
-        """
-        if series_id not in podcasts_data:
-            return f'<div class="admonition warning"><p class="admonition-title">Warning</p><p>Podcast data not found for series: {series_id}</p></div>'
-
-        data = podcasts_data[series_id]
-        audio_file = data.get('audio_file', '')
-        spotify_url = data.get('spotify_url', '')
-
-        # Construct the HTML/Markdown
-        # We use markdown="1" on the container to allow processing of the inner markdown (like the button)
-        html = f"""
-<div class="podcast-player" markdown="1">
-<audio controls style="width: 100%;">
-    <source src="/{audio_file}" type="audio/mpeg">
-    Tu navegador no soporta el elemento de audio.
-</audio>
-
-<br>
-
-[:simple-spotify: Escuchar en Spotify]({spotify_url}){{: .md-button .md-button--primary }}
-</div>
-"""
-        return html
-
-    @env.macro
-    def video_gallery(series_dirname):
-        """
-        Generates HTML for all videos in docs/series/{series_dirname}/videos/
-        """
-        # Define path relative to the project root
-        # We assume the structure is docs/series/{series_dirname}/videos
-        videos_dir_rel = f'docs/series/{series_dirname}/videos'
-        videos_dir_abs = os.path.join(os.path.dirname(__file__), videos_dir_rel)
-
-        if not os.path.exists(videos_dir_abs):
-            return f"<!-- No videos directory found at {videos_dir_rel} -->"
-
-        video_files = _public_video_files(os.listdir(videos_dir_abs), series_dirname)
-
-        if not video_files:
-            return f"<!-- No public video files found in {videos_dir_rel} -->"
-
-        html = '<div class="video-gallery" style="display: grid; gap: 20px; margin-top: 20px;">'
-        for vid in video_files:
-            # Construct the absolute web path
-            # /series/{series_dirname}/videos/{vid}
-            video_src = f"/series/{series_dirname}/videos/{vid}"
-            
-            # Clean up filename for display
-            title = vid.rsplit('.', 1)[0].replace('_', ' ').replace('-', ' ')
-            
-            html += f"""
-            <div class="video-container">
-                <video controls style="width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-                    <source src="{video_src}" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-                <p style="text-align: center; font-size: 0.9em; color: var(--md-default-fg-color--light); margin-top: 5px;">{title}</p>
-            </div>
-            """
-        html += '</div>'
-        return html
 
     @env.macro
     def reading_time():

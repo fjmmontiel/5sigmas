@@ -1,18 +1,18 @@
-<div class="ta-learn ai-tabs ta-demo ta-tabs" data-demo="tipos_aprendizaje_vnext" data-anim-tabs data-default="sup" data-anim-fullscreen="on" data-anim-contrast="auto">
+<div class="ta-learn ai-tabs ta-demo ta-tabs" data-demo="tipos_aprendizaje" data-anim-tabs data-default="sup" data-anim-fullscreen="on" data-anim-contrast="auto">
   <div class="ai-tabs__header">
     <div class="ai-tabs__title">De dónde sale el profesor</div>
     <div class="ai-tabs__subtitle">Regla rápida: cambia el profesor y cambia la forma de aprender.</div>
   </div>
 
   <div class="ai-tabs__nav ta-tablist" role="tablist" data-role="tablist" aria-label="Tipos de aprendizaje">
-    <button id="tab-sup-vnext" class="tab ta-tab" type="button" role="tab" data-role="tab" aria-selected="true" data-tab="sup">Supervisado</button>
-    <button id="tab-unsup-vnext" class="tab ta-tab" type="button" role="tab" data-role="tab" aria-selected="false" data-tab="unsup">No supervisado</button>
-    <button id="tab-self-vnext" class="tab ta-tab" type="button" role="tab" data-role="tab" aria-selected="false" data-tab="self">Auto-supervisado</button>
-    <button id="tab-rl-vnext" class="tab ta-tab" type="button" role="tab" data-role="tab" aria-selected="false" data-tab="rl">Refuerzo (RL)</button>
+    <button id="tab-sup" class="tab ta-tab" type="button" role="tab" data-role="tab" aria-selected="true" data-tab="sup">Supervisado</button>
+    <button id="tab-unsup" class="tab ta-tab" type="button" role="tab" data-role="tab" aria-selected="false" data-tab="unsup">No supervisado</button>
+    <button id="tab-self" class="tab ta-tab" type="button" role="tab" data-role="tab" aria-selected="false" data-tab="self">Auto-supervisado</button>
+    <button id="tab-rl" class="tab ta-tab" type="button" role="tab" data-role="tab" aria-selected="false" data-tab="rl">Refuerzo (RL)</button>
   </div>
 
   <div class="ai-tabs__content ta-panels">
-    <section class="panel ta-panel" data-panel="sup" aria-labelledby="tab-sup-vnext">
+    <section class="panel ta-panel" data-panel="sup" aria-labelledby="tab-sup">
       <div class="learn-grid">
         <article class="learn-hero learn-hero--sup">
           <span class="learn-kicker">Supervisado</span>
@@ -57,7 +57,7 @@
       </div>
     </section>
 
-    <section class="panel ta-panel" data-panel="unsup" aria-labelledby="tab-unsup-vnext" hidden>
+    <section class="panel ta-panel" data-panel="unsup" aria-labelledby="tab-unsup" hidden>
       <div class="learn-grid">
         <article class="learn-hero learn-hero--unsup">
           <span class="learn-kicker">No supervisado</span>
@@ -102,7 +102,7 @@
       </div>
     </section>
 
-    <section class="panel ta-panel" data-panel="self" aria-labelledby="tab-self-vnext" hidden>
+    <section class="panel ta-panel" data-panel="self" aria-labelledby="tab-self" hidden>
       <div class="learn-grid">
         <article class="learn-hero learn-hero--self">
           <span class="learn-kicker">Auto-supervisado</span>
@@ -147,7 +147,7 @@
       </div>
     </section>
 
-    <section class="panel ta-panel" data-panel="rl" aria-labelledby="tab-rl-vnext" hidden>
+    <section class="panel ta-panel" data-panel="rl" aria-labelledby="tab-rl" hidden>
       <div class="learn-grid">
         <article class="learn-hero learn-hero--rl">
           <span class="learn-kicker">Refuerzo</span>
@@ -506,7 +506,7 @@
 
 <script>
   (function () {
-    const KEY = "tipos_aprendizaje_vnext";
+    const KEY = "tipos_aprendizaje";
     if (window.__portableTabsFallback && window.__portableTabsFallback[KEY]) return;
     window.__portableTabsFallback = window.__portableTabsFallback || {};
     window.__portableTabsFallback[KEY] = true;
@@ -550,7 +550,7 @@
     }
 
     function initAll(scope) {
-      scope.querySelectorAll('.ta-learn[data-demo="tipos_aprendizaje_vnext"][data-anim-tabs]').forEach(initRoot);
+      scope.querySelectorAll('.ta-learn[data-demo="tipos_aprendizaje"][data-anim-tabs]').forEach(initRoot);
     }
 
     if (window.TabbedAnimations && typeof window.TabbedAnimations.initAll === "function") {

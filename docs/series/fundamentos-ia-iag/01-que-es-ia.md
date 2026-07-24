@@ -124,7 +124,7 @@ Piensa en cada algoritmo como una máquina con un tipo de **parámetros**. Entre
 * Si "gratis" aparece muy a menudo en spam y rara vez en no spam, eso empuja la predicción hacia spam.
 * Entrenar = actualizar esos conteos con muchos ejemplos y convertirlos en probabilidades.
 
-{{ include_html("snippets/fundamentos-ia/algoritmos/naive_bayes_vnext.html") }}
+{{ include_html("snippets/fundamentos-ia/algoritmos/naive_bayes.html") }}
 
 ---
 
@@ -143,7 +143,7 @@ Piensa en cada algoritmo como una máquina con un tipo de **parámetros**. Entre
 * Agrupar clientes por comportamiento (frecuencia, gasto, canales) sin etiquetas previas, solo los datos crudos.
 * Entrenar = recolocar los centros para que los puntos queden **lo más cerca posible** de su grupo (clientes más parecidos, más juntos).
 
-{{ include_html("snippets/fundamentos-ia/algoritmos/kmeans_vnext.html") }}
+{{ include_html("snippets/fundamentos-ia/algoritmos/kmeans.html") }}
 
 ---
 
@@ -185,7 +185,7 @@ Piensa en cada algoritmo como una máquina con un tipo de **parámetros**. Entre
 * La red combina señales con pesos, pasa por activaciones y produce una puntuación/probabilidad.
 * Si falla, ajusta pesos/sesgos para que la próxima vez "gratis" pese más o menos, etc.
 
-{{ include_html("snippets/fundamentos-ia/redes_neuronales_v2.html") }}
+{{ include_html("snippets/fundamentos-ia/redes_neuronales.html") }}
 
 ---
 

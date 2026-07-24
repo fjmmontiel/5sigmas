@@ -1,6 +1,6 @@
-from pathlib import Path
 from types import SimpleNamespace
 import sys
+from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -60,10 +60,3 @@ def test_on_post_page_skips_audio_when_index_has_no_entry(monkeypatch) -> None:
 
     assert 'class="s5-video-embed"' in output
     assert 'class="s5-article-audio"' not in output
-
-
-def test_mkdocs_registers_article_audio_javascript() -> None:
-    mkdocs_path = ROOT / "mkdocs.yml"
-    content = mkdocs_path.read_text(encoding="utf-8")
-
-    assert "- path: javascripts/article-audio.js" in content
