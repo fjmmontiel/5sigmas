@@ -92,7 +92,6 @@ def on_post_build(config, **kwargs):
             f"      <video:title>{escape(entry['title'])}</video:title>",
             f"      <video:description>{escape(entry['description'])}</video:description>",
             f"      <video:content_loc>{entry['video_url']}</video:content_loc>",
-            f"      <video:player_loc allow_embed=\"yes\">{entry['watch_url']}</video:player_loc>",
             *optional_video_tags,
             "    </video:video>",
             "  </url>",
