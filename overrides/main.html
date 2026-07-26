@@ -79,20 +79,6 @@
       "url": "{{ config.site_url }}meta/about/",
       "sameAs": ["https://www.linkedin.com/in/fjmm1998/"]
     }
-    {% elif "meta/advisor-ia" in page.url %}
-    "@type": "Service",
-    "name": "Advisor de IA",
-    "description": "{{ page.meta.description | default(config.site_description) | e }}",
-    "url": "{{ page.canonical_url }}",
-    "areaServed": "ES",
-    "serviceType": "Advisory y consultoría técnica de Inteligencia Artificial",
-    "provider": {
-      "@type": "Person",
-      "name": "Francisco Maldonado",
-      "jobTitle": "Ingeniero de sistemas de IA en tiempo real",
-      "url": "{{ config.site_url }}meta/about/",
-      "sameAs": ["https://www.linkedin.com/in/fjmm1998/"]
-    }
     {% elif "meta/about" in page.url %}
     "@type": "ProfilePage",
     "name": "Sobre Francisco Maldonado — 5sigmas",
@@ -150,49 +136,6 @@
     {% endif %}
   }
   </script>
-
-  {% if "meta/advisor-ia" in page.url %}
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "¿Qué diferencia hay entre advisory y desarrollo?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "El advisory ordena la decisión antes de construir: qué conviene hacer, qué riesgos existen y cómo debería plantearse una implementación. Puede terminar en una arquitectura, una recomendación o una lista de pruebas. El desarrollo empieza cuando la decisión ya está suficientemente clara."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "¿Tiene sentido si mi equipo aún no tiene un caso de uso definido?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Tiene sentido cuando hay una decisión real que tomar. En esa fase el trabajo suele consistir en separar problemas donde la IA puede aportar valor de automatizaciones más simples, restricciones de datos o ideas que todavía no justifican inversión."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "¿Trabajas solo con IA generativa?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "La IA generativa es una parte del mapa. También entran visión artificial, voz, clasificación, recuperación de información, agentes, evaluación, integración con sistemas existentes y criterios de producción."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "¿Qué debería enviar antes de escribir?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Una descripción breve del problema, qué se ha probado, qué datos o sistemas existen y qué te preocupa más: coste, latencia, calidad, seguridad, dependencia de proveedor, adopción o viabilidad técnica."
-        }
-      }
-    ]
-  }
-  </script>
-  {% endif %}
 
   {% if breadcrumb_parent_title and breadcrumb_parent_url and page.url not in ["", "index.html"] %}
   <script type="application/ld+json">
