@@ -1,5 +1,5 @@
 site_name: 5sigmas
-site_description: IA explicada con criterio técnico en español. Aprende inteligencia artificial sin hype, separa señal de ruido y aplica ese criterio a decisiones reales.
+site_description: IA explicada con criterio técnico en español. Aprende inteligencia artificial sin hype, separa señal de ruido y construye criterio propio con fuentes primarias.
 site_url: "https://5sigmas.com"
 validation:
   nav:
@@ -91,7 +91,6 @@ nav:
       - articulos-tecnicos/index.md
       - Agente Reactivo, Proactivo y Tool calls: articulos-tecnicos/proactive-reactive-agent-and-tool-calls.md
   - Próximamente: proximamente.md
-  - Advisor IA: meta/advisor-ia.md
   - Sobre 5sigmas: meta/about.md
 markdown_extensions:
   - meta
@@ -155,6 +154,7 @@ plugins:
   - redirects:
       enabled: !ENV [MKDOCS_REDIRECTS, true]
       redirect_maps:
+        'meta/advisor-ia.md': 'meta/about.md'
         'series/fundamentos-ia-iag/index.md': 'series/fundamentos-ia-iag/00_presentacion_serie.md'
         'series/from-cave-to-agi/index.md': 'series/from-cave-to-agi/00_presentacion_serie.md'
         'series/multimodalidad-iag/index.md': 'series/multimodalidad-iag/00_presentacion_serie.md'
