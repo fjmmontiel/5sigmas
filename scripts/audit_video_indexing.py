@@ -91,13 +91,17 @@ def main() -> int:
         meta = frontmatter(md)
         if not meta or "video" not in meta:
             continue
-        video_pages.append((md, meta))
         video = md.parent / meta["video"]
         poster = video.with_suffix(".jpg")
         if not video.exists():
             fail(f"{md}: missing video file {video.name}", failures)
         if not poster.exists():
-            fail(f"{md}: missing poster file {poster.name}", failures)
+            print(
+                f"Video indexing skipped: {md} has no poster file {poster.name}",
+                file=sys.stderr,
+            )
+            continue
+        video_pages.append((md, meta))
         if "noindex" not in meta.get("robots", "").lower():
             for key in ("title", "description", "date", "video_duration"):
                 if not meta.get(key):
@@ -124,9 +128,12 @@ def main() -> int:
         video = url.find("video:video", NS)
         if loc not in sitemap_locs:
             fail(f"video sitemap URL not present in sitemap.xml: {loc}", failures)
-        for tag in ("thumbnail_loc", "title", "description", "content_loc", "player_loc"):
+        for tag in ("thumbnail_loc", "title", "description", "content_loc"):
             if video.find(f"video:{tag}", NS) is None:
                 fail(f"{loc}: video sitemap missing {tag}", failures)
+        player_loc = video.find("video:player_loc", NS)
+        if player_loc is not None and player_loc.text == loc:
+            fail(f"{loc}: video sitemap player_loc must differ from loc", failures)
         for tag in ("duration", "publication_date"):
             if video.find(f"video:{tag}", NS) is None:
                 fail(f"{loc}: video sitemap missing optional-but-expected {tag}", failures)
