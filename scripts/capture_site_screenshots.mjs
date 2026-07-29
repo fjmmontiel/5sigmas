@@ -34,6 +34,18 @@ const collectLayout = () => {
     };
   };
 
+  const readingLeaf = [...document.querySelectorAll('body *')].find(
+    (node) => node.children.length === 0 && node.textContent.includes('Tiempo de lectura'),
+  );
+  const readingAncestors = [];
+  let current = readingLeaf;
+  for (let depth = 0; current && depth < 5; depth += 1, current = current.parentElement) {
+    readingAncestors.push({
+      ...rect(current),
+      text: current.textContent.trim().replace(/\s+/g, ' ').slice(0, 160),
+    });
+  }
+
   return {
     viewport: { width: document.documentElement.clientWidth, height: document.documentElement.clientHeight },
     document: { scrollWidth: document.documentElement.scrollWidth, scrollHeight: document.documentElement.scrollHeight },
@@ -41,6 +53,7 @@ const collectLayout = () => {
     landing: landing ? rect(landing) : null,
     landingChildren: landing ? [...landing.children].map(rect) : [],
     coverChildren: [...document.querySelectorAll('.s5-cover > *')].map(rect),
+    readingAncestors,
   };
 };
 
