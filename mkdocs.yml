@@ -39,7 +39,7 @@ theme:
     - navigation.footer
 
 extra:
-  generator: false  # quita “Made with Material for MkDocs”
+  generator: false
   social:
     - icon: fontawesome/brands/linkedin
       link: https://www.linkedin.com/in/fjmm1998/
@@ -133,6 +133,7 @@ extra_javascript:
     defer: true
 extra_css:
   - stylesheets/extra.css
+  - stylesheets/revamp.css
   - assets/stylesheets/animations.css
   - assets/stylesheets/series_energy_ai_preview.css
 
@@ -169,7 +170,6 @@ plugins:
         color: "#ffffff"
         font_family: Inter
       enabled: true
-  # - blog        # optional – see below
 exclude_docs: |
   drafts/
   drafts/**
