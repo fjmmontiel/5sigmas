@@ -21,19 +21,18 @@
     }
 
     document.querySelectorAll('.s5-observatory').forEach((panel) => {
+      const chart = panel.querySelector('.s5-observatory__chart');
+      if (!chart) return;
+
       panel.addEventListener('pointermove', (event) => {
         const bounds = panel.getBoundingClientRect();
         const x = ((event.clientX - bounds.left) / bounds.width - 0.5) * 8;
         const y = ((event.clientY - bounds.top) / bounds.height - 0.5) * 8;
-        panel.style.setProperty('--s5-shift-x', `${x}px`);
-        panel.style.setProperty('--s5-shift-y', `${y}px`);
-        const svg = panel.querySelector('svg');
-        if (svg) svg.style.transform = `translate(${x * 0.35}px, ${y * 0.35}px)`;
+        chart.style.transform = `translate(${x * 0.35}px, ${y * 0.35}px)`;
       });
 
       panel.addEventListener('pointerleave', () => {
-        const svg = panel.querySelector('svg');
-        if (svg) svg.style.transform = '';
+        chart.style.transform = '';
       });
     });
   };
