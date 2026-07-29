@@ -7,7 +7,6 @@ const outputDir = process.env.S5_SCREENSHOT_DIR ?? 'artifacts/visual-review';
 await mkdir(outputDir, { recursive: true });
 
 const browser = await chromium.launch({ headless: true });
-
 const desktop = { width: 1440, height: 1100 };
 const mobile = { width: 390, height: 844 };
 
@@ -15,6 +14,8 @@ const captures = [
   { name: 'homepage-desktop', path: '/', viewport: desktop },
   { name: 'homepage-mobile', path: '/', viewport: mobile, mobile: true },
   { name: 'homepage-dark', path: '/', viewport: desktop, colorScheme: 'dark', forcedScheme: 'slate' },
+  { name: 'visuals-desktop', path: '/visuales/', viewport: desktop },
+  { name: 'visuals-mobile', path: '/visuales/', viewport: mobile, mobile: true },
   { name: 'series-desktop', path: '/series/', viewport: desktop },
   { name: 'series-mobile', path: '/series/', viewport: mobile, mobile: true },
   { name: 'engineering-desktop', path: '/articulos-tecnicos/', viewport: desktop },
@@ -22,6 +23,7 @@ const captures = [
   { name: 'article-desktop', path: '/series/modelos-razonadores/03-test-time-compute/', viewport: desktop },
   { name: 'article-mobile', path: '/series/modelos-razonadores/03-test-time-compute/', viewport: mobile, mobile: true },
   { name: 'about-desktop', path: '/meta/about/', viewport: desktop },
+  { name: 'upcoming-desktop', path: '/proximamente/', viewport: desktop },
 ];
 
 const collectLayout = () => {
@@ -68,7 +70,6 @@ const collectLayout = () => {
     },
     landing: landing ? rect(landing) : null,
     landingChildren: landing ? [...landing.children].map(rect) : [],
-    coverChildren: [...document.querySelectorAll('.s5-cover > *')].map(rect),
     readingAncestors,
     brokenImages,
   };
