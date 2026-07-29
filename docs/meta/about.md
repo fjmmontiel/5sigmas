@@ -7,34 +7,47 @@ hide:
   - footer
 ---
 
-5sigmas es una publicación técnica sobre IA escrita desde la lógica de la ingeniería: separar señal de ruido, distinguir hecho de interpretación y priorizar fuentes primarias sobre narrativa comercial.
+<div class="s5-landing" markdown="1">
 
----
+<div class="s5-eyebrow">Sobre el proyecto</div>
+<h1>Una publicación técnica para separar señal de ruido.</h1>
+
+<div class="s5-about-grid">
+  <aside class="s5-about-manifesto">
+    <div class="s5-about-manifesto__big">La IA no necesita más ruido. Necesita mejores modelos mentales.</div>
+    <p>5sigmas prioriza mecanismos, evidencia y límites por encima de titulares, demos aisladas o narrativa comercial.</p>
+  </aside>
+  <div class="s5-about-content" markdown="1">
 
 ## Para quién es
 
-Este sitio es para las personas que quieren entender la IA más allá de los titulares.
+Este sitio es para quien quiere entender la IA más allá de los titulares y construir criterio propio antes de adoptar una herramienta, una arquitectura o una promesa.
 
-Si buscas aprender a usar una herramienta específica, hay mejores sitios. Si buscas saber cuál ha sido exactamente el último modelo publicado por DeepSeek, OpenAI, Anthropic o Google, hay mejores sitios.
+<div class="s5-quote">Si buscas entender cómo funciona esta tecnología desde sus cimientos y cómo cambia al llevarla a producción, este es tu lugar.</div>
 
-**Si buscas entender cómo funciona esta tecnología desde sus cimientos, este es tu lugar.**
-
-Cada serie está escrita para que puedas leerla sin depender de haberla visto en otro lado: los conceptos se construyen por capas, con las referencias que los sustentan y sin dar por supuesto lo que no se ha explicado antes.
+Cada serie está escrita para poder leerse de forma independiente, pero forma parte de una biblioteca común: los conceptos se construyen por capas, se explicitan los prerrequisitos y se enlazan las referencias que sostienen cada afirmación.
 
 ## Quién lo escribe
 
 Soy **Francisco Maldonado**, doble graduado en Física y Matemáticas. Trabajo diseñando y construyendo sistemas de IA que operan en tiempo real, desde asistentes de voz hasta visión artificial, abarcando desde la identificación de necesidades de negocio hasta la implantación en producción.
 
-Escribo para ordenar lo que normalmente queda disperso entre papers, repositorios y benchmarks.
-
-Si quieres plantearme una duda, comentar cómo aplicar alguna idea a tu caso o proponer una charla o ponencia, puedes escribirme directamente.
-
-[Preguntas, casos, charlas o ponencias](mailto:contacto@5sigmas.com){ .md-button }
+Escribo para ordenar lo que normalmente queda disperso entre papers, repositorios, benchmarks y decisiones de implementación.
 
 ## Cómo trabajo
 
-El contenido parte siempre de fuentes primarias: papers, anuncios oficiales, datasets y benchmarks publicados. Cuando hay interpretación o estimación, se señala como tal.
+El contenido parte de fuentes primarias: papers, anuncios oficiales, datasets, repositorios y benchmarks publicados. Cuando una conclusión incluye interpretación o estimación, se presenta como tal.
 
-Los artículos se actualizan cuando aparecen datos nuevos que cambian la conclusión, no cuando hay un nuevo modelo que mencionar. La fecha visible en cada artículo refleja cuándo fue publicado o revisado en profundidad.
+Los artículos se actualizan cuando aparecen datos que cambian la conclusión, no simplemente cuando aparece un nuevo modelo que mencionar. La fecha visible refleja una publicación o una revisión sustancial.
 
-Ningún artículo usa referencias de segunda mano como fuente principal de un hecho técnico. Si algo está citado, la fuente enlazada es la original.
+Ningún artículo utiliza referencias de segunda mano como fuente principal para un hecho técnico.
+
+## Contacto
+
+Puedes escribirme para plantear una duda, discutir cómo aplicar una idea a un caso real o proponer una charla o ponencia.
+
+<a class="s5-button s5-button--ink" href="mailto:contacto@5sigmas.com">contacto@5sigmas.com</a>
+
+  </div>
+</div>
+
+</div>
