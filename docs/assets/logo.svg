@@ -1,8 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
   <title id="title">5sigmas</title>
-  <rect width="120" height="120" rx="20" fill="#101214"/>
-  <rect x="18" y="18" width="12" height="12" fill="#ff4d24"/>
-  <path d="M18 92H102" stroke="#f3efe6" stroke-width="2" opacity=".24"/>
-  <text x="58" y="73" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="54" font-weight="700" letter-spacing="-5" fill="#f3efe6">5σ</text>
-  <text x="20" y="104" font-family="Arial, sans-serif" font-size="7" font-weight="700" letter-spacing="1.8" fill="#ff4d24">SIGNAL</text>
+  <rect width="64" height="64" rx="12" fill="#111111"/>
+  <text x="32" y="41" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="700" letter-spacing="-2" fill="#ffffff">5σ</text>
 </svg>
