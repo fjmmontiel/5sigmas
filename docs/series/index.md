@@ -2,16 +2,13 @@
 title: Series
 description: Todas las series de 5sigmas organizadas por bloques temáticos. Fundamentos, historia, frontera de modelos, economía e infraestructura de la IA.
 keywords: series IA, cursos inteligencia artificial español, divulgación IA, fundamentos machine learning
-tags:
-  - IA
-  - GenAI
 hide:
   - toc
   - navigation
   - footer
 ---
 
-<div class="s5-landing" markdown="1">
+<div class="s5-landing">
 
 <section class="s5-index-hero">
   <div class="s5-index-hero__copy">
