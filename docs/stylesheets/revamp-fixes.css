@@ -4,7 +4,8 @@
 .s5-landing,
 .s5-cover,
 .s5-cover__story,
-.s5-observatory {
+.s5-observatory,
+.s5-engineering-note__body {
   min-width: 0;
 }
 
@@ -25,6 +26,18 @@
   height: auto;
   max-width: 100%;
   transition: transform .18s ease-out;
+}
+
+.md-typeset .s5-button--signal {
+  color: #101214 !important;
+}
+
+.md-typeset .s5-button--ghost {
+  color: #f3efe6 !important;
+}
+
+.md-typeset .s5-button--ink {
+  color: var(--s5-paper) !important;
 }
 
 @media (max-width: 800px) {
