@@ -1,0 +1,79 @@
+/* Final responsive corrections discovered by Chromium visual review. */
+
+.s5-video-embed {
+  background: transparent !important;
+}
+
+.s5-video-embed__watch {
+  display: block;
+  margin: 0 !important;
+  padding: .75rem 0 0;
+  background: var(--s5-paper, #f3efe6) !important;
+}
+
+@media (max-width: 800px) {
+  .s5-series-row,
+  .md-typeset .s5-series-row {
+    display: grid !important;
+    grid-template-columns: 52px minmax(0, 1fr) !important;
+    grid-template-areas:
+      "number field"
+      "number title"
+      "number description"
+      "number chapters" !important;
+    column-gap: 1rem !important;
+    row-gap: .45rem !important;
+    align-items: start !important;
+    min-height: 0 !important;
+    padding: 1.35rem 0 !important;
+  }
+
+  .s5-series-row.is-primary,
+  .md-typeset .s5-series-row.is-primary {
+    margin: 0 !important;
+    padding: 1.35rem 1rem !important;
+  }
+
+  .s5-series-row > *,
+  .md-typeset .s5-series-row > * {
+    min-width: 0 !important;
+    width: auto !important;
+    max-width: 100% !important;
+    writing-mode: horizontal-tb !important;
+    word-break: normal !important;
+    overflow-wrap: break-word !important;
+  }
+
+  .s5-series-row__n {
+    grid-area: number;
+    align-self: start;
+    font-size: clamp(2.8rem, 16vw, 4rem) !important;
+    line-height: .82 !important;
+    letter-spacing: -.07em !important;
+  }
+
+  .s5-series-row__field {
+    grid-area: field;
+    padding-top: .1rem;
+  }
+
+  .s5-series-row__title {
+    grid-area: title;
+    font-size: clamp(1.35rem, 7vw, 1.8rem) !important;
+    line-height: 1.02 !important;
+    letter-spacing: -.035em !important;
+  }
+
+  .s5-series-row__desc {
+    grid-area: description;
+    margin-top: .25rem;
+    font-size: .84rem !important;
+    line-height: 1.55 !important;
+  }
+
+  .s5-series-row__chapters {
+    grid-area: chapters;
+    justify-self: start !important;
+    margin-top: .35rem;
+  }
+}
