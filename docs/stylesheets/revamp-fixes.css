@@ -18,6 +18,11 @@
   max-width: 100%;
 }
 
+/* Landing pages own their masthead and should not inherit article reading-time chrome. */
+.md-content__inner:has(> .s5-landing) > blockquote {
+  display: none;
+}
+
 .s5-observatory__chart {
   position: relative;
   z-index: 2;
