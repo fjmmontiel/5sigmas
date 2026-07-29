@@ -1,0 +1,41 @@
+/* Structural safeguards applied after the editorial design layer. */
+.md-content,
+.md-content__inner,
+.s5-landing,
+.s5-cover,
+.s5-cover__story,
+.s5-observatory {
+  min-width: 0;
+}
+
+.s5-landing {
+  display: block !important;
+  overflow-x: clip;
+}
+
+.s5-landing > * {
+  max-width: 100%;
+}
+
+.s5-observatory__chart {
+  position: relative;
+  z-index: 2;
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  transition: transform .18s ease-out;
+}
+
+@media (max-width: 800px) {
+  .s5-cover,
+  .s5-cover__story,
+  .s5-observatory {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .s5-cover__story {
+    overflow-wrap: anywhere;
+  }
+}
