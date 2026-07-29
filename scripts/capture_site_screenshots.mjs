@@ -1,5 +1,5 @@
 import { chromium } from 'playwright';
-import { mkdir } from 'node:fs/promises';
+import { mkdir, writeFile } from 'node:fs/promises';
 
 const baseUrl = process.env.S5_PREVIEW_URL ?? 'http://127.0.0.1:8000';
 const outputDir = process.env.S5_SCREENSHOT_DIR ?? 'artifacts/visual-review';
@@ -15,6 +15,34 @@ const captures = [
   { name: 'engineering-desktop', path: '/articulos-tecnicos/', viewport: { width: 1440, height: 1100 } },
   { name: 'article-desktop', path: '/series/modelos-razonadores/03-test-time-compute/', viewport: { width: 1440, height: 1100 } },
 ];
+
+const collectLayout = () => {
+  const landing = document.querySelector('.s5-landing');
+  const rect = (node) => {
+    const bounds = node.getBoundingClientRect();
+    const style = getComputedStyle(node);
+    return {
+      tag: node.tagName,
+      className: node.className,
+      display: style.display,
+      position: style.position,
+      width: Math.round(bounds.width),
+      height: Math.round(bounds.height),
+      left: Math.round(bounds.left),
+      top: Math.round(bounds.top),
+      scrollWidth: node.scrollWidth,
+    };
+  };
+
+  return {
+    viewport: { width: document.documentElement.clientWidth, height: document.documentElement.clientHeight },
+    document: { scrollWidth: document.documentElement.scrollWidth, scrollHeight: document.documentElement.scrollHeight },
+    body: { scrollWidth: document.body.scrollWidth, display: getComputedStyle(document.body).display },
+    landing: landing ? rect(landing) : null,
+    landingChildren: landing ? [...landing.children].map(rect) : [],
+    coverChildren: [...document.querySelectorAll('.s5-cover > *')].map(rect),
+  };
+};
 
 try {
   for (const capture of captures) {
@@ -33,6 +61,11 @@ try {
     if (!response?.ok()) {
       throw new Error(`${capture.path} returned ${response?.status() ?? 'no response'}`);
     }
+
+    const layout = await page.evaluate(collectLayout);
+    await writeFile(`${outputDir}/${capture.name}-layout.json`, JSON.stringify(layout, null, 2));
+    console.log(`LAYOUT ${capture.name}: ${JSON.stringify(layout)}`);
+
     await page.screenshot({
       path: `${outputDir}/${capture.name}.png`,
       fullPage: true,
