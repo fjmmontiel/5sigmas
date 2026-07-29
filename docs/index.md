@@ -7,7 +7,7 @@ hide:
   - footer
 ---
 
-<div class="s5-landing" markdown="1">
+<div class="s5-landing">
 
 <section class="s5-cover">
   <aside class="s5-cover__rail" aria-label="Metadatos editoriales">
@@ -28,28 +28,7 @@ hide:
 
   <div class="s5-observatory" aria-label="Visualización de señal frente a ruido">
     <div class="s5-observatory__head"><span>Signal observatory</span><span>μ = 0 · σ = 1</span></div>
-    <svg viewBox="0 0 500 320" role="img" aria-label="Distribución normal con región de cinco sigmas">
-      <line class="s5-grid-line" x1="20" y1="70" x2="480" y2="70" />
-      <line class="s5-grid-line" x1="20" y1="130" x2="480" y2="130" />
-      <line class="s5-grid-line" x1="20" y1="190" x2="480" y2="190" />
-      <line class="s5-axis" x1="20" y1="260" x2="480" y2="260" />
-      <line class="s5-sigma-line" x1="430" y1="55" x2="430" y2="260" />
-      <path class="s5-tail" d="M430 247 C450 252 466 257 480 260 L480 260 L430 260 Z" />
-      <path class="s5-curve" d="M20 259 C85 258 116 244 153 211 C194 175 213 70 250 48 C287 70 306 175 347 211 C384 244 415 258 480 259" />
-      <circle class="s5-noise-dot" cx="54" cy="92" r="3" />
-      <circle class="s5-noise-dot" cx="91" cy="204" r="2.5" />
-      <circle class="s5-noise-dot" cx="130" cy="118" r="3.5" />
-      <circle class="s5-noise-dot" cx="169" cy="229" r="2.5" />
-      <circle class="s5-noise-dot" cx="199" cy="96" r="3" />
-      <circle class="s5-noise-dot" cx="301" cy="102" r="2.5" />
-      <circle class="s5-noise-dot" cx="343" cy="81" r="3" />
-      <circle class="s5-noise-dot" cx="376" cy="222" r="2.5" />
-      <circle class="s5-noise-dot" cx="411" cy="145" r="3.5" />
-      <circle class="s5-noise-dot" cx="462" cy="99" r="2.5" />
-      <text x="438" y="45" fill="#ff4d24" font-family="IBM Plex Mono, monospace" font-size="12">5σ</text>
-      <text x="22" y="282" fill="rgba(255,255,255,.42)" font-family="IBM Plex Mono, monospace" font-size="10">NOISE</text>
-      <text x="422" y="282" fill="#ff4d24" font-family="IBM Plex Mono, monospace" font-size="10">SIGNAL</text>
-    </svg>
+    <img class="s5-observatory__chart" src="/assets/images/design/signal-observatory.svg" alt="Distribución normal con la región extrema de cinco sigmas resaltada" />
     <div class="s5-observatory__readout">
       <div class="s5-reading"><div class="s5-reading__value">5σ</div><div class="s5-reading__label">threshold</div></div>
       <div class="s5-reading"><div class="s5-reading__value">≠</div><div class="s5-reading__label">hype</div></div>
