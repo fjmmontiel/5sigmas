@@ -1,7 +1,7 @@
 ---
-title: Artículos Técnicos
-description: Artículos técnicos largos y autocontenidos sobre repositorios, runtimes y decisiones reales de implementación en sistemas de IA.
-keywords: artículos técnicos IA, runtime conversacional, async tool calls, arquitectura agentes, tool calling, sistemas LLM
+title: Ingeniería
+description: Notas técnicas de 5sigmas sobre arquitectura, runtimes, evaluación y sistemas de inteligencia artificial en producción.
+keywords: arquitectura IA, agentes, tool calling, sistemas LLM, runtime conversacional
 hide:
   - toc
   - navigation
@@ -10,44 +10,59 @@ hide:
 
 <div class="s5-landing">
 
-<section class="s5-lab-hero">
-  <div class="s5-lab-hero__copy">
-    <div class="s5-kicker">Systems laboratory / runbooks</div>
-    <h1>Donde una idea se enfrenta a producción.</h1>
-    <p>Notas autocontenidas sobre contratos, arquitectura, estado, latencia, herramientas, evaluación y operación. Menos “best practices”; más decisiones, condiciones y límites verificables.</p>
-  </div>
-  <aside class="s5-lab-hero__terminal">
-    <div class="s5-terminal__status">LAB STATUS · ACTIVE</div>
-    <div class="s5-terminal__code"><b>01</b>nota publicada<br>runtime conversacional<br>tool calls asíncronos<br>follow-up proactivo</div>
-    <div class="s5-terminal__status">BUILD → MEASURE → BREAK → EXPLAIN</div>
-  </aside>
+<section class="s5-page-intro">
+  <div class="s5-eyebrow">Construir</div>
+  <h1>Sistemas reales. Decisiones explícitas.</h1>
+  <p>Notas técnicas autocontenidas sobre arquitectura, estado, latencia, evaluación y operación. Cada pieza parte de un problema concreto y termina con sus límites.</p>
 </section>
 
-<header class="s5-section-header">
-  <div><div class="s5-kicker">Runbook publicado</div><h2 class="s5-section-title">El contrato visible no debe cargar con todo el sistema.</h2></div>
-  <p class="s5-section-intro">La primera nota estudia cómo separar conversación, ejecución interna y cierre diferido sin engañar al usuario ni degradar el historial.</p>
-</header>
+<section class="s5-section">
+  <div class="s5-section-head"><h2>Publicado</h2></div>
+  <div class="s5-note-feature">
+    <div>
+      <div class="s5-eyebrow">Nota 01</div>
+      <h2>Agente reactivo, proactivo y tool calls</h2>
+      <p>Cómo separar el contrato visible con el usuario, la ejecución interna y el cierre diferido sin convertir el historial conversacional en la base de datos del runtime.</p>
+      <a class="s5-text-link" href="/articulos-tecnicos/proactive-reactive-agent-and-tool-calls/">Leer la nota técnica →</a>
+    </div>
+    <div class="s5-note-feature__meta">Contrato conversacional<br />Estado interno<br />Ejecución asíncrona<br />Follow-up</div>
+  </div>
+</section>
 
-<article class="s5-engineering-note">
-  <div class="s5-engineering-note__id">NOTE / 001<br>PUBLICADA</div>
-  <div class="s5-engineering-note__body"><h2>Agente Reactivo, Proactivo y Tool calls</h2><p>Un patrón para aceptar una tarea con honestidad, ejecutarla fuera del turno visible y cerrar de forma proactiva sin convertir el historial conversacional en la base de datos del runtime.</p><div class="s5-mini-flow"><span>Aceptación</span><span>Ejecución</span><span>Follow-up</span></div><div class="s5-actions"><a class="s5-button s5-button--ink" href="/articulos-tecnicos/proactive-reactive-agent-and-tool-calls/">Abrir la nota técnica →</a></div></div>
-  <div class="s5-engineering-note__spec"><div class="s5-spec"><b>Foco</b><span>Contrato conversacional y estado interno.</span></div><div class="s5-spec"><b>Artefacto</b><span>Repositorio público + demo local.</span></div><div class="s5-spec"><b>Salida</b><span>Lifecycle y arquitectura objetivo.</span></div></div>
-</article>
+<section class="s5-section">
+  <div class="s5-section-head"><h2>En preparación</h2></div>
+  <div class="s5-simple-list">
+    <div class="s5-list-row">
+      <span class="s5-list-row__n">02</span>
+      <span class="s5-list-row__title">Latencia e interrupciones en sistemas de voz</span>
+      <span class="s5-list-row__desc">Del audio de entrada a la respuesta reproducida: dónde aparece la latencia y cómo medirla.</span>
+      <span class="s5-list-row__meta">Investigación</span>
+    </div>
+    <div class="s5-list-row">
+      <span class="s5-list-row__n">03</span>
+      <span class="s5-list-row__title">Evaluación de agentes y tool calling</span>
+      <span class="s5-list-row__desc">Contratos, trayectorias, memoria y éxito de tarea más allá de una respuesta textual aislada.</span>
+      <span class="s5-list-row__meta">Diseño</span>
+    </div>
+    <div class="s5-list-row">
+      <span class="s5-list-row__n">04</span>
+      <span class="s5-list-row__title">Percepción fiable en edge inference</span>
+      <span class="s5-list-row__desc">Cómo medir y operar visión artificial en tiempo real bajo restricciones físicas.</span>
+      <span class="s5-list-row__meta">Pendiente</span>
+    </div>
+  </div>
+</section>
 
-<header class="s5-section-header">
-  <div><div class="s5-kicker">Research queue</div><h2 class="s5-section-title">Los siguientes sistemas que merece la pena abrir.</h2></div>
-  <p class="s5-section-intro">El roadmap se organiza por problemas operativos reutilizables, no por vendors ni herramientas aisladas.</p>
-</header>
-
-<div class="s5-queue">
-  <div class="s5-queue-row"><span class="s5-queue-row__id">Q / 002</span><span class="s5-queue-row__title">Latencia end-to-end e interrupciones en sistemas de voz</span><span class="s5-queue-row__state">Investigación</span></div>
-  <div class="s5-queue-row"><span class="s5-queue-row__id">Q / 003</span><span class="s5-queue-row__title">Evaluación de agentes, memoria y tool calling</span><span class="s5-queue-row__state">Diseño</span></div>
-  <div class="s5-queue-row"><span class="s5-queue-row__id">Q / 004</span><span class="s5-queue-row__title">Percepción en tiempo real y fiabilidad en edge inference</span><span class="s5-queue-row__state">Pendiente</span></div>
-</div>
-
-<section class="s5-note-panel">
-  <div><div class="s5-kicker">Formato de cada nota</div><h2>Problema, contrato, arquitectura, evidencia y límites.</h2><p>La implementación solo es útil cuando quedan claras las condiciones bajo las que funciona y el coste de sostenerla.</p></div>
-  <div><div class="s5-kicker">Contexto antes que código</div><h2>Construye primero el modelo mental.</h2><p>Las series explican los mecanismos que estas notas dan por conocidos.</p><div class="s5-actions"><a class="s5-button s5-button--ink" href="/series/">Explorar las series →</a></div></div>
+<section class="s5-section">
+  <div class="s5-note-feature">
+    <div>
+      <div class="s5-eyebrow">Antes de implementar</div>
+      <h2>Entiende primero el mecanismo.</h2>
+      <p>Las series explican los conceptos que las notas técnicas dan por conocidos. Los vídeos y animaciones ofrecen la entrada más rápida.</p>
+      <a class="s5-text-link" href="/series/">Explorar las series →</a>
+    </div>
+    <div class="s5-note-feature__meta">Vídeo<br />Serie<br />Nota técnica<br />Código</div>
+  </div>
 </section>
 
 </div>
