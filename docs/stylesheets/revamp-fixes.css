@@ -35,7 +35,73 @@
   background-image: none !important;
 }
 
+/* Every admonition uses the same monochrome language, regardless of type. */
+.md-typeset .admonition,
+.md-typeset details,
+.md-typeset .admonition.info,
+.md-typeset .admonition.tip,
+.md-typeset .admonition.warning,
+.md-typeset .admonition.note {
+  border-color: var(--s5-line) !important;
+  background: var(--s5-bg) !important;
+  box-shadow: none !important;
+}
+
+.md-typeset .admonition-title,
+.md-typeset details > summary,
+.md-typeset .info > .admonition-title,
+.md-typeset .tip > .admonition-title,
+.md-typeset .warning > .admonition-title,
+.md-typeset .note > .admonition-title {
+  background: var(--s5-surface) !important;
+  color: var(--s5-text) !important;
+}
+
+.md-typeset .admonition-title::before,
+.md-typeset details > summary::before {
+  background-color: var(--s5-text) !important;
+}
+
+/* The video action is a plain text link, not a coloured banner. */
+.s5-video-embed__watch {
+  margin: .65rem 0 0 !important;
+  padding: 0 !important;
+  background: var(--s5-bg) !important;
+  border: 0 !important;
+}
+
+.md-typeset .s5-video-embed__watch a {
+  display: inline !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  color: var(--s5-text) !important;
+  font-family: inherit !important;
+  font-size: .75rem !important;
+  letter-spacing: 0 !important;
+  text-decoration: underline !important;
+  text-transform: none !important;
+  text-underline-offset: .2em;
+}
+
 @media (max-width: 800px) {
   .s5-landing,
   .s5-landing > * { width: 100%; }
+
+  .s5-list-row {
+    grid-template-columns: 30px minmax(0, 1fr) !important;
+  }
+
+  .s5-list-row__title,
+  .s5-list-row__desc,
+  .s5-list-row__meta {
+    grid-column: 2 !important;
+    min-width: 0;
+  }
+
+  .s5-list-row__meta {
+    margin-top: .1rem;
+    white-space: normal;
+  }
 }
