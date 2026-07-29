@@ -71,6 +71,12 @@ try {
       fullPage: true,
       animations: 'disabled',
     });
+
+    const overflow = layout.document.scrollWidth - layout.viewport.width;
+    if (overflow > 4) {
+      throw new Error(`${capture.name} has ${overflow}px of horizontal overflow`);
+    }
+
     await context.close();
   }
 } finally {
