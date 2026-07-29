@@ -8,12 +8,20 @@ await mkdir(outputDir, { recursive: true });
 
 const browser = await chromium.launch({ headless: true });
 
+const desktop = { width: 1440, height: 1100 };
+const mobile = { width: 390, height: 844 };
+
 const captures = [
-  { name: 'homepage-desktop', path: '/', viewport: { width: 1440, height: 1100 } },
-  { name: 'homepage-mobile', path: '/', viewport: { width: 390, height: 844 }, mobile: true },
-  { name: 'series-desktop', path: '/series/', viewport: { width: 1440, height: 1100 } },
-  { name: 'engineering-desktop', path: '/articulos-tecnicos/', viewport: { width: 1440, height: 1100 } },
-  { name: 'article-desktop', path: '/series/modelos-razonadores/03-test-time-compute/', viewport: { width: 1440, height: 1100 } },
+  { name: 'homepage-desktop', path: '/', viewport: desktop },
+  { name: 'homepage-mobile', path: '/', viewport: mobile, mobile: true },
+  { name: 'homepage-dark', path: '/', viewport: desktop, colorScheme: 'dark' },
+  { name: 'series-desktop', path: '/series/', viewport: desktop },
+  { name: 'series-mobile', path: '/series/', viewport: mobile, mobile: true },
+  { name: 'engineering-desktop', path: '/articulos-tecnicos/', viewport: desktop },
+  { name: 'engineering-mobile', path: '/articulos-tecnicos/', viewport: mobile, mobile: true },
+  { name: 'article-desktop', path: '/series/modelos-razonadores/03-test-time-compute/', viewport: desktop },
+  { name: 'article-mobile', path: '/series/modelos-razonadores/03-test-time-compute/', viewport: mobile, mobile: true },
+  { name: 'about-desktop', path: '/meta/about/', viewport: desktop },
 ];
 
 const collectLayout = () => {
@@ -46,6 +54,10 @@ const collectLayout = () => {
     });
   }
 
+  const brokenImages = [...document.images]
+    .filter((image) => image.complete && image.naturalWidth === 0)
+    .map((image) => image.currentSrc || image.src);
+
   return {
     viewport: { width: document.documentElement.clientWidth, height: document.documentElement.clientHeight },
     document: { scrollWidth: document.documentElement.scrollWidth, scrollHeight: document.documentElement.scrollHeight },
@@ -54,6 +66,7 @@ const collectLayout = () => {
     landingChildren: landing ? [...landing.children].map(rect) : [],
     coverChildren: [...document.querySelectorAll('.s5-cover > *')].map(rect),
     readingAncestors,
+    brokenImages,
   };
 };
 
@@ -63,10 +76,17 @@ try {
       viewport: capture.viewport,
       deviceScaleFactor: 1,
       isMobile: capture.mobile ?? false,
-      colorScheme: 'light',
+      colorScheme: capture.colorScheme ?? 'light',
       reducedMotion: 'reduce',
     });
     const page = await context.newPage();
+    const runtimeErrors = [];
+
+    page.on('pageerror', (error) => runtimeErrors.push(`pageerror: ${error.message}`));
+    page.on('console', (message) => {
+      if (message.type() === 'error') runtimeErrors.push(`console: ${message.text()}`);
+    });
+
     const response = await page.goto(`${baseUrl}${capture.path}`, {
       waitUntil: 'networkidle',
       timeout: 30_000,
@@ -88,6 +108,12 @@ try {
     const overflow = layout.document.scrollWidth - layout.viewport.width;
     if (overflow > 4) {
       throw new Error(`${capture.name} has ${overflow}px of horizontal overflow`);
+    }
+    if (layout.brokenImages.length > 0) {
+      throw new Error(`${capture.name} has broken images: ${layout.brokenImages.join(', ')}`);
+    }
+    if (runtimeErrors.length > 0) {
+      throw new Error(`${capture.name} emitted browser errors:\n${runtimeErrors.join('\n')}`);
     }
 
     await context.close();
