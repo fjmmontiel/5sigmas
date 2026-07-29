@@ -6,7 +6,7 @@ validation:
     omitted_files: ignore
   links:
     absolute_links: ignore
-    unrecognized_links: ignore
+  unrecognized_links: ignore
 theme:
   name: material
   custom_dir: overrides
@@ -131,11 +131,13 @@ extra_javascript:
     defer: true
   - path: assets/javascripts/series_energy_ai_local.js
     defer: true
+  - path: assets/javascripts/editorial-system.js
+    defer: true
 extra_css:
   - stylesheets/extra.css
-  - stylesheets/revamp.css
   - assets/stylesheets/animations.css
   - assets/stylesheets/series_energy_ai_preview.css
+  - stylesheets/revamp.css
 
 hooks:
   - hooks/reading_time.py
