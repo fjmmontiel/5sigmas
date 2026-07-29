@@ -11,78 +11,21 @@ hide:
   - footer
 ---
 
-# Series
+<div class="s5-landing" markdown="1">
 
-Divulgación técnica sobre IA organizada en series temáticas. Cada serie es un arco narrativo completo: los capítulos se construyen unos sobre otros, con fuentes primarias y sin dar por supuesto lo que no se ha explicado antes.
+<section class="s5-directory-hero"><div><div class="s5-eyebrow">Biblioteca guiada</div><h1>Series para construir conocimiento por capas.</h1><p>Cada serie desarrolla un arco completo: los capítulos se apoyan entre sí, explican los prerrequisitos y enlazan las fuentes primarias que sostienen las conclusiones.</p></div><aside class="s5-directory-hero__aside"><strong>No necesitas leerlo todo.</strong><span>Elige una pregunta, entra por el nivel adecuado y usa el resto de la biblioteca como mapa de referencia.</span></aside></section>
 
-<div class="si-grid">
+<div class="s5-filter-row"><span class="s5-filter">Fundamentos</span><span class="s5-filter">Historia</span><span class="s5-filter">Multimodalidad</span><span class="s5-filter">Razonamiento</span><span class="s5-filter">Economía</span><span class="s5-filter">Infraestructura</span></div>
 
-<a href="/series/fundamentos-ia-iag/00_presentacion_serie/" class="si-card">
-  <div class="si-label">General · 4 capítulos</div>
-  <div class="si-title">Fundamentos de IA e IA generativa</div>
-  <div class="si-desc">Las bases para distinguir señal de ruido. Qué es la IA, qué es la generativa, en qué se diferencian y qué significa AGI.</div>
-  <div class="si-cta">Leer →</div>
-</a>
-
-<a href="/series/from-cave-to-agi/00_presentacion_serie/" class="si-card">
-  <div class="si-label">General · 5 capítulos</div>
-  <div class="si-title">De las cavernas a la AGI</div>
-  <div class="si-desc">Recorrido histórico desde las primeras abstracciones matemáticas hasta los modelos fundacionales. Matemáticas, filosofía y computación en contexto.</div>
-  <div class="si-cta">Leer →</div>
-</a>
-
-<a href="/series/multimodalidad-iag/00_presentacion_serie/" class="si-card">
-  <div class="si-label">General · 5 capítulos</div>
-  <div class="si-title">Multimodalidad en IA generativa</div>
-  <div class="si-desc">Texto, imagen, audio y vídeo en un mismo sistema. Arquitecturas, alineamiento y límites reales de los modelos multimodales actuales.</div>
-  <div class="si-cta">Leer →</div>
-</a>
-
-<a href="/series/modelos-razonadores/00_presentacion_serie/" class="si-card">
-  <div class="si-label">Técnico · 5 capítulos</div>
-  <div class="si-title">Modelos razonadores</div>
-  <div class="si-desc">Test-time compute, cadenas de pensamiento y los costes reales de razonar en producción. Qué ganas y qué pagas cuando un modelo "piensa más".</div>
-  <div class="si-cta">Leer →</div>
-</a>
-
-<a href="/series/ia-pib-bienestar-energia/00_presentacion_serie/" class="si-card">
-  <div class="si-label">General · 4 capítulos</div>
-  <div class="si-title">IA, PIB, bienestar y energía</div>
-  <div class="si-desc">Electricidad, productividad y bienestar más allá del PIB. Cómo medir el impacto real de la IA cuando el crecimiento no cuenta toda la historia.</div>
-  <div class="si-cta">Leer →</div>
-</a>
-
-<a href="/series/datacenters-espacio/00_presentacion_serie/" class="si-card">
-  <div class="si-label">General · 4 capítulos</div>
-  <div class="si-title">Datacenters en el espacio</div>
-  <div class="si-desc">Qué tendría que cambiar para que el cómputo orbital tenga sentido: energía solar, disipación de calor, conectividad, costes de lanzamiento y huella material.</div>
-  <div class="si-cta">Leer →</div>
-</a>
-
+<div class="s5-feature-grid">
+  <a href="/series/fundamentos-ia-iag/00_presentacion_serie/" class="s5-feature"><div class="s5-feature__topline"></div><div class="s5-feature__meta">General · 4 capítulos</div><div class="s5-feature__title">Fundamentos de IA e IA generativa</div><div class="s5-feature__desc">Las distinciones básicas que el resto de la biblioteca da por supuestas: aprendizaje, modelos generativos, diferencias con software clásico y AGI.</div><div class="s5-feature__tags"><span class="s5-tag">Empieza aquí</span><span class="s5-tag">Base conceptual</span></div><div class="s5-feature__cta">Leer la serie →</div></a>
+  <a href="/series/from-cave-to-agi/00_presentacion_serie/" class="s5-feature"><div class="s5-feature__topline"></div><div class="s5-feature__meta">General · 5 capítulos</div><div class="s5-feature__title">De las cavernas a la AGI</div><div class="s5-feature__desc">De la representación simbólica al Transformer: matemáticas, filosofía y computación en contexto histórico.</div><div class="s5-feature__tags"><span class="s5-tag">Historia</span><span class="s5-tag">Transformers</span></div><div class="s5-feature__cta">Leer la serie →</div></a>
+  <a href="/series/multimodalidad-iag/00_presentacion_serie/" class="s5-feature"><div class="s5-feature__topline"></div><div class="s5-feature__meta">General · 5 capítulos</div><div class="s5-feature__title">Multimodalidad en IA generativa</div><div class="s5-feature__desc">Texto, imagen, audio y vídeo en un mismo sistema: alineamiento, arquitecturas, evaluación y riesgos.</div><div class="s5-feature__tags"><span class="s5-tag">Frontier</span><span class="s5-tag">Audio + visión</span></div><div class="s5-feature__cta">Leer la serie →</div></a>
+  <a href="/series/modelos-razonadores/00_presentacion_serie/" class="s5-feature s5-feature--amber"><div class="s5-feature__topline"></div><div class="s5-feature__meta">Técnico · 5 capítulos</div><div class="s5-feature__title">Modelos razonadores</div><div class="s5-feature__desc">Test-time compute, cadenas de pensamiento, latencia, streaming y costes reales de razonar en producción.</div><div class="s5-feature__tags"><span class="s5-tag">Razonamiento</span><span class="s5-tag">Producción</span></div><div class="s5-feature__cta">Leer la serie →</div></a>
+  <a href="/series/ia-pib-bienestar-energia/00_presentacion_serie/" class="s5-feature s5-feature--amber"><div class="s5-feature__topline"></div><div class="s5-feature__meta">General · 4 capítulos</div><div class="s5-feature__title">IA, PIB, bienestar y energía</div><div class="s5-feature__desc">Electricidad, productividad y bienestar más allá del PIB. Cómo medir impacto sin confundir crecimiento con progreso.</div><div class="s5-feature__tags"><span class="s5-tag">Economía</span><span class="s5-tag">Energía</span></div><div class="s5-feature__cta">Leer la serie →</div></a>
+  <a href="/series/datacenters-espacio/00_presentacion_serie/" class="s5-feature s5-feature--amber"><div class="s5-feature__topline"></div><div class="s5-feature__meta">General · 4 capítulos</div><div class="s5-feature__title">Datacenters en el espacio</div><div class="s5-feature__desc">Energía solar, disipación térmica, conectividad, materiales y costes de lanzamiento: qué tendría que cambiar para que el cómputo orbital tenga sentido.</div><div class="s5-feature__tags"><span class="s5-tag">Infraestructura</span><span class="s5-tag">Física</span></div><div class="s5-feature__cta">Leer la serie →</div></a>
 </div>
 
-<div style="margin:2rem 0 1rem" markdown="1">
-
-### Por dónde empezar
-
-Si es tu primer contacto con la IA, la serie [Fundamentos de IA e IA generativa](/series/fundamentos-ia-iag/00_presentacion_serie/) establece el vocabulario y las distinciones básicas que las otras series dan por supuestas. Si ya tienes base conceptual y quieres entender cómo llegamos hasta aquí, [De las cavernas a la AGI](/series/from-cave-to-agi/00_presentacion_serie/) ofrece el contexto histórico y técnico completo. Si te interesa la frontera actual de modelos que procesan texto, imagen y audio al mismo tiempo, empieza por [Multimodalidad en IA generativa](/series/multimodalidad-iag/00_presentacion_serie/). Si quieres entender cómo y por qué los modelos razonadores son distintos, qué es el test-time compute y qué costes reales introduce en producción, sigue con [Modelos razonadores](/series/modelos-razonadores/00_presentacion_serie/). Si te interesa la relación entre electricidad, productividad, crecimiento y calidad de vida, la serie [IA, PIB, bienestar y energía](/series/ia-pib-bienestar-energia/00_presentacion_serie/) completa la dimensión económica y material. Para bajar esa discusión a infraestructura física, [Datacenters en el espacio](/series/datacenters-espacio/00_presentacion_serie/) analiza energía, calor, conectividad, agua, materiales y costes de lanzamiento.
+<section class="s5-cta-panel"><div><div class="s5-eyebrow">Otra forma de leer</div><h2>¿Buscas una implementación concreta?</h2><p>Las notas técnicas bajan de la tesis general a runtimes, arquitectura, código y límites operativos.</p></div><div class="s5-actions"><a class="s5-button s5-button--primary" href="/articulos-tecnicos/">Ver artículos técnicos</a></div></section>
 
 </div>
-
-<div style="margin:1.5rem 0 2rem" markdown="1">
-
-### Conceptos clave cubiertos
-
-<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.75rem">
-<a href="/temas/llms/" style="text-decoration:none;border-radius:20px;border:1px solid rgba(50,74,178,.35);padding:.3rem .85rem;font-size:.82rem;color:#324AB2;font-weight:600;white-space:nowrap">LLMs</a>
-<a href="/temas/ia-generativa/" style="text-decoration:none;border-radius:20px;border:1px solid rgba(50,74,178,.35);padding:.3rem .85rem;font-size:.82rem;color:#324AB2;font-weight:600;white-space:nowrap">IA Generativa</a>
-<a href="/temas/agi/" style="text-decoration:none;border-radius:20px;border:1px solid rgba(38,166,154,.35);padding:.3rem .85rem;font-size:.82rem;color:#26A69A;font-weight:600;white-space:nowrap">AGI</a>
-<a href="/temas/multimodalidad/" style="text-decoration:none;border-radius:20px;border:1px solid rgba(124,199,255,.35);padding:.3rem .85rem;font-size:.82rem;color:#7cc7ff;font-weight:600;white-space:nowrap">Multimodalidad</a>
-<a href="/temas/transformer/" style="text-decoration:none;border-radius:20px;border:1px solid rgba(38,166,154,.35);padding:.3rem .85rem;font-size:.82rem;color:#26A69A;font-weight:600;white-space:nowrap">Transformer</a>
-<a href="/temas/evaluacion-modelos/" style="text-decoration:none;border-radius:20px;border:1px solid rgba(255,179,67,.35);padding:.3rem .85rem;font-size:.82rem;color:#FFB343;font-weight:600;white-space:nowrap">Evaluación de modelos</a>
-<a href="/temas/razonamiento/" style="text-decoration:none;border-radius:20px;border:1px solid rgba(255,179,67,.35);padding:.3rem .85rem;font-size:.82rem;color:#FFB343;font-weight:600;white-space:nowrap">Razonamiento</a>
-</div>
-
-</div>
-
-[Próximamente](/proximamente/){ .md-button }
