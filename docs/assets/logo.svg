@@ -1,23 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 120">
-  <defs>
-    <linearGradient id="grad5sigma" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#26A69A" />
-      <stop offset="40%" stop-color="#324AB2" />
-      <stop offset="75%" stop-color="#FFB343" />
-      <stop offset="100%" stop-color="#0F172A" />
-    </linearGradient>
-  </defs>
-
-  <text
-    x="50%"
-    y="50%"
-    text-anchor="middle"
-    dominant-baseline="central"
-    font-family="Inter, sans-serif, Arial"
-    font-size="68"
-    letter-spacing="-4"
-    fill="url(#grad5sigma)">
-    <tspan font-weight="800">5</tspan>
-    <tspan dx="-22" font-weight="800">σ</tspan>
-  </text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">5sigmas</title>
+  <rect width="120" height="120" rx="20" fill="#101214"/>
+  <rect x="18" y="18" width="12" height="12" fill="#ff4d24"/>
+  <path d="M18 92H102" stroke="#f3efe6" stroke-width="2" opacity=".24"/>
+  <text x="58" y="73" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="54" font-weight="700" letter-spacing="-5" fill="#f3efe6">5σ</text>
+  <text x="20" y="104" font-family="Arial, sans-serif" font-size="7" font-weight="700" letter-spacing="1.8" fill="#ff4d24">SIGNAL</text>
 </svg>
