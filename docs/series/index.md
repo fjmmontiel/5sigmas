@@ -13,19 +13,36 @@ hide:
 
 <div class="s5-landing" markdown="1">
 
-<section class="s5-directory-hero"><div><div class="s5-eyebrow">Biblioteca guiada</div><h1>Series para construir conocimiento por capas.</h1><p>Cada serie desarrolla un arco completo: los capítulos se apoyan entre sí, explican los prerrequisitos y enlazan las fuentes primarias que sostienen las conclusiones.</p></div><aside class="s5-directory-hero__aside"><strong>No necesitas leerlo todo.</strong><span>Elige una pregunta, entra por el nivel adecuado y usa el resto de la biblioteca como mapa de referencia.</span></aside></section>
+<section class="s5-index-hero">
+  <div class="s5-index-hero__copy">
+    <div class="s5-kicker">Knowledge index / 01</div>
+    <h1>Seis preguntas para entender la IA como un sistema.</h1>
+    <p class="s5-section-intro">Las series no siguen el calendario de lanzamientos. Cada una construye un arco completo, explicita los prerrequisitos y termina donde la evidencia deja de sostener una conclusión clara.</p>
+  </div>
+  <aside class="s5-index-hero__figure">
+    <div class="s5-label">CATÁLOGO ACTUAL</div>
+    <div class="s5-index-hero__big">06</div>
+    <p>Fundamentos · historia · multimodalidad · razonamiento · economía · infraestructura.</p>
+  </aside>
+</section>
 
-<div class="s5-filter-row"><span class="s5-filter">Fundamentos</span><span class="s5-filter">Historia</span><span class="s5-filter">Multimodalidad</span><span class="s5-filter">Razonamiento</span><span class="s5-filter">Economía</span><span class="s5-filter">Infraestructura</span></div>
+<header class="s5-section-header">
+  <div><div class="s5-kicker">Índice completo</div><h2 class="s5-section-title">Empieza donde aparece la fricción.</h2></div>
+  <p class="s5-section-intro">La primera ruta establece el vocabulario. El resto puede leerse por interés, pero cada serie indica qué conceptos da por conocidos.</p>
+</header>
 
-<div class="s5-feature-grid">
-  <a href="/series/fundamentos-ia-iag/00_presentacion_serie/" class="s5-feature"><div class="s5-feature__topline"></div><div class="s5-feature__meta">General · 4 capítulos</div><div class="s5-feature__title">Fundamentos de IA e IA generativa</div><div class="s5-feature__desc">Las distinciones básicas que el resto de la biblioteca da por supuestas: aprendizaje, modelos generativos, diferencias con software clásico y AGI.</div><div class="s5-feature__tags"><span class="s5-tag">Empieza aquí</span><span class="s5-tag">Base conceptual</span></div><div class="s5-feature__cta">Leer la serie →</div></a>
-  <a href="/series/from-cave-to-agi/00_presentacion_serie/" class="s5-feature"><div class="s5-feature__topline"></div><div class="s5-feature__meta">General · 5 capítulos</div><div class="s5-feature__title">De las cavernas a la AGI</div><div class="s5-feature__desc">De la representación simbólica al Transformer: matemáticas, filosofía y computación en contexto histórico.</div><div class="s5-feature__tags"><span class="s5-tag">Historia</span><span class="s5-tag">Transformers</span></div><div class="s5-feature__cta">Leer la serie →</div></a>
-  <a href="/series/multimodalidad-iag/00_presentacion_serie/" class="s5-feature"><div class="s5-feature__topline"></div><div class="s5-feature__meta">General · 5 capítulos</div><div class="s5-feature__title">Multimodalidad en IA generativa</div><div class="s5-feature__desc">Texto, imagen, audio y vídeo en un mismo sistema: alineamiento, arquitecturas, evaluación y riesgos.</div><div class="s5-feature__tags"><span class="s5-tag">Frontier</span><span class="s5-tag">Audio + visión</span></div><div class="s5-feature__cta">Leer la serie →</div></a>
-  <a href="/series/modelos-razonadores/00_presentacion_serie/" class="s5-feature s5-feature--amber"><div class="s5-feature__topline"></div><div class="s5-feature__meta">Técnico · 5 capítulos</div><div class="s5-feature__title">Modelos razonadores</div><div class="s5-feature__desc">Test-time compute, cadenas de pensamiento, latencia, streaming y costes reales de razonar en producción.</div><div class="s5-feature__tags"><span class="s5-tag">Razonamiento</span><span class="s5-tag">Producción</span></div><div class="s5-feature__cta">Leer la serie →</div></a>
-  <a href="/series/ia-pib-bienestar-energia/00_presentacion_serie/" class="s5-feature s5-feature--amber"><div class="s5-feature__topline"></div><div class="s5-feature__meta">General · 4 capítulos</div><div class="s5-feature__title">IA, PIB, bienestar y energía</div><div class="s5-feature__desc">Electricidad, productividad y bienestar más allá del PIB. Cómo medir impacto sin confundir crecimiento con progreso.</div><div class="s5-feature__tags"><span class="s5-tag">Economía</span><span class="s5-tag">Energía</span></div><div class="s5-feature__cta">Leer la serie →</div></a>
-  <a href="/series/datacenters-espacio/00_presentacion_serie/" class="s5-feature s5-feature--amber"><div class="s5-feature__topline"></div><div class="s5-feature__meta">General · 4 capítulos</div><div class="s5-feature__title">Datacenters en el espacio</div><div class="s5-feature__desc">Energía solar, disipación térmica, conectividad, materiales y costes de lanzamiento: qué tendría que cambiar para que el cómputo orbital tenga sentido.</div><div class="s5-feature__tags"><span class="s5-tag">Infraestructura</span><span class="s5-tag">Física</span></div><div class="s5-feature__cta">Leer la serie →</div></a>
-</div>
+<nav class="s5-series-index" aria-label="Índice de series">
+  <a class="s5-series-row is-primary" href="/series/fundamentos-ia-iag/00_presentacion_serie/"><span class="s5-series-row__n">01</span><span class="s5-series-row__field">Fundamentos</span><span class="s5-series-row__title">IA e IA generativa</span><span class="s5-series-row__desc">Aprendizaje, generación, software clásico y AGI: las distinciones que sostienen el resto de la biblioteca.</span><span class="s5-series-row__chapters">04 CAP.</span></a>
+  <a class="s5-series-row" href="/series/from-cave-to-agi/00_presentacion_serie/"><span class="s5-series-row__n">02</span><span class="s5-series-row__field">Historia</span><span class="s5-series-row__title">De las cavernas a la AGI</span><span class="s5-series-row__desc">De la representación simbólica al Transformer: matemáticas, filosofía y computación dentro del mismo relato.</span><span class="s5-series-row__chapters">05 CAP.</span></a>
+  <a class="s5-series-row" href="/series/multimodalidad-iag/00_presentacion_serie/"><span class="s5-series-row__n">03</span><span class="s5-series-row__field">Frontera</span><span class="s5-series-row__title">Multimodalidad generativa</span><span class="s5-series-row__desc">Cómo texto, imagen, audio y vídeo se alinean, se evalúan y fallan dentro de un modelo común.</span><span class="s5-series-row__chapters">05 CAP.</span></a>
+  <a class="s5-series-row" href="/series/modelos-razonadores/00_presentacion_serie/"><span class="s5-series-row__n">04</span><span class="s5-series-row__field">Modelos</span><span class="s5-series-row__title">Modelos razonadores</span><span class="s5-series-row__desc">Test-time compute, fallos, latencia, streaming e interacción humana bajo restricciones de producción.</span><span class="s5-series-row__chapters">05 CAP.</span></a>
+  <a class="s5-series-row" href="/series/ia-pib-bienestar-energia/00_presentacion_serie/"><span class="s5-series-row__n">05</span><span class="s5-series-row__field">Impacto</span><span class="s5-series-row__title">IA, PIB, bienestar y energía</span><span class="s5-series-row__desc">Qué medimos cuando hablamos de progreso y qué desaparece al reducir el impacto a crecimiento económico.</span><span class="s5-series-row__chapters">04 CAP.</span></a>
+  <a class="s5-series-row" href="/series/datacenters-espacio/00_presentacion_serie/"><span class="s5-series-row__n">06</span><span class="s5-series-row__field">Infraestructura</span><span class="s5-series-row__title">Datacenters en el espacio</span><span class="s5-series-row__desc">Energía, calor, conectividad, materiales y lanzamiento: la física detrás del cómputo orbital.</span><span class="s5-series-row__chapters">04 CAP.</span></a>
+</nav>
 
-<section class="s5-cta-panel"><div><div class="s5-eyebrow">Otra forma de leer</div><h2>¿Buscas una implementación concreta?</h2><p>Las notas técnicas bajan de la tesis general a runtimes, arquitectura, código y límites operativos.</p></div><div class="s5-actions"><a class="s5-button s5-button--primary" href="/articulos-tecnicos/">Ver artículos técnicos</a></div></section>
+<section class="s5-note-panel">
+  <div><div class="s5-kicker">Ruta recomendada</div><h2>Base → historia → frontera → operación.</h2><p>Es el recorrido más sólido cuando quieres formar un modelo mental completo y no solo resolver una duda puntual.</p></div>
+  <div><div class="s5-kicker">Otra forma de leer</div><h2>¿Buscas una decisión de implementación?</h2><p>Las notas de ingeniería parten de un contrato concreto y exponen arquitectura, código, límites y trade-offs operativos.</p><div class="s5-actions"><a class="s5-button s5-button--ink" href="/articulos-tecnicos/">Abrir el laboratorio →</a></div></div>
+</section>
 
 </div>
