@@ -16,14 +16,22 @@ hide:
   <p>Una entrada rápida a los conceptos más importantes de 5sigmas. Cada vídeo conecta con un capítulo completo y cada capítulo incorpora animaciones para explorar el mecanismo con más detalle.</p>
 </section>
 
-<section class="s5-section">
+<section class="s5-section" id="videos">
   <div class="s5-section-head"><h2>Vídeos</h2></div>
-  <div class="s5-media-grid">
-    <a class="s5-media-card" href="/videos/series/modelos-razonadores/03-test-time-compute/">
-      <img class="s5-media-card__image" src="/series/modelos-razonadores/03-test-time-compute.jpg" alt="Test-time compute" />
-      <div class="s5-media-card__meta">Modelos razonadores</div>
-      <div class="s5-media-card__title">Test-time compute: más cómputo antes de responder</div>
+
+  <article class="s5-video-feature">
+    <a href="/videos/series/modelos-razonadores/03-test-time-compute/">
+      <img class="s5-video-feature__image" src="/series/modelos-razonadores/03-test-time-compute.jpg" alt="Test-time compute" />
     </a>
+    <div>
+      <div class="s5-eyebrow">Destacado · Modelos razonadores</div>
+      <h2>Test-time compute: más cómputo antes de responder.</h2>
+      <p>Qué cambia cuando un modelo dedica más inferencia a una respuesta y cómo afecta a calidad, coste y latencia.</p>
+      <a class="s5-text-link" href="/videos/series/modelos-razonadores/03-test-time-compute/">Ver vídeo →</a>
+    </div>
+  </article>
+
+  <div class="s5-video-secondary-grid">
     <a class="s5-media-card" href="/videos/series/multimodalidad-iag/03-arquitecturas/">
       <img class="s5-media-card__image" src="/series/multimodalidad-iag/03-arquitecturas.jpg" alt="Arquitecturas multimodales" />
       <div class="s5-media-card__meta">Multimodalidad</div>
