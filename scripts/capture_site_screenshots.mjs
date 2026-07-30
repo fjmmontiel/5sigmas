@@ -7,6 +7,7 @@ const outputDir = process.env.S5_SCREENSHOT_DIR ?? 'artifacts/visual-review';
 await mkdir(outputDir, { recursive: true });
 
 const browser = await chromium.launch({ headless: true });
+
 const desktop = { width: 1440, height: 1100 };
 const mobile = { width: 390, height: 844 };
 
@@ -107,13 +108,15 @@ try {
       await page.waitForTimeout(50);
     }
 
+    await page.evaluate(() => window.scrollTo(0, 0));
+
     const layout = await page.evaluate(collectLayout);
     await writeFile(`${outputDir}/${capture.name}-layout.json`, JSON.stringify(layout, null, 2));
     console.log(`LAYOUT ${capture.name}: ${JSON.stringify(layout)}`);
 
     await page.screenshot({
       path: `${outputDir}/${capture.name}.png`,
-      fullPage: true,
+      fullPage: false,
       animations: 'disabled',
     });
 
