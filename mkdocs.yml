@@ -138,6 +138,8 @@ extra_css:
   - assets/stylesheets/series_energy_ai_preview.css
   - stylesheets/revamp.css
   - stylesheets/revamp-fixes.css
+  - stylesheets/revamp-responsive-fixes.css
+  - stylesheets/revamp-ux.css
 
 hooks:
   - hooks/reading_time.py
