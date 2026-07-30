@@ -140,6 +140,7 @@ extra_css:
   - stylesheets/revamp-fixes.css
   - stylesheets/revamp-responsive-fixes.css
   - stylesheets/revamp-ux.css
+  - stylesheets/revamp-home-cover.css
 
 hooks:
   - hooks/reading_time.py
