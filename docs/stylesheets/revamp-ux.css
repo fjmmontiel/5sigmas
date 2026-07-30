@@ -5,6 +5,53 @@
   padding-top: 0 !important;
 }
 
+/* Restore a recognisable 5σ monogram instead of a generic app tile. */
+.md-header__button.md-logo {
+  display: grid;
+  width: 2.9rem;
+  height: 2.4rem;
+  margin: 0 .25rem 0 0 !important;
+  padding: 0 !important;
+  place-items: center;
+}
+
+.md-logo img {
+  width: 2.55rem !important;
+  height: 2.05rem !important;
+  object-fit: contain;
+  object-position: center;
+}
+
+[data-md-color-scheme="slate"] .md-logo img {
+  filter: invert(1);
+}
+
+.md-header__title {
+  margin-left: 0 !important;
+  font-size: .9rem !important;
+  font-weight: 800 !important;
+  letter-spacing: -.04em !important;
+}
+
+/* Keep search and shell controls readable in both themes. */
+.md-search__icon,
+.md-search__input::placeholder {
+  color: var(--s5-muted) !important;
+  opacity: 1 !important;
+}
+
+[data-md-color-scheme="slate"] .md-search__form,
+[data-md-color-scheme="slate"] .md-search__output {
+  background: var(--s5-bg) !important;
+  color: var(--s5-text) !important;
+}
+
+[data-md-color-scheme="slate"] .md-search__input,
+[data-md-color-scheme="slate"] .md-search__input::placeholder,
+[data-md-color-scheme="slate"] .md-search__icon {
+  color: var(--s5-muted) !important;
+}
+
 /* The embedded player already provides the video; a second watch link adds noise. */
 .s5-video-embed__watch {
   display: none !important;
