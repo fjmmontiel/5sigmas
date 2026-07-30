@@ -9,48 +9,60 @@ hide:
 
 <div class="s5-landing">
 
-<section class="s5-home-hero">
-  <div class="s5-eyebrow">Inteligencia artificial, sin ruido</div>
-  <h1>Entender la IA. Ver cómo funciona.</h1>
-  <p>Vídeos breves, animaciones explicativas y artículos técnicos para pasar de una idea intuitiva a un modelo mental que puedas usar.</p>
-</section>
-
-<nav class="s5-entry-grid" aria-label="Formas de entrar en 5sigmas">
-  <a class="s5-entry" href="/visuales/">
-    <div class="s5-entry__index">01</div>
-    <div class="s5-entry__title">Ver</div>
-    <div class="s5-entry__text">Vídeos y animaciones para entender una idea antes de entrar en detalle.</div>
-  </a>
-  <a class="s5-entry" href="/series/">
-    <div class="s5-entry__index">02</div>
-    <div class="s5-entry__title">Aprender</div>
-    <div class="s5-entry__text">Series ordenadas para construir conocimiento de forma progresiva.</div>
-  </a>
-  <a class="s5-entry" href="/articulos-tecnicos/">
-    <div class="s5-entry__index">03</div>
-    <div class="s5-entry__title">Construir</div>
-    <div class="s5-entry__text">Arquitectura, decisiones y límites de sistemas reales de IA.</div>
-  </a>
-</nav>
-
-<section class="s5-section">
-  <div class="s5-section-head">
-    <h2>Empieza por aquí</h2>
-    <a href="/visuales/">Ver todo el contenido visual →</a>
-  </div>
-  <div class="s5-feature-media">
-    <a href="/videos/series/modelos-razonadores/03-test-time-compute/">
-      <img class="s5-feature-media__image" src="/series/modelos-razonadores/03-test-time-compute.jpg" alt="Visual del vídeo sobre test-time compute" />
-    </a>
-    <div>
-      <div class="s5-eyebrow">Vídeo · Modelos razonadores</div>
-      <h2>Qué ocurre cuando un modelo usa más cómputo antes de responder.</h2>
-      <p>Una introducción visual a test-time compute, sus tres palancas y el intercambio entre calidad, coste y latencia.</p>
-      <a class="s5-text-link" href="/videos/series/modelos-razonadores/03-test-time-compute/">Ver vídeo →</a>
-      <br />
-      <a class="s5-text-link" href="/series/modelos-razonadores/03-test-time-compute/">Leer el capítulo →</a>
+<section class="s5-home-cover">
+  <div class="s5-home-cover__intro">
+    <div class="s5-eyebrow">5sigmas · Inteligencia artificial, sin ruido</div>
+    <h1>Entender la IA.<br />Ver cómo funciona.</h1>
+    <p>Una biblioteca visual para pasar de una idea intuitiva a un modelo mental útil: vídeos breves, animaciones interactivas, capítulos técnicos y fuentes.</p>
+    <div class="s5-home-cover__formats" aria-label="Formatos de 5sigmas">
+      <span>Vídeos</span>
+      <span>Animaciones</span>
+      <span>Capítulos</span>
+      <span>Fuentes</span>
     </div>
   </div>
+
+  <article class="s5-home-spotlight">
+    <a class="s5-home-spotlight__media" href="/videos/series/modelos-razonadores/03-test-time-compute/" aria-label="Ver el vídeo sobre test-time compute">
+      <img src="/series/modelos-razonadores/03-test-time-compute.jpg" alt="Visual del vídeo sobre test-time compute" />
+      <span class="s5-home-spotlight__play"><span aria-hidden="true">▶</span> 1:29</span>
+    </a>
+    <div class="s5-home-spotlight__body">
+      <div class="s5-home-spotlight__meta">
+        <span>Empieza aquí</span>
+        <span>Modelos razonadores</span>
+      </div>
+      <h2>Por qué más tiempo para pensar puede mejorar una respuesta.</h2>
+      <p>Test-time compute explicado desde sus tres palancas y el intercambio real entre calidad, coste y latencia.</p>
+      <div class="s5-home-spotlight__actions">
+        <a class="s5-cta s5-cta--primary" href="/videos/series/modelos-razonadores/03-test-time-compute/">Ver vídeo <span>1:29</span></a>
+        <a class="s5-cta s5-cta--secondary" href="/series/modelos-razonadores/03-test-time-compute/">Abrir capítulo</a>
+      </div>
+    </div>
+  </article>
+</section>
+
+<section class="s5-entry-section" aria-labelledby="s5-entry-title">
+  <div class="s5-section-head s5-section-head--compact">
+    <h2 id="s5-entry-title">Elige cómo continuar</h2>
+  </div>
+  <nav class="s5-entry-grid" aria-label="Formas de entrar en 5sigmas">
+    <a class="s5-entry" href="/visuales/">
+      <div class="s5-entry__index">01</div>
+      <div class="s5-entry__title">Ver</div>
+      <div class="s5-entry__text">Vídeos y animaciones para entender una idea antes de entrar en detalle.</div>
+    </a>
+    <a class="s5-entry" href="/series/">
+      <div class="s5-entry__index">02</div>
+      <div class="s5-entry__title">Aprender</div>
+      <div class="s5-entry__text">Series ordenadas para construir conocimiento de forma progresiva.</div>
+    </a>
+    <a class="s5-entry" href="/articulos-tecnicos/">
+      <div class="s5-entry__index">03</div>
+      <div class="s5-entry__title">Construir</div>
+      <div class="s5-entry__text">Arquitectura, decisiones y límites de sistemas reales de IA.</div>
+    </a>
+  </nav>
 </section>
 
 <section class="s5-section">
