@@ -1,10 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 64" role="img" aria-labelledby="title description">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 64" role="img" aria-labelledby="title description">
   <title id="title">5sigmas</title>
-  <desc id="description">Monograma 5 sigma con una línea de umbral</desc>
-  <g fill="#111111" stroke="#111111" aria-hidden="true">
-    <text x="5" y="46" stroke="none" font-family="Inter, Arial, Helvetica, sans-serif" font-size="47" font-weight="800" letter-spacing="-4">5</text>
-    <text x="29" y="45" stroke="none" font-family="Inter, Arial, Helvetica, sans-serif" font-size="43" font-weight="800" letter-spacing="-2">σ</text>
-    <path d="M8 54H68" fill="none" stroke-width="3" stroke-linecap="round" />
-    <circle cx="68" cy="54" r="3" stroke="none" />
+  <desc id="description">Monograma entrelazado 5 sigma</desc>
+  <g fill="#111111" aria-hidden="true">
+    <text x="6" y="47" font-family="Inter, Arial, Helvetica, sans-serif" font-size="48" font-weight="800" letter-spacing="-4">5</text>
+    <text x="25" y="46" font-family="Inter, Arial, Helvetica, sans-serif" font-size="46" font-weight="800" letter-spacing="-3">σ</text>
   </g>
 </svg>
