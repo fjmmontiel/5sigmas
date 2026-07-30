@@ -58,7 +58,7 @@ hide:
     <h2>Explicaciones visuales</h2>
     <a href="/visuales/">Explorar todas →</a>
   </div>
-  <div class="s5-media-grid">
+  <div class="s5-media-stack">
     <a class="s5-media-card" href="/videos/series/multimodalidad-iag/03-arquitecturas/">
       <img class="s5-media-card__image" src="/series/multimodalidad-iag/03-arquitecturas.jpg" alt="Visual sobre arquitecturas multimodales" />
       <div class="s5-media-card__meta">Vídeo · Multimodalidad</div>
