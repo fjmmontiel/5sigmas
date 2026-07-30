@@ -1,5 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 64" role="img" aria-labelledby="title description">
   <title id="title">5sigmas</title>
-  <rect width="64" height="64" rx="12" fill="#111111"/>
-  <text x="32" y="41" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="700" letter-spacing="-2" fill="#ffffff">5σ</text>
+  <desc id="description">Monograma 5 sigma con una línea de umbral</desc>
+  <style>
+    .s5-logo-ink { fill: #111111; }
+    .s5-logo-rule { stroke: #111111; }
+    @media (prefers-color-scheme: dark) {
+      .s5-logo-ink { fill: #f5f5f5; }
+      .s5-logo-rule { stroke: #f5f5f5; }
+    }
+  </style>
+  <g aria-hidden="true">
+    <text class="s5-logo-ink" x="5" y="46" font-family="Inter, Arial, Helvetica, sans-serif" font-size="47" font-weight="800" letter-spacing="-4">5</text>
+    <text class="s5-logo-ink" x="29" y="45" font-family="Inter, Arial, Helvetica, sans-serif" font-size="43" font-weight="800" letter-spacing="-2">σ</text>
+    <path class="s5-logo-rule" d="M8 54H68" fill="none" stroke-width="3" stroke-linecap="round" />
+    <circle class="s5-logo-ink" cx="68" cy="54" r="3" />
+  </g>
 </svg>
