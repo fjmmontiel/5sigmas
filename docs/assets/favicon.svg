@@ -1,10 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
   <title id="title">5sigmas</title>
   <rect width="64" height="64" rx="13" fill="#111111" />
-  <g fill="#ffffff" stroke="#ffffff" aria-hidden="true">
-    <text x="7" y="43" stroke="none" font-family="Inter, Arial, Helvetica, sans-serif" font-size="38" font-weight="800" letter-spacing="-4">5</text>
-    <text x="28" y="42" stroke="none" font-family="Inter, Arial, Helvetica, sans-serif" font-size="35" font-weight="800" letter-spacing="-2">σ</text>
-    <path d="M9 50H54" fill="none" stroke-width="2.5" stroke-linecap="round" />
-    <circle cx="54" cy="50" r="2.5" stroke="none" />
+  <g fill="#ffffff" aria-hidden="true">
+    <text x="8" y="45" font-family="Inter, Arial, Helvetica, sans-serif" font-size="40" font-weight="800" letter-spacing="-4">5</text>
+    <text x="25" y="44" font-family="Inter, Arial, Helvetica, sans-serif" font-size="38" font-weight="800" letter-spacing="-3">σ</text>
   </g>
 </svg>
