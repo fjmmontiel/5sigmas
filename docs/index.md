@@ -15,20 +15,20 @@ hide:
     <h1>La IA se entiende cuando puedes verla funcionar.</h1>
     <p>Cada tema conecta un vídeo breve, una animación interactiva, un capítulo técnico y las fuentes originales. Primero construyes intuición. Después compruebas el mecanismo y sus límites.</p>
 
-    <ol class="s5-learning-loop" aria-label="Método de aprendizaje de 5sigmas">
-      <li>
+    <div class="s5-learning-loop" role="list" aria-label="Método de aprendizaje de 5sigmas">
+      <div class="s5-learning-loop__item" role="listitem">
         <span class="s5-learning-loop__n">01</span>
         <span><strong>Ver</strong><small>Orientarte en 1–2 minutos</small></span>
-      </li>
-      <li>
+      </div>
+      <div class="s5-learning-loop__item" role="listitem">
         <span class="s5-learning-loop__n">02</span>
         <span><strong>Explorar</strong><small>Manipular la idea</small></span>
-      </li>
-      <li>
+      </div>
+      <div class="s5-learning-loop__item" role="listitem">
         <span class="s5-learning-loop__n">03</span>
         <span><strong>Profundizar</strong><small>Capítulo y fuentes</small></span>
-      </li>
-    </ol>
+      </div>
+    </div>
   </div>
 
   <article class="s5-start-card">
