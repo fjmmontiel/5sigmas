@@ -12,7 +12,7 @@ hide:
 <section class="s5-home-cover">
   <div class="s5-home-cover__intro">
     <div class="s5-eyebrow">5sigmas · Inteligencia artificial, sin ruido</div>
-    <h1>La IA se entiende cuando puedes verla funcionar.</h1>
+    <h1>La IA se entiende<br />cuando puedes<br />verla funcionar.</h1>
     <p>Cada tema conecta un vídeo breve, una animación interactiva, un capítulo técnico y las fuentes originales. Primero construyes intuición. Después compruebas el mecanismo y sus límites.</p>
 
     <div class="s5-learning-loop" role="list" aria-label="Método de aprendizaje de 5sigmas">
