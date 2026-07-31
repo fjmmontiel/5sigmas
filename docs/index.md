@@ -12,31 +12,49 @@ hide:
 <section class="s5-home-cover">
   <div class="s5-home-cover__intro">
     <div class="s5-eyebrow">5sigmas · Inteligencia artificial, sin ruido</div>
-    <h1>Entender la IA.<br />Ver cómo funciona.</h1>
-    <p>Una biblioteca visual para pasar de una idea intuitiva a un modelo mental útil: vídeos breves, animaciones interactivas, capítulos técnicos y fuentes.</p>
-    <div class="s5-home-cover__formats" aria-label="Formatos de 5sigmas">
-      <span>Vídeos</span>
-      <span>Animaciones</span>
-      <span>Capítulos</span>
-      <span>Fuentes</span>
-    </div>
+    <h1>La IA se entiende cuando puedes verla funcionar.</h1>
+    <p>Cada tema conecta un vídeo breve, una animación interactiva, un capítulo técnico y las fuentes originales. Primero construyes intuición. Después compruebas el mecanismo y sus límites.</p>
+
+    <ol class="s5-learning-loop" aria-label="Método de aprendizaje de 5sigmas">
+      <li>
+        <span class="s5-learning-loop__n">01</span>
+        <span><strong>Ver</strong><small>Orientarte en 1–2 minutos</small></span>
+      </li>
+      <li>
+        <span class="s5-learning-loop__n">02</span>
+        <span><strong>Explorar</strong><small>Manipular la idea</small></span>
+      </li>
+      <li>
+        <span class="s5-learning-loop__n">03</span>
+        <span><strong>Profundizar</strong><small>Capítulo y fuentes</small></span>
+      </li>
+    </ol>
   </div>
 
-  <article class="s5-home-spotlight">
-    <a class="s5-home-spotlight__media" href="/videos/series/modelos-razonadores/03-test-time-compute/" aria-label="Ver el vídeo sobre test-time compute">
+  <article class="s5-start-card">
+    <header class="s5-start-card__header">
+      <span>Ruta recomendada</span>
+      <span>01 · Modelos razonadores</span>
+    </header>
+
+    <a class="s5-start-card__media" href="/videos/series/modelos-razonadores/03-test-time-compute/" aria-label="Entender test-time compute en un vídeo de un minuto y veintinueve segundos">
       <img src="/series/modelos-razonadores/03-test-time-compute.jpg" alt="Visual del vídeo sobre test-time compute" />
-      <span class="s5-home-spotlight__play"><span aria-hidden="true">▶</span> 1:29</span>
     </a>
-    <div class="s5-home-spotlight__body">
-      <div class="s5-home-spotlight__meta">
-        <span>Empieza aquí</span>
-        <span>Modelos razonadores</span>
-      </div>
-      <h2>Por qué más tiempo para pensar puede mejorar una respuesta.</h2>
-      <p>Test-time compute explicado desde sus tres palancas y el intercambio real entre calidad, coste y latencia.</p>
-      <div class="s5-home-spotlight__actions">
-        <a class="s5-cta s5-cta--primary" href="/videos/series/modelos-razonadores/03-test-time-compute/">Ver vídeo <span>1:29</span></a>
-        <a class="s5-cta s5-cta--secondary" href="/series/modelos-razonadores/03-test-time-compute/">Abrir capítulo</a>
+
+    <a class="s5-start-card__cta" href="/videos/series/modelos-razonadores/03-test-time-compute/">
+      <span>
+        <small>Empieza por una idea</small>
+        <strong>Entender test-time compute</strong>
+      </span>
+      <span class="s5-start-card__cta-meta"><span aria-hidden="true">▶</span> Vídeo · 1:29</span>
+    </a>
+
+    <div class="s5-start-card__detail">
+      <p>Por qué dedicar más cómputo antes de responder puede mejorar la calidad, y qué se paga en coste y latencia.</p>
+      <div class="s5-start-card__route" aria-label="Continuación de la ruta recomendada">
+        <span><b>1</b> Ver <small>1:29</small></span>
+        <span><b>2</b> Explorar <small>animaciones</small></span>
+        <a href="/series/modelos-razonadores/03-test-time-compute/"><b>3</b> Profundizar <small>9 min →</small></a>
       </div>
     </div>
   </article>
