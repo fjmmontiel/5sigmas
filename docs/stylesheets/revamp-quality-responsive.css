@@ -1,0 +1,13 @@
+/* Responsive safeguards for the final quality layer. */
+
+@media (max-width: 960px) {
+  .s5-home-cover {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .s5-home-cover__intro,
+  .s5-start-card {
+    width: 100%;
+    min-width: 0;
+  }
+}
