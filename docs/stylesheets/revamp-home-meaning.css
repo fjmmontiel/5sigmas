@@ -1,5 +1,11 @@
 /* Homepage density and the scientific meaning behind the 5sigmas name. */
 
+/* A solid header prevents previous content from bleeding through during scroll. */
+.md-header {
+  background: var(--s5-bg) !important;
+  backdrop-filter: none !important;
+}
+
 @media (min-width: 961px) {
   .s5-home-cover {
     grid-template-columns: minmax(0, .93fr) minmax(470px, 1.07fr) !important;
@@ -23,6 +29,7 @@
   padding: clamp(1.6rem, 3vw, 2.4rem) 0;
   border-top: 1px solid var(--s5-line-strong);
   border-bottom: 1px solid var(--s5-line);
+  scroll-margin-top: 7rem;
 }
 
 .s5-why__copy h2 {
@@ -135,6 +142,7 @@
     gap: 1.2rem;
     margin-bottom: 2.75rem;
     padding: 1.35rem 0 1.5rem;
+    scroll-margin-top: 4.5rem;
   }
 
   .s5-why__copy h2 {
