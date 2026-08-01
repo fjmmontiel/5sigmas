@@ -21,10 +21,15 @@ const captures = [
   { name: 'visuals-mobile', path: '/visuales/', viewport: mobile, mobile: true },
   { name: 'visuals-videos-desktop', path: '/visuales/', viewport: desktop, selector: '#videos' },
   { name: 'visuals-videos-mobile', path: '/visuales/', viewport: mobile, mobile: true, selector: '#videos' },
-  { name: 'visuals-library-desktop', path: '/visuales/', viewport: desktop, selector: '.s5-section-head--subsection' },
-  { name: 'visuals-library-mobile', path: '/visuales/', viewport: mobile, mobile: true, selector: '.s5-section-head--subsection' },
+  { name: 'visuals-library-desktop', path: '/visuales/', viewport: desktop, selector: '.s5-library-head' },
+  { name: 'visuals-library-mobile', path: '/visuales/', viewport: mobile, mobile: true, selector: '.s5-library-head' },
+  { name: 'visuals-filtered-desktop', path: '/visuales/', viewport: desktop, selector: '.s5-library-head', topic: 'infraestructura' },
+  { name: 'visuals-filtered-mobile', path: '/visuales/', viewport: mobile, mobile: true, selector: '.s5-library-head', topic: 'infraestructura' },
+  { name: 'visuals-routes-desktop', path: '/visuales/', viewport: desktop, selector: '#rutas' },
+  { name: 'visuals-routes-mobile', path: '/visuales/', viewport: mobile, mobile: true, selector: '#rutas' },
   { name: 'visuals-animations-desktop', path: '/visuales/', viewport: desktop, selector: '#animaciones' },
   { name: 'visuals-animations-mobile', path: '/visuales/', viewport: mobile, mobile: true, selector: '#animaciones' },
+  { name: 'visuals-resume-mobile', path: '/visuales/', viewport: mobile, mobile: true, selector: '.s5-resume', seedResume: true },
   { name: 'series-desktop', path: '/series/', viewport: desktop },
   { name: 'series-mobile', path: '/series/', viewport: mobile, mobile: true },
   { name: 'engineering-desktop', path: '/articulos-tecnicos/', viewport: desktop },
@@ -33,6 +38,8 @@ const captures = [
   { name: 'article-mobile', path: '/series/modelos-razonadores/03-test-time-compute/', viewport: mobile, mobile: true },
   { name: 'reader-library-desktop', path: '/series/modelos-razonadores/03-test-time-compute/', viewport: desktop, openReader: true },
   { name: 'reader-library-mobile', path: '/series/modelos-razonadores/03-test-time-compute/', viewport: mobile, mobile: true, openReader: true },
+  { name: 'reader-search-desktop', path: '/series/modelos-razonadores/03-test-time-compute/', viewport: desktop, openReader: true, readerSearch: 'multimodalidad' },
+  { name: 'reader-search-mobile', path: '/series/modelos-razonadores/03-test-time-compute/', viewport: mobile, mobile: true, openReader: true, readerSearch: 'multimodalidad' },
   { name: 'about-desktop', path: '/meta/about/', viewport: desktop },
   { name: 'upcoming-desktop', path: '/proximamente/', viewport: desktop },
 ];
@@ -84,15 +91,22 @@ const collectLayout = () => {
     landingChildren: landing ? [...landing.children].map(rect) : [],
     reader: {
       bars: document.querySelectorAll('[data-s5-reader-nav]').length,
-      collections: document.querySelectorAll('.s5-reader-library__collection').length,
+      collections: document.querySelectorAll('[data-s5-reader-collection]').length,
+      openCollections: document.querySelectorAll('[data-s5-reader-collection][open]:not([hidden])').length,
+      visibleCollections: [...document.querySelectorAll('[data-s5-reader-collection]')].filter((node) => !node.hidden).length,
       current: document.querySelector('.s5-reader-current strong')?.textContent.trim() ?? null,
       dialogOpen: document.querySelector('[data-s5-reader-library]')?.open ?? false,
+      search: document.querySelector('[data-s5-reader-search]')?.value ?? '',
     },
     visualHub: {
       videos: document.querySelectorAll('.s5-inline-video').length,
       lazyVideos: [...document.querySelectorAll('.s5-inline-video')].filter((video) => video.preload === 'none').length,
+      visibleCards: [...document.querySelectorAll('.s5-watch-grid [data-s5-topic-card]')].filter((node) => !node.hidden).length,
+      filters: document.querySelectorAll('[data-s5-topic]').length,
+      routes: document.querySelectorAll('.s5-route-card').length,
       animationEntries: document.querySelectorAll('.s5-lab-map a').length,
       labFeatures: document.querySelectorAll('.s5-lab-feature, .s5-lab-drawer').length,
+      resumeVisible: !document.querySelector('[data-s5-resume]')?.hidden,
     },
     readingAncestors,
     brokenImages,
@@ -109,6 +123,23 @@ const validateVisualHub = async (page) => {
   const animationEntries = await page.locator('.s5-lab-map a').count();
   if (animationEntries !== 3) throw new Error(`visual hub expected 3 animation entries, found ${animationEntries}`);
 
+  const filters = await page.locator('[data-s5-topic]').count();
+  if (filters !== 4) throw new Error(`visual hub expected 4 discovery filters, found ${filters}`);
+
+  const routes = await page.locator('.s5-route-card').count();
+  if (routes !== 3) throw new Error(`visual hub expected 3 guided routes, found ${routes}`);
+
+  const routeSteps = await page.locator('.s5-route-card').evaluateAll((cards) => cards.map((card) => card.querySelectorAll('ol a').length));
+  if (routeSteps.some((count) => count !== 3)) throw new Error(`each guided route must contain 3 steps: ${routeSteps.join(', ')}`);
+
+  const resume = await page.locator('[data-s5-resume]').count();
+  if (resume !== 1) throw new Error(`visual hub expected one resume surface, found ${resume}`);
+
+  await page.locator('[data-s5-topic="infraestructura"]').click();
+  const visibleInfrastructure = await page.locator('.s5-watch-grid [data-s5-topic-card]:visible').count();
+  if (visibleInfrastructure !== 2) throw new Error(`infrastructure filter expected 2 cards, found ${visibleInfrastructure}`);
+  await page.locator('[data-s5-topic="all"]').click();
+
   const sources = await page.locator('.s5-inline-video source').evaluateAll((nodes) => nodes.map((node) => node.src));
   for (const source of sources) {
     const response = await page.request.head(source);
@@ -120,14 +151,23 @@ const validateReaderNavigation = async (page) => {
   const bars = await page.locator('[data-s5-reader-nav]').count();
   if (bars !== 1) throw new Error(`reader navigation expected 1 bar, found ${bars}`);
 
-  const collections = await page.locator('.s5-reader-library__collection').count();
+  const collections = await page.locator('[data-s5-reader-collection]').count();
   if (collections !== 7) throw new Error(`reader navigation expected 6 series plus technical notes, found ${collections}`);
 
-  const links = await page.locator('.s5-reader-library__collection nav a').count();
+  const links = await page.locator('[data-s5-reader-entry]').count();
   if (links < 30) throw new Error(`reader navigation expected at least 30 navigable contents, found ${links}`);
 
-  const current = await page.locator('.s5-reader-library__collection nav a[aria-current="page"]').count();
+  const current = await page.locator('[data-s5-reader-entry][aria-current="page"]').count();
   if (current !== 1) throw new Error(`reader navigation expected one current page, found ${current}`);
+
+  const currentCollections = await page.locator('[data-s5-reader-collection].is-current[open]').count();
+  if (currentCollections !== 1) throw new Error(`reader navigation expected one open current collection, found ${currentCollections}`);
+
+  const initiallyOpen = await page.locator('[data-s5-reader-collection][open]').count();
+  if (initiallyOpen !== 1) throw new Error(`reader navigation should progressively disclose one collection, found ${initiallyOpen} open`);
+
+  const search = await page.locator('[data-s5-reader-search]').count();
+  if (search !== 1) throw new Error(`reader navigation expected one search field, found ${search}`);
 };
 
 try {
@@ -141,6 +181,19 @@ try {
     });
     const page = await context.newPage();
     const runtimeErrors = [];
+
+    if (capture.seedResume) {
+      await page.addInitScript(() => {
+        localStorage.setItem('s5:visual-progress:v1', JSON.stringify({
+          id: 'test-time-compute',
+          title: 'Test-time compute',
+          chapter: '/series/modelos-razonadores/03-test-time-compute/',
+          currentTime: 37,
+          duration: 89,
+          updatedAt: Date.now(),
+        }));
+      });
+    }
 
     page.on('pageerror', (error) => runtimeErrors.push(`pageerror: ${error.message}`));
     page.on('console', (message) => {
@@ -165,10 +218,18 @@ try {
       await page.waitForTimeout(50);
     }
 
+    if (capture.topic) {
+      await page.locator(`[data-s5-topic="${capture.topic}"]`).click();
+      await page.waitForTimeout(80);
+    }
+
     if (capture.openReader) {
       await page.locator('[data-s5-reader-open]').click();
       await page.locator('[data-s5-reader-library][open]').waitFor();
-      await page.waitForTimeout(100);
+      if (capture.readerSearch) {
+        await page.locator('[data-s5-reader-search]').fill(capture.readerSearch);
+      }
+      await page.waitForTimeout(120);
     } else if (capture.selector) {
       const target = page.locator(capture.selector).first();
       if ((await target.count()) === 0) {
@@ -203,6 +264,15 @@ try {
     }
     if (capture.forcedScheme && layout.body.scheme !== capture.forcedScheme) {
       throw new Error(`${capture.name} did not apply ${capture.forcedScheme} theme`);
+    }
+    if (capture.seedResume && !layout.visualHub.resumeVisible) {
+      throw new Error(`${capture.name} did not expose the saved learning progress`);
+    }
+    if (capture.topic === 'infraestructura' && layout.visualHub.visibleCards !== 2) {
+      throw new Error(`${capture.name} expected 2 filtered cards, found ${layout.visualHub.visibleCards}`);
+    }
+    if (capture.readerSearch && layout.reader.visibleCollections !== 1) {
+      throw new Error(`${capture.name} expected one matching collection, found ${layout.reader.visibleCollections}`);
     }
     if (runtimeErrors.length > 0) {
       throw new Error(`${capture.name} emitted browser errors:\n${runtimeErrors.join('\n')}`);
