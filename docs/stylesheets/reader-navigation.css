@@ -1,0 +1,407 @@
+/* Persistent reading navigation for series and technical articles. */
+
+.s5-reader-nav {
+  position: sticky;
+  top: 112px;
+  z-index: 15;
+  margin: 1rem 0 1.4rem;
+}
+
+.s5-reader-nav__bar {
+  display: grid;
+  grid-template-columns: minmax(120px, .7fr) minmax(145px, 1fr) minmax(210px, 1.45fr) minmax(145px, 1fr);
+  min-height: 74px;
+  border: 1px solid var(--s5-line-strong);
+  background: var(--md-default-bg-color);
+  box-shadow: 0 10px 28px color-mix(in srgb, var(--s5-text) 7%, transparent);
+}
+
+.s5-reader-nav__library,
+.s5-reader-step,
+.s5-reader-current {
+  min-width: 0;
+}
+
+.s5-reader-nav__library {
+  display: grid;
+  align-content: center;
+  gap: .18rem;
+  padding: .8rem 1rem;
+  border: 0;
+  border-right: 1px solid var(--s5-line);
+  background: transparent;
+  color: var(--s5-text);
+  cursor: pointer;
+  text-align: left;
+}
+
+.s5-reader-nav__library span,
+.s5-reader-step span,
+.s5-reader-current > span {
+  color: var(--s5-muted);
+  font-size: .52rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.s5-reader-nav__library b {
+  font-size: .67rem;
+  line-height: 1.2;
+}
+
+.s5-reader-nav__library:hover,
+.s5-reader-nav__library:focus-visible {
+  background: color-mix(in srgb, var(--s5-brand-blue) 8%, transparent);
+}
+
+.s5-reader-step {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: .55rem;
+  align-items: center;
+  padding: .75rem .85rem;
+  color: var(--s5-text) !important;
+  text-decoration: none !important;
+}
+
+.s5-reader-step--prev {
+  border-right: 1px solid var(--s5-line);
+}
+
+.s5-reader-step--next {
+  grid-template-columns: minmax(0, 1fr) auto;
+  border-left: 1px solid var(--s5-line);
+  text-align: right;
+}
+
+.s5-reader-step > span {
+  display: grid;
+  min-width: 0;
+  gap: .18rem;
+}
+
+.s5-reader-step strong {
+  overflow: hidden;
+  font-size: .64rem;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.s5-reader-step b {
+  font-size: .9rem;
+}
+
+.s5-reader-step:hover,
+.s5-reader-step:focus-visible {
+  background: color-mix(in srgb, var(--s5-text) 4%, transparent);
+}
+
+.s5-reader-step.is-disabled {
+  opacity: .28;
+}
+
+.s5-reader-current {
+  position: relative;
+  display: grid;
+  align-content: center;
+  gap: .16rem;
+  padding: .7rem 1rem .85rem;
+  text-align: center;
+}
+
+.s5-reader-current strong {
+  overflow: hidden;
+  font-size: .76rem;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.s5-reader-current small {
+  overflow: hidden;
+  color: var(--s5-muted);
+  font-size: .58rem;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.s5-reader-current i {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: var(--s5-line);
+}
+
+.s5-reader-current i::after {
+  display: block;
+  width: var(--s5-reader-progress);
+  height: 100%;
+  background: var(--s5-brand-blue);
+  content: '';
+}
+
+.s5-reader-library {
+  width: min(1180px, calc(100vw - 2rem));
+  max-width: none;
+  max-height: min(860px, calc(100vh - 2rem));
+  margin: auto;
+  padding: 0;
+  border: 1px solid var(--s5-line-strong);
+  background: var(--md-default-bg-color);
+  color: var(--s5-text);
+}
+
+.s5-reader-library::backdrop {
+  background: color-mix(in srgb, #000 68%, transparent);
+  backdrop-filter: blur(4px);
+}
+
+.s5-reader-library__surface {
+  max-height: min(860px, calc(100vh - 2rem));
+  overflow: auto;
+  padding: clamp(1.25rem, 3vw, 2.5rem);
+}
+
+.s5-reader-library__header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1rem;
+  align-items: start;
+  padding-bottom: 1.35rem;
+  border-bottom: 1px solid var(--s5-line-strong);
+  background: var(--md-default-bg-color);
+}
+
+.s5-reader-library__header span {
+  color: var(--s5-brand-blue);
+  font-size: .58rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.s5-reader-library__header h2 {
+  margin: .35rem 0 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  font-size: clamp(1.7rem, 3.2vw, 3rem) !important;
+  line-height: .98 !important;
+  letter-spacing: -.05em !important;
+}
+
+.s5-reader-library__header button {
+  padding: .55rem .7rem;
+  border: 1px solid var(--s5-line-strong);
+  background: transparent;
+  color: var(--s5-text);
+  cursor: pointer;
+  font-size: .62rem;
+  font-weight: 700;
+}
+
+.s5-reader-library__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 clamp(2rem, 4vw, 4rem);
+}
+
+.s5-reader-library__collection {
+  min-width: 0;
+  padding: 1.5rem 0 1.8rem;
+  border-bottom: 1px solid var(--s5-line);
+}
+
+.s5-reader-library__collection header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: .3rem 1rem;
+  align-items: end;
+  margin-bottom: .8rem;
+}
+
+.s5-reader-library__collection header > span {
+  grid-column: 1 / -1;
+  color: var(--s5-brand-orange);
+  font-size: .54rem;
+  font-weight: 800;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+
+.s5-reader-library__collection h3 {
+  margin: 0 !important;
+  font-size: 1rem;
+  line-height: 1.15;
+  letter-spacing: -.03em;
+}
+
+.s5-reader-library__collection h3 a {
+  color: var(--s5-text) !important;
+  text-decoration: none !important;
+}
+
+.s5-reader-library__collection header small {
+  color: var(--s5-muted);
+  font-size: .56rem;
+}
+
+.s5-reader-library__collection nav {
+  display: grid;
+  border-top: 1px solid var(--s5-line);
+}
+
+.s5-reader-library__collection nav a {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: .55rem;
+  align-items: center;
+  min-height: 42px;
+  padding: .45rem .2rem;
+  border-bottom: 1px solid var(--s5-line);
+  color: var(--s5-text) !important;
+  text-decoration: none !important;
+}
+
+.s5-reader-library__collection nav a span {
+  color: var(--s5-muted);
+  font-size: .52rem;
+  font-weight: 800;
+}
+
+.s5-reader-library__collection nav a strong {
+  overflow: hidden;
+  font-size: .65rem;
+  font-weight: 650;
+  line-height: 1.28;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.s5-reader-library__collection nav a:hover,
+.s5-reader-library__collection nav a:focus-visible {
+  background: color-mix(in srgb, var(--s5-text) 4%, transparent);
+}
+
+.s5-reader-library__collection nav a[aria-current='page'] {
+  background: color-mix(in srgb, var(--s5-brand-blue) 9%, transparent);
+}
+
+.s5-reader-library__collection nav a[aria-current='page'] span,
+.s5-reader-library__collection nav a[aria-current='page'] strong {
+  color: var(--s5-brand-blue);
+}
+
+@media (max-width: 960px) {
+  .s5-reader-nav {
+    top: 64px;
+  }
+
+  .s5-reader-nav__bar {
+    grid-template-columns: 52px minmax(0, 1fr) 52px;
+    min-height: 58px;
+  }
+
+  .s5-reader-nav__library {
+    grid-column: 2;
+    grid-row: 1;
+    align-content: center;
+    justify-items: center;
+    padding: .45rem;
+    border-right: 0;
+    text-align: center;
+  }
+
+  .s5-reader-nav__library span {
+    display: none;
+  }
+
+  .s5-reader-nav__library b {
+    font-size: .64rem;
+  }
+
+  .s5-reader-step {
+    grid-row: 1;
+    display: flex;
+    justify-content: center;
+    padding: .5rem;
+  }
+
+  .s5-reader-step--prev {
+    grid-column: 1;
+  }
+
+  .s5-reader-step--next {
+    grid-column: 3;
+  }
+
+  .s5-reader-step > span {
+    display: none;
+  }
+
+  .s5-reader-step b {
+    font-size: 1.1rem;
+  }
+
+  .s5-reader-current {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    min-height: 34px;
+    padding: .35rem .7rem .45rem;
+    border-top: 1px solid var(--s5-line);
+  }
+
+  .s5-reader-current > span,
+  .s5-reader-current small {
+    display: none;
+  }
+
+  .s5-reader-current strong {
+    font-size: .62rem;
+  }
+
+  .s5-reader-library__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 800px) {
+  .s5-reader-nav {
+    margin: .8rem 0 1.1rem;
+  }
+
+  .s5-reader-nav__bar {
+    box-shadow: 0 7px 18px color-mix(in srgb, var(--s5-text) 8%, transparent);
+  }
+
+  .s5-reader-library {
+    width: 100vw;
+    height: 100dvh;
+    max-height: 100dvh;
+    border: 0;
+  }
+
+  .s5-reader-library__surface {
+    max-height: 100dvh;
+    padding: 1rem;
+  }
+
+  .s5-reader-library__header {
+    padding-top: .2rem;
+  }
+
+  .s5-reader-library__header h2 {
+    font-size: 1.9rem !important;
+  }
+
+  .s5-reader-library__collection {
+    padding: 1.15rem 0 1.35rem;
+  }
+}
