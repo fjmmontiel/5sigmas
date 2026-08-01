@@ -1,0 +1,37 @@
+/* Final visual fixes found during real-browser review. */
+
+.s5-reader-library__collection > summary::before {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  content: none !important;
+}
+
+.s5-reader-library__collection > summary {
+  padding-left: .65rem;
+  padding-right: .45rem;
+}
+
+.s5-reader-library__collection.is-current > summary {
+  box-shadow: inset 3px 0 0 var(--s5-brand-blue);
+}
+
+@media (max-width: 800px) {
+  .s5-visual-hub__intro {
+    padding-bottom: .65rem !important;
+  }
+
+  .s5-visual-hub__intro + .s5-resume[hidden] + .s5-watch {
+    margin-top: 1.25rem !important;
+    padding-top: 0 !important;
+  }
+
+  .s5-visual-hub__jump {
+    margin-top: 1rem !important;
+  }
+
+  .s5-reader-library__collection > summary {
+    padding-left: .55rem;
+    padding-right: .35rem;
+  }
+}
