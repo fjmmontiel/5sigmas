@@ -2,12 +2,18 @@
   const STORAGE_KEY = 's5:visual-progress:v1';
 
   const ensureStyles = () => {
-    if (document.querySelector('link[data-s5-learning-discovery]')) return;
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = '/stylesheets/learning-discovery.css';
-    link.dataset.s5LearningDiscovery = 'true';
-    document.head.append(link);
+    const stylesheets = [
+      ['s5-learning-discovery', '/stylesheets/learning-discovery.css'],
+      ['s5-learning-discovery-fixes', '/stylesheets/learning-discovery-fixes.css'],
+    ];
+    for (const [key, href] of stylesheets) {
+      if (document.querySelector(`link[data-${key}]`)) continue;
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = href;
+      link.setAttribute(`data-${key}`, 'true');
+      document.head.append(link);
+    }
   };
 
   const readProgress = () => {
