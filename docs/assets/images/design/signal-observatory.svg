@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 320" role="img" aria-labelledby="title desc">
+  <title id="title">Distribución normal y umbral de cinco sigmas</title>
+  <desc id="desc">Curva normal con ruido disperso y la región extrema de cinco sigmas resaltada en naranja.</desc>
+  <style>
+    .grid{stroke:rgba(255,255,255,.1);stroke-width:1}.axis{stroke:rgba(255,255,255,.35);stroke-width:1.2}.curve{fill:none;stroke:#f3efe6;stroke-width:3;stroke-linecap:round}.tail{fill:rgba(255,77,36,.2);stroke:#ff4d24;stroke-width:1.4}.sigma{stroke:#ff4d24;stroke-width:1;stroke-dasharray:5 5}.dot{fill:#77e1c2;opacity:.72}.mono{font-family:'IBM Plex Mono',monospace;font-size:10px}.signal{fill:#ff4d24}.muted{fill:rgba(255,255,255,.42)}
+  </style>
+  <line class="grid" x1="20" y1="70" x2="480" y2="70"/>
+  <line class="grid" x1="20" y1="130" x2="480" y2="130"/>
+  <line class="grid" x1="20" y1="190" x2="480" y2="190"/>
+  <line class="axis" x1="20" y1="260" x2="480" y2="260"/>
+  <line class="sigma" x1="430" y1="55" x2="430" y2="260"/>
+  <path class="tail" d="M430 247 C450 252 466 257 480 260 L480 260 L430 260 Z"/>
+  <path class="curve" d="M20 259 C85 258 116 244 153 211 C194 175 213 70 250 48 C287 70 306 175 347 211 C384 244 415 258 480 259"/>
+  <circle class="dot" cx="54" cy="92" r="3"/><circle class="dot" cx="91" cy="204" r="2.5"/><circle class="dot" cx="130" cy="118" r="3.5"/><circle class="dot" cx="169" cy="229" r="2.5"/><circle class="dot" cx="199" cy="96" r="3"/><circle class="dot" cx="301" cy="102" r="2.5"/><circle class="dot" cx="343" cy="81" r="3"/><circle class="dot" cx="376" cy="222" r="2.5"/><circle class="dot" cx="411" cy="145" r="3.5"/><circle class="dot" cx="462" cy="99" r="2.5"/>
+  <text x="438" y="45" class="mono signal" font-size="12">5σ</text>
+  <text x="22" y="282" class="mono muted">NOISE</text>
+  <text x="422" y="282" class="mono signal">SIGNAL</text>
+</svg>

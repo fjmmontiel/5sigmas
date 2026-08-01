@@ -1,0 +1,180 @@
+/* Homepage density and the scientific meaning behind the 5sigmas name. */
+
+/* A solid header prevents previous content from bleeding through during scroll. */
+.md-header {
+  background: var(--s5-bg) !important;
+  backdrop-filter: none !important;
+}
+
+@media (min-width: 961px) {
+  .s5-home-cover {
+    grid-template-columns: minmax(0, .93fr) minmax(470px, 1.07fr) !important;
+    gap: clamp(2.25rem, 4vw, 3.75rem) !important;
+    align-items: center !important;
+    padding-top: 1.35rem !important;
+    padding-bottom: 2.15rem !important;
+  }
+
+  .s5-home-cover__intro {
+    padding-top: 0 !important;
+  }
+}
+
+.s5-why {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(320px, .92fr);
+  gap: clamp(2.5rem, 5vw, 5rem);
+  align-items: center;
+  margin: 0 0 clamp(3rem, 5vw, 4.5rem);
+  padding: clamp(1.6rem, 3vw, 2.4rem) 0;
+  border-top: 1px solid var(--s5-line-strong);
+  border-bottom: 1px solid var(--s5-line);
+  scroll-margin-top: 7rem;
+}
+
+.s5-why__copy h2 {
+  max-width: none;
+  margin: 0 0 1rem !important;
+  padding: 0 !important;
+  border: 0 !important;
+  font-size: clamp(2rem, 3.7vw, 3.35rem) !important;
+  line-height: .98 !important;
+  letter-spacing: -.055em !important;
+}
+
+.s5-why__copy > p {
+  max-width: 67ch !important;
+  margin: .65rem 0 0;
+  color: var(--s5-muted);
+  font-size: .88rem;
+  line-height: 1.62;
+}
+
+.s5-why__copy strong {
+  color: var(--s5-text);
+}
+
+.s5-why__metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 1.35rem;
+  border-top: 1px solid var(--s5-line);
+  border-bottom: 1px solid var(--s5-line);
+}
+
+.s5-why__metrics > span {
+  min-width: 0;
+  padding: .85rem .9rem .85rem 0;
+}
+
+.s5-why__metrics > span + span {
+  padding-left: .9rem;
+  border-left: 1px solid var(--s5-line);
+}
+
+.s5-why__metrics strong,
+.s5-why__metrics small {
+  display: block;
+}
+
+.s5-why__metrics strong {
+  color: var(--s5-text);
+  font-size: .76rem;
+  line-height: 1.2;
+}
+
+.s5-why__metrics span:first-child strong {
+  color: var(--s5-brand-blue);
+}
+
+.s5-why__metrics span:nth-child(2) strong {
+  color: var(--s5-brand-orange);
+}
+
+.s5-why__metrics small {
+  margin-top: .25rem;
+  color: var(--s5-muted);
+  font-size: .57rem;
+  line-height: 1.35;
+}
+
+.s5-why__visual {
+  margin: 0;
+  padding-left: clamp(1.5rem, 3vw, 2.75rem);
+  border-left: 1px solid var(--s5-line);
+}
+
+.s5-why__visual img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.s5-why__visual figcaption {
+  max-width: 48ch;
+  margin-top: .65rem;
+  color: var(--s5-muted);
+  font-size: .65rem;
+  line-height: 1.5;
+}
+
+.s5-why + .s5-entry-section {
+  margin-top: 0 !important;
+}
+
+@media (max-width: 960px) {
+  .s5-why {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .s5-why__visual {
+    max-width: 620px;
+    padding-top: 1.2rem;
+    padding-left: 0;
+    border-top: 1px solid var(--s5-line);
+    border-left: 0;
+  }
+}
+
+@media (max-width: 800px) {
+  .s5-why {
+    gap: 1.2rem;
+    margin-bottom: 2.75rem;
+    padding: 1.35rem 0 1.5rem;
+    scroll-margin-top: 4.5rem;
+  }
+
+  .s5-why__copy h2 {
+    font-size: 2.15rem !important;
+  }
+
+  .s5-why__copy > p {
+    font-size: .82rem;
+    line-height: 1.55;
+  }
+
+  .s5-why__metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 1rem;
+  }
+
+  .s5-why__metrics > span {
+    padding: .75rem .65rem .75rem 0;
+  }
+
+  .s5-why__metrics > span + span {
+    padding-left: .65rem;
+  }
+
+  .s5-why__metrics > span:nth-child(3) {
+    grid-column: 1 / -1;
+    padding-left: 0;
+    border-top: 1px solid var(--s5-line);
+    border-left: 0;
+  }
+
+  .s5-why__visual figcaption {
+    font-size: .6rem;
+  }
+}

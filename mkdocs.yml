@@ -1,29 +1,29 @@
 site_name: 5sigmas
-site_description: IA explicada con criterio técnico en español. Aprende inteligencia artificial sin hype, separa señal de ruido y construye criterio propio con fuentes primarias.
+site_description: Inteligencia artificial explicada con rigor mediante vídeos, animaciones, series y notas técnicas.
 site_url: "https://5sigmas.com"
 validation:
   nav:
     omitted_files: ignore
   links:
     absolute_links: ignore
-    unrecognized_links: ignore
+  unrecognized_links: ignore
 theme:
   name: material
   custom_dir: overrides
   language: es
   logo: assets/logo.svg
-  favicon: assets/logo.svg
+  favicon: assets/favicon.svg
   font: false
   palette:
     - scheme: default
-      primary: cyan
-      accent: amber
+      primary: white
+      accent: black
       toggle:
         icon: material/brightness-7
         name: Cambiar a modo oscuro
     - scheme: slate
-      primary: cyan
-      accent: amber
+      primary: black
+      accent: white
       toggle:
         icon: material/brightness-4
         name: Cambiar a modo claro
@@ -39,14 +39,15 @@ theme:
     - navigation.footer
 
 extra:
-  generator: false  # quita “Made with Material for MkDocs”
+  generator: false
   social:
     - icon: fontawesome/brands/linkedin
       link: https://www.linkedin.com/in/fjmm1998/
 
 nav:
   - Inicio: index.md
-  - Series:
+  - Ver: visuales/index.md
+  - Aprender:
       - series/index.md
       - Fundamentos de IA e IA generativa:
           - Presentación: series/fundamentos-ia-iag/00_presentacion_serie.md
@@ -87,11 +88,11 @@ nav:
           - Energía, calor y conectividad: series/datacenters-espacio/02-energia-calor-conectividad.md
           - Qué es un datacenter espacial: series/datacenters-espacio/03-que-es-datacenter-espacio.md
           - La huella real de un datacenter: series/datacenters-espacio/04-huella-real-datacenter.md
-  - Artículos Técnicos:
+  - Construir:
       - articulos-tecnicos/index.md
       - Agente Reactivo, Proactivo y Tool calls: articulos-tecnicos/proactive-reactive-agent-and-tool-calls.md
   - Próximamente: proximamente.md
-  - Sobre 5sigmas: meta/about.md
+  - Sobre: meta/about.md
 markdown_extensions:
   - meta
   - admonition
@@ -115,8 +116,6 @@ markdown_extensions:
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
 
 extra_javascript:
-  - path: javascripts/nav-gradient.js
-    defer: true
   - path: javascripts/external-links.js
     defer: true
   - path: javascripts/article-audio.js
@@ -131,10 +130,20 @@ extra_javascript:
     defer: true
   - path: assets/javascripts/series_energy_ai_local.js
     defer: true
+  - path: assets/javascripts/editorial-system.js
+    defer: true
 extra_css:
   - stylesheets/extra.css
   - assets/stylesheets/animations.css
   - assets/stylesheets/series_energy_ai_preview.css
+  - stylesheets/revamp.css
+  - stylesheets/revamp-fixes.css
+  - stylesheets/revamp-responsive-fixes.css
+  - stylesheets/revamp-ux.css
+  - stylesheets/revamp-home-cover.css
+  - stylesheets/revamp-quality.css
+  - stylesheets/revamp-quality-responsive.css
+  - stylesheets/revamp-home-meaning.css
 
 hooks:
   - hooks/reading_time.py
@@ -164,12 +173,10 @@ plugins:
   - social:
       cards_layout: clean
       cards_layout_options:
-        background_color: transparent
-        background_image: docs/assets/social_liquid.png
-        color: "#ffffff"
+        background_color: "#ffffff"
+        color: "#111111"
         font_family: Inter
       enabled: true
-  # - blog        # optional – see below
 exclude_docs: |
   drafts/
   drafts/**

@@ -1,59 +1,173 @@
 ---
 title: 5sigmas
-description: IA explicada con criterio técnico. Aprende inteligencia artificial sin hype, separa señal de ruido y construye criterio propio con fuentes primarias.
+description: Inteligencia artificial explicada con rigor mediante vídeos, animaciones, series y notas técnicas.
 hide:
   - navigation
+  - toc
   - footer
 ---
 
-# IA explicada con criterio técnico
+<div class="s5-landing">
 
-5sigmas existe para enseñar IA sin hype. El objetivo principal es separar señal de ruido, entender la tecnología desde sus cimientos y construir criterio propio antes de comprar una narrativa, una herramienta o una promesa.
+<section class="s5-home-cover">
+  <div class="s5-home-cover__intro">
+    <div class="s5-eyebrow">5sigmas · Inteligencia artificial, sin ruido</div>
+    <h1>Ver la IA.<br />Entenderla de verdad.</h1>
+    <p>Cada tema conecta un vídeo breve, una animación interactiva, un capítulo técnico y las fuentes originales. Primero construyes intuición. Después compruebas el mecanismo y sus límites.</p>
 
-Soy Francisco Maldonado, doble graduado en Física y Matemáticas. Trabajo diseñando y construyendo sistemas de IA que operan en tiempo real, desde asistentes de voz hasta visión artificial. Este sitio muestra cómo pienso, cómo explico y cómo separo una idea sólida de una moda pasajera.
+    <div class="s5-learning-loop" role="list" aria-label="Método de aprendizaje de 5sigmas">
+      <div class="s5-learning-loop__item" role="listitem">
+        <span class="s5-learning-loop__n">01</span>
+        <span><strong>Ver</strong><small>Orientarte en 1–2 minutos</small></span>
+      </div>
+      <div class="s5-learning-loop__item" role="listitem">
+        <span class="s5-learning-loop__n">02</span>
+        <span><strong>Explorar</strong><small>Manipular la idea</small></span>
+      </div>
+      <div class="s5-learning-loop__item" role="listitem">
+        <span class="s5-learning-loop__n">03</span>
+        <span><strong>Profundizar</strong><small>Capítulo y fuentes</small></span>
+      </div>
+    </div>
+  </div>
 
-[Empezar por las series](/series/){ .md-button .md-button--primary }
+  <article class="s5-start-card">
+    <header class="s5-start-card__header">
+      <span>Ruta recomendada</span>
+      <span>01 · Modelos razonadores</span>
+    </header>
 
----
+    <a class="s5-start-card__media" href="/videos/series/modelos-razonadores/03-test-time-compute/" aria-label="Entender test-time compute en un vídeo de un minuto y veintinueve segundos">
+      <img src="/series/modelos-razonadores/03-test-time-compute.jpg" alt="Visual del vídeo sobre test-time compute" />
+    </a>
 
-## ¿Por qué "5sigmas"?
+    <a class="s5-start-card__cta" href="/videos/series/modelos-razonadores/03-test-time-compute/">
+      <span>
+        <small>Empieza por una idea</small>
+        <strong>Entender test-time compute</strong>
+      </span>
+      <span class="s5-start-card__cta-meta"><span aria-hidden="true">▶</span> Vídeo · 1:29</span>
+    </a>
 
-En física de partículas, un descubrimiento se considera confirmado cuando alcanza una significancia estadística de **5 sigmas**: un listón muy exigente para no confundir ruido con señal. La ciencia exige controles, experimentos replicables y la eliminación de sesgos antes de dar algo por válido.
+    <div class="s5-start-card__detail">
+      <p>Por qué dedicar más cómputo antes de responder puede mejorar la calidad, y qué se paga en coste y latencia.</p>
+      <a class="s5-start-card__chapter" href="/series/modelos-razonadores/03-test-time-compute/">
+        <span>Abrir capítulo técnico</span>
+        <small>9 min →</small>
+      </a>
+    </div>
+  </article>
+</section>
 
-{{ include_html("snippets/5sigma.html") }}
+<section class="s5-why" aria-labelledby="s5-why-title">
+  <div class="s5-why__copy">
+    <div class="s5-eyebrow">El criterio detrás del nombre</div>
+    <h2 id="s5-why-title">¿Por qué 5sigmas?</h2>
+    <p>En física de partículas, un resultado solo se considera descubrimiento cuando alcanza una significancia de <strong>cinco sigmas</strong>: un umbral tan exigente que la probabilidad de confundir una fluctuación extrema con una señal real es aproximadamente de una entre 3,5 millones.</p>
+    <p>5sigmas aplica ese mismo principio a la inteligencia artificial: separar conocimiento fundamental de ruido diario, exigir evidencia y construir criterio antes de aceptar una narrativa, una herramienta o una promesa.</p>
+    <div class="s5-why__metrics" aria-label="Significado de cinco sigmas">
+      <span><strong>5σ</strong><small>umbral de descubrimiento</small></span>
+      <span><strong>≈ 1 entre 3,5 M</strong><small>probabilidad de ruido extremo</small></span>
+      <span><strong>Señal &gt; ruido</strong><small>principio editorial</small></span>
+    </div>
+  </div>
+  <figure class="s5-why__visual">
+    <img src="/assets/images/design/five-sigma-threshold.svg" alt="Curva normal con el umbral de cinco sigmas separado del ruido esperado" />
+    <figcaption>No publicar por novedad. Publicar cuando la explicación resiste evidencia, contexto y límites.</figcaption>
+  </figure>
+</section>
 
-Este proyecto aplica ese mismo criterio a la divulgación sobre IA: separar el conocimiento fundamental del ruido diario.
+<section class="s5-entry-section" aria-labelledby="s5-entry-title">
+  <div class="s5-section-head s5-section-head--compact">
+    <h2 id="s5-entry-title">Elige cómo continuar</h2>
+  </div>
+  <nav class="s5-entry-grid" aria-label="Formas de entrar en 5sigmas">
+    <a class="s5-entry" href="/visuales/">
+      <div class="s5-entry__index">01</div>
+      <div class="s5-entry__title">Ver</div>
+      <div class="s5-entry__text">Vídeos y animaciones para entender una idea antes de entrar en detalle.</div>
+    </a>
+    <a class="s5-entry" href="/series/">
+      <div class="s5-entry__index">02</div>
+      <div class="s5-entry__title">Aprender</div>
+      <div class="s5-entry__text">Series ordenadas para construir conocimiento de forma progresiva.</div>
+    </a>
+    <a class="s5-entry" href="/articulos-tecnicos/">
+      <div class="s5-entry__index">03</div>
+      <div class="s5-entry__title">Construir</div>
+      <div class="s5-entry__text">Arquitectura, decisiones y límites de sistemas reales de IA.</div>
+    </a>
+  </nav>
+</section>
 
-## Por dónde empezar
+<section class="s5-section">
+  <div class="s5-section-head">
+    <h2>Explicaciones visuales</h2>
+    <a href="/visuales/">Explorar todas →</a>
+  </div>
+  <div class="s5-media-stack">
+    <a class="s5-media-card" href="/videos/series/multimodalidad-iag/03-arquitecturas/">
+      <img class="s5-media-card__image" src="/series/multimodalidad-iag/03-arquitecturas.jpg" alt="Visual sobre arquitecturas multimodales" />
+      <div class="s5-media-card__meta">Vídeo · Multimodalidad</div>
+      <div class="s5-media-card__title">Cómo se construyen los modelos multimodales</div>
+    </a>
+    <a class="s5-media-card" href="/videos/series/from-cave-to-agi/04-escalar/">
+      <img class="s5-media-card__image" src="/series/from-cave-to-agi/04-escalar.jpg" alt="Visual sobre escalado de modelos de IA" />
+      <div class="s5-media-card__meta">Vídeo · Historia de la IA</div>
+      <div class="s5-media-card__title">Por qué escalar cambió la inteligencia artificial</div>
+    </a>
+    <a class="s5-media-card" href="/videos/series/datacenters-espacio/02-energia-calor-conectividad/">
+      <img class="s5-media-card__image" src="/series/datacenters-espacio/02-energia-calor-conectividad.jpg" alt="Visual sobre energía, calor y conectividad en datacenters espaciales" />
+      <div class="s5-media-card__meta">Vídeo · Infraestructura</div>
+      <div class="s5-media-card__title">Energía, calor y conectividad fuera de la Tierra</div>
+    </a>
+  </div>
+</section>
 
-<div style="display:flex;gap:1rem;flex-wrap:wrap;margin:1.25rem 0">
+<section class="s5-section">
+  <div class="s5-section-head">
+    <h2>Elige una ruta</h2>
+    <a href="/series/">Ver las seis series →</a>
+  </div>
+  <div class="s5-simple-list">
+    <a class="s5-list-row" href="/series/fundamentos-ia-iag/00_presentacion_serie/">
+      <span class="s5-list-row__n">01</span>
+      <span class="s5-list-row__title">Fundamentos de IA</span>
+      <span class="s5-list-row__desc">Las diferencias esenciales entre software, aprendizaje, generación y AGI.</span>
+      <span class="s5-list-row__meta">4 capítulos</span>
+    </a>
+    <a class="s5-list-row" href="/series/multimodalidad-iag/00_presentacion_serie/">
+      <span class="s5-list-row__n">02</span>
+      <span class="s5-list-row__title">Multimodalidad</span>
+      <span class="s5-list-row__desc">Texto, imagen, audio y vídeo dentro de un mismo sistema.</span>
+      <span class="s5-list-row__meta">5 capítulos</span>
+    </a>
+    <a class="s5-list-row" href="/series/modelos-razonadores/00_presentacion_serie/">
+      <span class="s5-list-row__n">03</span>
+      <span class="s5-list-row__title">Modelos razonadores</span>
+      <span class="s5-list-row__desc">Capacidad, fallos, coste y latencia de los modelos que deliberan.</span>
+      <span class="s5-list-row__meta">5 capítulos</span>
+    </a>
+    <a class="s5-list-row" href="/series/datacenters-espacio/00_presentacion_serie/">
+      <span class="s5-list-row__n">04</span>
+      <span class="s5-list-row__title">Datacenters en el espacio</span>
+      <span class="s5-list-row__desc">La física y la infraestructura detrás del cómputo orbital.</span>
+      <span class="s5-list-row__meta">4 capítulos</span>
+    </a>
+  </div>
+</section>
 
-<a href="/series/fundamentos-ia-iag/00_presentacion_serie/" style="flex:1;min-width:200px;text-decoration:none;border-radius:12px;border:1px solid rgba(38,166,154,.3);padding:1.25rem 1.25rem 1rem;display:flex;flex-direction:column;gap:.5rem;color:inherit">
-  <div style="font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:#26A69A;font-weight:700">Empieza aquí</div>
-  <div style="font-weight:600;font-size:1rem;line-height:1.3">Fundamentos de IA e IA generativa</div>
-  <div style="font-size:.88rem;opacity:.75;line-height:1.45">Sin base previa en IA o con lagunas conceptuales. Qué es, cómo funciona, qué diferencia la IA tradicional de la generativa.</div>
-  <div style="margin-top:auto;padding-top:.5rem;font-size:.85rem;color:#26A69A;font-weight:600">Ir a la serie →</div>
-</a>
-
-<a href="/series/from-cave-to-agi/00_presentacion_serie/" style="flex:1;min-width:200px;text-decoration:none;border-radius:12px;border:1px solid rgba(50,74,178,.3);padding:1.25rem 1.25rem 1rem;display:flex;flex-direction:column;gap:.5rem;color:inherit">
-  <div style="font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:#324AB2;font-weight:700">Ruta histórica</div>
-  <div style="font-weight:600;font-size:1rem;line-height:1.3">De las cavernas a la AGI</div>
-  <div style="font-size:.88rem;opacity:.75;line-height:1.45">Cómo llegamos hasta aquí: de las primeras abstracciones matemáticas al Transformer, con fuentes y contexto.</div>
-  <div style="margin-top:auto;padding-top:.5rem;font-size:.85rem;color:#324AB2;font-weight:600">Ir a la serie →</div>
-</a>
-
-<a href="/series/multimodalidad-iag/00_presentacion_serie/" style="flex:1;min-width:200px;text-decoration:none;border-radius:12px;border:1px solid rgba(255,179,67,.3);padding:1.25rem 1.25rem 1rem;display:flex;flex-direction:column;gap:.5rem;color:inherit">
-  <div style="font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:#FFB343;font-weight:700">Ruta frontier</div>
-  <div style="font-weight:600;font-size:1rem;line-height:1.3">Multimodalidad en IA generativa</div>
-  <div style="font-size:.88rem;opacity:.75;line-height:1.45">Ya tienes base y quieres explorar la frontera: qué pasa cuando texto, imagen y audio se unifican en un mismo sistema.</div>
-  <div style="margin-top:auto;padding-top:.5rem;font-size:.85rem;color:#FFB343;font-weight:600">Ir a la serie →</div>
-</a>
+<section class="s5-section">
+  <div class="s5-section-head"><h2>Ingeniería</h2></div>
+  <div class="s5-note-feature">
+    <div>
+      <div class="s5-eyebrow">Nota técnica</div>
+      <h2>Agente reactivo, proactivo y tool calls</h2>
+      <p>Cómo separar el contrato conversacional, la ejecución interna y el cierre diferido sin convertir el historial en la base de datos del sistema.</p>
+      <a class="s5-text-link" href="/articulos-tecnicos/proactive-reactive-agent-and-tool-calls/">Abrir la nota →</a>
+    </div>
+    <div class="s5-note-feature__meta">Runtime conversacional<br />Estado interno<br />Ejecución asíncrona</div>
+  </div>
+</section>
 
 </div>
-
----
-
-[Ver todas las series](/series/){ .md-button }
-[Ver vídeos](/videos/){ .md-button }
-[Próximamente](/proximamente/){ .md-button }
-[Sobre el proyecto](/meta/about/){ .md-button }

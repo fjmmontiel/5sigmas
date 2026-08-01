@@ -1,0 +1,153 @@
+/* Final isolated-view UX polish. Loaded after all design layers. */
+
+/* Landing pages should start immediately below the shell. */
+.md-content__inner:has(> .s5-landing) {
+  padding-top: 0 !important;
+}
+
+/* Restore a recognisable 5σ monogram instead of a generic app tile. */
+.md-header__button.md-logo {
+  display: grid;
+  width: 2.9rem;
+  height: 2.4rem;
+  margin: 0 .25rem 0 0 !important;
+  padding: 0 !important;
+  place-items: center;
+}
+
+.md-logo img {
+  width: 2.55rem !important;
+  height: 2.05rem !important;
+  object-fit: contain;
+  object-position: center;
+}
+
+[data-md-color-scheme="slate"] .md-logo img {
+  filter: invert(1);
+}
+
+.md-header__title {
+  margin-left: 0 !important;
+  font-size: .9rem !important;
+  font-weight: 800 !important;
+  letter-spacing: -.04em !important;
+}
+
+/* Keep search and shell controls readable in both themes. */
+.md-search__icon,
+.md-search__input::placeholder {
+  color: var(--s5-muted) !important;
+  opacity: 1 !important;
+}
+
+[data-md-color-scheme="slate"] .md-search__form,
+[data-md-color-scheme="slate"] .md-search__output {
+  background: var(--s5-bg) !important;
+  color: var(--s5-text) !important;
+}
+
+[data-md-color-scheme="slate"] .md-search__input,
+[data-md-color-scheme="slate"] .md-search__input::placeholder,
+[data-md-color-scheme="slate"] .md-search__icon {
+  color: var(--s5-muted) !important;
+}
+
+/* The embedded player already provides the video; a second watch link adds noise. */
+.s5-video-embed__watch {
+  display: none !important;
+}
+
+/* Long-form reading should prioritise the article over the complete site tree. */
+@media (min-width: 76.25em) {
+  .md-main__inner:not(:has(.s5-landing)) .md-sidebar--primary {
+    display: none !important;
+  }
+
+  .md-main__inner:not(:has(.s5-landing)) .md-content {
+    max-width: 1040px;
+    margin-right: auto;
+    margin-left: auto;
+  }
+}
+
+.md-main__inner:not(:has(.s5-landing)) .md-content__inner {
+  padding-top: 1.5rem;
+}
+
+.md-main__inner:not(:has(.s5-landing)) .md-typeset > h1 {
+  max-width: 16ch;
+  margin-top: .5rem;
+}
+
+/* Keep the first useful content visible inside a normal viewport. */
+.s5-home-hero {
+  padding-top: clamp(1.75rem, 3.5vw, 3rem) !important;
+  padding-bottom: clamp(1.75rem, 3vw, 2.75rem) !important;
+}
+
+.s5-page-intro {
+  padding-top: clamp(1.75rem, 3.5vw, 3rem) !important;
+  padding-bottom: clamp(1.5rem, 2.8vw, 2.5rem) !important;
+}
+
+.s5-about {
+  padding-top: clamp(2rem, 4vw, 3.5rem) !important;
+}
+
+.s5-section {
+  margin-top: clamp(2.5rem, 4.5vw, 4rem) !important;
+  margin-bottom: clamp(2.5rem, 4.5vw, 4rem) !important;
+}
+
+.s5-entry-grid {
+  margin-bottom: clamp(2.5rem, 4.5vw, 4rem) !important;
+}
+
+@media (max-width: 800px) {
+  .md-content__inner:has(> .s5-landing) {
+    padding-top: 0 !important;
+  }
+
+  /* Mobile keeps one clear brand signal: menu, monogram and actions. */
+  .md-header__inner {
+    display: flex;
+  }
+
+  .md-header__button[for="__drawer"] {
+    order: 0;
+  }
+
+  .md-header__button.md-logo {
+    order: 1;
+    width: 2.65rem;
+    margin-left: .1rem !important;
+  }
+
+  .md-header__title {
+    display: none !important;
+  }
+
+  .md-header__option {
+    order: 3;
+    margin-left: auto;
+  }
+
+  .md-header__button[for="__search"] {
+    order: 4;
+  }
+
+  .s5-home-hero,
+  .s5-page-intro {
+    padding-top: 1.5rem !important;
+    padding-bottom: 1.75rem !important;
+  }
+
+  .s5-section {
+    margin-top: 2.4rem !important;
+    margin-bottom: 2.4rem !important;
+  }
+
+  .s5-entry-grid {
+    margin-bottom: 2.2rem !important;
+  }
+}
