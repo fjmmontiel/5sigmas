@@ -15,6 +15,8 @@ const captures = [
   { name: 'homepage-desktop', path: '/', viewport: desktop },
   { name: 'homepage-mobile', path: '/', viewport: mobile, mobile: true },
   { name: 'homepage-dark', path: '/', viewport: desktop, colorScheme: 'dark', forcedScheme: 'slate' },
+  { name: 'homepage-why-desktop', path: '/', viewport: desktop, selector: '.s5-why' },
+  { name: 'homepage-why-mobile', path: '/', viewport: mobile, mobile: true, selector: '.s5-why' },
   { name: 'visuals-desktop', path: '/visuales/', viewport: desktop },
   { name: 'visuals-mobile', path: '/visuales/', viewport: mobile, mobile: true },
   { name: 'series-desktop', path: '/series/', viewport: desktop },
@@ -69,6 +71,7 @@ const collectLayout = () => {
       display: getComputedStyle(document.body).display,
       scheme: document.body.getAttribute('data-md-color-scheme'),
     },
+    scrollY: Math.round(window.scrollY),
     landing: landing ? rect(landing) : null,
     landingChildren: landing ? [...landing.children].map(rect) : [],
     readingAncestors,
@@ -108,7 +111,20 @@ try {
       await page.waitForTimeout(50);
     }
 
-    await page.evaluate(() => window.scrollTo(0, 0));
+    if (capture.selector) {
+      const target = page.locator(capture.selector).first();
+      if ((await target.count()) === 0) {
+        throw new Error(`${capture.name} could not find ${capture.selector}`);
+      }
+      await target.evaluate((node) => {
+        const headerOffset = window.innerWidth <= 800 ? 72 : 118;
+        const top = node.getBoundingClientRect().top + window.scrollY - headerOffset;
+        window.scrollTo({ top: Math.max(0, top), behavior: 'instant' });
+      });
+      await page.waitForTimeout(100);
+    } else {
+      await page.evaluate(() => window.scrollTo(0, 0));
+    }
 
     const layout = await page.evaluate(collectLayout);
     await writeFile(`${outputDir}/${capture.name}-layout.json`, JSON.stringify(layout, null, 2));
