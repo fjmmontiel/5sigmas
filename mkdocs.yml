@@ -142,6 +142,7 @@ extra_css:
   - stylesheets/revamp-ux.css
   - stylesheets/revamp-home-cover.css
   - stylesheets/revamp-quality.css
+  - stylesheets/revamp-quality-responsive.css
 
 hooks:
   - hooks/reading_time.py
