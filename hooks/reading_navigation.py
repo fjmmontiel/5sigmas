@@ -102,36 +102,74 @@ def _page_link(page: dict[str, str] | None, direction: str) -> str:
     )
 
 
-def _render_library(collections: list[dict[str, Any]], src_path: str) -> str:
-    cards: list[str] = []
-    for number, collection in enumerate(collections, start=1):
-        chapter_links: list[str] = []
-        for page_number, page in enumerate(collection["pages"], start=1):
-            current = page["path"] == src_path
-            current_attr = ' aria-current="page"' if current else ""
-            chapter_links.append(
-                f'<a href="{page["url"]}"{current_attr}>'
-                f'<span>{page_number:02d}</span><strong>{escape(page["title"])}</strong></a>'
-            )
-        cards.append(
-            '<section class="s5-reader-library__collection">'
-            '<header>'
-            f'<span>{number:02d} · {escape(collection["kind"])}</span>'
-            f'<h3><a href="{collection["url"]}">{escape(collection["title"])}</a></h3>'
-            f'<small>{len(collection["pages"])} contenidos</small>'
-            '</header>'
-            f'<nav>{"".join(chapter_links)}</nav>'
-            '</section>'
+def _collection_markup(
+    collection: dict[str, Any],
+    number: int,
+    src_path: str,
+    is_current: bool,
+) -> str:
+    chapter_links: list[str] = []
+    for page_number, page in enumerate(collection["pages"], start=1):
+        current = page["path"] == src_path
+        current_attr = ' aria-current="page"' if current else ""
+        search_value = escape(f'{collection["title"]} {page["title"]}', quote=True)
+        chapter_links.append(
+            f'<a href="{page["url"]}" data-s5-reader-entry data-search="{search_value}"{current_attr}>'
+            f'<span>{page_number:02d}</span><strong>{escape(page["title"])}</strong></a>'
         )
+
+    current_class = " is-current" if is_current else ""
+    open_attr = " open" if is_current else ""
+    collection_search = escape(
+        " ".join([collection["title"], collection["kind"], *[page["title"] for page in collection["pages"]]]),
+        quote=True,
+    )
+    return (
+        f'<details class="s5-reader-library__collection{current_class}" data-s5-reader-collection '
+        f'data-search="{collection_search}"{open_attr}>'
+        '<summary>'
+        f'<span>{number:02d}</span>'
+        '<div>'
+        f'<strong>{escape(collection["title"])}</strong>'
+        f'<small>{escape(collection["kind"])} · {len(collection["pages"])} contenidos</small>'
+        '</div>'
+        f'<b>{"Serie actual" if is_current else "Explorar"}</b>'
+        '</summary>'
+        f'<nav aria-label="Capítulos de {escape(collection["title"], quote=True)}">{"".join(chapter_links)}</nav>'
+        '</details>'
+    )
+
+
+def _render_library(
+    collections: list[dict[str, Any]],
+    current_collection: dict[str, Any],
+    current_page: dict[str, str],
+    src_path: str,
+) -> str:
+    ordered = [current_collection, *[collection for collection in collections if collection is not current_collection]]
+    cards = [
+        _collection_markup(collection, number, src_path, collection is current_collection)
+        for number, collection in enumerate(ordered, start=1)
+    ]
 
     return (
         '<dialog class="s5-reader-library" data-s5-reader-library aria-labelledby="s5-reader-library-title">'
         '<div class="s5-reader-library__surface">'
         '<header class="s5-reader-library__header">'
-        '<div><span>Biblioteca 5sigmas</span><h2 id="s5-reader-library-title">Todas las series y artículos</h2></div>'
+        '<div class="s5-reader-library__header-copy">'
+        '<span>Mapa de aprendizaje 5sigmas</span>'
+        '<h2 id="s5-reader-library-title">Series y artículos</h2>'
+        f'<p class="s5-reader-library__context">Estás en <strong>{escape(current_collection["title"])}</strong> · '
+        f'{escape(current_page["title"])}. La serie actual aparece primero; busca o abre otra cuando quieras cambiar de ruta.</p>'
+        '</div>'
+        '<div class="s5-reader-library__tools">'
+        '<input class="s5-reader-search" type="search" data-s5-reader-search '
+        'placeholder="Buscar serie o capítulo" aria-label="Buscar serie o capítulo">'
         '<button type="button" data-s5-reader-close aria-label="Cerrar biblioteca">Cerrar ×</button>'
+        '</div>'
         '</header>'
         f'<div class="s5-reader-library__grid">{"".join(cards)}</div>'
+        '<p class="s5-reader-empty" data-s5-reader-empty hidden>No hay contenidos que coincidan con la búsqueda.</p>'
         '</div>'
         '</dialog>'
     )
@@ -145,11 +183,14 @@ def _render(collections: list[dict[str, Any]], collection: dict[str, Any], index
     progress = round(((index + 1) / len(pages)) * 100, 2)
 
     return (
-        '<div class="s5-reader-nav" data-s5-reader-nav>'
+        '<div class="s5-reader-nav" data-s5-reader-nav '
+        f'data-series="{escape(collection["title"], quote=True)}" '
+        f'data-page="{escape(current["title"], quote=True)}" '
+        f'data-url="{current["url"]}">'
         '<div class="s5-reader-nav__bar">'
         '<button class="s5-reader-nav__library" type="button" data-s5-reader-open '
-        'aria-haspopup="dialog" aria-label="Abrir todas las series y artículos">'
-        '<span>Biblioteca</span><b>Series + artículos</b>'
+        'aria-haspopup="dialog" aria-label="Abrir mapa de aprendizaje">'
+        '<span>Mapa</span><b>Series + artículos</b>'
         '</button>'
         f'{_page_link(previous, "prev")}'
         '<div class="s5-reader-current">'
@@ -160,7 +201,7 @@ def _render(collections: list[dict[str, Any]], collection: dict[str, Any], index
         '</div>'
         f'{_page_link(following, "next")}'
         '</div>'
-        f'{_render_library(collections, src_path)}'
+        f'{_render_library(collections, collection, current, src_path)}'
         '</div>'
     )
 
