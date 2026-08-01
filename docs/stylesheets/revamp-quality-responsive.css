@@ -7,6 +7,10 @@
   border: 0 !important;
 }
 
+.s5-section-head--compact {
+  margin-bottom: .6rem !important;
+}
+
 .s5-page-intro + .s5-section {
   margin-top: 1.65rem !important;
 }
