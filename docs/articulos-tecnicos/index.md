@@ -13,7 +13,7 @@ hide:
 <section class="s5-page-intro">
   <div class="s5-eyebrow">Construir</div>
   <h1>Sistemas reales. Decisiones explícitas.</h1>
-  <p>Notas técnicas autocontenidas sobre arquitectura, estado, latencia, evaluación y operación. Cada pieza parte de un problema concreto y termina con sus límites.</p>
+  <p>Notas técnicas sobre arquitectura, estado, latencia, evaluación y operación. Cada pieza parte de un problema concreto, hace explícitas sus decisiones y termina con sus límites.</p>
 </section>
 
 <section class="s5-section">
