@@ -13,7 +13,7 @@ hide:
 <section class="s5-page-intro">
   <div class="s5-eyebrow">Aprender</div>
   <h1>Seis rutas. Un orden claro.</h1>
-  <p>Cada serie responde a una pregunta completa y conecta vídeos, animaciones, artículos y referencias. Puedes seguir el orden recomendado o entrar directamente en el tema que necesites.</p>
+  <p>Seis series conectan vídeos, animaciones, capítulos y fuentes. Sigue el orden recomendado o entra directamente en el tema que necesites.</p>
 </section>
 
 <section class="s5-section">
