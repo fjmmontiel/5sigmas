@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" role="img" aria-labelledby="title desc">
+  <title id="title">Umbral de cinco sigmas</title>
+  <desc id="desc">Curva normal con el umbral de cinco sigmas señalado en la cola derecha para representar la separación entre señal y ruido.</desc>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M52 248H674" stroke="#9a9a9a" stroke-width="1"/>
+    <path d="M74 248C158 247 204 236 251 193C299 149 315 63 360 42C405 63 421 149 469 193C516 236 562 247 646 248" stroke="#3154d8" stroke-width="6"/>
+    <path d="M610 248C626 247 638 246 646 248L646 248Z" fill="#f0642b" stroke="#f0642b" stroke-width="8"/>
+    <path d="M610 72V248" stroke="#f0642b" stroke-width="3" stroke-dasharray="8 9"/>
+  </g>
+  <g font-family="Inter, Arial, sans-serif">
+    <text x="360" y="278" fill="#777" font-size="16" text-anchor="middle">ruido esperado</text>
+    <text x="610" y="53" fill="#f0642b" font-size="17" font-weight="800" text-anchor="middle">5σ</text>
+    <text x="610" y="283" fill="#777" font-size="14" text-anchor="middle">umbral</text>
+    <text x="674" y="228" fill="#f0642b" font-size="15" font-weight="700" text-anchor="end">señal</text>
+  </g>
+</svg>
