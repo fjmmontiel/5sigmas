@@ -51,11 +51,10 @@ hide:
 
     <div class="s5-start-card__detail">
       <p>Por qué dedicar más cómputo antes de responder puede mejorar la calidad, y qué se paga en coste y latencia.</p>
-      <div class="s5-start-card__route" aria-label="Continuación de la ruta recomendada">
-        <span><b>1</b> Ver <small>1:29</small></span>
-        <span><b>2</b> Explorar <small>animaciones</small></span>
-        <a href="/series/modelos-razonadores/03-test-time-compute/"><b>3</b> Profundizar <small>9 min →</small></a>
-      </div>
+      <a class="s5-start-card__chapter" href="/series/modelos-razonadores/03-test-time-compute/">
+        <span>Abrir capítulo técnico</span>
+        <small>9 min →</small>
+      </a>
     </div>
   </article>
 </section>
