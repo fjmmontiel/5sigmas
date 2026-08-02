@@ -140,6 +140,20 @@ const validateReaderNavigation = async (page) => {
   if (shellGap > 42) throw new Error(`reader starts ${shellGap}px after h1`);
 };
 
+const openReaderMap = async (page, capture) => {
+  const courseButton = page.locator('.s5-reader-course[data-s5-reader-open]');
+  if (await courseButton.isVisible()) {
+    await courseButton.click();
+  } else {
+    const drawerToggle = page.locator('[data-s5-reader-direct-open]');
+    await drawerToggle.click();
+    const drawer = page.locator('[data-s5-reader-direct].is-open');
+    await drawer.waitFor();
+    await drawer.locator('[data-s5-reader-open]').click();
+  }
+  await page.locator('[data-s5-reader-library][open]').waitFor();
+};
+
 try {
   for (const capture of captures) {
     const context = await browser.newContext({
@@ -183,8 +197,7 @@ try {
     }
 
     if (capture.openReader) {
-      await page.locator('.s5-reader-course[data-s5-reader-open]').click();
-      await page.locator('[data-s5-reader-library][open]').waitFor();
+      await openReaderMap(page, capture);
     }
 
     if (capture.selectSeries !== undefined) {
