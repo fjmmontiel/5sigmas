@@ -59,6 +59,9 @@ jobs:
       - name: Capture responsive screenshots
         run: node scripts/capture_site_screenshots.mjs
 
+      - name: Validate direct series and article navigation
+        run: node scripts/validate_direct_reader_navigation.mjs
+
       - name: Upload visual review
         if: always()
         uses: actions/upload-artifact@v4
