@@ -151,6 +151,7 @@ extra_css:
   - stylesheets/visual-hub.css
   - stylesheets/visual-hub-responsive.css
   - stylesheets/reader-navigation.css
+  - stylesheets/reader-navigation-responsive.css
 
 hooks:
   - hooks/reading_time.py
