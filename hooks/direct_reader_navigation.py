@@ -1,4 +1,4 @@
-"""Inject always-visible direct jumps between every series, chapter and technical note."""
+"""Inject a clean left-side library for direct navigation between every series and article."""
 
 from __future__ import annotations
 
@@ -63,57 +63,95 @@ def _collections(config) -> list[dict[str, Any]]:
 
 
 def _find_current(collections: list[dict[str, Any]], src_path: str):
-    for collection in collections:
+    for collection_index, collection in enumerate(collections):
         for page in collection["pages"]:
             if page["path"] == src_path:
-                return collection, page
-    return None, None
+                return collection, collection_index, page
+    return None, -1, None
 
 
-def _series_options(collections: list[dict[str, Any]], current_collection: dict[str, Any]) -> str:
+def _series_options(collections: list[dict[str, Any]], current_index: int) -> str:
     options: list[str] = []
-    for collection in collections:
-        selected = ' selected' if collection is current_collection else ''
-        first_page = collection["pages"][0]
+    for index, collection in enumerate(collections):
+        selected = " selected" if index == current_index else ""
         options.append(
-            f'<option value="{first_page["url"]}"{selected}>{escape(collection["title"])}</option>'
+            f'<option value="s5-direct-collection-{index}"{selected}>{escape(collection["title"])}</option>'
         )
     return "".join(options)
 
 
-def _content_options(collections: list[dict[str, Any]], current_page: dict[str, str]) -> str:
-    groups: list[str] = []
-    for collection in collections:
-        options: list[str] = []
-        for page in collection["pages"]:
-            selected = ' selected' if page["path"] == current_page["path"] else ''
-            options.append(
-                f'<option value="{page["url"]}"{selected}>{escape(page["title"])}</option>'
-            )
-        groups.append(
-            f'<optgroup label="{escape(collection["title"], quote=True)}">{"".join(options)}</optgroup>'
+def _collection_panel(
+    collection: dict[str, Any],
+    collection_index: int,
+    current_page: dict[str, str],
+    is_current: bool,
+) -> str:
+    links: list[str] = []
+    for page_number, page in enumerate(collection["pages"], start=1):
+        current = page["path"] == current_page["path"]
+        current_attr = ' aria-current="page"' if current else ""
+        links.append(
+            f'<a href="{page["url"]}"{current_attr}>'
+            f'<span>{page_number:02d}</span>'
+            f'<strong>{escape(page["title"])}</strong>'
+            f'<small>{"Leyendo" if current else "Abrir"}</small>'
+            "</a>"
         )
-    return "".join(groups)
 
-
-def _render(collections: list[dict[str, Any]], current_collection: dict[str, Any], current_page: dict[str, str]) -> str:
+    hidden = "" if is_current else " hidden"
     return (
-        '<nav class="s5-reader-direct" data-s5-reader-direct aria-label="Navegación directa de contenidos">'
-        '<label class="s5-reader-direct__field">'
-        '<span>Serie</span>'
-        '<select data-s5-reader-jump="series" aria-label="Ir directamente a una serie">'
-        f'{_series_options(collections, current_collection)}'
-        '</select>'
-        '</label>'
-        '<label class="s5-reader-direct__field s5-reader-direct__field--content">'
-        '<span>Capítulo o artículo</span>'
-        '<select data-s5-reader-jump="content" aria-label="Ir directamente a cualquier capítulo o artículo">'
-        f'{_content_options(collections, current_page)}'
-        '</select>'
-        '</label>'
-        '<button type="button" data-s5-reader-open aria-haspopup="dialog">Mapa</button>'
-        '</nav>'
+        f'<section class="s5-reader-direct__collection" '
+        f'id="s5-direct-collection-{collection_index}" '
+        f'data-s5-reader-collection="s5-direct-collection-{collection_index}"{hidden}>'
+        "<header>"
+        f'<span>{escape(collection["kind"])}</span>'
+        f'<strong>{escape(collection["title"])}</strong>'
+        f'<small>{len(collection["pages"])} contenidos</small>'
+        "</header>"
+        f'<nav aria-label="Contenidos de {escape(collection["title"], quote=True)}">'
+        f'{"".join(links)}</nav>'
+        "</section>"
     )
+
+
+def _render(
+    collections: list[dict[str, Any]],
+    current_collection: dict[str, Any],
+    current_index: int,
+    current_page: dict[str, str],
+) -> tuple[str, str]:
+    panels = [
+        _collection_panel(collection, index, current_page, collection is current_collection)
+        for index, collection in enumerate(collections)
+    ]
+
+    aside = (
+        '<div class="s5-reader-direct-overlay" data-s5-reader-direct-overlay hidden></div>'
+        '<aside class="s5-reader-direct" id="s5-reader-direct" '
+        'data-s5-reader-direct aria-label="Explorar series y capítulos">'
+        '<header class="s5-reader-direct__header">'
+        '<div><span>Biblioteca</span><strong>Series y capítulos</strong></div>'
+        '<button type="button" data-s5-reader-direct-close aria-label="Cerrar biblioteca">×</button>'
+        "</header>"
+        '<label class="s5-reader-direct__picker">'
+        '<span>Serie</span>'
+        '<select data-s5-reader-series-picker aria-label="Elegir serie o notas técnicas">'
+        f'{_series_options(collections, current_index)}'
+        "</select>"
+        "</label>"
+        f'<div class="s5-reader-direct__collections">{"".join(panels)}</div>'
+        '<footer><button type="button" data-s5-reader-open aria-haspopup="dialog">'
+        "Buscar en todo el mapa</button></footer>"
+        "</aside>"
+    )
+
+    toggle = (
+        '<button class="s5-reader-direct-toggle" type="button" '
+        'data-s5-reader-direct-open aria-controls="s5-reader-direct" aria-expanded="false">'
+        '<span>Explorar</span><strong>Series y capítulos</strong><b aria-hidden="true">→</b>'
+        "</button>"
+    )
+    return aside, toggle
 
 
 def on_post_page(output: str, page, config, **kwargs) -> str:
@@ -124,11 +162,15 @@ def on_post_page(output: str, page, config, **kwargs) -> str:
         return output
 
     collections = _collections(config)
-    current_collection, current_page = _find_current(collections, src_path)
+    current_collection, current_index, current_page = _find_current(collections, src_path)
     if current_collection is None or current_page is None:
         return output
 
-    marker = '<nav class="s5-reader-rail"'
-    if marker not in output:
+    shell_marker = '<div class="s5-reader-shell"'
+    rail_marker = '<nav class="s5-reader-rail"'
+    if shell_marker not in output or rail_marker not in output:
         return output
-    return output.replace(marker, _render(collections, current_collection, current_page) + marker, 1)
+
+    aside, toggle = _render(collections, current_collection, current_index, current_page)
+    output = output.replace(shell_marker, aside + shell_marker, 1)
+    return output.replace(rail_marker, toggle + rail_marker, 1)
