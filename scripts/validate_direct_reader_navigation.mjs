@@ -83,9 +83,14 @@ try {
 
   controls = await assertLibrary(mobile, { mobile: true });
   panel = await chooseCollection(controls, 'IA, PIB, bienestar y energía');
+  await mobile.waitForTimeout(100);
   const drawerBox = await controls.library.boundingBox();
+  const horizontalScroll = await mobile.evaluate(() => window.scrollX || document.documentElement.scrollLeft || document.body.scrollLeft || 0);
   if (!drawerBox || drawerBox.x > 1 || drawerBox.width < 320) {
     throw new Error(`Mobile reader drawer is not fully usable: ${JSON.stringify(drawerBox)}`);
+  }
+  if (horizontalScroll !== 0) {
+    throw new Error(`Mobile reader drawer shifted the page horizontally: ${horizontalScroll}px`);
   }
   await mobile.screenshot({ path: `${outputDir}/reader-sidebar-mobile.png`, fullPage: false });
 } finally {
