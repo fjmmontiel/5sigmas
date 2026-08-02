@@ -1,40 +1,72 @@
 (() => {
   const MOBILE_QUERY = '(max-width: 1319px)';
 
+  const normalize = (value) => String(value || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim();
+
   const initializeDirectReaderNavigation = () => {
     for (const root of document.querySelectorAll('[data-s5-reader-direct]')) {
       if (root.dataset.s5DirectReady === 'true') continue;
       root.dataset.s5DirectReady = 'true';
 
-      const picker = root.querySelector('[data-s5-reader-series-picker]');
+      const search = root.querySelector('[data-s5-reader-direct-search]');
       const collections = [...root.querySelectorAll('[data-s5-reader-collection]')];
+      const entries = [...root.querySelectorAll('[data-s5-direct-entry]')];
+      const empty = root.querySelector('[data-s5-reader-direct-empty]');
       const collectionScroller = root.querySelector('.s5-reader-direct__collections');
+      const current = root.querySelector('a[aria-current="page"]');
       const toggle = document.querySelector('[data-s5-reader-direct-open]');
       const closeButton = root.querySelector('[data-s5-reader-direct-close]');
       const overlay = document.querySelector('[data-s5-reader-direct-overlay]');
-      const mapButton = root.querySelector('[data-s5-reader-open]');
-      if (!picker || collections.length === 0 || !toggle || !closeButton || !overlay) continue;
-
-      const activate = (id, { focusCurrent = false } = {}) => {
-        picker.value = id;
-        for (const collection of collections) {
-          const active = collection.dataset.s5ReaderCollection === id;
-          collection.hidden = !active;
-          if (active && focusCurrent) {
-            const target = collection.querySelector('a[aria-current="page"]') || collection.querySelector('a');
-            requestAnimationFrame(() => {
-              if (!target || !collectionScroller) return;
-              const targetTop = target.getBoundingClientRect().top;
-              const scrollerTop = collectionScroller.getBoundingClientRect().top;
-              collectionScroller.scrollTop += targetTop - scrollerTop - 16;
-            });
-          }
-        }
-      };
+      if (!search || collections.length === 0 || !toggle || !closeButton || !overlay) continue;
 
       const resetHorizontalScroll = () => {
         document.documentElement.scrollLeft = 0;
         document.body.scrollLeft = 0;
+      };
+
+      const scrollCurrentIntoView = () => {
+        requestAnimationFrame(() => {
+          if (!current || !collectionScroller) return;
+          const targetTop = current.getBoundingClientRect().top;
+          const scrollerTop = collectionScroller.getBoundingClientRect().top;
+          collectionScroller.scrollTop += targetTop - scrollerTop - 28;
+        });
+      };
+
+      const restore = () => {
+        for (const collection of collections) collection.hidden = false;
+        for (const entry of entries) entry.hidden = false;
+        if (empty) empty.hidden = true;
+      };
+
+      const filter = () => {
+        const query = normalize(search.value);
+        if (!query) {
+          restore();
+          return;
+        }
+
+        let visibleCollections = 0;
+        for (const collection of collections) {
+          const collectionMatches = normalize(collection.dataset.search || '').includes(query);
+          let visibleEntries = 0;
+
+          for (const entry of collection.querySelectorAll('[data-s5-direct-entry]')) {
+            const matches = collectionMatches || normalize(entry.dataset.search || entry.textContent).includes(query);
+            entry.hidden = !matches;
+            if (matches) visibleEntries += 1;
+          }
+
+          collection.hidden = visibleEntries === 0;
+          if (!collection.hidden) visibleCollections += 1;
+        }
+
+        if (empty) empty.hidden = visibleCollections > 0;
+        if (collectionScroller) collectionScroller.scrollTop = 0;
       };
 
       const open = () => {
@@ -44,7 +76,7 @@
         toggle.setAttribute('aria-expanded', 'true');
         document.body.classList.add('s5-reader-direct-open');
         resetHorizontalScroll();
-        requestAnimationFrame(() => picker.focus({ preventScroll: true }));
+        requestAnimationFrame(() => search.focus({ preventScroll: true }));
       };
 
       const close = ({ restoreFocus = true } = {}) => {
@@ -56,14 +88,10 @@
         if (restoreFocus) toggle.focus({ preventScroll: true });
       };
 
-      picker.addEventListener('change', () => {
-        activate(picker.value, { focusCurrent: true });
-        resetHorizontalScroll();
-      });
+      search.addEventListener('input', filter);
       toggle.addEventListener('click', open);
       closeButton.addEventListener('click', () => close());
       overlay.addEventListener('click', () => close());
-      mapButton?.addEventListener('click', () => close({ restoreFocus: false }));
 
       document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape' && root.classList.contains('is-open')) close();
@@ -74,7 +102,8 @@
         if (!event.matches) close({ restoreFocus: false });
       });
 
-      activate(picker.value, { focusCurrent: true });
+      restore();
+      scrollCurrentIntoView();
     }
   };
 
