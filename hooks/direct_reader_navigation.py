@@ -1,4 +1,4 @@
-"""Inject a clean left-side library for direct navigation between every series and article."""
+"""Inject a persistent library for direct navigation across Aprender and Construir."""
 
 from __future__ import annotations
 
@@ -41,6 +41,10 @@ def _pages(items: list[Any], *, skip_indexes: bool = False) -> list[dict[str, st
     return pages
 
 
+def _content_count(count: int) -> str:
+    return f"{count} contenido" if count == 1 else f"{count} contenidos"
+
+
 def _collections(config) -> list[dict[str, Any]]:
     nav = config.get("nav") or []
     collections: list[dict[str, Any]] = []
@@ -53,7 +57,7 @@ def _collections(config) -> list[dict[str, Any]]:
             continue
         pages = _pages(children)
         if pages:
-            collections.append({"title": str(title), "kind": "Serie", "pages": pages})
+            collections.append({"title": str(title), "kind": "Aprender", "pages": pages})
 
     technical = _pages(_section(nav, "Construir"), skip_indexes=True)
     if technical:
@@ -74,8 +78,9 @@ def _series_options(collections: list[dict[str, Any]], current_index: int) -> st
     options: list[str] = []
     for index, collection in enumerate(collections):
         selected = " selected" if index == current_index else ""
+        label = f'{collection["kind"]} · {collection["title"]}'
         options.append(
-            f'<option value="s5-direct-collection-{index}"{selected}>{escape(collection["title"])}</option>'
+            f'<option value="s5-direct-collection-{index}"{selected}>{escape(label)}</option>'
         )
     return "".join(options)
 
@@ -106,7 +111,7 @@ def _collection_panel(
         "<header>"
         f'<span>{escape(collection["kind"])}</span>'
         f'<strong>{escape(collection["title"])}</strong>'
-        f'<small>{len(collection["pages"])} contenidos</small>'
+        f'<small>{_content_count(len(collection["pages"]))}</small>'
         "</header>"
         f'<nav aria-label="Contenidos de {escape(collection["title"], quote=True)}">'
         f'{"".join(links)}</nav>'
@@ -128,27 +133,27 @@ def _render(
     aside = (
         '<div class="s5-reader-direct-overlay" data-s5-reader-direct-overlay hidden></div>'
         '<aside class="s5-reader-direct" id="s5-reader-direct" '
-        'data-s5-reader-direct aria-label="Explorar series y capítulos">'
+        'data-s5-reader-direct aria-label="Biblioteca de series y notas técnicas">'
         '<header class="s5-reader-direct__header">'
-        '<div><span>Biblioteca</span><strong>Series y capítulos</strong></div>'
+        '<div><span>Biblioteca</span><strong>Aprender y construir</strong></div>'
         '<button type="button" data-s5-reader-direct-close aria-label="Cerrar biblioteca">×</button>'
         "</header>"
         '<label class="s5-reader-direct__picker">'
-        '<span>Serie</span>'
+        '<span>Colección</span>'
         '<select data-s5-reader-series-picker aria-label="Elegir serie o notas técnicas">'
         f'{_series_options(collections, current_index)}'
         "</select>"
         "</label>"
         f'<div class="s5-reader-direct__collections">{"".join(panels)}</div>'
         '<footer><button type="button" data-s5-reader-open aria-haspopup="dialog">'
-        "Buscar en todo el mapa</button></footer>"
+        "Buscar en toda la biblioteca</button></footer>"
         "</aside>"
     )
 
     toggle = (
         '<button class="s5-reader-direct-toggle" type="button" '
         'data-s5-reader-direct-open aria-controls="s5-reader-direct" aria-expanded="false">'
-        '<span>Explorar</span><strong>Series y capítulos</strong><b aria-hidden="true">→</b>'
+        f'<span>Biblioteca</span><strong>{escape(current_collection["title"])}</strong><b aria-hidden="true">→</b>'
         "</button>"
     )
     return aside, toggle
