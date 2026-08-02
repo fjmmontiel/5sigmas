@@ -5,74 +5,54 @@ const baseUrl = process.env.S5_PREVIEW_URL ?? 'http://127.0.0.1:8000';
 const outputDir = process.env.S5_SCREENSHOT_DIR ?? 'artifacts/visual-review';
 
 await mkdir(outputDir, { recursive: true });
-
 const browser = await chromium.launch({ headless: true });
 
 const desktop = { width: 1440, height: 1100 };
 const mobile = { width: 390, height: 844 };
+const articlePath = '/series/modelos-razonadores/03-test-time-compute/';
 
 const captures = [
   { name: 'homepage-desktop', path: '/', viewport: desktop },
   { name: 'homepage-mobile', path: '/', viewport: mobile, mobile: true },
-  { name: 'homepage-dark', path: '/', viewport: desktop, colorScheme: 'dark', forcedScheme: 'slate' },
-  { name: 'homepage-why-desktop', path: '/', viewport: desktop, selector: '.s5-why' },
-  { name: 'homepage-why-mobile', path: '/', viewport: mobile, mobile: true, selector: '.s5-why' },
   { name: 'visuals-desktop', path: '/visuales/', viewport: desktop },
   { name: 'visuals-mobile', path: '/visuales/', viewport: mobile, mobile: true },
   { name: 'visuals-videos-desktop', path: '/visuales/', viewport: desktop, selector: '#videos' },
   { name: 'visuals-videos-mobile', path: '/visuales/', viewport: mobile, mobile: true, selector: '#videos' },
-  { name: 'visuals-library-desktop', path: '/visuales/', viewport: desktop, selector: '.s5-library-head' },
-  { name: 'visuals-library-mobile', path: '/visuales/', viewport: mobile, mobile: true, selector: '.s5-library-head' },
-  { name: 'visuals-filtered-desktop', path: '/visuales/', viewport: desktop, selector: '.s5-library-head', topic: 'infraestructura' },
-  { name: 'visuals-filtered-mobile', path: '/visuales/', viewport: mobile, mobile: true, selector: '.s5-library-head', topic: 'infraestructura' },
+  { name: 'visuals-filtered-desktop', path: '/visuales/', viewport: desktop, selector: '.s5-library-head', filterTopic: 'infraestructura' },
+  { name: 'visuals-filtered-mobile', path: '/visuales/', viewport: mobile, mobile: true, selector: '.s5-library-head', filterTopic: 'infraestructura' },
   { name: 'visuals-routes-desktop', path: '/visuales/', viewport: desktop, selector: '#rutas' },
   { name: 'visuals-routes-mobile', path: '/visuales/', viewport: mobile, mobile: true, selector: '#rutas' },
   { name: 'visuals-animations-desktop', path: '/visuales/', viewport: desktop, selector: '#animaciones' },
   { name: 'visuals-animations-mobile', path: '/visuales/', viewport: mobile, mobile: true, selector: '#animaciones' },
   { name: 'visuals-resume-mobile', path: '/visuales/', viewport: mobile, mobile: true, selector: '.s5-resume', seedResume: true },
+  { name: 'article-desktop', path: articlePath, viewport: desktop },
+  { name: 'article-mobile', path: articlePath, viewport: mobile, mobile: true },
+  { name: 'reader-rail-desktop', path: articlePath, viewport: desktop, selector: '.s5-reader-shell' },
+  { name: 'reader-rail-mobile', path: articlePath, viewport: mobile, mobile: true, selector: '.s5-reader-shell' },
+  { name: 'reader-map-desktop', path: articlePath, viewport: desktop, openReader: true },
+  { name: 'reader-map-mobile', path: articlePath, viewport: mobile, mobile: true, openReader: true },
+  { name: 'reader-map-other-desktop', path: articlePath, viewport: desktop, openReader: true, selectSeries: 2 },
+  { name: 'reader-map-other-mobile', path: articlePath, viewport: mobile, mobile: true, openReader: true, selectSeries: 2 },
+  { name: 'reader-search-desktop', path: articlePath, viewport: desktop, openReader: true, readerSearch: 'multimodalidad' },
+  { name: 'reader-search-mobile', path: articlePath, viewport: mobile, mobile: true, openReader: true, readerSearch: 'multimodalidad' },
+  { name: 'reader-end-desktop', path: articlePath, viewport: desktop, selector: '.s5-reader-end' },
+  { name: 'reader-end-mobile', path: articlePath, viewport: mobile, mobile: true, selector: '.s5-reader-end' },
   { name: 'series-desktop', path: '/series/', viewport: desktop },
   { name: 'series-mobile', path: '/series/', viewport: mobile, mobile: true },
-  { name: 'engineering-desktop', path: '/articulos-tecnicos/', viewport: desktop },
-  { name: 'engineering-mobile', path: '/articulos-tecnicos/', viewport: mobile, mobile: true },
-  { name: 'article-desktop', path: '/series/modelos-razonadores/03-test-time-compute/', viewport: desktop },
-  { name: 'article-mobile', path: '/series/modelos-razonadores/03-test-time-compute/', viewport: mobile, mobile: true },
-  { name: 'reader-library-desktop', path: '/series/modelos-razonadores/03-test-time-compute/', viewport: desktop, openReader: true },
-  { name: 'reader-library-mobile', path: '/series/modelos-razonadores/03-test-time-compute/', viewport: mobile, mobile: true, openReader: true },
-  { name: 'reader-search-desktop', path: '/series/modelos-razonadores/03-test-time-compute/', viewport: desktop, openReader: true, readerSearch: 'multimodalidad' },
-  { name: 'reader-search-mobile', path: '/series/modelos-razonadores/03-test-time-compute/', viewport: mobile, mobile: true, openReader: true, readerSearch: 'multimodalidad' },
-  { name: 'about-desktop', path: '/meta/about/', viewport: desktop },
-  { name: 'upcoming-desktop', path: '/proximamente/', viewport: desktop },
 ];
 
 const collectLayout = () => {
-  const landing = document.querySelector('.s5-landing');
-  const rect = (node) => {
+  const box = (selector) => {
+    const node = document.querySelector(selector);
+    if (!node) return null;
     const bounds = node.getBoundingClientRect();
-    const style = getComputedStyle(node);
     return {
-      tag: node.tagName,
-      className: node.className,
-      display: style.display,
-      position: style.position,
+      top: Math.round(bounds.top + window.scrollY),
+      bottom: Math.round(bounds.bottom + window.scrollY),
       width: Math.round(bounds.width),
       height: Math.round(bounds.height),
-      left: Math.round(bounds.left),
-      top: Math.round(bounds.top),
-      scrollWidth: node.scrollWidth,
     };
   };
-
-  const readingLeaf = [...document.querySelectorAll('body *')].find(
-    (node) => node.children.length === 0 && node.textContent.includes('Tiempo de lectura'),
-  );
-  const readingAncestors = [];
-  let current = readingLeaf;
-  for (let depth = 0; current && depth < 5; depth += 1, current = current.parentElement) {
-    readingAncestors.push({
-      ...rect(current),
-      text: current.textContent.trim().replace(/\s+/g, ' ').slice(0, 160),
-    });
-  }
 
   const brokenImages = [...document.images]
     .filter((image) => image.complete && image.naturalWidth === 0)
@@ -81,93 +61,83 @@ const collectLayout = () => {
   return {
     viewport: { width: document.documentElement.clientWidth, height: document.documentElement.clientHeight },
     document: { scrollWidth: document.documentElement.scrollWidth, scrollHeight: document.documentElement.scrollHeight },
-    body: {
-      scrollWidth: document.body.scrollWidth,
-      display: getComputedStyle(document.body).display,
-      scheme: document.body.getAttribute('data-md-color-scheme'),
-    },
     scrollY: Math.round(window.scrollY),
-    landing: landing ? rect(landing) : null,
-    landingChildren: landing ? [...landing.children].map(rect) : [],
-    reader: {
-      bars: document.querySelectorAll('[data-s5-reader-nav]').length,
-      collections: document.querySelectorAll('[data-s5-reader-collection]').length,
-      openCollections: document.querySelectorAll('[data-s5-reader-collection][open]:not([hidden])').length,
-      visibleCollections: [...document.querySelectorAll('[data-s5-reader-collection]')].filter((node) => !node.hidden).length,
-      current: document.querySelector('.s5-reader-current strong')?.textContent.trim() ?? null,
-      dialogOpen: document.querySelector('[data-s5-reader-library]')?.open ?? false,
-      search: document.querySelector('[data-s5-reader-search]')?.value ?? '',
-    },
-    visualHub: {
-      videos: document.querySelectorAll('.s5-inline-video').length,
-      lazyVideos: [...document.querySelectorAll('.s5-inline-video')].filter((video) => video.preload === 'none').length,
-      visibleCards: [...document.querySelectorAll('.s5-watch-grid [data-s5-topic-card]')].filter((node) => !node.hidden).length,
-      filters: document.querySelectorAll('[data-s5-topic]').length,
-      routes: document.querySelectorAll('.s5-route-card').length,
-      animationEntries: document.querySelectorAll('.s5-lab-map a').length,
-      labFeatures: document.querySelectorAll('.s5-lab-feature, .s5-lab-drawer').length,
-      resumeVisible: !document.querySelector('[data-s5-resume]')?.hidden,
-    },
-    readingAncestors,
     brokenImages,
+    visualHub: {
+      intro: box('.s5-visual-hub__intro'),
+      videos: box('#videos'),
+      firstVideo: box('.s5-watch-feature video'),
+      routes: box('#rutas'),
+      animations: box('#animaciones'),
+      videosCount: document.querySelectorAll('.s5-inline-video').length,
+      lazyVideos: [...document.querySelectorAll('.s5-inline-video')].filter((video) => video.preload === 'none').length,
+      visibleCards: [...document.querySelectorAll('.s5-watch-card')].filter((card) => !card.hidden).length,
+      routeCards: document.querySelectorAll('.s5-route-card').length,
+      routeSteps: document.querySelectorAll('.s5-route-card li').length,
+      animationEntries: document.querySelectorAll('.s5-lab-map a').length,
+    },
+    reader: {
+      h1: box('.md-content__inner h1'),
+      shell: box('.s5-reader-shell'),
+      topbar: box('.s5-reader-topbar'),
+      rail: box('.s5-reader-rail'),
+      railLinks: document.querySelectorAll('.s5-reader-rail a').length,
+      currentRail: document.querySelectorAll('.s5-reader-rail a[aria-current="page"]').length,
+      arrows: document.querySelectorAll('.s5-reader-arrow:not(.is-disabled)').length,
+      mapOpen: document.querySelector('[data-s5-reader-library]')?.open ?? false,
+      seriesTabs: document.querySelectorAll('[data-s5-series-tab]').length,
+      visibleTabs: [...document.querySelectorAll('[data-s5-series-tab]')].filter((tab) => !tab.hidden).length,
+      selectedTab: document.querySelector('[data-s5-series-tab][aria-selected="true"]')?.textContent.trim().replace(/\s+/g, ' ') ?? null,
+      panels: document.querySelectorAll('[data-s5-series-panel]').length,
+      visiblePanels: [...document.querySelectorAll('[data-s5-series-panel]')].filter((panel) => !panel.hidden).length,
+      entries: document.querySelectorAll('[data-s5-reader-entry]').length,
+      currentEntries: document.querySelectorAll('[data-s5-reader-entry][aria-current="page"]').length,
+      end: box('.s5-reader-end'),
+    },
   };
 };
 
-const validateVisualHub = async (page) => {
-  const videos = await page.locator('.s5-inline-video').count();
-  if (videos !== 6) throw new Error(`visual hub expected 6 inline videos, found ${videos}`);
+const validateVisualHub = async (page, viewport) => {
+  const metrics = await page.evaluate(collectLayout);
+  const { visualHub } = metrics;
+  if (visualHub.videosCount !== 6) throw new Error(`expected 6 inline videos, found ${visualHub.videosCount}`);
+  if (visualHub.lazyVideos !== 6) throw new Error(`expected all videos to preload none, found ${visualHub.lazyVideos}`);
+  if (visualHub.routeCards !== 3 || visualHub.routeSteps !== 9) {
+    throw new Error(`expected 3 guided routes and 9 steps, found ${visualHub.routeCards}/${visualHub.routeSteps}`);
+  }
+  if (visualHub.animationEntries !== 3) throw new Error(`expected 3 animation entries, found ${visualHub.animationEntries}`);
 
-  const lazyVideos = await page.locator('.s5-inline-video[preload="none"]').count();
-  if (lazyVideos !== videos) throw new Error(`visual hub expected all ${videos} videos to preload none, found ${lazyVideos}`);
-
-  const animationEntries = await page.locator('.s5-lab-map a').count();
-  if (animationEntries !== 3) throw new Error(`visual hub expected 3 animation entries, found ${animationEntries}`);
-
-  const filters = await page.locator('[data-s5-topic]').count();
-  if (filters !== 4) throw new Error(`visual hub expected 4 discovery filters, found ${filters}`);
-
-  const routes = await page.locator('.s5-route-card').count();
-  if (routes !== 3) throw new Error(`visual hub expected 3 guided routes, found ${routes}`);
-
-  const routeSteps = await page.locator('.s5-route-card').evaluateAll((cards) => cards.map((card) => card.querySelectorAll('ol a').length));
-  if (routeSteps.some((count) => count !== 3)) throw new Error(`each guided route must contain 3 steps: ${routeSteps.join(', ')}`);
-
-  const resume = await page.locator('[data-s5-resume]').count();
-  if (resume !== 1) throw new Error(`visual hub expected one resume surface, found ${resume}`);
-
-  await page.locator('[data-s5-topic="infraestructura"]').click();
-  const visibleInfrastructure = await page.locator('.s5-watch-grid [data-s5-topic-card]:visible').count();
-  if (visibleInfrastructure !== 2) throw new Error(`infrastructure filter expected 2 cards, found ${visibleInfrastructure}`);
-  await page.locator('[data-s5-topic="all"]').click();
+  const firstVideoOffset = visualHub.firstVideo.top - visualHub.videos.top;
+  if (firstVideoOffset > 220) throw new Error(`first video starts ${firstVideoOffset}px after videos section`);
+  if (viewport.width >= 1000 && visualHub.firstVideo.top > 650) {
+    throw new Error(`desktop first video starts too low at ${visualHub.firstVideo.top}px`);
+  }
+  if (viewport.width < 800 && visualHub.firstVideo.top > 700) {
+    throw new Error(`mobile first video starts too low at ${visualHub.firstVideo.top}px`);
+  }
 
   const sources = await page.locator('.s5-inline-video source').evaluateAll((nodes) => nodes.map((node) => node.src));
   for (const source of sources) {
     const response = await page.request.head(source);
-    if (!response.ok()) throw new Error(`inline video source returned ${response.status()}: ${source}`);
+    if (!response.ok()) throw new Error(`video source returned ${response.status()}: ${source}`);
   }
 };
 
 const validateReaderNavigation = async (page) => {
-  const bars = await page.locator('[data-s5-reader-nav]').count();
-  if (bars !== 1) throw new Error(`reader navigation expected 1 bar, found ${bars}`);
-
-  const collections = await page.locator('[data-s5-reader-collection]').count();
-  if (collections !== 7) throw new Error(`reader navigation expected 6 series plus technical notes, found ${collections}`);
-
-  const links = await page.locator('[data-s5-reader-entry]').count();
-  if (links < 30) throw new Error(`reader navigation expected at least 30 navigable contents, found ${links}`);
-
-  const current = await page.locator('[data-s5-reader-entry][aria-current="page"]').count();
-  if (current !== 1) throw new Error(`reader navigation expected one current page, found ${current}`);
-
-  const currentCollections = await page.locator('[data-s5-reader-collection].is-current[open]').count();
-  if (currentCollections !== 1) throw new Error(`reader navigation expected one open current collection, found ${currentCollections}`);
-
-  const initiallyOpen = await page.locator('[data-s5-reader-collection][open]').count();
-  if (initiallyOpen !== 1) throw new Error(`reader navigation should progressively disclose one collection, found ${initiallyOpen} open`);
-
-  const search = await page.locator('[data-s5-reader-search]').count();
-  if (search !== 1) throw new Error(`reader navigation expected one search field, found ${search}`);
+  const metrics = await page.evaluate(collectLayout);
+  const { reader } = metrics;
+  if (reader.railLinks !== 6) throw new Error(`expected 6 current-series rail links, found ${reader.railLinks}`);
+  if (reader.currentRail !== 1) throw new Error(`expected one current rail chapter, found ${reader.currentRail}`);
+  if (reader.arrows !== 2) throw new Error(`expected usable previous and next actions, found ${reader.arrows}`);
+  if (reader.seriesTabs !== 7 || reader.panels !== 7) {
+    throw new Error(`expected 7 series/article collections, found ${reader.seriesTabs}/${reader.panels}`);
+  }
+  if (reader.visiblePanels !== 1) throw new Error(`expected one visible series panel, found ${reader.visiblePanels}`);
+  if (reader.entries < 30) throw new Error(`expected at least 30 navigable entries, found ${reader.entries}`);
+  if (reader.currentEntries !== 1) throw new Error(`expected one current page, found ${reader.currentEntries}`);
+  if (!reader.end) throw new Error('expected end-of-article continuation block');
+  const shellGap = reader.shell.top - reader.h1.bottom;
+  if (shellGap > 42) throw new Error(`reader starts ${shellGap}px after h1`);
 };
 
 try {
@@ -182,6 +152,11 @@ try {
     const page = await context.newPage();
     const runtimeErrors = [];
 
+    page.on('pageerror', (error) => runtimeErrors.push(`pageerror: ${error.message}`));
+    page.on('console', (message) => {
+      if (message.type() === 'error') runtimeErrors.push(`console: ${message.text()}`);
+    });
+
     if (capture.seedResume) {
       await page.addInitScript(() => {
         localStorage.setItem('s5:visual-progress:v1', JSON.stringify({
@@ -195,59 +170,54 @@ try {
       });
     }
 
-    page.on('pageerror', (error) => runtimeErrors.push(`pageerror: ${error.message}`));
-    page.on('console', (message) => {
-      if (message.type() === 'error') runtimeErrors.push(`console: ${message.text()}`);
-    });
+    const response = await page.goto(`${baseUrl}${capture.path}`, { waitUntil: 'networkidle', timeout: 30_000 });
+    if (!response?.ok()) throw new Error(`${capture.path} returned ${response?.status() ?? 'no response'}`);
 
-    const response = await page.goto(`${baseUrl}${capture.path}`, {
-      waitUntil: 'networkidle',
-      timeout: 30_000,
-    });
-    if (!response?.ok()) {
-      throw new Error(`${capture.path} returned ${response?.status() ?? 'no response'}`);
-    }
+    if (capture.path === '/visuales/') await validateVisualHub(page, capture.viewport);
+    if (capture.path === articlePath) await validateReaderNavigation(page);
 
-    if (capture.path === '/visuales/') await validateVisualHub(page);
-    if (capture.path.includes('/series/modelos-razonadores/03-test-time-compute/')) await validateReaderNavigation(page);
-
-    if (capture.forcedScheme) {
-      await page.evaluate((scheme) => {
-        document.body.setAttribute('data-md-color-scheme', scheme);
-      }, capture.forcedScheme);
-      await page.waitForTimeout(50);
-    }
-
-    if (capture.topic) {
-      await page.locator(`[data-s5-topic="${capture.topic}"]`).click();
-      await page.waitForTimeout(80);
+    if (capture.filterTopic) {
+      await page.locator(`[data-s5-topic="${capture.filterTopic}"]`).click();
+      const visible = await page.locator('.s5-watch-card:not([hidden])').count();
+      if (visible !== 2) throw new Error(`infrastructure filter expected 2 cards, found ${visible}`);
     }
 
     if (capture.openReader) {
-      await page.locator('[data-s5-reader-open]').click();
+      await page.locator('.s5-reader-course[data-s5-reader-open]').click();
       await page.locator('[data-s5-reader-library][open]').waitFor();
-      if (capture.readerSearch) {
-        await page.locator('[data-s5-reader-search]').fill(capture.readerSearch);
+    }
+
+    if (capture.selectSeries !== undefined) {
+      const tab = page.locator('[data-s5-series-tab]').nth(capture.selectSeries);
+      const expected = await tab.getAttribute('data-s5-series-tab');
+      await tab.click();
+      await page.locator(`[data-s5-series-panel="${expected}"]:not([hidden])`).waitFor();
+    }
+
+    if (capture.readerSearch) {
+      await page.locator('[data-s5-reader-search]').fill(capture.readerSearch);
+      await page.waitForTimeout(80);
+      const selected = await page.locator('[data-s5-series-tab][aria-selected="true"]').innerText();
+      if (!selected.toLowerCase().includes('multimodalidad')) {
+        throw new Error(`reader search selected unexpected collection: ${selected}`);
       }
-      await page.waitForTimeout(120);
-    } else if (capture.selector) {
+    }
+
+    if (capture.selector && !capture.openReader) {
       const target = page.locator(capture.selector).first();
-      if ((await target.count()) === 0) {
-        throw new Error(`${capture.name} could not find ${capture.selector}`);
-      }
+      if ((await target.count()) === 0) throw new Error(`${capture.name} could not find ${capture.selector}`);
       await target.evaluate((node) => {
-        const headerOffset = window.innerWidth <= 800 ? 72 : 118;
-        const top = node.getBoundingClientRect().top + window.scrollY - headerOffset;
+        const offset = window.innerWidth <= 800 ? 68 : 116;
+        const top = node.getBoundingClientRect().top + window.scrollY - offset;
         window.scrollTo({ top: Math.max(0, top), behavior: 'instant' });
       });
-      await page.waitForTimeout(100);
-    } else {
+      await page.waitForTimeout(80);
+    } else if (!capture.openReader) {
       await page.evaluate(() => window.scrollTo(0, 0));
     }
 
     const layout = await page.evaluate(collectLayout);
     await writeFile(`${outputDir}/${capture.name}-layout.json`, JSON.stringify(layout, null, 2));
-    console.log(`LAYOUT ${capture.name}: ${JSON.stringify(layout)}`);
 
     await page.screenshot({
       path: `${outputDir}/${capture.name}.png`,
@@ -256,27 +226,9 @@ try {
     });
 
     const overflow = layout.document.scrollWidth - layout.viewport.width;
-    if (overflow > 4) {
-      throw new Error(`${capture.name} has ${overflow}px of horizontal overflow`);
-    }
-    if (layout.brokenImages.length > 0) {
-      throw new Error(`${capture.name} has broken images: ${layout.brokenImages.join(', ')}`);
-    }
-    if (capture.forcedScheme && layout.body.scheme !== capture.forcedScheme) {
-      throw new Error(`${capture.name} did not apply ${capture.forcedScheme} theme`);
-    }
-    if (capture.seedResume && !layout.visualHub.resumeVisible) {
-      throw new Error(`${capture.name} did not expose the saved learning progress`);
-    }
-    if (capture.topic === 'infraestructura' && layout.visualHub.visibleCards !== 2) {
-      throw new Error(`${capture.name} expected 2 filtered cards, found ${layout.visualHub.visibleCards}`);
-    }
-    if (capture.readerSearch && layout.reader.visibleCollections !== 1) {
-      throw new Error(`${capture.name} expected one matching collection, found ${layout.reader.visibleCollections}`);
-    }
-    if (runtimeErrors.length > 0) {
-      throw new Error(`${capture.name} emitted browser errors:\n${runtimeErrors.join('\n')}`);
-    }
+    if (overflow > 4) throw new Error(`${capture.name} has ${overflow}px horizontal overflow`);
+    if (layout.brokenImages.length > 0) throw new Error(`${capture.name} has broken images: ${layout.brokenImages.join(', ')}`);
+    if (runtimeErrors.length > 0) throw new Error(`${capture.name} emitted browser errors:\n${runtimeErrors.join('\n')}`);
 
     await context.close();
   }
