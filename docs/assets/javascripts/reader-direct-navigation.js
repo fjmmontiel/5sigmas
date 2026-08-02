@@ -1,71 +1,64 @@
 (() => {
-  const fixedTop = () => {
-    if (window.matchMedia('(max-width: 800px)').matches) return 116;
-    if (window.matchMedia('(max-width: 960px)').matches) return 122;
-    return 170;
-  };
+  const MOBILE_QUERY = '(max-width: 1319px)';
 
   const initializeDirectReaderNavigation = () => {
     for (const root of document.querySelectorAll('[data-s5-reader-direct]')) {
       if (root.dataset.s5DirectReady === 'true') continue;
       root.dataset.s5DirectReady = 'true';
 
-      for (const select of root.querySelectorAll('[data-s5-reader-jump]')) {
-        select.addEventListener('change', () => {
-          const target = select.value;
-          if (!target || target === window.location.pathname) return;
-          window.location.assign(target);
-        });
-      }
+      const picker = root.querySelector('[data-s5-reader-series-picker]');
+      const collections = [...root.querySelectorAll('[data-s5-reader-collection]')];
+      const toggle = document.querySelector('[data-s5-reader-direct-open]');
+      const closeButton = root.querySelector('[data-s5-reader-direct-close]');
+      const overlay = document.querySelector('[data-s5-reader-direct-overlay]');
+      const mapButton = root.querySelector('[data-s5-reader-open]');
+      if (!picker || collections.length === 0 || !toggle || !closeButton || !overlay) continue;
 
-      const placeholder = document.createElement('div');
-      placeholder.className = 's5-reader-direct-placeholder';
-      placeholder.setAttribute('aria-hidden', 'true');
-      root.before(placeholder);
-
-      let scheduled = false;
-      let fixed = false;
-
-      const setFixed = (rect) => {
-        const height = root.offsetHeight;
-        placeholder.style.setProperty('--s5-reader-placeholder-height', `${height}px`);
-        placeholder.classList.add('is-active');
-        root.style.setProperty('--s5-reader-fixed-left', `${rect.left}px`);
-        root.style.setProperty('--s5-reader-fixed-width', `${rect.width}px`);
-        root.classList.add('is-fixed');
-        if (!fixed) {
-          document.body.appendChild(root);
-          fixed = true;
+      const activate = (id, { focusCurrent = false } = {}) => {
+        picker.value = id;
+        for (const collection of collections) {
+          const active = collection.dataset.s5ReaderCollection === id;
+          collection.hidden = !active;
+          if (active && focusCurrent) {
+            const target = collection.querySelector('a[aria-current="page"]') || collection.querySelector('a');
+            requestAnimationFrame(() => target?.scrollIntoView({ block: 'nearest' }));
+          }
         }
       };
 
-      const unsetFixed = () => {
-        if (fixed) {
-          placeholder.after(root);
-          fixed = false;
-        }
-        placeholder.classList.remove('is-active');
-        root.classList.remove('is-fixed');
-        root.style.removeProperty('--s5-reader-fixed-left');
-        root.style.removeProperty('--s5-reader-fixed-width');
+      const open = () => {
+        if (!window.matchMedia(MOBILE_QUERY).matches) return;
+        root.classList.add('is-open');
+        overlay.hidden = false;
+        toggle.setAttribute('aria-expanded', 'true');
+        document.body.classList.add('s5-reader-direct-open');
+        requestAnimationFrame(() => picker.focus());
       };
 
-      const sync = () => {
-        scheduled = false;
-        const rect = placeholder.getBoundingClientRect();
-        if (rect.top <= fixedTop()) setFixed(rect);
-        else unsetFixed();
+      const close = ({ restoreFocus = true } = {}) => {
+        root.classList.remove('is-open');
+        overlay.hidden = true;
+        toggle.setAttribute('aria-expanded', 'false');
+        document.body.classList.remove('s5-reader-direct-open');
+        if (restoreFocus) toggle.focus();
       };
 
-      const scheduleSync = () => {
-        if (scheduled) return;
-        scheduled = true;
-        requestAnimationFrame(sync);
-      };
+      picker.addEventListener('change', () => activate(picker.value, { focusCurrent: true }));
+      toggle.addEventListener('click', open);
+      closeButton.addEventListener('click', () => close());
+      overlay.addEventListener('click', () => close());
+      mapButton?.addEventListener('click', () => close({ restoreFocus: false }));
 
-      window.addEventListener('scroll', scheduleSync, { passive: true });
-      window.addEventListener('resize', scheduleSync, { passive: true });
-      requestAnimationFrame(sync);
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && root.classList.contains('is-open')) close();
+      });
+
+      const media = window.matchMedia(MOBILE_QUERY);
+      media.addEventListener('change', (event) => {
+        if (!event.matches) close({ restoreFocus: false });
+      });
+
+      activate(picker.value, { focusCurrent: true });
     }
   };
 
