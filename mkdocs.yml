@@ -168,6 +168,7 @@ hooks:
   - hooks/nosnippet.py
   - hooks/sitemap_noindex.py
   - hooks/video_sitemap.py
+  - hooks/video_hub_redirect.py
 
 plugins:
   - search
@@ -176,6 +177,7 @@ plugins:
   - redirects:
       enabled: !ENV [MKDOCS_REDIRECTS, true]
       redirect_maps:
+        'videos/index.md': 'visuales/index.md'
         'meta/advisor-ia.md': 'meta/about.md'
         'series/fundamentos-ia-iag/index.md': 'series/fundamentos-ia-iag/00_presentacion_serie.md'
         'series/from-cave-to-agi/index.md': 'series/from-cave-to-agi/00_presentacion_serie.md'
