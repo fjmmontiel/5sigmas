@@ -1,1 +1,42 @@
-x
+/* Final reader density rules: local three-chapter context and no duplicate footer controls. */
+
+.md-content__inner > h1:has(+ .s5-reader-shell) {
+  margin-bottom: .35rem !important;
+}
+
+.s5-reader-shell {
+  margin-top: 0 !important;
+}
+
+/* The course navigator and end card replace Material's duplicate footer controls. */
+body:has(.s5-reader-shell) .md-footer__inner {
+  display: none !important;
+}
+
+@media (max-width: 800px) {
+  .md-content__inner > h1:has(+ .s5-reader-shell) {
+    margin-bottom: .25rem !important;
+  }
+
+  .s5-reader-shell {
+    margin-top: 0 !important;
+  }
+
+  /* Show the local reading context, not clipped fragments of the whole series. */
+  .s5-reader-rail {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-auto-columns: unset;
+    grid-auto-flow: unset;
+    overflow: hidden;
+  }
+
+  .s5-reader-rail a {
+    display: none;
+  }
+
+  .s5-reader-rail a:has(+ a[aria-current='page']),
+  .s5-reader-rail a[aria-current='page'],
+  .s5-reader-rail a[aria-current='page'] + a {
+    display: grid;
+  }
+}
