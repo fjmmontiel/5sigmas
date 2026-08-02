@@ -8,6 +8,27 @@ const expectPath = async (page, path) => {
   await page.waitForURL((url) => url.pathname === path, { timeout: 15_000 });
 };
 
+const assertMobileDock = async (page) => {
+  const topbar = page.locator('.s5-reader-topbar');
+  const toggle = page.locator('[data-s5-reader-direct-open]');
+  const localRail = page.locator('.s5-reader-rail');
+
+  await topbar.waitFor({ state: 'visible' });
+  await toggle.waitFor({ state: 'visible' });
+
+  const topbarBox = await topbar.boundingBox();
+  const toggleBox = await toggle.boundingBox();
+  if (!topbarBox || topbarBox.x > 1 || topbarBox.width > 46 || topbarBox.height > 130) {
+    throw new Error(`Mobile reader navigation is not a compact left dock: ${JSON.stringify(topbarBox)}`);
+  }
+  if (!toggleBox || toggleBox.x > 1 || toggleBox.width > 46 || toggleBox.height > 46) {
+    throw new Error(`Mobile library trigger is not integrated into the left dock: ${JSON.stringify(toggleBox)}`);
+  }
+  if (await localRail.isVisible()) {
+    throw new Error('The redundant horizontal chapter rail is still visible on mobile.');
+  }
+};
+
 const assertLibrary = async (page, { mobile = false } = {}) => {
   const library = page.locator('[data-s5-reader-direct]');
   const picker = library.locator('[data-s5-reader-series-picker]');
@@ -80,6 +101,10 @@ try {
 
   const mobile = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1 });
   await mobile.goto(`${baseUrl}/series/modelos-razonadores/03-test-time-compute/`, { waitUntil: 'networkidle' });
+  await mobile.evaluate(() => window.scrollTo(0, Math.min(760, document.documentElement.scrollHeight - window.innerHeight)));
+  await mobile.waitForTimeout(200);
+  await assertMobileDock(mobile);
+  await mobile.screenshot({ path: `${outputDir}/reader-mobile-left-dock.png`, fullPage: false });
 
   controls = await assertLibrary(mobile, { mobile: true });
   panel = await chooseCollection(controls, 'IA, PIB, bienestar y energía');
