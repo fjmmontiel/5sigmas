@@ -1,0 +1,19 @@
+/* Contextual density rules for chapter and article navigation. */
+
+.md-content__inner > h1:has(+ .s5-reader-shell) {
+  margin-bottom: .35rem !important;
+}
+
+.s5-reader-shell {
+  margin-top: 0 !important;
+}
+
+@media (max-width: 800px) {
+  .md-content__inner > h1:has(+ .s5-reader-shell) {
+    margin-bottom: .25rem !important;
+  }
+
+  .s5-reader-shell {
+    margin-top: 0 !important;
+  }
+}
