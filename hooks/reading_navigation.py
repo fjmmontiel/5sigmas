@@ -1,4 +1,4 @@
-"""Inject compact course navigation into series chapters and technical notes."""
+"""Inject contextual navigation into series chapters and technical notes."""
 
 from __future__ import annotations
 
@@ -40,6 +40,10 @@ def _pages(items: list[Any], *, skip_indexes: bool = False) -> list[dict[str, st
             continue
         result.append({"title": str(title), "path": src_path, "url": _url_for(src_path)})
     return result
+
+
+def _content_count(count: int) -> str:
+    return f"{count} contenido" if count == 1 else f"{count} contenidos"
 
 
 def _library(config) -> list[dict[str, Any]]:
@@ -85,33 +89,16 @@ def _find_current(collections: list[dict[str, Any]], src_path: str):
     return None, -1, -1
 
 
-def _flat_pages(collections: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    flattened: list[dict[str, Any]] = []
-    for collection in collections:
-        for page_index, page in enumerate(collection["pages"]):
-            flattened.append(
-                {
-                    **page,
-                    "collection": collection,
-                    "page_index": page_index,
-                }
-            )
-    return flattened
-
-
-def _neighbor_link(item: dict[str, Any] | None, direction: str, current_collection: dict[str, Any]) -> str:
+def _neighbor_link(item: dict[str, str] | None, direction: str, collection: dict[str, Any]) -> str:
     if item is None:
         return f'<span class="s5-reader-arrow s5-reader-arrow--{direction} is-disabled" aria-hidden="true"></span>'
 
     arrow = "←" if direction == "prev" else "→"
-    same_series = item["collection"] is current_collection
     label = "Anterior" if direction == "prev" else "Siguiente"
-    if not same_series:
-        label = "Serie anterior" if direction == "prev" else "Siguiente serie"
     title = escape(item["title"])
-    series = escape(item["collection"]["title"])
+    collection_title = escape(collection["title"])
 
-    copy = f'<span>{label}</span><strong>{title}</strong><small>{series}</small>'
+    copy = f'<span>{label}</span><strong>{title}</strong><small>{collection_title}</small>'
     if direction == "prev":
         copy = f'<b aria-hidden="true">{arrow}</b><span class="s5-reader-arrow__copy">{copy}</span>'
     else:
@@ -154,7 +141,7 @@ def _series_tab(collection: dict[str, Any], number: int, is_current: bool) -> st
         f'aria-selected="{selected}" tabindex="{0 if is_current else -1}" '
         f'data-s5-series-tab="{_series_id(number)}" data-search="{search_value}">'
         f'<span>{number:02d}</span><span><strong>{escape(collection["title"])}</strong>'
-        f'<small>{escape(collection["kind"])} · {len(collection["pages"])} contenidos</small></span></button>'
+        f'<small>{escape(collection["kind"])} · {_content_count(len(collection["pages"]))}</small></span></button>'
     )
 
 
@@ -176,7 +163,7 @@ def _series_panel(collection: dict[str, Any], number: int, src_path: str, is_cur
         f'aria-labelledby="{_series_id(number)}-tab" data-s5-series-panel="{_series_id(number)}"{hidden}>'
         '<header>'
         f'<div><span>{escape(collection["kind"])}</span><h3>{escape(collection["title"])}</h3></div>'
-        f'<small>{len(collection["pages"])} contenidos</small>'
+        f'<small>{_content_count(len(collection["pages"]))}</small>'
         '</header>'
         f'<nav aria-label="Contenidos de {escape(collection["title"], quote=True)}">{"".join(chapter_links)}</nav>'
         '</section>'
@@ -189,30 +176,29 @@ def _render_map(
     current_page: dict[str, str],
     src_path: str,
 ) -> str:
-    ordered = [current_collection, *[collection for collection in collections if collection is not current_collection]]
     tabs = [
         _series_tab(collection, number, collection is current_collection)
-        for number, collection in enumerate(ordered, start=1)
+        for number, collection in enumerate(collections, start=1)
     ]
     panels = [
         _series_panel(collection, number, src_path, collection is current_collection)
-        for number, collection in enumerate(ordered, start=1)
+        for number, collection in enumerate(collections, start=1)
     ]
 
     return (
         '<dialog class="s5-reader-map" data-s5-reader-library aria-labelledby="s5-reader-map-title">'
         '<div class="s5-reader-map__surface">'
         '<header class="s5-reader-map__header">'
-        '<div><span>Mapa de aprendizaje</span><h2 id="s5-reader-map-title">Navega sin perder el contexto.</h2>'
+        '<div><span>Biblioteca</span><h2 id="s5-reader-map-title">Series y notas técnicas.</h2>'
         f'<p>Estás en <strong>{escape(current_collection["title"])}</strong> · {escape(current_page["title"])}.</p></div>'
         '<div class="s5-reader-map__tools">'
         '<input class="s5-reader-search" type="search" data-s5-reader-search '
-        'placeholder="Buscar serie o capítulo" aria-label="Buscar serie o capítulo">'
-        '<button type="button" data-s5-reader-close aria-label="Cerrar mapa">Cerrar ×</button>'
+        'placeholder="Buscar serie, capítulo o nota" aria-label="Buscar serie, capítulo o nota técnica">'
+        '<button type="button" data-s5-reader-close aria-label="Cerrar biblioteca">Cerrar ×</button>'
         '</div>'
         '</header>'
         '<div class="s5-reader-map__body">'
-        f'<div class="s5-reader-series-list" role="tablist" aria-label="Series y artículos">{"".join(tabs)}</div>'
+        f'<div class="s5-reader-series-list" role="tablist" aria-label="Series y notas técnicas">{"".join(tabs)}</div>'
         f'<div class="s5-reader-series-panels">{"".join(panels)}'
         '<p class="s5-reader-empty" data-s5-reader-empty hidden>No hay contenidos que coincidan con la búsqueda.</p>'
         '</div>'
@@ -223,22 +209,27 @@ def _render_map(
 
 
 def _render_end(
-    previous: dict[str, Any] | None,
-    following: dict[str, Any] | None,
+    previous: dict[str, str] | None,
+    following: dict[str, str] | None,
     current_collection: dict[str, Any],
 ) -> str:
     if following is not None:
-        next_label = "Siguiente capítulo" if following["collection"] is current_collection else "Siguiente serie"
         primary = (
             f'<a class="s5-reader-end__next" href="{following["url"]}">'
-            f'<span>{next_label}</span><strong>{escape(following["title"])}</strong>'
-            f'<small>{escape(following["collection"]["title"])}</small><b aria-hidden="true">→</b></a>'
+            f'<span>Siguiente capítulo</span><strong>{escape(following["title"])}</strong>'
+            f'<small>{escape(current_collection["title"])}</small><b aria-hidden="true">→</b></a>'
+        )
+    elif current_collection["kind"] == "Serie":
+        primary = (
+            '<a class="s5-reader-end__next" href="/series/">'
+            '<span>Serie completada</span><strong>Elige la siguiente ruta</strong>'
+            '<small>Todas las series</small><b aria-hidden="true">→</b></a>'
         )
     else:
         primary = (
-            '<a class="s5-reader-end__next" href="/series/">'
-            '<span>Has completado la biblioteca</span><strong>Explorar todas las series</strong>'
-            '<small>Elige una nueva ruta</small><b aria-hidden="true">→</b></a>'
+            '<a class="s5-reader-end__next" href="/articulos-tecnicos/">'
+            '<span>Nota completada</span><strong>Explorar notas técnicas</strong>'
+            '<small>Construir</small><b aria-hidden="true">→</b></a>'
         )
 
     previous_link = ""
@@ -248,25 +239,25 @@ def _render_end(
             f'← {escape(previous["title"])}</a>'
         )
 
+    catalogue_url = "/series/" if current_collection["kind"] == "Serie" else "/articulos-tecnicos/"
+    catalogue_label = "Todas las series" if current_collection["kind"] == "Serie" else "Todas las notas técnicas"
+
     return (
         '<section class="s5-reader-end" aria-label="Continuar aprendizaje">'
         '<div class="s5-reader-end__label"><span>Continúa aprendiendo</span>'
-        f'<button type="button" data-s5-reader-open>Ver todos los capítulos</button></div>'
+        f'<button type="button" data-s5-reader-open>Abrir biblioteca</button></div>'
         f'{primary}<div class="s5-reader-end__footer">{previous_link}'
-        '<a href="/series/">Todas las series →</a></div>'
+        f'<a href="{catalogue_url}">{catalogue_label} →</a></div>'
         '</section>'
     )
 
 
-def _render(collections: list[dict[str, Any]], collection: dict[str, Any], collection_index: int, index: int, src_path: str) -> tuple[str, str]:
+def _render(collections: list[dict[str, Any]], collection: dict[str, Any], index: int, src_path: str) -> tuple[str, str]:
     pages = collection["pages"]
     current = pages[index]
     progress = round(((index + 1) / len(pages)) * 100, 2)
-
-    flattened = _flat_pages(collections)
-    flat_index = next(i for i, item in enumerate(flattened) if item["path"] == src_path)
-    previous = flattened[flat_index - 1] if flat_index > 0 else None
-    following = flattened[flat_index + 1] if flat_index + 1 < len(flattened) else None
+    previous = pages[index - 1] if index > 0 else None
+    following = pages[index + 1] if index + 1 < len(pages) else None
 
     top = (
         '<div class="s5-reader-shell" data-s5-reader-nav '
@@ -297,11 +288,11 @@ def on_post_page(output: str, page, config, **kwargs) -> str:
         return output
 
     collections = _library(config)
-    collection, collection_index, index = _find_current(collections, src_path)
+    collection, _, index = _find_current(collections, src_path)
     if collection is None:
         return output
 
-    top, end = _render(collections, collection, collection_index, index, src_path)
+    top, end = _render(collections, collection, index, src_path)
     output = re.sub(r"(</h1>)", r"\1\n" + top, output, count=1)
     output = re.sub(r"(</article>)", end + r"\1", output, count=1)
     return output
