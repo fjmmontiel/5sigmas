@@ -112,15 +112,21 @@ def main() -> int:
     sitemap_locs = {el.text for el in sitemap.findall(".//sm:loc", NS)}
     video_locs = set()
     video_index_loc = "https://5sigmas.com/videos/"
+    visual_hub_loc = "https://5sigmas.com/visuales/"
     video_index_path = SITE / "videos" / "index.html"
-    video_index_html = ""
 
-    if video_index_loc not in sitemap_locs:
-        fail("video index missing from sitemap.xml", failures)
+    if video_index_loc in sitemap_locs:
+        fail("legacy video index must not be present in sitemap.xml", failures)
     if not video_index_path.exists():
-        fail(f"missing built video index {video_index_path}", failures)
+        fail(f"missing built video index redirect {video_index_path}", failures)
     else:
         video_index_html = video_index_path.read_text(encoding="utf-8", errors="ignore")
+        if 'name="robots" content="noindex,follow"' not in video_index_html:
+            fail("legacy video index redirect must be noindex,follow", failures)
+        if f'rel="canonical" href="{visual_hub_loc}"' not in video_index_html:
+            fail("legacy video index must canonicalize to /visuales/", failures)
+        if visual_hub_loc not in video_index_html:
+            fail("legacy video index must redirect to /visuales/", failures)
 
     for url in video_sitemap.findall(".//sm:url", NS):
         loc = url.find("sm:loc", NS).text
@@ -174,8 +180,6 @@ def main() -> int:
         if not watch_html_path.exists():
             fail(f"{md}: missing built watch page {watch_html_path}", failures)
             continue
-        if video_index_html and watch_loc not in video_index_html:
-            fail(f"{md}: watch page missing from video index", failures)
         watch_html = watch_html_path.read_text(encoding="utf-8", errors="ignore")
         if 'name="robots" content="index,follow' not in watch_html:
             fail(f"{md}: watch page missing explicit indexable robots directive", failures)
