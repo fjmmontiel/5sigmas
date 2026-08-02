@@ -149,6 +149,7 @@ extra_css:
   - stylesheets/revamp-quality-responsive.css
   - stylesheets/revamp-home-meaning.css
   - stylesheets/visual-hub.css
+  - stylesheets/visual-hub-responsive.css
   - stylesheets/reader-navigation.css
 
 hooks:
