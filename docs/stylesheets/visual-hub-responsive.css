@@ -1,6 +1,10 @@
 /* Responsive density adjustments for the unified visual hub. */
 
 @media (min-width: 961px) {
+  .s5-visual-hub {
+    --s5-hub-section: 1.2rem;
+  }
+
   .s5-visual-hub__intro {
     padding-top: .8rem !important;
     padding-bottom: 1rem !important;
@@ -12,6 +16,18 @@
 
   .s5-section-head--with-copy {
     margin-bottom: .6rem !important;
+  }
+
+  #rutas {
+    padding-bottom: .8rem !important;
+  }
+
+  #rutas .s5-route-grid {
+    border-bottom: 0;
+  }
+
+  #animaciones {
+    padding-top: .8rem !important;
   }
 }
 
@@ -69,5 +85,17 @@
 
   .s5-watch-feature {
     padding-top: .15rem;
+  }
+
+  #rutas {
+    padding-bottom: .7rem !important;
+  }
+
+  #rutas .s5-route-grid {
+    border-bottom: 0;
+  }
+
+  #animaciones {
+    padding-top: .7rem !important;
   }
 }
