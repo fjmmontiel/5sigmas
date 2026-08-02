@@ -24,6 +24,7 @@
   position: fixed;
   top: 170px;
   left: var(--s5-reader-fixed-left);
+  z-index: 120;
   width: var(--s5-reader-fixed-width);
 }
 
