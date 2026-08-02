@@ -13,7 +13,7 @@ hide:
   <div class="s5-home-cover__intro">
     <div class="s5-eyebrow">5sigmas · Inteligencia artificial, sin ruido</div>
     <h1>Ver la IA.<br />Entenderla de verdad.</h1>
-    <p>Cada tema conecta un vídeo breve, una animación interactiva, un capítulo técnico y las fuentes originales. Primero construyes intuición. Después compruebas el mecanismo y sus límites.</p>
+    <p>Cada tema conecta un vídeo breve, una animación interactiva, un capítulo técnico y las fuentes originales. Primero construyes intuición. Después manipulas el mecanismo, compruebas sus límites y profundizas en la evidencia.</p>
 
     <div class="s5-learning-loop" role="list" aria-label="Método de aprendizaje de 5sigmas">
       <div class="s5-learning-loop__item" role="listitem">
@@ -22,7 +22,7 @@ hide:
       </div>
       <div class="s5-learning-loop__item" role="listitem">
         <span class="s5-learning-loop__n">02</span>
-        <span><strong>Explorar</strong><small>Manipular la idea</small></span>
+        <span><strong>Manipular</strong><small>Cambiar variables y comprobar el mecanismo</small></span>
       </div>
       <div class="s5-learning-loop__item" role="listitem">
         <span class="s5-learning-loop__n">03</span>
@@ -103,7 +103,7 @@ hide:
 <section class="s5-section">
   <div class="s5-section-head">
     <h2>Explicaciones visuales</h2>
-    <a href="/visuales/">Explorar todas →</a>
+    <a href="/visuales/">Ver todas →</a>
   </div>
   <div class="s5-media-stack">
     <a class="s5-media-card" href="/videos/series/multimodalidad-iag/03-arquitecturas/">
