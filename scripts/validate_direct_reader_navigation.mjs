@@ -12,20 +12,25 @@ const assertMobileDock = async (page) => {
   const topbar = page.locator('.s5-reader-topbar');
   const toggle = page.locator('[data-s5-reader-direct-open]');
   const localRail = page.locator('.s5-reader-rail');
+  const content = page.locator('.md-content__inner');
 
-  await topbar.waitFor({ state: 'visible' });
   await toggle.waitFor({ state: 'visible' });
 
-  const topbarBox = await topbar.boundingBox();
-  const toggleBox = await toggle.boundingBox();
-  if (!topbarBox || topbarBox.x > 1 || topbarBox.width > 46 || topbarBox.height > 130) {
-    throw new Error(`Mobile reader navigation is not a compact left dock: ${JSON.stringify(topbarBox)}`);
-  }
-  if (!toggleBox || toggleBox.x > 1 || toggleBox.width > 46 || toggleBox.height > 46) {
-    throw new Error(`Mobile library trigger is not integrated into the left dock: ${JSON.stringify(toggleBox)}`);
+  if (await topbar.isVisible()) {
+    throw new Error('The old full-width reader bar is still visible on mobile.');
   }
   if (await localRail.isVisible()) {
     throw new Error('The redundant horizontal chapter rail is still visible on mobile.');
+  }
+
+  const toggleBox = await toggle.boundingBox();
+  if (!toggleBox || toggleBox.x > 1 || toggleBox.width > 36 || toggleBox.height > 116) {
+    throw new Error(`Mobile library trigger is not a narrow left-edge tab: ${JSON.stringify(toggleBox)}`);
+  }
+
+  const paddingLeft = await content.evaluate((node) => Number.parseFloat(getComputedStyle(node).paddingLeft));
+  if (paddingLeft < 25) {
+    throw new Error(`Mobile article does not reserve a safe gutter for the left tab: ${paddingLeft}px`);
   }
 };
 
