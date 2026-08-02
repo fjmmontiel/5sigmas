@@ -1,4 +1,4 @@
-/* Final reader density rules: local three-chapter context and no duplicate footer controls. */
+/* Final reader density rules: local context without duplicate footer controls. */
 
 .md-content__inner > h1:has(+ .s5-reader-shell) {
   margin-bottom: .35rem !important;
@@ -14,69 +14,26 @@ body:has(.s5-reader-shell) .md-footer__inner {
 }
 
 @media (max-width: 800px) {
+  /* Reserve a narrow gutter for the left navigation tab so it never covers reading content. */
+  body:has(.s5-reader-shell) .md-content__inner {
+    padding-left: 1.7rem !important;
+  }
+
   .md-content__inner > h1:has(+ .s5-reader-shell) {
-    margin-bottom: .25rem !important;
+    margin-bottom: .2rem !important;
   }
 
   .s5-reader-shell {
     min-height: 0;
-    margin: 0 0 .65rem !important;
+    margin: 0 0 .55rem !important;
   }
 
-  /* Replace the full-width sticky navigator with a compact dock on the left edge. */
-  .s5-reader-topbar {
-    position: fixed !important;
-    top: 50dvh !important;
-    right: auto !important;
-    bottom: auto !important;
-    left: 0 !important;
-    z-index: 120;
-    display: grid !important;
-    grid-template: repeat(3, 42px) / 42px !important;
-    width: 42px !important;
-    min-width: 42px !important;
-    height: 126px !important;
-    min-height: 0 !important;
-    overflow: hidden;
-    border: 1px solid var(--s5-line-strong) !important;
-    border-left: 0 !important;
-    background: var(--md-default-bg-color) !important;
-    box-shadow: 8px 0 18px color-mix(in srgb, var(--s5-text) 9%, transparent) !important;
-    transform: translateY(-50%);
-  }
-
-  .s5-reader-arrow {
-    display: grid !important;
-    place-items: center;
-    width: 42px;
-    min-width: 42px;
-    height: 42px;
-    min-height: 42px;
-    padding: 0 !important;
-    border: 0 !important;
-  }
-
-  .s5-reader-arrow--prev {
-    grid-area: 1 / 1;
-    border-bottom: 1px solid var(--s5-line) !important;
-  }
-
-  .s5-reader-arrow--next {
-    grid-area: 3 / 1;
-    border-top: 1px solid var(--s5-line) !important;
-  }
-
-  .s5-reader-arrow__copy,
-  .s5-reader-course {
+  /* Previous/next remain available at the end; persistent navigation is the left library tab. */
+  .s5-reader-topbar,
+  .s5-reader-rail {
     display: none !important;
   }
 
-  .s5-reader-arrow > b {
-    font-size: .9rem;
-    line-height: 1;
-  }
-
-  /* The library trigger occupies the centre of the left dock. */
   .s5-reader-direct-toggle {
     position: fixed !important;
     top: 50dvh !important;
@@ -85,15 +42,16 @@ body:has(.s5-reader-shell) .md-footer__inner {
     z-index: 121 !important;
     display: grid !important;
     place-items: center !important;
-    width: 42px !important;
-    min-width: 42px !important;
-    height: 42px !important;
-    min-height: 42px !important;
+    width: 32px !important;
+    min-width: 32px !important;
+    height: 112px !important;
+    min-height: 112px !important;
     padding: 0 !important;
-    border: 0 !important;
-    border-right: 1px solid var(--s5-line-strong) !important;
+    border: 1px solid var(--s5-line-strong) !important;
+    border-left: 0 !important;
     background: var(--md-default-bg-color) !important;
-    box-shadow: none !important;
+    color: var(--s5-text) !important;
+    box-shadow: 7px 0 16px color-mix(in srgb, var(--s5-text) 8%, transparent) !important;
     transform: translateY(-50%);
   }
 
@@ -113,10 +71,24 @@ body:has(.s5-reader-shell) .md-footer__inner {
 
   .s5-reader-direct-toggle::before {
     color: var(--s5-text);
-    font-size: .92rem;
+    font-size: .51rem;
     font-weight: 800;
+    letter-spacing: .08em;
     line-height: 1;
-    content: '☰';
+    text-transform: uppercase;
+    writing-mode: vertical-rl;
+    content: 'Series';
+    transform: rotate(180deg);
+  }
+
+  .s5-reader-direct-toggle::after {
+    position: absolute;
+    right: -1px;
+    bottom: -1px;
+    left: -1px;
+    height: 3px;
+    background: var(--s5-brand-blue);
+    content: '';
   }
 
   .s5-reader-direct-toggle:hover,
@@ -126,12 +98,6 @@ body:has(.s5-reader-shell) .md-footer__inner {
     outline-offset: -2px;
   }
 
-  /* The left dock and drawer replace the clipped three-card rail on mobile. */
-  .s5-reader-rail {
-    display: none !important;
-  }
-
-  body.s5-reader-direct-open .s5-reader-topbar,
   body.s5-reader-direct-open .s5-reader-direct-toggle {
     opacity: 0;
     pointer-events: none;
@@ -139,14 +105,14 @@ body:has(.s5-reader-shell) .md-footer__inner {
 }
 
 @media (max-width: 800px) and (max-height: 620px) {
-  .s5-reader-topbar,
   .s5-reader-direct-toggle {
     top: 54dvh !important;
+    height: 96px !important;
+    min-height: 96px !important;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .s5-reader-topbar,
   .s5-reader-direct-toggle {
     transition: none !important;
   }
