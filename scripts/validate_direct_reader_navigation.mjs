@@ -22,6 +22,9 @@ const assertMobileDock = async (page) => {
   if (await localRail.isVisible()) {
     throw new Error('The redundant horizontal chapter rail is still visible on mobile.');
   }
+  if ((await toggle.locator('span').textContent())?.trim() !== 'Biblioteca') {
+    throw new Error('The mobile trigger must represent both series and technical articles.');
+  }
 
   const toggleBox = await toggle.boundingBox();
   if (!toggleBox || toggleBox.x > 1 || toggleBox.width > 36 || toggleBox.height > 116) {
@@ -29,8 +32,8 @@ const assertMobileDock = async (page) => {
   }
 
   const paddingLeft = await content.evaluate((node) => Number.parseFloat(getComputedStyle(node).paddingLeft));
-  if (paddingLeft < 25) {
-    throw new Error(`Mobile article does not reserve a safe gutter for the left tab: ${paddingLeft}px`);
+  if (paddingLeft < 34) {
+    throw new Error(`Mobile article does not reserve the full library-tab gutter: ${paddingLeft}px`);
   }
 };
 
@@ -39,12 +42,19 @@ const assertLibrary = async (page, { mobile = false } = {}) => {
   const picker = library.locator('[data-s5-reader-series-picker]');
   const collections = library.locator('[data-s5-reader-collection]');
   const links = library.locator('[data-s5-reader-collection] a');
+  const optionLabels = await picker.locator('option').allTextContents();
 
-  if (await picker.locator('option').count() !== 7) {
+  if (optionLabels.length !== 7) {
     throw new Error('Reader library must expose all 6 series plus technical notes.');
   }
+  if (optionLabels.filter((label) => label.startsWith('Aprender · ')).length !== 6) {
+    throw new Error(`Reader library must distinguish all learning series: ${JSON.stringify(optionLabels)}`);
+  }
+  if (optionLabels.filter((label) => label.startsWith('Construir · ')).length !== 1) {
+    throw new Error(`Reader library must distinguish technical notes: ${JSON.stringify(optionLabels)}`);
+  }
   if (await collections.count() !== 7) {
-    throw new Error('Reader library must render one chapter panel per collection.');
+    throw new Error('Reader library must render one content panel per collection.');
   }
   if (await links.count() < 30) {
     throw new Error('Reader library does not expose the complete article catalogue.');
@@ -78,6 +88,18 @@ const chooseCollection = async (controls, label) => {
   return panel;
 };
 
+const assertCollectionBoundary = async (page, { completionHref, label }) => {
+  const nextArrow = page.locator('.s5-reader-topbar .s5-reader-arrow--next');
+  if (!await nextArrow.evaluate((node) => node.classList.contains('is-disabled'))) {
+    throw new Error(`${label} must not continue into a different collection.`);
+  }
+
+  const endLink = page.locator('.s5-reader-end__next');
+  if (await endLink.getAttribute('href') !== completionHref) {
+    throw new Error(`${label} completion must return to ${completionHref}.`);
+  }
+};
+
 await fs.mkdir(outputDir, { recursive: true });
 const browser = await chromium.launch({ headless: true });
 
@@ -86,12 +108,12 @@ try {
   await desktop.goto(`${baseUrl}/series/modelos-razonadores/03-test-time-compute/`, { waitUntil: 'networkidle' });
 
   let controls = await assertLibrary(desktop);
-  let panel = await chooseCollection(controls, 'De las cavernas a la AGI');
+  let panel = await chooseCollection(controls, 'Aprender · De las cavernas a la AGI');
   await panel.locator('a[href="/series/from-cave-to-agi/00_presentacion_serie/"]').click();
   await expectPath(desktop, '/series/from-cave-to-agi/00_presentacion_serie/');
 
   controls = await assertLibrary(desktop);
-  panel = await chooseCollection(controls, 'Multimodalidad en IA Generativa');
+  panel = await chooseCollection(controls, 'Aprender · Multimodalidad en IA Generativa');
   await panel.locator('a[href="/series/multimodalidad-iag/03-arquitecturas/"]').click();
   await expectPath(desktop, '/series/multimodalidad-iag/03-arquitecturas/');
 
@@ -104,6 +126,16 @@ try {
   }
   await desktop.screenshot({ path: `${outputDir}/reader-sidebar-desktop.png`, fullPage: false });
 
+  await desktop.goto(`${baseUrl}/series/modelos-razonadores/05-riesgos/`, { waitUntil: 'networkidle' });
+  await assertCollectionBoundary(desktop, { completionHref: '/series/', label: 'A completed series' });
+
+  await desktop.goto(`${baseUrl}/articulos-tecnicos/proactive-reactive-agent-and-tool-calls/`, { waitUntil: 'networkidle' });
+  await assertCollectionBoundary(desktop, { completionHref: '/articulos-tecnicos/', label: 'A completed technical collection' });
+  const previousTechnical = desktop.locator('.s5-reader-topbar .s5-reader-arrow--prev');
+  if (!await previousTechnical.evaluate((node) => node.classList.contains('is-disabled'))) {
+    throw new Error('Technical notes must not inherit a previous link from the final learning series.');
+  }
+
   const mobile = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1 });
   await mobile.goto(`${baseUrl}/series/modelos-razonadores/03-test-time-compute/`, { waitUntil: 'networkidle' });
   await mobile.evaluate(() => window.scrollTo(0, Math.min(760, document.documentElement.scrollHeight - window.innerHeight)));
@@ -112,7 +144,7 @@ try {
   await mobile.screenshot({ path: `${outputDir}/reader-mobile-left-dock.png`, fullPage: false });
 
   controls = await assertLibrary(mobile, { mobile: true });
-  panel = await chooseCollection(controls, 'IA, PIB, bienestar y energía');
+  panel = await chooseCollection(controls, 'Aprender · IA, PIB, bienestar y energía');
   await mobile.waitForTimeout(100);
   const drawerBox = await controls.library.boundingBox();
   const horizontalScroll = await mobile.evaluate(() => window.scrollX || document.documentElement.scrollLeft || document.body.scrollLeft || 0);
