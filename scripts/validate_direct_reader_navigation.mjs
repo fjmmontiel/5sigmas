@@ -8,6 +8,15 @@ const expectPath = async (page, path) => {
   await page.waitForURL((url) => url.pathname === path, { timeout: 15_000 });
 };
 
+const scrollIntoReading = async (page) => {
+  await page.evaluate(() => {
+    const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+    const target = Math.min(maxScroll, Math.max(900, Math.round(maxScroll * 0.55)));
+    window.scrollTo(0, target);
+  });
+  await page.waitForTimeout(250);
+};
+
 const assertDirectNavigation = async (page) => {
   const direct = page.locator('[data-s5-reader-direct]');
   await direct.waitFor({ state: 'visible' });
@@ -43,22 +52,20 @@ try {
   await expectPath(desktop, '/series/multimodalidad-iag/03-arquitecturas/');
 
   controls = await assertDirectNavigation(desktop);
-  await desktop.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-  await desktop.waitForTimeout(250);
+  await scrollIntoReading(desktop);
   const desktopBox = await controls.direct.boundingBox();
-  if (!desktopBox || desktopBox.y < 160 || desktopBox.y > 190) {
-    throw new Error(`Direct navigation is not persistently stacked below the desktop reader bar: ${desktopBox?.y}`);
+  if (!desktopBox || desktopBox.y < 160 || desktopBox.y > 190 || desktopBox.width < 700) {
+    throw new Error(`Direct desktop navigation is not persistently visible at article width: ${JSON.stringify(desktopBox)}`);
   }
   await desktop.screenshot({ path: `${outputDir}/reader-direct-desktop.png`, fullPage: false });
 
   const mobile = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1 });
   await mobile.goto(`${baseUrl}/series/modelos-razonadores/03-test-time-compute/`, { waitUntil: 'networkidle' });
   controls = await assertDirectNavigation(mobile);
-  await mobile.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-  await mobile.waitForTimeout(250);
+  await scrollIntoReading(mobile);
   const mobileBox = await controls.direct.boundingBox();
-  if (!mobileBox || mobileBox.y < 105 || mobileBox.y > 135) {
-    throw new Error(`Direct navigation is not persistently stacked below the mobile reader bar: ${mobileBox?.y}`);
+  if (!mobileBox || mobileBox.y < 105 || mobileBox.y > 135 || mobileBox.width < 340) {
+    throw new Error(`Direct mobile navigation is not persistently visible at article width: ${JSON.stringify(mobileBox)}`);
   }
   await mobile.screenshot({ path: `${outputDir}/reader-direct-mobile.png`, fullPage: false });
 } finally {
