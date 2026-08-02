@@ -1,8 +1,15 @@
 /* Always-visible direct jumps between every series, chapter and technical note. */
 
+.s5-reader-direct-placeholder {
+  height: 0;
+}
+
+.s5-reader-direct-placeholder.is-active {
+  height: var(--s5-reader-placeholder-height);
+}
+
 .s5-reader-direct {
-  position: sticky;
-  top: 170px;
+  position: relative;
   z-index: 19;
   display: grid;
   grid-template-columns: minmax(150px, .72fr) minmax(260px, 1.45fr) auto;
@@ -11,6 +18,13 @@
   border-top: 0;
   background: var(--md-default-bg-color);
   box-shadow: 0 8px 18px color-mix(in srgb, var(--s5-text) 5%, transparent);
+}
+
+.s5-reader-direct.is-fixed {
+  position: fixed;
+  top: 170px;
+  left: var(--s5-reader-fixed-left);
+  width: var(--s5-reader-fixed-width);
 }
 
 .s5-reader-direct__field {
@@ -79,8 +93,11 @@
 
 @media (max-width: 960px) {
   .s5-reader-direct {
-    top: 122px;
     grid-template-columns: minmax(105px, .72fr) minmax(150px, 1.35fr) 58px;
+  }
+
+  .s5-reader-direct.is-fixed {
+    top: 122px;
   }
 
   .s5-reader-direct__field {
@@ -110,8 +127,11 @@
 
 @media (max-width: 800px) {
   .s5-reader-direct {
-    top: 116px;
     min-height: 56px;
+  }
+
+  .s5-reader-direct.is-fixed {
+    top: 116px;
   }
 
   .s5-reader-direct__field--content > span {
