@@ -150,7 +150,6 @@ extra_css:
   - stylesheets/revamp-home-meaning.css
   - stylesheets/visual-hub.css
   - stylesheets/reader-navigation.css
-  - stylesheets/visual-hub-polish.css
 
 hooks:
   - hooks/reading_time.py
