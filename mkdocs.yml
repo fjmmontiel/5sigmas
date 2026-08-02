@@ -132,6 +132,12 @@ extra_javascript:
     defer: true
   - path: assets/javascripts/editorial-system.js
     defer: true
+  - path: assets/javascripts/visual-hub.js
+    defer: true
+  - path: assets/javascripts/reader-navigation.js
+    defer: true
+  - path: assets/javascripts/reader-direct-navigation.js
+    defer: true
 extra_css:
   - stylesheets/extra.css
   - assets/stylesheets/animations.css
@@ -144,6 +150,11 @@ extra_css:
   - stylesheets/revamp-quality.css
   - stylesheets/revamp-quality-responsive.css
   - stylesheets/revamp-home-meaning.css
+  - stylesheets/visual-hub.css
+  - stylesheets/visual-hub-responsive.css
+  - stylesheets/reader-navigation.css
+  - stylesheets/reader-navigation-responsive.css
+  - stylesheets/reader-direct-navigation.css
 
 hooks:
   - hooks/reading_time.py
@@ -151,6 +162,8 @@ hooks:
   - hooks/serve_md_versions.py
   - hooks/jsonld_article.py
   - hooks/video_embed.py
+  - hooks/reading_navigation.py
+  - hooks/direct_reader_navigation.py
   - hooks/wip_series.py
   - hooks/nosnippet.py
   - hooks/sitemap_noindex.py
