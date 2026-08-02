@@ -1,21 +1,6 @@
 (() => {
   const STORAGE_KEY = 's5:visual-progress:v1';
 
-  const ensureStyles = () => {
-    const stylesheets = [
-      ['s5-learning-discovery', '/stylesheets/learning-discovery.css'],
-      ['s5-learning-discovery-fixes', '/stylesheets/learning-discovery-fixes.css'],
-    ];
-    for (const [key, href] of stylesheets) {
-      if (document.querySelector(`link[data-${key}]`)) continue;
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = href;
-      link.setAttribute(`data-${key}`, 'true');
-      document.head.append(link);
-    }
-  };
-
   const readProgress = () => {
     try {
       return JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
@@ -126,11 +111,11 @@
   };
 
   const initializeVisualHub = () => {
-    ensureStyles();
     const root = document.querySelector('.s5-visual-hub');
-    const videos = [...document.querySelectorAll('.s5-inline-video')];
+    if (!root) return;
 
-    if (root && root.dataset.s5VisualHubReady !== 'true') {
+    const videos = [...root.querySelectorAll('.s5-inline-video')];
+    if (root.dataset.s5VisualHubReady !== 'true') {
       root.dataset.s5VisualHubReady = 'true';
       setupFilters(root);
       setupResume(root, videos);
@@ -169,7 +154,6 @@
     }
   };
 
-  ensureStyles();
   if (typeof document$ !== 'undefined') {
     document$.subscribe(initializeVisualHub);
   } else if (document.readyState === 'loading') {
