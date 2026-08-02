@@ -14,9 +14,9 @@ body:has(.s5-reader-shell) .md-footer__inner {
 }
 
 @media (max-width: 800px) {
-  /* Reserve a narrow gutter for the left navigation tab so it never covers reading content. */
+  /* Keep the entire 32 px library tab outside the reading column. */
   body:has(.s5-reader-shell) .md-content__inner {
-    padding-left: 1.7rem !important;
+    padding-left: 2.25rem !important;
   }
 
   .md-content__inner > h1:has(+ .s5-reader-shell) {
@@ -28,7 +28,7 @@ body:has(.s5-reader-shell) .md-footer__inner {
     margin: 0 0 .55rem !important;
   }
 
-  /* Previous/next remain available at the end; persistent navigation is the left library tab. */
+  /* Previous/next remain available at the end; persistent navigation is the library tab. */
   .s5-reader-topbar,
   .s5-reader-rail {
     display: none !important;
@@ -71,13 +71,13 @@ body:has(.s5-reader-shell) .md-footer__inner {
 
   .s5-reader-direct-toggle::before {
     color: var(--s5-text);
-    font-size: .51rem;
+    font-size: .43rem;
     font-weight: 800;
-    letter-spacing: .08em;
+    letter-spacing: .04em;
     line-height: 1;
     text-transform: uppercase;
     writing-mode: vertical-rl;
-    content: 'Series';
+    content: 'Biblioteca';
     transform: rotate(180deg);
   }
 
