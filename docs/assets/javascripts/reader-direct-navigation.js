@@ -24,24 +24,37 @@
       root.before(placeholder);
 
       let scheduled = false;
+      let fixed = false;
+
+      const setFixed = (rect) => {
+        const height = root.offsetHeight;
+        placeholder.style.setProperty('--s5-reader-placeholder-height', `${height}px`);
+        placeholder.classList.add('is-active');
+        root.style.setProperty('--s5-reader-fixed-left', `${rect.left}px`);
+        root.style.setProperty('--s5-reader-fixed-width', `${rect.width}px`);
+        root.classList.add('is-fixed');
+        if (!fixed) {
+          document.body.appendChild(root);
+          fixed = true;
+        }
+      };
+
+      const unsetFixed = () => {
+        if (fixed) {
+          placeholder.after(root);
+          fixed = false;
+        }
+        placeholder.classList.remove('is-active');
+        root.classList.remove('is-fixed');
+        root.style.removeProperty('--s5-reader-fixed-left');
+        root.style.removeProperty('--s5-reader-fixed-width');
+      };
+
       const sync = () => {
         scheduled = false;
         const rect = placeholder.getBoundingClientRect();
-        const shouldFix = rect.top <= fixedTop();
-
-        if (shouldFix) {
-          const height = root.offsetHeight;
-          placeholder.style.setProperty('--s5-reader-placeholder-height', `${height}px`);
-          placeholder.classList.add('is-active');
-          root.style.setProperty('--s5-reader-fixed-left', `${rect.left}px`);
-          root.style.setProperty('--s5-reader-fixed-width', `${rect.width}px`);
-          root.classList.add('is-fixed');
-        } else {
-          placeholder.classList.remove('is-active');
-          root.classList.remove('is-fixed');
-          root.style.removeProperty('--s5-reader-fixed-left');
-          root.style.removeProperty('--s5-reader-fixed-width');
-        }
+        if (rect.top <= fixedTop()) setFixed(rect);
+        else unsetFixed();
       };
 
       const scheduleSync = () => {
