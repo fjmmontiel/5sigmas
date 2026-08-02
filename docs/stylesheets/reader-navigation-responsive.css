@@ -1,4 +1,4 @@
-/* Final reader density rules: local three-chapter context, no duplicate footer controls. */
+/* Final reader density rules: local three-chapter context and no duplicate footer controls. */
 
 .md-content__inner > h1:has(+ .s5-reader-shell) {
   margin-bottom: .35rem !important;
