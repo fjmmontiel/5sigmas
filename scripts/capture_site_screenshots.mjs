@@ -29,10 +29,10 @@ const captures = [
   { name: 'article-mobile', path: articlePath, viewport: mobile, mobile: true },
   { name: 'reader-rail-desktop', path: articlePath, viewport: desktop, selector: '.s5-reader-shell' },
   { name: 'reader-rail-mobile', path: articlePath, viewport: mobile, mobile: true, selector: '.s5-reader-shell' },
-  { name: 'reader-map-desktop', path: articlePath, viewport: desktop, openReader: true },
-  { name: 'reader-map-mobile', path: articlePath, viewport: mobile, mobile: true, openReader: true },
-  { name: 'reader-map-other-desktop', path: articlePath, viewport: desktop, openReader: true, selectSeries: 2 },
-  { name: 'reader-map-other-mobile', path: articlePath, viewport: mobile, mobile: true, openReader: true, selectSeries: 2 },
+  { name: 'reader-library-desktop', path: articlePath, viewport: desktop, openReader: true },
+  { name: 'reader-library-mobile', path: articlePath, viewport: mobile, mobile: true, openReader: true },
+  { name: 'reader-library-other-desktop', path: articlePath, viewport: desktop, openReader: true, selectSeries: 2 },
+  { name: 'reader-library-other-mobile', path: articlePath, viewport: mobile, mobile: true, openReader: true, selectSeries: 2 },
   { name: 'reader-search-desktop', path: articlePath, viewport: desktop, openReader: true, readerSearch: 'multimodalidad' },
   { name: 'reader-search-mobile', path: articlePath, viewport: mobile, mobile: true, openReader: true, readerSearch: 'multimodalidad' },
   { name: 'reader-end-desktop', path: articlePath, viewport: desktop, selector: '.s5-reader-end' },
@@ -86,12 +86,15 @@ const collectLayout = () => {
       arrows: document.querySelectorAll('.s5-reader-arrow:not(.is-disabled)').length,
       mapOpen: document.querySelector('[data-s5-reader-library]')?.open ?? false,
       seriesTabs: document.querySelectorAll('[data-s5-series-tab]').length,
-      visibleTabs: [...document.querySelectorAll('[data-s5-series-tab]')].filter((tab) => !tab.hidden).length,
-      selectedTab: document.querySelector('[data-s5-series-tab][aria-selected="true"]')?.textContent.trim().replace(/\s+/g, ' ') ?? null,
       panels: document.querySelectorAll('[data-s5-series-panel]').length,
-      visiblePanels: [...document.querySelectorAll('[data-s5-series-panel]')].filter((panel) => !panel.hidden).length,
       entries: document.querySelectorAll('[data-s5-reader-entry]').length,
       currentEntries: document.querySelectorAll('[data-s5-reader-entry][aria-current="page"]').length,
+      directCollections: document.querySelectorAll('[data-s5-reader-collection]').length,
+      visibleDirectCollections: [...document.querySelectorAll('[data-s5-reader-collection]')].filter((collection) => !collection.hidden).length,
+      directEntries: document.querySelectorAll('[data-s5-direct-entry]').length,
+      visibleDirectEntries: [...document.querySelectorAll('[data-s5-direct-entry]')].filter((entry) => !entry.hidden).length,
+      currentDirectEntries: document.querySelectorAll('[data-s5-direct-entry][aria-current="page"]').length,
+      directOpen: document.querySelector('[data-s5-reader-direct]')?.classList.contains('is-open') ?? false,
       end: box('.s5-reader-end'),
     },
   };
@@ -130,28 +133,74 @@ const validateReaderNavigation = async (page) => {
   if (reader.currentRail !== 1) throw new Error(`expected one current rail chapter, found ${reader.currentRail}`);
   if (reader.arrows !== 2) throw new Error(`expected usable previous and next actions, found ${reader.arrows}`);
   if (reader.seriesTabs !== 7 || reader.panels !== 7) {
-    throw new Error(`expected 7 series/article collections, found ${reader.seriesTabs}/${reader.panels}`);
+    throw new Error(`expected 7 collections in the searchable map, found ${reader.seriesTabs}/${reader.panels}`);
   }
-  if (reader.visiblePanels !== 1) throw new Error(`expected one visible series panel, found ${reader.visiblePanels}`);
-  if (reader.entries < 30) throw new Error(`expected at least 30 navigable entries, found ${reader.entries}`);
-  if (reader.currentEntries !== 1) throw new Error(`expected one current page, found ${reader.currentEntries}`);
+  if (reader.entries < 30 || reader.currentEntries !== 1) {
+    throw new Error(`searchable map entries are incomplete: ${reader.entries}/${reader.currentEntries}`);
+  }
+  if (reader.directCollections !== 7 || reader.visibleDirectCollections !== 7) {
+    throw new Error(`global library must expose all 7 collections simultaneously, found ${reader.directCollections}/${reader.visibleDirectCollections}`);
+  }
+  if (reader.directEntries < 30 || reader.currentDirectEntries !== 1) {
+    throw new Error(`global library entries are incomplete: ${reader.directEntries}/${reader.currentDirectEntries}`);
+  }
   if (!reader.end) throw new Error('expected end-of-article continuation block');
   const shellGap = reader.shell.top - reader.h1.bottom;
   if (shellGap > 42) throw new Error(`reader starts ${shellGap}px after h1`);
 };
 
-const openReaderMap = async (page, capture) => {
+const openReaderSurface = async (page) => {
   const courseButton = page.locator('.s5-reader-course[data-s5-reader-open]');
   if (await courseButton.isVisible()) {
     await courseButton.click();
-  } else {
-    const drawerToggle = page.locator('[data-s5-reader-direct-open]');
-    await drawerToggle.click();
-    const drawer = page.locator('[data-s5-reader-direct].is-open');
-    await drawer.waitFor();
-    await drawer.locator('[data-s5-reader-open]').click();
+    await page.locator('[data-s5-reader-library][open]').waitFor();
+    return 'map';
   }
-  await page.locator('[data-s5-reader-library][open]').waitFor();
+
+  const drawerToggle = page.locator('[data-s5-reader-direct-open]');
+  await drawerToggle.click();
+  await page.locator('[data-s5-reader-direct].is-open').waitFor();
+  return 'library';
+};
+
+const focusCollection = async (page, index) => {
+  const dialog = page.locator('[data-s5-reader-library][open]');
+  if (await dialog.count()) {
+    const tab = dialog.locator('[data-s5-series-tab]').nth(index);
+    const expected = await tab.getAttribute('data-s5-series-tab');
+    await tab.click();
+    await dialog.locator(`[data-s5-series-panel="${expected}"]:not([hidden])`).waitFor();
+    return;
+  }
+
+  const collection = page.locator('[data-s5-reader-direct].is-open [data-s5-reader-collection]').nth(index);
+  await collection.scrollIntoViewIfNeeded();
+  await collection.waitFor({ state: 'visible' });
+};
+
+const searchReader = async (page, query) => {
+  const dialogSearch = page.locator('[data-s5-reader-library][open] [data-s5-reader-search]');
+  if (await dialogSearch.count()) {
+    await dialogSearch.fill(query);
+    await page.waitForTimeout(80);
+    const selected = await page.locator('[data-s5-reader-library][open] [data-s5-series-tab][aria-selected="true"]').innerText();
+    if (!selected.toLowerCase().includes(query.toLowerCase())) {
+      throw new Error(`reader map selected unexpected collection: ${selected}`);
+    }
+    return;
+  }
+
+  const directSearch = page.locator('[data-s5-reader-direct].is-open [data-s5-reader-direct-search]');
+  await directSearch.fill(query);
+  await page.waitForTimeout(80);
+  const visibleCollections = page.locator('[data-s5-reader-direct].is-open [data-s5-reader-collection]:not([hidden])');
+  if (await visibleCollections.count() !== 1) {
+    throw new Error(`global library search expected one matching collection, found ${await visibleCollections.count()}`);
+  }
+  const label = await visibleCollections.first().innerText();
+  if (!label.toLowerCase().includes(query.toLowerCase())) {
+    throw new Error(`global library search returned unexpected collection: ${label}`);
+  }
 };
 
 try {
@@ -197,23 +246,15 @@ try {
     }
 
     if (capture.openReader) {
-      await openReaderMap(page, capture);
+      await openReaderSurface(page);
     }
 
     if (capture.selectSeries !== undefined) {
-      const tab = page.locator('[data-s5-series-tab]').nth(capture.selectSeries);
-      const expected = await tab.getAttribute('data-s5-series-tab');
-      await tab.click();
-      await page.locator(`[data-s5-series-panel="${expected}"]:not([hidden])`).waitFor();
+      await focusCollection(page, capture.selectSeries);
     }
 
     if (capture.readerSearch) {
-      await page.locator('[data-s5-reader-search]').fill(capture.readerSearch);
-      await page.waitForTimeout(80);
-      const selected = await page.locator('[data-s5-series-tab][aria-selected="true"]').innerText();
-      if (!selected.toLowerCase().includes('multimodalidad')) {
-        throw new Error(`reader search selected unexpected collection: ${selected}`);
-      }
+      await searchReader(page, capture.readerSearch);
     }
 
     if (capture.selector && !capture.openReader) {
