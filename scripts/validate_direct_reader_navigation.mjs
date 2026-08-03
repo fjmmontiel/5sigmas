@@ -37,12 +37,46 @@ const assertMobileDock = async (page) => {
   }
 };
 
+const assertCollapsibleOutline = async (controls) => {
+  const summaries = controls.collections.locator('summary');
+  if (await summaries.count() !== 7) {
+    throw new Error('Every collection must remain visible as a collapsible summary.');
+  }
+
+  const openCollections = controls.library.locator('[data-s5-reader-collection][open]');
+  if (await openCollections.count() !== 1) {
+    throw new Error(`Exactly the current collection should start open, found ${await openCollections.count()}.`);
+  }
+
+  const currentCollection = controls.library.locator('[data-s5-reader-collection][data-current="true"]');
+  if (await currentCollection.count() !== 1 || !await currentCollection.evaluate((node) => node.open)) {
+    throw new Error('The collection containing the current article must be expanded initially.');
+  }
+
+  const closedCollection = controls.library.locator('[data-s5-reader-collection]:not([data-current="true"])').first();
+  if (await closedCollection.evaluate((node) => node.open)) {
+    throw new Error('Non-current collections should start collapsed for a quick overview.');
+  }
+
+  await closedCollection.locator('summary').click();
+  if (!await closedCollection.evaluate((node) => node.open)) {
+    throw new Error('A collection summary must expand its articles in one click.');
+  }
+  if (await closedCollection.locator('[data-s5-direct-entry]:visible').count() === 0) {
+    throw new Error('An expanded collection must expose its article links.');
+  }
+  await closedCollection.locator('summary').click();
+  if (await closedCollection.evaluate((node) => node.open)) {
+    throw new Error('A collection summary must collapse its articles in one click.');
+  }
+};
+
 const assertLibrary = async (page, { mobile = false } = {}) => {
   const library = page.locator('[data-s5-reader-direct]');
   const search = library.locator('[data-s5-reader-direct-search]');
   const collections = library.locator('[data-s5-reader-collection]');
   const links = library.locator('[data-s5-direct-entry]');
-  const kinds = await collections.locator('header > span').allTextContents();
+  const kinds = await collections.locator('.s5-reader-direct__collection-copy > small').allTextContents();
 
   if (await collections.count() !== 7) {
     throw new Error('Reader library must expose all 6 series plus technical notes simultaneously.');
@@ -77,7 +111,9 @@ const assertLibrary = async (page, { mobile = false } = {}) => {
     }
   }
 
-  return { library, search, collections, links };
+  const controls = { library, search, collections, links };
+  await assertCollapsibleOutline(controls);
+  return controls;
 };
 
 const navigateDirectly = async (controls, page, path) => {
@@ -85,18 +121,23 @@ const navigateDirectly = async (controls, page, path) => {
   if (await link.count() !== 1) {
     throw new Error(`Global library must expose exactly one direct link to ${path}.`);
   }
+  const collection = link.locator('xpath=ancestor::details[1]');
+  if (!await collection.evaluate((node) => node.open)) {
+    await collection.locator('summary').click();
+  }
   await link.click();
   await expectPath(page, path);
 };
 
 const assertGlobalSearch = async (controls, query, expectedPath) => {
   await controls.search.fill(query);
-  const visibleLinks = controls.library.locator('[data-s5-direct-entry]:visible');
-  if (await visibleLinks.count() === 0) {
-    throw new Error(`Global search returned no results for ${query}.`);
-  }
-  if (await controls.library.locator(`a[href="${expectedPath}"]:visible`).count() !== 1) {
+  const expectedLink = controls.library.locator(`a[href="${expectedPath}"]:visible`);
+  if (await expectedLink.count() !== 1) {
     throw new Error(`Global search did not expose ${expectedPath} for ${query}.`);
+  }
+  const matchingCollection = expectedLink.locator('xpath=ancestor::details[1]');
+  if (!await matchingCollection.evaluate((node) => node.open)) {
+    throw new Error(`Global search must automatically expand the matching collection for ${query}.`);
   }
   await controls.search.fill('');
 };
