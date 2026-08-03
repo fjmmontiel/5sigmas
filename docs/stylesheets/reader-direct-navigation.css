@@ -1,4 +1,4 @@
-/* Clean library rail for direct navigation between every series and article. */
+/* Global library for direct navigation between every series and technical article. */
 
 .s5-reader-direct-overlay,
 .s5-reader-direct-toggle {
@@ -11,8 +11,8 @@
   left: max(12px, calc(50vw - 700px));
   z-index: 18;
   display: grid;
-  grid-template-rows: auto auto minmax(0, 1fr) auto;
-  width: 190px;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  width: 210px;
   max-height: calc(100dvh - 160px);
   overflow: hidden;
   border-top: 1px solid var(--s5-line-strong);
@@ -36,7 +36,7 @@
 }
 
 .s5-reader-direct__header span,
-.s5-reader-direct__picker > span,
+.s5-reader-direct__search > span,
 .s5-reader-direct__collection header > span {
   color: var(--s5-muted);
   font-size: .46rem;
@@ -54,33 +54,35 @@
   display: none;
 }
 
-.s5-reader-direct__picker {
+.s5-reader-direct__search {
   display: grid;
   gap: .28rem;
   padding: .65rem 0;
   border-bottom: 1px solid var(--s5-line-strong);
 }
 
-.s5-reader-direct select {
+.s5-reader-direct__search input {
   width: 100%;
-  min-height: 34px;
-  padding: .35rem 1.55rem .35rem .45rem;
+  min-height: 36px;
+  padding: .38rem .48rem;
   border: 1px solid var(--s5-line);
   border-radius: 0;
   background: var(--md-default-bg-color);
   color: var(--s5-text);
   font: inherit;
-  font-size: .56rem;
-  font-weight: 720;
-  text-overflow: ellipsis;
+  font-size: .55rem;
 }
 
-.s5-reader-direct select:hover,
-.s5-reader-direct select:focus-visible {
+.s5-reader-direct__search input::placeholder {
+  color: var(--s5-muted);
+}
+
+.s5-reader-direct__search input:hover,
+.s5-reader-direct__search input:focus-visible {
   border-color: var(--s5-line-strong);
 }
 
-.s5-reader-direct select:focus-visible {
+.s5-reader-direct__search input:focus-visible {
   outline: 2px solid color-mix(in srgb, var(--s5-brand-blue) 20%, transparent);
   outline-offset: 1px;
 }
@@ -88,17 +90,25 @@
 .s5-reader-direct__collections {
   min-height: 0;
   overflow-y: auto;
+  padding-bottom: .5rem;
   scrollbar-width: thin;
 }
 
-.s5-reader-direct__collection[hidden] {
+.s5-reader-direct__collection[hidden],
+.s5-reader-direct__collection nav a[hidden],
+.s5-reader-direct__empty[hidden] {
   display: none !important;
 }
 
 .s5-reader-direct__collection > header {
   display: grid;
   gap: .12rem;
-  padding: .65rem 0 .5rem;
+  padding: .72rem 0 .5rem;
+  border-top: 1px solid var(--s5-line-strong);
+}
+
+.s5-reader-direct__collection:first-child > header {
+  border-top: 0;
 }
 
 .s5-reader-direct__collection > header strong {
@@ -163,26 +173,11 @@
   color: var(--s5-brand-blue);
 }
 
-.s5-reader-direct > footer {
-  padding-top: .55rem;
-  border-top: 1px solid var(--s5-line-strong);
-}
-
-.s5-reader-direct > footer button {
-  width: 100%;
-  padding: .45rem 0;
-  border: 0;
-  background: transparent;
-  color: var(--s5-text);
-  cursor: pointer;
-  font-size: .52rem;
-  font-weight: 760;
-  text-align: left;
-}
-
-.s5-reader-direct > footer button:hover,
-.s5-reader-direct > footer button:focus-visible {
-  color: var(--s5-brand-blue);
+.s5-reader-direct__empty {
+  margin: .8rem 0;
+  color: var(--s5-muted);
+  font-size: .54rem;
+  line-height: 1.45;
 }
 
 @media (min-width: 1320px) {
@@ -213,7 +208,7 @@
     bottom: 0;
     left: 0;
     z-index: 1000;
-    width: min(340px, 90vw);
+    width: min(380px, 92vw);
     max-height: none;
     padding: 0 1rem .8rem;
     border: 0;
