@@ -1,4 +1,4 @@
-/* Global library for direct navigation between every series and technical article. */
+/* Collapsible global library for direct navigation between every series and technical article. */
 
 .s5-reader-direct-overlay,
 .s5-reader-direct-toggle {
@@ -37,7 +37,7 @@
 
 .s5-reader-direct__header span,
 .s5-reader-direct__search > span,
-.s5-reader-direct__collection header > span {
+.s5-reader-direct__collection-copy > small {
   color: var(--s5-muted);
   font-size: .46rem;
   font-weight: 800;
@@ -100,25 +100,81 @@
   display: none !important;
 }
 
-.s5-reader-direct__collection > header {
-  display: grid;
-  gap: .12rem;
-  padding: .72rem 0 .5rem;
+.s5-reader-direct__collection {
+  margin: 0;
+  border: 0;
   border-top: 1px solid var(--s5-line-strong);
 }
 
-.s5-reader-direct__collection:first-child > header {
+.s5-reader-direct__collection:first-child {
   border-top: 0;
 }
 
-.s5-reader-direct__collection > header strong {
-  font-size: .68rem;
-  line-height: 1.18;
+.s5-reader-direct__collection > summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: .42rem;
+  align-items: center;
+  min-width: 0;
+  padding: .62rem .1rem;
+  color: var(--s5-text);
+  cursor: pointer;
+  list-style: none;
 }
 
-.s5-reader-direct__collection > header small {
+.s5-reader-direct__collection > summary::-webkit-details-marker {
+  display: none;
+}
+
+.s5-reader-direct__collection > summary::after {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
   color: var(--s5-muted);
-  font-size: .47rem;
+  content: '+';
+  font-size: .72rem;
+  font-weight: 650;
+  line-height: 1;
+}
+
+.s5-reader-direct__collection[open] > summary::after {
+  content: '−';
+}
+
+.s5-reader-direct__collection > summary:hover,
+.s5-reader-direct__collection > summary:focus-visible {
+  background: color-mix(in srgb, var(--s5-text) 4%, transparent);
+}
+
+.s5-reader-direct__collection > summary:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--s5-brand-blue) 28%, transparent);
+  outline-offset: -2px;
+}
+
+.s5-reader-direct__collection[data-current='true'] > summary {
+  box-shadow: inset 3px 0 0 var(--s5-brand-blue);
+  background: color-mix(in srgb, var(--s5-brand-blue) 6%, transparent);
+}
+
+.s5-reader-direct__collection-copy {
+  display: grid;
+  gap: .1rem;
+  min-width: 0;
+}
+
+.s5-reader-direct__collection-copy > strong {
+  overflow: hidden;
+  font-size: .63rem;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.s5-reader-direct__collection-meta {
+  color: var(--s5-muted);
+  font-size: .43rem;
+  white-space: nowrap;
 }
 
 .s5-reader-direct__collection nav {
