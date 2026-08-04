@@ -1,6 +1,6 @@
 ---
 title: Agentes reactivos y proactivos en voz
-description: "Cómo desacoplar conversación, ejecución asíncrona y entrega de resultados en un agente de voz sin bloquear el turno, interrumpir al usuario ni duplicar mensajes."
+description: "Cómo separar la conversación, las tools asíncronas y la entrega de resultados para que un agente de voz no bloquee el turno, interrumpa mal o repita mensajes."
 date: 2026-08-04
 date_modified: 2026-08-04
 keywords: "agentes de voz, agente reactivo, agente proactivo, tool calls asíncronas, barge-in, full duplex, runtime conversacional, Twilio Media Streams, Pipecat"
@@ -16,92 +16,84 @@ tags:
 
 # Agentes reactivos y proactivos en voz
 
-> **Tesis:** en voz, que una operación haya terminado no significa que el sistema tenga permiso para hablar.  
-> **Alcance:** conversación telefónica o WebRTC, tool calls duraderas, interrupciones, playback y entrega diferida.  
-> **Objetivo:** responder ahora, ejecutar fuera del turno y devolver un único cierre cuando sea conversacionalmente seguro.
+> **Idea:** que una operación haya terminado no significa que el agente pueda hablar en ese momento.  
+> **Alcance:** telefonía o WebRTC, tools que tardan, interrupciones, playback y resultados que vuelven más tarde.  
+> **Objetivo:** aceptar la petición rápido, ejecutar fuera del turno y entregar un único cierre cuando encaje en la conversación.
 
-El patrón reactivo-proactivo parece sencillo en texto. El usuario pide una operación, el agente acusa recibo sin bloquear el chat, la tool corre en segundo plano y el sistema vuelve cuando el resultado existe. En voz, ese mismo contrato se vuelve bastante más exigente porque el canal no es una secuencia limpia de mensajes: el usuario puede seguir hablando, el modelo puede estar generando, el sintetizador puede tener audio en cola y el proveedor telefónico puede continuar reproduciendo audio que el runtime ya considera cancelado.
+En texto, el patrón reactivo-proactivo parece bastante limpio. El usuario pide algo, el agente confirma que lo está gestionando, la tool trabaja en segundo plano y el resultado aparece cuando está listo.
 
-Por eso, trasladar el patrón a voz no consiste en añadir un callback que diga *“la tool terminó”*. Consiste en coordinar cuatro relojes distintos:
+En voz se complica. El usuario puede seguir hablando mientras la operación continúa. El modelo puede estar generando otra respuesta. El TTS puede tener audio preparado y el proveedor telefónico puede seguir reproduciendo un fragmento que el runtime ya intentó cancelar.
 
-1. la actividad acústica del usuario;
-2. la generación del modelo;
-3. el audio efectivamente reproducido;
-4. las operaciones duraderas que siguen vivas fuera del turno.
+Por eso no basta con añadir un callback que diga *“la tool ha terminado”*. Hay que coordinar cuatro relojes:
 
-La idea central de este report es separar esos relojes y sus estados. El agente puede ser reactivo en la aceptación, asíncrono en la ejecución y proactivo en la entrega, pero solo una **superficie de interacción** debe poseer el canal de voz y decidir cuándo puede volver a hablar.
+1. La actividad acústica del usuario
+2. La respuesta que está generando el agente
+3. El audio que de verdad ha llegado a reproducirse
+4. Las operaciones que siguen vivas fuera del turno
+
+El patrón funciona cuando esos relojes se mantienen separados. La aceptación puede ser reactiva, la ejecución puede ser asíncrona y la entrega puede ser proactiva. Aun así, solo un componente debe controlar la voz y decidir cuándo vuelve a hablar el agente.
 
 {{ include_html("snippets/articulos-tecnicos/voice-reactive-proactive-panorama.html") }}
 
-## Reactivo y proactivo describen la entrega, no el modelo
+## Reactivo y proactivo hablan de la entrega
 
-Un agente reactivo responde a un estímulo del usuario. En el caso más simple, escucha una petición, decide si necesita una tool y devuelve una aceptación inmediata:
+Un agente reactivo responde a una petición del usuario. Puede escucharla, decidir que necesita una tool y devolver una aceptación corta:
 
 > “Lo reviso ahora. Puedes seguir contándome el resto.”
 
-Ese mensaje no confirma el resultado. Confirma que el sistema ha entendido una intención y ha aceptado trabajo. La operación queda registrada con una identidad propia y sale del turno visible.
+Ese mensaje no confirma el resultado. Solo confirma que el sistema ha entendido la petición y ha aceptado el trabajo.
 
-Un agente proactivo vuelve sin esperar una nueva pregunta cuando existe una actualización relevante. En texto, esto suele ser un nuevo mensaje. En voz, la proactividad es una política de entrega mucho más delicada: antes de hablar hay que comprobar si el usuario está hablando, si el sistema ya está reproduciendo otra respuesta, si el resultado sigue siendo pertinente y si varios resultados deberían agruparse.
+Un agente proactivo vuelve cuando tiene una actualización relevante, aunque el usuario no haya preguntado otra vez. En texto, eso suele ser un nuevo mensaje. En voz hay una decisión adicional: **cuándo decirlo**.
 
-Por tanto, el patrón completo no es:
+Antes de hablar, el runtime tiene que saber si el usuario sigue hablando, si hay otra respuesta en reproducción, si el resultado aún tiene sentido y si conviene esperar a que terminen otras operaciones del mismo lote.
 
-```text
-tool completada → hablar
-```
-
-sino:
+El flujo real se parece más a esto:
 
 ```text
 petición aceptada
 → operación registrada
-→ ejecución duradera
+→ ejecución en segundo plano
 → resultado disponible
 → política de entrega
-→ ventana conversacional segura
-→ audio reproducido o resincronización en el siguiente turno
+→ ventana segura
+→ audio reproducido o resultado unido al siguiente turno
 ```
 
-La operación puede terminar en milisegundos o varios segundos. La conversación puede continuar durante ese intervalo. El runtime debe conservar ambas líneas temporales sin fingir que son una sola.
+La operación y la conversación avanzan a ritmos distintos. El runtime tiene que conservar ambas líneas temporales sin mezclarlas.
 
-## Cuatro relojes que no se deben colapsar
+## Los cuatro relojes de una llamada
 
-En una llamada real conviven al menos cuatro máquinas de estado.
+En una llamada real conviven varias máquinas de estado. Colapsarlas en un único `is_busy` suele ser el principio de los problemas.
 
-### 1. Estado del canal del usuario
-
-Describe lo que el sistema cree que está haciendo la persona:
+### 1. Qué está haciendo el usuario
 
 ```text
 quiet → speech_started → speaking → speech_stopped → quiet
 ```
 
-No es suficiente con un booleano `is_user_speaking`. La detección tiene incertidumbre, necesita ventanas de silencio y puede corregirse después. Un VAD agresivo reduce la latencia aparente, pero también corta turnos; uno conservador protege el contenido, pero añade espera.
+Un booleano `is_user_speaking` se queda corto. El VAD trabaja con incertidumbre, necesita ventanas de silencio y puede corregir una decisión después.
 
-### 2. Estado de la respuesta del agente
+Un VAD agresivo responde antes, pero también puede cortar frases. Uno conservador protege mejor el turno, aunque añade espera. Esa decisión forma parte del producto, no es solo un parámetro técnico.
 
-Describe la generación lógica:
+### 2. Qué está generando el agente
 
 ```text
 planned → generating → completed
                   ↘ cancelled
 ```
 
-Una respuesta puede estar completa en el modelo y, aun así, no haber sido escuchada. También puede cancelarse tras haber producido tokens o frames parciales.
+Una respuesta puede estar terminada dentro del modelo y no haber llegado todavía al usuario. También puede cancelarse después de producir texto o audio parcial.
 
-### 3. Estado del playback
-
-Describe el audio enviado al canal:
+### 3. Qué audio se ha reproducido
 
 ```text
 queued → sent → playing → played
                     ↘ cleared
 ```
 
-Esta distinción es crítica. En Twilio Media Streams, el servidor puede enviar eventos `media`, asociar un `mark` y usar `clear` para vaciar el buffer. El `mark` permite conocer cuándo el audio correspondiente ha terminado de reproducirse; `clear` provoca la devolución de los marks pendientes y evita confundir audio enviado con audio escuchado.[^twilio-websocket]
+Esta separación es crítica. En Twilio Media Streams se pueden enviar eventos `media`, asociar un `mark` y usar `clear` para vaciar el buffer. El `mark` ayuda a seguir el audio enviado, pero un `clear` también devuelve los marks que seguían pendientes. Por eso el runtime necesita saber qué audio terminó de reproducirse y qué audio fue eliminado antes de llegar al usuario.[^twilio-websocket]
 
-### 4. Estado de la operación durable
-
-Describe trabajo que no debería depender del turno acústico:
+### 4. Qué operación sigue en marcha
 
 ```text
 accepted → running → succeeded
@@ -109,15 +101,17 @@ accepted → running → succeeded
                    ↘ cancelled_by_policy
 ```
 
-Una interrupción del usuario suele cancelar la generación y el playback, pero no necesariamente una transferencia, una búsqueda, una reserva o una consulta de backend ya aceptada. Mezclar estos ciclos produce uno de los errores más comunes en agentes de voz: utilizar el mismo `cancel` para todo.
+Una interrupción suele cancelar la respuesta y el playback. No debería cancelar automáticamente una transferencia, una reserva o una búsqueda que ya se había aceptado.
+
+Usar el mismo `cancel` para todo mezcla dos decisiones distintas. Una es acústica. La otra es de negocio.
 
 {{ include_html("snippets/articulos-tecnicos/voice-reactive-proactive-clocks.html") }}
 
-## La unidad correcta no es el turno, sino la operación
+## El turno se queda corto
 
-Los frameworks conversacionales suelen organizar el sistema alrededor de turnos. Para tools asíncronas, el turno deja de ser suficiente. Una petición puede crear varias operaciones, estas pueden terminar en órdenes distintas y su cierre puede emitirse durante otro turno.
+Los frameworks de conversación suelen organizar el estado alrededor de turnos. Para una tool asíncrona, eso no basta.
 
-El runtime necesita identidades explícitas:
+Una petición puede crear varias operaciones. Cada una puede acabar en un momento distinto y el cierre puede llegar durante otro turno. Por eso el runtime necesita identidades explícitas:
 
 ```python
 @dataclass(frozen=True)
@@ -135,19 +129,19 @@ class OperationContext:
     created_from_turn_id: str
 ```
 
-Cada identificador responde a una pregunta diferente:
+Cada identificador contesta una pregunta:
 
-- `session_id`: ¿a qué conversación pertenece?
-- `turn_id`: ¿qué intervención originó la decisión?
-- `operation_id`: ¿qué side effect o consulta concreta estamos siguiendo?
-- `batch_id`: ¿qué operaciones deberían cerrarse juntas?
-- `response_id`: ¿qué generación se puede cancelar?
-- `playback_id`: ¿qué audio fue enviado, reproducido o eliminado?
-- `intent_key`: ¿cómo evitamos repetir el mismo efecto ante retries o replays?
+- `session_id`: a qué conversación pertenece
+- `turn_id`: qué intervención originó la decisión
+- `operation_id`: qué consulta o efecto estamos siguiendo
+- `batch_id`: qué operaciones deberían cerrarse juntas
+- `response_id`: qué generación se puede cancelar
+- `playback_id`: qué audio se envió, se reprodujo o se eliminó
+- `intent_key`: cómo evitamos repetir el mismo efecto durante un retry o un replay
 
-El historial conversacional no debe actuar como base de datos de este estado. Los mensajes visibles sirven para reconstruir qué se dijo; no son una fuente fiable para saber si una operación fue aceptada, reintentada, completada o entregada.
+El historial no debería guardar todo ese estado. Sirve para reconstruir qué se dijo. No es una base fiable para saber si una operación se aceptó, se reintentó, terminó o ya se comunicó.
 
-Una separación mínima podría ser:
+Una separación mínima puede verse así:
 
 ```python
 class VoiceRuntimeState:
@@ -160,13 +154,13 @@ class VoiceRuntimeState:
     idempotency: dict[str, OperationResult]
 ```
 
-Esta estructura también permite aplicar una regla que debe ser invariante: **una operación terminada puede producir como máximo un cierre final audible**, aunque el callback llegue dos veces o el proceso se reinicie.
+Esta estructura permite fijar una regla sencilla: **una operación terminada puede producir como máximo un cierre final audible**, incluso si el callback llega dos veces o el proceso se reinicia.
 
-## La aceptación debe ser inmediata y semánticamente honesta
+## La primera respuesta acepta trabajo
 
-La primera respuesta tiene dos objetivos: confirmar que el agente ha entendido la petición y liberar la conversación. No debe hacer una promesa sobre un resultado que todavía no existe.
+La aceptación tiene dos objetivos. Debe confirmar que el agente ha entendido la petición y debe liberar la conversación.
 
-Un flujo razonable:
+No puede prometer un resultado que todavía no existe.
 
 ```python
 async def accept_tool_call(call: ToolCall, ctx: VoiceContext) -> Acceptance:
@@ -188,13 +182,13 @@ async def accept_tool_call(call: ToolCall, ctx: VoiceContext) -> Acceptance:
     )
 ```
 
-La frase de aceptación debe diseñarse como parte del contrato de producto. “Hecho” y “lo gestiono” no son equivalentes. La primera afirma un estado final; la segunda informa de una transición a trabajo en curso.
+La diferencia entre “hecho” y “lo estoy gestionando” es pequeña en palabras, pero enorme en el contrato del sistema. La primera frase afirma un estado final. La segunda cuenta que el trabajo ha empezado.
 
-En voz conviene, además, que la aceptación sea corta. Una explicación larga aumenta el tiempo durante el que el usuario no puede aportar información y eleva la probabilidad de barge-in. La intención no es ocultar el trabajo, sino mantener el canal útil.
+En voz, además, interesa que la aceptación sea corta. Cuanto más se alarga, más tiempo ocupa el canal y más probable es que el usuario interrumpa.
 
-## La proactividad necesita un `ActivityGate`
+## El resultado pasa por un `ActivityGate`
 
-Cuando llega un resultado, el componente que ejecutó la tool no debería hablar directamente. Debe publicar un evento durable y dejar que una política de entrega decida qué hacer.
+La tool no debería llamar directamente a `speak()` cuando termina. Primero publica un evento y después una política de entrega decide qué hacer.
 
 ```python
 @dataclass
@@ -208,7 +202,7 @@ class DeliveryEnvelope:
     source_operation_ids: tuple[str, ...]
 ```
 
-El `ActivityGate` evalúa el estado del canal:
+El `ActivityGate` mira el estado real de la conversación:
 
 ```python
 async def choose_delivery(
@@ -233,30 +227,34 @@ async def choose_delivery(
     return DeliverNow(interrupt=False)
 ```
 
-Las decisiones importantes son explícitas:
+A partir de ahí puede:
 
-- **entregar ahora**, si hay silencio y el resultado sigue siendo relevante;
-- **esperar una quiet window**, si el usuario está hablando;
-- **agrupar**, si quedan operaciones del mismo lote;
-- **adjuntar al siguiente turno**, si el usuario ha retomado la conversación;
-- **interrumpir**, únicamente para una prioridad que lo justifique;
-- **suprimir**, si el resultado ya fue sustituido o dejó de aportar valor.
+- Entregar el resultado ahora si hay silencio y sigue siendo relevante
+- Esperar una ventana de calma si el usuario está hablando
+- Agruparlo con otras operaciones del mismo lote
+- Incorporarlo a la siguiente respuesta
+- Interrumpir solo cuando la prioridad lo justifique
+- Suprimirlo si ya quedó obsoleto
 
-La quiet window no debe ser un temporizador global fijo. Puede depender del canal, el idioma, el dominio y el tipo de actualización. Interrumpir para decir que una búsqueda acabó suele ser peor que esperar. Interrumpir para advertir que un pago va a ejecutarse con datos incorrectos puede ser lo apropiado.
+La ventana de silencio no tiene por qué ser igual en todos los casos. Puede cambiar por canal, idioma, dominio y tipo de actualización.
 
-## Barge-in: cancelar la voz no equivale a cancelar el trabajo
+Interrumpir para decir que una búsqueda terminó suele ser peor que esperar. Interrumpir para avisar de que un pago va a salir con datos incorrectos puede estar justificado.
 
-Cuando el usuario empieza a hablar durante la respuesta del agente, el sistema debe detener rápidamente el audio. Pero la cancelación correcta es selectiva.
+## Barge-in: se cancela la voz, no todo el sistema
 
-Un barge-in suele implicar:
+Cuando el usuario empieza a hablar, el agente debe dejar de sonar rápido. La cancelación correcta es selectiva.
 
-1. cancelar la generación activa;
-2. detener TTS o la salida S2S;
-3. vaciar el buffer de playback;
-4. truncar el elemento de conversación al audio realmente escuchado;
-5. mantener vivas las operaciones duraderas salvo que la nueva intención las invalide.
+Un barge-in suele requerir:
 
-El SDK de voz de OpenAI expone esta idea al reaccionar a `input_audio_buffer.speech_started`: la aplicación puede cancelar la salida y truncar el audio del asistente para que el estado conversacional refleje solo lo que la persona llegó a oír.[^openai-voice-agents] En telefonía, `clear` y `mark` permiten aplicar el mismo principio sobre el buffer de Twilio.[^twilio-websocket]
+1. Cancelar la generación activa
+2. Detener el TTS o la salida S2S
+3. Vaciar el buffer de playback
+4. Ajustar el historial al audio que sí llegó a escucharse
+5. Mantener las operaciones en marcha salvo que la nueva intención las invalide
+
+El SDK de voz de OpenAI expone este patrón al reaccionar a `input_audio_buffer.speech_started`. La aplicación puede cancelar la salida y truncar el audio del asistente para que el estado refleje solo lo que la persona oyó.[^openai-voice-agents]
+
+En telefonía, `clear` y `mark` permiten aplicar el mismo principio sobre el buffer de Twilio.[^twilio-websocket]
 
 ```python
 async def on_barge_in(event: SpeechStarted, session: VoiceSession) -> None:
@@ -271,25 +269,27 @@ async def on_barge_in(event: SpeechStarted, session: VoiceSession) -> None:
         )
         await playback.clear(session.active_playback_id)
 
-    # Deliberadamente no se cancelan todas las operaciones.
+    # Las operaciones siguen vivas hasta que la política decida lo contrario.
     await operation_policy.reconcile_with_new_turn(session.session_id)
 ```
 
-La última línea es la relevante. El sistema puede cancelar una operación si el usuario dice “no hagas la transferencia”, pero no porque haya empezado a formular otra pregunta. La cancelación de negocio debe depender de intención y política, no de un evento acústico.
+El usuario puede decir “no hagas la transferencia” y cancelar una operación. Empezar una nueva pregunta no debería tener el mismo efecto.
 
 {{ include_html("snippets/articulos-tecnicos/voice-reactive-proactive-barge-in.html") }}
 
-## Tools paralelas: esperar al lote, no a cada callback
+## Varias tools deberían producir un solo cierre
 
-Un turno puede lanzar varias tools: comprobar disponibilidad, recuperar datos de cliente y calcular una alternativa. Si cada callback provoca una respuesta, el agente genera una sucesión de interrupciones:
+Un mismo turno puede comprobar disponibilidad, recuperar los datos del cliente y calcular una alternativa.
+
+Si cada callback habla por su cuenta, la llamada se llena de interrupciones:
 
 > “Ya tengo la disponibilidad.”  
 > “También he recuperado tus datos.”  
 > “Y ya está calculada la alternativa.”
 
-La unidad de entrega debería ser el lote semántico. Pipecat incorpora dos primitivas alineadas con esta idea. Una function call puede configurarse para sobrevivir a una interrupción y reinyectar el resultado cuando termina; además, las llamadas del mismo grupo comparten `group_id`, de forma que el LLM se reactiva una vez cuando completa la última llamada del grupo.[^pipecat-functions][^pipecat-frames]
+Es mejor tratar esas operaciones como un lote semántico.
 
-Un coordinador equivalente puede mantener:
+Pipecat tiene primitivas alineadas con esta idea. Una function call puede sobrevivir a una interrupción y devolver el resultado cuando termina. Además, las llamadas del mismo grupo comparten `group_id`, así que el LLM puede reactivarse una sola vez cuando acaba la última.[^pipecat-functions][^pipecat-frames]
 
 ```python
 @dataclass
@@ -304,7 +304,7 @@ class BatchState:
         return self.operation_ids == self.completed_ids
 ```
 
-Al recibir un callback:
+Al completar una operación:
 
 ```python
 async def on_operation_finished(result: OperationResult) -> None:
@@ -325,11 +325,13 @@ async def on_operation_finished(result: OperationResult) -> None:
     await delivery_bus.publish(envelope)
 ```
 
-`record_result_once` y `create_once` son indispensables. En producción hay retries, timeouts ambiguos y entregas *at least once*. La conversación no puede depender de que cada evento llegue exactamente una vez.
+`record_result_once` y `create_once` son importantes porque producción incluye retries, timeouts ambiguos y entregas *at least once*. El diseño no puede depender de que cada evento llegue exactamente una vez.
 
-## Resincronización en el siguiente turno
+## Cuando no hay hueco, el resultado espera
 
-No siempre aparece una ventana segura para un follow-up proactivo. La llamada puede terminar, el usuario puede continuar hablando o el resultado puede llegar cuando el agente ya está respondiendo a otra intención. En esos casos, el resultado debe sobrevivir como una entrega pendiente.
+A veces no aparece una ventana segura para hacer un follow-up. El usuario puede seguir hablando, el agente puede estar respondiendo a otra intención o la llamada puede terminar antes de que llegue el resultado.
+
+En esos casos, el cierre queda guardado como una entrega pendiente.
 
 En el siguiente turno, el runtime puede inyectar un contexto efímero:
 
@@ -337,96 +339,100 @@ En el siguiente turno, el runtime puede inyectar un contexto efímero:
 Actualización pendiente de una operación anterior:
 - La comprobación de disponibilidad terminó correctamente.
 - Todavía no se ha comunicado al usuario.
-- No confundas esta actualización con la nueva petición.
+- Esta actualización no sustituye la nueva petición.
 ```
 
-El modelo puede combinarla con la respuesta actual:
+El modelo puede unir ambos hilos de forma natural:
 
-> “Antes de ir con eso: ya tengo la disponibilidad que me pediste. Hay hueco el jueves. Sobre tu nueva pregunta…”
+> “Antes de ir con eso, ya tengo la disponibilidad que me pediste. Hay hueco el jueves. Sobre tu nueva pregunta…”
 
-Tras una respuesta confirmada como reproducida, el `delivery_id` pasa a `spoken`. Si el usuario interrumpe antes de escuchar el resultado, no debe marcarse como entregado y puede volver a intentarse de forma condensada.
+Después de confirmar que el audio se reprodujo, el `delivery_id` pasa a `spoken`. Si el usuario interrumpe antes de oír el resultado, no se marca como entregado y puede volver a intentarse de forma más corta.
 
-Esta distinción evita dos fallos opuestos:
+Así evitamos dos errores opuestos:
 
-- repetir cierres que sí se escucharon;
-- perder cierres porque el sistema confundió audio generado con audio reproducido.
+- Repetir un cierre que sí se escuchó
+- Perder un cierre porque el sistema confundió audio generado con audio reproducido
 
-## La superficie de voz debe ser la única dueña del canal
+## Un único componente controla la voz
 
-La arquitectura más estable separa tres planos:
+La arquitectura queda más clara cuando separa tres planos.
 
 ### Interaction Surface
 
-Escucha, detecta turnos, administra barge-in, genera backchannels, reproduce audio y aplica el `ActivityGate`. Es el único componente autorizado para hablar.
+Escucha, detecta turnos, gestiona barge-in, produce backchannels, reproduce audio y aplica el `ActivityGate`. Es el único componente autorizado para hablar.
 
 ### Cognitive Execution Plane
 
-Ejecuta razonamiento pesado, RAG, tools, retries, compensaciones e idempotencia. Puede tardar más y continuar aunque el canal cambie de turno.
+Se encarga del razonamiento pesado, RAG, tools, retries, compensaciones e idempotencia. Puede seguir trabajando aunque la conversación haya cambiado de turno.
 
 ### Durable Coordination
 
-Mantiene eventos, locks, operaciones, lotes y entregas pendientes. Une ambos planos sin convertir el historial de audio o texto en estado operacional.
+Guarda eventos, locks, operaciones, lotes y entregas pendientes. Conecta los otros dos planos sin convertir el transcript en estado operativo.
 
 {{ include_html("snippets/articulos-tecnicos/voice-reactive-proactive-runtime.html") }}
 
-Esta separación ya aparece en sistemas full-duplex recientes. GPT-Live, presentado por OpenAI el 8 de julio de 2026, mantiene la conversación en una superficie de voz mientras delega búsqueda, razonamiento más profundo y trabajo complejo a un modelo frontier situado detrás.[^gpt-live] La idea no elimina la orquestación; la convierte en una responsabilidad explícita.
+Esta división también aparece en sistemas full-duplex recientes. GPT-Live, presentado por OpenAI el 8 de julio de 2026, mantiene la conversación en una superficie de voz mientras delega búsqueda, razonamiento más profundo y trabajo complejo a un modelo frontier.[^gpt-live]
 
-## Invariantes que el runtime debe hacer cumplir
+La orquestación no desaparece. Simplemente deja de estar escondida.
 
-Las siguientes reglas son más útiles que una colección de prompts:
+## Reglas que el runtime debe cumplir
 
-1. **No afirmar éxito antes del estado terminal.**
-2. **Cada side effect se acepta o recupera con una clave de idempotencia.**
-3. **Cada lote produce como máximo un cierre final.**
-4. **Ninguna tool habla directamente en el canal.**
-5. **Una interrupción acústica no cancela por defecto una operación durable.**
-6. **El historial conserva solo el audio que el usuario pudo escuchar.**
-7. **Un resultado generado no cuenta como entregado hasta confirmar playback o resincronización.**
-8. **Los resultados pendientes sobreviven a cambios de turno y reinicios.**
-9. **Las actualizaciones obsoletas se suprimen o sustituyen, no se reproducen tarde.**
-10. **La prioridad de una entrega es política de negocio, no decisión improvisada del LLM.**
+Estas reglas aportan más fiabilidad que añadir instrucciones al prompt:
 
-Estas invariantes definen qué significa que el sistema sea correcto. La naturalidad de la voz es importante, pero no compensa una transferencia duplicada, una confirmación prematura o un cierre reproducido fuera de contexto.
+1. No confirmar éxito antes de llegar a un estado terminal
+2. Aceptar o recuperar cada efecto con una clave de idempotencia
+3. Producir como máximo un cierre final por lote
+4. Impedir que una tool hable directamente en el canal
+5. Mantener una operación viva ante una interrupción acústica, salvo decisión explícita
+6. Guardar en el historial solo el audio que el usuario pudo escuchar
+7. Marcar un resultado como entregado solo después del playback o de una resincronización confirmada
+8. Conservar los resultados pendientes durante cambios de turno y reinicios
+9. Suprimir o sustituir las actualizaciones obsoletas
+10. Tratar la prioridad como política de negocio y no como una improvisación del LLM
 
-## Observabilidad: medir el sistema que escucha y el que opera
+Una voz natural ayuda. No compensa una transferencia duplicada, una confirmación prematura o un resultado reproducido fuera de contexto.
 
-Un único valor de “latencia” no describe este patrón. Conviene instrumentar, como mínimo:
+## Qué medir
+
+Un único número de latencia no describe este sistema. Como mínimo, conviene seguir:
 
 | Métrica | Qué revela |
 |---|---|
-| `speech_stop_to_acceptance_audio_ms` | Tiempo desde fin de turno hasta primera aceptación audible |
+| `speech_stop_to_acceptance_audio_ms` | Tiempo desde el final del turno hasta la primera aceptación audible |
 | `barge_in_to_playback_stop_ms` | Cuánto tarda el agente en dejar de sonar |
 | `operation_accept_to_start_ms` | Espera interna antes de ejecutar |
 | `operation_duration_ms` | Tiempo real de la dependencia externa |
 | `operation_complete_to_delivery_ready_ms` | Coste de agregación y resumen |
-| `delivery_ready_to_first_audio_ms` | Espera causada por el `ActivityGate` |
+| `delivery_ready_to_first_audio_ms` | Espera introducida por el `ActivityGate` |
 | `generated_to_played_gap_ms` | Buffer y transporte de salida |
-| `duplicate_side_effect_rate` | Fallo de idempotencia |
-| `duplicate_delivery_rate` | Cierre audible repetido |
-| `stale_delivery_rate` | Resultados pronunciados cuando ya no eran pertinentes |
-| `next_turn_resync_rate` | Cuántos cierres no encontraron ventana proactiva |
-| `cancelled_response_unheard_ms` | Audio generado pero correctamente excluido del contexto |
+| `duplicate_side_effect_rate` | Fallos de idempotencia |
+| `duplicate_delivery_rate` | Cierres repetidos |
+| `stale_delivery_rate` | Resultados pronunciados demasiado tarde |
+| `next_turn_resync_rate` | Cierres que no encontraron una ventana proactiva |
+| `cancelled_response_unheard_ms` | Audio generado que se excluyó correctamente del contexto |
 
-Cada traza debería enlazar `session_id`, `turn_id`, `operation_id`, `batch_id`, `response_id`, `playback_id` y `delivery_id`. Sin esa correlación, un incidente se reduce a “el bot interrumpió” cuando en realidad puede ser una quiet window demasiado corta, un mark tardío o un callback duplicado.
+Cada traza debería enlazar `session_id`, `turn_id`, `operation_id`, `batch_id`, `response_id`, `playback_id` y `delivery_id`.
+
+Sin esa correlación, un incidente se resume como “el bot interrumpió”. Con ella se puede saber si falló la ventana de silencio, llegó tarde un `mark` o se procesó dos veces el mismo callback.
 
 ## Qué probar antes de producción
 
-El test suite debe reproducir conflictos temporales, no solo respuestas ideales:
+El test suite tiene que reproducir conflictos temporales, no solo conversaciones ideales:
 
-- la tool termina mientras el usuario sigue hablando;
-- la tool termina durante playback;
-- dos tools del mismo lote completan en orden inverso;
-- un callback se entrega dos veces;
-- el usuario interrumpe antes de oír el cierre;
-- el usuario cancela explícitamente una operación;
-- el canal se desconecta con entregas pendientes;
-- el proceso reinicia después del side effect y antes del follow-up;
-- una actualización queda obsoleta por una nueva intención;
-- un resultado urgente interrumpe y uno normal espera;
-- el TTS genera audio que Twilio todavía no ha reproducido;
-- el VAD dispara un falso `speech_started`.
+- La tool termina mientras el usuario sigue hablando
+- La tool termina durante playback
+- Dos tools del mismo lote acaban en orden inverso
+- Un callback llega dos veces
+- El usuario interrumpe antes de oír el cierre
+- El usuario cancela de forma explícita una operación
+- El canal se desconecta con entregas pendientes
+- El proceso reinicia después del efecto y antes del follow-up
+- Una nueva intención deja obsoleta una actualización anterior
+- Un resultado urgente interrumpe y uno normal espera
+- El TTS genera audio que Twilio todavía no ha reproducido
+- El VAD dispara un falso `speech_started`
 
-Un test útil no pregunta únicamente qué texto generó el modelo. Comprueba estados y efectos:
+Un test útil no comprueba solo el texto. También comprueba el estado y los efectos:
 
 ```python
 assert operation.side_effect_count == 1
@@ -438,13 +444,13 @@ assert durable_operation.was_not_cancelled_by_barge_in
 
 ## El patrón completo
 
-El agente reactivo-proactivo en voz no es un bot que “avisa luego”. Es un runtime que desacopla aceptación, ejecución y entrega sin perder la continuidad acústica.
+Un agente reactivo-proactivo en voz no es un bot que simplemente “avisa luego”.
 
-La aceptación reactiva mantiene la conversación fluida. El plano asíncrono permite ejecutar trabajo real sin bloquear el canal. La entrega proactiva devuelve el resultado cuando existe una oportunidad segura. Y el estado durable garantiza que una interrupción, un retry o un cambio de turno no conviertan ese comportamiento en mensajes duplicados o side effects inconsistentes.
+La aceptación reactiva mantiene la conversación en movimiento. El plano asíncrono ejecuta trabajo real sin bloquear el canal. La entrega proactiva devuelve el resultado cuando encuentra un hueco seguro. El estado persistente evita que una interrupción, un retry o un cambio de turno acaben en mensajes duplicados o efectos inconsistentes.
 
-La regla que resume todo el diseño es deliberadamente simple:
+La regla que resume el diseño es esta:
 
-> **La finalización técnica crea una entrega pendiente; solo la política conversacional concede permiso para hablar.**
+> **La finalización técnica crea una entrega pendiente. La conversación decide cuándo puede escucharse.**
 
 ## Fuentes
 
