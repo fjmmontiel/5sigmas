@@ -1,6 +1,6 @@
 ---
 title: Tres arquitecturas para agentes de voz
-description: "Comparación técnica entre full cascade, half cascade y speech-to-speech: latencia, prosodia, tool calling, interrupciones, control y una arquitectura híbrida para el siguiente salto."
+description: "Comparación práctica entre full cascade, half cascade y speech-to-speech, con foco en latencia, prosodia, tools, interrupciones y control."
 date: 2026-08-04
 date_modified: 2026-08-04
 keywords: "voice agents, full cascade, half cascade, speech to speech, audio in text out, realtime API, prosodia, streaming TTS, full duplex, arquitectura de voz"
@@ -17,27 +17,27 @@ tags:
 # Tres arquitecturas para agentes de voz
 
 > **Comparación:** full cascade, half cascade y speech-to-speech.  
-> **Criterio:** no solo tiempo hasta el primer audio, sino control, prosodia, interrupciones, tools y complejidad operacional.  
-> **Hot take:** una superficie S2S rápida debería conversar; un plano cognitivo más pesado debería razonar y ejecutar.
+> **Criterio:** latencia, prosodia, interrupciones, tools, control y coste de operación.  
+> **Hot take:** una superficie S2S rápida debería llevar la conversación. Un modelo más pesado debería encargarse del razonamiento y las acciones.
 
-La arquitectura de un agente de voz suele reducirse a una pregunta: ¿usamos STT, un LLM y TTS, o conectamos directamente un modelo speech-to-speech? Esa formulación mezcla decisiones distintas y hace que muchas comparaciones sean poco útiles.
+Cuando se habla de arquitecturas de voz, casi siempre aparece la misma pregunta: ¿montamos STT, LLM y TTS o usamos directamente un modelo speech-to-speech?
 
-Conviene separar cuatro ejes:
+La pregunta es útil, pero mezcla varias decisiones. Una arquitectura puede consumir audio y seguir funcionando por turnos. Un full cascade puede tener barge-in y streaming. Un modelo audio-native puede entender la voz y devolver texto para que otro sistema la sintetice.
 
-1. **Arquitectura de modalidad:** full cascade, half cascade o speech-to-speech.
-2. **Régimen de interacción:** turn-based o full-duplex.
-3. **Iniciativa:** reactiva o proactiva.
-4. **Orquestación:** monolítica o dividida entre una superficie rápida y un plano de ejecución.
+Para comparar bien las opciones, separo cuatro ejes:
 
-Un sistema S2S puede seguir siendo estrictamente por turnos. Un cascade puede soportar barge-in y cierto solapamiento. Un modelo audio-native puede producir texto y delegar la voz a un TTS. Y un agente full-duplex no tiene por qué ejecutar las tools dentro del mismo modelo que mantiene el ritmo de la conversación.
+1. **Modalidad:** full cascade, half cascade o speech-to-speech
+2. **Interacción:** por turnos o full-duplex
+3. **Iniciativa:** reactiva o proactiva
+4. **Orquestación:** un único modelo o una superficie rápida conectada a un plano de ejecución
 
-Este report compara las tres arquitecturas como **contratos entre componentes**, no como una clasificación de proveedores.
+Aquí no comparo proveedores. Comparo los contratos que aparecen entre componentes y los problemas que cada arquitectura deja en manos del runtime.
 
 {{ include_html("snippets/articulos-tecnicos/voice-architectures-comparison.html") }}
 
 ## 1. Full cascade: audio → STT → LLM → TTS → audio
 
-La arquitectura full cascade separa cada responsabilidad:
+Full cascade separa cada responsabilidad:
 
 ```text
 audio del usuario
@@ -51,25 +51,27 @@ audio del usuario
 → audio al usuario
 ```
 
-Es el diseño más conocido porque cada pieza puede sustituirse y observarse por separado. Permite elegir el STT que mejor funciona en un idioma, un LLM especializado, un TTS con la voz de marca y una capa de orquestación propia.
+Es la arquitectura más conocida porque cada pieza se puede observar, medir y sustituir de forma independiente.
 
-### Dónde sigue siendo fuerte
+Puedes elegir un STT que funcione bien en un mercado concreto, un LLM especializado, un TTS con la voz de marca y una capa propia para controlar tools, estado e interrupciones.
 
-**Modularidad.** Cada proveedor tiene un contrato explícito. Cambiar el TTS no obliga a cambiar el modelo de razonamiento.
+### Por qué sigue siendo una opción fuerte
 
-**Auditabilidad.** La transcripción, las tool calls y el texto final quedan disponibles como artefactos separados. En dominios regulados, esa separación facilita inspección y políticas.
+**Modularidad.** Cambiar el TTS no obliga a cambiar el modelo que razona.
 
-**Control de voz.** Un TTS dedicado suele ofrecer diccionarios, pronunciaciones, estilos y voces consistentes. La identidad sonora no depende de las voces disponibles en un modelo S2S.
+**Auditabilidad.** La transcripción, las tool calls y el texto final quedan como artefactos separados. Eso simplifica la inspección y muchas políticas de compliance.
 
-**Portabilidad.** La arquitectura puede ejecutarse sobre telefonía, navegador o aplicaciones nativas con adaptadores relativamente claros.
+**Control de voz.** Un TTS dedicado suele ofrecer diccionarios, pronunciaciones, estilos y voces más estables.
 
-**Optimización local.** Cada tramo puede cachearse, cuantizarse, desplegarse cerca del usuario o sustituirse por un modelo especializado.
+**Portabilidad.** El mismo diseño puede adaptarse a telefonía, navegador y aplicaciones nativas con contratos bastante claros.
 
-El problema no es que full cascade sea una mala arquitectura. El problema es que, cuando la conversación debe sentirse humana, deja de ser una tubería lineal y se convierte en una máquina de estados distribuida.
+**Optimización por tramo.** Cada componente puede desplegarse cerca del usuario, cachearse, cuantizarse o sustituirse por un modelo más pequeño.
 
-### La latencia no se suma una sola vez
+Full cascade no es una mala arquitectura. El problema aparece cuando la conversación tiene que sentirse humana. En ese momento deja de ser una tubería lineal y se convierte en una máquina de estados repartida entre varios servicios.
 
-Una medida simplificada es:
+### La latencia no es solo una suma
+
+Una primera aproximación sería:
 
 ```text
 T_first_audio =
@@ -81,38 +83,38 @@ T_first_audio =
   + T_playback_buffer
 ```
 
-Pero el coste real no se limita a esa suma. En streaming, cada componente toma decisiones con información provisional:
+Pero cada componente trabaja con información provisional.
 
-- el VAD decide si el turno terminó;
-- el STT emite parciales que puede corregir;
-- el LLM puede empezar sobre una hipótesis incompleta;
-- el TTS sintetiza texto que todavía puede cambiar;
-- el proveedor telefónico acumula audio que aún no se ha reproducido.
+- El VAD decide si el usuario terminó
+- El STT emite parciales que todavía pueden cambiar
+- El LLM puede empezar con una hipótesis incompleta
+- El TTS sintetiza texto que quizá haya que corregir
+- El proveedor telefónico guarda audio que aún no se ha reproducido
 
-Un error temprano obliga a cancelar o rehacer trabajo posterior. El sistema puede tener excelente latencia en cada servicio y, aun así, sonar lento por buffering, políticas conservadoras o reintentos de coordinación.
+Un error temprano obliga a cancelar o rehacer trabajo posterior. Puedes tener servicios rápidos y, aun así, una conversación lenta por buffering, políticas conservadoras o mala coordinación.
 
-### La frontera textual pierde señal
+### El texto pierde parte de la señal
 
-La transcripción conserva principalmente contenido léxico. Puede añadir puntuación o etiquetas, pero no representa completamente:
+La transcripción conserva muy bien el contenido léxico. No conserva por completo:
 
-- velocidad y cambios de ritmo;
-- energía;
-- vacilaciones;
-- sarcasmo;
-- emoción;
-- alargamientos;
-- énfasis;
-- pronunciación no estándar;
-- ruido y distancia del micrófono.
+- Velocidad y cambios de ritmo
+- Energía
+- Vacilaciones
+- Sarcasmo
+- Emoción
+- Alargamientos
+- Énfasis
+- Pronunciaciones poco habituales
+- Ruido y distancia del micrófono
 
-OpenAI describió precisamente esta pérdida al presentar Realtime API: en una cadena ASR → modelo de texto → TTS se pierde información como emoción, énfasis y acentos, además de introducir latencia.[^openai-realtime-intro]
+OpenAI destacó esta pérdida al presentar Realtime API. En una cadena ASR → modelo de texto → TTS desaparecen señales como emoción, énfasis y acentos, y además se añade latencia.[^openai-realtime-intro]
 
-La pérdida afecta a dos partes diferentes:
+La pérdida ocurre en dos direcciones:
 
-1. **comprensión:** el LLM recibe menos evidencia sobre intención y estado del usuario;
-2. **expresión:** el TTS recibe texto, pero no necesariamente la intención prosódica con la que debería decirlo.
+1. **Comprensión.** El LLM recibe menos información sobre la intención y el estado del usuario
+2. **Expresión.** El TTS recibe texto, pero no siempre sabe cómo debería decirlo
 
-### El estado se distribuye entre demasiados owners
+### Demasiados componentes comparten el estado
 
 En full cascade hay que reconciliar:
 
@@ -126,19 +128,13 @@ playback_state
 conversation_state
 ```
 
-Un barge-in puede ocurrir cuando:
+Un barge-in puede llegar mientras el STT corrige el turno anterior, el LLM sigue generando, una tool continúa en marcha y el audio ya sintetizado espera en el buffer.
 
-- el STT todavía corrige el final del turno anterior;
-- el LLM sigue generando;
-- una tool está en curso;
-- el TTS terminó de sintetizar;
-- el audio continúa en el buffer de telefonía.
-
-La implementación madura no cancela “el pipeline” como una sola entidad. Cancela una respuesta concreta, elimina audio pendiente, trunca el historial a lo escuchado y decide por separado qué hacer con las operaciones duraderas.
+Una implementación madura no cancela “todo el pipeline”. Cancela una respuesta concreta, elimina el audio pendiente, ajusta el historial a lo que se oyó y decide por separado qué hacer con las operaciones que siguen vivas.
 
 ## 2. Half cascade: audio → modelo audio-native → texto streaming → TTS
 
-Half cascade ocupa un espacio que suele describirse mal. La variante relevante aquí es:
+Half cascade suele explicarse de forma ambigua. En este report uso el término para esta arquitectura:
 
 ```text
 audio del usuario
@@ -148,35 +144,39 @@ audio del usuario
 → audio al usuario
 ```
 
-No es “STT integrado” sin más. El modelo consume audio directamente para comprender el turno, pero la frontera de salida sigue siendo texto. Esto elimina el STT externo como contrato intermedio y conserva un TTS especializado como capa de voz.
+El modelo escucha el audio directamente y lo usa para comprender el turno. La salida, en cambio, sigue siendo texto. Ese texto se envía a un TTS externo.
 
-El SDK oficial de OpenAI muestra una sesión Realtime con `output_modalities: ["text"]` y streaming mediante el evento `response.output_text.delta`.[^openai-python-realtime] Ese contrato hace viable una implementación audio-in / text-out sin obligar al modelo a producir audio.
+Así desaparece el STT como frontera independiente, pero se mantiene una voz especializada y controlable.
+
+El SDK oficial de OpenAI muestra sesiones Realtime con `output_modalities: ["text"]` y streaming a través de `response.output_text.delta`.[^openai-python-realtime] Ese contrato permite construir audio-in / text-out sin pedir al modelo que genere audio.
 
 ### Qué gana frente a full cascade
 
-**Comprensión audio-native.** El modelo puede usar tono, ritmo, pausas o vacilaciones como evidencia, en lugar de depender solo de una transcripción.
+**Comprensión audio-native.** El modelo puede usar tono, pausas, ritmo y vacilaciones como parte de la intención.
 
-**Menos reconciliación.** Desaparece la frontera externa entre STT parcial, STT final y LLM. Sigue existiendo turn detection, pero la comprensión y la generación pertenecen al mismo contexto multimodal.
+**Menos reconciliación.** Ya no hay que coordinar un STT parcial, un STT final y un LLM como tres estados distintos.
 
-**Streaming directo al TTS.** Los deltas de texto pueden alimentar un sintetizador externo sin esperar a la respuesta completa.
+**Streaming al TTS.** Los deltas de texto pueden empezar a sintetizarse antes de que termine la respuesta completa.
 
-**Voz independiente.** El producto mantiene un TTS elegido por calidad, coste, idiomas, clonación autorizada o identidad de marca.
+**Voz independiente.** El producto conserva el TTS que mejor encaja por calidad, precio, idiomas o identidad de marca.
 
-**Tool calling audio-native.** El modelo puede decidir tools a partir del audio sin serializar primero toda la interacción como una transcripción definitiva.
+**Tool calling desde audio.** El modelo puede decidir una tool sin convertir antes toda la interacción en una transcripción definitiva.
 
-Esta arquitectura puede reducir latencia y complejidad, pero no resuelve automáticamente la prosodia de salida.
+Es una opción muy interesante, aunque tiene un matiz importante: conservar la prosodia en la entrada no significa conservarla en la salida.
 
-### La prosodia entra, pero no atraviesa el texto por arte de magia
+### La prosodia entra y puede perderse al salir
 
-El modelo puede comprender que el usuario está frustrado, susurra o duda. Si la salida es solo:
+El modelo puede detectar que el usuario está frustrado, duda o habla en voz baja.
+
+Si el TTS solo recibe esto:
 
 ```text
 Entiendo. Voy a revisarlo.
 ```
 
-el TTS no conoce necesariamente la intención acústica. Puede leerlo con un estilo neutro y perder el beneficio expresivo.
+puede leerlo con un tono neutro. La comprensión fue audio-native, pero la respuesta volvió a cruzar una frontera de texto plano.
 
-La solución es convertir la frontera en un contrato más rico:
+Una forma de evitarlo es añadir un contrato intermedio:
 
 ```json
 {
@@ -193,30 +193,30 @@ La solución es convertir la frontera en un contrato más rico:
 }
 ```
 
-El `SpeechPlan` no necesita exponerse al usuario ni formar parte del historial visible. Es una representación intermedia para conservar intención expresiva y controlar el TTS.
+El `SpeechPlan` no se enseña al usuario y tampoco tiene por qué entrar en el historial. Su función es transportar la intención expresiva hasta el TTS.
 
 {{ include_html("snippets/articulos-tecnicos/voice-architectures-prosody.html") }}
 
-Hay tres formas de producirlo:
+Se puede producir de tres formas:
 
-1. el modelo devuelve texto y metadatos estructurados en paralelo;
-2. una capa ligera deriva el plan a partir del estado acústico y la respuesta;
-3. el TTS acepta instrucciones de estilo o tokens expresivos embebidos.
+1. El modelo devuelve el texto y los metadatos en paralelo
+2. Una capa ligera deriva el plan a partir del audio y de la respuesta
+3. El TTS recibe instrucciones de estilo o tokens expresivos
 
-La primera ofrece mayor trazabilidad. La segunda permite separar el modelo conversacional del control de voz. La tercera puede reducir latencia, pero acopla el contrato al proveedor de síntesis.
+La primera opción facilita la trazabilidad. La segunda separa mejor conversación y control de voz. La tercera reduce contratos, aunque también acopla más el sistema al proveedor de síntesis.
 
-### El reto de streaming
+### El streaming necesita un buen chunker
 
-Enviar cada delta de texto al TTS reduce la espera, pero introduce decisiones de chunking. Fragmentos demasiado cortos producen entonación errática. Fragmentos demasiado largos retrasan el primer audio.
+Enviar cada delta al TTS reduce la espera, pero puede romper la entonación. Fragmentos demasiado cortos suenan entrecortados. Fragmentos demasiado largos retrasan el primer audio.
 
-Un *semantic chunker* puede cerrar unidades cuando detecta:
+Un *semantic chunker* puede cerrar una unidad cuando encuentra:
 
-- puntuación fuerte;
-- una cláusula estable;
-- un límite de longitud;
-- una pausa explícita del `SpeechPlan`;
-- un cambio de intención;
-- una tool call que obliga a detener la respuesta.
+- Puntuación fuerte
+- Una cláusula estable
+- Un límite de longitud
+- Una pausa explícita del `SpeechPlan`
+- Un cambio de intención
+- Una tool call que obliga a detener la respuesta
 
 ```python
 async for delta in realtime.output_text():
@@ -229,21 +229,21 @@ async for delta in realtime.output_text():
         )
 ```
 
-El chunker debe conservar un pequeño margen de revisión. Una respuesta puede empezar con “Sí” y corregirse a “Sí, pero…”. Sintetizar el primer token demasiado pronto crea una promesa acústica difícil de retirar.
+El chunker necesita un pequeño margen de revisión. Una respuesta puede empezar con “Sí” y continuar con “Sí, pero…”. Sintetizar el primer token demasiado pronto crea una promesa acústica difícil de retirar.
 
-### Qué no elimina half cascade
+### Qué sigue siendo necesario
 
-Half cascade todavía necesita:
+Half cascade no elimina:
 
-- playback y truncado;
-- cancelación de TTS;
-- coordinación de tools;
-- gestión de resultados asíncronos;
-- idempotencia;
-- una política de entrega proactiva;
-- medición desde audio de entrada hasta audio escuchado.
+- El playback y su truncado
+- La cancelación del TTS
+- La coordinación de tools
+- Los resultados asíncronos
+- La idempotencia
+- La entrega proactiva
+- La medición hasta el audio que realmente se escuchó
 
-También añade una interfaz propia: el `SpeechPlan`. La arquitectura merece la pena cuando la comprensión acústica y la libertad de elegir TTS compensan ese contrato adicional.
+También introduce el `SpeechPlan`. Tiene sentido cuando la comprensión acústica y la libertad de elegir TTS compensan ese contrato adicional.
 
 ## 3. Speech-to-speech: audio ↔ modelo
 
@@ -255,41 +255,41 @@ audio del usuario
 ↔ audio del agente
 ```
 
-La simplificación visual es radical, pero no significa que el sistema completo tenga un único componente. Telefonía, tools, estado, políticas, observabilidad y seguridad siguen existiendo.
+El diagrama es mucho más limpio. El sistema completo sigue necesitando telefonía, tools, estado, políticas, seguridad y observabilidad.
 
-Los modelos Realtime modernos pueden recibir y emitir audio directamente, además de soportar function calling.[^openai-gpt-realtime] El beneficio principal es que comprensión y expresión comparten una representación acústica interna.
+Los modelos Realtime modernos pueden recibir y emitir audio directamente y también soportar function calling.[^openai-gpt-realtime] La ventaja principal es que comprensión y expresión comparten una representación acústica.
 
-### Lo que S2S hace mejor
+### Dónde destaca S2S
 
-**Timing conversacional.** Puede producir backchannels, adaptar el ritmo y reaccionar sin esperar una transcripción textual estable.
+**Ritmo conversacional.** Puede generar backchannels, adaptar el tempo y reaccionar sin esperar una transcripción estable.
 
-**Continuidad prosódica.** La información acústica no tiene que comprimirse a texto entre comprensión y respuesta.
+**Continuidad prosódica.** La señal acústica no tiene que comprimirse a texto entre la entrada y la respuesta.
 
-**Barge-in más natural.** El modelo puede operar sobre una sesión continua y responder a eventos de actividad del usuario.
+**Barge-in más natural.** La sesión puede reaccionar a la actividad del usuario y cortar la salida con menos intermediarios.
 
-**Menos fronteras externas.** Se reducen contratos, serializaciones y puntos de buffering entre STT, LLM y TTS.
+**Menos fronteras.** Se reducen serializaciones, contratos y buffers entre STT, LLM y TTS.
 
-**Full-duplex real.** Algunos modelos pueden escuchar mientras hablan y ajustar la salida durante el solapamiento.
+**Mejor encaje para full-duplex.** Algunos modelos pueden escuchar mientras hablan y ajustar la respuesta durante el solapamiento.
 
-Pero S2S y full-duplex no son sinónimos. Un modelo puede aceptar audio y devolver audio por turnos. Full-duplex exige que la arquitectura procese simultáneamente ambas direcciones y mantenga coherencia durante el solapamiento.
+S2S y full-duplex no son lo mismo. Un modelo puede recibir audio y devolver audio de forma estrictamente turn-based. Full-duplex exige procesar las dos direcciones a la vez y mantener coherencia cuando ambos hablan.
 
-### Lo que S2S complica
+### Qué se vuelve más difícil
 
-**Auditabilidad.** Es necesario derivar transcripciones, tool traces y estado escuchado sin asumir que el audio completo generado llegó al usuario.
+**Auditabilidad.** Hay que derivar transcripciones, tool traces y estado escuchado sin asumir que todo el audio generado llegó al usuario.
 
-**Control determinista.** La voz, la pronunciación y el estilo pueden depender de capacidades del modelo en lugar de un TTS especializado.
+**Control de voz.** La pronunciación, el estilo y la identidad dependen más de las capacidades del modelo.
 
-**Tool latency.** Una conversación natural no debería congelarse mientras una operación tarda. El modelo necesita delegación o continuidad asíncrona.
+**Latencia de tools.** La conversación no debería congelarse mientras una operación tarda. Hace falta delegación o continuidad asíncrona.
 
-**Coste y escalado.** Mantener una sesión audio-native continua puede ser más costoso que activar modelos especializados por etapas.
+**Coste.** Mantener una sesión audio-native continua puede ser más caro que activar modelos especializados por etapas.
 
-**Compliance.** Redacción, filtrado, PII y políticas de contenido deben aplicarse sobre audio, texto derivado y acciones.
+**Compliance.** Redacción, filtrado, PII y políticas deben aplicarse al audio, al texto derivado y a las acciones.
 
-**Portabilidad.** El contrato de sesión, eventos, voces y function calling suele estar más acoplado al proveedor.
+**Portabilidad.** El contrato de sesión, las voces y el function calling suelen estar más ligados al proveedor.
 
-## Latencia y complejidad: medir más que el primer token
+## Medir algo más que el primer audio
 
-Una comparación justa necesita separar:
+Una comparación justa necesita separar varios tiempos:
 
 ```text
 T_detection       fin de intervención detectado
@@ -302,26 +302,30 @@ T_delivery        resultado listo → cierre escuchado
 
 {{ include_html("snippets/articulos-tecnicos/voice-architectures-latency.html") }}
 
-S2S suele tener ventaja en `T_first_audio` y `T_interruption`, pero puede perder si la política de turn detection es conservadora o la red añade jitter. Full cascade puede ser competitivo con STT, LLM y TTS muy rápidos, aunque su coordinación siga siendo más compleja. Half cascade puede ocupar un punto intermedio: comprensión audio-native con una voz externa optimizada y controlable.
+S2S suele tener ventaja en `T_first_audio` y `T_interruption`. Puede perder parte de esa ventaja con un turn detection conservador o una red inestable.
 
-La comparación también debe medir calidad:
+Full cascade puede ser competitivo si STT, LLM y TTS son rápidos y trabajan en streaming. Su dificultad aparece en la coordinación.
 
-- precisión de intención bajo ruido y acentos;
-- conservación de entidades;
-- corrección de tool arguments;
-- naturalidad prosódica;
-- estabilidad de voz;
-- porcentaje de interrupciones falsas;
-- número de respuestas duplicadas;
-- éxito de tarea;
-- trazabilidad del resultado.
+Half cascade ocupa un punto intermedio. Mantiene comprensión audio-native y conserva una voz externa que se puede optimizar y controlar.
+
+La evaluación también necesita métricas de calidad:
+
+- Precisión de intención con ruido y acentos
+- Conservación de entidades
+- Corrección de los argumentos de tools
+- Naturalidad prosódica
+- Estabilidad de la voz
+- Interrupciones falsas
+- Respuestas duplicadas
+- Éxito de tarea
+- Trazabilidad del resultado
 
 ## Matriz de decisión
 
 | Dimensión | Full cascade | Half cascade | Speech-to-speech |
 |---|---|---|---|
 | Comprensión de prosodia | Baja o indirecta | Alta en entrada | Alta en entrada |
-| Prosodia de salida | Alta si el TTS es bueno | Alta con `SpeechPlan` + TTS | Nativa, dependiente del modelo |
+| Prosodia de salida | Alta si el TTS es bueno | Alta con `SpeechPlan` + TTS | Nativa y dependiente del modelo |
 | Latencia mínima posible | Media | Baja-media | Baja |
 | Control de voz | Muy alto | Muy alto | Variable |
 | Tool calling observable | Muy alto | Alto | Medio-alto |
@@ -332,35 +336,37 @@ La comparación también debe medir calidad:
 | Personalización acústica | TTS dedicado | TTS dedicado | Dependiente del modelo |
 | Debugging por etapas | Excelente | Bueno | Más difícil |
 
-No existe un ganador universal. La elección depende del producto.
+No hay una arquitectura ganadora para todos los productos.
 
 ### Elegir full cascade cuando
 
-- la trazabilidad textual y el control por etapas son obligatorios;
-- se necesita intercambiar proveedores;
-- la voz debe pertenecer a un TTS específico;
-- el dominio tolera una interacción más turn-based;
-- los equipos ya operan bien las máquinas de estado distribuidas.
+- La trazabilidad textual y el control por etapas son obligatorios
+- Hay que poder cambiar proveedores
+- La voz depende de un TTS concreto
+- El dominio tolera una conversación más turn-based
+- El equipo ya sabe operar una máquina de estados distribuida
 
 ### Elegir half cascade cuando
 
-- la comprensión del audio aporta valor real;
-- se quiere eliminar la reconciliación STT → LLM;
-- la voz externa es una ventaja de producto;
-- se puede diseñar y evaluar un `SpeechPlan`;
-- el sistema necesita text output para compliance o control.
+- La señal acústica aporta valor real a la comprensión
+- Se quiere eliminar la reconciliación STT → LLM
+- La voz externa es una ventaja de producto
+- Se puede diseñar y evaluar un `SpeechPlan`
+- Hace falta una salida textual gobernable
 
 ### Elegir S2S cuando
 
-- timing, naturalidad y full-duplex son prioritarios;
-- el modelo ofrece una voz y tool calling adecuados;
-- el equipo puede instrumentar audio escuchado y acciones;
-- la sesión continua compensa el coste y el acoplamiento;
-- el producto acepta que parte del comportamiento acústico sea menos modular.
+- El timing, la naturalidad y el full-duplex son prioritarios
+- El modelo ofrece una voz y un tool calling adecuados
+- El equipo puede instrumentar el audio escuchado y las acciones
+- La sesión continua compensa el coste y el acoplamiento
+- El producto acepta menos modularidad en el comportamiento acústico
 
-## Hot take: la arquitectura ganadora no será un único modelo gigante
+## Hot take: S2S delante, razonamiento pesado detrás
 
-Mi apuesta no es reemplazar toda la plataforma por un S2S monolítico. Es dividir responsabilidades:
+Mi apuesta no es sustituir toda la plataforma por un modelo S2S gigante.
+
+La arquitectura que más sentido me hace separa dos velocidades:
 
 ```text
 S2S Interaction Surface
@@ -370,43 +376,45 @@ Cognitive Execution Plane
 tools, RAG, workflows, workers y side effects
 ```
 
-La **S2S Interaction Surface** debe ser pequeña, rápida y full-duplex. Sus responsabilidades son humanas:
+La **S2S Interaction Surface** es pequeña, rápida y full-duplex. Se ocupa de la parte humana:
 
-- escuchar;
-- detectar cuándo intervenir;
-- producir backchannels;
-- mantener una voz estable;
-- gestionar barge-in;
-- responder preguntas ligeras;
-- aceptar trabajo;
-- volver con resultados cuando exista una ventana segura.
+- Escuchar
+- Saber cuándo intervenir
+- Producir backchannels
+- Mantener una voz estable
+- Gestionar barge-in
+- Resolver preguntas ligeras
+- Aceptar trabajo
+- Entregar resultados cuando haya un hueco seguro
 
-El **Cognitive Execution Plane** puede ser más pesado. Sus responsabilidades son computacionales:
+El **Cognitive Execution Plane** puede ser más pesado. Se ocupa de la parte computacional:
 
-- razonamiento profundo;
-- planificación;
-- RAG;
-- tool calls;
-- rutinas paralelas;
-- retries;
-- idempotencia;
-- validaciones;
-- compensaciones;
-- generación de un resultado estructurado.
+- Razonamiento profundo
+- Planificación
+- RAG
+- Tool calls
+- Rutinas paralelas
+- Retries
+- Idempotencia
+- Validaciones
+- Compensaciones
+- Generación de resultados estructurados
 
 La superficie no espera bloqueada. Puede decir:
 
 > “Lo estoy revisando. Cuéntame mientras tanto qué horario prefieres.”
 
-El plano cognitivo continúa y publica un `DeliveryEnvelope` cuando termina. La superficie decide si lo entrega, lo agrega o lo incorpora al siguiente turno.
+El plano cognitivo sigue trabajando y publica un `DeliveryEnvelope` cuando termina. La superficie decide si lo entrega, lo agrupa o lo incorpora al siguiente turno.
 
-GPT-Live hace explícita una dirección similar: una superficie full-duplex mantiene la conversación mientras delega búsqueda, razonamiento más profundo y trabajo complejo a un modelo frontier detrás.[^gpt-live] MoshiRAG explora un patrón relacionado desde investigación: una interfaz full-duplex compacta combinada con retrieval asíncrono para mejorar factualidad sin sacrificar interacción.[^moshirag]
+GPT-Live apunta en una dirección parecida. Una superficie full-duplex mantiene la conversación mientras delega búsqueda, razonamiento más profundo y trabajo complejo a un modelo frontier.[^gpt-live]
+
+MoshiRAG explora una idea relacionada desde investigación. Combina una interfaz full-duplex compacta con retrieval asíncrono para mejorar la factualidad sin romper la interacción.[^moshirag]
 
 {{ include_html("snippets/articulos-tecnicos/voice-architectures-surface-plane.html") }}
 
-### Few-shot prompting acústico: muestras de voz como contexto
+### Few-shot prompting con muestras de voz
 
-El siguiente paso es que la superficie pueda recibir ejemplos de audio autorizados como parte del prompt de voz:
+El siguiente paso sería poder pasar ejemplos de audio autorizados a la superficie:
 
 ```text
 system instructions
@@ -416,51 +424,55 @@ system instructions
 + consent and provenance metadata
 ```
 
-La analogía con few-shot prompting es útil. En texto, los ejemplos enseñan formato, tono o criterio. En voz, las muestras pueden condicionar:
+La analogía con el few-shot prompting de texto es directa. Los ejemplos enseñan formato, tono o criterio. En voz, las muestras pueden condicionar:
 
-- identidad vocal;
-- ritmo;
-- timbre;
-- pronunciación;
-- estilo;
-- entorno acústico;
-- expresividad.
+- Identidad vocal
+- Ritmo
+- Timbre
+- Pronunciación
+- Estilo
+- Entorno acústico
+- Expresividad
 
-VALL-E demostró *acoustic prompting* a partir de una grabación de tres segundos y mostró conservación de identidad, emoción y entorno.[^valle] OpenAI Voice Engine mostró generación condicionada por una muestra de 15 segundos, pero mantuvo el sistema en una vista previa limitada por los riesgos de suplantación.[^voice-engine]
+VALL-E demostró *acoustic prompting* con una grabación de tres segundos y mostró conservación de identidad, emoción y entorno.[^valle]
 
-Eso valida la dirección técnica, no una disponibilidad universal en los modelos S2S comerciales. Una implementación de producto debe separar tres conceptos:
+OpenAI Voice Engine mostró generación condicionada por una muestra de 15 segundos. El acceso se mantuvo limitado por los riesgos de suplantación.[^voice-engine]
 
-1. **voz base autorizada**, que define identidad;
-2. **estilo del turno**, que define emoción, energía y ritmo;
-3. **entorno o calidad**, que no debería copiarse accidentalmente.
+Eso respalda la dirección técnica, pero no significa que todos los modelos S2S comerciales ofrezcan hoy esta capacidad.
 
-También necesita controles duros:
+En producto conviene separar:
 
-- consentimiento verificable;
-- procedencia de la muestra;
-- lista de identidades bloqueadas;
-- detección y etiquetado de audio sintético;
-- revocación;
-- trazas de qué muestra condicionó cada sesión;
-- límites contra impersonación;
-- protección de las muestras en reposo y tránsito.
+1. **Voz base autorizada**, que define la identidad
+2. **Estilo del turno**, que define emoción, energía y ritmo
+3. **Entorno o calidad**, que no debería copiarse por accidente
 
-La capacidad de imitar mejor una voz humana no debe convertirse en una ruta lateral para clonar a cualquiera.
+También hacen falta controles claros:
 
-## Harness común para comparar las tres arquitecturas
+- Consentimiento verificable
+- Procedencia de la muestra
+- Identidades bloqueadas
+- Detección y etiquetado de audio sintético
+- Revocación
+- Trazas de la muestra usada en cada sesión
+- Límites contra la suplantación
+- Protección de las muestras en reposo y en tránsito
 
-Las tres variantes deben evaluarse con el mismo corpus y el mismo contrato de tarea.
+Mejorar la imitación de una voz humana no puede convertirse en una vía para clonar a cualquiera.
+
+## Un mismo harness para las tres arquitecturas
+
+Las tres variantes deberían evaluarse con el mismo corpus y el mismo contrato de tarea.
 
 ### Dataset
 
-- idiomas y mercados reales;
-- ruido, reverberación y telefonía degradada;
-- voces rápidas, lentas y con acentos;
-- interrupciones;
-- autocorrecciones;
-- tool calls cortas y largas;
-- resultados que llegan durante otro turno;
-- entidades sensibles y pronunciaciones de marca.
+- Idiomas y mercados reales
+- Ruido, reverberación y telefonía degradada
+- Voces rápidas, lentas y con acentos
+- Interrupciones
+- Autocorrecciones
+- Tools rápidas y lentas
+- Resultados que llegan durante otro turno
+- Entidades sensibles y pronunciaciones de marca
 
 ### Métricas
 
@@ -480,31 +492,37 @@ cost_per_successful_minute
 
 ### Protocolo
 
-1. fijar el mismo escenario y resultado esperado;
-2. ejecutar varias semillas o sesiones;
-3. registrar audio de entrada y audio efectivamente reproducido;
-4. comparar tool traces y side effects;
-5. realizar evaluación humana ciega de naturalidad;
-6. inspeccionar fallos por arquitectura, no solo promedios;
-7. repetir bajo congestión y dependencias lentas.
+1. Fijar el mismo escenario y el mismo resultado esperado
+2. Ejecutar varias semillas o sesiones
+3. Registrar el audio de entrada y el audio que de verdad se reprodujo
+4. Comparar tool traces y side effects
+5. Hacer una evaluación humana ciega de naturalidad
+6. Analizar los fallos por arquitectura y no solo los promedios
+7. Repetir con congestión y dependencias lentas
 
-El objetivo no es demostrar que una arquitectura tiene menos milisegundos en laboratorio. Es identificar cuál mantiene la conversación, ejecuta la tarea y conserva control cuando los componentes fallan o se solapan.
+El objetivo no es demostrar que una opción ahorra unos milisegundos en laboratorio. Es descubrir cuál mantiene la conversación, completa la tarea y conserva el control cuando los componentes fallan o se solapan.
 
 ## Conclusión
 
-Full cascade seguirá siendo valioso donde modularidad, control y auditabilidad pesen más que la naturalidad máxima. Half cascade es una opción especialmente interesante cuando se quiere comprensión audio-native sin renunciar a un TTS externo y a una salida textual gobernable. Speech-to-speech es el mejor punto de partida para timing, prosodia y full-duplex, pero no elimina el runtime ni las tools.
+Full cascade sigue teniendo mucho sentido cuando pesan más la modularidad, el control y la auditabilidad.
 
-La dirección más prometedora es híbrida:
+Half cascade es especialmente atractiva cuando queremos comprensión audio-native sin renunciar a un TTS externo y a una salida textual gobernable.
 
-> **una superficie S2S rápida para la relación humana, un plano cognitivo más pesado para el trabajo y un contrato durable para unirlos.**
+Speech-to-speech ofrece el mejor punto de partida para timing, prosodia y full-duplex. Aun así, no elimina el runtime ni las tools.
 
-A esa arquitectura se puede añadir un `Voice Prompt Pack` con muestras autorizadas, pronunciaciones y política expresiva. El resultado no es un único modelo que hace todo, sino un sistema en el que cada capa trabaja a la velocidad y con el nivel de control que necesita.
+La dirección que veo más prometedora es híbrida:
+
+> **Una superficie S2S rápida para la conversación, un plano cognitivo más pesado para el trabajo y un contrato persistente que los mantenga sincronizados.**
+
+A esa arquitectura se le puede sumar un `Voice Prompt Pack` con muestras autorizadas, pronunciaciones y política expresiva.
+
+El resultado no es un modelo que intenta hacerlo todo. Es un sistema en el que cada capa trabaja a la velocidad y con el nivel de control que necesita.
 
 ## Fuentes
 
 [^openai-realtime-intro]: OpenAI, [Introducing the Realtime API](https://openai.com/index/introducing-the-realtime-api/). Comparación con pipelines ASR → LLM → TTS y pérdida de señales acústicas.
 [^openai-python-realtime]: OpenAI, [OpenAI Python SDK — Realtime API](https://github.com/openai/openai-python). Ejemplo de `output_modalities: ["text"]` y streaming `response.output_text.delta`.
-[^openai-gpt-realtime]: OpenAI, [gpt-realtime model](https://developers.openai.com/api/docs/models/gpt-realtime). Entrada y salida de texto/audio, WebRTC, WebSocket, SIP y function calling.
+[^openai-gpt-realtime]: OpenAI, [gpt-realtime model](https://developers.openai.com/api/docs/models/gpt-realtime). Entrada y salida de texto y audio, WebRTC, WebSocket, SIP y function calling.
 [^gpt-live]: OpenAI, [Introducing GPT-Live](https://openai.com/index/introducing-gpt-live/), 8 de julio de 2026. Superficie full-duplex con delegación a un modelo frontier.
 [^moshirag]: MoshiRAG, [Full-Duplex Spoken Dialogue with Retrieval-Augmented Generation](https://arxiv.org/abs/2604.12928), 2026.
 [^valle]: Microsoft Research, [VALL-E](https://www.microsoft.com/en-us/research/project/vall-e-x/vall-e/). Acoustic prompting con una muestra de tres segundos y consideraciones éticas.
