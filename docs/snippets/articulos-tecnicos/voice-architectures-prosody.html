@@ -1,0 +1,188 @@
+<section class="varch varch-prosody" data-anim-fullscreen="on" data-anim-contrast="force" aria-label="Cómo atraviesa la prosodia las tres arquitecturas de voz">
+  <style>
+    .varch-prosody,.varch-prosody *{box-sizing:border-box}
+    .varch-prosody{
+      --ink:#07191b;--muted:#546366;--line:rgba(7,25,27,.12);--blue:#2364aa;--blue-soft:#eaf2fb;
+      --teal:#087f8f;--teal-soft:#e7f7f8;--purple:#6657b8;--purple-soft:#f0edff;
+      --amber:#d98a00;--amber-soft:#fff3da;--red:#c73a31;--red-soft:#fff0ed;--green:#23863a;--green-soft:#eaf6e8;
+      font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;color:var(--ink);
+      display:grid;margin:28px auto 34px;max-width:1400px;
+    }
+    .anim-shell-modal .varch-prosody{margin:0;max-width:none}
+    .varch-prosody__sheet{
+      position:relative;overflow:hidden;padding:30px;border:1px solid var(--line);border-radius:28px;
+      background:
+        radial-gradient(circle at 7% 9%,rgba(8,127,143,.09),transparent 25%),
+        radial-gradient(circle at 92% 89%,rgba(102,87,184,.09),transparent 27%),
+        linear-gradient(180deg,#fff,#fbfcfc);
+      box-shadow:0 22px 54px rgba(18,35,39,.12);
+    }
+    .varch-prosody__head{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:24px}
+    .varch-prosody__eyebrow{font-size:.74rem;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--teal)}
+    .varch-prosody h2{margin:7px 0 0;font-size:clamp(1.9rem,3.2vw,3rem);line-height:.98;letter-spacing:-.045em}
+    .varch-prosody__lead{max-width:480px;margin:0;color:var(--muted);font-size:.82rem;line-height:1.45;font-weight:700;text-align:right}
+    .varch-prosody__signal{
+      display:grid;grid-template-columns:240px 1fr;gap:14px;align-items:stretch;margin-bottom:14px;
+    }
+    .varch-prosody__source{
+      padding:15px;border:1px solid rgba(8,127,143,.23);border-radius:20px;background:linear-gradient(180deg,#fff,var(--teal-soft));
+      display:grid;gap:12px;align-content:center;text-align:center;
+    }
+    .varch-prosody__wave{height:58px;display:flex;align-items:center;justify-content:center;gap:5px}
+    .varch-prosody__wave i{display:block;width:5px;height:12px;border-radius:99px;background:var(--teal);animation:varch-prosody-wave 1.05s ease-in-out infinite}
+    .varch-prosody__wave i:nth-child(2){animation-delay:-.75s}.varch-prosody__wave i:nth-child(3){animation-delay:-.43s}
+    .varch-prosody__wave i:nth-child(4){animation-delay:-.88s}.varch-prosody__wave i:nth-child(5){animation-delay:-.25s}.varch-prosody__wave i:nth-child(6){animation-delay:-.6s}
+    .varch-prosody__source strong{font-size:.84rem}
+    .varch-prosody__source p{margin:0;color:var(--muted);font-size:.65rem;line-height:1.35;font-weight:720}
+    .varch-prosody__features{
+      display:grid;grid-template-columns:repeat(6,1fr);gap:8px;padding:15px;border:1px solid var(--line);border-radius:20px;background:#fff;
+    }
+    .varch-prosody__feature{
+      min-height:86px;padding:10px 8px;border-radius:14px;background:#f7faf8;border:1px solid rgba(7,25,27,.08);
+      display:grid;place-items:center;align-content:center;gap:7px;text-align:center;
+    }
+    .varch-prosody__feature b{font-size:.67rem}
+    .varch-prosody__feature span{color:var(--muted);font-size:.53rem;line-height:1.22;font-weight:720}
+    .varch-prosody__feature i{width:13px;height:13px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 5px rgba(8,127,143,.1);animation:varch-prosody-pulse 1.9s ease-in-out infinite}
+    .varch-prosody__feature:nth-child(2) i{animation-delay:-.3s}.varch-prosody__feature:nth-child(3) i{animation-delay:-.6s}
+    .varch-prosody__feature:nth-child(4) i{animation-delay:-.9s}.varch-prosody__feature:nth-child(5) i{animation-delay:-1.2s}.varch-prosody__feature:nth-child(6) i{animation-delay:-1.5s}
+    .varch-prosody__routes{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .varch-prosody__route{
+      position:relative;min-width:0;padding:16px;border:1px solid var(--line);border-radius:21px;background:#fff;
+      box-shadow:0 11px 24px rgba(18,35,39,.06);display:grid;grid-template-rows:auto auto 1fr auto;gap:12px;overflow:hidden;
+    }
+    .varch-prosody__route--full{border-color:rgba(35,100,170,.23)}
+    .varch-prosody__route--half{border-color:rgba(8,127,143,.29);background:linear-gradient(180deg,#fff,var(--teal-soft))}
+    .varch-prosody__route--s2s{border-color:rgba(102,87,184,.27);background:linear-gradient(180deg,#fff,var(--purple-soft))}
+    .varch-prosody__route-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .varch-prosody__route-head h3{margin:0;font-size:.92rem;letter-spacing:-.025em}
+    .varch-prosody__status{
+      padding:5px 7px;border-radius:999px;background:var(--red-soft);color:var(--red);font-size:.53rem;font-weight:950;text-transform:uppercase;letter-spacing:.05em;
+    }
+    .varch-prosody__route--half .varch-prosody__status{background:var(--amber-soft);color:#9a6200}
+    .varch-prosody__route--s2s .varch-prosody__status{background:var(--green-soft);color:var(--green)}
+    .varch-prosody__pipe{display:flex;align-items:center;justify-content:center;gap:7px;min-height:55px}
+    .varch-prosody__box{
+      min-width:70px;padding:9px 8px;border-radius:13px;background:#f7faf8;border:1px solid rgba(7,25,27,.09);
+      text-align:center;font-size:.59rem;font-weight:900;
+    }
+    .varch-prosody__box--text{background:var(--blue-soft);color:var(--blue);border-color:rgba(35,100,170,.18)}
+    .varch-prosody__box--plan{background:var(--amber-soft);color:#9a6200;border-color:rgba(217,138,0,.19)}
+    .varch-prosody__box--audio{background:var(--purple-soft);color:var(--purple);border-color:rgba(102,87,184,.18)}
+    .varch-prosody__arrow{color:var(--muted);font-weight:950}
+    .varch-prosody__loss{
+      display:flex;flex-wrap:wrap;gap:6px;align-content:start;
+    }
+    .varch-prosody__loss span{
+      padding:5px 7px;border-radius:999px;background:var(--red-soft);color:var(--red);border:1px solid rgba(199,58,49,.13);
+      font-size:.51rem;font-weight:850;
+    }
+    .varch-prosody__route--half .varch-prosody__loss span{background:#fff;color:#8a5a08;border-color:rgba(217,138,0,.15)}
+    .varch-prosody__route--s2s .varch-prosody__loss span{background:#fff;color:var(--purple);border-color:rgba(102,87,184,.15)}
+    .varch-prosody__explain{margin:0;color:var(--muted);font-size:.64rem;line-height:1.4;font-weight:720}
+    .varch-prosody__plan{
+      padding:12px;border-radius:15px;background:var(--ink);color:#d9e8e6;display:grid;gap:5px;
+      font:700 .55rem/1.35 "SFMono-Regular",Consolas,monospace;overflow:hidden;
+    }
+    .varch-prosody__plan span{display:grid;grid-template-columns:92px 1fr;gap:8px}
+    .varch-prosody__plan b{color:#9fe0b0;font-weight:800}
+    .varch-prosody__plan i{font-style:normal;color:#f5cc78}
+    .varch-prosody__bridge{
+      position:absolute;left:50%;bottom:9px;width:12px;height:12px;border-radius:50%;background:#fff;border:3px solid var(--amber);
+      animation:varch-prosody-bridge 3.8s ease-in-out infinite;
+    }
+    .varch-prosody__footer{
+      margin-top:15px;padding:13px 15px;border-radius:15px;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:18px;
+      font-size:.71rem;font-weight:800;
+    }
+    .varch-prosody__footer b{color:#9fe0b0}
+    .varch-prosody__footer code{font:700 .58rem/"SFMono-Regular",Consolas,monospace;color:#d9e8e6}
+    @keyframes varch-prosody-wave{0%,100%{height:11px;opacity:.45}50%{height:48px;opacity:1}}
+    @keyframes varch-prosody-pulse{0%,100%{transform:scale(.72);opacity:.45}50%{transform:scale(1);opacity:1}}
+    @keyframes varch-prosody-bridge{0%,100%{left:12%;opacity:.45}50%{left:84%;opacity:1}}
+    @media (max-width:980px){
+      .varch-prosody__sheet{padding:21px 16px}
+      .varch-prosody__head{display:grid;gap:10px}.varch-prosody__lead{text-align:left}
+      .varch-prosody__signal{grid-template-columns:1fr}
+      .varch-prosody__features{grid-template-columns:repeat(3,1fr)}
+      .varch-prosody__routes{grid-template-columns:1fr}
+    }
+    @media (max-width:520px){
+      .varch-prosody__features{grid-template-columns:repeat(2,1fr)}
+      .varch-prosody__footer{display:grid}
+      .varch-prosody__plan span{grid-template-columns:82px 1fr}
+    }
+    @media (prefers-reduced-motion:reduce){
+      .varch-prosody *{animation-duration:.001ms!important;animation-iteration-count:1!important}
+    }
+  </style>
+
+  <div class="varch-prosody__sheet">
+    <header class="varch-prosody__head">
+      <div>
+        <div class="varch-prosody__eyebrow">Información acústica</div>
+        <h2>La prosodia entra. ¿Cómo vuelve a salir?</h2>
+      </div>
+      <p class="varch-prosody__lead">Comprender audio directamente no garantiza una respuesta expresiva cuando la interfaz de salida vuelve a reducirse a texto plano.</p>
+    </header>
+
+    <div class="varch-prosody__signal">
+      <div class="varch-prosody__source">
+        <div class="varch-prosody__wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <strong>“Vale… supongo que sí.”</strong>
+        <p>Las palabras son afirmativas; el tono puede expresar duda, cansancio o desacuerdo.</p>
+      </div>
+      <div class="varch-prosody__features">
+        <div class="varch-prosody__feature"><i></i><b>Pitch</b><span>curva tonal</span></div>
+        <div class="varch-prosody__feature"><i></i><b>Tempo</b><span>ritmo y cambios</span></div>
+        <div class="varch-prosody__feature"><i></i><b>Energy</b><span>intensidad</span></div>
+        <div class="varch-prosody__feature"><i></i><b>Pauses</b><span>silencios útiles</span></div>
+        <div class="varch-prosody__feature"><i></i><b>Hesitation</b><span>duda y reparación</span></div>
+        <div class="varch-prosody__feature"><i></i><b>Emotion</b><span>estado expresivo</span></div>
+      </div>
+    </div>
+
+    <div class="varch-prosody__routes">
+      <article class="varch-prosody__route varch-prosody__route--full">
+        <header class="varch-prosody__route-head"><h3>Full cascade</h3><span class="varch-prosody__status">compressed</span></header>
+        <div class="varch-prosody__pipe"><span class="varch-prosody__box">Audio</span><span class="varch-prosody__arrow">→</span><span class="varch-prosody__box varch-prosody__box--text">“Vale, supongo que sí.”</span></div>
+        <div>
+          <div class="varch-prosody__loss"><span>pitch</span><span>tempo</span><span>hesitation</span><span>emotion</span></div>
+          <p class="varch-prosody__explain">El LLM recibe principalmente una hipótesis textual. Etiquetas adicionales pueden ayudar, pero son otra inferencia.</p>
+        </div>
+        <div class="varch-prosody__plan"><span><b>input</b><i>text transcript</i></span><span><b>output</b><i>text → TTS</i></span></div>
+      </article>
+
+      <article class="varch-prosody__route varch-prosody__route--half">
+        <header class="varch-prosody__route-head"><h3>Half cascade</h3><span class="varch-prosody__status">bridge required</span></header>
+        <div class="varch-prosody__pipe"><span class="varch-prosody__box">Audio</span><span class="varch-prosody__arrow">→</span><span class="varch-prosody__box varch-prosody__box--plan">Text + SpeechPlan</span><span class="varch-prosody__arrow">→</span><span class="varch-prosody__box">TTS</span></div>
+        <div>
+          <div class="varch-prosody__loss"><span>intent</span><span>pace</span><span>energy</span><span>pauses</span><span>emphasis</span></div>
+          <p class="varch-prosody__explain">El modelo comprende la señal acústica. Un contrato estructurado transporta intención expresiva hasta el TTS externo.</p>
+        </div>
+        <div class="varch-prosody__plan">
+          <span><b>intent</b><i>"reassuring"</i></span>
+          <span><b>pace</b><i>0.92</i></span>
+          <span><b>energy</b><i>0.42</i></span>
+          <span><b>pause_ms</b><i>180</i></span>
+        </div>
+        <span class="varch-prosody__bridge" aria-hidden="true"></span>
+      </article>
+
+      <article class="varch-prosody__route varch-prosody__route--s2s">
+        <header class="varch-prosody__route-head"><h3>Speech-to-speech</h3><span class="varch-prosody__status">continuous</span></header>
+        <div class="varch-prosody__pipe"><span class="varch-prosody__box">Audio</span><span class="varch-prosody__arrow">↔</span><span class="varch-prosody__box varch-prosody__box--audio">Acoustic representation</span><span class="varch-prosody__arrow">↔</span><span class="varch-prosody__box">Audio</span></div>
+        <div>
+          <div class="varch-prosody__loss"><span>timing</span><span>backchannels</span><span>style</span><span>overlap</span></div>
+          <p class="varch-prosody__explain">La señal no necesita volver a texto para expresarse, aunque el control fino depende de las capacidades del modelo.</p>
+        </div>
+        <div class="varch-prosody__plan"><span><b>input</b><i>audio-native</i></span><span><b>output</b><i>audio-native</i></span><span><b>control</b><i>model contract</i></span></div>
+      </article>
+    </div>
+
+    <div class="varch-prosody__footer">
+      <span><b>Half cascade solo conserva la ventaja si formaliza el puente.</b> Texto plano vuelve a perder la intención acústica antes del TTS.</span>
+      <code>audio → understanding → text + SpeechPlan → voice</code>
+    </div>
+  </div>
+</section>

@@ -160,6 +160,12 @@ try {
   });
 
   await desktop.goto(`${baseUrl}/articulos-tecnicos/reactive-proactive-voice-agents/`, { waitUntil: 'networkidle' });
+  await assertCollectionContinuation(desktop, {
+    nextHref: '/articulos-tecnicos/voice-agent-architectures/',
+    label: 'The technical collection',
+  });
+
+  await desktop.goto(`${baseUrl}/articulos-tecnicos/voice-agent-architectures/`, { waitUntil: 'networkidle' });
   await assertCollectionBoundary(desktop, { completionHref: '/articulos-tecnicos/', label: 'A completed technical collection' });
 
   const mobile = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1 });
