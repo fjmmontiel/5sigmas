@@ -1,0 +1,151 @@
+name: Temporary visual capture · reactive-proactive-voice-report
+
+on:
+  push:
+    branches:
+      - feature/adding-technical-report-reactive-proactive-voice
+
+permissions:
+  contents: write
+
+jobs:
+  build-capture-and-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Materialize report files
+        run: python scripts/apply_voice_report_patch.py
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; else pip install mkdocs mkdocs-material; fi
+
+      - name: Build site strictly
+        run: mkdocs build --clean --strict
+
+      - name: Audit video indexing metadata
+        run: python scripts/audit_video_indexing.py
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Serve built site
+        run: |
+          python -m http.server 8000 --directory site > /tmp/5sigmas-report-preview.log 2>&1 &
+          echo $! > /tmp/5sigmas-report-preview.pid
+          for attempt in {1..30}; do
+            curl --fail --silent http://127.0.0.1:8000/ > /dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/5sigmas-report-preview.log
+          exit 1
+
+      - name: Capture report screenshots
+        env:
+          CAPTURES_JSON: '[{"name": "article-top-desktop", "path": "/articulos-tecnicos/reactive-proactive-voice-agents/", "viewport": {"width": 1440, "height": 1100}}, {"name": "article-top-mobile", "path": "/articulos-tecnicos/reactive-proactive-voice-agents/", "viewport": {"width": 390, "height": 844}, "mobile": true}, {"name": "panorama-desktop", "path": "/articulos-tecnicos/reactive-proactive-voice-agents/", "viewport": {"width": 1440, "height": 1100}, "selector": ".vrpv-panorama"}, {"name": "clocks-desktop", "path": "/articulos-tecnicos/reactive-proactive-voice-agents/", "viewport": {"width": 1440, "height": 1100}, "selector": ".vrpv-clock"}, {"name": "barge-in-desktop", "path": "/articulos-tecnicos/reactive-proactive-voice-agents/", "viewport": {"width": 1440, "height": 1100}, "selector": ".vrpv-barge"}, {"name": "runtime-desktop", "path": "/articulos-tecnicos/reactive-proactive-voice-agents/", "viewport": {"width": 1440, "height": 1100}, "selector": ".vrpv-runtime"}]'
+          OUTPUT_DIR: artifacts/reactive-proactive-voice-report
+        run: |
+          cat > /tmp/capture-report.mjs <<'EOF'
+          import { chromium } from 'playwright';
+          import { mkdir } from 'node:fs/promises';
+
+          const captures = JSON.parse(process.env.CAPTURES_JSON);
+          const outputDir = process.env.OUTPUT_DIR;
+          await mkdir(outputDir, { recursive: true });
+          const browser = await chromium.launch({ headless: true });
+
+          try {
+            for (const capture of captures) {
+              const context = await browser.newContext({
+                viewport: capture.viewport,
+                deviceScaleFactor: 1,
+                isMobile: capture.mobile ?? false,
+                colorScheme: 'light',
+                reducedMotion: 'no-preference',
+              });
+              const page = await context.newPage();
+              const errors = [];
+              page.on('pageerror', error => errors.push(`pageerror: ${error.message}`));
+              page.on('console', message => {
+                if (message.type() === 'error') errors.push(`console: ${message.text()}`);
+              });
+
+              const response = await page.goto(`http://127.0.0.1:8000${capture.path}`, {
+                waitUntil: 'networkidle',
+                timeout: 30000,
+              });
+              if (!response?.ok()) throw new Error(`${capture.path} returned ${response?.status()}`);
+              await page.evaluate(() => document.fonts?.ready);
+              await page.waitForTimeout(850);
+
+              const overflow = await page.evaluate(() =>
+                document.documentElement.scrollWidth - document.documentElement.clientWidth
+              );
+              if (overflow > 4) throw new Error(`${capture.name} has ${overflow}px horizontal overflow`);
+
+              const broken = await page.evaluate(() =>
+                [...document.images]
+                  .filter(image => image.complete && image.naturalWidth === 0)
+                  .map(image => image.currentSrc || image.src)
+              );
+              if (broken.length) throw new Error(`${capture.name} has broken images: ${broken.join(', ')}`);
+              if (errors.length) throw new Error(`${capture.name} emitted browser errors: ${errors.join(' | ')}`);
+
+              if (capture.selector) {
+                const root = page.locator(capture.selector).first();
+                if (await root.count() !== 1) throw new Error(`Missing selector ${capture.selector}`);
+                const shell = root.locator('xpath=ancestor::section[@data-anim-shell]').first();
+                const target = await shell.count() ? shell : root;
+                await target.scrollIntoViewIfNeeded();
+                await page.waitForTimeout(350);
+                await target.screenshot({
+                  path: `${outputDir}/${capture.name}.png`,
+                  animations: 'allow',
+                });
+              } else {
+                await page.evaluate(() => window.scrollTo(0, 0));
+                await page.screenshot({
+                  path: `${outputDir}/${capture.name}.png`,
+                  fullPage: false,
+                  animations: 'allow',
+                });
+              }
+              await context.close();
+            }
+          } finally {
+            await browser.close();
+          }
+          EOF
+          node /tmp/capture-report.mjs
+
+      - name: Upload visual review
+        uses: actions/upload-artifact@v4
+        with:
+          name: reactive-proactive-voice-report
+          path: artifacts/reactive-proactive-voice-report/*
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Commit the report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add mkdocs.yml docs/articulos-tecnicos docs/snippets/articulos-tecnicos
+          git status --short
+          git commit -m "Add reactive and proactive voice agents technical report"
+          git push origin HEAD:feature/adding-technical-report-reactive-proactive-voice
