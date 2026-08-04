@@ -1,0 +1,218 @@
+<section class="varch varch-surface" data-anim-fullscreen="on" data-anim-contrast="force" aria-label="Arquitectura híbrida con superficie speech-to-speech y plano cognitivo">
+  <style>
+    .varch-surface,.varch-surface *{box-sizing:border-box}
+    .varch-surface{
+      --ink:#07191b;--muted:#546366;--line:rgba(7,25,27,.12);--green:#23863a;--green-soft:#eaf6e8;
+      --teal:#087f8f;--teal-soft:#e7f7f8;--purple:#6657b8;--purple-soft:#f0edff;
+      --amber:#d98a00;--amber-soft:#fff3da;--red:#c73a31;--red-soft:#fff0ed;
+      font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;color:var(--ink);
+      display:grid;margin:28px auto 34px;max-width:1440px;
+    }
+    .anim-shell-modal .varch-surface{margin:0;max-width:none}
+    .varch-surface__sheet{
+      position:relative;overflow:hidden;padding:30px;border:1px solid var(--line);border-radius:28px;
+      background:
+        radial-gradient(circle at 8% 8%,rgba(8,127,143,.10),transparent 25%),
+        radial-gradient(circle at 92% 90%,rgba(102,87,184,.10),transparent 28%),
+        linear-gradient(180deg,#fff,#fafcfc);
+      box-shadow:0 22px 54px rgba(18,35,39,.12);
+    }
+    .varch-surface__head{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:24px}
+    .varch-surface__eyebrow{font-size:.74rem;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--purple)}
+    .varch-surface h2{margin:7px 0 0;font-size:clamp(1.9rem,3.2vw,3rem);line-height:.98;letter-spacing:-.045em}
+    .varch-surface__hot{
+      max-width:440px;padding:11px 13px;border-radius:14px;border:1px solid rgba(102,87,184,.18);
+      background:var(--purple-soft);color:var(--purple);font-size:.76rem;line-height:1.38;font-weight:850;text-align:right;
+    }
+    .varch-surface__architecture{
+      position:relative;display:grid;grid-template-columns:minmax(210px,.7fr) minmax(300px,1fr) minmax(300px,1fr);gap:14px;align-items:stretch;
+    }
+    .varch-surface__column{display:grid;gap:12px;align-content:start}
+    .varch-surface__column-title{font-size:.6rem;font-weight:950;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);padding:0 2px}
+    .varch-surface__box{
+      position:relative;min-width:0;padding:16px;border:1px solid var(--line);border-radius:21px;background:rgba(255,255,255,.94);
+      box-shadow:0 11px 24px rgba(18,35,39,.06);display:grid;gap:11px;overflow:hidden;
+    }
+    .varch-surface__box--human{border-color:rgba(35,134,58,.24);background:linear-gradient(180deg,#fff,var(--green-soft))}
+    .varch-surface__box--s2s{min-height:302px;border-color:rgba(8,127,143,.3);background:linear-gradient(180deg,#fff,var(--teal-soft))}
+    .varch-surface__box--plane{min-height:230px;border-color:rgba(102,87,184,.29);background:linear-gradient(180deg,#fff,var(--purple-soft))}
+    .varch-surface__box--voice{border-color:rgba(217,138,0,.27);background:linear-gradient(180deg,#fff,var(--amber-soft))}
+    .varch-surface__box--guard{border-color:rgba(199,58,49,.2);background:linear-gradient(180deg,#fff,var(--red-soft))}
+    .varch-surface__box-head{display:flex;align-items:center;gap:10px}
+    .varch-surface__icon{
+      width:40px;height:40px;display:grid;place-items:center;flex:0 0 auto;border-radius:13px;background:#fff;
+      border:1px solid rgba(7,25,27,.08);font-size:.9rem;font-weight:950;
+    }
+    .varch-surface__box--human .varch-surface__icon{color:var(--green)}
+    .varch-surface__box--s2s .varch-surface__icon{color:var(--teal)}
+    .varch-surface__box--plane .varch-surface__icon{color:var(--purple)}
+    .varch-surface__box--voice .varch-surface__icon{color:#9a6200}
+    .varch-surface__box--guard .varch-surface__icon{color:var(--red)}
+    .varch-surface__box-head h3{margin:0;font-size:.93rem;letter-spacing:-.022em}
+    .varch-surface__box-head small{display:block;margin-top:3px;color:var(--muted);font-size:.6rem;font-weight:720;line-height:1.2}
+    .varch-surface__wave{height:52px;display:flex;align-items:center;justify-content:center;gap:5px;padding:0 8px;border-radius:15px;background:#fff;border:1px solid rgba(8,127,143,.14)}
+    .varch-surface__wave i{display:block;width:5px;height:10px;border-radius:99px;background:var(--teal);animation:varch-surface-wave .96s ease-in-out infinite}
+    .varch-surface__wave i:nth-child(2){animation-delay:-.72s}.varch-surface__wave i:nth-child(3){animation-delay:-.36s}
+    .varch-surface__wave i:nth-child(4){animation-delay:-.84s}.varch-surface__wave i:nth-child(5){animation-delay:-.22s}
+    .varch-surface__list{display:grid;gap:7px}
+    .varch-surface__item{display:grid;grid-template-columns:9px 1fr;gap:7px;color:var(--muted);font-size:.65rem;line-height:1.3;font-weight:740}
+    .varch-surface__item::before{content:"";width:7px;height:7px;margin-top:3px;border-radius:50%;background:var(--teal)}
+    .varch-surface__box--plane .varch-surface__item::before{background:var(--purple)}
+    .varch-surface__pills{display:flex;flex-wrap:wrap;gap:6px}
+    .varch-surface__pill{padding:5px 7px;border-radius:999px;background:#fff;border:1px solid rgba(7,25,27,.09);color:var(--muted);font-size:.54rem;font-weight:880}
+    .varch-surface__handoff{
+      padding:11px 12px;border-radius:14px;background:var(--ink);color:#fff;display:grid;gap:8px;overflow:hidden;position:relative;
+    }
+    .varch-surface__handoff::after{
+      content:"";position:absolute;top:0;bottom:0;left:-80px;width:70px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);
+      transform:skewX(-15deg);animation:varch-surface-scan 3.2s linear infinite;
+    }
+    .varch-surface__handoff strong{font-size:.65rem;color:#9fe0b0;text-transform:uppercase;letter-spacing:.08em}
+    .varch-surface__handoff code{font:700 .52rem/"SFMono-Regular",Consolas,monospace;color:#d9e8e6;white-space:normal}
+    .varch-surface__workers{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+    .varch-surface__worker{
+      min-height:69px;padding:9px 7px;border-radius:13px;background:#fff;border:1px solid rgba(102,87,184,.16);color:var(--purple);
+      display:grid;place-items:center;align-content:center;gap:7px;text-align:center;font-size:.57rem;line-height:1.2;font-weight:850;
+    }
+    .varch-surface__worker::before{
+      content:"";width:10px;height:10px;border-radius:50%;background:var(--purple);box-shadow:0 0 0 5px rgba(102,87,184,.1);
+      animation:varch-surface-pulse 1.8s ease-in-out infinite;
+    }
+    .varch-surface__worker:nth-child(2)::before{animation-delay:-.55s}.varch-surface__worker:nth-child(3)::before{animation-delay:-1.1s}
+    .varch-surface__audio-samples{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+    .varch-surface__sample{
+      min-height:78px;padding:9px;border-radius:13px;background:#fff;border:1px solid rgba(217,138,0,.17);display:grid;gap:6px;align-content:center;
+    }
+    .varch-surface__sample strong{font-size:.59rem;color:#8a5a08}
+    .varch-surface__sample span{height:18px;display:flex;align-items:center;gap:2px}
+    .varch-surface__sample i{display:block;width:3px;height:6px;border-radius:99px;background:var(--amber);animation:varch-surface-sample 1.25s ease-in-out infinite}
+    .varch-surface__sample i:nth-child(2){animation-delay:-.5s}.varch-surface__sample i:nth-child(3){animation-delay:-.8s}.varch-surface__sample i:nth-child(4){animation-delay:-.25s}.varch-surface__sample i:nth-child(5){animation-delay:-.65s}
+    .varch-surface__sample small{color:var(--muted);font-size:.48rem;font-weight:750}
+    .varch-surface__guardrails{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}
+    .varch-surface__guardrails span{
+      padding:8px;border-radius:11px;background:#fff;border:1px solid rgba(199,58,49,.13);color:#8e2d27;
+      font-size:.54rem;font-weight:850;text-align:center;
+    }
+    .varch-surface__route{
+      position:absolute;z-index:4;pointer-events:none;height:3px;border-radius:999px;background:rgba(8,127,143,.15);overflow:hidden;
+    }
+    .varch-surface__route::after{
+      content:"";position:absolute;inset:0;width:34%;background:linear-gradient(90deg,transparent,var(--teal),transparent);
+      animation:varch-surface-route 2.5s linear infinite;
+    }
+    .varch-surface__route--human{left:21%;top:150px;width:5.4%}
+    .varch-surface__route--delegate{left:60.2%;top:150px;width:5.3%;background:rgba(102,87,184,.15)}
+    .varch-surface__route--delegate::after{background:linear-gradient(90deg,transparent,var(--purple),transparent)}
+    .varch-surface__route--return{left:26.4%;top:370px;width:39%;background:rgba(217,138,0,.16)}
+    .varch-surface__route--return::after{background:linear-gradient(90deg,transparent,var(--amber),transparent);animation-direction:reverse}
+    .varch-surface__footer{
+      margin-top:17px;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;padding:14px 16px;border-radius:17px;background:var(--ink);color:#fff;
+      font-size:.72rem;line-height:1.35;font-weight:800;
+    }
+    .varch-surface__footer b{padding:5px 8px;border-radius:999px;background:rgba(255,255,255,.1);color:#9fe0b0;font-size:.57rem;text-transform:uppercase;letter-spacing:.07em}
+    .varch-surface__footer code{font:700 .57rem/"SFMono-Regular",Consolas,monospace;color:#d9e8e6}
+    @keyframes varch-surface-wave{0%,100%{height:9px;opacity:.45}50%{height:40px;opacity:1}}
+    @keyframes varch-surface-pulse{0%,100%{transform:scale(.72);opacity:.45}50%{transform:scale(1);opacity:1}}
+    @keyframes varch-surface-sample{0%,100%{height:5px;opacity:.5}50%{height:17px;opacity:1}}
+    @keyframes varch-surface-scan{0%{left:-80px}100%{left:115%}}
+    @keyframes varch-surface-route{0%{transform:translateX(-120%)}100%{transform:translateX(320%)}}
+    @media (max-width:980px){
+      .varch-surface__sheet{padding:21px 16px}
+      .varch-surface__head{display:grid;gap:10px}.varch-surface__hot{text-align:left}
+      .varch-surface__architecture{grid-template-columns:1fr}
+      .varch-surface__route{display:none}
+      .varch-surface__box--s2s,.varch-surface__box--plane{min-height:0}
+    }
+    @media (max-width:520px){
+      .varch-surface__workers,.varch-surface__audio-samples,.varch-surface__guardrails{grid-template-columns:1fr}
+      .varch-surface__footer{grid-template-columns:1fr}.varch-surface__footer code{justify-self:start}
+    }
+    @media (prefers-reduced-motion:reduce){
+      .varch-surface *{animation-duration:.001ms!important;animation-iteration-count:1!important}
+    }
+  </style>
+
+  <div class="varch-surface__sheet">
+    <header class="varch-surface__head">
+      <div>
+        <div class="varch-surface__eyebrow">Hot take</div>
+        <h2>La voz conversa. Otro modelo trabaja.</h2>
+      </div>
+      <div class="varch-surface__hot">No necesitamos un único S2S gigante bloqueado por tools. Necesitamos una superficie rápida que delegue sin abandonar la conversación.</div>
+    </header>
+
+    <div class="varch-surface__architecture">
+      <span class="varch-surface__route varch-surface__route--human" aria-hidden="true"></span>
+      <span class="varch-surface__route varch-surface__route--delegate" aria-hidden="true"></span>
+      <span class="varch-surface__route varch-surface__route--return" aria-hidden="true"></span>
+
+      <div class="varch-surface__column">
+        <div class="varch-surface__column-title">Relación humana</div>
+        <article class="varch-surface__box varch-surface__box--human">
+          <div class="varch-surface__box-head"><span class="varch-surface__icon">U</span><div><h3>Usuario</h3><small>Habla, interrumpe y cambia de intención</small></div></div>
+          <div class="varch-surface__pills"><span class="varch-surface__pill">audio</span><span class="varch-surface__pill">timing</span><span class="varch-surface__pill">context</span></div>
+        </article>
+
+        <article class="varch-surface__box varch-surface__box--guard">
+          <div class="varch-surface__box-head"><span class="varch-surface__icon">✓</span><div><h3>Safety & consent</h3><small>Identidad y procedencia de voz</small></div></div>
+          <div class="varch-surface__guardrails"><span>consent</span><span>provenance</span><span>revocation</span><span>anti-impersonation</span></div>
+        </article>
+      </div>
+
+      <div class="varch-surface__column">
+        <div class="varch-surface__column-title">Fast path · siempre disponible</div>
+        <article class="varch-surface__box varch-surface__box--s2s">
+          <div class="varch-surface__box-head"><span class="varch-surface__icon">S</span><div><h3>S2S Interaction Surface</h3><small>Full-duplex, rápida y dueña del canal</small></div></div>
+          <div class="varch-surface__wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="varch-surface__list">
+            <div class="varch-surface__item">Escucha, turn-taking y backchannels</div>
+            <div class="varch-surface__item">Barge-in y continuidad prosódica</div>
+            <div class="varch-surface__item">Respuestas ligeras y aceptación de trabajo</div>
+            <div class="varch-surface__item">Entrega de resultados en una quiet window</div>
+          </div>
+          <div class="varch-surface__pills"><span class="varch-surface__pill">low latency</span><span class="varch-surface__pill">voice owner</span><span class="varch-surface__pill">never blocked</span></div>
+        </article>
+
+        <div class="varch-surface__handoff">
+          <strong>Handoff contract</strong>
+          <code>TaskEnvelope → operation_id · intent · context · deadline · delivery_policy</code>
+        </div>
+
+        <article class="varch-surface__box varch-surface__box--voice">
+          <div class="varch-surface__box-head"><span class="varch-surface__icon">V</span><div><h3>Voice Prompt Pack</h3><small>Few-shot acústico autorizado</small></div></div>
+          <div class="varch-surface__audio-samples">
+            <div class="varch-surface__sample"><strong>Identity</strong><span><i></i><i></i><i></i><i></i><i></i></span><small>3–15 s reference</small></div>
+            <div class="varch-surface__sample"><strong>Style</strong><span><i></i><i></i><i></i><i></i><i></i></span><small>pace · energy</small></div>
+            <div class="varch-surface__sample"><strong>Lexicon</strong><span><i></i><i></i><i></i><i></i><i></i></span><small>names · brands</small></div>
+          </div>
+        </article>
+      </div>
+
+      <div class="varch-surface__column">
+        <div class="varch-surface__column-title">Slow path · profundidad y fiabilidad</div>
+        <article class="varch-surface__box varch-surface__box--plane">
+          <div class="varch-surface__box-head"><span class="varch-surface__icon">C</span><div><h3>Cognitive Execution Plane</h3><small>Modelo frontier y runtime durable</small></div></div>
+          <div class="varch-surface__list">
+            <div class="varch-surface__item">Razonamiento profundo y planificación</div>
+            <div class="varch-surface__item">RAG, browsing y contexto largo</div>
+            <div class="varch-surface__item">Tool calls, validaciones y side effects</div>
+            <div class="varch-surface__item">Retries, idempotencia y compensaciones</div>
+          </div>
+          <div class="varch-surface__workers"><span class="varch-surface__worker">RAG / Search</span><span class="varch-surface__worker">Business APIs</span><span class="varch-surface__worker">Async routines</span></div>
+          <div class="varch-surface__pills"><span class="varch-surface__pill">heavy model</span><span class="varch-surface__pill">parallel</span><span class="varch-surface__pill">durable state</span></div>
+        </article>
+
+        <div class="varch-surface__handoff">
+          <strong>Return contract</strong>
+          <code>DeliveryEnvelope → result · confidence · urgency · expires_at · speech_plan</code>
+        </div>
+      </div>
+    </div>
+
+    <div class="varch-surface__footer">
+      <b>Principio</b>
+      <span>La superficie protege la conversación; el plano cognitivo protege la corrección operacional. Se coordinan con eventos, no bloqueándose mutuamente.</span>
+      <code>fast interaction path + slow cognitive path</code>
+    </div>
+  </div>
+</section>

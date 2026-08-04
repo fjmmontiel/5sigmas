@@ -1,0 +1,201 @@
+<section class="varch varch-compare" data-anim-fullscreen="on" data-anim-contrast="force" aria-label="Comparación de full cascade, half cascade y speech-to-speech">
+  <style>
+    .varch-compare,.varch-compare *{box-sizing:border-box}
+    .varch-compare{
+      --ink:#07191b;--muted:#546366;--line:rgba(7,25,27,.12);
+      --blue:#2364aa;--blue-soft:#eaf2fb;--teal:#087f8f;--teal-soft:#e7f7f8;
+      --purple:#6657b8;--purple-soft:#f0edff;--amber:#d98a00;--amber-soft:#fff3da;--green:#23863a;--green-soft:#eaf6e8;
+      font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;color:var(--ink);
+      display:grid;margin:28px auto 34px;max-width:1440px;
+    }
+    .anim-shell-modal .varch-compare{margin:0;max-width:none}
+    .varch-compare__sheet{
+      position:relative;overflow:hidden;padding:30px;border:1px solid var(--line);border-radius:28px;
+      background:
+        radial-gradient(circle at 7% 8%,rgba(35,100,170,.09),transparent 25%),
+        radial-gradient(circle at 92% 10%,rgba(102,87,184,.09),transparent 26%),
+        linear-gradient(180deg,#fff,#fbfcfc);
+      box-shadow:0 22px 54px rgba(18,35,39,.12);
+    }
+    .varch-compare__head{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:24px}
+    .varch-compare__eyebrow{font-size:.74rem;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--teal)}
+    .varch-compare h2{margin:7px 0 0;font-size:clamp(1.9rem,3.2vw,3rem);line-height:.98;letter-spacing:-.045em}
+    .varch-compare__lead{max-width:510px;margin:0;color:var(--muted);font-size:.82rem;line-height:1.45;font-weight:700;text-align:right}
+    .varch-compare__lanes{display:grid;gap:12px}
+    .varch-compare__lane{
+      position:relative;display:grid;grid-template-columns:180px 1fr 220px;gap:14px;align-items:center;
+      padding:15px;border:1px solid var(--line);border-radius:21px;background:rgba(255,255,255,.93);
+      box-shadow:0 11px 24px rgba(18,35,39,.06);overflow:hidden;
+    }
+    .varch-compare__lane--full{border-color:rgba(35,100,170,.25)}
+    .varch-compare__lane--half{border-color:rgba(8,127,143,.29);background:linear-gradient(90deg,#fff,var(--teal-soft))}
+    .varch-compare__lane--s2s{border-color:rgba(102,87,184,.27);background:linear-gradient(90deg,#fff,var(--purple-soft))}
+    .varch-compare__label{display:grid;gap:6px;align-content:center}
+    .varch-compare__n{
+      width:max-content;padding:5px 8px;border-radius:999px;background:var(--blue-soft);color:var(--blue);
+      font-size:.55rem;font-weight:950;text-transform:uppercase;letter-spacing:.07em;
+    }
+    .varch-compare__lane--half .varch-compare__n{background:var(--teal-soft);color:var(--teal)}
+    .varch-compare__lane--s2s .varch-compare__n{background:var(--purple-soft);color:var(--purple)}
+    .varch-compare__label h3{margin:0;font-size:1.05rem;letter-spacing:-.03em}
+    .varch-compare__label p{margin:0;color:var(--muted);font-size:.63rem;line-height:1.35;font-weight:720}
+    .varch-compare__pipe{position:relative;display:flex;align-items:center;justify-content:center;gap:7px;min-height:86px}
+    .varch-compare__pipe::before{
+      content:"";position:absolute;left:4%;right:4%;top:50%;height:3px;border-radius:999px;background:rgba(35,100,170,.15);
+    }
+    .varch-compare__lane--half .varch-compare__pipe::before{background:rgba(8,127,143,.16)}
+    .varch-compare__lane--s2s .varch-compare__pipe::before{background:rgba(102,87,184,.16)}
+    .varch-compare__signal{
+      position:absolute;z-index:1;left:4%;top:calc(50% - 7px);width:14px;height:14px;border-radius:50%;
+      background:#fff;border:4px solid var(--blue);box-shadow:0 0 0 5px rgba(35,100,170,.09);
+      animation:varch-compare-flow 5.8s cubic-bezier(.58,.02,.35,.98) infinite;
+    }
+    .varch-compare__lane--half .varch-compare__signal{border-color:var(--teal);animation-duration:4.6s}
+    .varch-compare__lane--s2s .varch-compare__signal{border-color:var(--purple);animation-duration:3.7s}
+    .varch-compare__node{
+      position:relative;z-index:2;min-width:64px;min-height:58px;padding:9px 8px;border-radius:15px;border:1px solid rgba(7,25,27,.11);
+      background:#fff;display:grid;place-items:center;align-content:center;gap:4px;text-align:center;
+      box-shadow:0 7px 16px rgba(18,35,39,.065);
+    }
+    .varch-compare__node strong{font-size:.66rem;line-height:1.05}
+    .varch-compare__node small{color:var(--muted);font-size:.5rem;line-height:1.1;font-weight:750}
+    .varch-compare__node--audio{background:#f7faf8}
+    .varch-compare__node--stt{border-color:rgba(35,100,170,.22);background:var(--blue-soft);color:var(--blue)}
+    .varch-compare__node--llm{border-color:rgba(8,127,143,.22);background:var(--teal-soft);color:var(--teal)}
+    .varch-compare__node--tts{border-color:rgba(217,138,0,.23);background:var(--amber-soft);color:#9a6200}
+    .varch-compare__node--native{min-width:155px;border-color:rgba(102,87,184,.25);background:var(--purple-soft);color:var(--purple)}
+    .varch-compare__node--audio-model{min-width:135px;border-color:rgba(8,127,143,.25);background:var(--teal-soft);color:var(--teal)}
+    .varch-compare__arrow{position:relative;z-index:2;color:var(--muted);font-size:.82rem;font-weight:950}
+    .varch-compare__score{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}
+    .varch-compare__metric{
+      min-height:54px;padding:8px;border-radius:12px;background:#f7faf8;border:1px solid rgba(7,25,27,.08);display:grid;gap:3px;
+    }
+    .varch-compare__metric span{color:var(--muted);font-size:.52rem;font-weight:850;text-transform:uppercase;letter-spacing:.045em}
+    .varch-compare__metric strong{font-size:.68rem;line-height:1.1}
+    .varch-compare__metric--good strong{color:var(--green)}
+    .varch-compare__metric--mid strong{color:#9a6200}
+    .varch-compare__metric--hard strong{color:var(--blue)}
+    .varch-compare__axes{
+      margin-top:17px;display:grid;grid-template-columns:repeat(4,1fr);gap:9px;
+    }
+    .varch-compare__axis{
+      padding:12px;border:1px solid var(--line);border-radius:15px;background:#fff;display:grid;gap:4px;
+    }
+    .varch-compare__axis b{font-size:.68rem}
+    .varch-compare__axis span{color:var(--muted);font-size:.58rem;line-height:1.32;font-weight:720}
+    .varch-compare__axis:first-child{background:var(--teal-soft);border-color:rgba(8,127,143,.18)}
+    .varch-compare__footer{
+      margin-top:13px;padding:13px 15px;border-radius:15px;background:var(--ink);color:#fff;
+      display:flex;align-items:center;justify-content:space-between;gap:18px;font-size:.72rem;font-weight:800;
+    }
+    .varch-compare__footer b{color:#9fe0b0}
+    .varch-compare__footer code{font:700 .59rem/"SFMono-Regular",Consolas,monospace;color:#d9e8e6}
+    @keyframes varch-compare-flow{0%,8%{left:4%}90%,100%{left:94%}}
+    @media (max-width:980px){
+      .varch-compare__sheet{padding:21px 16px}
+      .varch-compare__head{display:grid;gap:10px}.varch-compare__lead{text-align:left}
+      .varch-compare__lane{grid-template-columns:1fr;gap:9px}
+      .varch-compare__pipe{justify-content:flex-start;overflow-x:auto;padding:5px 2px 9px}
+      .varch-compare__pipe::before{left:25px;right:25px}
+      .varch-compare__score{grid-template-columns:repeat(4,1fr)}
+      .varch-compare__axes{grid-template-columns:repeat(2,1fr)}
+    }
+    @media (max-width:600px){
+      .varch-compare__score{grid-template-columns:repeat(2,1fr)}
+      .varch-compare__axes{grid-template-columns:1fr}
+      .varch-compare__node{min-width:66px}
+      .varch-compare__footer{display:grid}
+    }
+    @media (prefers-reduced-motion:reduce){
+      .varch-compare *{animation-duration:.001ms!important;animation-iteration-count:1!important}
+      .varch-compare__signal{display:none}
+    }
+  </style>
+
+  <div class="varch-compare__sheet">
+    <header class="varch-compare__head">
+      <div>
+        <div class="varch-compare__eyebrow">Arquitectura de modalidad</div>
+        <h2>Tres rutas desde audio hasta audio.</h2>
+      </div>
+      <p class="varch-compare__lead">La tubería define dónde se comprime la señal, quién posee la voz y cuántas fronteras hay que coordinar. No determina por sí sola si el sistema es full-duplex.</p>
+    </header>
+
+    <div class="varch-compare__lanes">
+      <article class="varch-compare__lane varch-compare__lane--full">
+        <div class="varch-compare__label">
+          <span class="varch-compare__n">01 · modular</span>
+          <h3>Full cascade</h3>
+          <p>Cada etapa tiene proveedor, estado y buffer propios.</p>
+        </div>
+        <div class="varch-compare__pipe">
+          <span class="varch-compare__signal" aria-hidden="true"></span>
+          <div class="varch-compare__node varch-compare__node--audio"><strong>Audio in</strong><small>frames</small></div><span class="varch-compare__arrow">→</span>
+          <div class="varch-compare__node varch-compare__node--stt"><strong>STT</strong><small>partials</small></div><span class="varch-compare__arrow">→</span>
+          <div class="varch-compare__node varch-compare__node--llm"><strong>LLM</strong><small>tools</small></div><span class="varch-compare__arrow">→</span>
+          <div class="varch-compare__node varch-compare__node--tts"><strong>TTS</strong><small>chunks</small></div><span class="varch-compare__arrow">→</span>
+          <div class="varch-compare__node varch-compare__node--audio"><strong>Audio out</strong><small>playback</small></div>
+        </div>
+        <div class="varch-compare__score">
+          <div class="varch-compare__metric varch-compare__metric--mid"><span>Latencia</span><strong>Media</strong></div>
+          <div class="varch-compare__metric varch-compare__metric--good"><span>Control</span><strong>Muy alto</strong></div>
+          <div class="varch-compare__metric varch-compare__metric--hard"><span>Estados</span><strong>Muchos</strong></div>
+          <div class="varch-compare__metric varch-compare__metric--mid"><span>Prosodia</span><strong>Se corta</strong></div>
+        </div>
+      </article>
+
+      <article class="varch-compare__lane varch-compare__lane--half">
+        <div class="varch-compare__label">
+          <span class="varch-compare__n">02 · híbrida</span>
+          <h3>Half cascade</h3>
+          <p>Comprensión audio-native y voz externa gobernable.</p>
+        </div>
+        <div class="varch-compare__pipe">
+          <span class="varch-compare__signal" aria-hidden="true"></span>
+          <div class="varch-compare__node varch-compare__node--audio"><strong>Audio in</strong><small>prosody</small></div><span class="varch-compare__arrow">→</span>
+          <div class="varch-compare__node varch-compare__node--audio-model"><strong>Audio model</strong><small>streaming text</small></div><span class="varch-compare__arrow">→</span>
+          <div class="varch-compare__node varch-compare__node--tts"><strong>TTS</strong><small>SpeechPlan</small></div><span class="varch-compare__arrow">→</span>
+          <div class="varch-compare__node varch-compare__node--audio"><strong>Audio out</strong><small>playback</small></div>
+        </div>
+        <div class="varch-compare__score">
+          <div class="varch-compare__metric varch-compare__metric--good"><span>Latencia</span><strong>Baja-media</strong></div>
+          <div class="varch-compare__metric varch-compare__metric--good"><span>Control</span><strong>Alto</strong></div>
+          <div class="varch-compare__metric varch-compare__metric--mid"><span>Contrato</span><strong>SpeechPlan</strong></div>
+          <div class="varch-compare__metric varch-compare__metric--good"><span>Prosodia in</span><strong>Nativa</strong></div>
+        </div>
+      </article>
+
+      <article class="varch-compare__lane varch-compare__lane--s2s">
+        <div class="varch-compare__label">
+          <span class="varch-compare__n">03 · nativa</span>
+          <h3>Speech-to-speech</h3>
+          <p>Comprensión y expresión comparten representación acústica.</p>
+        </div>
+        <div class="varch-compare__pipe">
+          <span class="varch-compare__signal" aria-hidden="true"></span>
+          <div class="varch-compare__node varch-compare__node--audio"><strong>Audio in</strong><small>continuous</small></div><span class="varch-compare__arrow">↔</span>
+          <div class="varch-compare__node varch-compare__node--native"><strong>S2S realtime model</strong><small>voice · timing · tools</small></div><span class="varch-compare__arrow">↔</span>
+          <div class="varch-compare__node varch-compare__node--audio"><strong>Audio out</strong><small>continuous</small></div>
+        </div>
+        <div class="varch-compare__score">
+          <div class="varch-compare__metric varch-compare__metric--good"><span>Latencia</span><strong>Baja</strong></div>
+          <div class="varch-compare__metric varch-compare__metric--mid"><span>Control</span><strong>Variable</strong></div>
+          <div class="varch-compare__metric varch-compare__metric--good"><span>Timing</span><strong>Natural</strong></div>
+          <div class="varch-compare__metric varch-compare__metric--good"><span>Prosodia</span><strong>Continua</strong></div>
+        </div>
+      </article>
+    </div>
+
+    <div class="varch-compare__axes">
+      <div class="varch-compare__axis"><b>Modalidad</b><span>Full cascade · half cascade · S2S</span></div>
+      <div class="varch-compare__axis"><b>Duplex</b><span>Por turnos o simultáneo</span></div>
+      <div class="varch-compare__axis"><b>Iniciativa</b><span>Reactiva o proactiva</span></div>
+      <div class="varch-compare__axis"><b>Orquestación</b><span>Monolítica o delegada</span></div>
+    </div>
+
+    <div class="varch-compare__footer">
+      <span><b>No mezclar ejes:</b> S2S describe la modalidad; full-duplex describe cómo conviven escucha y habla.</span>
+      <code>modality ≠ duplex ≠ initiative ≠ orchestration</code>
+    </div>
+  </div>
+</section>

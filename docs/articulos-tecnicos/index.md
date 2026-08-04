@@ -36,17 +36,20 @@ hide:
     </div>
     <div class="s5-note-feature__meta">Voice runtime<br />Barge-in<br />ActivityGate<br />Tools asíncronas</div>
   </div>
+  <div class="s5-note-feature">
+    <div>
+      <div class="s5-eyebrow">Nota 03</div>
+      <h2>Tres arquitecturas para agentes de voz</h2>
+      <p>Una comparación operativa entre full cascade, half cascade y speech-to-speech, con foco en prosodia, latencia, tools, control y full-duplex.</p>
+      <a class="s5-text-link" href="/articulos-tecnicos/voice-agent-architectures/">Leer la nota técnica →</a>
+    </div>
+    <div class="s5-note-feature__meta">Full cascade<br />Half cascade<br />Speech-to-speech<br />Arquitectura híbrida</div>
+  </div>
 </section>
 
 <section class="s5-section">
   <div class="s5-section-head"><h2>En preparación</h2></div>
   <div class="s5-simple-list">
-    <div class="s5-list-row">
-      <span class="s5-list-row__n">03</span>
-      <span class="s5-list-row__title">Tres arquitecturas para agentes de voz</span>
-      <span class="s5-list-row__desc">Full cascade, half cascade y speech-to-speech: prosodia, latencia, control y una arquitectura híbrida.</span>
-      <span class="s5-list-row__meta">Investigación</span>
-    </div>
     <div class="s5-list-row">
       <span class="s5-list-row__n">04</span>
       <span class="s5-list-row__title">Evaluación de agentes y tool calling</span>

@@ -1,0 +1,201 @@
+<section class="varch varch-latency" data-anim-fullscreen="on" data-anim-contrast="force" aria-label="Presupuesto de latencia y complejidad de coordinación en arquitecturas de voz">
+  <style>
+    .varch-latency,.varch-latency *{box-sizing:border-box}
+    .varch-latency{
+      --ink:#07191b;--muted:#546366;--line:rgba(7,25,27,.12);--blue:#2364aa;--blue-soft:#eaf2fb;
+      --teal:#087f8f;--teal-soft:#e7f7f8;--purple:#6657b8;--purple-soft:#f0edff;
+      --amber:#d98a00;--amber-soft:#fff3da;--red:#c73a31;--green:#23863a;--green-soft:#eaf6e8;
+      font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;color:var(--ink);
+      display:grid;margin:28px auto 34px;max-width:1400px;
+    }
+    .anim-shell-modal .varch-latency{margin:0;max-width:none}
+    .varch-latency__sheet{
+      position:relative;overflow:hidden;padding:30px;border:1px solid var(--line);border-radius:28px;
+      background:
+        radial-gradient(circle at 90% 8%,rgba(217,138,0,.08),transparent 24%),
+        radial-gradient(circle at 7% 90%,rgba(8,127,143,.08),transparent 26%),
+        linear-gradient(180deg,#fff,#fbfcfc);
+      box-shadow:0 22px 54px rgba(18,35,39,.12);
+    }
+    .varch-latency__head{display:grid;grid-template-columns:1fr auto;align-items:end;gap:24px;margin-bottom:23px}
+    .varch-latency__eyebrow{font-size:.74rem;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--amber)}
+    .varch-latency h2{margin:7px 0 0;font-size:clamp(1.9rem,3.2vw,3rem);line-height:.98;letter-spacing:-.045em}
+    .varch-latency__formula{
+      padding:10px 12px;border-radius:13px;background:var(--ink);color:#fff;
+      font:700 .62rem/1.35 "SFMono-Regular",Consolas,monospace;max-width:470px;
+    }
+    .varch-latency__formula b{color:#9fe0b0}
+    .varch-latency__body{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(280px,.75fr);gap:15px}
+    .varch-latency__panel{
+      min-width:0;padding:17px;border:1px solid var(--line);border-radius:21px;background:rgba(255,255,255,.93);
+      box-shadow:0 11px 24px rgba(18,35,39,.06);
+    }
+    .varch-latency__panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+    .varch-latency__panel-head h3{margin:0;font-size:.92rem;letter-spacing:-.02em}
+    .varch-latency__panel-head span{color:var(--muted);font-size:.58rem;font-weight:800}
+    .varch-latency__scale{display:grid;grid-template-columns:130px 1fr;gap:10px;margin-bottom:6px}
+    .varch-latency__scale>span{font-size:.55rem;color:var(--muted);font-weight:850;text-transform:uppercase;letter-spacing:.06em}
+    .varch-latency__ticks{display:grid;grid-template-columns:repeat(6,1fr);font-size:.5rem;color:var(--muted);font-weight:800;text-align:center}
+    .varch-latency__rows{display:grid;gap:10px}
+    .varch-latency__row{display:grid;grid-template-columns:130px 1fr;gap:10px;align-items:center}
+    .varch-latency__name{display:grid;gap:3px}
+    .varch-latency__name strong{font-size:.73rem}
+    .varch-latency__name small{font-size:.55rem;color:var(--muted);font-weight:700}
+    .varch-latency__track{
+      position:relative;height:54px;border:1px solid rgba(7,25,27,.08);border-radius:13px;overflow:hidden;
+      background:
+        repeating-linear-gradient(90deg,transparent 0 calc(20% - 1px),rgba(7,25,27,.055) calc(20% - 1px) 20%),
+        #f7faf8;
+    }
+    .varch-latency__bar{
+      position:absolute;top:10px;height:33px;border-radius:9px;display:grid;place-items:center;padding:0 7px;
+      font-size:.53rem;font-weight:900;line-height:1.1;text-align:center;overflow:hidden;white-space:nowrap;
+      transform-origin:left;animation:varch-latency-grow 5.8s ease-in-out infinite;
+    }
+    .varch-latency__bar--endpoint{left:1%;width:17%;background:var(--amber-soft);color:#9a6200;border:1px solid rgba(217,138,0,.2)}
+    .varch-latency__bar--stt{left:19%;width:18%;background:var(--blue-soft);color:var(--blue);border:1px solid rgba(35,100,170,.2);animation-delay:-.2s}
+    .varch-latency__bar--llm{left:38%;width:24%;background:var(--teal-soft);color:var(--teal);border:1px solid rgba(8,127,143,.2);animation-delay:-.4s}
+    .varch-latency__bar--tts{left:63%;width:20%;background:#fff0dd;color:#9a6200;border:1px solid rgba(217,138,0,.22);animation-delay:-.6s}
+    .varch-latency__bar--buffer{left:84%;width:14%;background:#f0f2f1;color:var(--muted);border:1px solid rgba(7,25,27,.09);animation-delay:-.8s}
+    .varch-latency__bar--audio-model{left:18%;width:43%;background:var(--teal-soft);color:var(--teal);border:1px solid rgba(8,127,143,.22)}
+    .varch-latency__bar--half-tts{left:62%;width:22%;background:#fff0dd;color:#9a6200;border:1px solid rgba(217,138,0,.22)}
+    .varch-latency__bar--s2s{left:16%;width:49%;background:var(--purple-soft);color:var(--purple);border:1px solid rgba(102,87,184,.22)}
+    .varch-latency__first{
+      position:absolute;z-index:4;top:4px;bottom:4px;width:2px;background:var(--green);box-shadow:0 0 0 4px rgba(35,134,58,.08);
+    }
+    .varch-latency__first::after{
+      content:"first audio";position:absolute;left:5px;top:2px;padding:3px 5px;border-radius:6px;background:var(--green);color:#fff;
+      font-size:.47rem;font-weight:900;white-space:nowrap;
+    }
+    .varch-latency__first--full{left:84%}.varch-latency__first--half{left:67%}.varch-latency__first--s2s{left:49%}
+    .varch-latency__note{
+      margin-top:13px;padding:11px 12px;border-radius:13px;background:var(--green-soft);color:var(--green);
+      font-size:.64rem;line-height:1.4;font-weight:800;border:1px solid rgba(35,134,58,.17);
+    }
+    .varch-latency__stack{display:grid;gap:10px}
+    .varch-latency__complexity{
+      position:relative;padding:13px;border-radius:16px;border:1px solid var(--line);background:#f7faf8;display:grid;gap:9px;
+    }
+    .varch-latency__complexity-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .varch-latency__complexity-head strong{font-size:.76rem}
+    .varch-latency__complexity-head span{font-size:.58rem;font-weight:900;color:var(--muted)}
+    .varch-latency__dots{display:flex;flex-wrap:wrap;gap:6px}
+    .varch-latency__dot{
+      width:31px;height:31px;border-radius:10px;display:grid;place-items:center;background:#fff;border:1px solid rgba(7,25,27,.09);
+      font-size:.46rem;font-weight:950;color:var(--muted);animation:varch-latency-pulse 2.1s ease-in-out infinite;
+    }
+    .varch-latency__complexity--full .varch-latency__dot{border-color:rgba(35,100,170,.17);color:var(--blue)}
+    .varch-latency__complexity--half .varch-latency__dot{border-color:rgba(8,127,143,.17);color:var(--teal)}
+    .varch-latency__complexity--s2s .varch-latency__dot{border-color:rgba(102,87,184,.17);color:var(--purple)}
+    .varch-latency__dot:nth-child(2){animation-delay:-.3s}.varch-latency__dot:nth-child(3){animation-delay:-.6s}
+    .varch-latency__dot:nth-child(4){animation-delay:-.9s}.varch-latency__dot:nth-child(5){animation-delay:-1.2s}
+    .varch-latency__complexity p{margin:0;color:var(--muted);font-size:.59rem;line-height:1.35;font-weight:720}
+    .varch-latency__warning{
+      padding:13px;border-radius:16px;background:var(--amber-soft);color:#8a5a08;border:1px solid rgba(217,138,0,.19);
+      font-size:.63rem;line-height:1.4;font-weight:800;
+    }
+    .varch-latency__footer{
+      margin-top:15px;padding:13px 15px;border-radius:15px;background:var(--ink);color:#fff;display:grid;grid-template-columns:auto 1fr;
+      gap:13px;align-items:center;font-size:.71rem;font-weight:800;
+    }
+    .varch-latency__footer b{padding:5px 8px;border-radius:999px;background:rgba(255,255,255,.1);color:#9fe0b0;font-size:.57rem;text-transform:uppercase;letter-spacing:.07em}
+    @keyframes varch-latency-grow{0%,10%{transform:scaleX(.12);opacity:.5}45%,100%{transform:scaleX(1);opacity:1}}
+    @keyframes varch-latency-pulse{0%,100%{transform:translateY(0);opacity:.65}50%{transform:translateY(-3px);opacity:1}}
+    @media (max-width:950px){
+      .varch-latency__sheet{padding:21px 16px}
+      .varch-latency__head{grid-template-columns:1fr;gap:10px}
+      .varch-latency__body{grid-template-columns:1fr}
+    }
+    @media (max-width:620px){
+      .varch-latency__scale{grid-template-columns:82px 1fr}
+      .varch-latency__row{grid-template-columns:82px 1fr}
+      .varch-latency__bar{font-size:.43rem;padding:0 3px}
+      .varch-latency__first::after{display:none}
+      .varch-latency__footer{grid-template-columns:1fr}
+    }
+    @media (prefers-reduced-motion:reduce){
+      .varch-latency *{animation-duration:.001ms!important;animation-iteration-count:1!important}
+    }
+  </style>
+
+  <div class="varch-latency__sheet">
+    <header class="varch-latency__head">
+      <div>
+        <div class="varch-latency__eyebrow">Latencia end-to-end</div>
+        <h2>Los milisegundos viven en fronteras.</h2>
+      </div>
+      <div class="varch-latency__formula"><b>T_first_audio</b> = endpointing + inference + synthesis + transport + buffer</div>
+    </header>
+
+    <div class="varch-latency__body">
+      <article class="varch-latency__panel">
+        <header class="varch-latency__panel-head"><h3>Waterfall conceptual</h3><span>No representa un benchmark concreto</span></header>
+        <div class="varch-latency__scale"><span>Arquitectura</span><div class="varch-latency__ticks"><span>0</span><span>200</span><span>400</span><span>600</span><span>800</span><span>1000 ms</span></div></div>
+
+        <div class="varch-latency__rows">
+          <div class="varch-latency__row">
+            <div class="varch-latency__name"><strong>Full cascade</strong><small>5 fronteras principales</small></div>
+            <div class="varch-latency__track">
+              <span class="varch-latency__bar varch-latency__bar--endpoint">endpoint</span>
+              <span class="varch-latency__bar varch-latency__bar--stt">STT stable</span>
+              <span class="varch-latency__bar varch-latency__bar--llm">LLM</span>
+              <span class="varch-latency__bar varch-latency__bar--tts">TTS chunk</span>
+              <span class="varch-latency__bar varch-latency__bar--buffer">buffer</span>
+              <i class="varch-latency__first varch-latency__first--full"></i>
+            </div>
+          </div>
+
+          <div class="varch-latency__row">
+            <div class="varch-latency__name"><strong>Half cascade</strong><small>audio-native + TTS</small></div>
+            <div class="varch-latency__track">
+              <span class="varch-latency__bar varch-latency__bar--endpoint">turn detect</span>
+              <span class="varch-latency__bar varch-latency__bar--audio-model">audio model + text deltas</span>
+              <span class="varch-latency__bar varch-latency__bar--half-tts">TTS chunk</span>
+              <span class="varch-latency__bar varch-latency__bar--buffer">buffer</span>
+              <i class="varch-latency__first varch-latency__first--half"></i>
+            </div>
+          </div>
+
+          <div class="varch-latency__row">
+            <div class="varch-latency__name"><strong>Speech-to-speech</strong><small>sesión acústica continua</small></div>
+            <div class="varch-latency__track">
+              <span class="varch-latency__bar varch-latency__bar--endpoint">turn / overlap</span>
+              <span class="varch-latency__bar varch-latency__bar--s2s">S2S inference + audio</span>
+              <span class="varch-latency__bar varch-latency__bar--buffer">buffer</span>
+              <i class="varch-latency__first varch-latency__first--s2s"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="varch-latency__note">La ventaja teórica desaparece si el VAD espera demasiado, el TTS chunker retiene frases o el proveedor telefónico acumula más audio del necesario.</div>
+      </article>
+
+      <aside class="varch-latency__panel">
+        <header class="varch-latency__panel-head"><h3>Superficie de coordinación</h3><span>Estados que deben reconciliarse</span></header>
+        <div class="varch-latency__stack">
+          <div class="varch-latency__complexity varch-latency__complexity--full">
+            <div class="varch-latency__complexity-head"><strong>Full cascade</strong><span>7 owners</span></div>
+            <div class="varch-latency__dots"><span class="varch-latency__dot">VAD</span><span class="varch-latency__dot">STT</span><span class="varch-latency__dot">LLM</span><span class="varch-latency__dot">TOOL</span><span class="varch-latency__dot">TTS</span><span class="varch-latency__dot">BUF</span><span class="varch-latency__dot">HIST</span></div>
+            <p>Máxima observabilidad, pero más revisiones, cancelaciones y estados parciales.</p>
+          </div>
+          <div class="varch-latency__complexity varch-latency__complexity--half">
+            <div class="varch-latency__complexity-head"><strong>Half cascade</strong><span>5 owners</span></div>
+            <div class="varch-latency__dots"><span class="varch-latency__dot">VAD</span><span class="varch-latency__dot">AUDIO</span><span class="varch-latency__dot">TOOL</span><span class="varch-latency__dot">TTS</span><span class="varch-latency__dot">BUF</span></div>
+            <p>Elimina STT externo, pero introduce chunking y el contrato de SpeechPlan.</p>
+          </div>
+          <div class="varch-latency__complexity varch-latency__complexity--s2s">
+            <div class="varch-latency__complexity-head"><strong>Speech-to-speech</strong><span>3–4 owners</span></div>
+            <div class="varch-latency__dots"><span class="varch-latency__dot">S2S</span><span class="varch-latency__dot">TOOL</span><span class="varch-latency__dot">BUF</span><span class="varch-latency__dot">STATE</span></div>
+            <p>Menos fronteras de modalidad; el negocio, las tools y el playback siguen existiendo.</p>
+          </div>
+          <div class="varch-latency__warning">Menos cajas no implica menos rigor: el audio generado debe seguir distinguiéndose del audio realmente escuchado.</div>
+        </div>
+      </aside>
+    </div>
+
+    <div class="varch-latency__footer">
+      <b>Métrica correcta</b>
+      <span>No optimices solo `time_to_first_token`: mide fin de habla → primer audio reproducido, barge-in → silencio y resultado listo → cierre escuchado.</span>
+    </div>
+  </div>
+</section>
