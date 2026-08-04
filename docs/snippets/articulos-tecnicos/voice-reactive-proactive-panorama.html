@@ -1,0 +1,230 @@
+<section class="vrpv vrpv-panorama" data-anim-fullscreen="on" data-anim-contrast="force" aria-label="Ciclo reactivo, asíncrono y proactivo de un agente de voz">
+  <style>
+    .vrpv,.vrpv *{box-sizing:border-box}
+    .vrpv{
+      --ink:#07191b;--muted:#546366;--line:rgba(7,25,27,.12);
+      --green:#23863a;--green-soft:#eaf6e8;--teal:#087f8f;--teal-soft:#e7f7f8;
+      --amber:#d98a00;--amber-soft:#fff3da;--red:#c73a31;--red-soft:#fff0ed;
+      font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+      color:var(--ink);display:grid;gap:18px;margin:28px auto 34px;max-width:1440px;
+    }
+    .anim-shell-modal .vrpv{margin:0;max-width:none}
+    .vrpv__sheet{
+      position:relative;overflow:hidden;border:1px solid var(--line);border-radius:28px;
+      background:
+        radial-gradient(circle at 8% 8%,rgba(35,134,58,.10),transparent 27%),
+        radial-gradient(circle at 92% 10%,rgba(217,138,0,.10),transparent 29%),
+        linear-gradient(180deg,#fff 0%,#fbfcfc 100%);
+      box-shadow:0 22px 54px rgba(18,35,39,.12);padding:30px;
+    }
+    .vrpv__head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:25px}
+    .vrpv__eyebrow{font-size:.74rem;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--teal)}
+    .vrpv h2{margin:7px 0 0;font-size:clamp(1.85rem,3vw,3rem);line-height:.98;letter-spacing:-.045em}
+    .vrpv__lead{max-width:560px;margin:0;color:var(--muted);font-size:.98rem;line-height:1.5;font-weight:600;text-align:right}
+    .vrpv__flow{
+      position:relative;display:grid;grid-template-columns:1fr 1.08fr 1.28fr 1.08fr 1fr;
+      gap:13px;align-items:stretch;
+    }
+    .vrpv__flow::before{
+      content:"";position:absolute;z-index:0;left:8%;right:8%;top:54px;height:4px;border-radius:999px;
+      background:linear-gradient(90deg,var(--green) 0 22%,var(--teal) 22% 60%,var(--amber) 60% 100%);
+      opacity:.22;
+    }
+    .vrpv__packet{
+      position:absolute;z-index:3;top:48px;left:8%;width:16px;height:16px;border-radius:50%;background:#fff;
+      border:4px solid var(--green);box-shadow:0 0 0 6px rgba(35,134,58,.10);
+      animation:vrpv-travel 7.4s cubic-bezier(.62,.02,.3,.98) infinite;
+    }
+    .vrpv__stage{
+      position:relative;z-index:2;min-width:0;display:grid;grid-template-rows:auto 1fr auto;gap:12px;
+      padding:17px 14px 15px;border:1px solid var(--line);border-radius:22px;background:rgba(255,255,255,.92);
+      box-shadow:0 13px 28px rgba(18,35,39,.07);
+    }
+    .vrpv__stage--reactive{border-color:rgba(35,134,58,.28)}
+    .vrpv__stage--async{border-color:rgba(8,127,143,.3)}
+    .vrpv__stage--gate,.vrpv__stage--proactive{border-color:rgba(217,138,0,.32)}
+    .vrpv__stage-top{display:flex;align-items:center;gap:10px;min-height:56px}
+    .vrpv__n{
+      width:34px;height:34px;display:grid;place-items:center;flex:0 0 auto;border-radius:50%;color:#fff;
+      font-size:.88rem;font-weight:950;background:var(--ink);box-shadow:0 5px 13px rgba(7,25,27,.15);
+    }
+    .vrpv__stage--reactive .vrpv__n{background:var(--green)}
+    .vrpv__stage--async .vrpv__n{background:var(--teal)}
+    .vrpv__stage--gate .vrpv__n,.vrpv__stage--proactive .vrpv__n{background:var(--amber)}
+    .vrpv__stage h3{margin:0;font-size:1rem;line-height:1.05;letter-spacing:-.025em}
+    .vrpv__stage small{display:block;margin-top:4px;color:var(--muted);font-size:.7rem;font-weight:750;line-height:1.2}
+    .vrpv__visual{
+      min-height:144px;border-radius:17px;border:1px solid rgba(7,25,27,.08);background:#f7faf8;
+      padding:13px;display:grid;align-content:center;gap:10px;overflow:hidden;
+    }
+    .vrpv__wave{height:54px;display:flex;align-items:center;justify-content:center;gap:5px}
+    .vrpv__wave i{display:block;width:5px;height:12px;border-radius:99px;background:var(--ink);animation:vrpv-wave 1.05s ease-in-out infinite}
+    .vrpv__wave i:nth-child(2){animation-delay:-.72s}.vrpv__wave i:nth-child(3){animation-delay:-.5s}
+    .vrpv__wave i:nth-child(4){animation-delay:-.82s}.vrpv__wave i:nth-child(5){animation-delay:-.31s}
+    .vrpv__bubble{
+      padding:10px 11px;border-radius:14px 14px 14px 4px;background:var(--green-soft);color:var(--green);
+      font-size:.73rem;line-height:1.25;font-weight:850;border:1px solid rgba(35,134,58,.18);
+    }
+    .vrpv__accept{display:grid;gap:9px}
+    .vrpv__accept-line{height:8px;border-radius:99px;background:rgba(35,134,58,.17);overflow:hidden}
+    .vrpv__accept-line::before{
+      content:"";display:block;width:68%;height:100%;border-radius:inherit;background:var(--green);
+      animation:vrpv-fill 3.6s ease-in-out infinite;
+    }
+    .vrpv__accept-quote{font-size:.75rem;font-weight:850;color:var(--green);line-height:1.3}
+    .vrpv__jobs{display:grid;gap:7px}
+    .vrpv__job{
+      position:relative;display:grid;grid-template-columns:12px 1fr auto;align-items:center;gap:7px;
+      min-height:31px;padding:6px 8px;border-radius:11px;background:#fff;border:1px solid rgba(8,127,143,.17);
+      font-size:.68rem;font-weight:800;
+    }
+    .vrpv__job-dot{width:9px;height:9px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 4px rgba(8,127,143,.12);animation:vrpv-pulse 1.7s ease-in-out infinite}
+    .vrpv__job:nth-child(2) .vrpv__job-dot{animation-delay:-.55s}.vrpv__job:nth-child(3) .vrpv__job-dot{animation-delay:-1.1s}
+    .vrpv__job code{font:800 .58rem/"SFMono-Regular",Consolas,monospace;color:var(--muted)}
+    .vrpv__gate{display:grid;gap:8px}
+    .vrpv__gate-row{
+      display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px;border-radius:11px;
+      background:#fff;border:1px solid rgba(217,138,0,.16);font-size:.65rem;font-weight:800;
+    }
+    .vrpv__gate-row b{display:inline-flex;align-items:center;gap:6px}
+    .vrpv__gate-row b::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--amber)}
+    .vrpv__gate-state{padding:3px 6px;border-radius:999px;background:var(--amber-soft);color:#9a6200;font-size:.57rem;text-transform:uppercase;letter-spacing:.04em}
+    .vrpv__follow{display:grid;gap:10px}
+    .vrpv__follow-icon{
+      width:48px;height:48px;display:grid;place-items:center;margin:auto;border-radius:50%;
+      background:var(--amber-soft);color:var(--amber);font-size:1.35rem;font-weight:950;border:1px solid rgba(217,138,0,.22);
+      animation:vrpv-ring 2.3s ease-out infinite;
+    }
+    .vrpv__follow .vrpv__bubble{background:var(--amber-soft);color:#9a6200;border-color:rgba(217,138,0,.2)}
+    .vrpv__tag{
+      justify-self:start;padding:5px 8px;border-radius:999px;background:#f1f4f3;color:var(--muted);
+      font-size:.57rem;font-weight:900;text-transform:uppercase;letter-spacing:.055em;
+    }
+    .vrpv__stage--reactive .vrpv__tag{background:var(--green-soft);color:var(--green)}
+    .vrpv__stage--async .vrpv__tag{background:var(--teal-soft);color:var(--teal)}
+    .vrpv__stage--gate .vrpv__tag,.vrpv__stage--proactive .vrpv__tag{background:var(--amber-soft);color:#9a6200}
+    .vrpv__invariant{
+      margin-top:20px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:14px;
+      padding:15px 17px;border-radius:18px;background:var(--ink);color:#fff;
+    }
+    .vrpv__invariant strong{font-size:.68rem;text-transform:uppercase;letter-spacing:.12em;color:#9fe0b0}
+    .vrpv__invariant span{font-size:.9rem;font-weight:800;line-height:1.35}
+    .vrpv__invariant code{padding:6px 8px;border-radius:9px;background:rgba(255,255,255,.1);font:700 .65rem/"SFMono-Regular",Consolas,monospace;color:#d9e8e6}
+    @keyframes vrpv-travel{
+      0%,7%{left:8%;border-color:var(--green)}
+      22%{left:27%;border-color:var(--green)}
+      45%{left:49%;border-color:var(--teal)}
+      65%{left:69%;border-color:var(--amber)}
+      88%,100%{left:90%;border-color:var(--amber)}
+    }
+    @keyframes vrpv-wave{0%,100%{height:12px;opacity:.48}50%{height:45px;opacity:1}}
+    @keyframes vrpv-fill{0%,100%{transform:translateX(-90%)}50%{transform:translateX(30%)}}
+    @keyframes vrpv-pulse{0%,100%{transform:scale(.76);opacity:.45}50%{transform:scale(1);opacity:1}}
+    @keyframes vrpv-ring{0%{box-shadow:0 0 0 0 rgba(217,138,0,.28)}70%,100%{box-shadow:0 0 0 14px rgba(217,138,0,0)}}
+    @media (max-width:900px){
+      .vrpv__sheet{padding:21px 17px}
+      .vrpv__head{display:grid;gap:10px}.vrpv__lead{text-align:left}
+      .vrpv__flow{grid-template-columns:1fr;gap:12px}
+      .vrpv__flow::before{left:36px;right:auto;top:40px;bottom:40px;width:4px;height:auto;background:linear-gradient(180deg,var(--green),var(--teal),var(--amber))}
+      .vrpv__packet{left:30px;top:42px;animation:vrpv-travel-mobile 7.4s cubic-bezier(.62,.02,.3,.98) infinite}
+      .vrpv__stage{grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:13px;padding:14px}
+      .vrpv__stage-top{grid-column:1/-1}.vrpv__visual{grid-column:2;min-height:116px}.vrpv__tag{grid-column:2}
+      .vrpv__invariant{grid-template-columns:1fr;gap:7px}.vrpv__invariant code{justify-self:start}
+    }
+    @keyframes vrpv-travel-mobile{
+      0%,7%{top:42px;border-color:var(--green)}
+      22%{top:22%;border-color:var(--green)}
+      45%{top:45%;border-color:var(--teal)}
+      65%{top:67%;border-color:var(--amber)}
+      88%,100%{top:89%;border-color:var(--amber)}
+    }
+    @media (prefers-reduced-motion:reduce){
+      .vrpv *{animation-duration:.001ms!important;animation-iteration-count:1!important}
+      .vrpv__packet{display:none}
+    }
+  </style>
+
+  <div class="vrpv__sheet">
+    <header class="vrpv__head">
+      <div>
+        <div class="vrpv__eyebrow">Contrato conversacional</div>
+        <h2>Responder ahora. Operar después. Volver con permiso.</h2>
+      </div>
+      <p class="vrpv__lead">La tool puede terminar fuera del turno, pero el resultado solo entra en el canal cuando el runtime encuentra una ventana segura.</p>
+    </header>
+
+    <div class="vrpv__flow">
+      <span class="vrpv__packet" aria-hidden="true"></span>
+
+      <article class="vrpv__stage">
+        <div class="vrpv__stage-top">
+          <span class="vrpv__n">1</span>
+          <div><h3>Petición de voz</h3><small>El usuario mantiene el canal</small></div>
+        </div>
+        <div class="vrpv__visual">
+          <div class="vrpv__wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="vrpv__bubble">“Comprueba si puedo cambiar la cita.”</div>
+        </div>
+        <span class="vrpv__tag">turn_id</span>
+      </article>
+
+      <article class="vrpv__stage vrpv__stage--reactive">
+        <div class="vrpv__stage-top">
+          <span class="vrpv__n">2</span>
+          <div><h3>Aceptación reactiva</h3><small>No promete el resultado</small></div>
+        </div>
+        <div class="vrpv__visual vrpv__accept">
+          <div class="vrpv__accept-line"></div>
+          <div class="vrpv__accept-quote">“Lo reviso ahora. Puedes seguir.”</div>
+          <div class="vrpv__bubble">La conversación queda liberada.</div>
+        </div>
+        <span class="vrpv__tag">accepted</span>
+      </article>
+
+      <article class="vrpv__stage vrpv__stage--async">
+        <div class="vrpv__stage-top">
+          <span class="vrpv__n">3</span>
+          <div><h3>Trabajo asíncrono</h3><small>Fuera del turno acústico</small></div>
+        </div>
+        <div class="vrpv__visual vrpv__jobs">
+          <div class="vrpv__job"><span class="vrpv__job-dot"></span><span>Disponibilidad</span><code>running</code></div>
+          <div class="vrpv__job"><span class="vrpv__job-dot"></span><span>Política cliente</span><code>done</code></div>
+          <div class="vrpv__job"><span class="vrpv__job-dot"></span><span>Alternativas</span><code>running</code></div>
+        </div>
+        <span class="vrpv__tag">batch_id</span>
+      </article>
+
+      <article class="vrpv__stage vrpv__stage--gate">
+        <div class="vrpv__stage-top">
+          <span class="vrpv__n">4</span>
+          <div><h3>ActivityGate</h3><small>Completado ≠ hablar</small></div>
+        </div>
+        <div class="vrpv__visual vrpv__gate">
+          <div class="vrpv__gate-row"><b>Usuario</b><span class="vrpv__gate-state">hablando</span></div>
+          <div class="vrpv__gate-row"><b>Playback</b><span class="vrpv__gate-state">libre</span></div>
+          <div class="vrpv__gate-row"><b>Lote</b><span class="vrpv__gate-state">cerrado</span></div>
+          <div class="vrpv__gate-row"><b>Decisión</b><span class="vrpv__gate-state">esperar</span></div>
+        </div>
+        <span class="vrpv__tag">delivery_ready</span>
+      </article>
+
+      <article class="vrpv__stage vrpv__stage--proactive">
+        <div class="vrpv__stage-top">
+          <span class="vrpv__n">5</span>
+          <div><h3>Cierre proactivo</h3><small>Único, agregado y pertinente</small></div>
+        </div>
+        <div class="vrpv__visual vrpv__follow">
+          <div class="vrpv__follow-icon" aria-hidden="true">↗</div>
+          <div class="vrpv__bubble">“Ya lo tengo: hay hueco el jueves a las 17:30.”</div>
+        </div>
+        <span class="vrpv__tag">played</span>
+      </article>
+    </div>
+
+    <div class="vrpv__invariant">
+      <strong>Invariante</strong>
+      <span>La finalización técnica crea una entrega pendiente. Solo la política conversacional concede permiso para hablar.</span>
+      <code>completed → deliverable → played</code>
+    </div>
+  </div>
+</section>
