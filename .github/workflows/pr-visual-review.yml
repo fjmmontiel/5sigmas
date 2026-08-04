@@ -7,30 +7,23 @@ on:
       - 'overrides/**'
       - 'hooks/**'
       - 'scripts/**'
-      - '.tmp-voice-report/**'
       - 'mkdocs.yml'
       - 'requirements.txt'
       - '.github/workflows/pr-visual-review.yml'
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   build-and-capture:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          ref: ${{ github.event.pull_request.head.ref }}
 
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
           cache: pip
-
-      - name: Materialize technical report
-        run: python scripts/apply_voice_report_patch.py
 
       - name: Install Python dependencies
         run: |
@@ -67,88 +60,9 @@ jobs:
         run: node scripts/capture_site_screenshots.mjs
 
       - name: Validate direct series and article navigation
-        continue-on-error: true
         run: node scripts/validate_direct_reader_navigation.mjs
 
-      - name: Capture technical report screenshots
-        env:
-          CAPTURES_JSON: '[{"name":"article-top-desktop","path":"/articulos-tecnicos/reactive-proactive-voice-agents/","viewport":{"width":1440,"height":1100}},{"name":"article-top-mobile","path":"/articulos-tecnicos/reactive-proactive-voice-agents/","viewport":{"width":390,"height":844},"mobile":true},{"name":"panorama-desktop","path":"/articulos-tecnicos/reactive-proactive-voice-agents/","viewport":{"width":1440,"height":1100},"selector":".vrpv-panorama"},{"name":"clocks-desktop","path":"/articulos-tecnicos/reactive-proactive-voice-agents/","viewport":{"width":1440,"height":1100},"selector":".vrpv-clock"},{"name":"barge-in-desktop","path":"/articulos-tecnicos/reactive-proactive-voice-agents/","viewport":{"width":1440,"height":1100},"selector":".vrpv-barge"},{"name":"runtime-desktop","path":"/articulos-tecnicos/reactive-proactive-voice-agents/","viewport":{"width":1440,"height":1100},"selector":".vrpv-runtime"}]'
-          OUTPUT_DIR: artifacts/reactive-proactive-voice-report
-        run: |
-          cat > /tmp/capture-report.mjs <<'EOF'
-          import { chromium } from 'playwright';
-          import { mkdir } from 'node:fs/promises';
-
-          const captures = JSON.parse(process.env.CAPTURES_JSON);
-          const outputDir = process.env.OUTPUT_DIR;
-          await mkdir(outputDir, { recursive: true });
-          const browser = await chromium.launch({ headless: true });
-
-          try {
-            for (const capture of captures) {
-              const context = await browser.newContext({
-                viewport: capture.viewport,
-                deviceScaleFactor: 1,
-                isMobile: capture.mobile ?? false,
-                colorScheme: 'light',
-                reducedMotion: 'no-preference',
-              });
-              const page = await context.newPage();
-              const errors = [];
-              page.on('pageerror', error => errors.push(`pageerror: ${error.message}`));
-              page.on('console', message => {
-                if (message.type() === 'error') errors.push(`console: ${message.text()}`);
-              });
-
-              const response = await page.goto(`http://127.0.0.1:8000${capture.path}`, {
-                waitUntil: 'networkidle',
-                timeout: 30000,
-              });
-              if (!response?.ok()) throw new Error(`${capture.path} returned ${response?.status()}`);
-              await page.evaluate(() => document.fonts?.ready);
-              await page.waitForTimeout(850);
-
-              const overflow = await page.evaluate(() =>
-                document.documentElement.scrollWidth - document.documentElement.clientWidth
-              );
-              if (overflow > 4) throw new Error(`${capture.name} has ${overflow}px horizontal overflow`);
-
-              const broken = await page.evaluate(() =>
-                [...document.images]
-                  .filter(image => image.complete && image.naturalWidth === 0)
-                  .map(image => image.currentSrc || image.src)
-              );
-              if (broken.length) throw new Error(`${capture.name} has broken images: ${broken.join(', ')}`);
-              if (errors.length) throw new Error(`${capture.name} emitted browser errors: ${errors.join(' | ')}`);
-
-              if (capture.selector) {
-                const root = page.locator(capture.selector).first();
-                if (await root.count() !== 1) throw new Error(`Missing selector ${capture.selector}`);
-                const shell = root.locator('xpath=ancestor::section[@data-anim-shell]').first();
-                const target = await shell.count() ? shell : root;
-                await target.scrollIntoViewIfNeeded();
-                await page.waitForTimeout(350);
-                await target.screenshot({
-                  path: `${outputDir}/${capture.name}.png`,
-                  animations: 'allow',
-                });
-              } else {
-                await page.evaluate(() => window.scrollTo(0, 0));
-                await page.screenshot({
-                  path: `${outputDir}/${capture.name}.png`,
-                  fullPage: false,
-                  animations: 'allow',
-                });
-              }
-              await context.close();
-            }
-          } finally {
-            await browser.close();
-          }
-          EOF
-          node /tmp/capture-report.mjs
-
-      - name: Upload standard visual review
+      - name: Upload visual review
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -156,26 +70,3 @@ jobs:
           path: artifacts/visual-review/*
           if-no-files-found: error
           retention-days: 14
-
-      - name: Upload technical report review
-        uses: actions/upload-artifact@v4
-        with:
-          name: reactive-proactive-voice-report
-          path: artifacts/reactive-proactive-voice-report/*
-          if-no-files-found: error
-          retention-days: 14
-
-      - name: Commit materialized technical report
-        env:
-          HEAD_BRANCH: ${{ github.event.pull_request.head.ref }}
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add mkdocs.yml docs/articulos-tecnicos docs/snippets/articulos-tecnicos
-          git status --short
-          if git diff --cached --quiet; then
-            echo "Report files already materialized"
-          else
-            git commit -m "Add reactive and proactive voice agents technical report"
-            git push origin HEAD:"$HEAD_BRANCH"
-          fi
