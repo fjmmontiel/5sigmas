@@ -27,25 +27,34 @@ hide:
     </div>
     <div class="s5-note-feature__meta">Contrato conversacional<br />Estado interno<br />Ejecución asíncrona<br />Follow-up</div>
   </div>
+  <div class="s5-note-feature">
+    <div>
+      <div class="s5-eyebrow">Nota 02</div>
+      <h2>Agentes reactivos y proactivos en voz</h2>
+      <p>Cómo coordinar actividad acústica, generación, playback y tools duraderas para aceptar trabajo sin bloquear y volver con un único cierre cuando sea seguro hablar.</p>
+      <a class="s5-text-link" href="/articulos-tecnicos/reactive-proactive-voice-agents/">Leer la nota técnica →</a>
+    </div>
+    <div class="s5-note-feature__meta">Voice runtime<br />Barge-in<br />ActivityGate<br />Tools asíncronas</div>
+  </div>
 </section>
 
 <section class="s5-section">
   <div class="s5-section-head"><h2>En preparación</h2></div>
   <div class="s5-simple-list">
     <div class="s5-list-row">
-      <span class="s5-list-row__n">02</span>
-      <span class="s5-list-row__title">Latencia e interrupciones en sistemas de voz</span>
-      <span class="s5-list-row__desc">Del audio de entrada a la respuesta reproducida: dónde aparece la latencia y cómo medirla.</span>
+      <span class="s5-list-row__n">03</span>
+      <span class="s5-list-row__title">Tres arquitecturas para agentes de voz</span>
+      <span class="s5-list-row__desc">Full cascade, half cascade y speech-to-speech: prosodia, latencia, control y una arquitectura híbrida.</span>
       <span class="s5-list-row__meta">Investigación</span>
     </div>
     <div class="s5-list-row">
-      <span class="s5-list-row__n">03</span>
+      <span class="s5-list-row__n">04</span>
       <span class="s5-list-row__title">Evaluación de agentes y tool calling</span>
       <span class="s5-list-row__desc">Contratos, trayectorias, memoria y éxito de tarea más allá de una respuesta textual aislada.</span>
       <span class="s5-list-row__meta">Diseño</span>
     </div>
     <div class="s5-list-row">
-      <span class="s5-list-row__n">04</span>
+      <span class="s5-list-row__n">05</span>
       <span class="s5-list-row__title">Percepción fiable en edge inference</span>
       <span class="s5-list-row__desc">Cómo medir y operar visión artificial en tiempo real bajo restricciones físicas.</span>
       <span class="s5-list-row__meta">Pendiente</span>

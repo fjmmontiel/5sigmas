@@ -113,6 +113,16 @@ const assertCollectionBoundary = async (page, { completionHref, label }) => {
   }
 };
 
+const assertCollectionContinuation = async (page, { nextHref, label }) => {
+  const nextArrow = page.locator('.s5-reader-topbar .s5-reader-arrow--next');
+  if (await nextArrow.evaluate((node) => node.classList.contains('is-disabled'))) {
+    throw new Error(`${label} must continue inside the same collection.`);
+  }
+  if (await nextArrow.getAttribute('href') !== nextHref) {
+    throw new Error(`${label} must continue to ${nextHref}.`);
+  }
+};
+
 await fs.mkdir(outputDir, { recursive: true });
 const browser = await chromium.launch({ headless: true });
 
@@ -144,6 +154,12 @@ try {
   await assertCollectionBoundary(desktop, { completionHref: '/series/', label: 'A completed series' });
 
   await desktop.goto(`${baseUrl}/articulos-tecnicos/proactive-reactive-agent-and-tool-calls/`, { waitUntil: 'networkidle' });
+  await assertCollectionContinuation(desktop, {
+    nextHref: '/articulos-tecnicos/reactive-proactive-voice-agents/',
+    label: 'The technical collection',
+  });
+
+  await desktop.goto(`${baseUrl}/articulos-tecnicos/reactive-proactive-voice-agents/`, { waitUntil: 'networkidle' });
   await assertCollectionBoundary(desktop, { completionHref: '/articulos-tecnicos/', label: 'A completed technical collection' });
 
   const mobile = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1 });

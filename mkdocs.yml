@@ -91,6 +91,7 @@ nav:
   - Construir:
       - articulos-tecnicos/index.md
       - Agente Reactivo, Proactivo y Tool calls: articulos-tecnicos/proactive-reactive-agent-and-tool-calls.md
+      - Agentes reactivos y proactivos en voz: articulos-tecnicos/reactive-proactive-voice-agents.md
   - Próximamente: proximamente.md
   - Sobre: meta/about.md
 markdown_extensions:
