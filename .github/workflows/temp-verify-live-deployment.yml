@@ -1,0 +1,86 @@
+name: Temporary live deployment verification
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+    paths:
+      - '.github/workflows/temp-verify-live-deployment.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify-live-pages:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for and verify the deployed technical reports
+        shell: bash
+        run: |
+          set -uo pipefail
+
+          base='https://5sigmas.com/articulos-tecnicos'
+          index_file="${RUNNER_TEMP}/technical-index.html"
+          reactive_file="${RUNNER_TEMP}/reactive-proactive-voice.html"
+          architectures_file="${RUNNER_TEMP}/voice-architectures.html"
+
+          fetch_page() {
+            local url="$1"
+            local output="$2"
+            curl \
+              --fail \
+              --silent \
+              --show-error \
+              --location \
+              --connect-timeout 10 \
+              --max-time 30 \
+              --header 'Cache-Control: no-cache, no-store, max-age=0' \
+              --header 'Pragma: no-cache' \
+              --output "$output" \
+              "$url"
+          }
+
+          for attempt in $(seq 1 30); do
+            cache_buster="deploy-${GITHUB_SHA}-${attempt}-$(date +%s)"
+            echo "Verification attempt ${attempt}/30"
+
+            if fetch_page "${base}/?verify=${cache_buster}" "$index_file" \
+              && fetch_page "${base}/reactive-proactive-voice-agents/?verify=${cache_buster}" "$reactive_file" \
+              && fetch_page "${base}/voice-agent-architectures/?verify=${cache_buster}" "$architectures_file"; then
+
+              index_ok=false
+              reactive_ok=false
+              architectures_ok=false
+
+              grep -Fq 'Agentes reactivos y proactivos en voz' "$index_file" \
+                && grep -Fq 'Tres arquitecturas para agentes de voz' "$index_file" \
+                && index_ok=true
+
+              grep -Fq 'Agentes reactivos y proactivos en voz' "$reactive_file" \
+                && grep -Fq 'voice-reactive-proactive-panorama' "$reactive_file" \
+                && grep -Fq 'voice-reactive-proactive-runtime' "$reactive_file" \
+                && reactive_ok=true
+
+              grep -Fq 'Tres arquitecturas para agentes de voz' "$architectures_file" \
+                && grep -Fq 'varch-compare' "$architectures_file" \
+                && grep -Fq 'varch-surface' "$architectures_file" \
+                && architectures_ok=true
+
+              echo "index=${index_ok} reactive=${reactive_ok} architectures=${architectures_ok}"
+
+              if [[ "$index_ok" == true && "$reactive_ok" == true && "$architectures_ok" == true ]]; then
+                echo 'All technical-report pages are live with their interactive animation markup.'
+                exit 0
+              fi
+            fi
+
+            sleep 10
+          done
+
+          echo 'The public deployment did not expose the expected pages before the verification window closed.' >&2
+          echo 'Index markers:' >&2
+          grep -Eo 'Agentes reactivos y proactivos en voz|Tres arquitecturas para agentes de voz' "$index_file" 2>/dev/null | sort -u >&2 || true
+          echo 'Reactive page markers:' >&2
+          grep -Eo 'Agentes reactivos y proactivos en voz|voice-reactive-proactive-(panorama|runtime)' "$reactive_file" 2>/dev/null | sort -u >&2 || true
+          echo 'Architectures page markers:' >&2
+          grep -Eo 'Tres arquitecturas para agentes de voz|varch-(compare|surface)' "$architectures_file" 2>/dev/null | sort -u >&2 || true
+          exit 1
