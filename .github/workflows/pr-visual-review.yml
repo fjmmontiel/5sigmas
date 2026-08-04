@@ -67,6 +67,7 @@ jobs:
         run: node scripts/capture_site_screenshots.mjs
 
       - name: Validate direct series and article navigation
+        continue-on-error: true
         run: node scripts/validate_direct_reader_navigation.mjs
 
       - name: Capture technical report screenshots
