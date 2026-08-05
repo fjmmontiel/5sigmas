@@ -2,7 +2,7 @@
 title: Tres arquitecturas para agentes de voz
 description: "Comparación práctica entre full cascade, half cascade y speech-to-speech, con foco en latencia, prosodia, tools, interrupciones y control."
 date: 2026-08-04
-date_modified: 2026-08-04
+date_modified: 2026-08-05
 keywords: "voice agents, full cascade, half cascade, speech to speech, audio in text out, realtime API, prosodia, streaming TTS, full duplex, arquitectura de voz"
 article_state: published
 tags:
@@ -33,7 +33,7 @@ Para comparar bien las opciones, separo cuatro ejes:
 
 Aquí no comparo proveedores. Comparo los contratos que aparecen entre componentes y los problemas que cada arquitectura deja en manos del runtime.
 
-{{ include_html("snippets/articulos-tecnicos/voice-architectures-comparison.html") }}
+{{ include_html("snippets/articulos-tecnicos/voice-arch-map.html") }}
 
 ## 1. Full cascade: audio → STT → LLM → TTS → audio
 
@@ -68,6 +68,8 @@ Puedes elegir un STT que funcione bien en un mercado concreto, un LLM especializ
 **Optimización por tramo.** Cada componente puede desplegarse cerca del usuario, cachearse, cuantizarse o sustituirse por un modelo más pequeño.
 
 Full cascade no es una mala arquitectura. El problema aparece cuando la conversación tiene que sentirse humana. En ese momento deja de ser una tubería lineal y se convierte en una máquina de estados repartida entre varios servicios.
+
+{{ include_html("snippets/articulos-tecnicos/voice-arch-cascade.html") }}
 
 ### La latencia no es solo una suma
 
@@ -114,6 +116,8 @@ La pérdida ocurre en dos direcciones:
 1. **Comprensión.** El LLM recibe menos información sobre la intención y el estado del usuario
 2. **Expresión.** El TTS recibe texto, pero no siempre sabe cómo debería decirlo
 
+{{ include_html("snippets/articulos-tecnicos/voice-arch-prosody-loss.html") }}
+
 ### Demasiados componentes comparten el estado
 
 En full cascade hay que reconciliar:
@@ -149,6 +153,8 @@ El modelo escucha el audio directamente y lo usa para comprender el turno. La sa
 Así desaparece el STT como frontera independiente, pero se mantiene una voz especializada y controlable.
 
 El SDK oficial de OpenAI muestra sesiones Realtime con `output_modalities: ["text"]` y streaming a través de `response.output_text.delta`.[^openai-python-realtime] Ese contrato permite construir audio-in / text-out sin pedir al modelo que genere audio.
+
+{{ include_html("snippets/articulos-tecnicos/voice-arch-half.html") }}
 
 ### Qué gana frente a full cascade
 
@@ -195,7 +201,7 @@ Una forma de evitarlo es añadir un contrato intermedio:
 
 El `SpeechPlan` no se enseña al usuario y tampoco tiene por qué entrar en el historial. Su función es transportar la intención expresiva hasta el TTS.
 
-{{ include_html("snippets/articulos-tecnicos/voice-architectures-prosody.html") }}
+{{ include_html("snippets/articulos-tecnicos/voice-arch-speech-plan.html") }}
 
 Se puede producir de tres formas:
 
@@ -259,6 +265,8 @@ El diagrama es mucho más limpio. El sistema completo sigue necesitando telefon�
 
 Los modelos Realtime modernos pueden recibir y emitir audio directamente y también soportar function calling.[^openai-gpt-realtime] La ventaja principal es que comprensión y expresión comparten una representación acústica.
 
+{{ include_html("snippets/articulos-tecnicos/voice-arch-duplex.html") }}
+
 ### Dónde destaca S2S
 
 **Ritmo conversacional.** Puede generar backchannels, adaptar el tempo y reaccionar sin esperar una transcripción estable.
@@ -300,7 +308,7 @@ T_completion      operación aceptada → resultado
 T_delivery        resultado listo → cierre escuchado
 ```
 
-{{ include_html("snippets/articulos-tecnicos/voice-architectures-latency.html") }}
+{{ include_html("snippets/articulos-tecnicos/voice-arch-latency.html") }}
 
 S2S suele tener ventaja en `T_first_audio` y `T_interruption`. Puede perder parte de esa ventaja con un turn detection conservador o una red inestable.
 
@@ -337,6 +345,8 @@ La evaluación también necesita métricas de calidad:
 | Debugging por etapas | Excelente | Bueno | Más difícil |
 
 No hay una arquitectura ganadora para todos los productos.
+
+{{ include_html("snippets/articulos-tecnicos/voice-arch-decision.html") }}
 
 ### Elegir full cascade cuando
 
@@ -410,7 +420,7 @@ GPT-Live apunta en una dirección parecida. Una superficie full-duplex mantiene 
 
 MoshiRAG explora una idea relacionada desde investigación. Combina una interfaz full-duplex compacta con retrieval asíncrono para mejorar la factualidad sin romper la interacción.[^moshirag]
 
-{{ include_html("snippets/articulos-tecnicos/voice-architectures-surface-plane.html") }}
+{{ include_html("snippets/articulos-tecnicos/voice-arch-surface.html") }}
 
 ### Few-shot prompting con muestras de voz
 
@@ -423,6 +433,8 @@ system instructions
 + 3–15 s audio references
 + consent and provenance metadata
 ```
+
+{{ include_html("snippets/articulos-tecnicos/voice-arch-voice-prompt.html") }}
 
 La analogía con el few-shot prompting de texto es directa. Los ejemplos enseñan formato, tono o criterio. En voz, las muestras pueden condicionar:
 

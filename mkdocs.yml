@@ -124,6 +124,8 @@ extra_javascript:
     defer: true
   - path: assets/javascripts/animation-shell.js
     defer: true
+  - path: assets/javascripts/voice-report-animations.js
+    defer: true
   - path: assets/javascripts/site-demos.js
     defer: true
   - path: assets/javascripts/tabbed-animations.js
@@ -143,6 +145,7 @@ extra_javascript:
 extra_css:
   - stylesheets/extra.css
   - assets/stylesheets/animations.css
+  - stylesheets/voice-report-animations.css
   - assets/stylesheets/series_energy_ai_preview.css
   - stylesheets/revamp.css
   - stylesheets/revamp-fixes.css
@@ -157,6 +160,7 @@ extra_css:
   - stylesheets/reader-navigation.css
   - stylesheets/reader-navigation-responsive.css
   - stylesheets/reader-direct-navigation.css
+  - stylesheets/voice-report-animations-polish.css
 
 hooks:
   - hooks/reading_time.py
