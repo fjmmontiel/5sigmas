@@ -2,17 +2,11 @@
   "use strict";
 
   const ROOT_SELECTOR = ".anim-brand-shell__viewport > :is(.vrpv, .varch)";
-  const COMPACT_WIDTH = 760;
   let activeShells = new Set();
   let observer = null;
 
-  function isCompact(shell) {
-    const viewport = shell.querySelector(".anim-brand-shell__viewport");
-    return Boolean(viewport && viewport.getBoundingClientRect().width <= COMPACT_WIDTH);
-  }
-
   function syncBodyState() {
-    const focused = [...activeShells].some((shell) => shell.isConnected && isCompact(shell));
+    const focused = [...activeShells].some((shell) => shell.isConnected);
     document.body.classList.toggle("s5-voice-animation-focus", focused);
   }
 
@@ -33,7 +27,7 @@
     observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
-          if (entry.isIntersecting && entry.intersectionRatio >= 0.18) {
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.12) {
             activeShells.add(entry.target);
           } else {
             activeShells.delete(entry.target);
@@ -41,7 +35,7 @@
         }
         syncBodyState();
       },
-      { threshold: [0, 0.18, 0.5], rootMargin: "-8% 0px -8% 0px" }
+      { threshold: [0, 0.12, 0.35], rootMargin: "-5% 0px -5% 0px" }
     );
 
     for (const shell of shells) {
@@ -55,8 +49,6 @@
         syncBodyState();
       }, { passive: true });
     }
-
-    window.addEventListener("resize", syncBodyState, { passive: true });
   }
 
   if (window.document$ && typeof window.document$.subscribe === "function") {
