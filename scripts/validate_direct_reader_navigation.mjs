@@ -69,7 +69,7 @@ const assertCompactPresentationTitle = async (page) => {
 };
 
 const assertMaterialDrawerIsolation = async (page) => {
-  const toggle = page.locator('label[for="__drawer"]').first();
+  const toggle = page.locator('label.md-header__button[for="__drawer"]');
   const drawerState = page.locator('input[data-md-toggle="drawer"]').first();
   const primaryNavigation = page.locator('.md-sidebar--primary').first();
 
