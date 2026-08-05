@@ -20,16 +20,17 @@ try {
       reducedMotion: 'reduce',
     });
     const page = await context.newPage();
+    const pageFailures = [];
 
     page.on('response', (response) => {
       if (response.status() >= 400) {
-        failures.add(`${path}: HTTP ${response.status()} ${response.url()}`);
+        pageFailures.push(`HTTP ${response.status()} ${response.url()}`);
       }
     });
 
     page.on('requestfailed', (request) => {
-      failures.add(
-        `${path}: request failed ${request.url()} (${request.failure()?.errorText ?? 'unknown error'})`,
+      pageFailures.push(
+        `request failed ${request.url()} (${request.failure()?.errorText ?? 'unknown error'})`,
       );
     });
 
@@ -38,10 +39,35 @@ try {
       timeout: 30_000,
     });
     if (!response?.ok()) {
-      failures.add(`${path}: document returned ${response?.status() ?? 'no response'}`);
+      pageFailures.push(`document returned ${response?.status() ?? 'no response'}`);
     }
 
     await page.waitForTimeout(250);
+
+    if (pageFailures.length > 0) {
+      const diagnostics = await page.evaluate(() => {
+        const configNode = document.querySelector('#__config');
+        let configBase = 'missing';
+        try {
+          configBase = JSON.parse(configNode?.textContent ?? '{}').base ?? 'missing';
+        } catch {
+          configBase = 'invalid JSON';
+        }
+        return {
+          configBase,
+          documentBase: document.baseURI,
+          location: window.location.href,
+        };
+      });
+
+      for (const failure of pageFailures) {
+        failures.add(
+          `${path}: ${failure} [config.base=${diagnostics.configBase}; `
+          + `document.baseURI=${diagnostics.documentBase}; location=${diagnostics.location}]`,
+        );
+      }
+    }
+
     await context.close();
   }
 } finally {
