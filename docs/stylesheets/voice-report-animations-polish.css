@@ -1,3 +1,5 @@
+@import url("reader-layout-breathing.css");
+
 /* Voice microlabs live inside the article instead of behaving like full-page decks. */
 
 .anim-brand-shell:has(.anim-brand-shell__viewport > .s5v) {
