@@ -19,6 +19,33 @@ try {
       colorScheme: 'light',
       reducedMotion: 'reduce',
     });
+
+    await context.addInitScript(() => {
+      const NativeURL = globalThis.URL;
+      globalThis.__s5UrlCalls = [];
+      globalThis.URL = new Proxy(NativeURL, {
+        construct(target, args, newTarget) {
+          const result = Reflect.construct(target, args, newTarget);
+          const input = String(args[0] ?? '');
+          const base = args.length > 1 ? String(args[1]) : '';
+          if (
+            input === 'sitemap.xml'
+            || input === '.'
+            || input.startsWith('../')
+            || input.startsWith('../../')
+          ) {
+            globalThis.__s5UrlCalls.push({
+              input,
+              base,
+              result: String(result),
+              stack: new Error().stack,
+            });
+          }
+          return result;
+        },
+      });
+    });
+
     const page = await context.newPage();
     const pageFailures = [];
 
@@ -65,6 +92,7 @@ try {
           documentBase: document.baseURI,
           location: window.location.href,
           scope: String(globalThis.__md_scope ?? 'missing'),
+          urlCalls: globalThis.__s5UrlCalls ?? [],
         };
       });
 
@@ -72,7 +100,8 @@ try {
         failures.add(
           `${path}: ${failure} [config.base=${diagnostics.configBase}; `
           + `scope=${diagnostics.scope}; document.baseURI=${diagnostics.documentBase}; `
-          + `location=${diagnostics.location}]`,
+          + `location=${diagnostics.location}; `
+          + `URL calls=${JSON.stringify(diagnostics.urlCalls)}]`,
         );
       }
     }
