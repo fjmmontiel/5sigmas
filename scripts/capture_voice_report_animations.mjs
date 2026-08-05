@@ -49,6 +49,7 @@ async function assertNoOverflow(shell, label) {
       visual: visual ? [visual.clientWidth, visual.scrollWidth] : null,
       document: [document.documentElement.clientWidth, document.documentElement.scrollWidth],
       scrollX: window.scrollX,
+      contrastMode: node.getAttribute('data-anim-contrast'),
     };
   });
 
@@ -61,6 +62,9 @@ async function assertNoOverflow(shell, label) {
   if (result.scrollX !== 0 || result.document[1] - result.document[0] > 2) {
     throw new Error(`${label}: page-level horizontal overflow: ${JSON.stringify(result)}`);
   }
+  if (result.contrastMode !== 'off') {
+    throw new Error(`${label}: the shared animation shell is overriding the microlab colour semantics (${result.contrastMode})`);
+  }
 }
 
 async function assertVisualDensity(root, label, mode) {
@@ -69,26 +73,109 @@ async function assertVisualDensity(root, label, mode) {
     const interactive = node.querySelectorAll('button, input').length;
     const rect = node.getBoundingClientRect();
     const tinyText = [...node.querySelectorAll('b, span, p, small, em, code')]
-      .filter((el) => {
+      .map((el) => {
         const style = getComputedStyle(el);
-        const r = el.getBoundingClientRect();
-        return r.width > 0 && r.height > 0 && Number.parseFloat(style.fontSize) < 9;
+        const box = el.getBoundingClientRect();
+        return {
+          tag: el.tagName.toLowerCase(),
+          className: typeof el.className === 'string' ? el.className : '',
+          text: (el.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 60),
+          size: Number.parseFloat(style.fontSize),
+          width: box.width,
+          height: box.height,
+        };
       })
-      .length;
+      .filter((item) => item.width > 0 && item.height > 0 && item.size < 9);
     return { chars: text.length, interactive, width: rect.width, height: rect.height, tinyText };
   });
 
   if (metrics.chars > 330) {
     throw new Error(`${label}: the visual duplicates too much prose (${metrics.chars} visible characters)`);
   }
-  if (metrics.tinyText > 0) {
-    throw new Error(`${label}: contains ${metrics.tinyText} visible text elements below 9px`);
+  if (metrics.tinyText.length > 0) {
+    throw new Error(`${label}: visible text below 9px: ${JSON.stringify(metrics.tinyText)}`);
   }
   if (mode === 'mobile' && metrics.width > 366) {
     throw new Error(`${label}: mobile visual is wider than the usable column (${metrics.width}px)`);
   }
   if (mode === 'mobile' && metrics.height > 900) {
     throw new Error(`${label}: mobile visual behaves like a mega-deck (${metrics.height}px high)`);
+  }
+}
+
+async function assertFocusIsolation(page, label) {
+  await page.waitForFunction(() => document.body.classList.contains('s5-voice-animation-focus'), null, { timeout: 3000 });
+  const blockers = await page.evaluate(() => {
+    const selectors = ['.md-header', '.md-tabs', '.s5-reader-topbar', '.s5-reader-rail', '.s5-reader-direct-toggle'];
+    return selectors.flatMap((selector) => [...document.querySelectorAll(selector)].map((node) => {
+      const style = getComputedStyle(node);
+      const box = node.getBoundingClientRect();
+      const visible = box.width > 0 && box.height > 0 && style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity) > .05;
+      return { selector, visible, display: style.display, visibility: style.visibility, opacity: style.opacity };
+    }));
+  });
+
+  const visible = blockers.filter((item) => item.visible);
+  if (visible.length > 0) {
+    throw new Error(`${label}: sticky site chrome overlaps the focused microlab: ${JSON.stringify(visible)}`);
+  }
+}
+
+async function assertTextContrast(root, label) {
+  const failures = await root.evaluate((node) => {
+    const parse = (value) => {
+      const match = value.match(/[\d.]+/g);
+      if (!match || match.length < 3) return null;
+      return match.slice(0, 3).map(Number);
+    };
+    const luminance = (rgb) => {
+      const linear = rgb.map((value) => {
+        const channel = value / 255;
+        return channel <= .03928 ? channel / 12.92 : ((channel + .055) / 1.055) ** 2.4;
+      });
+      return .2126 * linear[0] + .7152 * linear[1] + .0722 * linear[2];
+    };
+    const ratio = (foreground, background) => {
+      const a = luminance(foreground);
+      const b = luminance(background);
+      return (Math.max(a, b) + .05) / (Math.min(a, b) + .05);
+    };
+    const backgroundOf = (element) => {
+      let current = element;
+      while (current && current !== node.parentElement) {
+        const value = getComputedStyle(current).backgroundColor;
+        const rgba = value.match(/[\d.]+/g)?.map(Number) || [];
+        if (rgba.length >= 3 && (rgba.length < 4 || rgba[3] > .92)) return parse(value);
+        current = current.parentElement;
+      }
+      return [255, 255, 255];
+    };
+
+    const targets = [
+      ...node.querySelectorAll('[aria-pressed="true"]'),
+      ...node.querySelectorAll('.s5v__rule b, .s5v__rule span'),
+      ...node.querySelectorAll('.s5v-runtime__bus b, .s5v-runtime__bus code'),
+      ...node.querySelectorAll('.s5v-voice-prompt__pack'),
+    ];
+
+    return targets.map((element) => {
+      const style = getComputedStyle(element);
+      const foreground = parse(style.color);
+      const background = backgroundOf(element);
+      const box = element.getBoundingClientRect();
+      if (!foreground || !background || box.width === 0 || box.height === 0) return null;
+      const value = ratio(foreground, background);
+      return {
+        text: (element.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 60),
+        foreground: style.color,
+        background,
+        ratio: Number(value.toFixed(2)),
+      };
+    }).filter((item) => item && item.ratio < 4.2);
+  });
+
+  if (failures.length > 0) {
+    throw new Error(`${label}: insufficient text contrast: ${JSON.stringify(failures)}`);
   }
 }
 
@@ -120,11 +207,13 @@ try {
       for (const [name, selector, step] of report.animations) {
         const root = await prepareAnimation(page, selector, step);
         const shell = root.locator('xpath=ancestor::*[@data-anim-shell][1]');
-        await shell.scrollIntoViewIfNeeded();
-        await page.waitForTimeout(220);
+        await root.evaluate((node) => node.scrollIntoView({ block: 'center', inline: 'nearest' }));
+        await page.waitForTimeout(320);
 
         await assertNoOverflow(shell, `${mode} ${name}`);
         await assertVisualDensity(root, `${mode} ${name}`, mode);
+        await assertFocusIsolation(page, `${mode} ${name}`);
+        await assertTextContrast(root, `${mode} ${name}`);
 
         await shell.screenshot({
           path: `${outputDir}/voice-${name}-${mode}.png`,
