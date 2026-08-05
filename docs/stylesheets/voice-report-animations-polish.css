@@ -1,12 +1,33 @@
-/* Final visual polish for the voice-report animation family. */
+/* Voice microlabs live inside the article instead of behaving like full-page decks. */
 
-/* A visible animation owns the reading surface. Fixed navigation must never be
- * painted over the diagram. It reappears as soon as the animation leaves the
- * viewport. */
+.anim-brand-shell:has(.anim-brand-shell__viewport > .s5v) {
+  width: 100%;
+  max-width: 100%;
+  margin: 1.45rem 0 2.6rem;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.anim-brand-shell:has(.anim-brand-shell__viewport > .s5v) .anim-brand-shell__toolbar {
+  min-height: 32px;
+  padding: 0 2px 7px;
+}
+
+.anim-brand-shell:has(.anim-brand-shell__viewport > .s5v) .anim-brand-shell__viewport {
+  min-width: 0;
+  max-width: 100%;
+  padding: 0;
+  overflow: visible;
+  background: transparent;
+}
+
+.anim-brand-shell:has(.anim-brand-shell__viewport > .s5v) .anim-brand-shell__footer {
+  margin-top: 7px;
+  opacity: .55;
+}
+
 body.s5-voice-animation-focus :is(
-  .md-header,
-  .md-tabs,
-  .s5-progress,
   .s5-reader-topbar,
   .s5-reader-rail,
   .s5-reader-direct,
@@ -17,19 +38,13 @@ body.s5-voice-animation-focus :is(
   pointer-events: none !important;
 }
 
-/* The completion card is injected inside the article flow. Visibility would
- * preserve its height and stretch a diagram, so it must leave layout entirely
- * while an animation owns the viewport. */
 body.s5-voice-animation-focus .s5-reader-end {
   display: none !important;
 }
 
-/* Technical diagrams need more room than the prose column on a large screen. */
 @media (min-width: 1100px) {
-  .anim-brand-shell:not([data-anim-shell-live="modal"]):has(
-    .anim-brand-shell__viewport > :is(.vrpv, .varch)
-  ) {
-    width: min(1180px, calc(100vw - 2rem));
+  .anim-brand-shell:has(.anim-brand-shell__viewport > .s5v--wide) {
+    width: min(1050px, calc(100vw - 3rem));
     max-width: none;
     margin-right: 50%;
     margin-left: 50%;
@@ -37,223 +52,24 @@ body.s5-voice-animation-focus .s5-reader-end {
   }
 }
 
-/* These animation-heavy reports use the full phone width. The fixed Biblioteca
- * tab creates a visible seam across long element captures and removes useful
- * space from every diagram. The site menu and end navigation remain available. */
 @media (max-width: 800px) {
-  body:has(.anim-brand-shell__viewport > :is(.vrpv, .varch)) .s5-reader-direct-toggle {
-    display: none !important;
+  body:has(.anim-brand-shell__viewport > .s5v) .md-content__inner {
+    padding-right: .8rem !important;
+    padding-left: .8rem !important;
   }
 
-  body:has(.anim-brand-shell__viewport > :is(.vrpv, .varch)) .md-content__inner {
-    padding-right: .65rem !important;
-    padding-left: .65rem !important;
-  }
-}
-
-/* Never depend on inherited theme colours inside dark explanatory blocks. */
-.anim-brand-shell__viewport :is(
-  .vrpv__invariant,
-  .vrpv-clock__footer,
-  .vrpv-barge__heard,
-  .vrpv-runtime__eventbus,
-  .vrpv-runtime__footer,
-  .varch-compare__footer,
-  .varch-latency__formula,
-  .varch-latency__footer,
-  .varch-prosody__plan,
-  .varch-prosody__footer,
-  .varch-surface__handoff,
-  .varch-surface__footer
-),
-.anim-brand-shell__viewport :is(
-  .vrpv__invariant,
-  .vrpv-clock__footer,
-  .vrpv-barge__heard,
-  .vrpv-runtime__eventbus,
-  .vrpv-runtime__footer,
-  .varch-compare__footer,
-  .varch-latency__formula,
-  .varch-latency__footer,
-  .varch-prosody__plan,
-  .varch-prosody__footer,
-  .varch-surface__handoff,
-  .varch-surface__footer
-) :is(span, p, small, strong, b, code, i) {
-  color: #f4fbfa !important;
-  -webkit-text-fill-color: #f4fbfa !important;
-}
-
-.anim-brand-shell__viewport :is(
-  .vrpv__invariant,
-  .vrpv-clock__footer,
-  .vrpv-barge__heard,
-  .vrpv-runtime__eventbus,
-  .vrpv-runtime__footer,
-  .varch-compare__footer,
-  .varch-latency__formula,
-  .varch-latency__footer,
-  .varch-prosody__footer,
-  .varch-surface__handoff,
-  .varch-surface__footer
-) :is(strong, b) {
-  color: #9fe0b0 !important;
-  -webkit-text-fill-color: #9fe0b0 !important;
-}
-
-.anim-brand-shell__viewport :is(
-  .vrpv__invariant,
-  .vrpv-clock__footer,
-  .vrpv-runtime__eventbus,
-  .vrpv-runtime__footer,
-  .varch-compare__footer,
-  .varch-latency__formula,
-  .varch-prosody__plan,
-  .varch-prosody__footer,
-  .varch-surface__handoff,
-  .varch-surface__footer
-) code {
-  color: #d9e8e6 !important;
-  -webkit-text-fill-color: #d9e8e6 !important;
-}
-
-/* Several footers intentionally place a light code badge on a dark strip. */
-.anim-brand-shell__viewport :is(
-  .vrpv-clock__footer,
-  .varch-compare__footer,
-  .varch-prosody__footer,
-  .varch-surface__footer
-) code {
-  color: #07191b !important;
-  -webkit-text-fill-color: #07191b !important;
-}
-
-.anim-brand-shell__viewport .varch-prosody__plan b {
-  color: #9fe0b0 !important;
-  -webkit-text-fill-color: #9fe0b0 !important;
-}
-
-.anim-brand-shell__viewport .varch-prosody__plan i {
-  color: #f5cc78 !important;
-  -webkit-text-fill-color: #f5cc78 !important;
-}
-
-.anim-brand-shell__viewport .vrpv-panorama .vrpv__job code {
-  min-width: max-content;
-  white-space: nowrap;
-}
-
-/* Mid-size laptop and tablet columns: a five-column panorama becomes a clean
- * 3 + 2 card grid rather than five compressed strips. */
-@container s5-animation (min-width: 681px) and (max-width: 1080px) {
-  .anim-brand-shell__viewport .vrpv-panorama .vrpv__flow {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 13px;
+  .anim-brand-shell:has(.anim-brand-shell__viewport > .s5v) {
+    margin-top: 1.1rem;
+    margin-bottom: 2.15rem;
   }
 
-  .anim-brand-shell__viewport .vrpv-panorama .vrpv__flow::before,
-  .anim-brand-shell__viewport .vrpv-panorama .vrpv__packet {
-    display: none;
-  }
-
-  .anim-brand-shell__viewport .vrpv-panorama .vrpv__stage {
-    min-height: 330px;
-  }
-}
-
-@container s5-animation (max-width: 520px) {
-  /* Compact timeline labels stay meaningful without colliding. */
-  .anim-brand-shell__viewport .vrpv-clock :is(
-    .vrpv-clock__segment--gen,
-    .vrpv-clock__segment--queue,
-    .vrpv-clock__segment--cancel,
-    .vrpv-clock__segment--clear
-  ) {
-    font-size: 0;
-  }
-
-  .anim-brand-shell__viewport .vrpv-clock .vrpv-clock__segment--gen::before {
-    content: "gen";
-    font-size: .48rem;
-  }
-
-  .anim-brand-shell__viewport .vrpv-clock .vrpv-clock__segment--queue::before {
-    content: "buf";
-    font-size: .44rem;
-  }
-
-  .anim-brand-shell__viewport .vrpv-clock .vrpv-clock__segment--cancel::before {
-    content: "×";
-    font-size: .72rem;
-  }
-
-  .anim-brand-shell__viewport .vrpv-clock .vrpv-clock__segment--clear::before {
-    content: "×";
-    font-size: .72rem;
-  }
-
-  .anim-brand-shell__viewport .vrpv-barge .vrpv-barge__rule {
-    grid-template-columns: 34px minmax(0, 1fr);
-    gap: 10px;
-    align-items: start;
-    padding: 12px;
-  }
-
-  .anim-brand-shell__viewport .vrpv-barge .vrpv-barge__rule-icon {
-    width: 34px;
-    height: 34px;
-    font-size: 1rem;
-  }
-
-  /* The waterfall keeps the proportions while using compact stage names. */
-  .anim-brand-shell__viewport .varch-latency .varch-latency__bar {
-    font-size: 0;
-  }
-
-  .anim-brand-shell__viewport .varch-latency .varch-latency__bar--endpoint::before {
-    content: "VAD";
-    font-size: .47rem;
-  }
-
-  .anim-brand-shell__viewport .varch-latency .varch-latency__bar--stt::before {
-    content: "STT";
-    font-size: .47rem;
-  }
-
-  .anim-brand-shell__viewport .varch-latency .varch-latency__bar--llm::before {
-    content: "LLM";
-    font-size: .47rem;
-  }
-
-  .anim-brand-shell__viewport .varch-latency :is(
-    .varch-latency__bar--tts,
-    .varch-latency__bar--half-tts
-  )::before {
-    content: "TTS";
-    font-size: .47rem;
-  }
-
-  .anim-brand-shell__viewport .varch-latency .varch-latency__bar--buffer::before {
-    content: "BUF";
-    font-size: .45rem;
-  }
-
-  .anim-brand-shell__viewport .varch-latency .varch-latency__bar--audio-model::before {
-    content: "Audio model";
-    font-size: .43rem;
-  }
-
-  .anim-brand-shell__viewport .varch-latency .varch-latency__bar--s2s::before {
-    content: "S2S";
-    font-size: .47rem;
+  .anim-brand-shell:has(.anim-brand-shell__viewport > .s5v) .anim-brand-shell__toolbar {
+    padding-right: 1px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   body.s5-voice-animation-focus :is(
-    .md-header,
-    .md-tabs,
-    .s5-progress,
     .s5-reader-topbar,
     .s5-reader-rail,
     .s5-reader-direct,
