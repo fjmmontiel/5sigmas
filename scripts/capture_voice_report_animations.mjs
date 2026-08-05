@@ -185,7 +185,17 @@ async function prepareAnimation(page, selector, step) {
   if (step) {
     const button = root.locator(`[data-s5v-step="${step}"]`);
     if (await button.count()) await button.click();
-    else await root.evaluate((node, value) => { node.dataset.step = String(value); }, step);
+    else await root.evaluate((node, value) => {
+      node.dataset.s5vPaused = 'true';
+      node.dataset.step = String(value);
+      node.style.setProperty('--s5v-step', String(value));
+      const stepValue = node.querySelector('[data-s5v-step-value]');
+      if (stepValue) stepValue.textContent = String(value);
+      if (node.classList.contains('s5v-batch')) {
+        const count = node.querySelector('.s5v-batch__progress b');
+        if (count) count.textContent = value >= 4 ? '3/3' : `${Math.max(0, value - 1)}/3`;
+      }
+    }, step);
   }
   if (selector === '.s5v-speech-plan') {
     await root.locator('input[data-s5v-var="energy"]').fill('68');
