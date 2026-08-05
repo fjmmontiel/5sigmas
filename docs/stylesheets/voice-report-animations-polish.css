@@ -1,20 +1,26 @@
 /* Final visual polish for the voice-report animation family. */
 
-/* A visible animation owns the reading surface. Fixed navigation and the article
- * completion card must never be painted over the diagram. They reappear as soon
- * as the animation leaves the viewport. */
+/* A visible animation owns the reading surface. Fixed navigation must never be
+ * painted over the diagram. It reappears as soon as the animation leaves the
+ * viewport. */
 body.s5-voice-animation-focus :is(
   .md-header,
   .md-tabs,
   .s5-reader-topbar,
   .s5-reader-rail,
   .s5-reader-direct,
-  .s5-reader-direct-toggle,
-  .s5-reader-end
+  .s5-reader-direct-toggle
 ) {
   visibility: hidden !important;
   opacity: 0 !important;
   pointer-events: none !important;
+}
+
+/* The completion card is injected inside the article flow. Visibility would
+ * preserve its height and stretch a diagram, so it must leave layout entirely
+ * while an animation owns the viewport. */
+body.s5-voice-animation-focus .s5-reader-end {
+  display: none !important;
 }
 
 /* Technical diagrams need more room than the prose column on a large screen. */
@@ -60,6 +66,7 @@ body.s5-voice-animation-focus :is(
   .varch-surface__footer
 ) :is(span, p, small, strong, b, code, i) {
   color: #f4fbfa !important;
+  -webkit-text-fill-color: #f4fbfa !important;
 }
 
 .anim-brand-shell__viewport :is(
@@ -76,6 +83,7 @@ body.s5-voice-animation-focus :is(
   .varch-surface__footer
 ) :is(strong, b) {
   color: #9fe0b0 !important;
+  -webkit-text-fill-color: #9fe0b0 !important;
 }
 
 .anim-brand-shell__viewport :is(
@@ -91,14 +99,17 @@ body.s5-voice-animation-focus :is(
   .varch-surface__footer
 ) code {
   color: #d9e8e6 !important;
+  -webkit-text-fill-color: #d9e8e6 !important;
 }
 
 .anim-brand-shell__viewport .varch-prosody__plan b {
   color: #9fe0b0 !important;
+  -webkit-text-fill-color: #9fe0b0 !important;
 }
 
 .anim-brand-shell__viewport .varch-prosody__plan i {
   color: #f5cc78 !important;
+  -webkit-text-fill-color: #f5cc78 !important;
 }
 
 /* Mid-size laptop and tablet columns: a five-column panorama becomes a clean
@@ -214,8 +225,7 @@ body.s5-voice-animation-focus :is(
     .s5-reader-topbar,
     .s5-reader-rail,
     .s5-reader-direct,
-    .s5-reader-direct-toggle,
-    .s5-reader-end
+    .s5-reader-direct-toggle
   ) {
     transition: none !important;
   }
