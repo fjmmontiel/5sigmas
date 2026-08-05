@@ -41,14 +41,14 @@ def _isolate_markdown_alternate(output: str) -> str:
 
     Material for MkDocs 9.7.7 queries ``link[rel=alternate]`` with an exact
     attribute selector and treats every match as another deployed site. A
-    Markdown representation is an alternate format, not an alternate site.
-    Adding a descriptive extension token preserves the standard ``alternate``
-    relation for crawlers while keeping it out of Material's exact selector.
+    Markdown representation is an alternate format and a related resource, not
+    an alternate site. The registered ``related`` token preserves valid link
+    semantics while keeping the element out of Material's exact selector.
     """
 
     return output.replace(
         'rel="alternate" type="text/markdown"',
-        'rel="alternate markdown" type="text/markdown"',
+        'rel="alternate related" type="text/markdown"',
         1,
     )
 
