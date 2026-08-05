@@ -1,0 +1,190 @@
+name: Temporary capture · live reader layout
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+    paths:
+      - '.github/workflows/temp-live-reader-layout.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  capture-live-reader:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Capture deployed reader pages
+        shell: bash
+        run: |
+          cat > capture-live-reader.mjs <<'JS'
+          import { chromium, devices } from 'playwright';
+          import fs from 'node:fs/promises';
+
+          const outputDir = 'artifacts/live-reader-layout';
+          await fs.mkdir(outputDir, { recursive: true });
+
+          const specs = [
+            {
+              slug: 'reactive-proactive-voice',
+              url: 'https://5sigmas.com/articulos-tecnicos/reactive-proactive-voice-agents/',
+              marker: '.s5v-contract',
+            },
+            {
+              slug: 'voice-architectures',
+              url: 'https://5sigmas.com/articulos-tecnicos/voice-agent-architectures/',
+              marker: '.s5v-arch-map',
+            },
+            {
+              slug: 'series-reader',
+              url: 'https://5sigmas.com/series/from-cave-to-agi/00_presentacion_serie/',
+              marker: 'article h1',
+            },
+          ];
+
+          const desktopViewports = [
+            { name: 'wide', width: 1728, height: 1117, minContent: 1180, maxLibraryX: 100 },
+            { name: 'standard', width: 1440, height: 1000, minContent: 1080, maxLibraryX: 45 },
+          ];
+
+          const browser = await chromium.launch({ headless: true });
+          const metrics = [];
+
+          async function waitForDeployment(page, spec, viewport) {
+            for (let attempt = 1; attempt <= 60; attempt += 1) {
+              const response = await page.goto(`${spec.url}?layout-review=${Date.now()}-${attempt}`, {
+                waitUntil: 'domcontentloaded',
+                timeout: 45_000,
+              }).catch(() => null);
+
+              if (response?.ok() && await page.locator(spec.marker).count()) {
+                const geometry = await page.evaluate(() => {
+                  const library = document.querySelector('.s5-reader-direct')?.getBoundingClientRect();
+                  const content = document.querySelector('.md-content')?.getBoundingClientRect();
+                  return {
+                    libraryX: library?.x ?? 9999,
+                    contentWidth: content?.width ?? 0,
+                  };
+                });
+
+                if (geometry.libraryX <= viewport.maxLibraryX && geometry.contentWidth >= viewport.minContent) {
+                  await page.waitForLoadState('networkidle', { timeout: 30_000 }).catch(() => {});
+                  console.log(`${spec.slug}/${viewport.name}: deployed`, geometry);
+                  return;
+                }
+
+                console.log(`${spec.slug}/${viewport.name}: waiting`, geometry);
+              }
+
+              await new Promise((resolve) => setTimeout(resolve, 10_000));
+            }
+
+            throw new Error(`Production did not expose the wider reader layout for ${spec.url}`);
+          }
+
+          async function settle(page) {
+            await page.evaluate(async () => {
+              await document.fonts.ready;
+              document.documentElement.style.scrollBehavior = 'auto';
+              const step = Math.max(520, Math.floor(window.innerHeight * .75));
+              for (let y = 0; y < document.documentElement.scrollHeight; y += step) {
+                window.scrollTo(0, y);
+                await new Promise((resolve) => setTimeout(resolve, 60));
+              }
+              window.scrollTo(0, 0);
+              await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+            });
+            await page.addStyleTag({
+              content: `
+                html, body { scroll-behavior: auto !important; }
+                *, *::before, *::after {
+                  animation-play-state: paused !important;
+                  transition: none !important;
+                }
+              `,
+            });
+            await page.evaluate(() => window.scrollTo(0, 0));
+            await page.waitForTimeout(350);
+          }
+
+          async function captureDesktop(spec, viewport) {
+            const page = await browser.newPage({ viewport, deviceScaleFactor: 1 });
+            await waitForDeployment(page, spec, viewport);
+            await settle(page);
+
+            const geometry = await page.evaluate(() => {
+              const read = (selector) => {
+                const element = document.querySelector(selector);
+                if (!element) return null;
+                const rect = element.getBoundingClientRect();
+                return {
+                  x: Math.round(rect.x * 10) / 10,
+                  width: Math.round(rect.width * 10) / 10,
+                };
+              };
+              return {
+                library: read('.s5-reader-direct'),
+                content: read('.md-content'),
+                title: read('article h1'),
+                navigation: read('.s5-reader-topbar'),
+                prose: read('.md-typeset > p'),
+                overflow: document.documentElement.scrollWidth - window.innerWidth,
+              };
+            });
+            metrics.push({ page: spec.slug, viewport: viewport.name, ...geometry });
+
+            if (geometry.overflow > 1) throw new Error(`Horizontal overflow: ${JSON.stringify(geometry)}`);
+            if (Math.abs(geometry.title.x - geometry.content.x) > 2) throw new Error(`Title misalignment: ${JSON.stringify(geometry)}`);
+            if (Math.abs(geometry.navigation.x - geometry.content.x) > 2) throw new Error(`Navigation misalignment: ${JSON.stringify(geometry)}`);
+
+            await page.screenshot({ path: `${outputDir}/${spec.slug}-${viewport.name}-viewport.png`, fullPage: false });
+            await page.screenshot({ path: `${outputDir}/${spec.slug}-${viewport.name}-full.png`, fullPage: true });
+            await page.close();
+          }
+
+          async function captureMobile(spec) {
+            const pixel = devices['Pixel 7'];
+            const page = await browser.newPage({
+              ...pixel,
+              viewport: { width: 390, height: 844 },
+              deviceScaleFactor: 1,
+            });
+            await page.goto(`${spec.url}?layout-mobile=${Date.now()}`, { waitUntil: 'networkidle' });
+            await settle(page);
+            const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+            if (overflow > 1) throw new Error(`Mobile horizontal overflow on ${spec.slug}: ${overflow}px`);
+            await page.screenshot({ path: `${outputDir}/${spec.slug}-mobile-viewport.png`, fullPage: false });
+            await page.close();
+          }
+
+          try {
+            for (const spec of specs) {
+              for (const viewport of desktopViewports) await captureDesktop(spec, viewport);
+              await captureMobile(spec);
+            }
+          } finally {
+            await browser.close();
+          }
+
+          await fs.writeFile(`${outputDir}/live-layout-metrics.json`, JSON.stringify(metrics, null, 2));
+          console.log(JSON.stringify(metrics, null, 2));
+          JS
+
+          node capture-live-reader.mjs
+
+      - name: Upload deployed page screenshots
+        uses: actions/upload-artifact@v4
+        with:
+          name: live-reader-layout
+          path: artifacts/live-reader-layout/*
+          if-no-files-found: error
+          retention-days: 7
