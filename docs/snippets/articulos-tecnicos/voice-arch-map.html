@@ -1,0 +1,12 @@
+<section class="s5v s5v-arch-map s5v--wide" data-s5v-stepper data-s5v-steps="3" data-step="1" data-anim-fullscreen="on" aria-label="Comparación de las tres arquitecturas de agentes de voz">
+  <div class="s5v__canvas">
+    <header class="s5v__head"><div><span class="s5v__kicker">Mapa</span><h3>¿Dónde colocas la frontera de texto?</h3></div><p>Ese corte cambia todo.</p></header>
+    <div class="s5v__steps s5v__steps--tabs"><button data-s5v-step="1">Full cascade</button><button data-s5v-step="2">Half cascade</button><button data-s5v-step="3">S2S</button></div>
+    <div class="s5v-arch-map__panels">
+      <div data-panel="1" class="s5v-arch-map__pipe"><span class="is-audio">Audio</span><i>→</i><span>STT</span><i>→</i><span>LLM</span><i>→</i><span>TTS</span><i>→</i><span class="is-audio">Audio</span></div>
+      <div data-panel="2" class="s5v-arch-map__pipe"><span class="is-audio">Audio</span><i>→</i><span class="is-model">Audio model</span><i>→</i><span class="is-text">Texto</span><i>→</i><span>TTS</span><i>→</i><span class="is-audio">Audio</span></div>
+      <div data-panel="3" class="s5v-arch-map__pipe"><span class="is-audio">Audio</span><i>↔</i><span class="is-model">S2S</span><i>↔</i><span class="is-audio">Audio</span></div>
+    </div>
+    <div class="s5v__copy"><span data-s5v-copy="1">El texto separa comprensión y voz.</span><span data-s5v-copy="2">El audio entra nativo. La voz sigue fuera.</span><span data-s5v-copy="3">La representación acústica cruza todo el turno.</span></div>
+  </div>
+</section>

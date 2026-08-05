@@ -2,7 +2,7 @@
 title: Agentes reactivos y proactivos en voz
 description: "Cómo separar la conversación, las tools asíncronas y la entrega de resultados para que un agente de voz no bloquee el turno, interrumpa mal o repita mensajes."
 date: 2026-08-04
-date_modified: 2026-08-04
+date_modified: 2026-08-05
 keywords: "agentes de voz, agente reactivo, agente proactivo, tool calls asíncronas, barge-in, full duplex, runtime conversacional, Twilio Media Streams, Pipecat"
 article_state: published
 tags:
@@ -33,7 +33,7 @@ Por eso no basta con añadir un callback que diga *“la tool ha terminado”*. 
 
 El patrón funciona cuando esos relojes se mantienen separados. La aceptación puede ser reactiva, la ejecución puede ser asíncrona y la entrega puede ser proactiva. Aun así, solo un componente debe controlar la voz y decidir cuándo vuelve a hablar el agente.
 
-{{ include_html("snippets/articulos-tecnicos/voice-reactive-proactive-panorama.html") }}
+{{ include_html("snippets/articulos-tecnicos/voice-rp-contract.html") }}
 
 ## Reactivo y proactivo hablan de la entrega
 
@@ -60,6 +60,8 @@ petición aceptada
 ```
 
 La operación y la conversación avanzan a ritmos distintos. El runtime tiene que conservar ambas líneas temporales sin mezclarlas.
+
+{{ include_html("snippets/articulos-tecnicos/voice-rp-safe-window.html") }}
 
 ## Los cuatro relojes de una llamada
 
@@ -105,7 +107,7 @@ Una interrupción suele cancelar la respuesta y el playback. No debería cancela
 
 Usar el mismo `cancel` para todo mezcla dos decisiones distintas. Una es acústica. La otra es de negocio.
 
-{{ include_html("snippets/articulos-tecnicos/voice-reactive-proactive-clocks.html") }}
+{{ include_html("snippets/articulos-tecnicos/voice-rp-clocks.html") }}
 
 ## El turno se queda corto
 
@@ -240,6 +242,8 @@ La ventana de silencio no tiene por qué ser igual en todos los casos. Puede cam
 
 Interrumpir para decir que una búsqueda terminó suele ser peor que esperar. Interrumpir para avisar de que un pago va a salir con datos incorrectos puede estar justificado.
 
+{{ include_html("snippets/articulos-tecnicos/voice-rp-gate.html") }}
+
 ## Barge-in: se cancela la voz, no todo el sistema
 
 Cuando el usuario empieza a hablar, el agente debe dejar de sonar rápido. La cancelación correcta es selectiva.
@@ -275,7 +279,7 @@ async def on_barge_in(event: SpeechStarted, session: VoiceSession) -> None:
 
 El usuario puede decir “no hagas la transferencia” y cancelar una operación. Empezar una nueva pregunta no debería tener el mismo efecto.
 
-{{ include_html("snippets/articulos-tecnicos/voice-reactive-proactive-barge-in.html") }}
+{{ include_html("snippets/articulos-tecnicos/voice-rp-barge.html") }}
 
 ## Varias tools deberían producir un solo cierre
 
@@ -327,6 +331,8 @@ async def on_operation_finished(result: OperationResult) -> None:
 
 `record_result_once` y `create_once` son importantes porque producción incluye retries, timeouts ambiguos y entregas *at least once*. El diseño no puede depender de que cada evento llegue exactamente una vez.
 
+{{ include_html("snippets/articulos-tecnicos/voice-rp-batch.html") }}
+
 ## Cuando no hay hueco, el resultado espera
 
 A veces no aparece una ventana segura para hacer un follow-up. El usuario puede seguir hablando, el agente puede estar respondiendo a otra intención o la llamada puede terminar antes de que llegue el resultado.
@@ -369,7 +375,7 @@ Se encarga del razonamiento pesado, RAG, tools, retries, compensaciones e idempo
 
 Guarda eventos, locks, operaciones, lotes y entregas pendientes. Conecta los otros dos planos sin convertir el transcript en estado operativo.
 
-{{ include_html("snippets/articulos-tecnicos/voice-reactive-proactive-runtime.html") }}
+{{ include_html("snippets/articulos-tecnicos/voice-rp-runtime.html") }}
 
 Esta división también aparece en sistemas full-duplex recientes. GPT-Live, presentado por OpenAI el 8 de julio de 2026, mantiene la conversación en una superficie de voz mientras delega búsqueda, razonamiento más profundo y trabajo complejo a un modelo frontier.[^gpt-live]
 

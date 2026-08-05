@@ -1,0 +1,11 @@
+<section class="s5v s5v-runtime s5v--wide" data-anim-fullscreen="on" aria-label="Arquitectura de un runtime reactivo y proactivo de voz">
+  <div class="s5v__canvas">
+    <header class="s5v__head"><div><span class="s5v__kicker">Arquitectura</span><h3>Solo una capa puede hablar.</h3></div><p>El resto publica eventos.</p></header>
+    <div class="s5v-runtime__stack">
+      <div class="s5v-runtime__surface"><span>voz</span><b>Interaction Surface</b><small>escucha · interrumpe · entrega</small></div>
+      <div class="s5v-runtime__bus"><i></i><b>event log</b><code>TaskEnvelope ↕ DeliveryEnvelope</code></div>
+      <div class="s5v-runtime__lower"><div><span>razón</span><b>Cognitive Plane</b><small>tools · RAG · policy</small></div><div><span>estado</span><b>Durable Coordination</b><small>colas · locks · idempotencia</small></div></div>
+      <span class="s5v-runtime__packet" aria-hidden="true"></span>
+    </div>
+  </div>
+</section>
