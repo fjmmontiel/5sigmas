@@ -1,5 +1,5 @@
 site_name: 5sigmas
-site_description: Inteligencia artificial explicada con rigor mediante vídeos, animaciones, series y notas técnicas.
+site_description: "Inteligencia artificial explicada en español con rigor: LLMs, Transformers, razonamiento, multimodalidad, agentes de voz y sistemas en producción."
 site_url: "https://5sigmas.com"
 validation:
   nav:
@@ -48,6 +48,12 @@ nav:
   - Inicio: index.md
   - Ver: visuales/index.md
   - Aprender:
+      - Conceptos:
+          - temas/index.md
+          - Qué es un LLM: temas/llms.md
+          - Cómo funciona el Transformer: temas/transformer.md
+          - Razonamiento en LLMs: temas/razonamiento.md
+          - Evaluación de modelos de IA: temas/evaluacion-modelos.md
       - series/index.md
       - Fundamentos de IA e IA generativa:
           - Presentación: series/fundamentos-ia-iag/00_presentacion_serie.md
@@ -181,6 +187,7 @@ plugins:
       redirect_maps:
         'videos/index.md': 'visuales/index.md'
         'meta/advisor-ia.md': 'meta/about.md'
+        'roadmaps.md': 'series/index.md'
         'series/fundamentos-ia-iag/index.md': 'series/fundamentos-ia-iag/00_presentacion_serie.md'
         'series/from-cave-to-agi/index.md': 'series/from-cave-to-agi/00_presentacion_serie.md'
         'series/multimodalidad-iag/index.md': 'series/multimodalidad-iag/00_presentacion_serie.md'
