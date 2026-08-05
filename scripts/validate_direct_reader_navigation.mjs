@@ -37,6 +37,56 @@ const assertMobileDock = async (page) => {
   }
 };
 
+const assertCompactPresentationTitle = async (page) => {
+  const title = page.locator('.md-content__inner > h1').first();
+  await title.waitFor({ state: 'visible' });
+
+  const metrics = await title.evaluate((node) => {
+    const bounds = node.getBoundingClientRect();
+    const style = getComputedStyle(node);
+    return {
+      left: bounds.left,
+      right: bounds.right,
+      width: bounds.width,
+      height: bounds.height,
+      fontSize: Number.parseFloat(style.fontSize),
+      lineHeight: Number.parseFloat(style.lineHeight),
+    };
+  });
+  const viewport = page.viewportSize();
+  const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth);
+
+  if (!viewport) throw new Error('Missing viewport while checking the mobile presentation title.');
+  if (metrics.right > viewport.width - 8 || metrics.left < 0) {
+    throw new Error(`Mobile presentation title escapes the reading column: ${JSON.stringify(metrics)}`);
+  }
+  if (metrics.height > 100 || metrics.fontSize > 44) {
+    throw new Error(`Mobile presentation title is still oversized: ${JSON.stringify(metrics)}`);
+  }
+  if (scrollWidth > viewport.width + 2) {
+    throw new Error(`Mobile presentation introduced ${scrollWidth - viewport.width}px of horizontal overflow.`);
+  }
+};
+
+const assertMaterialDrawerIsolation = async (page) => {
+  const toggle = page.locator('label.md-header__button[for="__drawer"]');
+  const drawerState = page.locator('input[data-md-toggle="drawer"]').first();
+  const primaryNavigation = page.locator('.md-sidebar--primary').first();
+
+  await toggle.waitFor({ state: 'visible' });
+  await toggle.click();
+  await page.waitForFunction(() => document.querySelector('input[data-md-toggle="drawer"]')?.checked === true);
+  await primaryNavigation.waitFor({ state: 'visible' });
+
+  const readerChrome = page.locator('.s5-reader-topbar:visible, .s5-reader-rail:visible, .s5-reader-direct-toggle:visible');
+  if (await readerChrome.count()) {
+    throw new Error('Reader navigation is still rendered above Material’s mobile drawer.');
+  }
+  if (!await drawerState.isChecked()) {
+    throw new Error('Material navigation drawer did not remain open during the visual check.');
+  }
+};
+
 const assertLibrary = async (page, { mobile = false } = {}) => {
   const library = page.locator('[data-s5-reader-direct]');
   const search = library.locator('[data-s5-reader-direct-search]');
@@ -188,6 +238,20 @@ try {
 
   await navigateDirectly(controls, mobile, '/series/datacenters-espacio/04-huella-real-datacenter/');
   await mobile.screenshot({ path: `${outputDir}/reader-sidebar-mobile.png`, fullPage: false });
+
+  const narrowMobile = await browser.newPage({ viewport: { width: 360, height: 800 }, deviceScaleFactor: 1 });
+  await narrowMobile.goto(`${baseUrl}/series/from-cave-to-agi/00_presentacion_serie/`, { waitUntil: 'networkidle' });
+  await assertMobileDock(narrowMobile);
+  await assertCompactPresentationTitle(narrowMobile);
+  await narrowMobile.screenshot({ path: `${outputDir}/reader-presentation-narrow-mobile.png`, fullPage: false });
+
+  const tabletDrawer = await browser.newPage({ viewport: { width: 900, height: 844 }, deviceScaleFactor: 1 });
+  await tabletDrawer.goto(`${baseUrl}/series/from-cave-to-agi/00_presentacion_serie/`, { waitUntil: 'networkidle' });
+  if (!await tabletDrawer.locator('.s5-reader-topbar').isVisible()) {
+    throw new Error('Tablet regression setup requires the reader topbar to be visible before opening Material navigation.');
+  }
+  await assertMaterialDrawerIsolation(tabletDrawer);
+  await tabletDrawer.screenshot({ path: `${outputDir}/reader-material-drawer-tablet.png`, fullPage: false });
 } finally {
   await browser.close();
 }

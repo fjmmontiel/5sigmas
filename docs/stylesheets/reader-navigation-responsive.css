@@ -1,6 +1,6 @@
 /* Final reader density rules: local context without duplicate footer controls. */
 
-.md-content__inner > h1:has(+ .s5-reader-shell) {
+.md-content__inner > h1:has(~ .s5-reader-shell) {
   margin-bottom: .35rem !important;
 }
 
@@ -13,14 +13,32 @@ body:has(.s5-reader-shell) .md-footer__inner {
   display: none !important;
 }
 
+/* Material's navigation and search drawers must own the whole overlay layer. */
+body:has(input[data-md-toggle="drawer"]:checked) .s5-reader-topbar,
+body:has(input[data-md-toggle="drawer"]:checked) .s5-reader-rail,
+body:has(input[data-md-toggle="drawer"]:checked) .s5-reader-direct-toggle,
+body:has(input[data-md-toggle="search"]:checked) .s5-reader-topbar,
+body:has(input[data-md-toggle="search"]:checked) .s5-reader-rail,
+body:has(input[data-md-toggle="search"]:checked) .s5-reader-direct-toggle {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
 @media (max-width: 800px) {
   /* Keep the entire 32 px library tab outside the reading column. */
   body:has(.s5-reader-shell) .md-content__inner {
     padding-left: 2.25rem !important;
   }
 
-  .md-content__inner > h1:has(+ .s5-reader-shell) {
+  /* Long chapter and series titles need to remain readable on 320–390 px phones. */
+  .md-content__inner > h1:has(~ .s5-reader-shell) {
+    max-width: 100% !important;
     margin-bottom: .2rem !important;
+    font-size: clamp(2rem, 10vw, 2.75rem) !important;
+    line-height: .96 !important;
+    text-wrap: balance;
+    overflow-wrap: break-word;
   }
 
   .s5-reader-shell {
