@@ -59,6 +59,9 @@ jobs:
       - name: Capture responsive screenshots
         run: node scripts/capture_site_screenshots.mjs
 
+      - name: Capture every voice report animation
+        run: node scripts/capture_voice_report_animations.mjs
+
       - name: Validate direct series and article navigation
         run: node scripts/validate_direct_reader_navigation.mjs
 
