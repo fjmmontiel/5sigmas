@@ -1,0 +1,157 @@
+name: Temporary capture · live voice report pages
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+    paths:
+      - '.github/workflows/temp-capture-live-voice-pages.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  capture-live-pages:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Capture the deployed pages
+        shell: bash
+        run: |
+          cat > /tmp/capture-live-pages.mjs <<'JS'
+          import { chromium, devices } from 'playwright';
+          import fs from 'node:fs/promises';
+
+          const outputDir = 'artifacts/live-page-review';
+          await fs.mkdir(outputDir, { recursive: true });
+
+          const pages = [
+            {
+              slug: 'reactive-proactive-voice',
+              url: 'https://5sigmas.com/articulos-tecnicos/reactive-proactive-voice-agents/',
+              marker: '.s5v-contract',
+            },
+            {
+              slug: 'voice-architectures',
+              url: 'https://5sigmas.com/articulos-tecnicos/voice-agent-architectures/',
+              marker: '.s5v-arch-map',
+            },
+          ];
+
+          const browser = await chromium.launch({ headless: true });
+
+          async function waitForDeployment(page, spec) {
+            for (let attempt = 1; attempt <= 60; attempt += 1) {
+              const cacheBuster = `${Date.now()}-${attempt}`;
+              try {
+                const response = await page.goto(`${spec.url}?live-review=${cacheBuster}`, {
+                  waitUntil: 'domcontentloaded',
+                  timeout: 45_000,
+                });
+                if (response?.ok() && await page.locator(spec.marker).count()) {
+                  await page.waitForLoadState('networkidle', { timeout: 30_000 }).catch(() => {});
+                  return;
+                }
+              } catch (error) {
+                console.log(`Attempt ${attempt}: ${error.message}`);
+              }
+              console.log(`Waiting for production deployment: ${spec.slug} (${attempt}/60)`);
+              await new Promise((resolve) => setTimeout(resolve, 10_000));
+            }
+            throw new Error(`Production did not expose ${spec.marker} for ${spec.url}`);
+          }
+
+          async function settlePage(page, marker) {
+            await page.locator(marker).first().waitFor({ state: 'visible', timeout: 30_000 });
+            await page.evaluate(async () => {
+              await document.fonts.ready;
+              const step = Math.max(480, Math.floor(window.innerHeight * 0.75));
+              for (let y = 0; y < document.documentElement.scrollHeight; y += step) {
+                window.scrollTo(0, y);
+                await new Promise((resolve) => setTimeout(resolve, 80));
+              }
+              window.scrollTo(0, 0);
+            });
+            await page.waitForTimeout(700);
+            await page.addStyleTag({
+              content: `
+                *, *::before, *::after {
+                  animation-play-state: paused !important;
+                  transition-duration: 0s !important;
+                  transition-delay: 0s !important;
+                }
+              `,
+            });
+            await page.evaluate(() => {
+              document.documentElement.style.scrollBehavior = 'auto';
+              document.body.classList.remove('anim-focus');
+              window.scrollTo(0, 0);
+            });
+            await page.waitForTimeout(250);
+          }
+
+          async function captureDesktop(spec) {
+            const page = await browser.newPage({
+              viewport: { width: 1728, height: 1117 },
+              deviceScaleFactor: 1,
+            });
+            await waitForDeployment(page, spec);
+            await settlePage(page, spec.marker);
+            await page.screenshot({
+              path: `${outputDir}/${spec.slug}-desktop-full.png`,
+              fullPage: true,
+            });
+            await page.screenshot({
+              path: `${outputDir}/${spec.slug}-desktop-viewport.png`,
+              fullPage: false,
+            });
+            await page.close();
+          }
+
+          async function captureMobile(spec) {
+            const pixel = devices['Pixel 7'];
+            const page = await browser.newPage({
+              ...pixel,
+              viewport: { width: 390, height: 844 },
+              deviceScaleFactor: 1,
+            });
+            await waitForDeployment(page, spec);
+            await settlePage(page, spec.marker);
+            await page.screenshot({
+              path: `${outputDir}/${spec.slug}-mobile-full.png`,
+              fullPage: true,
+            });
+            await page.screenshot({
+              path: `${outputDir}/${spec.slug}-mobile-viewport.png`,
+              fullPage: false,
+            });
+            await page.close();
+          }
+
+          try {
+            for (const spec of pages) {
+              await captureDesktop(spec);
+              await captureMobile(spec);
+            }
+          } finally {
+            await browser.close();
+          }
+          JS
+
+          node /tmp/capture-live-pages.mjs
+
+      - name: Upload production screenshots
+        uses: actions/upload-artifact@v4
+        with:
+          name: live-voice-report-pages
+          path: artifacts/live-page-review/*
+          if-no-files-found: error
+          retention-days: 7
