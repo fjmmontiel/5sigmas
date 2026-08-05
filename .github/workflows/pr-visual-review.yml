@@ -61,6 +61,9 @@ jobs:
           cat /tmp/5sigmas-preview.log
           exit 1
 
+      - name: Audit browser resource loading
+        run: node scripts/audit_browser_resources.mjs
+
       - name: Capture responsive screenshots
         run: node scripts/capture_site_screenshots.mjs
 
