@@ -107,22 +107,28 @@ jobs:
             await page.waitForLoadState('networkidle');
             await page.evaluate(async () => {
               await document.fonts.ready;
+              document.documentElement.style.scrollBehavior = 'auto';
+              document.body.style.scrollBehavior = 'auto';
               const step = Math.max(500, Math.floor(window.innerHeight * .75));
               for (let y = 0; y < document.documentElement.scrollHeight; y += step) {
                 window.scrollTo(0, y);
                 await new Promise((resolve) => setTimeout(resolve, 55));
               }
               window.scrollTo(0, 0);
+              await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
             });
-            await page.waitForTimeout(350);
+            await page.waitForTimeout(450);
             await page.addStyleTag({
               content: `
+                html, body { scroll-behavior: auto !important; }
                 *, *::before, *::after {
                   animation-play-state: paused !important;
                   transition: none !important;
                 }
               `,
             });
+            await page.evaluate(() => window.scrollTo(0, 0));
+            await page.waitForTimeout(180);
           }
 
           async function inspectDesktop(spec, viewport) {
