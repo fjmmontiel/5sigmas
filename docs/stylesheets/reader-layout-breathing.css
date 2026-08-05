@@ -1,0 +1,110 @@
+/*
+ * Desktop reader frame
+ *
+ * The global library replaces Material's primary navigation on article pages.
+ * At large widths we therefore use an explicit two-column editorial frame:
+ * a compact library on the left and a wider article canvas on the right.
+ * Mobile and tablet keep the existing drawer layout unchanged.
+ */
+
+@media (min-width: 1320px) {
+  body:has(.s5-reader-direct) {
+    --s5-reader-frame-width: min(1600px, calc(100vw - 48px));
+    --s5-reader-library-width: 220px;
+    --s5-reader-column-gap: clamp(30px, 2.35vw, 40px);
+    --s5-reader-article-width: min(
+      1240px,
+      calc(
+        var(--s5-reader-frame-width)
+        - var(--s5-reader-library-width)
+        - var(--s5-reader-column-gap)
+      )
+    );
+    --s5-reader-prose-width: 820px;
+  }
+
+  /* Remove the invisible Material sidebar columns and own the reader grid. */
+  body:has(.s5-reader-direct) .md-main__inner {
+    display: block;
+    width: var(--s5-reader-frame-width);
+    max-width: none;
+    margin-right: auto;
+    margin-left: auto;
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+  body:has(.s5-reader-direct) .md-main__inner > .md-sidebar {
+    display: none;
+  }
+
+  body:has(.s5-reader-direct) .md-content {
+    width: var(--s5-reader-article-width);
+    max-width: none !important;
+    margin-right: auto;
+    margin-left: calc(
+      var(--s5-reader-library-width)
+      + var(--s5-reader-column-gap)
+    );
+  }
+
+  body:has(.s5-reader-direct) .md-content__inner,
+  body:has(.s5-reader-direct) .md-typeset {
+    width: 100%;
+    max-width: none;
+  }
+
+  /* Anchor the library to the same frame instead of the old centred offset. */
+  body:has(.s5-reader-direct) .s5-reader-direct {
+    left: calc((100vw - var(--s5-reader-frame-width)) / 2);
+    width: var(--s5-reader-library-width);
+  }
+
+  /* A slightly broader text measure gives the article more air without
+     turning paragraphs into desktop-wide lines. */
+  body:has(.s5-reader-direct) .md-main__inner:not(:has(.s5-landing)) .md-typeset > :is(
+    p,
+    ul,
+    ol,
+    blockquote,
+    .admonition,
+    details
+  ) {
+    max-width: var(--s5-reader-prose-width);
+  }
+
+  body:has(.s5-reader-direct) .md-main__inner:not(:has(.s5-landing)) .md-typeset > h1 {
+    max-width: min(18ch, var(--s5-reader-article-width));
+  }
+
+  body:has(.s5-reader-direct) .md-typeset > :is(h2, h3, h4) {
+    max-width: 960px;
+  }
+
+  /* Keep navigation, metadata, tables and technical visuals aligned to the
+     wider article canvas while the prose remains intentionally narrower. */
+  body:has(.s5-reader-direct) :is(
+    .s5-reader-shell,
+    .s5-reader-end,
+    .md-tags,
+    .s5-article-meta,
+    .s5-article-status,
+    .s5-video-embed,
+    .md-typeset > table,
+    .md-typeset > pre
+  ) {
+    width: 100%;
+    max-width: var(--s5-reader-article-width);
+  }
+}
+
+/* At very wide viewports the frame stays calm instead of drifting to centre. */
+@media (min-width: 1760px) {
+  body:has(.s5-reader-direct) {
+    --s5-reader-frame-width: 1640px;
+    --s5-reader-library-width: 224px;
+    --s5-reader-column-gap: 42px;
+    --s5-reader-article-width: 1260px;
+    --s5-reader-prose-width: 840px;
+  }
+}
