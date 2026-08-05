@@ -1,0 +1,47 @@
+name: Temporary patch · voice microlab type
+
+on:
+  push:
+    branches:
+      - agent/voice-animation-responsive
+    paths:
+      - '.github/workflows/temp-patch-voice-microlab-type.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/voice-animation-responsive
+          fetch-depth: 0
+
+      - name: Raise the remaining tiny labels
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('docs/stylesheets/voice-report-animations.css')
+          text = path.read_text(encoding='utf-8')
+          replacements = {
+              '.s5v-barge__item em { color: var(--muted); font-size: .61rem;': '.s5v-barge__item em { color: var(--muted); font-size: .66rem;',
+              'background: var(--red-soft); color: var(--red); font-size: .56rem; transform:': 'background: var(--red-soft); color: var(--red); font-size: .64rem; transform:',
+          }
+          for old, new in replacements.items():
+              if old not in text:
+                  raise SystemExit(f'Missing CSS marker: {old}')
+              text = text.replace(old, new, 1)
+          path.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Commit the typography fix
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/stylesheets/voice-report-animations.css
+          git commit -m "Keep every microlab label above the mobile readability floor"
+          git push origin HEAD:agent/voice-animation-responsive
