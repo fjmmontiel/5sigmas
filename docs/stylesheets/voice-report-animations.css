@@ -545,10 +545,10 @@
 }
 
 .s5v-barge__item b { font-size: .78rem; }
-.s5v-barge__item em { color: var(--muted); font-size: .61rem; font-style: normal; font-weight: 800; }
+.s5v-barge__item em { color: var(--muted); font-size: .66rem; font-style: normal; font-weight: 800; }
 .s5v-barge__interrupt { position: absolute; top: 0; bottom: 0; left: -3%; width: 80px; opacity: 0; transition: left .55s ease, opacity .2s ease; }
 .s5v-barge__interrupt i { position: absolute; top: 0; bottom: 0; left: 50%; width: 3px; border-radius: 99px; background: var(--red); box-shadow: 0 0 0 7px rgba(199, 68, 57, .08); }
-.s5v-barge__interrupt b { position: absolute; bottom: -4px; left: 50%; padding: 4px 7px; border-radius: 999px; background: var(--red-soft); color: var(--red); font-size: .56rem; transform: translateX(-50%); }
+.s5v-barge__interrupt b { position: absolute; bottom: -4px; left: 50%; padding: 4px 7px; border-radius: 999px; background: var(--red-soft); color: var(--red); font-size: .64rem; transform: translateX(-50%); }
 .s5v-barge[data-step="2"] .s5v-barge__interrupt { left: 48%; opacity: 1; }
 .s5v-barge[data-step="2"] [data-kind="response"],
 .s5v-barge[data-step="2"] [data-kind="playback"] { border-color: rgba(199, 68, 57, .36); background: var(--red-soft); opacity: .62; transform: scale(.96); }
