@@ -1,7 +1,15 @@
-"""Correct generated search titles and Open Graph page types."""
+"""Correct generated search titles, Open Graph types and Material base paths."""
 
 from html import escape
 import re
+
+
+_MATERIAL_CONFIG_BASE = re.compile(
+    r'(<script id="__config" type="application/json">\s*\{.*?"base"\s*:\s*")'
+    r'(?P<base>[^"]*)'
+    r'(")',
+    re.DOTALL,
+)
 
 
 def _parts(page) -> list[str]:
@@ -25,6 +33,24 @@ def _is_article(page) -> bool:
     return False
 
 
+def _fix_material_base_url(output: str) -> str:
+    """Make Material resolve root assets correctly from nested static pages.
+
+    MkDocs emits values such as ``..`` and ``../../..`` in Material's JSON
+    configuration. The browser URL constructor treats those values as files
+    unless they end in ``/``. Material then asks for ``sitemap.xml`` below the
+    current page instead of at the site root. Keeping the value relative while
+    adding the directory marker works for local previews and production.
+    """
+
+    def replace(match: re.Match[str]) -> str:
+        base = match.group("base")
+        normalized = f"{base.rstrip('/')}/" if base else "./"
+        return f"{match.group(1)}{normalized}{match.group(3)}"
+
+    return _MATERIAL_CONFIG_BASE.sub(replace, output, count=1)
+
+
 def _fix_series_presentation_title(output: str, page, config) -> str:
     if not _is_series_presentation(page):
         return output
@@ -42,6 +68,7 @@ def _fix_series_presentation_title(output: str, page, config) -> str:
 
 
 def on_post_page(output: str, page, config, **kwargs) -> str:
+    output = _fix_material_base_url(output)
     output = _fix_series_presentation_title(output, page, config)
     if not _is_article(page):
         return output
