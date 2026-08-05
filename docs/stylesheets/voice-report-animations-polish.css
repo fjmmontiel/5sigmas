@@ -28,6 +28,8 @@
 }
 
 body.s5-voice-animation-focus :is(
+  .md-header,
+  .md-tabs,
   .s5-reader-topbar,
   .s5-reader-rail,
   .s5-reader-direct,

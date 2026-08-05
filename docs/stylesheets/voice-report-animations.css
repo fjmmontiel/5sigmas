@@ -145,7 +145,7 @@
 .s5v[data-step="5"] [data-s5v-step="5"] {
   border-color: var(--ink);
   background: var(--ink);
-  color: #fff;
+  color: #fff !important;
 }
 
 .s5v__steps--tabs {
@@ -320,6 +320,7 @@
 
 .s5v-window__lane b {
   font-size: .75rem;
+  white-space: nowrap;
 }
 
 .s5v-window__lane .s5v__wave {
@@ -378,7 +379,7 @@
 
 .s5v-window[data-step="2"] .s5v-window__quiet { opacity: 1; }
 .s5v-window[data-step="2"] .s5v-window__result { left: calc(50% - 53px); }
-.s5v-window[data-step="2"] .s5v-window__queue { opacity: .2; transform: scale(.9); }
+.s5v-window[data-step="2"] .s5v-window__queue { opacity: 0; transform: scale(.9); }
 .s5v-window[data-step="2"] .s5v-window__speech { opacity: 1; transform: scale(1); }
 
 /* Four clocks */
@@ -1027,7 +1028,7 @@
   }
 
   .s5v-window__lane {
-    grid-template-columns: 55px 1fr;
+    grid-template-columns: 72px 1fr;
   }
 
   .s5v-window__quiet {
