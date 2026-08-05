@@ -1,0 +1,510 @@
+/* Voice technical reports — responsive animation layouts.
+ * The article column can be much narrower than the browser viewport. Container
+ * queries make each animation respond to the space it actually receives.
+ */
+
+.anim-brand-shell {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.anim-brand-shell__viewport {
+  min-width: 0;
+  max-width: 100%;
+  container-name: s5-animation;
+  container-type: inline-size;
+  overflow: clip;
+}
+
+.anim-brand-shell__viewport > :is(.vrpv, .varch) {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0 auto !important;
+}
+
+.anim-brand-shell__viewport :is(.vrpv, .varch) > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.anim-brand-shell__viewport :is(.vrpv, .varch) :is(h2, h3, p, small, strong, span, code) {
+  max-width: 100%;
+}
+
+/* Reader controls must not float over a compact animation. The library trigger
+ * remains available, while the wide chapter rail and topbar move out of the way.
+ */
+body.s5-voice-animation-focus :is(.s5-reader-topbar, .s5-reader-rail) {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+@container s5-animation (max-width: 820px) {
+  .anim-brand-shell__viewport :is(
+    .vrpv__sheet,
+    .vrpv-clock__sheet,
+    .vrpv-barge__sheet,
+    .vrpv-runtime__sheet,
+    .varch-compare__sheet,
+    .varch-latency__sheet,
+    .varch-prosody__sheet,
+    .varch-surface__sheet
+  ) {
+    padding: 21px 16px;
+    border-radius: 22px;
+  }
+
+  .anim-brand-shell__viewport :is(
+    .vrpv__head,
+    .vrpv-clock__head,
+    .vrpv-barge__head,
+    .vrpv-runtime__head,
+    .varch-compare__head,
+    .varch-latency__head,
+    .varch-prosody__head,
+    .varch-surface__head
+  ) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+    align-items: start;
+    margin-bottom: 18px;
+  }
+
+  .anim-brand-shell__viewport :is(
+    .vrpv__lead,
+    .vrpv-barge__lead,
+    .vrpv-runtime__ownership,
+    .varch-compare__lead,
+    .varch-prosody__lead,
+    .varch-surface__hot
+  ) {
+    max-width: 64ch;
+    text-align: left;
+  }
+
+  .anim-brand-shell__viewport :is(.vrpv h2, .vrpv-clock h2, .vrpv-barge h2, .vrpv-runtime h2, .varch h2) {
+    font-size: clamp(1.7rem, 6cqi, 2.35rem);
+    line-height: 1;
+  }
+
+  /* Reactive / proactive panorama */
+  .anim-brand-shell__viewport .vrpv-panorama .vrpv__flow {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .anim-brand-shell__viewport .vrpv-panorama .vrpv__flow::before {
+    left: 36px;
+    right: auto;
+    top: 40px;
+    bottom: 40px;
+    width: 4px;
+    height: auto;
+    background: linear-gradient(180deg, var(--green), var(--teal), var(--amber));
+  }
+
+  .anim-brand-shell__viewport .vrpv-panorama .vrpv__packet {
+    left: 30px;
+    top: 42px;
+    animation-name: vrpv-travel-mobile;
+  }
+
+  .anim-brand-shell__viewport .vrpv-panorama .vrpv__stage {
+    grid-template-columns: 42px minmax(0, 1fr);
+    grid-template-rows: auto auto auto;
+    column-gap: 12px;
+    padding: 14px;
+  }
+
+  .anim-brand-shell__viewport .vrpv-panorama .vrpv__stage-top {
+    grid-column: 1 / -1;
+    min-height: 0;
+  }
+
+  .anim-brand-shell__viewport .vrpv-panorama .vrpv__visual {
+    grid-column: 2;
+    min-height: 112px;
+  }
+
+  .anim-brand-shell__viewport .vrpv-panorama .vrpv__tag {
+    grid-column: 2;
+  }
+
+  .anim-brand-shell__viewport .vrpv-panorama .vrpv__invariant {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 7px;
+  }
+
+  .anim-brand-shell__viewport .vrpv-panorama .vrpv__invariant code {
+    justify-self: start;
+  }
+
+  /* Four clocks */
+  .anim-brand-shell__viewport .vrpv-clock .vrpv-clock__timeline-head,
+  .anim-brand-shell__viewport .vrpv-clock .vrpv-clock__lane {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .anim-brand-shell__viewport .vrpv-clock .vrpv-clock__timeline-head > span {
+    display: none;
+  }
+
+  .anim-brand-shell__viewport .vrpv-clock .vrpv-clock__lane {
+    gap: 8px;
+  }
+
+  .anim-brand-shell__viewport .vrpv-clock .vrpv-clock__track {
+    height: 58px;
+  }
+
+  .anim-brand-shell__viewport .vrpv-clock .vrpv-clock__lanes::after {
+    display: none;
+  }
+
+  .anim-brand-shell__viewport .vrpv-clock .vrpv-clock__event {
+    position: static;
+    width: max-content;
+    max-width: 100%;
+    margin: 0 0 2px;
+    animation: none;
+  }
+
+  .anim-brand-shell__viewport .vrpv-clock .vrpv-clock__event::after {
+    display: none;
+  }
+
+  .anim-brand-shell__viewport .vrpv-clock .vrpv-clock__summary {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .anim-brand-shell__viewport .vrpv-clock .vrpv-clock__card {
+    min-height: 0;
+  }
+
+  .anim-brand-shell__viewport .vrpv-clock .vrpv-clock__footer {
+    display: grid;
+  }
+
+  /* Barge-in */
+  .anim-brand-shell__viewport .vrpv-barge .vrpv-barge__sequence {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .anim-brand-shell__viewport .vrpv-barge .vrpv-barge__arrow {
+    grid-template-columns: auto minmax(0, 1fr);
+    min-height: 44px;
+    justify-content: start;
+    text-align: left;
+  }
+
+  .anim-brand-shell__viewport .vrpv-barge .vrpv-barge__arrow span {
+    transform: rotate(90deg);
+  }
+
+  .anim-brand-shell__viewport .vrpv-barge .vrpv-barge__phone {
+    min-height: 0;
+  }
+
+  /* Reactive / proactive runtime */
+  .anim-brand-shell__viewport .vrpv-runtime .vrpv-runtime__layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .anim-brand-shell__viewport .vrpv-runtime .vrpv-runtime__route {
+    display: none;
+  }
+
+  .anim-brand-shell__viewport .vrpv-runtime :is(.vrpv-runtime__box--surface, .vrpv-runtime__box--cognitive) {
+    min-height: 0;
+  }
+
+  .anim-brand-shell__viewport .vrpv-runtime .vrpv-runtime__column-title {
+    margin-top: 5px;
+  }
+
+  /* Architecture comparison */
+  .anim-brand-shell__viewport .varch-compare .varch-compare__lane {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .anim-brand-shell__viewport .varch-compare .varch-compare__pipe {
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding: 6px 2px 10px;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: thin;
+  }
+
+  .anim-brand-shell__viewport .varch-compare .varch-compare__score {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .anim-brand-shell__viewport .varch-compare .varch-compare__axes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* Latency */
+  .anim-brand-shell__viewport .varch-latency .varch-latency__body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Prosody */
+  .anim-brand-shell__viewport .varch-prosody .varch-prosody__signal {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .anim-brand-shell__viewport .varch-prosody .varch-prosody__features {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .anim-brand-shell__viewport .varch-prosody .varch-prosody__routes {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* S2S surface / cognitive plane */
+  .anim-brand-shell__viewport .varch-surface .varch-surface__architecture {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .anim-brand-shell__viewport .varch-surface .varch-surface__route {
+    display: none;
+  }
+
+  .anim-brand-shell__viewport .varch-surface :is(.varch-surface__box--s2s, .varch-surface__box--plane) {
+    min-height: 0;
+  }
+}
+
+@container s5-animation (max-width: 680px) {
+  .anim-brand-shell__viewport {
+    padding-right: 8px;
+    padding-left: 8px;
+  }
+
+  .anim-brand-shell__viewport :is(
+    .vrpv__sheet,
+    .vrpv-clock__sheet,
+    .vrpv-barge__sheet,
+    .vrpv-runtime__sheet,
+    .varch-compare__sheet,
+    .varch-latency__sheet,
+    .varch-prosody__sheet,
+    .varch-surface__sheet
+  ) {
+    padding: 18px 13px;
+    border-radius: 18px;
+    box-shadow: 0 12px 30px rgba(18, 35, 39, .09);
+  }
+
+  .anim-brand-shell__viewport :is(.vrpv h2, .vrpv-clock h2, .vrpv-barge h2, .vrpv-runtime h2, .varch h2) {
+    font-size: clamp(1.5rem, 8cqi, 1.95rem);
+    letter-spacing: -.035em;
+  }
+
+  /* The comparison pipes become true vertical flows instead of tiny horizontal diagrams. */
+  .anim-brand-shell__viewport .varch-compare .varch-compare__pipe {
+    flex-direction: column;
+    align-items: center;
+    overflow: visible;
+    min-height: 0;
+    padding: 8px 0;
+  }
+
+  .anim-brand-shell__viewport .varch-compare .varch-compare__pipe::before {
+    left: 50%;
+    right: auto;
+    top: 16px;
+    bottom: 16px;
+    width: 3px;
+    height: auto;
+    transform: translateX(-50%);
+  }
+
+  .anim-brand-shell__viewport .varch-compare .varch-compare__signal {
+    display: none;
+  }
+
+  .anim-brand-shell__viewport .varch-compare .varch-compare__node {
+    width: min(100%, 280px);
+    min-width: 0;
+    min-height: 58px;
+  }
+
+  .anim-brand-shell__viewport .varch-compare .varch-compare__arrow {
+    transform: rotate(90deg);
+  }
+
+  .anim-brand-shell__viewport .varch-compare .varch-compare__score {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .anim-brand-shell__viewport .varch-compare .varch-compare__axes {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .anim-brand-shell__viewport .varch-compare .varch-compare__footer {
+    display: grid;
+  }
+
+  /* Latency labels move above each bar so the chart keeps its usable width. */
+  .anim-brand-shell__viewport .varch-latency .varch-latency__scale,
+  .anim-brand-shell__viewport .varch-latency .varch-latency__row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+  }
+
+  .anim-brand-shell__viewport .varch-latency .varch-latency__scale > span {
+    display: none;
+  }
+
+  .anim-brand-shell__viewport .varch-latency .varch-latency__track {
+    height: 64px;
+  }
+
+  .anim-brand-shell__viewport .varch-latency .varch-latency__bar {
+    top: 14px;
+    height: 36px;
+    padding: 0 3px;
+    font-size: .46rem;
+  }
+
+  .anim-brand-shell__viewport .varch-latency .varch-latency__first::after {
+    display: none;
+  }
+
+  .anim-brand-shell__viewport .varch-latency .varch-latency__footer {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Prosody routes become vertical, including the SpeechPlan bridge. */
+  .anim-brand-shell__viewport .varch-prosody .varch-prosody__features {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .anim-brand-shell__viewport .varch-prosody .varch-prosody__pipe {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    min-height: 0;
+  }
+
+  .anim-brand-shell__viewport .varch-prosody .varch-prosody__box {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .anim-brand-shell__viewport .varch-prosody .varch-prosody__arrow {
+    align-self: center;
+    transform: rotate(90deg);
+  }
+
+  .anim-brand-shell__viewport .varch-prosody .varch-prosody__plan span {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+  }
+
+  .anim-brand-shell__viewport .varch-prosody .varch-prosody__footer {
+    display: grid;
+  }
+}
+
+@container s5-animation (max-width: 520px) {
+  .anim-brand-shell__toolbar {
+    padding: 8px 8px 0;
+  }
+
+  .anim-brand-shell__btn {
+    min-height: 30px;
+    padding: 5px 9px;
+    font-size: .65rem;
+  }
+
+  /* On a phone the panorama uses the full card width. Decorative routing is removed. */
+  .anim-brand-shell__viewport .vrpv-panorama .vrpv__flow::before,
+  .anim-brand-shell__viewport .vrpv-panorama .vrpv__packet {
+    display: none;
+  }
+
+  .anim-brand-shell__viewport .vrpv-panorama .vrpv__stage {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+    padding: 12px;
+    border-radius: 17px;
+  }
+
+  .anim-brand-shell__viewport .vrpv-panorama :is(.vrpv__stage-top, .vrpv__visual, .vrpv__tag) {
+    grid-column: 1;
+  }
+
+  .anim-brand-shell__viewport .vrpv-panorama .vrpv__visual {
+    min-height: 0;
+  }
+
+  .anim-brand-shell__viewport .vrpv-panorama .vrpv__job {
+    grid-template-columns: 10px minmax(0, 1fr);
+  }
+
+  .anim-brand-shell__viewport .vrpv-panorama .vrpv__job code {
+    grid-column: 2;
+    justify-self: start;
+  }
+
+  .anim-brand-shell__viewport .vrpv-clock .vrpv-clock__ticks {
+    font-size: .5rem;
+  }
+
+  .anim-brand-shell__viewport .vrpv-clock .vrpv-clock__segment {
+    padding: 0 3px;
+    font-size: .46rem;
+  }
+
+  .anim-brand-shell__viewport .vrpv-clock :is(.vrpv-clock__segment--cancel, .vrpv-clock__segment--clear) {
+    font-size: 0;
+  }
+
+  .anim-brand-shell__viewport .vrpv-clock .vrpv-clock__segment--cancel::before {
+    content: "×";
+    font-size: .72rem;
+  }
+
+  .anim-brand-shell__viewport .vrpv-clock .vrpv-clock__segment--clear::before {
+    content: "clear";
+    font-size: .45rem;
+  }
+
+  .anim-brand-shell__viewport .vrpv-barge .vrpv-barge__phase {
+    padding: 12px;
+    border-radius: 17px;
+  }
+
+  .anim-brand-shell__viewport .vrpv-barge .vrpv-barge__phone {
+    padding: 13px 10px;
+    border-width: 4px;
+    border-radius: 20px;
+  }
+
+  .anim-brand-shell__viewport .vrpv-runtime :is(.vrpv-runtime__workers, .vrpv-runtime__gate, .vrpv-runtime__ids),
+  .anim-brand-shell__viewport .varch-surface :is(.varch-surface__workers, .varch-surface__audio-samples, .varch-surface__guardrails) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .anim-brand-shell__viewport .vrpv-runtime .vrpv-runtime__footer,
+  .anim-brand-shell__viewport .varch-surface .varch-surface__footer {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .anim-brand-shell__viewport :is(.vrpv-runtime__footer code, .varch-surface__footer code) {
+    justify-self: start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.s5-voice-animation-focus :is(.s5-reader-topbar, .s5-reader-rail) {
+    transition: none !important;
+  }
+}
