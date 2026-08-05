@@ -1,0 +1,67 @@
+name: Temporary patch · polish voice microlabs
+
+on:
+  push:
+    branches:
+      - agent/voice-animation-responsive
+    paths:
+      - '.github/workflows/temp-polish-voice-microlabs.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/voice-animation-responsive
+          fetch-depth: 0
+
+      - name: Preserve microlab colors and remove sticky chrome while focused
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          snippets = [
+              *Path('docs/snippets/articulos-tecnicos').glob('voice-rp-*.html'),
+              *Path('docs/snippets/articulos-tecnicos').glob('voice-arch-*.html'),
+          ]
+          for path in snippets:
+              text = path.read_text(encoding='utf-8')
+              marker = 'data-anim-fullscreen="on"'
+              if marker not in text:
+                  raise SystemExit(f'Missing fullscreen marker in {path}')
+              text = text.replace(marker, marker + ' data-anim-contrast="off"', 1)
+              path.write_text(text, encoding='utf-8')
+
+          css_path = Path('docs/stylesheets/voice-report-animations-polish.css')
+          css = css_path.read_text(encoding='utf-8')
+          css = css.replace(
+              'body.s5-voice-animation-focus :is(\n  .s5-reader-topbar,',
+              'body.s5-voice-animation-focus :is(\n  .md-header,\n  .md-tabs,\n  .s5-reader-topbar,',
+          )
+          css_path.write_text(css, encoding='utf-8')
+
+          visual_path = Path('docs/stylesheets/voice-report-animations.css')
+          visual = visual_path.read_text(encoding='utf-8')
+          visual = visual.replace('color: #fff;\n}', 'color: #fff !important;\n}', 1)
+          visual = visual.replace('.s5v-window[data-step="2"] .s5v-window__queue { opacity: .2;', '.s5v-window[data-step="2"] .s5v-window__queue { opacity: 0;')
+          visual = visual.replace('grid-template-columns: 55px 1fr;', 'grid-template-columns: 72px 1fr;', 1)
+          anchor = '.s5v-window__lane b {\n  font-size: .75rem;\n}'
+          replacement = '.s5v-window__lane b {\n  font-size: .75rem;\n  white-space: nowrap;\n}'
+          if anchor not in visual:
+              raise SystemExit('Missing safe-window label marker')
+          visual = visual.replace(anchor, replacement, 1)
+          visual_path.write_text(visual, encoding='utf-8')
+          PY
+
+      - name: Commit the visual polish
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/snippets/articulos-tecnicos docs/stylesheets/voice-report-animations.css docs/stylesheets/voice-report-animations-polish.css
+          git commit -m "Preserve microlab color semantics and hide sticky chrome in focus"
+          git push origin HEAD:agent/voice-animation-responsive
