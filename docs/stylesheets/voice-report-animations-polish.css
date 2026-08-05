@@ -6,6 +6,7 @@
 body.s5-voice-animation-focus :is(
   .md-header,
   .md-tabs,
+  .s5-progress,
   .s5-reader-topbar,
   .s5-reader-rail,
   .s5-reader-direct,
@@ -177,7 +178,7 @@ body.s5-voice-animation-focus .s5-reader-end {
   }
 
   .anim-brand-shell__viewport .vrpv-clock .vrpv-clock__segment--queue::before {
-    content: "buffer";
+    content: "buf";
     font-size: .44rem;
   }
 
@@ -252,6 +253,7 @@ body.s5-voice-animation-focus .s5-reader-end {
   body.s5-voice-animation-focus :is(
     .md-header,
     .md-tabs,
+    .s5-progress,
     .s5-reader-topbar,
     .s5-reader-rail,
     .s5-reader-direct,
