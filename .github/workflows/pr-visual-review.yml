@@ -9,6 +9,8 @@ on:
       - 'scripts/**'
       - 'mkdocs.yml'
       - 'requirements.txt'
+      - 'Makefile'
+      - '.github/workflows/deploy-pages.yml'
       - '.github/workflows/pr-visual-review.yml'
 
 permissions:
@@ -35,6 +37,9 @@ jobs:
 
       - name: Audit video indexing metadata
         run: python scripts/audit_video_indexing.py
+
+      - name: Audit search foundation
+        run: python scripts/audit_search_foundation.py
 
       - uses: actions/setup-node@v4
         with:
