@@ -41,14 +41,20 @@
   body:has(.s5-reader-direct) .md-content {
     width: var(--s5-reader-article-width);
     max-width: none !important;
-    margin-right: auto;
+    margin-right: 0 !important;
     margin-left: calc(
       var(--s5-reader-library-width)
       + var(--s5-reader-column-gap)
-    );
+    ) !important;
   }
 
-  body:has(.s5-reader-direct) .md-content__inner,
+  body:has(.s5-reader-direct) .md-content__inner {
+    width: 100%;
+    max-width: none;
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+  }
+
   body:has(.s5-reader-direct) .md-typeset {
     width: 100%;
     max-width: none;
