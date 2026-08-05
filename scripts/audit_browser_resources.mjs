@@ -24,13 +24,20 @@ try {
 
     page.on('response', (response) => {
       if (response.status() >= 400) {
-        pageFailures.push(`HTTP ${response.status()} ${response.url()}`);
+        const request = response.request();
+        pageFailures.push(
+          `HTTP ${response.status()} ${response.url()} `
+          + `[type=${request.resourceType()}; frame=${request.frame().url()}; `
+          + `navigation=${request.isNavigationRequest()}]`,
+        );
       }
     });
 
     page.on('requestfailed', (request) => {
       pageFailures.push(
-        `request failed ${request.url()} (${request.failure()?.errorText ?? 'unknown error'})`,
+        `request failed ${request.url()} (${request.failure()?.errorText ?? 'unknown error'}) `
+        + `[type=${request.resourceType()}; frame=${request.frame().url()}; `
+        + `navigation=${request.isNavigationRequest()}]`,
       );
     });
 
@@ -57,13 +64,15 @@ try {
           configBase,
           documentBase: document.baseURI,
           location: window.location.href,
+          scope: String(globalThis.__md_scope ?? 'missing'),
         };
       });
 
       for (const failure of pageFailures) {
         failures.add(
           `${path}: ${failure} [config.base=${diagnostics.configBase}; `
-          + `document.baseURI=${diagnostics.documentBase}; location=${diagnostics.location}]`,
+          + `scope=${diagnostics.scope}; document.baseURI=${diagnostics.documentBase}; `
+          + `location=${diagnostics.location}]`,
         );
       }
     }
