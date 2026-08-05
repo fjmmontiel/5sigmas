@@ -1,0 +1,54 @@
+name: Temporary patch · normalize voice microlab type
+
+on:
+  push:
+    branches:
+      - agent/voice-animation-responsive
+    paths:
+      - '.github/workflows/temp-normalize-voice-microlab-type.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/voice-animation-responsive
+          fetch-depth: 0
+
+      - name: Normalize all compact labels and pseudo-labels
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('docs/stylesheets/voice-report-animations.css')
+          text = path.read_text(encoding='utf-8')
+
+          for value in ('.56rem', '.58rem', '.59rem', '.61rem', '.62rem'):
+              text = text.replace(f'font-size: {value};', 'font-size: .64rem;')
+
+          old = '''.s5v-barge[data-step="2"] [data-kind="response"] em,
+          .s5v-barge[data-step="2"] [data-kind="playback"] em { font-size: 0; }
+          .s5v-barge[data-step="2"] [data-kind="response"] em::before,
+          .s5v-barge[data-step="2"] [data-kind="playback"] em::before { content: "cancelled"; color: var(--red); font-size: .64rem; }'''
+          new = '''.s5v-barge[data-step="2"] [data-kind="response"] em,
+          .s5v-barge[data-step="2"] [data-kind="playback"] em { position: relative; color: transparent; }
+          .s5v-barge[data-step="2"] [data-kind="response"] em::before,
+          .s5v-barge[data-step="2"] [data-kind="playback"] em::before { content: "cancelled"; position: absolute; inset: 0; display: grid; place-items: center; color: var(--red); font-size: .64rem; }'''
+          if old not in text:
+              raise SystemExit('Missing barge-in pseudo-label block')
+          text = text.replace(old, new, 1)
+          path.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Commit the readability floor
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/stylesheets/voice-report-animations.css
+          git commit -m "Normalize microlab labels above the readability floor"
+          git push origin HEAD:agent/voice-animation-responsive
