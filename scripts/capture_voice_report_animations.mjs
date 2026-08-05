@@ -8,19 +8,28 @@ const reports = [
   {
     path: '/articulos-tecnicos/reactive-proactive-voice-agents/',
     animations: [
-      ['reactive-panorama', '.vrpv-panorama'],
-      ['reactive-clocks', '.vrpv-clock'],
-      ['reactive-barge-in', '.vrpv-barge'],
-      ['reactive-runtime', '.vrpv-runtime'],
+      ['rp-contract', '.s5v-contract', 3],
+      ['rp-safe-window', '.s5v-window', 2],
+      ['rp-clocks', '.s5v-clocks'],
+      ['rp-activity-gate', '.s5v-gate', 2],
+      ['rp-barge-in', '.s5v-barge', 2],
+      ['rp-batch', '.s5v-batch', 4],
+      ['rp-runtime', '.s5v-runtime'],
     ],
   },
   {
     path: '/articulos-tecnicos/voice-agent-architectures/',
     animations: [
-      ['architectures-comparison', '.varch-compare'],
-      ['architectures-latency', '.varch-latency'],
-      ['architectures-prosody', '.varch-prosody'],
-      ['architectures-surface-plane', '.varch-surface'],
+      ['arch-map', '.s5v-arch-map', 2],
+      ['arch-cascade', '.s5v-cascade', 5],
+      ['arch-prosody-loss', '.s5v-prosody-loss', 2],
+      ['arch-half-cascade', '.s5v-half'],
+      ['arch-speech-plan', '.s5v-speech-plan'],
+      ['arch-duplex', '.s5v-duplex'],
+      ['arch-latency', '.s5v-latency'],
+      ['arch-decision', '.s5v-decision', 2],
+      ['arch-surface-plane', '.s5v-surface'],
+      ['arch-voice-prompt', '.s5v-voice-prompt'],
     ],
   },
 ];
@@ -30,21 +39,16 @@ const viewports = [
   ['mobile', { viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true }],
 ];
 
-function columnCount(value) {
-  if (!value || value === 'none') return 0;
-  return value.trim().split(/\s+/).length;
-}
-
 async function assertNoOverflow(shell, label) {
   const result = await shell.evaluate((node) => {
     const viewport = node.querySelector('.anim-brand-shell__viewport');
-    const root = viewport?.firstElementChild;
+    const visual = viewport?.querySelector('.s5v');
     return {
       shell: [node.clientWidth, node.scrollWidth],
       viewport: viewport ? [viewport.clientWidth, viewport.scrollWidth] : null,
-      root: root ? [root.clientWidth, root.scrollWidth] : null,
-      pageScrollX: window.scrollX,
+      visual: visual ? [visual.clientWidth, visual.scrollWidth] : null,
       document: [document.documentElement.clientWidth, document.documentElement.scrollWidth],
+      scrollX: window.scrollX,
     };
   });
 
@@ -54,58 +58,53 @@ async function assertNoOverflow(shell, label) {
       throw new Error(`${label}: horizontal overflow in ${name}: ${pair[0]} / ${pair[1]}`);
     }
   }
-  if (result.pageScrollX !== 0 || result.document[1] - result.document[0] > 2) {
+  if (result.scrollX !== 0 || result.document[1] - result.document[0] > 2) {
     throw new Error(`${label}: page-level horizontal overflow: ${JSON.stringify(result)}`);
   }
 }
 
-async function assertResponsiveMode(page, selector, mode) {
-  const values = await page.locator(selector).evaluate((root) => {
-    const get = (query, property) => {
-      const node = root.querySelector(query);
-      return node ? getComputedStyle(node)[property] : null;
-    };
-    return {
-      panorama: get('.vrpv__flow', 'gridTemplateColumns'),
-      clocks: get('.vrpv-clock__lane', 'gridTemplateColumns'),
-      barge: get('.vrpv-barge__sequence', 'gridTemplateColumns'),
-      runtime: get('.vrpv-runtime__layout', 'gridTemplateColumns'),
-      compareLane: get('.varch-compare__lane', 'gridTemplateColumns'),
-      comparePipe: get('.varch-compare__pipe', 'flexDirection'),
-      latency: get('.varch-latency__body', 'gridTemplateColumns'),
-      latencyRow: get('.varch-latency__row', 'gridTemplateColumns'),
-      prosodyRoutes: get('.varch-prosody__routes', 'gridTemplateColumns'),
-      prosodyPipe: get('.varch-prosody__pipe', 'flexDirection'),
-      surface: get('.varch-surface__architecture', 'gridTemplateColumns'),
-    };
+async function assertVisualDensity(root, label, mode) {
+  const metrics = await root.evaluate((node) => {
+    const text = (node.innerText || '').replace(/\s+/g, ' ').trim();
+    const interactive = node.querySelectorAll('button, input').length;
+    const rect = node.getBoundingClientRect();
+    const tinyText = [...node.querySelectorAll('b, span, p, small, em, code')]
+      .filter((el) => {
+        const style = getComputedStyle(el);
+        const r = el.getBoundingClientRect();
+        return r.width > 0 && r.height > 0 && Number.parseFloat(style.fontSize) < 9;
+      })
+      .length;
+    return { chars: text.length, interactive, width: rect.width, height: rect.height, tinyText };
   });
 
-  const checks = {
-    '.vrpv-panorama': ['panorama', mode === 'mobile' ? 1 : 5],
-    '.vrpv-clock': ['clocks', mode === 'mobile' ? 1 : 2],
-    '.vrpv-barge': ['barge', mode === 'mobile' ? 1 : 5],
-    '.vrpv-runtime': ['runtime', mode === 'mobile' ? 1 : 3],
-    '.varch-compare': ['compareLane', mode === 'mobile' ? 1 : 3],
-    '.varch-latency': ['latency', mode === 'mobile' ? 1 : 2],
-    '.varch-prosody': ['prosodyRoutes', mode === 'mobile' ? 1 : 3],
-    '.varch-surface': ['surface', mode === 'mobile' ? 1 : 3],
-  };
+  if (metrics.chars > 330) {
+    throw new Error(`${label}: the visual duplicates too much prose (${metrics.chars} visible characters)`);
+  }
+  if (metrics.tinyText > 0) {
+    throw new Error(`${label}: contains ${metrics.tinyText} visible text elements below 9px`);
+  }
+  if (mode === 'mobile' && metrics.width > 366) {
+    throw new Error(`${label}: mobile visual is wider than the usable column (${metrics.width}px)`);
+  }
+  if (mode === 'mobile' && metrics.height > 900) {
+    throw new Error(`${label}: mobile visual behaves like a mega-deck (${metrics.height}px high)`);
+  }
+}
 
-  const [key, expected] = checks[selector];
-  const actual = columnCount(values[key]);
-  if (actual !== expected) {
-    throw new Error(`${mode} ${selector}: expected ${expected} columns, got ${actual} (${values[key]})`);
+async function prepareAnimation(page, selector, step) {
+  const root = page.locator(selector);
+  await root.waitFor({ state: 'visible' });
+  if (step) {
+    const button = root.locator(`[data-s5v-step="${step}"]`);
+    if (await button.count()) await button.click();
+    else await root.evaluate((node, value) => { node.dataset.step = String(value); }, step);
   }
-
-  if (mode === 'mobile' && selector === '.varch-compare' && values.comparePipe !== 'column') {
-    throw new Error(`mobile comparison pipe must be vertical, got ${values.comparePipe}`);
+  if (selector === '.s5v-speech-plan') {
+    await root.locator('input[data-s5v-var="energy"]').fill('68');
+    await root.locator('input[data-s5v-var="pace"]').fill('104');
   }
-  if (mode === 'mobile' && selector === '.varch-latency' && columnCount(values.latencyRow) !== 1) {
-    throw new Error(`mobile latency row must use the full width, got ${values.latencyRow}`);
-  }
-  if (mode === 'mobile' && selector === '.varch-prosody' && values.prosodyPipe !== 'column') {
-    throw new Error(`mobile prosody pipe must be vertical, got ${values.prosodyPipe}`);
-  }
+  return root;
 }
 
 await fs.mkdir(outputDir, { recursive: true });
@@ -117,23 +116,28 @@ try {
 
     for (const report of reports) {
       await page.goto(`${baseUrl}${report.path}`, { waitUntil: 'networkidle' });
-      await page.emulateMedia({ reducedMotion: 'reduce' });
 
-      for (const [name, selector] of report.animations) {
-        const root = page.locator(selector);
-        await root.waitFor({ state: 'visible' });
+      for (const [name, selector, step] of report.animations) {
+        const root = await prepareAnimation(page, selector, step);
         const shell = root.locator('xpath=ancestor::*[@data-anim-shell][1]');
         await shell.scrollIntoViewIfNeeded();
-        await page.waitForTimeout(150);
+        await page.waitForTimeout(220);
 
         await assertNoOverflow(shell, `${mode} ${name}`);
-        await assertResponsiveMode(page, selector, mode);
+        await assertVisualDensity(root, `${mode} ${name}`, mode);
 
         await shell.screenshot({
           path: `${outputDir}/voice-${name}-${mode}.png`,
           animations: 'disabled',
         });
       }
+
+      const pageName = report.path.includes('reactive-proactive') ? 'reactive-report' : 'architectures-report';
+      await page.screenshot({
+        path: `${outputDir}/voice-${pageName}-${mode}.png`,
+        fullPage: true,
+        animations: 'disabled',
+      });
     }
 
     await page.close();
