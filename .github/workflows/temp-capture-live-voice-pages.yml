@@ -38,17 +38,19 @@ jobs:
               slug: 'reactive-proactive-voice',
               url: 'https://5sigmas.com/articulos-tecnicos/reactive-proactive-voice-agents/',
               marker: '.s5v-contract',
+              desktopMinWidth: 940,
             },
             {
               slug: 'voice-architectures',
               url: 'https://5sigmas.com/articulos-tecnicos/voice-agent-architectures/',
               marker: '.s5v-arch-map',
+              desktopMinWidth: 1120,
             },
           ];
 
           const browser = await chromium.launch({ headless: true });
 
-          async function waitForDeployment(page, spec) {
+          async function waitForDeployment(page, spec, minimumWidth = 0) {
             for (let attempt = 1; attempt <= 60; attempt += 1) {
               const cacheBuster = `${Date.now()}-${attempt}`;
               try {
@@ -56,17 +58,24 @@ jobs:
                   waitUntil: 'domcontentloaded',
                   timeout: 45_000,
                 });
-                if (response?.ok() && await page.locator(spec.marker).count()) {
+                const target = page.locator(spec.marker).first();
+                const exists = response?.ok() && await target.count();
+                const width = exists
+                  ? await target.evaluate((element) => element.getBoundingClientRect().width)
+                  : 0;
+                if (exists && width >= minimumWidth) {
+                  console.log(`${spec.slug}: deployed width ${Math.round(width)}px`);
                   await page.waitForLoadState('networkidle', { timeout: 30_000 }).catch(() => {});
                   return;
                 }
+                console.log(`${spec.slug}: current width ${Math.round(width)}px, expected at least ${minimumWidth}px`);
               } catch (error) {
                 console.log(`Attempt ${attempt}: ${error.message}`);
               }
               console.log(`Waiting for production deployment: ${spec.slug} (${attempt}/60)`);
               await new Promise((resolve) => setTimeout(resolve, 10_000));
             }
-            throw new Error(`Production did not expose ${spec.marker} for ${spec.url}`);
+            throw new Error(`Production did not expose the expected layout for ${spec.url}`);
           }
 
           async function settlePage(page, marker) {
@@ -103,7 +112,7 @@ jobs:
               viewport: { width: 1728, height: 1117 },
               deviceScaleFactor: 1,
             });
-            await waitForDeployment(page, spec);
+            await waitForDeployment(page, spec, spec.desktopMinWidth);
             await settlePage(page, spec.marker);
             await page.screenshot({
               path: `${outputDir}/${spec.slug}-desktop-full.png`,
