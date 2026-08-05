@@ -4,6 +4,17 @@ from html import escape
 import re
 
 
+_SEARCH_TITLE_OVERRIDES = {
+    "series": "Series de inteligencia artificial en español | 5sigmas",
+    "meta/about": "Sobre 5sigmas y Francisco Maldonado | 5sigmas",
+    "articulos-tecnicos": "Ingeniería de sistemas de IA en producción | 5sigmas",
+    "visuales": "Vídeos y animaciones de inteligencia artificial | 5sigmas",
+    "series/modelos-razonadores/04-latencia-streaming": (
+        "Latencia y streaming en modelos razonadores | 5sigmas"
+    ),
+}
+
+
 def _parts(page) -> list[str]:
     value = (page.url or "").strip("/")
     return value.split("/") if value else []
@@ -42,13 +53,18 @@ def _isolate_markdown_alternate(output: str) -> str:
     )
 
 
-def _fix_series_presentation_title(output: str, page, config) -> str:
-    if not _is_series_presentation(page):
+def _fix_search_title(output: str, page, config) -> str:
+    key = (page.url or "").strip("/")
+    search_title = _SEARCH_TITLE_OVERRIDES.get(key)
+
+    if search_title is None and _is_series_presentation(page):
+        parts = _parts(page)
+        series_title = page.parent.title if page.parent else parts[1].replace("-", " ")
+        search_title = f"{series_title} | {config.site_name}"
+
+    if search_title is None:
         return output
 
-    parts = _parts(page)
-    series_title = page.parent.title if page.parent else parts[1].replace("-", " ")
-    search_title = f"{series_title} | {config.site_name}"
     return re.sub(
         r"<title>.*?</title>",
         f"<title>{escape(search_title)}</title>",
@@ -60,7 +76,7 @@ def _fix_series_presentation_title(output: str, page, config) -> str:
 
 def on_post_page(output: str, page, config, **kwargs) -> str:
     output = _isolate_markdown_alternate(output)
-    output = _fix_series_presentation_title(output, page, config)
+    output = _fix_search_title(output, page, config)
     if not _is_article(page):
         return output
 
