@@ -1,6 +1,6 @@
 /* Final reader density rules: local context without duplicate footer controls. */
 
-.md-content__inner > h1:has(+ .s5-reader-shell) {
+.md-content__inner > h1:has(~ .s5-reader-shell) {
   margin-bottom: .35rem !important;
 }
 
@@ -32,7 +32,7 @@ body:has(input[data-md-toggle="search"]:checked) .s5-reader-direct-toggle {
   }
 
   /* Long chapter and series titles need to remain readable on 320–390 px phones. */
-  .md-content__inner > h1:has(+ .s5-reader-shell) {
+  .md-content__inner > h1:has(~ .s5-reader-shell) {
     max-width: 100% !important;
     margin-bottom: .2rem !important;
     font-size: clamp(2.1rem, 10.8vw, 3rem) !important;
