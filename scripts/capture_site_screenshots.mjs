@@ -217,7 +217,7 @@ try {
 
     page.on('pageerror', (error) => runtimeErrors.push(`pageerror: ${error.message}`));
     page.on('console', (message) => {
-      if (message.type() === 'error') runtimeErrors.push(`console: ${message.text()}`));
+      if (message.type() === 'error') runtimeErrors.push(`console: ${message.text()}`);
     });
 
     if (capture.seedResume) {
