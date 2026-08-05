@@ -1,0 +1,223 @@
+name: Temporary capture · live reader layout
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+    paths:
+      - '.github/workflows/temp-capture-live-reader-layout.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  capture-live-layout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Capture the deployed reader pages
+        shell: bash
+        run: |
+          cat > capture-live-reader-layout.mjs <<'JS'
+          import { chromium, devices } from 'playwright';
+          import fs from 'node:fs/promises';
+
+          const outputDir = 'artifacts/live-reader-layout';
+          await fs.mkdir(outputDir, { recursive: true });
+
+          const pages = [
+            {
+              slug: 'series-reader',
+              url: 'https://5sigmas.com/series/from-cave-to-agi/00_presentacion_serie/',
+              marker: 'article h1',
+            },
+            {
+              slug: 'reactive-proactive-voice',
+              url: 'https://5sigmas.com/articulos-tecnicos/reactive-proactive-voice-agents/',
+              marker: '.s5v-contract',
+            },
+            {
+              slug: 'voice-architectures',
+              url: 'https://5sigmas.com/articulos-tecnicos/voice-agent-architectures/',
+              marker: '.s5v-arch-map',
+            },
+          ];
+
+          const browser = await chromium.launch({ headless: true });
+          const metrics = [];
+
+          async function settle(page) {
+            await page.waitForLoadState('networkidle', { timeout: 30_000 }).catch(() => {});
+            await page.evaluate(async () => {
+              await document.fonts.ready;
+              document.documentElement.style.scrollBehavior = 'auto';
+              document.body.style.scrollBehavior = 'auto';
+              const step = Math.max(500, Math.floor(window.innerHeight * .75));
+              for (let y = 0; y < document.documentElement.scrollHeight; y += step) {
+                window.scrollTo(0, y);
+                await new Promise((resolve) => setTimeout(resolve, 65));
+              }
+              window.scrollTo(0, 0);
+              await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+            });
+            await page.addStyleTag({
+              content: `
+                html, body { scroll-behavior: auto !important; }
+                *, *::before, *::after {
+                  animation-play-state: paused !important;
+                  transition: none !important;
+                }
+              `,
+            });
+            await page.evaluate(() => window.scrollTo(0, 0));
+            await page.waitForTimeout(300);
+          }
+
+          async function readDesktopGeometry(page) {
+            return page.evaluate(() => {
+              const rect = (selector) => {
+                const element = document.querySelector(selector);
+                if (!element) return null;
+                const box = element.getBoundingClientRect();
+                return {
+                  x: Math.round(box.x * 10) / 10,
+                  width: Math.round(box.width * 10) / 10,
+                };
+              };
+              return {
+                library: rect('.s5-reader-direct'),
+                content: rect('.md-content'),
+                title: rect('article h1'),
+                navigation: rect('.s5-reader-topbar'),
+                prose: rect('.md-typeset > p'),
+                horizontalOverflow: document.documentElement.scrollWidth - window.innerWidth,
+              };
+            });
+          }
+
+          function deployedGeometryIsReady(geometry) {
+            if (!geometry.library || !geometry.content || !geometry.title || !geometry.navigation || !geometry.prose) {
+              return false;
+            }
+            const gap = geometry.content.x - (geometry.library.x + geometry.library.width);
+            return geometry.library.x <= 100
+              && geometry.content.width >= 1180
+              && geometry.prose.width >= 790
+              && gap >= 26
+              && Math.abs(geometry.title.x - geometry.content.x) <= 2
+              && Math.abs(geometry.navigation.x - geometry.content.x) <= 2
+              && geometry.horizontalOverflow <= 1;
+          }
+
+          async function waitForDeployment(page, spec) {
+            for (let attempt = 1; attempt <= 60; attempt += 1) {
+              try {
+                const cacheBuster = `${Date.now()}-${attempt}`;
+                const response = await page.goto(`${spec.url}?reader-layout=${cacheBuster}`, {
+                  waitUntil: 'domcontentloaded',
+                  timeout: 45_000,
+                });
+                const markerExists = response?.ok() && await page.locator(spec.marker).count();
+                if (markerExists) {
+                  await settle(page);
+                  const geometry = await readDesktopGeometry(page);
+                  console.log(`${spec.slug} attempt ${attempt}: ${JSON.stringify(geometry)}`);
+                  if (deployedGeometryIsReady(geometry)) {
+                    return geometry;
+                  }
+                }
+              } catch (error) {
+                console.log(`${spec.slug} attempt ${attempt}: ${error.message}`);
+              }
+              await new Promise((resolve) => setTimeout(resolve, 10_000));
+            }
+            throw new Error(`Production did not expose the wider reader layout for ${spec.url}`);
+          }
+
+          async function captureDesktop(spec) {
+            const page = await browser.newPage({
+              viewport: { width: 1728, height: 1117 },
+              deviceScaleFactor: 1,
+            });
+            const geometry = await waitForDeployment(page, spec);
+            metrics.push({ page: spec.slug, viewport: 'desktop', ...geometry });
+            await page.screenshot({
+              path: `${outputDir}/${spec.slug}-desktop-viewport.png`,
+              fullPage: false,
+            });
+            await page.screenshot({
+              path: `${outputDir}/${spec.slug}-desktop-full.png`,
+              fullPage: true,
+            });
+            await page.close();
+          }
+
+          async function captureMobile(spec) {
+            const pixel = devices['Pixel 7'];
+            const page = await browser.newPage({
+              ...pixel,
+              viewport: { width: 390, height: 844 },
+              deviceScaleFactor: 1,
+            });
+            const cacheBuster = `${Date.now()}-mobile`;
+            const response = await page.goto(`${spec.url}?reader-layout=${cacheBuster}`, {
+              waitUntil: 'domcontentloaded',
+              timeout: 45_000,
+            });
+            if (!response?.ok() || !await page.locator(spec.marker).count()) {
+              throw new Error(`Could not load ${spec.url} on mobile`);
+            }
+            await settle(page);
+            const mobileState = await page.evaluate(() => ({
+              overflow: document.documentElement.scrollWidth - window.innerWidth,
+              toggleVisible: Boolean(document.querySelector('.s5-reader-direct-toggle')),
+              libraryFixedVisible: getComputedStyle(document.querySelector('.s5-reader-direct')).position === 'fixed',
+            }));
+            if (mobileState.overflow > 1 || !mobileState.toggleVisible || !mobileState.libraryFixedVisible) {
+              throw new Error(`Mobile reader regression on ${spec.slug}: ${JSON.stringify(mobileState)}`);
+            }
+            metrics.push({ page: spec.slug, viewport: 'mobile', ...mobileState });
+            await page.screenshot({
+              path: `${outputDir}/${spec.slug}-mobile-viewport.png`,
+              fullPage: false,
+            });
+            await page.screenshot({
+              path: `${outputDir}/${spec.slug}-mobile-full.png`,
+              fullPage: true,
+            });
+            await page.close();
+          }
+
+          try {
+            for (const spec of pages) {
+              await captureDesktop(spec);
+              await captureMobile(spec);
+            }
+          } finally {
+            await browser.close();
+          }
+
+          await fs.writeFile(
+            `${outputDir}/production-layout-metrics.json`,
+            JSON.stringify(metrics, null, 2),
+          );
+          console.log(JSON.stringify(metrics, null, 2));
+          JS
+
+          node capture-live-reader-layout.mjs
+
+      - name: Upload production screenshots
+        uses: actions/upload-artifact@v4
+        with:
+          name: live-reader-layout
+          path: artifacts/live-reader-layout/*
+          if-no-files-found: error
+          retention-days: 7
