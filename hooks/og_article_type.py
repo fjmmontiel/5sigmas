@@ -1,15 +1,7 @@
-"""Correct generated search titles, Open Graph types and Material base paths."""
+"""Correct generated search titles and Open Graph page types."""
 
 from html import escape
 import re
-
-
-_MATERIAL_CONFIG_BASE = re.compile(
-    r'(<script id="__config" type="application/json">\s*\{.*?"base"\s*:\s*")'
-    r'(?P<base>[^"]*)'
-    r'(")',
-    re.DOTALL,
-)
 
 
 def _parts(page) -> list[str]:
@@ -33,22 +25,21 @@ def _is_article(page) -> bool:
     return False
 
 
-def _fix_material_base_url(output: str) -> str:
-    """Make Material resolve root assets correctly from nested static pages.
+def _isolate_markdown_alternate(output: str) -> str:
+    """Keep the Markdown alternate without triggering Material's site switcher.
 
-    MkDocs emits values such as ``..`` and ``../../..`` in Material's JSON
-    configuration. The browser URL constructor treats those values as files
-    unless they end in ``/``. Material then asks for ``sitemap.xml`` below the
-    current page instead of at the site root. Keeping the value relative while
-    adding the directory marker works for local previews and production.
+    Material for MkDocs 9.7.7 queries ``link[rel=alternate]`` with an exact
+    attribute selector and treats every match as another deployed site. A
+    Markdown representation is an alternate format, not an alternate site.
+    Adding a descriptive extension token preserves the standard ``alternate``
+    relation for crawlers while keeping it out of Material's exact selector.
     """
 
-    def replace(match: re.Match[str]) -> str:
-        base = match.group("base")
-        normalized = f"{base.rstrip('/')}/" if base else "./"
-        return f"{match.group(1)}{normalized}{match.group(3)}"
-
-    return _MATERIAL_CONFIG_BASE.sub(replace, output, count=1)
+    return output.replace(
+        'rel="alternate" type="text/markdown"',
+        'rel="alternate markdown" type="text/markdown"',
+        1,
+    )
 
 
 def _fix_series_presentation_title(output: str, page, config) -> str:
@@ -68,7 +59,7 @@ def _fix_series_presentation_title(output: str, page, config) -> str:
 
 
 def on_post_page(output: str, page, config, **kwargs) -> str:
-    output = _fix_material_base_url(output)
+    output = _isolate_markdown_alternate(output)
     output = _fix_series_presentation_title(output, page, config)
     if not _is_article(page):
         return output
