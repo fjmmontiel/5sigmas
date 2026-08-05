@@ -1,0 +1,222 @@
+/* Final visual polish for the voice-report animation family. */
+
+/* A visible animation owns the reading surface. Fixed navigation and the article
+ * completion card must never be painted over the diagram. They reappear as soon
+ * as the animation leaves the viewport. */
+body.s5-voice-animation-focus :is(
+  .md-header,
+  .md-tabs,
+  .s5-reader-topbar,
+  .s5-reader-rail,
+  .s5-reader-direct,
+  .s5-reader-direct-toggle,
+  .s5-reader-end
+) {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Technical diagrams need more room than the prose column on a large screen. */
+@media (min-width: 1100px) {
+  .anim-brand-shell:not([data-anim-shell-live="modal"]):has(
+    .anim-brand-shell__viewport > :is(.vrpv, .varch)
+  ) {
+    width: min(1180px, calc(100vw - 2rem));
+    max-width: none;
+    margin-right: 50%;
+    margin-left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+/* Never depend on inherited theme colours inside dark explanatory blocks. */
+.anim-brand-shell__viewport :is(
+  .vrpv__invariant,
+  .vrpv-clock__footer,
+  .vrpv-barge__heard,
+  .vrpv-runtime__eventbus,
+  .vrpv-runtime__footer,
+  .varch-compare__footer,
+  .varch-latency__formula,
+  .varch-latency__footer,
+  .varch-prosody__plan,
+  .varch-prosody__footer,
+  .varch-surface__handoff,
+  .varch-surface__footer
+),
+.anim-brand-shell__viewport :is(
+  .vrpv__invariant,
+  .vrpv-clock__footer,
+  .vrpv-barge__heard,
+  .vrpv-runtime__eventbus,
+  .vrpv-runtime__footer,
+  .varch-compare__footer,
+  .varch-latency__formula,
+  .varch-latency__footer,
+  .varch-prosody__plan,
+  .varch-prosody__footer,
+  .varch-surface__handoff,
+  .varch-surface__footer
+) :is(span, p, small, strong, b, code, i) {
+  color: #f4fbfa !important;
+}
+
+.anim-brand-shell__viewport :is(
+  .vrpv__invariant,
+  .vrpv-clock__footer,
+  .vrpv-barge__heard,
+  .vrpv-runtime__eventbus,
+  .vrpv-runtime__footer,
+  .varch-compare__footer,
+  .varch-latency__formula,
+  .varch-latency__footer,
+  .varch-prosody__footer,
+  .varch-surface__handoff,
+  .varch-surface__footer
+) :is(strong, b) {
+  color: #9fe0b0 !important;
+}
+
+.anim-brand-shell__viewport :is(
+  .vrpv__invariant,
+  .vrpv-clock__footer,
+  .vrpv-runtime__eventbus,
+  .vrpv-runtime__footer,
+  .varch-compare__footer,
+  .varch-latency__formula,
+  .varch-prosody__plan,
+  .varch-prosody__footer,
+  .varch-surface__handoff,
+  .varch-surface__footer
+) code {
+  color: #d9e8e6 !important;
+}
+
+.anim-brand-shell__viewport .varch-prosody__plan b {
+  color: #9fe0b0 !important;
+}
+
+.anim-brand-shell__viewport .varch-prosody__plan i {
+  color: #f5cc78 !important;
+}
+
+/* Mid-size laptop and tablet columns: a five-column panorama becomes a clean
+ * 3 + 2 card grid rather than five compressed strips. */
+@container s5-animation (min-width: 681px) and (max-width: 1080px) {
+  .anim-brand-shell__viewport .vrpv-panorama .vrpv__flow {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 13px;
+  }
+
+  .anim-brand-shell__viewport .vrpv-panorama .vrpv__flow::before,
+  .anim-brand-shell__viewport .vrpv-panorama .vrpv__packet {
+    display: none;
+  }
+
+  .anim-brand-shell__viewport .vrpv-panorama .vrpv__stage {
+    min-height: 330px;
+  }
+}
+
+@container s5-animation (max-width: 520px) {
+  /* Compact timeline labels stay meaningful without colliding. */
+  .anim-brand-shell__viewport .vrpv-clock :is(
+    .vrpv-clock__segment--gen,
+    .vrpv-clock__segment--queue,
+    .vrpv-clock__segment--cancel,
+    .vrpv-clock__segment--clear
+  ) {
+    font-size: 0;
+  }
+
+  .anim-brand-shell__viewport .vrpv-clock .vrpv-clock__segment--gen::before {
+    content: "gen";
+    font-size: .48rem;
+  }
+
+  .anim-brand-shell__viewport .vrpv-clock .vrpv-clock__segment--queue::before {
+    content: "buffer";
+    font-size: .44rem;
+  }
+
+  .anim-brand-shell__viewport .vrpv-clock .vrpv-clock__segment--cancel::before {
+    content: "×";
+    font-size: .72rem;
+  }
+
+  .anim-brand-shell__viewport .vrpv-clock .vrpv-clock__segment--clear::before {
+    content: "×";
+    font-size: .72rem;
+  }
+
+  .anim-brand-shell__viewport .vrpv-barge .vrpv-barge__rule {
+    grid-template-columns: 34px minmax(0, 1fr);
+    gap: 10px;
+    align-items: start;
+    padding: 12px;
+  }
+
+  .anim-brand-shell__viewport .vrpv-barge .vrpv-barge__rule-icon {
+    width: 34px;
+    height: 34px;
+    font-size: 1rem;
+  }
+
+  /* The waterfall keeps the proportions while using compact stage names. */
+  .anim-brand-shell__viewport .varch-latency .varch-latency__bar {
+    font-size: 0;
+  }
+
+  .anim-brand-shell__viewport .varch-latency .varch-latency__bar--endpoint::before {
+    content: "VAD";
+    font-size: .47rem;
+  }
+
+  .anim-brand-shell__viewport .varch-latency .varch-latency__bar--stt::before {
+    content: "STT";
+    font-size: .47rem;
+  }
+
+  .anim-brand-shell__viewport .varch-latency .varch-latency__bar--llm::before {
+    content: "LLM";
+    font-size: .47rem;
+  }
+
+  .anim-brand-shell__viewport .varch-latency :is(
+    .varch-latency__bar--tts,
+    .varch-latency__bar--half-tts
+  )::before {
+    content: "TTS";
+    font-size: .47rem;
+  }
+
+  .anim-brand-shell__viewport .varch-latency .varch-latency__bar--buffer::before {
+    content: "BUF";
+    font-size: .45rem;
+  }
+
+  .anim-brand-shell__viewport .varch-latency .varch-latency__bar--audio-model::before {
+    content: "Audio model";
+    font-size: .43rem;
+  }
+
+  .anim-brand-shell__viewport .varch-latency .varch-latency__bar--s2s::before {
+    content: "S2S";
+    font-size: .47rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.s5-voice-animation-focus :is(
+    .md-header,
+    .md-tabs,
+    .s5-reader-topbar,
+    .s5-reader-rail,
+    .s5-reader-direct,
+    .s5-reader-direct-toggle,
+    .s5-reader-end
+  ) {
+    transition: none !important;
+  }
+}
