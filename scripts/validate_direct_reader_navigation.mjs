@@ -94,11 +94,11 @@ const assertLibrary = async (page, { mobile = false } = {}) => {
   const links = library.locator('[data-s5-direct-entry]');
   const kinds = await collections.locator('header > span').allTextContents();
 
-  if (await collections.count() !== 7) {
-    throw new Error('Reader library must expose all 6 series plus technical notes simultaneously.');
+  if (await collections.count() !== 8) {
+    throw new Error('Reader library must expose the concept hub, all 6 series and technical notes simultaneously.');
   }
-  if (kinds.filter((label) => label.trim() === 'Aprender').length !== 6) {
-    throw new Error(`Reader library must expose six Aprender collections: ${JSON.stringify(kinds)}`);
+  if (kinds.filter((label) => label.trim() === 'Aprender').length !== 7) {
+    throw new Error(`Reader library must expose seven Aprender collections: ${JSON.stringify(kinds)}`);
   }
   if (kinds.filter((label) => label.trim() === 'Construir').length !== 1) {
     throw new Error(`Reader library must expose Construir separately: ${JSON.stringify(kinds)}`);
@@ -182,6 +182,7 @@ try {
 
   let controls = await assertLibrary(desktop);
   await assertGlobalSearch(controls, 'datacenter espacial', '/series/datacenters-espacio/03-que-es-datacenter-espacio/');
+  await assertGlobalSearch(controls, 'transformer', '/temas/transformer/');
 
   await navigateDirectly(controls, desktop, '/series/from-cave-to-agi/00_presentacion_serie/');
   controls = await assertLibrary(desktop);
