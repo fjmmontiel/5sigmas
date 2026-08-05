@@ -627,7 +627,7 @@
 .s5v-runtime__bus { display: flex; align-items: center; justify-content: center; gap: 12px; min-height: 48px; border-radius: 14px; background: var(--ink); color: #fff; }
 .s5v-runtime__bus i { width: 10px; height: 10px; border-radius: 50%; background: #9fe0b0; box-shadow: 0 0 0 6px rgba(159, 224, 176, .12); animation: s5v-pulse 1.7s ease-in-out infinite; }
 .s5v-runtime__bus b { color: #9fe0b0; font-size: .67rem; letter-spacing: .08em; text-transform: uppercase; }
-.s5v-runtime__bus code { color: #eaf4f2; font-size: .65rem; }
+.s5v-runtime__bus code { padding: 0; border: 0; background: transparent !important; box-shadow: none; color: #eaf4f2; font-size: .65rem; }
 .s5v-runtime__lower { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .s5v-runtime__packet { position: absolute; top: 55px; left: 9%; width: 12px; height: 12px; border-radius: 50%; background: var(--amber); box-shadow: 0 0 0 5px rgba(217, 138, 0, .12); animation: s5v-runtime-packet 5.5s ease-in-out infinite; }
 
