@@ -1,42 +1,44 @@
-"""
-Hook: serve_md_versions.py
-GEO optimization: serve clean Markdown versions of articles at {page_url}index.html.md
-per the llms.txt spec (https://llmstxt.org/).
+"""Serve clean Markdown mirrors next to pages that were actually built.
 
-This allows AI crawlers to access: https://5sigmas.com/series/foo/01-bar/index.html.md
-and get the clean Markdown source without HTML noise.
+Each public MkDocs page gets a sibling ending in ``index.html.md``. The
+existence check against the generated HTML is deliberate: source files excluded
+from the public build must never become reachable only through the Markdown
+mirror layer.
 """
 
-import shutil
 from pathlib import Path
+import shutil
 
 
-# Files and directories to skip
-_SKIP_DIRS = {"includes", "assets", "javascripts", "stylesheets", "snippets", "meta"}
+_SKIP_DIRS = {"includes", "assets", "javascripts", "stylesheets", "snippets"}
 _SKIP_PREFIXES = ("_", "abbreviations")
+
+
+def _html_target(source: Path, docs_dir: Path, site_dir: Path, use_directory_urls: bool) -> Path:
+    relative = source.relative_to(docs_dir)
+    if source.stem in {"index", "README"}:
+        return site_dir / relative.parent / "index.html"
+    if use_directory_urls:
+        return site_dir / relative.parent / source.stem / "index.html"
+    return site_dir / relative.parent / f"{source.stem}.html"
 
 
 def on_post_build(config, **kwargs) -> None:
     docs_dir = Path(config["docs_dir"])
     site_dir = Path(config["site_dir"])
+    use_directory_urls = bool(config.get("use_directory_urls", True))
 
-    for md_file in docs_dir.rglob("*.md"):
-        # Skip files in excluded directories
-        parts = md_file.relative_to(docs_dir).parts
-        if any(p in _SKIP_DIRS for p in parts):
+    for source in docs_dir.rglob("*.md"):
+        parts = source.relative_to(docs_dir).parts
+        if any(part in _SKIP_DIRS for part in parts):
             continue
-        if any(md_file.name.startswith(prefix) for prefix in _SKIP_PREFIXES):
+        if any(source.name.startswith(prefix) for prefix in _SKIP_PREFIXES):
             continue
 
-        rel = md_file.relative_to(docs_dir)
+        html_target = _html_target(source, docs_dir, site_dir, use_directory_urls)
+        if not html_target.is_file():
+            continue
 
-        # Map source .md to site URL path:
-        # index.md  -> site/<dir>/index.html.md
-        # 01-foo.md -> site/<dir>/01-foo/index.html.md
-        if md_file.stem in ("index", "README"):
-            target = site_dir / rel.parent / "index.html.md"
-        else:
-            target = site_dir / rel.parent / md_file.stem / "index.html.md"
-
-        target.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(md_file, target)
+        markdown_target = Path(f"{html_target}.md")
+        markdown_target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source, markdown_target)
