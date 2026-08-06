@@ -5,6 +5,86 @@ body:has(.s5-reader-shell) {
   --s5-reader-lead: min(900px, 76ch) !important;
 }
 
+.s5-reading-meta {
+  display: flex;
+  gap: .38rem;
+  align-items: center;
+  width: fit-content;
+  margin: .7rem 0 2.15rem;
+  color: var(--s5-muted);
+  font-size: .52rem;
+  font-weight: 680;
+  letter-spacing: .025em;
+}
+
+.s5-reading-meta::before {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--s5-brand-blue);
+  content: '';
+}
+
+.s5-reading-meta strong {
+  color: var(--s5-text);
+  font-weight: 780;
+}
+
+body:has(.s5-reader-shell) .sm-wrap {
+  display: flex !important;
+  width: fit-content !important;
+  max-width: 100% !important;
+  margin: .7rem 0 2.15rem !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+body:has(.s5-reader-shell) .sm-wrap:hover {
+  box-shadow: none !important;
+}
+
+body:has(.s5-reader-shell) .sm-wrap .sm-chips {
+  gap: .62rem !important;
+}
+
+body:has(.s5-reader-shell) .sm-wrap .sm-chip {
+  position: relative;
+  gap: .28rem !important;
+  padding: .15rem 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: var(--s5-muted) !important;
+  font-size: .52rem !important;
+}
+
+body:has(.s5-reader-shell) .sm-wrap .sm-chip + .sm-chip::before {
+  position: absolute;
+  top: 50%;
+  left: -.36rem;
+  color: var(--s5-line-strong);
+  content: '·';
+  transform: translateY(-52%);
+}
+
+body:has(.s5-reader-shell) .sm-wrap .sm-chip--time {
+  color: var(--s5-text) !important;
+}
+
+body:has(.s5-reader-shell) .sm-wrap .sm-chip--count,
+body:has(.s5-reader-shell) .sm-wrap .series-meta-row {
+  display: none !important;
+}
+
+body:has(.s5-reader-shell) .sm-wrap .sm-dot {
+  width: 6px !important;
+  height: 6px !important;
+  box-shadow: none !important;
+}
+
 @media (min-width: 1320px) {
   body:has(.s5-reader-shell) .md-header {
     z-index: 5 !important;
@@ -12,5 +92,18 @@ body:has(.s5-reader-shell) {
 
   body:has(.s5-reader-shell) .md-tabs {
     z-index: 6 !important;
+  }
+}
+
+@media (max-width: 800px) {
+  .s5-reading-meta,
+  body:has(.s5-reader-shell) .sm-wrap {
+    margin-top: .55rem !important;
+    margin-bottom: 1.8rem !important;
+  }
+
+  .s5-reading-meta,
+  body:has(.s5-reader-shell) .sm-wrap .sm-chip {
+    font-size: .49rem !important;
   }
 }
