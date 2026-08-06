@@ -7,6 +7,12 @@
     .toLowerCase()
     .trim();
 
+  const matchesQuery = (value, query) => {
+    const haystack = normalize(value);
+    const tokens = normalize(query).split(/\s+/).filter(Boolean);
+    return tokens.length > 0 && tokens.every((token) => haystack.includes(token));
+  };
+
   const rememberCurrentPage = (root) => {
     try {
       localStorage.setItem(LAST_READING_KEY, JSON.stringify({
@@ -73,11 +79,11 @@
         for (const tab of tabs) {
           const id = tab.dataset.s5SeriesTab;
           const panel = panels.find((candidate) => candidate.dataset.s5SeriesPanel === id);
-          const tabMatches = normalize(tab.dataset.search || tab.textContent).includes(query);
+          const tabMatches = matchesQuery(tab.dataset.search || tab.textContent, query);
           let visibleEntries = 0;
 
           for (const entry of panel?.querySelectorAll('[data-s5-reader-entry]') || []) {
-            const matches = tabMatches || normalize(entry.dataset.search || entry.textContent).includes(query);
+            const matches = tabMatches || matchesQuery(entry.dataset.search || entry.textContent, query);
             entry.hidden = !matches;
             if (matches) visibleEntries += 1;
           }
