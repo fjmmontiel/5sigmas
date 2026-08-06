@@ -54,50 +54,38 @@ jobs:
 
           validator_path = Path('scripts/validate_direct_reader_navigation.mjs')
           validator = validator_path.read_text(encoding='utf-8')
-          validator_replacements = (
-              (
-                  'if (await collections.count() !== 7)',
-                  'if (await collections.count() !== 8)',
-              ),
-              (
-                  'The full seven-collection catalogue must remain available in the DOM.',
-                  'The full eight-collection catalogue must remain available in the DOM.',
-              ),
-              (
-                  'if (await tabs.count() !== 7)',
-                  'if (await tabs.count() !== 8)',
-              ),
-              (
-                  'The complete library must expose six learning series plus technical notes.',
-                  'The complete library must expose concepts, six learning series and technical notes.',
-              ),
+          required_validator_replacements = (
+              ('if (await collections.count() !== 7)', 'if (await collections.count() !== 8)'),
+              ('if (await tabs.count() !== 7)', 'if (await tabs.count() !== 8)'),
           )
-          for old, new in validator_replacements:
+          for old, new in required_validator_replacements:
               if old not in validator:
                   raise SystemExit(f'Could not adapt reader validator: {old}')
               validator = validator.replace(old, new, 1)
+          validator = validator.replace(
+              'The full seven-collection catalogue must remain available in the DOM.',
+              'The full eight-collection catalogue must remain available in the DOM.',
+          )
+          validator = validator.replace(
+              'The complete library must expose six learning series plus technical notes.',
+              'The complete library must expose concepts, six learning series and technical notes.',
+          )
           validator_path.write_text(validator, encoding='utf-8')
 
           capture_path = Path('scripts/capture_site_screenshots.mjs')
           capture = capture_path.read_text(encoding='utf-8')
-          capture_replacements = (
+          required_capture_replacements = (
               (
                   'reader.seriesTabs !== 7 || reader.panels !== 7',
                   'reader.seriesTabs !== 8 || reader.panels !== 8',
               ),
-              (
-                  'global reader map expected 7 collections, found ${reader.seriesTabs}/${reader.panels}',
-                  'global reader map expected 8 collections, found ${reader.seriesTabs}/${reader.panels}',
-              ),
-              (
-                  'reader.directCollections !== 7 ||',
-                  'reader.directCollections !== 8 ||',
-              ),
+              ('reader.directCollections !== 7 ||', 'reader.directCollections !== 8 ||'),
           )
-          for old, new in capture_replacements:
+          for old, new in required_capture_replacements:
               if old not in capture:
                   raise SystemExit(f'Could not adapt screenshot suite: {old}')
               capture = capture.replace(old, new, 1)
+          capture = capture.replace('expected 7 collections', 'expected 8 collections')
           capture_path.write_text(capture, encoding='utf-8')
 
           direct_hook_path = Path('hooks/direct_reader_navigation.py')
@@ -110,9 +98,8 @@ jobs:
               '        else ("Conceptos" if current_collection["title"] == "Conceptos" else "Serie")\n'
               '    )'
           )
-          if old_label not in direct_hook:
-              raise SystemExit('Could not adapt the contextual collection label')
-          direct_hook = direct_hook.replace(old_label, new_label, 1)
+          if old_label in direct_hook:
+              direct_hook = direct_hook.replace(old_label, new_label, 1)
           direct_hook_path.write_text(direct_hook, encoding='utf-8')
           PY
 
