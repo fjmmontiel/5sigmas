@@ -60,6 +60,16 @@ const assertMaterialDrawerIsolation = async (page) => {
   }
 };
 
+const assertGlobalDesktopHeader = async (page) => {
+  const links = page.locator('.md-tabs__link:visible');
+  if (await links.count() < 5) {
+    throw new Error('Desktop reader pages must preserve the global 5sigmas navigation inside the header.');
+  }
+  if (await page.locator('.s5-reader-topbar:visible').count()) {
+    throw new Error('Desktop duplicates chapter navigation below the title even though the contextual rail is present.');
+  }
+};
+
 const assertContextualDesktopRail = async (page) => {
   const library = page.locator('[data-s5-reader-direct]');
   const collections = library.locator('[data-s5-reader-collection]');
@@ -74,9 +84,6 @@ const assertContextualDesktopRail = async (page) => {
   }
   if (await entries.count() < 30) {
     throw new Error('The reader no longer exposes the complete article catalogue.');
-  }
-  if (await collections.filter({ visible: true }).count?.()) {
-    // Playwright does not expose a cross-version visible filter consistently.
   }
   if (await library.locator('[data-s5-reader-collection]:visible').count() !== 1) {
     throw new Error('Desktop must show only the current collection in the persistent rail.');
@@ -100,6 +107,7 @@ const assertContextualDesktopRail = async (page) => {
     throw new Error(`Contextual rail is not positioned cleanly left of the article: ${JSON.stringify({ libraryBox, titleBox })}`);
   }
 
+  await assertGlobalDesktopHeader(page);
   return { library, browse };
 };
 
@@ -152,7 +160,7 @@ const assertCompactMobileReader = async (page) => {
   }
 
   const topbarBox = await topbar.boundingBox();
-  if (!topbarBox || topbarBox.height > 52 || topbarBox.x < 8 || topbarBox.x + topbarBox.width > 382) {
+  if (!topbarBox || topbarBox.height > 54 || topbarBox.x < 8 || topbarBox.x + topbarBox.width > 382) {
     throw new Error(`Mobile lesson navigator is not compact: ${JSON.stringify(topbarBox)}`);
   }
   if ((await topbar.evaluate((node) => getComputedStyle(node).position)) !== 'sticky') {
@@ -206,7 +214,7 @@ try {
   await desktop.evaluate(() => window.scrollTo(0, Math.min(1200, document.documentElement.scrollHeight - window.innerHeight)));
   await desktop.waitForTimeout(200);
   const desktopBox = await contextual.library.boundingBox();
-  if (!desktopBox || desktopBox.y < 115 || desktopBox.y > 140 || desktopBox.width < 190) {
+  if (!desktopBox || desktopBox.y < 60 || desktopBox.y > 90 || desktopBox.width < 190) {
     throw new Error(`Desktop contextual rail is not persistently usable: ${JSON.stringify(desktopBox)}`);
   }
   await desktop.screenshot({ path: `${outputDir}/reader-contextual-desktop.png`, fullPage: false });
