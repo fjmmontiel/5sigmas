@@ -61,7 +61,7 @@ const assertMaterialDrawerIsolation = async (page) => {
 };
 
 const assertGlobalDesktopHeader = async (page) => {
-  const links = page.locator('.md-tabs__link:visible');
+  const links = page.locator('.s5-reader-global-nav__link:visible');
   if (await links.count() < 5) {
     throw new Error('Desktop reader pages must preserve the global 5sigmas navigation inside the header.');
   }
