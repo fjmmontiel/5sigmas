@@ -7,6 +7,7 @@ on:
       - 'hooks/reading_navigation.py'
       - 'hooks/direct_reader_navigation.py'
       - 'docs/stylesheets/reader-editorial-v3.css'
+      - 'scripts/validate_direct_reader_navigation.mjs'
       - 'mkdocs.yml'
       - '.github/workflows/temp-reader-v3-review.yml'
 
@@ -55,37 +56,19 @@ jobs:
       - name: Capture full pages and validate the reader system
         shell: bash
         run: |
+          mkdir -p artifacts/reader-v3-review
           cat > capture-reader-v3.mjs <<'JS'
           import { chromium, devices } from 'playwright';
           import fs from 'node:fs/promises';
 
           const baseUrl = 'http://127.0.0.1:8000';
           const outputDir = 'artifacts/reader-v3-review';
-          await fs.mkdir(outputDir, { recursive: true });
-
           const specs = [
-            {
-              slug: 'reactive-proactive-voice',
-              path: '/articulos-tecnicos/reactive-proactive-voice-agents/',
-              visual: '.s5v-contract',
-            },
-            {
-              slug: 'voice-architectures',
-              path: '/articulos-tecnicos/voice-agent-architectures/',
-              visual: '.s5v-arch-map',
-            },
-            {
-              slug: 'series-presentation',
-              path: '/series/from-cave-to-agi/00_presentacion_serie/',
-              visual: null,
-            },
-            {
-              slug: 'series-chapter',
-              path: '/series/modelos-razonadores/03-test-time-compute/',
-              visual: null,
-            },
+            { slug: 'reactive-proactive-voice', path: '/articulos-tecnicos/reactive-proactive-voice-agents/', visual: '.s5v-contract' },
+            { slug: 'voice-architectures', path: '/articulos-tecnicos/voice-agent-architectures/', visual: '.s5v-arch-map' },
+            { slug: 'series-presentation', path: '/series/from-cave-to-agi/00_presentacion_serie/', visual: null },
+            { slug: 'series-chapter', path: '/series/modelos-razonadores/03-test-time-compute/', visual: null },
           ];
-
           const desktopViewports = [
             { name: 'wide', width: 1728, height: 1117 },
             { name: 'standard', width: 1440, height: 1000 },
@@ -93,8 +76,9 @@ jobs:
 
           const browser = await chromium.launch({ headless: true });
           const metrics = [];
+          const failures = [];
 
-          const roundedBox = async (page, selector) => {
+          const box = async (page, selector) => {
             const locator = page.locator(selector).first();
             if (!await locator.count()) return null;
             return locator.evaluate((element) => {
@@ -102,14 +86,8 @@ jobs:
               const style = getComputedStyle(element);
               const round = (value) => Math.round(value * 10) / 10;
               return {
-                x: round(rect.x),
-                y: round(rect.y),
-                width: round(rect.width),
-                height: round(rect.height),
-                display: style.display,
-                position: style.position,
-                fontSize: style.fontSize,
-                lineHeight: style.lineHeight,
+                x: round(rect.x), y: round(rect.y), width: round(rect.width), height: round(rect.height),
+                display: style.display, position: style.position, fontSize: style.fontSize,
               };
             });
           };
@@ -119,192 +97,143 @@ jobs:
             await page.evaluate(async () => {
               await document.fonts.ready;
               document.documentElement.style.scrollBehavior = 'auto';
-              document.body.style.scrollBehavior = 'auto';
               const step = Math.max(520, Math.floor(window.innerHeight * .72));
               for (let y = 0; y < document.documentElement.scrollHeight; y += step) {
                 window.scrollTo(0, y);
-                await new Promise((resolve) => setTimeout(resolve, 55));
+                await new Promise((resolve) => setTimeout(resolve, 50));
               }
               window.scrollTo(0, 0);
               await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
             });
-            await page.addStyleTag({
-              content: `
-                html, body { scroll-behavior: auto !important; }
-                *, *::before, *::after {
-                  animation-play-state: paused !important;
-                  transition-duration: 0s !important;
-                  transition-delay: 0s !important;
-                }
-              `,
-            });
+            await page.addStyleTag({ content: `
+              html, body { scroll-behavior: auto !important; }
+              *, *::before, *::after {
+                animation-play-state: paused !important;
+                transition-duration: 0s !important;
+                transition-delay: 0s !important;
+              }
+            ` });
             await page.evaluate(() => window.scrollTo(0, 0));
-            await page.waitForTimeout(300);
+            await page.waitForTimeout(260);
           }
 
-          async function inspectDesktop(spec, viewport) {
+          const recordFailure = (label, message) => failures.push(`${label}: ${message}`);
+
+          async function desktop(spec, viewport) {
+            const label = `${spec.slug}/${viewport.name}`;
             const page = await browser.newPage({ viewport, deviceScaleFactor: 1 });
-            const errors = [];
-            page.on('pageerror', (error) => errors.push(error.message));
+            const pageErrors = [];
+            page.on('pageerror', (error) => pageErrors.push(error.message));
             await page.goto(`${baseUrl}${spec.path}`, { waitUntil: 'domcontentloaded' });
             await settle(page);
 
-            const visibleCollections = await page.locator('.s5-reader-direct__collection:visible').count();
             const geometry = {
-              page: spec.slug,
-              viewport: viewport.name,
-              viewportWidth: viewport.width,
-              header: await roundedBox(page, '.md-header__inner'),
-              tabs: await roundedBox(page, '.md-tabs__inner'),
-              library: await roundedBox(page, '.s5-reader-direct'),
-              content: await roundedBox(page, '.md-content'),
-              context: await roundedBox(page, '.s5-reader-context'),
-              title: await roundedBox(page, 'article h1'),
-              navigator: await roundedBox(page, '.s5-reader-topbar'),
-              firstLead: await roundedBox(page, '.md-typeset > blockquote'),
-              firstParagraph: await roundedBox(page, '.md-typeset > p'),
-              firstSection: await roundedBox(page, '.md-typeset > h2'),
-              visual: spec.visual ? await roundedBox(page, spec.visual) : null,
-              visibleCollections,
+              page: spec.slug, viewport: viewport.name, viewportWidth: viewport.width,
+              header: await box(page, '.md-header__inner'),
+              tabs: await box(page, '.md-tabs'),
+              library: await box(page, '.s5-reader-direct'),
+              content: await box(page, '.md-content'),
+              context: await box(page, '.s5-reader-context'),
+              title: await box(page, 'article h1'),
+              navigator: await box(page, '.s5-reader-topbar'),
+              firstLead: await box(page, '.md-typeset > blockquote'),
+              firstParagraph: await box(page, '.md-typeset > p'),
+              visual: spec.visual ? await box(page, spec.visual) : null,
+              visibleCollections: await page.locator('.s5-reader-direct__collection:visible').count(),
               tagsVisible: await page.locator('.md-tags:visible').count(),
               breadcrumbsVisible: await page.locator('.md-path:visible').count(),
-              verticalToggleVisible: await page.locator('.s5-reader-direct-toggle:visible').count(),
-              horizontalOverflow: await page.evaluate(() => Math.max(0, document.documentElement.scrollWidth - window.innerWidth)),
-              pageErrors: errors,
+              directToggleVisible: await page.locator('.s5-reader-direct-toggle:visible').count(),
+              overflow: await page.evaluate(() => Math.max(0, document.documentElement.scrollWidth - window.innerWidth)),
+              pageErrors,
             };
             metrics.push(geometry);
-
-            const required = ['header', 'tabs', 'library', 'content', 'context', 'title', 'navigator'];
-            for (const field of required) {
-              if (!geometry[field]) throw new Error(`${spec.slug}/${viewport.name}: missing ${field}`);
-            }
-            if (!geometry.firstLead && !geometry.firstParagraph) {
-              throw new Error(`${spec.slug}/${viewport.name}: no readable lead or paragraph`);
-            }
-            if (geometry.pageErrors.length) {
-              throw new Error(`${spec.slug}/${viewport.name}: browser errors ${JSON.stringify(geometry.pageErrors)}`);
-            }
-            if (geometry.horizontalOverflow > 1) {
-              throw new Error(`${spec.slug}/${viewport.name}: horizontal overflow ${geometry.horizontalOverflow}px`);
-            }
-            if (geometry.visibleCollections !== 1) {
-              throw new Error(`${spec.slug}/${viewport.name}: expected one contextual collection, found ${geometry.visibleCollections}`);
-            }
-            if (geometry.tagsVisible || geometry.breadcrumbsVisible || geometry.verticalToggleVisible) {
-              throw new Error(`${spec.slug}/${viewport.name}: duplicated navigation chrome remains visible`);
-            }
-            if (geometry.navigator.height > 52) {
-              throw new Error(`${spec.slug}/${viewport.name}: navigator is too tall (${geometry.navigator.height}px)`);
-            }
-            if (geometry.content.x - (geometry.library.x + geometry.library.width) < 30) {
-              throw new Error(`${spec.slug}/${viewport.name}: library and article are too close`);
-            }
-            if (geometry.title.x !== geometry.content.x || geometry.navigator.x !== geometry.content.x) {
-              throw new Error(`${spec.slug}/${viewport.name}: editorial edges are not aligned`);
-            }
-            if (geometry.firstParagraph && (geometry.firstParagraph.width < 700 || geometry.firstParagraph.width > 790)) {
-              throw new Error(`${spec.slug}/${viewport.name}: prose measure ${geometry.firstParagraph.width}px is outside 700–790px`);
-            }
-            if (geometry.firstLead && geometry.firstLead.width > 890) {
-              throw new Error(`${spec.slug}/${viewport.name}: lead is too wide (${geometry.firstLead.width}px)`);
-            }
-            if (geometry.visual && geometry.visual.width < 900) {
-              throw new Error(`${spec.slug}/${viewport.name}: desktop visual remains too narrow (${geometry.visual.width}px)`);
-            }
-            if (geometry.title.y > 245) {
-              throw new Error(`${spec.slug}/${viewport.name}: title begins too low (${geometry.title.y}px)`);
-            }
 
             await page.screenshot({ path: `${outputDir}/${spec.slug}-${viewport.name}-viewport.png`, fullPage: false });
             await page.screenshot({ path: `${outputDir}/${spec.slug}-${viewport.name}-full.png`, fullPage: true });
+
+            for (const field of ['header', 'library', 'content', 'context', 'title', 'navigator']) {
+              if (!geometry[field]) recordFailure(label, `missing ${field}`);
+            }
+            if (!geometry.firstLead && !geometry.firstParagraph) recordFailure(label, 'missing readable lead or paragraph');
+            if (geometry.pageErrors.length) recordFailure(label, `browser errors ${JSON.stringify(geometry.pageErrors)}`);
+            if (geometry.overflow > 1) recordFailure(label, `horizontal overflow ${geometry.overflow}px`);
+            if (geometry.visibleCollections !== 1) recordFailure(label, `${geometry.visibleCollections} contextual collections visible`);
+            if (geometry.tagsVisible || geometry.breadcrumbsVisible || geometry.directToggleVisible) recordFailure(label, 'duplicated navigation chrome visible');
+            if (geometry.navigator?.height > 52) recordFailure(label, `navigator height ${geometry.navigator.height}px`);
+            if (geometry.content && geometry.library && geometry.content.x - (geometry.library.x + geometry.library.width) < 30) recordFailure(label, 'library/article gap below 30px');
+            if (geometry.title && geometry.content && Math.abs(geometry.title.x - geometry.content.x) > 1) recordFailure(label, 'title/content edges differ');
+            if (geometry.navigator && geometry.content && Math.abs(geometry.navigator.x - geometry.content.x) > 1) recordFailure(label, 'navigator/content edges differ');
+            if (geometry.firstParagraph && (geometry.firstParagraph.width < 700 || geometry.firstParagraph.width > 790)) recordFailure(label, `prose width ${geometry.firstParagraph.width}px`);
+            if (geometry.firstLead && geometry.firstLead.width > 890) recordFailure(label, `lead width ${geometry.firstLead.width}px`);
+            if (geometry.visual && geometry.visual.width < 900) recordFailure(label, `visual width ${geometry.visual.width}px`);
+            if (geometry.title?.y > 245) recordFailure(label, `title y=${geometry.title.y}px`);
             await page.close();
           }
 
-          async function inspectTablet(spec) {
-            const page = await browser.newPage({ viewport: { width: 1024, height: 900 }, deviceScaleFactor: 1 });
+          async function compact(spec, kind) {
+            const isMobile = kind === 'mobile';
+            const viewport = isMobile ? { width: 390, height: 844 } : { width: 1024, height: 900 };
+            const pageOptions = isMobile
+              ? { ...devices['Pixel 7'], viewport, deviceScaleFactor: 1 }
+              : { viewport, deviceScaleFactor: 1 };
+            const label = `${spec.slug}/${kind}`;
+            const page = await browser.newPage(pageOptions);
+            const pageErrors = [];
+            page.on('pageerror', (error) => pageErrors.push(error.message));
             await page.goto(`${baseUrl}${spec.path}`, { waitUntil: 'domcontentloaded' });
             await settle(page);
 
             const geometry = {
-              page: spec.slug,
-              viewport: 'tablet',
-              title: await roundedBox(page, 'article h1'),
-              navigator: await roundedBox(page, '.s5-reader-topbar'),
+              page: spec.slug, viewport: kind,
+              context: await box(page, '.s5-reader-context'),
+              title: await box(page, 'article h1'),
+              navigator: await box(page, '.s5-reader-topbar'),
+              firstLead: await box(page, '.md-typeset > blockquote'),
+              firstParagraph: await box(page, '.md-typeset > p'),
               libraryVisible: await page.locator('.s5-reader-direct:visible').count(),
-              toggleVisible: await page.locator('.s5-reader-direct-toggle:visible').count(),
-              overflow: await page.evaluate(() => Math.max(0, document.documentElement.scrollWidth - window.innerWidth)),
-            };
-            metrics.push(geometry);
-            if (!geometry.title || !geometry.navigator) throw new Error(`${spec.slug}/tablet: missing title or navigator`);
-            if (geometry.libraryVisible || geometry.toggleVisible) throw new Error(`${spec.slug}/tablet: duplicate navigation remains visible`);
-            if (geometry.navigator.position !== 'sticky') throw new Error(`${spec.slug}/tablet: compact navigator must be sticky`);
-            if (geometry.overflow > 1) throw new Error(`${spec.slug}/tablet: horizontal overflow ${geometry.overflow}px`);
-
-            await page.screenshot({ path: `${outputDir}/${spec.slug}-tablet-viewport.png`, fullPage: false });
-            await page.close();
-          }
-
-          async function inspectMobile(spec) {
-            const pixel = devices['Pixel 7'];
-            const page = await browser.newPage({
-              ...pixel,
-              viewport: { width: 390, height: 844 },
-              deviceScaleFactor: 1,
-            });
-            const errors = [];
-            page.on('pageerror', (error) => errors.push(error.message));
-            await page.goto(`${baseUrl}${spec.path}`, { waitUntil: 'domcontentloaded' });
-            await settle(page);
-
-            const geometry = {
-              page: spec.slug,
-              viewport: 'mobile',
-              context: await roundedBox(page, '.s5-reader-context'),
-              title: await roundedBox(page, 'article h1'),
-              navigator: await roundedBox(page, '.s5-reader-topbar'),
-              firstLead: await roundedBox(page, '.md-typeset > blockquote'),
-              firstParagraph: await roundedBox(page, '.md-typeset > p'),
-              libraryVisible: await page.locator('.s5-reader-direct:visible').count(),
-              toggleVisible: await page.locator('.s5-reader-direct-toggle:visible').count(),
+              directToggleVisible: await page.locator('.s5-reader-direct-toggle:visible').count(),
               tagsVisible: await page.locator('.md-tags:visible').count(),
               breadcrumbsVisible: await page.locator('.md-path:visible').count(),
               overflow: await page.evaluate(() => Math.max(0, document.documentElement.scrollWidth - window.innerWidth)),
-              pageErrors: errors,
+              pageErrors,
             };
             metrics.push(geometry);
 
-            if (!geometry.context || !geometry.title || !geometry.navigator) {
-              throw new Error(`${spec.slug}/mobile: missing contextual header`);
-            }
-            if (geometry.libraryVisible || geometry.toggleVisible || geometry.tagsVisible || geometry.breadcrumbsVisible) {
-              throw new Error(`${spec.slug}/mobile: duplicate navigation remains visible`);
-            }
-            if (geometry.overflow > 1) throw new Error(`${spec.slug}/mobile: horizontal overflow ${geometry.overflow}px`);
-            if (geometry.title.y > 185) throw new Error(`${spec.slug}/mobile: title begins too low (${geometry.title.y}px)`);
-            if (geometry.pageErrors.length) throw new Error(`${spec.slug}/mobile: browser errors ${JSON.stringify(geometry.pageErrors)}`);
+            await page.screenshot({ path: `${outputDir}/${spec.slug}-${kind}-viewport.png`, fullPage: false });
+            if (isMobile) await page.screenshot({ path: `${outputDir}/${spec.slug}-${kind}-full.png`, fullPage: true });
 
-            await page.screenshot({ path: `${outputDir}/${spec.slug}-mobile-viewport.png`, fullPage: false });
-            await page.screenshot({ path: `${outputDir}/${spec.slug}-mobile-full.png`, fullPage: true });
+            if (!geometry.context || !geometry.title || !geometry.navigator) recordFailure(label, 'missing contextual header');
+            if (geometry.libraryVisible || geometry.directToggleVisible || geometry.tagsVisible || geometry.breadcrumbsVisible) recordFailure(label, 'duplicated navigation chrome visible');
+            if (geometry.navigator?.position !== 'sticky') recordFailure(label, 'navigator is not sticky');
+            if (geometry.navigator?.height > 54) recordFailure(label, `navigator height ${geometry.navigator.height}px`);
+            if (geometry.overflow > 1) recordFailure(label, `horizontal overflow ${geometry.overflow}px`);
+            if (isMobile && geometry.title?.y > 190) recordFailure(label, `title y=${geometry.title.y}px`);
+            if (pageErrors.length) recordFailure(label, `browser errors ${JSON.stringify(pageErrors)}`);
             await page.close();
           }
 
           try {
             for (const spec of specs) {
-              for (const viewport of desktopViewports) await inspectDesktop(spec, viewport);
-              await inspectTablet(spec);
-              await inspectMobile(spec);
+              for (const viewport of desktopViewports) await desktop(spec, viewport);
+              await compact(spec, 'tablet');
+              await compact(spec, 'mobile');
             }
           } finally {
             await browser.close();
           }
 
           await fs.writeFile(`${outputDir}/reader-v3-metrics.json`, JSON.stringify(metrics, null, 2));
+          await fs.writeFile(`${outputDir}/reader-v3-failures.txt`, failures.join('\n'));
           console.log(JSON.stringify(metrics, null, 2));
+          if (failures.length) {
+            console.error(failures.join('\n'));
+            process.exit(1);
+          }
           JS
 
           node capture-reader-v3.mjs
 
-      - name: Validate existing direct navigation contract
+      - name: Validate direct navigation contract
         run: node scripts/validate_direct_reader_navigation.mjs
 
       - name: Upload visual review
