@@ -132,14 +132,14 @@ const validateReaderNavigation = async (page) => {
   if (reader.railLinks !== 6) throw new Error(`expected 6 current-series rail links, found ${reader.railLinks}`);
   if (reader.currentRail !== 1) throw new Error(`expected one current rail chapter, found ${reader.currentRail}`);
   if (reader.arrows !== 2) throw new Error(`expected usable previous and next actions, found ${reader.arrows}`);
-  if (reader.seriesTabs !== 7 || reader.panels !== 7) {
-    throw new Error(`expected 7 collections in the searchable map, found ${reader.seriesTabs}/${reader.panels}`);
+  if (reader.seriesTabs !== 8 || reader.panels !== 8) {
+    throw new Error(`expected 8 collections in the searchable map, found ${reader.seriesTabs}/${reader.panels}`);
   }
   if (reader.entries < 30 || reader.currentEntries !== 1) {
     throw new Error(`searchable map entries are incomplete: ${reader.entries}/${reader.currentEntries}`);
   }
-  if (reader.directCollections !== 7 || reader.visibleDirectCollections !== 7) {
-    throw new Error(`global library must expose all 7 collections simultaneously, found ${reader.directCollections}/${reader.visibleDirectCollections}`);
+  if (reader.directCollections !== 8 || reader.visibleDirectCollections !== 8) {
+    throw new Error(`global library must expose all 8 collections simultaneously, found ${reader.directCollections}/${reader.visibleDirectCollections}`);
   }
   if (reader.directEntries < 30 || reader.currentDirectEntries !== 1) {
     throw new Error(`global library entries are incomplete: ${reader.directEntries}/${reader.currentDirectEntries}`);
