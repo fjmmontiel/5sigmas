@@ -30,6 +30,7 @@ video_chapters:
 
 - Publicar una página de visualización por vídeo completo. Los momentos breves se expresan como capítulos y enlaces `?t=`, no como páginas casi duplicadas.
 - Omitir `video_takeaways` cuando los primeros encabezados útiles del artículo ya producen un buen resumen. Añadirlos solo para mejorar la respuesta directa.
+- Redactar `video_title` con las palabras que una persona usaría al buscar: la biblioteca ignora tildes y puntuación, y prioriza las coincidencias exactas del título.
 - Revisar manualmente subtítulos y transcripción antes de declararlos en el frontmatter.
 - Usar nombres versionados. No reemplazar los bytes de un archivo que ya pueda estar cacheado o indexado.
 - Mantener el vídeo, el póster, los subtítulos y la transcripción junto al Markdown del artículo para conservar una ruta pública determinista.
