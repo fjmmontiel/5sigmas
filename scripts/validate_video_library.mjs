@@ -53,8 +53,9 @@ const assertHub = async (page, { mobile = false } = {}) => {
   if (await visibleAfterSearch.count() !== 1) {
     throw new Error(`Video search should return one Test-Time Compute card, found ${await visibleAfterSearch.count()}.`);
   }
-  if (!/test-time compute/i.test(await visibleAfterSearch.first().innerText())) {
-    throw new Error('Video search returned the wrong card.');
+  const resultHref = await visibleAfterSearch.first().locator('.s5-video-card__poster').getAttribute('href');
+  if (resultHref !== sampleWatchPath) {
+    throw new Error(`Video search returned ${resultHref || 'no destination'} instead of ${sampleWatchPath}.`);
   }
 
   await search.fill('');
