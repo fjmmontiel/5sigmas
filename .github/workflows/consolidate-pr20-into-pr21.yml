@@ -1,0 +1,152 @@
+name: Consolidate PR 20 into PR 21
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/consolidate-pr20-into-pr21.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  consolidate:
+    if: github.event.pull_request.number == 21
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - name: Import the reviewed reader redesign and integrate it
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          git fetch origin \
+            refs/heads/redesign/reader-editorial-v3:refs/remotes/origin/redesign/reader-editorial-v3
+
+          git checkout origin/redesign/reader-editorial-v3 -- \
+            hooks/direct_reader_navigation.py \
+            hooks/reading_navigation.py \
+            docs/assets/javascripts/reader-navigation.js \
+            docs/stylesheets/reader-editorial-v3.css \
+            docs/stylesheets/reader-editorial-v3-iteration.css \
+            docs/stylesheets/revamp-home-cover.css \
+            scripts/validate_direct_reader_navigation.mjs
+
+          python - <<'PY'
+          from pathlib import Path
+
+          mkdocs_path = Path('mkdocs.yml')
+          mkdocs = mkdocs_path.read_text(encoding='utf-8')
+          editorial = '  - stylesheets/reader-editorial-v3.css\n'
+          iteration = '  - stylesheets/reader-editorial-v3-iteration.css\n'
+          anchor = '  - stylesheets/voice-report-animations-polish.css\n'
+          if editorial not in mkdocs:
+              if anchor not in mkdocs:
+                  raise SystemExit('Could not place reader-editorial-v3.css in mkdocs.yml')
+              mkdocs = mkdocs.replace(anchor, anchor + editorial, 1)
+          if iteration not in mkdocs:
+              mkdocs = mkdocs.replace(editorial, editorial + iteration, 1)
+          mkdocs_path.write_text(mkdocs, encoding='utf-8')
+
+          validator_path = Path('scripts/validate_direct_reader_navigation.mjs')
+          validator = validator_path.read_text(encoding='utf-8')
+          validator = validator.replace(
+              'if (await collections.count() !== 7)',
+              'if (await collections.count() !== 8)',
+          )
+          validator = validator.replace(
+              'The full seven-collection catalogue must remain available in the DOM.',
+              'The full eight-collection catalogue must remain available in the DOM.',
+          )
+          validator = validator.replace(
+              'if (await tabs.count() !== 7)',
+              'if (await tabs.count() !== 8)',
+          )
+          validator = validator.replace(
+              'The complete library must expose six learning series plus technical notes.',
+              'The complete library must expose concepts, six learning series and technical notes.',
+          )
+          validator_path.write_text(validator, encoding='utf-8')
+
+          capture_path = Path('scripts/capture_site_screenshots.mjs')
+          capture = capture_path.read_text(encoding='utf-8')
+          old_visibility = '''  if (reader.directCollections !== 8 || reader.visibleDirectCollections !== 8) {
+            throw new Error(`global library must expose all 8 collections simultaneously, found ${reader.directCollections}/${reader.visibleDirectCollections}`);
+          }
+          '''
+          new_visibility = '''  if (reader.directCollections !== 8) {
+            throw new Error(`global library must keep all 8 collections in the DOM, found ${reader.directCollections}`);
+          }
+          const expectedVisibleDirectCollections = metrics.viewport.width >= 1320 ? 1 : 0;
+          if (reader.visibleDirectCollections !== expectedVisibleDirectCollections) {
+            throw new Error(`contextual library expected ${expectedVisibleDirectCollections} visible collections, found ${reader.visibleDirectCollections}`);
+          }
+          '''
+          if old_visibility not in capture:
+              raise SystemExit('Could not update contextual-library screenshot assertion')
+          capture = capture.replace(old_visibility, new_visibility, 1)
+
+          old_open = '''const openReaderSurface = async (page) => {
+            const courseButton = page.locator('.s5-reader-course[data-s5-reader-open]');
+            if (await courseButton.isVisible()) {
+              await courseButton.click();
+              await page.locator('[data-s5-reader-library][open]').waitFor();
+              return 'map';
+            }
+
+            const drawerToggle = page.locator('[data-s5-reader-direct-open]');
+            await drawerToggle.click();
+            await page.locator('[data-s5-reader-direct].is-open').waitFor();
+            return 'library';
+          };
+          '''
+          new_open = '''const openReaderSurface = async (page) => {
+            const libraryButton = page.locator('[data-s5-reader-open]:visible').first();
+            if (await libraryButton.count()) {
+              await libraryButton.click();
+              await page.locator('[data-s5-reader-library][open]').waitFor();
+              return 'map';
+            }
+
+            const drawerToggle = page.locator('[data-s5-reader-direct-open]:visible').first();
+            if (await drawerToggle.count()) {
+              await drawerToggle.click();
+              await page.locator('[data-s5-reader-direct].is-open').waitFor();
+              return 'library';
+            }
+
+            throw new Error('No visible reader-library control is available at this viewport.');
+          };
+          '''
+          if old_open not in capture:
+              raise SystemExit('Could not update reader-library screenshot opener')
+          capture = capture.replace(old_open, new_open, 1)
+          capture_path.write_text(capture, encoding='utf-8')
+
+          direct_hook_path = Path('hooks/direct_reader_navigation.py')
+          direct_hook = direct_hook_path.read_text(encoding='utf-8')
+          direct_hook = direct_hook.replace(
+              'kind_label = "Serie" if current_collection["kind"] == "Aprender" else "Notas"',
+              'kind_label = (\n'
+              '        "Notas"\n'
+              '        if current_collection["kind"] == "Construir"\n'
+              '        else ("Conceptos" if current_collection["title"] == "Conceptos" else "Serie")\n'
+              '    )',
+          )
+          direct_hook_path.write_text(direct_hook, encoding='utf-8')
+          PY
+
+          rm -f \
+            .github/workflows/consolidate-pr20-into-pr21.yml \
+            .github/workflows/pr-tree-diagnostic.yml
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git diff --cached --check
+          git commit -m 'Consolidate the editorial reader redesign from PR #20'
+          git push origin HEAD:${GITHUB_HEAD_REF}
