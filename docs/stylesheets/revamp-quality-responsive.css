@@ -1,0 +1,34 @@
+/* Responsive safeguards and final spacing corrections. */
+
+.s5-section-head h2,
+.md-typeset .s5-section-head h2 {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+.s5-section-head--compact {
+  margin-bottom: .6rem !important;
+}
+
+.s5-page-intro + .s5-section {
+  margin-top: 1.65rem !important;
+}
+
+@media (max-width: 960px) {
+  .s5-home-cover {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .s5-home-cover__intro,
+  .s5-start-card {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 800px) {
+  .s5-page-intro + .s5-section {
+    margin-top: 1rem !important;
+  }
+}

@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="960" viewBox="0 0 1440 960" role="img" aria-labelledby="title desc">
+  <title id="title">5sigmas scientific editorial homepage preview</title>
+  <desc id="desc">Editorial homepage with a dark cover, orange scientific accent, five sigma chart and structured knowledge index.</desc>
+  <rect width="1440" height="960" fill="#f3efe6"/>
+  <g opacity=".24" stroke="#101214" stroke-width=".6">
+    <path d="M0 136H1440M0 170H1440M0 204H1440M0 238H1440M0 272H1440M0 306H1440M0 340H1440M0 374H1440M0 408H1440M0 442H1440M0 476H1440M0 510H1440M0 544H1440M0 578H1440M0 612H1440M0 646H1440M0 680H1440M0 714H1440M0 748H1440M0 782H1440M0 816H1440M0 850H1440M0 884H1440"/>
+    <path d="M34 96V960M68 96V960M102 96V960M136 96V960M170 96V960M204 96V960M238 96V960M272 96V960M306 96V960M340 96V960M374 96V960M408 96V960M442 96V960M476 96V960M510 96V960M544 96V960M578 96V960M612 96V960M646 96V960M680 96V960M714 96V960M748 96V960M782 96V960M816 96V960M850 96V960M884 96V960M918 96V960M952 96V960M986 96V960M1020 96V960M1054 96V960M1088 96V960M1122 96V960M1156 96V960M1190 96V960M1224 96V960M1258 96V960M1292 96V960M1326 96V960M1360 96V960M1394 96V960"/>
+  </g>
+  <rect width="1440" height="76" fill="#101214"/>
+  <rect x="34" y="19" width="38" height="38" rx="7" fill="#f3efe6"/>
+  <rect x="40" y="25" width="6" height="6" fill="#ff4d24"/>
+  <text x="54" y="50" text-anchor="middle" font-family="Georgia,serif" font-size="22" font-weight="700" fill="#101214">5σ</text>
+  <text x="89" y="45" font-family="Arial,sans-serif" font-size="18" font-weight="800" letter-spacing="-1" fill="#f3efe6">5sigmas</text>
+  <text x="181" y="44" font-family="monospace" font-size="8" letter-spacing="2" fill="#7d7e80">EVIDENCE-LED AI</text>
+  <text x="910" y="45" font-family="monospace" font-size="10" letter-spacing="1.4" fill="#b2b0aa">INICIO</text>
+  <text x="1000" y="45" font-family="monospace" font-size="10" letter-spacing="1.4" fill="#b2b0aa">SERIES</text>
+  <text x="1090" y="45" font-family="monospace" font-size="10" letter-spacing="1.4" fill="#b2b0aa">LAB</text>
+  <text x="1165" y="45" font-family="monospace" font-size="10" letter-spacing="1.4" fill="#b2b0aa">SOBRE</text>
+
+  <g transform="translate(30 104)">
+    <rect width="1380" height="520" fill="#101214"/>
+    <line x1="95" y1="0" x2="95" y2="520" stroke="#404245"/>
+    <line x1="918" y1="0" x2="918" y2="520" stroke="#404245"/>
+    <text x="37" y="485" transform="rotate(-90 37 485)" font-family="monospace" font-size="9" letter-spacing="2" fill="#77797c">FIELD NOTES / ARTIFICIAL INTELLIGENCE</text>
+    <circle cx="153" cy="116" r="5" fill="#ff4d24"/>
+    <text x="170" y="120" font-family="monospace" font-size="11" letter-spacing="2" fill="#ff4d24">5Σ / CRITERIO TÉCNICO</text>
+    <text x="148" y="208" font-family="Georgia,serif" font-size="78" font-weight="700" letter-spacing="-5" fill="#f3efe6">La IA cambia</text>
+    <text x="148" y="285" font-family="Georgia,serif" font-size="78" font-weight="700" letter-spacing="-5" fill="#f3efe6">cada semana.</text>
+    <text x="148" y="362" font-family="Georgia,serif" font-size="78" font-style="italic" font-weight="600" letter-spacing="-5" fill="#ff4d24">Los fundamentos no.</text>
+    <text x="151" y="413" font-family="Arial,sans-serif" font-size="15" fill="#9c9c99">Mecanismos, papers y sistemas reales para construir criterio propio.</text>
+    <rect x="150" y="448" width="218" height="42" fill="#ff4d24"/>
+    <text x="169" y="474" font-family="monospace" font-size="10" letter-spacing="1.2" fill="#101214">ENTRAR EN LA BIBLIOTECA →</text>
+    <rect x="382" y="448" width="174" height="42" fill="none" stroke="#747578"/>
+    <text x="402" y="474" font-family="monospace" font-size="10" letter-spacing="1.2" fill="#f3efe6">ABRIR EL LAB</text>
+
+    <g transform="translate(950 36)">
+      <text x="0" y="0" font-family="monospace" font-size="9" letter-spacing="1.6" fill="#818386">SIGNAL OBSERVATORY</text>
+      <text x="337" y="0" text-anchor="end" font-family="monospace" font-size="9" letter-spacing="1.2" fill="#818386">μ = 0 · σ = 1</text>
+      <g transform="translate(0 54)">
+        <path d="M0 70H350M0 130H350M0 190H350" stroke="#35383a"/>
+        <path d="M0 240H350" stroke="#7b7d80"/>
+        <path d="M0 239 C54 238 82 225 110 194 C142 158 153 62 175 42 C197 62 208 158 240 194 C268 225 296 238 350 239" fill="none" stroke="#f3efe6" stroke-width="3"/>
+        <path d="M317 230 C331 234 341 238 350 240 L350 240 L317 240Z" fill="#ff4d24" fill-opacity=".24" stroke="#ff4d24"/>
+        <path d="M317 32V240" stroke="#ff4d24" stroke-dasharray="5 5"/>
+        <text x="323" y="24" font-family="monospace" font-size="12" fill="#ff4d24">5σ</text>
+        <g fill="#77e1c2">
+          <circle cx="24" cy="88" r="3"/><circle cx="68" cy="178" r="2.5"/><circle cx="105" cy="106" r="3"/><circle cx="142" cy="208" r="2"/><circle cx="216" cy="86" r="3"/><circle cx="260" cy="196" r="2.5"/><circle cx="298" cy="117" r="3"/><circle cx="337" cy="74" r="2.5"/>
+        </g>
+      </g>
+      <line x1="0" y1="336" x2="350" y2="336" stroke="#404245"/>
+      <text x="0" y="382" font-family="Georgia,serif" font-size="38" fill="#f3efe6">5σ</text>
+      <text x="84" y="382" font-family="Georgia,serif" font-size="38" fill="#f3efe6">≠</text>
+      <text x="161" y="382" font-family="Georgia,serif" font-size="38" fill="#f3efe6">01</text>
+      <text x="0" y="403" font-family="monospace" font-size="8" letter-spacing="1.3" fill="#77797c">THRESHOLD</text>
+      <text x="84" y="403" font-family="monospace" font-size="8" letter-spacing="1.3" fill="#77797c">HYPE</text>
+      <text x="161" y="403" font-family="monospace" font-size="8" letter-spacing="1.3" fill="#77797c">METHOD</text>
+    </g>
+  </g>
+
+  <g transform="translate(30 624)">
+    <rect width="460" height="108" fill="#fbf8f1" stroke="#282b2e"/>
+    <rect x="460" width="460" height="108" fill="#fbf8f1" stroke="#282b2e"/>
+    <rect x="920" width="460" height="108" fill="#fbf8f1" stroke="#282b2e"/>
+    <text x="22" y="28" font-family="monospace" font-size="9" letter-spacing="1.5" fill="#77797c">FUENTES</text>
+    <text x="22" y="58" font-family="Georgia,serif" font-size="24" font-weight="700" fill="#101214">Primarias primero</text>
+    <text x="482" y="28" font-family="monospace" font-size="9" letter-spacing="1.5" fill="#77797c">LECTURA</text>
+    <text x="482" y="58" font-family="Georgia,serif" font-size="24" font-weight="700" fill="#101214">Hecho ≠ inferencia</text>
+    <text x="942" y="28" font-family="monospace" font-size="9" letter-spacing="1.5" fill="#77797c">APLICACIÓN</text>
+    <text x="942" y="58" font-family="Georgia,serif" font-size="24" font-weight="700" fill="#101214">Mecanismo → sistema</text>
+  </g>
+
+  <g transform="translate(30 786)">
+    <text x="0" y="0" font-family="monospace" font-size="10" letter-spacing="1.8" fill="#ff4d24">● MAPA DE CONOCIMIENTO</text>
+    <text x="0" y="56" font-family="Georgia,serif" font-size="48" font-weight="700" letter-spacing="-2" fill="#101214">No leas más. Lee en el orden correcto.</text>
+    <line x1="0" y1="94" x2="1380" y2="94" stroke="#2c2e31"/>
+    <text x="0" y="139" font-family="Georgia,serif" font-size="36" fill="#ff4d24">01</text>
+    <text x="92" y="139" font-family="Georgia,serif" font-size="28" font-weight="700" fill="#101214">Fundamentos</text>
+    <text x="420" y="137" font-family="Arial,sans-serif" font-size="13" fill="#6d6f73">Construye el vocabulario mínimo para distinguir aprendizaje, generación y promesas de AGI.</text>
+    <text x="1355" y="139" text-anchor="end" font-family="Georgia,serif" font-size="28" fill="#101214">→</text>
+  </g>
+</svg>

@@ -1,0 +1,215 @@
+<section class="vrpv vrpv-runtime" data-anim-fullscreen="on" data-anim-contrast="force" aria-label="Arquitectura de runtime para agente reactivo y proactivo de voz">
+  <style>
+    .vrpv-runtime,.vrpv-runtime *{box-sizing:border-box}
+    .vrpv-runtime{
+      --ink:#07191b;--muted:#546366;--line:rgba(7,25,27,.12);--green:#23863a;--green-soft:#eaf6e8;
+      --teal:#087f8f;--teal-soft:#e7f7f8;--amber:#d98a00;--amber-soft:#fff3da;--purple:#5252a6;--purple-soft:#eef0ff;
+      font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;color:var(--ink);
+      display:grid;margin:28px auto 34px;max-width:1420px;
+    }
+    .anim-shell-modal .vrpv-runtime{margin:0;max-width:none}
+    .vrpv-runtime__sheet{
+      position:relative;overflow:hidden;padding:30px;border:1px solid var(--line);border-radius:28px;
+      background:
+        radial-gradient(circle at 4% 10%,rgba(35,134,58,.09),transparent 25%),
+        radial-gradient(circle at 95% 88%,rgba(82,82,166,.09),transparent 26%),
+        linear-gradient(180deg,#fff,#fafcfc);
+      box-shadow:0 22px 54px rgba(18,35,39,.12);
+    }
+    .vrpv-runtime__head{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:23px}
+    .vrpv-runtime__eyebrow{font-size:.74rem;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--teal)}
+    .vrpv-runtime h2{margin:7px 0 0;font-size:clamp(1.9rem,3.2vw,3rem);line-height:.98;letter-spacing:-.045em}
+    .vrpv-runtime__ownership{
+      max-width:430px;padding:11px 13px;border:1px solid rgba(35,134,58,.17);border-radius:14px;
+      background:var(--green-soft);color:var(--green);font-size:.76rem;font-weight:850;line-height:1.35;text-align:right;
+    }
+    .vrpv-runtime__layout{position:relative;display:grid;grid-template-columns:1fr 1.15fr 1.15fr;gap:14px}
+    .vrpv-runtime__column{display:grid;gap:12px;align-content:start}
+    .vrpv-runtime__column-title{
+      padding:0 2px;font-size:.61rem;font-weight:950;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);
+    }
+    .vrpv-runtime__box{
+      position:relative;min-width:0;padding:16px;border:1px solid var(--line);border-radius:21px;background:rgba(255,255,255,.93);
+      box-shadow:0 12px 25px rgba(18,35,39,.06);display:grid;gap:11px;
+    }
+    .vrpv-runtime__box--channel{border-color:rgba(35,134,58,.27);background:linear-gradient(180deg,#fff,var(--green-soft))}
+    .vrpv-runtime__box--surface{border-color:rgba(8,127,143,.3);background:linear-gradient(180deg,#fff,var(--teal-soft));min-height:257px}
+    .vrpv-runtime__box--state{border-color:rgba(217,138,0,.27);background:linear-gradient(180deg,#fff,var(--amber-soft))}
+    .vrpv-runtime__box--cognitive{border-color:rgba(82,82,166,.28);background:linear-gradient(180deg,#fff,var(--purple-soft));min-height:184px}
+    .vrpv-runtime__box--workers{border-color:rgba(82,82,166,.2)}
+    .vrpv-runtime__box--delivery{border-color:rgba(217,138,0,.28);background:linear-gradient(180deg,#fff,var(--amber-soft))}
+    .vrpv-runtime__box-head{display:flex;align-items:center;gap:10px}
+    .vrpv-runtime__icon{
+      width:38px;height:38px;display:grid;place-items:center;flex:0 0 auto;border-radius:12px;background:#f1f4f3;
+      font-size:.85rem;font-weight:950;color:var(--ink);
+    }
+    .vrpv-runtime__box--channel .vrpv-runtime__icon{background:#fff;color:var(--green)}
+    .vrpv-runtime__box--surface .vrpv-runtime__icon{background:#fff;color:var(--teal)}
+    .vrpv-runtime__box--state .vrpv-runtime__icon,.vrpv-runtime__box--delivery .vrpv-runtime__icon{background:#fff;color:#9a6200}
+    .vrpv-runtime__box--cognitive .vrpv-runtime__icon{background:#fff;color:var(--purple)}
+    .vrpv-runtime__box-head h3{margin:0;font-size:.92rem;letter-spacing:-.02em}
+    .vrpv-runtime__box-head small{display:block;margin-top:3px;color:var(--muted);font-size:.61rem;font-weight:720;line-height:1.2}
+    .vrpv-runtime__pills{display:flex;flex-wrap:wrap;gap:6px}
+    .vrpv-runtime__pill{
+      padding:5px 7px;border:1px solid rgba(7,25,27,.09);border-radius:999px;background:#fff;color:var(--muted);
+      font-size:.55rem;font-weight:880;line-height:1;
+    }
+    .vrpv-runtime__list{display:grid;gap:7px}
+    .vrpv-runtime__item{
+      display:grid;grid-template-columns:9px 1fr;gap:7px;align-items:start;color:var(--muted);font-size:.65rem;line-height:1.32;font-weight:740;
+    }
+    .vrpv-runtime__item::before{content:"";width:7px;height:7px;margin-top:3px;border-radius:50%;background:var(--teal)}
+    .vrpv-runtime__box--cognitive .vrpv-runtime__item::before,.vrpv-runtime__box--workers .vrpv-runtime__item::before{background:var(--purple)}
+    .vrpv-runtime__box--delivery .vrpv-runtime__item::before{background:var(--amber)}
+    .vrpv-runtime__eventbus{
+      position:relative;padding:12px 13px;border-radius:16px;background:var(--ink);color:#fff;display:grid;gap:9px;overflow:hidden;
+    }
+    .vrpv-runtime__eventbus::after{
+      content:"";position:absolute;top:0;bottom:0;width:65px;left:-80px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);
+      transform:skewX(-15deg);animation:vrpv-runtime-scan 3.2s linear infinite;
+    }
+    .vrpv-runtime__eventbus strong{font-size:.69rem;letter-spacing:.04em;text-transform:uppercase;color:#9fe0b0}
+    .vrpv-runtime__events{display:flex;flex-wrap:wrap;gap:6px}
+    .vrpv-runtime__events code{padding:5px 6px;border-radius:7px;background:rgba(255,255,255,.1);font:700 .51rem/"SFMono-Regular",Consolas,monospace;color:#d9e8e6}
+    .vrpv-runtime__ids{
+      display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;
+    }
+    .vrpv-runtime__id{
+      padding:7px;border-radius:10px;background:#fff;border:1px solid rgba(217,138,0,.16);
+      font:750 .52rem/"SFMono-Regular",Consolas,monospace;color:#8a5a08;
+    }
+    .vrpv-runtime__workers{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+    .vrpv-runtime__worker{
+      min-height:67px;padding:9px 7px;border-radius:13px;background:var(--purple-soft);border:1px solid rgba(82,82,166,.16);
+      color:var(--purple);font-size:.58rem;line-height:1.2;font-weight:850;text-align:center;display:grid;place-items:center;
+    }
+    .vrpv-runtime__worker::before{
+      content:"";width:9px;height:9px;margin-bottom:4px;border-radius:50%;background:var(--purple);
+      box-shadow:0 0 0 5px rgba(82,82,166,.10);animation:vrpv-runtime-pulse 1.7s ease-in-out infinite;
+    }
+    .vrpv-runtime__worker:nth-child(2)::before{animation-delay:-.55s}.vrpv-runtime__worker:nth-child(3)::before{animation-delay:-1.1s}
+    .vrpv-runtime__gate{
+      display:grid;grid-template-columns:repeat(2,1fr);gap:7px;
+    }
+    .vrpv-runtime__gate span{
+      min-height:42px;padding:8px;border-radius:11px;background:#fff;border:1px solid rgba(217,138,0,.17);
+      display:grid;place-items:center;text-align:center;color:#8a5a08;font-size:.56rem;font-weight:850;
+    }
+    .vrpv-runtime__route{
+      position:absolute;z-index:4;pointer-events:none;height:3px;border-radius:999px;overflow:hidden;background:rgba(8,127,143,.12);
+    }
+    .vrpv-runtime__route::after{
+      content:"";position:absolute;inset:0;width:34%;background:linear-gradient(90deg,transparent,var(--teal),transparent);
+      animation:vrpv-runtime-route 2.4s linear infinite;
+    }
+    .vrpv-runtime__route--one{left:31.3%;top:124px;width:5.6%}
+    .vrpv-runtime__route--two{left:64%;top:124px;width:5.2%}
+    .vrpv-runtime__route--return{left:31.3%;top:503px;width:38%;background:rgba(217,138,0,.14)}
+    .vrpv-runtime__route--return::after{background:linear-gradient(90deg,transparent,var(--amber),transparent);animation-direction:reverse}
+    .vrpv-runtime__footer{
+      margin-top:17px;display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center;padding:14px 16px;border-radius:17px;
+      background:var(--ink);color:#fff;font-size:.74rem;font-weight:800;line-height:1.35;
+    }
+    .vrpv-runtime__footer b{color:#9fe0b0}
+    .vrpv-runtime__footer code{padding:6px 8px;border-radius:8px;background:rgba(255,255,255,.1);font:700 .58rem/"SFMono-Regular",Consolas,monospace;color:#d9e8e6}
+    @keyframes vrpv-runtime-scan{0%{left:-80px}100%{left:110%}}
+    @keyframes vrpv-runtime-pulse{0%,100%{transform:scale(.72);opacity:.45}50%{transform:scale(1);opacity:1}}
+    @keyframes vrpv-runtime-route{0%{transform:translateX(-120%)}100%{transform:translateX(320%)}}
+    @media (max-width:960px){
+      .vrpv-runtime__sheet{padding:21px 16px}
+      .vrpv-runtime__head{display:grid;gap:10px}.vrpv-runtime__ownership{text-align:left}
+      .vrpv-runtime__layout{grid-template-columns:1fr}
+      .vrpv-runtime__route{display:none}
+      .vrpv-runtime__box--surface,.vrpv-runtime__box--cognitive{min-height:0}
+      .vrpv-runtime__column-title{margin-top:5px}
+    }
+    @media (max-width:480px){
+      .vrpv-runtime__workers{grid-template-columns:1fr}
+      .vrpv-runtime__gate,.vrpv-runtime__ids{grid-template-columns:1fr}
+      .vrpv-runtime__footer{grid-template-columns:1fr}.vrpv-runtime__footer code{justify-self:start}
+    }
+    @media (prefers-reduced-motion:reduce){
+      .vrpv-runtime *{animation-duration:.001ms!important;animation-iteration-count:1!important}
+    }
+  </style>
+
+  <div class="vrpv-runtime__sheet">
+    <header class="vrpv-runtime__head">
+      <div>
+        <div class="vrpv-runtime__eyebrow">Arquitectura objetivo</div>
+        <h2>Una superficie habla. El resto publica estado.</h2>
+      </div>
+      <div class="vrpv-runtime__ownership">La Interaction Surface es el único owner del canal: timing, turn-taking, barge-in, backchannels y playback.</div>
+    </header>
+
+    <div class="vrpv-runtime__layout">
+      <span class="vrpv-runtime__route vrpv-runtime__route--one" aria-hidden="true"></span>
+      <span class="vrpv-runtime__route vrpv-runtime__route--two" aria-hidden="true"></span>
+      <span class="vrpv-runtime__route vrpv-runtime__route--return" aria-hidden="true"></span>
+
+      <div class="vrpv-runtime__column">
+        <div class="vrpv-runtime__column-title">Canal humano</div>
+        <article class="vrpv-runtime__box vrpv-runtime__box--channel">
+          <div class="vrpv-runtime__box-head"><span class="vrpv-runtime__icon">☎</span><div><h3>Telefonía / WebRTC</h3><small>Audio de entrada y salida</small></div></div>
+          <div class="vrpv-runtime__pills"><span class="vrpv-runtime__pill">Twilio</span><span class="vrpv-runtime__pill">SIP</span><span class="vrpv-runtime__pill">WebRTC</span></div>
+          <div class="vrpv-runtime__list">
+            <div class="vrpv-runtime__item">VAD y eventos de actividad</div>
+            <div class="vrpv-runtime__item">Frames de audio y marks de playback</div>
+          </div>
+        </article>
+
+        <article class="vrpv-runtime__box vrpv-runtime__box--delivery">
+          <div class="vrpv-runtime__box-head"><span class="vrpv-runtime__icon">G</span><div><h3>Delivery Policy</h3><small>ActivityGate y prioridades</small></div></div>
+          <div class="vrpv-runtime__gate"><span>quiet window</span><span>next turn</span><span>aggregate</span><span>interrupt</span></div>
+        </article>
+      </div>
+
+      <div class="vrpv-runtime__column">
+        <div class="vrpv-runtime__column-title">Interacción en tiempo real</div>
+        <article class="vrpv-runtime__box vrpv-runtime__box--surface">
+          <div class="vrpv-runtime__box-head"><span class="vrpv-runtime__icon">S</span><div><h3>S2S Interaction Surface</h3><small>Único componente autorizado para hablar</small></div></div>
+          <div class="vrpv-runtime__list">
+            <div class="vrpv-runtime__item">Comprensión acústica y turn-taking</div>
+            <div class="vrpv-runtime__item">Barge-in, cancel y truncado audible</div>
+            <div class="vrpv-runtime__item">Aceptaciones breves y backchannels</div>
+            <div class="vrpv-runtime__item">Reentrada proactiva segura</div>
+          </div>
+          <div class="vrpv-runtime__pills"><span class="vrpv-runtime__pill">response_id</span><span class="vrpv-runtime__pill">playback_id</span><span class="vrpv-runtime__pill">turn_id</span></div>
+        </article>
+
+        <div class="vrpv-runtime__eventbus">
+          <strong>Event bus durable</strong>
+          <div class="vrpv-runtime__events"><code>operation.accepted</code><code>operation.completed</code><code>delivery.ready</code><code>playback.marked</code></div>
+        </div>
+
+        <article class="vrpv-runtime__box vrpv-runtime__box--state">
+          <div class="vrpv-runtime__box-head"><span class="vrpv-runtime__icon">D</span><div><h3>State & Idempotency</h3><small>No vive en el historial del chat</small></div></div>
+          <div class="vrpv-runtime__ids"><span class="vrpv-runtime__id">session_id</span><span class="vrpv-runtime__id">operation_id</span><span class="vrpv-runtime__id">batch_id</span><span class="vrpv-runtime__id">delivery_id</span></div>
+        </article>
+      </div>
+
+      <div class="vrpv-runtime__column">
+        <div class="vrpv-runtime__column-title">Ejecución cognitiva</div>
+        <article class="vrpv-runtime__box vrpv-runtime__box--cognitive">
+          <div class="vrpv-runtime__box-head"><span class="vrpv-runtime__icon">C</span><div><h3>Cognitive Execution Plane</h3><small>Puede tardar y sobrevivir al turno</small></div></div>
+          <div class="vrpv-runtime__list">
+            <div class="vrpv-runtime__item">Razonamiento profundo y RAG</div>
+            <div class="vrpv-runtime__item">Planificación de tools y validación</div>
+            <div class="vrpv-runtime__item">Resumen de outcomes y compensaciones</div>
+          </div>
+        </article>
+
+        <article class="vrpv-runtime__box vrpv-runtime__box--workers">
+          <div class="vrpv-runtime__box-head"><span class="vrpv-runtime__icon">W</span><div><h3>Workers asíncronos</h3><small>Retries, concurrencia y side effects</small></div></div>
+          <div class="vrpv-runtime__workers"><span class="vrpv-runtime__worker">Search / RAG</span><span class="vrpv-runtime__worker">CRM / APIs</span><span class="vrpv-runtime__worker">Transactions</span></div>
+          <div class="vrpv-runtime__pills"><span class="vrpv-runtime__pill">intent_key</span><span class="vrpv-runtime__pill">DLQ</span><span class="vrpv-runtime__pill">retry policy</span></div>
+        </article>
+      </div>
+    </div>
+
+    <div class="vrpv-runtime__footer">
+      <span><b>Regla de ownership:</b> tools, workers y modelos pesados no reproducen audio; emiten resultados durables que la superficie convierte en conversación.</span>
+      <code>result → DeliveryEnvelope → ActivityGate → audio</code>
+    </div>
+  </div>
+</section>

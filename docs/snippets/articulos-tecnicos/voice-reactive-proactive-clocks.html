@@ -1,0 +1,207 @@
+<section class="vrpv vrpv-clock" data-anim-fullscreen="on" data-anim-contrast="force" aria-label="Cuatro relojes independientes en un agente de voz">
+  <style>
+    .vrpv-clock,.vrpv-clock *{box-sizing:border-box}
+    .vrpv-clock{
+      --ink:#07191b;--muted:#546366;--line:rgba(7,25,27,.12);--green:#23863a;--green-soft:#eaf6e8;
+      --teal:#087f8f;--teal-soft:#e7f7f8;--amber:#d98a00;--amber-soft:#fff3da;--red:#c73a31;--red-soft:#fff0ed;
+      font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;color:var(--ink);
+      display:grid;margin:28px auto 34px;max-width:1380px;
+    }
+    .anim-shell-modal .vrpv-clock{margin:0;max-width:none}
+    .vrpv-clock__sheet{
+      position:relative;overflow:hidden;padding:30px;border:1px solid var(--line);border-radius:28px;
+      background:
+        radial-gradient(circle at 90% 8%,rgba(199,58,49,.08),transparent 24%),
+        radial-gradient(circle at 8% 92%,rgba(8,127,143,.09),transparent 25%),
+        linear-gradient(180deg,#fff,#fafcfc);
+      box-shadow:0 22px 54px rgba(18,35,39,.12);
+    }
+    .vrpv-clock__head{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end;margin-bottom:24px}
+    .vrpv-clock__eyebrow{font-size:.74rem;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--red)}
+    .vrpv-clock h2{margin:7px 0 0;font-size:clamp(1.9rem,3.2vw,3rem);line-height:.98;letter-spacing:-.045em}
+    .vrpv-clock__head-note{
+      max-width:410px;padding:11px 13px;border:1px solid rgba(199,58,49,.17);border-radius:14px;
+      background:var(--red-soft);color:#8e2d27;font-size:.78rem;font-weight:800;line-height:1.35;
+    }
+    .vrpv-clock__timeline-head{
+      display:grid;grid-template-columns:190px 1fr;gap:14px;align-items:end;margin:0 0 8px;
+      color:var(--muted);font-size:.63rem;font-weight:850;text-transform:uppercase;letter-spacing:.08em;
+    }
+    .vrpv-clock__ticks{display:grid;grid-template-columns:repeat(6,1fr);padding:0 8px}
+    .vrpv-clock__ticks span{text-align:center}
+    .vrpv-clock__lanes{position:relative;display:grid;gap:10px}
+    .vrpv-clock__lanes::after{
+      content:"";position:absolute;z-index:6;top:-10px;bottom:-9px;left:58.5%;width:2px;background:var(--red);
+      box-shadow:0 0 0 5px rgba(199,58,49,.08);animation:vrpv-clock-cursor 6s ease-in-out infinite;
+    }
+    .vrpv-clock__lane{
+      display:grid;grid-template-columns:190px 1fr;gap:14px;align-items:center;padding:11px 12px;
+      border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.88);
+      box-shadow:0 10px 22px rgba(18,35,39,.055);
+    }
+    .vrpv-clock__label{display:flex;align-items:center;gap:10px;min-width:0}
+    .vrpv-clock__icon{
+      width:36px;height:36px;display:grid;place-items:center;flex:0 0 auto;border-radius:12px;
+      background:#f1f4f3;color:var(--ink);font-size:.9rem;font-weight:950;
+    }
+    .vrpv-clock__lane--user .vrpv-clock__icon{background:var(--green-soft);color:var(--green)}
+    .vrpv-clock__lane--model .vrpv-clock__icon{background:var(--teal-soft);color:var(--teal)}
+    .vrpv-clock__lane--playback .vrpv-clock__icon{background:var(--amber-soft);color:#9a6200}
+    .vrpv-clock__lane--operation .vrpv-clock__icon{background:#eef0ff;color:#5252a6}
+    .vrpv-clock__label strong{display:block;font-size:.79rem;line-height:1.1}
+    .vrpv-clock__label small{display:block;margin-top:4px;color:var(--muted);font-size:.62rem;font-weight:700;line-height:1.2}
+    .vrpv-clock__track{
+      position:relative;height:48px;overflow:hidden;border-radius:13px;border:1px solid rgba(7,25,27,.075);
+      background:
+        repeating-linear-gradient(90deg,transparent 0 calc(16.66% - 1px),rgba(7,25,27,.065) calc(16.66% - 1px) 16.66%),
+        #f7faf8;
+    }
+    .vrpv-clock__segment{
+      position:absolute;top:9px;height:28px;border-radius:9px;display:flex;align-items:center;justify-content:center;
+      padding:0 8px;font-size:.59rem;font-weight:900;white-space:nowrap;overflow:hidden;
+    }
+    .vrpv-clock__segment--speech{left:2%;width:31%;background:var(--green-soft);color:var(--green);border:1px solid rgba(35,134,58,.2)}
+    .vrpv-clock__segment--speech2{left:63%;width:25%;background:var(--green-soft);color:var(--green);border:1px solid rgba(35,134,58,.2)}
+    .vrpv-clock__segment--gen{left:35%;width:30%;background:var(--teal-soft);color:var(--teal);border:1px solid rgba(8,127,143,.2)}
+    .vrpv-clock__segment--cancel{left:58%;width:7%;background:var(--red-soft);color:var(--red);border:1px solid rgba(199,58,49,.22);z-index:2}
+    .vrpv-clock__segment--queue{left:43%;width:24%;background:var(--amber-soft);color:#9a6200;border:1px solid rgba(217,138,0,.22)}
+    .vrpv-clock__segment--clear{left:58%;width:9%;background:var(--red-soft);color:var(--red);border:1px solid rgba(199,58,49,.22);z-index:2}
+    .vrpv-clock__segment--op{left:24%;width:64%;background:#eef0ff;color:#5252a6;border:1px solid rgba(82,82,166,.2)}
+    .vrpv-clock__segment--op::after{
+      content:"";position:absolute;inset:0 auto 0 0;width:100%;background:linear-gradient(90deg,rgba(82,82,166,.18),rgba(82,82,166,.04));
+      transform-origin:left;animation:vrpv-clock-progress 6s ease-in-out infinite;
+    }
+    .vrpv-clock__segment span{position:relative;z-index:1}
+    .vrpv-clock__event{
+      position:absolute;z-index:8;left:calc(58.5% - 43px);top:-37px;width:88px;padding:6px 7px;border-radius:10px;
+      background:var(--red);color:#fff;text-align:center;font-size:.57rem;font-weight:950;line-height:1.1;
+      box-shadow:0 9px 18px rgba(199,58,49,.25);animation:vrpv-clock-event 6s ease-in-out infinite;
+    }
+    .vrpv-clock__event::after{
+      content:"";position:absolute;left:50%;top:100%;transform:translateX(-50%);
+      border:6px solid transparent;border-top-color:var(--red);
+    }
+    .vrpv-clock__summary{
+      margin-top:18px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;
+    }
+    .vrpv-clock__card{
+      min-height:112px;padding:15px;border-radius:18px;border:1px solid var(--line);background:#fff;
+      display:grid;align-content:start;gap:8px;
+    }
+    .vrpv-clock__card strong{font-size:.85rem;letter-spacing:-.015em}
+    .vrpv-clock__card p{margin:0;color:var(--muted);font-size:.7rem;line-height:1.4;font-weight:700}
+    .vrpv-clock__card code{justify-self:start;padding:5px 7px;border-radius:8px;background:#f1f4f3;color:var(--ink);font:750 .58rem/"SFMono-Regular",Consolas,monospace}
+    .vrpv-clock__card--cancel{border-color:rgba(199,58,49,.22);background:linear-gradient(180deg,#fff,var(--red-soft))}
+    .vrpv-clock__card--persist{border-color:rgba(82,82,166,.22);background:linear-gradient(180deg,#fff,#f5f5ff)}
+    .vrpv-clock__card--deliver{border-color:rgba(217,138,0,.22);background:linear-gradient(180deg,#fff,var(--amber-soft))}
+    .vrpv-clock__footer{
+      margin-top:13px;padding:13px 15px;border-radius:15px;background:var(--ink);color:#fff;
+      display:flex;align-items:center;justify-content:space-between;gap:18px;
+      font-size:.75rem;font-weight:800;
+    }
+    .vrpv-clock__footer b{color:#9fe0b0}
+    .vrpv-clock__footer code{font:700 .63rem/"SFMono-Regular",Consolas,monospace;color:#d9e8e6}
+    @keyframes vrpv-clock-cursor{
+      0%,42%{left:34%}56%,100%{left:58.5%}
+    }
+    @keyframes vrpv-clock-event{
+      0%,42%{opacity:0;transform:translateY(-7px)}50%,88%{opacity:1;transform:translateY(0)}100%{opacity:0}
+    }
+    @keyframes vrpv-clock-progress{0%{transform:scaleX(.06)}88%,100%{transform:scaleX(1)}}
+    @media (max-width:820px){
+      .vrpv-clock__sheet{padding:21px 15px}
+      .vrpv-clock__head{grid-template-columns:1fr;gap:11px}
+      .vrpv-clock__timeline-head{grid-template-columns:1fr}.vrpv-clock__timeline-head>span{display:none}
+      .vrpv-clock__lane{grid-template-columns:1fr;gap:8px}
+      .vrpv-clock__track{height:55px}
+      .vrpv-clock__lanes::after{top:59px}
+      .vrpv-clock__event{top:22px}
+      .vrpv-clock__summary{grid-template-columns:1fr}
+      .vrpv-clock__card{min-height:0}
+      .vrpv-clock__footer{display:grid}
+    }
+    @media (max-width:480px){
+      .vrpv-clock__ticks{font-size:.52rem}
+      .vrpv-clock__segment{font-size:.49rem;padding:0 4px}
+      .vrpv-clock__segment--cancel,.vrpv-clock__segment--clear{font-size:0}
+      .vrpv-clock__segment--cancel::before{content:"×";font-size:.7rem}
+      .vrpv-clock__segment--clear::before{content:"clear";font-size:.46rem}
+    }
+    @media (prefers-reduced-motion:reduce){
+      .vrpv-clock *{animation-duration:.001ms!important;animation-iteration-count:1!important}
+    }
+  </style>
+
+  <div class="vrpv-clock__sheet">
+    <header class="vrpv-clock__head">
+      <div>
+        <div class="vrpv-clock__eyebrow">Concurrencia real</div>
+        <h2>Una llamada, cuatro relojes.</h2>
+      </div>
+      <div class="vrpv-clock__head-note">El barge-in ocurre en el canal acústico. No debe propagarse como una cancelación indiscriminada a todo el sistema.</div>
+    </header>
+
+    <div class="vrpv-clock__timeline-head">
+      <span>Máquina de estado</span>
+      <div class="vrpv-clock__ticks"><span>0 s</span><span>1 s</span><span>2 s</span><span>3 s</span><span>4 s</span><span>5 s</span></div>
+    </div>
+
+    <div class="vrpv-clock__lanes">
+      <div class="vrpv-clock__event">BARGE-IN<br>speech_started</div>
+
+      <div class="vrpv-clock__lane vrpv-clock__lane--user">
+        <div class="vrpv-clock__label"><span class="vrpv-clock__icon">U</span><div><strong>Actividad del usuario</strong><small>VAD, turn detection y quiet window</small></div></div>
+        <div class="vrpv-clock__track">
+          <span class="vrpv-clock__segment vrpv-clock__segment--speech">petición</span>
+          <span class="vrpv-clock__segment vrpv-clock__segment--speech2">nuevo turno</span>
+        </div>
+      </div>
+
+      <div class="vrpv-clock__lane vrpv-clock__lane--model">
+        <div class="vrpv-clock__label"><span class="vrpv-clock__icon">M</span><div><strong>Generación del modelo</strong><small>Respuesta lógica, tokens o audio</small></div></div>
+        <div class="vrpv-clock__track">
+          <span class="vrpv-clock__segment vrpv-clock__segment--gen">generating</span>
+          <span class="vrpv-clock__segment vrpv-clock__segment--cancel">cancel</span>
+        </div>
+      </div>
+
+      <div class="vrpv-clock__lane vrpv-clock__lane--playback">
+        <div class="vrpv-clock__label"><span class="vrpv-clock__icon">▶</span><div><strong>Playback</strong><small>Queued, sent, playing, played o cleared</small></div></div>
+        <div class="vrpv-clock__track">
+          <span class="vrpv-clock__segment vrpv-clock__segment--queue">audio buffer</span>
+          <span class="vrpv-clock__segment vrpv-clock__segment--clear">clear</span>
+        </div>
+      </div>
+
+      <div class="vrpv-clock__lane vrpv-clock__lane--operation">
+        <div class="vrpv-clock__label"><span class="vrpv-clock__icon">↻</span><div><strong>Operación durable</strong><small>Tool, retry, side effect e idempotencia</small></div></div>
+        <div class="vrpv-clock__track">
+          <span class="vrpv-clock__segment vrpv-clock__segment--op"><span>accepted → running → succeeded</span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="vrpv-clock__summary">
+      <article class="vrpv-clock__card vrpv-clock__card--cancel">
+        <strong>Se cancela</strong>
+        <p>La respuesta activa y el audio pendiente que el usuario todavía no ha escuchado.</p>
+        <code>response_id · playback_id</code>
+      </article>
+      <article class="vrpv-clock__card vrpv-clock__card--persist">
+        <strong>Sobrevive</strong>
+        <p>La operación ya aceptada, salvo que una intención explícita o la política de negocio la invalide.</p>
+        <code>operation_id · intent_key</code>
+      </article>
+      <article class="vrpv-clock__card vrpv-clock__card--deliver">
+        <strong>Se resincroniza</strong>
+        <p>El resultado queda pendiente hasta una quiet window o se adjunta al siguiente turno.</p>
+        <code>delivery_id · batch_id</code>
+      </article>
+    </div>
+
+    <div class="vrpv-clock__footer">
+      <span><b>Separar estados</b> evita que “el usuario habló” signifique también “cancela el side effect”.</span>
+      <code>channel ≠ response ≠ playback ≠ operation</code>
+    </div>
+  </div>
+</section>

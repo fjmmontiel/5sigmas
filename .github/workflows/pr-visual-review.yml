@@ -1,0 +1,76 @@
+name: PR visual review
+
+on:
+  pull_request:
+    paths:
+      - 'docs/**'
+      - 'overrides/**'
+      - 'hooks/**'
+      - 'scripts/**'
+      - 'mkdocs.yml'
+      - 'requirements.txt'
+      - '.github/workflows/pr-visual-review.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; else pip install mkdocs mkdocs-material; fi
+
+      - name: Build site strictly
+        run: mkdocs build --clean --strict
+
+      - name: Audit video indexing metadata
+        run: python scripts/audit_video_indexing.py
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Serve built site
+        run: |
+          python -m http.server 8000 --directory site > /tmp/5sigmas-preview.log 2>&1 &
+          echo $! > /tmp/5sigmas-preview.pid
+          for attempt in {1..30}; do
+            curl --fail --silent http://127.0.0.1:8000/ > /dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/5sigmas-preview.log
+          exit 1
+
+      - name: Capture responsive screenshots
+        run: node scripts/capture_site_screenshots.mjs
+
+      - name: Capture and validate every progressive voice microlab
+        run: node scripts/capture_voice_report_animations.mjs
+
+      - name: Validate direct series and article navigation
+        run: node scripts/validate_direct_reader_navigation.mjs
+
+      - name: Upload visual review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: 5sigmas-visual-review
+          path: artifacts/visual-review/*
+          if-no-files-found: error
+          retention-days: 14

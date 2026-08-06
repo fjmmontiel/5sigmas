@@ -1,23 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 120">
-  <defs>
-    <linearGradient id="grad5sigma" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#26A69A" />
-      <stop offset="40%" stop-color="#324AB2" />
-      <stop offset="75%" stop-color="#FFB343" />
-      <stop offset="100%" stop-color="#0F172A" />
-    </linearGradient>
-  </defs>
-
-  <text
-    x="50%"
-    y="50%"
-    text-anchor="middle"
-    dominant-baseline="central"
-    font-family="Inter, sans-serif, Arial"
-    font-size="68"
-    letter-spacing="-4"
-    fill="url(#grad5sigma)">
-    <tspan font-weight="800">5</tspan>
-    <tspan dx="-22" font-weight="800">σ</tspan>
-  </text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 64" role="img" aria-labelledby="title description">
+  <title id="title">5sigmas</title>
+  <desc id="description">Monograma entrelazado 5 sigma en azul y naranja</desc>
+  <text x="6" y="47" fill="#3154D8" font-family="Inter, Arial, Helvetica, sans-serif" font-size="48" font-weight="800" letter-spacing="-4" aria-hidden="true">5</text>
+  <text x="27" y="46" fill="#F06A2A" font-family="Inter, Arial, Helvetica, sans-serif" font-size="46" font-weight="800" letter-spacing="-3" aria-hidden="true">σ</text>
 </svg>

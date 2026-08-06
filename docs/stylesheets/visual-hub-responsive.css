@@ -1,0 +1,101 @@
+/* Responsive density adjustments for the unified visual hub. */
+
+@media (min-width: 961px) {
+  .s5-visual-hub {
+    --s5-hub-section: 1.2rem;
+  }
+
+  .s5-visual-hub__intro {
+    padding-top: .8rem !important;
+    padding-bottom: 1rem !important;
+  }
+
+  .s5-watch {
+    padding-top: .8rem !important;
+  }
+
+  .s5-section-head--with-copy {
+    margin-bottom: .6rem !important;
+  }
+
+  #rutas {
+    padding-bottom: .8rem !important;
+  }
+
+  #rutas .s5-route-grid {
+    border-bottom: 0;
+  }
+
+  #animaciones {
+    padding-top: .8rem !important;
+  }
+}
+
+@media (max-width: 800px) {
+  .s5-visual-hub {
+    --s5-hub-section: 1.05rem;
+  }
+
+  .s5-visual-hub__intro {
+    padding-top: .55rem !important;
+    padding-bottom: .65rem !important;
+  }
+
+  .s5-visual-hub__intro > .s5-eyebrow {
+    margin-bottom: .35rem;
+  }
+
+  .s5-visual-hub__intro > h1 {
+    margin-bottom: .45rem !important;
+    font-size: 2.18rem !important;
+    line-height: .91 !important;
+  }
+
+  .s5-visual-hub__intro > p {
+    font-size: .7rem !important;
+    line-height: 1.4 !important;
+  }
+
+  .s5-visual-hub__jump {
+    margin-top: .52rem;
+  }
+
+  .s5-visual-hub__jump a {
+    min-height: 36px;
+    font-size: .47rem;
+  }
+
+  .s5-watch {
+    padding-top: .5rem !important;
+  }
+
+  .s5-watch > .s5-section-head--with-copy {
+    gap: .15rem;
+    margin-bottom: .38rem !important;
+  }
+
+  .s5-watch > .s5-section-head--with-copy h2 {
+    font-size: 1.42rem !important;
+  }
+
+  .s5-watch > .s5-section-head--with-copy > p {
+    font-size: .57rem;
+    line-height: 1.35;
+  }
+
+  .s5-watch-feature {
+    padding-top: .15rem;
+  }
+
+  #rutas {
+    padding-bottom: .7rem !important;
+  }
+
+  #rutas .s5-route-grid {
+    border-bottom: 0;
+  }
+
+  #animaciones {
+    padding-top: .7rem !important;
+  }
+}
