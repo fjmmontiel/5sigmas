@@ -107,8 +107,11 @@ body:has(.s5-reader-shell) .sm-wrap .sm-dot {
   }
 
   body:has(.s5-reader-shell) .md-tabs__list {
+    position: relative !important;
+    top: 18px !important;
     display: flex !important;
     align-items: center !important;
+    height: 38px !important;
     overflow: visible !important;
     visibility: visible !important;
     opacity: 1 !important;
@@ -118,7 +121,7 @@ body:has(.s5-reader-shell) .sm-wrap .sm-dot {
   body:has(.s5-reader-shell) .md-tabs__item {
     display: flex !important;
     align-items: center !important;
-    height: 100% !important;
+    height: 38px !important;
     padding-right: .95rem !important;
     visibility: visible !important;
     opacity: 1 !important;
@@ -129,9 +132,9 @@ body:has(.s5-reader-shell) .sm-wrap .sm-dot {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    height: 100% !important;
+    height: 38px !important;
     margin: 0 !important;
-    padding: 1px 0 0 !important;
+    padding: 0 !important;
     visibility: visible !important;
     color: var(--s5-muted) !important;
     font-size: .64rem !important;
