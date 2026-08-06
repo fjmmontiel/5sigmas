@@ -60,6 +60,9 @@ jobs:
       - name: Capture responsive screenshots
         run: node scripts/capture_site_screenshots.mjs
 
+      - name: Validate reader continuation outside animations
+        run: node scripts/validate_reader_end_placement.mjs
+
       - name: Capture and validate every progressive voice microlab
         run: node scripts/capture_voice_report_animations.mjs
 
