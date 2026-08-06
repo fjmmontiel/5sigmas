@@ -1,46 +1,45 @@
 /*
  * 5sigmas reader v3
  *
- * A visual-first editorial layout inspired by the calm reading rhythm of
- * explanatory lessons: contextual navigation on the left, readable prose,
- * and a wider breakout canvas for diagrams, video and interactive microlabs.
+ * One contextual path, one readable prose measure and one wide visual canvas.
+ * The complete catalogue remains available on demand instead of competing with
+ * every paragraph, diagram and interaction on the page.
  */
 
 body:has(.s5-reader-shell) {
-  --s5-reader-frame: min(1640px, calc(100vw - 48px));
-  --s5-reader-rail-width: 204px;
-  --s5-reader-gap: clamp(34px, 2.6vw, 46px);
+  --s5-reader-frame: min(1660px, calc(100vw - 48px));
+  --s5-reader-rail-width: 216px;
+  --s5-reader-gap: clamp(34px, 2.35vw, 42px);
   --s5-reader-canvas: min(
     1280px,
     calc(var(--s5-reader-frame) - var(--s5-reader-rail-width) - var(--s5-reader-gap))
   );
-  --s5-reader-prose: 760px;
-  --s5-reader-lead: 860px;
+  --s5-reader-prose: 70ch;
+  --s5-reader-lead: 76ch;
   --s5-reader-visual: 1160px;
+  --s5-reader-header-height: 56px;
 }
 
-/* The reading page already exposes its context. Repeating tags and a
-   breadcrumb trail before the title only delays the first useful idea. */
 body:has(.s5-reader-shell) .md-path,
 body:has(.s5-reader-shell) .md-tags {
   display: none !important;
 }
 
 body:has(.s5-reader-shell) .md-content__inner {
-  padding-top: clamp(2rem, 3vw, 3rem);
+  padding-top: clamp(1.65rem, 2.6vw, 2.35rem);
 }
 
 .s5-reader-context {
   display: flex;
   flex-wrap: wrap;
-  gap: .38rem;
+  gap: .34rem;
   align-items: center;
   max-width: var(--s5-reader-lead);
-  margin: 0 0 .9rem;
+  margin: 0 0 .72rem;
   color: var(--s5-muted);
-  font-size: .58rem;
-  font-weight: 700;
-  letter-spacing: .055em;
+  font-size: .54rem;
+  font-weight: 720;
+  letter-spacing: .06em;
   line-height: 1.35;
   text-transform: uppercase;
 }
@@ -64,34 +63,35 @@ body:has(.s5-reader-shell) .md-content__inner {
 .s5-reader-context strong {
   overflow: hidden;
   color: var(--s5-text);
-  font-weight: 760;
+  font-weight: 780;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 body:has(.s5-reader-shell) .md-typeset > h1 {
   display: block !important;
-  max-width: 14.5ch !important;
-  margin: 0 0 1.05rem !important;
-  font-size: clamp(3.55rem, 5vw, 5.15rem) !important;
-  line-height: .94 !important;
-  letter-spacing: -.068em !important;
+  max-width: 15ch !important;
+  margin: 0 0 .82rem !important;
+  font-size: clamp(3.15rem, 4.4vw, 4.65rem) !important;
+  line-height: .95 !important;
+  letter-spacing: -.064em !important;
+  overflow-wrap: normal;
   text-wrap: balance;
 }
 
-/* Previous/next remains available, but it no longer looks like a dashboard. */
 .s5-reader-shell {
   width: 100%;
-  max-width: var(--s5-reader-canvas);
-  margin: 0 0 1.15rem !important;
+  max-width: var(--s5-reader-visual);
+  margin: 0 0 .65rem !important;
 }
 
 .s5-reader-topbar {
   position: relative;
   top: auto;
   z-index: 5;
-  grid-template-columns: minmax(0, 1fr) minmax(220px, .9fr) minmax(0, 1fr);
-  min-height: 46px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(210px, .76fr) minmax(0, 1fr);
+  min-height: 44px;
   border: 0;
   border-top: 1px solid var(--s5-line-strong);
   border-bottom: 1px solid var(--s5-line);
@@ -99,9 +99,14 @@ body:has(.s5-reader-shell) .md-typeset > h1 {
   box-shadow: none;
 }
 
+.s5-reader-arrow,
+.s5-reader-course {
+  min-height: 44px;
+}
+
 .s5-reader-arrow {
-  gap: .5rem;
-  padding: .52rem .25rem;
+  gap: .42rem;
+  padding: .34rem .18rem;
 }
 
 .s5-reader-arrow--prev {
@@ -114,13 +119,13 @@ body:has(.s5-reader-shell) .md-typeset > h1 {
 
 .s5-reader-arrow span,
 .s5-reader-course > span {
-  font-size: .46rem;
-  letter-spacing: .07em;
+  font-size: .42rem;
+  letter-spacing: .075em;
 }
 
 .s5-reader-arrow strong {
-  font-size: .59rem;
-  font-weight: 720;
+  font-size: .55rem;
+  font-weight: 740;
 }
 
 .s5-reader-arrow small {
@@ -128,14 +133,19 @@ body:has(.s5-reader-shell) .md-typeset > h1 {
 }
 
 .s5-reader-course {
-  padding: .48rem .75rem .62rem;
+  gap: .04rem;
+  padding: .31rem .65rem .46rem;
   border-right: 1px solid var(--s5-line);
   border-left: 1px solid var(--s5-line);
 }
 
+.s5-reader-course > span {
+  display: none;
+}
+
 .s5-reader-course strong {
-  font-size: .61rem;
-  font-weight: 740;
+  font-size: .56rem;
+  font-weight: 760;
 }
 
 .s5-reader-course i {
@@ -146,12 +156,11 @@ body:has(.s5-reader-shell) .md-typeset > h1 {
   display: none !important;
 }
 
-/* Metadata reads as supporting information, not as another full-width card. */
-.s5-reader-shell + .series-meta {
+body:has(.s5-reader-shell) .s5-reader-shell + .sm-wrap {
   display: flex;
   width: fit-content;
   max-width: 100%;
-  margin: .8rem 0 2.1rem;
+  margin: .7rem 0 2.15rem;
   padding: 0;
   border: 0;
   border-radius: 0;
@@ -159,34 +168,49 @@ body:has(.s5-reader-shell) .md-typeset > h1 {
   box-shadow: none;
 }
 
-.s5-reader-shell + .series-meta:hover {
+body:has(.s5-reader-shell) .s5-reader-shell + .sm-wrap:hover {
   box-shadow: none;
 }
 
-.s5-reader-shell + .series-meta .series-meta-head {
-  gap: .35rem;
+body:has(.s5-reader-shell) .s5-reader-shell + .sm-wrap .sm-chips {
+  gap: .62rem;
 }
 
-.s5-reader-shell + .series-meta .series-meta-chip {
-  gap: .3rem;
-  padding: .26rem .48rem;
-  border-color: var(--s5-line);
+body:has(.s5-reader-shell) .s5-reader-shell + .sm-wrap .sm-chip {
+  position: relative;
+  gap: .28rem;
+  padding: .15rem 0;
+  border: 0;
+  border-radius: 0;
   background: transparent;
-  font-size: .54rem;
+  color: var(--s5-muted);
+  font-size: .52rem;
 }
 
-.s5-reader-shell + .series-meta .series-meta-chip .chip-dot {
+body:has(.s5-reader-shell) .s5-reader-shell + .sm-wrap .sm-chip + .sm-chip::before {
+  position: absolute;
+  top: 50%;
+  left: -.36rem;
+  color: var(--s5-line-strong);
+  content: '·';
+  transform: translateY(-52%);
+}
+
+body:has(.s5-reader-shell) .s5-reader-shell + .sm-wrap .sm-chip--time {
+  color: var(--s5-text);
+}
+
+body:has(.s5-reader-shell) .s5-reader-shell + .sm-wrap .sm-chip--count,
+body:has(.s5-reader-shell) .s5-reader-shell + .sm-wrap .series-meta-row {
+  display: none;
+}
+
+body:has(.s5-reader-shell) .s5-reader-shell + .sm-wrap .sm-dot {
   width: 6px;
   height: 6px;
   box-shadow: none;
 }
 
-.s5-reader-shell + .series-meta .series-meta-row {
-  display: none;
-}
-
-/* Reading rhythm. The body stays inside the 50–75 character range while
-   visual explanations can break out to the full article canvas. */
 body:has(.s5-reader-shell) .md-main__inner:not(:has(.s5-landing)) .md-typeset > :is(
   p,
   ul,
@@ -200,18 +224,20 @@ body:has(.s5-reader-shell) .md-main__inner:not(:has(.s5-landing)) .md-typeset > 
 
 body:has(.s5-reader-shell) .md-typeset > p,
 body:has(.s5-reader-shell) .md-typeset > li {
-  font-size: 1rem;
-  line-height: 1.76;
+  font-size: .95rem;
+  line-height: 1.72;
+  text-wrap: pretty;
 }
 
 body:has(.s5-reader-shell) .md-typeset > blockquote:first-of-type {
   max-width: var(--s5-reader-lead) !important;
-  margin: .25rem 0 2.5rem;
-  padding: .1rem 0 .1rem 1rem;
+  margin: .3rem 0 2.75rem;
+  padding: .08rem 0 .08rem .9rem;
   border-left: 2px solid var(--s5-text);
   color: var(--s5-muted);
-  font-size: 1.02rem;
-  line-height: 1.68;
+  font-size: .91rem;
+  line-height: 1.62;
+  text-wrap: pretty;
 }
 
 body:has(.s5-reader-shell) .md-typeset > blockquote:first-of-type strong {
@@ -219,24 +245,25 @@ body:has(.s5-reader-shell) .md-typeset > blockquote:first-of-type strong {
 }
 
 body:has(.s5-reader-shell) .md-typeset > h2 {
-  max-width: 21ch;
-  margin-top: clamp(4.8rem, 7vw, 6.6rem) !important;
-  margin-bottom: 1.35rem !important;
+  max-width: 22ch;
+  margin-top: clamp(4.2rem, 6vw, 5.5rem) !important;
+  margin-bottom: 1.15rem !important;
   padding-top: 0 !important;
   border-top: 0 !important;
-  font-size: clamp(2rem, 3.2vw, 2.65rem) !important;
-  line-height: 1.04 !important;
-  letter-spacing: -.05em !important;
+  font-size: clamp(1.95rem, 2.75vw, 2.45rem) !important;
+  line-height: 1.05 !important;
+  letter-spacing: -.048em !important;
   text-wrap: balance;
 }
 
 body:has(.s5-reader-shell) .md-typeset > h3 {
-  max-width: 28ch;
-  margin-top: 3.2rem !important;
-  margin-bottom: .9rem !important;
-  font-size: clamp(1.3rem, 2vw, 1.6rem) !important;
-  line-height: 1.12 !important;
-  letter-spacing: -.035em !important;
+  max-width: 30ch;
+  margin-top: 2.85rem !important;
+  margin-bottom: .8rem !important;
+  font-size: clamp(1.25rem, 1.8vw, 1.5rem) !important;
+  line-height: 1.13 !important;
+  letter-spacing: -.034em !important;
+  text-wrap: balance;
 }
 
 body:has(.s5-reader-shell) .md-typeset > :is(pre, table, .highlight) {
@@ -245,41 +272,82 @@ body:has(.s5-reader-shell) .md-typeset > :is(pre, table, .highlight) {
 
 body:has(.s5-reader-shell) .md-typeset > hr {
   max-width: var(--s5-reader-prose);
-  margin: 4rem 0;
+  margin: 3.6rem 0;
 }
 
 body:has(.s5-reader-shell) .s5-video-embed {
-  width: min(100%, 1080px);
+  width: min(100%, var(--s5-reader-visual));
   max-width: none;
-  margin-top: 2rem;
-  margin-bottom: 3.5rem;
+  margin-top: 1.7rem;
+  margin-bottom: 3.6rem;
 }
 
 body:has(.s5-reader-shell) .anim-brand-shell:has(.anim-brand-shell__viewport > .s5v) {
-  margin-top: 2rem;
-  margin-bottom: clamp(3.5rem, 6vw, 5.5rem);
+  width: min(1080px, 100%);
+  margin-top: 1.7rem;
+  margin-bottom: clamp(3.6rem, 5.4vw, 4.8rem);
 }
 
-/* Contextual desktop library. The current collection stays visible, while the
-   complete catalogue remains one click away in the existing library dialog. */
+body:has(.s5-reader-shell) .anim-brand-shell:has(.anim-brand-shell__viewport > .s5v--wide) {
+  width: min(var(--s5-reader-visual), 100%);
+}
+
 .s5-reader-direct__browse {
   display: none;
 }
 
 @media (min-width: 1320px) {
-  body:has(.s5-reader-shell) {
-    --s5-reader-frame: min(1640px, calc(100vw - 48px));
-    --s5-reader-rail-width: 204px;
-    --s5-reader-gap: clamp(34px, 2.6vw, 46px);
+  body:has(.s5-reader-shell) .md-header {
+    min-height: var(--s5-reader-header-height);
   }
 
-  body:has(.s5-reader-shell) :is(.md-header__inner, .md-tabs__inner) {
+  body:has(.s5-reader-shell) .md-header__inner {
     width: var(--s5-reader-frame);
     max-width: none;
+    min-height: var(--s5-reader-header-height);
+    height: var(--s5-reader-header-height);
+  }
+
+  body:has(.s5-reader-shell) .md-tabs {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    z-index: 3;
+    width: var(--s5-reader-frame);
+    height: var(--s5-reader-header-height);
+    border: 0;
+    background: transparent !important;
+    pointer-events: none;
+    transform: translateX(-50%);
+  }
+
+  body:has(.s5-reader-shell) .md-tabs__inner {
+    width: 100%;
+    max-width: none;
+    height: 100%;
   }
 
   body:has(.s5-reader-shell) .md-tabs__list {
-    margin-left: calc(var(--s5-reader-rail-width) + var(--s5-reader-gap));
+    align-items: stretch;
+    height: 100%;
+    margin: 0;
+    padding-right: 330px;
+    padding-left: calc(var(--s5-reader-rail-width) + var(--s5-reader-gap));
+    pointer-events: auto;
+  }
+
+  body:has(.s5-reader-shell) .md-tabs__item {
+    height: 100%;
+    padding-right: .75rem;
+    padding-left: 0;
+  }
+
+  body:has(.s5-reader-shell) .md-tabs__link {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    margin: 0;
+    font-size: .58rem;
   }
 
   body:has(.s5-reader-shell) .md-main__inner {
@@ -312,10 +380,10 @@ body:has(.s5-reader-shell) .anim-brand-shell:has(.anim-brand-shell__viewport > .
   }
 
   body:has(.s5-reader-shell) .s5-reader-direct {
-    top: 126px;
+    top: calc(var(--s5-reader-header-height) + 16px);
     left: calc((100vw - var(--s5-reader-frame)) / 2);
     width: var(--s5-reader-rail-width);
-    max-height: calc(100dvh - 148px);
+    max-height: calc(100dvh - var(--s5-reader-header-height) - 34px);
     grid-template-rows: auto auto minmax(0, 1fr);
     border-top: 1px solid var(--s5-line-strong);
     border-bottom: 0;
@@ -323,11 +391,27 @@ body:has(.s5-reader-shell) .anim-brand-shell:has(.anim-brand-shell__viewport > .
   }
 
   .s5-reader-direct__header {
-    padding: .8rem 0 .7rem;
+    padding: .72rem 0 .64rem;
+  }
+
+  .s5-reader-direct__header > div {
+    gap: .14rem;
+  }
+
+  .s5-reader-direct__header span {
+    font-size: .44rem;
   }
 
   .s5-reader-direct__header strong {
-    font-size: .78rem;
+    font-size: .76rem;
+    line-height: 1.18;
+  }
+
+  .s5-reader-direct__header small {
+    display: block;
+    color: var(--s5-muted);
+    font-size: .46rem;
+    font-weight: 650;
   }
 
   .s5-reader-direct__browse {
@@ -336,15 +420,16 @@ body:has(.s5-reader-shell) .anim-brand-shell:has(.anim-brand-shell__viewport > .
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    min-height: 38px;
-    padding: .45rem 0;
+    min-height: 36px;
+    padding: .4rem 0;
     border: 0;
+    border-top: 1px solid var(--s5-line);
     border-bottom: 1px solid var(--s5-line-strong);
     background: transparent;
     color: var(--s5-text);
     cursor: pointer;
-    font-size: .55rem;
-    font-weight: 720;
+    font-size: .53rem;
+    font-weight: 740;
     text-align: left;
   }
 
@@ -358,8 +443,9 @@ body:has(.s5-reader-shell) .anim-brand-shell:has(.anim-brand-shell__viewport > .
   }
 
   .s5-reader-direct__collections {
-    overflow: visible;
+    overflow-y: auto;
     padding-bottom: 0;
+    scrollbar-width: thin;
   }
 
   .s5-reader-direct__collection:not(.is-current) {
@@ -367,36 +453,31 @@ body:has(.s5-reader-shell) .anim-brand-shell:has(.anim-brand-shell__viewport > .
   }
 
   .s5-reader-direct__collection.is-current > header {
-    gap: .18rem;
-    padding: .9rem 0 .6rem;
-    border-top: 0;
-  }
-
-  .s5-reader-direct__collection.is-current > header > span {
-    font-size: .45rem;
-  }
-
-  .s5-reader-direct__collection.is-current > header > strong {
-    font-size: .72rem;
-  }
-
-  .s5-reader-direct__collection.is-current > header > small {
-    font-size: .46rem;
+    display: none;
   }
 
   .s5-reader-direct__collection nav a {
     grid-template-columns: 24px minmax(0, 1fr);
-    gap: .08rem .5rem;
-    padding: .58rem .12rem;
+    gap: .08rem .48rem;
+    min-height: 48px;
+    padding: .5rem .08rem;
   }
 
   .s5-reader-direct__collection nav a > span {
-    font-size: .48rem;
+    align-self: start;
+    padding-top: .08rem;
+    font-size: .46rem;
   }
 
   .s5-reader-direct__collection nav a > strong {
-    font-size: .61rem;
-    line-height: 1.28;
+    display: -webkit-box;
+    overflow: hidden;
+    font-size: .59rem;
+    line-height: 1.27;
+    text-overflow: ellipsis;
+    white-space: normal;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
   }
 
   .s5-reader-direct__collection nav a > small {
@@ -417,21 +498,22 @@ body:has(.s5-reader-shell) .anim-brand-shell:has(.anim-brand-shell__viewport > .
 @media (min-width: 1760px) {
   body:has(.s5-reader-shell) {
     --s5-reader-frame: 1660px;
-    --s5-reader-rail-width: 208px;
-    --s5-reader-gap: 48px;
+    --s5-reader-rail-width: 220px;
+    --s5-reader-gap: 44px;
     --s5-reader-canvas: 1280px;
-    --s5-reader-prose: 780px;
-    --s5-reader-lead: 880px;
   }
 }
 
-/* Tablet and mobile use one compact lesson navigator. The old vertical tab
-   competed with the article and is intentionally removed. */
 @media (max-width: 1319px) {
   body:has(.s5-reader-shell) .s5-reader-direct,
   body:has(.s5-reader-shell) .s5-reader-direct-overlay,
   body:has(.s5-reader-shell) .s5-reader-direct-toggle {
     display: none !important;
+  }
+
+  body:has(.s5-reader-shell) .md-header__inner {
+    min-height: var(--s5-reader-header-height);
+    height: var(--s5-reader-header-height);
   }
 
   body:has(.s5-reader-shell) .md-main__inner:not(:has(.s5-landing)) .md-content {
@@ -442,26 +524,28 @@ body:has(.s5-reader-shell) .anim-brand-shell:has(.anim-brand-shell__viewport > .
   }
 
   body:has(.s5-reader-shell) .md-content__inner {
-    padding-right: clamp(1rem, 3vw, 1.6rem) !important;
-    padding-left: clamp(1rem, 3vw, 1.6rem) !important;
+    padding-right: clamp(1rem, 2.6vw, 1.5rem) !important;
+    padding-left: clamp(1rem, 2.6vw, 1.5rem) !important;
   }
 
   .s5-reader-topbar {
     position: sticky;
-    top: 64px;
+    top: var(--s5-reader-header-height);
     z-index: 24;
-    grid-template-columns: 48px minmax(0, 1fr) 48px;
-    min-height: 46px;
+    display: grid !important;
+    grid-template-columns: 46px minmax(0, 1fr) 46px;
+    min-height: 44px;
     border: 1px solid var(--s5-line);
-    background: color-mix(in srgb, var(--s5-bg) 94%, transparent);
-    box-shadow: 0 8px 18px color-mix(in srgb, #000 7%, transparent);
+    background: color-mix(in srgb, var(--s5-bg) 95%, transparent);
+    box-shadow: 0 8px 18px color-mix(in srgb, #000 6%, transparent);
     backdrop-filter: blur(14px);
   }
 
   .s5-reader-arrow {
     display: flex;
     justify-content: center;
-    padding: .4rem;
+    min-height: 44px;
+    padding: .35rem;
   }
 
   .s5-reader-arrow__copy {
@@ -469,16 +553,14 @@ body:has(.s5-reader-shell) .anim-brand-shell:has(.anim-brand-shell__viewport > .
   }
 
   .s5-reader-course {
+    min-height: 44px;
+    padding: .3rem .5rem .42rem;
     border-right: 1px solid var(--s5-line);
     border-left: 1px solid var(--s5-line);
   }
 
-  .s5-reader-course > span {
-    display: none;
-  }
-
   .s5-reader-course strong {
-    font-size: .58rem;
+    font-size: .54rem;
   }
 }
 
@@ -486,19 +568,35 @@ body:has(.s5-reader-shell) .anim-brand-shell:has(.anim-brand-shell__viewport > .
   body:has(.s5-reader-shell) {
     --s5-reader-prose: 100%;
     --s5-reader-lead: 100%;
+    --s5-reader-header-height: 56px;
+  }
+
+  body:has(.s5-reader-shell) .md-main__inner {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+  }
+
+  body:has(.s5-reader-shell) .md-main__inner:not(:has(.s5-landing)) .md-content {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
   body:has(.s5-reader-shell) .md-content__inner {
-    padding-top: 1.45rem;
-    padding-right: 1rem !important;
-    padding-left: 1rem !important;
+    width: 100%;
+    margin: 0 !important;
+    padding-top: 1.35rem;
+    padding-right: 20px !important;
+    padding-left: 20px !important;
   }
 
   .s5-reader-context {
     flex-wrap: nowrap;
-    gap: .3rem;
-    margin-bottom: .75rem;
-    font-size: .5rem;
+    gap: .28rem;
+    margin-bottom: .62rem;
+    font-size: .48rem;
   }
 
   .s5-reader-context strong {
@@ -506,63 +604,77 @@ body:has(.s5-reader-shell) .anim-brand-shell:has(.anim-brand-shell__viewport > .
   }
 
   body:has(.s5-reader-shell) .md-typeset > h1 {
-    max-width: 12ch !important;
-    margin-bottom: .8rem !important;
-    font-size: clamp(2.45rem, 11.6vw, 3.15rem) !important;
-    line-height: .95 !important;
-    letter-spacing: -.058em !important;
+    max-width: 13ch !important;
+    margin-bottom: .68rem !important;
+    font-size: clamp(2.25rem, 10.8vw, 2.72rem) !important;
+    line-height: .965 !important;
+    letter-spacing: -.056em !important;
+    overflow-wrap: break-word;
   }
 
   .s5-reader-shell {
-    margin-bottom: .85rem !important;
+    max-width: 100%;
+    margin-bottom: .55rem !important;
   }
 
   .s5-reader-topbar {
-    top: 63px;
+    top: var(--s5-reader-header-height);
+    width: 100%;
     margin: 0;
   }
 
-  .s5-reader-shell + .series-meta {
-    margin: .75rem 0 1.65rem;
+  body:has(.s5-reader-shell) .s5-reader-shell + .sm-wrap {
+    margin: .55rem 0 1.75rem;
   }
 
-  .s5-reader-shell + .series-meta .series-meta-head {
-    gap: .3rem;
+  body:has(.s5-reader-shell) .s5-reader-shell + .sm-wrap .sm-chips {
+    gap: .5rem;
   }
 
-  .s5-reader-shell + .series-meta .series-meta-chip {
-    padding: .24rem .42rem;
-    font-size: .5rem;
+  body:has(.s5-reader-shell) .s5-reader-shell + .sm-wrap .sm-chip {
+    font-size: .49rem;
   }
 
   body:has(.s5-reader-shell) .md-typeset > p,
   body:has(.s5-reader-shell) .md-typeset > li {
-    font-size: .94rem;
-    line-height: 1.7;
+    font-size: .87rem;
+    line-height: 1.68;
   }
 
   body:has(.s5-reader-shell) .md-typeset > blockquote:first-of-type {
-    margin-bottom: 2rem;
-    padding-left: .8rem;
-    font-size: .95rem;
-    line-height: 1.65;
+    margin: .35rem 0 2.2rem;
+    padding-left: .72rem;
+    font-size: .82rem;
+    line-height: 1.58;
   }
 
   body:has(.s5-reader-shell) .md-typeset > h2 {
-    max-width: 16ch;
-    margin-top: 4.3rem !important;
-    margin-bottom: 1rem !important;
-    font-size: clamp(1.75rem, 8vw, 2.15rem) !important;
+    max-width: 18ch;
+    margin-top: 3.7rem !important;
+    margin-bottom: .9rem !important;
+    font-size: clamp(1.6rem, 7.5vw, 1.95rem) !important;
   }
 
   body:has(.s5-reader-shell) .md-typeset > h3 {
-    margin-top: 2.7rem !important;
-    font-size: 1.3rem !important;
+    margin-top: 2.45rem !important;
+    font-size: 1.2rem !important;
   }
 
   body:has(.s5-reader-shell) .anim-brand-shell:has(.anim-brand-shell__viewport > .s5v) {
-    margin-top: 1.5rem;
-    margin-bottom: 3.4rem;
+    width: 100%;
+    margin-top: 1.35rem;
+    margin-bottom: 3.2rem;
+  }
+
+  body:has(.s5-reader-shell) .anim-brand-shell:has(.anim-brand-shell__viewport > .s5v) .anim-brand-shell__toolbar {
+    min-height: 28px;
+    padding-bottom: 4px;
+  }
+
+  body:has(.s5-reader-shell) .s5-video-embed {
+    width: 100%;
+    margin-top: 1.35rem;
+    margin-bottom: 2.8rem;
   }
 }
 
