@@ -1,28 +1,27 @@
-"""
-hooks/video_embed.py — MkDocs hook
+"""Inject article video and optional audio players.
 
-Injects a <video> embed on pages that declare:
+Pages opt into video with ``video`` in frontmatter. Media remains same-origin by
+default. Set ``S5_VIDEO_MEDIA_ORIGIN`` after mirroring the same relative paths
+to a stable media domain such as ``https://media.5sigmas.com``.
 
-    video: "01-representar.mp4"
-
-in their frontmatter. Both the .mp4 and the poster (.jpg, same base name)
-must live alongside the .md file — they'll be copied to the site by MkDocs.
-
-Optional frontmatter fields:
-    video_duration: "PT4M20S"   ISO 8601
-
-The video title and description are taken from the page's own title/description.
+Optional video fields:
+    video_title: "..."
+    video_poster: "poster.jpg"
+    video_captions: "captions.vtt"
+    video_duration: "PT4M20S"
 """
 
 from functools import lru_cache
+from html import escape
+import os
 from pathlib import Path
 import re
 
 import yaml
 
 
-def _esc(s: str) -> str:
-    return str(s).replace('"', '\\"').replace("\n", " ").strip()
+def _esc(value: str) -> str:
+    return escape(str(value or "").replace("\n", " ").strip(), quote=True)
 
 
 def _dom_id(prefix: str, value: str) -> str:
@@ -85,29 +84,44 @@ def _watch_url(site_url: str, src_path: str, video_file: str) -> str:
     return f"{site_url}/videos/{rel.as_posix().strip('/')}/"
 
 
-# ── Hook ──────────────────────────────────────────────────────────────────────
+def _media_url(page, filename: str) -> str:
+    if re.match(r"^https?://", filename, re.IGNORECASE):
+        return filename
+    media_origin = os.environ.get("S5_VIDEO_MEDIA_ORIGIN", "").strip().rstrip("/")
+    if media_origin:
+        parent = Path(page.file.src_path).parent.as_posix().strip("/")
+        return f"{media_origin}/{parent}/{filename}" if parent else f"{media_origin}/{filename}"
+    return f"../{filename}"
+
 
 def on_post_page(output: str, page, config, **kwargs) -> str:
     meta = page.meta or {}
-    video_file = meta.get("video")
+    video_file = str(meta.get("video") or "").strip()
     if not video_file:
         return output
 
-    # Derive poster filename from mp4 basename
-    base        = video_file.rsplit(".", 1)[0]   # "01-representar"
-    poster_file = base + ".jpg"
+    poster_file = str(
+        meta.get("video_poster")
+        or Path(video_file).with_suffix(".jpg").name
+    ).strip()
+    captions_file = str(meta.get("video_captions") or "").strip()
 
-    # Relative paths used inside <video> — one level up from the slug/ directory
-    rel_video  = f"../{video_file}"
-    rel_poster = f"../{poster_file}"
+    video_url = _media_url(page, video_file)
+    poster_url = _media_url(page, poster_file)
+    captions_url = _media_url(page, captions_file) if captions_file else ""
 
-    # Metadata from page frontmatter / config
-    title       = _esc(meta.get("video_title") or page.title or "")
-    site_url    = (config.site_url or "").rstrip("/")
-    watch_url   = _watch_url(site_url, page.file.src_path, video_file) if site_url else ""
-
-    # ── <video> embed ─────────────────────────────────────────────────────────
+    title = _esc(meta.get("video_title") or page.title or "")
+    site_url = (config.site_url or "").rstrip("/")
+    watch_url = _watch_url(site_url, page.file.src_path, video_file) if site_url else ""
     video_dom_id = _dom_id("s5-video", page.file.src_path)
+
+    track = ""
+    if captions_url:
+        track = (
+            f'    <track kind="captions" src="{_esc(captions_url)}" '
+            'srclang="es" label="Español" default>\n'
+        )
+
     video_html = (
         '<div class="s5-video-embed">\n'
         "  <video\n"
@@ -116,18 +130,23 @@ def on_post_page(output: str, page, config, **kwargs) -> str:
         '    controlsList="nodownload"\n'
         '    oncontextmenu="return false"\n'
         '    preload="none"\n'
-        f'    poster="{rel_poster}"\n'
+        f'    poster="{_esc(poster_url)}"\n'
         "    playsinline\n"
         f'    aria-label="{title}"\n'
         "  >\n"
-        f'    <source src="{rel_video}" type="video/mp4">\n'
+        f'    <source src="{_esc(video_url)}" type="video/mp4">\n'
+        f"{track}"
+        "    Tu navegador no soporta el elemento de vídeo.\n"
         "  </video>\n"
-        f'  <p class="s5-video-embed__watch"><a href="{watch_url}">Ver página del vídeo</a></p>\n'
+        f'  <p class="s5-video-embed__watch"><a href="{_esc(watch_url)}">Ver vídeo, resumen y contenidos relacionados</a></p>\n'
         "</div>"
     )
     audio_html = _render_article_audio(page, video_dom_id)
 
-    # Inject video after the first </h1> in the page
-    output = re.sub(r"(</h1>)", r"\1\n" + video_html + ("\n" + audio_html if audio_html else ""), output, count=1)
-
+    output = re.sub(
+        r"(</h1>)",
+        r"\1\n" + video_html + ("\n" + audio_html if audio_html else ""),
+        output,
+        count=1,
+    )
     return output
