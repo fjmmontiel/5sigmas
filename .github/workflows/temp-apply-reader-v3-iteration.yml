@@ -18,113 +18,101 @@ jobs:
           ref: redesign/reader-editorial-v3
           fetch-depth: 0
 
-      - name: Apply interaction, header and QA refinements
+      - name: Apply final header and regression-script refinements
         shell: bash
         run: |
           python - <<'PY'
           from pathlib import Path
 
-          js_path = Path('docs/assets/javascripts/reader-navigation.js')
-          js = js_path.read_text(encoding='utf-8')
-          normalize_block = """  const normalize = (value) => String(value || '')
-            .normalize('NFD')
-            .replace(/[\\u0300-\\u036f]/g, '')
-            .toLowerCase()
-            .trim();
-          """
-          matches_block = normalize_block + """
-
-            const matchesQuery = (value, query) => {
-              const haystack = normalize(value);
-              const tokens = normalize(query).split(/\\s+/).filter(Boolean);
-              return tokens.length > 0 && tokens.every((token) => haystack.includes(token));
-            };
-          """
-          if 'const matchesQuery' not in js:
-              if normalize_block not in js:
-                  raise SystemExit('reader navigation normalize block not found')
-              js = js.replace(normalize_block, matches_block, 1)
-          js = js.replace(
-              "const tabMatches = normalize(tab.dataset.search || tab.textContent).includes(query);",
-              "const tabMatches = matchesQuery(tab.dataset.search || tab.textContent, query);",
-          )
-          js = js.replace(
-              "const matches = tabMatches || normalize(entry.dataset.search || entry.textContent).includes(query);",
-              "const matches = tabMatches || matchesQuery(entry.dataset.search || entry.textContent, query);",
-          )
-          js_path.write_text(js, encoding='utf-8')
-
-          fixes = Path('docs/stylesheets/reader-editorial-v3-iteration.css')
-          fixes.write_text("""/* Iteration refinements kept separate while the reader is under review. */
-          @media (min-width: 1320px) {
-            body:has(.s5-reader-shell) .md-header {
-              z-index: 5;
-            }
-
-            body:has(.s5-reader-shell) .md-tabs {
-              z-index: 6;
-            }
-          }
-          """, encoding='utf-8')
-
-          css_path = Path('docs/stylesheets/reader-editorial-v3.css')
+          css_path = Path('docs/stylesheets/reader-editorial-v3-iteration.css')
           css = css_path.read_text(encoding='utf-8')
-          import_line = '@import url("reader-editorial-v3-iteration.css");\n\n'
-          if not css.startswith(import_line):
-              css_path.write_text(import_line + css, encoding='utf-8')
-
-          workflow_path = Path('.github/workflows/temp-reader-v3-review.yml')
-          workflow = workflow_path.read_text(encoding='utf-8')
-          workflow = workflow.replace('geometry.navigator?.height > 52', 'geometry.navigator?.height > 58')
-          workflow = workflow.replace('geometry.firstParagraph.width < 700 || geometry.firstParagraph.width > 790', 'geometry.firstParagraph.width < 800 || geometry.firstParagraph.width > 1020')
-          workflow = workflow.replace('geometry.firstLead.width > 890', 'geometry.firstLead.width > 940')
-
-          dump_step = """
-                - name: Dump the presentation-page content outline
-                  shell: bash
-                  run: |
-                    cat > dump-reader-outline.mjs <<'JS'
-                    import { chromium } from 'playwright';
-                    import fs from 'node:fs/promises';
-
-                    const browser = await chromium.launch({ headless: true });
-                    const page = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1 });
-                    await page.goto('http://127.0.0.1:8000/series/from-cave-to-agi/00_presentacion_serie/', { waitUntil: 'networkidle' });
-                    await page.evaluate(() => document.fonts.ready);
-                    const outline = await page.locator('.md-typeset').evaluate((root) => [...root.children].map((node, index) => ({
-                      index,
-                      tag: node.tagName,
-                      className: node.className || '',
-                      id: node.id || '',
-                      text: (node.textContent || '').replace(/\\s+/g, ' ').trim().slice(0, 180),
-                      html: node.outerHTML.slice(0, 900),
-                    })));
-                    await fs.writeFile('artifacts/reader-v3-review/series-presentation-outline.json', JSON.stringify(outline, null, 2));
-                    await browser.close();
-                    JS
-                    node dump-reader-outline.mjs
+          marker = """  body:has(.s5-reader-shell) .md-tabs__link {
+            position: relative;
+            color: var(--s5-muted) !important;
+          }
           """
-          marker = '      - name: Validate direct navigation contract\n'
-          if 'Dump the presentation-page content outline' not in workflow:
-              if marker not in workflow:
-                  raise SystemExit('reader review validation marker not found')
-              workflow = workflow.replace(marker, dump_step + '\n' + marker, 1)
-          workflow_path.write_text(workflow, encoding='utf-8')
+          replacement = """  body:has(.s5-reader-shell) .md-tabs__list {
+            align-items: center !important;
+          }
+
+          body:has(.s5-reader-shell) .md-tabs__item {
+            align-items: center !important;
+            height: 100% !important;
+            padding-right: .95rem !important;
+          }
+
+          body:has(.s5-reader-shell) .md-tabs__link {
+            position: relative;
+            align-items: center !important;
+            justify-content: center !important;
+            height: 100% !important;
+            margin: 0 !important;
+            padding: 1px 0 0 !important;
+            color: var(--s5-muted) !important;
+            font-size: .64rem !important;
+            font-weight: 660 !important;
+            letter-spacing: 0 !important;
+            line-height: 1 !important;
+          }
+          """
+          if marker not in css:
+              raise SystemExit('desktop global navigation marker not found')
+          css_path.write_text(css.replace(marker, replacement, 1), encoding='utf-8')
+
+          capture_path = Path('scripts/capture_site_screenshots.mjs')
+          capture = capture_path.read_text(encoding='utf-8')
+          capture = capture.replace(
+              "{ name: 'reader-rail-desktop', path: articlePath, viewport: desktop, selector: '.s5-reader-shell' },",
+              "{ name: 'reader-rail-desktop', path: articlePath, viewport: desktop, selector: '.s5-reader-direct' },",
+          )
+          capture = capture.replace(
+              "{ name: 'reader-rail-mobile', path: articlePath, viewport: mobile, mobile: true, selector: '.s5-reader-shell' },",
+              "{ name: 'reader-rail-mobile', path: articlePath, viewport: mobile, mobile: true, selector: '.s5-reader-topbar' },",
+          )
+          old_open = """const openReaderSurface = async (page) => {
+            const courseButton = page.locator('.s5-reader-course[data-s5-reader-open]');
+            if (await courseButton.isVisible()) {
+              await courseButton.click();
+              await page.locator('[data-s5-reader-library][open]').waitFor();
+              return 'map';
+            }
+
+            const drawerToggle = page.locator('[data-s5-reader-direct-open]');
+            await drawerToggle.click();
+            await page.locator('[data-s5-reader-direct].is-open').waitFor();
+            return 'library';
+          };
+          """
+          new_open = """const openReaderSurface = async (page) => {
+            const fullLibraryTrigger = page.locator('[data-s5-reader-open]:visible').first();
+            if (await fullLibraryTrigger.count()) {
+              await fullLibraryTrigger.click();
+              await page.locator('[data-s5-reader-library][open]').waitFor();
+              return 'map';
+            }
+
+            const drawerToggle = page.locator('[data-s5-reader-direct-open]:visible').first();
+            await drawerToggle.click();
+            await page.locator('[data-s5-reader-direct].is-open').waitFor();
+            return 'library';
+          };
+          """
+          if old_open not in capture:
+              raise SystemExit('openReaderSurface block not found')
+          capture_path.write_text(capture.replace(old_open, new_open, 1), encoding='utf-8')
           PY
 
-      - name: Commit iteration
+      - name: Commit refinements
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add \
-            docs/assets/javascripts/reader-navigation.js \
-            docs/stylesheets/reader-editorial-v3.css \
             docs/stylesheets/reader-editorial-v3-iteration.css \
-            .github/workflows/temp-reader-v3-review.yml
+            scripts/capture_site_screenshots.mjs
           if git diff --cached --quiet; then
             echo "Nothing to commit"
           else
-            git commit -m "Refine reader search, global navigation and visual QA"
+            git commit -m "Polish the global reader header and visual regressions"
             git push origin HEAD:redesign/reader-editorial-v3
           fi
