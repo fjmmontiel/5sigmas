@@ -1,4 +1,4 @@
-"""Inject a persistent global library across Aprender and Construir."""
+"""Inject a persistent, collapsible global library across Aprender and Construir."""
 
 from __future__ import annotations
 
@@ -80,8 +80,10 @@ def _collection_panel(
     current_page: dict[str, str],
 ) -> str:
     links: list[str] = []
+    is_current_collection = False
     for page_number, page in enumerate(collection["pages"], start=1):
         current = page["path"] == current_page["path"]
+        is_current_collection = is_current_collection or current
         current_attr = ' aria-current="page"' if current else ""
         search_value = escape(
             f'{collection["kind"]} {collection["title"]} {page["title"]}',
@@ -96,23 +98,25 @@ def _collection_panel(
         )
 
     collection_search = escape(
-        " ".join(
-            [collection["kind"], collection["title"], *[page["title"] for page in collection["pages"]]]
-        ),
+        f'{collection["kind"]} {collection["title"]}',
         quote=True,
     )
+    open_attr = " open" if is_current_collection else ""
+    current_attr = ' data-current="true"' if is_current_collection else ""
     return (
-        f'<section class="s5-reader-direct__collection" '
+        f'<details class="s5-reader-direct__collection" '
         f'id="s5-direct-collection-{collection_index}" '
-        f'data-s5-reader-collection data-search="{collection_search}">'
-        "<header>"
-        f'<span>{escape(collection["kind"])}</span>'
+        f'data-s5-reader-collection data-search="{collection_search}"{current_attr}{open_attr}>'
+        "<summary>"
+        '<span class="s5-reader-direct__collection-copy">'
+        f'<small>{escape(collection["kind"])}</small>'
         f'<strong>{escape(collection["title"])}</strong>'
-        f'<small>{_content_count(len(collection["pages"]))}</small>'
-        "</header>"
+        "</span>"
+        f'<span class="s5-reader-direct__collection-meta">{_content_count(len(collection["pages"]))}</span>'
+        "</summary>"
         f'<nav aria-label="Contenidos de {escape(collection["title"], quote=True)}">'
         f'{"".join(links)}</nav>'
-        "</section>"
+        "</details>"
     )
 
 
