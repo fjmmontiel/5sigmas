@@ -17,6 +17,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
 
@@ -29,11 +30,19 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; else pip install mkdocs mkdocs-material; fi
 
+      - name: Validate video media declarations
+        run: python scripts/prepare_video_media.py --check
+
       - name: Build site
+        env:
+          S5_VIDEO_MEDIA_ORIGIN: ${{ vars.S5_VIDEO_MEDIA_ORIGIN }}
         run: mkdocs build --clean --strict
 
       - name: Audit video indexing metadata
         run: python scripts/audit_video_indexing.py
+
+      - name: Audit search foundation
+        run: python scripts/audit_search_foundation.py
 
       - uses: actions/configure-pages@v5
 
