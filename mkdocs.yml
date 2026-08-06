@@ -88,6 +88,13 @@ nav:
           - Energía, calor y conectividad: series/datacenters-espacio/02-energia-calor-conectividad.md
           - Qué es un datacenter espacial: series/datacenters-espacio/03-que-es-datacenter-espacio.md
           - La huella real de un datacenter: series/datacenters-espacio/04-huella-real-datacenter.md
+      - Seguridad en IA:
+          - Presentación: series/seguridad-ia/00_presentacion_serie.md
+          - Prompt injection: series/seguridad-ia/01-prompt-injection.md
+          - Jailbreaks: series/seguridad-ia/02-jailbreaks.md
+          - Envenenamiento: series/seguridad-ia/03-envenenamiento.md
+          - Red-teaming: series/seguridad-ia/04-red-teaming.md
+          - Controles de producción: series/seguridad-ia/05-controles-produccion.md
   - Construir:
       - articulos-tecnicos/index.md
       - Agente Reactivo, Proactivo y Tool calls: articulos-tecnicos/proactive-reactive-agent-and-tool-calls.md
@@ -202,7 +209,5 @@ plugins:
 exclude_docs: |
   drafts/
   drafts/**
-  series/seguridad-ia/**
-  snippets/seguridad-ia/**
   assets/templates/**
   includes/

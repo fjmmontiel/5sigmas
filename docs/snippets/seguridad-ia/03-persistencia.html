@@ -1,0 +1,21 @@
+<div class="security-visual security-visual--persistence" role="img" aria-label="Una señal puede pasar de la ingestión a la memoria y reactivarse más tarde">
+  <style>
+    .security-visual--persistence{margin:2rem 0;padding:1.5rem;border:1px solid color-mix(in srgb,var(--md-default-fg-color) 16%,transparent);border-radius:18px;background:color-mix(in srgb,var(--md-default-bg-color) 92%,#26a69a);}
+    .security-visual--persistence .sp-title{font-weight:800;font-size:1.05rem;margin-bottom:1rem;}
+    .security-visual--persistence .sp-flow{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;align-items:stretch;}
+    .security-visual--persistence .sp-step{padding:.9rem;border-radius:12px;background:color-mix(in srgb,var(--md-default-bg-color) 78%,#26a69a);position:relative;}
+    .security-visual--persistence .sp-step:not(:last-child)::after{content:'→';position:absolute;right:-.55rem;top:1rem;z-index:1;color:#26a69a;font-weight:800;}
+    .security-visual--persistence .sp-label{font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;opacity:.65;}
+    .security-visual--persistence .sp-main{font-weight:700;margin-top:.45rem;}
+    .security-visual--persistence .sp-trigger{margin-top:1rem;padding:.7rem;border-radius:10px;background:color-mix(in srgb,var(--md-default-bg-color) 80%,#ef4444);font-size:.9rem;}
+    @media (max-width:700px){.security-visual--persistence .sp-flow{grid-template-columns:1fr 1fr;}.security-visual--persistence .sp-step:nth-child(2)::after{content:'';}.security-visual--persistence .sp-step:nth-child(3)::after{content:'';}}
+  </style>
+  <div class="sp-title">Una instrucción peligrosa sigue siendo peligrosa cuando se guarda.</div>
+  <div class="sp-flow">
+    <div class="sp-step"><div class="sp-label">Entrada</div><div class="sp-main">documento externo</div></div>
+    <div class="sp-step"><div class="sp-label">Memoria</div><div class="sp-main">resumen guardado</div></div>
+    <div class="sp-step"><div class="sp-label">Recuperación</div><div class="sp-main">contexto recuperado</div></div>
+    <div class="sp-step"><div class="sp-label">Acción</div><div class="sp-main">acción del sistema</div></div>
+  </div>
+  <div class="sp-trigger"><strong>Disparador:</strong> la auditoría debe probar qué ocurre cuando la señal reaparece.</div>
+</div>

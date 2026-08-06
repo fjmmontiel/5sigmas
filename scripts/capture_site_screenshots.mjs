@@ -10,6 +10,7 @@ const browser = await chromium.launch({ headless: true });
 const desktop = { width: 1440, height: 1100 };
 const mobile = { width: 390, height: 844 };
 const articlePath = '/series/modelos-razonadores/03-test-time-compute/';
+const expectedCollections = 8;
 
 const captures = [
   { name: 'homepage-desktop', path: '/', viewport: desktop },
@@ -184,13 +185,13 @@ const validateReader = async (page, viewport) => {
   if (reader.arrows !== 2) {
     throw new Error(`expected usable previous and next actions, found ${reader.arrows}`);
   }
-  if (reader.seriesTabs !== 7 || reader.panels !== 7) {
-    throw new Error(`expected 7 collections in the searchable library, found ${reader.seriesTabs}/${reader.panels}`);
+  if (reader.seriesTabs !== expectedCollections || reader.panels !== expectedCollections) {
+    throw new Error(`expected ${expectedCollections} collections in the searchable library, found ${reader.seriesTabs}/${reader.panels}`);
   }
   if (reader.entries < 30 || reader.currentEntries !== 1) {
     throw new Error(`searchable library entries are incomplete: ${reader.entries}/${reader.currentEntries}`);
   }
-  if (reader.directCollections !== 7 || reader.directEntries < 30 || reader.currentDirectEntries !== 1) {
+  if (reader.directCollections !== expectedCollections || reader.directEntries < 30 || reader.currentDirectEntries !== 1) {
     throw new Error(`contextual library DOM is incomplete: ${reader.directCollections}/${reader.directEntries}/${reader.currentDirectEntries}`);
   }
   if (reader.breadcrumbsVisible || reader.tagsVisible || reader.directToggleVisible) {

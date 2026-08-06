@@ -12,8 +12,8 @@ hide:
 
 <section class="s5-page-intro">
   <div class="s5-eyebrow">Aprender</div>
-  <h1>Seis rutas. Un orden claro.</h1>
-  <p>Seis series conectan vídeos, animaciones, capítulos y fuentes. Sigue el orden recomendado o entra directamente en el tema que necesites.</p>
+  <h1>Siete rutas. Un orden claro.</h1>
+  <p>Siete series conectan vídeos, animaciones, capítulos y fuentes. Sigue el orden recomendado o entra directamente en el tema que necesites.</p>
 </section>
 
 <section class="s5-section">
@@ -54,6 +54,12 @@ hide:
       <span class="s5-list-row__title">Datacenters en el espacio</span>
       <span class="s5-list-row__desc">Energía, calor, conectividad, materiales y lanzamiento: la física del cómputo orbital.</span>
       <span class="s5-list-row__meta">4 capítulos</span>
+    </a>
+    <a class="s5-list-row" href="/series/seguridad-ia/00_presentacion_serie/">
+      <span class="s5-list-row__n">07</span>
+      <span class="s5-list-row__title">Seguridad en IA</span>
+      <span class="s5-list-row__desc">Prompt injection, jailbreaks, envenenamiento, red-teaming y controles para sistemas que leen y actúan.</span>
+      <span class="s5-list-row__meta">5 capítulos</span>
     </a>
   </nav>
 </section>

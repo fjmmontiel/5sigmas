@@ -4,6 +4,18 @@
   </div>
 
   <div class="ml-panel ta-panel" role="tabpanel" data-panel="nb">
+    <div class="ml-scene-intro">
+      <div class="ml-scene-copy">
+        <div class="ml-scene-title">Clasificación con Naive Bayes</div>
+        <span class="ml-scene-kicker">Guía rápida</span>
+        <h3>La predicción sale de juntar pistas sencillas</h3>
+        <p>Cuenta qué palabras aparecen más a menudo y luego combina esas señales para decidir.</p>
+      </div>
+      <div class="ml-scene-pills" role="list" aria-label="Claves de lectura">
+        <span class="ml-scene-pill" role="listitem">Primero aprende con ejemplos cortos.</span>
+        <span class="ml-scene-pill" role="listitem">Después compara qué señales pesan más.</span>
+      </div>
+    </div>
     <div class="ml-demo ta-demo" data-demo="ml:nb" data-seed="4"></div>
   </div>
 </div>
@@ -14,6 +26,7 @@
   /* ===================== */
   .ml-tabs {
     margin: 18px 0;
+    font-family: var(--md-text-font-family, inherit);
   }
 
   .ml-single {
@@ -66,6 +79,70 @@
     display: none;
   }
 
+  .ml-scene-intro {
+    display: grid;
+    gap: 10px;
+    margin: 0 0 12px;
+    padding: 14px;
+    border: 1px solid rgba(0, 0, 0, .14);
+    border-radius: 16px;
+    background:
+      radial-gradient(420px 180px at 0% 0%, rgba(20, 110, 235, .10), transparent 65%),
+      rgba(0, 0, 0, .03);
+  }
+
+  .ml-scene-kicker {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 9px;
+    border-radius: 999px;
+    border: 1px solid rgba(0, 0, 0, .12);
+    background: rgba(255, 255, 255, .7);
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+  }
+
+  .ml-scene-title {
+    margin: 0 0 8px;
+    font-size: 15px;
+    font-weight: 900;
+    letter-spacing: .02em;
+    line-height: 1.1;
+  }
+
+  .ml-scene-copy h3 {
+    margin: 10px 0 6px;
+    font-size: 25px;
+    line-height: 1.05;
+    letter-spacing: -.03em;
+  }
+
+  .ml-scene-copy p {
+    margin: 0;
+    color: rgba(0, 0, 0, .72);
+    line-height: 1.5;
+  }
+
+  .ml-scene-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .ml-scene-pill {
+    display: inline-flex;
+    align-items: center;
+    min-height: 34px;
+    padding: 7px 11px;
+    border-radius: 999px;
+    border: 1px solid rgba(0, 0, 0, .12);
+    background: rgba(255, 255, 255, .72);
+    font-size: 12.5px;
+    font-weight: 800;
+  }
+
   :root[data-md-color-scheme="slate"] .ml-tab,
   body[data-md-color-scheme="slate"] .ml-tab,
   [data-md-color-scheme="slate"] .ml-tab {
@@ -79,6 +156,32 @@
   [data-md-color-scheme="slate"] .ml-tab[aria-selected="true"] {
     border-color: var(--ta-brand-active-border, rgba(120, 200, 255, .55));
     background: var(--ta-brand-active, rgba(120, 200, 255, .14));
+  }
+
+  :root[data-md-color-scheme="slate"] .ml-scene-intro,
+  body[data-md-color-scheme="slate"] .ml-scene-intro,
+  [data-md-color-scheme="slate"] .ml-scene-intro {
+    border-color: rgba(255, 255, 255, .14);
+    background:
+      radial-gradient(420px 180px at 0% 0%, rgba(120, 200, 255, .12), transparent 65%),
+      rgba(255, 255, 255, .04);
+  }
+
+  :root[data-md-color-scheme="slate"] .ml-scene-kicker,
+  :root[data-md-color-scheme="slate"] .ml-scene-pill,
+  body[data-md-color-scheme="slate"] .ml-scene-kicker,
+  body[data-md-color-scheme="slate"] .ml-scene-pill,
+  [data-md-color-scheme="slate"] .ml-scene-kicker,
+  [data-md-color-scheme="slate"] .ml-scene-pill {
+    border-color: rgba(255, 255, 255, .14);
+    background: rgba(255, 255, 255, .06);
+    color: rgba(255, 255, 255, .92);
+  }
+
+  :root[data-md-color-scheme="slate"] .ml-scene-copy p,
+  body[data-md-color-scheme="slate"] .ml-scene-copy p,
+  [data-md-color-scheme="slate"] .ml-scene-copy p {
+    color: rgba(255, 255, 255, .72);
   }
 
   /* ===================== */
@@ -108,9 +211,9 @@
     margin: 0;
     position: relative;
 
-    font-family: var(--ta-brand-font, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji");
-    font-size: 15.5px;
-    line-height: 1.42;
+    font-family: var(--md-text-font-family, inherit);
+    font-size: 1em;
+    line-height: 1.6;
     --header-offset: 220px;
   }
 
@@ -196,6 +299,17 @@
     font-weight: 850;
     cursor: pointer;
     user-select: none;
+  }
+
+  .ml-btn--primary {
+    background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 18%, var(--card)), rgba(0, 0, 0, 0.00));
+    border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+    color: var(--text);
+  }
+
+  .ml-btn[disabled] {
+    opacity: .62;
+    cursor: wait;
   }
 
   .ml-btn:active {
@@ -322,8 +436,56 @@
     display: flex;
     gap: 16px;
     align-items: center;
-    margin-bottom: 12px;
+    margin-bottom: 14px;
     flex-wrap: wrap;
+  }
+
+  .ml-choice-group {
+    display: grid;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+
+  .ml-choice-copy {
+    font-size: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--muted);
+  }
+
+  .ml-choice-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .ml-choice-btn {
+    appearance: none;
+    border: 1px solid var(--border);
+    background: var(--bg-page);
+    color: var(--text);
+    border-radius: 999px;
+    padding: 8px 12px;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+  }
+
+  .ml-choice-btn[aria-pressed="true"] {
+    border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+    background: color-mix(in srgb, var(--accent) 12%, var(--bg-page));
+  }
+
+  .ml-choice-btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
+  }
+
+  .ml-input-note {
+    font-size: 12.5px;
+    color: var(--muted);
+    margin: -2px 0 8px;
   }
 
   .ml-label {
@@ -805,8 +967,8 @@
       if (kind === "nb") {
         return {
           kind,
-          title: "Bayes ingenuo: filtrar mensajes paso a paso",
-          subtitle: "Clasificación de texto (NO DESEADO / LEGÍTIMO). Entrenar = <b>contar palabras</b> en cada clase y combinarlas como pistas.",
+          title: "Bayes ingenuo: filtrar mensajes con pistas",
+          subtitle: "Clasificación de texto (NO DESEADO / LEGÍTIMO). Entrenar = <b>contar palabras</b> y combinarlas como señales.",
           frameDelayMs: 52,
           stepsPerFrame: 1,
           alpha: 1.0,
@@ -835,8 +997,8 @@
 
       return {
         kind: "kmeans",
-        title: "K-medias: segmentar clientes sin etiquetas",
-        subtitle: "Agrupamiento. No hay etiqueta objetivo: solo cercanía. Alterna asignar y promediar hasta converger.",
+        title: "K-medias: agrupar clientes sin etiquetas",
+        subtitle: "Agrupamiento. No hay etiqueta objetivo: solo cercanía. El algoritmo reparte clientes y recoloca grupos hasta estabilizarse.",
         plot: {
           xMin: 0, xMax: 1, yMin: 0, yMax: 1,
           labelX: "Frecuencia de compra (compras/mes)",
@@ -892,7 +1054,15 @@
         </div>
       `;
       } else if (cfg.kind === 'nb') {
+        const examples = cfg.testMsgs.slice(0, 3).map((msg) =>
+          `<button class="ml-choice-btn" type="button" data-example="${msg}">${msg}</button>`
+        ).join('');
         extra = `
+        <div class="ml-choice-group">
+          <div class="ml-choice-copy">Empieza con un ejemplo</div>
+          <div class="ml-choice-row" data-examples>${examples}</div>
+        </div>
+        <div class="ml-input-note">O escribe tu propio mensaje.</div>
         <div class="ml-inputs-row">
           <input type="text" class="ml-text-input" data-input="msg"
             placeholder="Escribe un mensaje (ej: gratis oferta urgente)..."
@@ -902,16 +1072,13 @@
       `;
       } else if (cfg.kind === 'kmeans') {
         extra = `
-        <div class="ml-inputs-row">
-          <label class="ml-label">K:
-            <select class="ml-number" data-input="k">
-              <option value="2">2</option>
-              <option value="3" selected>3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-            </select>
-          </label>
-          <div class="ml-pill" data-pill="input-hint" style="margin-left:auto; opacity:.7">elige K y reinicia</div>
+        <div class="ml-choice-group">
+          <div class="ml-choice-copy">Elige el nivel de detalle</div>
+          <div class="ml-choice-row" data-scenarios>
+            <button class="ml-choice-btn" type="button" data-scenario="2">Pocos grupos</button>
+            <button class="ml-choice-btn" type="button" data-scenario="3">Equilibrado</button>
+            <button class="ml-choice-btn" type="button" data-scenario="4">Más detalle</button>
+          </div>
         </div>
       `;
       }
@@ -919,9 +1086,7 @@
       root.innerHTML = `
       <div class="ml-head ml-head--controls">
         <div class="ml-actions">
-          <button class="ml-btn" data-btn="toggle">▶ Animar</button>
-          <button class="ml-btn" data-btn="step">⤼ Paso</button>
-          <button class="ml-btn" data-btn="reset">↺ Reiniciar</button>
+          <button class="ml-btn ml-btn--primary" data-btn="train">Entrenar</button>
         </div>
       </div>
 
@@ -951,27 +1116,14 @@
               <div class="ml-outcome-main" data-outcome-main>—</div>
             </div>
             <div class="ml-outcome-sub" data-outcome-sub>—</div>
-            <canvas class="ml-spark" data-canvas="spark" aria-hidden="true"></canvas>
           </div>
 
           <div class="ml-block">
-            <div class="ml-block-title">Cómo funciona</div>
-            <ul class="ml-list" data-how></ul>
+            <div class="ml-block-title">Qué está pasando ahora</div>
+            <ul class="ml-list" data-guide></ul>
           </div>
 
-          <div class="ml-block">
-            <div class="ml-block-title">Por qué ahora</div>
-            <ul class="ml-list" data-why></ul>
-          </div>
-
-          <div class="ml-block">
-          <div class="ml-block-title">Prueba guiada</div>
-          <div class="ml-try" data-try></div>
-        </div>
-
-        <div class="ml-aux-wrap" data-aux-wrap>
-          <canvas data-canvas="aux"></canvas>
-          <div data-aux-html></div>
+          <div class="ml-try" data-context></div>
         </div>
         </div>
       </div>
@@ -1375,15 +1527,15 @@
       ctx.fillStyle = style.getPropertyValue("--text").trim() || "rgba(0,0,0,0.92)";
       ctx.font = "12px ui-sans-serif, system-ui";
       const phaseTxt = (st.phase === "assign")
-        ? "Paso 1/2: asignar cada cliente al centro más cercano"
-        : "Paso 2/2: mover centros al promedio (media) del grupo";
+        ? "Paso 1/2: repartir clientes en grupos cercanos"
+        : "Paso 2/2: recolocar cada grupo";
       ctx.fillText(phaseTxt, pad + 8, pad + 18);
       ctx.restore();
 
       drawLegend(ctx, pad + 8, pad + 44, style, [
-        { label: "● clientes coloreados por grupo" },
-        { label: "○ centro (media) del grupo" },
-        { label: "líneas (algunas): asignación por cercanía" }
+        { label: "● clientes del mismo grupo" },
+        { label: "○ punto central del grupo" },
+        { label: "líneas de cercanía (muestra)" }
       ]);
     }
 
@@ -1420,7 +1572,7 @@
     function drawPlotNB(root, cfg, st) {
       const style = getComputedStyle(root);
       const c = root.querySelector('[data-canvas="plot"]');
-      const { ctx, w, h } = setCanvasSize(c, cfg.plotH || 420);
+      const { ctx, w, h } = setCanvasSize(c, Math.min(cfg.plotH || 420, 340));
 
       ctx.clearRect(0, 0, w, h);
       ctx.fillStyle = style.getPropertyValue("--card2").trim() || "rgba(0,0,0,0.05)";
@@ -1431,120 +1583,135 @@
       const spamC = style.getPropertyValue("--bad").trim() || "rgba(235,80,80,0.95)";
       const hamC = style.getPropertyValue("--good").trim() || "rgba(15,140,85,0.98)";
 
+      const trained = (st.trainIdx >= cfg.trainStream.length);
+      const progress = clamp(st.trainIdx / Math.max(1, cfg.trainStream.length), 0, 1);
+      const verdict = trained ? ((st.logOdds > 0) ? "NO DESEADO" : "LEGÍTIMO") : "AÚN APRENDIENDO";
+      const msgLabel = st.userOverride ? "Mensaje escrito" : "Mensaje de ejemplo";
+      const msg = String(st.testMsg || "sin mensaje");
+      const maxMsgChars = w < 420 ? 34 : 54;
+      const shownMsg = msg.length > maxMsgChars ? `${msg.slice(0, maxMsgChars - 3)}...` : msg;
+      const score = trained ? clamp(st.logOdds / 4, -1, 1) : 0;
+      const tokens = Array.from(st.testTokens || []);
+      const contribs = tokens.map((t) => {
+        const d = Math.log(Math.max(1e-12, st.pWordSpam[t] || 1e-12)) - Math.log(Math.max(1e-12, st.pWordHam[t] || 1e-12));
+        return { t, d };
+      }).sort((a, b) => Math.abs(b.d) - Math.abs(a.d));
+      const signals = trained
+        ? contribs.slice(0, 3).map((item) => ({
+          label: item.t,
+          tone: item.d > 0 ? "acerca a no deseado" : "acerca a legítimo",
+          color: item.d > 0 ? spamC : hamC
+        }))
+        : [];
+
       ctx.save();
       ctx.fillStyle = txt;
       ctx.font = "14px ui-sans-serif, system-ui";
-      ctx.fillText("Entrenamiento: contar palabras por clase", 12, 22);
-
+      ctx.fillText("Resumen visual del clasificador", 12, 22);
       ctx.fillStyle = muted;
       ctx.font = "12px ui-sans-serif, system-ui";
-      const ex = (st.trainIdx < cfg.trainStream.length) ? cfg.trainStream[st.trainIdx] : null;
-      const shown = ex
-        ? `ejemplo #${st.trainIdx + 1}: "${ex.text}" → ${ex.label === "spam" ? "NO DESEADO" : "LEGÍTIMO"}`
-        : "entrenamiento completo (prueba tu propio mensaje)";
-      ctx.fillText(shown, 12, 42);
+      ctx.fillText(trained ? "Ya aprendió con ejemplos y ahora compara señales simples." : "Primero aprende con ejemplos breves y luego decide.", 12, 42);
       ctx.restore();
 
-      const padX = 12;
-      const top = 70;
-      const rowH = 28;
-
-      const labelW = 112;
-      const leftBars = padX + labelW + 14;
-      const barW = Math.max(140, w - leftBars - 12);
-      const half = barW / 2;
-
+      const progressY = 58;
+      const progressW = w - 24;
       ctx.save();
-      ctx.font = "12px ui-sans-serif, system-ui";
-      ctx.fillStyle = muted;
-      ctx.fillText("P(palabra | no deseado)", leftBars, top - 12);
-      ctx.fillText("P(palabra | legítimo)", leftBars + half + 10, top - 12);
-      ctx.restore();
-
-      for (let i = 0; i < cfg.vocab.length; i++) {
-        const word = cfg.vocab[i];
-        const y = top + i * rowH;
-
-        const ps = st.pWordSpam[word] || 0;
-        const ph = st.pWordHam[word] || 0;
-
-        const inTest = st.testTokens && st.testTokens.has(word);
-        const focus = st.focusToken && st.focusToken === word;
-        if (inTest) {
-          ctx.save();
-          ctx.fillStyle = style.getPropertyValue("--accent").trim() || "rgba(20,110,235,0.98)";
-          ctx.globalAlpha = 0.08;
-          ctx.fillRect(10, y - 10, w - 20, rowH);
-          ctx.restore();
-        }
-        if (focus) {
-          ctx.save();
-          ctx.strokeStyle = style.getPropertyValue("--accent").trim() || "rgba(20,110,235,0.98)";
-          ctx.globalAlpha = 0.6;
-          ctx.strokeRect(10, y - 10, w - 20, rowH);
-          ctx.restore();
-        }
-
-        ctx.save();
-        ctx.fillStyle = txt;
-        ctx.font = "12px ui-monospace, Menlo, Monaco, Consolas, monospace";
-        ctx.fillText(word, padX, y + 8);
-        ctx.restore();
-
-        ctx.save();
-        ctx.strokeStyle = style.getPropertyValue("--border").trim() || "rgba(0,0,0,0.18)";
-        ctx.globalAlpha = 0.35;
-        ctx.strokeRect(leftBars, y - 4, (half - 16), 12);
-        ctx.strokeRect(leftBars + half + 10, y - 4, (half - 16), 12);
-        ctx.restore();
-
-        ctx.save();
-        ctx.fillStyle = spamC;
-        ctx.globalAlpha = 0.22;
-        ctx.fillRect(leftBars, y - 4, (half - 16) * clamp(ps, 0, 1), 12);
-        ctx.restore();
-
-        ctx.save();
-        ctx.fillStyle = hamC;
-        ctx.globalAlpha = 0.22;
-        ctx.fillRect(leftBars + half + 10, y - 4, (half - 16) * clamp(ph, 0, 1), 12);
-        ctx.restore();
-
-        ctx.save();
-        ctx.fillStyle = muted;
-        ctx.font = "11px ui-monospace, Menlo, Monaco, Consolas, monospace";
-        ctx.fillText(ps.toFixed(2), leftBars + (half - 16) + 6, y + 6);
-        ctx.fillText(ph.toFixed(2), leftBars + half + 10 + (half - 16) + 6, y + 6);
-        ctx.restore();
-      }
-
-      const yG = h - 54;
-      const gW = w - 24;
-      const t = clamp(softSigmoid(st.logOdds), 0, 1);
-
-      ctx.save();
-      ctx.strokeStyle = style.getPropertyValue("--border").trim() || "rgba(0,0,0,0.18)";
       ctx.fillStyle = style.getPropertyValue("--bg-page").trim() || "#fff";
-      ctx.lineWidth = 1.2;
-      ctx.beginPath(); ctx.roundRect(12, yG, gW, 18, 8);
+      ctx.strokeStyle = style.getPropertyValue("--border").trim() || "rgba(0,0,0,0.18)";
+      ctx.beginPath(); ctx.roundRect(12, progressY, progressW, 14, 7);
+      ctx.fill(); ctx.stroke();
+      ctx.fillStyle = style.getPropertyValue("--accent").trim() || "rgba(20,110,235,0.98)";
+      ctx.globalAlpha = 0.18;
+      ctx.beginPath(); ctx.roundRect(12, progressY, progressW * progress, 14, 7);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = muted;
+      ctx.font = "12px ui-sans-serif, system-ui";
+      ctx.fillText(`Entrenamiento: ${Math.min(st.trainIdx, cfg.trainStream.length)} / ${cfg.trainStream.length} ejemplos`, 12, progressY + 30);
+      ctx.restore();
+
+      const msgY = 102;
+      ctx.save();
+      ctx.fillStyle = style.getPropertyValue("--bg-page").trim() || "#fff";
+      ctx.strokeStyle = style.getPropertyValue("--border").trim() || "rgba(0,0,0,0.18)";
+      ctx.beginPath(); ctx.roundRect(12, msgY, w - 24, 58, 12);
+      ctx.fill(); ctx.stroke();
+      ctx.fillStyle = muted;
+      ctx.font = "11px ui-sans-serif, system-ui";
+      ctx.fillText(msgLabel, 24, msgY + 18);
+      ctx.fillStyle = txt;
+      ctx.font = "13px ui-sans-serif, system-ui";
+      ctx.fillText(`"${shownMsg}"`, 24, msgY + 39);
+      ctx.restore();
+
+      const meterY = 200;
+      const meterX = 12;
+      const meterW = w - 24;
+      const midX = meterX + meterW / 2;
+      ctx.save();
+      ctx.fillStyle = txt;
+      ctx.font = "12px ui-sans-serif, system-ui";
+      ctx.fillText("Balance de la decisión", 12, meterY - 12);
+      ctx.fillStyle = muted;
+      ctx.fillText("LEGÍTIMO", meterX, meterY + 34);
+      const rightLabel = ctx.measureText("NO DESEADO").width;
+      ctx.fillText("NO DESEADO", meterX + meterW - rightLabel, meterY + 34);
+
+      ctx.fillStyle = style.getPropertyValue("--bg-page").trim() || "#fff";
+      ctx.strokeStyle = style.getPropertyValue("--border").trim() || "rgba(0,0,0,0.18)";
+      ctx.beginPath(); ctx.roundRect(meterX, meterY, meterW, 18, 9);
       ctx.fill(); ctx.stroke();
 
-      ctx.fillStyle = spamC;
-      ctx.globalAlpha = 0.18;
-      ctx.beginPath(); ctx.roundRect(12, yG, gW * t, 18, 8);
-      ctx.fill();
+      ctx.strokeStyle = muted;
+      ctx.globalAlpha = 0.35;
+      ctx.beginPath();
+      ctx.moveTo(midX, meterY - 2);
+      ctx.lineTo(midX, meterY + 20);
+      ctx.stroke();
 
+      const fillW = Math.abs(score) * (meterW / 2);
+      ctx.globalAlpha = 0.22;
+      ctx.fillStyle = score >= 0 ? spamC : hamC;
+      if (fillW > 0.5) {
+        ctx.beginPath();
+        ctx.roundRect(score >= 0 ? midX : (midX - fillW), meterY, fillW, 18, 9);
+        ctx.fill();
+      }
       ctx.globalAlpha = 1;
       ctx.fillStyle = txt;
       ctx.font = "12px ui-sans-serif, system-ui";
-      const verdict = (st.logOdds > 0) ? "NO DESEADO" : "LEGÍTIMO";
-      const msgLabel = st.userOverride ? "Mensaje (usuario)" : "Mensaje (ejemplo)";
-      ctx.fillText(`${msgLabel}: "${st.testMsg}"`, 12, yG - 10);
-
-      ctx.fillStyle = muted;
-      ctx.font = "12px ui-monospace, Menlo, Monaco, Consolas, monospace";
-      ctx.fillText(`puntuación=${st.logOdds.toFixed(2)} → ${verdict}`, 12, yG + 34);
+      ctx.fillText(verdict, 12, meterY + 56);
       ctx.restore();
+
+      const signalsY = 280;
+      ctx.save();
+      ctx.fillStyle = txt;
+      ctx.font = "12px ui-sans-serif, system-ui";
+      ctx.fillText("Señales principales", 12, signalsY - 12);
+      ctx.restore();
+
+      const visibleSignals = signals.length ? signals : [{
+        label: trained ? "sin pistas claras" : "todavía aprendiendo",
+        tone: trained ? "no ha encontrado palabras conocidas en este mensaje" : "pulsa Entrenar para que aprenda ejemplos",
+        color: style.getPropertyValue("--accent").trim() || "rgba(20,110,235,0.98)"
+      }];
+
+      visibleSignals.slice(0, 2).forEach((signal, idx) => {
+        const y = signalsY + idx * 24;
+        const line = `${signal.label}: ${signal.tone}`;
+        const maxLineChars = w < 420 ? 42 : 62;
+        const shownLine = line.length > maxLineChars ? `${line.slice(0, maxLineChars - 3)}...` : line;
+        ctx.save();
+        ctx.fillStyle = signal.color;
+        ctx.globalAlpha = 0.12;
+        ctx.beginPath(); ctx.roundRect(12, y, w - 24, 18, 9);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+        ctx.fillStyle = txt;
+        ctx.font = "12px ui-sans-serif, system-ui";
+        ctx.fillText(shownLine, 20, y + 13);
+        ctx.restore();
+      });
     }
 
     /* ===================== */
@@ -1961,9 +2128,7 @@
         };
         syncDisclosure();
 
-        const btnToggle = root.querySelector('[data-btn="toggle"]');
-        const btnStep = root.querySelector('[data-btn="step"]');
-        const btnReset = root.querySelector('[data-btn="reset"]');
+        const btnTrain = root.querySelector('[data-btn="train"]');
         const btnPredict = root.querySelector('[data-btn="predict"]');
 
         const statusPill = root.querySelector('[data-pill="status"]');
@@ -1973,9 +2138,8 @@
         const outcomeBadge = root.querySelector('[data-outcome-badge]');
         const outcomeMain = root.querySelector('[data-outcome-main]');
         const outcomeSub = root.querySelector('[data-outcome-sub]');
-        const howEl = root.querySelector('[data-how]');
-        const whyEl = root.querySelector('[data-why]');
-        const tryEl = root.querySelector('[data-try]');
+        const guideEl = root.querySelector('[data-guide]');
+        const contextEl = root.querySelector('[data-context]');
         const advancedEl = null;
         const auxWrap = root.querySelector('[data-aux-wrap]');
         const auxHtml = root.querySelector('[data-aux-html]');
@@ -1989,6 +2153,8 @@
         const inpMsg = root.querySelector('[data-input="msg"]');
         const inpK = root.querySelector('[data-input="k"]');
         const tokensEl = root.querySelector('[data-tokens]');
+        const scenarioButtons = Array.from(root.querySelectorAll('[data-scenario]'));
+        const exampleButtons = Array.from(root.querySelectorAll('[data-example]'));
 
         const ac = new AbortController();
         const on = (el, ev, fn, opts = {}) => el && el.addEventListener(ev, fn, { ...opts, signal: ac.signal });
@@ -1996,6 +2162,7 @@
         let running = false;
         let raf = null;
         let to = null;
+        let completed = false;
 
         if (auxWrap && cfg.kind === "tree") auxWrap.classList.add("ml-scroll-x");
 
@@ -2046,15 +2213,6 @@
           on(inpXNum, "input", h);
           on(inpYNum, "input", h);
         }
-        if (inpK) {
-          inpK.value = String(cfg.K);
-          on(inpK, "change", () => {
-            const nextK = clamp(parseInt(inpK.value, 10) || cfg.K, 2, 6);
-            cfg.K = nextK;
-            reset();
-          });
-        }
-
         function updateTokensUI() {
           if (!tokensEl) return;
           const tokens = Array.from(st.allTokens || []);
@@ -2075,6 +2233,7 @@
             st.testMsg = inpMsg.value;
             recomputeNB(cfg, st);
             updateTokensUI();
+            syncExampleButtons();
             repaint();
             updateMetrics();
           });
@@ -2084,11 +2243,22 @@
             const tok = ev && ev.target && ev.target.dataset ? ev.target.dataset.token : null;
             if (!tok) return;
             st.focusToken = tok;
-            const list = root.querySelector('[data-vocab-list]');
-            const row = list ? list.querySelector(`[data-word="${tok}"]`) : null;
-            if (row) row.scrollIntoView({ block: "nearest" });
             repaint();
             updateMetrics();
+          });
+        }
+
+        function syncScenarioButtons() {
+          scenarioButtons.forEach((btn) => {
+            const active = Number(btn.dataset.scenario) === cfg.K;
+            btn.setAttribute("aria-pressed", active ? "true" : "false");
+          });
+        }
+
+        function syncExampleButtons() {
+          exampleButtons.forEach((btn) => {
+            const active = !st.userOverride && btn.dataset.example === st.testMsg;
+            btn.setAttribute("aria-pressed", active ? "true" : "false");
           });
         }
 
@@ -2098,6 +2268,9 @@
         function setOutcome(main, sub) {
           if (outcomeMain) outcomeMain.textContent = main;
           if (outcomeSub) outcomeSub.textContent = sub;
+        }
+        function setContext(text) {
+          if (contextEl) contextEl.textContent = text;
         }
         function setList(el, items) {
           if (!el) return;
@@ -2206,155 +2379,60 @@
           }
 
           if (cfg.kind === "nb") {
-            const total = st.nSpam + st.nHam;
-            const pSpam = total ? st.nSpam / total : 0.5;
             const verdict = (st.logOdds > 0) ? 'NO DESEADO' : 'LEGÍTIMO';
-            const rows = [
-              ['Entr.', `${Math.min(st.trainIdx, cfg.trainStream.length)}/${cfg.trainStream.length}`],
-              ['P(no deseado)', pSpam.toFixed(2)],
-              ['Puntaje', st.logOdds.toFixed(2)],
-              ['Clase', verdict],
-            ];
-            if (metricsEl) {
-              metricsEl.innerHTML = rows.map(([k, v]) =>
-                `<div class="ml-metric"><div class="k">${k}</div><div class="v">${v}</div></div>`
-              ).join("");
-            }
-
             const contribs = Array.from(st.testTokens || []).map(t => {
               const d = Math.log(Math.max(1e-12, st.pWordSpam[t])) - Math.log(Math.max(1e-12, st.pWordHam[t]));
-              const sign = d >= 0 ? '+' : '';
-              return { t, d, label: `${t} (${sign}${d.toFixed(2)})` };
+              return { t, d };
             });
             contribs.sort((a, b) => Math.abs(b.d) - Math.abs(a.d));
 
             const trained = (st.trainIdx >= cfg.trainStream.length);
             const untrained = (st.trainIdx === 0);
-            setHint(trained ? 'entrenado: escribe un mensaje' : (untrained ? 'pulsa Animar para contar ejemplos' : 'contando ejemplos…'));
-            setAuxHeader('Probabilidades + suavizado', 'por qué decide');
-
-            const probSpam = softSigmoid(st.logOdds);
+            setHint(trained ? 'elige un ejemplo o escribe tu mensaje' : (untrained ? 'pulsa Entrenar para contar ejemplos' : 'contando ejemplos…'));
+            setAuxHeader('Qué señales está viendo', 'lectura guiada');
             setOutcomeBadge(untrained ? "sin entrenar" : (trained ? "entrenado" : "entrenando"));
-            setOutcome(verdict, `P(no deseado) ≈ ${probSpam.toFixed(2)}${untrained ? " (solo prior)" : ""}`);
-            setList(howEl, [
-              "Aprende: cuántas veces sale cada palabra.",
-              "Decide: combina las pistas.",
-              "Gráfico: palabras que más empujan."
+            setOutcome(verdict, trained
+              ? `El mensaje actual se inclina a ${verdict}.`
+              : "Todavía no ha terminado de ver ejemplos.");
+            const topSignals = contribs.length
+              ? contribs.slice(0, 3).map((c) => `${c.t}: ${c.d > 0 ? 'empuja a no deseado' : 'empuja a legítimo'}.`)
+              : [untrained ? "Sin entrenamiento aún: parte de una situación neutra." : "No ha encontrado palabras conocidas en este mensaje."];
+            setList(guideEl, [
+              trained ? `Ha aprendido con ${cfg.trainStream.length} ejemplos cortos.` : `Va por ${Math.min(st.trainIdx, cfg.trainStream.length)} de ${cfg.trainStream.length} ejemplos.`,
+              ...topSignals.slice(0, 2)
             ]);
-            setList(whyEl, (contribs.length ? contribs.slice(0, 3).map(c => c.label) : [
-              untrained ? "Sin entrenar → se usa solo el prior (50/50)." : "No hay palabras del vocabulario."
-            ]));
-            if (tryEl) tryEl.textContent = "Escribe: gratis premio urgente.";
-            if (auxWrap) {
-              const allContribs = cfg.vocab.map(w => {
-                const d = Math.log(Math.max(1e-12, st.pWordSpam[w])) - Math.log(Math.max(1e-12, st.pWordHam[w]));
-                return { w, d };
-              }).sort((a, b) => Math.abs(b.d) - Math.abs(a.d));
-              const top = allContribs.slice(0, 8).map(it => {
-                const sign = it.d >= 0 ? '+' : '';
-                return `<div class="ml-vocab-row"><span class="w">${it.w}</span><span class="v">${sign}${it.d.toFixed(2)}</span></div>`;
-              }).join("");
-              auxWrap.style.display = "";
-              if (auxCanvas) auxCanvas.style.display = "none";
-              if (auxHtml) auxHtml.innerHTML = `
-              <div class="ml-small"><b>8 pistas más fuertes (|contribución|)</b></div>
-              <div class="ml-vocab-list">${top || "—"}</div>
-            `;
-            }
+            setContext(trained
+              ? "Prueba un ejemplo guiado o escribe tu propio mensaje para ver qué señales pesan más."
+              : "Pulsa Entrenar y deja que cuente ejemplos antes de decidir.");
+            if (auxWrap) auxWrap.style.display = "none";
+            if (advancedEl) advancedEl.innerHTML = "";
             if (sparkCanvas) sparkCanvas.style.display = "none";
-
-            if (advancedEl) {
-              const allRows = cfg.vocab.map(w => {
-                const d = Math.log(Math.max(1e-12, st.pWordSpam[w])) - Math.log(Math.max(1e-12, st.pWordHam[w]));
-                const sign = d >= 0 ? '+' : '';
-                const focus = st.focusToken && st.focusToken === w;
-                return `<div class="ml-vocab-row" data-word="${w}" data-focus="${focus ? 'true' : 'false'}"><span class="w">${w}</span><span class="v">${sign}${d.toFixed(2)}</span></div>`;
-              }).join("");
-              advancedEl.innerHTML = `
-              <details>
-                <summary>Ver tabla completa</summary>
-                <div class="ml-vocab-list" data-vocab-list>${allRows}</div>
-              </details>
-              <details>
-                <summary>Ver fórmula</summary>
-                <div class="ml-small">puntaje_log = log P(no deseado) - log P(legítimo) + Σ log P(w|no deseado) - log P(w|legítimo)</div>
-              </details>
-            `;
-            }
-
-            if (explainEl) {
-              const testTokens = Array.from(st.testTokens || []);
-              explainEl.innerHTML = `
-              <div>${cfg.useCaseHtml}</div>
-              <div style="height:10px"></div>
-              <div class="ml-small">
-                <b>Mensaje:</b> "${st.testMsg || ''}"<br>
-                <b>Palabras detectadas (del vocabulario):</b> ${testTokens.join(', ') || '—'}<br>
-                <b>Evidencia (log):</b> ${contribs.map(c => c.label).join(' · ') || '—'}
-              </div>
-              <div style="height:8px"></div>
-              <div class="ml-small">
-                Lectura rápida: si el <b>puntaje</b> &gt; 0, el mensaje se inclina a NO DESEADO; si &lt; 0, a LEGÍTIMO.
-                ${trained ? ' Escribe tu propio texto (arriba) para fijar el mensaje.' : ''}
-              </div>
-            `;
-            }
             return;
           }
 
-          const rows = [
-            ['Iteración', String(st.iter)],
-            ['Fase', (st.phase === 'assign') ? 'asignar' : 'mover'],
-            ['Inercia', st.inertia.toFixed(3)],
-            ['K', String(cfg.K)],
-          ];
-          if (metricsEl) {
-            metricsEl.innerHTML = rows.map(([k, v]) =>
-              `<div class="ml-metric"><div class="k">${k}</div><div class="v">${v}</div></div>`
-            ).join("");
-          }
-
-          setHint((st.phase === 'assign') ? 'asignando…' : 'moviendo centros…');
-          setAuxHeader('Centros y tamaños', 'medias del grupo');
-
-          const hist = st.inertiaHistory || [];
-          const delta = hist.length >= 2 ? (hist[hist.length - 1] - hist[hist.length - 2]) : 0;
-          const phaseTxt = (st.phase === 'assign') ? 'asignar' : 'promediar';
-          setOutcomeBadge("iteración " + st.iter);
-          setOutcome(`${phaseTxt.toUpperCase()}`, `Inercia: ${st.inertia.toFixed(3)} (${delta >= 0 ? "+" : ""}${delta.toFixed(3)})`);
-          setList(howEl, [
-            "Aprende: centros.",
-            "Decide: centro más cercano.",
-            "Gráfico: grupos + centros."
-          ]);
+          const phaseTxt = (st.phase === 'assign') ? 'repartir puntos' : 'recolocar grupos';
+          const scenarioLabel = cfg.K === 2 ? 'Pocos grupos' : (cfg.K === 3 ? 'Equilibrado' : 'Más detalle');
+          setHint((st.phase === 'assign') ? 'agrupando clientes parecidos…' : 'recolocando cada grupo…');
+          setAuxHeader('Qué está pasando', 'lectura guiada');
+          setOutcomeBadge(completed ? "listo" : `iteración ${st.iter + 1}`);
+          setOutcome(phaseTxt, completed
+            ? `La agrupación quedó estable con ${cfg.K} grupos.`
+            : `Escenario ${scenarioLabel.toLowerCase()} en marcha.`);
           const gruposInfo = st.centers.map((c, i) => {
             const size = st.data.filter(p => p.a === i).length;
-            return `C${i + 1}: n=${size}, centro (${formatKMeansCenter(c)})`;
+            return `Grupo ${i + 1}: ${size} clientes parecidos.`;
           });
-          setList(whyEl, [
-            `Fase actual: ${phaseTxt}.`,
-            `Inercia ${delta < 0 ? "↓" : "↑"} ${Math.abs(delta).toFixed(3)}.`,
+          setList(guideEl, [
+            `Escenario activo: ${scenarioLabel} (${cfg.K} grupos).`,
+            `Ahora toca ${phaseTxt}.`,
             ...gruposInfo.slice(0, 2)
           ]);
-          if (tryEl) tryEl.textContent = "Cambia K y observa la inercia.";
+          setContext(completed
+            ? "Prueba otro nivel de detalle para comparar cómo cambian los grupos."
+            : "Pulsa Entrenar para dejar que el algoritmo ajuste los grupos hasta estabilizarse.");
           if (auxWrap) auxWrap.style.display = "none";
           if (advancedEl) advancedEl.innerHTML = "";
-          if (sparkCanvas) sparkCanvas.style.display = "";
-
-          if (explainEl) {
-            explainEl.innerHTML = `
-            <div>${cfg.useCaseHtml}</div>
-            <div style="height:10px"></div>
-            <div class="ml-small">
-              <b>Cómo converge:</b> (1) cada punto → centro más cercano, (2) el centro se mueve al promedio de su grupo.
-              Se repite hasta que los centros casi no se mueven (movimiento pequeño varias iteraciones).
-            </div>
-            <div style="height:8px"></div>
-            <div class="ml-small">
-              Interpretación: cada color = un “tipo” de cliente encontrado sin etiquetas (solo por similitud).
-            </div>
-          `;
-          }
+          if (sparkCanvas) sparkCanvas.style.display = "none";
         }
 
         function repaint() {
@@ -2486,11 +2564,12 @@
 
           if (done) {
             running = false;
+            completed = true;
             root.classList.remove("ml-running");
-            btnToggle.textContent = "▶ Animar";
+            if (btnTrain) btnTrain.disabled = false;
 
             if (cfg.kind === "nb" && reason === "trained") setStatus("entrenado");
-            else if (cfg.kind === "kmeans") setStatus(reason === "stable" ? "convergió" : "fin");
+            else if (cfg.kind === "kmeans") setStatus(reason === "stable" ? "agrupación lista" : "entrenado");
             else if (reason === "acc") setStatus(`Acc. ≥ ${(stopAcc * 100).toFixed(0)}%`);
             else setStatus("fin");
 
@@ -2506,17 +2585,17 @@
         function start() {
           if (running) return;
           running = true;
+          completed = false;
           root.classList.add("ml-running");
-          btnToggle.textContent = "⏸ Pausar";
-          setStatus("animando…");
+          if (btnTrain) btnTrain.disabled = true;
+          setStatus(cfg.kind === "kmeans" ? "agrupando…" : "entrenando…");
           scheduleNext();
         }
 
         function stop() {
           running = false;
           root.classList.remove("ml-running");
-          btnToggle.textContent = "▶ Animar";
-          setStatus("pausado");
+          if (btnTrain) btnTrain.disabled = false;
           clearTimers();
           repaint();
           updateMetrics();
@@ -2524,6 +2603,7 @@
 
         function reset() {
           stop();
+          completed = false;
           const r = mulberry32(seed);
           if (cfg.kind === "tree") st = initStateTree(cfg, r);
           else if (cfg.kind === "nb") st = initStateNB(cfg);
@@ -2549,27 +2629,20 @@
           if (cfg.kind === "nb") {
             recomputeNB(cfg, st);
             updateTokensUI();
+            if (inpMsg) inpMsg.value = st.testMsg;
+            syncExampleButtons();
           }
 
+          syncScenarioButtons();
           tuneTreeCanvasWidth();
           updateMetrics();
           repaint();
         }
 
-        on(btnToggle, "click", () => (running ? stop() : start()));
-        on(btnReset, "click", reset);
-
-        // “Paso”: en NB, tras entrenar rota ejemplos (sin animación infinita)
-        on(btnStep, "click", () => {
+        on(btnTrain, "click", () => {
           if (running) return;
-          setStatus("paso");
-          const r = oneStep("manual");
-          // NB: si está entrenado, este click solo cambia demo-msg (si userOverride=false)
-          if (cfg.kind === "nb" && r && r.done && r.reason === "trained") {
-            setStatus("entrenado");
-          }
-          updateMetrics();
-          repaint();
+          if (completed) reset();
+          start();
         });
 
         if (btnPredict) {
@@ -2586,6 +2659,28 @@
           });
         }
 
+        scenarioButtons.forEach((btn) => {
+          on(btn, "click", () => {
+            const nextK = clamp(parseInt(btn.dataset.scenario, 10) || cfg.K, 2, 4);
+            cfg.K = nextK;
+            syncScenarioButtons();
+            reset();
+          });
+        });
+
+        exampleButtons.forEach((btn) => {
+          on(btn, "click", () => {
+            st.userOverride = false;
+            st.testMsg = btn.dataset.example || st.testMsg;
+            if (inpMsg) inpMsg.value = st.testMsg;
+            recomputeNB(cfg, st);
+            updateTokensUI();
+            syncExampleButtons();
+            repaint();
+            updateMetrics();
+          });
+        });
+
         // Resize -> repaint + re-ajustar ancho del árbol
         const ro = new ResizeObserver(() => {
           requestAnimationFrame(() => {
@@ -2600,7 +2695,13 @@
         // init
         setStatus("listo");
         setHint("—");
-        if (cfg.kind === "nb") { recomputeNB(cfg, st); updateTokensUI(); }
+        if (cfg.kind === "nb") {
+          recomputeNB(cfg, st);
+          updateTokensUI();
+          if (inpMsg) inpMsg.value = st.testMsg;
+          syncExampleButtons();
+        }
+        syncScenarioButtons();
         updateMetrics();
         repaint();
         requestAnimationFrame(() => {

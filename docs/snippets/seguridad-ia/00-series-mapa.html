@@ -1,0 +1,160 @@
+<div class="secmap">
+  <div class="secmap-hero">
+    <div class="secmap-kicker">Mapa de serie</div>
+    <div class="secmap-title">Cómo pasa el riesgo de un documento a una acción</div>
+    <div class="secmap-copy">La serie sigue el camino desde un contenido externo hasta una acción del sistema. En cada etapa explica qué puede fallar y qué control puede detenerlo.</div>
+  </div>
+
+  <div class="secmap-grid">
+    <div class="secmap-card">
+      <div class="secmap-step">01</div>
+      <div class="secmap-head">Una orden oculta en un documento</div>
+      <div class="secmap-text">Un documento externo contiene una orden que el sistema puede confundir con una instrucción válida.</div>
+    </div>
+    <div class="secmap-card">
+      <div class="secmap-step">02</div>
+      <div class="secmap-head">Pedir lo mismo de muchas formas</div>
+      <div class="secmap-text">Un atacante cambia la petición hasta encontrar una respuesta que debería estar bloqueada.</div>
+    </div>
+    <div class="secmap-card">
+      <div class="secmap-step">03</div>
+      <div class="secmap-head">Guardar una señal peligrosa</div>
+      <div class="secmap-text">Un documento, una memoria o un modelo conserva una señal que puede reaparecer más tarde.</div>
+    </div>
+    <div class="secmap-card">
+      <div class="secmap-step">04</div>
+      <div class="secmap-head">Probar el camino completo</div>
+      <div class="secmap-text">La evaluación sigue el sistema desde la entrada hasta la acción, no solo la respuesta de texto.</div>
+    </div>
+    <div class="secmap-card">
+      <div class="secmap-step">05</div>
+      <div class="secmap-head">Limitar lo que el sistema puede hacer</div>
+      <div class="secmap-text">Cuarentena, permisos mínimos, registros y recuperación reducen el daño.</div>
+    </div>
+  </div>
+
+  <div class="secmap-flow">
+    <div class="secmap-node">documento externo</div>
+    <div class="secmap-arrow">→</div>
+    <div class="secmap-node">búsqueda de documentos</div>
+    <div class="secmap-arrow">→</div>
+    <div class="secmap-node">decisión del modelo</div>
+    <div class="secmap-arrow">→</div>
+    <div class="secmap-node secmap-node--strong">acción o bloqueo</div>
+  </div>
+</div>
+
+<style>
+.secmap, .secmap * { box-sizing: border-box; }
+.secmap {
+  --teal:#26A69A;
+  --blue:#324AB2;
+  --amber:#FFB343;
+  --ink:#0f172a;
+  --muted:#5b6b80;
+  --line:rgba(15,23,42,.12);
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background:
+    radial-gradient(110% 120% at 0% 0%, rgba(38,166,154,.08), transparent 52%),
+    radial-gradient(95% 120% at 100% 100%, rgba(50,74,178,.08), transparent 54%),
+    linear-gradient(180deg, rgba(255,255,255,.96), rgba(244,247,251,.96));
+}
+.secmap-hero { display:grid; gap:8px; }
+.secmap-kicker {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+.secmap-title {
+  color: var(--ink);
+  font-size: clamp(24px, 4vw, 34px);
+  font-weight: 900;
+  line-height: 1.04;
+  letter-spacing: -.04em;
+}
+.secmap-copy {
+  max-width: 68ch;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.6;
+}
+.secmap-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 22px;
+}
+.secmap-card {
+  min-height: 156px;
+  padding: 16px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.86);
+  box-shadow: 0 14px 28px rgba(15,23,42,.05);
+}
+.secmap-step {
+  color: var(--blue);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .18em;
+}
+.secmap-head {
+  margin-top: 12px;
+  color: var(--ink);
+  font-size: 18px;
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -.03em;
+}
+.secmap-text {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+.secmap-flow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.74);
+}
+.secmap-node {
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.92);
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.secmap-node--strong {
+  background: linear-gradient(135deg, rgba(38,166,154,.14), rgba(50,74,178,.12));
+}
+.secmap-arrow {
+  color: var(--amber);
+  font-size: 18px;
+  font-weight: 900;
+}
+@media (max-width: 860px) {
+  .secmap-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 560px) {
+  .secmap { padding: 18px; }
+  .secmap-grid { grid-template-columns: 1fr; }
+  .secmap-flow { justify-content: flex-start; }
+}
+</style>
