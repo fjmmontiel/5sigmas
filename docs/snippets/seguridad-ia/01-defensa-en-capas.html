@@ -1,0 +1,172 @@
+<div class="defpi">
+  <div class="defpi-head">
+    <div class="defpi-title">La defensa útil corta rutas, no solo frases</div>
+    <div class="defpi-sub">Separar lectura de contenido no confiable, decisión privilegiada y ejecución de herramientas reduce la ruta de ataque mucho más que un system prompt más largo.</div>
+  </div>
+
+  <div class="defpi-stack">
+    <div class="defpi-layer">
+      <div class="defpi-layer-kicker">1. Ingesta</div>
+      <div class="defpi-box defpi-box--soft">contenido externo no confiable</div>
+      <div class="defpi-mini">sanitización y validación básica</div>
+    </div>
+    <div class="defpi-arrow">→</div>
+    <div class="defpi-layer">
+      <div class="defpi-layer-kicker">2. Cuarentena</div>
+      <div class="defpi-box defpi-box--teal">LLM sin tools</div>
+      <div class="defpi-mini">resume, etiqueta o extrae estructura</div>
+    </div>
+    <div class="defpi-arrow">→</div>
+    <div class="defpi-layer">
+      <div class="defpi-layer-kicker">3. Decisión</div>
+      <div class="defpi-box defpi-box--blue">LLM privilegiado</div>
+      <div class="defpi-mini">ve salida estructurada, no el texto crudo</div>
+    </div>
+    <div class="defpi-arrow">→</div>
+    <div class="defpi-layer">
+      <div class="defpi-layer-kicker">4. Acción</div>
+      <div class="defpi-box defpi-box--amber">tools con scope mínimo</div>
+      <div class="defpi-mini">permiso concreto, logs y abortos</div>
+    </div>
+  </div>
+
+  <div class="defpi-rails">
+    <div class="defpi-rail">
+      <div class="defpi-rail-title">Controles transversales</div>
+      <div class="defpi-pills">
+        <span>mínimo privilegio</span>
+        <span>salida estructurada</span>
+        <span>human approval</span>
+        <span>streaming guards</span>
+        <span>telemetría</span>
+        <span>kill switch</span>
+      </div>
+    </div>
+    <div class="defpi-rail defpi-rail--warn">
+      <div class="defpi-rail-title">Lo que no basta</div>
+      <div class="defpi-copy">Más instrucciones en el system prompt, filtros de keywords aislados o un guardrail sin separación de privilegios siguen dejando abierto el mismo camino entre texto hostil y acción sensible.</div>
+    </div>
+  </div>
+</div>
+
+<style>
+.defpi, .defpi * { box-sizing: border-box; }
+.defpi {
+  --teal:#26A69A;
+  --blue:#324AB2;
+  --amber:#FFB343;
+  --ink:#0f172a;
+  --muted:#607085;
+  --line:rgba(15,23,42,.12);
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 22px;
+  border-radius: 24px;
+  border: 1px solid var(--line);
+  background:
+    radial-gradient(100% 120% at 100% 0%, rgba(38,166,154,.08), transparent 52%),
+    linear-gradient(180deg, rgba(255,255,255,.98), rgba(244,247,251,.96));
+}
+.defpi-head { display:grid; gap:7px; }
+.defpi-title {
+  color: var(--ink);
+  font-size: clamp(22px, 3vw, 30px);
+  font-weight: 900;
+  letter-spacing: -.04em;
+}
+.defpi-sub { color: var(--muted); font-size: 14px; line-height: 1.58; max-width: 70ch; }
+.defpi-stack {
+  display:grid;
+  grid-template-columns: repeat(4, minmax(0,1fr));
+  gap: 10px;
+  align-items:start;
+  margin-top: 18px;
+}
+.defpi-layer {
+  padding: 16px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.9);
+  min-height: 174px;
+}
+.defpi-layer-kicker, .defpi-rail-title {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .16em;
+}
+.defpi-box {
+  margin-top: 12px;
+  padding: 16px 14px;
+  border-radius: 16px;
+  color: var(--ink);
+  font-size: 18px;
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -.03em;
+  border: 1px solid rgba(15,23,42,.08);
+  background: rgba(244,247,251,.94);
+}
+.defpi-box--soft { background: rgba(244,247,251,.96); }
+.defpi-box--teal { background: rgba(38,166,154,.12); }
+.defpi-box--blue { background: rgba(50,74,178,.12); }
+.defpi-box--amber { background: rgba(255,179,67,.18); }
+.defpi-mini {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+.defpi-arrow {
+  align-self:center;
+  justify-self:center;
+  color: var(--amber);
+  font-size: 20px;
+  font-weight: 900;
+}
+.defpi-rails {
+  display:grid;
+  grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+  gap: 14px;
+  margin-top: 16px;
+}
+.defpi-rail {
+  padding: 16px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.86);
+}
+.defpi-rail--warn {
+  background: linear-gradient(180deg, rgba(255,179,67,.12), rgba(255,255,255,.96));
+}
+.defpi-pills {
+  display:flex;
+  flex-wrap:wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+.defpi-pills span {
+  padding: 8px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(15,23,42,.08);
+  background: white;
+  color: var(--ink);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.defpi-copy {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+@media (max-width: 860px) {
+  .defpi-stack { grid-template-columns: 1fr; }
+  .defpi-rails { grid-template-columns: 1fr; }
+  .defpi-arrow { transform: rotate(90deg); }
+}
+</style>
+

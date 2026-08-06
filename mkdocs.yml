@@ -75,6 +75,13 @@ nav:
           - Test-Time Compute: series/modelos-razonadores/03-test-time-compute.md
           - Tiempo, latencia, streaming e interacción humana: series/modelos-razonadores/04-latencia-streaming.md
           - Riesgos: series/modelos-razonadores/05-riesgos.md
+      - Seguridad en IA:
+          - Presentación: series/seguridad-ia/00_presentacion_serie.md
+          - Prompt injection: series/seguridad-ia/01-prompt-injection.md
+          - Jailbreaks: series/seguridad-ia/02-jailbreaks.md
+          - Envenenamiento: series/seguridad-ia/03-envenenamiento.md
+          - Red-teaming: series/seguridad-ia/04-red-teaming.md
+          - Controles de producción: series/seguridad-ia/05-controles-produccion.md
       - IA, PIB, bienestar y energía:
           - Presentación: series/ia-pib-bienestar-energia/00_presentacion_serie.md
           - Electricidad y bienestar: series/ia-pib-bienestar-energia/01-electricidad-bienestar.md
@@ -173,7 +180,5 @@ plugins:
 exclude_docs: |
   drafts/
   drafts/**
-  series/seguridad-ia/**
-  snippets/seguridad-ia/**
   assets/templates/**
   includes/

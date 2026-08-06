@@ -1,0 +1,21 @@
+<div class="security-visual security-visual--defense" role="img" aria-label="Capas de defensa desde la lectura en cuarentena hasta la acción autorizada y reversible">
+  <style>
+    .security-visual--defense{margin:2rem 0;padding:1.5rem;border:1px solid color-mix(in srgb,var(--md-default-fg-color) 16%,transparent);border-radius:18px;background:color-mix(in srgb,var(--md-default-bg-color) 92%,#26a69a);}
+    .security-visual--defense .sd-title{font-weight:800;font-size:1.05rem;margin-bottom:1rem;}
+    .security-visual--defense .sd-layers{display:grid;gap:.55rem;}
+    .security-visual--defense .sd-layer{display:grid;grid-template-columns:12rem 1fr auto;gap:1rem;align-items:center;padding:.8rem 1rem;border-radius:11px;background:color-mix(in srgb,var(--md-default-bg-color) 80%,#26a69a);}
+    .security-visual--defense .sd-label{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;opacity:.65;}
+    .security-visual--defense .sd-main{font-weight:700;}
+    .security-visual--defense .sd-state{font-size:.8rem;color:#26a69a;font-weight:700;}
+    .security-visual--defense .sd-note{margin-top:1rem;font-size:.9rem;opacity:.76;}
+    @media (max-width:700px){.security-visual--defense .sd-layer{grid-template-columns:1fr;gap:.25rem;}.security-visual--defense .sd-state{justify-self:start;}}
+  </style>
+  <div class="sd-title">La defensa útil corta rutas, no solo frases.</div>
+  <div class="sd-layers">
+    <div class="sd-layer"><div class="sd-label">Entrada</div><div class="sd-main">etiquetar contenido no confiable</div><div class="sd-state">cuarentena</div></div>
+    <div class="sd-layer"><div class="sd-label">Decisión</div><div class="sd-main">validar estructura y scope</div><div class="sd-state">política</div></div>
+    <div class="sd-layer"><div class="sd-label">Acción</div><div class="sd-main">autorizar tool call</div><div class="sd-state">permiso</div></div>
+    <div class="sd-layer"><div class="sd-label">Salida</div><div class="sd-main">abortar, registrar y recuperar</div><div class="sd-state">control</div></div>
+  </div>
+  <div class="sd-note">Cada capa reduce la probabilidad o el impacto. Ninguna convierte al modelo en una frontera formal.</div>
+</div>

@@ -1,0 +1,187 @@
+<div class="ragpi">
+  <div class="ragpi-head">
+    <div class="ragpi-title">Por qué la inyección indirecta cambia el nivel de gravedad</div>
+    <div class="ragpi-sub">El atacante ya no tiene que convencer al usuario. Le basta con contaminar una fuente que el sistema vaya a recuperar como si fuera contexto legítimo.</div>
+  </div>
+
+  <div class="ragpi-board">
+    <div class="ragpi-col">
+      <div class="ragpi-kicker">Corpus externo</div>
+      <div class="ragpi-doc">Wiki interna limpia</div>
+      <div class="ragpi-doc">Email operativo limpio</div>
+      <div class="ragpi-doc ragpi-doc--attack">
+        Email envenenado
+        <span>trigger fragment + payload</span>
+      </div>
+      <div class="ragpi-doc">Notas históricas limpias</div>
+    </div>
+
+    <div class="ragpi-flow">
+      <div class="ragpi-step">
+        <div class="ragpi-step-no">1</div>
+        <div class="ragpi-step-copy">Consulta natural del usuario</div>
+      </div>
+      <div class="ragpi-arrow">→</div>
+      <div class="ragpi-step">
+        <div class="ragpi-step-no">2</div>
+        <div class="ragpi-step-copy">Retriever selecciona top-K</div>
+      </div>
+      <div class="ragpi-arrow">→</div>
+      <div class="ragpi-step ragpi-step--risk">
+        <div class="ragpi-step-no">3</div>
+        <div class="ragpi-step-copy">El texto hostil entra en contexto</div>
+      </div>
+      <div class="ragpi-arrow">→</div>
+      <div class="ragpi-step ragpi-step--danger">
+        <div class="ragpi-step-no">4</div>
+        <div class="ragpi-step-copy">El agente llama tools bajo contexto contaminado</div>
+      </div>
+    </div>
+
+    <div class="ragpi-side">
+      <div class="ragpi-card">
+        <div class="ragpi-card-kicker">Trigger fragment</div>
+        <div class="ragpi-card-copy">Su trabajo no es dañar. Su trabajo es ganar recuperación y colarse en el top-K.</div>
+      </div>
+      <div class="ragpi-card ragpi-card--warm">
+        <div class="ragpi-card-kicker">Attack fragment</div>
+        <div class="ragpi-card-copy">Una vez recuperado, el payload intenta reescribir objetivo, filtrar secretos o redirigir una tool call.</div>
+      </div>
+      <div class="ragpi-metric">
+        <div class="ragpi-metric-value">top-K</div>
+        <div class="ragpi-metric-copy">La barrera decisiva no es el chat. Es la recuperación.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.ragpi, .ragpi * { box-sizing: border-box; }
+.ragpi {
+  --teal:#26A69A;
+  --blue:#324AB2;
+  --amber:#FFB343;
+  --risk:#d94d4d;
+  --ink:#0f172a;
+  --muted:#607085;
+  --line:rgba(15,23,42,.12);
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 22px;
+  border-radius: 24px;
+  border: 1px solid var(--line);
+  background:
+    radial-gradient(100% 120% at 0% 0%, rgba(255,179,67,.08), transparent 50%),
+    linear-gradient(180deg, rgba(255,255,255,.98), rgba(244,247,251,.96));
+}
+.ragpi-head { display:grid; gap:7px; }
+.ragpi-title {
+  color: var(--ink);
+  font-size: clamp(22px, 3vw, 30px);
+  font-weight: 900;
+  letter-spacing: -.04em;
+}
+.ragpi-sub { color: var(--muted); font-size: 14px; line-height: 1.58; max-width: 70ch; }
+.ragpi-board {
+  display:grid;
+  grid-template-columns: minmax(0,.9fr) minmax(0,1.2fr) minmax(0,.9fr);
+  gap: 16px;
+  margin-top: 18px;
+}
+.ragpi-col, .ragpi-side {
+  display:grid;
+  gap: 10px;
+  align-content:start;
+}
+.ragpi-kicker, .ragpi-card-kicker {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+.ragpi-doc, .ragpi-card, .ragpi-metric {
+  padding: 14px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.9);
+  box-shadow: 0 14px 28px rgba(15,23,42,.05);
+  color: var(--ink);
+}
+.ragpi-doc { font-size: 14px; font-weight: 800; line-height: 1.4; }
+.ragpi-doc span {
+  display:block;
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+.ragpi-doc--attack {
+  background: linear-gradient(180deg, rgba(217,77,77,.12), rgba(255,255,255,.96));
+  border-color: rgba(217,77,77,.2);
+}
+.ragpi-flow {
+  display:grid;
+  gap: 10px;
+  align-content:center;
+}
+.ragpi-step {
+  display:grid;
+  grid-template-columns: 42px minmax(0,1fr);
+  gap: 12px;
+  align-items:center;
+  padding: 14px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.88);
+}
+.ragpi-step--risk {
+  background: linear-gradient(180deg, rgba(255,179,67,.14), rgba(255,255,255,.96));
+}
+.ragpi-step--danger {
+  background: linear-gradient(180deg, rgba(217,77,77,.14), rgba(255,255,255,.96));
+}
+.ragpi-step-no {
+  display:grid;
+  place-items:center;
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  background: rgba(50,74,178,.1);
+  color: var(--blue);
+  font-size: 16px;
+  font-weight: 900;
+}
+.ragpi-step-copy {
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.45;
+}
+.ragpi-arrow {
+  justify-self:center;
+  color: var(--amber);
+  font-size: 18px;
+  font-weight: 900;
+}
+.ragpi-card-copy, .ragpi-metric-copy {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+.ragpi-card--warm {
+  background: linear-gradient(180deg, rgba(255,179,67,.12), rgba(255,255,255,.96));
+}
+.ragpi-metric-value {
+  color: var(--blue);
+  font-size: 30px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -.04em;
+}
+@media (max-width: 860px) {
+  .ragpi-board { grid-template-columns: 1fr; }
+}
+</style>
+
