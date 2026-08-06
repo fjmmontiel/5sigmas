@@ -13,6 +13,17 @@
     return tokens.length > 0 && tokens.every((token) => haystack.includes(token));
   };
 
+  const repairReaderEndPlacement = () => {
+    const content = document.querySelector('article.md-content__inner');
+    const end = document.querySelector('.s5-reader-end');
+    if (!content || !end || end.parentElement === content) return;
+
+    // Embedded animations may contain their own <article>. The server-side hook
+    // historically targeted the first closing article tag, which can place the
+    // continuation block inside the visual instead of after the page content.
+    content.appendChild(end);
+  };
+
   const syncGlobalReaderNavigation = () => {
     const header = document.querySelector('.md-header__inner');
     const reader = document.querySelector('[data-s5-reader-nav]');
@@ -60,6 +71,7 @@
   };
 
   const initializeReaderNavigation = () => {
+    repairReaderEndPlacement();
     syncGlobalReaderNavigation();
 
     for (const root of document.querySelectorAll('[data-s5-reader-nav]')) {
