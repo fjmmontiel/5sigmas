@@ -1,0 +1,16 @@
+/* Final reader refinements applied with deliberate priority while v3 is reviewed. */
+
+body:has(.s5-reader-shell) {
+  --s5-reader-prose: min(780px, 70ch) !important;
+  --s5-reader-lead: min(900px, 76ch) !important;
+}
+
+@media (min-width: 1320px) {
+  body:has(.s5-reader-shell) .md-header {
+    z-index: 5 !important;
+  }
+
+  body:has(.s5-reader-shell) .md-tabs {
+    z-index: 6 !important;
+  }
+}
