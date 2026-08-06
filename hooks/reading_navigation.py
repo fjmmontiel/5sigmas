@@ -252,18 +252,32 @@ def _render_end(
     )
 
 
-def _render(collections: list[dict[str, Any]], collection: dict[str, Any], index: int, src_path: str) -> tuple[str, str]:
+def _render_context(collection: dict[str, Any], index: int) -> str:
+    section = "Aprender" if collection["kind"] == "Serie" else "Construir"
+    return (
+        '<div class="s5-reader-context" aria-label="Contexto de lectura">'
+        f'<button type="button" data-s5-reader-open>{section}</button>'
+        '<span aria-hidden="true">·</span>'
+        f'<span>{index + 1:02d} de {len(collection["pages"]):02d}</span>'
+        '<span aria-hidden="true">·</span>'
+        f'<strong>{escape(collection["title"])}</strong>'
+        '</div>'
+    )
+
+
+def _render(collections: list[dict[str, Any]], collection: dict[str, Any], index: int, src_path: str) -> tuple[str, str, str]:
     pages = collection["pages"]
     current = pages[index]
     progress = round(((index + 1) / len(pages)) * 100, 2)
     previous = pages[index - 1] if index > 0 else None
     following = pages[index + 1] if index + 1 < len(pages) else None
 
+    context = _render_context(collection, index)
     top = (
         '<div class="s5-reader-shell" data-s5-reader-nav '
         f'data-series="{escape(collection["title"], quote=True)}" '
         f'data-page="{escape(current["title"], quote=True)}" data-url="{current["url"]}">'
-        '<div class="s5-reader-topbar">'
+        f'<nav class="s5-reader-topbar" aria-label="Navegación de {escape(collection["title"], quote=True)}">'
         f'{_neighbor_link(previous, "prev", collection)}'
         '<button class="s5-reader-course" type="button" data-s5-reader-open aria-haspopup="dialog">'
         f'<span>{escape(collection["title"])}</span>'
@@ -271,13 +285,13 @@ def _render(collections: list[dict[str, Any]], collection: dict[str, Any], index
         f'<i style="--s5-reader-progress:{progress}%" aria-hidden="true"></i>'
         '</button>'
         f'{_neighbor_link(following, "next", collection)}'
-        '</div>'
+        '</nav>'
         f'{_chapter_rail(collection, src_path)}'
         f'{_render_map(collections, collection, current, src_path)}'
         '</div>'
     )
     end = _render_end(previous, following, collection)
-    return top, end
+    return context, top, end
 
 
 def on_post_page(output: str, page, config, **kwargs) -> str:
@@ -292,7 +306,8 @@ def on_post_page(output: str, page, config, **kwargs) -> str:
     if collection is None:
         return output
 
-    top, end = _render(collections, collection, index, src_path)
+    context, top, end = _render(collections, collection, index, src_path)
+    output = re.sub(r"(<h1(?:\s[^>]*)?>)", context + r"\1", output, count=1)
     output = re.sub(r"(</h1>)", r"\1\n" + top, output, count=1)
     output = re.sub(r"(</article>)", end + r"\1", output, count=1)
     return output

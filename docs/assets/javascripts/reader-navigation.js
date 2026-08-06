@@ -7,6 +7,45 @@
     .toLowerCase()
     .trim();
 
+  const matchesQuery = (value, query) => {
+    const haystack = normalize(value);
+    const tokens = normalize(query).split(/\s+/).filter(Boolean);
+    return tokens.length > 0 && tokens.every((token) => haystack.includes(token));
+  };
+
+  const syncGlobalReaderNavigation = () => {
+    const header = document.querySelector('.md-header__inner');
+    const reader = document.querySelector('[data-s5-reader-nav]');
+    const existing = header?.querySelector('[data-s5-reader-global-nav]');
+
+    if (!header || !reader) {
+      existing?.remove();
+      return;
+    }
+
+    const sourceLinks = [...document.querySelectorAll('.md-tabs__link')];
+    if (sourceLinks.length === 0) return;
+
+    const nav = document.createElement('nav');
+    nav.className = 's5-reader-global-nav';
+    nav.dataset.s5ReaderGlobalNav = 'true';
+    nav.setAttribute('aria-label', 'Navegación principal');
+
+    for (const source of sourceLinks) {
+      const link = document.createElement('a');
+      link.href = source.href;
+      link.textContent = source.textContent?.trim() || '';
+      link.className = 's5-reader-global-nav__link';
+      if (source.classList.contains('md-tabs__link--active')) {
+        link.classList.add('is-active');
+        link.setAttribute('aria-current', 'page');
+      }
+      nav.appendChild(link);
+    }
+
+    existing?.replaceWith(nav) || header.appendChild(nav);
+  };
+
   const rememberCurrentPage = (root) => {
     try {
       localStorage.setItem(LAST_READING_KEY, JSON.stringify({
@@ -21,6 +60,8 @@
   };
 
   const initializeReaderNavigation = () => {
+    syncGlobalReaderNavigation();
+
     for (const root of document.querySelectorAll('[data-s5-reader-nav]')) {
       if (root.dataset.s5ReaderReady === 'true') continue;
       root.dataset.s5ReaderReady = 'true';
@@ -73,11 +114,11 @@
         for (const tab of tabs) {
           const id = tab.dataset.s5SeriesTab;
           const panel = panels.find((candidate) => candidate.dataset.s5SeriesPanel === id);
-          const tabMatches = normalize(tab.dataset.search || tab.textContent).includes(query);
+          const tabMatches = matchesQuery(tab.dataset.search || tab.textContent, query);
           let visibleEntries = 0;
 
           for (const entry of panel?.querySelectorAll('[data-s5-reader-entry]') || []) {
-            const matches = tabMatches || normalize(entry.dataset.search || entry.textContent).includes(query);
+            const matches = tabMatches || matchesQuery(entry.dataset.search || entry.textContent, query);
             entry.hidden = !matches;
             if (matches) visibleEntries += 1;
           }
