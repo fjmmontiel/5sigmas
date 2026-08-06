@@ -22,7 +22,7 @@ jobs:
           ref: redesign/reader-editorial-v3
           fetch-depth: 0
 
-      - name: Update permanent and temporary visual checks
+      - name: Update permanent visual checks
         shell: bash
         run: |
           python - <<'PY'
@@ -44,15 +44,6 @@ jobs:
               "visibleGlobalTabs: [...document.querySelectorAll('.s5-reader-global-nav__link')].filter(isVisible).length,",
           )
           capture.write_text(text, encoding='utf-8')
-
-          workflow = Path('.github/workflows/temp-reader-v3-review.yml')
-          text = workflow.read_text(encoding='utf-8')
-          text = text.replace("globalNav: await box(page, '.md-tabs'),", "globalNav: await box(page, '.s5-reader-global-nav'),")
-          text = text.replace(
-              "globalNavLinks: await page.locator('.md-tabs__link:visible').count(),",
-              "globalNavLinks: await page.locator('.s5-reader-global-nav__link:visible').count(),",
-          )
-          workflow.write_text(text, encoding='utf-8')
           PY
 
       - name: Commit QA updates
@@ -62,8 +53,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add \
             scripts/validate_direct_reader_navigation.mjs \
-            scripts/capture_site_screenshots.mjs \
-            .github/workflows/temp-reader-v3-review.yml
+            scripts/capture_site_screenshots.mjs
           if git diff --cached --quiet; then
             echo "Nothing to commit"
           else
