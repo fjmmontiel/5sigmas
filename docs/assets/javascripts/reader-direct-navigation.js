@@ -23,6 +23,8 @@
       const overlay = document.querySelector('[data-s5-reader-direct-overlay]');
       if (!search || collections.length === 0 || !toggle || !closeButton || !overlay) continue;
 
+      let openBeforeSearch = null;
+
       const resetHorizontalScroll = () => {
         document.documentElement.scrollLeft = 0;
         document.body.scrollLeft = 0;
@@ -31,15 +33,27 @@
       const scrollCurrentIntoView = () => {
         requestAnimationFrame(() => {
           if (!current || !collectionScroller) return;
+          const currentCollection = current.closest('[data-s5-reader-collection]');
+          if (currentCollection) currentCollection.open = true;
           const targetTop = current.getBoundingClientRect().top;
           const scrollerTop = collectionScroller.getBoundingClientRect().top;
           collectionScroller.scrollTop += targetTop - scrollerTop - 28;
         });
       };
 
-      const restore = () => {
+      const snapshotOpenState = () => new Set(
+        collections.filter((collection) => collection.open).map((collection) => collection.id),
+      );
+
+      const restore = ({ restoreOpenState = true } = {}) => {
         for (const collection of collections) collection.hidden = false;
         for (const entry of entries) entry.hidden = false;
+        if (restoreOpenState && openBeforeSearch) {
+          for (const collection of collections) {
+            collection.open = openBeforeSearch.has(collection.id);
+          }
+          openBeforeSearch = null;
+        }
         if (empty) empty.hidden = true;
       };
 
@@ -49,6 +63,8 @@
           restore();
           return;
         }
+
+        if (openBeforeSearch === null) openBeforeSearch = snapshotOpenState();
 
         let visibleCollections = 0;
         for (const collection of collections) {
@@ -62,6 +78,7 @@
           }
 
           collection.hidden = visibleEntries === 0;
+          collection.open = !collection.hidden;
           if (!collection.hidden) visibleCollections += 1;
         }
 
@@ -76,6 +93,7 @@
         toggle.setAttribute('aria-expanded', 'true');
         document.body.classList.add('s5-reader-direct-open');
         resetHorizontalScroll();
+        scrollCurrentIntoView();
         requestAnimationFrame(() => search.focus({ preventScroll: true }));
       };
 
@@ -102,7 +120,7 @@
         if (!event.matches) close({ restoreFocus: false });
       });
 
-      restore();
+      restore({ restoreOpenState: false });
       scrollCurrentIntoView();
     }
   };
