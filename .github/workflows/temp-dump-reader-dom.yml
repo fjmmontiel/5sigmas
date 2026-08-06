@@ -57,7 +57,7 @@ jobs:
           await page.goto('http://127.0.0.1:8000/series/from-cave-to-agi/00_presentacion_serie/', { waitUntil: 'networkidle' });
           await page.evaluate(() => document.fonts.ready);
 
-          const outline = await page.locator('.md-typeset').evaluate((root) => [...root.children].map((node, index) => {
+          const outline = await page.locator('article.md-content__inner.md-typeset').evaluate((root) => [...root.children].map((node, index) => {
             const rect = node.getBoundingClientRect();
             const style = getComputedStyle(node);
             return {
@@ -71,18 +71,18 @@ jobs:
               width: Math.round(rect.width * 10) / 10,
               height: Math.round(rect.height * 10) / 10,
               display: style.display,
-              outerHTML: node.outerHTML.slice(0, 1400),
+              outerHTML: node.outerHTML.slice(0, 1600),
             };
           }));
 
-          const allReadingTime = await page.locator('text=/Tiempo de lectura/i').evaluateAll((nodes) => nodes.map((node) => ({
+          const allReadingTime = await page.locator('article.md-content__inner text=/Tiempo de lectura/i').evaluateAll((nodes) => nodes.map((node) => ({
             tag: node.tagName,
             className: node.className || '',
             parentTag: node.parentElement?.tagName || '',
             parentClass: node.parentElement?.className || '',
             grandparentTag: node.parentElement?.parentElement?.tagName || '',
             grandparentClass: node.parentElement?.parentElement?.className || '',
-            outerHTML: node.parentElement?.outerHTML.slice(0, 1800) || node.outerHTML.slice(0, 1800),
+            outerHTML: node.parentElement?.outerHTML.slice(0, 2000) || node.outerHTML.slice(0, 2000),
           })));
 
           await fs.writeFile('artifacts/reader-dom/series-presentation-outline.json', JSON.stringify({ outline, allReadingTime }, null, 2));
@@ -93,6 +93,7 @@ jobs:
           node inspect-reader-dom.mjs
 
       - name: Upload DOM inspection
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: reader-dom-inspection
