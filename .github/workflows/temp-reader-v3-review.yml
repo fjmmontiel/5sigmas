@@ -7,6 +7,8 @@ on:
       - 'hooks/reading_navigation.py'
       - 'hooks/direct_reader_navigation.py'
       - 'docs/stylesheets/reader-editorial-v3.css'
+      - 'docs/stylesheets/reader-editorial-v3-iteration.css'
+      - 'docs/assets/javascripts/reader-navigation.js'
       - 'scripts/validate_direct_reader_navigation.mjs'
       - 'mkdocs.yml'
       - '.github/workflows/temp-reader-v3-review.yml'
@@ -64,10 +66,10 @@ jobs:
           const baseUrl = 'http://127.0.0.1:8000';
           const outputDir = 'artifacts/reader-v3-review';
           const specs = [
-            { slug: 'reactive-proactive-voice', path: '/articulos-tecnicos/reactive-proactive-voice-agents/', visual: '.s5v-contract' },
-            { slug: 'voice-architectures', path: '/articulos-tecnicos/voice-agent-architectures/', visual: '.s5v-arch-map' },
-            { slug: 'series-presentation', path: '/series/from-cave-to-agi/00_presentacion_serie/', visual: null },
-            { slug: 'series-chapter', path: '/series/modelos-razonadores/03-test-time-compute/', visual: null },
+            { slug: 'reactive-proactive-voice', path: '/articulos-tecnicos/reactive-proactive-voice-agents/', visual: '.s5v-contract', kind: 'technical' },
+            { slug: 'voice-architectures', path: '/articulos-tecnicos/voice-agent-architectures/', visual: '.s5v-arch-map', kind: 'technical' },
+            { slug: 'series-presentation', path: '/series/from-cave-to-agi/00_presentacion_serie/', visual: '.s5-video-embed', kind: 'presentation' },
+            { slug: 'series-chapter', path: '/series/modelos-razonadores/03-test-time-compute/', visual: '.s5-video-embed', kind: 'chapter' },
           ];
           const desktopViewports = [
             { name: 'wide', width: 1728, height: 1117 },
@@ -114,12 +116,12 @@ jobs:
               }
             ` });
             await page.evaluate(() => window.scrollTo(0, 0));
-            await page.waitForTimeout(260);
+            await page.waitForTimeout(280);
           }
 
-          const recordFailure = (label, message) => failures.push(`${label}: ${message}`);
+          const fail = (label, message) => failures.push(`${label}: ${message}`);
 
-          async function desktop(spec, viewport) {
+          async function inspectDesktop(spec, viewport) {
             const label = `${spec.slug}/${viewport.name}`;
             const page = await browser.newPage({ viewport, deviceScaleFactor: 1 });
             const pageErrors = [];
@@ -128,14 +130,17 @@ jobs:
             await settle(page);
 
             const geometry = {
-              page: spec.slug, viewport: viewport.name, viewportWidth: viewport.width,
+              page: spec.slug,
+              viewport: viewport.name,
+              viewportWidth: viewport.width,
               header: await box(page, '.md-header__inner'),
-              tabs: await box(page, '.md-tabs'),
+              globalNav: await box(page, '.md-tabs'),
+              globalNavLinks: await page.locator('.md-tabs__link:visible').count(),
               library: await box(page, '.s5-reader-direct'),
               content: await box(page, '.md-content'),
               context: await box(page, '.s5-reader-context'),
               title: await box(page, 'article h1'),
-              navigator: await box(page, '.s5-reader-topbar'),
+              navigatorVisible: await page.locator('.s5-reader-topbar:visible').count(),
               firstLead: await box(page, '.md-typeset > blockquote'),
               firstParagraph: await box(page, '.md-typeset > p'),
               visual: spec.visual ? await box(page, spec.visual) : null,
@@ -143,6 +148,9 @@ jobs:
               tagsVisible: await page.locator('.md-tags:visible').count(),
               breadcrumbsVisible: await page.locator('.md-path:visible').count(),
               directToggleVisible: await page.locator('.s5-reader-direct-toggle:visible').count(),
+              oldReadingTimeBlocks: await page.locator('article blockquote:has-text("Tiempo de lectura")').count(),
+              readingMetaVisible: await page.locator('.s5-reading-meta:visible').count(),
+              seriesMetaVisible: await page.locator('.sm-wrap:visible').count(),
               overflow: await page.evaluate(() => Math.max(0, document.documentElement.scrollWidth - window.innerWidth)),
               pageErrors,
             };
@@ -151,40 +159,44 @@ jobs:
             await page.screenshot({ path: `${outputDir}/${spec.slug}-${viewport.name}-viewport.png`, fullPage: false });
             await page.screenshot({ path: `${outputDir}/${spec.slug}-${viewport.name}-full.png`, fullPage: true });
 
-            for (const field of ['header', 'library', 'content', 'context', 'title', 'navigator']) {
-              if (!geometry[field]) recordFailure(label, `missing ${field}`);
+            for (const field of ['header', 'globalNav', 'library', 'content', 'context', 'title']) {
+              if (!geometry[field]) fail(label, `missing ${field}`);
             }
-            if (!geometry.firstLead && !geometry.firstParagraph) recordFailure(label, 'missing readable lead or paragraph');
-            if (geometry.pageErrors.length) recordFailure(label, `browser errors ${JSON.stringify(geometry.pageErrors)}`);
-            if (geometry.overflow > 1) recordFailure(label, `horizontal overflow ${geometry.overflow}px`);
-            if (geometry.visibleCollections !== 1) recordFailure(label, `${geometry.visibleCollections} contextual collections visible`);
-            if (geometry.tagsVisible || geometry.breadcrumbsVisible || geometry.directToggleVisible) recordFailure(label, 'duplicated navigation chrome visible');
-            if (geometry.navigator?.height > 52) recordFailure(label, `navigator height ${geometry.navigator.height}px`);
-            if (geometry.content && geometry.library && geometry.content.x - (geometry.library.x + geometry.library.width) < 30) recordFailure(label, 'library/article gap below 30px');
-            if (geometry.title && geometry.content && Math.abs(geometry.title.x - geometry.content.x) > 1) recordFailure(label, 'title/content edges differ');
-            if (geometry.navigator && geometry.content && Math.abs(geometry.navigator.x - geometry.content.x) > 1) recordFailure(label, 'navigator/content edges differ');
-            if (geometry.firstParagraph && (geometry.firstParagraph.width < 700 || geometry.firstParagraph.width > 790)) recordFailure(label, `prose width ${geometry.firstParagraph.width}px`);
-            if (geometry.firstLead && geometry.firstLead.width > 890) recordFailure(label, `lead width ${geometry.firstLead.width}px`);
-            if (geometry.visual && geometry.visual.width < 900) recordFailure(label, `visual width ${geometry.visual.width}px`);
-            if (geometry.title?.y > 245) recordFailure(label, `title y=${geometry.title.y}px`);
+            if (!geometry.firstLead && !geometry.firstParagraph) fail(label, 'missing readable lead or paragraph');
+            if (geometry.pageErrors.length) fail(label, `browser errors ${JSON.stringify(geometry.pageErrors)}`);
+            if (geometry.overflow > 1) fail(label, `horizontal overflow ${geometry.overflow}px`);
+            if (geometry.globalNavLinks < 5) fail(label, `only ${geometry.globalNavLinks} global navigation links visible`);
+            if (geometry.navigatorVisible) fail(label, 'duplicated desktop lesson navigator visible');
+            if (geometry.visibleCollections !== 1) fail(label, `${geometry.visibleCollections} contextual collections visible`);
+            if (geometry.tagsVisible || geometry.breadcrumbsVisible || geometry.directToggleVisible) fail(label, 'duplicated navigation chrome visible');
+            if (geometry.content && geometry.library && geometry.content.x - (geometry.library.x + geometry.library.width) < 30) fail(label, 'library/article gap below 30px');
+            if (geometry.title && geometry.content && Math.abs(geometry.title.x - geometry.content.x) > 1) fail(label, 'title/content edges differ');
+            if (geometry.firstParagraph && (geometry.firstParagraph.width < 720 || geometry.firstParagraph.width > 800)) fail(label, `prose width ${geometry.firstParagraph.width}px`);
+            if (geometry.firstLead && geometry.firstLead.width > 920) fail(label, `lead width ${geometry.firstLead.width}px`);
+            if (geometry.visual && geometry.visual.width < 900) fail(label, `visual width ${geometry.visual.width}px`);
+            if (geometry.title?.y > 230) fail(label, `title y=${geometry.title.y}px`);
+            if (geometry.oldReadingTimeBlocks) fail(label, 'legacy reading-time block remains visible');
+            if (spec.kind === 'presentation' && geometry.seriesMetaVisible !== 1) fail(label, 'series presentation metadata is missing');
+            if (spec.kind === 'chapter' && geometry.readingMetaVisible !== 1) fail(label, 'compact chapter reading metadata is missing');
             await page.close();
           }
 
-          async function compact(spec, kind) {
+          async function inspectCompact(spec, kind) {
             const isMobile = kind === 'mobile';
             const viewport = isMobile ? { width: 390, height: 844 } : { width: 1024, height: 900 };
-            const pageOptions = isMobile
+            const options = isMobile
               ? { ...devices['Pixel 7'], viewport, deviceScaleFactor: 1 }
               : { viewport, deviceScaleFactor: 1 };
             const label = `${spec.slug}/${kind}`;
-            const page = await browser.newPage(pageOptions);
+            const page = await browser.newPage(options);
             const pageErrors = [];
             page.on('pageerror', (error) => pageErrors.push(error.message));
             await page.goto(`${baseUrl}${spec.path}`, { waitUntil: 'domcontentloaded' });
             await settle(page);
 
             const geometry = {
-              page: spec.slug, viewport: kind,
+              page: spec.slug,
+              viewport: kind,
               context: await box(page, '.s5-reader-context'),
               title: await box(page, 'article h1'),
               navigator: await box(page, '.s5-reader-topbar'),
@@ -194,6 +206,9 @@ jobs:
               directToggleVisible: await page.locator('.s5-reader-direct-toggle:visible').count(),
               tagsVisible: await page.locator('.md-tags:visible').count(),
               breadcrumbsVisible: await page.locator('.md-path:visible').count(),
+              oldReadingTimeBlocks: await page.locator('article blockquote:has-text("Tiempo de lectura")').count(),
+              readingMetaVisible: await page.locator('.s5-reading-meta:visible').count(),
+              seriesMetaVisible: await page.locator('.sm-wrap:visible').count(),
               overflow: await page.evaluate(() => Math.max(0, document.documentElement.scrollWidth - window.innerWidth)),
               pageErrors,
             };
@@ -202,21 +217,24 @@ jobs:
             await page.screenshot({ path: `${outputDir}/${spec.slug}-${kind}-viewport.png`, fullPage: false });
             if (isMobile) await page.screenshot({ path: `${outputDir}/${spec.slug}-${kind}-full.png`, fullPage: true });
 
-            if (!geometry.context || !geometry.title || !geometry.navigator) recordFailure(label, 'missing contextual header');
-            if (geometry.libraryVisible || geometry.directToggleVisible || geometry.tagsVisible || geometry.breadcrumbsVisible) recordFailure(label, 'duplicated navigation chrome visible');
-            if (geometry.navigator?.position !== 'sticky') recordFailure(label, 'navigator is not sticky');
-            if (geometry.navigator?.height > 54) recordFailure(label, `navigator height ${geometry.navigator.height}px`);
-            if (geometry.overflow > 1) recordFailure(label, `horizontal overflow ${geometry.overflow}px`);
-            if (isMobile && geometry.title?.y > 190) recordFailure(label, `title y=${geometry.title.y}px`);
-            if (pageErrors.length) recordFailure(label, `browser errors ${JSON.stringify(pageErrors)}`);
+            if (!geometry.context || !geometry.title || !geometry.navigator) fail(label, 'missing contextual header');
+            if (geometry.libraryVisible || geometry.directToggleVisible || geometry.tagsVisible || geometry.breadcrumbsVisible) fail(label, 'duplicated navigation chrome visible');
+            if (geometry.navigator?.position !== 'sticky') fail(label, 'navigator is not sticky');
+            if (geometry.navigator?.height > 54) fail(label, `navigator height ${geometry.navigator.height}px`);
+            if (geometry.overflow > 1) fail(label, `horizontal overflow ${geometry.overflow}px`);
+            if (isMobile && geometry.title?.y > 190) fail(label, `title y=${geometry.title.y}px`);
+            if (geometry.oldReadingTimeBlocks) fail(label, 'legacy reading-time block remains visible');
+            if (spec.kind === 'presentation' && geometry.seriesMetaVisible !== 1) fail(label, 'series presentation metadata is missing');
+            if (spec.kind === 'chapter' && geometry.readingMetaVisible !== 1) fail(label, 'compact chapter reading metadata is missing');
+            if (pageErrors.length) fail(label, `browser errors ${JSON.stringify(pageErrors)}`);
             await page.close();
           }
 
           try {
             for (const spec of specs) {
-              for (const viewport of desktopViewports) await desktop(spec, viewport);
-              await compact(spec, 'tablet');
-              await compact(spec, 'mobile');
+              for (const viewport of desktopViewports) await inspectDesktop(spec, viewport);
+              await inspectCompact(spec, 'tablet');
+              await inspectCompact(spec, 'mobile');
             }
           } finally {
             await browser.close();
