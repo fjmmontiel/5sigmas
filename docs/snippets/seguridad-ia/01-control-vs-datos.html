@@ -1,19 +1,19 @@
 <div class="pidi">
   <div class="pidi-head">
-    <div class="pidi-title">Dónde nace el problema</div>
-    <div class="pidi-sub">El modelo recibe control y datos dentro del mismo flujo textual. La defensa buena no es "pedirle más obediencia", sino reducir cuánto control operativo puede ganar el contenido no confiable.</div>
+    <div class="pidi-title">El sistema debe separar datos de instrucciones</div>
+    <div class="pidi-sub">Un modelo puede recibir un documento y una orden dentro del mismo texto. La aplicación debe decidir qué parte solo informa y qué parte puede activar una acción.</div>
   </div>
 
   <div class="pidi-grid">
     <div class="pidi-panel">
-      <div class="pidi-label">Plano ideal</div>
+      <div class="pidi-label">Separación clara</div>
       <div class="pidi-lane pidi-lane--safe">
-        <div class="pidi-chip pidi-chip--ctrl">control</div>
+        <div class="pidi-chip pidi-chip--ctrl">instrucciones del sistema</div>
         <div class="pidi-arrow">→</div>
         <div class="pidi-box">reglas del sistema</div>
       </div>
       <div class="pidi-lane">
-        <div class="pidi-chip pidi-chip--data">datos</div>
+        <div class="pidi-chip pidi-chip--data">documento externo</div>
         <div class="pidi-arrow">→</div>
         <div class="pidi-box">contenido a procesar</div>
       </div>
@@ -21,18 +21,18 @@
     </div>
 
     <div class="pidi-panel pidi-panel--risk">
-      <div class="pidi-label">Plano real en un LLM</div>
+      <div class="pidi-label">Cuando todo llega junto</div>
       <div class="pidi-stream">
-        <div class="pidi-token pidi-token--ctrl">system prompt</div>
-        <div class="pidi-token pidi-token--usr">pregunta usuario</div>
-        <div class="pidi-token pidi-token--ctx">texto recuperado</div>
-        <div class="pidi-token pidi-token--tool">salida de tool</div>
+        <div class="pidi-token pidi-token--ctrl">instrucción del sistema</div>
+        <div class="pidi-token pidi-token--usr">pregunta del usuario</div>
+        <div class="pidi-token pidi-token--ctx">documento recuperado</div>
+        <div class="pidi-token pidi-token--tool">respuesta de herramienta</div>
       </div>
       <div class="pidi-core">
         <div class="pidi-core-ring"></div>
-        <div class="pidi-core-text">mismo canal<br>de contexto</div>
+        <div class="pidi-core-text">mismo canal<br>de texto</div>
       </div>
-      <div class="pidi-riskline">Si el contenido hostil entra en contexto, compite por mover la decisión.</div>
+      <div class="pidi-riskline">Si el documento incluye una orden, el modelo puede tratarla como parte de la tarea.</div>
     </div>
   </div>
 </div>
@@ -168,4 +168,3 @@
   .pidi-grid { grid-template-columns: 1fr; }
 }
 </style>
-

@@ -1,6 +1,6 @@
 ---
-title: Prompt injection — cuando el modelo no distingue instrucciones de datos
-description: "Por qué aparece el prompt injection en LLMs, RAG y agentes. Qué lo diferencia de la inyección clásica y qué defensas cambian realmente la arquitectura del sistema."
+title: Prompt injection — cuando un documento puede cambiar lo que hace el sistema
+description: "Cómo una orden escondida en un documento puede entrar en un sistema con IA y qué controles separan la lectura de una acción."
 date: 2026-05-26
 keywords: prompt injection, seguridad LLM, indirect prompt injection, RAG security, agentes IA seguridad, dual LLM pattern
 tags:
@@ -24,7 +24,7 @@ Ahí aparece el prompt injection. No porque el modelo tenga una personalidad dé
 
 ---
 
-## 1. La causa raíz vive más allá del prompt
+## 1. El problema empieza cuando un documento llega al modelo
 
 El error más habitual es tratar el prompt injection como si fuera una versión exótica de "escribir mejor el system prompt". Eso confunde el síntoma con la causa.
 
@@ -40,7 +40,7 @@ La consecuencia práctica es simple: si el sistema lee contenido no confiable, d
 
 ---
 
-## 2. El salto serio llega con la inyección indirecta
+## 2. La orden puede aparecer en una búsqueda de documentos
 
 En un chat simple el atacante todavía habla directamente con el modelo. Eso ya es un problema, pero el riesgo sigue bastante contenido: la entrada maliciosa y el efecto quedan dentro de la misma interacción.
 
@@ -58,7 +58,7 @@ Los sistemas multiagente suelen verse mejor en la demo que en la auditoría. La 
 
 ---
 
-## 3. Por qué filtrar más no cierra el problema
+## 3. Filtrar palabras no separa los datos de las instrucciones
 
 Cuando aparece el prompt injection, la reacción natural es añadir filtros: listas de palabras prohibidas, detectores de instrucciones peligrosas, reescritura de consultas, perplejidad, masking, una capa extra de guardrail o un LLM juez. Todo eso puede aportar valor táctico. El problema es pensar que basta.
 
@@ -72,7 +72,7 @@ No hace falta un escenario hollywoodiense para que eso duela. Basta con que un a
 
 ---
 
-## 4. Las defensas útiles cambian la forma del sistema
+## 4. La protección debe separar lectura y acción
 
 La defensa seria no empieza por escribir un prompt más severo. Empieza por decidir qué parte del sistema puede ver contenido no confiable y qué parte puede actuar.
 

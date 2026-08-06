@@ -1,42 +1,42 @@
 <div class="secmap">
   <div class="secmap-hero">
     <div class="secmap-kicker">Mapa de serie</div>
-    <div class="secmap-title">De la entrada hostil al control de producción</div>
-    <div class="secmap-copy">La secuencia útil no va de menos a más miedo. Va de entender dónde nace el riesgo, cómo se propaga y qué controles cortan la cadena antes de que llegue a una acción con privilegios.</div>
+    <div class="secmap-title">Cómo pasa el riesgo de un documento a una acción</div>
+    <div class="secmap-copy">La serie sigue el camino desde un contenido externo hasta una acción del sistema. En cada etapa explica qué puede fallar y qué control puede detenerlo.</div>
   </div>
 
   <div class="secmap-grid">
     <div class="secmap-card">
       <div class="secmap-step">01</div>
-      <div class="secmap-head">Prompt injection</div>
-      <div class="secmap-text">Colisión entre instrucciones y datos dentro del mismo canal textual.</div>
+      <div class="secmap-head">Una orden oculta en un documento</div>
+      <div class="secmap-text">Un documento externo contiene una orden que el sistema puede confundir con una instrucción válida.</div>
     </div>
     <div class="secmap-card">
       <div class="secmap-step">02</div>
-      <div class="secmap-head">Jailbreaks</div>
-      <div class="secmap-text">Cómo forzar al modelo a abandonar sus límites operativos.</div>
+      <div class="secmap-head">Pedir lo mismo de muchas formas</div>
+      <div class="secmap-text">Un atacante cambia la petición hasta encontrar una respuesta que debería estar bloqueada.</div>
     </div>
     <div class="secmap-card">
       <div class="secmap-step">03</div>
-      <div class="secmap-head">Envenenamiento</div>
-      <div class="secmap-text">Cuando retrieval, memoria o entrenamiento aprenden la señal equivocada.</div>
+      <div class="secmap-head">Guardar una señal peligrosa</div>
+      <div class="secmap-text">Un documento, una memoria o un modelo conserva una señal que puede reaparecer más tarde.</div>
     </div>
     <div class="secmap-card">
       <div class="secmap-step">04</div>
-      <div class="secmap-head">Red-teaming</div>
-      <div class="secmap-text">Evaluar cadenas completas y no solo prompts aislados.</div>
+      <div class="secmap-head">Probar el camino completo</div>
+      <div class="secmap-text">La evaluación sigue el sistema desde la entrada hasta la acción, no solo la respuesta de texto.</div>
     </div>
     <div class="secmap-card">
       <div class="secmap-step">05</div>
-      <div class="secmap-head">Controles</div>
-      <div class="secmap-text">Cuarentena, mínimo privilegio, observabilidad y respuesta rápida.</div>
+      <div class="secmap-head">Limitar lo que el sistema puede hacer</div>
+      <div class="secmap-text">Cuarentena, permisos mínimos, registros y recuperación reducen el daño.</div>
     </div>
   </div>
 
   <div class="secmap-flow">
-    <div class="secmap-node">contenido externo</div>
+    <div class="secmap-node">documento externo</div>
     <div class="secmap-arrow">→</div>
-    <div class="secmap-node">contexto recuperado</div>
+    <div class="secmap-node">búsqueda de documentos</div>
     <div class="secmap-arrow">→</div>
     <div class="secmap-node">decisión del modelo</div>
     <div class="secmap-arrow">→</div>
@@ -158,4 +158,3 @@
   .secmap-flow { justify-content: flex-start; }
 }
 </style>
-

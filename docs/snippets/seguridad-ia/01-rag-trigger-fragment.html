@@ -1,17 +1,17 @@
 <div class="ragpi">
   <div class="ragpi-head">
-    <div class="ragpi-title">Por qué la inyección indirecta cambia el nivel de gravedad</div>
-    <div class="ragpi-sub">El atacante ya no tiene que convencer al usuario. Le basta con contaminar una fuente que el sistema vaya a recuperar como si fuera contexto legítimo.</div>
+    <div class="ragpi-title">Un documento externo puede llegar hasta una herramienta</div>
+    <div class="ragpi-sub">El atacante puede esconder una orden en una fuente que el sistema buscará después y tratará como información válida.</div>
   </div>
 
   <div class="ragpi-board">
     <div class="ragpi-col">
-      <div class="ragpi-kicker">Corpus externo</div>
+      <div class="ragpi-kicker">Documentos externos</div>
       <div class="ragpi-doc">Wiki interna limpia</div>
       <div class="ragpi-doc">Email operativo limpio</div>
       <div class="ragpi-doc ragpi-doc--attack">
         Email envenenado
-        <span>trigger fragment + payload</span>
+        <span>fragmento de activación y orden</span>
       </div>
       <div class="ragpi-doc">Notas históricas limpias</div>
     </div>
@@ -19,37 +19,37 @@
     <div class="ragpi-flow">
       <div class="ragpi-step">
         <div class="ragpi-step-no">1</div>
-        <div class="ragpi-step-copy">Consulta natural del usuario</div>
+        <div class="ragpi-step-copy">El usuario hace una pregunta</div>
       </div>
       <div class="ragpi-arrow">→</div>
       <div class="ragpi-step">
         <div class="ragpi-step-no">2</div>
-        <div class="ragpi-step-copy">Retriever selecciona top-K</div>
+        <div class="ragpi-step-copy">El sistema busca un documento</div>
       </div>
       <div class="ragpi-arrow">→</div>
       <div class="ragpi-step ragpi-step--risk">
         <div class="ragpi-step-no">3</div>
-        <div class="ragpi-step-copy">El texto hostil entra en contexto</div>
+        <div class="ragpi-step-copy">La orden entra en el contexto</div>
       </div>
       <div class="ragpi-arrow">→</div>
       <div class="ragpi-step ragpi-step--danger">
         <div class="ragpi-step-no">4</div>
-        <div class="ragpi-step-copy">El agente llama tools bajo contexto contaminado</div>
+        <div class="ragpi-step-copy">La aplicación decide si usa una herramienta</div>
       </div>
     </div>
 
     <div class="ragpi-side">
       <div class="ragpi-card">
-        <div class="ragpi-card-kicker">Trigger fragment</div>
-        <div class="ragpi-card-copy">Su trabajo no es dañar. Su trabajo es ganar recuperación y colarse en el top-K.</div>
+        <div class="ragpi-card-kicker">Fragmento de activación</div>
+        <div class="ragpi-card-copy">Su objetivo es aparecer entre los documentos que el sistema considera relevantes.</div>
       </div>
       <div class="ragpi-card ragpi-card--warm">
-        <div class="ragpi-card-kicker">Attack fragment</div>
-        <div class="ragpi-card-copy">Una vez recuperado, el payload intenta reescribir objetivo, filtrar secretos o redirigir una tool call.</div>
+        <div class="ragpi-card-kicker">Fragmento malicioso</div>
+        <div class="ragpi-card-copy">Cuando se recupera, puede intentar cambiar la tarea, filtrar información o redirigir una llamada a herramienta.</div>
       </div>
       <div class="ragpi-metric">
-        <div class="ragpi-metric-value">top-K</div>
-        <div class="ragpi-metric-copy">La barrera decisiva no es el chat. Es la recuperación.</div>
+        <div class="ragpi-metric-value">Búsqueda</div>
+        <div class="ragpi-metric-copy">La barrera decisiva es controlar qué documentos entran en el contexto.</div>
       </div>
     </div>
   </div>
@@ -184,4 +184,3 @@
   .ragpi-board { grid-template-columns: 1fr; }
 }
 </style>
-

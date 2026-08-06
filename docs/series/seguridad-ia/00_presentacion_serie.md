@@ -1,6 +1,6 @@
 ---
 title: Seguridad en IA — ataques y defensas
-description: "Una serie técnica sobre prompt injection, jailbreaks, envenenamiento de contexto, red-teaming y controles de producción para sistemas con LLMs, RAG y agentes."
+description: "Una serie sobre cómo una orden escondida en un documento puede influir en un sistema con IA, cómo puede conservarse ese riesgo y qué controles limitan las acciones."
 keywords: seguridad IA, prompt injection, jailbreak LLM, agentes IA, RAG security, OWASP LLM, red teaming IA
 date: 2026-05-26
 robots: noindex
@@ -26,27 +26,27 @@ La serie no intenta convertir la seguridad en IA en una lista de sustos nuevos. 
 
 ## Índice
 
-### 1. **Prompt injection — cuando el modelo no distingue instrucciones de datos**
+### 1. **Una orden escondida en un documento puede cambiar lo que hace el sistema**
 - Qué se rompe exactamente cuando un LLM procesa el plano de control y el plano de datos en el mismo canal.
 - Por qué la inyección indirecta en RAG y agentes es más grave que el caso de chat aislado.
 - Qué defensas cambian de verdad la forma del sistema.
 
-### 2. **Jailbreaks — cómo se fuerza un límite aprendido**
+### 2. **Pedir al modelo que ignore sus límites**
 - Cómo funcionan los ataques que fuerzan al modelo a abandonar sus restricciones.
 - Qué diferencia hay entre un bypass anecdótico y una familia de jailbreaks transferible.
 - Qué papel pueden jugar clasificadores, streaming guards y respuesta rápida.
 
-### 3. **Envenenamiento — memoria, retrieval y aprendizaje del input equivocado**
+### 3. **Guardar una señal peligrosa dentro del sistema**
 - Qué ocurre cuando el sistema aprende, recuerda o recupera contenido que no debería tratar como confiable.
 - Envenenamiento de bases RAG, memoria de trabajo de agentes y backdoors persistentes.
 - Por qué retirar conocimiento peligroso es más difícil de lo que parece.
 
-### 4. **Red-teaming — cómo medir antes del incidente**
+### 4. **Probar el camino completo antes del incidente**
 - Qué significa evaluar seguridad en sistemas agénticos y no solo en prompts aislados.
 - Qué hay que probar en pipelines con herramientas, memoria y varios pasos.
 - Por qué una captura bonita no basta para medir una cadena causal completa.
 
-### 5. **Controles de producción — mínimo privilegio, cuarentena y observabilidad**
+### 5. **Limitar lo que el sistema puede leer, cambiar y ejecutar**
 - Qué arquitectura defensiva tiene sentido en sistemas reales.
 - Dónde sirven los guardrails y dónde no.
 - Cómo combinar políticas, sandboxing, revisión humana y telemetría sin convertir el producto en algo inútil.

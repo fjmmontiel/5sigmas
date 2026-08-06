@@ -1,6 +1,6 @@
 ---
-title: Red-teaming — medir antes del incidente
-description: "Cómo evaluar capacidades peligrosas y fallos de seguridad en la cadena completa de un sistema con LLM."
+title: Red-teaming — probar el camino completo antes del incidente
+description: "Cómo probar desde el documento que entra hasta la acción que el sistema puede ejecutar, antes de que ocurra un incidente."
 date: 2026-08-06
 keywords: red teaming IA, evaluación de seguridad, uplift humano, ART, benchmarks LLM
 tags:
@@ -23,7 +23,7 @@ El red-teaming sirve para encontrar esos caminos antes de que los encuentre un
 incidente. Su valor depende de que la amenaza, el entorno, el presupuesto y la
 rúbrica se parezcan al uso que se quiere proteger.
 
-## Capacidad, uplift y daño
+## Separar lo que el modelo sabe hacer de lo que el sistema ejecuta
 
 Una evaluación debería separar al menos tres niveles:
 
@@ -41,7 +41,7 @@ obtenido una capacidad nueva. La evaluación debe revisar si el contenido era
 accionable, si la persona tenía los recursos necesarios y si el resultado se
 podía reproducir bajo condiciones realistas.
 
-## Helpful-only para ver el techo de capacidad
+## Probar un modelo sin sus filtros para conocer su capacidad
 
 El AI Safety Index recoge como buena práctica evaluar también modelos
 *helpful-only*, sin las mitigaciones de seguridad del producto. El objetivo no
@@ -53,7 +53,7 @@ activos, qué herramientas existen y quién revisa los resultados. Una cifra de
 un modelo capado no se puede comparar sin más con una cifra de un modelo sin
 guardrails.
 
-## Red-teaming automático
+## Automatizar ataques también puede engañar a la evaluación
 
 Constitutional Classifiers describe un pipeline de red-teaming automático que
 genera ataques largos y de varios turnos. Un modelo de ataque propone una
@@ -69,7 +69,7 @@ respuestas muy largas elevaba la puntuación sin aportar instrucciones realmente
 accionables. El red-team debe revisar ejemplos y medir utilidad para la amenaza
 real, no solo la puntuación agregada.
 
-## La cadena real tiene estados
+## La evaluación debe registrar cada paso
 
 Una evaluación de un agente necesita registrar:
 
@@ -90,7 +90,7 @@ El benchmark end-to-end no tiene que ser enorme. Tiene que ser representativo.
 Una tarea pequeña con una cuenta de prueba, un documento contaminado y una
 acción reversible puede revelar más que miles de prompts sin herramientas.
 
-## Evitar el benchmark de escaparate
+## Evitar pruebas que solo sirven para lucir una cifra
 
 Una buena prueba incluye variaciones de redacción, documentos adversarios,
 timeouts, errores de herramienta, reintentos y permisos reducidos. También debe

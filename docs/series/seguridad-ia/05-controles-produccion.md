@@ -1,6 +1,6 @@
 ---
-title: Controles de producción — defensa en profundidad
-description: "Qué arquitectura limita el daño cuando un LLM lee contenido externo, usa herramientas y una capa de seguridad falla."
+title: Controles de producción — limitar las acciones cuando el modelo falla
+description: "Qué controles limitan el daño cuando un sistema con IA lee contenido externo, usa herramientas y una defensa falla."
 date: 2026-08-06
 keywords: seguridad producción LLM, mínimo privilegio, dual LLM, guardrails, observabilidad agentes
 tags:
@@ -22,7 +22,7 @@ La defensa en profundidad no consiste en apilar filtros hasta que el producto
 deje de ser útil. Consiste en repartir responsabilidades entre capas que no
 compartan exactamente la misma superficie de ataque.
 
-## Separar lectura y acción
+## Separar la lectura de documentos y las acciones
 
 El patrón dual-LLM propone una frontera clara. Un modelo en cuarentena puede leer
 contenido no confiable y extraer datos. No tiene acceso directo a herramientas ni
@@ -35,7 +35,7 @@ La separación no elimina toda inyección. Un resumen puede estar contaminado y 
 clasificador puede equivocarse. La ventaja es que la ruta de ataque deja de ser
 un salto directo desde cualquier texto hasta una acción privilegiada.
 
-## Mínimo privilegio para tools
+## Dar a cada herramienta solo los permisos que necesita
 
 OWASP describe la agencia excesiva con ejemplos sencillos. Un agente que solo
 necesita leer documentos recibe una extensión que también puede subir y borrar
@@ -52,7 +52,7 @@ humana, doble confirmación, modo de previsualización o una operación reversib
 La política exacta depende del producto, pero debe existir antes de integrar la
 tool call.
 
-## Clasificar mientras se genera
+## Clasificar el texto mientras se genera
 
 Constitutional Classifiers presenta clasificadores de entrada y salida que
 pueden evaluar la secuencia mientras se genera. Si aparece contenido peligroso,
@@ -67,7 +67,7 @@ con el riesgo. Una conversación de bajo impacto puede usar una comprobación
 barata. Una tool call sensible puede exigir una capa especializada, validación
 determinista y aprobación humana.
 
-## Observar para poder parar
+## Registrar lo que ocurre para poder detenerlo
 
 La telemetría de seguridad debe seguir la ruta de decisión. Conviene conservar
 identidad de la petición, fuente recuperada, decisión de política, herramienta

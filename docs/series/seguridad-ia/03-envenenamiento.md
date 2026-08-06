@@ -1,6 +1,6 @@
 ---
-title: Envenenamiento — cuando el input equivocado persiste
-description: "Qué cambia cuando una base de conocimiento, una memoria o un modelo conserva una señal maliciosa que reaparece más tarde."
+title: Envenenamiento — cuando una instrucción peligrosa se queda en el sistema
+description: "Qué ocurre cuando un documento o una memoria conserva una instrucción peligrosa y el sistema la vuelve a usar más tarde."
 date: 2026-08-06
 keywords: envenenamiento RAG, memoria agentes, sleeper agents, backdoors LLM, unlearning
 tags:
@@ -25,7 +25,7 @@ un índice RAG. Una memoria de agente puede conservar una falsa preferencia o un
 resumen contaminado. Un dataset de entrenamiento puede introducir un patrón que
 solo se activa cuando aparece un disparador concreto.
 
-## La memoria no convierte el dato en verdad
+## Guardar un dato no lo convierte en verdad
 
 Guardar una salida en una base de datos no la vuelve confiable. La memoria de un
 agente debe tener origen, fecha, ámbito, permisos y una política de caducidad.
@@ -42,7 +42,7 @@ La división entre conocimiento y control debe conservarse también después de
 guardar el dato. Un resumen de correo puede ser útil para responder una pregunta
 y seguir siendo una entrada no confiable para enviar un pago.
 
-## El caso de los agentes durmientes
+## Un comportamiento peligroso puede quedar oculto
 
 El estudio *Sleeper Agents* construyó modelos de prueba que escribían código
 seguro cuando el prompt indicaba 2023 y código vulnerable cuando indicaba 2024.
@@ -61,7 +61,7 @@ haya eliminado una representación peligrosa. Cuando existe una hipótesis de
 persistencia, el protocolo de evaluación debe incluir disparadores, variaciones
 y pruebas fuera de distribución.
 
-## Por qué retirar conocimiento es difícil
+## Por qué retirar un dato es difícil
 
 El *unlearning* intenta eliminar una capacidad o un dato sin reentrenar el
 modelo completo. El notebook recoge una limitación importante: las técnicas
@@ -77,7 +77,7 @@ La corrección necesita una prueba de desaparición y una prueba de regresión. 
 primera pregunta si el comportamiento activable sigue presente.
 La segunda comprueba que la mitigación no ha destruido una capacidad legítima.
 
-## Diseñar una memoria que se pueda revocar
+## Cómo diseñar una memoria que pueda borrarse
 
 Una memoria operable necesita al menos:
 
@@ -96,7 +96,7 @@ La seguridad aparece aquí como control del ciclo de vida. No basta con filtrar
 la entrada una vez. Hay que controlar qué se conserva, quién lo puede leer,
 cuándo vuelve al contexto y qué ocurre si la fuente se corrige o se revoca.
 
-## La consecuencia para producto
+## Qué cambia en el producto
 
 Un sistema con memoria tiene que poder olvidar de manera verificable. Un sistema
 con RAG tiene que poder retirar una fuente y demostrar qué índices, caches y

@@ -1,6 +1,6 @@
 ---
-title: Jailbreaks — cómo se fuerza un límite aprendido
-description: "Cómo los jailbreaks automáticos fuerzan los límites de un modelo y por qué un filtro no equivale a una frontera de seguridad."
+title: Jailbreaks — cuando un modelo puede ser llevado a responder mal
+description: "Cómo un atacante prueba muchas formas de pedir lo mismo y qué controles siguen siendo necesarios después de una negativa."
 date: 2026-08-06
 keywords: jailbreaks, seguridad LLM, GCG, adversarial suffixes, Best-of-N
 tags:
@@ -24,7 +24,7 @@ historia o una reformulación conseguían que el modelo abandonara una restricci
 en una conversación concreta. El salto técnico llega cuando esa búsqueda se
 automatiza y el atacante puede probar miles de variantes con una métrica clara.
 
-## Una negativa no crea una frontera lógica
+## Rechazar una petición no crea una frontera perfecta
 
 Los modelos generativos no ejecutan una política de seguridad como un parser
 que devuelve siempre el mismo error. Generan tokens condicionados por el
@@ -41,7 +41,7 @@ decodificar de forma determinista solo hace más repetible el resultado.
 Para evaluar un sistema hay que observar qué ocurre cuando una persona
 persistente puede variar la entrada, observar la salida y volver a intentarlo.
 
-## La búsqueda automática cambia el coste
+## Probar muchas variantes cambia el coste del ataque
 
 El trabajo sobre ataques universales y transferibles popularizó una idea
 importante. Un sufijo adversario puede optimizarse para aumentar la probabilidad
@@ -64,7 +64,7 @@ encontrar una salida no deseada. El porcentaje depende del modelo, del objetivo,
 del presupuesto y de la evaluación concreta. No debe trasladarse como una
 garantía universal a cualquier producto.
 
-## Lo que sí puede hacer una defensa
+## Qué controles siguen siendo útiles
 
 Rate limiting y circuit breakers siguen siendo útiles. Reducen la velocidad del
 ataque, elevan su coste y permiten activar una revisión. El error es vender esa
@@ -81,7 +81,7 @@ Un agente que alcanza el límite de intentos debe quedar en un estado conocido y
 auditable. Un flujo de alto riesgo necesita una aprobación humana o una política
 determinista que no dependa de la redacción del modelo.
 
-## Medir el bypass correcto
+## Qué debe medir una prueba
 
 Un benchmark de jailbreak puede contar una respuesta como éxito cuando contiene
 palabras de una rúbrica, aunque no permita realizar la acción que preocupa. El

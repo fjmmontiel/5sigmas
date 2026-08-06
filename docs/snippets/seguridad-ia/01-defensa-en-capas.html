@@ -1,32 +1,32 @@
 <div class="defpi">
   <div class="defpi-head">
-    <div class="defpi-title">La defensa útil corta rutas, no solo frases</div>
-    <div class="defpi-sub">Separar lectura de contenido no confiable, decisión privilegiada y ejecución de herramientas reduce la ruta de ataque mucho más que un system prompt más largo.</div>
+    <div class="defpi-title">La defensa debe bloquear el camino hasta la acción</div>
+    <div class="defpi-sub">Separar la lectura de documentos no confiables, la decisión y el uso de herramientas reduce el riesgo más que añadir instrucciones al modelo.</div>
   </div>
 
   <div class="defpi-stack">
     <div class="defpi-layer">
       <div class="defpi-layer-kicker">1. Ingesta</div>
-      <div class="defpi-box defpi-box--soft">contenido externo no confiable</div>
-      <div class="defpi-mini">sanitización y validación básica</div>
+      <div class="defpi-box defpi-box--soft">documento externo no confiable</div>
+      <div class="defpi-mini">limpieza y validación básica</div>
     </div>
     <div class="defpi-arrow">→</div>
     <div class="defpi-layer">
       <div class="defpi-layer-kicker">2. Cuarentena</div>
-      <div class="defpi-box defpi-box--teal">LLM sin tools</div>
-      <div class="defpi-mini">resume, etiqueta o extrae estructura</div>
+      <div class="defpi-box defpi-box--teal">modelo sin herramientas</div>
+      <div class="defpi-mini">resume, etiqueta o extrae datos</div>
     </div>
     <div class="defpi-arrow">→</div>
     <div class="defpi-layer">
       <div class="defpi-layer-kicker">3. Decisión</div>
-      <div class="defpi-box defpi-box--blue">LLM privilegiado</div>
-      <div class="defpi-mini">ve salida estructurada, no el texto crudo</div>
+      <div class="defpi-box defpi-box--blue">modelo con permisos</div>
+      <div class="defpi-mini">recibe una salida revisada, no el texto completo</div>
     </div>
     <div class="defpi-arrow">→</div>
     <div class="defpi-layer">
       <div class="defpi-layer-kicker">4. Acción</div>
-      <div class="defpi-box defpi-box--amber">tools con scope mínimo</div>
-      <div class="defpi-mini">permiso concreto, logs y abortos</div>
+      <div class="defpi-box defpi-box--amber">herramientas con alcance mínimo</div>
+      <div class="defpi-mini">permiso concreto, registros y bloqueos</div>
     </div>
   </div>
 
@@ -36,15 +36,15 @@
       <div class="defpi-pills">
         <span>mínimo privilegio</span>
         <span>salida estructurada</span>
-        <span>human approval</span>
-        <span>streaming guards</span>
+        <span>aprobación humana</span>
+        <span>controles durante la respuesta</span>
         <span>telemetría</span>
-        <span>kill switch</span>
+        <span>interruptor de emergencia</span>
       </div>
     </div>
     <div class="defpi-rail defpi-rail--warn">
       <div class="defpi-rail-title">Lo que no basta</div>
-      <div class="defpi-copy">Más instrucciones en el system prompt, filtros de keywords aislados o un guardrail sin separación de privilegios siguen dejando abierto el mismo camino entre texto hostil y acción sensible.</div>
+      <div class="defpi-copy">Más instrucciones al modelo o filtros de palabras aislados siguen dejando abierto el camino entre un texto hostil y una acción sensible.</div>
     </div>
   </div>
 </div>
@@ -169,4 +169,3 @@
   .defpi-arrow { transform: rotate(90deg); }
 }
 </style>
-
