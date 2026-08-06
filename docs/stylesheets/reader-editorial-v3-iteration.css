@@ -90,8 +90,8 @@ body:has(.s5-reader-shell) .sm-wrap .sm-dot {
     z-index: 5 !important;
   }
 
-  /* Material keeps the global sections in a second tab row. On reader pages
-     they become part of the single global header instead. */
+  /* Material keeps the global sections in a second tab row. Reader pages
+     place them inside the single global header instead. */
   body:has(.s5-reader-shell) .md-tabs {
     display: block !important;
     visibility: visible !important;
@@ -105,22 +105,37 @@ body:has(.s5-reader-shell) .sm-wrap .sm-dot {
 
   body:has(.s5-reader-shell) .md-tabs__list {
     display: flex !important;
+    align-items: center !important;
     overflow: visible !important;
     visibility: visible !important;
     opacity: 1 !important;
     transform: none !important;
   }
 
-  body:has(.s5-reader-shell) .md-tabs__item,
-  body:has(.s5-reader-shell) .md-tabs__link {
+  body:has(.s5-reader-shell) .md-tabs__item {
     display: flex !important;
+    align-items: center !important;
+    height: 100% !important;
+    padding-right: .95rem !important;
     visibility: visible !important;
     opacity: 1 !important;
   }
 
   body:has(.s5-reader-shell) .md-tabs__link {
     position: relative;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 1px 0 0 !important;
+    visibility: visible !important;
     color: var(--s5-muted) !important;
+    font-size: .64rem !important;
+    font-weight: 660 !important;
+    letter-spacing: 0 !important;
+    line-height: 1 !important;
+    opacity: 1 !important;
   }
 
   body:has(.s5-reader-shell) .md-tabs__link--active,
