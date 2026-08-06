@@ -90,8 +90,66 @@ body:has(.s5-reader-shell) .sm-wrap .sm-dot {
     z-index: 5 !important;
   }
 
+  /* Material keeps the global sections in a second tab row. On reader pages
+     they become part of the single global header instead. */
   body:has(.s5-reader-shell) .md-tabs {
+    display: block !important;
+    visibility: visible !important;
     z-index: 6 !important;
+    opacity: 1 !important;
+  }
+
+  body:has(.s5-reader-shell) .md-tabs__inner {
+    overflow: visible !important;
+  }
+
+  body:has(.s5-reader-shell) .md-tabs__list {
+    display: flex !important;
+    overflow: visible !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  body:has(.s5-reader-shell) .md-tabs__item,
+  body:has(.s5-reader-shell) .md-tabs__link {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  body:has(.s5-reader-shell) .md-tabs__link {
+    position: relative;
+    color: var(--s5-muted) !important;
+  }
+
+  body:has(.s5-reader-shell) .md-tabs__link--active,
+  body:has(.s5-reader-shell) .md-tabs__link:hover,
+  body:has(.s5-reader-shell) .md-tabs__link:focus-visible {
+    color: var(--s5-text) !important;
+  }
+
+  body:has(.s5-reader-shell) .md-tabs__link--active::after {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    background: var(--s5-brand-blue);
+    content: '';
+  }
+
+  /* The contextual rail already contains every chapter in the active series.
+     Removing the second desktop navigator gives the title and lead room to
+     breathe without sacrificing any route through the content. */
+  body:has(.s5-reader-shell) .s5-reader-shell {
+    height: 0;
+    margin: 0 !important;
+  }
+
+  body:has(.s5-reader-shell) .s5-reader-topbar,
+  body:has(.s5-reader-shell) .s5-reader-rail {
+    display: none !important;
   }
 }
 
