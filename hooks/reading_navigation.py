@@ -253,13 +253,12 @@ def _render_end(
 
 
 def _render_context(collection: dict[str, Any], index: int) -> str:
-    unit = "Serie" if collection["kind"] == "Serie" else "Nota"
     section = "Aprender" if collection["kind"] == "Serie" else "Construir"
     return (
         '<div class="s5-reader-context" aria-label="Contexto de lectura">'
         f'<button type="button" data-s5-reader-open>{section}</button>'
         '<span aria-hidden="true">·</span>'
-        f'<span>{unit} {index + 1:02d}/{len(collection["pages"]):02d}</span>'
+        f'<span>{index + 1:02d} de {len(collection["pages"]):02d}</span>'
         '<span aria-hidden="true">·</span>'
         f'<strong>{escape(collection["title"])}</strong>'
         '</div>'
@@ -278,7 +277,7 @@ def _render(collections: list[dict[str, Any]], collection: dict[str, Any], index
         '<div class="s5-reader-shell" data-s5-reader-nav '
         f'data-series="{escape(collection["title"], quote=True)}" '
         f'data-page="{escape(current["title"], quote=True)}" data-url="{current["url"]}">'
-        '<div class="s5-reader-topbar">'
+        f'<nav class="s5-reader-topbar" aria-label="Navegación de {escape(collection["title"], quote=True)}">'
         f'{_neighbor_link(previous, "prev", collection)}'
         '<button class="s5-reader-course" type="button" data-s5-reader-open aria-haspopup="dialog">'
         f'<span>{escape(collection["title"])}</span>'
@@ -286,7 +285,7 @@ def _render(collections: list[dict[str, Any]], collection: dict[str, Any], index
         f'<i style="--s5-reader-progress:{progress}%" aria-hidden="true"></i>'
         '</button>'
         f'{_neighbor_link(following, "next", collection)}'
-        '</div>'
+        '</nav>'
         f'{_chapter_rail(collection, src_path)}'
         f'{_render_map(collections, collection, current, src_path)}'
         '</div>'
