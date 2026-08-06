@@ -171,6 +171,8 @@ extra_css:
   - stylesheets/reader-navigation-responsive.css
   - stylesheets/reader-direct-navigation.css
   - stylesheets/voice-report-animations-polish.css
+  - stylesheets/reader-editorial-v3.css
+  - stylesheets/reader-editorial-v3-iteration.css
 
 hooks:
   - hooks/reading_time.py

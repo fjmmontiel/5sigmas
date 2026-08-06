@@ -1,10 +1,17 @@
-"""Inject a persistent, collapsible global library across Aprender and Construir."""
+"""Inject a contextual desktop library and normalize reader metadata."""
 
 from __future__ import annotations
 
 from html import escape
 from pathlib import Path
+import re
 from typing import Any
+
+
+_READING_TIME_BLOCK = re.compile(
+    r'<blockquote>\s*<p>[^<]*<strong>Tiempo de lectura:</strong>\s*[^<]*</p>\s*</blockquote>',
+    flags=re.IGNORECASE,
+)
 
 
 def _url_for(src_path: str) -> str:
@@ -77,13 +84,13 @@ def _find_current(collections: list[dict[str, Any]], src_path: str):
 def _collection_panel(
     collection: dict[str, Any],
     collection_index: int,
+    current_collection: dict[str, Any],
     current_page: dict[str, str],
 ) -> str:
+    is_current_collection = collection is current_collection
     links: list[str] = []
-    is_current_collection = False
     for page_number, page in enumerate(collection["pages"], start=1):
         current = page["path"] == current_page["path"]
-        is_current_collection = is_current_collection or current
         current_attr = ' aria-current="page"' if current else ""
         search_value = escape(
             f'{collection["kind"]} {collection["title"]} {page["title"]}',
@@ -98,25 +105,25 @@ def _collection_panel(
         )
 
     collection_search = escape(
-        f'{collection["kind"]} {collection["title"]}',
+        " ".join(
+            [collection["kind"], collection["title"], *[page["title"] for page in collection["pages"]]]
+        ),
         quote=True,
     )
-    open_attr = " open" if is_current_collection else ""
-    current_attr = ' data-current="true"' if is_current_collection else ""
+    current_class = " is-current" if is_current_collection else ""
+    current_attr = ' data-current-collection="true"' if is_current_collection else ""
     return (
-        f'<details class="s5-reader-direct__collection" '
+        f'<section class="s5-reader-direct__collection{current_class}" '
         f'id="s5-direct-collection-{collection_index}" '
-        f'data-s5-reader-collection data-search="{collection_search}"{current_attr}{open_attr}>'
-        "<summary>"
-        '<span class="s5-reader-direct__collection-copy">'
-        f'<small>{escape(collection["kind"])}</small>'
+        f'data-s5-reader-collection data-search="{collection_search}"{current_attr}>'
+        "<header>"
+        f'<span>{escape(collection["kind"])}</span>'
         f'<strong>{escape(collection["title"])}</strong>'
-        "</span>"
-        f'<span class="s5-reader-direct__collection-meta">{_content_count(len(collection["pages"]))}</span>'
-        "</summary>"
+        f'<small>{_content_count(len(collection["pages"]))}</small>'
+        "</header>"
         f'<nav aria-label="Contenidos de {escape(collection["title"], quote=True)}">'
         f'{"".join(links)}</nav>'
-        "</details>"
+        "</section>"
     )
 
 
@@ -126,18 +133,31 @@ def _render(
     current_page: dict[str, str],
 ) -> tuple[str, str]:
     panels = [
-        _collection_panel(collection, index, current_page)
+        _collection_panel(collection, index, current_collection, current_page)
         for index, collection in enumerate(collections)
     ]
+    page_index = next(
+        index for index, page in enumerate(current_collection["pages"]) if page["path"] == current_page["path"]
+    )
+    progress_label = f"{page_index + 1:02d}/{len(current_collection['pages']):02d}"
+    kind_label = (
+        "Notas"
+        if current_collection["kind"] == "Construir"
+        else ("Conceptos" if current_collection["title"] == "Conceptos" else "Serie")
+    )
 
     aside = (
         '<div class="s5-reader-direct-overlay" data-s5-reader-direct-overlay hidden></div>'
         '<aside class="s5-reader-direct" id="s5-reader-direct" '
-        'data-s5-reader-direct aria-label="Biblioteca completa de series y notas técnicas">'
+        f'data-s5-reader-direct aria-label="Navegación de {escape(current_collection["title"], quote=True)}">'
         '<header class="s5-reader-direct__header">'
-        '<div><span>Biblioteca</span><strong>Todo 5sigmas</strong></div>'
+        '<div><span>Biblioteca</span>'
+        f'<strong>{escape(current_collection["title"])}</strong>'
+        f'<small>{kind_label} · {progress_label}</small></div>'
         '<button type="button" data-s5-reader-direct-close aria-label="Cerrar biblioteca">×</button>'
         "</header>"
+        '<button class="s5-reader-direct__browse" type="button" data-s5-reader-open>'
+        '<span>Toda la biblioteca</span><b aria-hidden="true">↗</b></button>'
         '<label class="s5-reader-direct__search">'
         '<span>Buscar</span>'
         '<input type="search" data-s5-reader-direct-search '
@@ -152,10 +172,32 @@ def _render(
     toggle = (
         '<button class="s5-reader-direct-toggle" type="button" '
         'data-s5-reader-direct-open aria-controls="s5-reader-direct" aria-expanded="false">'
-        f'<span>Biblioteca</span><strong>{escape(current_collection["title"])}</strong><b aria-hidden="true">→</b>'
+        f'<span>Biblioteca</span><strong>{progress_label} · {escape(current_collection["title"])}</strong>'
+        '<b aria-hidden="true">→</b>'
         "</button>"
     )
     return aside, toggle
+
+
+def _normalize_series_metadata(output: str, page) -> str:
+    src_path = page.file.src_path
+    if not src_path.startswith("series/"):
+        return output
+
+    if Path(src_path).name == "00_presentacion_serie.md":
+        return _READING_TIME_BLOCK.sub("", output, count=1)
+
+    minutes = (page.meta or {}).get("reading_time")
+    if not minutes:
+        return output
+
+    replacement = (
+        '<div class="s5-reading-meta" aria-label="Tiempo estimado de lectura">'
+        '<span>Lectura estimada</span>'
+        f'<strong>{escape(str(minutes))} min</strong>'
+        '</div>'
+    )
+    return _READING_TIME_BLOCK.sub(replacement, output, count=1)
 
 
 def on_post_page(output: str, page, config, **kwargs) -> str:
@@ -177,4 +219,5 @@ def on_post_page(output: str, page, config, **kwargs) -> str:
 
     aside, toggle = _render(collections, current_collection, current_page)
     output = output.replace(shell_marker, aside + shell_marker, 1)
-    return output.replace(rail_marker, toggle + rail_marker, 1)
+    output = output.replace(rail_marker, toggle + rail_marker, 1)
+    return _normalize_series_metadata(output, page)
