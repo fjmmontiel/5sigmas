@@ -1,0 +1,576 @@
+/*
+ * 5sigmas reader v3
+ *
+ * A visual-first editorial layout inspired by the calm reading rhythm of
+ * explanatory lessons: contextual navigation on the left, readable prose,
+ * and a wider breakout canvas for diagrams, video and interactive microlabs.
+ */
+
+body:has(.s5-reader-shell) {
+  --s5-reader-frame: min(1640px, calc(100vw - 48px));
+  --s5-reader-rail-width: 204px;
+  --s5-reader-gap: clamp(34px, 2.6vw, 46px);
+  --s5-reader-canvas: min(
+    1280px,
+    calc(var(--s5-reader-frame) - var(--s5-reader-rail-width) - var(--s5-reader-gap))
+  );
+  --s5-reader-prose: 760px;
+  --s5-reader-lead: 860px;
+  --s5-reader-visual: 1160px;
+}
+
+/* The reading page already exposes its context. Repeating tags and a
+   breadcrumb trail before the title only delays the first useful idea. */
+body:has(.s5-reader-shell) .md-path,
+body:has(.s5-reader-shell) .md-tags {
+  display: none !important;
+}
+
+body:has(.s5-reader-shell) .md-content__inner {
+  padding-top: clamp(2rem, 3vw, 3rem);
+}
+
+.s5-reader-context {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .38rem;
+  align-items: center;
+  max-width: var(--s5-reader-lead);
+  margin: 0 0 .9rem;
+  color: var(--s5-muted);
+  font-size: .58rem;
+  font-weight: 700;
+  letter-spacing: .055em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.s5-reader-context button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--s5-brand-blue);
+  cursor: pointer;
+  font: inherit;
+  text-transform: inherit;
+}
+
+.s5-reader-context button:hover,
+.s5-reader-context button:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: .22em;
+}
+
+.s5-reader-context strong {
+  overflow: hidden;
+  color: var(--s5-text);
+  font-weight: 760;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+body:has(.s5-reader-shell) .md-typeset > h1 {
+  display: block !important;
+  max-width: 14.5ch !important;
+  margin: 0 0 1.05rem !important;
+  font-size: clamp(3.55rem, 5vw, 5.15rem) !important;
+  line-height: .94 !important;
+  letter-spacing: -.068em !important;
+  text-wrap: balance;
+}
+
+/* Previous/next remains available, but it no longer looks like a dashboard. */
+.s5-reader-shell {
+  width: 100%;
+  max-width: var(--s5-reader-canvas);
+  margin: 0 0 1.15rem !important;
+}
+
+.s5-reader-topbar {
+  position: relative;
+  top: auto;
+  z-index: 5;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, .9fr) minmax(0, 1fr);
+  min-height: 46px;
+  border: 0;
+  border-top: 1px solid var(--s5-line-strong);
+  border-bottom: 1px solid var(--s5-line);
+  background: transparent;
+  box-shadow: none;
+}
+
+.s5-reader-arrow {
+  gap: .5rem;
+  padding: .52rem .25rem;
+}
+
+.s5-reader-arrow--prev {
+  border-right: 0;
+}
+
+.s5-reader-arrow--next {
+  border-left: 0;
+}
+
+.s5-reader-arrow span,
+.s5-reader-course > span {
+  font-size: .46rem;
+  letter-spacing: .07em;
+}
+
+.s5-reader-arrow strong {
+  font-size: .59rem;
+  font-weight: 720;
+}
+
+.s5-reader-arrow small {
+  display: none;
+}
+
+.s5-reader-course {
+  padding: .48rem .75rem .62rem;
+  border-right: 1px solid var(--s5-line);
+  border-left: 1px solid var(--s5-line);
+}
+
+.s5-reader-course strong {
+  font-size: .61rem;
+  font-weight: 740;
+}
+
+.s5-reader-course i {
+  height: 2px;
+}
+
+.s5-reader-rail {
+  display: none !important;
+}
+
+/* Metadata reads as supporting information, not as another full-width card. */
+.s5-reader-shell + .series-meta {
+  display: flex;
+  width: fit-content;
+  max-width: 100%;
+  margin: .8rem 0 2.1rem;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.s5-reader-shell + .series-meta:hover {
+  box-shadow: none;
+}
+
+.s5-reader-shell + .series-meta .series-meta-head {
+  gap: .35rem;
+}
+
+.s5-reader-shell + .series-meta .series-meta-chip {
+  gap: .3rem;
+  padding: .26rem .48rem;
+  border-color: var(--s5-line);
+  background: transparent;
+  font-size: .54rem;
+}
+
+.s5-reader-shell + .series-meta .series-meta-chip .chip-dot {
+  width: 6px;
+  height: 6px;
+  box-shadow: none;
+}
+
+.s5-reader-shell + .series-meta .series-meta-row {
+  display: none;
+}
+
+/* Reading rhythm. The body stays inside the 50–75 character range while
+   visual explanations can break out to the full article canvas. */
+body:has(.s5-reader-shell) .md-main__inner:not(:has(.s5-landing)) .md-typeset > :is(
+  p,
+  ul,
+  ol,
+  blockquote,
+  .admonition,
+  details
+) {
+  max-width: var(--s5-reader-prose) !important;
+}
+
+body:has(.s5-reader-shell) .md-typeset > p,
+body:has(.s5-reader-shell) .md-typeset > li {
+  font-size: 1rem;
+  line-height: 1.76;
+}
+
+body:has(.s5-reader-shell) .md-typeset > blockquote:first-of-type {
+  max-width: var(--s5-reader-lead) !important;
+  margin: .25rem 0 2.5rem;
+  padding: .1rem 0 .1rem 1rem;
+  border-left: 2px solid var(--s5-text);
+  color: var(--s5-muted);
+  font-size: 1.02rem;
+  line-height: 1.68;
+}
+
+body:has(.s5-reader-shell) .md-typeset > blockquote:first-of-type strong {
+  color: var(--s5-text);
+}
+
+body:has(.s5-reader-shell) .md-typeset > h2 {
+  max-width: 21ch;
+  margin-top: clamp(4.8rem, 7vw, 6.6rem) !important;
+  margin-bottom: 1.35rem !important;
+  padding-top: 0 !important;
+  border-top: 0 !important;
+  font-size: clamp(2rem, 3.2vw, 2.65rem) !important;
+  line-height: 1.04 !important;
+  letter-spacing: -.05em !important;
+  text-wrap: balance;
+}
+
+body:has(.s5-reader-shell) .md-typeset > h3 {
+  max-width: 28ch;
+  margin-top: 3.2rem !important;
+  margin-bottom: .9rem !important;
+  font-size: clamp(1.3rem, 2vw, 1.6rem) !important;
+  line-height: 1.12 !important;
+  letter-spacing: -.035em !important;
+}
+
+body:has(.s5-reader-shell) .md-typeset > :is(pre, table, .highlight) {
+  max-width: min(100%, 1000px);
+}
+
+body:has(.s5-reader-shell) .md-typeset > hr {
+  max-width: var(--s5-reader-prose);
+  margin: 4rem 0;
+}
+
+body:has(.s5-reader-shell) .s5-video-embed {
+  width: min(100%, 1080px);
+  max-width: none;
+  margin-top: 2rem;
+  margin-bottom: 3.5rem;
+}
+
+body:has(.s5-reader-shell) .anim-brand-shell:has(.anim-brand-shell__viewport > .s5v) {
+  margin-top: 2rem;
+  margin-bottom: clamp(3.5rem, 6vw, 5.5rem);
+}
+
+/* Contextual desktop library. The current collection stays visible, while the
+   complete catalogue remains one click away in the existing library dialog. */
+.s5-reader-direct__browse {
+  display: none;
+}
+
+@media (min-width: 1320px) {
+  body:has(.s5-reader-shell) {
+    --s5-reader-frame: min(1640px, calc(100vw - 48px));
+    --s5-reader-rail-width: 204px;
+    --s5-reader-gap: clamp(34px, 2.6vw, 46px);
+  }
+
+  body:has(.s5-reader-shell) :is(.md-header__inner, .md-tabs__inner) {
+    width: var(--s5-reader-frame);
+    max-width: none;
+  }
+
+  body:has(.s5-reader-shell) .md-tabs__list {
+    margin-left: calc(var(--s5-reader-rail-width) + var(--s5-reader-gap));
+  }
+
+  body:has(.s5-reader-shell) .md-main__inner {
+    display: block;
+    width: var(--s5-reader-frame);
+    max-width: none;
+    margin-right: auto;
+    margin-left: auto;
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+  body:has(.s5-reader-shell) .md-main__inner > .md-sidebar {
+    display: none !important;
+  }
+
+  body:has(.s5-reader-shell) .md-content {
+    width: var(--s5-reader-canvas);
+    max-width: none !important;
+    margin-right: 0 !important;
+    margin-left: calc(var(--s5-reader-rail-width) + var(--s5-reader-gap)) !important;
+  }
+
+  body:has(.s5-reader-shell) .md-content__inner,
+  body:has(.s5-reader-shell) .md-typeset {
+    width: 100%;
+    max-width: none;
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+  }
+
+  body:has(.s5-reader-shell) .s5-reader-direct {
+    top: 126px;
+    left: calc((100vw - var(--s5-reader-frame)) / 2);
+    width: var(--s5-reader-rail-width);
+    max-height: calc(100dvh - 148px);
+    grid-template-rows: auto auto minmax(0, 1fr);
+    border-top: 1px solid var(--s5-line-strong);
+    border-bottom: 0;
+    background: transparent;
+  }
+
+  .s5-reader-direct__header {
+    padding: .8rem 0 .7rem;
+  }
+
+  .s5-reader-direct__header strong {
+    font-size: .78rem;
+  }
+
+  .s5-reader-direct__browse {
+    display: flex;
+    gap: .75rem;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 38px;
+    padding: .45rem 0;
+    border: 0;
+    border-bottom: 1px solid var(--s5-line-strong);
+    background: transparent;
+    color: var(--s5-text);
+    cursor: pointer;
+    font-size: .55rem;
+    font-weight: 720;
+    text-align: left;
+  }
+
+  .s5-reader-direct__browse:hover,
+  .s5-reader-direct__browse:focus-visible {
+    color: var(--s5-brand-blue);
+  }
+
+  .s5-reader-direct__search {
+    display: none;
+  }
+
+  .s5-reader-direct__collections {
+    overflow: visible;
+    padding-bottom: 0;
+  }
+
+  .s5-reader-direct__collection:not(.is-current) {
+    display: none !important;
+  }
+
+  .s5-reader-direct__collection.is-current > header {
+    gap: .18rem;
+    padding: .9rem 0 .6rem;
+    border-top: 0;
+  }
+
+  .s5-reader-direct__collection.is-current > header > span {
+    font-size: .45rem;
+  }
+
+  .s5-reader-direct__collection.is-current > header > strong {
+    font-size: .72rem;
+  }
+
+  .s5-reader-direct__collection.is-current > header > small {
+    font-size: .46rem;
+  }
+
+  .s5-reader-direct__collection nav a {
+    grid-template-columns: 24px minmax(0, 1fr);
+    gap: .08rem .5rem;
+    padding: .58rem .12rem;
+  }
+
+  .s5-reader-direct__collection nav a > span {
+    font-size: .48rem;
+  }
+
+  .s5-reader-direct__collection nav a > strong {
+    font-size: .61rem;
+    line-height: 1.28;
+  }
+
+  .s5-reader-direct__collection nav a > small {
+    display: none;
+  }
+
+  .s5-reader-direct__collection nav a[aria-current='page'] {
+    background: transparent;
+    box-shadow: inset 2px 0 0 var(--s5-brand-blue);
+  }
+
+  .s5-reader-direct-toggle,
+  .s5-reader-direct-overlay {
+    display: none !important;
+  }
+}
+
+@media (min-width: 1760px) {
+  body:has(.s5-reader-shell) {
+    --s5-reader-frame: 1660px;
+    --s5-reader-rail-width: 208px;
+    --s5-reader-gap: 48px;
+    --s5-reader-canvas: 1280px;
+    --s5-reader-prose: 780px;
+    --s5-reader-lead: 880px;
+  }
+}
+
+/* Tablet and mobile use one compact lesson navigator. The old vertical tab
+   competed with the article and is intentionally removed. */
+@media (max-width: 1319px) {
+  body:has(.s5-reader-shell) .s5-reader-direct,
+  body:has(.s5-reader-shell) .s5-reader-direct-overlay,
+  body:has(.s5-reader-shell) .s5-reader-direct-toggle {
+    display: none !important;
+  }
+
+  body:has(.s5-reader-shell) .md-main__inner:not(:has(.s5-landing)) .md-content {
+    width: min(100%, 960px);
+    max-width: none;
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  body:has(.s5-reader-shell) .md-content__inner {
+    padding-right: clamp(1rem, 3vw, 1.6rem) !important;
+    padding-left: clamp(1rem, 3vw, 1.6rem) !important;
+  }
+
+  .s5-reader-topbar {
+    position: sticky;
+    top: 64px;
+    z-index: 24;
+    grid-template-columns: 48px minmax(0, 1fr) 48px;
+    min-height: 46px;
+    border: 1px solid var(--s5-line);
+    background: color-mix(in srgb, var(--s5-bg) 94%, transparent);
+    box-shadow: 0 8px 18px color-mix(in srgb, #000 7%, transparent);
+    backdrop-filter: blur(14px);
+  }
+
+  .s5-reader-arrow {
+    display: flex;
+    justify-content: center;
+    padding: .4rem;
+  }
+
+  .s5-reader-arrow__copy {
+    display: none;
+  }
+
+  .s5-reader-course {
+    border-right: 1px solid var(--s5-line);
+    border-left: 1px solid var(--s5-line);
+  }
+
+  .s5-reader-course > span {
+    display: none;
+  }
+
+  .s5-reader-course strong {
+    font-size: .58rem;
+  }
+}
+
+@media (max-width: 800px) {
+  body:has(.s5-reader-shell) {
+    --s5-reader-prose: 100%;
+    --s5-reader-lead: 100%;
+  }
+
+  body:has(.s5-reader-shell) .md-content__inner {
+    padding-top: 1.45rem;
+    padding-right: 1rem !important;
+    padding-left: 1rem !important;
+  }
+
+  .s5-reader-context {
+    flex-wrap: nowrap;
+    gap: .3rem;
+    margin-bottom: .75rem;
+    font-size: .5rem;
+  }
+
+  .s5-reader-context strong {
+    min-width: 0;
+  }
+
+  body:has(.s5-reader-shell) .md-typeset > h1 {
+    max-width: 12ch !important;
+    margin-bottom: .8rem !important;
+    font-size: clamp(2.45rem, 11.6vw, 3.15rem) !important;
+    line-height: .95 !important;
+    letter-spacing: -.058em !important;
+  }
+
+  .s5-reader-shell {
+    margin-bottom: .85rem !important;
+  }
+
+  .s5-reader-topbar {
+    top: 63px;
+    margin: 0;
+  }
+
+  .s5-reader-shell + .series-meta {
+    margin: .75rem 0 1.65rem;
+  }
+
+  .s5-reader-shell + .series-meta .series-meta-head {
+    gap: .3rem;
+  }
+
+  .s5-reader-shell + .series-meta .series-meta-chip {
+    padding: .24rem .42rem;
+    font-size: .5rem;
+  }
+
+  body:has(.s5-reader-shell) .md-typeset > p,
+  body:has(.s5-reader-shell) .md-typeset > li {
+    font-size: .94rem;
+    line-height: 1.7;
+  }
+
+  body:has(.s5-reader-shell) .md-typeset > blockquote:first-of-type {
+    margin-bottom: 2rem;
+    padding-left: .8rem;
+    font-size: .95rem;
+    line-height: 1.65;
+  }
+
+  body:has(.s5-reader-shell) .md-typeset > h2 {
+    max-width: 16ch;
+    margin-top: 4.3rem !important;
+    margin-bottom: 1rem !important;
+    font-size: clamp(1.75rem, 8vw, 2.15rem) !important;
+  }
+
+  body:has(.s5-reader-shell) .md-typeset > h3 {
+    margin-top: 2.7rem !important;
+    font-size: 1.3rem !important;
+  }
+
+  body:has(.s5-reader-shell) .anim-brand-shell:has(.anim-brand-shell__viewport > .s5v) {
+    margin-top: 1.5rem;
+    margin-bottom: 3.4rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .s5-reader-topbar,
+  .s5-reader-direct,
+  .s5-reader-map {
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+}
