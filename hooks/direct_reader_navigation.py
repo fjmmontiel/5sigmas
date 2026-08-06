@@ -1,4 +1,4 @@
-"""Inject a persistent global library across Aprender and Construir."""
+"""Inject a contextual desktop library and a full mobile/global library."""
 
 from __future__ import annotations
 
@@ -77,8 +77,10 @@ def _find_current(collections: list[dict[str, Any]], src_path: str):
 def _collection_panel(
     collection: dict[str, Any],
     collection_index: int,
+    current_collection: dict[str, Any],
     current_page: dict[str, str],
 ) -> str:
+    is_current_collection = collection is current_collection
     links: list[str] = []
     for page_number, page in enumerate(collection["pages"], start=1):
         current = page["path"] == current_page["path"]
@@ -101,10 +103,12 @@ def _collection_panel(
         ),
         quote=True,
     )
+    current_class = " is-current" if is_current_collection else ""
+    current_attr = ' data-current-collection="true"' if is_current_collection else ""
     return (
-        f'<section class="s5-reader-direct__collection" '
+        f'<section class="s5-reader-direct__collection{current_class}" '
         f'id="s5-direct-collection-{collection_index}" '
-        f'data-s5-reader-collection data-search="{collection_search}">'
+        f'data-s5-reader-collection data-search="{collection_search}"{current_attr}>'
         "<header>"
         f'<span>{escape(collection["kind"])}</span>'
         f'<strong>{escape(collection["title"])}</strong>'
@@ -122,18 +126,24 @@ def _render(
     current_page: dict[str, str],
 ) -> tuple[str, str]:
     panels = [
-        _collection_panel(collection, index, current_page)
+        _collection_panel(collection, index, current_collection, current_page)
         for index, collection in enumerate(collections)
     ]
+    page_index = next(
+        index for index, page in enumerate(current_collection["pages"]) if page["path"] == current_page["path"]
+    )
+    progress_label = f"{page_index + 1:02d}/{len(current_collection['pages']):02d}"
 
     aside = (
         '<div class="s5-reader-direct-overlay" data-s5-reader-direct-overlay hidden></div>'
         '<aside class="s5-reader-direct" id="s5-reader-direct" '
-        'data-s5-reader-direct aria-label="Biblioteca completa de series y notas técnicas">'
+        'data-s5-reader-direct aria-label="Navegación de la colección actual">'
         '<header class="s5-reader-direct__header">'
-        '<div><span>Biblioteca</span><strong>Todo 5sigmas</strong></div>'
+        f'<div><span>Biblioteca</span><strong>{escape(current_collection["title"])}</strong></div>'
         '<button type="button" data-s5-reader-direct-close aria-label="Cerrar biblioteca">×</button>'
         "</header>"
+        '<button class="s5-reader-direct__browse" type="button" data-s5-reader-open>'
+        '<span>Explorar todo 5sigmas</span><b aria-hidden="true">↗</b></button>'
         '<label class="s5-reader-direct__search">'
         '<span>Buscar</span>'
         '<input type="search" data-s5-reader-direct-search '
@@ -148,7 +158,8 @@ def _render(
     toggle = (
         '<button class="s5-reader-direct-toggle" type="button" '
         'data-s5-reader-direct-open aria-controls="s5-reader-direct" aria-expanded="false">'
-        f'<span>Biblioteca</span><strong>{escape(current_collection["title"])}</strong><b aria-hidden="true">→</b>'
+        f'<span>Biblioteca</span><strong>{progress_label} · {escape(current_collection["title"])}</strong>'
+        '<b aria-hidden="true">→</b>'
         "</button>"
     )
     return aside, toggle
