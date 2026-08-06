@@ -58,5 +58,7 @@ jobs:
             echo "Nothing to commit"
           else
             git commit -m "Validate the dedicated reader header navigation"
+            git fetch origin redesign/reader-editorial-v3
+            git rebase origin/redesign/reader-editorial-v3
             git push origin HEAD:redesign/reader-editorial-v3
           fi
