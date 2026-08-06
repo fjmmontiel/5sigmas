@@ -1,19 +1,18 @@
-name: Temporary inspect · reader DOM
+name: Temporary inspect · reader header geometry
 
 on:
   pull_request:
     types: [opened, reopened, synchronize]
     paths:
       - '.github/workflows/temp-dump-reader-dom.yml'
-      - 'docs/**'
-      - 'hooks/**'
-      - 'mkdocs.yml'
+      - 'docs/stylesheets/reader-editorial-v3.css'
+      - 'docs/stylesheets/reader-editorial-v3-iteration.css'
 
 permissions:
   contents: read
 
 jobs:
-  inspect-reader-dom:
+  inspect-reader-header:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -41,62 +40,66 @@ jobs:
       - name: Serve and inspect
         shell: bash
         run: |
-          mkdir -p artifacts/reader-dom
-          python -m http.server 8000 --directory site > /tmp/reader-dom.log 2>&1 &
+          mkdir -p artifacts/reader-header
+          python -m http.server 8000 --directory site > /tmp/reader-header.log 2>&1 &
           for attempt in {1..30}; do
             curl --fail --silent http://127.0.0.1:8000/ > /dev/null && break
             sleep 1
           done
 
-          cat > inspect-reader-dom.mjs <<'JS'
+          cat > inspect-reader-header.mjs <<'JS'
           import { chromium } from 'playwright';
           import fs from 'node:fs/promises';
 
           const browser = await chromium.launch({ headless: true });
-          const page = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1 });
-          await page.goto('http://127.0.0.1:8000/series/from-cave-to-agi/00_presentacion_serie/', { waitUntil: 'networkidle' });
+          const page = await browser.newPage({ viewport: { width: 1728, height: 1117 }, deviceScaleFactor: 1 });
+          await page.goto('http://127.0.0.1:8000/articulos-tecnicos/reactive-proactive-voice-agents/', { waitUntil: 'networkidle' });
           await page.evaluate(() => document.fonts.ready);
 
-          const outline = await page.locator('article.md-content__inner.md-typeset').evaluate((root) => [...root.children].map((node, index) => {
+          const inspect = async (selector) => page.locator(selector).evaluateAll((nodes) => nodes.map((node) => {
             const rect = node.getBoundingClientRect();
             const style = getComputedStyle(node);
+            const round = (value) => Math.round(value * 10) / 10;
             return {
-              index,
-              tag: node.tagName,
-              className: node.className || '',
-              id: node.id || '',
-              text: (node.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 220),
-              x: Math.round(rect.x * 10) / 10,
-              y: Math.round(rect.y * 10) / 10,
-              width: Math.round(rect.width * 10) / 10,
-              height: Math.round(rect.height * 10) / 10,
+              text: (node.textContent || '').replace(/\s+/g, ' ').trim(),
+              x: round(rect.x),
+              y: round(rect.y),
+              width: round(rect.width),
+              height: round(rect.height),
+              top: style.top,
+              marginTop: style.marginTop,
+              paddingTop: style.paddingTop,
+              paddingBottom: style.paddingBottom,
+              lineHeight: style.lineHeight,
+              transform: style.transform,
+              overflow: style.overflow,
               display: style.display,
-              outerHTML: node.outerHTML.slice(0, 1600),
+              alignItems: style.alignItems,
+              position: style.position,
             };
           }));
 
-          const allReadingTime = await page.locator('article.md-content__inner text=/Tiempo de lectura/i').evaluateAll((nodes) => nodes.map((node) => ({
-            tag: node.tagName,
-            className: node.className || '',
-            parentTag: node.parentElement?.tagName || '',
-            parentClass: node.parentElement?.className || '',
-            grandparentTag: node.parentElement?.parentElement?.tagName || '',
-            grandparentClass: node.parentElement?.parentElement?.className || '',
-            outerHTML: node.parentElement?.outerHTML.slice(0, 2000) || node.outerHTML.slice(0, 2000),
-          })));
+          const geometry = {
+            header: await inspect('.md-header'),
+            headerInner: await inspect('.md-header__inner'),
+            tabs: await inspect('.md-tabs'),
+            tabsInner: await inspect('.md-tabs__inner'),
+            tabsList: await inspect('.md-tabs__list'),
+            tabsItems: await inspect('.md-tabs__item'),
+            tabsLinks: await inspect('.md-tabs__link'),
+          };
 
-          await fs.writeFile('artifacts/reader-dom/series-presentation-outline.json', JSON.stringify({ outline, allReadingTime }, null, 2));
-          await page.screenshot({ path: 'artifacts/reader-dom/series-presentation-mobile.png', fullPage: true });
+          await fs.writeFile('artifacts/reader-header/header-geometry.json', JSON.stringify(geometry, null, 2));
+          await page.screenshot({ path: 'artifacts/reader-header/header.png', fullPage: false });
           await browser.close();
           JS
 
-          node inspect-reader-dom.mjs
+          node inspect-reader-header.mjs
 
-      - name: Upload DOM inspection
-        if: always()
+      - name: Upload inspection
         uses: actions/upload-artifact@v4
         with:
-          name: reader-dom-inspection
-          path: artifacts/reader-dom/*
+          name: reader-header-inspection
+          path: artifacts/reader-header/*
           if-no-files-found: error
           retention-days: 5
