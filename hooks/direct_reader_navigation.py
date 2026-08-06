@@ -1,10 +1,17 @@
-"""Inject a contextual desktop library and a full searchable library."""
+"""Inject a contextual desktop library and normalize reader metadata."""
 
 from __future__ import annotations
 
 from html import escape
 from pathlib import Path
+import re
 from typing import Any
+
+
+_READING_TIME_BLOCK = re.compile(
+    r'<blockquote>\s*<p>[^<]*<strong>Tiempo de lectura:</strong>\s*[^<]*</p>\s*</blockquote>',
+    flags=re.IGNORECASE,
+)
 
 
 def _url_for(src_path: str) -> str:
@@ -168,6 +175,27 @@ def _render(
     return aside, toggle
 
 
+def _normalize_series_metadata(output: str, page) -> str:
+    src_path = page.file.src_path
+    if not src_path.startswith("series/"):
+        return output
+
+    if Path(src_path).name == "00_presentacion_serie.md":
+        return _READING_TIME_BLOCK.sub("", output, count=1)
+
+    minutes = (page.meta or {}).get("reading_time")
+    if not minutes:
+        return output
+
+    replacement = (
+        '<div class="s5-reading-meta" aria-label="Tiempo estimado de lectura">'
+        '<span>Lectura estimada</span>'
+        f'<strong>{escape(str(minutes))} min</strong>'
+        '</div>'
+    )
+    return _READING_TIME_BLOCK.sub(replacement, output, count=1)
+
+
 def on_post_page(output: str, page, config, **kwargs) -> str:
     src_path = page.file.src_path
     if not (src_path.startswith("series/") or src_path.startswith("articulos-tecnicos/")):
@@ -187,4 +215,5 @@ def on_post_page(output: str, page, config, **kwargs) -> str:
 
     aside, toggle = _render(collections, current_collection, current_page)
     output = output.replace(shell_marker, aside + shell_marker, 1)
-    return output.replace(rail_marker, toggle + rail_marker, 1)
+    output = output.replace(rail_marker, toggle + rail_marker, 1)
+    return _normalize_series_metadata(output, page)
