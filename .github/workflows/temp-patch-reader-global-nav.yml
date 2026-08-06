@@ -1,0 +1,72 @@
+name: Temporary patch · reader global navigation
+
+on:
+  push:
+    branches:
+      - redesign/reader-editorial-v3
+
+permissions:
+  contents: write
+
+jobs:
+  patch-reader-global-navigation:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: redesign/reader-editorial-v3
+          fetch-depth: 0
+
+      - name: Update permanent and temporary visual checks
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          validation = Path('scripts/validate_direct_reader_navigation.mjs')
+          text = validation.read_text(encoding='utf-8')
+          text = text.replace("page.locator('.md-tabs__link:visible')", "page.locator('.s5-reader-global-nav__link:visible')")
+          text = text.replace(
+              "Desktop reader pages must preserve the global 5sigmas navigation inside the header.",
+              "Desktop reader pages must preserve the global 5sigmas navigation inside the header.",
+          )
+          validation.write_text(text, encoding='utf-8')
+
+          capture = Path('scripts/capture_site_screenshots.mjs')
+          text = capture.read_text(encoding='utf-8')
+          text = text.replace(
+              "globalTabs: document.querySelectorAll('.md-tabs__link').length,",
+              "globalTabs: document.querySelectorAll('.s5-reader-global-nav__link').length,",
+          )
+          text = text.replace(
+              "visibleGlobalTabs: [...document.querySelectorAll('.md-tabs__link')].filter(isVisible).length,",
+              "visibleGlobalTabs: [...document.querySelectorAll('.s5-reader-global-nav__link')].filter(isVisible).length,",
+          )
+          capture.write_text(text, encoding='utf-8')
+
+          workflow = Path('.github/workflows/temp-reader-v3-review.yml')
+          text = workflow.read_text(encoding='utf-8')
+          text = text.replace("globalNav: await box(page, '.md-tabs'),", "globalNav: await box(page, '.s5-reader-global-nav'),")
+          text = text.replace(
+              "globalNavLinks: await page.locator('.md-tabs__link:visible').count(),",
+              "globalNavLinks: await page.locator('.s5-reader-global-nav__link:visible').count(),",
+          )
+          workflow.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Commit QA updates
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            scripts/validate_direct_reader_navigation.mjs \
+            scripts/capture_site_screenshots.mjs \
+            .github/workflows/temp-reader-v3-review.yml
+          if git diff --cached --quiet; then
+            echo "Nothing to commit"
+          else
+            git commit -m "Validate the dedicated reader header navigation"
+            git push origin HEAD:redesign/reader-editorial-v3
+          fi
