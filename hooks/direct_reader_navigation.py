@@ -1,4 +1,4 @@
-"""Inject a contextual desktop library and a full mobile/global library."""
+"""Inject a contextual desktop library and a full searchable library."""
 
 from __future__ import annotations
 
@@ -133,17 +133,20 @@ def _render(
         index for index, page in enumerate(current_collection["pages"]) if page["path"] == current_page["path"]
     )
     progress_label = f"{page_index + 1:02d}/{len(current_collection['pages']):02d}"
+    kind_label = "Serie" if current_collection["kind"] == "Aprender" else "Notas"
 
     aside = (
         '<div class="s5-reader-direct-overlay" data-s5-reader-direct-overlay hidden></div>'
         '<aside class="s5-reader-direct" id="s5-reader-direct" '
-        'data-s5-reader-direct aria-label="Navegación de la colección actual">'
+        f'data-s5-reader-direct aria-label="Navegación de {escape(current_collection["title"], quote=True)}">'
         '<header class="s5-reader-direct__header">'
-        f'<div><span>Biblioteca</span><strong>{escape(current_collection["title"])}</strong></div>'
+        '<div><span>Biblioteca</span>'
+        f'<strong>{escape(current_collection["title"])}</strong>'
+        f'<small>{kind_label} · {progress_label}</small></div>'
         '<button type="button" data-s5-reader-direct-close aria-label="Cerrar biblioteca">×</button>'
         "</header>"
         '<button class="s5-reader-direct__browse" type="button" data-s5-reader-open>'
-        '<span>Explorar todo 5sigmas</span><b aria-hidden="true">↗</b></button>'
+        '<span>Toda la biblioteca</span><b aria-hidden="true">↗</b></button>'
         '<label class="s5-reader-direct__search">'
         '<span>Buscar</span>'
         '<input type="search" data-s5-reader-direct-search '
