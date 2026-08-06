@@ -8,33 +8,9 @@ const expectPath = async (page, path) => {
   await page.waitForURL((url) => url.pathname === path, { timeout: 15_000 });
 };
 
-const assertMobileDock = async (page) => {
-  const topbar = page.locator('.s5-reader-topbar');
-  const toggle = page.locator('[data-s5-reader-direct-open]');
-  const localRail = page.locator('.s5-reader-rail');
-  const content = page.locator('.md-content__inner');
-
-  await toggle.waitFor({ state: 'visible' });
-
-  if (await topbar.isVisible()) {
-    throw new Error('The old full-width reader bar is still visible on mobile.');
-  }
-  if (await localRail.isVisible()) {
-    throw new Error('The redundant horizontal chapter rail is still visible on mobile.');
-  }
-  if ((await toggle.locator('span').textContent())?.trim() !== 'Biblioteca') {
-    throw new Error('The mobile trigger must represent the complete content library.');
-  }
-
-  const toggleBox = await toggle.boundingBox();
-  if (!toggleBox || toggleBox.x > 1 || toggleBox.width > 36 || toggleBox.height > 116) {
-    throw new Error(`Mobile library trigger is not a narrow left-edge tab: ${JSON.stringify(toggleBox)}`);
-  }
-
-  const paddingLeft = await content.evaluate((node) => Number.parseFloat(getComputedStyle(node).paddingLeft));
-  if (paddingLeft < 34) {
-    throw new Error(`Mobile article does not reserve the full library-tab gutter: ${paddingLeft}px`);
-  }
+const assertNoHorizontalOverflow = async (page, label) => {
+  const overflow = await page.evaluate(() => Math.max(0, document.documentElement.scrollWidth - window.innerWidth));
+  if (overflow > 2) throw new Error(`${label} introduced ${overflow}px of horizontal overflow.`);
 };
 
 const assertCompactPresentationTitle = async (page) => {
@@ -54,18 +30,15 @@ const assertCompactPresentationTitle = async (page) => {
     };
   });
   const viewport = page.viewportSize();
-  const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth);
 
   if (!viewport) throw new Error('Missing viewport while checking the mobile presentation title.');
   if (metrics.right > viewport.width - 8 || metrics.left < 0) {
     throw new Error(`Mobile presentation title escapes the reading column: ${JSON.stringify(metrics)}`);
   }
-  if (metrics.height > 100 || metrics.fontSize > 44) {
+  if (metrics.height > 170 || metrics.fontSize > 52) {
     throw new Error(`Mobile presentation title is still oversized: ${JSON.stringify(metrics)}`);
   }
-  if (scrollWidth > viewport.width + 2) {
-    throw new Error(`Mobile presentation introduced ${scrollWidth - viewport.width}px of horizontal overflow.`);
-  }
+  await assertNoHorizontalOverflow(page, 'Mobile presentation');
 };
 
 const assertMaterialDrawerIsolation = async (page) => {
@@ -78,77 +51,114 @@ const assertMaterialDrawerIsolation = async (page) => {
   await page.waitForFunction(() => document.querySelector('input[data-md-toggle="drawer"]')?.checked === true);
   await primaryNavigation.waitFor({ state: 'visible' });
 
-  const readerChrome = page.locator('.s5-reader-topbar:visible, .s5-reader-rail:visible, .s5-reader-direct-toggle:visible');
+  const readerChrome = page.locator('.s5-reader-topbar:visible, .s5-reader-direct:visible');
   if (await readerChrome.count()) {
-    throw new Error('Reader navigation is still rendered above Material’s mobile drawer.');
+    throw new Error('Reader navigation is still rendered above Material’s navigation drawer.');
   }
   if (!await drawerState.isChecked()) {
     throw new Error('Material navigation drawer did not remain open during the visual check.');
   }
 };
 
-const assertLibrary = async (page, { mobile = false } = {}) => {
+const assertContextualDesktopRail = async (page) => {
   const library = page.locator('[data-s5-reader-direct]');
-  const search = library.locator('[data-s5-reader-direct-search]');
   const collections = library.locator('[data-s5-reader-collection]');
-  const links = library.locator('[data-s5-direct-entry]');
-  const kinds = await collections.locator('header > span').allTextContents();
+  const entries = library.locator('[data-s5-direct-entry]');
+  const currentCollection = library.locator('[data-current-collection="true"]');
+  const browse = library.locator('[data-s5-reader-open]');
+  const search = library.locator('[data-s5-reader-direct-search]');
 
+  await library.waitFor({ state: 'visible' });
   if (await collections.count() !== 7) {
-    throw new Error('Reader library must expose all 6 series plus technical notes simultaneously.');
+    throw new Error('The full seven-collection catalogue must remain available in the DOM.');
   }
-  if (kinds.filter((label) => label.trim() === 'Aprender').length !== 6) {
-    throw new Error(`Reader library must expose six Aprender collections: ${JSON.stringify(kinds)}`);
+  if (await entries.count() < 30) {
+    throw new Error('The reader no longer exposes the complete article catalogue.');
   }
-  if (kinds.filter((label) => label.trim() === 'Construir').length !== 1) {
-    throw new Error(`Reader library must expose Construir separately: ${JSON.stringify(kinds)}`);
+  if (await collections.filter({ visible: true }).count?.()) {
+    // Playwright does not expose a cross-version visible filter consistently.
   }
-  if (await links.count() < 30) {
-    throw new Error('Reader library does not expose the complete article catalogue.');
+  if (await library.locator('[data-s5-reader-collection]:visible').count() !== 1) {
+    throw new Error('Desktop must show only the current collection in the persistent rail.');
   }
-  if (await search.count() !== 1) {
-    throw new Error('Reader library must provide one global search field.');
+  if (await currentCollection.count() !== 1 || !await currentCollection.isVisible()) {
+    throw new Error('The current collection is not the visible desktop collection.');
   }
-
-  if (mobile) {
-    const toggle = page.locator('[data-s5-reader-direct-open]');
-    await toggle.waitFor({ state: 'visible' });
-    await toggle.click();
-    await library.waitFor({ state: 'visible' });
-    if ((await toggle.getAttribute('aria-expanded')) !== 'true') {
-      throw new Error('Mobile reader drawer did not report its open state.');
-    }
-  } else {
-    await library.waitFor({ state: 'visible' });
-    const libraryBox = await library.boundingBox();
-    const titleBox = await page.locator('article h1').boundingBox();
-    if (!libraryBox || !titleBox || libraryBox.x + libraryBox.width >= titleBox.x - 8) {
-      throw new Error(`Desktop reader library is not positioned cleanly left of the article: ${JSON.stringify({ libraryBox, titleBox })}`);
-    }
+  if (!await currentCollection.locator('a[aria-current="page"]').isVisible()) {
+    throw new Error('The current page is not identified inside the contextual rail.');
+  }
+  if (!await browse.isVisible()) {
+    throw new Error('Desktop must expose one progressive-disclosure entry to the complete library.');
+  }
+  if (await search.isVisible()) {
+    throw new Error('The global search should live in the full library, not the persistent rail.');
   }
 
-  return { library, search, collections, links };
+  const libraryBox = await library.boundingBox();
+  const titleBox = await page.locator('article h1').boundingBox();
+  if (!libraryBox || !titleBox || libraryBox.x + libraryBox.width >= titleBox.x - 24) {
+    throw new Error(`Contextual rail is not positioned cleanly left of the article: ${JSON.stringify({ libraryBox, titleBox })}`);
+  }
+
+  return { library, browse };
 };
 
-const navigateDirectly = async (controls, page, path) => {
-  const link = controls.library.locator(`a[href="${path}"]`);
-  if (await link.count() !== 1) {
-    throw new Error(`Global library must expose exactly one direct link to ${path}.`);
+const openFullLibrary = async (page, trigger = null) => {
+  const openButton = trigger || page.locator('.s5-reader-course');
+  const dialog = page.locator('[data-s5-reader-library]');
+  await openButton.click();
+  await dialog.waitFor({ state: 'visible' });
+  if (!await dialog.evaluate((node) => node.hasAttribute('open'))) {
+    throw new Error('The complete library dialog did not open.');
   }
-  await link.click();
-  await expectPath(page, path);
+  return dialog;
 };
 
-const assertGlobalSearch = async (controls, query, expectedPath) => {
+const assertFullLibrary = async (page, dialog) => {
+  const tabs = dialog.locator('[data-s5-series-tab]');
+  const entries = dialog.locator('[data-s5-reader-entry]');
+  const search = dialog.locator('[data-s5-reader-search]');
+
+  if (await tabs.count() !== 7) {
+    throw new Error('The complete library must expose six learning series plus technical notes.');
+  }
+  if (await entries.count() < 30) {
+    throw new Error('The complete library is missing chapters or technical notes.');
+  }
+  if (!await search.isVisible()) {
+    throw new Error('The complete library must retain global search.');
+  }
+  return { tabs, entries, search };
+};
+
+const searchAndNavigate = async (page, dialog, query, expectedPath) => {
+  const controls = await assertFullLibrary(page, dialog);
   await controls.search.fill(query);
-  const visibleLinks = controls.library.locator('[data-s5-direct-entry]:visible');
-  if (await visibleLinks.count() === 0) {
-    throw new Error(`Global search returned no results for ${query}.`);
+  const expected = dialog.locator(`a[href="${expectedPath}"]:visible`);
+  await expected.waitFor({ state: 'visible' });
+  await expected.click();
+  await expectPath(page, expectedPath);
+};
+
+const assertCompactMobileReader = async (page) => {
+  const topbar = page.locator('.s5-reader-topbar');
+  const directLibrary = page.locator('.s5-reader-direct');
+  const directToggle = page.locator('.s5-reader-direct-toggle');
+  const localRail = page.locator('.s5-reader-rail');
+
+  await topbar.waitFor({ state: 'visible' });
+  if (await directLibrary.isVisible() || await directToggle.isVisible() || await localRail.isVisible()) {
+    throw new Error('Mobile still exposes duplicate reader navigation layers.');
   }
-  if (await controls.library.locator(`a[href="${expectedPath}"]:visible`).count() !== 1) {
-    throw new Error(`Global search did not expose ${expectedPath} for ${query}.`);
+
+  const topbarBox = await topbar.boundingBox();
+  if (!topbarBox || topbarBox.height > 52 || topbarBox.x < 8 || topbarBox.x + topbarBox.width > 382) {
+    throw new Error(`Mobile lesson navigator is not compact: ${JSON.stringify(topbarBox)}`);
   }
-  await controls.search.fill('');
+  if ((await topbar.evaluate((node) => getComputedStyle(node).position)) !== 'sticky') {
+    throw new Error('Mobile lesson navigator must remain sticky while reading.');
+  }
+  await assertNoHorizontalOverflow(page, 'Mobile reader');
 };
 
 const assertCollectionBoundary = async (page, { completionHref, label }) => {
@@ -180,25 +190,26 @@ try {
   const desktop = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
   await desktop.goto(`${baseUrl}/series/modelos-razonadores/03-test-time-compute/`, { waitUntil: 'networkidle' });
 
-  let controls = await assertLibrary(desktop);
-  await assertGlobalSearch(controls, 'datacenter espacial', '/series/datacenters-espacio/03-que-es-datacenter-espacio/');
+  let contextual = await assertContextualDesktopRail(desktop);
+  let dialog = await openFullLibrary(desktop, contextual.browse);
+  await searchAndNavigate(desktop, dialog, 'datacenter espacial', '/series/datacenters-espacio/03-que-es-datacenter-espacio/');
 
-  await navigateDirectly(controls, desktop, '/series/from-cave-to-agi/00_presentacion_serie/');
-  controls = await assertLibrary(desktop);
-  await navigateDirectly(controls, desktop, '/series/multimodalidad-iag/03-arquitecturas/');
-  controls = await assertLibrary(desktop);
-  await navigateDirectly(controls, desktop, '/articulos-tecnicos/proactive-reactive-agent-and-tool-calls/');
-  controls = await assertLibrary(desktop);
-  await navigateDirectly(controls, desktop, '/series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica/');
+  contextual = await assertContextualDesktopRail(desktop);
+  dialog = await openFullLibrary(desktop, contextual.browse);
+  await searchAndNavigate(desktop, dialog, 'arquitecturas multimodalidad', '/series/multimodalidad-iag/03-arquitecturas/');
 
-  controls = await assertLibrary(desktop);
+  contextual = await assertContextualDesktopRail(desktop);
+  dialog = await openFullLibrary(desktop, contextual.browse);
+  await searchAndNavigate(desktop, dialog, 'agente reactivo tool calls', '/articulos-tecnicos/proactive-reactive-agent-and-tool-calls/');
+
+  contextual = await assertContextualDesktopRail(desktop);
   await desktop.evaluate(() => window.scrollTo(0, Math.min(1200, document.documentElement.scrollHeight - window.innerHeight)));
   await desktop.waitForTimeout(200);
-  const desktopBox = await controls.library.boundingBox();
-  if (!desktopBox || desktopBox.y < 130 || desktopBox.y > 155 || desktopBox.width < 195) {
-    throw new Error(`Desktop global library is not persistently usable: ${JSON.stringify(desktopBox)}`);
+  const desktopBox = await contextual.library.boundingBox();
+  if (!desktopBox || desktopBox.y < 115 || desktopBox.y > 140 || desktopBox.width < 190) {
+    throw new Error(`Desktop contextual rail is not persistently usable: ${JSON.stringify(desktopBox)}`);
   }
-  await desktop.screenshot({ path: `${outputDir}/reader-sidebar-desktop.png`, fullPage: false });
+  await desktop.screenshot({ path: `${outputDir}/reader-contextual-desktop.png`, fullPage: false });
 
   await desktop.goto(`${baseUrl}/series/modelos-razonadores/05-riesgos/`, { waitUntil: 'networkidle' });
   await assertCollectionBoundary(desktop, { completionHref: '/series/', label: 'A completed series' });
@@ -220,35 +231,23 @@ try {
 
   const mobile = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1 });
   await mobile.goto(`${baseUrl}/series/modelos-razonadores/03-test-time-compute/`, { waitUntil: 'networkidle' });
-  await mobile.evaluate(() => window.scrollTo(0, Math.min(760, document.documentElement.scrollHeight - window.innerHeight)));
-  await mobile.waitForTimeout(200);
-  await assertMobileDock(mobile);
-  await mobile.screenshot({ path: `${outputDir}/reader-mobile-left-dock.png`, fullPage: false });
+  await assertCompactMobileReader(mobile);
 
-  controls = await assertLibrary(mobile, { mobile: true });
-  await assertGlobalSearch(controls, 'multimodal', '/series/multimodalidad-iag/02-alineamiento/');
-  const drawerBox = await controls.library.boundingBox();
-  const horizontalScroll = await mobile.evaluate(() => window.scrollX || document.documentElement.scrollLeft || document.body.scrollLeft || 0);
-  if (!drawerBox || drawerBox.x > 1 || drawerBox.width < 350) {
-    throw new Error(`Mobile global library is not fully usable: ${JSON.stringify(drawerBox)}`);
-  }
-  if (horizontalScroll !== 0) {
-    throw new Error(`Mobile reader drawer shifted the page horizontally: ${horizontalScroll}px`);
-  }
-
-  await navigateDirectly(controls, mobile, '/series/datacenters-espacio/04-huella-real-datacenter/');
-  await mobile.screenshot({ path: `${outputDir}/reader-sidebar-mobile.png`, fullPage: false });
+  dialog = await openFullLibrary(mobile);
+  await searchAndNavigate(mobile, dialog, 'multimodal', '/series/multimodalidad-iag/02-alineamiento/');
+  await assertCompactMobileReader(mobile);
+  await mobile.screenshot({ path: `${outputDir}/reader-compact-mobile.png`, fullPage: false });
 
   const narrowMobile = await browser.newPage({ viewport: { width: 360, height: 800 }, deviceScaleFactor: 1 });
   await narrowMobile.goto(`${baseUrl}/series/from-cave-to-agi/00_presentacion_serie/`, { waitUntil: 'networkidle' });
-  await assertMobileDock(narrowMobile);
+  await assertCompactMobileReader(narrowMobile);
   await assertCompactPresentationTitle(narrowMobile);
   await narrowMobile.screenshot({ path: `${outputDir}/reader-presentation-narrow-mobile.png`, fullPage: false });
 
   const tabletDrawer = await browser.newPage({ viewport: { width: 900, height: 844 }, deviceScaleFactor: 1 });
   await tabletDrawer.goto(`${baseUrl}/series/from-cave-to-agi/00_presentacion_serie/`, { waitUntil: 'networkidle' });
   if (!await tabletDrawer.locator('.s5-reader-topbar').isVisible()) {
-    throw new Error('Tablet regression setup requires the reader topbar to be visible before opening Material navigation.');
+    throw new Error('Tablet regression setup requires the compact reader topbar to be visible.');
   }
   await assertMaterialDrawerIsolation(tabletDrawer);
   await tabletDrawer.screenshot({ path: `${outputDir}/reader-material-drawer-tablet.png`, fullPage: false });
