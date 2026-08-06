@@ -1,0 +1,304 @@
+name: Temporary verification · live editorial reader v3
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+    paths:
+      - '.github/workflows/temp-verify-live-reader-v3.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify-live-reader:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Wait for production, validate and capture complete pages
+        shell: bash
+        run: |
+          cat > verify-live-reader.mjs <<'JS'
+          import { chromium, devices } from 'playwright';
+          import fs from 'node:fs/promises';
+
+          const outputDir = 'artifacts/live-reader-v3';
+          await fs.mkdir(outputDir, { recursive: true });
+
+          const specs = [
+            {
+              slug: 'reactive-proactive-voice',
+              url: 'https://5sigmas.com/articulos-tecnicos/reactive-proactive-voice-agents/',
+              visual: '.s5v-contract',
+              kind: 'technical',
+            },
+            {
+              slug: 'voice-architectures',
+              url: 'https://5sigmas.com/articulos-tecnicos/voice-agent-architectures/',
+              visual: '.s5v-arch-map',
+              kind: 'technical',
+            },
+            {
+              slug: 'series-presentation',
+              url: 'https://5sigmas.com/series/from-cave-to-agi/00_presentacion_serie/',
+              visual: '.s5-video-embed',
+              kind: 'presentation',
+            },
+            {
+              slug: 'series-chapter',
+              url: 'https://5sigmas.com/series/modelos-razonadores/03-test-time-compute/',
+              visual: '.s5-video-embed',
+              kind: 'chapter',
+            },
+          ];
+
+          const browser = await chromium.launch({ headless: true });
+          const metrics = [];
+
+          const box = async (page, selector) => {
+            const locator = page.locator(selector).first();
+            if (!await locator.count()) return null;
+            return locator.evaluate((element) => {
+              const rect = element.getBoundingClientRect();
+              const style = getComputedStyle(element);
+              const round = (value) => Math.round(value * 10) / 10;
+              return {
+                x: round(rect.x),
+                y: round(rect.y),
+                width: round(rect.width),
+                height: round(rect.height),
+                position: style.position,
+                display: style.display,
+              };
+            });
+          };
+
+          async function waitForProduction(page, spec) {
+            for (let attempt = 1; attempt <= 60; attempt += 1) {
+              const response = await page.goto(`${spec.url}?reader-v3=${Date.now()}-${attempt}`, {
+                waitUntil: 'domcontentloaded',
+                timeout: 45_000,
+              }).catch(() => null);
+
+              if (response?.ok()) {
+                const ready = await page.evaluate(() => {
+                  const visible = (node) => {
+                    if (!node) return false;
+                    const style = getComputedStyle(node);
+                    return style.display !== 'none'
+                      && style.visibility !== 'hidden'
+                      && Number(style.opacity) !== 0
+                      && node.getClientRects().length > 0;
+                  };
+                  const globalLinks = [...document.querySelectorAll('.s5-reader-global-nav__link')].filter(visible);
+                  const visibleCollections = [...document.querySelectorAll('.s5-reader-direct__collection')].filter(visible);
+                  const desktopTopbar = [...document.querySelectorAll('.s5-reader-topbar')].filter(visible);
+                  return {
+                    context: Boolean(document.querySelector('.s5-reader-context')),
+                    globalLinks: globalLinks.length,
+                    visibleCollections: visibleCollections.length,
+                    desktopTopbar: desktopTopbar.length,
+                    legacyToggle: [...document.querySelectorAll('.s5-reader-direct-toggle')].filter(visible).length,
+                  };
+                });
+
+                console.log(`${spec.slug} attempt ${attempt}:`, ready);
+                if (
+                  ready.context
+                  && ready.globalLinks >= 5
+                  && ready.visibleCollections === 1
+                  && ready.desktopTopbar === 0
+                  && ready.legacyToggle === 0
+                ) {
+                  await page.waitForLoadState('networkidle', { timeout: 30_000 }).catch(() => {});
+                  return;
+                }
+              }
+
+              await new Promise((resolve) => setTimeout(resolve, 10_000));
+            }
+
+            throw new Error(`Production did not expose reader v3 for ${spec.url}`);
+          }
+
+          async function settle(page) {
+            await page.evaluate(async () => {
+              await document.fonts.ready;
+              document.documentElement.style.scrollBehavior = 'auto';
+              document.body.style.scrollBehavior = 'auto';
+              const step = Math.max(540, Math.floor(window.innerHeight * .72));
+              for (let y = 0; y < document.documentElement.scrollHeight; y += step) {
+                window.scrollTo(0, y);
+                await new Promise((resolve) => setTimeout(resolve, 65));
+              }
+              window.scrollTo(0, 0);
+              await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+            });
+            await page.addStyleTag({
+              content: `
+                html, body { scroll-behavior: auto !important; }
+                *, *::before, *::after {
+                  animation-play-state: paused !important;
+                  transition-duration: 0s !important;
+                  transition-delay: 0s !important;
+                }
+              `,
+            });
+            await page.evaluate(() => window.scrollTo(0, 0));
+            await page.waitForTimeout(350);
+          }
+
+          async function validateDesktop(page, spec) {
+            const geometry = {
+              page: spec.slug,
+              viewport: 'desktop',
+              header: await box(page, '.md-header__inner'),
+              globalNav: await box(page, '.s5-reader-global-nav'),
+              library: await box(page, '.s5-reader-direct'),
+              content: await box(page, '.md-content'),
+              context: await box(page, '.s5-reader-context'),
+              title: await box(page, 'article h1'),
+              firstParagraph: await box(page, '.md-typeset > p'),
+              firstLead: await box(page, '.md-typeset > blockquote'),
+              visual: await box(page, spec.visual),
+              globalLinks: await page.locator('.s5-reader-global-nav__link:visible').count(),
+              visibleCollections: await page.locator('.s5-reader-direct__collection:visible').count(),
+              desktopTopbar: await page.locator('.s5-reader-topbar:visible').count(),
+              breadcrumbs: await page.locator('.md-path:visible').count(),
+              tags: await page.locator('.md-tags:visible').count(),
+              legacyToggle: await page.locator('.s5-reader-direct-toggle:visible').count(),
+              legacyReadingTime: await page.locator('article blockquote:has-text("Tiempo de lectura")').count(),
+              readingMeta: await page.locator('.s5-reading-meta:visible').count(),
+              seriesMeta: await page.locator('.sm-wrap:visible').count(),
+              overflow: await page.evaluate(() => Math.max(0, document.documentElement.scrollWidth - window.innerWidth)),
+            };
+            metrics.push(geometry);
+
+            for (const key of ['header', 'globalNav', 'library', 'content', 'context', 'title']) {
+              if (!geometry[key]) throw new Error(`${spec.slug}/desktop missing ${key}`);
+            }
+            if (geometry.globalLinks < 5) throw new Error(`${spec.slug}/desktop global nav has ${geometry.globalLinks} links`);
+            if (geometry.visibleCollections !== 1) throw new Error(`${spec.slug}/desktop shows ${geometry.visibleCollections} persistent collections`);
+            if (geometry.desktopTopbar || geometry.breadcrumbs || geometry.tags || geometry.legacyToggle) {
+              throw new Error(`${spec.slug}/desktop exposes duplicate reader chrome`);
+            }
+            if (geometry.legacyReadingTime) throw new Error(`${spec.slug}/desktop exposes legacy reading-time block`);
+            if (geometry.overflow > 1) throw new Error(`${spec.slug}/desktop horizontal overflow ${geometry.overflow}px`);
+            if (geometry.content.x - (geometry.library.x + geometry.library.width) < 28) {
+              throw new Error(`${spec.slug}/desktop library and article are too close`);
+            }
+            if (Math.abs(geometry.title.x - geometry.content.x) > 1) {
+              throw new Error(`${spec.slug}/desktop title and article edges differ`);
+            }
+            if (geometry.firstParagraph && (geometry.firstParagraph.width < 720 || geometry.firstParagraph.width > 800)) {
+              throw new Error(`${spec.slug}/desktop prose width ${geometry.firstParagraph.width}px`);
+            }
+            if (geometry.visual && geometry.visual.width < 900) {
+              throw new Error(`${spec.slug}/desktop visual width ${geometry.visual.width}px`);
+            }
+            if (spec.kind === 'presentation' && geometry.seriesMeta !== 1) {
+              throw new Error(`${spec.slug}/desktop presentation metadata missing`);
+            }
+            if (spec.kind === 'chapter' && geometry.readingMeta !== 1) {
+              throw new Error(`${spec.slug}/desktop compact reading metadata missing`);
+            }
+            return geometry;
+          }
+
+          async function captureDesktop(spec) {
+            const page = await browser.newPage({
+              viewport: { width: 1728, height: 1117 },
+              deviceScaleFactor: 1,
+            });
+            await waitForProduction(page, spec);
+            await settle(page);
+            await validateDesktop(page, spec);
+            await page.screenshot({ path: `${outputDir}/${spec.slug}-desktop-viewport.png`, fullPage: false });
+            await page.screenshot({ path: `${outputDir}/${spec.slug}-desktop-full.png`, fullPage: true });
+            await page.close();
+          }
+
+          async function captureMobile(spec) {
+            const page = await browser.newPage({
+              ...devices['Pixel 7'],
+              viewport: { width: 390, height: 844 },
+              deviceScaleFactor: 1,
+            });
+            await page.goto(`${spec.url}?reader-v3-mobile=${Date.now()}`, {
+              waitUntil: 'networkidle',
+              timeout: 45_000,
+            });
+            await settle(page);
+
+            const geometry = {
+              page: spec.slug,
+              viewport: 'mobile',
+              context: await box(page, '.s5-reader-context'),
+              title: await box(page, 'article h1'),
+              navigator: await box(page, '.s5-reader-topbar'),
+              firstParagraph: await box(page, '.md-typeset > p'),
+              visual: await box(page, spec.visual),
+              library: await page.locator('.s5-reader-direct:visible').count(),
+              legacyToggle: await page.locator('.s5-reader-direct-toggle:visible').count(),
+              breadcrumbs: await page.locator('.md-path:visible').count(),
+              tags: await page.locator('.md-tags:visible').count(),
+              legacyReadingTime: await page.locator('article blockquote:has-text("Tiempo de lectura")').count(),
+              readingMeta: await page.locator('.s5-reading-meta:visible').count(),
+              seriesMeta: await page.locator('.sm-wrap:visible').count(),
+              overflow: await page.evaluate(() => Math.max(0, document.documentElement.scrollWidth - window.innerWidth)),
+            };
+            metrics.push(geometry);
+
+            if (!geometry.context || !geometry.title || !geometry.navigator) {
+              throw new Error(`${spec.slug}/mobile missing contextual reader elements`);
+            }
+            if (geometry.navigator.position !== 'sticky' || geometry.navigator.height > 54) {
+              throw new Error(`${spec.slug}/mobile navigator invalid: ${JSON.stringify(geometry.navigator)}`);
+            }
+            if (geometry.library || geometry.legacyToggle || geometry.breadcrumbs || geometry.tags) {
+              throw new Error(`${spec.slug}/mobile exposes duplicate reader chrome`);
+            }
+            if (geometry.legacyReadingTime) throw new Error(`${spec.slug}/mobile exposes legacy reading-time block`);
+            if (geometry.overflow > 1) throw new Error(`${spec.slug}/mobile horizontal overflow ${geometry.overflow}px`);
+            if (spec.kind === 'presentation' && geometry.seriesMeta !== 1) {
+              throw new Error(`${spec.slug}/mobile presentation metadata missing`);
+            }
+            if (spec.kind === 'chapter' && geometry.readingMeta !== 1) {
+              throw new Error(`${spec.slug}/mobile compact reading metadata missing`);
+            }
+
+            await page.screenshot({ path: `${outputDir}/${spec.slug}-mobile-viewport.png`, fullPage: false });
+            await page.screenshot({ path: `${outputDir}/${spec.slug}-mobile-full.png`, fullPage: true });
+            await page.close();
+          }
+
+          try {
+            for (const spec of specs) {
+              await captureDesktop(spec);
+              await captureMobile(spec);
+            }
+          } finally {
+            await browser.close();
+          }
+
+          await fs.writeFile(`${outputDir}/live-reader-v3-metrics.json`, JSON.stringify(metrics, null, 2));
+          console.log(JSON.stringify(metrics, null, 2));
+          JS
+
+          node verify-live-reader.mjs
+
+      - name: Upload live production screenshots
+        uses: actions/upload-artifact@v4
+        with:
+          name: live-reader-v3
+          path: artifacts/live-reader-v3/*
+          if-no-files-found: error
+          retention-days: 7
