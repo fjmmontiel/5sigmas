@@ -90,13 +90,16 @@ body:has(.s5-reader-shell) .sm-wrap .sm-dot {
     z-index: 5 !important;
   }
 
-  /* Material keeps the global sections in a second tab row. Reader pages
-     place them inside the single global header instead. */
+  /* Material may translate the tab row out of view while it manages the
+     standard two-level header. Reader pages pin it to the single header. */
   body:has(.s5-reader-shell) .md-tabs {
+    top: 0 !important;
     display: block !important;
+    overflow: visible !important;
     visibility: visible !important;
     z-index: 6 !important;
     opacity: 1 !important;
+    transform: translateX(-50%) !important;
   }
 
   body:has(.s5-reader-shell) .md-tabs__inner {
