@@ -1,54 +1,201 @@
 ---
-title: Large Language Models (LLMs)
-description: Qué son los LLMs, cómo se entrenan y en qué se diferencian de la IA tradicional. Guía técnica sin hype en español.
-keywords: LLM, large language models, modelos de lenguaje, preentrenamiento, parámetros, transformers, IA generativa, GPT
+title: "Qué es un LLM y cómo funciona"
+seo_title: "Qué es un LLM: cómo funciona un modelo de lenguaje grande"
+description: "Qué es un LLM, cómo tokeniza, aprende y genera texto, qué cambia con el ajuste por instrucciones y cuáles son sus límites técnicos."
+keywords: "LLM, large language model, modelo de lenguaje grande, tokens, preentrenamiento, Transformer, instruction tuning, RLHF"
 date: 2026-04-07
-hide:
-  - toc
-robots: noindex
+date_modified: 2026-08-05
 ---
 
-# Large Language Models (LLMs)
+# Qué es un LLM y cómo funciona
 
-Un Large Language Model es una red neuronal entrenada sobre volúmenes masivos de texto con un único objetivo: predecir qué token sigue a una secuencia dada. Lo que parece una tarea simple produce, a suficiente escala, sistemas capaces de razonar, traducir, resumir y generar código. La clave está en el volumen de parámetros (los pesos ajustables de la red), que en los modelos más grandes supera los cientos de miles de millones, y en la arquitectura Transformer, que permite procesar relaciones entre palabras a cualquier distancia del texto. A diferencia de los sistemas de IA tradicionales, que aprenden reglas para una tarea concreta, los LLMs aprenden representaciones generales del lenguaje que luego se adaptan a tareas específicas con un mínimo de datos adicionales.
+Un **LLM** (*Large Language Model* o modelo de lenguaje grande) es una red neuronal entrenada para estimar qué token puede venir después de una secuencia. Durante el preentrenamiento observa grandes cantidades de texto y ajusta sus parámetros para reducir el error de esa predicción. Después puede generar texto, responder preguntas, resumir, traducir o producir código porque muchas tareas pueden formularse como continuación condicionada de una secuencia.
 
-## En qué series aparece
+La definición parece simple. El comportamiento que emerge no lo es. Para entenderlo conviene separar cuatro piezas: **tokenización, representación, predicción y adaptación**.
 
-<div style="display:flex;gap:.75rem;flex-wrap:wrap;margin:1.25rem 0">
+## La respuesta en 60 segundos
 
-<a href="/series/fundamentos-ia-iag/00_presentacion_serie/" style="flex:1;min-width:200px;text-decoration:none;border-radius:10px;border:1px solid rgba(50,74,178,.3);padding:1rem;display:flex;flex-direction:column;gap:.4rem;color:inherit">
-  <div style="font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:#324AB2;font-weight:700">Fundamentos de IA e IA generativa</div>
-  <div style="font-size:.85rem;opacity:.8;line-height:1.4">Define qué es la IA, qué distingue a la generativa y qué significa que un modelo "aprenda". Base conceptual antes de entrar en arquitecturas.</div>
-  <div style="margin-top:.5rem;font-size:.82rem;color:#324AB2;font-weight:600">Leer →</div>
-</a>
+```text
+texto
+→ tokens
+→ vectores numéricos
+→ bloques Transformer
+→ probabilidades del siguiente token
+→ selección de un token
+→ repetir
+```
 
-<a href="/series/from-cave-to-agi/00_presentacion_serie/" style="flex:1;min-width:200px;text-decoration:none;border-radius:10px;border:1px solid rgba(38,166,154,.3);padding:1rem;display:flex;flex-direction:column;gap:.4rem;color:inherit">
-  <div style="font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:#26A69A;font-weight:700">De las cavernas a la AGI</div>
-  <div style="font-size:.85rem;opacity:.8;line-height:1.4">Explica la historia de aprender de datos, la revolución del aprendizaje profundo, el salto del Transformer y por qué la escala cambió el campo.</div>
-  <div style="margin-top:.5rem;font-size:.82rem;color:#26A69A;font-weight:600">Leer →</div>
-</a>
+El modelo no busca una frase almacenada ni consulta por defecto una base de datos. Calcula una distribución de probabilidad sobre el vocabulario, elige una continuación y vuelve a ejecutar el proceso con el nuevo contexto.
 
-<a href="/series/multimodalidad-iag/00_presentacion_serie/" style="flex:1;min-width:200px;text-decoration:none;border-radius:10px;border:1px solid rgba(124,199,255,.3);padding:1rem;display:flex;flex-direction:column;gap:.4rem;color:inherit">
-  <div style="font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:#7cc7ff;font-weight:700">Multimodalidad en IA generativa</div>
-  <div style="font-size:.85rem;opacity:.8;line-height:1.4">Muestra cómo los LLMs se extienden más allá del texto para procesar imagen, audio y vídeo dentro de una misma arquitectura.</div>
-  <div style="margin-top:.5rem;font-size:.82rem;color:#7cc7ff;font-weight:600">Leer →</div>
-</a>
+Un sistema de producto puede añadir memoria, búsqueda, herramientas o políticas alrededor del modelo. Esas capacidades pertenecen al sistema completo, no necesariamente a los pesos del LLM.
 
-</div>
+## 1. El texto se convierte en tokens
+
+El modelo no trabaja directamente con palabras. Un **tokenizador** divide el texto en unidades que pueden ser palabras completas, fragmentos, signos o bytes. Cada token recibe un identificador entero.
+
+Por ejemplo, una frase podría representarse de forma aproximada así:
+
+```text
+"Los modelos aprenden patrones"
+→ ["Los", " modelos", " aprenden", " patrones"]
+→ [1248, 5312, 18902, 7721]
+```
+
+La segmentación exacta depende del vocabulario y del algoritmo. Métodos como Byte Pair Encoding y SentencePiece equilibran dos objetivos: mantener un vocabulario manejable y representar palabras raras sin convertir cada carácter en una unidad independiente.[^sentencepiece]
+
+La tokenización importa porque condiciona:
+
+- el coste, que suele medirse por tokens
+- la longitud efectiva del contexto
+- la representación de idiomas y código
+- la facilidad para copiar números, nombres o cadenas poco frecuentes
+
+## 2. Los tokens se convierten en representaciones
+
+Cada identificador se transforma en un vector aprendido llamado **embedding**. El modelo también necesita información sobre la posición de cada token. Sin ella, una secuencia sería solo un conjunto sin orden.
+
+Los vectores atraviesan una pila de bloques Transformer. En cada bloque ocurren dos operaciones principales:
+
+1. **Atención:** cada posición combina información de otras posiciones relevantes
+2. **Red feed-forward:** transforma la representación de cada posición de forma no lineal
+
+Las conexiones residuales y la normalización estabilizan el entrenamiento. Al repetir el bloque muchas veces, las representaciones dejan de codificar solo la identidad del token y empiezan a incorporar sintaxis, relaciones semánticas, referencias, estructura del documento y señales útiles para la predicción.[^transformer]
+
+La guía sobre [el Transformer](/temas/transformer/) desarrolla esta arquitectura paso a paso.
+
+## 3. El objetivo base es predecir el siguiente token
+
+En un LLM autoregresivo, el entrenamiento optimiza una función de pérdida como esta:
+
+```text
+L = - Σ log p(token_t | token_1, ..., token_{t-1})
+```
+
+El modelo recibe una secuencia y debe asignar alta probabilidad al token real que sigue en cada posición. El gradiente indica cómo modificar millones o miles de millones de parámetros para cometer menos error en el siguiente lote.
+
+A gran escala, resolver bien esa tarea exige aprender regularidades profundas. Para predecir una continuación plausible, el modelo necesita capturar gramática, estilo, relaciones entre conceptos, convenciones de código y parte de la estructura estadística del mundo descrito en los datos.
+
+Eso no convierte la probabilidad en verdad. El objetivo de entrenamiento premia una continuación compatible con el contexto, no una afirmación verificada externamente.
+
+## 4. Preentrenamiento, instrucciones y preferencias no son lo mismo
+
+Un producto conversacional suele pasar por varias etapas.
+
+### Preentrenamiento
+
+El modelo aprende patrones generales a partir de grandes corpus. El resultado es un **modelo base** que completa texto, pero no necesariamente sigue bien una instrucción.
+
+### Ajuste por instrucciones
+
+Se entrena con pares de instrucción y respuesta para que interprete peticiones y adopte formatos útiles. Esta fase transforma la capacidad general de continuación en comportamiento asistencial.
+
+### Optimización por preferencias
+
+Se utilizan comparaciones humanas, modelos de recompensa u otras señales para favorecer respuestas consideradas más útiles, seguras o alineadas con el producto. InstructGPT mostró de forma temprana cómo el ajuste supervisado y el aprendizaje a partir de preferencias podían mejorar el seguimiento de instrucciones sin cambiar el objetivo fundamental de generación.[^instructgpt]
+
+Estas etapas modifican el comportamiento observable. No garantizan que el modelo conozca una fuente, mantenga coherencia durante una operación larga o ejecute acciones de forma fiable.
+
+## Parámetros, contexto y conocimiento externo
+
+Tres mecanismos distintos suelen confundirse.
+
+| Mecanismo | Qué contiene | Cuándo cambia |
+|---|---|---|
+| **Parámetros** | Patrones comprimidos durante el entrenamiento | Al entrenar o ajustar el modelo |
+| **Contexto** | Instrucciones, conversación y documentos enviados en la petición | En cada interacción |
+| **Recuperación o tools** | Información consultada o acciones ejecutadas fuera del modelo | Durante la ejecución del sistema |
+
+Un LLM puede responder desde sus parámetros, razonar sobre información incluida en el contexto o llamar a una herramienta. La trazabilidad es muy distinta en cada caso.
+
+Cuando la respuesta debe depender de documentación actual, una arquitectura con recuperación suele ser más verificable que confiar en lo que quedó comprimido durante el entrenamiento. Cuando debe cambiar el estado de otro sistema, hace falta una tool con contrato, validación e idempotencia.
+
+## Por qué la escala ayuda
+
+El rendimiento no depende solo del número de parámetros. También importan la cantidad y calidad de los datos, el cómputo de entrenamiento, la arquitectura, la longitud de contexto y el proceso de adaptación.
+
+Los trabajos sobre *scaling laws* mostraron relaciones predecibles entre pérdida, tamaño del modelo, datos y cómputo. Chinchilla añadió un matiz decisivo: para un presupuesto de entrenamiento dado, aumentar parámetros sin aumentar suficientes tokens puede dejar el modelo infraentrenado.[^gpt3][^chinchilla]
+
+Por eso “más grande” no es una explicación suficiente. La comparación útil exige conocer el régimen de entrenamiento y la tarea de evaluación.
+
+## Qué puede hacer bien un LLM
+
+Un LLM es especialmente útil cuando la tarea admite variación lingüística y el resultado puede verificarse o corregirse:
+
+- transformar y resumir texto
+- extraer información con un esquema
+- generar borradores y código
+- clasificar con instrucciones y ejemplos
+- traducir entre representaciones
+- coordinar tools mediante argumentos estructurados
+- razonar sobre información presente en el contexto
+
+El sistema mejora cuando añade restricciones explícitas, ejemplos, validadores, recuperación y evaluación sobre casos reales.
+
+## Límites que no desaparecen con un prompt mejor
+
+### Generación plausible, no garantía de verdad
+
+El modelo puede producir una afirmación fluida y falsa. La confianza verbal no es una estimación calibrada de corrección.
+
+### Sensibilidad al contexto
+
+Pequeños cambios en instrucciones, orden o ejemplos pueden alterar el resultado. En producción, el prompt es parte del software y necesita pruebas de regresión.
+
+### Conocimiento incompleto o desactualizado
+
+Los parámetros reflejan los datos y la fecha de entrenamiento. Un modelo no conoce automáticamente cambios posteriores ni la documentación privada de una organización.
+
+### Razonamiento no monotónico
+
+Más tokens de razonamiento o más tiempo de inferencia pueden ayudar, pero también introducir deriva, sobrepensamiento o coste sin mejora. La guía de [razonamiento en LLMs](/temas/razonamiento/) separa esas estrategias.
+
+### Falta de estado operacional fiable
+
+El historial conversacional no sustituye a una base de datos. Una operación larga necesita estado explícito, identificadores, reintentos e idempotencia fuera del modelo.
+
+## Cómo evaluar un LLM para un caso real
+
+No basta con elegir el modelo que lidera un benchmark. Una evaluación útil debería medir:
+
+1. la distribución real de entradas
+2. la calidad mínima aceptable
+3. los fallos costosos
+4. la latencia hasta una salida utilizable
+5. el coste total del sistema
+6. la estabilidad ante reformulaciones
+7. la corrección de tools y datos recuperados
+
+La guía de [evaluación de modelos de IA](/temas/evaluacion-modelos/) propone una pila completa desde pruebas estáticas hasta métricas de producto.
+
+## Dónde profundizar en 5sigmas
+
+- [Fundamentos de IA e IA generativa](/series/fundamentos-ia-iag/00_presentacion_serie/) para separar software, aprendizaje y generación
+- [De las cavernas a la AGI](/series/from-cave-to-agi/00_presentacion_serie/) para entender cómo representación, aprendizaje y escala convergen en los modelos fundacionales
+- [Modelos razonadores](/series/modelos-razonadores/00_presentacion_serie/) para estudiar inferencia, verificación, latencia y fallos
+- [Agente reactivo, proactivo y tool calls](/articulos-tecnicos/proactive-reactive-agent-and-tool-calls/) para llevar el modelo a un runtime observable
 
 ## Preguntas frecuentes
 
-**¿En qué se diferencia un LLM de una IA tradicional?**
-La IA tradicional aprende a resolver una tarea concreta (clasificar imágenes, detectar spam) con datos etiquetados para esa tarea. Un LLM aprende representaciones generales del lenguaje a partir de texto sin etiquetar y después se adapta a docenas de tareas distintas sin reentrenarse desde cero.
+### ¿Un LLM es una base de datos?
 
-**¿Los LLMs entienden el lenguaje?**
-Depende de qué se entienda por "entender". Los LLMs no tienen representaciones simbólicas del significado como las que tendría un sistema lógico, pero sus representaciones internas capturan relaciones semánticas, analogías y estructuras gramaticales con suficiente fidelidad como para ejecutar tareas complejas de razonamiento lingüístico. El debate sobre si eso constituye comprensión genuina sigue abierto en la comunidad.
+No. Sus parámetros comprimen regularidades aprendidas, pero no ofrecen recuperación exacta, actualización transaccional ni procedencia garantizada. Un sistema puede conectar el LLM con una base de datos o un índice, pero son componentes distintos.
 
-**¿Qué es el preentrenamiento?**
-El preentrenamiento es la fase en que el modelo aprende a predecir texto a partir de un corpus enorme (libros, web, código) sin instrucciones específicas. El resultado es un modelo base que captura conocimiento general del lenguaje. Después viene el ajuste fino (fine-tuning) o la alineación con instrucciones humanas (RLHF), que orientan ese conocimiento hacia tareas útiles.
+### ¿Un LLM entiende el lenguaje?
 
-**¿Por qué los LLMs cometen errores?**
-Los LLMs generan el texto más probable según sus pesos, no el más verdadero. Eso significa que pueden producir afirmaciones plausibles pero incorrectas (las llamadas "alucinaciones") cuando el texto de entrenamiento no cubre bien un tema, o cuando la tarea requiere razonamiento preciso que la predicción de tokens no garantiza.
+Depende de la definición de “entender”. Sus representaciones capturan relaciones sintácticas y semánticas suficientes para resolver tareas complejas. Eso no demuestra experiencia subjetiva ni garantiza una representación causal correcta del mundo.
 
-**¿Cuántos parámetros tiene un LLM grande?**
-Los modelos más grandes publicados hasta 2025 tienen entre 70.000 millones y varios billones de parámetros. GPT-3 tenía 175.000 millones. Llama 3 llega a 405.000 millones en su variante mayor. Sin embargo, el número de parámetros no es el único determinante del rendimiento: la calidad de los datos de entrenamiento y las técnicas de alineación importan tanto o más.
+### ¿Todos los LLMs usan Transformer?
+
+La mayoría de los modelos de lenguaje de propósito general publicados durante la etapa moderna usan Transformers o arquitecturas híbridas cercanas. Existen alternativas basadas en modelos de espacio de estados y otras operaciones, pero “LLM” describe escala y función, no obliga a una arquitectura concreta.
+
+### ¿Qué diferencia hay entre un LLM y un chatbot?
+
+El LLM es el modelo generativo. El chatbot añade interfaz, instrucciones, memoria, recuperación, herramientas, moderación, observabilidad y políticas de producto.
+
+## Fuentes primarias
+
+[^sentencepiece]: Taku Kudo y John Richardson, [*SentencePiece: A simple and language independent subword tokenizer and detokenizer for Neural Text Processing*](https://arxiv.org/abs/1808.06226), 2018.
+[^transformer]: Ashish Vaswani et al., [*Attention Is All You Need*](https://arxiv.org/abs/1706.03762), 2017.
+[^gpt3]: Tom B. Brown et al., [*Language Models are Few-Shot Learners*](https://arxiv.org/abs/2005.14165), 2020.
+[^chinchilla]: Jordan Hoffmann et al., [*Training Compute-Optimal Large Language Models*](https://arxiv.org/abs/2203.15556), 2022.
+[^instructgpt]: Long Ouyang et al., [*Training language models to follow instructions with human feedback*](https://arxiv.org/abs/2203.02155), 2022.
