@@ -59,7 +59,7 @@ hide:
       <span class="s5-list-row__n">07</span>
       <span class="s5-list-row__title">Seguridad en IA</span>
       <span class="s5-list-row__desc">Prompt injection, jailbreaks, envenenamiento, red-teaming y controles para sistemas que leen y actúan.</span>
-      <span class="s5-list-row__meta">5 capítulos · En construcción</span>
+      <span class="s5-list-row__meta">5 capítulos</span>
     </a>
   </nav>
 </section>
