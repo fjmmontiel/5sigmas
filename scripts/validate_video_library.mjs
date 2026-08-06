@@ -50,12 +50,18 @@ const assertHub = async (page, { mobile = false } = {}) => {
 
   await search.fill('test time compute');
   const visibleAfterSearch = library.locator('[data-s5-video-card]:visible');
-  if (await visibleAfterSearch.count() !== 1) {
-    throw new Error(`Video search should return one Test-Time Compute card, found ${await visibleAfterSearch.count()}.`);
+  const resultCount = await visibleAfterSearch.count();
+  if (resultCount === 0) {
+    throw new Error('Video search returned no results for Test-Time Compute.');
   }
-  const resultHref = await visibleAfterSearch.first().locator('.s5-video-card__poster').getAttribute('href');
-  if (resultHref !== sampleWatchPath) {
-    throw new Error(`Video search returned ${resultHref || 'no destination'} instead of ${sampleWatchPath}.`);
+  const resultPaths = await visibleAfterSearch
+    .locator('.s5-video-card__poster')
+    .evaluateAll((links) => links.map((link) => new URL(link.href).pathname));
+  if (!resultPaths.includes(sampleWatchPath)) {
+    throw new Error(`Video search omitted ${sampleWatchPath}: ${JSON.stringify(resultPaths)}.`);
+  }
+  if (resultPaths[0] !== sampleWatchPath) {
+    throw new Error(`Exact-title video was not ranked first: ${JSON.stringify(resultPaths)}.`);
   }
 
   await search.fill('');

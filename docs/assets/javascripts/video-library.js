@@ -3,6 +3,8 @@
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .replace(/\s+/g, ' ')
     .trim();
 
   const parseTimestamp = (value) => {
@@ -15,6 +17,18 @@
     return (parts[0] * 3600) + (parts[1] * 60) + parts[2];
   };
 
+  const searchScore = (card, query, tokens) => {
+    const title = normalize(card.querySelector('h2')?.textContent);
+    const haystack = normalize(card.dataset.search || card.textContent);
+    if (!tokens.every((token) => haystack.includes(token))) return null;
+    if (title === query) return 0;
+    if (title.startsWith(query)) return 1;
+    if (title.includes(query)) return 2;
+    if (tokens.every((token) => title.includes(token))) return 3;
+    if (haystack.includes(query)) return 4;
+    return 5;
+  };
+
   const initializeLibrary = (root) => {
     if (root.dataset.s5VideoLibraryReady === 'true') return;
     root.dataset.s5VideoLibraryReady = 'true';
@@ -22,21 +36,39 @@
     const search = root.querySelector('[data-s5-video-search]');
     const filters = [...root.querySelectorAll('[data-s5-video-filter]')];
     const cards = [...root.querySelectorAll('[data-s5-video-card]')];
+    const grid = root.querySelector('[data-s5-video-grid]');
     const status = root.querySelector('[data-s5-video-status]');
     const empty = root.querySelector('[data-s5-video-empty]');
     if (!search || filters.length === 0 || cards.length === 0) return;
 
+    const originalOrder = new Map(cards.map((card, index) => [card, index]));
     let activeTopic = 'all';
 
     const apply = () => {
       const query = normalize(search.value);
+      const tokens = query ? query.split(' ') : [];
       let visible = 0;
 
       for (const card of cards) {
         const topicMatches = activeTopic === 'all' || card.dataset.topic === activeTopic;
-        const textMatches = !query || normalize(card.dataset.search || card.textContent).includes(query);
+        const score = query ? searchScore(card, query, tokens) : 0;
+        const textMatches = !query || score !== null;
         card.hidden = !(topicMatches && textMatches);
+        card.dataset.s5VideoSearchScore = String(score ?? 999);
         if (!card.hidden) visible += 1;
+      }
+
+      if (grid) {
+        const ordered = [...cards].sort((left, right) => {
+          if (query && left.hidden !== right.hidden) return left.hidden ? 1 : -1;
+          if (query && !left.hidden && !right.hidden) {
+            const scoreDifference = Number(left.dataset.s5VideoSearchScore)
+              - Number(right.dataset.s5VideoSearchScore);
+            if (scoreDifference !== 0) return scoreDifference;
+          }
+          return originalOrder.get(left) - originalOrder.get(right);
+        });
+        for (const card of ordered) grid.append(card);
       }
 
       if (status) {

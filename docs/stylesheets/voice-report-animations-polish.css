@@ -1,2 +1,96 @@
-/* Compatibility entry point retained for existing builds.
-   The final reader iteration is loaded explicitly after reader-editorial-v3.css in mkdocs.yml. */
+/* Voice microlabs live inside the article instead of behaving like full-page decks. */
+
+.anim-brand-shell:has(.anim-brand-shell__viewport > .s5v) {
+  width: 100%;
+  max-width: 100%;
+  margin: 1.45rem 0 2.6rem;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.anim-brand-shell:has(.anim-brand-shell__viewport > .s5v) .anim-brand-shell__toolbar {
+  min-height: 32px;
+  padding: 0 2px 7px;
+}
+
+.anim-brand-shell:has(.anim-brand-shell__viewport > .s5v) .anim-brand-shell__viewport {
+  min-width: 0;
+  max-width: 100%;
+  padding: 0;
+  overflow: visible;
+  background: transparent;
+}
+
+.anim-brand-shell:has(.anim-brand-shell__viewport > .s5v) .anim-brand-shell__footer {
+  margin-top: 7px;
+  opacity: .55;
+}
+
+body.s5-voice-animation-focus :is(
+  .md-header,
+  .md-tabs,
+  .s5-reader-topbar,
+  .s5-reader-rail,
+  .s5-reader-direct,
+  .s5-reader-direct-toggle
+) {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+body.s5-voice-animation-focus .s5-reader-end {
+  display: none !important;
+}
+
+/*
+ * The prose remains deliberately narrow, but desktop microlabs get their own
+ * canvas. They stay aligned with the article's left edge and expand into the
+ * unused space on the right, rather than overlapping the contextual rail.
+ */
+@media (min-width: 1200px) {
+  .anim-brand-shell:has(.anim-brand-shell__viewport > .s5v) {
+    width: min(980px, calc(100vw - clamp(340px, 25vw, 430px)));
+    max-width: none;
+    margin-right: 0;
+    margin-left: 0;
+    transform: none;
+  }
+
+  .anim-brand-shell:has(.anim-brand-shell__viewport > .s5v--wide) {
+    width: min(1180px, calc(100vw - clamp(340px, 25vw, 430px)));
+  }
+
+  .anim-brand-shell:has(.anim-brand-shell__viewport > .s5v) .s5v {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+@media (max-width: 800px) {
+  body:has(.anim-brand-shell__viewport > .s5v) .md-content__inner {
+    padding-right: .8rem !important;
+    padding-left: .8rem !important;
+  }
+
+  .anim-brand-shell:has(.anim-brand-shell__viewport > .s5v) {
+    margin-top: 1.1rem;
+    margin-bottom: 2.15rem;
+  }
+
+  .anim-brand-shell:has(.anim-brand-shell__viewport > .s5v) .anim-brand-shell__toolbar {
+    padding-right: 1px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.s5-voice-animation-focus :is(
+    .s5-reader-topbar,
+    .s5-reader-rail,
+    .s5-reader-direct,
+    .s5-reader-direct-toggle
+  ) {
+    transition: none !important;
+  }
+}
