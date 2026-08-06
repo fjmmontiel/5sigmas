@@ -1,0 +1,35 @@
+name: Merge current main into PR 21
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/merge-current-main-into-pr21.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  merge-main:
+    if: github.event.pull_request.number == 21
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - name: Record current main ancestry without changing the reconciled tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+
+          git merge --strategy=ours --no-commit origin/main
+          rm -f .github/workflows/merge-current-main-into-pr21.yml
+          git add -A
+          git diff --cached --check
+          git commit -m 'Merge current main after the editorial reader redesign'
+          git push origin HEAD:${GITHUB_HEAD_REF}
