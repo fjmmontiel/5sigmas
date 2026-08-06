@@ -85,72 +85,57 @@ body:has(.s5-reader-shell) .sm-wrap .sm-dot {
   box-shadow: none !important;
 }
 
+.s5-reader-global-nav {
+  display: none;
+}
+
 @media (min-width: 1320px) {
   body:has(.s5-reader-shell) .md-header {
     z-index: 5 !important;
   }
 
-  /* Material may translate the tab row out of view while it manages the
-     standard two-level header. Reader pages pin it to the single header. */
-  body:has(.s5-reader-shell) .md-tabs {
-    top: 0 !important;
-    display: block !important;
-    overflow: visible !important;
-    visibility: visible !important;
-    z-index: 6 !important;
-    opacity: 1 !important;
-    transform: translateX(-50%) !important;
-  }
-
-  body:has(.s5-reader-shell) .md-tabs__inner {
-    overflow: visible !important;
-  }
-
-  body:has(.s5-reader-shell) .md-tabs__list {
-    position: relative !important;
-    top: 18px !important;
-    display: flex !important;
-    align-items: center !important;
-    height: 38px !important;
-    overflow: visible !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    transform: none !important;
-  }
-
-  body:has(.s5-reader-shell) .md-tabs__item {
-    display: flex !important;
-    align-items: center !important;
-    height: 38px !important;
-    padding-right: .95rem !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-  }
-
-  body:has(.s5-reader-shell) .md-tabs__link {
+  body:has(.s5-reader-shell) .md-header__inner {
     position: relative;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    height: 38px !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    visibility: visible !important;
-    color: var(--s5-muted) !important;
-    font-size: .64rem !important;
-    font-weight: 660 !important;
-    letter-spacing: 0 !important;
-    line-height: 1 !important;
-    opacity: 1 !important;
   }
 
-  body:has(.s5-reader-shell) .md-tabs__link--active,
-  body:has(.s5-reader-shell) .md-tabs__link:hover,
-  body:has(.s5-reader-shell) .md-tabs__link:focus-visible {
+  /* Material's second tab row remains the semantic source, but the reader
+     presents one stable global navigation directly inside the header. */
+  body:has(.s5-reader-shell) .md-tabs {
+    display: none !important;
+  }
+
+  .s5-reader-global-nav {
+    position: absolute;
+    top: 0;
+    right: 330px;
+    left: calc(var(--s5-reader-rail-width) + var(--s5-reader-gap));
+    display: flex;
+    gap: 1.05rem;
+    align-items: center;
+    height: var(--s5-reader-header-height);
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .s5-reader-global-nav__link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    color: var(--s5-muted) !important;
+    font-size: .64rem;
+    font-weight: 660;
+    line-height: 1;
+    text-decoration: none !important;
+  }
+
+  .s5-reader-global-nav__link:hover,
+  .s5-reader-global-nav__link:focus-visible,
+  .s5-reader-global-nav__link.is-active {
     color: var(--s5-text) !important;
   }
 
-  body:has(.s5-reader-shell) .md-tabs__link--active::after {
+  .s5-reader-global-nav__link.is-active::after {
     position: absolute;
     right: 0;
     bottom: 0;
@@ -170,6 +155,12 @@ body:has(.s5-reader-shell) .sm-wrap .sm-dot {
 
   body:has(.s5-reader-shell) .s5-reader-topbar,
   body:has(.s5-reader-shell) .s5-reader-rail {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1319px) {
+  .s5-reader-global-nav {
     display: none !important;
   }
 }
