@@ -1,0 +1,30 @@
+name: PR tree diagnostic
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/pr-tree-diagnostic.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  print-tree:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Print immutable PR tree identifiers
+        env:
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          set -euo pipefail
+          echo "PR_HEAD_SHA=${PR_HEAD_SHA}"
+          echo "PR_HEAD_TREE=$(git rev-parse \"${PR_HEAD_SHA}^{tree}\")"
+          echo "PR_BASE_SHA=${PR_BASE_SHA}"
+          echo "CHECKOUT_SHA=$(git rev-parse HEAD)"
+          echo "CHECKOUT_TREE=$(git rev-parse HEAD^{tree})"
