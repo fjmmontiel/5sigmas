@@ -2,8 +2,7 @@
 title: Seguridad en IA — ataques y defensas
 description: "Una serie sobre cómo una orden escondida en un documento puede influir en un sistema con IA, cómo puede conservarse ese riesgo y qué controles limitan las acciones."
 keywords: seguridad IA, prompt injection, jailbreak LLM, agentes IA, RAG security, OWASP LLM, red teaming IA
-date: 2026-05-26
-robots: noindex
+date: 2026-08-06
 tags:
   - IA
   - Seguridad
@@ -14,7 +13,7 @@ hide:
 
 # Seguridad en IA
 
-{{ include_html("snippets/series_meta.html", series_dir="seguridad-ia", data_state="construction", data_level="tecnico", status_label="En construcción", level_label="Técnico", extra_rows="<div class=\"series-meta-row\"><span class=\"series-meta-label\">Prerequisitos</span><span class=\"series-meta-value\"><a href=\"/series/fundamentos-ia-iag/00_presentacion_serie/\">Fundamentos de IA e IA generativa</a> · <a href=\"/series/modelos-razonadores/00_presentacion_serie/\">Modelos razonadores</a></span></div>") }}
+{{ include_html("snippets/series_meta.html", series_dir="seguridad-ia", data_state="complete", data_level="tecnico", status_label="Terminada", level_label="Técnico", progress_total="5", extra_rows="<div class=\"series-meta-row\"><span class=\"series-meta-label\">Prerrequisitos</span><span class=\"series-meta-value\"><a href=\"/series/fundamentos-ia-iag/00_presentacion_serie/\">Fundamentos de IA e IA generativa</a> · <a href=\"/series/modelos-razonadores/00_presentacion_serie/\">Modelos razonadores</a></span></div>") }}
 
 La seguridad de software suele partir de una intuición bastante estable: si separas bien el código de los datos, las clases de ataque principales quedan acotadas. En sistemas con LLMs esa intuición deja de ser suficiente, porque el propio motor del sistema consume instrucciones y datos en el mismo medio: lenguaje natural.
 
