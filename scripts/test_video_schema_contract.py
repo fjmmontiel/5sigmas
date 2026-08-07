@@ -1,6 +1,13 @@
 #!/usr/bin/env python3
 """Regression checks for the generated VideoObject contract."""
 
+from pathlib import Path
+import sys
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
 from hooks.video_sitemap import _video_schema
 
 
