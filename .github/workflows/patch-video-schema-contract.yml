@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - '.github/workflows/patch-video-schema-contract.yml'
+      - 'scripts/test_video_schema_contract.py'
 
 permissions:
   contents: write
