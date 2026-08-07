@@ -88,6 +88,9 @@ jobs:
       - name: Validate direct series and article navigation
         run: node scripts/validate_direct_reader_navigation.mjs
 
+      - name: Validate desktop reader header isolation
+        run: node scripts/validate_reader_header_overlap.mjs
+
       - name: Upload visual review
         if: always()
         uses: actions/upload-artifact@v4
