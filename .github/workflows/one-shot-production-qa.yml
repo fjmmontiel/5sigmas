@@ -1,0 +1,143 @@
+name: One-shot production human QA
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/one-shot-production-qa.yml'
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  live-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Wait for the reconciled release to be publicly visible
+        shell: bash
+        run: |
+          set -euo pipefail
+          ready=0
+          for attempt in {1..60}; do
+            catalog="$(curl --fail --silent --show-error --max-time 15 https://5sigmas.com/videos/catalog.json || true)"
+            if [ -n "$catalog" ] && \
+               node -e 'const d=JSON.parse(process.argv[1]); if (d.count < 39) process.exit(1)' "$catalog" && \
+               curl --fail --silent --show-error --max-time 15 https://5sigmas.com/temas/ | grep -q 'Conceptos' && \
+               curl --fail --silent --show-error --max-time 15 https://5sigmas.com/llms.txt | grep -q 'Seguridad en IA'; then
+              echo "Production release visible after attempt ${attempt}."
+              ready=1
+              break
+            fi
+            echo "Waiting for GitHub Pages/CDN propagation (${attempt}/60)..."
+            sleep 10
+          done
+          if [ "$ready" -ne 1 ]; then
+            echo 'Production did not expose the expected release within 10 minutes.' >&2
+            exit 1
+          fi
+
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Assert live public contract
+        env:
+          S5_PREVIEW_URL: https://5sigmas.com
+        shell: bash
+        run: |
+          set -euo pipefail
+          node - <<'NODE'
+          const { chromium } = require('playwright');
+          (async () => {
+            const base = 'https://5sigmas.com';
+            const expected = [
+              '/', '/videos/', '/temas/', '/series/',
+              '/series/seguridad-ia/00_presentacion_serie/',
+              '/series/modelos-razonadores/03-test-time-compute/',
+              '/videos/series/modelos-razonadores/03-test-time-compute/',
+              '/video-sitemap.xml', '/sitemap.xml', '/llms.txt', '/videos/catalog.json'
+            ];
+            const browser = await chromium.launch({ headless: true });
+            const context = await browser.newContext({ viewport: { width: 1440, height: 1000 }, colorScheme: 'light' });
+            const page = await context.newPage();
+            for (const path of expected) {
+              const response = await page.request.get(base + path, { timeout: 30000 });
+              if (!response.ok()) throw new Error(`${path} returned ${response.status()}`);
+            }
+            const catalog = await (await page.request.get(base + '/videos/catalog.json')).json();
+            if (catalog.count !== 39) throw new Error(`Expected 39 live videos, got ${catalog.count}`);
+            const llms = await (await page.request.get(base + '/llms.txt')).text();
+            if (!llms.includes('Seguridad en IA') || !llms.includes('Biblioteca completa de vídeos')) {
+              throw new Error('llms.txt is missing the reconciled discovery surface');
+            }
+            await page.goto(base + '/videos/series/modelos-razonadores/03-test-time-compute/', { waitUntil: 'networkidle' });
+            const canonical = await page.locator('link[rel="canonical"]').getAttribute('href');
+            if (canonical !== base + '/videos/series/modelos-razonadores/03-test-time-compute/') {
+              throw new Error(`Unexpected live watch canonical: ${canonical}`);
+            }
+            const videoSchemas = await page.locator('script[type="application/ld+json"]').evaluateAll(nodes => nodes.map(n => JSON.parse(n.textContent)).filter(x => x['@type'] === 'VideoObject'));
+            if (videoSchemas.length !== 1) throw new Error(`Expected one VideoObject, found ${videoSchemas.length}`);
+            const schema = videoSchemas[0];
+            if (!schema.contentUrl || schema.embedUrl) throw new Error('Live VideoObject content/embed contract is wrong');
+            await browser.close();
+          })().catch(error => { console.error(error); process.exit(1); });
+          NODE
+
+      - name: Audit live browser resources
+        env:
+          S5_PREVIEW_URL: https://5sigmas.com
+        run: node scripts/audit_browser_resources.mjs
+
+      - name: Capture live responsive site
+        env:
+          S5_PREVIEW_URL: https://5sigmas.com
+          S5_SCREENSHOT_DIR: artifacts/live-qa
+        run: node scripts/capture_site_screenshots.mjs
+
+      - name: Validate live reader continuation
+        env:
+          S5_PREVIEW_URL: https://5sigmas.com
+        run: node scripts/validate_reader_end_placement.mjs
+
+      - name: Capture every live voice microlab
+        env:
+          S5_PREVIEW_URL: https://5sigmas.com
+        run: node scripts/capture_voice_report_animations.mjs
+
+      - name: Validate complete live video experience
+        env:
+          S5_PREVIEW_URL: https://5sigmas.com
+        run: node scripts/validate_video_library.mjs
+
+      - name: Validate live direct reader navigation
+        env:
+          S5_PREVIEW_URL: https://5sigmas.com
+        run: node scripts/validate_direct_reader_navigation.mjs
+
+      - name: Upload production screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: 5sigmas-production-human-qa
+          path: artifacts/**
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Report production QA run to merged PR
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          QA_STATUS: ${{ job.status }}
+        shell: bash
+        run: |
+          gh api repos/${GITHUB_REPOSITORY}/issues/25/comments \
+            -f body="Production human QA status: **${QA_STATUS}**. Run ID: \`${GITHUB_RUN_ID}\`. Source commit: \`${GITHUB_SHA}\`. This run targets https://5sigmas.com directly and uploads the live screenshot artifact \`5sigmas-production-human-qa\`."
