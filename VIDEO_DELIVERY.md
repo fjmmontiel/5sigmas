@@ -15,7 +15,7 @@ Article frontmatter
         ├── article embed
         ├── /videos/ library card
         ├── /videos/.../ dedicated watch page
-        ├── VideoObject + optional Clip schema
+        ├── VideoObject + Clip or SeekToAction
         ├── video-sitemap.xml
         ├── videos/catalog.json
         └── R2 staging manifest
@@ -70,6 +70,8 @@ Cloudflare's current CORS reference is:
 
 - https://developers.cloudflare.com/r2/buckets/cors/
 
+The public `<video>` elements use `crossorigin="anonymous"`. This is intentional: the production media domain is a different origin and the same CORS contract must cover MP4 playback, posters and optional WebVTT captions. Do not switch to credentialed browser requests.
+
 After changing CORS on an already-cached custom domain, purge the custom-domain cache so old responses do not retain the previous headers.
 
 ## 3. Create restricted S3 credentials
@@ -109,9 +111,10 @@ Run locally or in CI:
 
 ```bash
 python scripts/prepare_video_media.py --check
+python scripts/test_video_schema_contract.py
 ```
 
-The command validates every public article that declares `video`:
+The media command validates every **public** article that declares `video`:
 
 - MP4 exists and is non-empty.
 - Poster exists and is non-empty.
@@ -120,6 +123,14 @@ The command validates every public article that declares `video`:
 - No media path escapes `docs/`.
 - No two source files collide on one R2 key.
 - SHA-256, byte size and MIME type can be recorded deterministically.
+
+The schema contract additionally verifies that:
+
+- `VideoObject.contentUrl` points to the actual media object.
+- A watch page is never misrepresented as `embedUrl`.
+- Curated chapters publish `Clip` key moments.
+- Videos without curated chapters publish `SeekToAction` against the watch-page `?t=` contract.
+- Article and watch-page players are compatible with the cross-origin R2 setup.
 
 To inspect the exact upload set:
 
@@ -182,7 +193,7 @@ Do not use expiring signed URLs for public indexed videos. Search engines and so
 
 ## 8. Authoring metadata
 
-Existing videos need no frontmatter migration. A fully curated entry can add:
+Existing public videos need no frontmatter migration when their MP4 and poster already satisfy the media gate. A fully curated entry can add:
 
 ```yaml
 video: "03-test-time-compute-v2.mp4"
@@ -205,7 +216,9 @@ video_chapters:
     end: 89
 ```
 
-Without curated takeaways, the generator extracts up to three useful section summaries from the source article. Without chapters, the page still publishes a valid `SeekToAction`; curated chapters additionally produce `Clip` schema and clickable key moments.
+Without curated takeaways, the generator extracts up to three useful section summaries from the source article. Without curated chapters, the page publishes `SeekToAction` so Google can infer key moments from the same `?t=` watch-page contract. When chapters are curated manually, the generator publishes `Clip` entries instead; it does not advertise both key-moment mechanisms at once.
+
+A series that has videos but does not yet have complete posters or release metadata must remain excluded from the public MkDocs build until that release is ready. Do not add placeholder posters solely to satisfy CI.
 
 ## 9. Media preparation standard
 
