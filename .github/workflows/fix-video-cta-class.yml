@@ -1,0 +1,55 @@
+name: Fix video CTA class
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/fix-video-cta-class.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.head_ref == 'reconcile/organic-growth-video-library-v2'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Give the watch-page CTA an explicit component class
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          python - <<'PY'
+          from pathlib import Path
+
+          hook = Path('hooks/video_sitemap.py')
+          body = hook.read_text(encoding='utf-8')
+          old = '    <a href="{entry[\'source_url\']}">Leer el artículo →</a>'
+          new = '    <a class="s5-video-watch__source-link" href="{entry[\'source_url\']}">Leer el artículo →</a>'
+          if new not in body:
+              if old not in body:
+                  raise SystemExit('watch-page CTA anchor missing')
+              body = body.replace(old, new, 1)
+          hook.write_text(body, encoding='utf-8')
+
+          test = Path('scripts/test_video_schema_contract.py')
+          test_body = test.read_text(encoding='utf-8')
+          marker = "    assert '<video controls crossorigin=\"anonymous\"' in watch_html, (\n"
+          insertion = "    assert 'class=\"s5-video-watch__source-link\"' in watch_html\n" + marker
+          if 's5-video-watch__source-link' not in test_body:
+              if marker not in test_body:
+                  raise SystemExit('video HTML test anchor missing')
+              test_body = test_body.replace(marker, insertion, 1)
+          test.write_text(test_body, encoding='utf-8')
+          PY
+
+          python -m py_compile hooks/video_sitemap.py scripts/test_video_schema_contract.py
+          git add hooks/video_sitemap.py scripts/test_video_schema_contract.py
+          git diff --cached --check
+          git commit -m 'fix: isolate video source CTA from global link styles'
+          git push origin HEAD:${GITHUB_HEAD_REF}
