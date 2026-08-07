@@ -1,0 +1,107 @@
+name: Separate video playback URL contract
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/patch-video-playback-url.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.head_ref == 'reconcile/organic-growth-video-library-v2'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install contract-test dependencies
+        run: python -m pip install mkdocs==1.6.1 PyYAML==6.0.3
+
+      - name: Split absolute discovery URLs from browser playback URLs
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('hooks/video_sitemap.py')
+          body = path.read_text(encoding='utf-8')
+
+          old_captions = '''    captions_url = (\n        _asset_url(site_url, media_origin, source_parent, captions_file)\n        if captions_file\n        else ""\n    )\n'''
+          new_captions = '''    captions_url = (\n        _asset_url(site_url, media_origin, source_parent, captions_file)\n        if captions_file\n        else ""\n    )\n    captions_playback_url = (\n        _playback_asset_url(media_origin, source_parent, captions_file)\n        if captions_file\n        else ""\n    )\n'''
+          if 'captions_playback_url = (' not in body:
+              if old_captions not in body:
+                  raise SystemExit('captions URL anchor missing')
+              body = body.replace(old_captions, new_captions, 1)
+
+          old_return = '''        "video_url": _asset_url(site_url, media_origin, source_parent, video_file),\n        "thumb_url": _asset_url(site_url, media_origin, source_parent, poster_file),\n        "captions_url": captions_url,\n'''
+          new_return = '''        "video_url": _asset_url(site_url, media_origin, source_parent, video_file),\n        "video_playback_url": _playback_asset_url(media_origin, source_parent, video_file),\n        "thumb_url": _asset_url(site_url, media_origin, source_parent, poster_file),\n        "thumb_playback_url": _playback_asset_url(media_origin, source_parent, poster_file),\n        "captions_url": captions_url,\n        "captions_playback_url": captions_playback_url,\n'''
+          if '"video_playback_url":' not in body:
+              if old_return not in body:
+                  raise SystemExit('entry media URL anchor missing')
+              body = body.replace(old_return, new_return, 1)
+
+          asset_helper_end = '''    origin = media_origin or site_url\n    return f"{origin}/{relative}"\n\n\ndef _is_url(value: str) -> bool:\n'''
+          playback_helper = '''    origin = media_origin or site_url\n    return f"{origin}/{relative}"\n\n\ndef _playback_asset_url(\n    media_origin: str,\n    source_parent: Path,\n    filename: str,\n) -> str:\n    if _is_url(filename):\n        return filename\n    relative = (source_parent / filename).as_posix().lstrip("/")\n    if media_origin:\n        return f"{media_origin}/{relative}"\n    return f"/{relative}"\n\n\ndef _is_url(value: str) -> bool:\n'''
+          if 'def _playback_asset_url(' not in body:
+              if asset_helper_end not in body:
+                  raise SystemExit('asset helper insertion anchor missing')
+              body = body.replace(asset_helper_end, playback_helper, 1)
+
+          body = body.replace(
+              'if entry["captions_url"]:\n        track = (\n            f\'<track kind="captions" src="{entry["captions_url"]}" \'',
+              'if entry["captions_playback_url"]:\n        track = (\n            f\'<track kind="captions" src="{entry["captions_playback_url"]}" \'',
+              1,
+          )
+          body = body.replace(
+              '<video controls crossorigin="anonymous" preload="metadata" poster="{entry[\'thumb_url\']}" playsinline data-s5-watch-player>',
+              '<video controls crossorigin="anonymous" preload="metadata" poster="{entry[\'thumb_playback_url\']}" playsinline data-s5-watch-player>',
+              1,
+          )
+          body = body.replace(
+              '<source src="{entry[\'video_url\']}" type="video/mp4">',
+              '<source src="{entry[\'video_playback_url\']}" type="video/mp4">',
+              1,
+          )
+
+          path.write_text(body, encoding='utf-8')
+
+          test = Path('scripts/test_video_schema_contract.py')
+          test_body = test.read_text(encoding='utf-8')
+          test_body = test_body.replace(
+              '        "video_url": "https://media.5sigmas.com/series/example/demo.mp4",\n',
+              '        "video_url": "https://5sigmas.com/series/example/demo.mp4",\n        "video_playback_url": "/series/example/demo.mp4",\n',
+              1,
+          )
+          test_body = test_body.replace(
+              '        "thumb_url": "https://media.5sigmas.com/series/example/demo.jpg",\n',
+              '        "thumb_url": "https://5sigmas.com/series/example/demo.jpg",\n        "thumb_playback_url": "/series/example/demo.jpg",\n',
+              1,
+          )
+          test_body = test_body.replace(
+              '        "captions_url": "https://media.5sigmas.com/series/example/demo.vtt",\n',
+              '        "captions_url": "https://5sigmas.com/series/example/demo.vtt",\n        "captions_playback_url": "/series/example/demo.vtt",\n',
+              1,
+          )
+          marker = '''    watch_html = _render_watch_page(entry, [])\n    assert '<video controls crossorigin="anonymous"' in watch_html, (\n'''
+          extra = '''    watch_html = _render_watch_page(entry, [])\n    assert 'src="/series/example/demo.mp4"' in watch_html\n    assert 'poster="/series/example/demo.jpg"' in watch_html\n    assert 'src="/series/example/demo.vtt"' in watch_html\n    assert '<video controls crossorigin="anonymous"' in watch_html, (\n'''
+          if marker in test_body:
+              test_body = test_body.replace(marker, extra, 1)
+          test.write_text(test_body, encoding='utf-8')
+          PY
+
+          python scripts/test_video_schema_contract.py
+          git add hooks/video_sitemap.py scripts/test_video_schema_contract.py
+          git diff --cached --check
+          git commit -m 'fix: separate absolute video discovery URLs from playback URLs'
+          git push origin HEAD:${GITHUB_HEAD_REF}
