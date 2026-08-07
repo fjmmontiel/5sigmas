@@ -16,6 +16,44 @@ const assertNoHorizontalOverflow = async (page, label) => {
   }
 };
 
+const loadAndAssertImages = async (page, rootSelector, label) => {
+  const images = page.locator(`${rootSelector} img`);
+  const count = await images.count();
+  if (count === 0) throw new Error(`${label} contains no images to validate.`);
+
+  for (let index = 0; index < count; index += 1) {
+    const image = images.nth(index);
+    await image.scrollIntoViewIfNeeded();
+    await image.evaluate((node) => {
+      if (node.loading === 'lazy') node.loading = 'eager';
+    });
+    await page.waitForFunction(
+      ({ selector, index: imageIndex }) => {
+        const nodes = document.querySelectorAll(selector);
+        const node = nodes[imageIndex];
+        return Boolean(node && node.complete && node.naturalWidth > 0 && node.naturalHeight > 0);
+      },
+      { selector: `${rootSelector} img`, index },
+      { timeout: 15_000 },
+    );
+  }
+
+  const broken = await images.evaluateAll((nodes) => nodes
+    .map((node, index) => ({
+      index,
+      src: node.currentSrc || node.src,
+      complete: node.complete,
+      width: node.naturalWidth,
+      height: node.naturalHeight,
+    }))
+    .filter((item) => !item.complete || item.width <= 0 || item.height <= 0));
+  if (broken.length > 0) {
+    throw new Error(`${label} contains broken images: ${JSON.stringify(broken)}.`);
+  }
+
+  await page.evaluate(() => window.scrollTo(0, 0));
+};
+
 const assertHub = async (page, { mobile = false } = {}) => {
   const library = page.locator('[data-s5-video-library]');
   const cards = library.locator('[data-s5-video-card]');
@@ -82,6 +120,15 @@ const assertHub = async (page, { mobile = false } = {}) => {
   await library.locator('[data-s5-video-filter="all"]').click();
   if (await library.locator('[data-s5-video-card]:visible').count() !== catalogueCount) {
     throw new Error('Resetting the video filters did not restore the complete catalogue.');
+  }
+
+  await loadAndAssertImages(
+    page,
+    '[data-s5-video-library]',
+    mobile ? 'Mobile video hub' : 'Desktop video hub',
+  );
+  if (await library.locator('img').count() !== catalogueCount) {
+    throw new Error(`The video hub exposes ${await library.locator('img').count()} poster images for ${catalogueCount} catalogue entries.`);
   }
   await assertNoHorizontalOverflow(page, mobile ? 'Mobile video hub' : 'Desktop video hub');
 };
@@ -152,6 +199,11 @@ const assertWatchPage = async (page, { mobile = false } = {}) => {
     throw new Error(`The ?t=5 deep-link runtime did not seek the player: ${currentTime}.`);
   }
 
+  await loadAndAssertImages(
+    page,
+    '[data-s5-video-watch]',
+    mobile ? 'Mobile watch page' : 'Desktop watch page',
+  );
   await assertNoHorizontalOverflow(page, mobile ? 'Mobile watch page' : 'Desktop watch page');
 };
 
