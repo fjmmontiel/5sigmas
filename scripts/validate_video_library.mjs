@@ -51,7 +51,14 @@ const loadAndAssertImages = async (page, rootSelector, label) => {
     throw new Error(`${label} contains broken images: ${JSON.stringify(broken)}.`);
   }
 
-  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.evaluate(() => {
+    document.documentElement.style.scrollBehavior = 'auto';
+    if (document.body) document.body.style.scrollBehavior = 'auto';
+    window.scrollTo(0, 0);
+    window.dispatchEvent(new Event('scroll'));
+  });
+  await page.waitForFunction(() => window.scrollY < 2);
+  await page.waitForTimeout(180);
 };
 
 const assertHub = async (page, { mobile = false } = {}) => {
@@ -166,6 +173,44 @@ const assertWatchPage = async (page, { mobile = false } = {}) => {
   const articlePath = new URL(articleHref, baseUrl).pathname;
   if (articlePath !== '/series/modelos-razonadores/03-test-time-compute/') {
     throw new Error(`The watch page does not return to its source article: ${articleHref}.`);
+  }
+
+  const ctaState = await articleLink.evaluate((node) => {
+    const style = getComputedStyle(node);
+    const parseRgb = (value) => {
+      const values = value.match(/[\d.]+/g)?.slice(0, 3).map(Number) || [];
+      return values.length === 3 ? values : null;
+    };
+    const luminance = (rgb) => {
+      const channels = rgb.map((value) => {
+        const channel = value / 255;
+        return channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
+      });
+      return (0.2126 * channels[0]) + (0.7152 * channels[1]) + (0.0722 * channels[2]);
+    };
+    const foreground = parseRgb(style.color);
+    const background = parseRgb(style.backgroundColor);
+    let contrast = 0;
+    if (foreground && background) {
+      const light = Math.max(luminance(foreground), luminance(background));
+      const dark = Math.min(luminance(foreground), luminance(background));
+      contrast = (light + 0.05) / (dark + 0.05);
+    }
+    const rect = node.getBoundingClientRect();
+    return {
+      text: node.textContent.trim(),
+      color: style.color,
+      background: style.backgroundColor,
+      contrast,
+      width: rect.width,
+      height: rect.height,
+    };
+  });
+  if (ctaState.text !== 'Leer el artículo →') {
+    throw new Error(`The source CTA lost its visible label: ${JSON.stringify(ctaState)}.`);
+  }
+  if (ctaState.contrast < 4.5 || ctaState.width < 90 || ctaState.height < 40) {
+    throw new Error(`The source CTA is not visually legible: ${JSON.stringify(ctaState)}.`);
   }
 
   const mediaHref = await player.locator('source').getAttribute('src');

@@ -507,7 +507,7 @@
   line-height: 1.55;
 }
 
-.s5-video-watch__source > a {
+.s5-video-watch .s5-video-watch__source > a {
   display: inline-flex;
   align-items: center;
   min-height: 46px;
