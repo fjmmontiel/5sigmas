@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/one-shot-production-qa.yml'
+      - 'qa/production-trigger.txt'
 
 permissions:
   contents: write
