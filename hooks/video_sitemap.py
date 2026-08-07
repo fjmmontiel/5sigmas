@@ -744,7 +744,7 @@ def _render_watch_page(
       <h2>Continúa con el artículo completo</h2>
       <p>El capítulo desarrolla el mecanismo, las fuentes primarias, los límites y las conexiones con el resto de la serie.</p>
     </div>
-    <a href="{entry['source_url']}">Leer el artículo →</a>
+    <a class="s5-video-watch__source-link" href="{entry['source_url']}">Leer el artículo →</a>
   </aside>
 
   <section class="s5-video-watch__related" aria-labelledby="related-videos-title">

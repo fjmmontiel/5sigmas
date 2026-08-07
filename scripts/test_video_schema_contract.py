@@ -70,6 +70,7 @@ def main() -> None:
     assert 'src="/series/example/demo.mp4"' in watch_html
     assert 'poster="/series/example/demo.jpg"' in watch_html
     assert 'src="/series/example/demo.vtt"' in watch_html
+    assert 'class="s5-video-watch__source-link"' in watch_html
     assert '<video controls crossorigin="anonymous"' in watch_html, (
         "watch pages must opt into anonymous CORS so cross-origin captions and media "
         "from media.5sigmas.com work under the documented R2 CORS policy"
