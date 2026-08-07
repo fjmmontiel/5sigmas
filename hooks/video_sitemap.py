@@ -813,7 +813,6 @@ def _video_schema(entry: dict[str, Any], site_url: str) -> dict[str, Any]:
         "description": entry["description"],
         "thumbnailUrl": [entry["thumb_url"]],
         "contentUrl": entry["video_url"],
-        "embedUrl": entry["watch_url"],
         "uploadDate": entry["publication_date"],
         "inLanguage": "es",
         "mainEntityOfPage": {"@id": entry["watch_url"]},
