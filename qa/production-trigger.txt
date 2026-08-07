@@ -1,2 +1,0 @@
-Trigger one-shot production QA for the reconciled organic-growth/video release.
-Observable trigger v2: workflow exists on main and reports its run ID at job start.
