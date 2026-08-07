@@ -4,6 +4,7 @@ import fs from 'node:fs/promises';
 const baseUrl = process.env.S5_PREVIEW_URL || 'http://127.0.0.1:8000';
 const outputDir = 'artifacts/visual-review';
 const sampleWatchPath = '/videos/series/modelos-razonadores/03-test-time-compute/';
+const sampleMediaPath = '/series/modelos-razonadores/03-test-time-compute.mp4';
 
 const assertNoHorizontalOverflow = async (page, label) => {
   const dimensions = await page.evaluate(() => ({
@@ -113,20 +114,44 @@ const assertWatchPage = async (page, { mobile = false } = {}) => {
   if (await related.count() !== 3) {
     throw new Error(`The watch page should expose three related videos, found ${await related.count()}.`);
   }
+
   const articleHref = await articleLink.getAttribute('href');
   const articlePath = new URL(articleHref, baseUrl).pathname;
   if (articlePath !== '/series/modelos-razonadores/03-test-time-compute/') {
     throw new Error(`The watch page does not return to its source article: ${articleHref}.`);
   }
 
-  await page.waitForFunction(() => {
-    const video = document.querySelector('[data-s5-watch-player]');
-    return video && video.readyState >= 1;
-  }, null, { timeout: 15_000 });
-  const currentTime = await player.evaluate((node) => node.currentTime);
-  if (currentTime < 4.5 || currentTime > 6.5) {
-    throw new Error(`The ?t=5 deep link did not seek the player: ${currentTime}.`);
+  const mediaHref = await player.locator('source').getAttribute('src');
+  const mediaPath = new URL(mediaHref, baseUrl).pathname;
+  if (mediaPath !== sampleMediaPath) {
+    throw new Error(`The watch player points to the wrong media path: ${mediaHref}.`);
   }
+  const mediaResponse = await page.request.head(`${baseUrl}${mediaPath}`);
+  if (!mediaResponse.ok()) {
+    throw new Error(`The watch media returned ${mediaResponse.status()}: ${mediaPath}.`);
+  }
+
+  // The production hosts (GitHub Pages and R2) support byte-range media requests,
+  // while Python's preview server is not a reliable media decoder/range server.
+  // Exercise the real runtime listener by providing deterministic metadata and
+  // dispatching the same loadedmetadata event a browser emits after decoding it.
+  await page.waitForFunction(() => document.querySelector('[data-s5-video-watch]')?.dataset.s5VideoWatchReady === 'true');
+  await player.evaluate((node) => {
+    let currentTime = 0;
+    Object.defineProperty(node, 'readyState', { configurable: true, get: () => 1 });
+    Object.defineProperty(node, 'duration', { configurable: true, get: () => 60 });
+    Object.defineProperty(node, 'currentTime', {
+      configurable: true,
+      get: () => currentTime,
+      set: (value) => { currentTime = Number(value); },
+    });
+    node.dispatchEvent(new Event('loadedmetadata'));
+  });
+  const currentTime = await player.evaluate((node) => Number(node.currentTime || 0));
+  if (currentTime < 4.5 || currentTime > 6.5) {
+    throw new Error(`The ?t=5 deep-link runtime did not seek the player: ${currentTime}.`);
+  }
+
   await assertNoHorizontalOverflow(page, mobile ? 'Mobile watch page' : 'Desktop watch page');
 };
 
