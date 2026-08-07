@@ -98,6 +98,27 @@ body:has(.s5-reader-shell) .sm-wrap .sm-dot {
     position: relative;
   }
 
+  /* Material swaps a second, page-title topic into the sticky header after
+     scrolling. The reader already has a contextual rail and its own global
+     navigation, so that long topic competes for the exact same horizontal
+     space. Keep the stable site identity only and reserve a bounded title
+     slot before the reader navigation starts. */
+  body:has(.s5-reader-shell) .md-header__title {
+    flex: 0 0 calc(var(--s5-reader-rail-width) - 76px) !important;
+    width: calc(var(--s5-reader-rail-width) - 76px) !important;
+    max-width: calc(var(--s5-reader-rail-width) - 76px) !important;
+  }
+
+  body:has(.s5-reader-shell) .md-header__topic:first-child {
+    display: block !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  body:has(.s5-reader-shell) .md-header__topic + .md-header__topic {
+    display: none !important;
+  }
+
   /* Material's second tab row remains the semantic source, but the reader
      presents one stable global navigation directly inside the header. */
   body:has(.s5-reader-shell) .md-tabs {
