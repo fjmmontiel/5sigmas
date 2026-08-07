@@ -1,6 +1,6 @@
 ---
 title: Riesgos de seguridad en sistemas multimodales
-description: Prompt injection visual, fugas de contexto de sistema, manipulación de herramientas, privacidad en imágenes y documentos, y qué cambia cuando el sistema no solo responde sino que actúa.
+description: Prompt injection visual, privacidad, fugas de contexto y manipulación de herramientas cuando un sistema multimodal puede observar y actuar.
 date: 2026-04-03
 keywords: "riesgos IA multimodal, prompt injection visual, seguridad sistemas IA, privacidad imágenes IA, ataques LLM multimodal, alineamiento seguridad, IA responsable multimodal"
 tags:

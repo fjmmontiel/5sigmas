@@ -113,8 +113,10 @@ const assertWatchPage = async (page, { mobile = false } = {}) => {
   if (await related.count() !== 3) {
     throw new Error(`The watch page should expose three related videos, found ${await related.count()}.`);
   }
-  if (await articleLink.getAttribute('href') !== '/series/modelos-razonadores/03-test-time-compute/') {
-    throw new Error('The watch page does not return to its source article.');
+  const articleHref = await articleLink.getAttribute('href');
+  const articlePath = new URL(articleHref, baseUrl).pathname;
+  if (articlePath !== '/series/modelos-razonadores/03-test-time-compute/') {
+    throw new Error(`The watch page does not return to its source article: ${articleHref}.`);
   }
 
   await page.waitForFunction(() => {
