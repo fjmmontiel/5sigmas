@@ -1,0 +1,46 @@
+name: Reconcile organic growth v2
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/reconcile-organic-growth-v2.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  reconcile:
+    if: github.head_ref == 'reconcile/organic-growth-video-library-v2'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Merge original PR21 branch with real Git semantics
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git log --format=%s -n 5 | grep -q '^reconcile: merge organic growth PR21 onto current main$'; then
+            echo 'Reconciliation commit already present.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git fetch origin agent/organic-growth-video-library
+          set +e
+          git merge --no-ff --no-commit origin/agent/organic-growth-video-library
+          status=$?
+          set -e
+          if [ "$status" -ne 0 ]; then
+            echo '::group::Conflicted files'
+            git status --short
+            git diff --name-only --diff-filter=U
+            echo '::endgroup::'
+            exit "$status"
+          fi
+          rm -f .github/workflows/merge-current-main-into-pr21.yml
+          git add -A
+          git commit -m 'reconcile: merge organic growth PR21 onto current main'
+          git push origin HEAD:${GITHUB_HEAD_REF}
