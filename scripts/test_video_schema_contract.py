@@ -16,9 +16,12 @@ def base_entry() -> dict:
     return {
         "id": "demo",
         "watch_url": f"{site_url}/videos/series/example/demo/",
-        "video_url": "https://media.5sigmas.com/series/example/demo.mp4",
-        "thumb_url": "https://media.5sigmas.com/series/example/demo.jpg",
-        "captions_url": "https://media.5sigmas.com/series/example/demo.vtt",
+        "video_url": "https://5sigmas.com/series/example/demo.mp4",
+        "video_playback_url": "/series/example/demo.mp4",
+        "thumb_url": "https://5sigmas.com/series/example/demo.jpg",
+        "thumb_playback_url": "/series/example/demo.jpg",
+        "captions_url": "https://5sigmas.com/series/example/demo.vtt",
+        "captions_playback_url": "/series/example/demo.vtt",
         "title": "Demo",
         "description": "Demo de contrato de vídeo.",
         "publication_date": "2026-08-07T00:00:00+00:00",
@@ -64,6 +67,9 @@ def main() -> None:
     assert curated_schema["hasPart"][1]["url"] == f"{entry['watch_url']}?t=25"
 
     watch_html = _render_watch_page(entry, [])
+    assert 'src="/series/example/demo.mp4"' in watch_html
+    assert 'poster="/series/example/demo.jpg"' in watch_html
+    assert 'src="/series/example/demo.vtt"' in watch_html
     assert '<video controls crossorigin="anonymous"' in watch_html, (
         "watch pages must opt into anonymous CORS so cross-origin captions and media "
         "from media.5sigmas.com work under the documented R2 CORS policy"

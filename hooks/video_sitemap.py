@@ -276,6 +276,11 @@ def _build_entry(
         if captions_file
         else ""
     )
+    captions_playback_url = (
+        _playback_asset_url(media_origin, source_parent, captions_file)
+        if captions_file
+        else ""
+    )
     transcript = _load_optional_text(source_dir, str(meta.get("video_transcript") or ""))
 
     return {
@@ -286,8 +291,11 @@ def _build_entry(
         "watch_src_uri": watch_src_uri,
         "watch_url": watch_url,
         "video_url": _asset_url(site_url, media_origin, source_parent, video_file),
+        "video_playback_url": _playback_asset_url(media_origin, source_parent, video_file),
         "thumb_url": _asset_url(site_url, media_origin, source_parent, poster_file),
+        "thumb_playback_url": _playback_asset_url(media_origin, source_parent, poster_file),
         "captions_url": captions_url,
+        "captions_playback_url": captions_playback_url,
         "title": title,
         "description": description,
         "publication_date": publication_date,
@@ -342,6 +350,19 @@ def _asset_url(
     relative = (source_parent / filename).as_posix().lstrip("/")
     origin = media_origin or site_url
     return f"{origin}/{relative}"
+
+
+def _playback_asset_url(
+    media_origin: str,
+    source_parent: Path,
+    filename: str,
+) -> str:
+    if _is_url(filename):
+        return filename
+    relative = (source_parent / filename).as_posix().lstrip("/")
+    if media_origin:
+        return f"{media_origin}/{relative}"
+    return f"/{relative}"
 
 
 def _is_url(value: str) -> bool:
@@ -635,9 +656,9 @@ def _render_watch_page(
         "video_watch_page": True,
     }
     track = ""
-    if entry["captions_url"]:
+    if entry["captions_playback_url"]:
         track = (
-            f'<track kind="captions" src="{entry["captions_url"]}" '
+            f'<track kind="captions" src="{entry["captions_playback_url"]}" '
             'srclang="es" label="Español" default>'
         )
 
@@ -696,8 +717,8 @@ def _render_watch_page(
   </header>
 
   <div class="s5-video-watch__player">
-    <video controls crossorigin="anonymous" preload="metadata" poster="{entry['thumb_url']}" playsinline data-s5-watch-player>
-      <source src="{entry['video_url']}" type="video/mp4">
+    <video controls crossorigin="anonymous" preload="metadata" poster="{entry['thumb_playback_url']}" playsinline data-s5-watch-player>
+      <source src="{entry['video_playback_url']}" type="video/mp4">
       {track}
       Tu navegador no soporta el elemento de vídeo.
     </video>
