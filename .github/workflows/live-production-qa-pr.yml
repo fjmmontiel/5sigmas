@@ -27,10 +27,12 @@ jobs:
           ready=0
           for attempt in {1..36}; do
             catalog="$(curl --fail --silent --show-error --max-time 15 https://5sigmas.com/videos/catalog.json || true)"
+            temas="$(curl --fail --silent --show-error --max-time 15 https://5sigmas.com/temas/ || true)"
+            llms="$(curl --fail --silent --show-error --max-time 15 https://5sigmas.com/llms.txt || true)"
             if [ -n "$catalog" ] && \
                node -e 'const d=JSON.parse(process.argv[1]); if (d.count !== 39) process.exit(1)' "$catalog" && \
-               curl --fail --silent --show-error --max-time 15 https://5sigmas.com/temas/ | grep -q 'Conceptos' && \
-               curl --fail --silent --show-error --max-time 15 https://5sigmas.com/llms.txt | grep -q 'Seguridad en IA'; then
+               grep -q 'Conceptos' <<<"$temas" && \
+               grep -q 'Seguridad en IA' <<<"$llms"; then
               echo "Production release visible after attempt ${attempt}."
               ready=1
               break
