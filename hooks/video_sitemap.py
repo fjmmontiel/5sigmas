@@ -55,6 +55,7 @@ TOPICS = {
     "modelos-razonadores": ("razonamiento", "Razonamiento"),
     "ia-pib-bienestar-energia": ("impacto", "Economía, energía y bienestar"),
     "datacenters-espacio": ("infraestructura", "Infraestructura"),
+    "seguridad-ia": ("seguridad", "Seguridad en IA"),
     "articulos-tecnicos": ("ingenieria", "Ingeniería de sistemas"),
 }
 NOISY_HEADINGS = {
@@ -695,7 +696,7 @@ def _render_watch_page(
   </header>
 
   <div class="s5-video-watch__player">
-    <video controls preload="metadata" poster="{entry['thumb_url']}" playsinline data-s5-watch-player>
+    <video controls crossorigin="anonymous" preload="metadata" poster="{entry['thumb_url']}" playsinline data-s5-watch-player>
       <source src="{entry['video_url']}" type="video/mp4">
       {track}
       Tu navegador no soporta el elemento de vídeo.
@@ -830,11 +831,6 @@ def _video_schema(entry: dict[str, Any], site_url: str) -> dict[str, Any]:
             "name": "5sigmas",
             "url": f"{site_url}/",
         },
-        "potentialAction": {
-            "@type": "SeekToAction",
-            "target": f"{entry['watch_url']}?t={{seek_to_second_number}}",
-            "startOffset-input": "required name=seek_to_second_number",
-        },
     }
     if entry["duration_iso"]:
         schema["duration"] = entry["duration_iso"]
@@ -851,6 +847,12 @@ def _video_schema(entry: dict[str, Any], site_url: str) -> dict[str, Any]:
                 clip["endOffset"] = chapter["end"]
             clips.append(clip)
         schema["hasPart"] = clips
+    else:
+        schema["potentialAction"] = {
+            "@type": "SeekToAction",
+            "target": f"{entry['watch_url']}?t={{seek_to_second_number}}",
+            "startOffset-input": "required name=seek_to_second_number",
+        }
     return schema
 
 

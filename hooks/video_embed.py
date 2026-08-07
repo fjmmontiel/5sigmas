@@ -127,6 +127,7 @@ def on_post_page(output: str, page, config, **kwargs) -> str:
         "  <video\n"
         f'    id="{video_dom_id}"\n'
         "    controls\n"
+        '    crossorigin="anonymous"\n'
         '    controlsList="nodownload"\n'
         '    oncontextmenu="return false"\n'
         '    preload="none"\n'
