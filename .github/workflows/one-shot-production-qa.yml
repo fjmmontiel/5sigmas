@@ -24,6 +24,14 @@ jobs:
         with:
           node-version: '22'
 
+      - name: Report production QA run start
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          gh api repos/${GITHUB_REPOSITORY}/issues/25/comments \
+            -f body="Production human QA **started**. Run ID: \`${GITHUB_RUN_ID}\`. Source commit: \`${GITHUB_SHA}\`. Target: https://5sigmas.com."
+
       - name: Wait for the reconciled release to be publicly visible
         shell: bash
         run: |
