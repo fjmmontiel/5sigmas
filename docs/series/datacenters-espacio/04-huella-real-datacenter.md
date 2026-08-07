@@ -1,6 +1,6 @@
 ---
 title: La huella real de un datacenter
-description: "Desglose completo del consumo de recursos de un centro de datos hiperscala: agua, energía, minerales críticos y ciclo de vida. Los datos calibran la conversación pública mejor que los titulares."
+description: "Agua, energía, minerales y ciclo de vida de los datacenters: qué consume la IA, por qué varía por ubicación y cómo medir su huella."
 date: 2026-06-14
 keywords: "consumo agua datacenters, huella ambiental inteligencia artificial, minerales críticos IA, PUE centros datos, WUE datacenter, cobalto minería IA, e-waste GPUs, golf vs datacenter agua, conflicto hídrico local"
 tags:

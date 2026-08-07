@@ -1,39 +1,56 @@
-"""
-Hook: jsonld_article.py
-Añade og:article meta tags a páginas de artículo.
-El JSON-LD (TechArticle + BreadcrumbList) ya lo genera overrides/main.html.
+"""Add standards-compliant Open Graph article metadata after rendering.
 
-Añade:
-  - <meta property="og:article:published_time">
-  - <meta property="og:article:author">
-  - <meta property="og:article:section"> (nombre de la serie)
+The JSON-LD graph lives in ``overrides/main.html``. This hook only adds the
+``article:*`` Open Graph properties that Material does not emit by default.
 """
+
+from html import escape
+
 
 SERIES_NAMES = {
-    "fundamentos-ia-iag": "Fundamentos de IA e IA Generativa",
+    "fundamentos-ia-iag": "Fundamentos de IA e IA generativa",
     "from-cave-to-agi": "De las cavernas a la AGI",
-    "multimodalidad-iag": "Multimodalidad en IA Generativa",
+    "multimodalidad-iag": "Multimodalidad en IA generativa",
     "modelos-razonadores": "Modelos razonadores",
     "ia-pib-bienestar-energia": "IA, PIB, bienestar y energía",
     "datacenters-espacio": "Datacenters en el espacio",
 }
 
 
+def _parts(page) -> list[str]:
+    value = (page.url or "").strip("/")
+    return value.split("/") if value else []
+
+
 def _is_article(page) -> bool:
-    url = page.url or ""
-    if url in ("", "index.html") or "meta/about" in url:
+    parts = _parts(page)
+    if not parts:
         return False
-    if "00_presentacion_serie" in url:
-        return False
-    return "series/" in url
+    if parts[0] == "series":
+        return len(parts) >= 3 and parts[2] != "00_presentacion_serie"
+    if parts[0] in {"articulos-tecnicos", "temas"}:
+        return len(parts) >= 2
+    return False
 
 
-def _series_name(page) -> str:
-    url = page.url or ""
-    for slug, name in SERIES_NAMES.items():
-        if slug in url:
-            return name
-    return "5Sigmas"
+def _section(page) -> str:
+    parts = _parts(page)
+    if not parts:
+        return "5sigmas"
+    if parts[0] == "series" and len(parts) >= 2:
+        return SERIES_NAMES.get(parts[1], "Series de 5sigmas")
+    if parts[0] == "articulos-tecnicos":
+        return "Ingeniería de sistemas de IA"
+    if parts[0] == "temas":
+        return "Conceptos de inteligencia artificial"
+    return "5sigmas"
+
+
+def _iso_datetime(value) -> str:
+    text = str(value or "").strip()
+    if not text:
+        return ""
+    return text if "T" in text else f"{text}T00:00:00+00:00"
 
 
 def on_post_page(output: str, page, config, **kwargs) -> str:
@@ -41,13 +58,28 @@ def on_post_page(output: str, page, config, **kwargs) -> str:
         return output
 
     meta = page.meta or {}
-    date_str = str(meta.get("date", "")) or ""
-    section = _series_name(page)
+    published = _iso_datetime(meta.get("date"))
+    modified = _iso_datetime(meta.get("date_modified") or meta.get("date"))
+    section = _section(page)
 
-    tags = ['<meta property="og:article:author" content="Francisco Maldonado">']
-    if date_str:
-        tags.append(f'<meta property="og:article:published_time" content="{date_str}">')
-    tags.append(f'<meta property="og:article:section" content="{section}">')
+    tags = [
+        '<meta property="article:author" content="https://5sigmas.com/meta/about/">',
+        f'<meta property="article:section" content="{escape(section, quote=True)}">',
+    ]
+    if published:
+        tags.append(
+            f'<meta property="article:published_time" content="{escape(published, quote=True)}">'
+        )
+    if modified:
+        tags.append(
+            f'<meta property="article:modified_time" content="{escape(modified, quote=True)}">'
+        )
+
+    raw_tags = meta.get("tags") or []
+    if isinstance(raw_tags, str):
+        raw_tags = [raw_tags]
+    for tag in raw_tags:
+        tags.append(f'<meta property="article:tag" content="{escape(str(tag), quote=True)}">')
 
     injection = "\n    ".join(tags)
     return output.replace("</head>", f"    {injection}\n</head>", 1)

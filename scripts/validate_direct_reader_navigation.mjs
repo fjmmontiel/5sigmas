@@ -3,7 +3,7 @@ import fs from 'node:fs/promises';
 
 const baseUrl = process.env.S5_PREVIEW_URL || 'http://127.0.0.1:8000';
 const outputDir = 'artifacts/visual-review';
-const expectedCollections = 8;
+const expectedCollections = 9;
 
 const expectPath = async (page, path) => {
   await page.waitForURL((url) => url.pathname === path, { timeout: 15_000 });
@@ -201,6 +201,16 @@ try {
 
   let contextual = await assertContextualDesktopRail(desktop);
   let dialog = await openFullLibrary(desktop, contextual.browse);
+  const librarySearch = dialog.locator('[data-s5-reader-search]');
+  await librarySearch.fill('qué es un llm');
+  if (await dialog.locator('a[href="/temas/llms/"]:visible').count() !== 1) {
+    throw new Error('Conceptos is missing from the unified reader library.');
+  }
+  await librarySearch.fill('prompt injection');
+  if (await dialog.locator('a[href="/series/seguridad-ia/01-prompt-injection/"]:visible').count() !== 1) {
+    throw new Error('Seguridad en IA is missing from the unified reader library.');
+  }
+  await librarySearch.fill('');
   await searchAndNavigate(desktop, dialog, 'datacenter espacial', '/series/datacenters-espacio/03-que-es-datacenter-espacio/');
 
   contextual = await assertContextualDesktopRail(desktop);
