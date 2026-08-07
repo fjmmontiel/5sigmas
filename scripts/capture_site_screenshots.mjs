@@ -10,7 +10,7 @@ const browser = await chromium.launch({ headless: true });
 const desktop = { width: 1440, height: 1100 };
 const mobile = { width: 390, height: 844 };
 const articlePath = '/series/modelos-razonadores/03-test-time-compute/';
-const expectedCollections = 8;
+const expectedCollections = 9;
 
 const captures = [
   { name: 'homepage-desktop', path: '/', viewport: desktop },

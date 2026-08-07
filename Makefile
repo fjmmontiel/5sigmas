@@ -4,15 +4,18 @@ PIP := $(VENV)/bin/pip
 MKDOCS := $(VENV)/bin/mkdocs
 MKDOCS_ENV := DISABLE_MKDOCS_2_WARNING=true NO_MKDOCS_2_WARNING=true
 
-.PHONY: help install build serve build-and-update up clean check-animation-branding check-video-indexing
+.PHONY: help install build serve build-and-update up clean check-animation-branding check-video-media check-video-indexing check-search-foundation
 
 # Fachada pública: build/preview del site y operaciones mínimas de curación/publicación.
 help:
 	@printf '%s\n' \
-		"install                   crea .venv e instala dependencias base" \
-		"check-animation-branding  valida snippets/branding usando el tooling canónico" \
-		"build                     compila el site público + auditoría de indexado" \
-		"serve                     levanta MkDocs en local"
+		"install                    crea .venv e instala dependencias base" \
+		"check-animation-branding   valida snippets/branding usando el tooling canónico" \
+		"check-video-media          valida MP4, posters, captions y claves de publicación" \
+		"check-video-indexing       valida la biblioteca, watch pages y metadata de vídeo" \
+		"check-search-foundation    valida SEO técnico, sitemap, enlaces y llms.txt" \
+		"build                      compila el site público + auditorías de indexado" \
+		"serve                      levanta MkDocs en local"
 
 # Crear venv e instalar dependencias
 install: $(MKDOCS)
@@ -23,9 +26,10 @@ $(MKDOCS):
 	$(PIP) install -r requirements.txt watchdog==6.0.0
 
 # Compilar la web a HTML estático (en ./site)
-build: install check-animation-branding
+build: install check-animation-branding check-video-media
 	$(MKDOCS_ENV) MKDOCS_REDIRECTS=true $(MKDOCS) build --strict
 	$(PYTHON) scripts/audit_video_indexing.py
+	$(PYTHON) scripts/audit_search_foundation.py
 
 # Servir en local (http://127.0.0.1:8000)
 serve: install
@@ -41,9 +45,17 @@ build-and-update: install
 check-animation-branding: install
 	$(PYTHON) scripts/validate_animation_branding.py
 
+check-video-media: install
+	$(PYTHON) scripts/prepare_video_media.py --check
+
 check-video-indexing: install
+	@test -d site || (echo "site/ no existe; ejecuta 'make build' primero" && exit 1)
 	$(PYTHON) scripts/audit_video_indexing.py
+
+check-search-foundation: install
+	@test -d site || (echo "site/ no existe; ejecuta 'make build' primero" && exit 1)
+	$(PYTHON) scripts/audit_search_foundation.py
 
 # Limpiar artefactos
 clean:
-	rm -rf $(VENV) site
+	rm -rf $(VENV) site .video-media

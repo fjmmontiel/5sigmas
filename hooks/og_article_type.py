@@ -1,22 +1,83 @@
-"""
-Hook: og_article_type.py
-Corrects og:type from "website" to "article" for article pages.
-Material for MkDocs always emits og:type="website"; this hook patches it post-render.
-Uses on_post_page which receives the full HTML output (head + body).
-"""
+"""Correct generated search titles and Open Graph page types."""
+
+from html import escape
+import re
+
+
+_SEARCH_TITLE_OVERRIDES = {
+    "series": "Series de inteligencia artificial en español | 5sigmas",
+    "meta/about": "Sobre 5sigmas y Francisco Maldonado | 5sigmas",
+    "articulos-tecnicos": "Ingeniería de sistemas de IA en producción | 5sigmas",
+    "visuales": "Vídeos y animaciones de inteligencia artificial | 5sigmas",
+    "series/modelos-razonadores/04-latencia-streaming": (
+        "Latencia y streaming en modelos razonadores | 5sigmas"
+    ),
+}
+
+
+def _parts(page) -> list[str]:
+    value = (page.url or "").strip("/")
+    return value.split("/") if value else []
+
+
+def _is_series_presentation(page) -> bool:
+    parts = _parts(page)
+    return len(parts) >= 3 and parts[0] == "series" and parts[2] == "00_presentacion_serie"
+
+
+def _is_article(page) -> bool:
+    parts = _parts(page)
+    if not parts:
+        return False
+    if parts[0] == "series":
+        return len(parts) >= 3 and parts[2] != "00_presentacion_serie"
+    if parts[0] in {"articulos-tecnicos", "temas"}:
+        return len(parts) >= 2
+    return False
+
+
+def _isolate_markdown_alternate(output: str) -> str:
+    """Keep the Markdown alternate without triggering Material's site switcher.
+
+    Material for MkDocs 9.7.7 queries ``link[rel=alternate]`` with an exact
+    attribute selector and treats every match as another deployed site. A
+    Markdown representation is an alternate format and a related resource, not
+    an alternate site. The registered ``related`` token preserves valid link
+    semantics while keeping the element out of Material's exact selector.
+    """
+
+    return output.replace(
+        'rel="alternate" type="text/markdown"',
+        'rel="alternate related" type="text/markdown"',
+        1,
+    )
+
+
+def _fix_search_title(output: str, page, config) -> str:
+    key = (page.url or "").strip("/")
+    search_title = _SEARCH_TITLE_OVERRIDES.get(key)
+
+    if search_title is None and _is_series_presentation(page):
+        parts = _parts(page)
+        series_title = page.parent.title if page.parent else parts[1].replace("-", " ")
+        search_title = f"{series_title} | {config.site_name}"
+
+    if search_title is None:
+        return output
+
+    return re.sub(
+        r"<title>.*?</title>",
+        f"<title>{escape(search_title)}</title>",
+        output,
+        count=1,
+        flags=re.DOTALL,
+    )
 
 
 def on_post_page(output: str, page, config, **kwargs) -> str:
-    url = page.url or ""
-    is_index = url in ("", "index.html")
-    is_about = "meta/about" in url
-    is_series_index = "00_presentacion_serie" in url
-
-    if is_index or is_about or is_series_index:
-        return output
-
-    # Only pages with a parent nav section are articles
-    if page.parent is None:
+    output = _isolate_markdown_alternate(output)
+    output = _fix_search_title(output, page, config)
+    if not _is_article(page):
         return output
 
     return output.replace(

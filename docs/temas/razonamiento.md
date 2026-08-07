@@ -1,51 +1,219 @@
 ---
-title: Razonamiento en LLMs
-description: Qué significa razonar para un modelo de lenguaje, qué es el test-time compute, chain of thought y cuáles son los fallos sistemáticos de los modelos razonadores.
-keywords: razonamiento LLM, test-time compute, chain of thought, modelos razonadores, o1, DeepSeek R1, sycophancy, fallos LLM, overthinking IA, cadenas de pensamiento
+title: "Razonamiento en LLMs"
+seo_title: "Razonamiento en LLMs: chain of thought y test-time compute"
+description: "Qué significa razonar en un LLM, cómo funcionan chain of thought, búsqueda y verificadores, y qué se paga en latencia, coste y fiabilidad."
+keywords: "razonamiento LLM, chain of thought, test-time compute, inference-time compute, self-consistency, verificadores, modelos razonadores"
 date: 2026-04-14
-hide:
-  - toc
-robots: noindex
+date_modified: 2026-08-05
 ---
 
 # Razonamiento en LLMs
 
-El razonamiento en modelos de lenguaje no es una propiedad binaria sino un espectro: desde la predicción de texto que sigue patrones hasta procesos que involucran múltiples pasos de verificación, generación de candidatos y corrección explícita. La idea central de los modelos razonadores modernos es que el razonamiento puede mejorarse asignando más cómputo en el momento de la inferencia (test-time compute) en lugar de solo durante el entrenamiento. Eso convierte el tiempo de ejecución en una variable de diseño: puedes pagar más pasos, más muestras o más verificación para mejorar la calidad de la respuesta, con un coste directo en latencia y coste por consulta. Esa palanca existe porque el razonamiento es un proceso con pasos, y cada paso adicional puede corregir errores de los anteriores. Los fallos de estos sistemas no son aleatorios: tienden a tomar atajos cuando los hay, a seguir la corriente del usuario (sycophancy) y a derivar del objetivo original cuando la cadena de pensamiento se alarga demasiado.
+En un LLM, **razonar** significa producir o ejecutar cómputo intermedio que ayuda a resolver una tarea antes de emitir la respuesta final. Ese cómputo puede tomar la forma de pasos textuales, búsqueda entre candidatos, uso de herramientas, verificación o iteraciones de corrección.
 
-## En qué series aparece
+No es una propiedad binaria. Un modelo puede resolver bien una clase de problemas y fallar ante una variación mínima. También puede llegar a una respuesta correcta con una explicación falsa, o escribir una cadena convincente que termina en un resultado incorrecto.
 
-<div style="display:flex;gap:.75rem;flex-wrap:wrap;margin:1.25rem 0">
+Por eso conviene separar tres preguntas:
 
-<a href="/series/modelos-razonadores/00_presentacion_serie/" style="flex:1;min-width:200px;text-decoration:none;border-radius:10px;border:1px solid rgba(255,179,67,.3);padding:1rem;display:flex;flex-direction:column;gap:.4rem;color:inherit">
-  <div style="font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:#FFB343;font-weight:700">Modelos razonadores</div>
-  <div style="font-size:.85rem;opacity:.8;line-height:1.4">Serie completa dedicada al razonamiento en LLMs: qué significa razonar, cómo se ven los fallos sistemáticos, qué es el test-time compute y qué costes introduce en producción.</div>
-  <div style="margin-top:.5rem;font-size:.82rem;color:#FFB343;font-weight:600">Leer →</div>
-</a>
+1. ¿La respuesta final es correcta?
+2. ¿El proceso utilizado es robusto?
+3. ¿La explicación visible refleja realmente ese proceso?
 
-<a href="/series/from-cave-to-agi/00_presentacion_serie/" style="flex:1;min-width:200px;text-decoration:none;border-radius:10px;border:1px solid rgba(38,166,154,.3);padding:1rem;display:flex;flex-direction:column;gap:.4rem;color:inherit">
-  <div style="font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:#26A69A;font-weight:700">De las cavernas a la AGI</div>
-  <div style="font-size:.85rem;opacity:.8;line-height:1.4">El capítulo 5 cubre qué ocurre más allá del escalado del Transformer: memoria en inferencia, búsqueda y las primeras señales hacia modelos del mundo con capacidades de razonamiento extendido.</div>
-  <div style="margin-top:.5rem;font-size:.82rem;color:#26A69A;font-weight:600">Leer →</div>
-</a>
+## La idea central
 
-</div>
+```text
+entrada
+→ generar estado o pasos intermedios
+→ explorar o verificar alternativas
+→ seleccionar una respuesta
+→ comprobar el resultado
+```
+
+Los modelos razonadores modernos dedican más cómputo durante la inferencia. Esa estrategia se conoce como **test-time compute** o **inference-time compute**. En lugar de fijar todo el rendimiento durante el entrenamiento, el sistema puede gastar más pasos en consultas difíciles.
+
+La ventaja es capacidad adaptable. El coste aparece en latencia, tokens, variabilidad y operación.
+
+## Chain of thought
+
+*Chain of thought* (CoT) induce al modelo a producir pasos intermedios antes de la respuesta. Wei et al. mostraron que ejemplos con razonamientos encadenados podían mejorar el rendimiento de modelos grandes en tareas aritméticas, simbólicas y de sentido común.[^cot]
+
+Un ejemplo simplificado:
+
+```text
+pregunta
+→ descomponer el problema
+→ resolver cada parte
+→ combinar resultados
+→ responder
+```
+
+La técnica ayuda porque ofrece espacio para representar variables y dependencias. También puede empeorar la respuesta si los primeros pasos contienen un error que se propaga.
+
+La cadena visible tampoco debe tratarse como una traza causal perfecta. Un modelo puede racionalizar una decisión influida por señales que no menciona. Turpin et al. documentaron explicaciones que parecían coherentes pero omitían factores decisivos del prompt.[^unfaithful]
+
+La conclusión práctica es clara: una explicación textual puede ser útil para inspección, pero no sustituye a una evaluación de corrección ni a telemetría del sistema.
+
+## Self-consistency y muestreo de candidatos
+
+Una respuesta única depende de una trayectoria de generación. **Self-consistency** genera varias cadenas y elige la respuesta que aparece con mayor consistencia entre ellas.[^selfconsistency]
+
+```text
+problema
+├─ trayectoria A → 42
+├─ trayectoria B → 41
+├─ trayectoria C → 42
+└─ trayectoria D → 42
+                 ↓
+             seleccionar 42
+```
+
+Esta estrategia funciona cuando existen caminos independientes que convergen en la solución. Su coste crece casi linealmente con el número de muestras y no ayuda si todas comparten el mismo sesgo.
+
+En problemas abiertos, votar texto completo no tiene sentido. Se necesita normalizar respuestas, evaluar candidatos o usar un modelo juez.
+
+## Búsqueda y planificación
+
+El razonamiento puede formularse como búsqueda sobre estados posibles.
+
+- **Tree of Thoughts:** explora varias continuaciones parciales
+- **beam search:** conserva los candidatos con mejor puntuación
+- **Monte Carlo Tree Search:** equilibra exploración y explotación
+- **programas o tools:** delegan operaciones verificables
+- **planificación explícita:** separa creación del plan y ejecución
+
+La búsqueda aporta valor cuando hay una función que distingue estados prometedores. Sin un evaluador fiable, el sistema solo multiplica texto plausible.
+
+## Verificadores y modelos de recompensa
+
+Un verificador puntúa una respuesta, un paso o una trayectoria. Puede ser:
+
+- una regla determinista
+- un compilador o test
+- un solver matemático
+- una consulta a datos externos
+- otro modelo
+- un *process reward model*
+
+La verificación final solo indica si el resultado parece correcto. La verificación por proceso intenta localizar dónde aparece el error. Esta última ofrece una señal más fina, pero requiere etiquetas o criterios a nivel de paso.
+
+Para código, ejecutar tests suele ser más fiable que pedir a otro modelo que opine. Para una tool call, validar el esquema y comprobar el efecto real es mejor que evaluar la naturalidad de la explicación.
+
+## Test-time compute
+
+El sistema puede asignar más cómputo de varias formas:
+
+```text
+más tokens de deliberación
++ más candidatos
++ búsqueda más profunda
++ verificadores
++ llamadas a tools
++ iteraciones de revisión
+```
+
+Snell et al. estudiaron cómo escalar cómputo en inferencia y mostraron que la estrategia óptima depende tanto de la dificultad del problema como de la capacidad del modelo para aprovechar ese presupuesto.[^testtime]
+
+Más cómputo no produce una mejora monotónica. Puede aparecer:
+
+- sobrepensamiento
+- deriva del objetivo
+- propagación de un supuesto inicial falso
+- confianza reforzada en una respuesta incorrecta
+- latencia incompatible con la interacción
+- coste superior al de usar directamente un modelo mejor
+
+La política correcta no es “pensar siempre más”. Es **rutar el presupuesto según la dificultad y el valor de la respuesta**.
+
+## Razonamiento visible y razonamiento interno
+
+En un producto conviene separar:
+
+1. **Cómputo interno:** pasos que el sistema utiliza para resolver
+2. **Justificación al usuario:** explicación breve, verificable y adaptada a la tarea
+3. **Traza operacional:** tools, argumentos, resultados, tiempos y cambios de estado
+
+No hace falta mostrar cada token intermedio para ofrecer transparencia. De hecho, una explicación larga puede ocultar la evidencia importante.
+
+Una respuesta auditable debería citar los datos relevantes, exponer supuestos, indicar incertidumbre y registrar las acciones reales fuera del texto mostrado.
+
+## Razonamiento con herramientas
+
+Las tools cambian el problema. El modelo ya no necesita simular todas las operaciones dentro de una cadena textual.
+
+```text
+pregunta
+→ decidir qué falta
+→ llamar a una tool
+→ validar resultado
+→ actualizar estado
+→ responder
+```
+
+Una calculadora reduce errores aritméticos. Un buscador aporta información actual. Un intérprete ejecuta código. Una API permite actuar sobre un sistema externo.
+
+El reto se desplaza hacia el contrato:
+
+- cuándo llamar
+- con qué argumentos
+- cómo validar
+- qué hacer ante timeout o resultado parcial
+- cómo evitar duplicados
+- cómo reanudar después de una interrupción
+
+La nota [Agente reactivo, proactivo y tool calls](/articulos-tecnicos/proactive-reactive-agent-and-tool-calls/) desarrolla ese runtime.
+
+## El coste humano de la latencia
+
+En un chat, varios segundos pueden ser aceptables si la tarea es compleja. En voz, la misma demora rompe el ritmo conversacional.
+
+La serie [Modelos razonadores](/series/modelos-razonadores/00_presentacion_serie/) separa:
+
+- tiempo hasta detectar el final del turno
+- tiempo hasta la primera decisión útil
+- tiempo hasta el primer audio
+- tiempo total de la operación
+- tiempo hasta entregar el resultado
+
+Esta separación evita optimizar solo el benchmark y olvidar la experiencia.
+
+## Cómo evaluar razonamiento
+
+Una evaluación robusta no mira solo la exactitud final.
+
+| Dimensión | Pregunta |
+|---|---|
+| Corrección | ¿La respuesta es verdadera o resuelve la tarea? |
+| Robustez | ¿Se mantiene ante reformulaciones y distractores? |
+| Eficiencia | ¿Cuánto cómputo y latencia necesita? |
+| Calibración | ¿La incertidumbre se relaciona con el error? |
+| Fidelidad | ¿La explicación refleja evidencia real? |
+| Acción | ¿Las tools y cambios de estado fueron correctos? |
+
+También hay que comparar contra baselines más simples. A veces una regla, una consulta estructurada o un modelo pequeño con una tool supera a una deliberación larga.
+
+La guía de [evaluación de modelos de IA](/temas/evaluacion-modelos/) propone cómo construir ese conjunto de pruebas.
 
 ## Preguntas frecuentes
 
-**¿Qué significa razonar para un LLM?**
-Un LLM no razona como un sistema formal de lógica: genera tokens probables dado un contexto. Pero cuando ese proceso se estructura en pasos intermedios explícitos (chain of thought), el modelo puede corregir errores en pasos anteriores antes de llegar a la respuesta final. Esa capacidad de autocorrección secuencial es lo que el campo llama razonamiento, con independencia de si hay comprensión real detrás.
+### ¿Chain of thought hace que el modelo sea lógico?
 
-**¿Qué es el test-time compute?**
-El test-time compute (cómputo en tiempo de inferencia) es la idea de destinar más pasos de cómputo a generar la respuesta en lugar de solo aumentar el tamaño del modelo. Las palancas concretas son: cadenas de pensamiento más largas, generación de múltiples candidatos con selección posterior, verificación por un modelo separado (process reward model) o iteraciones de refinamiento. El resultado es que el coste de la inferencia se vuelve variable según la dificultad de la consulta, a diferencia del coste fijo del preentrenamiento.
+No. Ofrece espacio para pasos intermedios y puede mejorar ciertas tareas. Los pasos siguen siendo generados por el modelo y pueden contener saltos, racionalizaciones o errores.
 
-**¿Qué es chain of thought?**
-Chain of thought (cadena de pensamiento) es una técnica en la que el modelo genera pasos intermedios de razonamiento explícitos antes de dar la respuesta final. Se puede inducir con ejemplos (few-shot) o con instrucciones directas (zero-shot, como "piensa paso a paso"). Su efecto es especialmente visible en tareas que requieren varios pasos de lógica o aritmética: el modelo que razona en voz alta comete menos errores que el que responde directamente.
+### ¿Cuanto más razona un modelo, mejor responde?
 
-**¿Cuáles son los fallos sistemáticos de los modelos razonadores?**
-Los principales son tres: los atajos (el modelo toma el camino de mínima resistencia cuando hay un patrón superficial que parece funcionar), la sycophancy (el modelo ajusta su respuesta para coincidir con lo que el usuario parece querer escuchar, aunque sea incorrecto) y la deriva de objetivo (en cadenas de pensamiento largas, el modelo puede alejarse de la tarea original). Estos fallos no son aleatorios: emergen de cómo se entrena el modelo con feedback humano.
+No siempre. La mejora depende de la tarea, el modelo, el verificador y el presupuesto. En consultas simples, más pasos pueden añadir coste y abrir nuevas oportunidades de error.
 
-**¿Qué es el overthinking en IA?**
-El overthinking (sobrepensamiento) ocurre cuando un modelo razonador genera cadenas de pensamiento desproporcionadamente largas para la dificultad real de la consulta, sin mejorar la calidad de la respuesta. El resultado práctico es latencia innecesaria y coste extra. Es uno de los riesgos documentados de los modelos con test-time compute extendido: más pasos no siempre significa mejor respuesta.
+### ¿Un modelo juez puede verificar a otro modelo?
 
-**¿Qué diferencia a o1 de los LLMs convencionales?**
-o1 (OpenAI) fue el primer modelo de producción que expuso explícitamente el test-time compute como mecanismo central: el modelo "piensa" durante un tiempo configurable antes de responder. A diferencia de los LLMs convencionales, cuyo coste de inferencia es fijo por token de salida, o1 tiene un coste variable que depende del tiempo de razonamiento asignado. DeepSeek R1 replicó resultados similares con un enfoque de entrenamiento distinto (RLVR con GRPO), abriendo el debate sobre qué parte del rendimiento viene de la arquitectura y qué parte del proceso de entrenamiento.
+Puede aportar una señal útil, especialmente con una rúbrica clara y ejemplos. También hereda sesgos, sensibilidad al orden y errores. Debe calibrarse contra humanos o verificadores externos y no ser la única fuente de verdad en decisiones críticas.
+
+### ¿RAG es razonamiento?
+
+RAG es recuperación de información. Puede formar parte de un proceso de razonamiento, pero recuperar un documento no implica usarlo correctamente ni verificar la conclusión.
+
+## Fuentes primarias
+
+[^cot]: Jason Wei et al., [*Chain-of-Thought Prompting Elicits Reasoning in Large Language Models*](https://arxiv.org/abs/2201.11903), 2022.
+[^selfconsistency]: Xuezhi Wang et al., [*Self-Consistency Improves Chain of Thought Reasoning in Language Models*](https://arxiv.org/abs/2203.11171), 2022.
+[^unfaithful]: Miles Turpin et al., [*Language Models Don't Always Say What They Think: Unfaithful Explanations in Chain-of-Thought Prompting*](https://arxiv.org/abs/2305.04388), 2023.
+[^testtime]: Charlie Snell et al., [*Scaling LLM Test-Time Compute Optimally can be More Effective than Scaling Model Parameters*](https://arxiv.org/abs/2408.03314), 2024.

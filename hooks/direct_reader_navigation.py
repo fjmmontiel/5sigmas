@@ -140,7 +140,11 @@ def _render(
         index for index, page in enumerate(current_collection["pages"]) if page["path"] == current_page["path"]
     )
     progress_label = f"{page_index + 1:02d}/{len(current_collection['pages']):02d}"
-    kind_label = "Serie" if current_collection["kind"] == "Aprender" else "Notas"
+    kind_label = (
+        "Notas"
+        if current_collection["kind"] == "Construir"
+        else ("Conceptos" if current_collection["title"] == "Conceptos" else "Serie")
+    )
 
     aside = (
         '<div class="s5-reader-direct-overlay" data-s5-reader-direct-overlay hidden></div>'

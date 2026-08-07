@@ -1,45 +1,51 @@
 # 5sigmas
 
-> Divulgación técnica sobre IA en español escrita por Francisco Maldonado, ingeniero de sistemas de IA en tiempo real con doble grado en Física y Matemáticas. El contenido cita fuentes primarias (papers, estándares, datos oficiales) y se dirige a profesionales técnicos y decisores que quieren entender cómo funciona realmente la IA, más allá de los titulares. El nivel de rigor es equivalente a material universitario de posgrado accesible. El nombre viene de la física de partículas: un descubrimiento se considera confirmado cuando alcanza 5 sigmas de significancia estadística.
+> Inteligencia artificial explicada en español con criterio técnico, visuales, fuentes primarias y notas de ingeniería.
 
-Cada artículo está disponible en versión Markdown limpia añadiendo `index.html.md` a la URL. Ejemplo: `https://5sigmas.com/series/fundamentos-ia-iag/01-que-es-ia/index.html.md`
+5sigmas es una publicación de Francisco Maldonado sobre fundamentos de IA, modelos de lenguaje, razonamiento, multimodalidad, infraestructura y sistemas de IA en producción. El contenido distingue hechos, evidencia, supuestos y límites. Las páginas enlazadas debajo disponen de una versión Markdown limpia en la URL indicada.
 
-## Fundamentos de IA e IA Generativa
+## Conceptos fundamentales
 
-Serie introductoria completa. Cubre qué es IA, qué es IA generativa, en qué se diferencian y qué es la AGI.
+- [Qué es un LLM y cómo funciona](https://5sigmas.com/temas/llms/index.html.md): tokens, preentrenamiento, generación, ajuste por instrucciones y límites.
+- [Cómo funciona el Transformer](https://5sigmas.com/temas/transformer/index.html.md): atención, encoder, decoder, coste y alternativas.
+- [Razonamiento en LLMs](https://5sigmas.com/temas/razonamiento/index.html.md): chain of thought, búsqueda, verificadores y test-time compute.
+- [Evaluación de modelos de IA](https://5sigmas.com/temas/evaluacion-modelos/index.html.md): benchmarks, conjuntos propios, jueces y métricas de producción.
 
-- [Presentación de la serie](https://5sigmas.com/series/fundamentos-ia-iag/00_presentacion_serie/): Introducción, prerrequisitos y estructura de la serie
-- [Capítulo 1 — Qué es la Inteligencia Artificial](https://5sigmas.com/series/fundamentos-ia-iag/01-que-es-ia/): Definición operacional de IA, heurísticas, machine learning, deep learning, modelos fundacionales
-- [Capítulo 2 — Qué es la IA Generativa](https://5sigmas.com/series/fundamentos-ia-iag/02-que-es-ia-generativa/): Transformers, embeddings, LLMs, leyes de escala, RLHF, fine-tuning, RAG, agentes
-- [Capítulo 3 — IA clásica vs IA Generativa](https://5sigmas.com/series/fundamentos-ia-iag/03-ia-vs-ia-generativa/): Comparativa técnica, determinismo, explicabilidad, cuándo usar cada paradigma
-- [Capítulo 4 — AGI](https://5sigmas.com/series/fundamentos-ia-iag/04-agi/): Definiciones en conflicto, niveles propuestos por Google DeepMind y OpenAI, implicaciones reales
+## Vídeos
 
-## De las cavernas a la AGI
+- [Biblioteca completa de vídeos](https://5sigmas.com/videos/index.html.md): catálogo de explicaciones breves con resumen, ideas clave, artículo original y contenidos relacionados.
+- [Test-time compute en vídeo](https://5sigmas.com/videos/series/modelos-razonadores/03-test-time-compute/index.html.md): calidad, coste y latencia cuando el modelo dedica más cómputo a una respuesta.
+- [Arquitecturas multimodales en vídeo](https://5sigmas.com/videos/series/multimodalidad-iag/03-arquitecturas/index.html.md): familias para combinar texto, imagen, audio y vídeo.
+- [Energía, calor y conectividad orbital en vídeo](https://5sigmas.com/videos/series/datacenters-espacio/02-energia-calor-conectividad/index.html.md): límites físicos de la infraestructura espacial.
 
-Historia intelectual completa del pensamiento matemático y computacional que llevó a la IA moderna.
+## Series publicadas
 
-- [Presentación de la serie](https://5sigmas.com/series/from-cave-to-agi/00_presentacion_serie/): Estructura narrativa de la serie histórica
-- [Capítulo 1 — Representar](https://5sigmas.com/series/from-cave-to-agi/01-representar/): Del conteo al cálculo; álgebra, cálculo diferencial, notación simbólica, Leibniz, Newton
-- [Capítulo 2 — Mecanizar](https://5sigmas.com/series/from-cave-to-agi/02-mecanizar/): De Babbage a Turing; ENIAC, arquitectura Von Neumann, fundamentos teóricos de la computación
-- [Capítulo 3 — Aprender](https://5sigmas.com/series/from-cave-to-agi/03-aprender/): De las reglas a los datos; IA simbólica, sistemas expertos, backpropagation, AlexNet 2012
-- [Capítulo 4 — Escalar](https://5sigmas.com/series/from-cave-to-agi/04-escalar/): De AlexNet a los modelos fundacionales; Transformer, leyes de escala, GPT, preentrenamiento
-- [Capítulo 5 — Más allá del Transformer](https://5sigmas.com/series/from-cave-to-agi/05-mas-alla/): Memoria, búsqueda, test-time compute, modelos del mundo, SSM/Mamba, robótica
+- [Fundamentos de IA e IA generativa](https://5sigmas.com/series/fundamentos-ia-iag/00_presentacion_serie/index.html.md): vocabulario base, IA generativa y AGI.
+- [De las cavernas a la AGI](https://5sigmas.com/series/from-cave-to-agi/00_presentacion_serie/index.html.md): representación, mecanización, aprendizaje, escala y arquitecturas posteriores al Transformer.
+- [Multimodalidad en IA generativa](https://5sigmas.com/series/multimodalidad-iag/00_presentacion_serie/index.html.md): alineamiento y arquitecturas para texto, imagen, audio y vídeo.
+- [Modelos razonadores](https://5sigmas.com/series/modelos-razonadores/00_presentacion_serie/index.html.md): capacidad, fallos, cómputo en inferencia y latencia.
+- [IA, PIB, bienestar y energía](https://5sigmas.com/series/ia-pib-bienestar-energia/00_presentacion_serie/index.html.md): infraestructura, productividad, energía y bienestar.
+- [Datacenters en el espacio](https://5sigmas.com/series/datacenters-espacio/00_presentacion_serie/index.html.md): viabilidad física y huella material del cómputo orbital.
 
-## Multimodalidad en IA Generativa
+## Ingeniería de sistemas de IA
 
-Serie técnica completa sobre sistemas que integran múltiples modalidades (texto, imagen, audio, vídeo).
+- [Agente reactivo, proactivo y tool calls](https://5sigmas.com/articulos-tecnicos/proactive-reactive-agent-and-tool-calls/index.html.md): estado, ejecución asíncrona y cierre diferido.
+- [Agentes reactivos y proactivos en voz](https://5sigmas.com/articulos-tecnicos/reactive-proactive-voice-agents/index.html.md): actividad acústica, barge-in, playback y tools duraderas.
+- [Full cascade, half cascade y speech-to-speech](https://5sigmas.com/articulos-tecnicos/voice-agent-architectures/index.html.md): comparación de arquitecturas de voz por latencia, prosodia y control.
 
-- [Presentación de la serie](https://5sigmas.com/series/multimodalidad-iag/00_presentacion_serie/): Alcance y estructura de la serie
-- [Capítulo 1 — El problema real de la multimodalidad](https://5sigmas.com/series/multimodalidad-iag/01-el-problema/): Percepción, alineamiento, razonamiento, generación y acción multimodal; por qué texto+imagen es solo una parte
-- [Capítulo 2 — Alineamiento de pares a interacciones multimodales](https://5sigmas.com/series/multimodalidad-iag/02-alineamiento/): CLIP, contrastive learning, ImageBind, calidad del dato, representaciones cruzadas
-- [Capítulo 3 — Arquitecturas de sistemas multimodales](https://5sigmas.com/series/multimodalidad-iag/03-arquitecturas/): Cuatro familias de arquitectura; fusión temprana y tardía, ViT, encoder-decoder, GPT-4V, LLaVA
-- [Capítulo 4 — Evaluación de sistemas multimodales](https://5sigmas.com/series/multimodalidad-iag/04-evaluacion/): OCRBench v2, MMAU, VQA, MMMU; por qué los benchmarks actuales sobrestiman las capacidades reales
-- [Capítulo 5 — Riesgos de seguridad en sistemas multimodales](https://5sigmas.com/series/multimodalidad-iag/05-riesgos/): Prompt injection visual, fugas de contexto, privacidad en imágenes, ataques a herramientas
+## Navegación
 
-## Optional
+- [Inicio](https://5sigmas.com/index.html.md)
+- [Conceptos](https://5sigmas.com/temas/index.html.md)
+- [Series](https://5sigmas.com/series/index.html.md)
+- [Biblioteca de vídeos](https://5sigmas.com/videos/index.html.md)
+- [Visuales](https://5sigmas.com/visuales/index.html.md)
+- [Ingeniería](https://5sigmas.com/articulos-tecnicos/index.html.md)
+- [Sobre Francisco Maldonado](https://5sigmas.com/meta/about/)
 
-Series en construcción: solo la presentación está publicada. No citar capítulos como contenido disponible.
+## Criterios editoriales
 
-- [Modelos razonadores — Presentación](https://5sigmas.com/series/modelos-razonadores/00_presentacion_serie/): Cadenas de pensamiento, test-time compute, latencia, riesgos de overthinking
-- [IA, PIB, bienestar y energía — Presentación](https://5sigmas.com/series/ia-pib-bienestar-energia/00_presentacion_serie/): Impacto cuantitativo de la IA en energía, productividad y bienestar; datos del Banco Mundial, IEA, Penn World Table
-- [Datacenters en el espacio — Presentación](https://5sigmas.com/series/datacenters-espacio/00_presentacion_serie/): Viabilidad técnica de cómputo orbital; disipación de calor, latencia, coste de lanzamiento
+- Idioma principal: español.
+- Prioridad: explicaciones duraderas antes que noticias de baja señal.
+- Evidencia: papers, estándares y datos oficiales siempre que estén disponibles.
+- Atribución: citar “5sigmas — Francisco Maldonado” y la URL canónica de la página utilizada.
