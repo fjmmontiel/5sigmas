@@ -1,0 +1,67 @@
+name: Final organic metadata polish
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/final-organic-polish.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.head_ref == 'reconcile/organic-growth-video-library-v2'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Shorten metadata and fix canonical source-link assertion
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          python - <<'PY'
+          from pathlib import Path
+
+          descriptions = {
+              'docs/series/modelos-razonadores/00_presentacion_serie.md': 'Cinco capítulos sobre cómo razonan los LLMs: test-time compute, fallos, latencia, coste y riesgos cuando usan herramientas.',
+              'docs/series/datacenters-espacio/04-huella-real-datacenter.md': 'Agua, energía, minerales y ciclo de vida de los datacenters: qué consume la IA, por qué varía por ubicación y cómo medir su huella.',
+              'docs/series/multimodalidad-iag/01-el-problema.md': 'Qué significa integrar texto, imagen, audio y otras modalidades, y cómo ordenar percepción, alineamiento, razonamiento, generación y acción.',
+              'docs/series/multimodalidad-iag/02-alineamiento.md': 'Cómo aprende un modelo que señales distintas describen lo mismo y por qué los datos determinan la robustez del alineamiento multimodal.',
+              'docs/series/multimodalidad-iag/03-arquitecturas.md': 'Cuatro familias de arquitectura multimodal, sus diferencias en calidad, coste y latencia, y cuándo conviene cada forma de combinar modalidades.',
+              'docs/series/multimodalidad-iag/04-evaluacion.md': 'Cómo evaluar sistemas multimodales sin confundir benchmarks con capacidad real: OCR, audio, grounding, razonamiento y fallos de las métricas.',
+              'docs/series/multimodalidad-iag/05-riesgos.md': 'Prompt injection visual, privacidad, fugas de contexto y manipulación de herramientas cuando un sistema multimodal puede observar y actuar.',
+              'docs/series/from-cave-to-agi/01-representar.md': 'Cómo símbolos, números, álgebra y cálculo hicieron posible representar y manipular el mundo hasta construir la base matemática de la IA moderna.',
+              'docs/series/from-cave-to-agi/03-aprender.md': 'Cómo la IA pasó de reglas escritas a mano al aprendizaje con datos: sistemas expertos, estadística, redes neuronales y el salto de AlexNet.',
+          }
+
+          for filename, replacement in descriptions.items():
+              path = Path(filename)
+              body = path.read_text(encoding='utf-8')
+              lines = body.splitlines()
+              for index, line in enumerate(lines[:12]):
+                  if line.startswith('description:'):
+                      quote = '"' if line.startswith('description: "') else ''
+                      lines[index] = f'description: {quote}{replacement}{quote}'
+                      break
+              else:
+                  raise SystemExit(f'{filename}: frontmatter description missing')
+              path.write_text('\n'.join(lines) + ('\n' if body.endswith('\n') else ''), encoding='utf-8')
+
+          path = Path('scripts/validate_video_library.mjs')
+          body = path.read_text(encoding='utf-8')
+          old = """  if (await articleLink.getAttribute('href') !== '/series/modelos-razonadores/03-test-time-compute/') {\n    throw new Error('The watch page does not return to its source article.');\n  }\n"""
+          new = """  const articleHref = await articleLink.getAttribute('href');\n  const articlePath = new URL(articleHref, baseUrl).pathname;\n  if (articlePath !== '/series/modelos-razonadores/03-test-time-compute/') {\n    throw new Error(`The watch page does not return to its source article: ${articleHref}.`);\n  }\n"""
+          if old not in body:
+              raise SystemExit('video source-link assertion anchor missing')
+          path.write_text(body.replace(old, new, 1), encoding='utf-8')
+          PY
+
+          git add docs/series scripts/validate_video_library.mjs
+          git diff --cached --check
+          git commit -m 'polish: remove search warnings and validate canonical video links'
+          git push origin HEAD:${GITHUB_HEAD_REF}
