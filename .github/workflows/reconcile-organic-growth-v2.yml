@@ -53,14 +53,12 @@ jobs:
               exit 1
             fi
 
-            # Current main owns the reader runtime/layout and its regressions.
             git checkout --ours \
               docs/assets/javascripts/reader-navigation.js \
               docs/stylesheets/voice-report-animations-polish.css \
               scripts/capture_site_screenshots.mjs \
               scripts/validate_direct_reader_navigation.mjs
 
-            # PR21 owns the new Conceptos-aware label, SEO nav additions and dependency bumps.
             git checkout --theirs \
               hooks/direct_reader_navigation.py \
               mkdocs.yml \
@@ -70,7 +68,6 @@ jobs:
           python - <<'PY'
           from pathlib import Path
 
-          # Merge nav intentionally: PR21 supplies Conceptos/Vídeos; current main supplies Seguridad en IA.
           mkdocs = Path('mkdocs.yml')
           text = mkdocs.read_text(encoding='utf-8')
           security_block = '''      - Seguridad en IA:\n          - Presentación: series/seguridad-ia/00_presentacion_serie.md\n          - Prompt injection: series/seguridad-ia/01-prompt-injection.md\n          - Jailbreaks: series/seguridad-ia/02-jailbreaks.md\n          - Envenenamiento: series/seguridad-ia/03-envenenamiento.md\n          - Red-teaming: series/seguridad-ia/04-red-teaming.md\n          - Controles de producción: series/seguridad-ia/05-controles-produccion.md\n'''
@@ -83,7 +80,6 @@ jobs:
           text = text.replace('  snippets/seguridad-ia/**\n', '')
           mkdocs.write_text(text, encoding='utf-8')
 
-          # The unified library is Conceptos + seven public series + technical notes.
           for filename in ('scripts/capture_site_screenshots.mjs', 'scripts/validate_direct_reader_navigation.mjs'):
               path = Path(filename)
               body = path.read_text(encoding='utf-8')
@@ -92,7 +88,6 @@ jobs:
               body = body.replace('const expectedCollections = 8;', 'const expectedCollections = 9;', 1)
               path.write_text(body, encoding='utf-8')
 
-          # Regression: the complete library must expose both the new Conceptos guides and Seguridad en IA.
           path = Path('scripts/validate_direct_reader_navigation.mjs')
           body = path.read_text(encoding='utf-8')
           needle = "  let dialog = await openFullLibrary(desktop, contextual.browse);\n"
@@ -104,15 +99,12 @@ jobs:
           path.write_text(body, encoding='utf-8')
           PY
 
-          # Remove reconciliation-only workflows from the product tree.
-          rm -f .github/workflows/merge-current-main-into-pr21.yml
-          rm -f .github/workflows/reconcile-organic-growth-v2.yml
+          # GitHub Actions tokens cannot push workflow mutations. Keep the branch's
+          # current workflows untouched; reviewed workflow changes are applied via
+          # the GitHub connector after this content merge lands on the PR branch.
+          git restore --source=HEAD --staged --worktree .github/workflows
 
           git add -A
-          if git diff --cached --check; then
-            git status --short
-          else
-            exit 1
-          fi
+          git diff --cached --check
           git commit -m 'reconcile: merge organic growth PR21 onto current main'
           git push origin HEAD:${GITHUB_HEAD_REF}
