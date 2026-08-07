@@ -1,0 +1,122 @@
+name: Publish video media to Cloudflare R2
+
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Upload the validated media to the configured R2 bucket
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: video-media-publish
+  cancel-in-progress: false
+
+jobs:
+  stage-and-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: auto
+      AWS_EC2_METADATA_DISABLED: "true"
+      R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+      R2_BUCKET_NAME: ${{ vars.R2_BUCKET_NAME }}
+      S5_VIDEO_MEDIA_ORIGIN: ${{ vars.S5_VIDEO_MEDIA_ORIGIN }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install publishing dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install PyYAML==6.0.3 awscli
+
+      - name: Validate and stage declared video media
+        run: python scripts/prepare_video_media.py --output .video-media
+
+      - name: Upload deterministic media manifest
+        uses: actions/upload-artifact@v4
+        with:
+          name: 5sigmas-video-media-manifest
+          path: .video-media/manifest.json
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Validate R2 publishing configuration
+        if: inputs.publish
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$AWS_ACCESS_KEY_ID" || { echo "Missing R2_ACCESS_KEY_ID secret" >&2; exit 1; }
+          test -n "$AWS_SECRET_ACCESS_KEY" || { echo "Missing R2_SECRET_ACCESS_KEY secret" >&2; exit 1; }
+          test -n "$R2_ACCOUNT_ID" || { echo "Missing R2_ACCOUNT_ID secret" >&2; exit 1; }
+          test -n "$R2_BUCKET_NAME" || { echo "Missing R2_BUCKET_NAME repository variable" >&2; exit 1; }
+          test -n "$S5_VIDEO_MEDIA_ORIGIN" || { echo "Missing S5_VIDEO_MEDIA_ORIGIN repository variable" >&2; exit 1; }
+          [[ "$S5_VIDEO_MEDIA_ORIGIN" == https://* ]] || { echo "S5_VIDEO_MEDIA_ORIGIN must use HTTPS" >&2; exit 1; }
+
+      - name: Publish media objects to R2
+        if: inputs.publish
+        run: |
+          aws s3 sync .video-media/media/ "s3://${R2_BUCKET_NAME}/" \
+            --endpoint-url "https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com" \
+            --cache-control "public,max-age=86400" \
+            --only-show-errors
+          aws s3 cp .video-media/manifest.json "s3://${R2_BUCKET_NAME}/manifests/video-manifest.json" \
+            --endpoint-url "https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com" \
+            --cache-control "no-cache" \
+            --content-type "application/json" \
+            --only-show-errors
+
+      - name: Verify public playback, byte ranges and CORS
+        if: inputs.publish
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          from urllib.parse import quote
+          from urllib.request import Request, urlopen
+
+          manifest = json.loads(Path('.video-media/manifest.json').read_text(encoding='utf-8'))
+          origin = os.environ['S5_VIDEO_MEDIA_ORIGIN'].rstrip('/')
+          selected = []
+          for kind in ('video', 'poster', 'captions'):
+              match = next((item for item in manifest['objects'] if item['kind'] == kind), None)
+              if match:
+                  selected.append(match)
+
+          for item in selected:
+              url = f"{origin}/{quote(item['key'], safe='/')}"
+              request = Request(
+                  url,
+                  headers={
+                      'Origin': 'https://5sigmas.com',
+                      'Range': 'bytes=0-0',
+                      'User-Agent': '5sigmas-media-verifier/1.0',
+                  },
+              )
+              with urlopen(request, timeout=30) as response:
+                  if response.status not in {200, 206}:
+                      raise RuntimeError(f"{url} returned {response.status}")
+                  allow_origin = response.headers.get('Access-Control-Allow-Origin')
+                  if allow_origin not in {'https://5sigmas.com', '*'}:
+                      raise RuntimeError(f"{url} returned invalid CORS origin {allow_origin!r}")
+                  if item['kind'] == 'video' and response.status != 206:
+                      raise RuntimeError(f"{url} did not honor the byte-range request")
+                  if item['kind'] == 'video' and not response.headers.get('Content-Range'):
+                      raise RuntimeError(f"{url} omitted Content-Range")
+                  if 'max-age' not in (response.headers.get('Cache-Control') or ''):
+                      raise RuntimeError(f"{url} omitted cache metadata")
+                  print(f"verified {item['kind']}: {url}")
+          PY
