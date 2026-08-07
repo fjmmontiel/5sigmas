@@ -7,7 +7,7 @@ on:
       - '.github/workflows/one-shot-production-qa.yml'
 
 permissions:
-  contents: read
+  contents: write
   issues: write
 
 jobs:
@@ -16,6 +16,8 @@ jobs:
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
@@ -132,6 +134,35 @@ jobs:
           if-no-files-found: warn
           retention-days: 14
 
+      - name: Persist inspectable production QA branch
+        if: always()
+        env:
+          QA_STATUS: ${{ job.status }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          report_dir=/tmp/production-qa-report
+          rm -rf "$report_dir"
+          mkdir -p "$report_dir"
+          if [ -d artifacts ]; then cp -R artifacts "$report_dir/"; fi
+          cat > "$report_dir/status.json" <<EOF
+          {
+            "status": "${QA_STATUS}",
+            "run_id": "${GITHUB_RUN_ID}",
+            "source_sha": "${GITHUB_SHA}",
+            "target": "https://5sigmas.com",
+            "expected_video_count": 39
+          }
+          EOF
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git switch --orphan qa-production-live
+          git rm -rf .
+          cp -R "$report_dir"/* .
+          git add -f .
+          git commit -m "qa: production verification ${GITHUB_RUN_ID} (${QA_STATUS})"
+          git push --force origin HEAD:qa/production-live
+
       - name: Report production QA run to merged PR
         if: always()
         env:
@@ -140,4 +171,4 @@ jobs:
         shell: bash
         run: |
           gh api repos/${GITHUB_REPOSITORY}/issues/25/comments \
-            -f body="Production human QA status: **${QA_STATUS}**. Run ID: \`${GITHUB_RUN_ID}\`. Source commit: \`${GITHUB_SHA}\`. This run targets https://5sigmas.com directly and uploads the live screenshot artifact \`5sigmas-production-human-qa\`."
+            -f body="Production human QA status: **${QA_STATUS}**. Run ID: \`${GITHUB_RUN_ID}\`. Source commit: \`${GITHUB_SHA}\`. This run targets https://5sigmas.com directly and persists its screenshots on branch \`qa/production-live\`."
