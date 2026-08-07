@@ -1,6 +1,6 @@
 ---
 title: El problema real de la multimodalidad
-description: Qué significa integrar texto, imagen, audio y otras modalidades, y cómo ordenar percepción, alineamiento, razonamiento, generación y acción.
+description: "Qué significa integrar texto, imagen, audio y otras modalidades, y cómo ordenar percepción, alineamiento, razonamiento, generación y acción."
 date: 2026-04-01
 keywords: "multimodalidad IA, sistemas multimodales, LLM multimodal, IA texto imagen audio, percepción multimodal, IA generativa multimodal, GPT-4V, Gemini multimodal"
 tags:

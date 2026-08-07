@@ -1,6 +1,6 @@
 ---
 title: Alineamiento de pares a interacciones multimodales
-description: Cómo aprende un modelo que señales distintas describen lo mismo y por qué los datos determinan la robustez del alineamiento multimodal.
+description: "Cómo aprende un modelo que señales distintas describen lo mismo y por qué los datos determinan la robustez del alineamiento multimodal."
 date: 2026-04-02
 keywords: "alineamiento multimodal, CLIP, contrastive learning, ImageBind, embedding multimodal, representaciones imagen texto, entrenamiento multimodal, aprendizaje contrastivo"
 tags:

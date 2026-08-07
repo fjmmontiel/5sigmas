@@ -1,6 +1,6 @@
 ---
 title: Evaluación de sistemas multimodales
-description: Cómo evaluar sistemas multimodales sin confundir benchmarks con capacidad real: OCR, audio, grounding, razonamiento y fallos de las métricas.
+description: "Cómo evaluar sistemas multimodales sin confundir benchmarks con capacidad real: OCR, audio, grounding, razonamiento y fallos de las métricas."
 date: 2026-04-03
 keywords: "evaluación modelos multimodales, benchmarks multimodales, OCRBench, MMAU, VQA, MMMU, capacidades IA real, evaluación LLM multimodal, métricas IA generativa"
 tags:
