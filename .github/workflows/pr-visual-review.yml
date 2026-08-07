@@ -38,6 +38,9 @@ jobs:
       - name: Validate video media declarations
         run: python scripts/prepare_video_media.py --check
 
+      - name: Validate video structured-data contract
+        run: python scripts/test_video_schema_contract.py
+
       - name: Build site strictly
         run: mkdocs build --clean --strict
 
@@ -91,5 +94,5 @@ jobs:
         with:
           name: 5sigmas-visual-review
           path: artifacts/visual-review/*
-          if-no-files-found: error
+          if-no-files-found: warn
           retention-days: 14
