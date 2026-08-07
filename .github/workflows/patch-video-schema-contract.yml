@@ -19,6 +19,13 @@ jobs:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install minimal schema-test dependencies
+        run: python -m pip install mkdocs==1.6.1 PyYAML==6.0.3
+
       - name: Remove invalid watch-page embedUrl and verify contract
         shell: bash
         run: |
