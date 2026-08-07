@@ -219,5 +219,7 @@ plugins:
 exclude_docs: |
   drafts/
   drafts/**
+  series/agentes-ia/**
+  snippets/agentes-ia/**
   assets/templates/**
   includes/
