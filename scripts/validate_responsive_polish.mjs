@@ -65,6 +65,9 @@ const validateMaterialDrawer = async (browser) => {
     throw new Error('Custom reader chrome is still rendered above the Material drawer.');
   }
 
+  // Overwrite the older transition-timing capture produced by the navigation
+  // suite so the final QA artifact only contains the stable drawer state.
+  await page.screenshot({ path: `${outputDir}/reader-material-drawer-tablet.png`, fullPage: false });
   await page.screenshot({ path: `${outputDir}/responsive-material-drawer-tablet.png`, fullPage: false });
   await page.close();
 };
@@ -133,12 +136,25 @@ const validateVideoFilters = async (browser) => {
 
   const last = buttons.last();
   await last.click();
-  await page.waitForTimeout(120);
+  await page.waitForTimeout(160);
   const filtersBox = await filters.boundingBox();
   const lastBox = await last.boundingBox();
+  const endState = await filters.evaluate((node) => {
+    const style = getComputedStyle(node);
+    return {
+      atEnd: node.classList.contains('is-at-end'),
+      scrolled: node.classList.contains('is-scrolled'),
+      scrollLeft: node.scrollLeft,
+      maxScroll: Math.max(0, node.scrollWidth - node.clientWidth),
+      maskImage: style.maskImage || style.webkitMaskImage || '',
+    };
+  });
   if (!filtersBox || !lastBox) throw new Error('Unable to measure the selected video filter.');
   if (lastBox.x < filtersBox.x - 2 || lastBox.x + lastBox.width > filtersBox.x + filtersBox.width - 10) {
     throw new Error(`Selected video filter remains clipped after interaction: ${JSON.stringify({ filtersBox, lastBox })}.`);
+  }
+  if (!endState.scrolled || !endState.atEnd || !endState.maskImage || endState.maskImage === 'none') {
+    throw new Error(`Video filter strip did not move its overflow cue to the left edge at the end: ${JSON.stringify(endState)}.`);
   }
 
   await assertNoHorizontalOverflow(page, 'Mobile video filters');
