@@ -183,8 +183,8 @@ const validateInlineVideo = async (browser) => {
     preload: node.preload,
   }));
   const posterState = await poster.evaluate((node) => ({ width: node.naturalWidth, height: node.naturalHeight }));
-  if (before.visibility !== 'hidden' || before.controls || before.preload !== 'none') {
-    throw new Error(`Inline video exposes native chrome before interaction: ${JSON.stringify(before)}.`);
+  if (before.visibility !== 'hidden' || !before.controls || before.preload !== 'none') {
+    throw new Error(`Inline video lost its hidden native-controls fallback: ${JSON.stringify(before)}.`);
   }
   if (posterState.width <= 0 || posterState.height <= 0) {
     throw new Error(`Inline poster did not decode: ${JSON.stringify(posterState)}.`);
