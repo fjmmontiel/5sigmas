@@ -48,8 +48,23 @@
     const syncFilterStrip = () => {
       if (!filterStrip) return;
       const maxScroll = Math.max(0, filterStrip.scrollWidth - filterStrip.clientWidth);
-      filterStrip.classList.toggle('is-scrolled', filterStrip.scrollLeft > 2);
-      filterStrip.classList.toggle('is-at-end', maxScroll > 2 && filterStrip.scrollLeft >= maxScroll - 2);
+      const scrolled = filterStrip.scrollLeft > 2;
+      const atEnd = maxScroll > 2 && filterStrip.scrollLeft >= maxScroll - 2;
+      filterStrip.classList.toggle('is-scrolled', scrolled);
+      filterStrip.classList.toggle('is-at-end', atEnd);
+
+      if (!window.matchMedia('(max-width: 800px)').matches || maxScroll <= 2) {
+        filterStrip.style.maskImage = '';
+        filterStrip.style.webkitMaskImage = '';
+        return;
+      }
+
+      const right = 'linear-gradient(to right, #000 0, #000 calc(100% - 24px), transparent 100%)';
+      const both = 'linear-gradient(to right, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%)';
+      const left = 'linear-gradient(to right, transparent 0, #000 24px, #000 100%)';
+      const mask = atEnd ? left : (scrolled ? both : right);
+      filterStrip.style.maskImage = mask;
+      filterStrip.style.webkitMaskImage = mask;
     };
 
     const apply = () => {
