@@ -35,6 +35,7 @@
 
     const search = root.querySelector('[data-s5-video-search]');
     const filters = [...root.querySelectorAll('[data-s5-video-filter]')];
+    const filterStrip = root.querySelector('.s5-video-library__filters');
     const cards = [...root.querySelectorAll('[data-s5-video-card]')];
     const grid = root.querySelector('[data-s5-video-grid]');
     const status = root.querySelector('[data-s5-video-status]');
@@ -43,6 +44,13 @@
 
     const originalOrder = new Map(cards.map((card, index) => [card, index]));
     let activeTopic = 'all';
+
+    const syncFilterStrip = () => {
+      if (!filterStrip) return;
+      const maxScroll = Math.max(0, filterStrip.scrollWidth - filterStrip.clientWidth);
+      filterStrip.classList.toggle('is-scrolled', filterStrip.scrollLeft > 2);
+      filterStrip.classList.toggle('is-at-end', maxScroll > 2 && filterStrip.scrollLeft >= maxScroll - 2);
+    };
 
     const apply = () => {
       const query = normalize(search.value);
@@ -77,6 +85,8 @@
       if (empty) empty.hidden = visible !== 0;
     };
 
+    filterStrip?.addEventListener('scroll', syncFilterStrip, { passive: true });
+
     for (const filter of filters) {
       filter.addEventListener('click', () => {
         activeTopic = filter.dataset.s5VideoFilter || 'all';
@@ -84,12 +94,16 @@
           candidate.setAttribute('aria-pressed', String(candidate === filter));
         }
         apply();
-        requestAnimationFrame(() => filter.scrollIntoView({ block: 'nearest', inline: 'nearest' }));
+        requestAnimationFrame(() => {
+          filter.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+          requestAnimationFrame(syncFilterStrip);
+        });
       });
     }
 
     search.addEventListener('input', apply);
     apply();
+    requestAnimationFrame(syncFilterStrip);
   };
 
   const initializeWatchPage = (root) => {
