@@ -84,6 +84,7 @@
           candidate.setAttribute('aria-pressed', String(candidate === filter));
         }
         apply();
+        requestAnimationFrame(() => filter.scrollIntoView({ block: 'nearest', inline: 'nearest' }));
       });
     }
 
@@ -129,12 +130,37 @@
     }
   };
 
+  const initializeInlineVideo = (root) => {
+    if (root.dataset.s5InlineVideoReady === 'true') return;
+    root.dataset.s5InlineVideoReady = 'true';
+
+    const player = root.querySelector('[data-s5-inline-video-player]');
+    const start = root.querySelector('[data-s5-inline-video-start]');
+    if (!player || !start) return;
+
+    start.addEventListener('click', () => {
+      root.classList.add('is-playing');
+      player.controls = true;
+      player.load();
+      const promise = player.play();
+      if (promise && typeof promise.catch === 'function') promise.catch(() => {});
+    });
+
+    player.addEventListener('ended', () => {
+      root.classList.remove('is-playing');
+      player.currentTime = 0;
+    });
+  };
+
   const initialize = () => {
     for (const root of document.querySelectorAll('[data-s5-video-library]')) {
       initializeLibrary(root);
     }
     for (const root of document.querySelectorAll('[data-s5-video-watch]')) {
       initializeWatchPage(root);
+    }
+    for (const root of document.querySelectorAll('[data-s5-inline-video]')) {
+      initializeInlineVideo(root);
     }
   };
 
