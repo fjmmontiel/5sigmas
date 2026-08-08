@@ -35,6 +35,7 @@
 
     const search = root.querySelector('[data-s5-video-search]');
     const filters = [...root.querySelectorAll('[data-s5-video-filter]')];
+    const filterStrip = root.querySelector('.s5-video-library__filters');
     const cards = [...root.querySelectorAll('[data-s5-video-card]')];
     const grid = root.querySelector('[data-s5-video-grid]');
     const status = root.querySelector('[data-s5-video-status]');
@@ -43,6 +44,28 @@
 
     const originalOrder = new Map(cards.map((card, index) => [card, index]));
     let activeTopic = 'all';
+
+    const syncFilterStrip = () => {
+      if (!filterStrip) return;
+      const maxScroll = Math.max(0, filterStrip.scrollWidth - filterStrip.clientWidth);
+      const scrolled = filterStrip.scrollLeft > 2;
+      const atEnd = maxScroll > 2 && filterStrip.scrollLeft >= maxScroll - 2;
+      filterStrip.classList.toggle('is-scrolled', scrolled);
+      filterStrip.classList.toggle('is-at-end', atEnd);
+
+      if (!window.matchMedia('(max-width: 800px)').matches || maxScroll <= 2) {
+        filterStrip.style.maskImage = '';
+        filterStrip.style.webkitMaskImage = '';
+        return;
+      }
+
+      const right = 'linear-gradient(to right, #000 0, #000 calc(100% - 24px), transparent 100%)';
+      const both = 'linear-gradient(to right, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%)';
+      const left = 'linear-gradient(to right, transparent 0, #000 24px, #000 100%)';
+      const mask = atEnd ? left : (scrolled ? both : right);
+      filterStrip.style.maskImage = mask;
+      filterStrip.style.webkitMaskImage = mask;
+    };
 
     const apply = () => {
       const query = normalize(search.value);
@@ -77,6 +100,8 @@
       if (empty) empty.hidden = visible !== 0;
     };
 
+    filterStrip?.addEventListener('scroll', syncFilterStrip, { passive: true });
+
     for (const filter of filters) {
       filter.addEventListener('click', () => {
         activeTopic = filter.dataset.s5VideoFilter || 'all';
@@ -84,11 +109,16 @@
           candidate.setAttribute('aria-pressed', String(candidate === filter));
         }
         apply();
+        requestAnimationFrame(() => {
+          filter.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+          requestAnimationFrame(syncFilterStrip);
+        });
       });
     }
 
     search.addEventListener('input', apply);
     apply();
+    requestAnimationFrame(syncFilterStrip);
   };
 
   const initializeWatchPage = (root) => {
@@ -129,12 +159,37 @@
     }
   };
 
+  const initializeInlineVideo = (root) => {
+    if (root.dataset.s5InlineVideoReady === 'true') return;
+    root.dataset.s5InlineVideoReady = 'true';
+
+    const player = root.querySelector('[data-s5-inline-video-player]');
+    const start = root.querySelector('[data-s5-inline-video-start]');
+    if (!player || !start) return;
+
+    start.addEventListener('click', () => {
+      root.classList.add('is-playing');
+      player.controls = true;
+      player.load();
+      const promise = player.play();
+      if (promise && typeof promise.catch === 'function') promise.catch(() => {});
+    });
+
+    player.addEventListener('ended', () => {
+      root.classList.remove('is-playing');
+      player.currentTime = 0;
+    });
+  };
+
   const initialize = () => {
     for (const root of document.querySelectorAll('[data-s5-video-library]')) {
       initializeLibrary(root);
     }
     for (const root of document.querySelectorAll('[data-s5-video-watch]')) {
       initializeWatchPage(root);
+    }
+    for (const root of document.querySelectorAll('[data-s5-inline-video]')) {
+      initializeInlineVideo(root);
     }
   };
 

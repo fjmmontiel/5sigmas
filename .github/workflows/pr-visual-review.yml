@@ -91,6 +91,9 @@ jobs:
       - name: Validate desktop reader header isolation
         run: node scripts/validate_reader_header_overlap.mjs
 
+      - name: Validate responsive interaction polish
+        run: node scripts/validate_responsive_polish.mjs
+
       - name: Upload visual review
         if: always()
         uses: actions/upload-artifact@v4

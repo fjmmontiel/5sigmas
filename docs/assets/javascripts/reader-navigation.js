@@ -101,7 +101,7 @@
           tab.setAttribute('aria-selected', String(selected));
           tab.tabIndex = selected ? 0 : -1;
           if (selected && focus) tab.focus();
-          if (selected && scroll) tab.scrollIntoView({ block: 'nearest', inline: 'center' });
+          if (selected && scroll) tab.scrollIntoView({ block: 'nearest', inline: 'start' });
         }
         for (const panel of panels) {
           panel.hidden = panel.dataset.s5SeriesPanel !== id;
@@ -154,7 +154,7 @@
         restore();
         if (typeof dialog.showModal === 'function') dialog.showModal();
         else dialog.setAttribute('open', '');
-        requestAnimationFrame(() => currentTab.scrollIntoView({ block: 'nearest', inline: 'center' }));
+        requestAnimationFrame(() => currentTab.scrollIntoView({ block: 'nearest', inline: 'start' }));
       };
 
       const close = () => {
