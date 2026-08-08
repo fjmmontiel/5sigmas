@@ -118,27 +118,35 @@ def on_post_page(output: str, page, config, **kwargs) -> str:
     track = ""
     if captions_url:
         track = (
-            f'    <track kind="captions" src="{_esc(captions_url)}" '
+            f'      <track kind="captions" src="{_esc(captions_url)}" '
             'srclang="es" label="Español" default>\n'
         )
 
     video_html = (
-        '<div class="s5-video-embed">\n'
-        "  <video\n"
-        f'    id="{video_dom_id}"\n'
-        "    controls\n"
-        '    crossorigin="anonymous"\n'
-        '    controlsList="nodownload"\n'
-        '    oncontextmenu="return false"\n'
-        '    preload="none"\n'
-        f'    poster="{_esc(poster_url)}"\n'
-        "    playsinline\n"
-        f'    aria-label="{title}"\n'
-        "  >\n"
-        f'    <source src="{_esc(video_url)}" type="video/mp4">\n'
+        '<div class="s5-video-embed" data-s5-inline-video>\n'
+        '  <div class="s5-video-embed__frame">\n'
+        "    <video\n"
+        f'      id="{video_dom_id}"\n'
+        '      data-s5-inline-video-player\n'
+        '      crossorigin="anonymous"\n'
+        '      controlsList="nodownload"\n'
+        '      oncontextmenu="return false"\n'
+        '      preload="none"\n'
+        f'      poster="{_esc(poster_url)}"\n'
+        "      playsinline\n"
+        f'      aria-label="{title}"\n'
+        "    >\n"
+        f'      <source src="{_esc(video_url)}" type="video/mp4">\n'
         f"{track}"
-        "    Tu navegador no soporta el elemento de vídeo.\n"
-        "  </video>\n"
+        "      Tu navegador no soporta el elemento de vídeo.\n"
+        "    </video>\n"
+        '    <button class="s5-video-embed__poster" type="button" data-s5-inline-video-start '
+        f'aria-label="Reproducir vídeo: {title}">\n'
+        f'      <img src="{_esc(poster_url)}" alt="" decoding="async" aria-hidden="true">\n'
+        '      <span class="s5-video-embed__play" aria-hidden="true"></span>\n'
+        "    </button>\n"
+        "    <noscript><style>.s5-video-embed__frame>video{visibility:visible!important}.s5-video-embed__poster{display:none!important}</style></noscript>\n"
+        "  </div>\n"
         f'  <p class="s5-video-embed__watch"><a href="{_esc(watch_url)}">Ver vídeo, resumen y contenidos relacionados</a></p>\n'
         "</div>"
     )
