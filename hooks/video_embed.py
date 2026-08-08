@@ -128,6 +128,7 @@ def on_post_page(output: str, page, config, **kwargs) -> str:
         "    <video\n"
         f'      id="{video_dom_id}"\n'
         '      data-s5-inline-video-player\n'
+        '      controls\n'
         '      crossorigin="anonymous"\n'
         '      controlsList="nodownload"\n'
         '      oncontextmenu="return false"\n'
