@@ -81,6 +81,15 @@ jobs:
           npm install --no-save playwright@1.55.0
           npx playwright install --with-deps chromium
 
+      - name: Localize canonical video catalogue URLs for preview
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          target = Path("site/videos/catalog.json")
+          text = target.read_text(encoding="utf-8")
+          target.write_text(text.replace("https://5sigmas.com/", "/"), encoding="utf-8")
+          PY
+
       - name: Serve built site
         run: |
           python -m http.server 8000 --directory site > /tmp/5sigmas-preview.log 2>&1 &
