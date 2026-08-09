@@ -60,6 +60,8 @@ OWASP identifica varias superficies específicas de MCP: **tool poisoning**, *ru
 
 El caso de *tool poisoning* es especialmente importante porque reproduce la misma propiedad que vimos con RAG. Una descripción de herramienta o una respuesta del servidor termina dentro del contexto del modelo. Si contiene instrucciones hostiles y el cliente la trata como contenido confiable, el canal de herramientas se convierte en otra vía de prompt injection ([OWASP MCP Tool Poisoning](https://owasp.org/www-community/attacks/MCP_Tool_Poisoning)).
 
+{{ include_html("snippets/seguridad-ia/05-mcp-boundary.html") }}
+
 Por eso un cliente MCP de producción debería aplicar, como mínimo:
 
 1. **Allowlist de servidores y tools**: no descubrimiento dinámico sin aprobación.
@@ -106,6 +108,8 @@ Ese *kill path* puede incluir:
 
 La propiedad importante es que el control viva fuera del canal natural-language que podría estar comprometido.
 
+{{ include_html("snippets/seguridad-ia/05-kill-path.html") }}
+
 ## Registrar lo que ocurre para poder detenerlo
 
 La telemetría de seguridad debe seguir la ruta de decisión. Conviene conservar identidad de la petición, fuente recuperada, memoria utilizada, decisión de política, herramienta propuesta, autorización, resultado y motivo de aborto sin registrar secretos o contenido personal innecesario.
@@ -129,6 +133,8 @@ Un gate de seguridad para un agente puede ser pequeño y específico:
 - escenarios de prompt injection indirecta ejecutados end-to-end;
 - kill switch y rollback verificados;
 - logs suficientes para reconstruir cada acción privilegiada.
+
+{{ include_html("snippets/seguridad-ia/05-release-gate.html") }}
 
 OWASP incorpora explícitamente adversarial validation, CI/CD y release gates dentro de sus recomendaciones para seguridad de agentes. La idea importante no es adoptar una cifra universal, sino hacer que el criterio de aceptación sea reproducible y esté conectado con el threat model del producto ([OWASP AI Agent Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html)).
 
