@@ -2,7 +2,7 @@
 
 > Inteligencia artificial explicada en español con criterio técnico, visuales, fuentes primarias y notas de ingeniería.
 
-5sigmas es una publicación de Francisco Maldonado sobre fundamentos de IA, modelos de lenguaje, razonamiento, multimodalidad, seguridad, infraestructura y sistemas de IA en producción. El contenido distingue hechos, evidencia, supuestos y límites. Las páginas enlazadas debajo disponen de una versión Markdown limpia en la URL indicada.
+5sigmas es una publicación de Francisco Maldonado sobre fundamentos de IA, modelos de lenguaje, razonamiento, multimodalidad, agentes, seguridad, infraestructura y sistemas de IA en producción. El contenido distingue hechos, evidencia, supuestos y límites. Las páginas enlazadas debajo disponen de una versión Markdown limpia en la URL indicada.
 
 ## Conceptos fundamentales
 
@@ -10,6 +10,8 @@
 - [Cómo funciona el Transformer](https://5sigmas.com/temas/transformer/index.html.md): atención, encoder, decoder, coste y alternativas.
 - [Razonamiento en LLMs](https://5sigmas.com/temas/razonamiento/index.html.md): chain of thought, búsqueda, verificadores y test-time compute.
 - [Evaluación de modelos de IA](https://5sigmas.com/temas/evaluacion-modelos/index.html.md): benchmarks, conjuntos propios, jueces y métricas de producción.
+- [Qué es un agente de IA](https://5sigmas.com/temas/agentes-ia/index.html.md): diferencia entre chatbot, workflow y agente, tools, memoria, estado, evaluación y seguridad.
+- [Qué es prompt injection](https://5sigmas.com/temas/prompt-injection/index.html.md): por qué contenido externo puede influir en un LLM y qué arquitectura mantiene la autorización fuera del prompt.
 
 ## Vídeos
 
@@ -17,6 +19,7 @@
 - [Test-time compute en vídeo](https://5sigmas.com/videos/series/modelos-razonadores/03-test-time-compute/index.html.md): calidad, coste y latencia cuando el modelo dedica más cómputo a una respuesta.
 - [Arquitecturas multimodales en vídeo](https://5sigmas.com/videos/series/multimodalidad-iag/03-arquitecturas/index.html.md): familias para combinar texto, imagen, audio y vídeo.
 - [Prompt injection en vídeo](https://5sigmas.com/videos/series/seguridad-ia/01-prompt-injection/index.html.md): cómo contenido externo puede influir en un sistema que lee y actúa.
+- [Qué es un agente de IA en vídeo](https://5sigmas.com/videos/series/agentes-ia/01-que-es-un-agente/index.html.md): diferencia entre chatbot, workflow, copiloto y agente acotado.
 - [Energía, calor y conectividad orbital en vídeo](https://5sigmas.com/videos/series/datacenters-espacio/02-energia-calor-conectividad/index.html.md): límites físicos de la infraestructura espacial.
 
 ## Series publicadas
@@ -28,6 +31,7 @@
 - [IA, PIB, bienestar y energía](https://5sigmas.com/series/ia-pib-bienestar-energia/00_presentacion_serie/index.html.md): infraestructura, productividad, energía y bienestar.
 - [Datacenters en el espacio](https://5sigmas.com/series/datacenters-espacio/00_presentacion_serie/index.html.md): viabilidad física y huella material del cómputo orbital.
 - [Seguridad en IA](https://5sigmas.com/series/seguridad-ia/00_presentacion_serie/index.html.md): prompt injection, jailbreaks, envenenamiento, red-teaming y controles de producción.
+- [Agentes de IA](https://5sigmas.com/series/agentes-ia/00_presentacion_serie/index.html.md): autonomía acotada, tools, memoria, estado, evaluación, seguridad y operación en producción.
 
 ## Ingeniería de sistemas de IA
 

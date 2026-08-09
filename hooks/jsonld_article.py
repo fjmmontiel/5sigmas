@@ -14,6 +14,8 @@ SERIES_NAMES = {
     "modelos-razonadores": "Modelos razonadores",
     "ia-pib-bienestar-energia": "IA, PIB, bienestar y energía",
     "datacenters-espacio": "Datacenters en el espacio",
+    "seguridad-ia": "Seguridad en IA",
+    "agentes-ia": "Agentes de IA",
 }
 
 

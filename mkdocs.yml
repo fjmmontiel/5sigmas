@@ -55,6 +55,8 @@ nav:
           - Cómo funciona el Transformer: temas/transformer.md
           - Razonamiento en LLMs: temas/razonamiento.md
           - Evaluación de modelos de IA: temas/evaluacion-modelos.md
+          - Qué es un agente de IA: temas/agentes-ia.md
+          - Qué es prompt injection: temas/prompt-injection.md
       - series/index.md
       - Fundamentos de IA e IA generativa:
           - Presentación: series/fundamentos-ia-iag/00_presentacion_serie.md
@@ -102,6 +104,13 @@ nav:
           - Envenenamiento: series/seguridad-ia/03-envenenamiento.md
           - Red-teaming: series/seguridad-ia/04-red-teaming.md
           - Controles de producción: series/seguridad-ia/05-controles-produccion.md
+      - Agentes de IA:
+          - Presentación: series/agentes-ia/00_presentacion_serie.md
+          - Qué es un agente: series/agentes-ia/01-que-es-un-agente.md
+          - Anatomía de un agente: series/agentes-ia/02-anatomia-de-un-agente.md
+          - Cómo evaluar un agente: series/agentes-ia/03-como-evaluar-un-agente.md
+          - Seguridad de agentes: series/agentes-ia/04-seguridad-agentes.md
+          - De la demo a producción: series/agentes-ia/05-de-la-demo-a-produccion.md
   - Construir:
       - articulos-tecnicos/index.md
       - Agente Reactivo, Proactivo y Tool calls: articulos-tecnicos/proactive-reactive-agent-and-tool-calls.md
@@ -210,6 +219,8 @@ plugins:
         'series/modelos-razonadores/index.md': 'series/modelos-razonadores/00_presentacion_serie.md'
         'series/ia-pib-bienestar-energia/index.md': 'series/ia-pib-bienestar-energia/00_presentacion_serie.md'
         'series/datacenters-espacio/index.md': 'series/datacenters-espacio/00_presentacion_serie.md'
+        'series/seguridad-ia/index.md': 'series/seguridad-ia/00_presentacion_serie.md'
+        'series/agentes-ia/index.md': 'series/agentes-ia/00_presentacion_serie.md'
   - social:
       cards_layout: clean
       cards_layout_options:
@@ -220,7 +231,5 @@ plugins:
 exclude_docs: |
   drafts/
   drafts/**
-  series/agentes-ia/**
-  snippets/agentes-ia/**
   assets/templates/**
   includes/
