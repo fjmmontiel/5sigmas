@@ -10,7 +10,7 @@ const browser = await chromium.launch({ headless: true });
 const desktop = { width: 1440, height: 1100 };
 const mobile = { width: 390, height: 844 };
 const articlePath = '/series/modelos-razonadores/03-test-time-compute/';
-const expectedCollections = 9;
+const minimumCollections = 10;
 
 const captures = [
   { name: 'homepage-desktop', path: '/', viewport: desktop },
@@ -185,14 +185,14 @@ const validateReader = async (page, viewport) => {
   if (reader.arrows !== 2) {
     throw new Error(`expected usable previous and next actions, found ${reader.arrows}`);
   }
-  if (reader.seriesTabs !== expectedCollections || reader.panels !== expectedCollections) {
-    throw new Error(`expected ${expectedCollections} collections in the searchable library, found ${reader.seriesTabs}/${reader.panels}`);
+  if (reader.seriesTabs < minimumCollections || reader.seriesTabs !== reader.panels) {
+    throw new Error(`reader collection library is incomplete or inconsistent: ${reader.seriesTabs} tabs / ${reader.panels} panels`);
   }
   if (reader.entries < 30 || reader.currentEntries !== 1) {
     throw new Error(`searchable library entries are incomplete: ${reader.entries}/${reader.currentEntries}`);
   }
-  if (reader.directCollections !== expectedCollections || reader.directEntries < 30 || reader.currentDirectEntries !== 1) {
-    throw new Error(`contextual library DOM is incomplete: ${reader.directCollections}/${reader.directEntries}/${reader.currentDirectEntries}`);
+  if (reader.directCollections !== reader.seriesTabs || reader.directEntries < 30 || reader.currentDirectEntries !== 1) {
+    throw new Error(`contextual library DOM is incomplete: ${reader.directCollections} collections vs ${reader.seriesTabs} tabs; ${reader.directEntries}/${reader.currentDirectEntries} entries`);
   }
   if (reader.breadcrumbsVisible || reader.tagsVisible || reader.directToggleVisible) {
     throw new Error('reader exposes duplicated breadcrumbs, tags or the legacy Biblioteca tab');
@@ -309,12 +309,8 @@ try {
 
     await page.evaluate(() => document.fonts.ready);
 
-    if (capture.path === '/visuales/') {
-      await validateVisualHub(page, capture.viewport);
-    }
-    if (capture.path === articlePath) {
-      await validateReader(page, capture.viewport);
-    }
+    if (capture.path === articlePath) await validateReader(page, capture.viewport);
+    if (capture.path === '/visuales/') await validateVisualHub(page, capture.viewport);
 
     if (capture.filterTopic) {
       await page.locator(`[data-s5-topic="${capture.filterTopic}"]`).click();
