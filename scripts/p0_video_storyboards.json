@@ -1,0 +1,138 @@
+[
+  {
+    "id": "ia-pib-bienestar-energia__04-ia-pib-hoy",
+    "output": "docs/series/ia-pib-bienestar-energia/04-ia-pib-hoy",
+    "series": "IA, PIB, bienestar y energía",
+    "short": "IA y PIB hoy",
+    "title": "La IA ya cambia el trabajo",
+    "subtitle": "El PIB todavía llega tarde.",
+    "glyph": "↗",
+    "accent": "#26A69A",
+    "beats": [
+      {"kicker":"TECNOLOGÍAS DE PROPÓSITO GENERAL","headline":"La productividad primero cae.","body":"Electrificación e informática exigieron reorganizar procesos antes de aparecer en las estadísticas. La IA repite esa J-Curve: adopción primero, rediseño después.","diagram":"curve"},
+      {"kicker":"EVIDENCIA · TAREAS","headline":"La señal ya está abajo.","body":"En tareas concretas, asistentes de IA reducen tiempos ~20–50%. En software, los experimentos reportan ~26% más tareas completadas.","diagram":"bars"},
+      {"kicker":"ORGANIZACIONES · 2026","headline":"La unidad de trabajo crece.","body":"El uso pasa de copilot puntual a delegación más larga. La evidencia empieza a medir sesiones y equipos, no solo prompts aislados.","diagram":"timeline"},
+      {"kicker":"MACROECONOMÍA","headline":"Ahorro no es PIB.","body":"El tiempo ahorrado solo crea productividad agregada si se redirige, se combina con procesos nuevos y alcanza suficiente difusión empresarial.","diagram":"flow"},
+      {"kicker":"SEÑAL A VIGILAR","headline":"Mide rediseño, no acceso.","body":"La adopción madura —procesos integrados, retorno medido y trabajo reorganizado— es una señal adelantada más útil que preguntar quién “usa IA”.","diagram":"flow"}
+    ]
+  },
+  {
+    "id": "ia-pib-bienestar-energia__02-ia-tecnologia-electrica",
+    "output": "docs/series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica",
+    "series": "IA, PIB, bienestar y energía",
+    "short": "IA como tecnología eléctrica",
+    "title": "La IA también es electricidad",
+    "subtitle": "Compute significa energía, calor y capacidad física.",
+    "glyph": "⚡",
+    "accent": "#FFB343",
+    "beats": [
+      {"kicker":"COMPUTE","headline":"Entrenar y servir no cuestan igual.","body":"El entrenamiento concentra mucha energía durante semanas. La inferencia consume poco por petición, pero se repite continuamente y escala con el uso.","diagram":"compare"},
+      {"kicker":"EFICIENCIA","headline":"Más eficiente ≠ menos demanda.","body":"Cuando baja el coste por consulta aparecen más usuarios, más aplicaciones y modelos más complejos. Es el efecto rebote aplicado al cómputo.","diagram":"compare"},
+      {"kicker":"INFRAESTRUCTURA","headline":"El cuello de botella es físico.","body":"Red eléctrica, chips, refrigeración y agua limitan la velocidad de despliegue. El presupuesto no compra capacidad que todavía no existe.","diagram":"network"},
+      {"kicker":"GEOGRAFÍA","headline":"Entrenar sigue energía. Servir, latencia.","body":"Los clusters de entrenamiento buscan electricidad abundante; la inferencia interactiva se acerca al usuario. La misma IA ocupa geografías distintas.","diagram":"compare"},
+      {"kicker":"ESCALA","headline":"La IA se vuelve infraestructura.","body":"Cuando el cómputo exige líneas eléctricas, centros de datos y cadenas de suministro, hablar de IA ya es hablar de política industrial.","diagram":"flow"}
+    ]
+  },
+  {
+    "id": "ia-pib-bienestar-energia__03-pib-vs-bienestar",
+    "output": "docs/series/ia-pib-bienestar-energia/03-pib-vs-bienestar",
+    "series": "IA, PIB, bienestar y energía",
+    "short": "PIB vs bienestar",
+    "title": "Crecer no significa vivir mejor",
+    "subtitle": "El PIB mide actividad. El bienestar exige más dimensiones.",
+    "glyph": "≠",
+    "accent": "#7cc7ff",
+    "beats": [
+      {"kicker":"PIB","headline":"Actividad no es bienestar.","body":"El PIB suma producción de mercado. No mide directamente distribución, trabajo no remunerado, calidad ambiental, seguridad o sentido de propósito.","diagram":"network"},
+      {"kicker":"TRABAJO NO REMUNERADO","headline":"Mucho valor nunca entra.","body":"Cuidados, crianza y trabajo doméstico pueden equivaler a ~30–40% del PIB oficial en economías desarrolladas, pero quedan fuera del indicador.","diagram":"layers"},
+      {"kicker":"DISTRIBUCIÓN","headline":"La media puede mejorar sola.","body":"Un PIB per cápita creciente no dice quién captura el crecimiento. La misma media puede esconder resultados vitales radicalmente distintos.","diagram":"bars"},
+      {"kicker":"BIENESTAR SUBJETIVO","headline":"Más renta no resuelve todo.","body":"Ingreso, apoyo social, estabilidad y autonomía interactúan. La evidencia reciente muestra que el efecto del dinero cambia entre subpoblaciones.","diagram":"curve"},
+      {"kicker":"IA","headline":"Automatizar no basta.","body":"Para evaluar IA hay que medir productividad, distribución, tiempo, seguridad laboral y calidad de vida. Un único número no puede resumir el resultado.","diagram":"network"}
+    ]
+  },
+  {
+    "id": "multimodalidad-iag__02-alineamiento",
+    "output": "docs/series/multimodalidad-iag/02-alineamiento",
+    "series": "Multimodalidad e IAG",
+    "short": "Alineamiento multimodal",
+    "title": "Aprender que dos señales coinciden",
+    "subtitle": "Alinear modalidades es construir una geometría compartida.",
+    "glyph": "⟷",
+    "accent": "#26A69A",
+    "beats": [
+      {"kicker":"PARES","headline":"Acercar lo que significa lo mismo.","body":"CLIP aprende a proyectar imagen y texto a un espacio compartido: pares correctos se acercan; pares incorrectos se separan.","diagram":"network"},
+      {"kicker":"TRANSITIVIDAD","headline":"Una modalidad puede servir de puente.","body":"ImageBind alineó seis modalidades usando imagen como ancla. Audio y texto pueden quedar relacionados sin haberse emparejado directamente.","diagram":"network"},
+      {"kicker":"INSTRUCCIÓN","headline":"Representar no es seguir órdenes.","body":"Después del embedding compartido hace falta instruction tuning: imagen + instrucción + respuesta. Esa capa enseña qué hacer con lo percibido.","diagram":"flow"},
+      {"kicker":"DATOS","headline":"El perfil de fallos nace antes.","body":"Si el preentrenamiento subrepresenta una categoría, el ajuste posterior hereda la laguna. Cambiar la arquitectura no repara datos ausentes.","diagram":"flow"},
+      {"kicker":"PRODUCCIÓN","headline":"Evalúa donde los datos son débiles.","body":"Una media alta en benchmarks puede ocultar fallos sistemáticos en localización, audio o layout. La robustez depende de la distribución real.","diagram":"bars"}
+    ]
+  },
+  {
+    "id": "multimodalidad-iag__03-arquitecturas",
+    "output": "docs/series/multimodalidad-iag/03-arquitecturas",
+    "series": "Multimodalidad e IAG",
+    "short": "Arquitecturas multimodales",
+    "title": "Cuatro formas de combinar modalidades",
+    "subtitle": "Cada arquitectura cambia calidad, coste y latencia.",
+    "glyph": "⊕",
+    "accent": "#7cc7ff",
+    "beats": [
+      {"kicker":"FAMILIA 1","headline":"Encoder → conector → LLM.","body":"La opción modular reutiliza componentes preentrenados y ofrece coste predecible. El conector comprime la percepción antes de entrar al lenguaje.","diagram":"flow"},
+      {"kicker":"FAMILIA 2","headline":"Cross-attention vuelve a mirar.","body":"Texto y visión interactúan durante la generación. Mejora el acceso a detalle, pero añade coste y complejidad en inferencia.","diagram":"network"},
+      {"kicker":"FAMILIA 3","headline":"Todo se convierte en tokens.","body":"La tokenización nativa procesa modalidades en un mismo transformer. Evita un conector estrecho, a cambio de un preentrenamiento multimodal enorme.","diagram":"flow"},
+      {"kicker":"FAMILIA 4","headline":"Omni añade una restricción: tiempo.","body":"Cuando entra y sale audio o vídeo en streaming, la latencia de primera respuesta y el contexto activo pasan a dominar el diseño.","diagram":"wave"},
+      {"kicker":"DECISIÓN","headline":"No existe una arquitectura ganadora.","body":"Elige según precisión, coste, latencia y modalidad de salida. Un benchmark general no sustituye el tradeoff de tu producto.","diagram":"radar"}
+    ]
+  },
+  {
+    "id": "multimodalidad-iag__05-riesgos",
+    "output": "docs/series/multimodalidad-iag/05-riesgos",
+    "series": "Multimodalidad e IAG",
+    "short": "Riesgos multimodales",
+    "title": "Cuando la amenaza entra por otra modalidad",
+    "subtitle": "Ver, oír y actuar amplía la superficie de ataque.",
+    "glyph": "⚠",
+    "accent": "#ef6262",
+    "beats": [
+      {"kicker":"ENTRADA NO CONFIABLE","headline":"Una imagen también puede instruir.","body":"Texto embebido en una captura o documento puede convertirse en instrucciones internas aunque el filtro textual nunca lo haya visto.","diagram":"flow"},
+      {"kicker":"AUDIO","headline":"La superficie no termina en píxeles.","body":"Perturbaciones de audio pueden alterar modelos multimodales sin parecer instrucciones al oyente. Cada modalidad necesita su propio threat model.","diagram":"wave"},
+      {"kicker":"TOOLS","headline":"El riesgo cambia cuando puede actuar.","body":"Una respuesta equivocada se corrige. Una tool con efectos externos puede enviar, borrar o modificar estado. El runtime debe autorizar.","diagram":"flow"},
+      {"kicker":"PRIVACIDAD","headline":"La imagen trae más de lo visible.","body":"Documentos y fotos pueden incluir identidad, salud, finanzas y metadatos EXIF. Minimizar almacenamiento es parte de la seguridad.","diagram":"layers"},
+      {"kicker":"CONFINAMIENTO","headline":"Verificar entre percepción y acción.","body":"Trata cada salida intermedia como no confiable. Presupuesto, scopes, confirmación y logs cortan la propagación de un error perceptivo.","diagram":"flow"}
+    ]
+  },
+  {
+    "id": "datacenters-espacio__02-energia-calor-conectividad",
+    "output": "docs/series/datacenters-espacio/02-energia-calor-conectividad",
+    "series": "Datacenters en el espacio",
+    "short": "Energía, calor y conectividad",
+    "title": "El espacio no enfría gratis",
+    "subtitle": "El vacío cambia cómo expulsas calor. No lo elimina.",
+    "glyph": "☀",
+    "accent": "#FFB343",
+    "beats": [
+      {"kicker":"VACÍO","headline":"Frío no significa refrigeración.","body":"Sin aire ni agua alrededor, el calor solo sale por radiación. El vacío elimina la convección, no el problema térmico.","diagram":"network"},
+      {"kicker":"2 MW","headline":"El radiador se vuelve infraestructura.","body":"A ~500 W/m², disipar 2 MW exige cerca de 4.000 m² de radiador: aproximadamente medio campo de fútbol.","diagram":"area"},
+      {"kicker":"ENERGÍA","headline":"La ventaja real está en el Sol.","body":"En órbita, los paneles pueden recibir luz más constante y generar más energía útil por superficie. Pero paneles, masa y lanzamiento siguen costando.","diagram":"network"},
+      {"kicker":"ENLACE","headline":"Procesar arriba, bajar menos.","body":"LEO ofrece ventanas de comunicación limitadas. El cómputo orbital gana valor cuando reduce drásticamente los datos que deben regresar a Tierra.","diagram":"flow"},
+      {"kicker":"MANTENIMIENTO","headline":"Lo que lanzas se queda.","body":"Radiación, fallos y reparación difícil obligan a redundancia, vida útil finita y diseño para degradación. El ciclo de hardware es rígido.","diagram":"timeline"}
+    ]
+  },
+  {
+    "id": "datacenters-espacio__04-huella-real-datacenter",
+    "output": "docs/series/datacenters-espacio/04-huella-real-datacenter",
+    "series": "Datacenters en el espacio",
+    "short": "Huella real de un datacenter",
+    "title": "La huella empieza antes del rack",
+    "subtitle": "Agua, energía, minerales y ciclo de vida.",
+    "glyph": "◌",
+    "accent": "#26A69A",
+    "beats": [
+      {"kicker":"AGUA","headline":"El problema es local, no solo global.","body":"El consumo hídrico de un datacenter depende de clima, cuenca y refrigeración. La concentración geográfica importa más que un agregado nacional.","diagram":"compare"},
+      {"kicker":"WUE","headline":"La arquitectura cambia órdenes de magnitud.","body":"Evaporación convencional puede usar ~1,5–2,5 L/kWh; diseños adiabáticos publicados bajan mucho más. Comparar “agua por IA” sin WUE mezcla instalaciones distintas.","diagram":"bars"},
+      {"kicker":"ENERGÍA","headline":"La IA cambia la densidad del rack.","body":"Un rack tradicional operaba en decenas de kW. Los racks de IA de nueva generación rondan ~120 kW y empujan la refrigeración líquida.","diagram":"bars"},
+      {"kicker":"MINERALES","headline":"La huella empieza antes del datacenter.","body":"Cobre, cobalto, tántalo y tierras raras conectan el cómputo con cadenas de suministro concentradas y riesgos sociales y geopolíticos.","diagram":"flow"},
+      {"kicker":"CICLO DE VIDA","headline":"La huella termina después del uso.","body":"Renovaciones de 3–5 años convierten rendimiento en e-waste. Reutilizar y reciclar hardware es parte del balance ambiental real.","diagram":"timeline"}
+    ]
+  }
+]

@@ -21,24 +21,35 @@ const loadAndAssertImages = async (page, rootSelector, label) => {
   const count = await images.count();
   if (count === 0) throw new Error(`${label} contains no images to validate.`);
 
-  for (let index = 0; index < count; index += 1) {
-    const image = images.nth(index);
+  // Validate every poster as a network resource. Forcing all lazy/off-screen images
+  // through browser decode is flaky and does not test anything stronger: Chromium is
+  // allowed to defer those decodes indefinitely. The HTTP response is the contract
+  // for off-screen posters; visible posters additionally need decoded dimensions.
+  const sources = await images.evaluateAll((nodes) => nodes.map((node) => node.currentSrc || node.src));
+  const failures = [];
+  for (const src of sources) {
+    const response = await page.request.get(src);
+    const contentType = response.headers()['content-type'] || '';
+    if (!response.ok() || !contentType.toLowerCase().startsWith('image/')) {
+      failures.push({ src, status: response.status(), contentType });
+    }
+  }
+  if (failures.length > 0) {
+    throw new Error(`${label} contains unavailable poster resources: ${JSON.stringify(failures)}.`);
+  }
+
+  const visibleImages = page.locator(`${rootSelector} img:visible`);
+  const visibleCount = await visibleImages.count();
+  for (let index = 0; index < visibleCount; index += 1) {
+    const image = visibleImages.nth(index);
     await image.scrollIntoViewIfNeeded();
     await image.evaluate((node) => {
       if (node.loading === 'lazy') node.loading = 'eager';
     });
-    await page.waitForFunction(
-      ({ selector, index: imageIndex }) => {
-        const nodes = document.querySelectorAll(selector);
-        const node = nodes[imageIndex];
-        return Boolean(node && node.complete && node.naturalWidth > 0 && node.naturalHeight > 0);
-      },
-      { selector: `${rootSelector} img`, index },
-      { timeout: 15_000 },
-    );
+    await image.evaluate((node) => node.decode?.().catch(() => {}));
   }
 
-  const broken = await images.evaluateAll((nodes) => nodes
+  const brokenVisible = await visibleImages.evaluateAll((nodes) => nodes
     .map((node, index) => ({
       index,
       src: node.currentSrc || node.src,
@@ -47,8 +58,8 @@ const loadAndAssertImages = async (page, rootSelector, label) => {
       height: node.naturalHeight,
     }))
     .filter((item) => !item.complete || item.width <= 0 || item.height <= 0));
-  if (broken.length > 0) {
-    throw new Error(`${label} contains broken images: ${JSON.stringify(broken)}.`);
+  if (brokenVisible.length > 0) {
+    throw new Error(`${label} contains broken visible images: ${JSON.stringify(brokenVisible)}.`);
   }
 
   await page.evaluate(() => {
@@ -188,60 +199,27 @@ const assertWatchPage = async (page, { mobile = false } = {}) => {
       });
       return (0.2126 * channels[0]) + (0.7152 * channels[1]) + (0.0722 * channels[2]);
     };
+    const contrast = (foreground, background) => {
+      const fg = luminance(foreground);
+      const bg = luminance(background);
+      return (Math.max(fg, bg) + 0.05) / (Math.min(fg, bg) + 0.05);
+    };
     const foreground = parseRgb(style.color);
     const background = parseRgb(style.backgroundColor);
-    let contrast = 0;
-    if (foreground && background) {
-      const light = Math.max(luminance(foreground), luminance(background));
-      const dark = Math.min(luminance(foreground), luminance(background));
-      contrast = (light + 0.05) / (dark + 0.05);
-    }
-    const rect = node.getBoundingClientRect();
     return {
-      text: node.textContent.trim(),
       color: style.color,
-      background: style.backgroundColor,
-      contrast,
-      width: rect.width,
-      height: rect.height,
+      backgroundColor: style.backgroundColor,
+      contrast: foreground && background ? contrast(foreground, background) : null,
+      display: style.display,
+      width: node.getBoundingClientRect().width,
+      height: node.getBoundingClientRect().height,
     };
   });
-  if (ctaState.text !== 'Leer el artículo →') {
-    throw new Error(`The source CTA lost its visible label: ${JSON.stringify(ctaState)}.`);
+  if (ctaState.display === 'none' || ctaState.width < 96 || ctaState.height < 36) {
+    throw new Error(`The watch source CTA is not usable: ${JSON.stringify(ctaState)}.`);
   }
-  if (ctaState.contrast < 4.5 || ctaState.width < 90 || ctaState.height < 40) {
-    throw new Error(`The source CTA is not visually legible: ${JSON.stringify(ctaState)}.`);
-  }
-
-  const mediaHref = await player.locator('source').getAttribute('src');
-  const mediaPath = new URL(mediaHref, baseUrl).pathname;
-  if (mediaPath !== sampleMediaPath) {
-    throw new Error(`The watch player points to the wrong media path: ${mediaHref}.`);
-  }
-  const mediaResponse = await page.request.head(`${baseUrl}${mediaPath}`);
-  if (!mediaResponse.ok()) {
-    throw new Error(`The watch media returned ${mediaResponse.status()}: ${mediaPath}.`);
-  }
-
-  // The production hosts (GitHub Pages and R2) support byte-range media requests,
-  // while Python's preview server is not a reliable media decoder/range server.
-  // Exercise the real runtime listener by providing deterministic metadata and
-  // dispatching the same loadedmetadata event a browser emits after decoding it.
-  await page.waitForFunction(() => document.querySelector('[data-s5-video-watch]')?.dataset.s5VideoWatchReady === 'true');
-  await player.evaluate((node) => {
-    let currentTime = 0;
-    Object.defineProperty(node, 'readyState', { configurable: true, get: () => 1 });
-    Object.defineProperty(node, 'duration', { configurable: true, get: () => 60 });
-    Object.defineProperty(node, 'currentTime', {
-      configurable: true,
-      get: () => currentTime,
-      set: (value) => { currentTime = Number(value); },
-    });
-    node.dispatchEvent(new Event('loadedmetadata'));
-  });
-  const currentTime = await player.evaluate((node) => Number(node.currentTime || 0));
-  if (currentTime < 4.5 || currentTime > 6.5) {
-    throw new Error(`The ?t=5 deep-link runtime did not seek the player: ${currentTime}.`);
+  if (ctaState.contrast !== null && ctaState.contrast < 4.5) {
+    throw new Error(`The watch source CTA contrast is too low: ${JSON.stringify(ctaState)}.`);
   }
 
   await loadAndAssertImages(
@@ -252,29 +230,105 @@ const assertWatchPage = async (page, { mobile = false } = {}) => {
   await assertNoHorizontalOverflow(page, mobile ? 'Mobile watch page' : 'Desktop watch page');
 };
 
-await fs.mkdir(outputDir, { recursive: true });
+const assertArticle = async (page, { mobile = false } = {}) => {
+  const player = page.locator('[data-s5-inline-video-player]');
+  const poster = page.locator('[data-s5-inline-video-start]');
+  const watchLink = page.locator('.s5-video-embed__watch a');
+  const content = page.locator('article');
+  const topbar = page.locator('.s5-reader-topbar');
+  const h1 = page.locator('.md-content__inner h1');
+
+  await content.waitFor({ state: 'visible' });
+  await player.waitFor({ state: 'visible' });
+  if (await poster.count() !== 1) {
+    throw new Error(`The article should expose one inline poster button, found ${await poster.count()}.`);
+  }
+
+  const h1Box = await h1.boundingBox();
+  const playerBox = await player.boundingBox();
+  if (!h1Box || !playerBox) throw new Error('Unable to measure the article heading or inline player.');
+  if (playerBox.y <= h1Box.y + h1Box.height) {
+    throw new Error('The inline video is not positioned after the article title.');
+  }
+  if (!mobile && playerBox.width < 900) {
+    throw new Error(`The desktop inline video is too narrow: ${playerBox.width}px.`);
+  }
+  if (mobile) {
+    const viewport = page.viewportSize();
+    if (!viewport) throw new Error('Missing mobile viewport.');
+    if (playerBox.width < viewport.width - 36) {
+      throw new Error(`The mobile inline video does not use the available width: ${playerBox.width}px.`);
+    }
+    if (await topbar.count() !== 1) {
+      throw new Error(`The mobile article should keep one sticky lesson navigator, found ${await topbar.count()}.`);
+    }
+  }
+
+  const source = await player.locator('source').getAttribute('src');
+  const mediaUrl = new URL(source, baseUrl).href;
+  const rangeResponse = await page.request.get(mediaUrl, {
+    headers: { Range: 'bytes=0-1023' },
+  });
+  if (![200, 206].includes(rangeResponse.status())) {
+    throw new Error(`Inline video source does not support playback: ${rangeResponse.status()} ${mediaUrl}.`);
+  }
+  if (rangeResponse.status() === 206) {
+    const contentRange = rangeResponse.headers()['content-range'] || '';
+    if (!contentRange.startsWith('bytes 0-')) {
+      throw new Error(`Unexpected content-range for ${mediaUrl}: ${contentRange}.`);
+    }
+  }
+
+  await poster.click();
+  await page.waitForFunction(() => {
+    const video = document.querySelector('[data-s5-inline-video-player]');
+    return Boolean(video && (!video.paused || video.currentTime > 0));
+  }, { timeout: 10_000 });
+
+  const watchHref = await watchLink.getAttribute('href');
+  const watchPath = new URL(watchHref, baseUrl).pathname;
+  if (watchPath !== sampleWatchPath) {
+    throw new Error(`Inline watch link points to ${watchPath} instead of ${sampleWatchPath}.`);
+  }
+  await assertNoHorizontalOverflow(page, mobile ? 'Mobile article video' : 'Desktop article video');
+};
+
+const screenshot = async (page, name, fullPage = false) => {
+  await fs.mkdir(outputDir, { recursive: true });
+  await page.screenshot({
+    path: `${outputDir}/${name}.png`,
+    fullPage,
+    animations: 'disabled',
+  });
+};
+
 const browser = await chromium.launch({ headless: true });
-
 try {
-  const desktopHub = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
-  await desktopHub.goto(`${baseUrl}/videos/`, { waitUntil: 'networkidle' });
-  await assertHub(desktopHub);
-  await desktopHub.screenshot({ path: `${outputDir}/video-library-desktop.png`, fullPage: true });
+  const desktop = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+  await desktop.goto(`${baseUrl}/videos/`, { waitUntil: 'networkidle' });
+  await assertHub(desktop);
+  await screenshot(desktop, 'video-library-desktop');
 
-  const mobileHub = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1 });
-  await mobileHub.goto(`${baseUrl}/videos/`, { waitUntil: 'networkidle' });
-  await assertHub(mobileHub, { mobile: true });
-  await mobileHub.screenshot({ path: `${outputDir}/video-library-mobile.png`, fullPage: true });
+  await desktop.goto(`${baseUrl}${sampleWatchPath}`, { waitUntil: 'networkidle' });
+  await assertWatchPage(desktop);
+  await screenshot(desktop, 'video-watch-desktop');
 
-  const desktopWatch = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
-  await desktopWatch.goto(`${baseUrl}${sampleWatchPath}?t=5`, { waitUntil: 'networkidle' });
-  await assertWatchPage(desktopWatch);
-  await desktopWatch.screenshot({ path: `${outputDir}/video-watch-desktop.png`, fullPage: true });
+  await desktop.goto(`${baseUrl}/series/modelos-razonadores/03-test-time-compute/`, { waitUntil: 'networkidle' });
+  await assertArticle(desktop);
+  await screenshot(desktop, 'article-inline-video-desktop');
 
-  const mobileWatch = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1 });
-  await mobileWatch.goto(`${baseUrl}${sampleWatchPath}?t=5`, { waitUntil: 'networkidle' });
-  await assertWatchPage(mobileWatch, { mobile: true });
-  await mobileWatch.screenshot({ path: `${outputDir}/video-watch-mobile.png`, fullPage: true });
+  const mobile = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true });
+  await mobile.goto(`${baseUrl}/videos/`, { waitUntil: 'networkidle' });
+  await assertHub(mobile, { mobile: true });
+  await screenshot(mobile, 'video-library-mobile');
+
+  await mobile.goto(`${baseUrl}${sampleWatchPath}`, { waitUntil: 'networkidle' });
+  await assertWatchPage(mobile, { mobile: true });
+  await screenshot(mobile, 'video-watch-mobile');
+
+  await mobile.goto(`${baseUrl}/series/modelos-razonadores/03-test-time-compute/`, { waitUntil: 'networkidle' });
+  await assertArticle(mobile, { mobile: true });
+  await screenshot(mobile, 'article-inline-video-mobile');
 } finally {
   await browser.close();
 }

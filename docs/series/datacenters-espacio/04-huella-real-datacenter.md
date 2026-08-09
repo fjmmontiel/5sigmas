@@ -8,7 +8,7 @@ tags:
   - Infraestructura
   - Medioambiente
 video: "04-huella-real-datacenter.mp4"
-video_duration: "PT1M11S"
+video_duration: "PT52S"
 ---
 
 # Capítulo 4 — La huella real de un datacenter

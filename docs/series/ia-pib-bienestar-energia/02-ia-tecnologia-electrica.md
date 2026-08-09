@@ -8,7 +8,7 @@ tags:
   - Energía
   - IA
 video: "02-ia-tecnologia-electrica.mp4"
-video_duration: "PT1M27S"
+video_duration: "PT52S"
 ---
 
 # Capítulo 2 — IA como tecnología eléctrica
