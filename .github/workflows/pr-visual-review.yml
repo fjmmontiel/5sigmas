@@ -81,13 +81,17 @@ jobs:
           npm install --no-save playwright@1.55.0
           npx playwright install --with-deps chromium
 
-      - name: Localize canonical video catalogue URLs for preview
+      - name: Localize generated video URLs for preview QA
         run: |
           python - <<'PY'
           from pathlib import Path
-          target = Path("site/videos/catalog.json")
-          text = target.read_text(encoding="utf-8")
-          target.write_text(text.replace("https://5sigmas.com/", "/"), encoding="utf-8")
+          root = Path("site/videos")
+          targets = [root / "catalog.json", *root.rglob("*.html")]
+          for target in targets:
+              if not target.is_file():
+                  continue
+              text = target.read_text(encoding="utf-8")
+              target.write_text(text.replace("https://5sigmas.com/", "/"), encoding="utf-8")
           PY
 
       - name: Serve built site
