@@ -30,6 +30,8 @@ El mismo principio vale para RAG. La recuperación ordena documentos por una se�
 
 La división entre conocimiento y control debe conservarse también después de guardar el dato. Un resumen de correo puede ser útil para responder una pregunta y seguir siendo una entrada no confiable para enviar un pago.
 
+{{ include_html("snippets/seguridad-ia/03-memory-governance.html") }}
+
 ## La memoria persistente ya es una superficie de ataque medible
 
 La evidencia de 2026 permite analizar esta superficie de forma mucho más directa que los primeros trabajos sobre backdoors en pesos del modelo.
@@ -52,6 +54,8 @@ El trabajo observó persistencia tras fine-tuning supervisado, reinforcement lea
 
 Ese caso pertenece a una capa diferente del sistema. El *sleeper agent* vive en los pesos del modelo; el *memory poisoning* de runtime vive en el estado persistente que rodea al modelo. Conviene separarlos porque las mitigaciones también son distintas.
 
+{{ include_html("snippets/seguridad-ia/03-runtime-vs-weights.html") }}
+
 ## Por qué retirar un dato es difícil
 
 Borrar una entrada de la tabla principal de memoria no demuestra que el sistema haya olvidado su influencia. Puede haber copias en índices vectoriales, caches, resúmenes, checkpoints, memoria de otros agentes o trazas reutilizadas en pasos posteriores.
@@ -62,6 +66,8 @@ Hay al menos cuatro dificultades distintas:
 2. El sistema puede conservar una reformulación o resumen aunque la fuente original desaparezca.
 3. Otro agente puede haber propagado la información a su propia memoria o estado.
 4. Si el dato llegó a entrenamiento o fine-tuning, retirar la fuente externa ya no elimina la representación aprendida.
+
+{{ include_html("snippets/seguridad-ia/03-propagation-map.html") }}
 
 La corrección necesita una prueba de desaparición y una prueba de regresión. La primera pregunta si el comportamiento activable sigue presente. La segunda comprueba que la mitigación no ha destruido una capacidad legítima.
 
