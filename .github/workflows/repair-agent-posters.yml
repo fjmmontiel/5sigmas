@@ -1,0 +1,58 @@
+name: Repair Agentes posters
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/repair-agent-posters.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  repair-posters:
+    if: github.head_ref == 'agent/media-density-review'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Install ffmpeg
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+
+      - name: Rebuild all Agentes posters from their MP4s
+        shell: bash
+        run: |
+          set -euo pipefail
+          dir='docs/series/agentes-ia'
+          for slug in \
+            00_presentacion_serie \
+            01-que-es-un-agente \
+            02-anatomia-de-un-agente \
+            03-como-evaluar-un-agente \
+            04-seguridad-agentes \
+            05-de-la-demo-a-produccion; do
+            ffmpeg -hide_banner -loglevel error -y \
+              -ss 1.5 -i "$dir/$slug.mp4" \
+              -frames:v 1 -update 1 -q:v 3 \
+              "$dir/$slug.jpg"
+            file "$dir/$slug.jpg" | grep -q 'JPEG image data'
+            test "$(stat -c%s "$dir/$slug.jpg")" -gt 5000
+          done
+
+      - name: Commit repaired JPEG posters
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name '5sigmas-ci'
+          git config user.email 'actions@users.noreply.github.com'
+          git add docs/series/agentes-ia/*.jpg
+          if git diff --cached --quiet; then
+            echo 'Posters already valid; nothing to commit.'
+            exit 0
+          fi
+          git commit -m 'Repair Agentes video posters as real JPEG frames'
+          git push origin HEAD:${{ github.head_ref }}
