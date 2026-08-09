@@ -56,11 +56,21 @@ jobs:
       - name: Enforce public-series publication contract
         run: python scripts/audit_publication_contract.py
 
-      - name: Capture representative frames from every public video
+      - name: Capture representative frames from changed public videos
+        shell: bash
         run: |
+          git fetch --no-tags --depth=1 origin "${{ github.event.pull_request.base.sha }}"
+          mapfile -t changed_videos < <(
+            git diff --name-only "${{ github.event.pull_request.base.sha }}" HEAD \
+              | grep -E '^docs/(series|articulos-tecnicos)/.*\.mp4$' || true
+          )
+          if [ "${#changed_videos[@]}" -eq 0 ]; then
+            echo "No public MP4 changed; full-catalogue frame review is available on demand."
+            exit 0
+          fi
           sudo apt-get update -qq
           sudo apt-get install -y -qq ffmpeg
-          python scripts/capture_video_density_review.py
+          python scripts/capture_video_density_review.py "${changed_videos[@]}"
 
       - uses: actions/setup-node@v4
         with:
