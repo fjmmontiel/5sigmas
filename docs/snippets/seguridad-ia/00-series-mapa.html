@@ -1,160 +1,22 @@
-<div class="secmap">
-  <div class="secmap-hero">
-    <div class="secmap-kicker">Mapa de serie</div>
-    <div class="secmap-title">Cómo pasa el riesgo de un documento a una acción</div>
-    <div class="secmap-copy">La serie sigue el camino desde un contenido externo hasta una acción del sistema. En cada etapa explica qué puede fallar y qué control puede detenerlo.</div>
+<div class="secpath" data-anim-fullscreen="on" data-anim-contrast="force">
+  <style>
+    .secpath,.secpath *{box-sizing:border-box}.secpath{--teal:#26A69A;--blue:#324AB2;--amber:#FFB343;--red:#D94D4D;--ink:var(--md-default-fg-color,#111827);--muted:color-mix(in srgb,var(--ink) 62%,transparent);--line:color-mix(in srgb,var(--ink) 14%,transparent);margin:1.8rem 0;padding:clamp(1rem,2.5vw,1.5rem);border:1px solid var(--line);border-radius:24px;background:linear-gradient(145deg,color-mix(in srgb,var(--md-default-bg-color) 95%,var(--blue)),color-mix(in srgb,var(--md-default-bg-color) 96%,var(--teal)));overflow:hidden}.secpath__head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:1rem;align-items:end}.secpath__kicker{font-size:.7rem;font-weight:850;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}.secpath h3{margin:.25rem 0 0;font-size:clamp(1.35rem,3vw,2rem);line-height:1.05;letter-spacing:-.035em}.secpath__lead{max-width:64ch;margin:.55rem 0 0;color:var(--muted);line-height:1.55}.secpath__controls{display:flex;gap:.45rem;flex-wrap:wrap}.secpath button{border:1px solid var(--line);background:var(--md-default-bg-color);color:var(--ink);border-radius:999px;padding:.55rem .85rem;font-weight:750;cursor:pointer}.secpath button:focus-visible{outline:3px solid color-mix(in srgb,var(--blue) 35%,transparent);outline-offset:2px}.secpath__track{position:relative;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:.55rem;margin-top:1.4rem;align-items:stretch}.secpath__track:before{content:"";position:absolute;left:5%;right:5%;top:50%;height:3px;background:var(--line);transform:translateY(-50%);z-index:0}.secpath__node{position:relative;z-index:1;min-height:132px;padding:.8rem;border:1px solid var(--line);border-radius:18px;background:color-mix(in srgb,var(--md-default-bg-color) 93%,var(--blue));display:grid;grid-template-rows:auto 1fr auto;gap:.45rem;transition:transform .35s ease,border-color .35s ease,box-shadow .35s ease,background .35s ease}.secpath__n{width:1.8rem;height:1.8rem;display:grid;place-items:center;border-radius:50%;background:color-mix(in srgb,var(--blue) 12%,var(--md-default-bg-color));font-size:.72rem;font-weight:900;color:var(--blue)}.secpath__title{font-size:.93rem;font-weight:850;line-height:1.18}.secpath__role{font-size:.72rem;line-height:1.35;color:var(--muted)}.secpath__node[data-stage="hostile"]{--stage:var(--red)}.secpath__node[data-stage="retrieval"]{--stage:var(--amber)}.secpath__node[data-stage="context"]{--stage:var(--blue)}.secpath__node[data-stage="decision"]{--stage:var(--blue)}.secpath__node[data-stage="policy"]{--stage:var(--teal)}.secpath__node[data-stage="effect"]{--stage:var(--red)}.secpath__node.is-active{transform:translateY(-8px);border-color:color-mix(in srgb,var(--stage) 55%,var(--line));background:color-mix(in srgb,var(--md-default-bg-color) 84%,var(--stage));box-shadow:0 16px 34px color-mix(in srgb,var(--stage) 18%,transparent)}.secpath__node.is-passed .secpath__n{background:var(--stage);color:#fff}.secpath__pulse{position:absolute;z-index:2;top:50%;left:5%;width:12px;height:12px;border-radius:50%;background:var(--red);box-shadow:0 0 0 7px color-mix(in srgb,var(--red) 18%,transparent);transform:translate(-50%,-50%);opacity:0;transition:left .55s cubic-bezier(.2,.8,.2,1),opacity .2s}.secpath.is-running .secpath__pulse{opacity:1}.secpath__outcome{display:grid;grid-template-columns:auto 1fr;gap:.75rem;align-items:center;margin-top:1rem;padding:.85rem 1rem;border:1px solid var(--line);border-radius:16px;background:color-mix(in srgb,var(--md-default-bg-color) 94%,var(--teal))}.secpath__badge{padding:.4rem .65rem;border-radius:999px;background:color-mix(in srgb,var(--teal) 16%,var(--md-default-bg-color));font-size:.72rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em}.secpath__outcome strong{display:block;font-size:.92rem}.secpath__outcome span{font-size:.78rem;color:var(--muted)}.secpath[data-step="6"] .secpath__outcome{background:color-mix(in srgb,var(--md-default-bg-color) 88%,var(--red))}.secpath[data-step="6"] .secpath__badge{background:color-mix(in srgb,var(--red) 16%,var(--md-default-bg-color))}@media(max-width:820px){.secpath__head{grid-template-columns:1fr}.secpath__track{grid-template-columns:repeat(2,minmax(0,1fr))}.secpath__track:before,.secpath__pulse{display:none}.secpath__node{min-height:118px}}@media(max-width:520px){.secpath__track{grid-template-columns:1fr}.secpath__outcome{grid-template-columns:1fr}}@media(prefers-reduced-motion:reduce){.secpath__node,.secpath__pulse{transition:none}}
+  </style>
+  <div class="secpath__head">
+    <div><div class="secpath__kicker">Mapa de la serie · una sola trayectoria</div><h3>Del texto externo al efecto real</h3><p class="secpath__lead">La seguridad cambia cuando una frase deja de ser solo texto y puede atravesar recuperación, decisión, autorización y ejecución.</p></div>
+    <div class="secpath__controls"><button type="button" data-action="play">▶ Reproducir ataque</button><button type="button" data-action="reset">Reiniciar</button></div>
   </div>
-
-  <div class="secmap-grid">
-    <div class="secmap-card">
-      <div class="secmap-step">01</div>
-      <div class="secmap-head">Una orden oculta en un documento</div>
-      <div class="secmap-text">Un documento externo contiene una orden que el sistema puede confundir con una instrucción válida.</div>
-    </div>
-    <div class="secmap-card">
-      <div class="secmap-step">02</div>
-      <div class="secmap-head">Pedir lo mismo de muchas formas</div>
-      <div class="secmap-text">Un atacante cambia la petición hasta encontrar una respuesta que debería estar bloqueada.</div>
-    </div>
-    <div class="secmap-card">
-      <div class="secmap-step">03</div>
-      <div class="secmap-head">Guardar una señal peligrosa</div>
-      <div class="secmap-text">Un documento, una memoria o un modelo conserva una señal que puede reaparecer más tarde.</div>
-    </div>
-    <div class="secmap-card">
-      <div class="secmap-step">04</div>
-      <div class="secmap-head">Probar el camino completo</div>
-      <div class="secmap-text">La evaluación sigue el sistema desde la entrada hasta la acción, no solo la respuesta de texto.</div>
-    </div>
-    <div class="secmap-card">
-      <div class="secmap-step">05</div>
-      <div class="secmap-head">Limitar lo que el sistema puede hacer</div>
-      <div class="secmap-text">Cuarentena, permisos mínimos, registros y recuperación reducen el daño.</div>
-    </div>
+  <div class="secpath__track" aria-label="Trayectoria de ataque desde contenido externo hasta efecto">
+    <div class="secpath__pulse" aria-hidden="true"></div>
+    <div class="secpath__node" data-stage="hostile"><div class="secpath__n">1</div><div class="secpath__title">Contenido hostil</div><div class="secpath__role">email · web · documento · memoria</div></div>
+    <div class="secpath__node" data-stage="retrieval"><div class="secpath__n">2</div><div class="secpath__title">Entra en contexto</div><div class="secpath__role">retrieval o lectura directa</div></div>
+    <div class="secpath__node" data-stage="context"><div class="secpath__n">3</div><div class="secpath__title">Compite con instrucciones</div><div class="secpath__role">mismo canal de lenguaje</div></div>
+    <div class="secpath__node" data-stage="decision"><div class="secpath__n">4</div><div class="secpath__title">Cambia una decisión</div><div class="secpath__role">plan · respuesta · tool proposal</div></div>
+    <div class="secpath__node" data-stage="policy"><div class="secpath__n">5</div><div class="secpath__title">Cruza autorización</div><div class="secpath__role">scope · policy · aprobación</div></div>
+    <div class="secpath__node" data-stage="effect"><div class="secpath__n">6</div><div class="secpath__title">Produce un efecto</div><div class="secpath__role">envío · borrado · exfiltración</div></div>
   </div>
-
-  <div class="secmap-flow">
-    <div class="secmap-node">documento externo</div>
-    <div class="secmap-arrow">→</div>
-    <div class="secmap-node">búsqueda de documentos</div>
-    <div class="secmap-arrow">→</div>
-    <div class="secmap-node">decisión del modelo</div>
-    <div class="secmap-arrow">→</div>
-    <div class="secmap-node secmap-node--strong">acción o bloqueo</div>
-  </div>
+  <div class="secpath__outcome"><div class="secpath__badge">Idea clave</div><div><strong data-outcome-title>El riesgo no es una respuesta: es una trayectoria.</strong><span data-outcome-copy>Los capítulos siguientes estudian cómo romper esta cadena en distintos puntos.</span></div></div>
+  <script>
+    (()=>{const root=document.currentScript.closest('.secpath');if(!root)return;const nodes=[...root.querySelectorAll('.secpath__node')],pulse=root.querySelector('.secpath__pulse'),title=root.querySelector('[data-outcome-title]'),copy=root.querySelector('[data-outcome-copy]');let timer=null,step=0;const render=()=>{root.dataset.step=String(step);nodes.forEach((n,i)=>{n.classList.toggle('is-active',i===step-1);n.classList.toggle('is-passed',i<step)});if(step>0&&pulse)pulse.style.left=`${5+(step-1)*18}%`;if(step===6){title.textContent='El control útil es el que detiene la cadena antes del efecto.';copy.textContent='Un modelo puede fallar y el producto seguir siendo seguro si autorización, scopes y recuperación contienen la acción.'}else{title.textContent='El riesgo no es una respuesta: es una trayectoria.';copy.textContent='Los capítulos siguientes estudian cómo romper esta cadena en distintos puntos.'}};const stop=()=>{if(timer){clearInterval(timer);timer=null}root.classList.remove('is-running')};root.querySelector('[data-action="play"]').addEventListener('click',()=>{stop();step=0;root.classList.add('is-running');render();timer=setInterval(()=>{step++;render();if(step>=6)stop()},720)});root.querySelector('[data-action="reset"]').addEventListener('click',()=>{stop();step=0;render()});render()})();
+  </script>
 </div>
-
-<style>
-.secmap, .secmap * { box-sizing: border-box; }
-.secmap {
-  --teal:#26A69A;
-  --blue:#324AB2;
-  --amber:#FFB343;
-  --ink:#0f172a;
-  --muted:#5b6b80;
-  --line:rgba(15,23,42,.12);
-  max-width: 920px;
-  margin: 0 auto;
-  padding: 24px;
-  border: 1px solid var(--line);
-  border-radius: 24px;
-  background:
-    radial-gradient(110% 120% at 0% 0%, rgba(38,166,154,.08), transparent 52%),
-    radial-gradient(95% 120% at 100% 100%, rgba(50,74,178,.08), transparent 54%),
-    linear-gradient(180deg, rgba(255,255,255,.96), rgba(244,247,251,.96));
-}
-.secmap-hero { display:grid; gap:8px; }
-.secmap-kicker {
-  color: var(--muted);
-  font-size: 11px;
-  font-weight: 900;
-  letter-spacing: .16em;
-  text-transform: uppercase;
-}
-.secmap-title {
-  color: var(--ink);
-  font-size: clamp(24px, 4vw, 34px);
-  font-weight: 900;
-  line-height: 1.04;
-  letter-spacing: -.04em;
-}
-.secmap-copy {
-  max-width: 68ch;
-  color: var(--muted);
-  font-size: 15px;
-  line-height: 1.6;
-}
-.secmap-grid {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 12px;
-  margin-top: 22px;
-}
-.secmap-card {
-  min-height: 156px;
-  padding: 16px;
-  border-radius: 18px;
-  border: 1px solid var(--line);
-  background: rgba(255,255,255,.86);
-  box-shadow: 0 14px 28px rgba(15,23,42,.05);
-}
-.secmap-step {
-  color: var(--blue);
-  font-size: 11px;
-  font-weight: 900;
-  letter-spacing: .18em;
-}
-.secmap-head {
-  margin-top: 12px;
-  color: var(--ink);
-  font-size: 18px;
-  font-weight: 900;
-  line-height: 1.1;
-  letter-spacing: -.03em;
-}
-.secmap-text {
-  margin-top: 10px;
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.55;
-}
-.secmap-flow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-top: 18px;
-  padding: 14px 16px;
-  border-radius: 18px;
-  border: 1px solid var(--line);
-  background: rgba(255,255,255,.74);
-}
-.secmap-node {
-  padding: 10px 14px;
-  border-radius: 999px;
-  border: 1px solid var(--line);
-  background: rgba(255,255,255,.92);
-  color: var(--ink);
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-}
-.secmap-node--strong {
-  background: linear-gradient(135deg, rgba(38,166,154,.14), rgba(50,74,178,.12));
-}
-.secmap-arrow {
-  color: var(--amber);
-  font-size: 18px;
-  font-weight: 900;
-}
-@media (max-width: 860px) {
-  .secmap-grid { grid-template-columns: 1fr 1fr; }
-}
-@media (max-width: 560px) {
-  .secmap { padding: 18px; }
-  .secmap-grid { grid-template-columns: 1fr; }
-  .secmap-flow { justify-content: flex-start; }
-}
-</style>
