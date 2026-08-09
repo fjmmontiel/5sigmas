@@ -180,6 +180,7 @@ extra_css:
   - stylesheets/voice-report-animations-polish.css
   - stylesheets/reader-editorial-v3.css
   - stylesheets/reader-editorial-v3-iteration.css
+  - stylesheets/security-visuals.css
 
 hooks:
   - hooks/reading_time.py

@@ -51,6 +51,8 @@ Una evaluación debería fijar explícitamente:
 - si el sistema aplica rate limiting o bloqueo por identidad;
 - si el ataque es contra una conversación aislada o un agente con tools.
 
+{{ include_html("snippets/seguridad-ia/02-attack-budget.html") }}
+
 El mismo modelo puede mostrar un perfil muy distinto bajo `N=1` y bajo un atacante adaptativo con cientos o miles de consultas. El presupuesto forma parte de la especificación de seguridad, igual que el timeout o el número de reintentos forman parte de la especificación de un sistema distribuido.
 
 ## Qué controles siguen siendo útiles
@@ -73,6 +75,8 @@ La evaluación mínima debería separar cuatro resultados:
 2. **Capability** — produjo información o una capacidad realmente utilizable.
 3. **Tool reachability** — el sistema permitió proponer una acción externa equivalente.
 4. **Execution** — la acción llegó a ejecutarse con efecto real.
+
+{{ include_html("snippets/seguridad-ia/02-outcome-ladder.html") }}
 
 Cada salto necesita una prueba distinta. Confundirlos produce dos errores opuestos. Puede parecer que el modelo está roto cuando solo generó texto irrelevante, o puede parecer seguro porque el filtro bloqueó la respuesta pero el runtime dejó disponible el mismo efecto por otra ruta.
 
