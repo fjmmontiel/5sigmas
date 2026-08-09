@@ -60,9 +60,9 @@ jobs:
         shell: bash
         run: |
           git fetch --no-tags --depth=1 origin "${{ github.event.pull_request.base.sha }}"
+          git diff --name-only "${{ github.event.pull_request.base.sha }}" HEAD > /tmp/pr-changed-files.txt
           mapfile -t changed_videos < <(
-            git diff --name-only "${{ github.event.pull_request.base.sha }}" HEAD \
-              | grep -E '^docs/(series|articulos-tecnicos)/.*\.mp4$' || true
+            grep -E '^docs/(series|articulos-tecnicos)/.*\.mp4$' /tmp/pr-changed-files.txt || true
           )
           if [ "${#changed_videos[@]}" -eq 0 ]; then
             echo "No public MP4 changed; full-catalogue frame review is available on demand."
@@ -108,6 +108,8 @@ jobs:
         run: node scripts/capture_site_screenshots.mjs
 
       - name: Capture animation density review
+        env:
+          S5_CHANGED_FILES_FILE: /tmp/pr-changed-files.txt
         run: node scripts/capture_animation_density_review.mjs
 
       - name: Validate Seguridad en IA visuals end-to-end
