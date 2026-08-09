@@ -50,6 +50,9 @@ jobs:
       - name: Audit search foundation
         run: python scripts/audit_search_foundation.py
 
+      - name: Enforce priority topic hub contract
+        run: python scripts/audit_priority_topic_hubs.py
+
       - name: Enforce public-series publication contract
         run: python scripts/audit_publication_contract.py
 
