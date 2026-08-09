@@ -8,7 +8,7 @@ tags:
   - Infraestructura
   - Energía
 video: "02-energia-calor-conectividad.mp4"
-video_duration: "PT1M11S"
+video_duration: "PT52S"
 ---
 
 # Capítulo 2 — Energía, calor y conectividad

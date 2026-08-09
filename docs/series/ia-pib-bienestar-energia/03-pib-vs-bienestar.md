@@ -8,7 +8,7 @@ tags:
   - Bienestar
   - IA
 video: "03-pib-vs-bienestar.mp4"
-video_duration: "PT1M28S"
+video_duration: "PT52S"
 ---
 
 # Capítulo 3 — Medición: PIB vs bienestar
