@@ -35,6 +35,14 @@ function safeName(url) {
   return url.replace(/^\//, '').replace(/\/$/, '').replace(/[^a-zA-Z0-9_-]+/g, '__') || 'home';
 }
 
+async function openStaticPage(page, url) {
+  const response = await page.goto(`${baseUrl}${url}`, { waitUntil: 'load', timeout: 30_000 });
+  if (!response?.ok()) return response;
+  await page.evaluate(() => document.fonts.ready);
+  await page.waitForTimeout(35);
+  return response;
+}
+
 function severity(metrics) {
   return (
     Math.max(0, (metrics.words - 65) / 65)
@@ -120,7 +128,7 @@ try {
   // Pass 1: measure every animation. No screenshots yet.
   for (const file of allHtml) {
     const url = urlFromFile(file);
-    const response = await desktop.goto(`${baseUrl}${url}`, { waitUntil: 'networkidle', timeout: 30_000 });
+    const response = await openStaticPage(desktop, url);
     if (!response?.ok()) continue;
     report.pagesScanned += 1;
     const shells = desktop.locator('.anim-brand-shell');
@@ -147,7 +155,8 @@ try {
   }
 
   for (const entry of selectedMap.values()) {
-    await desktop.goto(`${baseUrl}${entry.url}`, { waitUntil: 'networkidle', timeout: 30_000 });
+    const response = await openStaticPage(desktop, entry.url);
+    if (!response?.ok()) continue;
     const shell = desktop.locator('.anim-brand-shell').nth(entry.index - 1);
     if (!await shell.count()) continue;
     await shell.scrollIntoViewIfNeeded();
@@ -162,7 +171,8 @@ try {
 
   const mobile = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1, isMobile: true });
   for (const entry of report.animations.filter((item) => highPriority.some((prefix) => item.url.startsWith(prefix)))) {
-    await mobile.goto(`${baseUrl}${entry.url}`, { waitUntil: 'networkidle', timeout: 30_000 });
+    const response = await openStaticPage(mobile, entry.url);
+    if (!response?.ok()) continue;
     const shell = mobile.locator('.anim-brand-shell').nth(entry.index - 1);
     if (!await shell.count()) continue;
     await shell.scrollIntoViewIfNeeded();
