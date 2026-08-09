@@ -37,6 +37,30 @@ async function exerciseVisual(page, selector) {
     throw new Error(`visual ${selector} has invalid bounds ${JSON.stringify(box)}`);
   }
 
+  const diagnostics = await root.evaluate((node) => {
+    const styleNode = node.querySelector('style');
+    let cssRules = [];
+    try {
+      cssRules = styleNode?.sheet ? [...styleNode.sheet.cssRules].map((rule) => rule.cssText.slice(0, 180)) : [];
+    } catch (error) {
+      cssRules = [`CSSOM_ERROR: ${error.message}`];
+    }
+    const descendants = [...node.querySelectorAll('[class]')].slice(0, 24).map((child) => {
+      const style = getComputedStyle(child);
+      const bounds = child.getBoundingClientRect();
+      return {
+        className: child.className,
+        display: style.display,
+        position: style.position,
+        gridTemplateColumns: style.gridTemplateColumns,
+        flexDirection: style.flexDirection,
+        width: Math.round(bounds.width),
+        height: Math.round(bounds.height),
+      };
+    });
+    return { cssRuleCount: cssRules.length, cssRules, descendants };
+  });
+
   const buttons = root.locator('button');
   const count = await buttons.count();
   for (let index = 0; index < count; index += 1) {
@@ -55,7 +79,14 @@ async function exerciseVisual(page, selector) {
     if (!item.text && !item.aria) throw new Error(`unlabelled control inside ${selector}`);
   }
 
-  return { selector, buttons: count, ariaPressedControls: pressed, width: Math.round(box.width), height: Math.round(box.height) };
+  return {
+    selector,
+    buttons: count,
+    ariaPressedControls: pressed,
+    width: Math.round(box.width),
+    height: Math.round(box.height),
+    diagnostics,
+  };
 }
 
 try {
@@ -93,9 +124,7 @@ try {
       }
 
       const visualMetrics = [];
-      for (const selector of route.roots) {
-        visualMetrics.push(await exerciseVisual(page, selector));
-      }
+      for (const selector of route.roots) visualMetrics.push(await exerciseVisual(page, selector));
       await page.waitForTimeout(350);
 
       const after = await page.evaluate(() => ({
