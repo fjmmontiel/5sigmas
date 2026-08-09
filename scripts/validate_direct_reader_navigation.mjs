@@ -216,8 +216,13 @@ try {
     throw new Error('Conceptos is missing from the unified reader library.');
   }
   await librarySearch.fill('prompt injection');
+  const securityTab = dialog.locator('[data-s5-series-tab]').filter({ hasText: 'Seguridad en IA' });
+  if (await securityTab.count() !== 1 || !await securityTab.isVisible()) {
+    throw new Error('Seguridad en IA is not discoverable for the prompt injection query.');
+  }
+  await securityTab.click();
   if (await dialog.locator('a[href="/series/seguridad-ia/01-prompt-injection/"]:visible').count() !== 1) {
-    throw new Error('Seguridad en IA is missing from the unified reader library.');
+    throw new Error('Prompt injection is missing after selecting Seguridad en IA.');
   }
   await librarySearch.fill('');
   await searchAndNavigate(desktop, dialog, 'datacenter espacial', '/series/datacenters-espacio/03-que-es-datacenter-espacio/');
