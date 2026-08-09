@@ -105,15 +105,3 @@ jobs:
           path: artifacts/visual-review/*
           if-no-files-found: warn
           retention-days: 14
-
-      - name: Post Run actions/setup-node@v4
-        if: always()
-        run: true
-
-      - name: Post Run actions/setup-python@v5
-        if: always()
-        run: true
-
-      - name: Post Run actions/checkout@v4
-        if: always()
-        run: true
