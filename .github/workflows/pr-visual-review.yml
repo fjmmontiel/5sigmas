@@ -56,6 +56,9 @@ jobs:
       - name: Enforce public-series publication contract
         run: python scripts/audit_publication_contract.py
 
+      - name: Capture representative frames from every public video
+        run: python scripts/capture_video_density_review.py
+
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -81,6 +84,9 @@ jobs:
 
       - name: Capture responsive screenshots
         run: node scripts/capture_site_screenshots.mjs
+
+      - name: Capture animation density review
+        run: node scripts/capture_animation_density_review.mjs
 
       - name: Validate Seguridad en IA visuals end-to-end
         run: node scripts/capture_security_visuals.mjs
