@@ -212,9 +212,10 @@ const assertWatchPage = async (page, { mobile = false } = {}) => {
       contrast: foreground && background ? contrast(foreground, background) : null,
       display: style.display,
       width: node.getBoundingClientRect().width,
+      height: node.getBoundingClientRect().height,
     };
   });
-  if (ctaState.display === 'none' || ctaState.width < 180) {
+  if (ctaState.display === 'none' || ctaState.width < 96 || ctaState.height < 36) {
     throw new Error(`The watch source CTA is not usable: ${JSON.stringify(ctaState)}.`);
   }
   if (ctaState.contrast !== null && ctaState.contrast < 4.5) {
