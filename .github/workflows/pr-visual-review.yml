@@ -38,6 +38,9 @@ jobs:
       - name: Validate video media declarations
         run: python scripts/prepare_video_media.py --check
 
+      - name: Validate media binary signatures
+        run: python scripts/audit_media_magic.py
+
       - name: Validate video structured-data contract
         run: python scripts/test_video_schema_contract.py
 
@@ -125,8 +128,8 @@ jobs:
       - name: Capture and validate every progressive voice microlab
         run: node scripts/capture_voice_report_animations.mjs
 
-      - name: Validate and capture the complete video experience
-        run: node scripts/validate_video_library.mjs
+      - name: Validate complete video experience lifecycle
+        run: node scripts/validate_video_experience_v2.mjs
 
       - name: Validate direct series and article navigation
         run: node scripts/validate_direct_reader_navigation.mjs
