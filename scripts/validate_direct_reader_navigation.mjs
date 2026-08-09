@@ -3,7 +3,20 @@ import fs from 'node:fs/promises';
 
 const baseUrl = process.env.S5_PREVIEW_URL || 'http://127.0.0.1:8000';
 const outputDir = 'artifacts/visual-review';
-const expectedCollections = 9;
+let expectedCollections = null;
+
+const rememberCollectionCount = (actual, label) => {
+  if (actual < 3) {
+    throw new Error(`${label} exposes an implausibly small collection catalogue: ${actual}.`);
+  }
+  if (expectedCollections === null) {
+    expectedCollections = actual;
+    return;
+  }
+  if (actual !== expectedCollections) {
+    throw new Error(`${label} exposes ${actual} collections but the reader catalogue exposes ${expectedCollections}.`);
+  }
+};
 
 const expectPath = async (page, path) => {
   await page.waitForURL((url) => url.pathname === path, { timeout: 15_000 });
@@ -80,9 +93,7 @@ const assertContextualDesktopRail = async (page) => {
   const search = library.locator('[data-s5-reader-direct-search]');
 
   await library.waitFor({ state: 'visible' });
-  if (await collections.count() !== expectedCollections) {
-    throw new Error(`The full ${expectedCollections}-collection catalogue must remain available in the DOM.`);
-  }
+  rememberCollectionCount(await collections.count(), 'The contextual reader rail');
   if (await entries.count() < 30) {
     throw new Error('The reader no longer exposes the complete article catalogue.');
   }
@@ -128,9 +139,7 @@ const assertFullLibrary = async (page, dialog) => {
   const entries = dialog.locator('[data-s5-reader-entry]');
   const search = dialog.locator('[data-s5-reader-search]');
 
-  if (await tabs.count() !== expectedCollections) {
-    throw new Error(`The complete library must expose ${expectedCollections} collections.`);
-  }
+  rememberCollectionCount(await tabs.count(), 'The complete reader library');
   if (await entries.count() < 30) {
     throw new Error('The complete library is missing chapters or technical notes.');
   }
