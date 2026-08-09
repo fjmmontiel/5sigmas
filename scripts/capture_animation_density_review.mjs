@@ -6,6 +6,7 @@ const baseUrl = process.env.S5_PREVIEW_URL || 'http://127.0.0.1:8000';
 const siteDir = path.resolve(process.env.S5_SITE_DIR || 'site');
 const outputDir = path.resolve('artifacts/visual-review/animation-density');
 const highPriority = ['/series/seguridad-ia/', '/series/agentes-ia/'];
+const maxDesktopCaptures = 40;
 
 await fs.rm(outputDir, { recursive: true, force: true });
 await fs.mkdir(outputDir, { recursive: true });
@@ -32,6 +33,16 @@ function urlFromFile(file) {
 
 function safeName(url) {
   return url.replace(/^\//, '').replace(/\/$/, '').replace(/[^a-zA-Z0-9_-]+/g, '__') || 'home';
+}
+
+function severity(metrics) {
+  return (
+    Math.max(0, (metrics.words - 65) / 65)
+    + Math.max(0, (metrics.textLeaves - 18) / 18)
+    + Math.max(0, (11 - (metrics.minTextPx ?? 11)) / 3)
+    + Math.max(0, (metrics.controls - 6) / 6)
+    + Math.max(0, (metrics.height - 760) / 760)
+  );
 }
 
 async function inspectShell(shell) {
@@ -89,11 +100,24 @@ async function exercise(shell) {
   return null;
 }
 
+function flagsFor(metrics) {
+  const flags = [];
+  if (metrics.words > 65) flags.push(`dense-text:${metrics.words}`);
+  if (metrics.textLeaves > 18) flags.push(`many-labels:${metrics.textLeaves}`);
+  if (metrics.minTextPx !== null && metrics.minTextPx < 11) flags.push(`small-text:${metrics.minTextPx.toFixed(1)}px`);
+  if (metrics.controls > 6) flags.push(`many-controls:${metrics.controls}`);
+  if (metrics.height > 760) flags.push(`tall:${Math.round(metrics.height)}px`);
+  if (metrics.width > 1320) flags.push(`wide:${Math.round(metrics.width)}px`);
+  return flags;
+}
+
 const browser = await chromium.launch({ headless: true });
-const report = { pagesScanned: 0, animations: [], flags: [] };
+const report = { pagesScanned: 0, animations: [], flags: [], captures: [] };
 
 try {
   const desktop = await browser.newPage({ viewport: { width: 1440, height: 1000 }, deviceScaleFactor: 1 });
+
+  // Pass 1: measure every animation. No screenshots yet.
   for (const file of allHtml) {
     const url = urlFromFile(file);
     const response = await desktop.goto(`${baseUrl}${url}`, { waitUntil: 'networkidle', timeout: 30_000 });
@@ -101,31 +125,39 @@ try {
     report.pagesScanned += 1;
     const shells = desktop.locator('.anim-brand-shell');
     const count = await shells.count();
-    if (!count) continue;
-
     for (let index = 0; index < count; index += 1) {
       const shell = shells.nth(index);
-      await shell.scrollIntoViewIfNeeded();
       const metrics = await inspectShell(shell);
-      const id = `${safeName(url)}__${String(index + 1).padStart(2, '0')}`;
-      await shell.screenshot({ path: path.join(outputDir, `${id}__desktop-default.png`), animations: 'disabled' });
-      const state = await exercise(shell);
-      if (state) {
-        await shell.screenshot({ path: path.join(outputDir, `${id}__desktop-${state}.png`), animations: 'disabled' });
-      }
-
-      const flags = [];
-      if (metrics.words > 65) flags.push(`dense-text:${metrics.words}`);
-      if (metrics.textLeaves > 18) flags.push(`many-labels:${metrics.textLeaves}`);
-      if (metrics.minTextPx !== null && metrics.minTextPx < 11) flags.push(`small-text:${metrics.minTextPx.toFixed(1)}px`);
-      if (metrics.controls > 6) flags.push(`many-controls:${metrics.controls}`);
-      if (metrics.height > 760) flags.push(`tall:${Math.round(metrics.height)}px`);
-      if (metrics.width > 1320) flags.push(`wide:${Math.round(metrics.width)}px`);
-
-      const entry = { url, index: index + 1, metrics, exercisedState: state, flags };
+      const flags = flagsFor(metrics);
+      const entry = { url, index: index + 1, metrics, flags, severity: severity(metrics) };
       report.animations.push(entry);
       if (flags.length) report.flags.push(entry);
     }
+  }
+
+  // Pass 2: capture the most suspicious desktop pieces plus every high-priority
+  // Security/Agents visual. This keeps the artifact reviewable and CI bounded.
+  const ranked = [...report.flags].sort((a, b) => b.severity - a.severity);
+  const selectedMap = new Map();
+  for (const entry of ranked.slice(0, maxDesktopCaptures)) {
+    selectedMap.set(`${entry.url}#${entry.index}`, entry);
+  }
+  for (const entry of report.animations.filter((item) => highPriority.some((prefix) => item.url.startsWith(prefix)))) {
+    selectedMap.set(`${entry.url}#${entry.index}`, entry);
+  }
+
+  for (const entry of selectedMap.values()) {
+    await desktop.goto(`${baseUrl}${entry.url}`, { waitUntil: 'networkidle', timeout: 30_000 });
+    const shell = desktop.locator('.anim-brand-shell').nth(entry.index - 1);
+    if (!await shell.count()) continue;
+    await shell.scrollIntoViewIfNeeded();
+    const id = `${safeName(entry.url)}__${String(entry.index).padStart(2, '0')}`;
+    await shell.screenshot({ path: path.join(outputDir, `${id}__desktop-default.png`), animations: 'disabled' });
+    const state = await exercise(shell);
+    if (state) {
+      await shell.screenshot({ path: path.join(outputDir, `${id}__desktop-${state}.png`), animations: 'disabled' });
+    }
+    report.captures.push({ url: entry.url, index: entry.index, desktop: true, exercisedState: state });
   }
 
   const mobile = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1, isMobile: true });
@@ -144,4 +176,4 @@ try {
 }
 
 await fs.writeFile(path.join(outputDir, 'report.json'), `${JSON.stringify(report, null, 2)}\n`);
-console.log(`Reviewed ${report.animations.length} animations across ${report.pagesScanned} pages; ${report.flags.length} have density flags.`);
+console.log(`Reviewed ${report.animations.length} animations across ${report.pagesScanned} pages; ${report.flags.length} have density flags; captured ${report.captures.length} desktop candidates.`);
