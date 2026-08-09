@@ -4,9 +4,28 @@ import path from 'node:path';
 
 const baseUrl = process.env.S5_PREVIEW_URL || 'http://127.0.0.1:8000';
 const siteDir = path.resolve(process.env.S5_SITE_DIR || 'site');
+const docsDir = path.resolve('docs');
 const outputDir = path.resolve('artifacts/visual-review/animation-density');
+const changedFilesPath = process.env.S5_CHANGED_FILES_FILE || '';
 const highPriority = ['/series/seguridad-ia/', '/series/agentes-ia/'];
 const maxDesktopCaptures = 40;
+const globalVisualPrefixes = [
+  'docs/stylesheets/',
+  'docs/assets/stylesheets/',
+  'docs/assets/javascripts/animation-shell.js',
+  'hooks/',
+  'overrides/',
+];
+const globalVisualFiles = new Set(['main.py', 'mkdocs.yml']);
+const baselineUrls = [
+  '/series/seguridad-ia/01-prompt-injection/',
+  '/series/agentes-ia/01-que-es-un-agente/',
+  '/series/fundamentos-ia-iag/04-agi/',
+  '/series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica/',
+  '/series/multimodalidad-iag/03-arquitecturas/',
+  '/series/modelos-razonadores/03-test-time-compute/',
+  '/series/datacenters-espacio/02-energia-calor-conectividad/',
+];
 
 await fs.rm(outputDir, { recursive: true, force: true });
 await fs.mkdir(outputDir, { recursive: true });
@@ -22,17 +41,71 @@ async function walk(dir) {
   return out;
 }
 
-const allHtml = (await walk(siteDir))
-  .filter((file) => file.endsWith('index.html'))
-  .filter((file) => file.includes(`${path.sep}series${path.sep}`) || file.includes(`${path.sep}articulos-tecnicos${path.sep}`));
-
-function urlFromFile(file) {
+function urlFromSiteFile(file) {
   const rel = path.relative(siteDir, file).split(path.sep).join('/');
   return `/${rel.replace(/index\.html$/, '')}`;
 }
 
+function urlFromSourceMarkdown(file) {
+  const rel = file.replace(/^docs\//, '').replace(/\.md$/, '');
+  if (!rel.startsWith('series/') && !rel.startsWith('articulos-tecnicos/')) return null;
+  if (rel.endsWith('/index')) return `/${rel.slice(0, -'/index'.length)}/`;
+  return `/${rel}/`;
+}
+
 function safeName(url) {
   return url.replace(/^\//, '').replace(/\/$/, '').replace(/[^a-zA-Z0-9_-]+/g, '__') || 'home';
+}
+
+async function allPublicUrls() {
+  const files = (await walk(siteDir))
+    .filter((file) => file.endsWith('index.html'))
+    .filter((file) => file.includes(`${path.sep}series${path.sep}`) || file.includes(`${path.sep}articulos-tecnicos${path.sep}`));
+  return files.map(urlFromSiteFile).sort();
+}
+
+async function affectedUrls() {
+  if (!changedFilesPath) return allPublicUrls();
+  let changed = [];
+  try {
+    changed = (await fs.readFile(changedFilesPath, 'utf8')).split(/\r?\n/).map((item) => item.trim()).filter(Boolean);
+  } catch {
+    return allPublicUrls();
+  }
+
+  const urls = new Set();
+  for (const file of changed) {
+    if (/^docs\/(series|articulos-tecnicos)\/.*\.md$/.test(file)) {
+      const url = urlFromSourceMarkdown(file);
+      if (url) urls.add(url);
+    }
+  }
+
+  const changedSnippets = changed
+    .filter((file) => /^docs\/snippets\/.*\.html$/.test(file))
+    .map((file) => file.replace(/^docs\//, ''));
+  if (changedSnippets.length) {
+    const sourceMarkdown = (await walk(docsDir))
+      .filter((file) => file.endsWith('.md'))
+      .filter((file) => file.includes(`${path.sep}series${path.sep}`) || file.includes(`${path.sep}articulos-tecnicos${path.sep}`));
+    for (const source of sourceMarkdown) {
+      const text = await fs.readFile(source, 'utf8');
+      if (!changedSnippets.some((snippet) => text.includes(snippet))) continue;
+      const repoPath = path.relative(process.cwd(), source).split(path.sep).join('/');
+      const url = urlFromSourceMarkdown(repoPath);
+      if (url) urls.add(url);
+    }
+  }
+
+  const globalVisualChange = changed.some((file) =>
+    globalVisualFiles.has(file) || globalVisualPrefixes.some((prefix) => file.startsWith(prefix))
+  );
+  if (globalVisualChange) baselineUrls.forEach((url) => urls.add(url));
+
+  // If only audit/test code changed, keep a small baseline so the script still
+  // proves it can load and inspect real animation shells in the preview.
+  if (!urls.size) baselineUrls.slice(0, 3).forEach((url) => urls.add(url));
+  return [...urls].sort();
 }
 
 async function openStaticPage(page, url) {
@@ -61,8 +134,7 @@ async function inspectShell(shell) {
       return style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity || 1) > 0.02 && rect.width > 0 && rect.height > 0;
     };
     const textLeaves = [...root.querySelectorAll('*')].filter((node) => {
-      if (!visible(node)) return false;
-      if (node.children.length) return false;
+      if (!visible(node) || node.children.length) return false;
       return Boolean((node.textContent || '').trim());
     });
     const words = (root.innerText || '').trim().split(/\s+/).filter(Boolean);
@@ -119,15 +191,13 @@ function flagsFor(metrics) {
   return flags;
 }
 
+const urlsToScan = await affectedUrls();
 const browser = await chromium.launch({ headless: true });
-const report = { pagesScanned: 0, animations: [], flags: [], captures: [] };
+const report = { mode: changedFilesPath ? 'affected-pages' : 'full', pagesRequested: urlsToScan, pagesScanned: 0, animations: [], flags: [], captures: [] };
 
 try {
   const desktop = await browser.newPage({ viewport: { width: 1440, height: 1000 }, deviceScaleFactor: 1 });
-
-  // Pass 1: measure every animation. No screenshots yet.
-  for (const file of allHtml) {
-    const url = urlFromFile(file);
+  for (const url of urlsToScan) {
     const response = await openStaticPage(desktop, url);
     if (!response?.ok()) continue;
     report.pagesScanned += 1;
@@ -143,13 +213,9 @@ try {
     }
   }
 
-  // Pass 2: capture the most suspicious desktop pieces plus every high-priority
-  // Security/Agents visual. This keeps the artifact reviewable and CI bounded.
   const ranked = [...report.flags].sort((a, b) => b.severity - a.severity);
   const selectedMap = new Map();
-  for (const entry of ranked.slice(0, maxDesktopCaptures)) {
-    selectedMap.set(`${entry.url}#${entry.index}`, entry);
-  }
+  for (const entry of ranked.slice(0, maxDesktopCaptures)) selectedMap.set(`${entry.url}#${entry.index}`, entry);
   for (const entry of report.animations.filter((item) => highPriority.some((prefix) => item.url.startsWith(prefix)))) {
     selectedMap.set(`${entry.url}#${entry.index}`, entry);
   }
@@ -163,9 +229,7 @@ try {
     const id = `${safeName(entry.url)}__${String(entry.index).padStart(2, '0')}`;
     await shell.screenshot({ path: path.join(outputDir, `${id}__desktop-default.png`), animations: 'disabled' });
     const state = await exercise(shell);
-    if (state) {
-      await shell.screenshot({ path: path.join(outputDir, `${id}__desktop-${state}.png`), animations: 'disabled' });
-    }
+    if (state) await shell.screenshot({ path: path.join(outputDir, `${id}__desktop-${state}.png`), animations: 'disabled' });
     report.captures.push({ url: entry.url, index: entry.index, desktop: true, exercisedState: state });
   }
 
@@ -186,4 +250,4 @@ try {
 }
 
 await fs.writeFile(path.join(outputDir, 'report.json'), `${JSON.stringify(report, null, 2)}\n`);
-console.log(`Reviewed ${report.animations.length} animations across ${report.pagesScanned} pages; ${report.flags.length} have density flags; captured ${report.captures.length} desktop candidates.`);
+console.log(`Animation density ${report.mode}: reviewed ${report.animations.length} shells across ${report.pagesScanned}/${urlsToScan.length} pages; ${report.flags.length} flagged; captured ${report.captures.length} desktop candidates.`);
