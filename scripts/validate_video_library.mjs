@@ -38,7 +38,7 @@ const loadAndAssertImages = async (page, rootSelector, label) => {
     throw new Error(`${label} contains unavailable poster resources: ${JSON.stringify(failures)}.`);
   }
 
-  const visibleImages = images.filter({ visible: true });
+  const visibleImages = page.locator(`${rootSelector} img:visible`);
   const visibleCount = await visibleImages.count();
   for (let index = 0; index < visibleCount; index += 1) {
     const image = visibleImages.nth(index);
