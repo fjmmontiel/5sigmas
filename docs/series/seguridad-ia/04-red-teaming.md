@@ -32,6 +32,8 @@ Antes de elegir un dataset o una métrica, una evaluación debería fijar al men
 - **Éxito**: qué evento concreto cuenta como daño.
 - **Recuperación**: qué estado debe quedar después de abortar o revertir.
 
+{{ include_html("snippets/seguridad-ia/04-threat-model.html") }}
+
 Sin estas siete piezas, una tasa agregada de ataque puede ser precisa y seguir siendo poco útil para una decisión de producto.
 
 OWASP ya trata el red-teaming agéntico como una actividad de ciclo completo: identificar caminos de ataque, validar defensas y mantener feedback continuo entre diseño, despliegue y operación ([OWASP AI and Agentic Red Teaming, Q2 2026](https://genai.owasp.org/resource/ai-security-solutions-landscape-for-ai-and-agentic-red-teaming-q2-2026/)).
@@ -87,6 +89,8 @@ Cada punto permite una prueba distinta. Un filtro puede bloquear una salida y de
 
 El benchmark end-to-end no tiene que ser enorme. Tiene que ser representativo. Una tarea pequeña con una cuenta de prueba, un documento contaminado y una acción reversible puede revelar más que miles de prompts sin herramientas.
 
+{{ include_html("snippets/seguridad-ia/04-causal-chain.html") }}
+
 ## Medir la cadena causal, no solo el último texto
 
 Para un flujo con herramientas conviene separar estados de éxito:
@@ -132,6 +136,8 @@ Cada hallazgo debería convertirse, cuando sea posible, en un caso con:
 - verificación del estado final.
 
 Ese caso debe ejecutarse de nuevo cuando cambie el modelo, el prompt, el retrieval, la memoria, una herramienta o la política de autorización.
+
+{{ include_html("snippets/seguridad-ia/04-regression-loop.html") }}
 
 La seguridad no mejora porque el informe tenga una cifra con dos decimales. Mejora cuando el equipo puede señalar la ruta exacta que falló, repetirla en un entorno aislado y comprobar que una defensa nueva cambia el resultado sin romper el caso legítimo.
 
