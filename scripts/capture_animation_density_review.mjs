@@ -67,7 +67,7 @@ async function inspectShell(shell) {
 }
 
 async function exercise(shell) {
-  const range = shell.locator('input[type="range"]:visible').first();
+  const range = shell.locator('input[type="range"]:visible:not([disabled])').first();
   if (await range.count()) {
     const max = await range.getAttribute('max');
     if (max !== null) {
@@ -78,7 +78,7 @@ async function exercise(shell) {
       return 'range-max';
     }
   }
-  const buttons = shell.locator('button:visible');
+  const buttons = shell.locator('button:visible:not([disabled])');
   const count = await buttons.count();
   if (count > 1) {
     const target = buttons.nth(Math.min(count - 1, 4));
