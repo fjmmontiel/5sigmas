@@ -1,0 +1,88 @@
+name: Regenerate P0 compact videos
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/regenerate-p0-compact-videos.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  render-and-commit:
+    if: github.head_ref == 'agent/media-density-review'
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Install deterministic render dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg fonts-lato fonts-dejavu-core
+          python -m pip install --upgrade pillow
+
+      - name: Render eight compact P0 videos and posters
+        run: python scripts/regenerate_p0_compact_videos.py
+
+      - name: Align article duration metadata
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json, re
+          stories = json.loads(Path('scripts/p0_video_storyboards.json').read_text(encoding='utf-8'))
+          for story in stories:
+              md = Path(story['output'] + '.md')
+              text = md.read_text(encoding='utf-8')
+              updated, count = re.subn(r'(?m)^video_duration:\s*.*$', 'video_duration: "PT52S"', text, count=1)
+              if count != 1:
+                  raise SystemExit(f'Missing video_duration in {md}')
+              md.write_text(updated, encoding='utf-8')
+          PY
+
+      - name: Verify generated binaries
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/audit_media_magic.py
+          python - <<'PY'
+          from pathlib import Path
+          import json, subprocess
+          stories=json.loads(Path('scripts/p0_video_storyboards.json').read_text(encoding='utf-8'))
+          for story in stories:
+              mp4=Path(story['output']+'.mp4')
+              jpg=Path(story['output']+'.jpg')
+              probe=json.loads(subprocess.check_output([
+                  'ffprobe','-v','error','-select_streams','v:0',
+                  '-show_entries','stream=codec_name,width,height:format=duration','-of','json',str(mp4)
+              ], text=True))
+              stream=probe['streams'][0]; duration=float(probe['format']['duration'])
+              assert stream['codec_name']=='h264', (mp4, stream)
+              assert stream['width']==1920 and stream['height']==1080, (mp4, stream)
+              assert 51.5 <= duration <= 52.2, (mp4, duration)
+              assert jpg.read_bytes()[:3] == b'\xff\xd8\xff', jpg
+              print(f'{mp4}: h264 1920x1080 {duration:.1f}s · poster JPEG')
+          PY
+
+      - name: Commit public replacements and remove one-shot workflow
+        shell: bash
+        run: |
+          set -euo pipefail
+          git rm .github/workflows/regenerate-p0-compact-videos.yml
+          git config user.name '5sigmas-ci'
+          git config user.email 'actions@users.noreply.github.com'
+          git add scripts/regenerate_p0_compact_videos.py scripts/p0_video_storyboards.json
+          while IFS= read -r base; do
+            git add "${base}.mp4" "${base}.jpg" "${base}.md"
+          done < <(python - <<'PY'
+          import json
+          from pathlib import Path
+          for item in json.loads(Path('scripts/p0_video_storyboards.json').read_text(encoding='utf-8')):
+              print(item['output'])
+          PY
+          )
+          git commit -m 'Replace eight overloaded article videos with compact renders'
+          git push origin HEAD:${{ github.head_ref }}
