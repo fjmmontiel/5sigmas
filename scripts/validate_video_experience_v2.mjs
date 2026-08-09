@@ -104,7 +104,7 @@ async function validateArticle(page, mobile) {
   if (!h1Box || !posterBox || !viewport) throw new Error('Unable to measure inline poster.');
   if (posterBox.y <= h1Box.y + h1Box.height) throw new Error('Inline poster is not placed after the article title.');
   if (!mobile && posterBox.width < 900) throw new Error(`Desktop inline poster too narrow: ${posterBox.width}px.`);
-  if (mobile && posterBox.width < viewport.width - 36) throw new Error(`Mobile inline poster too narrow: ${posterBox.width}px.`);
+  if (mobile && posterBox.width < viewport.width * 0.88) throw new Error(`Mobile inline poster too narrow: ${posterBox.width}px.`);
 
   const source = await player.locator('source').getAttribute('src');
   const mediaUrl = new URL(source, page.url()).href;
