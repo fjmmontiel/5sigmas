@@ -107,7 +107,7 @@ async function validateArticle(page, mobile) {
   if (mobile && posterBox.width < viewport.width - 36) throw new Error(`Mobile inline poster too narrow: ${posterBox.width}px.`);
 
   const source = await player.locator('source').getAttribute('src');
-  const mediaUrl = new URL(source, baseUrl).href;
+  const mediaUrl = new URL(source, page.url()).href;
   const range = await page.request.get(mediaUrl, { headers: { Range: 'bytes=0-1023' } });
   if (![200, 206].includes(range.status())) throw new Error(`Inline video cannot be ranged: ${range.status()} ${mediaUrl}.`);
 
