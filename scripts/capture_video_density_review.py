@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
-"""Create a review artifact with representative frames for every public MP4.
+"""Create representative-frame artifacts for public MP4s.
 
-This is deliberately a review tool rather than an aesthetic score. It extracts
-four evenly distributed frames from each source video so dense scenes, tiny text,
-weak hierarchy and repetitive layouts can be inspected together instead of by
-opening forty-plus videos manually.
+With no positional arguments the script audits every public video. When paths are
+provided it audits only those MP4s, which lets CI review changed media without
+re-extracting the complete catalogue on every unrelated PR.
 """
 from __future__ import annotations
 
@@ -42,8 +41,26 @@ def probe(path: Path) -> dict:
 
 
 def is_public_video(path: Path) -> bool:
-    rel = path.relative_to(DOCS).as_posix()
-    return rel.startswith(("series/", "articulos-tecnicos/"))
+    try:
+        rel = path.resolve().relative_to(DOCS.resolve()).as_posix()
+    except ValueError:
+        return False
+    return rel.startswith(("series/", "articulos-tecnicos/")) and path.suffix.lower() == ".mp4"
+
+
+def discover_videos(raw_paths: list[str]) -> list[Path]:
+    if not raw_paths:
+        return sorted(path for path in DOCS.rglob("*.mp4") if is_public_video(path))
+
+    videos: list[Path] = []
+    for raw in raw_paths:
+        candidate = (ROOT / raw).resolve() if not Path(raw).is_absolute() else Path(raw).resolve()
+        if not candidate.is_file():
+            raise ValueError(f"video path does not exist: {raw}")
+        if not is_public_video(candidate):
+            raise ValueError(f"not a public article/series MP4: {raw}")
+        videos.append(candidate)
+    return sorted(set(videos))
 
 
 def main() -> int:
@@ -51,17 +68,22 @@ def main() -> int:
         print("ffmpeg/ffprobe are required for media review", file=sys.stderr)
         return 1
 
+    try:
+        videos = discover_videos(sys.argv[1:])
+    except ValueError as exc:
+        print(exc, file=sys.stderr)
+        return 2
+
     if OUT.exists():
         shutil.rmtree(OUT)
     OUT.mkdir(parents=True, exist_ok=True)
 
-    videos = sorted(path for path in DOCS.rglob("*.mp4") if is_public_video(path))
     report = {"video_count": len(videos), "fractions": FRACTIONS, "videos": []}
 
     for video in videos:
         meta = probe(video)
         duration = meta["duration"]
-        rel = video.relative_to(DOCS).as_posix()
+        rel = video.resolve().relative_to(DOCS.resolve()).as_posix()
         safe = rel.replace("/", "__").removesuffix(".mp4")
         frames = []
         if duration <= 0:
