@@ -1,0 +1,115 @@
+name: Fix inline video QA lifecycle
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/fix-inline-video-qa.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.head_ref == 'agent/media-density-review'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Validate poster before play and player after play
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('scripts/validate_video_library.mjs')
+          text = path.read_text(encoding='utf-8')
+          old = '''  await content.waitFor({ state: 'visible' });
+  await player.waitFor({ state: 'visible' });
+  if (await poster.count() !== 1) {
+    throw new Error(`The article should expose one inline poster button, found ${await poster.count()}.`);
+  }
+
+  const h1Box = await h1.boundingBox();
+  const playerBox = await player.boundingBox();
+  if (!h1Box || !playerBox) throw new Error('Unable to measure the article heading or inline player.');
+  if (playerBox.y <= h1Box.y + h1Box.height) {
+    throw new Error('The inline video is not positioned after the article title.');
+  }
+  if (!mobile && playerBox.width < 900) {
+    throw new Error(`The desktop inline video is too narrow: ${playerBox.width}px.`);
+  }
+  if (mobile) {
+    const viewport = page.viewportSize();
+    if (!viewport) throw new Error('Missing mobile viewport.');
+    if (playerBox.width < viewport.width - 36) {
+      throw new Error(`The mobile inline video does not use the available width: ${playerBox.width}px.`);
+    }
+    if (await topbar.count() !== 1) {
+      throw new Error(`The mobile article should keep one sticky lesson navigator, found ${await topbar.count()}.`);
+    }
+  }
+'''
+          new = '''  await content.waitFor({ state: 'visible' });
+  await player.waitFor({ state: 'attached' });
+  await poster.waitFor({ state: 'visible' });
+  if (await poster.count() !== 1) {
+    throw new Error(`The article should expose one inline poster button, found ${await poster.count()}.`);
+  }
+
+  const h1Box = await h1.boundingBox();
+  const posterBox = await poster.boundingBox();
+  if (!h1Box || !posterBox) throw new Error('Unable to measure the article heading or inline poster.');
+  if (posterBox.y <= h1Box.y + h1Box.height) {
+    throw new Error('The inline video poster is not positioned after the article title.');
+  }
+  if (!mobile && posterBox.width < 900) {
+    throw new Error(`The desktop inline video poster is too narrow: ${posterBox.width}px.`);
+  }
+  if (mobile) {
+    const viewport = page.viewportSize();
+    if (!viewport) throw new Error('Missing mobile viewport.');
+    if (posterBox.width < viewport.width - 36) {
+      throw new Error(`The mobile inline video poster does not use the available width: ${posterBox.width}px.`);
+    }
+    if (await topbar.count() !== 1) {
+      throw new Error(`The mobile article should keep one sticky lesson navigator, found ${await topbar.count()}.`);
+    }
+  }
+'''
+          if old not in text:
+              raise SystemExit('Expected pre-play article block not found')
+          text = text.replace(old, new)
+          marker = '''  await page.waitForFunction(() => {
+    const video = document.querySelector('[data-s5-inline-video-player]');
+    return Boolean(video && (!video.paused || video.currentTime > 0));
+  }, { timeout: 10_000 });
+
+  const watchHref = await watchLink.getAttribute('href');
+'''
+          replacement = '''  await page.waitForFunction(() => {
+    const video = document.querySelector('[data-s5-inline-video-player]');
+    return Boolean(video && (!video.paused || video.currentTime > 0));
+  }, { timeout: 10_000 });
+  await player.waitFor({ state: 'visible' });
+  const playerBox = await player.boundingBox();
+  if (!playerBox) throw new Error('The inline player did not become measurable after Play.');
+  if (Math.abs(playerBox.width - posterBox.width) > 4) {
+    throw new Error(`The inline player changed width after Play: poster=${posterBox.width}px player=${playerBox.width}px.`);
+  }
+
+  const watchHref = await watchLink.getAttribute('href');
+'''
+          if marker not in text:
+              raise SystemExit('Expected post-play marker not found')
+          path.write_text(text.replace(marker, replacement), encoding='utf-8')
+          PY
+
+      - name: Remove one-shot workflow and commit
+        run: |
+          git rm .github/workflows/fix-inline-video-qa.yml
+          git config user.name '5sigmas-ci'
+          git config user.email 'actions@users.noreply.github.com'
+          git add scripts/validate_video_library.mjs
+          git commit -m 'Validate inline video across poster-to-player lifecycle'
+          git push origin HEAD:${{ github.head_ref }}
