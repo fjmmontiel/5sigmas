@@ -121,6 +121,7 @@ function key(shell) {
 
 function compare(current, previous, context, isChanged) {
   const violations = [];
+  const notes = [];
   const label = `${context.url} · ${context.viewport} · ${current.demo}`;
 
   if (isChanged) {
@@ -130,10 +131,16 @@ function compare(current, previous, context, isChanged) {
     if (current.controls === 0 && !current.fullscreenOff) {
       violations.push(`${label}: static demo must set data-anim-fullscreen="off".`);
     }
+    if (current.controls > 8) {
+      violations.push(`${label}: changed demo exposes ${current.controls} simultaneous controls (>8).`);
+    }
   }
 
-  if (!previous) return violations;
+  if (!previous) return { violations, notes };
   const growth = (value, old, ratio, absolute) => value > Math.max(old * ratio, old + absolute);
+  const materiallySimplified = current.words <= previous.words * 0.80
+    && current.textLeaves <= previous.textLeaves * 0.80;
+
   if (growth(current.words, previous.words, 1.20, 12)) {
     violations.push(`${label}: words regressed ${previous.words} → ${current.words} (>20%).`);
   }
@@ -143,13 +150,23 @@ function compare(current, previous, context, isChanged) {
   if (current.minTextPx !== null && previous.minTextPx !== null && current.minTextPx < previous.minTextPx - 0.5) {
     violations.push(`${label}: minimum text shrank ${previous.minTextPx.toFixed(1)}px → ${current.minTextPx.toFixed(1)}px.`);
   }
+
   if (growth(current.height, previous.height, 1.15, 80)) {
-    violations.push(`${label}: shell height regressed ${Math.round(previous.height)}px → ${Math.round(current.height)}px (>15%).`);
+    if (materiallySimplified) {
+      notes.push(`${label}: height grew ${Math.round(previous.height)}px → ${Math.round(current.height)}px, allowed because visible words and labels both fell by at least 20%.`);
+    } else {
+      violations.push(`${label}: shell height regressed ${Math.round(previous.height)}px → ${Math.round(current.height)}px (>15%) without compensating simplification.`);
+    }
   }
-  if (current.controls > previous.controls + 2) {
-    violations.push(`${label}: controls increased ${previous.controls} → ${current.controls}.`);
+
+  if (current.controls > previous.controls + 2 && current.controls > 6) {
+    if (materiallySimplified) {
+      notes.push(`${label}: controls grew ${previous.controls} → ${current.controls}, allowed because progressive disclosure materially reduced simultaneous content.`);
+    } else {
+      violations.push(`${label}: controls increased ${previous.controls} → ${current.controls} without compensating simplification.`);
+    }
   }
-  return violations;
+  return { violations, notes };
 }
 
 function safe(value) {
@@ -165,6 +182,7 @@ const report = {
   changedDemos: [...scope.demos].sort(),
   urls: scope.urls,
   comparisons: [],
+  notes: [],
   violations: [],
 };
 
@@ -194,9 +212,10 @@ try {
       for (const shell of current.shells) {
         const old = previousMap.get(key(shell));
         const changedDemo = scope.demos.has(shell.demo) || !old;
-        const violations = compare(shell, old, { url, viewport: config.name }, changedDemo);
-        report.violations.push(...violations);
-        report.comparisons.push({ url, viewport: config.name, current: shell, previous: old || null, changedDemo, violations });
+        const result = compare(shell, old, { url, viewport: config.name }, changedDemo);
+        report.violations.push(...result.violations);
+        report.notes.push(...result.notes);
+        report.comparisons.push({ url, viewport: config.name, current: shell, previous: old || null, changedDemo, violations: result.violations, notes: result.notes });
 
         if (changedDemo) {
           const locator = currentPage.locator('.anim-brand-shell').nth(shell.index - 1);
@@ -224,6 +243,7 @@ try {
 }
 
 await fs.writeFile(path.join(outputDir, 'report.json'), `${JSON.stringify(report, null, 2)}\n`);
+for (const note of report.notes) console.log(`note: ${note}`);
 if (report.violations.length) {
   console.error(`Animation contract failed with ${report.violations.length} violation(s):`);
   for (const violation of report.violations) console.error(`- ${violation}`);
