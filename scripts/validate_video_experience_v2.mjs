@@ -237,10 +237,18 @@ try {
     { name: 'mobile', viewport: { width: 390, height: 844 }, mobile: true },
   ]) {
     const page = await browser.newPage({ viewport: config.viewport, isMobile: config.mobile, reducedMotion: 'reduce' });
+    let allowPageMedia = !localPreview;
+    if (localPreview) {
+      await page.route(/\.mp4(?:\?.*)?$/i, (route) => allowPageMedia ? route.continue() : route.abort());
+    }
+
+    allowPageMedia = false;
     await validateHub(page, config.mobile);
     for (const articlePath of targets) {
       const requirePlayback = !localPreview || articlePath === canonicalPlaybackCanary || changedTargets.has(articlePath);
+      allowPageMedia = requirePlayback;
       await validateArticle(page, articlePath, config.mobile, requirePlayback);
+      allowPageMedia = !localPreview;
       await validateWatch(page, articlePath, config.mobile);
       report[config.name].push(articlePath);
       if (requirePlayback) report.playback.push({ articlePath, viewport: config.name });
