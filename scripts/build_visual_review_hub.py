@@ -19,8 +19,6 @@ try:
 except Exception:  # pragma: no cover - raw embedding remains a valid fallback
     Image = None
 
-IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg", ".webp"}
-
 
 def image_uri(path: Path, max_width: int = 1100) -> str:
     suffix = path.suffix.lower()
@@ -60,6 +58,17 @@ def card(title: str, image: Path, meta: str = "", warn: bool = False) -> str:
     )
 
 
+def lifecycle_label(path: Path) -> str:
+    name = path.stem.removeprefix("video-lifecycle__")
+    parts = name.split("__")
+    if len(parts) < 3:
+        return name.replace("__", " · ").replace("-", " ")
+    article = parts[0].replace("__", "/").replace("-", " ")
+    viewport = parts[-2]
+    state = parts[-1]
+    return f"{article} · {viewport} · {state}"
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--artifact-dir", type=Path, default=Path("artifacts/visual-review"))
@@ -72,6 +81,7 @@ def main() -> int:
     root.mkdir(parents=True, exist_ok=True)
 
     video_report = safe_json(root / "video-density" / "report.json")
+    video_experience = safe_json(root / "video-experience-v2.json")
     density_report = safe_json(root / "animation-density" / "report.json")
     contract_report = safe_json(root / "animation-contract" / "report.json")
 
@@ -84,6 +94,7 @@ def main() -> int:
         "article-inline-video-desktop-v2.png", "article-inline-video-mobile-v2.png",
     ]
     responsive = [root / name for name in responsive_names if (root / name).is_file()]
+    lifecycle = sorted(root.glob("video-lifecycle__*.png"))
 
     frames = []
     for item in video_report.get("videos") or []:
@@ -112,23 +123,30 @@ def main() -> int:
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}main{max-width:1500px;margin:auto;padding:32px}.eyebrow{color:var(--teal);font-weight:800;text-transform:uppercase;letter-spacing:.12em;font-size:12px}h1{font-size:clamp(32px,5vw,62px);line-height:1;margin:.35rem 0 1rem}h2{margin-top:52px;font-size:28px}h3{font-size:17px;margin:.25rem 0 .7rem}p{color:var(--muted);max-width:92ch}.summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:24px 0}.stat,.card{background:var(--panel);border:1px solid var(--line);border-radius:16px}.stat{padding:16px}.stat b{display:block;font-size:28px}.stat span{color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.frames{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.card{padding:12px;overflow:hidden}.card img{display:block;width:100%;height:auto;border-radius:10px;border:1px solid #27313d}.meta{font:12px/1.45 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted);margin-top:8px;overflow-wrap:anywhere}.warn{border-color:#5a4722;background:#1d1a12}.note{padding:16px;border-left:3px solid var(--amber);background:#17150f;border-radius:8px;color:#d4c8ac}.ok{color:#7bd7c9}@media(max-width:900px){main{padding:18px}.summary,.grid{grid-template-columns:1fr}.frames{grid-template-columns:repeat(2,minmax(0,1fr))}}
 """
 
+    target_count = len(set((video_experience.get("desktop") or []) + (video_experience.get("mobile") or [])))
     pieces = [
         "<!doctype html><html lang=\"es\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">",
         f"<title>5sigmas · {html.escape(args.label)}</title><style>{css}</style></head><body><main>",
         f'<div class="eyebrow">5sigmas · CI evidence</div><h1>{html.escape(args.label)}</h1>',
         '<p>Artefacto autocontenido generado por CI. Resume responsive, vídeo, poster-first lifecycle y los candidatos de animación que requieren revisión visual.</p>',
         '<div class="summary">',
-        f'<div class="stat"><b>{len(video_report.get("videos") or [])}</b><span>vídeos muestreados</span></div>',
-        f'<div class="stat"><b>{len(frames)}</b><span>frames representativos</span></div>',
+        f'<div class="stat"><b>{target_count}</b><span>rutas de vídeo validadas</span></div>',
+        f'<div class="stat"><b>{len(lifecycle)}</b><span>estados poster / playing</span></div>',
         f'<div class="stat"><b>{len(density_report.get("animations") or [])}</b><span>animation shells</span></div>',
         f'<div class="stat"><b>{len(contract_report.get("violations") or [])}</b><span>violaciones de contrato</span></div>',
         '</div>',
     ]
 
     if responsive:
-        pieces.append('<h2>Responsive + video lifecycle</h2><div class="grid">')
+        pieces.append('<h2>Responsive baseline</h2><div class="grid">')
         for path in responsive:
             pieces.append(card(path.stem.replace("-", " "), path))
+        pieces.append('</div>')
+
+    if lifecycle:
+        pieces.append('<h2>P0 poster-first lifecycle</h2><p>Cada ruta permanente aparece en estado poster y después de Play, en desktop y móvil. Esto permite revisar el lifecycle sin ejecutar Chrome localmente.</p><div class="grid">')
+        for path in lifecycle:
+            pieces.append(card(lifecycle_label(path), path))
         pieces.append('</div>')
 
     if frames:
@@ -159,11 +177,14 @@ def main() -> int:
 
     if contract_report:
         violations = contract_report.get("violations") or []
+        notes = contract_report.get("notes") or []
         pieces.append('<h2>Contract result</h2>')
         if violations:
             pieces.append('<div class="note"><strong>Violations:</strong><br>' + '<br>'.join(html.escape(str(item)) for item in violations) + '</div>')
         else:
             pieces.append('<p class="ok"><strong>Animation contract passed.</strong></p>')
+        if notes:
+            pieces.append('<div class="meta">Intent-aware allowances:<br>' + '<br>'.join(html.escape(str(item)) for item in notes) + '</div>')
 
     pieces.append('</main></body></html>')
     output.write_text(''.join(pieces), encoding="utf-8")
