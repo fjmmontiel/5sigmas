@@ -32,30 +32,24 @@ hide:
     </div>
     <div class="s5-list-row">
       <span class="s5-list-row__n">03</span>
-      <span class="s5-list-row__title">Agentes de IA</span>
-      <span class="s5-list-row__desc">De responder a actuar: bucles, herramientas, memoria y límites operativos.</span>
-      <span class="s5-list-row__meta">Investigación</span>
-    </div>
-    <div class="s5-list-row">
-      <span class="s5-list-row__n">04</span>
       <span class="s5-list-row__title">Alucinación</span>
       <span class="s5-list-row__desc">Por qué ocurre, qué reduce el problema y qué no puede resolver el RAG.</span>
       <span class="s5-list-row__meta">Investigación</span>
     </div>
     <div class="s5-list-row">
-      <span class="s5-list-row__n">05</span>
+      <span class="s5-list-row__n">04</span>
       <span class="s5-list-row__title">Fine-tuning y adaptación</span>
       <span class="s5-list-row__desc">Cuándo adaptar un modelo, cuándo recuperar contexto y cuándo no hacer ninguna de las dos cosas.</span>
       <span class="s5-list-row__meta">Pendiente</span>
     </div>
     <div class="s5-list-row">
-      <span class="s5-list-row__n">06</span>
+      <span class="s5-list-row__n">05</span>
       <span class="s5-list-row__title">IA y trabajo</span>
       <span class="s5-list-row__desc">Evidencia sobre productividad, augmentation, sustitución y trabajo cualificado.</span>
       <span class="s5-list-row__meta">Pendiente</span>
     </div>
     <div class="s5-list-row">
-      <span class="s5-list-row__n">07</span>
+      <span class="s5-list-row__n">06</span>
       <span class="s5-list-row__title">Geopolítica de la IA</span>
       <span class="s5-list-row__desc">Chips, fabricación, energía, controles de exportación y soberanía tecnológica.</span>
       <span class="s5-list-row__meta">Pendiente</span>

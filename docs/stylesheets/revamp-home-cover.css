@@ -472,3 +472,56 @@
     padding-left: .65rem;
   }
 }
+
+/* The visual hub reuses the learning-loop class and loads after this file.
+   Keep its compact, single-line treatment from leaking into the homepage. */
+.s5-home-cover .s5-learning-loop__n {
+  color: var(--s5-muted);
+  font-size: .58rem;
+}
+
+.s5-home-cover .s5-learning-loop__item:first-child .s5-learning-loop__n {
+  color: var(--s5-brand-blue);
+}
+
+.s5-home-cover .s5-learning-loop__item:nth-child(2) .s5-learning-loop__n {
+  color: var(--s5-brand-orange);
+}
+
+.s5-home-cover .s5-learning-loop strong {
+  color: var(--s5-text);
+  font-size: .72rem;
+  line-height: 1.1;
+}
+
+.s5-home-cover .s5-learning-loop small {
+  overflow: visible;
+  margin-top: .35rem;
+  color: var(--s5-muted);
+  font-size: .61rem;
+  line-height: 1.35;
+  text-overflow: clip;
+  white-space: normal;
+}
+
+@media (max-width: 800px) {
+  .s5-home-cover .s5-learning-loop__n {
+    font-size: .53rem;
+  }
+
+  .s5-home-cover .s5-learning-loop strong {
+    font-size: .63rem;
+  }
+
+  .s5-home-cover .s5-learning-loop small {
+    margin-top: .25rem;
+    font-size: .53rem;
+    line-height: 1.25;
+  }
+}
+
+@media (max-width: 420px) {
+  .s5-home-cover .s5-learning-loop small {
+    max-width: none;
+  }
+}
