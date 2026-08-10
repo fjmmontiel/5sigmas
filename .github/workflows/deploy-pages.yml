@@ -98,7 +98,7 @@ jobs:
   post-deploy-smoke:
     needs: deploy
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     permissions:
       contents: read
     steps:
@@ -146,6 +146,12 @@ jobs:
         env:
           S5_PREVIEW_URL: https://5sigmas.com
         run: node scripts/validate_production_media_assets.mjs
+
+      - name: Prove permanent P0 public media matches repository bytes
+        env:
+          S5_VIDEO_MEDIA_ORIGIN: ${{ vars.S5_VIDEO_MEDIA_ORIGIN }}
+          S5_SITE_URL: https://5sigmas.com
+        run: python scripts/validate_public_media_identity.py
 
       - name: Validate all P0 poster-first video lifecycles on production
         env:
