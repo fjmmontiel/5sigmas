@@ -1,60 +1,115 @@
-# Visual and video QA
+# Visual, animation and video QA
 
-This repository treats visual quality as a release contract, not only as a build check.
+5sigmas treats rendered output as a release contract. A successful Markdown build is necessary but not sufficient.
 
-## PR checks
+## Release topology
 
-`pr-visual-review.yml` validates:
+Both pull requests and `main` deployments call `.github/workflows/visual-qa.yml`.
+
+The reusable gate validates:
 
 - strict MkDocs build and search/publication/video contracts;
-- binary media signatures, so a `.jpg` containing non-JPEG bytes fails before browser QA;
+- binary media signatures, so a `.jpg` containing MP4 bytes fails before browser QA;
+- cache-safe/versioned filenames whenever already-declared public video media changes;
 - browser resource loading and responsive screenshots;
-- animation-density review for pages affected by the PR;
-- Seguridad en IA visual interactions end-to-end;
-- reader continuation and voice microlabs;
-- the complete video library/watch/article poster-to-player lifecycle on desktop and mobile;
-- navigation, reader-header isolation and responsive interaction polish.
+- a discriminative animation-density review queue;
+- a hard animation regression contract against the PR/release base build;
+- Seguridad en IA interactions, reader continuation and voice microlabs;
+- the complete video hub/watch/article poster-to-player lifecycle on desktop and mobile;
+- all eight P0 compact-video routes as permanent canaries;
+- direct navigation, reader-header isolation and responsive interaction polish.
 
-When a public MP4 changes, CI also extracts representative frames at 8%, 34%, 62% and 88% of its duration.
+The output always contains a self-contained `artifacts/visual-review/5sigmas.html`. It embeds the most useful screenshots and representative video frames so review does not require a local checkout.
 
-## 2026-08-09 P0 compact-video replacement
+## Production proof
 
-The full-catalogue review identified eight P0 videos where paragraphs, supporting numbers, conclusions and diagrams competed within the same beat. They were replaced with reproducible compact renders generated from `scripts/p0_video_storyboards.json` and `scripts/regenerate_p0_compact_videos.py`.
+A release is not considered verified merely because the PR preview passed.
 
-The replacement contract is:
+`deploy-pages.yml` now:
 
-- 1920×1080 H.264;
-- `PT52S` article metadata and ~51.9 s encoded duration;
-- five content beats per video;
-- one thesis per beat;
-- one dominant diagram per beat;
-- short supporting copy instead of multiple simultaneous evidence blocks.
+1. runs the same reusable visual gate;
+2. publishes/validates changed R2 media before the Pages build when `S5_VIDEO_MEDIA_ORIGIN` is configured;
+3. stamps `/build.json` with the exact Git commit SHA;
+4. deploys Pages;
+5. waits until `https://5sigmas.com/build.json` exposes that exact SHA;
+6. re-runs P0 video lifecycle checks, Agentes poster decoding, animation contract checks and responsive captures against production;
+7. uploads a second self-contained `5sigmas-production-review` artifact.
 
-The eight changed MP4s are:
+That sequence makes `main == production` observable rather than inferred.
 
-1. `series/ia-pib-bienestar-energia/04-ia-pib-hoy.mp4`
-2. `series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica.mp4`
-3. `series/ia-pib-bienestar-energia/03-pib-vs-bienestar.mp4`
-4. `series/multimodalidad-iag/02-alineamiento.mp4`
-5. `series/multimodalidad-iag/03-arquitecturas.mp4`
-6. `series/multimodalidad-iag/05-riesgos.mp4`
-7. `series/datacenters-espacio/02-energia-calor-conectividad.mp4`
-8. `series/datacenters-espacio/04-huella-real-datacenter.mp4`
+## Video media identity and caching
 
-A PR containing those eight videos must therefore emit **32 representative review frames** from the changed-video gate before merge.
+`publish-video-media.yml` selects media objects from the release diff. Every selected object is uploaded with its source SHA-256 in R2 object metadata, then verified with `head-object` for both SHA-256 and byte length before public delivery checks run.
 
-## Full audits on demand
+Changed declared media must use one of these filename forms:
 
-Run the animation reviewer without `S5_CHANGED_FILES_FILE` to inspect the full site rather than only PR-affected pages:
+```text
+03-test-time-compute-v2.mp4
+03-test-time-compute-a1b2c3d4.mp4
+```
+
+Legacy mutable names are grandfathered while unchanged. Once changed, they must be renamed. Versioned/content-addressed objects receive:
+
+```text
+Cache-Control: public,max-age=31536000,immutable
+```
+
+Legacy objects retain the one-day cache until they are migrated.
+
+## Animation contracts
+
+There are deliberately two different mechanisms.
+
+### Review queue
+
+`capture_animation_density_review.mjs` identifies unusually dense visuals using thresholds intended to produce a small review queue, not mark the whole catalogue as defective. Current signals include high word count, many visible labels, small text, excessive controls and extreme height.
+
+Run the full catalogue on demand:
 
 ```bash
 node scripts/capture_animation_density_review.mjs
 ```
 
-Run the video reviewer without explicit paths to sample every public MP4:
+### Hard regression gate
 
-```bash
-python scripts/capture_video_density_review.py
-```
+`validate_animation_contract.mjs` compares affected pages with a separately built copy of the base commit at desktop and mobile widths. It fails on real regressions such as:
 
-The density reports are prioritisation evidence, not automatic aesthetic scores. A flagged visual must still be inspected in context before it is simplified or replaced.
+- horizontal overflow;
+- >20% text/label growth beyond a small absolute allowance;
+- smaller minimum text;
+- >15% unexplained shell-height growth;
+- large increases in controls;
+- changed/new demos using text below 11 px;
+- changed/new static demos exposing fullscreen instead of `data-anim-fullscreen="off"`;
+- interactions that introduce overflow.
+
+Because the comparison uses the actual base build, historical dense visuals are not made permanently red. Only new regressions are blocked.
+
+## Animation authoring standard
+
+Use a static infographic when the reader does not need to change a variable or state. Use interaction for causality, comparison or progressive disclosure.
+
+For interactive visuals:
+
+- one visual thesis per state;
+- one dominant diagram per state;
+- reveal detail progressively rather than showing all evidence simultaneously;
+- keep visible copy readable at article width and mobile width;
+- disable fullscreen when enlargement adds no analytical value;
+- support `prefers-reduced-motion`;
+- keep the article narrative outside the animation so the visual is not forced to carry every caveat.
+
+## P0 compact-video replacement
+
+The eight compact videos introduced on 2026-08-09 remain permanent release canaries:
+
+1. `series/ia-pib-bienestar-energia/04-ia-pib-hoy`
+2. `series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica`
+3. `series/ia-pib-bienestar-energia/03-pib-vs-bienestar`
+4. `series/multimodalidad-iag/02-alineamiento`
+5. `series/multimodalidad-iag/03-arquitecturas`
+6. `series/multimodalidad-iag/05-riesgos`
+7. `series/datacenters-espacio/02-energia-calor-conectividad`
+8. `series/datacenters-espacio/04-huella-real-datacenter`
+
+When any public MP4 changes, CI still extracts representative frames at 8%, 34%, 62% and 88% of its duration.
