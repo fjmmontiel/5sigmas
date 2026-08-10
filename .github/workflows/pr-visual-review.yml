@@ -25,3 +25,9 @@ jobs:
     with:
       base_sha: ${{ github.event.pull_request.base.sha }}
       artifact_name: 5sigmas-visual-review
+
+  media-release-plan:
+    uses: ./.github/workflows/publish-video-media.yml
+    with:
+      publish: false
+      base_sha: ${{ github.event.pull_request.base.sha }}
