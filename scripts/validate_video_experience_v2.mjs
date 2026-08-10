@@ -6,6 +6,7 @@ const outputDir = process.env.S5_SCREENSHOT_DIR || 'artifacts/visual-review';
 const changedFilesPath = process.env.S5_CHANGED_FILES_FILE || '';
 const includePermanentCanaries = process.env.S5_FULL_VIDEO_CANARIES !== '0';
 const localPreview = /^http:\/\/(?:127\.0\.0\.1|localhost)(?::\d+)?$/i.test(baseUrl);
+const canonicalPlaybackCanary = '/series/modelos-razonadores/03-test-time-compute/';
 
 const permanentArticlePaths = [
   '/series/ia-pib-bienestar-energia/04-ia-pib-hoy/',
@@ -16,7 +17,7 @@ const permanentArticlePaths = [
   '/series/multimodalidad-iag/05-riesgos/',
   '/series/datacenters-espacio/02-energia-calor-conectividad/',
   '/series/datacenters-espacio/04-huella-real-datacenter/',
-  '/series/modelos-razonadores/03-test-time-compute/',
+  canonicalPlaybackCanary,
 ];
 
 function articlePathFromMedia(file) {
@@ -33,19 +34,23 @@ function safe(value) {
 }
 
 async function readTargets() {
-  const targets = new Set(includePermanentCanaries ? permanentArticlePaths : [permanentArticlePaths.at(-1)]);
+  const targets = new Set(includePermanentCanaries ? permanentArticlePaths : [canonicalPlaybackCanary]);
+  const changedTargets = new Set();
   if (changedFilesPath) {
     try {
       const changed = (await fs.readFile(changedFilesPath, 'utf8')).split(/\r?\n/).map((value) => value.trim()).filter(Boolean);
       for (const file of changed) {
         const article = articlePathFromMedia(file);
-        if (article) targets.add(article);
+        if (article) {
+          targets.add(article);
+          changedTargets.add(article);
+        }
       }
     } catch {
       // Permanent canaries remain deterministic when no changed-file list exists.
     }
   }
-  return [...targets];
+  return { targets: [...targets], changedTargets };
 }
 
 async function settle(page) {
@@ -122,7 +127,7 @@ async function validateHub(page, mobile) {
   await search.fill('test time compute');
   const firstResult = root.locator('[data-s5-video-card]:visible .s5-video-card__poster').first();
   const resultPath = new URL(await firstResult.getAttribute('href'), baseUrl).pathname;
-  if (resultPath !== '/videos/series/modelos-razonadores/03-test-time-compute/') {
+  if (resultPath !== `/videos${canonicalPlaybackCanary}`) {
     throw new Error(`Exact video search did not rank first: ${resultPath}.`);
   }
   await search.fill('');
@@ -170,7 +175,7 @@ async function validateWatch(page, articlePath, mobile) {
   await noOverflow(page, `${mobile ? 'Mobile' : 'Desktop'} watch ${pathname}`);
 }
 
-async function validateArticle(page, articlePath, mobile) {
+async function validateArticle(page, articlePath, mobile, requirePlayback) {
   await goto(page, articlePath);
   const player = page.locator('[data-s5-inline-video-player]');
   const poster = page.locator('[data-s5-inline-video-start]');
@@ -200,19 +205,22 @@ async function validateArticle(page, articlePath, mobile) {
 
   const suffix = `${safe(articlePath)}__${mobile ? 'mobile' : 'desktop'}`;
   await screenshot(page, `video-lifecycle__${suffix}__poster`);
-  const beforeWidth = posterBox.width;
-  await poster.click();
-  await player.waitFor({ state: 'visible' });
-  await page.waitForFunction(() => {
-    const video = document.querySelector('[data-s5-inline-video-player]');
-    return Boolean(video && (!video.paused || video.currentTime > 0));
-  }, { timeout: 10_000 });
-  const playerBox = await player.boundingBox();
-  if (!playerBox) throw new Error(`${articlePath}: inline player is not measurable after Play.`);
-  if (Math.abs(playerBox.width - beforeWidth) > 4) {
-    throw new Error(`${articlePath}: player changed width after Play: ${beforeWidth}px → ${playerBox.width}px.`);
+
+  if (requirePlayback) {
+    const beforeWidth = posterBox.width;
+    await poster.click();
+    await player.waitFor({ state: 'visible' });
+    await page.waitForFunction(() => {
+      const video = document.querySelector('[data-s5-inline-video-player]');
+      return Boolean(video && (!video.paused || video.currentTime > 0));
+    }, { timeout: 10_000 });
+    const playerBox = await player.boundingBox();
+    if (!playerBox) throw new Error(`${articlePath}: inline player is not measurable after Play.`);
+    if (Math.abs(playerBox.width - beforeWidth) > 4) {
+      throw new Error(`${articlePath}: player changed width after Play: ${beforeWidth}px → ${playerBox.width}px.`);
+    }
+    await screenshot(page, `video-lifecycle__${suffix}__playing`);
   }
-  await screenshot(page, `video-lifecycle__${suffix}__playing`);
 
   const linkedWatch = new URL(await page.locator('.s5-video-embed__watch a').getAttribute('href'), baseUrl).pathname;
   if (linkedWatch !== watchPath(articlePath)) throw new Error(`${articlePath}: watch link points to ${linkedWatch}.`);
@@ -220,9 +228,9 @@ async function validateArticle(page, articlePath, mobile) {
   await noOverflow(page, `${mobile ? 'Mobile' : 'Desktop'} article ${articlePath}`);
 }
 
-const targets = await readTargets();
+const { targets, changedTargets } = await readTargets();
 const browser = await chromium.launch({ headless: true });
-const report = { baseUrl, localPreview, targets, desktop: [], mobile: [] };
+const report = { baseUrl, localPreview, targets, changedTargets: [...changedTargets], desktop: [], mobile: [], playback: [] };
 try {
   for (const config of [
     { name: 'desktop', viewport: { width: 1440, height: 1000 }, mobile: false },
@@ -231,15 +239,22 @@ try {
     const page = await browser.newPage({ viewport: config.viewport, isMobile: config.mobile, reducedMotion: 'reduce' });
     await validateHub(page, config.mobile);
     for (const articlePath of targets) {
-      await validateArticle(page, articlePath, config.mobile);
+      // Exhaustive playback belongs to the production smoke, where transport also
+      // has to prove real HTTP 206 semantics. Local preview validates every P0
+      // poster/layout/source but plays only the canonical canary and media touched
+      // by the current diff; this avoids repeatedly downloading immutable MP4s from
+      // python http.server without losing release signal.
+      const requirePlayback = !localPreview || articlePath === canonicalPlaybackCanary || changedTargets.has(articlePath);
+      await validateArticle(page, articlePath, config.mobile, requirePlayback);
       await validateWatch(page, articlePath, config.mobile);
       report[config.name].push(articlePath);
+      if (requirePlayback) report.playback.push({ articlePath, viewport: config.name });
     }
     await page.close();
   }
   await fs.mkdir(outputDir, { recursive: true });
   await fs.writeFile(`${outputDir}/video-experience-v2.json`, `${JSON.stringify(report, null, 2)}\n`);
-  console.log(`Video experience v2 passed: ${targets.length} article/watch lifecycles on desktop + mobile; transport=${localPreview ? 'HEAD+real playback' : 'strict 206 ranges'}.`);
+  console.log(`Video experience v2 passed: ${targets.length} article/watch routes on desktop + mobile; playback proofs=${report.playback.length}; transport=${localPreview ? 'local HEAD + canary/changed playback' : 'strict 206 + exhaustive playback'}.`);
 } finally {
   await browser.close();
 }
