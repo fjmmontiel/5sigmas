@@ -1,0 +1,220 @@
+name: Reusable visual and media QA
+
+on:
+  workflow_call:
+    inputs:
+      base_sha:
+        description: Base commit used for changed-file and regression comparison
+        required: false
+        default: ""
+        type: string
+      artifact_name:
+        description: Name of the uploaded review artifact
+        required: false
+        default: 5sigmas-visual-review
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Resolve release diff
+        id: diff
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE="${{ inputs.base_sha }}"
+          if [[ -n "$BASE" && ! "$BASE" =~ ^0+$ ]]; then
+            git cat-file -e "${BASE}^{commit}"
+            git diff --name-only "$BASE" HEAD > /tmp/pr-changed-files.txt
+            echo "has_base=true" >> "$GITHUB_OUTPUT"
+            echo "base=$BASE" >> "$GITHUB_OUTPUT"
+          else
+            git diff-tree --no-commit-id --name-only -r --root HEAD > /tmp/pr-changed-files.txt
+            echo "has_base=false" >> "$GITHUB_OUTPUT"
+            echo "base=" >> "$GITHUB_OUTPUT"
+          fi
+          echo "Changed files:"
+          cat /tmp/pr-changed-files.txt
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then python -m pip install -r requirements.txt; else python -m pip install mkdocs mkdocs-material PyYAML Pillow; fi
+
+      - name: Validate video media declarations
+        run: python scripts/prepare_video_media.py --check
+
+      - name: Validate media binary signatures
+        run: python scripts/audit_media_magic.py
+
+      - name: Enforce cache-safe filenames for changed declared media
+        run: python scripts/validate_changed_media_versioning.py --changed-files /tmp/pr-changed-files.txt
+
+      - name: Validate video structured-data contract
+        run: python scripts/test_video_schema_contract.py
+
+      - name: Build current site strictly
+        run: mkdocs build --clean --strict
+
+      - name: Validate all eight P0 article/watch contracts
+        run: python scripts/validate_p0_video_contract.py
+
+      - name: Audit video indexing metadata
+        run: python scripts/audit_video_indexing.py
+
+      - name: Audit search foundation
+        run: python scripts/audit_search_foundation.py
+
+      - name: Enforce priority topic hub contract
+        run: python scripts/audit_priority_topic_hubs.py
+
+      - name: Enforce public-series publication contract
+        run: python scripts/audit_publication_contract.py
+
+      - name: Capture representative frames from changed public videos
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t changed_videos < <(grep -E '^docs/(series|articulos-tecnicos)/.*\.mp4$' /tmp/pr-changed-files.txt || true)
+          if [ "${#changed_videos[@]}" -eq 0 ]; then
+            echo "No public MP4 changed."
+            exit 0
+          fi
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          python scripts/capture_video_density_review.py "${changed_videos[@]}"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Localize generated current-site video URLs for preview QA
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          root = Path('site/videos')
+          targets = [root / 'catalog.json', *root.rglob('*.html')]
+          for target in targets:
+              if target.is_file():
+                  text = target.read_text(encoding='utf-8')
+                  target.write_text(text.replace('https://5sigmas.com/', '/'), encoding='utf-8')
+          PY
+
+      - name: Serve current site
+        shell: bash
+        run: |
+          python -m http.server 8000 --directory site > /tmp/5sigmas-preview.log 2>&1 &
+          echo $! > /tmp/5sigmas-preview.pid
+          for attempt in {1..30}; do
+            curl --fail --silent http://127.0.0.1:8000/ > /dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/5sigmas-preview.log
+          exit 1
+
+      - name: Build and serve previous site for regression comparison
+        if: steps.diff.outputs.has_base == 'true'
+        shell: bash
+        env:
+          BASE_SHA: ${{ steps.diff.outputs.base }}
+        run: |
+          set -euo pipefail
+          git worktree add --detach /tmp/5sigmas-base "$BASE_SHA"
+          (
+            cd /tmp/5sigmas-base
+            mkdocs build --clean --strict
+          )
+          python - <<'PY'
+          from pathlib import Path
+          root = Path('/tmp/5sigmas-base/site/videos')
+          targets = [root / 'catalog.json', *root.rglob('*.html')]
+          for target in targets:
+              if target.is_file():
+                  text = target.read_text(encoding='utf-8')
+                  target.write_text(text.replace('https://5sigmas.com/', '/'), encoding='utf-8')
+          PY
+          python -m http.server 8001 --directory /tmp/5sigmas-base/site > /tmp/5sigmas-base-preview.log 2>&1 &
+          echo $! > /tmp/5sigmas-base-preview.pid
+          for attempt in {1..30}; do
+            curl --fail --silent http://127.0.0.1:8001/ > /dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/5sigmas-base-preview.log
+          exit 1
+
+      - name: Audit browser resource loading
+        run: node scripts/audit_browser_resources.mjs
+
+      - name: Capture responsive screenshots
+        run: node scripts/capture_site_screenshots.mjs
+
+      - name: Capture animation review queue
+        env:
+          S5_CHANGED_FILES_FILE: /tmp/pr-changed-files.txt
+        run: node scripts/capture_animation_density_review.mjs
+
+      - name: Enforce animation regression contract
+        env:
+          S5_CHANGED_FILES_FILE: /tmp/pr-changed-files.txt
+          S5_BASE_PREVIEW_URL: ${{ steps.diff.outputs.has_base == 'true' && 'http://127.0.0.1:8001' || '' }}
+        run: node scripts/validate_animation_contract.mjs
+
+      - name: Validate Seguridad en IA visuals end-to-end
+        run: node scripts/capture_security_visuals.mjs
+
+      - name: Validate reader continuation outside animations
+        run: node scripts/validate_reader_end_placement.mjs
+
+      - name: Capture and validate every progressive voice microlab
+        run: node scripts/capture_voice_report_animations.mjs
+
+      - name: Validate changed video lifecycles plus permanent browser canary
+        env:
+          S5_CHANGED_FILES_FILE: /tmp/pr-changed-files.txt
+          S5_FULL_VIDEO_CANARIES: "0"
+        run: node scripts/validate_video_experience_v2.mjs
+
+      - name: Validate direct series and article navigation
+        run: node scripts/validate_direct_reader_navigation.mjs
+
+      - name: Validate desktop reader header isolation
+        run: node scripts/validate_reader_header_overlap.mjs
+
+      - name: Validate responsive interaction polish
+        run: node scripts/validate_responsive_polish.mjs
+
+      - name: Build self-contained 5sigmas.html reviewer
+        if: always()
+        run: |
+          python scripts/build_visual_review_hub.py \
+            --artifact-dir artifacts/visual-review \
+            --output artifacts/visual-review/5sigmas.html \
+            --label "Visual review · ${{ github.sha }}"
+
+      - name: Upload visual review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.artifact_name }}
+          path: artifacts/visual-review
+          if-no-files-found: warn
+          retention-days: 14

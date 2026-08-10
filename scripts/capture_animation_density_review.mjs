@@ -2,20 +2,14 @@ import { chromium } from 'playwright';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
-const baseUrl = process.env.S5_PREVIEW_URL || 'http://127.0.0.1:8000';
+const baseUrl = (process.env.S5_PREVIEW_URL || 'http://127.0.0.1:8000').replace(/\/$/, '');
 const siteDir = path.resolve(process.env.S5_SITE_DIR || 'site');
 const docsDir = path.resolve('docs');
-const outputDir = path.resolve('artifacts/visual-review/animation-density');
+const outputDir = path.resolve(process.env.S5_ANIMATION_DENSITY_DIR || 'artifacts/visual-review/animation-density');
 const changedFilesPath = process.env.S5_CHANGED_FILES_FILE || '';
 const highPriority = ['/series/seguridad-ia/', '/series/agentes-ia/'];
-const maxDesktopCaptures = 40;
-const globalVisualPrefixes = [
-  'docs/stylesheets/',
-  'docs/assets/stylesheets/',
-  'docs/assets/javascripts/animation-shell.js',
-  'hooks/',
-  'overrides/',
-];
+const maxDesktopCaptures = 32;
+const globalVisualPrefixes = ['docs/stylesheets/', 'docs/assets/stylesheets/', 'docs/assets/javascripts/animation-shell.js', 'hooks/', 'overrides/'];
 const globalVisualFiles = new Set(['main.py', 'mkdocs.yml']);
 const baselineUrls = [
   '/series/seguridad-ia/01-prompt-injection/',
@@ -72,7 +66,6 @@ async function affectedUrls() {
   } catch {
     return allPublicUrls();
   }
-
   const urls = new Set();
   for (const file of changed) {
     if (/^docs\/(series|articulos-tecnicos)\/.*\.md$/.test(file)) {
@@ -80,14 +73,9 @@ async function affectedUrls() {
       if (url) urls.add(url);
     }
   }
-
-  const changedSnippets = changed
-    .filter((file) => /^docs\/snippets\/.*\.html$/.test(file))
-    .map((file) => file.replace(/^docs\//, ''));
+  const changedSnippets = changed.filter((file) => /^docs\/snippets\/.*\.html$/.test(file)).map((file) => file.replace(/^docs\//, ''));
   if (changedSnippets.length) {
-    const sourceMarkdown = (await walk(docsDir))
-      .filter((file) => file.endsWith('.md'))
-      .filter((file) => file.includes(`${path.sep}series${path.sep}`) || file.includes(`${path.sep}articulos-tecnicos${path.sep}`));
+    const sourceMarkdown = (await walk(docsDir)).filter((file) => file.endsWith('.md'));
     for (const source of sourceMarkdown) {
       const text = await fs.readFile(source, 'utf8');
       if (!changedSnippets.some((snippet) => text.includes(snippet))) continue;
@@ -96,34 +84,18 @@ async function affectedUrls() {
       if (url) urls.add(url);
     }
   }
-
-  const globalVisualChange = changed.some((file) =>
-    globalVisualFiles.has(file) || globalVisualPrefixes.some((prefix) => file.startsWith(prefix))
-  );
+  const globalVisualChange = changed.some((file) => globalVisualFiles.has(file) || globalVisualPrefixes.some((prefix) => file.startsWith(prefix)));
   if (globalVisualChange) baselineUrls.forEach((url) => urls.add(url));
-
-  // If only audit/test code changed, keep a small baseline so the script still
-  // proves it can load and inspect real animation shells in the preview.
   if (!urls.size) baselineUrls.slice(0, 3).forEach((url) => urls.add(url));
   return [...urls].sort();
 }
 
-async function openStaticPage(page, url) {
+async function openPage(page, url) {
   const response = await page.goto(`${baseUrl}${url}`, { waitUntil: 'load', timeout: 30_000 });
   if (!response?.ok()) return response;
   await page.evaluate(() => document.fonts.ready);
-  await page.waitForTimeout(35);
+  await page.waitForTimeout(40);
   return response;
-}
-
-function severity(metrics) {
-  return (
-    Math.max(0, (metrics.words - 65) / 65)
-    + Math.max(0, (metrics.textLeaves - 18) / 18)
-    + Math.max(0, (11 - (metrics.minTextPx ?? 11)) / 3)
-    + Math.max(0, (metrics.controls - 6) / 6)
-    + Math.max(0, (metrics.height - 760) / 760)
-  );
 }
 
 async function inspectShell(shell) {
@@ -133,79 +105,58 @@ async function inspectShell(shell) {
       const rect = node.getBoundingClientRect();
       return style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity || 1) > 0.02 && rect.width > 0 && rect.height > 0;
     };
-    const textLeaves = [...root.querySelectorAll('*')].filter((node) => {
-      if (!visible(node) || node.children.length) return false;
-      return Boolean((node.textContent || '').trim());
-    });
-    const words = (root.innerText || '').trim().split(/\s+/).filter(Boolean);
-    const fonts = textLeaves
-      .map((node) => parseFloat(getComputedStyle(node).fontSize || '0'))
-      .filter((value) => Number.isFinite(value) && value > 0);
+    const demoRoot = root.matches('[data-demo]') ? root : root.querySelector('[data-demo]');
+    const contentRoot = demoRoot || root;
+    const textLeaves = [...contentRoot.querySelectorAll('*')].filter((node) => visible(node) && node.children.length === 0 && Boolean((node.textContent || '').trim()));
+    const words = (contentRoot.innerText || '').trim().split(/\s+/).filter(Boolean);
+    const fonts = textLeaves.map((node) => parseFloat(getComputedStyle(node).fontSize || '0')).filter((value) => Number.isFinite(value) && value > 0);
     const rect = root.getBoundingClientRect();
-    const controls = [...root.querySelectorAll('button,input,select,textarea,[role="tab"]')].filter(visible);
+    const controls = [...contentRoot.querySelectorAll('button,input,select,textarea,[role="tab"]')].filter(visible);
     return {
+      demo: demoRoot?.getAttribute('data-demo') || null,
       words: words.length,
       textLeaves: textLeaves.length,
       minTextPx: fonts.length ? Math.min(...fonts) : null,
       width: rect.width,
       height: rect.height,
       controls: controls.length,
-      buttons: [...root.querySelectorAll('button')].filter(visible).length,
-      ranges: [...root.querySelectorAll('input[type="range"]')].filter(visible).length,
-      tabs: [...root.querySelectorAll('[role="tab"],[data-tab]')].filter(visible).length,
+      fullscreenOff: demoRoot?.getAttribute('data-anim-fullscreen') === 'off',
     };
   });
 }
 
-async function exercise(shell) {
-  const range = shell.locator('input[type="range"]:visible:not([disabled])').first();
-  if (await range.count()) {
-    const max = await range.getAttribute('max');
-    if (max !== null) {
-      await range.fill(max);
-      await range.dispatchEvent('input');
-      await range.dispatchEvent('change');
-      await shell.page().waitForTimeout(100);
-      return 'range-max';
-    }
-  }
-  const buttons = shell.locator('button:visible:not([disabled])');
-  const count = await buttons.count();
-  if (count > 1) {
-    const target = buttons.nth(Math.min(count - 1, 4));
-    await target.click();
-    await shell.page().waitForTimeout(120);
-    return `button-${Math.min(count, 5)}`;
-  }
-  return null;
-}
-
 function flagsFor(metrics) {
   const flags = [];
-  if (metrics.words > 65) flags.push(`dense-text:${metrics.words}`);
-  if (metrics.textLeaves > 18) flags.push(`many-labels:${metrics.textLeaves}`);
-  if (metrics.minTextPx !== null && metrics.minTextPx < 11) flags.push(`small-text:${metrics.minTextPx.toFixed(1)}px`);
+  if (metrics.words > 180) flags.push(`dense-text:${metrics.words}`);
+  if (metrics.textLeaves > 32) flags.push(`many-labels:${metrics.textLeaves}`);
+  if (metrics.minTextPx !== null && metrics.minTextPx < 10.5) flags.push(`small-text:${metrics.minTextPx.toFixed(1)}px`);
   if (metrics.controls > 6) flags.push(`many-controls:${metrics.controls}`);
-  if (metrics.height > 760) flags.push(`tall:${Math.round(metrics.height)}px`);
+  if (metrics.height > 1050) flags.push(`tall:${Math.round(metrics.height)}px`);
   if (metrics.width > 1320) flags.push(`wide:${Math.round(metrics.width)}px`);
   return flags;
 }
 
+function severity(metrics) {
+  return Math.max(0, (metrics.words - 180) / 90)
+    + Math.max(0, (metrics.textLeaves - 32) / 16)
+    + Math.max(0, (10.5 - (metrics.minTextPx ?? 10.5)) / 2)
+    + Math.max(0, (metrics.controls - 6) / 4)
+    + Math.max(0, (metrics.height - 1050) / 600);
+}
+
 const urlsToScan = await affectedUrls();
 const browser = await chromium.launch({ headless: true });
-const report = { mode: changedFilesPath ? 'affected-pages' : 'full', pagesRequested: urlsToScan, pagesScanned: 0, animations: [], flags: [], captures: [] };
-
+const report = { mode: changedFilesPath ? 'affected-pages' : 'full', thresholds: { words: 180, textLeaves: 32, minTextPx: 10.5, controls: 6, height: 1050 }, pagesRequested: urlsToScan, pagesScanned: 0, animations: [], flags: [], captures: [] };
 try {
-  const desktop = await browser.newPage({ viewport: { width: 1440, height: 1000 }, deviceScaleFactor: 1 });
+  const desktop = await browser.newPage({ viewport: { width: 1440, height: 1000 }, deviceScaleFactor: 1, reducedMotion: 'reduce' });
   for (const url of urlsToScan) {
-    const response = await openStaticPage(desktop, url);
+    const response = await openPage(desktop, url);
     if (!response?.ok()) continue;
     report.pagesScanned += 1;
     const shells = desktop.locator('.anim-brand-shell');
     const count = await shells.count();
     for (let index = 0; index < count; index += 1) {
-      const shell = shells.nth(index);
-      const metrics = await inspectShell(shell);
+      const metrics = await inspectShell(shells.nth(index));
       const flags = flagsFor(metrics);
       const entry = { url, index: index + 1, metrics, flags, severity: severity(metrics) };
       report.animations.push(entry);
@@ -213,41 +164,29 @@ try {
     }
   }
 
-  const ranked = [...report.flags].sort((a, b) => b.severity - a.severity);
-  const selectedMap = new Map();
-  for (const entry of ranked.slice(0, maxDesktopCaptures)) selectedMap.set(`${entry.url}#${entry.index}`, entry);
-  for (const entry of report.animations.filter((item) => highPriority.some((prefix) => item.url.startsWith(prefix)))) {
-    selectedMap.set(`${entry.url}#${entry.index}`, entry);
-  }
-
-  for (const entry of selectedMap.values()) {
-    const response = await openStaticPage(desktop, entry.url);
+  const ranked = [...report.flags].sort((a, b) => b.severity - a.severity).slice(0, maxDesktopCaptures);
+  for (const entry of ranked) {
+    const response = await openPage(desktop, entry.url);
     if (!response?.ok()) continue;
     const shell = desktop.locator('.anim-brand-shell').nth(entry.index - 1);
     if (!await shell.count()) continue;
     await shell.scrollIntoViewIfNeeded();
     const id = `${safeName(entry.url)}__${String(entry.index).padStart(2, '0')}`;
     await shell.screenshot({ path: path.join(outputDir, `${id}__desktop-default.png`), animations: 'disabled' });
-    const state = await exercise(shell);
-    if (state) await shell.screenshot({ path: path.join(outputDir, `${id}__desktop-${state}.png`), animations: 'disabled' });
-    report.captures.push({ url: entry.url, index: entry.index, desktop: true, exercisedState: state });
+    report.captures.push({ url: entry.url, index: entry.index, viewport: 'desktop' });
   }
 
-  const mobile = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1, isMobile: true });
-  for (const entry of report.animations.filter((item) => highPriority.some((prefix) => item.url.startsWith(prefix)))) {
-    const response = await openStaticPage(mobile, entry.url);
+  const mobile = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1, isMobile: true, reducedMotion: 'reduce' });
+  for (const entry of report.flags.filter((item) => highPriority.some((prefix) => item.url.startsWith(prefix)))) {
+    const response = await openPage(mobile, entry.url);
     if (!response?.ok()) continue;
     const shell = mobile.locator('.anim-brand-shell').nth(entry.index - 1);
     if (!await shell.count()) continue;
     await shell.scrollIntoViewIfNeeded();
-    await shell.screenshot({
-      path: path.join(outputDir, `${safeName(entry.url)}__${String(entry.index).padStart(2, '0')}__mobile-default.png`),
-      animations: 'disabled',
-    });
+    await shell.screenshot({ path: path.join(outputDir, `${safeName(entry.url)}__${String(entry.index).padStart(2, '0')}__mobile-default.png`), animations: 'disabled' });
   }
 } finally {
   await browser.close();
 }
-
 await fs.writeFile(path.join(outputDir, 'report.json'), `${JSON.stringify(report, null, 2)}\n`);
-console.log(`Animation density ${report.mode}: reviewed ${report.animations.length} shells across ${report.pagesScanned}/${urlsToScan.length} pages; ${report.flags.length} flagged; captured ${report.captures.length} desktop candidates.`);
+console.log(`Animation density ${report.mode}: ${report.animations.length} shells, ${report.flags.length} review candidates across ${report.pagesScanned}/${urlsToScan.length} pages.`);

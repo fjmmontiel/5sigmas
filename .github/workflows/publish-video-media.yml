@@ -1,6 +1,25 @@
 name: Publish video media to Cloudflare R2
 
 on:
+  workflow_call:
+    inputs:
+      publish:
+        description: Upload validated media when the production media origin is configured
+        required: false
+        default: true
+        type: boolean
+      base_sha:
+        description: Previous release SHA used to select changed media
+        required: false
+        default: ""
+        type: string
+    secrets:
+      R2_ACCESS_KEY_ID:
+        required: false
+      R2_SECRET_ACCESS_KEY:
+        required: false
+      R2_ACCOUNT_ID:
+        required: false
   workflow_dispatch:
     inputs:
       publish:
@@ -8,6 +27,11 @@ on:
         required: true
         default: false
         type: boolean
+      base_sha:
+        description: Optional base SHA; omit to publish/verify the complete declared catalogue
+        required: false
+        default: ""
+        type: string
 
 permissions:
   contents: read
@@ -19,7 +43,7 @@ concurrency:
 jobs:
   stage-and-publish:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
@@ -28,9 +52,12 @@ jobs:
       R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
       R2_BUCKET_NAME: ${{ vars.R2_BUCKET_NAME }}
       S5_VIDEO_MEDIA_ORIGIN: ${{ vars.S5_VIDEO_MEDIA_ORIGIN }}
+      S5_P0_PRE_HARDENING_SHA: 5413dfe6eb5bc604100afe1d51932e39bb6999f6
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-python@v5
         with:
@@ -45,16 +72,68 @@ jobs:
       - name: Validate and stage declared video media
         run: python scripts/prepare_video_media.py --output .video-media
 
-      - name: Upload deterministic media manifest
+      - name: Resolve changed media selection
+        id: selection
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE="${{ inputs.base_sha }}"
+          bootstrap=false
+          if [[ -n "$BASE" && ! "$BASE" =~ ^0+$ ]]; then
+            git cat-file -e "${BASE}^{commit}"
+            git diff --name-only "$BASE" HEAD > /tmp/video-media-changed-files.txt
+            python scripts/validate_changed_media_versioning.py --changed-files /tmp/video-media-changed-files.txt
+
+            select_args=(
+              --manifest .video-media/manifest.json
+              --changed-files /tmp/video-media-changed-files.txt
+              --output .video-media/selected.json
+            )
+            # PR #33 replaced the eight P0 binaries immediately before this hardened
+            # release pipeline existed. On the first release after that exact base,
+            # explicitly republish those 8 MP4 + 8 posters so R2 cannot remain on the
+            # pre-#33 bytes merely because this PR itself does not touch the binaries.
+            if [[ "$BASE" == "$S5_P0_PRE_HARDENING_SHA" ]]; then
+              bootstrap=true
+              while IFS= read -r source; do
+                select_args+=(--include-source "$source")
+              done < <(python - <<'PY'
+          import json
+          from pathlib import Path
+          for story in json.loads(Path('scripts/p0_video_storyboards.json').read_text(encoding='utf-8')):
+              stem = story['output']
+              print(f'{stem}.mp4')
+              print(f'{stem}.jpg')
+          PY
+              )
+            fi
+            python scripts/select_changed_video_media.py "${select_args[@]}"
+            echo "mode=changed" >> "$GITHUB_OUTPUT"
+          else
+            : > /tmp/video-media-changed-files.txt
+            python scripts/select_changed_video_media.py \
+              --manifest .video-media/manifest.json \
+              --output .video-media/selected.json \
+              --all
+            echo "mode=all" >> "$GITHUB_OUTPUT"
+          fi
+          COUNT="$(python -c 'import json; print(json.load(open(".video-media/selected.json"))["object_count"])')"
+          echo "count=$COUNT" >> "$GITHUB_OUTPUT"
+          echo "bootstrap=$bootstrap" >> "$GITHUB_OUTPUT"
+          echo "Selected $COUNT media objects; P0 bootstrap=$bootstrap."
+
+      - name: Upload deterministic media manifests
         uses: actions/upload-artifact@v4
         with:
           name: 5sigmas-video-media-manifest
-          path: .video-media/manifest.json
+          path: |
+            .video-media/manifest.json
+            .video-media/selected.json
           if-no-files-found: error
           retention-days: 30
 
       - name: Validate R2 publishing configuration
-        if: inputs.publish
+        if: inputs.publish && env.S5_VIDEO_MEDIA_ORIGIN != ''
         shell: bash
         run: |
           set -euo pipefail
@@ -62,50 +141,100 @@ jobs:
           test -n "$AWS_SECRET_ACCESS_KEY" || { echo "Missing R2_SECRET_ACCESS_KEY secret" >&2; exit 1; }
           test -n "$R2_ACCOUNT_ID" || { echo "Missing R2_ACCOUNT_ID secret" >&2; exit 1; }
           test -n "$R2_BUCKET_NAME" || { echo "Missing R2_BUCKET_NAME repository variable" >&2; exit 1; }
-          test -n "$S5_VIDEO_MEDIA_ORIGIN" || { echo "Missing S5_VIDEO_MEDIA_ORIGIN repository variable" >&2; exit 1; }
           [[ "$S5_VIDEO_MEDIA_ORIGIN" == https://* ]] || { echo "S5_VIDEO_MEDIA_ORIGIN must use HTTPS" >&2; exit 1; }
 
-      - name: Publish media objects to R2
-        if: inputs.publish
+      - name: Keep same-origin fallback when R2 is not configured
+        if: inputs.publish && env.S5_VIDEO_MEDIA_ORIGIN == ''
+        run: echo "S5_VIDEO_MEDIA_ORIGIN is empty; release will use the validated same-origin media fallback."
+
+      - name: Publish selected media objects to R2
+        if: inputs.publish && env.S5_VIDEO_MEDIA_ORIGIN != '' && steps.selection.outputs.count != '0'
+        shell: bash
+        env:
+          S5_P0_BOOTSTRAP: ${{ steps.selection.outputs.bootstrap }}
         run: |
-          aws s3 sync .video-media/media/ "s3://${R2_BUCKET_NAME}/" \
-            --endpoint-url "https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com" \
-            --cache-control "public,max-age=86400" \
-            --only-show-errors
+          set -euo pipefail
+          ENDPOINT="https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com"
+          jq -r '.objects[] | [.key,.source,.sha256,(.bytes|tostring),.content_type] | @tsv' .video-media/selected.json \
+            | while IFS=$'\t' read -r key source sha bytes content_type; do
+                filename="${key##*/}"
+                if [[ "$filename" =~ -v[0-9]+\.[A-Za-z0-9]+$ || "$filename" =~ -[0-9a-fA-F]{8,64}\.[A-Za-z0-9]+$ ]]; then
+                  cache_control="public,max-age=31536000,immutable"
+                elif [[ "$S5_P0_BOOTSTRAP" == "true" ]]; then
+                  # Force the transitional PR33 mutable keys to revalidate after the
+                  # one-time backfill. Future byte changes are forbidden without a
+                  # versioned/content-addressed filename.
+                  cache_control="public,max-age=0,must-revalidate"
+                else
+                  cache_control="public,max-age=86400"
+                fi
+                echo "Publishing $key ($bytes bytes, sha256=${sha:0:12}…, $cache_control)"
+                aws s3 cp "$source" "s3://${R2_BUCKET_NAME}/${key}" \
+                  --endpoint-url "$ENDPOINT" \
+                  --cache-control "$cache_control" \
+                  --content-type "$content_type" \
+                  --metadata "sha256=$sha" \
+                  --only-show-errors
+              done
+
+      - name: Publish current complete manifest
+        if: inputs.publish && env.S5_VIDEO_MEDIA_ORIGIN != ''
+        run: |
           aws s3 cp .video-media/manifest.json "s3://${R2_BUCKET_NAME}/manifests/video-manifest.json" \
             --endpoint-url "https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com" \
             --cache-control "no-cache" \
             --content-type "application/json" \
             --only-show-errors
 
-      - name: Verify public playback, byte ranges and CORS
-        if: inputs.publish
+      - name: Verify every selected R2 object and public playback
+        if: inputs.publish && env.S5_VIDEO_MEDIA_ORIGIN != ''
+        env:
+          S5_SELECTED_MEDIA: .video-media/selected.json
+          S5_FULL_MEDIA_MANIFEST: .video-media/manifest.json
         run: |
           python - <<'PY'
           import json
           import os
+          import re
+          import subprocess
           from pathlib import Path
           from urllib.parse import quote
           from urllib.request import Request, urlopen
 
-          manifest = json.loads(Path('.video-media/manifest.json').read_text(encoding='utf-8'))
+          selected = json.loads(Path(os.environ['S5_SELECTED_MEDIA']).read_text(encoding='utf-8'))['objects']
+          full = json.loads(Path(os.environ['S5_FULL_MEDIA_MANIFEST']).read_text(encoding='utf-8'))['objects']
+          endpoint = f"https://{os.environ['R2_ACCOUNT_ID']}.r2.cloudflarestorage.com"
+          bucket = os.environ['R2_BUCKET_NAME']
           origin = os.environ['S5_VIDEO_MEDIA_ORIGIN'].rstrip('/')
-          selected = []
-          for kind in ('video', 'poster', 'captions'):
-              match = next((item for item in manifest['objects'] if item['kind'] == kind), None)
-              if match:
-                  selected.append(match)
 
           for item in selected:
+              raw = subprocess.check_output([
+                  'aws', 's3api', 'head-object', '--bucket', bucket, '--key', item['key'],
+                  '--endpoint-url', endpoint, '--output', 'json'
+              ], text=True)
+              head = json.loads(raw)
+              remote_sha = (head.get('Metadata') or {}).get('sha256')
+              if remote_sha != item['sha256']:
+                  raise RuntimeError(f"{item['key']}: remote sha256 metadata {remote_sha!r} != {item['sha256']}")
+              if int(head.get('ContentLength') or -1) != int(item['bytes']):
+                  raise RuntimeError(f"{item['key']}: remote length {head.get('ContentLength')} != {item['bytes']}")
+
+          public = list(selected)
+          if not public:
+              for kind in ('video', 'poster'):
+                  match = next((item for item in full if item['kind'] == kind), None)
+                  if match:
+                      public.append(match)
+
+          for item in public:
               url = f"{origin}/{quote(item['key'], safe='/')}"
-              request = Request(
-                  url,
-                  headers={
-                      'Origin': 'https://5sigmas.com',
-                      'Range': 'bytes=0-0',
-                      'User-Agent': '5sigmas-media-verifier/1.0',
-                  },
-              )
+              request = Request(url, headers={
+                  'Origin': 'https://5sigmas.com',
+                  'Range': 'bytes=0-0',
+                  'Cache-Control': 'no-cache, max-age=0',
+                  'Pragma': 'no-cache',
+                  'User-Agent': '5sigmas-media-verifier/3.0',
+              })
               with urlopen(request, timeout=30) as response:
                   if response.status not in {200, 206}:
                       raise RuntimeError(f"{url} returned {response.status}")
@@ -113,10 +242,16 @@ jobs:
                   if allow_origin not in {'https://5sigmas.com', '*'}:
                       raise RuntimeError(f"{url} returned invalid CORS origin {allow_origin!r}")
                   if item['kind'] == 'video' and response.status != 206:
-                      raise RuntimeError(f"{url} did not honor the byte-range request")
-                  if item['kind'] == 'video' and not response.headers.get('Content-Range'):
-                      raise RuntimeError(f"{url} omitted Content-Range")
-                  if 'max-age' not in (response.headers.get('Cache-Control') or ''):
+                      raise RuntimeError(f"{url} did not honor byte-range playback")
+                  content_range = response.headers.get('Content-Range') or ''
+                  if response.status == 206:
+                      match = re.search(r'/([0-9]+)$', content_range)
+                      if not match or int(match.group(1)) != int(item['bytes']):
+                          raise RuntimeError(f"{url} Content-Range {content_range!r} does not match {item['bytes']} bytes")
+                  cache = response.headers.get('Cache-Control') or ''
+                  if 'max-age' not in cache:
                       raise RuntimeError(f"{url} omitted cache metadata")
-                  print(f"verified {item['kind']}: {url}")
+                  print(f"verified public {item['kind']}: {item['key']} ({response.status})")
+
+          print(f"Verified metadata identity for {len(selected)} selected R2 object(s) and public delivery for {len(public)} object(s).")
           PY

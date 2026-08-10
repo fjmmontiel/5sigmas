@@ -1,172 +1,60 @@
-<div class="ma-wrap" data-demo="03-marcos-alternativos">
-  <div class="ma-hd">
-    <div class="ma-title">Cuatro marcos alternativos al PIB: qué añade cada uno y qué sigue sin capturar</div>
-    <div class="ma-sub">Ninguno ha desplazado al PIB porque el PIB tiene ventajas reales: es preciso, frecuente y políticamente neutro en su metodología. Lo que estos marcos señalan es lo que se pierde cuando se usa como proxy del bienestar general.</div>
+<div class="ma2-wrap" data-demo="03-marcos-alternativos" data-anim-fullscreen="off">
+  <div class="ma2-head">
+    <div class="ma2-kicker">Más allá del PIB</div>
+    <div class="ma2-title">Cada marco corrige una ceguera distinta.</div>
+    <div class="ma2-sub">Selecciona un marco. En lugar de comparar cuatro fichas a la vez, mira solo qué añade al PIB y qué problema sigue abierto.</div>
   </div>
 
-  <div class="ma-frameworks">
-    <div class="ma-fw-grid">
+  <div class="ma2-tabs" role="tablist" aria-label="Marcos alternativos al PIB">
+    <button class="ma2-tab is-active" type="button" role="tab" aria-selected="true" data-framework="hdi">IDH</button>
+    <button class="ma2-tab" type="button" role="tab" aria-selected="false" data-framework="gpi">GPI</button>
+    <button class="ma2-tab" type="button" role="tab" aria-selected="false" data-framework="bli">Better Life</button>
+    <button class="ma2-tab" type="button" role="tab" aria-selected="false" data-framework="gnh">FNB</button>
+  </div>
 
-      <div class="ma-fw-card ma-fw-card--hdx">
-        <div class="ma-fw-name">Índice de Desarrollo Humano</div>
-        <div class="ma-fw-org">PNUD · desde 1990</div>
-        <div class="ma-fw-adds">
-          <div class="ma-fw-add-k">Añade respecto al PIB</div>
-          <div class="ma-fw-add">Esperanza de vida</div>
-          <div class="ma-fw-add">Años de escolaridad</div>
-          <div class="ma-fw-add">Renta nacional bruta per cápita</div>
-        </div>
-        <div class="ma-fw-misses">
-          <div class="ma-fw-miss-k">Sigue sin capturar</div>
-          <div class="ma-fw-miss">Distribución dentro del país</div>
-          <div class="ma-fw-miss">Bienestar subjetivo</div>
-          <div class="ma-fw-miss">Externalidades ambientales</div>
-        </div>
-      </div>
-
-      <div class="ma-fw-card ma-fw-card--gpi">
-        <div class="ma-fw-name">Genuine Progress Indicator</div>
-        <div class="ma-fw-org">GPI · desde los años 90</div>
-        <div class="ma-fw-adds">
-          <div class="ma-fw-add-k">Añade respecto al PIB</div>
-          <div class="ma-fw-add">Valor del trabajo voluntario y familiar</div>
-          <div class="ma-fw-add">Resta costes de desigualdad, crimen, contaminación</div>
-          <div class="ma-fw-add">Resta agotamiento de recursos naturales</div>
-        </div>
-        <div class="ma-fw-misses">
-          <div class="ma-fw-miss-k">Sigue sin capturar</div>
-          <div class="ma-fw-miss">Difícil de comparar entre países</div>
-          <div class="ma-fw-miss">Bienestar subjetivo directo</div>
-          <div class="ma-fw-miss">Dimensiones de gobernanza</div>
-        </div>
-      </div>
-
-      <div class="ma-fw-card ma-fw-card--bli">
-        <div class="ma-fw-name">Better Life Index</div>
-        <div class="ma-fw-org">OCDE · desde 2011</div>
-        <div class="ma-fw-adds">
-          <div class="ma-fw-add-k">Añade respecto al PIB</div>
-          <div class="ma-fw-add">11 dimensiones: vivienda, empleo, comunidad, salud, satisfacción, seguridad…</div>
-          <div class="ma-fw-add">Ponderación ajustable por el usuario</div>
-        </div>
-        <div class="ma-fw-misses">
-          <div class="ma-fw-miss-k">Sigue sin capturar</div>
-          <div class="ma-fw-miss">No produce un único número comparable</div>
-          <div class="ma-fw-miss">Cobertura limitada a países OCDE</div>
-          <div class="ma-fw-miss">Ponderaciones subjetivas dificultan comparación</div>
-        </div>
-      </div>
-
-      <div class="ma-fw-card ma-fw-card--gnh">
-        <div class="ma-fw-name">Felicidad Nacional Bruta</div>
-        <div class="ma-fw-org">Bután · desde 1972</div>
-        <div class="ma-fw-adds">
-          <div class="ma-fw-add-k">Añade respecto al PIB</div>
-          <div class="ma-fw-add">Bienestar psicológico y uso del tiempo</div>
-          <div class="ma-fw-add">Vitalidad comunitaria y resiliencia cultural</div>
-          <div class="ma-fw-add">Gobernanza y buena vida</div>
-        </div>
-        <div class="ma-fw-misses">
-          <div class="ma-fw-miss-k">Sigue sin capturar</div>
-          <div class="ma-fw-miss">Comparación internacional muy difícil</div>
-          <div class="ma-fw-miss">Valores enraizados en contexto cultural específico</div>
-          <div class="ma-fw-miss">No tiene equivalente cuantitativo preciso</div>
-        </div>
-      </div>
-
+  <section class="ma2-card" data-card="hdi">
+    <div class="ma2-card-head"><span>PNUD · desde 1990</span><strong>Índice de Desarrollo Humano</strong></div>
+    <div class="ma2-compare">
+      <div class="ma2-side ma2-side--plus"><b>Añade</b><strong>Salud + educación</strong><p>Combina esperanza de vida, escolaridad e ingreso para evitar que renta y desarrollo humano se confundan.</p></div>
+      <div class="ma2-side"><b>Sigue abierto</b><strong>Distribución y externalidades</strong><p>Un promedio nacional puede ocultar desigualdad interna, bienestar subjetivo y costes ambientales.</p></div>
     </div>
-  </div>
+    <div class="ma2-use"><b>Úsalo cuando:</b> quieras distinguir crecimiento económico de capacidades humanas básicas.</div>
+  </section>
+
+  <section class="ma2-card" data-card="gpi" hidden>
+    <div class="ma2-card-head"><span>GPI · desde los años 90</span><strong>Genuine Progress Indicator</strong></div>
+    <div class="ma2-compare">
+      <div class="ma2-side ma2-side--plus"><b>Añade</b><strong>Costes que el PIB no resta</strong><p>Valora trabajo no remunerado y descuenta parte de los costes asociados a contaminación, crimen o agotamiento de recursos.</p></div>
+      <div class="ma2-side"><b>Sigue abierto</b><strong>Comparabilidad</strong><p>Las decisiones de valoración y metodología hacen más difícil una comparación homogénea entre países.</p></div>
+    </div>
+    <div class="ma2-use"><b>Úsalo cuando:</b> quieras preguntar si la actividad económica neta realmente mejora el progreso social.</div>
+  </section>
+
+  <section class="ma2-card" data-card="bli" hidden>
+    <div class="ma2-card-head"><span>OCDE · desde 2011</span><strong>Better Life Index</strong></div>
+    <div class="ma2-compare">
+      <div class="ma2-side ma2-side--plus"><b>Añade</b><strong>Bienestar multidimensional</strong><p>Abre el análisis a vivienda, empleo, salud, comunidad, seguridad, satisfacción y otras dimensiones.</p></div>
+      <div class="ma2-side"><b>Sigue abierto</b><strong>Un único ranking universal</strong><p>Las ponderaciones dependen de preferencias y su cobertura se concentra en economías de la OCDE.</p></div>
+    </div>
+    <div class="ma2-use"><b>Úsalo cuando:</b> te importe explorar trade-offs entre dimensiones, no comprimirlas en un único número.</div>
+  </section>
+
+  <section class="ma2-card" data-card="gnh" hidden>
+    <div class="ma2-card-head"><span>Bután · desde 1972</span><strong>Felicidad Nacional Bruta</strong></div>
+    <div class="ma2-compare">
+      <div class="ma2-side ma2-side--plus"><b>Añade</b><strong>Psicología, tiempo y comunidad</strong><p>Introduce dimensiones de bienestar que una cuenta de producción no pretende medir.</p></div>
+      <div class="ma2-side"><b>Sigue abierto</b><strong>Transferencia cultural</strong><p>Sus valores y ponderaciones están ligados a un contexto institucional y cultural concreto.</p></div>
+    </div>
+    <div class="ma2-use"><b>Úsalo cuando:</b> quieras discutir bienestar explícitamente como objetivo político, no como proxy económico.</div>
+  </section>
+
+  <div class="ma2-footer"><b>Por qué el PIB sigue ahí:</b> es frecuente, preciso y comparable para medir producción. El error aparece al convertirlo, sin más, en una medida completa de bienestar.</div>
 </div>
 
 <style>
-.ma-wrap, .ma-wrap * { box-sizing: border-box; }
-
-.ma-wrap {
-  --ma: #26A69A;
-  --mb: #324AB2;
-  --mg: #FFB343;
-  --mr: #e04c4c;
-  --mbg: var(--md-default-bg-color, #fff);
-  --mfg: var(--md-default-fg-color, #0f172a);
-  --mbd: rgba(15,23,42,.16);
-  --mmut: rgba(15,23,42,.60);
-  --mf: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
-
-  display: grid;
-  gap: 16px;
-  max-width: 960px;
-  margin: 0 auto;
-  padding: clamp(14px,2vw,22px);
-  border: 1px solid var(--mbd);
-  border-radius: 20px;
-  background:
-    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--mb) 7%,transparent), transparent 50%),
-    radial-gradient(90% 120% at 95% 0%, color-mix(in srgb,var(--ma) 6%,transparent), transparent 52%),
-    var(--mbg);
-  color: var(--mfg);
-  font-family: var(--mf);
-  -webkit-font-smoothing: antialiased;
-}
-
-[data-md-color-scheme="slate"] .ma-wrap {
-  --mbg: var(--md-default-bg-color, #0f172a);
-  --mfg: var(--md-default-fg-color, #e2e8f0);
-  --mbd: rgba(226,232,240,.16);
-  --mmut: rgba(226,232,240,.60);
-}
-
-.ma-hd { display: grid; gap: 5px; }
-.ma-title { font-size: clamp(16px,2.1vw,22px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
-.ma-sub { font-size: 14px; color: var(--mmut); line-height: 1.5; max-width: 72ch; }
-
-/* Frameworks */
-.ma-frameworks { display: grid; gap: 10px; }
-
-.ma-fw-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
-
-.ma-fw-card {
-  border: 1px solid var(--mbd);
-  border-radius: 12px;
-  padding: 12px;
-  display: grid;
-  gap: 8px;
-  align-content: start;
-  background: color-mix(in srgb, var(--mbg) 90%, #0f172a 10%);
-}
-
-.ma-fw-card--hdx { border-color: color-mix(in srgb,var(--mb) 28%,var(--mbd)); }
-.ma-fw-card--gpi { border-color: color-mix(in srgb,var(--ma) 28%,var(--mbd)); }
-.ma-fw-card--bli { border-color: color-mix(in srgb,var(--mg) 28%,var(--mbd)); }
-.ma-fw-card--gnh { border-color: color-mix(in srgb,var(--mr) 22%,var(--mbd)); }
-
-.ma-fw-name { font-size: 14px; font-weight: 900; line-height: 1.2; }
-.ma-fw-org { font-size: 11px; font-weight: 700; color: var(--mmut); }
-
-.ma-fw-adds, .ma-fw-misses { display: grid; gap: 4px; }
-
-.ma-fw-add-k, .ma-fw-miss-k { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; color: var(--mmut); margin-bottom: 2px; }
-
-.ma-fw-add {
-  font-size: 12px;
-  padding: 4px 8px;
-  border-radius: 6px;
-  background: color-mix(in srgb,var(--ma) 8%,var(--mbg));
-  border: 1px solid color-mix(in srgb,var(--ma) 20%,var(--mbd));
-  color: color-mix(in srgb,var(--ma) 80%,var(--mfg));
-  line-height: 1.3;
-}
-
-.ma-fw-miss {
-  font-size: 12px;
-  padding: 4px 8px;
-  border-radius: 6px;
-  background: color-mix(in srgb,var(--mg) 7%,var(--mbg));
-  border: 1px solid color-mix(in srgb,var(--mg) 20%,var(--mbd));
-  color: var(--mmut);
-  line-height: 1.3;
-}
-
-@media (max-width: 640px) {
-  .ma-fw-grid { grid-template-columns: 1fr; }
-}
+.ma2-wrap,.ma2-wrap *{box-sizing:border-box}.ma2-wrap{--a:#26A69A;--b:#324AB2;--g:#FFB343;--r:#e04c4c;--bg:var(--md-default-bg-color,#fff);--fg:var(--md-default-fg-color,#0f172a);--line:color-mix(in srgb,var(--fg) 14%,transparent);--mut:color-mix(in srgb,var(--fg) 62%,transparent);max-width:900px;margin:1.5rem auto;padding:clamp(15px,2.4vw,24px);border:1px solid var(--line);border-radius:22px;background:radial-gradient(100% 130% at 0 0,color-mix(in srgb,var(--b) 7%,transparent),transparent 55%),var(--bg);color:var(--fg);font-family:"Avenir Next","Segoe UI",sans-serif}.ma2-head{display:grid;gap:5px}.ma2-kicker{font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--a)}.ma2-title{font-size:clamp(20px,3vw,31px);font-weight:950;letter-spacing:-.035em;line-height:1.08}.ma2-sub{max-width:72ch;font-size:13px;line-height:1.5;color:var(--mut)}.ma2-tabs{display:flex;gap:7px;flex-wrap:wrap;margin-top:16px}.ma2-tab{min-height:38px;padding:8px 15px;border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--mut);font:850 12px/1 inherit;cursor:pointer}.ma2-tab.is-active{background:var(--fg);color:var(--bg)}.ma2-card{margin-top:14px;display:grid;gap:14px;padding:18px;border:1px solid var(--line);border-radius:18px;background:color-mix(in srgb,var(--fg) 4%,transparent)}.ma2-card[hidden]{display:none}.ma2-card-head{display:grid;gap:3px}.ma2-card-head span{font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--mut);font-weight:850}.ma2-card-head strong{font-size:clamp(18px,2.5vw,24px)}.ma2-compare{display:grid;grid-template-columns:1fr 1fr;gap:10px}.ma2-side{display:grid;gap:6px;align-content:start;padding:15px;border:1px solid var(--line);border-radius:14px;background:var(--bg)}.ma2-side--plus{border-color:color-mix(in srgb,var(--a) 38%,var(--line));background:color-mix(in srgb,var(--a) 6%,var(--bg))}.ma2-side b{font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--mut)}.ma2-side strong{font-size:15px;line-height:1.3}.ma2-side p{margin:0;font-size:13px;line-height:1.5;color:var(--mut)}.ma2-use,.ma2-footer{font-size:13px;line-height:1.5}.ma2-use{padding:11px 13px;border-left:4px solid var(--g);border-radius:0 12px 12px 0;background:color-mix(in srgb,var(--g) 7%,transparent)}.ma2-footer{margin-top:13px;color:var(--mut)}@media(max-width:640px){.ma2-compare{grid-template-columns:1fr}}@media(prefers-reduced-motion:reduce){.ma2-wrap *{transition:none!important;animation:none!important}}
 </style>
+
+<script>
+(()=>{const root=document.querySelector('[data-demo="03-marcos-alternativos"]');if(!root||root.dataset.ma2Ready)return;root.dataset.ma2Ready='1';const tabs=[...root.querySelectorAll('[data-framework]')];const cards=[...root.querySelectorAll('[data-card]')];for(const tab of tabs)tab.addEventListener('click',()=>{const id=tab.dataset.framework;for(const item of tabs){const active=item===tab;item.classList.toggle('is-active',active);item.setAttribute('aria-selected',String(active));}for(const card of cards)card.hidden=card.dataset.card!==id;});})();
+</script>

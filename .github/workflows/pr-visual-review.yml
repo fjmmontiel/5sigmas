@@ -14,137 +14,24 @@ on:
       - '.github/workflows/deploy-pages.yml'
       - '.github/workflows/publish-video-media.yml'
       - '.github/workflows/pr-visual-review.yml'
+      - '.github/workflows/visual-qa.yml'
 
 permissions:
   contents: read
 
+concurrency:
+  group: pr-visual-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
-  build-and-capture:
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    steps:
-      - uses: actions/checkout@v4
+  visual-qa:
+    uses: ./.github/workflows/visual-qa.yml
+    with:
+      base_sha: ${{ github.event.pull_request.base.sha }}
+      artifact_name: 5sigmas-visual-review
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-          cache: pip
-
-      - name: Install Python dependencies
-        run: |
-          python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; else pip install mkdocs mkdocs-material; fi
-
-      - name: Validate video media declarations
-        run: python scripts/prepare_video_media.py --check
-
-      - name: Validate media binary signatures
-        run: python scripts/audit_media_magic.py
-
-      - name: Validate video structured-data contract
-        run: python scripts/test_video_schema_contract.py
-
-      - name: Build site strictly
-        run: mkdocs build --clean --strict
-
-      - name: Audit video indexing metadata
-        run: python scripts/audit_video_indexing.py
-
-      - name: Audit search foundation
-        run: python scripts/audit_search_foundation.py
-
-      - name: Enforce priority topic hub contract
-        run: python scripts/audit_priority_topic_hubs.py
-
-      - name: Enforce public-series publication contract
-        run: python scripts/audit_publication_contract.py
-
-      - name: Capture representative frames from changed public videos
-        shell: bash
-        run: |
-          git fetch --no-tags --depth=1 origin "${{ github.event.pull_request.base.sha }}"
-          git diff --name-only "${{ github.event.pull_request.base.sha }}" HEAD > /tmp/pr-changed-files.txt
-          mapfile -t changed_videos < <(
-            grep -E '^docs/(series|articulos-tecnicos)/.*\.mp4$' /tmp/pr-changed-files.txt || true
-          )
-          if [ "${#changed_videos[@]}" -eq 0 ]; then
-            echo "No public MP4 changed; full-catalogue frame review is available on demand."
-            exit 0
-          fi
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq ffmpeg
-          python scripts/capture_video_density_review.py "${changed_videos[@]}"
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-
-      - name: Install Playwright
-        run: |
-          npm install --no-save playwright@1.55.0
-          npx playwright install --with-deps chromium
-
-      - name: Localize generated video URLs for preview QA
-        run: |
-          python - <<'PY'
-          from pathlib import Path
-          root = Path("site/videos")
-          targets = [root / "catalog.json", *root.rglob("*.html")]
-          for target in targets:
-              if not target.is_file():
-                  continue
-              text = target.read_text(encoding="utf-8")
-              target.write_text(text.replace("https://5sigmas.com/", "/"), encoding="utf-8")
-          PY
-
-      - name: Serve built site
-        run: |
-          python -m http.server 8000 --directory site > /tmp/5sigmas-preview.log 2>&1 &
-          echo $! > /tmp/5sigmas-preview.pid
-          for attempt in {1..30}; do
-            curl --fail --silent http://127.0.0.1:8000/ > /dev/null && exit 0
-            sleep 1
-          done
-          cat /tmp/5sigmas-preview.log
-          exit 1
-
-      - name: Audit browser resource loading
-        run: node scripts/audit_browser_resources.mjs
-
-      - name: Capture responsive screenshots
-        run: node scripts/capture_site_screenshots.mjs
-
-      - name: Capture animation density review
-        env:
-          S5_CHANGED_FILES_FILE: /tmp/pr-changed-files.txt
-        run: node scripts/capture_animation_density_review.mjs
-
-      - name: Validate Seguridad en IA visuals end-to-end
-        run: node scripts/capture_security_visuals.mjs
-
-      - name: Validate reader continuation outside animations
-        run: node scripts/validate_reader_end_placement.mjs
-
-      - name: Capture and validate every progressive voice microlab
-        run: node scripts/capture_voice_report_animations.mjs
-
-      - name: Validate complete video experience lifecycle
-        run: node scripts/validate_video_experience_v2.mjs
-
-      - name: Validate direct series and article navigation
-        run: node scripts/validate_direct_reader_navigation.mjs
-
-      - name: Validate desktop reader header isolation
-        run: node scripts/validate_reader_header_overlap.mjs
-
-      - name: Validate responsive interaction polish
-        run: node scripts/validate_responsive_polish.mjs
-
-      - name: Upload visual review
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: 5sigmas-visual-review
-          path: artifacts/visual-review/*
-          if-no-files-found: warn
-          retention-days: 14
+  media-release-plan:
+    uses: ./.github/workflows/publish-video-media.yml
+    with:
+      publish: false
+      base_sha: ${{ github.event.pull_request.base.sha }}
