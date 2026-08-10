@@ -15,7 +15,22 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  visual-qa:
+    uses: ./.github/workflows/visual-qa.yml
+    with:
+      base_sha: ${{ github.event_name == 'push' && github.event.before || '' }}
+      artifact_name: 5sigmas-release-visual-review
+
+  publish-media:
+    needs: visual-qa
+    uses: ./.github/workflows/publish-video-media.yml
+    with:
+      publish: true
+      base_sha: ${{ github.event_name == 'push' && github.event.before || '' }}
+    secrets: inherit
+
   build:
+    needs: [visual-qa, publish-media]
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -33,10 +48,32 @@ jobs:
       - name: Validate video media declarations
         run: python scripts/prepare_video_media.py --check
 
+      - name: Validate media binary signatures
+        run: python scripts/audit_media_magic.py
+
       - name: Build site
         env:
           S5_VIDEO_MEDIA_ORIGIN: ${{ vars.S5_VIDEO_MEDIA_ORIGIN }}
         run: mkdocs build --clean --strict
+
+      - name: Stamp exact release SHA
+        env:
+          RELEASE_SHA: ${{ github.sha }}
+          RELEASE_RUN_ID: ${{ github.run_id }}
+        run: |
+          python - <<'PY'
+          import datetime as dt
+          import json
+          import os
+          from pathlib import Path
+          payload = {
+              'sha': os.environ['RELEASE_SHA'],
+              'run_id': os.environ['RELEASE_RUN_ID'],
+              'built_at': dt.datetime.now(dt.timezone.utc).isoformat(),
+          }
+          Path('site/build.json').write_text(json.dumps(payload, indent=2) + '\n', encoding='utf-8')
+          print(payload)
+          PY
 
       - name: Audit video indexing metadata
         run: python scripts/audit_video_indexing.py
@@ -57,3 +94,96 @@ jobs:
       name: github-pages
     steps:
       - uses: actions/deploy-pages@v4
+
+  post-deploy-smoke:
+    needs: deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Resolve deployed diff
+        shell: bash
+        run: |
+          BASE="${{ github.event_name == 'push' && github.event.before || '' }}"
+          if [[ -n "$BASE" && ! "$BASE" =~ ^0+$ ]]; then
+            git diff --name-only "$BASE" HEAD > /tmp/production-changed-files.txt
+          else
+            git diff-tree --no-commit-id --name-only -r --root HEAD > /tmp/production-changed-files.txt
+          fi
+          cat /tmp/production-changed-files.txt
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Wait until production serves this exact commit
+        env:
+          S5_EXPECTED_BUILD_SHA: ${{ github.sha }}
+          S5_PRODUCTION_URL: https://5sigmas.com
+        run: node scripts/wait_for_production_build.mjs
+
+      - name: Validate rebuilt Agentes posters on production
+        env:
+          S5_PREVIEW_URL: https://5sigmas.com
+        run: node scripts/validate_production_media_assets.mjs
+
+      - name: Validate all P0 poster-first video lifecycles on production
+        env:
+          S5_PREVIEW_URL: https://5sigmas.com
+          S5_CHANGED_FILES_FILE: /tmp/production-changed-files.txt
+          S5_FULL_VIDEO_CANARIES: "1"
+        run: node scripts/validate_video_experience_v2.mjs
+
+      - name: Validate changed animation contract on production
+        env:
+          S5_PREVIEW_URL: https://5sigmas.com
+          S5_CHANGED_FILES_FILE: /tmp/production-changed-files.txt
+        run: node scripts/validate_animation_contract.mjs
+
+      - name: Capture production animation review queue
+        env:
+          S5_PREVIEW_URL: https://5sigmas.com
+          S5_CHANGED_FILES_FILE: /tmp/production-changed-files.txt
+        run: node scripts/capture_animation_density_review.mjs
+
+      - name: Capture production responsive layouts
+        env:
+          S5_PREVIEW_URL: https://5sigmas.com
+        run: node scripts/capture_site_screenshots.mjs
+
+      - name: Build self-contained production reviewer
+        if: always()
+        run: |
+          python scripts/build_visual_review_hub.py \
+            --artifact-dir artifacts/visual-review \
+            --output artifacts/visual-review/5sigmas.html \
+            --label "Production · ${{ github.sha }}"
+
+      - name: Upload production smoke review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: 5sigmas-production-review
+          path: artifacts/visual-review
+          if-no-files-found: warn
+          retention-days: 14
