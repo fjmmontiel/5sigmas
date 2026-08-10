@@ -59,7 +59,7 @@ async function settle(page) {
 }
 
 async function goto(page, pathname) {
-  const response = await page.goto(`${baseUrl}${pathname}`, { waitUntil: 'load', timeout: 30_000 });
+  const response = await page.goto(`${baseUrl}${pathname}`, { waitUntil: 'domcontentloaded', timeout: 30_000 });
   if (!response?.ok()) throw new Error(`${pathname}: ${response?.status() ?? 'no response'}`);
   await settle(page);
 }
@@ -239,11 +239,6 @@ try {
     const page = await browser.newPage({ viewport: config.viewport, isMobile: config.mobile, reducedMotion: 'reduce' });
     await validateHub(page, config.mobile);
     for (const articlePath of targets) {
-      // Exhaustive playback belongs to the production smoke, where transport also
-      // has to prove real HTTP 206 semantics. Local preview validates every P0
-      // poster/layout/source but plays only the canonical canary and media touched
-      // by the current diff; this avoids repeatedly downloading immutable MP4s from
-      // python http.server without losing release signal.
       const requirePlayback = !localPreview || articlePath === canonicalPlaybackCanary || changedTargets.has(articlePath);
       await validateArticle(page, articlePath, config.mobile, requirePlayback);
       await validateWatch(page, articlePath, config.mobile);
