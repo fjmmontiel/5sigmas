@@ -5,6 +5,7 @@ const baseUrl = (process.env.S5_PREVIEW_URL || 'http://127.0.0.1:8000').replace(
 const outputDir = process.env.S5_SCREENSHOT_DIR || 'artifacts/visual-review';
 const changedFilesPath = process.env.S5_CHANGED_FILES_FILE || '';
 const includePermanentCanaries = process.env.S5_FULL_VIDEO_CANARIES !== '0';
+const localPreview = /^http:\/\/(?:127\.0\.0\.1|localhost)(?::\d+)?$/i.test(baseUrl);
 
 const permanentArticlePaths = [
   '/series/ia-pib-bienestar-energia/04-ia-pib-hoy/',
@@ -35,21 +36,27 @@ async function readTargets() {
   const targets = new Set(includePermanentCanaries ? permanentArticlePaths : [permanentArticlePaths.at(-1)]);
   if (changedFilesPath) {
     try {
-      const changed = (await fs.readFile(changedFilesPath, 'utf8')).split(/\r?\n/).map((v) => v.trim()).filter(Boolean);
+      const changed = (await fs.readFile(changedFilesPath, 'utf8')).split(/\r?\n/).map((value) => value.trim()).filter(Boolean);
       for (const file of changed) {
         const article = articlePathFromMedia(file);
         if (article) targets.add(article);
       }
     } catch {
-      // Permanent canaries still provide deterministic coverage.
+      // Permanent canaries remain deterministic when no changed-file list exists.
     }
   }
   return [...targets];
 }
 
 async function settle(page) {
-  await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
   await page.evaluate(() => document.fonts?.ready).catch(() => {});
+  await page.waitForTimeout(60);
+}
+
+async function goto(page, pathname) {
+  const response = await page.goto(`${baseUrl}${pathname}`, { waitUntil: 'load', timeout: 30_000 });
+  if (!response?.ok()) throw new Error(`${pathname}: ${response?.status() ?? 'no response'}`);
+  await settle(page);
 }
 
 async function noOverflow(page, label) {
@@ -60,15 +67,37 @@ async function noOverflow(page, label) {
   if (scroll > client + 2) throw new Error(`${label}: ${scroll - client}px horizontal overflow.`);
 }
 
-async function screenshot(page, name, fullPage = false) {
+async function screenshot(page, name) {
   await fs.mkdir(outputDir, { recursive: true });
-  await page.screenshot({ path: `${outputDir}/${name}.png`, animations: 'disabled', fullPage });
+  await page.screenshot({ path: `${outputDir}/${name}.png`, animations: 'disabled' });
+}
+
+async function validateMediaTransport(page, mediaUrl, label) {
+  if (localPreview) {
+    const head = await page.request.head(mediaUrl);
+    if (!head.ok()) throw new Error(`${label}: local media HEAD failed: ${head.status()} ${mediaUrl}.`);
+    return { status: head.status(), mode: 'local-head' };
+  }
+
+  const range = await page.request.get(mediaUrl, {
+    headers: {
+      Range: 'bytes=0-1023',
+      Origin: 'https://5sigmas.com',
+      'Cache-Control': 'no-cache',
+    },
+  });
+  if (range.status() !== 206) {
+    throw new Error(`${label}: production media must honor byte ranges with 206, got ${range.status()} ${mediaUrl}.`);
+  }
+  const contentRange = range.headers()['content-range'] || '';
+  if (!/^bytes\s+0-\d+\/\d+$/i.test(contentRange)) {
+    throw new Error(`${label}: invalid Content-Range ${JSON.stringify(contentRange)} for ${mediaUrl}.`);
+  }
+  return { status: 206, mode: 'production-range', contentRange };
 }
 
 async function validateHub(page, mobile) {
-  const response = await page.goto(`${baseUrl}/videos/`, { waitUntil: 'domcontentloaded', timeout: 30_000 });
-  if (!response?.ok()) throw new Error(`/videos/: ${response?.status() ?? 'no response'}`);
-  await settle(page);
+  await goto(page, '/videos/');
   const root = page.locator('[data-s5-video-library]');
   await root.waitFor({ state: 'visible' });
   const catalog = await page.evaluate(async () => {
@@ -81,8 +110,8 @@ async function validateHub(page, mobile) {
   if (catalog.count < 40) throw new Error(`Unexpectedly small video catalog: ${catalog.count}.`);
 
   const images = root.locator('img');
-  const count = await images.count();
-  for (let index = 0; index < Math.min(count, 12); index += 1) {
+  const imageCount = await images.count();
+  for (let index = 0; index < Math.min(imageCount, 12); index += 1) {
     const image = images.nth(index);
     await image.evaluate(async (node) => { if (node.decode) await node.decode(); });
     const dims = await image.evaluate((node) => ({ width: node.naturalWidth, height: node.naturalHeight }));
@@ -99,55 +128,50 @@ async function validateHub(page, mobile) {
   await search.fill('');
 
   const cardBoxes = await cards.evaluateAll((nodes) => nodes.slice(0, 2).map((node) => {
-    const r = node.getBoundingClientRect();
-    return { x: r.x, width: r.width };
+    const rect = node.getBoundingClientRect();
+    return { x: rect.x, width: rect.width };
   }));
-  if (mobile && cardBoxes.length > 1 && Math.abs(cardBoxes[0].x - cardBoxes[1].x) > 4) throw new Error('Mobile video hub is not single-column.');
+  if (mobile && cardBoxes.length > 1 && Math.abs(cardBoxes[0].x - cardBoxes[1].x) > 4) {
+    throw new Error('Mobile video hub is not single-column.');
+  }
   if (!mobile && cardBoxes[0]?.width < 300) throw new Error(`Desktop video cards too narrow: ${cardBoxes[0]?.width}px.`);
   await noOverflow(page, mobile ? 'Mobile video hub' : 'Desktop video hub');
   await screenshot(page, mobile ? 'video-library-mobile-v2' : 'video-library-desktop-v2');
 }
 
 async function validateWatch(page, articlePath, mobile) {
-  const path = watchPath(articlePath);
-  const response = await page.goto(`${baseUrl}${path}`, { waitUntil: 'domcontentloaded', timeout: 30_000 });
-  if (!response?.ok()) throw new Error(`${path}: ${response?.status() ?? 'no response'}`);
-  await settle(page);
+  const pathname = watchPath(articlePath);
+  await goto(page, pathname);
   const root = page.locator('[data-s5-video-watch]');
   const player = root.locator('[data-s5-watch-player]');
   await root.waitFor({ state: 'visible' });
   await player.waitFor({ state: 'visible' });
   const box = await player.boundingBox();
   const viewport = page.viewportSize();
-  if (!box || !viewport) throw new Error(`${path}: watch player is not measurable.`);
-  if (!mobile && box.width < 900) throw new Error(`${path}: desktop watch player too narrow: ${box.width}px.`);
-  if (mobile && box.width < viewport.width - 36) throw new Error(`${path}: mobile watch player too narrow: ${box.width}px.`);
-  if (await root.locator('.s5-video-watch__snippet-grid > article').count() === 0) throw new Error(`${path}: no summary snippets.`);
-  if (await root.locator('.s5-video-watch__related-grid > article').count() !== 3) throw new Error(`${path}: expected exactly three related videos.`);
+  if (!box || !viewport) throw new Error(`${pathname}: watch player is not measurable.`);
+  if (!mobile && box.width < 900) throw new Error(`${pathname}: desktop watch player too narrow: ${box.width}px.`);
+  if (mobile && box.width < viewport.width - 36) throw new Error(`${pathname}: mobile watch player too narrow: ${box.width}px.`);
+  if (await root.locator('.s5-video-watch__snippet-grid > article').count() === 0) throw new Error(`${pathname}: no summary snippets.`);
+  if (await root.locator('.s5-video-watch__related-grid > article').count() !== 3) throw new Error(`${pathname}: expected exactly three related videos.`);
 
   const sourceCta = root.locator('.s5-video-watch__source > a');
   const cta = await sourceCta.evaluate((node) => {
     const style = getComputedStyle(node);
-    const r = node.getBoundingClientRect();
-    return { display: style.display, width: r.width, height: r.height };
+    const rect = node.getBoundingClientRect();
+    return { display: style.display, width: rect.width, height: rect.height };
   });
-  if (cta.display === 'none' || cta.width < 96 || cta.height < 36) throw new Error(`${path}: source CTA collapsed: ${JSON.stringify(cta)}.`);
+  if (cta.display === 'none' || cta.width < 96 || cta.height < 36) throw new Error(`${pathname}: source CTA collapsed: ${JSON.stringify(cta)}.`);
   const sourcePath = new URL(await sourceCta.getAttribute('href'), baseUrl).pathname;
-  if (sourcePath !== articlePath) throw new Error(`${path}: CTA points to ${sourcePath}, expected ${articlePath}.`);
+  if (sourcePath !== articlePath) throw new Error(`${pathname}: CTA points to ${sourcePath}, expected ${articlePath}.`);
 
   const source = await player.locator('source').getAttribute('src');
-  if (source) {
-    const mediaUrl = new URL(source, page.url()).href;
-    const range = await page.request.get(mediaUrl, { headers: { Range: 'bytes=0-1023', Origin: 'https://5sigmas.com' } });
-    if (![200, 206].includes(range.status())) throw new Error(`${path}: watch video cannot be ranged: ${range.status()} ${mediaUrl}.`);
-  }
-  await noOverflow(page, `${mobile ? 'Mobile' : 'Desktop'} watch ${path}`);
+  if (!source) throw new Error(`${pathname}: watch player has no source.`);
+  await validateMediaTransport(page, new URL(source, page.url()).href, pathname);
+  await noOverflow(page, `${mobile ? 'Mobile' : 'Desktop'} watch ${pathname}`);
 }
 
 async function validateArticle(page, articlePath, mobile) {
-  const response = await page.goto(`${baseUrl}${articlePath}`, { waitUntil: 'domcontentloaded', timeout: 30_000 });
-  if (!response?.ok()) throw new Error(`${articlePath}: ${response?.status() ?? 'no response'}`);
-  await settle(page);
+  await goto(page, articlePath);
   const player = page.locator('[data-s5-inline-video-player]');
   const poster = page.locator('[data-s5-inline-video-start]');
   const h1 = page.locator('.md-content__inner h1');
@@ -172,9 +196,7 @@ async function validateArticle(page, articlePath, mobile) {
 
   const source = await player.locator('source').getAttribute('src');
   if (!source) throw new Error(`${articlePath}: inline player has no source.`);
-  const mediaUrl = new URL(source, page.url()).href;
-  const range = await page.request.get(mediaUrl, { headers: { Range: 'bytes=0-1023', Origin: 'https://5sigmas.com' } });
-  if (![200, 206].includes(range.status())) throw new Error(`${articlePath}: video cannot be ranged: ${range.status()} ${mediaUrl}.`);
+  await validateMediaTransport(page, new URL(source, page.url()).href, articlePath);
 
   const suffix = `${safe(articlePath)}__${mobile ? 'mobile' : 'desktop'}`;
   await screenshot(page, `video-lifecycle__${suffix}__poster`);
@@ -187,7 +209,9 @@ async function validateArticle(page, articlePath, mobile) {
   }, { timeout: 10_000 });
   const playerBox = await player.boundingBox();
   if (!playerBox) throw new Error(`${articlePath}: inline player is not measurable after Play.`);
-  if (Math.abs(playerBox.width - beforeWidth) > 4) throw new Error(`${articlePath}: player changed width after Play: ${beforeWidth}px → ${playerBox.width}px.`);
+  if (Math.abs(playerBox.width - beforeWidth) > 4) {
+    throw new Error(`${articlePath}: player changed width after Play: ${beforeWidth}px → ${playerBox.width}px.`);
+  }
   await screenshot(page, `video-lifecycle__${suffix}__playing`);
 
   const linkedWatch = new URL(await page.locator('.s5-video-embed__watch a').getAttribute('href'), baseUrl).pathname;
@@ -198,7 +222,7 @@ async function validateArticle(page, articlePath, mobile) {
 
 const targets = await readTargets();
 const browser = await chromium.launch({ headless: true });
-const report = { baseUrl, targets, desktop: [], mobile: [] };
+const report = { baseUrl, localPreview, targets, desktop: [], mobile: [] };
 try {
   for (const config of [
     { name: 'desktop', viewport: { width: 1440, height: 1000 }, mobile: false },
@@ -215,7 +239,7 @@ try {
   }
   await fs.mkdir(outputDir, { recursive: true });
   await fs.writeFile(`${outputDir}/video-experience-v2.json`, `${JSON.stringify(report, null, 2)}\n`);
-  console.log(`Video experience v2 passed: ${targets.length} article/watch lifecycles on desktop + mobile, including ${permanentArticlePaths.length - 1} permanent P0 videos.`);
+  console.log(`Video experience v2 passed: ${targets.length} article/watch lifecycles on desktop + mobile; transport=${localPreview ? 'HEAD+real playback' : 'strict 206 ranges'}.`);
 } finally {
   await browser.close();
 }
