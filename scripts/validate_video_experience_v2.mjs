@@ -59,7 +59,7 @@ async function settle(page) {
 }
 
 async function goto(page, pathname) {
-  const response = await page.goto(`${baseUrl}${pathname}`, { waitUntil: 'domcontentloaded', timeout: 30_000 });
+  const response = await page.goto(`${baseUrl}${pathname}`, { waitUntil: 'domcontentloaded', timeout: 15_000 });
   if (!response?.ok()) throw new Error(`${pathname}: ${response?.status() ?? 'no response'}`);
   await settle(page);
 }
@@ -79,12 +79,13 @@ async function screenshot(page, name) {
 
 async function validateMediaTransport(page, mediaUrl, label) {
   if (localPreview) {
-    const head = await page.request.head(mediaUrl);
+    const head = await page.request.head(mediaUrl, { timeout: 5000 });
     if (!head.ok()) throw new Error(`${label}: local media HEAD failed: ${head.status()} ${mediaUrl}.`);
     return { status: head.status(), mode: 'local-head' };
   }
 
   const range = await page.request.get(mediaUrl, {
+    timeout: 10_000,
     headers: {
       Range: 'bytes=0-1023',
       Origin: 'https://5sigmas.com',
@@ -102,6 +103,7 @@ async function validateMediaTransport(page, mediaUrl, label) {
 }
 
 async function validateHub(page, mobile) {
+  console.log(`[video-qa] ${mobile ? 'mobile' : 'desktop'} hub`);
   await goto(page, '/videos/');
   const root = page.locator('[data-s5-video-library]');
   await root.waitFor({ state: 'visible' });
@@ -146,6 +148,7 @@ async function validateHub(page, mobile) {
 
 async function validateWatch(page, articlePath, mobile) {
   const pathname = watchPath(articlePath);
+  console.log(`[video-qa] ${mobile ? 'mobile' : 'desktop'} watch ${pathname}`);
   await goto(page, pathname);
   const root = page.locator('[data-s5-video-watch]');
   const player = root.locator('[data-s5-watch-player]');
@@ -176,6 +179,7 @@ async function validateWatch(page, articlePath, mobile) {
 }
 
 async function validateArticle(page, articlePath, mobile, requirePlayback) {
+  console.log(`[video-qa] ${mobile ? 'mobile' : 'desktop'} article ${articlePath} playback=${requirePlayback}`);
   await goto(page, articlePath);
   const player = page.locator('[data-s5-inline-video-player]');
   const poster = page.locator('[data-s5-inline-video-start]');
@@ -213,7 +217,7 @@ async function validateArticle(page, articlePath, mobile, requirePlayback) {
     await page.waitForFunction(() => {
       const video = document.querySelector('[data-s5-inline-video-player]');
       return Boolean(video && (!video.paused || video.currentTime > 0));
-    }, { timeout: 10_000 });
+    }, { timeout: 5000 });
     const playerBox = await player.boundingBox();
     if (!playerBox) throw new Error(`${articlePath}: inline player is not measurable after Play.`);
     if (Math.abs(playerBox.width - beforeWidth) > 4) {
@@ -237,6 +241,8 @@ try {
     { name: 'mobile', viewport: { width: 390, height: 844 }, mobile: true },
   ]) {
     const page = await browser.newPage({ viewport: config.viewport, isMobile: config.mobile, reducedMotion: 'reduce' });
+    page.setDefaultTimeout(5000);
+    page.setDefaultNavigationTimeout(15_000);
     let allowPageMedia = !localPreview;
     if (localPreview) {
       await page.route(/\.mp4(?:\?.*)?$/i, (route) => allowPageMedia ? route.continue() : route.abort());
