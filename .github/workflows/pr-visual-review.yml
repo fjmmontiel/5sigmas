@@ -19,6 +19,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: pr-visual-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
   visual-qa:
     uses: ./.github/workflows/visual-qa.yml
