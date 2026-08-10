@@ -6,7 +6,7 @@ const outputDir = process.env.S5_SCREENSHOT_DIR || 'artifacts/visual-review';
 const changedFilesPath = process.env.S5_CHANGED_FILES_FILE || '';
 const includePermanentCanaries = process.env.S5_FULL_VIDEO_CANARIES !== '0';
 const localPreview = /^http:\/\/(?:127\.0\.0\.1|localhost)(?::\d+)?$/i.test(baseUrl);
-const canonicalPlaybackCanary = '/series/modelos-razonadores/03-test-time-compute/';
+const canonicalBrowserCanary = '/series/modelos-razonadores/03-test-time-compute/';
 
 const permanentArticlePaths = [
   '/series/ia-pib-bienestar-energia/04-ia-pib-hoy/',
@@ -17,7 +17,7 @@ const permanentArticlePaths = [
   '/series/multimodalidad-iag/05-riesgos/',
   '/series/datacenters-espacio/02-energia-calor-conectividad/',
   '/series/datacenters-espacio/04-huella-real-datacenter/',
-  canonicalPlaybackCanary,
+  canonicalBrowserCanary,
 ];
 
 function articlePathFromMedia(file) {
@@ -34,7 +34,7 @@ function safe(value) {
 }
 
 async function readTargets() {
-  const targets = new Set(includePermanentCanaries ? permanentArticlePaths : [canonicalPlaybackCanary]);
+  const targets = new Set(includePermanentCanaries ? permanentArticlePaths : [canonicalBrowserCanary]);
   const changedTargets = new Set();
   if (changedFilesPath) {
     try {
@@ -47,7 +47,7 @@ async function readTargets() {
         }
       }
     } catch {
-      // Permanent canaries remain deterministic when no changed-file list exists.
+      // The permanent browser canary still gives deterministic coverage.
     }
   }
   return { targets: [...targets], changedTargets };
@@ -129,18 +129,14 @@ async function validateHub(page, mobile) {
   await search.fill('test time compute');
   const firstResult = root.locator('[data-s5-video-card]:visible .s5-video-card__poster').first();
   const resultPath = new URL(await firstResult.getAttribute('href'), baseUrl).pathname;
-  if (resultPath !== `/videos${canonicalPlaybackCanary}`) {
-    throw new Error(`Exact video search did not rank first: ${resultPath}.`);
-  }
+  if (resultPath !== `/videos${canonicalBrowserCanary}`) throw new Error(`Exact video search did not rank first: ${resultPath}.`);
   await search.fill('');
 
   const cardBoxes = await cards.evaluateAll((nodes) => nodes.slice(0, 2).map((node) => {
     const rect = node.getBoundingClientRect();
     return { x: rect.x, width: rect.width };
   }));
-  if (mobile && cardBoxes.length > 1 && Math.abs(cardBoxes[0].x - cardBoxes[1].x) > 4) {
-    throw new Error('Mobile video hub is not single-column.');
-  }
+  if (mobile && cardBoxes.length > 1 && Math.abs(cardBoxes[0].x - cardBoxes[1].x) > 4) throw new Error('Mobile video hub is not single-column.');
   if (!mobile && cardBoxes[0]?.width < 300) throw new Error(`Desktop video cards too narrow: ${cardBoxes[0]?.width}px.`);
   await noOverflow(page, mobile ? 'Mobile video hub' : 'Desktop video hub');
   await screenshot(page, mobile ? 'video-library-mobile-v2' : 'video-library-desktop-v2');
@@ -178,8 +174,8 @@ async function validateWatch(page, articlePath, mobile) {
   await noOverflow(page, `${mobile ? 'Mobile' : 'Desktop'} watch ${pathname}`);
 }
 
-async function validateArticle(page, articlePath, mobile, requirePlayback) {
-  console.log(`[video-qa] ${mobile ? 'mobile' : 'desktop'} article ${articlePath} playback=${requirePlayback}`);
+async function validateArticle(page, articlePath, mobile) {
+  console.log(`[video-qa] ${mobile ? 'mobile' : 'desktop'} article ${articlePath} mode=${localPreview ? 'transition' : 'playback'}`);
   await goto(page, articlePath);
   const player = page.locator('[data-s5-inline-video-player]');
   const poster = page.locator('[data-s5-inline-video-start]');
@@ -209,21 +205,23 @@ async function validateArticle(page, articlePath, mobile, requirePlayback) {
 
   const suffix = `${safe(articlePath)}__${mobile ? 'mobile' : 'desktop'}`;
   await screenshot(page, `video-lifecycle__${suffix}__poster`);
+  const beforeWidth = posterBox.width;
+  await poster.click();
+  await player.waitFor({ state: 'visible' });
+  const playerBox = await player.boundingBox();
+  if (!playerBox) throw new Error(`${articlePath}: inline player is not measurable after Play transition.`);
+  if (Math.abs(playerBox.width - beforeWidth) > 4) {
+    throw new Error(`${articlePath}: player changed width after Play transition: ${beforeWidth}px → ${playerBox.width}px.`);
+  }
 
-  if (requirePlayback) {
-    const beforeWidth = posterBox.width;
-    await poster.click();
-    await player.waitFor({ state: 'visible' });
+  if (!localPreview) {
     await page.waitForFunction(() => {
       const video = document.querySelector('[data-s5-inline-video-player]');
       return Boolean(video && (!video.paused || video.currentTime > 0));
     }, { timeout: 5000 });
-    const playerBox = await player.boundingBox();
-    if (!playerBox) throw new Error(`${articlePath}: inline player is not measurable after Play.`);
-    if (Math.abs(playerBox.width - beforeWidth) > 4) {
-      throw new Error(`${articlePath}: player changed width after Play: ${beforeWidth}px → ${playerBox.width}px.`);
-    }
     await screenshot(page, `video-lifecycle__${suffix}__playing`);
+  } else {
+    await screenshot(page, `video-lifecycle__${suffix}__player`);
   }
 
   const linkedWatch = new URL(await page.locator('.s5-video-embed__watch a').getAttribute('href'), baseUrl).pathname;
@@ -234,7 +232,7 @@ async function validateArticle(page, articlePath, mobile, requirePlayback) {
 
 const { targets, changedTargets } = await readTargets();
 const browser = await chromium.launch({ headless: true });
-const report = { baseUrl, localPreview, targets, changedTargets: [...changedTargets], desktop: [], mobile: [], playback: [] };
+const report = { baseUrl, localPreview, targets, changedTargets: [...changedTargets], desktop: [], mobile: [], transitionProofs: [], playbackProofs: [] };
 try {
   for (const config of [
     { name: 'desktop', viewport: { width: 1440, height: 1000 }, mobile: false },
@@ -243,27 +241,26 @@ try {
     const page = await browser.newPage({ viewport: config.viewport, isMobile: config.mobile, reducedMotion: 'reduce' });
     page.setDefaultTimeout(5000);
     page.setDefaultNavigationTimeout(15_000);
-    let allowPageMedia = !localPreview;
     if (localPreview) {
-      await page.route(/\.mp4(?:\?.*)?$/i, (route) => allowPageMedia ? route.continue() : route.abort());
+      // The local preview is intentionally not a transport simulator. Abort browser
+      // MP4 downloads entirely; page.request HEAD still validates source existence.
+      // Production smoke is where real 206 semantics and currentTime>0 are mandatory.
+      await page.route(/\.mp4(?:\?.*)?$/i, (route) => route.abort());
     }
 
-    allowPageMedia = false;
     await validateHub(page, config.mobile);
     for (const articlePath of targets) {
-      const requirePlayback = !localPreview || articlePath === canonicalPlaybackCanary || changedTargets.has(articlePath);
-      allowPageMedia = requirePlayback;
-      await validateArticle(page, articlePath, config.mobile, requirePlayback);
-      allowPageMedia = !localPreview;
+      await validateArticle(page, articlePath, config.mobile);
       await validateWatch(page, articlePath, config.mobile);
       report[config.name].push(articlePath);
-      if (requirePlayback) report.playback.push({ articlePath, viewport: config.name });
+      report.transitionProofs.push({ articlePath, viewport: config.name });
+      if (!localPreview) report.playbackProofs.push({ articlePath, viewport: config.name });
     }
     await page.close();
   }
   await fs.mkdir(outputDir, { recursive: true });
   await fs.writeFile(`${outputDir}/video-experience-v2.json`, `${JSON.stringify(report, null, 2)}\n`);
-  console.log(`Video experience v2 passed: ${targets.length} article/watch routes on desktop + mobile; playback proofs=${report.playback.length}; transport=${localPreview ? 'local HEAD + canary/changed playback' : 'strict 206 + exhaustive playback'}.`);
+  console.log(`Video experience v2 passed: ${targets.length} article/watch routes on desktop + mobile; transition proofs=${report.transitionProofs.length}; playback proofs=${report.playbackProofs.length}; transport=${localPreview ? 'local HEAD + browser transition' : 'strict 206 + real playback'}.`);
 } finally {
   await browser.close();
 }
