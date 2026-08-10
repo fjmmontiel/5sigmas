@@ -11,10 +11,15 @@ lo renderice, por lo que el valor aparece en el header de la página.
 """
 import re
 
+import mkdocs.plugins
+
 WORDS_PER_MINUTE = 230  # velocidad de lectura técnica en español
 
 
+@mkdocs.plugins.event_priority(100)
 def on_page_markdown(markdown, page, **kwargs):
+    # Run before the macros plugin expands include_html() into large interactive
+    # snippets. Otherwise their UI copy is counted as article reading time.
     text = markdown
 
     # Excluir tooltips <details>...</details>
