@@ -127,7 +127,7 @@ hide:
 <section class="s5-section">
   <div class="s5-section-head">
     <h2>Elige una ruta</h2>
-    <a href="/series/">Ver las seis series →</a>
+    <a href="/series/">Ver todas las series →</a>
   </div>
   <div class="s5-simple-list">
     <a class="s5-list-row" href="/series/fundamentos-ia-iag/00_presentacion_serie/">
