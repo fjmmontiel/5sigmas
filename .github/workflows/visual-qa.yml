@@ -70,6 +70,9 @@ jobs:
       - name: Build current site strictly
         run: mkdocs build --clean --strict
 
+      - name: Validate all eight P0 article/watch contracts
+        run: python scripts/validate_p0_video_contract.py
+
       - name: Audit video indexing metadata
         run: python scripts/audit_video_indexing.py
 
@@ -184,10 +187,10 @@ jobs:
       - name: Capture and validate every progressive voice microlab
         run: node scripts/capture_voice_report_animations.mjs
 
-      - name: Validate all permanent P0 video lifecycles
+      - name: Validate changed video lifecycles plus permanent browser canary
         env:
           S5_CHANGED_FILES_FILE: /tmp/pr-changed-files.txt
-          S5_FULL_VIDEO_CANARIES: "1"
+          S5_FULL_VIDEO_CANARIES: "0"
         run: node scripts/validate_video_experience_v2.mjs
 
       - name: Validate direct series and article navigation
