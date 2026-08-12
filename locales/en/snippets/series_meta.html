@@ -1,0 +1,22 @@
+<div class="sm-wrap" data-state="{{ data_state }}" data-level="{{ data_level }}">
+  <div class="sm-chips">
+    <span class="sm-chip sm-chip--status">
+      <span class="sm-dot" aria-hidden="true"></span>
+      <span class="sm-chip-label">{{ status_label }}</span>
+    </span>
+    <span class="sm-chip sm-chip--level">
+      <span class="sm-chip-label">{{ level_label }}</span>
+    </span>
+    <span class="sm-chip sm-chip--time">
+      <span class="sm-chip-label">{{ data_time }}</span>
+    </span>
+    <span class="sm-chip sm-chip--count">
+      <span class="sm-chip-label">{{ count_label }}</span>
+    </span>
+  </div>
+  {{ extra_rows }}
+</div>
+
+<style>
+.sm-wrap{--sm-b:#324ab2;--sm-ok:#26a69a;--sm-bg:var(--md-default-bg-color,#fff);--sm-fg:var(--md-default-fg-color,#0f172a);--sm-bd:rgba(15,23,42,.12);--sm-muted:rgba(15,23,42,.52);margin:0 0 1.4rem;padding:10px 14px;border:1px solid var(--sm-bd);border-radius:12px;background:color-mix(in srgb,var(--sm-bg) 97%,#0f172a 3%);font-family:"Avenir Next","Segoe UI",Arial,sans-serif}.sm-chips{display:flex;flex-wrap:wrap;align-items:center;gap:6px}.sm-chip{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:999px;border:1px solid var(--sm-bd);font-size:12px;font-weight:700;color:var(--sm-muted);background:color-mix(in srgb,var(--sm-bg) 90%,transparent);line-height:1;white-space:nowrap}.sm-dot{width:7px;height:7px;border-radius:50%;background:var(--sm-ok)}.sm-wrap[data-state="complete"] .sm-chip--status{color:color-mix(in srgb,var(--sm-ok) 75%,var(--sm-fg));border-color:color-mix(in srgb,var(--sm-ok) 28%,var(--sm-bd));background:color-mix(in srgb,var(--sm-ok) 8%,var(--sm-bg))}.sm-wrap[data-level="technical"] .sm-chip--level{color:color-mix(in srgb,#7c3aed 65%,var(--sm-fg));border-color:color-mix(in srgb,#7c3aed 20%,var(--sm-bd));background:color-mix(in srgb,#7c3aed 5%,var(--sm-bg))}.sm-wrap .series-meta-row{display:flex;align-items:baseline;gap:4px;margin-top:8px;padding-top:8px;border-top:1px solid var(--sm-bd);font-size:12px;flex-wrap:wrap}.sm-wrap .series-meta-label{font-weight:700;color:var(--sm-muted);white-space:nowrap}.sm-wrap .series-meta-value{color:var(--sm-fg)}@media(max-width:480px){.sm-chips{gap:5px}.sm-chip{font-size:11px;padding:3px 8px}}
+</style>
