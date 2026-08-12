@@ -1,0 +1,40 @@
+locale: en
+name: English
+status: pilot
+canonical_source_locale: es
+route_strategy: preserve-source-slugs
+fallback_to_spanish: false
+
+published_routes:
+  - index.md
+  - series/index.md
+  - series/agentes-ia/00_presentacion_serie.md
+  - series/agentes-ia/01-que-es-un-agente.md
+  - series/agentes-ia/02-anatomia-de-un-agente.md
+  - series/agentes-ia/03-como-evaluar-un-agente.md
+  - series/agentes-ia/04-seguridad-agentes.md
+  - series/agentes-ia/05-de-la-demo-a-produccion.md
+  - meta/about.md
+
+required_snippets:
+  - snippets/series_meta.html
+  - snippets/agentes-ia/01-bucle-agente.html
+  - snippets/agentes-ia/03-evaluacion.html
+  - snippets/agentes-ia/04-seguridad.html
+
+coverage:
+  homepage: translated
+  series_hub: translated
+  agents_series: complete
+  about: translated
+  remaining_series: not_yet_published
+  technical_articles: not_yet_published
+  visual_hub: not_yet_published
+  video_hub: not_yet_published
+
+quality_gates:
+  - no_spanish_fallback
+  - strict_mkdocs_build
+  - translated_snippet_contract
+  - rendered_html_lang
+  - canonical_locale_url
