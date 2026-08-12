@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block htmltitle %}
+  {% if page and page.meta.seo_title %}
+  <title>{{ page.meta.seo_title | e }} | {{ config.site_name | e }}</title>
+  {% elif page %}
+  <title>{{ page.title | e }} | {{ config.site_name | e }}</title>
+  {% else %}
+  {{ super() }}
+  {% endif %}
+{% endblock %}
+
+{% block extrahead %}
+  {{ super() }}
+  {% if page %}
+  {% set language = config.extra.content_language | default("en") %}
+  {% set site_root = config.site_url.rstrip('/') ~ '/' %}
+  <meta name="author" content="Francisco Maldonado">
+  <link rel="author" href="{{ site_root }}meta/about/">
+  <link rel="alternate" type="text/markdown" href="{{ page.canonical_url }}index.html.md" title="Markdown version">
+  {% if page.meta.keywords %}
+  <meta name="keywords" content="{{ page.meta.keywords | e }}">
+  {% endif %}
+  {% if page.meta.robots %}
+  <meta name="robots" content="{{ page.meta.robots | e }}">
+  {% else %}
+  <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1">
+  {% endif %}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": {% if page.url.startswith("series/") and page.url.rstrip('/').split('/')|length >= 3 %}"TechArticle"{% else %}"WebPage"{% endif %},
+    "@id": {{ (page.canonical_url ~ "#webpage") | tojson }},
+    "name": {{ page.meta.seo_title | default(page.title) | tojson }},
+    "description": {{ page.meta.description | default(config.site_description) | tojson }},
+    "url": {{ page.canonical_url | tojson }},
+    "inLanguage": {{ language | tojson }},
+    "author": {
+      "@type": "Person",
+      "name": "Francisco Maldonado",
+      "url": {{ (site_root ~ "meta/about/") | tojson }}
+    },
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "5sigmas",
+      "url": {{ site_root | tojson }}
+    }
+  }
+  </script>
+  {% endif %}
+{% endblock %}
