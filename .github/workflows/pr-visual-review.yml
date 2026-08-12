@@ -133,6 +133,9 @@ jobs:
           cat /tmp/5sigmas-preview.log
           exit 1
 
+      - name: Validate English locale in browser
+        run: node scripts/validate_english_locale.mjs
+
       - name: Audit browser resource loading
         run: node scripts/audit_browser_resources.mjs
 
