@@ -75,6 +75,7 @@ plugins:
   - macros:
       module_name: locale_main
       on_error_fail: true
+      on_undefined: strict
 
 hooks: []
 
