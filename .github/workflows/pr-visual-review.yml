@@ -4,10 +4,15 @@ on:
   pull_request:
     paths:
       - 'docs/**'
+      - 'locales/**'
       - 'overrides/**'
+      - 'overrides_locale/**'
       - 'hooks/**'
       - 'scripts/**'
       - 'mkdocs.yml'
+      - 'mkdocs.en.yml'
+      - 'main.py'
+      - 'locale_main.py'
       - 'requirements.txt'
       - 'Makefile'
       - 'VIDEO_DELIVERY.md'
@@ -58,6 +63,26 @@ jobs:
 
       - name: Enforce public-series publication contract
         run: python scripts/audit_publication_contract.py
+
+      - name: Prepare English locale
+        env:
+          S5_LOCALE: en
+        run: python scripts/prepare_locale.py --locale en
+
+      - name: Audit English locale sources
+        env:
+          S5_LOCALE: en
+        run: python scripts/audit_locale.py --locale en
+
+      - name: Build English locale strictly
+        env:
+          S5_LOCALE: en
+        run: mkdocs build -f mkdocs.en.yml --clean --strict
+
+      - name: Audit rendered English locale
+        env:
+          S5_LOCALE: en
+        run: python scripts/audit_locale.py --locale en --site site/en
 
       - name: Capture representative frames from changed public videos
         shell: bash
@@ -146,5 +171,14 @@ jobs:
         with:
           name: 5sigmas-visual-review
           path: artifacts/visual-review/*
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Upload English locale preview
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: 5sigmas-en-preview
+          path: site/en
           if-no-files-found: warn
           retention-days: 14
