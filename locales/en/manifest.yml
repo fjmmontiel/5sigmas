@@ -4,11 +4,7 @@ status: mirror-in-progress
 canonical_source_locale: es
 route_strategy: preserve-source-slugs
 fallback_to_spanish: false
-
-# Canonical Spanish media is never inherited implicitly. Add only genuinely
-# language-neutral files here. Localized posters/video/audio live under locales/en.
 shared_media: []
-
 published_routes:
   - index.md
   - series/index.md
@@ -16,7 +12,11 @@ published_routes:
   - series/from-cave-to-agi/00_presentacion_serie.md
   - series/multimodalidad-iag/00_presentacion_serie.md
   - series/modelos-razonadores/00_presentacion_serie.md
+  - series/modelos-razonadores/01-que-es-razonar.md
+  - series/modelos-razonadores/02-fallos.md
   - series/modelos-razonadores/03-test-time-compute.md
+  - series/modelos-razonadores/04-latencia-streaming.md
+  - series/modelos-razonadores/05-riesgos.md
   - series/ia-pib-bienestar-energia/00_presentacion_serie.md
   - series/datacenters-espacio/00_presentacion_serie.md
   - series/seguridad-ia/00_presentacion_serie.md
@@ -27,13 +27,26 @@ published_routes:
   - series/agentes-ia/04-seguridad-agentes.md
   - series/agentes-ia/05-de-la-demo-a-produccion.md
   - meta/about.md
-
 required_snippets:
   - snippets/series_meta.html
+  - snippets/modelos-razonadores/01-rlvr-entrenamiento.html
+  - snippets/modelos-razonadores/01-ecosistema-modelos.html
+  - snippets/modelos-razonadores/01-razonamiento-pasos.html
+  - snippets/modelos-razonadores/02-sycofancia.html
+  - snippets/modelos-razonadores/02-propagacion-error.html
+  - snippets/modelos-razonadores/02-tipos-fallos.html
+  - snippets/modelos-razonadores/02-cot-fidelidad.html
+  - snippets/modelos-razonadores/05-specification-gaming.html
   - snippets/modelos-razonadores/03-prm-orm-comparacion.html
   - snippets/modelos-razonadores/03-best-of-n-visual.html
   - snippets/modelos-razonadores/03-ttc-palancas.html
   - snippets/modelos-razonadores/03-escala-complementaria.html
+  - snippets/modelos-razonadores/04-ttft-streaming.html
+  - snippets/modelos-razonadores/04-routellm-decision.html
+  - snippets/modelos-razonadores/04-latencia-umbral.html
+  - snippets/modelos-razonadores/05-overthinking-curva.html
+  - snippets/modelos-razonadores/05-taborag-flujo.html
+  - snippets/modelos-razonadores/05-riesgos-ttc.html
   - snippets/ia-pib-energia/series_energy_ai_01_electricity.html
   - snippets/ia-pib-energia/series_energy_ai_02_ai.html
   - snippets/ia-pib-energia/series_energy_ai_03_measurement.html
@@ -43,20 +56,18 @@ required_snippets:
   - snippets/agentes-ia/01-bucle-agente.html
   - snippets/agentes-ia/03-evaluacion.html
   - snippets/agentes-ia/04-seguridad.html
-
 coverage:
   homepage: pilot_to_be_replaced_with_canonical_mirror
   series_hub: canonical_structure_mirrored
   series_presentations: complete
   agents_series: complete
-  reasoning_models: test_time_compute_published
+  reasoning_models: text_and_visuals_complete_media_in_progress
   remaining_chapters: in_progress
   concept_hubs: not_yet_published
   technical_articles: not_yet_published
   visual_hub: blocked_on_localized_media
   video_hub: blocked_on_localized_media
-  localized_video_media: test_time_compute_in_progress
-
+  localized_video_media: test_time_compute_published_reasoning_batch_pending
 quality_gates:
   - no_spanish_fallback
   - no_implicit_spanish_media

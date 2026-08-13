@@ -1,0 +1,46 @@
+<div class="raz-wrap" data-anim-tabs data-default="process">
+  <div class="raz-hd">
+    <div class="raz-title">What does "reasoning" mean for an LLM?</div>
+    <div class="raz-sub">A multi-step process with real cost. Benchmarks quantify what extended reasoning can produce that a direct answer cannot.</div>
+  </div>
+
+  <nav class="raz-nav" aria-label="Sections">
+    <button type="button" data-tab="process" aria-selected="true">The process</button>
+    <button type="button" data-tab="benchmarks" aria-selected="false">The benchmarks</button>
+  </nav>
+
+  <section class="raz-panel" data-panel="process">
+    <div class="raz-compare">
+      <div class="raz-col">
+        <div class="raz-col-label">Direct answer</div>
+        <div class="raz-step">Prompt</div><div class="raz-arr">↓</div><div class="raz-step">Answer</div>
+        <div class="raz-col-note">Fast · Cheap · Works well on familiar pattern-matching tasks</div>
+      </div>
+      <div class="raz-col raz-col--chain">
+        <div class="raz-col-label">With a reasoning chain</div>
+        <div class="raz-step">Prompt</div><div class="raz-arr">↓</div>
+        <div class="raz-chain"><div>Decompose the problem</div><div>Solve subproblem 1</div><div>Solve subproblem 2</div><div>Check consistency</div><div>Synthesize the answer</div></div>
+        <div class="raz-arr">↓</div><div class="raz-step raz-step--better">Answer</div>
+        <div class="raz-col-note">Slower · More expensive · Better on multi-step problems</div>
+      </div>
+    </div>
+    <div class="raz-props">
+      <article><span>STEPS</span><strong>Chained intermediate work</strong><p>Each step depends on earlier ones. Final quality depends on the quality of the full chain.</p></article>
+      <article><span>COST</span><strong>Consumes resources</strong><p>More steps mean more generated tokens, higher latency and greater cost per request.</p></article>
+      <article><span>FAILURE</span><strong>Not infallible</strong><p>Failures follow predictable patterns depending on problem type and the training distribution.</p></article>
+    </div>
+  </section>
+
+  <section class="raz-panel" data-panel="benchmarks" hidden>
+    <div class="raz-bench-intro"><strong>o1's impact on reasoning benchmarks · September 2024</strong><p>The same pattern appears across three domains: spending more compute while generating can produce gains that do not come from model size alone.</p></div>
+    <div class="raz-benchmarks">
+      <article class="raz-bench"><h4>AIME 2024</h4><p>Competition mathematics</p><div class="raz-row"><span>GPT-4o</span><b>13%</b></div><div class="raz-row"><span>o1 · 1 sample</span><b>74%</b></div><div class="raz-row"><span>o1 · 64 samples</span><b>83%</b></div></article>
+      <article class="raz-bench"><h4>Codeforces</h4><p>Programming competition</p><div class="raz-row"><span>GPT-4o</span><b>P11</b></div><div class="raz-row"><span>o1</span><b>P89</b></div></article>
+      <article class="raz-bench"><h4>GPQA Diamond</h4><p>PhD-level physics, chemistry and biology</p><div class="raz-row"><span>PhD experts</span><b>~69%</b></div><div class="raz-row"><span>o1</span><b>78%</b></div><small>First time a model exceeded the recruited human experts on this benchmark.</small></article>
+    </div>
+  </section>
+</div>
+
+<style>
+.raz-wrap,.raz-wrap *{box-sizing:border-box}.raz-wrap{--bg:var(--md-default-bg-color,#fff);--fg:var(--md-default-fg-color,#0f172a);--bd:rgba(15,23,42,.16);--mut:rgba(15,23,42,.60);--teal:#26A69A;display:grid;gap:16px;max-width:900px;margin:0 auto;padding:clamp(16px,2vw,28px);border:1px solid var(--bd);border-radius:20px;background:var(--bg);color:var(--fg);font-family:"Avenir Next","Segoe UI",Arial,sans-serif}[data-md-color-scheme="slate"] .raz-wrap{--bd:rgba(226,232,240,.16);--mut:rgba(226,232,240,.60)}.raz-hd{display:grid;gap:5px}.raz-title{font-size:clamp(17px,2.1vw,23px);font-weight:900}.raz-sub,.raz-col-note,.raz-bench p,.raz-bench-intro p{color:var(--mut);line-height:1.5}.raz-nav{display:flex;gap:7px;flex-wrap:wrap}.raz-nav button{border:1px solid var(--bd);border-radius:999px;background:var(--bg);padding:7px 14px;font:inherit;font-size:13px;font-weight:800;cursor:pointer;color:var(--mut)}.raz-nav button[aria-selected="true"]{border-color:var(--teal);color:var(--fg)}.raz-panel[hidden]{display:none}.raz-compare{display:grid;grid-template-columns:1fr 1fr;gap:12px}.raz-col{border:1px solid var(--bd);border-radius:14px;padding:16px;display:flex;flex-direction:column;align-items:center;gap:9px}.raz-col--chain{border-color:color-mix(in srgb,var(--teal) 35%,var(--bd))}.raz-col-label{font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.07em;color:var(--mut);align-self:flex-start}.raz-step{padding:9px 16px;border-radius:10px;border:1px solid var(--bd);font-weight:800;text-align:center;width:100%}.raz-step--better{background:color-mix(in srgb,var(--teal) 12%,var(--bg));border-color:var(--teal)}.raz-arr{color:var(--mut)}.raz-chain{display:grid;gap:5px;width:100%}.raz-chain div{padding:7px 12px;border-radius:8px;border:1px solid color-mix(in srgb,var(--teal) 30%,var(--bd));font-size:13px;font-weight:700;text-align:center}.raz-col-note{font-size:12px;text-align:center}.raz-props{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}.raz-props article,.raz-bench{border:1px solid var(--bd);border-radius:12px;padding:13px}.raz-props span{display:block;font-size:10px;font-weight:900;color:var(--mut);letter-spacing:.07em}.raz-props strong{display:block;margin:.25rem 0}.raz-props p{margin:0;color:var(--mut);font-size:13px;line-height:1.45}.raz-benchmarks{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.raz-bench h4{margin:0}.raz-bench p{font-size:12px;margin:.3rem 0 .7rem}.raz-row{display:flex;justify-content:space-between;border-top:1px solid var(--bd);padding:7px 0;font-size:13px}.raz-bench small{color:var(--mut)}@media(max-width:680px){.raz-compare,.raz-props,.raz-benchmarks{grid-template-columns:1fr}}
+</style>

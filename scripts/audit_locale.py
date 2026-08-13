@@ -5,6 +5,8 @@ from __future__ import annotations
 
 import argparse
 import re
+import subprocess
+import sys
 from pathlib import Path
 
 import yaml
@@ -88,6 +90,22 @@ def audit_site(site: Path) -> list[str]:
     return errors
 
 
+def audit_full_english_parity() -> list[str]:
+    """Run the canonical parity counter from the already-required locale gate.
+
+    While manifest status is mirror-in-progress it reports exact gaps and exits
+    zero. Once the manifest is flipped to complete the same script becomes a hard
+    zero-delta gate and any remaining mismatch blocks the locale build.
+    """
+    script = ROOT / "scripts" / "audit_english_full_parity.py"
+    if not script.is_file():
+        return []
+    result = subprocess.run([sys.executable, str(script)], cwd=ROOT)
+    if result.returncode:
+        return [f"full English parity audit failed with exit code {result.returncode}"]
+    return []
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--locale", required=True)
@@ -98,6 +116,8 @@ def main() -> None:
     errors = audit_source(args.locale, manifest)
     if args.site:
         errors.extend(audit_site((ROOT / args.site).resolve()))
+    if args.locale.strip().lower() == "en" and not args.site:
+        errors.extend(audit_full_english_parity())
 
     if errors:
         print("Locale audit failed:")

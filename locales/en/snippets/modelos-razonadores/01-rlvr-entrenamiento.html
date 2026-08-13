@@ -1,0 +1,190 @@
+<div class="rlvr-wrap" data-demo="01-rlvr-entrenamiento" data-default="bucle">
+  <div class="rlvr-hd">
+    <div class="rlvr-title">How a reasoning model is trained</div>
+    <div class="rlvr-sub">Reinforcement Learning with Verifiable Rewards: the loop that turns failed attempts into deeper reasoning strategies.</div>
+  </div>
+
+  <nav class="rlvr-nav" data-role="tablist" aria-label="Sections">
+    <button type="button" data-role="tab" data-tab="bucle" aria-selected="true">The RLVR loop</button>
+    <button type="button" data-role="tab" data-tab="vs" aria-selected="false">vs. pretraining</button>
+    <button type="button" data-role="tab" data-tab="grpo" aria-selected="false">GRPO</button>
+  </nav>
+
+  <div class="rlvr-panels">
+    <section class="rlvr-panel" data-panel="bucle">
+      <div class="rlvr-loop">
+        <div class="rlvr-step rlvr-step--problem">
+          <div class="rlvr-step-num">1</div>
+          <div class="rlvr-step-icon">∑</div>
+          <div class="rlvr-step-label">PROBLEM</div>
+          <div class="rlvr-step-body">The model receives a problem with a verifiable answer: mathematics, code or formal logic.</div>
+          <div class="rlvr-step-ex">"Prove that √2 is irrational"</div>
+        </div>
+        <div class="rlvr-step rlvr-step--cot">
+          <div class="rlvr-step-num">2</div>
+          <div class="rlvr-step-icon">⋯</div>
+          <div class="rlvr-step-label">CHAIN OF THOUGHT</div>
+          <div class="rlvr-step-body">The model generates internal reasoning tokens. There is no rigid output format: it can explore, backtrack and revisit premises.</div>
+          <div class="rlvr-step-ex">"Assume √2 = p/q… then 2q² = p²… p is even… q is even… contradiction."</div>
+        </div>
+        <div class="rlvr-step rlvr-step--verify">
+          <div class="rlvr-step-num">3</div>
+          <div class="rlvr-step-icon">✓</div>
+          <div class="rlvr-step-label">VERIFICATION</div>
+          <div class="rlvr-step-body">An external verifier checks the final answer. The check is objective: it scores correctness, not presentation.</div>
+          <div class="rlvr-step-ex">Math: does it match the correct result? · Code: do the unit tests pass?</div>
+        </div>
+        <div class="rlvr-step rlvr-step--reward">
+          <div class="rlvr-step-num">4</div>
+          <div class="rlvr-step-icon">R</div>
+          <div class="rlvr-step-label">REWARD</div>
+          <div class="rlvr-step-body">A binary or scalar signal. Chains that produce correct answers reinforce the strategies they used; incorrect ones weaken them.</div>
+          <div class="rlvr-step-ex">+1 if correct · 0 if incorrect · the gradient updates the model weights</div>
+        </div>
+      </div>
+      <div class="rlvr-loop-note">The loop repeats across millions of problems. The model does not learn "the answer"—it learns which reasoning strategies work.</div>
+    </section>
+
+    <section class="rlvr-panel" data-panel="vs" hidden>
+      <div class="rlvr-compare">
+        <div class="rlvr-col">
+          <div class="rlvr-col-tag" style="background:rgba(38,166,154,.1);border-color:rgba(38,166,154,.25);color:#26A69A">PRETRAINING</div>
+          <div class="rlvr-col-title">Next-token prediction</div>
+          <div class="rlvr-col-items">
+            <div class="rlvr-item"><div class="rlvr-item-k">Objective</div><div class="rlvr-item-v">Imitate existing text from the internet—articles, books, code and conversations</div></div>
+            <div class="rlvr-item"><div class="rlvr-item-k">Signal</div><div class="rlvr-item-v">Cross-entropy on the next token. Dense: every token produces a gradient</div></div>
+            <div class="rlvr-item"><div class="rlvr-item-k">Result</div><div class="rlvr-item-v">The model learns statistical language patterns and factual knowledge about the world</div></div>
+            <div class="rlvr-item rlvr-item--limit"><div class="rlvr-item-k">Limit</div><div class="rlvr-item-v">Books show clean solutions, not the search process that produced them</div></div>
+          </div>
+        </div>
+        <div class="rlvr-col">
+          <div class="rlvr-col-tag" style="background:rgba(50,74,178,.1);border-color:rgba(124,199,255,.25);color:#7cc7ff">RLVR POST-TRAINING</div>
+          <div class="rlvr-col-title">Optimization with verifiable rewards</div>
+          <div class="rlvr-col-items">
+            <div class="rlvr-item"><div class="rlvr-item-k">Objective</div><div class="rlvr-item-v">Maximize correct-answer rate on verifiable problems—mathematics, code and logic</div></div>
+            <div class="rlvr-item"><div class="rlvr-item-k">Signal</div><div class="rlvr-item-v">Binary per episode: correct or incorrect. Sparse—only at the end of each attempt</div></div>
+            <div class="rlvr-item"><div class="rlvr-item-k">Result</div><div class="rlvr-item-v">The model discovers search strategies: backtracking, intermediate verification and exploration of alternative paths</div></div>
+            <div class="rlvr-item rlvr-item--win"><div class="rlvr-item-k">Advantage</div><div class="rlvr-item-v">No human reasoning traces are required—the verifier acts as an objective judge that can scale</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="rlvr-panel" data-panel="grpo" hidden>
+      <div class="rlvr-grpo-intro">GRPO (Group Relative Policy Optimization) is the training algorithm used by DeepSeek R1. It removes the need for a separate critic model.</div>
+      <div class="rlvr-grpo-flow">
+        <div class="rlvr-gstep"><div class="rlvr-gstep-tag">INPUT</div><div class="rlvr-gstep-title">Problem</div><div class="rlvr-gstep-desc">A mathematics or coding problem whose answer can be verified objectively</div></div>
+        <div class="rlvr-gstep"><div class="rlvr-gstep-tag">SAMPLING</div><div class="rlvr-gstep-title">G independent attempts</div><div class="rlvr-gstep-desc">The model generates G different answers to the same problem (for example G=8). Each has its own reasoning chain</div></div>
+        <div class="rlvr-gstep"><div class="rlvr-gstep-tag">EVALUATION</div><div class="rlvr-gstep-title">Rewards r₁…r_G</div><div class="rlvr-gstep-desc">Each attempt receives a verified reward. Its advantage is its deviation from the group average: Aᵢ = (rᵢ − r̄) / std</div></div>
+        <div class="rlvr-gstep"><div class="rlvr-gstep-tag">UPDATE</div><div class="rlvr-gstep-title">Relative gradient</div><div class="rlvr-gstep-desc">Attempts above the group average reinforce their reasoning tokens; worse attempts penalize them. No separate critic model is required.</div></div>
+      </div>
+      <div class="rlvr-grpo-why">
+        <div class="rlvr-why-item"><div class="rlvr-why-k">No critic model</div><div class="rlvr-why-v">Classic PPO needs a separate value model. GRPO uses the group as its reference, saving memory and simplifying the pipeline</div></div>
+        <div class="rlvr-why-item"><div class="rlvr-why-k">No reasoning traces</div><div class="rlvr-why-v">Human CoT examples are not required. The model discovers its own exploration strategies guided only by the verified result</div></div>
+        <div class="rlvr-why-item"><div class="rlvr-why-k">Emergent result</div><div class="rlvr-why-v">During R1 training, the model spontaneously developed backtracking, verification and path-exploration behaviors without being explicitly told to do so</div></div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<style>
+.rlvr-wrap, .rlvr-wrap * { box-sizing: border-box; }
+.rlvr-wrap {
+  --ra: #26A69A; --rb: #324AB2; --rg: #FFB343; --rc: #7cc7ff; --rr: #e04c4c;
+  --rbg: var(--md-default-bg-color, #fff);
+  --rfg: var(--md-default-fg-color, #0f172a);
+  --rbd: rgba(15,23,42,.14); --rmut: rgba(15,23,42,.58);
+  --ef: "Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  display: grid; gap: 16px; max-width: 940px; margin: 0 auto;
+  padding: clamp(16px,2vw,28px);
+  border: 1px solid var(--rbd); border-radius: 20px;
+  background:
+    radial-gradient(110% 130% at 5% 0%, color-mix(in srgb,var(--rb) 6%,transparent), transparent 50%),
+    radial-gradient(90% 120% at 95% 0%, color-mix(in srgb,var(--ra) 6%,transparent), transparent 52%),
+    var(--rbg);
+  color: var(--rfg); font-family: var(--ef); -webkit-font-smoothing: antialiased;
+}
+[data-md-color-scheme="slate"] .rlvr-wrap {
+  --rbg: var(--md-default-bg-color, #0f172a);
+  --rfg: var(--md-default-fg-color, #e2e8f0);
+  --rbd: rgba(226,232,240,.15); --rmut: rgba(226,232,240,.58);
+}
+.rlvr-hd { display: grid; gap: 5px; }
+.rlvr-title { font-size: clamp(17px,2vw,23px); font-weight: 900; letter-spacing: -.02em; }
+.rlvr-sub { font-size: 14.5px; color: var(--rmut); line-height: 1.5; }
+.rlvr-nav { display: flex; flex-wrap: wrap; gap: 7px; }
+.rlvr-nav button { appearance: none; border: 1px solid var(--rbd); border-radius: 999px; background: color-mix(in srgb,var(--rbg) 90%,#0f172a 10%); color: var(--rmut); padding: 7px 16px; font: inherit; font-size: 13px; font-weight: 800; cursor: pointer; transition: border-color .14s, background .14s, color .14s; }
+.rlvr-nav button[aria-selected="true"] { border-color: color-mix(in srgb,var(--rb) 44%,transparent); background: color-mix(in srgb,var(--rb) 10%,var(--rbg)); color: var(--rfg); }
+.rlvr-panel[hidden] { display: none; }
+.rlvr-loop { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.rlvr-step { border: 1px solid var(--rbd); border-radius: 14px; padding: 16px; background: color-mix(in srgb,var(--rbg) 88%,#0f172a 12%); display: grid; gap: 8px; align-content: start; }
+.rlvr-step--problem { border-color: color-mix(in srgb,var(--rc) 30%,var(--rbd)); }
+.rlvr-step--cot { border-color: color-mix(in srgb,var(--rb) 30%,var(--rbd)); }
+.rlvr-step--verify { border-color: color-mix(in srgb,var(--ra) 30%,var(--rbd)); }
+.rlvr-step--reward { border-color: color-mix(in srgb,var(--rg) 30%,var(--rbd)); }
+.rlvr-step-num { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 900; color: var(--rfg); background: color-mix(in srgb,var(--rb) 14%,transparent); border: 1px solid color-mix(in srgb,var(--rb) 28%,transparent); }
+.rlvr-step-icon { font-size: 30px; font-family: "SF Mono","JetBrains Mono","Courier New",monospace; font-weight: 900; line-height: 1; }
+.rlvr-step--problem .rlvr-step-icon { color: var(--rc); }
+.rlvr-step--cot .rlvr-step-icon { color: color-mix(in srgb,var(--rb) 80%,var(--rfg)); }
+.rlvr-step--verify .rlvr-step-icon { color: var(--ra); }
+.rlvr-step--reward .rlvr-step-icon { color: var(--rg); }
+.rlvr-step-label { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--rmut); }
+.rlvr-step-body { font-size: 13.5px; color: var(--rfg); line-height: 1.5; }
+.rlvr-step-ex { font-size: 12px; color: var(--rmut); font-style: italic; border-top: 1px solid var(--rbd); padding-top: 7px; line-height: 1.4; }
+.rlvr-loop-note { font-size: 14px; color: var(--rmut); font-style: italic; border-left: 3px solid color-mix(in srgb,var(--rb) 36%,transparent); padding-left: 12px; }
+.rlvr-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.rlvr-col { border: 1px solid var(--rbd); border-radius: 14px; padding: 16px; background: color-mix(in srgb,var(--rbg) 88%,#0f172a 12%); display: grid; gap: 10px; align-content: start; }
+.rlvr-col-tag { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; padding: 3px 10px; border-radius: 999px; border: 1px solid; width: fit-content; }
+.rlvr-col-title { font-size: 16px; font-weight: 900; line-height: 1.2; }
+.rlvr-col-items { display: grid; gap: 8px; }
+.rlvr-item { padding: 9px 11px; border-radius: 9px; border: 1px solid var(--rbd); background: color-mix(in srgb,var(--rbg) 85%,transparent); display: grid; gap: 4px; }
+.rlvr-item--limit { border-color: color-mix(in srgb,var(--rr) 20%,var(--rbd)); background: color-mix(in srgb,var(--rr) 5%,var(--rbg)); }
+.rlvr-item--win { border-color: color-mix(in srgb,var(--ra) 22%,var(--rbd)); background: color-mix(in srgb,var(--ra) 5%,var(--rbg)); }
+.rlvr-item-k { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .05em; color: var(--rmut); }
+.rlvr-item-v { font-size: 13.5px; color: var(--rfg); line-height: 1.4; }
+.rlvr-grpo-intro { font-size: 14.5px; color: var(--rmut); font-style: italic; border-left: 3px solid color-mix(in srgb,var(--rc) 36%,transparent); padding-left: 12px; }
+.rlvr-grpo-flow { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.rlvr-gstep { border: 1px solid var(--rbd); border-radius: 12px; padding: 14px 16px; background: color-mix(in srgb,var(--rbg) 88%,#0f172a 12%); display: grid; gap: 6px; align-content: start; }
+.rlvr-gstep-tag { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .07em; color: var(--rmut); }
+.rlvr-gstep-title { font-size: 15px; font-weight: 900; }
+.rlvr-gstep-desc { font-size: 13px; color: var(--rmut); line-height: 1.45; }
+.rlvr-grpo-why { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+.rlvr-why-item { border: 1px solid var(--rbd); border-radius: 10px; padding: 12px 14px; background: color-mix(in srgb,var(--rbg) 88%,#0f172a 12%); display: grid; gap: 5px; }
+.rlvr-why-k { font-size: 12px; font-weight: 900; }
+.rlvr-why-v { font-size: 13px; color: var(--rmut); line-height: 1.4; }
+@media (max-width: 600px) { .rlvr-loop { grid-template-columns: 1fr; } .rlvr-compare { grid-template-columns: 1fr; } .rlvr-grpo-flow { grid-template-columns: 1fr; } .rlvr-grpo-why { grid-template-columns: 1fr; } }
+</style>
+
+<script>
+(function () {
+  function activate(root, key) {
+    root.querySelectorAll('[data-role="tab"]').forEach(t => {
+      const on = t.getAttribute('data-tab') === key;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+    });
+    root.querySelectorAll('[data-panel]').forEach(p => { p.hidden = p.getAttribute('data-panel') !== key; });
+  }
+  function initRoot(root) {
+    if (root.dataset.rlvrReady === '1') return;
+    root.dataset.rlvrReady = '1';
+    const tabs = Array.from(root.querySelectorAll('[data-role="tab"]'));
+    const first = root.getAttribute('data-default') || (tabs[0] && tabs[0].getAttribute('data-tab'));
+    tabs.forEach(tab => {
+      tab.tabIndex = -1;
+      tab.addEventListener('click', () => activate(root, tab.getAttribute('data-tab')));
+      tab.addEventListener('keydown', e => {
+        const cur = tabs.indexOf(tab); let next = cur;
+        if (e.key === 'ArrowRight') next = (cur + 1) % tabs.length;
+        if (e.key === 'ArrowLeft') next = (cur - 1 + tabs.length) % tabs.length;
+        if (next !== cur) { e.preventDefault(); tabs[next].focus(); activate(root, tabs[next].getAttribute('data-tab')); }
+      });
+    });
+    activate(root, first);
+  }
+  function boot() { document.querySelectorAll('[data-demo="01-rlvr-entrenamiento"]').forEach(initRoot); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
+  if (typeof document$ !== 'undefined' && document$.subscribe) document$.subscribe(boot);
+})();
+</script>
