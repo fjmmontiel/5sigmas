@@ -215,6 +215,9 @@ jobs:
       - name: Validate English locale in browser
         run: node scripts/validate_english_locale.mjs
 
+      - name: Validate English SEO and schema parity
+        run: node scripts/validate_english_seo.mjs
+
       - name: Upload English visual review
         if: always()
         uses: actions/upload-artifact@v4

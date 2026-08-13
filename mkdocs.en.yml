@@ -28,6 +28,7 @@ extra:
   locale_code: en
   locale_name: English
   locale_prefix: /en
+  global_site_root: https://5sigmas.com/
   generator: false
   alternate:
     - name: Español
@@ -36,6 +37,18 @@ extra:
     - name: English
       link: /en/
       lang: en
+  schema_ui:
+    home_title: "5sigmas: AI explained with technical rigor"
+    markdown_label: Markdown version
+    home_label: Home
+    series_label: Series
+    concepts_label: Concepts
+    engineering_label: Engineering
+    job_title: Real-time AI systems engineer
+    profile_name: "About Francisco Maldonado — 5sigmas"
+    person_description: "Dual graduate in Physics and Mathematics. Designs and builds production AI systems, including voice assistants, computer vision and real-time systems."
+    concepts_collection_name: Artificial intelligence concepts
+    engineering_collection_name: AI systems engineering
   reader_ui:
     learn_section: Learn
     build_section: Build
@@ -125,6 +138,13 @@ plugins:
       module_name: locale_main
       on_error_fail: true
       on_undefined: strict
+  - social:
+      cards_layout: clean
+      cards_layout_options:
+        background_color: "#ffffff"
+        color: "#111111"
+        font_family: Inter
+      enabled: true
 
 hooks:
   - hooks/reading_navigation.py

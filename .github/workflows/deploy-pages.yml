@@ -114,6 +114,11 @@ jobs:
           S5_PREVIEW_BASE: https://5sigmas.com
         run: node scripts/validate_english_locale.mjs
 
+      - name: Validate live English SEO and schema
+        env:
+          S5_PREVIEW_BASE: https://5sigmas.com
+        run: node scripts/validate_english_seo.mjs
+
       - name: Upload live English screenshots
         if: always()
         uses: actions/upload-artifact@v4
