@@ -72,6 +72,7 @@ extra:
     continue_aria: Continue learning
     context_aria: Reading context
     navigation_aria: "Navigation for {collection}"
+    progress_of: of
     all_library: Full library
     search: Search
     direct_search_placeholder: "Series, chapter or note"
