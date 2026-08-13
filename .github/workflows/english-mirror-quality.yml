@@ -20,6 +20,7 @@ jobs:
     timeout-minutes: 12
     env:
       S5_LOCALE: en
+      S5_EN_TTC_SEED_URL: "https://sdmntprnortheu.oaiusercontent.com/files/00000000-2028-81f4-9eab-ac94800f4fec/raw?se=2026-08-13T10%3A03%3A27Z&sp=r&sv=2026-02-06&sr=b&scid=dcb3d45e-9abd-572f-8040-c30e59535edc&skoid=1d6acb5b-b3f4-43ec-a5ec-b05c4a7708c8&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-08-13T09%3A30%3A13Z&ske=2026-08-14T09%3A30%3A13Z&sks=b&skv=2026-02-06&sig=6I7lyFGpzl%2BO2ZocqzPfplw%2BqSjx/8nyrfZF3vSLjpE%3D"
     steps:
       - uses: actions/checkout@v4
 
@@ -71,6 +72,24 @@ jobs:
         env:
           S5_REQUIRE_EN_TTC_MEDIA: '0'
         run: node scripts/validate_english_reasoning_ttc.mjs
+
+      - name: Stage reviewed English TTC media seed
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3 "$S5_EN_TTC_SEED_URL" -o /tmp/en-ttc.zip
+          mkdir -p artifacts/en-ttc-seed
+          unzip -q -j /tmp/en-ttc.zip '03-test-time-compute.mp4' '03-test-time-compute.jpg' -d artifacts/en-ttc-seed
+          echo '4e6238a7dffc03643b48e08f7c579fb7d710217a827720113e7477c633be0f33  artifacts/en-ttc-seed/03-test-time-compute.mp4' | sha256sum -c -
+          echo '60cee7a788f546bb58e56e5008ca21c7efd9317b9b84c059a9427465d6e40f50  artifacts/en-ttc-seed/03-test-time-compute.jpg' | sha256sum -c -
+
+      - name: Upload reviewed English TTC media seed
+        uses: actions/upload-artifact@v4
+        with:
+          name: english-ttc-reviewed-seed
+          path: artifacts/en-ttc-seed/*
+          if-no-files-found: error
+          retention-days: 14
 
       - name: Upload English mirror screenshots
         if: always()
