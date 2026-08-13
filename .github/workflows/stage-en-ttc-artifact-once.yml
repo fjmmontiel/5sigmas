@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     env:
-      SOURCE_ZIP: "https://sdmntprindiasocentral.oaiusercontent.com/files/00000000-0760-8211-8bdd-19d8c5939703/raw?se=2026-08-13T09%3A42%3A06Z&sp=r&sv=2026-02-06&sr=b&scid=b88f3db1-695a-5b41-b4cc-eaad092d5bb1&skoid=1d6acb5b-b3f4-43ec-a5ec-b05c4a7708c8&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-08-13T09%3A29%3A39Z&ske=2026-08-14T09%3A29%3A39Z&sks=b&skv=2026-02-06&sig=E3Up9yV4UUHAdE1kRlZT7fW9E8Q4YaCL8DYaQ50otW0%3D"
+      SOURCE_ZIP: "https://sdmntprnortheu.oaiusercontent.com/files/00000000-2028-81f4-9eab-ac94800f4fec/raw?se=2026-08-13T10%3A03%3A27Z&sp=r&sv=2026-02-06&sr=b&scid=dcb3d45e-9abd-572f-8040-c30e59535edc&skoid=1d6acb5b-b3f4-43ec-a5ec-b05c4a7708c8&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-08-13T09%3A30%3A13Z&ske=2026-08-14T09%3A30%3A13Z&sks=b&skv=2026-02-06&sig=6I7lyFGpzl%2BO2ZocqzPfplw%2BqSjx/8nyrfZF3vSLjpE%3D"
     steps:
       - name: Download and verify reviewed renderer artifact
         shell: bash
