@@ -26,11 +26,33 @@ SITE = ROOT / "site"
 CURRENT_LANGUAGE = "es"
 
 
-def _configured_alternate_roots() -> list[tuple[str, str]]:
-    config = yaml.safe_load(CONFIG.read_text(encoding="utf-8")) or {}
-    alternates = (config.get("extra") or {}).get("alternate") or []
-    roots: list[tuple[str, str]] = []
+def _load_extra_block() -> dict:
+    """Safely parse only ``extra:`` instead of executable MkDocs YAML tags."""
+    lines = CONFIG.read_text(encoding="utf-8").splitlines()
+    try:
+        start = next(index for index, line in enumerate(lines) if line.strip() == "extra:" and not line.startswith(" "))
+    except StopIteration as exc:
+        raise AssertionError("mkdocs.yml has no top-level extra block") from exc
 
+    block = [lines[start]]
+    for line in lines[start + 1 :]:
+        if line and not line[0].isspace():
+            break
+        block.append(line)
+
+    parsed = yaml.safe_load("\n".join(block)) or {}
+    extra = parsed.get("extra") or {}
+    if not isinstance(extra, dict):
+        raise AssertionError("mkdocs.yml extra block must be a mapping")
+    return extra
+
+
+def _configured_alternate_roots() -> list[tuple[str, str]]:
+    alternates = _load_extra_block().get("alternate") or []
+    if not isinstance(alternates, list):
+        raise AssertionError("extra.alternate must be a list")
+
+    roots: list[tuple[str, str]] = []
     for item in alternates:
         if not isinstance(item, dict):
             raise AssertionError(f"Invalid extra.alternate entry: {item!r}")
