@@ -72,3 +72,53 @@ jobs:
       name: github-pages
     steps:
       - uses: actions/deploy-pages@v4
+
+  live-qa:
+    needs: deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Wait for English Pages deployment
+        shell: bash
+        run: |
+          for attempt in {1..18}; do
+            body="$(curl --fail --silent --show-error --location https://5sigmas.com/en/ || true)"
+            if grep -q 'AI Agents' <<< "$body"; then
+              echo "Live English deployment is serving the expected locale."
+              exit 0
+            fi
+            echo "Waiting for the Pages edge to expose the new English build ($attempt/18)..."
+            sleep 5
+          done
+          echo "English production did not become ready within the validation window."
+          exit 1
+
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Audit live Spanish resources
+        env:
+          S5_PREVIEW_URL: https://5sigmas.com
+        run: node scripts/audit_browser_resources.mjs
+
+      - name: Validate live English locale
+        env:
+          S5_PREVIEW_BASE: https://5sigmas.com
+        run: node scripts/validate_english_locale.mjs
+
+      - name: Upload live English screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: 5sigmas-en-live-qa
+          path: artifacts/visual-review/english-*.png
+          if-no-files-found: warn
+          retention-days: 14
