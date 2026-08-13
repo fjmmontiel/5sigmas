@@ -1,0 +1,85 @@
+INHERIT: mkdocs.yml
+
+site_name: 5sigmas
+site_description: "Artificial intelligence explained with technical rigor through visual explanations, learning series, primary sources and production engineering."
+site_url: "https://5sigmas.com/en/"
+docs_dir: .locale-build/en
+site_dir: site/en
+
+theme:
+  language: en
+  custom_dir: overrides_locale
+  palette:
+    - scheme: default
+      primary: white
+      accent: black
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: black
+      accent: white
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+extra:
+  content_language: en
+  locale_code: en
+  locale_name: English
+  generator: false
+  alternate:
+    - name: Español
+      link: /
+      lang: es
+    - name: English
+      link: /en/
+      lang: en
+
+nav:
+  - Home: index.md
+  - Learn:
+      - Series: series/index.md
+      - AI Agents:
+          - Introduction: series/agentes-ia/00_presentacion_serie.md
+          - What is an AI agent?: series/agentes-ia/01-que-es-un-agente.md
+          - Anatomy of an agent: series/agentes-ia/02-anatomia-de-un-agente.md
+          - How to evaluate an agent: series/agentes-ia/03-como-evaluar-un-agente.md
+          - Agent security: series/agentes-ia/04-seguridad-agentes.md
+          - From demo to production: series/agentes-ia/05-de-la-demo-a-produccion.md
+  - About: meta/about.md
+
+markdown_extensions:
+  - meta
+  - admonition
+  - footnotes
+  - toc:
+      permalink: true
+  - pymdownx.superfences:
+  - pymdownx.highlight:
+      auto_title: true
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - abbr
+  - attr_list
+  - md_in_html
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+plugins:
+  - search:
+      lang: en
+  - tags:
+  - macros:
+      module_name: locale_main
+      on_error_fail: true
+      on_undefined: strict
+
+hooks: []
+
+# Custom JavaScript currently contains Spanish editorial UI in several modules.
+# Keep the first English pilot deterministic; re-enable scripts one-by-one only
+# after each module has a locale contract.
+extra_javascript: []
