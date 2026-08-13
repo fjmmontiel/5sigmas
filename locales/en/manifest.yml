@@ -16,6 +16,7 @@ published_routes:
   - series/modelos-razonadores/02-fallos.md
   - series/modelos-razonadores/03-test-time-compute.md
   - series/modelos-razonadores/04-latencia-streaming.md
+  - series/modelos-razonadores/05-riesgos.md
   - series/ia-pib-bienestar-energia/00_presentacion_serie.md
   - series/datacenters-espacio/00_presentacion_serie.md
   - series/seguridad-ia/00_presentacion_serie.md
@@ -43,6 +44,9 @@ required_snippets:
   - snippets/modelos-razonadores/04-ttft-streaming.html
   - snippets/modelos-razonadores/04-routellm-decision.html
   - snippets/modelos-razonadores/04-latencia-umbral.html
+  - snippets/modelos-razonadores/05-overthinking-curva.html
+  - snippets/modelos-razonadores/05-taborag-flujo.html
+  - snippets/modelos-razonadores/05-riesgos-ttc.html
   - snippets/ia-pib-energia/series_energy_ai_01_electricity.html
   - snippets/ia-pib-energia/series_energy_ai_02_ai.html
   - snippets/ia-pib-energia/series_energy_ai_03_measurement.html
@@ -57,13 +61,13 @@ coverage:
   series_hub: canonical_structure_mirrored
   series_presentations: complete
   agents_series: complete
-  reasoning_models: chapters_1_2_3_and_4_published
+  reasoning_models: text_and_visuals_complete_media_in_progress
   remaining_chapters: in_progress
   concept_hubs: not_yet_published
   technical_articles: not_yet_published
   visual_hub: blocked_on_localized_media
   video_hub: blocked_on_localized_media
-  localized_video_media: test_time_compute_published
+  localized_video_media: test_time_compute_published_reasoning_batch_pending
 quality_gates:
   - no_spanish_fallback
   - no_implicit_spanish_media
