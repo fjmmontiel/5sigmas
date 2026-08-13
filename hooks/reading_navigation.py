@@ -43,6 +43,7 @@ _DEFAULT_UI = {
     "continue_aria": "Continuar aprendizaje",
     "context_aria": "Contexto de lectura",
     "navigation_aria": "Navegación de {collection}",
+    "progress_of": "de",
 }
 
 
@@ -338,7 +339,7 @@ def _render_context(collection: dict[str, Any], index: int, ui: dict[str, str]) 
         f'<div class="s5-reader-context" aria-label="{escape(ui["context_aria"], quote=True)}">'
         f'<button type="button" data-s5-reader-open>{escape(section)}</button>'
         '<span aria-hidden="true">·</span>'
-        f'<span>{index + 1:02d} de {len(collection["pages"]):02d}</span>'
+        f'<span>{index + 1:02d} {escape(ui["progress_of"])} {len(collection["pages"]):02d}</span>'
         '<span aria-hidden="true">·</span>'
         f'<strong>{escape(collection["title"])}</strong>'
         '</div>'
