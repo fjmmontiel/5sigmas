@@ -56,7 +56,7 @@ jobs:
         run: python scripts/audit_video_indexing.py
 
       - name: Audit search foundation
-        run: python scripts/audit_search_foundation.py
+        run: python scripts/audit_multilingual_search_foundation.py
 
       - name: Enforce priority topic hub contract
         run: python scripts/audit_priority_topic_hubs.py
