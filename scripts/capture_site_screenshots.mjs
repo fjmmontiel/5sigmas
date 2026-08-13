@@ -283,7 +283,18 @@ try {
 
     page.on('pageerror', (error) => runtimeErrors.push(`pageerror: ${error.message}`));
     page.on('console', (message) => {
-      if (message.type() === 'error') runtimeErrors.push(`console: ${message.text()}`);
+      if (message.type() !== 'error') return;
+      const location = message.location();
+      const where = location?.url
+        ? ` @ ${location.url}${Number.isInteger(location.lineNumber) ? `:${location.lineNumber}:${location.columnNumber}` : ''}`
+        : '';
+      runtimeErrors.push(`console: ${message.text()}${where}`);
+    });
+    page.on('response', (response) => {
+      if (response.status() >= 400) runtimeErrors.push(`http ${response.status()}: ${response.url()}`);
+    });
+    page.on('requestfailed', (request) => {
+      runtimeErrors.push(`requestfailed: ${request.url()} (${request.failure()?.errorText || 'unknown error'})`);
     });
 
     if (capture.seedResume) {

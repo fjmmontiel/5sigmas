@@ -40,7 +40,8 @@
     const nav = document.createElement('nav');
     nav.className = 's5-reader-global-nav';
     nav.dataset.s5ReaderGlobalNav = 'true';
-    nav.setAttribute('aria-label', 'Navegación principal');
+    const language = (document.documentElement.lang || 'es').toLowerCase();
+    nav.setAttribute('aria-label', language.startsWith('en') ? 'Main navigation' : 'Navegación principal');
 
     for (const source of sourceLinks) {
       const link = document.createElement('a');

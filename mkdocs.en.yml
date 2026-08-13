@@ -27,6 +27,7 @@ extra:
   content_language: en
   locale_code: en
   locale_name: English
+  locale_prefix: /en
   generator: false
   alternate:
     - name: Español
@@ -35,6 +36,54 @@ extra:
     - name: English
       link: /en/
       lang: en
+  reader_ui:
+    learn_section: Learn
+    build_section: Build
+    series_kind: Series
+    build_kind: Build
+    technical_title: Technical notes
+    concepts_title: Concepts
+    content_singular: "{count} item"
+    content_plural: "{count} items"
+    previous: Previous
+    next: Next
+    chapters_aria: "Chapters in {collection}"
+    reading: Reading
+    open: Open
+    contents_aria: "Contents of {collection}"
+    library: Library
+    library_title: "Series and technical notes."
+    you_are_in: You are in
+    search_placeholder: "Search series, chapter or note"
+    search_aria: "Search series, chapter or technical note"
+    close_library: Close library
+    close: "Close ×"
+    library_catalogue_aria: "Series and technical notes"
+    no_results: "No content matches this search."
+    next_chapter: Next chapter
+    series_completed: Series completed
+    choose_next_path: Choose the next path
+    all_series: All series
+    note_completed: Note completed
+    explore_technical: Explore technical notes
+    all_technical: All technical notes
+    continue_learning: Keep learning
+    open_library: Open library
+    continue_aria: Continue learning
+    context_aria: Reading context
+    navigation_aria: "Navigation for {collection}"
+    progress_of: of
+    all_library: Full library
+    search: Search
+    direct_search_placeholder: "Series, chapter or note"
+    direct_search_aria: "Search any series, chapter or technical note"
+    direct_navigation_aria: "Navigation for {collection}"
+    kind_notes: Notes
+    kind_concepts: Concepts
+    kind_series: Series
+    reading_time_label: Reading time
+    reading_estimated: Estimated reading
+    reading_estimated_aria: Estimated reading time
 
 nav:
   - Home: index.md
@@ -77,9 +126,14 @@ plugins:
       on_error_fail: true
       on_undefined: strict
 
-hooks: []
+hooks:
+  - hooks/reading_navigation.py
+  - hooks/direct_reader_navigation.py
 
-# Custom JavaScript currently contains Spanish editorial UI in several modules.
-# Keep the first English pilot deterministic; re-enable scripts one-by-one only
-# after each module has a locale contract.
-extra_javascript: []
+extra_javascript:
+  - path: javascripts/external-links.js
+    defer: true
+  - path: assets/javascripts/reader-navigation.js
+    defer: true
+  - path: assets/javascripts/reader-direct-navigation.js
+    defer: true
