@@ -9,6 +9,7 @@ on:
       - 'scripts/validate_english_series_mirror.mjs'
       - 'scripts/validate_english_reasoning_ttc.mjs'
       - 'scripts/validate_english_energy_ch1.mjs'
+      - 'scripts/validate_english_cave_ch1.mjs'
       - 'docs/assets/javascripts/series_energy_ai_preview.js'
       - '.github/workflows/english-mirror-quality.yml'
 
@@ -75,6 +76,9 @@ jobs:
 
       - name: Validate English Energy chapter 1
         run: node scripts/validate_english_energy_ch1.mjs
+
+      - name: Validate English From Caves chapter 1
+        run: node scripts/validate_english_cave_ch1.mjs
 
       - name: Upload English mirror screenshots
         if: always()
