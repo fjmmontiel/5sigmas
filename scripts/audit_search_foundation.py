@@ -34,7 +34,10 @@ REQUIRED_INDEXABLE_PATHS = (
     "temas/transformer/index.html",
     "temas/razonamiento/index.html",
     "temas/evaluacion-modelos/index.html",
+    "temas/agentes-ia/index.html",
+    "temas/prompt-injection/index.html",
 )
+REQUIRED_HOMEPAGE_TOPIC_PATHS = REQUIRED_INDEXABLE_PATHS[1:]
 REQUIRED_MARKDOWN_PATHS = tuple(
     path.removesuffix("index.html") + "index.html.md" for path in REQUIRED_INDEXABLE_PATHS
 )
@@ -478,6 +481,12 @@ def audit(site_dir: Path) -> tuple[list[str], list[str], dict[str, int]]:
             errors.append(f"Required organic-search page is not indexable: {canonical}")
         if canonical != SITE_ROOT and incoming[canonical] == 0:
             errors.append(f"Required organic-search page has no internal incoming links: {canonical}")
+
+    homepage_links = outgoing.get(SITE_ROOT, set())
+    for relative in REQUIRED_HOMEPAGE_TOPIC_PATHS:
+        canonical = normalize_url(f"{SITE_ORIGIN}/{relative.removesuffix('index.html')}")
+        if canonical not in homepage_links:
+            errors.append(f"Homepage is missing a direct crawlable link to: {canonical}")
 
     for relative in REQUIRED_MARKDOWN_PATHS:
         if not (site_dir / relative).is_file():

@@ -27,6 +27,7 @@ El mecanismo de fondo es el mismo que en cualquier sistema de ML, con datos que 
 Lo que cambió es qué se aprende y a qué escala se aplica. Ese cambio descansa en tres piezas que encajan en orden:
 
 - **Embeddings**: cómo el modelo representa el significado como números.
+- [**LLM**](/temas/llms/): el modelo de lenguaje que genera texto token a token.
 - **Transformer**: la arquitectura que permite procesar contexto largo en paralelo.
 - **Leyes de escala**: por qué más datos y parámetros produce capacidades que nadie programó.
 

@@ -18,9 +18,14 @@ SITE = ROOT / "site"
 MKDOCS = ROOT / "mkdocs.yml"
 TOPIC_INDEX = DOCS / "temas" / "index.md"
 LLMS = DOCS / "llms.txt"
+HOMEPAGE = SITE / "index.html"
 ORIGIN = "https://5sigmas.com"
 
 PRIORITY_TOPICS = {
+    "llms": "Qué es un LLM",
+    "transformer": "Cómo funciona el Transformer",
+    "razonamiento": "Razonamiento en LLMs",
+    "evaluacion-modelos": "Evaluación de modelos de IA",
     "agentes-ia": "Qué es un agente de IA",
     "prompt-injection": "Qué es prompt injection",
 }
@@ -53,6 +58,10 @@ def main() -> int:
     topic_index = TOPIC_INDEX.read_text(encoding="utf-8")
     llms = LLMS.read_text(encoding="utf-8")
     sitemap = sitemap_urls()
+    homepage = HOMEPAGE.read_text(encoding="utf-8", errors="replace") if HOMEPAGE.is_file() else ""
+
+    if not homepage:
+        errors.append("Built homepage is missing: site/index.html")
 
     for slug, label in PRIORITY_TOPICS.items():
         source = DOCS / "temas" / f"{slug}.md"
@@ -91,8 +100,18 @@ def main() -> int:
             rendered = html.read_text(encoding="utf-8", errors="replace")
             if re.search(r'<meta[^>]+name=["\']robots["\'][^>]+content=["\'][^"\']*noindex', rendered, re.I):
                 errors.append(f"Built priority topic is noindex: {canonical}")
+            canonicals = re.findall(
+                r'<link[^>]+rel=["\']canonical["\'][^>]+href=["\']([^"\']+)',
+                rendered,
+                re.I,
+            )
+            if canonicals != [canonical]:
+                errors.append(f"Built priority topic has the wrong canonical: {canonical}")
             if label.casefold() not in rendered.casefold():
                 errors.append(f"Built priority topic does not expose expected answer intent {label!r}: {canonical}")
+
+        if f'href="/temas/{slug}/"' not in homepage:
+            errors.append(f"Homepage is missing a direct crawlable link: {canonical}")
 
     print(f"Priority topic hubs: {len(PRIORITY_TOPICS)}")
     if errors:
