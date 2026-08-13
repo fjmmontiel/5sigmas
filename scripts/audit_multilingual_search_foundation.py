@@ -1,18 +1,17 @@
 #!/usr/bin/env python3
-"""Run the search-foundation audit against a single-locale build in a multilingual site.
+"""Run strict Spanish search QA against the final multilingual route contract.
 
-Material renders configured locale roots (for example ``/en/``) into the language
-selector of every page. During the Spanish-only QA phase those routes are not built
-yet, even though the production workflow builds them into the final Pages artifact.
+The Spanish site is built first in CI, while alternate locales are added later to the
+same ``site/`` tree. Route-aware language links therefore reference valid future
+locale pages that do not exist yet at the moment the Spanish search audit runs.
 
-This wrapper stages *only* configured alternate-locale roots after proving that each
-locale has a manifest, runs the existing strict audit unchanged, then removes the
-staged markers. Arbitrary missing internal links therefore still fail normally.
+This wrapper stages only routes explicitly declared in each configured locale's
+manifest, runs the existing strict search audit unchanged, then removes the staged
+markers. Arbitrary missing internal links still fail normally.
 """
 
 from __future__ import annotations
 
-import shutil
 from pathlib import Path
 from urllib.parse import urlsplit
 
@@ -30,7 +29,11 @@ def _load_extra_block() -> dict:
     """Safely parse only ``extra:`` instead of executable MkDocs YAML tags."""
     lines = CONFIG.read_text(encoding="utf-8").splitlines()
     try:
-        start = next(index for index, line in enumerate(lines) if line.strip() == "extra:" and not line.startswith(" "))
+        start = next(
+            index
+            for index, line in enumerate(lines)
+            if line.strip() == "extra:" and not line.startswith(" ")
+        )
     except StopIteration as exc:
         raise AssertionError("mkdocs.yml has no top-level extra block") from exc
 
@@ -47,12 +50,24 @@ def _load_extra_block() -> dict:
     return extra
 
 
-def _configured_alternate_roots() -> list[tuple[str, str]]:
+def _load_manifest(locale: str) -> dict:
+    manifest = ROOT / "locales" / locale / "manifest.yml"
+    if not manifest.is_file():
+        raise AssertionError(
+            f"Configured locale {locale} has no manifest: {manifest.relative_to(ROOT)}"
+        )
+    data = yaml.safe_load(manifest.read_text(encoding="utf-8")) or {}
+    if not isinstance(data, dict):
+        raise AssertionError(f"Locale manifest must be a mapping: {manifest.relative_to(ROOT)}")
+    return data
+
+
+def _configured_alternates() -> list[tuple[str, str, dict]]:
     alternates = _load_extra_block().get("alternate") or []
     if not isinstance(alternates, list):
         raise AssertionError("extra.alternate must be a list")
 
-    roots: list[tuple[str, str]] = []
+    configured: list[tuple[str, str, dict]] = []
     for item in alternates:
         if not isinstance(item, dict):
             raise AssertionError(f"Invalid extra.alternate entry: {item!r}")
@@ -75,36 +90,84 @@ def _configured_alternate_roots() -> list[tuple[str, str]]:
             raise AssertionError(
                 f"Locale {lang} must use its root {expected}; configured {link}"
             )
-        manifest = ROOT / "locales" / lang / "manifest.yml"
-        if not manifest.is_file():
+
+        configured.append((lang, normalized, _load_manifest(lang)))
+
+    return configured
+
+
+def _published_source_routes(locale: str, manifest: dict) -> list[str]:
+    routes = manifest.get("published_routes") or []
+    if not isinstance(routes, list):
+        raise AssertionError(f"locales/{locale}/manifest.yml published_routes must be a list")
+
+    normalized: list[str] = []
+    for raw in routes:
+        src = str(raw).strip().lstrip("/")
+        if not src or ".." in Path(src).parts or not src.endswith(".md"):
+            raise AssertionError(f"Unsafe published route in locales/{locale}/manifest.yml: {raw!r}")
+        source = ROOT / "locales" / locale / src
+        if not source.is_file():
             raise AssertionError(
-                f"Configured locale {lang} has no manifest: {manifest.relative_to(ROOT)}"
+                f"Manifest-published route has no locale source: locales/{locale}/{src}"
             )
-        roots.append((lang, normalized))
+        normalized.append(src)
+    return normalized
 
-    return roots
+
+def _site_target(locale: str, source_path: str) -> Path:
+    """Map a locale Markdown source path to MkDocs' directory-style HTML output."""
+    source = Path(source_path)
+    if source.name == "index.md":
+        relative = source.parent
+    else:
+        relative = source.with_suffix("")
+    return SITE / locale / relative / "index.html"
 
 
-def main() -> int:
-    created_roots: list[Path] = []
-    try:
-        for lang, root in _configured_alternate_roots():
-            locale_dir = SITE / root.strip("/")
-            target = locale_dir / "index.html"
+def _stage_manifest_routes() -> list[Path]:
+    created_files: list[Path] = []
+    for lang, _root, manifest in _configured_alternates():
+        for source_path in _published_source_routes(lang, manifest):
+            target = _site_target(lang, source_path)
             if target.exists():
                 continue
-            locale_dir.mkdir(parents=True, exist_ok=True)
+            target.parent.mkdir(parents=True, exist_ok=True)
             target.write_text(
                 "<!doctype html><html><head><meta charset=\"utf-8\">"
                 f"<title>{lang} locale deployment contract</title></head><body></body></html>",
                 encoding="utf-8",
             )
-            created_roots.append(locale_dir)
+            created_files.append(target)
+    return created_files
 
+
+def _cleanup_staged_routes(created_files: list[Path]) -> None:
+    for target in reversed(created_files):
+        target.unlink(missing_ok=True)
+
+    # Remove only directories that became empty as a consequence of removing our
+    # own marker files. Existing build output is never removed.
+    parents = sorted(
+        {parent for target in created_files for parent in target.parents if SITE in parent.parents or parent == SITE},
+        key=lambda path: len(path.parts),
+        reverse=True,
+    )
+    for directory in parents:
+        if directory == SITE:
+            continue
+        try:
+            directory.rmdir()
+        except OSError:
+            pass
+
+
+def main() -> int:
+    created_files = _stage_manifest_routes()
+    try:
         return audit_search_foundation.main()
     finally:
-        for root in reversed(created_roots):
-            shutil.rmtree(root, ignore_errors=True)
+        _cleanup_staged_routes(created_files)
 
 
 if __name__ == "__main__":

@@ -210,6 +210,7 @@ hooks:
   - hooks/nosnippet.py
   - hooks/sitemap_noindex.py
   - hooks/video_sitemap.py
+  - hooks/locale_alternates.py
 
 plugins:
   - search

@@ -1,0 +1,66 @@
+name: Locale switch quality
+
+on:
+  pull_request:
+    paths:
+      - 'mkdocs.yml'
+      - 'mkdocs.en.yml'
+      - 'locales/**'
+      - 'hooks/**'
+      - 'overrides/**'
+      - 'overrides_locale/**'
+      - 'scripts/validate_locale_switching.mjs'
+      - '.github/workflows/locale-switch-quality.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  route-equivalence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Build Spanish site
+        run: mkdocs build --clean --strict
+
+      - name: Prepare English locale
+        run: python scripts/prepare_locale.py --locale en
+
+      - name: Build English locale into combined site
+        env:
+          S5_LOCALE: en
+        run: mkdocs build -f mkdocs.en.yml --clean --strict
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Serve combined site
+        run: |
+          python -m http.server 8000 --directory site > /tmp/5sigmas-locale-preview.log 2>&1 &
+          for attempt in {1..30}; do
+            curl --fail --silent http://127.0.0.1:8000/ > /dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/5sigmas-locale-preview.log
+          exit 1
+
+      - name: Validate route-equivalent language switching
+        run: node scripts/validate_locale_switching.mjs

@@ -124,6 +124,11 @@ jobs:
           S5_PREVIEW_BASE: https://5sigmas.com
         run: node scripts/validate_english_home_parity.mjs
 
+      - name: Validate live route-equivalent locale switching
+        env:
+          S5_PREVIEW_BASE: https://5sigmas.com
+        run: node scripts/validate_locale_switching.mjs
+
       - name: Upload live English screenshots
         if: always()
         uses: actions/upload-artifact@v4

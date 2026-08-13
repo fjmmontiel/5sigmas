@@ -149,6 +149,7 @@ plugins:
 hooks:
   - hooks/reading_navigation.py
   - hooks/direct_reader_navigation.py
+  - hooks/locale_alternates.py
 
 extra_javascript:
   - path: javascripts/external-links.js
