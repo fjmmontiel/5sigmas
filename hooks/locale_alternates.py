@@ -62,7 +62,7 @@ def _src_route(src_path: str) -> str:
     path = Path(src_path)
     if path.name == "index.md":
         parent = path.parent.as_posix().strip("/")
-        return f"/{parent}/" if parent else "/"
+        return "/" if parent in {"", "."} else f"/{parent}/"
     return "/" + path.with_suffix("").as_posix().strip("/") + "/"
 
 
@@ -157,7 +157,6 @@ def on_post_build(config, **kwargs) -> None:
 
         source_route = _source_route_from_sitemap_url(loc_node.text, language)
 
-        # Remove any pre-existing alternate children so repeated local builds stay deterministic.
         for child in list(url_node):
             if child.tag == f"{{{XHTML_NS}}}link":
                 url_node.remove(child)
@@ -166,11 +165,10 @@ def on_post_build(config, **kwargs) -> None:
         if source_route not in published:
             continue
 
-        pairs = (
+        for hreflang, href in (
             ("es", GLOBAL_ORIGIN + source_route),
             ("en", GLOBAL_ORIGIN + _english_route(source_route)),
-        )
-        for hreflang, href in pairs:
+        ):
             ET.SubElement(
                 url_node,
                 f"{{{XHTML_NS}}}link",
