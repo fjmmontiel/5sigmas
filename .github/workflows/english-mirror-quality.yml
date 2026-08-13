@@ -7,6 +7,7 @@ on:
       - 'mkdocs.en.yml'
       - 'scripts/prepare_locale.py'
       - 'scripts/validate_english_series_mirror.mjs'
+      - 'scripts/validate_english_reasoning_ttc.mjs'
       - 'docs/assets/javascripts/series_energy_ai_preview.js'
       - '.github/workflows/english-mirror-quality.yml'
 
@@ -66,11 +67,16 @@ jobs:
       - name: Validate full English series mirror
         run: node scripts/validate_english_series_mirror.mjs
 
-      - name: Upload series mirror screenshots
+      - name: Validate translated Test-Time Compute chapter
+        env:
+          S5_REQUIRE_EN_TTC_MEDIA: '0'
+        run: node scripts/validate_english_reasoning_ttc.mjs
+
+      - name: Upload English mirror screenshots
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: 5sigmas-en-series-mirror
-          path: artifacts/visual-review/english-series-mirror-*.png
+          path: artifacts/visual-review/english-*.png
           if-no-files-found: warn
           retention-days: 14
