@@ -8,6 +8,7 @@ on:
       - 'scripts/prepare_locale.py'
       - 'scripts/validate_english_series_mirror.mjs'
       - 'scripts/validate_english_reasoning_ttc.mjs'
+      - 'scripts/validate_english_energy_ch1.mjs'
       - 'docs/assets/javascripts/series_energy_ai_preview.js'
       - '.github/workflows/english-mirror-quality.yml'
 
@@ -71,6 +72,9 @@ jobs:
         env:
           S5_REQUIRE_EN_TTC_MEDIA: '0'
         run: node scripts/validate_english_reasoning_ttc.mjs
+
+      - name: Validate English Energy chapter 1
+        run: node scripts/validate_english_energy_ch1.mjs
 
       - name: Upload English mirror screenshots
         if: always()

@@ -18,6 +18,7 @@ published_routes:
   - series/modelos-razonadores/04-latencia-streaming.md
   - series/modelos-razonadores/05-riesgos.md
   - series/ia-pib-bienestar-energia/00_presentacion_serie.md
+  - series/ia-pib-bienestar-energia/01-electricidad-bienestar.md
   - series/datacenters-espacio/00_presentacion_serie.md
   - series/seguridad-ia/00_presentacion_serie.md
   - series/agentes-ia/00_presentacion_serie.md
@@ -51,6 +52,10 @@ required_snippets:
   - snippets/ia-pib-energia/series_energy_ai_02_ai.html
   - snippets/ia-pib-energia/series_energy_ai_03_measurement.html
   - snippets/ia-pib-energia/series_energy_ai_04_gdp.html
+  - snippets/ia-pib-bienestar-energia/01-mecanismos.html
+  - snippets/ia-pib-bienestar-energia/01-kwh-idi-curva.html
+  - snippets/ia-pib-bienestar-energia/01-costes-cortes.html
+  - snippets/ia-pib-bienestar-energia/01-electricidad-infraestructura.html
   - snippets/datacenters-espacio/dc_space_pressure_anim.html
   - snippets/seguridad-ia/00-series-mapa.html
   - snippets/agentes-ia/01-bucle-agente.html
@@ -72,6 +77,7 @@ coverage:
   series_presentations: complete
   agents_series: complete
   reasoning_models: text_visuals_and_native_media_complete
+  energy_series: chapter_1_text_and_visuals_published
   remaining_chapters: in_progress
   concept_hubs: not_yet_published
   technical_articles: not_yet_published
