@@ -84,10 +84,23 @@ for (const [route, expected] of contentChecks) {
 }
 
 await page.goto(`${base}/en/`, { waitUntil: 'domcontentloaded' });
-const spanishAlternate = await page.locator('link[rel="alternate"][hreflang="es"]').count();
-const englishAlternate = await page.locator('link[rel="alternate"][hreflang="en"]').count();
-if (!spanishAlternate || !englishAlternate) {
-  failures.push(`/en/: expected hreflang alternates for es and en`);
+const pageAlternates = await page.locator('link[rel="alternate"][hreflang]').count();
+if (pageAlternates !== 0) {
+  failures.push(`/en/: page-level hreflang tags must stay absent; Material treats them as locale roots`);
+}
+const sitemap = await page.request.get(`${base}/en/sitemap.xml`);
+if (!sitemap.ok()) {
+  failures.push(`/en/sitemap.xml: HTTP ${sitemap.status()}`);
+} else {
+  const xml = await sitemap.text();
+  for (const expected of [
+    'hreflang="es" href="https://5sigmas.com/"',
+    'hreflang="en" href="https://5sigmas.com/en/"',
+    'hreflang="es" href="https://5sigmas.com/series/agentes-ia/02-anatomia-de-un-agente/"',
+    'hreflang="en" href="https://5sigmas.com/en/series/agentes-ia/02-anatomia-de-un-agente/"',
+  ]) {
+    if (!xml.includes(expected)) failures.push(`/en/sitemap.xml: missing truthful locale alternate ${expected}`);
+  }
 }
 await page.screenshot({ path: path.join(outDir, 'english-home-desktop.png'), fullPage: true });
 
@@ -204,4 +217,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`English locale browser QA passed: ${routes.length} routes, translated visuals, hreflang, localized reader shell, desktop/mobile overflow.`);
+console.log(`English locale browser QA passed: ${routes.length} routes, translated visuals, sitemap hreflang, localized reader shell, desktop/mobile overflow.`);
