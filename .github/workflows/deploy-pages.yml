@@ -119,6 +119,11 @@ jobs:
           S5_PREVIEW_BASE: https://5sigmas.com
         run: node scripts/validate_english_seo.mjs
 
+      - name: Validate live English-Spanish homepage parity
+        env:
+          S5_PREVIEW_BASE: https://5sigmas.com
+        run: node scripts/validate_english_home_parity.mjs
+
       - name: Upload live English screenshots
         if: always()
         uses: actions/upload-artifact@v4

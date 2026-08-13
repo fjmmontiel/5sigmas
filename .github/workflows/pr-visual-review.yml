@@ -124,6 +124,9 @@ jobs:
       - name: Audit browser resource loading
         run: node scripts/audit_browser_resources.mjs
 
+      - name: Validate English-Spanish homepage parity
+        run: node scripts/validate_english_home_parity.mjs
+
       - name: Capture responsive screenshots
         run: node scripts/capture_site_screenshots.mjs
 
