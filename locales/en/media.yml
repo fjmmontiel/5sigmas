@@ -1,0 +1,29 @@
+series/modelos-razonadores/01-que-es-razonar.md:
+  video: 01-que-es-razonar.mp4
+  video_poster: 01-que-es-razonar.jpg
+  video_title: What It Means for an LLM to Reason
+  video_duration: PT58S
+
+series/modelos-razonadores/02-fallos.md:
+  video: 02-fallos.mp4
+  video_poster: 02-fallos.jpg
+  video_title: How Reasoning Fails
+  video_duration: PT59S
+
+series/modelos-razonadores/03-test-time-compute.md:
+  video: 03-test-time-compute.mp4
+  video_poster: 03-test-time-compute.jpg
+  video_title: Test-Time Compute
+  video_duration: PT1M0S
+
+series/modelos-razonadores/04-latencia-streaming.md:
+  video: 04-latencia-streaming.mp4
+  video_poster: 04-latencia-streaming.jpg
+  video_title: Latency, Streaming and Product Design
+  video_duration: PT59S
+
+series/modelos-razonadores/05-riesgos.md:
+  video: 05-riesgos.mp4
+  video_poster: 05-riesgos.jpg
+  video_title: Reasoning Risks and Production Controls
+  video_duration: PT1M0S
