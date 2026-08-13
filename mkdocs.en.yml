@@ -102,6 +102,20 @@ nav:
   - Home: index.md
   - Learn:
       - Series: series/index.md
+      - AI and Generative AI Foundations:
+          - Introduction: series/fundamentos-ia-iag/00_presentacion_serie.md
+      - From the Caves to AGI:
+          - Introduction: series/from-cave-to-agi/00_presentacion_serie.md
+      - Multimodality in Generative AI:
+          - Introduction: series/multimodalidad-iag/00_presentacion_serie.md
+      - Reasoning Models:
+          - Introduction: series/modelos-razonadores/00_presentacion_serie.md
+      - AI, GDP, Well-being and Energy:
+          - Introduction: series/ia-pib-bienestar-energia/00_presentacion_serie.md
+      - Data Centers in Space:
+          - Introduction: series/datacenters-espacio/00_presentacion_serie.md
+      - AI Security:
+          - Introduction: series/seguridad-ia/00_presentacion_serie.md
       - AI Agents:
           - Introduction: series/agentes-ia/00_presentacion_serie.md
           - What is an AI agent?: series/agentes-ia/01-que-es-un-agente.md
@@ -153,6 +167,8 @@ hooks:
 
 extra_javascript:
   - path: javascripts/external-links.js
+    defer: true
+  - path: assets/javascripts/series_energy_ai_preview.js
     defer: true
   - path: assets/javascripts/reader-navigation.js
     defer: true
