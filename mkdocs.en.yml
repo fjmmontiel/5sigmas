@@ -30,6 +30,13 @@ extra:
   locale_prefix: /en
   global_site_root: https://5sigmas.com/
   generator: false
+  video_watch_pages: false
+  locale_video_pages:
+    series/modelos-razonadores/03-test-time-compute.md:
+      video: 03-test-time-compute.mp4
+      video_poster: 03-test-time-compute.jpg
+      video_title: Test-Time Compute
+      video_duration: PT1M0S
   alternate:
     - name: Español
       link: /
@@ -110,6 +117,7 @@ nav:
           - Introduction: series/multimodalidad-iag/00_presentacion_serie.md
       - Reasoning Models:
           - Introduction: series/modelos-razonadores/00_presentacion_serie.md
+          - Test-Time Compute: series/modelos-razonadores/03-test-time-compute.md
       - AI, GDP, Well-being and Energy:
           - Introduction: series/ia-pib-bienestar-energia/00_presentacion_serie.md
       - Data Centers in Space:
@@ -161,6 +169,7 @@ plugins:
       enabled: true
 
 hooks:
+  - hooks/video_embed.py
   - hooks/reading_navigation.py
   - hooks/direct_reader_navigation.py
   - hooks/locale_alternates.py
@@ -169,6 +178,12 @@ extra_javascript:
   - path: javascripts/external-links.js
     defer: true
   - path: assets/javascripts/series_energy_ai_preview.js
+    defer: true
+  - path: assets/javascripts/tabbed-animations.js
+    defer: true
+  - path: assets/javascripts/locale-tabbed-adapter.js
+    defer: true
+  - path: assets/javascripts/video-library.js
     defer: true
   - path: assets/javascripts/reader-navigation.js
     defer: true

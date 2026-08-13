@@ -6,6 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
+  actions: read
   contents: read
   pages: write
   id-token: write
@@ -59,6 +60,45 @@ jobs:
       - name: Audit rendered English locale
         run: python scripts/audit_locale.py --locale en --site site/en
 
+      - name: Restore reviewed English TTC media
+        id: en-ttc-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: .localized-media/en/ttc-v1
+          key: s5-en-ttc-4e6238a7dffc03643b48e08f7c579fb7d710217a827720113e7477c633be0f33
+
+      - name: Seed reviewed English TTC media from verified PR artifact
+        if: steps.en-ttc-cache.outputs.cache-hit != 'true'
+        uses: actions/download-artifact@v4
+        with:
+          name: english-ttc-reviewed-seed
+          path: .localized-media/en/ttc-v1
+          run-id: 31689108864
+          github-token: ${{ github.token }}
+
+      - name: Verify and stage reviewed English TTC media
+        shell: bash
+        run: |
+          set -euo pipefail
+          media='.localized-media/en/ttc-v1'
+          mp4="$media/03-test-time-compute.mp4"
+          jpg="$media/03-test-time-compute.jpg"
+          echo '4e6238a7dffc03643b48e08f7c579fb7d710217a827720113e7477c633be0f33  .localized-media/en/ttc-v1/03-test-time-compute.mp4' | sha256sum -c -
+          echo '60cee7a788f546bb58e56e5008ca21c7efd9317b9b84c059a9427465d6e40f50  .localized-media/en/ttc-v1/03-test-time-compute.jpg' | sha256sum -c -
+          test "$(stat -c %s "$mp4")" = '4337214'
+          test "$(stat -c %s "$jpg")" = '105949'
+          target='site/en/series/modelos-razonadores'
+          mkdir -p "$target"
+          cp "$mp4" "$target/03-test-time-compute.mp4"
+          cp "$jpg" "$target/03-test-time-compute.jpg"
+
+      - name: Save reviewed English TTC media cache
+        if: steps.en-ttc-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: .localized-media/en/ttc-v1
+          key: s5-en-ttc-4e6238a7dffc03643b48e08f7c579fb7d710217a827720113e7477c633be0f33
+
       - uses: actions/configure-pages@v5
 
       - uses: actions/upload-pages-artifact@v3
@@ -84,19 +124,18 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Wait for English Pages deployment
+      - name: Wait for English TTC deployment
         shell: bash
         run: |
           for attempt in {1..18}; do
-            body="$(curl --fail --silent --show-error --location https://5sigmas.com/en/series/ || true)"
-            if grep -q 'AI and Generative AI Foundations' <<< "$body"; then
-              echo "Live English series mirror is serving the expected release."
+            body="$(curl --fail --silent --show-error --location https://5sigmas.com/en/series/modelos-razonadores/03-test-time-compute/ || true)"
+            if grep -q 'PRM vs ORM: two ways to reward reasoning' <<< "$body"; then
+              echo "Live English TTC release is serving the expected mirror."
               exit 0
             fi
-            echo "Waiting for the Pages edge to expose the new English mirror ($attempt/18)..."
             sleep 5
           done
-          echo "English production did not become ready within the validation window."
+          echo "English TTC production did not become ready within the validation window."
           exit 1
 
       - name: Install Playwright
@@ -133,6 +172,12 @@ jobs:
         env:
           S5_PREVIEW_BASE: https://5sigmas.com
         run: node scripts/validate_english_series_mirror.mjs
+
+      - name: Validate live English Test-Time Compute
+        env:
+          S5_PREVIEW_BASE: https://5sigmas.com
+          S5_REQUIRE_EN_TTC_MEDIA: '1'
+        run: node scripts/validate_english_reasoning_ttc.mjs
 
       - name: Upload live English screenshots
         if: always()

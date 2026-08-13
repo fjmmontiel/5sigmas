@@ -16,6 +16,7 @@ published_routes:
   - series/from-cave-to-agi/00_presentacion_serie.md
   - series/multimodalidad-iag/00_presentacion_serie.md
   - series/modelos-razonadores/00_presentacion_serie.md
+  - series/modelos-razonadores/03-test-time-compute.md
   - series/ia-pib-bienestar-energia/00_presentacion_serie.md
   - series/datacenters-espacio/00_presentacion_serie.md
   - series/seguridad-ia/00_presentacion_serie.md
@@ -29,6 +30,10 @@ published_routes:
 
 required_snippets:
   - snippets/series_meta.html
+  - snippets/modelos-razonadores/03-prm-orm-comparacion.html
+  - snippets/modelos-razonadores/03-best-of-n-visual.html
+  - snippets/modelos-razonadores/03-ttc-palancas.html
+  - snippets/modelos-razonadores/03-escala-complementaria.html
   - snippets/ia-pib-energia/series_energy_ai_01_electricity.html
   - snippets/ia-pib-energia/series_energy_ai_02_ai.html
   - snippets/ia-pib-energia/series_energy_ai_03_measurement.html
@@ -44,12 +49,13 @@ coverage:
   series_hub: canonical_structure_mirrored
   series_presentations: complete
   agents_series: complete
+  reasoning_models: test_time_compute_published
   remaining_chapters: in_progress
   concept_hubs: not_yet_published
   technical_articles: not_yet_published
   visual_hub: blocked_on_localized_media
   video_hub: blocked_on_localized_media
-  localized_video_media: not_yet_published
+  localized_video_media: test_time_compute_in_progress
 
 quality_gates:
   - no_spanish_fallback
@@ -59,3 +65,4 @@ quality_gates:
   - rendered_html_lang
   - canonical_locale_url
   - route_safe_language_switch
+  - localized_video_binary_required_when_declared
