@@ -1,0 +1,110 @@
+<article class="sp-card sp-card--local sea2-card" data-anim-fullscreen="off" data-anim-contrast="force">
+  <div class="sea2-head">
+    <h3>AI as an electrical technology</h3>
+    <p class="muted">The scale is already material: data centers consumed 415 TWh in 2024, and the IEA projects between 945 and 1,260 TWh by 2030.</p>
+  </div>
+
+  <div class="sea2-bars" role="img" aria-label="Global data-center electricity consumption: 415 TWh in 2024, 945 TWh in the 2030 base scenario and 1260 TWh in the 2030 high scenario">
+    <div class="sea2-row">
+      <div class="sea2-label">2024</div>
+      <div class="sea2-track">
+        <div class="sea2-fill sea2-fill--2024"></div>
+        <div class="sea2-value">415 TWh</div>
+      </div>
+      <div class="sea2-ref">1.5% of global electricity</div>
+    </div>
+    <div class="sea2-row">
+      <div class="sea2-label">2030 base</div>
+      <div class="sea2-track">
+        <div class="sea2-fill sea2-fill--base"></div>
+        <div class="sea2-value">945 TWh</div>
+      </div>
+      <div class="sea2-ref">2.28× 2024 · slightly above Japan today</div>
+    </div>
+    <div class="sea2-row">
+      <div class="sea2-label">2030 high</div>
+      <div class="sea2-track">
+        <div class="sea2-fill sea2-fill--high"></div>
+        <div class="sea2-value">1,260 TWh</div>
+      </div>
+      <div class="sea2-ref">3.04× 2024 · IEA Lift-Off scenario</div>
+    </div>
+  </div>
+
+  <div class="sea2-facts">
+    <div class="sea2-fact">
+      <div class="sea2-fact-k">AI load 2024</div>
+      <div class="sea2-fact-v">~62 TWh</div>
+      <div class="sea2-fact-d">Approximately 15% of the total, using accelerated servers as a proxy for AI workload.</div>
+    </div>
+    <div class="sea2-fact">
+      <div class="sea2-fact-k">AI-specific 2030</div>
+      <div class="sea2-fact-v">554 TWh</div>
+      <div class="sea2-fact-d">Greenpeace estimate for AI-specific workloads. Its methodology differs from the IEA base scenario.</div>
+    </div>
+    <div class="sea2-fact">
+      <div class="sea2-fact-k">Typical load</div>
+      <div class="sea2-fact-v">100 MW</div>
+      <div class="sea2-fact-d">Order of magnitude for a typical AI data center. The largest facilities under construction are around 2 GW—roughly twenty times more.</div>
+    </div>
+  </div>
+
+  <p class="caption">Sources: IEA <em>Energy and AI</em> (2025) for 415 / 945 / 1,260 TWh, the 1.5% share, comparison with Japan and the ~100 MW order of magnitude for a typical AI data center; Greenpeace/Öko-Institut (2025) for 554 TWh of AI-specific load in 2030. Caveat: the 2024 AI share uses accelerated servers as a proxy because there is no perfectly clean physical boundary between AI and non-AI workloads.</p>
+</article>
+
+<style>
+.sea2-card {
+  --sea2-a: #26A69A;
+  --sea2-b: #324AB2;
+  --sea2-g: #FFB343;
+  --sea2-r: #e04c4c;
+  --sea2-bg: var(--md-default-bg-color, #fff);
+  --sea2-fg: var(--md-default-fg-color, #0f172a);
+  --sea2-bd: rgba(15,23,42,.16);
+  --sea2-mut: rgba(15,23,42,.62);
+  --sea2-mono: "SF Mono","JetBrains Mono","Courier New",monospace;
+  display: grid;
+  gap: 14px;
+  background:
+    radial-gradient(110% 140% at 0% 0%, color-mix(in srgb, var(--sea2-b) 8%, transparent), transparent 48%),
+    radial-gradient(95% 120% at 100% 100%, color-mix(in srgb, var(--sea2-a) 6%, transparent), transparent 54%),
+    rgba(255, 255, 255, 0.7);
+}
+[data-md-color-scheme="slate"] .sea2-card {
+  --sea2-bg: var(--md-default-bg-color, #0f172a);
+  --sea2-fg: var(--md-default-fg-color, #e2e8f0);
+  --sea2-bd: rgba(226,232,240,.16);
+  --sea2-mut: rgba(226,232,240,.62);
+  background:
+    radial-gradient(110% 140% at 0% 0%, color-mix(in srgb, var(--sea2-b) 14%, transparent), transparent 48%),
+    radial-gradient(95% 120% at 100% 100%, color-mix(in srgb, var(--sea2-a) 10%, transparent), transparent 54%),
+    rgba(15, 18, 24, 0.92);
+}
+.sea2-head { display:grid; gap:4px; }
+.sea2-head h3 { margin:0; }
+.sea2-card .muted { margin:0; line-height:1.5; }
+.sea2-bars { display:grid; gap:10px; }
+.sea2-row { display:grid; grid-template-columns:88px 1fr 240px; gap:10px; align-items:center; }
+.sea2-label { font-size:12px; font-weight:800; text-align:right; color:var(--sea2-mut); }
+.sea2-track { position:relative; height:38px; border:1px solid var(--sea2-bd); border-radius:10px; overflow:hidden; background:color-mix(in srgb,var(--sea2-bg) 88%,#0f172a 12%); display:flex; align-items:center; }
+.sea2-fill { position:absolute; inset:0 auto 0 0; border-radius:9px; }
+.sea2-fill--2024 { width:33%; background:linear-gradient(90deg,color-mix(in srgb,var(--sea2-a) 58%,transparent),var(--sea2-a)); }
+.sea2-fill--base { width:75%; background:linear-gradient(90deg,color-mix(in srgb,var(--sea2-g) 58%,transparent),var(--sea2-g)); }
+.sea2-fill--high { width:100%; background:linear-gradient(90deg,color-mix(in srgb,var(--sea2-r) 58%,transparent),var(--sea2-r)); }
+.sea2-value { position:relative; z-index:1; padding:0 12px; font-size:13px; font-weight:900; font-family:var(--sea2-mono); }
+.sea2-ref { font-size:12px; line-height:1.35; color:var(--sea2-mut); }
+.sea2-facts { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.sea2-fact { display:grid; gap:5px; padding:13px 14px; border:1px solid var(--sea2-bd); border-radius:12px; background:color-mix(in srgb,var(--sea2-bg) 90%,#0f172a 10%); }
+.sea2-fact-k { font-size:10px; font-weight:900; letter-spacing:.06em; text-transform:uppercase; color:var(--sea2-mut); }
+.sea2-fact-v { font-size:22px; font-weight:900; line-height:1; letter-spacing:-.02em; font-family:var(--sea2-mono); }
+.sea2-fact:nth-child(1) .sea2-fact-v { color:color-mix(in srgb,var(--sea2-b) 70%,var(--sea2-fg)); }
+.sea2-fact:nth-child(2) .sea2-fact-v { color:color-mix(in srgb,var(--sea2-r) 70%,var(--sea2-fg)); }
+.sea2-fact:nth-child(3) .sea2-fact-v { color:color-mix(in srgb,var(--sea2-a) 78%,var(--sea2-fg)); }
+.sea2-fact-d { font-size:12px; line-height:1.45; color:var(--sea2-mut); }
+.sea2-card .caption { margin:0; font-size:12px; line-height:1.5; color:var(--sea2-mut); }
+@media (max-width:760px) {
+  .sea2-row { grid-template-columns:84px 1fr; }
+  .sea2-ref { display:none; }
+  .sea2-facts { grid-template-columns:1fr; }
+}
+</style>
