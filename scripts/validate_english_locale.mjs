@@ -26,12 +26,34 @@ const forbiddenSpanish = [
   'Tiempo de lectura',
   'Pantalla completa',
   'Prerrequisitos:',
+  'Biblioteca',
+  'Estás en',
+  'Anterior',
+  'Siguiente capítulo',
+  'Lectura estimada',
 ];
 
 const browser = await chromium.launch({ headless: true });
 const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
 const page = await context.newPage();
 const failures = [];
+
+const assertNoSpanish = async (route) => {
+  const body = await page.locator('body').innerText();
+  for (const marker of forbiddenSpanish) {
+    if (body.includes(marker)) failures.push(`${route}: Spanish UI marker ${JSON.stringify(marker)}`);
+  }
+};
+
+const assertNoOverflow = async (route, suffix = '') => {
+  const overflow = await page.evaluate(() => ({
+    viewport: document.documentElement.clientWidth,
+    scroll: document.documentElement.scrollWidth,
+  }));
+  if (overflow.scroll > overflow.viewport + 2) {
+    failures.push(`${route}${suffix}: horizontal overflow ${overflow.scroll}px > ${overflow.viewport}px`);
+  }
+};
 
 for (const route of routes) {
   const response = await page.goto(`${base}${route}`, { waitUntil: 'domcontentloaded' });
@@ -44,19 +66,8 @@ for (const route of routes) {
   if (!lang || !lang.toLowerCase().startsWith('en')) {
     failures.push(`${route}: expected html lang=en, got ${lang}`);
   }
-
-  const body = await page.locator('body').innerText();
-  for (const marker of forbiddenSpanish) {
-    if (body.includes(marker)) failures.push(`${route}: Spanish UI marker ${JSON.stringify(marker)}`);
-  }
-
-  const overflow = await page.evaluate(() => ({
-    viewport: document.documentElement.clientWidth,
-    scroll: document.documentElement.scrollWidth,
-  }));
-  if (overflow.scroll > overflow.viewport + 2) {
-    failures.push(`${route}: horizontal overflow ${overflow.scroll}px > ${overflow.viewport}px`);
-  }
+  await assertNoSpanish(route);
+  await assertNoOverflow(route);
 }
 
 const contentChecks = [
@@ -78,20 +89,100 @@ if (!spanishAlternate || !englishAlternate) {
 }
 await page.screenshot({ path: path.join(outDir, 'english-home-desktop.png'), fullPage: true });
 
+const readerRoute = '/en/series/agentes-ia/02-anatomia-de-un-agente/';
+await page.setViewportSize({ width: 1440, height: 900 });
+await page.goto(`${base}${readerRoute}`, { waitUntil: 'networkidle' });
+
+for (const selector of ['.s5-reader-context', '.s5-reader-shell', '.s5-reader-direct', '.s5-reader-end', '.s5-reading-meta']) {
+  if (await page.locator(selector).count() !== 1) {
+    failures.push(`${readerRoute}: expected exactly one ${selector} reader component`);
+  }
+}
+
+const contextText = await page.locator('.s5-reader-context').innerText().catch(() => '');
+if (!contextText.includes('Learn') || !contextText.includes('03 of 06') || !contextText.includes('AI Agents')) {
+  failures.push(`${readerRoute}: localized reader context is incomplete: ${JSON.stringify(contextText)}`);
+}
+
+const readingMeta = await page.locator('.s5-reading-meta').innerText().catch(() => '');
+if (!readingMeta.includes('Estimated reading') || !/\d+\s+min/.test(readingMeta)) {
+  failures.push(`${readerRoute}: compact English reading-time treatment is missing: ${JSON.stringify(readingMeta)}`);
+}
+
+const readerHrefs = await page.locator('.s5-reader-topbar a, .s5-reader-direct a, .s5-reader-end a').evaluateAll((links) =>
+  links.map((link) => link.getAttribute('href')).filter(Boolean)
+);
+for (const href of readerHrefs) {
+  if (!href.startsWith('/en/')) failures.push(`${readerRoute}: reader link escapes English locale: ${href}`);
+}
+
+const globalNav = page.locator('.s5-reader-global-nav');
+await globalNav.waitFor({ state: 'visible' }).catch(() => {});
+if (await globalNav.getAttribute('aria-label').catch(() => null) !== 'Main navigation') {
+  failures.push(`${readerRoute}: desktop reader header is not localized as Main navigation`);
+}
+if (await globalNav.locator('a').count() < 3) {
+  failures.push(`${readerRoute}: desktop reader header lost the English global navigation`);
+}
+
+const libraryOpen = page.locator('[data-s5-reader-open]').first();
+await libraryOpen.click().catch(() => {});
+const library = page.locator('[data-s5-reader-library]');
+await library.waitFor({ state: 'visible' }).catch(() => {});
+if (!await library.isVisible().catch(() => false)) {
+  failures.push(`${readerRoute}: full reader library does not open`);
+} else {
+  const libraryText = await library.innerText();
+  for (const expected of ['Library', 'Series and technical notes.', 'AI Agents', 'Reading']) {
+    if (!libraryText.includes(expected)) failures.push(`${readerRoute}: reader library missing English copy ${JSON.stringify(expected)}`);
+  }
+  for (const marker of forbiddenSpanish) {
+    if (libraryText.includes(marker)) failures.push(`${readerRoute}: reader library leaked Spanish marker ${JSON.stringify(marker)}`);
+  }
+  await page.locator('[data-s5-reader-close]').click();
+}
+await assertNoOverflow(readerRoute, ' desktop reader');
+await page.screenshot({ path: path.join(outDir, 'english-agent-anatomy-desktop.png'), fullPage: false });
+
+const finalRoute = '/en/series/agentes-ia/05-de-la-demo-a-produccion/';
+await page.goto(`${base}${finalRoute}`, { waitUntil: 'networkidle' });
+const completionHref = await page.locator('.s5-reader-end__next').getAttribute('href').catch(() => null);
+const completionText = await page.locator('.s5-reader-end__next').innerText().catch(() => '');
+if (completionHref !== '/en/series/' || !completionText.includes('Series completed')) {
+  failures.push(`${finalRoute}: series completion must stay in English and return to /en/series/`);
+}
+
+const presentationRoute = '/en/series/agentes-ia/00_presentacion_serie/';
+await page.goto(`${base}${presentationRoute}`, { waitUntil: 'networkidle' });
+if (await page.locator('.s5-reading-meta').count()) {
+  failures.push(`${presentationRoute}: series presentation should not show chapter reading-time metadata`);
+}
+
 await page.setViewportSize({ width: 390, height: 844 });
 for (const [route, filename] of [
   ['/en/', 'english-home-mobile.png'],
-  ['/en/series/agentes-ia/02-anatomia-de-un-agente/', 'english-agent-anatomy-mobile.png'],
+  [readerRoute, 'english-agent-anatomy-mobile.png'],
   ['/en/series/agentes-ia/04-seguridad-agentes/', 'english-agent-security-mobile.png'],
 ]) {
-  await page.goto(`${base}${route}`, { waitUntil: 'domcontentloaded' });
-  const overflow = await page.evaluate(() => ({
-    viewport: document.documentElement.clientWidth,
-    scroll: document.documentElement.scrollWidth,
-  }));
-  if (overflow.scroll > overflow.viewport + 2) {
-    failures.push(`${route} mobile: horizontal overflow ${overflow.scroll}px > ${overflow.viewport}px`);
+  await page.goto(`${base}${route}`, { waitUntil: 'networkidle' });
+  await assertNoSpanish(`${route} mobile`);
+  await assertNoOverflow(route, ' mobile');
+
+  if (route !== '/en/') {
+    const topbar = page.locator('.s5-reader-topbar');
+    if (!await topbar.isVisible().catch(() => false)) {
+      failures.push(`${route} mobile: compact reader navigator is not visible`);
+    } else {
+      const box = await topbar.boundingBox();
+      if (!box || box.height > 56 || box.x < 8 || box.x + box.width > 382) {
+        failures.push(`${route} mobile: compact reader navigator dimensions regressed: ${JSON.stringify(box)}`);
+      }
+    }
+    if (await page.locator('.s5-reader-direct:visible, .s5-reader-rail:visible').count()) {
+      failures.push(`${route} mobile: duplicate desktop reader layers are visible`);
+    }
   }
+
   await page.screenshot({ path: path.join(outDir, filename), fullPage: true });
 }
 
@@ -103,4 +194,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`English locale browser QA passed: ${routes.length} routes, translated visuals, hreflang, desktop/mobile overflow.`);
+console.log(`English locale browser QA passed: ${routes.length} routes, translated visuals, hreflang, localized reader shell, desktop/mobile overflow.`);
