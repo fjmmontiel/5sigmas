@@ -42,7 +42,7 @@ jobs:
         run: python scripts/audit_video_indexing.py
 
       - name: Audit Spanish search foundation
-        run: python scripts/audit_search_foundation.py
+        run: python scripts/audit_multilingual_search_foundation.py
 
       - name: Prepare English locale
         run: python scripts/prepare_locale.py --locale en
