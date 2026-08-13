@@ -57,6 +57,7 @@ required_snippets:
   - snippets/agentes-ia/03-evaluacion.html
   - snippets/agentes-ia/04-seguridad.html
 published_files:
+  - assets/images/home/agents-system-boundary.svg
   - series/modelos-razonadores/01-que-es-razonar.mp4
   - series/modelos-razonadores/01-que-es-razonar.jpg
   - series/modelos-razonadores/02-fallos.mp4
