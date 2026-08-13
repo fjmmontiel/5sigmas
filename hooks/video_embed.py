@@ -1,9 +1,9 @@
 """Inject locale-aware article video and optional audio players.
 
-Pages normally opt into video with ``video`` in frontmatter. Locale builds may
-also declare media in ``extra.locale_video_pages`` so translated content can be
-published independently from the canonical Spanish frontmatter. Media is
-same-origin by default and locale-prefixed on a configured media origin.
+Spanish pages normally opt into video through frontmatter. Locale builds may
+also declare media in ``extra.locale_video_pages`` or ``locales/<locale>/media.yml``.
+Locale media is intentionally explicit so translated pages never inherit a
+Spanish-labelled binary by accident.
 """
 
 from functools import lru_cache
@@ -15,6 +15,12 @@ import re
 import yaml
 
 
+ROOT = Path(__file__).resolve().parents[1]
+ARTICLE_AUDIO_INDEX = ROOT / "docs" / "series" / "article_audio.yml"
+LOCALES_ROOT = ROOT / "locales"
+MIME_TYPES = {".wav": "audio/wav", ".mp3": "audio/mpeg", ".m4a": "audio/mp4", ".aac": "audio/aac", ".ogg": "audio/ogg"}
+
+
 def _esc(value: str) -> str:
     return escape(str(value or "").replace("\n", " ").strip(), quote=True)
 
@@ -24,16 +30,24 @@ def _dom_id(prefix: str, value: str) -> str:
     return f"{prefix}-{token or 'page'}"
 
 
-ARTICLE_AUDIO_INDEX = Path(__file__).resolve().parents[1] / "docs" / "series" / "article_audio.yml"
-MIME_TYPES = {".wav": "audio/wav", ".mp3": "audio/mpeg", ".m4a": "audio/mp4", ".aac": "audio/aac", ".ogg": "audio/ogg"}
-
-
 @lru_cache(maxsize=1)
 def _load_article_audio_index() -> dict:
     if not ARTICLE_AUDIO_INDEX.exists():
         return {}
     try:
         data = yaml.safe_load(ARTICLE_AUDIO_INDEX.read_text(encoding="utf-8")) or {}
+    except Exception:
+        return {}
+    return data if isinstance(data, dict) else {}
+
+
+@lru_cache(maxsize=8)
+def _load_locale_media(locale: str) -> dict:
+    path = LOCALES_ROOT / locale / "media.yml"
+    if not path.is_file():
+        return {}
+    try:
+        data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
     except Exception:
         return {}
     return data if isinstance(data, dict) else {}
@@ -53,18 +67,26 @@ def _ui(config) -> dict:
 def _video_meta(page, config) -> dict:
     meta = dict(page.meta or {})
     declared = (config.get("extra") or {}).get("locale_video_pages") or {}
-    locale_entry = declared.get(page.file.src_path)
+    sources = []
+    config_entry = declared.get(page.file.src_path) if isinstance(declared, dict) else None
+    if isinstance(config_entry, dict):
+        sources.append(config_entry)
+    locale_entry = _load_locale_media(_locale(config)).get(page.file.src_path)
     if isinstance(locale_entry, dict):
-        for key, value in locale_entry.items():
+        sources.append(locale_entry)
+    for source in sources:
+        for key, value in source.items():
             meta.setdefault(key, value)
     return meta
 
 
 def _render_article_audio(page, video_dom_id: str) -> str:
     entry = _load_article_audio_index().get(page.file.src_path)
-    if not isinstance(entry, dict): return ""
+    if not isinstance(entry, dict):
+        return ""
     audio_file = str(entry.get("audio_file") or "").strip().lstrip("/")
-    if not audio_file: return ""
+    if not audio_file:
+        return ""
     title = _esc(entry.get("title") or "Escucha el artículo")
     voice = _esc(entry.get("voice_label") or entry.get("voice") or "Kokoro")
     mime = MIME_TYPES.get(Path(audio_file).suffix.lower(), "audio/wav")
@@ -80,7 +102,8 @@ def _watch_url(site_url: str, src_path: str, video_file: str) -> str:
 
 
 def _media_url(page, filename: str, config) -> str:
-    if re.match(r"^https?://", filename, re.IGNORECASE): return filename
+    if re.match(r"^https?://", filename, re.IGNORECASE):
+        return filename
     media_origin = os.environ.get("S5_VIDEO_MEDIA_ORIGIN", "").strip().rstrip("/")
     if media_origin:
         parent = Path(page.file.src_path).parent.as_posix().strip("/")
@@ -94,7 +117,8 @@ def _media_url(page, filename: str, config) -> str:
 def on_post_page(output: str, page, config, **kwargs) -> str:
     meta = _video_meta(page, config)
     video_file = str(meta.get("video") or "").strip()
-    if not video_file: return output
+    if not video_file:
+        return output
     poster_file = str(meta.get("video_poster") or Path(video_file).with_suffix(".jpg").name).strip()
     captions_file = str(meta.get("video_captions") or "").strip()
     video_url = _media_url(page, video_file, config)
