@@ -80,6 +80,14 @@ jobs:
           sudo apt-get install -y -qq ffmpeg
           python scripts/capture_video_density_review.py "${changed_videos[@]}"
 
+      - name: Prepare English locale for combined browser QA
+        run: python scripts/prepare_locale.py --locale en
+
+      - name: Build English locale for combined browser QA
+        env:
+          S5_LOCALE: en
+        run: mkdocs build -f mkdocs.en.yml --clean --strict
+
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
