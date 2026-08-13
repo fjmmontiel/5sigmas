@@ -34,7 +34,7 @@ hide:
     </a>
     <a class="s5-list-row" href="/en/series/multimodalidad-iag/00_presentacion_serie/">
       <span class="s5-list-row__n">03</span>
-      <span class="s5-list-row__title">Generative Multimodality</span>
+      <span class="s5-list-row__title">Multimodality in Generative AI</span>
       <span class="s5-list-row__desc">How text, image, audio and video are aligned, processed, evaluated and where they fail.</span>
       <span class="s5-list-row__meta">5 chapters</span>
     </a>
