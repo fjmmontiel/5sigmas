@@ -1,9 +1,7 @@
 name: Publish reviewed English TTC media once
 
 on:
-  push:
-    branches:
-      - agent/english-full-mirror-02
+  pull_request:
     paths:
       - '.github/workflows/publish-en-ttc-media-once.yml'
   workflow_dispatch:
