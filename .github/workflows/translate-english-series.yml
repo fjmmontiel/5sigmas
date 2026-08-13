@@ -5,7 +5,6 @@ on:
     branches:
       - 'agent/english-translation-*'
     paths:
-      - 'locales/en/translation-request.json'
       - 'scripts/translate_locale_with_models.py'
       - '.github/workflows/translate-english-series.yml'
 
@@ -18,6 +17,9 @@ jobs:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 45
+    env:
+      S5_TRANSLATION_SERIES: fundamentos-ia-iag
+      S5_TRANSLATION_LOCALE: en
     steps:
       - uses: actions/checkout@v4
         with:
@@ -27,48 +29,22 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Read translation request
-        id: request
-        shell: bash
-        run: |
-          set -euo pipefail
-          request='locales/en/translation-request.json'
-          if [[ ! -f "$request" ]]; then
-            echo 'No translation request is present; infrastructure-only push.'
-            echo 'enabled=false' >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-          series="$(python -c 'import json; print(json.load(open("locales/en/translation-request.json"))["series"])')"
-          locale="$(python -c 'import json; print(json.load(open("locales/en/translation-request.json")).get("locale", "en"))')"
-          overwrite="$(python -c 'import json; print(str(bool(json.load(open("locales/en/translation-request.json")).get("overwrite", False))).lower())')"
-          echo "enabled=true" >> "$GITHUB_OUTPUT"
-          echo "series=$series" >> "$GITHUB_OUTPUT"
-          echo "locale=$locale" >> "$GITHUB_OUTPUT"
-          echo "overwrite=$overwrite" >> "$GITHUB_OUTPUT"
-
       - name: Generate draft translations with GitHub Models
-        if: steps.request.outputs.enabled == 'true'
         env:
           GITHUB_TOKEN: ${{ github.token }}
           S5_TRANSLATION_MODEL: openai/gpt-4.1
-        shell: bash
-        run: |
-          set -euo pipefail
-          args=(--locale '${{ steps.request.outputs.locale }}' --series '${{ steps.request.outputs.series }}')
-          if [[ '${{ steps.request.outputs.overwrite }}' == 'true' ]]; then args+=(--overwrite); fi
-          python scripts/translate_locale_with_models.py "${args[@]}"
+        run: python scripts/translate_locale_with_models.py --locale "$S5_TRANSLATION_LOCALE" --series "$S5_TRANSLATION_SERIES"
 
       - name: Commit generated drafts
-        if: steps.request.outputs.enabled == 'true'
         shell: bash
         run: |
           set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add 'locales/${{ steps.request.outputs.locale }}/'
+          git add "locales/$S5_TRANSLATION_LOCALE/"
           if git diff --cached --quiet; then
             echo 'No new translation drafts were generated.'
             exit 0
           fi
-          git commit -m "Draft English ${{ steps.request.outputs.series }} locale sources"
+          git commit -m "Draft English $S5_TRANSLATION_SERIES locale sources"
           git push origin HEAD:${{ github.ref_name }}
