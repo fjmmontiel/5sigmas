@@ -56,7 +56,7 @@ jobs:
         run: python scripts/audit_video_indexing.py
 
       - name: Audit search foundation
-        run: python scripts/audit_search_foundation.py
+        run: python scripts/audit_multilingual_search_foundation.py
 
       - name: Enforce priority topic hub contract
         run: python scripts/audit_priority_topic_hubs.py
@@ -79,6 +79,14 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y -qq ffmpeg
           python scripts/capture_video_density_review.py "${changed_videos[@]}"
+
+      - name: Prepare English locale for combined browser QA
+        run: python scripts/prepare_locale.py --locale en
+
+      - name: Build English locale for combined browser QA
+        env:
+          S5_LOCALE: en
+        run: mkdocs build -f mkdocs.en.yml --clean --strict
 
       - uses: actions/setup-node@v4
         with:

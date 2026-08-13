@@ -40,6 +40,13 @@ theme:
 
 extra:
   generator: false
+  alternate:
+    - name: Español
+      link: /
+      lang: es
+    - name: English
+      link: /en/
+      lang: en
   social:
     - icon: fontawesome/brands/linkedin
       link: https://www.linkedin.com/in/fjmm1998/
