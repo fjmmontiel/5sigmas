@@ -1,0 +1,22 @@
+<script>
+(() => {
+  const roots = ['[data-ttc-tabs]', '[data-bon]', '[data-levers]', '[data-scale2d]'];
+  const init = (root) => {
+    if (root.dataset.s5TtcTabsReady === '1') return;
+    root.dataset.s5TtcTabsReady = '1';
+    const tabs = Array.from(root.querySelectorAll('button[data-tab]'));
+    const panels = Array.from(root.querySelectorAll('[data-panel]'));
+    if (!tabs.length || !panels.length) return;
+    const show = (key) => {
+      tabs.forEach((tab) => tab.setAttribute('aria-selected', tab.dataset.tab === key ? 'true' : 'false'));
+      panels.forEach((panel) => { panel.hidden = panel.dataset.panel !== key; });
+    };
+    tabs.forEach((tab) => tab.addEventListener('click', () => show(tab.dataset.tab)));
+    show(root.dataset.default || tabs[0].dataset.tab);
+  };
+  const boot = () => roots.forEach((selector) => document.querySelectorAll(selector).forEach(init));
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
+  if (window.document$ && typeof window.document$.subscribe === 'function') window.document$.subscribe(boot);
+})();
+</script>
