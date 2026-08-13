@@ -30,6 +30,13 @@ extra:
   locale_prefix: /en
   global_site_root: https://5sigmas.com/
   generator: false
+  video_watch_pages: false
+  locale_video_pages:
+    series/modelos-razonadores/03-test-time-compute.md:
+      video: 03-test-time-compute.mp4
+      video_poster: 03-test-time-compute.jpg
+      video_title: Test-Time Compute
+      video_duration: PT1M0S
   alternate:
     - name: Español
       link: /
@@ -162,6 +169,7 @@ plugins:
       enabled: true
 
 hooks:
+  - hooks/video_embed.py
   - hooks/reading_navigation.py
   - hooks/direct_reader_navigation.py
   - hooks/locale_alternates.py
@@ -170,6 +178,8 @@ extra_javascript:
   - path: javascripts/external-links.js
     defer: true
   - path: assets/javascripts/series_energy_ai_preview.js
+    defer: true
+  - path: assets/javascripts/video-library.js
     defer: true
   - path: assets/javascripts/reader-navigation.js
     defer: true
