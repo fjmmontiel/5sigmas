@@ -1,0 +1,48 @@
+<div class="eco-wrap" data-anim-tabs data-default="timeline">
+  <div class="eco-hd">
+    <div class="eco-title">The reasoning-model ecosystem</div>
+    <div class="eco-sub">From o1 to today's models: architectures, openness and comparative performance.</div>
+  </div>
+
+  <nav class="eco-nav" aria-label="Sections">
+    <button type="button" data-tab="timeline" aria-selected="true">Timeline</button>
+    <button type="button" data-tab="openness" aria-selected="false">Openness</button>
+    <button type="button" data-tab="benchmarks" aria-selected="false">Benchmarks</button>
+  </nav>
+
+  <section class="eco-panel" data-panel="timeline">
+    <div class="eco-intro">From private chain of thought to open training—in less than a year.</div>
+    <div class="eco-tl">
+      <article class="eco-event"><div class="eco-date">Sep 2024</div><div class="eco-card"><strong>OpenAI · o1-preview</strong><p>First model with an autonomous internal chain of thought. CoT hidden from the user. Trained with reinforcement learning on mathematical reasoning and code.</p><span>AIME 2024: <b>74%</b> · GPQA: <b>78%</b></span></div></article>
+      <article class="eco-event"><div class="eco-date">Jan 2025</div><div class="eco-card"><strong>DeepSeek · R1</strong><p>First frontier-level open-weight reasoning model. Trained with GRPO without a separate critic. Public, readable CoT. 671B parameters.</p><span>AIME 2024: <b>79.8%</b> · GPQA: <b>71.5%</b></span></div></article>
+      <article class="eco-event"><div class="eco-date">Feb 2025</div><div class="eco-card"><strong>Anthropic · Claude 3.7 Sonnet</strong><p>Hybrid mode: standard or extended reasoning in the same model. Visible CoT and a configurable thinking-token budget.</p><span>AIME 2024: <b>80%</b> · GPQA: <b>84.8%</b> (256×)</span></div></article>
+      <article class="eco-event"><div class="eco-date">Mar 2025</div><div class="eco-card"><strong>Google · Gemini 2.5 Pro</strong><p>Reasoning integrated with multimodal capabilities and a 1M-token native context window. Thinking level configurable from the API.</p><span>AIME 2024: <b>92%</b> · GPQA: <b>~87%</b></span></div></article>
+      <article class="eco-event"><div class="eco-date">Apr 2025</div><div class="eco-card"><strong>OpenAI · o3</strong><p>Deep reasoning with extended internal search. Very high mathematics and coding accuracy, with high cost and latency at maximum effort.</p><span>AIME 2024: <b>91.6%</b> · SWE-bench: <b>71.7%</b></span></div></article>
+    </div>
+  </section>
+
+  <section class="eco-panel" data-panel="openness" hidden>
+    <div class="eco-intro">Reasoning models expose different parts of their process, with different consequences for auditing, safety and trust.</div>
+    <div class="eco-grid">
+      <div class="eco-col-hd"></div><div class="eco-col-hd">Visible CoT</div><div class="eco-col-hd">Readability</div><div class="eco-col-hd">Open weights</div><div class="eco-col-hd">Configurable</div>
+      <div class="eco-label">o1 / o3</div><div class="eco-cell no">No — hidden</div><div class="eco-cell">N/A</div><div class="eco-cell no">No</div><div class="eco-cell partial">Low / medium / high effort</div>
+      <div class="eco-label">DeepSeek R1</div><div class="eco-cell yes">Yes — complete</div><div class="eco-cell partial">High, except some RL fragments</div><div class="eco-cell yes">Yes — 671B</div><div class="eco-cell no">No</div>
+      <div class="eco-label">Claude 3.7</div><div class="eco-cell yes">Yes — complete</div><div class="eco-cell yes">High by design</div><div class="eco-cell no">No</div><div class="eco-cell yes">Token budget</div>
+      <div class="eco-label">Gemini 2.5</div><div class="eco-cell partial">Partial summary</div><div class="eco-cell partial">Medium</div><div class="eco-cell no">No</div><div class="eco-cell yes">Thinking level</div>
+    </div>
+    <p class="eco-note">Visible CoT does not guarantee faithfulness to the internal process, but it does enable external auditing and detection of recurring failure patterns.</p>
+  </section>
+
+  <section class="eco-panel" data-panel="benchmarks" hidden>
+    <div class="eco-intro">Comparative performance on three informative benchmarks for complex reasoning. September 2025 figures; pass@1 unless stated otherwise.</div>
+    <div class="eco-bench-grid">
+      <article class="eco-bcard"><h4>AIME 2024</h4><p>Competition mathematics · 30 problems · not saturated</p><div class="eco-bars"><span>GPT-4o <b>12%</b></span><span>o1 <b>74%</b></span><span>DeepSeek R1 <b>80%</b></span><span>Claude 3.7 <b>80%</b></span><span>o3 <b>92%</b></span><span>Gemini 2.5 Pro <b>92%</b></span></div></article>
+      <article class="eco-bcard"><h4>GPQA Diamond</h4><p>PhD-level science · physics, chemistry, biology · not saturated</p><div class="eco-bars"><span>PhD experts <b>~69%</b></span><span>o1 <b>77%</b></span><span>DeepSeek R1 <b>72%</b></span><span>Claude 3.7 ×256 <b>85%</b></span><span>Gemini 2.5 Pro <b>87%</b></span></div></article>
+      <article class="eco-bcard"><h4>SWE-bench Verified</h4><p>Real software engineering · GitHub issues · not saturated</p><div class="eco-bars"><span>GPT-4o <b>38%</b></span><span>DeepSeek R1 <b>49%</b></span><span>Claude 3.7 <b>70%</b></span><span>o3 <b>72%</b></span></div></article>
+    </div>
+  </section>
+</div>
+
+<style>
+.eco-wrap,.eco-wrap *{box-sizing:border-box}.eco-wrap{--bg:var(--md-default-bg-color,#fff);--fg:var(--md-default-fg-color,#0f172a);--bd:rgba(15,23,42,.14);--mut:rgba(15,23,42,.62);--teal:#26A69A;display:grid;gap:16px;max-width:940px;margin:0 auto;padding:clamp(16px,2vw,28px);border:1px solid var(--bd);border-radius:20px;background:var(--bg);color:var(--fg);font-family:"Avenir Next","Segoe UI",Arial,sans-serif}[data-md-color-scheme="slate"] .eco-wrap{--bd:rgba(226,232,240,.15);--mut:rgba(226,232,240,.62)}.eco-hd{display:grid;gap:5px}.eco-title{font-size:clamp(17px,2vw,23px);font-weight:900}.eco-sub,.eco-intro,.eco-note{color:var(--mut);line-height:1.5}.eco-nav{display:flex;flex-wrap:wrap;gap:7px}.eco-nav button{border:1px solid var(--bd);border-radius:999px;background:var(--bg);padding:7px 16px;font:inherit;font-size:13px;font-weight:800;cursor:pointer;color:var(--mut)}.eco-nav button[aria-selected="true"]{border-color:var(--teal);color:var(--fg)}.eco-panel[hidden]{display:none}.eco-tl{display:grid;gap:10px}.eco-event{display:grid;grid-template-columns:80px 1fr;gap:12px}.eco-date{font-size:11.5px;font-weight:900;color:var(--mut);padding-top:12px}.eco-card,.eco-bcard{border:1px solid var(--bd);border-radius:12px;padding:12px 16px}.eco-card p,.eco-bcard p{margin:.35rem 0;color:var(--mut);font-size:13px;line-height:1.5}.eco-card span{font-size:12px;color:var(--mut)}.eco-grid{display:grid;grid-template-columns:120px repeat(4,1fr);gap:4px}.eco-col-hd,.eco-label,.eco-cell{font-size:12px;padding:7px 8px}.eco-col-hd{font-size:10.5px;font-weight:900;text-transform:uppercase;text-align:center;color:var(--mut)}.eco-label{font-weight:900}.eco-cell{border:1px solid var(--bd);border-radius:8px;text-align:center}.eco-cell.yes{border-color:color-mix(in srgb,var(--teal) 45%,var(--bd))}.eco-cell.partial{border-color:#FFB343}.eco-cell.no{opacity:.72}.eco-bench-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.eco-bcard h4{margin:0}.eco-bars{display:grid;gap:6px;font-size:12px;color:var(--mut)}.eco-bars span{display:flex;justify-content:space-between;border-top:1px solid var(--bd);padding-top:5px}.eco-bars b{color:var(--fg)}@media(max-width:680px){.eco-bench-grid{grid-template-columns:1fr}.eco-grid{grid-template-columns:100px repeat(4,1fr);font-size:10px}.eco-event{grid-template-columns:62px 1fr}}
+</style>
