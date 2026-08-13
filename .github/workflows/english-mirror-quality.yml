@@ -20,10 +20,6 @@ jobs:
     timeout-minutes: 12
     env:
       S5_LOCALE: en
-      S5_REASONING_01_URL: 'https://sdmntpreastus.oaiusercontent.com/files/00000000-42d4-81f9-b2c0-94d712802168/raw?se=2026-08-13T15%3A48%3A18Z&sp=r&sv=2026-02-06&sr=b&scid=10c76253-7547-51cd-873e-0e013d93b285&skoid=7b771594-2b4f-4e93-93be-fdeeeb59aaf9&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-08-13T04%3A16%3A11Z&ske=2026-08-14T04%3A16%3A11Z&sks=b&skv=2026-02-06&sig=lXWiSXJdwQI6a7hfHEgEUqb4GZzg/fQDaz9n0Qyy/2k%3D'
-      S5_REASONING_02_URL: 'https://sdmntprukwest.oaiusercontent.com/files/00000000-5728-8243-be91-45d36b29adc0/raw?se=2026-08-13T15%3A48%3A32Z&sp=r&sv=2026-02-06&sr=b&scid=357a5fcb-6b5e-5f3a-a4fb-dc21bdad10bc&skoid=7b771594-2b4f-4e93-93be-fdeeeb59aaf9&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-08-13T03%3A37%3A53Z&ske=2026-08-14T03%3A37%3A53Z&sks=b&skv=2026-02-06&sig=zrcMin9WI%2Bl/piGOsINrMgPRuV8KOqhbJFNJFT%2BdDDI%3D'
-      S5_REASONING_04_URL: 'https://sdmntpritalynorth.oaiusercontent.com/files/00000000-88b0-8246-a153-e81c91e3c0c2/raw?se=2026-08-13T15%3A48%3A41Z&sp=r&sv=2026-02-06&sr=b&scid=6f13f0ae-ac66-5880-8623-3921b2c558ae&skoid=7b771594-2b4f-4e93-93be-fdeeeb59aaf9&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-08-13T03%3A30%3A46Z&ske=2026-08-14T03%3A30%3A46Z&sks=b&skv=2026-02-06&sig=LO7yMrrBuS/XGVRp6sdwN0QUriScbvuGG6JLkbggD4c%3D'
-      S5_REASONING_05_URL: 'https://sdmntpreastus.oaiusercontent.com/files/00000000-dcb4-81f9-b241-cc80a8521d29/raw?se=2026-08-13T15%3A48%3A51Z&sp=r&sv=2026-02-06&sr=b&scid=af8c68c2-c963-5b0b-8ab8-9cf808c823e5&skoid=7b771594-2b4f-4e93-93be-fdeeeb59aaf9&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-08-13T03%3A29%3A10Z&ske=2026-08-14T03%3A29%3A10Z&sks=b&skv=2026-02-06&sig=TZxMLo/B63afPfCvb2XrPBwFfQTJphrzwD5Np7oRfUY%3D'
     steps:
       - uses: actions/checkout@v4
 
@@ -75,38 +71,6 @@ jobs:
         env:
           S5_REQUIRE_EN_TTC_MEDIA: '0'
         run: node scripts/validate_english_reasoning_ttc.mjs
-
-      - name: Stage reviewed English Reasoning media
-        shell: bash
-        run: |
-          set -euo pipefail
-          out='artifacts/en-reasoning-seed'
-          mkdir -p "$out"
-          fetch_one() {
-            slug="$1"; url="$2"
-            curl --fail --location --retry 3 "$url" -o "/tmp/${slug}.zip"
-            unzip -q -j "/tmp/${slug}.zip" "${slug}.mp4" "${slug}.jpg" -d "$out"
-          }
-          fetch_one '01-que-es-razonar' "$S5_REASONING_01_URL"
-          fetch_one '02-fallos' "$S5_REASONING_02_URL"
-          fetch_one '04-latencia-streaming' "$S5_REASONING_04_URL"
-          fetch_one '05-riesgos' "$S5_REASONING_05_URL"
-          echo 'eb0c36519bf5fea9ab39107326158fb07890bf3edab6d38bc30a1fc694d68c0d  artifacts/en-reasoning-seed/01-que-es-razonar.mp4' | sha256sum -c -
-          echo '750c1b7c911b5e7d74729752172bc0694b0ab75bc7603f485f226e4a42fd953e  artifacts/en-reasoning-seed/01-que-es-razonar.jpg' | sha256sum -c -
-          echo 'dfe48b8db55f8017f5891d3880140890df49f35c3a50beb52c5d49334865057c  artifacts/en-reasoning-seed/02-fallos.mp4' | sha256sum -c -
-          echo '38ff15eb04985f828a5c9fd93ee0ef6504a85cc6c381963bfe5a99a550a0ee74  artifacts/en-reasoning-seed/02-fallos.jpg' | sha256sum -c -
-          echo '2c1fca5deaa97d431218f3c00fa6f58f5f73cf39c4a7be6a549450771ec7b093  artifacts/en-reasoning-seed/04-latencia-streaming.mp4' | sha256sum -c -
-          echo 'af990fa5dcb5fea945bdcf84373de2bb8f4a0212d36d1b2669cf9fcdb56b4772  artifacts/en-reasoning-seed/04-latencia-streaming.jpg' | sha256sum -c -
-          echo '571d3b12c6241c77988e1a51d19b6ff1e612b46ee9094ed27dc096aa2e51abc8  artifacts/en-reasoning-seed/05-riesgos.mp4' | sha256sum -c -
-          echo 'f3c4b59805196c447ddc0a3ba0b29ca6f5752ffd728194f5e1389b7e21727b2d  artifacts/en-reasoning-seed/05-riesgos.jpg' | sha256sum -c -
-
-      - name: Upload reviewed English Reasoning media seed
-        uses: actions/upload-artifact@v4
-        with:
-          name: english-reasoning-reviewed-seed
-          path: artifacts/en-reasoning-seed/*
-          if-no-files-found: error
-          retention-days: 14
 
       - name: Upload English mirror screenshots
         if: always()
