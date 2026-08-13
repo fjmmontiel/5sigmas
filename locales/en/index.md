@@ -37,6 +37,10 @@ hide:
       <span>01 · AI Agents</span>
     </header>
 
+    <a class="s5-start-card__media" href="/en/series/agentes-ia/01-que-es-un-agente/" aria-label="Open the introduction to bounded AI agents">
+      <img src="/en/assets/images/home/agents-system-boundary.svg" alt="Diagram of a bounded AI agent observing, planning, acting with a tool and verifying under a policy boundary" />
+    </a>
+
     <a class="s5-start-card__cta" href="/en/series/agentes-ia/01-que-es-un-agente/">
       <span>
         <small>Start with the system boundary</small>
