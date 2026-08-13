@@ -13,6 +13,7 @@ published_routes:
   - series/multimodalidad-iag/00_presentacion_serie.md
   - series/modelos-razonadores/00_presentacion_serie.md
   - series/modelos-razonadores/01-que-es-razonar.md
+  - series/modelos-razonadores/02-fallos.md
   - series/modelos-razonadores/03-test-time-compute.md
   - series/ia-pib-bienestar-energia/00_presentacion_serie.md
   - series/datacenters-espacio/00_presentacion_serie.md
@@ -29,6 +30,11 @@ required_snippets:
   - snippets/modelos-razonadores/01-rlvr-entrenamiento.html
   - snippets/modelos-razonadores/01-ecosistema-modelos.html
   - snippets/modelos-razonadores/01-razonamiento-pasos.html
+  - snippets/modelos-razonadores/02-sycofancia.html
+  - snippets/modelos-razonadores/02-propagacion-error.html
+  - snippets/modelos-razonadores/02-tipos-fallos.html
+  - snippets/modelos-razonadores/02-cot-fidelidad.html
+  - snippets/modelos-razonadores/05-specification-gaming.html
   - snippets/modelos-razonadores/03-prm-orm-comparacion.html
   - snippets/modelos-razonadores/03-best-of-n-visual.html
   - snippets/modelos-razonadores/03-ttc-palancas.html
@@ -47,7 +53,7 @@ coverage:
   series_hub: canonical_structure_mirrored
   series_presentations: complete
   agents_series: complete
-  reasoning_models: chapters_1_and_3_published
+  reasoning_models: chapters_1_2_and_3_published
   remaining_chapters: in_progress
   concept_hubs: not_yet_published
   technical_articles: not_yet_published
