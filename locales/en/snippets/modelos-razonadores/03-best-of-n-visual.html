@@ -1,0 +1,50 @@
+<div class="s5-bon" data-bon data-default="mechanism">
+  <header class="s5-bon__head">
+    <div class="s5-bon__eyebrow">Test-time compute · sampling</div>
+    <h3>Best-of-N: generate several answers, then select</h3>
+    <p>The simplest way to spend more inference compute is to sample multiple independent candidates. The selector determines what “best” means.</p>
+  </header>
+  <nav class="s5-bon__tabs" aria-label="Best-of-N explanation">
+    <button type="button" data-tab="mechanism" aria-selected="true">Mechanism</button>
+    <button type="button" data-tab="variants" aria-selected="false">Variants</button>
+    <button type="button" data-tab="curve" aria-selected="false">Returns curve</button>
+  </nav>
+
+  <section data-panel="mechanism" class="s5-bon__panel">
+    <p class="s5-bon__lead">Same prompt, N independent runs at temperature &gt; 0, then a selection rule.</p>
+    <div class="s5-bon__prompt"><b>Prompt</b><span>Prove that the angles of a triangle sum to 180°.</span></div>
+    <div class="s5-bon__fan">
+      <article class="is-winner"><span>Candidate 1</span><p>Construct a line through A parallel to BC; alternate interior angles map α and β onto a straight angle.</p><strong>0.91 · selected</strong></article>
+      <article><span>Candidate 2</span><p>Use the exterior-angle sum and the supplementary relationship at each vertex.</p><strong>0.78</strong></article>
+      <article><span>Candidate 3</span><p>Apply the general polygon formula (n − 2) × 180° for n=3.</p><strong>0.65</strong></article>
+    </div>
+    <div class="s5-bon__select"><b>PRM selector</b><span>Candidate 1 wins because its intermediate steps receive the highest average process score.</span></div>
+  </section>
+
+  <section data-panel="variants" class="s5-bon__panel" hidden>
+    <div class="s5-bon__variants">
+      <article><div class="s5-bon__pill">Verifier · N≈4–64</div><h4>Best-of-N + PRM/ORM</h4><p>Score every candidate and take the maximum.</p><small>Best fit: mathematics and code with objective checks.</small></article>
+      <article><div class="s5-bon__pill">Vote · N≈8–40</div><h4>Self-consistency</h4><p>Select the final answer that appears most frequently across samples.</p><small>Best fit: discrete answers and single-result calculations.</small></article>
+      <article><div class="s5-bon__pill">Judge · N≈3–8</div><h4>Model-as-judge</h4><p>A separate evaluator ranks open-ended candidates against explicit criteria.</p><small>Best fit: analysis, writing and arguments without a deterministic verifier.</small></article>
+    </div>
+  </section>
+
+  <section data-panel="curve" class="s5-bon__panel" hidden>
+    <p class="s5-bon__lead">The expected gain is strongly diminishing: early samples buy much more than later ones.</p>
+    <div class="s5-bon__chart" role="img" aria-label="Illustrative diminishing-returns curve for Best-of-N">
+      <div class="s5-bon__axis-y"><span>higher quality</span></div>
+      <svg viewBox="0 0 620 270" aria-hidden="true">
+        <path d="M70 225H585M70 225V35" class="axis"/>
+        <path d="M82 218C160 155 230 102 315 74C405 45 490 37 570 31" class="prm"/>
+        <path d="M82 218C175 187 265 143 350 122C438 101 508 93 570 88" class="cons"/>
+        <g class="points"><circle cx="82" cy="218" r="7"/><circle cx="180" cy="140" r="7"/><circle cx="315" cy="74" r="7"/><circle cx="500" cy="36" r="7"/></g>
+        <text x="82" y="250">N=1</text><text x="180" y="250">N=4</text><text x="315" y="250">N=16</text><text x="500" y="250">N=64</text>
+      </svg>
+    </div>
+    <div class="s5-bon__notes"><span><b>N=1 → 4</b> usually delivers the largest jump.</span><span><b>N=32 → 64</b> doubles sampling cost for a much smaller gain.</span><span>A verifier can outperform majority voting because the best answer need not be the most common.</span></div>
+  </section>
+</div>
+<style>
+.s5-bon,.s5-bon *{box-sizing:border-box}.s5-bon{--a:#26A69A;--b:#7cc7ff;--g:#FFB343;--fg:var(--md-default-fg-color,#0f172a);--bg:var(--md-default-bg-color,#fff);--mut:color-mix(in srgb,var(--fg) 60%,transparent);--line:color-mix(in srgb,var(--fg) 15%,transparent);display:grid;gap:14px;margin:1.5rem 0;padding:clamp(14px,2vw,24px);border:1px solid var(--line);border-radius:22px;background:radial-gradient(110% 140% at 100% 0,color-mix(in srgb,var(--b) 7%,transparent),transparent 55%),var(--bg);font-family:"Avenir Next","Segoe UI",Arial,sans-serif}.s5-bon h3,.s5-bon h4,.s5-bon p{margin:0}.s5-bon__head{display:grid;gap:5px}.s5-bon__eyebrow{font-size:10px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--a)}.s5-bon h3{font-size:clamp(20px,2.8vw,30px);line-height:1.05}.s5-bon__head p,.s5-bon__lead{color:var(--mut);font-size:13px;line-height:1.55}.s5-bon__tabs{display:flex;gap:7px;flex-wrap:wrap}.s5-bon__tabs button{border:1px solid var(--line);border-radius:999px;padding:7px 13px;background:color-mix(in srgb,var(--bg) 90%,#0f172a 10%);color:var(--mut);font:inherit;font-size:12px;font-weight:800;cursor:pointer}.s5-bon__tabs button[aria-selected=true]{background:color-mix(in srgb,var(--a) 11%,var(--bg));border-color:color-mix(in srgb,var(--a) 45%,var(--line));color:var(--fg)}.s5-bon__panel{display:grid;gap:11px}.s5-bon__prompt,.s5-bon__select{display:grid;grid-template-columns:auto 1fr;gap:10px;padding:11px 13px;border:1px solid var(--line);border-radius:12px;background:color-mix(in srgb,var(--bg) 90%,#0f172a 10%);font-size:12px}.s5-bon__prompt span,.s5-bon__select span{color:var(--mut)}.s5-bon__fan,.s5-bon__variants{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.s5-bon__fan article,.s5-bon__variants article{display:grid;gap:8px;padding:13px;border:1px solid var(--line);border-radius:14px;background:color-mix(in srgb,var(--bg) 91%,#0f172a 9%);font-size:12px}.s5-bon__fan article.is-winner{border-color:color-mix(in srgb,var(--a) 55%,var(--line));box-shadow:inset 0 -3px 0 var(--a)}.s5-bon__fan span,.s5-bon__pill{font-size:10px;font-weight:900;text-transform:uppercase;color:var(--mut)}.s5-bon__fan p,.s5-bon__variants p,.s5-bon__variants small{color:var(--mut);line-height:1.45}.s5-bon__fan strong{color:var(--a)}.s5-bon__pill{width:fit-content;padding:4px 8px;border-radius:999px;background:color-mix(in srgb,var(--b) 12%,var(--bg));color:var(--fg)}.s5-bon__chart{position:relative;padding:8px;border:1px solid var(--line);border-radius:14px;background:color-mix(in srgb,var(--bg) 92%,#0f172a 8%)}.s5-bon__chart svg{display:block;width:100%;height:auto}.s5-bon__chart .axis{stroke:var(--line);stroke-width:2;fill:none}.s5-bon__chart .prm{stroke:var(--b);stroke-width:5;fill:none}.s5-bon__chart .cons{stroke:var(--a);stroke-width:4;stroke-dasharray:9 8;fill:none}.s5-bon__chart .points circle{fill:var(--g)}.s5-bon__chart text{fill:var(--mut);font-size:13px;font-family:monospace}.s5-bon__axis-y{position:absolute;display:none}.s5-bon__notes{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.s5-bon__notes span{padding:10px 11px;border-left:3px solid var(--a);background:color-mix(in srgb,var(--a) 6%,var(--bg));font-size:11.5px;color:var(--mut);line-height:1.45}.s5-bon [hidden]{display:none!important}@media(max-width:700px){.s5-bon__fan,.s5-bon__variants,.s5-bon__notes{grid-template-columns:1fr}}
+</style>
+<script>(()=>{const r=document.currentScript.closest('[data-bon]');if(!r)return;const t=[...r.querySelectorAll('[data-tab]')];const a=k=>{t.forEach(x=>x.setAttribute('aria-selected',x.dataset.tab===k?'true':'false'));r.querySelectorAll('[data-panel]').forEach(p=>p.hidden=p.dataset.panel!==k)};t.forEach(x=>x.addEventListener('click',()=>a(x.dataset.tab)));a(r.dataset.default||'mechanism')})();</script>
