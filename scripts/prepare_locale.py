@@ -2,14 +2,15 @@
 """Create an isolated MkDocs docs_dir for a 5sigmas locale.
 
 Locale builds are intentionally source-strict:
-- Markdown and HTML must be authored under ``locales/<locale>``;
+- only manifest-declared Markdown routes and translated snippets are publishable;
 - shared global assets (CSS/JS/design system) come from ``docs``;
 - article-adjacent images, video and audio are *not* inherited from Spanish;
 - a canonical media file is shared only when the locale manifest explicitly lists
   it under ``shared_media``.
 
-This prevents a translated page from silently serving Spanish-labelled posters,
-Spanish MP4s or Spanish narration under a locale-prefixed URL.
+Draft translations may exist under ``locales/<locale>`` without entering the
+MkDocs build until they are added to the manifest. This prevents both accidental
+publication and strict-nav failures while a full locale is being mirrored.
 """
 
 from __future__ import annotations
@@ -39,21 +40,65 @@ def _manifest(locale: str) -> dict:
     return data
 
 
+def _safe_relative(raw: object, *, field: str, locale: str) -> Path:
+    relative = Path(str(raw).strip().lstrip("/"))
+    if not str(relative) or ".." in relative.parts or relative.is_absolute():
+        raise SystemExit(f"Unsafe {field} entry for {locale}: {raw!r}")
+    return relative
+
+
 def _copy_explicit_shared_media(locale: str, target: Path, manifest: dict) -> None:
     entries = manifest.get("shared_media") or []
     if not isinstance(entries, list):
         raise SystemExit(f"locales/{locale}/manifest.yml shared_media must be a list")
 
     for raw in entries:
-        relative = Path(str(raw).strip().lstrip("/"))
-        if not str(relative) or ".." in relative.parts:
-            raise SystemExit(f"Unsafe shared_media entry for {locale}: {raw!r}")
+        relative = _safe_relative(raw, field="shared_media", locale=locale)
         source = DOCS / relative
         if not source.is_file():
             raise SystemExit(f"Missing canonical shared media for {locale}: docs/{relative}")
         destination = target / relative
         destination.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(source, destination)
+
+
+def _copy_declared_locale_files(locale: str, source: Path, target: Path, manifest: dict) -> None:
+    groups = (
+        ("published_routes", ".md"),
+        ("required_snippets", ".html"),
+    )
+    seen: set[Path] = set()
+    for field, expected_suffix in groups:
+        entries = manifest.get(field) or []
+        if not isinstance(entries, list):
+            raise SystemExit(f"locales/{locale}/manifest.yml {field} must be a list")
+        for raw in entries:
+            relative = _safe_relative(raw, field=field, locale=locale)
+            if expected_suffix and relative.suffix.lower() != expected_suffix:
+                raise SystemExit(f"Unexpected {field} extension for {locale}: {relative}")
+            if relative in seen:
+                continue
+            seen.add(relative)
+            src = source / relative
+            if not src.is_file():
+                raise SystemExit(f"Manifest-declared locale file is missing: locales/{locale}/{relative}")
+            dst = target / relative
+            dst.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(src, dst)
+
+    # Optional locale-specific public files can be declared without expanding the
+    # semantic route/snippet contracts above (for example captions or diagrams).
+    extras = manifest.get("published_files") or []
+    if not isinstance(extras, list):
+        raise SystemExit(f"locales/{locale}/manifest.yml published_files must be a list")
+    for raw in extras:
+        relative = _safe_relative(raw, field="published_files", locale=locale)
+        src = source / relative
+        if not src.is_file():
+            raise SystemExit(f"Manifest-declared locale file is missing: locales/{locale}/{relative}")
+        dst = target / relative
+        dst.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(src, dst)
 
 
 def prepare(locale: str) -> Path:
@@ -79,10 +124,7 @@ def prepare(locale: str) -> Path:
             shutil.copy2(src, target / filename)
 
     _copy_explicit_shared_media(locale, target, manifest)
-
-    # Locale source wins and contains all publishable Markdown, translated HTML
-    # and all locale-specific media (posters, videos, audio, diagrams, etc.).
-    shutil.copytree(source, target, dirs_exist_ok=True)
+    _copy_declared_locale_files(locale, source, target, manifest)
     return target
 
 
