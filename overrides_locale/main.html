@@ -1,10 +1,23 @@
 {% extends "base.html" %}
 
+{% set language = config.extra.content_language | default("en") %}
+{% set schema_ui = config.extra.schema_ui | default({}) %}
+{% set global_root = config.extra.global_site_root | default("https://5sigmas.com/") %}
+
 {% block htmltitle %}
   {% if page and page.meta.seo_title %}
   <title>{{ page.meta.seo_title | e }} | {{ config.site_name | e }}</title>
+  {% elif page and page.url in ["", "index.html"] %}
+  <title>{{ schema_ui.home_title | default("5sigmas: AI explained with technical rigor") | e }}</title>
   {% elif page %}
+    {% set title_path = page.url.rstrip('/') %}
+    {% set title_parts = title_path.split('/') if title_path else [] %}
+    {% if title_parts and title_parts[0] == "series" and title_parts|length >= 3 and title_parts[2] != "00_presentacion_serie" %}
+      {% set title_series = page.parent.title if page.parent else title_parts[1].replace('-', ' ') %}
+  <title>{{ page.title | e }} — {{ title_series | e }} | {{ config.site_name | e }}</title>
+    {% else %}
   <title>{{ page.title | e }} | {{ config.site_name | e }}</title>
+    {% endif %}
   {% else %}
   {{ super() }}
   {% endif %}
@@ -13,39 +26,316 @@
 {% block extrahead %}
   {{ super() }}
   {% if page %}
-  {% set language = config.extra.content_language | default("en") %}
   {% set site_root = config.site_url.rstrip('/') ~ '/' %}
+  {% set page_path = page.url.rstrip('/') %}
+  {% set path_parts = page_path.split('/') if page_path else [] %}
+  {% set is_home = page.url in ["", "index.html"] %}
+  {% set is_about = "meta/about" in page.url %}
+  {% set is_series = false %}
+  {% set is_series_presentation = false %}
+  {% set is_collection = false %}
+  {% set is_article = false %}
+  {% if path_parts and path_parts[0] == "series" %}
+    {% set is_series = true %}
+    {% if path_parts|length >= 3 and path_parts[2] == "00_presentacion_serie" %}
+      {% set is_series_presentation = true %}
+    {% elif path_parts|length >= 3 %}
+      {% set is_article = true %}
+    {% endif %}
+  {% elif path_parts and path_parts[0] in ["articulos-tecnicos", "temas"] and path_parts|length >= 2 %}
+    {% set is_article = true %}
+  {% endif %}
+  {% if page_path in ["series", "articulos-tecnicos", "temas", "visuales"] %}
+    {% set is_collection = true %}
+  {% endif %}
+
+  {% set person_id = global_root.rstrip('/') ~ "/#francisco-maldonado" %}
+  {% set organization_id = global_root.rstrip('/') ~ "/#organization" %}
+  {% set website_id = site_root ~ "#website" %}
+  {% set breadcrumb_parent_title = none %}
+  {% set breadcrumb_parent_url = none %}
+  {% set series_section_title = none %}
+  {% set series_section_url = none %}
+
+  {% if is_series_presentation %}
+    {% set breadcrumb_parent_title = schema_ui.series_label | default("Series") %}
+    {% set breadcrumb_parent_url = site_root ~ "series/" %}
+    {% set series_section_title = page.title %}
+    {% set series_section_url = page.canonical_url %}
+  {% elif is_series and path_parts|length >= 3 %}
+    {% set series_section_title = page.parent.title if page.parent else path_parts[1].replace('-', ' ') %}
+    {% set series_section_url = site_root ~ "series/" ~ path_parts[1] ~ "/00_presentacion_serie/" %}
+    {% set breadcrumb_parent_title = series_section_title %}
+    {% set breadcrumb_parent_url = series_section_url %}
+  {% elif path_parts and path_parts[0] == "temas" and path_parts|length >= 2 %}
+    {% set breadcrumb_parent_title = schema_ui.concepts_label | default("Concepts") %}
+    {% set breadcrumb_parent_url = site_root ~ "temas/" %}
+  {% elif path_parts and path_parts[0] == "articulos-tecnicos" and path_parts|length >= 2 %}
+    {% set breadcrumb_parent_title = schema_ui.engineering_label | default("Engineering") %}
+    {% set breadcrumb_parent_url = site_root ~ "articulos-tecnicos/" %}
+  {% elif not is_collection and page.parent %}
+    {% set breadcrumb_parent_title = page.parent.title %}
+    {% set breadcrumb_parent_url = site_root ~ (page.parent.url or '') %}
+  {% endif %}
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono:wght@400;700&display=swap"
+    onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono:wght@400;700&display=swap">
+  </noscript>
+
   <meta name="author" content="Francisco Maldonado">
   <link rel="author" href="{{ site_root }}meta/about/">
-  <link rel="alternate" type="text/markdown" href="{{ page.canonical_url }}index.html.md" title="Markdown version">
+  <link rel="alternate" type="text/markdown" href="{{ page.canonical_url }}index.html.md" title="{{ schema_ui.markdown_label | default('Markdown version') | e }}">
+
   {% if page.meta.keywords %}
   <meta name="keywords" content="{{ page.meta.keywords | e }}">
   {% endif %}
+
   {% if page.meta.robots %}
   <meta name="robots" content="{{ page.meta.robots | e }}">
   {% else %}
   <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1">
   {% endif %}
+
+  {% if is_home %}
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": {% if page.url.startswith("series/") and page.url.rstrip('/').split('/')|length >= 3 %}"TechArticle"{% else %}"WebPage"{% endif %},
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": {{ organization_id | tojson }},
+        "name": "5sigmas",
+        "url": {{ global_root | tojson }},
+        "description": {{ config.site_description | tojson }},
+        "logo": {
+          "@type": "ImageObject",
+          "url": {{ (global_root.rstrip('/') ~ "/assets/logo.svg") | tojson }}
+        },
+        "founder": {"@id": {{ person_id | tojson }}}
+      },
+      {
+        "@type": "Person",
+        "@id": {{ person_id | tojson }},
+        "name": "Francisco Maldonado",
+        "jobTitle": {{ schema_ui.job_title | default("Real-time AI systems engineer") | tojson }},
+        "url": {{ (site_root ~ "meta/about/") | tojson }},
+        "sameAs": ["https://www.linkedin.com/in/fjmm1998/", "https://github.com/fjmmontiel"]
+      },
+      {
+        "@type": "WebSite",
+        "@id": {{ website_id | tojson }},
+        "name": {{ config.site_name | tojson }},
+        "alternateName": "5sigmas",
+        "description": {{ config.site_description | tojson }},
+        "url": {{ site_root | tojson }},
+        "inLanguage": {{ language | tojson }},
+        "publisher": {"@id": {{ organization_id | tojson }}},
+        "author": {"@id": {{ person_id | tojson }}}
+      }
+    ]
+  }
+  </script>
+  {% elif is_about %}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "ProfilePage",
+        "@id": {{ (page.canonical_url ~ "#profile") | tojson }},
+        "name": {{ schema_ui.profile_name | default("About Francisco Maldonado — 5sigmas") | tojson }},
+        "description": {{ page.meta.description | default(config.site_description) | tojson }},
+        "url": {{ page.canonical_url | tojson }},
+        "inLanguage": {{ language | tojson }},
+        "isPartOf": {
+          "@type": "WebSite",
+          "@id": {{ website_id | tojson }},
+          "name": {{ config.site_name | tojson }},
+          "url": {{ site_root | tojson }}
+        },
+        "mainEntity": {"@id": {{ person_id | tojson }}}
+      },
+      {
+        "@type": "Person",
+        "@id": {{ person_id | tojson }},
+        "name": "Francisco Maldonado",
+        "jobTitle": {{ schema_ui.job_title | default("Real-time AI systems engineer") | tojson }},
+        "description": {{ schema_ui.person_description | default("Dual graduate in Physics and Mathematics. Designs and builds production AI systems, including voice assistants, computer vision and real-time systems.") | tojson }},
+        "url": {{ page.canonical_url | tojson }},
+        "sameAs": ["https://www.linkedin.com/in/fjmm1998/", "https://github.com/fjmmontiel"]
+      }
+    ]
+  }
+  </script>
+  {% elif is_series_presentation %}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
     "@id": {{ (page.canonical_url ~ "#webpage") | tojson }},
-    "name": {{ page.meta.seo_title | default(page.title) | tojson }},
+    "name": {{ page.title | tojson }},
     "description": {{ page.meta.description | default(config.site_description) | tojson }},
     "url": {{ page.canonical_url | tojson }},
     "inLanguage": {{ language | tojson }},
-    "author": {
-      "@type": "Person",
-      "name": "Francisco Maldonado",
-      "url": {{ (site_root ~ "meta/about/") | tojson }}
-    },
     "isPartOf": {
       "@type": "WebSite",
+      "@id": {{ website_id | tojson }},
+      "name": {{ config.site_name | tojson }},
+      "url": {{ site_root | tojson }}
+    },
+    "mainEntity": {
+      "@type": "CreativeWorkSeries",
+      "@id": {{ (page.canonical_url ~ "#series") | tojson }},
+      "name": {{ page.title | tojson }},
+      "description": {{ page.meta.description | default(config.site_description) | tojson }},
+      "url": {{ page.canonical_url | tojson }},
+      "inLanguage": {{ language | tojson }},
+      "author": {
+        "@type": "Person",
+        "@id": {{ person_id | tojson }},
+        "name": "Francisco Maldonado",
+        "url": {{ (site_root ~ "meta/about/") | tojson }}
+      },
+      "publisher": {
+        "@type": "Organization",
+        "@id": {{ organization_id | tojson }},
+        "name": "5sigmas",
+        "url": {{ global_root | tojson }}
+      }
+    }
+  }
+  </script>
+  {% elif is_collection %}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "@id": {{ (page.canonical_url ~ "#webpage") | tojson }},
+    "name": {{ page.title | tojson }},
+    "description": {{ page.meta.description | default(config.site_description) | tojson }},
+    "url": {{ page.canonical_url | tojson }},
+    "inLanguage": {{ language | tojson }},
+    "isPartOf": {
+      "@type": "WebSite",
+      "@id": {{ website_id | tojson }},
+      "name": {{ config.site_name | tojson }},
+      "url": {{ site_root | tojson }}
+    },
+    "publisher": {
+      "@type": "Organization",
+      "@id": {{ organization_id | tojson }},
       "name": "5sigmas",
+      "url": {{ global_root | tojson }}
+    }
+  }
+  </script>
+  {% elif is_article %}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "@id": {{ (page.canonical_url ~ "#article") | tojson }},
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": {{ page.canonical_url | tojson }}
+    },
+    "headline": {{ page.meta.seo_title | default(page.title) | tojson }},
+    "description": {{ page.meta.description | default(config.site_description) | tojson }},
+    "url": {{ page.canonical_url | tojson }},
+    "inLanguage": {{ language | tojson }},
+    "image": {
+      "@type": "ImageObject",
+      "url": {{ (site_root ~ "assets/images/social/" ~ page.url.rstrip('/') ~ ".png") | tojson }}
+    },
+    {% if page.meta.keywords %}"keywords": {{ page.meta.keywords | tojson }},{% endif %}
+    {% if page.meta.proficiency_level %}"proficiencyLevel": {{ page.meta.proficiency_level | tojson }},{% endif %}
+    {% if page.meta.prerequisites %}"dependencies": {{ page.meta.prerequisites | tojson }},{% endif %}
+    {% if page.meta.date %}
+    "datePublished": {{ page.meta.date | string | tojson }},
+    "dateModified": {{ page.meta.date_modified | default(page.meta.date) | string | tojson }},
+    {% endif %}
+    {% if series_section_title and series_section_url %}
+    "isPartOf": {
+      "@type": "CreativeWorkSeries",
+      "@id": {{ (series_section_url ~ "#series") | tojson }},
+      "name": {{ series_section_title | tojson }},
+      "url": {{ series_section_url | tojson }}
+    },
+    {% elif path_parts and path_parts[0] == "temas" %}
+    "isPartOf": {
+      "@type": "CollectionPage",
+      "@id": {{ (site_root ~ "temas/#webpage") | tojson }},
+      "name": {{ schema_ui.concepts_collection_name | default("Artificial intelligence concepts") | tojson }},
+      "url": {{ (site_root ~ "temas/") | tojson }}
+    },
+    {% elif path_parts and path_parts[0] == "articulos-tecnicos" %}
+    "isPartOf": {
+      "@type": "CollectionPage",
+      "@id": {{ (site_root ~ "articulos-tecnicos/#webpage") | tojson }},
+      "name": {{ schema_ui.engineering_collection_name | default("AI systems engineering") | tojson }},
+      "url": {{ (site_root ~ "articulos-tecnicos/") | tojson }}
+    },
+    {% endif %}
+    "author": {
+      "@type": "Person",
+      "@id": {{ person_id | tojson }},
+      "name": "Francisco Maldonado",
+      "url": {{ (site_root ~ "meta/about/") | tojson }},
+      "sameAs": ["https://www.linkedin.com/in/fjmm1998/", "https://github.com/fjmmontiel"]
+    },
+    "publisher": {
+      "@type": "Organization",
+      "@id": {{ organization_id | tojson }},
+      "name": "5sigmas",
+      "url": {{ global_root | tojson }},
+      "logo": {
+        "@type": "ImageObject",
+        "url": {{ (global_root.rstrip('/') ~ "/assets/logo.svg") | tojson }}
+      }
+    }
+  }
+  </script>
+  {% else %}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": {{ (page.canonical_url ~ "#webpage") | tojson }},
+    "name": {{ page.title | tojson }},
+    "description": {{ page.meta.description | default(config.site_description) | tojson }},
+    "url": {{ page.canonical_url | tojson }},
+    "inLanguage": {{ language | tojson }},
+    "isPartOf": {
+      "@type": "WebSite",
+      "@id": {{ website_id | tojson }},
+      "name": {{ config.site_name | tojson }},
       "url": {{ site_root | tojson }}
     }
   }
   </script>
+  {% endif %}
+
+  {% if not is_home %}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type": "ListItem", "position": 1, "name": {{ schema_ui.home_label | default("Home") | tojson }}, "item": {{ site_root | tojson }}}
+      {% if breadcrumb_parent_title and breadcrumb_parent_url %},
+      {"@type": "ListItem", "position": 2, "name": {{ breadcrumb_parent_title | tojson }}, "item": {{ breadcrumb_parent_url | tojson }}},
+      {"@type": "ListItem", "position": 3, "name": {{ page.title | tojson }}, "item": {{ page.canonical_url | tojson }}}
+      {% else %},
+      {"@type": "ListItem", "position": 2, "name": {{ page.title | tojson }}, "item": {{ page.canonical_url | tojson }}}
+      {% endif %}
+    ]
+  }
+  </script>
+  {% endif %}
   {% endif %}
 {% endblock %}
