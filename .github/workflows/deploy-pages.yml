@@ -17,7 +17,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
 
@@ -33,16 +33,31 @@ jobs:
       - name: Validate video media declarations
         run: python scripts/prepare_video_media.py --check
 
-      - name: Build site
+      - name: Build Spanish site
         env:
           S5_VIDEO_MEDIA_ORIGIN: ${{ vars.S5_VIDEO_MEDIA_ORIGIN }}
         run: mkdocs build --clean --strict
 
-      - name: Audit video indexing metadata
+      - name: Audit Spanish video indexing metadata
         run: python scripts/audit_video_indexing.py
 
-      - name: Audit search foundation
+      - name: Audit Spanish search foundation
         run: python scripts/audit_search_foundation.py
+
+      - name: Prepare English locale
+        run: python scripts/prepare_locale.py --locale en
+
+      - name: Audit English locale sources
+        run: python scripts/audit_locale.py --locale en
+
+      - name: Build English locale into /en
+        env:
+          S5_LOCALE: en
+          S5_VIDEO_MEDIA_ORIGIN: ${{ vars.S5_VIDEO_MEDIA_ORIGIN }}
+        run: mkdocs build -f mkdocs.en.yml --clean --strict
+
+      - name: Audit rendered English locale
+        run: python scripts/audit_locale.py --locale en --site site/en
 
       - uses: actions/configure-pages@v5
 
