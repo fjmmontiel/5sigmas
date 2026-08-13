@@ -15,6 +15,7 @@ for (const viewport of [{name:'desktop',width:1440,height:1000},{name:'mobile',w
   if (!response?.ok()) failures.push(`HTTP ${response?.status() ?? 'no response'}`);
   const body = await page.locator('body').innerText();
   if (!body.includes('Chapter 2 — Mechanize')) failures.push('missing English chapter title');
+  for (const concept of ['programmable computer', 'Turing', 'stored-program']) if (!body.toLowerCase().includes(concept.toLowerCase())) failures.push(`missing core concept ${concept}`);
   for (const forbidden of ['Capítulo ', 'Prerrequisitos', 'Siguiente capítulo', 'Mecanizar —']) if (body.includes(forbidden)) failures.push(`Spanish leakage ${JSON.stringify(forbidden)}`);
   for (const selector of ['.calc-limit','.logic-wrap','.turing-wrap','.stored-wrap','.mech-time']) if (await page.locator(selector).count() !== 1) failures.push(`missing ${selector}`);
   if (await page.locator('video[data-s5-inline-video-player]').count()) failures.push('unexpected inherited Spanish video');
