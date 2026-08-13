@@ -88,12 +88,12 @@ jobs:
         shell: bash
         run: |
           for attempt in {1..18}; do
-            body="$(curl --fail --silent --show-error --location https://5sigmas.com/en/ || true)"
-            if grep -q 'AI Agents' <<< "$body"; then
-              echo "Live English deployment is serving the expected locale."
+            body="$(curl --fail --silent --show-error --location https://5sigmas.com/en/series/ || true)"
+            if grep -q 'AI and Generative AI Foundations' <<< "$body"; then
+              echo "Live English series mirror is serving the expected release."
               exit 0
             fi
-            echo "Waiting for the Pages edge to expose the new English build ($attempt/18)..."
+            echo "Waiting for the Pages edge to expose the new English mirror ($attempt/18)..."
             sleep 5
           done
           echo "English production did not become ready within the validation window."
@@ -128,6 +128,11 @@ jobs:
         env:
           S5_PREVIEW_BASE: https://5sigmas.com
         run: node scripts/validate_locale_switching.mjs
+
+      - name: Validate live English series mirror
+        env:
+          S5_PREVIEW_BASE: https://5sigmas.com
+        run: node scripts/validate_english_series_mirror.mjs
 
       - name: Upload live English screenshots
         if: always()
