@@ -33,6 +33,8 @@ const forbiddenSpanish = [
   'Lectura estimada',
 ];
 
+const normalizeVisible = (value) => String(value || '').replace(/\s+/g, ' ').trim().toLowerCase();
+
 const browser = await chromium.launch({ headless: true });
 const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
 const page = await context.newPage();
@@ -100,12 +102,14 @@ for (const selector of ['.s5-reader-context', '.s5-reader-shell', '.s5-reader-di
 }
 
 const contextText = await page.locator('.s5-reader-context').innerText().catch(() => '');
-if (!contextText.includes('Learn') || !contextText.includes('03 of 06') || !contextText.includes('AI Agents')) {
+const normalizedContext = normalizeVisible(contextText);
+if (!normalizedContext.includes('learn') || !normalizedContext.includes('03 of 06') || !normalizedContext.includes('ai agents')) {
   failures.push(`${readerRoute}: localized reader context is incomplete: ${JSON.stringify(contextText)}`);
 }
 
 const readingMeta = await page.locator('.s5-reading-meta').innerText().catch(() => '');
-if (!readingMeta.includes('Estimated reading') || !/\d+\s+min/.test(readingMeta)) {
+const normalizedReadingMeta = normalizeVisible(readingMeta);
+if (!normalizedReadingMeta.includes('estimated reading') || !/\d+\s+min/.test(normalizedReadingMeta)) {
   failures.push(`${readerRoute}: compact English reading-time treatment is missing: ${JSON.stringify(readingMeta)}`);
 }
 
@@ -125,7 +129,7 @@ if (await globalNav.locator('a').count() < 3) {
   failures.push(`${readerRoute}: desktop reader header lost the English global navigation`);
 }
 
-const libraryOpen = page.locator('[data-s5-reader-open]').first();
+const libraryOpen = page.locator('[data-s5-reader-open]:visible').first();
 await libraryOpen.click().catch(() => {});
 const library = page.locator('[data-s5-reader-library]');
 await library.waitFor({ state: 'visible' }).catch(() => {});
@@ -133,12 +137,18 @@ if (!await library.isVisible().catch(() => false)) {
   failures.push(`${readerRoute}: full reader library does not open`);
 } else {
   const libraryText = await library.innerText();
-  for (const expected of ['Library', 'Series and technical notes.', 'AI Agents', 'Reading']) {
-    if (!libraryText.includes(expected)) failures.push(`${readerRoute}: reader library missing English copy ${JSON.stringify(expected)}`);
+  const normalizedLibrary = normalizeVisible(libraryText);
+  for (const expected of ['series and technical notes.', 'ai agents', 'reading']) {
+    if (!normalizedLibrary.includes(expected)) failures.push(`${readerRoute}: reader library missing English copy ${JSON.stringify(expected)}`);
+  }
+  const libraryHeading = normalizeVisible(await library.locator('h2').innerText().catch(() => ''));
+  if (libraryHeading !== 'series and technical notes.') {
+    failures.push(`${readerRoute}: reader library heading is not localized: ${JSON.stringify(libraryHeading)}`);
   }
   for (const marker of forbiddenSpanish) {
     if (libraryText.includes(marker)) failures.push(`${readerRoute}: reader library leaked Spanish marker ${JSON.stringify(marker)}`);
   }
+  await page.screenshot({ path: path.join(outDir, 'english-agent-library-desktop.png'), fullPage: false });
   await page.locator('[data-s5-reader-close]').click();
 }
 await assertNoOverflow(readerRoute, ' desktop reader');
@@ -148,8 +158,8 @@ const finalRoute = '/en/series/agentes-ia/05-de-la-demo-a-produccion/';
 await page.goto(`${base}${finalRoute}`, { waitUntil: 'networkidle' });
 const completionHref = await page.locator('.s5-reader-end__next').getAttribute('href').catch(() => null);
 const completionText = await page.locator('.s5-reader-end__next').innerText().catch(() => '');
-if (completionHref !== '/en/series/' || !completionText.includes('Series completed')) {
-  failures.push(`${finalRoute}: series completion must stay in English and return to /en/series/`);
+if (completionHref !== '/en/series/' || !normalizeVisible(completionText).includes('series completed')) {
+  failures.push(`${finalRoute}: series completion must stay in English and return to /en/series/; got href=${JSON.stringify(completionHref)} text=${JSON.stringify(completionText)}`);
 }
 
 const presentationRoute = '/en/series/agentes-ia/00_presentacion_serie/';
