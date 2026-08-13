@@ -8,6 +8,15 @@ const browser = await chromium.launch({ headless: true });
 const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
 
 const absolute = (path) => `https://5sigmas.com${path}`;
+const normalizeTarget = (href) => {
+  if (!href) return null;
+  try {
+    const parsed = new URL(href, 'https://5sigmas.com');
+    return parsed.pathname.endsWith('/') ? parsed.pathname : `${parsed.pathname}/`;
+  } catch {
+    return null;
+  }
+};
 
 const languageTargets = async () => page.evaluate(() => {
   const links = [...document.querySelectorAll('a[href]')];
@@ -20,7 +29,34 @@ const languageTargets = async () => page.evaluate(() => {
     .filter((item) => item.hreflang || /^(English|Español)$/i.test(item.text));
 });
 
-const alternate = async (lang) => page.locator(`link[rel="alternate"][hreflang="${lang}"]`).getAttribute('href').catch(() => null);
+const assertNoPageAlternates = async (route) => {
+  const alternates = await page.locator('link[rel="alternate"][hreflang]').count();
+  if (alternates !== 0) {
+    failures.push(`${route}: page-level hreflang links must be absent because Material treats them as locale roots`);
+  }
+};
+
+const sitemapText = async (route) => {
+  const response = await page.request.get(`${base}${route}`);
+  if (!response.ok()) {
+    failures.push(`${route}: HTTP ${response.status()}`);
+    return '';
+  }
+  return response.text();
+};
+
+const esSitemap = await sitemapText('/sitemap.xml');
+const enSitemap = await sitemapText('/en/sitemap.xml');
+
+const assertSitemapPair = (sourceRoute) => {
+  const enRoute = sourceRoute === '/' ? '/en/' : `/en${sourceRoute}`;
+  const esHref = `hreflang="es" href="${absolute(sourceRoute)}"`;
+  const enHref = `hreflang="en" href="${absolute(enRoute)}"`;
+  for (const [name, xml] of [['Spanish sitemap', esSitemap], ['English sitemap', enSitemap]]) {
+    if (!xml.includes(esHref)) failures.push(`${name}: missing ${esHref}`);
+    if (!xml.includes(enHref)) failures.push(`${name}: missing ${enHref}`);
+  }
+};
 
 const assertTranslatedPair = async ({ es, en }) => {
   for (const [route, currentLanguage] of [[es, 'es'], [en, 'en']]) {
@@ -30,29 +66,14 @@ const assertTranslatedPair = async ({ es, en }) => {
       continue;
     }
 
-    const esHref = await alternate('es');
-    const enHref = await alternate('en');
-    if (esHref !== absolute(es)) failures.push(`${route}: hreflang=es ${JSON.stringify(esHref)} != ${absolute(es)}`);
-    if (enHref !== absolute(en)) failures.push(`${route}: hreflang=en ${JSON.stringify(enHref)} != ${absolute(en)}`);
-
+    await assertNoPageAlternates(route);
     const targets = await languageTargets();
     const spanish = targets.find((item) => item.hreflang === 'es' || item.text === 'Español');
     const english = targets.find((item) => item.hreflang === 'en' || item.text === 'English');
-    const expectedSpanishPath = es;
-    const expectedEnglishPath = en;
-    const normalizeTarget = (href) => {
-      if (!href) return null;
-      try {
-        const parsed = new URL(href, 'https://5sigmas.com');
-        return parsed.pathname.endsWith('/') ? parsed.pathname : `${parsed.pathname}/`;
-      } catch {
-        return null;
-      }
-    };
-    if (normalizeTarget(spanish?.href) !== expectedSpanishPath) {
+    if (normalizeTarget(spanish?.href) !== es) {
       failures.push(`${route}: Spanish selector target ${JSON.stringify(spanish?.href)} does not preserve the translated route`);
     }
-    if (normalizeTarget(english?.href) !== expectedEnglishPath) {
+    if (normalizeTarget(english?.href) !== en) {
       failures.push(`${route}: English selector target ${JSON.stringify(english?.href)} does not preserve the translated route`);
     }
 
@@ -63,6 +84,8 @@ const assertTranslatedPair = async ({ es, en }) => {
       if (!targetResponse.ok()) failures.push(`${route}: opposite-locale selector target returns ${targetResponse.status()}: ${target.pathname}`);
     }
   }
+
+  assertSitemapPair(es);
 };
 
 await assertTranslatedPair({
@@ -77,18 +100,14 @@ await assertTranslatedPair({ es: '/', en: '/en/' });
 
 const untranslated = '/series/fundamentos-ia-iag/02-que-es-ia-generativa/';
 await page.goto(`${base}${untranslated}`, { waitUntil: 'networkidle' });
-const untranslatedEn = await alternate('en');
-if (untranslatedEn !== null) {
-  failures.push(`${untranslated}: must not advertise hreflang=en until an English equivalent exists; got ${JSON.stringify(untranslatedEn)}`);
-}
+await assertNoPageAlternates(untranslated);
 const untranslatedTargets = await languageTargets();
 const untranslatedEnglish = untranslatedTargets.find((item) => item.hreflang === 'en' || item.text === 'English');
-if (untranslatedEnglish?.href) {
-  const target = new URL(untranslatedEnglish.href, `${base}${untranslated}`);
-  const targetResponse = await page.request.get(`${base}${target.pathname}`);
-  if (!targetResponse.ok()) {
-    failures.push(`${untranslated}: English selector must never point to a 404; got ${target.pathname} → ${targetResponse.status()}`);
-  }
+if (normalizeTarget(untranslatedEnglish?.href) !== '/en/') {
+  failures.push(`${untranslated}: until translated, English selector should safely fall back to /en/; got ${JSON.stringify(untranslatedEnglish?.href)}`);
+}
+if (esSitemap.includes(`hreflang="en" href="${absolute(`/en${untranslated}`)}"`)) {
+  failures.push(`${untranslated}: Spanish sitemap must not advertise an English equivalent before it exists`);
 }
 
 await browser.close();
@@ -99,4 +118,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Locale-switch quality QA passed: translated pages preserve route equivalence; untranslated pages expose no false hreflang and no 404 language target.');
+console.log('Locale-switch quality QA passed: selectors preserve translated routes, XML sitemaps carry truthful hreflang pairs, and untranslated pages expose no false English equivalent.');
