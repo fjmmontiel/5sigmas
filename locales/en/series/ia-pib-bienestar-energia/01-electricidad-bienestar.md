@@ -101,8 +101,8 @@ This is the bridge to AI infrastructure. Accelerators, storage and model serving
 
 ---
 
-!!! tip "Next reading"
-    Continue with [Chapter 2 — AI as an electrical technology →](./02-ia-tecnologia-electrica.md) to see what compute means physically, why efficiency can coexist with rising total demand, and where the real infrastructure bottlenecks appear.
+!!! tip "Continue the path"
+    Return to the [AI, GDP, Well-being and Energy series overview](./00_presentacion_serie.md). Chapter 2 will appear in English as soon as its complete text, visual and media layer passes the same publication gate.
 
 ## References
 
