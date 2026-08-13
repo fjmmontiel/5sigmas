@@ -132,3 +132,8 @@ def on_pre_page_macros(env) -> None:
                 env.markdown = env.markdown[:pos] + "\n\n" + macro_call + env.markdown[pos:]
             else:
                 env.markdown = macro_call + "\n\n" + env.markdown
+
+    if src_path == "series/modelos-razonadores/03-test-time-compute.md":
+        runtime = '{{ include_html("snippets/modelos-razonadores/03-tabs-runtime.html") }}'
+        if runtime not in env.markdown:
+            env.markdown = env.markdown.rstrip() + "\n\n" + runtime + "\n"
