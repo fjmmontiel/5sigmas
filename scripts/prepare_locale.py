@@ -2,20 +2,23 @@
 """Create an isolated MkDocs docs_dir for a 5sigmas locale.
 
 Locale builds are intentionally source-strict:
-- only manifest-declared Markdown routes and translated snippets are publishable;
+- only manifest-declared Markdown routes are publishable;
+- translated snippets referenced by those published routes are staged automatically;
+- ``required_snippets`` remains supported for explicit global/non-route dependencies;
 - shared global assets (CSS/JS/design system) come from ``docs``;
 - article-adjacent images, video and audio are *not* inherited from Spanish;
 - a canonical media file is shared only when the locale manifest explicitly lists
   it under ``shared_media``.
 
 Draft translations may exist under ``locales/<locale>`` without entering the
-MkDocs build until they are added to the manifest. This prevents both accidental
-publication and strict-nav failures while a full locale is being mirrored.
+MkDocs build until their route is added to the manifest. This prevents both
+accidental publication and strict-nav failures while a full locale is mirrored.
 """
 
 from __future__ import annotations
 
 import argparse
+import re
 import shutil
 from pathlib import Path
 
@@ -28,6 +31,7 @@ BUILD = ROOT / ".locale-build"
 
 SHARED_DIRS = ("assets", "stylesheets", "javascripts")
 SHARED_ROOT_FILES = ("favicon.svg",)
+INCLUDE_HTML_RE = re.compile(r"include_html\(\s*[\"']([^\"']+)[\"']", re.IGNORECASE)
 
 
 def _manifest(locale: str) -> dict:
@@ -47,12 +51,52 @@ def _safe_relative(raw: object, *, field: str, locale: str) -> Path:
     return relative
 
 
-def _copy_explicit_shared_media(locale: str, target: Path, manifest: dict) -> None:
-    entries = manifest.get("shared_media") or []
+def _list_field(manifest: dict, field: str, locale: str) -> list[object]:
+    entries = manifest.get(field) or []
     if not isinstance(entries, list):
-        raise SystemExit(f"locales/{locale}/manifest.yml shared_media must be a list")
+        raise SystemExit(f"locales/{locale}/manifest.yml {field} must be a list")
+    return entries
 
-    for raw in entries:
+
+def _published_routes(locale: str, manifest: dict) -> list[Path]:
+    routes: list[Path] = []
+    for raw in _list_field(manifest, "published_routes", locale):
+        relative = _safe_relative(raw, field="published_routes", locale=locale)
+        if relative.suffix.lower() != ".md":
+            raise SystemExit(f"Unexpected published_routes extension for {locale}: {relative}")
+        routes.append(relative)
+    return routes
+
+
+def _discover_route_snippets(locale: str, source: Path, manifest: dict) -> set[Path]:
+    """Return translated HTML dependencies referenced by published Markdown.
+
+    The published route remains the publication authority. A draft route cannot
+    pull snippets into the build because it is never scanned. Every discovered
+    dependency must exist in the locale source; Spanish fallback is impossible.
+    """
+    result: set[Path] = set()
+    for route in _published_routes(locale, manifest):
+        path = source / route
+        if not path.is_file():
+            raise SystemExit(f"Manifest-declared locale file is missing: locales/{locale}/{route}")
+        text = path.read_text(encoding="utf-8")
+        for raw in INCLUDE_HTML_RE.findall(text):
+            relative = _safe_relative(raw, field="route snippet", locale=locale)
+            if relative.suffix.lower() != ".html":
+                raise SystemExit(f"Unexpected route snippet extension for {locale}: {relative}")
+            snippet = source / relative
+            if not snippet.is_file():
+                raise SystemExit(
+                    f"Published locale route {route} references missing translated snippet: "
+                    f"locales/{locale}/{relative}"
+                )
+            result.add(relative)
+    return result
+
+
+def _copy_explicit_shared_media(locale: str, target: Path, manifest: dict) -> None:
+    for raw in _list_field(manifest, "shared_media", locale):
         relative = _safe_relative(raw, field="shared_media", locale=locale)
         source = DOCS / relative
         if not source.is_file():
@@ -62,43 +106,43 @@ def _copy_explicit_shared_media(locale: str, target: Path, manifest: dict) -> No
         shutil.copy2(source, destination)
 
 
-def _copy_declared_locale_files(locale: str, source: Path, target: Path, manifest: dict) -> None:
-    groups = (
-        ("published_routes", ".md"),
-        ("required_snippets", ".html"),
-    )
-    seen: set[Path] = set()
-    for field, expected_suffix in groups:
-        entries = manifest.get(field) or []
-        if not isinstance(entries, list):
-            raise SystemExit(f"locales/{locale}/manifest.yml {field} must be a list")
-        for raw in entries:
-            relative = _safe_relative(raw, field=field, locale=locale)
-            if expected_suffix and relative.suffix.lower() != expected_suffix:
-                raise SystemExit(f"Unexpected {field} extension for {locale}: {relative}")
-            if relative in seen:
-                continue
-            seen.add(relative)
-            src = source / relative
-            if not src.is_file():
-                raise SystemExit(f"Manifest-declared locale file is missing: locales/{locale}/{relative}")
-            dst = target / relative
-            dst.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(src, dst)
+def _copy_locale_file(locale: str, source: Path, target: Path, relative: Path, *, field: str) -> None:
+    src = source / relative
+    if not src.is_file():
+        raise SystemExit(f"Manifest/dependency locale file is missing: locales/{locale}/{relative} ({field})")
+    dst = target / relative
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(src, dst)
 
-    # Optional locale-specific public files can be declared without expanding the
-    # semantic route/snippet contracts above (for example captions or diagrams).
-    extras = manifest.get("published_files") or []
-    if not isinstance(extras, list):
-        raise SystemExit(f"locales/{locale}/manifest.yml published_files must be a list")
-    for raw in extras:
+
+def _copy_declared_locale_files(locale: str, source: Path, target: Path, manifest: dict) -> None:
+    seen: set[Path] = set()
+
+    for relative in _published_routes(locale, manifest):
+        if relative not in seen:
+            _copy_locale_file(locale, source, target, relative, field="published_routes")
+            seen.add(relative)
+
+    # Explicit snippets remain useful for dependencies that do not originate in
+    # a published Markdown route. Route-local dependencies are discovered below.
+    for raw in _list_field(manifest, "required_snippets", locale):
+        relative = _safe_relative(raw, field="required_snippets", locale=locale)
+        if relative.suffix.lower() != ".html":
+            raise SystemExit(f"Unexpected required_snippets extension for {locale}: {relative}")
+        if relative not in seen:
+            _copy_locale_file(locale, source, target, relative, field="required_snippets")
+            seen.add(relative)
+
+    for relative in sorted(_discover_route_snippets(locale, source, manifest)):
+        if relative not in seen:
+            _copy_locale_file(locale, source, target, relative, field="published route dependency")
+            seen.add(relative)
+
+    for raw in _list_field(manifest, "published_files", locale):
         relative = _safe_relative(raw, field="published_files", locale=locale)
-        src = source / relative
-        if not src.is_file():
-            raise SystemExit(f"Manifest-declared locale file is missing: locales/{locale}/{relative}")
-        dst = target / relative
-        dst.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(src, dst)
+        if relative not in seen:
+            _copy_locale_file(locale, source, target, relative, field="published_files")
+            seen.add(relative)
 
 
 def prepare(locale: str) -> Path:
