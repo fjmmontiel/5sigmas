@@ -93,7 +93,7 @@ A useful scorecard separates the workload, hardware, facility, electricity suppl
 ---
 
 !!! tip "Continue the path"
-    Continue with [Chapter 3 — Measurement: GDP vs well-being →](./03-pib-vs-bienestar.md).
+    Return to the [AI, GDP, Well-being and Energy series overview](./00_presentacion_serie.md). Chapter 3 will be published as the next completed slice.
 
 ## References
 
