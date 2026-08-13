@@ -11,6 +11,7 @@ published_routes:
   - series/fundamentos-ia-iag/00_presentacion_serie.md
   - series/from-cave-to-agi/00_presentacion_serie.md
   - series/from-cave-to-agi/01-representar.md
+  - series/from-cave-to-agi/02-mecanizar.md
   - series/multimodalidad-iag/00_presentacion_serie.md
   - series/modelos-razonadores/00_presentacion_serie.md
   - series/modelos-razonadores/01-que-es-razonar.md
@@ -91,7 +92,7 @@ coverage:
   agents_series: complete
   reasoning_models: text_visuals_and_native_media_complete
   energy_series: chapters_1_2_text_and_visuals_published
-  cave_to_agi_series: chapter_1_text_and_visuals_published
+  cave_to_agi_series: chapters_1_2_text_and_visuals_published
   remaining_chapters: in_progress
   concept_hubs: not_yet_published
   technical_articles: not_yet_published
