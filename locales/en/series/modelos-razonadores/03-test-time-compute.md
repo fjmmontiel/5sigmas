@@ -157,3 +157,5 @@ Budget forcing prevents a reasoning process from terminating too early and adds 
 
 **Which problems benefit most from chain-of-thought?**  
 Problems with sequential structure and explicit dependencies: multi-operation mathematics, multi-level logical reasoning and code where later steps depend on earlier choices. Direct factual retrieval and short, well-specified questions usually benefit less because the relevant information does not require a long chain of intermediate computation.
+
+<script src="../../../assets/javascripts/english-ttc-tabs.js" defer></script>
