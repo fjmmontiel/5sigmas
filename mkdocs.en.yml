@@ -179,6 +179,10 @@ extra_javascript:
     defer: true
   - path: assets/javascripts/series_energy_ai_preview.js
     defer: true
+  - path: assets/javascripts/tabbed-animations.js
+    defer: true
+  - path: assets/javascripts/locale-tabbed-adapter.js
+    defer: true
   - path: assets/javascripts/video-library.js
     defer: true
   - path: assets/javascripts/reader-navigation.js
