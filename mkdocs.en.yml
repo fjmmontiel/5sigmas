@@ -131,7 +131,11 @@ nav:
           - Risks: series/multimodalidad-iag/05-riesgos.md
       - Reasoning Models:
           - Introduction: series/modelos-razonadores/00_presentacion_serie.md
+          - What is reasoning?: series/modelos-razonadores/01-que-es-razonar.md
+          - Reasoning-model failures: series/modelos-razonadores/02-fallos.md
           - Test-Time Compute: series/modelos-razonadores/03-test-time-compute.md
+          - Time, latency, streaming and human interaction: series/modelos-razonadores/04-latencia-streaming.md
+          - Risks: series/modelos-razonadores/05-riesgos.md
       - AI, GDP, Well-being and Energy:
           - Introduction: series/ia-pib-bienestar-energia/00_presentacion_serie.md
           - Electricity and well-being: series/ia-pib-bienestar-energia/01-electricidad-bienestar.md
@@ -158,6 +162,11 @@ nav:
           - How to evaluate an agent: series/agentes-ia/03-como-evaluar-un-agente.md
           - Agent security: series/agentes-ia/04-seguridad-agentes.md
           - From demo to production: series/agentes-ia/05-de-la-demo-a-produccion.md
+  - Build:
+      - Technical Articles: articulos-tecnicos/index.md
+      - Proactive and reactive agents and tool calls: articulos-tecnicos/proactive-reactive-agent-and-tool-calls.md
+      - Reactive-proactive voice agents: articulos-tecnicos/reactive-proactive-voice-agents.md
+      - Three architectures for voice agents: articulos-tecnicos/voice-agent-architectures.md
   - About: meta/about.md
 
 markdown_extensions:
