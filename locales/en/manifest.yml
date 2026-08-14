@@ -143,6 +143,18 @@ published_files:
   - series/ia-pib-bienestar-energia/03-pib-vs-bienestar.jpg
   - series/ia-pib-bienestar-energia/04-ia-pib-hoy.mp4
   - series/ia-pib-bienestar-energia/04-ia-pib-hoy.jpg
+  - series/from-cave-to-agi/00_presentacion_serie.mp4
+  - series/from-cave-to-agi/00_presentacion_serie.jpg
+  - series/from-cave-to-agi/01-representar.mp4
+  - series/from-cave-to-agi/01-representar.jpg
+  - series/from-cave-to-agi/02-mecanizar.mp4
+  - series/from-cave-to-agi/02-mecanizar.jpg
+  - series/from-cave-to-agi/03-aprender.mp4
+  - series/from-cave-to-agi/03-aprender.jpg
+  - series/from-cave-to-agi/04-escalar.mp4
+  - series/from-cave-to-agi/04-escalar.jpg
+  - series/from-cave-to-agi/05-mas-alla.mp4
+  - series/from-cave-to-agi/05-mas-alla.jpg
   - series/modelos-razonadores/01-que-es-razonar.mp4
   - series/modelos-razonadores/01-que-es-razonar.jpg
   - series/modelos-razonadores/02-fallos.mp4
@@ -160,7 +172,7 @@ coverage:
   agents_series: complete
   reasoning_models: text_visuals_and_native_media_complete
   energy_series: text_visuals_and_native_media_complete
-  cave_to_agi_series: text_and_visuals_complete_native_video_media_pending
+  cave_to_agi_series: text_visuals_and_native_media_complete
   datacenters_space_series: text_and_visuals_complete_native_media_pending
   security_series: text_and_visuals_complete_native_media_pending
   remaining_chapters: complete
@@ -168,7 +180,7 @@ coverage:
   technical_articles: text_and_visuals_complete_native_media_pending
   visual_hub: blocked_on_localized_media
   video_hub: blocked_on_localized_media
-  localized_video_media: reasoning_models_foundations_multimodality_and_energy_complete
+  localized_video_media: reasoning_models_foundations_multimodality_energy_and_caves_complete
 quality_gates:
   - no_spanish_fallback
   - no_implicit_spanish_media
