@@ -7,10 +7,19 @@ const base = process.env.S5_PREVIEW_BASE || 'http://127.0.0.1:8000';
 const outDir = path.resolve('artifacts/visual-review');
 await fs.mkdir(outDir, { recursive: true });
 
-const chapters = [
+const pages = [
+  {
+    route: '/en/series/fundamentos-ia-iag/00_presentacion_serie/',
+    title: 'AI and Generative AI Foundations',
+    media: '00_presentacion_serie',
+    concepts: ['What is AI?', 'Generative AI', 'AGI'],
+    demos: [],
+    screenshot: 'english-foundations-00-introduction.png',
+  },
   {
     route: '/en/series/fundamentos-ia-iag/01-que-es-ia/',
     title: 'Chapter 1 — What is AI?',
+    media: '01-que-es-ia',
     concepts: ['Machine Learning', 'Deep Learning', 'MLOps'],
     demos: [
       'fnd-ia-ml-dl',
@@ -26,6 +35,7 @@ const chapters = [
   {
     route: '/en/series/fundamentos-ia-iag/02-que-es-ia-generativa/',
     title: 'Chapter 2 — What is Generative AI?',
+    media: '02-que-es-ia-generativa',
     concepts: ['embeddings', 'Transformer', 'foundation model', 'LLMOps'],
     demos: [
       'fnd-embeddings',
@@ -41,6 +51,7 @@ const chapters = [
   {
     route: '/en/series/fundamentos-ia-iag/03-ia-vs-ia-generativa/',
     title: 'Chapter 3 — Classical AI vs Generative AI',
+    media: '03-ia-vs-ia-generativa',
     concepts: ['determinism', 'evaluation', 'RAG', 'agent'],
     demos: [
       'fnd-five-differences',
@@ -53,6 +64,7 @@ const chapters = [
   {
     route: '/en/series/fundamentos-ia-iag/04-agi/',
     title: 'Chapter 4 — AGI: Artificial General Intelligence',
+    media: '04-agi',
     concepts: ['generality', 'alignment', 'task horizon', 'DeepMind'],
     demos: [
       'fnd-agi-levels',
@@ -76,7 +88,7 @@ const failures = [];
 const browser = await chromium.launch({ headless: true });
 
 try {
-  for (const chapter of chapters) {
+  for (const entry of pages) {
     for (const viewport of [
       { name: 'desktop', width: 1440, height: 1000 },
       { name: 'mobile', width: 390, height: 844 },
@@ -85,43 +97,59 @@ try {
       const runtimeErrors = [];
       page.on('pageerror', (error) => runtimeErrors.push(`pageerror: ${error.message}`));
 
-      const response = await page.goto(`${base}${chapter.route}`, { waitUntil: 'networkidle' });
-      if (!response?.ok()) failures.push(`${chapter.route}: HTTP ${response?.status() ?? 'no response'}`);
+      const response = await page.goto(`${base}${entry.route}`, { waitUntil: 'networkidle' });
+      if (!response?.ok()) failures.push(`${entry.route}: HTTP ${response?.status() ?? 'no response'}`);
 
       const body = await page.locator('body').innerText();
-      if (!body.includes(chapter.title)) failures.push(`${chapter.route}: missing English chapter title`);
-      for (const concept of chapter.concepts) {
+      if (!body.includes(entry.title)) failures.push(`${entry.route}: missing English page title`);
+      for (const concept of entry.concepts) {
         if (!body.toLowerCase().includes(concept.toLowerCase())) {
-          failures.push(`${chapter.route}: missing core concept ${concept}`);
+          failures.push(`${entry.route}: missing core concept ${concept}`);
         }
       }
       for (const token of forbidden) {
-        if (body.includes(token)) failures.push(`${chapter.route}: Spanish leakage ${JSON.stringify(token)}`);
+        if (body.includes(token)) failures.push(`${entry.route}: Spanish leakage ${JSON.stringify(token)}`);
       }
 
-      for (const demo of chapter.demos) {
+      for (const demo of entry.demos) {
         const selector = `[data-demo="${demo}"]`;
-        if (await page.locator(selector).count() !== 1) failures.push(`${chapter.route}: missing ${selector}`);
+        if (await page.locator(selector).count() !== 1) failures.push(`${entry.route}: missing ${selector}`);
       }
 
       const demos = page.locator('[data-demo]');
-      if (await demos.count() !== chapter.demos.length) {
-        failures.push(`${chapter.route}: expected ${chapter.demos.length} teaching visuals, found ${await demos.count()}`);
+      if (await demos.count() !== entry.demos.length) {
+        failures.push(`${entry.route}: expected ${entry.demos.length} teaching visuals, found ${await demos.count()}`);
       }
 
-      const details = page.locator('[data-demo] details');
-      if (await details.count() === 0) {
-        failures.push(`${chapter.route}: visuals expose no interactive disclosure`);
+      if (entry.demos.length) {
+        const details = page.locator('[data-demo] details');
+        if (await details.count() === 0) {
+          failures.push(`${entry.route}: visuals expose no interactive disclosure`);
+        } else {
+          const candidate = details.nth(Math.min(1, (await details.count()) - 1));
+          const before = await candidate.getAttribute('open');
+          await candidate.locator('summary').click();
+          const after = await candidate.getAttribute('open');
+          if (before === after) failures.push(`${entry.route}: details interaction did not toggle`);
+        }
+      }
+
+      const videos = page.locator('video[data-s5-inline-video-player]');
+      const videoCount = await videos.count();
+      if (videoCount !== 1) {
+        failures.push(`${entry.route}: expected one native English inline video, found ${videoCount}`);
       } else {
-        const candidate = details.nth(Math.min(1, (await details.count()) - 1));
-        const before = await candidate.getAttribute('open');
-        await candidate.locator('summary').click();
-        const after = await candidate.getAttribute('open');
-        if (before === after) failures.push(`${chapter.route}: details interaction did not toggle`);
-      }
-
-      if (await page.locator('video[data-s5-inline-video-player]').count()) {
-        failures.push(`${chapter.route}: unexpected inherited Spanish video`);
+        const video = videos.first();
+        const source = video.locator('source').first();
+        const sourceUrl = new URL((await source.getAttribute('src')) || '', page.url());
+        const posterUrl = new URL((await video.getAttribute('poster')) || '', page.url());
+        const expectedRoot = '/en/series/fundamentos-ia-iag/';
+        if (!sourceUrl.pathname.startsWith(expectedRoot) || !sourceUrl.pathname.endsWith(`/${entry.media}.mp4`)) {
+          failures.push(`${entry.route}: native video resolves outside English Foundations media: ${sourceUrl.pathname}`);
+        }
+        if (!posterUrl.pathname.startsWith(expectedRoot) || !posterUrl.pathname.endsWith(`/${entry.media}.jpg`)) {
+          failures.push(`${entry.route}: native poster resolves outside English Foundations media: ${posterUrl.pathname}`);
+        }
       }
 
       const [clientWidth, scrollWidth] = await page.evaluate(() => [
@@ -129,13 +157,13 @@ try {
         document.documentElement.scrollWidth,
       ]);
       if (scrollWidth > clientWidth + 2) {
-        failures.push(`${chapter.route}: ${viewport.name} horizontal overflow ${scrollWidth - clientWidth}px`);
+        failures.push(`${entry.route}: ${viewport.name} horizontal overflow ${scrollWidth - clientWidth}px`);
       }
-      for (const runtimeError of runtimeErrors) failures.push(`${chapter.route}: ${runtimeError}`);
+      for (const runtimeError of runtimeErrors) failures.push(`${entry.route}: ${runtimeError}`);
 
       if (viewport.name === 'desktop') {
         await page.screenshot({
-          path: path.join(outDir, chapter.screenshot),
+          path: path.join(outDir, entry.screenshot),
           fullPage: true,
           animations: 'disabled',
         });
@@ -152,4 +180,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Complete English Foundations QA passed: Chapters 1–4, 23 native visuals, interactions, no Spanish media inheritance, desktop/mobile clean.');
+console.log('Complete English Foundations QA passed: introduction + Chapters 1–4, 23 native visuals, native-English MP4/poster pairs, interactions, and clean desktop/mobile layouts.');
