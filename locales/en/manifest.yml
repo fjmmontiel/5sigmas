@@ -20,6 +20,11 @@ published_routes:
   - series/from-cave-to-agi/04-escalar.md
   - series/from-cave-to-agi/05-mas-alla.md
   - series/multimodalidad-iag/00_presentacion_serie.md
+  - series/multimodalidad-iag/01-el-problema.md
+  - series/multimodalidad-iag/02-alineamiento.md
+  - series/multimodalidad-iag/03-arquitecturas.md
+  - series/multimodalidad-iag/04-evaluacion.md
+  - series/multimodalidad-iag/05-riesgos.md
   - series/modelos-razonadores/00_presentacion_serie.md
   - series/modelos-razonadores/01-que-es-razonar.md
   - series/modelos-razonadores/02-fallos.md
@@ -97,6 +102,7 @@ coverage:
   series_hub: canonical_structure_mirrored
   series_presentations: complete
   foundations_series: text_and_visuals_complete_native_media_pending
+  multimodality_series: text_and_visuals_complete_native_media_pending
   agents_series: complete
   reasoning_models: text_visuals_and_native_media_complete
   energy_series: chapters_1_2_text_and_visuals_published
