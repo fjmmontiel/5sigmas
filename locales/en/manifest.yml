@@ -121,6 +121,18 @@ published_files:
   - series/fundamentos-ia-iag/03-ia-vs-ia-generativa.jpg
   - series/fundamentos-ia-iag/04-agi.mp4
   - series/fundamentos-ia-iag/04-agi.jpg
+  - series/multimodalidad-iag/00_presentacion_serie.mp4
+  - series/multimodalidad-iag/00_presentacion_serie.jpg
+  - series/multimodalidad-iag/01-el-problema.mp4
+  - series/multimodalidad-iag/01-el-problema.jpg
+  - series/multimodalidad-iag/02-alineamiento.mp4
+  - series/multimodalidad-iag/02-alineamiento.jpg
+  - series/multimodalidad-iag/03-arquitecturas.mp4
+  - series/multimodalidad-iag/03-arquitecturas.jpg
+  - series/multimodalidad-iag/04-evaluacion.mp4
+  - series/multimodalidad-iag/04-evaluacion.jpg
+  - series/multimodalidad-iag/05-riesgos.mp4
+  - series/multimodalidad-iag/05-riesgos.jpg
   - series/modelos-razonadores/01-que-es-razonar.mp4
   - series/modelos-razonadores/01-que-es-razonar.jpg
   - series/modelos-razonadores/02-fallos.mp4
@@ -134,7 +146,7 @@ coverage:
   series_hub: canonical_structure_mirrored
   series_presentations: complete
   foundations_series: text_visuals_and_native_media_complete
-  multimodality_series: text_and_visuals_complete_native_media_pending
+  multimodality_series: text_visuals_and_native_media_complete
   agents_series: complete
   reasoning_models: text_visuals_and_native_media_complete
   energy_series: text_and_visuals_complete_native_media_pending
@@ -146,7 +158,7 @@ coverage:
   technical_articles: text_and_visuals_complete_native_media_pending
   visual_hub: blocked_on_localized_media
   video_hub: blocked_on_localized_media
-  localized_video_media: reasoning_models_and_foundations_complete
+  localized_video_media: reasoning_models_foundations_and_multimodality_complete
 quality_gates:
   - no_spanish_fallback
   - no_implicit_spanish_media
