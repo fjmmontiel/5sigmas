@@ -7,13 +7,23 @@ const base = process.env.S5_PREVIEW_BASE || 'http://127.0.0.1:8000';
 const outDir = path.resolve('artifacts/visual-review');
 await fs.mkdir(outDir, { recursive: true });
 
-const chapters = [
+const pages = [
+  {
+    route: '/en/series/multimodalidad-iag/00_presentacion_serie/',
+    title: 'Multimodality in Generative AI',
+    concepts: ['Alignment', 'Architectures', 'Evaluation', 'Risks'],
+    demos: 0,
+    prefix: null,
+    media: '00_presentacion_serie',
+    screenshot: 'english-multimodality-00-introduction.png',
+  },
   {
     route: '/en/series/multimodalidad-iag/01-el-problema/',
     title: 'Chapter 1 — The real problem: integrating different modalities without reducing them too early',
     concepts: ['perception', 'alignment', 'grounding', 'modality collapse'],
     demos: 3,
     prefix: 'mm-01-',
+    media: '01-el-problema',
     screenshot: 'english-multimodality-01-problem.png',
   },
   {
@@ -22,6 +32,7 @@ const chapters = [
     concepts: ['contrastive learning', 'ImageBind', 'instruction', 'data quality'],
     demos: 4,
     prefix: 'mm-02-',
+    media: '02-alineamiento',
     screenshot: 'english-multimodality-02-alignment.png',
   },
   {
@@ -30,6 +41,7 @@ const chapters = [
     concepts: ['cross-attention', 'tokenization', 'streaming', 'latency'],
     demos: 5,
     prefix: 'mm-03-',
+    media: '03-arquitecturas',
     screenshot: 'english-multimodality-03-architectures.png',
   },
   {
@@ -38,6 +50,7 @@ const chapters = [
     concepts: ['grounding', 'contamination', 'language priors', 'HallusionBench'],
     demos: 7,
     prefix: 'mm-04-',
+    media: '04-evaluacion',
     screenshot: 'english-multimodality-04-evaluation.png',
   },
   {
@@ -46,6 +59,7 @@ const chapters = [
     concepts: ['untrusted', 'authorization', 'provenance', 'human approval'],
     demos: 8,
     prefix: 'mm-05-',
+    media: '05-riesgos',
     screenshot: 'english-multimodality-05-risks.png',
   },
 ];
@@ -63,7 +77,7 @@ const browser = await chromium.launch({ headless: true });
 let totalVisuals = 0;
 
 try {
-  for (const chapter of chapters) {
+  for (const entry of pages) {
     for (const viewport of [
       { name: 'desktop', width: 1440, height: 1000 },
       { name: 'mobile', width: 390, height: 844 },
@@ -72,49 +86,68 @@ try {
       const runtimeErrors = [];
       page.on('pageerror', (error) => runtimeErrors.push(`pageerror: ${error.message}`));
 
-      const response = await page.goto(`${base}${chapter.route}`, { waitUntil: 'networkidle' });
-      if (!response?.ok()) failures.push(`${chapter.route}: HTTP ${response?.status() ?? 'no response'}`);
+      const response = await page.goto(`${base}${entry.route}`, { waitUntil: 'networkidle' });
+      if (!response?.ok()) failures.push(`${entry.route}: HTTP ${response?.status() ?? 'no response'}`);
 
       const body = await page.locator('body').innerText();
-      if (!body.includes(chapter.title)) failures.push(`${chapter.route}: missing English chapter title`);
-      for (const concept of chapter.concepts) {
-        if (!body.toLowerCase().includes(concept.toLowerCase())) failures.push(`${chapter.route}: missing core concept ${concept}`);
+      if (!body.includes(entry.title)) failures.push(`${entry.route}: missing English page title`);
+      for (const concept of entry.concepts) {
+        if (!body.toLowerCase().includes(concept.toLowerCase())) failures.push(`${entry.route}: missing core concept ${concept}`);
       }
       for (const token of forbidden) {
-        if (body.includes(token)) failures.push(`${chapter.route}: Spanish leakage ${JSON.stringify(token)}`);
+        if (body.includes(token)) failures.push(`${entry.route}: Spanish leakage ${JSON.stringify(token)}`);
       }
 
       const demoValues = await page.locator('[data-demo]').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('data-demo')));
-      if (demoValues.length !== chapter.demos) {
-        failures.push(`${chapter.route}: expected ${chapter.demos} teaching visuals, found ${demoValues.length}`);
+      if (demoValues.length !== entry.demos) {
+        failures.push(`${entry.route}: expected ${entry.demos} teaching visuals, found ${demoValues.length}`);
       }
-      if (new Set(demoValues).size !== demoValues.length) failures.push(`${chapter.route}: duplicate data-demo visual identifiers`);
-      for (const demo of demoValues) {
-        if (!demo?.startsWith(chapter.prefix)) failures.push(`${chapter.route}: unexpected visual identifier ${JSON.stringify(demo)}`);
+      if (new Set(demoValues).size !== demoValues.length) failures.push(`${entry.route}: duplicate data-demo visual identifiers`);
+      if (entry.prefix) {
+        for (const demo of demoValues) {
+          if (!demo?.startsWith(entry.prefix)) failures.push(`${entry.route}: unexpected visual identifier ${JSON.stringify(demo)}`);
+        }
       }
       if (viewport.name === 'desktop') totalVisuals += demoValues.length;
 
-      const details = page.locator('[data-demo] details');
-      if (await details.count() === 0) {
-        failures.push(`${chapter.route}: visuals expose no interactive disclosure`);
-      } else {
-        const candidate = details.first();
-        const before = await candidate.getAttribute('open');
-        await candidate.locator('summary').click();
-        const after = await candidate.getAttribute('open');
-        if (before === after) failures.push(`${chapter.route}: details interaction did not toggle`);
+      if (entry.demos) {
+        const details = page.locator('[data-demo] details');
+        if (await details.count() === 0) {
+          failures.push(`${entry.route}: visuals expose no interactive disclosure`);
+        } else {
+          const candidate = details.first();
+          const before = await candidate.getAttribute('open');
+          await candidate.locator('summary').click();
+          const after = await candidate.getAttribute('open');
+          if (before === after) failures.push(`${entry.route}: details interaction did not toggle`);
+        }
       }
 
-      if (await page.locator('video[data-s5-inline-video-player]').count()) failures.push(`${chapter.route}: unexpected inherited Spanish video`);
-      if (await page.locator('audio').count()) failures.push(`${chapter.route}: unexpected inherited Spanish audio`);
+      const videos = page.locator('video[data-s5-inline-video-player]');
+      const videoCount = await videos.count();
+      if (videoCount !== 1) {
+        failures.push(`${entry.route}: expected one native English inline video, found ${videoCount}`);
+      } else {
+        const video = videos.first();
+        const sourceUrl = new URL((await video.locator('source').first().getAttribute('src')) || '', page.url());
+        const posterUrl = new URL((await video.getAttribute('poster')) || '', page.url());
+        const expectedRoot = '/en/series/multimodalidad-iag/';
+        if (!sourceUrl.pathname.startsWith(expectedRoot) || !sourceUrl.pathname.endsWith(`/${entry.media}.mp4`)) {
+          failures.push(`${entry.route}: native video resolves outside English Multimodality media: ${sourceUrl.pathname}`);
+        }
+        if (!posterUrl.pathname.startsWith(expectedRoot) || !posterUrl.pathname.endsWith(`/${entry.media}.jpg`)) {
+          failures.push(`${entry.route}: native poster resolves outside English Multimodality media: ${posterUrl.pathname}`);
+        }
+      }
+      if (await page.locator('audio').count()) failures.push(`${entry.route}: unexpected inherited Spanish audio`);
 
       const [clientWidth, scrollWidth] = await page.evaluate(() => [document.documentElement.clientWidth, document.documentElement.scrollWidth]);
-      if (scrollWidth > clientWidth + 2) failures.push(`${chapter.route}: ${viewport.name} horizontal overflow ${scrollWidth - clientWidth}px`);
-      for (const runtimeError of runtimeErrors) failures.push(`${chapter.route}: ${runtimeError}`);
+      if (scrollWidth > clientWidth + 2) failures.push(`${entry.route}: ${viewport.name} horizontal overflow ${scrollWidth - clientWidth}px`);
+      for (const runtimeError of runtimeErrors) failures.push(`${entry.route}: ${runtimeError}`);
 
       if (viewport.name === 'desktop') {
         await page.screenshot({
-          path: path.join(outDir, chapter.screenshot),
+          path: path.join(outDir, entry.screenshot),
           fullPage: true,
           animations: 'disabled',
         });
@@ -133,4 +166,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Complete English Multimodality QA passed: Chapters 1–5, 27 unique native visuals, interactions, no Spanish media inheritance, desktop/mobile clean.');
+console.log('Complete English Multimodality QA passed: introduction + Chapters 1–5, 27 unique native visuals, six native-English MP4/poster pairs, interactions, no Spanish media inheritance, desktop/mobile clean.');
