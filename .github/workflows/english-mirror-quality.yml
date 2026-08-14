@@ -12,6 +12,7 @@ on:
       - 'scripts/validate_english_cave_ch1.mjs'
       - 'scripts/validate_english_history_ch2.mjs'
       - 'scripts/validate_english_caves_complete.mjs'
+      - 'scripts/validate_english_foundations_complete.mjs'
       - 'docs/assets/javascripts/series_energy_ai_preview.js'
       - '.github/workflows/english-mirror-quality.yml'
 
@@ -87,6 +88,9 @@ jobs:
 
       - name: Validate complete English Caves to AGI series
         run: node scripts/validate_english_caves_complete.mjs
+
+      - name: Validate complete English Foundations series
+        run: node scripts/validate_english_foundations_complete.mjs
 
       - name: Upload English mirror screenshots
         if: always()

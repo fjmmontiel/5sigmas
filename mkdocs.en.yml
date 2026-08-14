@@ -111,6 +111,10 @@ nav:
       - Series: series/index.md
       - AI and Generative AI Foundations:
           - Introduction: series/fundamentos-ia-iag/00_presentacion_serie.md
+          - What is AI?: series/fundamentos-ia-iag/01-que-es-ia.md
+          - What is Generative AI?: series/fundamentos-ia-iag/02-que-es-ia-generativa.md
+          - Classical AI vs Generative AI: series/fundamentos-ia-iag/03-ia-vs-ia-generativa.md
+          - AGI: series/fundamentos-ia-iag/04-agi.md
       - From the Caves to AGI:
           - Introduction: series/from-cave-to-agi/00_presentacion_serie.md
           - Represent: series/from-cave-to-agi/01-representar.md
