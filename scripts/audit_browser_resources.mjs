@@ -9,6 +9,15 @@ const paths = [
   '/series/modelos-razonadores/03-test-time-compute/',
 ];
 
+const isTransientExternalFontFailure = (url, resourceType) => {
+  if (resourceType !== 'font') return false;
+  try {
+    return new URL(url).hostname === 'fonts.gstatic.com';
+  } catch {
+    return false;
+  }
+};
+
 const browser = await chromium.launch({ headless: true });
 const failures = new Set();
 
@@ -24,6 +33,7 @@ try {
     page.on('response', (response) => {
       if (response.status() >= 400) {
         const request = response.request();
+        if (isTransientExternalFontFailure(response.url(), request.resourceType())) return;
         failures.add(
           `${path}: HTTP ${response.status()} ${response.url()} `
           + `[type=${request.resourceType()}; frame=${request.frame().url()}; `
@@ -33,6 +43,7 @@ try {
     });
 
     page.on('requestfailed', (request) => {
+      if (isTransientExternalFontFailure(request.url(), request.resourceType())) return;
       failures.add(
         `${path}: request failed ${request.url()} `
         + `(${request.failure()?.errorText ?? 'unknown error'}) `
