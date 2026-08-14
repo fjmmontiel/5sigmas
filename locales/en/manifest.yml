@@ -53,6 +53,13 @@ published_routes:
   - series/agentes-ia/03-como-evaluar-un-agente.md
   - series/agentes-ia/04-seguridad-agentes.md
   - series/agentes-ia/05-de-la-demo-a-produccion.md
+  - temas/index.md
+  - temas/llms.md
+  - temas/transformer.md
+  - temas/razonamiento.md
+  - temas/evaluacion-modelos.md
+  - temas/agentes-ia.md
+  - temas/prompt-injection.md
   - articulos-tecnicos/index.md
   - articulos-tecnicos/proactive-reactive-agent-and-tool-calls.md
   - articulos-tecnicos/reactive-proactive-voice-agents.md
@@ -125,7 +132,7 @@ coverage:
   datacenters_space_series: text_and_visuals_complete_native_media_pending
   security_series: text_and_visuals_complete_native_media_pending
   remaining_chapters: complete
-  concept_hubs: not_yet_published
+  concept_hubs: canonical_six_complete
   technical_articles: text_and_visuals_complete_native_media_pending
   visual_hub: blocked_on_localized_media
   video_hub: blocked_on_localized_media

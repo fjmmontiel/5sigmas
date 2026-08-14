@@ -83,9 +83,16 @@ await assertTranslatedPair({ es: '/series/ia-pib-bienestar-energia/03-pib-vs-bie
 await assertTranslatedPair({ es: '/series/datacenters-espacio/01-por-que-ahora/', en: '/en/series/datacenters-espacio/01-por-que-ahora/' });
 await assertTranslatedPair({ es: '/series/seguridad-ia/01-prompt-injection/', en: '/en/series/seguridad-ia/01-prompt-injection/' });
 await assertTranslatedPair({ es: '/articulos-tecnicos/proactive-reactive-agent-and-tool-calls/', en: '/en/articulos-tecnicos/proactive-reactive-agent-and-tool-calls/' });
+await assertTranslatedPair({ es: '/temas/', en: '/en/temas/' });
+await assertTranslatedPair({ es: '/temas/llms/', en: '/en/temas/llms/' });
+await assertTranslatedPair({ es: '/temas/transformer/', en: '/en/temas/transformer/' });
+await assertTranslatedPair({ es: '/temas/razonamiento/', en: '/en/temas/razonamiento/' });
+await assertTranslatedPair({ es: '/temas/evaluacion-modelos/', en: '/en/temas/evaluacion-modelos/' });
+await assertTranslatedPair({ es: '/temas/agentes-ia/', en: '/en/temas/agentes-ia/' });
+await assertTranslatedPair({ es: '/temas/prompt-injection/', en: '/en/temas/prompt-injection/' });
 await assertTranslatedPair({ es: '/', en: '/en/' });
 
-const untranslated = '/temas/llms/';
+const untranslated = '/temas/agi/';
 await page.goto(`${base}${untranslated}`, { waitUntil: 'networkidle' });
 await assertNoPageAlternates(untranslated);
 const untranslatedTargets = await languageTargets();
