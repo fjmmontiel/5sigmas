@@ -178,6 +178,11 @@ jobs:
           S5_PREVIEW_BASE: https://5sigmas.com
         run: node scripts/validate_english_technical_articles.mjs
 
+      - name: Validate live English Concepts
+        env:
+          S5_PREVIEW_BASE: https://5sigmas.com
+        run: node scripts/validate_english_concepts.mjs
+
       - name: Validate live English Test-Time Compute
         env:
           S5_PREVIEW_BASE: https://5sigmas.com
