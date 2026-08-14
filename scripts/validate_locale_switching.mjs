@@ -21,19 +21,13 @@ const normalizeTarget = (href) => {
 const languageTargets = async () => page.evaluate(() => {
   const links = [...document.querySelectorAll('a[href]')];
   return links
-    .map((node) => ({
-      text: (node.textContent || '').replace(/\s+/g, ' ').trim(),
-      href: node.getAttribute('href'),
-      hreflang: node.getAttribute('hreflang'),
-    }))
+    .map((node) => ({ text: (node.textContent || '').replace(/\s+/g, ' ').trim(), href: node.getAttribute('href'), hreflang: node.getAttribute('hreflang') }))
     .filter((item) => item.hreflang || /^(English|Español)$/i.test(item.text));
 });
 
 const assertNoPageAlternates = async (route) => {
   const alternates = await page.locator('link[rel="alternate"][hreflang]').count();
-  if (alternates !== 0) {
-    failures.push(`${route}: page-level hreflang links must be absent because Material treats them as locale roots`);
-  }
+  if (alternates !== 0) failures.push(`${route}: page-level hreflang links must be absent because Material treats them as locale roots`);
 };
 
 const sitemapText = async (route) => {
@@ -65,18 +59,12 @@ const assertTranslatedPair = async ({ es, en }) => {
       failures.push(`${route}: HTTP ${response?.status() ?? 'no response'}`);
       continue;
     }
-
     await assertNoPageAlternates(route);
     const targets = await languageTargets();
     const spanish = targets.find((item) => item.hreflang === 'es' || item.text === 'Español');
     const english = targets.find((item) => item.hreflang === 'en' || item.text === 'English');
-    if (normalizeTarget(spanish?.href) !== es) {
-      failures.push(`${route}: Spanish selector target ${JSON.stringify(spanish?.href)} does not preserve the translated route`);
-    }
-    if (normalizeTarget(english?.href) !== en) {
-      failures.push(`${route}: English selector target ${JSON.stringify(english?.href)} does not preserve the translated route`);
-    }
-
+    if (normalizeTarget(spanish?.href) !== es) failures.push(`${route}: Spanish selector target ${JSON.stringify(spanish?.href)} does not preserve the translated route`);
+    if (normalizeTarget(english?.href) !== en) failures.push(`${route}: English selector target ${JSON.stringify(english?.href)} does not preserve the translated route`);
     const opposite = currentLanguage === 'es' ? english : spanish;
     if (opposite?.href) {
       const target = new URL(opposite.href, `${base}${route}`);
@@ -84,39 +72,23 @@ const assertTranslatedPair = async ({ es, en }) => {
       if (!targetResponse.ok()) failures.push(`${route}: opposite-locale selector target returns ${targetResponse.status()}: ${target.pathname}`);
     }
   }
-
   assertSitemapPair(es);
 };
 
-await assertTranslatedPair({
-  es: '/series/agentes-ia/02-anatomia-de-un-agente/',
-  en: '/en/series/agentes-ia/02-anatomia-de-un-agente/',
-});
-await assertTranslatedPair({
-  es: '/series/agentes-ia/00_presentacion_serie/',
-  en: '/en/series/agentes-ia/00_presentacion_serie/',
-});
-await assertTranslatedPair({
-  es: '/series/fundamentos-ia-iag/02-que-es-ia-generativa/',
-  en: '/en/series/fundamentos-ia-iag/02-que-es-ia-generativa/',
-});
-await assertTranslatedPair({
-  es: '/series/multimodalidad-iag/01-el-problema/',
-  en: '/en/series/multimodalidad-iag/01-el-problema/',
-});
+await assertTranslatedPair({ es: '/series/agentes-ia/02-anatomia-de-un-agente/', en: '/en/series/agentes-ia/02-anatomia-de-un-agente/' });
+await assertTranslatedPair({ es: '/series/agentes-ia/00_presentacion_serie/', en: '/en/series/agentes-ia/00_presentacion_serie/' });
+await assertTranslatedPair({ es: '/series/fundamentos-ia-iag/02-que-es-ia-generativa/', en: '/en/series/fundamentos-ia-iag/02-que-es-ia-generativa/' });
+await assertTranslatedPair({ es: '/series/multimodalidad-iag/01-el-problema/', en: '/en/series/multimodalidad-iag/01-el-problema/' });
+await assertTranslatedPair({ es: '/series/ia-pib-bienestar-energia/03-pib-vs-bienestar/', en: '/en/series/ia-pib-bienestar-energia/03-pib-vs-bienestar/' });
 await assertTranslatedPair({ es: '/', en: '/en/' });
 
-const untranslated = '/series/ia-pib-bienestar-energia/03-pib-vs-bienestar/';
+const untranslated = '/series/datacenters-espacio/01-por-que-ahora/';
 await page.goto(`${base}${untranslated}`, { waitUntil: 'networkidle' });
 await assertNoPageAlternates(untranslated);
 const untranslatedTargets = await languageTargets();
 const untranslatedEnglish = untranslatedTargets.find((item) => item.hreflang === 'en' || item.text === 'English');
-if (normalizeTarget(untranslatedEnglish?.href) !== '/en/') {
-  failures.push(`${untranslated}: until translated, English selector should safely fall back to /en/; got ${JSON.stringify(untranslatedEnglish?.href)}`);
-}
-if (esSitemap.includes(`hreflang="en" href="${absolute(`/en${untranslated}`)}"`)) {
-  failures.push(`${untranslated}: Spanish sitemap must not advertise an English equivalent before it exists`);
-}
+if (normalizeTarget(untranslatedEnglish?.href) !== '/en/') failures.push(`${untranslated}: until translated, English selector should safely fall back to /en/; got ${JSON.stringify(untranslatedEnglish?.href)}`);
+if (esSitemap.includes(`hreflang="en" href="${absolute(`/en${untranslated}`)}"`)) failures.push(`${untranslated}: Spanish sitemap must not advertise an English equivalent before it exists`);
 
 await browser.close();
 
@@ -125,5 +97,4 @@ if (failures.length) {
   for (const failure of failures) console.error(` - ${failure}`);
   process.exit(1);
 }
-
 console.log('Locale-switch quality QA passed: selectors preserve translated routes, XML sitemaps carry truthful hreflang pairs, and untranslated pages expose no false English equivalent.');
