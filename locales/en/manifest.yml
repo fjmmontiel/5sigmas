@@ -34,6 +34,8 @@ published_routes:
   - series/ia-pib-bienestar-energia/00_presentacion_serie.md
   - series/ia-pib-bienestar-energia/01-electricidad-bienestar.md
   - series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica.md
+  - series/ia-pib-bienestar-energia/03-pib-vs-bienestar.md
+  - series/ia-pib-bienestar-energia/04-ia-pib-hoy.md
   - series/datacenters-espacio/00_presentacion_serie.md
   - series/seguridad-ia/00_presentacion_serie.md
   - series/agentes-ia/00_presentacion_serie.md
@@ -105,7 +107,7 @@ coverage:
   multimodality_series: text_and_visuals_complete_native_media_pending
   agents_series: complete
   reasoning_models: text_visuals_and_native_media_complete
-  energy_series: chapters_1_2_text_and_visuals_published
+  energy_series: text_and_visuals_complete_native_media_pending
   cave_to_agi_series: text_and_visuals_complete_native_video_media_pending
   remaining_chapters: in_progress
   concept_hubs: not_yet_published
