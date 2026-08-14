@@ -96,9 +96,13 @@ await assertTranslatedPair({
   es: '/series/agentes-ia/00_presentacion_serie/',
   en: '/en/series/agentes-ia/00_presentacion_serie/',
 });
+await assertTranslatedPair({
+  es: '/series/fundamentos-ia-iag/02-que-es-ia-generativa/',
+  en: '/en/series/fundamentos-ia-iag/02-que-es-ia-generativa/',
+});
 await assertTranslatedPair({ es: '/', en: '/en/' });
 
-const untranslated = '/series/fundamentos-ia-iag/02-que-es-ia-generativa/';
+const untranslated = '/series/multimodalidad-iag/01-el-problema/';
 await page.goto(`${base}${untranslated}`, { waitUntil: 'networkidle' });
 await assertNoPageAlternates(untranslated);
 const untranslatedTargets = await languageTargets();
