@@ -10,6 +10,7 @@ await fs.mkdir(outDir, { recursive: true });
 const chapters = [
   {
     route: '/en/series/from-cave-to-agi/03-aprender/',
+    slug: '03-aprender',
     title: 'Chapter 3 — Learn',
     concepts: ['expert systems', 'backpropagation', 'AlexNet'],
     demos: ['03-simbolica','03-inviernos-ia','03-bucle-entrenamiento','03-problema-xor','03-nlp-pre-transformer'],
@@ -17,6 +18,7 @@ const chapters = [
   },
   {
     route: '/en/series/from-cave-to-agi/04-escalar/',
+    slug: '04-escalar',
     title: 'Chapter 4 — Scale',
     concepts: ['Transformer', 'scaling laws', 'foundation models'],
     demos: ['04-shock-2012','04-transformer-reutilizacion','04-escala-producto','04-leyes-escala','04-emergencia-capacidades','04-preentrenamiento-finetuning'],
@@ -24,6 +26,7 @@ const chapters = [
   },
   {
     route: '/en/series/from-cave-to-agi/05-mas-alla/',
+    slug: '05-mas-alla',
     title: 'Chapter 5 — Beyond the Transformer',
     concepts: ['search', 'memory', 'world models', 'robotics'],
     demos: ['05-agentes-convergencia','05-busqueda-solucion','05-memoria-tipos','05-arquitecturas-post-transformer','05-world-models-ecosystem','05-apuestas-capital','05-robotica-fundacional'],
@@ -69,7 +72,18 @@ try {
         if (before === after) failures.push(`${chapter.route}: details interaction did not toggle`);
       }
 
-      if (await page.locator('video[data-s5-inline-video-player]').count()) failures.push(`${chapter.route}: unexpected inherited Spanish video`);
+      const videos = page.locator('video[data-s5-inline-video-player]');
+      if (await videos.count() !== 1) {
+        failures.push(`${chapter.route}: expected one native-English video, found ${await videos.count()}`);
+      } else {
+        const video = videos.first();
+        const sourceUrl = new URL((await video.locator('source').first().getAttribute('src')) || '', page.url());
+        const posterUrl = new URL((await video.getAttribute('poster')) || '', page.url());
+        const root = '/en/series/from-cave-to-agi/';
+        if (sourceUrl.pathname !== `${root}${chapter.slug}.mp4`) failures.push(`${chapter.route}: unexpected video source ${sourceUrl.pathname}`);
+        if (posterUrl.pathname !== `${root}${chapter.slug}.jpg`) failures.push(`${chapter.route}: unexpected video poster ${posterUrl.pathname}`);
+      }
+
       const [clientWidth, scrollWidth] = await page.evaluate(() => [document.documentElement.clientWidth, document.documentElement.scrollWidth]);
       if (scrollWidth > clientWidth + 2) failures.push(`${chapter.route}: ${viewport.name} horizontal overflow ${scrollWidth - clientWidth}px`);
 
@@ -87,4 +101,4 @@ if (failures.length) {
   for (const failure of [...new Set(failures)]) console.error(failure);
   process.exit(1);
 }
-console.log('Complete English From the Caves to AGI QA passed: Chapters 3–5, 18 native visuals, interactions, no Spanish media inheritance, desktop/mobile clean.');
+console.log('Complete English From the Caves to AGI QA passed: Chapters 3–5, 18 native visuals, native-English media, interactions, desktop/mobile clean.');
