@@ -162,6 +162,14 @@ nav:
           - How to evaluate an agent: series/agentes-ia/03-como-evaluar-un-agente.md
           - Agent security: series/agentes-ia/04-seguridad-agentes.md
           - From demo to production: series/agentes-ia/05-de-la-demo-a-produccion.md
+  - Concepts:
+      - Concepts: temas/index.md
+      - What is an LLM?: temas/llms.md
+      - How the Transformer works: temas/transformer.md
+      - Reasoning in LLMs: temas/razonamiento.md
+      - Evaluating AI models: temas/evaluacion-modelos.md
+      - What is an AI agent?: temas/agentes-ia.md
+      - What is prompt injection?: temas/prompt-injection.md
   - Build:
       - Technical Articles: articulos-tecnicos/index.md
       - Proactive and reactive agents and tool calls: articulos-tecnicos/proactive-reactive-agent-and-tool-calls.md
