@@ -24,6 +24,7 @@ const nativePresentationMedia = new Map([
   ['from-cave-to-agi', '00_presentacion_serie'],
   ['multimodalidad-iag', '00_presentacion_serie'],
   ['ia-pib-bienestar-energia', '00_presentacion_serie'],
+  ['datacenters-espacio', '00_presentacion_serie'],
 ]);
 
 const forbidden = [

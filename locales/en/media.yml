@@ -159,3 +159,33 @@ series/modelos-razonadores/05-riesgos.md:
   video_poster: 05-riesgos.jpg
   video_title: Reasoning Risks and Production Controls
   video_duration: PT1M0S
+
+series/datacenters-espacio/00_presentacion_serie.md:
+  video: 00_presentacion_serie.mp4
+  video_poster: 00_presentacion_serie.jpg
+  video_title: Data Centers in Space
+  video_duration: PT53S
+
+series/datacenters-espacio/01-por-que-ahora.md:
+  video: 01-por-que-ahora.mp4
+  video_poster: 01-por-que-ahora.jpg
+  video_title: Why now
+  video_duration: PT53S
+
+series/datacenters-espacio/02-energia-calor-conectividad.md:
+  video: 02-energia-calor-conectividad.mp4
+  video_poster: 02-energia-calor-conectividad.jpg
+  video_title: Energy, heat and connectivity
+  video_duration: PT53S
+
+series/datacenters-espacio/03-que-es-datacenter-espacio.md:
+  video: 03-que-es-datacenter-espacio.mp4
+  video_poster: 03-que-es-datacenter-espacio.jpg
+  video_title: What a data center in space actually is
+  video_duration: PT53S
+
+series/datacenters-espacio/04-huella-real-datacenter.md:
+  video: 04-huella-real-datacenter.mp4
+  video_poster: 04-huella-real-datacenter.jpg
+  video_title: The real footprint of a data center
+  video_duration: PT53S
