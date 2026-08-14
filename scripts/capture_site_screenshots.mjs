@@ -42,6 +42,19 @@ const captures = [
   { name: 'series-mobile', path: '/series/', viewport: mobile, mobile: true },
 ];
 
+const isTransientExternalFontUrl = (url) => {
+  if (!url) return false;
+  try {
+    return new URL(url).hostname === 'fonts.gstatic.com';
+  } catch {
+    return false;
+  }
+};
+
+const isTransientExternalFontFailure = (url, resourceType) => (
+  resourceType === 'font' && isTransientExternalFontUrl(url)
+);
+
 const collectLayout = () => {
   const isVisible = (node) => {
     if (!node) return false;
@@ -285,15 +298,20 @@ try {
     page.on('console', (message) => {
       if (message.type() !== 'error') return;
       const location = message.location();
+      if (isTransientExternalFontUrl(location?.url)) return;
       const where = location?.url
         ? ` @ ${location.url}${Number.isInteger(location.lineNumber) ? `:${location.lineNumber}:${location.columnNumber}` : ''}`
         : '';
       runtimeErrors.push(`console: ${message.text()}${where}`);
     });
     page.on('response', (response) => {
-      if (response.status() >= 400) runtimeErrors.push(`http ${response.status()}: ${response.url()}`);
+      if (response.status() < 400) return;
+      const request = response.request();
+      if (isTransientExternalFontFailure(response.url(), request.resourceType())) return;
+      runtimeErrors.push(`http ${response.status()}: ${response.url()}`);
     });
     page.on('requestfailed', (request) => {
+      if (isTransientExternalFontFailure(request.url(), request.resourceType())) return;
       runtimeErrors.push(`requestfailed: ${request.url()} (${request.failure()?.errorText || 'unknown error'})`);
     });
 
