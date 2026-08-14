@@ -1,3 +1,33 @@
+series/fundamentos-ia-iag/00_presentacion_serie.md:
+  video: 00_presentacion_serie.mp4
+  video_poster: 00_presentacion_serie.jpg
+  video_title: AI and Generative AI Foundations
+  video_duration: PT53S
+
+series/fundamentos-ia-iag/01-que-es-ia.md:
+  video: 01-que-es-ia.mp4
+  video_poster: 01-que-es-ia.jpg
+  video_title: What is AI?
+  video_duration: PT1M3S
+
+series/fundamentos-ia-iag/02-que-es-ia-generativa.md:
+  video: 02-que-es-ia-generativa.mp4
+  video_poster: 02-que-es-ia-generativa.jpg
+  video_title: What is Generative AI?
+  video_duration: PT1M3S
+
+series/fundamentos-ia-iag/03-ia-vs-ia-generativa.md:
+  video: 03-ia-vs-ia-generativa.mp4
+  video_poster: 03-ia-vs-ia-generativa.jpg
+  video_title: Classical AI vs Generative AI
+  video_duration: PT1M3S
+
+series/fundamentos-ia-iag/04-agi.md:
+  video: 04-agi.mp4
+  video_poster: 04-agi.jpg
+  video_title: "AGI: Artificial General Intelligence"
+  video_duration: PT1M3S
+
 series/modelos-razonadores/01-que-es-razonar.md:
   video: 01-que-es-razonar.mp4
   video_poster: 01-que-es-razonar.jpg

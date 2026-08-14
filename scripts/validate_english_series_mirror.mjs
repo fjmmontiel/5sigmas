@@ -19,6 +19,10 @@ const presentations = [
   ['agentes-ia', 'AI Agents'],
 ];
 
+const nativePresentationMedia = new Map([
+  ['fundamentos-ia-iag', '00_presentacion_serie'],
+]);
+
 const forbidden = [
   'Prerrequisitos', 'Terminada', 'Técnico', 'Capítulos', 'Ver todas las series',
   'Reproducir ataque', 'Reiniciar', 'Idea clave', 'Cargar gráfico externo', 'Abrir OWID',
@@ -60,7 +64,28 @@ for (const [slug, expectedTitle] of presentations) {
   for (const marker of forbidden) {
     if (body.includes(marker)) failures.push(`${route}: Spanish visual/UI marker leaked: ${JSON.stringify(marker)}`);
   }
-  if (await page.locator('video').count()) failures.push(`${route}: presentation must not expose canonical Spanish video before English media exists`);
+
+  const nativeMedia = nativePresentationMedia.get(slug);
+  const videos = page.locator('video[data-s5-inline-video-player]');
+  const videoCount = await videos.count();
+  if (nativeMedia) {
+    if (videoCount !== 1) {
+      failures.push(`${route}: expected one declared native-English presentation video, found ${videoCount}`);
+    } else {
+      const video = videos.first();
+      const sourceUrl = new URL((await video.locator('source').first().getAttribute('src')) || '', page.url());
+      const posterUrl = new URL((await video.getAttribute('poster')) || '', page.url());
+      const expectedRoot = `/en/series/${slug}/`;
+      if (!sourceUrl.pathname.startsWith(expectedRoot) || !sourceUrl.pathname.endsWith(`/${nativeMedia}.mp4`)) {
+        failures.push(`${route}: native presentation video escaped English locale media: ${sourceUrl.pathname}`);
+      }
+      if (!posterUrl.pathname.startsWith(expectedRoot) || !posterUrl.pathname.endsWith(`/${nativeMedia}.jpg`)) {
+        failures.push(`${route}: native presentation poster escaped English locale media: ${posterUrl.pathname}`);
+      }
+    }
+  } else if (videoCount) {
+    failures.push(`${route}: presentation exposed video before native-English media was declared`);
+  }
 }
 
 await page.goto(`${base}/en/series/ia-pib-bienestar-energia/00_presentacion_serie/`, { waitUntil: 'networkidle' });
@@ -109,4 +134,4 @@ if (failures.length) {
   for (const failure of failures) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log('English series mirror QA passed: eight canonical series entries, localized embedded visuals, no Spanish video inheritance, desktop/mobile overflow clean.');
+console.log('English series mirror QA passed: eight canonical series entries, localized embedded visuals, native-English presentation media only when declared, desktop/mobile overflow clean.');
