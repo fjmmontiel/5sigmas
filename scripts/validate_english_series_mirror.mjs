@@ -21,6 +21,7 @@ const presentations = [
 
 const nativePresentationMedia = new Map([
   ['fundamentos-ia-iag', '00_presentacion_serie'],
+  ['multimodalidad-iag', '00_presentacion_serie'],
 ]);
 
 const forbidden = [
