@@ -113,6 +113,11 @@ nav:
           - Introduction: series/fundamentos-ia-iag/00_presentacion_serie.md
       - From the Caves to AGI:
           - Introduction: series/from-cave-to-agi/00_presentacion_serie.md
+          - Represent: series/from-cave-to-agi/01-representar.md
+          - Mechanize: series/from-cave-to-agi/02-mecanizar.md
+          - Learn: series/from-cave-to-agi/03-aprender.md
+          - Scale: series/from-cave-to-agi/04-escalar.md
+          - Beyond the Transformer: series/from-cave-to-agi/05-mas-alla.md
       - Multimodality in Generative AI:
           - Introduction: series/multimodalidad-iag/00_presentacion_serie.md
       - Reasoning Models:
