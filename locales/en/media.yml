@@ -64,6 +64,36 @@ series/fundamentos-ia-iag/04-agi.md:
   video_title: "AGI: Artificial General Intelligence"
   video_duration: PT1M3S
 
+series/ia-pib-bienestar-energia/00_presentacion_serie.md:
+  video: 00_presentacion_serie.mp4
+  video_poster: 00_presentacion_serie.jpg
+  video_title: AI, GDP, Well-being and Energy
+  video_duration: PT1M2S
+
+series/ia-pib-bienestar-energia/01-electricidad-bienestar.md:
+  video: 01-electricidad-bienestar.mp4
+  video_poster: 01-electricidad-bienestar.jpg
+  video_title: Electricity and Well-being
+  video_duration: PT1M2S
+
+series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica.md:
+  video: 02-ia-tecnologia-electrica.mp4
+  video_poster: 02-ia-tecnologia-electrica.jpg
+  video_title: AI as an Electrical Technology
+  video_duration: PT1M2S
+
+series/ia-pib-bienestar-energia/03-pib-vs-bienestar.md:
+  video: 03-pib-vs-bienestar.mp4
+  video_poster: 03-pib-vs-bienestar.jpg
+  video_title: "Measurement: GDP vs Well-being"
+  video_duration: PT1M2S
+
+series/ia-pib-bienestar-energia/04-ia-pib-hoy.md:
+  video: 04-ia-pib-hoy.mp4
+  video_poster: 04-ia-pib-hoy.jpg
+  video_title: AI and GDP Today
+  video_duration: PT1M2S
+
 series/modelos-razonadores/01-que-es-razonar.md:
   video: 01-que-es-razonar.mp4
   video_poster: 01-que-es-razonar.jpg

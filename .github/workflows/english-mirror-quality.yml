@@ -10,6 +10,7 @@ on:
       - 'scripts/validate_english_reasoning_ttc.mjs'
       - 'scripts/validate_english_energy_ch1.mjs'
       - 'scripts/validate_english_energy_complete.mjs'
+      - 'scripts/validate_english_energy_media.mjs'
       - 'scripts/validate_english_cave_ch1.mjs'
       - 'scripts/validate_english_history_ch2.mjs'
       - 'scripts/validate_english_caves_complete.mjs'
@@ -88,6 +89,9 @@ jobs:
 
       - name: Validate complete English Energy series
         run: node scripts/validate_english_energy_complete.mjs
+
+      - name: Validate native English Energy media
+        run: node scripts/validate_english_energy_media.mjs
 
       - name: Validate English history chapter 1
         run: node scripts/validate_english_cave_ch1.mjs

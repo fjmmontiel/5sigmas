@@ -55,8 +55,19 @@ for (const selector of ['.kwh-wrap', '.infra-wrap']) {
   if (await page.locator(selector).count() !== 1) failures.push(`${route}: expected one ${selector}`);
 }
 
-if (await page.locator('video[data-s5-inline-video-player]').count()) {
-  failures.push(`${route}: must not expose a Spanish or placeholder video before native English media is published`);
+const videos = page.locator('video[data-s5-inline-video-player]');
+if (await videos.count() !== 1) {
+  failures.push(`${route}: expected one declared native-English chapter video, found ${await videos.count()}`);
+} else {
+  const video = videos.first();
+  const sourceUrl = new URL((await video.locator('source').first().getAttribute('src')) || '', page.url());
+  const posterUrl = new URL((await video.getAttribute('poster')) || '', page.url());
+  if (sourceUrl.pathname !== '/en/series/ia-pib-bienestar-energia/01-electricidad-bienestar.mp4') {
+    failures.push(`${route}: chapter video is not the native-English Energy asset: ${sourceUrl.pathname}`);
+  }
+  if (posterUrl.pathname !== '/en/series/ia-pib-bienestar-energia/01-electricidad-bienestar.jpg') {
+    failures.push(`${route}: chapter poster is not the native-English Energy asset: ${posterUrl.pathname}`);
+  }
 }
 
 await page.screenshot({ path: path.join(outDir, 'english-energy-ch1-desktop.png'), fullPage: true });
@@ -70,4 +81,4 @@ if (failures.length) {
   for (const failure of failures) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log('English Energy chapter 1 QA passed: full localized chapter, four visual systems, interactive tabs, no Spanish media inheritance, desktop/mobile clean.');
+console.log('English Energy chapter 1 QA passed: full localized chapter, four visual systems, native-English media, interactive tabs, desktop/mobile clean.');

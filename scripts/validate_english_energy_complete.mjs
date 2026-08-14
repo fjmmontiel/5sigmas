@@ -10,6 +10,7 @@ await fs.mkdir(outDir, { recursive: true });
 const chapters = [
   {
     route: '/en/series/ia-pib-bienestar-energia/03-pib-vs-bienestar/',
+    slug: '03-pib-vs-bienestar',
     title: 'Chapter 3 — Measurement: GDP vs well-being',
     concepts: ['unpaid work', 'Easterlin', 'Human Development Index', 'measurement pluralism'],
     demos: ['energy-03-gdp-wellbeing', 'energy-03-income-wellbeing', 'energy-03-frameworks'],
@@ -19,6 +20,7 @@ const chapters = [
   },
   {
     route: '/en/series/ia-pib-bienestar-energia/04-ia-pib-hoy/',
+    slug: '04-ia-pib-hoy',
     title: 'Chapter 4 — AI and GDP today: real impact, lags and early signals',
     concepts: ['productivity J-curve', '80.6%', '67%', 'Acemoglu'],
     demos: ['energy-04-jcurve', 'energy-04-evidence', 'energy-04-diffusion', 'energy-04-adoption-gap', 'energy-04-forecasts'],
@@ -76,7 +78,17 @@ try {
         if (before === after) failures.push(`${chapter.route}: details interaction did not toggle`);
       }
 
-      if (await page.locator('video[data-s5-inline-video-player]').count()) failures.push(`${chapter.route}: unexpected inherited Spanish video`);
+      const videos = page.locator('video[data-s5-inline-video-player]');
+      if (await videos.count() !== 1) {
+        failures.push(`${chapter.route}: expected one native-English video, found ${await videos.count()}`);
+      } else {
+        const video = videos.first();
+        const sourceUrl = new URL((await video.locator('source').first().getAttribute('src')) || '', page.url());
+        const posterUrl = new URL((await video.getAttribute('poster')) || '', page.url());
+        const root = '/en/series/ia-pib-bienestar-energia/';
+        if (sourceUrl.pathname !== `${root}${chapter.slug}.mp4`) failures.push(`${chapter.route}: unexpected video source ${sourceUrl.pathname}`);
+        if (posterUrl.pathname !== `${root}${chapter.slug}.jpg`) failures.push(`${chapter.route}: unexpected video poster ${posterUrl.pathname}`);
+      }
       if (await page.locator('audio').count()) failures.push(`${chapter.route}: unexpected inherited Spanish audio`);
 
       const [clientWidth, scrollWidth] = await page.evaluate(() => [document.documentElement.clientWidth, document.documentElement.scrollWidth]);
@@ -96,4 +108,4 @@ if (failures.length) {
   for (const failure of [...new Set(failures)]) console.error(failure);
   process.exit(1);
 }
-console.log('Complete English Energy QA passed: Chapters 3–4, 10 rendered visuals, interactions, no Spanish media inheritance, desktop/mobile clean.');
+console.log('Complete English Energy QA passed: Chapters 3–4, 10 rendered visuals, native-English media, interactions, desktop/mobile clean.');
