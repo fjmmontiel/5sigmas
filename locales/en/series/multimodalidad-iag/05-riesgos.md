@@ -170,8 +170,6 @@ A practical contract includes:
 7. **Log the perception → reasoning → action chain** sufficiently to debug failures.
 8. **Evaluate bias and regulatory risk** on application-specific slices rather than only general benchmarks.
 
-{{ include_html("snippets/multimodalidad-iag/05-riesgos-multimodal.html") }}
-
 !!! tip "Series complete"
     This closes the text/visual Multimodality learning path. Continue through the [full series library →](/en/series/) or deepen evaluation and security in the dedicated topic/technical surfaces as they are published in English.
 
