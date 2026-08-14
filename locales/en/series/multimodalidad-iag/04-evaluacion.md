@@ -139,8 +139,6 @@ For a production multimodal system, evaluation should include at least:
 7. **contamination controls** for public benchmarks,
 8. **end-to-end product metrics** such as latency and tool/action correctness when perception drives downstream operations.
 
-{{ include_html("snippets/multimodalidad-iag/04-metricas-evaluacion.html") }}
-
 !!! tip "Next chapter"
     [Chapter 5 — Risks →](./05-riesgos.md) — What risks become specific to multimodality, how visual/audio input expands the instruction surface, and why perception-to-action systems amplify errors.
 
