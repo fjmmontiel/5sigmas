@@ -94,6 +94,42 @@ series/ia-pib-bienestar-energia/04-ia-pib-hoy.md:
   video_title: AI and GDP Today
   video_duration: PT1M2S
 
+series/from-cave-to-agi/00_presentacion_serie.md:
+  video: 00_presentacion_serie.mp4
+  video_poster: 00_presentacion_serie.jpg
+  video_title: From the Caves to AGI
+  video_duration: PT1M3S
+
+series/from-cave-to-agi/01-representar.md:
+  video: 01-representar.mp4
+  video_poster: 01-representar.jpg
+  video_title: Represent — from counting to calculus
+  video_duration: PT1M3S
+
+series/from-cave-to-agi/02-mecanizar.md:
+  video: 02-mecanizar.mp4
+  video_poster: 02-mecanizar.jpg
+  video_title: Mechanize — from calculation to computing
+  video_duration: PT1M3S
+
+series/from-cave-to-agi/03-aprender.md:
+  video: 03-aprender.mp4
+  video_poster: 03-aprender.jpg
+  video_title: Learn — from rules to data
+  video_duration: PT1M3S
+
+series/from-cave-to-agi/04-escalar.md:
+  video: 04-escalar.mp4
+  video_poster: 04-escalar.jpg
+  video_title: Scale — deep learning to foundation models
+  video_duration: PT1M3S
+
+series/from-cave-to-agi/05-mas-alla.md:
+  video: 05-mas-alla.mp4
+  video_poster: 05-mas-alla.jpg
+  video_title: Beyond the Transformer
+  video_duration: PT1M3S
+
 series/modelos-razonadores/01-que-es-razonar.md:
   video: 01-que-es-razonar.mp4
   video_poster: 01-que-es-razonar.jpg
