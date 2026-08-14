@@ -146,6 +146,11 @@ nav:
           - The real footprint of a data center: series/datacenters-espacio/04-huella-real-datacenter.md
       - AI Security:
           - Introduction: series/seguridad-ia/00_presentacion_serie.md
+          - Prompt injection: series/seguridad-ia/01-prompt-injection.md
+          - Jailbreaks: series/seguridad-ia/02-jailbreaks.md
+          - Poisoning: series/seguridad-ia/03-envenenamiento.md
+          - Red teaming: series/seguridad-ia/04-red-teaming.md
+          - Production controls: series/seguridad-ia/05-controles-produccion.md
       - AI Agents:
           - Introduction: series/agentes-ia/00_presentacion_serie.md
           - What is an AI agent?: series/agentes-ia/01-que-es-un-agente.md

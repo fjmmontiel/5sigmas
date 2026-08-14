@@ -81,9 +81,10 @@ await assertTranslatedPair({ es: '/series/fundamentos-ia-iag/02-que-es-ia-genera
 await assertTranslatedPair({ es: '/series/multimodalidad-iag/01-el-problema/', en: '/en/series/multimodalidad-iag/01-el-problema/' });
 await assertTranslatedPair({ es: '/series/ia-pib-bienestar-energia/03-pib-vs-bienestar/', en: '/en/series/ia-pib-bienestar-energia/03-pib-vs-bienestar/' });
 await assertTranslatedPair({ es: '/series/datacenters-espacio/01-por-que-ahora/', en: '/en/series/datacenters-espacio/01-por-que-ahora/' });
+await assertTranslatedPair({ es: '/series/seguridad-ia/01-prompt-injection/', en: '/en/series/seguridad-ia/01-prompt-injection/' });
 await assertTranslatedPair({ es: '/', en: '/en/' });
 
-const untranslated = '/series/seguridad-ia/01-prompt-injection/';
+const untranslated = '/articulos-tecnicos/proactive-reactive-agent-and-tool-calls/';
 await page.goto(`${base}${untranslated}`, { waitUntil: 'networkidle' });
 await assertNoPageAlternates(untranslated);
 const untranslatedTargets = await languageTargets();
