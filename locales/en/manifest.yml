@@ -9,6 +9,10 @@ published_routes:
   - index.md
   - series/index.md
   - series/fundamentos-ia-iag/00_presentacion_serie.md
+  - series/fundamentos-ia-iag/01-que-es-ia.md
+  - series/fundamentos-ia-iag/02-que-es-ia-generativa.md
+  - series/fundamentos-ia-iag/03-ia-vs-ia-generativa.md
+  - series/fundamentos-ia-iag/04-agi.md
   - series/from-cave-to-agi/00_presentacion_serie.md
   - series/from-cave-to-agi/01-representar.md
   - series/from-cave-to-agi/02-mecanizar.md
@@ -92,6 +96,7 @@ coverage:
   homepage: pilot_to_be_replaced_with_canonical_mirror
   series_hub: canonical_structure_mirrored
   series_presentations: complete
+  foundations_series: text_and_visuals_complete_native_media_pending
   agents_series: complete
   reasoning_models: text_visuals_and_native_media_complete
   energy_series: chapters_1_2_text_and_visuals_published
