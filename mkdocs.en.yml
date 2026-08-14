@@ -134,6 +134,10 @@ nav:
           - Test-Time Compute: series/modelos-razonadores/03-test-time-compute.md
       - AI, GDP, Well-being and Energy:
           - Introduction: series/ia-pib-bienestar-energia/00_presentacion_serie.md
+          - Electricity and well-being: series/ia-pib-bienestar-energia/01-electricidad-bienestar.md
+          - AI as an electrical technology: series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica.md
+          - GDP vs well-being: series/ia-pib-bienestar-energia/03-pib-vs-bienestar.md
+          - AI and GDP today: series/ia-pib-bienestar-energia/04-ia-pib-hoy.md
       - Data Centers in Space:
           - Introduction: series/datacenters-espacio/00_presentacion_serie.md
       - AI Security:
