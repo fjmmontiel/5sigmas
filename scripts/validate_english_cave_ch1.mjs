@@ -21,7 +21,16 @@ for (const viewport of [{name:'desktop',width:1440,height:1000},{name:'mobile',w
   for (const selector of ['.numsys-wrap','.algebra-wrap','.proof-wrap','.rep-time']) {
     if (await page.locator(selector).count() !== 1) failures.push(`missing ${selector}`);
   }
-  if (await page.locator('video[data-s5-inline-video-player]').count()) failures.push('unexpected inherited Spanish video');
+  const videos = page.locator('video[data-s5-inline-video-player]');
+  if (await videos.count() !== 1) {
+    failures.push(`expected one native-English chapter video, found ${await videos.count()}`);
+  } else {
+    const video = videos.first();
+    const sourceUrl = new URL((await video.locator('source').first().getAttribute('src')) || '', page.url());
+    const posterUrl = new URL((await video.getAttribute('poster')) || '', page.url());
+    if (sourceUrl.pathname !== '/en/series/from-cave-to-agi/01-representar.mp4') failures.push(`unexpected video source ${sourceUrl.pathname}`);
+    if (posterUrl.pathname !== '/en/series/from-cave-to-agi/01-representar.jpg') failures.push(`unexpected video poster ${posterUrl.pathname}`);
+  }
   const tabs = page.locator('.numsys-wrap button[data-tab]');
   if (await tabs.count() > 1) {
     await tabs.nth(1).click();
@@ -34,4 +43,4 @@ for (const viewport of [{name:'desktop',width:1440,height:1000},{name:'mobile',w
 }
 await browser.close();
 if (failures.length) { for (const failure of failures) console.error(failure); process.exit(1); }
-console.log('English From Caves to AGI chapter 1 QA passed.');
+console.log('English From Caves to AGI chapter 1 QA passed with native-English media.');
