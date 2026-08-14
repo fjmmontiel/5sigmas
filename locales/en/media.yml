@@ -189,3 +189,39 @@ series/datacenters-espacio/04-huella-real-datacenter.md:
   video_poster: 04-huella-real-datacenter.jpg
   video_title: The real footprint of a data center
   video_duration: PT53S
+
+series/seguridad-ia/00_presentacion_serie.md:
+  video: 00_presentacion_serie.mp4
+  video_poster: 00_presentacion_serie.jpg
+  video_title: AI Security
+  video_duration: PT48S
+
+series/seguridad-ia/01-prompt-injection.md:
+  video: 01-prompt-injection.mp4
+  video_poster: 01-prompt-injection.jpg
+  video_title: Prompt Injection
+  video_duration: PT48S
+
+series/seguridad-ia/02-jailbreaks.md:
+  video: 02-jailbreaks.mp4
+  video_poster: 02-jailbreaks.jpg
+  video_title: Jailbreaks
+  video_duration: PT48S
+
+series/seguridad-ia/03-envenenamiento.md:
+  video: 03-envenenamiento.mp4
+  video_poster: 03-envenenamiento.jpg
+  video_title: Poisoning
+  video_duration: PT48S
+
+series/seguridad-ia/04-red-teaming.md:
+  video: 04-red-teaming.mp4
+  video_poster: 04-red-teaming.jpg
+  video_title: Red Teaming
+  video_duration: PT48S
+
+series/seguridad-ia/05-controles-produccion.md:
+  video: 05-controles-produccion.mp4
+  video_poster: 05-controles-produccion.jpg
+  video_title: Production Controls
+  video_duration: PT48S
