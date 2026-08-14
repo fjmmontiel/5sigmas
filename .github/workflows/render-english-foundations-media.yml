@@ -55,6 +55,7 @@ jobs:
             test "$codec" = 'h264'
             test "$dims" = '1920x1080'
             test "$pix" = 'yuv420p'
+            ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "$root/$slug.mp4"
           done
 
       - name: Commit rendered binaries to the migration branch
@@ -64,16 +65,18 @@ jobs:
           git add -f locales/en/series/fundamentos-ia-iag/*.mp4 locales/en/series/fundamentos-ia-iag/*.jpg
           if git diff --cached --quiet; then
             echo 'Rendered media is already current.'
-            exit 0
+          else
+            git commit -m 'Render native English Foundations media'
+            git push origin HEAD:agent/english-media-foundations
           fi
-          git commit -m 'Render native English Foundations media'
-          git push origin HEAD:agent/english-media-foundations
 
-      - name: Upload poster review set
+      - name: Upload native-media review set
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: english-foundations-native-media-posters
-          path: locales/en/series/fundamentos-ia-iag/*.jpg
+          name: english-foundations-native-media-review
+          path: |
+            locales/en/series/fundamentos-ia-iag/*.jpg
+            locales/en/series/fundamentos-ia-iag/*.mp4
           if-no-files-found: error
           retention-days: 14
