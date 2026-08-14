@@ -124,6 +124,11 @@ nav:
           - Beyond the Transformer: series/from-cave-to-agi/05-mas-alla.md
       - Multimodality in Generative AI:
           - Introduction: series/multimodalidad-iag/00_presentacion_serie.md
+          - The real multimodality problem: series/multimodalidad-iag/01-el-problema.md
+          - Alignment: series/multimodalidad-iag/02-alineamiento.md
+          - Architectures: series/multimodalidad-iag/03-arquitecturas.md
+          - Evaluation: series/multimodalidad-iag/04-evaluacion.md
+          - Risks: series/multimodalidad-iag/05-riesgos.md
       - Reasoning Models:
           - Introduction: series/modelos-razonadores/00_presentacion_serie.md
           - Test-Time Compute: series/modelos-razonadores/03-test-time-compute.md
