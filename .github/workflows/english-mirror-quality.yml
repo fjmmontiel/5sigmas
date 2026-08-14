@@ -16,6 +16,7 @@ on:
       - 'scripts/validate_english_foundations_complete.mjs'
       - 'scripts/validate_english_multimodality_complete.mjs'
       - 'scripts/validate_english_datacenters_complete.mjs'
+      - 'scripts/validate_english_security_complete.mjs'
       - 'docs/assets/javascripts/series_energy_ai_preview.js'
       - '.github/workflows/english-mirror-quality.yml'
 
@@ -103,6 +104,9 @@ jobs:
 
       - name: Validate complete English Data Centers in Space series
         run: node scripts/validate_english_datacenters_complete.mjs
+
+      - name: Validate complete English AI Security series
+        run: node scripts/validate_english_security_complete.mjs
 
       - name: Upload English mirror screenshots
         if: always()
