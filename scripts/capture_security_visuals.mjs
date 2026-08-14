@@ -19,6 +19,28 @@ const viewports = [
   { name: 'mobile', viewport: { width: 390, height: 844 }, mobile: true },
 ];
 
+const isTransientExternalFontUrl = (url) => {
+  if (!url) return false;
+  try {
+    return new URL(url).hostname === 'fonts.gstatic.com';
+  } catch {
+    return false;
+  }
+};
+
+const isTransientExternalFontFailure = (url, resourceType) => (
+  resourceType === 'font' && isTransientExternalFontUrl(url)
+);
+
+// Chromium emits a second, URL-less console error for failed resources. HTTP and
+// request failures are audited separately below with the exact URL, status and type,
+// so retaining this duplicate would turn an allowed third-party font failure into a
+// false positive while adding no coverage for first-party resources.
+const isGenericResourceConsoleError = (text) => (
+  /^Failed to load resource: the server responded with a status of \d+/.test(text)
+  || /^Failed to load resource: net::ERR_/.test(text)
+);
+
 const browser = await chromium.launch({ headless: true });
 const report = [];
 
@@ -103,7 +125,27 @@ try {
       const runtimeErrors = [];
       page.on('pageerror', (error) => runtimeErrors.push(`pageerror: ${error.message}`));
       page.on('console', (message) => {
-        if (message.type() === 'error') runtimeErrors.push(`console: ${message.text()}`);
+        if (message.type() !== 'error') return;
+        const text = message.text();
+        if (isGenericResourceConsoleError(text)) return;
+        const location = message.location();
+        if (isTransientExternalFontUrl(location?.url)) return;
+        const where = location?.url
+          ? ` @ ${location.url}${Number.isInteger(location.lineNumber) ? `:${location.lineNumber}:${location.columnNumber}` : ''}`
+          : '';
+        runtimeErrors.push(`console: ${text}${where}`);
+      });
+      page.on('response', (response) => {
+        if (response.status() < 400) return;
+        const request = response.request();
+        if (isTransientExternalFontFailure(response.url(), request.resourceType())) return;
+        runtimeErrors.push(`http ${response.status()}: ${response.url()} [type=${request.resourceType()}]`);
+      });
+      page.on('requestfailed', (request) => {
+        if (isTransientExternalFontFailure(request.url(), request.resourceType())) return;
+        runtimeErrors.push(
+          `request failed: ${request.url()} (${request.failure()?.errorText ?? 'unknown error'}) [type=${request.resourceType()}]`,
+        );
       });
 
       const response = await page.goto(`${baseUrl}${route.path}`, { waitUntil: 'networkidle', timeout: 30_000 });
