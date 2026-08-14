@@ -120,7 +120,7 @@ published_files:
   - series/modelos-razonadores/05-riesgos.mp4
   - series/modelos-razonadores/05-riesgos.jpg
 coverage:
-  homepage: pilot_to_be_replaced_with_canonical_mirror
+  homepage: canonical_structure_mirrored_native_media_only
   series_hub: canonical_structure_mirrored
   series_presentations: complete
   foundations_series: text_and_visuals_complete_native_media_pending

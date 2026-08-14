@@ -13,12 +13,12 @@ hide:
   <div class="s5-home-cover__intro">
     <div class="s5-eyebrow">5sigmas · Artificial intelligence, without the noise</div>
     <h1>See AI.<br />Understand how it actually works.</h1>
-    <p>Each topic connects intuition, an interactive mechanism, technical depth and primary sources. Start with the mental model, manipulate the system, check its limits and then go to the evidence.</p>
+    <p>Each topic connects a visual explanation, an interactive mechanism, technical depth and primary sources. Build intuition first, manipulate the mechanism, inspect its limits and then go to the evidence.</p>
 
     <div class="s5-learning-loop" role="list" aria-label="5sigmas learning method">
       <div class="s5-learning-loop__item" role="listitem">
         <span class="s5-learning-loop__n">01</span>
-        <span><strong>See</strong><small>Build intuition first</small></span>
+        <span><strong>See</strong><small>Orient yourself around one idea</small></span>
       </div>
       <div class="s5-learning-loop__item" role="listitem">
         <span class="s5-learning-loop__n">02</span>
@@ -34,24 +34,24 @@ hide:
   <article class="s5-start-card">
     <header class="s5-start-card__header">
       <span>Recommended path</span>
-      <span>01 · AI Agents</span>
+      <span>01 · Reasoning Models</span>
     </header>
 
-    <a class="s5-start-card__media" href="/en/series/agentes-ia/01-que-es-un-agente/" aria-label="Open the introduction to bounded AI agents">
-      <img src="/en/assets/images/home/agents-system-boundary.svg" alt="Diagram of a bounded AI agent observing, planning, acting with a tool and verifying under a policy boundary" />
+    <a class="s5-start-card__media" href="/en/series/modelos-razonadores/01-que-es-razonar/" aria-label="Open the introduction to reasoning models">
+      <img src="/en/series/modelos-razonadores/01-que-es-razonar.jpg" alt="Native English visual explaining what reasoning models optimize during training and inference" />
     </a>
 
-    <a class="s5-start-card__cta" href="/en/series/agentes-ia/01-que-es-un-agente/">
+    <a class="s5-start-card__cta" href="/en/series/modelos-razonadores/01-que-es-razonar/">
       <span>
-        <small>Start with the system boundary</small>
-        <strong>What is an AI agent?</strong>
+        <small>Start with one mechanism</small>
+        <strong>What does it mean for a model to reason?</strong>
       </span>
-      <span class="s5-start-card__cta-meta">Chapter · 8 min</span>
+      <span class="s5-start-card__cta-meta">Chapter · 9 min</span>
     </a>
 
     <div class="s5-start-card__detail">
-      <p>Separate chatbots, deterministic workflows, copilots and bounded agents—and make autonomy concrete through tools, permissions and stopping conditions.</p>
-      <a class="s5-start-card__chapter" href="/en/series/agentes-ia/00_presentacion_serie/">
+      <p>Separate fluent generation from deliberate inference, then connect reasoning traces, reinforcement signals and test-time compute to what the system can actually verify.</p>
+      <a class="s5-start-card__chapter" href="/en/series/modelos-razonadores/00_presentacion_serie/">
         <span>Open the complete series</span>
         <small>5 chapters →</small>
       </a>
@@ -79,51 +79,94 @@ hide:
 
 <section class="s5-entry-section" aria-labelledby="s5-entry-title">
   <div class="s5-section-head s5-section-head--compact">
-    <h2 id="s5-entry-title">Start with a complete path</h2>
+    <h2 id="s5-entry-title">Choose how to continue</h2>
   </div>
   <nav class="s5-entry-grid" aria-label="Ways to enter the English 5sigmas library">
-    <a class="s5-entry" href="/en/series/agentes-ia/00_presentacion_serie/">
+    <a class="s5-entry" href="/en/temas/">
       <div class="s5-entry__index">01</div>
-      <div class="s5-entry__title">Learn</div>
-      <div class="s5-entry__text">A five-chapter path from the definition of an agent to production operation.</div>
+      <div class="s5-entry__title">Understand</div>
+      <div class="s5-entry__text">Answer-first guides to LLMs, Transformers, reasoning, evaluation, agents and security.</div>
     </a>
-    <a class="s5-entry" href="/en/series/agentes-ia/03-como-evaluar-un-agente/">
+    <a class="s5-entry" href="/en/series/">
       <div class="s5-entry__index">02</div>
-      <div class="s5-entry__title">Evaluate</div>
-      <div class="s5-entry__text">Measure the whole task: outcome, trajectory, permissions, cost and recovery.</div>
+      <div class="s5-entry__title">Learn</div>
+      <div class="s5-entry__text">Ordered learning paths that build a technical mental model progressively.</div>
     </a>
-    <a class="s5-entry" href="/en/series/agentes-ia/04-seguridad-agentes/">
+    <a class="s5-entry" href="/en/articulos-tecnicos/">
       <div class="s5-entry__index">03</div>
-      <div class="s5-entry__title">Secure</div>
-      <div class="s5-entry__text">Understand prompt injection, identity, least privilege and human approval.</div>
+      <div class="s5-entry__title">Build</div>
+      <div class="s5-entry__text">Architecture, trade-offs and failure boundaries from real AI systems.</div>
     </a>
   </nav>
 </section>
 
 <section class="s5-section">
   <div class="s5-section-head">
-    <h2>AI Agents</h2>
-    <a href="/en/series/">View the learning hub →</a>
+    <h2>Visual explanations</h2>
+    <a href="/en/series/modelos-razonadores/00_presentacion_serie/">Open the complete path →</a>
+  </div>
+  <div class="s5-media-stack">
+    <a class="s5-media-card" href="/en/series/modelos-razonadores/02-fallos/">
+      <img class="s5-media-card__image" src="/en/series/modelos-razonadores/02-fallos.jpg" alt="Native English visual about reasoning-model failure modes" />
+      <div class="s5-media-card__meta">Visual · Reasoning</div>
+      <div class="s5-media-card__title">Why a convincing reasoning trace can still fail</div>
+    </a>
+    <a class="s5-media-card" href="/en/series/modelos-razonadores/04-latencia-streaming/">
+      <img class="s5-media-card__image" src="/en/series/modelos-razonadores/04-latencia-streaming.jpg" alt="Native English visual about latency and streaming in reasoning systems" />
+      <div class="s5-media-card__meta">Visual · Interaction</div>
+      <div class="s5-media-card__title">Latency is part of model quality once a human is waiting</div>
+    </a>
+    <a class="s5-media-card" href="/en/series/modelos-razonadores/05-riesgos/">
+      <img class="s5-media-card__image" src="/en/series/modelos-razonadores/05-riesgos.jpg" alt="Native English visual about risks from additional inference-time reasoning" />
+      <div class="s5-media-card__meta">Visual · Reliability</div>
+      <div class="s5-media-card__title">More inference compute is a control knob, not a guarantee</div>
+    </a>
+  </div>
+</section>
+
+<section class="s5-section">
+  <div class="s5-section-head">
+    <h2>Choose a path</h2>
+    <a href="/en/series/">View all series →</a>
   </div>
   <div class="s5-simple-list">
-    <a class="s5-list-row" href="/en/series/agentes-ia/01-que-es-un-agente/">
+    <a class="s5-list-row" href="/en/series/fundamentos-ia-iag/00_presentacion_serie/">
       <span class="s5-list-row__n">01</span>
-      <span class="s5-list-row__title">What an agent is—and is not</span>
-      <span class="s5-list-row__desc">A precise boundary between chatbots, workflows, copilots and bounded agents.</span>
-      <span class="s5-list-row__meta">Definition</span>
+      <span class="s5-list-row__title">AI and Generative AI Foundations</span>
+      <span class="s5-list-row__desc">The essential distinctions between software, learning, generation and AGI.</span>
+      <span class="s5-list-row__meta">4 chapters</span>
     </a>
-    <a class="s5-list-row" href="/en/series/agentes-ia/02-anatomia-de-un-agente/">
+    <a class="s5-list-row" href="/en/series/multimodalidad-iag/00_presentacion_serie/">
       <span class="s5-list-row__n">02</span>
-      <span class="s5-list-row__title">Anatomy of an agent</span>
-      <span class="s5-list-row__desc">Tools, memory, context, runtime state and the observe–plan–act–verify loop.</span>
-      <span class="s5-list-row__meta">Architecture</span>
+      <span class="s5-list-row__title">Multimodality</span>
+      <span class="s5-list-row__desc">Text, image, audio and video inside the same generative system.</span>
+      <span class="s5-list-row__meta">5 chapters</span>
     </a>
-    <a class="s5-list-row" href="/en/series/agentes-ia/05-de-la-demo-a-produccion/">
-      <span class="s5-list-row__n">05</span>
-      <span class="s5-list-row__title">From demo to production</span>
-      <span class="s5-list-row__desc">Budgets, retries, idempotency, asynchronous work and observability.</span>
-      <span class="s5-list-row__meta">Production</span>
+    <a class="s5-list-row" href="/en/series/modelos-razonadores/00_presentacion_serie/">
+      <span class="s5-list-row__n">03</span>
+      <span class="s5-list-row__title">Reasoning Models</span>
+      <span class="s5-list-row__desc">Capability, failure, cost and latency when models spend compute before answering.</span>
+      <span class="s5-list-row__meta">5 chapters</span>
     </a>
+    <a class="s5-list-row" href="/en/series/datacenters-espacio/00_presentacion_serie/">
+      <span class="s5-list-row__n">04</span>
+      <span class="s5-list-row__title">Data Centers in Space</span>
+      <span class="s5-list-row__desc">The physics and infrastructure behind orbital compute.</span>
+      <span class="s5-list-row__meta">4 chapters</span>
+    </a>
+  </div>
+</section>
+
+<section class="s5-section">
+  <div class="s5-section-head"><h2>Engineering</h2></div>
+  <div class="s5-note-feature">
+    <div>
+      <div class="s5-eyebrow">Technical note</div>
+      <h2>Proactive and reactive agents and tool calls</h2>
+      <p>How to separate the conversational contract, internal execution and deferred completion without turning conversation history into the system database.</p>
+      <a class="s5-text-link" href="/en/articulos-tecnicos/proactive-reactive-agent-and-tool-calls/">Open the note →</a>
+    </div>
+    <div class="s5-note-feature__meta">Conversational runtime<br />Internal state<br />Asynchronous execution</div>
   </div>
 </section>
 
