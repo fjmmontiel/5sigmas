@@ -1,5 +1,21 @@
 (() => {
   const STORAGE_KEY = 's5:visual-progress:v1';
+  const isEnglish = () => (document.documentElement.lang || '').toLowerCase().startsWith('en');
+  const copy = () => isEnglish()
+    ? {
+        availableOne: 'explanation available',
+        availableMany: 'explanations available',
+        fallbackVideo: 'Video',
+        progressJoin: 'of',
+        completed: 'completed',
+      }
+    : {
+        availableOne: 'explicación disponible',
+        availableMany: 'explicaciones disponibles',
+        fallbackVideo: 'Vídeo',
+        progressJoin: 'de',
+        completed: 'completado',
+      };
 
   const readProgress = () => {
     try {
@@ -49,7 +65,8 @@
         button.setAttribute('aria-pressed', String(button.dataset.s5Topic === topic));
       }
       if (status) {
-        status.textContent = `${visible} ${visible === 1 ? 'explicación disponible' : 'explicaciones disponibles'}`;
+        const text = copy();
+        status.textContent = `${visible} ${visible === 1 ? text.availableOne : text.availableMany}`;
       }
     };
 
@@ -80,11 +97,12 @@
         return;
       }
 
+      const text = copy();
       banner.hidden = false;
-      if (title) title.textContent = progress.title || video.dataset.s5VideoTitle || 'Vídeo';
+      if (title) title.textContent = progress.title || video.dataset.s5VideoTitle || text.fallbackVideo;
       if (progressText) {
         const percent = Math.max(1, Math.min(99, Math.round((progress.currentTime / progress.duration) * 100)));
-        progressText.textContent = `${formatTime(progress.currentTime)} de ${formatTime(progress.duration)} · ${percent}% completado`;
+        progressText.textContent = `${formatTime(progress.currentTime)} ${text.progressJoin} ${formatTime(progress.duration)} · ${percent}% ${text.completed}`;
       }
       if (chapter) chapter.href = progress.chapter || video.dataset.s5VideoChapter || '#';
 
@@ -139,7 +157,7 @@
         lastSavedSecond = currentSecond;
         writeProgress({
           id: video.dataset.s5VideoId,
-          title: video.dataset.s5VideoTitle || video.getAttribute('aria-label') || 'Vídeo',
+          title: video.dataset.s5VideoTitle || video.getAttribute('aria-label') || copy().fallbackVideo,
           chapter: video.dataset.s5VideoChapter || '',
           currentTime: video.currentTime,
           duration: video.duration,
