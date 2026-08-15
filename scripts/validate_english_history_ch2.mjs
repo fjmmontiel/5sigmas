@@ -42,7 +42,23 @@ for (const viewport of [{name:'desktop',width:1440,height:1000},{name:'mobile',w
   if (await referenceRows.count() < 15) failures.push(`expected at least 15 canonical reference rows, found ${await referenceRows.count()}`);
 
   for (const forbidden of ['Capítulo ', 'Prerrequisitos', 'Siguiente capítulo', 'Mecanizar —', 'Fuentes base', 'Preguntas frecuentes']) if (body.includes(forbidden)) failures.push(`Spanish leakage ${JSON.stringify(forbidden)}`);
-  for (const selector of ['.calc-limit','.logic-wrap','.turing-wrap','.stored-wrap','.mech-time']) if (await page.locator(selector).count() !== 1) failures.push(`missing ${selector}`);
+  for (const selector of ['.calc-wrap','.logic-wrap','.turing-wrap','.stored-wrap','.mech-time']) if (await page.locator(selector).count() !== 1) failures.push(`missing ${selector}`);
+
+  const calculator = page.locator('.calc-wrap');
+  if (await calculator.count() === 1) {
+    const calculatorText = await calculator.innerText();
+    for (const phrase of ['The limit of mechanical calculators','Pascaline · 1642','Leibniz wheel · 1674','The limit']) {
+      if (!calculatorText.includes(phrase)) failures.push(`canonical calculator visual missing ${JSON.stringify(phrase)}`);
+    }
+    const tabs = calculator.locator('.calc-tab');
+    if (await tabs.count() !== 3) failures.push(`expected 3 canonical calculator tabs, found ${await tabs.count()}`);
+    await tabs.filter({hasText:'The limit'}).click();
+    if (!(await calculator.locator('[data-cpanel="limite"]').evaluate(el => el.classList.contains('calc-panel--active')))) failures.push('calculator limit tab did not activate canonical panel');
+    const limitText = await calculator.locator('[data-cpanel="limite"]').innerText();
+    if (!limitText.includes('The impassable wall: conditional logic')) failures.push('canonical calculator limit panel missing translated wall explanation');
+    for (const forbidden of ['El límite','Rueda de Leibniz','Lógica condicional','Lo que hizo falta']) if (calculatorText.includes(forbidden)) failures.push(`calculator visual Spanish leakage ${JSON.stringify(forbidden)}`);
+  }
+
   const videos = page.locator('video[data-s5-inline-video-player]');
   if (await videos.count() !== 1) {
     failures.push(`expected one native-English chapter video, found ${await videos.count()}`);
@@ -60,4 +76,4 @@ for (const viewport of [{name:'desktop',width:1440,height:1000},{name:'mobile',w
 }
 await browser.close();
 if (failures.length) { for (const failure of failures) console.error(failure); process.exit(1); }
-console.log('English history chapter 2 QA passed with canonical narrative and native-English media.');
+console.log('English history chapter 2 QA passed with canonical narrative, canonical calculator visual, and native-English media.');
