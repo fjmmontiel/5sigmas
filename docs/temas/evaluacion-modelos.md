@@ -4,7 +4,7 @@ seo_title: "Cómo evaluar modelos de IA: benchmarks, calidad y producción"
 description: "Cómo evaluar un modelo y un sistema de IA con benchmarks, conjuntos propios, jueces, pruebas humanas y métricas de producto sin confundir una puntuación con valor real."
 keywords: "evaluación modelos IA, benchmark LLM, evals, evaluación humana, LLM as a judge, contaminación benchmarks, calidad IA"
 date: 2026-04-07
-date_modified: 2026-08-05
+date_modified: 2026-08-15
 ---
 
 # Evaluación de modelos de IA
@@ -27,7 +27,7 @@ Cada nivel introduce fallos y criterios distintos.
 Una pila de evaluación útil combina:
 
 1. **pruebas unitarias** para contratos deterministas
-2. **conjunto dorado propio** con casos representativos
+2. **conjunto de datos de referencia propio** con casos representativos
 3. **benchmarks externos** para situar capacidades generales
 4. **evaluación humana o jueces calibrados** para calidad abierta
 5. **pruebas adversariales y de seguridad**
@@ -85,9 +85,9 @@ Después se calcula rendimiento por segmento, no solo una cifra global.
 
 Una taxonomía permite responder preguntas accionables: “¿el nuevo modelo mejora consultas largas, pero empeora nombres propios en español?” Eso ayuda a decidir. “Subió dos puntos” no.
 
-## 3. Usa un conjunto dorado propio
+## 3. Usa un conjunto de datos de referencia propio
 
-El **golden set** contiene ejemplos reales o diseñados para representar el dominio. Cada caso necesita:
+El **conjunto de datos de referencia** (*golden set*) contiene ejemplos reales o diseñados para representar el dominio. Cada caso necesita:
 
 - entrada
 - contexto relevante
@@ -98,7 +98,7 @@ El **golden set** contiene ejemplos reales o diseñados para representar el domi
 
 Debe versionarse como código. Cuando aparece un incidente, se añade un caso de regresión. Cuando cambia el producto, se actualiza la distribución y se conserva un subconjunto estable para comparar versiones.
 
-Un golden set no tiene que ser enorme. Un centenar de casos bien elegidos puede detectar más problemas de producto que miles de preguntas genéricas.
+Un conjunto de referencia no tiene que ser enorme. Un centenar de casos bien elegidos puede detectar más problemas de producto que miles de preguntas genéricas.
 
 ## 4. Entiende qué mide un benchmark
 
@@ -128,7 +128,7 @@ Las defensas incluyen:
 - rotación frecuente
 - evaluación dinámica
 - deduplicación
-- análisis de memorization
+- análisis de memorización
 - tareas con ejecución verificable
 
 LiveCodeBench diseñó una evaluación de código que se actualiza con problemas recientes y usa ejecución para comprobar las soluciones.[^livecodebench] El principio es más general: cuando sea posible, una prueba viva y verificable resiste mejor la optimización superficial.
@@ -232,7 +232,7 @@ Conecta ambos niveles:
 | exactitud por intención | éxito de tarea |
 | puntuación de calidad | reformulaciones y abandono |
 | latencia medida | tiempo percibido |
-| tool correctness | incidentes y reversión |
+| uso correcto de tools | incidentes y reversión |
 | coste por caso | coste por tarea completada |
 
 Un experimento online necesita guardrails. No se debería exponer una variante a producción solo porque mejoró un juez automático.
@@ -247,7 +247,7 @@ Una diferencia pequeña puede ser ruido muestral. Reporta:
 - variabilidad entre ejecuciones
 - prueba pareada cuando se evalúan los mismos ejemplos
 
-Para outputs estocásticos, ejecuta varias semillas o temperaturas cuando esa variabilidad forme parte del producto.
+Para salidas estocásticas, ejecuta varias semillas o temperaturas cuando esa variabilidad forme parte del producto.
 
 La significación estadística tampoco garantiza relevancia práctica. Una mejora minúscula puede ser real y no justificar el coste adicional.
 
@@ -280,7 +280,7 @@ La evaluación no es una fase al final. Es el bucle que permite cambiar el siste
 
 No existe uno universal. Usa benchmarks para capacidades generales y un conjunto propio para la tarea, idioma, datos, latencia y riesgo del producto.
 
-### ¿Cuántos ejemplos necesita un golden set?
+### ¿Cuántos ejemplos necesita un conjunto de datos de referencia?
 
 Depende de la diversidad y del tamaño de la mejora que se quiere detectar. Empieza con casos representativos y fallos críticos, mide cobertura por segmento y amplía donde la incertidumbre sea alta.
 
