@@ -65,6 +65,16 @@ SPANISH_REQUIRED_TERMS = {
     "evaluacion-modelos": ("conjunto de datos de referencia",),
 }
 
+REQUIRED_VISUAL_INCLUDES = {
+    "transformer": (
+        "snippets/temas/transformer-block.html",
+        "snippets/temas/transformer-qkv.html",
+        "snippets/temas/transformer-multihead.html",
+        "snippets/temas/transformer-causal-mask.html",
+        "snippets/temas/transformer-residual-norm.html",
+    ),
+}
+
 
 def frontmatter(path: Path) -> dict[str, Any]:
     text = path.read_text(encoding="utf-8")
@@ -124,6 +134,13 @@ def source_contract_errors(
                 errors.append(
                     f"ES priority topic is missing required native technical terminology {required!r}: {source_label}"
                 )
+
+    for visual in REQUIRED_VISUAL_INCLUDES.get(slug, ()):
+        include = f'{{{{ include_html("{visual}") }}}}'
+        if include not in source_text:
+            errors.append(
+                f"{locale.upper()} priority topic is missing required visual include {visual!r}: {source_label}"
+            )
 
     if f"temas/{slug}.md" not in nav_text:
         errors.append(f"{locale.upper()} priority topic missing from MkDocs navigation: {slug}")
