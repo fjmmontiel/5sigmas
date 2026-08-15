@@ -4,7 +4,7 @@ seo_title: "How the Transformer works: attention and architecture step by step"
 description: "Technical explanation of the Transformer: embeddings, self-attention, residual blocks, encoder, decoder, cost and architectural limits."
 keywords: "Transformer, self-attention, Transformer architecture, Query Key Value, encoder decoder, LLM"
 date: 2026-04-07
-date_modified: 2026-08-15
+date_modified: 2026-08-16
 ---
 
 # How the Transformer works
@@ -82,16 +82,13 @@ Modern architectures use activations and gates such as GELU, SwiGLU or related v
 
 ## 6. Residuals and normalization
 
-Each sub-block is connected to its input through a residual addition:
+Each sub-block does not simply replace the representation it receives: it learns a transformation on top of a **residual path** that preserves the input. Normalization placement determines where the signal is modified before it continues through the stack of layers.
 
-```text
-x' = x + Attention(x)
-x'' = x' + FFN(x')
-```
+{{ include_html("snippets/temas/transformer-residual-norm.html") }}
 
-The residual path helps gradients travel through many layers and lets each block learn a correction to the previous representation. Normalization controls activation scale.
+The original Transformer used *post-norm*: it first adds the sublayer output to the residual path and normalizes afterwards.[^transformer] In *pre-norm*, normalization is applied inside the sublayer branch, leaving a direct identity path across layers. Xiong et al. analyze why that placement changes gradient behavior at initialization and can improve optimization stability.[^prenorm]
 
-The exact order differs across model families. In *post-norm*, normalization comes after the addition. In *pre-norm*, it comes before the sub-block. This choice affects training stability as networks become deeper.
+The same residual structure surrounds both attention and the feed-forward network. The exact normalization detail varies across model families, but the central idea remains: each sublayer learns a correction to a representation that can also advance through the residual path.
 
 ## Encoder, decoder and encoder-decoder
 
@@ -187,6 +184,7 @@ No. It increases available information, but also cost and the difficulty of loca
 ## Primary sources
 
 [^transformer]: Ashish Vaswani et al., [*Attention Is All You Need*](https://arxiv.org/abs/1706.03762), 2017.
+[^prenorm]: Ruibin Xiong et al., [*On Layer Normalization in the Transformer Architecture*](https://arxiv.org/abs/2002.04745), 2020.
 [^bert]: Jacob Devlin et al., [*BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding*](https://arxiv.org/abs/1810.04805), 2018.
 [^vit]: Alexey Dosovitskiy et al., [*An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale*](https://arxiv.org/abs/2010.11929), 2020.
 [^mamba]: Albert Gu and Tri Dao, [*Mamba: Linear-Time Sequence Modeling with Selective State Spaces*](https://arxiv.org/abs/2312.00752), 2023.
