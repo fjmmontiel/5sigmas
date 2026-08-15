@@ -52,6 +52,19 @@ PRIORITY_TOPICS = {
     },
 }
 
+SPANISH_FORBIDDEN_CALQUES = {
+    "evaluacion-modelos": (
+        "conjunto dorado",
+        "análisis de memorization",
+        "tool correctness",
+        "outputs estocásticos",
+    ),
+}
+
+SPANISH_REQUIRED_TERMS = {
+    "evaluacion-modelos": ("conjunto de datos de referencia",),
+}
+
 
 def frontmatter(path: Path) -> dict[str, Any]:
     text = path.read_text(encoding="utf-8")
@@ -90,6 +103,7 @@ def source_contract_errors(
     if not source.is_file():
         return [f"Missing {locale.upper()} priority topic source: {source_label}"]
 
+    source_text = source.read_text(encoding="utf-8")
     meta = frontmatter(source)
     if "noindex" in str(meta.get("robots") or "").lower():
         errors.append(f"{locale.upper()} priority topic is noindex: {source_label}")
@@ -97,6 +111,19 @@ def source_contract_errors(
         errors.append(f"{locale.upper()} priority topic has no meta description: {source_label}")
     if not str(meta.get("seo_title") or "").strip():
         errors.append(f"{locale.upper()} priority topic has no seo_title: {source_label}")
+
+    if locale == "es":
+        folded = source_text.casefold()
+        for forbidden in SPANISH_FORBIDDEN_CALQUES.get(slug, ()):
+            if forbidden.casefold() in folded:
+                errors.append(
+                    f"ES priority topic contains forbidden literal/calque terminology {forbidden!r}: {source_label}"
+                )
+        for required in SPANISH_REQUIRED_TERMS.get(slug, ()):
+            if required.casefold() not in folded:
+                errors.append(
+                    f"ES priority topic is missing required native technical terminology {required!r}: {source_label}"
+                )
 
     if f"temas/{slug}.md" not in nav_text:
         errors.append(f"{locale.upper()} priority topic missing from MkDocs navigation: {slug}")
