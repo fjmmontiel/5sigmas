@@ -1,6 +1,6 @@
 {
   "source": "snippets/from-cave-to-agi/05-memoria-tipos.html",
-  "source_blob_sha": "8b83790135b5d610fe1bb1b5da3d0845713132c8",
+  "source_blob_sha": "abb7274f511b9f96dfcfbbc7bbaa405c45708a88",
   "replacements": {
     "Tres tipos de memoria, tres lógicas distintas": "Three types of memory, three different mechanisms",
     "Ventana larga ≠ memoria viva ≠ aprendizaje permanente. Confundirlos lleva a expectativas incorrectas sobre qué puede recordar un agente y cuándo.": "Long context ≠ persistent memory ≠ permanent learning. Confusing them creates false expectations about what an agent can remember and when.",
