@@ -30,7 +30,7 @@ extra:
   locale_prefix: /en
   global_site_root: https://5sigmas.com/
   generator: false
-  video_watch_pages: false
+  video_watch_pages: true
   locale_video_pages:
     series/modelos-razonadores/03-test-time-compute.md:
       video: 03-test-time-compute.mp4
@@ -108,6 +108,7 @@ extra:
 nav:
   - Home: index.md
   - Watch: visuales/index.md
+  - Videos: videos/index.md
   - Learn:
       - Series: series/index.md
       - AI and Generative AI Foundations:
@@ -214,6 +215,7 @@ plugins:
       enabled: true
 
 hooks:
+  - hooks/video_sitemap_en.py
   - hooks/video_embed.py
   - hooks/reading_navigation.py
   - hooks/direct_reader_navigation.py

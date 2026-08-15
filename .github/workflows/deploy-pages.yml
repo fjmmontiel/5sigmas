@@ -203,6 +203,11 @@ jobs:
           S5_PREVIEW_BASE: https://5sigmas.com
         run: node scripts/validate_english_visual_hub.mjs
 
+      - name: Validate live English video hub
+        env:
+          S5_PREVIEW_BASE: https://5sigmas.com
+        run: node scripts/validate_english_video_hub.mjs
+
       - name: Validate live English Test-Time Compute
         env:
           S5_PREVIEW_BASE: https://5sigmas.com

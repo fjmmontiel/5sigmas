@@ -216,12 +216,12 @@ coverage:
   concept_hubs: canonical_six_complete
   technical_articles: text_visuals_and_native_media_complete
   visual_hub: native_english_complete
-  video_hub: not_yet_published
+  video_hub: native_english_complete
   localized_video_media: canonical_series_and_technical_articles_complete
 generated_surfaces:
   visual_hub: true
-  video_library: false
-  video_watch_pages: false
+  video_library: true
+  video_watch_pages: true
 quality_gates:
   - no_spanish_fallback
   - no_implicit_spanish_media
@@ -231,3 +231,4 @@ quality_gates:
   - canonical_locale_url
   - route_safe_language_switch
   - localized_video_binary_required_when_declared
+  - generated_video_hub_schema_and_browser

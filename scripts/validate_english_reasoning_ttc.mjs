@@ -54,7 +54,16 @@ if (!String(poster || '').endsWith('/en/series/modelos-razonadores/03-test-time-
 if ((await page.locator('.s5-video-embed__poster').getAttribute('aria-label').catch(() => '')).startsWith('Reproducir')) {
   failures.push(`${route}: video player controls leaked Spanish`);
 }
-if (await page.locator('.s5-video-embed__watch').count()) failures.push(`${route}: English watch link must stay hidden until /en/videos/ is mirrored`);
+const watch = page.locator('.s5-video-embed__watch a');
+if (await watch.count() !== 1) {
+  failures.push(`${route}: mirrored /en/videos/ surface requires exactly one English watch link`);
+} else {
+  const watchHref = await watch.getAttribute('href');
+  const watchText = (await watch.innerText()).trim();
+  const expectedWatch = 'https://5sigmas.com/en/videos/series/modelos-razonadores/03-test-time-compute/';
+  if (watchHref !== expectedWatch) failures.push(`${route}: English watch link is not route-native: ${JSON.stringify(watchHref)}`);
+  if (watchText !== 'Watch video, summary and related content') failures.push(`${route}: English watch link copy mismatch: ${JSON.stringify(watchText)}`);
+}
 
 const checkOverflow = async (label) => {
   const dims = await page.evaluate(() => ({ width: document.documentElement.clientWidth, scroll: document.documentElement.scrollWidth }));
@@ -85,4 +94,4 @@ if (failures.length) {
   for (const failure of failures) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log(`English Test-Time Compute QA passed: full chapter, four interactive visuals, locale-native player, desktop/mobile clean${requireMedia ? ', MP4/poster fetched' : ''}.`);
+console.log(`English Test-Time Compute QA passed: full chapter, four interactive visuals, locale-native player/watch link, desktop/mobile clean${requireMedia ? ', MP4/poster fetched' : ''}.`);

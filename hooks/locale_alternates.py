@@ -9,6 +9,9 @@ cause requests such as ``/article/sitemap.xml``. 5sigmas instead uses:
 - an English-home selector fallback for Spanish-only pages.
 
 ``locales/en/manifest.yml`` remains the source of truth for published English pages.
+Generated English video routes are derived from the manifest's generated-surface
+flags plus ``locales/en/media.yml`` so they stay truthful without pretending that
+hook-generated Markdown exists as locale source files.
 """
 
 from __future__ import annotations
@@ -42,14 +45,58 @@ ET.register_namespace("", SITEMAP_NS)
 ET.register_namespace("xhtml", XHTML_NS)
 
 
-@lru_cache(maxsize=8)
-def _published_routes(locale: str) -> frozenset[str]:
+def _manifest_data(locale: str) -> dict[str, Any]:
     manifest = ROOT / "locales" / locale / "manifest.yml"
     if not manifest.is_file():
-        return frozenset()
+        return {}
     data = yaml.safe_load(manifest.read_text(encoding="utf-8")) or {}
-    routes = data.get("published_routes") or []
-    return frozenset(str(route).strip().lstrip("/") for route in routes if str(route).strip())
+    return data if isinstance(data, dict) else {}
+
+
+def _generated_video_routes(locale: str, data: dict[str, Any]) -> frozenset[str]:
+    if locale != "en":
+        return frozenset()
+    generated = data.get("generated_surfaces") or {}
+    library_enabled = bool(generated.get("video_library"))
+    watches_enabled = bool(generated.get("video_watch_pages"))
+    if not library_enabled and not watches_enabled:
+        return frozenset()
+
+    routes: set[str] = set()
+    if library_enabled:
+        routes.add("videos/index.md")
+    if not watches_enabled:
+        return frozenset(routes)
+
+    media_index = ROOT / "locales" / locale / "media.yml"
+    if not media_index.is_file():
+        return frozenset(routes)
+    media = yaml.safe_load(media_index.read_text(encoding="utf-8")) or {}
+    if not isinstance(media, dict):
+        return frozenset(routes)
+
+    for src_uri, declaration in media.items():
+        if not isinstance(declaration, dict):
+            continue
+        video = str(declaration.get("video") or "").strip()
+        if not video:
+            continue
+        source_parent = Path(str(src_uri)).parent
+        watch_src = Path("videos") / source_parent / f"{Path(video).stem}.md"
+        routes.add(watch_src.as_posix())
+    return frozenset(routes)
+
+
+@lru_cache(maxsize=8)
+def _published_routes(locale: str) -> frozenset[str]:
+    data = _manifest_data(locale)
+    routes = {
+        str(route).strip().lstrip("/")
+        for route in (data.get("published_routes") or [])
+        if str(route).strip()
+    }
+    routes.update(_generated_video_routes(locale, data))
+    return frozenset(routes)
 
 
 @lru_cache(maxsize=8)

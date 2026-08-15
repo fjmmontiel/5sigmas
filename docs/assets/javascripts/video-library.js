@@ -7,6 +7,12 @@
     .replace(/\s+/g, ' ')
     .trim();
 
+  const isEnglish = () => (document.documentElement.lang || '').toLowerCase().startsWith('en');
+  const availabilityCopy = (count) => {
+    if (isEnglish()) return `${count} ${count === 1 ? 'video available' : 'videos available'}`;
+    return `${count} ${count === 1 ? 'vídeo disponible' : 'vídeos disponibles'}`;
+  };
+
   const parseTimestamp = (value) => {
     if (value === null || value === undefined) return null;
     const text = String(value).trim();
@@ -94,9 +100,7 @@
         for (const card of ordered) grid.append(card);
       }
 
-      if (status) {
-        status.textContent = `${visible} ${visible === 1 ? 'vídeo disponible' : 'vídeos disponibles'}`;
-      }
+      if (status) status.textContent = availabilityCopy(visible);
       if (empty) empty.hidden = visible !== 0;
     };
 
@@ -182,15 +186,9 @@
   };
 
   const initialize = () => {
-    for (const root of document.querySelectorAll('[data-s5-video-library]')) {
-      initializeLibrary(root);
-    }
-    for (const root of document.querySelectorAll('[data-s5-video-watch]')) {
-      initializeWatchPage(root);
-    }
-    for (const root of document.querySelectorAll('[data-s5-inline-video]')) {
-      initializeInlineVideo(root);
-    }
+    for (const root of document.querySelectorAll('[data-s5-video-library]')) initializeLibrary(root);
+    for (const root of document.querySelectorAll('[data-s5-video-watch]')) initializeWatchPage(root);
+    for (const root of document.querySelectorAll('[data-s5-inline-video]')) initializeInlineVideo(root);
   };
 
   if (typeof document$ !== 'undefined') {
