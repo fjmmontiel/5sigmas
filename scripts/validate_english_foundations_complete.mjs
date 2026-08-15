@@ -25,7 +25,7 @@ const pages = [
     demos: [
       'ia_ml_dl',
       'tipos_aprendizaje',
-      'fnd-decision-tree',
+      'ml:tree',
       'fnd-naive-bayes',
       'fnd-kmeans',
       'fnd-neural-network',
@@ -104,6 +104,22 @@ const forbidden = [
   'Fuentes base',
   'Qué es IA',
 ];
+const treeForbidden = [
+  'Árboles de Decisión',
+  'Guía rápida',
+  'Primero preguntas',
+  'Ingresos mensuales',
+  'Ratio de deuda',
+  'Mapa de cortes',
+  'Cómo decide este caso',
+  'En palabras sencillas',
+  'Cómo leer el dibujo',
+  'Diagrama de hojas',
+  'sin entrenar',
+  'pulsa Entrenar',
+  'Aún no hay',
+  'Resultado:',
+];
 const failures = [];
 const browser = await chromium.launch({ headless: true });
 
@@ -167,6 +183,70 @@ try {
           const visiblePanels = await root.locator(`${contract.panelSelector}:visible`).count();
           if (visiblePanels !== 1) {
             failures.push(`${entry.route}: ${demo} tab ${tab} exposes ${visiblePanels} visible panels`);
+          }
+        }
+      }
+
+      const tree = page.locator('[data-demo="ml:tree"]');
+      if (await tree.count() === 1) {
+        const host = page.locator('.ml-tabs:has([data-demo="ml:tree"])').first();
+        if (await host.count() !== 1) {
+          failures.push(`${entry.route}: canonical decision-tree host missing`);
+        } else {
+          if ((await host.getAttribute('data-default')) !== 'tree') {
+            failures.push(`${entry.route}: decision-tree canonical default tab changed`);
+          }
+          if (await host.locator('[data-role="tab"][data-tab="tree"]').count() !== 1) {
+            failures.push(`${entry.route}: decision-tree canonical tab contract missing`);
+          }
+          if (await host.locator('.ml-scene-pill').count() !== 2) {
+            failures.push(`${entry.route}: decision-tree canonical reading-guide density changed`);
+          }
+          if (await tree.locator('canvas[data-canvas="plot"]').count() !== 1 || await tree.locator('canvas[data-canvas="aux"]').count() !== 1) {
+            failures.push(`${entry.route}: decision-tree must preserve both canonical canvases`);
+          }
+          if (await tree.locator('input[type="range"]').count() !== 2 || await tree.locator('input[type="number"]').count() !== 2) {
+            failures.push(`${entry.route}: decision-tree canonical loan controls changed`);
+          }
+          const treeText = await host.innerText();
+          const lowerTreeText = treeText.toLowerCase();
+          for (const required of [
+            'Decision Trees',
+            'Monthly income (€)',
+            'Debt ratio (%)',
+            'How this case is decided',
+            'In plain language',
+            'How to read the visual',
+            'Leaf diagram',
+          ]) {
+            if (!lowerTreeText.includes(required.toLowerCase())) failures.push(`${entry.route}: decision-tree missing English canonical copy ${JSON.stringify(required)}`);
+          }
+          for (const token of treeForbidden) {
+            if (treeText.includes(token)) failures.push(`${entry.route}: decision-tree Spanish leakage ${JSON.stringify(token)}`);
+          }
+
+          const train = tree.locator('[data-btn="toggle"]');
+          if (await train.count() !== 1) {
+            failures.push(`${entry.route}: decision-tree Train control missing`);
+          } else {
+            if ((await train.innerText()).trim() !== 'Train') {
+              failures.push(`${entry.route}: decision-tree initial control is not Train`);
+            }
+            await train.click();
+            try {
+              await page.waitForFunction(() => {
+                const button = document.querySelector('[data-demo="ml:tree"] [data-btn="toggle"]');
+                return button && /Trained/.test(button.textContent || '');
+              }, null, { timeout: 7000 });
+            } catch {
+              failures.push(`${entry.route}: decision-tree training did not reach canonical trained state`);
+            }
+            const trainedText = await host.innerText();
+            if (!trainedText.includes('Result:')) failures.push(`${entry.route}: decision-tree trained result is missing`);
+            if (!trainedText.toLowerCase().includes('leaf diagram')) failures.push(`${entry.route}: decision-tree trained leaf diagram disappeared`);
+            for (const token of treeForbidden) {
+              if (trainedText.includes(token)) failures.push(`${entry.route}: decision-tree Spanish leakage after training ${JSON.stringify(token)}`);
+            }
           }
         }
       }
@@ -260,4 +340,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Complete English Foundations QA passed: introduction + Chapters 1–4, 23 native visuals, native-English MP4/poster pairs, canonical native article audio, canonical interaction density, interactions, and clean desktop/mobile layouts.');
+console.log('Complete English Foundations QA passed: introduction + Chapters 1–4, 23 native visuals, native-English MP4/poster pairs, canonical native article audio, canonical interaction density including the full decision-tree trainer, interactions, and clean desktop/mobile layouts.');
