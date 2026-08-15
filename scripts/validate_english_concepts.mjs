@@ -46,6 +46,8 @@ const evaluationEnglishForbidden = [
   'acción equivocada',
   'PRINCIPIO',
 ];
+const evaluationEnglishAnchors = ['Reference data', 'External benchmarks', 'Judge + humans', 'Online metrics', 'Answer + citations', 'Final answer'];
+const evaluationSpanishAnchors = ['Datos de referencia', 'Benchmarks externos', 'Juez + humanos', 'Métricas online', 'Respuesta + citas', 'Respuesta final'];
 const viewports = [
   { name: 'desktop', width: 1440, height: 1000 },
   { name: 'mobile', width: 390, height: 844 },
@@ -83,7 +85,7 @@ async function checkVisualContract(page, route, viewport, selectors) {
   }
 }
 
-async function checkEvaluationDensity(page, route, viewport) {
+async function checkEvaluationDensity(page, route, viewport, anchors) {
   const expectedCounts = [
     ['.evo-level', 4],
     ['.evs-stage', 6],
@@ -94,8 +96,9 @@ async function checkEvaluationDensity(page, route, viewport) {
     const count = await page.locator(selector).count();
     if (count !== expected) failures.push(`${route}: ${viewport.name} expected ${expected} ${selector}, found ${count}`);
   }
-  for (const text of ['Reference data', 'External benchmarks', 'Judge + humans', 'Online metrics', 'Answer + citations', 'Final answer']) {
-    if (!(await page.locator('body').innerText()).includes(text)) failures.push(`${route}: ${viewport.name} missing visual anchor ${JSON.stringify(text)}`);
+  const body = await page.locator('body').innerText();
+  for (const text of anchors) {
+    if (!body.includes(text)) failures.push(`${route}: ${viewport.name} missing visual anchor ${JSON.stringify(text)}`);
   }
 }
 
@@ -117,6 +120,25 @@ await validateSpanishVisualSources(
 const browser = await chromium.launch({ headless: true });
 
 try {
+  for (const viewport of viewports) {
+    const route = '/temas/evaluacion-modelos/';
+    const page = await browser.newPage({ viewport: { width: viewport.width, height: viewport.height } });
+    const runtimeErrors = [];
+    page.on('pageerror', (error) => runtimeErrors.push(`pageerror: ${error.message}`));
+    const response = await page.goto(`${base}${route}`, { waitUntil: 'networkidle' });
+    if (!response?.ok()) failures.push(`${route}: HTTP ${response?.status() ?? 'no response'}`);
+    const body = await page.locator('body').innerText();
+    if (!body.includes('Evaluación de modelos de IA')) failures.push(`${route}: missing Spanish title`);
+    const htmlLang = await page.locator('html').getAttribute('lang');
+    if (htmlLang !== 'es') failures.push(`${route}: html lang=${JSON.stringify(htmlLang)}`);
+    await checkVisualContract(page, route, viewport, evaluationVisuals.map((item) => item.selector));
+    await checkEvaluationDensity(page, route, viewport, evaluationSpanishAnchors);
+    await checkOverflow(page, route, viewport);
+    for (const err of runtimeErrors) failures.push(`${route}: ${err}`);
+    await page.screenshot({ path: path.join(outDir, `spanish-concept-evaluation-${viewport.name}.png`), fullPage: true, animations: 'disabled' });
+    await page.close();
+  }
+
   const hub = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
   const hubResponse = await hub.goto(`${base}/en/temas/`, { waitUntil: 'networkidle' });
   if (!hubResponse?.ok()) failures.push(`/en/temas/: HTTP ${hubResponse?.status() ?? 'no response'}`);
@@ -155,7 +177,7 @@ try {
         await checkVisualContract(page, concept.route, viewport, concept.visuals);
         const localeForbidden = concept.visualGroup === 'transformer' ? transformerEnglishForbidden : evaluationEnglishForbidden;
         for (const token of localeForbidden) if (body.includes(token)) failures.push(`${concept.route}: visual Spanish leakage ${JSON.stringify(token)}`);
-        if (concept.visualGroup === 'evaluation') await checkEvaluationDensity(page, concept.route, viewport);
+        if (concept.visualGroup === 'evaluation') await checkEvaluationDensity(page, concept.route, viewport, evaluationEnglishAnchors);
         await page.screenshot({ path: path.join(outDir, `english-concept-${concept.visualGroup}-${viewport.name}.png`), fullPage: true, animations: 'disabled' });
       }
 
@@ -172,4 +194,4 @@ if (failures.length) {
   for (const failure of [...new Set(failures)]) console.error(failure);
   process.exit(1);
 }
-console.log('Concept QA passed: canonical English hub + six English topic routes, Transformer and evaluation ES source contracts + EN rendered visual contracts, native localization, canonical URLs, and desktop/mobile overflow cleanliness.');
+console.log('Concept QA passed: canonical ES/EN evaluation renders + English hub and six English topic routes, Transformer and evaluation visual contracts, native localization, canonical URLs, and desktop/mobile overflow cleanliness.');
