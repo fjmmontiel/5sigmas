@@ -54,10 +54,7 @@ The explanation “every word looks at all the others” is useful, though incom
 
 Instead of running one attention operation over the full dimension, the block divides the representation into several **heads**. Each head computes its own `Q`, `K` and `V` matrices.
 
-```text
-head_i = Attention(QW_i^Q, KW_i^K, VW_i^V)
-MultiHead = Concat(head_1, ..., head_h) W^O
-```
+{{ include_html("snippets/temas/transformer-multihead.html") }}
 
 One head may capture local dependencies. Another may relate distant entities. Another may help copy structure or track delimiters. There is no fixed universal assignment, but the separation increases the capacity to represent multiple relationships simultaneously.
 
