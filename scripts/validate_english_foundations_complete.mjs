@@ -23,8 +23,8 @@ const pages = [
     media: '01-que-es-ia',
     concepts: ['Machine Learning', 'Deep Learning', 'MLOps'],
     demos: [
-      'fnd-ia-ml-dl',
-      'fnd-learning-types',
+      'ia_ml_dl',
+      'tipos_aprendizaje',
       'fnd-decision-tree',
       'fnd-naive-bayes',
       'fnd-kmeans',
