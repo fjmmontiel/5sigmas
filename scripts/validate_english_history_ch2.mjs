@@ -86,7 +86,9 @@ for (const viewport of [{name:'desktop',width:1440,height:1000},{name:'mobile',w
     } catch {
       failures.push(`von Neumann runtime did not boot on ${viewport.name}`);
     }
-    const phaseValue = async () => (await vonNeumann.locator('#vn-detail-phase').innerText()).trim();
+    // Use DOM text rather than rendered innerText for phase labels: the canonical
+    // Spanish CSS intentionally uppercases the label visually via text-transform.
+    const phaseValue = async () => ((await vonNeumann.locator('#vn-detail-phase').textContent()) || '').trim();
     const titleValue = async () => (await vonNeumann.locator('#vn-detail-title').innerText()).trim();
     const nextPhase = vonNeumann.locator('#vn-next');
     await nextPhase.click();
