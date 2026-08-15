@@ -101,6 +101,51 @@ for (const viewport of [{name:'desktop',width:1440,height:1000},{name:'mobile',w
     ]) if (allText.includes(forbidden)) failures.push(`training-loop Spanish leakage ${JSON.stringify(forbidden)}`);
   }
 
+  const xor = page.locator('.xor-wrap');
+  if (await xor.count() !== 1) failures.push(`expected one canonical XOR visual, found ${await xor.count()}`);
+  else {
+    const allText = (await xor.textContent()) || '';
+    for (const phrase of [
+      'Why a perceptron cannot learn XOR',
+      'The task',
+      'The perceptron',
+      'The problem',
+      'The proof',
+      'The solution',
+      'The four conditions required by XOR are mathematically incompatible',
+      'Two hidden neurons bend the space. The output boundary is still a straight line.'
+    ]) if (!allText.includes(phrase)) failures.push(`canonical XOR visual missing ${JSON.stringify(phrase)}`);
+
+    if (await xor.locator('.xor-step').count() !== 5) failures.push(`expected 5 canonical XOR steps, found ${await xor.locator('.xor-step').count()}`);
+    if (await xor.locator('.xor-panel').count() !== 5) failures.push(`expected 5 canonical XOR panels, found ${await xor.locator('.xor-panel').count()}`);
+    if (await xor.locator('.xor-try').count() !== 3) failures.push(`expected 3 canonical XOR line attempts, found ${await xor.locator('.xor-try').count()}`);
+    if (await xor.locator('.xor-cond').count() !== 4) failures.push(`expected 4 canonical XOR algebraic conditions, found ${await xor.locator('.xor-cond').count()}`);
+    if (await xor.locator('.xor-transform-col').count() !== 2) failures.push(`expected 2 canonical XOR representation panels, found ${await xor.locator('.xor-transform-col').count()}`);
+    try {
+      await page.waitForFunction(() => document.querySelector('[data-demo="03-problema-xor"]')?.dataset.xorReady === '1', null, {timeout: 2000});
+    } catch {
+      failures.push(`XOR runtime did not boot on ${viewport.name}`);
+    }
+
+    const next = xor.locator('#xor-next');
+    for (let i = 1; i < 5; i++) {
+      await next.click();
+      if (!(await xor.locator(`[data-p="${i}"]`).evaluate(el => el.classList.contains('xor-panel--active')))) failures.push(`XOR Next did not activate panel ${i}`);
+    }
+    if (!(await next.isDisabled())) failures.push('XOR Next control was not disabled on final panel');
+    await xor.locator('#xor-prev').click();
+    if (!(await xor.locator('[data-p="3"]').evaluate(el => el.classList.contains('xor-panel--active')))) failures.push('XOR Previous did not return to proof panel');
+    await xor.locator('[data-s="0"]').click();
+    if (!(await xor.locator('[data-p="0"]').evaluate(el => el.classList.contains('xor-panel--active')))) failures.push('XOR stepper did not return to task panel');
+
+    for (const forbidden of [
+      'Por qué un perceptrón','La tarea','El perceptrón','El problema','La prueba','La solución','Cómo clasifica',
+      'clase 0','clase 1','El límite','Línea horizontal','Línea vertical','Línea diagonal','La conclusión',
+      'Prueba algebraica','Las cuatro condiciones','Suma (0,1)','se deduce','contradicción','Consecuencia',
+      'Redes multicapa','Dos neuronas ocultas','Espacio original','Espacio oculto','La clave','Anterior','Siguiente'
+    ]) if (allText.includes(forbidden)) failures.push(`XOR Spanish leakage ${JSON.stringify(forbidden)}`);
+  }
+
   const dims = await page.evaluate(() => [document.documentElement.clientWidth, document.documentElement.scrollWidth]);
   if (dims[1] > dims[0] + 2) failures.push(`${viewport.name} horizontal overflow`);
   if (viewport.name === 'desktop') await page.screenshot({path:path.join(outDir,'english-history-03-learn.png'),fullPage:true});
@@ -112,4 +157,4 @@ if (failures.length) {
   for (const failure of failures) console.error(failure);
   process.exit(1);
 }
-console.log('English history chapter 3 QA passed with canonical symbolic-AI and training-loop structure, interaction and translation fidelity.');
+console.log('English history chapter 3 QA passed with canonical symbolic-AI, training-loop and XOR structure, interaction and translation fidelity.');
