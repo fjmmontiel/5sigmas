@@ -1,123 +1,117 @@
 ---
-title: "What is AGI: Artificial General Intelligence"
-description: "What AGI means, why there is no consensus definition, DeepMind's capability levels, economic definitions, and what would still be required to reach it."
+title: "What is AGI: artificial general intelligence"
+description: "AGI means artificial general intelligence. This chapter explains its definitions, DeepMind's and OpenAI's levels, and what would still be required to reach it."
 date: 2026-03-20
-keywords: "AGI, artificial general intelligence, what is AGI, AGI definition, DeepMind AGI levels, superintelligence, AI alignment, OpenAI AGI"
+keywords: "agi, artificial general intelligence, what is agi, agi definition, deepmind agi levels, superintelligence, ai alignment, openai agi, agi risks"
 tags:
   - AI
   - AGI
   - Alignment
+video: "04-agi.mp4"
+video_duration: "PT1M10S"
 ---
 
 # Chapter 4 — AGI: Artificial General Intelligence
 
-This chapter closes the Foundations series by examining Artificial General Intelligence: what the term means, why there is no consensus definition and what reaching it would imply. By the end, you will understand the main definitions in dispute, DeepMind's capability-level framework, the gap between today's frontier systems and robust general intelligence, and why economic impact, scientific acceleration and alignment become increasingly important as systems grow more capable.
+This chapter closes the series by examining the concept of Artificial General Intelligence: what it means, why there is no agreed definition, and what reaching it would imply. By the end, the reader will know the three main definitions in dispute (cognitive, economic, and DeepMind's six-level spectrum), understand precisely what current systems can and cannot do, and have a clear map of the economic, scientific, and alignment impacts that would need to be addressed before reaching much more capable systems. To get the most from it, it is best to have read the previous three chapters in the series.
 
 !!! info "Prerequisites"
-    This chapter closes the series. It is best read after [Chapter 1 — What is AI?](./01-que-es-ia.md), [Chapter 2 — What is Generative AI?](./02-que-es-ia-generativa.md) and [Chapter 3 — Classical AI vs Generative AI](./03-ia-vs-ia-generativa.md).
+    This chapter closes the series. To get the most from it, it is best to have read the previous three chapters: [Chapter 1 — What is AI](./01-que-es-ia.md), [Chapter 2 — What is Generative AI](./02-que-es-ia-generativa.md) and [Chapter 3 — AI vs Generative AI](./03-ia-vs-ia-generativa.md).
 
-A fraud detector cannot explain thermodynamics. A vision classifier cannot play chess. A language model can generate fluent text but does not automatically drive a car, repair a tap or remember yesterday's conversation unless the surrounding system gives it those capabilities.
+A fraud detector cannot explain thermodynamics to you, a computer-vision model does not know how to play chess, and an LLM generates fluent text but cannot drive a car, repair a tap, or remember what it learned in yesterday's conversation. Now imagine a system that had all these capabilities at once.
 
-**Artificial General Intelligence (AGI)** is the term usually used for a system capable of competent performance across a **broad range of cognitive tasks**, without being redesigned separately for each one, while transferring useful knowledge between domains.
+**Artificial General Intelligence (AGI)** is the term for a system capable of performing at a competent human level across a **broad range of cognitive tasks**, without being specifically redesigned for each one and with the ability to transfer what it has learned between domains.
 
-The problem is that the field does not agree on exactly where that threshold lies.
+The problem is that nobody agrees on exactly what that means.
 
 ---
 
 ## 1. The definition problem
 
-“AGI” is not a technical term with one universally accepted test. Different communities use it to capture different properties:
+"AGI" is not a technical term with an agreed definition. It is a field term that different groups use in different, sometimes incompatible ways. There is no paper that says "this is AGI, this is not."
 
-- breadth across intellectual tasks,
-- economically useful autonomy,
-- transfer and learning in unfamiliar domains,
-- expert-level or superhuman performance,
-- or the ability to automate increasingly large parts of AI research itself.
+The underlying questions do not have a single answer: does it matter that the system can do any task? That it surpasses humans in economic value? That it can improve itself? That it has something resembling real understanding?
 
-Those definitions are related but not equivalent. Depending on the criterion, the threshold can move dramatically.
+Depending on the definition you use, AGI could be 2 years away, 20 years away, or indefinable in today's terms.
 
 ---
 
-## 2. Definitions in dispute
+## 2. The definitions in dispute
 
-### 2.1 Cognitive definition
+### 2.1 The cognitive definition
 
-The classical framing is roughly: an AGI can perform **the broad range of intellectual tasks a human can perform** rather than excelling only in one engineered domain.
+The oldest definition: AGI is a system that can **perform any intellectual task that a human being can perform**.
+It comes from the AI research community of the 1950s-80s, and includes abstract reasoning, learning in completely new domains, common sense, long-term planning, and understanding language in real-world context.
 
-This includes abstract reasoning, learning unfamiliar tasks, common-sense knowledge, long-horizon planning and transferring knowledge across domains.
+The problem with this definition is that "any human intellectual task" is a fuzzy bar. Humans also have biases, limits, and failures.
+Which human do we compare against? Under what conditions?
 
-The difficulty is measurement. “Human-level” is not one number. Humans differ substantially by task, expertise, time budget and access to tools.
+### 2.2 The economic definition
 
-### 2.2 Economic definition
+OpenAI defines AGI as **"highly autonomous systems that outperform humans at most economically valuable work"** ([OpenAI Charter][r3]).
+Unlike the cognitive definition, this is measurable: it can be tested against labour and productivity benchmarks.
 
-The [OpenAI Charter][r3] defines AGI as **highly autonomous systems that outperform humans at most economically valuable work**.
+The shift in focus is significant: from "general intelligence" to "general economic usefulness", a different and in some respects lower bar. The problem is that a substantial part of economically valuable cognitive work could be transformed or automated without the system reaching the classical-definition threshold. Would that be AGI?
 
-This shifts the question from cognitive similarity to broad economic usefulness. It is more operational because labour and productivity can be benchmarked, but it may classify a system as economically general before it satisfies stronger notions of cognitive generality.
+### 2.3 The capability spectrum: six levels
 
-A system could transform a large share of knowledge work while still lacking robust physical understanding, persistent learning or transfer to truly unfamiliar environments.
+DeepMind proposed treating AGI not as a binary threshold but as a **spectrum of six capability levels**, numbered from 0 to 5:
 
-### 2.3 Capability spectrum: six levels
-
-DeepMind proposed treating progress toward AGI as a spectrum rather than one binary event. The framework separates **performance** from **generality** and uses six approximate capability levels:
-
-| Level | Description | Approximate intuition |
+| Level | Description | Approximate reference |
 |---|---|---|
-| **0. No AI** | No autonomous intelligent capability | Calculator |
-| **1. Emerging** | At least non-expert-level performance on some tasks | Current systems on bounded tasks |
-| **2. Competent** | At least as capable as a substantial fraction of skilled adults across a broad set of tasks | Not established as broadly achieved |
-| **3. Expert** | Expert-level performance across most relevant tasks | Achieved only in narrow domains today |
-| **4. Virtuoso** | At or above the best humans across essentially all relevant domains | Not achieved |
-| **5. Superintelligence** | Beyond all humans across cognitive tasks | Hypothetical |
+| **0. No AI** | No autonomous capability | Calculator |
+| **1. Emerging AI** | Equal to or better than a non-expert on some tasks | ChatGPT, according to its authors, on some specific tasks |
+| **2. Competent AI** | Equal to or better than 50% of adult workers | — |
+| **3. Expert AI** | Equal to or better than a human expert on most tasks in its domain | Medical-diagnosis models in specific domains |
+| **4. Virtuoso AI** | Equal to or better than the best human expert at practically everything | — |
+| **5. Superintelligence (ASI)** | Surpasses all humans on all cognitive tasks | — |
 
-The important idea is that a system can be spectacularly strong on one benchmark while remaining narrow in overall generality.
+This framework recognises that the transition does not happen all at once. In the original paper (2023), DeepMind marked Competent AGI and higher levels as unreached by any public system. The framework also distinguishes performance from generality: a system can show high-level performance on one specific task without demonstrating equivalent generality ([arXiv][r1]).
 
-### 2.4 Safety-oriented definitions
+### 2.4 The safety perspective
 
-For AI-safety researchers, a critical threshold may be less about “human-level intelligence” and more about **autonomous capability growth**: systems able to automate increasingly large parts of AI research, improve tooling, and contribute to building more capable successors.
+For AI-safety researchers, the critical line is not "better than humans at cognitive tasks" but the **capacity for recursive improvement**: a system that improves its own design to produce successively more capable systems. A system could surpass all humans on all tasks without crossing that threshold, but if it did cross it, the pace of change would exceed humans' ability to understand and control what is happening. Current operational frameworks go further: Anthropic defines specific thresholds based on the ability to automate an AI researcher's work, from bounded tasks to full autonomous research cycles ([Anthropic RSP][r_rsp]).
 
-Operational safety frameworks such as Anthropic's Responsible Scaling Policy therefore define capability thresholds around AI R&D automation rather than relying only on the word AGI.
-
-> The ambiguity is not merely poor terminology. Different groups are trying to measure different properties of increasingly capable systems.
+> The ambiguity in the definition is not carelessness. It reflects that different communities are trying to capture different properties of the same entity.
 
 {{ include_html("snippets/fundamentos-ia-iag/04-niveles-agi.html") }}
 
 ---
 
-## 3. What current systems still do not establish
+## 3. What we know is not AGI today
 
-Frontier models are extremely capable across language, coding, mathematics and tool use. They also have limits that matter when discussing general intelligence.
+Current models have capabilities that impress both people using them for the first time and people who have worked in the field for years. They also have fundamental limitations that are worth understanding precisely.
 
-### What current systems do well
+### What they do well today
 
-- Expert-level language generation and analysis in many trained domains.
-- Reasoning over large provided contexts.
-- In-context adaptation from a small number of demonstrations.
-- Software engineering and debugging on increasingly realistic benchmarks.
-- Computer use and web interaction when given tools and interfaces.
-- Cross-domain synthesis when relevant information is available in training or context.
-- High performance on selected mathematics and science competitions and benchmarks.
+* Expert-level language understanding and generation in many domains represented in their training.
+* Reasoning over complex texts within a context window.
+* Generalisation from very few examples: learning from three cases in the prompt and generalising.
+* Coding and solving real errors: frontier models achieve very high scores on software benchmarks such as OSWorld and SWE-bench, although SWE-bench Verified is no longer considered representative of the current frontier because of data contamination ([OpenAI][r_swe]).
+* Computer use and web navigation: Claude Sonnet 4.6 and GPT 5.4 operate graphical interfaces and execute complete browser workflows with a 1M-token context window ([Anthropic][r11]).
+* Synthesising knowledge across domains when the relevant knowledge was present in the training data.
+* Olympiad mathematics and science: the most capable models achieve gold-medal performance in the IMO, IPhO, and IChO and exceed 90% on PhD-level science benchmarks ([Gemini 3 Deep Think blog][r14]). ARC-AGI-2 results are verified by the ARC Prize Foundation, but the Olympiad and HLE results are reported by the laboratories themselves.
 
-### What remains incomplete
+### What they lack
 
-- **Robust causal reasoning:** systems can confuse correlation and causation and remain brittle under some counterfactual changes.
-- **Grounded physical understanding:** text and multimodal training are not equivalent to reliable embodied interaction with the physical world.
-- **Persistent learning:** ordinary inference does not continuously update the pretrained model's weights; memory must be added explicitly.
-- **Out-of-distribution generalization:** performance can fail unpredictably when tasks depart substantially from learned patterns.
-- **Reliable uncertainty awareness:** models do not always know when they lack information and can produce confident unsupported outputs.
-- **Long-horizon autonomy:** sustained multi-step work remains substantially harder than short benchmark questions.
+* **Robust causal reasoning**: they confuse correlation with causation and fail on counterfactuals.
+* **Knowledge of the physical world**: their "understanding" comes from text, not direct interaction with objects and consequences.
+* **Real persistent memory**: each conversation starts from scratch unless the architecture includes explicit memory.
+* **Generalisation outside what is known**: they work well in training domains and fail unpredictably on variations far from what they have seen.
+* **Knowing when they do not know**: they do not reliably recognise the limits of their own knowledge, hence hallucinations.
 
-> Passing a short conversational Turing-style interaction is not the same as demonstrating general intelligence.
+> Passing the Turing test in a short conversation does not imply general intelligence. A model can generate text that looks human for minutes and fail on causal-reasoning or common-sense problems that a human with no specific training would solve without difficulty.
 
 <details markdown="1">
-<summary><strong>Does a language model “understand”?</strong></summary>
+<summary><strong>The difference between linguistic understanding and understanding the world</strong></summary>
 
-This remains an active philosophical and empirical debate.
+One of the most active debates in the field is whether LLMs "understand" or simply produce very sophisticated statistical patterns over text.
 
-One view argues that language models learn statistical structure from representations of the world rather than direct causal interaction with the world itself, so linguistic competence should not be equated with grounded understanding.
+The argument that they do not understand: the model has no access to the world, only to text about the world. It can complete sentences about physics without understanding why a ball falls. It can describe pain without having felt it. Linguistic representation is not the same as conceptual representation.
 
-Another view notes that learned representations support genuine generalization: models can combine concepts in ways that exceed simple memorization, and internal representations encode useful structure related to space, time, truth and semantics.
+The argument that something resembling understanding emerges: models generalise in ways that are not explained by pure memorisation. Their internal representations capture semantic structure. Some experiments show that models have internal representations of concepts such as truth/falsehood, space, or time.
 
-The unresolved question matters because it changes what we should expect from scaling. If broad understanding emerges sufficiently from multimodal predictive learning, scale may continue closing the gap. If robust intelligence requires deeper interaction, memory and causal experience, scale alone may not be enough.
+The debate is not settled and has direct consequences for what to expect from continued scaling: if understanding emerges from language at scale, scaling could move us closer to AGI. If it requires something more (direct experience of the world, causal interaction with objects and consequences), scaling alone would not be enough.
 
 </details>
 
@@ -125,125 +119,120 @@ The unresolved question matters because it changes what we should expect from sc
 
 ---
 
-## 4. If AGI arrived: what would change?
+## 4. If it arrived: what would change
+
+The question is not whether what we have today is AGI. It is not, under any reasonable definition. The question is what it would imply if it arrived.
 
 ### Economic impact
 
-A broadly capable cognitive system could automate not only repetitive work but parts of analysis, design, research and complex decision-making.
+A system with AGI capabilities could automate cognitive work at scale: not only manual or repetitive tasks, but analysis, design, research, and complex decision-making.
 
-Even estimates for current generative AI are wide. McKinsey has estimated that generative AI could affect activities representing a large share of worker time, while Goldman Sachs has estimated meaningful exposure of jobs and tasks to AI-driven automation. ([McKinsey][r8], [Goldman Sachs][r9])
+The impact estimates are broad, and that is already with today's AI. McKinsey estimates that generative AI could automate activities representing up to 60-70% of workers' time ([McKinsey report][r8]). Goldman Sachs estimates that ~25% of current tasks are directly automatable and that two-thirds of jobs in the US and Europe are exposed to some degree of substitution ([Goldman Sachs report][r9]).
 
-The distribution of impact matters as much as the aggregate productivity gain: who captures the value, which tasks disappear first, which new work appears, and how transitions are managed.
+The distribution of the impact matters as much as the total impact: who captures the value produced, how it is redistributed, and what happens to the people whose work is automated first.
 
 ### Scientific impact
 
-AlphaFold provides a concrete example of AI accelerating scientific work. Its protein-structure predictions helped transform a decades-old scientific challenge and contributed to the work recognized by the 2024 Nobel Prize in Chemistry.
+AlphaFold provides a glimpse of what could be possible: it delivered a decisive leap on a problem the scientific community had been trying to solve for fifty years, recognised by the 2024 Nobel Prize in Chemistry.
 
-A much more general system able to absorb large literatures, identify contradictions, propose testable hypotheses and design experiments could compress the cycle from scientific question to useful application.
+A system capable of reading all available literature, identifying contradictions, proposing testable hypotheses, and designing experiments would radically change the speed of discovery. Compressing the time between discovery and application could redefine entire fields of medicine, chemistry, and physics within a single generation.
 
-### Alignment
+### The alignment problem
 
-The central safety concern is not that a powerful system must be “evil.” It is that it may be **highly capable while optimizing an objective that imperfectly captures what people actually want**.
+The greatest risk is not that an AGI is malicious. It is that it is **very capable and optimises for an objective that does not exactly capture what we want as a society**.
 
-Alignment is the technical and philosophical problem of ensuring that increasingly capable systems pursue intended outcomes under uncertainty, conflicting preferences and changing contexts.
+"Alignment" is the technical and philosophical problem of ensuring that a very capable system optimises for what humans actually value, not merely what we were able to specify in the training objective. It is a problem with no known complete solution today.
 
-> There is no complete, generally accepted solution to alignment for arbitrarily capable autonomous systems. That uncertainty is a technical reason to study capability thresholds and control mechanisms before systems become much harder to supervise.
+> The field of AI Safety exists precisely because the most serious researchers in the area acknowledge that they do not know how to solve alignment before reaching systems far more capable than today's. The uncertainty is not alarmism; it is technical honesty about an open problem.
 
 {{ include_html("snippets/fundamentos-ia-iag/04-impacto-agi.html") }}
 
 ---
 
-## 5. Where are we now?
+## 5. Where we are and where we are going
 
-No public consensus establishes that current systems satisfy the strongest cognitive, economic or recursive-improvement definitions of AGI. Instead, we have extremely capable but still uneven systems whose coverage across tasks is widening quickly.
+No current system satisfies any of the AGI definitions (neither the cognitive one, nor the complete economic one, nor recursive improvement). What exists are very capable narrow-intelligence systems (not general ones) that, when combined, are beginning to cover a broad range of tasks.
 
 {{ include_html("snippets/fundamentos-ia-iag/04-benchmarks-evolucion.html") }}
 
 {{ include_html("snippets/fundamentos-ia-iag/04-ia-vs-humanos.html") }}
 
-Frontier systems in 2025–2026 report expert or superhuman results in bounded domains such as coding, formal mathematics and scientific benchmarks, but narrow benchmark strength does not by itself establish broad generality.
+Frontier models from 2025-2026 show expert-level performance in specific domains such as software, formal mathematics, or text analysis, but there is no public, agreed evidence that they have reached the Competent AGI threshold under DeepMind's framework across most cognitive tasks. In domains requiring physical experience, tacit knowledge, or robust causal reasoning, they remain below it.
 
-One useful measure is **task horizon**. METR estimates how long a task, measured by the time required by a skilled human, a model can complete with a target reliability such as 50%. The key idea is that sustained work over hours or days is a more demanding autonomy test than answering isolated questions.
+METR evaluates the **task time horizon**: the length of task a model can solve with 50% reliability. In March 2025 that horizon was ~1 hour; with GPT-5-thinking, METR estimates it at ~2 hours 15 minutes ([METR, 2025][r12]). The trend is a doubling roughly every ~7 months, and the next significant threshold is the jump to days or weeks, where the risks of real autonomy emerge.
 
-Another family of tests, such as ARC-AGI, attempts to measure adaptation to unfamiliar abstract problems from very few examples. Performance has improved dramatically, but the benchmark designers themselves emphasize that high benchmark scores are not equivalent to proving AGI.
+ARC-AGI-2 measures the capability still missing for cognitive AGI: reasoning about completely new problems from very few examples, without memorising patterns. Launched with initial results below 4%, Gemini 3 Deep Think reached 84.6% in February 2026, close to the ~85% threshold for beating the benchmark ([Gemini 3 Deep Think blog][r14]). Humanity's Last Exam (HLE), the hardest benchmark published to date, reached 48.4% with the same model, while human experts with references score ~85-90%. The ARC Prize organisers themselves insist that "AGI remains unsolved" and that ARC-AGI-2 was designed to keep tasks easy for humans and difficult for AI ([ARC Prize][r_arc]).
 
-The most useful question is therefore not “what exact date will AGI arrive?” No one can answer that reliably. Better questions are:
+The pace of progress over the last five years is unprecedented. Emergent capabilities with scale suggest dynamics that the scientific community does not fully understand, and the AGI debate has moved from academic speculation to the public, regulatory, and foreign-policy agenda.
 
-- Which capabilities are becoming robust across domains rather than on one benchmark?
-- How long can systems operate autonomously before errors compound?
-- How well do they transfer to genuinely novel tasks?
-- Can they recognize uncertainty and recover safely from failure?
-- What controls remain effective as capability increases?
+The most useful question is not "when will AGI arrive?" Nobody honestly knows. The question is which criteria for thinking and which evaluation frameworks make you more robust in an environment where AI improves quickly and the landscape changes every few months.
 
 !!! abstract "Position summary"
-    **What we know:** modern systems outperform humans on some bounded tasks, their autonomous task horizon is increasing, and general-reasoning benchmarks are improving quickly.
+    **What we do know:** current systems outperform human experts in specific, bounded domains. The horizon of autonomous tasks is growing predictably. General-reasoning benchmarks are improving faster than expected.
 
-    **What we do not know:** whether continued scaling converges to robust general intelligence; where unknown ceilings may exist; whether current alignment methods remain adequate for much more capable systems; and how strongly benchmark progress transfers outside benchmark distributions.
+    **What we do not know:** whether emergent capabilities with scale converge towards something that deserves to be called AGI or whether there is a ceiling we do not know about. Whether alignment is a technical problem that can be solved before reaching much more capable systems. Whether the qualitative jumps observed in benchmarks translate into real generalisation outside the laboratory.
 
-    **What true broad generality would imply:** deep changes to cognitive labour, faster scientific discovery, and a much higher premium on solving control and alignment before failures become difficult to reverse.
+    **What reaching it would imply:** a reorganisation of the division of cognitive labour deeper than industrialisation. Compression of the time between scientific discovery and application. And the need to solve alignment before the system is capable enough for errors to become irreversible.
 
-This is the purpose of the Foundations series: a conceptual map that remains useful even while specific model names change.
-
-!!! tip "Continue learning"
-    The next learning path follows the historical sequence that produced today's systems: [From the Caves to AGI →](/en/series/from-cave-to-agi/00_presentacion_serie/)
+That is what this series has tried to build: a stable mental map that works even when the models change.
 
 ---
 
 ## 6. References
 
 <details markdown="1">
-<summary><strong>Core sources</strong></summary>
+<summary><strong>Base sources</strong></summary>
 
 | Key | Source | Short description |
-|---|---|---|
-| R1 | **Morris et al. (2023)** — *Levels of AGI: Operationalizing Progress on the Path to AGI* ([arXiv][r1]) | DeepMind's capability/generality framework. |
-| R2 | **Bubeck et al. (2023)** — *Sparks of Artificial General Intelligence* ([arXiv][r2]) | Early GPT-4 capability analysis. |
-| R3 | **OpenAI** — *OpenAI Charter* ([OpenAI][r3]) | Economic definition of AGI. |
-| R4 | **Stuart Russell (2019)** — *Human Compatible* | AI control and value-alignment framing. |
-| R5 | **Nick Bostrom (2014)** — *Superintelligence* | Influential risk scenario; a debate reference rather than scientific consensus. |
-| R6 | **Krakovna et al. (2020)** — *Specification gaming* ([DeepMind][r6]) | Examples of systems optimizing the wrong proxy objective. |
-| R7 | **Grace et al. (2024)** — *Thousands of AI Authors on the Future of AI* ([arXiv][r7]) | Survey of AI researchers' forecasts. |
-| R8 | **McKinsey Global Institute (2023)** — *The economic potential of generative AI* ([McKinsey][r8]) | Economic-impact estimates. |
-| R9 | **Goldman Sachs (2023)** — *The Potentially Large Effects of Artificial Intelligence on Economic Growth* ([Goldman Sachs][r9]) | Labour/task exposure estimates. |
-| R10 | **OpenAI (2025)** — *GPT-5 System Card* ([OpenAI][r10]) | Frontier capability and safety evaluations. |
-| R11 | **Anthropic (2026)** — *Introducing Claude Sonnet 4.6* ([Anthropic][r11]) | Computer-use, coding and long-context capability report. |
-| R12 | **METR (2025)** — *Measuring AI Ability to Complete Long Tasks* ([METR][r12]) | Task-horizon methodology. |
-| R13 | **Google DeepMind (2026)** — *Gemini 3.1 Pro* ([DeepMind][r13]) | Frontier benchmark report. |
-| R14 | **Google (2026)** — *Gemini 3 Deep Think* ([Google][r14]) | Reported advanced reasoning results. |
-| R15 | **ARC Prize Foundation (2025)** — *ARC-AGI-2* ([ARC Prize][r_arc]) | Generalization benchmark and methodology. |
-| R16 | **Anthropic** — *Responsible Scaling Policy* ([RSP][r_rsp]) | Capability thresholds linked to safety measures. |
-| R17 | **OpenAI (2026)** — *Why SWE-bench Verified no longer measures frontier coding capabilities* ([OpenAI][r_swe]) | Benchmark-contamination analysis. |
+| --- | --- | --- |
+| R1 | **Morris et al. (2023)** — *Levels of AGI: Operationalizing Progress on the Path to AGI* ([arXiv][r1]) | DeepMind's six-level (0-5) framework for operationalising AGI. |
+| R2 | **Bubeck et al. (2023)** — *Sparks of Artificial General Intelligence: Early experiments with GPT-4* ([arXiv][r2]) | Systematic evaluation of GPT-4 against the cognitive-AGI bar. |
+| R3 | **OpenAI (2023)** — *OpenAI Charter* ([OpenAI][r3]) | OpenAI's canonical definition of AGI: "highly autonomous systems that outperform humans at most economically valuable work". |
+| R4 | **Russell, S. (2019)** — *Human Compatible: Artificial Intelligence and the Problem of Control* (book, Basic Books) | Central argument on the alignment problem and the design of AI compatible with human values. |
+| R5 | **Bostrom, N. (2014)** — *Superintelligence: Paths, Dangers, Strategies* (book, Oxford University Press) | The intelligence-explosion scenario and its risks. A debate reference, not scientific consensus. |
+| R6 | **Krakovna et al. (2020)** — *Specification gaming: the flip side of AI ingenuity* ([DeepMind blog][r6]) | Real examples of systems optimising the wrong metric with unforeseen results. |
+| R7 | **Grace et al. (2024)** — *Thousands of AI Authors on the Future of AI* ([arXiv][r7]) | Survey of AI researchers on probabilities and estimated timelines for AGI milestones. |
+| R8 | **McKinsey Global Institute (2023)** — *The economic potential of generative AI: The next productivity frontier* ([McKinsey][r8]) | Estimates that generative AI could automate activities representing 60-70% of workers' time. |
+| R9 | **Briggs, J. & Kodnani, D. (2023)** — *The Potentially Large Effects of Artificial Intelligence on Economic Growth* ([Goldman Sachs][r9]) | Estimates that two-thirds of jobs in the US and Europe are exposed to some degree of AI automation; ~25% of tasks are directly automatable. |
+| R10 | **OpenAI (2025)** — *GPT-5 System Card* ([OpenAI][r10]) | Results on SWE-bench Verified (74.9%), METR evaluations (task horizon ~2h15m), and comparisons with human experts in scientific domains. |
+| R11 | **Anthropic (2026)** — *Introducing Claude Sonnet 4.6* ([Anthropic][r11]) | Official announcement with computer-use and coding capabilities and a 1M-token context window (beta). |
+| R12 | **METR (2025)** — *Measuring AI Ability to Complete Long Tasks* ([METR][r12]) | Introduces the task-horizon metric: task length completable with 50% reliability doubles roughly every ~7 months; Claude 3.7 Sonnet reaches ~1 hour. |
+| R13 | **Google DeepMind (2026)** — *Gemini 3.1 Pro* ([deepmind.google][r13]) | Gemini 3.1 Pro: GPQA Diamond 94.3%; SWE-bench Verified 80.6% (new SOTA as of Feb 2026); ARC-AGI-2 77.1%. |
+| R14 | **The Deep Think team (2026)** — *Gemini 3 Deep Think: Advancing science, research and engineering* ([blog.google][r14]) | Gemini 3 Deep Think: ARC-AGI-2 84.6% (verified by the ARC Prize Foundation); HLE 48.4% without tools; gold medal in IMO 2025, IPhO 2025, and IChO 2025. |
+| R15 | **ARC Prize Foundation (2025)** — *Announcing ARC-AGI-2 and ARC Prize 2025* ([arcprize.org][r_arc]) | Launch of ARC-AGI-2; insists that "AGI remains unsolved" and details the result-verification methodology. |
+| R16 | **Anthropic (2024)** — *Responsible Scaling Policy v2.1* ([Anthropic][r_rsp]) | Defines AI R&D autonomy thresholds (AI R&D-1 through AI R&D-5) and their relationship to safety measures. |
+| R17 | **OpenAI (2026)** — *Why SWE-bench Verified no longer measures frontier coding capabilities* ([OpenAI][r_swe]) | Explains why SWE-bench Verified is contaminated and recommends SWE-bench Pro and other alternative benchmarks. |
 
 </details>
 
-[r1]: https://arxiv.org/abs/2311.02462
-[r2]: https://arxiv.org/abs/2303.12528
-[r3]: https://openai.com/charter/
-[r6]: https://deepmind.google/discover/blog/specification-gaming-the-flip-side-of-ai-ingenuity/
-[r7]: https://arxiv.org/abs/2401.02843
-[r8]: https://www.mckinsey.com/capabilities/mckinsey-digital/our-insights/the-economic-potential-of-generative-ai-the-next-productivity-frontier
-[r9]: https://www.goldmansachs.com/insights/articles/generative-ai-could-raise-global-gdp-by-7-percent.html
-[r10]: https://openai.com/index/gpt-5-system-card/
-[r11]: https://www.anthropic.com/news/claude-sonnet-4-6
-[r12]: https://metr.org/blog/2025-03-19-measuring-ai-ability-to-complete-long-tasks/
-[r13]: https://deepmind.google/models/gemini/pro/
-[r14]: https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-deep-think/
-[r_arc]: https://arcprize.org/blog/announcing-arc-agi-2-and-arc-prize-2025
-[r_rsp]: https://www-cdn.anthropic.com/17310f6d70ae5627f55313ed067afc1a762a4068.pdf
-[r_swe]: https://openai.com/index/why-we-no-longer-evaluate-swe-bench-verified/
+[r1]: https://arxiv.org/abs/2311.02462 "Levels of AGI: Operationalizing Progress on the Path to AGI"
+[r2]: https://arxiv.org/abs/2303.12528 "Sparks of Artificial General Intelligence: Early experiments with GPT-4"
+[r3]: https://openai.com/charter/ "OpenAI Charter"
+[r6]: https://deepmind.google/discover/blog/specification-gaming-the-flip-side-of-ai-ingenuity/ "Specification gaming: the flip side of AI ingenuity"
+[r7]: https://arxiv.org/abs/2401.02843 "Thousands of AI Authors on the Future of AI"
+[r8]: https://www.mckinsey.com/capabilities/mckinsey-digital/our-insights/the-economic-potential-of-generative-ai-the-next-productivity-frontier "The economic potential of generative AI: The next productivity frontier"
+[r9]: https://www.goldmansachs.com/insights/articles/generative-ai-could-raise-global-gdp-by-7-percent.html "The Potentially Large Effects of Artificial Intelligence on Economic Growth"
+[r10]: https://openai.com/index/gpt-5-system-card/ "GPT-5 System Card"
+[r11]: https://www.anthropic.com/news/claude-sonnet-4-6 "Introducing Claude Sonnet 4.6"
+[r12]: https://metr.org/blog/2025-03-19-measuring-ai-ability-to-complete-long-tasks/ "Measuring AI Ability to Complete Long Tasks"
+[r13]: https://deepmind.google/models/gemini/pro/ "Gemini 3.1 Pro"
+[r14]: https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-deep-think/ "Gemini 3 Deep Think: Advancing science, research and engineering"
+[r_arc]: https://arcprize.org/blog/announcing-arc-agi-2-and-arc-prize-2025 "Announcing ARC-AGI-2 and ARC Prize 2025"
+[r_rsp]: https://www-cdn.anthropic.com/17310f6d70ae5627f55313ed067afc1a762a4068.pdf "Anthropic Responsible Scaling Policy v2.1"
+[r_swe]: https://openai.com/index/why-we-no-longer-evaluate-swe-bench-verified/ "Why SWE-bench Verified no longer measures frontier coding capabilities"
 
 ---
 
 ## Frequently asked questions
 
-**What are DeepMind's levels on the path toward AGI?**  
-The framework uses six levels from no AI through superintelligence and separates generality from performance. A system can be superhuman in a narrow task without being generally expert across cognitive work.
+**What levels define the path towards AGI according to DeepMind?**
+DeepMind proposes a spectrum of six levels numbered from 0 to 5: from no AI through to Superintelligence. Frontier models from 2025-2026 sit at the boundary between competent AI and expert AI in specific domains, but they have not reached expert-level generality across most cognitive tasks, which would be the threshold for level 3 in that framework.
 
-**How does the economic definition differ from the classical cognitive definition?**  
-The cognitive definition focuses on broad intellectual competence and transfer. The economic definition focuses on outperforming humans across most economically valuable work. A system could therefore be economically transformative while still failing stronger tests of general cognition.
+**How does the economic definition of AGI differ from the classical cognitive definition?**
+The cognitive definition requires performing any human intellectual task, a fuzzy bar because humans also have biases and limits. OpenAI's economic definition focuses on outperforming humans at most economically valuable work, a bar measurable with labour benchmarks although lower in some respects, because part of cognitive work could be automated without the system reaching real cognitive generality.
 
-**What capability threshold most concerns safety researchers?**  
-One important threshold is the ability to automate increasingly large portions of AI research and development, because that can accelerate further capability growth and reduce the time available for human supervision. Modern safety frameworks define operational thresholds around such capabilities instead of relying only on the label AGI.
+**What criterion most concerns safety researchers when discussing AGI?**
+For them, the critical line is not task performance but recursive improvement: a system that improves its own design to produce successively more capable systems. If that threshold were crossed, the pace of change would exceed humans' ability to understand and control what is happening, regardless of whether the system satisfies the cognitive or economic definition.
 
-**What does METR's task horizon measure?**  
-It estimates the duration of tasks a model can complete with a chosen reliability. This measures sustained autonomous work rather than isolated question answering, which makes it useful for tracking when agents move from minutes-long tasks toward hours, days or longer workflows.
+**What does the task time horizon (METR) measure and why does it matter for autonomy?**
+It measures the maximum task duration an agent completes with 50% reliability, not the time it takes to answer questions but sustained multi-step work. In March 2025 that horizon was approximately two hours and fifteen minutes for the most capable models, and the trend is a doubling every seven months. The next significant threshold is the jump to days or weeks, where the risks of real autonomy emerge.

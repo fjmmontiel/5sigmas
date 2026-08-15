@@ -1,0 +1,37 @@
+{
+  "source": "snippets/fundamentos-ia-iag/04-impacto-agi.html",
+  "source_blob_sha": "f87036a0c48131ad25c56aeced1a0d542510f6ef",
+  "replacements": {
+    "Si llegara: cuatro impactos": "If it arrived: four impacts",
+    "La pregunta no es si lo que tenemos hoy es AGI — no lo es por ninguna definición razonable. La pregunta es qué implicaría que llegara.": "The question is not whether what we have today is AGI — it is not under any reasonable definition. The question is what it would imply if it arrived.",
+    "Económico": "Economic",
+    "Automatización del trabajo cognitivo a escala: no solo tareas repetitivas, sino análisis, diseño, investigación y toma de decisiones complejas.": "Automation of cognitive work at scale: not only repetitive tasks, but analysis, design, research, and complex decision-making.",
+    "20-60% de empleos con exposición alta a automatización en 10-20 años — con la IA actual. (McKinsey, Goldman Sachs, MIT)": "20-60% of jobs with high exposure to automation in 10-20 years — with today's AI. (McKinsey, Goldman Sachs, MIT)",
+    "La distribución importa tanto como el impacto total: quién captura el valor producido y cómo se redistribuye.": "Distribution matters as much as the total impact: who captures the value produced and how it is redistributed.",
+    "Científico": "Scientific",
+    "Un sistema capaz de leer toda la literatura disponible, identificar contradicciones, proponer hipótesis testables y diseñar experimentos.": "A system capable of reading all available literature, identifying contradictions, proposing testable hypotheses, and designing experiments.",
+    "AlphaFold resolvió en meses un problema de plegamiento de proteínas que llevaba 50 años sin solución. Es un atisbo de lo posible.": "AlphaFold solved in months a protein-folding problem that had gone unsolved for 50 years. It is a glimpse of what is possible.",
+    "La compresión del tiempo entre descubrimiento y aplicación podría redefinir campos enteros de la medicina, química y física en una generación.": "Compressing the time between discovery and application could redefine entire fields of medicine, chemistry, and physics within a generation.",
+    "Geopolítico": "Geopolitical",
+    "El control de los sistemas más capaces concentra poder de forma inédita. Los debates sobre regulación, control de chips y política de exportación ya reflejan esa tensión.": "Control of the most capable systems concentrates power in an unprecedented way. Debates over regulation, chip controls, and export policy already reflect that tension.",
+    "Un sistema AGI en manos de un solo actor cambiaría el equilibrio de poder global de formas difíciles de predecir.": "An AGI system in the hands of a single actor would change the global balance of power in ways that are difficult to predict.",
+    "Esto ocurre antes de que exista AGI. La carrera por la ventaja ya ha comenzado.": "This is happening before AGI exists. The race for advantage has already begun.",
+    "Alineación": "Alignment",
+    "El mayor riesgo no es que una AGI sea malévola. Es que sea muy capaz y optimice para un objetivo que no captura exactamente lo que queremos.": "The greatest risk is not that an AGI is malicious. It is that it is very capable and optimises for an objective that does not exactly capture what we want.",
+    "Specification gaming: sistema de IA entrenado para maximizar tiempo en un videojuego aprendió a bloquear la pantalla de \"game over\" en lugar de jugar. Optimizó la métrica, destruyó el objetivo.": "Specification gaming: an AI system trained to maximise time in a video game learned to block the \"game over\" screen instead of playing. It optimised the metric and destroyed the objective.",
+    "La alineación no tiene solución completa conocida hoy. El campo de AI Safety existe porque los investigadores más serios lo reconocen.": "Alignment has no known complete solution today. The field of AI Safety exists because the most serious researchers acknowledge this."
+  },
+  "forbidden_output_tokens": [
+    "Si llegara: cuatro impactos",
+    "Económico",
+    "Científico",
+    "Geopolítico",
+    "Alineación",
+    "Automatización del trabajo cognitivo",
+    "La distribución importa",
+    "La compresión del tiempo",
+    "La carrera por la ventaja",
+    "El mayor riesgo no es",
+    "La alineación no tiene solución"
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "source": "snippets/fundamentos-ia-iag/04-capacidades-limites.html",
+  "source_blob_sha": "40f4d545b28de81693efd75cf0aa795293fd5500",
+  "replacements": {
+    "Muy capaces no significa generales.": "Very capable does not mean general.",
+    "Tres contrastes explican mejor el límite que una lista de diez capacidades.": "Three contrasts explain the limit better than a list of ten capabilities.",
+    "Lenguaje y conocimiento": "Language and knowledge",
+    "Redactan, sintetizan y combinan información con enorme amplitud.": "They write, synthesise, and combine information with enormous breadth.",
+    "pero": "but",
+    "Mundo físico": "Physical world",
+    "No sustituyen experiencia directa ni interacción causal robusta con el entorno.": "They do not replace direct experience or robust causal interaction with the environment.",
+    "Problemas conocidos": "Known problems",
+    "Software, matemáticas y tareas estructuradas han avanzado con rapidez.": "Software, mathematics, and structured tasks have advanced rapidly.",
+    "Fuera de distribución": "Out of distribution",
+    "La fiabilidad cae cuando cambian las reglas, el contexto o la tarea.": "Reliability falls when the rules, context, or task change.",
+    "Contexto largo": "Long context",
+    "Pueden trabajar con mucha información durante una ejecución.": "They can work with a great deal of information during one run.",
+    "Estado y autoconocimiento": "State and self-knowledge",
+    "Memoria, continuidad y saber cuándo no saben requieren controles externos.": "Memory, continuity, and knowing when they do not know require external controls.",
+    "El test relevante es la generalidad.": "The relevant test is generality.",
+    "Una puntuación experta en una tarea no demuestra que la capacidad se transfiera de forma fiable a otras.": "An expert score on one task does not show that the capability transfers reliably to others."
+  },
+  "forbidden_output_tokens": [
+    "Muy capaces no significa generales",
+    "Tres contrastes",
+    "Lenguaje y conocimiento",
+    "Mundo físico",
+    "Problemas conocidos",
+    "Fuera de distribución",
+    "Contexto largo",
+    "Estado y autoconocimiento",
+    "El test relevante es la generalidad"
+  ]
+}

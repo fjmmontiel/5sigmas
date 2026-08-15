@@ -1,0 +1,36 @@
+{
+  "source": "snippets/fundamentos-ia-iag/04-niveles-agi.html",
+  "source_blob_sha": "1d650e27fe0c3fc25a7279695feae1e00b0f6156",
+  "replacements": {
+    "AGI no es un interruptor": "AGI is not a switch",
+    "El marco de DeepMind separa rendimiento y generalidad.": "DeepMind's framework separates performance and generality.",
+    "Un sistema puede ser extraordinario en un dominio sin demostrar capacidad general equivalente.": "A system can be extraordinary in one domain without demonstrating equivalent general capability.",
+    "Sin IA": "No AI",
+    "Automatización programada.": "Programmed automation.",
+    "Emergente": "Emerging",
+    "Supera a no expertos en algunas tareas.": "Surpasses non-experts on some tasks.",
+    "Competente": "Competent",
+    "La frontera que importa para capacidad amplia.": "The frontier that matters for broad capability.",
+    "Experta": "Expert",
+    "Nivel experto de forma general.": "Expert level in general.",
+    "Virtuosa": "Virtuoso",
+    "Mejor que los mejores expertos.": "Better than the best experts.",
+    "Superinteligencia": "Superintelligence",
+    "Por encima de humanos en tareas cognitivas.": "Above humans on cognitive tasks.",
+    "estrecha": "narrow",
+    "general": "general",
+    "La pregunta correcta no es “¿qué nivel tiene este modelo?”": "The right question is not “what level is this model?”",
+    "Es si mantiene ese rendimiento a través de dominios, condiciones y tareas distintas.": "It is whether it maintains that performance across different domains, conditions, and tasks."
+  },
+  "forbidden_output_tokens": [
+    "AGI no es un interruptor",
+    "Sin IA",
+    "Automatización programada",
+    "Supera a no expertos",
+    "La frontera que importa",
+    "Nivel experto de forma general",
+    "Mejor que los mejores expertos",
+    "Por encima de humanos",
+    "La pregunta correcta"
+  ]
+}
