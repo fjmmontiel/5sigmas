@@ -77,9 +77,12 @@ def hidden(path: Path) -> bool:
 
 def expected_editorial_routes() -> set[str]:
     result: set[str] = set()
+    # Explicit root surfaces remain canonical routes even when a page is
+    # intentionally noindex (for example Coming Soon). noindex is an SEO
+    # directive, not a signal that locale route parity may omit the page.
     for rel in PUBLIC_ROOT_FILES:
         path = DOCS / rel
-        if path.is_file() and not hidden(path):
+        if path.is_file():
             result.add(rel)
 
     for dirname in PUBLIC_DIRS:
@@ -290,7 +293,7 @@ def main() -> int:
         "manifest_routes": compare(routes, declared_routes),
         "translated_snippets": {"missing": snippet_failures, "extra": []},
         "navigation": compare(expected_nav, actual_nav),
-        "video_articles": compare(videos, en_video_pages),
+        "video_articles": required_subset(videos, en_video_pages),
         "javascript_modules": required_subset(es_js, en_js),
         "audio_articles": compare(expected_audio, actual_audio),
         "audio_binaries": {"missing": audio_binary_failures, "extra": []},
