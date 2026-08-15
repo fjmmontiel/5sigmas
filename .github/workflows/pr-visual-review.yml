@@ -127,6 +127,9 @@ jobs:
       - name: Validate English-Spanish homepage parity
         run: node scripts/validate_english_home_parity.mjs
 
+      - name: Validate canonical ES/EN Concepts
+        run: node scripts/validate_english_concepts.mjs
+
       - name: Capture responsive screenshots
         run: node scripts/capture_site_screenshots.mjs
 
