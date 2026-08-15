@@ -16,6 +16,7 @@ hook-generated Markdown exists as locale source files.
 
 from __future__ import annotations
 
+import ast
 from functools import lru_cache
 from html import escape
 from pathlib import Path
@@ -84,6 +85,95 @@ def _generated_video_routes(locale: str, data: dict[str, Any]) -> frozenset[str]
         source_parent = Path(str(src_uri)).parent
         watch_src = Path("videos") / source_parent / f"{Path(video).stem}.md"
         routes.add(watch_src.as_posix())
+    return frozenset(routes)
+
+
+def _source_frontmatter(path: Path) -> dict[str, Any]:
+    text = path.read_text(encoding="utf-8")
+    match = re.match(r"\A---\s*\n(.*?)\n---\s*(?:\n|$)", text, flags=re.DOTALL)
+    if not match:
+        return {}
+    data = yaml.safe_load(match.group(1)) or {}
+    return data if isinstance(data, dict) else {}
+
+
+def _source_is_not_indexable(meta: dict[str, Any]) -> bool:
+    status = str(meta.get("publication_status") or "").strip().lower()
+    robots = str(meta.get("robots") or "").strip().lower()
+    return status in {"draft", "hidden", "wip", "private"} or "noindex" in robots
+
+
+def _is_remote_asset(value: str) -> bool:
+    return bool(re.match(r"^(?:https?:)?//", value.strip(), flags=re.IGNORECASE))
+
+
+@lru_cache(maxsize=1)
+def _wip_series() -> frozenset[str]:
+    module = ast.parse((ROOT / "hooks" / "wip_series.py").read_text(encoding="utf-8"))
+    for node in module.body:
+        if not isinstance(node, ast.Assign):
+            continue
+        if any(
+            isinstance(target, ast.Name) and target.id == "WIP_SERIES"
+            for target in node.targets
+        ):
+            value = ast.literal_eval(node.value)
+            return frozenset(str(item) for item in value)
+    return frozenset()
+
+
+def _spanish_nav_sources() -> frozenset[str]:
+    """Read the Spanish public navigation contract without loading MkDocs YAML tags."""
+    config_text = (ROOT / "mkdocs.yml").read_text(encoding="utf-8")
+    match = re.search(
+        r"(?ms)^nav:\s*\n(?P<body>.*?)(?=^markdown_extensions:)",
+        config_text,
+    )
+    if match is None:
+        raise RuntimeError("mkdocs.yml has no parseable Spanish nav contract")
+    paths = re.findall(
+        r"(?m)(?:^|[-:]\s*)([A-Za-z0-9_.\/-]+\.md)\s*$",
+        match.group("body"),
+    )
+    return frozenset(paths)
+
+
+@lru_cache(maxsize=1)
+def _spanish_public_routes() -> frozenset[str]:
+    """Derive Spanish indexable routes from nav/front matter, not build output."""
+    sources = _spanish_nav_sources()
+    routes: set[str] = set()
+
+    for source_path in sources:
+        if source_path == "videos/index.md":
+            routes.add("/videos/")
+            continue
+
+        source = ROOT / "docs" / source_path
+        if not source.is_file():
+            continue
+
+        meta = _source_frontmatter(source)
+        source_route = _src_route(source_path)
+        if _source_is_not_indexable(meta) or any(
+            slug in source_route for slug in _wip_series()
+        ):
+            continue
+        routes.add(source_route)
+
+        video = str(meta.get("video") or "").strip()
+        if not video:
+            continue
+        if not _is_remote_asset(video) and not (source.parent / video).is_file():
+            continue
+        poster = str(
+            meta.get("video_poster") or Path(video).with_suffix(".jpg").name
+        ).strip()
+        if not _is_remote_asset(poster) and not (source.parent / poster).is_file():
+            continue
+        source_parent = Path(source_path).parent.as_posix().strip("/")
+        routes.add(f"/videos/{source_parent}/{Path(video).stem}/")
+
     return frozenset(routes)
 
 
@@ -193,6 +283,7 @@ def on_post_build(config, **kwargs) -> None:
 
     language = _current_language(config)
     published = _published_public_routes("en")
+    spanish_routes = _spanish_public_routes() if language == "en" else frozenset()
     tree = ET.parse(sitemap_path)
     root = tree.getroot()
     changed = False
@@ -210,6 +301,8 @@ def on_post_build(config, **kwargs) -> None:
                 changed = True
 
         if source_route not in published:
+            continue
+        if language == "en" and source_route not in spanish_routes:
             continue
 
         for hreflang, href in (

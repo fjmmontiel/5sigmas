@@ -8,6 +8,8 @@ import re
 import subprocess
 import sys
 from pathlib import Path
+from urllib.parse import urlsplit
+import xml.etree.ElementTree as ET
 
 import yaml
 
@@ -27,6 +29,16 @@ HIGH_SIGNAL_SPANISH = (
 )
 
 MISSING_SNIPPET_RE = re.compile(r"Missing locale snippet:", re.IGNORECASE)
+MARKDOWN_LINK_RE = re.compile(
+    r'<link\b(?=[^>]*\brel=["\']alternate["\'])(?=[^>]*\btype=["\']text/markdown["\'])[^>]*\bhref=["\']([^"\']+)',
+    re.IGNORECASE,
+)
+ROBOTS_NOINDEX_RE = re.compile(
+    r'<meta\b(?=[^>]*\bname=["\']robots["\'])(?=[^>]*\bcontent=["\'][^"\']*noindex)',
+    re.IGNORECASE,
+)
+SITEMAP_NS = "http://www.sitemaps.org/schemas/sitemap/0.9"
+XHTML_NS = "http://www.w3.org/1999/xhtml"
 
 
 def load_manifest(locale: str) -> dict:
@@ -76,6 +88,54 @@ def audit_site(site: Path) -> list[str]:
         text = path.read_text(encoding="utf-8", errors="replace")
         if MISSING_SNIPPET_RE.search(text):
             errors.append(f"missing translated snippet rendered in {path.relative_to(site)}")
+        for markdown_url in MARKDOWN_LINK_RE.findall(text):
+            parsed = urlsplit(markdown_url)
+            if parsed.path.startswith("/en/"):
+                mirror = site / parsed.path.removeprefix("/en/")
+                if not mirror.is_file():
+                    errors.append(
+                        f"Markdown alternate missing for {path.relative_to(site)}: {markdown_url}"
+                    )
+
+    sitemap = site / "sitemap.xml"
+    if sitemap.is_file():
+        tree = ET.parse(sitemap)
+        sitemap_urls = tree.getroot().findall(f"{{{SITEMAP_NS}}}url")
+        for url_node in sitemap_urls:
+            loc_node = url_node.find(f"{{{SITEMAP_NS}}}loc")
+            if loc_node is None or not loc_node.text:
+                continue
+            parsed = urlsplit(loc_node.text)
+            if not parsed.path.startswith("/en/"):
+                continue
+            page_file = site / parsed.path.removeprefix("/en/").strip("/") / "index.html"
+            if parsed.path == "/en/":
+                page_file = site / "index.html"
+            if page_file.is_file() and ROBOTS_NOINDEX_RE.search(
+                page_file.read_text(encoding="utf-8", errors="replace")
+            ):
+                errors.append(f"noindex page appears in English sitemap: {loc_node.text}")
+
+        spanish_sitemap = site.parent / "sitemap.xml"
+        if spanish_sitemap.is_file():
+            spanish_locs = {
+                node.text
+                for node in ET.parse(spanish_sitemap).getroot().findall(
+                    f"{{{SITEMAP_NS}}}url/{{{SITEMAP_NS}}}loc"
+                )
+                if node.text
+            }
+            for url_node in sitemap_urls:
+                loc_node = url_node.find(f"{{{SITEMAP_NS}}}loc")
+                if loc_node is None or not loc_node.text:
+                    continue
+                for alternate in url_node.findall(f"{{{XHTML_NS}}}link"):
+                    if alternate.attrib.get("hreflang") == "es":
+                        if alternate.attrib.get("href") not in spanish_locs:
+                            errors.append(
+                                "English sitemap hreflang=es is not present in the Spanish sitemap: "
+                                f"{alternate.attrib.get('href')}"
+                            )
 
     index = site / "index.html"
     if not index.is_file():
