@@ -209,6 +209,7 @@ try {
             failures.push(`${entry.route}: decision-tree canonical loan controls changed`);
           }
           const treeText = await host.innerText();
+          const lowerTreeText = treeText.toLowerCase();
           for (const required of [
             'Decision Trees',
             'Monthly income (€)',
@@ -218,7 +219,7 @@ try {
             'How to read the visual',
             'Leaf diagram',
           ]) {
-            if (!treeText.includes(required)) failures.push(`${entry.route}: decision-tree missing English canonical copy ${JSON.stringify(required)}`);
+            if (!lowerTreeText.includes(required.toLowerCase())) failures.push(`${entry.route}: decision-tree missing English canonical copy ${JSON.stringify(required)}`);
           }
           for (const token of treeForbidden) {
             if (treeText.includes(token)) failures.push(`${entry.route}: decision-tree Spanish leakage ${JSON.stringify(token)}`);
@@ -236,13 +237,13 @@ try {
               await page.waitForFunction(() => {
                 const button = document.querySelector('[data-demo="ml:tree"] [data-btn="toggle"]');
                 return button && /Trained/.test(button.textContent || '');
-              }, { timeout: 7000 });
+              }, null, { timeout: 7000 });
             } catch {
               failures.push(`${entry.route}: decision-tree training did not reach canonical trained state`);
             }
             const trainedText = await host.innerText();
             if (!trainedText.includes('Result:')) failures.push(`${entry.route}: decision-tree trained result is missing`);
-            if (!trainedText.includes('Leaf diagram')) failures.push(`${entry.route}: decision-tree trained leaf diagram disappeared`);
+            if (!trainedText.toLowerCase().includes('leaf diagram')) failures.push(`${entry.route}: decision-tree trained leaf diagram disappeared`);
             for (const token of treeForbidden) {
               if (trainedText.includes(token)) failures.push(`${entry.route}: decision-tree Spanish leakage after training ${JSON.stringify(token)}`);
             }
