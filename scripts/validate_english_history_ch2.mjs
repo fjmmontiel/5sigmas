@@ -29,7 +29,7 @@ for (const viewport of [{name:'desktop',width:1440,height:1000},{name:'mobile',w
   if (await referenceRows.count() < 15) failures.push(`expected at least 15 canonical reference rows, found ${await referenceRows.count()}`);
 
   for (const forbidden of ['Capítulo ','Prerrequisitos','Siguiente capítulo','Mecanizar —','Fuentes base','Preguntas frecuentes']) if (body.includes(forbidden)) failures.push(`Spanish leakage ${JSON.stringify(forbidden)}`);
-  for (const selector of ['.calc-wrap','.gate-wrap','.tur-wrap','.vn-wrap','.mech-time']) if (await page.locator(selector).count() !== 1) failures.push(`missing ${selector}`);
+  for (const selector of ['.calc-wrap','.gate-wrap','.tur-wrap','.vn-wrap','.mec-wrap']) if (await page.locator(selector).count() !== 1) failures.push(`missing ${selector}`);
 
   const calculator = page.locator('.calc-wrap');
   if (await calculator.count() === 1) {
@@ -81,31 +81,43 @@ for (const viewport of [{name:'desktop',width:1440,height:1000},{name:'mobile',w
     const vnText = (await vonNeumann.textContent()) || '';
     for (const phrase of ['The von Neumann cycle: how the processor executes an instruction','Phase 1 — FETCH','Read the instruction','Previous phase','Next phase']) if (!vnText.includes(phrase)) failures.push(`canonical von Neumann visual missing ${JSON.stringify(phrase)}`);
     if (await vonNeumann.locator('.vn-phase-item').count() !== 4) failures.push(`expected 4 canonical von Neumann phases, found ${await vonNeumann.locator('.vn-phase-item').count()}`);
-    try {
-      await page.waitForFunction(() => document.querySelector('[data-demo="02-ciclo-von-neumann"]')?.dataset.vnReady === '1', null, {timeout: 2000});
-    } catch {
-      failures.push(`von Neumann runtime did not boot on ${viewport.name}`);
-    }
-    // Use DOM text rather than rendered innerText for phase labels: the canonical
-    // Spanish CSS intentionally uppercases the label visually via text-transform.
+    try { await page.waitForFunction(() => document.querySelector('[data-demo="02-ciclo-von-neumann"]')?.dataset.vnReady === '1', null, {timeout: 2000}); }
+    catch { failures.push(`von Neumann runtime did not boot on ${viewport.name}`); }
     const phaseValue = async () => ((await vonNeumann.locator('#vn-detail-phase').textContent()) || '').trim();
     const titleValue = async () => (await vonNeumann.locator('#vn-detail-title').innerText()).trim();
     const nextPhase = vonNeumann.locator('#vn-next');
     await nextPhase.click();
     const afterDecode = await phaseValue();
     if (afterDecode !== 'Phase 2 — DECODE') failures.push(`von Neumann Next interaction expected DECODE, got ${JSON.stringify(afterDecode)} on ${viewport.name}`);
-    const decodeTitle = await titleValue();
-    if (decodeTitle !== 'Interpret the instruction') failures.push(`von Neumann DECODE title expected translated title, got ${JSON.stringify(decodeTitle)} on ${viewport.name}`);
-    await nextPhase.click();
-    await nextPhase.click();
+    if (await titleValue() !== 'Interpret the instruction') failures.push(`von Neumann DECODE title expected translated title on ${viewport.name}`);
+    await nextPhase.click(); await nextPhase.click();
     const afterWriteback = await phaseValue();
     if (afterWriteback !== 'Phase 4 — WRITE-BACK') failures.push(`von Neumann cycle expected WRITE-BACK, got ${JSON.stringify(afterWriteback)} on ${viewport.name}`);
-    const writebackTitle = await titleValue();
-    if (writebackTitle !== 'Store the result') failures.push(`von Neumann WRITE-BACK title expected translated title, got ${JSON.stringify(writebackTitle)} on ${viewport.name}`);
+    if (await titleValue() !== 'Store the result') failures.push(`von Neumann WRITE-BACK title expected translated title on ${viewport.name}`);
     await vonNeumann.locator('#vn-prev').click();
-    const afterPrev = await phaseValue();
-    if (afterPrev !== 'Phase 3 — EXECUTE') failures.push(`von Neumann Previous expected EXECUTE, got ${JSON.stringify(afterPrev)} on ${viewport.name}`);
+    if (await phaseValue() !== 'Phase 3 — EXECUTE') failures.push(`von Neumann Previous expected EXECUTE on ${viewport.name}`);
     for (const forbidden of ['El ciclo de Von Neumann','Cuatro fases','Fase 1','Leer la instrucción','La unidad de control','Activo:','Fase anterior','Fase siguiente','Interpretar la instrucción','Ejecutar la operación','Guardar el resultado','siguiente instrucción']) if (vnText.includes(forbidden)) failures.push(`von Neumann visual Spanish leakage ${JSON.stringify(forbidden)}`);
+  }
+
+  const timeline = page.locator('.mec-wrap');
+  if (await timeline.count() === 1) {
+    const headerText = (await timeline.textContent()) || '';
+    for (const phrase of ['From gears to the universal computer','Mechanical era','Theoretical era','AI is born']) if (!headerText.includes(phrase)) failures.push(`canonical mechanization timeline missing ${JSON.stringify(phrase)}`);
+    if (await timeline.locator('.mec-epoch').count() !== 3) failures.push(`expected 3 canonical mechanization eras, found ${await timeline.locator('.mec-epoch').count()}`);
+    if (await timeline.locator('.mec-item').count() !== 3) failures.push(`expected 3 mechanical-era items, found ${await timeline.locator('.mec-item').count()}`);
+    const mechanical = await timeline.locator('#mecTimeline').innerText();
+    for (const phrase of ['First mechanical calculators','Jacquard loom','Analytical Engine (Babbage) and first algorithm (Lovelace)']) if (!mechanical.includes(phrase)) failures.push(`mechanical era missing ${JSON.stringify(phrase)}`);
+    await timeline.locator('[data-era="teo"]').click();
+    if (!(await timeline.locator('[data-era="teo"]').evaluate(el => el.classList.contains('mec-epoch--active')))) failures.push('theoretical-era tab did not activate');
+    if (await timeline.locator('.mec-item').count() !== 3) failures.push(`expected 3 theoretical-era items, found ${await timeline.locator('.mec-item').count()}`);
+    const theoretical = await timeline.locator('#mecTimeline').innerText();
+    for (const phrase of ['Boolean logic (Boole)','Turing Machine','Information theory (Shannon)']) if (!theoretical.includes(phrase)) failures.push(`theoretical era missing ${JSON.stringify(phrase)}`);
+    await timeline.locator('[data-era="dig"]').click();
+    if (await timeline.locator('.mec-item').count() !== 2) failures.push(`expected 2 AI-birth-era items, found ${await timeline.locator('.mec-item').count()}`);
+    const digital = await timeline.locator('#mecTimeline').innerText();
+    for (const phrase of ['Von Neumann architecture','Dartmouth conference — AI is born']) if (!digital.includes(phrase)) failures.push(`AI-birth era missing ${JSON.stringify(phrase)}`);
+    const allTimeline = `${headerText}\n${mechanical}\n${theoretical}\n${digital}`;
+    for (const forbidden of ['De los engranajes','Tres siglos de intentos','Era mecánica','Era teórica','Nace la IA','Primeras calculadoras','Telar de Jacquard','Máquina Analítica','Lógica booleana','Máquina de Turing','Teoría de la información','Arquitectura Von Neumann','Conferencia de Dartmouth','Hito']) if (allTimeline.includes(forbidden)) failures.push(`mechanization timeline Spanish leakage ${JSON.stringify(forbidden)}`);
   }
 
   const videos = page.locator('video[data-s5-inline-video-player]');
@@ -124,4 +136,4 @@ for (const viewport of [{name:'desktop',width:1440,height:1000},{name:'mobile',w
 }
 await browser.close();
 if (failures.length) { for (const failure of failures) console.error(failure); process.exit(1); }
-console.log('English history chapter 2 QA passed with canonical narrative, calculator, logic-gates, Turing and von Neumann visuals, plus native-English media.');
+console.log('English history chapter 2 QA passed with canonical narrative and all five canonical visuals plus native-English media.');
