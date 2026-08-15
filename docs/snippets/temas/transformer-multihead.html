@@ -1,0 +1,93 @@
+<div class="tmh-wrap" data-demo="topic-transformer-multihead">
+  <div class="tmh-head">
+    <div class="tmh-kicker">MULTI-HEAD ATTENTION</div>
+    <div class="tmh-title">Varias proyecciones leen relaciones distintas antes de recombinarse</div>
+    <div class="tmh-sub">Cada cabeza recibe la misma secuencia, aprende sus propias proyecciones Q/K/V y produce una salida contextual. Después se concatenan todas las cabezas y una proyección W<sup>O</sup> las vuelve a mezclar.</div>
+  </div>
+
+  <div class="tmh-flow" role="img" aria-label="Multi-head attention: una representación de entrada se proyecta en varias cabezas de atención, sus salidas se concatenan y se mezclan con W O">
+    <div class="tmh-input">
+      <span>ENTRADA</span>
+      <strong>X</strong>
+      <small>n × d<sub>model</sub></small>
+    </div>
+    <div class="tmh-arrow" aria-hidden="true">→</div>
+
+    <div class="tmh-heads">
+      <div class="tmh-headcard">
+        <div class="tmh-headtop"><b>cabeza 1</b><span>W<sub>1</sub><sup>Q,K,V</sup></span></div>
+        <div class="tmh-qkv"><i>Q₁</i><i>K₁</i><i>V₁</i></div>
+        <div class="tmh-map">
+          <i></i><i class="hot"></i><i></i><i></i>
+          <i class="warm"></i><i></i><i></i><i class="hot"></i>
+          <i></i><i></i><i class="hot"></i><i></i>
+          <i class="hot"></i><i></i><i class="warm"></i><i></i>
+        </div>
+        <strong class="tmh-z">z₁</strong>
+      </div>
+
+      <div class="tmh-headcard">
+        <div class="tmh-headtop"><b>cabeza 2</b><span>W<sub>2</sub><sup>Q,K,V</sup></span></div>
+        <div class="tmh-qkv"><i>Q₂</i><i>K₂</i><i>V₂</i></div>
+        <div class="tmh-map">
+          <i class="hot"></i><i></i><i></i><i class="warm"></i>
+          <i></i><i class="hot"></i><i></i><i></i>
+          <i></i><i class="warm"></i><i></i><i class="hot"></i>
+          <i></i><i></i><i class="hot"></i><i></i>
+        </div>
+        <strong class="tmh-z">z₂</strong>
+      </div>
+
+      <div class="tmh-headcard tmh-headcard--more">
+        <div class="tmh-headtop"><b>… cabeza h</b><span>W<sub>h</sub><sup>Q,K,V</sup></span></div>
+        <div class="tmh-qkv"><i>Qₕ</i><i>Kₕ</i><i>Vₕ</i></div>
+        <div class="tmh-map">
+          <i></i><i class="warm"></i><i class="hot"></i><i></i>
+          <i class="hot"></i><i></i><i></i><i></i>
+          <i></i><i class="hot"></i><i></i><i class="warm"></i>
+          <i></i><i></i><i></i><i class="hot"></i>
+        </div>
+        <strong class="tmh-z">zₕ</strong>
+      </div>
+    </div>
+
+    <div class="tmh-arrow" aria-hidden="true">→</div>
+    <div class="tmh-merge">
+      <span>RECOMBINAR</span>
+      <div class="tmh-concat">[ z₁ | z₂ | … | zₕ ]</div>
+      <div class="tmh-wo">× W<sup>O</sup></div>
+      <strong>salida multi-head</strong>
+    </div>
+  </div>
+
+  <div class="tmh-equations">
+    <div><span>CADA CABEZA</span><strong>head<sub>i</sub> = Attention(QW<sub>i</sub><sup>Q</sup>, KW<sub>i</sub><sup>K</sup>, VW<sub>i</sub><sup>V</sup>)</strong></div>
+    <div><span>SALIDA</span><strong>MultiHead = Concat(head₁, …, headₕ) W<sup>O</sup></strong></div>
+  </div>
+
+  <div class="tmh-contract">
+    <div><span>COMPARTEN</span><strong>la misma secuencia de entrada</strong></div>
+    <div><span>NO COMPARTEN</span><strong>las proyecciones Q/K/V</strong></div>
+    <div><span>NO HAY ROLES FIJOS</span><strong>una cabeza no tiene una semántica universal preasignada</strong></div>
+  </div>
+
+  <div class="tmh-note">Los patrones de las matrices son ilustrativos. La arquitectura permite subespacios de atención distintos; no implica que una cabeza concreta tenga siempre una función interpretable y estable.</div>
+  <div class="tmh-ref">Fuente primaria: <a href="https://arxiv.org/abs/1706.03762">Vaswani et al., <em>Attention Is All You Need</em> (2017), §3.2.2</a>.</div>
+</div>
+
+<style>
+.tmh-wrap,.tmh-wrap *{box-sizing:border-box}
+.tmh-wrap{--tmh-a:var(--md-primary-fg-color,#26a69a);--tmh-b:#4757d6;--tmh-c:var(--md-accent-fg-color,#ffb343);--tmh-bg:var(--md-default-bg-color,#fff);--tmh-fg:var(--md-default-fg-color,#111827);--tmh-muted:color-mix(in srgb,var(--tmh-fg) 58%,transparent);--tmh-border:color-mix(in srgb,var(--tmh-fg) 14%,transparent);container-type:inline-size;margin:1.1rem 0 1.5rem;padding:clamp(14px,2vw,22px);border:1px solid var(--tmh-border);border-radius:20px;background:radial-gradient(90% 120% at 0 0,color-mix(in srgb,var(--tmh-b) 8%,transparent),transparent 55%),radial-gradient(90% 120% at 100% 0,color-mix(in srgb,var(--tmh-a) 7%,transparent),transparent 58%),var(--tmh-bg);color:var(--tmh-fg)}
+.tmh-head{display:grid;gap:4px;margin-bottom:14px}.tmh-kicker{font-size:10.5px;font-weight:900;letter-spacing:.12em;color:var(--tmh-muted)}.tmh-title{font-size:clamp(18px,2.1vw,24px);font-weight:900;line-height:1.1;letter-spacing:-.02em;max-width:40ch}.tmh-sub{font-size:13.2px;line-height:1.46;color:var(--tmh-muted);max-width:90ch}
+.tmh-flow{display:grid;grid-template-columns:minmax(86px,.65fr) auto minmax(0,3fr) auto minmax(150px,1fr);gap:9px;align-items:center}.tmh-arrow{font-size:21px;font-weight:900;color:var(--tmh-muted);text-align:center}
+.tmh-input,.tmh-merge{min-width:0;border:1px solid var(--tmh-border);border-radius:14px;padding:12px;background:color-mix(in srgb,var(--tmh-bg) 94%,var(--tmh-fg) 6%);display:grid;gap:6px;align-content:center;text-align:center}.tmh-input{min-height:150px;border-color:color-mix(in srgb,var(--tmh-b) 34%,var(--tmh-border))}.tmh-input span,.tmh-merge>span,.tmh-equations span,.tmh-contract span{font-size:9px;font-weight:900;letter-spacing:.09em;color:var(--tmh-muted)}.tmh-input strong{font-size:28px;line-height:1}.tmh-input small{font-size:10.5px;color:var(--tmh-muted)}
+.tmh-heads{min-width:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.tmh-headcard{min-width:0;border:1px solid color-mix(in srgb,var(--tmh-b) 28%,var(--tmh-border));border-radius:13px;padding:9px;background:color-mix(in srgb,var(--tmh-b) 4%,var(--tmh-bg));display:grid;gap:7px}.tmh-headcard:nth-child(2){border-color:color-mix(in srgb,var(--tmh-a) 33%,var(--tmh-border));background:color-mix(in srgb,var(--tmh-a) 4%,var(--tmh-bg))}.tmh-headcard--more{border-color:color-mix(in srgb,var(--tmh-c) 38%,var(--tmh-border));background:color-mix(in srgb,var(--tmh-c) 5%,var(--tmh-bg))}
+.tmh-headtop{display:flex;justify-content:space-between;gap:5px;align-items:baseline}.tmh-headtop b{font-size:11.5px}.tmh-headtop span{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:9px;color:var(--tmh-muted)}.tmh-qkv{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}.tmh-qkv i{font-style:normal;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10px;text-align:center;padding:5px 2px;border:1px solid var(--tmh-border);border-radius:7px;background:var(--tmh-bg)}
+.tmh-map{width:min(116px,100%);aspect-ratio:1.65;margin:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:3px}.tmh-map i{border-radius:3px;background:color-mix(in srgb,var(--tmh-b) 9%,var(--tmh-bg));border:1px solid color-mix(in srgb,var(--tmh-b) 11%,transparent)}.tmh-map i.warm{background:color-mix(in srgb,var(--tmh-c) 28%,var(--tmh-bg))}.tmh-map i.hot{background:color-mix(in srgb,var(--tmh-a) 43%,var(--tmh-bg));border-color:color-mix(in srgb,var(--tmh-a) 44%,transparent)}.tmh-z{justify-self:center;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;padding:4px 8px;border-radius:7px;background:color-mix(in srgb,var(--tmh-fg) 7%,transparent)}
+.tmh-merge{min-height:150px;border-color:color-mix(in srgb,var(--tmh-a) 38%,var(--tmh-border));background:color-mix(in srgb,var(--tmh-a) 5%,var(--tmh-bg))}.tmh-concat,.tmh-wo{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;padding:7px;border:1px solid var(--tmh-border);border-radius:8px;background:var(--tmh-bg)}.tmh-merge strong{font-size:12px;line-height:1.25}
+.tmh-equations{margin-top:10px;display:grid;grid-template-columns:1.35fr 1fr;gap:8px}.tmh-equations>div{min-width:0;border:1px solid var(--tmh-border);border-radius:11px;padding:9px 10px;display:grid;gap:4px;background:color-mix(in srgb,var(--tmh-bg) 95%,var(--tmh-fg) 5%)}.tmh-equations strong{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10.8px;line-height:1.45;overflow-wrap:anywhere}
+.tmh-contract{margin-top:8px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.tmh-contract>div{min-width:0;border:1px solid var(--tmh-border);border-radius:11px;padding:9px 10px;display:grid;gap:3px}.tmh-contract strong{font-size:11.2px;line-height:1.32}.tmh-note{margin-top:9px;font-size:10.2px;line-height:1.4;color:var(--tmh-muted)}.tmh-ref{margin-top:6px;font-size:9.8px;line-height:1.35;color:var(--tmh-muted)}.tmh-ref a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+@container (max-width:760px){.tmh-flow{grid-template-columns:1fr;gap:6px}.tmh-arrow{height:14px;transform:rotate(90deg);font-size:18px}.tmh-input,.tmh-merge{min-height:auto}.tmh-heads{grid-template-columns:1fr}.tmh-map{max-width:150px}.tmh-equations,.tmh-contract{grid-template-columns:1fr}}
+@media (max-width:760px){.tmh-flow{grid-template-columns:1fr;gap:6px}.tmh-arrow{height:14px;transform:rotate(90deg);font-size:18px}.tmh-input,.tmh-merge{min-height:auto}.tmh-heads{grid-template-columns:1fr}.tmh-map{max-width:150px}.tmh-equations,.tmh-contract{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.tmh-wrap *{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
