@@ -5,6 +5,8 @@ on:
     paths:
       - 'locales/en/**'
       - 'mkdocs.en.yml'
+      - 'hooks/video_sitemap_en.py'
+      - 'hooks/locale_alternates.py'
       - 'scripts/prepare_locale.py'
       - 'scripts/validate_english_series_mirror.mjs'
       - 'scripts/validate_english_reasoning_ttc.mjs'
@@ -25,8 +27,10 @@ on:
       - 'scripts/validate_english_technical_articles.mjs'
       - 'scripts/validate_english_concepts.mjs'
       - 'scripts/validate_english_visual_hub.mjs'
+      - 'scripts/validate_english_video_hub.mjs'
       - 'docs/assets/javascripts/series_energy_ai_preview.js'
       - 'docs/assets/javascripts/visual-hub.js'
+      - 'docs/assets/javascripts/video-library.js'
       - '.github/workflows/english-mirror-quality.yml'
 
 permissions:
@@ -140,6 +144,9 @@ jobs:
 
       - name: Validate English visual hub
         run: node scripts/validate_english_visual_hub.mjs
+
+      - name: Validate English video hub
+        run: node scripts/validate_english_video_hub.mjs
 
       - name: Upload English mirror screenshots
         if: always()
