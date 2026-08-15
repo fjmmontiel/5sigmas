@@ -82,6 +82,21 @@ const pages = [
   },
 ];
 
+const canonicalInteractionContracts = {
+  ia_ml_dl: {
+    tabs: ['ia', 'ml', 'dl', 'gen'],
+    panelSelector: '.ai-panel[data-panel]',
+    itemSelector: '.ai-grid .ex',
+    items: 24,
+  },
+  tipos_aprendizaje: {
+    tabs: ['sup', 'unsup', 'self', 'rl'],
+    panelSelector: '.ta-panel[data-panel]',
+    itemSelector: '.learn-summary .learn-card',
+    items: 16,
+  },
+};
+
 const forbidden = [
   'Capítulo ',
   'Siguiente lectura',
@@ -125,6 +140,35 @@ try {
       const demos = page.locator('[data-demo]');
       if (await demos.count() !== entry.demos.length) {
         failures.push(`${entry.route}: expected ${entry.demos.length} teaching visuals, found ${await demos.count()}`);
+      }
+
+      for (const [demo, contract] of Object.entries(canonicalInteractionContracts)) {
+        const root = page.locator(`[data-demo="${demo}"]`);
+        if (await root.count() !== 1) continue;
+        if (!(await root.first().getAttribute('data-anim-tabs')) && !(await root.first().getAttribute('data-default'))) {
+          failures.push(`${entry.route}: ${demo} lost its canonical tab interaction contract`);
+        }
+        const actualTabs = await root.locator('[data-role="tab"][data-tab]').evaluateAll((nodes) =>
+          nodes.map((node) => node.getAttribute('data-tab')),
+        );
+        if (JSON.stringify(actualTabs) !== JSON.stringify(contract.tabs)) {
+          failures.push(`${entry.route}: ${demo} tab sequence changed: ${JSON.stringify(actualTabs)}`);
+        }
+        const panels = await root.locator(contract.panelSelector).count();
+        if (panels !== contract.tabs.length) {
+          failures.push(`${entry.route}: ${demo} expected ${contract.tabs.length} canonical panels, found ${panels}`);
+        }
+        const items = await root.locator(contract.itemSelector).count();
+        if (items !== contract.items) {
+          failures.push(`${entry.route}: ${demo} expected canonical density ${contract.items}, found ${items}`);
+        }
+        for (const tab of contract.tabs) {
+          await root.locator(`[data-role="tab"][data-tab="${tab}"]`).click();
+          const visiblePanels = await root.locator(`${contract.panelSelector}:visible`).count();
+          if (visiblePanels !== 1) {
+            failures.push(`${entry.route}: ${demo} tab ${tab} exposes ${visiblePanels} visible panels`);
+          }
+        }
       }
 
       if (entry.demos.length) {
@@ -216,4 +260,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Complete English Foundations QA passed: introduction + Chapters 1–4, 23 native visuals, native-English MP4/poster pairs, canonical native article audio, interactions, and clean desktop/mobile layouts.');
+console.log('Complete English Foundations QA passed: introduction + Chapters 1–4, 23 native visuals, native-English MP4/poster pairs, canonical native article audio, canonical interaction density, interactions, and clean desktop/mobile layouts.');
