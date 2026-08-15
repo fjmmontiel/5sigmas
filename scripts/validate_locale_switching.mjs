@@ -91,6 +91,8 @@ await assertTranslatedPair({ es: '/temas/evaluacion-modelos/', en: '/en/temas/ev
 await assertTranslatedPair({ es: '/temas/agentes-ia/', en: '/en/temas/agentes-ia/' });
 await assertTranslatedPair({ es: '/temas/prompt-injection/', en: '/en/temas/prompt-injection/' });
 await assertTranslatedPair({ es: '/visuales/', en: '/en/visuales/' });
+await assertTranslatedPair({ es: '/videos/', en: '/en/videos/' });
+await assertTranslatedPair({ es: '/videos/series/fundamentos-ia-iag/00_presentacion_serie/', en: '/en/videos/series/fundamentos-ia-iag/00_presentacion_serie/' });
 await assertTranslatedPair({ es: '/', en: '/en/' });
 
 const untranslated = '/temas/agi/';
