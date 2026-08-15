@@ -1,0 +1,32 @@
+{
+  "source": "snippets/temas/transformer-qkv.html",
+  "source_blob_sha": "896029b4e3737edb2f12f545efa4682309974248",
+  "replacements": {
+    ">La ecuación de atención convertida en flujo</div>": ">The attention equation, turned into a flow</div>",
+    ">Q decide qué busca cada posición; K calcula compatibilidad; V aporta el contenido que finalmente se mezcla.</div>": ">Q encodes what each position is looking for; K determines compatibility; V provides the content that is ultimately mixed.</div>",
+    ">Proyectar</strong>": ">Project</strong>",
+    ">Tres proyecciones aprendidas de la misma representación.</p>": ">Three learned projections of the same representation.</p>",
+    ">Comparar</strong>": ">Compare</strong>",
+    "aria-label=\"Matriz de compatibilidad entre queries y keys\"": "aria-label=\"Compatibility matrix between queries and keys\"",
+    ">Cada fila compara una query con todas las keys.</p>": ">Each row compares one query with every key.</p>",
+    ">Normalizar</strong>": ">Normalize</strong>",
+    ">Los pesos de cada fila quedan normalizados y suman 1.</p>": ">Each row is normalized so its weights sum to 1.</p>",
+    ">Mezclar valores</strong>": ">Mix values</strong>",
+    ">La salida es una combinación ponderada de los values.</p>": ">The output is a weighted combination of the values.</p>",
+    ">Los colores son una guía pedagógica, no pesos de un modelo concreto. La operación real se ejecuta sobre matrices.</div>": ">The colors are a teaching aid, not weights from a specific model. The real operation runs on matrices.</div>"
+  },
+  "forbidden_output_tokens": [
+    "ecuación de atención",
+    "qué busca",
+    "Proyectar",
+    "proyecciones aprendidas",
+    "Comparar",
+    "Matriz de compatibilidad",
+    "Cada fila compara",
+    "Normalizar",
+    "Los pesos",
+    "Mezclar valores",
+    "combinación ponderada",
+    "Los colores"
+  ]
+}
