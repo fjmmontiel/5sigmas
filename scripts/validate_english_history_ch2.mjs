@@ -42,7 +42,7 @@ for (const viewport of [{name:'desktop',width:1440,height:1000},{name:'mobile',w
   if (await referenceRows.count() < 15) failures.push(`expected at least 15 canonical reference rows, found ${await referenceRows.count()}`);
 
   for (const forbidden of ['Capítulo ', 'Prerrequisitos', 'Siguiente capítulo', 'Mecanizar —', 'Fuentes base', 'Preguntas frecuentes']) if (body.includes(forbidden)) failures.push(`Spanish leakage ${JSON.stringify(forbidden)}`);
-  for (const selector of ['.calc-wrap','.logic-wrap','.turing-wrap','.stored-wrap','.mech-time']) if (await page.locator(selector).count() !== 1) failures.push(`missing ${selector}`);
+  for (const selector of ['.calc-wrap','.gate-wrap','.turing-wrap','.stored-wrap','.mech-time']) if (await page.locator(selector).count() !== 1) failures.push(`missing ${selector}`);
 
   const calculator = page.locator('.calc-wrap');
   if (await calculator.count() === 1) {
@@ -57,6 +57,25 @@ for (const viewport of [{name:'desktop',width:1440,height:1000},{name:'mobile',w
     const limitText = await calculator.locator('[data-cpanel="limite"]').innerText();
     if (!limitText.includes('The impassable wall: conditional logic')) failures.push('canonical calculator limit panel missing translated wall explanation');
     for (const forbidden of ['El límite','Rueda de Leibniz','Lógica condicional','Lo que hizo falta']) if (calculatorText.includes(forbidden)) failures.push(`calculator visual Spanish leakage ${JSON.stringify(forbidden)}`);
+  }
+
+  const gates = page.locator('.gate-wrap');
+  if (await gates.count() === 1) {
+    const gateText = await gates.innerText();
+    for (const phrase of ['Logic gates: from thought to circuits','AND gate','OR gate','NOT gate (inverter)','1-bit adder — combined gates']) {
+      if (!gateText.includes(phrase)) failures.push(`canonical logic-gates visual missing ${JSON.stringify(phrase)}`);
+    }
+    const gateTabs = gates.locator('.gate-tab');
+    if (await gateTabs.count() !== 4) failures.push(`expected 4 canonical logic-gate tabs, found ${await gateTabs.count()}`);
+    await gates.locator('[data-gtab="and"]').click();
+    await gates.locator('#and-a').click();
+    await gates.locator('#and-b').click();
+    if ((await gates.locator('#and-out .gate-out-val').innerText()).trim() !== '1') failures.push('canonical AND-gate interaction did not produce 1 for A=1, B=1');
+    await gates.locator('[data-gtab="combo"]').click();
+    if (!(await gates.locator('[data-gpanel="combo"]').evaluate(el => el.classList.contains('gate-panel--active')))) failures.push('logic-gates Combination tab did not activate canonical panel');
+    for (const forbidden of ['Puertas lógicas:','Combinación','Puerta AND','Puerta OR','Puerta NOT','Salida:','Tabla de verdad','Uso real:','Sumador de 1 bit','acarreo']) {
+      if (gateText.includes(forbidden)) failures.push(`logic-gates visual Spanish leakage ${JSON.stringify(forbidden)}`);
+    }
   }
 
   const videos = page.locator('video[data-s5-inline-video-player]');
@@ -76,4 +95,4 @@ for (const viewport of [{name:'desktop',width:1440,height:1000},{name:'mobile',w
 }
 await browser.close();
 if (failures.length) { for (const failure of failures) console.error(failure); process.exit(1); }
-console.log('English history chapter 2 QA passed with canonical narrative, canonical calculator visual, and native-English media.');
+console.log('English history chapter 2 QA passed with canonical narrative, calculator and logic-gates visuals, plus native-English media.');
