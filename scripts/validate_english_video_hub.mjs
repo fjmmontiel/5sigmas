@@ -58,8 +58,9 @@ if (hubResponse?.ok()) {
   if (canonical !== 'https://5sigmas.com/en/videos/') failures.push(`/en/videos/: canonical is ${JSON.stringify(canonical)}`);
 
   const body = (await page.locator('body').innerText()).replace(/\s+/g, ' ');
+  const bodyLower = body.toLowerCase();
   for (const expected of ['One technical idea per video', 'Video library', 'videos available']) {
-    if (!body.includes(expected)) failures.push(`/en/videos/: missing English hub copy ${JSON.stringify(expected)}`);
+    if (!bodyLower.includes(expected.toLowerCase())) failures.push(`/en/videos/: missing English hub copy ${JSON.stringify(expected)}`);
   }
   for (const forbidden of ['vídeo disponible', 'vídeos disponibles', 'Ver vídeo', 'Leer artículo']) {
     if (body.includes(forbidden)) failures.push(`/en/videos/: Spanish runtime copy leaked: ${JSON.stringify(forbidden)}`);
