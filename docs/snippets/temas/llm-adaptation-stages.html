@@ -1,0 +1,54 @@
+<div class="las-wrap" data-demo="topic-llm-adaptation-stages">
+  <div class="las-head">
+    <div class="las-kicker">DEL MODELO BASE AL ASISTENTE</div>
+    <div class="las-title">Preentrenamiento, ajuste por instrucciones y preferencias optimizan señales distintas</div>
+    <div class="las-sub">Las etapas posteriores cambian cómo responde el modelo ante una petición. No convierten por sí solas una continuación probable en una fuente verificable ni sustituyen memoria, tools o estado operacional.</div>
+  </div>
+
+  <div class="las-stages" role="img" aria-label="Tres etapas de adaptación de un modelo de lenguaje: preentrenamiento, ajuste por instrucciones y optimización por preferencias">
+    <div class="las-stage las-stage--pre">
+      <div class="las-num">01</div>
+      <span>PREENTRENAMIENTO</span>
+      <strong>Aprender regularidades del corpus</strong>
+      <div class="las-signal"><b>Señal</b><em>siguiente token real</em></div>
+      <div class="las-change"><b>Resultado</b><em>modelo base que completa secuencias</em></div>
+    </div>
+    <div class="las-arrow" aria-hidden="true">→</div>
+    <div class="las-stage las-stage--sft">
+      <div class="las-num">02</div>
+      <span>INSTRUCTION TUNING</span>
+      <strong>Aprender a seguir peticiones</strong>
+      <div class="las-signal"><b>Señal</b><em>instrucción → respuesta objetivo</em></div>
+      <div class="las-change"><b>Resultado</b><em>formatos y conducta más útiles</em></div>
+    </div>
+    <div class="las-arrow" aria-hidden="true">→</div>
+    <div class="las-stage las-stage--pref">
+      <div class="las-num">03</div>
+      <span>PREFERENCIAS</span>
+      <strong>Favorecer respuestas preferidas</strong>
+      <div class="las-signal"><b>Señal</b><em>comparaciones, reward models u objetivos equivalentes</em></div>
+      <div class="las-change"><b>Resultado</b><em>comportamiento alineado con criterios del producto</em></div>
+    </div>
+  </div>
+
+  <div class="las-invariants">
+    <div><span>NO GARANTIZA</span><strong>procedencia factual</strong><small>Una respuesta puede seguir instrucciones y seguir siendo falsa.</small></div>
+    <div><span>NO AÑADE POR SÍ SOLO</span><strong>conocimiento actualizado</strong><small>Los cambios externos requieren contexto, recuperación o nuevo entrenamiento.</small></div>
+    <div><span>NO SUSTITUYE</span><strong>estado y autorización</strong><small>Las acciones fiables necesitan contratos, permisos y verificación fuera del texto.</small></div>
+  </div>
+
+  <div class="las-rule"><span>Lectura correcta</span><strong>Estas etapas forman una cadena de adaptación del comportamiento; no son tres nombres para el mismo entrenamiento.</strong></div>
+  <div class="las-ref">Fuente primaria: <a href="https://arxiv.org/abs/2203.02155">Ouyang et al., Training language models to follow instructions with human feedback (2022)</a></div>
+</div>
+
+<style>
+.las-wrap,.las-wrap *{box-sizing:border-box}
+.las-wrap{--las-a:var(--md-primary-fg-color,#26a69a);--las-b:#4757d6;--las-c:var(--md-accent-fg-color,#ffb343);--las-r:#e06c75;--las-bg:var(--md-default-bg-color,#fff);--las-fg:var(--md-default-fg-color,#111827);--las-muted:color-mix(in srgb,var(--las-fg) 58%,transparent);--las-border:color-mix(in srgb,var(--las-fg) 14%,transparent);container-type:inline-size;margin:1.1rem 0 1.5rem;padding:clamp(14px,2vw,22px);border:1px solid var(--las-border);border-radius:20px;background:radial-gradient(90% 130% at 0 0,color-mix(in srgb,var(--las-b) 7%,transparent),transparent 56%),radial-gradient(80% 120% at 100% 0,color-mix(in srgb,var(--las-a) 8%,transparent),transparent 58%),var(--las-bg);color:var(--las-fg)}
+.las-head{display:grid;gap:4px;margin-bottom:14px}.las-kicker{font-size:10px;font-weight:900;letter-spacing:.12em;color:var(--las-muted)}.las-title{font-size:clamp(18px,2.1vw,24px);font-weight:900;line-height:1.12;letter-spacing:-.02em;max-width:34ch}.las-sub{font-size:13.4px;line-height:1.48;color:var(--las-muted);max-width:90ch}
+.las-stages{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr);gap:8px;align-items:stretch}.las-stage{position:relative;min-width:0;padding:13px;border:1px solid var(--las-border);border-radius:14px;background:color-mix(in srgb,var(--las-bg) 96%,var(--las-fg) 4%);display:grid;grid-template-rows:auto auto auto 1fr 1fr;gap:7px}.las-num{position:absolute;top:10px;right:10px;font-size:25px;font-weight:900;line-height:1;color:color-mix(in srgb,var(--las-fg) 8%,transparent)}.las-stage>span,.las-invariants span,.las-rule span{font-size:9.2px;font-weight:900;letter-spacing:.09em;color:var(--las-muted)}.las-stage>strong{font-size:13.4px;line-height:1.28;max-width:18ch}.las-stage--pre{border-color:color-mix(in srgb,var(--las-b) 38%,var(--las-border));background:color-mix(in srgb,var(--las-b) 5%,var(--las-bg))}.las-stage--sft{border-color:color-mix(in srgb,var(--las-a) 42%,var(--las-border));background:color-mix(in srgb,var(--las-a) 5%,var(--las-bg))}.las-stage--pref{border-color:color-mix(in srgb,var(--las-c) 48%,var(--las-border));background:color-mix(in srgb,var(--las-c) 6%,var(--las-bg))}.las-signal,.las-change{align-self:end;padding-top:8px;border-top:1px solid var(--las-border);display:grid;gap:2px}.las-signal b,.las-change b{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--las-muted)}.las-signal em,.las-change em{font-size:10.8px;line-height:1.35;font-style:normal}.las-arrow{display:grid;place-items:center;font-size:18px;font-weight:900;color:var(--las-muted)}
+.las-invariants{margin-top:10px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.las-invariants>div{min-width:0;padding:10px 11px;border:1px solid var(--las-border);border-radius:12px;background:color-mix(in srgb,var(--las-r) 3%,var(--las-bg));display:grid;gap:3px}.las-invariants strong{font-size:11.7px;line-height:1.28}.las-invariants small{font-size:10.3px;line-height:1.38;color:var(--las-muted)}
+.las-rule{margin-top:10px;padding:10px 12px;border-left:3px solid var(--las-a);border-radius:0 10px 10px 0;background:color-mix(in srgb,var(--las-a) 5%,var(--las-bg));display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:center}.las-rule span{white-space:nowrap}.las-rule strong{font-size:11.7px;line-height:1.4}.las-ref{margin-top:9px;font-size:9.8px;line-height:1.35;color:var(--las-muted)}.las-ref a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+@container (max-width:720px){.las-stages{grid-template-columns:1fr;gap:6px}.las-arrow{height:14px;transform:rotate(90deg)}.las-invariants{grid-template-columns:1fr}.las-rule{grid-template-columns:1fr;gap:3px}.las-stage{grid-template-rows:auto auto auto auto auto}.las-stage>strong{max-width:none}}
+@media (max-width:720px){.las-stages{grid-template-columns:1fr;gap:6px}.las-arrow{height:14px;transform:rotate(90deg)}.las-invariants{grid-template-columns:1fr}.las-rule{grid-template-columns:1fr;gap:3px}}
+@media (prefers-reduced-motion:reduce){.las-wrap *{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
