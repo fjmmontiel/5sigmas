@@ -14,9 +14,34 @@ for (const viewport of [{name:'desktop',width:1440,height:1000},{name:'mobile',w
   const response = await page.goto(`${base}${route}`,{waitUntil:'networkidle'});
   if (!response?.ok()) failures.push(`HTTP ${response?.status() ?? 'no response'}`);
   const body = await page.locator('body').innerText();
-  if (!body.includes('Chapter 2 — Mechanize')) failures.push('missing English chapter title');
-  for (const concept of ['programmable computer', 'Turing', 'stored-program']) if (!body.toLowerCase().includes(concept.toLowerCase())) failures.push(`missing core concept ${concept}`);
-  for (const forbidden of ['Capítulo ', 'Prerrequisitos', 'Siguiente capítulo', 'Mecanizar —']) if (body.includes(forbidden)) failures.push(`Spanish leakage ${JSON.stringify(forbidden)}`);
+  if (!body.includes('Chapter 2: Mechanize')) failures.push('missing canonical English chapter title');
+
+  const canonicalNarrative = [
+    'Pascaline',
+    'Step Reckoner',
+    'Jacquard loom',
+    'Analytical Engine',
+    'Ada Lovelace',
+    'Boolean algebra',
+    'A Symbolic Analysis of Relay and Switching Circuits',
+    'halting problem',
+    'A Mathematical Theory of Communication',
+    'stored-program concept',
+    'Manchester Baby',
+    'EDSAC',
+    'Dartmouth Summer Research Project on Artificial Intelligence',
+    'Chapter 3 — Learn',
+    'Core sources',
+    'What is the difference between automating and programming?'
+  ];
+  for (const phrase of canonicalNarrative) if (!body.includes(phrase)) failures.push(`missing canonical narrative phrase ${JSON.stringify(phrase)}`);
+
+  const optional = page.locator('details.s5-optional');
+  if (await optional.count() !== 1) failures.push(`expected canonical halting-problem disclosure, found ${await optional.count()}`);
+  const referenceRows = page.locator('table tbody tr');
+  if (await referenceRows.count() < 15) failures.push(`expected at least 15 canonical reference rows, found ${await referenceRows.count()}`);
+
+  for (const forbidden of ['Capítulo ', 'Prerrequisitos', 'Siguiente capítulo', 'Mecanizar —', 'Fuentes base', 'Preguntas frecuentes']) if (body.includes(forbidden)) failures.push(`Spanish leakage ${JSON.stringify(forbidden)}`);
   for (const selector of ['.calc-limit','.logic-wrap','.turing-wrap','.stored-wrap','.mech-time']) if (await page.locator(selector).count() !== 1) failures.push(`missing ${selector}`);
   const videos = page.locator('video[data-s5-inline-video-player]');
   if (await videos.count() !== 1) {
@@ -35,4 +60,4 @@ for (const viewport of [{name:'desktop',width:1440,height:1000},{name:'mobile',w
 }
 await browser.close();
 if (failures.length) { for (const failure of failures) console.error(failure); process.exit(1); }
-console.log('English history chapter 2 QA passed with native-English media.');
+console.log('English history chapter 2 QA passed with canonical narrative and native-English media.');
