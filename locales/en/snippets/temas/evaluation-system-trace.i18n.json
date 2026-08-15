@@ -1,6 +1,6 @@
 {
   "source": "snippets/temas/evaluation-system-trace.html",
-  "source_blob_sha": "583ed8c3e99bce1ec09d3ca84e91e0e54010fc89",
+  "source_blob_sha": "2a1f26535d118c9032e0594ce0d9696bba4a1867",
   "replacements": {
     ">DIAGNÓSTICO DE SISTEMAS</div>": ">SYSTEM DIAGNOSTICS</div>",
     ">No puntúes solo la respuesta: localiza dónde nació el fallo</div>": ">Do not score only the answer: locate where the failure began</div>",
