@@ -1,0 +1,43 @@
+{
+  "source": "snippets/from-cave-to-agi/04-preentrenamiento-finetuning.html",
+  "source_blob_sha": "879f1d24a29b5bcbe4a622b1505214c80f5d3dd0",
+  "replacements": {
+    "Del dato en bruto al producto: tres etapas": "From raw data to product: three stages",
+    "Un modelo fundacional no es un producto terminado. Entre el preentrenamiento y el uso real hay dos etapas más, cada una con su propia lógica, su coste y sus limitaciones.": "A foundation model is not a finished product. Between pretraining and real-world use there are two more stages, each with its own logic, cost, and limitations.",
+    "Etapa 1": "Stage 1",
+    "Preentrenamiento": "Pretraining",
+    "Etapa 2": "Stage 2",
+    "Alineamiento": "Alignment",
+    "Etapa 3": "Stage 3",
+    "Uso real": "Real-world use",
+    "$10M – $100M · semanas de cómputo": "$10M – $100M · weeks of compute",
+    "Objetivo: predecir el token siguiente": "Objective: predict the next token",
+    "Entra": "Input",
+    "📚 Libros": "📚 Books",
+    "🌐 Web": "🌐 Web",
+    "💻 Código": "💻 Code",
+    "📰 Artículos": "📰 Articles",
+    "Sale": "Output",
+    "Modelo base": "Base model",
+    "Billones de parámetros. Conocimiento general del lenguaje y del mundo. Potente pero no instruccionable de forma confiable.": "Billions of parameters. General knowledge of language and the world. Powerful, but not reliably steerable through instructions.",
+    "$100K – $10M · interacción humana": "$100K – $10M · human interaction",
+    "Objetivo: seguir instrucciones y evitar daños": "Objective: follow instructions and avoid harm",
+    "👤 Instrucciones humanas": "👤 Human instructions",
+    "⚖ Preferencias comparadas": "⚖ Compared preferences",
+    "Modelo alineado": "Aligned model",
+    "Sigue instrucciones, mantiene tono, evita respuestas dañinas. Listo para interacción humana directa.": "Follows instructions, maintains tone, avoids harmful responses. Ready for direct human interaction.",
+    "Variable · por llamada o despliegue": "Variable · per call or deployment",
+    "El modelo alineado orquestado con contexto y herramientas": "The aligned model orchestrated with context and tools",
+    "Entra en tiempo de uso": "Runtime input",
+    "🔧 Herramientas externas": "🔧 External tools",
+    "📄 Documentos / RAG": "📄 Documents / RAG",
+    "🧩 Memoria temporal": "🧩 Temporary memory",
+    "🎯 Instrucción de sistema": "🎯 System instruction",
+    "Producto": "Product",
+    "El modelo alineado orquestado con contexto, herramientas y memoria. Esto es lo que el usuario experimenta.": "The aligned model orchestrated with context, tools, and memory. This is what the user experiences.",
+    "El modelo fundacional es una base necesaria, no suficiente. Un asistente, un agente o un sistema RAG son la Etapa 3: usan el modelo como motor, pero añaden capas que el preentrenamiento no puede proporcionar.": "The foundation model is a necessary base, but not sufficient. An assistant, an agent, or a RAG system belongs to Stage 3: they use the model as an engine but add layers that pretraining cannot provide."
+  },
+  "forbidden_output_tokens": [
+    "Del dato en bruto", "Un modelo fundacional no es", "Etapa 1", "Preentrenamiento", "Etapa 2", "Alineamiento", "Etapa 3", "Uso real", "semanas de cómputo", "Objetivo:", "Entra", "Libros", "Código", "Artículos", "Sale", "Modelo base", "Conocimiento general", "interacción humana", "Instrucciones humanas", "Preferencias comparadas", "Modelo alineado", "Sigue instrucciones", "por llamada o despliegue", "Entra en tiempo de uso", "Herramientas externas", "Documentos", "Memoria temporal", "Instrucción de sistema", "Producto", "El modelo fundacional es una base"
+  ]
+}
