@@ -1,0 +1,107 @@
+<div class="tqv-wrap" data-demo="topic-transformer-qkv">
+  <div class="tqv-head">
+    <div class="tqv-kicker">SELF-ATTENTION</div>
+    <div class="tqv-title">La ecuación de atención convertida en flujo</div>
+    <div class="tqv-sub">Q decide qué busca cada posición; K calcula compatibilidad; V aporta el contenido que finalmente se mezcla.</div>
+  </div>
+
+  <div class="tqv-flow">
+    <div class="tqv-step">
+      <div class="tqv-step-top"><span>1</span><strong>Proyectar</strong></div>
+      <div class="tqv-proj">
+        <div class="tqv-x">X</div><span class="tqv-arr">→</span>
+        <div class="tqv-triplet">
+          <div><b>Q</b><small>queries</small></div>
+          <div><b>K</b><small>keys</small></div>
+          <div><b>V</b><small>values</small></div>
+        </div>
+      </div>
+      <p>Tres proyecciones aprendidas de la misma representación.</p>
+    </div>
+
+    <div class="tqv-step">
+      <div class="tqv-step-top"><span>2</span><strong>Comparar</strong></div>
+      <div class="tqv-formula">S = QK<sup>T</sup> / √d<sub>k</sub></div>
+      <div class="tqv-matrix tqv-matrix--scores" aria-label="Matriz de compatibilidad entre queries y keys">
+        <i></i><i></i><i class="hot"></i><i></i>
+        <i></i><i class="hot"></i><i></i><i></i>
+        <i class="hot"></i><i></i><i></i><i class="warm"></i>
+        <i></i><i></i><i class="warm"></i><i class="hot"></i>
+      </div>
+      <p>Cada fila compara una query con todas las keys.</p>
+    </div>
+
+    <div class="tqv-step">
+      <div class="tqv-step-top"><span>3</span><strong>Normalizar</strong></div>
+      <div class="tqv-formula">A = softmax(S)</div>
+      <div class="tqv-weights">
+        <span style="--w:18%"></span>
+        <span style="--w:46%"></span>
+        <span style="--w:24%"></span>
+        <span style="--w:12%"></span>
+      </div>
+      <p>Los pesos de cada fila quedan normalizados y suman 1.</p>
+    </div>
+
+    <div class="tqv-step">
+      <div class="tqv-step-top"><span>4</span><strong>Mezclar valores</strong></div>
+      <div class="tqv-formula">Z = AV</div>
+      <div class="tqv-mix">
+        <span>α₁v₁</span><b>+</b><span>α₂v₂</span><b>+</b><span>…</span><b>→</b><strong>z</strong>
+      </div>
+      <p>La salida es una combinación ponderada de los values.</p>
+    </div>
+  </div>
+
+  <div class="tqv-equation">
+    <span>Attention(Q, K, V)</span>
+    <strong>= softmax(QK<sup>T</sup> / √d<sub>k</sub>) V</strong>
+  </div>
+  <div class="tqv-note">Los colores son una guía pedagógica, no pesos de un modelo concreto. La operación real se ejecuta sobre matrices.</div>
+</div>
+
+<style>
+.tqv-wrap,.tqv-wrap *{box-sizing:border-box}
+.tqv-wrap{
+  --tqv-a:var(--md-primary-fg-color,#26a69a);
+  --tqv-b:#4757d6;
+  --tqv-c:var(--md-accent-fg-color,#ffb343);
+  --tqv-bg:var(--md-default-bg-color,#fff);
+  --tqv-fg:var(--md-default-fg-color,#111827);
+  --tqv-muted:color-mix(in srgb,var(--tqv-fg) 58%,transparent);
+  --tqv-border:color-mix(in srgb,var(--tqv-fg) 14%,transparent);
+  margin:1.1rem 0 1.5rem;padding:clamp(14px,2vw,22px);border:1px solid var(--tqv-border);border-radius:20px;
+  background:radial-gradient(110% 130% at 100% 0,color-mix(in srgb,var(--tqv-b) 8%,transparent),transparent 52%),var(--tqv-bg);color:var(--tqv-fg)
+}
+.tqv-head{display:grid;gap:4px;margin-bottom:14px}
+.tqv-kicker{font-size:11px;font-weight:900;letter-spacing:.12em;color:var(--tqv-muted)}
+.tqv-title{font-size:clamp(18px,2.1vw,24px);font-weight:900;line-height:1.1;letter-spacing:-.02em}
+.tqv-sub{font-size:13.5px;line-height:1.45;color:var(--tqv-muted);max-width:78ch}
+.tqv-flow{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.tqv-step{border:1px solid var(--tqv-border);border-radius:14px;padding:11px;display:grid;grid-template-rows:auto 1fr auto;gap:9px;background:color-mix(in srgb,var(--tqv-bg) 92%,var(--tqv-fg) 8%);min-width:0}
+.tqv-step-top{display:flex;align-items:center;gap:7px}
+.tqv-step-top>span{width:22px;height:22px;border-radius:999px;display:grid;place-items:center;font-size:10px;font-weight:900;background:color-mix(in srgb,var(--tqv-b) 14%,transparent);color:var(--tqv-b)}
+.tqv-step-top strong{font-size:12.5px}
+.tqv-step p{margin:0;font-size:10.8px;line-height:1.35;color:var(--tqv-muted)}
+.tqv-proj{display:grid;grid-template-columns:auto auto 1fr;align-items:center;gap:8px}
+.tqv-x{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;font-weight:900;border:1px solid color-mix(in srgb,var(--tqv-b) 36%,var(--tqv-border));background:color-mix(in srgb,var(--tqv-b) 9%,var(--tqv-bg))}
+.tqv-arr{font-weight:900;color:var(--tqv-muted)}
+.tqv-triplet{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+.tqv-triplet>div{min-width:0;border:1px solid var(--tqv-border);border-radius:9px;padding:6px 4px;text-align:center;background:var(--tqv-bg)}
+.tqv-triplet b{display:block;font-size:14px}.tqv-triplet small{display:block;font-size:8.5px;color:var(--tqv-muted)}
+.tqv-formula{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;font-weight:800;text-align:center;padding:8px;border-radius:9px;background:var(--tqv-bg);border:1px solid var(--tqv-border)}
+.tqv-matrix{width:min(150px,100%);aspect-ratio:1.6;margin:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:3px}
+.tqv-matrix i{border-radius:4px;background:color-mix(in srgb,var(--tqv-b) 9%,var(--tqv-bg));border:1px solid color-mix(in srgb,var(--tqv-b) 12%,transparent)}
+.tqv-matrix i.warm{background:color-mix(in srgb,var(--tqv-c) 28%,var(--tqv-bg))}
+.tqv-matrix i.hot{background:color-mix(in srgb,var(--tqv-a) 42%,var(--tqv-bg));border-color:color-mix(in srgb,var(--tqv-a) 44%,transparent)}
+.tqv-weights{display:grid;gap:5px;align-content:center}
+.tqv-weights span{display:block;height:9px;border-radius:999px;background:linear-gradient(90deg,var(--tqv-a) var(--w),color-mix(in srgb,var(--tqv-fg) 9%,transparent) var(--w))}
+.tqv-mix{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;align-items:center;align-content:center}
+.tqv-mix span,.tqv-mix strong{padding:6px 7px;border-radius:8px;border:1px solid var(--tqv-border);background:var(--tqv-bg);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px}
+.tqv-mix b{font-size:11px;color:var(--tqv-muted)}
+.tqv-equation{margin-top:11px;border:1px solid color-mix(in srgb,var(--tqv-a) 40%,var(--tqv-border));border-radius:12px;padding:10px 12px;display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;justify-content:center;background:color-mix(in srgb,var(--tqv-a) 6%,var(--tqv-bg));font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.tqv-equation span{font-size:12px;color:var(--tqv-muted)}.tqv-equation strong{font-size:14px}
+.tqv-note{margin-top:7px;font-size:10px;line-height:1.35;text-align:center;color:var(--tqv-muted)}
+@media (max-width:900px){.tqv-flow{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.tqv-flow{grid-template-columns:1fr}.tqv-step{grid-template-rows:auto auto auto}.tqv-matrix{max-width:180px}}
+</style>
