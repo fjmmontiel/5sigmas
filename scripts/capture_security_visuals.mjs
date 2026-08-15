@@ -8,6 +8,8 @@ await mkdir(outputDir, { recursive: true });
 const routes = [
   { slug: '00-presentacion', path: '/series/seguridad-ia/00_presentacion_serie/', roots: ['.secpath'] },
   { slug: '01-prompt-injection', path: '/series/seguridad-ia/01-prompt-injection/', roots: ['.ctxmix', '.ragtrace', '.defsim'] },
+  { slug: 'topic-prompt-injection-es', path: '/temas/prompt-injection/', lang: 'es', roots: ['.ctxmix', '.ragtrace', '.defsim'], expectText: ['La frontera se pierde dentro del contexto', 'La barrera real está antes del modelo', 'No necesitas que todas las capas sean perfectas'], forbidText: ['The boundary disappears inside the context', 'The first real barrier is retrieval', 'You do not need every layer to be perfect'] },
+  { slug: 'topic-prompt-injection-en', path: '/en/temas/prompt-injection/', lang: 'en', roots: ['.ctxmix', '.ragtrace', '.defsim'], expectText: ['The boundary disappears inside the context', 'The first real barrier is retrieval', 'You do not need every layer to be perfect'], forbidText: ['La frontera se pierde dentro del contexto', 'La barrera real está antes del modelo', 'No necesitas que todas las capas sean perfectas'] },
   { slug: '02-jailbreaks', path: '/series/seguridad-ia/02-jailbreaks/', roots: ['.jbsearch', '.jbbudget', '.jbladder'] },
   { slug: '03-envenenamiento', path: '/series/seguridad-ia/03-envenenamiento/', roots: ['.memlife', '.memgov', '.memprop', '.memlayers'] },
   { slug: '04-red-teaming', path: '/series/seguridad-ia/04-red-teaming/', roots: ['.threatbuild', '.uplift3', '.causalrt', '.regloop'] },
@@ -32,6 +34,29 @@ const isTransientExternalFontFailure = (url, resourceType) => (
   resourceType === 'font' && isTransientExternalFontUrl(url)
 );
 
+const previewHost = (() => {
+  try {
+    return new URL(baseUrl).hostname;
+  } catch {
+    return '';
+  }
+})();
+const isLocalPreview = previewHost === '127.0.0.1' || previewHost === 'localhost';
+
+// Material's instant-navigation bundle probes a sitemap relative to its configured
+// production base even while this QA runs against a localhost build. Search/SEO
+// gates validate the real sitemap separately, so do not let that preview-only XHR
+// obscure first-party visual/runtime failures.
+const isPreviewOnlyHostedSitemapProbe = (url, resourceType) => {
+  if (!isLocalPreview || resourceType !== 'xhr' || !url) return false;
+  try {
+    const parsed = new URL(url);
+    return parsed.hostname === '5sigmas.com' && parsed.pathname.endsWith('/sitemap.xml');
+  } catch {
+    return false;
+  }
+};
+
 // Chromium emits a second, URL-less console error for failed resources. HTTP and
 // request failures are audited separately below with the exact URL, status and type,
 // so retaining this duplicate would turn an allowed third-party font failure into a
@@ -50,8 +75,10 @@ const visible = async (locator) => await locator.evaluate((node) => {
 });
 
 async function exerciseVisual(page, selector) {
-  const root = page.locator(selector).first();
-  if (!await root.count()) throw new Error(`missing visual ${selector}`);
+  const matches = page.locator(selector);
+  const matchCount = await matches.count();
+  if (matchCount !== 1) throw new Error(`expected exactly one ${selector}, found ${matchCount}`);
+  const root = matches.first();
   if (!await visible(root)) throw new Error(`visual ${selector} is not visible`);
 
   const box = await root.boundingBox();
@@ -139,10 +166,12 @@ try {
         if (response.status() < 400) return;
         const request = response.request();
         if (isTransientExternalFontFailure(response.url(), request.resourceType())) return;
+        if (isPreviewOnlyHostedSitemapProbe(response.url(), request.resourceType())) return;
         runtimeErrors.push(`http ${response.status()}: ${response.url()} [type=${request.resourceType()}]`);
       });
       page.on('requestfailed', (request) => {
         if (isTransientExternalFontFailure(request.url(), request.resourceType())) return;
+        if (isPreviewOnlyHostedSitemapProbe(request.url(), request.resourceType())) return;
         runtimeErrors.push(
           `request failed: ${request.url()} (${request.failure()?.errorText ?? 'unknown error'}) [type=${request.resourceType()}]`,
         );
@@ -151,6 +180,18 @@ try {
       const response = await page.goto(`${baseUrl}${route.path}`, { waitUntil: 'networkidle', timeout: 30_000 });
       if (!response?.ok()) throw new Error(`${route.path} returned ${response?.status() ?? 'no response'}`);
       await page.evaluate(() => document.fonts.ready);
+
+      if (route.lang) {
+        const htmlLang = await page.locator('html').getAttribute('lang');
+        if (htmlLang !== route.lang) throw new Error(`${route.path} html lang=${JSON.stringify(htmlLang)} expected ${route.lang}`);
+      }
+      const body = await page.locator('body').innerText();
+      for (const expected of route.expectText ?? []) {
+        if (!body.includes(expected)) throw new Error(`${route.path} missing visual teaching anchor ${JSON.stringify(expected)}`);
+      }
+      for (const forbidden of route.forbidText ?? []) {
+        if (body.includes(forbidden)) throw new Error(`${route.path} locale leakage ${JSON.stringify(forbidden)}`);
+      }
 
       const initial = await page.evaluate(() => ({
         viewportWidth: document.documentElement.clientWidth,

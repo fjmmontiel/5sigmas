@@ -4,7 +4,7 @@ seo_title: "Prompt injection: what it is and how to reduce the risk"
 description: "What prompt injection is in LLM systems, why it matters for RAG and agents, and which design principles reduce the risk that external content influences an action."
 keywords: "prompt injection, LLM security, indirect prompt injection, RAG security, AI agent security"
 date: 2026-08-09
-date_modified: 2026-08-09
+date_modified: 2026-08-15
 ---
 
 # What is prompt injection?
@@ -15,17 +15,7 @@ The practical consequence is simple: **reading external information should not g
 
 ## The 60-second answer
 
-```text
-trusted rules
-+ user request
-+ external content
-        ↓
-    LLM context
-        ↓
- proposed decision
-        ↓
- runtime validation and authorization
-```
+{{ include_html("snippets/seguridad-ia/01-control-vs-datos.html") }}
 
 The model can interpret context. The runtime should decide which content has authority, which tools are available and which actions are allowed.
 
@@ -38,6 +28,8 @@ Indirect injection is especially important in RAG and agent systems because the 
 ## RAG retrieves relevance, not authority
 
 A RAG system selects information because it appears relevant to a query. That selection does not prove that the content is correct, current, authorized or safe to use when deciding an action.
+
+{{ include_html("snippets/seguridad-ia/01-rag-trigger-fragment.html") }}
 
 It helps to separate two questions:
 
@@ -65,6 +57,8 @@ A clearer system prompt can reduce errors, but it is still natural language inte
 Defence becomes stronger when the architecture around the model changes.
 
 ## Defence principles
+
+{{ include_html("snippets/seguridad-ia/01-defensa-en-capas.html") }}
 
 ### Treat external content as untrusted
 
