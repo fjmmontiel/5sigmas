@@ -476,7 +476,7 @@ async function validateChapterThreeCanonicalVisuals(page, entry) {
       }
     }
     const copy = await matrix.innerText();
-    for (const required of ['The operational matrix', 'Explicit rules', 'Classical ML', 'Plain LLM', 'LLM + RAG', 'Agent']) {
+    for (const required of ['The operational matrix', 'Rules', 'Classical ML', 'Plain LLM', 'LLM + RAG', 'Agent']) {
       if (!copy.includes(required)) failures.push(`${entry.route}: operational matrix missing English canonical copy ${JSON.stringify(required)}`);
     }
   }
