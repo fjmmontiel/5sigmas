@@ -17,54 +17,36 @@ for (const viewport of [{name:'desktop',width:1440,height:1000},{name:'mobile',w
   if (!body.includes('Chapter 2: Mechanize')) failures.push('missing canonical English chapter title');
 
   const canonicalNarrative = [
-    'Pascaline',
-    'Step Reckoner',
-    'Jacquard loom',
-    'Analytical Engine',
-    'Ada Lovelace',
-    'Boolean algebra',
-    'A Symbolic Analysis of Relay and Switching Circuits',
-    'halting problem',
-    'A Mathematical Theory of Communication',
-    'stored-program concept',
-    'Manchester Baby',
-    'EDSAC',
-    'Dartmouth Summer Research Project on Artificial Intelligence',
-    'Chapter 3 — Learn',
-    'Core sources',
-    'What is the difference between automating and programming?'
+    'Pascaline','Step Reckoner','Jacquard loom','Analytical Engine','Ada Lovelace','Boolean algebra',
+    'A Symbolic Analysis of Relay and Switching Circuits','halting problem','A Mathematical Theory of Communication',
+    'stored-program concept','Manchester Baby','EDSAC','Dartmouth Summer Research Project on Artificial Intelligence',
+    'Chapter 3 — Learn','Core sources','What is the difference between automating and programming?'
   ];
   for (const phrase of canonicalNarrative) if (!body.includes(phrase)) failures.push(`missing canonical narrative phrase ${JSON.stringify(phrase)}`);
-
   const optional = page.locator('details.s5-optional');
   if (await optional.count() !== 1) failures.push(`expected canonical halting-problem disclosure, found ${await optional.count()}`);
   const referenceRows = page.locator('table tbody tr');
   if (await referenceRows.count() < 15) failures.push(`expected at least 15 canonical reference rows, found ${await referenceRows.count()}`);
 
-  for (const forbidden of ['Capítulo ', 'Prerrequisitos', 'Siguiente capítulo', 'Mecanizar —', 'Fuentes base', 'Preguntas frecuentes']) if (body.includes(forbidden)) failures.push(`Spanish leakage ${JSON.stringify(forbidden)}`);
+  for (const forbidden of ['Capítulo ','Prerrequisitos','Siguiente capítulo','Mecanizar —','Fuentes base','Preguntas frecuentes']) if (body.includes(forbidden)) failures.push(`Spanish leakage ${JSON.stringify(forbidden)}`);
   for (const selector of ['.calc-wrap','.gate-wrap','.tur-wrap','.vn-wrap','.mech-time']) if (await page.locator(selector).count() !== 1) failures.push(`missing ${selector}`);
 
   const calculator = page.locator('.calc-wrap');
   if (await calculator.count() === 1) {
     const calculatorText = await calculator.innerText();
-    for (const phrase of ['The limit of mechanical calculators','Pascaline · 1642','Leibniz wheel · 1674','The limit']) {
-      if (!calculatorText.includes(phrase)) failures.push(`canonical calculator visual missing ${JSON.stringify(phrase)}`);
-    }
+    for (const phrase of ['The limit of mechanical calculators','Pascaline · 1642','Leibniz wheel · 1674','The limit']) if (!calculatorText.includes(phrase)) failures.push(`canonical calculator visual missing ${JSON.stringify(phrase)}`);
     const tabs = calculator.locator('.calc-tab');
     if (await tabs.count() !== 3) failures.push(`expected 3 canonical calculator tabs, found ${await tabs.count()}`);
     await tabs.filter({hasText:'The limit'}).click();
     if (!(await calculator.locator('[data-cpanel="limite"]').evaluate(el => el.classList.contains('calc-panel--active')))) failures.push('calculator limit tab did not activate canonical panel');
-    const limitText = await calculator.locator('[data-cpanel="limite"]').innerText();
-    if (!limitText.includes('The impassable wall: conditional logic')) failures.push('canonical calculator limit panel missing translated wall explanation');
+    if (!(await calculator.locator('[data-cpanel="limite"]').innerText()).includes('The impassable wall: conditional logic')) failures.push('canonical calculator limit panel missing translated wall explanation');
     for (const forbidden of ['El límite','Rueda de Leibniz','Lógica condicional','Lo que hizo falta']) if (calculatorText.includes(forbidden)) failures.push(`calculator visual Spanish leakage ${JSON.stringify(forbidden)}`);
   }
 
   const gates = page.locator('.gate-wrap');
   if (await gates.count() === 1) {
     const gateText = (await gates.textContent()) || '';
-    for (const phrase of ['Logic gates: from thought to circuits','AND gate','OR gate','NOT gate (inverter)','1-bit adder — combined gates']) {
-      if (!gateText.includes(phrase)) failures.push(`canonical logic-gates visual missing ${JSON.stringify(phrase)}`);
-    }
+    for (const phrase of ['Logic gates: from thought to circuits','AND gate','OR gate','NOT gate (inverter)','1-bit adder — combined gates']) if (!gateText.includes(phrase)) failures.push(`canonical logic-gates visual missing ${JSON.stringify(phrase)}`);
     const gateTabs = gates.locator('.gate-tab');
     if (await gateTabs.count() !== 4) failures.push(`expected 4 canonical logic-gate tabs, found ${await gateTabs.count()}`);
     await gates.locator('[data-gtab="and"]').click();
@@ -73,17 +55,13 @@ for (const viewport of [{name:'desktop',width:1440,height:1000},{name:'mobile',w
     if ((await gates.locator('#and-out .gate-out-val').innerText()).trim() !== '1') failures.push('canonical AND-gate interaction did not produce 1 for A=1, B=1');
     await gates.locator('[data-gtab="combo"]').click();
     if (!(await gates.locator('[data-gpanel="combo"]').evaluate(el => el.classList.contains('gate-panel--active')))) failures.push('logic-gates Combination tab did not activate canonical panel');
-    for (const forbidden of ['Puertas lógicas:','Combinación','Puerta AND','Puerta OR','Puerta NOT','Salida:','Tabla de verdad','Uso real:','Sumador de 1 bit','acarreo']) {
-      if (gateText.includes(forbidden)) failures.push(`logic-gates visual Spanish leakage ${JSON.stringify(forbidden)}`);
-    }
+    for (const forbidden of ['Puertas lógicas:','Combinación','Puerta AND','Puerta OR','Puerta NOT','Salida:','Tabla de verdad','Uso real:','Sumador de 1 bit','acarreo']) if (gateText.includes(forbidden)) failures.push(`logic-gates visual Spanish leakage ${JSON.stringify(forbidden)}`);
   }
 
   const turing = page.locator('.tur-wrap');
   if (await turing.count() === 1) {
     const turingText = (await turing.textContent()) || '';
-    for (const phrase of ['The Turing Machine: what it means to compute','Simulation — add 1 in binary','What it proved','The Halting Problem']) {
-      if (!turingText.includes(phrase)) failures.push(`canonical Turing visual missing ${JSON.stringify(phrase)}`);
-    }
+    for (const phrase of ['The Turing Machine: what it means to compute','Simulation — add 1 in binary','What it proved','The Halting Problem']) if (!turingText.includes(phrase)) failures.push(`canonical Turing visual missing ${JSON.stringify(phrase)}`);
     if (await turing.locator('.tur-part').count() !== 3) failures.push(`expected 3 canonical Turing anatomy cards, found ${await turing.locator('.tur-part').count()}`);
     if (await turing.locator('.tur-cell').count() !== 8) failures.push(`expected 8 canonical Turing tape cells, found ${await turing.locator('.tur-cell').count()}`);
     const stepButton = turing.locator('#tur-step');
@@ -95,37 +73,42 @@ for (const viewport of [{name:'desktop',width:1440,height:1000},{name:'mobile',w
     if (!(await stepButton.isDisabled())) failures.push('canonical Turing step control was not disabled after HALT');
     await turing.locator('#tur-reset').click();
     if ((await turing.locator('#tur-state-label').innerText()).trim() !== 'q0 — looking for the right end') failures.push('canonical Turing reset did not restore q0');
-    for (const forbidden of ['La Máquina de Turing','Simulación — sumar','Regla aplicada:','Reiniciar','Ejecutar','Pausar','Lo que demostró','El Problema de la Parada','buscando extremo derecho','sumando (acarreo)']) {
-      if (turingText.includes(forbidden)) failures.push(`Turing visual Spanish leakage ${JSON.stringify(forbidden)}`);
-    }
+    for (const forbidden of ['La Máquina de Turing','Simulación — sumar','Regla aplicada:','Reiniciar','Ejecutar','Pausar','Lo que demostró','El Problema de la Parada','buscando extremo derecho','sumando (acarreo)']) if (turingText.includes(forbidden)) failures.push(`Turing visual Spanish leakage ${JSON.stringify(forbidden)}`);
   }
 
   const vonNeumann = page.locator('.vn-wrap');
   if (await vonNeumann.count() === 1) {
     const vnText = (await vonNeumann.textContent()) || '';
-    for (const phrase of ['The von Neumann cycle: how the processor executes an instruction','Phase 1 — FETCH','Read the instruction','Previous phase','Next phase']) {
-      if (!vnText.includes(phrase)) failures.push(`canonical von Neumann visual missing ${JSON.stringify(phrase)}`);
-    }
+    for (const phrase of ['The von Neumann cycle: how the processor executes an instruction','Phase 1 — FETCH','Read the instruction','Previous phase','Next phase']) if (!vnText.includes(phrase)) failures.push(`canonical von Neumann visual missing ${JSON.stringify(phrase)}`);
     if (await vonNeumann.locator('.vn-phase-item').count() !== 4) failures.push(`expected 4 canonical von Neumann phases, found ${await vonNeumann.locator('.vn-phase-item').count()}`);
+    try {
+      await page.waitForFunction(() => document.querySelector('[data-demo="02-ciclo-von-neumann"]')?.dataset.vnReady === '1', null, {timeout: 2000});
+    } catch {
+      failures.push(`von Neumann runtime did not boot on ${viewport.name}`);
+    }
+    const phaseValue = async () => (await vonNeumann.locator('#vn-detail-phase').innerText()).trim();
+    const titleValue = async () => (await vonNeumann.locator('#vn-detail-title').innerText()).trim();
     const nextPhase = vonNeumann.locator('#vn-next');
     await nextPhase.click();
-    if ((await vonNeumann.locator('#vn-detail-phase').innerText()).trim() !== 'Phase 2 — DECODE') failures.push('von Neumann Next interaction did not activate DECODE');
-    if ((await vonNeumann.locator('#vn-detail-title').innerText()).trim() !== 'Interpret the instruction') failures.push('von Neumann DECODE title is not the canonical translated title');
+    const afterDecode = await phaseValue();
+    if (afterDecode !== 'Phase 2 — DECODE') failures.push(`von Neumann Next interaction expected DECODE, got ${JSON.stringify(afterDecode)} on ${viewport.name}`);
+    const decodeTitle = await titleValue();
+    if (decodeTitle !== 'Interpret the instruction') failures.push(`von Neumann DECODE title expected translated title, got ${JSON.stringify(decodeTitle)} on ${viewport.name}`);
     await nextPhase.click();
     await nextPhase.click();
-    if ((await vonNeumann.locator('#vn-detail-phase').innerText()).trim() !== 'Phase 4 — WRITE-BACK') failures.push('von Neumann cycle did not reach WRITE-BACK');
-    if ((await vonNeumann.locator('#vn-detail-title').innerText()).trim() !== 'Store the result') failures.push('von Neumann WRITE-BACK title is not the canonical translated title');
+    const afterWriteback = await phaseValue();
+    if (afterWriteback !== 'Phase 4 — WRITE-BACK') failures.push(`von Neumann cycle expected WRITE-BACK, got ${JSON.stringify(afterWriteback)} on ${viewport.name}`);
+    const writebackTitle = await titleValue();
+    if (writebackTitle !== 'Store the result') failures.push(`von Neumann WRITE-BACK title expected translated title, got ${JSON.stringify(writebackTitle)} on ${viewport.name}`);
     await vonNeumann.locator('#vn-prev').click();
-    if ((await vonNeumann.locator('#vn-detail-phase').innerText()).trim() !== 'Phase 3 — EXECUTE') failures.push('von Neumann Previous interaction did not return to EXECUTE');
-    for (const forbidden of ['El ciclo de Von Neumann','Cuatro fases','Fase 1','Leer la instrucción','La unidad de control','Activo:','Fase anterior','Fase siguiente','Interpretar la instrucción','Ejecutar la operación','Guardar el resultado','siguiente instrucción']) {
-      if (vnText.includes(forbidden)) failures.push(`von Neumann visual Spanish leakage ${JSON.stringify(forbidden)}`);
-    }
+    const afterPrev = await phaseValue();
+    if (afterPrev !== 'Phase 3 — EXECUTE') failures.push(`von Neumann Previous expected EXECUTE, got ${JSON.stringify(afterPrev)} on ${viewport.name}`);
+    for (const forbidden of ['El ciclo de Von Neumann','Cuatro fases','Fase 1','Leer la instrucción','La unidad de control','Activo:','Fase anterior','Fase siguiente','Interpretar la instrucción','Ejecutar la operación','Guardar el resultado','siguiente instrucción']) if (vnText.includes(forbidden)) failures.push(`von Neumann visual Spanish leakage ${JSON.stringify(forbidden)}`);
   }
 
   const videos = page.locator('video[data-s5-inline-video-player]');
-  if (await videos.count() !== 1) {
-    failures.push(`expected one native-English chapter video, found ${await videos.count()}`);
-  } else {
+  if (await videos.count() !== 1) failures.push(`expected one native-English chapter video, found ${await videos.count()}`);
+  else {
     const video = videos.first();
     const sourceUrl = new URL((await video.locator('source').first().getAttribute('src')) || '', page.url());
     const posterUrl = new URL((await video.getAttribute('poster')) || '', page.url());
