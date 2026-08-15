@@ -429,7 +429,7 @@ async function validateChapterThreeCanonicalVisuals(page, entry) {
     if (await decision.locator('#dt-stage').count() !== 1 || await decision.locator('#dt-path-row').count() !== 1) {
       failures.push(`${entry.route}: decision-tree canonical stage/path contract missing`);
     }
-    const initial = await decision.innerText();
+    const initial = await decision.textContent();
     for (const required of ['Which technology do you need?', 'Question 1 of 4', 'Yes →', 'No']) {
       if (!initial.includes(required)) failures.push(`${entry.route}: decision-tree missing English canonical copy ${JSON.stringify(required)}`);
     }
@@ -438,7 +438,7 @@ async function validateChapterThreeCanonicalVisuals(page, entry) {
       failures.push(`${entry.route}: decision-tree Yes control missing`);
     } else {
       await yes.click();
-      const result = await decision.innerText();
+      const result = await decision.textContent();
       for (const required of ['Recommended technology', 'Explicit rules', 'Cost: minimal', 'Evaluation: trivial']) {
         if (!result.includes(required)) failures.push(`${entry.route}: decision-tree result missing ${JSON.stringify(required)}`);
       }
@@ -447,7 +447,7 @@ async function validateChapterThreeCanonicalVisuals(page, entry) {
         failures.push(`${entry.route}: decision-tree restart control missing`);
       } else {
         await restart.click();
-        if (!(await decision.innerText()).includes('Question 1 of 4')) {
+        if (!(await decision.textContent()).includes('Question 1 of 4')) {
           failures.push(`${entry.route}: decision-tree restart did not restore canonical first question`);
         }
       }
