@@ -21,7 +21,13 @@ jobs:
           ref: agent/english-media-agents
 
       - name: Package native English Agents media
-        run: python scripts/package_english_agents_media.py
+        run: |
+          python scripts/package_english_agents_media.py
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('locales/en/media.yml')
+          p.write_text(p.read_text(encoding='utf-8').rstrip() + '\n', encoding='utf-8')
+          PY
 
       - name: Commit final media contract
         shell: bash
