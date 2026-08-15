@@ -4,7 +4,7 @@ seo_title: "Prompt injection: qué es y cómo se reduce el riesgo"
 description: "Qué es prompt injection en sistemas con LLMs, por qué importa en RAG y agentes y qué principios de diseño reducen el riesgo de que contenido externo influya en una acción."
 keywords: "prompt injection, seguridad LLM, indirect prompt injection, RAG security, seguridad agentes IA"
 date: 2026-08-09
-date_modified: 2026-08-09
+date_modified: 2026-08-15
 ---
 
 # Qué es prompt injection
@@ -15,17 +15,7 @@ La consecuencia práctica es sencilla: **leer información externa no debería o
 
 ## La respuesta en 60 segundos
 
-```text
-reglas confiables
-+ petición del usuario
-+ contenido externo
-        ↓
-    contexto del LLM
-        ↓
- decisión propuesta
-        ↓
- validación y autorización del runtime
-```
+{{ include_html("snippets/seguridad-ia/01-control-vs-datos.html") }}
 
 El modelo puede interpretar contexto. El runtime debe decidir qué contenido tiene autoridad, qué herramientas están disponibles y qué acciones están permitidas.
 
@@ -38,6 +28,8 @@ La variante indirecta es especialmente importante en RAG y agentes porque el con
 ## RAG recupera relevancia, no autoridad
 
 Un sistema RAG selecciona información porque parece relevante para una consulta. Esa selección no demuestra que el contenido sea correcto, reciente, autorizado o seguro para decidir una acción.
+
+{{ include_html("snippets/seguridad-ia/01-rag-trigger-fragment.html") }}
 
 Por eso conviene separar dos preguntas:
 
@@ -65,6 +57,8 @@ Un system prompt más claro puede reducir errores, pero sigue siendo lenguaje na
 La defensa gana fuerza cuando cambia la arquitectura alrededor del modelo.
 
 ## Principios de defensa
+
+{{ include_html("snippets/seguridad-ia/01-defensa-en-capas.html") }}
 
 ### Tratar el contenido externo como no confiable
 
