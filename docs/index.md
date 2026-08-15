@@ -100,6 +100,54 @@ hide:
   </nav>
 </section>
 
+<section class="s5-section" aria-labelledby="s5-concepts-title">
+  <div class="s5-section-head">
+    <div>
+      <h2 id="s5-concepts-title">Conceptos esenciales</h2>
+      <p class="s5-section-head__copy">Respuestas directas a las ideas que sostienen la IA moderna.</p>
+    </div>
+    <a href="/temas/">Ver todos los conceptos →</a>
+  </div>
+  <div class="s5-simple-list">
+    <a class="s5-list-row" href="/temas/llms/">
+      <span class="s5-list-row__n">01</span>
+      <span class="s5-list-row__title">LLMs</span>
+      <span class="s5-list-row__desc">Qué son, cómo aprenden y cómo generan texto token a token.</span>
+      <span class="s5-list-row__meta">Modelos</span>
+    </a>
+    <a class="s5-list-row" href="/temas/transformer/">
+      <span class="s5-list-row__n">02</span>
+      <span class="s5-list-row__title">Transformers</span>
+      <span class="s5-list-row__desc">Atención, representaciones y arquitectura de los modelos actuales.</span>
+      <span class="s5-list-row__meta">Arquitectura</span>
+    </a>
+    <a class="s5-list-row" href="/temas/razonamiento/">
+      <span class="s5-list-row__n">03</span>
+      <span class="s5-list-row__title">Razonamiento</span>
+      <span class="s5-list-row__desc">Qué significa razonar en un LLM y qué cambia durante la inferencia.</span>
+      <span class="s5-list-row__meta">Inferencia</span>
+    </a>
+    <a class="s5-list-row" href="/temas/evaluacion-modelos/">
+      <span class="s5-list-row__n">04</span>
+      <span class="s5-list-row__title">Evaluación de modelos</span>
+      <span class="s5-list-row__desc">Cómo medir capacidad real sin confundir un benchmark con el objetivo.</span>
+      <span class="s5-list-row__meta">Medición</span>
+    </a>
+    <a class="s5-list-row" href="/temas/agentes-ia/">
+      <span class="s5-list-row__n">05</span>
+      <span class="s5-list-row__title">Agentes de IA</span>
+      <span class="s5-list-row__desc">Objetivos, herramientas, estado y límites para pasar de responder a actuar.</span>
+      <span class="s5-list-row__meta">Sistemas</span>
+    </a>
+    <a class="s5-list-row" href="/temas/prompt-injection/">
+      <span class="s5-list-row__n">06</span>
+      <span class="s5-list-row__title">Prompt injection</span>
+      <span class="s5-list-row__desc">Por qué los datos pueden influir en las instrucciones y cómo reducir ese riesgo.</span>
+      <span class="s5-list-row__meta">Seguridad</span>
+    </a>
+  </div>
+</section>
+
 <section class="s5-section">
   <div class="s5-section-head">
     <h2>Explicaciones visuales</h2>
