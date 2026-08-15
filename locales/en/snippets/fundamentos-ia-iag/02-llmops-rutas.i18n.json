@@ -3,6 +3,8 @@
   "source_blob_sha": "67d53a936f79fb54bf92a3d2ba479b4fbbcef545",
   "replacements": {
     "data-demo=\"02-llmops-rutas\"": "data-demo=\"fnd-llmops-routes\"",
+    "API externa": "External API",
+    "Open-source propio": "Self-hosted open source",
     ">Dos rutas para poner un LLM en producción</div>": ">Two routes for putting an LLM into production</div>",
     ">El ciclo LLMOps es el mismo en ambos casos. Lo que cambia es qué capas de la pila gestionas tú.</div>": ">The LLMOps lifecycle is the same in both cases. What changes is which layers of the stack you manage yourself.</div>",
     ">API externa</div>": ">External API</div>",
