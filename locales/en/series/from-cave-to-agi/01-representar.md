@@ -1,141 +1,162 @@
 ---
 title: Represent — from counting to calculus
-description: How symbols, numbers, algebra, proof and calculus created the mathematical language that later made computation possible.
+description: "How symbols, numbers, algebra and calculus made it possible to represent and manipulate the world, building the mathematical foundation of modern AI."
 date: 2026-03-26
-keywords: "history of mathematics, symbolic representation, algebra, calculus, history of computing, mathematical notation, artificial intelligence history"
+keywords: "history of mathematics, symbolic representation, algebra, differential calculus, history of computing, Leibniz Newton, mathematical notation, origins of artificial intelligence"
 tags:
   - AI
   - History
+video: "01-representar.mp4"
+video_duration: "PT1M22S"
 ---
 
-# Chapter 1 — Represent (≈ 43,000 BCE to 1700)
+# Chapter 1: Represent (≈ 43,000 BCE to 1700)
 
-This chapter follows the construction of the mathematical language that would eventually make computation possible: from marks that stand for quantities to algebraic unknowns, deductive proof and calculus. The thread is the same throughout: **whenever an idea can be compressed into a symbol, we gain the ability to reason about the symbol without manipulating the physical object itself.**
+This chapter tells how humanity built the mathematical language that would later make computation possible, from the first notches carved into bone to the differential calculus of Newton and Leibniz. By the end, you will understand why notation matters as much as the concepts it describes, how algebra turned unknown quantities into manipulable objects, and how the Greek deductive ideal laid the foundations for step-by-step verifiable reasoning. No prior mathematical background is required, only curiosity about where the tools that computers now execute millions of times per second came from. The thread is always the same: whenever humanity found a way to compress an idea into a symbol, it gained the ability to reason about that idea without having to touch it.
 
-No mathematical background is required. The goal is to understand why notation and abstraction are not cosmetic additions to mathematics; they change what kinds of thought can be performed reliably and repeatedly.
+In this chapter we trace an extraordinarily long and decisive process: how humanity moved from marking quantities on physical objects to building a mathematical language capable of describing relationships, proving conclusions and anticipating how the world will behave.
+
+This is not only a history of numbers; it is the history of how human beings apply abstraction.
+
+The profound shift came when we accepted that a mark could stand in for a thing, that a letter could represent an unknown quantity, and that a deduction could be valid even when it did not directly touch any physical object. In that distance between the world and its representation lies an essential part of the intellectual history that would later make computation possible.
 
 ---
 
-## 1. We invented languages for describing the world
+## 1. We invented languages to describe the world
 
-### Before writing, we were already recording quantity
+### Before writing, we were already counting
 
-Counting is older than writing. Paleolithic objects with repeated notches, such as the Lebombo and Ishango bones, do not prove the existence of formal mathematics, but they do show something fundamental: humans were using physical marks to record or organize quantities long before written numerals existed.
+The need to count is far older than writing. Paleolithic notched objects such as the Lebombo bone and the Ishango bone do not by themselves prove the existence of formal mathematics, but they do show something more basic and more important: very ancient human groups were already using sequences of marks to record, organize or remember quantities ([Royal Society](https://royalsocietypublishing.org/rstb/article/373/1740/20160518/23403/From-number-sense-to-number-symbols-An), [PNAS Border Cave](https://pmc.ncbi.nlm.nih.gov/articles/PMC3421171/), [Royal Belgian Institute of Natural Sciences](https://www.naturalsciences.be/en/museum/exhibitions-activities/exhibitions/250-years-of-natural-sciences/the-ishango-bone)).
 
-A notch is not a sheep, a day or a bag of grain. It is a **representation** that can stand in for any of them. Once a mark can represent something absent, reasoning can begin to operate on symbols instead of only on objects.
+That gesture is more profound than it looks. A notch is not a sheep, it is not a day, it is not a bag of grain.
+It is a physical representation of any of those concepts. And as soon as you accept that a mark can speak on behalf of something absent, an idea appears that runs through all later history: thinking by operating on symbols.
 
-### Number systems, position and zero
+### Numbers, position and zero
 
-Different civilizations developed different numerical representations. Additive systems use repeated symbols. Positional systems add a much more powerful idea: the value of a symbol depends on where it appears.
+For millennia, different civilizations developed their own ways of representing quantities. The Egyptians used an additive system. The Romans did too. The Babylonians introduced a very powerful positional system. The difference matters because, in a positional system, the value of a symbol also depends on the place it occupies. That idea multiplies the expressive capacity of a small set of signs.
 
-That change gives a small set of symbols enormous expressive range.
+The development of zero requires us to distinguish two historical steps that are often mixed together. One step is to use a mark to indicate an absence inside a positional system.
+Another, much more ambitious step is to treat that absence as a number with rules of its own. In India we find both pieces at different times: the Bakhshali manuscript shows a dot used as a placeholder, and centuries later Brahmagupta formulates explicit arithmetic rules for operating with zero as a number ([Oxford GLAM](https://www.glam.ox.ac.uk/article/carbon-dating-finds-bakhshali-manuscript-contains-oldest-recorded-origins-symbol-zero), [Britannica: zero](https://www.britannica.com/science/zero-mathematics), [Britannica: Brahmagupta](https://www.britannica.com/biography/Brahmagupta)).
+
+With that step, numerical representation gains a new generality. We no longer only record concrete quantities. We can build a compact, reusable and formal system for expressing any quantity and operating on it according to stable rules. Later, that tradition would pass into the Islamic world and from there into Europe ([Britannica: zero](https://www.britannica.com/science/zero-mathematics)).
 
 {{ include_html("snippets/from-cave-to-agi/01-sistemas-numeracion.html") }}
 
-The history of zero contains two separate conceptual steps. First, a placeholder marks an empty position inside a positional notation. Later, zero becomes a number with arithmetic rules of its own. The Bakhshali manuscript preserves an early placeholder notation, while Brahmagupta later formulated explicit arithmetic involving zero and negative numbers.
+### Algebra: operating on what we do not yet know
 
-With positional notation and zero, written numbers become compact, general and systematically manipulable.
+The next leap is no longer about representing visible quantities, but about reasoning over unknown quantities. In the ninth century, al-Khwarizmi systematized procedures for solving linear and quadratic equations in *Al-Kitab al-mukhtasar fi hisab al-jabr wa-l-muqabala*. The word algebra comes from *al-jabr*, and the word algorithm would later come from the Latinization of his name ([Britannica: The Compendious Book on Calculation by Completion and Balancing](https://www.britannica.com/topic/The-Compendious-Book-on-Calculation-by-Completion-and-Balancing), [Britannica: al-Khwarizmi](https://www.britannica.com/biography/al-Khwarizmi), [MacTutor: Al-Khwarizmi](https://mathshistory.st-andrews.ac.uk/Biographies/Al-Khwarizmi/)).
 
-### Algebra: reasoning about what we do not yet know
+There is an important precision here. Al-Khwarizmi's algebra is not yet modern symbolic notation. His methods are rhetorical and rely on geometric arguments. But the conceptual shift has already happened: an expression can be transformed step by step, following general rules, until we isolate what we did not know at the beginning.
 
-The next leap was to represent unknown quantities. In the ninth century, al-Khwarizmi systematized methods for solving linear and quadratic equations. His algebra was still rhetorical rather than written in modern symbolic form, but the conceptual move was already there: **a relationship can be transformed according to general rules until an unknown quantity becomes explicit.**
+### Notation compresses thought
+
+Between medieval rhetorical algebra and calculus lies a decisive piece: notation.
+François Viète introduced the first systematic algebraic notation, using letters for variables and parameters. A few decades later, Descartes and Fermat took that symbolic compression one step further by connecting equations and geometry.
+A curve stopped being only a figure and also became a relationship expressible through symbols ([Britannica: François Viète](https://www.britannica.com/biography/Francois-Viete-seigneur-de-la-Bigotiere), [Britannica: Analytic geometry](https://www.britannica.com/science/analytic-geometry), [Britannica: mathematics / analytic geometry](https://www.britannica.com/science/mathematics/Analytic-geometry), [Britannica: La Géométrie](https://www.britannica.com/topic/La-Geometrie)).
+
+This changes the kind of thinking that can be done. With good notation, a complex idea takes up less mental space. And when an idea fits into compact symbols, it becomes easier to transform, combine and generalize.
 
 {{ include_html("snippets/from-cave-to-agi/01-algebra-despejar.html") }}
 
-Centuries later, François Viète introduced systematic letter-based notation for variables and parameters. Descartes and Fermat then connected algebra to geometry. A curve could be both a shape and a symbolic relationship.
-
-That compression matters. Good notation reduces how much working memory a complicated idea consumes. Once a relationship fits into compact symbols, it becomes easier to transform, combine and generalize.
-
 ---
 
-## 2. Formalizing justification
+## 2. Formalizing truth
 
-### The deductive ideal
+### Greek geometry and the deductive ideal
 
-Greek mathematics added a standard that went beyond useful calculation: **show why a conclusion follows**.
+The Greeks added something that goes beyond practical calculation: a standard of justification. In the *Elements*, Euclid organizes results from definitions, postulates and chained proofs.
+It is not only about reaching a correct conclusion, but about showing why that conclusion follows necessarily from accepted assumptions ([Britannica: Elements](https://www.britannica.com/topic/Elements-by-Euclid), [Britannica: Euclid](https://www.britannica.com/biography/Euclid-Greek-mathematician), [Britannica: Euclidean geometry](https://www.britannica.com/science/Euclidean-geometry)).
 
-Euclid's *Elements* organizes geometry around definitions, postulates and chains of inference. The important change is epistemic. A mathematical statement is not accepted only because it looks right or works in a particular example. Its justification can be reconstructed from explicit starting assumptions.
+That deductive ideal changes the nature of mathematical knowledge. Inside the system, authority no longer lies in tradition, intuition or immediate experience, but in the chain of inferences. Every step can be reviewed and every conclusion can be reconstructed.
 
 {{ include_html("snippets/from-cave-to-agi/01-cadena-deductiva.html") }}
 
-This idea will matter much later for computation. A repeatable procedure needs each step to be explicit enough that another person—or eventually a machine—can execute it without relying on hidden intuition.
-
 ### The power and limit of abstraction
 
-Formal mathematics gains precision by working with idealized objects. A geometric line has no thickness. A perfect circle has no manufacturing error. That distance from physical reality is a feature: it makes exact reasoning possible.
+The strength of this approach is enormous. It makes it possible to obtain necessary truths from a formal structure.
+But it also has a clear limit: it only works on idealized objects. A geometric line has no thickness; a triangle has no measurement errors. Rigor arises precisely from that distance from the physical world.
 
-But it also creates a second problem. To explain the real world, formal relationships eventually have to reconnect with observation and measurement. Modern science becomes powerful when it learns to move in both directions:
-
-> **world → mathematical representation → deduction / calculation → prediction about the world**
-
----
-
-## 3. When nature became mathematical
-
-### Equations as models of physical processes
-
-The seventeenth century produced a major shift. Galileo expressed terrestrial motion quantitatively. Kepler described planetary motion with mathematical laws. Newton later connected terrestrial and celestial mechanics inside a unified mathematical framework.
-
-Understanding increasingly meant more than describing or classifying. It meant finding a mathematical structure that could explain observations and predict what would happen next.
-
-### Calculus: a language for change
-
-Calculus emerged in that setting. Newton developed his methods during the 1660s; Leibniz developed them independently in the 1670s and published notation that strongly influenced what is still used today.
-
-Calculus provides a language for two ideas that appear everywhere in physical systems:
-
-- **rate of change** — how fast a quantity is changing now;
-- **accumulation** — how small changes add up over an interval.
-
-That makes trajectories, varying speed, growth and many other continuous processes calculable rather than merely observable.
+This distinction will become crucial later. Mathematics gains power when it abstracts, but science only gains explanatory power when it manages to return from that abstraction to the observed world. The modern history of science consists, to a large extent, of learning to travel that double path well.
 
 ---
 
-## 4. What representation made possible
+## 3. Doing science with mathematics
 
-By the end of this period, several pieces required by later computation already exist:
+### When nature began to be written in equations
 
-- compact symbolic systems for quantities;
-- algebraic rules for transforming expressions and unknowns;
-- deductive reasoning expressed as reviewable steps;
-- mathematical models of physical relationships;
-- calculus for describing continuous change.
+A decisive transformation takes place in the seventeenth century. Galileo mathematizes terrestrial motion, Kepler formulates quantitative laws for planetary orbits, and Newton will bring both lines together in a unified mechanics.
+From that point on, nature stops being only something described in words and becomes something that is also expressed through precise mathematical relationships ([Britannica: Galileo](https://www.britannica.com/biography/Galileo-Galilei), [Britannica: Kepler's laws](https://www.britannica.com/science/Keplers-laws-of-planetary-motion), [Britannica: Principia](https://www.britannica.com/topic/Principia)).
+
+The cultural shift is immense.
+Understanding no longer means only classifying or narrating, but finding a mathematical structure that can explain and predict.
+
+### Calculus and the description of change
+
+Calculus appears in that context. Newton develops his methods in the second half of the 1660s. Leibniz arrives independently in the 1670s and in 1684 publishes the exposition that would establish much of the notation we still use today ([Britannica: Newton and Leibniz](https://www.britannica.com/science/mathematics/Newton-and-Leibniz), [Britannica: Gottfried Wilhelm Leibniz](https://www.britannica.com/biography/Gottfried-Wilhelm-Leibniz), [MacTutor: Leibniz](https://mathshistory.st-andrews.ac.uk/Biographies/Leibniz/), [Britannica: Isaac Newton](https://www.britannica.com/biography/Isaac-Newton)).
+
+What calculus contributes is a language for describing continuous variation. It makes it possible to formalize rates of change and accumulations. Thanks to it, phenomena such as falling bodies, orbits, changing velocity or the propagation of physical quantities stop being merely observable and become calculable in advance.
+
+That predictive power expands what mathematics can do: it no longer serves only to count, measure or prove, but also to model processes.
 
 {{ include_html("snippets/from-cave-to-agi/01-timeline-representar.html") }}
 
-None of these tools was invented for computers. Yet without them, the next historical step would be difficult even to formulate: **can the manipulation of symbols itself be mechanized?**
+---
 
-That question leads from mathematical representation to machines, algorithms and eventually general-purpose computation.
+## 4. What these tools made possible
+
+By the end of this period, humanity already has several pieces that would later become indispensable for computation.
+
+- Symbolic systems capable of representing quantities in compact, operable form.
+- Algebraic rules for transforming expressions and working with unknowns.
+- A deductive ideal that turns reasoning into a verifiable sequence of steps.
+- A mathematical language capable of describing relationships, trajectories and continuous change.
+
+None of these pieces was created with computers in mind. Computers were still centuries away. But without them, there would be no way to imagine the next stage: turning these representations and rules into executable mechanical procedures.
+
+The next chapter enters exactly there: at the moment when humanity stops limiting itself to thinking with symbols and begins trying to make a machine manipulate them for us.
+
+!!! tip "Next chapter"
+    [Chapter 2 — Mechanize →](./02-mecanizar.md) — From Babbage to Turing: how we moved from automating specific calculations to designing general-purpose machines capable of executing any program.
 
 ---
 
-!!! tip "Continue the path"
-    Return to the [From Caves to AGI series overview](./00_presentacion_serie.md). Chapter 2 — *Mechanize* — will be published as the next completed slice.
-
-## References
+## 5. References
 
 <details markdown="1">
 <summary><strong>Core sources</strong></summary>
 
-- **Royal Society (2018)** — archaeological perspective on the transition from number sense to number symbols.
-- **PNAS (2012)** — archaeological context for marked artifacts from Border Cave.
-- **Royal Belgian Institute of Natural Sciences** — institutional description of the Ishango bone.
-- **Oxford GLAM** — dating and interpretation of the zero placeholder in the Bakhshali manuscript.
-- **Britannica** — zero, Brahmagupta, al-Khwarizmi, Viète, analytic geometry, Euclid, Galileo, Kepler, Newton and Leibniz.
-- **MacTutor History of Mathematics** — historical context for al-Khwarizmi and Leibniz.
+| Key | Source | Brief description |
+| --- | --- | --- |
+| R1 | [Royal Society (2018) — *From number sense to number symbols. An archaeological perspective*](https://royalsocietypublishing.org/rstb/article/373/1740/20160518/23403/From-number-sense-to-number-symbols-An) | Archaeological framework for the transition from physical marks to numerical notation. |
+| R2 | [PNAS (2012) — *Early evidence of San material culture represented by organic artifacts from Border Cave, South Africa*](https://pmc.ncbi.nlm.nih.gov/articles/PMC3421171/) | Archaeological context for Border Cave and the notched objects associated with Lebombo. |
+| R3 | [Royal Belgian Institute of Natural Sciences — *The Ishango Bone*](https://www.naturalsciences.be/en/museum/exhibitions-activities/exhibitions/250-years-of-natural-sciences/the-ishango-bone) | Institutional description of the Ishango bone and its groups of notches. |
+| R4 | [Oxford GLAM — *Carbon dating finds Bakhshali manuscript contains oldest recorded origins of the symbol 'zero'*](https://www.glam.ox.ac.uk/article/carbon-dating-finds-bakhshali-manuscript-contains-oldest-recorded-origins-symbol-zero) | Use of the dot as a placeholder in the Bakhshali manuscript. |
+| R5 | [Britannica — *Zero*](https://www.britannica.com/science/zero-mathematics) | Historical distinction between a placeholder and zero as a number. |
+| R6 | [Britannica — *Brahmagupta*](https://www.britannica.com/biography/Brahmagupta) | Explicit arithmetic rules for zero and negative numbers. |
+| R7 | [Britannica — *The Compendious Book on Calculation by Completion and Balancing*](https://www.britannica.com/topic/The-Compendious-Book-on-Calculation-by-Completion-and-Balancing) | Al-Khwarizmi's foundational role in the development of algebra. |
+| R8 | [MacTutor — *Al-Khwarizmi*](https://mathshistory.st-andrews.ac.uk/Biographies/Al-Khwarizmi/) | Etymology of “algorithm” and biographical context. |
+| R9 | [Britannica — *François Viète*](https://www.britannica.com/biography/Francois-Viete-seigneur-de-la-Bigotiere) | First systematic algebraic notation. |
+| R10 | [Britannica — *Analytic geometry*](https://www.britannica.com/science/analytic-geometry) | Union of algebra and geometry in the Cartesian tradition. |
+| R11 | [Britannica — *Elements*](https://www.britannica.com/topic/Elements-by-Euclid) | Euclid and the standard of deductive reasoning. |
+| R12 | [Britannica — *Galileo*](https://www.britannica.com/biography/Galileo-Galilei) | Mathematization of motion in the scientific revolution. |
+| R13 | [Britannica — *Kepler’s laws of planetary motion*](https://www.britannica.com/science/Keplers-laws-of-planetary-motion) | Quantitative formulation of planetary orbits. |
+| R14 | [Britannica — *Principia*](https://www.britannica.com/topic/Principia) | Newtonian unification of mechanics and gravitation. |
+| R15 | [Britannica — *Newton and Leibniz*](https://www.britannica.com/science/mathematics/Newton-and-Leibniz) | Independent development of calculus and basic chronology. |
 
 </details>
 
+---
+
 ## Frequently asked questions
 
-**Why is notation more than shorthand?**  
-Because compact notation reduces the mental cost of representing a relationship. That makes transformations and combinations that would be cumbersome in prose much easier to perform and verify.
+**Why does notation matter if the mathematical concept already exists?**
+Because notation changes what is possible to think, not only what is convenient to write. When Viète introduced letters for variables and Descartes connected equations with geometry, they did not merely simplify writing: they opened conceptual territories that had previously been inaccessible. An idea that fits into compact symbols can be transformed, combined with other ideas and generalized in ways that verbal language does not allow.
 
-**What did algebra add beyond arithmetic?**  
-Arithmetic manipulates known quantities. Algebra lets a symbol stand for an unknown quantity and provides rules for transforming the relationship until the unknown becomes explicit.
+**What did algebra contribute that verbal or geometric reasoning could not?**
+The ability to operate on what is not yet known. Mathematics before al-Khwarizmi solved concrete cases, but each case had to be reasoned through again from the beginning. Algebra introduces a decisive conceptual change: an expression can be transformed step by step, following general rules, until an unknown that did not even have a name at the start is isolated.
 
-**Why is deductive proof relevant to computing?**  
-Both depend on explicit steps. A procedure that can be reconstructed from formal rules is much closer to something that can eventually be mechanized.
+**What role did the Greek deductive ideal play in the history of computation?**
+It established a standard of justification that computation would inherit centuries later. Euclid did not only organize results: he required every conclusion to follow necessarily from accepted assumptions through verifiable steps. That model of reasoning as a chain of reviewable inferences is exactly what Turing would formalize when describing what it means to compute.
 
-**What did calculus add?**  
-A compact mathematical language for continuous change and accumulation, allowing physical processes to be modeled and predicted quantitatively.
+**What does differential calculus have to do with training neural networks?**
+A direct connection. Gradient descent, the central mechanism for adjusting a model's parameters, is a direct application of differential calculus: it requires calculating how the error varies when each weight changes, and those quantities are derivatives. Without the language of calculus that Newton and Leibniz developed to describe continuous variation, the algorithm that trains today's models would not exist.
