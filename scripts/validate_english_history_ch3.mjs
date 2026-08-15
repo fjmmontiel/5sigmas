@@ -19,6 +19,47 @@ for (const viewport of [{name:'desktop',width:1440,height:1000},{name:'mobile',w
     if (!body.includes(phrase)) failures.push(`missing canonical Chapter 3 narrative phrase ${JSON.stringify(phrase)}`);
   }
 
+  const symbolic = page.locator('.sim-wrap');
+  if (await symbolic.count() !== 1) failures.push(`expected one canonical symbolic-AI visual, found ${await symbolic.count()}`);
+  else {
+    const allText = (await symbolic.textContent()) || '';
+    for (const phrase of [
+      'Symbolic AI: knowledge written by hand',
+      'Paradigm',
+      'MYCIN',
+      'The limit',
+      'Intelligence as a list of rules',
+      'MYCIN — 450 rules to diagnose infections',
+      'The bottleneck: acquiring the knowledge'
+    ]) if (!allText.includes(phrase)) failures.push(`canonical symbolic-AI visual missing ${JSON.stringify(phrase)}`);
+
+    if (await symbolic.locator('.sim-step').count() !== 3) failures.push(`expected 3 canonical symbolic-AI steps, found ${await symbolic.locator('.sim-step').count()}`);
+    if (await symbolic.locator('.sim-panel').count() !== 3) failures.push(`expected 3 canonical symbolic-AI panels, found ${await symbolic.locator('.sim-panel').count()}`);
+    if (await symbolic.locator('.sim-rule').count() !== 3) failures.push(`expected 3 canonical MYCIN rule rows, found ${await symbolic.locator('.sim-rule').count()}`);
+    if (await symbolic.locator('.sim-sc-row').count() !== 3) failures.push(`expected 3 canonical symbolic-AI scale rows, found ${await symbolic.locator('.sim-sc-row').count()}`);
+    try {
+      await page.waitForFunction(() => document.querySelector('[data-demo="03-simbolica"]')?.dataset.simReady === '1', null, {timeout: 2000});
+    } catch {
+      failures.push(`symbolic-AI runtime did not boot on ${viewport.name}`);
+    }
+
+    const next = symbolic.locator('#sim-next');
+    await next.click();
+    if (!(await symbolic.locator('[data-p="1"]').evaluate(el => el.classList.contains('sim-panel--active')))) failures.push('symbolic-AI Next did not activate MYCIN panel');
+    await next.click();
+    if (!(await symbolic.locator('[data-p="2"]').evaluate(el => el.classList.contains('sim-panel--active')))) failures.push('symbolic-AI Next did not activate limit panel');
+    if (!(await next.isDisabled())) failures.push('symbolic-AI Next control was not disabled on final panel');
+    await symbolic.locator('#sim-prev').click();
+    if (!(await symbolic.locator('[data-p="1"]').evaluate(el => el.classList.contains('sim-panel--active')))) failures.push('symbolic-AI Previous did not return to MYCIN panel');
+    await symbolic.locator('[data-s="0"]').click();
+    if (!(await symbolic.locator('[data-p="0"]').evaluate(el => el.classList.contains('sim-panel--active')))) failures.push('symbolic-AI stepper did not return to paradigm panel');
+
+    for (const forbidden of [
+      'IA simbólica','Durante tres décadas','Paradigma','El límite','La inteligencia como lista','Ejemplo real',
+      'reglas para diagnosticar','El techo','El cuello de botella','Dominio estrecho','Dominio medio','Dominio abierto','Anterior','Siguiente'
+    ]) if (allText.includes(forbidden)) failures.push(`symbolic-AI Spanish leakage ${JSON.stringify(forbidden)}`);
+  }
+
   const loop = page.locator('.buc-wrap');
   if (await loop.count() !== 1) failures.push(`expected one canonical training loop, found ${await loop.count()}`);
   else {
@@ -71,4 +112,4 @@ if (failures.length) {
   for (const failure of failures) console.error(failure);
   process.exit(1);
 }
-console.log('English history chapter 3 QA passed with canonical training-loop structure, interaction and translation fidelity.');
+console.log('English history chapter 3 QA passed with canonical symbolic-AI and training-loop structure, interaction and translation fidelity.');
