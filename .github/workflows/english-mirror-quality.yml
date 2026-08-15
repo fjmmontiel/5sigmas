@@ -8,6 +8,7 @@ on:
       - 'hooks/video_sitemap_en.py'
       - 'hooks/locale_alternates.py'
       - 'scripts/prepare_locale.py'
+      - 'scripts/audit_english_full_parity.py'
       - 'scripts/validate_english_series_mirror.mjs'
       - 'scripts/validate_english_reasoning_ttc.mjs'
       - 'scripts/validate_english_energy_ch1.mjs'
