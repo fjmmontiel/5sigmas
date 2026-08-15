@@ -1,6 +1,6 @@
 {
   "source": "snippets/temas/transformer-block.html",
-  "source_blob_sha": "349c34a5e3afb684fb2a6567965d426ccd8bb24c",
+  "source_blob_sha": "91b05b1175458cb7392efc74c3d389d52ec32ddb",
   "replacements": {
     ">ARQUITECTURA</div>": ">ARCHITECTURE</div>",
     ">Un bloque Transformer, sin saltos</div>": ">A Transformer block, end to end</div>",
