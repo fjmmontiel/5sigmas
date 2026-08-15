@@ -4,7 +4,7 @@ seo_title: "Qué es un LLM: cómo funciona un modelo de lenguaje grande"
 description: "Qué es un LLM, cómo tokeniza, aprende y genera texto, qué cambia con el ajuste por instrucciones y cuáles son sus límites técnicos."
 keywords: "LLM, large language model, modelo de lenguaje grande, tokens, preentrenamiento, Transformer, instruction tuning, RLHF"
 date: 2026-04-07
-date_modified: 2026-08-05
+date_modified: 2026-08-15
 ---
 
 # Qué es un LLM y cómo funciona
@@ -15,15 +15,7 @@ La definición parece simple. El comportamiento que emerge no lo es. Para entend
 
 ## La respuesta en 60 segundos
 
-```text
-texto
-→ tokens
-→ vectores numéricos
-→ bloques Transformer
-→ probabilidades del siguiente token
-→ selección de un token
-→ repetir
-```
+{{ include_html("snippets/temas/llm-token-pipeline.html") }}
 
 El modelo no busca una frase almacenada ni consulta por defecto una base de datos. Calcula una distribución de probabilidad sobre el vocabulario, elige una continuación y vuelve a ejecutar el proceso con el nuevo contexto.
 
@@ -65,11 +57,9 @@ La guía sobre [el Transformer](/temas/transformer/) desarrolla esta arquitectur
 
 ## 3. El objetivo base es predecir el siguiente token
 
-En un LLM autoregresivo, el entrenamiento optimiza una función de pérdida como esta:
+En un LLM autoregresivo, el entrenamiento optimiza la probabilidad del token real condicionado por los anteriores.
 
-```text
-L = - Σ log p(token_t | token_1, ..., token_{t-1})
-```
+{{ include_html("snippets/temas/llm-next-token.html") }}
 
 El modelo recibe una secuencia y debe asignar alta probabilidad al token real que sigue en cada posición. El gradiente indica cómo modificar millones o miles de millones de parámetros para cometer menos error en el siguiente lote.
 
@@ -80,6 +70,8 @@ Eso no convierte la probabilidad en verdad. El objetivo de entrenamiento premia 
 ## 4. Preentrenamiento, instrucciones y preferencias no son lo mismo
 
 Un producto conversacional suele pasar por varias etapas.
+
+{{ include_html("snippets/temas/llm-adaptation-stages.html") }}
 
 ### Preentrenamiento
 
