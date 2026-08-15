@@ -1,0 +1,40 @@
+{
+  "source": "snippets/from-cave-to-agi/02-puertas-logicas.html",
+  "source_blob_sha": "3a949416e290dcc2f0d28b62e3d91738ebdde462",
+  "replacements": {
+    "Puertas lógicas: del pensamiento a los circuitos": "Logic gates: from thought to circuits",
+    "Boole demostró que la lógica es álgebra. Shannon demostró que esa álgebra puede implementarse con interruptores eléctricos. Con solo tres puertas básicas se construye cualquier circuito digital.": "Boole showed that logic is algebra. Shannon showed that this algebra can be implemented with electrical switches. With just three basic gates, any digital circuit can be built.",
+    "Combinación": "Combination",
+    "Puerta AND": "AND gate",
+    "La salida es 1 solo cuando <em>todas</em> las entradas son 1. El interruptor se abre solo si dos personas pulsan a la vez.": "The output is 1 only when <em>all</em> inputs are 1. The switch opens only if two people press at the same time.",
+    "Salida:": "Output:",
+    "Tabla de verdad": "Truth table",
+    "Uso real: selector de condición — la CPU activa una operación solo cuando dos condiciones se cumplen a la vez.": "Real use: condition selector — the CPU activates an operation only when two conditions are true at the same time.",
+    "Puerta OR": "OR gate",
+    "La salida es 1 cuando <em>al menos una</em> entrada es 1. El interruptor se abre si cualquiera de las dos personas pulsa.": "The output is 1 when <em>at least one</em> input is 1. The switch opens if either person presses.",
+    "Uso real: detección de errores — una alarma se activa si cualquier sensor detecta un problema.": "Real use: error detection — an alarm activates if any sensor detects a problem.",
+    "Puerta NOT (inversor)": "NOT gate (inverter)",
+    "Una sola entrada: invierte su valor. 0 se convierte en 1, y 1 en 0. Es la negación lógica.": "A single input: it inverts its value. 0 becomes 1, and 1 becomes 0. This is logical negation.",
+    "Uso real: complemento — NAND = AND + NOT, base de todos los chips modernos por su eficiencia en silicio.": "Real use: complement — NAND = AND + NOT, a building block of modern chips because of its silicon efficiency.",
+    "Con solo puertas NAND (AND seguido de NOT) puede construirse cualquier circuito digital. Los chips modernos están hechos de millones de NAND.": "With NAND gates alone (AND followed by NOT), any digital circuit can be built. Modern chips contain millions of NAND-equivalent gate structures.",
+    "Sumador de 1 bit — puertas combinadas": "1-bit adder — combined gates",
+    "A + B produce un bit de <strong>suma (S)</strong> y un bit de <strong>acarreo (C)</strong>. Dos puertas, cuatro posibles combinaciones.": "A + B produces one <strong>sum bit (S)</strong> and one <strong>carry bit (C)</strong>. Two gates, four possible input combinations.",
+    "S (suma)": "S (sum)",
+    "C (acarreo)": "C (carry)",
+    "Encadenando sumadores de 1 bit se suman números de cualquier longitud. La CPU contiene miles de millones de estas puertas.": "Chaining 1-bit adders lets us add numbers of any practical width. A CPU contains billions of logic gates built from transistor networks."
+  },
+  "forbidden_output_tokens": [
+    "Puertas lógicas:",
+    "Combinación",
+    "Puerta AND",
+    "Puerta OR",
+    "Puerta NOT",
+    "Salida:",
+    "Tabla de verdad",
+    "Uso real:",
+    "Sumador de 1 bit",
+    "suma (S)",
+    "acarreo (C)",
+    "Encadenando sumadores"
+  ]
+}
