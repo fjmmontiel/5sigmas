@@ -1,0 +1,149 @@
+name: Render native English article audio once
+
+on:
+  push:
+    branches:
+      - agent/english-article-audio-parity
+    paths:
+      - '.github/workflows/english-article-audio-render-once.yml'
+      - '.tmp/english-article-audio-source.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/english-article-audio-parity
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install native TTS runtime
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg espeak-ng
+          python -m pip install --upgrade pip
+          python -m pip install kokoro-onnx==0.5.0 numpy
+
+      - name: Fetch Kokoro model files
+        run: |
+          mkdir -p /tmp/kokoro
+          curl -L --fail --retry 3 -o /tmp/kokoro/kokoro-v1.0.onnx \
+            https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0/kokoro-v1.0.onnx
+          curl -L --fail --retry 3 -o /tmp/kokoro/voices-v1.0.bin \
+            https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0/voices-v1.0.bin
+          test -s /tmp/kokoro/kokoro-v1.0.onnx
+          test -s /tmp/kokoro/voices-v1.0.bin
+
+      - name: Synthesize native English master
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          import wave
+          import numpy as np
+          from kokoro_onnx import Kokoro
+
+          source = Path('.tmp/english-article-audio-source.txt').read_text(encoding='utf-8').strip()
+          replacements = [
+              (r'\bLLMOps\b', 'L L M ops'),
+              (r'\bMLOps\b', 'M L ops'),
+              (r'\bLLMs\b', 'L L Ms'),
+              (r'\bLLM\b', 'L L M'),
+              (r'\bRAG\b', 'rag'),
+              (r'\bAGI\b', 'A G I'),
+              (r'\bAI\b', 'A I'),
+          ]
+          for pattern, replacement in replacements:
+              source = re.sub(pattern, replacement, source, flags=re.IGNORECASE)
+
+          paragraphs = [p.strip() for p in re.split(r'\n\s*\n', source) if p.strip()]
+          chunks = []
+          for paragraph in paragraphs:
+              sentences = [s.strip() for s in re.split(r'(?<=[.!?…])\s+', paragraph) if s.strip()]
+              current = []
+              words = 0
+              for sentence in sentences:
+                  n = len(sentence.split())
+                  if current and words + n > 42:
+                      chunks.append(' '.join(current))
+                      current = [sentence]
+                      words = n
+                  else:
+                      current.append(sentence)
+                      words += n
+              if current:
+                  chunks.append(' '.join(current))
+
+          model = Kokoro('/tmp/kokoro/kokoro-v1.0.onnx', '/tmp/kokoro/voices-v1.0.bin')
+          sample_rate = 24000
+          parts = []
+          for index, chunk in enumerate(chunks):
+              audio, sr = model.create(chunk, voice='af_sarah', lang='en-us', speed=0.96)
+              sample_rate = sr
+              parts.append(audio.astype(np.float32, copy=False))
+              if index + 1 < len(chunks):
+                  parts.append(np.zeros(int(sample_rate * 0.42), dtype=np.float32))
+          master = np.concatenate(parts)
+          master = np.clip(master, -1.0, 1.0)
+          pcm = (master * 32767).astype('<i2')
+          raw = Path('/tmp/english-article-audio.wav')
+          with wave.open(str(raw), 'wb') as handle:
+              handle.setnchannels(1)
+              handle.setsampwidth(2)
+              handle.setframerate(sample_rate)
+              handle.writeframes(pcm.tobytes())
+          print(f'synthesized {len(chunks)} chunks, {len(master) / sample_rate:.1f}s raw audio')
+          PY
+
+      - name: Master and encode M4A
+        run: |
+          target='locales/en/series/fundamentos-ia-iag/02-que-es-ia-generativa.podcast.m4a'
+          mkdir -p "$(dirname "$target")"
+          ffmpeg -y -i /tmp/english-article-audio.wav \
+            -af 'highpass=f=55,lowpass=f=10800,deesser=i=0.18:m=0.5:f=0.5:s=0.28,acompressor=threshold=-18dB:ratio=2.4:attack=4:release=90:makeup=2.2,loudnorm=I=-16:TP=-1.5:LRA=11' \
+            -c:a aac -b:a 128k -movflags +faststart "$target"
+          codec="$(ffprobe -v error -select_streams a:0 -show_entries stream=codec_name -of default=nw=1:nk=1 "$target")"
+          duration="$(ffprobe -v error -show_entries format=duration -of default=nw=1:nk=1 "$target")"
+          test "$codec" = 'aac'
+          python - "$duration" <<'PY'
+          import sys
+          duration = float(sys.argv[1])
+          if not 300 <= duration <= 900:
+              raise SystemExit(f'unexpected native English article-audio duration: {duration:.2f}s')
+          print(f'validated native English article audio: {duration:.2f}s')
+          PY
+          printf '%s\n' "$duration" > /tmp/audio-duration-seconds
+
+      - name: Write locale audio index
+        run: |
+          duration_ms="$(python - <<'PY'
+          from pathlib import Path
+          print(round(float(Path('/tmp/audio-duration-seconds').read_text().strip()) * 1000))
+          PY
+          )"
+          cat > locales/en/article_audio.yml <<EOF
+          series/fundamentos-ia-iag/02-que-es-ia-generativa.md:
+            audio_file: en/series/fundamentos-ia-iag/02-que-es-ia-generativa.podcast.m4a
+            duration_ms: ${duration_ms}
+            title: Listen to this article
+            voice: af_sarah
+            voice_label: Sarah
+          EOF
+
+      - name: Commit generated native media
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add locales/en/article_audio.yml \
+            locales/en/series/fundamentos-ia-iag/02-que-es-ia-generativa.podcast.m4a
+          git diff --cached --check
+          git commit -m 'feat(en): add native English article audio'
+          git push origin HEAD:agent/english-article-audio-parity
