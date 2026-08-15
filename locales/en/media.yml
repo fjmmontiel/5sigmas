@@ -225,3 +225,9 @@ series/seguridad-ia/05-controles-produccion.md:
   video_poster: 05-controles-produccion.jpg
   video_title: Production Controls
   video_duration: PT48S
+
+articulos-tecnicos/proactive-reactive-agent-and-tool-calls.md:
+  video: reactive-proactive-agent-header-demo.mp4
+  video_poster: reactive-proactive-agent-header-demo.jpg
+  video_title: Proactive and reactive agents and tool calls
+  video_duration: PT20S
