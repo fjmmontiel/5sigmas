@@ -5,6 +5,7 @@ import { chromium } from 'playwright';
 
 const base = process.env.S5_PREVIEW_BASE || 'http://127.0.0.1:8000';
 const outDir = path.resolve('artifacts/visual-review');
+const englishOnlyPreview = (process.env.S5_LOCALE || '').trim().toLowerCase() === 'en';
 await fs.mkdir(outDir, { recursive: true });
 
 const transformerVisuals = [
@@ -120,23 +121,25 @@ await validateSpanishVisualSources(
 const browser = await chromium.launch({ headless: true });
 
 try {
-  for (const viewport of viewports) {
-    const route = '/temas/evaluacion-modelos/';
-    const page = await browser.newPage({ viewport: { width: viewport.width, height: viewport.height } });
-    const runtimeErrors = [];
-    page.on('pageerror', (error) => runtimeErrors.push(`pageerror: ${error.message}`));
-    const response = await page.goto(`${base}${route}`, { waitUntil: 'networkidle' });
-    if (!response?.ok()) failures.push(`${route}: HTTP ${response?.status() ?? 'no response'}`);
-    const body = await page.locator('body').innerText();
-    if (!body.includes('Evaluación de modelos de IA')) failures.push(`${route}: missing Spanish title`);
-    const htmlLang = await page.locator('html').getAttribute('lang');
-    if (htmlLang !== 'es') failures.push(`${route}: html lang=${JSON.stringify(htmlLang)}`);
-    await checkVisualContract(page, route, viewport, evaluationVisuals.map((item) => item.selector));
-    await checkEvaluationDensity(page, route, viewport, evaluationSpanishAnchors);
-    await checkOverflow(page, route, viewport);
-    for (const err of runtimeErrors) failures.push(`${route}: ${err}`);
-    await page.screenshot({ path: path.join(outDir, `spanish-concept-evaluation-${viewport.name}.png`), fullPage: true, animations: 'disabled' });
-    await page.close();
+  if (!englishOnlyPreview) {
+    for (const viewport of viewports) {
+      const route = '/temas/evaluacion-modelos/';
+      const page = await browser.newPage({ viewport: { width: viewport.width, height: viewport.height } });
+      const runtimeErrors = [];
+      page.on('pageerror', (error) => runtimeErrors.push(`pageerror: ${error.message}`));
+      const response = await page.goto(`${base}${route}`, { waitUntil: 'networkidle' });
+      if (!response?.ok()) failures.push(`${route}: HTTP ${response?.status() ?? 'no response'}`);
+      const body = await page.locator('body').innerText();
+      if (!body.includes('Evaluación de modelos de IA')) failures.push(`${route}: missing Spanish title`);
+      const htmlLang = await page.locator('html').getAttribute('lang');
+      if (htmlLang !== 'es') failures.push(`${route}: html lang=${JSON.stringify(htmlLang)}`);
+      await checkVisualContract(page, route, viewport, evaluationVisuals.map((item) => item.selector));
+      await checkEvaluationDensity(page, route, viewport, evaluationSpanishAnchors);
+      await checkOverflow(page, route, viewport);
+      for (const err of runtimeErrors) failures.push(`${route}: ${err}`);
+      await page.screenshot({ path: path.join(outDir, `spanish-concept-evaluation-${viewport.name}.png`), fullPage: true, animations: 'disabled' });
+      await page.close();
+    }
   }
 
   const hub = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
@@ -194,4 +197,4 @@ if (failures.length) {
   for (const failure of [...new Set(failures)]) console.error(failure);
   process.exit(1);
 }
-console.log('Concept QA passed: canonical ES/EN evaluation renders + English hub and six English topic routes, Transformer and evaluation visual contracts, native localization, canonical URLs, and desktop/mobile overflow cleanliness.');
+console.log(`Concept QA passed: ${englishOnlyPreview ? 'English-only preview' : 'combined ES/EN preview'} with evaluation and Transformer visual contracts, native localization, canonical URLs, and desktop/mobile overflow cleanliness.`);
