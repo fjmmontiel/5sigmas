@@ -6,7 +6,7 @@ const root = '/en/series/from-cave-to-agi/';
 const pages = [
   ['00_presentacion_serie', 'From the Caves to AGI'],
   ['01-representar', 'Chapter 1: Represent'],
-  ['02-mecanizar', 'Chapter 2 — Mechanize'],
+  ['02-mecanizar', 'Chapter 2: Mechanize'],
   ['03-aprender', 'Chapter 3 — Learn'],
   ['04-escalar', 'Chapter 4 — Scale'],
   ['05-mas-alla', 'Chapter 5 — Beyond the Transformer'],
