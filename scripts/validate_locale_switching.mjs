@@ -90,6 +90,7 @@ await assertTranslatedPair({ es: '/temas/razonamiento/', en: '/en/temas/razonami
 await assertTranslatedPair({ es: '/temas/evaluacion-modelos/', en: '/en/temas/evaluacion-modelos/' });
 await assertTranslatedPair({ es: '/temas/agentes-ia/', en: '/en/temas/agentes-ia/' });
 await assertTranslatedPair({ es: '/temas/prompt-injection/', en: '/en/temas/prompt-injection/' });
+await assertTranslatedPair({ es: '/visuales/', en: '/en/visuales/' });
 await assertTranslatedPair({ es: '/', en: '/en/' });
 
 const untranslated = '/temas/agi/';

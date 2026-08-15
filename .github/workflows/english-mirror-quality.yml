@@ -24,7 +24,9 @@ on:
       - 'scripts/validate_english_agents_media.mjs'
       - 'scripts/validate_english_technical_articles.mjs'
       - 'scripts/validate_english_concepts.mjs'
+      - 'scripts/validate_english_visual_hub.mjs'
       - 'docs/assets/javascripts/series_energy_ai_preview.js'
+      - 'docs/assets/javascripts/visual-hub.js'
       - '.github/workflows/english-mirror-quality.yml'
 
 permissions:
@@ -135,6 +137,9 @@ jobs:
 
       - name: Validate canonical English Concepts
         run: node scripts/validate_english_concepts.mjs
+
+      - name: Validate English visual hub
+        run: node scripts/validate_english_visual_hub.mjs
 
       - name: Upload English mirror screenshots
         if: always()
