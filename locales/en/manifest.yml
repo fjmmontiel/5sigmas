@@ -7,6 +7,7 @@ fallback_to_spanish: false
 shared_media: []
 published_routes:
   - index.md
+  - proximamente.md
   - visuales/index.md
   - series/index.md
   - series/fundamentos-ia-iag/00_presentacion_serie.md
@@ -202,6 +203,7 @@ published_files:
   - articulos-tecnicos/reactive-proactive-agent-header-demo.jpg
 coverage:
   homepage: canonical_structure_mirrored_native_media_only
+  coming_soon: canonical_parity_complete
   series_hub: canonical_structure_mirrored
   series_presentations: complete
   foundations_series: text_visuals_and_native_media_complete
