@@ -81,9 +81,8 @@ try {
 
       if (chapter.slug === '03-aprender') {
         const winters = page.locator('[data-demo="03-inviernos-ia"]');
-        // Use textContent here because canonical panels are intentionally hidden
-        // until their step is active; innerText would omit panels 2–3 and turn
-        // a correct translation into a false-negative fidelity failure.
+        // Canonical panels are intentionally hidden until their step is active;
+        // textContent keeps the full translated surface visible to this audit.
         const winterText = (await winters.textContent()) || '';
         for (const anchor of [
           'The AI winters: the same pattern, twice',
@@ -136,7 +135,10 @@ try {
         await page.waitForTimeout(300);
         const secondTimelineTitle = await timeline.locator('#repTitle').innerText();
         if (secondTimelineTitle !== 'Formal arithmetic') failures.push(`${chapter.route}: representation timeline did not advance`);
-      } else {
+      } else if (chapter.slug !== '03-aprender') {
+        // Chapter 3 is now fully canonical and each visual has dedicated interaction QA.
+        // Chapters 4–5 still retain compact disclosure implementations while their
+        // remaining canonical mirrors are migrated one visual at a time.
         const details = page.locator('[data-demo] details');
         if (await details.count() === 0) failures.push(`${chapter.route}: visuals expose no interactive disclosure`);
         else {
