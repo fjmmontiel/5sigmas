@@ -231,3 +231,39 @@ articulos-tecnicos/proactive-reactive-agent-and-tool-calls.md:
   video_poster: reactive-proactive-agent-header-demo.jpg
   video_title: Proactive and reactive agents and tool calls
   video_duration: PT20S
+
+series/agentes-ia/00_presentacion_serie.md:
+  video: 00_presentacion_serie.mp4
+  video_poster: 00_presentacion_serie.jpg
+  video_title: AI Agents
+  video_duration: PT32S
+
+series/agentes-ia/01-que-es-un-agente.md:
+  video: 01-que-es-un-agente.mp4
+  video_poster: 01-que-es-un-agente.jpg
+  video_title: What an AI agent is—and is not
+  video_duration: PT32S
+
+series/agentes-ia/02-anatomia-de-un-agente.md:
+  video: 02-anatomia-de-un-agente.mp4
+  video_poster: 02-anatomia-de-un-agente.jpg
+  video_title: The anatomy of an agent
+  video_duration: PT32S
+
+series/agentes-ia/03-como-evaluar-un-agente.md:
+  video: 03-como-evaluar-un-agente.mp4
+  video_poster: 03-como-evaluar-un-agente.jpg
+  video_title: How to evaluate an AI agent
+  video_duration: PT32S
+
+series/agentes-ia/04-seguridad-agentes.md:
+  video: 04-seguridad-agentes.mp4
+  video_poster: 04-seguridad-agentes.jpg
+  video_title: Agent security
+  video_duration: PT32S
+
+series/agentes-ia/05-de-la-demo-a-produccion.md:
+  video: 05-de-la-demo-a-produccion.mp4
+  video_poster: 05-de-la-demo-a-produccion.jpg
+  video_title: From demo to production
+  video_duration: PT32S
