@@ -79,6 +79,37 @@ try {
         if (await page.locator(selector).count() !== 1) failures.push(`${chapter.route}: missing ${selector}`);
       }
 
+      if (chapter.slug === '03-aprender') {
+        const winters = page.locator('[data-demo="03-inviernos-ia"]');
+        // Use textContent here because canonical panels are intentionally hidden
+        // until their step is active; innerText would omit panels 2–3 and turn
+        // a correct translation into a false-negative fidelity failure.
+        const winterText = (await winters.textContent()) || '';
+        for (const anchor of [
+          'The AI winters: the same pattern, twice',
+          'First summer and first winter',
+          'Expert systems: summer and second winter',
+          'The quiet accumulation: three factors converge',
+          'top-5 error fell from 25.8% to 15.3%',
+        ]) {
+          if (!winterText.includes(anchor)) failures.push(`${chapter.route}: AI-winters visual missing ${JSON.stringify(anchor)}`);
+        }
+        for (const token of ['Los inviernos de la IA', 'Primer ciclo', 'Verano', 'Invierno', 'Datos masivos', 'Anterior', 'Siguiente']) {
+          if (winterText.includes(token)) failures.push(`${chapter.route}: AI-winters Spanish leakage ${JSON.stringify(token)}`);
+        }
+        if (await winters.locator('.inv-step').count() !== 3) failures.push(`${chapter.route}: expected three canonical AI-winters steps`);
+        if (await winters.locator('.inv-panel').count() !== 3) failures.push(`${chapter.route}: expected three canonical AI-winters panels`);
+        if ((await winters.getAttribute('data-inv-ready')) !== '1') failures.push(`${chapter.route}: AI-winters runtime did not initialize`);
+        await winters.locator('#inv-next').click();
+        if (!(await winters.locator('.inv-panel[data-p="1"]').getAttribute('class'))?.includes('inv-panel--active')) failures.push(`${chapter.route}: AI-winters Next did not activate second panel`);
+        await winters.locator('#inv-next').click();
+        if (!(await winters.locator('.inv-panel[data-p="2"]').getAttribute('class'))?.includes('inv-panel--active')) failures.push(`${chapter.route}: AI-winters Next did not activate third panel`);
+        await winters.locator('#inv-prev').click();
+        if (!(await winters.locator('.inv-panel[data-p="1"]').getAttribute('class'))?.includes('inv-panel--active')) failures.push(`${chapter.route}: AI-winters Previous did not return to second panel`);
+        await winters.locator('.inv-step[data-s="0"]').click();
+        if (!(await winters.locator('.inv-panel[data-p="0"]').getAttribute('class'))?.includes('inv-panel--active')) failures.push(`${chapter.route}: AI-winters stepper did not return to first panel`);
+      }
+
       if (chapter.canonicalInteractions) {
         const numeralTabs = page.locator('[data-demo="01-sistemas-numeracion"] .num-tab');
         const numeralPanels = page.locator('[data-demo="01-sistemas-numeracion"] .num-panel');
@@ -146,4 +177,4 @@ if (failures.length) {
   for (const failure of [...new Set(failures)]) console.error(failure);
   process.exit(1);
 }
-console.log('Complete English From the Caves to AGI QA passed: Chapter 1 and Chapters 3–5, 22 canonical/native visuals, native-English media, interactions, desktop/mobile clean.');
+console.log('Complete English From the Caves to AGI QA passed: Chapter 1 and Chapters 3–5, canonical/native visuals, native-English media, interactions, desktop/mobile clean.');
