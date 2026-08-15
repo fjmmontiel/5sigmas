@@ -13,8 +13,10 @@ const pages = [
     title: 'AI and Generative AI Foundations',
     media: '00_presentacion_serie',
     concepts: ['What is AI?', 'Generative AI', 'AGI'],
-    demos: [],
+    visuals: [],
+    demoIds: [],
     audio: false,
+    requireDetails: false,
     screenshot: 'english-foundations-00-introduction.png',
   },
   {
@@ -22,16 +24,18 @@ const pages = [
     title: 'Chapter 1 — What is AI?',
     media: '01-que-es-ia',
     concepts: ['Machine Learning', 'Deep Learning', 'MLOps'],
-    demos: [
-      'ia_ml_dl',
-      'tipos_aprendizaje',
-      'ml:tree',
-      'fnd-naive-bayes',
-      'fnd-kmeans',
-      'fnd-neural-network',
-      'fnd-mlops-cycle',
+    visuals: [
+      '[data-demo="ia_ml_dl"]',
+      '[data-demo="tipos_aprendizaje"]',
+      '[data-demo="ml:tree"]',
+      '[data-demo="ml:nb"]',
+      '[data-demo="ml:kmeans"]',
+      '.nn3-root',
+      '.mlops-walkthrough[data-mk="root"]',
     ],
+    demoIds: [],
     audio: false,
+    requireDetails: false,
     screenshot: 'english-foundations-01-ai.png',
   },
   {
@@ -39,7 +43,7 @@ const pages = [
     title: 'Chapter 2 — What is Generative AI?',
     media: '02-que-es-ia-generativa',
     concepts: ['embeddings', 'Transformer', 'foundation model', 'LLMOps'],
-    demos: [
+    demoIds: [
       'fnd-embeddings',
       'fnd-transformer',
       'fnd-scaling-curve',
@@ -49,6 +53,7 @@ const pages = [
       'fnd-llmops-routes',
     ],
     audio: true,
+    requireDetails: true,
     screenshot: 'english-foundations-02-genai.png',
   },
   {
@@ -56,13 +61,14 @@ const pages = [
     title: 'Chapter 3 — Classical AI vs Generative AI',
     media: '03-ia-vs-ia-generativa',
     concepts: ['determinism', 'evaluation', 'RAG', 'agent'],
-    demos: [
+    demoIds: [
       'fnd-five-differences',
       'fnd-tech-decision',
       'fnd-operational-matrix',
       'fnd-fraud-stack',
     ],
     audio: false,
+    requireDetails: true,
     screenshot: 'english-foundations-03-comparison.png',
   },
   {
@@ -70,7 +76,7 @@ const pages = [
     title: 'Chapter 4 — AGI: Artificial General Intelligence',
     media: '04-agi',
     concepts: ['generality', 'alignment', 'task horizon', 'DeepMind'],
-    demos: [
+    demoIds: [
       'fnd-agi-levels',
       'fnd-current-capabilities',
       'fnd-agi-impact',
@@ -78,6 +84,7 @@ const pages = [
       'fnd-ai-vs-humans',
     ],
     audio: false,
+    requireDetails: true,
     screenshot: 'english-foundations-04-agi.png',
   },
 ];
@@ -104,6 +111,7 @@ const forbidden = [
   'Fuentes base',
   'Qué es IA',
 ];
+
 const treeForbidden = [
   'Árboles de Decisión',
   'Guía rápida',
@@ -120,8 +128,251 @@ const treeForbidden = [
   'Aún no hay',
   'Resultado:',
 ];
+
+const chapterOneForbidden = [
+  'Demostración de bayes ingenuo',
+  'Clasificación con Naive Bayes',
+  'La predicción sale de juntar pistas sencillas',
+  'Empieza con un ejemplo',
+  'O escribe tu propio mensaje',
+  'Elige el nivel de detalle',
+  'Pocos grupos',
+  'Los grupos se recolocan',
+  'Cómo aprende una red neuronal',
+  'MLOps en una mirada',
+  'Entrenar no basta',
+  'Qué sale de este paso',
+];
+
 const failures = [];
 const browser = await chromium.launch({ headless: true });
+
+async function validateCanonicalTabs(page, entry) {
+  for (const [demo, contract] of Object.entries(canonicalInteractionContracts)) {
+    const root = page.locator(`[data-demo="${demo}"]`);
+    if (await root.count() !== 1) continue;
+    const hasAnimTabs = await root.first().evaluate((element) => element.hasAttribute('data-anim-tabs'));
+    if (!hasAnimTabs && (await root.first().getAttribute('data-default')) === null) {
+      failures.push(`${entry.route}: ${demo} lost its canonical tab interaction contract`);
+    }
+    const actualTabs = await root.locator('[data-role="tab"][data-tab]').evaluateAll((nodes) =>
+      nodes.map((node) => node.getAttribute('data-tab')),
+    );
+    if (JSON.stringify(actualTabs) !== JSON.stringify(contract.tabs)) {
+      failures.push(`${entry.route}: ${demo} tab sequence changed: ${JSON.stringify(actualTabs)}`);
+    }
+    const panels = await root.locator(contract.panelSelector).count();
+    if (panels !== contract.tabs.length) {
+      failures.push(`${entry.route}: ${demo} expected ${contract.tabs.length} canonical panels, found ${panels}`);
+    }
+    const items = await root.locator(contract.itemSelector).count();
+    if (items !== contract.items) {
+      failures.push(`${entry.route}: ${demo} expected canonical density ${contract.items}, found ${items}`);
+    }
+    for (const tab of contract.tabs) {
+      await root.locator(`[data-role="tab"][data-tab="${tab}"]`).click();
+      const visiblePanels = await root.locator(`${contract.panelSelector}:visible`).count();
+      if (visiblePanels !== 1) {
+        failures.push(`${entry.route}: ${demo} tab ${tab} exposes ${visiblePanels} visible panels`);
+      }
+    }
+  }
+}
+
+async function validateDecisionTree(page, entry) {
+  const tree = page.locator('[data-demo="ml:tree"]');
+  if (await tree.count() !== 1) return;
+  const host = page.locator('.ml-tabs:has([data-demo="ml:tree"])').first();
+  if (await host.count() !== 1) {
+    failures.push(`${entry.route}: canonical decision-tree host missing`);
+    return;
+  }
+  if ((await host.getAttribute('data-default')) !== 'tree') {
+    failures.push(`${entry.route}: decision-tree canonical default tab changed`);
+  }
+  if (await host.locator('[data-role="tab"][data-tab="tree"]').count() !== 1) {
+    failures.push(`${entry.route}: decision-tree canonical tab contract missing`);
+  }
+  if (await host.locator('.ml-scene-pill').count() !== 2) {
+    failures.push(`${entry.route}: decision-tree canonical reading-guide density changed`);
+  }
+  if (await tree.locator('canvas[data-canvas="plot"]').count() !== 1 || await tree.locator('canvas[data-canvas="aux"]').count() !== 1) {
+    failures.push(`${entry.route}: decision-tree must preserve both canonical canvases`);
+  }
+  if (await tree.locator('input[type="range"]').count() !== 2 || await tree.locator('input[type="number"]').count() !== 2) {
+    failures.push(`${entry.route}: decision-tree canonical loan controls changed`);
+  }
+  const treeText = await host.innerText();
+  const lowerTreeText = treeText.toLowerCase();
+  for (const required of [
+    'Decision Trees',
+    'Monthly income (€)',
+    'Debt ratio (%)',
+    'How this case is decided',
+    'In plain language',
+    'How to read the visual',
+    'Leaf diagram',
+  ]) {
+    if (!lowerTreeText.includes(required.toLowerCase())) {
+      failures.push(`${entry.route}: decision-tree missing English canonical copy ${JSON.stringify(required)}`);
+    }
+  }
+  for (const token of treeForbidden) {
+    if (treeText.includes(token)) failures.push(`${entry.route}: decision-tree Spanish leakage ${JSON.stringify(token)}`);
+  }
+
+  const train = tree.locator('[data-btn="toggle"]');
+  if (await train.count() !== 1) {
+    failures.push(`${entry.route}: decision-tree Train control missing`);
+    return;
+  }
+  if ((await train.innerText()).trim() !== 'Train') {
+    failures.push(`${entry.route}: decision-tree initial control is not Train`);
+  }
+  await train.click();
+  try {
+    await page.waitForFunction(() => {
+      const button = document.querySelector('[data-demo="ml:tree"] [data-btn="toggle"]');
+      return button && /Trained/.test(button.textContent || '');
+    }, null, { timeout: 7000 });
+  } catch {
+    failures.push(`${entry.route}: decision-tree training did not reach canonical trained state`);
+  }
+  const trainedText = await host.innerText();
+  if (!trainedText.includes('Result:')) failures.push(`${entry.route}: decision-tree trained result is missing`);
+  if (!trainedText.toLowerCase().includes('leaf diagram')) failures.push(`${entry.route}: decision-tree trained leaf diagram disappeared`);
+  for (const token of treeForbidden) {
+    if (trainedText.includes(token)) failures.push(`${entry.route}: decision-tree Spanish leakage after training ${JSON.stringify(token)}`);
+  }
+}
+
+async function validateNaiveBayes(page, entry) {
+  const demo = page.locator('[data-demo="ml:nb"]');
+  if (await demo.count() !== 1) return;
+  const host = page.locator('.ml-tabs:has([data-demo="ml:nb"])').first();
+  if (await host.count() !== 1) {
+    failures.push(`${entry.route}: canonical Naive Bayes host missing`);
+    return;
+  }
+  if ((await host.getAttribute('data-default')) !== 'nb') failures.push(`${entry.route}: Naive Bayes canonical default changed`);
+  if (await host.locator('.ml-scene-pill').count() !== 2) failures.push(`${entry.route}: Naive Bayes reading-guide density changed`);
+  if (await demo.locator('canvas[data-canvas="plot"]').count() !== 1) failures.push(`${entry.route}: Naive Bayes canonical plot canvas missing`);
+  if (await demo.locator('[data-example]').count() !== 3) failures.push(`${entry.route}: Naive Bayes guided examples changed`);
+  if (await demo.locator('input[data-input="msg"]').count() !== 1) failures.push(`${entry.route}: Naive Bayes custom-message input missing`);
+  const text = (await host.innerText()).toLowerCase();
+  for (const required of ['Classification with Naive Bayes', 'Start with an example', 'Or write your own message.', 'What is happening now']) {
+    if (!text.includes(required.toLowerCase())) failures.push(`${entry.route}: Naive Bayes missing English canonical copy ${JSON.stringify(required)}`);
+  }
+  const train = demo.locator('[data-btn="train"]');
+  if (await train.count() !== 1 || (await train.innerText()).trim() !== 'Train') {
+    failures.push(`${entry.route}: Naive Bayes Train control missing or mistranslated`);
+    return;
+  }
+  await train.click();
+  try {
+    await page.waitForFunction(() => {
+      const status = document.querySelector('[data-demo="ml:nb"] [data-pill="status"]');
+      return status && /trained/i.test(status.textContent || '');
+    }, null, { timeout: 7000 });
+  } catch {
+    failures.push(`${entry.route}: Naive Bayes training did not reach canonical trained state`);
+  }
+}
+
+async function validateKMeans(page, entry) {
+  const demo = page.locator('[data-demo="ml:kmeans"]');
+  if (await demo.count() !== 1) return;
+  const host = page.locator('.ml-tabs:has([data-demo="ml:kmeans"])').first();
+  if (await host.count() !== 1) {
+    failures.push(`${entry.route}: canonical k-means host missing`);
+    return;
+  }
+  if ((await host.getAttribute('data-default')) !== 'kmeans') failures.push(`${entry.route}: k-means canonical default changed`);
+  if (await host.locator('.ml-scene-pill').count() !== 2) failures.push(`${entry.route}: k-means reading-guide density changed`);
+  if (await demo.locator('canvas[data-canvas="plot"]').count() !== 1) failures.push(`${entry.route}: k-means canonical plot canvas missing`);
+  const scenarios = demo.locator('[data-scenario]');
+  if (await scenarios.count() !== 3) failures.push(`${entry.route}: k-means canonical scenario controls changed`);
+  const text = (await host.innerText()).toLowerCase();
+  for (const required of ['Clustering Algorithms', 'Choose the level of detail', 'Fewer groups', 'Balanced', 'More detail']) {
+    if (!text.includes(required.toLowerCase())) failures.push(`${entry.route}: k-means missing English canonical copy ${JSON.stringify(required)}`);
+  }
+  if (await scenarios.count() === 3) {
+    await scenarios.first().click();
+    if ((await scenarios.first().getAttribute('aria-pressed')) !== 'true') failures.push(`${entry.route}: k-means scenario interaction failed`);
+  }
+  const train = demo.locator('[data-btn="train"]');
+  if (await train.count() !== 1 || (await train.innerText()).trim() !== 'Train') {
+    failures.push(`${entry.route}: k-means Train control missing or mistranslated`);
+    return;
+  }
+  await train.click();
+  try {
+    await page.waitForFunction(() => {
+      const status = document.querySelector('[data-demo="ml:kmeans"] [data-pill="status"]');
+      return status && /(clustering ready|trained)/i.test(status.textContent || '');
+    }, null, { timeout: 9000 });
+  } catch {
+    failures.push(`${entry.route}: k-means training did not reach canonical completed state`);
+  }
+}
+
+async function validateNeuralNetwork(page, entry) {
+  const root = page.locator('.nn3-root');
+  if (await root.count() !== 1) return;
+  const hasAnimTabs = await root.evaluate((element) => element.hasAttribute('data-anim-tabs'));
+  if ((await root.getAttribute('data-default')) !== 'linear' || !hasAnimTabs) {
+    failures.push(`${entry.route}: neural-network canonical tab contract changed`);
+  }
+  const tabs = await root.locator('[data-role="tab"][data-tab]').evaluateAll((nodes) => nodes.map((n) => n.getAttribute('data-tab')));
+  if (JSON.stringify(tabs) !== JSON.stringify(['linear', 'sine', 'complex'])) {
+    failures.push(`${entry.route}: neural-network tab sequence changed: ${JSON.stringify(tabs)}`);
+  }
+  if (await root.locator('.nn3-panel[data-panel]').count() !== 3) failures.push(`${entry.route}: neural-network canonical panels changed`);
+  if (await root.locator('svg.nn3-chart[data-chart]').count() !== 3) failures.push(`${entry.route}: neural-network canonical training charts changed`);
+  if (await root.locator('.nn3-train-btn').count() !== 3) failures.push(`${entry.route}: neural-network Train controls changed`);
+  if (await root.locator('.nn3-card').count() !== 6) failures.push(`${entry.route}: neural-network information density changed`);
+  for (const tab of ['linear', 'sine', 'complex']) {
+    await root.locator(`[data-role="tab"][data-tab="${tab}"]`).click();
+    if (await root.locator('.nn3-panel[data-panel]:visible').count() !== 1) failures.push(`${entry.route}: neural-network tab ${tab} exposes the wrong panel count`);
+  }
+  await root.locator('[data-role="tab"][data-tab="linear"]').click();
+  const train = root.locator('.nn3-train-btn[data-chart="linear"]');
+  if ((await train.innerText()).trim() !== '▶ Train') failures.push(`${entry.route}: neural-network linear Train control mistranslated`);
+  await train.click();
+  try {
+    await page.waitForFunction(() => {
+      const button = document.querySelector('.nn3-root .nn3-train-btn[data-chart="linear"]');
+      return button && /Reset/.test(button.textContent || '');
+    }, null, { timeout: 7000 });
+  } catch {
+    failures.push(`${entry.route}: neural-network training did not complete`);
+  }
+  const text = (await root.textContent()) || '';
+  for (const required of ['A single neuron learns linear relationships', 'A hidden layer makes it possible to learn curves', 'More layers = increasingly complex patterns', 'Epoch', 'Loss']) {
+    if (!text.includes(required)) failures.push(`${entry.route}: neural-network missing English canonical copy ${JSON.stringify(required)}`);
+  }
+}
+
+async function validateMLOps(page, entry) {
+  const root = page.locator('.mlops-walkthrough[data-mk="root"]');
+  if (await root.count() !== 1) return;
+  if ((await root.getAttribute('data-default')) !== 'datos') failures.push(`${entry.route}: MLOps canonical default changed`);
+  if (await root.locator('.mlops-summary-pill').count() !== 2) failures.push(`${entry.route}: MLOps reading-guide density changed`);
+  const steps = root.locator('.mlops-step[data-step]');
+  if (await steps.count() !== 8) failures.push(`${entry.route}: MLOps canonical 8-step flow changed`);
+  if (await root.locator('svg [data-node]').count() !== 8) failures.push(`${entry.route}: MLOps canonical orbit stations changed`);
+  const text = await root.innerText();
+  for (const required of ['MLOps at a glance', 'Training is not enough: you need the full lifecycle.', 'Data', 'Prepare', 'Train', 'Evaluate', 'Version', 'Deploy', 'Monitor', 'Feedback']) {
+    if (!text.includes(required)) failures.push(`${entry.route}: MLOps missing English canonical copy ${JSON.stringify(required)}`);
+  }
+  const deploy = root.locator('[data-step="desplegar"]');
+  if (await deploy.count() === 1) {
+    await deploy.click();
+    if ((await root.getAttribute('data-active')) !== 'desplegar') failures.push(`${entry.route}: MLOps step interaction failed`);
+    const panelText = await root.locator('[data-mk="panel"]').innerText();
+    if (!panelText.includes('6) Deploy — put it to work')) failures.push(`${entry.route}: MLOps deploy panel did not preserve canonical content`);
+  }
+}
 
 try {
   for (const entry of pages) {
@@ -140,118 +391,40 @@ try {
       const lowerBody = body.toLowerCase();
       if (!body.includes(entry.title)) failures.push(`${entry.route}: missing English page title`);
       for (const concept of entry.concepts) {
-        if (!lowerBody.includes(concept.toLowerCase())) {
-          failures.push(`${entry.route}: missing core concept ${concept}`);
-        }
+        if (!lowerBody.includes(concept.toLowerCase())) failures.push(`${entry.route}: missing core concept ${concept}`);
       }
       for (const token of forbidden) {
         if (body.includes(token)) failures.push(`${entry.route}: Spanish leakage ${JSON.stringify(token)}`);
       }
-
-      for (const demo of entry.demos) {
-        const selector = `[data-demo="${demo}"]`;
-        if (await page.locator(selector).count() !== 1) failures.push(`${entry.route}: missing ${selector}`);
-      }
-
-      const demos = page.locator('[data-demo]');
-      if (await demos.count() !== entry.demos.length) {
-        failures.push(`${entry.route}: expected ${entry.demos.length} teaching visuals, found ${await demos.count()}`);
-      }
-
-      for (const [demo, contract] of Object.entries(canonicalInteractionContracts)) {
-        const root = page.locator(`[data-demo="${demo}"]`);
-        if (await root.count() !== 1) continue;
-        if (!(await root.first().getAttribute('data-anim-tabs')) && !(await root.first().getAttribute('data-default'))) {
-          failures.push(`${entry.route}: ${demo} lost its canonical tab interaction contract`);
-        }
-        const actualTabs = await root.locator('[data-role="tab"][data-tab]').evaluateAll((nodes) =>
-          nodes.map((node) => node.getAttribute('data-tab')),
-        );
-        if (JSON.stringify(actualTabs) !== JSON.stringify(contract.tabs)) {
-          failures.push(`${entry.route}: ${demo} tab sequence changed: ${JSON.stringify(actualTabs)}`);
-        }
-        const panels = await root.locator(contract.panelSelector).count();
-        if (panels !== contract.tabs.length) {
-          failures.push(`${entry.route}: ${demo} expected ${contract.tabs.length} canonical panels, found ${panels}`);
-        }
-        const items = await root.locator(contract.itemSelector).count();
-        if (items !== contract.items) {
-          failures.push(`${entry.route}: ${demo} expected canonical density ${contract.items}, found ${items}`);
-        }
-        for (const tab of contract.tabs) {
-          await root.locator(`[data-role="tab"][data-tab="${tab}"]`).click();
-          const visiblePanels = await root.locator(`${contract.panelSelector}:visible`).count();
-          if (visiblePanels !== 1) {
-            failures.push(`${entry.route}: ${demo} tab ${tab} exposes ${visiblePanels} visible panels`);
-          }
+      if (entry.route.includes('/01-que-es-ia/')) {
+        for (const token of chapterOneForbidden) {
+          if (body.includes(token)) failures.push(`${entry.route}: Chapter 1 Spanish leakage ${JSON.stringify(token)}`);
         }
       }
 
-      const tree = page.locator('[data-demo="ml:tree"]');
-      if (await tree.count() === 1) {
-        const host = page.locator('.ml-tabs:has([data-demo="ml:tree"])').first();
-        if (await host.count() !== 1) {
-          failures.push(`${entry.route}: canonical decision-tree host missing`);
-        } else {
-          if ((await host.getAttribute('data-default')) !== 'tree') {
-            failures.push(`${entry.route}: decision-tree canonical default tab changed`);
-          }
-          if (await host.locator('[data-role="tab"][data-tab="tree"]').count() !== 1) {
-            failures.push(`${entry.route}: decision-tree canonical tab contract missing`);
-          }
-          if (await host.locator('.ml-scene-pill').count() !== 2) {
-            failures.push(`${entry.route}: decision-tree canonical reading-guide density changed`);
-          }
-          if (await tree.locator('canvas[data-canvas="plot"]').count() !== 1 || await tree.locator('canvas[data-canvas="aux"]').count() !== 1) {
-            failures.push(`${entry.route}: decision-tree must preserve both canonical canvases`);
-          }
-          if (await tree.locator('input[type="range"]').count() !== 2 || await tree.locator('input[type="number"]').count() !== 2) {
-            failures.push(`${entry.route}: decision-tree canonical loan controls changed`);
-          }
-          const treeText = await host.innerText();
-          const lowerTreeText = treeText.toLowerCase();
-          for (const required of [
-            'Decision Trees',
-            'Monthly income (€)',
-            'Debt ratio (%)',
-            'How this case is decided',
-            'In plain language',
-            'How to read the visual',
-            'Leaf diagram',
-          ]) {
-            if (!lowerTreeText.includes(required.toLowerCase())) failures.push(`${entry.route}: decision-tree missing English canonical copy ${JSON.stringify(required)}`);
-          }
-          for (const token of treeForbidden) {
-            if (treeText.includes(token)) failures.push(`${entry.route}: decision-tree Spanish leakage ${JSON.stringify(token)}`);
-          }
-
-          const train = tree.locator('[data-btn="toggle"]');
-          if (await train.count() !== 1) {
-            failures.push(`${entry.route}: decision-tree Train control missing`);
-          } else {
-            if ((await train.innerText()).trim() !== 'Train') {
-              failures.push(`${entry.route}: decision-tree initial control is not Train`);
-            }
-            await train.click();
-            try {
-              await page.waitForFunction(() => {
-                const button = document.querySelector('[data-demo="ml:tree"] [data-btn="toggle"]');
-                return button && /Trained/.test(button.textContent || '');
-              }, null, { timeout: 7000 });
-            } catch {
-              failures.push(`${entry.route}: decision-tree training did not reach canonical trained state`);
-            }
-            const trainedText = await host.innerText();
-            if (!trainedText.includes('Result:')) failures.push(`${entry.route}: decision-tree trained result is missing`);
-            if (!trainedText.toLowerCase().includes('leaf diagram')) failures.push(`${entry.route}: decision-tree trained leaf diagram disappeared`);
-            for (const token of treeForbidden) {
-              if (trainedText.includes(token)) failures.push(`${entry.route}: decision-tree Spanish leakage after training ${JSON.stringify(token)}`);
-            }
-          }
+      if (entry.visuals) {
+        for (const selector of entry.visuals) {
+          if (await page.locator(selector).count() !== 1) failures.push(`${entry.route}: expected one canonical teaching visual ${selector}`);
+        }
+      } else {
+        for (const demo of entry.demoIds) {
+          const selector = `[data-demo="${demo}"]`;
+          if (await page.locator(selector).count() !== 1) failures.push(`${entry.route}: missing ${selector}`);
+        }
+        const demos = page.locator('[data-demo]');
+        if (await demos.count() !== entry.demoIds.length) {
+          failures.push(`${entry.route}: expected ${entry.demoIds.length} teaching visuals, found ${await demos.count()}`);
         }
       }
 
-      if (entry.demos.length) {
+      await validateCanonicalTabs(page, entry);
+      await validateDecisionTree(page, entry);
+      await validateNaiveBayes(page, entry);
+      await validateKMeans(page, entry);
+      await validateNeuralNetwork(page, entry);
+      await validateMLOps(page, entry);
+
+      if (entry.requireDetails) {
         const details = page.locator('[data-demo] details');
         if (await details.count() === 0) {
           failures.push(`${entry.route}: visuals expose no interactive disclosure`);
@@ -288,9 +461,6 @@ try {
         failures.push(`${entry.route}: expected ${entry.audio ? 'one' : 'zero'} native English article-audio player, found ${audioCount}`);
       }
       if (entry.audio && audioCount === 1) {
-        // innerText reflects CSS text-transform (the eyebrow renders uppercase),
-        // so validate semantic copy case-insensitively rather than weakening the
-        // locale contract to a presentation-specific casing.
         if (!lowerBody.includes('article audio') || !lowerBody.includes('listen to this article')) {
           failures.push(`${entry.route}: missing English article-audio UI copy`);
         }
@@ -316,9 +486,7 @@ try {
         document.documentElement.clientWidth,
         document.documentElement.scrollWidth,
       ]);
-      if (scrollWidth > clientWidth + 2) {
-        failures.push(`${entry.route}: ${viewport.name} horizontal overflow ${scrollWidth - clientWidth}px`);
-      }
+      if (scrollWidth > clientWidth + 2) failures.push(`${entry.route}: ${viewport.name} horizontal overflow ${scrollWidth - clientWidth}px`);
       for (const runtimeError of runtimeErrors) failures.push(`${entry.route}: ${runtimeError}`);
 
       if (viewport.name === 'desktop') {
@@ -340,4 +508,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Complete English Foundations QA passed: introduction + Chapters 1–4, 23 native visuals, native-English MP4/poster pairs, canonical native article audio, canonical interaction density including the full decision-tree trainer, interactions, and clean desktop/mobile layouts.');
+console.log('Complete English Foundations QA passed: introduction + Chapters 1–4, 23 canonical teaching visuals, native-English media, canonical interaction density including Decision Tree, Naive Bayes, k-means, neural-network training and the 8-step MLOps walkthrough, plus clean desktop/mobile layouts.');
