@@ -42,7 +42,7 @@ for (const viewport of [{name:'desktop',width:1440,height:1000},{name:'mobile',w
   if (await referenceRows.count() < 15) failures.push(`expected at least 15 canonical reference rows, found ${await referenceRows.count()}`);
 
   for (const forbidden of ['Capítulo ', 'Prerrequisitos', 'Siguiente capítulo', 'Mecanizar —', 'Fuentes base', 'Preguntas frecuentes']) if (body.includes(forbidden)) failures.push(`Spanish leakage ${JSON.stringify(forbidden)}`);
-  for (const selector of ['.calc-wrap','.gate-wrap','.tur-wrap','.vn-wrap','.mech-time']) if (await page.locator(selector).count() !== 1) failures.push(`missing ${selector}`);
+  for (const selector of ['.calc-wrap','.gate-wrap','.tur-wrap','.vn-wrap','.mec-wrap']) if (await page.locator(selector).count() !== 1) failures.push(`missing ${selector}`);
 
   const calculator = page.locator('.calc-wrap');
   if (await calculator.count() === 1) {
@@ -122,6 +122,31 @@ for (const viewport of [{name:'desktop',width:1440,height:1000},{name:'mobile',w
     }
   }
 
+  const timeline = page.locator('.mec-wrap');
+  if (await timeline.count() === 1) {
+    const initialText = await timeline.innerText();
+    for (const phrase of ['From gears to the universal computer','Mechanical era','Theoretical era','AI is born','Early mechanical calculators','Jacquard loom','Analytical Engine (Babbage) and first algorithm (Lovelace)']) {
+      if (!initialText.includes(phrase)) failures.push(`canonical mechanization timeline missing ${JSON.stringify(phrase)}`);
+    }
+    if (await timeline.locator('.mec-item').count() !== 3) failures.push(`expected three mechanical-era milestones, found ${await timeline.locator('.mec-item').count()}`);
+    await timeline.locator('[data-era="teo"]').click();
+    const theoryText = await timeline.innerText();
+    for (const phrase of ['Boolean logic (Boole)','Turing machine','Information theory (Shannon)']) {
+      if (!theoryText.includes(phrase)) failures.push(`theoretical-era timeline missing ${JSON.stringify(phrase)}`);
+    }
+    if (await timeline.locator('.mec-item').count() !== 3) failures.push(`expected three theoretical-era milestones, found ${await timeline.locator('.mec-item').count()}`);
+    await timeline.locator('[data-era="dig"]').click();
+    const digitalText = await timeline.innerText();
+    for (const phrase of ['von Neumann architecture','Dartmouth Conference — AI is born']) {
+      if (!digitalText.includes(phrase)) failures.push(`digital-era timeline missing ${JSON.stringify(phrase)}`);
+    }
+    if (await timeline.locator('.mec-item').count() !== 2) failures.push(`expected two digital-era milestones, found ${await timeline.locator('.mec-item').count()}`);
+    const allTimelineText = `${initialText}\n${theoryText}\n${digitalText}`;
+    for (const forbidden of ['De los engranajes','Era mecánica','Era teórica','Nace la IA','Primeras calculadoras','Telar de Jacquard','Tarjetas perforadas','Máquina Analítica','Lógica booleana','Máquina de Turing','Teoría de la información','Arquitectura Von Neumann','Conferencia de Dartmouth','inteligencia artificial']) {
+      if (allTimelineText.includes(forbidden)) failures.push(`mechanization timeline Spanish leakage ${JSON.stringify(forbidden)}`);
+    }
+  }
+
   const videos = page.locator('video[data-s5-inline-video-player]');
   if (await videos.count() !== 1) {
     failures.push(`expected one native-English chapter video, found ${await videos.count()}`);
@@ -139,4 +164,4 @@ for (const viewport of [{name:'desktop',width:1440,height:1000},{name:'mobile',w
 }
 await browser.close();
 if (failures.length) { for (const failure of failures) console.error(failure); process.exit(1); }
-console.log('English history chapter 2 QA passed with canonical narrative, calculator, logic-gates, Turing and von Neumann visuals, plus native-English media.');
+console.log('English history chapter 2 QA passed with canonical narrative and all five canonical visuals, plus native-English media.');
