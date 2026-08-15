@@ -100,6 +100,54 @@ hide:
   </nav>
 </section>
 
+<section class="s5-section" aria-labelledby="s5-concepts-title-en">
+  <div class="s5-section-head">
+    <div>
+      <h2 id="s5-concepts-title-en">Core concepts</h2>
+      <p class="s5-section-head__copy">Direct answers to the concepts behind modern AI systems.</p>
+    </div>
+    <a href="/en/temas/">View all concepts →</a>
+  </div>
+  <div class="s5-simple-list">
+    <a class="s5-list-row" href="/en/temas/llms/">
+      <span class="s5-list-row__n">01</span>
+      <span class="s5-list-row__title">LLMs</span>
+      <span class="s5-list-row__desc">What large language models are, how they learn and how they generate tokens.</span>
+      <span class="s5-list-row__meta">Models</span>
+    </a>
+    <a class="s5-list-row" href="/en/temas/transformer/">
+      <span class="s5-list-row__n">02</span>
+      <span class="s5-list-row__title">Transformers</span>
+      <span class="s5-list-row__desc">Attention, representations and the architecture behind modern language models.</span>
+      <span class="s5-list-row__meta">Architecture</span>
+    </a>
+    <a class="s5-list-row" href="/en/temas/razonamiento/">
+      <span class="s5-list-row__n">03</span>
+      <span class="s5-list-row__title">Reasoning</span>
+      <span class="s5-list-row__desc">What reasoning means for an LLM and what changes at inference time.</span>
+      <span class="s5-list-row__meta">Inference</span>
+    </a>
+    <a class="s5-list-row" href="/en/temas/evaluacion-modelos/">
+      <span class="s5-list-row__n">04</span>
+      <span class="s5-list-row__title">Model evaluation</span>
+      <span class="s5-list-row__desc">How to measure real capability without confusing a benchmark with the objective.</span>
+      <span class="s5-list-row__meta">Evaluation</span>
+    </a>
+    <a class="s5-list-row" href="/en/temas/agentes-ia/">
+      <span class="s5-list-row__n">05</span>
+      <span class="s5-list-row__title">AI agents</span>
+      <span class="s5-list-row__desc">Goals, tools, state and boundaries that turn model responses into actions.</span>
+      <span class="s5-list-row__meta">Systems</span>
+    </a>
+    <a class="s5-list-row" href="/en/temas/prompt-injection/">
+      <span class="s5-list-row__n">06</span>
+      <span class="s5-list-row__title">Prompt injection</span>
+      <span class="s5-list-row__desc">Why untrusted data can influence instructions and which controls reduce the risk.</span>
+      <span class="s5-list-row__meta">Security</span>
+    </a>
+  </div>
+</section>
+
 <section class="s5-section">
   <div class="s5-section-head">
     <h2>Visual explanations</h2>
