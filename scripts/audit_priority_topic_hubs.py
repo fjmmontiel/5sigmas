@@ -71,6 +71,7 @@ REQUIRED_VISUAL_INCLUDES = {
         "snippets/temas/transformer-qkv.html",
         "snippets/temas/transformer-multihead.html",
         "snippets/temas/transformer-causal-mask.html",
+        "snippets/temas/transformer-ffn.html",
         "snippets/temas/transformer-residual-norm.html",
     ),
 }
