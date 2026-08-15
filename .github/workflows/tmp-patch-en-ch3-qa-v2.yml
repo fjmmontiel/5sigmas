@@ -1,0 +1,31 @@
+name: Temporary Chapter 3 QA patch v2
+
+on:
+  push:
+    branches:
+      - fix/en-fidelity-foundations-ch3-20260815
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: ${{ !contains(github.event.head_commit.message, 'lock canonical Chapter 3 interactions') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/en-fidelity-foundations-ch3-20260815
+          fetch-depth: 0
+      - name: Apply QA patch
+        run: |
+          python scripts/tmp_patch_ch3_qa.py
+          git diff --check
+          node --check scripts/validate_english_foundations_complete.mjs
+      - name: Commit QA patch
+        run: |
+          git config user.name "5sigmas automation"
+          git config user.email "actions@users.noreply.github.com"
+          git add scripts/validate_english_foundations_complete.mjs
+          git commit -m "test(en): lock canonical Chapter 3 interactions"
+          git push origin HEAD:fix/en-fidelity-foundations-ch3-20260815
