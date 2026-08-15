@@ -26,6 +26,7 @@ const nativePresentationMedia = new Map([
   ['ia-pib-bienestar-energia', '00_presentacion_serie'],
   ['datacenters-espacio', '00_presentacion_serie'],
   ['seguridad-ia', '00_presentacion_serie'],
+  ['agentes-ia', '00_presentacion_serie'],
 ]);
 
 const forbidden = [
