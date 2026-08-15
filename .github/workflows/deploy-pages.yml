@@ -173,6 +173,11 @@ jobs:
           S5_PREVIEW_BASE: https://5sigmas.com
         run: node scripts/validate_english_series_mirror.mjs
 
+      - name: Validate live English Foundations and article audio
+        env:
+          S5_PREVIEW_BASE: https://5sigmas.com
+        run: node scripts/validate_english_foundations_complete.mjs
+
       - name: Validate live English Data Centers media
         env:
           S5_PREVIEW_BASE: https://5sigmas.com
