@@ -222,14 +222,29 @@ hooks:
   - hooks/direct_reader_navigation.py
   - hooks/locale_alternates.py
 
+# mkdocs.yml is inherited for common theme/configuration, but MkDocs replaces
+# this list when the locale config declares it. Keep the complete canonical
+# shared runtime here, then add the one English-only locale adapter.
 extra_javascript:
   - path: javascripts/external-links.js
     defer: true
-  - path: assets/javascripts/series_energy_ai_preview.js
+  - path: javascripts/article-audio.js
+    defer: true
+  - path: assets/javascripts/animation-shell.js
+    defer: true
+  - path: assets/javascripts/voice-report-animations.js
+    defer: true
+  - path: assets/javascripts/site-demos.js
     defer: true
   - path: assets/javascripts/tabbed-animations.js
     defer: true
   - path: assets/javascripts/locale-tabbed-adapter.js
+    defer: true
+  - path: assets/javascripts/series_energy_ai_preview.js
+    defer: true
+  - path: assets/javascripts/series_energy_ai_local.js
+    defer: true
+  - path: assets/javascripts/editorial-system.js
     defer: true
   - path: assets/javascripts/visual-hub.js
     defer: true
