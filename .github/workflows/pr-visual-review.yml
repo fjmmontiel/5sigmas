@@ -213,7 +213,7 @@ jobs:
       - name: Serve English preview
         run: |
           python -m http.server 8000 --directory site > /tmp/5sigmas-en-preview.log 2>&1 &
-          echo $! > /tmp/5sigmas-preview.pid
+          echo $! > /tmp/5sigmas-en-preview.pid
           for attempt in {1..30}; do
             curl --fail --silent http://127.0.0.1:8000/en/ > /dev/null && exit 0
             sleep 1
