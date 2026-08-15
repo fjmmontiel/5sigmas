@@ -81,7 +81,10 @@ try {
 
       if (chapter.slug === '03-aprender') {
         const winters = page.locator('[data-demo="03-inviernos-ia"]');
-        const winterText = await winters.innerText();
+        // Use textContent here because canonical panels are intentionally hidden
+        // until their step is active; innerText would omit panels 2–3 and turn
+        // a correct translation into a false-negative fidelity failure.
+        const winterText = (await winters.textContent()) || '';
         for (const anchor of [
           'The AI winters: the same pattern, twice',
           'First summer and first winter',
