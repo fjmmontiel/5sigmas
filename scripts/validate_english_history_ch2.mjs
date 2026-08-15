@@ -61,7 +61,9 @@ for (const viewport of [{name:'desktop',width:1440,height:1000},{name:'mobile',w
 
   const gates = page.locator('.gate-wrap');
   if (await gates.count() === 1) {
-    const gateText = await gates.innerText();
+    // textContent intentionally includes hidden tab panels. innerText only exposes the active
+    // panel, which made the fidelity gate incorrectly fail for translated OR/NOT/adder copy.
+    const gateText = (await gates.textContent()) || '';
     for (const phrase of ['Logic gates: from thought to circuits','AND gate','OR gate','NOT gate (inverter)','1-bit adder — combined gates']) {
       if (!gateText.includes(phrase)) failures.push(`canonical logic-gates visual missing ${JSON.stringify(phrase)}`);
     }
