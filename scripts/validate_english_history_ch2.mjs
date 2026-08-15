@@ -42,7 +42,7 @@ for (const viewport of [{name:'desktop',width:1440,height:1000},{name:'mobile',w
   if (await referenceRows.count() < 15) failures.push(`expected at least 15 canonical reference rows, found ${await referenceRows.count()}`);
 
   for (const forbidden of ['Capítulo ', 'Prerrequisitos', 'Siguiente capítulo', 'Mecanizar —', 'Fuentes base', 'Preguntas frecuentes']) if (body.includes(forbidden)) failures.push(`Spanish leakage ${JSON.stringify(forbidden)}`);
-  for (const selector of ['.calc-wrap','.gate-wrap','.turing-wrap','.stored-wrap','.mech-time']) if (await page.locator(selector).count() !== 1) failures.push(`missing ${selector}`);
+  for (const selector of ['.calc-wrap','.gate-wrap','.tur-wrap','.stored-wrap','.mech-time']) if (await page.locator(selector).count() !== 1) failures.push(`missing ${selector}`);
 
   const calculator = page.locator('.calc-wrap');
   if (await calculator.count() === 1) {
@@ -80,6 +80,23 @@ for (const viewport of [{name:'desktop',width:1440,height:1000},{name:'mobile',w
     }
   }
 
+  const turing = page.locator('.tur-wrap');
+  if (await turing.count() === 1) {
+    const turingText = (await turing.textContent()) || '';
+    for (const phrase of ['The Turing machine: what it means to compute','Tape','Head','Rules (program)','Simulation — add 1 in binary','What it established','The Halting Problem']) {
+      if (!turingText.includes(phrase)) failures.push(`canonical Turing visual missing ${JSON.stringify(phrase)}`);
+    }
+    const tapeCells = turing.locator('#tur-tape .tur-cell');
+    if (await tapeCells.count() !== 8) failures.push(`expected canonical eight-cell Turing tape, found ${await tapeCells.count()}`);
+    await turing.locator('#tur-step').click();
+    if ((await turing.locator('#tur-step-num').innerText()).trim() !== '1') failures.push('canonical Turing Step interaction did not advance to step 1');
+    await turing.locator('#tur-reset').click();
+    if ((await turing.locator('#tur-step-num').innerText()).trim() !== '0') failures.push('canonical Turing Reset interaction did not restore step 0');
+    for (const forbidden of ['La Máquina de Turing','Cinta','Cabezal','Reglas (programa)','Simulación — sumar','Estado:','Regla aplicada:','Reiniciar','Ejecutar','Lo que demostró','Problema de la Parada','acarreo','Pausar']) {
+      if (turingText.includes(forbidden)) failures.push(`Turing visual Spanish leakage ${JSON.stringify(forbidden)}`);
+    }
+  }
+
   const videos = page.locator('video[data-s5-inline-video-player]');
   if (await videos.count() !== 1) {
     failures.push(`expected one native-English chapter video, found ${await videos.count()}`);
@@ -97,4 +114,4 @@ for (const viewport of [{name:'desktop',width:1440,height:1000},{name:'mobile',w
 }
 await browser.close();
 if (failures.length) { for (const failure of failures) console.error(failure); process.exit(1); }
-console.log('English history chapter 2 QA passed with canonical narrative, calculator and logic-gates visuals, plus native-English media.');
+console.log('English history chapter 2 QA passed with canonical narrative, calculator, logic-gates and Turing visuals, plus native-English media.');
