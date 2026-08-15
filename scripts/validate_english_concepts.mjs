@@ -18,12 +18,17 @@ const evaluationVisuals = [
   { selector: '.evs-wrap', source: 'docs/snippets/temas/evaluation-stack.html' },
   { selector: '.evt-wrap', source: 'docs/snippets/temas/evaluation-system-trace.html' },
 ];
+const agentVisuals = [
+  { selector: '.aix-loop', source: 'docs/snippets/agentes-ia/01-bucle-agente.html' },
+  { selector: '.ags-wrap', source: 'docs/snippets/temas/agent-system-boundary.html' },
+  { selector: '.agt-wrap', source: 'docs/snippets/temas/agent-tool-gate.html' },
+];
 const concepts = [
   { route: '/en/temas/llms/', title: 'What is an LLM and how does it work?', terms: ['tokenization', 'pretraining', 'Parameters'] },
   { route: '/en/temas/transformer/', title: 'How the Transformer works', terms: ['Query', 'Key', 'Value', 'Multi-head attention'], visuals: transformerVisuals.map((item) => item.selector), visualGroup: 'transformer' },
   { route: '/en/temas/razonamiento/', title: 'Reasoning in LLMs', terms: ['Chain of thought', 'Test-time compute', 'verifier'] },
   { route: '/en/temas/evaluacion-modelos/', title: 'Evaluating AI models', terms: ['golden set', 'benchmark', 'LLM as a judge'], visuals: evaluationVisuals.map((item) => item.selector), visualGroup: 'evaluation' },
-  { route: '/en/temas/agentes-ia/', title: 'What is an AI agent?', terms: ['tool calling', 'Operational state', 'least privilege'] },
+  { route: '/en/temas/agentes-ia/', title: 'What is an AI agent?', terms: ['tool calling', 'Operational state', 'least privilege'], visuals: agentVisuals.map((item) => item.selector), visualGroup: 'agents' },
   { route: '/en/temas/prompt-injection/', title: 'What is prompt injection?', terms: ['indirect prompt injection', 'least privilege', 'Authorize outside the prompt'] },
 ];
 
@@ -47,8 +52,26 @@ const evaluationEnglishForbidden = [
   'acción equivocada',
   'PRINCIPIO',
 ];
+const agentsEnglishForbidden = [
+  'Un agente es un bucle con permisos',
+  'Observar',
+  'Planear',
+  'Actuar',
+  'Verificar',
+  'ARQUITECTURA DEL AGENTE',
+  'El modelo decide',
+  'Estado operativo',
+  'FRONTERA DE AUTORIDAD',
+  'Una tool call es una propuesta',
+  'PROPUESTA DEL MODELO',
+  'Permisos',
+  'RESULTADO OBSERVABLE',
+  'SIGUIENTE DECISIÓN',
+];
 const evaluationEnglishAnchors = ['Reference data', 'External benchmarks', 'Judge + humans', 'Online metrics', 'Answer + citations', 'Final answer'];
 const evaluationSpanishAnchors = ['Datos de referencia', 'Benchmarks externos', 'Juez + humanos', 'Métricas online', 'Respuesta + citas', 'Respuesta final'];
+const agentEnglishAnchors = ['An agent is a loop with permissions', 'AGENT ARCHITECTURE', 'Operational state', 'AUTHORITY BOUNDARY', 'Permissions', 'OBSERVABLE RESULT'];
+const agentSpanishAnchors = ['Un agente es un bucle con permisos', 'ARQUITECTURA DEL AGENTE', 'Estado operativo', 'FRONTERA DE AUTORIDAD', 'Permisos', 'RESULTADO OBSERVABLE'];
 const viewports = [
   { name: 'desktop', width: 1440, height: 1000 },
   { name: 'mobile', width: 390, height: 844 },
@@ -103,6 +126,24 @@ async function checkEvaluationDensity(page, route, viewport, anchors) {
   }
 }
 
+async function checkAgentDensity(page, route, viewport, anchors) {
+  const expectedCounts = [
+    ['.aix-node', 4],
+    ['.ags-state-row > div', 2],
+    ['.ags-footer > span', 7],
+    ['.agt-checks > div', 4],
+    ['.agt-outcomes > div', 2],
+  ];
+  for (const [selector, expected] of expectedCounts) {
+    const count = await page.locator(selector).count();
+    if (count !== expected) failures.push(`${route}: ${viewport.name} expected ${expected} ${selector}, found ${count}`);
+  }
+  const body = await page.locator('body').innerText();
+  for (const text of anchors) {
+    if (!body.includes(text)) failures.push(`${route}: ${viewport.name} missing agent visual anchor ${JSON.stringify(text)}`);
+  }
+}
+
 async function checkOverflow(page, route, viewport) {
   const [clientWidth, scrollWidth] = await page.evaluate(() => [document.documentElement.clientWidth, document.documentElement.scrollWidth]);
   if (scrollWidth > clientWidth + 2) failures.push(`${route}: ${viewport.name} horizontal overflow ${scrollWidth - clientWidth}px`);
@@ -117,6 +158,11 @@ await validateSpanishVisualSources(
   'docs/temas/evaluacion-modelos.md',
   evaluationVisuals,
   ['La misma respuesta puede fallar en capas distintas', 'Datos de referencia', 'No puntúes solo la respuesta'],
+);
+await validateSpanishVisualSources(
+  'docs/temas/agentes-ia.md',
+  agentVisuals,
+  ['Un agente es un bucle con permisos', 'ARQUITECTURA DEL AGENTE', 'FRONTERA DE AUTORIDAD'],
 );
 const browser = await chromium.launch({ headless: true });
 
@@ -138,6 +184,25 @@ try {
       await checkOverflow(page, route, viewport);
       for (const err of runtimeErrors) failures.push(`${route}: ${err}`);
       await page.screenshot({ path: path.join(outDir, `spanish-concept-evaluation-${viewport.name}.png`), fullPage: true, animations: 'disabled' });
+      await page.close();
+    }
+
+    for (const viewport of viewports) {
+      const route = '/temas/agentes-ia/';
+      const page = await browser.newPage({ viewport: { width: viewport.width, height: viewport.height } });
+      const runtimeErrors = [];
+      page.on('pageerror', (error) => runtimeErrors.push(`pageerror: ${error.message}`));
+      const response = await page.goto(`${base}${route}`, { waitUntil: 'networkidle' });
+      if (!response?.ok()) failures.push(`${route}: HTTP ${response?.status() ?? 'no response'}`);
+      const body = await page.locator('body').innerText();
+      if (!body.includes('Qué es un agente de IA')) failures.push(`${route}: missing Spanish title`);
+      const htmlLang = await page.locator('html').getAttribute('lang');
+      if (htmlLang !== 'es') failures.push(`${route}: html lang=${JSON.stringify(htmlLang)}`);
+      await checkVisualContract(page, route, viewport, agentVisuals.map((item) => item.selector));
+      await checkAgentDensity(page, route, viewport, agentSpanishAnchors);
+      await checkOverflow(page, route, viewport);
+      for (const err of runtimeErrors) failures.push(`${route}: ${err}`);
+      await page.screenshot({ path: path.join(outDir, `spanish-concept-agents-${viewport.name}.png`), fullPage: true, animations: 'disabled' });
       await page.close();
     }
   }
@@ -178,9 +243,14 @@ try {
 
       if (concept.visuals) {
         await checkVisualContract(page, concept.route, viewport, concept.visuals);
-        const localeForbidden = concept.visualGroup === 'transformer' ? transformerEnglishForbidden : evaluationEnglishForbidden;
+        const localeForbidden = concept.visualGroup === 'transformer'
+          ? transformerEnglishForbidden
+          : concept.visualGroup === 'evaluation'
+            ? evaluationEnglishForbidden
+            : agentsEnglishForbidden;
         for (const token of localeForbidden) if (body.includes(token)) failures.push(`${concept.route}: visual Spanish leakage ${JSON.stringify(token)}`);
         if (concept.visualGroup === 'evaluation') await checkEvaluationDensity(page, concept.route, viewport, evaluationEnglishAnchors);
+        if (concept.visualGroup === 'agents') await checkAgentDensity(page, concept.route, viewport, agentEnglishAnchors);
         await page.screenshot({ path: path.join(outDir, `english-concept-${concept.visualGroup}-${viewport.name}.png`), fullPage: true, animations: 'disabled' });
       }
 
@@ -197,4 +267,4 @@ if (failures.length) {
   for (const failure of [...new Set(failures)]) console.error(failure);
   process.exit(1);
 }
-console.log(`Concept QA passed: ${englishOnlyPreview ? 'English-only preview' : 'combined ES/EN preview'} with evaluation and Transformer visual contracts, native localization, canonical URLs, and desktop/mobile overflow cleanliness.`);
+console.log(`Concept QA passed: ${englishOnlyPreview ? 'English-only preview' : 'combined ES/EN preview'} with evaluation, Transformer and agent visual contracts, native localization, canonical URLs, and desktop/mobile overflow cleanliness.`);
