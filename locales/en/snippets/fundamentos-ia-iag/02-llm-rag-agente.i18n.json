@@ -3,6 +3,10 @@
   "source_blob_sha": "60aa31a3457e224ab2cb1081e8806a9e284600b6",
   "replacements": {
     "data-demo=\"02-llm-rag-agente\"": "data-demo=\"fnd-llm-rag-agent\"",
+    "LLM puro": "Plain LLM",
+    "Agente": "Agent",
+    "invoca": "invokes",
+    "devuelve": "returns",
     ">Tres configuraciones sobre el mismo modelo</div>": ">Three configurations on top of the same model</div>",
     ">Más a la derecha no significa mejor: significa más capacidad, más coste y mayor superficie de fallo.</div>": ">Further to the right does not mean better: it means more capability, higher cost, and a larger failure surface.</div>",
     ">1</span> LLM puro</button>": ">1</span> Plain LLM</button>",
