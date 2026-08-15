@@ -18,6 +18,7 @@ on:
       - 'scripts/validate_english_history_ch2.mjs'
       - 'scripts/validate_english_history_ch3.mjs'
       - 'scripts/validate_english_caves_ch3_nlp.mjs'
+      - 'scripts/validate_english_caves_ch4_alexnet.mjs'
       - 'scripts/validate_english_caves_complete.mjs'
       - 'scripts/validate_english_caves_media.mjs'
       - 'scripts/validate_english_foundations_complete.mjs'
@@ -117,6 +118,9 @@ jobs:
 
       - name: Validate canonical English Chapter 3 pre-Transformer NLP visual
         run: node scripts/validate_english_caves_ch3_nlp.mjs
+
+      - name: Validate canonical English Chapter 4 AlexNet visual
+        run: node scripts/validate_english_caves_ch4_alexnet.mjs
 
       - name: Validate complete English Caves to AGI series
         run: node scripts/validate_english_caves_complete.mjs
