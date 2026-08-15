@@ -134,3 +134,19 @@ For most current applications, the practical choice comes down to variants of th
 [r7]: https://deepmind.google/models/gemini/audio/ "Gemini 2.5 Native Audio"
 [r8]: https://arxiv.org/abs/2405.09818 "Chameleon — Team Chameleon 2024"
 [r9]: https://arxiv.org/abs/2403.05530 "Gemini 1.5 — Team Gemini 2024"
+
+---
+
+## Frequently asked questions
+
+**What is the fundamental difference between the encoder-connector-LLM architecture and cross-attention fusion?**
+In the encoder-connector-LLM architecture, the image is processed before the text and its representation remains fixed from the start: the language model receives it as input but cannot go back to the image during generation. With cross-attention, as in Flamingo, the model can access visual tokens at any point during generation, which improves quality on tasks that require fine localization or iterative inspection, although it increases the computational cost of inference.
+
+**What advantage does a mixture-of-experts architecture offer in models such as Gemini 1.5?**
+It makes it possible to scale the model to hundreds of billions of parameters without scaling inference cost proportionally, because only a fraction of the parameters is activated for each token. That makes it possible to process contexts of up to one million multimodal tokens in production, a scale that would be computationally impractical with an equivalent dense architecture.
+
+**Why use a compression module such as Q-Former instead of projecting every visual patch directly?**
+Projecting every patch produces too many visual tokens, which makes inference more expensive and can saturate the language model's context. A compression module uses a fixed number of learnable queries to extract only the visual features most relevant to language, reducing the representation to a predictable size regardless of image size.
+
+**What distinguishes omni models from the other multimodal architectures?**
+It is not only that they generate in several modalities, but that they do so under hard temporal constraints: the model has to perceive, process, and respond while audio or video is still arriving. That imposes qualitatively different requirements on attention design, active-context size, and the decoder, which makes omni models a separate family rather than simply an extension of native tokenization.
