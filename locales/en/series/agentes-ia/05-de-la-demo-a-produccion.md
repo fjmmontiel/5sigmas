@@ -95,7 +95,7 @@ The answers matter more than choosing the currently fashionable framework. Frame
 
 ## References
 
-- [Reactive / Proactive Agent — 5sigmas runtime](https://5sigmas.com/articulos-tecnicos/proactive-reactive-agent-and-tool-calls/)
+- [Reactive / Proactive Agent — 5sigmas runtime](/en/articulos-tecnicos/proactive-reactive-agent-and-tool-calls/)
 - [NIST — Agent identity and authorization](https://csrc.nist.gov/pubs/other/2026/02/05/accelerating-the-adoption-of-software-and-ai-agent/ipd)
 - [NIST — AI Agent Standards Initiative](https://www.nist.gov/artificial-intelligence/ai-agent-standards-initiative)
 - [Anthropic — Trustworthy agents in practice](https://www.anthropic.com/research/trustworthy-agents)

@@ -158,6 +158,18 @@ def _source_route_from_sitemap_url(url: str, language: str) -> str:
     return route
 
 
+def _sitemap_routes(path: Path) -> frozenset[str]:
+    """Return normalized public routes from an already-built locale sitemap."""
+    if not path.is_file():
+        return frozenset()
+    tree = ET.parse(path)
+    routes: set[str] = set()
+    for loc_node in tree.getroot().findall(f"{{{SITEMAP_NS}}}url/{{{SITEMAP_NS}}}loc"):
+        if loc_node.text:
+            routes.add(_normalize_route(urlsplit(loc_node.text).path))
+    return frozenset(routes)
+
+
 def on_post_page(output: str, page, config, **kwargs) -> str:
     src_path = page.file.src_path.lstrip("/")
     source_route = _src_route(src_path)
@@ -193,6 +205,8 @@ def on_post_build(config, **kwargs) -> None:
 
     language = _current_language(config)
     published = _published_public_routes("en")
+    spanish_sitemap = Path(config["site_dir"]).parent / "sitemap.xml"
+    spanish_routes = _sitemap_routes(spanish_sitemap) if language == "en" else frozenset()
     tree = ET.parse(sitemap_path)
     root = tree.getroot()
     changed = False
@@ -210,6 +224,8 @@ def on_post_build(config, **kwargs) -> None:
                 changed = True
 
         if source_route not in published:
+            continue
+        if language == "en" and source_route not in spanish_routes:
             continue
 
         for hreflang, href in (

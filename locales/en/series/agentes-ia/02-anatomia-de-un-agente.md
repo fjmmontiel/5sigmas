@@ -98,5 +98,5 @@ Memory can also increase the attack surface. If an agent writes a malicious inst
 - [Yao et al. (2022) — ReAct](https://arxiv.org/abs/2210.03629)
 - [Schick et al. (2023) — Toolformer](https://arxiv.org/abs/2302.04761)
 - [Model Context Protocol — current authorization specification](https://modelcontextprotocol.io/specification/latest/basic/authorization)
-- [Reactive / Proactive Agent — technical article](https://5sigmas.com/articulos-tecnicos/proactive-reactive-agent-and-tool-calls/)
+- [Reactive / Proactive Agent — technical article](/en/articulos-tecnicos/proactive-reactive-agent-and-tool-calls/)
 - [OpenAI Agents SDK — documentation](https://openai.github.io/openai-agents-python/)
