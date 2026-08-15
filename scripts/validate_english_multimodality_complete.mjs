@@ -47,7 +47,7 @@ const pages = [
   {
     route: '/en/series/multimodalidad-iag/04-evaluacion/',
     title: 'Chapter 4 — Evaluation: measuring without fooling ourselves',
-    concepts: ['grounding', 'contamination', 'language priors', 'HallusionBench'],
+    concepts: ['grounding', 'contamination', 'language bias', 'HallusionBench'],
     demos: 7,
     prefix: 'mm-04-',
     media: '04-evaluacion',
@@ -185,7 +185,7 @@ try {
           if (await grounding.locator('.grn-principle').count() !== 3) failures.push(`${entry.route}: grounding visual lost benchmark-design principles`);
           if (await grounding.locator('.grn-bench').count() !== 2) failures.push(`${entry.route}: grounding visual lost benchmark examples`);
           const groundingText = (await grounding.textContent()) || '';
-          for (const token of ['What grounding is', 'When it fails silently', 'What good benchmarks do', 'Invisible failure', 'Designed counterexamples', 'MMStar', 'SEEDBench']) {
+          for (const token of ['What grounding is', 'When it fails silently', 'What good benchmarks do', 'Invisible failure', 'The solution: designed counterexamples', 'MMStar', 'SEEDBench']) {
             if (!groundingText.includes(token)) failures.push(`${entry.route}: grounding visual missing ${JSON.stringify(token)}`);
           }
           await assertTabInteraction(grounding, '.grn-tab', '.grn-panel', 2, 'grounding benchmark-design', entry.route);
