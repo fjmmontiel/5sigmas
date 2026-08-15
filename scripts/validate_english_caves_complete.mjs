@@ -9,6 +9,15 @@ await fs.mkdir(outDir, { recursive: true });
 
 const chapters = [
   {
+    route: '/en/series/from-cave-to-agi/01-representar/',
+    slug: '01-representar',
+    title: 'Chapter 1: Represent',
+    concepts: ['algebra', 'deductive', 'calculus'],
+    demos: ['01-sistemas-numeracion','01-algebra-despejar','01-cadena-deductiva','01-timeline-representar'],
+    screenshot: 'english-history-01-represent.png',
+    canonicalInteractions: true,
+  },
+  {
     route: '/en/series/from-cave-to-agi/03-aprender/',
     slug: '03-aprender',
     title: 'Chapter 3 — Learn',
@@ -34,7 +43,15 @@ const chapters = [
   },
 ];
 
-const forbidden = ['Capítulo ', 'Siguiente capítulo', 'Anterior', 'Preguntas frecuentes', 'Fuentes base'];
+const forbidden = [
+  'Capítulo ',
+  'Siguiente capítulo',
+  'Anterior',
+  'Preguntas frecuentes',
+  'Fuentes base',
+  'Hace posible',
+  'No permite',
+];
 const failures = [];
 const browser = await chromium.launch({ headless: true });
 
@@ -62,14 +79,42 @@ try {
         if (await page.locator(selector).count() !== 1) failures.push(`${chapter.route}: missing ${selector}`);
       }
 
-      const details = page.locator('[data-demo] details');
-      if (await details.count() === 0) failures.push(`${chapter.route}: visuals expose no interactive disclosure`);
-      else {
-        const candidate = details.filter({ has: page.locator('summary') }).nth(Math.min(1, (await details.count()) - 1));
-        const before = await candidate.getAttribute('open');
-        await candidate.locator('summary').click();
-        const after = await candidate.getAttribute('open');
-        if (before === after) failures.push(`${chapter.route}: details interaction did not toggle`);
+      if (chapter.canonicalInteractions) {
+        const numeralTabs = page.locator('[data-demo="01-sistemas-numeracion"] .num-tab');
+        const numeralPanels = page.locator('[data-demo="01-sistemas-numeracion"] .num-panel');
+        if (await numeralTabs.count() !== 4) failures.push(`${chapter.route}: expected four canonical numeral-system tabs`);
+        if (await numeralPanels.count() !== 4) failures.push(`${chapter.route}: expected four canonical numeral-system panels`);
+        const binaryTab = page.locator('[data-demo="01-sistemas-numeracion"] .num-tab[data-tab="binary"]');
+        await binaryTab.click();
+        if (!(await binaryTab.getAttribute('class'))?.includes('num-tab--active')) failures.push(`${chapter.route}: numeral-system tab interaction did not activate Binary`);
+        if (!(await page.locator('[data-demo="01-sistemas-numeracion"] .num-panel[data-panel="binary"]').getAttribute('class'))?.includes('num-panel--active')) failures.push(`${chapter.route}: Binary panel did not activate`);
+
+        if (await page.locator('[data-demo="01-algebra-despejar"] .alg-s-item').count() !== 4) failures.push(`${chapter.route}: expected four canonical algebra steps`);
+        await page.locator('[data-demo="01-algebra-despejar"] #alg-next').click();
+        if (!(await page.locator('[data-demo="01-algebra-despejar"] .alg-panel[data-panel="1"]').getAttribute('class'))?.includes('alg-panel--active')) failures.push(`${chapter.route}: algebra stepper did not advance`);
+
+        if (await page.locator('[data-demo="01-cadena-deductiva"] .ded-step').count() !== 4) failures.push(`${chapter.route}: expected four canonical deductive steps`);
+        await page.locator('[data-demo="01-cadena-deductiva"] #ded-next').click();
+        if (!(await page.locator('[data-demo="01-cadena-deductiva"] .ded-panel[data-panel="1"]').getAttribute('class'))?.includes('ded-panel--active')) failures.push(`${chapter.route}: deductive stepper did not advance`);
+
+        const timeline = page.locator('[data-demo="01-timeline-representar"]');
+        if (await timeline.locator('.rep-dot').count() !== 7) failures.push(`${chapter.route}: expected seven canonical representation milestones`);
+        const firstTimelineTitle = await timeline.locator('#repTitle').innerText();
+        if (firstTimelineTitle !== 'The first counters') failures.push(`${chapter.route}: unexpected first representation milestone ${JSON.stringify(firstTimelineTitle)}`);
+        await timeline.locator('#repNext').click();
+        await page.waitForTimeout(300);
+        const secondTimelineTitle = await timeline.locator('#repTitle').innerText();
+        if (secondTimelineTitle !== 'Formal arithmetic') failures.push(`${chapter.route}: representation timeline did not advance`);
+      } else {
+        const details = page.locator('[data-demo] details');
+        if (await details.count() === 0) failures.push(`${chapter.route}: visuals expose no interactive disclosure`);
+        else {
+          const candidate = details.filter({ has: page.locator('summary') }).nth(Math.min(1, (await details.count()) - 1));
+          const before = await candidate.getAttribute('open');
+          await candidate.locator('summary').click();
+          const after = await candidate.getAttribute('open');
+          if (before === after) failures.push(`${chapter.route}: details interaction did not toggle`);
+        }
       }
 
       const videos = page.locator('video[data-s5-inline-video-player]');
@@ -101,4 +146,4 @@ if (failures.length) {
   for (const failure of [...new Set(failures)]) console.error(failure);
   process.exit(1);
 }
-console.log('Complete English From the Caves to AGI QA passed: Chapters 3–5, 18 native visuals, native-English media, interactions, desktop/mobile clean.');
+console.log('Complete English From the Caves to AGI QA passed: Chapter 1 and Chapters 3–5, 22 canonical/native visuals, native-English media, interactions, desktop/mobile clean.');
