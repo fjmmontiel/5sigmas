@@ -180,7 +180,7 @@ It depends on the definition of “understand.” Its representations capture en
 
 Most general-purpose language models published in the modern era use Transformers or closely related hybrid architectures. Alternatives based on state-space models and other operations exist, but “LLM” describes scale and function rather than mandating one architecture.
 
-### What is the difference between an LM and a chatbot?
+### What is the difference between an LLM and a chatbot?
 
 The LLM is the generative model. The chatbot adds interface, instructions, memory, retrieval, tools, moderation, observability and product policies.
 
