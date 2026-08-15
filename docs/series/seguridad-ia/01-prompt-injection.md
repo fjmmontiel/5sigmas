@@ -14,7 +14,7 @@ video_duration: "PT1M0S"
 
 # Capítulo 1 — Prompt injection
 
-Este capítulo explica por qué el prompt injection nace de cómo están construidos los sistemas con LLMs. Al terminarlo, el lector entenderá qué se rompe cuando instrucciones y datos comparten el mismo canal, por qué la inyección indirecta en RAG y agentes cambia el nivel de gravedad, qué límites tienen los filtros y guardrails de post-proceso, y qué arquitectura defensiva tiene sentido si el sistema puede leer contenido externo y actuar sobre herramientas.
+Este capítulo explica por qué el [prompt injection](/temas/prompt-injection/) nace de cómo están construidos los sistemas con LLMs. Al terminarlo, el lector entenderá qué se rompe cuando instrucciones y datos comparten el mismo canal, por qué la inyección indirecta en RAG y agentes cambia el nivel de gravedad, qué límites tienen los filtros y guardrails de post-proceso, y qué arquitectura defensiva tiene sentido si el sistema puede leer contenido externo y actuar sobre herramientas.
 
 En seguridad clásica solemos vivir de una separación. El programa tiene un plano de control, donde se decide qué hacer, y un plano de datos, donde vive lo que el programa procesa. Cuando esa frontera se conserva, muchas defensas son razonables porque el sistema sabe, al menos de forma aproximada, qué parte del input debe ejecutarse y cuál solo debe interpretarse.
 

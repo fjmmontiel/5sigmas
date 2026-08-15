@@ -13,7 +13,7 @@ video_duration: "PT1M29S"
 
 # Capítulo 1 — Qué es "razonar" para un LLM
 
-Este capítulo examina qué significa razonar en el contexto de los LLMs, cómo nacieron los primeros modelos diseñados para hacerlo y qué dicen los papers sobre sus límites. Al terminarlo, el lector entenderá en qué se diferencia el razonamiento deliberado del reconocimiento de patrones, sabrá por qué RLVR y GRPO producen un perfil de entrenamiento distinto al del RLHF estándar, conocerá los benchmarks que documentaron el salto de o1 y tendrá un marco para leer el debate sobre si los LLMs razonan genuinamente o replican estructuras aprendidas.
+Este capítulo examina qué significa [razonar en el contexto de los LLMs](/temas/razonamiento/), cómo nacieron los primeros modelos diseñados para hacerlo y qué dicen los papers sobre sus límites. Al terminarlo, el lector entenderá en qué se diferencia el razonamiento deliberado del reconocimiento de patrones, sabrá por qué RLVR y GRPO producen un perfil de entrenamiento distinto al del RLHF estándar, conocerá los benchmarks que documentaron el salto de o1 y tendrá un marco para leer el debate sobre si los LLMs razonan genuinamente o replican estructuras aprendidas.
 
 Cuando un LLM responde a una pregunta compleja con argumentos estructurados, contraejemplos y conclusiones coherentes, la reacción más común es decir que "razona". La pregunta más técnica es si esa palabra describe algo real o es solo una metáfora conveniente.
 

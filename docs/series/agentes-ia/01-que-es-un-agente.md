@@ -15,7 +15,7 @@ video_duration: "PT60S"
 
 La palabra *agente* se ha convertido en una etiqueta para casi cualquier aplicación que usa un modelo de lenguaje. Un asistente que redacta un correo, un workflow con tres APIs y un sistema que decide pasos dinámicamente pueden aparecer descritos con la misma palabra. Esa ambigüedad es el primer problema que hay que resolver.
 
-En esta serie usaremos una definición operativa: **un agente es un sistema que recibe un objetivo, decide qué acciones necesita para acercarse a él, ejecuta esas acciones en un entorno y usa los resultados para decidir el siguiente paso**. El modelo puede ser el componente que propone la acción, pero el agente incluye también el runtime, las herramientas, el estado y las políticas que limitan la ejecución.
+En esta serie usaremos una definición operativa: **un [agente de IA](/temas/agentes-ia/) es un sistema que recibe un objetivo, decide qué acciones necesita para acercarse a él, ejecuta esas acciones en un entorno y usa los resultados para decidir el siguiente paso**. El modelo puede ser el componente que propone la acción, pero el agente incluye también el runtime, las herramientas, el estado y las políticas que limitan la ejecución.
 
 {{ include_html("snippets/agentes-ia/01-bucle-agente.html") }}
 

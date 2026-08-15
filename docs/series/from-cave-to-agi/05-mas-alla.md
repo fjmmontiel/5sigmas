@@ -29,7 +29,7 @@ Este capítulo recorre esa nueva fase.
 
 ## 1. Por qué el Transformer ya no basta como mapa completo
 
-El Transformer reorganizó el campo porque era paralelizable, escalable y extremadamente general. Pero precisamente al escalarlo empezaron a hacerse visibles varios límites.
+El [Transformer](/temas/transformer/) reorganizó el campo porque era paralelizable, escalable y extremadamente general. Pero precisamente al escalarlo empezaron a hacerse visibles varios límites.
 
 El primero es computacional. La atención estándar crece de forma costosa con la longitud del contexto, y eso convierte la memoria larga en un problema de hardware y eficiencia.
 
