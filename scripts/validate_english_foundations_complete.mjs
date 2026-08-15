@@ -53,7 +53,7 @@ const pages = [
       'fnd-llmops-routes',
     ],
     audio: true,
-    requireDetails: true,
+    requireDetails: false,
     screenshot: 'english-foundations-02-genai.png',
   },
   {
