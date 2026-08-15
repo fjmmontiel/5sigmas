@@ -47,7 +47,7 @@ const pages = [
   {
     route: '/en/series/multimodalidad-iag/04-evaluacion/',
     title: 'Chapter 4 — Evaluation: measuring without fooling ourselves',
-    concepts: ['grounding', 'contamination', 'language priors', 'HallusionBench'],
+    concepts: ['grounding', 'contamination', 'language bias', 'HallusionBench'],
     demos: 7,
     prefix: 'mm-04-',
     media: '04-evaluacion',
@@ -173,6 +173,25 @@ try {
         }
       }
 
+      if (entry.route.endsWith('/04-evaluacion/')) {
+        const grounding = page.locator('[data-demo="mm-04-grounding"]');
+        if (await grounding.count() !== 1) {
+          failures.push(`${entry.route}: missing canonical grounding visual`);
+        } else {
+          if (await grounding.locator('.grn-tab').count() !== 3) failures.push(`${entry.route}: grounding visual lost its three canonical tabs`);
+          if (await grounding.locator('.grn-panel').count() !== 3) failures.push(`${entry.route}: grounding visual lost its three canonical panels`);
+          if (await grounding.locator('.grn-col').count() !== 2) failures.push(`${entry.route}: grounding visual lost grounded-vs-prior comparison`);
+          if (await grounding.locator('.grn-scenario').count() !== 2) failures.push(`${entry.route}: grounding visual lost visible/invisible failure scenarios`);
+          if (await grounding.locator('.grn-principle').count() !== 3) failures.push(`${entry.route}: grounding visual lost benchmark-design principles`);
+          if (await grounding.locator('.grn-bench').count() !== 2) failures.push(`${entry.route}: grounding visual lost benchmark examples`);
+          const groundingText = (await grounding.textContent()) || '';
+          for (const token of ['What grounding is', 'When it fails silently', 'What good benchmarks do', 'Invisible failure', 'The solution: designed counterexamples', 'MMStar', 'SEEDBench']) {
+            if (!groundingText.includes(token)) failures.push(`${entry.route}: grounding visual missing ${JSON.stringify(token)}`);
+          }
+          await assertTabInteraction(grounding, '.grn-tab', '.grn-panel', 2, 'grounding benchmark-design', entry.route);
+        }
+      }
+
       if (entry.demos && !entry.route.endsWith('/03-arquitecturas/')) {
         const details = page.locator('[data-demo] details');
         if (await details.count() === 0) {
@@ -229,4 +248,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Complete English Multimodality QA passed: introduction + Chapters 1–5, 27 unique native visuals, canonical Chapter 3 trade-off/VQ-VAE-MoE/four-family interactions, six native-English MP4/poster pairs, no Spanish media inheritance, desktop/mobile clean.');
+console.log('Complete English Multimodality QA passed: introduction + Chapters 1–5, 27 unique native visuals, canonical Chapter 3 trade-off/VQ-VAE-MoE/four-family interactions, canonical Chapter 4 grounding interaction, six native-English MP4/poster pairs, no Spanish media inheritance, desktop/mobile clean.');

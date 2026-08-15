@@ -1,8 +1,8 @@
 ---
 title: Evaluating multimodal systems
-description: "How to evaluate multimodal systems without confusing benchmark scores with real capability: grounding, contamination, OCR, audio, long video and hallucination."
+description: "How to evaluate multimodal systems without confusing benchmarks with real capability: OCR, audio, grounding, reasoning and metric failures."
 date: 2026-04-03
-keywords: "multimodal model evaluation, multimodal benchmarks, OCRBench, MMAU, VQA, MMMU, multimodal LLM evaluation, grounding, visual hallucination"
+keywords: "multimodal model evaluation, multimodal benchmarks, OCRBench, MMAU, VQA, MMMU, real AI capabilities, multimodal LLM evaluation, generative AI metrics"
 tags:
   - AI
   - Evaluation
@@ -11,184 +11,144 @@ tags:
 
 # Chapter 4 — Evaluation: measuring without fooling ourselves
 
-This chapter explains why real multimodal capability is harder to measure than benchmark leaderboards suggest. By the end, you will understand grounding and language priors, why evaluation-data contamination can inflate published scores, which metrics reveal more than final-answer accuracy, and what OCRBench v2, MMAU, MMMU, Video-MME, ZeroBench and HallusionBench reveal about documents, audio, long video, spatial reasoning and visual hallucination.
+This article analyzes why measuring the real capability of a multimodal system is harder than benchmark rankings suggest. By reading it, you will understand grounding and language bias (and why the latter can make a model answer correctly without actually processing the image), how evaluation-data contamination artificially inflates published results, and what benchmarks such as OCRBench v2, MMAU, ZeroBench and HallusionBench reveal about the field's real limits in documents, audio, long video and spatial reasoning. The article is useful both for technical readers evaluating models and for anyone who wants to interpret the comparisons circulating in the field rigorously.
 
-Multimodal evaluation has two recurring structural problems.
+Evaluating whether a language model produces accurate and useful answers is already a complex problem, but adding the visual or auditory dimension multiplies the difficulty in two different ways.
 
-First, models can score well without relying on the modality we think we are testing. Language priors and benchmark contamination can make an answer correct for the wrong reason.
+The first is that current multimodality benchmarks have two systematic problems that lead us to overestimate real capabilities: evaluation-data contamination and the dominance of text in benchmarks.
 
-Second, the field historically concentrated on image-question answering because it is easy to automate, while harder capabilities—document structure, expert audio, long-duration temporal reasoning, spatial cognition and multimodal generation—remain much less completely measured.
+The second is that evaluation has historically been dominated by vision-language tasks, leaving whole capabilities poorly measured: understanding documents with complex layouts, reasoning over audio, temporal coherence in video, or the quality of outputs generated in modalities other than text. OCRBench v2 and MMAU are recent reminders that this space, evaluated only superficially until now, remains difficult terrain for the best current models.
 
 ---
 
-## 1. Grounding: is the answer supported by the evidence?
+## 1. What it means to evaluate grounding
 
-In a multimodal system, **grounding** is the degree to which the output is supported by the actual image, audio, document or video rather than by a statistical prior over likely answers.
+In multimodal systems, grounding is the degree to which the model's answer is supported by the actual content of the image or audio, rather than by statistical inferences about what kind of answer is likely given the text of the question. A model can correctly answer "What color is the car in the image?" without actually processing the image if the color most frequent in its training for cars in similar contexts happens to match the correct answer.
 
-A model may answer “red” to “What colour is the car?” even if it barely processed the image, simply because red cars are common in similar training examples. If the guess happens to be correct, ordinary accuracy cannot distinguish real visual understanding from a shortcut.
+That model does not have grounding; it has a strong language bias that produces the right answer for the wrong reasons. The difference remains invisible as long as the statistical bias and the correct answer point in the same direction.
 
-Good grounding tests therefore include **counter-prior examples**: unusual colours, uncommon object counts, atypical spatial configurations and cases where the correct answer contradicts the most common linguistic expectation.
+To measure grounding, benchmarks need examples where the correct answer violates statistical expectations. If every question about fruit in images has an answer matching the fruit most represented in training, there is no way to distinguish a model with real visual understanding from one that answers from probability.
 
-[VQA v2][r1] was explicitly motivated by this problem. Earlier VQA datasets allowed surprisingly strong text-only baselines because question form leaked information about likely answers.
+The Visual Question Answering Challenge (VQA), historically one of the most widely used benchmarks, has exactly this problem [Goyal et al., 2017][r1]. A 2017 analysis showed that a model that completely ignored the images and answered only from the distribution of the most frequent responses for each question type still achieved surprisingly high results. Later benchmark improvements introduced balancing techniques to reduce this bias, although they did not remove it completely.
 
 {{ include_html("snippets/multimodalidad-iag/04-grounding-concepto.html") }}
 
 ---
 
-## 2. Benchmark contamination
+## 2. The problem of benchmark contamination
 
-Foundation models are trained on enormous internet-scale datasets. Old benchmark images, captions, answer keys and discussion pages can therefore enter pretraining data.
+The second systematic problem is contamination. Foundation models are pretrained on massive amounts of internet data, and there is no guarantee that image-description pairs or evaluation datasets do not appear in those data.
 
-That creates a simple problem: a score may measure **recognition of previously seen evaluation material** in addition to generalization.
+Contamination in text is already a documented problem: models that obtain exceptional results on some reasoning benchmarks can recite the correct answers when given the problem identifier, suggesting that the benchmark was present in their training data. In multimodality the problem is potentially larger because benchmark images are often publicly available photographs that may have appeared in pretraining together with their descriptions or labels.
 
-The risk is especially difficult in multimodality because benchmark images are often public photographs that may have appeared elsewhere with labels or descriptions. Exact-text deduplication is not enough; near-duplicate images and transformed copies also matter.
+The technical solution is to use benchmarks whose evaluation data did not exist on the internet when the model was pretrained or that are protected from indexing. In practice, however, the most useful recommendation is to interpret results skeptically when the evaluated model was pretrained at internet scale, especially if the benchmark is old.
 
-A rigorous evaluation pipeline should therefore:
-
-- prefer new or protected test material when possible,
-- perform similarity searches against known training corpora when available,
-- report contamination analysis alongside scores,
-- and interpret results on old public benchmarks as an upper bound on uncontaminated capability rather than unquestioned ground truth.
+The most rigorous labs perform contamination analyses before publishing results: they search their training data for images similar to those in the evaluation benchmark and exclude those images from the final analysis. Without that analysis, published results are an upper bound on the model's real capability on that benchmark, not a direct measurement.
 
 {{ include_html("snippets/multimodalidad-iag/04-contaminacion.html") }}
 
 ---
 
-## 3. Language priors: answering from probability instead of perception
+## 3. Language bias: answering from probability, not evidence
 
-A language prior is the model's tendency to answer from the statistical structure of the question and training corpus even when the image contains the decisive evidence.
+The language bias/prior is the tendency of models to generate answers that are statistically likely given the text of the question, regardless of the image content. It is the subtlest form of missing grounding and the hardest to detect with standard benchmarks because the errors it causes are invisible when the statistical distribution matches the distribution of correct answers.
 
-A standard diagnostic is **ablation**: ask the same question without the image and compare performance. If scores barely change, the supposedly visual benchmark may mostly be testing language.
+Ablation experiments are the standard tool for measuring it: present the model with the question without the image and observe whether the answer distribution changes significantly. When the model without the image obtains results similar to the model with the image, language bias is dominating the answer.
 
-The shortcut is strongest when answer distributions are highly skewed—for example common colours, typical object counts or frequent object–attribute combinations.
+The effect is especially strong in categories where training distributions are skewed: questions about the usual color of certain objects, an animal species when only one animal is visible, or the number of elements in scenes where two or three is the dominant frequency. In all these cases there is a highly skewed answer distribution that the model learns during training and uses as a shortcut, ignoring the image when the bias is strong enough.
 
-Benchmarks such as [SEED-Bench][r2] and [MMStar][r3] try to reduce this effect through more carefully selected and balanced examples.
+Designing benchmarks that resist language bias requires active techniques: counterexamples where an object has an unusual color, scenes where the number of elements violates expectations, and spatial configurations that are uncommon in training. [MMStar][r3] and [SEEDBench][r2] are examples of benchmarks designed with explicit attention to this problem.
 
 {{ include_html("snippets/multimodalidad-iag/04-prior-linguistico.html") }}
 
 ---
 
-## 4. Metrics beyond final-answer accuracy
+## 4. Metrics beyond accuracy
 
-Accuracy remains useful, but it is not enough.
+Final-answer accuracy does not capture all the relevant information about a multimodal model's capabilities. More rigorous evaluators include three additional dimensions that reveal different aspects of visual understanding.
 
-### Consistency
+**Consistency.** A genuinely capable model should answer paraphrases of the same question consistently. When the answer changes drastically under a semantically equivalent formulation, the model does not have robust understanding of the visual content; it is sensitive to the surface form of the question.
 
-A robust model should answer semantically equivalent paraphrases consistently. Large changes under superficial wording changes suggest dependence on prompt form rather than stable understanding.
+**Localization when relevant.** For tasks where the answer depends on the location of elements in the image, evaluation should verify not only whether the final answer is correct but also whether the model can indicate where the relevant element is in the image. A model that correctly answers "there are three cars" but cannot delimit where they are has a different kind of understanding from a model that can, and that difference matters in applications where localization is part of the expected result [Hu et al., 2024][r4].
 
-### Localization
-
-When the answer depends on a region of an image, evaluation should verify whether the system can identify that region rather than only produce the final label. Correct counting without any ability to localize the counted objects indicates a different capability profile than grounded detection.
-
-### Calibration and abstention
-
-A model should lower confidence or abstain when evidence is ambiguous or insufficient. Confidently answering unanswerable questions is especially dangerous in multimodal products because fluent language can hide perceptual uncertainty.
+**Calibration.** Models should be able to express uncertainty when visual content is ambiguous or when the question does not have a clear answer given the available content. A model that always generates a high-confidence answer, even for ambiguous images or questions that cannot be answered without additional information, is not properly calibrated. In production, this becomes falsely definitive answers where the system should abstain or ask for clarification.
 
 {{ include_html("snippets/multimodalidad-iag/04-metricas-evaluacion.html") }}
 
 ---
 
-## 5. Domains where current evaluation exposes real limits
+## 5. Domains where evaluation remains difficult
 
-### Complex documents
+Multimodality evaluation has been dominated by VQA and visual-grounding tasks because they are the easiest to automate and turn into benchmarks with single-choice answers. That has created a systematic blind spot: the domains where evaluation is hardest to automate are precisely those that reveal the most about current model limitations.
 
-OCR is not only character recognition. Real documents contain columns, tables, merged cells, formulas, figures, handwriting and non-linear reading order.
-
-[OCRBench v2][r5] evaluates localization, handwriting and logical reasoning over documents. OmniDocBench extends the problem to complex page reconstruction and layout understanding. Systems that perform strongly on ordinary text can still collapse when structure and semantics have to be integrated simultaneously.
+**Documents with complex layouts.** OCRBench v2, published in 2024, evaluated advanced multimodal models on text localization, handwriting recognition and logical reasoning over documents [Liu et al., 2024][r5]. The results showed that even models with high VQA scores struggle in real-document scenarios: text in non-standard orientations, tables with merged cells, mathematical formulas embedded in text flow, or questions requiring information to be crossed between several regions of the same document. OmniDocBench, presented at CVPR 2025, extended this evaluation to documents with non-standard layouts: multiple columns, floating figures and elements with non-linear alignment. The evaluation of 13 SOTA models showed the same collapse: systems that reach 80–90% accuracy on standard text fall to 36.9% on complex-layout reconstruction, confirming that the limit is not visual recognition but the integration of structure and semantics in scenes that are not linear prose [Ouyang et al., 2025][r10].
 
 {{ include_html("snippets/multimodalidad-iag/04-ocrbench.html") }}
 
-### Expert audio
+**Expert audio.** MMAU, published by Adobe Research in 2024, evaluated audio understanding and reasoning in three categories: speech, non-verbal environmental sounds and music [Sakshi et al., 2024][r6]. The results showed that even the strongest models remain significantly below expert human performance on the hardest tasks in each category, with especially marked degradation when the task requires reasoning about the cause of a sound rather than merely identifying it, inferring context from multiple simultaneous sound sources, or distinguishing musical variants that share superficial structure. These limits are especially relevant for native-audio systems such as Gemini 2.5 or Qwen2.5-Omni, where capability expectations often exceed what available benchmarks can confirm.
 
-[MMAU][r6] evaluates speech, environmental sounds and music. Hard cases require causal reasoning, multiple simultaneous sound sources or distinctions that cannot be solved by simple audio classification. Native-audio products may therefore appear more general than what current benchmarks actually establish.
+**Expert reasoning.** MMMU, published in 2023, evaluated models' ability to reason over visual content in 30 university subjects grouped into 6 disciplines: Art and Design, Business, Science, Health and Medicine, Humanities and Social Sciences, and Engineering and Technology. Unlike image-description benchmarks, MMMU requires integrating domain knowledge with visual understanding: reading the image correctly is not enough; the model has to know what it sees means. The results showed a persistent gap between the best models and expert human performance, especially in disciplines where the image is not illustration but contains the decisive evidence: circuit diagrams, laboratory graphs and radiographs [Yue et al., 2023][r7].
 
-### Expert visual reasoning
-
-[MMMU][r7] combines domain knowledge with diagrams, charts, radiographs and other visual evidence across university-level subjects. It exposes a central difference between “recognizing an image” and reasoning over evidence embedded in a technical visual.
-
-### Long video and spatial cognition
-
-[Video-MME][r8] shows a strong degradation as videos become longer and evidence is distributed across time. Tracking events over minutes or hours is a different problem from answering questions about one image.
-
-[ZeroBench][r11] attacks another weakness: abstract spatial reasoning from static scenes. Its difficult examples show that some apparently simple geometric relationships remain much harder for frontier multimodal systems than for humans.
+**Long-duration video.** Video-MME, published in 2024, evaluated video understanding over durations ranging from minutes to hours, with questions requiring temporal tracking, analysis of changes between segments and synthesis of information distributed throughout the video. The evaluation revealed a pronounced quality drop as duration increases: models that understand short videos well fail on long versions of the same tasks because the attention mechanism loses temporal coherence at the scale of minutes or hours, a limitation that image or short-video benchmarks do not capture [Fu et al., 2024][r8]. ZeroBench, published in February 2025, highlighted another angle of the problem: it evaluated 20 frontier models on one hundred visual-spatial cognition tasks over static images, and all obtained 0.0% accuracy [Roberts et al., 2025][r11]. This is not temporal coherence but something more basic: pure spatial reasoning in scenes that any three-year-old can solve effortlessly systematically exceeds what any current model can do. LVOmniBench, introduced in 2026, confirmed the pattern for long-duration real-world video between 10 and 90 minutes: every open-source model remains below 35% accuracy, with the best evaluated commercial model reaching only 65%.
 
 {{ include_html("snippets/multimodalidad-iag/04-video-degradacion.html") }}
 
-### Visual hallucination
-
-[HallusionBench][r9] tests failures such as claiming an absent object is present, denying a visible element or asserting an incorrect spatial relationship. The failure profile varies across counting, existence and spatial reasoning, which means one aggregate score can hide important weaknesses.
+**Visual hallucinations.** HallusionBench, published in 2023, was designed to detect hallucinations specific to vision-language systems: cases where the model claims to see absent elements, denies the presence of visible elements, or assigns incorrect spatial relations to objects that it can identify individually. The results showed that visual hallucination is a consistent pattern across all evaluated models rather than a marginal phenomenon, and that frequency varies by task type—counting, spatial reasoning, existence—in such a way that no model is robust across all categories at once [Liu et al., 2023][r9].
 
 {{ include_html("snippets/multimodalidad-iag/04-hallusionbench.html") }}
 
-### Multimodal outputs
-
-Evaluation becomes even less mature when the output itself is audio, image or video. Real-time speech quality, interruption handling, text–voice consistency and generation conditioned jointly on several input modalities still lack the standardized measurement ecosystem that text generation has accumulated.
+**Multimodal outputs.** There are no established benchmarks that adequately measure real-time spoken-response quality, consistency between text and voice generated simultaneously, or the accuracy of images generated conditioned on both text and an input image. This absence of metrics means that we do not know precisely where the current limits of systems operating in that space lie.
 
 ---
-
-## 6. A practical evaluation contract
-
-For a production multimodal system, evaluation should include at least:
-
-1. **task accuracy** on representative inputs,
-2. **grounding tests** where language priors point toward the wrong answer,
-3. **modality ablations** to prove the system actually uses the perceptual input,
-4. **consistency** under paraphrase and harmless transformations,
-5. **calibration/abstention** for ambiguous evidence,
-6. **slice analysis** across image quality, document structure, language, audio conditions and video duration,
-7. **contamination controls** for public benchmarks,
-8. **end-to-end product metrics** such as latency and tool/action correctness when perception drives downstream operations.
 
 !!! tip "Next chapter"
-    [Chapter 5 — Risks →](./05-riesgos.md) — What risks become specific to multimodality, how visual/audio input expands the instruction surface, and why perception-to-action systems amplify errors.
+    [Chapter 5 — Risks →](./05-riesgos.md) — Which risks are specific to multimodality, why poor grounding has different consequences depending on the modality, and how the risk profile changes when perception and action are coupled in the same system.
 
----
-
-## 7. References
+## 6. References
 
 <details markdown="1">
 <summary><strong>Core sources</strong></summary>
 
 | Key | Source | Short description |
 | --- | --- | --- |
-| R1 | **Goyal et al. (2017)** — *Making the V in VQA Matter* ([arXiv][r1]) | Language priors and VQA v2. |
-| R2 | **Li et al. (2023)** — *SEED-Bench* ([arXiv][r2]) | Multimodal generative-comprehension benchmark. |
-| R3 | **Chen et al. (2024)** — *MMStar* ([arXiv][r3]) | Benchmark designed to reduce data leakage and text-only shortcuts. |
-| R4 | **Hu et al. (2024)** — grounded multimodal evaluation ([arXiv][r4]) | Localization-aware multimodal evaluation. |
-| R5 | **Liu et al. (2024)** — *OCRBench v2* ([arXiv][r5]) | OCR, handwriting, localization and document reasoning. |
-| R6 | **Sakshi et al. (2024)** — *MMAU* ([Adobe Research][r6]) | Massive multitask audio understanding and reasoning. |
-| R7 | **Yue et al. (2023)** — *MMMU* ([arXiv][r7]) | Expert multimodal reasoning across academic disciplines. |
-| R8 | **Fu et al. (2024)** — *Video-MME* ([arXiv][r8]) | Long-duration video understanding. |
-| R9 | **Liu et al. (2023)** — *HallusionBench* ([arXiv][r9]) | Visual hallucination and reasoning failures. |
-| R10 | **Ouyang et al. (2025)** — *OmniDocBench* ([CVPR][r10]) | Complex document parsing and layout reconstruction. |
-| R11 | **Roberts et al. (2025)** — *ZeroBench* ([arXiv][r11]) | Difficult visual-spatial cognition benchmark. |
+| R1 | **Goyal et al. (2017)** — *Making the V in VQA Matter* ([arXiv][r1]) | Analysis of language priors in VQA and VQA v2. |
+| R2 | **Li et al. (2023)** — *SEED-Bench: Benchmarking Multimodal LLMs with Generative Comprehension* ([arXiv][r2]) | Benchmark designed to reduce contamination and language priors. |
+| R3 | **Chen et al. (2024)** — *MMStar: Are We on the Right Way for Evaluating Large Vision-Language Models?* ([arXiv][r3]) | Analysis of leakage in multimodal benchmarks and proposal for more rigorous evaluation. |
+| R4 | **Hu et al. (2024)** — *Evaluating Visual Grounding in Large Vision-Language Models* ([arXiv][r4]) | Review of visual-grounding evaluation metrics for VLMs, emphasizing localization and calibration. |
+| R5 | **Liu et al. (2024)** — *OCRBench v2* ([arXiv][r5]) | Benchmark for text localization, handwriting and logical reasoning over documents. |
+| R6 | **Sakshi et al. (2024)** — *MMAU: A Massive Multi-Task Audio Understanding and Reasoning Benchmark* ([Adobe Research][r6]) | Audio-understanding and reasoning benchmark covering speech, non-verbal sounds and music. |
+| R7 | **Yue et al. (2023)** — *MMMU: A Massive Multi-discipline Multimodal Understanding and Reasoning Benchmark for Expert AGI* ([arXiv][r7]) | Visual-reasoning benchmark across 57 university disciplines with a persistent gap from expert humans. |
+| R8 | **Fu et al. (2024)** — *Video-MME: The First-Ever Comprehensive Evaluation Benchmark of Multi-modal LLMs in Video Analysis* ([arXiv][r8]) | Video-understanding benchmark spanning durations from minutes to hours. |
+| R9 | **Liu et al. (2023)** — *HallusionBench: An Advanced Diagnostic Suite for Entangled Language Hallucination and Visual Illusion in Large Vision-Language Models* ([arXiv][r9]) | Benchmark specifically designed to detect visual hallucinations in vision-language systems. |
+| R10 | **Ouyang et al. (2024)** — *OmniDocBench: Benchmarking Diverse PDF Document Parsing with Comprehensive Annotations* ([arXiv][r10]) | PDF-parsing benchmark with complex layouts; presented at CVPR 2025. |
+| R11 | **Roberts et al. (2025)** — *ZeroBench: An Impossible Visual Benchmark for Contemporary Large Multimodal Models* ([arXiv][r11]) | Impossible benchmark: 20 frontier models evaluated, all at 0.0% on visual-spatial cognition. |
 
 </details>
 
-[r1]: https://arxiv.org/abs/1612.00837
-[r2]: https://arxiv.org/abs/2307.16125
-[r3]: https://arxiv.org/abs/2403.20330
-[r4]: https://arxiv.org/abs/2407.03199
-[r5]: https://arxiv.org/abs/2501.00321
-[r6]: https://research.adobe.com/publication/mmau-a-massive-multi-task-audio-understanding-and-reasoning-benchmark/
-[r7]: https://arxiv.org/abs/2311.16502
-[r8]: https://arxiv.org/abs/2405.21075
-[r9]: https://arxiv.org/abs/2310.14566
-[r10]: https://openaccess.thecvf.com/content/CVPR2025/html/Ouyang_OmniDocBench_Benchmarking_Diverse_PDF_Document_Parsing_with_Comprehensive_Annotations_CVPR_2025_paper.html
-[r11]: https://arxiv.org/abs/2502.09696
+[r1]: https://arxiv.org/abs/1612.00837 "Making the V in VQA Matter — Goyal et al. 2017"
+[r2]: https://arxiv.org/abs/2307.16125 "SEED-Bench — Li et al. 2023"
+[r3]: https://arxiv.org/abs/2403.17101 "MMStar — Chen et al. 2024"
+[r4]: https://arxiv.org/abs/2402.05862 "Evaluation of VLMs — 2024"
+[r5]: https://arxiv.org/abs/2501.00321 "OCRBench v2 — Liu et al. 2024"
+[r6]: https://research.adobe.com/publication/mmau-a-massive-multi-task-audio-understanding-and-reasoning-benchmark/ "MMAU — Sakshi et al. 2024"
+[r7]: https://arxiv.org/abs/2311.16502 "MMMU — Yue et al. 2023"
+[r8]: https://arxiv.org/abs/2405.21075 "Video-MME — Fu et al. 2024"
+[r9]: https://arxiv.org/abs/2310.14566 "HallusionBench — Liu et al. 2023"
+[r10]: https://arxiv.org/abs/2412.07626 "OmniDocBench — Ouyang et al. 2024"
+[r11]: https://arxiv.org/abs/2502.09696 "ZeroBench — Roberts et al. 2025"
 
 ---
 
 ## Frequently asked questions
 
-**How can a model get a visual benchmark question right without using the image?**  
-If the question strongly predicts the usual answer, the language prior can be enough. Image-ablation tests reveal this by measuring how much performance remains after the modality is removed.
+**Why can a model score highly on a visual benchmark without actually processing the image?**
+Because of language bias: the model answers from the statistical distribution of likely responses given the question text, not from the visual content. The effect is invisible when that statistical bias matches the correct answer because the model is right for the wrong reasons and an accuracy benchmark cannot distinguish it from a model that did process the image.
 
-**Why is contamination especially difficult for multimodal benchmarks?**  
-Because near-duplicate images can appear across websites with different crops, captions and transformations. Text deduplication alone cannot prove the model has never seen the evaluation evidence.
+**How can you detect whether a system really reasons over the temporal sequence of a video?**
+With what the article describes as the shuffling test: pass the video frames to the model in random order before asking the question. If the score does not change or even improves after shuffling, the system does not have dynamic temporal reasoning and is answering from semantic cues present in individual frames rather than from the sequence.
 
-**Why do document benchmarks matter if a model already has strong OCR?**  
-Recognizing characters is only one step. Real documents require reading order, table structure, formulas, region relationships and cross-page reasoning. Layout and semantics have to be integrated.
+**What makes MMMU more demanding than image-description benchmarks?**
+MMMU uses university-exam questions across 30 subjects where the image is not an illustration but contains the decisive evidence: circuit diagrams, laboratory graphs and radiographs. Reading the image correctly is not enough; the model has to know what it sees means. The best current models still remain significantly below expert human performance in the most technical categories.
 
-**What should I measure if perception triggers actions?**  
-Evaluate the complete causal chain: perceptual grounding, calibration, tool/action selection, recovery behaviour and the cost of false positives/negatives. A small perception error can become much more serious once it drives an external action.
+**Why does model performance fall so sharply when moving from standard text to documents with complex layouts?**
+Because their representations are optimized for natural photographs, not for integrating spatial structure and semantics at the same time. OCRBench v2 and OmniDocBench show that systems with 80–90% accuracy on standard text fall to 36.9% on reconstruction of layouts with multiple columns, tables with merged cells or formulas embedded in text flow.
