@@ -1,0 +1,41 @@
+{
+  "source": "snippets/from-cave-to-agi/04-emergencia-capacidades.html",
+  "source_blob_sha": "bc76fa0b464ac96f2a22f78fcd304d563cc3b275",
+  "replacements": {
+    "¿Emergencia real o artefacto de medición?": "Real emergence or measurement artifact?",
+    "Algunas capacidades parecen aparecer de golpe cuando un modelo alcanza cierto tamaño. Pero si ese umbral brusco es real o depende de cómo medimos es una pregunta abierta con consecuencias importantes.": "Some capabilities seem to appear suddenly when a model reaches a certain size. But whether that abrupt threshold is real or depends on how we measure it is an open question with important consequences.",
+    "La tarea": "The task",
+    "El debate": "The debate",
+    "Una tarea concreta a distintas escalas": "One specific task at different scales",
+    "Pregunta: \"¿Cuántas r hay en la palabra strawberry?\"": "Question: \"How many r letters are in the word strawberry?\"",
+    "~1B parámetros": "~1B parameters",
+    "\"La palabra strawberry tiene 2 letras r.\"": "\"The word strawberry has 2 r letters.\"",
+    "✗ Incorrecto": "✗ Incorrect",
+    "El modelo no cuenta caracteres; predice la respuesta más probable por distribución de texto.": "The model does not count characters; it predicts the most likely response from the text distribution.",
+    "~7B parámetros": "~7B parameters",
+    "\"Strawberry tiene 3 letras r: s-t-r-a-w-b-e-r-r-y.\"": "\"Strawberry has 3 r letters: s-t-r-a-w-b-e-r-r-y.\"",
+    "△ Correcto, pero sin trazabilidad clara": "△ Correct, but without clear traceability",
+    "El modelo acierta el conteo, pero la respuesta no evidencia de forma sólida que esté operando sobre posiciones de caracteres.": "The model gets the count right, but the response does not provide solid evidence that it is operating over character positions.",
+    "~70B parámetros": "~70B parameters",
+    "\"Hay 3 letras r en strawberry: en la posición 3, 8 y 9.\"": "\"There are 3 r letters in strawberry: at positions 3, 8 and 9.\"",
+    "✓ Correcto con razonamiento": "✓ Correct with reasoning",
+    "A esta escala aparece la capacidad de razonar sobre la estructura interna de palabras.": "At this scale, the ability to reason about the internal structure of words appears.",
+    "El debate: ¿cómo lees esa mejora?": "The debate: how should you interpret that improvement?",
+    "Lectura fuerte · Wei et al. 2022": "Strong reading · Wei et al. 2022",
+    "Emergencia real: la capacidad no existe por debajo del umbral y aparece de golpe": "Real emergence: the capability does not exist below the threshold and appears suddenly",
+    "Rendimiento en la tarea": "Task performance",
+    "Métrica: correcto / incorrecto (binario)": "Metric: correct / incorrect (binary)",
+    "Con métrica binaria (correcto o no), el salto parece abrupto. El modelo \"no puede\" y de repente \"puede\".": "With a binary metric (correct or not), the jump looks abrupt. The model \"cannot\" and suddenly \"can\".",
+    "Implicación: hay umbrales reales de capacidad que no se pueden extrapolar desde escalas menores.": "Implication: there are real capability thresholds that cannot be extrapolated from smaller scales.",
+    "Lectura cauta · Schaeffer et al. 2023": "Cautious reading · Schaeffer et al. 2023",
+    "Artefacto de métrica: la mejora es gradual pero la métrica binaria la hace parecer brusca": "Metric artifact: improvement is gradual but the binary metric makes it look abrupt",
+    "Métrica: crédito parcial (cuántas r detecta correctamente)": "Metric: partial credit (how many r letters it detects correctly)",
+    "Con crédito parcial, el progreso es continuo. El modelo mejora en cada escala, aunque no llega al 100% hasta escalas grandes.": "With partial credit, progress is continuous. The model improves at each scale, although it does not reach 100% until larger scales.",
+    "Implicación: no hay \"magia\" en los umbrales grandes. La emergencia puede ser un artefacto de elegir métricas que no capturan mejoras parciales.": "Implication: there is no \"magic\" in large-scale thresholds. Emergence may be an artifact of choosing metrics that do not capture partial improvements.",
+    "Por qué importa este debate": "Why this debate matters",
+    "Si la emergencia es real, no puedes predecir cuándo aparecerá una capacidad peligrosa en modelos más grandes. Si es artefacto de métrica, puedes rastrear el progreso gradual y anticiparte. La diferencia tiene consecuencias directas para la seguridad y la planificación del campo.": "If emergence is real, you cannot predict when a dangerous capability will appear in larger models. If it is a metric artifact, you can track gradual progress and anticipate it. The difference has direct consequences for safety and planning in the field."
+  },
+  "forbidden_output_tokens": [
+    "¿Emergencia real", "Algunas capacidades parecen", "La tarea", "El debate", "Una tarea concreta", "Pregunta:", "parámetros", "La palabra strawberry", "Incorrecto", "El modelo no cuenta", "Correcto, pero", "El modelo acierta", "Hay 3 letras", "Correcto con razonamiento", "A esta escala aparece", "¿cómo lees esa mejora?", "Lectura fuerte", "Emergencia real:", "Rendimiento en la tarea", "Métrica:", "Con métrica binaria", "Implicación:", "Lectura cauta", "Artefacto de métrica", "Con crédito parcial", "Por qué importa este debate", "Si la emergencia es real"
+  ]
+}
