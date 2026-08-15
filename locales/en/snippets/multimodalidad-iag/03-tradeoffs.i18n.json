@@ -1,6 +1,6 @@
 {
   "source": "snippets/multimodalidad-iag/03-tradeoffs.html",
-  "source_blob_sha": "a2f95e26b8ddc918d8395945ef89f9f341f9cad2",
+  "source_blob_sha": "d9600ed095baf93078e2a3b26d2ab569a50de429",
   "replacements": {
     "Tradeoffs en producción — las cuatro familias": "Production trade-offs — the four families",
     "Para la mayoría de equipos, la elección práctica es entre variantes del enfoque encoder+conector. Las diferencias en coste operacional son frecuentemente más determinantes que los números de los benchmarks.": "For most teams, the practical choice is among variants of the encoder+connector approach. Differences in operating cost are often more decisive than benchmark scores.",
