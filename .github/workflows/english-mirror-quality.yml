@@ -23,6 +23,7 @@ on:
       - 'scripts/validate_english_caves_ch4_remaining.mjs'
       - 'scripts/validate_english_caves_ch5_agents.mjs'
       - 'scripts/validate_english_caves_ch5_search.mjs'
+      - 'scripts/validate_english_caves_ch5_memory.mjs'
       - 'scripts/validate_english_caves_complete.mjs'
       - 'scripts/validate_english_caves_media.mjs'
       - 'scripts/validate_english_foundations_complete.mjs'
@@ -137,6 +138,9 @@ jobs:
 
       - name: Validate canonical English Chapter 5 solution-search visual
         run: node scripts/validate_english_caves_ch5_search.mjs
+
+      - name: Validate canonical English Chapter 5 memory visual
+        run: node scripts/validate_english_caves_ch5_memory.mjs
 
       - name: Validate complete English Caves to AGI series
         run: node scripts/validate_english_caves_complete.mjs
