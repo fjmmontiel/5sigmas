@@ -152,7 +152,7 @@ try {
           if (await discrete.locator('.tkd-vq-step').count() !== 4) failures.push(`${entry.route}: VQ-VAE pipeline lost one of four canonical stages`);
           if (await discrete.locator('.tkd-moe-expert').count() !== 4) failures.push(`${entry.route}: MoE panel lost one of four canonical experts`);
           if (await discrete.locator('.tkd-moe-stat').count() !== 3) failures.push(`${entry.route}: MoE panel lost canonical statistics`);
-          const discreteText = await discrete.innerText();
+          const discreteText = (await discrete.textContent()) || '';
           for (const token of ['Native tokenization in practice', 'Nearest-neighbor lookup', 'Mixed input sequence', 'Router (lightweight network)', '2 / 8', '~25%', '1M tokens']) {
             if (!discreteText.includes(token)) failures.push(`${entry.route}: discrete-token visual missing ${JSON.stringify(token)}`);
           }
@@ -165,7 +165,7 @@ try {
         } else {
           if (await families.locator('.arc-tab').count() !== 4) failures.push(`${entry.route}: architecture-family visual lost its four canonical tabs`);
           if (await families.locator('.arc-panel').count() !== 4) failures.push(`${entry.route}: architecture-family visual lost its four canonical panels`);
-          const familyText = await families.innerText();
+          const familyText = (await families.textContent()) || '';
           for (const token of ['Encoder + connector + LLM', 'Cross-attention fusion', 'Native tokenization', 'Omni and streaming models', 'GPT-4o', 'Gemini 2.5 Native Audio', 'Qwen2.5-Omni']) {
             if (!familyText.includes(token)) failures.push(`${entry.route}: architecture-family visual missing ${JSON.stringify(token)}`);
           }
