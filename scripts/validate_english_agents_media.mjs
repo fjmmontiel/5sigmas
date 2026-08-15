@@ -9,7 +9,7 @@ const pages = [
   ['02-anatomia-de-un-agente', 'The anatomy of an agent'],
   ['03-como-evaluar-un-agente', 'A demo measures an output. An agent needs a trace.'],
   ['04-seguridad-agentes', 'Incoming data can become an instruction'],
-  ['05-de-la-demo-a-produccion', 'From demo to production'],
+  ['05-de-la-demo-a-produccion', 'Chapter 5 — From demo to an operable system'],
 ];
 const viewports = [
   ['desktop', { width: 1440, height: 1000 }],
