@@ -1,1 +1,672 @@
-<section class="fnd-v" data-demo="fnd-ia-ml-dl" aria-label="Hierarchy of AI, machine learning, deep learning and generative AI"><header><p class="k">THE AI STACK</p><h3>Four labels, different scopes</h3><p>Each layer narrows the family of systems being described.</p></header><div class="nest"><article><b>Artificial Intelligence</b><small>Any engineered system performing tasks associated with intelligent behaviour.</small><article><b>Machine Learning</b><small>AI whose behaviour is learned from data rather than only explicit rules.</small><article><b>Deep Learning</b><small>ML based on multi-layer neural networks.</small><article><b>Generative AI</b><small>Models whose primary output is newly generated content.</small></article></article></article></article></div><details><summary>Do the sets always nest perfectly?</summary><p>This is a practical teaching hierarchy, not a complete taxonomy. Generative modelling predates deep learning, and modern products often combine several families. The key distinction is what technology learns and what the system outputs.</p></details></section><style>.fnd-v{max-width:860px;margin:1.2rem auto;padding:18px;border:1px solid color-mix(in srgb,currentColor 14%,transparent);border-radius:18px;display:grid;gap:12px}.fnd-v *{box-sizing:border-box}.fnd-v h3,.fnd-v p{margin:.15rem 0}.fnd-v .k{font-size:.72rem;font-weight:800;letter-spacing:.08em;color:var(--md-primary-fg-color,#26a69a)}.fnd-v .nest article{padding:10px;border:1px solid color-mix(in srgb,currentColor 13%,transparent);border-radius:12px;margin:7px;background:color-mix(in srgb,currentColor 3%,transparent)}.fnd-v small{display:block;opacity:.72;margin-top:4px}.fnd-v details{padding:10px 12px;border:1px solid color-mix(in srgb,currentColor 13%,transparent);border-radius:12px}.fnd-v summary{font-weight:800;cursor:pointer}</style>
+<div class="ai-mat ta-demo ta-tabs" data-demo="ia_ml_dl" data-anim-tabs data-default="ia" data-anim-contrast="auto">
+  <nav class="ai-nav" data-role="tablist" aria-label="AI -> ML -> DL -> GenAI">
+    <button id="tab-ia" type="button" data-role="tab" aria-selected="true" data-tab="ia">AI</button>
+    <button id="tab-ml" type="button" data-role="tab" aria-selected="false" data-tab="ml">ML</button>
+    <button id="tab-dl" type="button" data-role="tab" aria-selected="false" data-tab="dl">DL</button>
+    <button id="tab-gen" type="button" data-role="tab" aria-selected="false" data-tab="gen">GenAI</button>
+  </nav>
+
+  <div class="ta-panels">
+    <section class="ai-panel" data-panel="ia" aria-labelledby="tab-ia">
+      <div class="ai-title">AI</div>
+      <div class="ai-sub">
+        <div class="ai-sub-h">The umbrella: deciding and planning</div>
+        <div class="ai-sub-d">
+          Broad framework: techniques that let a system reason, plan or decide. It can use rules, search,
+          optimization or (sometimes) learning. If the focus is making decisions/plans without “training a model”, it is usually AI.
+        </div>
+      </div>
+
+      <div class="ai-row3" aria-label="Input, output and capabilities">
+        <div class="ai-card">
+          <div class="ai-card-k">Typical input</div>
+          <div class="ai-card-v">
+            <div class="ai-lines">
+              <div class="ai-line"><span class="b">•</span><span>Goal (what you want to achieve)</span></div>
+              <div class="ai-line"><span class="b">•</span><span>Constraints (time, cost, rules)</span></div>
+              <div class="ai-line"><span class="b">•</span><span>Environment state (map, resources, conditions)</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ai-card">
+          <div class="ai-card-k">Typical output</div>
+          <div class="ai-card-v">
+            <div class="ai-lines">
+              <div class="ai-line"><span class="b">•</span><span>Decision (what to do)</span></div>
+              <div class="ai-line"><span class="b">•</span><span>Plan / route (ordered steps)</span></div>
+              <div class="ai-line"><span class="b">•</span><span>Action / policy (how to act in each case)</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ai-card">
+          <div class="ai-card-k">Capabilities</div>
+          <div class="ai-chips">
+            <span class="chip n"><span class="x">-</span>Learns from data</span>
+            <span class="chip n"><span class="x">-</span>Neural network</span>
+            <span class="chip n" data-k="gen"><span class="x">-</span>Generates content</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ai-ex" aria-label="Everyday examples">
+        <ul class="ai-grid">
+          <li><div class="ex"><div class="ex-t">🤖 Robot vacuum: efficient route</div><div class="ex-d">Plans where to go to cover the house while avoiding obstacles.</div></div></li>
+          <li><div class="ex"><div class="ex-t">♟️ Sudoku/chess: best move</div><div class="ex-d">Explores options and chooses the one that maximizes a score.</div></div></li>
+          <li><div class="ex"><div class="ex-t">🗓️ Shop shifts</div><div class="ex-d">Assigns schedules while satisfying rules and constraints.</div></div></li>
+          <li><div class="ex"><div class="ex-t">🚚 Delivery: multi-stop route</div><div class="ex-d">Optimizes visit order to minimize time or distance.</div></div></li>
+          <li><div class="ex"><div class="ex-t">📋 Rule-based support (FAQ)</div><div class="ex-d">If it detects X, it recommends Y by following a defined flow.</div></div></li>
+          <li><div class="ex"><div class="ex-t">🚦 Coordinated traffic lights</div><div class="ex-d">Adjusts cycles with control logic to reduce congestion.</div></div></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="ai-panel" data-panel="ml" aria-labelledby="tab-ml" hidden>
+      <div class="ai-title">ML</div>
+      <div class="ai-sub">
+        <div class="ai-sub-h">Learning patterns from examples</div>
+        <div class="ai-sub-d">
+          Branch of AI where the system learns from data to generalize to new cases, without programming rules for every situation.
+          If it trains on historical data and then “predicts” on new cases, this is ML.
+        </div>
+      </div>
+
+      <div class="ai-row3" aria-label="Input, output and capabilities">
+        <div class="ai-card">
+          <div class="ai-card-k">Typical input</div>
+          <div class="ai-card-v">
+            <div class="ai-lines">
+              <div class="ai-line"><span class="b">•</span><span>Examples (X) with variables / features</span></div>
+              <div class="ai-line"><span class="b">•</span><span>Labels (y) in supervised learning (the correct answer)</span></div>
+              <div class="ai-line"><span class="b">•</span><span>Objective: loss/metric (what it optimizes)</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ai-card">
+          <div class="ai-card-k">Typical output</div>
+          <div class="ai-card-v">
+            <div class="ai-lines">
+              <div class="ai-line"><span class="b">•</span><span>Trained model (learned pattern)</span></div>
+              <div class="ai-line"><span class="b">•</span><span>Prediction on new cases (class/value/probability)</span></div>
+              <div class="ai-line"><span class="b">•</span><span>Scores/segments (ranking, clusters, anomalies)</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ai-card">
+          <div class="ai-card-k">Capabilities</div>
+          <div class="ai-chips">
+            <span class="chip y"><span class="x">✓</span>Learns from data</span>
+            <span class="chip n"><span class="x">-</span>Neural network</span>
+            <span class="chip n" data-k="gen"><span class="x">-</span>Generates content</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ai-ex" aria-label="Everyday examples">
+        <ul class="ai-grid">
+          <li><div class="ex"><div class="ex-t">🛒 Supermarket demand</div><div class="ex-d">Predicts how many units will sell to adjust stock.</div></div></li>
+          <li><div class="ex"><div class="ex-t">💶 Default risk</div><div class="ex-d">Estimates the probability of default to decide conditions.</div></div></li>
+          <li><div class="ex"><div class="ex-t">🕵️ Card fraud</div><div class="ex-d">Detects suspicious transactions by comparing them with patterns.</div></div></li>
+          <li><div class="ex"><div class="ex-t">🚪 Churn</div><div class="ex-d">Predicts who might cancel a subscription.</div></div></li>
+          <li><div class="ex"><div class="ex-t">👥 Customer segments</div><div class="ex-d">Groups similar profiles for more relevant offers.</div></div></li>
+          <li><div class="ex"><div class="ex-t">🎯 Product recommendation</div><div class="ex-d">Suggests items from similar behavior across users.</div></div></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="ai-panel" data-panel="dl" aria-labelledby="tab-dl" hidden>
+      <div class="ai-title">DL</div>
+      <div class="ai-sub">
+        <div class="ai-sub-h">ML with deep neural networks</div>
+        <div class="ai-sub-d">
+          Subset of ML based on deep networks, especially useful for images, audio and language (complex data).
+          If deep networks are used for perception (image/audio/text), it is DL.
+        </div>
+      </div>
+
+      <div class="ai-row3" aria-label="Input, output and capabilities">
+        <div class="ai-card">
+          <div class="ai-card-k">Typical input</div>
+          <div class="ai-card-v">
+            <div class="ai-lines">
+              <div class="ai-line"><span class="b">•</span><span>Complex signals: image, audio or text</span></div>
+              <div class="ai-line"><span class="b">•</span><span>Sequences/context (tokens, frames)</span></div>
+              <div class="ai-line"><span class="b">•</span><span>Learning signal: labels or self-supervision</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ai-card">
+          <div class="ai-card-k">Typical output</div>
+          <div class="ai-card-v">
+            <div class="ai-lines">
+              <div class="ai-line"><span class="b">•</span><span>Recognition / detection (what is there and where)</span></div>
+              <div class="ai-line"><span class="b">•</span><span>Reusable representations (embeddings)</span></div>
+              <div class="ai-line"><span class="b">•</span><span>Signals for other tasks (search, ranking)</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ai-card">
+          <div class="ai-card-k">Capabilities</div>
+          <div class="ai-chips">
+            <span class="chip y"><span class="x">✓</span>Learns from data</span>
+            <span class="chip y"><span class="x">✓</span>Neural network</span>
+            <span class="chip n" data-k="gen"><span class="x">-</span>Generates content</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ai-ex" aria-label="Everyday examples">
+        <ul class="ai-grid">
+          <li><div class="ex"><div class="ex-t">🔓 Face unlock</div><div class="ex-d">Recognizes a face by comparing it with a learned representation.</div></div></li>
+          <li><div class="ex"><div class="ex-t">🎙️ Transcribing voice notes</div><div class="ex-d">Turns audio into text by learning acoustic patterns.</div></div></li>
+          <li><div class="ex"><div class="ex-t">🔤 Reading text in photos (OCR)</div><div class="ex-d">Detects and recognizes letters in images.</div></div></li>
+          <li><div class="ex"><div class="ex-t">👁️ Object detection</div><div class="ex-d">Identifies and locates cars, people and signs.</div></div></li>
+          <li><div class="ex"><div class="ex-t">🌙📷 Camera night mode</div><div class="ex-d">Reduces noise and recovers detail by combining information.</div></div></li>
+          <li><div class="ex"><div class="ex-t">🖼️ Similar photos in a gallery</div><div class="ex-d">Finds similar images by comparing visual embeddings.</div></div></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="ai-panel" data-panel="gen" aria-labelledby="tab-gen" hidden>
+      <div class="ai-title">GenAI</div>
+      <div class="ai-sub">
+        <div class="ai-sub-h">DL that generates content</div>
+        <div class="ai-sub-d">
+          A (usual) subset of DL oriented toward creating new content: text, images, audio or code, conditioned on a goal and context.
+          If the output is new content (not just a prediction), you are in GenAI.
+        </div>
+      </div>
+
+      <div class="ai-row3" aria-label="Input, output and capabilities">
+        <div class="ai-card">
+          <div class="ai-card-k">Typical input</div>
+          <div class="ai-card-v">
+            <div class="ai-lines">
+              <div class="ai-line"><span class="b">•</span><span>Prompt (instruction) + goal</span></div>
+              <div class="ai-line"><span class="b">•</span><span>Context (conversation, documents, examples)</span></div>
+              <div class="ai-line"><span class="b">•</span><span>Constraints/conditioning (format, tone, tools)</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ai-card">
+          <div class="ai-card-k">Typical output</div>
+          <div class="ai-card-v">
+            <div class="ai-lines">
+              <div class="ai-line"><span class="b">•</span><span>New content (text, image, audio, code)</span></div>
+              <div class="ai-line"><span class="b">•</span><span>Variants / ideas / ready-to-use drafts</span></div>
+              <div class="ai-line"><span class="b">•</span><span>Structured responses (in the requested format)</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ai-card">
+          <div class="ai-card-k">Capabilities</div>
+          <div class="ai-chips">
+            <span class="chip y"><span class="x">✓</span>Learns from data</span>
+            <span class="chip y"><span class="x">✓</span>Neural network</span>
+            <span class="chip y" data-k="gen"><span class="x">✓</span>Generates content</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ai-ex" aria-label="Everyday examples">
+        <ul class="ai-grid">
+          <li><div class="ex"><div class="ex-t">✉️ Drafting an email</div><div class="ex-d">Generates a draft with a specified goal and tone.</div></div></li>
+          <li><div class="ex"><div class="ex-t">📝 Summarizing a document</div><div class="ex-d">Condenses key points into a short, structured text.</div></div></li>
+          <li><div class="ex"><div class="ex-t">🎛️ Rewriting in another tone</div><div class="ex-d">Adjusts style: more formal, shorter or more persuasive.</div></div></li>
+          <li><div class="ex"><div class="ex-t">🖼️✨ Creating an image</div><div class="ex-d">Generates a coherent image from a description.</div></div></li>
+          <li><div class="ex"><div class="ex-t">💻 Coding assistant</div><div class="ex-d">Proposes functions, fixes errors and suggests refactors.</div></div></li>
+          <li><div class="ex"><div class="ex-t">🎤 Presentation script</div><div class="ex-d">Produces an outline and speaker notes from the topic.</div></div></li>
+        </ul>
+      </div>
+    </section>
+  </div>
+</div>
+
+<style>
+  .ai-mat,
+  .ai-mat * { box-sizing: border-box; }
+
+  .ai-mat {
+    --bg: var(--md-default-bg-color, #fff);
+    --fg: var(--md-default-fg-color, #0f172a);
+    --a: var(--md-primary-fg-color, #26A69A);
+    --g: var(--md-accent-fg-color, #FFB343);
+    --ta-brand-font: "Avenir Next", "Avenir", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    --bd: rgba(15, 23, 42, .22);
+    --mut: rgba(15, 23, 42, .72);
+    --p: clamp(12px, 1.0vw, 15px);
+    --gap: clamp(10px, 1.0vw, 14px);
+
+    display: block;
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: var(--p);
+    padding-bottom: calc(var(--p) + 46px);
+
+    border: 1px solid var(--bd);
+    border-radius: 20px;
+    overflow: hidden;
+    isolation: isolate;
+
+    background:
+      radial-gradient(140% 140% at 12% 12%, rgba(38, 166, 154, .10), transparent 62%),
+      radial-gradient(140% 140% at 88% 16%, rgba(255, 179, 67, .09), transparent 66%),
+      linear-gradient(180deg, rgba(0, 0, 0, .04), rgba(255, 255, 255, .07));
+
+    color: var(--fg);
+    font-family: var(--ta-brand-font);
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  [data-md-color-scheme="slate"] .ai-mat {
+    --bg: var(--md-default-bg-color, #0f172a);
+    --fg: var(--md-default-fg-color, #e2e8f0);
+    --bd: rgba(226, 232, 240, .22);
+    --mut: rgba(226, 232, 240, .76);
+
+    background:
+      radial-gradient(140% 140% at 12% 12%, rgba(38, 166, 154, .14), transparent 62%),
+      radial-gradient(140% 140% at 88% 16%, rgba(255, 179, 67, .12), transparent 66%),
+      linear-gradient(180deg, rgba(255, 255, 255, .04), rgba(17, 24, 39, .44));
+  }
+
+  /* Tabs */
+  .ai-nav {
+    --flow-w: 0px;
+    --flow-accent: rgb(50, 74, 178);
+
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+    margin: 2px 2px 12px;
+    overflow: hidden;
+    border-radius: 16px;
+  }
+
+  .ai-nav::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, .02);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .ai-nav::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: var(--flow-w);
+    border-radius: 16px;
+    background:
+      linear-gradient(90deg,
+        color-mix(in srgb, var(--flow-accent) 18%, transparent),
+        color-mix(in srgb, var(--flow-accent) 10%, transparent));
+    border: 1px solid color-mix(in srgb, var(--flow-accent) 26%, transparent);
+    clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 50%, calc(100% - 18px) 100%, 0 100%);
+    pointer-events: none;
+    z-index: 0;
+    transition: width .18s ease;
+  }
+
+  .ai-nav button {
+    position: relative;
+    z-index: 1;
+    appearance: none;
+    -webkit-appearance: none;
+    font: inherit;
+    cursor: pointer;
+    user-select: none;
+    touch-action: manipulation;
+
+    border: 1px solid var(--bd);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, .04);
+    padding: 12px 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+
+    font-weight: 950;
+    letter-spacing: .01em;
+    color: var(--fg);
+
+    transition: transform .14s ease, box-shadow .14s ease, border-color .14s ease, background-color .14s ease;
+  }
+
+  .ai-nav button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 22px rgba(0, 0, 0, .10);
+  }
+
+  .ai-nav button:focus-visible {
+    outline: none;
+    box-shadow: inset 0 0 0 3px rgba(50, 74, 178, .24);
+  }
+
+  .ai-nav button.on,
+  .ai-nav button[aria-selected="true"] {
+    background: rgba(50, 74, 178, .14);
+    border-color: rgba(50, 74, 178, .55);
+  }
+
+  .ai-nav button.is-in:not(.on) {
+    background: color-mix(in srgb, var(--flow-accent) 9%, rgba(255, 255, 255, .04));
+    border-color: color-mix(in srgb, var(--flow-accent) 28%, var(--bd));
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--flow-accent) 16%, transparent);
+  }
+
+  .ai-nav button[data-tab="gen"].on,
+  .ai-nav button[data-tab="gen"][aria-selected="true"] {
+    background: color-mix(in srgb, var(--g) 18%, transparent);
+    border-color: color-mix(in srgb, var(--g) 46%, transparent);
+  }
+
+  .ta-panels {
+    border-top: 1px dashed color-mix(in srgb, var(--g) 35%, transparent);
+    padding-top: 12px;
+  }
+
+  /* Panel */
+  .ai-panel {
+    padding: var(--gap);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 0;
+    background: rgba(255, 255, 255, .02);
+    border-radius: 16px;
+  }
+
+  .ai-panel[hidden] { display: none !important; }
+
+  .ai-title {
+    font-size: clamp(20px, 2.0vw, 28px);
+    font-weight: 950;
+    margin: 0;
+  }
+
+  .ai-sub { display: grid; gap: 6px; }
+
+  .ai-sub-h {
+    font-size: clamp(14.5px, 1.25vw, 16px);
+    font-weight: 900;
+    color: var(--mut);
+    line-height: 1.25;
+  }
+
+  .ai-sub-d {
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--fg);
+    max-width: 72ch;
+  }
+
+  /* Cards + row3 */
+  .ai-card {
+    border: 1px solid var(--bd);
+    border-radius: 14px;
+    padding: 12px;
+    background: rgba(255, 255, 255, .04);
+  }
+
+  .ai-card-k {
+    font-size: 11px;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    color: var(--mut);
+    margin-bottom: 6px;
+    font-weight: 900;
+  }
+
+  .ai-card-v { font-size: 14px; line-height: 1.5; }
+
+  .ai-row3 {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  /* Enriched IO list */
+  .ai-lines { display: grid; gap: 6px; }
+
+  .ai-line {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+
+  .ai-line .b {
+    color: var(--mut);
+    font-weight: 950;
+    line-height: 1.2;
+  }
+
+  /* Chips */
+  .ai-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--bd);
+    border-radius: 999px;
+    padding: 7px 10px;
+    background: rgba(255, 255, 255, .03);
+    font-weight: 900;
+    font-size: 13px;
+  }
+
+  .chip .x {
+    width: 22px;
+    height: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    border: 1px solid var(--bd);
+    background: rgba(255, 255, 255, .02);
+    font-weight: 950;
+  }
+
+  .chip.y .x { background: color-mix(in srgb, var(--a) 20%, transparent); }
+
+  .chip.y[data-k="gen"] .x { background: color-mix(in srgb, var(--g) 22%, transparent); }
+
+  .chip.n { opacity: .60; }
+
+  /* Examples */
+  .ai-ex {
+    border: 1px solid var(--bd);
+    border-radius: 14px;
+    padding: 10px;
+    background: rgba(255, 255, 255, .04);
+  }
+
+  .ai-grid {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 8px;
+  }
+
+  .ai-grid > li {
+    padding: 0;
+    border: 0;
+    background: transparent;
+  }
+
+  .ai-grid > li::before { content: none !important; }
+
+  .ex {
+    border: 1px solid var(--bd);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, .03);
+    padding: 8px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .ex-t {
+    font-weight: 950;
+    font-size: 13.8px;
+    line-height: 1.2;
+  }
+
+  .ex-d {
+    color: var(--mut);
+    font-size: 12.9px;
+    line-height: 1.35;
+  }
+
+  @media (max-width: 980px) {
+    .ai-row3 { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 440px) {
+    .ai-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .ai-nav::after { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ai-nav button { transition: none !important; }
+    .ai-nav button:hover { transform: none !important; }
+  }
+</style>
+
+<script>
+  (function () {
+    function initRoot(root) {
+      if (!root || root.dataset.tabsInit === '1') return;
+      root.dataset.tabsInit = '1';
+
+      const tablist = root.querySelector('[data-role="tablist"]');
+      const tabs = Array.from(root.querySelectorAll('[data-role="tab"][data-tab]'));
+      const panels = Array.from(root.querySelectorAll('.ai-panel[data-panel]'));
+
+      if (!tablist || tabs.length === 0 || panels.length === 0) return;
+
+      let currentId = null;
+      let currentIndex = 0;
+      let raf = 0;
+
+      function applyFlow() {
+        const t = tabs[currentIndex];
+        if (!t) return;
+        const right = t.offsetLeft + t.offsetWidth;
+        const pad = 10;
+        const w = Math.min(tablist.clientWidth, right + pad);
+        tablist.style.setProperty('--flow-w', w + 'px');
+        tablist.style.setProperty('--flow-accent', currentId === 'gen' ? 'var(--g)' : 'rgb(50, 74, 178)');
+      }
+
+      function scheduleFlow() {
+        if (raf) cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(applyFlow);
+      }
+
+      if ('ResizeObserver' in window) {
+        const ro = new ResizeObserver(() => scheduleFlow());
+        ro.observe(tablist);
+      } else {
+        window.addEventListener('resize', scheduleFlow, { passive: true });
+      }
+
+      function setActive(id, focusTab) {
+        currentId = id;
+        currentIndex = Math.max(0, tabs.findIndex((x) => x.getAttribute('data-tab') === id));
+
+        tabs.forEach((t, i) => {
+          const on = t.getAttribute('data-tab') === id;
+          const isIn = i <= currentIndex;
+          t.classList.toggle('on', on);
+          t.classList.toggle('is-in', isIn);
+          t.setAttribute('aria-selected', on ? 'true' : 'false');
+          t.tabIndex = on ? 0 : -1;
+        });
+
+        scheduleFlow();
+
+        panels.forEach((p) => {
+          const on = p.getAttribute('data-panel') === id;
+          if (on) p.removeAttribute('hidden');
+          else p.setAttribute('hidden', '');
+        });
+
+        if (focusTab) {
+          const t = tabs.find((x) => x.getAttribute('data-tab') === id);
+          if (t) t.focus();
+        }
+      }
+
+      const initial = root.getAttribute('data-default') || (tabs[0] && tabs[0].getAttribute('data-tab'));
+      if (initial) setActive(initial, false);
+
+      tablist.addEventListener('click', (e) => {
+        const btn = e.target && e.target.closest && e.target.closest('[data-role="tab"][data-tab]');
+        if (!btn || !tablist.contains(btn)) return;
+        setActive(btn.getAttribute('data-tab'), false);
+      });
+
+      tablist.addEventListener('keydown', (e) => {
+        const btn = e.target && e.target.closest && e.target.closest('[data-role="tab"][data-tab]');
+        if (!btn || !tablist.contains(btn)) return;
+
+        const k = e.key;
+        if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(k)) return;
+        e.preventDefault();
+
+        const cur = tabs.indexOf(btn);
+        if (cur < 0) return;
+
+        let next = cur;
+        if (k === 'ArrowLeft') next = (cur - 1 + tabs.length) % tabs.length;
+        if (k === 'ArrowRight') next = (cur + 1) % tabs.length;
+        if (k === 'Home') next = 0;
+        if (k === 'End') next = tabs.length - 1;
+
+        const id = tabs[next] && tabs[next].getAttribute('data-tab');
+        if (id) setActive(id, true);
+      });
+    }
+
+    function boot() {
+      document.querySelectorAll('[data-anim-tabs][data-demo="ia_ml_dl"]').forEach(initRoot);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', boot, { once: true });
+    } else {
+      boot();
+    }
+
+    // MkDocs Material instant navigation
+    if (window.document$ && typeof window.document$.subscribe === 'function') {
+      window.document$.subscribe(() => boot());
+    }
+  })();
+</script>
