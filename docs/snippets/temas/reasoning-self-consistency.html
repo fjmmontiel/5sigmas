@@ -1,0 +1,67 @@
+<div class="rsc-wrap" data-demo="topic-reasoning-self-consistency">
+  <div class="rsc-head">
+    <div class="rsc-kicker">SELF-CONSISTENCY</div>
+    <div class="rsc-title">Una trayectoria puede equivocarse; varias permiten estimar qué respuesta es estable</div>
+    <div class="rsc-sub">En vez de confiar en una única cadena, se muestrean varias trayectorias y se agregan sus respuestas normalizadas. El método ayuda cuando caminos distintos convergen; no corrige un sesgo compartido por todas las muestras.</div>
+  </div>
+
+  <div class="rsc-stage" role="img" aria-label="Cuatro trayectorias de razonamiento producen respuestas 42, 41, 42 y 42, que se agregan para seleccionar 42">
+    <div class="rsc-problem"><span>PROBLEMA</span><strong>x = ?</strong><small>misma entrada</small></div>
+    <div class="rsc-fan" aria-hidden="true">↗<br>→<br>→<br>↘</div>
+    <div class="rsc-paths">
+      <div class="rsc-path rsc-path--win"><span>TRAYECTORIA A</span><strong>… → 42</strong><small>camino 1</small></div>
+      <div class="rsc-path rsc-path--lose"><span>TRAYECTORIA B</span><strong>… → 41</strong><small>camino 2</small></div>
+      <div class="rsc-path rsc-path--win"><span>TRAYECTORIA C</span><strong>… → 42</strong><small>camino 3</small></div>
+      <div class="rsc-path rsc-path--win"><span>TRAYECTORIA D</span><strong>… → 42</strong><small>camino 4</small></div>
+    </div>
+    <div class="rsc-arrow" aria-hidden="true">→</div>
+    <div class="rsc-aggregate">
+      <span>AGREGAR RESPUESTAS</span>
+      <div class="rsc-count"><b>42</b><i>3 votos</i></div>
+      <div class="rsc-count rsc-count--muted"><b>41</b><i>1 voto</i></div>
+      <div class="rsc-winner"><span>SELECCIÓN</span><strong>42</strong></div>
+    </div>
+  </div>
+
+  <div class="rsc-caveats">
+    <div><span>CUÁNDO AYUDA</span><strong>errores parcialmente independientes</strong><small>múltiples caminos razonables llegan a la misma solución.</small></div>
+    <div><span>CUÁNDO NO</span><strong>sesgo común</strong><small>si todas las muestras comparten el mismo supuesto falso, la votación lo refuerza.</small></div>
+    <div><span>COSTE</span><strong>≈ número de muestras</strong><small>más candidatos implican más tokens, latencia y evaluación.</small></div>
+  </div>
+
+  <div class="rsc-ref">Fuente primaria: <a href="https://arxiv.org/abs/2203.11171">Wang et al., Self-Consistency Improves Chain of Thought Reasoning in Language Models (2022)</a>.</div>
+</div>
+
+<style>
+.rsc-wrap,.rsc-wrap *{box-sizing:border-box}
+.rsc-wrap{
+  --rsc-a:var(--md-primary-fg-color,#26a69a);
+  --rsc-b:#4757d6;
+  --rsc-c:var(--md-accent-fg-color,#ffb343);
+  --rsc-r:#e06c75;
+  --rsc-bg:var(--md-default-bg-color,#fff);
+  --rsc-fg:var(--md-default-fg-color,#111827);
+  --rsc-muted:color-mix(in srgb,var(--rsc-fg) 58%,transparent);
+  --rsc-border:color-mix(in srgb,var(--rsc-fg) 14%,transparent);
+  container-type:inline-size;
+  margin:1.1rem 0 1.5rem;padding:clamp(14px,2vw,22px);border:1px solid var(--rsc-border);border-radius:20px;
+  background:radial-gradient(90% 120% at 100% 0,color-mix(in srgb,var(--rsc-a) 8%,transparent),transparent 56%),var(--rsc-bg);color:var(--rsc-fg)
+}
+.rsc-head{display:grid;gap:4px;margin-bottom:14px}.rsc-kicker{font-size:10px;font-weight:900;letter-spacing:.12em;color:var(--rsc-muted)}
+.rsc-title{font-size:clamp(18px,2.1vw,24px);font-weight:900;line-height:1.12;letter-spacing:-.02em;max-width:34ch}.rsc-sub{font-size:13.5px;line-height:1.48;color:var(--rsc-muted);max-width:86ch}
+.rsc-stage{display:grid;grid-template-columns:minmax(92px,.65fr) auto minmax(250px,1.65fr) auto minmax(170px,.9fr);gap:10px;align-items:center;min-width:0}
+.rsc-problem,.rsc-aggregate{min-width:0;border:1px solid var(--rsc-border);border-radius:15px;padding:12px;display:grid;gap:5px;background:color-mix(in srgb,var(--rsc-b) 5%,var(--rsc-bg))}
+.rsc-problem span,.rsc-path span,.rsc-aggregate>span,.rsc-winner span,.rsc-caveats span{font-size:9.2px;font-weight:900;letter-spacing:.09em;color:var(--rsc-muted)}
+.rsc-problem strong{font-size:21px}.rsc-problem small,.rsc-path small,.rsc-caveats small{font-size:10.5px;line-height:1.35;color:var(--rsc-muted)}
+.rsc-fan,.rsc-arrow{font-size:17px;line-height:1.75;text-align:center;color:var(--rsc-muted);font-weight:900}.rsc-arrow{line-height:1}
+.rsc-paths{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;min-width:0}.rsc-path{min-width:0;border:1px solid var(--rsc-border);border-radius:12px;padding:9px 10px;display:grid;gap:3px;background:color-mix(in srgb,var(--rsc-bg) 95%,var(--rsc-fg) 5%)}
+.rsc-path strong{font-size:13px}.rsc-path--win{border-color:color-mix(in srgb,var(--rsc-a) 45%,var(--rsc-border));background:color-mix(in srgb,var(--rsc-a) 5%,var(--rsc-bg))}.rsc-path--lose{border-color:color-mix(in srgb,var(--rsc-r) 40%,var(--rsc-border));background:color-mix(in srgb,var(--rsc-r) 4%,var(--rsc-bg))}
+.rsc-aggregate{background:color-mix(in srgb,var(--rsc-a) 5%,var(--rsc-bg))}.rsc-count{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:5px 7px;border-radius:8px;background:color-mix(in srgb,var(--rsc-a) 9%,transparent)}.rsc-count b{font-size:13px}.rsc-count i{font-size:10px;font-style:normal;color:var(--rsc-muted)}.rsc-count--muted{background:color-mix(in srgb,var(--rsc-r) 7%,transparent)}
+.rsc-winner{margin-top:2px;padding-top:7px;border-top:1px solid var(--rsc-border);display:flex;justify-content:space-between;align-items:end;gap:8px}.rsc-winner strong{font-size:23px;color:var(--rsc-a)}
+.rsc-caveats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}.rsc-caveats>div{min-width:0;padding:10px 11px;border:1px solid var(--rsc-border);border-radius:12px;display:grid;gap:3px}.rsc-caveats strong{font-size:11.7px;line-height:1.3}
+.rsc-ref{margin-top:9px;font-size:9.8px;line-height:1.35;color:var(--rsc-muted)}.rsc-ref a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+@container (max-width:720px){.rsc-stage{grid-template-columns:1fr;gap:7px}.rsc-fan{height:16px;line-height:1;transform:rotate(90deg)}.rsc-arrow{height:14px;transform:rotate(90deg)}.rsc-paths{grid-template-columns:1fr 1fr}.rsc-caveats{grid-template-columns:1fr}.rsc-problem{grid-template-columns:auto auto 1fr;align-items:center}.rsc-problem small{text-align:right}}
+@media (max-width:720px){.rsc-stage{grid-template-columns:1fr;gap:7px}.rsc-fan{height:16px;line-height:1;transform:rotate(90deg)}.rsc-arrow{height:14px;transform:rotate(90deg)}.rsc-caveats{grid-template-columns:1fr}}
+@media (max-width:420px){.rsc-paths{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.rsc-wrap *{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+</style>

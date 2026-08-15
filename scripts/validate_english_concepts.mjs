@@ -13,6 +13,11 @@ const transformerVisuals = [
   { selector: '.tqv-wrap', source: 'docs/snippets/temas/transformer-qkv.html' },
   { selector: '.tcm-wrap', source: 'docs/snippets/temas/transformer-causal-mask.html' },
 ];
+const reasoningVisuals = [
+  { selector: '.rfl-wrap', source: 'docs/snippets/temas/reasoning-loop.html' },
+  { selector: '.rsc-wrap', source: 'docs/snippets/temas/reasoning-self-consistency.html' },
+  { selector: '.rtc-wrap', source: 'docs/snippets/temas/reasoning-test-time-compute.html' },
+];
 const evaluationVisuals = [
   { selector: '.evo-wrap', source: 'docs/snippets/temas/evaluation-object.html' },
   { selector: '.evs-wrap', source: 'docs/snippets/temas/evaluation-stack.html' },
@@ -26,7 +31,7 @@ const agentVisuals = [
 const concepts = [
   { route: '/en/temas/llms/', title: 'What is an LLM and how does it work?', terms: ['tokenization', 'pretraining', 'Parameters'] },
   { route: '/en/temas/transformer/', title: 'How the Transformer works', terms: ['Query', 'Key', 'Value', 'Multi-head attention'], visuals: transformerVisuals.map((item) => item.selector), visualGroup: 'transformer' },
-  { route: '/en/temas/razonamiento/', title: 'Reasoning in LLMs', terms: ['Chain of thought', 'Test-time compute', 'verifier'] },
+  { route: '/en/temas/razonamiento/', title: 'Reasoning in LLMs', terms: ['Chain of thought', 'Test-time compute', 'verifier'], visuals: reasoningVisuals.map((item) => item.selector), visualGroup: 'reasoning' },
   { route: '/en/temas/evaluacion-modelos/', title: 'Evaluating AI models', terms: ['golden set', 'benchmark', 'LLM as a judge'], visuals: evaluationVisuals.map((item) => item.selector), visualGroup: 'evaluation' },
   { route: '/en/temas/agentes-ia/', title: 'What is an AI agent?', terms: ['tool calling', 'Operational state', 'least privilege'], visuals: agentVisuals.map((item) => item.selector), visualGroup: 'agents' },
   { route: '/en/temas/prompt-injection/', title: 'What is prompt injection?', terms: ['indirect prompt injection', 'least privilege', 'Authorize outside the prompt'] },
@@ -40,6 +45,25 @@ const transformerEnglishForbidden = [
   'Durante el entrenamiento',
   'Mezclar valores',
   'Representación contextual',
+];
+const reasoningEnglishForbidden = [
+  'CÓMPUTO EN INFERENCIA',
+  'Razonar no es escribir',
+  'Estado intermedio',
+  'EXPLORAR',
+  'RESPUESTA FINAL',
+  'TRAZA OPERACIONAL',
+  'Una trayectoria puede equivocarse',
+  'TRAYECTORIA A',
+  'AGREGAR RESPUESTAS',
+  'CUÁNDO AYUDA',
+  'sesgo común',
+  'El presupuesto de inferencia',
+  'RUTA B · MEDIA',
+  'BÚSQUEDA / TOOLS',
+  'SEÑALES DE ROUTING',
+  'No monotónico',
+  'Fuente primaria:',
 ];
 const evaluationEnglishForbidden = [
   'OBJETO DE EVALUACIÓN',
@@ -68,6 +92,8 @@ const agentsEnglishForbidden = [
   'RESULTADO OBSERVABLE',
   'SIGUIENTE DECISIÓN',
 ];
+const reasoningEnglishAnchors = ['INFERENCE COMPUTE', 'Intermediate state', 'OPERATIONAL TRACE', 'TRAJECTORY A', 'AGGREGATE ANSWERS', 'ROUTING SIGNALS', 'Not monotonic'];
+const reasoningSpanishAnchors = ['CÓMPUTO EN INFERENCIA', 'Estado intermedio', 'TRAZA OPERACIONAL', 'TRAYECTORIA A', 'AGREGAR RESPUESTAS', 'SEÑALES DE ROUTING', 'No monotónico'];
 const evaluationEnglishAnchors = ['Reference data', 'External benchmarks', 'Judge + humans', 'Online metrics', 'Answer + citations', 'Final answer'];
 const evaluationSpanishAnchors = ['Datos de referencia', 'Benchmarks externos', 'Juez + humanos', 'Métricas online', 'Respuesta + citas', 'Respuesta final'];
 const agentEnglishAnchors = ['An agent is a loop with permissions', 'AGENT ARCHITECTURE', 'Operational state', 'AUTHORITY BOUNDARY', 'Permissions', 'OBSERVABLE RESULT'];
@@ -106,6 +132,24 @@ async function checkVisualContract(page, route, viewport, selectors) {
       const overflow = await page.locator(selector).evaluate((node) => node.scrollWidth - node.clientWidth);
       if (overflow > 2) failures.push(`${route}: ${viewport.name} ${selector} internal overflow ${overflow}px`);
     }
+  }
+}
+
+async function checkReasoningDensity(page, route, viewport, anchors) {
+  const expectedCounts = [
+    ['.rfl-node', 5],
+    ['.rsc-path', 4],
+    ['.rsc-caveats > div', 3],
+    ['.rtc-route', 3],
+    ['.rtc-policy > div:not(.rtc-arrow)', 3],
+  ];
+  for (const [selector, expected] of expectedCounts) {
+    const count = await page.locator(selector).count();
+    if (count !== expected) failures.push(`${route}: ${viewport.name} expected ${expected} ${selector}, found ${count}`);
+  }
+  const body = await page.locator('body').innerText();
+  for (const text of anchors) {
+    if (!body.includes(text)) failures.push(`${route}: ${viewport.name} missing reasoning visual anchor ${JSON.stringify(text)}`);
   }
 }
 
@@ -155,6 +199,11 @@ await validateSpanishVisualSources(
   ['La ecuación de atención convertida en flujo', 'Máscara causal', 'Representación contextual'],
 );
 await validateSpanishVisualSources(
+  'docs/temas/razonamiento.md',
+  reasoningVisuals,
+  ['Razonar no es escribir una explicación larga', 'Una trayectoria puede equivocarse', 'El presupuesto de inferencia debe aumentar'],
+);
+await validateSpanishVisualSources(
   'docs/temas/evaluacion-modelos.md',
   evaluationVisuals,
   ['La misma respuesta puede fallar en capas distintas', 'Datos de referencia', 'No puntúes solo la respuesta'],
@@ -168,6 +217,25 @@ const browser = await chromium.launch({ headless: true });
 
 try {
   if (!englishOnlyPreview) {
+    for (const viewport of viewports) {
+      const route = '/temas/razonamiento/';
+      const page = await browser.newPage({ viewport: { width: viewport.width, height: viewport.height } });
+      const runtimeErrors = [];
+      page.on('pageerror', (error) => runtimeErrors.push(`pageerror: ${error.message}`));
+      const response = await page.goto(`${base}${route}`, { waitUntil: 'networkidle' });
+      if (!response?.ok()) failures.push(`${route}: HTTP ${response?.status() ?? 'no response'}`);
+      const body = await page.locator('body').innerText();
+      if (!body.includes('Razonamiento en LLMs')) failures.push(`${route}: missing Spanish title`);
+      const htmlLang = await page.locator('html').getAttribute('lang');
+      if (htmlLang !== 'es') failures.push(`${route}: html lang=${JSON.stringify(htmlLang)}`);
+      await checkVisualContract(page, route, viewport, reasoningVisuals.map((item) => item.selector));
+      await checkReasoningDensity(page, route, viewport, reasoningSpanishAnchors);
+      await checkOverflow(page, route, viewport);
+      for (const err of runtimeErrors) failures.push(`${route}: ${err}`);
+      await page.screenshot({ path: path.join(outDir, `spanish-concept-reasoning-${viewport.name}.png`), fullPage: true, animations: 'disabled' });
+      await page.close();
+    }
+
     for (const viewport of viewports) {
       const route = '/temas/evaluacion-modelos/';
       const page = await browser.newPage({ viewport: { width: viewport.width, height: viewport.height } });
@@ -245,10 +313,13 @@ try {
         await checkVisualContract(page, concept.route, viewport, concept.visuals);
         const localeForbidden = concept.visualGroup === 'transformer'
           ? transformerEnglishForbidden
-          : concept.visualGroup === 'evaluation'
-            ? evaluationEnglishForbidden
-            : agentsEnglishForbidden;
+          : concept.visualGroup === 'reasoning'
+            ? reasoningEnglishForbidden
+            : concept.visualGroup === 'evaluation'
+              ? evaluationEnglishForbidden
+              : agentsEnglishForbidden;
         for (const token of localeForbidden) if (body.includes(token)) failures.push(`${concept.route}: visual Spanish leakage ${JSON.stringify(token)}`);
+        if (concept.visualGroup === 'reasoning') await checkReasoningDensity(page, concept.route, viewport, reasoningEnglishAnchors);
         if (concept.visualGroup === 'evaluation') await checkEvaluationDensity(page, concept.route, viewport, evaluationEnglishAnchors);
         if (concept.visualGroup === 'agents') await checkAgentDensity(page, concept.route, viewport, agentEnglishAnchors);
         await page.screenshot({ path: path.join(outDir, `english-concept-${concept.visualGroup}-${viewport.name}.png`), fullPage: true, animations: 'disabled' });
@@ -267,4 +338,4 @@ if (failures.length) {
   for (const failure of [...new Set(failures)]) console.error(failure);
   process.exit(1);
 }
-console.log(`Concept QA passed: ${englishOnlyPreview ? 'English-only preview' : 'combined ES/EN preview'} with evaluation, Transformer and agent visual contracts, native localization, canonical URLs, and desktop/mobile overflow cleanliness.`);
+console.log(`Concept QA passed: ${englishOnlyPreview ? 'English-only preview' : 'combined ES/EN preview'} with reasoning, evaluation, Transformer and agent visual contracts, native localization, canonical URLs, and desktop/mobile overflow cleanliness.`);

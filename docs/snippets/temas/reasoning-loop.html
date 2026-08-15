@@ -1,0 +1,84 @@
+<div class="rfl-wrap" data-demo="topic-reasoning-loop">
+  <div class="rfl-head">
+    <div class="rfl-kicker">CÓMPUTO EN INFERENCIA</div>
+    <div class="rfl-title">Razonar no es escribir una explicación larga: es gastar cómputo para llegar a una decisión mejor</div>
+    <div class="rfl-sub">El sistema puede crear estados intermedios, explorar alternativas y verificar resultados antes de responder. La explicación visible es otra capa: puede resumir evidencia, pero no debe confundirse con una traza causal perfecta.</div>
+  </div>
+
+  <div class="rfl-flow" role="img" aria-label="Flujo de razonamiento: entrada, cómputo intermedio, exploración o verificación, selección, comprobación y respuesta final">
+    <div class="rfl-node rfl-node--input"><span>01 · ENTRADA</span><strong>Problema</strong><small>objetivo · contexto · restricciones</small></div>
+    <div class="rfl-arrow" aria-hidden="true">→</div>
+    <div class="rfl-node rfl-node--compute"><span>02 · CÓMPUTO</span><strong>Estado intermedio</strong><small>descomponer · calcular · planificar</small></div>
+    <div class="rfl-arrow" aria-hidden="true">→</div>
+    <div class="rfl-node rfl-node--search"><span>03 · EXPLORAR</span><strong>Alternativas</strong><small>muestras · búsqueda · tools</small></div>
+    <div class="rfl-arrow" aria-hidden="true">→</div>
+    <div class="rfl-node rfl-node--judge"><span>04 · EVALUAR</span><strong>Seleccionar</strong><small>regla · test · solver · juez</small></div>
+    <div class="rfl-arrow" aria-hidden="true">→</div>
+    <div class="rfl-node rfl-node--verify"><span>05 · VERIFICAR</span><strong>Comprobar</strong><small>resultado · evidencia · estado</small></div>
+  </div>
+
+  <div class="rfl-output">
+    <div class="rfl-output-main"><span>RESPUESTA FINAL</span><strong>La salida que recibe el usuario</strong><small>Puede incluir una justificación breve y verificable.</small></div>
+    <div class="rfl-separator" aria-hidden="true">≠</div>
+    <div class="rfl-output-trace"><span>TRAZA OPERACIONAL</span><strong>Lo que realmente ocurrió</strong><small>tools · argumentos · resultados · tiempos · cambios de estado</small></div>
+  </div>
+
+  <div class="rfl-rule"><span>Idea clave</span><strong>Corrección final, robustez del proceso y fidelidad de la explicación son preguntas distintas.</strong></div>
+  <div class="rfl-ref">Fuentes: <a href="https://arxiv.org/abs/2201.11903">Wei et al. (2022)</a> · <a href="https://arxiv.org/abs/2305.04388">Turpin et al. (2023)</a></div>
+</div>
+
+<style>
+.rfl-wrap,.rfl-wrap *{box-sizing:border-box}
+.rfl-wrap{
+  --rfl-a:var(--md-primary-fg-color,#26a69a);
+  --rfl-b:#4757d6;
+  --rfl-c:var(--md-accent-fg-color,#ffb343);
+  --rfl-r:#e06c75;
+  --rfl-bg:var(--md-default-bg-color,#fff);
+  --rfl-fg:var(--md-default-fg-color,#111827);
+  --rfl-muted:color-mix(in srgb,var(--rfl-fg) 58%,transparent);
+  --rfl-border:color-mix(in srgb,var(--rfl-fg) 14%,transparent);
+  container-type:inline-size;
+  margin:1.1rem 0 1.5rem;
+  padding:clamp(14px,2vw,22px);
+  border:1px solid var(--rfl-border);
+  border-radius:20px;
+  background:
+    radial-gradient(90% 130% at 0 0,color-mix(in srgb,var(--rfl-b) 8%,transparent),transparent 54%),
+    radial-gradient(80% 120% at 100% 0,color-mix(in srgb,var(--rfl-a) 9%,transparent),transparent 58%),
+    var(--rfl-bg);
+  color:var(--rfl-fg)
+}
+.rfl-head{display:grid;gap:4px;margin-bottom:14px}
+.rfl-kicker{font-size:10px;font-weight:900;letter-spacing:.12em;color:var(--rfl-muted)}
+.rfl-title{font-size:clamp(18px,2.1vw,24px);font-weight:900;line-height:1.12;letter-spacing:-.02em;max-width:31ch}
+.rfl-sub{font-size:13.5px;line-height:1.48;color:var(--rfl-muted);max-width:86ch}
+.rfl-flow{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr);gap:7px;align-items:stretch;min-width:0}
+.rfl-node{min-width:0;min-height:122px;padding:11px;border:1px solid var(--rfl-border);border-radius:14px;display:grid;grid-template-rows:auto auto 1fr;gap:5px;background:color-mix(in srgb,var(--rfl-bg) 95%,var(--rfl-fg) 5%)}
+.rfl-node span,.rfl-output span,.rfl-rule span{font-size:9.3px;font-weight:900;letter-spacing:.09em;color:var(--rfl-muted)}
+.rfl-node strong{font-size:13.2px;line-height:1.2}
+.rfl-node small{align-self:end;font-size:10.7px;line-height:1.38;color:var(--rfl-muted)}
+.rfl-node--input{border-color:color-mix(in srgb,var(--rfl-b) 36%,var(--rfl-border));background:color-mix(in srgb,var(--rfl-b) 5%,var(--rfl-bg))}
+.rfl-node--compute{border-color:color-mix(in srgb,var(--rfl-b) 52%,var(--rfl-border));background:color-mix(in srgb,var(--rfl-b) 7%,var(--rfl-bg))}
+.rfl-node--search{border-color:color-mix(in srgb,var(--rfl-c) 46%,var(--rfl-border));background:color-mix(in srgb,var(--rfl-c) 7%,var(--rfl-bg))}
+.rfl-node--judge{border-color:color-mix(in srgb,var(--rfl-a) 44%,var(--rfl-border));background:color-mix(in srgb,var(--rfl-a) 6%,var(--rfl-bg))}
+.rfl-node--verify{border-color:color-mix(in srgb,var(--rfl-r) 42%,var(--rfl-border));background:color-mix(in srgb,var(--rfl-r) 5%,var(--rfl-bg))}
+.rfl-arrow{display:grid;place-items:center;font-size:17px;font-weight:900;color:var(--rfl-muted)}
+.rfl-output{margin-top:10px;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:9px;align-items:stretch}
+.rfl-output-main,.rfl-output-trace{min-width:0;padding:11px 12px;border:1px solid var(--rfl-border);border-radius:13px;display:grid;gap:4px}
+.rfl-output-main{border-color:color-mix(in srgb,var(--rfl-a) 46%,var(--rfl-border));background:color-mix(in srgb,var(--rfl-a) 5%,var(--rfl-bg))}
+.rfl-output-trace{border-color:color-mix(in srgb,var(--rfl-b) 42%,var(--rfl-border));background:color-mix(in srgb,var(--rfl-b) 5%,var(--rfl-bg))}
+.rfl-output strong{font-size:12.7px}.rfl-output small{font-size:10.8px;line-height:1.38;color:var(--rfl-muted)}
+.rfl-separator{display:grid;place-items:center;font-size:22px;font-weight:900;color:var(--rfl-muted)}
+.rfl-rule{margin-top:10px;padding:10px 12px;border-left:3px solid var(--rfl-a);border-radius:0 10px 10px 0;background:color-mix(in srgb,var(--rfl-a) 5%,var(--rfl-bg));display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:center}
+.rfl-rule span{white-space:nowrap}.rfl-rule strong{font-size:11.8px;line-height:1.4}
+.rfl-ref{margin-top:9px;font-size:9.8px;line-height:1.35;color:var(--rfl-muted)}.rfl-ref a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+@container (max-width:760px){
+  .rfl-flow{grid-template-columns:1fr;gap:6px}.rfl-arrow{height:13px;transform:rotate(90deg)}.rfl-node{min-height:0;grid-template-columns:1fr;grid-template-rows:auto auto auto}.rfl-node small{align-self:auto}
+  .rfl-output{grid-template-columns:1fr;gap:6px}.rfl-separator{height:18px}.rfl-rule{grid-template-columns:1fr;gap:3px}
+}
+@media (max-width:760px){
+  .rfl-flow{grid-template-columns:1fr;gap:6px}.rfl-arrow{height:13px;transform:rotate(90deg)}.rfl-node{min-height:0}.rfl-output{grid-template-columns:1fr;gap:6px}.rfl-separator{height:18px}.rfl-rule{grid-template-columns:1fr;gap:3px}
+}
+@media (prefers-reduced-motion:reduce){.rfl-wrap *{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+</style>
