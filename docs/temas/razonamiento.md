@@ -4,7 +4,7 @@ seo_title: "Razonamiento en LLMs: chain of thought y test-time compute"
 description: "Qué significa razonar en un LLM, cómo funcionan chain of thought, búsqueda y verificadores, y qué se paga en latencia, coste y fiabilidad."
 keywords: "razonamiento LLM, chain of thought, test-time compute, inference-time compute, self-consistency, verificadores, modelos razonadores"
 date: 2026-04-14
-date_modified: 2026-08-05
+date_modified: 2026-08-15
 ---
 
 # Razonamiento en LLMs
@@ -21,13 +21,7 @@ Por eso conviene separar tres preguntas:
 
 ## La idea central
 
-```text
-entrada
-→ generar estado o pasos intermedios
-→ explorar o verificar alternativas
-→ seleccionar una respuesta
-→ comprobar el resultado
-```
+{{ include_html("snippets/temas/reasoning-loop.html") }}
 
 Los modelos razonadores modernos dedican más cómputo durante la inferencia. Esa estrategia se conoce como **test-time compute** o **inference-time compute**. En lugar de fijar todo el rendimiento durante el entrenamiento, el sistema puede gastar más pasos en consultas difíciles.
 
@@ -57,15 +51,7 @@ La conclusión práctica es clara: una explicación textual puede ser útil para
 
 Una respuesta única depende de una trayectoria de generación. **Self-consistency** genera varias cadenas y elige la respuesta que aparece con mayor consistencia entre ellas.[^selfconsistency]
 
-```text
-problema
-├─ trayectoria A → 42
-├─ trayectoria B → 41
-├─ trayectoria C → 42
-└─ trayectoria D → 42
-                 ↓
-             seleccionar 42
-```
+{{ include_html("snippets/temas/reasoning-self-consistency.html") }}
 
 Esta estrategia funciona cuando existen caminos independientes que convergen en la solución. Su coste crece casi linealmente con el número de muestras y no ayuda si todas comparten el mismo sesgo.
 
@@ -102,14 +88,7 @@ Para código, ejecutar tests suele ser más fiable que pedir a otro modelo que o
 
 El sistema puede asignar más cómputo de varias formas:
 
-```text
-más tokens de deliberación
-+ más candidatos
-+ búsqueda más profunda
-+ verificadores
-+ llamadas a tools
-+ iteraciones de revisión
-```
+{{ include_html("snippets/temas/reasoning-test-time-compute.html") }}
 
 Snell et al. estudiaron cómo escalar cómputo en inferencia y mostraron que la estrategia óptima depende tanto de la dificultad del problema como de la capacidad del modelo para aprovechar ese presupuesto.[^testtime]
 
