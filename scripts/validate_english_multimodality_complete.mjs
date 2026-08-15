@@ -105,10 +105,32 @@ try {
       if (new Set(demoValues).size !== demoValues.length) failures.push(`${entry.route}: duplicate data-demo visual identifiers`);
       if (entry.prefix) {
         for (const demo of demoValues) {
-          if (!demo?.startsWith(entry.prefix)) failures.push(`${entry.route}: unexpected visual identifier ${JSON.stringify(demo)}`);
+          const canonicalChapter3Tradeoffs = entry.route.endsWith('/03-arquitecturas/') && demo === '03-tradeoffs';
+          if (!demo?.startsWith(entry.prefix) && !canonicalChapter3Tradeoffs) {
+            failures.push(`${entry.route}: unexpected visual identifier ${JSON.stringify(demo)}`);
+          }
         }
       }
       if (viewport.name === 'desktop') totalVisuals += demoValues.length;
+
+      if (entry.route.endsWith('/03-arquitecturas/')) {
+        const tradeoffs = page.locator('[data-demo="03-tradeoffs"]');
+        if (await tradeoffs.count() !== 1) {
+          failures.push(`${entry.route}: missing canonical four-family trade-off visual`);
+        } else {
+          if (await tradeoffs.locator('.trd-hdr').count() !== 5) failures.push(`${entry.route}: trade-off visual lost architecture headers`);
+          if (await tradeoffs.locator('.trd-rl').count() !== 6) failures.push(`${entry.route}: trade-off visual lost six metric rows`);
+          if (await tradeoffs.locator('.trd-cell').count() !== 24) failures.push(`${entry.route}: trade-off visual lost 24 architecture/metric cells`);
+          const tradeoffText = await tradeoffs.innerText();
+          for (const token of ['Training cost', 'Visual reasoning quality', 'Inference latency', 'Accessibility for teams', 'Multimodal generation', 'First-response latency', 'Omni / streaming']) {
+            if (!tradeoffText.includes(token)) failures.push(`${entry.route}: trade-off visual missing ${JSON.stringify(token)}`);
+          }
+          if (viewport.name === 'mobile') {
+            const [clientWidth, scrollWidth] = await tradeoffs.locator('.trd-grid').evaluate((node) => [node.clientWidth, node.scrollWidth]);
+            if (scrollWidth <= clientWidth) failures.push(`${entry.route}: mobile trade-off matrix should retain all four families via contained horizontal scrolling`);
+          }
+        }
+      }
 
       if (entry.demos) {
         const details = page.locator('[data-demo] details');
@@ -166,4 +188,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Complete English Multimodality QA passed: introduction + Chapters 1–5, 27 unique native visuals, six native-English MP4/poster pairs, interactions, no Spanish media inheritance, desktop/mobile clean.');
+console.log('Complete English Multimodality QA passed: introduction + Chapters 1–5, 27 unique native visuals, canonical Chapter 3 trade-off matrix, six native-English MP4/poster pairs, interactions, no Spanish media inheritance, desktop/mobile clean.');
