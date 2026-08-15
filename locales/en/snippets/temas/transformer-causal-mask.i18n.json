@@ -1,0 +1,33 @@
+{
+  "source": "snippets/temas/transformer-causal-mask.html",
+  "source_blob_sha": "90d0ed1a1695f447b3eace8c6682d62ded0ddbf0",
+  "replacements": {
+    ">DECODER AUTOREGRESIVO</div>": ">AUTOREGRESSIVE DECODER</div>",
+    ">La máscara causal separa paralelismo de acceso al futuro</div>": ">The causal mask separates parallel computation from access to the future</div>",
+    ">Durante el entrenamiento se calculan muchas posiciones a la vez, pero cada query solo puede atender a su propio prefijo.</div>": ">During training, many positions are computed at once, but each query can attend only to its own prefix.</div>",
+    "aria-label=\"Máscara causal triangular\"": "aria-label=\"Triangular causal mask\"",
+    ">bloqueado: token futuro</span>": ">blocked: future token</span>",
+    ">ENTRENAMIENTO</div>": ">TRAINING</div>",
+    ">Paralelo en filas</strong>": ">Parallel across rows</strong>",
+    ">Las posiciones conocidas del lote se calculan juntas. La máscara invalida los logits que apuntan al futuro antes de aplicar softmax.</p>": ">Known positions in the batch are computed together. The mask invalidates logits that point to the future before softmax is applied.</p>",
+    ">GENERACIÓN</div>": ">GENERATION</div>",
+    ">Secuencial en tokens nuevos</strong>": ">Sequential for new tokens</strong>",
+    ">El token siguiente todavía no existe. La caché KV reutiliza keys y values del prefijo para no recomputarlos en cada paso.</p>": ">The next token does not exist yet. The KV cache reuses prefix keys and values instead of recomputing them at every step.</p>",
+    "<strong>Contrato:</strong> posición <code>t</code> puede usar <code>1…t</code>; nunca <code>t+1…n</code>.": "<strong>Contract:</strong> position <code>t</code> may use <code>1…t</code>; never <code>t+1…n</code>."
+  },
+  "forbidden_output_tokens": [
+    "DECODER AUTOREGRESIVO",
+    "máscara causal",
+    "Durante el entrenamiento",
+    "Máscara causal triangular",
+    "bloqueado",
+    "ENTRENAMIENTO",
+    "Paralelo en filas",
+    "Las posiciones conocidas",
+    "GENERACIÓN",
+    "Secuencial en tokens",
+    "El token siguiente",
+    "Contrato:",
+    "posición"
+  ]
+}
