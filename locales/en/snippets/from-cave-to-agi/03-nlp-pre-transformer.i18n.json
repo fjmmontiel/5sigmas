@@ -31,7 +31,7 @@
     "Reconocimiento de entidades (NER)": "Named-entity recognition (NER)",
     "Ayer": "Yesterday",
     "publicó": "published",
-    "en": "in",
+    ">en<": ">in<",
     "PERSONA": "PERSON",
     "LUGAR / ORG": "PLACE / ORG",
     "Otro": "Other",
