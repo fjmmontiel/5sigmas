@@ -1,0 +1,122 @@
+<div class="evo-wrap" data-demo="topic-evaluation-object">
+  <div class="evo-head">
+    <div class="evo-kicker">OBJETO DE EVALUACIÓN</div>
+    <div class="evo-title">La misma respuesta puede fallar en capas distintas</div>
+    <div class="evo-sub">Antes de elegir una métrica, fija el límite del sistema que quieres medir. Cada capa añade comportamiento y nuevos modos de fallo.</div>
+  </div>
+
+  <div class="evo-grid" role="img" aria-label="Cuatro niveles de evaluación: modelo aislado, modelo con prompt, sistema con RAG y tools, y producto usado por personas">
+    <div class="evo-level evo-level--1">
+      <div class="evo-num">1</div>
+      <div class="evo-main">
+        <strong>Modelo aislado</strong>
+        <span>Capacidad base bajo una entrada controlada.</span>
+      </div>
+      <div class="evo-measure"><span>MIDE</span><b>calidad de salida</b></div>
+      <div class="evo-risk"><span>PUEDE FALLAR</span><b>conocimiento · razonamiento · formato</b></div>
+    </div>
+
+    <div class="evo-plus" aria-hidden="true">+</div>
+
+    <div class="evo-level evo-level--2">
+      <div class="evo-num">2</div>
+      <div class="evo-main">
+        <strong>Modelo + prompt</strong>
+        <span>El comportamiento ya depende de instrucciones, contexto y formato.</span>
+      </div>
+      <div class="evo-measure"><span>AÑADE</span><b>seguimiento de instrucciones</b></div>
+      <div class="evo-risk"><span>NUEVOS FALLOS</span><b>ambigüedad · contexto · sensibilidad al prompt</b></div>
+    </div>
+
+    <div class="evo-plus" aria-hidden="true">+</div>
+
+    <div class="evo-level evo-level--3">
+      <div class="evo-num">3</div>
+      <div class="evo-main">
+        <strong>RAG + tools</strong>
+        <span>Recuperación, selección de acciones, argumentos y estado entran en la evaluación.</span>
+      </div>
+      <div class="evo-measure"><span>AÑADE</span><b>trayectoria y estado final</b></div>
+      <div class="evo-risk"><span>NUEVOS FALLOS</span><b>retrieval · tool · argumentos · duplicados</b></div>
+    </div>
+
+    <div class="evo-plus" aria-hidden="true">+</div>
+
+    <div class="evo-level evo-level--4">
+      <div class="evo-num">4</div>
+      <div class="evo-main">
+        <strong>Producto usado por personas</strong>
+        <span>Latencia, interacción, coste, seguridad y éxito real de tarea pasan a importar.</span>
+      </div>
+      <div class="evo-measure"><span>AÑADE</span><b>resultado de producto</b></div>
+      <div class="evo-risk"><span>NUEVOS FALLOS</span><b>UX · tiempo · coste · incidentes</b></div>
+    </div>
+  </div>
+
+  <div class="evo-footer">
+    <span class="evo-rule">Regla práctica</span>
+    <strong>No uses una métrica del nivel 1 para afirmar que el nivel 4 funciona.</strong>
+  </div>
+</div>
+
+<style>
+.evo-wrap,.evo-wrap *{box-sizing:border-box}
+.evo-wrap{
+  --evo-a:var(--md-primary-fg-color,#26a69a);
+  --evo-b:#4757d6;
+  --evo-c:var(--md-accent-fg-color,#ffb343);
+  --evo-bg:var(--md-default-bg-color,#fff);
+  --evo-fg:var(--md-default-fg-color,#111827);
+  --evo-muted:color-mix(in srgb,var(--evo-fg) 58%,transparent);
+  --evo-border:color-mix(in srgb,var(--evo-fg) 14%,transparent);
+  container-type:inline-size;
+  margin:1.1rem 0 1.5rem;
+  padding:clamp(14px,2vw,22px);
+  border:1px solid var(--evo-border);
+  border-radius:20px;
+  background:
+    radial-gradient(100% 120% at 0 0,color-mix(in srgb,var(--evo-b) 8%,transparent),transparent 52%),
+    radial-gradient(90% 110% at 100% 0,color-mix(in srgb,var(--evo-a) 8%,transparent),transparent 56%),
+    var(--evo-bg);
+  color:var(--evo-fg)
+}
+.evo-head{display:grid;gap:4px;margin-bottom:14px}
+.evo-kicker{font-size:11px;font-weight:900;letter-spacing:.12em;color:var(--evo-muted)}
+.evo-title{font-size:clamp(18px,2.1vw,24px);font-weight:900;line-height:1.1;letter-spacing:-.02em}
+.evo-sub{font-size:13.5px;line-height:1.45;color:var(--evo-muted);max-width:78ch}
+.evo-grid{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr);gap:8px;align-items:stretch;min-width:0}
+.evo-level{min-width:0;border:1px solid var(--evo-border);border-radius:15px;padding:11px;display:grid;grid-template-rows:auto auto auto;gap:9px;background:color-mix(in srgb,var(--evo-bg) 94%,var(--evo-fg) 6%);position:relative}
+.evo-level--1{border-color:color-mix(in srgb,var(--evo-b) 28%,var(--evo-border))}
+.evo-level--2{border-color:color-mix(in srgb,var(--evo-b) 42%,var(--evo-border));background:color-mix(in srgb,var(--evo-b) 4%,var(--evo-bg))}
+.evo-level--3{border-color:color-mix(in srgb,var(--evo-a) 45%,var(--evo-border));background:color-mix(in srgb,var(--evo-a) 5%,var(--evo-bg))}
+.evo-level--4{border-color:color-mix(in srgb,var(--evo-c) 48%,var(--evo-border));background:color-mix(in srgb,var(--evo-c) 6%,var(--evo-bg))}
+.evo-num{width:25px;height:25px;border-radius:999px;display:grid;place-items:center;font-size:10px;font-weight:900;background:color-mix(in srgb,var(--evo-fg) 9%,transparent)}
+.evo-main{display:grid;gap:4px;align-content:start}
+.evo-main strong{font-size:13.2px;line-height:1.2}
+.evo-main span{font-size:11.2px;line-height:1.38;color:var(--evo-muted)}
+.evo-measure,.evo-risk{border-top:1px solid var(--evo-border);padding-top:7px;display:grid;gap:2px;align-content:start}
+.evo-measure span,.evo-risk span{font-size:9.3px;font-weight:900;letter-spacing:.08em;color:var(--evo-muted)}
+.evo-measure b,.evo-risk b{font-size:10.6px;line-height:1.35;font-weight:750;overflow-wrap:anywhere}
+.evo-risk b{color:color-mix(in srgb,var(--evo-fg) 78%,var(--evo-c) 22%)}
+.evo-plus{display:grid;place-items:center;font-size:18px;font-weight:900;color:var(--evo-muted)}
+.evo-footer{margin-top:12px;border:1px solid color-mix(in srgb,var(--evo-a) 34%,var(--evo-border));border-radius:12px;padding:10px 12px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:center;background:color-mix(in srgb,var(--evo-a) 5%,var(--evo-bg))}
+.evo-rule{font-size:9.8px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--evo-muted);white-space:nowrap}
+.evo-footer strong{font-size:12px;line-height:1.35}
+@container (max-width:900px){
+  .evo-grid{grid-template-columns:1fr;gap:7px}
+  .evo-plus{height:14px;line-height:1;transform:rotate(90deg)}
+  .evo-level{grid-template-columns:28px minmax(0,1fr);grid-template-rows:auto auto;gap:7px 9px}
+  .evo-num{grid-row:1/span 2}
+  .evo-main{grid-column:2}
+  .evo-measure,.evo-risk{grid-column:2}
+  .evo-footer{grid-template-columns:1fr;gap:3px}
+}
+@media (max-width:900px){
+  .evo-grid{grid-template-columns:1fr;gap:7px}
+  .evo-plus{height:14px;line-height:1;transform:rotate(90deg)}
+  .evo-level{grid-template-columns:28px minmax(0,1fr);grid-template-rows:auto auto;gap:7px 9px}
+  .evo-num{grid-row:1/span 2}
+  .evo-main,.evo-measure,.evo-risk{grid-column:2}
+  .evo-footer{grid-template-columns:1fr;gap:3px}
+}
+</style>

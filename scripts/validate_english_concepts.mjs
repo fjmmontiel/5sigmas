@@ -12,11 +12,16 @@ const transformerVisuals = [
   { selector: '.tqv-wrap', source: 'docs/snippets/temas/transformer-qkv.html' },
   { selector: '.tcm-wrap', source: 'docs/snippets/temas/transformer-causal-mask.html' },
 ];
+const evaluationVisuals = [
+  { selector: '.evo-wrap', source: 'docs/snippets/temas/evaluation-object.html' },
+  { selector: '.evs-wrap', source: 'docs/snippets/temas/evaluation-stack.html' },
+  { selector: '.evt-wrap', source: 'docs/snippets/temas/evaluation-system-trace.html' },
+];
 const concepts = [
   { route: '/en/temas/llms/', title: 'What is an LLM and how does it work?', terms: ['tokenization', 'pretraining', 'Parameters'] },
-  { route: '/en/temas/transformer/', title: 'How the Transformer works', terms: ['Query', 'Key', 'Value', 'Multi-head attention'], visuals: transformerVisuals.map((item) => item.selector) },
+  { route: '/en/temas/transformer/', title: 'How the Transformer works', terms: ['Query', 'Key', 'Value', 'Multi-head attention'], visuals: transformerVisuals.map((item) => item.selector), visualGroup: 'transformer' },
   { route: '/en/temas/razonamiento/', title: 'Reasoning in LLMs', terms: ['Chain of thought', 'Test-time compute', 'verifier'] },
-  { route: '/en/temas/evaluacion-modelos/', title: 'Evaluating AI models', terms: ['golden set', 'benchmark', 'LLM as a judge'] },
+  { route: '/en/temas/evaluacion-modelos/', title: 'Evaluating AI models', terms: ['golden set', 'benchmark', 'LLM as a judge'], visuals: evaluationVisuals.map((item) => item.selector), visualGroup: 'evaluation' },
   { route: '/en/temas/agentes-ia/', title: 'What is an AI agent?', terms: ['tool calling', 'Operational state', 'least privilege'] },
   { route: '/en/temas/prompt-injection/', title: 'What is prompt injection?', terms: ['indirect prompt injection', 'least privilege', 'Authorize outside the prompt'] },
 ];
@@ -30,27 +35,38 @@ const transformerEnglishForbidden = [
   'Mezclar valores',
   'Representación contextual',
 ];
+const evaluationEnglishForbidden = [
+  'OBJETO DE EVALUACIÓN',
+  'La misma respuesta',
+  'PILA DE EVALUACIÓN',
+  'Datos de referencia',
+  'DIAGNÓSTICO DE SISTEMAS',
+  'No puntúes solo',
+  'documento ausente',
+  'acción equivocada',
+  'PRINCIPIO',
+];
 const viewports = [
   { name: 'desktop', width: 1440, height: 1000 },
   { name: 'mobile', width: 390, height: 844 },
 ];
 const failures = [];
 
-async function validateSpanishTransformerSources() {
-  const topicPath = path.resolve('docs/temas/transformer.md');
+async function validateSpanishVisualSources(topicRel, visuals, expectedLabels) {
+  const topicPath = path.resolve(topicRel);
   const topic = await fs.readFile(topicPath, 'utf8');
-  for (const visual of transformerVisuals) {
+  for (const visual of visuals) {
     const rel = visual.source.replace(/^docs\//, '');
     const include = `{{ include_html(\"${rel}\") }}`;
-    if (!topic.includes(include)) failures.push(`/temas/transformer/: missing canonical include ${include}`);
+    if (!topic.includes(include)) failures.push(`${topicRel}: missing canonical include ${include}`);
 
     const source = await fs.readFile(path.resolve(visual.source), 'utf8');
     if (!source.includes(visual.selector.slice(1))) failures.push(`${visual.source}: missing visual root ${visual.selector}`);
   }
 
-  for (const expected of ['La ecuación de atención convertida en flujo', 'Máscara causal', 'Representación contextual']) {
-    const found = await Promise.all(transformerVisuals.map(async (visual) => (await fs.readFile(path.resolve(visual.source), 'utf8')).includes(expected)));
-    if (!found.some(Boolean)) failures.push(`/temas/transformer/: missing Spanish visual teaching label ${JSON.stringify(expected)}`);
+  for (const expected of expectedLabels) {
+    const found = await Promise.all(visuals.map(async (visual) => (await fs.readFile(path.resolve(visual.source), 'utf8')).includes(expected)));
+    if (!found.some(Boolean)) failures.push(`${topicRel}: missing Spanish visual teaching label ${JSON.stringify(expected)}`);
   }
 }
 
@@ -67,12 +83,37 @@ async function checkVisualContract(page, route, viewport, selectors) {
   }
 }
 
+async function checkEvaluationDensity(page, route, viewport) {
+  const expectedCounts = [
+    ['.evo-level', 4],
+    ['.evs-stage', 6],
+    ['.evt-lane', 2],
+    ['.evt-step', 12],
+  ];
+  for (const [selector, expected] of expectedCounts) {
+    const count = await page.locator(selector).count();
+    if (count !== expected) failures.push(`${route}: ${viewport.name} expected ${expected} ${selector}, found ${count}`);
+  }
+  for (const text of ['Reference data', 'External benchmarks', 'Judge + humans', 'Online metrics', 'Answer + citations', 'Final answer']) {
+    if (!(await page.locator('body').innerText()).includes(text)) failures.push(`${route}: ${viewport.name} missing visual anchor ${JSON.stringify(text)}`);
+  }
+}
+
 async function checkOverflow(page, route, viewport) {
   const [clientWidth, scrollWidth] = await page.evaluate(() => [document.documentElement.clientWidth, document.documentElement.scrollWidth]);
   if (scrollWidth > clientWidth + 2) failures.push(`${route}: ${viewport.name} horizontal overflow ${scrollWidth - clientWidth}px`);
 }
 
-await validateSpanishTransformerSources();
+await validateSpanishVisualSources(
+  'docs/temas/transformer.md',
+  transformerVisuals,
+  ['La ecuación de atención convertida en flujo', 'Máscara causal', 'Representación contextual'],
+);
+await validateSpanishVisualSources(
+  'docs/temas/evaluacion-modelos.md',
+  evaluationVisuals,
+  ['La misma respuesta puede fallar en capas distintas', 'Datos de referencia', 'No puntúes solo la respuesta'],
+);
 const browser = await chromium.launch({ headless: true });
 
 try {
@@ -112,8 +153,10 @@ try {
 
       if (concept.visuals) {
         await checkVisualContract(page, concept.route, viewport, concept.visuals);
-        for (const token of transformerEnglishForbidden) if (body.includes(token)) failures.push(`${concept.route}: visual Spanish leakage ${JSON.stringify(token)}`);
-        await page.screenshot({ path: path.join(outDir, `english-concept-transformer-${viewport.name}.png`), fullPage: true, animations: 'disabled' });
+        const localeForbidden = concept.visualGroup === 'transformer' ? transformerEnglishForbidden : evaluationEnglishForbidden;
+        for (const token of localeForbidden) if (body.includes(token)) failures.push(`${concept.route}: visual Spanish leakage ${JSON.stringify(token)}`);
+        if (concept.visualGroup === 'evaluation') await checkEvaluationDensity(page, concept.route, viewport);
+        await page.screenshot({ path: path.join(outDir, `english-concept-${concept.visualGroup}-${viewport.name}.png`), fullPage: true, animations: 'disabled' });
       }
 
       await checkOverflow(page, concept.route, viewport);
@@ -129,4 +172,4 @@ if (failures.length) {
   for (const failure of [...new Set(failures)]) console.error(failure);
   process.exit(1);
 }
-console.log('Concept QA passed: canonical English hub + six English topic routes, Transformer ES source contract + EN rendered visual contract, native localization, canonical URLs, and desktop/mobile overflow cleanliness.');
+console.log('Concept QA passed: canonical English hub + six English topic routes, Transformer and evaluation ES source contracts + EN rendered visual contracts, native localization, canonical URLs, and desktop/mobile overflow cleanliness.');

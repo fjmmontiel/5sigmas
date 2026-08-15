@@ -1,0 +1,107 @@
+<div class="evt-wrap" data-demo="topic-evaluation-system-trace">
+  <div class="evt-head">
+    <div class="evt-kicker">DIAGNÓSTICO DE SISTEMAS</div>
+    <div class="evt-title">No puntúes solo la respuesta: localiza dónde nació el fallo</div>
+    <div class="evt-sub">RAG y agentes añaden pasos observables. Separarlos permite convertir una salida incorrecta en una causa concreta y una corrección verificable.</div>
+  </div>
+
+  <div class="evt-lanes">
+    <section class="evt-lane evt-lane--rag" aria-label="Trayectoria de evaluación para un sistema RAG">
+      <div class="evt-lane-head"><span>RAG</span><strong>¿La evidencia correcta llegó y se usó bien?</strong></div>
+      <div class="evt-flow">
+        <div class="evt-step"><b>Consulta</b><small>intención</small></div>
+        <div class="evt-arrow" aria-hidden="true">→</div>
+        <div class="evt-step"><b>Retriever</b><small>recall</small><em>documento ausente</em></div>
+        <div class="evt-arrow" aria-hidden="true">→</div>
+        <div class="evt-step"><b>Ranking</b><small>orden</small><em>evidencia relegada</em></div>
+        <div class="evt-arrow" aria-hidden="true">→</div>
+        <div class="evt-step"><b>Contexto</b><small>cobertura</small></div>
+        <div class="evt-arrow" aria-hidden="true">→</div>
+        <div class="evt-step"><b>Modelo</b><small>uso de evidencia</small><em>inferencia no apoyada</em></div>
+        <div class="evt-arrow" aria-hidden="true">→</div>
+        <div class="evt-step evt-step--result"><b>Respuesta + citas</b><small>fidelidad</small><em>cita no respalda</em></div>
+      </div>
+    </section>
+
+    <section class="evt-lane evt-lane--agent" aria-label="Trayectoria de evaluación para un agente con tools">
+      <div class="evt-lane-head"><span>AGENTE</span><strong>¿La acción correcta produjo el estado correcto?</strong></div>
+      <div class="evt-flow">
+        <div class="evt-step"><b>Intención</b><small>objetivo</small></div>
+        <div class="evt-arrow" aria-hidden="true">→</div>
+        <div class="evt-step"><b>Tool</b><small>selección</small><em>acción equivocada</em></div>
+        <div class="evt-arrow" aria-hidden="true">→</div>
+        <div class="evt-step"><b>Argumentos</b><small>contrato</small><em>dato inválido</em></div>
+        <div class="evt-arrow" aria-hidden="true">→</div>
+        <div class="evt-step"><b>Resultado</b><small>observación</small><em>error / retry</em></div>
+        <div class="evt-arrow" aria-hidden="true">→</div>
+        <div class="evt-step"><b>Estado</b><small>efecto real</small><em>duplicado / inconsistente</em></div>
+        <div class="evt-arrow" aria-hidden="true">→</div>
+        <div class="evt-step evt-step--result"><b>Respuesta final</b><small>mensaje al usuario</small></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="evt-rule">
+    <span>PRINCIPIO</span>
+    <strong>El mismo “fallo de respuesta” exige fixes distintos si la causa fue retrieval, ranking, tool selection, argumentos, estado o generación.</strong>
+  </div>
+</div>
+
+<style>
+.evt-wrap,.evt-wrap *{box-sizing:border-box}
+.evt-wrap{
+  --evt-a:var(--md-primary-fg-color,#26a69a);
+  --evt-b:#4757d6;
+  --evt-c:var(--md-accent-fg-color,#ffb343);
+  --evt-bg:var(--md-default-bg-color,#fff);
+  --evt-fg:var(--md-default-fg-color,#111827);
+  --evt-muted:color-mix(in srgb,var(--evt-fg) 58%,transparent);
+  --evt-border:color-mix(in srgb,var(--evt-fg) 14%,transparent);
+  container-type:inline-size;
+  margin:1.1rem 0 1.5rem;
+  padding:clamp(14px,2vw,22px);
+  border:1px solid var(--evt-border);
+  border-radius:20px;
+  background:
+    radial-gradient(90% 100% at 0 0,color-mix(in srgb,var(--evt-b) 7%,transparent),transparent 55%),
+    radial-gradient(90% 100% at 100% 0,color-mix(in srgb,var(--evt-a) 7%,transparent),transparent 55%),
+    var(--evt-bg);
+  color:var(--evt-fg)
+}
+.evt-head{display:grid;gap:4px;margin-bottom:14px}
+.evt-kicker{font-size:11px;font-weight:900;letter-spacing:.12em;color:var(--evt-muted)}
+.evt-title{font-size:clamp(18px,2.1vw,24px);font-weight:900;line-height:1.1;letter-spacing:-.02em}
+.evt-sub{font-size:13.5px;line-height:1.45;color:var(--evt-muted);max-width:82ch}
+.evt-lanes{display:grid;gap:10px}
+.evt-lane{border:1px solid var(--evt-border);border-radius:15px;padding:10px;background:color-mix(in srgb,var(--evt-bg) 95%,var(--evt-fg) 5%);min-width:0}
+.evt-lane--rag{border-color:color-mix(in srgb,var(--evt-b) 38%,var(--evt-border))}
+.evt-lane--agent{border-color:color-mix(in srgb,var(--evt-a) 45%,var(--evt-border))}
+.evt-lane-head{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px;align-items:center;margin-bottom:8px}
+.evt-lane-head span{font-size:9.6px;font-weight:900;letter-spacing:.1em;color:var(--evt-muted);border:1px solid var(--evt-border);border-radius:999px;padding:4px 7px}
+.evt-lane-head strong{font-size:12px;line-height:1.3}
+.evt-flow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr) auto) minmax(0,1.15fr);gap:6px;align-items:stretch;min-width:0}
+.evt-step{min-width:0;border:1px solid var(--evt-border);border-radius:11px;padding:8px;display:grid;grid-template-rows:auto auto 1fr;gap:2px;background:var(--evt-bg)}
+.evt-step b{font-size:10.8px;line-height:1.2;overflow-wrap:anywhere}
+.evt-step small{font-size:9.1px;line-height:1.25;color:var(--evt-muted)}
+.evt-step em{margin-top:6px;border-top:1px solid var(--evt-border);padding-top:5px;font-size:8.9px;line-height:1.25;font-style:normal;font-weight:750;color:color-mix(in srgb,var(--evt-fg) 76%,var(--evt-c) 24%)}
+.evt-step--result{background:color-mix(in srgb,var(--evt-a) 5%,var(--evt-bg));border-color:color-mix(in srgb,var(--evt-a) 36%,var(--evt-border))}
+.evt-lane--rag .evt-step--result{background:color-mix(in srgb,var(--evt-b) 5%,var(--evt-bg));border-color:color-mix(in srgb,var(--evt-b) 34%,var(--evt-border))}
+.evt-arrow{display:grid;place-items:center;font-size:17px;font-weight:900;color:var(--evt-muted)}
+.evt-rule{margin-top:11px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:center;border:1px solid color-mix(in srgb,var(--evt-c) 42%,var(--evt-border));border-radius:12px;padding:10px 12px;background:color-mix(in srgb,var(--evt-c) 5%,var(--evt-bg))}
+.evt-rule span{font-size:9.5px;font-weight:900;letter-spacing:.1em;color:var(--evt-muted)}
+.evt-rule strong{font-size:11.4px;line-height:1.35}
+@container (max-width:980px){
+  .evt-flow{grid-template-columns:1fr;gap:5px}
+  .evt-arrow{height:12px;line-height:1;transform:rotate(90deg)}
+  .evt-step{grid-template-columns:minmax(80px,.45fr) minmax(0,.55fr);grid-template-rows:auto auto;align-items:start}
+  .evt-step b{grid-column:1}.evt-step small{grid-column:1}.evt-step em{grid-column:2;grid-row:1/span 2;margin:0;padding:0 0 0 7px;border-top:0;border-left:1px solid var(--evt-border)}
+  .evt-rule{grid-template-columns:1fr;gap:3px}
+}
+@media (max-width:900px){
+  .evt-flow{grid-template-columns:1fr;gap:5px}
+  .evt-arrow{height:12px;line-height:1;transform:rotate(90deg)}
+  .evt-step{grid-template-columns:minmax(80px,.45fr) minmax(0,.55fr);grid-template-rows:auto auto;align-items:start}
+  .evt-step b{grid-column:1}.evt-step small{grid-column:1}.evt-step em{grid-column:2;grid-row:1/span 2;margin:0;padding:0 0 0 7px;border-top:0;border-left:1px solid var(--evt-border)}
+  .evt-rule{grid-template-columns:1fr;gap:3px}
+}
+</style>
