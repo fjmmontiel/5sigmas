@@ -42,7 +42,7 @@ for (const viewport of [{name:'desktop',width:1440,height:1000},{name:'mobile',w
   if (await referenceRows.count() < 15) failures.push(`expected at least 15 canonical reference rows, found ${await referenceRows.count()}`);
 
   for (const forbidden of ['Capítulo ', 'Prerrequisitos', 'Siguiente capítulo', 'Mecanizar —', 'Fuentes base', 'Preguntas frecuentes']) if (body.includes(forbidden)) failures.push(`Spanish leakage ${JSON.stringify(forbidden)}`);
-  for (const selector of ['.calc-wrap','.gate-wrap','.tur-wrap','.stored-wrap','.mech-time']) if (await page.locator(selector).count() !== 1) failures.push(`missing ${selector}`);
+  for (const selector of ['.calc-wrap','.gate-wrap','.tur-wrap','.vn-wrap','.mech-time']) if (await page.locator(selector).count() !== 1) failures.push(`missing ${selector}`);
 
   const calculator = page.locator('.calc-wrap');
   if (await calculator.count() === 1) {
@@ -97,6 +97,31 @@ for (const viewport of [{name:'desktop',width:1440,height:1000},{name:'mobile',w
     }
   }
 
+  const vonNeumann = page.locator('.vn-wrap');
+  if (await vonNeumann.count() === 1) {
+    const initialText = await vonNeumann.innerText();
+    for (const phrase of ['The von Neumann cycle: how a processor executes an instruction','Phase 1 — FETCH','Fetch the instruction from memory','Active: Memory + Control unit + Registers (PC, IR)','Example — ADD R1, R2 instruction:']) {
+      if (!initialText.includes(phrase)) failures.push(`canonical von Neumann visual missing ${JSON.stringify(phrase)}`);
+    }
+    const phases = vonNeumann.locator('.vn-phase-item');
+    if (await phases.count() !== 4) failures.push(`expected four canonical von Neumann phases, found ${await phases.count()}`);
+    const expectedPhases = [
+      ['fetch','Phase 1 — FETCH','Fetch the instruction from memory'],
+      ['decode','Phase 2 — DECODE','Decode the instruction'],
+      ['execute','Phase 3 — EXECUTE','Execute the operation in the ALU'],
+      ['writeback','Phase 4 — WRITE-BACK','Store the result']
+    ];
+    for (const [phase, label, title] of expectedPhases) {
+      await vonNeumann.locator(`[data-phase="${phase}"]`).click();
+      if ((await vonNeumann.locator('#vn-detail-phase').innerText()).trim() !== label) failures.push(`von Neumann ${phase} phase label drift`);
+      if ((await vonNeumann.locator('#vn-detail-title').innerText()).trim() !== title) failures.push(`von Neumann ${phase} phase title drift`);
+    }
+    const visibleText = await vonNeumann.innerText();
+    for (const forbidden of ['El ciclo de Von Neumann','Fase ','Leer la instrucción','unidad de control','Memoria[','Activo:','Ejemplo — instrucción','Fase anterior','Fase siguiente','Interpretar la instrucción','Ejecutar la operación','Guardar el resultado','opcionalmente']) {
+      if (visibleText.includes(forbidden)) failures.push(`von Neumann visual Spanish leakage ${JSON.stringify(forbidden)}`);
+    }
+  }
+
   const videos = page.locator('video[data-s5-inline-video-player]');
   if (await videos.count() !== 1) {
     failures.push(`expected one native-English chapter video, found ${await videos.count()}`);
@@ -114,4 +139,4 @@ for (const viewport of [{name:'desktop',width:1440,height:1000},{name:'mobile',w
 }
 await browser.close();
 if (failures.length) { for (const failure of failures) console.error(failure); process.exit(1); }
-console.log('English history chapter 2 QA passed with canonical narrative, calculator, logic-gates and Turing visuals, plus native-English media.');
+console.log('English history chapter 2 QA passed with canonical narrative, calculator, logic-gates, Turing and von Neumann visuals, plus native-English media.');
