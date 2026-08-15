@@ -54,10 +54,7 @@ La interpretación “cada palabra mira a todas las demás” es útil, aunque i
 
 En lugar de ejecutar una sola atención con toda la dimensión, el bloque divide la representación en varias **cabezas**. Cada cabeza calcula sus propias matrices `Q`, `K` y `V`.
 
-```text
-head_i = Attention(QW_i^Q, KW_i^K, VW_i^V)
-MultiHead = Concat(head_1, ..., head_h) W^O
-```
+{{ include_html("snippets/temas/transformer-multihead.html") }}
 
 Una cabeza puede capturar dependencias locales. Otra puede relacionar entidades alejadas. Otra puede ayudar a copiar estructura o seguir delimitadores. No existe una asignación fija y universal, pero la separación aumenta la capacidad de representar relaciones simultáneas.
 
