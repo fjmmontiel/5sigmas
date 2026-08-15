@@ -185,6 +185,8 @@ published_files:
   - series/modelos-razonadores/04-latencia-streaming.jpg
   - series/modelos-razonadores/05-riesgos.mp4
   - series/modelos-razonadores/05-riesgos.jpg
+  - articulos-tecnicos/reactive-proactive-agent-header-demo.mp4
+  - articulos-tecnicos/reactive-proactive-agent-header-demo.jpg
 coverage:
   homepage: canonical_structure_mirrored_native_media_only
   series_hub: canonical_structure_mirrored
@@ -199,10 +201,10 @@ coverage:
   security_series: text_visuals_and_native_media_complete
   remaining_chapters: complete
   concept_hubs: canonical_six_complete
-  technical_articles: text_and_visuals_complete_native_media_pending
+  technical_articles: text_visuals_and_native_media_complete
   visual_hub: blocked_on_localized_media
   video_hub: blocked_on_localized_media
-  localized_video_media: reasoning_models_foundations_multimodality_energy_caves_datacenters_and_security_complete
+  localized_video_media: reasoning_models_foundations_multimodality_energy_caves_datacenters_security_and_technical_articles_complete
 quality_gates:
   - no_spanish_fallback
   - no_implicit_spanish_media
