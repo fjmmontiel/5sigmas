@@ -38,6 +38,11 @@ const schemasFromPage = async (page) => {
   return schemas;
 };
 
+const githubAnnotation = (message) => String(message)
+  .replace(/%/g, '%25')
+  .replace(/\r/g, '%0D')
+  .replace(/\n/g, '%0A');
+
 const browser = await chromium.launch({ headless: true });
 const context = await browser.newContext({ viewport: { width: 1440, height: 1100 } });
 const page = await context.newPage();
@@ -171,7 +176,10 @@ await browser.close();
 
 if (failures.length) {
   console.error('English video hub QA failed:');
-  for (const failure of failures) console.error(` - ${failure}`);
+  for (const failure of failures) {
+    console.error(` - ${failure}`);
+    if (process.env.GITHUB_ACTIONS === 'true') console.error(`::error title=English video hub QA::${githubAnnotation(failure)}`);
+  }
   process.exit(1);
 }
 console.log(`English video hub QA passed: native-English library, watch pages, schema, sitemap, runtime filters and responsive layout are coherent (${catalogue?.count || 0} videos).`);
