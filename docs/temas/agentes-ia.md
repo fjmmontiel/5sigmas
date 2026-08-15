@@ -4,7 +4,7 @@ seo_title: "Qué es un agente de IA: cómo funciona y en qué se diferencia de u
 description: "Qué es un agente de IA, cómo usa herramientas, memoria y estado, en qué se diferencia de un chatbot o workflow y qué necesita para funcionar de forma fiable."
 keywords: "agente de IA, agentes IA, AI agents, agentic AI, chatbot vs agente, tool calling, memoria agentes, agentes en producción"
 date: 2026-08-09
-date_modified: 2026-08-09
+date_modified: 2026-08-15
 ---
 
 # Qué es un agente de IA
@@ -15,14 +15,7 @@ La diferencia esencial es esta: **un chatbot genera una respuesta; un agente pue
 
 ## La respuesta en 60 segundos
 
-```text
-objetivo
-→ observar contexto y estado
-→ decidir el siguiente paso
-→ llamar una herramienta o responder
-→ comprobar el resultado
-→ continuar, pedir ayuda o detenerse
-```
+{{ include_html("snippets/agentes-ia/01-bucle-agente.html") }}
 
 Una tool call no concede autoridad por sí misma. Que el modelo genere `send_email(...)` no significa que el sistema deba ejecutarlo. El runtime debe validar argumentos, permisos, riesgo y estado antes de producir un efecto externo.
 
@@ -49,25 +42,17 @@ Un agente fiable necesita más que un prompt y varias funciones:
 6. **Política** — qué requiere autorización, qué está prohibido y qué presupuesto existe.
 7. **Verificación** — cómo se demuestra que el resultado es correcto.
 
+{{ include_html("snippets/temas/agent-system-boundary.html") }}
+
 La serie [Agentes de IA — de responder a actuar](/series/agentes-ia/00_presentacion_serie/) desarrolla estas piezas con vídeos, visuales y cinco capítulos progresivos.
 
 ## Tool calling no es lo mismo que agencia
 
 Un LLM puede producir argumentos estructurados para una función. Eso es **tool calling**. La agencia aparece cuando el sistema puede decidir *cuándo* usar una herramienta, interpretar el resultado y escoger qué hacer después.
 
-La tool debe seguir siendo un contrato de software:
+La tool debe seguir siendo un contrato de software. El modelo propone una llamada; el runtime mantiene la frontera de autoridad y decide si puede ejecutarse.
 
-```text
-nombre
-+ esquema de argumentos
-+ permisos
-+ timeout
-+ idempotencia
-+ resultado observable
-+ política de error
-```
-
-El modelo propone. El runtime valida y autoriza.
+{{ include_html("snippets/temas/agent-tool-gate.html") }}
 
 ## Memoria, contexto y estado no son lo mismo
 
@@ -137,3 +122,10 @@ No. Un único modelo puede coordinar varias tools. Los sistemas multiagente son 
 ### ¿Más autonomía significa un agente mejor?
 
 No. En producción suele importar más que la autonomía esté acotada: herramientas mínimas, presupuestos, verificación y un criterio claro de parada.
+
+## Fuentes primarias
+
+- [Yao et al. — ReAct: Synergizing Reasoning and Acting in Language Models](https://arxiv.org/abs/2210.03629)
+- [OpenAI Agents SDK — Agents](https://openai.github.io/openai-agents-python/agents/)
+- [OpenAI Agents SDK — Tool guardrails](https://openai.github.io/openai-agents-python/guardrails/)
+- [Model Context Protocol — Authorization](https://modelcontextprotocol.io/specification/latest/basic/authorization)
