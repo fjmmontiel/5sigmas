@@ -1,0 +1,72 @@
+<div class="trn-wrap" data-demo="topic-transformer-residual-norm">
+  <div class="trn-head">
+    <div class="trn-kicker">RESIDUAL + NORMALIZACIÓN</div>
+    <div class="trn-title">La posición de la normalización cambia la ruta por la que viaja la representación</div>
+    <div class="trn-sub">Cada subcapa aprende una transformación <strong>F</strong> —atención o FFN— mientras una ruta residual conserva la representación de entrada. <em>Post-norm</em> y <em>pre-norm</em> colocan la normalización en puntos distintos de ese mismo circuito.</div>
+  </div>
+
+  <div class="trn-grid">
+    <section class="trn-variant trn-variant--post" aria-label="Post-norm: la entrada y la salida de la subcapa se suman antes de aplicar normalización">
+      <div class="trn-variant-head">
+        <span>POST-NORM · TRANSFORMER ORIGINAL</span>
+        <strong>y = Norm(x + F(x))</strong>
+      </div>
+      <div class="trn-flow" role="img" aria-label="Flujo post-norm: x se bifurca hacia la ruta residual y hacia la subcapa F; ambas rutas se suman y después se normalizan">
+        <div class="trn-node trn-node--input"><small>ENTRADA</small><b>x</b></div>
+        <div class="trn-fork" aria-hidden="true">↙︎&nbsp;&nbsp;↘︎</div>
+        <div class="trn-lanes">
+          <div class="trn-lane trn-lane--res"><small>RUTA RESIDUAL</small><b>identidad</b></div>
+          <div class="trn-lane trn-lane--sub"><small>SUBCAPA</small><b>F(x)</b><em>Attention / FFN</em></div>
+        </div>
+        <div class="trn-join"><span>+</span><small>SUMA</small></div>
+        <div class="trn-arrow" aria-hidden="true">↓</div>
+        <div class="trn-node trn-node--norm"><small>NORMALIZAR</small><b>Norm</b></div>
+        <div class="trn-arrow" aria-hidden="true">↓</div>
+        <div class="trn-node trn-node--output"><small>SALIDA</small><b>y</b></div>
+      </div>
+      <div class="trn-readout"><span>La ruta de identidad también atraviesa la normalización antes de llegar a la siguiente capa.</span></div>
+    </section>
+
+    <section class="trn-variant trn-variant--pre" aria-label="Pre-norm: la normalización se aplica dentro de la rama de la subcapa y la ruta residual llega directamente a la suma">
+      <div class="trn-variant-head">
+        <span>PRE-NORM</span>
+        <strong>y = x + F(Norm(x))</strong>
+      </div>
+      <div class="trn-flow" role="img" aria-label="Flujo pre-norm: x se bifurca; la ruta residual llega directamente a la suma y la otra rama pasa por normalización y la subcapa F antes de sumarse">
+        <div class="trn-node trn-node--input"><small>ENTRADA</small><b>x</b></div>
+        <div class="trn-fork" aria-hidden="true">↙︎&nbsp;&nbsp;↘︎</div>
+        <div class="trn-lanes">
+          <div class="trn-lane trn-lane--res"><small>RUTA RESIDUAL</small><b>identidad</b><em>sin normalizar</em></div>
+          <div class="trn-lane trn-lane--sub trn-lane--pre"><small>RAMA DE LA SUBCAPA</small><b>Norm(x)</b><span>↓</span><b>F(·)</b><em>Attention / FFN</em></div>
+        </div>
+        <div class="trn-join"><span>+</span><small>SUMA</small></div>
+        <div class="trn-arrow" aria-hidden="true">↓</div>
+        <div class="trn-node trn-node--output"><small>SALIDA</small><b>y</b></div>
+      </div>
+      <div class="trn-readout"><span>La identidad queda como camino directo entre capas; la normalización vive dentro de la rama que aprende la corrección.</span></div>
+    </section>
+  </div>
+
+  <div class="trn-contract">
+    <div><span>SE REPITE</span><strong>una vez alrededor de atención y otra alrededor de la FFN</strong></div>
+    <div><span>NO CAMBIA</span><strong>la idea residual: la subcapa aprende una corrección sobre x</strong></div>
+    <div><span>SÍ CAMBIA</span><strong>dónde se normaliza la señal que atraviesa el bloque</strong></div>
+  </div>
+
+  <div class="trn-note">El Transformer de 2017 usó post-norm. Xiong et al. analizaron por qué la colocación de LayerNorm afecta a la estabilidad de optimización y mostraron gradientes mejor comportados al inicio para pre-norm en su análisis y experimentos; eso no implica que una variante sea universalmente superior en cualquier arquitectura.</div>
+  <div class="trn-ref">Fuentes primarias: <a href="https://arxiv.org/abs/1706.03762">Vaswani et al., <em>Attention Is All You Need</em> (2017), §3.1</a> · <a href="https://arxiv.org/abs/2002.04745">Xiong et al., <em>On Layer Normalization in the Transformer Architecture</em> (2020)</a>.</div>
+</div>
+
+<style>
+.trn-wrap,.trn-wrap *{box-sizing:border-box}
+.trn-wrap{--trn-a:var(--md-primary-fg-color,#26a69a);--trn-b:#4757d6;--trn-c:var(--md-accent-fg-color,#ffb343);--trn-bg:var(--md-default-bg-color,#fff);--trn-fg:var(--md-default-fg-color,#111827);--trn-muted:color-mix(in srgb,var(--trn-fg) 58%,transparent);--trn-border:color-mix(in srgb,var(--trn-fg) 14%,transparent);container-type:inline-size;margin:1.1rem 0 1.5rem;padding:clamp(14px,2vw,22px);border:1px solid var(--trn-border);border-radius:20px;background:radial-gradient(90% 120% at 0 0,color-mix(in srgb,var(--trn-b) 8%,transparent),transparent 56%),radial-gradient(90% 120% at 100% 0,color-mix(in srgb,var(--trn-a) 7%,transparent),transparent 58%),var(--trn-bg);color:var(--trn-fg)}
+.trn-head{display:grid;gap:4px;margin-bottom:14px}.trn-kicker{font-size:10.5px;font-weight:900;letter-spacing:.12em;color:var(--trn-muted)}.trn-title{font-size:clamp(18px,2.1vw,24px);font-weight:900;line-height:1.1;letter-spacing:-.02em;max-width:45ch}.trn-sub{font-size:13.2px;line-height:1.46;color:var(--trn-muted);max-width:94ch}.trn-sub strong{color:var(--trn-fg)}
+.trn-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.trn-variant{min-width:0;border:1px solid var(--trn-border);border-radius:15px;padding:11px;background:color-mix(in srgb,var(--trn-bg) 95%,var(--trn-fg) 5%);display:grid;gap:10px}.trn-variant--post{border-color:color-mix(in srgb,var(--trn-b) 32%,var(--trn-border));background:color-mix(in srgb,var(--trn-b) 4%,var(--trn-bg))}.trn-variant--pre{border-color:color-mix(in srgb,var(--trn-a) 35%,var(--trn-border));background:color-mix(in srgb,var(--trn-a) 4%,var(--trn-bg))}.trn-variant-head{display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap}.trn-variant-head span,.trn-contract span{font-size:9px;font-weight:900;letter-spacing:.09em;color:var(--trn-muted)}.trn-variant-head strong{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10.8px;line-height:1.35}
+.trn-flow{display:grid;justify-items:center;gap:5px;min-width:0}.trn-node{min-width:92px;border:1px solid var(--trn-border);border-radius:10px;padding:7px 10px;background:var(--trn-bg);display:grid;gap:2px;text-align:center}.trn-node small,.trn-lane small,.trn-join small{font-size:8.5px;font-weight:900;letter-spacing:.08em;color:var(--trn-muted)}.trn-node b{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px}.trn-node--input{border-color:color-mix(in srgb,var(--trn-b) 32%,var(--trn-border))}.trn-node--norm{border-color:color-mix(in srgb,var(--trn-c) 55%,var(--trn-border));background:color-mix(in srgb,var(--trn-c) 8%,var(--trn-bg))}.trn-node--output{border-color:color-mix(in srgb,var(--trn-a) 40%,var(--trn-border));background:color-mix(in srgb,var(--trn-a) 6%,var(--trn-bg))}.trn-fork,.trn-arrow{font-size:15px;font-weight:900;line-height:1;color:var(--trn-muted)}
+.trn-lanes{width:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;align-items:stretch}.trn-lane{min-width:0;border:1px solid var(--trn-border);border-radius:10px;padding:8px;display:grid;gap:3px;align-content:center;text-align:center;background:var(--trn-bg)}.trn-lane b{font-size:11px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.trn-lane em{font-size:9px;color:var(--trn-muted);font-style:normal}.trn-lane--res{border-style:dashed;border-color:color-mix(in srgb,var(--trn-fg) 26%,transparent)}.trn-lane--sub{border-color:color-mix(in srgb,var(--trn-b) 30%,var(--trn-border))}.trn-lane--pre{border-color:color-mix(in srgb,var(--trn-a) 36%,var(--trn-border))}.trn-lane--pre span{font-size:10px;color:var(--trn-muted);line-height:1}
+.trn-join{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;border:1px solid color-mix(in srgb,var(--trn-a) 45%,var(--trn-border));background:color-mix(in srgb,var(--trn-a) 8%,var(--trn-bg));line-height:1}.trn-join span{font-size:20px;font-weight:900}.trn-join small{font-size:7.5px}.trn-readout{border-top:1px solid var(--trn-border);padding-top:8px;font-size:10.6px;line-height:1.38;color:var(--trn-muted)}
+.trn-contract{margin-top:9px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.trn-contract>div{min-width:0;border:1px solid var(--trn-border);border-radius:11px;padding:9px 10px;display:grid;gap:3px}.trn-contract strong{font-size:11.2px;line-height:1.32}.trn-note{margin-top:9px;font-size:10.2px;line-height:1.42;color:var(--trn-muted)}.trn-ref{margin-top:6px;font-size:9.8px;line-height:1.36;color:var(--trn-muted)}.trn-ref a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+@container (max-width:700px){.trn-grid,.trn-contract{grid-template-columns:1fr}.trn-variant{padding:10px}.trn-lanes{gap:6px}.trn-variant-head{display:grid;gap:4px}.trn-variant-head strong{overflow-wrap:anywhere}}
+@media (max-width:760px){.trn-grid,.trn-contract{grid-template-columns:1fr}.trn-variant{padding:10px}.trn-lanes{gap:6px}.trn-variant-head{display:grid;gap:4px}.trn-variant-head strong{overflow-wrap:anywhere}}
+@media (prefers-reduced-motion:reduce){.trn-wrap *{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
