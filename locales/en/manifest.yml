@@ -1,6 +1,6 @@
 locale: en
 name: English
-status: mirror-in-progress
+status: complete
 canonical_source_locale: es
 route_strategy: preserve-source-slugs
 fallback_to_spanish: false
@@ -113,12 +113,14 @@ required_snippets:
   - snippets/agentes-ia/04-seguridad.html
 published_files:
   - assets/images/home/agents-system-boundary.svg
+  - article_audio.yml
   - series/fundamentos-ia-iag/00_presentacion_serie.mp4
   - series/fundamentos-ia-iag/00_presentacion_serie.jpg
   - series/fundamentos-ia-iag/01-que-es-ia.mp4
   - series/fundamentos-ia-iag/01-que-es-ia.jpg
   - series/fundamentos-ia-iag/02-que-es-ia-generativa.mp4
   - series/fundamentos-ia-iag/02-que-es-ia-generativa.jpg
+  - series/fundamentos-ia-iag/02-que-es-ia-generativa.podcast.m4a
   - series/fundamentos-ia-iag/03-ia-vs-ia-generativa.mp4
   - series/fundamentos-ia-iag/03-ia-vs-ia-generativa.jpg
   - series/fundamentos-ia-iag/04-agi.mp4
@@ -179,6 +181,8 @@ published_files:
   - series/seguridad-ia/04-red-teaming.jpg
   - series/seguridad-ia/05-controles-produccion.mp4
   - series/seguridad-ia/05-controles-produccion.jpg
+  - series/modelos-razonadores/00_presentacion_serie.mp4
+  - series/modelos-razonadores/00_presentacion_serie.jpg
   - series/modelos-razonadores/01-que-es-razonar.mp4
   - series/modelos-razonadores/01-que-es-razonar.jpg
   - series/modelos-razonadores/02-fallos.mp4
@@ -202,9 +206,9 @@ published_files:
   - articulos-tecnicos/reactive-proactive-agent-header-demo.mp4
   - articulos-tecnicos/reactive-proactive-agent-header-demo.jpg
 coverage:
-  homepage: canonical_structure_mirrored_native_media_only
+  homepage: canonical_parity_complete_native_media_only
   coming_soon: canonical_parity_complete
-  series_hub: canonical_structure_mirrored
+  series_hub: canonical_parity_complete
   series_presentations: complete
   foundations_series: text_visuals_and_native_media_complete
   multimodality_series: text_visuals_and_native_media_complete
@@ -220,6 +224,7 @@ coverage:
   visual_hub: native_english_complete
   video_hub: native_english_complete
   localized_video_media: canonical_series_and_technical_articles_complete
+  article_audio: canonical_native_english_complete
 generated_surfaces:
   visual_hub: true
   video_library: true
@@ -233,4 +238,5 @@ quality_gates:
   - canonical_locale_url
   - route_safe_language_switch
   - localized_video_binary_required_when_declared
+  - localized_audio_binary_required_when_declared
   - generated_video_hub_schema_and_browser

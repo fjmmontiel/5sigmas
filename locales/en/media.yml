@@ -130,6 +130,12 @@ series/from-cave-to-agi/05-mas-alla.md:
   video_title: Beyond the Transformer
   video_duration: PT1M3S
 
+series/modelos-razonadores/00_presentacion_serie.md:
+  video: 00_presentacion_serie.mp4
+  video_poster: 00_presentacion_serie.jpg
+  video_title: Reasoning Models
+  video_duration: PT45S
+
 series/modelos-razonadores/01-que-es-razonar.md:
   video: 01-que-es-razonar.mp4
   video_poster: 01-que-es-razonar.jpg

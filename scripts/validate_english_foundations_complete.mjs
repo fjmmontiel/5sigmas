@@ -14,6 +14,7 @@ const pages = [
     media: '00_presentacion_serie',
     concepts: ['What is AI?', 'Generative AI', 'AGI'],
     demos: [],
+    audio: false,
     screenshot: 'english-foundations-00-introduction.png',
   },
   {
@@ -30,6 +31,7 @@ const pages = [
       'fnd-neural-network',
       'fnd-mlops-cycle',
     ],
+    audio: false,
     screenshot: 'english-foundations-01-ai.png',
   },
   {
@@ -46,6 +48,7 @@ const pages = [
       'fnd-llmops',
       'fnd-llmops-routes',
     ],
+    audio: true,
     screenshot: 'english-foundations-02-genai.png',
   },
   {
@@ -59,6 +62,7 @@ const pages = [
       'fnd-operational-matrix',
       'fnd-fraud-stack',
     ],
+    audio: false,
     screenshot: 'english-foundations-03-comparison.png',
   },
   {
@@ -73,6 +77,7 @@ const pages = [
       'fnd-benchmark-evolution',
       'fnd-ai-vs-humans',
     ],
+    audio: false,
     screenshot: 'english-foundations-04-agi.png',
   },
 ];
@@ -101,9 +106,10 @@ try {
       if (!response?.ok()) failures.push(`${entry.route}: HTTP ${response?.status() ?? 'no response'}`);
 
       const body = await page.locator('body').innerText();
+      const lowerBody = body.toLowerCase();
       if (!body.includes(entry.title)) failures.push(`${entry.route}: missing English page title`);
       for (const concept of entry.concepts) {
-        if (!body.toLowerCase().includes(concept.toLowerCase())) {
+        if (!lowerBody.includes(concept.toLowerCase())) {
           failures.push(`${entry.route}: missing core concept ${concept}`);
         }
       }
@@ -152,6 +158,36 @@ try {
         }
       }
 
+      const audio = page.locator('audio[data-audio-role="podcast"]');
+      const audioCount = await audio.count();
+      if (audioCount !== (entry.audio ? 1 : 0)) {
+        failures.push(`${entry.route}: expected ${entry.audio ? 'one' : 'zero'} native English article-audio player, found ${audioCount}`);
+      }
+      if (entry.audio && audioCount === 1) {
+        // innerText reflects CSS text-transform (the eyebrow renders uppercase),
+        // so validate semantic copy case-insensitively rather than weakening the
+        // locale contract to a presentation-specific casing.
+        if (!lowerBody.includes('article audio') || !lowerBody.includes('listen to this article')) {
+          failures.push(`${entry.route}: missing English article-audio UI copy`);
+        }
+        if (lowerBody.includes('audio local') || lowerBody.includes('escucha el artículo')) {
+          failures.push(`${entry.route}: Spanish article-audio UI leaked into English`);
+        }
+        const source = audio.first().locator('source').first();
+        const sourceUrl = new URL((await source.getAttribute('src')) || '', page.url());
+        const expectedAudio = '/en/series/fundamentos-ia-iag/02-que-es-ia-generativa.podcast.m4a';
+        if (sourceUrl.pathname !== expectedAudio) {
+          failures.push(`${entry.route}: native article audio resolved to ${sourceUrl.pathname}, expected ${expectedAudio}`);
+        } else {
+          const audioResponse = await page.request.head(sourceUrl.href);
+          if (!audioResponse.ok()) failures.push(`${entry.route}: native article audio HTTP ${audioResponse.status()}`);
+          const contentType = (audioResponse.headers()['content-type'] || '').toLowerCase();
+          if (contentType && !contentType.includes('audio') && !contentType.includes('mp4')) {
+            failures.push(`${entry.route}: unexpected native article-audio content type ${contentType}`);
+          }
+        }
+      }
+
       const [clientWidth, scrollWidth] = await page.evaluate(() => [
         document.documentElement.clientWidth,
         document.documentElement.scrollWidth,
@@ -180,4 +216,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Complete English Foundations QA passed: introduction + Chapters 1–4, 23 native visuals, native-English MP4/poster pairs, interactions, and clean desktop/mobile layouts.');
+console.log('Complete English Foundations QA passed: introduction + Chapters 1–4, 23 native visuals, native-English MP4/poster pairs, canonical native article audio, interactions, and clean desktop/mobile layouts.');

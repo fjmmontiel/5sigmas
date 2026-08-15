@@ -23,6 +23,7 @@ const nativePresentationMedia = new Map([
   ['fundamentos-ia-iag', '00_presentacion_serie'],
   ['from-cave-to-agi', '00_presentacion_serie'],
   ['multimodalidad-iag', '00_presentacion_serie'],
+  ['modelos-razonadores', '00_presentacion_serie'],
   ['ia-pib-bienestar-energia', '00_presentacion_serie'],
   ['datacenters-espacio', '00_presentacion_serie'],
   ['seguridad-ia', '00_presentacion_serie'],
