@@ -17,12 +17,39 @@ DOCS = ROOT / "docs"
 SITE = ROOT / "site"
 MKDOCS = ROOT / "mkdocs.yml"
 TOPIC_INDEX = DOCS / "temas" / "index.md"
+HOME = DOCS / "index.md"
 LLMS = DOCS / "llms.txt"
+EN_ROOT = ROOT / "locales" / "en"
+EN_MKDOCS = ROOT / "mkdocs.en.yml"
+EN_TOPIC_INDEX = EN_ROOT / "temas" / "index.md"
+EN_HOME = EN_ROOT / "index.md"
 ORIGIN = "https://5sigmas.com"
 
 PRIORITY_TOPICS = {
-    "agentes-ia": "Qué es un agente de IA",
-    "prompt-injection": "Qué es prompt injection",
+    "llms": {
+        "es_label": "Qué es un LLM",
+        "en_label": "What is an LLM",
+    },
+    "transformer": {
+        "es_label": "Transformer",
+        "en_label": "Transformer",
+    },
+    "razonamiento": {
+        "es_label": "Razonamiento",
+        "en_label": "Reasoning",
+    },
+    "evaluacion-modelos": {
+        "es_label": "Evaluación",
+        "en_label": "Evaluation",
+    },
+    "agentes-ia": {
+        "es_label": "Qué es un agente de IA",
+        "en_label": "AI agent",
+    },
+    "prompt-injection": {
+        "es_label": "Qué es prompt injection",
+        "en_label": "prompt injection",
+    },
 }
 
 
@@ -47,31 +74,75 @@ def sitemap_urls() -> set[str]:
     }
 
 
+def source_contract_errors(
+    *,
+    source: Path,
+    nav_text: str,
+    topic_index_text: str,
+    home_text: str,
+    slug: str,
+    locale: str,
+) -> list[str]:
+    errors: list[str] = []
+    prefix = "" if locale == "es" else "/en"
+    source_label = f"temas/{slug}.md" if locale == "es" else f"locales/en/temas/{slug}.md"
+
+    if not source.is_file():
+        return [f"Missing {locale.upper()} priority topic source: {source_label}"]
+
+    meta = frontmatter(source)
+    if "noindex" in str(meta.get("robots") or "").lower():
+        errors.append(f"{locale.upper()} priority topic is noindex: {source_label}")
+    if not str(meta.get("description") or "").strip():
+        errors.append(f"{locale.upper()} priority topic has no meta description: {source_label}")
+    if not str(meta.get("seo_title") or "").strip():
+        errors.append(f"{locale.upper()} priority topic has no seo_title: {source_label}")
+
+    if f"temas/{slug}.md" not in nav_text:
+        errors.append(f"{locale.upper()} priority topic missing from MkDocs navigation: {slug}")
+
+    expected_href = f'href="{prefix}/temas/{slug}/"'
+    if expected_href not in topic_index_text:
+        errors.append(f"{locale.upper()} priority topic missing incoming link from topic index: {slug}")
+    if expected_href not in home_text:
+        errors.append(f"{locale.upper()} priority topic missing direct homepage link: {slug}")
+
+    return errors
+
+
 def main() -> int:
     errors: list[str] = []
     nav = MKDOCS.read_text(encoding="utf-8")
     topic_index = TOPIC_INDEX.read_text(encoding="utf-8")
+    home = HOME.read_text(encoding="utf-8")
     llms = LLMS.read_text(encoding="utf-8")
+    en_nav = EN_MKDOCS.read_text(encoding="utf-8")
+    en_topic_index = EN_TOPIC_INDEX.read_text(encoding="utf-8")
+    en_home = EN_HOME.read_text(encoding="utf-8")
     sitemap = sitemap_urls()
 
-    for slug, label in PRIORITY_TOPICS.items():
+    for slug, labels in PRIORITY_TOPICS.items():
         source = DOCS / "temas" / f"{slug}.md"
-        if not source.is_file():
-            errors.append(f"Missing priority topic source: temas/{slug}.md")
-            continue
-
-        meta = frontmatter(source)
-        if "noindex" in str(meta.get("robots") or "").lower():
-            errors.append(f"Priority topic is noindex: temas/{slug}.md")
-        if not str(meta.get("description") or "").strip():
-            errors.append(f"Priority topic has no meta description: temas/{slug}.md")
-        if not str(meta.get("seo_title") or "").strip():
-            errors.append(f"Priority topic has no seo_title: temas/{slug}.md")
-
-        if f"temas/{slug}.md" not in nav:
-            errors.append(f"Priority topic missing from MkDocs navigation: {slug}")
-        if f'href="/temas/{slug}/"' not in topic_index:
-            errors.append(f"Priority topic missing incoming link from /temas/: {slug}")
+        errors.extend(
+            source_contract_errors(
+                source=source,
+                nav_text=nav,
+                topic_index_text=topic_index,
+                home_text=home,
+                slug=slug,
+                locale="es",
+            )
+        )
+        errors.extend(
+            source_contract_errors(
+                source=EN_ROOT / "temas" / f"{slug}.md",
+                nav_text=en_nav,
+                topic_index_text=en_topic_index,
+                home_text=en_home,
+                slug=slug,
+                locale="en",
+            )
+        )
 
         markdown_url = f"{ORIGIN}/temas/{slug}/index.html.md"
         if markdown_url not in llms:
@@ -89,12 +160,21 @@ def main() -> int:
 
         if html.is_file():
             rendered = html.read_text(encoding="utf-8", errors="replace")
-            if re.search(r'<meta[^>]+name=["\']robots["\'][^>]+content=["\'][^"\']*noindex', rendered, re.I):
+            if re.search(
+                r'<meta[^>]+name=["\']robots["\'][^>]+content=["\'][^"\']*noindex',
+                rendered,
+                re.I,
+            ):
                 errors.append(f"Built priority topic is noindex: {canonical}")
-            if label.casefold() not in rendered.casefold():
-                errors.append(f"Built priority topic does not expose expected answer intent {label!r}: {canonical}")
+            if canonical not in rendered:
+                errors.append(f"Built priority topic does not expose its canonical URL: {canonical}")
+            if str(labels["es_label"]).casefold() not in rendered.casefold():
+                errors.append(
+                    "Built priority topic does not expose expected answer intent "
+                    f"{labels['es_label']!r}: {canonical}"
+                )
 
-    print(f"Priority topic hubs: {len(PRIORITY_TOPICS)}")
+    print(f"Priority topic hubs: {len(PRIORITY_TOPICS)} (ES + EN source contracts)")
     if errors:
         print("Priority topic hub contract violations:", file=sys.stderr)
         for error in errors:
