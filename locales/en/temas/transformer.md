@@ -4,7 +4,7 @@ seo_title: "How the Transformer works: attention and architecture step by step"
 description: "Technical explanation of the Transformer: embeddings, self-attention, residual blocks, encoder, decoder, cost and architectural limits."
 keywords: "Transformer, self-attention, Transformer architecture, Query Key Value, encoder decoder, LLM"
 date: 2026-04-07
-date_modified: 2026-08-05
+date_modified: 2026-08-15
 ---
 
 # How the Transformer works
@@ -15,14 +15,7 @@ Attention is the distinctive operation, but a complete Transformer also needs em
 
 ## The architecture in one view
 
-```text
-tokens
-→ embeddings + position
-→ [attention → residual → normalization
-   → feed-forward network → residual → normalization] × N
-→ contextual representation
-→ vocabulary projection or another output
-```
+{{ include_html("snippets/temas/transformer-block.html") }}
 
 In an autoregressive model, the final representation is projected onto the vocabulary to produce next-token probabilities.
 
@@ -49,11 +42,9 @@ Each representation is projected into three vectors:
 - **Key (K):** what signal each position offers to be matched.
 - **Value (V):** what content it contributes if it receives attention.
 
-Scaled attention can be written as:
+Scaled attention connects four operations: projecting `Q`, `K` and `V`; computing compatibility; normalizing the weights; and mixing the values.[^transformer]
 
-```text
-Attention(Q, K, V) = softmax(QKᵀ / √d_k) V
-```
+{{ include_html("snippets/temas/transformer-qkv.html") }}
 
 The product `QKᵀ` calculates compatibility between positions. The `√d_k` factor controls logit scale. `softmax` turns each row into normalized weights. Multiplication by `V` produces a weighted combination of information.
 
@@ -72,13 +63,9 @@ One head may capture local dependencies. Another may relate distant entities. An
 
 ## 4. Causal masking in generative models
 
-An autoregressive decoder must not see the future during training. A triangular mask prevents position `t` from attending to later tokens.
+An autoregressive decoder must not see the future during training. A triangular mask prevents position `t` from attending to later tokens.[^transformer]
 
-```text
-position 1 → sees 1
-position 2 → sees 1, 2
-position 3 → sees 1, 2, 3
-```
+{{ include_html("snippets/temas/transformer-causal-mask.html") }}
 
 So although all known positions in a batch can be processed in parallel during training, every prediction follows the same contract that will exist during generation: it can only use the available prefix.
 
