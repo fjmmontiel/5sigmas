@@ -26,6 +26,8 @@ jobs:
 
       - name: Install renderer dependencies
         run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
           python -m pip install --upgrade pip
           pip install playwright==1.55.0
           python -m playwright install --with-deps chromium
