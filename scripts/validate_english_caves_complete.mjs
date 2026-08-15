@@ -81,8 +81,6 @@ try {
 
       if (chapter.slug === '03-aprender') {
         const winters = page.locator('[data-demo="03-inviernos-ia"]');
-        // Canonical panels are intentionally hidden until their step is active;
-        // textContent keeps the full translated surface visible to this audit.
         const winterText = (await winters.textContent()) || '';
         for (const anchor of [
           'The AI winters: the same pattern, twice',
@@ -135,10 +133,10 @@ try {
         await page.waitForTimeout(300);
         const secondTimelineTitle = await timeline.locator('#repTitle').innerText();
         if (secondTimelineTitle !== 'Formal arithmetic') failures.push(`${chapter.route}: representation timeline did not advance`);
-      } else if (chapter.slug !== '03-aprender') {
-        // Chapter 3 is now fully canonical and each visual has dedicated interaction QA.
-        // Chapters 4–5 still retain compact disclosure implementations while their
-        // remaining canonical mirrors are migrated one visual at a time.
+      } else if (!['03-aprender', '04-escalar'].includes(chapter.slug)) {
+        // Chapters 3 and 4 now use canonical Spanish-first interactive mirrors and
+        // have dedicated interaction QA. Chapter 5 still contains compact English
+        // disclosure implementations while its remaining visuals are migrated.
         const details = page.locator('[data-demo] details');
         if (await details.count() === 0) failures.push(`${chapter.route}: visuals expose no interactive disclosure`);
         else {
@@ -179,4 +177,4 @@ if (failures.length) {
   for (const failure of [...new Set(failures)]) console.error(failure);
   process.exit(1);
 }
-console.log('Complete English From the Caves to AGI QA passed: Chapter 1 and Chapters 3–5, canonical/native visuals, native-English media, interactions, desktop/mobile clean.');
+console.log('Complete English From the Caves to AGI QA passed: Chapters 1, 3 and 4 canonical/native visuals, native-English media, interactions and desktop/mobile layout; Chapter 5 remains under staged migration.');
