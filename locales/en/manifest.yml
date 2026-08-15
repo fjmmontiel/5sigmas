@@ -185,6 +185,18 @@ published_files:
   - series/modelos-razonadores/04-latencia-streaming.jpg
   - series/modelos-razonadores/05-riesgos.mp4
   - series/modelos-razonadores/05-riesgos.jpg
+  - series/agentes-ia/00_presentacion_serie.mp4
+  - series/agentes-ia/00_presentacion_serie.jpg
+  - series/agentes-ia/01-que-es-un-agente.mp4
+  - series/agentes-ia/01-que-es-un-agente.jpg
+  - series/agentes-ia/02-anatomia-de-un-agente.mp4
+  - series/agentes-ia/02-anatomia-de-un-agente.jpg
+  - series/agentes-ia/03-como-evaluar-un-agente.mp4
+  - series/agentes-ia/03-como-evaluar-un-agente.jpg
+  - series/agentes-ia/04-seguridad-agentes.mp4
+  - series/agentes-ia/04-seguridad-agentes.jpg
+  - series/agentes-ia/05-de-la-demo-a-produccion.mp4
+  - series/agentes-ia/05-de-la-demo-a-produccion.jpg
   - articulos-tecnicos/reactive-proactive-agent-header-demo.mp4
   - articulos-tecnicos/reactive-proactive-agent-header-demo.jpg
 coverage:
@@ -193,7 +205,7 @@ coverage:
   series_presentations: complete
   foundations_series: text_visuals_and_native_media_complete
   multimodality_series: text_visuals_and_native_media_complete
-  agents_series: complete
+  agents_series: text_visuals_and_native_media_complete
   reasoning_models: text_visuals_and_native_media_complete
   energy_series: text_visuals_and_native_media_complete
   cave_to_agi_series: text_visuals_and_native_media_complete
@@ -202,9 +214,9 @@ coverage:
   remaining_chapters: complete
   concept_hubs: canonical_six_complete
   technical_articles: text_visuals_and_native_media_complete
-  visual_hub: blocked_on_localized_media
-  video_hub: blocked_on_localized_media
-  localized_video_media: reasoning_models_foundations_multimodality_energy_caves_datacenters_security_and_technical_articles_complete
+  visual_hub: not_yet_published
+  video_hub: not_yet_published
+  localized_video_media: canonical_series_and_technical_articles_complete
 quality_gates:
   - no_spanish_fallback
   - no_implicit_spanish_media
