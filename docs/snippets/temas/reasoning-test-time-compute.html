@@ -1,0 +1,68 @@
+<div class="rtc-wrap" data-demo="topic-reasoning-test-time-compute">
+  <div class="rtc-head">
+    <div class="rtc-kicker">TEST-TIME COMPUTE</div>
+    <div class="rtc-title">El presupuesto de inferencia debe aumentar cuando la tarea lo justifica, no por defecto</div>
+    <div class="rtc-sub">Más cómputo puede significar más deliberación, más candidatos, búsqueda, verificadores, tools o revisiones. La política útil es asignar ese presupuesto según dificultad, valor de la respuesta y latencia tolerable.</div>
+  </div>
+
+  <div class="rtc-grid" role="img" aria-label="Tres rutas de inferencia para tareas simples, medias y difíciles, con presupuestos crecientes de deliberación, candidatos, búsqueda y verificación">
+    <section class="rtc-route rtc-route--low">
+      <div class="rtc-route-head"><span>RUTA A · SIMPLE</span><strong>Responder directo</strong></div>
+      <div class="rtc-budget"><span>DELIBERACIÓN</span><b class="rtc-bar rtc-bar--1"></b><em>baja</em></div>
+      <div class="rtc-budget"><span>CANDIDATOS</span><b class="rtc-bar rtc-bar--1"></b><em>1</em></div>
+      <div class="rtc-budget"><span>VERIFICACIÓN</span><b class="rtc-bar rtc-bar--1"></b><em>mínima</em></div>
+      <div class="rtc-result"><span>OBJETIVO</span><strong>latencia baja</strong><small>No abrir una búsqueda costosa si la respuesta ya es clara.</small></div>
+    </section>
+
+    <section class="rtc-route rtc-route--mid">
+      <div class="rtc-route-head"><span>RUTA B · MEDIA</span><strong>Generar + comprobar</strong></div>
+      <div class="rtc-budget"><span>DELIBERACIÓN</span><b class="rtc-bar rtc-bar--2"></b><em>media</em></div>
+      <div class="rtc-budget"><span>CANDIDATOS</span><b class="rtc-bar rtc-bar--2"></b><em>varios</em></div>
+      <div class="rtc-budget"><span>VERIFICACIÓN</span><b class="rtc-bar rtc-bar--2"></b><em>regla / juez</em></div>
+      <div class="rtc-result"><span>OBJETIVO</span><strong>ganar robustez</strong><small>Usar presupuesto adicional cuando puede cambiar la decisión.</small></div>
+    </section>
+
+    <section class="rtc-route rtc-route--high">
+      <div class="rtc-route-head"><span>RUTA C · DIFÍCIL</span><strong>Buscar + verificar + revisar</strong></div>
+      <div class="rtc-budget"><span>DELIBERACIÓN</span><b class="rtc-bar rtc-bar--3"></b><em>alta</em></div>
+      <div class="rtc-budget"><span>BÚSQUEDA / TOOLS</span><b class="rtc-bar rtc-bar--3"></b><em>profunda</em></div>
+      <div class="rtc-budget"><span>VERIFICADORES</span><b class="rtc-bar rtc-bar--3"></b><em>múltiples</em></div>
+      <div class="rtc-result"><span>OBJETIVO</span><strong>reducir error caro</strong><small>El coste extra solo compensa si la tarea puede aprovecharlo.</small></div>
+    </section>
+  </div>
+
+  <div class="rtc-policy">
+    <div><span>SEÑALES DE ROUTING</span><strong>dificultad · incertidumbre · impacto del error · SLA de latencia</strong></div>
+    <div class="rtc-arrow" aria-hidden="true">→</div>
+    <div><span>PRESUPUESTO</span><strong>tokens · muestras · profundidad · verificadores · tools · revisiones</strong></div>
+    <div class="rtc-arrow" aria-hidden="true">→</div>
+    <div><span>DECISIÓN</span><strong>parar cuando el valor marginal ya no compensa el coste</strong></div>
+  </div>
+
+  <div class="rtc-warning"><span>No monotónico</span><strong>Más cómputo también puede amplificar un supuesto falso, provocar deriva del objetivo o añadir latencia sin mejorar la respuesta.</strong></div>
+  <div class="rtc-ref">Fuente primaria: <a href="https://arxiv.org/abs/2408.03314">Snell et al., Scaling LLM Test-Time Compute Optimally can be More Effective than Scaling Model Parameters (2024)</a>.</div>
+</div>
+
+<style>
+.rtc-wrap,.rtc-wrap *{box-sizing:border-box}
+.rtc-wrap{
+  --rtc-a:var(--md-primary-fg-color,#26a69a);--rtc-b:#4757d6;--rtc-c:var(--md-accent-fg-color,#ffb343);--rtc-r:#e06c75;
+  --rtc-bg:var(--md-default-bg-color,#fff);--rtc-fg:var(--md-default-fg-color,#111827);--rtc-muted:color-mix(in srgb,var(--rtc-fg) 58%,transparent);--rtc-border:color-mix(in srgb,var(--rtc-fg) 14%,transparent);
+  container-type:inline-size;margin:1.1rem 0 1.5rem;padding:clamp(14px,2vw,22px);border:1px solid var(--rtc-border);border-radius:20px;
+  background:radial-gradient(100% 120% at 0 0,color-mix(in srgb,var(--rtc-c) 8%,transparent),transparent 54%),radial-gradient(85% 120% at 100% 0,color-mix(in srgb,var(--rtc-b) 7%,transparent),transparent 58%),var(--rtc-bg);color:var(--rtc-fg)
+}
+.rtc-head{display:grid;gap:4px;margin-bottom:14px}.rtc-kicker{font-size:10px;font-weight:900;letter-spacing:.12em;color:var(--rtc-muted)}
+.rtc-title{font-size:clamp(18px,2.1vw,24px);font-weight:900;line-height:1.12;letter-spacing:-.02em;max-width:35ch}.rtc-sub{font-size:13.5px;line-height:1.48;color:var(--rtc-muted);max-width:88ch}
+.rtc-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;min-width:0}.rtc-route{min-width:0;border:1px solid var(--rtc-border);border-radius:15px;padding:11px;display:grid;gap:9px;background:color-mix(in srgb,var(--rtc-bg) 95%,var(--rtc-fg) 5%)}
+.rtc-route--low{border-color:color-mix(in srgb,var(--rtc-a) 38%,var(--rtc-border));background:color-mix(in srgb,var(--rtc-a) 4%,var(--rtc-bg))}.rtc-route--mid{border-color:color-mix(in srgb,var(--rtc-b) 45%,var(--rtc-border));background:color-mix(in srgb,var(--rtc-b) 5%,var(--rtc-bg))}.rtc-route--high{border-color:color-mix(in srgb,var(--rtc-c) 50%,var(--rtc-border));background:color-mix(in srgb,var(--rtc-c) 6%,var(--rtc-bg))}
+.rtc-route-head{display:grid;gap:3px}.rtc-route-head span,.rtc-budget span,.rtc-result span,.rtc-policy span,.rtc-warning span{font-size:9.2px;font-weight:900;letter-spacing:.09em;color:var(--rtc-muted)}.rtc-route-head strong{font-size:13.2px;line-height:1.25}
+.rtc-budget{display:grid;grid-template-columns:minmax(84px,.8fr) minmax(60px,1fr) auto;gap:7px;align-items:center}.rtc-budget em{font-size:9.8px;font-style:normal;color:var(--rtc-muted);white-space:nowrap}.rtc-bar{display:block;height:7px;border-radius:999px;background:linear-gradient(90deg,var(--rtc-a) 0 var(--rtc-fill),color-mix(in srgb,var(--rtc-fg) 8%,transparent) var(--rtc-fill) 100%)}.rtc-bar--1{--rtc-fill:28%}.rtc-bar--2{--rtc-fill:62%}.rtc-bar--3{--rtc-fill:92%}
+.rtc-result{margin-top:auto;padding-top:8px;border-top:1px solid var(--rtc-border);display:grid;gap:3px}.rtc-result strong{font-size:11.8px}.rtc-result small{font-size:10.5px;line-height:1.38;color:var(--rtc-muted)}
+.rtc-policy{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr);gap:9px;align-items:stretch;margin-top:10px}.rtc-policy>div:not(.rtc-arrow){min-width:0;padding:10px;border:1px solid var(--rtc-border);border-radius:12px;display:grid;gap:4px;background:color-mix(in srgb,var(--rtc-bg) 96%,var(--rtc-fg) 4%)}.rtc-policy strong{font-size:11px;line-height:1.4}.rtc-arrow{display:grid;place-items:center;font-size:17px;font-weight:900;color:var(--rtc-muted)}
+.rtc-warning{margin-top:10px;padding:10px 12px;border-left:3px solid var(--rtc-r);border-radius:0 10px 10px 0;background:color-mix(in srgb,var(--rtc-r) 5%,var(--rtc-bg));display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:center}.rtc-warning span{white-space:nowrap}.rtc-warning strong{font-size:11.7px;line-height:1.4}
+.rtc-ref{margin-top:9px;font-size:9.8px;line-height:1.35;color:var(--rtc-muted)}.rtc-ref a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+@container (max-width:760px){.rtc-grid{grid-template-columns:1fr}.rtc-policy{grid-template-columns:1fr;gap:6px}.rtc-arrow{height:13px;transform:rotate(90deg)}.rtc-warning{grid-template-columns:1fr;gap:3px}}
+@media (max-width:760px){.rtc-grid{grid-template-columns:1fr}.rtc-policy{grid-template-columns:1fr;gap:6px}.rtc-arrow{height:13px;transform:rotate(90deg)}.rtc-warning{grid-template-columns:1fr;gap:3px}}
+@media (max-width:420px){.rtc-budget{grid-template-columns:1fr;gap:3px}.rtc-budget em{justify-self:start}.rtc-bar{width:100%}}
+@media (prefers-reduced-motion:reduce){.rtc-wrap *{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+</style>
