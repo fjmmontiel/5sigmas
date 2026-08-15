@@ -11,6 +11,10 @@
     "Error top-5 en ImageNet": "ImageNet top-5 error",
     "Mejor": "Best",
     "Nivel humano": "Human level",
+    "28,2%": "28.2%",
+    "25,8%": "25.8%",
+    "15,3%": "15.3%",
+    "6,7%": "6.7%",
     "Eje: % error top-5 en ImageNet. Menos es mejor. AlexNet redujo el error en ~10 puntos de golpe, después de años de mejoras de 1-2 puntos.": "Axis: ImageNet top-5 error (%). Lower is better. AlexNet cut the error by about 10 percentage points at once, after years of 1–2 point improvements.",
     "Tres piezas convergieron al mismo tiempo. Ninguna sola habría sido suficiente.": "Three pieces converged at the same time. No single one would have been sufficient.",
     "DATOS": "DATA",
@@ -24,7 +28,7 @@
     "Visión artificial = ingeniería manual de características (SIFT, HOG, LBP…). Cada dominio requería expertos distintos.": "Computer vision = hand-engineered features (SIFT, HOG, LBP…). Each domain required different experts.",
     "DESPUÉS": "AFTER",
     "La red aprende las características por sí sola desde datos crudos. El mismo paradigma funciona en visión, audio, texto y más.": "The network learns features directly from raw data. The same paradigm can be applied across vision, audio, text, and more.",
-    "El cambio de régimen no fue técnico: fue epistemológico. Los datos y el cómputo pasaron a ser las palancas dominantes.": "The regime shift was not only technical; it changed how progress was pursued. Data and compute became dominant levers alongside architecture."
+    "El cambio de régimen no fue técnico: fue epistemológico. Los datos y el cómputo pasaron a ser las palancas dominantes.": "The regime shift was not just technical; it was epistemological. Data and compute became the dominant levers."
   },
   "forbidden_output_tokens": [
     "2012 cambia el régimen",
