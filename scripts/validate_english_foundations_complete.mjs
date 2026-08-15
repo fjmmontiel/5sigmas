@@ -76,7 +76,7 @@ const pages = [
     route: '/en/series/fundamentos-ia-iag/04-agi/',
     title: 'Chapter 4 — AGI: Artificial General Intelligence',
     media: '04-agi',
-    concepts: ['generality', 'alignment', 'task horizon', 'DeepMind'],
+    concepts: ['generality', 'alignment', 'task time horizon', 'DeepMind'],
     visuals: [
       '[data-demo="04-niveles-agi"]',
       '[data-demo="04-capacidades-limites"]',
@@ -539,7 +539,7 @@ async function validateChapterFourCanonicalVisuals(page, entry) {
     if (JSON.stringify(numbers) !== JSON.stringify(['0', '1', '2', '3', '4', '5'])) {
       failures.push(`${entry.route}: AGI level sequence changed: ${JSON.stringify(numbers)}`);
     }
-    const copy = await levels.innerText();
+    const copy = (await levels.textContent()) || '';
     for (const required of ['AGI is not a switch', "DeepMind's framework separates performance and generality.", 'No AI', 'Emerging', 'Competent', 'Expert', 'Virtuoso', 'Superintelligence']) {
       if (!copy.includes(required)) failures.push(`${entry.route}: AGI levels missing English canonical copy ${JSON.stringify(required)}`);
     }
@@ -550,7 +550,7 @@ async function validateChapterFourCanonicalVisuals(page, entry) {
     failures.push(`${entry.route}: canonical AGI capability-limits visual missing`);
   } else {
     if (await capabilities.locator('.cap-row').count() !== 3) failures.push(`${entry.route}: AGI capability-limits canonical three-contrast density changed`);
-    const copy = await capabilities.innerText();
+    const copy = (await capabilities.textContent()) || '';
     for (const required of ['Very capable does not mean general.', 'Language and knowledge', 'Physical world', 'Known problems', 'Out of distribution', 'Long context', 'State and self-knowledge']) {
       if (!copy.includes(required)) failures.push(`${entry.route}: capability-limits visual missing English canonical copy ${JSON.stringify(required)}`);
     }
@@ -561,7 +561,7 @@ async function validateChapterFourCanonicalVisuals(page, entry) {
     failures.push(`${entry.route}: canonical AGI impact visual missing`);
   } else {
     if (await impact.locator('.imp-card').count() !== 4) failures.push(`${entry.route}: AGI impact canonical four-card density changed`);
-    const copy = await impact.innerText();
+    const copy = (await impact.textContent()) || '';
     for (const required of ['If it arrived: four impacts', 'Economic', 'Scientific', 'Geopolitical', 'Alignment']) {
       if (!copy.includes(required)) failures.push(`${entry.route}: AGI impact visual missing English canonical copy ${JSON.stringify(required)}`);
     }
@@ -587,7 +587,7 @@ async function validateChapterFourCanonicalVisuals(page, entry) {
         failures.push(`${entry.route}: benchmark-evolution tab ${tab} exposes wrong panel count`);
       }
     }
-    const copy = await benchmarks.innerText();
+    const copy = (await benchmarks.textContent()) || '';
     for (const required of ['How to measure progress towards AGI', 'Real-world software engineering', 'Autonomy horizon', 'General reasoning', 'PhD physics', 'Applied science']) {
       if (!copy.includes(required)) failures.push(`${entry.route}: benchmark-evolution visual missing English canonical copy ${JSON.stringify(required)}`);
     }
@@ -607,7 +607,7 @@ async function validateChapterFourCanonicalVisuals(page, entry) {
       await humans.locator(`[data-ivh-tab="${tab}"]`).click();
       if (await humans.locator('[data-ivh-panel]:visible').count() !== 1) failures.push(`${entry.route}: AI-vs-humans tab ${tab} exposes wrong panel count`);
     }
-    const copy = await humans.innerText();
+    const copy = (await humans.textContent()) || '';
     for (const required of ['AI vs humans: the map is uneven', 'Benchmarks surpassed', 'Open frontiers', 'Chess', 'Protein structure', 'Long-duration autonomy', 'Physical world']) {
       if (!copy.includes(required)) failures.push(`${entry.route}: AI-vs-humans visual missing English canonical copy ${JSON.stringify(required)}`);
     }
