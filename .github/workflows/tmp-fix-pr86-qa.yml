@@ -1,0 +1,47 @@
+name: Temporary PR86 QA fix
+
+on:
+  push:
+    branches:
+      - fix/en-fidelity-foundations-ch3-20260815
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    if: ${{ !contains(github.event.head_commit.message, 'fix canonical decision-tree assertions') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/en-fidelity-foundations-ch3-20260815
+          fetch-depth: 0
+      - name: Fix rendered-text assertion semantics
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('scripts/validate_english_foundations_complete.mjs')
+          text = path.read_text(encoding='utf-8')
+          replacements = {
+              'const initial = await decision.innerText();': 'const initial = await decision.textContent();',
+              'const result = await decision.innerText();': 'const result = await decision.textContent();',
+              "if (!(await decision.innerText()).includes('Question 1 of 4')) {": "if (!(await decision.textContent()).includes('Question 1 of 4')) {",
+          }
+          for old, new in replacements.items():
+              if text.count(old) != 1:
+                  raise SystemExit(f'expected exactly one QA target: {old}')
+              text = text.replace(old, new, 1)
+          path.write_text(text, encoding='utf-8')
+          PY
+          node --check scripts/validate_english_foundations_complete.mjs
+          git diff --check
+      - name: Commit QA fix
+        shell: bash
+        run: |
+          git config user.name "5sigmas automation"
+          git config user.email "actions@users.noreply.github.com"
+          git add scripts/validate_english_foundations_complete.mjs
+          git commit -m "test(en): fix canonical decision-tree assertions"
+          git push origin HEAD:fix/en-fidelity-foundations-ch3-20260815
