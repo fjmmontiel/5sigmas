@@ -1,0 +1,42 @@
+{
+  "source": "snippets/temas/transformer-block.html",
+  "source_blob_sha": "349c34a5e3afb684fb2a6567965d426ccd8bb24c",
+  "replacements": {
+    ">ARQUITECTURA</div>": ">ARCHITECTURE</div>",
+    ">Un bloque Transformer, sin saltos</div>": ">A Transformer block, end to end</div>",
+    ">La atención mezcla información entre posiciones; la red feed-forward transforma cada posición. Las rutas residuales conservan una vía directa.</div>": ">Attention mixes information across positions; the feed-forward network transforms each position. Residual paths preserve a direct route.</div>",
+    "aria-label=\"Flujo conceptual de un Transformer desde tokens hasta la salida\"": "aria-label=\"Conceptual Transformer flow from tokens to output\"",
+    ">IDs discretos</span>": ">discrete IDs</span>",
+    ">Embedding + posición</span>": ">Embedding + position</span>",
+    ">vectores con orden</span>": ">ordered vectors</span>",
+    ">BLOQUE × N</div>": ">BLOCK × N</div>",
+    ">mezcla contexto entre tokens</span>": ">mixes context across tokens</span>",
+    ">estabiliza la representación</span>": ">stabilizes the representation</span>",
+    ">transforma cada posición por separado</span>": ">transforms each position independently</span>",
+    ">prepara la siguiente capa</span>": ">prepares the next layer</span>",
+    ">Orden ilustrativo post-norm; muchas familias modernas usan pre-norm.</div>": ">Illustrative post-norm order; many modern families use pre-norm.</div>",
+    ">Representación contextual</span>": ">Contextual representation</span>",
+    ">cada token ya incorpora contexto</span>": ">each token now carries context</span>",
+    ">Proyección / salida</span>": ">Projection / output</span>",
+    ">vocabulario u otra cabeza</span>": ">vocabulary or another head</span>",
+    ">Atención</span>": ">Attention</span>",
+    ">mueve información entre posiciones</strong>": ">moves information across positions</strong>",
+    ">transforma información dentro de cada posición</strong>": ">transforms information within each position</strong>",
+    ">mantiene una ruta directa para señal y gradiente</strong>": ">preserves a direct path for signal and gradients</strong>"
+  },
+  "forbidden_output_tokens": [
+    "ARQUITECTURA",
+    "sin saltos",
+    "mezcla información",
+    "IDs discretos",
+    "Embedding + posición",
+    "vectores con orden",
+    "BLOQUE × N",
+    "estabiliza la representación",
+    "prepara la siguiente capa",
+    "Representación contextual",
+    "vocabulario u otra cabeza",
+    "mueve información",
+    "mantiene una ruta directa"
+  ]
+}
