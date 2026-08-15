@@ -42,7 +42,7 @@ for (const viewport of [{name:'desktop',width:1440,height:1000},{name:'mobile',w
   if (await referenceRows.count() < 15) failures.push(`expected at least 15 canonical reference rows, found ${await referenceRows.count()}`);
 
   for (const forbidden of ['Capítulo ', 'Prerrequisitos', 'Siguiente capítulo', 'Mecanizar —', 'Fuentes base', 'Preguntas frecuentes']) if (body.includes(forbidden)) failures.push(`Spanish leakage ${JSON.stringify(forbidden)}`);
-  for (const selector of ['.calc-wrap','.gate-wrap','.tur-wrap','.vn-wrap','.mech-time']) if (await page.locator(selector).count() !== 1) failures.push(`missing ${selector}`);
+  for (const selector of ['.calc-wrap','.gate-wrap','.tur-wrap','.vn-wrap','.mec-wrap']) if (await page.locator(selector).count() !== 1) failures.push(`missing ${selector}`);
 
   const calculator = page.locator('.calc-wrap');
   if (await calculator.count() === 1) {
@@ -122,6 +122,31 @@ for (const viewport of [{name:'desktop',width:1440,height:1000},{name:'mobile',w
     }
   }
 
+  const timeline = page.locator('.mec-wrap');
+  if (await timeline.count() === 1) {
+    const timelineHeader = (await timeline.textContent()) || '';
+    for (const phrase of ['From gears to the universal computer','Mechanical era','Theoretical era','AI is born']) {
+      if (!timelineHeader.includes(phrase)) failures.push(`canonical mechanization timeline missing ${JSON.stringify(phrase)}`);
+    }
+    if (await timeline.locator('.mec-epoch').count() !== 3) failures.push(`expected 3 canonical mechanization eras, found ${await timeline.locator('.mec-epoch').count()}`);
+    if (await timeline.locator('.mec-item').count() !== 3) failures.push(`expected 3 mechanical-era timeline items, found ${await timeline.locator('.mec-item').count()}`);
+    const mechanicalText = await timeline.locator('#mecTimeline').innerText();
+    for (const phrase of ['First mechanical calculators','Jacquard loom','Analytical Engine (Babbage) and first algorithm (Lovelace)']) if (!mechanicalText.includes(phrase)) failures.push(`mechanical era missing ${JSON.stringify(phrase)}`);
+    await timeline.locator('[data-era="teo"]').click();
+    if (!(await timeline.locator('[data-era="teo"]').evaluate(el => el.classList.contains('mec-epoch--active')))) failures.push('theoretical-era tab did not activate');
+    if (await timeline.locator('.mec-item').count() !== 3) failures.push(`expected 3 theoretical-era timeline items, found ${await timeline.locator('.mec-item').count()}`);
+    const theoreticalText = await timeline.locator('#mecTimeline').innerText();
+    for (const phrase of ['Boolean logic (Boole)','Turing Machine','Information theory (Shannon)']) if (!theoreticalText.includes(phrase)) failures.push(`theoretical era missing ${JSON.stringify(phrase)}`);
+    await timeline.locator('[data-era="dig"]').click();
+    if (await timeline.locator('.mec-item').count() !== 2) failures.push(`expected 2 AI-birth-era timeline items, found ${await timeline.locator('.mec-item').count()}`);
+    const digitalText = await timeline.locator('#mecTimeline').innerText();
+    for (const phrase of ['Von Neumann architecture','Dartmouth conference — AI is born']) if (!digitalText.includes(phrase)) failures.push(`AI-birth era missing ${JSON.stringify(phrase)}`);
+    const timelineAll = `${timelineHeader}\n${mechanicalText}\n${theoreticalText}\n${digitalText}`;
+    for (const forbidden of ['De los engranajes','Tres siglos de intentos','Era mecánica','Era teórica','Nace la IA','Primeras calculadoras','Telar de Jacquard','Máquina Analítica','Lógica booleana','Máquina de Turing','Teoría de la información','Arquitectura Von Neumann','Conferencia de Dartmouth','Hito']) {
+      if (timelineAll.includes(forbidden)) failures.push(`mechanization timeline Spanish leakage ${JSON.stringify(forbidden)}`);
+    }
+  }
+
   const videos = page.locator('video[data-s5-inline-video-player]');
   if (await videos.count() !== 1) {
     failures.push(`expected one native-English chapter video, found ${await videos.count()}`);
@@ -139,4 +164,4 @@ for (const viewport of [{name:'desktop',width:1440,height:1000},{name:'mobile',w
 }
 await browser.close();
 if (failures.length) { for (const failure of failures) console.error(failure); process.exit(1); }
-console.log('English history chapter 2 QA passed with canonical narrative, calculator, logic-gates, Turing and von Neumann visuals, plus native-English media.');
+console.log('English history chapter 2 QA passed with canonical narrative and all five canonical visuals plus native-English media.');
