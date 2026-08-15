@@ -4,6 +4,7 @@
   "replacements": {
     "El límite de las calculadoras mecánicas": "The limit of mechanical calculators",
     "Pascal y Leibniz construyeron máquinas que sumaban y multiplicaban. Calculaban, pero no podían decidir. Ese salto tardó dos siglos más.": "Pascal and Leibniz built machines that could add and multiply. They calculated, but they could not decide. That leap took another two centuries.",
+    "Pascalina · 1642": "Pascaline · 1642",
     "Rueda de Leibniz · 1674": "Leibniz wheel · 1674",
     "El límite": "The limit",
     "Ruedas dentadas de 10 posiciones. Cuando una pasa de 9 a 0, empuja la siguiente (acarreo mecánico). Brillante, pero solo conoce una operación.": "Ten-position toothed wheels. When one moves from 9 to 0, it advances the next wheel (mechanical carry). Brilliant, but it only knows one operation.",
@@ -28,6 +29,7 @@
   },
   "forbidden_output_tokens": [
     "El límite de las calculadoras",
+    "Pascalina · 1642",
     "Rueda de Leibniz",
     "Lógica condicional",
     "Rueda escalonada",
