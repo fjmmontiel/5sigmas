@@ -1,0 +1,41 @@
+{
+  "source": "snippets/from-cave-to-agi/05-arquitecturas-post-transformer.html",
+  "source_blob_sha": "26dabc303e3568280c4ad163711ab7c3f3214279",
+  "replacements": {
+    "Más allá del Transformer: tres problemas, tres respuestas": "Beyond the Transformer: three problems, three responses",
+    "Mamba, Titans y enfoques de aprendizaje continuo atacan límites distintos del Transformer. No son sustitutos generales: son soluciones a problemas concretos.": "Mamba, Titans and continual-learning approaches target different Transformer limitations. They are not general replacements: they are solutions to specific problems.",
+    "Aprendizaje continuo": "Continual learning",
+    "LIMITACIÓN DEL TRANSFORMER": "TRANSFORMER LIMITATION",
+    "IDEA NUEVA": "NEW IDEA",
+    "La autoatención tiene coste cuadrático. Al doblar el contexto, el cómputo se cuadruplica. Para secuencias largas (audio, genómica, documentos extensos), el Transformer es prohibitivamente caro.": "Self-attention has quadratic cost. Doubling the context quadruples the compute. For long sequences (audio, genomics, long documents), the Transformer becomes prohibitively expensive.",
+    "Los State Space Models procesan tokens en un estado oculto compacto que se actualiza en cada paso. Coste lineal O(N). Mamba añade selectividad: el estado decide qué información retener en cada momento.": "State Space Models process tokens through a compact hidden state that is updated at every step. Linear O(N) cost. Mamba adds selectivity: the state decides which information to retain at each moment.",
+    "Eficiente en secuencias largas, pero el estado oculto es comprimido: puede perder dependencias a largo plazo que la atención completa captaría. Menos expresivo en tareas donde importa cada relación entre tokens.": "Efficient on long sequences, but the hidden state is compressed: it can lose long-range dependencies that full attention would capture. Less expressive on tasks where every relationship between tokens matters.",
+    "La memoria del Transformer vive solo en la caché KV de la ventana activa. Fuera de la ventana, el modelo no recuerda nada. Ampliar la ventana es costoso y no resuelve la persistencia real entre sesiones.": "Transformer memory lives only in the KV cache of the active window. Outside that window, the model remembers nothing. Expanding the window is costly and does not solve true persistence across sessions.",
+    "Titans usa los propios pesos del modelo como memoria en inferencia. Una red secundaria aprende a comprimir y recuperar información relevante actualizando sus parámetros durante el uso, sin reentrenamiento completo.": "Titans uses model weights themselves as memory at inference time. A secondary network learns to compress and retrieve relevant information by updating its parameters during use, without full retraining.",
+    "Memoria persistente sin ventana grande, pero el aprendizaje en inferencia añade latencia. La memoria puede corromperse o sobrescribirse sin una gestión cuidadosa del olvido. Arquitectura más compleja de entrenar.": "Persistent memory without a large context window, but inference-time learning adds latency. Memory can become corrupted or overwritten without careful management of forgetting. The architecture is more complex to train.",
+    "Los modelos actuales se entrenan una vez y se congelan. Aprender algo nuevo requiere reentrenar o hacer fine-tuning, que puede causar \"olvido catastrófico\": el modelo pierde conocimiento previo al adquirir nuevo.": "Current models are trained once and then frozen. Learning something new requires retraining or fine-tuning, which can cause \"catastrophic forgetting\": the model loses previous knowledge as it acquires new knowledge.",
+    "El aprendizaje continuo (Continual Learning) busca que el modelo incorpore conocimiento incremental sin olvidar lo anterior. Técnicas: regularización de pesos importantes, módulos expansibles, arquitecturas con memoria episódica.": "Continual Learning aims to let the model incorporate knowledge incrementally without forgetting what came before. Techniques include regularizing important weights, expandable modules and architectures with episodic memory.",
+    "Mitigar el olvido catastrófico es difícil: las soluciones actuales funcionan bien en dominios estrechos pero escalan con dificultad. El equilibrio estabilidad-plasticidad sigue siendo un problema abierto a escala.": "Mitigating catastrophic forgetting is difficult: current solutions work well in narrow domains but are hard to scale. The stability-plasticity balance remains an open problem at scale.",
+    "Por qué importa": "Why it matters",
+    "Estas arquitecturas no compiten directamente con GPT o Claude en tareas generales. Atacan nichos donde el Transformer tiene fricciones claras: secuencias largas, memoria persistente y aprendizaje incremental. El campo avanza atacando límites concretos, no buscando un sustituto universal.": "These architectures do not compete directly with GPT or Claude on general tasks. They target niches where the Transformer has clear frictions: long sequences, persistent memory and incremental learning. The field is advancing by attacking specific limits, not by searching for a universal replacement."
+  },
+  "forbidden_output_tokens": [
+    "Más allá del Transformer",
+    "tres problemas",
+    "enfoques de aprendizaje continuo",
+    "Aprendizaje continuo",
+    "LIMITACIÓN DEL TRANSFORMER",
+    "IDEA NUEVA",
+    "La autoatención",
+    "Los State Space Models procesan",
+    "Eficiente en secuencias largas",
+    "La memoria del Transformer",
+    "Titans usa los propios pesos",
+    "Memoria persistente sin ventana",
+    "Los modelos actuales se entrenan",
+    "El aprendizaje continuo",
+    "Mitigar el olvido catastrófico",
+    "Por qué importa",
+    "Estas arquitecturas no compiten"
+  ]
+}
