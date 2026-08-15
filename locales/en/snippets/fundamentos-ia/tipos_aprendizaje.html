@@ -1,1 +1,572 @@
-<section class="fnd-v" data-demo="fnd-learning-types" aria-label="Four ways to construct a learning signal"><header><p class="k">LEARNING SIGNAL</p><h3>Where does the teacher come from?</h3></header><div class="grid"><article><b>Supervised</b><p>Examples include target labels.</p><small>email → spam / not spam</small></article><article><b>Unsupervised</b><p>No target label; the objective discovers structure.</p><small>customers → clusters</small></article><article><b>Self-supervised</b><p>The data creates its own prediction target.</p><small>context → next token</small></article><article><b>Reinforcement learning</b><p>A reward signal evaluates actions or outcomes.</p><small>state → action → reward</small></article></div><details><summary>Architecture ≠ learning method</summary><p>The same neural architecture can be trained with different learning signals. “Transformer” describes architecture; “self-supervised” describes how training targets are obtained.</p></details></section><style>.fnd-v{max-width:860px;margin:1.2rem auto;padding:18px;border:1px solid color-mix(in srgb,currentColor 14%,transparent);border-radius:18px;display:grid;gap:12px}.fnd-v *{box-sizing:border-box}.fnd-v h3,.fnd-v p{margin:.15rem 0}.fnd-v .k{font-size:.72rem;font-weight:800;letter-spacing:.08em;color:var(--md-primary-fg-color,#26a69a)}.fnd-v .grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.fnd-v article,.fnd-v details{padding:11px;border:1px solid color-mix(in srgb,currentColor 13%,transparent);border-radius:12px}.fnd-v article small{display:block;margin-top:7px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;opacity:.7}.fnd-v summary{font-weight:800;cursor:pointer}@media(max-width:560px){.fnd-v .grid{grid-template-columns:1fr}}</style>
+<div class="ta-learn ai-tabs ta-demo ta-tabs" data-demo="tipos_aprendizaje" data-anim-tabs data-default="sup" data-anim-fullscreen="on" data-anim-contrast="auto">
+  <div class="ai-tabs__header">
+    <div class="ai-tabs__title">Where the teacher comes from</div>
+    <div class="ai-tabs__subtitle">Quick rule: change the teacher and you change the way the system learns.</div>
+  </div>
+
+  <div class="ai-tabs__nav ta-tablist" role="tablist" data-role="tablist" aria-label="Learning types">
+    <button id="tab-sup" class="tab ta-tab" type="button" role="tab" data-role="tab" aria-selected="true" data-tab="sup">Supervised</button>
+    <button id="tab-unsup" class="tab ta-tab" type="button" role="tab" data-role="tab" aria-selected="false" data-tab="unsup">Unsupervised</button>
+    <button id="tab-self" class="tab ta-tab" type="button" role="tab" data-role="tab" aria-selected="false" data-tab="self">Self-supervised</button>
+    <button id="tab-rl" class="tab ta-tab" type="button" role="tab" data-role="tab" aria-selected="false" data-tab="rl">Reinforcement (RL)</button>
+  </div>
+
+  <div class="ai-tabs__content ta-panels">
+    <section class="panel ta-panel" data-panel="sup" aria-labelledby="tab-sup">
+      <div class="learn-grid">
+        <article class="learn-hero learn-hero--sup">
+          <span class="learn-kicker">Supervised</span>
+          <h3>Someone tells you the correct answer</h3>
+          <p>If someone already knows the answer, it is supervised learning.</p>
+          <div class="learn-pills">
+            <span class="learn-pill">Signal: human labels</span>
+            <span class="learn-pill">Goal: get <code>y</code> right</span>
+          </div>
+        </article>
+
+        <div class="learn-bottom">
+          <div class="learn-flow" role="img" aria-label="Supervised: input, model, prediction, comparison and adjustment">
+            <div class="learn-node"><span>1</span><strong>Input</strong><small><code>x</code> + <code>y</code></small></div>
+            <div class="learn-arrow"></div>
+            <div class="learn-node learn-node--accent"><span>2</span><strong>Predict</strong><small><code>ŷ</code></small></div>
+            <div class="learn-arrow"></div>
+            <div class="learn-node"><span>3</span><strong>Compare</strong><small><code>ŷ</code> vs <code>y</code></small></div>
+            <div class="learn-arrow"></div>
+            <div class="learn-node"><span>4</span><strong>Adjust</strong><small>minimize error</small></div>
+          </div>
+
+          <div class="learn-summary" role="list" aria-label="Supervised summary">
+            <div class="learn-card learn-card--idea" role="listitem">
+              <div class="k">Core idea</div>
+              <p>It learns by comparing its answer with the correct one.</p>
+            </div>
+            <div class="learn-card" role="listitem">
+              <div class="k">When it fits</div>
+              <p>When you can obtain reliable labels and measure the error.</p>
+            </div>
+            <div class="learn-card" role="listitem">
+              <div class="k">What it returns</div>
+              <p>A prediction: class, value or probability.</p>
+            </div>
+            <div class="learn-card" role="listitem">
+              <div class="k">Example</div>
+              <p>Spam, churn, default risk.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel ta-panel" data-panel="unsup" aria-labelledby="tab-unsup" hidden>
+      <div class="learn-grid">
+        <article class="learn-hero learn-hero--unsup">
+          <span class="learn-kicker">Unsupervised</span>
+          <h3>No one gives you the answer</h3>
+          <p>If no one knows the answer, it is unsupervised learning.</p>
+          <div class="learn-pills">
+            <span class="learn-pill">Signal: only <code>x</code></span>
+            <span class="learn-pill">Goal: find structure</span>
+          </div>
+        </article>
+
+        <div class="learn-bottom">
+          <div class="learn-flow" role="img" aria-label="Unsupervised: data, organization, groups and human validation">
+            <div class="learn-node"><span>1</span><strong>Input</strong><small>only <code>x</code></small></div>
+            <div class="learn-arrow"></div>
+            <div class="learn-node learn-node--accent"><span>2</span><strong>Organize</strong><small>similarity / rarity</small></div>
+            <div class="learn-arrow"></div>
+            <div class="learn-node"><span>3</span><strong>Return</strong><small>clusters / anomalies</small></div>
+            <div class="learn-arrow"></div>
+            <div class="learn-node"><span>4</span><strong>Validate</strong><small>business reviews it</small></div>
+          </div>
+
+          <div class="learn-summary" role="list" aria-label="Unsupervised summary">
+            <div class="learn-card learn-card--idea" role="listitem">
+              <div class="k">Core idea</div>
+              <p>It does not look for a correct answer: it looks for useful structure.</p>
+            </div>
+            <div class="learn-card" role="listitem">
+              <div class="k">When it fits</div>
+              <p>When there are no labels but you want to segment or detect outliers.</p>
+            </div>
+            <div class="learn-card" role="listitem">
+              <div class="k">What it returns</div>
+              <p>A useful organization of the data space.</p>
+            </div>
+            <div class="learn-card" role="listitem">
+              <div class="k">Example</div>
+              <p>Customer segmentation or anomaly detection.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel ta-panel" data-panel="self" aria-labelledby="tab-self" hidden>
+      <div class="learn-grid">
+        <article class="learn-hero learn-hero--self">
+          <span class="learn-kicker">Self-supervised</span>
+          <h3>The data itself creates its teacher</h3>
+          <p>If the data creates the signal, it is self-supervised learning.</p>
+          <div class="learn-pills">
+            <span class="learn-pill">Signal: <code>x</code> creates <code>y*</code></span>
+            <span class="learn-pill">Goal: learn a general foundation</span>
+          </div>
+        </article>
+
+        <div class="learn-bottom">
+          <div class="learn-flow" role="img" aria-label="Self-supervised: data, pretext task, representation and adaptation">
+            <div class="learn-node"><span>1</span><strong>Input</strong><small>unlabeled data</small></div>
+            <div class="learn-arrow"></div>
+            <div class="learn-node learn-node--accent"><span>2</span><strong>Pretext</strong><small>create <code>y*</code></small></div>
+            <div class="learn-arrow"></div>
+            <div class="learn-node"><span>3</span><strong>Learn</strong><small>representations</small></div>
+            <div class="learn-arrow"></div>
+            <div class="learn-node"><span>4</span><strong>Adapt</strong><small>fine-tuning</small></div>
+          </div>
+
+          <div class="learn-summary" role="list" aria-label="Self-supervised summary">
+            <div class="learn-card learn-card--idea" role="listitem">
+              <div class="k">Core idea</div>
+              <p>The data itself creates a provisional task to learn something reusable.</p>
+            </div>
+            <div class="learn-card" role="listitem">
+              <div class="k">When it fits</div>
+              <p>When you have huge amounts of raw data and few human labels.</p>
+            </div>
+            <div class="learn-card" role="listitem">
+              <div class="k">What it returns</div>
+              <p>Embeddings or transferable representations.</p>
+            </div>
+            <div class="learn-card" role="listitem">
+              <div class="k">Example</div>
+              <p>Pretraining language or vision models.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel ta-panel" data-panel="rl" aria-labelledby="tab-rl" hidden>
+      <div class="learn-grid">
+        <article class="learn-hero learn-hero--rl">
+          <span class="learn-kicker">Reinforcement</span>
+          <h3>You learn through reward or punishment</h3>
+          <p>If it acts and receives a reward, it is RL.</p>
+          <div class="learn-pills">
+            <span class="learn-pill">Signal: reward</span>
+            <span class="learn-pill">Goal: maximize return</span>
+          </div>
+        </article>
+
+        <div class="learn-bottom">
+          <div class="learn-flow" role="img" aria-label="RL: state, action, reward and new policy">
+            <div class="learn-node"><span>1</span><strong>State</strong><small>what is happening</small></div>
+            <div class="learn-arrow"></div>
+            <div class="learn-node learn-node--accent"><span>2</span><strong>Action</strong><small>choose what to do</small></div>
+            <div class="learn-arrow"></div>
+            <div class="learn-node"><span>3</span><strong>Reward</strong><small>good / bad</small></div>
+            <div class="learn-arrow"></div>
+            <div class="learn-node"><span>4</span><strong>Policy</strong><small>changes next time</small></div>
+          </div>
+
+          <div class="learn-summary" role="list" aria-label="RL summary">
+            <div class="learn-card learn-card--idea" role="listitem">
+              <div class="k">Core idea</div>
+              <p>It learns by trying actions and measuring their accumulated reward.</p>
+            </div>
+            <div class="learn-card" role="listitem">
+              <div class="k">When it fits</div>
+              <p>When sequences of actions matter, not just a single isolated prediction.</p>
+            </div>
+            <div class="learn-card" role="listitem">
+              <div class="k">What it returns</div>
+              <p>A policy: what to do in each state.</p>
+            </div>
+            <div class="learn-card" role="listitem">
+              <div class="k">Example</div>
+              <p>Games, robotics, control and sequential optimization.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<style>
+  .ta-learn,
+  .ta-learn * {
+    box-sizing: border-box;
+  }
+
+  .ta-learn {
+    --learn-bg: color-mix(in srgb, var(--md-default-bg-color, #ffffff) 95%, #e0f2fe 5%);
+    --learn-panel: color-mix(in srgb, var(--md-default-bg-color, #ffffff) 90%, #0f172a 10%);
+    --learn-line: color-mix(in srgb, var(--md-default-fg-color, #0f172a) 16%, transparent);
+    --learn-fg: color-mix(in srgb, var(--md-default-fg-color, #0f172a) 94%, transparent);
+    --learn-muted: color-mix(in srgb, var(--md-default-fg-color, #0f172a) 68%, transparent);
+    --learn-soft: color-mix(in srgb, var(--md-default-bg-color, #ffffff) 96%, #0f172a 4%);
+    --learn-a: var(--ta-brand-primary, #26A69A);
+    --learn-b: var(--ta-brand-accent, #324AB2);
+    --learn-c: var(--md-accent-fg-color, #FFB343);
+    --learn-d: #7c3aed;
+    --ta-brand-font: "Avenir Next", "Avenir", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+
+    display: block;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: clamp(14px, 2vw, 24px);
+    border-radius: 24px;
+    border: 1px solid var(--learn-line);
+    background:
+      radial-gradient(860px 420px at 0% 0%, color-mix(in srgb, var(--learn-a) 12%, transparent), transparent 60%),
+      radial-gradient(720px 360px at 100% 0%, color-mix(in srgb, var(--learn-c) 12%, transparent), transparent 62%),
+      var(--learn-bg);
+    color: var(--learn-fg);
+    font-family: var(--ta-brand-font);
+  }
+
+  [data-md-color-scheme="slate"] .ta-learn {
+    --learn-bg: color-mix(in srgb, var(--md-default-bg-color, #0b1220) 92%, #ffffff 8%);
+    --learn-panel: color-mix(in srgb, var(--md-default-bg-color, #0b1220) 82%, #ffffff 18%);
+    --learn-line: color-mix(in srgb, #e2e8f0 18%, transparent);
+    --learn-fg: color-mix(in srgb, #f8fafc 94%, transparent);
+    --learn-muted: color-mix(in srgb, #f8fafc 68%, transparent);
+    --learn-soft: color-mix(in srgb, var(--md-default-bg-color, #0b1220) 86%, #ffffff 14%);
+  }
+
+  .ai-tabs__header {
+    display: grid;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+
+  .ai-tabs__title {
+    font-size: clamp(24px, 3vw, 34px);
+    font-weight: 900;
+    letter-spacing: -.03em;
+    line-height: 1.02;
+  }
+
+  .ai-tabs__subtitle {
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--learn-muted);
+  }
+
+
+  .learn-guidebar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .learn-guidechip {
+    min-height: 42px;
+    padding: 9px 11px;
+    border-radius: 14px;
+    border: 1px solid color-mix(in srgb, var(--md-default-fg-color, #0f172a) 12%, transparent);
+    background: color-mix(in srgb, var(--md-default-bg-color, #ffffff) 92%, #0f172a 8%);
+    color: color-mix(in srgb, var(--md-default-fg-color, #0f172a) 90%, transparent);
+    font-size: 12.5px;
+    font-weight: 700;
+    line-height: 1.35;
+  }
+
+  [data-md-color-scheme="slate"] .learn-guidechip {
+    background: color-mix(in srgb, var(--md-default-bg-color, #0b1220) 84%, #ffffff 16%);
+    border-color: color-mix(in srgb, #f8fafc 14%, transparent);
+    color: color-mix(in srgb, #f8fafc 92%, transparent);
+  }
+
+  .ai-tabs__nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+
+  .ai-tabs__nav .tab {
+    appearance: none;
+    border: 1px solid var(--learn-line);
+    background: color-mix(in srgb, var(--learn-soft) 92%, transparent);
+    color: var(--learn-muted);
+    border-radius: 999px;
+    padding: 9px 12px;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+  }
+
+  .ai-tabs__nav .tab[aria-selected="true"] {
+    color: var(--learn-fg);
+    border-color: color-mix(in srgb, var(--learn-b) 44%, transparent);
+    background: color-mix(in srgb, var(--learn-b) 14%, var(--learn-soft));
+  }
+
+  .ai-tabs__nav .tab:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--learn-b) 22%, transparent);
+  }
+
+  .panel[hidden] {
+    display: none;
+  }
+
+  .learn-grid {
+    display: grid;
+    gap: 12px;
+    grid-template-rows: auto auto;
+  }
+
+  .learn-bottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  @media (max-width: 700px) {
+    .learn-bottom {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .learn-hero,
+  .learn-flow,
+  .learn-card {
+    border: 1px solid var(--learn-line);
+    border-radius: 20px;
+    background: color-mix(in srgb, var(--learn-panel) 90%, transparent);
+  }
+
+  .learn-hero {
+    padding: 18px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .learn-hero::after {
+    content: "";
+    position: absolute;
+    inset: auto -40px -40px auto;
+    width: 180px;
+    height: 180px;
+    border-radius: 999px;
+    opacity: .18;
+    background: currentColor;
+    filter: blur(60px);
+    pointer-events: none;
+  }
+
+  .learn-hero--sup { color: var(--learn-b); }
+  .learn-hero--unsup { color: var(--learn-a); }
+  .learn-hero--self { color: var(--learn-c); }
+  .learn-hero--rl { color: var(--learn-d); }
+
+  .learn-kicker,
+  .learn-pill {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    border: 1px solid var(--learn-line);
+    background: color-mix(in srgb, var(--learn-soft) 92%, transparent);
+    color: var(--learn-fg);
+  }
+
+  .learn-kicker {
+    padding: 6px 10px;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+  }
+
+  .learn-hero h3 {
+    margin: 12px 0 8px;
+    color: var(--learn-fg);
+    font-size: clamp(22px, 3vw, 32px);
+    line-height: 1.05;
+    letter-spacing: -.03em;
+  }
+
+  .learn-hero p {
+    margin: 0;
+    max-width: 66ch;
+    color: var(--learn-muted);
+    line-height: 1.55;
+  }
+
+  .learn-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+  }
+
+  .learn-pill {
+    padding: 7px 11px;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .learn-flow {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    padding: 16px;
+    align-items: start;
+  }
+
+  .learn-node {
+    min-height: 108px;
+    border-radius: 18px;
+    border: 1px solid var(--learn-line);
+    background: color-mix(in srgb, var(--learn-soft) 90%, transparent);
+    padding: 14px;
+    display: grid;
+    gap: 6px;
+    align-content: start;
+  }
+
+  .learn-node span {
+    width: 24px;
+    height: 24px;
+    border-radius: 999px;
+    display: inline-grid;
+    place-items: center;
+    border: 1px solid var(--learn-line);
+    background: color-mix(in srgb, var(--learn-soft) 96%, transparent);
+    font-size: 12px;
+    font-weight: 900;
+  }
+
+  .learn-node strong {
+    font-size: 15px;
+    line-height: 1.1;
+  }
+
+  .learn-node small {
+    color: var(--learn-muted);
+    font-size: 12px;
+    line-height: 1.35;
+  }
+
+  .learn-node--accent {
+    border-color: color-mix(in srgb, var(--learn-b) 42%, transparent);
+    background:
+      linear-gradient(135deg, color-mix(in srgb, var(--learn-b) 14%, transparent), transparent 75%),
+      color-mix(in srgb, var(--learn-soft) 90%, transparent);
+  }
+
+  .learn-arrow {
+    display: none;
+  }
+
+  .learn-summary {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .learn-card {
+    padding: 16px;
+  }
+
+  .learn-card .k {
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--learn-muted);
+    margin-bottom: 8px;
+  }
+
+  .learn-card p {
+    margin: 0;
+    line-height: 1.55;
+    font-size: 14px;
+  }
+
+  .learn-card--idea {
+    background:
+      linear-gradient(135deg, color-mix(in srgb, var(--learn-b) 10%, transparent), transparent 75%),
+      color-mix(in srgb, var(--learn-panel) 90%, transparent);
+  }
+
+  @media (max-width: 500px) {
+    .learn-flow,
+    .learn-summary {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    const KEY = "tipos_aprendizaje";
+    if (window.__portableTabsFallback && window.__portableTabsFallback[KEY]) return;
+    window.__portableTabsFallback = window.__portableTabsFallback || {};
+    window.__portableTabsFallback[KEY] = true;
+
+    function activate(root, key) {
+      const tabs = root.querySelectorAll('[data-role="tab"], [role="tab"]');
+      const panels = root.querySelectorAll("[data-panel]");
+      tabs.forEach((tab) => {
+        const selected = tab.getAttribute("data-tab") === key;
+        tab.setAttribute("aria-selected", selected ? "true" : "false");
+        tab.tabIndex = selected ? 0 : -1;
+      });
+      panels.forEach((panel) => {
+        panel.hidden = panel.getAttribute("data-panel") !== key;
+      });
+    }
+
+    function initRoot(root) {
+      if (!root || root.dataset.tabsReady === "true") return;
+      root.dataset.tabsReady = "true";
+      const tabs = Array.from(root.querySelectorAll('[data-role="tab"], [role="tab"]'));
+      const first = root.getAttribute("data-default") || (tabs[0] && tabs[0].getAttribute("data-tab"));
+      tabs.forEach((tab) => {
+        tab.tabIndex = -1;
+        tab.addEventListener("click", () => activate(root, tab.getAttribute("data-tab")));
+        tab.addEventListener("keydown", (event) => {
+          const current = tabs.indexOf(tab);
+          let next = current;
+          if (event.key === "ArrowRight") next = (current + 1) % tabs.length;
+          if (event.key === "ArrowLeft") next = (current - 1 + tabs.length) % tabs.length;
+          if (event.key === "Home") next = 0;
+          if (event.key === "End") next = tabs.length - 1;
+          if (next !== current) {
+            event.preventDefault();
+            tabs[next].focus();
+            activate(root, tabs[next].getAttribute("data-tab"));
+          }
+        });
+      });
+      activate(root, first);
+    }
+
+    function initAll(scope) {
+      scope.querySelectorAll('.ta-learn[data-demo="tipos_aprendizaje"][data-anim-tabs]').forEach(initRoot);
+    }
+
+    if (window.TabbedAnimations && typeof window.TabbedAnimations.initAll === "function") {
+      window.TabbedAnimations.initAll();
+    } else {
+      initAll(document);
+    }
+
+    if (typeof document$ !== "undefined" && document$.subscribe) {
+      document$.subscribe(() => {
+        if (window.TabbedAnimations && typeof window.TabbedAnimations.initAll === "function") {
+          window.TabbedAnimations.initAll();
+        } else {
+          initAll(document);
+        }
+      });
+    }
+  })();
+</script>
