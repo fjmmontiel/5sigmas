@@ -1,0 +1,40 @@
+{
+  "source": "snippets/from-cave-to-agi/02-limite-calculadoras.html",
+  "source_blob_sha": "a3a6f6905063b766a1c2fc902df789453444b921",
+  "replacements": {
+    "El límite de las calculadoras mecánicas": "The limit of mechanical calculators",
+    "Pascal y Leibniz construyeron máquinas que sumaban y multiplicaban. Calculaban, pero no podían decidir. Ese salto tardó dos siglos más.": "Pascal and Leibniz built machines that could add and multiply. They calculated, but they could not decide. That leap took another two centuries.",
+    "Rueda de Leibniz · 1674": "Leibniz wheel · 1674",
+    "El límite": "The limit",
+    "Ruedas dentadas de 10 posiciones. Cuando una pasa de 9 a 0, empuja la siguiente (acarreo mecánico). Brillante, pero solo conoce una operación.": "Ten-position toothed wheels. When one moves from 9 to 0, it advances the next wheel (mechanical carry). Brilliant, but it only knows one operation.",
+    "Suma": "Addition",
+    "Resta": "Subtraction",
+    "Multiplicación": "Multiplication",
+    "Lógica condicional": "Conditional logic",
+    "Rueda escalonada — dientes de longitud variable": "Stepped wheel — variable-length teeth",
+    "La rueda escalonada permite multiplicar repitiendo sumas mecánicas. El operador giraba la manivela el número de veces correcto. Más versátil, pero sigue sin poder decidir.": "The stepped wheel enables multiplication by repeating mechanical additions. The operator turned the crank the required number of times. More versatile, but still unable to decide.",
+    "División": "Division",
+    "Bucles o repetición": "Loops or repetition",
+    "El muro infranqueable: la lógica condicional": "The impassable wall: conditional logic",
+    "Ambas máquinas podían calcular <em>si se les decía exactamente qué calcular</em>. Lo que no podían hacer era tomar decisiones:": "Both machines could calculate <em>if they were told exactly what to calculate</em>. What they could not do was make decisions:",
+    "Imposible para cualquiera de ellas": "Impossible for either machine",
+    "SI resultado &gt; 100 ENTONCES hacer A, SI NO hacer B": "IF result &gt; 100 THEN do A, ELSE do B",
+    "Requiere leer el resultado, compararlo y elegir un camino. Ninguna máquina mecánica podía alterar su propio proceso de ejecución.": "This requires reading the result, comparing it and choosing a path. Neither mechanical machine could alter its own execution process.",
+    "Lo que hizo falta": "What was needed",
+    "Instrucciones separadas del mecanismo": "Instructions separated from the mechanism",
+    "Jacquard (tarjetas, 1805) · Babbage (Analytical Engine, 1837)": "Jacquard (cards, 1805) · Babbage (Analytical Engine, 1837)",
+    "Lógica booleana en circuitos": "Boolean logic in circuits",
+    "Boole (álgebra lógica, 1854) · Shannon (circuitos, 1937)": "Boole (logical algebra, 1854) · Shannon (circuits, 1937)"
+  },
+  "forbidden_output_tokens": [
+    "El límite de las calculadoras",
+    "Rueda de Leibniz",
+    "Lógica condicional",
+    "Rueda escalonada",
+    "El muro infranqueable",
+    "Imposible para cualquiera",
+    "Lo que hizo falta",
+    "Instrucciones separadas",
+    "Lógica booleana"
+  ]
+}
