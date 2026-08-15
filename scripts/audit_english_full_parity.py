@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """Measure English 5sigmas against the canonical Spanish public surface.
 
-Spanish under docs/ is the source of truth.  The English locale is complete only
+Spanish under docs/ is the source of truth. The English locale is complete only
 when it mirrors the same public editorial routes, navigation graph, embedded
-visual dependencies, article video declarations and shared JavaScript runtime.
+visual dependencies, article video declarations, article-audio declarations
+and shared JavaScript runtime.
 
-During the migration this script reports the exact delta and exits zero.  When
+During the migration this script reports the exact delta and exits zero. When
 ``locales/en/manifest.yml`` declares ``status: complete`` (or --strict is used),
 any delta is a CI failure.
 """
@@ -25,6 +26,8 @@ ROOT = Path(__file__).resolve().parents[1]
 DOCS = ROOT / "docs"
 LOCALE = ROOT / "locales" / "en"
 MANIFEST = LOCALE / "manifest.yml"
+LOCALE_AUDIO_INDEX = LOCALE / "article_audio.yml"
+SPANISH_AUDIO_INDEX = DOCS / "series" / "article_audio.yml"
 MKDOCS_ES = ROOT / "mkdocs.yml"
 MKDOCS_EN = ROOT / "mkdocs.en.yml"
 NON_PUBLIC_STATES = {"draft", "hidden", "wip", "private"}
@@ -107,11 +110,22 @@ def video_pages(routes: set[str]) -> set[str]:
     return result
 
 
-def manifest() -> dict[str, Any]:
-    if not MANIFEST.is_file():
+def load_mapping(path: Path) -> dict[str, Any]:
+    if not path.is_file():
         return {}
-    value = yaml.safe_load(MANIFEST.read_text(encoding="utf-8")) or {}
+    try:
+        value = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    except yaml.YAMLError:
+        return {}
     return value if isinstance(value, dict) else {}
+
+
+def article_audio_index(path: Path) -> dict[str, Any]:
+    return load_mapping(path)
+
+
+def manifest() -> dict[str, Any]:
+    return load_mapping(MANIFEST)
 
 
 def nav_paths(config_text: str) -> set[str]:
@@ -145,19 +159,40 @@ def locale_video_pages(config_text: str) -> set[str]:
     return set(re.findall(r"^\s{4}([^:#]+\.md):\s*$", match.group("body"), re.MULTILINE))
 
 
-def article_audio_pages() -> set[str]:
-    index = DOCS / "series" / "article_audio.yml"
-    if not index.is_file():
-        return set()
-    value = yaml.safe_load(index.read_text(encoding="utf-8")) or {}
-    return set(value) if isinstance(value, dict) else set()
-
-
 def compare(expected: set[str], actual: set[str]) -> dict[str, list[str]]:
     return {
         "missing": sorted(expected - actual),
         "extra": sorted(actual - expected),
     }
+
+
+def english_audio_binary_contract(
+    expected_routes: set[str],
+    locale_index: dict[str, Any],
+) -> tuple[list[str], set[str]]:
+    failures: list[str] = []
+    required_files: set[str] = {"article_audio.yml"} if expected_routes else set()
+
+    for route in sorted(expected_routes):
+        entry = locale_index.get(route)
+        if not isinstance(entry, dict):
+            continue
+        raw = str(entry.get("audio_file") or "").strip().lstrip("/")
+        if not raw:
+            failures.append(f"{route}: missing audio_file")
+            continue
+        if not raw.startswith("en/"):
+            failures.append(f"{route}: audio_file must use the en/ namespace ({raw})")
+            continue
+        relative = raw.removeprefix("en/")
+        if not relative or ".." in Path(relative).parts:
+            failures.append(f"{route}: unsafe audio_file ({raw})")
+            continue
+        required_files.add(relative)
+        if not (LOCALE / relative).is_file():
+            failures.append(f"{route}: missing locales/en/{relative}")
+
+    return failures, required_files
 
 
 def main() -> int:
@@ -173,10 +208,15 @@ def main() -> int:
     routes = expected_editorial_routes()
     snippets = source_snippets(routes)
     videos = video_pages(routes)
-    audio = article_audio_pages()
+    spanish_audio = article_audio_index(SPANISH_AUDIO_INDEX)
+    english_audio = article_audio_index(LOCALE_AUDIO_INDEX)
+    expected_audio = set(spanish_audio)
+    actual_audio = set(english_audio)
+    audio_binary_failures, required_audio_files = english_audio_binary_contract(expected_audio, english_audio)
 
     declared_routes = set(data.get("published_routes") or [])
     declared_snippets = set(data.get("required_snippets") or [])
+    declared_files = set(data.get("published_files") or [])
     existing_routes = {
         path.relative_to(LOCALE).as_posix()
         for path in LOCALE.rglob("*.md")
@@ -208,7 +248,7 @@ def main() -> int:
             "nav_routes": len(expected_nav),
             "snippet_dependencies": len(snippets),
             "video_articles": len(videos),
-            "audio_articles": len(audio),
+            "audio_articles": len(expected_audio),
             "javascript_modules": len(es_js),
         },
         "editorial_routes": compare(routes, existing_routes),
@@ -218,8 +258,13 @@ def main() -> int:
         "navigation": compare(expected_nav, actual_nav),
         "video_articles": compare(videos, en_video_pages),
         "javascript_modules": compare(es_js, en_js),
-        "audio_articles": {
-            "missing": sorted(audio),
+        "audio_articles": compare(expected_audio, actual_audio),
+        "audio_binaries": {
+            "missing": audio_binary_failures,
+            "extra": [],
+        },
+        "manifest_audio_files": {
+            "missing": sorted(required_audio_files - declared_files),
             "extra": [],
         },
     }
@@ -237,6 +282,7 @@ def main() -> int:
     for key in (
         "editorial_routes", "manifest_routes", "snippet_files", "manifest_snippets",
         "navigation", "video_articles", "javascript_modules", "audio_articles",
+        "audio_binaries", "manifest_audio_files",
     ):
         section = report[key]
         deltas += len(section.get("missing", [])) + len(section.get("extra", []))
@@ -248,12 +294,13 @@ def main() -> int:
     print(f"  canonical nav routes:       {len(expected_nav)}")
     print(f"  snippet dependencies:       {len(snippets)}")
     print(f"  video-bearing articles:     {len(videos)}")
+    print(f"  audio-bearing articles:     {len(expected_audio)}")
     print(f"  JS runtime modules:         {len(es_js)}")
     print(f"  total parity delta:         {deltas}")
 
     for key in (
         "editorial_routes", "snippet_files", "navigation", "video_articles",
-        "javascript_modules", "audio_articles",
+        "javascript_modules", "audio_articles", "audio_binaries", "manifest_audio_files",
     ):
         missing = report[key]["missing"]
         if missing:
