@@ -4,7 +4,7 @@ seo_title: "What is an LLM: how a large language model works"
 description: "What an LLM is, how it tokenizes, learns and generates text, what instruction tuning changes, and the main technical limits."
 keywords: "LLM, large language model, tokens, pretraining, Transformer, instruction tuning, RLHF"
 date: 2026-04-07
-date_modified: 2026-08-05
+date_modified: 2026-08-15
 ---
 
 # What is an LLM and how does it work?
@@ -15,15 +15,7 @@ The definition is simple. The resulting behaviour is not. A useful way to unders
 
 ## The 60-second answer
 
-```text
-text
-→ tokens
-→ numerical vectors
-→ Transformer blocks
-→ next-token probabilities
-→ select a token
-→ repeat
-```
+{{ include_html("snippets/temas/llm-token-pipeline.html") }}
 
 The model does not search for a stored sentence or query a database by default. It calculates a probability distribution over the vocabulary, chooses a continuation, and runs the process again with the updated context.
 
@@ -65,11 +57,9 @@ The guide to [the Transformer](/en/temas/transformer/) develops this architectur
 
 ## 3. The base objective is next-token prediction
 
-For an autoregressive LLM, training optimizes a loss such as:
+For an autoregressive LLM, training optimizes the probability of the true token conditioned on the previous ones.
 
-```text
-L = - Σ log p(token_t | token_1, ..., token_{t-1})
-```
+{{ include_html("snippets/temas/llm-next-token.html") }}
 
 The model receives a sequence and must assign high probability to the real token that follows at each position. The gradient indicates how to modify millions or billions of parameters to make less error on the next batch.
 
@@ -80,6 +70,8 @@ That does not turn probability into truth. The training objective rewards a cont
 ## 4. Pretraining, instructions and preferences are different stages
 
 A conversational product usually passes through several stages.
+
+{{ include_html("snippets/temas/llm-adaptation-stages.html") }}
 
 ### Pretraining
 
@@ -178,7 +170,7 @@ The guide to [evaluating AI models](/en/temas/evaluacion-modelos/) proposes a co
 
 ### Is an LLM a database?
 
-No. Its parameters compress learned regularities, but they do not provide exact retrieval, transactional updates or guaranteed provenance. A system can connect an LLM to a database or index, but those are separate components.
+No. Its parameters compress learned regularities, but they do not provide exact retrieval, transactional updates or guaranteed provenance. A system can connect the LLM to a database or index, but those are separate components.
 
 ### Does an LLM understand language?
 
