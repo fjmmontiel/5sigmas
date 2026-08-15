@@ -5,7 +5,7 @@ const base = process.env.S5_PREVIEW_BASE || 'http://127.0.0.1:8000';
 const root = '/en/series/from-cave-to-agi/';
 const pages = [
   ['00_presentacion_serie', 'From the Caves to AGI'],
-  ['01-representar', 'Chapter 1 — Represent'],
+  ['01-representar', 'Chapter 1: Represent'],
   ['02-mecanizar', 'Chapter 2 — Mechanize'],
   ['03-aprender', 'Chapter 3 — Learn'],
   ['04-escalar', 'Chapter 4 — Scale'],
