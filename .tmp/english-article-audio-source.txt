@@ -1,0 +1,53 @@
+In this chapter we are going to answer a question that is often answered too quickly: what exactly is generative artificial intelligence, and why has it gone from being a technical curiosity to becoming one of the most visible layers of modern software?
+
+The central idea is simple. Generative AI does not only classify an input or decide which group it belongs to. It generates a new output: text, images, audio, video, or code. That changes the type of system we build, and also the intuition we need in order to understand it.
+
+To make that precise, we will walk through the three pieces that explain most of the recent leap. First, embeddings. Second, the Transformer. Third, scaling laws. We will then close with the difference between a plain LLM, a system with RAG, and an agent, followed by a quick view of what it means to operate these systems in production.
+
+Start with the foundation. A machine-learning model needs numbers as input, and text is not naturally numerical. Before a model can do useful work with language, that language has to be transformed into a mathematical representation that the model can process.
+
+The first step is tokenization. Instead of treating an entire sentence as one indivisible unit, the system splits it into smaller pieces called tokens. A token can be a word, part of a word, or even a punctuation mark. This fragmentation makes it possible to handle very large vocabularies without learning a completely separate input for every possible word.
+
+The second step is to turn every token into a vector. A vector is simply a list of numbers. Initially, those numbers have no special meaning. They are a structure that can be adjusted during training.
+
+The third step is the important one. During training, those vectors move through a mathematical space until tokens that appear in similar contexts end up close to each other. That is where the embedding emerges. It is not a hand-written dictionary definition. It is a learned position in a semantic space.
+
+This helps explain why some relationships appear geometrically. Related terms end up near each other. Terms that rarely share contexts move farther apart. And some vector operations capture semantic regularities that were never programmed explicitly.
+
+The idea is deeper than it first appears. When we say that a model processes text, what we really mean is that it processes vectors. The same logic can also be extended to other modalities. Text, images, and audio can all be transformed into numerical representations that a sufficiently general architecture can process.
+
+But turning language into vectors still does not solve the central sequence problem: how do you process long contexts without losing the important information along the way?
+
+Before the Transformer, dominant language models processed sequences recurrently. They moved through tokens step by step. This created two practical costs. First, training was difficult to parallelize. Second, information from the beginning of a long sequence could degrade as the model progressed through the context.
+
+The Transformer changed this with attention. Rather than reading text only as a strictly linear chain, attention computes relationships between tokens in the context. Put differently, it lets the model weight which parts of the sequence matter most when interpreting a token or producing the next one.
+
+That technical detail has enormous consequences. The model no longer depends on carrying a fragile hidden state forward one step at a time. It can relate distant parts of the context more directly and perform much of that computation in parallel. This is one reason language modelling quality improved so strongly while training also became much easier to scale.
+
+The Transformer is not limited to text. The architecture is general enough to be adapted to images, audio, video, and code. That generality is one of the reasons it became central to modern foundation models.
+
+But having the right architecture was still not enough. The decisive jump came when it was combined with very large datasets and very large compute budgets.
+
+This is where scaling laws enter. As model size, training data, and compute increase, performance often improves in relatively predictable ways when those resources are balanced sensibly.
+
+The striking result was not just that performance improved. At larger scales, models also began to display useful behaviours that were not implemented as isolated hand-written capabilities: better few-shot learning, stronger instruction following, more capable summarisation and translation, better code synthesis, and more coherent behaviour on complex tasks.
+
+These effects are sometimes described as emergent capabilities. That does not mean magic. It means that the combination of architecture, data, optimisation, and scale can produce useful behaviours that are difficult to understand by looking only at local rules or small benchmarks.
+
+Once those capabilities are sufficiently broad and stable, we reach the idea of a foundation model. A foundation model is pretrained on a large amount of data and can then be adapted to many tasks without being rebuilt from scratch. Instead of training a separate model for every problem, we begin with a general base and specialise it through prompting, fine-tuning, retrieval, or external tools.
+
+At this point it is useful to separate three practical configurations that are often mixed together in public discussion.
+
+The first is a plain LLM. Here the model answers using the capabilities and knowledge encoded during training. This is useful for writing, summarising, translating, or analysing text when general knowledge is sufficient. The limitation is straightforward: the model does not automatically know facts that appeared after its training cutoff, and it cannot independently query private documents or live systems.
+
+The second configuration is an LLM with RAG, or retrieval-augmented generation. Here the system does not rely only on information represented in model parameters. Before producing an answer, it retrieves relevant external context, such as documentation, a knowledge base, or internal policy. This can improve freshness, traceability, and accuracy in a specific domain, but it adds another layer of system complexity. Quality now depends not only on the model, but also on indexing, chunking, retrieval quality, ranking, and how context is assembled for the model.
+
+The third configuration is an agent. Here the model does more than produce a response. It can decide on intermediate steps, call tools, inspect external systems, and chain actions together to pursue an objective. This expands what the system can do, but it also increases operational cost and the surface area for failure. A poorly controlled agent does not only risk saying the wrong thing. It can take the wrong action.
+
+So moving farther along that progression does not automatically mean better. It means more capability, a larger operational surface, and more difficulty controlling the real behaviour of the system.
+
+The final piece is LLMOps. If MLOps is the discipline of putting machine-learning systems into production, LLMOps adapts many of those concerns to foundation-model systems. Important questions include prompt versioning, continuous evaluation, observability, cost, latency, fallback behaviour, security, context management, and response traceability.
+
+In other words, embeddings, the Transformer, and scaling laws explain much of why these models work. LLMs, RAG, agents, and LLMOps explain how those models become useful systems, or problematic ones, once they leave the laboratory.
+
+If you remember one idea from this chapter, make it this. Generative AI is not a magical black box that happens to write convincing text. It is built from mathematical representations of data, architectures able to process context at scale, and training regimes in which the right combination of data and compute changes model behaviour. Everything else, from a chatbot to an agent with tools, is built on top of that foundation.
