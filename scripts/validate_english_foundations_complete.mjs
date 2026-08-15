@@ -106,9 +106,10 @@ try {
       if (!response?.ok()) failures.push(`${entry.route}: HTTP ${response?.status() ?? 'no response'}`);
 
       const body = await page.locator('body').innerText();
+      const lowerBody = body.toLowerCase();
       if (!body.includes(entry.title)) failures.push(`${entry.route}: missing English page title`);
       for (const concept of entry.concepts) {
-        if (!body.toLowerCase().includes(concept.toLowerCase())) {
+        if (!lowerBody.includes(concept.toLowerCase())) {
           failures.push(`${entry.route}: missing core concept ${concept}`);
         }
       }
@@ -163,10 +164,13 @@ try {
         failures.push(`${entry.route}: expected ${entry.audio ? 'one' : 'zero'} native English article-audio player, found ${audioCount}`);
       }
       if (entry.audio && audioCount === 1) {
-        if (!body.includes('Article audio') || !body.includes('Listen to this article')) {
+        // innerText reflects CSS text-transform (the eyebrow renders uppercase),
+        // so validate semantic copy case-insensitively rather than weakening the
+        // locale contract to a presentation-specific casing.
+        if (!lowerBody.includes('article audio') || !lowerBody.includes('listen to this article')) {
           failures.push(`${entry.route}: missing English article-audio UI copy`);
         }
-        if (body.includes('Audio local') || body.includes('Escucha el artículo')) {
+        if (lowerBody.includes('audio local') || lowerBody.includes('escucha el artículo')) {
           failures.push(`${entry.route}: Spanish article-audio UI leaked into English`);
         }
         const source = audio.first().locator('source').first();
