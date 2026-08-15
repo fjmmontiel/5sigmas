@@ -4,7 +4,7 @@ seo_title: "Reasoning in LLMs: chain of thought and test-time compute"
 description: "What reasoning means in an LLM, how chain of thought, search and verifiers work, and what they cost in latency, compute and reliability."
 keywords: "LLM reasoning, chain of thought, test-time compute, inference-time compute, self-consistency, verifiers, reasoning models"
 date: 2026-04-14
-date_modified: 2026-08-05
+date_modified: 2026-08-15
 ---
 
 # Reasoning in LLMs
@@ -21,13 +21,7 @@ That is why it helps to separate three questions:
 
 ## The central idea
 
-```text
-input
-→ generate intermediate state or steps
-→ explore or verify alternatives
-→ select an answer
-→ check the result
-```
+{{ include_html("snippets/temas/reasoning-loop.html") }}
 
 Modern reasoning models spend more compute during inference. This strategy is known as **test-time compute** or **inference-time compute**. Instead of fixing all capability during training, the system can spend additional steps on difficult queries.
 
@@ -57,15 +51,7 @@ The practical conclusion is straightforward: textual explanation can help inspec
 
 A single answer depends on one generation trajectory. **Self-consistency** generates several chains and chooses the answer that appears most consistently across them.[^selfconsistency]
 
-```text
-problem
-├─ trajectory A → 42
-├─ trajectory B → 41
-├─ trajectory C → 42
-└─ trajectory D → 42
-                 ↓
-              choose 42
-```
+{{ include_html("snippets/temas/reasoning-self-consistency.html") }}
 
 This strategy works when independent paths can converge on the solution. Its cost grows roughly linearly with the number of samples and it does not help if all samples share the same bias.
 
@@ -102,14 +88,7 @@ For code, running tests is usually more reliable than asking another model for a
 
 A system can allocate more compute in several ways:
 
-```text
-more deliberation tokens
-+ more candidates
-+ deeper search
-+ verifiers
-+ tool calls
-+ revision iterations
-```
+{{ include_html("snippets/temas/reasoning-test-time-compute.html") }}
 
 Snell et al. studied scaling inference compute and showed that the best strategy depends both on problem difficulty and on the model's ability to use the additional budget.[^testtime]
 
