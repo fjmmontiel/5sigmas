@@ -1,0 +1,39 @@
+{
+  "source": "snippets/from-cave-to-agi/04-escala-producto.html",
+  "source_blob_sha": "d67341ec0fc45f573b525c443c03eacdc2bf6848",
+  "replacements": {
+    "La escala sale del laboratorio y entra en producto": "Scale leaves the lab and enters the product",
+    "GPT-3 demostró que la escala funcionaba. ChatGPT demostró que la escala podía llegar a cien millones de personas. El paso entre ambos no fue más cómputo: fue alineamiento.": "GPT-3 showed that scaling worked. ChatGPT showed that scaling could reach one hundred million people. The step between them was not more compute: it was alignment.",
+    "GPT-3: el paper": "GPT-3: the paper",
+    "El gap técnico": "The technical gap",
+    "ChatGPT: el producto": "ChatGPT: the product",
+    "175 mil millones de parámetros. La escala reveló capacidades que no existían en modelos menores: traducción, resumen, código, razonamiento simple, sin fine-tuning específico.": "175 billion parameters. Scale revealed capabilities that smaller models did not have: translation, summarization, code, simple reasoning, without task-specific fine-tuning.",
+    "PARÁMETROS": "PARAMETERS",
+    "×1.590 respecto a GPT-2 en 2 años": "×1,590 vs GPT-2 in 2 years",
+    "TOKENS DE ENTRENAMIENTO": "TRAINING TOKENS",
+    "CommonCrawl, libros, Wikipedia, código": "CommonCrawl, books, Wikipedia, code",
+    "ACCESO": "ACCESS",
+    "Solo investigadores y empresas seleccionadas": "Only selected researchers and companies",
+    "GPT-3 era impresionante pero inestable. Sus respuestas dependían mucho de cómo se formulaba la instrucción. No era usable por el público general.": "GPT-3 was impressive but unstable. Its responses depended heavily on how the instruction was phrased. It was not usable by the general public.",
+    "Entre un buen modelo base y un buen asistente hay un abismo. El alineamiento fue la pieza que faltaba: enseñar al modelo qué respuesta prefieren los humanos, no solo qué respuesta es probable.": "There is a gulf between a good base model and a good assistant. Alignment was the missing piece: teaching the model which response humans prefer, not only which response is probable.",
+    "MODELO BASE": "BASE MODEL",
+    "Predictor de texto": "Text predictor",
+    "Completa secuencias con alta probabilidad. No distingue entre respuestas útiles, dañinas o simplemente raras.": "Completes sequences with high probability. It does not distinguish between useful, harmful, or simply strange responses.",
+    "\"¿Cómo hago X?\" → continúa con probabilidades de lenguaje, puede generar cualquier cosa plausible": "\"How do I do X?\" → continues according to language probabilities and can generate anything plausible",
+    "MODELO ALINEADO": "ALIGNED MODEL",
+    "Asistente": "Assistant",
+    "Aprende las preferencias humanas a través de comparaciones. Sigue instrucciones, evita respuestas dañinas, mantiene el formato conversacional.": "Learns human preferences through comparisons. Follows instructions, avoids harmful responses, and maintains a conversational format.",
+    "\"¿Cómo hago X?\" → respuesta estructurada, segura, en el tono adecuado": "\"How do I do X?\" → a structured, safe response in the appropriate tone",
+    "ChatGPT no fue el modelo más potente de su momento. Fue el primero que cualquier persona podía usar de forma natural. La velocidad de adopción no tuvo precedentes.": "ChatGPT was not the most powerful model of its time. It was the first that anyone could use naturally. Its adoption speed was unprecedented.",
+    "Tiempo en alcanzar 100 millones de usuarios activos": "Time to reach 100 million active users",
+    "3,5 años": "3.5 years",
+    "2,5 años": "2.5 years",
+    "9 meses": "9 months",
+    "2 meses": "2 months",
+    "Fuente: UBS/Similarweb citado por Reuters, enero 2023. La métrica exacta varía según la fuente, pero el orden de magnitud es indiscutible.": "Source: UBS/Similarweb as cited by Reuters, January 2023. The exact metric varies by source, but the order of magnitude is clear.",
+    "La escala dejó de ser un resultado en un paper. Se convirtió en una interfaz pública.": "Scale stopped being a result in a paper. It became a public interface."
+  },
+  "forbidden_output_tokens": [
+    "La escala sale del laboratorio", "demostró que la escala", "El gap técnico", "el producto", "mil millones de parámetros", "PARÁMETROS", "TOKENS DE ENTRENAMIENTO", "libros", "ACCESO", "Solo investigadores", "era impresionante pero inestable", "Entre un buen modelo base", "MODELO BASE", "Predictor de texto", "Completa secuencias", "¿Cómo hago X?", "MODELO ALINEADO", "Aprende las preferencias humanas", "Tiempo en alcanzar", "años", "meses", "Fuente:", "La escala dejó de ser"
+  ]
+}
