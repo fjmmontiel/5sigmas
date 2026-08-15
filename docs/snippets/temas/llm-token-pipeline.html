@@ -1,0 +1,76 @@
+<div class="ltp-wrap" data-demo="topic-llm-token-pipeline">
+  <div class="ltp-head">
+    <div class="ltp-kicker">DEL TEXTO A LA PREDICCIÓN</div>
+    <div class="ltp-title">Un LLM repite el mismo ciclo: representar el contexto, calcular una distribución y añadir un token</div>
+    <div class="ltp-sub">La tokenización define las unidades discretas; los embeddings las convierten en vectores; el Transformer mezcla información del contexto; la capa de salida produce puntuaciones sobre el vocabulario.</div>
+  </div>
+
+  <div class="ltp-flow" role="img" aria-label="Flujo de un modelo de lenguaje: texto, tokens, embeddings, bloques Transformer, logits y probabilidades del siguiente token">
+    <div class="ltp-card ltp-card--text">
+      <span>01 · TEXTO</span>
+      <strong>“Los modelos aprenden”</strong>
+      <small>cadena de caracteres</small>
+    </div>
+    <div class="ltp-arrow" aria-hidden="true">→</div>
+    <div class="ltp-card ltp-card--tokens">
+      <span>02 · TOKENS</span>
+      <div class="ltp-chips"><b>Los</b><b> modelos</b><b> aprenden</b></div>
+      <small>unidades discretas + IDs</small>
+    </div>
+    <div class="ltp-arrow" aria-hidden="true">→</div>
+    <div class="ltp-card ltp-card--vec">
+      <span>03 · EMBEDDINGS</span>
+      <div class="ltp-vector">[0.18, −0.42, …]</div>
+      <small>vectores + posición</small>
+    </div>
+    <div class="ltp-arrow" aria-hidden="true">→</div>
+    <div class="ltp-card ltp-card--model">
+      <span>04 · TRANSFORMER</span>
+      <strong>atención + MLP</strong>
+      <small>representación contextual</small>
+    </div>
+    <div class="ltp-arrow" aria-hidden="true">→</div>
+    <div class="ltp-card ltp-card--prob">
+      <span>05 · DISTRIBUCIÓN</span>
+      <div class="ltp-bars">
+        <i style="--p:78%"><em>patrones</em></i>
+        <i style="--p:41%"><em>rápido</em></i>
+        <i style="--p:24%"><em>mejor</em></i>
+      </div>
+      <small>probabilidad sobre el vocabulario</small>
+    </div>
+  </div>
+
+  <div class="ltp-loop">
+    <div><span>SELECCIONAR</span><strong>se elige o muestrea un token</strong></div>
+    <div class="ltp-loop-arrow" aria-hidden="true">↺</div>
+    <div><span>ACTUALIZAR CONTEXTO</span><strong>el token se añade y el ciclo se repite</strong></div>
+  </div>
+
+  <div class="ltp-rule"><span>Separación importante</span><strong>Memoria, RAG, tools y políticas pueden rodear al modelo, pero no forman parte automáticamente de sus pesos.</strong></div>
+  <div class="ltp-ref">Fuentes primarias: <a href="https://arxiv.org/abs/1808.06226">SentencePiece</a> · <a href="https://arxiv.org/abs/1706.03762">Attention Is All You Need</a></div>
+</div>
+
+<style>
+.ltp-wrap,.ltp-wrap *{box-sizing:border-box}
+.ltp-wrap{
+  --ltp-a:var(--md-primary-fg-color,#26a69a);--ltp-b:#4757d6;--ltp-c:var(--md-accent-fg-color,#ffb343);--ltp-r:#e06c75;
+  --ltp-bg:var(--md-default-bg-color,#fff);--ltp-fg:var(--md-default-fg-color,#111827);
+  --ltp-muted:color-mix(in srgb,var(--ltp-fg) 58%,transparent);--ltp-border:color-mix(in srgb,var(--ltp-fg) 14%,transparent);
+  container-type:inline-size;margin:1.1rem 0 1.5rem;padding:clamp(14px,2vw,22px);border:1px solid var(--ltp-border);border-radius:20px;
+  background:radial-gradient(90% 130% at 0 0,color-mix(in srgb,var(--ltp-b) 8%,transparent),transparent 56%),radial-gradient(80% 120% at 100% 0,color-mix(in srgb,var(--ltp-a) 8%,transparent),transparent 58%),var(--ltp-bg);color:var(--ltp-fg)
+}
+.ltp-head{display:grid;gap:4px;margin-bottom:15px}.ltp-kicker{font-size:10px;font-weight:900;letter-spacing:.12em;color:var(--ltp-muted)}
+.ltp-title{font-size:clamp(18px,2.1vw,24px);font-weight:900;line-height:1.12;letter-spacing:-.02em;max-width:34ch}.ltp-sub{font-size:13.4px;line-height:1.48;color:var(--ltp-muted);max-width:90ch}
+.ltp-flow{display:grid;grid-template-columns:minmax(0,1.05fr) auto minmax(0,1.15fr) auto minmax(0,1fr) auto minmax(0,1.05fr) auto minmax(0,1.2fr);gap:7px;align-items:stretch;min-width:0}
+.ltp-card{min-width:0;min-height:136px;padding:11px;border:1px solid var(--ltp-border);border-radius:14px;background:color-mix(in srgb,var(--ltp-bg) 96%,var(--ltp-fg) 4%);display:grid;grid-template-rows:auto 1fr auto;gap:7px}
+.ltp-card>span,.ltp-loop span,.ltp-rule span{font-size:9.2px;font-weight:900;letter-spacing:.09em;color:var(--ltp-muted)}.ltp-card strong{font-size:12.9px;line-height:1.3;align-self:center}.ltp-card small{font-size:10.5px;line-height:1.35;color:var(--ltp-muted);align-self:end}
+.ltp-card--text{border-color:color-mix(in srgb,var(--ltp-b) 34%,var(--ltp-border))}.ltp-card--tokens{border-color:color-mix(in srgb,var(--ltp-a) 38%,var(--ltp-border))}.ltp-card--vec{border-color:color-mix(in srgb,var(--ltp-c) 46%,var(--ltp-border))}.ltp-card--model{border-color:color-mix(in srgb,var(--ltp-b) 48%,var(--ltp-border));background:color-mix(in srgb,var(--ltp-b) 5%,var(--ltp-bg))}.ltp-card--prob{border-color:color-mix(in srgb,var(--ltp-r) 38%,var(--ltp-border))}
+.ltp-arrow{display:grid;place-items:center;font-weight:900;font-size:17px;color:var(--ltp-muted)}.ltp-chips{display:flex;flex-wrap:wrap;gap:4px;align-content:center}.ltp-chips b{padding:5px 7px;border-radius:8px;background:color-mix(in srgb,var(--ltp-a) 11%,var(--ltp-bg));font-size:11px}.ltp-vector{align-self:center;font:700 11px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;padding:8px;border-radius:9px;background:color-mix(in srgb,var(--ltp-c) 10%,var(--ltp-bg))}
+.ltp-bars{display:grid;gap:6px;align-self:center}.ltp-bars i{position:relative;height:20px;border-radius:7px;overflow:hidden;background:color-mix(in srgb,var(--ltp-fg) 6%,var(--ltp-bg));font-style:normal}.ltp-bars i::before{content:"";position:absolute;inset:0 auto 0 0;width:var(--p);background:linear-gradient(90deg,color-mix(in srgb,var(--ltp-r) 34%,transparent),color-mix(in srgb,var(--ltp-r) 16%,transparent))}.ltp-bars em{position:relative;z-index:1;display:block;padding:3px 6px;font-size:9.7px;font-style:normal;font-weight:800}
+.ltp-loop{margin-top:10px;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:8px;align-items:center}.ltp-loop>div:not(.ltp-loop-arrow){padding:10px 12px;border:1px solid var(--ltp-border);border-radius:12px;display:grid;gap:3px;background:color-mix(in srgb,var(--ltp-a) 4%,var(--ltp-bg))}.ltp-loop strong{font-size:11.5px;line-height:1.35}.ltp-loop-arrow{font-size:24px;font-weight:900;color:var(--ltp-a)}
+.ltp-rule{margin-top:10px;padding:10px 12px;border-left:3px solid var(--ltp-a);border-radius:0 10px 10px 0;background:color-mix(in srgb,var(--ltp-a) 5%,var(--ltp-bg));display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:center}.ltp-rule span{white-space:nowrap}.ltp-rule strong{font-size:11.7px;line-height:1.4}.ltp-ref{margin-top:9px;font-size:9.8px;line-height:1.35;color:var(--ltp-muted)}.ltp-ref a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+@container (max-width:760px){.ltp-flow{grid-template-columns:1fr;gap:6px}.ltp-arrow{height:13px;transform:rotate(90deg)}.ltp-card{min-height:0;grid-template-rows:auto auto auto}.ltp-loop{grid-template-columns:1fr;gap:6px}.ltp-loop-arrow{height:18px;display:grid;place-items:center}.ltp-rule{grid-template-columns:1fr;gap:3px}}
+@media (max-width:760px){.ltp-flow{grid-template-columns:1fr;gap:6px}.ltp-arrow{height:13px;transform:rotate(90deg)}.ltp-card{min-height:0}.ltp-loop{grid-template-columns:1fr;gap:6px}.ltp-rule{grid-template-columns:1fr;gap:3px}}
+@media (prefers-reduced-motion:reduce){.ltp-wrap *{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
