@@ -7,6 +7,7 @@ fallback_to_spanish: false
 shared_media: []
 published_routes:
   - index.md
+  - visuales/index.md
   - series/index.md
   - series/fundamentos-ia-iag/00_presentacion_serie.md
   - series/fundamentos-ia-iag/01-que-es-ia.md
@@ -214,9 +215,13 @@ coverage:
   remaining_chapters: complete
   concept_hubs: canonical_six_complete
   technical_articles: text_visuals_and_native_media_complete
-  visual_hub: not_yet_published
+  visual_hub: native_english_complete
   video_hub: not_yet_published
   localized_video_media: canonical_series_and_technical_articles_complete
+generated_surfaces:
+  visual_hub: true
+  video_library: false
+  video_watch_pages: false
 quality_gates:
   - no_spanish_fallback
   - no_implicit_spanish_media
