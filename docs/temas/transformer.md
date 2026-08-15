@@ -4,7 +4,7 @@ seo_title: "Cómo funciona el Transformer: atención y arquitectura paso a paso"
 description: "Explicación técnica del Transformer: embeddings, autoatención, bloques residuales, encoder, decoder, coste y límites de la arquitectura."
 keywords: "Transformer, self-attention, autoatención, arquitectura Transformer, Query Key Value, encoder decoder, LLM"
 date: 2026-04-07
-date_modified: 2026-08-15
+date_modified: 2026-08-16
 ---
 
 # Cómo funciona el Transformer
@@ -82,16 +82,13 @@ Arquitecturas modernas utilizan activaciones y puertas como GELU, SwiGLU o varia
 
 ## 6. Residuales y normalización
 
-Cada subbloque se conecta con su entrada mediante una suma residual:
+Cada subbloque no sustituye sin más la representación que recibe: aprende una transformación sobre una **ruta residual** que conserva la entrada. La posición de la normalización determina dónde se modifica la señal antes de continuar por la pila de capas.
 
-```text
-x' = x + Attention(x)
-x'' = x' + FFN(x')
-```
+{{ include_html("snippets/temas/transformer-residual-norm.html") }}
 
-La ruta residual facilita que el gradiente atraviese muchas capas y permite a cada bloque aprender una corrección sobre la representación previa. La normalización controla la escala de las activaciones.
+El Transformer original usó *post-norm*: suma primero la salida de la subcapa a la ruta residual y normaliza después.[^transformer] En *pre-norm*, la normalización se aplica dentro de la rama de la subcapa, dejando una ruta de identidad directa entre capas. El análisis de Xiong et al. muestra por qué esa colocación cambia el comportamiento de los gradientes al inicio del entrenamiento y puede mejorar la estabilidad de optimización.[^prenorm]
 
-El orden exacto cambia entre familias. En *post-norm*, la normalización aparece después de la suma. En *pre-norm*, antes del subbloque. Esta decisión afecta a la estabilidad cuando la red se hace profunda.
+La misma estructura residual rodea tanto la atención como la red feed-forward. El detalle exacto de la normalización cambia entre familias, pero la idea central se mantiene: cada subcapa aprende una corrección sobre una representación que también puede avanzar por la ruta residual.
 
 ## Encoder, decoder y encoder-decoder
 
@@ -187,6 +184,7 @@ No. Aumenta la información disponible, pero también el coste y la dificultad d
 ## Fuentes primarias
 
 [^transformer]: Ashish Vaswani et al., [*Attention Is All You Need*](https://arxiv.org/abs/1706.03762), 2017.
+[^prenorm]: Ruibin Xiong et al., [*On Layer Normalization in the Transformer Architecture*](https://arxiv.org/abs/2002.04745), 2020.
 [^bert]: Jacob Devlin et al., [*BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding*](https://arxiv.org/abs/1810.04805), 2018.
 [^vit]: Alexey Dosovitskiy et al., [*An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale*](https://arxiv.org/abs/2010.11929), 2020.
 [^mamba]: Albert Gu y Tri Dao, [*Mamba: Linear-Time Sequence Modeling with Selective State Spaces*](https://arxiv.org/abs/2312.00752), 2023.
