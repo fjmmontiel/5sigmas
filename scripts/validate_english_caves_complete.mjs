@@ -107,6 +107,76 @@ try {
         if (!(await winters.locator('.inv-panel[data-p="0"]').getAttribute('class'))?.includes('inv-panel--active')) failures.push(`${chapter.route}: AI-winters stepper did not return to first panel`);
       }
 
+      if (chapter.slug === '05-mas-alla') {
+        const world = page.locator('[data-demo="05-world-models-ecosystem"]');
+        const worldText = (await world.textContent()) || '';
+        for (const anchor of [
+          'World models: simulate before acting',
+          'Simulates several possible futures',
+          'Reject before acting',
+          'Necessary, not optional',
+          'Different architecture or LLM?',
+        ]) {
+          if (!worldText.includes(anchor)) failures.push(`${chapter.route}: world-model visual missing ${JSON.stringify(anchor)}`);
+        }
+        for (const token of ['simular antes de actuar', 'Simula varios futuros posibles', 'Rechazar antes de actuar', 'Necesario, no opcional', 'Arquitectura distinta']) {
+          if (worldText.includes(token)) failures.push(`${chapter.route}: world-model Spanish leakage ${JSON.stringify(token)}`);
+        }
+        if (await world.locator('.wm-tab').count() !== 2) failures.push(`${chapter.route}: expected two canonical world-model tabs`);
+        if (await world.locator('.wm-panel').count() !== 2) failures.push(`${chapter.route}: expected two canonical world-model panels`);
+        if (await world.locator('.wm-key').count() !== 3) failures.push(`${chapter.route}: expected three canonical world-model implication cards`);
+        if (await world.locator('svg').count() !== 2) failures.push(`${chapter.route}: expected two canonical world-model SVG scenes`);
+        if ((await world.getAttribute('data-wm-ready')) !== '1') failures.push(`${chapter.route}: world-model runtime did not initialize`);
+        await world.locator('.wm-tab[data-wtab="keys"]').click();
+        if (!(await world.locator('[data-wpanel="keys"]').getAttribute('class'))?.includes('wm-panel--active')) failures.push(`${chapter.route}: world-model implication tab did not activate`);
+
+        const capital = page.locator('[data-demo="05-apuestas-capital"]');
+        const capitalText = (await capital.textContent()) || '';
+        for (const anchor of [
+          'The frontier no longer scales only in the model',
+          'Distribution',
+          'Specific bets',
+          'Compute and infrastructure',
+          'Energy for compute',
+          'Robotics and the physical world',
+          'The thesis signaled by capital',
+        ]) {
+          if (!capitalText.includes(anchor)) failures.push(`${chapter.route}: capital visual missing ${JSON.stringify(anchor)}`);
+        }
+        for (const token of ['La frontera ya no escala', 'Distribución', 'Apuestas concretas', 'Cómputo e infraestructura', 'Energía para el cómputo', 'Robótica y mundo físico', 'La tesis que el capital señala']) {
+          if (capitalText.includes(token)) failures.push(`${chapter.route}: capital visual Spanish leakage ${JSON.stringify(token)}`);
+        }
+        if (await capital.locator('.cap-tab').count() !== 2) failures.push(`${chapter.route}: expected two canonical capital tabs`);
+        if (await capital.locator('.cap-cat').count() !== 4) failures.push(`${chapter.route}: expected four canonical capital categories`);
+        if (await capital.locator('.cap-bet-mini').count() !== 20) failures.push(`${chapter.route}: expected twenty canonical capital bets`);
+        if ((await capital.getAttribute('data-cap-ready')) !== '1') failures.push(`${chapter.route}: capital runtime did not initialize`);
+        await capital.locator('.cap-tab[data-ctab="detail"]').click();
+        if (!(await capital.getAttribute('class'))?.includes('cap-wrap--detail')) failures.push(`${chapter.route}: capital detail tab did not expose concrete bets`);
+        if (!(await capital.locator('.cap-bets-mini').first().isVisible())) failures.push(`${chapter.route}: capital bets remained hidden after detail-tab activation`);
+
+        const robotics = page.locator('[data-demo="05-robotica-fundacional"]');
+        const roboticsText = (await robotics.textContent()) || '';
+        for (const anchor of [
+          'Robotics: real-world maturity scale',
+          'Controlled demo',
+          'Industrial pilot',
+          'Documented deployment',
+          'Why this distinction matters',
+        ]) {
+          if (!roboticsText.includes(anchor)) failures.push(`${chapter.route}: robotics visual missing ${JSON.stringify(anchor)}`);
+        }
+        for (const token of ['Robótica: escala de madurez real', 'Demo controlada', 'Piloto industrial', 'Despliegue documentado', 'Por qué importa esta distinción']) {
+          if (roboticsText.includes(token)) failures.push(`${chapter.route}: robotics Spanish leakage ${JSON.stringify(token)}`);
+        }
+        if (await robotics.locator('.rob-tab').count() !== 4) failures.push(`${chapter.route}: expected four canonical robotics tabs`);
+        if (await robotics.locator('.rob-panel').count() !== 4) failures.push(`${chapter.route}: expected four canonical robotics panels`);
+        if (await robotics.locator('.rob-ex').count() !== 10) failures.push(`${chapter.route}: expected ten canonical robotics examples`);
+        if ((await robotics.getAttribute('data-rob-ready')) !== '1') failures.push(`${chapter.route}: robotics runtime did not initialize`);
+        await robotics.locator('.rob-tab[data-rtab="4"]').click();
+        if (!(await robotics.locator('[data-rpanel="4"]').getAttribute('class'))?.includes('rob-panel--active')) failures.push(`${chapter.route}: robotics deployment rung did not activate`);
+        if ((await robotics.locator('[data-fill]').evaluate(el => el.style.width)) !== '100%') failures.push(`${chapter.route}: robotics maturity scale did not advance to 100%`);
+      }
+
       if (chapter.canonicalInteractions) {
         const numeralTabs = page.locator('[data-demo="01-sistemas-numeracion"] .num-tab');
         const numeralPanels = page.locator('[data-demo="01-sistemas-numeracion"] .num-panel');
@@ -133,19 +203,6 @@ try {
         await page.waitForTimeout(300);
         const secondTimelineTitle = await timeline.locator('#repTitle').innerText();
         if (secondTimelineTitle !== 'Formal arithmetic') failures.push(`${chapter.route}: representation timeline did not advance`);
-      } else if (!['03-aprender', '04-escalar'].includes(chapter.slug)) {
-        // Chapters 3 and 4 now use canonical Spanish-first interactive mirrors and
-        // have dedicated interaction QA. Chapter 5 still contains compact English
-        // disclosure implementations while its remaining visuals are migrated.
-        const details = page.locator('[data-demo] details');
-        if (await details.count() === 0) failures.push(`${chapter.route}: visuals expose no interactive disclosure`);
-        else {
-          const candidate = details.filter({ has: page.locator('summary') }).nth(Math.min(1, (await details.count()) - 1));
-          const before = await candidate.getAttribute('open');
-          await candidate.locator('summary').click();
-          const after = await candidate.getAttribute('open');
-          if (before === after) failures.push(`${chapter.route}: details interaction did not toggle`);
-        }
       }
 
       const videos = page.locator('video[data-s5-inline-video-player]');
@@ -177,4 +234,4 @@ if (failures.length) {
   for (const failure of [...new Set(failures)]) console.error(failure);
   process.exit(1);
 }
-console.log('Complete English From the Caves to AGI QA passed: Chapters 1, 3 and 4 canonical/native visuals, native-English media, interactions and desktop/mobile layout; Chapter 5 remains under staged migration.');
+console.log('Complete English From the Caves to AGI QA passed: canonical/native visuals, native-English media, interactions and desktop/mobile layout are preserved across Chapters 1, 3, 4 and 5.');
