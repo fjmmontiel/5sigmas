@@ -2,6 +2,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { chromium } from 'playwright';
+import './validate_english_caves_ch5_post_transformer.mjs';
 
 const base = process.env.S5_PREVIEW_BASE || 'http://127.0.0.1:8000';
 const route = '/en/series/from-cave-to-agi/05-mas-alla/';
