@@ -142,6 +142,7 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git pull --rebase origin agent/english-article-audio-parity
           git add locales/en/article_audio.yml \
             locales/en/series/fundamentos-ia-iag/02-que-es-ia-generativa.podcast.m4a
           git diff --cached --check
