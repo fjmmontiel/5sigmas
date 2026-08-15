@@ -4,7 +4,7 @@ seo_title: "What is an AI agent: how it works and how it differs from a chatbot"
 description: "What an AI agent is, how it uses tools, memory and state, how it differs from a chatbot or workflow, and what it needs to operate reliably."
 keywords: "AI agent, AI agents, agentic AI, chatbot vs agent, tool calling, agent memory, production AI agents"
 date: 2026-08-09
-date_modified: 2026-08-09
+date_modified: 2026-08-15
 ---
 
 # What is an AI agent?
@@ -15,14 +15,7 @@ The essential distinction is this: **a chatbot generates a response; an agent ca
 
 ## The 60-second answer
 
-```text
-objective
-→ observe context and state
-→ choose the next step
-→ call a tool or respond
-→ inspect the result
-→ continue, ask for help or stop
-```
+{{ include_html("snippets/agentes-ia/01-bucle-agente.html") }}
 
 A tool call does not grant authority by itself. The fact that the model emits `send_email(...)` does not mean the system should execute it. The runtime must validate arguments, permissions, risk and state before producing an external effect.
 
@@ -49,25 +42,17 @@ A reliable agent needs more than a prompt and several functions:
 6. **Policy** — what requires authorization, what is forbidden and what budget exists.
 7. **Verification** — how the system proves that the result is correct.
 
+{{ include_html("snippets/temas/agent-system-boundary.html") }}
+
 The [AI Agents — from responding to acting](/en/series/agentes-ia/00_presentacion_serie/) series develops these components through five progressive chapters.
 
 ## Tool calling is not the same as agency
 
 An LLM can produce structured arguments for a function. That is **tool calling**. Agency appears when the system can decide *when* to use a tool, interpret its result and choose what to do next.
 
-The tool should remain a software contract:
+A tool should remain a software contract. The model proposes a call; the runtime keeps the authority boundary and decides whether it may execute.
 
-```text
-name
-+ argument schema
-+ permissions
-+ timeout
-+ idempotency
-+ observable result
-+ error policy
-```
-
-The model proposes. The runtime validates and authorizes.
+{{ include_html("snippets/temas/agent-tool-gate.html") }}
 
 ## Memory, context and state are different things
 
@@ -137,3 +122,10 @@ No. One model can coordinate multiple tools. Multi-agent systems are one possibl
 ### Does more autonomy mean a better agent?
 
 No. In production, bounded autonomy usually matters more: minimal tools, budgets, verification and a clear stopping criterion.
+
+## Primary sources
+
+- [Yao et al. — ReAct: Synergizing Reasoning and Acting in Language Models](https://arxiv.org/abs/2210.03629)
+- [OpenAI Agents SDK — Agents](https://openai.github.io/openai-agents-python/agents/)
+- [OpenAI Agents SDK — Tool guardrails](https://openai.github.io/openai-agents-python/guardrails/)
+- [Model Context Protocol — Authorization](https://modelcontextprotocol.io/specification/latest/basic/authorization)
