@@ -104,8 +104,11 @@
 .trd-bad  { color: color-mix(in srgb,var(--ar) 65%,var(--afg)); }
 
 @media (max-width: 640px) {
-  .trd-grid { grid-template-columns: 1fr 1fr; }
-  .trd-hdr:nth-child(4), .trd-hdr:nth-child(5),
-  .trd-cell:nth-child(5n-1), .trd-cell:nth-child(5n) { display: none; }
+  .trd-grid {
+    grid-template-columns: 140px repeat(4, 100px);
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    -webkit-overflow-scrolling: touch;
+  }
 }
 </style>
