@@ -70,15 +70,11 @@ During inference, generation is still sequential because the next token does not
 
 ## 5. The feed-forward network
 
-After attention, each position passes through a dense network applied independently:
+After attention, each position passes through a dense network independently, using the same parameters for every position in that layer.[^transformer]
 
-```text
-FFN(x) = W₂ σ(W₁x + b₁) + b₂
-```
+{{ include_html("snippets/temas/transformer-ffn.html") }}
 
-Attention moves and combines information across positions. The feed-forward network transforms that information inside each position. In large models, this part contains a significant fraction of the parameters and compute.
-
-Modern architectures use activations and gates such as GELU, SwiGLU or related variants. *Mixture-of-experts* models replace one dense network with multiple experts and route each token to a subset of them.
+In large models, this part contains a significant fraction of the parameters and compute. Modern architectures use activations and gates such as GELU, SwiGLU or related variants. *Mixture-of-experts* models replace one dense network with multiple experts and route each token to a subset of them.
 
 ## 6. Residuals and normalization
 
