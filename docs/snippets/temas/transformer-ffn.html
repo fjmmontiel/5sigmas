@@ -1,0 +1,93 @@
+<div class="tff-wrap" data-demo="topic-transformer-ffn">
+  <div class="tff-head">
+    <div class="tff-kicker">RED FEED-FORWARD · POR POSICIÓN</div>
+    <div class="tff-title">La atención mezcla información entre tokens; la FFN transforma cada posición por separado</div>
+    <div class="tff-sub">Después de la atención, cada vector pasa por la <strong>misma transformación</strong> de la capa: expansión a una dimensión interna, no linealidad o puerta y proyección de vuelta a <code>d<sub>model</sub></code>. Durante esta operación no hay mezcla lateral entre posiciones.</div>
+  </div>
+
+  <div class="tff-compare">
+    <section class="tff-panel tff-panel--attention" aria-label="La atención combina información entre posiciones">
+      <div class="tff-panel-head"><span>ATTENTION</span><strong>mezcla entre posiciones</strong></div>
+      <div class="tff-token-row tff-token-row--attention" role="img" aria-label="Tres posiciones conectadas entre sí durante la atención">
+        <div class="tff-token"><small>POS. 1</small><b>x₁</b></div>
+        <div class="tff-token"><small>POS. 2</small><b>x₂</b></div>
+        <div class="tff-token"><small>POS. 3</small><b>x₃</b></div>
+        <svg class="tff-links" viewBox="0 0 300 86" aria-hidden="true" preserveAspectRatio="none">
+          <path d="M48 58 C92 8 208 8 252 58" />
+          <path d="M48 58 C110 34 190 34 252 58" />
+          <path d="M150 58 C112 18 76 18 48 58" />
+          <path d="M150 58 C188 18 224 18 252 58" />
+        </svg>
+      </div>
+      <div class="tff-caption">Una posición puede incorporar información de otras posiciones.</div>
+    </section>
+
+    <section class="tff-panel tff-panel--ffn" aria-label="La red feed-forward aplica la misma transformación de manera independiente a cada posición">
+      <div class="tff-panel-head"><span>FFN</span><strong>transformación independiente</strong></div>
+      <div class="tff-lanes" role="img" aria-label="Tres posiciones atraviesan en paralelo la misma secuencia lineal, activación y lineal sin conectarse entre sí">
+        <div class="tff-lane">
+          <div class="tff-token"><small>POS. 1</small><b>x₁</b></div>
+          <div class="tff-down">↓</div>
+          <div class="tff-stage tff-stage--expand"><small>LINEAL</small><b>d<sub>model</sub> → d<sub>ff</sub></b></div>
+          <div class="tff-down">↓</div>
+          <div class="tff-stage tff-stage--act"><small>NO LINEALIDAD / PUERTA</small><b>σ(·)</b></div>
+          <div class="tff-down">↓</div>
+          <div class="tff-stage tff-stage--project"><small>LINEAL</small><b>d<sub>ff</sub> → d<sub>model</sub></b></div>
+          <div class="tff-down">↓</div>
+          <div class="tff-token tff-token--out"><small>SALIDA</small><b>y₁</b></div>
+        </div>
+        <div class="tff-lane">
+          <div class="tff-token"><small>POS. 2</small><b>x₂</b></div>
+          <div class="tff-down">↓</div>
+          <div class="tff-stage tff-stage--expand"><small>MISMOS W₁, b₁</small><b>d<sub>model</sub> → d<sub>ff</sub></b></div>
+          <div class="tff-down">↓</div>
+          <div class="tff-stage tff-stage--act"><small>MISMA FUNCIÓN</small><b>σ(·)</b></div>
+          <div class="tff-down">↓</div>
+          <div class="tff-stage tff-stage--project"><small>MISMOS W₂, b₂</small><b>d<sub>ff</sub> → d<sub>model</sub></b></div>
+          <div class="tff-down">↓</div>
+          <div class="tff-token tff-token--out"><small>SALIDA</small><b>y₂</b></div>
+        </div>
+        <div class="tff-lane">
+          <div class="tff-token"><small>POS. 3</small><b>x₃</b></div>
+          <div class="tff-down">↓</div>
+          <div class="tff-stage tff-stage--expand"><small>LINEAL</small><b>d<sub>model</sub> → d<sub>ff</sub></b></div>
+          <div class="tff-down">↓</div>
+          <div class="tff-stage tff-stage--act"><small>NO LINEALIDAD / PUERTA</small><b>σ(·)</b></div>
+          <div class="tff-down">↓</div>
+          <div class="tff-stage tff-stage--project"><small>LINEAL</small><b>d<sub>ff</sub> → d<sub>model</sub></b></div>
+          <div class="tff-down">↓</div>
+          <div class="tff-token tff-token--out"><small>SALIDA</small><b>y₃</b></div>
+        </div>
+      </div>
+      <div class="tff-caption">Cada posición se transforma de forma independiente, pero comparte los parámetros de esa FFN dentro de la capa.</div>
+    </section>
+  </div>
+
+  <div class="tff-equation" aria-label="Ecuación general de una red feed-forward de dos proyecciones">
+    <span>FORMA GENERAL</span>
+    <strong>FFN(x) = W₂ σ(W₁x + b₁) + b₂</strong>
+    <em>Transformer original: ReLU entre dos proyecciones; <code>d<sub>model</sub>=512</code> y <code>d<sub>ff</sub>=2048</code>. Las arquitecturas modernas cambian anchos y pueden usar variantes con puertas como SwiGLU.</em>
+  </div>
+
+  <div class="tff-contract">
+    <div><span>ATTENTION</span><strong>decide de qué posiciones recoger información</strong></div>
+    <div><span>FFN</span><strong>transforma localmente la representación resultante</strong></div>
+    <div><span>PARÁMETROS</span><strong>se comparten entre posiciones de una capa; cambian entre capas</strong></div>
+  </div>
+
+  <div class="tff-ref">Fuentes primarias: <a href="https://arxiv.org/abs/1706.03762">Vaswani et al., <em>Attention Is All You Need</em> (2017), §3.3</a> · <a href="https://arxiv.org/abs/2002.05202">Shazeer, <em>GLU Variants Improve Transformer</em> (2020)</a>.</div>
+</div>
+
+<style>
+.tff-wrap,.tff-wrap *{box-sizing:border-box}
+.tff-wrap{--tff-a:var(--md-primary-fg-color,#26a69a);--tff-b:#4757d6;--tff-c:var(--md-accent-fg-color,#ffb343);--tff-bg:var(--md-default-bg-color,#fff);--tff-fg:var(--md-default-fg-color,#111827);--tff-muted:color-mix(in srgb,var(--tff-fg) 58%,transparent);--tff-border:color-mix(in srgb,var(--tff-fg) 14%,transparent);container-type:inline-size;margin:1.1rem 0 1.5rem;padding:clamp(14px,2vw,22px);border:1px solid var(--tff-border);border-radius:20px;background:radial-gradient(90% 120% at 0 0,color-mix(in srgb,var(--tff-b) 8%,transparent),transparent 56%),radial-gradient(90% 120% at 100% 0,color-mix(in srgb,var(--tff-a) 7%,transparent),transparent 58%),var(--tff-bg);color:var(--tff-fg)}
+.tff-head{display:grid;gap:4px;margin-bottom:14px}.tff-kicker{font-size:10.5px;font-weight:900;letter-spacing:.12em;color:var(--tff-muted)}.tff-title{font-size:clamp(18px,2.1vw,24px);font-weight:900;line-height:1.1;letter-spacing:-.02em;max-width:48ch}.tff-sub{font-size:13.2px;line-height:1.46;color:var(--tff-muted);max-width:96ch}.tff-sub strong{color:var(--tff-fg)}.tff-sub code,.tff-equation code{font-size:.94em}
+.tff-compare{display:grid;grid-template-columns:minmax(220px,.72fr) minmax(0,1.58fr);gap:10px;align-items:stretch}.tff-panel{min-width:0;border:1px solid var(--tff-border);border-radius:15px;padding:11px;background:color-mix(in srgb,var(--tff-bg) 95%,var(--tff-fg) 5%);display:grid;gap:10px}.tff-panel--attention{border-color:color-mix(in srgb,var(--tff-b) 30%,var(--tff-border));background:color-mix(in srgb,var(--tff-b) 4%,var(--tff-bg))}.tff-panel--ffn{border-color:color-mix(in srgb,var(--tff-a) 34%,var(--tff-border));background:color-mix(in srgb,var(--tff-a) 4%,var(--tff-bg))}.tff-panel-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}.tff-panel-head span,.tff-contract span,.tff-equation>span{font-size:9px;font-weight:900;letter-spacing:.09em;color:var(--tff-muted)}.tff-panel-head strong{font-size:11.2px;line-height:1.25}.tff-caption{border-top:1px solid var(--tff-border);padding-top:8px;font-size:10.6px;line-height:1.38;color:var(--tff-muted)}
+.tff-token-row{position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;align-items:end;min-height:118px;padding-top:38px}.tff-token{position:relative;z-index:2;min-width:0;border:1px solid var(--tff-border);border-radius:10px;padding:7px 8px;background:var(--tff-bg);display:grid;gap:2px;text-align:center}.tff-token small,.tff-stage small{font-size:8px;font-weight:900;letter-spacing:.075em;color:var(--tff-muted)}.tff-token b{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px}.tff-token--out{border-color:color-mix(in srgb,var(--tff-a) 44%,var(--tff-border));background:color-mix(in srgb,var(--tff-a) 7%,var(--tff-bg))}.tff-links{position:absolute;inset:2px 0 auto;width:100%;height:86px;z-index:1;overflow:visible}.tff-links path{fill:none;stroke:color-mix(in srgb,var(--tff-b) 52%,transparent);stroke-width:2;stroke-linecap:round;stroke-dasharray:4 4}
+.tff-lanes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;align-items:start}.tff-lane{min-width:0;display:grid;justify-items:center;gap:4px;padding:7px;border:1px dashed color-mix(in srgb,var(--tff-fg) 18%,transparent);border-radius:12px;background:color-mix(in srgb,var(--tff-bg) 88%,transparent)}.tff-stage{width:100%;min-height:48px;border:1px solid var(--tff-border);border-radius:9px;padding:6px;display:grid;place-items:center;gap:2px;text-align:center;background:var(--tff-bg)}.tff-stage b{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:9.8px;line-height:1.24}.tff-stage--expand{border-color:color-mix(in srgb,var(--tff-b) 30%,var(--tff-border));background:color-mix(in srgb,var(--tff-b) 5%,var(--tff-bg))}.tff-stage--act{border-color:color-mix(in srgb,var(--tff-c) 48%,var(--tff-border));background:color-mix(in srgb,var(--tff-c) 7%,var(--tff-bg))}.tff-stage--project{border-color:color-mix(in srgb,var(--tff-a) 34%,var(--tff-border));background:color-mix(in srgb,var(--tff-a) 5%,var(--tff-bg))}.tff-down{font-size:12px;line-height:1;color:var(--tff-muted);font-weight:900}
+.tff-equation{margin-top:9px;border:1px solid var(--tff-border);border-radius:12px;padding:10px 12px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;align-items:baseline}.tff-equation strong{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:clamp(11px,1.3vw,13px);overflow-wrap:anywhere}.tff-equation em{grid-column:2;font-size:10.5px;line-height:1.4;color:var(--tff-muted);font-style:normal}.tff-contract{margin-top:9px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.tff-contract>div{min-width:0;border:1px solid var(--tff-border);border-radius:11px;padding:9px 10px;display:grid;gap:3px}.tff-contract strong{font-size:11.2px;line-height:1.32}.tff-ref{margin-top:7px;font-size:9.8px;line-height:1.36;color:var(--tff-muted)}.tff-ref a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+@container (max-width:760px){.tff-compare{grid-template-columns:1fr}.tff-token-row{min-height:110px}.tff-lanes{grid-template-columns:1fr}.tff-lane{grid-template-columns:62px 16px minmax(94px,1fr) 16px minmax(84px,.9fr) 16px minmax(94px,1fr) 16px 62px;align-items:center;justify-items:stretch}.tff-lane .tff-down{transform:rotate(-90deg);text-align:center}.tff-stage{min-height:58px}.tff-contract{grid-template-columns:1fr}.tff-equation{grid-template-columns:1fr}.tff-equation em{grid-column:1}.tff-token{padding:7px 5px}}
+@container (max-width:500px){.tff-lane{grid-template-columns:1fr;gap:3px}.tff-lane .tff-down{transform:none}.tff-stage{min-height:44px}.tff-token-row{gap:5px}.tff-token small{font-size:7.4px}}
+@media (max-width:760px){.tff-compare{grid-template-columns:1fr}.tff-lanes{grid-template-columns:1fr}.tff-lane{grid-template-columns:1fr;gap:3px}.tff-lane .tff-down{transform:none}.tff-stage{min-height:44px}.tff-contract,.tff-equation{grid-template-columns:1fr}.tff-equation em{grid-column:1}}
+@media (prefers-reduced-motion:reduce){.tff-wrap *{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
