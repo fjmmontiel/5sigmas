@@ -183,6 +183,11 @@ jobs:
           S5_PREVIEW_BASE: https://5sigmas.com
         run: node scripts/validate_english_security_media.mjs
 
+      - name: Validate live English AI Agents media
+        env:
+          S5_PREVIEW_BASE: https://5sigmas.com
+        run: node scripts/validate_english_agents_media.mjs
+
       - name: Validate live English Technical Articles
         env:
           S5_PREVIEW_BASE: https://5sigmas.com
