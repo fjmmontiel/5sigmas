@@ -42,7 +42,7 @@ for (const viewport of [{name:'desktop',width:1440,height:1000},{name:'mobile',w
   if (await referenceRows.count() < 15) failures.push(`expected at least 15 canonical reference rows, found ${await referenceRows.count()}`);
 
   for (const forbidden of ['Capítulo ', 'Prerrequisitos', 'Siguiente capítulo', 'Mecanizar —', 'Fuentes base', 'Preguntas frecuentes']) if (body.includes(forbidden)) failures.push(`Spanish leakage ${JSON.stringify(forbidden)}`);
-  for (const selector of ['.calc-wrap','.gate-wrap','.tur-wrap','.stored-wrap','.mech-time']) if (await page.locator(selector).count() !== 1) failures.push(`missing ${selector}`);
+  for (const selector of ['.calc-wrap','.gate-wrap','.tur-wrap','.vn-wrap','.mech-time']) if (await page.locator(selector).count() !== 1) failures.push(`missing ${selector}`);
 
   const calculator = page.locator('.calc-wrap');
   if (await calculator.count() === 1) {
@@ -61,8 +61,6 @@ for (const viewport of [{name:'desktop',width:1440,height:1000},{name:'mobile',w
 
   const gates = page.locator('.gate-wrap');
   if (await gates.count() === 1) {
-    // textContent intentionally includes hidden tab panels. innerText only exposes the active
-    // panel, which made the fidelity gate incorrectly fail for translated OR/NOT/adder copy.
     const gateText = (await gates.textContent()) || '';
     for (const phrase of ['Logic gates: from thought to circuits','AND gate','OR gate','NOT gate (inverter)','1-bit adder — combined gates']) {
       if (!gateText.includes(phrase)) failures.push(`canonical logic-gates visual missing ${JSON.stringify(phrase)}`);
@@ -102,6 +100,28 @@ for (const viewport of [{name:'desktop',width:1440,height:1000},{name:'mobile',w
     }
   }
 
+  const vonNeumann = page.locator('.vn-wrap');
+  if (await vonNeumann.count() === 1) {
+    const vnText = (await vonNeumann.textContent()) || '';
+    for (const phrase of ['The von Neumann cycle: how the processor executes an instruction','Phase 1 — FETCH','Read the instruction','Previous phase','Next phase']) {
+      if (!vnText.includes(phrase)) failures.push(`canonical von Neumann visual missing ${JSON.stringify(phrase)}`);
+    }
+    if (await vonNeumann.locator('.vn-phase-item').count() !== 4) failures.push(`expected 4 canonical von Neumann phases, found ${await vonNeumann.locator('.vn-phase-item').count()}`);
+    const nextPhase = vonNeumann.locator('#vn-next');
+    await nextPhase.click();
+    if ((await vonNeumann.locator('#vn-detail-phase').innerText()).trim() !== 'Phase 2 — DECODE') failures.push('von Neumann Next interaction did not activate DECODE');
+    if ((await vonNeumann.locator('#vn-detail-title').innerText()).trim() !== 'Interpret the instruction') failures.push('von Neumann DECODE title is not the canonical translated title');
+    await nextPhase.click();
+    await nextPhase.click();
+    if ((await vonNeumann.locator('#vn-detail-phase').innerText()).trim() !== 'Phase 4 — WRITE-BACK') failures.push('von Neumann cycle did not reach WRITE-BACK');
+    if ((await vonNeumann.locator('#vn-detail-title').innerText()).trim() !== 'Store the result') failures.push('von Neumann WRITE-BACK title is not the canonical translated title');
+    await vonNeumann.locator('#vn-prev').click();
+    if ((await vonNeumann.locator('#vn-detail-phase').innerText()).trim() !== 'Phase 3 — EXECUTE') failures.push('von Neumann Previous interaction did not return to EXECUTE');
+    for (const forbidden of ['El ciclo de Von Neumann','Cuatro fases','Fase 1','Leer la instrucción','La unidad de control','Activo:','Fase anterior','Fase siguiente','Interpretar la instrucción','Ejecutar la operación','Guardar el resultado','siguiente instrucción']) {
+      if (vnText.includes(forbidden)) failures.push(`von Neumann visual Spanish leakage ${JSON.stringify(forbidden)}`);
+    }
+  }
+
   const videos = page.locator('video[data-s5-inline-video-player]');
   if (await videos.count() !== 1) {
     failures.push(`expected one native-English chapter video, found ${await videos.count()}`);
@@ -119,4 +139,4 @@ for (const viewport of [{name:'desktop',width:1440,height:1000},{name:'mobile',w
 }
 await browser.close();
 if (failures.length) { for (const failure of failures) console.error(failure); process.exit(1); }
-console.log('English history chapter 2 QA passed with canonical narrative, calculator, logic-gates and Turing visuals, plus native-English media.');
+console.log('English history chapter 2 QA passed with canonical narrative, calculator, logic-gates, Turing and von Neumann visuals, plus native-English media.');
