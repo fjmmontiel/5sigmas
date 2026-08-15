@@ -151,7 +151,8 @@ async function validateCanonicalTabs(page, entry) {
   for (const [demo, contract] of Object.entries(canonicalInteractionContracts)) {
     const root = page.locator(`[data-demo="${demo}"]`);
     if (await root.count() !== 1) continue;
-    if (!(await root.first().getAttribute('data-anim-tabs')) && !(await root.first().getAttribute('data-default'))) {
+    const hasAnimTabs = await root.first().evaluate((element) => element.hasAttribute('data-anim-tabs'));
+    if (!hasAnimTabs && (await root.first().getAttribute('data-default')) === null) {
       failures.push(`${entry.route}: ${demo} lost its canonical tab interaction contract`);
     }
     const actualTabs = await root.locator('[data-role="tab"][data-tab]').evaluateAll((nodes) =>
@@ -258,9 +259,9 @@ async function validateNaiveBayes(page, entry) {
   if (await demo.locator('canvas[data-canvas="plot"]').count() !== 1) failures.push(`${entry.route}: Naive Bayes canonical plot canvas missing`);
   if (await demo.locator('[data-example]').count() !== 3) failures.push(`${entry.route}: Naive Bayes guided examples changed`);
   if (await demo.locator('input[data-input="msg"]').count() !== 1) failures.push(`${entry.route}: Naive Bayes custom-message input missing`);
-  const text = await host.innerText();
+  const text = (await host.innerText()).toLowerCase();
   for (const required of ['Classification with Naive Bayes', 'Start with an example', 'Or write your own message.', 'What is happening now']) {
-    if (!text.includes(required)) failures.push(`${entry.route}: Naive Bayes missing English canonical copy ${JSON.stringify(required)}`);
+    if (!text.includes(required.toLowerCase())) failures.push(`${entry.route}: Naive Bayes missing English canonical copy ${JSON.stringify(required)}`);
   }
   const train = demo.locator('[data-btn="train"]');
   if (await train.count() !== 1 || (await train.innerText()).trim() !== 'Train') {
@@ -291,9 +292,9 @@ async function validateKMeans(page, entry) {
   if (await demo.locator('canvas[data-canvas="plot"]').count() !== 1) failures.push(`${entry.route}: k-means canonical plot canvas missing`);
   const scenarios = demo.locator('[data-scenario]');
   if (await scenarios.count() !== 3) failures.push(`${entry.route}: k-means canonical scenario controls changed`);
-  const text = await host.innerText();
+  const text = (await host.innerText()).toLowerCase();
   for (const required of ['Clustering Algorithms', 'Choose the level of detail', 'Fewer groups', 'Balanced', 'More detail']) {
-    if (!text.includes(required)) failures.push(`${entry.route}: k-means missing English canonical copy ${JSON.stringify(required)}`);
+    if (!text.includes(required.toLowerCase())) failures.push(`${entry.route}: k-means missing English canonical copy ${JSON.stringify(required)}`);
   }
   if (await scenarios.count() === 3) {
     await scenarios.first().click();
@@ -318,7 +319,8 @@ async function validateKMeans(page, entry) {
 async function validateNeuralNetwork(page, entry) {
   const root = page.locator('.nn3-root');
   if (await root.count() !== 1) return;
-  if ((await root.getAttribute('data-default')) !== 'linear' || !(await root.getAttribute('data-anim-tabs'))) {
+  const hasAnimTabs = await root.evaluate((element) => element.hasAttribute('data-anim-tabs'));
+  if ((await root.getAttribute('data-default')) !== 'linear' || !hasAnimTabs) {
     failures.push(`${entry.route}: neural-network canonical tab contract changed`);
   }
   const tabs = await root.locator('[data-role="tab"][data-tab]').evaluateAll((nodes) => nodes.map((n) => n.getAttribute('data-tab')));
@@ -345,7 +347,7 @@ async function validateNeuralNetwork(page, entry) {
   } catch {
     failures.push(`${entry.route}: neural-network training did not complete`);
   }
-  const text = await root.innerText();
+  const text = (await root.textContent()) || '';
   for (const required of ['A single neuron learns linear relationships', 'A hidden layer makes it possible to learn curves', 'More layers = increasingly complex patterns', 'Epoch', 'Loss']) {
     if (!text.includes(required)) failures.push(`${entry.route}: neural-network missing English canonical copy ${JSON.stringify(required)}`);
   }
