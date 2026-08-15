@@ -34,6 +34,29 @@ const isTransientExternalFontFailure = (url, resourceType) => (
   resourceType === 'font' && isTransientExternalFontUrl(url)
 );
 
+const previewHost = (() => {
+  try {
+    return new URL(baseUrl).hostname;
+  } catch {
+    return '';
+  }
+})();
+const isLocalPreview = previewHost === '127.0.0.1' || previewHost === 'localhost';
+
+// Material's instant-navigation bundle probes a sitemap relative to its configured
+// production base even while this QA runs against a localhost build. Search/SEO
+// gates validate the real sitemap separately, so do not let that preview-only XHR
+// obscure first-party visual/runtime failures.
+const isPreviewOnlyHostedSitemapProbe = (url, resourceType) => {
+  if (!isLocalPreview || resourceType !== 'xhr' || !url) return false;
+  try {
+    const parsed = new URL(url);
+    return parsed.hostname === '5sigmas.com' && parsed.pathname.endsWith('/sitemap.xml');
+  } catch {
+    return false;
+  }
+};
+
 // Chromium emits a second, URL-less console error for failed resources. HTTP and
 // request failures are audited separately below with the exact URL, status and type,
 // so retaining this duplicate would turn an allowed third-party font failure into a
@@ -143,10 +166,12 @@ try {
         if (response.status() < 400) return;
         const request = response.request();
         if (isTransientExternalFontFailure(response.url(), request.resourceType())) return;
+        if (isPreviewOnlyHostedSitemapProbe(response.url(), request.resourceType())) return;
         runtimeErrors.push(`http ${response.status()}: ${response.url()} [type=${request.resourceType()}]`);
       });
       page.on('requestfailed', (request) => {
         if (isTransientExternalFontFailure(request.url(), request.resourceType())) return;
+        if (isPreviewOnlyHostedSitemapProbe(request.url(), request.resourceType())) return;
         runtimeErrors.push(
           `request failed: ${request.url()} (${request.failure()?.errorText ?? 'unknown error'}) [type=${request.resourceType()}]`,
         );
