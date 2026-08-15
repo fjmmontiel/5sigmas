@@ -77,13 +77,14 @@ const pages = [
     title: 'Chapter 4 — AGI: Artificial General Intelligence',
     media: '04-agi',
     concepts: ['generality', 'alignment', 'task horizon', 'DeepMind'],
-    demoIds: [
-      'fnd-agi-levels',
-      'fnd-current-capabilities',
-      'fnd-agi-impact',
-      'fnd-benchmark-evolution',
-      'fnd-ai-vs-humans',
+    visuals: [
+      '[data-demo="04-niveles-agi"]',
+      '[data-demo="04-capacidades-limites"]',
+      '[data-demo="04-impacto-agi"]',
+      '[data-demo="04-benchmarks-evolucion"]',
+      '[data-demo="04-ia-vs-humanos"]',
     ],
+    demoIds: [],
     audio: false,
     requireDetails: true,
     screenshot: 'english-foundations-04-agi.png',
@@ -157,6 +158,18 @@ const chapterThreeForbidden = [
   'Por qué funciona',
   'Cuándo aporta valor',
   'Agente — investigación',
+];
+
+const chapterFourForbidden = [
+  'AGI no es un interruptor',
+  'Muy capaces no significa generales',
+  'Si llegara: cuatro impactos',
+  'Cómo medir el progreso hacia AGI',
+  'Horizonte temporal de tareas',
+  'Referencias superadas',
+  'Fronteras abiertas',
+  'Autonomía prolongada',
+  'Fuente:',
 ];
 
 const failures = [];
@@ -514,6 +527,98 @@ async function validateChapterThreeCanonicalVisuals(page, entry) {
   }
 }
 
+async function validateChapterFourCanonicalVisuals(page, entry) {
+  if (!entry.route.includes('/04-agi/')) return;
+
+  const levels = page.locator('[data-demo="04-niveles-agi"]');
+  if (await levels.count() !== 1) {
+    failures.push(`${entry.route}: canonical AGI levels visual missing`);
+  } else {
+    if (await levels.locator('.agi-level').count() !== 6) failures.push(`${entry.route}: AGI levels canonical six-level density changed`);
+    const numbers = await levels.locator('.agi-n').evaluateAll((nodes) => nodes.map((node) => (node.textContent || '').trim()));
+    if (JSON.stringify(numbers) !== JSON.stringify(['0', '1', '2', '3', '4', '5'])) {
+      failures.push(`${entry.route}: AGI level sequence changed: ${JSON.stringify(numbers)}`);
+    }
+    const copy = await levels.innerText();
+    for (const required of ['AGI is not a switch', "DeepMind's framework separates performance and generality.", 'No AI', 'Emerging', 'Competent', 'Expert', 'Virtuoso', 'Superintelligence']) {
+      if (!copy.includes(required)) failures.push(`${entry.route}: AGI levels missing English canonical copy ${JSON.stringify(required)}`);
+    }
+  }
+
+  const capabilities = page.locator('[data-demo="04-capacidades-limites"]');
+  if (await capabilities.count() !== 1) {
+    failures.push(`${entry.route}: canonical AGI capability-limits visual missing`);
+  } else {
+    if (await capabilities.locator('.cap-row').count() !== 3) failures.push(`${entry.route}: AGI capability-limits canonical three-contrast density changed`);
+    const copy = await capabilities.innerText();
+    for (const required of ['Very capable does not mean general.', 'Language and knowledge', 'Physical world', 'Known problems', 'Out of distribution', 'Long context', 'State and self-knowledge']) {
+      if (!copy.includes(required)) failures.push(`${entry.route}: capability-limits visual missing English canonical copy ${JSON.stringify(required)}`);
+    }
+  }
+
+  const impact = page.locator('[data-demo="04-impacto-agi"]');
+  if (await impact.count() !== 1) {
+    failures.push(`${entry.route}: canonical AGI impact visual missing`);
+  } else {
+    if (await impact.locator('.imp-card').count() !== 4) failures.push(`${entry.route}: AGI impact canonical four-card density changed`);
+    const copy = await impact.innerText();
+    for (const required of ['If it arrived: four impacts', 'Economic', 'Scientific', 'Geopolitical', 'Alignment']) {
+      if (!copy.includes(required)) failures.push(`${entry.route}: AGI impact visual missing English canonical copy ${JSON.stringify(required)}`);
+    }
+  }
+
+  const benchmarks = page.locator('[data-demo="04-benchmarks-evolucion"]');
+  if (await benchmarks.count() !== 1) {
+    failures.push(`${entry.route}: canonical AGI benchmark-evolution visual missing`);
+  } else {
+    const expectedTabs = ['swe', 'metr', 'arc', 'physics', 'sci'];
+    const actualTabs = await benchmarks.locator('.bev-tab[data-bev]').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('data-bev')));
+    if (JSON.stringify(actualTabs) !== JSON.stringify(expectedTabs)) {
+      failures.push(`${entry.route}: benchmark-evolution tab sequence changed: ${JSON.stringify(actualTabs)}`);
+    }
+    if (await benchmarks.locator('.bev-panel[data-panel]').count() !== 5) failures.push(`${entry.route}: benchmark-evolution canonical five-panel density changed`);
+    if (await benchmarks.locator('.bev-sci-card').count() !== 7) failures.push(`${entry.route}: applied-science canonical seven-card density changed`);
+    if (await benchmarks.locator('[data-panel="swe"] .bev-bar-row').count() !== 4) failures.push(`${entry.route}: SWE-bench canonical comparison density changed`);
+    if (await benchmarks.locator('[data-panel="metr"] .bev-metr-row').count() !== 4) failures.push(`${entry.route}: METR canonical timeline density changed`);
+    if (await benchmarks.locator('[data-panel="arc"] .bev-arc-col').count() !== 2) failures.push(`${entry.route}: ARC-AGI canonical two-column comparison changed`);
+    for (const tab of expectedTabs) {
+      await benchmarks.locator(`.bev-tab[data-bev="${tab}"]`).click();
+      if (await benchmarks.locator('.bev-panel[data-panel]:visible').count() !== 1) {
+        failures.push(`${entry.route}: benchmark-evolution tab ${tab} exposes wrong panel count`);
+      }
+    }
+    const copy = await benchmarks.innerText();
+    for (const required of ['How to measure progress towards AGI', 'Real-world software engineering', 'Autonomy horizon', 'General reasoning', 'PhD physics', 'Applied science']) {
+      if (!copy.includes(required)) failures.push(`${entry.route}: benchmark-evolution visual missing English canonical copy ${JSON.stringify(required)}`);
+    }
+  }
+
+  const humans = page.locator('[data-demo="04-ia-vs-humanos"]');
+  if (await humans.count() !== 1) {
+    failures.push(`${entry.route}: canonical AI-vs-humans visual missing`);
+  } else {
+    const tabs = await humans.locator('[data-ivh-tab]').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('data-ivh-tab')));
+    if (JSON.stringify(tabs) !== JSON.stringify(['done', 'open'])) failures.push(`${entry.route}: AI-vs-humans tab sequence changed: ${JSON.stringify(tabs)}`);
+    if (await humans.locator('[data-ivh-panel]').count() !== 2) failures.push(`${entry.route}: AI-vs-humans canonical two-panel density changed`);
+    if (await humans.locator('[data-ivh-panel="done"] .ivh-row').count() !== 4 || await humans.locator('[data-ivh-panel="open"] .ivh-row').count() !== 4) {
+      failures.push(`${entry.route}: AI-vs-humans canonical four-plus-four domain density changed`);
+    }
+    for (const tab of ['done', 'open']) {
+      await humans.locator(`[data-ivh-tab="${tab}"]`).click();
+      if (await humans.locator('[data-ivh-panel]:visible').count() !== 1) failures.push(`${entry.route}: AI-vs-humans tab ${tab} exposes wrong panel count`);
+    }
+    const copy = await humans.innerText();
+    for (const required of ['AI vs humans: the map is uneven', 'Benchmarks surpassed', 'Open frontiers', 'Chess', 'Protein structure', 'Long-duration autonomy', 'Physical world']) {
+      if (!copy.includes(required)) failures.push(`${entry.route}: AI-vs-humans visual missing English canonical copy ${JSON.stringify(required)}`);
+    }
+  }
+
+  const pageText = await page.locator('body').innerText();
+  for (const token of chapterFourForbidden) {
+    if (pageText.includes(token)) failures.push(`${entry.route}: Chapter 4 Spanish leakage ${JSON.stringify(token)}`);
+  }
+}
+
 try {
   for (const entry of pages) {
     for (const viewport of [
@@ -564,11 +669,12 @@ try {
       await validateNeuralNetwork(page, entry);
       await validateMLOps(page, entry);
       await validateChapterThreeCanonicalVisuals(page, entry);
+      await validateChapterFourCanonicalVisuals(page, entry);
 
       if (entry.requireDetails) {
-        const details = page.locator('[data-demo] details');
+        const details = page.locator('.md-content details');
         if (await details.count() === 0) {
-          failures.push(`${entry.route}: visuals expose no interactive disclosure`);
+          failures.push(`${entry.route}: article exposes no interactive disclosure`);
         } else {
           const candidate = details.nth(Math.min(1, (await details.count()) - 1));
           const before = await candidate.getAttribute('open');
@@ -649,4 +755,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Complete English Foundations QA passed: introduction + Chapters 1–4, 23 canonical teaching visuals, native-English media, canonical interaction density including Decision Tree, Naive Bayes, k-means, neural-network training and the 8-step MLOps walkthrough, plus clean desktop/mobile layouts.');
+console.log('Complete English Foundations QA passed: introduction + Chapters 1–4, 23 canonical teaching visuals, native-English media, canonical interaction density including Decision Tree, Naive Bayes, k-means, neural-network training, the 8-step MLOps walkthrough, and Chapter 4 AGI levels/benchmarks/AI-vs-humans interactions, plus clean desktop/mobile layouts.');
