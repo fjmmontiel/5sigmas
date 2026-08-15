@@ -1,0 +1,88 @@
+<div class="tcm-wrap" data-demo="topic-transformer-causal-mask">
+  <div class="tcm-head">
+    <div class="tcm-kicker">DECODER AUTOREGRESIVO</div>
+    <div class="tcm-title">La máscara causal separa paralelismo de acceso al futuro</div>
+    <div class="tcm-sub">Durante el entrenamiento se calculan muchas posiciones a la vez, pero cada query solo puede atender a su propio prefijo.</div>
+  </div>
+
+  <div class="tcm-grid">
+    <div class="tcm-matrix-card">
+      <div class="tcm-axis tcm-axis--top"><span>keys →</span><b>1</b><b>2</b><b>3</b><b>4</b><b>5</b></div>
+      <div class="tcm-matrix-body">
+        <div class="tcm-axis-side"><span>queries ↓</span><b>1</b><b>2</b><b>3</b><b>4</b><b>5</b></div>
+        <div class="tcm-mask" aria-label="Máscara causal triangular">
+          <i class="ok">✓</i><i class="no">×</i><i class="no">×</i><i class="no">×</i><i class="no">×</i>
+          <i class="ok">✓</i><i class="ok">✓</i><i class="no">×</i><i class="no">×</i><i class="no">×</i>
+          <i class="ok">✓</i><i class="ok">✓</i><i class="ok">✓</i><i class="no">×</i><i class="no">×</i>
+          <i class="ok">✓</i><i class="ok">✓</i><i class="ok">✓</i><i class="ok">✓</i><i class="no">×</i>
+          <i class="ok">✓</i><i class="ok">✓</i><i class="ok">✓</i><i class="ok">✓</i><i class="ok">✓</i>
+        </div>
+      </div>
+      <div class="tcm-legend"><span class="ok">visible</span><span class="no">bloqueado: token futuro</span></div>
+    </div>
+
+    <div class="tcm-side">
+      <div class="tcm-mode">
+        <div class="tcm-mode-tag">ENTRENAMIENTO</div>
+        <strong>Paralelo en filas</strong>
+        <p>Las posiciones conocidas del lote se calculan juntas. La máscara invalida los logits que apuntan al futuro antes de aplicar softmax.</p>
+        <div class="tcm-row-demo"><span>q₁</span><span>q₂</span><span>q₃</span><span>q₄</span><span>q₅</span></div>
+      </div>
+      <div class="tcm-mode">
+        <div class="tcm-mode-tag">GENERACIÓN</div>
+        <strong>Secuencial en tokens nuevos</strong>
+        <p>El token siguiente todavía no existe. La caché KV reutiliza keys y values del prefijo para no recomputarlos en cada paso.</p>
+        <div class="tcm-seq-demo"><span>t₁</span><b>→</b><span>t₂</span><b>→</b><span>t₃</span><b>→</b><span class="next">t₄ ?</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tcm-bottom"><strong>Contrato:</strong> posición <code>t</code> puede usar <code>1…t</code>; nunca <code>t+1…n</code>.</div>
+</div>
+
+<style>
+.tcm-wrap,.tcm-wrap *{box-sizing:border-box}
+.tcm-wrap{
+  --tcm-a:var(--md-primary-fg-color,#26a69a);
+  --tcm-b:#4757d6;
+  --tcm-r:#ef4444;
+  --tcm-bg:var(--md-default-bg-color,#fff);
+  --tcm-fg:var(--md-default-fg-color,#111827);
+  --tcm-muted:color-mix(in srgb,var(--tcm-fg) 58%,transparent);
+  --tcm-border:color-mix(in srgb,var(--tcm-fg) 14%,transparent);
+  margin:1.1rem 0 1.5rem;padding:clamp(14px,2vw,22px);border:1px solid var(--tcm-border);border-radius:20px;
+  background:radial-gradient(100% 120% at 0 0,color-mix(in srgb,var(--tcm-b) 8%,transparent),transparent 50%),var(--tcm-bg);color:var(--tcm-fg)
+}
+.tcm-head{display:grid;gap:4px;margin-bottom:14px}
+.tcm-kicker{font-size:11px;font-weight:900;letter-spacing:.12em;color:var(--tcm-muted)}
+.tcm-title{font-size:clamp(18px,2.1vw,24px);font-weight:900;line-height:1.1;letter-spacing:-.02em}
+.tcm-sub{font-size:13.5px;line-height:1.45;color:var(--tcm-muted);max-width:78ch}
+.tcm-grid{display:grid;grid-template-columns:minmax(320px,.9fr) minmax(0,1.1fr);gap:10px}
+.tcm-matrix-card,.tcm-mode{border:1px solid var(--tcm-border);border-radius:14px;background:color-mix(in srgb,var(--tcm-bg) 92%,var(--tcm-fg) 8%)}
+.tcm-matrix-card{padding:12px;display:grid;gap:8px}
+.tcm-axis--top{display:grid;grid-template-columns:80px repeat(5,1fr);gap:4px;align-items:end}
+.tcm-axis--top span,.tcm-axis-side span{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--tcm-muted);font-weight:900}
+.tcm-axis b{font-size:10px;color:var(--tcm-muted);text-align:center}
+.tcm-matrix-body{display:grid;grid-template-columns:80px 1fr;gap:5px}
+.tcm-axis-side{display:grid;grid-template-rows:22px repeat(5,1fr);gap:4px;align-items:center}
+.tcm-axis-side b{font-size:10px;color:var(--tcm-muted);text-align:right;padding-right:8px}
+.tcm-mask{display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(5,1fr);gap:4px;min-height:210px}
+.tcm-mask i{display:grid;place-items:center;border-radius:7px;font-size:11px;font-style:normal;font-weight:900;border:1px solid var(--tcm-border)}
+.tcm-mask i.ok{background:color-mix(in srgb,var(--tcm-a) 15%,var(--tcm-bg));border-color:color-mix(in srgb,var(--tcm-a) 35%,var(--tcm-border));color:color-mix(in srgb,var(--tcm-a) 80%,var(--tcm-fg))}
+.tcm-mask i.no{background:color-mix(in srgb,var(--tcm-r) 6%,var(--tcm-bg));color:color-mix(in srgb,var(--tcm-r) 45%,var(--tcm-muted))}
+.tcm-legend{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.tcm-legend span{padding:4px 8px;border-radius:999px;font-size:9.5px;font-weight:800;border:1px solid var(--tcm-border)}
+.tcm-legend .ok{background:color-mix(in srgb,var(--tcm-a) 10%,var(--tcm-bg))}.tcm-legend .no{background:color-mix(in srgb,var(--tcm-r) 6%,var(--tcm-bg))}
+.tcm-side{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tcm-mode{padding:12px;display:grid;align-content:start;gap:7px}
+.tcm-mode-tag{font-size:9.5px;font-weight:900;letter-spacing:.1em;color:var(--tcm-muted)}
+.tcm-mode strong{font-size:13.5px}.tcm-mode p{margin:0;font-size:11px;line-height:1.4;color:var(--tcm-muted)}
+.tcm-row-demo{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-top:auto}
+.tcm-row-demo span,.tcm-seq-demo span{padding:7px 4px;border-radius:8px;text-align:center;font:800 10.5px ui-monospace,SFMono-Regular,Menlo,monospace;border:1px solid color-mix(in srgb,var(--tcm-b) 28%,var(--tcm-border));background:color-mix(in srgb,var(--tcm-b) 8%,var(--tcm-bg))}
+.tcm-seq-demo{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin-top:auto}.tcm-seq-demo b{font-size:10px;color:var(--tcm-muted)}
+.tcm-seq-demo .next{border-style:dashed;color:var(--tcm-muted)}
+.tcm-bottom{margin-top:10px;border:1px solid color-mix(in srgb,var(--tcm-a) 32%,var(--tcm-border));border-radius:11px;padding:9px 11px;text-align:center;font-size:11.5px;background:color-mix(in srgb,var(--tcm-a) 6%,var(--tcm-bg))}
+.tcm-bottom code{font-size:11px}
+@media(max-width:820px){.tcm-grid{grid-template-columns:1fr}.tcm-side{grid-template-columns:1fr 1fr}}
+@media(max-width:540px){.tcm-side{grid-template-columns:1fr}.tcm-matrix-body{grid-template-columns:58px 1fr}.tcm-axis--top{grid-template-columns:58px repeat(5,1fr)}.tcm-axis-side{grid-template-rows:18px repeat(5,1fr)}.tcm-mask{min-height:180px}}
+</style>

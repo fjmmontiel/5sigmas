@@ -4,7 +4,7 @@ seo_title: "Cómo funciona el Transformer: atención y arquitectura paso a paso"
 description: "Explicación técnica del Transformer: embeddings, autoatención, bloques residuales, encoder, decoder, coste y límites de la arquitectura."
 keywords: "Transformer, self-attention, autoatención, arquitectura Transformer, Query Key Value, encoder decoder, LLM"
 date: 2026-04-07
-date_modified: 2026-08-05
+date_modified: 2026-08-15
 ---
 
 # Cómo funciona el Transformer
@@ -15,14 +15,7 @@ La atención es la operación distintiva, pero un Transformer completo también 
 
 ## La arquitectura en una sola vista
 
-```text
-tokens
-→ embeddings + posición
-→ [atención → residual → normalización
-   → red feed-forward → residual → normalización] × N
-→ representación contextual
-→ proyección al vocabulario u otra salida
-```
+{{ include_html("snippets/temas/transformer-block.html") }}
 
 En un modelo autoregresivo, la última representación se proyecta sobre el vocabulario para producir las probabilidades del siguiente token.
 
@@ -49,11 +42,9 @@ Cada representación se proyecta en tres vectores:
 - **Key (K):** qué señal ofrece cada posición para ser encontrada
 - **Value (V):** qué contenido aporta si recibe atención
 
-La atención escalada puede escribirse así:
+La atención escalada conecta cuatro operaciones: proyectar `Q`, `K` y `V`; calcular compatibilidades; normalizar los pesos; y mezclar los valores.[^transformer]
 
-```text
-Attention(Q, K, V) = softmax(QKᵀ / √d_k) V
-```
+{{ include_html("snippets/temas/transformer-qkv.html") }}
 
 El producto `QKᵀ` calcula compatibilidades entre posiciones. El factor `√d_k` controla la escala de los logits. `softmax` convierte cada fila en pesos normalizados. La multiplicación por `V` produce una combinación ponderada de información.
 
@@ -72,13 +63,9 @@ Una cabeza puede capturar dependencias locales. Otra puede relacionar entidades 
 
 ## 4. Máscara causal en modelos generativos
 
-Un decoder autoregresivo no debe ver el futuro durante el entrenamiento. Se aplica una máscara triangular que impide a la posición `t` atender a tokens posteriores.
+Un decoder autoregresivo no debe ver el futuro durante el entrenamiento. Se aplica una máscara triangular que impide a la posición `t` atender a tokens posteriores.[^transformer]
 
-```text
-posición 1 → ve 1
-posición 2 → ve 1, 2
-posición 3 → ve 1, 2, 3
-```
+{{ include_html("snippets/temas/transformer-causal-mask.html") }}
 
 Así, aunque todas las posiciones del lote se procesen en paralelo durante el entrenamiento, cada predicción respeta el mismo contrato que existirá al generar: solo puede usar el prefijo disponible.
 

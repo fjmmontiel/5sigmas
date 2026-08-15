@@ -1,0 +1,147 @@
+<div class="tvb-wrap" data-demo="topic-transformer-block">
+  <div class="tvb-head">
+    <div class="tvb-kicker">ARQUITECTURA</div>
+    <div class="tvb-title">Un bloque Transformer, sin saltos</div>
+    <div class="tvb-sub">La atención mezcla información entre posiciones; la red feed-forward transforma cada posición. Las rutas residuales conservan una vía directa.</div>
+  </div>
+
+  <div class="tvb-pipeline" role="img" aria-label="Flujo conceptual de un Transformer desde tokens hasta la salida">
+    <div class="tvb-node tvb-node--input">
+      <span class="tvb-node-label">Tokens</span>
+      <span class="tvb-node-meta">IDs discretos</span>
+    </div>
+    <div class="tvb-arrow" aria-hidden="true">→</div>
+    <div class="tvb-node">
+      <span class="tvb-node-label">Embedding + posición</span>
+      <span class="tvb-node-meta">vectores con orden</span>
+    </div>
+    <div class="tvb-arrow" aria-hidden="true">→</div>
+
+    <div class="tvb-stack">
+      <div class="tvb-stack-label">BLOQUE × N</div>
+      <div class="tvb-stage tvb-stage--attn">
+        <span class="tvb-stage-num">1</span>
+        <div>
+          <strong>Self-attention</strong>
+          <span>mezcla contexto entre tokens</span>
+        </div>
+      </div>
+      <div class="tvb-residual">
+        <span class="tvb-residual-line"></span>
+        <span class="tvb-residual-chip">+ residual</span>
+      </div>
+      <div class="tvb-stage tvb-stage--norm">
+        <span class="tvb-stage-num">2</span>
+        <div>
+          <strong>Add + Norm</strong>
+          <span>estabiliza la representación</span>
+        </div>
+      </div>
+      <div class="tvb-stage tvb-stage--ffn">
+        <span class="tvb-stage-num">3</span>
+        <div>
+          <strong>Feed-forward</strong>
+          <span>transforma cada posición por separado</span>
+        </div>
+      </div>
+      <div class="tvb-residual">
+        <span class="tvb-residual-line"></span>
+        <span class="tvb-residual-chip">+ residual</span>
+      </div>
+      <div class="tvb-stage tvb-stage--norm">
+        <span class="tvb-stage-num">4</span>
+        <div>
+          <strong>Add + Norm</strong>
+          <span>prepara la siguiente capa</span>
+        </div>
+      </div>
+      <div class="tvb-order-note">Orden ilustrativo post-norm; muchas familias modernas usan pre-norm.</div>
+    </div>
+
+    <div class="tvb-arrow" aria-hidden="true">→</div>
+    <div class="tvb-node tvb-node--output">
+      <span class="tvb-node-label">Representación contextual</span>
+      <span class="tvb-node-meta">cada token ya incorpora contexto</span>
+    </div>
+    <div class="tvb-arrow" aria-hidden="true">→</div>
+    <div class="tvb-node">
+      <span class="tvb-node-label">Proyección / salida</span>
+      <span class="tvb-node-meta">vocabulario u otra cabeza</span>
+    </div>
+  </div>
+
+  <div class="tvb-contract">
+    <div><span>Atención</span><strong>mueve información entre posiciones</strong></div>
+    <div><span>FFN</span><strong>transforma información dentro de cada posición</strong></div>
+    <div><span>Residual</span><strong>mantiene una ruta directa para señal y gradiente</strong></div>
+  </div>
+</div>
+
+<style>
+.tvb-wrap,.tvb-wrap * { box-sizing: border-box; }
+.tvb-wrap {
+  --tvb-a: var(--md-primary-fg-color,#26a69a);
+  --tvb-b: #4757d6;
+  --tvb-c: var(--md-accent-fg-color,#ffb343);
+  --tvb-bg: var(--md-default-bg-color,#fff);
+  --tvb-fg: var(--md-default-fg-color,#111827);
+  --tvb-muted: color-mix(in srgb,var(--tvb-fg) 58%,transparent);
+  --tvb-border: color-mix(in srgb,var(--tvb-fg) 14%,transparent);
+  container-type: inline-size;
+  margin: 1.1rem 0 1.5rem;
+  padding: clamp(14px,2vw,22px);
+  border: 1px solid var(--tvb-border);
+  border-radius: 20px;
+  background:
+    radial-gradient(100% 120% at 0 0,color-mix(in srgb,var(--tvb-b) 8%,transparent),transparent 52%),
+    radial-gradient(90% 110% at 100% 0,color-mix(in srgb,var(--tvb-a) 8%,transparent),transparent 56%),
+    var(--tvb-bg);
+  color: var(--tvb-fg);
+}
+.tvb-head { display:grid; gap:4px; margin-bottom:14px; }
+.tvb-kicker { font-size:11px; font-weight:900; letter-spacing:.12em; color:var(--tvb-muted); }
+.tvb-title { font-size:clamp(18px,2.1vw,24px); font-weight:900; line-height:1.1; letter-spacing:-.02em; }
+.tvb-sub { font-size:13.5px; line-height:1.45; color:var(--tvb-muted); max-width:75ch; }
+.tvb-pipeline {
+  display:grid;
+  grid-template-columns:minmax(80px,.72fr) auto minmax(105px,.9fr) auto minmax(220px,1.5fr) auto minmax(125px,1fr) auto minmax(100px,.82fr);
+  align-items:center;
+  gap:8px;
+  min-width:0;
+}
+.tvb-arrow { font-size:22px; font-weight:900; color:var(--tvb-muted); text-align:center; }
+.tvb-node { min-width:0; min-height:92px; border:1px solid var(--tvb-border); border-radius:14px; padding:12px; display:grid; align-content:center; gap:5px; background:color-mix(in srgb,var(--tvb-bg) 90%,var(--tvb-fg) 10%); }
+.tvb-node--input { border-color:color-mix(in srgb,var(--tvb-b) 36%,var(--tvb-border)); }
+.tvb-node--output { border-color:color-mix(in srgb,var(--tvb-a) 40%,var(--tvb-border)); background:color-mix(in srgb,var(--tvb-a) 7%,var(--tvb-bg)); }
+.tvb-node-label { font-size:13px; font-weight:900; line-height:1.2; overflow-wrap:anywhere; }
+.tvb-node-meta { font-size:11.5px; line-height:1.35; color:var(--tvb-muted); overflow-wrap:anywhere; }
+.tvb-stack { min-width:0; border:1px solid color-mix(in srgb,var(--tvb-a) 38%,var(--tvb-border)); border-radius:16px; padding:10px; display:grid; gap:6px; background:color-mix(in srgb,var(--tvb-a) 5%,var(--tvb-bg)); }
+.tvb-stack-label { font-size:10px; font-weight:900; letter-spacing:.12em; color:var(--tvb-muted); text-align:center; }
+.tvb-stage { min-width:0; display:grid; grid-template-columns:24px minmax(0,1fr); gap:8px; align-items:center; border:1px solid var(--tvb-border); border-radius:10px; padding:8px 9px; background:color-mix(in srgb,var(--tvb-bg) 92%,var(--tvb-fg) 8%); }
+.tvb-stage-num { width:22px; height:22px; border-radius:999px; display:grid; place-items:center; font-size:10px; font-weight:900; background:color-mix(in srgb,var(--tvb-fg) 9%,transparent); }
+.tvb-stage strong { display:block; font-size:12.5px; line-height:1.2; }
+.tvb-stage span:not(.tvb-stage-num) { display:block; font-size:10.8px; line-height:1.3; color:var(--tvb-muted); }
+.tvb-stage--attn { border-color:color-mix(in srgb,var(--tvb-b) 34%,var(--tvb-border)); }
+.tvb-stage--ffn { border-color:color-mix(in srgb,var(--tvb-c) 42%,var(--tvb-border)); }
+.tvb-residual { display:grid; grid-template-columns:1fr auto 1fr; gap:6px; align-items:center; }
+.tvb-residual-line { height:1px; background:color-mix(in srgb,var(--tvb-a) 45%,transparent); }
+.tvb-residual::after { content:""; height:1px; background:color-mix(in srgb,var(--tvb-a) 45%,transparent); }
+.tvb-residual-chip { font-size:9.5px; font-weight:800; color:var(--tvb-muted); white-space:nowrap; }
+.tvb-order-note { font-size:10px; line-height:1.35; color:var(--tvb-muted); text-align:center; }
+.tvb-contract { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin-top:12px; }
+.tvb-contract>div { min-width:0; border:1px solid var(--tvb-border); border-radius:11px; padding:9px 10px; display:grid; gap:2px; background:color-mix(in srgb,var(--tvb-bg) 94%,var(--tvb-fg) 6%); }
+.tvb-contract span { font-size:10px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; color:var(--tvb-muted); }
+.tvb-contract strong { font-size:11.5px; line-height:1.35; }
+@container (max-width:820px) {
+  .tvb-pipeline { grid-template-columns:1fr; gap:7px; }
+  .tvb-arrow { transform:rotate(90deg); font-size:18px; }
+  .tvb-node { min-height:auto; }
+  .tvb-contract { grid-template-columns:1fr; }
+}
+@media (max-width:900px) {
+  .tvb-pipeline { grid-template-columns:1fr; gap:7px; }
+  .tvb-arrow { transform:rotate(90deg); font-size:18px; }
+  .tvb-node { min-height:auto; }
+  .tvb-contract { grid-template-columns:1fr; }
+}
+</style>
