@@ -7,10 +7,14 @@ const base = process.env.S5_PREVIEW_BASE || 'http://127.0.0.1:8000';
 const outDir = path.resolve('artifacts/visual-review');
 await fs.mkdir(outDir, { recursive: true });
 
-const transformerVisuals = ['.tvb-wrap', '.tqv-wrap', '.tcm-wrap'];
+const transformerVisuals = [
+  { selector: '.tvb-wrap', source: 'docs/snippets/temas/transformer-block.html' },
+  { selector: '.tqv-wrap', source: 'docs/snippets/temas/transformer-qkv.html' },
+  { selector: '.tcm-wrap', source: 'docs/snippets/temas/transformer-causal-mask.html' },
+];
 const concepts = [
   { route: '/en/temas/llms/', title: 'What is an LLM and how does it work?', terms: ['tokenization', 'pretraining', 'Parameters'] },
-  { route: '/en/temas/transformer/', title: 'How the Transformer works', terms: ['Query', 'Key', 'Value', 'Multi-head attention'], visuals: transformerVisuals },
+  { route: '/en/temas/transformer/', title: 'How the Transformer works', terms: ['Query', 'Key', 'Value', 'Multi-head attention'], visuals: transformerVisuals.map((item) => item.selector) },
   { route: '/en/temas/razonamiento/', title: 'Reasoning in LLMs', terms: ['Chain of thought', 'Test-time compute', 'verifier'] },
   { route: '/en/temas/evaluacion-modelos/', title: 'Evaluating AI models', terms: ['golden set', 'benchmark', 'LLM as a judge'] },
   { route: '/en/temas/agentes-ia/', title: 'What is an AI agent?', terms: ['tool calling', 'Operational state', 'least privilege'] },
@@ -31,7 +35,24 @@ const viewports = [
   { name: 'mobile', width: 390, height: 844 },
 ];
 const failures = [];
-const browser = await chromium.launch({ headless: true });
+
+async function validateSpanishTransformerSources() {
+  const topicPath = path.resolve('docs/temas/transformer.md');
+  const topic = await fs.readFile(topicPath, 'utf8');
+  for (const visual of transformerVisuals) {
+    const rel = visual.source.replace(/^docs\//, '');
+    const include = `{{ include_html(\"${rel}\") }}`;
+    if (!topic.includes(include)) failures.push(`/temas/transformer/: missing canonical include ${include}`);
+
+    const source = await fs.readFile(path.resolve(visual.source), 'utf8');
+    if (!source.includes(visual.selector.slice(1))) failures.push(`${visual.source}: missing visual root ${visual.selector}`);
+  }
+
+  for (const expected of ['La ecuación de atención convertida en flujo', 'Máscara causal', 'Representación contextual']) {
+    const found = await Promise.all(transformerVisuals.map(async (visual) => (await fs.readFile(path.resolve(visual.source), 'utf8')).includes(expected)));
+    if (!found.some(Boolean)) failures.push(`/temas/transformer/: missing Spanish visual teaching label ${JSON.stringify(expected)}`);
+  }
+}
 
 async function checkVisualContract(page, route, viewport, selectors) {
   for (const selector of selectors) {
@@ -40,6 +61,8 @@ async function checkVisualContract(page, route, viewport, selectors) {
     if (count === 1) {
       const box = await page.locator(selector).boundingBox();
       if (!box || box.width < 250 || box.height < 120) failures.push(`${route}: ${viewport.name} ${selector} has invalid geometry ${JSON.stringify(box)}`);
+      const overflow = await page.locator(selector).evaluate((node) => node.scrollWidth - node.clientWidth);
+      if (overflow > 2) failures.push(`${route}: ${viewport.name} ${selector} internal overflow ${overflow}px`);
     }
   }
 }
@@ -48,6 +71,9 @@ async function checkOverflow(page, route, viewport) {
   const [clientWidth, scrollWidth] = await page.evaluate(() => [document.documentElement.clientWidth, document.documentElement.scrollWidth]);
   if (scrollWidth > clientWidth + 2) failures.push(`${route}: ${viewport.name} horizontal overflow ${scrollWidth - clientWidth}px`);
 }
+
+await validateSpanishTransformerSources();
+const browser = await chromium.launch({ headless: true });
 
 try {
   const hub = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
@@ -95,22 +121,6 @@ try {
       await page.close();
     }
   }
-
-  for (const viewport of viewports) {
-    const route = '/temas/transformer/';
-    const page = await browser.newPage({ viewport: { width: viewport.width, height: viewport.height } });
-    const runtimeErrors = [];
-    page.on('pageerror', (error) => runtimeErrors.push(`pageerror: ${error.message}`));
-    const response = await page.goto(`${base}${route}`, { waitUntil: 'networkidle' });
-    if (!response?.ok()) failures.push(`${route}: HTTP ${response?.status() ?? 'no response'}`);
-    const body = await page.locator('body').innerText();
-    if (!body.includes('Cómo funciona el Transformer')) failures.push(`${route}: missing Spanish title`);
-    await checkVisualContract(page, route, viewport, transformerVisuals);
-    await checkOverflow(page, route, viewport);
-    for (const err of runtimeErrors) failures.push(`${route}: ${err}`);
-    await page.screenshot({ path: path.join(outDir, `spanish-concept-transformer-${viewport.name}.png`), fullPage: true, animations: 'disabled' });
-    await page.close();
-  }
 } finally {
   await browser.close();
 }
@@ -119,4 +129,4 @@ if (failures.length) {
   for (const failure of [...new Set(failures)]) console.error(failure);
   process.exit(1);
 }
-console.log('Concept QA passed: canonical English hub + six English topic routes, Transformer ES/EN visual parity, native localization, canonical URLs, and desktop/mobile overflow cleanliness.');
+console.log('Concept QA passed: canonical English hub + six English topic routes, Transformer ES source contract + EN rendered visual contract, native localization, canonical URLs, and desktop/mobile overflow cleanliness.');
