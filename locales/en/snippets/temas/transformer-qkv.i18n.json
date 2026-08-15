@@ -1,6 +1,6 @@
 {
   "source": "snippets/temas/transformer-qkv.html",
-  "source_blob_sha": "896029b4e3737edb2f12f545efa4682309974248",
+  "source_blob_sha": "0bed96855633ca1bf41ba284878695c8ff32f53a",
   "replacements": {
     ">La ecuación de atención convertida en flujo</div>": ">The attention equation, turned into a flow</div>",
     ">Q decide qué busca cada posición; K calcula compatibilidad; V aporta el contenido que finalmente se mezcla.</div>": ">Q encodes what each position is looking for; K determines compatibility; V provides the content that is ultimately mixed.</div>",
