@@ -21,6 +21,7 @@ on:
       - 'scripts/validate_english_caves_ch4_alexnet.mjs'
       - 'scripts/validate_english_caves_ch4_transformer.mjs'
       - 'scripts/validate_english_caves_ch4_remaining.mjs'
+      - 'scripts/validate_english_caves_ch5_agents.mjs'
       - 'scripts/validate_english_caves_complete.mjs'
       - 'scripts/validate_english_caves_media.mjs'
       - 'scripts/validate_english_foundations_complete.mjs'
@@ -129,6 +130,9 @@ jobs:
 
       - name: Validate remaining canonical English Chapter 4 visuals
         run: node scripts/validate_english_caves_ch4_remaining.mjs
+
+      - name: Validate canonical English Chapter 5 agent-loop visual
+        run: node scripts/validate_english_caves_ch5_agents.mjs
 
       - name: Validate complete English Caves to AGI series
         run: node scripts/validate_english_caves_complete.mjs
