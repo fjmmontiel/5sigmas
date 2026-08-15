@@ -76,6 +76,18 @@ const failures = [];
 const browser = await chromium.launch({ headless: true });
 let totalVisuals = 0;
 
+async function assertTabInteraction(root, tabSelector, panelSelector, targetIndex, label, route) {
+  const tabs = root.locator(tabSelector);
+  const panels = root.locator(panelSelector);
+  const targetTab = tabs.nth(targetIndex);
+  const targetPanel = panels.nth(targetIndex);
+  await targetTab.click();
+  if (!(await targetTab.evaluate((node) => node.classList.contains('active')))) {
+    failures.push(`${route}: ${label} tab did not become active`);
+  }
+  if (!(await targetPanel.isVisible())) failures.push(`${route}: ${label} target panel did not become visible`);
+}
+
 try {
   for (const entry of pages) {
     for (const viewport of [
@@ -130,9 +142,38 @@ try {
             if (scrollWidth <= clientWidth) failures.push(`${entry.route}: mobile trade-off matrix should retain all four families via contained horizontal scrolling`);
           }
         }
+
+        const discrete = page.locator('[data-demo="mm-03-discrete-tokens"]');
+        if (await discrete.count() !== 1) {
+          failures.push(`${entry.route}: missing canonical VQ-VAE/MoE discrete-token visual`);
+        } else {
+          if (await discrete.locator('.tkd-tab').count() !== 2) failures.push(`${entry.route}: discrete-token visual lost its two canonical tabs`);
+          if (await discrete.locator('.tkd-panel').count() !== 2) failures.push(`${entry.route}: discrete-token visual lost its two canonical panels`);
+          if (await discrete.locator('.tkd-vq-step').count() !== 4) failures.push(`${entry.route}: VQ-VAE pipeline lost one of four canonical stages`);
+          if (await discrete.locator('.tkd-moe-expert').count() !== 4) failures.push(`${entry.route}: MoE panel lost one of four canonical experts`);
+          if (await discrete.locator('.tkd-moe-stat').count() !== 3) failures.push(`${entry.route}: MoE panel lost canonical statistics`);
+          const discreteText = (await discrete.textContent()) || '';
+          for (const token of ['Native tokenization in practice', 'Nearest-neighbor lookup', 'Mixed input sequence', 'Router (lightweight network)', '2 / 8', '~25%', '1M tokens']) {
+            if (!discreteText.includes(token)) failures.push(`${entry.route}: discrete-token visual missing ${JSON.stringify(token)}`);
+          }
+          await assertTabInteraction(discrete, '.tkd-tab', '.tkd-panel', 1, 'discrete-token MoE', entry.route);
+        }
+
+        const families = page.locator('[data-demo="mm-03-families"]');
+        if (await families.count() !== 1) {
+          failures.push(`${entry.route}: missing canonical four-family architecture visual`);
+        } else {
+          if (await families.locator('.arc-tab').count() !== 4) failures.push(`${entry.route}: architecture-family visual lost its four canonical tabs`);
+          if (await families.locator('.arc-panel').count() !== 4) failures.push(`${entry.route}: architecture-family visual lost its four canonical panels`);
+          const familyText = (await families.textContent()) || '';
+          for (const token of ['Encoder + connector + LLM', 'Cross-attention fusion', 'Native tokenization', 'Omni and streaming models', 'GPT-4o', 'Gemini 2.5 Native Audio', 'Qwen2.5-Omni']) {
+            if (!familyText.includes(token)) failures.push(`${entry.route}: architecture-family visual missing ${JSON.stringify(token)}`);
+          }
+          await assertTabInteraction(families, '.arc-tab', '.arc-panel', 3, 'omni/streaming architecture', entry.route);
+        }
       }
 
-      if (entry.demos) {
+      if (entry.demos && !entry.route.endsWith('/03-arquitecturas/')) {
         const details = page.locator('[data-demo] details');
         if (await details.count() === 0) {
           failures.push(`${entry.route}: visuals expose no interactive disclosure`);
@@ -188,4 +229,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Complete English Multimodality QA passed: introduction + Chapters 1–5, 27 unique native visuals, canonical Chapter 3 trade-off matrix, six native-English MP4/poster pairs, interactions, no Spanish media inheritance, desktop/mobile clean.');
+console.log('Complete English Multimodality QA passed: introduction + Chapters 1–5, 27 unique native visuals, canonical Chapter 3 trade-off/VQ-VAE-MoE/four-family interactions, six native-English MP4/poster pairs, no Spanish media inheritance, desktop/mobile clean.');
