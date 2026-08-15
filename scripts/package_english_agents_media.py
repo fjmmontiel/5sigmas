@@ -80,7 +80,7 @@ series/agentes-ia/05-de-la-demo-a-produccion.md:
 media_path = Path("locales/en/media.yml")
 media_text = media_path.read_text(encoding="utf-8")
 if "series/agentes-ia/00_presentacion_serie.md:" not in media_text:
-    media_path.write_text(media_text.rstrip() + media_append + "\n", encoding="utf-8")
+    media_path.write_text(media_text.rstrip() + media_append.rstrip() + "\n", encoding="utf-8")
 
 validator = r'''#!/usr/bin/env node
 import { chromium } from 'playwright';
@@ -113,7 +113,6 @@ try {
       if (!response?.ok()) failures.push(`${route}: HTTP ${response?.status() ?? 'no response'}`);
       const body = await page.locator('body').innerText().catch(() => '');
       if (!body.includes(marker)) failures.push(`${route}: missing English marker ${JSON.stringify(marker)}`);
-
       const videos = page.locator('video[data-s5-inline-video-player]');
       const videoCount = await videos.count();
       if (videoCount !== 1) failures.push(`${route}: expected one native-English video, found ${videoCount}`);
@@ -148,26 +147,5 @@ console.log('Native English AI Agents media QA passed: presentation + Chapters 1
 '''
 Path("scripts/validate_english_agents_media.mjs").write_text(validator, encoding="utf-8")
 
-replace_once(
-    ".github/workflows/english-mirror-quality.yml",
-    "      - 'scripts/validate_english_security_media.mjs'\n",
-    "      - 'scripts/validate_english_security_media.mjs'\n      - 'scripts/validate_english_agents_media.mjs'\n",
-)
-replace_once(
-    ".github/workflows/english-mirror-quality.yml",
-    "      - name: Validate complete English Technical Articles\n        run: node scripts/validate_english_technical_articles.mjs\n",
-    "      - name: Validate native English AI Agents media\n        run: node scripts/validate_english_agents_media.mjs\n\n      - name: Validate complete English Technical Articles\n        run: node scripts/validate_english_technical_articles.mjs\n",
-)
-replace_once(
-    ".github/workflows/deploy-pages.yml",
-    "      - name: Validate live English Technical Articles\n        env:\n          S5_PREVIEW_BASE: https://5sigmas.com\n        run: node scripts/validate_english_technical_articles.mjs\n",
-    "      - name: Validate live English AI Agents media\n        env:\n          S5_PREVIEW_BASE: https://5sigmas.com\n        run: node scripts/validate_english_agents_media.mjs\n\n      - name: Validate live English Technical Articles\n        env:\n          S5_PREVIEW_BASE: https://5sigmas.com\n        run: node scripts/validate_english_technical_articles.mjs\n",
-)
-
-for temporary in [
-    ".github/workflows/render-english-agents-media.yml",
-    "scripts/render_english_agents_media.py",
-    ".github/workflows/package-english-agents-media.yml",
-    "scripts/package_english_agents_media.py",
-]:
-    Path(temporary).unlink(missing_ok=True)
+Path("scripts/render_english_agents_media.py").unlink(missing_ok=True)
+Path("scripts/package_english_agents_media.py").unlink(missing_ok=True)
