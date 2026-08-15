@@ -23,6 +23,21 @@ const requestText = async (request, route) => {
   return response.text();
 };
 
+const schemasFromPage = async (page) => {
+  const payloads = await page.locator('script[type="application/ld+json"]').allTextContents();
+  const schemas = [];
+  for (const payload of payloads) {
+    try {
+      const parsed = JSON.parse(payload);
+      if (Array.isArray(parsed)) schemas.push(...parsed);
+      else if (parsed && typeof parsed === 'object') schemas.push(parsed);
+    } catch (error) {
+      failures.push(`invalid JSON-LD payload: ${error.message}`);
+    }
+  }
+  return schemas;
+};
+
 const browser = await chromium.launch({ headless: true });
 const context = await browser.newContext({ viewport: { width: 1440, height: 1100 } });
 const page = await context.newPage();
@@ -43,6 +58,14 @@ if (hubResponse?.ok()) {
   }
   for (const forbidden of ['vídeo disponible', 'vídeos disponibles', 'Ver vídeo', 'Leer artículo']) {
     if (body.includes(forbidden)) failures.push(`/en/videos/: Spanish runtime copy leaked: ${JSON.stringify(forbidden)}`);
+  }
+
+  const hubSchemas = await schemasFromPage(page);
+  const collection = hubSchemas.find((schema) => schema['@type'] === 'CollectionPage');
+  if (!collection) failures.push('/en/videos/: missing CollectionPage JSON-LD');
+  else {
+    if (collection.inLanguage !== 'en') failures.push(`/en/videos/: CollectionPage inLanguage is ${JSON.stringify(collection.inLanguage)}`);
+    if (collection.url !== 'https://5sigmas.com/en/videos/') failures.push(`/en/videos/: CollectionPage URL is ${JSON.stringify(collection.url)}`);
   }
 
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
@@ -95,6 +118,8 @@ if (catalogue) {
       if (visibleCards <= 0 || visibleCards >= catalogue.count) failures.push(`/en/videos/: topic filter ${topic} did not narrow the catalogue (${visibleCards}/${catalogue.count})`);
       const status = (await page.locator('[data-s5-video-status]').innerText()).trim();
       if (!/videos? available$/i.test(status)) failures.push(`/en/videos/: filter status is not localized English: ${JSON.stringify(status)}`);
+    } else {
+      failures.push(`/en/videos/: missing runtime filter for catalogue topic ${topic}`);
     }
   }
 
@@ -111,10 +136,16 @@ if (catalogue) {
     if (canonical !== video.watch_url) failures.push(`${watchPath}: canonical ${JSON.stringify(canonical)} != ${video.watch_url}`);
     const source = await page.locator('[data-s5-watch-player] source').getAttribute('src');
     if (!absolutePath(source || '/').startsWith('/en/')) failures.push(`${watchPath}: player source is not native-English: ${source}`);
-    const jsonld = await page.locator('script[type="application/ld+json"]').allTextContents();
-    if (!jsonld.some((value) => value.includes('VideoObject') && value.includes('"inLanguage": "en"'))) failures.push(`${watchPath}: missing English VideoObject JSON-LD`);
-    const articleLinks = await page.locator('a[href]').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('href') || '').filter(Boolean));
-    if (!articleLinks.some((href) => href.includes('/en/') && !href.includes('/en/videos/'))) failures.push(`${watchPath}: no English source/article link found`);
+    const schemas = await schemasFromPage(page);
+    const videoSchema = schemas.find((schema) => schema['@type'] === 'VideoObject');
+    if (!videoSchema) failures.push(`${watchPath}: missing VideoObject JSON-LD`);
+    else {
+      if (videoSchema.inLanguage !== 'en') failures.push(`${watchPath}: VideoObject inLanguage is ${JSON.stringify(videoSchema.inLanguage)}`);
+      if (videoSchema.contentUrl !== video.video_url) failures.push(`${watchPath}: VideoObject contentUrl ${JSON.stringify(videoSchema.contentUrl)} != ${video.video_url}`);
+      if (videoSchema.mainEntityOfPage?.['@id'] !== video.watch_url) failures.push(`${watchPath}: VideoObject mainEntityOfPage is not its watch URL`);
+    }
+    const sourceHref = await page.locator('.s5-video-watch__source-link').getAttribute('href').catch(() => null);
+    if (sourceHref !== video.source_url) failures.push(`${watchPath}: source/article link ${JSON.stringify(sourceHref)} != ${video.source_url}`);
   }
 
   if (catalogue.videos.length) {
