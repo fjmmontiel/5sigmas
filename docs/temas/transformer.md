@@ -70,15 +70,11 @@ Durante la inferencia, la generación sigue siendo secuencial porque el token si
 
 ## 5. La red feed-forward
 
-Después de la atención, cada posición atraviesa una red densa aplicada de forma independiente:
+Después de la atención, cada posición atraviesa una red densa aplicada de forma independiente y con los mismos parámetros para todas las posiciones de esa capa.[^transformer]
 
-```text
-FFN(x) = W₂ σ(W₁x + b₁) + b₂
-```
+{{ include_html("snippets/temas/transformer-ffn.html") }}
 
-La atención mueve y combina información entre posiciones. La red feed-forward transforma esa información dentro de cada posición. En modelos grandes, esta parte contiene una fracción importante de los parámetros y del cómputo.
-
-Arquitecturas modernas utilizan activaciones y puertas como GELU, SwiGLU o variantes equivalentes. Los modelos *mixture-of-experts* sustituyen una única red densa por varios expertos y enrutan cada token hacia una parte de ellos.
+En modelos grandes, esta parte contiene una fracción importante de los parámetros y del cómputo. Arquitecturas modernas utilizan activaciones y puertas como GELU, SwiGLU o variantes equivalentes. Los modelos *mixture-of-experts* sustituyen una única red densa por varios expertos y enrutan cada token hacia una parte de ellos.
 
 ## 6. Residuales y normalización
 
