@@ -1,0 +1,54 @@
+<div class="lnt-wrap" data-demo="topic-llm-next-token">
+  <div class="lnt-head">
+    <div class="lnt-kicker">OBJETIVO AUTORREGRESIVO</div>
+    <div class="lnt-title">El modelo no predice una frase completa: puntúa el siguiente token condicionado por todo el prefijo</div>
+    <div class="lnt-sub">En entrenamiento conocemos el token correcto y minimizamos su log-loss. En generación no existe una respuesta dada: se transforma la distribución en una elección y ese token pasa a formar parte del siguiente contexto.</div>
+  </div>
+
+  <div class="lnt-grid">
+    <div class="lnt-context">
+      <span>CONTEXTO</span>
+      <div class="lnt-seq"><b>La</b><b> capital</b><b> de</b><b> Francia</b><b> es</b><i>?</i></div>
+      <small>El Transformer produce una representación para la posición que debe continuar la secuencia.</small>
+    </div>
+
+    <div class="lnt-dist">
+      <span>DISTRIBUCIÓN SOBRE EL VOCABULARIO</span>
+      <div class="lnt-row"><b>París</b><div><i style="--w:82%"></i></div><em>más probable</em></div>
+      <div class="lnt-row"><b>Lyon</b><div><i style="--w:31%"></i></div><em>menos probable</em></div>
+      <div class="lnt-row"><b>una</b><div><i style="--w:15%"></i></div><em>cola larga</em></div>
+      <div class="lnt-note">Las barras son ilustrativas: muestran orden relativo, no probabilidades medidas de un modelo concreto.</div>
+    </div>
+  </div>
+
+  <div class="lnt-train">
+    <div class="lnt-formula" aria-label="Pérdida de lenguaje: menos la suma del logaritmo de la probabilidad del token real condicionado por los tokens anteriores">
+      <span>ENTRENAMIENTO</span>
+      <strong>ℒ = − Σ<sub>t</sub> log p(x<sub>t</sub> | x<sub>&lt;t</sub>)</strong>
+      <small>Si el token real recibe poca probabilidad, la pérdida aumenta y el gradiente corrige los parámetros.</small>
+    </div>
+    <div class="lnt-arrow" aria-hidden="true">→</div>
+    <div class="lnt-generate">
+      <span>GENERACIÓN</span>
+      <strong>distribución → selección → nuevo contexto → repetir</strong>
+      <small>Greedy, temperatura, top-p u otras reglas cambian cómo se selecciona; no cambian el hecho de que la distribución se recalcula en cada paso.</small>
+    </div>
+  </div>
+
+  <div class="lnt-rule"><span>Consecuencia</span><strong>Optimizar probabilidad de continuación no equivale a verificar verdad. La factualidad necesita señales, datos o comprobaciones adicionales.</strong></div>
+  <div class="lnt-ref">Fuente primaria: <a href="https://arxiv.org/abs/2005.14165">Brown et al., Language Models are Few-Shot Learners (2020)</a></div>
+</div>
+
+<style>
+.lnt-wrap,.lnt-wrap *{box-sizing:border-box}
+.lnt-wrap{--lnt-a:var(--md-primary-fg-color,#26a69a);--lnt-b:#4757d6;--lnt-c:var(--md-accent-fg-color,#ffb343);--lnt-r:#e06c75;--lnt-bg:var(--md-default-bg-color,#fff);--lnt-fg:var(--md-default-fg-color,#111827);--lnt-muted:color-mix(in srgb,var(--lnt-fg) 58%,transparent);--lnt-border:color-mix(in srgb,var(--lnt-fg) 14%,transparent);container-type:inline-size;margin:1.1rem 0 1.5rem;padding:clamp(14px,2vw,22px);border:1px solid var(--lnt-border);border-radius:20px;background:radial-gradient(90% 130% at 0 0,color-mix(in srgb,var(--lnt-b) 7%,transparent),transparent 55%),radial-gradient(80% 120% at 100% 0,color-mix(in srgb,var(--lnt-r) 7%,transparent),transparent 58%),var(--lnt-bg);color:var(--lnt-fg)}
+.lnt-head{display:grid;gap:4px;margin-bottom:14px}.lnt-kicker{font-size:10px;font-weight:900;letter-spacing:.12em;color:var(--lnt-muted)}.lnt-title{font-size:clamp(18px,2.1vw,24px);font-weight:900;line-height:1.12;letter-spacing:-.02em;max-width:34ch}.lnt-sub{font-size:13.4px;line-height:1.48;color:var(--lnt-muted);max-width:90ch}
+.lnt-grid{display:grid;grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr);gap:10px}.lnt-context,.lnt-dist,.lnt-formula,.lnt-generate{min-width:0;padding:12px;border:1px solid var(--lnt-border);border-radius:14px;background:color-mix(in srgb,var(--lnt-bg) 96%,var(--lnt-fg) 4%)}.lnt-context>span,.lnt-dist>span,.lnt-formula>span,.lnt-generate>span,.lnt-rule span{font-size:9.2px;font-weight:900;letter-spacing:.09em;color:var(--lnt-muted)}
+.lnt-seq{display:flex;flex-wrap:wrap;gap:4px;margin:18px 0 14px}.lnt-seq b,.lnt-seq i{padding:6px 8px;border-radius:8px;font-size:12px;font-style:normal}.lnt-seq b{background:color-mix(in srgb,var(--lnt-b) 8%,var(--lnt-bg))}.lnt-seq i{min-width:34px;text-align:center;border:1px dashed color-mix(in srgb,var(--lnt-r) 60%,var(--lnt-border));background:color-mix(in srgb,var(--lnt-r) 7%,var(--lnt-bg));font-weight:900}.lnt-context small,.lnt-formula small,.lnt-generate small{display:block;font-size:10.8px;line-height:1.4;color:var(--lnt-muted)}
+.lnt-dist{display:grid;gap:8px}.lnt-row{display:grid;grid-template-columns:72px minmax(0,1fr) 88px;gap:8px;align-items:center}.lnt-row>b{font-size:11px}.lnt-row>div{height:18px;border-radius:6px;background:color-mix(in srgb,var(--lnt-fg) 6%,var(--lnt-bg));overflow:hidden}.lnt-row i{display:block;width:var(--w);height:100%;background:linear-gradient(90deg,color-mix(in srgb,var(--lnt-a) 44%,transparent),color-mix(in srgb,var(--lnt-b) 24%,transparent));border-radius:6px}.lnt-row em{font-size:9.4px;font-style:normal;color:var(--lnt-muted)}.lnt-note{margin-top:2px;font-size:9.8px;line-height:1.35;color:var(--lnt-muted)}
+.lnt-train{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:9px;align-items:stretch;margin-top:10px}.lnt-formula,.lnt-generate{display:grid;gap:7px}.lnt-formula{border-color:color-mix(in srgb,var(--lnt-c) 46%,var(--lnt-border));background:color-mix(in srgb,var(--lnt-c) 5%,var(--lnt-bg))}.lnt-generate{border-color:color-mix(in srgb,var(--lnt-a) 44%,var(--lnt-border));background:color-mix(in srgb,var(--lnt-a) 5%,var(--lnt-bg))}.lnt-formula strong{font:800 clamp(15px,2vw,20px)/1.35 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:-.03em;overflow-wrap:anywhere}.lnt-generate strong{font-size:12.5px;line-height:1.35}.lnt-arrow{display:grid;place-items:center;font-size:18px;font-weight:900;color:var(--lnt-muted)}
+.lnt-rule{margin-top:10px;padding:10px 12px;border-left:3px solid var(--lnt-r);border-radius:0 10px 10px 0;background:color-mix(in srgb,var(--lnt-r) 5%,var(--lnt-bg));display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:center}.lnt-rule span{white-space:nowrap}.lnt-rule strong{font-size:11.7px;line-height:1.4}.lnt-ref{margin-top:9px;font-size:9.8px;line-height:1.35;color:var(--lnt-muted)}.lnt-ref a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+@container (max-width:700px){.lnt-grid{grid-template-columns:1fr}.lnt-train{grid-template-columns:1fr;gap:6px}.lnt-arrow{height:14px;transform:rotate(90deg)}.lnt-row{grid-template-columns:62px minmax(0,1fr);}.lnt-row em{grid-column:2}.lnt-rule{grid-template-columns:1fr;gap:3px}}
+@media (max-width:700px){.lnt-grid{grid-template-columns:1fr}.lnt-train{grid-template-columns:1fr;gap:6px}.lnt-arrow{height:14px;transform:rotate(90deg)}.lnt-rule{grid-template-columns:1fr;gap:3px}}
+@media (prefers-reduced-motion:reduce){.lnt-wrap *{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
