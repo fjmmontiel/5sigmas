@@ -13,6 +13,7 @@ const articles = [
     title: 'Proactive and reactive agents and tool calls',
     concepts: ['idempotency', 'DeliveryEnvelope', 'durable'],
     prefix: 'tech-01-', demos: 4,
+    media: 'reactive-proactive-agent-header-demo',
     screenshot: 'english-technical-01-async-tools.png',
   },
   {
@@ -20,6 +21,7 @@ const articles = [
     title: 'Reactive–proactive voice agents',
     concepts: ['barge-in', 'heard-state', 'delivery window'],
     prefix: 'tech-02-', demos: 7,
+    media: null,
     screenshot: 'english-technical-02-reactive-proactive-voice.png',
   },
   {
@@ -27,6 +29,7 @@ const articles = [
     title: 'Three architectures for voice agents',
     concepts: ['full cascade', 'half cascade', 'SpeechPlan', 'speech-to-speech'],
     prefix: 'tech-03-', demos: 10,
+    media: null,
     screenshot: 'english-technical-03-voice-architectures.png',
   },
 ];
@@ -83,7 +86,21 @@ try {
         if (before === after) failures.push(`${article.route}: details interaction did not toggle`);
       }
 
-      if (await page.locator('video[data-s5-inline-video-player]').count()) failures.push(`${article.route}: unexpected inherited Spanish video`);
+      const videos = page.locator('video[data-s5-inline-video-player]');
+      const videoCount = await videos.count();
+      if (article.media) {
+        if (videoCount !== 1) failures.push(`${article.route}: expected one native-English video, found ${videoCount}`);
+        else {
+          const video = videos.first();
+          const sourceUrl = new URL((await video.locator('source').first().getAttribute('src')) || '', page.url());
+          const posterUrl = new URL((await video.getAttribute('poster')) || '', page.url());
+          const root = '/en/articulos-tecnicos/';
+          if (sourceUrl.pathname !== `${root}${article.media}.mp4`) failures.push(`${article.route}: video escaped native English media: ${sourceUrl.pathname}`);
+          if (posterUrl.pathname !== `${root}${article.media}.jpg`) failures.push(`${article.route}: poster escaped native English media: ${posterUrl.pathname}`);
+        }
+      } else if (videoCount) {
+        failures.push(`${article.route}: unexpected inherited or undeclared video`);
+      }
       if (await page.locator('audio').count()) failures.push(`${article.route}: unexpected inherited Spanish audio`);
       const [clientWidth, scrollWidth] = await page.evaluate(() => [document.documentElement.clientWidth, document.documentElement.scrollWidth]);
       if (scrollWidth > clientWidth + 2) failures.push(`${article.route}: ${viewport.name} horizontal overflow ${scrollWidth - clientWidth}px`);
@@ -102,4 +119,4 @@ if (failures.length) {
   for (const failure of [...new Set(failures)]) console.error(failure);
   process.exit(1);
 }
-console.log('Complete English Technical Articles QA passed: hub + 3 articles, 21 visuals, interactions, no Spanish media inheritance, desktop/mobile clean.');
+console.log('Complete English Technical Articles QA passed: hub + 3 articles, 21 visuals, exact native-English header media where canonical, no Spanish media inheritance, desktop/mobile clean.');
