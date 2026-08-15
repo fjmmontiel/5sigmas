@@ -1,0 +1,111 @@
+<div class="evs-wrap" data-demo="topic-evaluation-stack">
+  <div class="evs-head">
+    <div class="evs-kicker">PILA DE EVALUACIÓN</div>
+    <div class="evs-title">Seis capas, seis preguntas distintas</div>
+    <div class="evs-sub">Una evaluación robusta combina señales complementarias. Cada capa reduce un tipo de incertidumbre; ninguna puntuación resume por sí sola el sistema completo.</div>
+  </div>
+
+  <div class="evs-flow" role="img" aria-label="Pila de evaluación con pruebas deterministas, datos de referencia, benchmarks, jueces o humanos, pruebas adversariales y métricas online">
+    <div class="evs-stage evs-stage--det">
+      <div class="evs-top"><span class="evs-num">1</span><strong>Contratos deterministas</strong></div>
+      <p>¿Cumple lo verificable?</p>
+      <div class="evs-tags"><span>schema</span><span>tests</span><span>estado</span></div>
+    </div>
+    <div class="evs-arrow" aria-hidden="true">→</div>
+    <div class="evs-stage evs-stage--gold">
+      <div class="evs-top"><span class="evs-num">2</span><strong>Datos de referencia</strong></div>
+      <p>¿Funciona en tu dominio?</p>
+      <div class="evs-tags"><span>casos reales</span><span>segmentos</span><span>regresiones</span></div>
+    </div>
+    <div class="evs-arrow" aria-hidden="true">→</div>
+    <div class="evs-stage evs-stage--bench">
+      <div class="evs-top"><span class="evs-num">3</span><strong>Benchmarks externos</strong></div>
+      <p>¿Dónde se sitúa la capacidad general?</p>
+      <div class="evs-tags"><span>comparación</span><span>estándar</span></div>
+    </div>
+    <div class="evs-arrow" aria-hidden="true">→</div>
+    <div class="evs-stage evs-stage--judge">
+      <div class="evs-top"><span class="evs-num">4</span><strong>Juez + humanos</strong></div>
+      <p>¿La calidad abierta cumple la rúbrica?</p>
+      <div class="evs-tags"><span>calibración</span><span>acuerdo</span></div>
+    </div>
+    <div class="evs-arrow" aria-hidden="true">→</div>
+    <div class="evs-stage evs-stage--adv">
+      <div class="evs-top"><span class="evs-num">5</span><strong>Adversarial + seguridad</strong></div>
+      <p>¿Qué ocurre fuera del camino feliz?</p>
+      <div class="evs-tags"><span>ataques</span><span>límites</span><span>recuperación</span></div>
+    </div>
+    <div class="evs-arrow" aria-hidden="true">→</div>
+    <div class="evs-stage evs-stage--online">
+      <div class="evs-top"><span class="evs-num">6</span><strong>Métricas online</strong></div>
+      <p>¿Crea valor con usuarios reales?</p>
+      <div class="evs-tags"><span>éxito</span><span>latencia</span><span>coste</span></div>
+    </div>
+  </div>
+
+  <div class="evs-decision">
+    <div class="evs-decision-label">DECISIÓN</div>
+    <div class="evs-decision-text"><strong>Modelo / prompt / sistema / producto</strong><span>La métrica útil es la que cambia una decisión concreta sobre esa capa.</span></div>
+  </div>
+</div>
+
+<style>
+.evs-wrap,.evs-wrap *{box-sizing:border-box}
+.evs-wrap{
+  --evs-a:var(--md-primary-fg-color,#26a69a);
+  --evs-b:#4757d6;
+  --evs-c:var(--md-accent-fg-color,#ffb343);
+  --evs-bg:var(--md-default-bg-color,#fff);
+  --evs-fg:var(--md-default-fg-color,#111827);
+  --evs-muted:color-mix(in srgb,var(--evs-fg) 58%,transparent);
+  --evs-border:color-mix(in srgb,var(--evs-fg) 14%,transparent);
+  container-type:inline-size;
+  margin:1.1rem 0 1.5rem;
+  padding:clamp(14px,2vw,22px);
+  border:1px solid var(--evs-border);
+  border-radius:20px;
+  background:
+    radial-gradient(90% 110% at 0 0,color-mix(in srgb,var(--evs-a) 7%,transparent),transparent 55%),
+    radial-gradient(90% 110% at 100% 0,color-mix(in srgb,var(--evs-b) 7%,transparent),transparent 55%),
+    var(--evs-bg);
+  color:var(--evs-fg)
+}
+.evs-head{display:grid;gap:4px;margin-bottom:14px}
+.evs-kicker{font-size:11px;font-weight:900;letter-spacing:.12em;color:var(--evs-muted)}
+.evs-title{font-size:clamp(18px,2.1vw,24px);font-weight:900;line-height:1.1;letter-spacing:-.02em}
+.evs-sub{font-size:13.5px;line-height:1.45;color:var(--evs-muted);max-width:80ch}
+.evs-flow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr) auto) minmax(0,1fr);gap:7px;align-items:stretch;min-width:0}
+.evs-stage{min-width:0;border:1px solid var(--evs-border);border-radius:14px;padding:10px;display:grid;grid-template-rows:auto 1fr auto;gap:7px;background:color-mix(in srgb,var(--evs-bg) 94%,var(--evs-fg) 6%)}
+.evs-stage--det{border-color:color-mix(in srgb,var(--evs-b) 28%,var(--evs-border))}
+.evs-stage--gold{border-color:color-mix(in srgb,var(--evs-b) 43%,var(--evs-border));background:color-mix(in srgb,var(--evs-b) 4%,var(--evs-bg))}
+.evs-stage--bench{border-color:color-mix(in srgb,var(--evs-a) 32%,var(--evs-border))}
+.evs-stage--judge{border-color:color-mix(in srgb,var(--evs-a) 48%,var(--evs-border));background:color-mix(in srgb,var(--evs-a) 5%,var(--evs-bg))}
+.evs-stage--adv{border-color:color-mix(in srgb,var(--evs-c) 42%,var(--evs-border))}
+.evs-stage--online{border-color:color-mix(in srgb,var(--evs-c) 58%,var(--evs-border));background:color-mix(in srgb,var(--evs-c) 6%,var(--evs-bg))}
+.evs-top{display:grid;grid-template-columns:23px minmax(0,1fr);gap:7px;align-items:center}
+.evs-num{width:23px;height:23px;border-radius:999px;display:grid;place-items:center;font-size:9.5px;font-weight:900;background:color-mix(in srgb,var(--evs-fg) 9%,transparent)}
+.evs-top strong{font-size:11.3px;line-height:1.2;overflow-wrap:anywhere}
+.evs-stage p{margin:0;font-size:10.6px;line-height:1.35;color:var(--evs-muted)}
+.evs-tags{display:flex;gap:4px;flex-wrap:wrap}
+.evs-tags span{border:1px solid var(--evs-border);border-radius:999px;padding:3px 5px;font-size:8.8px;font-weight:800;line-height:1.15;color:var(--evs-muted);background:color-mix(in srgb,var(--evs-bg) 92%,var(--evs-fg) 8%)}
+.evs-arrow{display:grid;place-items:center;font-size:18px;font-weight:900;color:var(--evs-muted)}
+.evs-decision{margin-top:12px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:11px;align-items:center;border:1px solid color-mix(in srgb,var(--evs-a) 38%,var(--evs-border));border-radius:12px;padding:10px 12px;background:color-mix(in srgb,var(--evs-a) 5%,var(--evs-bg))}
+.evs-decision-label{font-size:9.5px;font-weight:900;letter-spacing:.1em;color:var(--evs-muted)}
+.evs-decision-text{display:grid;gap:2px}
+.evs-decision-text strong{font-size:11.8px;line-height:1.25}
+.evs-decision-text span{font-size:10.8px;line-height:1.35;color:var(--evs-muted)}
+@container (max-width:720px){
+  .evs-flow{grid-template-columns:1fr;gap:6px}
+  .evs-arrow{height:13px;line-height:1;transform:rotate(90deg)}
+  .evs-stage{grid-template-columns:minmax(0,1fr) minmax(0,.8fr);grid-template-rows:auto auto;align-items:start}
+  .evs-top{grid-column:1}.evs-stage p{grid-column:1}.evs-tags{grid-column:2;grid-row:1/span 2;justify-content:flex-end;align-self:center}
+  .evs-decision{grid-template-columns:1fr;gap:3px}
+}
+@media (max-width:900px){
+  .evs-flow{grid-template-columns:1fr;gap:6px}
+  .evs-arrow{height:13px;line-height:1;transform:rotate(90deg)}
+  .evs-stage{grid-template-columns:minmax(0,1fr) minmax(0,.8fr);grid-template-rows:auto auto;align-items:start}
+  .evs-top{grid-column:1}.evs-stage p{grid-column:1}.evs-tags{grid-column:2;grid-row:1/span 2;justify-content:flex-end;align-self:center}
+  .evs-decision{grid-template-columns:1fr;gap:3px}
+}
+</style>

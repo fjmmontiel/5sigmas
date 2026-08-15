@@ -1,0 +1,43 @@
+{
+  "source": "snippets/temas/evaluation-object.html",
+  "source_blob_sha": "d86d94187ba68a7fe425071d496dceb3941a4b58",
+  "replacements": {
+    ">OBJETO DE EVALUACIÓN</div>": ">EVALUATION TARGET</div>",
+    ">La misma respuesta puede fallar en capas distintas</div>": ">The same bad answer can fail at different layers</div>",
+    ">Antes de elegir una métrica, fija el límite del sistema que quieres medir. Cada capa añade comportamiento y nuevos modos de fallo.</div>": ">Before choosing a metric, define the system boundary you want to measure. Each layer adds behaviour and new failure modes.</div>",
+    "aria-label=\"Cuatro niveles de evaluación: modelo aislado, modelo con prompt, sistema con RAG y tools, y producto usado por personas\"": "aria-label=\"Four evaluation levels: isolated model, model with prompt, system with RAG and tools, and product used by people\"",
+    ">Modelo aislado</strong>": ">Isolated model</strong>",
+    ">Capacidad base bajo una entrada controlada.</span>": ">Base capability under a controlled input.</span>",
+    ">MIDE</span>": ">MEASURES</span>",
+    ">calidad de salida</b>": ">output quality</b>",
+    ">PUEDE FALLAR</span>": ">CAN FAIL ON</span>",
+    ">conocimiento · razonamiento · formato</b>": ">knowledge · reasoning · format</b>",
+    ">Modelo + prompt</strong>": ">Model + prompt</strong>",
+    ">El comportamiento ya depende de instrucciones, contexto y formato.</span>": ">Behaviour now depends on instructions, context and format.</span>",
+    ">AÑADE</span>": ">ADDS</span>",
+    ">seguimiento de instrucciones</b>": ">instruction following</b>",
+    ">NUEVOS FALLOS</span>": ">NEW FAILURES</span>",
+    ">ambigüedad · contexto · sensibilidad al prompt</b>": ">ambiguity · context · prompt sensitivity</b>",
+    ">Recuperación, selección de acciones, argumentos y estado entran en la evaluación.</span>": ">Retrieval, action selection, arguments and state become part of the evaluation.</span>",
+    ">trayectoria y estado final</b>": ">trajectory and final state</b>",
+    ">retrieval · tool · argumentos · duplicados</b>": ">retrieval · tool · arguments · duplicates</b>",
+    ">Producto usado por personas</strong>": ">Product used by people</strong>",
+    ">Latencia, interacción, coste, seguridad y éxito real de tarea pasan a importar.</span>": ">Latency, interaction, cost, safety and real task success now matter.</span>",
+    ">resultado de producto</b>": ">product outcome</b>",
+    ">UX · tiempo · coste · incidentes</b>": ">UX · time · cost · incidents</b>",
+    ">Regla práctica</span>": ">Practical rule</span>",
+    ">No uses una métrica del nivel 1 para afirmar que el nivel 4 funciona.</strong>": ">Do not use a level-1 metric to claim that level 4 works.</strong>"
+  },
+  "forbidden_output_tokens": [
+    "OBJETO DE EVALUACIÓN",
+    "La misma respuesta",
+    "Modelo aislado",
+    "Capacidad base",
+    "PUEDE FALLAR",
+    "AÑADE",
+    "NUEVOS FALLOS",
+    "Recuperación, selección",
+    "Producto usado por personas",
+    "Regla práctica"
+  ]
+}

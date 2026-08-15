@@ -4,7 +4,7 @@ seo_title: "How to evaluate AI models: benchmarks, quality and production"
 description: "How to evaluate an AI model and system with benchmarks, domain sets, judges, human review and product metrics without confusing a score with real value."
 keywords: "AI model evaluation, LLM benchmark, evals, human evaluation, LLM as a judge, benchmark contamination, AI quality"
 date: 2026-04-07
-date_modified: 2026-08-05
+date_modified: 2026-08-15
 ---
 
 # Evaluating AI models
@@ -13,25 +13,13 @@ Evaluating AI means measuring whether a **model, system or product** meets an ob
 
 The first decision in an evaluation is not which metric to use. It is **what object is being evaluated**.
 
-```text
-isolated model
-≠ model + prompt
-≠ system with RAG and tools
-≠ product used by people
-```
+{{ include_html("snippets/temas/evaluation-object.html") }}
 
 Each layer introduces different failures and criteria.
 
 ## The 60-second answer
 
-A useful evaluation stack combines:
-
-1. **unit tests** for deterministic contracts;
-2. a **domain golden set** with representative cases;
-3. **external benchmarks** to position general capabilities;
-4. **human evaluation or calibrated judges** for open-ended quality;
-5. **adversarial and security testing**;
-6. **online metrics** for task success, cost and experience.
+{{ include_html("snippets/temas/evaluation-stack.html") }}
 
 No layer replaces the others. The key is connecting every metric to a product decision.
 
@@ -190,32 +178,15 @@ A judge needs calibration. Compare it against a human-annotated set, measure agr
 
 A system with retrieval or tools can fail before text generation.
 
+{{ include_html("snippets/temas/evaluation-system-trace.html") }}
+
 ### RAG
 
-Separate:
-
-1. retrieval quality;
-2. evidence coverage;
-3. correct use of evidence;
-4. citation faithfulness;
-5. answer quality.
-
-A wrong answer can come from a missing document, poor ranking or incorrect inference. Without decomposition, the proposed fix is guesswork.
+A wrong answer can come from a missing document, poor ranking, insufficient evidence, an incorrect inference or a citation that does not support the claim. Without that decomposition, the proposed fix is guesswork.
 
 ### Agents and tools
 
-Record the trajectory:
-
-```text
-intent
-→ selected tool
-→ arguments
-→ result
-→ updated state
-→ final answer
-```
-
-Evaluate task success, unnecessary steps, forbidden actions, retries, duplicates and error recovery.
+Evaluate task success, unnecessary steps, forbidden actions, retries, duplicates, final state and error recovery. The trajectory shows whether the failure is in the decision, execution or final user-facing message.
 
 ### Voice and realtime systems
 

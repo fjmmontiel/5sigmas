@@ -13,25 +13,13 @@ Evaluar IA significa medir si un **modelo, sistema o producto** cumple un objeti
 
 La primera decisión de una evaluación no es qué métrica usar. Es **qué objeto se está evaluando**.
 
-```text
-modelo aislado
-≠ modelo + prompt
-≠ sistema con RAG y tools
-≠ producto utilizado por personas
-```
+{{ include_html("snippets/temas/evaluation-object.html") }}
 
 Cada nivel introduce fallos y criterios distintos.
 
 ## La respuesta en 60 segundos
 
-Una pila de evaluación útil combina:
-
-1. **pruebas unitarias** para contratos deterministas
-2. **conjunto de datos de referencia propio** con casos representativos
-3. **benchmarks externos** para situar capacidades generales
-4. **evaluación humana o jueces calibrados** para calidad abierta
-5. **pruebas adversariales y de seguridad**
-6. **métricas online** sobre tarea, coste y experiencia
+{{ include_html("snippets/temas/evaluation-stack.html") }}
 
 Ninguna capa sustituye a las demás. La clave es conectar cada métrica con una decisión de producto.
 
@@ -190,32 +178,15 @@ Un juez necesita calibración. Se compara con un conjunto anotado por humanos, s
 
 Un sistema con recuperación o tools puede fallar antes de generar texto.
 
+{{ include_html("snippets/temas/evaluation-system-trace.html") }}
+
 ### RAG
 
-Separa:
-
-1. calidad de recuperación
-2. cobertura de la evidencia
-3. uso correcto de la evidencia
-4. fidelidad de las citas
-5. calidad de la respuesta
-
-Una respuesta incorrecta puede venir de un documento no recuperado, un ranking malo o una inferencia errónea. Sin esa descomposición, la solución propuesta será una conjetura.
+Una respuesta incorrecta puede venir de un documento no recuperado, un ranking malo, evidencia insuficiente, una inferencia errónea o una cita que no respalda la afirmación. Sin esa descomposición, la solución propuesta será una conjetura.
 
 ### Agentes y tools
 
-Registra la trayectoria:
-
-```text
-intención
-→ tool elegida
-→ argumentos
-→ resultado
-→ estado actualizado
-→ respuesta final
-```
-
-Evalúa éxito de tarea, pasos innecesarios, acciones prohibidas, reintentos, duplicados y recuperación ante errores.
+Evalúa éxito de tarea, pasos innecesarios, acciones prohibidas, reintentos, duplicados, estado final y recuperación ante errores. La trayectoria explica si el fallo está en la decisión, la ejecución o el mensaje final.
 
 ### Voz y tiempo real
 
