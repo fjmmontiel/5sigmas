@@ -1,0 +1,56 @@
+name: Temporary PR86 fix
+
+on:
+  push:
+    branches:
+      - fix/en-fidelity-foundations-ch3-20260815
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    if: ${{ !contains(github.event.head_commit.message, 'fix Chapter 3 mirror runtime') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/en-fidelity-foundations-ch3-20260815
+          fetch-depth: 0
+      - name: Fix canonical mirror runtime and QA assertion
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          sidecar = Path('locales/en/snippets/fundamentos-ia-iag/03-decision-tree.i18n.json')
+          text = sidecar.read_text(encoding='utf-8')
+          replacements = {
+              "Is the task linguistic and is the model's general knowledge sufficient?": "Is the task linguistic and is the general knowledge of the model sufficient?",
+              "The task is linguistic and the model's general knowledge is sufficient. A single model works for writing, summarization, translation, and code. Adaptation is cheap through prompting. The limitation: static knowledge with a cutoff date.": "The task is linguistic and the general knowledge of the model is sufficient. A single model works for writing, summarization, translation, and code. Adaptation is cheap through prompting. The limitation: static knowledge with a cutoff date.",
+          }
+          for old, new in replacements.items():
+              if old not in text:
+                  raise SystemExit(f'missing sidecar target: {old}')
+              text = text.replace(old, new, 1)
+          sidecar.write_text(text, encoding='utf-8')
+
+          qa = Path('scripts/validate_english_foundations_complete.mjs')
+          text = qa.read_text(encoding='utf-8')
+          old = "['The operational matrix', 'Explicit rules', 'Classical ML', 'Plain LLM', 'LLM + RAG', 'Agent']"
+          new = "['The operational matrix', 'Rules', 'Classical ML', 'Plain LLM', 'LLM + RAG', 'Agent']"
+          if old not in text:
+              raise SystemExit('missing operational-matrix QA target')
+          qa.write_text(text.replace(old, new, 1), encoding='utf-8')
+          PY
+          python -m json.tool locales/en/snippets/fundamentos-ia-iag/03-decision-tree.i18n.json >/dev/null
+          node --check scripts/validate_english_foundations_complete.mjs
+          git diff --check
+      - name: Commit fix
+        shell: bash
+        run: |
+          git config user.name "5sigmas automation"
+          git config user.email "actions@users.noreply.github.com"
+          git add locales/en/snippets/fundamentos-ia-iag/03-decision-tree.i18n.json scripts/validate_english_foundations_complete.mjs
+          git commit -m "fix(en): fix Chapter 3 mirror runtime"
+          git push origin HEAD:fix/en-fidelity-foundations-ch3-20260815
