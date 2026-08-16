@@ -106,6 +106,8 @@ For a sequence of length `n`, the `QKᵀ` matrix contains `n × n` elements. Its
 
 That does not mean total model cost is always `O(n²)`. Projections and feed-forward networks also matter, and optimized implementations avoid materializing some intermediates. But the growth of all-to-all interaction remains a structural limit for very long contexts.
 
+{{ include_html("snippets/temas/transformer-attention-cost.html") }}
+
 Research directions include:
 
 - local or sparse attention;

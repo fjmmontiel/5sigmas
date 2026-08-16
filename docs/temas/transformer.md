@@ -106,6 +106,8 @@ Para una secuencia de longitud `n`, la matriz `QKᵀ` tiene `n × n` elementos. 
 
 Eso no significa que todo el coste del modelo sea siempre `O(n²)`. Las proyecciones y redes feed-forward también pesan, y las implementaciones optimizadas evitan materializar ciertos intermedios. Pero el crecimiento de la interacción entre todos los pares sigue siendo un límite estructural para contextos muy largos.
 
+{{ include_html("snippets/temas/transformer-attention-cost.html") }}
+
 Las líneas de trabajo incluyen:
 
 - atención local o dispersa

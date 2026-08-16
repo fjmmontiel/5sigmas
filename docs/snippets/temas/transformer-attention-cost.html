@@ -1,0 +1,90 @@
+<div class="tac-wrap" data-demo="topic-transformer-attention-cost">
+  <div class="tac-head">
+    <div class="tac-kicker">COSTE DE ATENCIÓN DENSA</div>
+    <div class="tac-title">La longitud crece linealmente; las interacciones por pares, cuadráticamente</div>
+    <div class="tac-sub">En self-attention densa, cada una de las <strong>n</strong> queries se compara con <strong>n</strong> keys. El cuello estructural aparece en la matriz de scores <strong>n × n</strong>, no en una afirmación de que todo el Transformer cueste siempre O(n²).</div>
+  </div>
+
+  <div class="tac-equation" role="img" aria-label="Dimensiones de las matrices en el cálculo de atención">
+    <div class="tac-tensor"><span>Q</span><strong>n × d<sub>k</sub></strong><small>una query por posición</small></div>
+    <b>×</b>
+    <div class="tac-tensor"><span>Kᵀ</span><strong>d<sub>k</sub> × n</strong><small>una key por posición</small></div>
+    <b>→</b>
+    <div class="tac-tensor tac-tensor--hot"><span>QKᵀ</span><strong>n × n</strong><small>compatibilidad entre pares</small></div>
+    <b>→</b>
+    <div class="tac-tensor"><span>softmax · V</span><strong>n × d<sub>v</sub></strong><small>mezcla de values</small></div>
+  </div>
+
+  <div class="tac-scale" aria-label="Ejemplo exacto del crecimiento cuadrático del número de scores">
+    <section class="tac-scale-card">
+      <div class="tac-scale-head"><span>n = 4</span><strong>16 scores</strong></div>
+      <div class="tac-matrix tac-matrix--4" aria-label="Matriz de 4 por 4 con 16 scores"></div>
+      <p>4 queries × 4 keys = <strong>16</strong> compatibilidades.</p>
+    </section>
+    <div class="tac-scale-arrow"><span>2× tokens</span><b>→</b><strong>4× scores</strong></div>
+    <section class="tac-scale-card">
+      <div class="tac-scale-head"><span>n = 8</span><strong>64 scores</strong></div>
+      <div class="tac-matrix tac-matrix--8" aria-label="Matriz de 8 por 8 con 64 scores"></div>
+      <p>8 queries × 8 keys = <strong>64</strong> compatibilidades.</p>
+    </section>
+  </div>
+
+  <div class="tac-boundary">
+    <div class="tac-boundary-title">Qué crece con n</div>
+    <div class="tac-boundary-grid">
+      <div class="tac-cost tac-cost--quadratic"><span>INTERACCIÓN ALL-TO-ALL</span><strong>scores de atención · ~ n²</strong><p>Para dimensiones fijas por cabeza, el trabajo de comparar todas las posiciones entre sí crece cuadráticamente con la longitud.</p></div>
+      <div class="tac-cost"><span>OTROS BLOQUES</span><strong>proyecciones + FFN · ~ n</strong><p>Con ancho del modelo fijo, estas operaciones se aplican por posición. Por eso el coste total no se resume correctamente como “todo es O(n²)”.</p></div>
+      <div class="tac-cost tac-cost--io"><span>KERNEL EXACTO</span><strong>FlashAttention · menos tráfico de memoria</strong><p>Usa tiling para no materializar toda la matriz de atención en HBM y reducir lecturas/escrituras. Sigue calculando atención densa exacta.</p></div>
+    </div>
+  </div>
+
+  <div class="tac-design">
+    <div class="tac-design-title">Cuando n crece, hay varios puntos del espacio de diseño</div>
+    <div class="tac-design-grid">
+      <div><span>CAMBIAR EL PATRÓN</span><strong>atención local o dispersa</strong><small>reduce qué pares interactúan</small></div>
+      <div><span>REDUCIR LO QUE ENTRA</span><strong>retrieval, compresión, memoria externa</strong><small>evita atender a contexto irrelevante</small></div>
+      <div><span>CAMBIAR LA ARQUITECTURA</span><strong>SSM e híbridos</strong><small>exploran otra dinámica de secuencia</small></div>
+    </div>
+  </div>
+
+  <div class="tac-contracts">
+    <div><span>n × n ES EL OBJETO CLAVE</span><strong>la matriz de scores representa interacciones entre pares de posiciones</strong></div>
+    <div><span>OPTIMIZAR MEMORIA ≠ CAMBIAR EL PATRÓN</span><strong>FlashAttention mejora el movimiento de datos sin convertir la atención densa exacta en atención lineal</strong></div>
+    <div><span>O(n²) NO DESCRIBE TODO EL MODELO</span><strong>FFN, proyecciones y otros componentes también contribuyen al coste total</strong></div>
+  </div>
+
+  <div class="tac-ref">Fuentes primarias:
+    <a href="https://arxiv.org/abs/1706.03762">Vaswani et al. (2017), Transformer</a> ·
+    <a href="https://arxiv.org/abs/2205.14135">Dao et al. (2022), FlashAttention</a> ·
+    <a href="https://arxiv.org/abs/2312.00752">Gu & Dao (2023), Mamba</a>
+  </div>
+</div>
+
+<style>
+.tac-wrap,.tac-wrap *{box-sizing:border-box}
+.tac-wrap{--tac-a:#188b78;--tac-b:#4757d6;--tac-c:#b97900;--tac-r:#c84f5d;--tac-bg:var(--md-default-bg-color,#fff);--tac-fg:var(--md-default-fg-color,#111827);--tac-muted:color-mix(in srgb,var(--tac-fg) 58%,transparent);--tac-border:color-mix(in srgb,var(--tac-fg) 14%,transparent);container-type:inline-size;margin:1.1rem 0 1.5rem;padding:clamp(14px,2vw,22px);border:1px solid var(--tac-border);border-radius:20px;background:radial-gradient(90% 120% at 0 0,color-mix(in srgb,var(--tac-b) 7%,transparent),transparent 56%),radial-gradient(90% 120% at 100% 0,color-mix(in srgb,var(--tac-a) 7%,transparent),transparent 58%),var(--tac-bg);color:var(--tac-fg)}
+.tac-head{display:grid;gap:4px;margin-bottom:14px}.tac-kicker{font-size:10px;font-weight:950;letter-spacing:.12em;color:var(--tac-muted)}.tac-title{font-size:clamp(18px,2.1vw,24px);font-weight:900;line-height:1.12;letter-spacing:-.02em}.tac-sub{max-width:88ch;font-size:13.2px;line-height:1.45;color:var(--tac-muted)}
+.tac-equation{display:grid;grid-template-columns:1fr auto 1fr auto 1.1fr auto 1.15fr;gap:7px;align-items:center;padding:10px;border:1px solid var(--tac-border);border-radius:15px;background:color-mix(in srgb,var(--tac-bg) 95%,var(--tac-fg) 5%)}.tac-equation>b{font-size:16px;text-align:center;color:var(--tac-muted)}.tac-tensor{min-width:0;display:grid;gap:2px;padding:9px;border-radius:11px;background:var(--tac-bg);border:1px solid var(--tac-border);text-align:center}.tac-tensor span{font:900 10px/1.1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--tac-muted)}.tac-tensor strong{font:900 15px/1.15 ui-monospace,SFMono-Regular,Menlo,monospace}.tac-tensor small{font-size:9.5px;line-height:1.25;color:var(--tac-muted)}.tac-tensor--hot{border-color:color-mix(in srgb,var(--tac-r) 46%,var(--tac-border));background:color-mix(in srgb,var(--tac-r) 7%,var(--tac-bg))}.tac-tensor--hot strong{color:var(--tac-r)}
+.tac-scale{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;margin-top:10px}.tac-scale-card{min-width:0;padding:11px;border:1px solid var(--tac-border);border-radius:14px;background:var(--tac-bg)}.tac-scale-head{display:flex;justify-content:space-between;gap:8px;align-items:baseline;margin-bottom:8px}.tac-scale-head span{font:900 11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--tac-muted)}.tac-scale-head strong{font-size:12px}.tac-scale-card p{margin:7px 0 0;font-size:10.5px;line-height:1.35;color:var(--tac-muted)}.tac-matrix{width:min(100%,210px);aspect-ratio:1;margin:auto;border:1px solid color-mix(in srgb,var(--tac-b) 35%,var(--tac-border));border-radius:8px;background-color:color-mix(in srgb,var(--tac-b) 13%,var(--tac-bg));overflow:hidden}.tac-matrix--4{background-image:linear-gradient(to right,transparent calc(25% - .5px),color-mix(in srgb,var(--tac-b) 45%,transparent) calc(25% - .5px),color-mix(in srgb,var(--tac-b) 45%,transparent) calc(25% + .5px),transparent calc(25% + .5px)),linear-gradient(to right,transparent calc(50% - .5px),color-mix(in srgb,var(--tac-b) 45%,transparent) calc(50% - .5px),color-mix(in srgb,var(--tac-b) 45%,transparent) calc(50% + .5px),transparent calc(50% + .5px)),linear-gradient(to right,transparent calc(75% - .5px),color-mix(in srgb,var(--tac-b) 45%,transparent) calc(75% - .5px),color-mix(in srgb,var(--tac-b) 45%,transparent) calc(75% + .5px),transparent calc(75% + .5px)),linear-gradient(to bottom,transparent calc(25% - .5px),color-mix(in srgb,var(--tac-b) 45%,transparent) calc(25% - .5px),color-mix(in srgb,var(--tac-b) 45%,transparent) calc(25% + .5px),transparent calc(25% + .5px)),linear-gradient(to bottom,transparent calc(50% - .5px),color-mix(in srgb,var(--tac-b) 45%,transparent) calc(50% - .5px),color-mix(in srgb,var(--tac-b) 45%,transparent) calc(50% + .5px),transparent calc(50% + .5px)),linear-gradient(to bottom,transparent calc(75% - .5px),color-mix(in srgb,var(--tac-b) 45%,transparent) calc(75% - .5px),color-mix(in srgb,var(--tac-b) 45%,transparent) calc(75% + .5px),transparent calc(75% + .5px))}.tac-matrix--8{background-size:12.5% 12.5%;background-image:linear-gradient(to right,color-mix(in srgb,var(--tac-b) 35%,transparent) 1px,transparent 1px),linear-gradient(to bottom,color-mix(in srgb,var(--tac-b) 35%,transparent) 1px,transparent 1px)}.tac-scale-arrow{display:grid;gap:3px;text-align:center;min-width:94px}.tac-scale-arrow span{font-size:10px;font-weight:900;color:var(--tac-muted)}.tac-scale-arrow b{font-size:20px;color:var(--tac-a)}.tac-scale-arrow strong{font-size:12px;color:var(--tac-r)}
+.tac-boundary{margin-top:10px}.tac-boundary-title,.tac-design-title{font-size:11px;font-weight:900;margin:0 0 7px}.tac-boundary-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.tac-cost{min-width:0;padding:10px;border:1px solid var(--tac-border);border-radius:13px;background:color-mix(in srgb,var(--tac-bg) 96%,var(--tac-fg) 4%);display:grid;gap:4px}.tac-cost span,.tac-design span{font-size:9px;font-weight:950;letter-spacing:.08em;color:var(--tac-muted)}.tac-cost strong{font-size:12px;line-height:1.25}.tac-cost p{margin:0;font-size:10px;line-height:1.4;color:var(--tac-muted)}.tac-cost--quadratic{border-top:3px solid var(--tac-r)}.tac-cost--io{border-top:3px solid var(--tac-a)}
+.tac-design{margin-top:10px;padding-top:10px;border-top:1px solid var(--tac-border)}.tac-design-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.tac-design-grid>div{display:grid;gap:3px;padding:9px 10px;border-radius:12px;background:color-mix(in srgb,var(--tac-b) 5%,var(--tac-bg));border:1px solid color-mix(in srgb,var(--tac-b) 18%,var(--tac-border))}.tac-design strong{font-size:11px;line-height:1.3}.tac-design small{font-size:9.5px;line-height:1.3;color:var(--tac-muted)}
+.tac-contracts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}.tac-contracts>div{min-width:0;border-top:2px solid color-mix(in srgb,var(--tac-a) 55%,var(--tac-border));padding:8px 9px 4px;display:grid;gap:3px}.tac-contracts span{font-size:8.8px;font-weight:950;letter-spacing:.06em;color:var(--tac-muted)}.tac-contracts strong{font-size:9.8px;line-height:1.35}.tac-ref{margin-top:9px;font-size:9.5px;line-height:1.4;color:var(--tac-muted)}.tac-ref a{color:inherit;text-decoration:underline;text-decoration-color:color-mix(in srgb,var(--tac-a) 45%,transparent);text-underline-offset:2px}
+@media(max-width:760px){.tac-equation{grid-template-columns:1fr}.tac-equation>b{transform:rotate(90deg);line-height:1}.tac-scale{grid-template-columns:1fr}.tac-scale-arrow{grid-template-columns:1fr auto 1fr;align-items:center}.tac-scale-arrow b{transform:rotate(90deg)}.tac-boundary-grid,.tac-design-grid,.tac-contracts{grid-template-columns:1fr}.tac-matrix{width:min(74vw,210px)}}
+@media(prefers-reduced-motion:reduce){.tac-wrap *{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+
+<script>
+(() => {
+  const root = document.querySelector('[data-demo="topic-transformer-attention-cost"]');
+  if (!root) return;
+  const fail = (message) => { throw new Error(`Transformer attention-cost visual: ${message}`); };
+  if (root.querySelectorAll('.tac-tensor').length !== 4) fail('expected exactly 4 tensor stages');
+  if (root.querySelectorAll('.tac-scale-card').length !== 2) fail('expected exactly 2 scaling examples');
+  if (root.querySelectorAll('.tac-cost').length !== 3) fail('expected exactly 3 cost-boundary cards');
+  if (root.querySelectorAll('.tac-design-grid > div').length !== 3) fail('expected exactly 3 design-space routes');
+  if (root.querySelectorAll('.tac-contracts > div').length !== 3) fail('expected exactly 3 teaching contracts');
+  requestAnimationFrame(() => {
+    if (root.scrollWidth - root.clientWidth > 2) fail(`internal horizontal overflow ${root.scrollWidth - root.clientWidth}px`);
+  });
+})();
+</script>
