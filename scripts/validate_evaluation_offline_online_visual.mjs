@@ -82,7 +82,6 @@ try {
         const text = await visual.innerText();
         for (const anchor of testCase.anchors) check(text.includes(anchor), `${testCase.route}: ${viewport.name} missing teaching anchor ${JSON.stringify(anchor)}`);
         for (const token of testCase.forbidden) check(!text.includes(token), `${testCase.route}: ${viewport.name} Spanish leakage ${JSON.stringify(token)}`);
-        await visual.screenshot({ path: path.join(outDir, `evaluation-offline-online-${testCase.locale}-${viewport.name}.png`), animations: 'disabled' });
       }
       check((await page.locator('.eoo-row').count()) === 5, `${testCase.route}: ${viewport.name} expected 5 offline-online mappings`);
       check((await page.locator('.eoo-card--offline').count()) === 5, `${testCase.route}: ${viewport.name} expected 5 offline cards`);
@@ -93,6 +92,10 @@ try {
       const pageOverflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
       check(pageOverflow <= 2, `${testCase.route}: ${viewport.name} horizontal page overflow ${pageOverflow}px`);
       for (const error of runtimeErrors) failures.push(`${testCase.route}: ${viewport.name} runtime error: ${error}`);
+      if (await visual.count()) {
+        await page.locator('.md-header').evaluateAll((nodes) => nodes.forEach((node) => { node.style.visibility = 'hidden'; }));
+        await visual.screenshot({ path: path.join(outDir, `evaluation-offline-online-${testCase.locale}-${viewport.name}.png`), animations: 'disabled' });
+      }
       await page.close();
     }
 
