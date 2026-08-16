@@ -67,18 +67,13 @@ Search adds value when there is a signal that distinguishes promising states. Wi
 
 ## Verifiers and reward models
 
-A verifier scores an answer, step or trajectory. It can be:
+A verifier scores an answer, a step or a trajectory. The important distinction is **which part of the process it can observe and which source of truth it compares against**. When an executable check exists — tests, a solver, a schema or external state — that signal is usually more direct than asking another model for an opinion.[^verifiers]
 
-- a deterministic rule;
-- a compiler or test suite;
-- a mathematical solver;
-- a query against external data;
-- another model;
-- a *process reward model*.
+{{ include_html("snippets/temas/reasoning-verifier-signal.html") }}
 
-Final-answer verification only indicates whether the result appears correct. Process verification tries to locate where an error first appears. The latter provides a finer signal but requires labels or criteria at the step level.
+An outcome verifier or **Outcome Reward Model (ORM)** scores the final outcome. It is useful when the answer can be judged reliably, but it does not identify where the first error in a trajectory appeared. A **Process Reward Model (PRM)** scores intermediate states or steps and provides a finer signal for locating errors or guiding search, at the cost of requiring a reliable step-level criterion.[^process]
 
-For code, running tests is usually more reliable than asking another model for an opinion. For a tool call, validating the schema and checking the real effect is better than evaluating the naturalness of the explanation.
+Process verification also does not prove that a visible explanation is the model's internal causal trace. It scores the intermediate artifact that can be observed. For code, executing tests is still preferable to judging the naturalness of an explanation; for a tool call, validating the schema and checking the real effect is better.
 
 ## Test-time compute
 
@@ -188,6 +183,8 @@ RAG is information retrieval. It can be part of a reasoning process, but retriev
 [^unfaithful]: Miles Turpin et al., [*Language Models Don't Always Say What They Think: Unfaithful Explanations in Chain-of-Thought Prompting*](https://arxiv.org/abs/2305.04388), 2023.
 [^tot]: Shunyu Yao et al., [*Tree of Thoughts: Deliberate Problem Solving with Large Language Models*](https://arxiv.org/abs/2305.10601), 2023.
 [^uct]: Levente Kocsis and Csaba Szepesvári, [*Bandit Based Monte-Carlo Planning*](https://doi.org/10.1007/11871842_29), ECML 2006.
+[^verifiers]: Karl Cobbe et al., [*Training Verifiers to Solve Math Word Problems*](https://arxiv.org/abs/2110.14168), 2021.
+[^process]: Hunter Lightman et al., [*Let's Verify Step by Step*](https://arxiv.org/abs/2305.20050), 2023.
 [^testtime]: Charlie Snell et al., [*Scaling LLM Test-Time Compute Optimally can be More Effective than Scaling Model Parameters*](https://arxiv.org/abs/2408.03314), 2024.
 [^react]: Shunyu Yao et al., [*ReAct: Synergizing Reasoning and Acting in Language Models*](https://arxiv.org/abs/2210.03629), ICLR 2023.
 [^agentguardrails]: [OpenAI Agents SDK — Guardrails](https://openai.github.io/openai-agents-python/guardrails/), official documentation.
