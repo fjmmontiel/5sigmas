@@ -1,0 +1,16 @@
+{
+  "source": "snippets/articulos-tecnicos/voice-arch-cascade.html",
+  "source_blob_sha": "0e81e4fae34be52a2648de86b67be2a668265d70",
+  "replacements": {
+    "Barreras secuenciales de una arquitectura full cascade": "Sequential boundaries in a full-cascade architecture",
+    "Cada frontera añade una espera.": "Each boundary adds a wait.",
+    "Rápido por pieza no siempre es rápido al hablar.": "Fast components do not always make a fast conversation.",
+    "barreras abiertas": "boundaries cleared"
+  },
+  "forbidden_output_tokens": [
+    "Barreras secuenciales",
+    "Cada frontera añade una espera.",
+    "Rápido por pieza",
+    "barreras abiertas"
+  ]
+}
