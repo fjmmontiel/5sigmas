@@ -1,0 +1,162 @@
+<div class="rsp-wrap" data-demo="topic-reasoning-search-planning">
+  <div class="rsp-head">
+    <div class="rsp-kicker">BÚSQUEDA Y PLANIFICACIÓN</div>
+    <div class="rsp-title">Buscar no es generar más texto: es mantener estados, evaluarlos y decidir qué explorar después</div>
+    <div class="rsp-sub">El diagrama abstrae el mecanismo común: generar candidatos, aplicar una señal de evaluación, conservar una frontera y expandir o retroceder hasta encontrar un estado aceptable.</div>
+  </div>
+
+  <div class="rsp-main" role="img" aria-label="Árbol de búsqueda: desde un problema se generan tres candidatos, se descarta uno, se expanden los prometedores y un verificador confirma el estado objetivo">
+    <section class="rsp-tree" aria-label="Árbol de estados candidatos">
+      <div class="rsp-root">
+        <span>ESTADO INICIAL</span>
+        <strong>Problema</strong>
+        <small>contexto + objetivo + restricciones</small>
+      </div>
+
+      <div class="rsp-level rsp-level--one">
+        <div class="rsp-node rsp-node--pruned">
+          <span>A</span><strong>Candidato A</strong><small>no cumple una restricción</small><em>DESCARTAR</em>
+        </div>
+        <div class="rsp-node rsp-node--frontier">
+          <span>B</span><strong>Candidato B</strong><small>prometedor, aún incompleto</small><em>FRONTERA</em>
+        </div>
+        <div class="rsp-node rsp-node--frontier">
+          <span>C</span><strong>Candidato C</strong><small>prometedor, aún incompleto</small><em>FRONTERA</em>
+        </div>
+      </div>
+
+      <div class="rsp-level rsp-level--two">
+        <div class="rsp-node rsp-node--pruned">
+          <span>B1</span><strong>Expansión B1</strong><small>el verificador detecta un fallo</small><em>RETROCEDER</em>
+        </div>
+        <div class="rsp-node rsp-node--keep">
+          <span>B2</span><strong>Expansión B2</strong><small>válida, pero no termina</small><em>MANTENER</em>
+        </div>
+        <div class="rsp-node rsp-node--goal">
+          <span>C1</span><strong>Estado objetivo</strong><small>cumple criterio de parada</small><em>✓ ACEPTAR</em>
+        </div>
+      </div>
+    </section>
+
+    <aside class="rsp-policy" aria-label="Bucle de control de la búsqueda">
+      <div class="rsp-policy-title">BUCLE DE CONTROL</div>
+      <div class="rsp-policy-step"><span>01</span><div><strong>Expandir</strong><small>proponer uno o varios estados siguientes</small></div></div>
+      <div class="rsp-policy-arrow" aria-hidden="true">↓</div>
+      <div class="rsp-policy-step"><span>02</span><div><strong>Evaluar</strong><small>regla, test, solver, reward model o juez</small></div></div>
+      <div class="rsp-policy-arrow" aria-hidden="true">↓</div>
+      <div class="rsp-policy-step"><span>03</span><div><strong>Actualizar frontera</strong><small>conservar, priorizar, podar o volver atrás</small></div></div>
+      <div class="rsp-policy-arrow" aria-hidden="true">↓</div>
+      <div class="rsp-policy-step rsp-policy-step--stop"><span>04</span><div><strong>Parar o continuar</strong><small>objetivo alcanzado, presupuesto agotado o sin mejora</small></div></div>
+    </aside>
+  </div>
+
+  <div class="rsp-contracts">
+    <div class="rsp-contract">
+      <span>UNA TRAYECTORIA</span>
+      <strong>CoT lineal</strong>
+      <small>Una decisión temprana condiciona todo lo que sigue.</small>
+    </div>
+    <div class="rsp-contract rsp-contract--beam">
+      <span>FRONTERA ACOTADA</span>
+      <strong>Beam / best-first</strong>
+      <small>Se conservan varios candidatos y la política decide cuál expandir.</small>
+    </div>
+    <div class="rsp-contract rsp-contract--tree">
+      <span>ÁRBOL EXPLÍCITO</span>
+      <strong>Tree of Thoughts / MCTS</strong>
+      <small>La búsqueda puede ramificar, reevaluar y volver a estados anteriores.</small>
+    </div>
+  </div>
+
+  <div class="rsp-rule">
+    <span>CONDICIÓN NECESARIA</span>
+    <strong>La búsqueda solo aporta señal si el evaluador distingue estados prometedores de estados plausibles pero malos.</strong>
+    <small>Sin una señal útil, aumentar ramas aumenta coste y candidatos; no crea por sí solo una mejor política de selección.</small>
+  </div>
+
+  <div class="rsp-ref">Fuentes primarias: <a href="https://arxiv.org/abs/2305.10601">Yao et al. · Tree of Thoughts (2023)</a> · <a href="https://doi.org/10.1007/11871842_29">Kocsis &amp; Szepesvári · UCT (2006)</a>.</div>
+</div>
+
+<style>
+.rsp-wrap,.rsp-wrap *{box-sizing:border-box}
+.rsp-wrap{
+  --rsp-a:var(--md-primary-fg-color,#26a69a);
+  --rsp-b:#4757d6;
+  --rsp-c:var(--md-accent-fg-color,#ffb343);
+  --rsp-r:#e06c75;
+  --rsp-bg:var(--md-default-bg-color,#fff);
+  --rsp-fg:var(--md-default-fg-color,#111827);
+  --rsp-muted:color-mix(in srgb,var(--rsp-fg) 58%,transparent);
+  --rsp-border:color-mix(in srgb,var(--rsp-fg) 14%,transparent);
+  container-type:inline-size;
+  margin:1.1rem 0 1.55rem;
+  padding:clamp(14px,2vw,22px);
+  border:1px solid var(--rsp-border);
+  border-radius:20px;
+  background:
+    radial-gradient(90% 120% at 0 0,color-mix(in srgb,var(--rsp-b) 7%,transparent),transparent 58%),
+    radial-gradient(82% 110% at 100% 100%,color-mix(in srgb,var(--rsp-a) 6%,transparent),transparent 60%),
+    var(--rsp-bg);
+  color:var(--rsp-fg)
+}
+.rsp-head{display:grid;gap:4px;margin-bottom:14px}
+.rsp-kicker{font-size:10px;font-weight:900;letter-spacing:.12em;color:var(--rsp-muted)}
+.rsp-title{max-width:48ch;font-size:clamp(18px,2.1vw,24px);font-weight:900;line-height:1.12;letter-spacing:-.02em}
+.rsp-sub{max-width:88ch;font-size:13.5px;line-height:1.48;color:var(--rsp-muted)}
+.rsp-main{display:grid;grid-template-columns:minmax(0,2.4fr) minmax(210px,.85fr);gap:10px;align-items:stretch;min-width:0}
+.rsp-tree{position:relative;min-width:0;display:grid;gap:11px;padding:12px;border:1px solid var(--rsp-border);border-radius:15px;background:color-mix(in srgb,var(--rsp-bg) 96%,var(--rsp-fg) 4%)}
+.rsp-root{width:min(220px,100%);justify-self:center;display:grid;gap:3px;text-align:center;padding:10px 12px;border:1px solid color-mix(in srgb,var(--rsp-b) 40%,var(--rsp-border));border-radius:12px;background:color-mix(in srgb,var(--rsp-b) 6%,var(--rsp-bg))}
+.rsp-root span,.rsp-node>span,.rsp-contract span,.rsp-rule>span,.rsp-policy-title{font-size:8.8px;font-weight:900;letter-spacing:.09em;color:var(--rsp-muted)}
+.rsp-root strong{font-size:14px}.rsp-root small,.rsp-node small,.rsp-contract small,.rsp-rule small{font-size:10.1px;line-height:1.35;color:var(--rsp-muted)}
+.rsp-level{position:relative;display:grid;gap:8px;min-width:0}
+.rsp-level::before{content:"";position:absolute;left:50%;top:-11px;width:1px;height:11px;background:var(--rsp-border)}
+.rsp-level--one{grid-template-columns:repeat(3,minmax(0,1fr))}
+.rsp-level--two{grid-template-columns:repeat(3,minmax(0,1fr));padding-left:7%;padding-right:7%}
+.rsp-node{position:relative;min-width:0;min-height:112px;display:grid;grid-template-rows:auto auto 1fr auto;gap:5px;padding:10px;border:1px solid var(--rsp-border);border-radius:12px;background:var(--rsp-bg);transition:transform .16s ease,border-color .16s ease}
+.rsp-node:hover{transform:translateY(-2px)}
+.rsp-node strong{font-size:11.8px;line-height:1.25}.rsp-node em{font-style:normal;font-size:8.8px;font-weight:900;letter-spacing:.07em;color:var(--rsp-muted)}
+.rsp-node--frontier,.rsp-node--keep{border-color:color-mix(in srgb,var(--rsp-b) 40%,var(--rsp-border));background:color-mix(in srgb,var(--rsp-b) 4%,var(--rsp-bg))}
+.rsp-node--goal{border-color:color-mix(in srgb,var(--rsp-a) 52%,var(--rsp-border));background:color-mix(in srgb,var(--rsp-a) 6%,var(--rsp-bg))}.rsp-node--goal em{color:color-mix(in srgb,var(--rsp-a) 78%,var(--rsp-fg))}
+.rsp-node--pruned{border-color:color-mix(in srgb,var(--rsp-r) 28%,var(--rsp-border));opacity:.74}.rsp-node--pruned em{color:color-mix(in srgb,var(--rsp-r) 65%,var(--rsp-fg))}
+.rsp-policy{min-width:0;display:grid;align-content:start;gap:5px;padding:12px;border:1px solid color-mix(in srgb,var(--rsp-c) 38%,var(--rsp-border));border-radius:15px;background:color-mix(in srgb,var(--rsp-c) 5%,var(--rsp-bg))}
+.rsp-policy-title{margin-bottom:2px}.rsp-policy-step{display:grid;grid-template-columns:27px minmax(0,1fr);gap:8px;align-items:start;padding:8px;border:1px solid var(--rsp-border);border-radius:10px;background:var(--rsp-bg)}
+.rsp-policy-step>span{width:24px;height:24px;display:grid;place-items:center;border-radius:999px;background:color-mix(in srgb,var(--rsp-b) 10%,var(--rsp-bg));font-size:8.5px;font-weight:900}.rsp-policy-step>div{display:grid;gap:2px}.rsp-policy-step strong{font-size:11px}.rsp-policy-step small{font-size:9.6px;line-height:1.32;color:var(--rsp-muted)}
+.rsp-policy-step--stop{border-color:color-mix(in srgb,var(--rsp-a) 42%,var(--rsp-border))}.rsp-policy-arrow{text-align:center;height:8px;line-height:8px;font-size:11px;color:var(--rsp-muted)}
+.rsp-contracts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}.rsp-contract{min-width:0;display:grid;gap:4px;padding:10px 11px;border:1px solid var(--rsp-border);border-radius:12px;background:var(--rsp-bg)}.rsp-contract strong{font-size:11.8px}.rsp-contract--beam{border-color:color-mix(in srgb,var(--rsp-b) 36%,var(--rsp-border))}.rsp-contract--tree{border-color:color-mix(in srgb,var(--rsp-a) 42%,var(--rsp-border))}
+.rsp-rule{display:grid;gap:4px;margin-top:9px;padding:11px 12px;border:1px solid color-mix(in srgb,var(--rsp-c) 45%,var(--rsp-border));border-radius:12px;background:color-mix(in srgb,var(--rsp-c) 5%,var(--rsp-bg))}.rsp-rule strong{font-size:12px;line-height:1.35}
+.rsp-ref{margin-top:9px;font-size:9.8px;line-height:1.35;color:var(--rsp-muted)}.rsp-ref a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+@container (max-width:760px){
+  .rsp-main{grid-template-columns:1fr}
+  .rsp-level--one,.rsp-level--two{grid-template-columns:1fr;padding:0}
+  .rsp-level::before{display:none}
+  .rsp-node{min-height:0;grid-template-columns:42px minmax(0,.75fr) minmax(0,1.15fr);grid-template-rows:auto auto;gap:3px 8px}.rsp-node>span{grid-row:1/span 2;align-self:center}.rsp-node strong{grid-column:2}.rsp-node small{grid-column:3;grid-row:1/span 2;align-self:center}.rsp-node em{grid-column:2;grid-row:2}
+  .rsp-contracts{grid-template-columns:1fr}.rsp-policy-step{grid-template-columns:30px minmax(0,1fr)}
+}
+@media (max-width:760px){.rsp-main{grid-template-columns:1fr}.rsp-level--one,.rsp-level--two,.rsp-contracts{grid-template-columns:1fr}.rsp-level--two{padding:0}}
+@media (prefers-reduced-motion:reduce){.rsp-node{transition:none!important}.rsp-node:hover{transform:none!important}}
+</style>
+
+<script>
+(() => {
+  const root = document.querySelector('[data-demo="topic-reasoning-search-planning"]');
+  if (!root) return;
+  const expected = [
+    ['.rsp-root', 1],
+    ['.rsp-node', 6],
+    ['.rsp-node--frontier', 2],
+    ['.rsp-node--pruned', 2],
+    ['.rsp-node--goal', 1],
+    ['.rsp-policy-step', 4],
+    ['.rsp-contract', 3],
+  ];
+  for (const [selector, count] of expected) {
+    const found = root.querySelectorAll(selector).length;
+    if (found !== count) throw new Error(`reasoning-search visual contract: ${selector} expected ${count}, found ${found}`);
+  }
+  requestAnimationFrame(() => {
+    if (root.scrollWidth - root.clientWidth > 2) {
+      throw new Error(`reasoning-search visual contract: horizontal overflow ${root.scrollWidth - root.clientWidth}px`);
+    }
+  });
+})();
+</script>

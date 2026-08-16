@@ -51,15 +51,19 @@ For open-ended problems, voting over complete text is not meaningful. The system
 
 ## Search and planning
 
-Reasoning can be formulated as search over possible states.
+Reasoning can be formulated as search over possible states. **Tree of Thoughts** makes that idea explicit by maintaining multiple intermediate continuations, evaluating them and deciding which branch to explore next.[^tot]
 
-- **Tree of Thoughts:** explores multiple partial continuations.
-- **Beam search:** keeps the best-scoring candidates.
-- **Monte Carlo Tree Search:** balances exploration and exploitation.
-- **Programs or tools:** delegate verifiable operations.
-- **Explicit planning:** separates plan creation from execution.
+{{ include_html("snippets/temas/reasoning-search-planning.html") }}
 
-Search adds value when there is a function that distinguishes promising states. Without a reliable evaluator, the system simply multiplies plausible text.
+Concrete algorithms differ in how they manage the frontier:
+
+- **beam search:** keeps a bounded set of candidates according to a score;
+- **Tree of Thoughts:** can branch, evaluate and backtrack among intermediate states;
+- **Monte Carlo Tree Search / UCT:** allocates exploration according to observed value and uncertainty across branches.[^uct]
+- **programs or tools:** turn part of the search space into verifiable operations;
+- **explicit planning:** separates plan creation from execution.
+
+Search adds value when there is a signal that distinguishes promising states. Without a reliable evaluator, a system can multiply plausible candidates without improving selection.
 
 ## Verifiers and reward models
 
@@ -182,6 +186,8 @@ RAG is information retrieval. It can be part of a reasoning process, but retriev
 [^cot]: Jason Wei et al., [*Chain-of-Thought Prompting Elicits Reasoning in Large Language Models*](https://arxiv.org/abs/2201.11903), 2022.
 [^selfconsistency]: Xuezhi Wang et al., [*Self-Consistency Improves Chain of Thought Reasoning in Language Models*](https://arxiv.org/abs/2203.11171), 2022.
 [^unfaithful]: Miles Turpin et al., [*Language Models Don't Always Say What They Think: Unfaithful Explanations in Chain-of-Thought Prompting*](https://arxiv.org/abs/2305.04388), 2023.
+[^tot]: Shunyu Yao et al., [*Tree of Thoughts: Deliberate Problem Solving with Large Language Models*](https://arxiv.org/abs/2305.10601), 2023.
+[^uct]: Levente Kocsis and Csaba Szepesvári, [*Bandit Based Monte-Carlo Planning*](https://doi.org/10.1007/11871842_29), ECML 2006.
 [^testtime]: Charlie Snell et al., [*Scaling LLM Test-Time Compute Optimally can be More Effective than Scaling Model Parameters*](https://arxiv.org/abs/2408.03314), 2024.
 [^react]: Shunyu Yao et al., [*ReAct: Synergizing Reasoning and Acting in Language Models*](https://arxiv.org/abs/2210.03629), ICLR 2023.
 [^agentguardrails]: [OpenAI Agents SDK — Guardrails](https://openai.github.io/openai-agents-python/guardrails/), official documentation.

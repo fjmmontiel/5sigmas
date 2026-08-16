@@ -74,6 +74,14 @@ REQUIRED_VISUAL_INCLUDES = {
         "snippets/temas/transformer-ffn.html",
         "snippets/temas/transformer-residual-norm.html",
     ),
+    "razonamiento": (
+        "snippets/temas/reasoning-loop.html",
+        "snippets/temas/reasoning-chain-of-thought.html",
+        "snippets/temas/reasoning-self-consistency.html",
+        "snippets/temas/reasoning-search-planning.html",
+        "snippets/temas/reasoning-test-time-compute.html",
+        "snippets/temas/agent-tool-gate.html",
+    ),
     "agentes-ia": (
         "snippets/agentes-ia/01-bucle-agente.html",
         "snippets/temas/agent-system-boundary.html",
