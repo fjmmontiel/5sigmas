@@ -4,7 +4,7 @@ seo_title: "Razonamiento en LLMs: chain of thought y test-time compute"
 description: "Qué significa razonar en un LLM, cómo funcionan chain of thought, búsqueda y verificadores, y qué se paga en latencia, coste y fiabilidad."
 keywords: "razonamiento LLM, chain of thought, test-time compute, inference-time compute, self-consistency, verificadores, modelos razonadores"
 date: 2026-04-14
-date_modified: 2026-08-15
+date_modified: 2026-08-16
 ---
 
 # Razonamiento en LLMs
@@ -31,15 +31,7 @@ La ventaja es capacidad adaptable. El coste aparece en latencia, tokens, variabi
 
 *Chain of thought* (CoT) induce al modelo a producir pasos intermedios antes de la respuesta. Wei et al. mostraron que ejemplos con razonamientos encadenados podían mejorar el rendimiento de modelos grandes en tareas aritméticas, simbólicas y de sentido común.[^cot]
 
-Un ejemplo simplificado:
-
-```text
-pregunta
-→ descomponer el problema
-→ resolver cada parte
-→ combinar resultados
-→ responder
-```
+{{ include_html("snippets/temas/reasoning-chain-of-thought.html") }}
 
 La técnica ayuda porque ofrece espacio para representar variables y dependencias. También puede empeorar la respuesta si los primeros pasos contienen un error que se propaga.
 
