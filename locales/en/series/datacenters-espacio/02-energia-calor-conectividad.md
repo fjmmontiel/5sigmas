@@ -28,7 +28,7 @@ It is not. A cold environment is one thing; giving a system an effective way to 
 
 On Earth, a data center can reject heat using moving air, chilled water and cooling towers. All of that already exists around the installation and works continuously, but in space there is no air or water waiting outside the equipment to carry that heat away.
 
-That leaves only one option: reject it by radiating it outward. The system has to shed heat the way a very hot surface emits energy. This mechanism works, but it is much slower than moving air or water, and it also requires deploying enormous surfaces to handle high power levels ([NASA][r1], [LoadPath][r2]).
+That leaves only one option: reject it outward as thermal radiation. The system has to shed heat the way a very hot surface emits energy. This mechanism works, but it is much slower than moving air or water, and it also requires deploying enormous surfaces to handle high power levels ([NASA][r1], [LoadPath][r2]).
 
 ### The real scale of radiators
 
