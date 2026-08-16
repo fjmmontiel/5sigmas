@@ -145,14 +145,7 @@ This prevents optimizing only the benchmark while forgetting the interaction.
 
 A robust evaluation does not look only at final accuracy.
 
-| Dimension | Question |
-|---|---|
-| Correctness | Is the answer true or does it solve the task? |
-| Robustness | Does it hold under paraphrases and distractors? |
-| Efficiency | How much compute and latency does it need? |
-| Calibration | Does uncertainty track error? |
-| Faithfulness | Does the explanation reflect real evidence? |
-| Action | Were tools and state changes correct? |
+{{ include_html("snippets/temas/reasoning-evaluation.html") }}
 
 Simple baselines matter too. Sometimes a rule, structured query or small model with a tool beats a long deliberation process.
 
