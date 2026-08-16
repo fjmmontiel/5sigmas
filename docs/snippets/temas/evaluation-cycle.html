@@ -1,0 +1,149 @@
+<div class="evc-wrap" data-demo="topic-evaluation-cycle">
+  <div class="evc-head">
+    <div class="evc-kicker">BUCLE OPERATIVO</div>
+    <div class="evc-title">Cada cambio debe volver convertido en evidencia</div>
+    <div class="evc-sub">Offline reduces incertidumbre antes de exponer usuarios. Producción revela fallos de producto que vuelven al conjunto de evaluación como regresiones reproducibles.</div>
+  </div>
+
+  <div class="evc-context" aria-label="Dos zonas del ciclo de evaluación">
+    <div class="evc-context-item evc-context-item--offline"><span>OFFLINE</span><strong>comparar en condiciones reproducibles</strong></div>
+    <div class="evc-context-item evc-context-item--online"><span>ONLINE</span><strong>observar comportamiento real con exposición limitada</strong></div>
+  </div>
+
+  <div class="evc-cycle" aria-label="Ciclo operativo de evaluación desde un incidente hasta convertir nuevos fallos de producción en regresiones">
+    <section class="evc-stage evc-stage--signal">
+      <div class="evc-stage-top"><span class="evc-num">1</span><b>SEÑAL</b></div>
+      <strong>Incidente o necesidad</strong>
+      <p>Convierte una observación en un caso reproducible.</p>
+      <div class="evc-tags"><span>entrada real</span><span>criterio</span><span>severidad</span></div>
+    </section>
+    <div class="evc-arrow evc-arrow--12" aria-hidden="true">→</div>
+
+    <section class="evc-stage evc-stage--baseline">
+      <div class="evc-stage-top"><span class="evc-num">2</span><b>BASELINE</b></div>
+      <strong>Mide el sistema actual</strong>
+      <p>Ejecuta la referencia antes de cambiar nada.</p>
+      <div class="evc-tags"><span>mismos casos</span><span>segmentos</span><span>coste</span></div>
+    </section>
+    <div class="evc-arrow evc-arrow--23" aria-hidden="true">→</div>
+
+    <section class="evc-stage evc-stage--change">
+      <div class="evc-stage-top"><span class="evc-num">3</span><b>CAMBIO</b></div>
+      <strong>Modelo / prompt / sistema</strong>
+      <p>Formula una hipótesis y mide el delta por segmento.</p>
+      <div class="evc-tags"><span>variabilidad</span><span>comparación</span><span>revisión humana</span></div>
+    </section>
+    <div class="evc-turn evc-turn--down" aria-hidden="true">↓</div>
+
+    <section class="evc-stage evc-stage--rollout">
+      <div class="evc-stage-top"><span class="evc-num">4</span><b>ROLLOUT</b></div>
+      <strong>Prueba limitada</strong>
+      <p>Expón la variante con límites explícitos y reversión.</p>
+      <div class="evc-tags"><span>guardrails</span><span>rollback</span><span>cohorte</span></div>
+    </section>
+    <div class="evc-arrow evc-arrow--45" aria-hidden="true">←</div>
+
+    <section class="evc-stage evc-stage--observe">
+      <div class="evc-stage-top"><span class="evc-num">5</span><b>PRODUCCIÓN</b></div>
+      <strong>Observa el producto</strong>
+      <p>La señal online valida lo que la eval offline no puede ver sola.</p>
+      <div class="evc-tags"><span>éxito</span><span>latencia</span><span>incidentes</span></div>
+    </section>
+    <div class="evc-arrow evc-arrow--56" aria-hidden="true">←</div>
+
+    <section class="evc-stage evc-stage--regression">
+      <div class="evc-stage-top"><span class="evc-num">6</span><b>REGRESIÓN</b></div>
+      <strong>Fallo nuevo → caso permanente</strong>
+      <p>Lo aprendido vuelve al conjunto de evaluación y se versiona.</p>
+      <div class="evc-tags"><span>reproducir</span><span>versionar</span><span>no olvidar</span></div>
+    </section>
+    <div class="evc-turn evc-turn--up" aria-hidden="true">↑</div>
+  </div>
+
+  <div class="evc-feedback">
+    <span>CIERRA EL BUCLE</span>
+    <strong>El historial de fallos se convierte en tests de regresión: la siguiente versión empieza con más conocimiento que la anterior.</strong>
+  </div>
+</div>
+
+<style>
+.evc-wrap,.evc-wrap *{box-sizing:border-box}
+.evc-wrap{
+  --evc-a:var(--md-primary-fg-color,#26a69a);
+  --evc-b:#4757d6;
+  --evc-c:var(--md-accent-fg-color,#ffb343);
+  --evc-bg:var(--md-default-bg-color,#fff);
+  --evc-fg:var(--md-default-fg-color,#111827);
+  --evc-muted:color-mix(in srgb,var(--evc-fg) 58%,transparent);
+  --evc-border:color-mix(in srgb,var(--evc-fg) 14%,transparent);
+  container-type:inline-size;
+  margin:1.1rem 0 1.5rem;
+  padding:clamp(14px,2vw,22px);
+  border:1px solid var(--evc-border);
+  border-radius:20px;
+  background:
+    radial-gradient(88% 100% at 0 0,color-mix(in srgb,var(--evc-b) 7%,transparent),transparent 56%),
+    radial-gradient(88% 100% at 100% 100%,color-mix(in srgb,var(--evc-a) 7%,transparent),transparent 56%),
+    var(--evc-bg);
+  color:var(--evc-fg)
+}
+.evc-head{display:grid;gap:4px;margin-bottom:12px}
+.evc-kicker{font-size:11px;font-weight:900;letter-spacing:.12em;color:var(--evc-muted)}
+.evc-title{font-size:clamp(18px,2.1vw,24px);font-weight:900;line-height:1.1;letter-spacing:-.02em}
+.evc-sub{font-size:13.5px;line-height:1.45;color:var(--evc-muted);max-width:82ch}
+.evc-context{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.evc-context-item{min-width:0;display:flex;align-items:center;gap:8px;border:1px solid var(--evc-border);border-radius:999px;padding:7px 10px;background:color-mix(in srgb,var(--evc-bg) 95%,var(--evc-fg) 5%)}
+.evc-context-item span{flex:0 0 auto;font-size:9.4px;font-weight:950;letter-spacing:.1em}
+.evc-context-item strong{min-width:0;font-size:10.6px;line-height:1.25;color:var(--evc-muted);font-weight:750;overflow-wrap:anywhere}
+.evc-context-item--offline{border-color:color-mix(in srgb,var(--evc-b) 36%,var(--evc-border))}.evc-context-item--offline span{color:color-mix(in srgb,var(--evc-b) 76%,var(--evc-fg))}
+.evc-context-item--online{border-color:color-mix(in srgb,var(--evc-a) 38%,var(--evc-border))}.evc-context-item--online span{color:color-mix(in srgb,var(--evc-a) 76%,var(--evc-fg))}
+.evc-cycle{display:grid;grid-template-columns:minmax(0,1fr) 24px minmax(0,1fr) 24px minmax(0,1fr);grid-template-rows:auto 22px auto;gap:6px;align-items:stretch;min-width:0}
+.evc-stage{min-width:0;min-height:164px;border:1px solid var(--evc-border);border-radius:14px;padding:11px;display:grid;grid-template-rows:auto auto minmax(2.7em,1fr) auto;gap:7px;background:color-mix(in srgb,var(--evc-bg) 96%,var(--evc-fg) 4%);position:relative;overflow:hidden;transition:transform .16s ease,border-color .16s ease}
+.evc-stage::before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:color-mix(in srgb,var(--evc-fg) 22%,transparent)}
+.evc-stage:hover{transform:translateY(-2px)}
+.evc-stage--signal{grid-column:1;grid-row:1;border-color:color-mix(in srgb,var(--evc-b) 32%,var(--evc-border))}.evc-stage--signal::before,.evc-stage--baseline::before,.evc-stage--change::before{background:color-mix(in srgb,var(--evc-b) 68%,transparent)}
+.evc-stage--baseline{grid-column:3;grid-row:1;border-color:color-mix(in srgb,var(--evc-b) 42%,var(--evc-border));background:color-mix(in srgb,var(--evc-b) 4%,var(--evc-bg))}
+.evc-stage--change{grid-column:5;grid-row:1;border-color:color-mix(in srgb,var(--evc-b) 52%,var(--evc-border));background:color-mix(in srgb,var(--evc-b) 6%,var(--evc-bg))}
+.evc-stage--rollout{grid-column:5;grid-row:3;border-color:color-mix(in srgb,var(--evc-a) 46%,var(--evc-border));background:color-mix(in srgb,var(--evc-a) 5%,var(--evc-bg))}
+.evc-stage--observe{grid-column:3;grid-row:3;border-color:color-mix(in srgb,var(--evc-a) 38%,var(--evc-border))}
+.evc-stage--regression{grid-column:1;grid-row:3;border-color:color-mix(in srgb,var(--evc-c) 48%,var(--evc-border));background:color-mix(in srgb,var(--evc-c) 5%,var(--evc-bg))}
+.evc-stage--rollout::before,.evc-stage--observe::before{background:color-mix(in srgb,var(--evc-a) 70%,transparent)}
+.evc-stage--regression::before{background:color-mix(in srgb,var(--evc-c) 78%,transparent)}
+.evc-stage-top{display:flex;align-items:center;gap:7px}
+.evc-num{width:24px;height:24px;border-radius:999px;display:grid;place-items:center;background:color-mix(in srgb,var(--evc-fg) 9%,transparent);font-size:10px;font-weight:950}
+.evc-stage-top b{font-size:9.6px;letter-spacing:.09em;color:var(--evc-muted)}
+.evc-stage>strong{font-size:13px;line-height:1.22;overflow-wrap:anywhere}
+.evc-stage p{margin:0;font-size:11px;line-height:1.38;color:var(--evc-muted)}
+.evc-tags{display:flex;gap:5px;flex-wrap:wrap;align-self:end}
+.evc-tags span{border:1px solid var(--evc-border);border-radius:999px;padding:4px 6px;font-size:9.2px;font-weight:800;line-height:1.15;color:var(--evc-muted);background:color-mix(in srgb,var(--evc-bg) 92%,var(--evc-fg) 8%)}
+.evc-arrow,.evc-turn{display:grid;place-items:center;font-size:17px;font-weight:950;color:var(--evc-muted);line-height:1}
+.evc-arrow--12{grid-column:2;grid-row:1}.evc-arrow--23{grid-column:4;grid-row:1}.evc-turn--down{grid-column:5;grid-row:2}.evc-arrow--45{grid-column:4;grid-row:3}.evc-arrow--56{grid-column:2;grid-row:3}.evc-turn--up{grid-column:1;grid-row:2;color:color-mix(in srgb,var(--evc-c) 70%,var(--evc-muted))}
+.evc-feedback{margin-top:10px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:center;border:1px solid color-mix(in srgb,var(--evc-c) 42%,var(--evc-border));border-radius:12px;padding:10px 12px;background:color-mix(in srgb,var(--evc-c) 5%,var(--evc-bg))}
+.evc-feedback span{font-size:9.4px;font-weight:950;letter-spacing:.1em;color:var(--evc-muted)}
+.evc-feedback strong{font-size:11.4px;line-height:1.35}
+@container (max-width:720px){
+  .evc-context{grid-template-columns:1fr}
+  .evc-cycle{grid-template-columns:1fr;grid-template-rows:none;gap:4px}
+  .evc-stage,.evc-arrow,.evc-turn{grid-column:1!important;grid-row:auto!important}
+  .evc-stage{min-height:0;grid-template-columns:minmax(0,.52fr) minmax(0,.48fr);grid-template-rows:auto auto auto;gap:5px 10px;padding:10px}
+  .evc-stage-top,.evc-stage>strong,.evc-stage p{grid-column:1}.evc-tags{grid-column:2;grid-row:1/span 3;align-self:center;justify-content:flex-end}
+  .evc-arrow,.evc-turn{height:13px;font-size:0}.evc-arrow::before,.evc-turn::before{content:"↓";font-size:16px}
+  .evc-turn--up{display:none}
+  .evc-feedback{grid-template-columns:1fr;gap:3px}
+}
+@media (max-width:900px){
+  .evc-context{grid-template-columns:1fr}
+  .evc-cycle{grid-template-columns:1fr;grid-template-rows:none;gap:4px}
+  .evc-stage,.evc-arrow,.evc-turn{grid-column:1!important;grid-row:auto!important}
+  .evc-stage{min-height:0;grid-template-columns:minmax(0,.52fr) minmax(0,.48fr);grid-template-rows:auto auto auto;gap:5px 10px;padding:10px}
+  .evc-stage-top,.evc-stage>strong,.evc-stage p{grid-column:1}.evc-tags{grid-column:2;grid-row:1/span 3;align-self:center;justify-content:flex-end}
+  .evc-arrow,.evc-turn{height:13px;font-size:0}.evc-arrow::before,.evc-turn::before{content:"↓";font-size:16px}
+  .evc-turn--up{display:none}
+  .evc-feedback{grid-template-columns:1fr;gap:3px}
+}
+@media (max-width:440px){
+  .evc-stage{grid-template-columns:1fr;grid-template-rows:auto auto auto auto}.evc-stage-top,.evc-stage>strong,.evc-stage p,.evc-tags{grid-column:1;grid-row:auto}.evc-tags{justify-content:flex-start}
+  .evc-context-item{border-radius:12px;align-items:flex-start;flex-direction:column;gap:2px}
+}
+@media (prefers-reduced-motion:reduce){.evc-wrap *{animation:none!important;transition:none!important;scroll-behavior:auto!important}.evc-stage:hover{transform:none}}
+</style>
