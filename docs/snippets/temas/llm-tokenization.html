@@ -35,20 +35,20 @@
     <div class="ltk-compare-grid">
       <section class="ltk-tokenizer">
         <div class="ltk-tokenizer-top"><span>TOKENIZADOR A</span><em>segmentación ilustrativa</em></div>
-        <div class="ltk-source">“modelos razonadores”</div>
-        <div class="ltk-pieces ltk-pieces--a"><b>▁modelos</b><b>▁razonadores</b></div>
-        <div class="ltk-meter"><span style="--ltk-w:34%"></span><span style="--ltk-w:66%"></span></div>
+        <div class="ltk-source">“razonamiento artificial”</div>
+        <div class="ltk-pieces ltk-pieces--a"><b>▁razonamiento</b><b>▁artificial</b></div>
+        <div class="ltk-meter"><span style="--ltk-w:55%"></span><span style="--ltk-w:45%"></span></div>
         <small>Dos unidades si ambas piezas están bien cubiertas por el vocabulario.</small>
       </section>
       <section class="ltk-tokenizer">
         <div class="ltk-tokenizer-top"><span>TOKENIZADOR B</span><em>segmentación ilustrativa</em></div>
-        <div class="ltk-source">“modelos razonadores”</div>
-        <div class="ltk-pieces ltk-pieces--b"><b>▁model</b><b>os</b><b>▁razon</b><b>adores</b></div>
-        <div class="ltk-meter"><span style="--ltk-w:25%"></span><span style="--ltk-w:12%"></span><span style="--ltk-w:31%"></span><span style="--ltk-w:32%"></span></div>
+        <div class="ltk-source">“razonamiento artificial”</div>
+        <div class="ltk-pieces ltk-pieces--b"><b>▁razon</b><b>amiento</b><b>▁arti</b><b>ficial</b></div>
+        <div class="ltk-meter"><span style="--ltk-w:29%"></span><span style="--ltk-w:26%"></span><span style="--ltk-w:22%"></span><span style="--ltk-w:23%"></span></div>
         <small>Más unidades si el vocabulario necesita recomponer la misma cadena con fragmentos menores.</small>
       </section>
     </div>
-    <div class="ltk-note"><strong>Importante:</strong> las segmentaciones de este diagrama son pedagógicas; no representan la salida de un tokenizer concreto.</div>
+    <div class="ltk-note"><strong>Importante:</strong> las segmentaciones de este diagrama son pedagógicas; no representan la salida de un tokenizador concreto.</div>
   </div>
 
   <div class="ltk-contracts">
@@ -68,7 +68,7 @@
 
   <div class="ltk-rule">
     <span>IDEA OPERATIVA</span>
-    <strong>Cuando comparas modelos, límites de contexto o costes, compara tokens con el tokenizer real del modelo; no estimes a partir de palabras o caracteres.</strong>
+    <strong>Cuando comparas modelos, límites de contexto o costes, cuenta tokens con el tokenizador real del modelo; no estimes a partir de palabras o caracteres.</strong>
   </div>
 
   <div class="ltk-ref">Fuentes primarias: <a href="https://arxiv.org/abs/1508.07909">Sennrich et al. · BPE subword units (2015)</a> · <a href="https://arxiv.org/abs/1808.06226">Kudo &amp; Richardson · SentencePiece (2018)</a>.</div>
