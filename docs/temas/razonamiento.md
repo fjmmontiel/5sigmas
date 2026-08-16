@@ -109,16 +109,9 @@ Una respuesta auditable debería citar los datos relevantes, exponer supuestos, 
 
 ## Razonamiento con herramientas
 
-Las tools cambian el problema. El modelo ya no necesita simular todas las operaciones dentro de una cadena textual.
+Las tools cambian el problema. El modelo ya no necesita simular todas las operaciones dentro de una cadena textual: puede alternar decisiones con acciones sobre un entorno y usar resultados observables para actualizar el siguiente paso.[^react]
 
-```text
-pregunta
-→ decidir qué falta
-→ llamar a una tool
-→ validar resultado
-→ actualizar estado
-→ responder
-```
+{{ include_html("snippets/temas/agent-tool-gate.html") }}
 
 Una calculadora reduce errores aritméticos. Un buscador aporta información actual. Un intérprete ejecuta código. Una API permite actuar sobre un sistema externo.
 
@@ -130,6 +123,8 @@ El reto se desplaza hacia el contrato:
 - qué hacer ante timeout o resultado parcial
 - cómo evitar duplicados
 - cómo reanudar después de una interrupción
+
+La separación importante es operacional: **el modelo propone; el runtime valida y ejecuta; el resultado real actualiza el estado; solo entonces se decide el siguiente paso**. En implementaciones actuales, los runtimes de agentes exponen precisamente ese bucle y permiten aplicar guardrails alrededor de las tool calls.[^agentguardrails]
 
 La nota [Agente reactivo, proactivo y tool calls](/articulos-tecnicos/proactive-reactive-agent-and-tool-calls/) desarrolla ese runtime.
 
@@ -188,3 +183,5 @@ RAG es recuperación de información. Puede formar parte de un proceso de razona
 [^selfconsistency]: Xuezhi Wang et al., [*Self-Consistency Improves Chain of Thought Reasoning in Language Models*](https://arxiv.org/abs/2203.11171), 2022.
 [^unfaithful]: Miles Turpin et al., [*Language Models Don't Always Say What They Think: Unfaithful Explanations in Chain-of-Thought Prompting*](https://arxiv.org/abs/2305.04388), 2023.
 [^testtime]: Charlie Snell et al., [*Scaling LLM Test-Time Compute Optimally can be More Effective than Scaling Model Parameters*](https://arxiv.org/abs/2408.03314), 2024.
+[^react]: Shunyu Yao et al., [*ReAct: Synergizing Reasoning and Acting in Language Models*](https://arxiv.org/abs/2210.03629), ICLR 2023.
+[^agentguardrails]: [OpenAI Agents SDK — Guardrails](https://openai.github.io/openai-agents-python/guardrails/), documentación oficial.
