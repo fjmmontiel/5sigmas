@@ -25,13 +25,7 @@ A product system can add memory, retrieval, tools or policies around the model. 
 
 The model does not work directly with words. A **tokenizer** splits text into units that may be complete words, fragments, punctuation or bytes. Each token receives an integer identifier.
 
-For example, a sentence might be represented approximately as:
-
-```text
-"Models learn patterns"
-→ ["Models", " learn", " patterns"]
-→ [1248, 5312, 7721]
-```
+{{ include_html("snippets/temas/llm-tokenization.html") }}
 
 The exact segmentation depends on the vocabulary and algorithm. Methods such as Byte Pair Encoding and SentencePiece balance two goals: keeping the vocabulary manageable and representing rare words without turning every character into an independent unit.[^sentencepiece]
 
