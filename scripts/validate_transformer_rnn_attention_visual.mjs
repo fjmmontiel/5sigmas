@@ -136,6 +136,12 @@ try {
 
       if (await visual.count()) {
         await page.locator('.md-header').evaluateAll((nodes) => nodes.forEach((node) => { node.style.visibility = 'hidden'; }));
+        await page.locator('body *').evaluateAll((nodes) => nodes.forEach((node) => {
+          const style = getComputedStyle(node);
+          const rect = node.getBoundingClientRect();
+          const topRail = (style.position === 'fixed' || style.position === 'sticky') && rect.top <= 8 && rect.height <= 8 && rect.width >= 40;
+          if (topRail) node.style.visibility = 'hidden';
+        }));
         await visual.screenshot({
           path: path.join(outDir, `transformer-rnn-attention-${testCase.locale}-${viewport.name}.png`),
           animations: 'disabled',
