@@ -4,7 +4,7 @@ seo_title: "Prompt injection: what it is and how to reduce the risk"
 description: "What prompt injection is in LLM systems, why it matters for RAG and agents, and which design principles reduce the risk that external content influences an action."
 keywords: "prompt injection, LLM security, indirect prompt injection, RAG security, AI agent security"
 date: 2026-08-09
-date_modified: 2026-08-15
+date_modified: 2026-08-16
 ---
 
 # What is prompt injection?
@@ -87,6 +87,8 @@ Observability should make it possible to reconstruct which information entered t
 ## How to evaluate a system
 
 A useful evaluation reproduces the real path and separates several stages: external input, retrieval, decision change, proposed tool use, authorization and final effect. That makes it possible to see whether the risk is stopped in retrieval, policy or immediately before an operation executes.
+
+{{ include_html("snippets/seguridad-ia/04-causal-chain.html") }}
 
 [Red teaming — test the complete path before the incident](/en/series/seguridad-ia/04-red-teaming/) develops this end-to-end evaluation approach.
 

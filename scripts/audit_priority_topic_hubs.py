@@ -74,6 +74,12 @@ REQUIRED_VISUAL_INCLUDES = {
         "snippets/temas/transformer-ffn.html",
         "snippets/temas/transformer-residual-norm.html",
     ),
+    "prompt-injection": (
+        "snippets/seguridad-ia/01-control-vs-datos.html",
+        "snippets/seguridad-ia/01-rag-trigger-fragment.html",
+        "snippets/seguridad-ia/01-defensa-en-capas.html",
+        "snippets/seguridad-ia/04-causal-chain.html",
+    ),
 }
 
 
