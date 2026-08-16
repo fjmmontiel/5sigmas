@@ -1,6 +1,6 @@
 {
   "source": "snippets/modelos-razonadores/04-ttft-streaming.html",
-  "source_blob_sha": "7c07e92dce5a71b7fcb8545dfe671c63a9816af7",
+  "source_blob_sha": "bbc4ef28f2123d809405ba73fa3124b4700776f3",
   "replacements": {
     "TTFT y latencia total: dos métricas, dos percepciones": "TTFT and total latency: two metrics, two perceptions",
     "Time To First Token define si el usuario percibe la respuesta como instantánea o lenta, incluso cuando el tiempo total es idéntico.": "Time To First Token determines whether the user perceives the response as instant or slow, even when total time is identical.",
