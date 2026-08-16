@@ -125,6 +125,24 @@ try {
       }
       if (viewport.name === 'desktop') totalVisuals += demoValues.length;
 
+      if (entry.route.endsWith('/01-el-problema/')) {
+        const commonSpace = page.locator('[data-demo="mm-01-common-space"]');
+        if (await commonSpace.count() !== 1) {
+          failures.push(`${entry.route}: missing canonical common-space visual`);
+        } else {
+          if (await commonSpace.locator('.ec-tab').count() !== 3) failures.push(`${entry.route}: common-space visual lost its three canonical tabs`);
+          if (await commonSpace.locator('.ec-panel').count() !== 3) failures.push(`${entry.route}: common-space visual lost its three canonical panels`);
+          if (await commonSpace.locator('.ec-lv').count() !== 3) failures.push(`${entry.route}: common-space visual lost its three integration levels`);
+          if (await commonSpace.locator('.ec-cap').count() !== 5) failures.push(`${entry.route}: common-space visual lost its five capability cards`);
+          if (await commonSpace.locator('.ec-diff').count() !== 4) failures.push(`${entry.route}: common-space visual lost its four structural difficulties`);
+          const commonSpaceText = (await commonSpace.textContent()) || '';
+          for (const token of ['The three levels', 'Five capabilities', 'Why it remains difficult', 'Translation', 'Alignment', 'Operational co-presence', 'Perceive', 'Reason', 'Generate', 'Act', 'Granularity', 'Temporality', 'Grounding', 'Asymmetry']) {
+            if (!commonSpaceText.includes(token)) failures.push(`${entry.route}: common-space visual missing ${JSON.stringify(token)}`);
+          }
+          await assertTabInteraction(commonSpace, '.ec-tab', '.ec-panel', 2, 'common-space difficulty', entry.route);
+        }
+      }
+
       if (entry.route.endsWith('/03-arquitecturas/')) {
         const tradeoffs = page.locator('[data-demo="03-tradeoffs"]');
         if (await tradeoffs.count() !== 1) {
@@ -192,10 +210,10 @@ try {
         }
       }
 
-      // Chapters 3 and 4 now use canonical tab/panel interactions that are
+      // Chapters 1, 3 and 4 now use canonical tab/panel interactions that are
       // validated explicitly above and in chapter-specific QA. Do not require
       // obsolete <details> disclosures merely because older English redesigns used them.
-      if (entry.demos && !entry.route.endsWith('/03-arquitecturas/') && !entry.route.endsWith('/04-evaluacion/')) {
+      if (entry.demos && !entry.route.endsWith('/01-el-problema/') && !entry.route.endsWith('/03-arquitecturas/') && !entry.route.endsWith('/04-evaluacion/')) {
         const details = page.locator('[data-demo] details');
         if (await details.count() === 0) {
           failures.push(`${entry.route}: visuals expose no interactive disclosure`);
@@ -251,4 +269,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Complete English Multimodality QA passed: introduction + Chapters 1–5, 27 unique native visuals, canonical Chapter 3 trade-off/VQ-VAE-MoE/four-family interactions, canonical Chapter 4 grounding interaction, six native-English MP4/poster pairs, no Spanish media inheritance, desktop/mobile clean.');
+console.log('Complete English Multimodality QA passed: introduction + Chapters 1–5, 27 unique native visuals, canonical Chapter 1 common-space interaction, canonical Chapter 3 trade-off/VQ-VAE-MoE/four-family interactions, canonical Chapter 4 grounding interaction, six native-English MP4/poster pairs, no Spanish media inheritance, desktop/mobile clean.');
