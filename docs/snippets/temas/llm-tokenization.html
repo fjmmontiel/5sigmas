@@ -1,0 +1,104 @@
+<div class="ltk-wrap" data-demo="topic-llm-tokenization">
+  <div class="ltk-head">
+    <div class="ltk-kicker">TOKENIZACIÓN · TEXTO → UNIDADES DISCRETAS</div>
+    <div class="ltk-title">El modelo no recibe palabras: recibe una secuencia de IDs definida por un tokenizador concreto</div>
+    <div class="ltk-sub">La segmentación depende del vocabulario y del algoritmo. El mismo texto puede ocupar distinto número de tokens con tokenizadores distintos, aunque los caracteres visibles sean idénticos.</div>
+  </div>
+
+  <div class="ltk-pipeline" role="img" aria-label="Flujo conceptual de tokenización: texto, segmentación en subpalabras e identificadores de vocabulario">
+    <section class="ltk-stage ltk-stage--text">
+      <span class="ltk-stage-id">01 · TEXTO</span>
+      <strong>“Los modelos aprenden patrones”</strong>
+      <small>cadena de caracteres</small>
+    </section>
+    <div class="ltk-arrow" aria-hidden="true">→</div>
+    <section class="ltk-stage ltk-stage--pieces">
+      <span class="ltk-stage-id">02 · SEGMENTAR</span>
+      <div class="ltk-pieces" aria-label="Segmentación ilustrativa en cuatro subpalabras">
+        <b>Los</b><b>▁modelos</b><b>▁aprenden</b><b>▁patrones</b>
+      </div>
+      <small>subpalabras / bytes según el tokenizador</small>
+    </section>
+    <div class="ltk-arrow" aria-hidden="true">→</div>
+    <section class="ltk-stage ltk-stage--ids">
+      <span class="ltk-stage-id">03 · MAPEAR AL VOCABULARIO</span>
+      <div class="ltk-ids"><b>id₁</b><b>id₂</b><b>id₃</b><b>id₄</b></div>
+      <small>cada pieza corresponde a un entero del vocabulario</small>
+    </section>
+  </div>
+
+  <div class="ltk-compare">
+    <div class="ltk-compare-head">
+      <span>MISMO TEXTO · VOCABULARIOS DISTINTOS</span>
+      <strong>La frontera de token no es una propiedad universal de la palabra</strong>
+    </div>
+    <div class="ltk-compare-grid">
+      <section class="ltk-tokenizer">
+        <div class="ltk-tokenizer-top"><span>TOKENIZADOR A</span><em>segmentación ilustrativa</em></div>
+        <div class="ltk-source">“arquitectura neuronal”</div>
+        <div class="ltk-pieces ltk-pieces--a"><b>▁arquitectura</b><b>▁neuronal</b></div>
+        <div class="ltk-meter"><span style="--ltk-w:55%"></span><span style="--ltk-w:45%"></span></div>
+        <small>Dos unidades si ambas piezas están bien cubiertas por el vocabulario.</small>
+      </section>
+      <section class="ltk-tokenizer">
+        <div class="ltk-tokenizer-top"><span>TOKENIZADOR B</span><em>segmentación ilustrativa</em></div>
+        <div class="ltk-source">“arquitectura neuronal”</div>
+        <div class="ltk-pieces ltk-pieces--b"><b>▁arqui</b><b>tectura</b><b>▁neuro</b><b>nal</b></div>
+        <div class="ltk-meter"><span style="--ltk-w:29%"></span><span style="--ltk-w:26%"></span><span style="--ltk-w:22%"></span><span style="--ltk-w:23%"></span></div>
+        <small>Más unidades si el vocabulario necesita recomponer la misma cadena con fragmentos menores.</small>
+      </section>
+    </div>
+    <div class="ltk-note"><strong>Importante:</strong> las segmentaciones de este diagrama son pedagógicas; no representan la salida de un tokenizador concreto.</div>
+  </div>
+
+  <div class="ltk-contracts">
+    <div class="ltk-contract">
+      <span>NO ES «UNA PALABRA = UN TOKEN»</span>
+      <strong>Una palabra puede ser una pieza, varias subpalabras o una secuencia de bytes.</strong>
+    </div>
+    <div class="ltk-contract">
+      <span>LOS IDs NO SON UNIVERSALES</span>
+      <strong>El entero solo tiene significado dentro del vocabulario de ese tokenizador.</strong>
+    </div>
+    <div class="ltk-contract">
+      <span>CAMBIA EL PRESUPUESTO</span>
+      <strong>Más tokens consumen más contexto y pueden aumentar el coste de inferencia.</strong>
+    </div>
+  </div>
+
+  <div class="ltk-rule">
+    <span>IDEA OPERATIVA</span>
+    <strong>Cuando comparas modelos, límites de contexto o costes, cuenta tokens con el tokenizador real del modelo; no estimes a partir de palabras o caracteres.</strong>
+  </div>
+
+  <div class="ltk-ref">Fuentes primarias: <a href="https://arxiv.org/abs/1508.07909">Sennrich et al. · BPE subword units (2015)</a> · <a href="https://arxiv.org/abs/1808.06226">Kudo &amp; Richardson · SentencePiece (2018)</a>.</div>
+</div>
+
+<style>
+.ltk-wrap,.ltk-wrap *{box-sizing:border-box}
+.ltk-wrap{
+  --ltk-a:var(--md-primary-fg-color,#26a69a);--ltk-b:#4757d6;--ltk-c:var(--md-accent-fg-color,#ffb343);--ltk-r:#e06c75;
+  --ltk-bg:var(--md-default-bg-color,#fff);--ltk-fg:var(--md-default-fg-color,#111827);
+  --ltk-muted:color-mix(in srgb,var(--ltk-fg) 58%,transparent);--ltk-border:color-mix(in srgb,var(--ltk-fg) 14%,transparent);
+  container-type:inline-size;margin:1.1rem 0 1.5rem;padding:clamp(14px,2vw,22px);border:1px solid var(--ltk-border);border-radius:20px;
+  background:radial-gradient(85% 125% at 0 0,color-mix(in srgb,var(--ltk-b) 8%,transparent),transparent 58%),radial-gradient(80% 120% at 100% 0,color-mix(in srgb,var(--ltk-a) 8%,transparent),transparent 58%),var(--ltk-bg);color:var(--ltk-fg)
+}
+.ltk-head{display:grid;gap:4px;margin-bottom:15px}.ltk-kicker{font-size:10px;font-weight:900;letter-spacing:.12em;color:var(--ltk-muted)}
+.ltk-title{font-size:clamp(18px,2.1vw,24px);font-weight:900;line-height:1.12;letter-spacing:-.02em;max-width:36ch}.ltk-sub{font-size:13.4px;line-height:1.48;color:var(--ltk-muted);max-width:90ch}
+.ltk-pipeline{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1.25fr) auto minmax(0,1fr);gap:8px;align-items:stretch;min-width:0}
+.ltk-stage{min-width:0;min-height:132px;padding:12px;border:1px solid var(--ltk-border);border-radius:14px;background:color-mix(in srgb,var(--ltk-bg) 96%,var(--ltk-fg) 4%);display:grid;grid-template-rows:auto 1fr auto;gap:8px}
+.ltk-stage--text{border-color:color-mix(in srgb,var(--ltk-b) 38%,var(--ltk-border))}.ltk-stage--pieces{border-color:color-mix(in srgb,var(--ltk-a) 42%,var(--ltk-border));background:color-mix(in srgb,var(--ltk-a) 4%,var(--ltk-bg))}.ltk-stage--ids{border-color:color-mix(in srgb,var(--ltk-c) 48%,var(--ltk-border))}
+.ltk-stage-id,.ltk-compare-head span,.ltk-tokenizer-top span,.ltk-contract span,.ltk-rule span{font-size:9.2px;font-weight:900;letter-spacing:.09em;color:var(--ltk-muted)}
+.ltk-stage strong{font-size:13px;line-height:1.35;align-self:center}.ltk-stage small,.ltk-tokenizer small{font-size:10.7px;line-height:1.38;color:var(--ltk-muted);align-self:end}
+.ltk-arrow{display:grid;place-items:center;font-weight:900;font-size:18px;color:var(--ltk-muted)}
+.ltk-pieces,.ltk-ids{display:flex;flex-wrap:wrap;gap:5px;align-content:center}.ltk-pieces b,.ltk-ids b{padding:6px 8px;border-radius:8px;background:color-mix(in srgb,var(--ltk-a) 11%,var(--ltk-bg));font:800 11px/1.25 ui-monospace,SFMono-Regular,Menlo,monospace}.ltk-ids b{background:color-mix(in srgb,var(--ltk-c) 13%,var(--ltk-bg));min-width:38px;text-align:center}
+.ltk-compare{margin-top:11px;padding:12px;border:1px solid var(--ltk-border);border-radius:15px;background:color-mix(in srgb,var(--ltk-b) 3%,var(--ltk-bg))}.ltk-compare-head{display:grid;gap:3px;margin-bottom:10px}.ltk-compare-head strong{font-size:13.1px;line-height:1.35}
+.ltk-compare-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.ltk-tokenizer{min-width:0;padding:11px;border:1px solid var(--ltk-border);border-radius:12px;background:var(--ltk-bg);display:grid;gap:8px}.ltk-tokenizer-top{display:flex;align-items:center;justify-content:space-between;gap:8px}.ltk-tokenizer-top em{font-size:9px;color:var(--ltk-muted);font-style:normal}.ltk-source{font-size:11.6px;font-weight:800}
+.ltk-pieces--a b{background:color-mix(in srgb,var(--ltk-a) 12%,var(--ltk-bg))}.ltk-pieces--b b{background:color-mix(in srgb,var(--ltk-b) 10%,var(--ltk-bg))}.ltk-meter{height:8px;display:flex;gap:3px}.ltk-meter span{width:var(--ltk-w);height:100%;border-radius:999px;background:linear-gradient(90deg,color-mix(in srgb,var(--ltk-b) 58%,var(--ltk-bg)),color-mix(in srgb,var(--ltk-a) 58%,var(--ltk-bg)))}
+.ltk-note{margin-top:9px;padding:8px 10px;border-radius:10px;background:color-mix(in srgb,var(--ltk-c) 9%,var(--ltk-bg));font-size:10.5px;line-height:1.42;color:var(--ltk-muted)}.ltk-note strong{color:var(--ltk-fg)}
+.ltk-contracts{margin-top:10px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.ltk-contract{padding:10px 11px;border:1px solid var(--ltk-border);border-radius:12px;display:grid;gap:4px;background:color-mix(in srgb,var(--ltk-bg) 97%,var(--ltk-fg) 3%)}.ltk-contract strong{font-size:10.8px;line-height:1.38}
+.ltk-rule{margin-top:10px;padding:10px 12px;border-left:3px solid var(--ltk-a);border-radius:0 10px 10px 0;background:color-mix(in srgb,var(--ltk-a) 5%,var(--ltk-bg));display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:center}.ltk-rule span{white-space:nowrap}.ltk-rule strong{font-size:11.6px;line-height:1.42}.ltk-ref{margin-top:9px;font-size:9.8px;line-height:1.35;color:var(--ltk-muted)}.ltk-ref a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+@container (max-width:720px){.ltk-pipeline{grid-template-columns:1fr;gap:6px}.ltk-arrow{height:13px;transform:rotate(90deg)}.ltk-stage{min-height:0;grid-template-rows:auto auto auto}.ltk-compare-grid,.ltk-contracts{grid-template-columns:1fr}.ltk-rule{grid-template-columns:1fr;gap:3px}.ltk-rule span{white-space:normal}}
+@media (max-width:720px){.ltk-pipeline{grid-template-columns:1fr;gap:6px}.ltk-arrow{height:13px;transform:rotate(90deg)}.ltk-stage{min-height:0}.ltk-compare-grid,.ltk-contracts{grid-template-columns:1fr}.ltk-rule{grid-template-columns:1fr;gap:3px}.ltk-tokenizer-top{align-items:flex-start;flex-direction:column;gap:2px}}
+@media (prefers-reduced-motion:reduce){.ltk-wrap *{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
