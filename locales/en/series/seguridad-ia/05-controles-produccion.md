@@ -1,8 +1,8 @@
 ---
 title: Production controls — limit actions when the model fails
-description: "Which runtime controls bound damage when AI systems read external content, use tools and memory, connect through MCP, and one defensive layer fails."
+description: "Which controls limit damage when an AI system reads external content, uses tools and one defense fails."
 date: 2026-08-06
-keywords: "production LLM security, least privilege, dual LLM, guardrails, MCP security, tool poisoning, agent observability, kill switch"
+keywords: production LLM security, least privilege, dual LLM, guardrails, MCP security, tool poisoning, agent observability
 tags:
   - AI
   - Security
@@ -12,205 +12,155 @@ tags:
 
 # Chapter 5 — Production controls
 
-A secure system limits what each component can see, which actions require authorization, what happens when a defense fails and how the resulting state can be reconstructed. The promise that a model will never make a mistake is not a sufficient security model.
+A secure system limits what each component can see, which actions require authorization, what happens when a defense fails and how to demonstrate what happened. The promise that the model will never make a mistake is not enough.
 
-Defense in depth is not “add filters until the product becomes unusable.” It is **split responsibilities across layers that do not share exactly the same failure mode**.
+Defense in depth does not mean stacking filters until the product becomes unusable. It means distributing responsibilities across layers that do not share exactly the same attack surface.
 
-In 2026, that boundary extends beyond “LLM + tools.” Production agents connect to MCP servers, persistent memory, browsers, repositories, email, databases, other agents and code runtimes. Every integration introduces a trust channel that needs permissions, validation and an independent way to stop.
+In 2026, that boundary can no longer be thought of only as “LLM + tools.” Real systems connect agents to MCP servers, persistent memory, other agents, browsers, repositories, email, databases and code runtimes. Every integration adds a trust channel that needs permissions, validation and an explicit way to stop.
 
----
+## Separate document reading from actions
 
-## 1. Separate untrusted reading from privileged action
-
-A dual-model pattern creates a useful structural boundary. A quarantined component can read external content and extract information without access to sensitive tools. A privileged component can decide whether to act, but receives constrained structured output rather than the full untrusted document whenever possible.
+The dual-LLM pattern proposes a clear boundary. A quarantined model can read untrusted content and extract data. It has no direct access to tools or sensitive information. A privileged model can decide an action, but it receives structured outputs or summaries rather than the full hostile document.
 
 {{ include_html("snippets/seguridad-ia/05-defense-depth.html") }}
 
-The pattern does not eliminate manipulation. Summaries can be wrong and classifiers can fail. Its value is that arbitrary external text no longer has a direct path to privileged effects.
+The separation does not eliminate every injection. A summary can be contaminated and a classifier can be wrong. The advantage is that the attack path is no longer a direct jump from arbitrary text to a privileged action.
 
-The broader rule is:
+The general rule is broader than the dual-LLM pattern: **the component that processes untrusted data should not automatically inherit the ability to produce irreversible effects**.
 
-> **The component that interprets untrusted content should not automatically inherit the authority to create irreversible effects.**
+## Give every tool only the permissions it needs
 
----
+OWASP places tool misuse, privilege abuse and unexpected execution among the main risks of agentic applications. The practical implication is simple: the blast radius of a failure is largely determined before the model generates anything, by the permissions the runtime has already granted it ([OWASP Top 10 for Agentic Applications 2026](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/)).
 
-## 2. Give every tool only the permissions its workflow needs
+An agent that only needs to read documents should not receive a tool that can also upload and delete files. If a hostile input convinces the model to use the wrong operation, the blast radius was already defined by the contract.
 
-The blast radius of a model failure is largely determined before inference begins—by the permissions and operations exposed by the runtime.
-
-A read-only document agent should not receive a tool that can also upload/delete files. A mail summarizer does not need administrative mailbox operations merely because the same connector supports them.
-
-Every production tool contract should define at least:
+Every tool should declare at least:
 
 - name and purpose;
-- typed argument schema;
-- reachable resources and scopes;
+- argument schema;
+- permissions and reachable resources;
 - allowed operations;
-- timeout/resource budget;
-- error behaviour;
-- idempotency/retry semantics;
+- timeout and consumption limits;
+- error behavior;
+- idempotency or retry strategy;
 - reversibility;
-- risk class.
+- action risk class.
 
-The runtime validates and authorizes each request against the current user, resource and operation. A model-generated JSON object is a proposal, not proof of authorization.
+The runtime must validate the call and authorize it according to user, resource and operation. The model can propose. It should not become the final authority merely because it generated valid JSON.
 
-Destructive actions require an additional boundary: human approval, deterministic policy, preview mode, reversible operation or another mechanism appropriate to the product.
+Destructive actions need an additional boundary. It can be human approval, double confirmation, preview mode, a reversible operation or a deterministic policy independent of the model. The exact policy depends on the product, but it should exist before integrating the tool call.
 
----
+## MCP does not eliminate the problem: it standardizes a new trust boundary
 
-## 3. MCP standardizes integration, not trust
+MCP simplifies the connection between LLM applications and external tools, but standardization does not automatically make the server, its tool descriptions or its responses trustworthy.
 
-MCP makes it easier to connect AI applications with external tools and data. It does not make a server, tool description or tool response inherently trusted.
+OWASP identifies several MCP-specific surfaces: **tool poisoning**, *rug pull* of definitions after initial approval, *tool shadowing* between servers, *confused deputy*, overly broad OAuth permissions and exfiltration through apparently legitimate channels ([OWASP MCP Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/MCP_Security_Cheat_Sheet.html)).
 
-OWASP identifies agentic/MCP risks including malicious or changed tool definitions, tool-name/description conflicts, confused-deputy behaviour, overly broad OAuth scopes and data exfiltration through apparently legitimate channels.
-
-A crucial principle is that **tool metadata and outputs can themselves enter model context**. If they contain untrusted instructions and the client treats them as authority, the integration channel becomes another prompt-injection surface.
+The case of *tool poisoning* is especially important because it reproduces the same property we saw with RAG. A tool description or server response ends up inside the model context. If it contains hostile instructions and the client treats it as trusted content, the tool channel becomes another prompt-injection path ([OWASP MCP Tool Poisoning](https://owasp.org/www-community/attacks/MCP_Tool_Poisoning)).
 
 {{ include_html("snippets/seguridad-ia/05-mcp-boundary.html") }}
 
-A production MCP client should therefore use controls such as:
+That is why a production MCP client should apply, at minimum:
 
-1. approved server/tool allowlists;
-2. minimal read/write/admin scopes;
-3. integrity/version checks for approved tool definitions and schemas;
-4. sandboxing for less-trusted servers;
-5. authorization on every call rather than “tool exists = user may invoke it”;
-6. validation of tool outputs before they re-enter model context;
-7. explicit secret/data-flow boundaries.
+1. **Server and tool allowlists**: no dynamic discovery without approval.
+2. **Minimum scopes**: separate read, write and administration.
+3. **Definition integrity**: detect changes in tool descriptions and schemas after approval.
+4. **Isolation**: run untrusted servers in a sandbox and limit filesystem, network and credentials.
+5. **Per-call authorization**: the fact that a tool exists does not mean any user or flow can invoke it.
+6. **Untrusted tool outputs**: validate the result before returning it to model context.
+7. **Secret boundaries**: prevent credentials or sensitive data from ending up in tool arguments without explicit policy.
 
-MCP is an integration layer. Authorization remains a runtime responsibility.
+MCP should be treated as an integration layer, not an authorization layer.
 
----
+## Memory also needs write policies
 
-## 4. Writing memory is a privileged operation too
+The previous chapter showed that a hostile input can persist and reappear later. Production therefore needs controls not only over tool calls but also over the state the agent can modify.
 
-The previous chapter showed that untrusted content can persist and influence later decisions. Production controls must therefore cover state mutation as well as tool calls.
+OWASP recommends validating and sanitizing data before persistence, isolating memory between users and sessions, limiting duration and size, and auditing sensitive content ([OWASP AI Agent Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html)).
 
-Memory writes should be validated, scoped, time-bounded and auditable. User/session/tenant isolation must be explicit. Sensitive content needs retention rules and a revocation path.
+That suggests a useful rule: **writing memory is a privileged action**. Not necessarily as sensitive as sending a payment, but important enough to require provenance, scope and revocation.
 
-This suggests a useful framing:
+## Classify text while it is generated
 
-> **Writing memory is an action with authority, even when it looks like a UX feature.**
+Constitutional Classifiers presents input and output classifiers that can evaluate the sequence as it is generated. If dangerous content appears, the system can stop generation without waiting until the end.
 
-The risk may be lower than sending a payment, but the object still needs provenance, scope and lifecycle control because it can alter future model context.
+That improves response time and experience, but it does not replace the rest of the architecture. A guardrail is still a model or component that needs evaluation. It also adds cost, latency and another signal to monitor.
 
----
+Classifiers are most useful when the control they exercise is connected to the risk. A low-impact conversation can use a cheap check. A sensitive tool call may require a specialized layer, deterministic validation and human approval.
 
-## 5. Classify content while it is generated—but connect the control to the real risk
+The mistake is to put the guardrail only in front of visible text and leave an equivalent path open through a tool. **Blocking the response while allowing the action is not a mitigation.**
 
-Streaming input/output classifiers can stop unsafe generation earlier and improve response time. They also add latency, cost and another component that needs evaluation.
+## Design a real kill path
 
-Their value is highest when the control maps to the consequence. A low-risk chat can use lightweight checks. A sensitive tool action can require stronger classification plus deterministic policy and human approval.
+A production agent needs a way to stop that does not depend on the model itself cooperating.
 
-The common architectural failure is to block dangerous visible text while leaving an equivalent action path open through tools.
+That *kill path* can include:
 
-> **Blocking the response while allowing the action is not a mitigation.**
-
----
-
-## 6. Build a kill path outside the model
-
-A production agent needs a stop mechanism that does not depend on the potentially compromised model cooperating.
-
-A kill path can include:
-
-- circuit breakers by user, tenant or workflow;
+- a circuit breaker per user, tenant or workflow;
 - immediate revocation of tool credentials;
-- cancellation of in-flight jobs;
-- retry/attempt budgets;
-- temporary disablement of one tool;
-- rollback or reconciliation for partial effects;
-- degraded read-only mode.
+- cancellation of executions in progress;
+- retry and budget limits;
+- temporary blocking of a specific tool;
+- rollback or reconciliation of partially executed actions;
+- a degraded read-only mode.
+
+The important property is that the control lives outside the natural-language channel that may be compromised.
 
 {{ include_html("snippets/seguridad-ia/05-kill-path.html") }}
 
-The important property is that this control lives **outside the natural-language channel** that may be under adversarial influence.
+## Record what happens so it can be stopped
 
----
+Security telemetry should follow the decision path. It is useful to preserve request identity, retrieved source, memory used, policy decision, proposed tool, authorization, result and abort reason without recording unnecessary secrets or personal content.
 
-## 7. Observe the complete decision path
-
-Security telemetry should make privileged actions reconstructable without unnecessarily logging secrets or personal data.
-
-A useful trace links:
+A minimum trace for an action should make it possible to reconstruct:
 
 `input → retrieval/memory → model decision → tool proposal → policy decision → execution → resulting state`
 
-Operational signals include sudden changes in approval/denial rates, repeated attempts, unusual tool usage, unexpected MCP-server access and abnormal retry patterns.
+The signal is not only a log. Sudden changes in approval rates, rejection reasons, tool usage, MCP servers consulted or retries can indicate a bypass or regression. Without a baseline, the team learns about the problem only when it is already investigating the incident.
 
-Observability is what turns a failed defense into something the team can diagnose and improve rather than rediscover in the next incident.
+## Turn security into a release gate
 
----
+The red teaming from the previous chapter has operational value only if its results can block a release.
 
-## 8. Turn red-team findings into release gates
-
-The previous chapter's red teaming only becomes operational if meaningful findings can block a release.
-
-A product-specific agent-security gate might require:
+A security gate for an agent can be small and specific:
 
 - no destructive action without independent authorization;
-- no sensitive tool directly reachable from untrusted external content without a structural boundary;
-- no cross-tenant memory leakage in regression fixtures;
-- approved tool schemas/scopes unchanged or explicitly reviewed;
-- indirect-injection scenarios executed end-to-end;
+- no sensitive tool accessible from untrusted external content without a structural boundary;
+- zero cross-tenant memory leakage in the regression set;
+- tool schemas and scopes compared against an approved baseline;
+- indirect prompt-injection scenarios executed end-to-end;
 - kill switch and rollback verified;
-- sufficient trace evidence to reconstruct every privileged action.
+- enough logs to reconstruct every privileged action.
 
 {{ include_html("snippets/seguridad-ia/05-release-gate.html") }}
 
-There is no universal numeric threshold for every product. The acceptance criteria should follow the threat model and be reproducible in CI/CD.
+OWASP explicitly includes adversarial validation, CI/CD and release gates in its recommendations for agent security. The important idea is not to adopt a universal number, but to make the acceptance criterion reproducible and connected to the product's threat model ([OWASP AI Agent Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html)).
 
----
+## The resulting design
 
-## 9. The production architecture that remains
+A reasonable architecture for a flow with external content and sensitive actions can follow this sequence:
 
-A reasonable high-level sequence for a workflow combining external content and sensitive actions is:
+1. ingestion labeled as untrusted;
+2. quarantined reading;
+3. structured and validated output;
+4. memory with provenance and scope if persistence is needed;
+5. decision with limited tools;
+6. independent authorization by user, resource and operation;
+7. sandbox for risky execution;
+8. reversible tool where possible;
+9. end-to-end telemetry;
+10. abort, audit and recovery.
 
-1. label ingestion as untrusted;
-2. process it in a constrained/quarantined component;
-3. emit validated structured data;
-4. persist memory only with provenance and scope;
-5. let the decision component see only the tools it needs;
-6. authorize by user/resource/operation outside the model;
-7. sandbox higher-risk execution;
-8. prefer reversible operations where possible;
-9. record end-to-end telemetry;
-10. provide independent abort, audit and recovery controls.
+The sequence is not intended as a universal recipe. It serves to make visible where data is separated from action and where the system can be stopped.
 
-The sequence is not a universal implementation recipe. Its purpose is to make trust transitions explicit.
-
-The series ends with one durable rule:
-
-> **The more authority you give a system that interprets language, the less your security can depend on that language always being interpreted as intended.**
-
-Real control lives in runtime boundaries, permissions, authorization, isolation, observability and recovery.
-
----
+The series ends with an unglamorous and very useful rule. **The more power you give to a system that interprets language, the less you can depend on that language being interpreted as you expect.** Real control lives in runtime boundaries, permissions, authorization, isolation, observability and the ability to recover.
 
 ## References
 
-- OWASP (2026), *Top 10 for Agentic Applications*.
-- OWASP, *AI Agent Security Cheat Sheet*.
-- OWASP, *MCP Security Cheat Sheet* and *MCP Tool Poisoning*.
-- OWASP, *LLM Prompt Injection Prevention Cheat Sheet*.
-- Anthropic (2025), *Constitutional Classifiers*.
-- NIST, *AI Risk Management Framework*.
-
----
-
-## Frequently asked questions
-
-**Why is least privilege more important for agents than chatbots?**  
-Because an interpretation failure can become an external state change. Limiting the available operations bounds the consequence before the model generates anything.
-
-**Does MCP solve tool security?**  
-No. It standardizes connectivity. Clients still need server trust, scopes, schema integrity, output validation and per-call authorization.
-
-**Why treat memory writes as privileged?**  
-Because stored state can influence future decisions. Provenance, scope, expiry and revocation prevent a low-trust observation from silently becoming durable authority.
-
-**What makes a kill switch trustworthy?**  
-It must live outside the model's natural-language reasoning loop and be able to revoke/cancel the capabilities the workflow is using.
-
-**What should a security release gate test?**  
-Concrete threat-model regressions across retrieval, memory, authorization, tools, recovery and traceability—not only model refusal rates.
+- OWASP (2026), [*Top 10 for Agentic Applications*](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/).
+- OWASP, [*AI Agent Security Cheat Sheet*](https://cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html).
+- OWASP, [*MCP Security Cheat Sheet*](https://cheatsheetseries.owasp.org/cheatsheets/MCP_Security_Cheat_Sheet.html).
+- OWASP, [*MCP Tool Poisoning*](https://owasp.org/www-community/attacks/MCP_Tool_Poisoning).
+- OWASP, [*LLM Prompt Injection Prevention Cheat Sheet*](https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html).
+- Anthropic (2025), [*Constitutional Classifiers: Defending against universal jailbreaks*](https://www.anthropic.com/research/constitutional-classifiers).
+- NIST, [*AI Risk Management Framework*](https://www.nist.gov/itl/ai-risk-management-framework).
