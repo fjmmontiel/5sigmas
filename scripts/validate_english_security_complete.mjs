@@ -26,7 +26,15 @@ const chapters = [
     canonicalJailbreaks: true,
     screenshot: 'english-security-02-jailbreaks.png',
   },
-  { slug: '03-envenenamiento', route: '/en/series/seguridad-ia/03-envenenamiento/', title: 'Chapter 3 — Poisoning', concepts: ['provenance', 'runtime memory', 'Sleeper Agents'], demos: 4, prefix: 'sec-03-', screenshot: 'english-security-03-poisoning.png' },
+  {
+    slug: '03-envenenamiento',
+    route: '/en/series/seguridad-ia/03-envenenamiento/',
+    title: 'Chapter 3 — Poisoning',
+    concepts: ['60–89%', '84.2%', '50.3%', 'Sleeper Agents', 'Write → Retrieve → Execute → Forget'],
+    demos: 4,
+    canonicalPoisoning: true,
+    screenshot: 'english-security-03-poisoning.png',
+  },
   { slug: '04-red-teaming', route: '/en/series/seguridad-ia/04-red-teaming/', title: 'Chapter 4 — Red teaming', concepts: ['trajectory', 'grader validity', 'release gate'], demos: 4, prefix: 'sec-04-', screenshot: 'english-security-04-red-teaming.png' },
   { slug: '05-controles-produccion', route: '/en/series/seguridad-ia/05-controles-produccion/', title: 'Chapter 5 — Production controls', concepts: ['least privilege', 'MCP', 'kill path'], demos: 4, prefix: 'sec-05-', screenshot: 'english-security-05-production-controls.png' },
 ];
@@ -132,6 +140,86 @@ async function validateJailbreakVisuals(page, chapter) {
   return selectors.reduce(async (promise, selector) => (await promise) + (await page.locator(selector).count() === 1 ? 1 : 0), Promise.resolve(0));
 }
 
+async function validatePoisoningVisuals(page, chapter) {
+  const selectors = ['.memlife', '.memgov', '.memlayers', '.memprop'];
+  for (const selector of selectors) {
+    const matches = page.locator(selector);
+    const count = await matches.count();
+    if (count !== 1) {
+      failures.push(`${chapter.route}: expected exactly one canonical ${selector}, found ${count}`);
+      continue;
+    }
+    const root = matches.first();
+    if (!await isVisible(root)) failures.push(`${chapter.route}: canonical ${selector} is not visible`);
+    const box = await root.boundingBox();
+    if (!box || box.width < 240 || box.height < 120) failures.push(`${chapter.route}: canonical ${selector} has invalid geometry ${JSON.stringify(box)}`);
+  }
+
+  const lifecycle = page.locator('.memlife');
+  if (await lifecycle.count() === 1) {
+    if (await lifecycle.locator('.memlife__step').count() !== 6) failures.push(`${chapter.route}: persistence lifecycle must expose six canonical stages`);
+    const labels = ((await lifecycle.innerText()) || '').toLowerCase();
+    for (const token of ['write', 'sleep', 'retrieve', 'influence', 'execute', 'forget']) {
+      if (!labels.includes(token)) failures.push(`${chapter.route}: persistence lifecycle missing ${token}`);
+    }
+    const run = lifecycle.locator('[data-run]');
+    if (await run.count() !== 1) failures.push(`${chapter.route}: persistence lifecycle is missing its play control`);
+    else {
+      await run.click();
+      await page.waitForTimeout(850);
+      const step = Number(await lifecycle.getAttribute('data-step'));
+      if (!Number.isFinite(step) || step < 1) failures.push(`${chapter.route}: persistence lifecycle interaction did not advance`);
+      const trace = ((await lifecycle.locator('[data-trace]').innerText()) || '').toLowerCase();
+      if (!trace.includes('write')) failures.push(`${chapter.route}: persistence lifecycle trace did not localize the Write stage`);
+    }
+  }
+
+  const governance = page.locator('.memgov');
+  if (await governance.count() === 1) {
+    const checks = governance.locator('[data-check]');
+    if (await checks.count() !== 3) failures.push(`${chapter.route}: memory governance must expose three canonical guarantees`);
+    for (let index = 0; index < await checks.count(); index += 1) await checks.nth(index).click();
+    await page.waitForTimeout(75);
+    if (await governance.locator('[data-check][aria-pressed="true"]').count() !== 3) failures.push(`${chapter.route}: memory governance toggles did not all activate`);
+    const verdict = governance.locator('[data-verdict]');
+    if (!await verdict.evaluate((node) => node.classList.contains('is-safe'))) failures.push(`${chapter.route}: memory governance did not reach bounded-persistence state`);
+    if (!((await verdict.innerText()) || '').includes('Bounded persistence')) failures.push(`${chapter.route}: memory governance safe verdict was not localized`);
+  }
+
+  const layers = page.locator('.memlayers');
+  if (await layers.count() === 1) {
+    if (await layers.locator('[data-focus]').count() !== 3) failures.push(`${chapter.route}: runtime-vs-weights visual must expose compare/runtime/weights controls`);
+    const weights = layers.locator('[data-focus="weights"]');
+    if (await weights.count() !== 1) failures.push(`${chapter.route}: runtime-vs-weights visual is missing weights focus`);
+    else {
+      await weights.click();
+      await page.waitForTimeout(75);
+      if (await layers.getAttribute('data-focus') !== 'weights') failures.push(`${chapter.route}: runtime-vs-weights focus interaction did not switch to weights`);
+      if (await weights.getAttribute('aria-pressed') !== 'true') failures.push(`${chapter.route}: runtime-vs-weights weights control did not become active`);
+    }
+  }
+
+  const propagation = page.locator('.memprop');
+  if (await propagation.count() === 1) {
+    if (await propagation.locator('.memprop__node').count() !== 5) failures.push(`${chapter.route}: propagation map must expose five derived-state nodes`);
+    const propagate = propagation.locator('[data-action="propagate"]');
+    const revoke = propagation.locator('[data-action="revoke"]');
+    if (await propagate.count() !== 1 || await revoke.count() !== 1) failures.push(`${chapter.route}: propagation map is missing propagate/revoke controls`);
+    else {
+      await propagate.click();
+      await page.waitForTimeout(75);
+      if (!await propagation.evaluate((node) => node.classList.contains('is-propagated'))) failures.push(`${chapter.route}: propagation action did not mark derived state`);
+      await revoke.click();
+      await page.waitForTimeout(75);
+      if (!await propagation.evaluate((node) => node.classList.contains('is-revoking'))) failures.push(`${chapter.route}: revocation action did not enter partial-revocation state`);
+      const note = ((await propagation.locator('[data-note]').innerText()) || '').toLowerCase();
+      if (!note.includes('partial revocation') || !note.includes('does not prove forgetting')) failures.push(`${chapter.route}: propagation revocation note lost canonical semantics`);
+    }
+  }
+
+  return selectors.reduce(async (promise, selector) => (await promise) + (await page.locator(selector).count() === 1 ? 1 : 0), Promise.resolve(0));
+}
+
 async function validateCanonicalCausalVisual(page, chapter) {
   const causal = page.locator('.causalrt');
   const count = await causal.count();
@@ -200,13 +288,15 @@ try {
       if (!body.includes(chapter.title)) failures.push(`${chapter.route}: missing English chapter title`);
       for (const concept of chapter.concepts) if (!body.toLowerCase().includes(concept.toLowerCase())) failures.push(`${chapter.route}: missing core concept ${concept}`);
       for (const token of forbidden) if (body.includes(token)) failures.push(`${chapter.route}: Spanish leakage ${JSON.stringify(token)}`);
-      if (chapter.slug === '02-jailbreaks' && body.includes('Frequently asked questions')) failures.push(`${chapter.route}: English-only FAQ section drifted back into the canonical article`);
+      if (['02-jailbreaks', '03-envenenamiento'].includes(chapter.slug) && body.includes('Frequently asked questions')) failures.push(`${chapter.route}: English-only FAQ section drifted back into the canonical article`);
 
       const visualCount = chapter.visualSelectors
         ? await validatePromptInjectionVisuals(page, chapter)
         : chapter.canonicalJailbreaks
           ? await validateJailbreakVisuals(page, chapter)
-          : await validateLegacySecurityVisuals(page, chapter);
+          : chapter.canonicalPoisoning
+            ? await validatePoisoningVisuals(page, chapter)
+            : await validateLegacySecurityVisuals(page, chapter);
       if (visualCount !== chapter.demos) failures.push(`${chapter.route}: expected ${chapter.demos} teaching visuals, found ${visualCount}`);
       if (viewport.name === 'desktop') totalVisuals += visualCount;
 
@@ -240,4 +330,4 @@ if (failures.length) {
   for (const failure of [...new Set(failures)]) console.error(failure);
   process.exit(1);
 }
-console.log('Complete English AI Security QA passed: Chapters 1–5, 18 unique defensive visuals, exact native-English video/poster pairs, interactions, desktop/mobile clean.');
+console.log('Complete English AI Security QA passed: Chapters 1–5, 18 unique defensive visuals, canonical Chapter 2 jailbreak search/budget/outcome interactions, canonical Chapter 3 persistence/governance/runtime-vs-weights/propagation interactions, exact native-English video/poster pairs, desktop/mobile clean.');

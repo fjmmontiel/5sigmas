@@ -1,0 +1,40 @@
+{
+  "source": "snippets/seguridad-ia/03-persistencia.html",
+  "source_blob_sha": "b37e1567122f1817210a8a4612f80ab1e0b02230",
+  "replacements": {
+    "El ataque puede dormir entre dos conversaciones": "The attack can sleep between two conversations",
+    "El problema no termina cuando acaba el turno. Una señal persistida puede reaparecer mucho después con más autoridad aparente que cuando entró.": "The problem does not end when the turn ends. A persisted signal can reappear much later with more apparent authority than when it entered.",
+    "▶ Reproducir ciclo": "▶ Play cycle",
+    "Contenido externo consigue convertirse en memoria.": "External content manages to become memory.",
+    "La señal permanece fuera de la conversación visible.": "The signal remains outside the visible conversation.",
+    "Una consulta futura vuelve a traerla al contexto.": "A future query brings it back into context.",
+    "La memoria modifica la decisión del agente.": "The memory changes the agent's decision.",
+    "La influencia alcanza una acción o tool call.": "The influence reaches an action or tool call.",
+    "Revocar exige comprobar que la influencia desapareció.": "Revocation requires verifying that the influence disappeared.",
+    "<strong>0 · Entrada efímera:</strong> todavía no existe persistencia.": "<strong>0 · Ephemeral input:</strong> persistence does not exist yet.",
+    "<strong>1 · Write:</strong> la frontera crítica es quién puede escribir memoria y con qué procedencia.": "<strong>1 · Write:</strong> the critical boundary is who can write memory and with what provenance.",
+    "<strong>2 · Sleep:</strong> el incidente queda desacoplado del momento de ingestión.": "<strong>2 · Sleep:</strong> the incident becomes decoupled from the moment of ingestion.",
+    "<strong>3 · Retrieve:</strong> la memoria reaparece como contexto aparentemente legítimo.": "<strong>3 · Retrieve:</strong> the memory reappears as apparently legitimate context.",
+    "<strong>4 · Influence:</strong> guardar una observación puede convertirla en señal de decisión futura.": "<strong>4 · Influence:</strong> storing an observation can turn it into a future decision signal.",
+    "<strong>5 · Execute:</strong> aquí la persistencia se convierte en consecuencia.": "<strong>5 · Execute:</strong> this is where persistence becomes a consequence.",
+    "<strong>6 · Forget:</strong> borrar una fila no basta; hay que verificar derivados, índices, caches y regresiones.": "<strong>6 · Forget:</strong> deleting one row is not enough; derivatives, indexes, caches and regressions must be verified."
+  },
+  "forbidden_output_tokens": [
+    "El ataque puede dormir",
+    "El problema no termina",
+    "Reproducir ciclo",
+    "Contenido externo consigue",
+    "La señal permanece",
+    "Una consulta futura",
+    "La memoria modifica",
+    "La influencia alcanza",
+    "Revocar exige",
+    "Entrada efímera",
+    "la frontera crítica",
+    "el incidente queda",
+    "aparentemente legítimo",
+    "guardar una observación",
+    "la persistencia se convierte",
+    "borrar una fila no basta"
+  ]
+}

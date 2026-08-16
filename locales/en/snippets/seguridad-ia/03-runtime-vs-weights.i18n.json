@@ -1,0 +1,38 @@
+{
+  "source": "snippets/seguridad-ia/03-runtime-vs-weights.html",
+  "source_blob_sha": "ecbecd7610fff1dbb979afddfc29f41b95e5f75c",
+  "replacements": {
+    "Dos persistencias distintas requieren mitigaciones distintas": "Two different kinds of persistence require different mitigations",
+    "Una señal puede persistir en el estado que rodea al modelo o dentro de sus pesos. Mezclarlas produce diagnósticos y controles equivocados.": "A signal can persist in the state surrounding the model or inside its weights. Conflating them leads to incorrect diagnoses and controls.",
+    "Pesos del modelo": "Model weights",
+    "Sleeper behaviour · pesos": "Sleeper behaviour · weights",
+    "Comparar": "Compare",
+    "Pesos": "Weights",
+    "Modelo base": "Base model",
+    "Memoria / RAG / estado": "Memory / RAG / state",
+    "La señal hostil se guarda fuera de los pesos.": "The hostile signal is stored outside the weights.",
+    "puede reaparecer entre sesiones": "can reappear across sessions",
+    "Mitigaciones:": "Mitigations:",
+    "procedencia, scopes, TTL, aislamiento, revocación y reconstrucción de derivados.": "provenance, scopes, TTL, isolation, revocation and rebuilding derivatives.",
+    "El comportamiento activable forma parte del modelo entrenado.": "The activatable behavior is part of the trained model.",
+    "Contexto de ejecución": "Runtime context",
+    "puede sobrevivir a técnicas de safety training": "can survive safety-training techniques",
+    "evaluación de triggers, entrenamiento, model selection y controles externos de producto.": "trigger evaluation, training, model selection and external product controls."
+  },
+  "forbidden_output_tokens": [
+    "Dos persistencias distintas",
+    "Una señal puede persistir",
+    "Mezclarlas produce",
+    "Comparar",
+    "Pesos del modelo",
+    "Modelo base",
+    "Memoria / RAG / estado",
+    "La señal hostil",
+    "puede reaparecer",
+    "Mitigaciones",
+    "procedencia, scopes",
+    "Contexto de ejecución",
+    "puede sobrevivir",
+    "evaluación de triggers"
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "source": "snippets/seguridad-ia/03-propagation-map.html",
+  "source_blob_sha": "281405d51ed9d6cd13dc3ff32e9757a58c5d630b",
+  "replacements": {
+    "Borrar la fila original no demuestra que la influencia desapareció": "Deleting the original row does not prove that the influence disappeared",
+    "Una memoria puede propagarse a derivados. La revocación real necesita saber qué copias, resúmenes e índices heredaron la señal.": "A memory can propagate into derivatives. Real revocation requires knowing which copies, summaries and indexes inherited the signal.",
+    "Propagar": "Propagate",
+    "Revocar": "Revoke",
+    "Memoria<br>original": "Original<br>memory",
+    "Índice vectorial": "Vector index",
+    "embedding derivado": "derived embedding",
+    "Resumen": "Summary",
+    "texto reformulado": "rephrased text",
+    "contexto reutilizable": "reusable context",
+    "Otro agente": "Another agent",
+    "estado propagado": "propagated state",
+    "snapshot intermedio": "intermediate snapshot",
+    "<strong>Estado limpio:</strong> todavía no hemos modelado propagación.": "<strong>Clean state:</strong> we have not modeled propagation yet.",
+    "<strong>Propagación:</strong> la misma semántica ya vive en varios artefactos. El origen dejó de ser la única copia relevante.": "<strong>Propagation:</strong> the same semantics now live in several artifacts. The origin is no longer the only relevant copy.",
+    "<strong>Revocación parcial:</strong> algunos derivados pueden invalidarse; otros requieren reconstrucción, expiración o una prueba de regresión. DELETE memory_id no prueba olvido.": "<strong>Partial revocation:</strong> some derivatives can be invalidated; others require rebuilding, expiration or a regression test. DELETE memory_id does not prove forgetting."
+  },
+  "forbidden_output_tokens": [
+    "Borrar la fila original",
+    "Una memoria puede propagarse",
+    "revocación real",
+    "Propagar",
+    "Revocar",
+    "Memoria<br>original",
+    "Índice vectorial",
+    "embedding derivado",
+    "Resumen",
+    "texto reformulado",
+    "contexto reutilizable",
+    "Otro agente",
+    "estado propagado",
+    "snapshot intermedio",
+    "Estado limpio",
+    "Propagación:",
+    "Revocación parcial"
+  ]
+}
