@@ -4,7 +4,7 @@ on:
   pull_request:
     paths:
       - 'locales/en/series/ia-pib-bienestar-energia/03-pib-vs-bienestar.md'
-      - 'locales/en/snippets/ia-pib-bienestar-energia/03-pib-bienestar.*'
+      - 'locales/en/snippets/ia-pib-bienestar-energia/03-*'
       - 'scripts/validate_english_energy_ch3.mjs'
       - 'locale_main.py'
       - '.github/workflows/english-energy-ch3-quality.yml'
