@@ -55,8 +55,8 @@ const pages = [
   },
   {
     route: '/en/series/multimodalidad-iag/05-riesgos/',
-    title: 'Chapter 5 — Risks: when perception becomes part of the attack surface',
-    concepts: ['untrusted', 'authorization', 'provenance', 'human approval'],
+    title: 'Chapter 5 — Risks: visual prompt injection, action and operational security',
+    concepts: ['prompt injection', 'least privilege', 'data minimization', 'reversibility'],
     demos: 8,
     prefix: 'mm-05-',
     media: '05-riesgos',
@@ -276,6 +276,23 @@ try {
         }
       }
 
+      if (entry.route.endsWith('/05-riesgos/')) {
+        const injection = page.locator('[data-demo="mm-05-visual-injection"]');
+        if (await injection.count() !== 1) {
+          failures.push(`${entry.route}: missing canonical visual prompt-injection explainer`);
+        } else {
+          if (await injection.locator('.piv-tab').count() !== 3) failures.push(`${entry.route}: visual prompt-injection explainer lost its three canonical tabs`);
+          if (await injection.locator('.piv-panel').count() !== 3) failures.push(`${entry.route}: visual prompt-injection explainer lost its three canonical panels`);
+          if (await injection.locator('.piv-tech').count() !== 3) failures.push(`${entry.route}: visual prompt-injection explainer lost its three obfuscation techniques`);
+          if (await injection.locator('.piv-fstep').count() !== 6) failures.push(`${entry.route}: visual prompt-injection explainer lost normal/adversarial pipeline stages`);
+          const injectionText = (await injection.textContent()) || '';
+          for (const token of ['Normal flow', 'Adversarial image', 'Obfuscation techniques', 'Trust chain intact', 'The breaking point', 'Low contrast', 'Rotated text', 'Inside a visual pattern']) {
+            if (!injectionText.includes(token)) failures.push(`${entry.route}: visual prompt-injection explainer missing ${JSON.stringify(token)}`);
+          }
+          await assertTabInteraction(injection, '.piv-tab', '.piv-panel', 2, 'visual prompt-injection obfuscation', entry.route);
+        }
+      }
+
       // Chapters 1–4 now use canonical tab/panel interactions that are
       // validated explicitly above and in chapter-specific QA. Do not require
       // obsolete <details> disclosures merely because older English redesigns used them.
@@ -335,4 +352,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Complete English Multimodality QA passed: introduction + Chapters 1–5, 27 unique native visuals, canonical Chapter 1 common-space interaction, canonical Chapter 2 ImageBind/instruction/data-quality/training-progression interactions, canonical Chapter 3 trade-off/VQ-VAE-MoE/four-family interactions, canonical Chapter 4 grounding interaction, six native-English MP4/poster pairs, no Spanish media inheritance, desktop/mobile clean.');
+console.log('Complete English Multimodality QA passed: introduction + Chapters 1–5, 27 unique native visuals, canonical Chapter 1 common-space interaction, canonical Chapter 2 ImageBind/instruction/data-quality/training-progression interactions, canonical Chapter 3 trade-off/VQ-VAE-MoE/four-family interactions, canonical Chapter 4 grounding interaction, canonical Chapter 5 visual-prompt-injection interaction, six native-English MP4/poster pairs, no Spanish media inheritance, desktop/mobile clean.');
