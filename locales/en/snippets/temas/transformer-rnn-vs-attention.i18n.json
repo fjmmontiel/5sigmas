@@ -1,6 +1,6 @@
 {
   "source": "snippets/temas/transformer-rnn-vs-attention.html",
-  "source_blob_sha": "47efc127911981d6e2893797027d3b9dc1015376",
+  "source_blob_sha": "53382bcca5aeeb597eaaec2dc8f535c3e3c98060",
   "replacements": {
     "RECURRENCIA → DEPENDENCIA SECUENCIAL · ATENCIÓN → INTERACCIÓN DIRECTA": "RECURRENCE → SEQUENTIAL DEPENDENCY · ATTENTION → DIRECT INTERACTION",
     "Por qué la atención cambió la ruta entre posiciones": "Why attention changed the path between positions",
