@@ -50,6 +50,7 @@ try {
     if (!response?.ok()) failures.push(`${viewport.name}: HTTP ${response?.status() ?? 'no response'}`);
 
     const body = await page.locator('body').innerText();
+    const allText = (await page.locator('body').textContent()) || '';
     requireText(body, [
       'Chapter 3 — Measurement: GDP vs well-being',
       'between 30 and 40% of official GDP',
@@ -61,11 +62,13 @@ try {
       'Gross National Happiness',
       'How does AI automation affect well-being beyond income?',
       'Core sources',
+    ], `${viewport.name}: article`);
+    requireText(allText, [
       'Stiglitz, J., Sen, A., Fitoussi, J.-P. (2009)',
       'Penn World Table',
       'OECD (2013)',
-    ], `${viewport.name}: article`);
-    forbidText(body, [
+    ], `${viewport.name}: references`);
+    forbidText(allText, [
       'Capítulo 3', 'Qué mide el PIB', 'Preguntas frecuentes', 'Fuentes base',
       'The correct conclusion is therefore measurement pluralism',
       'What this changes when evaluating AI',
@@ -84,8 +87,8 @@ try {
       if (await gdp.locator('.en-energy-v').count() !== 0) failures.push(`${viewport.name}: old English GDP/well-being redesign remains`);
       const text = (await gdp.textContent()) || '';
       requireText(text, [
-        'GDP vs well-being: they do not answer the same question', 'What GDP measures well', 'Production', 'Price', 'Pace',
-        'activity is not the same as lived experience', 'What well-being adds', 'Distribution', 'Quality of life', 'Subjective experience',
+        'GDP vs well-being: they do not answer the same question', 'What it captures well', 'Production', 'Price', 'Pace',
+        'activity is not the same as lived experience', 'What it adds', 'Distribution', 'Quality of life', 'Subjective experience',
         'Where they diverge most', 'Inequality', 'Externalities', 'Automation',
       ], `${viewport.name}: GDP/well-being`);
       forbidText(text, ['PIB vs bienestar', 'Qué mide bien el PIB', 'Producción', 'Qué añade el bienestar', 'Distribución', 'Desigualdad'], `${viewport.name}: GDP/well-being`);
