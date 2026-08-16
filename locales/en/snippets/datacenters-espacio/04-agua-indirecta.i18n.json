@@ -1,0 +1,36 @@
+{
+  "source": "snippets/datacenters-espacio/04-agua-indirecta.html",
+  "source_blob_sha": "de0550c07aa7226e93ce4cdef7993f6093c463ec",
+  "replacements": {
+    "data-demo=\"04-agua-indirecta\"": "data-demo=\"dc-04-indirect-water\"",
+    ">iceberg hidrico</div>": ">water iceberg</div>",
+    ">El agua visible de refrigeracion no es toda la huella hidrica</div>": ">Visible cooling water is not the whole water footprint</div>",
+    ">El consumo directo de torres es solo la superficie: la electricidad puede arrastrar agua aguas arriba según el mix energético.</div>": ">Direct cooling-tower consumption is only the visible layer: electricity can carry upstream water use depending on the power mix.</div>",
+    "aria-label=\"El agua visible de refrigeracion no es toda la huella hidrica\"": "aria-label=\"Visible cooling water is not the whole water footprint\"",
+    ">Agua directa</text>": ">Direct water</text>",
+    ">torres, humidificación, clima local</text>": ">towers, humidification, local climate</text>",
+    ">Más del 60% puede ser indirecta</text>": ">More than 60% can be indirect</text>",
+    ">agua usada al generar electricidad para el datacenter</text>": ">water used to generate electricity for the data center</text>",
+    ">Visible</text>": ">Visible</text>",
+    ">agua usada en sitio</text>": ">water used on site</text>",
+    ">Aguas arriba</text>": ">Upstream</text>",
+    ">depende del mix eléctrico</text>": ">depends on the power mix</text>",
+    ">Un datacenter de 100 MW ronda 2 millones de litros diarios en total</span>": ">A 100 MW data center is around 2 million litres per day in total</span>",
+    ">La parte indirecta puede superar el 60% por electricidad</span>": ">The indirect share can exceed 60% because of electricity</span>",
+    ">Mirar solo refrigeración local subestima la huella hídrica</span>": ">Looking only at local cooling underestimates the water footprint</span>"
+  },
+  "forbidden_output_tokens": [
+    "iceberg hidrico",
+    "El agua visible",
+    "El consumo directo",
+    "Agua directa",
+    "Más del 60%",
+    "agua usada al generar",
+    "agua usada en sitio",
+    "Aguas arriba",
+    "depende del mix",
+    "Un datacenter de 100 MW",
+    "La parte indirecta",
+    "Mirar solo refrigeración"
+  ]
+}
