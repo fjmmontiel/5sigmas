@@ -1,0 +1,75 @@
+name: Evaluation verifier visual quality
+
+on:
+  pull_request:
+    paths:
+      - 'docs/temas/evaluacion-modelos.md'
+      - 'docs/snippets/temas/evaluation-verifier-routing.html'
+      - 'locales/en/temas/evaluacion-modelos.md'
+      - 'locales/en/snippets/temas/evaluation-verifier-routing.html'
+      - 'locales/en/snippets/temas/evaluation-verifier-routing.i18n.json'
+      - 'scripts/validate_evaluation_verifier_visual.mjs'
+      - '.github/workflows/topic-evaluation-verifier-quality.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verifier-routing:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Build Spanish site strictly
+        run: mkdocs build --clean --strict
+
+      - name: Prepare English locale
+        run: python scripts/prepare_locale.py --locale en
+
+      - name: Build English locale strictly
+        env:
+          S5_LOCALE: en
+        run: mkdocs build -f mkdocs.en.yml --clean --strict
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Serve combined preview
+        run: |
+          python -m http.server 8000 --directory site > /tmp/5sigmas-eval-preview.log 2>&1 &
+          for attempt in {1..30}; do
+            curl --fail --silent http://127.0.0.1:8000/temas/evaluacion-modelos/ > /dev/null && \
+            curl --fail --silent http://127.0.0.1:8000/en/temas/evaluacion-modelos/ > /dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/5sigmas-eval-preview.log
+          exit 1
+
+      - name: Validate verifier routing ES/EN
+        run: node scripts/validate_evaluation_verifier_visual.mjs
+
+      - name: Upload verifier visual evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evaluation-verifier-visual-review
+          path: artifacts/visual-review/evaluation-verifier-routing-*.png
+          if-no-files-found: warn
+          retention-days: 14
