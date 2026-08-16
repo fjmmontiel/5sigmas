@@ -4,7 +4,7 @@ seo_title: "Qué es un agente de IA: cómo funciona y en qué se diferencia de u
 description: "Qué es un agente de IA, cómo usa herramientas, memoria y estado, en qué se diferencia de un chatbot o workflow y qué necesita para funcionar de forma fiable."
 keywords: "agente de IA, agentes IA, AI agents, agentic AI, chatbot vs agente, tool calling, memoria agentes, agentes en producción"
 date: 2026-08-09
-date_modified: 2026-08-15
+date_modified: 2026-08-16
 ---
 
 # Qué es un agente de IA
@@ -56,11 +56,11 @@ La tool debe seguir siendo un contrato de software. El modelo propone una llamad
 
 ## Memoria, contexto y estado no son lo mismo
 
-- **Contexto:** información que el modelo ve ahora.
-- **Memoria:** información que se conserva y puede recuperarse después.
-- **Estado operativo:** qué está ocurriendo realmente en una tarea: intentos, locks, operaciones pendientes y resultados.
+Las tres capas participan en la misma tarea, pero no responden a la misma pregunta: el contexto es la vista de trabajo del modelo, la memoria conserva información recuperable y el estado operativo describe la ejecución real que mantiene el runtime.
 
-Mezclar las tres capas produce fallos difíciles de depurar. Una conversación puede decir que una acción fue solicitada mientras el runtime sabe que todavía está ejecutándose. El estado operativo debe ser la fuente de verdad sobre lo que realmente ocurrió.
+{{ include_html("snippets/temas/agent-context-memory-state.html") }}
+
+La separación se vuelve crítica cuando una tool tarda. La conversación puede registrar que una acción fue solicitada mientras el runtime sabe que sigue ejecutándose. Por eso el estado operativo —no el texto del chat ni una memoria recuperada— debe gobernar qué ocurrió realmente y qué puede afirmarse al usuario.
 
 ## Cómo se evalúa un agente
 
@@ -126,6 +126,8 @@ No. En producción suele importar más que la autonomía esté acotada: herramie
 ## Fuentes primarias
 
 - [Yao et al. — ReAct: Synergizing Reasoning and Acting in Language Models](https://arxiv.org/abs/2210.03629)
-- [OpenAI Agents SDK — Agents](https://openai.github.io/openai-agents-python/agents/)
+- [OpenAI Agents SDK — Context management](https://openai.github.io/openai-agents-python/context/)
+- [OpenAI Agents SDK — Sessions](https://openai.github.io/openai-agents-python/sessions/)
+- [OpenAI Agents SDK — Run state](https://openai.github.io/openai-agents-python/ref/run_state/)
 - [OpenAI Agents SDK — Tool guardrails](https://openai.github.io/openai-agents-python/guardrails/)
 - [Model Context Protocol — Authorization](https://modelcontextprotocol.io/specification/latest/basic/authorization)
