@@ -1,0 +1,27 @@
+{
+  "source": "snippets/articulos-tecnicos/voice-arch-prosody-loss.html",
+  "source_blob_sha": "a74f817d61c3773d1f6e8c30083cde305f22f539",
+  "replacements": {
+    "Pérdida de prosodia al convertir audio en texto": "Prosody loss when converting audio to text",
+    "Señal": "Signal",
+    "El texto conserva qué. No siempre cómo.": "Text preserves what. Not always how.",
+    "La transcripción comprime la voz.": "Transcription compresses the voice.",
+    "“Está bien.”": "“It's fine.”",
+    "ritmo": "pace",
+    "energía": "energy",
+    "duda": "hesitation",
+    "énfasis": "emphasis",
+    "Texto": "Text"
+  },
+  "forbidden_output_tokens": [
+    "Pérdida de prosodia",
+    "Señal",
+    "El texto conserva qué",
+    "La transcripción comprime la voz",
+    "Está bien",
+    "ritmo",
+    "energía",
+    "duda",
+    "énfasis"
+  ]
+}

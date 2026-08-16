@@ -1,0 +1,24 @@
+{
+  "source": "snippets/articulos-tecnicos/voice-arch-voice-prompt.html",
+  "source_blob_sha": "1c461da0d48ea4d727579d2f4c2ea494f30f8e27",
+  "replacements": {
+    "Few-shot prompting con muestras de voz autorizadas": "Few-shot prompting with authorized voice samples",
+    "Few-shot, pero con voz.": "Few-shot, but with voice.",
+    "Muestras autorizadas, no una descripción textual.": "Authorized samples, not a text description.",
+    "Identidad": "Identity",
+    "Estilo": "Style",
+    "Pronunciación": "Pronunciation",
+    "voz condicionada": "conditioned voice",
+    "consentimiento · procedencia · revocación": "consent · provenance · revocation"
+  },
+  "forbidden_output_tokens": [
+    "muestras de voz autorizadas",
+    "Few-shot, pero con voz",
+    "Muestras autorizadas",
+    "Identidad",
+    "Estilo",
+    "Pronunciación",
+    "voz condicionada",
+    "consentimiento · procedencia · revocación"
+  ]
+}

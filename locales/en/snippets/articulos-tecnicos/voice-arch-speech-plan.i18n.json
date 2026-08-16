@@ -1,0 +1,22 @@
+{
+  "source": "snippets/articulos-tecnicos/voice-arch-speech-plan.html",
+  "source_blob_sha": "2c47b7bb0c0e75af509f7a536113bfdbbb6bedaa",
+  "replacements": {
+    "SpeechPlan para transportar intención expresiva hasta el TTS": "SpeechPlan for carrying expressive intent to the TTS",
+    "El texto necesita instrucciones de voz.": "Text needs voice instructions.",
+    "Mueve los controles.": "Move the controls.",
+    "“Entiendo. Vamos paso a paso.”": "“I understand. We'll go step by step.”",
+    "Ritmo": "Pace",
+    "Energía": "Energy",
+    "Pausa": "Pause"
+  },
+  "forbidden_output_tokens": [
+    "transportar intención expresiva",
+    "El texto necesita instrucciones",
+    "Mueve los controles",
+    "Entiendo. Vamos paso a paso",
+    "Ritmo",
+    "Energía",
+    "Pausa"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "source": "snippets/articulos-tecnicos/voice-arch-map.html",
+  "source_blob_sha": "54fc048651397e7bed1e39e7b99ad230e85d7d79",
+  "replacements": {
+    "Comparación de las tres arquitecturas de agentes de voz": "Comparison of the three voice-agent architectures",
+    "Mapa": "Map",
+    "¿Dónde colocas la frontera de texto?": "Where do you place the text boundary?",
+    "Ese corte cambia todo.": "That boundary changes everything.",
+    "Texto": "Text",
+    "El texto separa comprensión y voz.": "Text separates understanding from voice.",
+    "El audio entra nativo. La voz sigue fuera.": "Audio enters natively. The voice stays external.",
+    "La representación acústica cruza todo el turno.": "The acoustic representation spans the whole turn."
+  },
+  "forbidden_output_tokens": [
+    "Comparación de las tres arquitecturas",
+    "¿Dónde colocas la frontera de texto?",
+    "Ese corte cambia todo.",
+    "El texto separa comprensión",
+    "El audio entra nativo",
+    "La representación acústica"
+  ]
+}

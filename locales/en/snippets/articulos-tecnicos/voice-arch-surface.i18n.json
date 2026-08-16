@@ -1,0 +1,18 @@
+{
+  "source": "snippets/articulos-tecnicos/voice-arch-surface.html",
+  "source_blob_sha": "fff7972caec26a63758dc27b78cf8a0f80feb939",
+  "replacements": {
+    "Superficie S2S rápida conectada a un plano cognitivo pesado": "Fast S2S surface connected to a heavier cognitive plane",
+    "Dos velocidades. Un contrato.": "Two speeds. One contract.",
+    "La superficie conversa. El plano ejecuta.": "The surface converses. The plane executes.",
+    "timing · barge-in · voz": "timing · barge-in · voice",
+    "retries · idempotencia": "retries · idempotency"
+  },
+  "forbidden_output_tokens": [
+    "Superficie S2S rápida",
+    "Dos velocidades. Un contrato.",
+    "La superficie conversa",
+    "timing · barge-in · voz",
+    "idempotencia"
+  ]
+}
