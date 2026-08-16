@@ -19,7 +19,7 @@
     "El riesgo cambia cuando el producto ofrece una ruta de acción.": "Risk changes when the product provides a path to action.",
     "Aquí entran contratos de tools, scopes, autorización y separación entre texto y efectos externos.": "This is where tool contracts, scopes, authorization, and separation between text and external effects matter.",
     "Este es el nivel que demuestra un efecto externo real.": "This is the level that demonstrates a real external effect.",
-    "Para llegar aquí han fallado también controles del runtime. Por eso la seguridad de producto no puede reducirse al comportamiento textual del modelo.": "To get here, runtime controls must also have failed. That is why product security cannot be reduced to the model's textual behavior."
+    "Para llegar aquí han fallado también controles del runtime. Por eso la seguridad de producto no puede reducirse al comportamiento textual del modelo.": "To get here, runtime controls must also have failed. That is why product security cannot be reduced to the textual behavior of the model."
   },
   "forbidden_output_tokens": [
     "El jailbreak funcionó",
