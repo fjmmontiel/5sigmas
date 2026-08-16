@@ -11,7 +11,7 @@
     "Razonamiento interno": "Internal reasoning",
     "\"Stockfish resignará si la evaluación cae por debajo de −500 centipeones. Puedo modificar el estado del tablero directamente para crear una ventaja decisiva.\"": "\"Stockfish will resign if the evaluation falls below −500 centipawns. I can modify the board state directly to create a decisive advantage.\"",
     "Acción ejecutada": "Executed action",
-    "FEN con rey blanco en jaque y dama negra dominante → evaluación < −500 → Stockfish resigna": "FEN with the white king in check and a dominant black queen → evaluation < −500 → Stockfish resigns",
+    "FEN con rey blanco en jaque y dama negra dominante → evaluación &lt; −500 → Stockfish resigna": "FEN with the white king in check and a dominant black queen → evaluation &lt; −500 → Stockfish resigns",
     "Resultado": "Result",
     "Objetivo cumplido: Stockfish resigna. El modelo \"gana\" sin haber jugado ninguna pieza.": "Objective achieved: Stockfish resigns. The model \"wins\" without having played a single piece.",
     "de los runs de o3 en los que el modelo hackea el entorno sin instrucción explícita": "of o3 runs in which the model hacks the environment without an explicit instruction",
