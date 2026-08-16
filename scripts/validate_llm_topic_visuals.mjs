@@ -85,7 +85,7 @@ async function validateSourceContracts() {
   }
 }
 
-async function checkTokenizationDensity(page, route, viewport) {
+async function checkTokenizationDensity(page, route, locale, viewport) {
   const expectedCounts = [
     ['.ltk-stage', 3],
     ['.ltk-tokenizer', 2],
@@ -97,6 +97,31 @@ async function checkTokenizationDensity(page, route, viewport) {
   for (const [selector, expected] of expectedCounts) {
     const count = await page.locator(selector).count();
     if (count !== expected) failures.push(`${route}: ${viewport.name} expected ${expected} ${selector}, found ${count}`);
+  }
+
+  const expected = locale === 'es'
+    ? {
+        source: ['“arquitectura neuronal”', '“arquitectura neuronal”'],
+        a: ['▁arquitectura', '▁neuronal'],
+        b: ['▁arqui', 'tectura', '▁neuro', 'nal'],
+      }
+    : {
+        source: ['“neural architecture”', '“neural architecture”'],
+        a: ['▁neural', '▁architecture'],
+        b: ['▁neu', 'ral', '▁archi', 'tecture'],
+      };
+
+  const actualSource = await page.locator('.ltk-source').allTextContents();
+  const actualA = await page.locator('.ltk-pieces--a b').allTextContents();
+  const actualB = await page.locator('.ltk-pieces--b b').allTextContents();
+  for (const [label, actual, wanted] of [
+    ['comparison source', actualSource, expected.source],
+    ['tokenizer A pieces', actualA, expected.a],
+    ['tokenizer B pieces', actualB, expected.b],
+  ]) {
+    if (JSON.stringify(actual) !== JSON.stringify(wanted)) {
+      failures.push(`${route}: ${viewport.name} ${label}=${JSON.stringify(actual)} expected ${JSON.stringify(wanted)}`);
+    }
   }
 }
 
@@ -176,7 +201,7 @@ async function checkPage(browser, route, locale, viewport) {
     await locator.screenshot({ path: path.join(outDir, `concept-llm-${locale}-${viewport.name}-${visual.selector.slice(1)}.png`), animations: 'disabled' });
   }
 
-  await checkTokenizationDensity(page, route, viewport);
+  await checkTokenizationDensity(page, route, locale, viewport);
 
   const pageOverflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   if (pageOverflow > 2) failures.push(`${route}: ${viewport.name} page overflow ${pageOverflow}px`);
