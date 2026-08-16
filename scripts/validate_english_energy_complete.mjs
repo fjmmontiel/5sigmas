@@ -12,11 +12,13 @@ const chapters = [
     route: '/en/series/ia-pib-bienestar-energia/03-pib-vs-bienestar/',
     slug: '03-pib-vs-bienestar',
     title: 'Chapter 3 — Measurement: GDP vs well-being',
-    concepts: ['unpaid work', 'Easterlin', 'Human Development Index', 'measurement pluralism'],
-    demos: ['energy-03-gdp-wellbeing', 'energy-03-income-wellbeing', 'energy-03-frameworks'],
+    concepts: ['unpaid work', 'Easterlin', 'Human Development Index', 'Core sources'],
+    demos: ['03-pib-bienestar', '03-kahneman-killingsworth', '03-marcos-alternativos'],
+    demoSelector: '[data-demo^="03-"]',
     previewTitle: 'GDP vs well-being',
     expectedVisuals: 4,
     screenshot: 'english-energy-03-gdp-wellbeing.png',
+    interaction: 'tabs',
   },
   {
     route: '/en/series/ia-pib-bienestar-energia/04-ia-pib-hoy/',
@@ -24,9 +26,11 @@ const chapters = [
     title: 'Chapter 4 — AI and GDP today: real impact, lags and early signals',
     concepts: ['productivity J-curve', '80.6%', '67%', 'Acemoglu'],
     demos: ['energy-04-jcurve', 'energy-04-evidence', 'energy-04-diffusion', 'energy-04-adoption-gap', 'energy-04-forecasts'],
+    demoSelector: '[data-demo^="energy-"]',
     previewTitle: 'AI and GDP today',
     expectedVisuals: 6,
     screenshot: 'english-energy-04-ai-gdp.png',
+    interaction: 'details',
   },
 ];
 
@@ -52,7 +56,7 @@ try {
       for (const concept of chapter.concepts) if (!body.toLowerCase().includes(concept.toLowerCase())) failures.push(`${chapter.route}: missing core concept ${concept}`);
       for (const token of forbidden) if (body.includes(token)) failures.push(`${chapter.route}: Spanish leakage ${JSON.stringify(token)}`);
 
-      const demoValues = await page.locator('[data-demo^="energy-"]').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('data-demo')));
+      const demoValues = await page.locator(chapter.demoSelector).evaluateAll((nodes) => nodes.map((node) => node.getAttribute('data-demo')));
       if (demoValues.length !== chapter.demos.length) failures.push(`${chapter.route}: expected ${chapter.demos.length} native teaching visuals, found ${demoValues.length}`);
       if (new Set(demoValues).size !== demoValues.length) failures.push(`${chapter.route}: duplicate data-demo visual identifiers`);
       for (const demo of chapter.demos) if (!demoValues.includes(demo)) failures.push(`${chapter.route}: missing [data-demo="${demo}"]`);
@@ -68,14 +72,23 @@ try {
       if (visualCount !== chapter.expectedVisuals) failures.push(`${chapter.route}: expected ${chapter.expectedVisuals} rendered visual units, found ${visualCount}`);
       if (viewport.name === 'desktop') totalVisuals += visualCount;
 
-      const details = page.locator('[data-demo^="energy-"] details');
-      if (await details.count() === 0) failures.push(`${chapter.route}: native visuals expose no interactive disclosure`);
-      else {
-        const candidate = details.first();
-        const before = await candidate.getAttribute('open');
-        await candidate.locator('summary').click();
-        const after = await candidate.getAttribute('open');
-        if (before === after) failures.push(`${chapter.route}: details interaction did not toggle`);
+      if (chapter.interaction === 'details') {
+        const details = page.locator(`${chapter.demoSelector} details`);
+        if (await details.count() === 0) failures.push(`${chapter.route}: native visuals expose no interactive disclosure`);
+        else {
+          const candidate = details.first();
+          const before = await candidate.getAttribute('open');
+          await candidate.locator('summary').click();
+          const after = await candidate.getAttribute('open');
+          if (before === after) failures.push(`${chapter.route}: details interaction did not toggle`);
+        }
+      } else if (chapter.interaction === 'tabs') {
+        const root = page.locator('[data-demo="03-kahneman-killingsworth"]');
+        if (await root.count() !== 1 || await root.locator('[data-tab]').count() !== 4) failures.push(`${chapter.route}: canonical four-tab income/well-being interaction missing`);
+        else {
+          await root.locator('[data-tab="4"]').click();
+          if (await root.locator('[data-panel="4"]').getAttribute('hidden') !== null) failures.push(`${chapter.route}: canonical income/well-being tab interaction failed`);
+        }
       }
 
       const videos = page.locator('video[data-s5-inline-video-player]');
