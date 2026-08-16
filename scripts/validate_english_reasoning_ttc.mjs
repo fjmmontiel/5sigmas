@@ -21,7 +21,7 @@ for (const expected of [
   'Chapter 3 — Test-Time Compute', 'The three levers',
   'PRMs vs ORMs: two ways to teach reasoning',
   'Best-of-N: generate multiple answers and choose the best',
-  'Three levers for spending more inference compute',
+  'The three levers of test-time compute',
   'Training scale and inference compute are complementary',
   'Frequently asked questions',
 ]) if (!body.includes(expected)) failures.push(`${route}: missing English chapter/visual copy ${JSON.stringify(expected)}`);
@@ -30,7 +30,7 @@ for (const forbidden of ['Capítulo ','Prerrequisitos','Las tres palancas','Más
   if (body.includes(forbidden)) failures.push(`${route}: Spanish leakage ${JSON.stringify(forbidden)}`);
 }
 
-for (const selector of ['[data-demo="03-prm-orm-comparacion"]','[data-demo="03-best-of-n-visual"]','[data-levers]','[data-scale2d]']) {
+for (const selector of ['[data-demo="03-prm-orm-comparacion"]','[data-demo="03-best-of-n-visual"]','[data-demo="03-ttc-palancas"]','[data-scale2d]']) {
   const root = page.locator(selector);
   if (await root.count() !== 1) failures.push(`${route}: expected exactly one ${selector}`);
   const buttons = root.locator('button[data-tab]');
