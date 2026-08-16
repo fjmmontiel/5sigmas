@@ -192,7 +192,10 @@ try {
         }
       }
 
-      if (entry.demos && !entry.route.endsWith('/03-arquitecturas/')) {
+      // Chapters 3 and 4 now use canonical tab/panel interactions that are
+      // validated explicitly above and in chapter-specific QA. Do not require
+      // obsolete <details> disclosures merely because older English redesigns used them.
+      if (entry.demos && !entry.route.endsWith('/03-arquitecturas/') && !entry.route.endsWith('/04-evaluacion/')) {
         const details = page.locator('[data-demo] details');
         if (await details.count() === 0) {
           failures.push(`${entry.route}: visuals expose no interactive disclosure`);
