@@ -1,0 +1,117 @@
+<div class="evr-wrap" data-demo="topic-evaluation-reference-set">
+  <div class="evr-head">
+    <div class="evr-kicker">COBERTURA → CASOS → REGRESIONES</div>
+    <div class="evr-title">Un dataset de referencia útil representa fallos, no solo ejemplos</div>
+    <div class="evr-sub">La taxonomía define qué dimensiones importan; el conjunto de referencia convierte esas dimensiones en casos reproducibles; los incidentes reales vuelven como regresiones permanentes.</div>
+  </div>
+
+  <div class="evr-flow" role="img" aria-label="Construcción de un conjunto de datos de referencia desde una taxonomía de casos hasta una matriz de cobertura, un caso reproducible y una regresión versionada">
+    <section class="evr-card evr-card--taxonomy">
+      <div class="evr-card-label"><span>01</span><strong>TAXONOMÍA</strong></div>
+      <h3>Define los ejes del riesgo</h3>
+      <p>No empieces por acumular ejemplos. Decide primero qué variaciones debe soportar el sistema.</p>
+      <div class="evr-axes">
+        <div class="evr-axis"><b>TAREA</b><span>consulta</span><span>extracción</span><span>tool</span></div>
+        <div class="evr-axis"><b>CONTEXTO</b><span>ambiguo</span><span>ruido</span><span>mercado</span></div>
+        <div class="evr-axis"><b>RIESGO</b><span>bajo</span><span>alto</span><span>irreversible</span></div>
+      </div>
+    </section>
+
+    <div class="evr-arrow" aria-hidden="true">→</div>
+
+    <section class="evr-card evr-card--coverage">
+      <div class="evr-card-label"><span>02</span><strong>COBERTURA</strong></div>
+      <h3>Haz visibles los huecos</h3>
+      <p>Ejemplo ilustrativo de una auditoría: cada celda pregunta si existe al menos un caso útil para esa combinación.</p>
+      <div class="evr-legend"><span><i class="evr-dot evr-dot--covered"></i>cubierto</span><span><i class="evr-dot evr-dot--gap"></i>hueco</span></div>
+      <div class="evr-matrix" aria-label="Matriz ilustrativa de cobertura por tipo de tarea y condición">
+        <div class="evr-matrix-head"></div><div class="evr-matrix-head">normal</div><div class="evr-matrix-head">ambiguo</div><div class="evr-matrix-head">ruido</div><div class="evr-matrix-head">alto impacto</div>
+        <div class="evr-row-label">consulta</div><div class="evr-cell evr-cell--covered">●</div><div class="evr-cell evr-cell--covered">●</div><div class="evr-cell evr-cell--covered">●</div><div class="evr-cell evr-cell--gap">○</div>
+        <div class="evr-row-label">extracción</div><div class="evr-cell evr-cell--covered">●</div><div class="evr-cell evr-cell--covered">●</div><div class="evr-cell evr-cell--gap">○</div><div class="evr-cell evr-cell--covered">●</div>
+        <div class="evr-row-label">tool</div><div class="evr-cell evr-cell--covered">●</div><div class="evr-cell evr-cell--gap">○</div><div class="evr-cell evr-cell--covered">●</div><div class="evr-cell evr-cell--gap">○</div>
+        <div class="evr-row-label">voz</div><div class="evr-cell evr-cell--covered">●</div><div class="evr-cell evr-cell--covered">●</div><div class="evr-cell evr-cell--gap">○</div><div class="evr-cell evr-cell--covered">●</div>
+      </div>
+      <div class="evr-matrix-note">La matriz no es una puntuación. Sirve para detectar segmentos sin evidencia antes de comparar versiones.</div>
+    </section>
+
+    <div class="evr-arrow" aria-hidden="true">→</div>
+
+    <section class="evr-card evr-card--case">
+      <div class="evr-card-label"><span>03</span><strong>CASO REPRODUCIBLE</strong></div>
+      <h3>Cada fila necesita un contrato</h3>
+      <div class="evr-case-grid">
+        <div class="evr-case-field"><span>ENTRADA</span><strong>qué recibe el sistema</strong></div>
+        <div class="evr-case-field"><span>CONTEXTO</span><strong>evidencia disponible</strong></div>
+        <div class="evr-case-field"><span>ESPERADO / RÚBRICA</span><strong>qué cuenta como éxito</strong></div>
+        <div class="evr-case-field"><span>SEGMENTOS</span><strong>qué dimensión representa</strong></div>
+        <div class="evr-case-field"><span>SEVERIDAD</span><strong>qué cuesta fallar</strong></div>
+        <div class="evr-case-field"><span>PROCEDENCIA + FECHA</span><strong>de dónde viene y cuándo aplica</strong></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="evr-feedback">
+    <div class="evr-feedback-step"><span>INCIDENTE REAL</span><strong>algo falla en producción</strong></div>
+    <div class="evr-feedback-arrow" aria-hidden="true">→</div>
+    <div class="evr-feedback-step"><span>REGRESIÓN</span><strong>se reproduce como caso</strong></div>
+    <div class="evr-feedback-arrow" aria-hidden="true">→</div>
+    <div class="evr-feedback-step"><span>VERSIÓN N+1</span><strong>el fallo ya no se olvida</strong></div>
+  </div>
+
+  <div class="evr-contracts">
+    <div><span>SEGMENTA</span><strong>reporta por grupos relevantes; el promedio global puede ocultar una regresión</strong></div>
+    <div><span>VERSIONA</span><strong>conserva casos estables para comparar y añade fallos nuevos como regresiones</strong></div>
+    <div><span>TRAZA</span><strong>entrada, criterio, etiquetas, severidad y procedencia deben viajar con cada caso</strong></div>
+  </div>
+
+  <div class="evr-ref">Fuentes primarias:
+    <a href="https://arxiv.org/abs/2211.09110">Liang et al., HELM (2022)</a> ·
+    <a href="https://platform.openai.com/docs/api-reference/evals">OpenAI Evals API</a>
+  </div>
+</div>
+
+<style>
+.evr-wrap,.evr-wrap *{box-sizing:border-box}
+.evr-wrap{
+  --evr-a:var(--md-primary-fg-color,#26a69a);
+  --evr-b:#4757d6;
+  --evr-c:var(--md-accent-fg-color,#ffb343);
+  --evr-r:#e06c75;
+  --evr-bg:var(--md-default-bg-color,#fff);
+  --evr-fg:var(--md-default-fg-color,#111827);
+  --evr-muted:color-mix(in srgb,var(--evr-fg) 58%,transparent);
+  --evr-border:color-mix(in srgb,var(--evr-fg) 14%,transparent);
+  container-type:inline-size;
+  margin:1.1rem 0 1.5rem;
+  padding:clamp(14px,2vw,22px);
+  border:1px solid var(--evr-border);
+  border-radius:20px;
+  background:
+    radial-gradient(90% 120% at 0 0,color-mix(in srgb,var(--evr-b) 7%,transparent),transparent 56%),
+    radial-gradient(90% 120% at 100% 0,color-mix(in srgb,var(--evr-a) 7%,transparent),transparent 58%),
+    var(--evr-bg);
+  color:var(--evr-fg)
+}
+.evr-head{display:grid;gap:4px;margin-bottom:13px}
+.evr-kicker{font-size:10px;font-weight:950;letter-spacing:.12em;color:var(--evr-muted)}
+.evr-title{font-size:clamp(18px,2.1vw,24px);font-weight:900;line-height:1.12;letter-spacing:-.02em;max-width:50ch}
+.evr-sub{font-size:13.4px;line-height:1.48;color:var(--evr-muted);max-width:92ch}
+.evr-flow{display:grid;grid-template-columns:minmax(0,.92fr) 22px minmax(0,1.24fr) 22px minmax(0,.92fr);gap:7px;align-items:stretch;min-width:0}
+.evr-card{min-width:0;border:1px solid var(--evr-border);border-radius:15px;padding:12px;background:color-mix(in srgb,var(--evr-bg) 96%,var(--evr-fg) 4%);display:grid;align-content:start;gap:8px}
+.evr-card--taxonomy{border-color:color-mix(in srgb,var(--evr-b) 44%,var(--evr-border));background:color-mix(in srgb,var(--evr-b) 4%,var(--evr-bg))}
+.evr-card--coverage{border-color:color-mix(in srgb,var(--evr-a) 48%,var(--evr-border));background:color-mix(in srgb,var(--evr-a) 4%,var(--evr-bg))}
+.evr-card--case{border-color:color-mix(in srgb,var(--evr-c) 50%,var(--evr-border));background:color-mix(in srgb,var(--evr-c) 4%,var(--evr-bg))}
+.evr-card-label{display:flex;align-items:center;gap:7px}.evr-card-label span{display:grid;place-items:center;width:23px;height:23px;border-radius:8px;background:color-mix(in srgb,var(--evr-fg) 8%,var(--evr-bg));font:900 9px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--evr-muted)}.evr-card-label strong{font-size:9.4px;letter-spacing:.09em;color:var(--evr-muted)}
+.evr-card h3{margin:0;font-size:13.4px;line-height:1.22}.evr-card p{margin:0;font-size:10.6px;line-height:1.4;color:var(--evr-muted)}
+.evr-axes{display:grid;gap:7px;margin-top:2px}.evr-axis{display:grid;grid-template-columns:52px repeat(3,minmax(0,1fr));gap:4px;align-items:center}.evr-axis b{font-size:8px;letter-spacing:.07em;color:var(--evr-muted)}.evr-axis span{min-width:0;padding:5px 4px;border:1px solid var(--evr-border);border-radius:8px;background:var(--evr-bg);font-size:8.7px;font-weight:800;text-align:center;overflow-wrap:anywhere}
+.evr-arrow{display:grid;place-items:center;font-size:20px;font-weight:950;color:var(--evr-muted)}
+.evr-legend{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.evr-legend span{display:flex;align-items:center;gap:4px;font-size:8.3px;font-weight:800;color:var(--evr-muted)}.evr-dot{width:8px;height:8px;border-radius:999px;display:inline-block}.evr-dot--covered{background:var(--evr-a)}.evr-dot--gap{border:2px solid var(--evr-r);background:transparent}
+.evr-matrix{display:grid;grid-template-columns:64px repeat(4,minmax(0,1fr));gap:4px;align-items:stretch;min-width:0}.evr-matrix-head{display:grid;place-items:end center;min-width:0;min-height:22px;padding:2px;font-size:7px;font-weight:900;line-height:1.05;color:var(--evr-muted);text-align:center;overflow-wrap:anywhere}.evr-row-label{display:flex;align-items:center;font-size:7.8px;font-weight:900;color:var(--evr-muted)}.evr-cell{display:grid;place-items:center;min-width:0;min-height:29px;border:1px solid var(--evr-border);border-radius:8px;background:var(--evr-bg);font-size:12px;font-weight:950}.evr-cell--covered{color:var(--evr-a);border-color:color-mix(in srgb,var(--evr-a) 35%,var(--evr-border));background:color-mix(in srgb,var(--evr-a) 5%,var(--evr-bg))}.evr-cell--gap{color:var(--evr-r);border-style:dashed;border-color:color-mix(in srgb,var(--evr-r) 52%,var(--evr-border));background:color-mix(in srgb,var(--evr-r) 3%,var(--evr-bg))}.evr-matrix-note{font-size:8.9px;line-height:1.35;color:var(--evr-muted)}
+.evr-case-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}.evr-case-field{min-width:0;padding:7px;border:1px solid var(--evr-border);border-radius:9px;background:var(--evr-bg);display:grid;gap:3px}.evr-case-field span{font-size:7.4px;font-weight:950;letter-spacing:.05em;color:var(--evr-muted)}.evr-case-field strong{font-size:8.9px;line-height:1.24;overflow-wrap:anywhere}
+.evr-feedback{display:grid;grid-template-columns:minmax(0,1fr) 20px minmax(0,1fr) 20px minmax(0,1fr);gap:6px;align-items:stretch;margin-top:10px;padding:10px;border:1px solid color-mix(in srgb,var(--evr-r) 38%,var(--evr-border));border-radius:14px;background:color-mix(in srgb,var(--evr-r) 3%,var(--evr-bg))}.evr-feedback-step{min-width:0;display:grid;gap:3px;align-content:center;text-align:center}.evr-feedback-step span{font-size:8px;font-weight:950;letter-spacing:.08em;color:var(--evr-muted)}.evr-feedback-step strong{font-size:10.2px;line-height:1.25}.evr-feedback-arrow{display:grid;place-items:center;font-size:17px;font-weight:950;color:var(--evr-muted)}
+.evr-contracts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}.evr-contracts>div{min-width:0;padding:9px 10px;border-left:3px solid var(--evr-b);border-radius:0 9px 9px 0;background:color-mix(in srgb,var(--evr-b) 4%,var(--evr-bg));display:grid;gap:3px}.evr-contracts>div:nth-child(2){border-left-color:var(--evr-a);background:color-mix(in srgb,var(--evr-a) 4%,var(--evr-bg))}.evr-contracts>div:nth-child(3){border-left-color:var(--evr-c);background:color-mix(in srgb,var(--evr-c) 5%,var(--evr-bg))}.evr-contracts span{font-size:8.2px;font-weight:950;letter-spacing:.08em;color:var(--evr-muted)}.evr-contracts strong{font-size:9.5px;line-height:1.3}
+.evr-ref{margin-top:9px;font-size:8.8px;line-height:1.35;color:var(--evr-muted)}.evr-ref a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+@container (max-width:760px){.evr-flow{grid-template-columns:1fr;gap:5px}.evr-arrow{height:14px;font-size:0}.evr-arrow::before{content:"↓";font-size:16px}.evr-card{padding:11px}.evr-feedback{grid-template-columns:1fr;gap:4px}.evr-feedback-arrow{height:12px;font-size:0}.evr-feedback-arrow::before{content:"↓";font-size:15px}.evr-contracts{grid-template-columns:1fr}}
+@container (max-width:430px){.evr-wrap{padding:12px}.evr-title{font-size:18px}.evr-sub{font-size:12.5px}.evr-axis{grid-template-columns:1fr 1fr 1fr}.evr-axis b{grid-column:1/-1}.evr-matrix{grid-template-columns:54px repeat(4,minmax(0,1fr));gap:3px}.evr-matrix-head{font-size:6.4px}.evr-row-label{font-size:7px}.evr-cell{min-height:27px}.evr-case-grid{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.evr-wrap *{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+</style>
