@@ -1,0 +1,42 @@
+{
+  "source": "snippets/datacenters-espacio/03-arquitectura-tether.html",
+  "source_blob_sha": "3f51ef682af2c7558b45fc25874052d3de27c1a3",
+  "replacements": {
+    "data-demo=\"03-arquitectura-tether\"": "data-demo=\"dc-03-megaproject\"",
+    ">topologia tether</div>": ">tether topology</div>",
+    ">Una arquitectura con tether reparte potencia, calor y enlace</div>": ">A tether architecture separates power, heat and connectivity</div>",
+    ">Paneles, cómputo, radiadores y antenas se separan físicamente para no concentrar masa, superficie térmica y comunicaciones en una caja.</div>": ">Panels, compute, radiators and antennas are physically separated so mass, thermal surface and communications are not concentrated in one box.</div>",
+    "aria-label=\"Una arquitectura con tether reparte potencia, calor y enlace\"": "aria-label=\"A tether architecture separates power, heat and connectivity\"",
+    ">Potencia separada</text>": ">Separated power</text>",
+    ">paneles orientados al Sol</text>": ">panels oriented toward the Sun</text>",
+    ">Nodos de cómputo</text>": ">Compute nodes</text>",
+    ">masa y consumo aquí</text>": ">mass and power draw here</text>",
+    ">Radiadores</text>": ">Radiators</text>",
+    ">superficie lejos del calor</text>": ">surface area away from the heat source</text>",
+    ">Enlace y desorbitado</text>": ">Connectivity and deorbit</text>",
+    ">antenas y cierre de ciclo</text>": ">antennas and end-of-life closure</text>",
+    ">también ocupan geometría</text>": ">also consume geometry</text>",
+    ">un datacenter orbital no es una caja: es una estructura extendida</text>": ">an orbital data center is not a box: it is an extended structure</text>",
+    ">La arquitectura separa potencia, cómputo, calor y enlace</span>": ">The architecture separates power, compute, heat and connectivity</span>",
+    ">La superficie térmica manda tanto como los chips</span>": ">Thermal surface area matters as much as the chips</span>",
+    ">La geometría es parte del sistema, no decoración</span>": ">Geometry is part of the system, not decoration</span>"
+  },
+  "forbidden_output_tokens": [
+    "topologia tether",
+    "Una arquitectura con tether",
+    "Paneles, cómputo",
+    "Potencia separada",
+    "paneles orientados al Sol",
+    "Nodos de cómputo",
+    "masa y consumo aquí",
+    ">Radiadores</text>",
+    "superficie lejos del calor",
+    "Enlace y desorbitado",
+    "antenas y cierre de ciclo",
+    "también ocupan geometría",
+    "un datacenter orbital no es una caja",
+    "La arquitectura separa",
+    "La superficie térmica",
+    "La geometría es parte"
+  ]
+}
