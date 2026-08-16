@@ -1,0 +1,38 @@
+{
+  "source": "snippets/ia-pib-bienestar-energia/02-efecto-rebote.html",
+  "source_blob_sha": "88d0f46fd7f9ddb9de5d099a5edacc87cc8ad096",
+  "replacements": {
+    "Por qué la eficiencia no reduce el consumo: el efecto rebote": "Why efficiency does not reduce consumption: the rebound effect",
+    "Cuando una tecnología se vuelve más eficiente, su coste por unidad baja. Pero eso incentiva más uso, más casos de uso y modelos más potentes. El resultado neto puede ser mayor consumo total, no menor.": "When a technology becomes more efficient, its unit cost falls. But that encourages more use, more use cases and more powerful models. The net result can be higher total consumption, not lower consumption.",
+    "Inicio": "Start",
+    "Chips más eficientes": "More efficient chips",
+    "Cada operación consume menos energía. Menor calor, menores costes de refrigeración, mayor densidad de cómputo por rack.": "Each operation consumes less energy. Less heat, lower cooling costs and higher compute density per rack.",
+    "Efecto 1": "Effect 1",
+    "Menor coste por consulta": "Lower cost per query",
+    "Servir un modelo se vuelve más barato. Aplicaciones antes inviables económicamente pasan el umbral de rentabilidad.": "Serving a model becomes cheaper. Applications that were previously economically unviable cross the profitability threshold.",
+    "Efecto 2": "Effect 2",
+    "Más casos de uso viables": "More viable use cases",
+    "Más sectores y geografías pueden desplegar IA. Más modelos especializados. Más usuarios simultáneos.": "More sectors and geographies can deploy AI. More specialized models. More simultaneous users.",
+    "Resultado": "Result",
+    "Mayor demanda total": "Higher total demand",
+    "El volumen de uso crece más rápido que la mejora de eficiencia. El consumo energético agregado aumenta aunque cada operación consuma menos.": "Usage volume grows faster than efficiency improves. Aggregate energy consumption rises even though each operation consumes less.",
+    "Este patrón tiene nombre: paradoja de Jevons (1865). Formulado para el carbón, aplicado después al petróleo, ahora observable en semiconductores. El consumo eléctrico de centros de datos creció de forma sostenida en los años en que la eficiencia por operación también mejoró de forma sostenida. Ambas tendencias son simultáneamente ciertas.": "This pattern has a name: the Jevons paradox (1865). Formulated for coal, later applied to oil and now observable in semiconductors. Data-center electricity consumption grew steadily during the same years in which efficiency per operation also improved steadily. Both trends are true at the same time."
+  },
+  "forbidden_output_tokens": [
+    "Por qué la eficiencia no reduce",
+    "Cuando una tecnología se vuelve más eficiente",
+    "Inicio",
+    "Chips más eficientes",
+    "Cada operación consume menos",
+    "Efecto 1",
+    "Menor coste por consulta",
+    "Servir un modelo se vuelve más barato",
+    "Efecto 2",
+    "Más casos de uso viables",
+    "Más sectores y geografías",
+    "Resultado",
+    "Mayor demanda total",
+    "El volumen de uso crece más rápido",
+    "Este patrón tiene nombre"
+  ]
+}
