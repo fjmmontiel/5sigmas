@@ -86,7 +86,7 @@ try {
       }
 
       const positions = await page.evaluate(() => {
-        const bodyText = document.body.innerText;
+        const bodyText = (document.querySelector('.md-content__inner') || document.body).innerText;
         return {
           evidence: bodyText.indexOf('Telling the model that the user "is an expert"'),
           visual: bodyText.indexOf('Sycophancy: the model that always agrees'),
@@ -169,7 +169,7 @@ try {
       }
 
       const positions = await page.evaluate(() => {
-        const bodyText = document.body.innerText;
+        const bodyText = (document.querySelector('.md-content__inner') || document.body).innerText;
         return {
           risk: bodyText.indexOf('Longer chains introduce risk.'),
           visual: bodyText.indexOf('Error propagation through reasoning chains'),
