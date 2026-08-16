@@ -1,6 +1,6 @@
 {
   "source": "snippets/temas/evaluation-judge-calibration.html",
-  "source_blob_sha": "1915e2041307028800d2c509d9cb2c9be4116fcc",
+  "source_blob_sha": "5548096420216faa5436bee96edfb348607d35b8",
   "replacements": {
     ">JUEZ AUTOMÁTICO → CALIBRACIÓN → GATE</div>": ">AUTOMATED JUDGE → CALIBRATION → GATE</div>",
     ">Un LLM juez escala una rúbrica; no sustituye su validación</div>": ">An LLM judge scales a rubric; it does not replace its validation</div>",
