@@ -134,7 +134,7 @@ try {
       check((await page.locator('.evr-axis span').count()) === 9, `${testCase.route}: ${viewport.name} expected 9 taxonomy example tags`);
       check((await page.locator('.evr-row-label').count()) === 4, `${testCase.route}: ${viewport.name} expected 4 coverage matrix rows`);
       check((await page.locator('.evr-cell').count()) === 16, `${testCase.route}: ${viewport.name} expected 16 coverage matrix cells`);
-      check((await page.locator('.evr-cell--gap').count()) === 4, `${testCase.route}: ${viewport.name} expected 4 illustrative coverage gaps`);
+      check((await page.locator('.evr-cell--gap').count()) === 5, `${testCase.route}: ${viewport.name} expected 5 illustrative coverage gaps`);
       check((await page.locator('.evr-case-field').count()) === 6, `${testCase.route}: ${viewport.name} expected 6 reproducible-case fields`);
       check((await page.locator('.evr-feedback-step').count()) === 3, `${testCase.route}: ${viewport.name} expected 3 incident→regression feedback stages`);
       check((await page.locator('.evr-contracts > div').count()) === 3, `${testCase.route}: ${viewport.name} expected 3 reference-set teaching contracts`);
