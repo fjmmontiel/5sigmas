@@ -1,8 +1,8 @@
 ---
 title: Measurement — GDP vs well-being
-description: "Why GDP does not capture complete human well-being, which dimensions matter beyond market activity, and when subjective well-being diverges from material conditions."
+description: Why GDP does not capture real well-being, which dimensions matter most, and when subjective well-being diverges from material well-being.
 date: 2026-04-09
-keywords: "GDP well-being, beyond GDP, human development index HDI, Easterlin paradox, genuine progress indicator GPI, subjective well-being, Stiglitz Sen Fitoussi, unpaid work"
+keywords: "GDP well-being, beyond GDP, Human Development Index HDI, Easterlin paradox, GPI Genuine Progress Indicator, subjective well-being measurement, Stiglitz Sen Fitoussi, unpaid work economy"
 tags:
   - Economics
   - Well-being
@@ -11,126 +11,143 @@ tags:
 
 # Chapter 3 — Measurement: GDP vs well-being
 
-This chapter examines what GDP measures, what it leaves out, and why alternative well-being frameworks capture dimensions that standard economic statistics miss. By the end, you will understand the difference between economic activity and lived outcomes, the Easterlin paradox and the Kahneman–Killingsworth debate on income and life satisfaction, and how to evaluate AI's impact beyond headline GDP.
+This chapter examines what GDP measures, what it leaves out, and why alternative well-being frameworks capture dimensions that standard economic metrics ignore. By the end, the reader will understand the difference between economic activity and real well-being, know the Easterlin paradox and the Kahneman–Killingsworth debate on the relationship between income and life satisfaction, and have a framework for evaluating AI's impact on well-being beyond what GDP shows.
 
-!!! info "Prerequisite"
-    This chapter builds on [Chapter 2 — AI as an electrical technology](./02-ia-tecnologia-electrica.md).
+!!! info "Prerequisites"
+    This chapter assumes familiarity with the concepts introduced in [Chapter 2 — AI as an electrical technology](./02-ia-tecnologia-electrica.md).
 
-When we ask whether a country is doing “better,” or whether a technology improves people's lives, we need a measurement model. GDP is used because it is standardized, frequent and internationally comparable. The problem is not that GDP measures badly. It measures **market economic activity** well. The problem is treating that as equivalent to well-being.
-
----
-
-## 1. What GDP measures — and what it leaves out
-
-GDP sums the value of final goods and services produced in an economy over a period. As a measure of market activity it is precise and useful. Several economically and socially important dimensions sit outside it.
-
-**Unpaid work.** Elder care, child care, household production and community volunteering are largely excluded because no market transaction occurs. OECD and World Bank estimates place the value of unpaid work around **30–40% of official GDP** in developed economies ([OECD, *How's Life? 2020*](https://www.oecd.org/en/publications/how-s-life-2020_9870c393-en.html)).
-
-**Distribution.** GDP per capita is an average. It can rise while most households receive little of the gain. The arithmetic mean says nothing about who captures additional output.
-
-**Service quality.** More spending or more units delivered do not necessarily mean better outcomes. Education expenditure can rise while learning quality falls; health spending can rise because illness increased rather than because health improved.
-
-**Negative externalities.** Pollution, natural-resource depletion and environmental degradation do not automatically subtract from GDP. Spending required to repair the damage can actually add to measured output.
-
-**Security and social cohesion.** Institutional trust, personal safety, social stability and the ability to plan for the future have enormous value but no direct representation in GDP.
+When we want to know whether a country is "better off" than before, or whether a technology is improving people's lives, we need to measure it. And the indicator most commonly used for that is GDP. The problem is that GDP measures what it measures well—economic activity—but that is not the same thing as well-being.
 
 ---
 
-## 2. What well-being frameworks add
+## 1. What GDP measures and what it leaves out
 
-Economists, psychologists and international organizations converge on a broader set of dimensions.
+GDP sums the value of all goods and services produced in an economy over a period of time. As a metric of economic activity, it is precise and comparable across countries. The problem is not what it measures, but what it does not measure.
+
+### What GDP leaves out
+
+**Unpaid work.** Elder care, raising children, household maintenance and community volunteer work do not enter GDP because they do not pass through the market. OECD and World Bank estimates place the value of this unpaid work at between 30 and 40% of official GDP in developed economies [OECD (2020)](https://www.oecd.org/en/publications/how-s-life-2020_9870c393-en.html), making it the largest category of production the indicator ignores completely.
+
+**Distribution.** GDP per capita is an average that can hide extreme inequalities. A country in which 1% of the population captures 90% of growth can have rising GDP per capita while most of the population experiences no improvement at all. The arithmetic mean says nothing about how what it measures is distributed.
+
+**Quality of services.** An education system that produces more graduates with weaker skills can register higher GDP—more measured economic activity—while producing a worse result in terms of real human capital. The quantity of activity and the quality of the outcome are different things.
+
+**Negative externalities.** Pollution, depletion of natural resources and environmental degradation do not appear in GDP as costs. A country can grow while destroying its natural environment without that subtracting anything from the indicator. When that destruction forces spending on remedies—hospitals, water purification, infrastructure repairs—that spending adds to GDP instead of subtracting from it.
+
+**Security and social cohesion.** The absence of violence, institutional trust, social stability and the ability to plan for the future have enormous value for people and have no direct representation in GDP.
+
+---
+
+## 2. What well-being measures that GDP does not capture
+
+The well-being frameworks developed by economists, psychologists and international organizations over recent decades converge on similar dimensions.
 
 {{ include_html("snippets/ia-pib-bienestar-energia/03-pib-bienestar.html") }}
 
 ### Material dimensions
 
-Income and wealth, employment and job quality, housing, accessible health services and education all depend partly on economic capacity. Even here, however, **distribution and quality** matter more than the aggregate alone.
+Income and wealth, employment and job quality, housing, accessible health services and quality education: these are the dimensions where GDP has the greatest predictive power, although even here distribution matters more than the average.
 
 ### Non-material dimensions
 
-Work–life balance, social relationships, community support, civic participation, personal safety, environmental quality, autonomy and subjective well-being can move differently from GDP.
-
-The goal is not to replace production statistics with one subjective number. It is to stop asking one indicator to answer several distinct questions.
+Work–life balance, social relationships and community support, civic participation and governance, personal safety, environmental quality and subjective well-being: these are the dimensions that diverge most from GDP and where the paradox of "growing without improving" appears most often.
 
 ---
 
-## 3. Subjective well-being and divergence from material conditions
+## 3. Subjective well-being and when it diverges from material well-being
 
-Subjective well-being asks people how satisfied they are with their lives or how they experience them. The measure has known limitations: adaptation, comparison effects, cultural response styles and survey context all matter. Modern measurement also distinguishes **hedonic well-being** (pleasure and absence of distress) from **eudaimonic well-being** (purpose, autonomy and fulfilment) ([OECD guidelines](https://www.oecd.org/en/publications/oecd-guidelines-on-measuring-subjective-well-being_9789264191655-en.html)).
+Subjective well-being—what people report when asked how satisfied they are with their lives—is a complicated but relevant metric. Its limitations are well known: people adapt to circumstances (what once seemed intolerable becomes normal), comparison anchors matter enormously (satisfaction depends heavily on whom you compare yourself with), and surveys have cultural and moment-specific biases. Recent research also distinguishes between hedonic well-being (absence of distress, immediate pleasure) and eudaimonic well-being (sense of purpose, autonomy, fulfilment), two dimensions that can move in different directions under the same material changes [OECD (2013)](https://www.oecd.org/en/publications/oecd-guidelines-on-measuring-subjective-well-being_9789264191655-en.html).
 
-Despite those limitations, subjective measures capture information GDP cannot. The *World Happiness Report 2024*, for example, put Finland at roughly **7.7/10** in life evaluation while Spain was around **6.5**, a gap that cannot be explained by income alone. Social support, institutional trust and perceived freedom contribute materially to the difference.
+Despite those limitations, subjective well-being data capture something GDP cannot: whether people feel that their life is good, regardless of what aggregate indicators say. Data from the World Happiness Report 2024 illustrate the divergence: Finland, with a life-satisfaction score of 7.7 out of 10, topped the ranking for the seventh consecutive year despite not being the European country with the highest GDP per capita, while Spain, with an income level comparable to several Nordic countries, sits around 6.5. The difference is not explained by income but by variables such as institutional trust, social-support networks and perceived freedom to make life decisions.
 
 ### The Easterlin paradox
 
-Richard Easterlin documented a pattern that remains central to the debate: within a country at a point in time, higher-income people generally report higher well-being, but long-run increases in national income do not always produce a proportional increase in average life satisfaction ([Easterlin, 1974](https://www.nber.org/system/files/chapters/c3699/c3699.pdf)). Relative position and adaptation can partly offset absolute income gains.
+In the 1970s, economist Richard Easterlin documented a pattern that remains relevant [Easterlin (1974)](https://www.nber.org/system/files/chapters/c3699/c3699.pdf): within a country, at a given point in time, people with higher incomes report greater subjective well-being.
 
-A related dispute concerned whether emotional well-being stops improving above an income threshold. In 2023, Daniel Kahneman and Matthew Killingsworth, with Barbara Mellers, published an adversarial collaboration designed to reconcile earlier conflicting findings. The result was heterogeneous: for most participants, well-being continued to rise with income; for roughly the **lowest-well-being 20%**, the relationship flattened at higher income levels.
+But across countries, over time, growth in GDP per capita does not produce the same kind of increase in subjective well-being once a basic threshold has been crossed. The effect of relative position—how much you have compared with those around you—can dominate the effect of absolute income. Easterlin's research, which he continued refining until his death in 2024, generated decades of empirical debate about whether the threshold exists and where it lies. In 2023, that debate produced a methodologically important result: Daniel Kahneman and Matthew Killingsworth published an adversarial collaboration designed to reconcile their previously contradictory conclusions, with Kahneman arguing that hedonic well-being stopped increasing with income above $75,000 per year and Killingsworth finding continuous growth without a ceiling.
+
+The joint analysis found that both were right for different subpopulations: for most people, well-being measured in real time continues to increase with income without an apparent ceiling, but for roughly the 20% who already report low well-being, income above that threshold produces no appreciable additional improvement. The Easterlin paradox and the ceiling hypothesis are compatible because they apply to different people.
+
+This has direct implications for evaluating AI's impact: if AI raises GDP but concentrates the gains among a few, its impact on subjective well-being can be neutral or negative for the majority even while the aggregate indicator improves.
+
+### When material and subjective well-being diverge most
+
+Comparative studies point to the situations and contexts where the divergence is greatest:
+
+**Rising inequality.** When economic growth is not distributed evenly, the subjective well-being of those left behind can deteriorate even while the average rises.
+
+**Job insecurity.** Even if income is maintained, perceived instability in employment consistently reduces subjective well-being. The fear of losing what one has weighs more heavily than the value of having it.
+
+**Loss of meaning.** Work provides not only income but also structure, social identity and a sense of purpose. When automation eliminates tasks without replacing them with others that have equivalent subjective value, the effect on well-being can exceed what income figures show.
+
+**Commuting time and living conditions.** Time lost to long commutes, noise pollution, excessive urban density and lack of access to nature consistently erode subjective well-being, although they rarely appear as priorities in standard economic metrics.
 
 {{ include_html("snippets/ia-pib-bienestar-energia/03-kahneman-killingsworth.html") }}
 
-The general lesson is more important than a single threshold: **population averages can hide very different response curves across subgroups**.
-
-### Where material and subjective well-being diverge most
-
-- **Rising inequality:** aggregate growth can coexist with deterioration for groups left behind.
-- **Job insecurity:** uncertainty about future employment lowers well-being even when current income is unchanged.
-- **Loss of purpose:** work provides structure, identity and meaning as well as income; automation can affect those dimensions separately.
-- **Living conditions and time:** long commutes, noise, pollution and weak access to nature reduce experienced well-being without appearing clearly in GDP.
-
-This matters directly for AI: if AI raises aggregate output while concentrating the gains or increasing insecurity, GDP can improve while important well-being dimensions do not.
-
 ---
 
-## 4. Complementary frameworks
+## 4. Alternative frameworks that try to capture more
 
-Several frameworks try to measure progress more broadly.
+Several efforts have tried to go beyond GDP as an indicator of progress.
 
-**Human Development Index (HDI).** Combines life expectancy, education and gross national income per capita ([UNDP](https://hdr.undp.org/data-center)). It is broader than GDP but still incomplete on distribution and subjective well-being.
+**Human Development Index (HDI)** ([UNDP](https://hdr.undp.org/data-center))**:** combines life expectancy, education and gross national income per capita. More complete than GDP alone, but it still does not capture distribution or subjective well-being.
 
 {{ include_html("snippets/ia-pib-energia/series_energy_ai_03_measurement.html") }}
 
-**Genuine Progress Indicator (GPI).** Starts from consumption, adds unpaid household and volunteer work, and subtracts costs such as inequality, crime, pollution and resource depletion. It can diverge substantially from GDP when externalities and distribution change ([Talberth et al., 2007](https://web.archive.org/web/20070713205752/http://www.rprogress.org/publications/2007/GPI%202006.pdf)).
+**Genuine Progress Indicator (GPI)** ([Talberth et al., 2007](https://web.archive.org/web/20070713205752/http://www.rprogress.org/publications/2007/GPI%202006.pdf))**:** starts from personal consumption, adds the value of volunteer and family work, and subtracts the costs of inequality, crime, pollution and resource depletion. It produces results very different from GDP in developed countries: states with high GDP per capita can rank very low on GPI once their negative externalities are deducted, while states with less economic activity but lower inequality and less environmental degradation move up the ranking. The divergence between the two indicators has widened since the 1970s in most advanced economies [Talberth et al. (2007)](https://web.archive.org/web/20070713205752/http://www.rprogress.org/publications/2007/GPI%202006.pdf).
 
-**OECD Better Life framework.** Tracks dimensions such as housing, jobs, community, environment, safety and life satisfaction, explicitly recognizing that well-being is multidimensional ([OECD](https://www.oecd.org/en/publications/how-s-life-2020_9870c393-en.html)).
+**OECD Better Life Index** ([OECD, 2020](https://www.oecd.org/en/publications/how-s-life-2020_9870c393-en.html))**:** eleven dimensions that each user can weight according to their priorities. It explicitly recognizes that there is no single correct definition of well-being.
 
-**Gross National Happiness.** Bhutan's framework includes psychological well-being, time use, community vitality and cultural resilience. It is unusually broad, but harder to standardize internationally.
+**Gross National Happiness:** Bhutan's framework, which incorporates psychological well-being, time use, community vitality and cultural resilience. Radical in its breadth, difficult to compare internationally.
+
+> None of these frameworks has displaced GDP as the dominant indicator because GDP has real advantages: it is precise, comparable, frequently updated and politically neutral in its methodology. But the alternative frameworks show what is lost when GDP is used as a proxy for general well-being.
 
 {{ include_html("snippets/ia-pib-bienestar-energia/03-marcos-alternativos.html") }}
 
-None has displaced GDP because GDP has genuine strengths: it is precise in what it measures, frequently updated, internationally standardized and relatively neutral about which outcomes should receive more weight. The correct conclusion is therefore **measurement pluralism**, not abandoning GDP.
-
----
-
-## 5. What this changes when evaluating AI
-
-AI's effects can appear at different layers and at different times:
-
-1. **Task output:** work becomes faster or higher quality.
-2. **Firm productivity:** the gain survives coordination and workflow redesign.
-3. **Market output:** quantities, prices and new products change enough to enter economic statistics.
-4. **Distribution:** gains and costs are shared differently across workers, firms and consumers.
-5. **Well-being:** time, autonomy, access, security and purpose can improve or worsen independently of headline output.
-
-A technology can therefore raise measured productivity without improving every dimension of well-being, or improve consumer experience before the gain is visible in GDP.
-
-!!! tip "Next chapter"
-    [Chapter 4 — AI and GDP today →](./04-ia-pib-hoy.md) explains where AI's productivity effects are already visible, why aggregate statistics lag, and which leading indicators are worth watching.
+The next chapter applies this distinction to the specific case of AI: where the productivity impact is already appearing, why GDP sees it late, and which early signals are more indicative of what is happening.
 
 ---
 
 ## Frequently asked questions
 
-**What important dimensions does GDP not measure directly?**  
-Unpaid work, distribution, service quality, many environmental externalities, personal security, institutional trust, social support and subjective well-being.
+**What are the main dimensions of well-being that GDP does not measure?**
+GDP measures market economic activity. What it leaves out includes unpaid work (caregiving, raising children, volunteering, which the OECD estimates at 30–40% of official GDP), the distribution of that activity across the population (GDP per capita is an average that can hide extreme inequalities), service quality (more university graduates does not imply more human capital), negative externalities such as pollution, and subjective well-being variables such as security, institutional trust and sense of purpose.
 
-**What does the Easterlin paradox say?**  
-Higher-income people within a country tend to report higher well-being, but long-run national income growth does not always generate a proportional rise in average life satisfaction. Relative position and adaptation help explain the gap.
+**What does the Easterlin paradox say about income and happiness?**
+Easterlin documented that within a country and at a given point in time, people with higher incomes report greater subjective well-being. But across countries over time, growth in GDP per capita does not produce the same increase in subjective well-being once a basic threshold has been crossed. The paradox proposes that the effect of relative position—how much you have compared with your neighbours—can dominate the effect of absolute income. Later research, including an adversarial collaboration between Kahneman and Killingsworth published in 2023, suggests that both patterns can be true for different subpopulations.
 
-**Why is HDI better than GDP but still incomplete?**  
-HDI adds health and education to income, but it still does not fully capture distribution, environmental quality, security or subjective well-being.
+**How does HDI differ from GDP, and why is it still insufficient?**
+The Human Development Index combines life expectancy, years of education and gross national income per capita. It is more complete than GDP alone because it includes two non-economic dimensions. But it still does not capture the distribution of those indicators within a country, subjective well-being, environmental quality or variables such as personal safety and social cohesion. The inequality-adjusted HDI (IHDI) tries to address the first problem, but the other dimensions remain outside it because of measurement and international-comparability difficulties.
 
-**Why has no alternative indicator replaced GDP?**  
-Because GDP is standardized, frequently measured and highly comparable. Broader frameworks require normative choices about which dimensions to include and how to weight them.
+**Why has no alternative indicator displaced GDP as the dominant measure?**
+Because GDP has real advantages that alternative frameworks do not offer: it is precise in what it measures, can be updated frequently, is internationally comparable using standardized methodology and is politically neutral in its methodology (it does not take a position on which dimensions matter most). Frameworks such as GPI, HDI or the OECD Better Life Index require decisions about what to weight more heavily, making them conceptually richer but harder to use as references in comparative economic policy.
 
-**How should AI's impact be measured?**  
-Across several layers simultaneously: task productivity, firm productivity, market output, distribution and lived outcomes. No single aggregate number can capture all of them.
+**How does AI automation affect well-being beyond income?**
+If AI automates tasks without creating others with equivalent subjective value, the effect on well-being can be negative even if income is maintained. Work is not only a source of income but also of social identity, temporal structure and sense of purpose. Subjective well-being studies show that job insecurity consistently reduces well-being even when income is maintained, because the fear of losing what one has weighs more heavily than its current value. If AI displaces work without that transition being managed, the impact on subjective well-being can exceed what income data indicate.
+
+---
+
+## 5. References
+
+<details markdown="1">
+<summary><strong>Core sources</strong></summary>
+
+| Key | Source | Brief description |
+| --- | --- | --- |
+| R1 | **UNDP** — *Human Development Reports* ([UNDP][r1]) | Conceptual framework and Human Development Index data. Annual publication with life expectancy, education and income data for more than 190 countries. |
+| R2 | **OECD (2020)** — *How's Life? Measuring Well-being* ([OECD][r2]) | Better Life Index framework and comparative analysis of well-being across 11 dimensions. Includes estimates of the value of unpaid work in developed economies. |
+| R3 | **Easterlin, R.A. (1974)** — *Does Economic Growth Improve the Human Lot? Some Empirical Evidence* (in Paul A. David and Melvin W. Reder, eds., *Nations and Households in Economic Growth*) | Original formulation of the paradox between GDP growth and subjective well-being. Starting point for decades of empirical debate about the basic-needs satisfaction threshold. |
+| R4 | **Stiglitz, J., Sen, A., Fitoussi, J.-P. (2009)** — *Report by the Commission on the Measurement of Economic Performance and Social Progress* ([Eurostat][r4]) | Report of the commission convened by Sarkozy. Systematic account of GDP's limitations and proposals to incorporate distribution, sustainability and subjective well-being. |
+| R5 | **Penn World Table** ([University of Groningen][r5]) | Comparative database of GDP, productivity and material well-being adjusted for purchasing-power parity for more than 180 countries since 1950. |
+| R6 | **Talberth, J., Cobb, C., Slattery, N. (2007)** — *The Genuine Progress Indicator 2006* ([Redefining Progress][r6]) | GPI methodology and data for the United States. Documents the growing divergence between GDP and GPI since the 1970s in advanced economies. |
+| R7 | **OECD (2013)** — *OECD Guidelines on Measuring Subjective Well-being* ([OECD][r7]) | Methodological framework for measuring subjective well-being, including the distinction between hedonic dimensions (affective evaluation) and eudaimonic dimensions (functioning and purpose). |
+
+</details>
+
+[r1]: https://hdr.undp.org/data-center "Human Development Reports — UNDP"
+[r2]: https://www.oecd.org/en/publications/how-s-life-2020_9870c393-en.html "How's Life? Measuring Well-being — OECD"
+[r3]: https://www.nber.org/system/files/chapters/c3699/c3699.pdf "Does Economic Growth Improve the Human Lot? — Easterlin (1974)"
+[r4]: https://ec.europa.eu/eurostat/documents/8131721/8131772/Stiglitz-Sen-Fitoussi-Commission-report.pdf "Report on the Measurement of Economic Performance — Stiglitz-Sen-Fitoussi"
+[r5]: https://www.rug.nl/ggdc/productivity/pwt/ "Penn World Table — University of Groningen"
+[r6]: https://web.archive.org/web/20070713205752/http://www.rprogress.org/publications/2007/GPI%202006.pdf "The Genuine Progress Indicator 2006 — Redefining Progress"
+[r7]: https://www.oecd.org/en/publications/oecd-guidelines-on-measuring-subjective-well-being_9789264191655-en.html "OECD Guidelines on Measuring Subjective Well-being"
