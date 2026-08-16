@@ -1,0 +1,161 @@
+<div class="aev-wrap" data-demo="topic-agent-evaluation-trace">
+  <div class="aev-head">
+    <div class="aev-kicker">EVALUACIÓN DE AGENTES · TRAZA COMPLETA</div>
+    <div class="aev-title">Evalúa el resultado y cada transición que lo produjo</div>
+    <div class="aev-sub">Una respuesta final correcta no basta: hay que comprobar qué decidió el agente, qué pudo ejecutar, qué efecto ocurrió realmente y si el sistema quedó en un estado recuperable.</div>
+  </div>
+
+  <div class="aev-trace" role="img" aria-label="Traza de evaluación de un agente desde el objetivo hasta la respuesta final">
+    <div class="aev-step aev-step--goal">
+      <span class="aev-num">01</span>
+      <div class="aev-step-head"><small>CONTRATO</small><strong>Objetivo</strong></div>
+      <p>Define qué significa terminar correctamente antes de ejecutar.</p>
+      <div class="aev-observe"><span>REGISTRA</span><b>caso · criterio de éxito</b></div>
+      <div class="aev-risk"><span>FALLO</span><em>objetivo ambiguo</em></div>
+    </div>
+    <div class="aev-arrow" aria-hidden="true">→</div>
+
+    <div class="aev-step aev-step--decision">
+      <span class="aev-num">02</span>
+      <div class="aev-step-head"><small>MODELO</small><strong>Decisión</strong></div>
+      <p>Selecciona una acción y propone argumentos a partir del contexto.</p>
+      <div class="aev-observe"><span>REGISTRA</span><b>tool · argumentos · orden</b></div>
+      <div class="aev-risk"><span>FALLO</span><em>tool o parámetros incorrectos</em></div>
+    </div>
+    <div class="aev-arrow" aria-hidden="true">→</div>
+
+    <div class="aev-step aev-step--auth">
+      <span class="aev-num">03</span>
+      <div class="aev-step-head"><small>RUNTIME</small><strong>Autorización</strong></div>
+      <p>Valida esquema, permisos, riesgo y cualquier aprobación requerida.</p>
+      <div class="aev-observe"><span>REGISTRA</span><b>gate · permiso · decisión</b></div>
+      <div class="aev-risk"><span>FALLO</span><em>acción ejecutada sin autoridad</em></div>
+    </div>
+    <div class="aev-arrow" aria-hidden="true">→</div>
+
+    <div class="aev-step aev-step--execution">
+      <span class="aev-num">04</span>
+      <div class="aev-step-head"><small>TOOL</small><strong>Ejecución</strong></div>
+      <p>Produce un resultado observable: éxito, error, timeout o reintento.</p>
+      <div class="aev-observe"><span>REGISTRA</span><b>resultado · latencia · retry</b></div>
+      <div class="aev-risk"><span>FALLO</span><em>error oculto o reintento inseguro</em></div>
+    </div>
+    <div class="aev-arrow" aria-hidden="true">→</div>
+
+    <div class="aev-step aev-step--state">
+      <span class="aev-num">05</span>
+      <div class="aev-step-head"><small>FUENTE DE VERDAD</small><strong>Estado</strong></div>
+      <p>Comprueba el efecto real, la idempotencia y la posibilidad de recuperar.</p>
+      <div class="aev-observe"><span>REGISTRA</span><b>estado final · efecto · rollback</b></div>
+      <div class="aev-risk"><span>FALLO</span><em>duplicado o estado inconsistente</em></div>
+    </div>
+    <div class="aev-arrow" aria-hidden="true">→</div>
+
+    <div class="aev-step aev-step--answer">
+      <span class="aev-num">06</span>
+      <div class="aev-step-head"><small>USUARIO</small><strong>Respuesta</strong></div>
+      <p>Comunica únicamente lo que está respaldado por el resultado observado.</p>
+      <div class="aev-observe"><span>REGISTRA</span><b>mensaje · evidencia · abstención</b></div>
+      <div class="aev-risk"><span>FALLO</span><em>afirmar un efecto que no ocurrió</em></div>
+    </div>
+  </div>
+
+  <div class="aev-gates" aria-label="Dimensiones complementarias para evaluar una trayectoria de agente">
+    <div class="aev-gate"><span>01 · RESULTADO</span><strong>¿Alcanzó el objetivo?</strong><small>Corrección de la tarea completa, no solo del texto final.</small></div>
+    <div class="aev-gate"><span>02 · TRAYECTORIA</span><strong>¿Tomó buenas decisiones?</strong><small>Tool, argumentos, orden, pasos innecesarios y evidencia usada.</small></div>
+    <div class="aev-gate"><span>03 · SEGURIDAD</span><strong>¿Respetó la autoridad?</strong><small>Permisos, aprobaciones, límites y abstención cuando faltaban.</small></div>
+    <div class="aev-gate"><span>04 · ECONOMÍA</span><strong>¿Cuánto costó llegar?</strong><small>Pasos, tokens, latencia, reintentos y superficie de riesgo.</small></div>
+    <div class="aev-gate"><span>05 · RECUPERACIÓN</span><strong>¿Quedó un estado sano?</strong><small>Idempotencia, errores observables, rollback y continuación segura.</small></div>
+  </div>
+
+  <div class="aev-rule">
+    <span>REGLA DE EVALUACIÓN</span>
+    <strong>Una respuesta correcta no compensa una acción prohibida, un efecto duplicado o un estado inconsistente.</strong>
+    <small>La traza convierte el fallo en una transición concreta que puede reproducirse, medirse y corregirse.</small>
+  </div>
+
+  <div class="aev-source">Referencia operativa: <a href="https://openai.github.io/openai-agents-python/tracing/">OpenAI Agents SDK · Tracing</a> · <a href="https://openai.github.io/openai-agents-python/guardrails/">Tool guardrails</a></div>
+</div>
+
+<style>
+.aev-wrap,.aev-wrap *{box-sizing:border-box}
+.aev-wrap{
+  --aev-a:var(--md-primary-fg-color,#26a69a);
+  --aev-b:#4757d6;
+  --aev-c:var(--md-accent-fg-color,#ffb343);
+  --aev-r:#e06c75;
+  --aev-bg:var(--md-default-bg-color,#fff);
+  --aev-fg:var(--md-default-fg-color,#111827);
+  --aev-muted:color-mix(in srgb,var(--aev-fg) 58%,transparent);
+  --aev-border:color-mix(in srgb,var(--aev-fg) 14%,transparent);
+  container-type:inline-size;
+  margin:1.15rem 0 1.55rem;
+  padding:clamp(14px,2vw,22px);
+  border:1px solid var(--aev-border);
+  border-radius:20px;
+  color:var(--aev-fg);
+  background:
+    radial-gradient(85% 110% at 0 0,color-mix(in srgb,var(--aev-b) 8%,transparent),transparent 57%),
+    radial-gradient(85% 110% at 100% 0,color-mix(in srgb,var(--aev-a) 8%,transparent),transparent 57%),
+    var(--aev-bg)
+}
+.aev-head{display:grid;gap:4px;margin-bottom:14px}
+.aev-kicker{font-size:10.5px;font-weight:900;letter-spacing:.12em;color:var(--aev-muted)}
+.aev-title{font-size:clamp(18px,2.1vw,24px);font-weight:900;line-height:1.1;letter-spacing:-.02em}
+.aev-sub{max-width:88ch;font-size:13.5px;line-height:1.45;color:var(--aev-muted)}
+.aev-trace{display:grid;grid-template-columns:repeat(5,minmax(0,1fr) auto) minmax(0,1fr);gap:5px;align-items:stretch;min-width:0}
+.aev-step{position:relative;min-width:0;min-height:205px;display:grid;grid-template-rows:auto auto auto 1fr auto;gap:7px;padding:10px;border:1px solid var(--aev-border);border-radius:14px;background:color-mix(in srgb,var(--aev-bg) 96%,var(--aev-fg) 4%)}
+.aev-step--goal{border-color:color-mix(in srgb,var(--aev-b) 34%,var(--aev-border))}
+.aev-step--auth{border-color:color-mix(in srgb,var(--aev-c) 50%,var(--aev-border));background:color-mix(in srgb,var(--aev-c) 4%,var(--aev-bg))}
+.aev-step--state{border-color:color-mix(in srgb,var(--aev-a) 46%,var(--aev-border));background:color-mix(in srgb,var(--aev-a) 4%,var(--aev-bg))}
+.aev-step--answer{border-color:color-mix(in srgb,var(--aev-a) 38%,var(--aev-border))}
+.aev-num{position:absolute;top:8px;right:8px;width:22px;height:22px;display:grid;place-items:center;border:1px solid var(--aev-border);border-radius:999px;font-size:8px;font-weight:900;color:var(--aev-muted);background:var(--aev-bg)}
+.aev-step-head{display:grid;gap:2px;padding-right:25px}
+.aev-step-head small,.aev-observe span,.aev-risk span,.aev-gate span,.aev-rule>span{font-size:8.5px;font-weight:900;letter-spacing:.09em;color:var(--aev-muted)}
+.aev-step-head strong{font-size:12.2px;line-height:1.2}
+.aev-step p{margin:0;font-size:10.3px;line-height:1.38;color:var(--aev-muted)}
+.aev-observe,.aev-risk{display:grid;gap:3px;padding:7px;border-radius:9px;background:var(--aev-bg);border:1px solid var(--aev-border)}
+.aev-observe b{font-size:9.3px;line-height:1.28;overflow-wrap:anywhere}
+.aev-risk{align-self:end;border-color:color-mix(in srgb,var(--aev-r) 25%,var(--aev-border));background:color-mix(in srgb,var(--aev-r) 4%,var(--aev-bg))}
+.aev-risk em{font-size:9px;line-height:1.28;font-style:normal;font-weight:750;color:color-mix(in srgb,var(--aev-fg) 76%,var(--aev-r) 24%)}
+.aev-arrow{display:grid;place-items:center;font-size:16px;font-weight:900;color:var(--aev-muted)}
+.aev-gates{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin-top:11px}
+.aev-gate{min-width:0;display:grid;gap:4px;padding:9px;border:1px solid var(--aev-border);border-radius:11px;background:var(--aev-bg)}
+.aev-gate:nth-child(3){border-color:color-mix(in srgb,var(--aev-c) 45%,var(--aev-border))}
+.aev-gate:nth-child(5){border-color:color-mix(in srgb,var(--aev-a) 42%,var(--aev-border))}
+.aev-gate strong{font-size:10.6px;line-height:1.25}
+.aev-gate small{font-size:9.1px;line-height:1.32;color:var(--aev-muted)}
+.aev-rule{margin-top:10px;display:grid;grid-template-columns:auto minmax(0,1.25fr) minmax(0,.75fr);gap:10px;align-items:center;padding:10px 12px;border:1px solid color-mix(in srgb,var(--aev-c) 42%,var(--aev-border));border-radius:12px;background:color-mix(in srgb,var(--aev-c) 5%,var(--aev-bg))}
+.aev-rule strong{font-size:11.3px;line-height:1.34}.aev-rule small{font-size:9.6px;line-height:1.35;color:var(--aev-muted)}
+.aev-source{margin-top:8px;font-size:9.2px;line-height:1.35;color:var(--aev-muted)}.aev-source a{font-weight:750}
+@container (max-width:820px){
+  .aev-trace{grid-template-columns:1fr;gap:5px}
+  .aev-arrow{height:12px;line-height:1;transform:rotate(90deg)}
+  .aev-step{min-height:0;grid-template-columns:minmax(110px,.58fr) minmax(0,.92fr);grid-template-rows:auto auto auto;gap:6px 8px}
+  .aev-step-head{grid-column:1;grid-row:1}.aev-step p{grid-column:1;grid-row:2/4}
+  .aev-observe{grid-column:2;grid-row:1/3}.aev-risk{grid-column:2;grid-row:3;align-self:stretch}.aev-num{top:7px;right:7px}
+  .aev-gates{grid-template-columns:repeat(2,minmax(0,1fr))}.aev-gate:last-child{grid-column:1/-1}
+  .aev-rule{grid-template-columns:1fr;gap:4px}
+}
+@container (max-width:460px){
+  .aev-step{grid-template-columns:1fr;grid-template-rows:auto auto auto auto}.aev-step-head,.aev-step p,.aev-observe,.aev-risk{grid-column:1;grid-row:auto}.aev-step-head{padding-right:28px}
+  .aev-gates{grid-template-columns:1fr}.aev-gate:last-child{grid-column:auto}
+}
+@media (prefers-reduced-motion:reduce){.aev-wrap *{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+</style>
+
+<script>
+(() => {
+  const root = document.currentScript?.previousElementSibling?.previousElementSibling || document.querySelector('[data-demo="topic-agent-evaluation-trace"]');
+  if (!root || root.dataset.contractChecked === '1') return;
+  root.dataset.contractChecked = '1';
+  const fail = (message) => { throw new Error(`[topic-agent-evaluation-trace] ${message}`); };
+  requestAnimationFrame(() => {
+    if (root.querySelectorAll('.aev-step').length !== 6) fail('expected 6 trace stages');
+    if (root.querySelectorAll('.aev-gate').length !== 5) fail('expected 5 evaluation gates');
+    if (root.querySelectorAll('.aev-observe').length !== 6) fail('expected one observable record per stage');
+    if (root.querySelectorAll('.aev-risk').length !== 6) fail('expected one failure mode per stage');
+    if (root.scrollWidth - root.clientWidth > 2) fail(`horizontal overflow ${root.scrollWidth - root.clientWidth}px`);
+  });
+})();
+</script>

@@ -64,15 +64,11 @@ La separación se vuelve crítica cuando una tool tarda. La conversación puede 
 
 ## Cómo se evalúa un agente
 
-Una respuesta final convincente no basta. Hay que medir la **tarea completa**:
+Una respuesta final convincente no basta. Hay que medir la **tarea completa**: qué decidió el agente, qué pudo ejecutar, qué efecto produjo y si el sistema quedó en un estado correcto y recuperable.
 
-- ¿alcanzó el objetivo?
-- ¿usó las herramientas correctas?
-- ¿respetó los permisos?
-- ¿cuántos pasos, tokens y reintentos necesitó?
-- ¿qué hizo cuando una tool falló?
-- ¿supo abstenerse cuando faltaban datos o autorización?
-- ¿dejó el sistema en un estado recuperable?
+{{ include_html("snippets/temas/agent-evaluation-trace.html") }}
+
+La traza hace observables las transiciones que una puntuación final oculta. Permite separar un fallo de selección de tool de uno de autorización, ejecución, estado o comunicación al usuario, y convertir cada incidente en un caso reproducible.
 
 [Cómo evaluar un agente de IA](/series/agentes-ia/03-como-evaluar-un-agente/) desarrolla una arquitectura de gates para resultado, trayectoria, seguridad y economía operativa.
 
@@ -129,5 +125,6 @@ No. En producción suele importar más que la autonomía esté acotada: herramie
 - [OpenAI Agents SDK — Context management](https://openai.github.io/openai-agents-python/context/)
 - [OpenAI Agents SDK — Sessions](https://openai.github.io/openai-agents-python/sessions/)
 - [OpenAI Agents SDK — Run state](https://openai.github.io/openai-agents-python/ref/run_state/)
+- [OpenAI Agents SDK — Tracing](https://openai.github.io/openai-agents-python/tracing/)
 - [OpenAI Agents SDK — Tool guardrails](https://openai.github.io/openai-agents-python/guardrails/)
 - [Model Context Protocol — Authorization](https://modelcontextprotocol.io/specification/latest/basic/authorization)

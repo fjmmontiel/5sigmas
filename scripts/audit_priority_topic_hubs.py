@@ -74,6 +74,13 @@ REQUIRED_VISUAL_INCLUDES = {
         "snippets/temas/transformer-ffn.html",
         "snippets/temas/transformer-residual-norm.html",
     ),
+    "agentes-ia": (
+        "snippets/agentes-ia/01-bucle-agente.html",
+        "snippets/temas/agent-system-boundary.html",
+        "snippets/temas/agent-tool-gate.html",
+        "snippets/temas/agent-context-memory-state.html",
+        "snippets/temas/agent-evaluation-trace.html",
+    ),
     "prompt-injection": (
         "snippets/seguridad-ia/01-control-vs-datos.html",
         "snippets/seguridad-ia/01-rag-trigger-fragment.html",
