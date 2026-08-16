@@ -68,6 +68,7 @@ SPANISH_REQUIRED_TERMS = {
 REQUIRED_VISUAL_INCLUDES = {
     "transformer": (
         "snippets/temas/transformer-block.html",
+        "snippets/temas/transformer-embedding-position.html",
         "snippets/temas/transformer-qkv.html",
         "snippets/temas/transformer-multihead.html",
         "snippets/temas/transformer-causal-mask.html",

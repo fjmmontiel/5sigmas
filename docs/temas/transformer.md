@@ -23,16 +23,11 @@ En un modelo autoregresivo, la última representación se proyecta sobre el voca
 
 Un token empieza como un identificador entero. Una matriz aprendida lo convierte en un vector. Tokens que aparecen en contextos parecidos pueden acabar con representaciones relacionadas.
 
-La atención, por sí sola, no conoce el orden. El modelo necesita añadir o incorporar la posición. El paper original usó codificaciones sinusoidales. Arquitecturas posteriores emplean embeddings posicionales aprendidos, posiciones relativas o transformaciones rotatorias como RoPE.
+La atención, por sí sola, no conoce el orden. El modelo necesita añadir o incorporar la posición. El paper original usó codificaciones sinusoidales sumadas al embedding de entrada. Arquitecturas posteriores emplean embeddings posicionales aprendidos, posiciones relativas o transformaciones rotatorias como RoPE.[^transformer][^rope]
 
-La posición no es un detalle cosmético. Permite distinguir:
+{{ include_html("snippets/temas/transformer-embedding-position.html") }}
 
-```text
-"el modelo corrigió al evaluador"
-"el evaluador corrigió al modelo"
-```
-
-Los tokens son casi los mismos. La relación cambia por completo.
+La posición no es un detalle cosmético: permite distinguir quién actúa sobre quién aunque una secuencia contenga prácticamente los mismos tokens. El mecanismo exacto no es universal; la suma `embedding + posición` describe el Transformer original, mientras que RoPE incorpora la posición mediante rotaciones dentro del cálculo de atención.[^rope]
 
 ## 2. Query, Key y Value
 
@@ -180,6 +175,7 @@ No. Aumenta la información disponible, pero también el coste y la dificultad d
 ## Fuentes primarias
 
 [^transformer]: Ashish Vaswani et al., [*Attention Is All You Need*](https://arxiv.org/abs/1706.03762), 2017.
+[^rope]: Jianlin Su et al., [*RoFormer: Enhanced Transformer with Rotary Position Embedding*](https://arxiv.org/abs/2104.09864), 2021.
 [^prenorm]: Ruibin Xiong et al., [*On Layer Normalization in the Transformer Architecture*](https://arxiv.org/abs/2002.04745), 2020.
 [^bert]: Jacob Devlin et al., [*BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding*](https://arxiv.org/abs/1810.04805), 2018.
 [^vit]: Alexey Dosovitskiy et al., [*An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale*](https://arxiv.org/abs/2010.11929), 2020.
