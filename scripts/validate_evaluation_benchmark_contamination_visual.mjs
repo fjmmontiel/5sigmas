@@ -99,7 +99,15 @@ try {
       check(pageOverflow <= 2, `${testCase.route}: ${viewport.name} horizontal page overflow ${pageOverflow}px`);
       for (const error of runtimeErrors) failures.push(`${testCase.route}: ${viewport.name} runtime error: ${error}`);
       if (await visual.count()) {
-        await page.locator('.md-header').evaluateAll((nodes) => nodes.forEach((node) => { node.style.visibility = 'hidden'; }));
+        await page.evaluate(() => {
+          const target = document.querySelector('.ebc-wrap');
+          if (!target) return;
+          for (const node of document.querySelectorAll('body *')) {
+            if (node === target || target.contains(node) || node.contains(target)) continue;
+            const style = getComputedStyle(node);
+            if (style.position === 'fixed' || style.position === 'sticky') node.style.visibility = 'hidden';
+          }
+        });
         await visual.screenshot({ path: path.join(outDir, `evaluation-benchmark-contamination-${testCase.locale}-${viewport.name}.png`), animations: 'disabled' });
       }
       await page.close();
