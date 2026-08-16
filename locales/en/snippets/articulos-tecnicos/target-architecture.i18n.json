@@ -4,21 +4,23 @@
   "replacements": {
     "Siguiente paso hacia producción para Reactive / Proactive Agent": "Next step toward production for Reactive / Proactive Agent",
     "Desliza horizontalmente para revisar la lamina completa": "Scroll horizontally to review the full visual",
+    "estado compartido + ejecucion": "shared state + execution",
+    "assistant responde sin esperar la API": "assistant responds without waiting for the API",
+    "el chat visible no guarda mensajes internos": "the visible chat does not store internal messages",
+    "el cierre vuelve por proactive o next_turn": "completion returns through proactive or next_turn",
+    "chat · polling · cierre": "chat · polling · completion",
+    "turno · prompt · accepted": "turn · prompt · accepted",
+    "respuesta inmediata": "immediate response",
+    "decision de cierre": "completion decision",
+    "entrega + retorno": "delivery + return",
     "runtime / estado": "runtime / state",
     "entrega diferida": "deferred delivery",
     "infra externa": "external infrastructure",
     "turno visible": "visible turn",
-    "chat · polling · cierre": "chat · polling · completion",
-    "turno · prompt · accepted": "turn · prompt · accepted",
-    "respuesta inmediata": "immediate response",
-    "decision": "decision",
-    "estado compartido + ejecucion": "shared state + execution",
-    "negocio": "business",
-    "decision de cierre": "completion decision",
     "cierre visible": "visible completion",
-    "assistant responde sin esperar la API": "assistant responds without waiting for the API",
-    "el chat visible no guarda mensajes internos": "the visible chat does not store internal messages",
-    "el cierre vuelve por proactive o next_turn": "completion returns through proactive or next_turn",
+    "negocio": "business",
+    "turno": "turn",
+    "decision": "decision",
     "visible": "visible"
   },
   "forbidden_output_tokens": [
@@ -33,9 +35,11 @@
     "estado compartido + ejecucion",
     "negocio",
     "decision de cierre",
+    "entrega + retorno",
     "cierre visible",
     "assistant responde sin esperar la API",
     "el chat visible no guarda mensajes internos",
-    "el cierre vuelve por proactive"
+    "el cierre vuelve por proactive",
+    "turno"
   ]
 }
