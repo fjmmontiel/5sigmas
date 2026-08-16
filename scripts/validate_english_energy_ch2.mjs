@@ -30,8 +30,9 @@ async function checkPlacement(root, viewport, name, beforeText, afterText) {
     const before = candidates.find((el) => (el.textContent || '').includes(beforeText));
     const after = candidates.find((el) => (el.textContent || '').includes(afterText));
     if (!before || !after) return false;
-    return Boolean(before.compareDocumentPosition(node) & Node.DOCUMENT_POSITION_FOLLOWING)
-      && Boolean(node.compareDocumentPosition(after) & Node.DOCUMENT_POSITION_FOLLOWING);
+    const beforeOk = before.contains(node) || Boolean(before.compareDocumentPosition(node) & Node.DOCUMENT_POSITION_FOLLOWING);
+    const afterOk = node.contains(after) || Boolean(node.compareDocumentPosition(after) & Node.DOCUMENT_POSITION_FOLLOWING);
+    return beforeOk && afterOk;
   }, { beforeText, afterText });
   if (!ok) failures.push(`${viewport}: ${name} moved away from canonical article hook`);
 }
