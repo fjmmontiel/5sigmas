@@ -1,0 +1,26 @@
+{
+  "source": "snippets/articulos-tecnicos/voice-rp-barge.html",
+  "source_blob_sha": "72b0d890eb1b0b8bdd08f2ce99599bf2c50c3ee1",
+  "replacements": {
+    "Cancelación selectiva durante un barge-in": "Selective cancellation during a barge-in",
+    "Cancelar la voz. Mantener el trabajo.": "Cancel the voice. Keep the work.",
+    "La interrupción es acústica.": "The interruption is acoustic.",
+    "Respuesta": "Response",
+    "Operación": "Operation",
+    "Antes": "Before",
+    "Interrupción": "Interruption",
+    "El agente está hablando y la tool sigue en marcha.": "The agent is speaking and the tool is still running.",
+    "Respuesta y playback se cancelan. La operación continúa.": "Response and playback are cancelled. The operation continues."
+  },
+  "forbidden_output_tokens": [
+    "Cancelación selectiva",
+    "Cancelar la voz",
+    "La interrupción es acústica",
+    "Respuesta",
+    "Operación",
+    "Antes",
+    "Interrupción",
+    "El agente está hablando",
+    "La operación continúa"
+  ]
+}
