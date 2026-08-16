@@ -4,6 +4,8 @@
   "replacements": {
     "Dos persistencias distintas requieren mitigaciones distintas": "Two different kinds of persistence require different mitigations",
     "Una señal puede persistir en el estado que rodea al modelo o dentro de sus pesos. Mezclarlas produce diagnósticos y controles equivocados.": "A signal can persist in the state surrounding the model or inside its weights. Conflating them leads to incorrect diagnoses and controls.",
+    "Pesos del modelo": "Model weights",
+    "Sleeper behaviour · pesos": "Sleeper behaviour · weights",
     "Comparar": "Compare",
     "Pesos": "Weights",
     "Modelo base": "Base model",
@@ -12,8 +14,6 @@
     "puede reaparecer entre sesiones": "can reappear across sessions",
     "Mitigaciones:": "Mitigations:",
     "procedencia, scopes, TTL, aislamiento, revocación y reconstrucción de derivados.": "provenance, scopes, TTL, isolation, revocation and rebuilding derivatives.",
-    "Sleeper behaviour · pesos": "Sleeper behaviour · weights",
-    "Pesos del modelo": "Model weights",
     "El comportamiento activable forma parte del modelo entrenado.": "The activatable behavior is part of the trained model.",
     "Contexto de ejecución": "Runtime context",
     "puede sobrevivir a técnicas de safety training": "can survive safety-training techniques",
