@@ -161,7 +161,11 @@ try {
       await exerciseTabs(levers, 'TTC levers', viewport.name);
       const positions = await page.evaluate(() => {
         const bodyText = (document.querySelector('.md-content__inner') || document.body).innerText;
-        return { before: bodyText.indexOf('Lever 3: More structure in the reasoning process'), visual: bodyText.indexOf('The three levers of test-time compute'), after: bodyText.indexOf('Relationship between quality, cost, and latency') };
+        return {
+          before: bodyText.indexOf('The result is broader coverage of the solution space'),
+          visual: bodyText.indexOf('The three levers of test-time compute'),
+          after: bodyText.indexOf('None of these levers is free.')
+        };
       });
       if (!(positions.before >= 0 && positions.visual > positions.before && positions.after > positions.visual)) failures.push(`${viewport.name}: TTC levers visual moved away from its canonical article hook`);
 
