@@ -1,0 +1,24 @@
+{
+  "source": "snippets/articulos-tecnicos/voice-arch-half.html",
+  "source_blob_sha": "767d489c124cd018f7c653799907b9395d476aab",
+  "replacements": {
+    "Pipeline half cascade de audio a texto streaming y TTS": "Half-cascade pipeline from audio to streaming text and TTS",
+    "Audio-native para entender. TTS para hablar.": "Audio-native for understanding. TTS for speaking.",
+    "Dos fortalezas con una frontera explícita.": "Two strengths with an explicit boundary.",
+    "prosodia + intención": "prosody + intent",
+    "Texto Δ": "Text Δ",
+    "TTS externo": "External TTS",
+    "voz controlable": "controllable voice",
+    "La prosodia de entrada no cruza sola la frontera de texto.": "Input prosody does not cross the text boundary by itself."
+  },
+  "forbidden_output_tokens": [
+    "Pipeline half cascade de audio",
+    "Audio-native para entender",
+    "Dos fortalezas",
+    "prosodia + intención",
+    "Texto Δ",
+    "TTS externo",
+    "voz controlable",
+    "La prosodia de entrada"
+  ]
+}
