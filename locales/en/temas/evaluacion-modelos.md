@@ -88,7 +88,7 @@ The **golden set** contains real or designed examples representative of the doma
 
 It should be versioned like code. When an incident appears, add a regression case. When the product changes, update the distribution while keeping a stable subset for comparing versions.
 
-A golden set does not need to be enormous. A hundred carefully chosen cases can detect more product problems than thousands of generic questions.
+Size alone does not guarantee coverage. Prioritize representative cases and critical failures, then expand the set where uncertainty or risk requires it.
 
 ## 4. Understand what a benchmark measures
 
@@ -175,6 +175,8 @@ Risks include:
 - shared errors with the evaluated model.
 
 A judge needs calibration. Compare it against a human-annotated set, measure agreement by segment and review important disagreements. For high-impact decisions, it should not be the sole authority.
+
+{{ include_html("snippets/temas/evaluation-judge-calibration.html") }}
 
 ## 8. Evaluate the system, not only the answer
 
