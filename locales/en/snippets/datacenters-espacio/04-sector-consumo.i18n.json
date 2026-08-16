@@ -1,0 +1,31 @@
+{
+  "source": "snippets/datacenters-espacio/04-sector-consumo.html",
+  "source_blob_sha": "0e9f1b3d915d93ff1f0714d9e3b4e03255dea043",
+  "replacements": {
+    "data-demo=\"04-sector-consumo\"": "data-demo=\"dc-04-sector-power\"",
+    ">crecimiento agregado</div>": ">aggregate growth</div>",
+    ">La eficiencia local no cancela el crecimiento agregado</div>": ">Local efficiency does not cancel aggregate growth</div>",
+    ">Aunque cada instalación mejore su PUE, el consumo total puede subir si crecen el parque de centros y la demanda de IA.</div>": ">Even if every facility improves its PUE, total consumption can rise as the data-center fleet and AI demand grow.</div>",
+    "aria-label=\"La eficiencia local no cancela el crecimiento agregado\"": "aria-label=\"Local efficiency does not cancel aggregate growth\"",
+    ">mundo 2024</text>": ">world 2024</text>",
+    ">mundo 2030</text>": ">world 2030</text>",
+    ">EE.UU.: 4,4% → 12%</text>": ">US: 4.4% → 12%</text>",
+    ">la red ve demanda total</text>": ">the grid sees total demand</text>",
+    ">no el PUE medio</text>": ">not average PUE</text>",
+    ">Global: 415 TWh en 2024 hacia 945 TWh en 2030</span>": ">Global: 415 TWh in 2024 toward 945 TWh in 2030</span>",
+    ">EE.UU.: de 4,4% a hasta 12% de demanda eléctrica</span>": ">US: from 4.4% to as much as 12% of electricity demand</span>",
+    ">La eficiencia por instalación no cancela el crecimiento agregado</span>": ">Per-facility efficiency does not cancel aggregate growth</span>"
+  },
+  "forbidden_output_tokens": [
+    "crecimiento agregado",
+    "La eficiencia local",
+    "Aunque cada instalación",
+    "mundo 2024",
+    "mundo 2030",
+    "EE.UU.: 4,4%",
+    "la red ve demanda total",
+    "no el PUE medio",
+    "Global: 415 TWh en",
+    "La eficiencia por instalación"
+  ]
+}

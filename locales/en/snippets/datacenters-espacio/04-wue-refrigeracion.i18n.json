@@ -1,0 +1,33 @@
+{
+  "source": "snippets/datacenters-espacio/04-wue-refrigeracion.html",
+  "source_blob_sha": "da139aad771e6315972dd1c5bfc7caee4adee26e",
+  "replacements": {
+    "data-demo=\"04-wue-refrigeracion\"": "data-demo=\"dc-04-wue\"",
+    ">trade-off WUE</div>": ">WUE trade-off</div>",
+    ">La refrigeración cambia agua directa por energía y complejidad</div>": ">Cooling trades direct water for energy and complexity</div>",
+    ">El WUE mide agua directa, pero cada tecnología desplaza el coste hacia electricidad, clima operativo o CAPEX.</div>": ">WUE measures direct water, but each technology shifts cost toward electricity, operating climate or CAPEX.</div>",
+    "aria-label=\"La refrigeración cambia agua directa por energía y complejidad\"": "aria-label=\"Cooling trades direct water for energy and complexity\"",
+    ">litros consumidos por kWh IT</text>": ">litres consumed per IT kWh</text>",
+    ">1,5-2,5</text>": ">1.5–2.5</text>",
+    ">evaporativa</text>": ">evaporative</text>",
+    ">0,19</text>": ">0.19</text>",
+    ">Iowa adiabática</text>": ">Iowa adiabatic</text>",
+    ">cerrado / inmersión</text>": ">closed loop / immersion</text>",
+    ">WUE no lo cuenta todo</text>": ">WUE does not capture everything</text>",
+    ">mueve coste a energía o CAPEX</text>": ">shifts cost to energy or CAPEX</text>",
+    ">Evaporativa: 1,5-2,5 L/kWh IT</span>": ">Evaporative: 1.5–2.5 L/IT kWh</span>",
+    ">Iowa adiabática: 0,19 L/kWh IT</span>": ">Iowa adiabatic: 0.19 L/IT kWh</span>",
+    ">Cerrado o inmersión: casi cero agua directa, más complejidad</span>": ">Closed loop or immersion: almost zero direct water, more complexity</span>"
+  },
+  "forbidden_output_tokens": [
+    "La refrigeración cambia",
+    "El WUE mide",
+    "litros consumidos",
+    "evaporativa",
+    "Iowa adiabática",
+    "cerrado / inmersión",
+    "WUE no lo cuenta todo",
+    "mueve coste",
+    "Cerrado o inmersión"
+  ]
+}

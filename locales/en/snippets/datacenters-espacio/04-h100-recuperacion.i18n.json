@@ -1,0 +1,42 @@
+{
+  "source": "snippets/datacenters-espacio/04-h100-recuperacion.html",
+  "source_blob_sha": "1bd1983fe44bc01eee4c78eb7dd24c5e8074e027",
+  "replacements": {
+    "data-demo=\"04-h100-recuperacion\"": "data-demo=\"dc-04-gpu-recovery\"",
+    ">ciclo de GPU</div>": ">GPU lifecycle</div>",
+    ">La circularidad reduce exposición, pero no sustituye demanda nueva</div>": ">Circularity reduces exposure, but it does not replace new demand</div>",
+    ">Reutilizar y recuperar hardware baja presión marginal; no borra el tirón de nuevos racks de IA ni la compra de GPUs.</div>": ">Reusing and recovering hardware lowers marginal pressure; it does not erase demand for new AI racks and GPUs.</div>",
+    "aria-label=\"La circularidad reduce exposición, pero no sustituye demanda nueva\"": "aria-label=\"Circularity reduces exposure, but it does not replace new demand\"",
+    ">Compra nueva</text>": ">New purchase</text>",
+    ">la demanda sigue entrando</text>": ">new demand keeps entering</text>",
+    ">3-5 años de ciclo</text>": ">3–5 year cycle</text>",
+    ">renovación de hardware</text>": ">hardware refresh</text>",
+    ">90,9% gestionado</text>": ">90.9% managed</text>",
+    ">reutilizar o reciclar</text>": ">reuse or recycle</text>",
+    ">Metales recuperados</text>": ">Recovered metals</text>",
+    ">reduce exposición marginal</text>": ">reduces marginal exposure</text>",
+    ">demanda nueva</text>": ">new demand</text>",
+    ">más racks IA</text>": ">more AI racks</text>",
+    ">2.500 t</text>": ">2,500 t</text>",
+    ">desviadas de vertedero</text>": ">diverted from landfill</text>",
+    ">la circularidad ayuda, pero no reemplaza el crecimiento de la compra</text>": ">circularity helps, but it does not replace growth in new purchases</text>",
+    ">Ciclo típico: 3-5 años antes de renovación</span>": ">Typical cycle: 3–5 years before refresh</span>",
+    ">90,9% puede gestionarse con reutilización o reciclaje</span>": ">90.9% can be managed through reuse or recycling</span>",
+    ">La circularidad reduce exposición, no sustituye la demanda nueva</span>": ">Circularity reduces exposure; it does not replace new demand</span>"
+  },
+  "forbidden_output_tokens": [
+    "ciclo de GPU",
+    "La circularidad reduce",
+    "Reutilizar y recuperar",
+    "Compra nueva",
+    "la demanda sigue entrando",
+    "años de ciclo",
+    "renovación de hardware",
+    "90,9%",
+    "reutilizar o reciclar",
+    "Metales recuperados",
+    "demanda nueva",
+    "más racks IA",
+    "desviadas de vertedero"
+  ]
+}
