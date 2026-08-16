@@ -93,12 +93,9 @@ BERT popularizó el uso de encoders con contexto bidireccional para producir rep
 
 Las RNN y LSTM actualizan un estado paso a paso. Eso introduce una dependencia secuencial difícil de paralelizar y obliga a transportar información lejana a través de muchos pasos.
 
-El Transformer ofrece dos ventajas principales:
+{{ include_html("snippets/temas/transformer-rnn-vs-attention.html") }}
 
-1. **Camino corto entre posiciones:** una capa de atención puede relacionar directamente tokens alejados
-2. **Entrenamiento paralelo:** todas las posiciones conocidas se procesan juntas
-
-El precio es que la atención densa construye una matriz entre pares de posiciones.
+La ventaja aparece sobre posiciones ya conocidas durante el entrenamiento: la atención reduce el número de operaciones secuenciales dentro de una capa y acorta el camino entre posiciones distantes. El precio es la interacción densa entre pares, que se vuelve importante al crecer el contexto.
 
 ## El coste de la atención
 
