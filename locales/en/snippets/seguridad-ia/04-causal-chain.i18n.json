@@ -14,7 +14,7 @@
     ">El plan del agente cambia.</span>": ">The agent's plan changes.</span>",
     ">3 · Llamada propuesta</b>": ">3 · Tool proposed</b>",
     ">Se propone una tool call sensible.</span>": ">A sensitive tool call is proposed.</span>",
-    ">4 · Autorización superada</b>": ">4 · Policy crossed</b>",
+    ">4 · Autorización superada</b>": ">4 · Authorization passed</b>",
     ">La política permite continuar.</span>": ">Authorization allows the path to continue.</span>",
     ">5 · Efecto externo</b>": ">5 · External effect</b>",
     ">El recurso externo cambia.</span>": ">The external resource changes.</span>",
