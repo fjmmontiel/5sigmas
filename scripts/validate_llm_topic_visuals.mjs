@@ -50,6 +50,14 @@ const visuals = [
     countSelector: '.las-stage',
     count: 3,
   },
+  {
+    selector: '.lke-wrap',
+    source: 'docs/snippets/temas/llm-knowledge-layers.html',
+    mirror: 'locales/en/snippets/temas/llm-knowledge-layers.html',
+    map: 'locales/en/snippets/temas/llm-knowledge-layers.i18n.json',
+    countSelector: '.lke-layer',
+    count: 3,
+  },
 ];
 
 const viewports = [
@@ -125,6 +133,27 @@ async function checkTokenizationDensity(page, route, locale, viewport) {
   }
 }
 
+async function checkKnowledgeLayersDensity(page, route, locale, viewport) {
+  const expectedCounts = [
+    ['.lke-layer', 3],
+    ['.lke-system-node', 5],
+    ['.lke-external-row', 2],
+    ['.lke-contracts > div', 3],
+  ];
+  for (const [selector, expected] of expectedCounts) {
+    const count = await page.locator(selector).count();
+    if (count !== expected) failures.push(`${route}: ${viewport.name} expected ${expected} ${selector}, found ${count}`);
+  }
+
+  const expectedLabels = locale === 'es'
+    ? ['PARÁMETROS θ', 'CONTEXTO DE ESTA PETICIÓN', 'RECUPERACIÓN / TOOLS', 'CÓMO SE CONECTAN EN UN SISTEMA REAL']
+    : ['PARAMETERS θ', 'REQUEST CONTEXT', 'RETRIEVAL / TOOLS', 'HOW THEY CONNECT IN A REAL SYSTEM'];
+  const body = await page.locator('.lke-wrap').innerText();
+  for (const label of expectedLabels) {
+    if (!body.includes(label)) failures.push(`${route}: ${viewport.name} LLM knowledge visual missing ${JSON.stringify(label)}`);
+  }
+}
+
 async function checkPage(browser, route, locale, viewport) {
   const page = await browser.newPage({ viewport: { width: viewport.width, height: viewport.height } });
   const runtimeErrors = [];
@@ -145,6 +174,8 @@ async function checkPage(browser, route, locale, viewport) {
         'REPRESENTACIÓN CONTEXTUAL',
         'OBJETIVO AUTORREGRESIVO',
         'DEL MODELO BASE AL ASISTENTE',
+        'DÓNDE VIVE LA INFORMACIÓN',
+        'CÓMO SE CONECTAN EN UN SISTEMA REAL',
         'probabilidad sobre el vocabulario',
         'El embedding de token es el punto de partida',
         'Optimizar probabilidad de continuación',
@@ -157,6 +188,8 @@ async function checkPage(browser, route, locale, viewport) {
         'CONTEXTUAL REPRESENTATION',
         'AUTOREGRESSIVE OBJECTIVE',
         'FROM BASE MODEL TO ASSISTANT',
+        'WHERE THE INFORMATION LIVES',
+        'HOW THEY CONNECT IN A REAL SYSTEM',
         'probability over the vocabulary',
         'The token embedding is the starting point',
         'Optimizing continuation probability',
@@ -176,6 +209,10 @@ async function checkPage(browser, route, locale, viewport) {
       'Lectura correcta',
       'OBJETIVO AUTORREGRESIVO',
       'DEL MODELO BASE AL ASISTENTE',
+      'DÓNDE VIVE LA INFORMACIÓN',
+      'PARÁMETROS θ',
+      'CONTEXTO DE ESTA PETICIÓN',
+      'CÓMO SE CONECTAN EN UN SISTEMA REAL',
       'Fuentes primarias:',
       'Fuente primaria:',
     ]) {
@@ -202,6 +239,7 @@ async function checkPage(browser, route, locale, viewport) {
   }
 
   await checkTokenizationDensity(page, route, locale, viewport);
+  await checkKnowledgeLayersDensity(page, route, locale, viewport);
 
   const pageOverflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   if (pageOverflow > 2) failures.push(`${route}: ${viewport.name} page overflow ${pageOverflow}px`);

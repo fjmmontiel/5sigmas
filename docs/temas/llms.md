@@ -87,11 +87,7 @@ Estas etapas modifican el comportamiento observable. No garantizan que el modelo
 
 Tres mecanismos distintos suelen confundirse.
 
-| Mecanismo | Qué contiene | Cuándo cambia |
-|---|---|---|
-| **Parámetros** | Patrones comprimidos durante el entrenamiento | Al entrenar o ajustar el modelo |
-| **Contexto** | Instrucciones, conversación y documentos enviados en la petición | En cada interacción |
-| **Recuperación o tools** | Información consultada o acciones ejecutadas fuera del modelo | Durante la ejecución del sistema |
+{{ include_html("snippets/temas/llm-knowledge-layers.html") }}
 
 Un LLM puede responder desde sus parámetros, razonar sobre información incluida en el contexto o llamar a una herramienta. La trazabilidad es muy distinta en cada caso.
 

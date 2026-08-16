@@ -87,11 +87,7 @@ These stages change observable behaviour. They do not guarantee that the model k
 
 Three different mechanisms are often confused.
 
-| Mechanism | What it contains | When it changes |
-|---|---|---|
-| **Parameters** | Patterns compressed during training | When the model is trained or fine-tuned |
-| **Context** | Instructions, conversation and documents sent in the request | Every interaction |
-| **Retrieval or tools** | Information queried or actions executed outside the model | During system execution |
+{{ include_html("snippets/temas/llm-knowledge-layers.html") }}
 
 An LLM can answer from its parameters, reason over information included in context, or call a tool. Traceability is very different in each case.
 
