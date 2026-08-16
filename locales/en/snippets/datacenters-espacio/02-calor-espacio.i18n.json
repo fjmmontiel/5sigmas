@@ -1,0 +1,38 @@
+{
+  "source": "snippets/datacenters-espacio/02-calor-espacio.html",
+  "source_blob_sha": "11aa6ca85fb4cd533e15f52fe0e5f5148875d58e",
+  "replacements": {
+    "data-demo=\"02-calor-espacio\"": "data-demo=\"dc-02-heat\"",
+    ">seccion termica</div>": ">thermal section</div>",
+    ">El vacío no enfría gratis: corta la convección</div>": ">Vacuum does not provide free cooling: it removes convection</div>",
+    ">En tierra un fluido transporta calor. En órbita el camino continuo es radiar fotones.</div>": ">On Earth, a fluid transports heat. In orbit, the continuous path is to radiate photons.</div>",
+    "aria-label=\"El vacío no enfría gratis: corta la convección\"": "aria-label=\"Vacuum does not provide free cooling: it removes convection\"",
+    ">Tierra: transporte por fluido</text>": ">Earth: transport by fluid</text>",
+    ">Órbita: salida por radiación</text>": ">Orbit: rejection by radiation</text>",
+    ">El calor viaja</text>": ">Heat moves</text>",
+    ">aire o líquido se llevan energía</text>": ">air or liquid carries energy away</text>",
+    ">El vacío aísla</text>": ">Vacuum insulates</text>",
+    ">fotones + radiador hacen el trabajo</text>": ">photons + radiator do the work</text>",
+    ">A más potencia, más superficie</text>": ">More power, more area</text>",
+    ">el límite no es frío, es área y masa radiadora</text>": ">the limit is not cold, but radiator area and mass</text>",
+    ">En tierra el fluido transporta calor fuera del rack</span>": ">On Earth, fluid carries heat away from the rack</span>",
+    ">En órbita el vacío aísla: no hay convección útil</span>": ">In orbit, vacuum insulates: there is no useful convection</span>",
+    ">La escala la dictan radiadores, temperatura, área y masa</span>": ">Scale is set by radiators, temperature, area and mass</span>"
+  },
+  "forbidden_output_tokens": [
+    "seccion termica",
+    "El vacío no enfría gratis",
+    "En tierra un fluido transporta calor",
+    "Tierra: transporte por fluido",
+    "Órbita: salida por radiación",
+    "El calor viaja",
+    "aire o líquido",
+    "El vacío aísla",
+    "fotones + radiador",
+    "A más potencia",
+    "el límite no es frío",
+    "En tierra el fluido",
+    "En órbita el vacío",
+    "La escala la dictan"
+  ]
+}
