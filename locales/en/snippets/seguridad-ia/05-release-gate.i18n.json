@@ -1,0 +1,31 @@
+{
+  "source": "snippets/seguridad-ia/05-release-gate.html",
+  "source_blob_sha": "513bf2b8863c43d7668bb3da0a8e497c5776992b",
+  "replacements": {
+    "Un release gate necesita pocas propiedades, pero verificables": "A release gate needs few properties, but they must be verifiable",
+    "Agrupa los controles en tres fronteras operativas. Si una falla, el despliegue se detiene.": "Group the controls into three operational boundaries. If one fails, deployment stops.",
+    "Autoridad acotada": "Bounded authority",
+    "Contenido externo no llega directo a tools sensibles y las acciones destructivas requieren autorización independiente.": "External content does not reach sensitive tools directly and destructive actions require independent authorization.",
+    "Estado y contratos gobernados": "Governed state and contracts",
+    "Memoria revocable; schemas y scopes comparados contra una baseline aprobada.": "Revocable memory; schemas and scopes compared against an approved baseline.",
+    "Ataque y recuperación probados": "Attack and recovery tested",
+    "Prompt injection end-to-end, kill switch y rollback verificados en regresión.": "End-to-end prompt injection, kill switch and rollback verified in regression.",
+    "0 / 3 fronteras verificadas": "0 / 3 boundaries verified",
+    "${n} / ${checks.length} fronteras verificadas": "${n} / ${checks.length} boundaries verified",
+    "El despliegue sigue bloqueado mientras falte una frontera verificable.": "Deployment remains blocked while a verifiable boundary is missing.",
+    "Las tres fronteras definidas por el threat model están verificadas.": "The three boundaries defined by the threat model are verified."
+  },
+  "forbidden_output_tokens": [
+    "Un release gate necesita",
+    "Agrupa los controles",
+    "Autoridad acotada",
+    "Contenido externo no llega",
+    "Estado y contratos gobernados",
+    "Memoria revocable",
+    "Ataque y recuperación probados",
+    "verificados en regresión",
+    "fronteras verificadas",
+    "El despliegue sigue bloqueado",
+    "Las tres fronteras definidas"
+  ]
+}
