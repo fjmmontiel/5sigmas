@@ -216,17 +216,11 @@ An online experiment still needs guardrails. A variant should not reach producti
 
 ## 10. Statistical uncertainty
 
-A small difference can be sampling noise. Report:
+A small difference can be sampling noise. If you compare two versions on the same cases, preserve the per-example pairing and analyze the per-case difference before aggregation. The interval should accompany the estimated effect.
 
-- number of cases;
-- segment distribution;
-- confidence interval;
-- variability across runs;
-- paired tests when the same examples are evaluated.
+{{ include_html("snippets/temas/evaluation-uncertainty.html") }}
 
-For stochastic outputs, run multiple seeds or temperatures when that variability is part of the product.
-
-Statistical significance does not guarantee practical relevance either. A tiny improvement can be real while still not justifying additional cost.
+For stochastic systems, separate uncertainty caused by which cases were sampled from run-to-run variability on the same case when that randomness is part of the product. The final decision should combine magnitude, uncertainty, and cost, latency, or risk; a statistically detectable difference does not by itself imply practical value.
 
 ## An operational evaluation loop
 

@@ -21,12 +21,7 @@ A tool call does not grant authority by itself. The fact that the model emits `s
 
 ## Chatbot, workflow, copilot and agent
 
-| System | Who decides the steps | Can act | Example |
-|---|---|---:|---|
-| **Chatbot** | Conversational flow | Usually no | Answer a question |
-| **Workflow** | Deterministic code | Yes | Retrieve data → validate → save |
-| **Copilot** | Model proposes; human approves | With approval | Prepare SQL or a code change |
-| **Bounded agent** | Model chooses among allowed actions | Yes, within limits | Query, compare, retry and update a record |
+{{ include_html("snippets/temas/agent-autonomy-spectrum.html") }}
 
 A workflow is not inferior because it is deterministic. If the steps are already known, it is usually easier to test, explain and constrain. Agency adds value when the sequence depends on the environment and encoding every branch in advance is not worth the complexity.
 
@@ -122,9 +117,11 @@ No. In production, bounded autonomy usually matters more: minimal tools, budgets
 ## Primary sources
 
 - [Yao et al. — ReAct: Synergizing Reasoning and Acting in Language Models](https://arxiv.org/abs/2210.03629)
+- [Anthropic — Trustworthy agents in practice](https://www.anthropic.com/research/trustworthy-agents)
 - [OpenAI Agents SDK — Context management](https://openai.github.io/openai-agents-python/context/)
 - [OpenAI Agents SDK — Sessions](https://openai.github.io/openai-agents-python/sessions/)
 - [OpenAI Agents SDK — Run state](https://openai.github.io/openai-agents-python/ref/run_state/)
 - [OpenAI Agents SDK — Tracing](https://openai.github.io/openai-agents-python/tracing/)
 - [OpenAI Agents SDK — Tool guardrails](https://openai.github.io/openai-agents-python/guardrails/)
+- [OpenAI Agents SDK — Agent orchestration](https://openai.github.io/openai-agents-python/multi_agent/)
 - [Model Context Protocol — Authorization](https://modelcontextprotocol.io/specification/latest/basic/authorization)

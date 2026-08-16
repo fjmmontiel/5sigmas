@@ -1,0 +1,135 @@
+<div class="aas-wrap" data-demo="topic-agent-autonomy-spectrum">
+  <div class="aas-head">
+    <div class="aas-kicker">CUATRO PATRONES · QUIÉN DECIDE · QUIÉN EJECUTA</div>
+    <div class="aas-title">La diferencia está en quién decide el siguiente paso y quién puede ejecutar</div>
+    <div class="aas-sub">Chatbot, workflow, copiloto y agente acotado pueden usar un LLM; cambia qué parte del recorrido fija el código, qué decisiones delega el sistema y dónde se mantiene la autorización.</div>
+  </div>
+
+  <div class="aas-axis" aria-hidden="true">
+    <span>RECORRIDO FIJADO EN CÓDIGO</span>
+    <i></i>
+    <span>SECUENCIA DECIDIDA EN RUNTIME</span>
+  </div>
+
+  <div class="aas-grid" role="img" aria-label="Comparación operacional entre chatbot, workflow determinista, copiloto con aprobación y agente acotado">
+    <section class="aas-card aas-card--chat">
+      <div class="aas-card-head"><span>01</span><div><small>CHATBOT</small><strong>Genera una respuesta</strong></div></div>
+      <div class="aas-flow">
+        <b>usuario</b><i>→</i><b>modelo</b><i>→</i><b>respuesta</b>
+      </div>
+      <div class="aas-row"><span>QUIÉN ELIGE EL SIGUIENTE PASO</span><strong>flujo conversacional</strong></div>
+      <div class="aas-row"><span>EFECTO EXTERNO</span><strong>normalmente ninguno</strong></div>
+      <div class="aas-gate">La salida termina en texto en este patrón.</div>
+    </section>
+
+    <section class="aas-card aas-card--workflow">
+      <div class="aas-card-head"><span>02</span><div><small>WORKFLOW</small><strong>Ejecuta una ruta conocida</strong></div></div>
+      <div class="aas-flow">
+        <b>paso A</b><i>→</i><b>paso B</b><i>→</i><b>paso C</b>
+      </div>
+      <div class="aas-row"><span>QUIÉN ELIGE EL SIGUIENTE PASO</span><strong>código determinista</strong></div>
+      <div class="aas-row"><span>EFECTO EXTERNO</span><strong>sí, si el flujo lo define</strong></div>
+      <div class="aas-gate">La ruta puede ser compleja sin ser agéntica.</div>
+    </section>
+
+    <section class="aas-card aas-card--copilot">
+      <div class="aas-card-head"><span>03</span><div><small>COPILOTO</small><strong>El modelo propone; una persona decide</strong></div></div>
+      <div class="aas-flow">
+        <b>modelo</b><i>→</i><b>propuesta</b><i>→</i><b class="aas-human">aprobación humana</b>
+      </div>
+      <div class="aas-row"><span>QUIÉN ELIGE EL SIGUIENTE PASO</span><strong>modelo + humano</strong></div>
+      <div class="aas-row"><span>EFECTO EXTERNO</span><strong>después de aprobación</strong></div>
+      <div class="aas-gate">La autoridad final permanece fuera del modelo.</div>
+    </section>
+
+    <section class="aas-card aas-card--agent">
+      <div class="aas-card-head"><span>04</span><div><small>AGENTE ACOTADO</small><strong>El modelo selecciona entre acciones permitidas</strong></div></div>
+      <div class="aas-flow">
+        <b>modelo</b><i>→</i><b>acción</b><i>→</i><b class="aas-runtime">política del runtime</b>
+      </div>
+      <div class="aas-row"><span>QUIÉN ELIGE EL SIGUIENTE PASO</span><strong>modelo, dentro de límites</strong></div>
+      <div class="aas-row"><span>EFECTO EXTERNO</span><strong>solo tras autorización</strong></div>
+      <div class="aas-gate">La agencia no concede permisos: el runtime conserva la frontera de autoridad.</div>
+    </section>
+  </div>
+
+  <div class="aas-contracts">
+    <div><span>NO ES UN RANKING</span><strong>Un workflow determinista puede ser la arquitectura correcta si el recorrido ya se conoce.</strong></div>
+    <div><span>SEÑAL DE AGENCIA</span><strong>El sistema decide dinámicamente qué acción usar a partir del estado y de resultados intermedios.</strong></div>
+    <div><span>SEÑAL DE SEGURIDAD</span><strong>Decidir una acción y tener autoridad para ejecutarla son responsabilidades distintas.</strong></div>
+  </div>
+
+  <div class="aas-ref">Fuentes primarias:
+    <a href="https://www.anthropic.com/research/trustworthy-agents">Anthropic · Trustworthy agents in practice</a> ·
+    <a href="https://openai.github.io/openai-agents-python/multi_agent/">OpenAI Agents SDK · orchestration</a> ·
+    <a href="https://openai.github.io/openai-agents-python/running_agents/">OpenAI Agents SDK · agent loop</a>
+  </div>
+</div>
+
+<style>
+.aas-wrap,.aas-wrap *{box-sizing:border-box}
+.aas-wrap{
+  --aas-a:var(--md-primary-fg-color,#26a69a);
+  --aas-b:#4757d6;
+  --aas-c:var(--md-accent-fg-color,#ffb343);
+  --aas-r:#d85f6a;
+  --aas-bg:var(--md-default-bg-color,#fff);
+  --aas-fg:var(--md-default-fg-color,#111827);
+  --aas-muted:color-mix(in srgb,var(--aas-fg) 58%,transparent);
+  --aas-border:color-mix(in srgb,var(--aas-fg) 14%,transparent);
+  container-type:inline-size;
+  margin:1.1rem 0 1.5rem;
+  padding:clamp(14px,2vw,22px);
+  border:1px solid var(--aas-border);
+  border-radius:20px;
+  background:radial-gradient(100% 120% at 0 0,color-mix(in srgb,var(--aas-b) 7%,transparent),transparent 54%),radial-gradient(90% 110% at 100% 0,color-mix(in srgb,var(--aas-a) 7%,transparent),transparent 58%),var(--aas-bg);
+  color:var(--aas-fg)
+}
+.aas-head{display:grid;gap:4px;margin-bottom:12px}
+.aas-kicker{font-size:10px;font-weight:900;letter-spacing:.12em;color:var(--aas-muted)}
+.aas-title{font-size:clamp(18px,2.1vw,24px);font-weight:900;line-height:1.1;letter-spacing:-.02em}
+.aas-sub{font-size:13.5px;line-height:1.45;color:var(--aas-muted);max-width:88ch}
+.aas-axis{display:grid;grid-template-columns:auto minmax(80px,1fr) auto;gap:9px;align-items:center;margin:4px 2px 11px;color:var(--aas-muted);font-size:8.8px;font-weight:900;letter-spacing:.08em}
+.aas-axis i{height:2px;background:linear-gradient(90deg,color-mix(in srgb,var(--aas-fg) 18%,transparent),var(--aas-b),var(--aas-a));position:relative}
+.aas-axis i:after{content:"";position:absolute;right:-1px;top:50%;width:7px;height:7px;border-top:2px solid var(--aas-a);border-right:2px solid var(--aas-a);transform:translateY(-50%) rotate(45deg)}
+.aas-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;min-width:0}
+.aas-card{min-width:0;display:grid;gap:9px;padding:12px;border:1px solid var(--aas-border);border-radius:16px;background:color-mix(in srgb,var(--aas-bg) 96%,var(--aas-fg) 4%)}
+.aas-card--workflow{border-color:color-mix(in srgb,var(--aas-b) 30%,var(--aas-border))}
+.aas-card--copilot{border-color:color-mix(in srgb,var(--aas-c) 44%,var(--aas-border))}
+.aas-card--agent{border-color:color-mix(in srgb,var(--aas-a) 46%,var(--aas-border));background:color-mix(in srgb,var(--aas-a) 4%,var(--aas-bg))}
+.aas-card-head{display:grid;grid-template-columns:auto minmax(0,1fr);gap:9px;align-items:center}
+.aas-card-head>span{width:31px;height:31px;display:grid;place-items:center;border-radius:10px;border:1px solid var(--aas-border);font-size:9px;font-weight:900;color:var(--aas-muted);background:var(--aas-bg)}
+.aas-card-head>div{display:grid;gap:2px}
+.aas-card-head small{font-size:9px;font-weight:900;letter-spacing:.1em;color:var(--aas-muted)}
+.aas-card-head strong{font-size:12.6px;line-height:1.25}
+.aas-flow{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1.35fr);gap:5px;align-items:center;min-width:0}
+.aas-flow b{min-width:0;padding:8px 7px;border:1px solid var(--aas-border);border-radius:9px;background:var(--aas-bg);font-size:9.7px;line-height:1.2;text-align:center;overflow-wrap:anywhere}
+.aas-flow i{font-style:normal;color:var(--aas-muted);font-size:12px}
+.aas-flow .aas-human{border-color:color-mix(in srgb,var(--aas-c) 48%,var(--aas-border));background:color-mix(in srgb,var(--aas-c) 7%,var(--aas-bg))}
+.aas-flow .aas-runtime{border-color:color-mix(in srgb,var(--aas-a) 50%,var(--aas-border));background:color-mix(in srgb,var(--aas-a) 7%,var(--aas-bg))}
+.aas-row{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:8px;align-items:start;padding-top:7px;border-top:1px dashed color-mix(in srgb,var(--aas-fg) 18%,transparent)}
+.aas-row span{font-size:8.5px;font-weight:900;letter-spacing:.08em;color:var(--aas-muted)}
+.aas-row strong{font-size:10.4px;line-height:1.3}
+.aas-gate{padding:8px 9px;border-radius:10px;background:color-mix(in srgb,var(--aas-fg) 5%,transparent);font-size:10px;line-height:1.35;color:var(--aas-muted)}
+.aas-contracts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}
+.aas-contracts>div{display:grid;gap:3px;padding:9px 10px;border:1px solid var(--aas-border);border-radius:11px;background:color-mix(in srgb,var(--aas-bg) 96%,var(--aas-fg) 4%)}
+.aas-contracts span{font-size:8.5px;font-weight:900;letter-spacing:.09em;color:var(--aas-muted)}
+.aas-contracts strong{font-size:10.2px;line-height:1.35}
+.aas-ref{margin-top:9px;font-size:9.2px;line-height:1.4;color:var(--aas-muted)}
+.aas-ref a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+@container (max-width:720px){.aas-axis{grid-template-columns:1fr}.aas-axis i{display:none}.aas-axis span:last-child{text-align:left}.aas-grid{grid-template-columns:1fr}.aas-contracts{grid-template-columns:1fr}.aas-flow{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1.25fr)}}
+@media (max-width:720px){.aas-axis{grid-template-columns:1fr}.aas-axis i{display:none}.aas-axis span:last-child{text-align:left}.aas-grid{grid-template-columns:1fr}.aas-contracts{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.aas-wrap *{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+</style>
+
+<script>
+(()=>{
+  const root=document.querySelector('[data-demo="topic-agent-autonomy-spectrum"]');
+  if(!root)return;
+  const cards=[...root.querySelectorAll('.aas-card')];
+  const rows=[...root.querySelectorAll('.aas-row')];
+  const contracts=[...root.querySelectorAll('.aas-contracts > div')];
+  if(cards.length!==4||rows.length!==8||contracts.length!==3)throw new Error('agent autonomy spectrum visual contract mismatch');
+  requestAnimationFrame(()=>{if(root.scrollWidth>root.clientWidth+2)throw new Error(`agent autonomy spectrum visual overflow ${root.scrollWidth-root.clientWidth}px`)});
+})();
+</script>
