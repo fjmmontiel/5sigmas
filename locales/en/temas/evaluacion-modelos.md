@@ -202,15 +202,7 @@ Add temporal and acoustic measures. A correct answer arriving after an awkward p
 
 Offline evals provide reproducibility and fast comparison. Online metrics reveal what happens with real users.
 
-Connect the two levels:
-
-| Offline | Online |
-|---|---|
-| accuracy by intent | task success |
-| quality score | reformulation and abandonment |
-| measured latency | perceived waiting time |
-| tool correctness | incidents and rollback |
-| cost per case | cost per completed task |
+{{ include_html("snippets/temas/evaluation-offline-online.html") }}
 
 An online experiment still needs guardrails. A variant should not reach production merely because an automated judge improved.
 
