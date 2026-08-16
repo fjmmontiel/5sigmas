@@ -84,6 +84,8 @@ El **conjunto de datos de referencia** (*golden set*) contiene ejemplos reales o
 - severidad del fallo
 - procedencia y fecha
 
+{{ include_html("snippets/temas/evaluation-reference-set.html") }}
+
 Debe versionarse como código. Cuando aparece un incidente, se añade un caso de regresión. Cuando cambia el producto, se actualiza la distribución y se conserva un subconjunto estable para comparar versiones.
 
 Un conjunto de referencia no tiene que ser enorme. Un centenar de casos bien elegidos puede detectar más problemas de producto que miles de preguntas genéricas.
