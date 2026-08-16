@@ -1,8 +1,8 @@
 ---
 title: Red teaming — test the complete path before the incident
-description: "How to test from untrusted input to retrieval, model decision, authorization and tool effect, and turn security findings into reproducible release regressions."
+description: "How to test from the document that enters the system to the action it can execute, before an incident occurs."
 date: 2026-08-06
-keywords: "AI red teaming, AI security evaluation, human uplift, attack budget, AI agents, LLM security benchmarks"
+keywords: AI red teaming, security evaluation, human uplift, attack budget, AI agents, LLM benchmarks
 tags:
   - AI
   - Security
@@ -12,175 +12,138 @@ tags:
 
 # Chapter 4 — Red teaming
 
-A security evaluation can be rigorous and still answer the wrong question. If the real system retrieves documents, uses tools, keeps memory and allows repeated attempts, testing one isolated prompt leaves out the path through which harm could occur.
+A security test can be rigorous and still answer the wrong question. If the real system retrieves documents, uses tools, keeps memory and allows multiple attempts, evaluating only an isolated prompt leaves out the chain through which harm could occur.
 
-Red teaming finds those paths before an incident does. Its value depends on whether the threat model, environment, attack budget and success rubric resemble the product being protected.
+Red teaming is useful for finding those paths before an incident does. Its value depends on whether the threat, environment, budget and rubric resemble the use case being protected.
 
-For agentic systems, the unit of analysis is therefore not one response. It is a **trajectory**.
+In agentic systems, this forces a change in the unit of analysis: auditing a response is not enough. We need to audit a **trajectory**.
 
----
+## The threat model comes before the benchmark
 
-## 1. Threat model before benchmark
+Before choosing a dataset or metric, an evaluation should define at least:
 
-Before selecting a dataset or metric, define at least:
-
-- **Asset** — which data, capability or resource is protected?
-- **Actor** — what can the adversary control and observe?
-- **Entry point** — chat, document, web, email, memory, tool output, MCP server or another agent?
-- **Budget** — attempts, time, adaptivity and cost?
-- **Permissions** — which tools, scopes and credentials are reachable?
-- **Success** — what concrete event counts as harm?
-- **Recovery** — what state should remain after abort/rollback?
+- **Asset**: which data, capability or resource needs to be protected.
+- **Actor**: what the attacker can control and what information they observe.
+- **Input**: chat, document, web, email, memory, tool output, MCP server or another agent.
+- **Budget**: number of attempts, time, adaptivity and available cost.
+- **Permissions**: tools, scopes, credentials and reachable resources.
+- **Success**: which concrete event counts as harm.
+- **Recovery**: what state should remain after aborting or reverting.
 
 {{ include_html("snippets/seguridad-ia/04-threat-model.html") }}
 
-Without these dimensions, an attack-success percentage may be numerically precise and operationally meaningless.
+Without these seven pieces, an aggregate attack rate can be precise and still be of little use for a product decision.
 
-OWASP's 2026 agentic red-team guidance treats the activity as a lifecycle practice: identify attack paths, validate defenses and feed reproducible findings back into design and deployment.
+OWASP already treats agentic red teaming as a full-lifecycle activity: identify attack paths, validate defenses and maintain continuous feedback between design, deployment and operation ([OWASP AI and Agentic Red Teaming, Q2 2026](https://genai.owasp.org/resource/ai-security-solutions-landscape-for-ai-and-agentic-red-teaming-q2-2026/)).
 
----
+## Separate what the model can do from what the system executes
 
-## 2. Separate model capability, human uplift and product execution
+An evaluation should separate at least three levels:
 
-A security evaluation should distinguish:
+- what the model knows how to do;
+- how much it improves a person trying to complete a task;
+- what the product can execute with its tools and permissions.
 
-1. **Model capability** — what can the model produce under the tested configuration?
-2. **Human uplift** — how much does access to the model improve a person's ability to complete the threat-model task?
-3. **Product execution** — what external effects can the deployed system actually perform with its tools and permissions?
+The first question belongs to model capability. The second measures human *uplift*. The third is a property of the complete system.
 
 {{ include_html("snippets/seguridad-ia/04-uplift.html") }}
 
-A high rubric score does not automatically prove that a person obtained a novel dangerous capability, and a model-level failure does not automatically mean the production runtime can execute the corresponding effect.
+A high rubric score does not by itself prove that a person has gained a new capability. The evaluation needs to check whether the content was actionable, whether the person had the necessary resources and whether the result could be reproduced under realistic conditions.
 
-These are different experiments and should be reported separately.
+## Testing the model and testing the product are different experiments
 
----
+To study base capability, it can make sense to evaluate configurations with mitigations reduced or disabled. The goal is not to deploy them, but to avoid confusing “the system blocked the output” with “the model does not have that capability.”
 
-## 3. Model evaluation and product evaluation are different setups
+The comparison must state which version is being tested, which safeguards are active, which tools exist, what permissions the agent has, how many attempts the attacker receives and who reviews the results. A number from a model with guardrails cannot simply be compared with a number from another setup that does not have them.
 
-To study base capability, researchers may intentionally reduce mitigations. That can be valid if it is clearly labelled. It should not be compared directly with a production system running classifiers, policy engines, scoped tools and confirmations.
+That detail also matters for regressions. If a new version changes the system prompt, classifier, retrieval, model or tool scopes, the evaluated system has changed even if the commercial name remains the same.
 
-Every evaluation should declare:
+## Automating attacks can also mislead the evaluation
 
-- model/version;
-- system prompt and context configuration;
-- active safeguards;
-- tools and scopes;
-- attempt budget;
-- grader and human-review process.
+*Constitutional Classifiers* describes an automated red-teaming pipeline that generates long, multi-turn attacks. An attack model proposes a structure, fills it with variants and uses the results to produce new attempts ([Anthropic, 2025](https://www.anthropic.com/research/constitutional-classifiers)).
 
-Changing any of those variables changes the system under test, even if the product name remains the same.
+Automation increases coverage, but it also introduces a metric risk. If the grader rewards particular words or long responses, the attacker can learn to game the rubric without finding a useful path.
 
----
+That is why an automated evaluation needs two kinds of validation:
 
-## 4. Automated attack generation can game the grader
+1. **Attack validity**: confirm that the supposed success actually produces the capability or effect of concern.
+2. **Grader validity**: review false positives, false negatives and cases where the attacker optimizes against the rubric itself.
 
-Automated red-team agents can generate large families of test cases and adapt based on previous results. This improves coverage but introduces a second optimization target: the evaluator itself.
+A score without audited examples can measure the attacker's ability to fool the evaluator rather than the ability to compromise the product.
 
-If the grader over-rewards keywords, verbosity or superficial rubric matches, an automated attacker can learn to maximize the score without finding a meaningful compromise.
+## The evaluation should record every step
 
-A robust automated evaluation therefore validates both:
+An agent evaluation needs to record:
 
-**Attack validity.** Did the candidate success actually produce the capability/effect defined in the threat model?
+1. the input and its provenance;
+2. what the system retrieved or remembered;
+3. the model's decision;
+4. the proposed tool call;
+5. the authorization that was applied;
+6. the tool result;
+7. the final state and the possibility of recovery.
 
-**Grader validity.** What are the false-positive/false-negative rates, and are there signs that the attack process is optimizing for the rubric rather than the product compromise?
+Each point allows a different test. A filter can block an output while leaving retrieval untouched. A policy engine can deny the tool while still recording dangerous memory. A runtime can abort in time and leave partial state that needs reconciliation.
 
-A score without audited examples can measure how well the attacker fooled the evaluator.
-
----
-
-## 5. Record every step in the trajectory
-
-For a tool-using agent, the evaluation trace should include:
-
-1. input and provenance;
-2. retrieved/remembered context;
-3. model decision;
-4. proposed tool call;
-5. authorization decision;
-6. tool result;
-7. final state and recovery result.
+The end-to-end benchmark does not have to be huge. It has to be representative. A small task with a test account, a contaminated document and a reversible action can reveal more than thousands of prompts with no tools.
 
 {{ include_html("snippets/seguridad-ia/04-causal-chain.html") }}
 
-Each step is a different control point. Retrieval can be compromised while authorization still works. The model can behave correctly while a tool schema is too permissive. The runtime can abort a call but leave partial state requiring reconciliation.
+## Measure the causal chain, not only the final text
 
-A small end-to-end fixture with reversible actions can reveal more than thousands of prompts that never touch the actual product boundary.
+For a tool-using flow, it is useful to separate success states:
 
----
+- **Injection reached context** — the hostile input reached the model.
+- **Decision changed** — the agent's decision or plan changed.
+- **Tool proposed** — a dangerous tool call appeared.
+- **Policy bypassed** — the authorization layer allowed the call.
+- **Effect happened** — the external resource actually changed.
+- **Recovery failed** — the system could not stop, revert or reconcile the effect.
 
-## 6. Measure the causal chain, not only final text
+This decomposition turns one “attack success” percentage into useful engineering evidence. If the attack reaches the model but always dies at authorization, the control that is working becomes visible. If the model appears safe but the same effect can be reached through a poorly validated tool call, that becomes visible too.
 
-A useful decomposition is:
+## Test ordinary failures as well as perfect attacks
 
-- **Injection reached context** — hostile influence entered active context.
-- **Decision changed** — the model's plan shifted.
-- **Tool proposed** — a sensitive action was requested.
-- **Policy bypassed** — independent authorization allowed it.
-- **Effect happened** — external state changed.
-- **Recovery failed** — stop/rollback/reconciliation did not restore the expected state.
-
-This makes control effectiveness visible. If injections frequently reach the model but always die at authorization, that boundary can be measured. If the model appears safe but a permissive tool exposes the same effect, that is visible too.
-
----
-
-## 7. Test ordinary failures as well as adversarial inputs
-
-Real incidents often combine hostile content with normal distributed-system failure modes:
+A good test includes wording variations and adversarial documents, but also everyday system failures:
 
 - timeouts and partial responses;
-- tool errors and retries;
-- duplicate actions;
+- tool errors;
+- retries;
+- duplicated actions;
+- reduced permissions;
 - revoked credentials;
-- schema changes;
-- expired or poisoned memory;
-- human interruption during execution.
+- modified tool schemas;
+- expired or contaminated memory;
+- human interruption halfway through an execution.
 
-Red teaming should include these interactions because the dangerous path may require only that a malicious input coincides with one retry or one over-broad permission.
+Many incidents do not require the attacker to control every step. It is enough for a hostile input to coincide with a retry, an excessive permission or incomplete reconciliation.
 
----
+## Turn the red team into a regression
 
-## 8. Convert every useful finding into regression
+The most valuable result of a red team is not the report. It is the reproducible test that remains afterward.
 
-The most valuable output of a red team is not the slide deck. It is the reproducible test that remains after the finding.
+Whenever possible, each finding should become a case with:
 
-Where possible, each finding becomes a fixture with:
-
-- known initial state;
-- fixed tools/scopes;
-- attack budget;
-- success condition;
-- stop condition;
+- an input fixture;
+- a known initial state;
+- fixed tools and scopes;
+- attacker budget;
+- success criterion;
+- stop criterion;
 - expected trace evidence;
 - final-state verification.
 
+That case should run again when the model, prompt, retrieval, memory, a tool or the authorization policy changes.
+
 {{ include_html("snippets/seguridad-ia/04-regression-loop.html") }}
 
-Run it again whenever the model, prompt, retrieval, memory, tool contract or authorization policy changes.
+Security does not improve because a report contains a number with two decimal places. It improves when the team can point to the exact path that failed, repeat it in an isolated environment and verify that a new defense changes the result without breaking the legitimate case.
 
-The goal is a security release gate connected to a concrete causal path, not a one-time aggregate score.
-
----
+That is the role of red teaming in this series: turn an abstract fear into an observable chain with a stop criterion and evidence that can become a release gate.
 
 ## References
 
-- OWASP (2026), *AI Security Solutions Landscape for AI and Agentic Red Teaming Q2 2026*.
-- OWASP (2026), *Top 10 for Agentic Applications*.
-- Anthropic (2025), *Constitutional Classifiers*.
-- NIST, *AI Risk Management Framework*.
-
----
-
-## Frequently asked questions
-
-**Why is one prompt benchmark insufficient for an agent?**  
-Because the product's real risk may arise through retrieval, memory, tools, authorization and retries rather than the final text alone.
-
-**What is the difference between model capability and product execution?**  
-The model may be able to describe or propose something without the runtime having permission to execute the effect.
-
-**Why audit the grader?**  
-Automated attacks can optimize against a weak rubric. A high score is useful only if sampled “successes” correspond to meaningful threat-model outcomes.
-
-**What should happen after a red-team finding is fixed?**  
-Turn it into a reproducible regression and keep it in the release gate.
+- OWASP (2026), [*AI Security Solutions Landscape for AI and Agentic Red Teaming Q2 2026*](https://genai.owasp.org/resource/ai-security-solutions-landscape-for-ai-and-agentic-red-teaming-q2-2026/).
+- OWASP (2026), [*Top 10 for Agentic Applications*](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/).
+- Anthropic (2025), [*Constitutional Classifiers: Defending against universal jailbreaks*](https://www.anthropic.com/research/constitutional-classifiers).
+- NIST, [*AI Risk Management Framework*](https://www.nist.gov/itl/ai-risk-management-framework).

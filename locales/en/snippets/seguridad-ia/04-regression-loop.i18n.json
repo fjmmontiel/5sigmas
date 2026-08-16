@@ -1,0 +1,39 @@
+{
+  "source": "snippets/seguridad-ia/04-regression-loop.html",
+  "source_blob_sha": "9ad04afadea4c1d65fee0283fafa39278f9fd762",
+  "replacements": {
+    "El entregable útil de un red-team es el test que queda": "The useful deliverable from a red team is the test that remains",
+    "Un hallazgo que no se convierte en fixture reproducible vuelve a depender de memoria humana en la siguiente release.": "A finding that does not become a reproducible fixture depends on human memory again at the next release.",
+    "▶ Recorrer ciclo": "▶ Run cycle",
+    "Una trayectoria concreta consigue atravesar el sistema.": "A concrete trajectory manages to cross the system.",
+    "Entrada, estado inicial, scopes y budget quedan fijados.": "Input, initial state, scopes and budget are fixed.",
+    "Se cambia la frontera que debe detener la cadena.": "The boundary that should stop the chain is changed.",
+    "El mismo caso corre contra modelo, prompt, retrieval o policy nuevos.": "The same case runs against a new model, prompt, retrieval or policy.",
+    "Si reaparece el efecto, la release no pasa.": "If the effect reappears, the release does not pass.",
+    "<strong>Inicio:</strong> un incidente reproducible puede convertirse en una propiedad que la CI comprueba de forma continua.": "<strong>Start:</strong> a reproducible incident can become a property that CI checks continuously.",
+    "<strong>Hallazgo:</strong> describe la trayectoria, no solo el último texto.": "<strong>Finding:</strong> describe the trajectory, not only the final text.",
+    "<strong>Fixture:</strong> congela condiciones para que el experimento sea repetible.": "<strong>Fixture:</strong> freeze conditions so the experiment is repeatable.",
+    "<strong>Mitigación:</strong> cambia una frontera concreta y deja visible qué control actúa.": "<strong>Mitigation:</strong> change one concrete boundary and make the acting control visible.",
+    "<strong>Regresión:</strong> repite el caso cuando cambia cualquier pieza relevante del sistema.": "<strong>Regression:</strong> repeat the case whenever any relevant system component changes.",
+    "<strong>Release gate:</strong> el riesgo deja de ser un informe histórico y se convierte en criterio de aceptación.": "<strong>Release gate:</strong> risk stops being a historical report and becomes an acceptance criterion.",
+    "Hallazgo": "Finding",
+    "Mitigación": "Mitigation",
+    "Regresión": "Regression"
+  },
+  "forbidden_output_tokens": [
+    "El entregable útil",
+    "Un hallazgo que no",
+    "Recorrer ciclo",
+    "Una trayectoria concreta",
+    "Entrada, estado inicial",
+    "Se cambia la frontera",
+    "El mismo caso corre",
+    "Si reaparece el efecto",
+    "Inicio:</strong>",
+    "Hallazgo:</strong>",
+    "congela condiciones",
+    "Mitigación:</strong>",
+    "Regresión:</strong>",
+    "el riesgo deja de ser"
+  ]
+}

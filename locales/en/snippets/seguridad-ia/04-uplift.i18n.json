@@ -1,0 +1,43 @@
+{
+  "source": "snippets/seguridad-ia/04-uplift.html",
+  "source_blob_sha": "8e66d960a116d6bbce4f70c6aec2b41bbb5dcd74",
+  "replacements": {
+    "Capacidad, uplift y ejecución son experimentos distintos": "Capability, uplift and execution are different experiments",
+    "Selecciona una capa. La misma respuesta puede ser relevante para una pregunta y no decir casi nada sobre las otras dos.": "Select one layer. The same response can be relevant to one question and say almost nothing about the other two.",
+    "¿Qué puede producir el modelo?": "What can the model produce?",
+    "Evalúa capacidad base bajo una configuración declarada.": "Evaluate base capability under a declared configuration.",
+    "<b>Medida:</b> calidad/accionabilidad de la salida.": "<b>Measure:</b> output quality/actionability.",
+    "¿Cuánto mejora a una persona?": "How much does it improve a person?",
+    "Compara una tarea con recursos normales frente a asistencia del modelo.": "Compare a task with normal resources against assistance from the model.",
+    "<b>Medida:</b> diferencia observable en éxito, tiempo o calidad.": "<b>Measure:</b> observable difference in success, time or quality.",
+    "¿Qué puede ejecutar el producto?": "What can the product execute?",
+    "Incluye tools, scopes, autorización, estado y recuperación.": "Includes tools, scopes, authorization, state and recovery.",
+    "<b>Medida:</b> efecto externo y control que lo detuvo.": "<b>Measure:</b> external effect and the control that stopped it.",
+    "<strong>Modelo:</strong> una salida peligrosa mide comportamiento del modelo, no demuestra por sí sola que exista una ruta de daño en producción.": "<strong>Model:</strong> a dangerous output measures model behavior; by itself it does not demonstrate a path to harm in production.",
+    "<strong>Uplift humano:</strong> la pregunta es cuánto cambia lo que una persona consigue hacer con la ayuda del modelo frente a su baseline.": "<strong>Human uplift:</strong> the question is how much model assistance changes what a person can accomplish relative to the baseline.",
+    "<strong>Producto:</strong> el resultado relevante es si una trayectoria atraviesa tools y autorización hasta producir un efecto real.": "<strong>Product:</strong> the relevant result is whether a trajectory crosses tools and authorization to produce a real effect.",
+    "<strong>Comparación:</strong> capability, uplift y ejecución se conectan, pero ninguna de las tres sustituye a las otras.": "<strong>Comparison:</strong> capability, uplift and execution are connected, but none of the three substitutes for the others.",
+    "1 · Modelo": "1 · Model",
+    "2 · Persona + modelo": "2 · Person + model",
+    "3 · Producto": "3 · Product",
+    "Comparar": "Compare"
+  },
+  "forbidden_output_tokens": [
+    "Capacidad, uplift",
+    "Selecciona una capa",
+    "Qué puede producir",
+    "Evalúa capacidad base",
+    "calidad/accionabilidad",
+    "Cuánto mejora",
+    "Compara una tarea",
+    "diferencia observable",
+    "Qué puede ejecutar",
+    "Incluye tools",
+    "efecto externo y control",
+    "Modelo:</strong> una salida",
+    "Uplift humano",
+    "Producto:</strong> el resultado",
+    "Comparación:</strong>",
+    "Persona + modelo"
+  ]
+}

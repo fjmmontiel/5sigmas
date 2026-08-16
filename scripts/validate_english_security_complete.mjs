@@ -35,7 +35,15 @@ const chapters = [
     canonicalPoisoning: true,
     screenshot: 'english-security-03-poisoning.png',
   },
-  { slug: '04-red-teaming', route: '/en/series/seguridad-ia/04-red-teaming/', title: 'Chapter 4 — Red teaming', concepts: ['trajectory', 'grader validity', 'release gate'], demos: 4, prefix: 'sec-04-', screenshot: 'english-security-04-red-teaming.png' },
+  {
+    slug: '04-red-teaming',
+    route: '/en/series/seguridad-ia/04-red-teaming/',
+    title: 'Chapter 4 — Red teaming',
+    concepts: ['trajectory', 'Attack validity', 'Grader validity', 'Injection reached context', 'Recovery failed', 'release gate'],
+    demos: 4,
+    canonicalRedTeam: true,
+    screenshot: 'english-security-04-red-teaming.png',
+  },
   { slug: '05-controles-produccion', route: '/en/series/seguridad-ia/05-controles-produccion/', title: 'Chapter 5 — Production controls', concepts: ['least privilege', 'MCP', 'kill path'], demos: 4, prefix: 'sec-05-', screenshot: 'english-security-05-production-controls.png' },
 ];
 
@@ -250,11 +258,79 @@ async function validateCanonicalCausalVisual(page, chapter) {
   return 1;
 }
 
+async function validateRedTeamVisuals(page, chapter) {
+  const selectors = ['.threatbuild', '.uplift3', '.causalrt', '.regloop'];
+  for (const selector of selectors) {
+    const matches = page.locator(selector);
+    const count = await matches.count();
+    if (count !== 1) {
+      failures.push(`${chapter.route}: expected exactly one canonical ${selector}, found ${count}`);
+      continue;
+    }
+    const root = matches.first();
+    if (!await isVisible(root)) failures.push(`${chapter.route}: canonical ${selector} is not visible`);
+    const box = await root.boundingBox();
+    if (!box || box.width < 240 || box.height < 120) failures.push(`${chapter.route}: canonical ${selector} has invalid geometry ${JSON.stringify(box)}`);
+  }
+
+  const threat = page.locator('.threatbuild');
+  if (await threat.count() === 1) {
+    const selects = threat.locator('select[data-group]');
+    if (await selects.count() !== 4) failures.push(`${chapter.route}: threat-model visual must expose four experiment controls`);
+    const permissions = threat.locator('select[data-group="permissions"]');
+    const success = threat.locator('select[data-group="success"]');
+    if (await permissions.count() !== 1 || await success.count() !== 1) {
+      failures.push(`${chapter.route}: threat-model visual lost permission/success controls`);
+    } else {
+      await permissions.selectOption('bounded write');
+      await success.selectOption('external effect');
+      await page.waitForTimeout(75);
+      const warning = threat.locator('[data-warning]');
+      if (!await warning.evaluate((node) => node.classList.contains('is-ready'))) failures.push(`${chapter.route}: threat-model interaction did not reach end-to-end state`);
+      if (!((await warning.innerText()) || '').includes('End-to-end threat model')) failures.push(`${chapter.route}: threat-model end-to-end verdict was not localized`);
+      const summary = ((await threat.locator('[data-summary]').innerText()) || '').toLowerCase();
+      if (!summary.includes('bounded write') || !summary.includes('external effect')) failures.push(`${chapter.route}: threat-model dynamic summary lost selected experiment semantics`);
+    }
+  }
+
+  const uplift = page.locator('.uplift3');
+  if (await uplift.count() === 1) {
+    if (await uplift.locator('[data-focus]').count() !== 4) failures.push(`${chapter.route}: uplift visual must expose model/human/product/compare controls`);
+    if (await uplift.locator('[data-card]').count() !== 3) failures.push(`${chapter.route}: uplift visual must expose three experiment cards`);
+    const product = uplift.locator('[data-focus="system"]');
+    if (await product.count() !== 1) failures.push(`${chapter.route}: uplift visual is missing product focus`);
+    else {
+      await product.click();
+      await page.waitForTimeout(75);
+      if (await product.getAttribute('aria-pressed') !== 'true') failures.push(`${chapter.route}: uplift product focus did not activate`);
+      if (!await uplift.locator('[data-card="system"]').evaluate((node) => node.classList.contains('is-focus'))) failures.push(`${chapter.route}: uplift product card did not become focused`);
+      const take = ((await uplift.locator('[data-take]').innerText()) || '').toLowerCase();
+      if (!take.includes('product') || !take.includes('real effect')) failures.push(`${chapter.route}: uplift product takeaway lost canonical execution semantics`);
+    }
+  }
+
+  await validateCanonicalCausalVisual(page, chapter);
+
+  const regression = page.locator('.regloop');
+  if (await regression.count() === 1) {
+    if (await regression.locator('.regloop__step').count() !== 5) failures.push(`${chapter.route}: regression visual must expose five canonical stages`);
+    const run = regression.locator('[data-run]');
+    if (await run.count() !== 1) failures.push(`${chapter.route}: regression visual is missing its run control`);
+    else {
+      await run.click();
+      await page.waitForTimeout(750);
+      if (await regression.locator('.regloop__step.is-active').count() !== 1) failures.push(`${chapter.route}: regression-cycle interaction did not activate a stage`);
+      const copy = ((await regression.locator('[data-copy]').innerText()) || '').toLowerCase();
+      if (!copy.includes('finding') || !copy.includes('trajectory')) failures.push(`${chapter.route}: regression-cycle runtime copy was not localized`);
+    }
+  }
+
+  return selectors.reduce(async (promise, selector) => (await promise) + (await page.locator(selector).count() === 1 ? 1 : 0), Promise.resolve(0));
+}
+
 async function validateLegacySecurityVisuals(page, chapter) {
   const demoValues = await page.locator('[data-demo^="sec-"]').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('data-demo')));
-  let visualCount = demoValues.length;
-  const legacyExpected = chapter.slug === '04-red-teaming' ? chapter.demos - 1 : chapter.demos;
-  if (demoValues.length !== legacyExpected) failures.push(`${chapter.route}: expected ${legacyExpected} legacy teaching visuals, found ${demoValues.length}`);
+  if (demoValues.length !== chapter.demos) failures.push(`${chapter.route}: expected ${chapter.demos} legacy teaching visuals, found ${demoValues.length}`);
   if (new Set(demoValues).size !== demoValues.length) failures.push(`${chapter.route}: duplicate data-demo visual identifiers`);
   for (const demo of demoValues) if (!demo?.startsWith(chapter.prefix)) failures.push(`${chapter.route}: unexpected visual identifier ${JSON.stringify(demo)}`);
 
@@ -267,9 +343,7 @@ async function validateLegacySecurityVisuals(page, chapter) {
     const after = await candidate.getAttribute('open');
     if (before === after) failures.push(`${chapter.route}: details interaction did not toggle`);
   }
-
-  if (chapter.slug === '04-red-teaming') visualCount += await validateCanonicalCausalVisual(page, chapter);
-  return visualCount;
+  return demoValues.length;
 }
 
 try {
@@ -288,7 +362,7 @@ try {
       if (!body.includes(chapter.title)) failures.push(`${chapter.route}: missing English chapter title`);
       for (const concept of chapter.concepts) if (!body.toLowerCase().includes(concept.toLowerCase())) failures.push(`${chapter.route}: missing core concept ${concept}`);
       for (const token of forbidden) if (body.includes(token)) failures.push(`${chapter.route}: Spanish leakage ${JSON.stringify(token)}`);
-      if (['02-jailbreaks', '03-envenenamiento'].includes(chapter.slug) && body.includes('Frequently asked questions')) failures.push(`${chapter.route}: English-only FAQ section drifted back into the canonical article`);
+      if (['02-jailbreaks', '03-envenenamiento', '04-red-teaming'].includes(chapter.slug) && body.includes('Frequently asked questions')) failures.push(`${chapter.route}: English-only FAQ section drifted back into the canonical article`);
 
       const visualCount = chapter.visualSelectors
         ? await validatePromptInjectionVisuals(page, chapter)
@@ -296,7 +370,9 @@ try {
           ? await validateJailbreakVisuals(page, chapter)
           : chapter.canonicalPoisoning
             ? await validatePoisoningVisuals(page, chapter)
-            : await validateLegacySecurityVisuals(page, chapter);
+            : chapter.canonicalRedTeam
+              ? await validateRedTeamVisuals(page, chapter)
+              : await validateLegacySecurityVisuals(page, chapter);
       if (visualCount !== chapter.demos) failures.push(`${chapter.route}: expected ${chapter.demos} teaching visuals, found ${visualCount}`);
       if (viewport.name === 'desktop') totalVisuals += visualCount;
 
@@ -330,4 +406,4 @@ if (failures.length) {
   for (const failure of [...new Set(failures)]) console.error(failure);
   process.exit(1);
 }
-console.log('Complete English AI Security QA passed: Chapters 1–5, 18 unique defensive visuals, canonical Chapter 2 jailbreak search/budget/outcome interactions, canonical Chapter 3 persistence/governance/runtime-vs-weights/propagation interactions, exact native-English video/poster pairs, desktop/mobile clean.');
+console.log('Complete English AI Security QA passed: Chapters 1–5, 18 unique defensive visuals, canonical Chapter 2 jailbreak search/budget/outcome interactions, canonical Chapter 3 persistence/governance/runtime-vs-weights/propagation interactions, canonical Chapter 4 threat-model/uplift/causal-chain/regression interactions, exact native-English video/poster pairs, desktop/mobile clean.');
