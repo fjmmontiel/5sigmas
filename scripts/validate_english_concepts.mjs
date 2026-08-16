@@ -11,7 +11,10 @@ await fs.mkdir(outDir, { recursive: true });
 const transformerVisuals = [
   { selector: '.tvb-wrap', source: 'docs/snippets/temas/transformer-block.html' },
   { selector: '.tqv-wrap', source: 'docs/snippets/temas/transformer-qkv.html' },
+  { selector: '.tmh-wrap', source: 'docs/snippets/temas/transformer-multihead.html' },
   { selector: '.tcm-wrap', source: 'docs/snippets/temas/transformer-causal-mask.html' },
+  { selector: '.tff-wrap', source: 'docs/snippets/temas/transformer-ffn.html' },
+  { selector: '.trn-wrap', source: 'docs/snippets/temas/transformer-residual-norm.html' },
 ];
 const reasoningVisuals = [
   { selector: '.rfl-wrap', source: 'docs/snippets/temas/reasoning-loop.html' },
@@ -45,6 +48,28 @@ const transformerEnglishForbidden = [
   'Durante el entrenamiento',
   'Mezclar valores',
   'Representación contextual',
+  'Varias proyecciones leen',
+  'Cada cabeza recibe',
+  'cabeza 1',
+  'cabeza 2',
+  'RECOMBINAR',
+  'salida multi-head',
+  'NO HAY ROLES FIJOS',
+  'RED FEED-FORWARD · POR POSICIÓN',
+  'La atención mezcla información',
+  'mezcla entre posiciones',
+  'transformación independiente',
+  'NO LINEALIDAD / PUERTA',
+  'MISMOS W₁',
+  'MISMA FUNCIÓN',
+  'MISMOS W₂',
+  'FORMA GENERAL',
+  'RESIDUAL + NORMALIZACIÓN',
+  'La posición de la normalización',
+  'RUTA RESIDUAL',
+  'NORMALIZAR',
+  'RAMA DE LA SUBCAPA',
+  'El Transformer de 2017 usó',
 ];
 const reasoningEnglishForbidden = [
   'CÓMPUTO EN INFERENCIA',
@@ -92,6 +117,34 @@ const agentsEnglishForbidden = [
   'RESULTADO OBSERVABLE',
   'SIGUIENTE DECISIÓN',
 ];
+const transformerEnglishAnchors = [
+  'MULTI-HEAD ATTENTION',
+  'head 1',
+  'RECOMBINE',
+  'multi-head output',
+  'FEED-FORWARD NETWORK · PER POSITION',
+  'mixes across positions',
+  'independent transformation',
+  'GENERAL FORM',
+  'RESIDUAL + NORMALIZATION',
+  'POST-NORM · ORIGINAL TRANSFORMER',
+  'RESIDUAL PATH',
+  'SUBLAYER BRANCH',
+];
+const transformerSpanishAnchors = [
+  'MULTI-HEAD ATTENTION',
+  'cabeza 1',
+  'RECOMBINAR',
+  'salida multi-head',
+  'RED FEED-FORWARD · POR POSICIÓN',
+  'mezcla entre posiciones',
+  'transformación independiente',
+  'FORMA GENERAL',
+  'RESIDUAL + NORMALIZACIÓN',
+  'POST-NORM · TRANSFORMER ORIGINAL',
+  'RUTA RESIDUAL',
+  'RAMA DE LA SUBCAPA',
+];
 const reasoningEnglishAnchors = ['INFERENCE COMPUTE', 'Intermediate state', 'OPERATIONAL TRACE', 'TRAJECTORY A', 'AGGREGATE ANSWERS', 'ROUTING SIGNALS', 'Not monotonic'];
 const reasoningSpanishAnchors = ['CÓMPUTO EN INFERENCIA', 'Estado intermedio', 'TRAZA OPERACIONAL', 'TRAYECTORIA A', 'AGREGAR RESPUESTAS', 'SEÑALES DE ROUTING', 'No monotónico'];
 const evaluationEnglishAnchors = ['Reference data', 'External benchmarks', 'Judge + humans', 'Online metrics', 'Answer + citations', 'Final answer'];
@@ -132,6 +185,42 @@ async function checkVisualContract(page, route, viewport, selectors) {
       const overflow = await page.locator(selector).evaluate((node) => node.scrollWidth - node.clientWidth);
       if (overflow > 2) failures.push(`${route}: ${viewport.name} ${selector} internal overflow ${overflow}px`);
     }
+  }
+}
+
+async function captureVisuals(page, prefix, viewport, selectors) {
+  for (const selector of selectors) {
+    const locator = page.locator(selector);
+    if (await locator.count() !== 1) continue;
+    await locator.screenshot({
+      path: path.join(outDir, `${prefix}-${viewport.name}-${selector.slice(1)}.png`),
+      animations: 'disabled',
+    });
+  }
+}
+
+async function checkTransformerDensity(page, route, viewport, anchors) {
+  const expectedCounts = [
+    ['.tmh-headcard', 3],
+    ['.tmh-qkv', 3],
+    ['.tmh-equations > div', 2],
+    ['.tmh-contract > div', 3],
+    ['.tff-panel', 2],
+    ['.tff-lane', 3],
+    ['.tff-stage', 9],
+    ['.tff-contract > div', 3],
+    ['.trn-variant', 2],
+    ['.trn-lanes', 2],
+    ['.trn-join', 2],
+    ['.trn-contract > div', 3],
+  ];
+  for (const [selector, expected] of expectedCounts) {
+    const count = await page.locator(selector).count();
+    if (count !== expected) failures.push(`${route}: ${viewport.name} expected ${expected} ${selector}, found ${count}`);
+  }
+  const body = await page.locator('body').innerText();
+  for (const text of anchors) {
+    if (!body.includes(text)) failures.push(`${route}: ${viewport.name} missing Transformer visual anchor ${JSON.stringify(text)}`);
   }
 }
 
@@ -196,7 +285,14 @@ async function checkOverflow(page, route, viewport) {
 await validateSpanishVisualSources(
   'docs/temas/transformer.md',
   transformerVisuals,
-  ['La ecuación de atención convertida en flujo', 'Máscara causal', 'Representación contextual'],
+  [
+    'La ecuación de atención convertida en flujo',
+    'Máscara causal',
+    'Representación contextual',
+    'Varias proyecciones leen relaciones distintas antes de recombinarse',
+    'La atención mezcla información entre tokens; la FFN transforma cada posición por separado',
+    'La posición de la normalización cambia la ruta por la que viaja la representación',
+  ],
 );
 await validateSpanishVisualSources(
   'docs/temas/razonamiento.md',
@@ -217,6 +313,26 @@ const browser = await chromium.launch({ headless: true });
 
 try {
   if (!englishOnlyPreview) {
+    for (const viewport of viewports) {
+      const route = '/temas/transformer/';
+      const page = await browser.newPage({ viewport: { width: viewport.width, height: viewport.height } });
+      const runtimeErrors = [];
+      page.on('pageerror', (error) => runtimeErrors.push(`pageerror: ${error.message}`));
+      const response = await page.goto(`${base}${route}`, { waitUntil: 'networkidle' });
+      if (!response?.ok()) failures.push(`${route}: HTTP ${response?.status() ?? 'no response'}`);
+      const body = await page.locator('body').innerText();
+      if (!body.includes('Cómo funciona el Transformer')) failures.push(`${route}: missing Spanish title`);
+      const htmlLang = await page.locator('html').getAttribute('lang');
+      if (htmlLang !== 'es') failures.push(`${route}: html lang=${JSON.stringify(htmlLang)}`);
+      await checkVisualContract(page, route, viewport, transformerVisuals.map((item) => item.selector));
+      await checkTransformerDensity(page, route, viewport, transformerSpanishAnchors);
+      await checkOverflow(page, route, viewport);
+      for (const err of runtimeErrors) failures.push(`${route}: ${err}`);
+      await page.screenshot({ path: path.join(outDir, `spanish-concept-transformer-${viewport.name}.png`), fullPage: true, animations: 'disabled' });
+      await captureVisuals(page, 'spanish-concept-transformer', viewport, transformerVisuals.map((item) => item.selector));
+      await page.close();
+    }
+
     for (const viewport of viewports) {
       const route = '/temas/razonamiento/';
       const page = await browser.newPage({ viewport: { width: viewport.width, height: viewport.height } });
@@ -319,6 +435,10 @@ try {
               ? evaluationEnglishForbidden
               : agentsEnglishForbidden;
         for (const token of localeForbidden) if (body.includes(token)) failures.push(`${concept.route}: visual Spanish leakage ${JSON.stringify(token)}`);
+        if (concept.visualGroup === 'transformer') {
+          await checkTransformerDensity(page, concept.route, viewport, transformerEnglishAnchors);
+          await captureVisuals(page, 'english-concept-transformer', viewport, concept.visuals);
+        }
         if (concept.visualGroup === 'reasoning') await checkReasoningDensity(page, concept.route, viewport, reasoningEnglishAnchors);
         if (concept.visualGroup === 'evaluation') await checkEvaluationDensity(page, concept.route, viewport, evaluationEnglishAnchors);
         if (concept.visualGroup === 'agents') await checkAgentDensity(page, concept.route, viewport, agentEnglishAnchors);
@@ -338,4 +458,4 @@ if (failures.length) {
   for (const failure of [...new Set(failures)]) console.error(failure);
   process.exit(1);
 }
-console.log(`Concept QA passed: ${englishOnlyPreview ? 'English-only preview' : 'combined ES/EN preview'} with reasoning, evaluation, Transformer and agent visual contracts, native localization, canonical URLs, and desktop/mobile overflow cleanliness.`);
+console.log(`Concept QA passed: ${englishOnlyPreview ? 'English-only preview' : 'combined ES/EN preview'} with six-visual Transformer coverage, reasoning, evaluation and agent visual contracts, native localization, canonical URLs, and desktop/mobile overflow cleanliness.`);
