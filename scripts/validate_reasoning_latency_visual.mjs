@@ -129,10 +129,18 @@ try {
       check(pageOverflow <= 2, `${testCase.route}: ${viewport.name} horizontal page overflow ${pageOverflow}px`);
       for (const error of runtimeErrors) failures.push(`${testCase.route}: ${viewport.name} runtime error: ${error}`);
 
+      // Element screenshots scroll the visual into view. Hide sticky site chrome while
+      // capturing the visual so the mobile header cannot cover a timeline milestone.
+      const cleanVisualStyle = await page.addStyleTag({ content: '.md-header{visibility:hidden!important}' });
       await visual.screenshot({
         path: path.join(outDir, `reasoning-latency-${testCase.locale}-${viewport.name}.png`),
         animations: 'disabled',
       });
+      await cleanVisualStyle.evaluate((node) => node.remove());
+
+      // Reset scroll before a full-page capture so sticky chrome is recorded at the
+      // top of the page rather than over the section that happened to be inspected.
+      await page.evaluate(() => window.scrollTo(0, 0));
       await page.screenshot({
         path: path.join(outDir, `reasoning-latency-page-${testCase.locale}-${viewport.name}.png`),
         fullPage: true,
