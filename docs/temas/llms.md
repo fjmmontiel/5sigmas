@@ -25,13 +25,7 @@ Un sistema de producto puede añadir memoria, búsqueda, herramientas o polític
 
 El modelo no trabaja directamente con palabras. Un **tokenizador** divide el texto en unidades que pueden ser palabras completas, fragmentos, signos o bytes. Cada token recibe un identificador entero.
 
-Por ejemplo, una frase podría representarse de forma aproximada así:
-
-```text
-"Los modelos aprenden patrones"
-→ ["Los", " modelos", " aprenden", " patrones"]
-→ [1248, 5312, 18902, 7721]
-```
+{{ include_html("snippets/temas/llm-tokenization.html") }}
 
 La segmentación exacta depende del vocabulario y del algoritmo. Métodos como Byte Pair Encoding y SentencePiece equilibran dos objetivos: mantener un vocabulario manejable y representar palabras raras sin convertir cada carácter en una unidad independiente.[^sentencepiece]
 
