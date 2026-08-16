@@ -1,0 +1,40 @@
+{
+  "source": "snippets/ia-pib-bienestar-energia/02-entrenamiento-inferencia.html",
+  "source_blob_sha": "c334cc5b1cdb33c664d3c58f879c0998a530937b",
+  "replacements": {
+    "Dos fases con perfiles de consumo radicalmente distintos": "Two phases with radically different consumption profiles",
+    "Entrenar un modelo ocurre una vez y concentra energía durante semanas. Servir el modelo ocurre miles de millones de veces al día. El consumo acumulado de la inferencia puede superar al del entrenamiento conforme crece la adopción.": "Training a model happens once and concentrates energy use over weeks. Serving the model happens billions of times per day. Cumulative inference consumption can exceed training consumption as adoption grows.",
+    "Entrenamiento": "Training",
+    "Episódico · Alta intensidad · Concentrado": "Episodic · High intensity · Concentrated",
+    "consumo estimado del entrenamiento inicial de GPT-4 — equivalente al consumo anual de varios miles de hogares": "estimated consumption of the initial GPT-4 training run — equivalent to the annual electricity use of several thousand homes",
+    "Se ejecuta una vez por versión (semanas o meses de cómputo intensivo)": "Runs once per version (weeks or months of intensive compute)",
+    "Miles de aceleradores en paralelo en un mismo centro de datos": "Thousands of accelerators running in parallel in one data center",
+    "Se concentra donde la electricidad es más barata: renovables, regiones con superávit nocturno": "Concentrated where electricity is cheaper: renewables and regions with overnight surplus",
+    "Inferencia": "Inference",
+    "Continua · Baja por consulta · Distribuida": "Continuous · Low per query · Distributed",
+    "~2,9 Wh": "~2.9 Wh",
+    "por consulta a un LLM — ×10 frente a una búsqueda web (0,3 Wh); hasta ×40 por minuto de vídeo generado": "per LLM query — ×10 versus a web search (0.3 Wh); up to ×40 per minute of generated video",
+    "Miles de millones de consultas diarias en producción continua": "Billions of daily queries in continuous production",
+    "El consumo acumulado puede superar al entrenamiento con la adopción masiva": "Cumulative consumption can exceed training consumption under mass adoption",
+    "Se despliega cerca de los usuarios: la latencia baja requiere proximidad geográfica": "Deployed close to users: low latency requires geographic proximity",
+    "Fuente: IEA, Energy and AI, 2025. El dato de ~42 GWh para GPT-4 procede de Epoch AI (2023). El ratio ×10 frente a búsqueda web es la estimación mediana de la IEA para modelos de lenguaje de gran escala en producción.": "Source: IEA, Energy and AI, 2025. The ~42 GWh GPT-4 estimate comes from Epoch AI (2023). The ×10 ratio versus web search is the IEA median estimate for large-scale language models in production."
+  },
+  "forbidden_output_tokens": [
+    "Dos fases con perfiles",
+    "Entrenar un modelo ocurre una vez",
+    "Entrenamiento",
+    "Episódico · Alta intensidad",
+    "consumo estimado del entrenamiento",
+    "Se ejecuta una vez por versión",
+    "Miles de aceleradores",
+    "Se concentra donde la electricidad",
+    "Inferencia",
+    "Continua · Baja por consulta",
+    "~2,9 Wh",
+    "por consulta a un LLM",
+    "Miles de millones de consultas",
+    "El consumo acumulado puede superar",
+    "Se despliega cerca de los usuarios",
+    "Fuente: IEA, Energy and AI"
+  ]
+}
