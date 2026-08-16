@@ -76,7 +76,7 @@ async function validateVoiceRp(page, article, viewportName) {
   const canonicalAnchors = [
     'Four clocks have to be coordinated',
     'The first response accepts work',
-    'The result goes through an `ActivityGate`',
+    'The result goes through an ActivityGate',
     'Barge-in: cancel the voice, not the whole system',
     'Several tools should produce one final completion',
     'A single component controls the voice',
@@ -128,7 +128,7 @@ async function validateVoiceRp(page, article, viewportName) {
   for (let index = 0; index < voiceRpSelectors.length - 1; index += 1) {
     await expectBefore(page, article.route, voiceRpSelectors[index], voiceRpSelectors[index + 1]);
   }
-  await expectBefore(page, article.route, '.s5v-contract', 'h2');
+  await expectBefore(page, article.route, '.s5v-contract', 'main h2');
 
   return voiceRpSelectors.length;
 }
@@ -140,9 +140,17 @@ try {
   const hubBody = await hub.locator('body').innerText();
   if (!hubBody.includes('Technical Articles')) failures.push('/en/articulos-tecnicos/: missing English hub title');
   for (const article of articles) {
-    const relative = article.route.replace('/en/', '/');
-    const linkCount = await hub.locator(`a[href$="${relative}"]`).count();
-    if (!linkCount && !hubBody.includes(article.title.split(' — ')[0])) failures.push(`/en/articulos-tecnicos/: missing link/text for ${article.route}`);
+    const hasRouteLink = await hub.locator('a').evaluateAll(
+      (nodes, route) => nodes.some((node) => {
+        try {
+          return new URL(node.href).pathname === route;
+        } catch {
+          return false;
+        }
+      }),
+      article.route,
+    );
+    if (!hasRouteLink && !hubBody.includes(article.title.split(' — ')[0])) failures.push(`/en/articulos-tecnicos/: missing link/text for ${article.route}`);
   }
   await hub.close();
 
