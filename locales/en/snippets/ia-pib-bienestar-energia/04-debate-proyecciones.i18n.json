@@ -1,0 +1,32 @@
+{
+  "source": "snippets/ia-pib-bienestar-energia/04-debate-proyecciones.html",
+  "source_blob_sha": "89026705d50d700ecec96ecc19a85688e08e9b8c",
+  "replacements": {
+    "El debate macroeconómico: la cifra cambia según lo que creas transformable": "The macroeconomic debate: the number changes with what you believe can be transformed",
+    "Goldman Sachs y Acemoglu no discrepan por una décima. Discrepan sobre cuánta economía puede rehacerse de verdad con la IA actual.": "Goldman Sachs and Acemoglu do not disagree by a decimal point. They disagree about how much of the economy can actually be rebuilt with current AI.",
+    "Escenario optimista": "Optimistic scenario",
+    "Optimista": "Optimistic",
+    "$7 billones": "$7 trillion",
+    "impacto acumulado en PIB global en una década.": "cumulative impact on global GDP over a decade.",
+    "ocupaciones con tareas sustancialmente automatizables.": "occupations containing substantially automatable tasks.",
+    "Qué debe ser cierto": "What must be true",
+    "La mejora por tarea escala a empresa y luego a macro. La difusión es amplia y el rediseño organizativo sí ocurre.": "Task-level improvement scales to the company and then to the macroeconomy. Diffusion is broad and organizational redesign actually happens.",
+    "Escenario cauteloso": "Cautious scenario",
+    "Cauteloso": "Cautious",
+    "&lt;0,53%": "&lt;0.53%",
+    "impacto acumulado en PTF en una década.": "cumulative TFP impact over a decade.",
+    "tareas donde la automatización sería rentable hoy.": "tasks where automation would be economically viable today.",
+    "Qué frena el salto": "What limits the jump",
+    "Muchas mejoras ahorran coste, pero no rehacen suficiente economía ni crean valor nuevo neto al ritmo que exigen las previsiones altas.": "Many improvements save costs, but they do not rebuild enough of the economy or create net new value at the pace required by high-end forecasts.",
+    "La variable decisiva": "The decisive variable",
+    "1. Tareas expuestas": "1. Exposed tasks",
+    "¿Cuántas tareas relevantes puede tocar la IA con fiabilidad económica?": "How many economically relevant tasks can AI affect reliably?",
+    "2. Reorganización real": "2. Real reorganization",
+    "¿Las empresas cambian procesos o solo añaden una capa encima?": "Do companies change processes or merely add a layer on top?",
+    "3. Valor nuevo": "3. New value",
+    "¿La IA crea productos y capacidades nuevas o solo abarata trabajo existente?": "Does AI create new products and capabilities or only make existing work cheaper?",
+    "El rango práctico hoy va desde un escenario alto de ": "The practical range today runs from a high-end scenario of ",
+    "$7T-$15,7T": "$7T–$15.7T",
+    " si la difusión se generaliza, hasta uno mucho menor si la IA se queda en automatizar tareas rutinarias sin rehacer suficiente estructura productiva.": " if diffusion becomes widespread, down to a much smaller outcome if AI remains limited to automating routine tasks without rebuilding enough productive structure."
+  }
+}
