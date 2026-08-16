@@ -1,0 +1,40 @@
+{
+  "source": "snippets/datacenters-espacio/02-radiadores-escala.html",
+  "source_blob_sha": "562829299e0b3eef2c3109b9e8a4c4a6e21ddc89",
+  "replacements": {
+    "data-demo=\"02-radiadores-escala\"": "data-demo=\"dc-02-radiator-scale\"",
+    ">escala termica</div>": ">thermal scale</div>",
+    ">A escala MW, disipar calor exige arquitectura de radiadores</div>": ">At MW scale, heat rejection requires radiator architecture</div>",
+    ">En vacío no hay convección útil: la potencia eléctrica acaba como calor y obliga a crecer en superficie emisiva, orientación y masa.</div>": ">In vacuum there is no useful convection: electrical power ends up as heat, forcing growth in emitting area, orientation constraints and mass.</div>",
+    "aria-label=\"A escala MW, disipar calor exige arquitectura de radiadores\"": "aria-label=\"At MW scale, heat rejection requires radiator architecture\"",
+    ">módulo</text>": ">module</text>",
+    ">campo térmico</text>": ">thermal field</text>",
+    ">radiador dedicado</text>": ">dedicated radiator</text>",
+    ">≈ 3.950 m²</text>": ">≈ 3,950 m²</text>",
+    ">No hay aire útil</text>": ">No useful air</text>",
+    ">el calor solo sale radiando</text>": ">heat leaves only by radiation</text>",
+    ">La escala pesa</text>": ">Scale adds mass</text>",
+    ">el radiador puede superar</text>": ">radiator mass can exceed</text>",
+    ">servidores + potencia</text>": ">servers + power system</text>",
+    ">2 MW pueden exigir ≈ 3.950 m² de radiador</span>": ">2 MW can require ≈ 3,950 m² of radiator</span>",
+    ">La masa térmica compite con servidores y potencia</span>": ">Thermal mass competes with servers and power</span>",
+    ">Subir temperatura ayuda, pero no elimina el problema</span>": ">Raising temperature helps, but does not eliminate the problem</span>"
+  },
+  "forbidden_output_tokens": [
+    "escala termica",
+    "A escala MW",
+    "En vacío no hay convección útil",
+    "módulo",
+    "campo térmico",
+    "radiador dedicado",
+    "3.950 m²",
+    "No hay aire útil",
+    "el calor solo sale radiando",
+    "La escala pesa",
+    "el radiador puede superar",
+    "servidores + potencia",
+    "pueden exigir",
+    "La masa térmica compite",
+    "Subir temperatura ayuda"
+  ]
+}
