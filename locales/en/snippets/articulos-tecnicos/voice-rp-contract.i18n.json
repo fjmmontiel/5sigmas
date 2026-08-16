@@ -1,0 +1,39 @@
+{
+  "source": "snippets/articulos-tecnicos/voice-rp-contract.html",
+  "source_blob_sha": "5dc37739d8c637f996c03a92abc3950668e81565",
+  "replacements": {
+    "Contrato reactivo, asíncrono y proactivo": "Reactive, asynchronous, and proactive contract",
+    "Contrato": "Contract",
+    "Una petición. Dos tiempos.": "One request. Two timelines.",
+    "La conversación no espera a la tool.": "The conversation does not wait for the tool.",
+    "Conversación": "Conversation",
+    "Aceptar": "Accept",
+    "Seguir": "Continue",
+    "Operación": "Operation",
+    "Crear": "Create",
+    "Ejecutar": "Execute",
+    "Entregar": "Deliver",
+    "Etapas": "Stages",
+    "Operar": "Operate",
+    "Responde sin prometer el resultado.": "Respond without promising the result.",
+    "La tool avanza fuera del turno.": "The tool progresses outside the turn.",
+    "El cierre vuelve cuando puede escucharse.": "The completion returns when it can be heard."
+  },
+  "forbidden_output_tokens": [
+    "Contrato reactivo",
+    "Una petición. Dos tiempos.",
+    "La conversación no espera",
+    "Conversación",
+    "Aceptar",
+    "Seguir",
+    "Operación",
+    "Crear",
+    "Ejecutar",
+    "Entregar",
+    "Etapas",
+    "Operar",
+    "Responde sin prometer",
+    "La tool avanza",
+    "El cierre vuelve"
+  ]
+}

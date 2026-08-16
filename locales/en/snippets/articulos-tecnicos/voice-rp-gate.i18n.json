@@ -1,0 +1,34 @@
+{
+  "source": "snippets/articulos-tecnicos/voice-rp-gate.html",
+  "source_blob_sha": "70400ece9ac3b61b3b465c4df32eac0ee96dc8bb",
+  "replacements": {
+    "Decisiones del ActivityGate": "ActivityGate decisions",
+    "Política de entrega": "Delivery policy",
+    "¿Qué hace el resultado?": "What does the result do?",
+    "Una decisión, tres salidas.": "One decision, three outputs.",
+    "listo": "ready",
+    "Hablar": "Speak",
+    "canal libre": "channel free",
+    "Esperar": "Wait",
+    "usuario hablando": "user speaking",
+    "Unir": "Merge",
+    "siguiente turno": "next turn",
+    "Silencio": "Quiet",
+    "Hablando": "Speaking",
+    "Turno abierto": "Open turn"
+  },
+  "forbidden_output_tokens": [
+    "Decisiones del ActivityGate",
+    "Política de entrega",
+    "Qué hace el resultado",
+    "Una decisión, tres salidas",
+    "canal libre",
+    "Esperar",
+    "usuario hablando",
+    "Unir",
+    "siguiente turno",
+    "Silencio",
+    "Hablando",
+    "Turno abierto"
+  ]
+}
