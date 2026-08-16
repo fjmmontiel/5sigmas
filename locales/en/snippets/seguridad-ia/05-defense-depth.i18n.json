@@ -1,0 +1,34 @@
+{
+  "source": "snippets/seguridad-ia/05-defense-depth.html",
+  "source_blob_sha": "d68884278e2983150e90fec9abc419023a1c3cce",
+  "replacements": {
+    "El blast radius se decide en los permisos, antes del prompt": "The blast radius is decided by permissions, before the prompt",
+    "La misma inyección produce consecuencias completamente distintas según qué actor puede leer, escribir o administrar cada recurso.": "The same injection produces completely different consequences depending on which actor can read, write or administer each resource.",
+    "<strong>Escenario:</strong> un documento hostil intenta provocar un deploy. Con la matriz actual, el lector que procesa ese documento no tiene ruta directa a producción.": "<strong>Scenario:</strong> a hostile document attempts to trigger a deploy. With the current matrix, the reader processing that document has no direct path to production.",
+    "<strong>Blast radius ampliado:</strong> ahora una interpretación contaminada tiene una ruta de alto impacto que antes no existía. El prompt no cambió; cambió el permiso.": "<strong>Expanded blast radius:</strong> a contaminated interpretation now has a high-impact path that did not exist before. The prompt did not change; the permission did.",
+    "Restaurar mínimo privilegio": "Restore least privilege",
+    "Conceder admin al lector": "Grant admin to reader",
+    "Lector no confiable": "Untrusted reader",
+    "Agente operativo": "Operational agent",
+    "Documentos": "Documents",
+    "Producción": "Production",
+    "borrador": "draft",
+    "enviar": "send",
+    "leer": "read"
+  },
+  "forbidden_output_tokens": [
+    "El blast radius se decide",
+    "La misma inyección produce",
+    "Escenario:</strong>",
+    "Blast radius ampliado",
+    "Restaurar mínimo privilegio",
+    "Conceder admin al lector",
+    "Lector no confiable",
+    "Agente operativo",
+    "Documentos",
+    "Producción",
+    "borrador",
+    "enviar",
+    "leer"
+  ]
+}
