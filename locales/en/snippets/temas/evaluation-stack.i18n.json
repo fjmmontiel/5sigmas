@@ -1,6 +1,6 @@
 {
   "source": "snippets/temas/evaluation-stack.html",
-  "source_blob_sha": "4508c6d7c547c76f3abacc9c913959f6b9bee968",
+  "source_blob_sha": "f71eff43a9d560c8cf61c02d5625e5d0d6f4733e",
   "replacements": {
     ">PILA DE EVALUACIÓN</div>": ">EVALUATION STACK</div>",
     ">Seis capas, seis preguntas distintas</div>": ">Six layers, six different questions</div>",
