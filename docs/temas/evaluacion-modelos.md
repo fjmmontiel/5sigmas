@@ -216,17 +216,11 @@ Un experimento online necesita guardrails. No se debería exponer una variante a
 
 ## 10. Incertidumbre estadística
 
-Una diferencia pequeña puede ser ruido muestral. Reporta:
+Una diferencia pequeña puede ser ruido muestral. Si comparas dos versiones sobre los mismos casos, conserva el emparejamiento por ejemplo y analiza la diferencia por caso antes de agregar. El intervalo debe acompañar al efecto estimado.
 
-- número de casos
-- distribución por segmento
-- intervalo de confianza
-- variabilidad entre ejecuciones
-- prueba pareada cuando se evalúan los mismos ejemplos
+{{ include_html("snippets/temas/evaluation-uncertainty.html") }}
 
-Para salidas estocásticas, ejecuta varias semillas o temperaturas cuando esa variabilidad forme parte del producto.
-
-La significación estadística tampoco garantiza relevancia práctica. Una mejora minúscula puede ser real y no justificar el coste adicional.
+En sistemas estocásticos, separa la incertidumbre debida a qué casos has muestreado de la variabilidad entre ejecuciones del mismo caso cuando esa aleatoriedad forme parte del producto. La decisión final debe combinar magnitud, incertidumbre y coste, latencia o riesgo; una diferencia estadísticamente detectable no implica por sí sola valor práctico.
 
 ## Un ciclo de evaluación operativo
 
