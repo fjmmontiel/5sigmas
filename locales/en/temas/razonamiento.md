@@ -4,7 +4,7 @@ seo_title: "Reasoning in LLMs: chain of thought and test-time compute"
 description: "What reasoning means in an LLM, how chain of thought, search and verifiers work, and what they cost in latency, compute and reliability."
 keywords: "LLM reasoning, chain of thought, test-time compute, inference-time compute, self-consistency, verifiers, reasoning models"
 date: 2026-04-14
-date_modified: 2026-08-15
+date_modified: 2026-08-16
 ---
 
 # Reasoning in LLMs
@@ -31,15 +31,7 @@ The benefit is adaptive capability. The cost appears in latency, tokens, variabi
 
 *Chain of thought* (CoT) prompts the model to produce intermediate steps before the answer. Wei et al. showed that examples containing chained reasoning could improve large-model performance on arithmetic, symbolic and commonsense tasks.[^cot]
 
-A simplified example:
-
-```text
-question
-→ decompose the problem
-→ solve each part
-→ combine results
-→ answer
-```
+{{ include_html("snippets/temas/reasoning-chain-of-thought.html") }}
 
 The technique can help because it provides space to represent variables and dependencies. It can also hurt if early steps contain an error that propagates.
 

@@ -1,0 +1,124 @@
+<div class="rct-wrap" data-demo="topic-reasoning-chain-of-thought">
+  <div class="rct-head">
+    <div class="rct-kicker">CHAIN OF THOUGHT</div>
+    <div class="rct-title">Los pasos intermedios pueden ayudar a resolver; no demuestran cómo tomó la decisión el modelo</div>
+    <div class="rct-sub">CoT hace explícita una secuencia intermedia antes de la respuesta. El ejemplo muestra una descomposición útil, pero la explicación visible no debe tratarse como una traza causal perfecta.</div>
+  </div>
+
+  <div class="rct-example" role="img" aria-label="Ejemplo simplificado: el problema 24 por 17 se descompone, se resuelven las partes, se combinan y se responde 408">
+    <div class="rct-problem">
+      <span>PROBLEMA</span>
+      <strong>24 × 17</strong>
+      <small>ejemplo didáctico</small>
+    </div>
+    <div class="rct-arrow" aria-hidden="true">→</div>
+    <div class="rct-steps">
+      <section class="rct-step">
+        <span>1 · DESCOMPONER</span>
+        <strong>24 × (10 + 7)</strong>
+        <small>hacer visibles las dependencias</small>
+      </section>
+      <div class="rct-step-arrow" aria-hidden="true">→</div>
+      <section class="rct-step">
+        <span>2 · RESOLVER</span>
+        <strong>240 + 168</strong>
+        <small>operar sobre partes más simples</small>
+      </section>
+      <div class="rct-step-arrow" aria-hidden="true">→</div>
+      <section class="rct-step">
+        <span>3 · COMBINAR</span>
+        <strong>408</strong>
+        <small>integrar los resultados parciales</small>
+      </section>
+      <div class="rct-step-arrow" aria-hidden="true">→</div>
+      <section class="rct-step rct-step--answer">
+        <span>4 · RESPONDER</span>
+        <strong>408</strong>
+        <small>emitir la salida final</small>
+      </section>
+    </div>
+  </div>
+
+  <div class="rct-contracts">
+    <div class="rct-contract">
+      <span>UTILIDAD</span>
+      <strong>más espacio para variables y dependencias</strong>
+      <small>Puede ayudar en tareas donde una solución se beneficia de pasos intermedios.</small>
+    </div>
+    <div class="rct-contract rct-contract--risk">
+      <span>RIESGO</span>
+      <strong>un error temprano puede propagarse</strong>
+      <small>Una cadena más larga añade puntos donde una suposición incorrecta puede contaminar lo que sigue.</small>
+    </div>
+    <div class="rct-contract rct-contract--faith">
+      <span>FIDELIDAD</span>
+      <strong>explicación visible ≠ traza causal</strong>
+      <small>Evalúa la respuesta y la evidencia; no asumas que cada paso textual revela el mecanismo interno real.</small>
+    </div>
+  </div>
+
+  <div class="rct-ref">Fuentes primarias: <a href="https://arxiv.org/abs/2201.11903">Wei et al. (2022)</a> · <a href="https://arxiv.org/abs/2305.04388">Turpin et al. (2023)</a>.</div>
+</div>
+
+<style>
+.rct-wrap,.rct-wrap *{box-sizing:border-box}
+.rct-wrap{
+  --rct-a:var(--md-primary-fg-color,#26a69a);
+  --rct-b:#4757d6;
+  --rct-c:var(--md-accent-fg-color,#ffb343);
+  --rct-r:#e06c75;
+  --rct-bg:var(--md-default-bg-color,#fff);
+  --rct-fg:var(--md-default-fg-color,#111827);
+  --rct-muted:color-mix(in srgb,var(--rct-fg) 58%,transparent);
+  --rct-border:color-mix(in srgb,var(--rct-fg) 14%,transparent);
+  container-type:inline-size;
+  margin:1.1rem 0 1.5rem;
+  padding:clamp(14px,2vw,22px);
+  border:1px solid var(--rct-border);
+  border-radius:20px;
+  background:
+    radial-gradient(92% 120% at 0 0,color-mix(in srgb,var(--rct-b) 7%,transparent),transparent 58%),
+    radial-gradient(82% 100% at 100% 100%,color-mix(in srgb,var(--rct-a) 6%,transparent),transparent 60%),
+    var(--rct-bg);
+  color:var(--rct-fg)
+}
+.rct-head{display:grid;gap:4px;margin-bottom:14px}
+.rct-kicker{font-size:10px;font-weight:900;letter-spacing:.12em;color:var(--rct-muted)}
+.rct-title{font-size:clamp(18px,2.1vw,24px);font-weight:900;line-height:1.12;letter-spacing:-.02em;max-width:42ch}
+.rct-sub{font-size:13.5px;line-height:1.48;color:var(--rct-muted);max-width:88ch}
+.rct-example{display:grid;grid-template-columns:minmax(112px,.55fr) 24px minmax(0,2.45fr);gap:8px;align-items:center;min-width:0}
+.rct-problem{min-width:0;border:1px solid color-mix(in srgb,var(--rct-b) 40%,var(--rct-border));border-radius:15px;padding:12px;display:grid;gap:5px;background:color-mix(in srgb,var(--rct-b) 5%,var(--rct-bg))}
+.rct-problem span,.rct-step span,.rct-contract span{font-size:9.2px;font-weight:900;letter-spacing:.09em;color:var(--rct-muted)}
+.rct-problem strong{font-size:21px;line-height:1.1}.rct-problem small,.rct-step small,.rct-contract small{font-size:10.4px;line-height:1.35;color:var(--rct-muted)}
+.rct-arrow,.rct-step-arrow{display:grid;place-items:center;color:var(--rct-muted);font-size:17px;font-weight:950}
+.rct-steps{display:grid;grid-template-columns:minmax(0,1fr) 18px minmax(0,1fr) 18px minmax(0,1fr) 18px minmax(0,1fr);gap:5px;align-items:stretch;min-width:0}
+.rct-step{min-width:0;min-height:118px;border:1px solid var(--rct-border);border-radius:13px;padding:10px;display:grid;grid-template-rows:auto auto 1fr;gap:6px;background:color-mix(in srgb,var(--rct-bg) 96%,var(--rct-fg) 4%);transition:transform .16s ease,border-color .16s ease}
+.rct-step:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--rct-b) 45%,var(--rct-border))}
+.rct-step strong{font-size:12.8px;line-height:1.25;overflow-wrap:anywhere}
+.rct-step--answer{border-color:color-mix(in srgb,var(--rct-a) 48%,var(--rct-border));background:color-mix(in srgb,var(--rct-a) 6%,var(--rct-bg))}
+.rct-step--answer strong{font-size:20px;color:color-mix(in srgb,var(--rct-a) 78%,var(--rct-fg))}
+.rct-contracts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}
+.rct-contract{min-width:0;border:1px solid color-mix(in srgb,var(--rct-a) 34%,var(--rct-border));border-radius:12px;padding:10px 11px;display:grid;gap:4px;background:color-mix(in srgb,var(--rct-a) 4%,var(--rct-bg))}
+.rct-contract strong{font-size:11.8px;line-height:1.3}
+.rct-contract--risk{border-color:color-mix(in srgb,var(--rct-r) 34%,var(--rct-border));background:color-mix(in srgb,var(--rct-r) 4%,var(--rct-bg))}
+.rct-contract--faith{border-color:color-mix(in srgb,var(--rct-c) 42%,var(--rct-border));background:color-mix(in srgb,var(--rct-c) 5%,var(--rct-bg))}
+.rct-ref{margin-top:9px;font-size:9.8px;line-height:1.35;color:var(--rct-muted)}.rct-ref a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+@container (max-width:760px){
+  .rct-example{grid-template-columns:1fr;gap:6px}
+  .rct-arrow{height:14px;font-size:0}.rct-arrow::before{content:"↓";font-size:16px}
+  .rct-problem{grid-template-columns:auto auto 1fr;align-items:center}.rct-problem small{text-align:right}
+  .rct-steps{grid-template-columns:1fr;gap:4px}
+  .rct-step{min-height:0;grid-template-columns:minmax(0,.44fr) minmax(0,.56fr);grid-template-rows:auto auto;gap:4px 8px}
+  .rct-step span,.rct-step strong{grid-column:1}.rct-step small{grid-column:2;grid-row:1/span 2;align-self:center}
+  .rct-step-arrow{height:12px;font-size:0}.rct-step-arrow::before{content:"↓";font-size:15px}
+  .rct-contracts{grid-template-columns:1fr}
+}
+@media (max-width:760px){
+  .rct-example{grid-template-columns:1fr;gap:6px}
+  .rct-steps{grid-template-columns:1fr;gap:4px}
+  .rct-contracts{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  .rct-step{transition:none!important}.rct-step:hover{transform:none!important}
+}
+</style>
