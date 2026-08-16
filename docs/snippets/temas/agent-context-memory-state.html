@@ -179,11 +179,17 @@
   if(!root)return;
   const buttons=[...root.querySelectorAll('[data-stage]')];
   const panels=[...root.querySelectorAll('[data-stage-panel]')];
+  const layers=[...root.querySelectorAll('.acms-layer')];
+  if(buttons.length!==4||layers.length!==3||panels.length!==12)throw new Error('agent context/memory/state visual contract mismatch');
+  for(const stage of ['requested','accepted','running','succeeded']){
+    if(panels.filter((panel)=>panel.dataset.stagePanel===stage).length!==3)throw new Error(`agent context/memory/state stage ${stage} is incomplete`);
+  }
   const setStage=(stage)=>{
     buttons.forEach((button)=>button.setAttribute('aria-pressed',String(button.dataset.stage===stage)));
     panels.forEach((panel)=>{panel.hidden=panel.dataset.stagePanel!==stage});
   };
   buttons.forEach((button)=>button.addEventListener('click',()=>setStage(button.dataset.stage)));
   setStage('requested');
+  requestAnimationFrame(()=>{if(root.scrollWidth>root.clientWidth+2)throw new Error(`agent context/memory/state visual overflow ${root.scrollWidth-root.clientWidth}px`)});
 })();
 </script>
