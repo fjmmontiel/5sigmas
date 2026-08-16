@@ -63,9 +63,41 @@ async function validatePromptInjectionVisuals(page, chapter) {
   return count;
 }
 
+async function validateCanonicalCausalVisual(page, chapter) {
+  const causal = page.locator('.causalrt');
+  const count = await causal.count();
+  if (count !== 1) {
+    failures.push(`${chapter.route}: expected exactly one canonical .causalrt visual, found ${count}`);
+    return count;
+  }
+
+  const root = causal.first();
+  if (!await isVisible(root)) failures.push(`${chapter.route}: canonical .causalrt is not visible`);
+  const box = await root.boundingBox();
+  if (!box || box.width < 240 || box.height < 180) failures.push(`${chapter.route}: canonical .causalrt has invalid geometry ${JSON.stringify(box)}`);
+
+  const steps = root.locator('.causalrt__step');
+  if (await steps.count() !== 6) failures.push(`${chapter.route}: canonical .causalrt must expose six causal stages`);
+  const controls = root.locator('[data-stop]');
+  if (await controls.count() !== 5) failures.push(`${chapter.route}: canonical .causalrt must expose five stop conditions`);
+
+  const authorization = root.locator('[data-stop="policy"]');
+  if (await authorization.count() !== 1) failures.push(`${chapter.route}: canonical .causalrt is missing authorization control`);
+  else {
+    await authorization.click();
+    await page.waitForTimeout(100);
+    if (await authorization.getAttribute('aria-pressed') !== 'true') failures.push(`${chapter.route}: canonical .causalrt authorization control did not activate`);
+    const result = ((await root.locator('[data-result]').innerText()) || '').toLowerCase();
+    if (!result.includes('authorization')) failures.push(`${chapter.route}: canonical .causalrt did not localize the authorization result`);
+  }
+  return 1;
+}
+
 async function validateLegacySecurityVisuals(page, chapter) {
   const demoValues = await page.locator('[data-demo^="sec-"]').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('data-demo')));
-  if (demoValues.length !== chapter.demos) failures.push(`${chapter.route}: expected ${chapter.demos} teaching visuals, found ${demoValues.length}`);
+  let visualCount = demoValues.length;
+  const legacyExpected = chapter.slug === '04-red-teaming' ? chapter.demos - 1 : chapter.demos;
+  if (demoValues.length !== legacyExpected) failures.push(`${chapter.route}: expected ${legacyExpected} legacy teaching visuals, found ${demoValues.length}`);
   if (new Set(demoValues).size !== demoValues.length) failures.push(`${chapter.route}: duplicate data-demo visual identifiers`);
   for (const demo of demoValues) if (!demo?.startsWith(chapter.prefix)) failures.push(`${chapter.route}: unexpected visual identifier ${JSON.stringify(demo)}`);
 
@@ -78,7 +110,9 @@ async function validateLegacySecurityVisuals(page, chapter) {
     const after = await candidate.getAttribute('open');
     if (before === after) failures.push(`${chapter.route}: details interaction did not toggle`);
   }
-  return demoValues.length;
+
+  if (chapter.slug === '04-red-teaming') visualCount += await validateCanonicalCausalVisual(page, chapter);
+  return visualCount;
 }
 
 try {
