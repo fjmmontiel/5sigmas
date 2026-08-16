@@ -18,9 +18,10 @@ const articles = [
   },
   {
     route: '/en/articulos-tecnicos/reactive-proactive-voice-agents/',
-    title: 'Reactive–proactive voice agents',
-    concepts: ['barge-in', 'heard-state', 'delivery window'],
-    prefix: 'tech-02-', demos: 7,
+    title: 'Reactive and proactive agents in voice',
+    concepts: ['ActivityGate', 'DeliveryEnvelope', 'speech_stop_to_acceptance_audio_ms', 'Pipecat', 'Twilio'],
+    canonicalVoiceRp: true,
+    demos: 7,
     media: null,
     screenshot: 'english-technical-02-reactive-proactive-voice.png',
   },
@@ -35,9 +36,102 @@ const articles = [
 ];
 
 const forbidden = ['Preguntas frecuentes', 'Fuentes base', 'Artículo técnico', 'Siguiente artículo'];
+const voiceRpSelectors = ['.s5v-contract', '.s5v-window', '.s5v-clocks', '.s5v-gate', '.s5v-barge', '.s5v-batch', '.s5v-runtime'];
 const failures = [];
 const browser = await chromium.launch({ headless: true });
 let totalVisuals = 0;
+
+const visible = async (locator) => locator.evaluate((node) => {
+  const style = getComputedStyle(node);
+  return style.display !== 'none' && style.visibility !== 'hidden' && node.getClientRects().length > 0;
+});
+
+async function expectCount(page, route, selector, expected) {
+  const count = await page.locator(selector).count();
+  if (count !== expected) failures.push(`${route}: ${selector} expected ${expected}, found ${count}`);
+}
+
+async function expectBefore(page, route, beforeSelector, afterSelector) {
+  const before = page.locator(beforeSelector).first();
+  const after = page.locator(afterSelector).first();
+  if (!(await before.count()) || !(await after.count())) {
+    failures.push(`${route}: cannot resolve hook order ${beforeSelector} -> ${afterSelector}`);
+    return;
+  }
+  const [a, b] = await Promise.all([before.elementHandle(), after.elementHandle()]);
+  const ordered = await page.evaluate(([x, y]) => Boolean(x.compareDocumentPosition(y) & Node.DOCUMENT_POSITION_FOLLOWING), [a, b]);
+  if (!ordered) failures.push(`${route}: wrong hook order ${beforeSelector} -> ${afterSelector}`);
+}
+
+async function validateVoiceRp(page, article, viewportName) {
+  const body = await page.locator('body').innerText();
+  const stale = [
+    'Use a shared conversational blackboard',
+    'The seam between reactive and proactive behaviour is the key contract',
+    'Priority does not have to mean immediate interruption',
+    'Frequently asked questions',
+  ];
+  for (const token of stale) if (body.includes(token)) failures.push(`${article.route}: English-only reauthoring remains ${JSON.stringify(token)}`);
+
+  const canonicalAnchors = [
+    'Four clocks have to be coordinated',
+    'The first response accepts work',
+    'The result goes through an `ActivityGate`',
+    'Barge-in: cancel the voice, not the whole system',
+    'Several tools should produce one final completion',
+    'A single component controls the voice',
+    'Technical completion creates a pending delivery. The conversation decides when it can be heard.',
+  ];
+  for (const token of canonicalAnchors) if (!body.includes(token)) failures.push(`${article.route}: missing canonical teaching anchor ${JSON.stringify(token)}`);
+
+  if (await page.locator('[data-demo^="tech-02-"]').count()) failures.push(`${article.route}: legacy simplified tech-02 visual remains in article flow`);
+  for (const selector of voiceRpSelectors) {
+    const root = page.locator(selector);
+    const count = await root.count();
+    if (count !== 1) {
+      failures.push(`${article.route}: expected one canonical ${selector}, found ${count}`);
+      continue;
+    }
+    if (!await visible(root.first())) failures.push(`${article.route}: canonical ${selector} is not visible`);
+    const box = await root.first().boundingBox();
+    if (!box || box.width < 240 || box.height < 70) failures.push(`${article.route}: ${selector} has invalid ${viewportName} geometry ${JSON.stringify(box)}`);
+    const overflow = await root.first().evaluate((node) => node.scrollWidth - node.clientWidth);
+    if (overflow > 2) failures.push(`${article.route}: ${viewportName} ${selector} internal overflow ${overflow}px`);
+  }
+
+  await expectCount(page, article.route, '.s5v-contract [data-s5v-step]', 3);
+  await expectCount(page, article.route, '.s5v-contract [data-s5v-copy]', 3);
+  await expectCount(page, article.route, '.s5v-window [data-s5v-step]', 2);
+  await expectCount(page, article.route, '.s5v-clocks .s5v-clocks__row', 4);
+  await expectCount(page, article.route, '.s5v-gate [data-s5v-step]', 3);
+  await expectCount(page, article.route, '.s5v-gate .s5v-gate__out', 3);
+  await expectCount(page, article.route, '.s5v-barge [data-s5v-step]', 2);
+  await expectCount(page, article.route, '.s5v-barge .s5v-barge__item', 3);
+  await expectCount(page, article.route, '.s5v-barge [data-s5v-copy]', 2);
+  await expectCount(page, article.route, '.s5v-batch .s5v-batch__tools span', 3);
+  await expectCount(page, article.route, '.s5v-batch .s5v-batch__progress i', 3);
+  await expectCount(page, article.route, '.s5v-runtime .s5v-runtime__lower > div', 2);
+
+  for (const selector of ['.s5v-contract', '.s5v-window', '.s5v-gate', '.s5v-barge']) {
+    const root = page.locator(selector).first();
+    if (!(await root.count())) continue;
+    const buttons = root.locator('[data-s5v-step]');
+    const n = await buttons.count();
+    if (n < 2) continue;
+    await buttons.nth(n - 1).click();
+    await page.waitForTimeout(80);
+    const expected = await buttons.nth(n - 1).getAttribute('data-s5v-step');
+    const actual = await root.getAttribute('data-step');
+    if (actual !== expected) failures.push(`${article.route}: ${selector} interaction did not reach step ${expected}; got ${actual}`);
+  }
+
+  for (let index = 0; index < voiceRpSelectors.length - 1; index += 1) {
+    await expectBefore(page, article.route, voiceRpSelectors[index], voiceRpSelectors[index + 1]);
+  }
+  await expectBefore(page, article.route, '.s5v-contract', 'h2');
+
+  return voiceRpSelectors.length;
+}
 
 try {
   const hub = await browser.newPage({ viewport: { width: 1280, height: 900 } });
@@ -70,21 +164,27 @@ try {
       }
       for (const token of forbidden) if (body.includes(token)) failures.push(`${article.route}: Spanish leakage ${JSON.stringify(token)}`);
 
-      const demos = await page.locator('[data-demo^="tech-"]').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('data-demo')));
-      if (demos.length !== article.demos) failures.push(`${article.route}: expected ${article.demos} visuals, found ${demos.length}`);
-      if (new Set(demos).size !== demos.length) failures.push(`${article.route}: duplicate visual ids`);
-      for (const demo of demos) if (!demo?.startsWith(article.prefix)) failures.push(`${article.route}: unexpected visual id ${JSON.stringify(demo)}`);
-      if (viewport.name === 'desktop') totalVisuals += demos.length;
+      let demoCount = 0;
+      if (article.canonicalVoiceRp) {
+        demoCount = await validateVoiceRp(page, article, viewport.name);
+      } else {
+        const demos = await page.locator('[data-demo^="tech-"]').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('data-demo')));
+        if (demos.length !== article.demos) failures.push(`${article.route}: expected ${article.demos} visuals, found ${demos.length}`);
+        if (new Set(demos).size !== demos.length) failures.push(`${article.route}: duplicate visual ids`);
+        for (const demo of demos) if (!demo?.startsWith(article.prefix)) failures.push(`${article.route}: unexpected visual id ${JSON.stringify(demo)}`);
+        demoCount = demos.length;
 
-      const details = page.locator('[data-demo^="tech-"] details');
-      if (await details.count() === 0) failures.push(`${article.route}: no interactive visual disclosure`);
-      else {
-        const candidate = details.first();
-        const before = await candidate.getAttribute('open');
-        await candidate.locator('summary').click();
-        const after = await candidate.getAttribute('open');
-        if (before === after) failures.push(`${article.route}: details interaction did not toggle`);
+        const details = page.locator('[data-demo^="tech-"] details');
+        if (await details.count() === 0) failures.push(`${article.route}: no interactive visual disclosure`);
+        else {
+          const candidate = details.first();
+          const before = await candidate.getAttribute('open');
+          await candidate.locator('summary').click();
+          const after = await candidate.getAttribute('open');
+          if (before === after) failures.push(`${article.route}: details interaction did not toggle`);
+        }
       }
+      if (viewport.name === 'desktop') totalVisuals += demoCount;
 
       const videos = page.locator('video[data-s5-inline-video-player]');
       const videoCount = await videos.count();
@@ -119,4 +219,4 @@ if (failures.length) {
   for (const failure of [...new Set(failures)]) console.error(failure);
   process.exit(1);
 }
-console.log('Complete English Technical Articles QA passed: hub + 3 articles, 21 visuals, exact native-English header media where canonical, no Spanish media inheritance, desktop/mobile clean.');
+console.log('Complete English Technical Articles QA passed: hub + 3 articles, 21 visuals, canonical reactive-proactive voice parity, native-English media, desktop/mobile clean.');
