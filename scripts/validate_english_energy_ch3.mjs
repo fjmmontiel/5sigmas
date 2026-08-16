@@ -48,19 +48,10 @@ try {
     const article = page.locator('.md-content__inner');
     const articleText = (await article.textContent()) || '';
     requireText(articleText, [
-      'Chapter 3 — Measurement: GDP vs well-being',
-      '30–40% of official GDP',
-      '1% of the population captures 90% of growth',
-      '7.7 out of 10',
-      'around 6.5',
-      '$75,000 per year',
-      'roughly the 20% who already report low well-being',
-      'Genuine Progress Indicator (GPI)',
-      'eleven dimensions',
-      'The next chapter applies this distinction',
-      'How does AI automation affect well-being beyond income?',
-      '5. References',
-      'Core sources',
+      'Chapter 3 — Measurement: GDP vs well-being', '30–40% of official GDP', '1% of the population captures 90% of growth',
+      '7.7 out of 10', 'around 6.5', '$75,000 per year', 'roughly the 20% who already report low well-being',
+      'Genuine Progress Indicator (GPI)', 'eleven dimensions', 'The next chapter applies this distinction',
+      'How does AI automation affect well-being beyond income?', '5. References', 'Core sources',
     ], `${viewport.name}: article fidelity`);
     forbidText(articleText, [
       'What this changes when evaluating AI', 'measurement pluralism', 'Task output:', 'Firm productivity:', 'Market output:',
@@ -102,17 +93,37 @@ try {
         'The Easterlin paradox was correct', 'Killingsworth was correct', 'Implication for AI',
       ], `${viewport.name}: Kahneman-Killingsworth`);
       forbidText(text, ['La paradoja resuelta', 'El conflicto', 'insatisfecho', 'Finlandia', 'España', 'EE.UU.', 'Ingreso anual', 'Bienestar hedónico', '¿Quiénes son estas personas?', 'Metodología diferente', 'sin techo detectado', 'Implicación para la IA'], `${viewport.name}: Kahneman-Killingsworth`);
-
       await kk.locator('.kk-tab[data-tab="4"]').click();
       if (await kk.locator('.kk-panel[data-panel="4"]').isHidden()) failures.push(`${viewport.name}: tab 4 click did not reveal canonical resolution panel`);
       await kk.locator('.kk-tab[data-tab="1"]').focus();
       await page.keyboard.press('ArrowRight');
       if (await kk.locator('.kk-panel[data-panel="2"]').isHidden()) failures.push(`${viewport.name}: keyboard tab interaction did not reveal Kahneman panel`);
       await kk.locator('.kk-tab[data-tab="1"]').click();
-
       await checkPlacement(kk, viewport.name, 'Kahneman-Killingsworth visual', 'although they rarely appear as priorities in standard economic metrics', 'Alternative frameworks that try to capture more');
       await checkOverflow(kk, viewport.name, 'Kahneman-Killingsworth visual');
       await kk.screenshot({ path: path.join(outDir, `english-energy-ch3-kahneman-killingsworth-${viewport.name}.png`), animations: 'disabled' });
+    }
+
+    const frameworks = page.locator('[data-demo="03-marcos-alternativos"]');
+    if (await frameworks.count() !== 1) failures.push(`${viewport.name}: expected exactly one canonical alternative-frameworks visual`);
+    else {
+      if (await frameworks.locator('.ma-fw-card').count() !== 4) failures.push(`${viewport.name}: alternative-frameworks visual lost one of four canonical frameworks`);
+      if (await frameworks.locator('.ma-fw-add').count() !== 11) failures.push(`${viewport.name}: alternative-frameworks visual lost canonical additions`);
+      if (await frameworks.locator('.ma-fw-miss').count() !== 12) failures.push(`${viewport.name}: alternative-frameworks visual lost canonical limitations`);
+      if (await page.locator('[data-demo="energy-03-frameworks"]').count() !== 0) failures.push(`${viewport.name}: legacy English framework redesign remains`);
+      const text = (await frameworks.textContent()) || '';
+      requireText(text, [
+        'Four alternatives to GDP: what each adds and what it still fails to capture',
+        'Human Development Index', 'UNDP · since 1990', 'Adds beyond GDP', 'Life expectancy', 'Gross national income per capita',
+        'Genuine Progress Indicator', 'Value of volunteer and family work', 'Subtracts natural-resource depletion',
+        'Better Life Index', 'OECD · since 2011', '11 dimensions: housing, jobs, community, health, satisfaction, safety…',
+        'Gross National Happiness', 'Bhutan · since 1972', 'Community vitality and cultural resilience',
+        'Still does not capture', 'International comparison is very difficult',
+      ], `${viewport.name}: alternative frameworks`);
+      forbidText(text, ['Cuatro marcos alternativos', 'Índice de Desarrollo Humano', 'PNUD', 'Añade respecto al PIB', 'Esperanza de vida', 'Sigue sin capturar', 'Distribución dentro del país', 'Bienestar subjetivo', 'OCDE · desde', 'Felicidad Nacional Bruta', 'Bután'], `${viewport.name}: alternative frameworks`);
+      await checkPlacement(frameworks, viewport.name, 'alternative-frameworks visual', 'None of these frameworks has displaced GDP as the dominant indicator', 'The next chapter applies this distinction');
+      await checkOverflow(frameworks, viewport.name, 'alternative-frameworks visual');
+      await frameworks.screenshot({ path: path.join(outDir, `english-energy-ch3-alternative-frameworks-${viewport.name}.png`), animations: 'disabled' });
     }
 
     const [pageClientWidth, pageScrollWidth] = await page.evaluate(() => [document.documentElement.clientWidth, document.documentElement.scrollWidth]);
@@ -129,4 +140,4 @@ if (failures.length) {
   for (const failure of failures) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log('English Energy Chapter 3 fidelity QA passed: canonical article, GDP/well-being and Kahneman-Killingsworth visuals are faithful, interactive and overflow-clean on desktop/mobile.');
+console.log('English Energy Chapter 3 QA passed: canonical article and all three Chapter 3 visuals are faithful, interactive where applicable, correctly placed and overflow-clean on desktop/mobile.');
