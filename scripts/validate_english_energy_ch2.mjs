@@ -150,7 +150,10 @@ try {
 
 if (failures.length) {
   console.error('English Energy Chapter 2 QA failed:');
-  for (const failure of failures) console.error(` - ${failure}`);
+  for (const failure of failures) {
+    console.error(` - ${failure}`);
+    console.error(`::error title=English Energy Chapter 2 QA::${failure.replaceAll('%', '%25').replaceAll('\r', '%0D').replaceAll('\n', '%0A')}`);
+  }
   process.exit(1);
 }
 console.log('English Energy Chapter 2 QA passed: canonical article evidence plus training/inference and rebound visuals are faithful, correctly placed and overflow-clean on desktop/mobile.');
