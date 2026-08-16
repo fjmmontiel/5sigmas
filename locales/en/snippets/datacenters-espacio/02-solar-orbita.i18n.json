@@ -1,0 +1,40 @@
+{
+  "source": "snippets/datacenters-espacio/02-solar-orbita.html",
+  "source_blob_sha": "d02c80cf63d522f2c53218ca6c7a8ec0980bb78f",
+  "replacements": {
+    "data-demo=\"02-solar-orbita\"": "data-demo=\"dc-02-solar\"",
+    ">orbita solar</div>": ">orbital solar</div>",
+    ">La ventaja solar orbital es continuidad, no magia térmica</div>": ">Orbital solar's advantage is continuity, not thermal magic</div>",
+    ">Una órbita bien elegida reduce noches y nubes, pero toda la energía consumida vuelve como calor que hay que radiar.</div>": ">A well-chosen orbit reduces nights and clouds, but all consumed energy returns as heat that must be radiated.</div>",
+    "aria-label=\"La ventaja solar orbital es continuidad, no magia térmica\"": "aria-label=\"Orbital solar's advantage is continuity, not thermal magic\"",
+    ">95-99% de sol</text>": ">95–99% sunlight</text>",
+    ">órbita amanecer-ocaso</text>": ">dawn–dusk orbit</text>",
+    ">+36-40% irradiancia</text>": ">+36–40% irradiance</text>",
+    ">sin nubes, sin atmósfera</text>": ">no clouds, no atmosphere</text>",
+    ">Pero todo vuelve calor</text>": ">But it all becomes heat</text>",
+    ">paneles y radiadores</text>": ">panels and radiators</text>",
+    ">se dimensionan juntos</text>": ">are sized together</text>",
+    ">Tierra: cortes por noche y clima</text>": ">Earth: interruptions from night and weather</text>",
+    ">Órbita: casi continuo, no gratis térmicamente</text>": ">Orbit: nearly continuous, not thermally free</text>",
+    ">Órbita amanecer-ocaso: 95-99% de disponibilidad solar</span>": ">Dawn–dusk orbit: 95–99% solar availability</span>",
+    ">Más irradiancia facilita potencia, no refrigeración</span>": ">More irradiance helps power, not cooling</span>",
+    ">Paneles y radiadores forman el mismo presupuesto térmico</span>": ">Panels and radiators share the same thermal budget</span>"
+  },
+  "forbidden_output_tokens": [
+    "orbita solar",
+    "La ventaja solar orbital",
+    "Una órbita bien elegida",
+    "de sol",
+    "órbita amanecer-ocaso",
+    "irradiancia",
+    "sin nubes",
+    "Pero todo vuelve calor",
+    "paneles y radiadores",
+    "se dimensionan juntos",
+    "Tierra: cortes",
+    "Órbita: casi continuo",
+    "disponibilidad solar",
+    "Más irradiancia",
+    "presupuesto térmico"
+  ]
+}
