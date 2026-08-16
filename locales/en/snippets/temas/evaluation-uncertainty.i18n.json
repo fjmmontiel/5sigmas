@@ -1,6 +1,6 @@
 {
   "source": "snippets/temas/evaluation-uncertainty.html",
-  "source_blob_sha": "c9a19464a0ed3411277315798d646aa0000042ed",
+  "source_blob_sha": "00e04b23f3244e975bc938b73d7dca6bbd0cb253",
   "replacements": {
     ">MISMO TEST → DIFERENCIAS PAREADAS → INCERTIDUMBRE → DECISIÓN</div>": ">SAME TEST → PAIRED DIFFERENCES → UNCERTAINTY → DECISION</div>",
     ">Un punto estimado no es una conclusión</div>": ">A point estimate is not a conclusion</div>",
