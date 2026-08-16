@@ -4,7 +4,7 @@ seo_title: "Cómo evaluar modelos de IA: benchmarks, calidad y producción"
 description: "Cómo evaluar un modelo y un sistema de IA con benchmarks, conjuntos propios, jueces, pruebas humanas y métricas de producto sin confundir una puntuación con valor real."
 keywords: "evaluación modelos IA, benchmark LLM, evals, evaluación humana, LLM as a judge, contaminación benchmarks, calidad IA"
 date: 2026-04-07
-date_modified: 2026-08-15
+date_modified: 2026-08-16
 ---
 
 # Evaluación de modelos de IA
@@ -224,19 +224,9 @@ La significación estadística tampoco garantiza relevancia práctica. Una mejor
 
 ## Un ciclo de evaluación operativo
 
-```text
-incidente o necesidad
-→ añadir caso y criterio
-→ ejecutar baseline
-→ cambiar modelo, prompt o sistema
-→ comparar por segmento
-→ revisión humana de diferencias
-→ prueba limitada
-→ observar producción
-→ convertir fallos nuevos en regresiones
-```
+{{ include_html("snippets/temas/evaluation-cycle.html") }}
 
-La evaluación no es una fase al final. Es el bucle que permite cambiar el sistema sin perder conocimiento sobre sus fallos.
+La evaluación no es una fase al final. Es el bucle que permite cambiar el sistema sin perder conocimiento sobre sus fallos.[^openai-evals]
 
 ## Dónde profundizar en 5sigmas
 
@@ -269,3 +259,4 @@ Solo si la tarea, distribución y métrica se parecen al producto. En muchos sis
 [^helm]: Percy Liang et al., [*Holistic Evaluation of Language Models*](https://arxiv.org/abs/2211.09110), 2022.
 [^arena]: Lianmin Zheng et al., [*Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena*](https://arxiv.org/abs/2306.05685), 2023.
 [^livecodebench]: Naman Jain et al., [*LiveCodeBench: Holistic and Contamination Free Evaluation of Large Language Models for Code*](https://arxiv.org/abs/2403.07974), 2024.
+[^openai-evals]: OpenAI, [*GPT-4 Research — OpenAI Evals*](https://openai.com/index/gpt-4-research/), 2023. OpenAI describe Evals as a development tool for identifying shortcomings, preventing regressions and tracking performance across model versions.

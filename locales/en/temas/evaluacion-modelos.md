@@ -4,7 +4,7 @@ seo_title: "How to evaluate AI models: benchmarks, quality and production"
 description: "How to evaluate an AI model and system with benchmarks, domain sets, judges, human review and product metrics without confusing a score with real value."
 keywords: "AI model evaluation, LLM benchmark, evals, human evaluation, LLM as a judge, benchmark contamination, AI quality"
 date: 2026-04-07
-date_modified: 2026-08-15
+date_modified: 2026-08-16
 ---
 
 # Evaluating AI models
@@ -224,19 +224,9 @@ Statistical significance does not guarantee practical relevance either. A tiny i
 
 ## An operational evaluation loop
 
-```text
-incident or need
-→ add a case and criterion
-→ run baseline
-→ change model, prompt or system
-→ compare by segment
-→ human review of differences
-→ limited rollout
-→ observe production
-→ convert new failures into regressions
-```
+{{ include_html("snippets/temas/evaluation-cycle.html") }}
 
-Evaluation is not a final phase. It is the loop that lets a system change without forgetting what it has already learned about its failures.
+Evaluation is not a final phase. It is the loop that lets a system change without forgetting what it has already learned about its failures.[^openai-evals]
 
 ## Where to go deeper in 5sigmas
 
@@ -269,3 +259,4 @@ Only when the task, distribution and metric resemble the product. In many system
 [^helm]: Percy Liang et al., [*Holistic Evaluation of Language Models*](https://arxiv.org/abs/2211.09110), 2022.
 [^arena]: Lianmin Zheng et al., [*Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena*](https://arxiv.org/abs/2306.05685), 2023.
 [^livecodebench]: Naman Jain et al., [*LiveCodeBench: Holistic and Contamination Free Evaluation of Large Language Models for Code*](https://arxiv.org/abs/2403.07974), 2024.
+[^openai-evals]: OpenAI, [*GPT-4 Research — OpenAI Evals*](https://openai.com/index/gpt-4-research/), 2023. OpenAI describes Evals as a development tool for identifying shortcomings, preventing regressions and tracking performance across model versions.
