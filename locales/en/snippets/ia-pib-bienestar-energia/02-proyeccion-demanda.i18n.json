@@ -1,0 +1,43 @@
+{
+  "source": "snippets/ia-pib-bienestar-energia/02-proyeccion-demanda.html",
+  "source_blob_sha": "c84b23f608cb64aa536f7fda53c8de02252be006",
+  "replacements": {
+    "Del dato global al cuello de botella local": "From global data to the local bottleneck",
+    "La IEA proyecta que el consumo eléctrico global de centros de datos pasará de 415 TWh en 2024 a entre 945 y 1.260 TWh en 2030. La tensión operativa aparece cuando ese agregado se traduce en cargas continuas de cientos o miles de MW conectadas a una red concreta.": "The IEA projects that global data-center electricity consumption will rise from 415 TWh in 2024 to between 945 and 1,260 TWh in 2030. Operational pressure appears when that aggregate becomes continuous loads of hundreds or thousands of MW connected to a specific grid.",
+    "IEA · consumo eléctrico global de centros de datos": "IEA · global data-center electricity consumption",
+    "2024 · 415 TWh": "2024 · 415 TWh",
+    "2030 base · 945 TWh": "2030 base · 945 TWh",
+    "2030 alto · 1.260 TWh": "2030 high · 1,260 TWh",
+    "El escenario base ya queda ligeramente por encima del consumo eléctrico actual de Japón; el alto lleva el sector a algo más de 3x su nivel de 2024.": "The base scenario is already slightly above Japan's current electricity consumption; the high scenario takes the sector to a little more than 3× its 2024 level.",
+    "Centro típico": "Typical center",
+    "100 MW continuos": "100 MW continuous",
+    "~100.000 hogares": "~100,000 homes",
+    "Equivalencia de orden anual: si mantiene esa carga 24/7, consume tanta electricidad a lo largo del año como unos 100.000 hogares medios.": "Annual order-of-magnitude equivalence: if it sustains that load 24/7, it consumes about as much electricity over a year as roughly 100,000 average homes.",
+    "Campus grande": "Large campus",
+    "500 MW continuos": "500 MW continuous",
+    "~500.000 hogares": "~500,000 homes",
+    "Aquí la discusión deja de ser abstracta: subestaciones, líneas y permisos locales pasan a ser el cuello de botella inmediato.": "At this scale the discussion stops being abstract: substations, transmission lines and local permits become the immediate bottleneck.",
+    "Gigacampus": "Gigacampus",
+    "~2 millones de hogares": "~2 million homes",
+    "Es la escala de los mayores proyectos en construcción. Ya no compite solo por energía barata, sino por capacidad física de red a nivel regional.": "This is the scale of the largest projects under construction. They compete not only for cheap electricity but for physical regional grid capacity.",
+    "Fuente: IEA, Energy and AI, 2025, para 415 / 945 / 1.260 TWh, cuota del 1,5%, comparación con Japón y la referencia de un centro de datos de IA típico en ~100 MW; los mayores en construcción consumen alrededor de veinte veces más. La equivalencia en hogares es una comparación de energía anual bajo operación continua, no una igualdad instantánea exacta hogar por hogar.": "Source: IEA, Energy and AI, 2025, for 415 / 945 / 1,260 TWh, the 1.5% share, the Japan comparison and the reference of a typical AI data center at ~100 MW; the largest facilities under construction consume around twenty times more. The household equivalence compares annual energy under continuous operation, not exact instantaneous household-by-household demand."
+  },
+  "forbidden_output_tokens": [
+    "Del dato global al cuello de botella local",
+    "consumo eléctrico global de centros de datos",
+    "2030 alto",
+    "1.260 TWh",
+    "El escenario base ya queda",
+    "Centro típico",
+    "100 MW continuos",
+    "100.000 hogares",
+    "Equivalencia de orden anual",
+    "Campus grande",
+    "500 MW continuos",
+    "500.000 hogares",
+    "Aquí la discusión deja de ser abstracta",
+    "millones de hogares",
+    "Es la escala de los mayores proyectos",
+    "cuota del 1,5%"
+  ]
+}
