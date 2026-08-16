@@ -10,9 +10,10 @@ await fs.mkdir(outDir, { recursive: true });
 const articles = [
   {
     route: '/en/articulos-tecnicos/proactive-reactive-agent-and-tool-calls/',
-    title: 'Proactive and reactive agents and tool calls',
-    concepts: ['idempotency', 'DeliveryEnvelope', 'durable'],
-    prefix: 'tech-01-', demos: 4,
+    title: 'Reactive and proactive agents and tool calls',
+    concepts: ['RuntimeState', 'handle_background_completion', 'pending_updates', 'DLQ'],
+    canonicalAsyncTool: true,
+    demos: 4,
     media: 'reactive-proactive-agent-header-demo',
     screenshot: 'english-technical-01-async-tools.png',
   },
@@ -61,6 +62,87 @@ async function expectBefore(page, route, beforeSelector, afterSelector) {
   const [a, b] = await Promise.all([before.elementHandle(), after.elementHandle()]);
   const ordered = await page.evaluate(([x, y]) => Boolean(x.compareDocumentPosition(y) & Node.DOCUMENT_POSITION_FOLLOWING), [a, b]);
   if (!ordered) failures.push(`${route}: wrong hook order ${beforeSelector} -> ${afterSelector}`);
+}
+
+async function validateAsyncTool(page, article, viewportName) {
+  const body = await page.locator('body').innerText();
+  const stale = [
+    'Core idea:',
+    'Runtime rule:',
+    'Failure mode:',
+    'Reactive acknowledgement and proactive completion are different events',
+    'A tool result should become a delivery object',
+    'One component should own conversational delivery',
+    'Batch work should create one coherent completion',
+  ];
+  for (const token of stale) if (body.includes(token)) failures.push(`${article.route}: English-only reauthoring remains ${JSON.stringify(token)}`);
+
+  const canonicalAnchors = [
+    'Base repository:',
+    'The problem is not the tool, but time',
+    'The first turn accepts work; it does not promise results',
+    'Asynchronous work needs policy, not only background execution',
+    'Completion returns when the batch can close',
+    'A reasonable next step toward production',
+    'What the repository actually contributes',
+  ];
+  for (const token of canonicalAnchors) if (!body.includes(token)) failures.push(`${article.route}: missing canonical teaching anchor ${JSON.stringify(token)}`);
+
+  const source = await fs.readFile('locales/en/articulos-tecnicos/proactive-reactive-agent-and-tool-calls.md', 'utf8');
+  const sourceHooks = [
+    'async-tool-panorama.html',
+    'tool-lifecycle.html',
+    'target-architecture.html',
+    'runtime-conversational.html',
+  ];
+  let previous = -1;
+  for (const hook of sourceHooks) {
+    const index = source.indexOf(hook);
+    if (index < 0) failures.push(`${article.route}: missing canonical source hook ${hook}`);
+    if (index <= previous) failures.push(`${article.route}: source hook out of order ${hook}`);
+    previous = index;
+  }
+
+  if (await page.locator('[data-demo^="tech-01-"]').count()) failures.push(`${article.route}: legacy simplified tech-01 visual remains in article flow`);
+  const roots = [
+    '.atcs-panorama',
+    'section.atcs-wrap[aria-label="Lifecycle of an operation and pending updates"]',
+    'section.atca-wrap[aria-label="Next step toward production for Reactive / Proactive Agent"]',
+    'section.atcs-wrap[aria-label="Conversational runtime and deferred delivery"]',
+  ];
+  for (const selector of roots) {
+    const root = page.locator(selector);
+    const count = await root.count();
+    if (count !== 1) {
+      failures.push(`${article.route}: expected one canonical ${selector}, found ${count}`);
+      continue;
+    }
+    if (!await visible(root.first())) failures.push(`${article.route}: canonical ${selector} is not visible`);
+    const box = await root.first().boundingBox();
+    if (!box || box.width < 240 || box.height < 100) failures.push(`${article.route}: ${selector} has invalid ${viewportName} geometry ${JSON.stringify(box)}`);
+    const overflow = await root.first().evaluate((node) => node.scrollWidth - node.clientWidth);
+    if (overflow > 2) failures.push(`${article.route}: ${viewportName} ${selector} page-level component overflow ${overflow}px`);
+  }
+
+  await expectCount(page, article.route, '.atcs-panorama-compact__section', 3);
+  await expectCount(page, article.route, '.atcs-panorama-compact__legend span', 3);
+  await expectCount(page, article.route, '.atcs-panorama svg.atcs-board', 1);
+  await expectCount(page, article.route, 'section.atcs-wrap[aria-label="Lifecycle of an operation and pending updates"] svg.atcs-board', 1);
+  await expectCount(page, article.route, 'section.atca-wrap[aria-label="Next step toward production for Reactive / Proactive Agent"] svg.atca-board', 1);
+  await expectCount(page, article.route, 'section.atcs-wrap[aria-label="Conversational runtime and deferred delivery"] svg.atcs-board', 1);
+
+  const evidence = [
+    'Accepted', 'Registered', 'In progress', 'Retry', 'Completed', 'Delivered', 'Failed / exhausted',
+    'Persistence and state', 'Delivery policy', 'Redis + Locks', 'Command Queue', 'Async Workers',
+    'Completion Stream', 'DLQ / replay', 'Internal processing', 'Persistent state', 'Path A · visible turn',
+    'Path B · async work', 'Deferred delivery',
+  ];
+  for (const token of evidence) if (!body.includes(token)) failures.push(`${article.route}: missing canonical visual evidence ${JSON.stringify(token)}`);
+
+  for (let index = 0; index < roots.length - 1; index += 1) {
+    await expectBefore(page, article.route, roots[index], roots[index + 1]);
+  }
+  return roots.length;
 }
 
 async function validateVoiceRp(page, article, viewportName) {
@@ -173,7 +255,9 @@ try {
       for (const token of forbidden) if (body.includes(token)) failures.push(`${article.route}: Spanish leakage ${JSON.stringify(token)}`);
 
       let demoCount = 0;
-      if (article.canonicalVoiceRp) {
+      if (article.canonicalAsyncTool) {
+        demoCount = await validateAsyncTool(page, article, viewport.name);
+      } else if (article.canonicalVoiceRp) {
         demoCount = await validateVoiceRp(page, article, viewport.name);
       } else {
         const demos = await page.locator('[data-demo^="tech-"]').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('data-demo')));
@@ -227,4 +311,4 @@ if (failures.length) {
   for (const failure of [...new Set(failures)]) console.error(failure);
   process.exit(1);
 }
-console.log('Complete English Technical Articles QA passed: hub + 3 articles, 21 visuals, canonical reactive-proactive voice parity, native-English media, desktop/mobile clean.');
+console.log('Complete English Technical Articles QA passed: hub + 3 articles, 21 visuals, canonical async-tool and reactive-proactive voice parity, native-English media, desktop/mobile clean.');
