@@ -97,6 +97,8 @@ When an answer must depend on current documentation, retrieval is often more ver
 
 Performance does not depend only on parameter count. The amount and quality of data, training compute, architecture, context length and adaptation process also matter.
 
+{{ include_html("snippets/temas/llm-scale-balance.html") }}
+
 Work on *scaling laws* showed predictable relationships between loss, model size, data and compute. Chinchilla added an important qualification: for a fixed training budget, increasing parameters without enough additional tokens can leave a model undertrained.[^gpt3][^chinchilla]
 
 That is why “larger” is not a sufficient explanation. A useful comparison needs to know the training regime and evaluation task.

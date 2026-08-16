@@ -97,6 +97,8 @@ Cuando la respuesta debe depender de documentación actual, una arquitectura con
 
 El rendimiento no depende solo del número de parámetros. También importan la cantidad y calidad de los datos, el cómputo de entrenamiento, la arquitectura, la longitud de contexto y el proceso de adaptación.
 
+{{ include_html("snippets/temas/llm-scale-balance.html") }}
+
 Los trabajos sobre *scaling laws* mostraron relaciones predecibles entre pérdida, tamaño del modelo, datos y cómputo. Chinchilla añadió un matiz decisivo: para un presupuesto de entrenamiento dado, aumentar parámetros sin aumentar suficientes tokens puede dejar el modelo infraentrenado.[^gpt3][^chinchilla]
 
 Por eso “más grande” no es una explicación suficiente. La comparación útil exige conocer el régimen de entrenamiento y la tarea de evaluación.

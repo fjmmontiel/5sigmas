@@ -1,0 +1,100 @@
+<div class="lsc-wrap" data-demo="topic-llm-scale-balance">
+  <div class="lsc-head">
+    <div class="lsc-kicker">ESCALA = BALANCE ENTRE N, D Y C</div>
+    <div class="lsc-title">Más parámetros ayudan solo cuando datos y cómputo acompañan</div>
+    <div class="lsc-sub">Las <em>scaling laws</em> describen relaciones empíricas entre pérdida y tres recursos de entrenamiento. Si uno se queda corto, aumentar otro entra en rendimientos decrecientes.</div>
+  </div>
+
+  <div class="lsc-system">
+    <div class="lsc-levers">
+      <section class="lsc-lever lsc-lever--n">
+        <div class="lsc-label"><span>01</span><strong>PARÁMETROS N</strong></div>
+        <div class="lsc-symbol">N</div>
+        <div class="lsc-desc">tamaño del modelo</div>
+      </section>
+      <section class="lsc-lever lsc-lever--d">
+        <div class="lsc-label"><span>02</span><strong>DATOS D</strong></div>
+        <div class="lsc-symbol">D</div>
+        <div class="lsc-desc">tokens de entrenamiento</div>
+      </section>
+      <section class="lsc-lever lsc-lever--c">
+        <div class="lsc-label"><span>03</span><strong>CÓMPUTO C</strong></div>
+        <div class="lsc-symbol">C</div>
+        <div class="lsc-desc">presupuesto de entrenamiento</div>
+      </section>
+    </div>
+
+    <div class="lsc-converge" aria-hidden="true">
+      <span>↘</span><span>↓</span><span>↙</span>
+    </div>
+
+    <div class="lsc-loss">
+      <span>OBJETIVO OBSERVADO</span>
+      <strong>pérdida de validación L ↓</strong>
+      <em>cuando los otros factores no son el cuello de botella</em>
+    </div>
+  </div>
+
+  <div class="lsc-laws">
+    <div class="lsc-laws-title">RELACIONES DE POTENCIA EMPÍRICAS</div>
+    <div class="lsc-law-grid">
+      <div class="lsc-law"><span>modelo</span><strong>L(N) ∝ N<sup>−α<sub>N</sub></sup></strong></div>
+      <div class="lsc-law"><span>datos</span><strong>L(D) ∝ D<sup>−α<sub>D</sub></sup></strong></div>
+      <div class="lsc-law"><span>cómputo</span><strong>L(C) ∝ C<sup>−α<sub>C</sub></sup></strong></div>
+    </div>
+    <div class="lsc-law-note">Son ajustes empíricos dentro de un régimen de entrenamiento; no garantizan que cada benchmark o capacidad mejore con la misma curva.</div>
+  </div>
+
+  <div class="lsc-budget">
+    <div class="lsc-budget-head">
+      <span>EJEMPLO CHINCHILLA · MISMO PRESUPUESTO DE ENTRENAMIENTO</span>
+      <strong>No basta con maximizar N</strong>
+    </div>
+    <div class="lsc-runs">
+      <section class="lsc-run lsc-run--gopher">
+        <div class="lsc-run-name">Gopher</div>
+        <div class="lsc-metrics">
+          <div><span>PARÁMETROS</span><strong>280B</strong></div>
+          <div><span>DATOS</span><strong>1×</strong></div>
+          <div><span>CÓMPUTO</span><strong>=</strong></div>
+        </div>
+      </section>
+      <div class="lsc-vs" aria-hidden="true">→</div>
+      <section class="lsc-run lsc-run--chinchilla">
+        <div class="lsc-run-name">Chinchilla</div>
+        <div class="lsc-metrics">
+          <div><span>PARÁMETROS</span><strong>70B</strong></div>
+          <div><span>DATOS</span><strong>4×</strong></div>
+          <div><span>CÓMPUTO</span><strong>=</strong></div>
+        </div>
+      </section>
+    </div>
+    <div class="lsc-budget-note">Hoffmann et al. entrenaron Chinchilla con el mismo cómputo que Gopher, una cuarta parte de parámetros y 4× más datos. El resultado mostró que el presupuesto puede rendir mejor al equilibrar tamaño y tokens de entrenamiento.</div>
+  </div>
+
+  <div class="lsc-contracts">
+    <div><span>CUELLO DE BOTELLA</span><strong>escalar N sin suficiente D puede dejar el modelo infraentrenado</strong></div>
+    <div><span>ALCANCE</span><strong>son leyes empíricas de pérdida, no leyes físicas universales</strong></div>
+    <div><span>COMPARACIÓN</span><strong>“más grande” no basta: importa cómo se repartió el presupuesto</strong></div>
+  </div>
+
+  <div class="lsc-ref">Fuentes primarias:
+    <a href="https://arxiv.org/abs/2001.08361">Kaplan et al., Scaling Laws (2020)</a> ·
+    <a href="https://arxiv.org/abs/2203.15556">Hoffmann et al., Chinchilla (2022)</a>
+  </div>
+</div>
+
+<style>
+.lsc-wrap,.lsc-wrap *{box-sizing:border-box}
+.lsc-wrap{--lsc-a:var(--md-primary-fg-color,#26a69a);--lsc-b:#4757d6;--lsc-c:var(--md-accent-fg-color,#ffb343);--lsc-r:#e06c75;--lsc-bg:var(--md-default-bg-color,#fff);--lsc-fg:var(--md-default-fg-color,#111827);--lsc-muted:color-mix(in srgb,var(--lsc-fg) 58%,transparent);--lsc-border:color-mix(in srgb,var(--lsc-fg) 14%,transparent);container-type:inline-size;margin:1.1rem 0 1.5rem;padding:clamp(14px,2vw,22px);border:1px solid var(--lsc-border);border-radius:20px;background:radial-gradient(95% 130% at 0 0,color-mix(in srgb,var(--lsc-b) 7%,transparent),transparent 55%),radial-gradient(85% 120% at 100% 0,color-mix(in srgb,var(--lsc-a) 7%,transparent),transparent 58%),var(--lsc-bg);color:var(--lsc-fg)}
+.lsc-head{display:grid;gap:4px;margin-bottom:12px}.lsc-kicker{font-size:10px;font-weight:900;letter-spacing:.12em;color:var(--lsc-muted)}.lsc-title{font-size:clamp(18px,2.1vw,24px);font-weight:900;line-height:1.12;letter-spacing:-.02em;max-width:45ch}.lsc-sub{font-size:13.4px;line-height:1.48;color:var(--lsc-muted);max-width:92ch}.lsc-sub em{font-style:normal;font-weight:800;color:var(--lsc-fg)}
+.lsc-system{padding:12px;border:1px solid var(--lsc-border);border-radius:15px;background:color-mix(in srgb,var(--lsc-bg) 96%,var(--lsc-fg) 4%)}.lsc-levers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.lsc-lever{min-width:0;padding:11px;border:1px solid var(--lsc-border);border-radius:13px;background:var(--lsc-bg);display:grid;grid-template-columns:auto 1fr;grid-template-areas:"label label" "symbol desc";gap:8px 10px;align-items:center}.lsc-lever--n{border-color:color-mix(in srgb,var(--lsc-b) 45%,var(--lsc-border));background:color-mix(in srgb,var(--lsc-b) 4%,var(--lsc-bg))}.lsc-lever--d{border-color:color-mix(in srgb,var(--lsc-a) 48%,var(--lsc-border));background:color-mix(in srgb,var(--lsc-a) 4%,var(--lsc-bg))}.lsc-lever--c{border-color:color-mix(in srgb,var(--lsc-c) 55%,var(--lsc-border));background:color-mix(in srgb,var(--lsc-c) 5%,var(--lsc-bg))}.lsc-label{grid-area:label;display:flex;gap:7px;align-items:center}.lsc-label span{display:grid;place-items:center;width:22px;height:22px;border-radius:7px;background:color-mix(in srgb,var(--lsc-fg) 7%,var(--lsc-bg));font:900 9px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--lsc-muted)}.lsc-label strong{font-size:10.5px;letter-spacing:.06em}.lsc-symbol{grid-area:symbol;display:grid;place-items:center;width:38px;height:38px;border-radius:11px;background:color-mix(in srgb,var(--lsc-fg) 7%,var(--lsc-bg));font:900 20px/1 ui-monospace,SFMono-Regular,Menlo,monospace}.lsc-desc{grid-area:desc;font-size:11px;font-weight:800;line-height:1.25}
+.lsc-converge{display:grid;grid-template-columns:repeat(3,1fr);padding:4px 11%;font-size:20px;font-weight:900;color:var(--lsc-muted);text-align:center}.lsc-loss{display:grid;justify-items:center;gap:3px;padding:10px 12px;border:1px solid color-mix(in srgb,var(--lsc-r) 36%,var(--lsc-border));border-radius:12px;background:color-mix(in srgb,var(--lsc-r) 4%,var(--lsc-bg));text-align:center}.lsc-loss span{font-size:8.5px;font-weight:900;letter-spacing:.09em;color:var(--lsc-muted)}.lsc-loss strong{font:900 16px/1.15 ui-monospace,SFMono-Regular,Menlo,monospace}.lsc-loss em{font-size:9.5px;font-style:normal;color:var(--lsc-muted)}
+.lsc-laws{margin-top:10px;padding:11px;border:1px solid var(--lsc-border);border-radius:14px}.lsc-laws-title{margin-bottom:8px;font-size:9px;font-weight:900;letter-spacing:.1em;color:var(--lsc-muted)}.lsc-law-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.lsc-law{padding:9px;border-radius:10px;background:color-mix(in srgb,var(--lsc-bg) 96%,var(--lsc-fg) 4%);display:grid;gap:4px;text-align:center}.lsc-law span{font-size:8.5px;font-weight:800;color:var(--lsc-muted)}.lsc-law strong{font:800 12px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace}.lsc-law-note{margin-top:7px;font-size:9.6px;line-height:1.35;color:var(--lsc-muted)}
+.lsc-budget{margin-top:10px;padding:12px;border:1px solid color-mix(in srgb,var(--lsc-a) 32%,var(--lsc-border));border-radius:15px;background:color-mix(in srgb,var(--lsc-a) 3%,var(--lsc-bg))}.lsc-budget-head{display:flex;justify-content:space-between;gap:10px;align-items:baseline;margin-bottom:9px}.lsc-budget-head span{font-size:8.7px;font-weight:900;letter-spacing:.09em;color:var(--lsc-muted)}.lsc-budget-head strong{font-size:11.5px}.lsc-runs{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:8px;align-items:stretch}.lsc-run{min-width:0;padding:10px;border:1px solid var(--lsc-border);border-radius:12px;background:var(--lsc-bg)}.lsc-run--gopher{border-color:color-mix(in srgb,var(--lsc-b) 36%,var(--lsc-border))}.lsc-run--chinchilla{border-color:color-mix(in srgb,var(--lsc-a) 55%,var(--lsc-border));background:color-mix(in srgb,var(--lsc-a) 5%,var(--lsc-bg))}.lsc-run-name{margin-bottom:8px;font-size:12px;font-weight:900}.lsc-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.lsc-metrics>div{padding:7px 6px;border-radius:9px;background:color-mix(in srgb,var(--lsc-bg) 94%,var(--lsc-fg) 6%);display:grid;gap:3px;text-align:center}.lsc-metrics span{font-size:7.6px;font-weight:900;letter-spacing:.06em;color:var(--lsc-muted)}.lsc-metrics strong{font:900 13px/1 ui-monospace,SFMono-Regular,Menlo,monospace}.lsc-vs{display:grid;place-items:center;font-size:20px;font-weight:900;color:var(--lsc-muted)}.lsc-budget-note{margin-top:8px;font-size:10px;line-height:1.4;color:var(--lsc-muted)}
+.lsc-contracts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}.lsc-contracts>div{padding:9px 10px;border-left:3px solid var(--lsc-b);border-radius:0 9px 9px 0;background:color-mix(in srgb,var(--lsc-b) 4%,var(--lsc-bg));display:grid;gap:3px}.lsc-contracts>div:nth-child(2){border-left-color:var(--lsc-a);background:color-mix(in srgb,var(--lsc-a) 4%,var(--lsc-bg))}.lsc-contracts>div:nth-child(3){border-left-color:var(--lsc-c);background:color-mix(in srgb,var(--lsc-c) 5%,var(--lsc-bg))}.lsc-contracts span{font-size:8.3px;font-weight:900;letter-spacing:.08em;color:var(--lsc-muted)}.lsc-contracts strong{font-size:9.6px;line-height:1.3}
+.lsc-ref{margin-top:9px;font-size:8.8px;line-height:1.35;color:var(--lsc-muted)}.lsc-ref a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+@container (max-width:620px){.lsc-levers,.lsc-law-grid,.lsc-contracts{grid-template-columns:1fr}.lsc-converge{display:none}.lsc-loss{margin-top:8px}.lsc-budget-head{display:grid}.lsc-runs{grid-template-columns:1fr}.lsc-vs{transform:rotate(90deg);min-height:18px}.lsc-metrics{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@container (max-width:400px){.lsc-wrap{padding:12px}.lsc-title{font-size:18px}.lsc-sub{font-size:12.6px}.lsc-lever{grid-template-columns:auto 1fr}.lsc-metrics{gap:4px}.lsc-metrics span{font-size:7px}.lsc-metrics strong{font-size:12px}}
+@media (prefers-reduced-motion:reduce){.lsc-wrap *{transition:none!important;animation:none!important}}
+</style>

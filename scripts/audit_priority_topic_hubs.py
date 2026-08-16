@@ -66,6 +66,15 @@ SPANISH_REQUIRED_TERMS = {
 }
 
 REQUIRED_VISUAL_INCLUDES = {
+    "llms": (
+        "snippets/temas/llm-token-pipeline.html",
+        "snippets/temas/llm-tokenization.html",
+        "snippets/temas/llm-contextual-representation.html",
+        "snippets/temas/llm-next-token.html",
+        "snippets/temas/llm-adaptation-stages.html",
+        "snippets/temas/llm-knowledge-layers.html",
+        "snippets/temas/llm-scale-balance.html",
+    ),
     "transformer": (
         "snippets/temas/transformer-block.html",
         "snippets/temas/transformer-embedding-position.html",
