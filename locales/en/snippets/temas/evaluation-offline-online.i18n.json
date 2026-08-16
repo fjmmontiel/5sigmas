@@ -1,6 +1,6 @@
 {
   "source": "snippets/temas/evaluation-offline-online.html",
-  "source_blob_sha": "d11d9b16bc306cc5c37964bb27542fac42bd48a4",
+  "source_blob_sha": "b8920f964a365cba005a02bfff4dfb96a2721f9b",
   "replacements": {
     "OFFLINE → HIPÓTESIS MEDIBLE → ONLINE → DECISIÓN DE PRODUCTO": "OFFLINE → MEASURABLE HYPOTHESIS → ONLINE → PRODUCT DECISION",
     "Una eval offline no es el resultado del usuario": "An offline eval is not the user outcome",
