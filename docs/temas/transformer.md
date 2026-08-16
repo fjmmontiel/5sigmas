@@ -83,17 +83,9 @@ La misma estructura residual rodea tanto la atención como la red feed-forward. 
 
 ## Encoder, decoder y encoder-decoder
 
-### Encoder
+{{ include_html("snippets/temas/transformer-encoder-decoder.html") }}
 
-Usa atención bidireccional. Cada token puede atender a todo el contexto. BERT popularizó esta configuración para producir representaciones útiles en clasificación, extracción y comprensión.[^bert]
-
-### Decoder
-
-Usa atención causal y genera de izquierda a derecha. Las familias GPT son el ejemplo dominante para generación de texto.
-
-### Encoder-decoder
-
-El encoder representa la entrada. El decoder genera la salida y añade atención cruzada sobre las representaciones del encoder. Es una estructura natural para traducción y transformación secuencia a secuencia.
+BERT popularizó el uso de encoders con contexto bidireccional para producir representaciones útiles en clasificación, extracción y comprensión.[^bert] Las familias GPT popularizaron el decoder causal para generación. El Transformer original combinaba ambos: el encoder representaba toda la entrada y el decoder generaba la salida consultando esas representaciones mediante *cross-attention*.[^transformer]
 
 “Transformer” no implica por tanto un único diagrama. Describe una familia de bloques y contratos de atención.
 

@@ -74,6 +74,7 @@ REQUIRED_VISUAL_INCLUDES = {
         "snippets/temas/transformer-causal-mask.html",
         "snippets/temas/transformer-ffn.html",
         "snippets/temas/transformer-residual-norm.html",
+        "snippets/temas/transformer-encoder-decoder.html",
     ),
     "razonamiento": (
         "snippets/temas/reasoning-loop.html",

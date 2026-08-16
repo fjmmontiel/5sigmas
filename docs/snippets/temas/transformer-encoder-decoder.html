@@ -1,0 +1,107 @@
+<div class="ted-wrap" data-demo="topic-transformer-encoder-decoder">
+  <div class="ted-head">
+    <div class="ted-kicker">FAMILIAS TRANSFORMER</div>
+    <div class="ted-title">Encoder, decoder y encoder-decoder: cambia el contrato de atención</div>
+    <div class="ted-sub">Comparten bloques Transformer, pero no exponen la misma información a cada posición. La diferencia está en qué puede atender a qué y en cómo fluye la información entre entrada y salida.</div>
+  </div>
+
+  <div class="ted-grid" aria-label="Comparación entre encoder, decoder y encoder-decoder">
+    <section class="ted-variant ted-encoder">
+      <div class="ted-variant-head"><span>ENCODER</span><strong>Representar todo el input</strong></div>
+      <div class="ted-tokens" aria-label="Secuencia de entrada del encoder"><b>A</b><b>B</b><b>C</b><b>D</b></div>
+      <div class="ted-matrix ted-matrix-full" aria-label="Matriz de atención bidireccional del encoder">
+        <i></i><i></i><i></i><i></i>
+        <i></i><i></i><i></i><i></i>
+        <i></i><i></i><i></i><i></i>
+        <i></i><i></i><i></i><i></i>
+      </div>
+      <div class="ted-flow"><span>self-attention bidireccional</span><b>→</b><strong>representaciones contextualizadas</strong></div>
+      <p>Cada posición puede combinar información de todo el input. Q, K y V proceden de la misma secuencia.</p>
+    </section>
+
+    <section class="ted-variant ted-decoder">
+      <div class="ted-variant-head"><span>DECODER</span><strong>Generar sin mirar el futuro</strong></div>
+      <div class="ted-tokens" aria-label="Prefijo disponible para el decoder"><b>x₁</b><b>x₂</b><b>x₃</b><b>x₄</b></div>
+      <div class="ted-matrix ted-matrix-causal" aria-label="Matriz causal del decoder">
+        <i class="on"></i><i></i><i></i><i></i>
+        <i class="on"></i><i class="on"></i><i></i><i></i>
+        <i class="on"></i><i class="on"></i><i class="on"></i><i></i>
+        <i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i>
+      </div>
+      <div class="ted-flow"><span>self-attention causal</span><b>→</b><strong>p(x<sub>t+1</sub> | x<sub>≤t</sub>)</strong></div>
+      <p>Cada posición solo puede usar el prefijo disponible. Ese mismo contrato sostiene la generación autoregresiva.</p>
+    </section>
+
+    <section class="ted-variant ted-encdec">
+      <div class="ted-variant-head"><span>ENCODER-DECODER</span><strong>Representar entrada y generar salida</strong></div>
+      <div class="ted-dual">
+        <div class="ted-side"><small>ENCODER</small><div class="ted-tokens ted-tokens-mini"><b>A</b><b>B</b><b>C</b><b>D</b></div><strong>memoria del input · K,V</strong></div>
+        <div class="ted-cross">Q <b>→</b> cross-attention <b>←</b> K,V</div>
+        <div class="ted-side"><small>DECODER</small><div class="ted-tokens ted-tokens-mini"><b>y₁</b><b>y₂</b><b>y₃</b></div><strong>self-attention causal</strong></div>
+      </div>
+      <div class="ted-cross-matrix" aria-label="Atención cruzada de tres posiciones del decoder sobre cuatro posiciones del encoder">
+        <i></i><i></i><i></i><i></i>
+        <i></i><i></i><i></i><i></i>
+        <i></i><i></i><i></i><i></i>
+      </div>
+      <p>Las queries vienen del decoder; keys y values vienen del encoder. Así la salida puede consultar todo el input mientras mantiene causalidad sobre sus propios tokens.</p>
+    </section>
+  </div>
+
+  <div class="ted-contract">
+    <div><b>Encoder</b><span>Visibilidad completa dentro del input.</span></div>
+    <div><b>Decoder</b><span>Visibilidad causal dentro de la salida.</span></div>
+    <div><b>Encoder-decoder</b><span>Causalidad en la salida + cross-attention sobre todo el input.</span></div>
+  </div>
+
+  <div class="ted-note"><b>Idea clave:</b> “Transformer” no describe un único diagrama. Describe bloques reutilizables cuyo patrón de atención cambia según la tarea.</div>
+  <div class="ted-ref">Fuentes primarias: <a href="https://arxiv.org/abs/1706.03762">Vaswani et al. (2017), §3.2.3</a> · <a href="https://arxiv.org/abs/1810.04805">Devlin et al. (2018, BERT)</a>.</div>
+</div>
+
+<style>
+.ted-wrap,.ted-wrap *{box-sizing:border-box}
+.ted-wrap{
+  --ted-a:var(--md-primary-fg-color,#26a69a);
+  --ted-b:#4757d6;
+  --ted-c:var(--md-accent-fg-color,#ffb343);
+  --ted-bg:var(--md-default-bg-color,#fff);
+  --ted-fg:var(--md-default-fg-color,#111827);
+  --ted-muted:color-mix(in srgb,var(--ted-fg) 58%,transparent);
+  --ted-border:color-mix(in srgb,var(--ted-fg) 14%,transparent);
+  margin:1.1rem 0 1.5rem;padding:clamp(14px,2vw,22px);border:1px solid var(--ted-border);border-radius:20px;
+  background:radial-gradient(110% 130% at 100% 0,color-mix(in srgb,var(--ted-b) 8%,transparent),transparent 52%),var(--ted-bg);color:var(--ted-fg)
+}
+.ted-head{display:grid;gap:4px;margin-bottom:14px}.ted-kicker{font-size:11px;font-weight:900;letter-spacing:.12em;color:var(--ted-muted)}
+.ted-title{font-size:clamp(18px,2.1vw,24px);font-weight:900;line-height:1.1;letter-spacing:-.02em}.ted-sub{font-size:13.5px;line-height:1.45;color:var(--ted-muted);max-width:82ch}
+.ted-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.ted-variant{min-width:0;border:1px solid var(--ted-border);border-radius:15px;padding:12px;display:grid;align-content:start;gap:10px;background:color-mix(in srgb,var(--ted-bg) 95%,var(--ted-fg) 5%)}
+.ted-variant-head{display:grid;gap:3px}.ted-variant-head span,.ted-side small{font-size:9px;font-weight:900;letter-spacing:.1em;color:var(--ted-muted)}.ted-variant-head strong{font-size:13px;line-height:1.25}.ted-variant p{margin:0;font-size:10.5px;line-height:1.42;color:var(--ted-muted)}
+.ted-tokens{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}.ted-tokens b{border:1px solid color-mix(in srgb,var(--ted-b) 22%,var(--ted-border));border-radius:8px;padding:6px 3px;text-align:center;font:800 11px/1.1 ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--ted-bg)}
+.ted-matrix{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;max-width:150px;margin:0 auto;width:100%}.ted-matrix i,.ted-cross-matrix i{aspect-ratio:1;border-radius:4px;border:1px solid color-mix(in srgb,var(--ted-fg) 12%,transparent);background:color-mix(in srgb,var(--ted-fg) 5%,transparent)}
+.ted-matrix-full i{background:color-mix(in srgb,var(--ted-a) 45%,var(--ted-bg));border-color:color-mix(in srgb,var(--ted-a) 48%,var(--ted-border))}.ted-matrix-causal i.on{background:color-mix(in srgb,var(--ted-c) 52%,var(--ted-bg));border-color:color-mix(in srgb,var(--ted-c) 55%,var(--ted-border))}
+.ted-flow{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:6px;text-align:center;font-size:9.5px}.ted-flow span{color:var(--ted-muted)}.ted-flow b{color:var(--ted-a)}.ted-flow strong{font-size:9.5px;line-height:1.25}
+.ted-dual{display:grid;gap:7px}.ted-side{display:grid;gap:5px;padding:8px;border:1px solid var(--ted-border);border-radius:10px;background:var(--ted-bg)}.ted-side>strong{font-size:9.5px;line-height:1.3}.ted-tokens-mini{grid-template-columns:repeat(4,1fr)}.ted-side:last-child .ted-tokens-mini{grid-template-columns:repeat(3,1fr)}
+.ted-cross{text-align:center;border-radius:999px;padding:6px 8px;font:800 9.5px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;background:color-mix(in srgb,var(--ted-b) 8%,var(--ted-bg));border:1px solid color-mix(in srgb,var(--ted-b) 24%,var(--ted-border));color:var(--ted-b)}
+.ted-cross-matrix{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;max-width:150px;margin:0 auto;width:100%}.ted-cross-matrix i{background:color-mix(in srgb,var(--ted-b) 36%,var(--ted-bg));border-color:color-mix(in srgb,var(--ted-b) 45%,var(--ted-border))}
+.ted-contract{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}.ted-contract>div{min-width:0;border-top:2px solid color-mix(in srgb,var(--ted-a) 58%,var(--ted-border));padding:8px 9px 5px;display:grid;gap:3px}.ted-contract b{font-size:10.5px}.ted-contract span{font-size:9.8px;line-height:1.35;color:var(--ted-muted)}
+.ted-note{margin-top:8px;padding:9px 10px;border-radius:10px;background:color-mix(in srgb,var(--ted-c) 8%,var(--ted-bg));font-size:10.5px;line-height:1.4}.ted-ref{margin-top:8px;font-size:9.5px;line-height:1.35;color:var(--ted-muted)}.ted-ref a{color:inherit;text-decoration:underline;text-decoration-color:color-mix(in srgb,var(--ted-a) 45%,transparent);text-underline-offset:2px}
+@media(max-width:900px){.ted-grid{grid-template-columns:1fr 1fr}.ted-encdec{grid-column:1/-1}.ted-dual{grid-template-columns:1fr auto 1fr;align-items:center}.ted-cross{writing-mode:horizontal-tb}}
+@media(max-width:620px){.ted-grid,.ted-contract{grid-template-columns:1fr}.ted-encdec{grid-column:auto}.ted-dual{grid-template-columns:1fr}.ted-cross{border-radius:10px}.ted-flow{grid-template-columns:1fr}.ted-flow b{transform:rotate(90deg)}}
+@media(prefers-reduced-motion:reduce){.ted-wrap *{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+
+<script>
+(() => {
+  const root = document.querySelector('[data-demo="topic-transformer-encoder-decoder"]');
+  if (!root) return;
+  const fail = (message) => { throw new Error(`Transformer encoder/decoder visual: ${message}`); };
+  if (root.querySelectorAll('.ted-variant').length !== 3) fail('expected exactly 3 architecture variants');
+  if (root.querySelectorAll('.ted-matrix-full i').length !== 16) fail('expected 16 encoder visibility cells');
+  if (root.querySelectorAll('.ted-matrix-causal i').length !== 16) fail('expected 16 decoder visibility cells');
+  if (root.querySelectorAll('.ted-matrix-causal i.on').length !== 10) fail('expected 10 visible causal cells');
+  if (root.querySelectorAll('.ted-cross-matrix i').length !== 12) fail('expected 12 cross-attention cells');
+  if (root.querySelectorAll('.ted-contract > div').length !== 3) fail('expected exactly 3 teaching contracts');
+  requestAnimationFrame(() => {
+    if (root.scrollWidth - root.clientWidth > 2) fail(`internal horizontal overflow ${root.scrollWidth - root.clientWidth}px`);
+  });
+})();
+</script>
