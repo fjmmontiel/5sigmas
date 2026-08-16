@@ -86,7 +86,7 @@ try {
       }
 
       const positions = await page.evaluate(() => {
-        const bodyText = document.body.innerText;
+        const bodyText = (document.querySelector('.md-content__inner') || document.body).innerText;
         return {
           evidence: bodyText.indexOf('Telling the model that the user "is an expert"'),
           visual: bodyText.indexOf('Sycophancy: the model that always agrees'),
@@ -99,6 +99,89 @@ try {
 
       await assertNoOverflow(sycophancy, `${viewport.name}: sycophancy`);
       await sycophancy.screenshot({ path: path.join(outDir, `english-reasoning-ch2-sycophancy-${viewport.name}.png`), animations: 'disabled' });
+    }
+
+    const propagation = page.locator('[data-demo="02-propagacion-error"]');
+    if (await propagation.count() !== 1) {
+      failures.push(`${viewport.name}: expected exactly one canonical error-propagation visual`);
+    } else {
+      if (await propagation.locator('[data-role="tab"]').count() !== 2) failures.push(`${viewport.name}: error propagation lost one of two canonical tabs`);
+      if (await propagation.locator('[data-panel]').count() !== 2) failures.push(`${viewport.name}: error propagation lost one of two canonical panels`);
+      if (await propagation.locator('.pe-step').count() !== 6) failures.push(`${viewport.name}: error propagation lost canonical six-step chain`);
+      if (await propagation.locator('.pe-step--ok').count() !== 1) failures.push(`${viewport.name}: error propagation lost canonical correct state`);
+      if (await propagation.locator('.pe-step--error').count() !== 1) failures.push(`${viewport.name}: error propagation lost canonical originating-error state`);
+      if (await propagation.locator('.pe-step--contaminated').count() !== 3) failures.push(`${viewport.name}: error propagation lost canonical three contaminated states`);
+      if (await propagation.locator('.pe-step--wrong').count() !== 1) failures.push(`${viewport.name}: error propagation lost canonical wrong-result state`);
+      if (await propagation.locator('.pe-ampl-svg').count() !== 1) failures.push(`${viewport.name}: error propagation lost canonical amplification SVG`);
+      if (await propagation.locator('.pe-impl-card').count() !== 3) failures.push(`${viewport.name}: error propagation lost canonical three implication cards`);
+
+      const text = (await propagation.textContent()) || '';
+      for (const token of [
+        'Error propagation through reasoning chains',
+        'Chain with an error',
+        'Implications',
+        'How many days are there from March 15 to June 10',
+        'Error here',
+        'off-by-one error is introduced at this step',
+        'Contaminated',
+        'Incorrect result',
+        '87 days',
+        'Correct answer: 88 days',
+        'Cumulative error probability as a function of reasoning-chain length',
+        '2 steps',
+        '6 steps',
+        '12 steps',
+        '20 steps',
+        'Length matters',
+        'The final answer is not enough',
+        'Intermediate verification',
+      ]) {
+        if (!text.includes(token)) failures.push(`${viewport.name}: error propagation missing ${JSON.stringify(token)}`);
+      }
+      for (const token of [
+        'Propagación de error',
+        'Cadena con error',
+        '¿Cuántos días hay',
+        'Error aquí',
+        'Contaminado',
+        'Resultado incorrecto',
+        '87 días',
+        'Probabilidad de error acumulada',
+        'La longitud importa',
+        'El resultado final no basta',
+        'Verificación intermedia',
+      ]) {
+        if (text.includes(token)) failures.push(`${viewport.name}: error propagation Spanish leakage ${JSON.stringify(token)}`);
+      }
+
+      const tabs = propagation.locator('[data-role="tab"]');
+      const panels = propagation.locator('[data-panel]');
+      for (let index = 0; index < 2; index += 1) {
+        await tabs.nth(index).click();
+        if ((await tabs.nth(index).getAttribute('aria-selected')) !== 'true') failures.push(`${viewport.name}: error propagation tab ${index + 1} did not activate`);
+        if (!(await panels.nth(index).isVisible())) failures.push(`${viewport.name}: error propagation panel ${index + 1} did not become visible`);
+      }
+      await tabs.nth(0).click();
+      await tabs.nth(0).focus();
+      await tabs.nth(0).press('ArrowRight');
+      if ((await tabs.nth(1).getAttribute('aria-selected')) !== 'true' || !(await panels.nth(1).isVisible())) {
+        failures.push(`${viewport.name}: error propagation keyboard tab interaction diverged from canonical behavior`);
+      }
+
+      const positions = await page.evaluate(() => {
+        const bodyText = (document.querySelector('.md-content__inner') || document.body).innerText;
+        return {
+          risk: bodyText.indexOf('Longer chains introduce risk.'),
+          visual: bodyText.indexOf('Error propagation through reasoning chains'),
+          hallucinations: bodyText.indexOf('Hallucinations inside reasoning'),
+        };
+      });
+      if (!(positions.risk >= 0 && positions.visual > positions.risk && positions.hallucinations > positions.visual)) {
+        failures.push(`${viewport.name}: error-propagation visual moved away from its canonical article hook`);
+      }
+
+      await assertNoOverflow(propagation, `${viewport.name}: error propagation`);
+      await propagation.screenshot({ path: path.join(outDir, `english-reasoning-ch2-error-propagation-${viewport.name}.png`), animations: 'disabled' });
     }
 
     const pageText = (await page.locator('body').textContent()) || '';
@@ -116,4 +199,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('English Reasoning Chapter 2 QA passed: canonical sycophancy visual preserved, localized, interactive, correctly placed, unique, and overflow-clean on desktop/mobile.');
+console.log('English Reasoning Chapter 2 QA passed: canonical sycophancy and error-propagation visuals preserved, localized, interactive, correctly placed, unique, and overflow-clean on desktop/mobile.');
