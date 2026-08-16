@@ -1,0 +1,22 @@
+{
+  "source": "snippets/articulos-tecnicos/voice-arch-duplex.html",
+  "source_blob_sha": "3239e59729aaf4406a9f3d984529278f4c716d1e",
+  "replacements": {
+    "Solapamiento full duplex entre usuario y agente": "Full-duplex overlap between user and agent",
+    "Escuchar mientras habla.": "Listen while speaking.",
+    "Full-duplex es solapamiento con control.": "Full duplex is controlled overlap.",
+    "Usuario": "User",
+    "Agente": "Agent",
+    "No es magia": "Not magic",
+    "El runtime sigue decidiendo turnos, tools y playback.": "The runtime still decides turns, tools and playback."
+  },
+  "forbidden_output_tokens": [
+    "Solapamiento full duplex",
+    "Escuchar mientras habla",
+    "solapamiento con control",
+    "Usuario",
+    "Agente",
+    "No es magia",
+    "El runtime sigue decidiendo"
+  ]
+}
