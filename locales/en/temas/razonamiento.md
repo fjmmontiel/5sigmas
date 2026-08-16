@@ -125,13 +125,9 @@ The note [Proactive and reactive agents and tool calls](/en/articulos-tecnicos/p
 
 In chat, several seconds may be acceptable for a complex task. In voice, the same delay can break conversational rhythm.
 
-The [Reasoning Models](/en/series/modelos-razonadores/00_presentacion_serie/) series separates:
+{{ include_html("snippets/temas/reasoning-latency-clocks.html") }}
 
-- time to detect the end of a turn;
-- time to the first useful decision;
-- time to first audio;
-- total operation time;
-- time until the result is delivered.
+The [Reasoning Models](/en/series/modelos-razonadores/00_presentacion_serie/) series and the comparison of [voice-agent architectures](/en/articulos-tecnicos/voice-agent-architectures/) develop these boundaries in more detail.
 
 This prevents optimizing only the benchmark while forgetting the interaction.
 

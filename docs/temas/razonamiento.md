@@ -125,13 +125,9 @@ La nota [Agente reactivo, proactivo y tool calls](/articulos-tecnicos/proactive-
 
 En un chat, varios segundos pueden ser aceptables si la tarea es compleja. En voz, la misma demora rompe el ritmo conversacional.
 
-La serie [Modelos razonadores](/series/modelos-razonadores/00_presentacion_serie/) separa:
+{{ include_html("snippets/temas/reasoning-latency-clocks.html") }}
 
-- tiempo hasta detectar el final del turno
-- tiempo hasta la primera decisión útil
-- tiempo hasta el primer audio
-- tiempo total de la operación
-- tiempo hasta entregar el resultado
+La serie [Modelos razonadores](/series/modelos-razonadores/00_presentacion_serie/) y la comparación de [arquitecturas para agentes de voz](/articulos-tecnicos/voice-agent-architectures/) desarrollan estas fronteras con más detalle.
 
 Esta separación evita optimizar solo el benchmark y olvidar la experiencia.
 
