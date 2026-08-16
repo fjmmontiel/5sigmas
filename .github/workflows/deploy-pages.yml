@@ -129,7 +129,7 @@ jobs:
         run: |
           for attempt in {1..18}; do
             body="$(curl --fail --silent --show-error --location https://5sigmas.com/en/series/modelos-razonadores/03-test-time-compute/ || true)"
-            if grep -q 'PRM vs ORM: two ways to reward reasoning' <<< "$body"; then
+            if grep -q 'PRMs vs ORMs: two ways to teach reasoning' <<< "$body"; then
               echo "Live English TTC release is serving the expected mirror."
               exit 0
             fi
