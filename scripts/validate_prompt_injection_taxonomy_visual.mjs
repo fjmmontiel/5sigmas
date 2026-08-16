@@ -137,11 +137,24 @@ try {
       check((await page.locator('.pit-note').count()) === 3, `${testCase.route}: ${viewport.name} expected 3 distinction notes`);
       check((await page.locator('.pit-contracts > div').count()) === 3, `${testCase.route}: ${viewport.name} expected 3 teaching contracts`);
 
+      const flowLines = await page.locator('.pit-flow b').evaluateAll((nodes) => nodes.map((node) => {
+        const style = getComputedStyle(node);
+        const lineHeight = Number.parseFloat(style.lineHeight);
+        const innerHeight = node.clientHeight - Number.parseFloat(style.paddingTop) - Number.parseFloat(style.paddingBottom);
+        return { text: node.textContent?.trim() || '', lines: innerHeight / lineHeight };
+      }));
+      for (const flow of flowLines) {
+        check(flow.lines <= 2.25, `${testCase.route}: ${viewport.name} flow label wraps beyond two lines: ${JSON.stringify(flow)}`);
+      }
+
       const pageOverflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
       check(pageOverflow <= 2, `${testCase.route}: ${viewport.name} horizontal page overflow ${pageOverflow}px`);
       for (const error of runtimeErrors) failures.push(`${testCase.route}: ${viewport.name} runtime error: ${error}`);
 
       if (await visual.count()) {
+        // The site header is intentionally sticky; hide only site chrome for the isolated
+        // review artifact so a stitched mobile element screenshot cannot obscure the visual.
+        await page.addStyleTag({ content: '.md-header,.md-tabs{visibility:hidden!important}' });
         await visual.screenshot({
           path: path.join(outDir, `prompt-injection-taxonomy-${testCase.locale}-${viewport.name}.png`),
           animations: 'disabled',
@@ -171,4 +184,4 @@ if (failures.length) {
   for (const failure of failures) console.error(`- ${failure}`);
   process.exit(1);
 }
-console.log('Prompt-injection taxonomy visual validation passed: ES/EN mirror parity, three-risk semantics, desktop/mobile geometry, overflow, language integrity, screenshots and reduced-motion behavior are valid.');
+console.log('Prompt-injection taxonomy visual validation passed: ES/EN mirror parity, three-risk semantics, desktop/mobile geometry, flow-label legibility, overflow, language integrity, screenshots and reduced-motion behavior are valid.');
