@@ -1,0 +1,32 @@
+{
+  "source": "snippets/datacenters-espacio/04-energia-densidad.html",
+  "source_blob_sha": "37c4876b3f37cb32f9c9dc27f380cf11bf229ad0",
+  "replacements": {
+    "data-demo=\"04-energia-densidad\"": "data-demo=\"dc-04-rack-density\"",
+    ">edificio termico</div>": ">thermal building</div>",
+    ">La densidad por rack convierte el edificio en sistema térmico</div>": ">Rack density turns the building into a thermal system</div>",
+    ">Subir potencia por rack obliga a rediseñar cableado, líquido, sala, subestación y permisos: el problema deja de ser solo servidor.</div>": ">Higher power per rack forces redesign of cabling, liquid loops, rooms, substations and permits: the problem stops being only the server.</div>",
+    "aria-label=\"La densidad por rack convierte el edificio en sistema térmico\"": "aria-label=\"Rack density turns the building into a thermal system\"",
+    ">rack clásico</text>": ">traditional rack</text>",
+    ">primeros racks IA</text>": ">early AI racks</text>",
+    ">El límite salta de escala</text>": ">The constraint changes scale</text>",
+    ">aire → líquido → edificio</text>": ">air → liquid → building</text>",
+    ">No cabe en pasillos</text>": ">It no longer fits the aisle model</text>",
+    ">exige sala y red nuevas</text>": ">requires a new room and power network</text>",
+    ">Rack clásico: 5-15 kW</span>": ">Traditional rack: 5–15 kW</span>",
+    ">Primeros racks IA: 50-100 kW</span>": ">Early AI racks: 50–100 kW</span>",
+    ">GB200 NVL72: ~120 kW y refrigeración líquida práctica</span>": ">GB200 NVL72: ~120 kW and liquid cooling as a practical requirement</span>"
+  },
+  "forbidden_output_tokens": [
+    "edificio termico",
+    "La densidad por rack",
+    "Subir potencia por rack",
+    "rack clásico",
+    "primeros racks IA",
+    "El límite salta",
+    "aire → líquido",
+    "No cabe en pasillos",
+    "exige sala",
+    "Primeros racks IA"
+  ]
+}
