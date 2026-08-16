@@ -86,7 +86,10 @@ try {
 
 if (failures.length) {
   console.error('English Energy Chapter 2 bottlenecks QA failed:');
-  for (const failure of failures) console.error(` - ${failure}`);
+  for (const failure of failures) {
+    console.error(` - ${failure}`);
+    console.error(`::error title=English Energy Chapter 2 bottlenecks QA::${failure.replaceAll('%', '%25').replaceAll('\r', '%0D').replaceAll('\n', '%0A')}`);
+  }
   process.exit(1);
 }
 
