@@ -44,7 +44,15 @@ const chapters = [
     canonicalRedTeam: true,
     screenshot: 'english-security-04-red-teaming.png',
   },
-  { slug: '05-controles-produccion', route: '/en/series/seguridad-ia/05-controles-produccion/', title: 'Chapter 5 — Production controls', concepts: ['least privilege', 'MCP', 'kill path'], demos: 4, prefix: 'sec-05-', screenshot: 'english-security-05-production-controls.png' },
+  {
+    slug: '05-controles-produccion',
+    route: '/en/series/seguridad-ia/05-controles-produccion/',
+    title: 'Chapter 5 — Production controls',
+    concepts: ['MCP', 'kill path', 'Blocking the response while allowing the action is not a mitigation.', 'release gate'],
+    demos: 4,
+    canonicalProductionControls: true,
+    screenshot: 'english-security-05-production-controls.png',
+  },
 ];
 
 const forbidden = ['Capítulo ', 'Preguntas frecuentes', 'Prerrequisitos', 'Siguiente capítulo', 'Fuentes base'];
@@ -328,6 +336,86 @@ async function validateRedTeamVisuals(page, chapter) {
   return selectors.reduce(async (promise, selector) => (await promise) + (await page.locator(selector).count() === 1 ? 1 : 0), Promise.resolve(0));
 }
 
+async function validateProductionControlVisuals(page, chapter) {
+  const selectors = ['.proddef', '.mcpbound', '.killpath', '.releasegate'];
+  for (const selector of selectors) {
+    const matches = page.locator(selector);
+    const count = await matches.count();
+    if (count !== 1) {
+      failures.push(`${chapter.route}: expected exactly one canonical ${selector}, found ${count}`);
+      continue;
+    }
+    const root = matches.first();
+    if (!await isVisible(root)) failures.push(`${chapter.route}: canonical ${selector} is not visible`);
+    const box = await root.boundingBox();
+    if (!box || box.width < 240 || box.height < 120) failures.push(`${chapter.route}: canonical ${selector} has invalid geometry ${JSON.stringify(box)}`);
+  }
+
+  const defense = page.locator('.proddef');
+  if (await defense.count() === 1) {
+    if (await defense.locator('.proddef__cell').count() !== 9) failures.push(`${chapter.route}: defense-depth matrix must expose nine permission cells`);
+    const toggle = defense.locator('[data-toggle]');
+    if (await toggle.count() !== 1) failures.push(`${chapter.route}: defense-depth visual is missing its privilege toggle`);
+    else {
+      await toggle.click();
+      await page.waitForTimeout(75);
+      if (!await defense.evaluate((node) => node.classList.contains('is-risk'))) failures.push(`${chapter.route}: defense-depth privilege escalation did not enter risk state`);
+      const productionCell = defense.locator('.proddef__cell').nth(2);
+      if (((await productionCell.textContent()) || '').trim() !== 'deploy') failures.push(`${chapter.route}: defense-depth escalation did not expose production deploy authority`);
+      const copy = ((await defense.locator('[data-copy]').innerText()) || '').toLowerCase();
+      if (!copy.includes('expanded blast radius') || !copy.includes('permission')) failures.push(`${chapter.route}: defense-depth risk copy lost canonical permission semantics`);
+    }
+  }
+
+  const mcp = page.locator('.mcpbound');
+  if (await mcp.count() === 1) {
+    const controls = mcp.locator('[data-control]');
+    if (await controls.count() !== 3) failures.push(`${chapter.route}: MCP boundary must expose three canonical controls`);
+    for (let index = 0; index < await controls.count(); index += 1) await controls.nth(index).click();
+    await page.waitForTimeout(75);
+    if (await mcp.locator('[data-control][aria-pressed="true"]').count() !== 3) failures.push(`${chapter.route}: MCP boundary controls did not all activate`);
+    const result = mcp.locator('[data-result]');
+    if (!await result.evaluate((node) => node.classList.contains('is-safe'))) failures.push(`${chapter.route}: MCP boundary did not reach explicit-boundary state`);
+    if (!((await result.innerText()) || '').includes('Explicit boundary')) failures.push(`${chapter.route}: MCP boundary safe verdict was not localized`);
+    if (!((await mcp.locator('[data-hidden]').innerText()) || '').includes('schema verified')) failures.push(`${chapter.route}: MCP integrity control did not localize verified-schema state`);
+  }
+
+  const kill = page.locator('.killpath');
+  if (await kill.count() === 1) {
+    if (await kill.locator('.killpath__stage').count() !== 5) failures.push(`${chapter.route}: kill-path visual must expose five execution stages`);
+    if (await kill.locator('[data-kill]').count() !== 4) failures.push(`${chapter.route}: kill-path visual must expose four external stop controls`);
+    const start = kill.locator('[data-start]');
+    const revoke = kill.locator('[data-kill="credential"]');
+    if (await start.count() !== 1 || await revoke.count() !== 1) failures.push(`${chapter.route}: kill-path visual lost start/revoke controls`);
+    else {
+      await start.click();
+      await page.waitForTimeout(100);
+      if (await revoke.isDisabled()) failures.push(`${chapter.route}: kill-path external controls did not enable after start`);
+      await revoke.click();
+      await page.waitForTimeout(75);
+      const result = kill.locator('[data-result]');
+      if (!await result.evaluate((node) => node.classList.contains('is-killed'))) failures.push(`${chapter.route}: kill-path revoke action did not enter killed state`);
+      const copy = ((await result.innerText()) || '').toLowerCase();
+      if (!copy.includes('runtime recovered authority') || !copy.includes('cooperative response')) failures.push(`${chapter.route}: kill-path result lost canonical external-authority semantics`);
+    }
+  }
+
+  const release = page.locator('.releasegate');
+  if (await release.count() === 1) {
+    const checks = release.locator('[data-check]');
+    if (await checks.count() !== 3) failures.push(`${chapter.route}: release gate must expose three verifiable operational boundaries`);
+    for (let index = 0; index < await checks.count(); index += 1) await checks.nth(index).click();
+    await page.waitForTimeout(75);
+    if (await release.locator('[data-check][aria-pressed="true"]').count() !== 3) failures.push(`${chapter.route}: release-gate checks did not all activate`);
+    if (((await release.locator('[data-badge]').textContent()) || '').trim() !== 'PASS') failures.push(`${chapter.route}: release gate did not reach PASS state`);
+    if (!await release.locator('[data-deploy]').evaluate((node) => node.classList.contains('is-ready'))) failures.push(`${chapter.route}: release gate did not enable deployment after all boundaries passed`);
+    const title = ((await release.locator('[data-title]').innerText()) || '').toLowerCase();
+    if (!title.includes('3 / 3 boundaries verified')) failures.push(`${chapter.route}: release-gate count was not localized`);
+  }
+
+  return selectors.reduce(async (promise, selector) => (await promise) + (await page.locator(selector).count() === 1 ? 1 : 0), Promise.resolve(0));
+}
+
 async function validateLegacySecurityVisuals(page, chapter) {
   const demoValues = await page.locator('[data-demo^="sec-"]').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('data-demo')));
   if (demoValues.length !== chapter.demos) failures.push(`${chapter.route}: expected ${chapter.demos} legacy teaching visuals, found ${demoValues.length}`);
@@ -362,7 +450,7 @@ try {
       if (!body.includes(chapter.title)) failures.push(`${chapter.route}: missing English chapter title`);
       for (const concept of chapter.concepts) if (!body.toLowerCase().includes(concept.toLowerCase())) failures.push(`${chapter.route}: missing core concept ${concept}`);
       for (const token of forbidden) if (body.includes(token)) failures.push(`${chapter.route}: Spanish leakage ${JSON.stringify(token)}`);
-      if (['02-jailbreaks', '03-envenenamiento', '04-red-teaming'].includes(chapter.slug) && body.includes('Frequently asked questions')) failures.push(`${chapter.route}: English-only FAQ section drifted back into the canonical article`);
+      if (['02-jailbreaks', '03-envenenamiento', '04-red-teaming', '05-controles-produccion'].includes(chapter.slug) && body.includes('Frequently asked questions')) failures.push(`${chapter.route}: English-only FAQ section drifted back into the canonical article`);
 
       const visualCount = chapter.visualSelectors
         ? await validatePromptInjectionVisuals(page, chapter)
@@ -372,7 +460,9 @@ try {
             ? await validatePoisoningVisuals(page, chapter)
             : chapter.canonicalRedTeam
               ? await validateRedTeamVisuals(page, chapter)
-              : await validateLegacySecurityVisuals(page, chapter);
+              : chapter.canonicalProductionControls
+                ? await validateProductionControlVisuals(page, chapter)
+                : await validateLegacySecurityVisuals(page, chapter);
       if (visualCount !== chapter.demos) failures.push(`${chapter.route}: expected ${chapter.demos} teaching visuals, found ${visualCount}`);
       if (viewport.name === 'desktop') totalVisuals += visualCount;
 
@@ -406,4 +496,4 @@ if (failures.length) {
   for (const failure of [...new Set(failures)]) console.error(failure);
   process.exit(1);
 }
-console.log('Complete English AI Security QA passed: Chapters 1–5, 18 unique defensive visuals, canonical Chapter 2 jailbreak search/budget/outcome interactions, canonical Chapter 3 persistence/governance/runtime-vs-weights/propagation interactions, canonical Chapter 4 threat-model/uplift/causal-chain/regression interactions, exact native-English video/poster pairs, desktop/mobile clean.');
+console.log('Complete English AI Security QA passed: Chapters 1–5, 18 unique defensive visuals, canonical Chapter 2 jailbreak search/budget/outcome interactions, canonical Chapter 3 persistence/governance/runtime-vs-weights/propagation interactions, canonical Chapter 4 threat-model/uplift/causal-chain/regression interactions, canonical Chapter 5 permission/MCP/kill-path/release-gate interactions, exact native-English video/poster pairs, desktop/mobile clean.');
