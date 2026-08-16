@@ -1,0 +1,121 @@
+<div class="evd-wrap" data-demo="topic-evaluation-verifier-routing">
+  <div class="evd-head">
+    <div class="evd-kicker">SEÑAL → VERIFICADOR → DECISIÓN</div>
+    <div class="evd-title">Comprueba el fallo donde existe la verdad</div>
+    <div class="evd-sub">Antes de pedir a otro modelo que juzgue una salida, pregunta si el éxito ya puede observarse directamente en la estructura, la ejecución o el estado. Solo lo que no admite un criterio determinista necesita una rúbrica.</div>
+  </div>
+
+  <div class="evd-question" role="img" aria-label="Selección del tipo de evaluador según si el criterio puede verificarse por estructura, ejecución, estado o requiere juicio humano">
+    <span>¿QUÉ AFIRMACIÓN QUIERES VERIFICAR?</span>
+    <div class="evd-question-chips">
+      <b>estructura</b><b>resultado</b><b>estado</b><b>latencia</b><b>calidad percibida</b>
+    </div>
+  </div>
+
+  <div class="evd-routes">
+    <section class="evd-card evd-card--structure">
+      <div class="evd-label"><span>A</span><strong>ESTRUCTURA / VALOR</strong></div>
+      <h3>Comparador determinista</h3>
+      <div class="evd-tags"><span>JSON / schema</span><span>valor numérico</span><span>URL / cita</span></div>
+      <div class="evd-mini-flow"><b>salida</b><i>→</i><b>regla</b><i>→</i><strong>pass / fail</strong></div>
+      <p>Úsalo cuando la condición puede decidirse sin interpretación.</p>
+    </section>
+
+    <section class="evd-card evd-card--execution">
+      <div class="evd-label"><span>B</span><strong>EJECUCIÓN / ESTADO</strong></div>
+      <h3>Ejecuta y observa</h3>
+      <div class="evd-tags"><span>tests</span><span>API args</span><span>estado final</span><span>latencia / coste</span></div>
+      <div class="evd-mini-flow"><b>acción</b><i>→</i><b>entorno</b><i>→</i><strong>estado</strong></div>
+      <p>La fuente de verdad es el sistema, no el texto que lo describe.</p>
+    </section>
+
+    <section class="evd-card evd-card--judgement">
+      <div class="evd-label"><span>C</span><strong>JUICIO</strong></div>
+      <h3>Rúbrica + referencia humana</h3>
+      <div class="evd-tags"><span>utilidad</span><span>tono</span><span>claridad</span><span>preferencia</span></div>
+      <div class="evd-mini-flow"><b>caso</b><i>→</i><b>humano</b><i>→</i><strong>criterio</strong></div>
+      <div class="evd-scale"><span>A ESCALA</span><strong>LLM juez calibrado</strong><i>→</i><b>humano si discrepa / alto impacto</b></div>
+    </section>
+  </div>
+
+  <div class="evd-case">
+    <div class="evd-case-head"><span>MISMO CASO, VARIAS SEÑALES</span><strong>Un agente reserva una cita</strong></div>
+    <div class="evd-case-grid">
+      <div><span>FORMATO</span><strong>JSON válido</strong><b>✓ checker</b></div>
+      <div><span>ACCIÓN</span><strong>argumentos correctos</strong><b>✓ checker</b></div>
+      <div><span>ESTADO</span><strong>evento creado una vez</strong><b>✓ sistema</b></div>
+      <div><span>MENSAJE</span><strong>claridad para el usuario</strong><b>→ rúbrica</b></div>
+    </div>
+  </div>
+
+  <div class="evd-contracts">
+    <div><span>VERIFICA ABAJO</span><strong>si el resultado existe en una API, base de datos, test o reloj, mídelo allí</strong></div>
+    <div><span>COMBINA</span><strong>un mismo caso puede tener checks deterministas y una rúbrica subjetiva</strong></div>
+    <div><span>ESCALA DESPUÉS</span><strong>el juez automático entra solo donde hace falta juicio y dentro del perímetro calibrado</strong></div>
+  </div>
+
+  <div class="evd-ref">Fuentes primarias:
+    <a href="https://arxiv.org/abs/2403.07974">Jain et al., LiveCodeBench (2024)</a> ·
+    <a href="https://platform.openai.com/docs/api-reference/graders">OpenAI Graders API</a> ·
+    <a href="https://arxiv.org/abs/2306.05685">Zheng et al., LLM-as-a-Judge (2023)</a>
+  </div>
+</div>
+
+<style>
+.evd-wrap,.evd-wrap *{box-sizing:border-box}
+.evd-wrap{
+  --evd-a:var(--md-primary-fg-color,#26a69a);
+  --evd-b:#4757d6;
+  --evd-c:var(--md-accent-fg-color,#ffb343);
+  --evd-r:#d85f6a;
+  --evd-bg:var(--md-default-bg-color,#fff);
+  --evd-fg:var(--md-default-fg-color,#111827);
+  --evd-muted:color-mix(in srgb,var(--evd-fg) 58%,transparent);
+  --evd-border:color-mix(in srgb,var(--evd-fg) 14%,transparent);
+  container-type:inline-size;
+  margin:1.1rem 0 1.5rem;
+  padding:clamp(14px,2vw,22px);
+  border:1px solid var(--evd-border);
+  border-radius:20px;
+  background:
+    radial-gradient(90% 120% at 0 0,color-mix(in srgb,var(--evd-b) 7%,transparent),transparent 56%),
+    radial-gradient(90% 120% at 100% 0,color-mix(in srgb,var(--evd-a) 7%,transparent),transparent 58%),
+    var(--evd-bg);
+  color:var(--evd-fg)
+}
+.evd-head{display:grid;gap:4px;margin-bottom:12px}
+.evd-kicker{font-size:10px;font-weight:950;letter-spacing:.12em;color:var(--evd-muted)}
+.evd-title{font-size:clamp(18px,2.1vw,24px);font-weight:900;line-height:1.12;letter-spacing:-.02em;max-width:44ch}
+.evd-sub{font-size:13.3px;line-height:1.48;color:var(--evd-muted);max-width:92ch}
+.evd-question{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border:1px solid var(--evd-border);border-radius:13px;background:color-mix(in srgb,var(--evd-fg) 3%,var(--evd-bg));margin-bottom:9px}
+.evd-question>span{font-size:8.8px;font-weight:950;letter-spacing:.08em;color:var(--evd-muted);white-space:nowrap}
+.evd-question-chips{display:flex;justify-content:flex-end;gap:5px;flex-wrap:wrap}.evd-question-chips b{padding:5px 7px;border:1px solid var(--evd-border);border-radius:999px;background:var(--evd-bg);font-size:8.5px;line-height:1;font-weight:850}
+.evd-routes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;align-items:stretch}
+.evd-card{min-width:0;padding:12px;border:1px solid var(--evd-border);border-radius:15px;background:color-mix(in srgb,var(--evd-bg) 96%,var(--evd-fg) 4%);display:grid;align-content:start;gap:8px}
+.evd-card--structure{border-color:color-mix(in srgb,var(--evd-b) 45%,var(--evd-border));background:color-mix(in srgb,var(--evd-b) 4%,var(--evd-bg))}
+.evd-card--execution{border-color:color-mix(in srgb,var(--evd-a) 48%,var(--evd-border));background:color-mix(in srgb,var(--evd-a) 4%,var(--evd-bg))}
+.evd-card--judgement{border-color:color-mix(in srgb,var(--evd-c) 55%,var(--evd-border));background:color-mix(in srgb,var(--evd-c) 5%,var(--evd-bg))}
+.evd-label{display:flex;align-items:center;gap:7px}.evd-label span{display:grid;place-items:center;width:24px;height:24px;border-radius:8px;background:color-mix(in srgb,var(--evd-fg) 8%,var(--evd-bg));font:950 9px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--evd-muted)}.evd-label strong{font-size:9px;letter-spacing:.075em;color:var(--evd-muted)}
+.evd-card h3{margin:0;font-size:13.8px;line-height:1.2}.evd-card p{margin:0;font-size:10px;line-height:1.38;color:var(--evd-muted)}
+.evd-tags{display:flex;gap:5px;flex-wrap:wrap}.evd-tags span{padding:5px 6px;border:1px solid var(--evd-border);border-radius:8px;background:var(--evd-bg);font-size:8px;font-weight:800;line-height:1}
+.evd-mini-flow{display:grid;grid-template-columns:minmax(0,1fr) 11px minmax(0,1fr) 11px minmax(0,1fr);gap:3px;align-items:center}.evd-mini-flow b,.evd-mini-flow strong{min-width:0;padding:7px 4px;border:1px solid var(--evd-border);border-radius:8px;background:var(--evd-bg);font-size:8.6px;line-height:1.15;text-align:center;overflow-wrap:anywhere}.evd-mini-flow strong{border-color:color-mix(in srgb,var(--evd-a) 44%,var(--evd-border));background:color-mix(in srgb,var(--evd-a) 5%,var(--evd-bg))}.evd-mini-flow i{font-style:normal;text-align:center;color:var(--evd-muted);font-size:11px;font-weight:950}
+.evd-scale{display:grid;grid-template-columns:auto minmax(0,1fr) 12px minmax(0,1.25fr);gap:5px;align-items:center;padding:7px;border:1px dashed color-mix(in srgb,var(--evd-c) 62%,var(--evd-border));border-radius:10px;background:color-mix(in srgb,var(--evd-c) 5%,var(--evd-bg))}.evd-scale span{font-size:7px;font-weight:950;letter-spacing:.08em;color:var(--evd-muted)}.evd-scale strong,.evd-scale b{font-size:8.2px;line-height:1.2}.evd-scale i{font-style:normal;text-align:center;color:var(--evd-muted);font-weight:950}
+.evd-case{margin-top:9px;padding:10px;border:1px solid color-mix(in srgb,var(--evd-b) 34%,var(--evd-border));border-radius:14px;background:color-mix(in srgb,var(--evd-b) 3%,var(--evd-bg))}
+.evd-case-head{display:flex;justify-content:space-between;gap:12px;align-items:baseline;margin-bottom:8px}.evd-case-head span{font-size:8px;font-weight:950;letter-spacing:.08em;color:var(--evd-muted)}.evd-case-head strong{font-size:11px}
+.evd-case-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.evd-case-grid>div{min-width:0;padding:8px;border:1px solid var(--evd-border);border-radius:9px;background:var(--evd-bg);display:grid;gap:3px}.evd-case-grid span{font-size:7px;font-weight:950;letter-spacing:.06em;color:var(--evd-muted)}.evd-case-grid strong{font-size:9px;line-height:1.2}.evd-case-grid b{font-size:8px;color:var(--evd-a)}.evd-case-grid>div:last-child b{color:var(--evd-c)}
+.evd-contracts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:9px}.evd-contracts>div{min-width:0;padding:9px 10px;border-left:3px solid var(--evd-b);border-radius:0 9px 9px 0;background:color-mix(in srgb,var(--evd-b) 4%,var(--evd-bg));display:grid;gap:3px}.evd-contracts>div:nth-child(2){border-left-color:var(--evd-a);background:color-mix(in srgb,var(--evd-a) 4%,var(--evd-bg))}.evd-contracts>div:nth-child(3){border-left-color:var(--evd-c);background:color-mix(in srgb,var(--evd-c) 5%,var(--evd-bg))}.evd-contracts span{font-size:8px;font-weight:950;letter-spacing:.08em;color:var(--evd-muted)}.evd-contracts strong{font-size:9.3px;line-height:1.3}
+.evd-ref{margin-top:9px;font-size:8.8px;line-height:1.35;color:var(--evd-muted)}.evd-ref a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+@container (max-width:760px){
+  .evd-question{align-items:flex-start;flex-direction:column}.evd-question>span{white-space:normal}.evd-question-chips{justify-content:flex-start}
+  .evd-routes{grid-template-columns:1fr}.evd-card{padding:11px}.evd-card h3{font-size:13.4px}.evd-card p{font-size:10.2px}
+  .evd-scale{grid-template-columns:58px minmax(0,1fr) 12px minmax(0,1.25fr)}
+  .evd-case-head{display:grid;gap:2px}.evd-case-grid{grid-template-columns:1fr 1fr}
+  .evd-contracts{grid-template-columns:1fr}.evd-contracts>div{padding:8px 9px}
+}
+@container (max-width:430px){
+  .evd-wrap{padding:12px;border-radius:16px}.evd-sub{font-size:12.3px}.evd-question{padding:9px}
+  .evd-mini-flow b,.evd-mini-flow strong{font-size:8.2px;padding:7px 3px}
+  .evd-scale{grid-template-columns:1fr 12px 1.2fr}.evd-scale span{grid-column:1/-1}.evd-case-grid{grid-template-columns:1fr}.evd-case-grid>div{grid-template-columns:70px minmax(0,1fr) auto;align-items:center;gap:6px}.evd-case-grid span,.evd-case-grid strong,.evd-case-grid b{min-width:0}.evd-case-grid b{text-align:right}
+}
+@media (prefers-reduced-motion:reduce){.evd-wrap *{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>

@@ -139,6 +139,8 @@ Usa reglas o ejecución para:
 
 Una métrica determinista suele ser más barata, reproducible y auditable. La evaluación generativa debería reservarse para dimensiones que realmente requieren juicio.
 
+{{ include_html("snippets/temas/evaluation-verifier-routing.html") }}
+
 ## 6. Evaluación humana
 
 Los humanos pueden valorar corrección, utilidad, tono, claridad o preferencia. Para que la señal sea fiable hacen falta:

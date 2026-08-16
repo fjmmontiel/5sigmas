@@ -139,6 +139,8 @@ Use rules or execution to:
 
 A deterministic metric is usually cheaper, reproducible and auditable. Generative evaluation should be reserved for dimensions that genuinely require judgement.
 
+{{ include_html("snippets/temas/evaluation-verifier-routing.html") }}
+
 ## 6. Human evaluation
 
 Humans can assess correctness, usefulness, tone, clarity or preference. Reliable human evaluation needs:
