@@ -1,0 +1,33 @@
+{
+  "source": "snippets/datacenters-espacio/04-agua-comparativa.html",
+  "source_blob_sha": "8aaef9620fe30770dd0c76f4df328d809af33328",
+  "replacements": {
+    "data-demo=\"04-agua-comparativa\"": "data-demo=\"dc-04-water-scale\"",
+    ">doble escala hidrica</div>": ">dual water scale</div>",
+    ">El agua puede ser pequeña en total y crítica en una cuenca</div>": ">Water use can be small in aggregate and critical in one basin</div>",
+    ">Una cifra nacional baja no evita conflictos locales: clima, permisos y disponibilidad cambian el peso de cada litro.</div>": ">A low national total does not prevent local conflict: climate, permits and availability change the impact of each litre.</div>",
+    "aria-label=\"El agua puede ser pequeña en total y crítica en una cuenca\"": "aria-label=\"Water use can be small in aggregate and critical in one basin\"",
+    ">datacenters</text>": ">data centers</text>",
+    ">golf</text>": ">golf courses</text>",
+    ">galones retirados al día en EE.UU.</text>": ">gallons withdrawn per day in the US</text>",
+    ">El total no decide</text>": ">The total does not decide</text>",
+    ">clima, permisos y cuenca</text>": ">climate, permits and basin</text>",
+    ">cambian el impacto</text>": ">change the impact</text>",
+    ">Conflicto local</text>": ">Local conflict</text>",
+    ">puede ser real aunque</text>": ">can be real even when</text>",
+    ">el agregado sea menor</text>": ">the aggregate is smaller</text>",
+    ">EE.UU.: datacenters 449 M gal/día frente a golf 2.000 M</span>": ">US: data centers 449M gal/day versus golf courses 2,000M</span>",
+    ">El dato agregado calibra, no absuelve</span>": ">The aggregate figure calibrates; it does not absolve</span>",
+    ">La cuenca local puede convertir un volumen menor en conflicto</span>": ">A local basin can turn a smaller volume into conflict</span>"
+  },
+  "forbidden_output_tokens": [
+    "doble escala hidrica",
+    "El agua puede ser pequeña",
+    "Una cifra nacional baja",
+    "galones retirados",
+    "El total no decide",
+    "Conflicto local",
+    "El dato agregado",
+    "La cuenca local"
+  ]
+}
