@@ -8,7 +8,7 @@ const outDir = path.resolve('artifacts/visual-review');
 await fs.mkdir(outDir, { recursive: true });
 
 const chapters = [
-  { slug:'01-por-que-ahora', route:'/en/series/datacenters-espacio/01-por-que-ahora/', title:'Chapter 1 — Why now', concepts:['350,000','six terrestrial bottlenecks','launch'], demos:3, prefix:'dc-01-', shot:'english-datacenters-01-why-now.png' },
+  { slug:'01-por-que-ahora', route:'/en/series/datacenters-espacio/01-por-que-ahora/', title:'Chapter 1 — Why now', concepts:['350,000','six bottlenecks','launch'], demos:3, prefix:'dc-01-', shot:'english-datacenters-01-why-now.png' },
   { slug:'02-energia-calor-conectividad', route:'/en/series/datacenters-espacio/02-energia-calor-conectividad/', title:'Chapter 2 — Energy, heat and connectivity', concepts:['4,000 m²','thermal radiation','downlink'], demos:5, prefix:'dc-02-', shot:'english-datacenters-02-physics.png' },
   { slug:'03-que-es-datacenter-espacio', route:'/en/series/datacenters-espacio/03-que-es-datacenter-espacio/', title:'Chapter 3 — What is “a data center in space”?', concepts:['Starcloud','Axiom','Three-Body'], demos:4, prefix:'dc-03-', shot:'english-datacenters-03-projects.png' },
   { slug:'04-huella-real-datacenter', route:'/en/series/datacenters-espacio/04-huella-real-datacenter/', title:'Chapter 4 — The real footprint of a data center', concepts:['WUE','PUE','cobalt','120 kW'], demos:9, prefix:'dc-04-', shot:'english-datacenters-04-footprint.png' },
@@ -72,14 +72,14 @@ async function assertChapter1Canonical(page, route, viewport) {
   if (await rows.count() !== 10) failures.push(`${route}: expected 10 canonical reference rows, found ${await rows.count()}`);
 
   const hookOrder = [
-    ['2. Terrestrial bottlenecks', '.ddc[data-demo="dc-01-bottlenecks"]', 'Power grid'],
-    ['3. Why space enters the discussion', '.dpe[data-demo="dc-01-why-space"]', 'What is real as a potential advantage'],
-    ['4. The launch-cost inflection point', '.dli[data-demo="dc-01-launch-cost"]', 'On 4 February 2026'],
+    ['2. Terrestrial bottlenecks', '.ddc[data-demo="dc-01-bottlenecks"]', 'h3', 'Power grid'],
+    ['3. Why space enters the discussion', '.dpe[data-demo="dc-01-why-space"]', 'p', 'What is real as a potential advantage'],
+    ['4. The launch-cost inflection point', '.dli[data-demo="dc-01-launch-cost"]', 'p', 'On 4 February 2026'],
   ];
-  for (const [headingText, visualSelector, afterText] of hookOrder) {
+  for (const [headingText, visualSelector, afterSelector, afterText] of hookOrder) {
     const h = page.locator('h2', { hasText:headingText }).first();
     const v = page.locator(visualSelector).first();
-    const after = page.getByText(afterText, { exact:false }).first();
+    const after = page.locator(afterSelector, { hasText:afterText }).first();
     if (!(await h.count()) || !(await v.count()) || !(await after.count())) {
       failures.push(`${route}: cannot resolve canonical hook order for ${visualSelector}`);
       continue;
