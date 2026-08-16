@@ -1,0 +1,112 @@
+<div class="lke-wrap" data-demo="topic-llm-knowledge-layers">
+  <div class="lke-head">
+    <div class="lke-kicker">DÓNDE VIVE LA INFORMACIÓN</div>
+    <div class="lke-title">Parámetros, contexto y sistemas externos cambian en momentos distintos</div>
+    <div class="lke-sub">No son tres nombres para “memoria”. Separarlos aclara qué puede estar actualizado, qué evidencia entra en esta petición y qué parte del sistema puede leer o modificar estado fuera del modelo.</div>
+  </div>
+
+  <div class="lke-grid">
+    <section class="lke-layer lke-layer--params">
+      <div class="lke-label"><span>01</span><strong>PARÁMETROS θ</strong></div>
+      <div class="lke-mini-flow">
+        <div class="lke-node"><span>datos de entrenamiento</span><b>D</b></div>
+        <div class="lke-arrow" aria-hidden="true">→</div>
+        <div class="lke-node lke-node--accent"><span>optimización</span><b>∇L</b></div>
+        <div class="lke-arrow" aria-hidden="true">→</div>
+        <div class="lke-node lke-node--weights"><span>pesos aprendidos</span><b>θ</b></div>
+      </div>
+      <div class="lke-meta">
+        <div><span>CAMBIA</span><strong>entrenamiento / fine-tuning</strong></div>
+        <div><span>CONTIENE</span><strong>regularidades comprimidas</strong></div>
+        <div><span>PROCEDENCIA</span><strong>no recupera una fuente exacta por defecto</strong></div>
+      </div>
+    </section>
+
+    <section class="lke-layer lke-layer--context">
+      <div class="lke-label"><span>02</span><strong>CONTEXTO DE ESTA PETICIÓN</strong></div>
+      <div class="lke-context-stack">
+        <i>instrucciones</i>
+        <i>conversación</i>
+        <i>documentos incluidos</i>
+        <i>resultados de tools</i>
+      </div>
+      <div class="lke-context-path">
+        <b>tokens visibles ahora</b>
+        <span aria-hidden="true">→</span>
+        <b>atención del modelo</b>
+      </div>
+      <div class="lke-meta">
+        <div><span>CAMBIA</span><strong>en cada interacción</strong></div>
+        <div><span>CONTIENE</span><strong>evidencia explícita de esta llamada</strong></div>
+        <div><span>PROCEDENCIA</span><strong>puede conservarse junto a la respuesta</strong></div>
+      </div>
+    </section>
+
+    <section class="lke-layer lke-layer--external">
+      <div class="lke-label"><span>03</span><strong>RECUPERACIÓN / TOOLS</strong></div>
+      <div class="lke-external">
+        <div class="lke-external-row">
+          <span>LEER</span>
+          <b>índice · DB · API</b>
+          <em>recuperar evidencia</em>
+        </div>
+        <div class="lke-external-row">
+          <span>ACTUAR</span>
+          <b>runtime + contrato</b>
+          <em>validar y ejecutar efecto</em>
+        </div>
+      </div>
+      <div class="lke-meta">
+        <div><span>CAMBIA</span><strong>durante la ejecución del sistema</strong></div>
+        <div><span>CONTIENE</span><strong>datos o estado fuera del modelo</strong></div>
+        <div><span>PROCEDENCIA</span><strong>puede registrar fuente, llamada y resultado</strong></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="lke-system">
+    <div class="lke-system-title">CÓMO SE CONECTAN EN UN SISTEMA REAL</div>
+    <div class="lke-system-flow">
+      <div class="lke-system-node lke-system-node--external"><span>fuentes externas</span><b>docs · DB · APIs</b></div>
+      <div class="lke-system-arrow"><span>recuperación</span><b>→</b></div>
+      <div class="lke-system-node lke-system-node--context"><span>contexto</span><b>x₁ … xₙ</b></div>
+      <div class="lke-system-arrow"><span>condiciona</span><b>→</b></div>
+      <div class="lke-system-node lke-system-node--model"><span>LLM</span><b>f<sub>θ</sub>(x)</b></div>
+      <div class="lke-system-arrow lke-system-arrow--action"><span>tool propuesta</span><b>→</b></div>
+      <div class="lke-system-node lke-system-node--runtime"><span>runtime</span><b>validar · autorizar</b></div>
+      <div class="lke-system-arrow lke-system-arrow--action"><span>efecto</span><b>→</b></div>
+      <div class="lke-system-node lke-system-node--state"><span>estado externo</span><b>leer / escribir</b></div>
+    </div>
+  </div>
+
+  <div class="lke-contracts">
+    <div><span>RAG</span><strong>recupera evidencia; no reentrena los pesos en cada consulta</strong></div>
+    <div><span>CONTEXTO</span><strong>condiciona esta inferencia; no equivale a memoria persistente</strong></div>
+    <div><span>TOOLS</span><strong>conectan el modelo con un runtime; los efectos ocurren fuera del LLM</strong></div>
+  </div>
+
+  <div class="lke-ref">Fuentes primarias:
+    <a href="https://arxiv.org/abs/2005.14165">Brown et al., GPT-3 (2020)</a> ·
+    <a href="https://arxiv.org/abs/2005.11401">Lewis et al., RAG (2020)</a> ·
+    <a href="https://arxiv.org/abs/2210.03629">Yao et al., ReAct (2022)</a>
+  </div>
+</div>
+
+<style>
+.lke-wrap,.lke-wrap *{box-sizing:border-box}
+.lke-wrap{--lke-a:var(--md-primary-fg-color,#26a69a);--lke-b:#4757d6;--lke-c:var(--md-accent-fg-color,#ffb343);--lke-r:#e06c75;--lke-bg:var(--md-default-bg-color,#fff);--lke-fg:var(--md-default-fg-color,#111827);--lke-muted:color-mix(in srgb,var(--lke-fg) 58%,transparent);--lke-border:color-mix(in srgb,var(--lke-fg) 14%,transparent);container-type:inline-size;margin:1.1rem 0 1.5rem;padding:clamp(14px,2vw,22px);border:1px solid var(--lke-border);border-radius:20px;background:radial-gradient(90% 130% at 0 0,color-mix(in srgb,var(--lke-b) 7%,transparent),transparent 55%),radial-gradient(80% 120% at 100% 0,color-mix(in srgb,var(--lke-a) 7%,transparent),transparent 58%),var(--lke-bg);color:var(--lke-fg)}
+.lke-head{display:grid;gap:4px;margin-bottom:12px}.lke-kicker{font-size:10px;font-weight:900;letter-spacing:.12em;color:var(--lke-muted)}.lke-title{font-size:clamp(18px,2.1vw,24px);font-weight:900;line-height:1.12;letter-spacing:-.02em;max-width:42ch}.lke-sub{font-size:13.4px;line-height:1.48;color:var(--lke-muted);max-width:95ch}
+.lke-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.lke-layer{min-width:0;padding:12px;border:1px solid var(--lke-border);border-radius:15px;background:color-mix(in srgb,var(--lke-bg) 96%,var(--lke-fg) 4%);display:grid;align-content:start;gap:10px}.lke-layer--params{border-color:color-mix(in srgb,var(--lke-b) 42%,var(--lke-border));background:color-mix(in srgb,var(--lke-b) 4%,var(--lke-bg))}.lke-layer--context{border-color:color-mix(in srgb,var(--lke-a) 45%,var(--lke-border));background:color-mix(in srgb,var(--lke-a) 4%,var(--lke-bg))}.lke-layer--external{border-color:color-mix(in srgb,var(--lke-c) 52%,var(--lke-border));background:color-mix(in srgb,var(--lke-c) 5%,var(--lke-bg))}
+.lke-label{display:flex;gap:7px;align-items:center}.lke-label span{display:grid;place-items:center;width:22px;height:22px;border-radius:7px;background:color-mix(in srgb,var(--lke-fg) 7%,var(--lke-bg));font:900 9px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--lke-muted)}.lke-label strong{font-size:11px;letter-spacing:.06em}
+.lke-mini-flow{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr);gap:5px;align-items:center}.lke-node{min-width:0;padding:8px 6px;border:1px solid var(--lke-border);border-radius:10px;background:var(--lke-bg);text-align:center;display:grid;gap:3px}.lke-node span{font-size:8.7px;line-height:1.2;color:var(--lke-muted)}.lke-node b{font:900 13px/1.1 ui-monospace,SFMono-Regular,Menlo,monospace}.lke-node--accent{border-color:color-mix(in srgb,var(--lke-b) 35%,var(--lke-border))}.lke-node--weights{background:color-mix(in srgb,var(--lke-b) 8%,var(--lke-bg));border-color:color-mix(in srgb,var(--lke-b) 50%,var(--lke-border))}.lke-arrow{font-weight:900;color:var(--lke-muted)}
+.lke-context-stack{display:grid;grid-template-columns:1fr 1fr;gap:6px}.lke-context-stack i{font-style:normal;padding:8px;border-radius:9px;border:1px solid color-mix(in srgb,var(--lke-a) 28%,var(--lke-border));background:var(--lke-bg);font-size:9.3px;font-weight:800;text-align:center}.lke-context-path{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:6px;align-items:center}.lke-context-path b{padding:7px 8px;border-radius:9px;background:color-mix(in srgb,var(--lke-a) 8%,var(--lke-bg));font-size:9.4px;line-height:1.25;text-align:center}.lke-context-path span{font-weight:900;color:var(--lke-muted)}
+.lke-external{display:grid;gap:7px}.lke-external-row{display:grid;grid-template-columns:auto minmax(0,1fr);gap:3px 8px;padding:8px 9px;border-radius:10px;border:1px solid color-mix(in srgb,var(--lke-c) 38%,var(--lke-border));background:var(--lke-bg)}.lke-external-row span{grid-row:1/3;align-self:center;padding:4px 5px;border-radius:6px;background:color-mix(in srgb,var(--lke-c) 16%,var(--lke-bg));font-size:8px;font-weight:900;letter-spacing:.06em}.lke-external-row b{font-size:10px}.lke-external-row em{font-size:8.8px;font-style:normal;color:var(--lke-muted)}
+.lke-meta{display:grid;gap:5px;margin-top:auto}.lke-meta>div{display:grid;grid-template-columns:70px minmax(0,1fr);gap:6px;padding-top:5px;border-top:1px solid var(--lke-border)}.lke-meta span{font-size:8.2px;font-weight:900;letter-spacing:.07em;color:var(--lke-muted)}.lke-meta strong{font-size:9.5px;line-height:1.28}
+.lke-system{margin-top:10px;padding:11px;border:1px solid var(--lke-border);border-radius:14px;background:color-mix(in srgb,var(--lke-bg) 97%,var(--lke-fg) 3%)}.lke-system-title{margin-bottom:8px;font-size:9px;font-weight:900;letter-spacing:.1em;color:var(--lke-muted)}.lke-system-flow{display:grid;grid-template-columns:minmax(105px,1fr) auto minmax(90px,.8fr) auto minmax(90px,.75fr) auto minmax(100px,.85fr) auto minmax(100px,.85fr);gap:5px;align-items:stretch}.lke-system-node{min-width:0;padding:8px;border:1px solid var(--lke-border);border-radius:10px;background:var(--lke-bg);display:grid;place-content:center;gap:3px;text-align:center}.lke-system-node span{font-size:8.4px;font-weight:800;color:var(--lke-muted)}.lke-system-node b{font:800 10px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace}.lke-system-node--external,.lke-system-node--state{border-color:color-mix(in srgb,var(--lke-c) 48%,var(--lke-border));background:color-mix(in srgb,var(--lke-c) 5%,var(--lke-bg))}.lke-system-node--context{border-color:color-mix(in srgb,var(--lke-a) 42%,var(--lke-border));background:color-mix(in srgb,var(--lke-a) 5%,var(--lke-bg))}.lke-system-node--model{border-color:color-mix(in srgb,var(--lke-b) 48%,var(--lke-border));background:color-mix(in srgb,var(--lke-b) 5%,var(--lke-bg))}.lke-system-node--runtime{border-color:color-mix(in srgb,var(--lke-r) 38%,var(--lke-border));background:color-mix(in srgb,var(--lke-r) 4%,var(--lke-bg))}.lke-system-arrow{display:grid;place-content:center;justify-items:center;gap:2px;color:var(--lke-muted)}.lke-system-arrow span{font-size:7.6px;font-weight:800;writing-mode:vertical-rl;transform:rotate(180deg)}.lke-system-arrow b{font-size:14px}.lke-system-arrow--action{color:color-mix(in srgb,var(--lke-r) 75%,var(--lke-fg))}
+.lke-contracts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}.lke-contracts>div{padding:9px 10px;border-left:3px solid var(--lke-b);border-radius:0 9px 9px 0;background:color-mix(in srgb,var(--lke-b) 4%,var(--lke-bg));display:grid;gap:3px}.lke-contracts>div:nth-child(2){border-left-color:var(--lke-a);background:color-mix(in srgb,var(--lke-a) 4%,var(--lke-bg))}.lke-contracts>div:nth-child(3){border-left-color:var(--lke-c);background:color-mix(in srgb,var(--lke-c) 5%,var(--lke-bg))}.lke-contracts span{font-size:8.4px;font-weight:900;letter-spacing:.08em;color:var(--lke-muted)}.lke-contracts strong{font-size:10px;line-height:1.32}.lke-ref{margin-top:9px;font-size:9.8px;line-height:1.35;color:var(--lke-muted)}.lke-ref a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+@container (max-width:820px){.lke-grid,.lke-contracts{grid-template-columns:1fr}.lke-system-flow{grid-template-columns:1fr}.lke-system-arrow{height:18px;display:flex;align-items:center;justify-content:center;gap:6px}.lke-system-arrow span{writing-mode:horizontal-tb;transform:none}.lke-system-arrow b{transform:rotate(90deg)}}
+@container (max-width:480px){.lke-mini-flow{grid-template-columns:1fr}.lke-arrow{height:12px;display:grid;place-items:center;transform:rotate(90deg)}.lke-meta>div{grid-template-columns:64px minmax(0,1fr)}.lke-context-stack{grid-template-columns:1fr 1fr}}
+@media (max-width:700px){.lke-grid,.lke-contracts{grid-template-columns:1fr}.lke-system-flow{grid-template-columns:1fr}.lke-system-arrow{height:18px;display:flex;align-items:center;justify-content:center;gap:6px}.lke-system-arrow span{writing-mode:horizontal-tb;transform:none}.lke-system-arrow b{transform:rotate(90deg)}}
+@media (max-width:480px){.lke-mini-flow{grid-template-columns:1fr}.lke-arrow{height:12px;display:grid;place-items:center;transform:rotate(90deg)}.lke-meta>div{grid-template-columns:64px minmax(0,1fr)}}
+@media (prefers-reduced-motion:reduce){.lke-wrap *{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
