@@ -28,6 +28,7 @@ on:
       - 'scripts/validate_english_caves_media.mjs'
       - 'scripts/validate_english_foundations_complete.mjs'
       - 'scripts/validate_english_multimodality_complete.mjs'
+      - 'scripts/validate_english_multimodality_ch4_metrics.mjs'
       - 'scripts/validate_english_datacenters_complete.mjs'
       - 'scripts/validate_english_datacenters_media.mjs'
       - 'scripts/validate_english_security_complete.mjs'
@@ -153,6 +154,9 @@ jobs:
 
       - name: Validate complete English Multimodality series
         run: node scripts/validate_english_multimodality_complete.mjs
+
+      - name: Validate canonical English Multimodality Chapter 4 evaluation metrics
+        run: node scripts/validate_english_multimodality_ch4_metrics.mjs
 
       - name: Validate complete English Data Centers in Space series
         run: node scripts/validate_english_datacenters_complete.mjs
