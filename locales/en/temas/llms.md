@@ -4,7 +4,7 @@ seo_title: "What is an LLM: how a large language model works"
 description: "What an LLM is, how it tokenizes, learns and generates text, what instruction tuning changes, and the main technical limits."
 keywords: "LLM, large language model, tokens, pretraining, Transformer, instruction tuning, RLHF"
 date: 2026-04-07
-date_modified: 2026-08-15
+date_modified: 2026-08-16
 ---
 
 # What is an LLM and how does it work?
@@ -53,6 +53,8 @@ The vectors pass through a stack of Transformer blocks. Two main operations occu
 
 Residual connections and normalization stabilize training. As blocks are repeated, representations stop encoding only token identity and begin to incorporate syntax, semantic relationships, references, document structure and other signals useful for prediction.[^transformer]
 
+{{ include_html("snippets/temas/llm-contextual-representation.html") }}
+
 The guide to [the Transformer](/en/temas/transformer/) develops this architecture step by step.
 
 ## 3. The base objective is next-token prediction
@@ -61,7 +63,7 @@ For an autoregressive LLM, training optimizes the probability of the true token 
 
 {{ include_html("snippets/temas/llm-next-token.html") }}
 
-The model receives a sequence and must assign high probability to the real token that follows at each position. The gradient indicates how to modify millions or billions of parameters to make less error on the next batch.
+The model receives a sequence and must assign high probability to the real token that follows at each position. The gradient indicates how to modify millions or billions of parameters to make fewer errors on the next batch.
 
 At scale, solving that task well requires learning deep regularities. To predict a plausible continuation, the model needs to capture grammar, style, relationships between concepts, coding conventions and part of the statistical structure of the world described in its data.
 
