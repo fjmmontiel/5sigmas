@@ -95,6 +95,7 @@ try {
       for (const error of runtimeErrors) failures.push(`${testCase.route}: ${viewport.name} runtime error: ${error}`);
       if (await visual.count()) {
         await page.locator('.md-header').evaluateAll((nodes) => nodes.forEach((node) => { node.style.visibility = 'hidden'; }));
+        if (viewport.name === 'mobile') await page.setViewportSize({ width: viewport.width, height: 2600 });
         await visual.screenshot({ path: path.join(outDir, `transformer-attention-cost-${testCase.locale}-${viewport.name}.png`), animations: 'disabled' });
       }
       await page.close();
