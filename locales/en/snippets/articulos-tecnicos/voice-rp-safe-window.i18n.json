@@ -1,0 +1,28 @@
+{
+  "source": "snippets/articulos-tecnicos/voice-rp-safe-window.html",
+  "source_blob_sha": "59be98664de3d9da0ff11ecfe9cd6a0fddb889c2",
+  "replacements": {
+    "Ventana segura para entregar un resultado": "Safe window for delivering a result",
+    "Terminar no da permiso para hablar.": "Finishing does not grant permission to speak.",
+    "El canal manda.": "The channel decides.",
+    "Usuario": "User",
+    "silencio": "quiet",
+    "resultado listo": "result ready",
+    "espera": "wait",
+    "“Ya lo tengo.”": "“I have it.”",
+    "Hablando": "Speaking",
+    "Silencio": "Quiet"
+  },
+  "forbidden_output_tokens": [
+    "Ventana segura para entregar",
+    "Terminar no da permiso",
+    "El canal manda",
+    "Usuario",
+    "silencio",
+    "resultado listo",
+    "espera",
+    "Ya lo tengo",
+    "Hablando",
+    "Silencio"
+  ]
+}
