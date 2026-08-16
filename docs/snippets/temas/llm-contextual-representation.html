@@ -1,0 +1,83 @@
+<div class="lcr-wrap" data-demo="topic-llm-contextual-representation">
+  <div class="lcr-head">
+    <div class="lcr-kicker">REPRESENTACIÓN CONTEXTUAL</div>
+    <div class="lcr-title">El embedding identifica el token; las capas Transformer construyen un estado dependiente de posición y contexto</div>
+    <div class="lcr-sub">La misma unidad léxica parte del mismo embedding de token. La señal posicional y la atención hacen que su representación final cambie según las palabras que la rodean.</div>
+  </div>
+
+  <div class="lcr-seed">
+    <span>IDENTIDAD DEL TOKEN</span>
+    <strong>«banco» → e<sub>banco</sub></strong>
+    <small>Ejemplo conceptual: la segmentación y el ID exactos dependen del tokenizador.</small>
+  </div>
+
+  <div class="lcr-paths">
+    <div class="lcr-path">
+      <div class="lcr-context">
+        <span>CONTEXTO A</span>
+        <div class="lcr-sentence"><b>El</b><b class="focus"> banco</b><b> aprobó</b><b> el</b><b> crédito</b></div>
+      </div>
+      <div class="lcr-stage">
+        <span>ENTRADA</span>
+        <strong>e<sub>banco</sub> + p<sub>t</sub></strong>
+        <small>embedding de token + señal de posición</small>
+      </div>
+      <div class="lcr-arrow" aria-hidden="true">→</div>
+      <div class="lcr-stage transformer">
+        <span>BLOQUES TRANSFORMER</span>
+        <div class="lcr-stack"><i>atención</i><i>FFN</i><i>× L capas</i></div>
+        <small>cada capa mezcla señales del contexto permitido</small>
+      </div>
+      <div class="lcr-arrow" aria-hidden="true">→</div>
+      <div class="lcr-stage output">
+        <span>ESTADO CONTEXTUAL</span>
+        <strong>h<sub>t</sub><sup>(L)</sup></strong>
+        <small>incorpora señales como «aprobó» y «crédito»</small>
+      </div>
+    </div>
+
+    <div class="lcr-path">
+      <div class="lcr-context">
+        <span>CONTEXTO B</span>
+        <div class="lcr-sentence"><b>Nos</b><b> sentamos</b><b> en</b><b> el</b><b class="focus"> banco</b><b> junto</b><b> al</b><b> río</b></div>
+      </div>
+      <div class="lcr-stage">
+        <span>ENTRADA</span>
+        <strong>e<sub>banco</sub> + p<sub>t</sub></strong>
+        <small>mismo embedding de token; posición posiblemente distinta</small>
+      </div>
+      <div class="lcr-arrow" aria-hidden="true">→</div>
+      <div class="lcr-stage transformer">
+        <span>BLOQUES TRANSFORMER</span>
+        <div class="lcr-stack"><i>atención</i><i>FFN</i><i>× L capas</i></div>
+        <small>las activaciones cambian al cambiar el contexto</small>
+      </div>
+      <div class="lcr-arrow" aria-hidden="true">→</div>
+      <div class="lcr-stage output">
+        <span>ESTADO CONTEXTUAL</span>
+        <strong>h<sub>t</sub><sup>(L)</sup></strong>
+        <small>incorpora señales como «sentamos» y «río»</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="lcr-rule">
+    <span>Lectura correcta</span>
+    <strong>El embedding de token es el punto de partida. La representación que usan las capas posteriores es contextual y puede ser distinta en cada aparición.</strong>
+  </div>
+  <div class="lcr-ref">Fuente primaria: <a href="https://arxiv.org/abs/1706.03762">Vaswani et al., Attention Is All You Need (2017), §§3.1–3.5</a></div>
+</div>
+
+<style>
+.lcr-wrap,.lcr-wrap *{box-sizing:border-box}
+.lcr-wrap{--lcr-a:var(--md-primary-fg-color,#26a69a);--lcr-b:#4757d6;--lcr-c:var(--md-accent-fg-color,#ffb343);--lcr-r:#e06c75;--lcr-bg:var(--md-default-bg-color,#fff);--lcr-fg:var(--md-default-fg-color,#111827);--lcr-muted:color-mix(in srgb,var(--lcr-fg) 58%,transparent);--lcr-border:color-mix(in srgb,var(--lcr-fg) 14%,transparent);container-type:inline-size;margin:1.1rem 0 1.5rem;padding:clamp(14px,2vw,22px);border:1px solid var(--lcr-border);border-radius:20px;background:radial-gradient(90% 130% at 0 0,color-mix(in srgb,var(--lcr-b) 7%,transparent),transparent 55%),radial-gradient(80% 120% at 100% 0,color-mix(in srgb,var(--lcr-a) 7%,transparent),transparent 58%),var(--lcr-bg);color:var(--lcr-fg)}
+.lcr-head{display:grid;gap:4px;margin-bottom:12px}.lcr-kicker{font-size:10px;font-weight:900;letter-spacing:.12em;color:var(--lcr-muted)}.lcr-title{font-size:clamp(18px,2.1vw,24px);font-weight:900;line-height:1.12;letter-spacing:-.02em;max-width:38ch}.lcr-sub{font-size:13.4px;line-height:1.48;color:var(--lcr-muted);max-width:92ch}
+.lcr-seed{display:grid;grid-template-columns:auto auto minmax(0,1fr);gap:10px;align-items:center;margin-bottom:10px;padding:10px 12px;border:1px solid color-mix(in srgb,var(--lcr-b) 34%,var(--lcr-border));border-radius:13px;background:color-mix(in srgb,var(--lcr-b) 5%,var(--lcr-bg))}.lcr-seed>span,.lcr-context>span,.lcr-stage>span,.lcr-rule>span{font-size:9.2px;font-weight:900;letter-spacing:.09em;color:var(--lcr-muted)}.lcr-seed strong{font:800 14px/1.25 ui-monospace,SFMono-Regular,Menlo,monospace}.lcr-seed small{font-size:10.6px;line-height:1.35;color:var(--lcr-muted)}
+.lcr-paths{display:grid;gap:10px}.lcr-path{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(120px,.75fr) auto minmax(130px,.8fr) auto minmax(130px,.8fr);gap:8px;align-items:stretch}.lcr-context,.lcr-stage{min-width:0;padding:11px;border:1px solid var(--lcr-border);border-radius:13px;background:color-mix(in srgb,var(--lcr-bg) 96%,var(--lcr-fg) 4%)}.lcr-context{display:grid;align-content:start;gap:10px}.lcr-sentence{display:flex;flex-wrap:wrap;gap:4px}.lcr-sentence b{padding:6px 7px;border-radius:7px;background:color-mix(in srgb,var(--lcr-fg) 5%,var(--lcr-bg));font-size:10.8px}.lcr-sentence b.focus{outline:1px solid color-mix(in srgb,var(--lcr-b) 60%,var(--lcr-border));background:color-mix(in srgb,var(--lcr-b) 11%,var(--lcr-bg));color:color-mix(in srgb,var(--lcr-b) 82%,var(--lcr-fg))}
+.lcr-stage{display:grid;align-content:start;gap:7px}.lcr-stage strong{font:800 14px/1.25 ui-monospace,SFMono-Regular,Menlo,monospace}.lcr-stage small{font-size:10.3px;line-height:1.34;color:var(--lcr-muted)}.lcr-stage.transformer{border-color:color-mix(in srgb,var(--lcr-a) 42%,var(--lcr-border));background:color-mix(in srgb,var(--lcr-a) 5%,var(--lcr-bg))}.lcr-stage.output{border-color:color-mix(in srgb,var(--lcr-c) 48%,var(--lcr-border));background:color-mix(in srgb,var(--lcr-c) 5%,var(--lcr-bg))}
+.lcr-stack{display:flex;flex-wrap:wrap;gap:4px}.lcr-stack i{font-style:normal;font-size:9.7px;font-weight:800;padding:5px 7px;border-radius:999px;border:1px solid color-mix(in srgb,var(--lcr-a) 34%,var(--lcr-border));background:var(--lcr-bg)}.lcr-arrow{display:grid;place-items:center;color:var(--lcr-muted);font-size:17px;font-weight:900}
+.lcr-rule{margin-top:10px;padding:10px 12px;border-left:3px solid var(--lcr-b);border-radius:0 10px 10px 0;background:color-mix(in srgb,var(--lcr-b) 5%,var(--lcr-bg));display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:center}.lcr-rule>span{white-space:nowrap}.lcr-rule strong{font-size:11.7px;line-height:1.4}.lcr-ref{margin-top:9px;font-size:9.8px;line-height:1.35;color:var(--lcr-muted)}.lcr-ref a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+@container (max-width:760px){.lcr-seed{grid-template-columns:1fr;gap:4px}.lcr-path{grid-template-columns:1fr}.lcr-arrow{height:14px;transform:rotate(90deg)}.lcr-rule{grid-template-columns:1fr;gap:3px}.lcr-rule>span{white-space:normal}}
+@media (max-width:700px){.lcr-seed{grid-template-columns:1fr;gap:4px}.lcr-path{grid-template-columns:1fr}.lcr-arrow{height:14px;transform:rotate(90deg)}.lcr-rule{grid-template-columns:1fr;gap:3px}.lcr-rule>span{white-space:normal}}
+@media (prefers-reduced-motion:reduce){.lcr-wrap *{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
