@@ -1,0 +1,30 @@
+{
+  "source": "snippets/datacenters-espacio/04-pue-trayectoria.html",
+  "source_blob_sha": "896502b7cf361fb4a3b18c471b0603cd4c6400f2",
+  "replacements": {
+    "data-demo=\"04-pue-trayectoria\"": "data-demo=\"dc-04-pue\"",
+    ">energia auxiliar PUE</div>": ">PUE auxiliary energy</div>",
+    ">PUE muestra cuanta energia queda fuera del computo util</div>": ">PUE shows how much energy sits outside useful compute</div>",
+    ">Un PUE menor reduce energia auxiliar de edificio, pero no elimina la energia IT ni compensa por si solo el crecimiento de carga.</div>": ">A lower PUE reduces building overhead, but it does not remove IT energy or by itself offset load growth.</div>",
+    "aria-label=\"PUE muestra cuanta energia queda fuera del computo util\"": "aria-label=\"PUE shows how much energy sits outside useful compute\"",
+    ">PUE 2,0</text>": ">PUE 2.0</text>",
+    ">50% no IT</text>": ">50% non-IT</text>",
+    ">PUE 1,5</text>": ">PUE 1.5</text>",
+    ">33% no IT</text>": ">33% non-IT</text>",
+    ">PUE 1,2</text>": ">PUE 1.2</text>",
+    ">17% no IT</text>": ">17% non-IT</text>",
+    ">PUE 2,0: la mitad no es IT</span>": ">PUE 2.0: half is non-IT</span>",
+    ">PUE 1,5: un tercio no es IT</span>": ">PUE 1.5: one third is non-IT</span>",
+    ">PUE 1,2: el margen ya es menor</span>": ">PUE 1.2: the remaining overhead is much smaller</span>"
+  },
+  "forbidden_output_tokens": [
+    "energia auxiliar PUE",
+    "PUE muestra cuanta",
+    "Un PUE menor",
+    "PUE 2,0",
+    "PUE 1,5",
+    "PUE 1,2",
+    "no es IT",
+    "un tercio"
+  ]
+}
