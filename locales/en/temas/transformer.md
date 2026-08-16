@@ -23,16 +23,11 @@ In an autoregressive model, the final representation is projected onto the vocab
 
 A token begins as an integer identifier. A learned matrix turns it into a vector. Tokens that occur in similar contexts can end up with related representations.
 
-Attention alone does not know order. The model must add or incorporate position. The original paper used sinusoidal positional encodings. Later architectures use learned positional embeddings, relative positions or rotational transformations such as RoPE.
+Attention alone does not know order. The model must add or otherwise incorporate position. The original paper used sinusoidal positional encodings added to the input embedding. Later architectures use learned positional embeddings, relative positions or rotational transformations such as RoPE.[^transformer][^rope]
 
-Position is not cosmetic. It distinguishes, for example:
+{{ include_html("snippets/temas/transformer-embedding-position.html") }}
 
-```text
-"the model corrected the evaluator"
-"the evaluator corrected the model"
-```
-
-The tokens are almost the same. The relationship changes completely.
+Position is not cosmetic: it lets the model distinguish who acts on whom even when a sequence contains nearly the same tokens. The exact mechanism is not universal; `embedding + position` describes the original Transformer, while RoPE incorporates position through rotations inside the attention computation.[^rope]
 
 ## 2. Query, Key and Value
 
@@ -180,6 +175,7 @@ No. It increases available information, but also cost and the difficulty of loca
 ## Primary sources
 
 [^transformer]: Ashish Vaswani et al., [*Attention Is All You Need*](https://arxiv.org/abs/1706.03762), 2017.
+[^rope]: Jianlin Su et al., [*RoFormer: Enhanced Transformer with Rotary Position Embedding*](https://arxiv.org/abs/2104.09864), 2021.
 [^prenorm]: Ruibin Xiong et al., [*On Layer Normalization in the Transformer Architecture*](https://arxiv.org/abs/2002.04745), 2020.
 [^bert]: Jacob Devlin et al., [*BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding*](https://arxiv.org/abs/1810.04805), 2018.
 [^vit]: Alexey Dosovitskiy et al., [*An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale*](https://arxiv.org/abs/2010.11929), 2020.
