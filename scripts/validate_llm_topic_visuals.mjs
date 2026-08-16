@@ -19,6 +19,14 @@ const visuals = [
     count: 5,
   },
   {
+    selector: '.lcr-wrap',
+    source: 'docs/snippets/temas/llm-contextual-representation.html',
+    mirror: 'locales/en/snippets/temas/llm-contextual-representation.html',
+    map: 'locales/en/snippets/temas/llm-contextual-representation.i18n.json',
+    countSelector: '.lcr-stage',
+    count: 6,
+  },
+  {
     selector: '.lnt-wrap',
     source: 'docs/snippets/temas/llm-next-token.html',
     mirror: 'locales/en/snippets/temas/llm-next-token.html',
@@ -81,12 +89,12 @@ async function checkPage(browser, route, locale, viewport) {
 
   const body = await page.locator('body').innerText();
   const anchors = locale === 'es'
-    ? ['DEL TEXTO A LA PREDICCIÓN', 'OBJETIVO AUTORREGRESIVO', 'DEL MODELO BASE AL ASISTENTE', 'probabilidad sobre el vocabulario', 'Optimizar probabilidad de continuación']
-    : ['FROM TEXT TO PREDICTION', 'AUTOREGRESSIVE OBJECTIVE', 'FROM BASE MODEL TO ASSISTANT', 'probability over the vocabulary', 'Optimizing continuation probability'];
+    ? ['DEL TEXTO A LA PREDICCIÓN', 'REPRESENTACIÓN CONTEXTUAL', 'OBJETIVO AUTORREGRESIVO', 'DEL MODELO BASE AL ASISTENTE', 'probabilidad sobre el vocabulario', 'El embedding de token es el punto de partida', 'Optimizar probabilidad de continuación']
+    : ['FROM TEXT TO PREDICTION', 'CONTEXTUAL REPRESENTATION', 'AUTOREGRESSIVE OBJECTIVE', 'FROM BASE MODEL TO ASSISTANT', 'probability over the vocabulary', 'The token embedding is the starting point', 'Optimizing continuation probability'];
   for (const anchor of anchors) if (!body.includes(anchor)) failures.push(`${route}: ${viewport.name} missing anchor ${JSON.stringify(anchor)}`);
 
   if (locale === 'en') {
-    for (const token of ['DEL TEXTO A LA PREDICCIÓN', 'OBJETIVO AUTORREGRESIVO', 'DEL MODELO BASE AL ASISTENTE', 'Fuentes primarias:', 'Fuente primaria:']) {
+    for (const token of ['DEL TEXTO A LA PREDICCIÓN', 'REPRESENTACIÓN CONTEXTUAL', 'IDENTIDAD DEL TOKEN', 'CONTEXTO A', 'Lectura correcta', 'OBJETIVO AUTORREGRESIVO', 'DEL MODELO BASE AL ASISTENTE', 'Fuentes primarias:', 'Fuente primaria:']) {
       if (body.includes(token)) failures.push(`${route}: ${viewport.name} Spanish leakage ${JSON.stringify(token)}`);
     }
   }
