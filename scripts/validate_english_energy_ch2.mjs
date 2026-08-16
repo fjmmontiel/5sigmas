@@ -185,7 +185,7 @@ try {
         waterBefore: text.indexOf('roughly 3.6 times the IEA estimate for global data centers in 2024'),
         waterVisual: text.indexOf('Water: the comparison depends on the boundary'),
         waterAfter: text.indexOf('The number of people capable of designing, training and maintaining AI systems at scale'),
-        geographyBefore: text.indexOf('not only technological efficiency.'),
+        geographyBefore: text.indexOf('This concentration has consequences for the local grid:'),
         geographyVisual: text.indexOf('The same AI, two geographies'),
         geographyAfter: text.indexOf('The next chapter examines the other side of the equation'),
       };
