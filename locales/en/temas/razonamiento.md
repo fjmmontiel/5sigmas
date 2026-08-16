@@ -96,15 +96,9 @@ The right policy is not “always think more.” It is to **route compute accord
 
 ## Visible reasoning and internal reasoning
 
-In a product it is useful to separate:
+{{ include_html("snippets/temas/reasoning-evidence-surfaces.html") }}
 
-1. **Internal computation:** steps the system uses to solve the task.
-2. **User-facing justification:** a concise, verifiable explanation adapted to the task.
-3. **Operational trace:** tools, arguments, results, timings and state changes.
-
-You do not need to expose every intermediate token to provide transparency. In fact, a long explanation can hide the important evidence.
-
-An auditable answer should cite relevant data, expose assumptions, communicate uncertainty and record real actions outside the displayed prose.
+You do not need to expose every intermediate token to provide transparency. A long explanation can hide the important evidence; an auditable answer should cite relevant data, expose assumptions, communicate uncertainty and record real actions outside the displayed prose.
 
 ## Reasoning with tools
 
