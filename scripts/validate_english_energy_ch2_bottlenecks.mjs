@@ -59,17 +59,20 @@ try {
       const [clientWidth, scrollWidth] = await visual.evaluate((node) => [node.clientWidth, node.scrollWidth]);
       if (scrollWidth > clientWidth + 2) failures.push(`${viewport.name}: bottlenecks visual internal overflow ${scrollWidth - clientWidth}px`);
 
-      const positions = await page.evaluate(() => {
-        const text = (document.querySelector('.md-content__inner') || document.body).innerText;
-        return {
-          before: text.indexOf('Five bottlenecks determine how quickly it can actually grow.'),
-          visual: text.indexOf('Five bottlenecks to AI expansion'),
-          after: text.indexOf('Electricity'),
-        };
+      const hookOrder = await visual.evaluate((node) => {
+        const content = node.closest('.md-content__inner') || document.querySelector('.md-content__inner') || document.body;
+        const before = [...content.querySelectorAll('p')].find((el) =>
+          (el.textContent || '').includes('Five bottlenecks determine how quickly it can actually grow.')
+        );
+        const after = [...content.querySelectorAll('h3')].find((el) =>
+          (el.textContent || '').trim().startsWith('Electricity')
+        );
+        if (!before || !after) return false;
+        const beforeToVisual = before.compareDocumentPosition(node) & Node.DOCUMENT_POSITION_FOLLOWING;
+        const visualToAfter = node.compareDocumentPosition(after) & Node.DOCUMENT_POSITION_FOLLOWING;
+        return Boolean(beforeToVisual && visualToAfter);
       });
-      if (!(positions.before >= 0 && positions.visual > positions.before && positions.after > positions.visual)) {
-        failures.push(`${viewport.name}: bottlenecks visual moved away from canonical article hook`);
-      }
+      if (!hookOrder) failures.push(`${viewport.name}: bottlenecks visual moved away from canonical article hook`);
 
       await visual.screenshot({
         path: path.join(outDir, `english-energy-ch2-bottlenecks-${viewport.name}.png`),
