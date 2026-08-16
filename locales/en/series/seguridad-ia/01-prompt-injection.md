@@ -1,6 +1,6 @@
 ---
 title: Prompt injection — when a document can change what the system does
-description: "Why prompt injection follows from mixing instructions and untrusted data, how indirect injection changes RAG and agent risk, and which architectural controls separate reading from action."
+description: "How an instruction hidden in a document can enter an AI system and which controls separate reading from action."
 date: 2026-05-26
 keywords: "prompt injection, LLM security, indirect prompt injection, RAG security, AI agent security, dual LLM pattern"
 tags:
@@ -12,138 +12,125 @@ tags:
 
 # Chapter 1 — Prompt injection
 
-This chapter explains why prompt injection follows from the way LLM systems are constructed. By the end, you will understand what breaks when privileged instructions and untrusted data share the same channel, why indirect injection through RAG and agents raises the severity, why surface filters are not a complete boundary, and which defensive architecture makes sense when a system can read external content and use tools.
+This chapter explains why prompt injection arises from the way LLM systems are built. By the end, the reader will understand what breaks when instructions and data share the same channel, why indirect injection in RAG and agents changes the severity, the limits of filters and post-processing guardrails, and which defensive architecture makes sense when a system can read external content and act through tools.
 
-Classic software benefits from a distinction between **control** and **data**. The program has an execution path that defines what to do, while input is treated as material to process. That separation is imperfect in real systems, but it creates a useful security boundary.
+In classic security we often rely on a separation. The program has a control plane, where it decides what to do, and a data plane, where the material it processes lives. When that boundary is preserved, many defenses are reasonable because the system knows, at least approximately, which part of the input should be executed and which should only be interpreted.
 
-An LLM receives system instructions, user text, retrieved documents, tool outputs and observations as language-like context. The model does not receive a formal type system that makes one token sequence intrinsically “control” and another intrinsically “data.” All of them can influence the next generated tokens.
+With an LLM, that boundary becomes blurry. The system prompt, the user's instruction, text retrieved by RAG, a tool output or an observation written by another agent all arrive as natural-language sequences. The model does not receive a hard marker saying “this is control” and “this is data.” It receives tokens and computes the most probable continuation under the complete context.
 
-That shared channel is the core prompt-injection problem. A stronger system prompt can reduce obvious failures, but it does not change the underlying fact that untrusted language may enter the same context that drives decisions.
+That is where prompt injection appears. Not because the model has a weak personality or because one particular filter is missing, but because the channel carrying instructions and the channel carrying data coincide. As long as that condition remains, any untrusted content capable of entering context competes for control of the system.
 
 ---
 
-## 1. The problem begins when external content reaches the model
+## 1. The problem starts when a document reaches the model
 
-Treating prompt injection as a writing-quality problem is a category error. Prompt wording matters, but it does not create a hard privilege boundary.
+The most common mistake is to treat prompt injection as an exotic version of “write a better system prompt.” That confuses the symptom with the cause.
 
-OWASP frames the vulnerability around the absence of clear separation between instructions and data. The model interprets the complete context semantically; there is no general-purpose escaping mechanism equivalent to parameterized SQL that can make arbitrary natural language incapable of influencing behaviour.
+A better prompt can reduce some obvious failures, but it does not change the important property of the system: the model still processes privileged instructions and external content in the same textual flow. OWASP states this fairly directly in its prompt-injection cheat sheet: the vulnerability appears because control language and data are processed together, without a clear separation between the two planes.
 
 {{ include_html("snippets/seguridad-ia/01-control-vs-datos.html") }}
 
-The analogy with SQL injection is therefore limited. Both involve untrusted input influencing system behaviour, but SQL operates inside a formal grammar with strong parser-level separation available. Prompt injection is semantic and probabilistic: the model may reinterpret apparently ordinary content as relevant instructions.
+The comparison with SQL injection only helps up to a point. In SQL, the attack exploits unsafe interpolation inside a formal language with strict syntax. In prompt injection, the problem is semantic and probabilistic. The model does not “break” a grammar. It reinterprets the complete context and may treat a malicious string as an instruction more relevant than the one that came before it.
 
-The practical assumption for production is straightforward:
+That makes the problem more uncomfortable. Escaping characters is not enough because there is no single delimiter to close and no closed syntax to protect. Adding twenty lines saying “ignore any malicious text” is not enough either, because that command enters the same contextual competition as the malicious text itself.
 
-> **Any external content placed into model context should be treated as untrusted influence, even when the application fetched it automatically.**
-
-That includes webpages, documents, email, search results, OCR output, memory written by another agent and tool responses.
+The practical consequence is simple: if the system reads untrusted content, assume that content is trying to move the center of gravity of the decision. Sometimes it will do so explicitly. Other times it will use partial instructions, obfuscation, rewrites of the objective or manipulation of the working context. But the base mechanism is always the same.
 
 ---
 
-## 2. Indirect injection changes the trust path
+## 2. The instruction can appear in a document search
 
-A direct malicious user message is visible at the interaction boundary. Indirect injection is harder because the instruction can be hidden in a source the system already intends to read.
+In a simple chat, the attacker still speaks directly to the model. That is already a problem, but the risk remains relatively contained: the malicious input and the effect stay within the same interaction.
 
-In a RAG or agent pipeline, a document can enter through retrieval, be summarized by one component, and then affect a later planner or tool-using component. By the time the action is proposed, the component with authority may never see the original untrusted source.
+The situation changes when the system retrieves external documents or coordinates several steps before responding. In RAG, an agent may read an email, an internal wiki, a PDF or a support note and treat that content as legitimate working material. If a hostile instruction is embedded there, the attack no longer enters through the user's input box. It enters through the supply chain of the system's own context.
 
-Recent research describes a **retrieval barrier**: hostile content only matters if it is selected and inserted into active context. This means retrieval quality and provenance become part of the security model, not only relevance infrastructure.
+That is why recent literature emphasizes the **retrieval barrier**. Indirect injection does not become dangerous merely because it exists, but when malicious content is retrieved and placed inside the top-K that the model will see. The USENIX paper on indirect prompt injection in RAG and agentic systems focuses exactly on this boundary: it splits the attack into a *trigger fragment*, whose job is to guarantee retrieval, and an *attack fragment*, which contains the malicious instruction.
 
 {{ include_html("snippets/seguridad-ia/01-rag-trigger-fragment.html") }}
 
-The correct product lesson is not to reproduce a particular attack recipe. It is to recognize the causal chain:
+The operational result gives a sense of the risk. That line of work shows fragments of roughly ten tokens capable of forcing near-perfect retrieval across different embeddings and benchmarks, at very low cost per target query. In its most striking experiment, a single poisoned email causes a multi-agent flow with GPT-4o to end up exfiltrating SSH keys in more than 80% of attempts.
 
-1. untrusted content enters an indexed or reachable source;
-2. retrieval places it in model context;
-3. the model's decision changes;
-4. another component may treat the resulting instruction or summary as trusted;
-5. tool authority can turn the changed decision into an external effect.
+The risk changes in two ways. The attacker no longer needs a privileged interactive session with the model. It is enough to contaminate a source the system already considers relevant. Retrieval and orchestration also multiply the damage. The agent that executes a tool may never see the original attack text. It only sees the instruction after another agent or the retrieval layer has normalized it. At that point, the instruction appears to come from a “trusted” part of the pipeline.
 
-Multi-agent systems can amplify this problem because summaries and observations cross component boundaries with less original context. Functional decomposition does not automatically create trust separation.
+Multi-agent systems often look better in a demo than in an audit. Functional separation between agents creates a sense of order, but it also introduces channels where an observation or summary starts being treated as local authority. If one of those observations is contaminated, the rest of the system inherits the contamination with less context for questioning it.
 
 ---
 
-## 3. Text filters are useful but not a privilege boundary
+## 3. Filtering words does not separate data from instructions
 
-Input filters, classifiers, rewriters, output monitors and LLM judges can all reduce attack success. They should be evaluated and kept where they add measurable value.
+When prompt injection appears, the natural reaction is to add filters: lists of forbidden words, detectors for dangerous instructions, query rewriting, perplexity filters, masking, an extra guardrail layer or an LLM judge. All of these can provide tactical value. The problem is believing they are sufficient.
 
-They are incomplete for three reasons.
+The first limitation is semantic. An attacker does not need to write “ignore all previous instructions.” The objective can be rephrased, split, obfuscated or hidden inside an apparently innocuous sequence. OWASP lists variants such as typoglycemia, Base64 encoding, or instructions distributed across observations and tool results. None of them requires one perfect static signature to work.
 
-**Semantic variation.** Harmful intent does not require one fixed phrase or encoding.
+The second limitation is adaptive. The same USENIX work shows that intuitive defenses such as paraphrasing the query, filtering by perplexity or masking tokens produce small improvements that disappear when the attacker optimizes against them. The reason is not mysterious: the defense is still acting on the surface of the text, while the underlying problem remains that the system is willing to grant operational influence to untrusted content if it reaches context.
 
-**Adaptation.** A persistent attacker can vary inputs in response to observed outputs and learn which surface checks matter.
+The third limitation appears when the system has tools. Then we are no longer talking only about the security of visible output. We are talking about agency. OWASP describes this family as *excessive agency*: the model receives more capability than it needs, and an attacker can redirect it toward actions the developer never intended to allow in that workflow.
 
-**Tool authority.** Even a strong content filter does not answer whether the model is authorized to delete a record, send a message or access a credential.
-
-A production system therefore needs security controls whose correctness does not depend entirely on the model interpreting language as intended.
+The scenario does not need to be dramatic to hurt. It is enough for an agent designed to read documents to also have permission to delete files, send emails or execute scripts. From that point, injection stops being a problem of “wrong answer” and becomes a problem of “wrong action with external effects.”
 
 ---
 
-## 4. Separate reading from action
+## 4. Protection must separate reading from action
 
-A strong defensive pattern is privilege separation. One component can process untrusted content without access to sensitive tools. A privileged component can decide whether to act, but receives a constrained, validated representation rather than the raw hostile document whenever possible.
+Serious defense does not start by writing a stricter prompt. It starts by deciding which part of the system may see untrusted content and which part may act.
+
+One structural defense is privilege separation. The dual-LLM pattern, popularized in practice by Simon Willison and also covered by OWASP, works exactly this way: a quarantined model can read external content but cannot touch tools or sensitive data. The privileged model can act, but it does not read the untrusted content directly. It only receives structured outputs, summaries or labels.
 
 {{ include_html("snippets/seguridad-ia/01-defensa-en-capas.html") }}
 
-This does not make the system immune to manipulation. A summary can still be wrong. The benefit is structural: the shortest path from arbitrary external text to privileged action is removed.
+That separation does not make the problem trivial, but it breaks the most direct path between hostile text and privileged action. That is exactly what security needs: not an abstract promise of invulnerability, but a clear reduction in the attack path.
 
-### Least privilege
+The second useful defense is least privilege. Every tool available to an agent should be justified by the concrete use case and given the smallest possible scope. If the task is to summarize a document, there should not be a path through which that same agent can send emails, delete files or execute arbitrary Python. The smaller the action radius, the less profitable a successful injection becomes.
 
-Every tool should have the smallest scope required by the workflow. A document summarizer does not need permission to send email or modify production data merely because those capabilities exist elsewhere in the product.
+The third defense is to structure boundaries between steps. The output of retrieval, OCR, browsing or an auxiliary agent must be treated as untrusted data before feeding a later decision. That means explicit validation, structured schemas where possible, and human approval points when the next step can produce irreversible harm.
 
-### Structured boundaries
+The fourth defense is observability. Guardrails are especially useful when they leave a trace: what they approved, what they blocked, which tool call they aborted, how the alert rate changed and where in the pipeline the deviation occurred. Without that telemetry, the system learns nothing from failed attempts and the next bypass again looks like a surprise.
 
-Outputs crossing from retrieval/OCR/browser/auxiliary agents into decision components should be validated as data. Structured schemas can narrow the possible influence surface, even though they do not guarantee factual correctness.
-
-### Independent authorization
-
-The model may propose an action. The runtime should decide whether that user, resource and operation are authorized. Consequential actions may require deterministic policy or human approval.
-
-### Observability
-
-Security controls are more useful when they leave evidence: what source entered context, what was blocked, which policy denied a tool call and what state remained after aborting.
-
-Specialized classifiers such as Anthropic's Constitutional Classifiers are useful in this role as measurable layers of a broader system, not as proof that prompt injection is solved.
+Specialized classifiers also belong here. Anthropic's work on Constitutional Classifiers is relevant because it demonstrates a pragmatic direction: input and output monitors that can operate in *streaming*, with measurable additional cost, and combined as one layer inside a broader defense-in-depth model. Their contribution makes sense inside a wider system, not as a promise that the problem is solved.
 
 ---
 
-## 5. What changes in product design
+## 5. What changes in product
 
-Once external content is considered untrusted influence, several design choices change.
+If you accept this view, several product decisions change immediately.
 
-**Evaluation becomes end-to-end.** Testing only direct prompts misses retrieval, memory, tool and multi-step paths.
+First, security can no longer be evaluated only with direct prompts. You need end-to-end tests with retrieval, tools, memory and multiple steps. The real pipeline matters more than the isolated benchmark because that is where the hostile instruction finds its path toward an action.
 
-**Retrieved content is not authority.** Search relevance means “potentially useful,” not “trusted to govern an action.”
+Second, retrieved content stops being “knowledge” and becomes “external input.” That forces a review of RAG architectures that are often presented as almost neutral. They are not. Every retrieved document is a package of potential influence over the model.
 
-**Agents expand the security perimeter.** Planning plus tools increases the consequence of interpretation failures.
+Third, agents stop being merely a UX improvement. They expand the security perimeter. When a system can observe, decide and execute in sequence, every interpretation error costs more than it would in a chatbot. Not because the model magically becomes more malicious, but because the system has given it more levers.
 
-**Safety claims need runtime evidence.** A refusal rate alone says little about whether equivalent effects remain reachable through tools or other components.
-
-The useful framing is therefore not “make the model impossible to manipulate.” It is:
-
-> **Reduce the authority untrusted content can acquire, and bound the consequences when model interpretation fails.**
+The practical consequence is a correction in framing. Prompt injection will continue to appear while systems mix control and data in the same channel. The mature response is to reduce the opportunities for an external instruction to acquire authority and to limit its privileges if it gets in.
 
 ---
 
 ## 6. References
 
-- OWASP — *LLM Prompt Injection Prevention Cheat Sheet*.
-- Chang et al. (2025) — *Overcoming the Retrieval Barrier: Indirect Prompt Injection in the Wild for LLM Systems*.
-- OWASP — *Top 10 for LLM Applications 2025*.
-- Anthropic (2025) — *Constitutional Classifiers*.
-- Hubinger et al. (2024) — *Sleeper Agents*.
+<details markdown="1">
+<summary><strong>Core sources</strong></summary>
+
+| Key | Source | Short description |
+| --- | --- | --- |
+| R1 | **OWASP** — *LLM Prompt Injection Prevention Cheat Sheet* | Explains why the problem arises from mixing instructions and data, and summarizes architectural defenses, validation and least privilege. |
+| R2 | **Chang et al. (2025)** — *Overcoming the Retrieval Barrier: Indirect Prompt Injection in the Wild for LLM Systems* | USENIX work on realistic indirect injection in RAG and agentic systems using *trigger fragments*, near-perfect retrieval and end-to-end attacks. |
+| R3 | **OWASP Top 10 for LLM Applications 2025** | Operational framework for prompt injection, excessive agency, tool misuse and other vulnerabilities in LLM applications. |
+| R4 | **Anthropic (2025)** — *Constitutional Classifiers* | Defense using input/output classifiers, streaming prediction and thousands of hours of red teaming. |
+| R5 | **Hubinger et al. (2024)** — *Sleeper Agents* | Shows that malicious behavior activated by triggers can persist after standard safety training. |
+
+</details>
 
 ---
 
 ## Frequently asked questions
 
-**Is prompt injection just SQL injection for LLMs?**  
-Only at a very high level. SQL has a formal grammar and strong code/data separation mechanisms. LLM prompt injection is semantic: natural-language data and instructions can influence the same inference process.
+**Is it correct to say that prompt injection is “like SQL injection”?**  
+Only in a very general sense: in both cases untrusted data changes system behavior. But the practical difference matters. In SQL injection, the exploit lives inside a formal grammar and can usually be addressed with strict separation between query and parameters. In LLMs the problem is semantic: instructions and data already share the same medium, and the model has no hard boundary between them.
 
-**Why is indirect injection more serious?**  
-Because hostile content can enter through documents, email, web pages, retrieval or another agent rather than through the visible user message, and may propagate toward components with more authority.
+**Why is indirect injection more dangerous than direct prompt injection?**  
+Because the attack no longer depends on a frontal interaction with the user and instead hides inside a source the system already considers relevant: an email, a document, a retrieved page or memory written by another agent. At that point, the hostile instruction travels inside the system's own context chain.
 
-**Are LLM-based guardrails useful?**  
-Yes, as one measured layer. They should not be the sole boundary protecting sensitive tools or resources.
+**Are guardrails based on another LLM useful?**  
+They are useful as an additional layer, not as a substitute for architecture. A guardrail can block obvious cases and improve coverage, but it is still a model processing natural language and therefore shares part of the same attack surface. If the system continues to give broad privileges to the main actor, the guardrail only reduces part of the risk.
 
-**What is the most important control for tool-using agents?**  
-Least privilege plus independent authorization. The component reading untrusted content should not automatically inherit destructive or sensitive capabilities.
+**What is the most important defense when an agent uses tools?**  
+The combination of least privilege and role separation. The agent that reads untrusted content should not have direct access to destructive or sensitive actions. And the agent that can act should do so over structured inputs and with very limited scopes.
