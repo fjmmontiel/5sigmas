@@ -1,8 +1,8 @@
 ---
 title: The real footprint of a data center
-description: "Water, electricity, critical minerals and hardware lifecycle: what AI infrastructure actually consumes, why impacts vary by location, and which constraints space does or does not remove."
+description: "Water, energy, minerals and data-center lifecycle: what AI consumes, why impact varies by location, and how to measure its footprint."
 date: 2026-06-14
-keywords: "data center water use, AI environmental footprint, PUE WUE data center, critical minerals AI, cobalt data center, GPU e-waste, circular economy data center"
+keywords: "data center water consumption, AI environmental footprint, AI critical minerals, data center PUE, data center WUE, cobalt AI mining, GPU e-waste, golf vs data center water, local water conflict"
 tags:
   - AI
   - Infrastructure
@@ -11,184 +11,149 @@ tags:
 
 # Chapter 4 — The real footprint of a data center
 
-This chapter decomposes the footprint of hyperscale compute into four layers: **water, electricity, critical minerals and hardware lifecycle**. By the end, you will be able to calibrate common water-use claims, interpret WUE and PUE correctly, understand why AI rack density changes the physical plant, and see why mineral supply chains and refresh cycles matter even when a data center itself looks clean.
+This chapter breaks down the real footprint of a hyperscale data center across four dimensions: water, energy, critical minerals and lifecycle. By the end, we will have the data needed to calibrate the public debate (the aggregate comparison between golf courses and data centers, WUE by cooling technology and the cobalt supply chain), understand why water consumption is more a problem of geographic concentration than global magnitude, and evaluate which constraints space solves and which it inherits without any additional advantage.
 
-!!! info "Prerequisite"
-    This chapter closes the series and builds on [Chapter 3 — What is a data center in space?](./03-que-es-datacenter-espacio.md).
+!!! info "Prerequisites"
+    This chapter assumes you know the concepts introduced in [Chapter 3 — What is a data center in space?](./03-que-es-datacenter-espacio.md).
 
-The public discussion often over-focuses on one visible resource at a time. Water attracts headlines, electricity dominates grid planning, while the embodied footprint of accelerators and supply chains is easier to ignore. A serious comparison between terrestrial and orbital compute has to include all four.
+The previous three chapters built the argument for why space enters the conversation about compute infrastructure: demand is growing faster than terrestrial infrastructure can absorb, and several bottlenecks have physical components that the orbital environment addresses differently. Before evaluating whether that rethink makes sense, it is worth understanding precisely what a terrestrial data center actually consumes, because the public narrative is often poorly calibrated: it exaggerates water, underestimates minerals and almost always omits lifecycle.
 
 ---
 
-## 1. Calibrating the water conversation
+## 1. The comparison that calibrates the conversation
 
-In the United States, data centers collectively withdraw roughly **449 million gallons of water per day** in one widely cited national comparison, while golf courses withdraw around **2 billion gallons per day**. Agriculture remains larger again by one or more orders of magnitude.
+In the United States, data centers collectively withdraw about 449 million gallons of water per day, while golf courses withdraw approximately 2 billion ([MOST][r3]). Both volumes are far below the national agricultural scale, which still dominates the aggregate by one or more orders of magnitude ([MOST][r3]).
 
 {{ include_html("snippets/datacenters-espacio/04-agua-comparativa.html") }}
 
-That comparison does **not** mean data-center water use is irrelevant. It means the impact is primarily **geographic and technological**, not only national aggregate volume.
+This comparison is not meant to end the debate about the environmental impact of data centers, but to calibrate it. The sector's water problem is real, but the correct reading is more geographic than aggregate: it depends heavily on local climate, cooling technology and whether the facility sits in an already stressed basin. Microsoft, for example, publishes WUE by region precisely because the water profile changes significantly by location and thermal architecture ([Microsoft Water][r1]).
 
-A facility in a water-stressed basin can create real conflict even if the sector is a small fraction of national withdrawals. Microsoft and other operators therefore increasingly publish site/region-specific water metrics because a litre consumed in Iowa is not environmentally equivalent to a litre consumed in an already constrained watershed.
+The point is not that golf courses are the problem and data centers are not. It is that public discussion of data-center water use usually occurs without this context, making it difficult to separate concern proportional to the actual magnitude of consumption from other factors: the visibility of the sector, concentration in areas with pre-existing water stress or distrust associated with companies whose overall scale is large regardless of the specific environmental vector.
 
 ---
 
-## 2. Withdrawal, consumption and WUE
+## 2. Water: withdrawal, consumption and the technology that determines it
 
-Water **withdrawal** is the total volume taken from a source. Water **consumption** is the fraction that is not immediately returned to the local cycle—often because it evaporates.
+The first distinction often omitted in discussions of data-center water is the difference between withdrawal and consumption. Withdrawal is the total volume taken from a source, whether an aquifer, river or municipal network. Consumption is the volume effectively lost to the atmosphere or incorporated into a product, so it cannot immediately be reused in the same local cycle. In a data center with evaporative cooling, the difference is large: of all the water withdrawn to pass through cooling towers, between 70 and 80 percent evaporates, while the rest is discharged as blowdown with mineral concentration and chemical treatments that require specific management before release.
 
-Evaporative cooling can lose roughly **70–80%** of withdrawn cooling water to the atmosphere, with the rest discharged as blowdown that may require treatment.
-
-The industry metric is **WUE (Water Usage Effectiveness)**: litres of water consumed per kWh delivered to IT equipment.
-
-Representative designs span more than an order of magnitude:
-
-- dry-air systems can have near-zero **direct** WUE but higher electricity use;
-- conventional evaporative systems can sit around **1.5–2.5 L/kWh**;
-- Microsoft's published Iowa adiabatic design reports around **0.19 L/kWh**;
-- closed-loop liquid/immersion designs can reduce direct evaporation dramatically.
+The metric that quantifies this efficiency is WUE (Water Usage Effectiveness), defined as litres of water consumed per kilowatt-hour of energy delivered to compute equipment. An older air-cooled data center can have a WUE of zero because it simply uses no direct cooling water, although at the cost of higher electricity consumption. A conventional evaporative facility typically has a WUE between 1.5 and 2.5 litres per kWh ([arXiv][r6]). The best documented result used here is Microsoft's Iowa design, which uses adiabatic cooling with outside air for most of the year and water only when ambient temperature rises above roughly 29 °C: its published WUE is 0.19 litres per kWh ([Microsoft Iowa][r4]).
 
 {{ include_html("snippets/datacenters-espacio/04-wue-refrigeracion.html") }}
 
-This is why “water per AI query” numbers are often misleading. The same compute workload can have radically different water use depending on the facility and climate.
+AI has added a new dimension to this debate that did not exist five years ago: consumption per transaction has become a visible number in public discussion. But those figures are comparable only when they normalize the same compute workload. If a facility delivers 1 MWh to AI equipment, a conventional evaporative data center may consume 1,500–2,500 litres of water, Microsoft's Iowa adiabatic design around 190 litres, and a closed-loop or immersion system almost zero direct evaporation. The order-of-magnitude difference comes from the facility WUE, not from mixing different queries or models ([Microsoft Iowa][r4], [arXiv][r6]).
 
 {{ include_html("snippets/datacenters-espacio/04-agua-indirecta.html") }}
 
-There is also **indirect water** in electricity generation and hardware supply chains. A site with zero direct evaporative cooling can still rely on a regional power mix with significant water intensity. Complete footprinting therefore has to distinguish direct operational use from upstream use.
+The sector trend is toward reducing the relative weight of evaporation as the dominant cooling mechanism, not because operators have chosen the environment over cost, but because the heat density of latest-generation AI racks exceeds what air cooling can manage efficiently. That does not mean evaporation disappears tomorrow: in many designs it still appears as support when outside temperature rises. But it does push toward more closed loops, immersion and other architectures in which water is used less as a consumable and more as part of a technical cycle.
 
 ---
 
-## 3. Electricity: total demand vs facility efficiency
+## 3. Energy: the AI premium and what it implies
 
-Global data-center electricity use was roughly **415 TWh in 2024**, with projections around **945 TWh by 2030** under strong growth assumptions—about 3% of global electricity consumption. In the United States, data centers could rise from roughly **4.4% of national electricity use in 2023** toward materially higher shares later in the decade as AI capacity expands.
+Global data-center electricity consumption is around 415 TWh in 2024, with projections pointing to almost double that figure at 945 TWh in 2030, or roughly 3 percent of world electricity consumption ([FAS][r13]). In the United States, which holds approximately 45 percent of installed global capacity, the sector moved from 4.4 percent of national demand in 2023 toward projections as high as 12 percent in 2028 ([FAS][r13]). The scale of those numbers is real, but context matters: not all of that growth is inefficiency. Much of it is new demand that did not previously exist in the compute economy, because large language models at mass-use scale did not exist either.
 
 {{ include_html("snippets/datacenters-espacio/04-sector-consumo.html") }}
 
-### PUE is not total efficiency
-
-**PUE (Power Usage Effectiveness)** is total facility power divided by power delivered to IT equipment.
-
-- PUE 2.0: every watt of compute requires another watt of facility overhead.
-- PUE 1.1: only roughly 0.1 W of overhead accompanies each watt delivered to IT.
-
-Modern hyperscale facilities have pushed PUE much closer to 1.1 than old data centers did.
+The metric that measures the energy efficiency of the data center as a facility is PUE (Power Usage Effectiveness), defined as the ratio between total facility power, including cooling, electrical distribution and auxiliary systems, and the power that actually reaches compute equipment. A PUE of 2.0 means that for every watt processed by a server another watt is consumed by support infrastructure, so half the energy does not produce compute. Previous-generation data centers often operated in that range. Modern hyperscale facilities are much closer to 1.1 than 2.0, so at hundreds-of-megawatts scale the reduction in infrastructure overhead is large even while total sector demand keeps growing.
 
 {{ include_html("snippets/datacenters-espacio/04-pue-trayectoria.html") }}
 
-A falling PUE can coexist with rapidly rising total electricity use because the amount of IT compute is growing much faster than facility overhead is shrinking.
-
-### AI changes rack density
-
-Traditional server racks often operated around **5–15 kW**. Dense GPU systems moved into the 50–100 kW range. Nvidia's GB200 NVL72-class rack is around **120 kW** at full load.
+What AI has changed is not primarily facility PUE, which hyperscale operators have continued to improve, but power density per rack. A conventional server rack consumed between 5 and 15 kW. The first GPU racks for AI inference were deployed in the 50–100 kW range. Nvidia's GB200 NVL72 rack, which connects 72 Blackwell GPUs in one compute fabric, is around 120 kW at full load, a jump that makes liquid cooling a practical operating requirement ([NVIDIA][r7]). No air system can handle 120 kW per rack inside a conventional hot-aisle/cold-aisle building.
 
 {{ include_html("snippets/datacenters-espacio/04-energia-densidad.html") }}
 
-At that density, liquid cooling is not a nice-to-have. Power distribution, piping, heat exchangers, floor/loading design and building layout all change. This helps explain why operators are building new AI-native facilities rather than simply filling every old data center with newer GPUs.
+This density increase forces redesign not only of cooling systems but also electrical distribution, raised floors and the building structure itself. Data centers built for 10–20 kW per rack need substantial infrastructure upgrades to accommodate latest-generation AI hardware, which explains part of the new-construction frenzy and part of the difficulty of forecasting sector electricity demand: it is not merely more compute, but a physically different kind of compute.
 
 ---
 
-## 4. Critical minerals: the invisible infrastructure
+## 4. Minerals: the part that does not make the headlines
 
-Accelerators and data-center electrical systems depend on globally concentrated material supply chains.
+Public debate about data centers focuses on water and energy because they are the resources with the most visible impact and the easiest to quantify in terms of local infrastructure. The minerals that make up the hardware are invisible at the data-center site but concentrate some of the hardest risks to manage across the value chain: geopolitical risk, supply risk and social consequences in extraction regions.
+
+An AI GPU rack is not only silicon. The ultrapure silicon substrate requires controlled impurities of boron, phosphorus or arsenic to define electrical properties. Interconnects between billions of transistors use copper as the main conductor and cobalt in advanced nodes to resist electromigration. Lithium-ion batteries in uninterruptible power supplies, which have replaced lead-acid batteries because of smaller size and longer life, contain nickel-manganese-cobalt cathodes. High-frequency capacitors use tantalum. Hard-drive motors and fibre-optic transceivers require permanent magnets made from neodymium and dysprosium, rare earths whose refining is 91 percent concentrated in China ([SFA][r8], [JPMorgan][r11]).
 
 {{ include_html("snippets/datacenters-espacio/04-minerales-cadena.html") }}
 
-Examples include:
-
-- ultra-pure silicon plus controlled dopants for semiconductors;
-- copper and cobalt in advanced interconnects and electrical distribution;
-- lithium, nickel, manganese and cobalt in UPS batteries;
-- tantalum in capacitors;
-- neodymium/dysprosium and other rare-earth materials in motors, drives and optical/networking components.
-
-Rare-earth refining is highly concentrated in China, creating geopolitical supply risk even when mining occurs elsewhere.
-
-### Cobalt is the clearest social-risk example
-
-Roughly **three quarters of world cobalt mine production** comes from the Democratic Republic of Congo, while much of global refining is concentrated in China.
+Cobalt is the most documented and most extreme case. Approximately 74 percent of world production comes from the Democratic Republic of Congo, and about 67 percent of global refining takes place in China ([SFA][r8]). Research published in 2024 on extraction zones in Lualaba province identified what the authors describe as sacrifice zones: communities where pollution from industrial mining has reached levels that systematically affect local health. Surveys documented that 56 percent of women and girls in communities near five major mines reported reproductive and gynaecological health problems, with elevated rates of miscarriage and malformation. Seventy-two percent of residents reported chronic skin diseases linked to contact with rivers classified as hyper-acidic because of sulfuric-acid discharges and mine-tailings failures ([RAID][r9]).
 
 {{ include_html("snippets/datacenters-espacio/04-cobalto-cadena.html") }}
 
-Research and human-rights reporting around Lualaba and other mining regions documents severe health, water-contamination and labour impacts. Industry programmes such as the Fair Cobalt Alliance attempt to improve protective equipment, mine safety and child-labour remediation, but the scale of artisanal mining is much larger than any single programme.
+The technology industry has launched initiatives such as the Fair Cobalt Alliance, co-founded by Apple, Google and Microsoft, which in the first half of 2024 reported distributing protective equipment to artisanal washers, covering six mining pits to prevent collapses and enrolling 18 minors in remediation programmes ([FCA][r14]). These initiatives have measurable impact, although the scale of the problem, with as many as 250,000 people linked to artisanal mining in Congo, comfortably exceeds them ([FCA][r14]).
 
-This is part of AI infrastructure even though it happens thousands of kilometres away from the data center.
+Tantalum has a different but similarly concentrated geopolitical profile: the United States imports 100 percent of its tantalum, most of it from Rwanda and Congo. Copper, which connects data buses, heat sinks and building electrical distribution, comes 40 percent from Chile and Peru. The geography of mineral dependence in technology infrastructure is therefore global, concentrated and difficult to substitute in the short term ([JPMorgan][r11]).
 
 ---
 
-## 5. Hardware life, refresh cycles and e-waste
+## 5. Useful life, e-waste and the circular economy of GPUs
 
-A server may remain technically usable for many years, but operational refresh cycles are often around **three to five years** because warranties, efficiency and accelerator-generation gains make earlier replacement economically attractive.
+A server can remain technically usable for many years. In practice, the industry's usual refresh cycle is three to five years, driven by manufacturer warranties and the performance advantage of the next hardware generation, which for AI accelerators has been large enough to justify early replacement. This distance between technical life and the real refresh cycle is one of the determinants of the sector's electronic-waste volume.
 
-That gap between technical life and economic life is a major driver of e-waste.
-
-Large operators increasingly run circular centres that inspect, refurbish and redeploy components. Microsoft reported a **90.9% reuse/recycling rate for server components in 2024**, alongside thousands of tonnes diverted from landfill.
+Large operators have responded with circular centres: facilities dedicated to evaluating, refurbishing and redistributing hardware that has finished its active life in the primary data center but still has enough technical capacity for other uses. Microsoft reported in 2024 a 90.9 percent reuse and recycling rate for server components, processing packaging from more than 30,000 racks and diverting 2,500 metric tonnes of waste from landfill ([Microsoft][r12]). When hardware truly reaches end of life, recovering metals and reusable components adds a real economic incentive alongside the environmental argument.
 
 {{ include_html("snippets/datacenters-espacio/04-h100-recuperacion.html") }}
 
-The circular-economy question is particularly important for AI accelerators because frontier hardware depreciates economically very quickly even when it still works. A retired H100-class GPU may still be valuable for inference, research or smaller workloads after it no longer belongs in the most performance-sensitive training cluster.
+At the scale of tens or hundreds of thousands of GPUs that make up modern AI clusters, these mechanisms are no longer marginal. An H100 that is no longer competitive for training frontier models can continue to have economic value for inference workloads for several years. A rack retired after four years is not necessarily electronic waste: it can be an asset that moves down the compute value chain before reaching recycling.
 
 ---
 
-## 6. What space solves—and what it inherits
+## 6. The real balance
 
-The orbital thesis looks different once the terrestrial footprint is separated into layers.
+The footprint of a modern data center is, when disaggregated, more nuanced than either extreme of the public debate suggests. Sector electricity consumption is set to almost double by 2030, dependence on minerals with ethically compromised supply chains is real and difficult to resolve in the short term, and concentration of facilities in water-stressed regions creates local tensions that do not disappear simply because the sector is small at national scale. But aggregate water consumption remains lower than other intensive uses, hyperscale operators have continuously improved energy efficiency, and hardware lifecycle management is improving.
 
-### Space can potentially reduce
+What emerges is a map of the real problems and their different nature. Water is more a problem of geographic concentration than global magnitude: impact appears where water stress and facility density intersect, not in the national aggregate. Energy is a problem of growing scale that can be mitigated with carbon-free generation but not eliminated by efficiency alone. Minerals are the least visible and most structurally difficult problem because they depend on risk geographies that technology cannot replace in the short term.
 
-**Local grid congestion.** Orbital solar power avoids a terrestrial transmission queue for the compute itself.
-
-**Direct evaporative water use.** A vacuum radiator does not consume cooling water through evaporation.
-
-**Land-use conflict.** The compute and solar/radiator structures are not competing for terrestrial industrial land.
-
-### Space does not remove
-
-**Energy demand.** The compute still needs the same order of electrical power.
-
-**Heat rejection.** It becomes a radiator/mass problem instead of an evaporative-water problem.
-
-**Critical minerals.** The same accelerators, power electronics and networking still require globally sourced materials—and orbital structures add more material.
-
-**Hardware obsolescence and e-waste.** In orbit, replacement may be *harder*, and end-of-life disposal becomes an orbital-debris problem rather than ordinary recycling logistics.
-
-**Embodied emissions.** Launch vehicles, spacecraft structure, solar arrays and radiators add manufacturing and launch footprints before any computation occurs.
-
-The comparison is therefore not “dirty Earth vs clean space.” It is a **transfer of constraints**.
-
----
-
-## 7. A lifecycle framework for any compute proposal
-
-A useful footprint analysis should report at least:
-
-1. **IT electricity** consumed over the service life;
-2. **facility/orbital overhead** (PUE or its orbital equivalent);
-3. **direct water** and upstream water intensity;
-4. **embodied hardware/material footprint**;
-5. **critical-mineral provenance**;
-6. **refresh/replacement frequency**;
-7. **transport or launch footprint**;
-8. **end-of-life recovery or disposal**.
-
-A proposal that optimizes one row can still be worse overall if it transfers cost into another.
-
-!!! tip "Series complete"
-    This closes the Data Centers in Space text/visual argument: terrestrial bottlenecks explain why the idea is being discussed; orbital physics determines what is hard; real hardware shows which use cases are already credible; and lifecycle accounting prevents the final comparison from becoming marketing.
+This inventory of constraints is the right starting point for evaluating the argument for data centers in space. The frictions identified as bottlenecks in Chapter 1 have physically different answers in orbit: direct solar energy without atmospheric losses removes grid dependence, vacuum makes cooling water unnecessary and heat is managed by radiation. Minerals, by contrast, have no orbital solution: any hardware taken into space carries exactly the same mineral footprint it has on Earth, plus additional material for radiators, solar panels and radiation protection. Space solves some problems of terrestrial infrastructure and inherits others without any additional advantage.
 
 ---
 
 ## Frequently asked questions
 
-**Is data-center water consumption globally huge?**  
-It is meaningful but much smaller than agriculture in aggregate. The most serious impacts often come from local concentration in already water-stressed regions.
+**Do data centers really consume a lot of water compared with other industries?**
+In absolute terms, US data centers withdraw about 449 million gallons of water per day. Golf courses withdraw approximately 2 billion, about 4.5 times more, while agriculture still dominates the national aggregate by one or more orders of magnitude ([MOST][r3]). The real problem is less the aggregate magnitude than concentration: data centers are often built in already water-stressed areas because of favourable climate, creating local conflicts that the national figure alone does not capture.
 
-**What is the difference between WUE and PUE?**  
-WUE measures water consumed per unit of IT energy. PUE measures total facility electricity divided by IT electricity. A facility can improve one while worsening the other.
+**What is WUE and how much does it vary by cooling technology?**
+WUE (Water Usage Effectiveness) measures litres of water consumed per kilowatt-hour delivered to compute. A data center with conventional evaporative cooling has a WUE of 1.5–2.5 litres per kWh ([arXiv][r6]). Microsoft's published Iowa design reports 0.19, with adiabatic cooling that uses water only when temperature rises above roughly 29 °C ([Microsoft Iowa][r4]). Dielectric-fluid immersion or closed-loop systems have WUE close to zero because water does not evaporate. The difference between the majority standard and the documented best practice is more than a factor of ten.
 
-**Why does AI force liquid cooling?**  
-Because modern accelerator racks can exceed 100 kW. Air cooling struggles to remove that heat density efficiently within ordinary rack/building constraints.
+**How much can water consumption change for the same compute workload depending on cooling?**
+A great deal. WUE measures litres of water consumed per kilowatt-hour delivered to compute. For the same IT load, a conventional evaporative facility consumes 1.5–2.5 litres per kWh, the Microsoft Iowa adiabatic design 0.19, and a closed-loop or immersion system almost zero direct evaporation ([Microsoft Iowa][r4], [arXiv][r6]). For 1 MWh delivered to compute, that means 1,500–2,500 litres versus about 190 litres, or even less. The decisive variable here is facility cooling, not comparisons between models or queries that are not normalized.
 
-**Why include minerals in the AI footprint?**  
-Because accelerators, batteries, networking and electrical infrastructure depend on concentrated global supply chains with geopolitical, labour and environmental impacts.
+**Which critical minerals are found in an AI GPU and where do they come from?**
+The most relevant include cobalt (NMC battery cathodes and interconnects in advanced chip nodes), whose production is 74% concentrated in the DRC and 67% of refining in China; rare earths such as neodymium and dysprosium (hard-drive magnets and fibre transceivers), with 91% of refining in China; tantalum (high-frequency capacitors), of which the US imports 100%; and copper (interconnects, heat sinks and electrical distribution) ([SFA][r8], [JPMorgan][r11]). Cobalt has the most documented human consequences: mining communities in Lualaba, DRC, report 56% rates of reproductive problems and 72% skin disease associated with pollution ([RAID][r9]).
 
-**Does moving a data center to space eliminate its environmental footprint?**  
-No. It can eliminate some local terrestrial constraints such as direct evaporative water use and grid connection, but it retains energy, materials and lifecycle costs while adding launch, radiation and orbital-disposal requirements.
+**What happens to GPUs and data-center hardware when they are retired?**
+Large operators have adopted a circular-centre model: they evaluate, refurbish and redistribute hardware leaving primary data centers before it reaches true end of life. Microsoft reported in 2024 a 90.9% reuse and recycling rate for server components ([Microsoft][r12]). When hardware can no longer be reused, recovery of metals and components adds a real economic incentive, so end of life is managed as a value chain rather than only a compliance cost.
+
+---
+
+## 7. References
+
+<details markdown="1">
+<summary><strong>Base sources</strong></summary>
+
+| Key | Source | Brief description |
+| --- | --- | --- |
+| R1 | **Microsoft (2025)** — *Understanding water use at Microsoft datacenters* ([Microsoft Water][r1]) | How Microsoft contextualizes water by region and publishes WUE metrics by site. |
+| R3 | **MOST Policy Initiative (2024)** — *Data Center Water Use* ([MOST][r3]) | Withdrawal vs consumption, US data centers at 449M gallons/day and aggregate context versus agriculture and other uses. |
+| R4 | **Microsoft (Iowa factsheet)** — *Central US datacenter sustainability factsheet* ([Microsoft Iowa][r4]) | Published WUE of 0.19 and adiabatic cooling use in Iowa. |
+| R6 | **arXiv (2025)** — *The Environmental Impact of AI Servers and Sustainable Solutions* ([arXiv][r6]) | AI-water projections for 2030: +200–300B gallons/year in the US and evaporative WUE of 1.5–2.5 L/kWh. |
+| R7 | **NVIDIA (2026)** — *Mission Control FAQ for GB200/GB300 NVL72* ([NVIDIA][r7]) | GB200 NVL72: 72 GPUs, 18 nodes and ~120 kW per rack at full load. |
+| R8 | **SFA Oxford (2024)** — *Critical Minerals in AI and Digital Technologies* ([SFA][r8]) | Cobalt, rare earths, tantalum and copper in semiconductors and batteries, with geopolitical dependencies. |
+| R9 | **RAID UK (2024)** — *Environmental and Human Costs of DRC Cobalt Demand* ([RAID][r9]) | Sacrifice zones in Lualaba, 56% of women with reproductive problems, 72% skin disease and hyper-acidic rivers. |
+| R11 | **J.P. Morgan (2024)** — *The Growing Demand for Critical Minerals* ([JPMorgan][r11]) | Demand projections for rare earths, cobalt and copper for digital infrastructure in 2025–2030. |
+| R12 | **Microsoft (2025)** — *Environmental Sustainability Report 2025* ([Microsoft][r12]) | 90.9% reuse/recycling rate in FY24, 2,500 t of diverted waste and 30,000 racks processed. |
+| R13 | **FAS / Federation of American Scientists (2025)** — *Measuring AI's Energy and Environmental Footprint* ([FAS][r13]) | Global data centers: 415 TWh (2024) → 945 TWh (2030), and US: 4.4% → up to 12% of national demand in 2028. |
+| R14 | **Fair Cobalt Alliance (2024)** — *FCA Mid-Year Report 2024* ([FCA][r14]) | 250,000 people in artisanal mining, PPE distribution and 18 minors in remediation programmes. |
+
+</details>
+
+[r1]: https://local.microsoft.com/blog/understanding-water-use-at-microsoft-datacenters/ "Understanding water use at Microsoft datacenters — Microsoft"
+[r3]: https://mostpolicyinitiative.org/science-note/data-center-water-use/ "Data Center Water Use — MOST Policy Initiative"
+[r4]: https://datacenters.microsoft.com/globe/pdfs/sustainability/factsheets/Iowa%20%28Central%20US%29.pdf "Iowa (Central US) factsheet — Microsoft"
+[r6]: https://arxiv.org/html/2601.06063v1 "Environmental Impact of AI Servers — arXiv"
+[r7]: https://docs.nvidia.com/mission-control/docs/systems-administration-guide/2.0.0/prs/faq.html "Mission Control FAQ for GB200/GB300 NVL72 — NVIDIA"
+[r8]: https://www.sfa-oxford.com/knowledge-and-insights/critical-minerals-in-low-carbon-and-future-technologies/critical-minerals-in-artificial-intelligence/ "Critical Minerals in AI — SFA Oxford"
+[r9]: https://raid-uk.org/report-environmental-pollution-human-costs-drc-cobalt-demand-industrial-mines-green-energy-evs-2024/ "DRC Cobalt Human Costs — RAID"
+[r11]: https://www.jpmorgan.com/insights/global-research/commodities/critical-minerals "Critical Minerals Demand — J.P. Morgan"
+[r12]: https://cdn-dynmedia-1.microsoft.com/is/content/microsoftcorp/microsoft/msc/documents/presentations/CSR/2025-Microsoft-Environmental-Sustainability-Report.pdf "Environmental Sustainability Report — Microsoft"
+[r13]: https://fas.org/publication/measuring-and-standardizing-ais-energy-footprint/ "AI Energy Footprint — FAS"
+[r14]: https://faircobaltalliance.org/blog/fca-mid-year-report-2024/ "Fair Cobalt Alliance Mid-Year 2024 — FCA"
