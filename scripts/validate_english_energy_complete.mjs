@@ -25,12 +25,12 @@ const chapters = [
     slug: '04-ia-pib-hoy',
     title: 'Chapter 4 — AI and GDP today: real impact, lags and early signals',
     concepts: ['productivity J-curve', '80.6%', '67%', 'Acemoglu'],
-    demos: ['energy-04-jcurve', 'energy-04-evidence', 'energy-04-diffusion', 'energy-04-adoption-gap', 'energy-04-forecasts'],
-    demoSelector: '[data-demo^="energy-"]',
+    demos: ['04-jcurva-productividad', 'energy-04-evidence', 'energy-04-diffusion', 'energy-04-adoption-gap', 'energy-04-forecasts'],
+    demoSelector: '[data-demo="04-jcurva-productividad"], [data-demo^="energy-04-"]',
     previewTitle: 'AI and GDP today',
     expectedVisuals: 6,
     screenshot: 'english-energy-04-ai-gdp.png',
-    interaction: 'details',
+    interaction: 'mixed-ch4',
   },
 ];
 
@@ -88,6 +88,38 @@ try {
         else {
           await root.locator('[data-tab="4"]').click();
           if (await root.locator('[data-panel="4"]').getAttribute('hidden') !== null) failures.push(`${chapter.route}: canonical income/well-being tab interaction failed`);
+        }
+      } else if (chapter.interaction === 'mixed-ch4') {
+        const root = page.locator('[data-demo="04-jcurva-productividad"]');
+        if (await root.count() !== 1) {
+          failures.push(`${chapter.route}: canonical productivity J-curve visual missing`);
+        } else {
+          const tabs = root.locator('[data-tab]');
+          const panels = root.locator('[data-panel]');
+          if (await tabs.count() !== 4) failures.push(`${chapter.route}: J-curve expected 4 tabs, found ${await tabs.count()}`);
+          if (await panels.count() !== 4) failures.push(`${chapter.route}: J-curve expected 4 panels, found ${await panels.count()}`);
+          if (await root.locator('.jc-era').count() !== 3) failures.push(`${chapter.route}: J-curve electrification analogy expected 3 eras`);
+          if (await root.locator('.jc-mech').count() !== 4) failures.push(`${chapter.route}: J-curve expected 4 lag mechanisms`);
+          if (await root.locator('.jc-ni').count() !== 3) failures.push(`${chapter.route}: J-curve expected 3 current-position signals`);
+          if (await root.locator('svg').count() !== 2) failures.push(`${chapter.route}: J-curve expected 2 canonical SVG charts`);
+          if (await tabs.count() === 4) {
+            await root.locator('[data-tab="4"]').click();
+            if (await root.locator('[data-panel="4"]').getAttribute('hidden') !== null) failures.push(`${chapter.route}: canonical J-curve tab interaction failed`);
+          }
+          const jcurveText = await root.innerText();
+          for (const token of ['La curva J', 'Difusión lenta', 'Estamos aquí', 'Las señales de dónde estamos realmente']) {
+            if (jcurveText.includes(token)) failures.push(`${chapter.route}: J-curve Spanish leakage ${JSON.stringify(token)}`);
+          }
+        }
+
+        const details = page.locator('[data-demo^="energy-04-"] details');
+        if (await details.count() === 0) failures.push(`${chapter.route}: remaining Chapter 4 visuals expose no interactive disclosure`);
+        else {
+          const candidate = details.first();
+          const before = await candidate.getAttribute('open');
+          await candidate.locator('summary').click();
+          const after = await candidate.getAttribute('open');
+          if (before === after) failures.push(`${chapter.route}: remaining Chapter 4 details interaction did not toggle`);
         }
       }
 
