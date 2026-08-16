@@ -1,0 +1,17 @@
+{
+  "source": "snippets/ia-pib-bienestar-energia/04-evidencia-sectorial.html",
+  "source_blob_sha": "e5909c1acc1fbebb79e0920b6cc0f5ee32dbcca6",
+  "replacements": {
+    "Dónde el impacto aparece antes que en el PIB: datos sectoriales observados": "Where the impact appears before GDP: observed sector-level evidence",
+    "Las ganancias a nivel de tarea son consistentes y documentadas. La pregunta abierta es si el tiempo ahorrado se redirige a actividades de mayor valor o si el excedente se diluye en reorganización.": "Task-level gains are consistent and documented. The open question is whether saved time is redirected toward higher-value activities or whether the surplus is absorbed by reorganization.",
+    "Servicios legales": "Legal services",
+    "12 – 32% reducción de tiempo en tareas documentales": "12–32% reduction in time spent on document tasks",
+    "Desarrollo de software": "Software development",
+    "+26% en tasa de completitud de tareas con asistente de código (Peng et al., 2023)": "+26% task-completion rate with a coding assistant (Peng et al., 2023)",
+    "Atención al cliente": "Customer support",
+    "14% más casos resueltos por hora (Brynjolfsson et al., 2023)": "14% more cases resolved per hour (Brynjolfsson et al., 2023)",
+    "Diagnóstico por imagen": "Medical imaging",
+    "FDA: de 6 a más de 220 dispositivos aprobados con IA entre 2016 y 2023": "FDA: from 6 to more than 220 AI-enabled devices authorized between 2016 and 2023",
+    "Las ganancias a nivel de tarea no se trasladan automáticamente a la economía en el mismo porcentaje: el tiempo ahorrado no siempre se redirige a tareas más productivas. Pero señalan que el potencial físico existe y es medible antes de que aparezca en el PIB agregado.": "Task-level gains do not automatically translate into the same percentage gain for the economy: saved time is not always redirected toward more productive work. But they show that the underlying potential is real and measurable before it appears in aggregate GDP."
+  }
+}
