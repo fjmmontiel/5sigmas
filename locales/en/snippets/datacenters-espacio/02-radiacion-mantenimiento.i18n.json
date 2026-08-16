@@ -1,0 +1,40 @@
+{
+  "source": "snippets/datacenters-espacio/02-radiacion-mantenimiento.html",
+  "source_blob_sha": "705f4157dc849076353d68bbd79fb6dffd1cad2e",
+  "replacements": {
+    "data-demo=\"02-radiacion-mantenimiento\"": "data-demo=\"dc-02-radiation\"",
+    ">operacion orbital</div>": ">orbital operations</div>",
+    ">La operación orbital debe sobrevivir sin taller cercano</div>": ">Orbital operations must survive without a nearby repair shop</div>",
+    ">Radiación, averías y fin de misión obligan a diseñar redundancia, aislamiento de fallos y retirada orbital desde el inicio.</div>": ">Radiation, failures and end of mission require redundancy, fault isolation and orbital removal to be designed in from the start.</div>",
+    "aria-label=\"La operación orbital debe sobrevivir sin taller cercano\"": "aria-label=\"Orbital operations must survive without a nearby repair shop\"",
+    ">nodo sano</text>": ">healthy node</text>",
+    ">errores de bit</text>": ">bit errors</text>",
+    ">módulo aislado</text>": ">isolated module</text>",
+    ">relevo modular</text>": ">modular replacement</text>",
+    ">Hardware: 5-7 años</text>": ">Hardware: 5–7 years</text>",
+    ">radiación y degradación</text>": ">radiation and degradation</text>",
+    ">Fallo blando aceptable</text>": ">Tolerable soft failure</text>",
+    ">la carga migra, no se repara</text>": ">the workload migrates; it is not repaired</text>",
+    ">retirada al fin de misión</text>": ">end-of-mission removal</text>",
+    ">Diseñar para 5-7 años, no para reparación manual</span>": ">Design for 5–7 years, not manual repair</span>",
+    ">El fallo blando se absorbe con redundancia y migración</span>": ">Soft failures are absorbed through redundancy and migration</span>",
+    ">El módulo agotado se aísla y se retira</span>": ">The exhausted module is isolated and removed</span>"
+  },
+  "forbidden_output_tokens": [
+    "operacion orbital",
+    "La operación orbital",
+    "Radiación, averías",
+    "nodo sano",
+    "errores de bit",
+    "módulo aislado",
+    "relevo modular",
+    "años",
+    "radiación y degradación",
+    "Fallo blando aceptable",
+    "la carga migra",
+    "retirada al fin de misión",
+    "Diseñar para",
+    "El fallo blando se absorbe",
+    "El módulo agotado"
+  ]
+}
