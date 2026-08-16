@@ -1,0 +1,76 @@
+<div class="eoo-wrap" data-demo="topic-evaluation-offline-online">
+  <div class="eoo-head">
+    <div class="eoo-kicker">OFFLINE → HIPÓTESIS MEDIBLE → ONLINE → DECISIÓN DE PRODUCTO</div>
+    <div class="eoo-title">Una eval offline no es el resultado del usuario</div>
+    <div class="eoo-sub">Offline te da repetibilidad y diagnóstico. Online comprueba si esas señales se traducen en comportamiento real. La conexión útil es explícita: cada proxy offline debe tener una métrica online asociada, guardrails y un criterio de rollback.</div>
+  </div>
+
+  <div class="eoo-grid" role="img" aria-label="Mapa entre señales de evaluación offline, métricas online y decisión de producto con guardrails">
+    <div class="eoo-colhead eoo-colhead--offline"><span>OFFLINE · ENTORNO CONTROLADO</span><strong>¿Qué cambió técnicamente?</strong></div>
+    <div class="eoo-colhead eoo-colhead--bridge"><span>HIPÓTESIS</span><strong>¿Qué debería mejorar para el usuario?</strong></div>
+    <div class="eoo-colhead eoo-colhead--online"><span>ONLINE · USO REAL</span><strong>¿Ocurrió de verdad?</strong></div>
+
+    <div class="eoo-row">
+      <div class="eoo-card eoo-card--offline"><span>INTENCIÓN</span><strong>Exactitud por intención</strong><p>Casos versionados, segmentados y reproducibles.</p></div>
+      <div class="eoo-bridge"><b>si entiende mejor la petición</b><i>→</i><span>debería completar más tareas</span></div>
+      <div class="eoo-card eoo-card--online"><span>RESULTADO</span><strong>Éxito de tarea</strong><p>Completada, abandonada, escalada o corregida.</p></div>
+    </div>
+
+    <div class="eoo-row">
+      <div class="eoo-card eoo-card--offline"><span>CALIDAD</span><strong>Regla, rúbrica o juez calibrado</strong><p>Señal automática contrastada con referencia humana cuando aplica.</p></div>
+      <div class="eoo-bridge"><b>si la respuesta es más útil</b><i>→</i><span>debería reducir reformulaciones</span></div>
+      <div class="eoo-card eoo-card--online"><span>COMPORTAMIENTO</span><strong>Reformulación y abandono</strong><p>El usuario repite, corrige, se va o termina la tarea.</p></div>
+    </div>
+
+    <div class="eoo-row">
+      <div class="eoo-card eoo-card--offline"><span>LATENCIA</span><strong>Tiempo medido por etapa</strong><p>Modelo, retrieval, tools, TTS y red por separado.</p></div>
+      <div class="eoo-bridge"><b>si baja la latencia técnica</b><i>→</i><span>debería mejorar la espera percibida</span></div>
+      <div class="eoo-card eoo-card--online"><span>EXPERIENCIA</span><strong>Espera percibida y abandono</strong><p>La misma latencia puede sentirse distinta según streaming, turn-taking o interfaz.</p></div>
+    </div>
+
+    <div class="eoo-row">
+      <div class="eoo-card eoo-card--offline"><span>TOOLS</span><strong>Acción, argumentos y estado esperado</strong><p>Tests deterministas cuando el efecto es verificable.</p></div>
+      <div class="eoo-bridge"><b>si ejecuta la acción correcta</b><i>→</i><span>debería bajar el daño operacional</span></div>
+      <div class="eoo-card eoo-card--online"><span>RIESGO</span><strong>Incidentes, reversión y escalado</strong><p>Duplicados, acciones prohibidas, rollback y recuperación.</p></div>
+    </div>
+
+    <div class="eoo-row">
+      <div class="eoo-card eoo-card--offline"><span>EFICIENCIA</span><strong>Coste por caso</strong><p>Tokens, llamadas, tiempo de tool y cómputo por evaluación.</p></div>
+      <div class="eoo-bridge"><b>si el sistema usa menos recursos</b><i>→</i><span>debería bajar el coste por resultado</span></div>
+      <div class="eoo-card eoo-card--online"><span>ECONOMÍA</span><strong>Coste por tarea completada</strong><p>Normaliza el coste por valor entregado, no por request aislada.</p></div>
+    </div>
+  </div>
+
+  <div class="eoo-gate">
+    <div class="eoo-gate-step"><span>1 · PROMUEVE</span><strong>Offline supera el umbral</strong><p>La variante cumple regresiones, segmentos críticos, latencia, coste y seguridad antes de exponerse.</p></div>
+    <i class="eoo-arrow">→</i>
+    <div class="eoo-gate-step"><span>2 · EXPERIMENTA</span><strong>A/B o rollout controlado</strong><p>Mide la métrica objetivo junto con guardrails de errores, latencia, coste y riesgo.</p></div>
+    <i class="eoo-arrow">→</i>
+    <div class="eoo-gate-step"><span>3 · DECIDE</span><strong>Ship, iterar o rollback</strong><p>Una mejora offline que no mueve el producto —o rompe un guardrail— no se convierte en victoria.</p></div>
+  </div>
+
+  <div class="eoo-contracts">
+    <div><span>PROXY ≠ OUTCOME</span><strong>la métrica offline formula una hipótesis; el experimento online valida el efecto en producto</strong></div>
+    <div><span>SEGMENTA</span><strong>un promedio global puede ocultar regresiones en idioma, mercado, riesgo o tipo de tarea</strong></div>
+    <div><span>GUARDRAILS</span><strong>no promociones una variante por una sola métrica si empeora seguridad, errores, latencia o coste</strong></div>
+  </div>
+
+  <div class="eoo-ref">Fuentes:
+    <a href="https://openai.com/index/gpt-4-research/">OpenAI Evals · detectar fallos y prevenir regresiones</a> ·
+    <a href="https://www.microsoft.com/en-us/research/publication/online-experimentation-at-microsoft/">Microsoft Research · experimentación online controlada</a> ·
+    <a href="https://www.microsoft.com/en-us/research/publication/principles-for-the-design-of-online-a-b-metrics/">Microsoft Research · diseño de métricas A/B</a>
+  </div>
+</div>
+
+<style>
+.eoo-wrap,.eoo-wrap *{box-sizing:border-box}
+.eoo-wrap{--eoo-a:#188b78;--eoo-b:#4757d6;--eoo-c:#b97900;--eoo-r:#c84f5d;--eoo-bg:var(--md-default-bg-color,#fff);--eoo-fg:var(--md-default-fg-color,#111827);--eoo-muted:color-mix(in srgb,var(--eoo-fg) 58%,transparent);--eoo-border:color-mix(in srgb,var(--eoo-fg) 14%,transparent);container-type:inline-size;margin:1.1rem 0 1.5rem;padding:clamp(14px,2vw,22px);border:1px solid var(--eoo-border);border-radius:20px;background:radial-gradient(90% 120% at 0 0,color-mix(in srgb,var(--eoo-b) 7%,transparent),transparent 56%),radial-gradient(90% 120% at 100% 0,color-mix(in srgb,var(--eoo-a) 7%,transparent),transparent 58%),var(--eoo-bg);color:var(--eoo-fg)}
+.eoo-head{display:grid;gap:4px;margin-bottom:12px}.eoo-kicker{font-size:10px;font-weight:950;letter-spacing:.12em;color:var(--eoo-muted)}.eoo-title{font-size:clamp(18px,2.1vw,24px);font-weight:900;line-height:1.12;letter-spacing:-.02em}.eoo-sub{font-size:13.3px;line-height:1.48;color:var(--eoo-muted);max-width:92ch}
+.eoo-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(185px,.62fr) minmax(0,1fr);gap:7px;align-items:stretch}.eoo-colhead{padding:8px 9px;border-bottom:2px solid var(--eoo-border);display:grid;gap:2px}.eoo-colhead span{font-size:8px;font-weight:950;letter-spacing:.08em;color:var(--eoo-muted)}.eoo-colhead strong{font-size:10px}.eoo-colhead--offline{border-color:color-mix(in srgb,var(--eoo-b) 55%,var(--eoo-border))}.eoo-colhead--online{border-color:color-mix(in srgb,var(--eoo-a) 55%,var(--eoo-border))}.eoo-colhead--bridge{text-align:center;border-color:color-mix(in srgb,var(--eoo-c) 55%,var(--eoo-border))}
+.eoo-row{display:contents}.eoo-card,.eoo-bridge{min-width:0;border:1px solid var(--eoo-border);border-radius:12px;padding:9px;background:color-mix(in srgb,var(--eoo-bg) 96%,var(--eoo-fg) 4%)}.eoo-card{display:grid;align-content:start;gap:3px}.eoo-card>span{font-size:7.5px;font-weight:950;letter-spacing:.08em;color:var(--eoo-muted)}.eoo-card>strong{font-size:10px;line-height:1.2}.eoo-card>p{margin:0;font-size:8.8px;line-height:1.32;color:var(--eoo-muted)}.eoo-card--offline{border-color:color-mix(in srgb,var(--eoo-b) 30%,var(--eoo-border));background:color-mix(in srgb,var(--eoo-b) 4%,var(--eoo-bg))}.eoo-card--online{border-color:color-mix(in srgb,var(--eoo-a) 30%,var(--eoo-border));background:color-mix(in srgb,var(--eoo-a) 4%,var(--eoo-bg))}
+.eoo-bridge{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:6px;text-align:center;border-style:dashed;border-color:color-mix(in srgb,var(--eoo-c) 42%,var(--eoo-border));background:color-mix(in srgb,var(--eoo-c) 3%,var(--eoo-bg))}.eoo-bridge b,.eoo-bridge span{font-size:8px;line-height:1.22}.eoo-bridge span{color:var(--eoo-muted)}.eoo-bridge i{font-style:normal;font-size:14px;color:var(--eoo-c)}
+.eoo-gate{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:8px;align-items:center;margin-top:10px;padding:10px;border:1px solid var(--eoo-border);border-radius:14px;background:color-mix(in srgb,var(--eoo-bg) 97%,var(--eoo-fg) 3%)}.eoo-gate-step{display:grid;gap:3px}.eoo-gate-step span{font-size:7.5px;font-weight:950;letter-spacing:.08em;color:var(--eoo-muted)}.eoo-gate-step strong{font-size:10px}.eoo-gate-step p{margin:0;font-size:8.7px;line-height:1.32;color:var(--eoo-muted)}.eoo-arrow{font-style:normal;font-size:16px;color:var(--eoo-b)}
+.eoo-contracts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:8px}.eoo-contracts>div{padding:8px;border:1px solid var(--eoo-border);border-radius:11px;display:grid;gap:3px}.eoo-contracts span{font-size:7.5px;font-weight:950;letter-spacing:.07em;color:var(--eoo-muted)}.eoo-contracts strong{font-size:8.8px;line-height:1.3}.eoo-ref{margin-top:9px;font-size:8.2px;line-height:1.35;color:var(--eoo-muted)}.eoo-ref a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+@container (max-width:760px){.eoo-grid{grid-template-columns:1fr;gap:6px}.eoo-colhead{margin-top:3px}.eoo-colhead--bridge{display:none}.eoo-row{display:grid;grid-template-columns:1fr;gap:5px}.eoo-bridge{grid-template-columns:1fr auto 1fr}.eoo-card>strong{font-size:11px}.eoo-card>p{font-size:9.5px}.eoo-bridge b,.eoo-bridge span{font-size:8.8px}.eoo-gate{grid-template-columns:1fr}.eoo-arrow{transform:rotate(90deg);justify-self:center;line-height:1}.eoo-contracts{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.eoo-wrap *{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
