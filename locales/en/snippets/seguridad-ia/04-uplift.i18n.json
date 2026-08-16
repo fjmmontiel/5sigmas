@@ -20,8 +20,7 @@
     "1 · Modelo": "1 · Model",
     "2 · Persona + modelo": "2 · Person + model",
     "3 · Producto": "3 · Product",
-    "Comparar": "Compare",
-    "Medida:": "Measure:"
+    "Comparar": "Compare"
   },
   "forbidden_output_tokens": [
     "Capacidad, uplift",
