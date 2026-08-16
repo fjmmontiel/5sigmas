@@ -1,0 +1,151 @@
+<div class="rl-wrap" data-demo="topic-reasoning-latency">
+  <div class="rl-head">
+    <div class="rl-kicker">LATENCIA INTERACTIVA · RELOJES SOLAPADOS</div>
+    <div class="rl-title">No midas una sola latencia</div>
+    <div class="rl-sub">Marca eventos observables. Conversación, modelo, tools y playback pueden avanzar a la vez; el usuario percibe cuándo oye algo útil y cuándo recibe el resultado.</div>
+  </div>
+
+  <div class="rl-timeline" aria-label="Cronología desde el final del turno hasta la entrega del resultado">
+    <div class="rl-event"><small>t₀ · HABLA</small><strong>termina el turno</strong></div>
+    <i aria-hidden="true">→</i>
+    <div class="rl-event"><small>t₁ · ENDPOINT</small><strong>fin detectado</strong></div>
+    <i aria-hidden="true">→</i>
+    <div class="rl-event rl-event--decision"><small>t₂ · DECISIÓN</small><strong>primer paso útil</strong></div>
+    <i aria-hidden="true">→</i>
+    <div class="rl-event rl-event--audio"><small>t₃ · AUDIO</small><strong>primer audio oído</strong></div>
+    <i aria-hidden="true">→</i>
+    <div class="rl-event rl-event--result"><small>t₄ · ENTREGA</small><strong>resultado recibido</strong></div>
+  </div>
+
+  <div class="rl-lanes">
+    <section class="rl-lane rl-lane--conversation">
+      <div class="rl-lane-label"><small>RELOJ CONVERSACIONAL</small><strong>¿Cuándo vuelve a sentirse viva la interacción?</strong></div>
+      <div class="rl-track">
+        <span class="rl-segment rl-segment--turn">detección</span>
+        <span class="rl-segment rl-segment--model">modelo / runtime</span>
+        <span class="rl-segment rl-segment--speech">síntesis + playback</span>
+      </div>
+      <div class="rl-measure"><code>T_first_audio = t(audio_oído) − t(fin_turno)</code><span>Incluye más que el tiempo del modelo.</span></div>
+    </section>
+
+    <section class="rl-lane rl-lane--operation">
+      <div class="rl-lane-label"><small>RELOJ OPERACIONAL</small><strong>¿Cuándo termina el trabajo que produce el resultado?</strong></div>
+      <div class="rl-track rl-track--operation">
+        <span class="rl-segment rl-segment--dispatch">dispatch</span>
+        <span class="rl-segment rl-segment--tool">tool / operación</span>
+        <span class="rl-segment rl-segment--deliver">entrega</span>
+      </div>
+      <div class="rl-measure"><code>T_operation = t(resultado_listo) − t(inicio_operación)</code><span>Puede solaparse con una respuesta hablada.</span></div>
+    </section>
+  </div>
+
+  <div class="rl-metrics" aria-label="Cinco relojes que conviene instrumentar">
+    <div><span>01</span><small>FIN DE TURNO</small><strong>habla → endpoint</strong></div>
+    <div><span>02</span><small>PRIMERA DECISIÓN</small><strong>habla → decisión útil</strong></div>
+    <div><span>03</span><small>PRIMER AUDIO</small><strong>habla → audio oído</strong></div>
+    <div><span>04</span><small>OPERACIÓN</small><strong>inicio → resultado listo</strong></div>
+    <div><span>05</span><small>ENTREGA</small><strong>habla → resultado recibido</strong></div>
+  </div>
+
+  <div class="rl-contracts">
+    <div><span>NO SUMAR A CIEGAS</span><strong>Los relojes se solapan: una tool puede seguir mientras la conversación ya continúa.</strong></div>
+    <div><span>MEDIR LA COLA</span><strong>Una media oculta esperas raras; conserva la distribución por etapa y por ruta.</strong></div>
+    <div><span>BENCHMARK ≠ INTERACCIÓN</span><strong>Más acierto puede no compensar una ruta que tarda demasiado para la superficie de producto.</strong></div>
+  </div>
+
+  <div class="rl-caveat"><span>CONTRATO</span><strong>Instrumenta marcas reales del runtime, la tool y el playback. No infieras experiencia de usuario a partir de “latencia del modelo” solamente.</strong></div>
+
+  <div class="rl-sources">Fuentes oficiales:
+    <a href="https://platform.openai.com/docs/api-reference/realtime">OpenAI Realtime API</a> ·
+    <a href="https://openai.github.io/openai-agents-python/tracing/">OpenAI Agents SDK — Tracing</a>
+  </div>
+</div>
+
+<style>
+.rl-wrap,.rl-wrap *{box-sizing:border-box}
+.rl-wrap{
+  --rl-bg:var(--md-default-bg-color,#fff);
+  --rl-fg:var(--md-default-fg-color,#111827);
+  --rl-muted:color-mix(in srgb,var(--rl-fg) 58%,transparent);
+  --rl-border:color-mix(in srgb,var(--rl-fg) 14%,transparent);
+  --rl-blue:#3567d6;
+  --rl-teal:#138b84;
+  --rl-amber:#c98200;
+  --rl-ink:#313a40;
+  container-type:inline-size;
+  display:grid;
+  gap:13px;
+  margin:1.1rem 0 1.5rem;
+  padding:clamp(14px,2vw,22px);
+  border:1px solid var(--rl-border);
+  border-radius:20px;
+  background:
+    radial-gradient(85% 120% at 0 0,color-mix(in srgb,var(--rl-blue) 7%,transparent),transparent 60%),
+    radial-gradient(85% 120% at 100% 0,color-mix(in srgb,var(--rl-amber) 7%,transparent),transparent 60%),
+    var(--rl-bg);
+  color:var(--rl-fg)
+}
+.rl-head{display:grid;gap:4px}
+.rl-kicker{font-size:10px;font-weight:950;letter-spacing:.1em;color:var(--rl-muted)}
+.rl-title{font-size:clamp(18px,2.1vw,24px);font-weight:900;line-height:1.12;letter-spacing:-.02em}
+.rl-sub{max-width:90ch;font-size:13.3px;line-height:1.47;color:var(--rl-muted)}
+.rl-timeline{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr);gap:6px;align-items:center}
+.rl-event{display:grid;gap:2px;min-width:0;padding:9px 8px;border:1px solid var(--rl-border);border-radius:11px;background:var(--rl-bg);text-align:center}
+.rl-event--decision{border-color:color-mix(in srgb,var(--rl-blue) 35%,var(--rl-border))}
+.rl-event--audio{border-color:color-mix(in srgb,var(--rl-teal) 38%,var(--rl-border));background:color-mix(in srgb,var(--rl-teal) 4%,var(--rl-bg))}
+.rl-event--result{border-color:color-mix(in srgb,var(--rl-amber) 40%,var(--rl-border));background:color-mix(in srgb,var(--rl-amber) 4%,var(--rl-bg))}
+.rl-event small{font-size:8.2px;font-weight:950;letter-spacing:.06em;color:var(--rl-muted)}
+.rl-event strong{font-size:10.7px;line-height:1.25}
+.rl-timeline>i{font-style:normal;font-weight:900;color:var(--rl-muted);font-size:11px}
+.rl-lanes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.rl-lane{display:grid;gap:9px;min-width:0;padding:12px;border:1px solid var(--rl-border);border-radius:15px;background:color-mix(in srgb,var(--rl-bg) 97%,var(--rl-fg) 3%)}
+.rl-lane--conversation{border-top:3px solid var(--rl-teal)}
+.rl-lane--operation{border-top:3px solid var(--rl-amber)}
+.rl-lane-label{display:grid;gap:2px}
+.rl-lane-label small{font-size:8.7px;font-weight:950;letter-spacing:.07em;color:var(--rl-muted)}
+.rl-lane-label strong{font-size:12.3px;line-height:1.33}
+.rl-track{display:grid;grid-template-columns:.7fr 1.4fr 1fr;gap:4px;min-height:38px}
+.rl-track--operation{grid-template-columns:.55fr 1.7fr .75fr}
+.rl-segment{display:grid;place-items:center;min-width:0;padding:7px 5px;border-radius:8px;border:1px solid var(--rl-border);font:800 9px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;text-align:center}
+.rl-segment--turn{background:color-mix(in srgb,var(--rl-ink) 7%,var(--rl-bg))}
+.rl-segment--model,.rl-segment--dispatch{background:color-mix(in srgb,var(--rl-blue) 7%,var(--rl-bg));border-color:color-mix(in srgb,var(--rl-blue) 28%,var(--rl-border))}
+.rl-segment--speech{background:color-mix(in srgb,var(--rl-teal) 8%,var(--rl-bg));border-color:color-mix(in srgb,var(--rl-teal) 30%,var(--rl-border))}
+.rl-segment--tool{background:color-mix(in srgb,var(--rl-amber) 9%,var(--rl-bg));border-color:color-mix(in srgb,var(--rl-amber) 32%,var(--rl-border))}
+.rl-segment--deliver{background:color-mix(in srgb,var(--rl-teal) 7%,var(--rl-bg));border-color:color-mix(in srgb,var(--rl-teal) 28%,var(--rl-border))}
+.rl-measure{display:grid;gap:3px;padding-top:8px;border-top:1px solid var(--rl-border)}
+.rl-measure code{font-size:9.5px;line-height:1.35;white-space:normal;word-break:break-word}
+.rl-measure span{font-size:10.2px;line-height:1.35;color:var(--rl-muted)}
+.rl-metrics{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}
+.rl-metrics>div{display:grid;grid-template-columns:auto 1fr;grid-template-areas:"n k" "n v";column-gap:7px;align-items:center;min-width:0;padding:8px;border:1px solid var(--rl-border);border-radius:10px;background:var(--rl-bg)}
+.rl-metrics span{grid-area:n;display:grid;place-items:center;width:24px;height:24px;border:1px solid var(--rl-border);border-radius:999px;font:900 8px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--rl-muted)}
+.rl-metrics small{grid-area:k;font-size:7.7px;font-weight:950;letter-spacing:.055em;color:var(--rl-muted)}
+.rl-metrics strong{grid-area:v;font-size:9.5px;line-height:1.25}
+.rl-contracts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.rl-contracts>div{display:grid;gap:3px;padding:9px 10px;border:1px solid var(--rl-border);border-radius:11px;background:var(--rl-bg)}
+.rl-contracts span{font-size:8.2px;font-weight:950;letter-spacing:.06em;color:var(--rl-muted)}
+.rl-contracts strong{font-size:10.5px;line-height:1.38}
+.rl-caveat{display:grid;grid-template-columns:auto 1fr;gap:9px;align-items:center;padding:10px 11px;border:1px solid color-mix(in srgb,var(--rl-blue) 34%,var(--rl-border));border-radius:11px;background:color-mix(in srgb,var(--rl-blue) 4%,var(--rl-bg))}
+.rl-caveat span{font-size:8.7px;font-weight:950;letter-spacing:.08em;color:var(--rl-muted)}
+.rl-caveat strong{font-size:10.8px;line-height:1.4}
+.rl-sources{font-size:9.8px;line-height:1.4;color:var(--rl-muted)}
+.rl-sources a{font-weight:800}
+@container (max-width:760px){
+  .rl-timeline{grid-template-columns:1fr;gap:5px}
+  .rl-timeline>i{transform:rotate(90deg);justify-self:center}
+  .rl-lanes{grid-template-columns:1fr}
+  .rl-metrics{grid-template-columns:1fr 1fr}
+  .rl-metrics>div:last-child{grid-column:1/-1}
+  .rl-contracts{grid-template-columns:1fr}
+}
+@container (max-width:430px){
+  .rl-wrap{border-radius:16px;padding:13px;gap:11px}
+  .rl-sub{font-size:12.5px}
+  .rl-track,.rl-track--operation{grid-template-columns:1fr}
+  .rl-metrics{grid-template-columns:1fr}
+  .rl-metrics>div:last-child{grid-column:auto}
+  .rl-caveat{grid-template-columns:1fr;gap:4px}
+}
+@media (prefers-reduced-motion:reduce){
+  .rl-wrap *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
+</style>
