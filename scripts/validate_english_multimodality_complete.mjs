@@ -143,6 +143,72 @@ try {
         }
       }
 
+      if (entry.route.endsWith('/02-alineamiento/')) {
+        const imageBind = page.locator('[data-demo="mm-02-imagebind"]');
+        if (await imageBind.count() !== 1) {
+          failures.push(`${entry.route}: missing canonical ImageBind transitivity visual`);
+        } else {
+          if (await imageBind.locator('.ib-tab').count() !== 3) failures.push(`${entry.route}: ImageBind visual lost its three canonical tabs`);
+          if (await imageBind.locator('.ib-panel').count() !== 3) failures.push(`${entry.route}: ImageBind visual lost its three canonical panels`);
+          if (await imageBind.locator('.ib-spoke-node').count() !== 6) failures.push(`${entry.route}: ImageBind visual lost six-modality anchor structure`);
+          if (await imageBind.locator('.ib-col-card').count() !== 2) failures.push(`${entry.route}: ImageBind visual lost binary-vs-native comparison`);
+          const imageBindText = (await imageBind.textContent()) || '';
+          for (const token of ['The image–text pair problem', 'Image as the anchor', 'What changes with native alignment', 'Transitive alignment', 'N(N−1)/2 = 15', 'N = 6', 'Gemini Embedding 2']) {
+            if (!imageBindText.includes(token)) failures.push(`${entry.route}: ImageBind visual missing ${JSON.stringify(token)}`);
+          }
+          await assertTabInteraction(imageBind, '.ib-tab', '.ib-panel', 2, 'ImageBind native-alignment', entry.route);
+        }
+
+        const instruction = page.locator('[data-demo="mm-02-instruction"]');
+        if (await instruction.count() !== 1) {
+          failures.push(`${entry.route}: missing canonical visual-instruction visual`);
+        } else {
+          if (await instruction.locator('.ivs-tab').count() !== 2) failures.push(`${entry.route}: visual-instruction visual lost its two canonical tabs`);
+          if (await instruction.locator('.ivs-panel').count() !== 2) failures.push(`${entry.route}: visual-instruction visual lost its two canonical panels`);
+          if (await instruction.locator('.ivs-card').count() !== 2) failures.push(`${entry.route}: visual-instruction visual lost pair-vs-triple comparison`);
+          if (await instruction.locator('.ivs-chain-node').count() !== 5) failures.push(`${entry.route}: visual-instruction synthetic-data chain lost stages`);
+          if (await instruction.locator('.ivs-insight').count() !== 2) failures.push(`${entry.route}: visual-instruction visual lost advantage/risk comparison`);
+          const instructionText = (await instruction.textContent()) || '';
+          for (const token of ['Pairs vs triples', 'Synthetic generation with GPT-4', 'Shared representation', 'Instruction-following model', 'Structural risk']) {
+            if (!instructionText.includes(token)) failures.push(`${entry.route}: visual-instruction visual missing ${JSON.stringify(token)}`);
+          }
+          await assertTabInteraction(instruction, '.ivs-tab', '.ivs-panel', 1, 'visual-instruction synthetic generation', entry.route);
+        }
+
+        const dataQuality = page.locator('[data-demo="mm-02-data-quality"]');
+        if (await dataQuality.count() !== 1) {
+          failures.push(`${entry.route}: missing canonical data-quality visual`);
+        } else {
+          if (await dataQuality.locator('.cdp-tab').count() !== 2) failures.push(`${entry.route}: data-quality visual lost its two canonical tabs`);
+          if (await dataQuality.locator('.cdp-panel').count() !== 2) failures.push(`${entry.route}: data-quality visual lost its two canonical panels`);
+          if (await dataQuality.locator('.cdp-cat-row').count() !== 6) failures.push(`${entry.route}: data-quality visual lost six category profiles`);
+          if (await dataQuality.locator('.cdp-stage').count() !== 3) failures.push(`${entry.route}: data-quality cascade lost one of three training stages`);
+          const dataQualityText = (await dataQuality.textContent()) || '';
+          for (const token of ['Data → capabilities', 'The cascade effect', 'Categories frequent in training', 'Categories infrequent in training', 'Stage 1 · Pretraining', 'Stage 3 · RLHF']) {
+            if (!dataQualityText.includes(token)) failures.push(`${entry.route}: data-quality visual missing ${JSON.stringify(token)}`);
+          }
+          await assertTabInteraction(dataQuality, '.cdp-tab', '.cdp-panel', 1, 'data-quality cascade', entry.route);
+        }
+
+        const training = page.locator('[data-demo="mm-02-preference-data"]');
+        if (await training.count() !== 1) {
+          failures.push(`${entry.route}: missing canonical multimodal-training progression visual`);
+        } else {
+          if (await training.locator('.da-tab').count() !== 3) failures.push(`${entry.route}: training-progression visual lost its three canonical tabs`);
+          if (await training.locator('.da-panel').count() !== 3) failures.push(`${entry.route}: training-progression visual lost its three canonical panels`);
+          if (await training.locator('.da-ct-pair').count() !== 2) failures.push(`${entry.route}: training-progression visual lost contrastive pair comparison`);
+          if (await training.locator('.da-triple-item').count() !== 3) failures.push(`${entry.route}: training-progression visual lost instruction triple`);
+          if (await training.locator('.da-source-card').count() !== 2) failures.push(`${entry.route}: training-progression visual lost human-vs-synthetic sources`);
+          if (await training.locator('.da-inh-node').count() !== 3) failures.push(`${entry.route}: training-progression visual lost inheritance chain`);
+          if (await training.locator('.da-rlhf-node').count() !== 3) failures.push(`${entry.route}: training-progression visual lost RLHF chain`);
+          const trainingText = (await training.textContent()) || '';
+          for (const token of ['Stage 1 — Pretraining', 'Stage 2 — Fine-tuning', 'Stage 3 — RLHF', 'Contrastive learning', 'Human annotation', 'Synthetic generation', 'Human preference alignment (RLHF)']) {
+            if (!trainingText.includes(token)) failures.push(`${entry.route}: training-progression visual missing ${JSON.stringify(token)}`);
+          }
+          await assertTabInteraction(training, '.da-tab', '.da-panel', 2, 'training-progression RLHF', entry.route);
+        }
+      }
+
       if (entry.route.endsWith('/03-arquitecturas/')) {
         const tradeoffs = page.locator('[data-demo="03-tradeoffs"]');
         if (await tradeoffs.count() !== 1) {
@@ -210,10 +276,10 @@ try {
         }
       }
 
-      // Chapters 1, 3 and 4 now use canonical tab/panel interactions that are
+      // Chapters 1–4 now use canonical tab/panel interactions that are
       // validated explicitly above and in chapter-specific QA. Do not require
       // obsolete <details> disclosures merely because older English redesigns used them.
-      if (entry.demos && !entry.route.endsWith('/01-el-problema/') && !entry.route.endsWith('/03-arquitecturas/') && !entry.route.endsWith('/04-evaluacion/')) {
+      if (entry.demos && !entry.route.endsWith('/01-el-problema/') && !entry.route.endsWith('/02-alineamiento/') && !entry.route.endsWith('/03-arquitecturas/') && !entry.route.endsWith('/04-evaluacion/')) {
         const details = page.locator('[data-demo] details');
         if (await details.count() === 0) {
           failures.push(`${entry.route}: visuals expose no interactive disclosure`);
@@ -269,4 +335,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Complete English Multimodality QA passed: introduction + Chapters 1–5, 27 unique native visuals, canonical Chapter 1 common-space interaction, canonical Chapter 3 trade-off/VQ-VAE-MoE/four-family interactions, canonical Chapter 4 grounding interaction, six native-English MP4/poster pairs, no Spanish media inheritance, desktop/mobile clean.');
+console.log('Complete English Multimodality QA passed: introduction + Chapters 1–5, 27 unique native visuals, canonical Chapter 1 common-space interaction, canonical Chapter 2 ImageBind/instruction/data-quality/training-progression interactions, canonical Chapter 3 trade-off/VQ-VAE-MoE/four-family interactions, canonical Chapter 4 grounding interaction, six native-English MP4/poster pairs, no Spanish media inheritance, desktop/mobile clean.');
