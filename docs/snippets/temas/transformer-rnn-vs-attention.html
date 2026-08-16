@@ -1,0 +1,87 @@
+<div class="tra-wrap" data-demo="topic-transformer-rnn-vs-attention">
+  <div class="tra-head">
+    <div class="tra-kicker">RECURRENCIA → DEPENDENCIA SECUENCIAL · ATENCIÓN → INTERACCIÓN DIRECTA</div>
+    <div class="tra-title">Por qué la atención cambió la ruta entre posiciones</div>
+    <div class="tra-sub">La diferencia no es que una RNN “no pueda recordar” y un Transformer sí. Es la geometría del cómputo: una red recurrente propaga estado paso a paso; self-attention puede conectar dos posiciones conocidas dentro de una sola capa y procesar esas posiciones en paralelo.</div>
+  </div>
+
+  <div class="tra-compare" role="img" aria-label="Comparación entre una red recurrente que propaga estado secuencialmente y una capa de self-attention que conecta posiciones directamente y procesa posiciones conocidas en paralelo">
+    <section class="tra-lane tra-lane--rnn">
+      <div class="tra-lane-head"><span>RNN / LSTM</span><strong>el estado recorre la secuencia</strong></div>
+      <div class="tra-sequence tra-sequence--rnn" aria-label="Cadena recurrente de cuatro posiciones">
+        <div class="tra-token"><b>x₁</b><small>token 1</small></div>
+        <i>→</i>
+        <div class="tra-state"><b>h₁</b><small>estado</small></div>
+        <i>→</i>
+        <div class="tra-state"><b>h₂</b><small>estado</small></div>
+        <i>→</i>
+        <div class="tra-state"><b>h₃</b><small>estado</small></div>
+        <i>→</i>
+        <div class="tra-state tra-state--target"><b>h₄</b><small>posición 4</small></div>
+      </div>
+      <div class="tra-path"><span>DEPENDENCIA x₁ → h₄</span><strong>atraviesa Θ(n) pasos recurrentes</strong></div>
+      <div class="tra-metrics">
+        <div><span>OPERACIONES SECUENCIALES / CAPA</span><strong>O(n)</strong></div>
+        <div><span>CAMINO MÁXIMO ENTRE POSICIONES</span><strong>O(n)</strong></div>
+      </div>
+    </section>
+
+    <section class="tra-lane tra-lane--attn">
+      <div class="tra-lane-head"><span>SELF-ATTENTION</span><strong>cada posición consulta el conjunto conocido</strong></div>
+      <div class="tra-attn-stage">
+        <div class="tra-inputs" aria-label="Cuatro posiciones de entrada">
+          <div class="tra-token"><b>x₁</b><small>1</small></div>
+          <div class="tra-token"><b>x₂</b><small>2</small></div>
+          <div class="tra-token"><b>x₃</b><small>3</small></div>
+          <div class="tra-token"><b>x₄</b><small>4</small></div>
+        </div>
+        <div class="tra-matrix" aria-label="Matriz de atención cuatro por cuatro">
+          <span class="tra-cell tra-cell--hot"></span><span class="tra-cell"></span><span class="tra-cell"></span><span class="tra-cell tra-cell--link"></span>
+          <span class="tra-cell"></span><span class="tra-cell tra-cell--hot"></span><span class="tra-cell"></span><span class="tra-cell"></span>
+          <span class="tra-cell"></span><span class="tra-cell"></span><span class="tra-cell tra-cell--hot"></span><span class="tra-cell"></span>
+          <span class="tra-cell tra-cell--link"></span><span class="tra-cell"></span><span class="tra-cell"></span><span class="tra-cell tra-cell--hot"></span>
+        </div>
+        <div class="tra-outputs" aria-label="Cuatro posiciones de salida">
+          <div class="tra-output"><b>y₁</b></div>
+          <div class="tra-output"><b>y₂</b></div>
+          <div class="tra-output"><b>y₃</b></div>
+          <div class="tra-output"><b>y₄</b></div>
+        </div>
+      </div>
+      <div class="tra-path tra-path--attn"><span>DEPENDENCIA x₁ ↔ y₄</span><strong>puede cruzar una sola capa de atención</strong></div>
+      <div class="tra-metrics">
+        <div><span>OPERACIONES SECUENCIALES / CAPA</span><strong>O(1)</strong></div>
+        <div><span>CAMINO MÁXIMO ENTRE POSICIONES</span><strong>O(1)</strong></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="tra-contracts">
+    <div><span>PARALELISMO</span><strong>durante entrenamiento, las posiciones conocidas de una capa de atención pueden calcularse juntas; la recurrencia introduce una dependencia paso a paso</strong></div>
+    <div><span>CAMINO CORTO</span><strong>una relación distante no necesita atravesar una cadena de estados recurrentes dentro de la capa</strong></div>
+    <div><span>PRECIO</span><strong>la atención densa compara pares de posiciones: gana paralelismo y camino corto, pero introduce la matriz n × n explicada en la sección siguiente</strong></div>
+  </div>
+
+  <div class="tra-caveat"><span>IMPORTANTE</span><strong>Esto describe el cómputo dentro de una capa sobre posiciones ya conocidas. Un decoder autoregresivo sigue generando tokens nuevos secuencialmente: el token t+1 no existe hasta decidir t.</strong></div>
+
+  <div class="tra-ref">Fuentes primarias:
+    <a href="https://arxiv.org/abs/1706.03762">Vaswani et al. (2017), <em>Attention Is All You Need</em>, Tabla 1</a> ·
+    <a href="https://arxiv.org/abs/1409.3215">Sutskever et al. (2014), <em>Sequence to Sequence Learning with Neural Networks</em></a>
+  </div>
+</div>
+
+<style>
+.tra-wrap,.tra-wrap *{box-sizing:border-box}
+.tra-wrap{--tra-a:#188b78;--tra-b:#4757d6;--tra-c:#b97900;--tra-r:#c84f5d;--tra-bg:var(--md-default-bg-color,#fff);--tra-fg:var(--md-default-fg-color,#111827);--tra-muted:color-mix(in srgb,var(--tra-fg) 58%,transparent);--tra-border:color-mix(in srgb,var(--tra-fg) 14%,transparent);container-type:inline-size;margin:1.1rem 0 1.5rem;padding:clamp(14px,2vw,22px);border:1px solid var(--tra-border);border-radius:20px;background:radial-gradient(90% 120% at 0 0,color-mix(in srgb,var(--tra-r) 6%,transparent),transparent 56%),radial-gradient(90% 120% at 100% 0,color-mix(in srgb,var(--tra-b) 7%,transparent),transparent 58%),var(--tra-bg);color:var(--tra-fg)}
+.tra-head{display:grid;gap:4px;margin-bottom:13px}.tra-kicker{font-size:10px;font-weight:950;letter-spacing:.11em;color:var(--tra-muted)}.tra-title{font-size:clamp(18px,2.1vw,24px);font-weight:900;line-height:1.12;letter-spacing:-.02em}.tra-sub{font-size:13.3px;line-height:1.48;color:var(--tra-muted);max-width:94ch}
+.tra-compare{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:stretch}.tra-lane{min-width:0;padding:12px;border:1px solid var(--tra-border);border-radius:15px;display:grid;gap:10px;align-content:start;background:color-mix(in srgb,var(--tra-bg) 97%,var(--tra-fg) 3%)}.tra-lane--rnn{border-color:color-mix(in srgb,var(--tra-r) 38%,var(--tra-border));background:color-mix(in srgb,var(--tra-r) 3%,var(--tra-bg))}.tra-lane--attn{border-color:color-mix(in srgb,var(--tra-b) 42%,var(--tra-border));background:color-mix(in srgb,var(--tra-b) 3%,var(--tra-bg))}.tra-lane-head{display:grid;gap:2px}.tra-lane-head span{font-size:8.3px;font-weight:950;letter-spacing:.09em;color:var(--tra-muted)}.tra-lane-head strong{font-size:12.2px;line-height:1.25}
+.tra-sequence{display:grid;grid-template-columns:auto 10px auto 10px auto 10px auto 10px auto;gap:4px;align-items:center;min-height:92px}.tra-sequence>i{font-style:normal;text-align:center;color:var(--tra-r);font-weight:950}.tra-token,.tra-state,.tra-output{min-width:0;border:1px solid var(--tra-border);border-radius:10px;background:var(--tra-bg);display:grid;place-items:center;gap:2px;padding:8px 5px}.tra-token b,.tra-state b,.tra-output b{font:900 12px/1 ui-monospace,SFMono-Regular,Menlo,monospace}.tra-token small,.tra-state small{font-size:7.2px;color:var(--tra-muted)}.tra-state{border-color:color-mix(in srgb,var(--tra-r) 30%,var(--tra-border));background:color-mix(in srgb,var(--tra-r) 4%,var(--tra-bg))}.tra-state--target{box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--tra-r) 42%,transparent)}
+.tra-attn-stage{display:grid;grid-template-columns:minmax(0,.58fr) minmax(90px,.82fr) minmax(0,.58fr);gap:8px;align-items:center;min-height:92px}.tra-inputs,.tra-outputs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}.tra-inputs .tra-token,.tra-output{padding:6px 4px}.tra-output{border-color:color-mix(in srgb,var(--tra-b) 30%,var(--tra-border));background:color-mix(in srgb,var(--tra-b) 4%,var(--tra-bg))}.tra-matrix{display:grid;grid-template-columns:repeat(4,1fr);gap:3px;aspect-ratio:1;max-width:116px;width:100%;justify-self:center;padding:7px;border:1px solid color-mix(in srgb,var(--tra-b) 32%,var(--tra-border));border-radius:12px;background:var(--tra-bg)}.tra-cell{border-radius:4px;background:color-mix(in srgb,var(--tra-b) 10%,var(--tra-bg));border:1px solid color-mix(in srgb,var(--tra-b) 12%,var(--tra-border))}.tra-cell--hot{background:color-mix(in srgb,var(--tra-b) 65%,var(--tra-bg))}.tra-cell--link{background:color-mix(in srgb,var(--tra-c) 72%,var(--tra-bg));border-color:color-mix(in srgb,var(--tra-c) 66%,var(--tra-border))}
+.tra-path{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 9px;border:1px dashed color-mix(in srgb,var(--tra-r) 46%,var(--tra-border));border-radius:10px;background:color-mix(in srgb,var(--tra-r) 3%,var(--tra-bg))}.tra-path--attn{border-color:color-mix(in srgb,var(--tra-b) 46%,var(--tra-border));background:color-mix(in srgb,var(--tra-b) 3%,var(--tra-bg))}.tra-path span{font-size:7.6px;font-weight:950;letter-spacing:.07em;color:var(--tra-muted)}.tra-path strong{font-size:9px;line-height:1.25;text-align:right}
+.tra-metrics{display:grid;grid-template-columns:1fr 1fr;gap:6px}.tra-metrics>div{min-width:0;padding:8px;border:1px solid var(--tra-border);border-radius:10px;background:var(--tra-bg);display:grid;gap:3px}.tra-metrics span{font-size:6.9px;font-weight:950;letter-spacing:.055em;color:var(--tra-muted);line-height:1.15}.tra-metrics strong{font:950 15px/1 ui-monospace,SFMono-Regular,Menlo,monospace}
+.tra-contracts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}.tra-contracts>div{min-width:0;padding:9px 10px;border-left:3px solid var(--tra-b);border-radius:0 9px 9px 0;background:color-mix(in srgb,var(--tra-b) 4%,var(--tra-bg));display:grid;gap:3px}.tra-contracts>div:nth-child(1){border-left-color:var(--tra-a);background:color-mix(in srgb,var(--tra-a) 4%,var(--tra-bg))}.tra-contracts>div:nth-child(3){border-left-color:var(--tra-c);background:color-mix(in srgb,var(--tra-c) 4%,var(--tra-bg))}.tra-contracts span{font-size:8px;font-weight:950;letter-spacing:.08em;color:var(--tra-muted)}.tra-contracts strong{font-size:9.4px;line-height:1.32}
+.tra-caveat{display:grid;grid-template-columns:auto 1fr;gap:9px;align-items:start;margin-top:9px;padding:9px 10px;border:1px solid color-mix(in srgb,var(--tra-c) 40%,var(--tra-border));border-radius:11px;background:color-mix(in srgb,var(--tra-c) 4%,var(--tra-bg))}.tra-caveat span{font-size:7.7px;font-weight:950;letter-spacing:.08em;color:var(--tra-c)}.tra-caveat strong{font-size:9.4px;line-height:1.34}.tra-ref{margin-top:9px;font-size:8.5px;line-height:1.35;color:var(--tra-muted)}.tra-ref a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+@container (max-width:760px){.tra-compare{grid-template-columns:1fr}.tra-sequence{grid-template-columns:auto 8px auto 8px auto 8px auto 8px auto;gap:2px;min-height:78px}.tra-token,.tra-state{padding:7px 3px}.tra-token b,.tra-state b{font-size:10.5px}.tra-token small,.tra-state small{font-size:6.4px}.tra-attn-stage{grid-template-columns:minmax(0,.62fr) minmax(86px,.76fr) minmax(0,.62fr);min-height:84px}.tra-matrix{max-width:100px}.tra-path{align-items:flex-start}.tra-path strong{font-size:8.8px}.tra-contracts{grid-template-columns:1fr}.tra-caveat{grid-template-columns:1fr}.tra-lane-head strong{font-size:11.5px}}
+@container (max-width:430px){.tra-sequence{grid-template-columns:1fr;gap:4px}.tra-sequence>i{transform:none;height:12px;line-height:12px;font-size:0}.tra-sequence>i::before{content:"↓";font-size:15px;line-height:12px;color:var(--tra-r)}.tra-token,.tra-state{min-height:34px}.tra-attn-stage{grid-template-columns:1fr;gap:5px}.tra-inputs,.tra-outputs{grid-template-columns:repeat(4,1fr)}.tra-matrix{max-width:142px}.tra-path{display:grid;grid-template-columns:1fr}.tra-path strong{text-align:left}.tra-metrics{grid-template-columns:1fr 1fr}.tra-metrics strong{font-size:14px}}
+@media (prefers-reduced-motion:reduce){.tra-wrap *{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
