@@ -1,0 +1,31 @@
+{
+  "source": "snippets/ia-pib-bienestar-energia/01-costes-cortes.html",
+  "source_blob_sha": "ff6aa27aeb0b343fef4dc064f0c61e995fa0412c",
+  "replacements": {
+    "El coste real de un corte de suministro no es el kWh perdido": "The real cost of an outage is not the missing kWh",
+    "Las interrupciones tienen un coste que no aparece en la factura eléctrica pero sí en los márgenes de cada organización que los soporta. Y para el sector salud el coste no es económico: es en resultados clínicos.": "Interruptions impose a cost that does not appear on the electricity bill but does appear in the margins of every organization that bears them. In healthcare, the cost is not primarily economic: it appears in clinical outcomes.",
+    "Gran empresa": "Large firm",
+    "de ingresos anuales": "of annual revenue",
+    "Generadores de respaldo, pérdida de producción, renegociación de pedidos. El diferencial frente a competidores con suministro estable actúa como impuesto implícito permanente sobre la competitividad.": "Backup generators, lost production and renegotiated orders. The gap relative to competitors with stable supply acts as a permanent implicit tax on competitiveness.",
+    "Pequeña y mediana empresa": "Small and medium-sized firm",
+    "Sin capacidad de instalar generación de respaldo propia. Un corte prolongado puede suponer género perdido, clientes cancelados y maquinaria dañada sin posibilidad de recuperación inmediata.": "Without the capacity to install its own backup generation, a prolonged outage can mean spoiled goods, cancelled customers and damaged machinery with no immediate path to recovery.",
+    "Sector salud": "Healthcare",
+    "Irreversible": "Irreversible",
+    "en resultados clínicos": "in clinical outcomes",
+    "Ruptura de cadena de frío de vacunas, cancelación de procedimientos quirúrgicos, mortalidad perinatal correlacionada con frecuencia de cortes. El coste no se mide en euros.": "Vaccine cold-chain failures, cancelled surgical procedures and perinatal mortality correlated with outage frequency. The cost is not measured in euros.",
+    "Fuente: Banco Mundial, Enterprise Surveys. El coste del 5-6% es la mediana para grandes empresas en países con infraestructura inestable; el 20%+ recoge el percentil superior para pymes sin generación propia.": "Source: World Bank, Enterprise Surveys. The 5–6% cost is the median for large firms in countries with unstable infrastructure; 20%+ captures the upper percentile for SMEs without their own generation."
+  },
+  "forbidden_output_tokens": [
+    "El coste real de un corte",
+    "Las interrupciones tienen un coste",
+    "Gran empresa",
+    "de ingresos anuales",
+    "Generadores de respaldo",
+    "Pequeña y mediana empresa",
+    "Sin capacidad de instalar",
+    "Sector salud",
+    "en resultados clínicos",
+    "Ruptura de cadena de frío",
+    "Fuente: Banco Mundial"
+  ]
+}
