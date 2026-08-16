@@ -1,0 +1,33 @@
+{
+  "source": "snippets/datacenters-espacio/01-lanzamiento-inflection.html",
+  "source_blob_sha": "689cdd4f7ed6a04a77006f1a804a60f587113965",
+  "replacements": {
+    "data-demo=\"01-lanzamiento-inflection\"": "data-demo=\"dc-01-launch-cost\"",
+    ">curva de lanzamiento</div>": ">launch curve</div>",
+    ">La caída del coste de lanzamiento abre comparación, no viabilidad automática</div>": ">Falling launch cost opens comparison, not automatic viability</div>",
+    ">Pasar de decenas de miles de dólares por kilo a miles permite analizar nichos; competir con tierra exige costes operativos mucho menores.</div>": ">Moving from tens of thousands of dollars per kilogram to thousands makes niche analysis possible; competing with Earth requires much lower operating costs.</div>",
+    "aria-label=\"La caída del coste de lanzamiento abre comparación, no viabilidad automática\"": "aria-label=\"Falling launch cost opens comparison, not automatic viability\"",
+    ">Transbordador</text>": ">Space Shuttle</text>",
+    ">~88k USD/kg</text>": ">~$88k/kg</text>",
+    ">Reutilizacion</text>": ">Reusable launch</text>",
+    ">~1,4-2,5k/kg</text>": ">~$1.4–2.5k/kg</text>",
+    ">Umbral futuro</text>": ">Future threshold</text>",
+    ">&lt;200 USD/kg</text>": ">&lt;$200/kg</text>",
+    ">Antes: decenas de miles por kg</span>": ">Before: tens of thousands per kg</span>",
+    ">Ahora: miles por kg, caso a caso</span>": ">Now: thousands per kg, case by case</span>",
+    ">Futuro: depende de coste operativo total</span>": ">Future: depends on total operating cost</span>"
+  },
+  "forbidden_output_tokens": [
+    "curva de lanzamiento",
+    "La caída del coste de lanzamiento",
+    "Pasar de decenas de miles",
+    "Transbordador",
+    "USD/kg",
+    "Reutilizacion",
+    "1,4-2,5k",
+    "Umbral futuro",
+    "Antes: decenas de miles",
+    "Ahora: miles por kg",
+    "Futuro: depende"
+  ]
+}
