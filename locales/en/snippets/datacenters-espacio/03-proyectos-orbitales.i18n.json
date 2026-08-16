@@ -1,0 +1,41 @@
+{
+  "source": "snippets/datacenters-espacio/03-proyectos-orbitales.html",
+  "source_blob_sha": "517ac7f280a8619bfe05ad84baa7b650a1cc273d",
+  "replacements": {
+    "data-demo=\"03-proyectos-orbitales\"": "data-demo=\"dc-03-projects\"",
+    ">mapa de evidencia</div>": ">evidence map</div>",
+    ">Los proyectos reales validan piezas, no el datacenter completo</div>": ">Real projects validate components, not the complete data center</div>",
+    ">La evidencia actual muestra almacenamiento, cómputo a bordo o pruebas de hardware; no demuestra hiperscala orbital operativa.</div>": ">Current evidence shows storage, onboard compute or hardware tests; it does not demonstrate operational orbital hyperscale.</div>",
+    "aria-label=\"Los proyectos reales validan piezas, no el datacenter completo\"": "aria-label=\"Real projects validate components, not the complete data center\"",
+    ">evidencia real: piezas operativas, no nube orbital completa</text>": ">real evidence: operational components, not a complete orbital cloud</text>",
+    ">ejecuta apps y filtra observación</text>": ">runs apps and filters observation data</text>",
+    ">límite: cómputo especializado</text>": ">limit: specialized compute</text>",
+    ">122 TB y enlace óptico 2,5 Gbps</text>": ">122 TB and 2.5 Gbps optical link</text>",
+    ">límite: archivo, no nube general</text>": ">limit: archive, not general cloud</text>",
+    ">GPU real, Gemma y NanoGPT</text>": ">real GPU, Gemma and NanoGPT</text>",
+    ">límite: demostración pequeña</text>": ">limit: small demonstration</text>",
+    ">12 satélites, 5 PF, láser 100 Gbps</text>": ">12 satellites, 5 PF, 100 Gbps laser</text>",
+    ">límite: constelación cerrada</text>": ">limit: closed constellation</text>",
+    ">La evidencia ya es real, pero fragmentaria</span>": ">The evidence is now real, but fragmented</span>",
+    ">Hay GPU, archivo, apps y constelación especializada</span>": ">There are GPUs, archives, apps and a specialized constellation</span>",
+    ">Ninguna prueba equivale a hiperscala orbital</span>": ">No single test is equivalent to orbital hyperscale</span>"
+  },
+  "forbidden_output_tokens": [
+    "mapa de evidencia",
+    "Los proyectos reales",
+    "La evidencia actual muestra",
+    "evidencia real: piezas",
+    "ejecuta apps",
+    "límite: cómputo",
+    "enlace óptico 2,5",
+    "límite: archivo",
+    "GPU real",
+    "límite: demostración",
+    "12 satélites",
+    "láser 100 Gbps",
+    "límite: constelación",
+    "La evidencia ya es real",
+    "Hay GPU, archivo",
+    "Ninguna prueba equivale"
+  ]
+}
