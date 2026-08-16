@@ -36,7 +36,9 @@ try {
     if (await visual.count() !== 1) {
       failures.push(`${viewport.name}: expected exactly one canonical bottlenecks visual`);
     } else {
+      if (await visual.locator('.cue-grid').count() !== 1) failures.push(`${viewport.name}: expected the canonical bottleneck grid`);
       if (await visual.locator('.cue-item').count() !== 5) failures.push(`${viewport.name}: expected five canonical bottleneck cards`);
+      if (await visual.locator('.cue-item-num').count() !== 5) failures.push(`${viewport.name}: expected five canonical bottleneck indices`);
       if (await visual.locator('.cue-item-badge').count() !== 5) failures.push(`${viewport.name}: expected five canonical bottleneck badges`);
       if (await visual.locator('.cue-detail').count() !== 5) failures.push(`${viewport.name}: expected five canonical bottleneck details`);
       if (await visual.locator('[data-tab]').count() !== 0) failures.push(`${viewport.name}: bottlenecks visual contains invented interaction`);
