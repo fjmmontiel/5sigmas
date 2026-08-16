@@ -7,6 +7,7 @@
     "Los pares imagen-texto enseñan representaciones. Los triples de instrucción enseñan comportamiento. Son etapas distintas y no pueden sustituirse.": "Image–text pairs teach representations. Instruction triples teach behavior. They are different stages and cannot replace each other.",
     "Pares vs triples": "Pairs vs triples",
     "Generación sintética con GPT-4": "Synthetic generation with GPT-4",
+    "Generación sintética": "Synthetic generation",
     "Preentrenamiento contrastivo": "Contrastive pretraining",
     "Imagen": "Image",
     "Texto descriptivo": "Descriptive text",
