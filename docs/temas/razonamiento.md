@@ -96,15 +96,9 @@ La política correcta no es “pensar siempre más”. Es **rutar el presupuesto
 
 ## Razonamiento visible y razonamiento interno
 
-En un producto conviene separar:
+{{ include_html("snippets/temas/reasoning-evidence-surfaces.html") }}
 
-1. **Cómputo interno:** pasos que el sistema utiliza para resolver
-2. **Justificación al usuario:** explicación breve, verificable y adaptada a la tarea
-3. **Traza operacional:** tools, argumentos, resultados, tiempos y cambios de estado
-
-No hace falta mostrar cada token intermedio para ofrecer transparencia. De hecho, una explicación larga puede ocultar la evidencia importante.
-
-Una respuesta auditable debería citar los datos relevantes, exponer supuestos, indicar incertidumbre y registrar las acciones reales fuera del texto mostrado.
+No hace falta mostrar cada token intermedio para ofrecer transparencia. Una explicación larga puede ocultar la evidencia importante; una respuesta auditable debería citar los datos relevantes, exponer supuestos, indicar incertidumbre y registrar las acciones reales fuera del texto mostrado.
 
 ## Razonamiento con herramientas
 
