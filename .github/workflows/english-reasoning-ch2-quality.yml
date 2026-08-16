@@ -1,0 +1,74 @@
+name: English Reasoning Chapter 2 quality
+
+on:
+  pull_request:
+    paths:
+      - 'locales/en/snippets/modelos-razonadores/02-*'
+      - 'locales/en/series/modelos-razonadores/02-fallos.md'
+      - 'scripts/validate_english_reasoning_ch2.mjs'
+      - 'locale_main.py'
+      - '.github/workflows/english-reasoning-ch2-quality.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  reasoning-ch2:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      S5_LOCALE: en
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Prepare strict English locale
+        run: python scripts/prepare_locale.py --locale en
+
+      - name: Audit English locale sources
+        run: python scripts/audit_locale.py --locale en
+
+      - name: Build English locale strictly
+        run: mkdocs build -f mkdocs.en.yml --clean --strict
+
+      - name: Audit rendered English locale
+        run: python scripts/audit_locale.py --locale en --site site/en
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Serve English preview
+        run: |
+          python -m http.server 8000 --directory site > /tmp/5sigmas-reasoning-ch2.log 2>&1 &
+          for attempt in {1..30}; do
+            curl --fail --silent http://127.0.0.1:8000/en/series/modelos-razonadores/02-fallos/ > /dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/5sigmas-reasoning-ch2.log
+          exit 1
+
+      - name: Validate canonical English Reasoning Chapter 2 visuals
+        run: node scripts/validate_english_reasoning_ch2.mjs
+
+      - name: Upload Reasoning Chapter 2 screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: english-reasoning-ch2-review
+          path: artifacts/visual-review/english-reasoning-ch2-*.png
+          if-no-files-found: ignore
