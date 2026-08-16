@@ -1,0 +1,25 @@
+{
+  "source": "snippets/articulos-tecnicos/voice-rp-runtime.html",
+  "source_blob_sha": "f1938f793ba4553eec3e01263b035da02b7543f2",
+  "replacements": {
+    "Arquitectura de un runtime reactivo y proactivo de voz": "Architecture of a reactive and proactive voice runtime",
+    "Arquitectura": "Architecture",
+    "Solo una capa puede hablar.": "Only one layer can speak.",
+    "El resto publica eventos.": "Everything else publishes events.",
+    "voz": "voice",
+    "escucha · interrumpe · entrega": "listens · interrupts · delivers",
+    "razón": "reasoning",
+    "estado": "state",
+    "colas · locks · idempotencia": "queues · locks · idempotency"
+  },
+  "forbidden_output_tokens": [
+    "Arquitectura de un runtime",
+    "Solo una capa puede hablar",
+    "El resto publica eventos",
+    "voz",
+    "escucha · interrumpe · entrega",
+    "razón",
+    "estado",
+    "colas · locks · idempotencia"
+  ]
+}
