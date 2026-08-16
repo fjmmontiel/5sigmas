@@ -17,7 +17,15 @@ const chapters = [
     visualSelectors: ['.ctxmix', '.ragtrace', '.defsim'],
     screenshot: 'english-security-01-prompt-injection.png',
   },
-  { slug: '02-jailbreaks', route: '/en/series/seguridad-ia/02-jailbreaks/', title: 'Chapter 2 — Jailbreaks', concepts: ['attack budget', 'N=1', 'execution'], demos: 3, prefix: 'sec-02-', screenshot: 'english-security-02-jailbreaks.png' },
+  {
+    slug: '02-jailbreaks',
+    route: '/en/series/seguridad-ia/02-jailbreaks/',
+    title: 'Chapter 2 — Jailbreaks',
+    concepts: ['GCG', 'attack budget', 'N=1', 'Tool reachability', 'Constitutional Classifiers'],
+    demos: 3,
+    canonicalJailbreaks: true,
+    screenshot: 'english-security-02-jailbreaks.png',
+  },
   { slug: '03-envenenamiento', route: '/en/series/seguridad-ia/03-envenenamiento/', title: 'Chapter 3 — Poisoning', concepts: ['provenance', 'runtime memory', 'Sleeper Agents'], demos: 4, prefix: 'sec-03-', screenshot: 'english-security-03-poisoning.png' },
   { slug: '04-red-teaming', route: '/en/series/seguridad-ia/04-red-teaming/', title: 'Chapter 4 — Red teaming', concepts: ['trajectory', 'grader validity', 'release gate'], demos: 4, prefix: 'sec-04-', screenshot: 'english-security-04-red-teaming.png' },
   { slug: '05-controles-produccion', route: '/en/series/seguridad-ia/05-controles-produccion/', title: 'Chapter 5 — Production controls', concepts: ['least privilege', 'MCP', 'kill path'], demos: 4, prefix: 'sec-05-', screenshot: 'english-security-05-production-controls.png' },
@@ -61,6 +69,67 @@ async function validatePromptInjectionVisuals(page, chapter) {
     count += 1;
   }
   return count;
+}
+
+async function validateJailbreakVisuals(page, chapter) {
+  const selectors = ['.jbsearch', '.jbbudget', '.jbladder'];
+  for (const selector of selectors) {
+    const matches = page.locator(selector);
+    const count = await matches.count();
+    if (count !== 1) {
+      failures.push(`${chapter.route}: expected exactly one canonical ${selector}, found ${count}`);
+      continue;
+    }
+    const root = matches.first();
+    if (!await isVisible(root)) failures.push(`${chapter.route}: canonical ${selector} is not visible`);
+    const box = await root.boundingBox();
+    if (!box || box.width < 240 || box.height < 150) failures.push(`${chapter.route}: canonical ${selector} has invalid geometry ${JSON.stringify(box)}`);
+  }
+
+  const search = page.locator('.jbsearch');
+  if (await search.count() === 1) {
+    if (await search.locator('.jbsearch__attempt').count() !== 12) failures.push(`${chapter.route}: jailbreak search must expose 12 attempt markers`);
+    const run = search.locator('[data-run]');
+    if (await run.count() !== 1) failures.push(`${chapter.route}: jailbreak search is missing its run control`);
+    else {
+      await run.click();
+      await page.waitForTimeout(320);
+      const observed = Number((await search.locator('[data-count]').textContent()) || '0');
+      if (observed < 1) failures.push(`${chapter.route}: jailbreak search interaction did not advance attempts`);
+    }
+  }
+
+  const budget = page.locator('.jbbudget');
+  if (await budget.count() === 1) {
+    if (await budget.locator('.jbbudget__dot').count() !== 80) failures.push(`${chapter.route}: attack-budget visual must expose 80 conceptual search points`);
+    const range = budget.locator('input[type="range"]');
+    if (await range.count() !== 1) failures.push(`${chapter.route}: attack-budget visual is missing its attempt slider`);
+    else {
+      await range.evaluate((node) => { node.value = '4'; node.dispatchEvent(new Event('input', { bubbles: true })); });
+      await budget.locator('[data-mode="adaptive"]').click();
+      await page.waitForTimeout(75);
+      const n = ((await budget.locator('[data-n]').textContent()) || '').replace(/[^0-9]/g, '');
+      if (n !== '1000') failures.push(`${chapter.route}: attack-budget slider did not reach N=1000`);
+      if (await budget.locator('.jbbudget__dot.is-feedback').count() === 0) failures.push(`${chapter.route}: adaptive attack-budget mode exposes no feedback points`);
+    }
+  }
+
+  const ladder = page.locator('.jbladder');
+  if (await ladder.count() === 1) {
+    const steps = ladder.locator('[data-step]');
+    if (await steps.count() !== 4) failures.push(`${chapter.route}: outcome ladder must expose four distinct levels`);
+    const execution = ladder.locator('[data-step="execution"]');
+    if (await execution.count() !== 1) failures.push(`${chapter.route}: outcome ladder is missing execution level`);
+    else {
+      await execution.click();
+      await page.waitForTimeout(75);
+      if (await execution.getAttribute('aria-pressed') !== 'true') failures.push(`${chapter.route}: outcome ladder execution interaction did not activate`);
+      const detail = ((await ladder.locator('.jbladder__detail').innerText()) || '').toLowerCase();
+      if (!detail.includes('external effect') || !detail.includes('runtime')) failures.push(`${chapter.route}: outcome ladder execution detail lost canonical consequence/runtime explanation`);
+    }
+  }
+
+  return selectors.reduce(async (promise, selector) => (await promise) + (await page.locator(selector).count() === 1 ? 1 : 0), Promise.resolve(0));
 }
 
 async function validateCanonicalCausalVisual(page, chapter) {
@@ -131,10 +200,13 @@ try {
       if (!body.includes(chapter.title)) failures.push(`${chapter.route}: missing English chapter title`);
       for (const concept of chapter.concepts) if (!body.toLowerCase().includes(concept.toLowerCase())) failures.push(`${chapter.route}: missing core concept ${concept}`);
       for (const token of forbidden) if (body.includes(token)) failures.push(`${chapter.route}: Spanish leakage ${JSON.stringify(token)}`);
+      if (chapter.slug === '02-jailbreaks' && body.includes('Frequently asked questions')) failures.push(`${chapter.route}: English-only FAQ section drifted back into the canonical article`);
 
       const visualCount = chapter.visualSelectors
         ? await validatePromptInjectionVisuals(page, chapter)
-        : await validateLegacySecurityVisuals(page, chapter);
+        : chapter.canonicalJailbreaks
+          ? await validateJailbreakVisuals(page, chapter)
+          : await validateLegacySecurityVisuals(page, chapter);
       if (visualCount !== chapter.demos) failures.push(`${chapter.route}: expected ${chapter.demos} teaching visuals, found ${visualCount}`);
       if (viewport.name === 'desktop') totalVisuals += visualCount;
 

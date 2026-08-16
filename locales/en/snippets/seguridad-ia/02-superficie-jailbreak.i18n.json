@@ -1,0 +1,43 @@
+{
+  "source": "snippets/seguridad-ia/02-superficie-jailbreak.html",
+  "source_blob_sha": "84debf858fb6e1c7b56d20a3c8ca3765e7400a6d",
+  "replacements": {
+    "Un jailbreak automatizado es un problema de búsqueda": "An automated jailbreak is a search problem",
+    "El atacante genera una variante, observa la respuesta, puntúa el resultado y usa esa señal para construir el siguiente intento.": "The attacker generates a variant, observes the response, scores the result, and uses that signal to construct the next attempt.",
+    "▶ Ejecutar 12 intentos": "▶ Run 12 attempts",
+    "Prompt inicial": "Initial prompt",
+    "petición que el modelo rechaza": "request the model refuses",
+    "Mutación": "Mutation",
+    "cambia tokens, formato o framing": "changes tokens, format, or framing",
+    "Modelo": "Model",
+    "genera una nueva respuesta": "generates a new response",
+    "Score": "Score",
+    "¿se acercó al objetivo?": "did it get closer to the objective?",
+    "Intentos de ataque": "Attack attempts",
+    "Intentos observados": "Observed attempts",
+    "Cambio conceptual": "Conceptual shift",
+    "N=1 ≠ atacante adaptativo": "N=1 ≠ adaptive attacker",
+    "Una negativa aislada solo prueba un punto de una superficie enorme de entradas posibles.": "One isolated refusal tests only one point on an enormous surface of possible inputs.",
+    "El presupuesto de ataque debe formar parte del threat model: intentos, feedback disponible, adaptatividad, idiomas, formatos y rate limits.": "The attack budget must be part of the threat model: attempts, available feedback, adaptivity, languages, formats, and rate limits.",
+    "Cada respuesta ofrece nueva información al atacante. La evaluación debe declarar cuánta búsqueda permitimos.": "Each response gives the attacker new information. The evaluation must declare how much search we allow.",
+    "Un intento interesante no equivale todavía a daño: falta comprobar utilidad, tools y ejecución.": "An interesting attempt does not yet equal harm: usefulness, tools, and execution still have to be verified."
+  },
+  "forbidden_output_tokens": [
+    "Un jailbreak automatizado",
+    "El atacante genera",
+    "Ejecutar 12 intentos",
+    "Prompt inicial",
+    "petición que el modelo rechaza",
+    "Mutación",
+    "genera una nueva respuesta",
+    "se acercó al objetivo",
+    "Intentos de ataque",
+    "Intentos observados",
+    "Cambio conceptual",
+    "atacante adaptativo",
+    "Una negativa aislada",
+    "El presupuesto de ataque",
+    "Cada respuesta ofrece",
+    "Un intento interesante"
+  ]
+}

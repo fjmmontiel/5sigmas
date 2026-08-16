@@ -293,10 +293,10 @@ try {
         }
       }
 
-      // Chapters 1–4 now use canonical tab/panel interactions that are
+      // Chapters 1–5 now use canonical tab/panel interactions that are
       // validated explicitly above and in chapter-specific QA. Do not require
       // obsolete <details> disclosures merely because older English redesigns used them.
-      if (entry.demos && !entry.route.endsWith('/01-el-problema/') && !entry.route.endsWith('/02-alineamiento/') && !entry.route.endsWith('/03-arquitecturas/') && !entry.route.endsWith('/04-evaluacion/')) {
+      if (entry.demos && !entry.route.endsWith('/01-el-problema/') && !entry.route.endsWith('/02-alineamiento/') && !entry.route.endsWith('/03-arquitecturas/') && !entry.route.endsWith('/04-evaluacion/') && !entry.route.endsWith('/05-riesgos/')) {
         const details = page.locator('[data-demo] details');
         if (await details.count() === 0) {
           failures.push(`${entry.route}: visuals expose no interactive disclosure`);
