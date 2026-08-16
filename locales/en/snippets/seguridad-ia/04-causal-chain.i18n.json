@@ -31,7 +31,7 @@
     "effect:'rollback tras el efecto'": "effect:'rollback after the effect'",
     "<strong>Control seleccionado: ${labels[stop]}.</strong> Ejecuta la prueba para ver dónde se corta o contiene la trayectoria.": "<strong>Selected control: ${labels[stop]}.</strong> Run the test to see where the path is stopped or contained.",
     "context:'<strong>Detenido en retrieval:</strong> el contenido hostil no alcanzó el contexto activo.'": "context:'<strong>Stopped at retrieval:</strong> the hostile content did not reach the active context.'",
-    "decision:'<strong>Detenido antes de cambiar la decisión:</strong> la influencia no alteró el plan del agente.'": "decision:'<strong>Stopped before the decision changed:</strong> the influence did not alter the agent's plan.'",
+    "decision:'<strong>Detenido antes de cambiar la decisión:</strong> la influencia no alteró el plan del agente.'": "decision:'<strong>Stopped before the decision changed:</strong> the influence did not alter the plan chosen by the agent.'",
     "policy:'<strong>Detenido en autorización:</strong> la política independiente rechazó la acción.'": "policy:'<strong>Stopped at authorization:</strong> the independent policy rejected the action.'",
     "effect:'<strong>Contenido en recuperación:</strong> el efecto externo ocurrió, pero rollback o reconciliación restauró el estado esperado.'": "effect:'<strong>Contained during recovery:</strong> the external effect occurred, but rollback or reconciliation restored the expected state.'",
     "<strong>Sin bloqueo:</strong> la trayectoria alcanzó el efecto externo sin un control que la detuviera.": "<strong>No block:</strong> the path reached an external effect without a control stopping it.",
