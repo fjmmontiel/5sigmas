@@ -58,6 +58,14 @@ const visuals = [
     countSelector: '.lke-layer',
     count: 3,
   },
+  {
+    selector: '.lsc-wrap',
+    source: 'docs/snippets/temas/llm-scale-balance.html',
+    mirror: 'locales/en/snippets/temas/llm-scale-balance.html',
+    map: 'locales/en/snippets/temas/llm-scale-balance.i18n.json',
+    countSelector: '.lsc-lever',
+    count: 3,
+  },
 ];
 
 const viewports = [
@@ -154,6 +162,27 @@ async function checkKnowledgeLayersDensity(page, route, locale, viewport) {
   }
 }
 
+async function checkScaleDensity(page, route, locale, viewport) {
+  const expectedCounts = [
+    ['.lsc-lever', 3],
+    ['.lsc-law', 3],
+    ['.lsc-run', 2],
+    ['.lsc-contracts > div', 3],
+  ];
+  for (const [selector, expected] of expectedCounts) {
+    const count = await page.locator(selector).count();
+    if (count !== expected) failures.push(`${route}: ${viewport.name} expected ${expected} ${selector}, found ${count}`);
+  }
+
+  const expectedLabels = locale === 'es'
+    ? ['ESCALA = BALANCE ENTRE N, D Y C', 'PARÁMETROS N', 'DATOS D', 'CÓMPUTO C', 'RELACIONES DE POTENCIA EMPÍRICAS', 'EJEMPLO CHINCHILLA · MISMO PRESUPUESTO DE ENTRENAMIENTO']
+    : ['SCALE = BALANCE ACROSS N, D, AND C', 'PARAMETERS N', 'DATA D', 'COMPUTE C', 'EMPIRICAL POWER-LAW RELATIONSHIPS', 'CHINCHILLA EXAMPLE · SAME TRAINING BUDGET'];
+  const body = await page.locator('.lsc-wrap').innerText();
+  for (const label of [...expectedLabels, '280B', '70B', '4×']) {
+    if (!body.includes(label)) failures.push(`${route}: ${viewport.name} LLM scale visual missing ${JSON.stringify(label)}`);
+  }
+}
+
 async function checkPage(browser, route, locale, viewport) {
   const page = await browser.newPage({ viewport: { width: viewport.width, height: viewport.height } });
   const runtimeErrors = [];
@@ -176,6 +205,8 @@ async function checkPage(browser, route, locale, viewport) {
         'DEL MODELO BASE AL ASISTENTE',
         'DÓNDE VIVE LA INFORMACIÓN',
         'CÓMO SE CONECTAN EN UN SISTEMA REAL',
+        'ESCALA = BALANCE ENTRE N, D Y C',
+        'EJEMPLO CHINCHILLA · MISMO PRESUPUESTO DE ENTRENAMIENTO',
         'probabilidad sobre el vocabulario',
         'El embedding de token es el punto de partida',
         'Optimizar probabilidad de continuación',
@@ -190,6 +221,8 @@ async function checkPage(browser, route, locale, viewport) {
         'FROM BASE MODEL TO ASSISTANT',
         'WHERE THE INFORMATION LIVES',
         'HOW THEY CONNECT IN A REAL SYSTEM',
+        'SCALE = BALANCE ACROSS N, D, AND C',
+        'CHINCHILLA EXAMPLE · SAME TRAINING BUDGET',
         'probability over the vocabulary',
         'The token embedding is the starting point',
         'Optimizing continuation probability',
@@ -213,6 +246,11 @@ async function checkPage(browser, route, locale, viewport) {
       'PARÁMETROS θ',
       'CONTEXTO DE ESTA PETICIÓN',
       'CÓMO SE CONECTAN EN UN SISTEMA REAL',
+      'ESCALA = BALANCE ENTRE N, D Y C',
+      'PARÁMETROS N',
+      'DATOS D',
+      'CÓMPUTO C',
+      'MISMO PRESUPUESTO DE ENTRENAMIENTO',
       'Fuentes primarias:',
       'Fuente primaria:',
     ]) {
@@ -240,6 +278,7 @@ async function checkPage(browser, route, locale, viewport) {
 
   await checkTokenizationDensity(page, route, locale, viewport);
   await checkKnowledgeLayersDensity(page, route, locale, viewport);
+  await checkScaleDensity(page, route, locale, viewport);
 
   const pageOverflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   if (pageOverflow > 2) failures.push(`${route}: ${viewport.name} page overflow ${pageOverflow}px`);
