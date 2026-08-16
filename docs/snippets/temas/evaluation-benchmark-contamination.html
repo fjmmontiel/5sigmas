@@ -1,0 +1,146 @@
+<div class="ebc-wrap" data-demo="topic-evaluation-benchmark-contamination">
+  <div class="ebc-head">
+    <div class="ebc-kicker">TEST PÚBLICO → EXPOSICIÓN → PUNTUACIÓN → EVIDENCIA NUEVA</div>
+    <div class="ebc-title">Un benchmark pierde fuerza como prueba cuando entra en el ciclo de optimización</div>
+    <div class="ebc-sub">La puntuación sigue siendo observable, pero puede mezclar capacidad con exposición al test o adaptación repetida al mismo objetivo. La defensa no es ignorar benchmarks: es renovar y separar la evidencia.</div>
+  </div>
+
+  <div class="ebc-flow" role="img" aria-label="Flujo causal desde un benchmark público hasta contaminación o sobreoptimización y renovación de la evidencia">
+    <section class="ebc-stage ebc-stage--test">
+      <div class="ebc-num">01</div>
+      <div class="ebc-stage-label">TEST PÚBLICO</div>
+      <h3>Casos fijos y comparables</h3>
+      <p>Permiten comparar versiones bajo el mismo contrato, pero su contenido puede acabar siendo conocido por el ciclo de desarrollo.</p>
+      <div class="ebc-chips"><span>casos</span><span>respuestas</span><span>leaderboard</span></div>
+    </section>
+    <div class="ebc-arrow" aria-hidden="true">→</div>
+    <section class="ebc-stage ebc-stage--exposure">
+      <div class="ebc-num">02</div>
+      <div class="ebc-stage-label">EXPOSICIÓN</div>
+      <h3>El test toca entrenamiento o tuning</h3>
+      <p>Puede aparecer exacto o de forma semánticamente parecida en datos, prompts, selección de modelos o iteraciones de producto.</p>
+      <div class="ebc-paths"><span>train data</span><span>prompting</span><span>model selection</span></div>
+    </section>
+    <div class="ebc-arrow" aria-hidden="true">→</div>
+    <section class="ebc-stage ebc-stage--score">
+      <div class="ebc-num">03</div>
+      <div class="ebc-stage-label">PUNTUACIÓN</div>
+      <h3>El score ya no identifica una sola causa</h3>
+      <p>Una mejora puede reflejar generalización, familiaridad con el test o adaptación al criterio. Sin evidencia adicional, esas causas no se separan.</p>
+      <div class="ebc-score-box"><span>SCORE ↑</span><strong>¿capacidad, exposición o ambas?</strong></div>
+    </section>
+    <div class="ebc-arrow" aria-hidden="true">→</div>
+    <section class="ebc-stage ebc-stage--refresh">
+      <div class="ebc-num">04</div>
+      <div class="ebc-stage-label">EVIDENCIA NUEVA</div>
+      <h3>Renueva lo que el sistema no pudo optimizar</h3>
+      <div class="ebc-defenses">
+        <span>casos privados o posteriores</span>
+        <span>rotación / evaluación dinámica</span>
+        <span>deduplicación + análisis de memorización</span>
+        <span>verificación ejecutable cuando existe</span>
+      </div>
+    </section>
+  </div>
+
+  <div class="ebc-mechanisms">
+    <section class="ebc-lane ebc-lane--contamination">
+      <div class="ebc-lane-head"><span>CONTAMINACIÓN</span><strong>el test entra en los datos o señales que forman el sistema</strong></div>
+      <div class="ebc-lane-flow"><span>test</span><b>→</b><span>exposición directa / semántica</span><b>→</b><span>ventaja en la evaluación</span></div>
+      <p>La coincidencia exacta es solo un caso. Detectar contaminación semántica es más difícil, especialmente sin acceso al corpus de entrenamiento.</p>
+    </section>
+    <section class="ebc-lane ebc-lane--saturation">
+      <div class="ebc-lane-head"><span>SATURACIÓN / SOBREOPTIMIZACIÓN</span><strong>el test se convierte en objetivo repetido del ciclo de desarrollo</strong></div>
+      <div class="ebc-lane-flow"><span>benchmark estable</span><b>→</b><span>iteraciones contra el mismo score</span><b>→</b><span>menor información sobre casos nuevos</span></div>
+      <p>No exige copiar el test en entrenamiento. Reutilizar una prueba estática como objetivo de selección puede reducir su valor como evidencia independiente.</p>
+    </section>
+  </div>
+
+  <div class="ebc-contracts">
+    <div><span>PÚBLICO ≠ LIMPIO</span><strong>que un benchmark sea estándar no demuestra que siga siendo independiente del entrenamiento</strong></div>
+    <div><span>SCORE ≠ GENERALIZACIÓN</span><strong>la puntuación necesita contexto sobre exposición, fecha, protocolo y distribución</strong></div>
+    <div><span>RENUEVA + VERIFICA</span><strong>combina casos nuevos o privados con señales ejecutables y análisis de contaminación cuando sea posible</strong></div>
+  </div>
+
+  <div class="ebc-ref">Fuentes primarias:
+    <a href="https://arxiv.org/abs/2310.18018">Sainz et al. (2023) · niveles y medición de contaminación</a> ·
+    <a href="https://arxiv.org/abs/2403.07974">Jain et al., LiveCodeBench (2024) · problemas recientes + ejecución</a> ·
+    <a href="https://arxiv.org/abs/2312.10523">Magnusson et al., PALOMA (2023) · decontaminación del benchmark</a>
+  </div>
+</div>
+
+<style>
+.ebc-wrap,.ebc-wrap *{box-sizing:border-box}
+.ebc-wrap{
+  --ebc-a:var(--md-primary-fg-color,#26a69a);
+  --ebc-b:#4757d6;
+  --ebc-c:var(--md-accent-fg-color,#ffb343);
+  --ebc-r:#d95d6f;
+  --ebc-bg:var(--md-default-bg-color,#fff);
+  --ebc-fg:var(--md-default-fg-color,#111827);
+  --ebc-muted:color-mix(in srgb,var(--ebc-fg) 60%,transparent);
+  --ebc-border:color-mix(in srgb,var(--ebc-fg) 14%,transparent);
+  container-type:inline-size;
+  margin:1.1rem 0 1.5rem;
+  padding:clamp(14px,2vw,22px);
+  border:1px solid var(--ebc-border);
+  border-radius:20px;
+  background:
+    radial-gradient(90% 120% at 0 0,color-mix(in srgb,var(--ebc-b) 7%,transparent),transparent 56%),
+    radial-gradient(90% 120% at 100% 0,color-mix(in srgb,var(--ebc-a) 7%,transparent),transparent 58%),
+    var(--ebc-bg);
+  color:var(--ebc-fg)
+}
+.ebc-head{display:grid;gap:4px;margin-bottom:13px}
+.ebc-kicker{font-size:10px;font-weight:950;letter-spacing:.1em;color:var(--ebc-muted)}
+.ebc-title{max-width:56ch;font-size:clamp(18px,2.1vw,24px);font-weight:900;line-height:1.12;letter-spacing:-.02em}
+.ebc-sub{max-width:94ch;font-size:13.2px;line-height:1.47;color:var(--ebc-muted)}
+.ebc-flow{display:grid;grid-template-columns:minmax(0,1fr) 18px minmax(0,1fr) 18px minmax(0,1fr) 18px minmax(0,1fr);gap:6px;align-items:stretch;min-width:0}
+.ebc-stage{min-width:0;padding:11px;border:1px solid var(--ebc-border);border-radius:14px;background:color-mix(in srgb,var(--ebc-bg) 96%,var(--ebc-fg) 4%);display:grid;align-content:start;gap:7px}
+.ebc-stage--test{border-color:color-mix(in srgb,var(--ebc-b) 38%,var(--ebc-border));background:color-mix(in srgb,var(--ebc-b) 4%,var(--ebc-bg))}
+.ebc-stage--exposure{border-color:color-mix(in srgb,var(--ebc-r) 44%,var(--ebc-border));background:color-mix(in srgb,var(--ebc-r) 4%,var(--ebc-bg))}
+.ebc-stage--score{border-color:color-mix(in srgb,var(--ebc-c) 48%,var(--ebc-border));background:color-mix(in srgb,var(--ebc-c) 4%,var(--ebc-bg))}
+.ebc-stage--refresh{border-color:color-mix(in srgb,var(--ebc-a) 45%,var(--ebc-border));background:color-mix(in srgb,var(--ebc-a) 4%,var(--ebc-bg))}
+.ebc-num{display:grid;place-items:center;width:24px;height:24px;border-radius:8px;background:color-mix(in srgb,var(--ebc-fg) 8%,var(--ebc-bg));font:900 9px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--ebc-muted)}
+.ebc-stage-label{font-size:8.5px;font-weight:950;letter-spacing:.08em;color:var(--ebc-muted)}
+.ebc-stage h3{margin:0;font-size:12.4px;line-height:1.22}
+.ebc-stage p{margin:0;font-size:9.6px;line-height:1.38;color:var(--ebc-muted)}
+.ebc-arrow{display:grid;place-items:center;font-size:17px;font-weight:950;color:var(--ebc-muted)}
+.ebc-chips,.ebc-paths{display:flex;gap:4px;flex-wrap:wrap}
+.ebc-chips span,.ebc-paths span{padding:4px 6px;border:1px solid var(--ebc-border);border-radius:999px;background:var(--ebc-bg);font-size:7.8px;font-weight:850}
+.ebc-score-box{display:grid;gap:3px;padding:7px 8px;border:1px dashed color-mix(in srgb,var(--ebc-c) 65%,var(--ebc-border));border-radius:9px;background:var(--ebc-bg)}
+.ebc-score-box span{font:950 10px/1.1 ui-monospace,SFMono-Regular,Menlo,monospace;color:color-mix(in srgb,var(--ebc-c) 82%,var(--ebc-fg))}
+.ebc-score-box strong{font-size:8.7px;line-height:1.28}
+.ebc-defenses{display:grid;gap:4px}
+.ebc-defenses span{padding:5px 6px;border-left:2px solid var(--ebc-a);border-radius:0 7px 7px 0;background:var(--ebc-bg);font-size:8.2px;font-weight:800;line-height:1.24}
+.ebc-mechanisms{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.ebc-lane{min-width:0;padding:10px;border:1px solid var(--ebc-border);border-radius:13px;display:grid;gap:7px}
+.ebc-lane--contamination{border-color:color-mix(in srgb,var(--ebc-r) 42%,var(--ebc-border));background:color-mix(in srgb,var(--ebc-r) 3%,var(--ebc-bg))}
+.ebc-lane--saturation{border-color:color-mix(in srgb,var(--ebc-b) 40%,var(--ebc-border));background:color-mix(in srgb,var(--ebc-b) 3%,var(--ebc-bg))}
+.ebc-lane-head{display:grid;gap:3px}.ebc-lane-head span{font-size:8.4px;font-weight:950;letter-spacing:.07em;color:var(--ebc-muted)}.ebc-lane-head strong{font-size:10.5px;line-height:1.28}
+.ebc-lane-flow{display:grid;grid-template-columns:minmax(0,.8fr) 14px minmax(0,1.35fr) 14px minmax(0,1fr);gap:4px;align-items:center}
+.ebc-lane-flow span{min-width:0;padding:6px;border:1px solid var(--ebc-border);border-radius:8px;background:var(--ebc-bg);font-size:8.2px;font-weight:800;line-height:1.2;text-align:center;overflow-wrap:anywhere}.ebc-lane-flow b{text-align:center;color:var(--ebc-muted)}
+.ebc-lane p{margin:0;font-size:9px;line-height:1.34;color:var(--ebc-muted)}
+.ebc-contracts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}
+.ebc-contracts>div{min-width:0;padding:9px 10px;border-left:3px solid var(--ebc-b);border-radius:0 9px 9px 0;background:color-mix(in srgb,var(--ebc-b) 4%,var(--ebc-bg));display:grid;gap:3px}
+.ebc-contracts>div:nth-child(2){border-left-color:var(--ebc-c);background:color-mix(in srgb,var(--ebc-c) 4%,var(--ebc-bg))}
+.ebc-contracts>div:nth-child(3){border-left-color:var(--ebc-a);background:color-mix(in srgb,var(--ebc-a) 4%,var(--ebc-bg))}
+.ebc-contracts span{font-size:8.2px;font-weight:950;letter-spacing:.07em;color:var(--ebc-muted)}.ebc-contracts strong{font-size:9.3px;line-height:1.3}
+.ebc-ref{margin-top:9px;font-size:8.7px;line-height:1.36;color:var(--ebc-muted)}.ebc-ref a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+@container (max-width:800px){
+  .ebc-flow{grid-template-columns:1fr;gap:5px}
+  .ebc-arrow{height:14px;font-size:0}.ebc-arrow::before{content:"↓";font-size:16px}
+  .ebc-stage{padding:10px}
+  .ebc-mechanisms{grid-template-columns:1fr}
+  .ebc-contracts{grid-template-columns:1fr}
+}
+@container (max-width:430px){
+  .ebc-wrap{padding:12px;border-radius:16px}
+  .ebc-title{font-size:18px}.ebc-sub{font-size:12px}
+  .ebc-lane-flow{grid-template-columns:1fr;gap:3px}
+  .ebc-lane-flow b{height:10px;font-size:0}.ebc-lane-flow b::before{content:"↓";font-size:13px}
+}
+@media (prefers-reduced-motion:reduce){
+  .ebc-wrap *{animation-duration:0s!important;animation-delay:0s!important;transition-duration:0s!important;scroll-behavior:auto!important}
+}
+</style>

@@ -111,15 +111,7 @@ Los benchmarks públicos pueden aparecer en corpus de entrenamiento o inspirar d
 
 La contaminación puede ser exacta o semántica. Detectarla es difícil si los datos de entrenamiento no son públicos.
 
-Las defensas incluyen:
-
-- conjuntos privados
-- preguntas creadas después del entrenamiento
-- rotación frecuente
-- evaluación dinámica
-- deduplicación
-- análisis de memorización
-- tareas con ejecución verificable
+{{ include_html("snippets/temas/evaluation-benchmark-contamination.html") }}
 
 LiveCodeBench diseñó una evaluación de código que se actualiza con problemas recientes y usa ejecución para comprobar las soluciones.[^livecodebench] El principio es más general: cuando sea posible, una prueba viva y verificable resiste mejor la optimización superficial.
 

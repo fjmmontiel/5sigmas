@@ -111,15 +111,7 @@ Public benchmarks can appear in training corpora or inspire very similar data. W
 
 Contamination can be exact or semantic. It is difficult to detect when training data is not public.
 
-Defences include:
-
-- private sets;
-- questions created after training;
-- frequent rotation;
-- dynamic evaluation;
-- deduplication;
-- memorization analysis;
-- tasks with executable verification.
+{{ include_html("snippets/temas/evaluation-benchmark-contamination.html") }}
 
 LiveCodeBench designed a code evaluation that updates with recent problems and executes solutions to verify them.[^livecodebench] The broader principle is useful: where possible, a live and verifiable test resists superficial optimization better.
 
