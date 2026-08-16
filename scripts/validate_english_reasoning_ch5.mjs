@@ -119,7 +119,7 @@ try {
       const bodyText = (document.querySelector('.md-content__inner') || document.body).innerText;
       return {
         before: bodyText.indexOf('The system should decide how much to think before it starts'),
-        visual: bodyText.indexOf('Overthinking: when more reasoning degrades the answer'),
+        visual: bodyText.indexOf('There is an optimal reasoning-token budget.'),
         after: bodyText.indexOf('Quality vs cost vs latency in a real product'),
       };
     });
