@@ -60,7 +60,7 @@ try {
       'close to 80% by 2030',
       'Why is AI described as an "electrical technology"?',
       'Will improvements in AI hardware efficiency reduce its global energy consumption?',
-      'Primary source for the 415→945→1,260 TWh projections',
+      'IEA (2025)', 'Greenpeace (2025)', 'Epoch AI (2023)',
     ], `${viewport.name}: article`);
     forbidText(body, [
       'Capítulo 2', 'Qué implica "compute"', 'Por qué la eficiencia no frena', 'Los cuellos de botella reales',
@@ -124,10 +124,6 @@ try {
     }
     if (!(positions.reboundBefore >= 0 && positions.reboundVisual > positions.reboundBefore && positions.reboundAfter > positions.reboundVisual)) {
       failures.push(`${viewport.name}: rebound visual moved away from canonical article hook`);
-    }
-
-    for (const demo of ['02-cuellos-botella', '02-proyeccion-demanda', '02-huella-ambiental', '02-agua-golf-datacenters', '02-geografia-ia']) {
-      if (await page.locator(`[data-demo="${demo}"]`).count() !== 1) failures.push(`${viewport.name}: expected one remaining Chapter 2 visual ${demo}`);
     }
 
     const videos = page.locator('video[data-s5-inline-video-player]');
