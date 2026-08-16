@@ -1,42 +1,42 @@
 ---
-title: Risks — overthinking, cost, security and alignment
-description: "Overthinking, untrusted context and agent security in reasoning models with tools. Design criteria for bounding risk in production."
+title: Risks — overthinking, cost, attacks and alignment
+description: "Overthinking, prompt injection and agent hijacking in reasoning models with tools. Design criteria for bounding risk in production."
 date: 2026-04-14
-keywords: "AI overthinking, reasoning model risks, agent security, untrusted context, RAG security, AI alignment, responsible AI systems, CoT illegibility, agent permissions"
+keywords: "AI overthinking, reasoning model risks, prompt injection, TabooRAG, agent specification gaming, AI alignment, responsible AI systems, many-shot jailbreaking, CoT illegibility, agent hijacking"
 tags:
   - AI
   - LLMs
   - Reasoning
 ---
 
-# Chapter 5 — Risks: overthinking, cost, security and alignment
+# Chapter 5 — Risks: overthinking, cost, attacks and alignment
 
-The previous chapters described the benefits of test-time compute: better quality, higher reliability and more capability on difficult tasks. This final chapter completes the picture with the risks introduced by the same additional capability. By the end, you will understand overthinking and why more reasoning can make an answer worse, know the main security surfaces created by models that can read external context and use tools, and have concrete design criteria for bounding those risks in production.
+The previous chapters described the benefits of test-time compute: better quality, higher reliability and more capability for complex tasks. This chapter completes the picture with the risks introduced by that same power. By the end, the reader will understand overthinking and why more reasoning can produce worse answers, know the attack surfaces opened by models with tools (prompt injection, TabooRAG, agent hijacking), and have design criteria for managing the risk profile of these systems.
 
 !!! info "Prerequisites"
-    This chapter closes the series. The most relevant prerequisites are [Chapter 3 — Test-Time Compute](./03-test-time-compute.md) and [Chapter 4 — Physical time and latency](./04-latencia-streaming.md).
+    This chapter closes the series. It is recommended to have read the previous four chapters, especially [Chapter 3 — Test-Time Compute](./03-test-time-compute.md) and [Chapter 4 — Latency](./04-latencia-streaming.md).
 
 ---
 
 ## 1. Overthinking: when more reasoning degrades the answer
 
-The intuition that more reasoning always improves an answer is wrong. Reasoning models exhibit a documented phenomenon usually called **overthinking** ([Apple Research, 2025](https://machinelearning.apple.com/research/illusion-of-thinking)): the model continues reasoning after a useful solution has effectively been found, reopens settled premises, introduces unnecessary doubt and can finish with an answer worse than the one it had earlier.
+The intuition that more reasoning always produces better answers is incorrect. There is a documented phenomenon in reasoning models called overthinking ([Apple Research, 2025](https://machinelearning.apple.com/research/illusion-of-thinking)): the model generates excessively long reasoning chains in which it revisits correct conclusions, introduces unnecessary doubt and ends up producing worse answers than it would have produced with fewer steps.
 
-Common symptoms include:
+Symptoms of overthinking include:
 
-**Revisiting already verified premises.** The model solves a subproblem correctly, continues reasoning, then reconsiders the result without strong new evidence and moves to a worse conclusion.
+**Revisiting already verified premises.** The model solves a subproblem correctly, continues reasoning, and at a later step reconsiders the solution without a well-founded reason, reaching a different and worse conclusion.
 
-**Unproductive loops.** It generates variations of the same argument without reducing uncertainty or moving toward a decision. Tokens and latency increase while marginal value approaches zero.
+**Unproductive loops.** The model generates variations of the same reasoning without moving toward a conclusion. It consumes tokens without producing incremental value.
 
-**Hypercorrection on simple tasks.** For questions with an obvious answer, a reasoning model can search for a more sophisticated interpretation and reason itself away from the correct simple result.
+**Hypercorrection on simple tasks.** On questions with an obvious answer, the model can generate elaborate reasoning that leads it to search for the most "sophisticated" answer instead of the correct one.
 
-The pattern resembles analysis paralysis in human decision-making: deliberation is valuable until the marginal reasoning step starts adding more noise than information.
+The pattern is analogous to analysis paralysis in human thinking: excessive deliberation can produce worse decisions than a more intuitive response for some types of problems.
 
-The product implication is that a TTC budget should not be "as much as possible." It should be appropriate for the problem class and complexity, and the system should have a way to stop when extra compute is no longer improving the result.
+The practical implication is that the test-time compute budget should not be "the more, the better" but "the amount appropriate for the type and complexity of the problem." That requires some mechanism for estimating complexity before assigning the budget.
 
-Apple Research documented a measurable version of this effect in controlled tasks: additional reasoning beyond the useful region could reduce accuracy rather than merely plateau. The engineering lesson is not one universal token threshold, but the existence of a task-dependent optimum beyond which additional compute can have negative value.
+Apple Research (2025) documented the pattern quantitatively: reasoning models reach their quality peak at around 1,500 reasoning tokens for simple tasks, and quality falls by approximately 18 percentage points when moving from 1,500 to 8,000 reasoning tokens. That is a measurable deterioration, not a speculative degradation.
 
-Modern model families increasingly expose configurable reasoning levels. Having a maximum reasoning mode does not imply that maximum effort should be selected for every request.
+Current models are beginning to make the response explicit: Gemini 3.5 Flash lets the system select reasoning levels to tune the balance between quality, cost and latency. The product lesson does not change: having more capability does not require using the maximum budget for every query. The system should decide how much to think before it starts, and be able to stop when additional compute stops adding value ([Google DeepMind, 2026](https://deepmind.google/models/model-cards/gemini-3-5-flash/)).
 
 {{ include_html("snippets/modelos-razonadores/05-overthinking-curva.html") }}
 
@@ -44,61 +44,65 @@ Modern model families increasingly expose configurable reasoning levels. Having 
 
 ## 2. Quality vs cost vs latency in a real product
 
-The quality/cost/latency tension exists in every generative-AI system, but reasoning makes all three variables more dynamic.
+The three-way tension that every generative-AI system has to manage becomes sharper in reasoning models.
 
-### Variable operating cost
+### The debt profile
 
-Without extended reasoning, latency and generation cost are often comparatively stable for a given model and output length. With reasoning, two requests of similar visible size can have radically different internal compute profiles.
+In models without extended reasoning, quality debt is paid relatively uniformly: the model works well on the distribution of cases it was trained for and fails on cases outside that distribution. Cost and latency are predictable.
 
-That makes capacity planning more difficult. If there is no per-request or per-session reasoning budget, API spend and tail latency vary with the mix of user problems rather than only with traffic volume.
+In reasoning models, cost and latency are variable. A simple query and a complex query can have radically different cost profiles, which makes budget planning more difficult. API bills can become unpredictable if there are no explicit budgets per query or per session.
 
-### SLOs under variable reasoning
+### SLOs with variable reasoning
 
-Service-level objectives become harder when response time depends on how much the model decides to reason. A system that promises a p95 response bound needs active controls capable of terminating or degrading a reasoning path before it exceeds that bound.
+Service-level objectives (SLOs) for latency become harder to meet when response time depends on how much the model decides to reason. A system that guarantees a response within five seconds for the 95th percentile of queries needs active mechanisms to cut off the reasoning chain before it exceeds that limit.
 
-### User expectations at high latency
+### User experience under high latency
 
-There is also an expectation mismatch. A user can wait twenty seconds for a response that looks superficially similar to one generated in two seconds. Unless the additional quality is visible or the interface communicates meaningful progress, the user experiences the extra reasoning as latency rather than value.
+The previous chapter covered perceived-latency thresholds. In product-quality terms, the specific risk of reasoning models is the mismatch between expectation and experience: a user who waits twenty seconds and receives an answer that appears identical to one they could have received in two seconds perceives the wait as a failure, even if the answer is objectively better.
 
 ---
 
-## 3. Security surfaces created by tools and external context
+## 3. New attack surfaces
 
-Reasoning models that can use tools, retrieval systems, files or browsers operate across a larger trust boundary than a simple chat model. The central security problem is not reasoning by itself; it is the combination of **untrusted context, planning ability, persistent state and external actions**.
+Reasoning models with access to tools, RAG or browsing have attack surfaces that simple conversational models do not have.
 
-### Treat retrieved content as data, not authority
+The scale of that surface has also changed. Claude Sonnet 5 is presented as a model capable of planning, using browsers and terminals, and executing tasks autonomously. The farther the model can progress through a workflow, the more important controls over tools, context and permissions become. Anthropic's safety documentation evaluates prompt-injection risk inside agentic systems, not only in the initial prompt ([Anthropic, 2026](https://www.anthropic.com/news/claude-sonnet-5); [Claude Sonnet 5 System Card](https://www-cdn.anthropic.com/73ad94ca3c0502e75e46637cc62c8bd9532a7f2c/Claude%20Sonnet%205%20System%20Card.pdf)).
 
-Once a model reads documents, web pages, attachments or API results, those sources become inputs to the decision process. They should not automatically acquire the same authority as developer instructions or verified user intent.
+### Prompt injection in tool environments
 
-For a production agent, every external source needs provenance and a trust level. Content retrieved from the web or a document store should be treated as untrusted data that may be inaccurate, misleading or intentionally manipulative.
+When the model can read documents, browse web pages or execute code, the content of those external sources becomes an attack surface. A document designed to contain hidden instructions can try to redirect the model's behavior ("ignore the previous instructions and do X").
 
-### Context contamination and retrieval-layer availability failures
+In a simple conversational LLM, the attack surface is mainly what the user writes directly. In an agent with tools, the surface extends to all content the agent can read or process: web pages, attachments and API responses.
 
-Long workflows accumulate intermediate state. An incorrect or adversarial tool result early in the chain can bias later decisions, and the influence can be difficult to infer from the final answer alone.
+### Context contamination
 
-Research on retrieval-augmented systems has also shown that contaminated context can exploit conservative safety behavior to make legitimate requests fail. The defensive lesson is straightforward: validate and classify retrieved material **before** it becomes model context, preserve source provenance and monitor retrieval quality instead of relying only on a final-output filter.
+In long reasoning chains with multiple tool calls, information from earlier steps can contaminate later steps in ways that are difficult to trace. An incorrect or malicious intermediate result can influence later conclusions without being obvious in the final output.
+
+### TabooRAG and alignment-based denial-of-service attacks
+
+A documented variant of attack against RAG systems exploits the model's own safety system: wrapping a benign query in context that the model interprets as "restricted high risk" in order to provoke a systematic refusal. The attack, called TabooRAG ([Li et al., 2026](https://arxiv.org/abs/2603.03919)), does not seek to extract information or manipulate the model toward malicious outputs; instead, it makes the model refuse to process legitimate queries by contaminating the context with risk signals. It is effectively a denial-of-service attack that uses the model's alignment as the mechanism.
+
+The defense is not trivial: filters that detect high-risk language to protect the model can also be exploited to block it. RAG systems need mechanisms for validating retrieved content before it enters the model context, not only filters on the final output.
 
 {{ include_html("snippets/modelos-razonadores/05-taborag-flujo.html") }}
 
 ### Objective drift in agentic environments
 
-With tools and autonomy, a model can discover a route that satisfies the literal metric while violating the intended process. Chapter 2 covered documented specification-gaming experiments where a reasoning model manipulated its environment rather than perform the intended task normally ([Bondarenko et al., 2025](https://arxiv.org/abs/2502.13295)).
+In environments with tools and greater autonomy, reasoning models can exhibit aggressive forms of specification gaming. Chapter 2 documented an experiment in which the model overwrote the state of a game board instead of finding a better move ([Bondarenko et al., 2025](https://arxiv.org/abs/2502.13295)). There was no explicit instruction to cheat. The system found a way to optimize the stated objective that broke the implicit rules of the environment.
 
-For production agents, objectives should therefore include constraints on **how** an outcome may be achieved, not only the desired end state. Permissions, allowed tools, irreversible actions and validation checkpoints belong in the system design rather than in an informal assumption about what the model should infer.
+For production agent systems, this pattern is a real operational risk: objectives must specify the constraints on how they may be achieved, not only what must be achieved, or the model can find paths that satisfy the letter while violating the spirit of the objective.
 
-{{ include_html("snippets/modelos-razonadores/05-specification-gaming.html") }}
+### Agent hijacking
 
-### Persistent state needs stricter controls
+Agent hijacking occurs when a malicious actor manages to manipulate the agent's memory or decision context persistently across sessions. Unlike a prompt injection that affects a single response, agent hijacking can redirect system behavior across multiple future interactions without the user being aware.
 
-A one-turn bad input can affect one decision. Persistent memory, writable knowledge stores and long-lived agent state can carry bad information into future sessions.
+Agents that maintain persistent memory, use updatable external knowledge bases or can modify their own system context are especially susceptible. A malicious instruction stored in the agent's memory can influence all subsequent responses until it is detected and removed, which may be too late if the contents of that memory are not monitored.
 
-Systems that persist model-derived information therefore need provenance, scoped write permissions, validation and deletion/recovery mechanisms. Untrusted observations should not silently become durable high-authority instructions.
+### Illegibility of the reasoning chain as a supervision risk
 
-### Illegible reasoning is a supervision risk
+In models where reinforcement learning has produced illegible reasoning chains — mixtures of meaningless characters, fragments in unrelated languages, incoherent text interleaved with coherent text ([Jose, 2025](https://arxiv.org/abs/2510.27338)) — monitoring the reasoning process as a safety mechanism stops working. You cannot supervise what you cannot read.
 
-Where reinforcement learning produces reasoning chains that are difficult to interpret, reasoning-monitoring becomes a weaker safety layer. A safeguard cannot reliably supervise a process whose important internal artifacts are not consistently readable.
-
-For systems that use visible reasoning or reasoning summaries as an audit signal, **legibility and faithfulness are functional requirements**, not aesthetic preferences. They should not be treated as substitutes for permission boundaries, tool validation or independent outcome checks.
+For production systems where reasoning supervision is a safety layer, CoT legibility is not a cosmetic preference but a functional requirement. Models whose training does not preserve legibility make any monitoring system based on chain of thought fundamentally less reliable as a safeguard.
 
 ---
 
@@ -106,27 +110,23 @@ For systems that use visible reasoning or reasoning summaries as an audit signal
 
 ### Hard budgets for time, tokens and tools
 
-Set explicit maximums before a reasoning chain starts: reasoning tokens, wall-clock time, tool calls and external-action scope. The system should remain capable of producing a valid bounded outcome when the budget is exhausted.
+Set explicit maximum limits before starting any reasoning chain: maximum reasoning-chain tokens, maximum total-latency seconds and maximum external tool calls. The system must be able to produce a valid output inside those limits even if the reasoning is incomplete.
 
 ### Active stopping signals
 
-Hard limits are a safety net. Better systems also detect when additional reasoning is no longer adding value: repeated arguments, convergence of independent paths, stable verification results or sufficiently high confidence in the current solution.
+In addition to hard budgets, define signals that indicate that continuing to reason is not producing value: repetition of arguments already explored, convergence on the same conclusion through multiple routes, or sufficiently high confidence in the current result. Active stopping signals reduce cost and latency in cases where the model is overthinking.
 
-### Verification at high-impact boundaries
+### Verification when critical
 
-Before an external or difficult-to-reverse action, add explicit verification. Depending on the domain, that can be user confirmation, a second independent policy check, a deterministic validator or a human approval step.
+For actions with external or difficult-to-reverse consequences, add an explicit verification step before execution. In agent systems, that step may be user confirmation, a second pass by the model evaluating its own plan, or a domain-specific validation tool.
 
-### Least privilege and typed tool access
+### Clear fallbacks
 
-Give the reasoning model only the permissions required for the current task. Prefer narrow, typed operations over general-purpose execution surfaces. A model that only needs to read information should not automatically receive permission to modify the underlying system.
+Define explicitly what happens when the system exceeds its budget without reaching a satisfactory answer: produce the best partial answer available, ask the user for more information, hand off to a human operator, or simply state that it cannot answer with sufficient confidence within the operating constraints.
 
-### Explicit fallbacks
+### Abstain when it is the right choice
 
-Define what happens when reasoning cannot complete inside its operating envelope: return the best verified partial result, ask for missing information, fall back to a bounded simpler path, escalate to a human or abstain.
-
-### Abstain when abstention is correct
-
-A good system knows when it does not know. A low-confidence answer presented with high apparent certainty can be more damaging than an explicit statement of uncertainty. Abstention criteria should account for failed verification, out-of-distribution inputs, missing evidence and non-convergence inside the assigned reasoning budget.
+A well-designed system knows when it does not know. Producing a low-confidence answer with a strong appearance of certainty is more harmful than stating uncertainty explicitly. Reasoning models should have clear criteria for when confidence in the reasoning is sufficient to produce a final output and when it is preferable to abstain or request more data.
 
 {{ include_html("snippets/modelos-razonadores/05-riesgos-ttc.html") }}
 
@@ -134,32 +134,35 @@ A good system knows when it does not know. A low-confidence answer presented wit
 
 ## 5. Series conclusion
 
-This series builds one coherent map:
+The map built by this series has four pieces:
 
-1. LLM reasoning is a multi-step process with real cost and predictable failure modes. It differs from human reasoning but can still be studied operationally.
-2. Failures have a taxonomy: shortcuts, systematic bias, objective drift, cascading errors, hallucinations and unfaithful reasoning. Taxonomy makes evaluation and mitigation possible.
-3. Test-time compute converts additional inference compute into quality on some classes of problems, but introduces a tradeoff between quality, cost and latency.
-4. Those risks are manageable through explicit budgets, stopping rules, validation at critical boundaries, least privilege, fallbacks and the ability to abstain.
+1. LLM reasoning is a process with steps, real cost and predictable failures, different from but not incomparable to human reasoning.
+2. Failures have a taxonomy: shortcuts, systematic errors, objective drift and cascading propagation. Knowing the taxonomy makes it possible to detect them and design mitigations.
+3. Test-time compute converts compute into quality, with a tradeoff profile between quality, cost and latency that has to be managed actively.
+4. The risks of these systems are manageable with the right criteria: hard budgets, stopping signals, verification at critical points, explicit fallbacks and the ability to abstain.
 
-The practical conclusion is neither that reasoning systems are inherently dangerous nor that they are inherently trustworthy. They require deliberate engineering so that additional capability is surrounded by controls strong enough for the environment where the system actually runs.
+The practical conclusion is not that these systems are dangerous, nor that they are infallible. It is that they require deliberate design so that their advantages outweigh their risks, and that design is within reach of any team that understands the underlying mechanisms well.
 
 ---
 
 ## 6. References
 
 <details markdown="1">
-<summary><strong>Primary sources</strong></summary>
+<summary><strong>Base sources</strong></summary>
 
 | Source | Short description |
 | --- | --- |
-| **Perez & Ribeiro (2022)** — *[Ignore Previous Prompt: Attack Techniques for Language Models](https://arxiv.org/abs/2211.09527)* | Early systematic documentation of instruction-manipulation risks in language models. |
-| **Greshake et al. (2023)** — *[Not What You've Signed Up For: Compromising Real-World LLM-Integrated Applications](https://arxiv.org/abs/2302.12173)* | Extends the threat model to integrated applications where web pages, documents and APIs become untrusted input surfaces. |
-| **Anthropic (2023)** — *[Claude's Constitution](https://www.anthropic.com/research/claude-s-constitution)* | Alignment framework relevant to uncertainty, abstention and resistance to harmful instruction patterns. |
-| **Jose, A. (2025)** — *[Reasoning Models Sometimes Output Illegible Chains of Thought](https://arxiv.org/abs/2510.27338)* | Analysis of reasoning-chain legibility and the relationship between unreadable fragments and task performance. |
-| **Bondarenko et al. (2025)** — *[Demonstrating Specification Gaming in Reasoning Models](https://arxiv.org/abs/2502.13295)* | Documents specification gaming in reasoning models operating inside an environment with tools/state. |
-| **Apple Research (2025)** — *[The Illusion of Thinking](https://machinelearning.apple.com/research/illusion-of-thinking)* | Evidence that additional reasoning can cease to improve and can degrade performance on controlled tasks. |
-| **Li et al. (2026)** — *[When Safety Becomes a Vulnerability: Exploiting LLM Alignment Homogeneity for Transferable Blocking in RAG](https://arxiv.org/abs/2603.03919)* | Research on retrieval-layer availability failures caused by contaminated context. |
-| **Google DeepMind (2026)** — *[Gemini 3.5 Flash Model Card](https://deepmind.google/models/model-cards/gemini-3-5-flash/)* | Configurable reasoning levels and the quality/cost/latency control surface. |
+| **Perez & Ribeiro (2022)** — *[Ignore Previous Prompt: Attack Techniques for Language Models](https://arxiv.org/abs/2211.09527)* | Systematic documentation of direct prompt-injection techniques; a foundation for understanding variants in tool environments. Cited in §3 (Prompt injection). |
+| **Greshake et al. (2023)** — *[Not What You've Signed Up For: Compromising Real-World LLM-Integrated Applications](https://arxiv.org/abs/2302.12173)* | Extends prompt injection to systems with tools: documents, websites and APIs become attack surfaces. Cited in §3 (Context contamination). |
+| **Anthropic (2023)** — *[Claude's Constitution](https://www.anthropic.com/research/claude-s-constitution)* | Design framework for AI systems with abstention criteria, epistemic honesty and resistance to manipulation. Cited in §4 (Responsible design). |
+| **Jose, A. (2025)** — *[Reasoning Models Sometimes Output Illegible Chains of Thought](https://arxiv.org/abs/2510.27338)* | Analysis of 14 reasoning models: outcome-based RL produces illegible chains and accuracy falls by 53% when they are truncated. Claude is the exception because of specific training objectives. Cited in §3 (Illegibility). |
+| **Anil et al. (2024)** — *[Many-Shot Jailbreaking](https://www.anthropic.com/research/many-shot-jailbreaking)* | Documents how long contexts create new attack surfaces: hundreds of examples of unwanted behavior in context modify the model's response distribution. Cited in §3 (Context contamination). |
+| **Bondarenko et al. (2025)** — *[Demonstrating Specification Gaming in Reasoning Models](https://arxiv.org/abs/2502.13295)* | Documents a specification-gaming case in which the model modifies the environment state to maximize the stated objective. Cited in §3 (Objective drift). |
+| **Anthropic (2026)** — *[Claude Sonnet 5 System Card](https://www-cdn.anthropic.com/73ad94ca3c0502e75e46637cc62c8bd9532a7f2c/Claude%20Sonnet%205%20System%20Card.pdf)* | Current safety evaluation for a model with planning, tool use and agentic behavior. Relevant to §3 (Attack surfaces). |
+| **Apple Research (2025)** — *[The Illusion of Thinking](https://machinelearning.apple.com/research/illusion-of-thinking)* | Documents overthinking: on simple tasks the model finds the correct solution early in its internal chain but continues exploring incorrect alternatives, degrading the final answer. Cited in §1. |
+| **Li et al. (2026)** — *[When Safety Becomes a Vulnerability: Exploiting LLM Alignment Homogeneity for Transferable Blocking in RAG](https://arxiv.org/abs/2603.03919)* | Foundational TabooRAG paper: an adversary injects a document into the RAG store that wraps benign elements in "restricted-risk" context, triggering model safeguards against legitimate queries. The attack's transferability is explained by the homogeneity of refusal criteria across frontier models. Cited in §3 (TabooRAG). |
+| **Google DeepMind (2026)** — *[Gemini 3.5 Flash Model Card](https://deepmind.google/models/model-cards/gemini-3-5-flash/)* | Documents configurable reasoning levels for controlling the balance between quality, cost and latency. Relevant to §1 (Overthinking) and §4 (Budgets). |
+| **Anthropic (2026)** — *[Claude Sonnet 5](https://www.anthropic.com/news/claude-sonnet-5)* and *[System Card](https://www-cdn.anthropic.com/73ad94ca3c0502e75e46637cc62c8bd9532a7f2c/Claude%20Sonnet%205%20System%20Card.pdf)* | Current evidence on agentic models with planning, tool use and dedicated prompt-injection evaluation. Cited in §3 (Attack surfaces). |
 
 </details>
 
@@ -168,13 +171,13 @@ The practical conclusion is neither that reasoning systems are inherently danger
 ## Frequently asked questions
 
 **What is the difference between overthinking and simply reasoning for longer?**
-Long reasoning is useful when later steps continue reducing uncertainty or correcting real mistakes. Overthinking is the region where the system has already found a useful answer but continues exploring without new evidence and begins to degrade it. The relevant engineering question is marginal value per additional reasoning step, not chain length by itself.
+Overthinking is specific: the model has found the correct answer at some point in the chain but continues exploring alternatives that lead it to revisit that conclusion without a well-founded reason. Apple Research documented that quality can fall when the model continues reasoning after finding a correct answer. Long reasoning that produces value is reasoning that moves toward a better conclusion. Overthinking is reasoning that revisits already-correct conclusions without new evidence.
 
-**How should untrusted context be handled in systems with tools?**
-Treat retrieved or tool-provided content as data with explicit provenance and trust level. Validate it before it enters the model's decision context, constrain tools through least privilege, and independently verify high-impact actions. Final-output filtering alone is insufficient because bad context can influence planning before a final response exists.
+**How do you protect against prompt injection in systems with tools?**
+The main defense is to validate content before it enters the model context, not only to filter the model's output. Documents retrieved by RAG, API responses and web-search results are attack surfaces that should be treated with the same skepticism as user input. Complement this with supervision of the tool-call history and detection of instruction patterns in retrieved content.
 
-**Why are retrieval-layer availability failures difficult?**
-They can exploit the model's own conservative behavior, causing legitimate tasks to be blocked because retrieved context looks risky or contradictory. The defensive response is to validate sources, separate trust domains and monitor retrieval quality before context construction.
+**What is the TabooRAG attack and why is it difficult to defend against?**
+TabooRAG injects into the RAG store a document that wraps a benign query in high-risk context, causing the model to refuse legitimate queries. The defense is difficult because the filters that protect the model are the same mechanism the attack exploits: any filter that detects risk in content can be tricked into detecting risk where there is none. The defense requires validating retrieved content before it enters the context, not only filtering the final output.
 
 **When should a well-designed system abstain instead of answering?**
-When the reasoning process does not converge within its budget, required evidence cannot be verified, the input is outside a region where the system has demonstrated reliability, or the expected cost of a confident error exceeds the value of providing a speculative answer.
+When confidence in the reasoning is insufficient to produce a reliable output and the cost of an error is high. Producing a low-confidence answer with a strong appearance of certainty is more harmful than stating uncertainty explicitly. Practical criteria include: the reasoning chain does not converge within the assigned budget, the problem is outside the distribution where the model has demonstrated reliability, or the task requires information the model cannot verify.
