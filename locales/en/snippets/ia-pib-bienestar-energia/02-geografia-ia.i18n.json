@@ -1,0 +1,42 @@
+{
+  "source": "snippets/ia-pib-bienestar-energia/02-geografia-ia.html",
+  "source_blob_sha": "65e4d12c44035a28e09db5cf9793528964da1536",
+  "replacements": {
+    "La misma IA, dos geografías": "The same AI, two geographies",
+    "Entrenar sigue la energía. Servir sigue la latencia.": "Training follows electricity. Serving follows latency.",
+    "El mismo stack se instala en lugares distintos porque cambia la restricción dominante.": "The same stack is installed in different places because the dominant constraint changes.",
+    "Entrenamiento": "Training",
+    "Busca electricidad barata y capacidad masiva.": "It seeks cheap electricity and massive capacity.",
+    "Prioridad": "Priority",
+    "$/MWh · potencia disponible": "$/MWh · available power",
+    "Ubicación": "Location",
+    "puede estar lejos del usuario": "can be far from the user",
+    "Tolera distancia si el cluster escala bien.": "It tolerates distance if the cluster scales well.",
+    "Inferencia": "Inference",
+    "Busca proximidad y respuesta estable.": "It seeks proximity and stable response times.",
+    "milisegundos · conectividad": "milliseconds · connectivity",
+    "cerca de hubs de demanda": "close to demand hubs",
+    "Tolera energía más cara si mejora la experiencia.": "It tolerates more expensive electricity if it improves the experience.",
+    "La concentración se vuelve un problema de red.": "Concentration becomes a grid problem.",
+    "Irlanda muestra qué ocurre cuando mucha capacidad se agrupa en un hub pequeño.": "Ireland shows what happens when large amounts of capacity cluster in a small hub."
+  },
+  "forbidden_output_tokens": [
+    "La misma IA, dos geografías",
+    "Entrenar sigue la energía",
+    "El mismo stack se instala",
+    "Entrenamiento",
+    "Busca electricidad barata",
+    "Prioridad",
+    "potencia disponible",
+    "Ubicación",
+    "puede estar lejos del usuario",
+    "Tolera distancia",
+    "Inferencia",
+    "Busca proximidad",
+    "milisegundos · conectividad",
+    "cerca de hubs de demanda",
+    "Tolera energía más cara",
+    "La concentración se vuelve un problema de red",
+    "Irlanda muestra qué ocurre"
+  ]
+}
