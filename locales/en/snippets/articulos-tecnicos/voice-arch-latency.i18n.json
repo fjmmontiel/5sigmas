@@ -1,0 +1,16 @@
+{
+  "source": "snippets/articulos-tecnicos/voice-arch-latency.html",
+  "source_blob_sha": "35a6b4b0964cb280396323b525cdd15eb6652c13",
+  "replacements": {
+    "Comparación relativa del camino hasta el primer audio": "Relative comparison of the path to first audio",
+    "Latencia": "Latency",
+    "Mide hasta el audio escuchado.": "Measure until the audio is actually heard.",
+    "Ejemplo relativo, no benchmark.": "Relative example, not a benchmark."
+  },
+  "forbidden_output_tokens": [
+    "Comparación relativa del camino",
+    "Latencia",
+    "Mide hasta el audio escuchado",
+    "Ejemplo relativo, no benchmark"
+  ]
+}
