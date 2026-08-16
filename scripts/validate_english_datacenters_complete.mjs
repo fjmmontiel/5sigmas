@@ -97,6 +97,100 @@ async function assertChapter1Canonical(page, route, viewport) {
   }
 }
 
+async function assertChapter2Canonical(page, route, viewport) {
+  const roots = [
+    ['.drs[data-demo="dc-02-radiator-scale"]', 'radiator-scale visual'],
+    ['.dce[data-demo="dc-02-heat"]', 'vacuum heat visual'],
+    ['.dso[data-demo="dc-02-solar"]', 'orbital-solar visual'],
+    ['.dev[data-demo="dc-02-links"]', 'link-window visual'],
+    ['.drm[data-demo="dc-02-radiation"]', 'radiation-maintenance visual'],
+  ];
+  for (const [selector, label] of roots) {
+    if (await page.locator(selector).count() !== 1) failures.push(`${route}: missing canonical ${label}`);
+  }
+  if (await page.locator('.dcv[data-demo^="dc-02-"]').count()) failures.push(`${route}: legacy Chapter 2 redesign remains`);
+
+  const structural = [
+    ['.drs svg.viz-radiator-scale', 1, 'radiator-scale SVG'],
+    ['.drs .radiator', 3, 'radiator scale stages'],
+    ['.drs .node', 2, 'radiator constraint nodes'],
+    ['.drs .read span', 3, 'radiator teaching notes'],
+    ['.dce svg.viz-thermal-section', 1, 'thermal-section SVG'],
+    ['.dce .chip', 2, 'Earth/orbit chips'],
+    ['.dce .node', 1, 'thermal scaling note'],
+    ['.dce .read span', 3, 'thermal teaching notes'],
+    ['.dso svg.viz-sun-orbit', 1, 'orbital-solar SVG'],
+    ['.dso .node', 3, 'orbital-solar evidence nodes'],
+    ['.dso .read span', 3, 'orbital-solar teaching notes'],
+    ['.dev svg.viz-downlink-funnel', 1, 'downlink-funnel SVG'],
+    ['.dev .funnel', 2, 'downlink funnel stages'],
+    ['.dev .node', 4, 'link evidence nodes'],
+    ['.dev .sat', 4, 'laser-mesh nodes'],
+    ['.dev .read span', 3, 'link teaching notes'],
+    ['.drm svg.viz-mission-failure', 1, 'mission-failure SVG'],
+    ['.drm .rackframe', 4, 'mission lifecycle rack states'],
+    ['.drm .node', 2, 'mission evidence nodes'],
+    ['.drm .read span', 3, 'mission teaching notes'],
+  ];
+  for (const [selector, expected, label] of structural) {
+    const count = await page.locator(selector).count();
+    if (count !== expected) failures.push(`${route}: ${label} expected ${expected}, found ${count}`);
+  }
+
+  const body = await page.locator('body').innerText();
+  const anchors = [
+    '2 MW can require ≈ 3,950 m² of radiator',
+    'Vacuum does not provide free cooling: it removes convection',
+    'Dawn–dusk orbit: 95–99% solar availability',
+    'laser mesh: 100 Gbps and vacuum ~35% faster than fibre',
+    '60–190 ms',
+    'Hardware: 5–7 years',
+    'Starcloud did demonstrate in November 2025',
+    'between 120 and 600 seconds per orbit',
+    'What is the real advantage of space for data centers?',
+    'Base sources',
+    '720× improvement in SEFI immunity',
+  ];
+  for (const x of anchors) if (!body.includes(x)) failures.push(`${route}: missing canonical Chapter 2 evidence ${JSON.stringify(x)}`);
+  for (const x of ['The four equations behind orbital feasibility', 'The orbital-energy thesis therefore depends on three numbers together', 'Downlink is a separate constraint']) {
+    if (body.includes(x)) failures.push(`${route}: English-only Chapter 2 framing remains ${JSON.stringify(x)}`);
+  }
+
+  const refs = page.locator('h2', { hasText:'5. References' });
+  if (await refs.count() !== 1) failures.push(`${route}: missing canonical Chapter 2 references section`);
+  const rows = page.locator('table tbody tr');
+  if (await rows.count() !== 10) failures.push(`${route}: expected 10 canonical Chapter 2 reference rows, found ${await rows.count()}`);
+
+  const orderedHooks = [
+    ['h3', 'The real scale of radiators', '.drs[data-demo="dc-02-radiator-scale"]', 'h3', 'Why in-orbit validation is still limited'],
+    ['h3', 'Why in-orbit validation is still limited', '.dce[data-demo="dc-02-heat"]', 'h2', '2. Solar energy in orbit'],
+    ['h2', '2. Solar energy in orbit', '.dso[data-demo="dc-02-solar"]', 'p', 'Outside the atmosphere'],
+    ['h2', '3. Connectivity: link windows and bandwidth', '.dev[data-demo="dc-02-links"]', 'h2', '4. Orbital degradation and maintenance'],
+    ['h2', '4. Orbital degradation and maintenance', '.drm[data-demo="dc-02-radiation"]', 'p', 'All of these requirements have direct design consequences'],
+  ];
+  for (const [beforeSelector, beforeText, visualSelector, afterSelector, afterText] of orderedHooks) {
+    const before = page.locator(beforeSelector, { hasText:beforeText }).first();
+    const visual = page.locator(visualSelector).first();
+    const after = page.locator(afterSelector, { hasText:afterText }).first();
+    if (!(await before.count()) || !(await visual.count()) || !(await after.count())) {
+      failures.push(`${route}: cannot resolve canonical Chapter 2 hook order for ${visualSelector}`);
+      continue;
+    }
+    const order = await page.evaluate(([bEl, vEl, aEl]) => ({
+      beforeVisual: Boolean(bEl.compareDocumentPosition(vEl) & Node.DOCUMENT_POSITION_FOLLOWING),
+      visualBeforeAfter: Boolean(vEl.compareDocumentPosition(aEl) & Node.DOCUMENT_POSITION_FOLLOWING),
+    }), [await before.elementHandle(), await visual.elementHandle(), await after.elementHandle()]);
+    if (!order.beforeVisual || !order.visualBeforeAfter) failures.push(`${route}: wrong article hook placement for ${visualSelector}`);
+  }
+
+  for (const selector of ['.drs', '.dce', '.dso', '.dev', '.drm']) {
+    const loc = page.locator(selector);
+    if (await loc.count() !== 1) continue;
+    const delta = await loc.evaluate((el) => el.scrollWidth - el.clientWidth);
+    if (delta > 2) failures.push(`${route}: ${viewport} ${selector} internal overflow ${delta}px`);
+  }
+}
+
 try {
   for (const c of chapters) {
     for (const v of [{ name:'desktop', width:1440, height:1000 }, { name:'mobile', width:390, height:844 }]) {
@@ -118,6 +212,8 @@ try {
 
       if (c.slug === '01-por-que-ahora') {
         await assertChapter1Canonical(page, c.route, v.name);
+      } else if (c.slug === '02-energia-calor-conectividad') {
+        await assertChapter2Canonical(page, c.route, v.name);
       } else {
         const details = page.locator('[data-demo^="dc-"] details');
         if (await details.count() === 0) failures.push(`${c.route}: no interactive disclosure`);
@@ -159,4 +255,4 @@ if (failures.length) {
   for (const f of [...new Set(failures)]) console.error(f);
   process.exit(1);
 }
-console.log('Complete English Data Centers QA passed: Chapters 1–4, 21 native visuals, canonical Chapter 1 article/visual fidelity, exact native-English video/poster pairs, interactions, desktop/mobile clean.');
+console.log('Complete English Data Centers QA passed: Chapters 1–4, 21 native visuals, canonical Chapters 1–2 article/visual fidelity, exact native-English video/poster pairs, interactions, desktop/mobile clean.');
