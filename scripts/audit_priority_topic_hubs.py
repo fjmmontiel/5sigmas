@@ -95,6 +95,7 @@ REQUIRED_VISUAL_INCLUDES = {
     ),
     "agentes-ia": (
         "snippets/agentes-ia/01-bucle-agente.html",
+        "snippets/temas/agent-autonomy-spectrum.html",
         "snippets/temas/agent-system-boundary.html",
         "snippets/temas/agent-tool-gate.html",
         "snippets/temas/agent-context-memory-state.html",

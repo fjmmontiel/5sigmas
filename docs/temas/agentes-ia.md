@@ -21,12 +21,7 @@ Una tool call no concede autoridad por sí misma. Que el modelo genere `send_ema
 
 ## Chatbot, workflow, copiloto y agente
 
-| Sistema | Quién decide los pasos | Puede actuar | Ejemplo |
-|---|---|---:|---|
-| **Chatbot** | Flujo conversacional | Normalmente no | Responder una pregunta |
-| **Workflow** | Código determinista | Sí | Recuperar datos → validar → guardar |
-| **Copiloto** | Modelo propone; humano aprueba | Con aprobación | Preparar SQL o un cambio de código |
-| **Agente acotado** | Modelo decide entre acciones permitidas | Sí, dentro de límites | Consultar, comparar, reintentar y actualizar un registro |
+{{ include_html("snippets/temas/agent-autonomy-spectrum.html") }}
 
 Un workflow no es peor por ser determinista. Si los pasos ya se conocen, suele ser más fácil de probar, explicar y limitar. La agencia aporta valor cuando la secuencia depende del entorno y no merece la pena codificar todas las ramas por adelantado.
 
@@ -122,9 +117,11 @@ No. En producción suele importar más que la autonomía esté acotada: herramie
 ## Fuentes primarias
 
 - [Yao et al. — ReAct: Synergizing Reasoning and Acting in Language Models](https://arxiv.org/abs/2210.03629)
+- [Anthropic — Trustworthy agents in practice](https://www.anthropic.com/research/trustworthy-agents)
 - [OpenAI Agents SDK — Context management](https://openai.github.io/openai-agents-python/context/)
 - [OpenAI Agents SDK — Sessions](https://openai.github.io/openai-agents-python/sessions/)
 - [OpenAI Agents SDK — Run state](https://openai.github.io/openai-agents-python/ref/run_state/)
 - [OpenAI Agents SDK — Tracing](https://openai.github.io/openai-agents-python/tracing/)
 - [OpenAI Agents SDK — Tool guardrails](https://openai.github.io/openai-agents-python/guardrails/)
+- [OpenAI Agents SDK — Agent orchestration](https://openai.github.io/openai-agents-python/multi_agent/)
 - [Model Context Protocol — Authorization](https://modelcontextprotocol.io/specification/latest/basic/authorization)
