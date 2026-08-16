@@ -20,6 +20,7 @@ const reasoningVisuals = [
   { selector: '.rfl-wrap', source: 'docs/snippets/temas/reasoning-loop.html' },
   { selector: '.rsc-wrap', source: 'docs/snippets/temas/reasoning-self-consistency.html' },
   { selector: '.rtc-wrap', source: 'docs/snippets/temas/reasoning-test-time-compute.html' },
+  { selector: '.agt-wrap', source: 'docs/snippets/temas/agent-tool-gate.html' },
 ];
 const evaluationVisuals = [
   { selector: '.evo-wrap', source: 'docs/snippets/temas/evaluation-object.html' },
@@ -88,6 +89,16 @@ const reasoningEnglishForbidden = [
   'BÚSQUEDA / TOOLS',
   'SEÑALES DE ROUTING',
   'No monotónico',
+  'FRONTERA DE AUTORIDAD',
+  'Una tool call es una propuesta',
+  'PROPUESTA DEL MODELO',
+  'GATE DEL RUNTIME',
+  'Antes de ejecutar',
+  'Permisos',
+  'BLOQUEADO / PENDIENTE',
+  'RESULTADO OBSERVABLE',
+  'ACTUALIZAR ESTADO',
+  'SIGUIENTE DECISIÓN',
   'Fuente primaria:',
 ];
 const evaluationEnglishForbidden = [
@@ -145,8 +156,8 @@ const transformerSpanishAnchors = [
   'RUTA RESIDUAL',
   'RAMA DE LA SUBCAPA',
 ];
-const reasoningEnglishAnchors = ['INFERENCE COMPUTE', 'Intermediate state', 'OPERATIONAL TRACE', 'TRAJECTORY A', 'AGGREGATE ANSWERS', 'ROUTING SIGNALS', 'Not monotonic'];
-const reasoningSpanishAnchors = ['CÓMPUTO EN INFERENCIA', 'Estado intermedio', 'TRAZA OPERACIONAL', 'TRAYECTORIA A', 'AGREGAR RESPUESTAS', 'SEÑALES DE ROUTING', 'No monotónico'];
+const reasoningEnglishAnchors = ['INFERENCE COMPUTE', 'Intermediate state', 'OPERATIONAL TRACE', 'TRAJECTORY A', 'AGGREGATE ANSWERS', 'ROUTING SIGNALS', 'Not monotonic', 'AUTHORITY BOUNDARY', 'RUNTIME GATE', 'OBSERVABLE RESULT', 'NEXT DECISION'];
+const reasoningSpanishAnchors = ['CÓMPUTO EN INFERENCIA', 'Estado intermedio', 'TRAZA OPERACIONAL', 'TRAYECTORIA A', 'AGREGAR RESPUESTAS', 'SEÑALES DE ROUTING', 'No monotónico', 'FRONTERA DE AUTORIDAD', 'GATE DEL RUNTIME', 'RESULTADO OBSERVABLE', 'SIGUIENTE DECISIÓN'];
 const evaluationEnglishAnchors = ['Reference data', 'External benchmarks', 'Judge + humans', 'Online metrics', 'Answer + citations', 'Final answer'];
 const evaluationSpanishAnchors = ['Datos de referencia', 'Benchmarks externos', 'Juez + humanos', 'Métricas online', 'Respuesta + citas', 'Respuesta final'];
 const agentEnglishAnchors = ['An agent is a loop with permissions', 'AGENT ARCHITECTURE', 'Operational state', 'AUTHORITY BOUNDARY', 'Permissions', 'OBSERVABLE RESULT'];
@@ -231,6 +242,9 @@ async function checkReasoningDensity(page, route, viewport, anchors) {
     ['.rsc-caveats > div', 3],
     ['.rtc-route', 3],
     ['.rtc-policy > div:not(.rtc-arrow)', 3],
+    ['.agt-checks > div', 4],
+    ['.agt-outcomes > div', 2],
+    ['.agt-result-node', 3],
   ];
   for (const [selector, expected] of expectedCounts) {
     const count = await page.locator(selector).count();
@@ -297,7 +311,7 @@ await validateSpanishVisualSources(
 await validateSpanishVisualSources(
   'docs/temas/razonamiento.md',
   reasoningVisuals,
-  ['Razonar no es escribir una explicación larga', 'Una trayectoria puede equivocarse', 'El presupuesto de inferencia debe aumentar'],
+  ['Razonar no es escribir una explicación larga', 'Una trayectoria puede equivocarse', 'El presupuesto de inferencia debe aumentar', 'FRONTERA DE AUTORIDAD'],
 );
 await validateSpanishVisualSources(
   'docs/temas/evaluacion-modelos.md',
@@ -349,6 +363,7 @@ try {
       await checkOverflow(page, route, viewport);
       for (const err of runtimeErrors) failures.push(`${route}: ${err}`);
       await page.screenshot({ path: path.join(outDir, `spanish-concept-reasoning-${viewport.name}.png`), fullPage: true, animations: 'disabled' });
+      await captureVisuals(page, 'spanish-concept-reasoning', viewport, reasoningVisuals.map((item) => item.selector));
       await page.close();
     }
 
@@ -439,7 +454,10 @@ try {
           await checkTransformerDensity(page, concept.route, viewport, transformerEnglishAnchors);
           await captureVisuals(page, 'english-concept-transformer', viewport, concept.visuals);
         }
-        if (concept.visualGroup === 'reasoning') await checkReasoningDensity(page, concept.route, viewport, reasoningEnglishAnchors);
+        if (concept.visualGroup === 'reasoning') {
+          await checkReasoningDensity(page, concept.route, viewport, reasoningEnglishAnchors);
+          await captureVisuals(page, 'english-concept-reasoning', viewport, concept.visuals);
+        }
         if (concept.visualGroup === 'evaluation') await checkEvaluationDensity(page, concept.route, viewport, evaluationEnglishAnchors);
         if (concept.visualGroup === 'agents') await checkAgentDensity(page, concept.route, viewport, agentEnglishAnchors);
         await page.screenshot({ path: path.join(outDir, `english-concept-${concept.visualGroup}-${viewport.name}.png`), fullPage: true, animations: 'disabled' });
@@ -458,4 +476,4 @@ if (failures.length) {
   for (const failure of [...new Set(failures)]) console.error(failure);
   process.exit(1);
 }
-console.log(`Concept QA passed: ${englishOnlyPreview ? 'English-only preview' : 'combined ES/EN preview'} with six-visual Transformer coverage, reasoning, evaluation and agent visual contracts, native localization, canonical URLs, and desktop/mobile overflow cleanliness.`);
+console.log(`Concept QA passed: ${englishOnlyPreview ? 'English-only preview' : 'combined ES/EN preview'} with six-visual Transformer coverage, reasoning (including tool execution boundaries), evaluation and agent visual contracts, native localization, canonical URLs, and desktop/mobile overflow cleanliness.`);
