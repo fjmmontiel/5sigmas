@@ -4,7 +4,7 @@ seo_title: "What is an AI agent: how it works and how it differs from a chatbot"
 description: "What an AI agent is, how it uses tools, memory and state, how it differs from a chatbot or workflow, and what it needs to operate reliably."
 keywords: "AI agent, AI agents, agentic AI, chatbot vs agent, tool calling, agent memory, production AI agents"
 date: 2026-08-09
-date_modified: 2026-08-15
+date_modified: 2026-08-16
 ---
 
 # What is an AI agent?
@@ -56,11 +56,11 @@ A tool should remain a software contract. The model proposes a call; the runtime
 
 ## Memory, context and state are different things
 
-- **Context:** information visible to the model now.
-- **Memory:** information preserved and retrievable later.
-- **Operational state:** what is actually happening in a task: attempts, locks, pending operations and results.
+All three layers participate in the same task, but they answer different questions: context is the model's working view, memory preserves retrievable information, and operational state describes the real execution maintained by the runtime.
 
-Mixing these layers creates failures that are difficult to debug. A conversation may say that an action was requested while the runtime knows it is still executing. Operational state should be the source of truth for what actually happened.
+{{ include_html("snippets/temas/agent-context-memory-state.html") }}
+
+The separation becomes critical when a tool takes time. The conversation may record that an action was requested while the runtime knows it is still executing. Operational state — not chat text or retrieved memory — must therefore govern what actually happened and what the system may claim to the user.
 
 ## How to evaluate an agent
 
@@ -126,6 +126,8 @@ No. In production, bounded autonomy usually matters more: minimal tools, budgets
 ## Primary sources
 
 - [Yao et al. — ReAct: Synergizing Reasoning and Acting in Language Models](https://arxiv.org/abs/2210.03629)
-- [OpenAI Agents SDK — Agents](https://openai.github.io/openai-agents-python/agents/)
+- [OpenAI Agents SDK — Context management](https://openai.github.io/openai-agents-python/context/)
+- [OpenAI Agents SDK — Sessions](https://openai.github.io/openai-agents-python/sessions/)
+- [OpenAI Agents SDK — Run state](https://openai.github.io/openai-agents-python/ref/run_state/)
 - [OpenAI Agents SDK — Tool guardrails](https://openai.github.io/openai-agents-python/guardrails/)
 - [Model Context Protocol — Authorization](https://modelcontextprotocol.io/specification/latest/basic/authorization)
