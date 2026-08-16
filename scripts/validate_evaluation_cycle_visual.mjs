@@ -39,6 +39,7 @@ check(!englishTopic.includes('→ add a case and criterion'), 'English evaluatio
 check(translation.source === 'snippets/temas/evaluation-cycle.html', 'English translation map: wrong canonical source');
 check(translation.source_blob_sha === gitBlobSha(source), `English translation map: source_blob_sha drift (expected ${gitBlobSha(source)}, found ${translation.source_blob_sha})`);
 check(source.includes('prefers-reduced-motion:reduce'), 'Evaluation cycle visual: missing reduced-motion contract');
+check(source.includes('evc-mobile-return'), 'Evaluation cycle visual: missing explicit mobile loop-return affordance');
 
 const browser = await chromium.launch({ headless: true });
 const cases = [
@@ -46,13 +47,15 @@ const cases = [
     locale: 'es',
     route: '/temas/evaluacion-modelos/',
     anchors: ['BUCLE OPERATIVO', 'Incidente o necesidad', 'Mide el sistema actual', 'Modelo / prompt / sistema', 'Rollout limitado', 'Observa el producto', 'Fallo nuevo → caso permanente', 'CIERRA EL BUCLE'],
+    mobileReturn: 'VUELVE A SEÑAL',
     forbidden: [],
   },
   {
     locale: 'en',
     route: '/en/temas/evaluacion-modelos/',
     anchors: ['OPERATIONAL LOOP', 'Incident or need', 'Measure the current system', 'Model / prompt / system', 'Limited rollout', 'Observe the product', 'New failure → permanent case', 'CLOSE THE LOOP'],
-    forbidden: ['BUCLE OPERATIVO', 'Las evals offline reducen', 'Incidente o necesidad', 'Mide el sistema actual', 'Rollout limitado', 'Observa el producto', 'Las métricas online muestran', 'REGRESIÓN', 'CIERRA EL BUCLE'],
+    mobileReturn: 'BACK TO SIGNAL',
+    forbidden: ['BUCLE OPERATIVO', 'Las evals offline reducen', 'Incidente o necesidad', 'Mide el sistema actual', 'Rollout limitado', 'Observa el producto', 'Las métricas online muestran', 'REGRESIÓN', 'VUELVE A SEÑAL', 'CIERRA EL BUCLE'],
   },
 ];
 const viewports = [
@@ -82,6 +85,23 @@ try {
       check((await page.locator('.evc-context-item').count()) === 2, `${testCase.route}: ${viewport.name} expected 2 offline/online context bands`);
       check((await page.locator('.evc-feedback').count()) === 1, `${testCase.route}: ${viewport.name} expected one loop-closing feedback band`);
       check((await page.locator('.evc-tags span').count()) === 18, `${testCase.route}: ${viewport.name} expected 18 stage evidence tags`);
+
+      const mobileReturn = page.locator('.evc-mobile-return');
+      check((await mobileReturn.count()) === 1, `${testCase.route}: ${viewport.name} expected one mobile loop-return affordance`);
+      if (await mobileReturn.count()) {
+        const visible = await mobileReturn.isVisible();
+        if (viewport.name === 'mobile') {
+          check(visible, `${testCase.route}: mobile loop-return affordance must be visible`);
+          if (visible) {
+            const returnText = await mobileReturn.innerText();
+            check(returnText.includes(testCase.mobileReturn), `${testCase.route}: mobile loop-return label should contain ${JSON.stringify(testCase.mobileReturn)}, got ${JSON.stringify(returnText)}`);
+            const returnBox = await mobileReturn.boundingBox();
+            check(Boolean(returnBox && returnBox.height >= 20 && returnBox.width >= 100), `${testCase.route}: invalid mobile loop-return geometry ${JSON.stringify(returnBox)}`);
+          }
+        } else {
+          check(!visible, `${testCase.route}: desktop should use the spatial up-arrow, not the mobile loop-return label`);
+        }
+      }
 
       const body = await page.locator('body').innerText();
       for (const anchor of testCase.anchors) check(body.includes(anchor), `${testCase.route}: ${viewport.name} missing teaching anchor ${JSON.stringify(anchor)}`);
@@ -121,4 +141,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Evaluation-cycle visual QA passed: ES/EN source parity, six-stage loop, desktop/mobile geometry, overflow, language integrity, screenshots and reduced-motion behavior are valid.');
+console.log('Evaluation-cycle visual QA passed: ES/EN source parity, six-stage loop, explicit mobile return path, desktop/mobile geometry, overflow, language integrity, screenshots and reduced-motion behavior are valid.');
