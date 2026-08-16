@@ -56,7 +56,7 @@ const pages = [
   {
     route: '/en/series/multimodalidad-iag/05-riesgos/',
     title: 'Chapter 5 — Risks: visual prompt injection, action and operational security',
-    concepts: ['prompt injection', 'least privilege', 'data minimization', 'reversibility'],
+    concepts: ['prompt injection', 'least-privilege', 'data minimization', 'reversibility'],
     demos: 8,
     prefix: 'mm-05-',
     media: '05-riesgos',
