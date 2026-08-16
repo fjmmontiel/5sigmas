@@ -24,9 +24,9 @@ const chapters = [
     route: '/en/series/ia-pib-bienestar-energia/04-ia-pib-hoy/',
     slug: '04-ia-pib-hoy',
     title: 'Chapter 4 — AI and GDP today: real impact, lags and early signals',
-    concepts: ['productivity J-curve', '80.6%', '67%', 'Acemoglu'],
-    demos: ['04-jcurva-productividad', '04-evidencia-sectorial', 'energy-04-diffusion', 'energy-04-adoption-gap', 'energy-04-forecasts'],
-    demoSelector: '[data-demo="04-jcurva-productividad"], [data-demo="04-evidencia-sectorial"], [data-demo^="energy-04-"]',
+    concepts: ['productivity J-curve', '80.6%', '67%', 'Previously unavailable capabilities', 'The problem of mismeasured value', 'Core sources', 'Acemoglu'],
+    demos: ['04-jcurva-productividad', '04-evidencia-sectorial', '04-difusion', '04-brecha-adopcion', '04-debate-proyecciones'],
+    demoSelector: '[data-demo="04-jcurva-productividad"], [data-demo="04-evidencia-sectorial"], [data-demo="04-difusion"], [data-demo="04-brecha-adopcion"], [data-demo="04-debate-proyecciones"]',
     previewTitle: 'AI and GDP today',
     expectedVisuals: 6,
     screenshot: 'english-energy-04-ai-gdp.png',
@@ -72,17 +72,7 @@ try {
       if (visualCount !== chapter.expectedVisuals) failures.push(`${chapter.route}: expected ${chapter.expectedVisuals} rendered visual units, found ${visualCount}`);
       if (viewport.name === 'desktop') totalVisuals += visualCount;
 
-      if (chapter.interaction === 'details') {
-        const details = page.locator(`${chapter.demoSelector} details`);
-        if (await details.count() === 0) failures.push(`${chapter.route}: native visuals expose no interactive disclosure`);
-        else {
-          const candidate = details.first();
-          const before = await candidate.getAttribute('open');
-          await candidate.locator('summary').click();
-          const after = await candidate.getAttribute('open');
-          if (before === after) failures.push(`${chapter.route}: details interaction did not toggle`);
-        }
-      } else if (chapter.interaction === 'tabs') {
+      if (chapter.interaction === 'tabs') {
         const root = page.locator('[data-demo="03-kahneman-killingsworth"]');
         if (await root.count() !== 1 || await root.locator('[data-tab]').count() !== 4) failures.push(`${chapter.route}: canonical four-tab income/well-being interaction missing`);
         else {
@@ -90,6 +80,26 @@ try {
           if (await root.locator('[data-panel="4"]').getAttribute('hidden') !== null) failures.push(`${chapter.route}: canonical income/well-being tab interaction failed`);
         }
       } else if (chapter.interaction === 'mixed-ch4') {
+        const sequence = [
+          '1. Why macro impact takes time to arrive',
+          '2. Where it appears before GDP',
+          '3. New products and services that did not exist before',
+          '4. The problem of mismeasured value',
+          '5. The most indicative early signals',
+          'Frequently asked questions',
+          '6. References',
+        ];
+        let previous = -1;
+        for (const token of sequence) {
+          const index = body.indexOf(token);
+          if (index < 0) failures.push(`${chapter.route}: missing canonical article section ${JSON.stringify(token)}`);
+          if (index >= 0 && index <= previous) failures.push(`${chapter.route}: canonical article section order changed at ${JSON.stringify(token)}`);
+          if (index >= 0) previous = index;
+        }
+        for (const antiPattern of ['The full series chain', 'Series complete', 'The adoption gap\n']) {
+          if (body.includes(antiPattern)) failures.push(`${chapter.route}: stale English-only framing ${JSON.stringify(antiPattern)}`);
+        }
+
         const root = page.locator('[data-demo="04-jcurva-productividad"]');
         if (await root.count() !== 1) {
           failures.push(`${chapter.route}: canonical productivity J-curve visual missing`);
@@ -128,15 +138,57 @@ try {
           }
         }
 
-        const details = page.locator('[data-demo^="energy-04-"] details');
-        if (await details.count() === 0) failures.push(`${chapter.route}: remaining Chapter 4 visuals expose no interactive disclosure`);
-        else {
-          const candidate = details.first();
-          const before = await candidate.getAttribute('open');
-          await candidate.locator('summary').click();
-          const after = await candidate.getAttribute('open');
-          if (before === after) failures.push(`${chapter.route}: remaining Chapter 4 details interaction did not toggle`);
+        const diffusion = page.locator('[data-demo="04-difusion"]');
+        if (await diffusion.count() !== 1) {
+          failures.push(`${chapter.route}: canonical diffusion visual missing`);
+        } else {
+          if (await diffusion.locator('.dif2-stage').count() !== 3) failures.push(`${chapter.route}: diffusion visual expected 3 stages`);
+          if (await diffusion.locator('.dif2-pill').count() !== 6) failures.push(`${chapter.route}: diffusion visual expected 6 stage pills`);
+          if (await diffusion.locator('.dif2-signal').count() !== 3) failures.push(`${chapter.route}: diffusion visual expected 3 leading signals`);
+          if (await diffusion.locator('.dif2-arrow').count() !== 2) failures.push(`${chapter.route}: diffusion visual expected 2 causal arrows`);
+          const diffusionText = await diffusion.innerText();
+          for (const token of ['20–50%', 'AlphaFold ×45,000', '2–5%']) {
+            if (!diffusionText.includes(token)) failures.push(`${chapter.route}: diffusion visual missing canonical signal ${JSON.stringify(token)}`);
+          }
+          for (const token of ['Adopción y exploración', 'Rediseño organizativo', 'Impacto macro visible', 'Qué mirar antes que el PIB']) {
+            if (diffusionText.includes(token)) failures.push(`${chapter.route}: diffusion Spanish leakage ${JSON.stringify(token)}`);
+          }
         }
+
+        const adoption = page.locator('[data-demo="04-brecha-adopcion"]');
+        if (await adoption.count() !== 1) {
+          failures.push(`${chapter.route}: canonical adoption-gap visual missing`);
+        } else {
+          if (await adoption.locator('.ba-row').count() !== 2) failures.push(`${chapter.route}: adoption gap expected 2 company-size rows`);
+          if (await adoption.locator('.ba-fill').count() !== 2) failures.push(`${chapter.route}: adoption gap expected 2 quantitative fills`);
+          if (await adoption.locator('.ba-maturity').count() !== 1) failures.push(`${chapter.route}: adoption gap maturity block missing`);
+          const adoptionText = await adoption.innerText();
+          for (const token of ['~55%', '~25%', '+30 percentage-point gap', '1%', '99%']) {
+            if (!adoptionText.includes(token)) failures.push(`${chapter.route}: adoption-gap visual missing canonical signal ${JSON.stringify(token)}`);
+          }
+          for (const token of ['La brecha de adopción', 'Gran empresa', 'Pyme', 'madurez real']) {
+            if (adoptionText.includes(token)) failures.push(`${chapter.route}: adoption-gap Spanish leakage ${JSON.stringify(token)}`);
+          }
+        }
+
+        const forecasts = page.locator('[data-demo="04-debate-proyecciones"]');
+        if (await forecasts.count() !== 1) {
+          failures.push(`${chapter.route}: canonical forecast-debate visual missing`);
+        } else {
+          if (await forecasts.locator('.dp-pole').count() !== 2) failures.push(`${chapter.route}: forecast debate expected 2 scenario poles`);
+          if (await forecasts.locator('.dp-stat').count() !== 4) failures.push(`${chapter.route}: forecast debate expected 4 quantitative stats`);
+          if (await forecasts.locator('.dp-pole-premise').count() !== 2) failures.push(`${chapter.route}: forecast debate expected 2 premise blocks`);
+          if (await forecasts.locator('.dp-bottom-item').count() !== 3) failures.push(`${chapter.route}: forecast debate expected 3 decisive variables`);
+          const forecastsText = await forecasts.innerText();
+          for (const token of ['$7 trillion', '60-70%', '<0.53%', '~5%', '$7T–$15.7T']) {
+            if (!forecastsText.includes(token)) failures.push(`${chapter.route}: forecast debate missing canonical signal ${JSON.stringify(token)}`);
+          }
+          for (const token of ['El debate macroeconómico', 'Optimista', 'Cauteloso', 'La variable decisiva']) {
+            if (forecastsText.includes(token)) failures.push(`${chapter.route}: forecast-debate Spanish leakage ${JSON.stringify(token)}`);
+          }
+        }
+
+        if (await page.locator('[data-demo^="energy-04-"]').count() !== 0) failures.push(`${chapter.route}: obsolete independent English Chapter 4 redesign still rendered`);
       }
 
       const videos = page.locator('video[data-s5-inline-video-player]');
@@ -169,4 +221,4 @@ if (failures.length) {
   for (const failure of [...new Set(failures)]) console.error(failure);
   process.exit(1);
 }
-console.log('Complete English Energy QA passed: Chapters 3–4, 10 rendered visuals, native-English media, interactions, desktop/mobile clean.');
+console.log('Complete English Energy QA passed: Chapters 3–4, canonical Chapter 4 article and visuals, native-English media, interactions, desktop/mobile clean.');
