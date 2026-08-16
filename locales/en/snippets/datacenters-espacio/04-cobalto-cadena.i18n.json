@@ -1,0 +1,42 @@
+{
+  "source": "snippets/datacenters-espacio/04-cobalto-cadena.html",
+  "source_blob_sha": "e616fd18553c60b9dce1dbf12c3407af854daee0",
+  "replacements": {
+    "data-demo=\"04-cobalto-cadena\"": "data-demo=\"dc-04-cobalt\"",
+    ">cadena de cobalto</div>": ">cobalt supply chain</div>",
+    ">El cobalto concentra origen, refino y riesgo social</div>": ">Cobalt concentrates origin, refining and social risk</div>",
+    ">La cadena combina extracción concentrada, refino industrial y demanda final en baterías o UPS; el riesgo no es solo precio.</div>": ">The chain combines concentrated mining, industrial refining and final demand in batteries or UPS systems; the risk is not only price.</div>",
+    "aria-label=\"El cobalto concentra origen, refino y riesgo social\"": "aria-label=\"Cobalt concentrates origin, refining and social risk\"",
+    ">RDC: 74%</text>": ">DRC: 74%</text>",
+    ">extracción mundial</text>": ">world mine production</text>",
+    ">riesgo social localizado</text>": ">localized social risk</text>",
+    ">China: 67%</text>": ">China: 67%</text>",
+    ">refino global</text>": ">global refining</text>",
+    ">cuello industrial</text>": ">industrial bottleneck</text>",
+    ">Baterías y UPS</text>": ">Batteries and UPS</text>",
+    ">resiliencia eléctrica</text>": ">electrical resilience</text>",
+    ">en demanda final</text>": ">in final demand</text>",
+    ">salud reproductiva reportada</text>": ">reported reproductive health problems</text>",
+    ">enfermedades de piel reportadas</text>": ">reported skin diseases</text>",
+    ">la cadena de suministro también es una huella humana</text>": ">the supply chain is also a human footprint</text>",
+    ">74% de producción en RDC, 67% de refino en China</span>": ">74% of production in DRC, 67% of refining in China</span>",
+    ">El riesgo incluye salud local, no solo precio o suministro</span>": ">The risk includes local health, not only price or supply</span>",
+    ">La demanda de UPS y baterías arrastra esa cadena</span>": ">Demand for UPS systems and batteries carries that chain with it</span>"
+  },
+  "forbidden_output_tokens": [
+    "cadena de cobalto",
+    "El cobalto concentra",
+    "La cadena combina",
+    "RDC: 74%",
+    "extracción mundial",
+    "riesgo social localizado",
+    "refino global",
+    "cuello industrial",
+    "Baterías y UPS",
+    "salud reproductiva",
+    "enfermedades de piel",
+    "huella humana",
+    "El riesgo incluye",
+    "La demanda de UPS"
+  ]
+}
