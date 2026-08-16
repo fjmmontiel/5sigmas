@@ -202,15 +202,7 @@ Añade medidas temporales y acústicas. Una respuesta correcta que llega despué
 
 Las evals offline permiten reproducibilidad y comparación rápida. Las métricas online muestran qué ocurre con usuarios reales.
 
-Conecta ambos niveles:
-
-| Offline | Online |
-|---|---|
-| exactitud por intención | éxito de tarea |
-| puntuación de calidad | reformulaciones y abandono |
-| latencia medida | tiempo percibido |
-| uso correcto de tools | incidentes y reversión |
-| coste por caso | coste por tarea completada |
+{{ include_html("snippets/temas/evaluation-offline-online.html") }}
 
 Un experimento online necesita guardrails. No se debería exponer una variante a producción solo porque mejoró un juez automático.
 
