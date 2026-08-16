@@ -1,0 +1,40 @@
+{
+  "source": "snippets/datacenters-espacio/01-por-que-espacio.html",
+  "source_blob_sha": "86437195c08b67e2bd155b5953d5fbe1a145b81f",
+  "replacements": {
+    "data-demo=\"01-por-que-espacio\"": "data-demo=\"dc-01-why-space\"",
+    ">tres palancas</div>": ">three levers</div>",
+    ">El espacio cambia tres palancas, no convierte todo en viable</div>": ">Space changes three levers; it does not make everything viable</div>",
+    ">Energía, datos y masa tienen reglas distintas en órbita: más continuidad solar, menos volumen si filtras arriba y más coste por cada kilo.</div>": ">Energy, data and mass follow different rules in orbit: more continuous solar power, less data volume if you filter upstream, and more cost for every kilogram.</div>",
+    "aria-label=\"El espacio cambia tres palancas, no convierte todo en viable\"": "aria-label=\"Space changes three levers; it does not make everything viable\"",
+    ">Energia</text>": ">Energy</text>",
+    ">solar orbital</text>": ">orbital solar</text>",
+    ">mas horas utiles</text>": ">more usable hours</text>",
+    ">Datos</text>": ">Data</text>",
+    ">filtrar en orbita</text>": ">filter in orbit</text>",
+    ">menos volumen</text>": ">less volume</text>",
+    ">Masa</text>": ">Mass</text>",
+    ">kg lanzado</text>": ">kg launched</text>",
+    ">nuevo coste</text>": ">new cost</text>",
+    ">Energía: más continuidad temporal</span>": ">Energy: more temporal continuity</span>",
+    ">Datos: solo mejora si filtras bruto</span>": ">Data: only improves if raw data is filtered</span>",
+    ">Masa: cada kilo lanzado decide diseño</span>": ">Mass: every kilogram launched shapes the design</span>"
+  },
+  "forbidden_output_tokens": [
+    "tres palancas",
+    "El espacio cambia tres palancas",
+    "Energía, datos y masa",
+    "Energia",
+    "solar orbital",
+    "mas horas utiles",
+    "Datos",
+    "filtrar en orbita",
+    "menos volumen",
+    "Masa",
+    "kg lanzado",
+    "nuevo coste",
+    "Energía: más continuidad",
+    "Datos: solo mejora",
+    "Masa: cada kilo"
+  ]
+}
