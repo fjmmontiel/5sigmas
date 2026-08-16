@@ -128,7 +128,7 @@ async function validateVoiceRp(page, article, viewportName) {
   for (let index = 0; index < voiceRpSelectors.length - 1; index += 1) {
     await expectBefore(page, article.route, voiceRpSelectors[index], voiceRpSelectors[index + 1]);
   }
-  await expectBefore(page, article.route, '.s5v-contract', 'main h2');
+  await expectBefore(page, article.route, '.s5v-contract', '.md-content__inner > h2');
 
   return voiceRpSelectors.length;
 }
