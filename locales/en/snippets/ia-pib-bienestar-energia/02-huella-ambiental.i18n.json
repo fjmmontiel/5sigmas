@@ -1,0 +1,38 @@
+{
+  "source": "snippets/ia-pib-bienestar-energia/02-huella-ambiental.html",
+  "source_blob_sha": "9766e330b264396019c602f199b84bc9bc39ed86",
+  "replacements": {
+    "Huella real vs declarada: energía, CO₂ y residuos de la IA": "Real vs declared footprint: AI electricity, CO₂ and waste",
+    "Los compromisos de neutralidad climática de las grandes tecnológicas no equivalen a consumo renovable en tiempo real. La contabilidad anual de PPAs oculta las emisiones reales hora a hora.": "Big-tech carbon-neutrality commitments are not equivalent to real-time renewable consumption. Annual PPA accounting hides actual hour-by-hour emissions.",
+    "Electricidad IA específica": "AI-specific electricity",
+    "× 11 entre 2023 y 2030": "×11 from 2023 to 2030",
+    "La carga de IA crece mucho más rápido que el total de centros de datos. Greenpeace (2025) sitúa ese multiplicador en siete años, no en una década completa.": "AI workloads are growing much faster than total data-center demand. Greenpeace (2025) places that multiplier over seven years, not a full decade.",
+    "Emisiones CO₂ atribuibles a IA": "CO₂ emissions attributable to AI",
+    "entre 2020 y 2030": "from 2020 to 2030",
+    "Las emisiones reales superan entre 1,6 y 7,6 veces las declaradas porque los PPAs se contabilizan anualmente, no hora a hora.": "Actual emissions are between 1.6 and 7.6 times the declared figures because PPAs are accounted for annually, not hour by hour.",
+    "Residuos electrónicos de IA": "AI electronic waste",
+    "1,2 – 5 M t": "1.2–5 M t",
+    "estimación para 2030": "estimate for 2030",
+    "Por encima de la capacidad actual de reciclaje especializado. Producir un wafer de semiconductor de última generación requiere ~2,3 MWh. Greenpeace (2025).": "Above the current capacity of specialized recycling systems. Producing a leading-edge semiconductor wafer requires ~2.3 MWh. Greenpeace (2025).",
+    "Por qué los compromisos renovables no equivalen a consumo renovable": "Why renewable commitments are not equivalent to renewable consumption",
+    "Los contratos de compra de energía renovable (PPAs) que firman Google, Microsoft y Amazon garantizan que una cantidad equivalente de energía renovable entra a la red cada año. No garantizan que la electricidad que llega al centro de datos en cada momento sea de origen renovable. Las emisiones se compensan en papel pero no se evitan en tiempo real. Microsoft anunció en 2023 un acuerdo para retomar parte de la producción nuclear de Three Mile Island como respuesta directa a este problema de temporalidad.": "Renewable power purchase agreements (PPAs) signed by Google, Microsoft and Amazon guarantee that an equivalent amount of renewable energy enters the grid each year. They do not guarantee that the electricity reaching the data center at every moment is renewable. Emissions are offset on paper but not avoided in real time. Microsoft announced in 2023 an agreement to restart part of Three Mile Island's nuclear generation as a direct response to this timing problem.",
+    "Fuente: Greenpeace (2025). Datos de emisiones CO₂: rango basado en mix eléctrico regional y eficiencia de centros de datos. Los PPAs anuales no resuelven la descarbonización horaria.": "Source: Greenpeace (2025). CO₂-emissions range based on regional electricity mix and data-center efficiency. Annual PPAs do not solve hourly decarbonization."
+  },
+  "forbidden_output_tokens": [
+    "Huella real vs declarada",
+    "Los compromisos de neutralidad climática",
+    "Electricidad IA específica",
+    "entre 2023 y 2030",
+    "La carga de IA crece",
+    "Emisiones CO₂ atribuibles",
+    "entre 2020 y 2030",
+    "Las emisiones reales superan",
+    "Residuos electrónicos de IA",
+    "1,2 – 5 M t",
+    "estimación para 2030",
+    "Por encima de la capacidad actual",
+    "Por qué los compromisos renovables",
+    "Los contratos de compra de energía renovable",
+    "Fuente: Greenpeace"
+  ]
+}
