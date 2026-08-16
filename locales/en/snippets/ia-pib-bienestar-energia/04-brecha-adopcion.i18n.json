@@ -1,0 +1,15 @@
+{
+  "source": "snippets/ia-pib-bienestar-energia/04-brecha-adopcion.html",
+  "source_blob_sha": "04243139caa10edb1cac4634ba09e736b6350546",
+  "replacements": {
+    "La brecha de adopción: quién capturará las ganancias primero": "The adoption gap: who will capture the gains first",
+    "Si las ganancias de productividad se materializan primero donde la adopción es mayor, el resultado a corto plazo es una concentración en quienes ya tienen ventaja de escala.": "If productivity gains materialize first where adoption is highest, the short-term result is concentration among those that already have a scale advantage.",
+    "Gran empresa": "Large company",
+    "Adopción activa con rediseño de procesos": "Active adoption with process redesign",
+    "Pyme": "SME",
+    "Brecha de +30 puntos porcentuales, en ampliación (McKinsey, 2024)": "+30 percentage-point gap, widening (McKinsey, 2024)",
+    "Solo el ": "Only ",
+    " de las empresas ha alcanzado madurez real en IA": " of companies have reached genuine AI maturity",
+    "McKinsey (2024) define madurez como integración profunda en procesos de negocio con métricas de retorno documentadas. El 99% restante está en exploración, piloto o adopción parcial. Esta cifra es la razón principal por la que el impacto macro todavía no aparece en el PIB.": "McKinsey (2024) defines maturity as deep integration into business processes with documented return metrics. The remaining 99% are in exploration, pilot or partial-adoption phases. This figure is the main reason macro impact still does not appear in GDP."
+  }
+}
