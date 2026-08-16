@@ -1,8 +1,8 @@
 ---
 title: AI as an electrical technology
-description: How AI workloads translate into electricity demand, why efficiency and total demand can rise together, and which infrastructure layers matter.
+description: What AI implies in compute and energy terms, why demand can grow even as hardware improves, and where the real bottlenecks are.
 date: 2026-04-08
-keywords: "AI electricity, AI energy use, data centers AI, inference energy, AI infrastructure"
+keywords: "AI electrical technology, artificial intelligence energy consumption, AI data centers energy, AI rebound effect, GPU TPU compute, LLM inference energy, data center PUE, AI energy bottlenecks"
 tags:
   - Economics
   - Energy
@@ -11,103 +11,163 @@ tags:
 
 # Chapter 2 — AI as an electrical technology
 
-AI is software running on a physical stack. Model development and model serving depend on accelerators, memory, networking, storage, cooling and reliable electricity. This chapter connects those layers and explains why lower energy per task does not automatically imply lower total demand.
+This chapter describes AI's real energy profile — training versus inference, growing demand and geographic concentration — and why continuous improvements in hardware efficiency do not imply declining electricity demand in absolute terms. By the end, the reader will understand what "compute" means in practice, why the Jevons paradox allows efficiency and total demand to grow at the same time, and have the framework needed for the debate on AI's impact on GDP and well-being developed in the following chapters.
 
-!!! info "Prerequisite"
-    Start with [Chapter 1 — Electricity and well-being](./01-electricidad-bienestar.md) for the distinction between nominal access and usable, reliable supply.
+!!! info "Prerequisites"
+    This chapter assumes familiarity with the concepts introduced in [Chapter 1 — Electricity and well-being](./01-electricidad-bienestar.md).
+
+AI is not only a software technology. Behind every model query there is hardware consuming electricity, cooling infrastructure consuming more, and a logistics chain that runs from mining the materials used to manufacture chips to installing new high-voltage transmission lines to supply data centers.
 
 {{ include_html("snippets/ia-pib-energia/series_energy_ai_02_ai.html") }}
 
 ---
 
-## 1. Building models and serving them have different demand profiles
+## 1. What "compute" means in practice
 
-Large model-building runs concentrate a large amount of compute into a finite period. Serving repeats smaller workloads continuously across many users and applications. As adoption grows, serving can become the larger lifetime workload because a small cost is multiplied by high volume and long operating periods.
+The process of developing and deploying AI models is divided into two phases with very different energy profiles.
+
+### Training
+
+Training a large model requires processing massive amounts of data for weeks or months using thousands of specialized accelerators — GPUs or TPUs — in parallel. The energy consumed by a large-scale training run can equal the annual electricity consumption of thousands of homes. According to published estimates, the initial training of GPT-4 consumed around 42 GWh over several weeks, a figure comparable to the annual consumption of thousands of homes [Epoch AI (2023)](https://epoch.ai/data/ai-models).
+
+This is not a process repeated frequently for the same model, but it is repeated for every new version, every specialized variant and every experiment carried out by research teams. The sum of all those training runs across dozens of active laboratories and companies represents growing energy demand concentrated geographically in the data centers where the training happens.
+
+### Inference
+
+Inference is the process of using the model to answer questions. Every query, every image generation and every document analysis consumes energy. Unlike training, inference happens billions of times per day in a distributed and continuous way.
+
+What matters is the relationship between the two: training is a large one-off cost, whereas inference is a small continuous cost that, multiplied by usage volume, can exceed training in aggregate energy consumption as adoption grows. A query to a large language model consumes approximately ten times more energy than a conventional web search, while video generation can reach forty times the energy use of that search [IEA (2025)](https://www.iea.org/reports/energy-and-ai).
+
+> Energy is not consumed only when models are trained, but also when they are served. A model with millions of daily users consumes energy continuously, not episodically.
 
 {{ include_html("snippets/ia-pib-bienestar-energia/02-entrenamiento-inferencia.html") }}
 
-The physical cost of any workload depends on model size, precision, hardware generation, batching, context length, output length and modality. There is therefore no single universal value for “energy per AI query”.
-
 ---
 
-## 2. Efficiency can coexist with rising total demand
+## 2. Why efficiency does not stop demand
 
-Hardware and software continue to reduce the energy needed for a unit of useful work. But total electricity depends on more than unit efficiency:
+A reasonable intuition is that if chips become more efficient per operation, energy consumption should stabilize or decline. That intuition is partly correct and completely insufficient for predicting what happens in practice.
 
-> **energy per task × number of tasks × workload complexity**
+The phenomenon that explains the divergence has a name: the rebound effect, or Jevons paradox [Jevons (1865)](https://archive.org/details/coalquestionani00jevogoog). When a technology becomes more efficient, its cost of use falls, which encourages more use and can result in higher total consumption even though every unit of use is cheaper.
 
-If energy per task falls while usage and workload complexity grow faster, total demand can still increase. This is the rebound effect: cheaper, more efficient compute enables more applications and more frequent use.
+For AI, efficiency improvements have three simultaneous effects:
+
+1. **They reduce the cost per query**, making applications economically viable that were not viable before.
+2. **They broaden the set of users**, because models that are cheaper to operate can be deployed across more sectors and geographies.
+3. **They increase model complexity**, because more efficient hardware creates room to scale model capability without increasing unit cost at the same rate.
+
+The net result in recent years has been rising rather than stable energy consumption, despite real improvements in efficiency per operation.
 
 {{ include_html("snippets/ia-pib-bienestar-energia/02-efecto-rebote.html") }}
 
-The engineering question is whether efficiency improves faster than aggregate demand expands.
-
 ---
 
-## 3. The physical bottlenecks
+## 3. The real bottlenecks
 
-Compute capacity depends on several layers working together. A constraint in any one of them can limit deployable capacity.
+The expansion of AI as an electrical technology is not limited only by the amount of money available to invest. Five bottlenecks determine how quickly it can actually grow.
 
 {{ include_html("snippets/ia-pib-bienestar-energia/02-cuellos-botella.html") }}
 
-### Electricity and facilities
+### Electricity
 
-Large data centers require substantial reliable electrical capacity and supporting facility infrastructure. The IEA estimated global data-center electricity consumption at **415 TWh in 2024** and described substantially higher scenarios for 2030 as AI and conventional data workloads expand ([IEA, 2025](https://www.iea.org/reports/energy-and-ai)).
+The first and most direct bottleneck: data centers need grid connections with sufficient capacity and guarantees of continuous supply. The IEA estimates that global data-center electricity consumption reached 415 TWh in 2024 and could reach between 945 TWh and 1,260 TWh in 2030 depending on the pace of adoption; the base scenario already sits slightly above Japan's current electricity consumption [IEA (2025)](https://www.iea.org/reports/energy-and-ai).
+
+Within that total, the AI-specific component is growing faster than the rest of data workloads: a Greenpeace analysis (2025) estimates that electricity consumption attributable to AI workloads could grow from 50 TWh in 2023 to 554 TWh in 2030, an 11× increase in seven years, with associated CO₂ emissions rising from approximately 180 to 320 million tonnes over the same period [Greenpeace (2025)](https://www.greenpeace.de/publikationen/20250514-greenpeace-studie-umweltauswirkungen-ki-eng.pdf).
 
 {{ include_html("snippets/ia-pib-bienestar-energia/02-proyeccion-demanda.html") }}
 
-### Hardware, cooling and resource accounting
+When using a comparison with households, it should be read as an order-of-magnitude annual-energy equivalence under continuous operation. It does not mean that a data center and 100,000 homes consume exactly the same amount at every instant, but that their annual energy totals can be similar if the data center sustains that load throughout the year.
 
-Accelerators depend on a wider semiconductor and networking supply chain. Cooling, networking, storage and power conversion add facility overhead, while hardware manufacturing and replacement add lifecycle costs that are separate from operational electricity.
+In many regions, the grid has no capacity available in the short term, expansion lead times are measured in years, and supply stability depends on an energy mix that remains mostly fossil-based in many countries. Large technology companies respond with long-term renewable-energy contracts (PPAs), dedicated supply agreements and, more recently, direct agreements with existing nuclear plants: Microsoft announced in 2023 an agreement to restart part of the generation at Three Mile Island in Pennsylvania, and Amazon and Google have signed similar agreements with nuclear-energy operators.
+
+Those contracts, however, are not equivalent to real-time renewable consumption: they guarantee that an equivalent amount of renewable energy enters the grid, not that the electricity reaching a data center at every moment is renewable. The Greenpeace (2025) analysis estimates that the real emissions of large technology companies are between 1.6 and 7.6 times higher than their carbon-neutrality claims suggest, because PPAs are accounted for as annual offsets rather than direct real-time substitution [Greenpeace (2025)](https://www.greenpeace.de/publikationen/20250514-greenpeace-studie-umweltauswirkungen-ki-eng.pdf).
 
 {{ include_html("snippets/ia-pib-bienestar-energia/02-huella-ambiental.html") }}
 
-Water comparisons also require consistent boundaries. Facility-level and sector-level totals, or direct and indirect water use, should not be mixed in the same comparison.
+### Chips
+
+AI accelerators — primarily NVIDIA GPUs and Google TPUs at present — are the scarcest resource in the ecosystem. Manufacturing them requires leading-edge semiconductors produced in only a few fabs worldwide, mainly in Taiwan and South Korea, as well as materials such as gallium, of which China controls between 98% and 99% of global production [IEA (2025)](https://www.iea.org/reports/energy-and-ai). The supply chain is long, fragile and geopolitically sensitive.
+
+Hardware manufacturing also has its own energy and material footprint, which is rarely included in sector sustainability calculations: producing a leading-edge semiconductor wafer requires approximately 2.3 MWh, and the total volume of AI hardware expected to be deployed over the next decade is already generating estimates of between 1.2 and 5 million tonnes of electronic waste by 2030, a stream that exceeds the current capacity of specialized recycling systems [Greenpeace (2025)](https://www.greenpeace.de/publikationen/20250514-greenpeace-studie-umweltauswirkungen-ki-eng.pdf).
+
+Lead times for large-scale hardware range between 36 and 52 weeks for large orders [(IEA, 2025)][r1], limiting how quickly any actor can scale compute capacity regardless of available budget. US restrictions on exports of advanced chips add another layer of uncertainty for actors outside the Western technology alliance.
+
+### Water
+
+Data-center cooling consumes enough water to be entering local planning debates. A 100 MW data center can consume around two million liters per day through evaporative-cooling systems, and estimates for the sector as a whole suggest that global consumption could rise from 560 billion liters in 2024 to 1.2 trillion in 2030 [IEA (2025)](https://www.iea.org/reports/energy-and-ai). In water-stressed regions — which are, paradoxically, also attractive locations for data centers because of climate or low land cost — this use creates direct tension with other water uses and with local communities that see the facilities as competitors for a scarce resource.
+
+The comparison itself needs to be qualified. Facility by facility, a typical 100 MW data center consumes substantially more water than a medium-sized golf course: the IEA places the data center at roughly two million liters per day in total, while the 2024 GCSAA/ASHS survey for the United States puts median water use per golf facility at around 85 million liters per year [(GCSAA/ASHS, 2025)](https://journals.ashs.org/view/journals/horttech/35/5/article-p848.xml). At the aggregate sector level, however, the picture changes: the same survey projects around 2.01 trillion liters of water applied to US golf courses in 2024, roughly 3.6 times the IEA estimate for global data centers in 2024 [(GCSAA, 2025)](https://www.gcsaa.org/docs/default-source/what-we-do/gcep-phase-4-water-report.pdf?sfvrsn=c829dd3e_0).
 
 {{ include_html("snippets/ia-pib-bienestar-energia/02-agua-golf-datacenters.html") }}
 
+### Talent
+
+The number of people capable of designing, training and maintaining AI systems at scale remains limited relative to demand. Talent is geographically concentrated, and its scarcity is a real limit on development speed.
+
+### Regulation
+
+Regulation of data centers, personal-data management and the use of AI systems in critical sectors varies enormously across jurisdictions and adds uncertainty about which business models are viable in which geographies. The European AI Act, US restrictions on chip exports and debates over digital sovereignty across multiple countries create a constantly changing regulatory environment that shapes investment decisions.
+
 ---
 
-## 4. Geography matters
+## 4. The geography of AI energy demand
 
-Compute demand is concentrated rather than evenly spread across a grid. Large sites value electricity availability, facility capacity and network connectivity, while regional serving also values proximity to users.
+AI energy demand is not distributed uniformly. It is concentrated in data centers, which are themselves concentrated in regions with favorable conditions: low electricity prices, available land, fiber connectivity and climates that reduce cooling costs.
+
+In the United States, Northern Virginia, Texas and the Pacific Northwest hold a disproportionate share of capacity. In Europe, Ireland and the Nordic countries have attracted massive investment because of cheap energy and favorable cooling climates. Ireland illustrates the concentration this can create at national scale: data centers already account for more than 20% of the country's total electricity consumption, and some projections put that share close to 80% by 2030 if expansion continues at the expected pace, making management of that demand a national energy-policy priority without parallel in other sectors. In Asia, Singapore, Japan and parts of China concentrate regional capacity.
+
+A functional distinction is also beginning to appear within this distribution: model training tends to concentrate where electricity is cheaper — often near renewable generation or electricity markets with low off-peak prices — while low-latency inference is located close to population centers. This two-level geography has implications for which regions attract which type of infrastructure and what kinds of jobs and added value each function generates.
+
+This concentration has consequences for the local grid: adding one large data center can represent a significant share of a region's electricity consumption and place pressure on infrastructure that was not designed to absorb that additional load.
+
+> The scale at which AI is being deployed turns the question "how much energy does it consume?" into a question of public infrastructure and energy policy, not only technological efficiency.
 
 {{ include_html("snippets/ia-pib-bienestar-energia/02-geografia-ia.html") }}
 
-The same global AI service can therefore depend on several different local infrastructure conditions.
+The next chapter examines the other side of the equation: how we measure the impact produced by all this consumption, and why GDP captures only part of what actually matters.
 
 ---
-
-## 5. A better measurement stack
-
-A useful scorecard separates the workload, hardware, facility, electricity supply and hardware lifecycle. A single “Wh per query” number can be useful, but only when those assumptions are explicit.
-
-| Layer | Examples of what to measure |
-| --- | --- |
-| Workload | modality, context length, output size |
-| Hardware | accelerator generation, utilization, precision |
-| Facility | IT load and cooling overhead |
-| Electricity | total consumption and reliability |
-| Lifecycle | hardware manufacturing and replacement |
-
----
-
-!!! tip "Continue the path"
-    Return to the [AI, GDP, Well-being and Energy series overview](./00_presentacion_serie.md). Chapter 3 will be published as the next completed slice.
-
-## References
-
-- **IEA (2025)** — [Energy and AI](https://www.iea.org/reports/energy-and-ai).
-- **Jevons (1865)** — *The Coal Question*, the classical statement of the rebound mechanism.
-- **Epoch AI** — public datasets tracking the growth of AI model compute.
 
 ## Frequently asked questions
 
-**Why can serving matter more than model building over the full lifecycle?**  
-Because model building is episodic while serving can run continuously at high volume.
+**Why is AI described as an "electrical technology"?**
+Because, like the electric motor or computing, AI has no fixed sector of use: it can transform productivity in any industry that adopts its capabilities. The electric motor did not merely power factories; it reorganized how those factories were designed. AI does not merely automate office tasks; it changes how decision-making processes are structured. The "electrical" parallel also points to its physical dependency: without energy infrastructure at scale, there is no AI at scale.
 
-**Does more efficient hardware reduce electricity demand?**  
-It reduces electricity per unit of work, but total demand can still rise if usage grows faster.
+**How much energy does it take to train a large AI model?**
+The initial training of a model at GPT-4 scale consumed around 42 GWh according to available estimates, equivalent to the annual electricity consumption of a few thousand homes. But that number corresponds to a single training run: the industry performs dozens of large-scale training runs per year across active laboratories, plus hundreds of smaller-scale experiments, making the aggregate figure several times larger. Model scale has also continued to grow: models trained in 2025 often exceed that threshold.
 
-**Why is one energy-per-query number insufficient?**  
-Because model size, modality, output length, hardware, utilization and facility overhead all change the physical cost.
+**What is the rebound effect and why does it matter for AI energy use?**
+The rebound effect, or Jevons paradox, describes the pattern in which an improvement in a technology's efficiency reduces the cost per unit of use and, as a consequence, expands usage volume by more than the efficiency improvement saves. Applied to AI: although each generation of chips performs more compute per watt, total demand for compute grows faster than efficiency improves, so aggregate consumption rises even as the cost per operation falls. This is the mechanism by which IEA projections estimate that data-center electricity consumption will nearly double between 2024 and 2030 even while assuming continued efficiency improvements.
+
+**Why are AI data centers concentrated in certain geographic locations?**
+Because they simultaneously require cheap and abundant electricity, available land, water for cooling and high-capacity fiber connectivity. That combination is scarce. Northern Virginia, northwestern Ireland, Singapore and the Nordic countries each offer different subsets of those conditions. As demand grows and exhausts available capacity in those locations, friction first appears around the local grid and water resources before new generation capacity can arrive.
+
+**Will improvements in AI hardware efficiency reduce its global energy consumption?**
+Probably not in absolute terms, although they can in relative terms. Improvements in chip efficiency reduce the cost per operation, expanding the market for viable applications and, with it, total demand. The same pattern occurred with mobile phones: current chips are thousands of times more efficient than the first mobile chips, but the electricity consumption of the telecommunications sector has continued to grow because usage volume multiplied even faster.
+
+---
+
+## 5. References
+
+<details markdown="1">
+<summary><strong>Base sources</strong></summary>
+
+| Key | Source | Short description |
+| --- | --- | --- |
+| R1 | **IEA (2025)** — *Energy and AI* ([IEA][r1]) | Primary source for the 415→945→1,260 TWh projections, per-query consumption comparisons, water data and the geographic concentration of data centers. |
+| R2 | **Greenpeace (2025)** — *Umweltauswirkungen der Künstlichen Intelligenz* ([Greenpeace][r2]) | Analysis of AI's environmental impact: carbon emissions, water consumption and the water footprint of data centers. |
+| R3 | **Patterson, D. et al. (2021)** — *Carbon and the Broad Economy of Machine Learning* ([arXiv][r3]) | Methodological framework for calculating the carbon footprint of training; includes proposals for sector energy efficiency. |
+| R4 | **Jevons, W.S. (1865)** — *The Coal Question* | Original formulation of the efficiency paradox: technological improvement lowers unit cost but expands usage volume, resulting in growing total demand. |
+| R5 | **Strubell, E. et al. (2019)** — *Energy and Policy Considerations for Deep Learning in NLP* ([arXiv][r5]) | First systematic analysis of the energy and carbon cost of training large-scale language models. |
+| R6 | **Epoch AI (2023)** — *Trends in Machine Learning* ([Epoch AI][r6]) | Database of notable models with estimates of compute, training energy cost and scaling trends. Source for the ~42 GWh GPT-4 estimate. |
+| R7 | **GCSAA / ASHS (2025)** — *Survey of Water Use and Management Practices on US Golf Courses from 2005 to 2024* | National survey and peer-reviewed paper on water applied to US golf courses; basis for around 2.01 trillion liters in 2024 and a median of around 85 million liters per facility. |
+
+</details>
+
+[r1]: https://www.iea.org/reports/energy-and-ai "Energy and AI — IEA"
+[r2]: https://www.greenpeace.de/publikationen/20250514-greenpeace-studie-umweltauswirkungen-ki-eng.pdf "Umweltauswirkungen KI — Greenpeace"
+[r3]: https://arxiv.org/abs/2104.10350 "Carbon and the Broad Economy of Machine Learning — arXiv"
+[r4]: https://archive.org/details/coalquestionani00jevogoog "The Coal Question — Jevons (1865)"
+[r5]: https://arxiv.org/abs/1906.02629 "Energy and Policy Considerations for Deep Learning in NLP — arXiv"
+[r6]: https://epoch.ai/data/ai-models "AI Models — Epoch AI"
+[r7]: https://journals.ashs.org/view/journals/horttech/35/5/article-p848.xml "Survey of Water Use and Management Practices on US Golf Courses from 2005 to 2024 — ASHS HortTechnology"
