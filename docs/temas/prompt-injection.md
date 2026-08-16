@@ -4,7 +4,7 @@ seo_title: "Prompt injection: qué es y cómo se reduce el riesgo"
 description: "Qué es prompt injection en sistemas con LLMs, por qué importa en RAG y agentes y qué principios de diseño reducen el riesgo de que contenido externo influya en una acción."
 keywords: "prompt injection, seguridad LLM, indirect prompt injection, RAG security, seguridad agentes IA"
 date: 2026-08-09
-date_modified: 2026-08-15
+date_modified: 2026-08-16
 ---
 
 # Qué es prompt injection
@@ -87,6 +87,8 @@ La observabilidad debe permitir reconstruir qué información entró, qué decis
 ## Cómo evaluar un sistema
 
 Una evaluación útil reproduce el flujo real y separa varias etapas: entrada externa, recuperación, cambio de decisión, propuesta de herramienta, autorización y efecto final. Así puede saberse si el riesgo muere en retrieval, en la política o antes de ejecutar una operación.
+
+{{ include_html("snippets/seguridad-ia/04-causal-chain.html") }}
 
 [Red-teaming — probar el camino completo antes del incidente](/series/seguridad-ia/04-red-teaming/) desarrolla esta forma de evaluación end-to-end.
 
