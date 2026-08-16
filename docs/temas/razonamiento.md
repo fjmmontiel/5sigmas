@@ -67,18 +67,13 @@ La búsqueda aporta valor cuando hay una señal que distingue estados prometedor
 
 ## Verificadores y modelos de recompensa
 
-Un verificador puntúa una respuesta, un paso o una trayectoria. Puede ser:
+Un verificador puntúa una respuesta, un paso o una trayectoria. La distinción importante es **qué parte del proceso puede observar y contra qué fuente de verdad compara**. Cuando existe una comprobación ejecutable —tests, solver, esquema o estado externo— esa señal suele ser más directa que pedir a otro modelo una opinión.[^verifiers]
 
-- una regla determinista
-- un compilador o test
-- un solver matemático
-- una consulta a datos externos
-- otro modelo
-- un *process reward model*
+{{ include_html("snippets/temas/reasoning-verifier-signal.html") }}
 
-La verificación final solo indica si el resultado parece correcto. La verificación por proceso intenta localizar dónde aparece el error. Esta última ofrece una señal más fina, pero requiere etiquetas o criterios a nivel de paso.
+Un verificador de resultado u **Outcome Reward Model (ORM)** puntúa el outcome final. Es útil cuando la respuesta puede juzgarse de forma fiable, pero no identifica dónde apareció el primer error de una trayectoria. Un **Process Reward Model (PRM)** puntúa estados o pasos intermedios y ofrece una señal más fina para localizar errores o guiar búsqueda, a cambio de necesitar un criterio fiable a nivel de paso.[^process]
 
-Para código, ejecutar tests suele ser más fiable que pedir a otro modelo que opine. Para una tool call, validar el esquema y comprobar el efecto real es mejor que evaluar la naturalidad de la explicación.
+La verificación por proceso tampoco demuestra que una explicación visible sea la traza causal interna del modelo. Evalúa el artefacto intermedio que puede observarse. Para código, ejecutar tests sigue siendo preferible a juzgar la naturalidad de una explicación; para una tool call, conviene validar el esquema y comprobar el efecto real.
 
 ## Test-time compute
 
@@ -188,6 +183,8 @@ RAG es recuperación de información. Puede formar parte de un proceso de razona
 [^unfaithful]: Miles Turpin et al., [*Language Models Don't Always Say What They Think: Unfaithful Explanations in Chain-of-Thought Prompting*](https://arxiv.org/abs/2305.04388), 2023.
 [^tot]: Shunyu Yao et al., [*Tree of Thoughts: Deliberate Problem Solving with Large Language Models*](https://arxiv.org/abs/2305.10601), 2023.
 [^uct]: Levente Kocsis y Csaba Szepesvári, [*Bandit Based Monte-Carlo Planning*](https://doi.org/10.1007/11871842_29), ECML 2006.
+[^verifiers]: Karl Cobbe et al., [*Training Verifiers to Solve Math Word Problems*](https://arxiv.org/abs/2110.14168), 2021.
+[^process]: Hunter Lightman et al., [*Let's Verify Step by Step*](https://arxiv.org/abs/2305.20050), 2023.
 [^testtime]: Charlie Snell et al., [*Scaling LLM Test-Time Compute Optimally can be More Effective than Scaling Model Parameters*](https://arxiv.org/abs/2408.03314), 2024.
 [^react]: Shunyu Yao et al., [*ReAct: Synergizing Reasoning and Acting in Language Models*](https://arxiv.org/abs/2210.03629), ICLR 2023.
 [^agentguardrails]: [OpenAI Agents SDK — Guardrails](https://openai.github.io/openai-agents-python/guardrails/), documentación oficial.
