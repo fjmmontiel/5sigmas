@@ -1,0 +1,174 @@
+<div class="eus-wrap" data-demo="topic-evaluation-uncertainty">
+  <div class="eus-head">
+    <div class="eus-kicker">MISMO TEST → DIFERENCIAS PAREADAS → INCERTIDUMBRE → DECISIÓN</div>
+    <div class="eus-title">Un punto estimado no es una conclusión</div>
+    <div class="eus-sub">Compara las versiones sobre los mismos casos, conserva la diferencia por ejemplo y reporta el efecto junto con su incertidumbre. Después separa una diferencia detectable de una diferencia que realmente compensa en producto.</div>
+  </div>
+
+  <div class="eus-paired" role="img" aria-label="Comparación pareada de dos versiones sobre los mismos casos, seguida por una estimación de la diferencia media y su incertidumbre">
+    <div class="eus-paired-head">
+      <span>1 · EMPAREJA POR CASO</span>
+      <strong>La unidad útil es la diferencia del mismo ejemplo</strong>
+    </div>
+    <div class="eus-paired-grid">
+      <div class="eus-pair-table">
+        <div class="eus-pair-row eus-pair-row--head"><span>CASO</span><b>BASE A</b><b>CANDIDATA B</b><strong>Δᵢ</strong></div>
+        <div class="eus-pair-row"><span>i₁</span><b>m₁(A)</b><b>m₁(B)</b><strong>m₁(B) − m₁(A)</strong></div>
+        <div class="eus-pair-row"><span>i₂</span><b>m₂(A)</b><b>m₂(B)</b><strong>m₂(B) − m₂(A)</strong></div>
+        <div class="eus-pair-row"><span>…</span><b>…</b><b>…</b><strong>…</strong></div>
+      </div>
+      <div class="eus-estimator">
+        <span>2 · AGREGA LAS DIFERENCIAS</span>
+        <div class="eus-formula"><b>Δᵢ = mᵢ(B) − mᵢ(A)</b></div>
+        <div class="eus-formula"><b>Δ̄ = (1/n) Σᵢ Δᵢ</b></div>
+        <p>El intervalo se calcula sobre la estimación que responde a tu diseño. Si A y B ven los mismos casos, no rompas ese emparejamiento al comparar.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="eus-intervals">
+    <div class="eus-intervals-head">
+      <span>3 · LEE MAGNITUD + INCERTIDUMBRE</span>
+      <strong>Tres resultados conceptualmente distintos</strong>
+    </div>
+
+    <div class="eus-axis-labels"><span>favorece A</span><b>0 · sin diferencia</b><span>favorece B</span></div>
+
+    <div class="eus-interval-row eus-interval-row--unresolved">
+      <div class="eus-interval-copy"><span>A</span><strong>No resuelto por la muestra</strong><p>El intervalo compatible con los datos todavía cruza 0.</p></div>
+      <div class="eus-axis">
+        <i class="eus-zero"></i><i class="eus-threshold eus-threshold--left"></i><i class="eus-threshold eus-threshold--right"></i>
+        <span class="eus-ci" style="--eus-left:36%;--eus-right:64%"></span><b class="eus-dot" style="--eus-dot:53%"></b>
+      </div>
+    </div>
+
+    <div class="eus-interval-row eus-interval-row--small">
+      <div class="eus-interval-copy"><span>B</span><strong>Diferencia estimada, impacto pequeño</strong><p>El intervalo queda a un lado de 0, pero el efecto sigue dentro del umbral práctico definido para el producto.</p></div>
+      <div class="eus-axis">
+        <i class="eus-zero"></i><i class="eus-threshold eus-threshold--left"></i><i class="eus-threshold eus-threshold--right"></i>
+        <span class="eus-ci" style="--eus-left:54%;--eus-right:63%"></span><b class="eus-dot" style="--eus-dot:59%"></b>
+      </div>
+    </div>
+
+    <div class="eus-interval-row eus-interval-row--useful">
+      <div class="eus-interval-copy"><span>C</span><strong>Diferencia compatible con valor práctico</strong><p>El efecto y su intervalo superan el umbral de mejora que justifica coste, latencia o riesgo adicional.</p></div>
+      <div class="eus-axis">
+        <i class="eus-zero"></i><i class="eus-threshold eus-threshold--left"></i><i class="eus-threshold eus-threshold--right"></i>
+        <span class="eus-ci" style="--eus-left:70%;--eus-right:86%"></span><b class="eus-dot" style="--eus-dot:78%"></b>
+      </div>
+    </div>
+
+    <div class="eus-legend">
+      <span><i class="eus-legend-zero"></i>0</span>
+      <span><i class="eus-legend-threshold"></i>±δ<sub>práctico</sub></span>
+      <span><i class="eus-legend-ci"></i>intervalo</span>
+      <b>Geometría ilustrativa · no representa resultados medidos.</b>
+    </div>
+  </div>
+
+  <div class="eus-variance">
+    <div class="eus-variance-card">
+      <span>MUESTREO DE CASOS</span>
+      <strong>¿Qué habría pasado con otra muestra del dominio?</strong>
+      <div class="eus-case-cloud" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <p>El número de casos y la cobertura por segmento determinan cuánto sabes sobre la población objetivo.</p>
+    </div>
+    <div class="eus-variance-card">
+      <span>GENERACIÓN ESTOCÁSTICA</span>
+      <strong>¿Qué cambia si repites el mismo caso?</strong>
+      <div class="eus-run-stack"><b>xᵢ</b><i>→</i><span>ejecución 1</span><span>ejecución 2</span><span>ejecución k</span></div>
+      <p>Si la aleatoriedad forma parte del producto, mide también la variabilidad entre ejecuciones; no la confundas con cambiar de casos.</p>
+    </div>
+  </div>
+
+  <div class="eus-contracts">
+    <div><span>DISEÑO</span><strong>mismos casos → comparación pareada; conserva Δᵢ antes de agregar</strong></div>
+    <div><span>REPORTE</span><strong>efecto + intervalo + n + segmentos + variabilidad entre ejecuciones cuando aplique</strong></div>
+    <div><span>DECISIÓN</span><strong>la evidencia estadística no sustituye el umbral de valor práctico del producto</strong></div>
+  </div>
+
+  <div class="eus-ref">Fuentes:
+    <a href="https://www.itl.nist.gov/div898/handbook/prc/section3/prc311.htm">NIST · observaciones pareadas</a> ·
+    <a href="https://itl.nist.gov/div898/handbook/prc/section3/prc312.htm">NIST · intervalos para diferencias</a> ·
+    <a href="https://aclanthology.org/W04-3250/">Koehn · pruebas de significación en evaluación NLP (2004)</a> ·
+    <a href="https://doi.org/10.1080/00031305.2016.1154108">ASA · significación ≠ tamaño/importancia del efecto (2016)</a>
+  </div>
+</div>
+
+<style>
+.eus-wrap,.eus-wrap *{box-sizing:border-box}
+.eus-wrap{
+  --eus-a:#188b78;
+  --eus-b:#4757d6;
+  --eus-c:#b97900;
+  --eus-r:#d85f6a;
+  --eus-bg:var(--md-default-bg-color,#fff);
+  --eus-fg:var(--md-default-fg-color,#111827);
+  --eus-muted:color-mix(in srgb,var(--eus-fg) 58%,transparent);
+  --eus-border:color-mix(in srgb,var(--eus-fg) 14%,transparent);
+  container-type:inline-size;
+  margin:1.1rem 0 1.5rem;
+  padding:clamp(14px,2vw,22px);
+  border:1px solid var(--eus-border);
+  border-radius:20px;
+  background:
+    radial-gradient(90% 120% at 0 0,color-mix(in srgb,var(--eus-b) 7%,transparent),transparent 56%),
+    radial-gradient(90% 120% at 100% 0,color-mix(in srgb,var(--eus-a) 7%,transparent),transparent 58%),
+    var(--eus-bg);
+  color:var(--eus-fg)
+}
+.eus-head{display:grid;gap:4px;margin-bottom:12px}
+.eus-kicker{font-size:10px;font-weight:950;letter-spacing:.12em;color:var(--eus-muted)}
+.eus-title{font-size:clamp(18px,2.1vw,24px);font-weight:900;line-height:1.12;letter-spacing:-.02em;max-width:44ch}
+.eus-sub{font-size:13.3px;line-height:1.48;color:var(--eus-muted);max-width:92ch}
+.eus-paired,.eus-intervals,.eus-variance-card{border:1px solid var(--eus-border);border-radius:15px;background:color-mix(in srgb,var(--eus-bg) 96%,var(--eus-fg) 4%)}
+.eus-paired{padding:11px}
+.eus-paired-head,.eus-intervals-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:9px}
+.eus-paired-head span,.eus-intervals-head span{font-size:8px;font-weight:950;letter-spacing:.08em;color:var(--eus-muted)}
+.eus-paired-head strong,.eus-intervals-head strong{font-size:11px}
+.eus-paired-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(220px,.65fr);gap:9px}
+.eus-pair-table{display:grid;gap:4px}
+.eus-pair-row{display:grid;grid-template-columns:44px minmax(0,.8fr) minmax(0,.8fr) minmax(0,1.45fr);gap:5px;align-items:center;min-width:0}
+.eus-pair-row>*{min-width:0;padding:7px 6px;border:1px solid var(--eus-border);border-radius:8px;background:var(--eus-bg);font-size:8.5px;line-height:1.15;text-align:center;overflow-wrap:anywhere}
+.eus-pair-row>span{font:900 8px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--eus-muted)}
+.eus-pair-row>strong{border-color:color-mix(in srgb,var(--eus-a) 44%,var(--eus-border));background:color-mix(in srgb,var(--eus-a) 5%,var(--eus-bg))}
+.eus-pair-row--head>*{padding:5px 4px;border-color:transparent;background:transparent;font-size:7px;font-weight:950;letter-spacing:.05em;color:var(--eus-muted)}
+.eus-estimator{padding:10px;border:1px solid color-mix(in srgb,var(--eus-b) 38%,var(--eus-border));border-radius:12px;background:color-mix(in srgb,var(--eus-b) 4%,var(--eus-bg));display:grid;align-content:start;gap:7px}
+.eus-estimator>span{font-size:8px;font-weight:950;letter-spacing:.08em;color:var(--eus-muted)}
+.eus-formula{padding:8px;border:1px solid var(--eus-border);border-radius:9px;background:var(--eus-bg);text-align:center}
+.eus-formula b{font:850 11px/1.25 ui-monospace,SFMono-Regular,Menlo,monospace}
+.eus-estimator p{margin:0;font-size:9.2px;line-height:1.35;color:var(--eus-muted)}
+.eus-intervals{margin-top:9px;padding:11px}
+.eus-axis-labels{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;padding:0 8px 4px 222px;color:var(--eus-muted);font-size:7.5px}.eus-axis-labels span:last-child{text-align:right}.eus-axis-labels b{font-size:7.5px}
+.eus-interval-row{display:grid;grid-template-columns:210px minmax(0,1fr);gap:12px;align-items:center;padding:8px;border-top:1px solid var(--eus-border)}
+.eus-interval-copy{display:grid;grid-template-columns:24px minmax(0,1fr);gap:2px 7px;align-items:start;min-width:0}
+.eus-interval-copy>span{grid-row:1/3;display:grid;place-items:center;width:24px;height:24px;border-radius:8px;background:color-mix(in srgb,var(--eus-fg) 8%,var(--eus-bg));font:950 8px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--eus-muted)}
+.eus-interval-copy strong{font-size:9.5px;line-height:1.2}.eus-interval-copy p{margin:0;font-size:8.5px;line-height:1.28;color:var(--eus-muted)}
+.eus-axis{position:relative;height:36px;border-radius:10px;background:linear-gradient(90deg,color-mix(in srgb,var(--eus-r) 4%,var(--eus-bg)),var(--eus-bg) 42%,var(--eus-bg) 58%,color-mix(in srgb,var(--eus-a) 4%,var(--eus-bg)));border:1px solid var(--eus-border);overflow:hidden}
+.eus-axis::after{content:"";position:absolute;left:8px;right:8px;top:50%;height:1px;background:color-mix(in srgb,var(--eus-fg) 22%,transparent)}
+.eus-zero,.eus-threshold{position:absolute;top:5px;bottom:5px;width:1px;z-index:2}.eus-zero{left:50%;background:var(--eus-fg)}.eus-threshold{border-left:1px dashed color-mix(in srgb,var(--eus-c) 72%,var(--eus-fg))}.eus-threshold--left{left:35%}.eus-threshold--right{left:65%}
+.eus-ci{position:absolute;z-index:3;left:var(--eus-left);right:calc(100% - var(--eus-right));top:17px;height:4px;border-radius:999px;background:var(--eus-b)}.eus-ci::before,.eus-ci::after{content:"";position:absolute;top:-4px;width:2px;height:12px;border-radius:2px;background:var(--eus-b)}.eus-ci::before{left:0}.eus-ci::after{right:0}
+.eus-dot{position:absolute;z-index:4;left:var(--eus-dot);top:13px;transform:translateX(-50%);width:12px;height:12px;border:3px solid var(--eus-bg);border-radius:50%;background:var(--eus-b);box-shadow:0 0 0 1px var(--eus-b)}
+.eus-interval-row--small .eus-ci,.eus-interval-row--small .eus-ci::before,.eus-interval-row--small .eus-ci::after,.eus-interval-row--small .eus-dot{background:var(--eus-c)}.eus-interval-row--small .eus-dot{box-shadow:0 0 0 1px var(--eus-c)}
+.eus-interval-row--useful .eus-ci,.eus-interval-row--useful .eus-ci::before,.eus-interval-row--useful .eus-ci::after,.eus-interval-row--useful .eus-dot{background:var(--eus-a)}.eus-interval-row--useful .eus-dot{box-shadow:0 0 0 1px var(--eus-a)}
+.eus-legend{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:7px 8px 0;color:var(--eus-muted);font-size:7.8px}.eus-legend span{display:flex;align-items:center;gap:4px}.eus-legend i{display:inline-block;width:14px}.eus-legend-zero{height:10px;border-left:1px solid var(--eus-fg)}.eus-legend-threshold{height:10px;border-left:1px dashed var(--eus-c)}.eus-legend-ci{height:4px;border-radius:999px;background:var(--eus-b)}.eus-legend b{margin-left:auto;font-size:7.8px;font-weight:750}
+.eus-variance{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:9px}
+.eus-variance-card{padding:11px;display:grid;gap:7px}.eus-variance-card>span{font-size:8px;font-weight:950;letter-spacing:.08em;color:var(--eus-muted)}.eus-variance-card>strong{font-size:11px;line-height:1.22}.eus-variance-card>p{margin:0;font-size:9px;line-height:1.35;color:var(--eus-muted)}
+.eus-case-cloud{display:grid;grid-template-columns:repeat(9,1fr);gap:4px;padding:7px;border:1px solid var(--eus-border);border-radius:9px;background:var(--eus-bg)}.eus-case-cloud i{aspect-ratio:1;border-radius:4px;background:color-mix(in srgb,var(--eus-b) 26%,var(--eus-bg));border:1px solid color-mix(in srgb,var(--eus-b) 35%,var(--eus-border))}.eus-case-cloud i:nth-child(3n){background:color-mix(in srgb,var(--eus-a) 24%,var(--eus-bg));border-color:color-mix(in srgb,var(--eus-a) 36%,var(--eus-border))}
+.eus-run-stack{display:grid;grid-template-columns:38px 14px repeat(3,minmax(0,1fr));gap:5px;align-items:center}.eus-run-stack>*{min-width:0}.eus-run-stack>b,.eus-run-stack>span{padding:7px 5px;border:1px solid var(--eus-border);border-radius:8px;background:var(--eus-bg);font-size:8.2px;text-align:center}.eus-run-stack>b{font:900 9px/1 ui-monospace,SFMono-Regular,Menlo,monospace}.eus-run-stack>i{font-style:normal;text-align:center;color:var(--eus-muted);font-weight:950}
+.eus-contracts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:9px}.eus-contracts>div{min-width:0;padding:9px 10px;border-left:3px solid var(--eus-b);border-radius:0 9px 9px 0;background:color-mix(in srgb,var(--eus-b) 4%,var(--eus-bg));display:grid;gap:3px}.eus-contracts>div:nth-child(2){border-left-color:var(--eus-a);background:color-mix(in srgb,var(--eus-a) 4%,var(--eus-bg))}.eus-contracts>div:nth-child(3){border-left-color:var(--eus-c);background:color-mix(in srgb,var(--eus-c) 5%,var(--eus-bg))}.eus-contracts span{font-size:8px;font-weight:950;letter-spacing:.08em;color:var(--eus-muted)}.eus-contracts strong{font-size:9.3px;line-height:1.3}
+.eus-ref{margin-top:9px;font-size:8.8px;line-height:1.35;color:var(--eus-muted)}.eus-ref a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+@container (max-width:760px){
+  .eus-paired-head,.eus-intervals-head{display:grid;gap:2px}.eus-paired-grid{grid-template-columns:1fr}.eus-axis-labels{padding-left:8px}
+  .eus-interval-row{grid-template-columns:1fr;gap:7px}.eus-interval-copy{grid-template-columns:24px minmax(0,1fr)}.eus-axis{height:34px}
+  .eus-variance{grid-template-columns:1fr}.eus-contracts{grid-template-columns:1fr}.eus-contracts>div{padding:8px 9px}
+}
+@container (max-width:430px){
+  .eus-wrap{padding:12px;border-radius:16px}.eus-sub{font-size:12.3px}
+  .eus-pair-row{grid-template-columns:32px minmax(0,.72fr) minmax(0,.72fr) minmax(0,1.2fr);gap:3px}.eus-pair-row>*{padding:6px 3px;font-size:7.7px}.eus-pair-row--head>*{font-size:6.6px}
+  .eus-formula b{font-size:9.7px}.eus-axis-labels{font-size:6.8px;gap:4px}.eus-axis-labels b{font-size:6.8px}
+  .eus-legend{gap:7px}.eus-legend b{width:100%;margin-left:0}
+  .eus-run-stack{grid-template-columns:34px 12px 1fr}.eus-run-stack>b,.eus-run-stack>i{grid-row:1/4}.eus-run-stack>span{grid-column:3}
+}
+@media (prefers-reduced-motion:reduce){.eus-wrap *{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
