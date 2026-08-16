@@ -93,12 +93,9 @@ BERT popularized bidirectional encoder stacks for representations useful in clas
 
 RNNs and LSTMs update a state step by step. That creates a sequential dependency that is difficult to parallelize and forces distant information to travel through many steps.
 
-The Transformer offers two main advantages:
+{{ include_html("snippets/temas/transformer-rnn-vs-attention.html") }}
 
-1. **Short path between positions:** one attention layer can directly relate distant tokens.
-2. **Parallel training:** all known positions can be processed together.
-
-The cost is that dense attention constructs an interaction matrix between pairs of positions.
+The advantage applies over positions already known during training: attention reduces the number of sequential operations within a layer and shortens the path between distant positions. The price is dense pairwise interaction, which matters increasingly as context grows.
 
 ## The cost of attention
 
