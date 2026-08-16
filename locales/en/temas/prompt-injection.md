@@ -42,11 +42,7 @@ The chapter [Prompt injection — when a document can change what the system doe
 
 ## Prompt injection and jailbreaks are not the same thing
 
-| Risk | Main question |
-|---|---|
-| **Jailbreak** | Can a variation of the request bypass a model restriction? |
-| **Prompt injection** | Can untrusted content alter the task the system believes it should perform? |
-| **Indirect injection** | Can that influence enter from an external source consulted by the application? |
+{{ include_html("snippets/temas/prompt-injection-taxonomy.html") }}
 
 The categories can overlap, but measuring them separately helps identify which control is actually working.
 
