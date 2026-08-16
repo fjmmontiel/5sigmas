@@ -222,6 +222,74 @@ try {
       });
     }
 
+    const hallusion = page.locator('[data-demo="mm-04-hallucination"]');
+    if (await hallusion.count() !== 1) {
+      failures.push(`${viewport.name}: expected one canonical HallusionBench visual`);
+    } else {
+      if (await hallusion.locator('.hbl-tab').count() !== 3) failures.push(`${viewport.name}: HallusionBench visual lost one of three canonical tabs`);
+      if (await hallusion.locator('.hbl-panel').count() !== 3) failures.push(`${viewport.name}: HallusionBench visual lost one of three canonical panels`);
+      if (await hallusion.locator('.hbl-scene svg').count() !== 3) failures.push(`${viewport.name}: HallusionBench visual lost one of three scene diagrams`);
+      if (await hallusion.locator('.hbl-response').count() !== 6) failures.push(`${viewport.name}: HallusionBench visual lost hallucinated-vs-correct response pairs`);
+      if (await hallusion.locator('.hbl-mechanism').count() !== 3) failures.push(`${viewport.name}: HallusionBench visual lost one of three mechanism explanations`);
+      if (await hallusion.locator('.hbl-sum-card').count() !== 3) failures.push(`${viewport.name}: HallusionBench visual lost its three-pattern summary`);
+
+      const text = (await hallusion.textContent()) || '';
+      for (const token of [
+        'HallusionBench: three patterns of visual hallucination',
+        'Claiming what is absent',
+        'Denying what is present',
+        'Incorrect spatial relation',
+        'There is only one glass in the image',
+        'Hallucinating model',
+        'Correct answer',
+        'Underlying mechanism',
+        'VAT: €388.97',
+        'Taxable base: €1,458.53',
+        'The cube is above the sphere',
+        'Pattern shared by all three types',
+        'language prior outweighs the visual evidence',
+      ]) {
+        if (!text.includes(token)) failures.push(`${viewport.name}: HallusionBench visual missing ${JSON.stringify(token)}`);
+      }
+
+      for (const token of [
+        'tres patrones de alucinación visual',
+        'Afirmar lo ausente',
+        'Negar lo presente',
+        'Relación espacial errónea',
+        'Imagen real',
+        'Solo hay un vaso',
+        'Modelo hallucinating',
+        'Respuesta correcta',
+        'Mecanismo subyacente',
+        'IVA: €388,97',
+        'Base imponible',
+        'El cubo está encima de la esfera',
+        'Patrón común a los tres tipos',
+        'prior lingüístico supera la evidencia visual',
+      ]) {
+        if (text.includes(token)) failures.push(`${viewport.name}: HallusionBench Spanish leakage ${JSON.stringify(token)}`);
+      }
+
+      const tabs = hallusion.locator('.hbl-tab');
+      const panels = hallusion.locator('.hbl-panel');
+      for (let index = 0; index < 3; index += 1) {
+        await tabs.nth(index).click();
+        if (!(await tabs.nth(index).evaluate((node) => node.classList.contains('active')))) {
+          failures.push(`${viewport.name}: HallusionBench tab ${index + 1} did not become active`);
+        }
+        if (!(await panels.nth(index).isVisible())) failures.push(`${viewport.name}: HallusionBench panel ${index + 1} did not become visible`);
+      }
+
+      const [visualClientWidth, visualScrollWidth] = await hallusion.evaluate((node) => [node.clientWidth, node.scrollWidth]);
+      if (visualScrollWidth > visualClientWidth + 2) failures.push(`${viewport.name}: HallusionBench visual internal overflow ${visualScrollWidth - visualClientWidth}px`);
+
+      await hallusion.screenshot({
+        path: path.join(outDir, `english-multimodality-04-hallusionbench-${viewport.name}.png`),
+        animations: 'disabled',
+      });
+    }
+
     const [clientWidth, scrollWidth] = await page.evaluate(() => [document.documentElement.clientWidth, document.documentElement.scrollWidth]);
     if (scrollWidth > clientWidth + 2) failures.push(`${viewport.name}: page horizontal overflow ${scrollWidth - clientWidth}px`);
     for (const error of runtimeErrors) failures.push(`${viewport.name}: pageerror: ${error}`);
@@ -237,4 +305,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Canonical English Multimodality Chapter 4 QA passed: evaluation metrics, OCRBench, and long-video degradation preserve canonical tabs/panels, information density, real interactions, English labels, no Spanish leakage, and clean desktop/mobile overflow.');
+console.log('Canonical English Multimodality Chapter 4 QA passed: evaluation metrics, OCRBench, long-video degradation, and HallusionBench preserve canonical tabs/panels, information density, real interactions, English labels, no Spanish leakage, and clean desktop/mobile overflow.');
