@@ -1,0 +1,22 @@
+{
+  "source": "snippets/articulos-tecnicos/voice-rp-batch.html",
+  "source_blob_sha": "876f19077c1b93dba3f8a1995800e9b7ac9e5fcd",
+  "replacements": {
+    "Agregación de varias tools en un único cierre": "Aggregating several tools into one completion",
+    "Tres callbacks. Un solo cierre.": "Three callbacks. One final completion.",
+    "El lote habla cuando se drena.": "The batch speaks when it drains.",
+    "Disponibilidad": "Availability",
+    "Cliente": "Customer",
+    "Alternativa": "Alternative",
+    "“Hay hueco el jueves.”": "“There is a slot on Thursday.”"
+  },
+  "forbidden_output_tokens": [
+    "Agregación de varias tools",
+    "Tres callbacks. Un solo cierre.",
+    "El lote habla",
+    "Disponibilidad",
+    "Cliente",
+    "Alternativa",
+    "Hay hueco el jueves"
+  ]
+}

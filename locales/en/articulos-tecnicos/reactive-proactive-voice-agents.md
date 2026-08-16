@@ -1,342 +1,467 @@
 ---
-title: Reactive–proactive voice agents
-description: "How to combine immediate spoken acknowledgements with asynchronous tool execution and proactive result delivery without blocking the conversation or duplicating side effects."
+title: Reactive and proactive agents in voice
+description: "How to separate conversation, asynchronous tools, and result delivery so a voice agent does not block the turn, interrupt badly, or repeat messages."
 date: 2026-08-04
-keywords: "voice agents, proactive voice agent, reactive voice agent, realtime AI, asynchronous tools, barge-in, proactive delivery, Twilio, TTS playback"
+date_modified: 2026-08-05
+keywords: "voice agents, reactive agent, proactive agent, asynchronous tool calls, barge-in, full duplex, conversational runtime, Twilio Media Streams, Pipecat"
 article_state: published
 tags:
   - AI
   - Voice
   - Agents
-  - Realtime
   - Tool Calling
+  - Architecture
+  - Runtime
 ---
 
-# Reactive–proactive voice agents
+# Reactive and proactive agents in voice
 
-> **Problem:** a spoken conversation runs at human timing while tools and workflows can take seconds or minutes.  
-> **Design goal:** acknowledge quickly, keep the conversation alive, and inject completed work only when there is a safe delivery window.  
-> **Invariant:** an operation may finish while the agent is speaking, while the user is speaking, or while another turn is already active.
+> **Idea:** the fact that an operation has finished does not mean the agent can speak at that moment.  
+> **Scope:** telephony or WebRTC, slow tools, interruptions, playback, and results that return later.  
+> **Goal:** accept the request quickly, execute outside the turn, and deliver a single completion when it fits the conversation.
 
-A voice agent becomes difficult when it stops being purely reactive.
+In text, the reactive–proactive pattern looks fairly clean. The user asks for something, the agent confirms that it is handling it, the tool works in the background, and the result appears when it is ready.
 
-A reactive system waits for the user, computes one response and speaks it. A proactive system may need to surface an event that completes later: a booking result, a background lookup, a verification, a callback or a delayed tool result.
+Voice makes this harder. The user may keep speaking while the operation continues. The model may be generating another response. TTS may already have audio prepared, and the telephony provider may still be playing a fragment that the runtime already tried to cancel.
 
-The hard part is not generating the sentence. It is deciding **when** that sentence may enter an already-live audio conversation without interrupting the user, overlapping another response or producing duplicate delivery.
+That is why adding a callback that says *“the tool has finished”* is not enough. Four clocks have to be coordinated:
 
-{{ include_html("snippets/articulos-tecnicos/voice-rp-timeline.html") }}
+1. The user's acoustic activity
+2. The response the agent is generating
+3. The audio that has actually been played
+4. The operations that remain alive outside the turn
 
-## 1. Keep operation time and conversation time separate
+The pattern works when those clocks remain separate. Acceptance can be reactive, execution can be asynchronous, and delivery can be proactive. Even then, only one component should control the voice and decide when the agent speaks again.
 
-Consider this timeline:
+{{ include_html("snippets/articulos-tecnicos/voice-rp-contract.html") }}
+
+## Reactive and proactive describe delivery
+
+A reactive agent responds to a user request. It can listen, decide that it needs a tool, and return a short acknowledgement:
+
+> “I'll check that now. You can keep telling me the rest.”
+
+That message does not confirm the result. It only confirms that the system understood the request and accepted the work.
+
+A proactive agent comes back when it has a relevant update, even if the user has not asked again. In text, that is usually a new message. In voice there is one more decision: **when to say it**.
+
+Before speaking, the runtime has to know whether the user is still talking, whether another response is being played, whether the result is still relevant, and whether it is better to wait for other operations in the same batch to finish.
+
+The real flow looks more like this:
 
 ```text
-T0  user asks for slow work
-T1  agent acknowledges: “I’m checking that now.”
-T2  user continues speaking about something else
-T3  tool finishes
-T4  user is still speaking
-T5  safe gap appears
-T6  agent delivers the result
+request accepted
+→ operation registered
+→ background execution
+→ result available
+→ delivery policy
+→ safe window
+→ audio played or result joined to the next turn
 ```
 
-The tool completed at `T3`. The human did not receive the result until `T6`.
+The operation and the conversation progress at different rates. The runtime has to preserve both timelines without mixing them.
 
-That difference creates two clocks:
+{{ include_html("snippets/articulos-tecnicos/voice-rp-safe-window.html") }}
 
-- **operation clock** — accepted → running → terminal;
-- **conversation clock** — listening → thinking → speaking → interrupted → idle.
+## The four clocks of a call
 
-A reliable architecture does not force one clock to wait for the other.
+Several state machines coexist in a real call. Collapsing them into one `is_busy` is often where the problems begin.
 
-## 2. Use a shared conversational blackboard
+### 1. What the user is doing
 
-The interaction surface needs a compact state object describing what is happening now, what work is outstanding and what may be delivered next.
+```text
+quiet → speech_started → speaking → speech_stopped → quiet
+```
+
+A boolean `is_user_speaking` is too weak. VAD works under uncertainty, needs silence windows, and can revise a decision afterward.
+
+An aggressive VAD responds earlier, but it can also cut sentences. A conservative one protects the turn better, although it adds waiting time. That decision is part of the product, not merely a technical parameter.
+
+### 2. What the agent is generating
+
+```text
+planned → generating → completed
+                  ↘ cancelled
+```
+
+A response can be complete inside the model and still not have reached the user. It can also be cancelled after producing partial text or audio.
+
+### 3. What audio has been played
+
+```text
+queued → sent → playing → played
+                    ↘ cleared
+```
+
+This distinction is critical. Twilio Media Streams can receive `media` events, associate a `mark`, and use `clear` to empty the buffer. The `mark` helps track sent audio, but a `clear` also returns marks that were still pending. The runtime therefore needs to know which audio finished playing and which audio was removed before it reached the user.[^twilio-websocket]
+
+### 4. Which operation is still running
+
+```text
+accepted → running → succeeded
+                   ↘ failed
+                   ↘ cancelled_by_policy
+```
+
+An interruption usually cancels the response and playback. It should not automatically cancel a transfer, booking, or search that was already accepted.
+
+Using the same `cancel` for everything mixes two different decisions. One is acoustic. The other is a business decision.
+
+{{ include_html("snippets/articulos-tecnicos/voice-rp-clocks.html") }}
+
+## A turn is not enough
+
+Conversation frameworks usually organize state around turns. That is not enough for an asynchronous tool.
+
+One request can create several operations. Each can finish at a different moment, and the completion can arrive during another turn. The runtime therefore needs explicit identities:
 
 ```python
-@dataclass
-class ConversationBlackboard:
+@dataclass(frozen=True)
+class VoiceContext:
     session_id: str
-    user_speaking: bool
-    agent_speaking: bool
-    active_response_id: str | None
-    active_turn_id: str | None
-    pending_deliveries: list[str]
-    active_operations: set[str]
-    last_user_activity_at: float
-    last_agent_audio_at: float
+    turn_id: str
+    response_id: str | None
+    playback_id: str | None
+
+@dataclass(frozen=True)
+class OperationContext:
+    operation_id: str
+    batch_id: str
+    intent_key: str
+    created_from_turn_id: str
 ```
 
-The blackboard is not a replacement for durable operation storage. It is the **interaction projection** used to arbitrate realtime behaviour.
+Each identifier answers one question:
 
-{{ include_html("snippets/articulos-tecnicos/voice-rp-blackboard.html") }}
+- `session_id`: which conversation it belongs to
+- `turn_id`: which utterance originated the decision
+- `operation_id`: which query or effect we are tracking
+- `batch_id`: which operations should close together
+- `response_id`: which generation can be cancelled
+- `playback_id`: which audio was sent, played, or cleared
+- `intent_key`: how we avoid repeating the same effect during a retry or replay
 
-A worker may update operation state in a database. The interaction process consumes that state and decides whether a pending delivery can be spoken now.
+The transcript should not hold all that state. It is useful for reconstructing what was said. It is not a reliable database for knowing whether an operation was accepted, retried, finished, or already communicated.
 
-## 3. Define explicit delivery windows
-
-“Tool completed” should not automatically mean “speak immediately.”
-
-A delivery policy can consider:
-
-- whether the user is currently speaking;
-- whether the agent is already speaking;
-- whether a response is being interrupted;
-- delivery priority;
-- result age/staleness;
-- whether the result belongs to the current topic;
-- whether several completions should be batched;
-- whether the user explicitly asked not to be interrupted.
+A minimal separation can look like this:
 
 ```python
-def can_deliver(now, blackboard, envelope):
-    if blackboard.user_speaking:
-        return False
-    if blackboard.agent_speaking and not envelope.may_interrupt:
-        return False
-    if envelope.expires_at and now > envelope.expires_at:
-        return False
-    return True
+class VoiceRuntimeState:
+    channel: ChannelState
+    responses: dict[str, ResponseState]
+    playbacks: dict[str, PlaybackState]
+    operations: dict[str, OperationState]
+    batches: dict[str, BatchState]
+    pending_deliveries: deque[DeliveryEnvelope]
+    idempotency: dict[str, OperationResult]
 ```
 
-{{ include_html("snippets/articulos-tecnicos/voice-rp-windows.html") }}
+This structure allows one simple rule: **a completed operation can produce at most one audible final completion**, even if the callback arrives twice or the process restarts.
 
-### Priority does not have to mean immediate interruption
+## The first response accepts work
 
-A high-priority result may be delivered at the first natural gap. Only genuinely urgent categories should be allowed to cut through an active utterance.
+Acceptance has two goals. It should confirm that the agent understood the request and free the conversation.
 
-This prevents the system from becoming technically proactive but conversationally rude.
-
-## 4. The seam between reactive and proactive behaviour is the key contract
-
-The same voice surface should handle both ordinary turn responses and asynchronous completions.
-
-```text
-Reactive path
-user speech → turn → response → playback
-
-Proactive path
-operation event → delivery envelope → policy → response → playback
-```
-
-Both eventually create a response that enters the same playback and interruption machinery.
-
-{{ include_html("snippets/articulos-tecnicos/voice-rp-seam.html") }}
-
-This is important because two independent “speakers”—one for normal responses and another for callbacks—will eventually overlap, race or disagree about playback state.
-
-One surface should own the mouth.
-
-## 5. Barge-in cancels audio, not necessarily the work
-
-When the user interrupts while the agent is talking, the immediate requirement is to stop output quickly.
-
-That may require several actions:
-
-1. cancel current model generation;
-2. cancel/stop TTS synthesis;
-3. clear queued telephone/playback media;
-4. record how much audio was actually heard;
-5. truncate conversation history accordingly.
-
-It does **not** necessarily mean cancelling the slow background tool.
-
-{{ include_html("snippets/articulos-tecnicos/voice-rp-barge.html") }}
-
-A booking search, database query or workflow can remain useful after the user interrupts the spoken acknowledgement. Cancellation should target the response first and the operation only when the user's new intent invalidates it.
-
-### Heard-state matters
-
-For a telephony stack, generated text and generated audio are not equivalent to audio the callee heard.
-
-A useful lifecycle is:
-
-```text
-response_created
-→ tts_started
-→ media_enqueued
-→ playback_started
-→ playback_mark_confirmed
-→ heard
-```
-
-If the user barges in before the mark/acknowledgement corresponding to the final result, the runtime should not treat that result as fully delivered.
-
-## 6. Batch related results before speaking
-
-A single user request can fan out into multiple operations:
-
-```text
-availability search
-pricing lookup
-policy validation
-customer-data fetch
-```
-
-If each completion independently enters the conversation, the agent can produce a stream of fragmented updates.
-
-Group related work by `batch_id` and create one delivery when the batch reaches the chosen condition:
+It cannot promise a result that does not yet exist.
 
 ```python
-if batch.all_terminal:
-    await deliveries.create_once(
-        key=f"batch:{batch.id}:final",
-        payload=build_user_summary(batch),
+async def accept_tool_call(call: ToolCall, ctx: VoiceContext) -> Acceptance:
+    operation = await operation_store.create_once(
+        intent_key=build_intent_key(call, ctx),
+        payload=call.arguments,
+        created_from_turn_id=ctx.turn_id,
+    )
+
+    await queue.publish(
+        "operation.accepted",
+        operation_id=operation.id,
+        session_id=ctx.session_id,
+    )
+
+    return Acceptance(
+        speech="I'm checking it. You can continue.",
+        operation_id=operation.id,
     )
 ```
 
-{{ include_html("snippets/articulos-tecnicos/voice-rp-batch.html") }}
+The difference between “done” and “I'm handling it” is small in wording but enormous in the system contract. The first sentence asserts a final state. The second says that the work has started.
 
-The batch may also support intermediate milestones for genuinely long workflows, but those should be deliberate product events rather than arbitrary worker callbacks.
+In voice, it is also useful to keep the acknowledgement short. The longer it is, the longer it occupies the channel and the more likely the user is to interrupt.
 
-## 7. A runtime loop for conversational delivery
+## The result goes through an `ActivityGate`
 
-A compact runtime can subscribe to both media/turn events and durable-operation events:
-
-```python
-async def realtime_loop(events):
-    async for event in events:
-        match event:
-            case UserSpeechStarted():
-                await stop_current_playback()
-                blackboard.user_speaking = True
-
-            case UserSpeechStopped():
-                blackboard.user_speaking = False
-                await maybe_deliver_pending()
-
-            case OperationCompleted(operation_id, result_ref):
-                envelope = await build_delivery(operation_id, result_ref)
-                await delivery_store.put_once(envelope)
-                await maybe_deliver_pending()
-
-            case PlaybackConfirmed(delivery_id):
-                await delivery_store.mark_delivered(delivery_id)
-```
-
-{{ include_html("snippets/articulos-tecnicos/voice-rp-runtime.html") }}
-
-The important property is that operation completion **publishes** a delivery opportunity. It does not seize the audio channel.
-
-## 8. Tool result delivery needs idempotency too
-
-At-least-once callbacks and process restarts can otherwise produce repeated spoken results.
-
-Use a stable delivery key:
-
-```text
-delivery_key = operation_id + ":final"
-```
-
-Then enforce `create_once` and `mark_delivered_once` semantics.
-
-The delivery store may distinguish:
-
-- `pending`
-- `reserved`
-- `speaking`
-- `delivered`
-- `superseded`
-- `expired`
-
-A lease can prevent two interaction workers from speaking the same result simultaneously after a reconnect/failover.
-
-## 9. Proactivity needs conversational relevance
-
-A result can become technically correct but conversationally stale.
-
-Examples:
-
-- the user changed the requested date;
-- another tool superseded the result;
-- the user explicitly cancelled the task;
-- the session ended;
-- the result is now too old to be useful.
-
-A delivery envelope should therefore include expiry and relevance information:
+The tool should not call `speak()` directly when it finishes. It first publishes an event, and then a delivery policy decides what to do.
 
 ```python
 @dataclass
 class DeliveryEnvelope:
-    operation_id: str
-    topic_key: str
-    created_at: float
-    expires_at: float | None
-    priority: int
-    may_interrupt: bool
-    payload: dict
+    delivery_id: str
+    session_id: str
+    batch_id: str
+    priority: Literal["normal", "urgent"]
+    summary: str
+    became_ready_at: datetime
+    source_operation_ids: tuple[str, ...]
 ```
 
-Before speaking it, the runtime revalidates whether the result still belongs to the active user state.
-
-## 10. Measure the real user-facing timings
-
-For proactive voice systems, separate at least:
-
-```text
-request_to_ack_ms
-operation_duration_ms
-result_ready_to_safe_window_ms
-safe_window_to_first_audio_ms
-barge_in_to_silence_ms
-result_ready_to_heard_ms
-duplicate_delivery_rate
-stale_delivery_rate
-```
-
-The metric `result_ready_to_safe_window_ms` is especially useful: it tells you whether the operation is slow or the conversation policy is deliberately waiting for a natural gap.
-
-A low technical tool latency does not guarantee fast human-visible delivery.
-
-## 11. Test overlapping events, not only clean turns
-
-Useful integration scenarios include:
-
-- result completes while user is speaking;
-- result completes while agent is speaking;
-- user barges in during proactive delivery;
-- two batches finish nearly simultaneously;
-- callback is duplicated;
-- connection drops after result creation but before playback confirmation;
-- user changes the task before delivery;
-- slow tool finishes after session close;
-- tool is explicitly cancelled;
-- TTS fails after the result was reserved.
-
-Assertions should include side effects and heard-state:
+The `ActivityGate` observes the real state of the conversation:
 
 ```python
-assert delivery.create_count == 1
-assert delivery.heard_count <= 1
-assert operation.side_effect_count == 1
-assert no_overlapping_agent_audio
-assert stale_result_was_not_spoken
+async def choose_delivery(
+    envelope: DeliveryEnvelope,
+    channel: ChannelSnapshot,
+) -> DeliveryDecision:
+    if envelope.priority == "urgent" and channel.can_interrupt:
+        return DeliverNow(interrupt=True)
+
+    if channel.user_is_speaking:
+        return QueueUntilQuiet(min_quiet_ms=650)
+
+    if channel.playback_is_active:
+        return QueueAfterPlayback()
+
+    if channel.turn_is_open:
+        return AttachToNextResponse()
+
+    if envelope.is_stale:
+        return SuppressAndPersist()
+
+    return DeliverNow(interrupt=False)
 ```
 
-## 12. Architecture rule
+From there it can:
 
-A reactive–proactive voice agent works best when **one realtime interaction surface owns turn-taking and playback**, while asynchronous workers own durable work and publish results through idempotent delivery envelopes.
+- Deliver the result now if there is silence and it is still relevant
+- Wait for a quiet window if the user is speaking
+- Group it with other operations in the same batch
+- Incorporate it into the next response
+- Interrupt only when priority justifies it
+- Suppress it if it is already stale
 
-> **The background worker decides when work is done. The voice surface decides when the human should hear about it.**
+The silence window does not have to be identical in every case. It can vary by channel, language, domain, and update type.
 
-This gives the system room to stay conversational while work continues in parallel.
+Interrupting to say that a search finished is usually worse than waiting. Interrupting to warn that a payment is about to be sent with incorrect details may be justified.
+
+{{ include_html("snippets/articulos-tecnicos/voice-rp-gate.html") }}
+
+## Barge-in: cancel the voice, not the whole system
+
+When the user starts speaking, the agent should stop making sound quickly. The correct cancellation is selective.
+
+A barge-in usually requires:
+
+1. Cancel the active generation
+2. Stop TTS or S2S output
+3. Clear the playback buffer
+4. Adjust history to the audio that was actually heard
+5. Keep operations running unless the new intent invalidates them
+
+The OpenAI voice SDK exposes this pattern by reacting to `input_audio_buffer.speech_started`. The application can cancel output and truncate assistant audio so that state reflects only what the person heard.[^openai-voice-agents]
+
+In telephony, `clear` and `mark` allow the same principle to be applied to Twilio's buffer.[^twilio-websocket]
+
+```python
+async def on_barge_in(event: SpeechStarted, session: VoiceSession) -> None:
+    if session.active_response_id:
+        await realtime.cancel_response(session.active_response_id)
+
+    if session.active_playback_id:
+        played_ms = await playback.estimate_played_ms(session.active_playback_id)
+        await realtime.truncate_assistant_audio(
+            response_id=session.active_response_id,
+            audio_end_ms=played_ms,
+        )
+        await playback.clear(session.active_playback_id)
+
+    # Operations remain alive until policy decides otherwise.
+    await operation_policy.reconcile_with_new_turn(session.session_id)
+```
+
+The user can say “don't make the transfer” and cancel an operation. Starting a new question should not have the same effect.
+
+{{ include_html("snippets/articulos-tecnicos/voice-rp-barge.html") }}
+
+## Several tools should produce one final completion
+
+One turn can check availability, retrieve customer data, and calculate an alternative.
+
+If every callback speaks on its own, the call fills with interruptions:
+
+> “I have the availability.”  
+> “I've also retrieved your details.”  
+> “And the alternative has been calculated.”
+
+It is better to treat those operations as one semantic batch.
+
+Pipecat has primitives aligned with this idea. A function call can survive an interruption and return its result when it finishes. Calls in the same group also share a `group_id`, so the LLM can be reactivated once when the last one completes.[^pipecat-functions][^pipecat-frames]
+
+```python
+@dataclass
+class BatchState:
+    batch_id: str
+    operation_ids: set[str]
+    completed_ids: set[str]
+    final_delivery_id: str | None = None
+
+    @property
+    def drained(self) -> bool:
+        return self.operation_ids == self.completed_ids
+```
+
+When an operation completes:
+
+```python
+async def on_operation_finished(result: OperationResult) -> None:
+    await store.record_result_once(result)
+
+    batch = await store.mark_batch_member_complete(
+        batch_id=result.batch_id,
+        operation_id=result.operation_id,
+    )
+
+    if not batch.drained:
+        return
+
+    envelope = await delivery_store.create_once(
+        delivery_key=f"batch:{batch.batch_id}:final",
+        payload=summarize_batch(batch),
+    )
+    await delivery_bus.publish(envelope)
+```
+
+`record_result_once` and `create_once` matter because production includes retries, ambiguous timeouts, and *at least once* delivery. The design cannot depend on every event arriving exactly once.
+
+{{ include_html("snippets/articulos-tecnicos/voice-rp-batch.html") }}
+
+## When there is no gap, the result waits
+
+Sometimes no safe window appears for a follow-up. The user may keep talking, the agent may be responding to another intent, or the call may end before the result arrives.
+
+In those cases, the completion remains stored as a pending delivery.
+
+On the next turn, the runtime can inject ephemeral context:
+
+```text
+Pending update from a previous operation:
+- The availability check completed successfully.
+- It has not yet been communicated to the user.
+- This update does not replace the new request.
+```
+
+The model can join both threads naturally:
+
+> “Before we go to that, I already have the availability you asked for. There is a slot on Thursday. About your new question…”
+
+After confirming that the audio was played, the `delivery_id` becomes `spoken`. If the user interrupts before hearing the result, it is not marked delivered and can be retried in a shorter form.
+
+This avoids two opposite errors:
+
+- Repeating a completion that was already heard
+- Losing a completion because the system confused generated audio with played audio
+
+## A single component controls the voice
+
+The architecture becomes clearer when it separates three planes.
+
+### Interaction Surface
+
+It listens, detects turns, handles barge-in, produces backchannels, plays audio, and applies the `ActivityGate`. It is the only component authorized to speak.
+
+### Cognitive Execution Plane
+
+It handles heavier reasoning, RAG, tools, retries, compensations, and idempotency. It can keep working even after the conversation has moved to another turn.
+
+### Durable Coordination
+
+It stores events, locks, operations, batches, and pending deliveries. It connects the other two planes without turning the transcript into operational state.
+
+{{ include_html("snippets/articulos-tecnicos/voice-rp-runtime.html") }}
+
+This division also appears in recent full-duplex systems. GPT-Live, introduced by OpenAI on July 8, 2026, keeps the conversation on a voice surface while delegating search, deeper reasoning, and complex work to a frontier model.[^gpt-live]
+
+Orchestration does not disappear. It simply stops being hidden.
+
+## Rules the runtime must satisfy
+
+These rules add more reliability than adding instructions to the prompt:
+
+1. Do not confirm success before reaching a terminal state
+2. Accept or recover every effect with an idempotency key
+3. Produce at most one final completion per batch
+4. Prevent a tool from speaking directly into the channel
+5. Keep an operation alive through an acoustic interruption unless an explicit decision cancels it
+6. Store in history only the audio the user could have heard
+7. Mark a result delivered only after playback or confirmed resynchronization
+8. Preserve pending results across turn changes and restarts
+9. Suppress or replace stale updates
+10. Treat priority as business policy rather than an improvisation by the LLM
+
+A natural voice helps. It does not compensate for a duplicated transfer, premature confirmation, or a result played out of context.
+
+## What to measure
+
+A single latency number does not describe this system. At minimum, track:
+
+| Metric | What it reveals |
+|---|---|
+| `speech_stop_to_acceptance_audio_ms` | Time from the end of the turn to the first audible acknowledgement |
+| `barge_in_to_playback_stop_ms` | How long it takes the agent to stop sounding |
+| `operation_accept_to_start_ms` | Internal wait before execution |
+| `operation_duration_ms` | Real time spent in the external dependency |
+| `operation_complete_to_delivery_ready_ms` | Aggregation and summarization cost |
+| `delivery_ready_to_first_audio_ms` | Wait introduced by the `ActivityGate` |
+| `generated_to_played_gap_ms` | Output buffering and transport |
+| `duplicate_side_effect_rate` | Idempotency failures |
+| `duplicate_delivery_rate` | Repeated completions |
+| `stale_delivery_rate` | Results spoken too late |
+| `next_turn_resync_rate` | Completions that did not find a proactive window |
+| `cancelled_response_unheard_ms` | Generated audio correctly excluded from context |
+
+Every trace should link `session_id`, `turn_id`, `operation_id`, `batch_id`, `response_id`, `playback_id`, and `delivery_id`.
+
+Without that correlation, an incident is summarized as “the bot interrupted.” With it, you can tell whether the silence window failed, a `mark` arrived late, or the same callback was processed twice.
+
+## What to test before production
+
+The test suite has to reproduce timing conflicts, not only ideal conversations:
+
+- The tool finishes while the user is still speaking
+- The tool finishes during playback
+- Two tools in the same batch finish in reverse order
+- A callback arrives twice
+- The user interrupts before hearing the completion
+- The user explicitly cancels an operation
+- The channel disconnects with pending deliveries
+- The process restarts after the effect and before the follow-up
+- A new intent makes a previous update stale
+- An urgent result interrupts and a normal one waits
+- TTS generates audio that Twilio has not played yet
+- VAD fires a false `speech_started`
+
+A useful test does not check only text. It also checks state and effects:
+
+```python
+assert operation.side_effect_count == 1
+assert batch.final_delivery_count == 1
+assert playback.heard_text == conversation.assistant_text
+assert pending_delivery.is_empty_after_confirmed_playback
+assert durable_operation.was_not_cancelled_by_barge_in
+```
+
+## The complete pattern
+
+A reactive–proactive voice agent is not a bot that simply “notifies later.”
+
+Reactive acceptance keeps the conversation moving. The asynchronous plane executes real work without blocking the channel. Proactive delivery returns the result when it finds a safe gap. Persistent state prevents an interruption, retry, or turn change from becoming duplicate messages or inconsistent effects.
+
+The rule that summarizes the design is:
+
+> **Technical completion creates a pending delivery. The conversation decides when it can be heard.**
 
 ## Sources
 
-- OpenAI Realtime API and Agents SDK — realtime sessions, function calling and asynchronous events.
-- Pipecat — frame-based realtime pipelines and function calling.
-- Twilio Media Streams — bidirectional media, `mark` acknowledgements and `clear` semantics.
-
-## Frequently asked questions
-
-**Should a completed tool interrupt the user immediately?**  
-Usually no. It should create a pending delivery and wait for a safe conversational window unless the result is explicitly classified as interrupt-worthy.
-
-**Does barge-in cancel background work?**  
-Not automatically. It should stop the current response/playback; durable work is cancelled only when the new user intent invalidates it.
-
-**Why track heard-state?**  
-Because generated or buffered audio may never reach the user. Delivery semantics should reflect playback acknowledgement, not only TTS completion.
-
-**How do you avoid duplicate spoken results after retries?**  
-Use stable operation/delivery identifiers, create-once semantics and a delivery lease/state machine.
+[^openai-voice-agents]: OpenAI Agents SDK, [Build voice agents](https://openai.github.io/openai-agents-js/guides/voice-agents/build/). Describes semantic VAD, interruption events, and assistant-audio truncation.
+[^twilio-websocket]: Twilio, [Media Streams WebSocket messages](https://www.twilio.com/docs/voice/media-streams/websocket-messages). Contract for `media`, `mark`, and `clear` in bidirectional streams.
+[^pipecat-functions]: Pipecat, [Function calling](https://docs.pipecat.ai/pipecat/learn/function-calling). Asynchronous execution and the `cancel_on_interruption` policy.
+[^pipecat-frames]: Pipecat, [Control frames](https://docs.pipecat.ai/api-reference/server/frames/control-frames). Grouping calls with `group_id`.
+[^gpt-live]: OpenAI, [Introducing GPT-Live](https://openai.com/index/introducing-gpt-live/), July 8, 2026. Full-duplex surface with delegation of search, reasoning, and complex work.

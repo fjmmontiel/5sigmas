@@ -1,0 +1,24 @@
+{
+  "source": "snippets/articulos-tecnicos/voice-rp-clocks.html",
+  "source_blob_sha": "f0719b0eb555daa9420b622c53a64db2e51115e6",
+  "replacements": {
+    "Cuatro relojes independientes de una llamada": "Four independent clocks in a call",
+    "Estado": "State",
+    "Cuatro relojes. Cuatro verdades.": "Four clocks. Four truths.",
+    "No existe un único <code>is_busy</code>.": "There is no single <code>is_busy</code>.",
+    "Usuario": "User",
+    "Modelo": "Model",
+    "Regla": "Rule",
+    "Cada reloj se cancela y confirma por separado.": "Each clock is cancelled and confirmed independently."
+  },
+  "forbidden_output_tokens": [
+    "Cuatro relojes independientes",
+    "Estado",
+    "Cuatro relojes. Cuatro verdades.",
+    "No existe un único",
+    "Usuario",
+    "Modelo",
+    "Regla",
+    "Cada reloj se cancela"
+  ]
+}

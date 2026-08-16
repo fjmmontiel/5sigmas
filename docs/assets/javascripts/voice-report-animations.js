@@ -1,7 +1,7 @@
 (() => {
   "use strict";
 
-  const ROOT_SELECTOR = ".anim-brand-shell__viewport > .s5v";
+  const ROOT_SELECTOR = ".s5v";
   const timers = new WeakMap();
   let focusObserver = null;
   let activeShells = new Set();
