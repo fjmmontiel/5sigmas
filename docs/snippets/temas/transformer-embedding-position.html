@@ -1,0 +1,108 @@
+<div class="tep-wrap" data-demo="topic-transformer-embedding-position">
+  <div class="tep-head">
+    <div class="tep-kicker">ENTRADA DEL TRANSFORMER</div>
+    <div class="tep-title">Identidad del token + posición: el orden cambia la relación</div>
+    <div class="tep-sub">La autoatención no incorpora el orden por sí sola. El modelo necesita una señal posicional para distinguir secuencias con casi los mismos tokens pero relaciones distintas.</div>
+  </div>
+
+  <div class="tep-sequences" aria-label="Dos secuencias con los mismos tokens principales en posiciones diferentes">
+    <div class="tep-lane">
+      <div class="tep-lane-label">SECUENCIA A</div>
+      <div class="tep-token-row">
+        <div class="tep-token"><strong>modelo</strong><span>e(modelo)</span><small>posición 1 · PE(1)</small></div>
+        <span class="tep-arrow">→</span>
+        <div class="tep-token"><strong>corrigió</strong><span>e(corrigió)</span><small>posición 2 · PE(2)</small></div>
+        <span class="tep-arrow">→</span>
+        <div class="tep-token"><strong>evaluador</strong><span>e(evaluador)</span><small>posición 3 · PE(3)</small></div>
+      </div>
+      <div class="tep-meaning"><b>quién actúa:</b> el modelo <span>→</span> <b>quién recibe:</b> el evaluador</div>
+    </div>
+
+    <div class="tep-lane">
+      <div class="tep-lane-label">SECUENCIA B</div>
+      <div class="tep-token-row">
+        <div class="tep-token"><strong>evaluador</strong><span>e(evaluador)</span><small>posición 1 · PE(1)</small></div>
+        <span class="tep-arrow">→</span>
+        <div class="tep-token"><strong>corrigió</strong><span>e(corrigió)</span><small>posición 2 · PE(2)</small></div>
+        <span class="tep-arrow">→</span>
+        <div class="tep-token"><strong>modelo</strong><span>e(modelo)</span><small>posición 3 · PE(3)</small></div>
+      </div>
+      <div class="tep-meaning"><b>quién actúa:</b> el evaluador <span>→</span> <b>quién recibe:</b> el modelo</div>
+    </div>
+  </div>
+
+  <div class="tep-mechanism">
+    <div class="tep-equation">
+      <span>Transformer original</span>
+      <strong>x<sub>i</sub> = e(token<sub>i</sub>) + PE(i)</strong>
+      <small>Embedding y codificación posicional tienen la misma dimensión y se suman antes de entrar en la pila.</small>
+    </div>
+    <div class="tep-rope">
+      <span>Familias posteriores</span>
+      <strong>La posición no tiene que sumarse al embedding</strong>
+      <small>RoPE, por ejemplo, introduce posición mediante rotaciones aplicadas a Q y K dentro de la atención.</small>
+    </div>
+  </div>
+
+  <div class="tep-contract">
+    <div><b>Identidad ≠ orden</b><span>El embedding de token representa qué unidad es; la señal posicional indica dónde aparece.</span></div>
+    <div><b>Mismos tokens ≠ misma secuencia</b><span>Cambiar posiciones puede invertir relaciones aunque el vocabulario sea casi idéntico.</span></div>
+    <div><b>No hay un único mecanismo</b><span>La suma sinusoidal explica el Transformer original; posiciones aprendidas, relativas y RoPE usan contratos distintos.</span></div>
+  </div>
+
+  <div class="tep-ref">Fuentes primarias: <a href="https://arxiv.org/abs/1706.03762">Vaswani et al. (2017)</a> · <a href="https://arxiv.org/abs/2104.09864">Su et al. (2021, RoPE)</a>.</div>
+</div>
+
+<style>
+.tep-wrap,.tep-wrap *{box-sizing:border-box}
+.tep-wrap{
+  --tep-a:var(--md-primary-fg-color,#26a69a);
+  --tep-b:#4757d6;
+  --tep-c:var(--md-accent-fg-color,#ffb343);
+  --tep-bg:var(--md-default-bg-color,#fff);
+  --tep-fg:var(--md-default-fg-color,#111827);
+  --tep-muted:color-mix(in srgb,var(--tep-fg) 58%,transparent);
+  --tep-border:color-mix(in srgb,var(--tep-fg) 14%,transparent);
+  margin:1.1rem 0 1.5rem;padding:clamp(14px,2vw,22px);border:1px solid var(--tep-border);border-radius:20px;
+  background:radial-gradient(110% 130% at 100% 0,color-mix(in srgb,var(--tep-b) 8%,transparent),transparent 52%),var(--tep-bg);color:var(--tep-fg)
+}
+.tep-head{display:grid;gap:4px;margin-bottom:14px}
+.tep-kicker{font-size:11px;font-weight:900;letter-spacing:.12em;color:var(--tep-muted)}
+.tep-title{font-size:clamp(18px,2.1vw,24px);font-weight:900;line-height:1.1;letter-spacing:-.02em}
+.tep-sub{font-size:13.5px;line-height:1.45;color:var(--tep-muted);max-width:78ch}
+.tep-sequences{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tep-lane{min-width:0;border:1px solid var(--tep-border);border-radius:14px;padding:12px;display:grid;gap:10px;background:color-mix(in srgb,var(--tep-bg) 93%,var(--tep-fg) 7%)}
+.tep-lane-label{font-size:10px;font-weight:900;letter-spacing:.11em;color:var(--tep-muted)}
+.tep-token-row{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr);gap:5px;align-items:center}
+.tep-token{min-width:0;border:1px solid color-mix(in srgb,var(--tep-b) 22%,var(--tep-border));border-radius:11px;padding:8px 5px;display:grid;gap:3px;text-align:center;background:var(--tep-bg)}
+.tep-token strong{font-size:12px;overflow-wrap:anywhere}.tep-token span{font:700 10px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--tep-b)}.tep-token small{font-size:9px;line-height:1.25;color:var(--tep-muted)}
+.tep-arrow{font-weight:900;color:var(--tep-muted)}
+.tep-meaning{font-size:10.5px;line-height:1.35;text-align:center;color:var(--tep-muted)}.tep-meaning b{color:var(--tep-fg)}.tep-meaning span{padding:0 4px;color:var(--tep-a)}
+.tep-mechanism{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.tep-equation,.tep-rope{border-radius:13px;padding:11px 12px;display:grid;gap:5px;border:1px solid var(--tep-border)}
+.tep-equation{background:color-mix(in srgb,var(--tep-a) 6%,var(--tep-bg));border-color:color-mix(in srgb,var(--tep-a) 32%,var(--tep-border))}
+.tep-rope{background:color-mix(in srgb,var(--tep-b) 6%,var(--tep-bg));border-color:color-mix(in srgb,var(--tep-b) 28%,var(--tep-border))}
+.tep-equation>span,.tep-rope>span{font-size:9px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--tep-muted)}
+.tep-equation strong{font:800 14px/1.3 ui-monospace,SFMono-Regular,Menlo,monospace}.tep-rope strong{font-size:12.5px;line-height:1.3}
+.tep-equation small,.tep-rope small{font-size:10px;line-height:1.4;color:var(--tep-muted)}
+.tep-contract{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}
+.tep-contract>div{min-width:0;border-top:2px solid color-mix(in srgb,var(--tep-c) 60%,var(--tep-border));padding:8px 9px 5px;display:grid;gap:3px}
+.tep-contract b{font-size:10.5px}.tep-contract span{font-size:9.8px;line-height:1.35;color:var(--tep-muted)}
+.tep-ref{margin-top:8px;font-size:9.5px;line-height:1.35;color:var(--tep-muted)}.tep-ref a{color:inherit;text-decoration:underline;text-decoration-color:color-mix(in srgb,var(--tep-a) 45%,transparent);text-underline-offset:2px}
+@media(max-width:760px){.tep-sequences,.tep-mechanism{grid-template-columns:1fr}.tep-contract{grid-template-columns:1fr 1fr}}
+@media(max-width:460px){.tep-token-row{grid-template-columns:1fr}.tep-arrow{display:none}.tep-token{grid-template-columns:1fr auto;align-items:center;text-align:left;padding:8px 9px}.tep-token strong{grid-column:1}.tep-token span{grid-column:2;grid-row:1}.tep-token small{grid-column:1/-1}.tep-contract{grid-template-columns:1fr}}
+</style>
+
+<script>
+(() => {
+  const root = document.querySelector('[data-demo="topic-transformer-embedding-position"]');
+  if (!root) return;
+  const fail = (message) => { throw new Error(`Transformer embedding/position visual: ${message}`); };
+  if (root.querySelectorAll('.tep-lane').length !== 2) fail('expected exactly 2 sequence lanes');
+  if (root.querySelectorAll('.tep-token').length !== 6) fail('expected exactly 6 token cards');
+  if (root.querySelectorAll('.tep-contract > div').length !== 3) fail('expected exactly 3 teaching contracts');
+  requestAnimationFrame(() => {
+    if (root.scrollWidth - root.clientWidth > 2) fail(`internal horizontal overflow ${root.scrollWidth - root.clientWidth}px`);
+  });
+})();
+</script>
