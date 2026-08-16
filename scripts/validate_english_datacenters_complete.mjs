@@ -149,7 +149,6 @@ async function assertChapter2Canonical(page, route, viewport) {
     'between 120 and 600 seconds per orbit',
     'What is the real advantage of space for data centers?',
     'Base sources',
-    '720× improvement in SEFI immunity',
   ];
   for (const x of anchors) if (!body.includes(x)) failures.push(`${route}: missing canonical Chapter 2 evidence ${JSON.stringify(x)}`);
   for (const x of ['The four equations behind orbital feasibility', 'The orbital-energy thesis therefore depends on three numbers together', 'Downlink is a separate constraint']) {
@@ -160,6 +159,8 @@ async function assertChapter2Canonical(page, route, viewport) {
   if (await refs.count() !== 1) failures.push(`${route}: missing canonical Chapter 2 references section`);
   const rows = page.locator('table tbody tr');
   if (await rows.count() !== 10) failures.push(`${route}: expected 10 canonical Chapter 2 reference rows, found ${await rows.count()}`);
+  const refText = (await page.locator('table').last().textContent()) || '';
+  if (!refText.includes('720× improvement in SEFI immunity')) failures.push(`${route}: canonical Radshield reference evidence missing from collapsed reference table`);
 
   const orderedHooks = [
     ['h3', 'The real scale of radiators', '.drs[data-demo="dc-02-radiator-scale"]', 'h3', 'Why in-orbit validation is still limited'],
