@@ -1,6 +1,6 @@
 {
   "source": "snippets/temas/agent-context-memory-state.html",
-  "source_blob_sha": "811439e5061900f9bf7a52f54db488f03bbbb9c5",
+  "source_blob_sha": "42204e7681bb5a3980e702a6fd4e99c2ebe40648",
   "replacements": {
     ">TRES CAPAS · TRES RESPONSABILIDADES</div>": ">THREE LAYERS · THREE RESPONSIBILITIES</div>",
     ">Contexto, memoria y estado responden a preguntas distintas</div>": ">Context, memory and state answer different questions</div>",
@@ -39,7 +39,7 @@
     ">informe enviado · result_id=m_7f2</code>": ">report sent · result_id=m_7f2</code>",
     ">Puede persistirse si la política de memoria lo permite.</small>": ">It may be persisted if the memory policy allows it.</small>",
     ">persistente · recuperable · gobernado</strong>": ">persistent · retrievable · governed</strong>",
-    ">ESTADO OPERATIVO</div>": ">OPERATIONAL STATE</div>",
+    ">Estado operativo</div>": ">OPERATIONAL STATE</div>",
     ">¿Qué está ocurriendo realmente?</strong>": ">What is actually happening?</strong>",
     ">Datos del runtime: estado de la operación, reintentos, bloqueos, idempotencia, errores y resultados observables.</p>": ">Runtime data: operation status, retries, locks, idempotency, errors and observable results.</p>",
     ">FUENTE DE VERDAD</span>": ">SOURCE OF TRUTH</span>",
@@ -68,7 +68,7 @@
     "¿Qué podrá recuperarse después?",
     "SIN ESCRITURA",
     "HECHO VERIFICADO",
-    "ESTADO OPERATIVO",
+    "Estado operativo",
     "¿Qué está ocurriendo realmente?",
     "FUENTE DE VERDAD",
     "REGLA DE DISEÑO",
