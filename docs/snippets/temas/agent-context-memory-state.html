@@ -74,7 +74,7 @@
     <section class="acms-layer acms-layer--state">
       <div class="acms-layer-head">
         <span class="acms-icon">03</span>
-        <div><div class="acms-label">ESTADO OPERATIVO</div><strong>¿Qué está ocurriendo realmente?</strong></div>
+        <div><div class="acms-label">Estado operativo</div><strong>¿Qué está ocurriendo realmente?</strong></div>
       </div>
       <p>Datos del runtime: estado de la operación, reintentos, bloqueos, idempotencia, errores y resultados observables.</p>
       <div class="acms-stage" data-stage-panel="requested">
@@ -175,7 +175,7 @@
 
 <script>
 (()=>{
-  const root=document.currentScript.closest('.acms-wrap');
+  const root=document.querySelector('[data-demo="topic-agent-context-memory-state"]');
   if(!root)return;
   const buttons=[...root.querySelectorAll('[data-stage]')];
   const panels=[...root.querySelectorAll('[data-stage-panel]')];
