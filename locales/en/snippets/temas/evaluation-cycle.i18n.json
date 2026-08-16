@@ -1,6 +1,6 @@
 {
   "source": "snippets/temas/evaluation-cycle.html",
-  "source_blob_sha": "9f0aafee19544dacc731b2399858eefefd2fd56e",
+  "source_blob_sha": "2ac0690a4f88bbe9a9f11774bdf0f360a401640a",
   "replacements": {
     ">BUCLE OPERATIVO</div>": ">OPERATIONAL LOOP</div>",
     ">Cada cambio debe volver convertido en evidencia</div>": ">Every change must come back as evidence</div>",
@@ -41,6 +41,7 @@
     ">reproducir</span>": ">reproduce</span>",
     ">versionar</span>": ">version</span>",
     ">no olvidar</span>": ">do not forget</span>",
+    ">VUELVE A SEÑAL</span>": ">BACK TO SIGNAL</span>",
     ">CIERRA EL BUCLE</span>": ">CLOSE THE LOOP</span>",
     ">El historial de fallos se convierte en tests de regresión: la siguiente versión empieza con más conocimiento que la anterior.</strong>": ">The failure history becomes regression tests: the next version starts with more knowledge than the previous one.</strong>"
   },
@@ -56,6 +57,7 @@
     "Observa el producto",
     "Las métricas online muestran",
     "REGRESIÓN",
+    "VUELVE A SEÑAL",
     "CIERRA EL BUCLE"
   ]
 }
