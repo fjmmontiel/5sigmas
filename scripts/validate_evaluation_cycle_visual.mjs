@@ -45,14 +45,14 @@ const cases = [
   {
     locale: 'es',
     route: '/temas/evaluacion-modelos/',
-    anchors: ['BUCLE OPERATIVO', 'Incidente o necesidad', 'Mide el sistema actual', 'Modelo / prompt / sistema', 'Prueba limitada', 'Observa el producto', 'Fallo nuevo → caso permanente', 'CIERRA EL BUCLE'],
+    anchors: ['BUCLE OPERATIVO', 'Incidente o necesidad', 'Mide el sistema actual', 'Modelo / prompt / sistema', 'Rollout limitado', 'Observa el producto', 'Fallo nuevo → caso permanente', 'CIERRA EL BUCLE'],
     forbidden: [],
   },
   {
     locale: 'en',
     route: '/en/temas/evaluacion-modelos/',
     anchors: ['OPERATIONAL LOOP', 'Incident or need', 'Measure the current system', 'Model / prompt / system', 'Limited rollout', 'Observe the product', 'New failure → permanent case', 'CLOSE THE LOOP'],
-    forbidden: ['BUCLE OPERATIVO', 'Incidente o necesidad', 'Mide el sistema actual', 'Prueba limitada', 'Observa el producto', 'REGRESIÓN', 'CIERRA EL BUCLE'],
+    forbidden: ['BUCLE OPERATIVO', 'Las evals offline reducen', 'Incidente o necesidad', 'Mide el sistema actual', 'Rollout limitado', 'Observa el producto', 'Las métricas online muestran', 'REGRESIÓN', 'CIERRA EL BUCLE'],
   },
 ];
 const viewports = [
