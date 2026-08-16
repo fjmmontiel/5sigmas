@@ -1,0 +1,103 @@
+<div class="pit-wrap" data-demo="topic-prompt-injection-taxonomy">
+  <div class="pit-head">
+    <div class="pit-kicker">MISMO FORMATO DE TEXTO · DISTINTO CONTRATO DE SEGURIDAD</div>
+    <div class="pit-title">Jailbreak, inyección directa e indirecta no atacan exactamente lo mismo</div>
+    <div class="pit-sub">Clasifícalos por quién introduce la instrucción, por dónde entra y qué control intenta superar.</div>
+  </div>
+
+  <div class="pit-grid" role="img" aria-label="Comparación entre jailbreak, prompt injection directa e indirecta según origen, trayectoria, objetivo y control">
+    <section class="pit-card pit-card--jb">
+      <div class="pit-card-head"><span>01</span><div><small>JAILBREAK</small><strong>El usuario intenta superar una restricción del modelo</strong></div></div>
+      <div class="pit-flow"><b>usuario</b><i>→</i><b>prompt adversarial</b><i>→</i><b>modelo</b></div>
+      <div class="pit-row"><span>ENTRADA</span><strong>petición principal del usuario</strong></div>
+      <div class="pit-row"><span>OBJETIVO ATACADO</span><strong>restricción o comportamiento de seguridad del modelo</strong></div>
+      <div class="pit-row"><span>CONTROL CLAVE</span><strong>robustez del modelo + evaluación adversarial</strong></div>
+      <div class="pit-note">No necesita contenido externo ni RAG. Puede solaparse con técnicas de prompt injection, pero el objetivo de seguridad no es el mismo.</div>
+    </section>
+
+    <section class="pit-card pit-card--direct">
+      <div class="pit-card-head"><span>02</span><div><small>INYECCIÓN DIRECTA</small><strong>La entrada principal intenta cambiar la tarea de la aplicación</strong></div></div>
+      <div class="pit-flow"><b>usuario</b><i>→</i><b>instrucción inyectada</b><i>→</i><b>contexto</b></div>
+      <div class="pit-row"><span>ENTRADA</span><strong>canal directo de interacción</strong></div>
+      <div class="pit-row"><span>OBJETIVO ATACADO</span><strong>prioridad de instrucciones o tarea pretendida</strong></div>
+      <div class="pit-row"><span>CONTROL CLAVE</span><strong>jerarquía de instrucciones + validación del runtime</strong></div>
+      <div class="pit-note">El problema aparece cuando texto con menor autoridad intenta gobernar una decisión que la aplicación reservaba a reglas superiores.</div>
+    </section>
+
+    <section class="pit-card pit-card--indirect">
+      <div class="pit-card-head"><span>03</span><div><small>INYECCIÓN INDIRECTA</small><strong>Una fuente externa introduce instrucciones dentro de los datos</strong></div></div>
+      <div class="pit-flow"><b>fuente externa</b><i>→</i><b>retrieval / tool</b><i>→</i><b>contexto</b></div>
+      <div class="pit-row"><span>ENTRADA</span><strong>contenido de terceros consultado por el sistema</strong></div>
+      <div class="pit-row"><span>OBJETIVO ATACADO</span><strong>frontera entre datos no confiables y control</strong></div>
+      <div class="pit-row"><span>CONTROL CLAVE</span><strong>procedencia + mínimo privilegio + autorización externa</strong></div>
+      <div class="pit-note">Es prompt injection por una ruta indirecta: el atacante no necesita escribir en el chat si consigue que su contenido sea recuperado o leído.</div>
+    </section>
+  </div>
+
+  <div class="pit-contracts">
+    <div><span>RELACIÓN</span><strong>La inyección indirecta es una ruta de prompt injection; jailbreak describe otro objetivo de seguridad.</strong></div>
+    <div><span>SOLAPAMIENTO</span><strong>Una misma cadena de texto puede intentar ambas cosas. Clasifica el fallo por el control que debía resistirlo.</strong></div>
+    <div><span>EVALUACIÓN</span><strong>Mide por separado robustez de rechazo, resistencia a inyección y contención end-to-end antes del efecto.</strong></div>
+  </div>
+
+  <div class="pit-ref">Fuentes primarias:
+    <a href="https://arxiv.org/abs/2302.12173">Greshake et al. · Indirect Prompt Injection</a> ·
+    <a href="https://arxiv.org/abs/2307.15043">Zou et al. · adversarial jailbreaks</a> ·
+    <a href="https://openai.com/index/designing-agents-to-resist-prompt-injection/">OpenAI · designing agents to resist prompt injection</a>
+  </div>
+</div>
+
+<style>
+.pit-wrap,.pit-wrap *{box-sizing:border-box}
+.pit-wrap{
+  --pit-a:var(--md-primary-fg-color,#26a69a);
+  --pit-b:#4757d6;
+  --pit-c:var(--md-accent-fg-color,#ffb343);
+  --pit-r:#d85f6a;
+  --pit-bg:var(--md-default-bg-color,#fff);
+  --pit-fg:var(--md-default-fg-color,#111827);
+  --pit-muted:color-mix(in srgb,var(--pit-fg) 58%,transparent);
+  --pit-border:color-mix(in srgb,var(--pit-fg) 14%,transparent);
+  container-type:inline-size;
+  margin:1.1rem 0 1.5rem;
+  padding:clamp(14px,2vw,22px);
+  border:1px solid var(--pit-border);
+  border-radius:20px;
+  background:radial-gradient(100% 120% at 0 0,color-mix(in srgb,var(--pit-b) 7%,transparent),transparent 54%),radial-gradient(90% 110% at 100% 0,color-mix(in srgb,var(--pit-a) 7%,transparent),transparent 58%),var(--pit-bg);
+  color:var(--pit-fg);
+  overflow:hidden
+}
+.pit-head{display:grid;gap:4px;margin-bottom:13px}
+.pit-kicker{font-size:10px;font-weight:900;letter-spacing:.12em;color:var(--pit-muted)}
+.pit-title{font-size:clamp(18px,2.1vw,24px);font-weight:900;line-height:1.1;letter-spacing:-.02em}
+.pit-sub{font-size:13.5px;line-height:1.45;color:var(--pit-muted);max-width:88ch}
+.pit-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;min-width:0}
+.pit-card{min-width:0;display:grid;gap:9px;padding:12px;border:1px solid var(--pit-border);border-radius:16px;background:color-mix(in srgb,var(--pit-bg) 96%,var(--pit-b))}
+.pit-card--direct{background:color-mix(in srgb,var(--pit-bg) 96%,var(--pit-c))}
+.pit-card--indirect{background:color-mix(in srgb,var(--pit-bg) 96%,var(--pit-r))}
+.pit-card-head{display:grid;grid-template-columns:28px minmax(0,1fr);gap:8px;align-items:start}
+.pit-card-head>span{display:grid;place-items:center;width:28px;height:28px;border-radius:999px;border:1px solid var(--pit-border);font-size:10px;font-weight:900}
+.pit-card-head small{display:block;font-size:9.5px;font-weight:900;letter-spacing:.1em;color:var(--pit-muted)}
+.pit-card-head strong{display:block;margin-top:2px;font-size:13px;line-height:1.25}
+.pit-flow{display:grid;grid-template-columns:minmax(0,.72fr) auto minmax(92px,1.56fr) auto minmax(0,.72fr);gap:4px;align-items:center;padding:8px;border-radius:12px;border:1px dashed var(--pit-border);background:color-mix(in srgb,var(--pit-bg) 78%,transparent)}
+.pit-flow b{min-width:0;padding:6px 4px;border-radius:8px;background:var(--pit-bg);font-size:10.5px;line-height:1.18;text-align:center;overflow-wrap:normal;word-break:normal;hyphens:none}
+.pit-flow i{font-style:normal;font-weight:900;color:var(--pit-muted)}
+.pit-row{display:grid;gap:2px;padding-top:7px;border-top:1px solid var(--pit-border)}
+.pit-row span{font-size:9px;font-weight:900;letter-spacing:.09em;color:var(--pit-muted)}
+.pit-row strong{font-size:12px;line-height:1.3}
+.pit-note{padding:8px;border-radius:11px;background:color-mix(in srgb,var(--pit-fg) 4%,transparent);font-size:10.75px;line-height:1.4;color:var(--pit-muted)}
+.pit-contracts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:9px}
+.pit-contracts>div{padding:9px 10px;border:1px solid var(--pit-border);border-radius:12px;background:color-mix(in srgb,var(--pit-bg) 97%,var(--pit-a))}
+.pit-contracts span{display:block;font-size:9px;font-weight:900;letter-spacing:.1em;color:var(--pit-muted)}
+.pit-contracts strong{display:block;margin-top:3px;font-size:11px;line-height:1.35}
+.pit-ref{margin-top:9px;font-size:10px;line-height:1.45;color:var(--pit-muted)}
+.pit-ref a{font-weight:700}
+@container (max-width:760px){
+  .pit-grid,.pit-contracts{grid-template-columns:1fr}
+  .pit-card{gap:8px}
+  .pit-flow{grid-template-columns:minmax(0,.72fr) auto minmax(105px,1.56fr) auto minmax(0,.72fr)}
+}
+@media(prefers-reduced-motion:reduce){
+  .pit-wrap,.pit-wrap *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
+</style>
