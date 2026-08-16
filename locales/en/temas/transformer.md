@@ -83,17 +83,9 @@ The same residual structure surrounds both attention and the feed-forward networ
 
 ## Encoder, decoder and encoder-decoder
 
-### Encoder
+{{ include_html("snippets/temas/transformer-encoder-decoder.html") }}
 
-Uses bidirectional attention. Each token can attend to the full context. BERT popularized this configuration for representations useful in classification, extraction and language understanding.[^bert]
-
-### Decoder
-
-Uses causal attention and generates from left to right. GPT-style families are the dominant example for text generation.
-
-### Encoder-decoder
-
-The encoder represents the input. The decoder generates the output and adds cross-attention over encoder representations. It is a natural structure for translation and sequence-to-sequence transformation.
+BERT popularized bidirectional encoder stacks for representations useful in classification, extraction and language understanding.[^bert] GPT-style families popularized the causal decoder for generation. The original Transformer combined both: the encoder represented the full input and the decoder generated the output while consulting those representations through *cross-attention*.[^transformer]
 
 “Transformer” therefore does not imply one single diagram. It describes a family of blocks and attention contracts.
 
