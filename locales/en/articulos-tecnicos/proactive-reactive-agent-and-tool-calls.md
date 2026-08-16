@@ -1,355 +1,208 @@
 ---
-title: Proactive and reactive agents and tool calls
-description: "How to design agents that acknowledge work immediately, execute tools asynchronously, preserve durable state and deliver results proactively without coupling conversation timing to operation timing."
-date: 2026-08-03
-keywords: "AI agents, tool calling, proactive agents, reactive agents, asynchronous tools, durable execution, idempotency, agent runtime, delivery envelope"
+title: Reactive and proactive agents and tool calls
+description: "A technical walkthrough of Reactive / Proactive Agent and the conversational contract it encapsulates: immediate response, asynchronous work, and deferred completion."
+date: 2026-04-23
+date_modified: 2026-05-11
+keywords: "reactive agent, proactive agent, tool calls, async tool calls, conversational runtime, background tasks, pending updates"
 article_state: published
+video: "reactive-proactive-agent-header-demo.mp4"
+video_duration: "PT20S"
 tags:
   - AI
   - Agents
   - Tool Calling
-  - Realtime
   - Architecture
+  - Runtime
 ---
 
-# Proactive and reactive agents and tool calls
+# Reactive and proactive agents and tool calls
 
-> **Core idea:** a model turn should not be the clock that governs slow or asynchronous work.  
-> **Runtime rule:** accept quickly, execute durably, and deliver the result when the interaction surface is ready.  
-> **Failure mode:** coupling a tool's technical completion directly to the model's next utterance.
+> **Base repository:** [`Reactive / Proactive Agent`](https://fjmmontiel.github.io/reactive-proactive-agent/)  
+> **Status:** published on 5sigmas; scoped local demo with an associated public repository  
+> **Scope:** conversational contract, local runtime, mock service, and deferred completion  
 
-Many agent systems begin with a synchronous assumption:
+When an agent uses tools against external systems, the difficult part is not calling an external API.
+That call can be made with a function, a queue, or any HTTP library. What complicates the design is that the conversation with the LLM and the external operation can leave the chat blocked.
 
-```text
-user request
-→ LLM decides tool
-→ tool blocks
-→ LLM waits
-→ tool returns
-→ LLM answers
-```
+The flow is also straightforward to describe: the user types in the chat box or speaks over a phone channel, the model decides that it needs a tool to process the request correctly, and the operation eventually goes out to a service that may take time, fail, or finish after the user has already continued talking.
 
-That is acceptable for a local lookup that finishes in tens of milliseconds. It becomes fragile when the work takes seconds, minutes or longer, when several operations run in parallel, or when the user continues interacting while the work is still active.
+[`Reactive / Proactive Agent`](https://fjmmontiel.github.io/reactive-proactive-agent/) works precisely on this problem.
 
-A robust runtime separates **conversation**, **operation execution** and **result delivery**.
+The repository is a scoped local demo built to pin down a conversational contract: respond now with what the system knows, execute the operation outside the visible chat turn, and return the completion once the result actually exists.
+
+With that idea implemented correctly, the agent has a *reactive component* that accepts the request without waiting for the external API, and a *proactive component* that comes back later with one completion once the batch is resolved or is ready to be resynchronized on the next turn.
+
+The demo uses access provisioning because it is a concrete enough domain to force the agent to touch an external system.
 
 {{ include_html("snippets/articulos-tecnicos/async-tool-panorama.html") }}
 
-## 1. Reactive acknowledgement and proactive completion are different events
+## The problem is not the tool, but time
 
-When a user asks for slow work, the agent usually needs to respond immediately so the interaction does not feel frozen:
+In a classic chatbot, tools break the normal conversational flow when the tool involves calling an external API. If the agent waits for the API, the chat remains blocked because the tool has not finished and does not release the LLM. If it responds as if the API had already finished, it lies about the real state. And if it dumps every technical detail into the conversation, the visible history ends up carrying implementation details that are irrelevant to the user.
 
-> “I’ll check that now. You can keep going while I do it.”
+The repository's design decision is to separate those planes without losing continuity for the user. The agent can say that it is starting a task, but it must not say that the task is complete until the external system closes it. Meanwhile, the user can ask something else or request another access. The runtime keeps operational state, HTTP attempts, and pending results without turning them into permanent `system` messages inside the chat.
 
-That utterance is **acceptance**, not completion.
+That separation starts in the in-memory state. `RuntimeState` keeps visible history, operations, pending updates, and traces in different structures:
 
-The durable operation starts after acceptance and can outlive the current model turn. When it reaches a terminal state, the system creates a result that may be delivered immediately, attached to a later turn, grouped with other results, or suppressed if it is no longer relevant.
-
-A useful state model is:
-
-```text
-request
-→ accepted
-→ running
-→ terminal(success | failure | cancelled)
-→ delivery_pending
-→ delivered | superseded | expired
+```python
+class RuntimeState:
+    def __init__(self) -> None:
+        self._messages: dict[str, list[Message]] = {}
+        self._pending_updates_by_session: dict[str, list[PendingUpdate]] = {}
+        self._operations_by_session: dict[str, dict[str, OperationRecord]] = {}
+        self._inflight_counts_by_session: dict[str, int] = {}
+        self._events: dict[str, list[Event]] = {}
+        self._model_traces: dict[str, list[ModelTrace]] = {}
+        self._turn_locks_by_session: dict[str, threading.Lock] = {}
 ```
 
-The key distinction is that `terminal` belongs to the operation while `delivered` belongs to the interaction surface.
+This division avoids a very common temptation: using the chat history as the database for everything that happened. Here, `_messages` remains conversation. `_operations_by_session` describes technical work. `_pending_updates_by_session` stores completions that already exist but have not yet gone back to the user. `_inflight_counts_by_session` tells the runtime whether the batch is still alive. Traces and events exist to observe the demo, not to contaminate the visible thread. Snapshots still expose `pending_system_messages`, but only as a compatibility view over those `PendingUpdate` objects, not as the canonical runtime state.
+
+## The first turn accepts work; it does not promise results
+
+The central function is still `ConversationRuntime.handle_user_turn()`. Its responsibility is not to resolve the external operation, but to decide what the agent can say in the current turn and what work has to leave for the background.
+
+```python
+def handle_user_turn(self, conversation_id: str, user_text: str) -> ChatResult:
+    self.state.acquire_turn(conversation_id, "user", blocking=True)
+    self.state.append(conversation_id, Role.USER, user_text)
+    inflight_count = self.state.inflight_count(conversation_id)
+    pending_updates = self.state.pending_updates(conversation_id)
+    consume_pending_updates = bool(pending_updates) and inflight_count == 0
+    turn_pending_updates = self.state.take_pending_updates(conversation_id) if consume_pending_updates else []
+    live_operations_context = self._build_live_operations_context(
+        conversation_id,
+        pending_updates=pending_updates,
+        inflight_count=inflight_count,
+    )
+    injected_system_message, system_messages, messages, first_turn = self._run_model_turn(
+        conversation_id=conversation_id,
+        phase="first_pass",
+        tools=self.registry.provider_definitions(),
+        pending_updates=turn_pending_updates,
+        extra_system_messages=[live_operations_context] if live_operations_context else [],
+    )
+```
+
+This section explains a good part of the repository's current design. Before calling the model, the runtime checks whether there are live operations and whether there are pending completions. If nothing remains in flight, it can consume those pending updates on the next turn as ephemeral context. If work is still open, it does not consume them as a final completion; instead, it prepares operational context so the model can answer honestly without declaring the batch finished.
+
+When the model requests a tool, the runtime validates arguments, normalizes batches under `accesses`, and registers each operation before launching it:
+
+```python
+if first_turn.tool_calls:
+    acceptance_messages: list[str] = []
+    for tool_call in first_turn.tool_calls:
+        tool = self.registry.get(tool_call.name)
+        normalized_arguments = normalize_tool_arguments(tool, tool_call.arguments)
+        validate_tool_arguments(tool, normalized_arguments)
+        acceptance = tool.acceptance_message(normalized_arguments)
+        for i, item in enumerate(normalized_arguments.get(tool.batch_field) or []):
+            sub_id = f"{tool_call.id}:{i}"
+            self.state.accept_operation(conversation_id, tool.name, sub_id, item)
+            self.background_tasks.submit_item(conversation_id, tool, sub_id, item)
+        acceptance_messages.append(acceptance)
+    assistant_text = " ".join(acceptance_messages)
+```
+
+The important detail is the acceptance language. The agent does not say “it is done.” It says that it is starting the task. That distinction sustains the contract. The conversation moves forward, but the result still belongs to the operational plane.
+
+## Asynchronous work needs policy, not only background execution
+
+Moving HTTP work to a thread or an event loop does not solve the problem by itself. What matters is what happens with attempts, retries, and completion. `BackgroundTaskRunner` runs each operation with bounded concurrency, classifies the result, and updates state on every attempt:
+
+```python
+async def _process(...):
+    async with self._semaphore:
+        for attempt in range(1, tool.max_attempts + 1):
+            http_status, response_body, exception = await asyncio.to_thread(_execute_request, request)
+            outcome = classify_outcome(http_status, response_body, exception)
+            self.state.mark_attempt(...)
+            if outcome.success:
+                self.state.finish_processing(...)
+                self._notify_completion(conversation_id)
+                return
+            if outcome.retryable and attempt < tool.max_attempts:
+                await asyncio.sleep(tool.backoff_seconds)
+                continue
+            self.state.finish_processing(...)
+            self._notify_completion(conversation_id)
+            return
+```
+
+The repository models technical failures, business errors, `429`, `5xx`, timeouts, and successful responses under one policy. That policy does not live in the UI or in the prompt. It lives in the runtime and is reflected in the operations, events, and snapshot that the interface later reads. That is why the demo can show retries visibly without turning them into visible conversation.
+
+The next visual places the whole operation on one map. The important part is not memorizing every box, but seeing where the request changes planes: visible acceptance, background work, technical outcome, pending completion, and final delivery.
 
 {{ include_html("snippets/articulos-tecnicos/tool-lifecycle.html") }}
 
-## 2. The model should not own durable operation state
+## Completion returns when the batch can close
 
-The conversation transcript is useful context. It is not a durable workflow engine.
-
-If a process restarts after a payment succeeds but before the assistant announces success, a transcript-only design may rerun the payment or lose the result. If a callback arrives twice, the model cannot reliably infer whether the side effect already happened. If the user changes topic while a tool is active, the operation should not disappear merely because the next prompt no longer mentions it.
-
-Durable coordination should track explicit objects such as:
+The proactive part of the repository is not the model “deciding to notify” by intuition. The decision lives in `handle_background_completion()`. Every time an operation finishes, the background runner notifies the runtime. The runtime checks whether operations remain alive, whether the demo is forcing resynchronization on the next turn, and whether the session is free to write a new agent message.
 
 ```python
-@dataclass
-class Operation:
-    operation_id: str
-    session_id: str
-    turn_id: str
-    kind: str
-    status: Literal[
-        "accepted", "running", "succeeded", "failed", "cancelled"
+def handle_background_completion(self, conversation_id: str) -> bool:
+    inflight_count = self.state.inflight_count(conversation_id)
+    pending_updates = self.state.pending_updates(conversation_id)
+    if not pending_updates:
+        return False
+    if inflight_count > 0:
+        return False
+    if self.force_next_turn_resync:
+        return False
+    if not self.state.acquire_turn(conversation_id, "proactive", blocking=False):
+        self._schedule_proactive_retry(conversation_id)
+        return False
+
+    pending_updates = self.state.take_pending_updates(conversation_id)
+    assistant_text = self._build_guaranteed_proactive_followup(
+        [update.message for update in pending_updates]
+    )
+    self.state.append(conversation_id, Role.ASSISTANT, assistant_text)
+    self.state.mark_updates_proactively_delivered(conversation_id, pending_updates)
+    return True
+```
+
+The current rule is stricter than “a task finished, send a message.” The completion is emitted when no operations remain open for that session, and if several tasks belong to the same batch, they are accumulated. If the session is busy, delivery is retried. If configuration forces resynchronization, the result is prepared for the next turn. That discipline avoids one of the most annoying behaviors in agents with background work: partial, duplicate, or out-of-context messages.
+
+There is another important detail in the public branch. When all operations finish successfully, the follow-up does not call the model again: it is constructed with `_build_guaranteed_proactive_followup()`. The LLM only enters the completion path when there are final failures and several outcomes have to be converted into a short explanation with a concrete alternative. That separation reduces variability exactly where the system needs to be more predictable.
+
+When it cannot emit a proactive follow-up, the repository uses `pending_updates` as the bridge. On the next turn, those completions are injected as internal context and disappear after being consumed. The user gets continuity, but the visible chat does not fill with technical messages. In the external snapshot of state, `delivery_mode` indicates whether the result remains `queued`, returned through `proactive`, or was absorbed by `next_turn`; `session_view.latest_sync_mode` summarizes that state for the UI as `aggregating`, `queued_final`, `proactive`, `next_turn`, `waiting`, or `idle`.
+
+```python
+def _build_pending_updates(self, pending_updates: list[PendingUpdate]) -> str | None:
+    if not pending_updates:
+        return None
+    lines = [
+        "State of previous operations already completed before this turn:",
+        "These updates only describe previous operations and do not replace new user requests in this turn.",
     ]
-    idempotency_key: str
-    started_at: datetime | None
-    completed_at: datetime | None
-    result_ref: str | None
-    error: str | None
+    lines.extend(f"- {update.message}" for update in pending_updates)
+    return "\n".join(lines)
 ```
 
-The model can decide **what** work should happen. The runtime owns whether it has been accepted, started, completed, retried or cancelled.
+That internal text is not a continuity instruction for the model. The runtime can use operational state to answer better without exposing it as if it were a natural part of the conversation.
 
-### Idempotency is part of the tool contract
+## A reasonable next step toward production
 
-Production systems include retries, ambiguous timeouts and at-least-once event delivery. The tool layer should therefore support an idempotency key or an equivalent mechanism:
+The current repository lives in a single Python process with in-memory state, a local demo server, a mock service, and a local browser. That limitation is documented in the repository and should be respected. The demo does not persist real state, deploy infrastructure, or claim to cover production security. Even so, the code already separates responsibilities cleanly enough to outline a next technical step without pretending it is a definitive architecture.
 
-```python
-result = await payments.create_transfer(
-    request=transfer,
-    idempotency_key=operation.idempotency_key,
-)
-```
-
-A model retry must not silently become a duplicate side effect.
-
-## 3. A tool result should become a delivery object
-
-Technical completion should not write directly to the user channel.
-
-Instead, the runtime creates a `DeliveryEnvelope`:
-
-```python
-@dataclass
-class DeliveryEnvelope:
-    delivery_id: str
-    session_id: str
-    operation_id: str
-    payload: dict
-    priority: Literal["low", "normal", "urgent"]
-    status: Literal["pending", "speaking", "delivered", "suppressed"]
-    created_at: datetime
-    expires_at: datetime | None = None
-```
-
-The interaction surface decides when the envelope can be surfaced.
-
-This separation solves several common races:
-
-- an operation finishes while the user is still speaking;
-- two operations finish in the opposite order from which they started;
-- a result arrives after the conversation changed topic;
-- the result is technically generated but not actually heard/read;
-- a callback is delivered twice;
-- the channel disconnects before delivery.
+The right reading of the next visual is: “what minimum pieces would need to leave the local process for this pattern to begin behaving like an operable system?”
+The first change would be to move shared state to Redis so `pending_updates`, `inflight_count`, per-session locks, and idempotency survive even if the process serving the turn disappears.
+The second would be to separate visible acceptance from real execution with a queue and a worker pool.
+The third would be to place completion policy in an explicit component that decides whether the batch can return as a follow-up or has to remain ready for the next turn.
 
 {{ include_html("snippets/articulos-tecnicos/target-architecture.html") }}
 
-## 4. One component should own conversational delivery
+That intermediate step also forces several pieces that can still remain implicit locally to become stricter. The first is idempotency: relying on an external API identifier is not enough; the runtime needs its own intent key so provisions and follow-ups are not duplicated after restarts or replays.
 
-A tool callback should not generate user-visible speech directly. It publishes state/events. A single interaction surface arbitrates human-visible output.
+The second is terminal-failure handling: when an operation exhausts its retries, it should not disappear or remain in limbo, but move to a DLQ with enough context for inspection, replay, or manual intervention. The third is observability: in production, knowing that “something took a long time” is not enough. The system must be able to reconstruct why a session remained aggregating results, why a completion went through `proactive` instead of `next_turn`, or exactly where a batch stopped progressing.
 
-At a high level:
-
-```text
-Interaction Surface
-  ↕ user turns / deliveries
-Durable Coordination
-  ↕ operation events
-Cognitive Execution Plane
-  ↕ tools, RAG, workers, workflows
-External systems
-```
-
-### Interaction Surface
-
-Owns the human-facing channel:
-
-- turn detection;
-- current response state;
-- interruption/barge-in;
-- playback state;
-- acknowledgement;
-- pending-result delivery;
-- priority policy.
-
-### Cognitive Execution Plane
-
-Owns slow or expensive work:
-
-- reasoning;
-- tool calls;
-- retrieval;
-- retries;
-- compensation;
-- validation;
-- parallel routines.
-
-### Durable Coordination
-
-Owns truth about long-lived operations:
-
-- operation state;
-- idempotency keys;
-- event ordering;
-- locks/leases;
-- pending deliveries;
-- cancellation/supersession;
-- recovery after restart.
-
-The result is not “the LLM waits for a tool.” It is “the interaction surface and the execution plane share a durable protocol.”
-
-## 5. Reactive and proactive policy should be explicit
-
-A runtime can classify an operation when it is accepted:
-
-```python
-@dataclass
-class OperationPolicy:
-    may_continue_across_turns: bool
-    may_interrupt: bool
-    delivery_priority: str
-    stale_after_s: float | None
-    cancellation_scope: str
-```
-
-Examples:
-
-- a database lookup may continue across turns and wait for a quiet delivery window;
-- a bank transfer may require explicit confirmation before execution;
-- a safety-critical warning may be allowed to interrupt;
-- a recommendation computed for an old user preference may become stale and be suppressed.
-
-The model can supply semantic context, but these rules should not be improvised from scratch on every turn.
-
-## 6. Cancellation must be selective
-
-“User interrupted” and “operation cancelled” are not the same event.
-
-A user may speak over the agent because they want to ask another question. The runtime should stop the current response/playback quickly, but the durable operation can continue unless the new intent explicitly invalidates it.
-
-Likewise, cancelling one response should not cancel every operation started by that session.
-
-A useful hierarchy is:
-
-```text
-session
-  ├─ turn
-  │   ├─ response
-  │   └─ operation A
-  └─ operation B (cross-turn)
-```
-
-Cancellation should target the smallest state object justified by the new intent.
-
-## 7. Batch work should create one coherent completion
-
-One user request can fan out into several operations:
-
-```text
-check availability
-+ fetch customer data
-+ calculate alternative
-```
-
-If every callback talks independently, the interaction becomes noisy and out of order.
-
-Group operations by a semantic `batch_id` and create a final delivery only when the batch reaches the chosen completion condition:
-
-```python
-async def on_operation_terminal(result: OperationResult):
-    await store.record_result_once(result)
-    batch = await store.mark_member_complete(
-        batch_id=result.batch_id,
-        operation_id=result.operation_id,
-    )
-
-    if not batch.ready_for_final_delivery:
-        return
-
-    await delivery_store.create_once(
-        delivery_key=f"batch:{batch.batch_id}:final",
-        payload=summarize(batch),
-    )
-```
-
-This gives the conversation one coherent conclusion while retaining the individual operation traces.
-
-## 8. Delivery acknowledgement should reflect what the human actually received
-
-For text UIs, “delivered” may mean the message reached the client. For voice, generated audio and heard audio are different states.
-
-The system should distinguish:
-
-```text
-result_ready
-→ response_generated
-→ audio_buffered
-→ playback_started
-→ playback_confirmed
-→ delivered
-```
-
-If a user interrupts before the final sentence is heard, the result should not be marked delivered simply because TTS generated it.
-
-This becomes essential for avoiding duplicate or missing follow-ups after barge-in, reconnects and retries.
+That is why this evolution is presented as a reliability harness rather than a grand master architecture. Redis, a queue, workers, completion policy, DLQ, and traces do not turn the demo into a complete platform, but they move it toward production without breaking what is valuable in the repository: the conversational contract. The agent still responds without waiting for the API, the visible history does not become a technical database, and the completion still returns only once, when the batch is actually ready to close.
 
 {{ include_html("snippets/articulos-tecnicos/runtime-conversational.html") }}
 
-## 9. What to measure
+## What the repository actually contributes
 
-A single “tool latency” number is insufficient. Useful metrics include:
+The value of `Reactive / Proactive Agent` is not discovering that work can run in the background. That is a known and standard software technique. The interesting part is that it pins down the conversational contract around that work: what the agent may say now, where technical state lives, when results are accumulated, and how the system reports back to the user without polluting the thread.
 
-| Metric | Meaning |
-|---|---|
-| `request_to_acceptance_ms` | How quickly the system acknowledges the work |
-| `acceptance_to_operation_start_ms` | Internal scheduling delay |
-| `operation_duration_ms` | External dependency/work duration |
-| `terminal_to_delivery_ready_ms` | Aggregation/rendering delay |
-| `delivery_ready_to_visible_ms` | Conversation-policy wait |
-| `duplicate_side_effect_rate` | Idempotency failures |
-| `duplicate_delivery_rate` | Repeated completion messages |
-| `stale_delivery_rate` | Results surfaced after relevance expired |
-| `cancel_reconciliation_rate` | Correct resolution after intent changes |
-| `restart_recovery_success_rate` | Durable state survives process failure |
-
-Every trace should correlate at least `session_id`, `turn_id`, `operation_id`, `batch_id`, `response_id` and `delivery_id`.
-
-## 10. What to test before production
-
-The important tests are temporal conflicts, not only ideal conversations:
-
-- callback arrives twice;
-- process restarts after the external effect but before delivery;
-- user changes topic while work is running;
-- user explicitly cancels one operation;
-- two operations complete out of order;
-- delivery becomes stale;
-- channel disconnects with a pending result;
-- one operation fails while the rest of the batch succeeds;
-- authorization expires between acceptance and execution;
-- model response is interrupted but the durable operation should survive.
-
-Assertions should include state and side effects:
-
-```python
-assert operation.side_effect_count == 1
-assert delivery.final_count == 1
-assert operation.status == "succeeded"
-assert delivery.status in {"delivered", "pending"}
-assert cancelled_response.did_not_cancel_unrelated_operation
-```
-
-## 11. The architecture in one sentence
-
-A proactive/reactive agent is not an LLM that “remembers to tell you later.” It is a runtime where **acceptance, durable execution and human-visible delivery are separate state machines connected by explicit identifiers and idempotent events**.
-
-> **Technical completion creates a pending delivery. The interaction surface decides when that delivery should become part of the conversation.**
-
-## Sources
-
-- OpenAI Agents SDK — tool/function calling and realtime sessions.
-- OpenAI Realtime API documentation — asynchronous session events and function calls.
-- Pipecat function-calling/control-frame documentation — asynchronous function execution and grouped calls.
-- Twilio Media Streams — media buffering, `mark` and `clear` semantics for bidirectional voice streams.
-
-## Frequently asked questions
-
-**Why not simply wait for the tool before generating a response?**  
-Because slow tools block the interaction, do not survive turn changes cleanly and couple the user experience to external dependency latency.
-
-**Why is the transcript not enough as operation state?**  
-Because retries, restarts and ambiguous side effects require explicit durable identifiers and statuses that should not be reconstructed from natural language.
-
-**Should a tool callback ever speak directly to the user?**  
-Preferably no. It should publish a result; one interaction surface should decide how and when human-visible delivery occurs.
-
-**What is the key reliability primitive?**  
-Idempotency for side effects plus durable, independently acknowledged delivery state.
+This is a small but very practical piece of agent design. Many tool-calling demos show a model calling a function and receiving an immediate response. This repository focuses on the more uncomfortable case: the operation remains alive after the turn. That is where the problems that later matter in a real product appear: latency, retries, duplicate messages, invisible state, out-of-order interruptions, and conversations that lose honesty about what has already happened.
