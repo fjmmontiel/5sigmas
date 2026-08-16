@@ -1,0 +1,238 @@
+<div class="rev-wrap" data-demo="topic-reasoning-evaluation">
+  <div class="rev-head">
+    <div class="rev-kicker">NO MIDAS SOLO LA RESPUESTA FINAL</div>
+    <div class="rev-title">Seis señales observan partes distintas del mismo sistema</div>
+    <div class="rev-sub">Una evaluación útil conecta cada métrica con el punto del recorrido donde puede aparecer el fallo.</div>
+  </div>
+
+  <div class="rev-trace" role="img" aria-label="Recorrido de evaluación desde variantes de la tarea hasta respuesta, incertidumbre, herramientas y estado externo">
+    <div class="rev-stage">
+      <span>ENTRADA</span>
+      <strong>misma tarea</strong>
+      <small>reformulaciones · distractores</small>
+    </div>
+    <i>→</i>
+    <div class="rev-stage rev-stage--core">
+      <span>SISTEMA</span>
+      <strong>razonamiento / búsqueda</strong>
+      <small>tokens · pasos · latencia</small>
+    </div>
+    <i>→</i>
+    <div class="rev-stage">
+      <span>SALIDA</span>
+      <strong>respuesta + incertidumbre</strong>
+      <small>evidencia · explicación</small>
+    </div>
+    <i>→</i>
+    <div class="rev-stage rev-stage--effect">
+      <span>EFECTO</span>
+      <strong>tool / estado</strong>
+      <small>acción realmente ejecutada</small>
+    </div>
+  </div>
+
+  <div class="rev-grid">
+    <section class="rev-card" data-probe="correctness">
+      <div class="rev-card-head"><span>01</span><strong>Corrección</strong></div>
+      <div class="rev-mini"><b>respuesta</b><i>↔</i><em>verdad / test</em></div>
+      <p>¿Resuelve la tarea y coincide con una referencia o comprobación ejecutable?</p>
+      <small>MIDE · resultado</small>
+    </section>
+
+    <section class="rev-card" data-probe="robustness">
+      <div class="rev-card-head"><span>02</span><strong>Robustez</strong></div>
+      <div class="rev-mini rev-mini--split"><b>A</b><b>A′</b><b>A″</b><i>→</i><em>consistencia</em></div>
+      <p>¿Se mantiene al reformular, añadir ruido o introducir distractores?</p>
+      <small>MIDE · sensibilidad a la entrada</small>
+    </section>
+
+    <section class="rev-card" data-probe="efficiency">
+      <div class="rev-card-head"><span>03</span><strong>Eficiencia</strong></div>
+      <div class="rev-mini"><b>calidad</b><i>÷</i><em>tokens · tiempo · coste</em></div>
+      <p>¿Qué presupuesto de inferencia necesita para alcanzar esa calidad?</p>
+      <small>MIDE · recursos del proceso</small>
+    </section>
+
+    <section class="rev-card" data-probe="calibration">
+      <div class="rev-card-head"><span>04</span><strong>Calibración</strong></div>
+      <div class="rev-cal" aria-label="Esquema ilustrativo de calibración entre confianza y frecuencia empírica de acierto">
+        <div style="--h:32%"><span>30</span></div>
+        <div style="--h:58%"><span>60</span></div>
+        <div style="--h:84%"><span>90</span></div>
+        <i></i>
+      </div>
+      <p>¿La incertidumbre declarada se relaciona con la frecuencia real de error?</p>
+      <small>MIDE · confianza frente a error observado</small>
+    </section>
+
+    <section class="rev-card" data-probe="faithfulness">
+      <div class="rev-card-head"><span>05</span><strong>Fidelidad</strong></div>
+      <div class="rev-mini"><b>explicación</b><i>↔</i><em>evidencia observable</em></div>
+      <p>¿La justificación está respaldada por la evidencia que puede inspeccionarse?</p>
+      <small>NO DEMUESTRA · traza causal interna</small>
+    </section>
+
+    <section class="rev-card" data-probe="action">
+      <div class="rev-card-head"><span>06</span><strong>Acción</strong></div>
+      <div class="rev-mini"><b>tool call</b><i>→</i><em>estado final</em></div>
+      <p>¿La acción autorizada, sus argumentos y el efecto externo fueron correctos?</p>
+      <small>MIDE · ejecución real</small>
+    </section>
+  </div>
+
+  <div class="rev-contracts">
+    <div><span>A</span><strong>La exactitud final no cubre robustez, coste ni efectos externos.</strong></div>
+    <div><span>B</span><strong>La explicación visible se evalúa como evidencia observable, no como lectura de la causalidad interna.</strong></div>
+    <div><span>C</span><strong>Compara también contra un baseline simple con el mismo contrato de tarea.</strong></div>
+  </div>
+
+  <div class="rev-sources">Fuentes primarias: <a href="https://arxiv.org/abs/2211.09110">Liang et al. · HELM (2022)</a> · <a href="https://arxiv.org/abs/2305.04388">Turpin et al. (2023)</a> · <a href="https://openai.github.io/openai-agents-python/running_agents/">OpenAI Agents SDK · Running agents</a></div>
+</div>
+
+<style>
+.rev-wrap, .rev-wrap * { box-sizing: border-box; }
+.rev-wrap {
+  --rev-bg: var(--md-default-bg-color, #fff);
+  --rev-fg: var(--md-default-fg-color, #0f172a);
+  --rev-muted: color-mix(in srgb, var(--rev-fg) 62%, transparent);
+  --rev-border: color-mix(in srgb, var(--rev-fg) 14%, transparent);
+  --rev-blue: #324AB2;
+  --rev-teal: #198F84;
+  --rev-amber: #B87900;
+  display: grid;
+  gap: 14px;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: clamp(14px, 2vw, 24px);
+  border: 1px solid var(--rev-border);
+  border-radius: 20px;
+  background:
+    radial-gradient(110% 120% at 4% 0%, color-mix(in srgb, var(--rev-blue) 6%, transparent), transparent 50%),
+    radial-gradient(100% 120% at 96% 0%, color-mix(in srgb, var(--rev-teal) 6%, transparent), transparent 52%),
+    var(--rev-bg);
+  color: var(--rev-fg);
+  font-family: "Avenir Next", "Avenir", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  container-type: inline-size;
+}
+.rev-head { display: grid; gap: 4px; }
+.rev-kicker { font-size: 10px; font-weight: 900; letter-spacing: .08em; color: var(--rev-blue); }
+.rev-title { font-size: clamp(17px, 2.2vw, 23px); font-weight: 900; line-height: 1.15; letter-spacing: -.025em; }
+.rev-sub { max-width: 780px; font-size: 13.5px; line-height: 1.5; color: var(--rev-muted); }
+.rev-trace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 7px;
+  align-items: center;
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid var(--rev-border);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--rev-bg) 92%, var(--rev-fg) 8%);
+}
+.rev-trace > i { color: var(--rev-muted); font-style: normal; font-size: 12px; }
+.rev-stage {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+  padding: 9px 10px;
+  border: 1px solid var(--rev-border);
+  border-radius: 10px;
+  background: var(--rev-bg);
+}
+.rev-stage--core { border-color: color-mix(in srgb, var(--rev-blue) 36%, var(--rev-border)); }
+.rev-stage--effect { border-color: color-mix(in srgb, var(--rev-teal) 36%, var(--rev-border)); }
+.rev-stage span { font-size: 9px; font-weight: 900; letter-spacing: .07em; color: var(--rev-muted); }
+.rev-stage strong { font-size: 12px; line-height: 1.3; }
+.rev-stage small { font-size: 10.5px; line-height: 1.35; color: var(--rev-muted); }
+.rev-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 9px; }
+.rev-card {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  min-width: 0;
+  padding: 11px;
+  border: 1px solid var(--rev-border);
+  border-radius: 13px;
+  background: color-mix(in srgb, var(--rev-bg) 96%, var(--rev-fg) 4%);
+}
+.rev-card:nth-child(1), .rev-card:nth-child(2) { border-top: 3px solid var(--rev-blue); }
+.rev-card:nth-child(3), .rev-card:nth-child(4) { border-top: 3px solid var(--rev-amber); }
+.rev-card:nth-child(5), .rev-card:nth-child(6) { border-top: 3px solid var(--rev-teal); }
+.rev-card-head { display: grid; grid-template-columns: 25px 1fr; gap: 7px; align-items: center; }
+.rev-card-head span {
+  display: grid;
+  place-items: center;
+  width: 23px;
+  height: 23px;
+  border-radius: 999px;
+  border: 1px solid var(--rev-border);
+  color: var(--rev-muted);
+  font: 900 8.5px/1 "SF Mono", "JetBrains Mono", monospace;
+}
+.rev-card-head strong { font-size: 13px; line-height: 1.2; }
+.rev-card p { margin: 0; font-size: 11.5px; line-height: 1.42; }
+.rev-card > small { margin-top: auto; font-size: 8.8px; font-weight: 900; letter-spacing: .05em; color: var(--rev-muted); }
+.rev-mini {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  min-height: 36px;
+  padding: 7px;
+  border: 1px solid var(--rev-border);
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--rev-bg) 90%, var(--rev-fg) 10%);
+}
+.rev-mini b, .rev-mini em {
+  padding: 4px 6px;
+  border-radius: 6px;
+  font: 800 9.5px/1.25 "SF Mono", "JetBrains Mono", monospace;
+}
+.rev-mini b { border: 1px solid var(--rev-border); background: var(--rev-bg); }
+.rev-mini em { font-style: normal; color: var(--rev-blue); background: color-mix(in srgb, var(--rev-blue) 10%, transparent); }
+.rev-mini i { font-style: normal; color: var(--rev-muted); font-size: 10px; }
+.rev-mini--split b { min-width: 26px; text-align: center; }
+.rev-cal {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: end;
+  gap: 7px;
+  height: 68px;
+  padding: 8px 8px 16px;
+  border: 1px solid var(--rev-border);
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--rev-bg) 90%, var(--rev-fg) 10%);
+  overflow: hidden;
+}
+.rev-cal > div { position: relative; height: var(--h); min-height: 10px; border-radius: 5px 5px 2px 2px; background: color-mix(in srgb, var(--rev-amber) 72%, var(--rev-bg)); }
+.rev-cal > div span { position: absolute; left: 50%; top: -13px; transform: translateX(-50%); font: 800 8px/1 "SF Mono", monospace; color: var(--rev-muted); }
+.rev-cal > i { position: absolute; left: 8px; right: 8px; bottom: 12px; border-top: 1px dashed color-mix(in srgb, var(--rev-fg) 28%, transparent); }
+.rev-contracts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.rev-contracts div { display: grid; grid-template-columns: 23px 1fr; gap: 7px; align-items: start; padding: 8px 9px; border: 1px solid var(--rev-border); border-radius: 10px; }
+.rev-contracts span { display: grid; place-items: center; width: 21px; height: 21px; border-radius: 999px; background: color-mix(in srgb, var(--rev-blue) 10%, transparent); color: var(--rev-blue); font: 900 8.5px/1 "SF Mono", monospace; }
+.rev-contracts strong { font-size: 10.8px; line-height: 1.4; }
+.rev-sources { font-size: 10.3px; line-height: 1.4; color: var(--rev-muted); }
+.rev-sources a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+
+@container (max-width: 720px) {
+  .rev-trace { grid-template-columns: 1fr; }
+  .rev-trace > i { transform: rotate(90deg); justify-self: center; }
+  .rev-grid, .rev-contracts { grid-template-columns: 1fr; }
+  .rev-card { padding: 10px; }
+}
+@container (max-width: 430px) {
+  .rev-wrap { padding: 12px; border-radius: 16px; }
+  .rev-title { font-size: 18px; }
+  .rev-sub { font-size: 12.5px; }
+  .rev-stage strong { font-size: 11.5px; }
+  .rev-card p { font-size: 11px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rev-wrap *, .rev-wrap *::before, .rev-wrap *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+</style>

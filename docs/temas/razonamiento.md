@@ -145,14 +145,7 @@ Esta separación evita optimizar solo el benchmark y olvidar la experiencia.
 
 Una evaluación robusta no mira solo la exactitud final.
 
-| Dimensión | Pregunta |
-|---|---|
-| Corrección | ¿La respuesta es verdadera o resuelve la tarea? |
-| Robustez | ¿Se mantiene ante reformulaciones y distractores? |
-| Eficiencia | ¿Cuánto cómputo y latencia necesita? |
-| Calibración | ¿La incertidumbre se relaciona con el error? |
-| Fidelidad | ¿La explicación refleja evidencia real? |
-| Acción | ¿Las tools y cambios de estado fueron correctos? |
+{{ include_html("snippets/temas/reasoning-evaluation.html") }}
 
 También hay que comparar contra baselines más simples. A veces una regla, una consulta estructurada o un modelo pequeño con una tool supera a una deliberación larga.
 

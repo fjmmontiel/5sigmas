@@ -1,0 +1,167 @@
+#!/usr/bin/env node
+import crypto from 'node:crypto';
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import { chromium } from 'playwright';
+
+const base = process.env.S5_PREVIEW_BASE || 'http://127.0.0.1:8000';
+const outDir = path.resolve('artifacts/visual-review');
+await fs.mkdir(outDir, { recursive: true });
+
+const sourcePath = path.resolve('docs/snippets/temas/reasoning-evaluation.html');
+const mapPath = path.resolve('locales/en/snippets/temas/reasoning-evaluation.i18n.json');
+const spanishTopicPath = path.resolve('docs/temas/razonamiento.md');
+const englishTopicPath = path.resolve('locales/en/temas/razonamiento.md');
+const failures = [];
+
+function check(condition, message) {
+  if (!condition) failures.push(message);
+}
+
+function gitBlobSha(text) {
+  const bytes = Buffer.from(text, 'utf8');
+  return crypto.createHash('sha1').update(`blob ${bytes.length}\0`).update(bytes).digest('hex');
+}
+
+const [source, mapRaw, spanishTopic, englishTopic] = await Promise.all([
+  fs.readFile(sourcePath, 'utf8'),
+  fs.readFile(mapPath, 'utf8'),
+  fs.readFile(spanishTopicPath, 'utf8'),
+  fs.readFile(englishTopicPath, 'utf8'),
+]);
+const translation = JSON.parse(mapRaw);
+const include = '{{ include_html("snippets/temas/reasoning-evaluation.html") }}';
+
+check(spanishTopic.includes(include), 'Spanish reasoning hub: missing reasoning evaluation visual include');
+check(englishTopic.includes(include), 'English reasoning hub: missing reasoning evaluation visual include');
+check(!spanishTopic.includes('| Dimensión | Pregunta |'), 'Spanish reasoning hub: legacy evaluation table still present');
+check(!englishTopic.includes('| Dimension | Question |'), 'English reasoning hub: legacy evaluation table still present');
+check(translation.source === 'snippets/temas/reasoning-evaluation.html', 'English translation map: wrong canonical source');
+check(translation.source_blob_sha === gitBlobSha(source), `English translation map: source_blob_sha drift (expected ${gitBlobSha(source)}, found ${translation.source_blob_sha})`);
+check(source.includes('https://arxiv.org/abs/2211.09110'), 'Reasoning evaluation visual: missing HELM primary source');
+check(source.includes('https://arxiv.org/abs/2305.04388'), 'Reasoning evaluation visual: missing Turpin et al. primary source');
+check(source.includes('https://openai.github.io/openai-agents-python/running_agents/'), 'Reasoning evaluation visual: missing Agents SDK primary documentation');
+check(source.includes('prefers-reduced-motion: reduce'), 'Reasoning evaluation visual: missing reduced-motion contract');
+
+const browser = await chromium.launch({ headless: true });
+const cases = [
+  {
+    locale: 'es',
+    route: '/temas/razonamiento/',
+    anchors: [
+      'NO MIDAS SOLO LA RESPUESTA FINAL',
+      'Corrección',
+      'Robustez',
+      'Eficiencia',
+      'Calibración',
+      'Fidelidad',
+      'Acción',
+      'La exactitud final no cubre robustez, coste ni efectos externos.',
+      'no como lectura de la causalidad interna',
+      'baseline simple',
+    ],
+    forbidden: [],
+  },
+  {
+    locale: 'en',
+    route: '/en/temas/razonamiento/',
+    anchors: [
+      'DO NOT MEASURE ONLY THE FINAL ANSWER',
+      'Correctness',
+      'Robustness',
+      'Efficiency',
+      'Calibration',
+      'Faithfulness',
+      'Action',
+      'Final accuracy does not cover robustness, cost or external effects.',
+      'not as a readout of internal causality',
+      'simple baseline',
+    ],
+    forbidden: [
+      'NO MIDAS SOLO',
+      'Seis señales observan',
+      'Una evaluación útil',
+      'ENTRADA',
+      'misma tarea',
+      'razonamiento / búsqueda',
+      'respuesta + incertidumbre',
+      'Corrección',
+      '¿Resuelve la tarea',
+      'Robustez',
+      'Eficiencia',
+      'Calibración',
+      'Fidelidad',
+      '¿La justificación',
+      'Acción',
+      '¿La acción autorizada',
+      'Fuentes primarias:',
+    ],
+  },
+];
+
+const viewports = [
+  { name: 'desktop', width: 1440, height: 1000 },
+  { name: 'mobile', width: 390, height: 844 },
+];
+
+try {
+  for (const testCase of cases) {
+    for (const viewport of viewports) {
+      const page = await browser.newPage({ viewport: { width: viewport.width, height: viewport.height } });
+      const runtimeErrors = [];
+      page.on('pageerror', (error) => runtimeErrors.push(error.message));
+      const response = await page.goto(`${base}${testCase.route}`, { waitUntil: 'networkidle' });
+      check(response?.ok(), `${testCase.route}: ${viewport.name} HTTP ${response?.status() ?? 'no response'}`);
+
+      const visual = page.locator('.rev-wrap');
+      check((await visual.count()) === 1, `${testCase.route}: ${viewport.name} expected exactly one .rev-wrap`);
+      if (await visual.count()) {
+        const box = await visual.boundingBox();
+        check(Boolean(box && box.width >= 250 && box.height >= 520), `${testCase.route}: ${viewport.name} invalid reasoning evaluation geometry ${JSON.stringify(box)}`);
+        const overflow = await visual.evaluate((node) => node.scrollWidth - node.clientWidth);
+        check(overflow <= 2, `${testCase.route}: ${viewport.name} reasoning evaluation internal overflow ${overflow}px`);
+      }
+
+      check((await page.locator('.rev-stage').count()) === 4, `${testCase.route}: ${viewport.name} expected four trace stages`);
+      check((await page.locator('.rev-card').count()) === 6, `${testCase.route}: ${viewport.name} expected six evaluation probes`);
+      check((await page.locator('.rev-contracts > div').count()) === 3, `${testCase.route}: ${viewport.name} expected three teaching contracts`);
+      check((await page.locator('.rev-cal > div').count()) === 3, `${testCase.route}: ${viewport.name} expected three calibration bars`);
+      check((await page.locator('[data-probe]').count()) === 6, `${testCase.route}: ${viewport.name} expected six data-probe nodes`);
+
+      const body = await page.locator('body').innerText();
+      for (const anchor of testCase.anchors) check(body.includes(anchor), `${testCase.route}: ${viewport.name} missing teaching anchor ${JSON.stringify(anchor)}`);
+      for (const token of testCase.forbidden) check(!body.includes(token), `${testCase.route}: ${viewport.name} Spanish leakage ${JSON.stringify(token)}`);
+
+      const pageOverflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+      check(pageOverflow <= 2, `${testCase.route}: ${viewport.name} horizontal page overflow ${pageOverflow}px`);
+      for (const error of runtimeErrors) failures.push(`${testCase.route}: ${viewport.name} runtime error: ${error}`);
+
+      await visual.screenshot({
+        path: path.join(outDir, `reasoning-evaluation-${testCase.locale}-${viewport.name}.png`),
+        animations: 'disabled',
+      });
+      await page.close();
+    }
+
+    const reduced = await browser.newPage({ viewport: { width: 390, height: 844 } });
+    await reduced.emulateMedia({ reducedMotion: 'reduce' });
+    await reduced.goto(`${base}${testCase.route}`, { waitUntil: 'networkidle' });
+    const reducedStyle = await reduced.locator('.rev-card').first().evaluate((node) => ({
+      transitionDuration: getComputedStyle(node).transitionDuration,
+      animationName: getComputedStyle(node).animationName,
+    }));
+    check(reducedStyle.transitionDuration.split(',').every((value) => value.trim() === '0s'), `${testCase.route}: reduced-motion transition remains active (${reducedStyle.transitionDuration})`);
+    check(reducedStyle.animationName === 'none', `${testCase.route}: reduced-motion animation remains active (${reducedStyle.animationName})`);
+    await reduced.close();
+  }
+} finally {
+  await browser.close();
+}
+
+if (failures.length) {
+  console.error('Reasoning evaluation visual QA failed:\n');
+  for (const failure of failures) console.error(`- ${failure}`);
+  process.exit(1);
+}
+
+console.log('Reasoning evaluation visual QA passed: ES/EN mirror parity, six evaluation signals, primary references, desktop/mobile geometry, overflow, language integrity, screenshots and reduced-motion behavior are valid.');
