@@ -19,7 +19,7 @@ if (!response?.ok()) failures.push(`${route}: HTTP ${response?.status() ?? 'no r
 const body = await page.locator('body').innerText();
 for (const expected of [
   'Chapter 3 — Test-Time Compute', 'The three levers',
-  'PRM vs ORM: two ways to reward reasoning',
+  'PRMs vs ORMs: two ways to teach reasoning',
   'Best-of-N: generate several answers, then select',
   'Three levers for spending more inference compute',
   'Training scale and inference compute are complementary',
@@ -30,7 +30,7 @@ for (const forbidden of ['Capítulo ','Prerrequisitos','Las tres palancas','Más
   if (body.includes(forbidden)) failures.push(`${route}: Spanish leakage ${JSON.stringify(forbidden)}`);
 }
 
-for (const selector of ['[data-ttc-tabs]','[data-bon]','[data-levers]','[data-scale2d]']) {
+for (const selector of ['[data-demo="03-prm-orm-comparacion"]','[data-bon]','[data-levers]','[data-scale2d]']) {
   const root = page.locator(selector);
   if (await root.count() !== 1) failures.push(`${route}: expected exactly one ${selector}`);
   const buttons = root.locator('button[data-tab]');
