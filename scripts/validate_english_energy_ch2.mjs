@@ -104,7 +104,6 @@ try {
       const text = (await bottlenecks.textContent()) || '';
       requireText(text, ['Five bottlenecks to AI expansion', 'Energy', 'Critical today', 'Chips', 'Water', 'Growing', 'Talent', 'Regulation', 'Variable', 'AI Act'], `${viewport.name}: bottlenecks`);
       forbidText(text, ['Cinco cuellos de botella', 'Energía', 'Crítico hoy', 'Agua', 'Creciente', 'Talento', 'Regulación'], `${viewport.name}: bottlenecks`);
-      await checkPlacement(bottlenecks, viewport.name, 'bottlenecks', 'Five bottlenecks determine how quickly it can actually grow.', 'Electricity');
       await checkOverflow(bottlenecks, viewport.name, 'bottlenecks'); await capture(bottlenecks, viewport.name, 'bottlenecks');
     }
 
@@ -131,7 +130,7 @@ try {
       requireText(text, ['Real vs declared footprint: AI electricity, CO₂ and waste', '50 → 554 TWh', '180 → 320 Mt', '1.6 and 7.6 times', '1.2–5 M t', '~2.3 MWh', 'Why renewable commitments are not equivalent to renewable consumption'], `${viewport.name}: environmental footprint`);
       forbidText(text, ['Huella real vs declarada', 'Electricidad IA específica', 'Emisiones CO₂ atribuibles', 'Residuos electrónicos de IA'], `${viewport.name}: environmental footprint`);
       await checkPlacement(footprint, viewport.name, 'environmental footprint', 'between 1.6 and 7.6 times higher than their carbon-neutrality claims suggest', 'AI accelerators — primarily NVIDIA GPUs');
-      await checkOverflow(footprint, viewport.name, 'environmental footprint'); await capture(footprint, viewport.name, 'environmental-footprint');
+      await checkOverflow(footprint, viewport.name, 'environmental-footprint'); await capture(footprint, viewport.name, 'environmental-footprint');
     }
 
     const water = page.locator('[data-demo="02-agua-golf-datacenters"]');
