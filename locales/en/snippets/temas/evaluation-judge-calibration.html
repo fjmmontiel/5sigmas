@@ -1,0 +1,116 @@
+<div class="ejc-wrap" data-demo="topic-evaluation-judge-calibration">
+  <div class="ejc-head">
+    <div class="ejc-kicker">AUTOMATED JUDGE → CALIBRATION → GATE</div>
+    <div class="ejc-title">An LLM judge scales a rubric; it does not replace its validation</div>
+    <div class="ejc-sub">Before using it at scale, compare it with human decisions on the same cases, locate the segments where it disagrees, and separate automation from authority.</div>
+  </div>
+
+  <div class="ejc-pipeline" role="img" aria-label="Calibration of an LLM judge from a human-annotated sample to a gate separating automated evaluation from human review">
+    <section class="ejc-card ejc-card--human">
+      <div class="ejc-step"><span>01</span><strong>HUMAN REFERENCE</strong></div>
+      <h3>Same cases, explicit rubric</h3>
+      <div class="ejc-case">
+        <span>input</span>
+        <span>response A/B</span>
+        <span>rubric</span>
+        <strong>human decision</strong>
+      </div>
+      <p>The calibration sample defines what counts as correct before the judge is measured.</p>
+    </section>
+
+    <div class="ejc-arrow" aria-hidden="true">→</div>
+
+    <section class="ejc-card ejc-card--judge">
+      <div class="ejc-step"><span>02</span><strong>CANDIDATE JUDGE</strong></div>
+      <h3>Evaluate exactly the same contract</h3>
+      <div class="ejc-judge-box">
+        <span>input + responses + rubric</span>
+        <b>LLM judge</b>
+        <strong>score / preference + rationale</strong>
+      </div>
+      <p>Do not change task, format, or criterion between the reference and the judge.</p>
+    </section>
+
+    <div class="ejc-arrow" aria-hidden="true">→</div>
+
+    <section class="ejc-card ejc-card--calibration">
+      <div class="ejc-step"><span>03</span><strong>CALIBRATION</strong></div>
+      <h3>Measure where it agrees and where it fails</h3>
+      <div class="ejc-segments">
+        <div><span>SEGMENT A</span><strong>stable agreement</strong><i class="ejc-ok"></i></div>
+        <div><span>SEGMENT B</span><strong>disagreements</strong><i class="ejc-warn"></i></div>
+        <div><span>SEGMENT C</span><strong>systematic bias</strong><i class="ejc-risk"></i></div>
+      </div>
+      <div class="ejc-biases"><span>position</span><span>verbosity</span><span>self-enhancement</span></div>
+    </section>
+
+    <div class="ejc-arrow" aria-hidden="true">→</div>
+
+    <section class="ejc-card ejc-card--gate">
+      <div class="ejc-step"><span>04</span><strong>GATE</strong></div>
+      <h3>Scale only the validated perimeter</h3>
+      <div class="ejc-gate-grid">
+        <div class="ejc-route ejc-route--auto"><span>CALIBRATED + LOW RISK</span><strong>automated evaluation</strong></div>
+        <div class="ejc-route ejc-route--human"><span>DISAGREEMENT / HIGH IMPACT</span><strong>human review</strong></div>
+      </div>
+      <p>The judge can prioritize and filter; critical decisions retain a human path.</p>
+    </section>
+  </div>
+
+  <div class="ejc-contracts">
+    <div><span>COMPARE</span><strong>the judge against a human reference on the same cases</strong></div>
+    <div><span>SEGMENT</span><strong>a global average can hide failures concentrated in one class of cases</strong></div>
+    <div><span>RECALIBRATE</span><strong>if the judge model, rubric, domain, or input distribution changes</strong></div>
+  </div>
+
+  <div class="ejc-ref">Primary source:
+    <a href="https://arxiv.org/abs/2306.05685">Zheng et al., Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena (2023)</a>
+  </div>
+</div>
+
+<style>
+.ejc-wrap,.ejc-wrap *{box-sizing:border-box}
+.ejc-wrap{
+  --ejc-a:var(--md-primary-fg-color,#26a69a);
+  --ejc-b:#4757d6;
+  --ejc-c:var(--md-accent-fg-color,#ffb343);
+  --ejc-r:#e06c75;
+  --ejc-bg:var(--md-default-bg-color,#fff);
+  --ejc-fg:var(--md-default-fg-color,#111827);
+  --ejc-muted:color-mix(in srgb,var(--ejc-fg) 58%,transparent);
+  --ejc-border:color-mix(in srgb,var(--ejc-fg) 14%,transparent);
+  container-type:inline-size;
+  margin:1.1rem 0 1.5rem;
+  padding:clamp(14px,2vw,22px);
+  border:1px solid var(--ejc-border);
+  border-radius:20px;
+  background:
+    radial-gradient(95% 120% at 0 0,color-mix(in srgb,var(--ejc-b) 7%,transparent),transparent 58%),
+    radial-gradient(95% 120% at 100% 0,color-mix(in srgb,var(--ejc-a) 7%,transparent),transparent 60%),
+    var(--ejc-bg);
+  color:var(--ejc-fg)
+}
+.ejc-head{display:grid;gap:4px;margin-bottom:13px}
+.ejc-kicker{font-size:10px;font-weight:950;letter-spacing:.12em;color:var(--ejc-muted)}
+.ejc-title{font-size:clamp(18px,2.1vw,24px);font-weight:900;line-height:1.12;letter-spacing:-.02em;max-width:58ch}
+.ejc-sub{font-size:13.4px;line-height:1.48;color:var(--ejc-muted);max-width:94ch}
+.ejc-pipeline{display:grid;grid-template-columns:minmax(0,1fr) 18px minmax(0,1fr) 18px minmax(0,1fr) 18px minmax(0,1fr);gap:6px;align-items:stretch;min-width:0}
+.ejc-card{min-width:0;border:1px solid var(--ejc-border);border-radius:15px;padding:12px;background:color-mix(in srgb,var(--ejc-bg) 96%,var(--ejc-fg) 4%);display:grid;align-content:start;gap:8px}
+.ejc-card--human{border-color:color-mix(in srgb,var(--ejc-b) 44%,var(--ejc-border));background:color-mix(in srgb,var(--ejc-b) 4%,var(--ejc-bg))}
+.ejc-card--judge{border-color:color-mix(in srgb,var(--ejc-a) 44%,var(--ejc-border));background:color-mix(in srgb,var(--ejc-a) 4%,var(--ejc-bg))}
+.ejc-card--calibration{border-color:color-mix(in srgb,var(--ejc-c) 48%,var(--ejc-border));background:color-mix(in srgb,var(--ejc-c) 4%,var(--ejc-bg))}
+.ejc-card--gate{border-color:color-mix(in srgb,var(--ejc-r) 42%,var(--ejc-border));background:color-mix(in srgb,var(--ejc-r) 3%,var(--ejc-bg))}
+.ejc-step{display:flex;align-items:center;gap:7px}.ejc-step span{display:grid;place-items:center;width:23px;height:23px;border-radius:8px;background:color-mix(in srgb,var(--ejc-fg) 8%,var(--ejc-bg));font:900 9px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--ejc-muted)}.ejc-step strong{font-size:9.2px;letter-spacing:.075em;color:var(--ejc-muted)}
+.ejc-card h3{margin:0;font-size:13.2px;line-height:1.22}.ejc-card p{margin:0;font-size:9.7px;line-height:1.38;color:var(--ejc-muted)}
+.ejc-case{display:grid;grid-template-columns:1fr 1fr;gap:5px}.ejc-case span,.ejc-case strong{display:grid;place-items:center;min-width:0;min-height:31px;padding:5px;border:1px solid var(--ejc-border);border-radius:8px;background:var(--ejc-bg);font-size:8.6px;line-height:1.15;text-align:center}.ejc-case strong{grid-column:1/-1;border-color:color-mix(in srgb,var(--ejc-b) 35%,var(--ejc-border));background:color-mix(in srgb,var(--ejc-b) 6%,var(--ejc-bg));font-size:9px}
+.ejc-judge-box{display:grid;gap:5px}.ejc-judge-box span,.ejc-judge-box strong{padding:6px 7px;border:1px solid var(--ejc-border);border-radius:8px;background:var(--ejc-bg);font-size:8.6px;line-height:1.2;text-align:center}.ejc-judge-box b{display:grid;place-items:center;min-height:40px;border:1px solid color-mix(in srgb,var(--ejc-a) 48%,var(--ejc-border));border-radius:10px;background:color-mix(in srgb,var(--ejc-a) 7%,var(--ejc-bg));font-size:12px}.ejc-judge-box span::after{content:'↓';display:block;margin-top:3px;color:var(--ejc-muted);font-weight:950}.ejc-judge-box b::after{content:'↓';display:block;font-size:10px;color:var(--ejc-muted);margin-top:2px}
+.ejc-segments{display:grid;gap:5px}.ejc-segments>div{position:relative;display:grid;grid-template-columns:1fr auto;gap:2px 7px;align-items:center;min-width:0;padding:7px 28px 7px 8px;border:1px solid var(--ejc-border);border-radius:8px;background:var(--ejc-bg)}.ejc-segments span{font-size:7.4px;font-weight:950;letter-spacing:.05em;color:var(--ejc-muted)}.ejc-segments strong{grid-column:1/-1;font-size:9px}.ejc-segments i{position:absolute;right:9px;top:50%;transform:translateY(-50%);width:10px;height:10px;border-radius:999px}.ejc-ok{background:var(--ejc-a)}.ejc-warn{background:var(--ejc-c)}.ejc-risk{background:var(--ejc-r)}
+.ejc-biases{display:flex;gap:5px;flex-wrap:wrap}.ejc-biases span{padding:4px 6px;border:1px dashed color-mix(in srgb,var(--ejc-r) 45%,var(--ejc-border));border-radius:999px;background:color-mix(in srgb,var(--ejc-r) 3%,var(--ejc-bg));font-size:7.7px;font-weight:850;color:var(--ejc-muted)}
+.ejc-gate-grid{display:grid;gap:6px}.ejc-route{display:grid;gap:4px;padding:8px;border:1px solid var(--ejc-border);border-radius:9px;background:var(--ejc-bg)}.ejc-route span{font-size:7.5px;font-weight:950;letter-spacing:.05em;color:var(--ejc-muted)}.ejc-route strong{font-size:9.4px;line-height:1.2}.ejc-route--auto{border-left:4px solid var(--ejc-a)}.ejc-route--human{border-left:4px solid var(--ejc-r)}
+.ejc-arrow{display:grid;place-items:center;font-size:19px;font-weight:950;color:var(--ejc-muted)}
+.ejc-contracts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}.ejc-contracts>div{min-width:0;padding:9px 10px;border-left:3px solid var(--ejc-b);border-radius:0 9px 9px 0;background:color-mix(in srgb,var(--ejc-b) 4%,var(--ejc-bg));display:grid;gap:3px}.ejc-contracts>div:nth-child(2){border-left-color:var(--ejc-c);background:color-mix(in srgb,var(--ejc-c) 5%,var(--ejc-bg))}.ejc-contracts>div:nth-child(3){border-left-color:var(--ejc-a);background:color-mix(in srgb,var(--ejc-a) 4%,var(--ejc-bg))}.ejc-contracts span{font-size:8.2px;font-weight:950;letter-spacing:.08em;color:var(--ejc-muted)}.ejc-contracts strong{font-size:9.5px;line-height:1.3}
+.ejc-ref{margin-top:9px;font-size:8.8px;line-height:1.35;color:var(--ejc-muted)}.ejc-ref a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+@container (max-width:820px){.ejc-pipeline{grid-template-columns:1fr;gap:5px}.ejc-pipeline>.ejc-card{grid-column:auto}.ejc-pipeline>.ejc-arrow{display:grid;grid-column:auto;height:14px;font-size:0}.ejc-pipeline>.ejc-arrow::before{content:'↓';font-size:15px}.ejc-contracts{grid-template-columns:1fr}}
+@container (max-width:580px){.ejc-card{padding:11px}.ejc-card h3{font-size:13px}.ejc-card p{font-size:9.8px}.ejc-case span,.ejc-case strong,.ejc-judge-box span,.ejc-judge-box strong,.ejc-segments strong,.ejc-route strong{font-size:9px}}
+@media (prefers-reduced-motion:reduce){.ejc-wrap *{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+</style>

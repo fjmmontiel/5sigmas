@@ -88,7 +88,7 @@ El **conjunto de datos de referencia** (*golden set*) contiene ejemplos reales o
 
 Debe versionarse como código. Cuando aparece un incidente, se añade un caso de regresión. Cuando cambia el producto, se actualiza la distribución y se conserva un subconjunto estable para comparar versiones.
 
-Un conjunto de referencia no tiene que ser enorme. Un centenar de casos bien elegidos puede detectar más problemas de producto que miles de preguntas genéricas.
+El tamaño por sí solo no garantiza cobertura. Prioriza casos representativos y fallos críticos, y amplía el conjunto donde la incertidumbre o el riesgo lo exijan.
 
 ## 4. Entiende qué mide un benchmark
 
@@ -175,6 +175,8 @@ Sus riesgos incluyen:
 - errores compartidos con el modelo evaluado
 
 Un juez necesita calibración. Se compara con un conjunto anotado por humanos, se mide acuerdo por segmento y se revisan los desacuerdos importantes. Para decisiones de alto impacto, no debería operar como autoridad única.
+
+{{ include_html("snippets/temas/evaluation-judge-calibration.html") }}
 
 ## 8. Evalúa el sistema, no solo la respuesta
 
