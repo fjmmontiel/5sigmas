@@ -84,6 +84,8 @@ The **golden set** contains real or designed examples representative of the doma
 - failure severity;
 - provenance and date.
 
+{{ include_html("snippets/temas/evaluation-reference-set.html") }}
+
 It should be versioned like code. When an incident appears, add a regression case. When the product changes, update the distribution while keeping a stable subset for comparing versions.
 
 A golden set does not need to be enormous. A hundred carefully chosen cases can detect more product problems than thousands of generic questions.
