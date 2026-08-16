@@ -18,18 +18,47 @@ const failures = [];
 const browser = await chromium.launch({ headless: true });
 let total = 0;
 
+async function assertCount(page, route, selector, expected, label) {
+  const count = await page.locator(selector).count();
+  if (count !== expected) failures.push(`${route}: ${label} expected ${expected}, found ${count}`);
+}
+
+async function assertHooks(page, route, hooks) {
+  for (const [beforeSelector, beforeText, visualSelector, afterSelector, afterText] of hooks) {
+    const before = page.locator(beforeSelector, { hasText:beforeText }).first();
+    const visual = page.locator(visualSelector).first();
+    const after = page.locator(afterSelector, { hasText:afterText }).first();
+    if (!(await before.count()) || !(await visual.count()) || !(await after.count())) {
+      failures.push(`${route}: cannot resolve canonical hook order for ${visualSelector}`);
+      continue;
+    }
+    const order = await page.evaluate(([bEl, vEl, aEl]) => ({
+      beforeVisual: Boolean(bEl.compareDocumentPosition(vEl) & Node.DOCUMENT_POSITION_FOLLOWING),
+      visualBeforeAfter: Boolean(vEl.compareDocumentPosition(aEl) & Node.DOCUMENT_POSITION_FOLLOWING),
+    }), [await before.elementHandle(), await visual.elementHandle(), await after.elementHandle()]);
+    if (!order.beforeVisual || !order.visualBeforeAfter) failures.push(`${route}: wrong article hook placement for ${visualSelector}`);
+  }
+}
+
+async function assertInternalOverflow(page, route, viewport, selectors) {
+  for (const selector of selectors) {
+    const loc = page.locator(selector);
+    if (await loc.count() !== 1) continue;
+    const delta = await loc.evaluate((el) => el.scrollWidth - el.clientWidth);
+    if (delta > 2) failures.push(`${route}: ${viewport} ${selector} internal overflow ${delta}px`);
+  }
+}
+
 async function assertChapter1Canonical(page, route, viewport) {
   const roots = [
     ['.ddc[data-demo="dc-01-bottlenecks"]', 'bottleneck map'],
     ['.dpe[data-demo="dc-01-why-space"]', 'orbital levers'],
     ['.dli[data-demo="dc-01-launch-cost"]', 'launch curve'],
   ];
-  for (const [selector, label] of roots) {
-    if (await page.locator(selector).count() !== 1) failures.push(`${route}: missing canonical ${label}`);
-  }
+  for (const [selector, label] of roots) if (await page.locator(selector).count() !== 1) failures.push(`${route}: missing canonical ${label}`);
   if (await page.locator('.dcv[data-demo^="dc-01-"]').count()) failures.push(`${route}: legacy Chapter 1 redesign remains`);
 
-  const structural = [
+  for (const [selector, expected, label] of [
     ['.ddc svg.viz-pressure-map', 1, 'bottleneck pressure map'],
     ['.ddc .node', 5, 'bottleneck nodes'],
     ['.ddc .read span', 3, 'bottleneck teaching notes'],
@@ -39,14 +68,10 @@ async function assertChapter1Canonical(page, route, viewport) {
     ['.dli svg.viz-launch-curve', 1, 'launch curve'],
     ['.dli .node', 3, 'launch-cost states'],
     ['.dli .read span', 3, 'launch-cost teaching notes'],
-  ];
-  for (const [selector, expected, label] of structural) {
-    const count = await page.locator(selector).count();
-    if (count !== expected) failures.push(`${route}: ${label} expected ${expected}, found ${count}`);
-  }
+  ]) await assertCount(page, route, selector, expected, label);
 
   const body = await page.locator('body').innerText();
-  const anchors = [
+  for (const x of [
     '4–10 years in key markets',
     'Power grid and water are the most severe bottlenecks',
     'Space changes three levers; it does not make everything viable',
@@ -60,41 +85,19 @@ async function assertChapter1Canonical(page, route, viewport) {
     '100 GW of AI compute',
     'What is the FOOL paper and what does it propose for the satellite downlink bottleneck?',
     'Base sources',
-  ];
-  for (const x of anchors) if (!body.includes(x)) failures.push(`${route}: missing canonical Chapter 1 evidence ${JSON.stringify(x)}`);
-  for (const x of ['What to carry into the rest of the series', 'That is a genuine form of data gravity', 'The correct comparison']) {
-    if (body.includes(x)) failures.push(`${route}: English-only Chapter 1 framing remains ${JSON.stringify(x)}`);
-  }
+  ]) if (!body.includes(x)) failures.push(`${route}: missing canonical Chapter 1 evidence ${JSON.stringify(x)}`);
+  for (const x of ['What to carry into the rest of the series', 'That is a genuine form of data gravity', 'The correct comparison']) if (body.includes(x)) failures.push(`${route}: English-only Chapter 1 framing remains ${JSON.stringify(x)}`);
 
-  const refs = page.locator('h2', { hasText:'5. References' });
-  if (await refs.count() !== 1) failures.push(`${route}: missing canonical references section`);
+  if (await page.locator('h2', { hasText:'5. References' }).count() !== 1) failures.push(`${route}: missing canonical references section`);
   const rows = page.locator('table tbody tr');
   if (await rows.count() !== 10) failures.push(`${route}: expected 10 canonical reference rows, found ${await rows.count()}`);
 
-  const hookOrder = [
-    ['2. Terrestrial bottlenecks', '.ddc[data-demo="dc-01-bottlenecks"]', 'h3', 'Power grid'],
-    ['3. Why space enters the discussion', '.dpe[data-demo="dc-01-why-space"]', 'p', 'What is real as a potential advantage'],
-    ['4. The launch-cost inflection point', '.dli[data-demo="dc-01-launch-cost"]', 'p', 'On 4 February 2026'],
-  ];
-  for (const [headingText, visualSelector, afterSelector, afterText] of hookOrder) {
-    const h = page.locator('h2', { hasText:headingText }).first();
-    const v = page.locator(visualSelector).first();
-    const after = page.locator(afterSelector, { hasText:afterText }).first();
-    if (!(await h.count()) || !(await v.count()) || !(await after.count())) {
-      failures.push(`${route}: cannot resolve canonical hook order for ${visualSelector}`);
-      continue;
-    }
-    const order = await page.evaluate(([hEl, vEl, aEl]) => ({
-      headingBeforeVisual: Boolean(hEl.compareDocumentPosition(vEl) & Node.DOCUMENT_POSITION_FOLLOWING),
-      visualBeforeAfter: Boolean(vEl.compareDocumentPosition(aEl) & Node.DOCUMENT_POSITION_FOLLOWING),
-    }), [await h.elementHandle(), await v.elementHandle(), await after.elementHandle()]);
-    if (!order.headingBeforeVisual || !order.visualBeforeAfter) failures.push(`${route}: wrong article hook placement for ${visualSelector}`);
-  }
-
-  for (const selector of ['.ddc', '.dpe', '.dli']) {
-    const delta = await page.locator(selector).evaluate((el) => el.scrollWidth - el.clientWidth);
-    if (delta > 2) failures.push(`${route}: ${viewport} ${selector} internal overflow ${delta}px`);
-  }
+  await assertHooks(page, route, [
+    ['h2', '2. Terrestrial bottlenecks', '.ddc[data-demo="dc-01-bottlenecks"]', 'h3', 'Power grid'],
+    ['h2', '3. Why space enters the discussion', '.dpe[data-demo="dc-01-why-space"]', 'p', 'What is real as a potential advantage'],
+    ['h2', '4. The launch-cost inflection point', '.dli[data-demo="dc-01-launch-cost"]', 'p', 'On 4 February 2026'],
+  ]);
+  await assertInternalOverflow(page, route, viewport, ['.ddc', '.dpe', '.dli']);
 }
 
 async function assertChapter2Canonical(page, route, viewport) {
@@ -105,12 +108,10 @@ async function assertChapter2Canonical(page, route, viewport) {
     ['.dev[data-demo="dc-02-links"]', 'link-window visual'],
     ['.drm[data-demo="dc-02-radiation"]', 'radiation-maintenance visual'],
   ];
-  for (const [selector, label] of roots) {
-    if (await page.locator(selector).count() !== 1) failures.push(`${route}: missing canonical ${label}`);
-  }
+  for (const [selector, label] of roots) if (await page.locator(selector).count() !== 1) failures.push(`${route}: missing canonical ${label}`);
   if (await page.locator('.dcv[data-demo^="dc-02-"]').count()) failures.push(`${route}: legacy Chapter 2 redesign remains`);
 
-  const structural = [
+  for (const [selector, expected, label] of [
     ['.drs svg.viz-radiator-scale', 1, 'radiator-scale SVG'],
     ['.drs .radiator', 3, 'radiator scale stages'],
     ['.drs .node', 2, 'radiator constraint nodes'],
@@ -131,14 +132,10 @@ async function assertChapter2Canonical(page, route, viewport) {
     ['.drm .rackframe', 4, 'mission lifecycle rack states'],
     ['.drm .node', 2, 'mission evidence nodes'],
     ['.drm .read span', 3, 'mission teaching notes'],
-  ];
-  for (const [selector, expected, label] of structural) {
-    const count = await page.locator(selector).count();
-    if (count !== expected) failures.push(`${route}: ${label} expected ${expected}, found ${count}`);
-  }
+  ]) await assertCount(page, route, selector, expected, label);
 
   const body = await page.locator('body').innerText();
-  const anchors = [
+  for (const x of [
     '2 MW can require ≈ 3,950 m² of radiator',
     'Vacuum does not provide free cooling: it removes convection',
     'Dawn–dusk orbit: 95–99% solar availability',
@@ -149,47 +146,105 @@ async function assertChapter2Canonical(page, route, viewport) {
     'between 120 and 600 seconds per orbit',
     'What is the real advantage of space for data centers?',
     'Base sources',
-  ];
-  for (const x of anchors) if (!body.includes(x)) failures.push(`${route}: missing canonical Chapter 2 evidence ${JSON.stringify(x)}`);
-  for (const x of ['The four equations behind orbital feasibility', 'The orbital-energy thesis therefore depends on three numbers together', 'Downlink is a separate constraint']) {
-    if (body.includes(x)) failures.push(`${route}: English-only Chapter 2 framing remains ${JSON.stringify(x)}`);
-  }
+  ]) if (!body.includes(x)) failures.push(`${route}: missing canonical Chapter 2 evidence ${JSON.stringify(x)}`);
+  for (const x of ['The four equations behind orbital feasibility', 'The orbital-energy thesis therefore depends on three numbers together', 'Downlink is a separate constraint']) if (body.includes(x)) failures.push(`${route}: English-only Chapter 2 framing remains ${JSON.stringify(x)}`);
 
-  const refs = page.locator('h2', { hasText:'5. References' });
-  if (await refs.count() !== 1) failures.push(`${route}: missing canonical Chapter 2 references section`);
+  if (await page.locator('h2', { hasText:'5. References' }).count() !== 1) failures.push(`${route}: missing canonical Chapter 2 references section`);
   const rows = page.locator('table tbody tr');
   if (await rows.count() !== 10) failures.push(`${route}: expected 10 canonical Chapter 2 reference rows, found ${await rows.count()}`);
   const refText = (await page.locator('table').last().textContent()) || '';
   if (!refText.includes('720× improvement in SEFI immunity')) failures.push(`${route}: canonical Radshield reference evidence missing from collapsed reference table`);
 
-  const orderedHooks = [
+  await assertHooks(page, route, [
     ['h3', 'The real scale of radiators', '.drs[data-demo="dc-02-radiator-scale"]', 'h3', 'Why in-orbit validation is still limited'],
     ['h3', 'Why in-orbit validation is still limited', '.dce[data-demo="dc-02-heat"]', 'h2', '2. Solar energy in orbit'],
     ['h2', '2. Solar energy in orbit', '.dso[data-demo="dc-02-solar"]', 'p', 'Outside the atmosphere'],
     ['h2', '3. Connectivity: link windows and bandwidth', '.dev[data-demo="dc-02-links"]', 'h2', '4. Orbital degradation and maintenance'],
     ['h2', '4. Orbital degradation and maintenance', '.drm[data-demo="dc-02-radiation"]', 'p', 'All of these requirements have direct design consequences'],
-  ];
-  for (const [beforeSelector, beforeText, visualSelector, afterSelector, afterText] of orderedHooks) {
-    const before = page.locator(beforeSelector, { hasText:beforeText }).first();
-    const visual = page.locator(visualSelector).first();
-    const after = page.locator(afterSelector, { hasText:afterText }).first();
-    if (!(await before.count()) || !(await visual.count()) || !(await after.count())) {
-      failures.push(`${route}: cannot resolve canonical Chapter 2 hook order for ${visualSelector}`);
-      continue;
-    }
-    const order = await page.evaluate(([bEl, vEl, aEl]) => ({
-      beforeVisual: Boolean(bEl.compareDocumentPosition(vEl) & Node.DOCUMENT_POSITION_FOLLOWING),
-      visualBeforeAfter: Boolean(vEl.compareDocumentPosition(aEl) & Node.DOCUMENT_POSITION_FOLLOWING),
-    }), [await before.elementHandle(), await visual.elementHandle(), await after.elementHandle()]);
-    if (!order.beforeVisual || !order.visualBeforeAfter) failures.push(`${route}: wrong article hook placement for ${visualSelector}`);
-  }
+  ]);
+  await assertInternalOverflow(page, route, viewport, ['.drs', '.dce', '.dso', '.dev', '.drm']);
+}
 
-  for (const selector of ['.drs', '.dce', '.dso', '.dev', '.drm']) {
-    const loc = page.locator(selector);
-    if (await loc.count() !== 1) continue;
-    const delta = await loc.evaluate((el) => el.scrollWidth - el.clientWidth);
-    if (delta > 2) failures.push(`${route}: ${viewport} ${selector} internal overflow ${delta}px`);
-  }
+async function assertChapter3Canonical(page, route, viewport) {
+  const roots = [
+    ['.dco[data-demo="dc-03-maturity"]', 'maturity visual'],
+    ['.dpn[data-demo="dc-03-data-gravity"]', 'data-gravity visual'],
+    ['.dpo[data-demo="dc-03-projects"]', 'project-evidence visual'],
+    ['.dat[data-demo="dc-03-megaproject"]', 'tether architecture visual'],
+  ];
+  for (const [selector, label] of roots) if (await page.locator(selector).count() !== 1) failures.push(`${route}: missing canonical ${label}`);
+  if (await page.locator('.dcv[data-demo^="dc-03-"]').count()) failures.push(`${route}: legacy Chapter 3 redesign remains`);
+
+  for (const [selector, expected, label] of [
+    ['.dco svg.viz-viability-stair', 1, 'maturity SVG'],
+    ['.dco .node', 3, 'maturity states'],
+    ['.dco .read span', 3, 'maturity teaching notes'],
+    ['.dpn svg.viz-data-compression', 1, 'data-compression SVG'],
+    ['.dpn .processor', 1, 'onboard processor'],
+    ['.dpn .node', 3, 'data-gravity evidence nodes'],
+    ['.dpn .funnel', 2, 'data-gravity funnels'],
+    ['.dpn .read span', 3, 'data-gravity teaching notes'],
+    ['.dpo svg.viz-evidence-board', 1, 'project evidence SVG'],
+    ['.dpo .evidence', 4, 'project evidence cards'],
+    ['.dpo .read span', 3, 'project evidence teaching notes'],
+    ['.dat svg.viz-tether-topology', 1, 'tether topology SVG'],
+    ['.dat .wing', 2, 'solar wings'],
+    ['.dat .processor', 1, 'compute node'],
+    ['.dat .radiator', 1, 'radiator block'],
+    ['.dat .node', 2, 'tether support nodes'],
+    ['.dat .read span', 3, 'tether teaching notes'],
+  ]) await assertCount(page, route, selector, expected, label);
+
+  const body = await page.locator('body').innerText();
+  for (const x of [
+    'Today: filter data born in orbit',
+    'Medium term: extreme archive and specialized nodes',
+    'Distant: broad general-purpose orbital AI',
+    '100–500 W, no training',
+    'orders of magnitude less data',
+    '< 10 minutes',
+    '122 TB and 2.5 Gbps optical link',
+    '12 satellites, 5 PF, 100 Gbps laser',
+    'an orbital data center is not a box: it is an extended structure',
+    '744 TOPS',
+    '30 TB of storage',
+    'up to 720 times',
+    'up to one million satellites',
+    '100 GW of AI compute',
+    '4 km × 4 km',
+    'What is the “Digital Flag State” debate and why does it matter for data in space?',
+    'Base sources',
+  ]) if (!body.includes(x)) failures.push(`${route}: missing canonical Chapter 3 evidence ${JSON.stringify(x)}`);
+  for (const x of [
+    'This chapter maps the spectrum hidden behind the phrase',
+    'General-purpose orbital cloud is different',
+    'The correct analogy is therefore',
+    'Megaprojects: hardware reality vs roadmap',
+    'Next chapter',
+  ]) if (body.includes(x)) failures.push(`${route}: English-only Chapter 3 framing remains ${JSON.stringify(x)}`);
+  for (const x of ['madurez de casos', 'Procesar donde nace', 'mapa de evidencia', 'topologia tether']) if (body.includes(x)) failures.push(`${route}: Chapter 3 Spanish visual leakage ${JSON.stringify(x)}`);
+
+  if (await page.locator('h2', { hasText:'7. References' }).count() !== 1) failures.push(`${route}: missing canonical Chapter 3 references section`);
+  const refTable = page.locator('table').last();
+  const refRows = await refTable.locator('tbody tr').count();
+  if (refRows !== 17) failures.push(`${route}: expected 17 canonical Chapter 3 reference rows, found ${refRows}`);
+  const faqHeading = page.locator('h2', { hasText:'Frequently asked questions' });
+  if (await faqHeading.count() !== 1) failures.push(`${route}: missing canonical Chapter 3 FAQ layer`);
+  for (const question of [
+    'Which projects already have real computing hardware operating in orbit in 2026?',
+    'What is the difference between onboard processing and general-purpose computing in orbit?',
+    'For which use cases does orbital computing make economic sense today?',
+    'What is the “Digital Flag State” debate and why does it matter for data in space?',
+    'When could orbital data centers compete economically with terrestrial ones for general-purpose workloads?',
+  ]) if (!body.includes(question)) failures.push(`${route}: missing canonical Chapter 3 FAQ ${JSON.stringify(question)}`);
+
+  await assertHooks(page, route, [
+    ['h1', 'Chapter 3 — What is “a data center in space”?', '.dco[data-demo="dc-03-maturity"]', 'h2', '1. What it means to process data in orbit'],
+    ['h3', 'Processing observation data', '.dpn[data-demo="dc-03-data-gravity"]', 'p', 'A concrete example'],
+    ['h2', '2. Projects that already have hardware in orbit', '.dpo[data-demo="dc-03-projects"]', 'p', 'Of these, the most significant case'],
+    ['h2', '5. Megaprojects: visions measured in decades', '.dat[data-demo="dc-03-megaproject"]', 'p', 'SpaceX / Orbital Data Center System'],
+  ]);
+  await assertInternalOverflow(page, route, viewport, ['.dco', '.dpn', '.dpo', '.dat']);
 }
 
 try {
@@ -215,6 +270,8 @@ try {
         await assertChapter1Canonical(page, c.route, v.name);
       } else if (c.slug === '02-energia-calor-conectividad') {
         await assertChapter2Canonical(page, c.route, v.name);
+      } else if (c.slug === '03-que-es-datacenter-espacio') {
+        await assertChapter3Canonical(page, c.route, v.name);
       } else {
         const details = page.locator('[data-demo^="dc-"] details');
         if (await details.count() === 0) failures.push(`${c.route}: no interactive disclosure`);
@@ -256,4 +313,4 @@ if (failures.length) {
   for (const f of [...new Set(failures)]) console.error(f);
   process.exit(1);
 }
-console.log('Complete English Data Centers QA passed: Chapters 1–4, 21 native visuals, canonical Chapters 1–2 article/visual fidelity, exact native-English video/poster pairs, interactions, desktop/mobile clean.');
+console.log('Complete English Data Centers QA passed: Chapters 1–4, 21 native visuals, canonical Chapters 1–3 article/visual fidelity, exact native-English video/poster pairs, interactions, desktop/mobile clean.');
