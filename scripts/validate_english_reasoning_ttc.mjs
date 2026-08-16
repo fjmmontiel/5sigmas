@@ -22,7 +22,7 @@ for (const expected of [
   'PRMs vs ORMs: two ways to teach reasoning',
   'Best-of-N: generate multiple answers and choose the best',
   'The three levers of test-time compute',
-  'Training scale and inference compute are complementary',
+  'Training scale and inference compute: two distinct axes',
   'Frequently asked questions',
 ]) if (!body.includes(expected)) failures.push(`${route}: missing English chapter/visual copy ${JSON.stringify(expected)}`);
 
@@ -30,7 +30,7 @@ for (const forbidden of ['Capítulo ','Prerrequisitos','Las tres palancas','Más
   if (body.includes(forbidden)) failures.push(`${route}: Spanish leakage ${JSON.stringify(forbidden)}`);
 }
 
-for (const selector of ['[data-demo="03-prm-orm-comparacion"]','[data-demo="03-best-of-n-visual"]','[data-demo="03-ttc-palancas"]','[data-scale2d]']) {
+for (const selector of ['[data-demo="03-prm-orm-comparacion"]','[data-demo="03-best-of-n-visual"]','[data-demo="03-ttc-palancas"]','[data-demo="03-escala-complementaria"]']) {
   const root = page.locator(selector);
   if (await root.count() !== 1) failures.push(`${route}: expected exactly one ${selector}`);
   const buttons = root.locator('button[data-tab]');
@@ -39,6 +39,37 @@ for (const selector of ['[data-demo="03-prm-orm-comparacion"]','[data-demo="03-b
     await buttons.nth(1).click();
     if (await buttons.nth(1).getAttribute('aria-selected') !== 'true') failures.push(`${route}: ${selector} second tab does not activate`);
   }
+}
+
+const scale = page.locator('[data-demo="03-escala-complementaria"]');
+if (await scale.count() === 1) {
+  if (await scale.locator('[data-role="tab"]').count() !== 3) failures.push(`${route}: complementary-scale visual lost one of three canonical tabs`);
+  if (await scale.locator('[data-panel]').count() !== 3) failures.push(`${route}: complementary-scale visual lost one of three canonical panels`);
+  if (await scale.locator('.esc-axis').count() !== 3) failures.push(`${route}: complementary-scale axes panel lost canonical three-axis structure`);
+  if (await scale.locator('.esc-bar-row').count() !== 4) failures.push(`${route}: complementary-scale evidence panel lost canonical four AIME rows`);
+  if (await scale.locator('.esc-insight-item').count() !== 3) failures.push(`${route}: complementary-scale evidence panel lost canonical three evidence notes`);
+  if (await scale.locator('.esc-gpqa-row').count() !== 2) failures.push(`${route}: complementary-scale evidence panel lost canonical GPQA comparison`);
+  if (await scale.locator('.esc-shift-col').count() !== 2) failures.push(`${route}: complementary-scale design panel lost before/now cost comparison`);
+  if (await scale.locator('.esc-decision').count() !== 2) failures.push(`${route}: complementary-scale design panel lost canonical two decision cards`);
+
+  const scaleText = (await scale.textContent()) || '';
+  for (const expected of [
+    'Training scale and inference compute: two distinct axes', 'Empirical evidence', 'Two dimensions', 'Design implication',
+    'Training compute', 'Inference compute (TTC)', 'Maximum quality', 'Why the distinction matters',
+    '13%', '74%', '83%', '56.7%', '+61 pp', '+9 additional pp', 'GPQA Diamond — expert level', '~69%', '78%',
+    'The shift in the cost curve', 'Before', 'Now', 'Model + budget, not just model', 'Unpredictable per-query cost', '3–10×',
+  ]) if (!scaleText.includes(expected)) failures.push(`${route}: complementary-scale visual missing ${JSON.stringify(expected)}`);
+
+  for (const forbidden of [
+    'Escala de entrenamiento', 'Más parámetros y más tiempo', 'Secciones', 'Evidencia empírica', 'Dos dimensiones',
+    'Implicación de diseño', 'Cómputo de entrenamiento', 'Más datos', 'Más epochs', 'Por qué importa la distinción',
+    'Lo que muestran los datos', 'nivel experto', 'El cambio en la curva de coste', 'Decisiones que cambian',
+    'Modelo + presupuesto', 'Coste por consulta impredecible',
+  ]) if (scaleText.includes(forbidden)) failures.push(`${route}: complementary-scale Spanish leakage ${JSON.stringify(forbidden)}`);
+
+  const scaleDims = await scale.evaluate((node) => ({ width: node.clientWidth, scroll: node.scrollWidth }));
+  if (scaleDims.scroll > scaleDims.width + 2) failures.push(`${route}: complementary-scale desktop internal overflow ${scaleDims.scroll}px > ${scaleDims.width}px`);
+  await scale.screenshot({ path: path.join(outDir, 'english-test-time-compute-scale-desktop.png'), animations: 'disabled' });
 }
 
 const video = page.locator('video[data-s5-inline-video-player]');
@@ -75,6 +106,17 @@ await page.screenshot({ path: path.join(outDir, 'english-test-time-compute-deskt
 await page.setViewportSize({ width: 390, height: 844 });
 await page.goto(`${base}${route}`, { waitUntil: 'networkidle' });
 await checkOverflow('mobile');
+const mobileScale = page.locator('[data-demo="03-escala-complementaria"]');
+if (await mobileScale.count() === 1) {
+  const mobileScaleDims = await mobileScale.evaluate((node) => ({ width: node.clientWidth, scroll: node.scrollWidth }));
+  if (mobileScaleDims.scroll > mobileScaleDims.width + 2) failures.push(`${route}: complementary-scale mobile internal overflow ${mobileScaleDims.scroll}px > ${mobileScaleDims.width}px`);
+  const mobileTabs = mobileScale.locator('[data-role="tab"]');
+  for (let index = 0; index < 3; index += 1) {
+    await mobileTabs.nth(index).click();
+    if ((await mobileTabs.nth(index).getAttribute('aria-selected')) !== 'true') failures.push(`${route}: complementary-scale mobile tab ${index + 1} did not activate`);
+  }
+  await mobileScale.screenshot({ path: path.join(outDir, 'english-test-time-compute-scale-mobile.png'), animations: 'disabled' });
+}
 await page.screenshot({ path: path.join(outDir, 'english-test-time-compute-mobile.png'), fullPage: true });
 
 if (requireMedia && videoSource) {
@@ -94,4 +136,4 @@ if (failures.length) {
   for (const failure of failures) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log(`English Test-Time Compute QA passed: full chapter, four interactive visuals, locale-native player/watch link, desktop/mobile clean${requireMedia ? ', MP4/poster fetched' : ''}.`);
+console.log(`English Test-Time Compute QA passed: full chapter, four canonical interactive visuals, locale-native player/watch link, desktop/mobile clean${requireMedia ? ', MP4/poster fetched' : ''}.`);
