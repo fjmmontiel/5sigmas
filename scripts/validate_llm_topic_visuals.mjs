@@ -19,6 +19,14 @@ const visuals = [
     count: 5,
   },
   {
+    selector: '.ltk-wrap',
+    source: 'docs/snippets/temas/llm-tokenization.html',
+    mirror: 'locales/en/snippets/temas/llm-tokenization.html',
+    map: 'locales/en/snippets/temas/llm-tokenization.i18n.json',
+    countSelector: '.ltk-stage',
+    count: 3,
+  },
+  {
     selector: '.lcr-wrap',
     source: 'docs/snippets/temas/llm-contextual-representation.html',
     mirror: 'locales/en/snippets/temas/llm-contextual-representation.html',
@@ -77,6 +85,21 @@ async function validateSourceContracts() {
   }
 }
 
+async function checkTokenizationDensity(page, route, viewport) {
+  const expectedCounts = [
+    ['.ltk-stage', 3],
+    ['.ltk-tokenizer', 2],
+    ['.ltk-contract', 3],
+    ['.ltk-ids b', 4],
+    ['.ltk-pieces--a b', 2],
+    ['.ltk-pieces--b b', 4],
+  ];
+  for (const [selector, expected] of expectedCounts) {
+    const count = await page.locator(selector).count();
+    if (count !== expected) failures.push(`${route}: ${viewport.name} expected ${expected} ${selector}, found ${count}`);
+  }
+}
+
 async function checkPage(browser, route, locale, viewport) {
   const page = await browser.newPage({ viewport: { width: viewport.width, height: viewport.height } });
   const runtimeErrors = [];
@@ -89,12 +112,48 @@ async function checkPage(browser, route, locale, viewport) {
 
   const body = await page.locator('body').innerText();
   const anchors = locale === 'es'
-    ? ['DEL TEXTO A LA PREDICCIÓN', 'REPRESENTACIÓN CONTEXTUAL', 'OBJETIVO AUTORREGRESIVO', 'DEL MODELO BASE AL ASISTENTE', 'probabilidad sobre el vocabulario', 'El embedding de token es el punto de partida', 'Optimizar probabilidad de continuación']
-    : ['FROM TEXT TO PREDICTION', 'CONTEXTUAL REPRESENTATION', 'AUTOREGRESSIVE OBJECTIVE', 'FROM BASE MODEL TO ASSISTANT', 'probability over the vocabulary', 'The token embedding is the starting point', 'Optimizing continuation probability'];
+    ? [
+        'DEL TEXTO A LA PREDICCIÓN',
+        'TOKENIZACIÓN · TEXTO → UNIDADES DISCRETAS',
+        'LOS IDs NO SON UNIVERSALES',
+        'las segmentaciones de este diagrama son pedagógicas',
+        'REPRESENTACIÓN CONTEXTUAL',
+        'OBJETIVO AUTORREGRESIVO',
+        'DEL MODELO BASE AL ASISTENTE',
+        'probabilidad sobre el vocabulario',
+        'El embedding de token es el punto de partida',
+        'Optimizar probabilidad de continuación',
+      ]
+    : [
+        'FROM TEXT TO PREDICTION',
+        'TOKENIZATION · TEXT → DISCRETE UNITS',
+        'IDs ARE NOT UNIVERSAL',
+        'the segmentations in this diagram are pedagogical',
+        'CONTEXTUAL REPRESENTATION',
+        'AUTOREGRESSIVE OBJECTIVE',
+        'FROM BASE MODEL TO ASSISTANT',
+        'probability over the vocabulary',
+        'The token embedding is the starting point',
+        'Optimizing continuation probability',
+      ];
   for (const anchor of anchors) if (!body.includes(anchor)) failures.push(`${route}: ${viewport.name} missing anchor ${JSON.stringify(anchor)}`);
 
   if (locale === 'en') {
-    for (const token of ['DEL TEXTO A LA PREDICCIÓN', 'REPRESENTACIÓN CONTEXTUAL', 'IDENTIDAD DEL TOKEN', 'CONTEXTO A', 'Lectura correcta', 'OBJETIVO AUTORREGRESIVO', 'DEL MODELO BASE AL ASISTENTE', 'Fuentes primarias:', 'Fuente primaria:']) {
+    for (const token of [
+      'DEL TEXTO A LA PREDICCIÓN',
+      'TOKENIZACIÓN',
+      'VOCABULARIOS DISTINTOS',
+      'TOKENIZADOR A',
+      'LOS IDs NO SON UNIVERSALES',
+      'REPRESENTACIÓN CONTEXTUAL',
+      'IDENTIDAD DEL TOKEN',
+      'CONTEXTO A',
+      'Lectura correcta',
+      'OBJETIVO AUTORREGRESIVO',
+      'DEL MODELO BASE AL ASISTENTE',
+      'Fuentes primarias:',
+      'Fuente primaria:',
+    ]) {
       if (body.includes(token)) failures.push(`${route}: ${viewport.name} Spanish leakage ${JSON.stringify(token)}`);
     }
   }
@@ -116,6 +175,8 @@ async function checkPage(browser, route, locale, viewport) {
 
     await locator.screenshot({ path: path.join(outDir, `concept-llm-${locale}-${viewport.name}-${visual.selector.slice(1)}.png`), animations: 'disabled' });
   }
+
+  await checkTokenizationDensity(page, route, viewport);
 
   const pageOverflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   if (pageOverflow > 2) failures.push(`${route}: ${viewport.name} page overflow ${pageOverflow}px`);
