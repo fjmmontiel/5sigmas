@@ -11,7 +11,7 @@ tags:
 
 # Chapter 1 — What is AI?
 
-This chapter presents a framework for understanding any modern artificial-intelligence system, from a spam filter to a large language model. By the end, the reader will be able to distinguish the four main technological families (AI, ML, DL and GenAI), understand where the signal that makes a system learn comes from, and know what changes internally in each type of algorithm during training. No technical experience is required, although becoming familiar with the terms will make the following chapters easier to follow. The chapter closes with MLOps: the engineering practices that turn a trained model into a reliable product.
+This chapter presents a framework for understanding any modern artificial-intelligence system, from a spam filter to a large language model. By the end, the reader will be able to distinguish the four main technological families (AI, ML, DL and GenAI), understand where a system's learning signal comes from, and know what changes internally in each type of algorithm during training. No prior technical experience is required; familiarity with the terminology will make the following chapters easier to follow. The chapter closes with MLOps: the engineering practices that turn a trained model into a reliable product.
 
 Artificial intelligence is **not a “mind” or an autonomous entity**.
 It is a family of **systems built to optimize a task** against a measurable objective, often using data and some form of learning.
@@ -22,9 +22,9 @@ To separate products, models and marketing claims, we'll use a simple framework 
 
 Any “AI system” can be understood by answering:
 
-- **What type of AI application is it?** The family or technology it uses
-- **How does it learn?** Where the learning signal comes from
-- **What changes during training?** Which parts of the model are adjusted
+- **What type of AI application is it?** Which family or technology does it use?
+- **How does it learn?** Where does the learning signal come from?
+- **What changes during training?** Which parts of the model are adjusted?
 
 We'll take those questions in order.
 
@@ -36,16 +36,16 @@ A useful way to see the hierarchy is:
 
 * **Machine Learning (ML):** a branch of AI that lets systems **learn from data and improve with experience**, instead of depending on explicit rules. In the analogy, ML would be the **“training”** of that brain.
 
-* **Deep Learning (DL):** a specialized type of ML that uses **neural networks with many layers** to handle complex data such as images, audio or language. It resembles the **neurons and deep connections** of the brain.
+* **Deep Learning (DL):** a specialized type of ML that uses **neural networks with many layers** to handle complex data such as images, audio or language. In the analogy, those layers resemble the **interconnected neurons** of the brain.
 
-* **Generative Artificial Intelligence (GenAI):** a part of DL oriented toward **generating content** (text, image, audio, code).
+* **Generative Artificial Intelligence (GenAI):** a part of DL focused on **generating content** (text, image, audio, code).
 
 > AI / ML / DL describe the system's **technological family**.
 > In this series, “generative” is used as a practical label for systems whose primary output is **new content**, although technically it also refers to a family of generative models that model distributions and generate samples.
 
 {{ include_html("snippets/fundamentos-ia/ia_ml_dl.html") }}
 
-We now know how to identify which technological family a system uses. The second question is: **where does the signal that makes it learn come from?**
+We now know how to identify which technological family a system uses. The second question is: **where does its learning signal come from?**
 
 ## 2. How do these systems learn?
 
@@ -65,7 +65,7 @@ The next question is **what changes inside the model and how those changes impro
 
 ### 3.1 The universal learning loop
 
-1. **Train and predict** with the data it currently has.
+1. **Train on the current data and make predictions.**
 2. **Measure the error** (or how well it separates / groups).
 3. **Adjust something internal** to reduce that error.
 4. **Repeat** many times.
@@ -85,7 +85,7 @@ What gets adjusted matters because different algorithm families learn in differe
 
 ### 3.3 What is adjusted depending on the type of algorithm
 
-Think of each algorithm as a machine with a type of **parameter**. Training means updating those parameters so that predictions fit better and better.
+Think of each algorithm as a system with its own kind of **parameters**. Training means updating those parameters so that its predictions improve.
 
 #### 1. Adjust **rules / decisions**: Decision Trees, Random Forest, XGBoost
 
@@ -95,13 +95,13 @@ Think of each algorithm as a machine with a type of **parameter**. Training mean
 * The **thresholds** for those questions (e.g. “more than X?”).
 * The **structure** of the tree (which branches exist and how deep it goes).
 
-> It is like building a **questionnaire**: “if A happens, ask B, otherwise ask C”.
+> It is like building a **questionnaire**: “if A happens, ask B; otherwise ask C”.
 
 **Loan-approval example:**
 
-* First candidate rule: “monthly income above X?”: separates applications with greater repayment capacity.
-* Then: “debt ratio below Y?”: refines the separation.
-* Training = trying many questions/thresholds and keeping those that **best separate** applications that can be approved from those that should be rejected.
+* First candidate rule: “monthly income above X?” This separates applications with greater repayment capacity.
+* Then: “debt ratio below Y?” This refines the separation.
+* Training = trying many questions/thresholds and keeping those that **best distinguish** approvable applications from those that should be rejected.
 
 {{ include_html("snippets/fundamentos-ia/algoritmos/arboles_decision.html") }}
 
@@ -112,9 +112,9 @@ Think of each algorithm as a machine with a type of **parameter**. Training mean
 **What changes internally:**
 
 * Tables of **frequencies/probabilities**: which signals appear more often in each class.
-* It treats signals as **almost independent** given the class, so that evidence can be combined simply.
+* It treats signals as **almost independent** given the class, so the evidence can be combined with a simple calculation.
 
-> It is like keeping a **count**: “when it is spam, how many times do I see ‘free’? How many times ‘urgent’?”
+> It is like keeping a **count**: “when it is spam, how often do I see ‘free’? How often do I see ‘urgent’?”
 
 **Spam example:**
 
@@ -138,7 +138,7 @@ Think of each algorithm as a machine with a type of **parameter**. Training mean
 **Example:**
 
 * Group customers by behavior (frequency, spending, channels) without prior labels, using only the raw data.
-* Training = repositioning the centers so that points are **as close as possible** to their group (more similar customers, closer together).
+* Training = moving the centers so that points are **as close as possible** to their group (more similar customers, closer together).
 
 {{ include_html("snippets/fundamentos-ia/algoritmos/kmeans.html") }}
 
@@ -148,7 +148,7 @@ Think of each algorithm as a machine with a type of **parameter**. Training mean
 
 **What changes internally:**
 
-* The **weights** (and **biases**) in the connections are numbers that indicate **how much influence** each input signal has when combined.
+* The **weights** (and **biases**) in the connections are numbers that determine **how much influence** each input signal has when signals are combined.
 * In deep networks, there are **millions** of weights distributed across layers.
 
 > Each neuron calculates a **weighted sum** and then applies an **activation function**, which lets the system learn non-linear concepts.
@@ -167,11 +167,11 @@ Think of each algorithm as a machine with a type of **parameter**. Training mean
 * The activation introduces **non-linearity**, which lets the model capture relationships such as “if A and B happen, but not C…”, curves, soft thresholds, etc.
 * It also affects training: the type of activation influences how easy or difficult it is to adjust weights in deep layers.
 
-**The 4 minimum pieces needed to make the adjustments:**
+**Four core pieces make those updates possible:**
 
 * **Activation function**: lets systems learn **non-linear** concepts.
-* **Loss function**: a measure of the “failure” (how wrong the model was).
-* **Backpropagation**: distributes responsibility for the error across the weights (which weights contributed most to the failure).
+* **Loss function**: measures how wrong the model's output is.
+* **Backpropagation**: propagates the error signal backward through the network to determine how the weights should change.
 * **Optimizer**: decides how much to move each weight at each step (small, repeated steps).
 </details>
 
@@ -194,15 +194,15 @@ Not every family is equally suitable for every problem. The type of data is ofte
 | **Trees** (Decision Tree, Random Forest, XGBoost) | Structured tabular data: numbers, categories, mixed variables. A favorite for business data and Kaggle competitions with tables. | Images, audio, raw text without preprocessing. |
 | **Naive Bayes** | Text (bag of words, token frequencies), categorical data with few correlations between variables. Very fast with little data. | Continuous data with strong correlations; complex relationships between variables. |
 | **K-means** (clustering) | Continuous numerical data where Euclidean distance makes sense: coordinates, scaled behavioral metrics. | Text, high-dimensional data without prior reduction, purely categorical variables. |
-| **Neural networks** | Images, audio, text, time series, video. They shine when the data volume is large and the pattern is complex. | Small tabular datasets: trees often win with lower computational cost. |
+| **Neural networks** | Images, audio, text, time series, video. They perform especially well when data volumes are large and the pattern is complex. | Small tabular datasets: trees often win with lower computational cost. |
 
 > **These four families illustrate the spectrum of adjustment mechanisms, not the whole map.** There are dozens more: SVMs, logistic/linear regression, Gaussian mixture models, Bayesian networks, time-series models (ARIMA, Prophet), ensemble methods, etc. Choosing an algorithm always starts by understanding the type of data and the objective of the problem.
 
-These three axes (**technological family, learning type, adjustment mechanism**) let us describe any modern AI system. But they all share something: where the logic that makes them work comes from.
+Together, these three axes (**technological family, learning type, adjustment mechanism**) let us describe any modern AI system. They also expose a deeper distinction: where the system's logic comes from.
 
 ## 4. Classical software vs AI
 
-Everything above describes a different way of defining the logic of a solution. It does not change how code is written, but rather where the logic that makes the system work comes from.
+Everything above changes where a solution's logic comes from. The distinction is not yet about how developers write code; it is about whether the rules are written explicitly or learned from data.
 
 In classical software:
 
@@ -225,9 +225,9 @@ Example: using many **(Fahrenheit, Celsius)** pairs so that the system learns th
 
 This is the basic principle of so-called **Software 2.0**: the logic is no longer written, it is learned.
 
-This does not yet change how software itself is built, but how solutions are built using AI. The leap in the way software is developed will arrive with LLMs.
+This does not yet change how software itself is built, but how solutions are built using AI. LLMs will later change how software itself is developed.
 
-This paradigm shift did not happen all at once. There were decades of advances, failures and leaps that explain where we are today and where we are going.
+This shift emerged over decades of advances, failures and technical leaps that explain where we are today and where we are going.
 
 ## 5. Major milestones
 
@@ -237,25 +237,25 @@ The important thing is to see **what changed in each wave**.
 | Date | Major milestone | What changes |
 | --- | --- | --- |
 | **1950** | **Turing** ([paper][hito-turing]) | Establishes the conceptual framework for “intelligence in machines”. |
-| **1955–1956** | **Dartmouth Conference** ([proposal][hito-dartmouth]) | The field of AI is formally born. |
-| **1958–1959** | **Perceptron and early demonstrations of machine learning** ([paper · Rosenblatt][hito-perceptron], [paper · Samuel][hito-samuel]) | The idea of learning from data appears, rather than only from rules. |
+| **1955–1956** | **Dartmouth Conference** ([proposal][hito-dartmouth]) | AI becomes a formal research field. |
+| **1958–1959** | **Perceptron and early demonstrations of machine learning** ([paper · Rosenblatt][hito-perceptron], [paper · Samuel][hito-samuel]) | Demonstrates learning from data as an alternative to relying only on rules. |
 | **1980s** | **Expert systems** ([XCON case][hito-xcon]) | First business wave of rule-based AI. |
 | **1986** | **Backpropagation** ([paper][hito-backprop]) | Training multilayer neural networks becomes viable. |
 | **1997** | **Deep Blue** ([IBM][hito-deepblue]) | A specialized AI defeats the world chess champion and makes the power of narrow AI visible. |
 | **2012** | **AlexNet + ImageNet** ([paper][hito-alexnet], [ILSVRC][hito-imagenet]) | The modern era of deep learning scaled with data and GPUs begins. |
-| **2017** | **Transformer — “Attention is all you need”** ([paper][hito-transformer]) | The base architecture of modern language models appears. |
-| **2020–2022** | **GPT-3, AlphaFold and ChatGPT** ([article · GPT-3][hito-gpt3], [CASP14][hito-casp14], [Nature paper · AlphaFold][hito-alphafold-paper], [announcement · ChatGPT][hito-chatgpt]) | Foundation models, direct scientific impact and mass adoption arrive. |
+| **2017** | **Transformer — “Attention is all you need”** ([paper][hito-transformer]) | Introduces the base architecture used by modern language models. |
+| **2020–2022** | **GPT-3, AlphaFold and ChatGPT** ([article · GPT-3][hito-gpt3], [CASP14][hito-casp14], [Nature paper · AlphaFold][hito-alphafold-paper], [announcement · ChatGPT][hito-chatgpt]) | Foundation models scale, AI delivers direct scientific impact and generative AI reaches mass adoption. |
 
 If you want an even simpler mental picture, read it like this:
 
 > **rules** -> **statistical learning** -> **deep learning** -> **foundation models** -> **useful AI at scale**
 
-All that research culminates in capable and efficient systems. But a capable model is not yet a product.
+Those advances produce capable and efficient systems. But a capable model is not yet a product.
 For an AI system to work reliably in the real world, a complete engineering cycle is required.
 
 ## 6. MLOps: the complete cycle for AI to work in the real world
 
-MLOps is the “engineering” part that makes AI work reliably in the real world: not only today, but also three months from now when the data, the market or user behavior has changed. ([Google Cloud](https://docs.cloud.google.com/architecture/mlops-continuous-delivery-and-automation-pipelines-in-machine-learning))
+MLOps is the engineering discipline that keeps AI systems reliable in the real world: not only today, but also three months from now when the data, the market or user behavior has changed. ([Google Cloud](https://docs.cloud.google.com/architecture/mlops-continuous-delivery-and-automation-pipelines-in-machine-learning))
 The key idea:
 
 > A trained model ≠ AI in production.
@@ -270,7 +270,7 @@ The clearest way to understand MLOps is as a chain of 8 steps. If one is missing
 5. Version: record which model it is and which data/version it was trained with (traceability).
 6. Deploy: put it to work (API or batch), ideally gradually.
 7. Monitor: check whether the world changes (data), whether the system is healthy (latency/errors) and whether performance falls.
-8. Feedback and improvement: when the “truth” arrives (real labels), correct, retrain or roll back.
+8. Feedback and improvement: when the ground truth arrives (real labels), correct, retrain or roll back.
 
 {{ include_html("snippets/fundamentos-ia/mlops/ciclo_mlops.html")}}
 
@@ -360,7 +360,7 @@ The clearest way to understand MLOps is as a chain of 8 steps. If one is missing
 ## Frequently asked questions
 
 **What is the difference between Deep Learning and Machine Learning?**
-Deep Learning is a specialized type of Machine Learning that uses neural networks with many layers to handle complex data such as images, audio or language. ML learns patterns in order to generalize; DL emulates the structure of neural connections in the brain for advanced perception tasks that other algorithms do not reach.
+Deep Learning is a specialized type of Machine Learning that uses neural networks with many layers to handle complex data such as images, audio or language. ML learns patterns in order to generalize; DL uses layered neural networks for advanced perception tasks where simpler algorithms often fall short.
 
 **How can a system learn without anyone telling it the correct answer?**
 Through two different routes. In unsupervised learning, the system looks for structure in unlabeled data, such as grouping customers by behavior. In self-supervised learning, the data itself creates the signal: for example, a language model predicts the next token using the preceding text as the “answer”, without any human having annotated it.
@@ -369,4 +369,4 @@ Through two different routes. In unsupervised learning, the system looks for str
 In traditional software the programmer defines the rules explicitly. In AI, input and output data cause the logic to emerge from training: the programmer designs the learning process, but the concrete logic that solves the problem is discovered by the model itself. You do not write the formula; you learn it.
 
 **What physically changes inside a neural network when the model learns?**
-Millions of numerical weights distributed across the connections between layers are adjusted. Backpropagation distributes responsibility for the error across those weights and the optimizer decides how much to move each one at every step in order to reduce the accumulated error.
+Millions of numerical weights distributed across the connections between layers are adjusted. Backpropagation propagates the error signal through the network, and the optimizer decides how much to move each weight at each step to reduce the accumulated error.
