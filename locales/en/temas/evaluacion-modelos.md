@@ -39,7 +39,7 @@ For an agent with tools:
 
 - action selection
 - correct arguments
-- operation order
+- order of operations
 - idempotency
 - final state
 - user-facing message
