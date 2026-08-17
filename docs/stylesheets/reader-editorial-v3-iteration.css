@@ -98,6 +98,13 @@ body:has(.s5-reader-shell) .sm-wrap .sm-dot {
     position: relative;
   }
 
+  /* Keep Material's native controls in the reserved right-hand header lane.
+     The reader global nav is absolutely positioned in the middle lane; without
+     this flex push, theme/language/search controls can occupy the same pixels. */
+  body:has(.s5-reader-shell) .md-header__option[data-md-component="palette"] {
+    margin-left: auto;
+  }
+
   /* Material swaps a second, page-title topic into the sticky header after
      scrolling. The reader already has a contextual rail and its own global
      navigation, so that long topic competes for the exact same horizontal
