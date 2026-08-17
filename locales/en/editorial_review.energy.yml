@@ -26,3 +26,9 @@ certified_routes:
     english_blob_sha: c1732c377c6b50c73ac332fccf73f9f6c0e96d9e
     review_scope: prose, headings, lists, FAQs, terminology, technical meaning, quantitative evidence, references, visual hooks
     note: Side-by-side native-English review; removed literal GDP/well-being, relative-income, survey-bias and alternative-framework phrasing while preserving the canonical argument, evidence and visual placement.
+  - route: series/ia-pib-bienestar-energia/04-ia-pib-hoy.md
+    reviewed_on: 2026-08-17
+    spanish_blob_sha: 863623c80f5d59f1f6e1e0d88c826714a12f27b8
+    english_blob_sha: 1eac7919a630cc9dd68c0e179dd2a7be80e53c71
+    review_scope: prose, headings, lists, FAQs, terminology, technical meaning, quantitative evidence, references, visual hooks
+    note: Side-by-side native-English review; tightened J-curve, adoption, agent-work, mismeasured-value and forecast language without changing any claim, number, source or visual placement.
