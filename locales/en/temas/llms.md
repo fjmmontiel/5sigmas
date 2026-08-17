@@ -31,10 +31,10 @@ The exact segmentation depends on the vocabulary and algorithm. Methods such as 
 
 Tokenization matters because it affects:
 
-- cost, which is often measured in tokens;
-- effective context length;
-- representation of languages and code;
-- the ease of copying numbers, names or uncommon strings.
+- cost, which is often measured in tokens
+- effective context length
+- representation of languages and code
+- the ease of copying numbers, names or uncommon strings
 
 ## 2. Tokens become representations
 
@@ -107,13 +107,13 @@ That is why “larger” is not a sufficient explanation. A useful comparison ne
 
 An LLM is particularly useful when the task allows linguistic variation and the result can be verified or corrected:
 
-- transform and summarize text;
-- extract information into a schema;
-- generate drafts and code;
-- classify from instructions and examples;
-- translate between representations;
-- coordinate tools through structured arguments;
-- reason over information present in the context.
+- transform and summarize text
+- extract information into a schema
+- generate drafts and code
+- classify from instructions and examples
+- translate between representations
+- coordinate tools through structured arguments
+- reason over information present in the context
 
 The complete system improves when explicit constraints, examples, validators, retrieval and evaluation on real cases are added.
 
@@ -143,13 +143,13 @@ Conversation history is not a database. A long-running operation needs explicit 
 
 Choosing the model at the top of one benchmark is not enough. A useful evaluation should measure:
 
-1. the real input distribution;
-2. the minimum acceptable quality;
-3. costly failure modes;
-4. latency to a usable output;
-5. total system cost;
-6. stability under paraphrases;
-7. correctness of tools and retrieved data.
+1. The real input distribution
+2. The minimum acceptable quality
+3. Costly failure modes
+4. Latency to a usable output
+5. Total system cost
+6. Stability under paraphrases
+7. Correctness of tools and retrieved data
 
 The guide to [evaluating AI models](/en/temas/evaluacion-modelos/) proposes a complete stack from static tests to product metrics.
 

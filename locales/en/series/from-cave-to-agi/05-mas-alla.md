@@ -147,11 +147,11 @@ Taken together, the movement is clear. Transformer scaling produced extremely ca
 
 The directions that currently appear most promising are aimed precisely at those points:
 
-- Search and verification over solution spaces,
-- Selective memory during inference,
-- Continual learning across multiple timescales,
-- Internal models of environments,
-- Systems capable of perceiving and acting in the physical world.
+- Search and verification over solution spaces
+- Selective memory during inference
+- Continual learning across multiple timescales
+- Internal models of environments
+- Systems capable of perceiving and acting in the physical world
 
 We do not yet know which combination will prevail. What does appear clear is that AI's future is not determined only by larger models, but by better-organized systems that can interact with the world more effectively.
 

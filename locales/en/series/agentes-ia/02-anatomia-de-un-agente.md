@@ -31,13 +31,13 @@ In practice there is a fifth cross-cutting component: **policy**. Policy determi
 
 A tool should not be presented to the model as a vague sentence such as “you can query the system.” It needs an explicit contract:
 
-- a stable name;
-- a description of when to use it and when not to;
-- an argument schema;
-- type and range validation;
-- read or write permissions;
-- timeout and retry policy;
-- a clear representation of success, error, and partial results.
+- a stable name
+- a description of when to use it and when not to
+- an argument schema
+- type and range validation
+- read or write permissions
+- timeout and retry policy
+- a clear representation of success, error, and partial results
 
 If a `send_email` tool accepts an ambiguous recipient, the model may fill the argument with a plausible inference. The problem is not only that the LLM can be wrong: the system has designed a dangerous boundary. A good tool contract makes illegal states difficult to express.
 
@@ -69,19 +69,19 @@ or:
 
 `requested → accepted → running → retrying → failed`
 
-User-facing language must respect that machine. “The operation has been started” can describe `accepted`; “the operation has finished” is only correct in `succeeded`. Honesty should not depend on the model being cautious—it should depend on the runtime exposing states the model can express without inventing completion.
+User-facing language must respect that machine. “The operation has started” can describe `accepted`; “the operation has finished” is only correct in `succeeded`. Honesty should not depend on the model being cautious—it should depend on the runtime exposing states the model can express without inventing completion.
 
-The Reactive/Proactive Agent pattern used by 5sigmas follows this separation: visible conversation, operations, pending updates, locks, and traces live in different structures. It solves a small but recurring problem: accept work now and close it only when an external result exists, without blocking the chat or emitting partial messages as if they were final.
+The Reactive/Proactive Agent pattern used by 5sigmas follows this separation: visible conversation, operations, pending updates, locks, and traces live in different structures. It solves a small but recurring problem: accepting work now and closing it only once an external result exists, without blocking the chat or emitting partial messages as if they were final.
 
 ## Memory is not a universal solution
 
 Adding a vector database does not turn a system into an agent. Retrieval can help find documentation, but the system must still decide:
 
-- which query to make;
-- which documents are trustworthy;
-- how evidence is cited;
-- what to do with conflicting results;
-- when retrieval has not found enough information.
+- what query to run
+- which documents are trustworthy
+- how evidence is cited
+- what to do with conflicting results
+- when retrieval has not found enough information
 
 Memory can also increase the attack surface. If an agent writes a malicious instruction into memory and later retrieves it as trusted context, the problem has not disappeared—it has become persistent.
 

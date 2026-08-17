@@ -18,13 +18,13 @@ A demo can look autonomous for two minutes. Production begins when a tool is slo
 
 An agent should have explicit limits:
 
-- maximum number of steps;
-- maximum calls per tool;
-- total execution time;
-- tokens or estimated cost;
-- maximum context size;
-- retry count;
-- actions that require approval.
+- maximum number of steps
+- maximum calls per tool
+- total execution time
+- tokens or estimated cost
+- maximum context size
+- retry count
+- actions that require approval
 
 Without a budget, an ambiguous task can produce an expensive loop. The limit is not merely an optimization detail: it defines stopping behavior. Once reached, the agent should summarize state, request information, escalate to a person, or return a clear failure.
 
@@ -42,9 +42,9 @@ The Reactive/Proactive Agent pattern used by 5sigmas models a common case: the a
 
 The pattern has three rules:
 
-1. accepting work is not the same as promising an outcome;
-2. completion is emitted only when the operation can actually close;
-3. if the user keeps talking, a pending result returns as controlled context or as one deliberate notification.
+1. Accepting work is not the same as promising an outcome.
+2. Report completion only when the operation can actually close.
+3. If the user keeps talking, return a pending result as controlled context or as a single deliberate notification.
 
 This separation avoids duplicate messages and avoids turning visible conversation history into a database of retries, locks, and HTTP responses.
 
@@ -62,12 +62,12 @@ Traces are not only for debugging. They support evaluation, explain decisions, e
 
 An agent is not the natural evolution of every automation. Avoid one when:
 
-- the path is known and deterministic;
-- the action is irreversible and cannot be verified adequately;
-- the data is too sensitive for the available environment;
-- latency or cost cannot tolerate variability;
-- the success criterion cannot be expressed or reviewed;
-- a conventional function solves the problem with less risk surface.
+- the path is known and deterministic
+- the action is irreversible and cannot be verified adequately
+- the data is too sensitive for the available environment
+- latency or cost cannot tolerate variability
+- the success criterion cannot be expressed or reviewed
+- a conventional function solves the problem with less risk surface
 
 In those cases, a deterministic workflow, form, or normal function is often better. Use an agent for the part where uncertainty in the sequence is worth the additional cost of delegating decisions.
 

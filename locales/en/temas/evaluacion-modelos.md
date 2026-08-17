@@ -29,29 +29,29 @@ No layer replaces the others. The key is connecting every metric to a product de
 
 For a data extractor:
 
-- required fields;
-- valid formats;
-- precision and recall;
-- handling of missing values;
-- cost of a false positive.
+- required fields
+- valid formats
+- precision and recall
+- handling of missing values
+- cost of a false positive
 
 For an agent with tools:
 
-- action selection;
-- correct arguments;
-- operation order;
-- idempotency;
-- final state;
-- user-facing message.
+- action selection
+- correct arguments
+- order of operations
+- idempotency
+- final state
+- user-facing message
 
 For a voice assistant:
 
-- intent understanding;
-- entities;
-- time to first audio;
-- interruptions;
-- task success;
-- duplicate closure.
+- intent understanding
+- entities
+- time to first audio
+- interruptions
+- task success
+- duplicate end-of-call events
 
 The metric must reflect the failure that matters. Optimizing textual similarity when the real problem is executing a transfer twice measures the wrong surface.
 
@@ -59,30 +59,30 @@ The metric must reflect the failure that matters. Optimizing textual similarity 
 
 An average hides where the system fails. The evaluation set should label relevant dimensions:
 
-- intent or task type;
-- difficulty;
-- language and market;
-- length and noise;
-- ambiguity;
-- need for external knowledge;
-- tool use;
-- impact of error;
-- affected population or segment.
+- intent or task type
+- difficulty
+- language and market
+- length and noise
+- ambiguity
+- need for external knowledge
+- tool use
+- impact of error
+- affected population or segment
 
 Then calculate performance by segment, not only one global number.
 
 A taxonomy enables actionable questions: “Does the new model improve long queries but regress on Spanish proper names?” That helps a decision. “It gained two points” does not.
 
-## 3. Use your own golden set
+## 3. Build your own reference set
 
-The **golden set** contains real or designed examples representative of the domain. Every case needs:
+The **reference set** (often called a *golden set*) contains real or designed examples representative of the domain. Every case needs:
 
-- input;
-- relevant context;
-- expected result or rubric;
-- segment labels;
-- failure severity;
-- provenance and date.
+- input
+- relevant context
+- expected result or rubric
+- segment labels
+- failure severity
+- provenance and date
 
 {{ include_html("snippets/temas/evaluation-reference-set.html") }}
 
@@ -121,13 +121,13 @@ Not everything needs a generative judge.
 
 Use rules or execution to:
 
-- validate JSON and schemas;
-- compare numeric values;
-- run tests;
-- check citations and URLs;
-- verify API arguments;
-- inspect final state;
-- measure latency and cost.
+- validate JSON and schemas
+- compare numeric values
+- run tests
+- check citations and URLs
+- verify API arguments
+- inspect final state
+- measure latency and cost
 
 A deterministic metric is usually cheaper, reproducible and auditable. Generative evaluation should be reserved for dimensions that genuinely require judgement.
 
@@ -147,18 +147,18 @@ A judge model can scale open-ended evaluations. It receives the input, responses
 
 It is useful for:
 
-- filtering regressions;
-- comparing many variants;
-- evaluating format and coverage;
-- prioritizing samples for human review.
+- screening for regressions
+- comparing many variants
+- evaluating format and coverage
+- prioritizing samples for human review
 
 Risks include:
 
-- position bias;
-- preference for longer answers;
-- affinity with its own model family;
-- prompt sensitivity;
-- shared errors with the evaluated model.
+- position bias
+- preference for longer answers
+- bias toward outputs from its own model family
+- prompt sensitivity
+- shared errors with the evaluated model
 
 A judge needs calibration. Compare it against a human-annotated set, measure agreement by segment and review important disagreements. For high-impact decisions, it should not be the sole authority.
 
@@ -217,7 +217,7 @@ Evaluation is not a final phase. It is the loop that lets a system change withou
 
 There is no universal one. Use benchmarks for general capabilities and your own set for the product's task, language, data, latency and risk.
 
-### How many examples does a golden set need?
+### How many examples does a reference set need?
 
 It depends on diversity and the size of the improvement you need to detect. Start with representative cases and critical failures, measure segment coverage and expand where uncertainty is high.
 

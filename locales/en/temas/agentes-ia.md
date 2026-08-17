@@ -79,11 +79,11 @@ The [AI Security](/en/series/seguridad-ia/00_presentacion_serie/) series covers 
 
 Agency is useful when:
 
-- the objective is clear but the sequence changes depending on what happens;
-- several tools are available;
-- intermediate results determine the next step;
-- the system can verify progress and outcome;
-- permissions and cost can be bounded.
+- the objective is clear but the sequence changes depending on what happens
+- several tools are available
+- intermediate results determine the next step
+- the system can verify progress and outcome
+- permissions and cost can be bounded
 
 A conventional workflow may be better when the path is known, the error budget is tiny or a deterministic function solves the problem with less risk surface.
 

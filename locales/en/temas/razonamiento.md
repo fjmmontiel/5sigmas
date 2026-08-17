@@ -57,10 +57,10 @@ Reasoning can be formulated as search over possible states. **Tree of Thoughts**
 
 Concrete algorithms differ in how they manage the frontier:
 
-- **beam search:** keeps a bounded set of candidates according to a score;
-- **Tree of Thoughts:** can branch, evaluate and backtrack among intermediate states;
+- **beam search:** keeps a bounded set of candidates according to a score
+- **Tree of Thoughts:** can branch, evaluate and backtrack among intermediate states
 - **Monte Carlo Tree Search / UCT:** allocates exploration according to observed value and uncertainty across branches.[^uct]
-- **programs or tools:** turn part of the search space into verifiable operations;
+- **programs or tools:** turn part of the search space into verifiable operations
 - **explicit planning:** separates plan creation from execution.
 
 Search adds value when there is a signal that distinguishes promising states. Without a reliable evaluator, a system can multiply plausible candidates without improving selection.
@@ -85,12 +85,12 @@ Snell et al. studied scaling inference compute and showed that the best strategy
 
 More compute does not produce monotonic improvement. Failure modes include:
 
-- overthinking;
-- objective drift;
-- propagation of an incorrect initial assumption;
-- reinforced confidence in a wrong answer;
-- interaction-breaking latency;
-- cost greater than simply using a stronger model.
+- overthinking
+- objective drift
+- propagation of an incorrect initial assumption
+- reinforced confidence in a wrong answer
+- interaction-breaking latency
+- cost greater than simply using a stronger model
 
 The right policy is not “always think more.” It is to **route compute according to difficulty and the value of the answer**.
 
@@ -110,12 +110,12 @@ A calculator reduces arithmetic errors. Retrieval brings current information. An
 
 The challenge moves into the contract:
 
-- when to call;
-- which arguments to use;
-- how to validate;
-- what to do on timeout or partial results;
-- how to prevent duplicates;
-- how to resume after interruption.
+- when to call
+- which arguments to use
+- how to validate
+- what to do on timeout or partial results
+- how to prevent duplicates
+- how to resume after interruption
 
 The important separation is operational: **the model proposes; the runtime validates and executes; the real result updates state; only then does the system choose the next step**. Current agent runtimes expose exactly this loop and can apply guardrails around tool calls.[^agentguardrails]
 

@@ -40,9 +40,9 @@ OWASP already treats agentic red teaming as a full-lifecycle activity: identify 
 
 An evaluation should separate at least three levels:
 
-- what the model knows how to do;
-- how much it improves a person trying to complete a task;
-- what the product can execute with its tools and permissions.
+- what the model knows how to do
+- how much it improves a person trying to complete a task
+- what the product can execute with its tools and permissions
 
 The first question belongs to model capability. The second measures human *uplift*. The third is a property of the complete system.
 
@@ -75,13 +75,13 @@ A score without audited examples can measure the attacker's ability to fool the 
 
 An agent evaluation needs to record:
 
-1. the input and its provenance;
-2. what the system retrieved or remembered;
-3. the model's decision;
-4. the proposed tool call;
-5. the authorization that was applied;
-6. the tool result;
-7. the final state and the possibility of recovery.
+1. The input and its provenance
+2. What the system retrieved or remembered
+3. The model's decision
+4. The proposed tool call
+5. The authorization that was applied
+6. The tool result
+7. The final state and the possibility of recovery
 
 Each point allows a different test. A filter can block an output while leaving retrieval untouched. A policy engine can deny the tool while still recording dangerous memory. A runtime can abort in time and leave partial state that needs reconciliation.
 
@@ -106,15 +106,15 @@ This decomposition turns one “attack success” percentage into useful enginee
 
 A good test includes wording variations and adversarial documents, but also everyday system failures:
 
-- timeouts and partial responses;
-- tool errors;
-- retries;
-- duplicated actions;
-- reduced permissions;
-- revoked credentials;
-- modified tool schemas;
-- expired or contaminated memory;
-- human interruption halfway through an execution.
+- timeouts and partial responses
+- tool errors
+- retries
+- duplicated actions
+- reduced permissions
+- revoked credentials
+- modified tool schemas
+- expired or contaminated memory
+- human interruption halfway through an execution
 
 Many incidents do not require the attacker to control every step. It is enough for a hostile input to coincide with a retry, an excessive permission or incomplete reconciliation.
 
@@ -124,14 +124,14 @@ The most valuable result of a red team is not the report. It is the reproducible
 
 Whenever possible, each finding should become a case with:
 
-- an input fixture;
-- a known initial state;
-- fixed tools and scopes;
-- attacker budget;
-- success criterion;
-- stop criterion;
-- expected trace evidence;
-- final-state verification.
+- an input fixture
+- a known initial state
+- fixed tools and scopes
+- attacker budget
+- success criterion
+- stop criterion
+- expected trace evidence
+- final-state verification
 
 That case should run again when the model, prompt, retrieval, memory, a tool or the authorization policy changes.
 

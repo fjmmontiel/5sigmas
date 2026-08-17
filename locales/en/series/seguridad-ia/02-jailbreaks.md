@@ -43,13 +43,13 @@ Saying that a model “resists jailbreaks” without declaring how many attempts
 
 An evaluation should explicitly fix:
 
-- maximum number of attempts;
-- whether the attacker sees previous responses;
-- whether the next prompt can adapt;
-- whether the attacker has access to logits, scores, or only text;
-- whether language, encoding, or format can change;
-- whether the system applies rate limiting or identity-based blocking;
-- whether the attack targets an isolated conversation or an agent with tools.
+- maximum number of attempts
+- whether the attacker sees previous responses
+- whether the next prompt can adapt
+- whether the attacker has access to logits, scores, or only text
+- whether language, encoding, or format can change
+- whether the system applies rate limiting or identity-based blocking
+- whether the attack targets an isolated conversation or an agent with tools
 
 {{ include_html("snippets/seguridad-ia/02-attack-budget.html") }}
 
