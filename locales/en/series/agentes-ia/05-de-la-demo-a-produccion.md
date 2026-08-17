@@ -42,9 +42,9 @@ The Reactive/Proactive Agent pattern used by 5sigmas models a common case: the a
 
 The pattern has three rules:
 
-1. accepting work is not the same as promising an outcome;
-2. completion is emitted only when the operation can actually close;
-3. if the user keeps talking, a pending result returns as controlled context or as one deliberate notification.
+1. Accepting work is not the same as promising an outcome.
+2. Report completion only when the operation can actually close.
+3. If the user keeps talking, return a pending result as controlled context or as a single deliberate notification.
 
 This separation avoids duplicate messages and avoids turning visible conversation history into a database of retries, locks, and HTTP responses.
 
