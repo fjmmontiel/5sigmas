@@ -96,7 +96,7 @@ Beyond the physics described in the previous chapter, there are operational impl
 
 ---
 
-## 5. Megaprojects: decades-long visions
+## 5. Megaprojects: visions measured in decades
 
 Massive-scale projects exist at different stages of development, from pilots already in orbit to visions that depend on Starship becoming fully operational.
 
