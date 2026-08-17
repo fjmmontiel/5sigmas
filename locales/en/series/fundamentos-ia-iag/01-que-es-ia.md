@@ -22,9 +22,9 @@ To avoid confusing products, models and marketing, we are going to use a simple 
 
 Any “AI system” can be understood by answering:
 
-- **What type of AI application is it?**: the family/technology it uses
-- **How does it learn?**: where the “teacher” comes from
-- **How is it adjusted?**: how the model changes during training
+- **What type of AI application is it?** The family or technology it uses
+- **How does it learn?** Where the learning signal comes from
+- **What changes during training?** Which parts of the model are adjusted
 
 We will answer each question in order.
 
