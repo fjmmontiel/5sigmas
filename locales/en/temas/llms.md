@@ -143,13 +143,13 @@ Conversation history is not a database. A long-running operation needs explicit 
 
 Choosing the model at the top of one benchmark is not enough. A useful evaluation should measure:
 
-1. the real input distribution;
-2. the minimum acceptable quality;
-3. costly failure modes;
-4. latency to a usable output;
-5. total system cost;
-6. stability under paraphrases;
-7. correctness of tools and retrieved data.
+1. The real input distribution
+2. The minimum acceptable quality
+3. Costly failure modes
+4. Latency to a usable output
+5. Total system cost
+6. Stability under paraphrases
+7. Correctness of tools and retrieved data
 
 The guide to [evaluating AI models](/en/temas/evaluacion-modelos/) proposes a complete stack from static tests to product metrics.
 
