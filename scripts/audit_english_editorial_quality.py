@@ -15,7 +15,8 @@ Review signals (reported, not hard failures):
 - clusters of three or more very short English bullets;
 - short list blocks with mixed terminal punctuation;
 - a small set of high-precision translationese phrases that deserve native-English
-  review in context.
+  review in context;
+- certified routes whose English or canonical Spanish blob changed after review.
 
 Code fences are ignored. Front matter is ignored. Generated/non-editorial files
 are not scanned; the published route list in locales/en/manifest.yml is the scope.
@@ -24,6 +25,7 @@ are not scanned; the published route list in locales/en/manifest.yml is the scop
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import sys
@@ -37,6 +39,7 @@ ROOT = Path(__file__).resolve().parents[1]
 ES_ROOT = ROOT / "docs"
 EN_ROOT = ROOT / "locales" / "en"
 MANIFEST = EN_ROOT / "manifest.yml"
+EDITORIAL_REVIEW = EN_ROOT / "editorial_review.yml"
 
 BULLET_RE = re.compile(r"^(?P<indent>\s*)[-*+]\s+(?P<body>\S.*)$")
 FENCE_RE = re.compile(r"^\s*(```|~~~)")
@@ -53,6 +56,12 @@ TRANSLATIONESE_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
     ("are_the_following", re.compile(r"\bare the following\b", re.IGNORECASE)),
     ("we_will_see", re.compile(r"\bwe will see\b", re.IGNORECASE)),
     ("it_is_convenient_or_advisable", re.compile(r"\bit is (?:convenient|advisable) to\b", re.IGNORECASE)),
+    ("almost_same_question_always_appears", re.compile(r"\balmost the same question always appears\b", re.IGNORECASE)),
+    ("problem_appears_when", re.compile(r"\bthe problem appears when\b", re.IGNORECASE)),
+    ("adds_real_value_to", re.compile(r"\badds real value to\b", re.IGNORECASE)),
+    ("justifies_cost_and_coupling", re.compile(r"\bjustifies its cost and coupling\b", re.IGNORECASE)),
+    ("makes_the_most_sense_to_me", re.compile(r"\bmakes the most sense to me\b", re.IGNORECASE)),
+    ("it_is_useful_to_separate", re.compile(r"\bit is useful to separate\b", re.IGNORECASE)),
 )
 
 
@@ -72,6 +81,15 @@ def load_manifest() -> dict:
     return data
 
 
+def load_editorial_review() -> dict:
+    if not EDITORIAL_REVIEW.is_file():
+        return {}
+    data = yaml.safe_load(EDITORIAL_REVIEW.read_text(encoding="utf-8")) or {}
+    if not isinstance(data, dict):
+        raise SystemExit("locales/en/editorial_review.yml must contain a mapping")
+    return data
+
+
 def published_markdown_routes() -> list[str]:
     routes = load_manifest().get("published_routes") or []
     return sorted(
@@ -79,6 +97,12 @@ def published_markdown_routes() -> list[str]:
         for route in routes
         if str(route).endswith(".md") and (EN_ROOT / str(route)).is_file()
     )
+
+
+def git_blob_sha(path: Path) -> str:
+    data = path.read_bytes()
+    header = f"blob {len(data)}\0".encode("ascii")
+    return hashlib.sha1(header + data).hexdigest()
 
 
 def body_lines(path: Path) -> list[tuple[int, str]]:
@@ -263,6 +287,83 @@ def fragmentation_findings(route: str, en_path: Path, es_path: Path) -> list[Fin
     return findings
 
 
+def certification_findings(routes: Iterable[str]) -> tuple[list[Finding], int, int]:
+    findings: list[Finding] = []
+    route_set = set(routes)
+    current_count = 0
+    stale_count = 0
+
+    entries = load_editorial_review().get("certified_routes") or []
+    if not isinstance(entries, list):
+        raise SystemExit("locales/en/editorial_review.yml certified_routes must be a list")
+
+    for entry in entries:
+        if not isinstance(entry, dict) or not entry.get("route"):
+            findings.append(
+                Finding(
+                    kind="editorial_certification_invalid",
+                    route="editorial_review.yml",
+                    line=None,
+                    excerpt="Each certified route must be a mapping with a route field",
+                    severity="error",
+                )
+            )
+            continue
+
+        route = str(entry["route"])
+        if route not in route_set:
+            findings.append(
+                Finding(
+                    kind="editorial_certification_not_published",
+                    route=route,
+                    line=None,
+                    excerpt="Certified route is not present in manifest published_routes",
+                    severity="error",
+                )
+            )
+            continue
+
+        en_path = EN_ROOT / route
+        es_path = ES_ROOT / route
+        if not en_path.is_file() or not es_path.is_file():
+            findings.append(
+                Finding(
+                    kind="editorial_certification_missing_source",
+                    route=route,
+                    line=None,
+                    excerpt="Certified route is missing its English or canonical Spanish file",
+                    severity="error",
+                )
+            )
+            continue
+
+        expected_en = str(entry.get("english_blob_sha") or "")
+        expected_es = str(entry.get("spanish_blob_sha") or "")
+        actual_en = git_blob_sha(en_path)
+        actual_es = git_blob_sha(es_path)
+        mismatches: list[str] = []
+        if not expected_en or actual_en != expected_en:
+            mismatches.append(f"EN {expected_en or 'missing'} → {actual_en}")
+        if not expected_es or actual_es != expected_es:
+            mismatches.append(f"ES {expected_es or 'missing'} → {actual_es}")
+
+        if mismatches:
+            stale_count += 1
+            findings.append(
+                Finding(
+                    kind="editorial_certification_stale",
+                    route=route,
+                    line=None,
+                    excerpt="; ".join(mismatches),
+                    severity="review",
+                )
+            )
+        else:
+            current_count += 1
+
+    return findings, current_count, stale_count
+
+
 def audit(routes: Iterable[str]) -> list[Finding]:
     findings: list[Finding] = []
     for route in routes:
@@ -282,11 +383,16 @@ def main() -> int:
 
     routes = published_markdown_routes()
     findings = audit(routes)
+    certification_items, certified_current, certified_stale = certification_findings(routes)
+    findings.extend(certification_items)
+
     errors = [item for item in findings if item.severity == "error"]
     reviews = [item for item in findings if item.severity == "review"]
 
     print("English editorial-quality audit")
     print(f"  published Markdown routes: {len(routes)}")
+    print(f"  current certifications:    {certified_current}")
+    print(f"  stale certifications:      {certified_stale}")
     print(f"  hard errors:               {len(errors)}")
     print(f"  review signals:            {len(reviews)}")
 
@@ -299,6 +405,8 @@ def main() -> int:
 
     report = {
         "published_markdown_routes": len(routes),
+        "current_certification_count": certified_current,
+        "stale_certification_count": certified_stale,
         "hard_error_count": len(errors),
         "review_signal_count": len(reviews),
         "findings": [asdict(item) for item in findings],

@@ -1,8 +1,8 @@
 ---
 title: Three architectures for voice agents
-description: "Practical comparison between full cascade, half cascade and speech-to-speech, focusing on latency, prosody, tools, interruptions and control."
+description: "A practical comparison of full cascade, half cascade and speech-to-speech, focusing on latency, prosody, tools, interruptions and control."
 date: 2026-08-04
-date_modified: 2026-08-05
+date_modified: 2026-08-17
 keywords: "voice agents, full cascade, half cascade, speech to speech, audio in text out, realtime API, prosody, streaming TTS, full duplex, voice architecture"
 article_state: published
 tags:
@@ -20,7 +20,7 @@ tags:
 > **Criteria:** latency, prosody, interruptions, tools, control and operating cost.  
 > **Hot take:** a fast S2S surface should carry the conversation. A heavier model should handle reasoning and actions.
 
-When voice architectures come up, almost the same question always appears: do we assemble STT, LLM and TTS, or do we use a speech-to-speech model directly?
+When people discuss voice architectures, the same question comes up almost every time: do we assemble STT, LLM and TTS, or use a speech-to-speech model directly?
 
 The question is useful, but it mixes several decisions. An architecture can consume audio and still operate turn by turn. A full cascade can support barge-in and streaming. An audio-native model can understand speech and return text for another system to synthesize.
 
@@ -67,7 +67,7 @@ You can choose an STT that works well in a particular market, a specialized LLM,
 
 **Per-stage optimization.** Each component can be deployed closer to the user, cached, quantized or replaced by a smaller model.
 
-Full cascade is not a bad architecture. The problem appears when the conversation has to feel human. At that point it stops being a linear pipeline and becomes a state machine distributed across several services.
+Full cascade is not a bad architecture. The hard part starts when the conversation has to feel human. At that point it stops being a linear pipeline and becomes a state machine distributed across several services.
 
 {{ include_html("snippets/articulos-tecnicos/voice-arch-cascade.html") }}
 
@@ -138,7 +138,7 @@ A mature implementation does not cancel "the whole pipeline." It cancels one spe
 
 ## 2. Half cascade: audio → audio-native model → streaming text → TTS
 
-Half cascade is often explained ambiguously. In this report I use the term for this architecture:
+Half cascade is often explained ambiguously. Here, I use the term for this architecture:
 
 ```text
 user audio
@@ -168,7 +168,7 @@ The official OpenAI SDK shows Realtime sessions with `output_modalities: ["text"
 
 **Tool calling from audio.** The model can decide on a tool without first converting the whole interaction into a final transcript.
 
-It is a very interesting option, with one important nuance: preserving prosody on input does not mean preserving it on output.
+It is a strong option, with one important nuance: preserving prosody on input does not mean preserving it on output.
 
 ### Prosody enters and can be lost again on output
 
@@ -249,7 +249,7 @@ Half cascade does not eliminate:
 - Proactive delivery
 - Measurement all the way to the audio that was actually heard
 
-It also introduces the `SpeechPlan`. It makes sense when acoustic understanding and the freedom to choose a TTS compensate for that additional contract.
+It also introduces the `SpeechPlan`. The extra contract is worthwhile when audio-native understanding and the freedom to choose a TTS matter enough to justify it.
 
 ## 3. Speech-to-speech: audio ↔ model
 
@@ -312,7 +312,7 @@ T_delivery        result ready → completion heard
 
 S2S usually has an advantage in `T_first_audio` and `T_interruption`. It can lose part of that advantage with conservative turn detection or an unstable network.
 
-Full cascade can be competitive if STT, LLM and TTS are fast and work in streaming. Its difficulty is coordination.
+Full cascade can be competitive if STT, LLM and TTS are fast and work in streaming. The hard part is coordination.
 
 Half cascade occupies an intermediate point. It keeps audio-native understanding and preserves an external voice that can be optimized and controlled.
 
@@ -350,33 +350,33 @@ There is no winning architecture for every product.
 
 ### Choose full cascade when
 
-- Textual traceability and stage-level control are mandatory
+- Text-level traceability and stage-level control are mandatory
 - Providers need to be interchangeable
-- The voice depends on a specific TTS
-- The domain tolerates a more turn-based conversation
+- The product depends on a specific TTS voice
+- The domain can tolerate a more turn-based conversation
 - The team already knows how to operate a distributed state machine
 
 ### Choose half cascade when
 
-- The acoustic signal adds real value to understanding
-- STT → LLM reconciliation should be removed
-- The external voice is a product advantage
-- A `SpeechPlan` can be designed and evaluated
-- Governable text output is required
+- Acoustic cues materially improve understanding
+- You want to eliminate STT → LLM reconciliation
+- The external TTS voice is a product advantage
+- You can design and evaluate a `SpeechPlan`
+- You need text output you can govern directly
 
 ### Choose S2S when
 
-- Timing, naturalness and full-duplex are priorities
-- The model offers suitable voice and tool calling
-- The team can instrument heard audio and actions
-- A continuous session justifies its cost and coupling
-- The product accepts less modularity in acoustic behaviour
+- Timing, naturalness and full-duplex behavior are priorities
+- The model provides suitable voice quality and tool calling
+- The team can instrument what audio was actually heard and which actions executed
+- The benefits of a continuous session justify its cost and tighter coupling
+- The product can accept less modularity in acoustic behavior
 
 ## Hot take: S2S in front, heavy reasoning behind
 
 My bet is not to replace the whole platform with one giant S2S model.
 
-The architecture that makes the most sense to me separates two speeds:
+The architecture I prefer separates the system into two layers with different latency budgets:
 
 ```text
 S2S Interaction Surface
@@ -386,7 +386,7 @@ Cognitive Execution Plane
 tools, RAG, workflows, workers and side effects
 ```
 
-The **S2S Interaction Surface** is small, fast and full-duplex. It handles the human side:
+The **S2S Interaction Surface** is small, fast and full-duplex. It handles conversation-facing work:
 
 - Listen
 - Know when to intervene
@@ -397,7 +397,7 @@ The **S2S Interaction Surface** is small, fast and full-duplex. It handles the h
 - Accept work
 - Deliver results when there is a safe opening
 
-The **Cognitive Execution Plane** can be heavier. It handles the computational side:
+The **Cognitive Execution Plane** can be heavier. It handles deeper execution:
 
 - Deep reasoning
 - Planning
@@ -410,7 +410,7 @@ The **Cognitive Execution Plane** can be heavier. It handles the computational s
 - Compensations
 - Structured result generation
 
-The surface does not wait in a blocked state. It can say:
+The surface remains responsive instead of blocking on long-running work. It can say:
 
 > "I'm checking it. In the meantime, tell me which time slot you prefer."
 
@@ -424,7 +424,7 @@ MoshiRAG explores a related idea in research. It combines a compact full-duplex 
 
 ### Few-shot prompting with voice samples
 
-The next step would be to pass authorized audio examples to the surface:
+A further extension is to pass authorized audio examples to the surface:
 
 ```text
 system instructions
@@ -436,7 +436,7 @@ system instructions
 
 {{ include_html("snippets/articulos-tecnicos/voice-arch-voice-prompt.html") }}
 
-The analogy with text few-shot prompting is direct. Examples teach format, tone or criteria. In voice, samples can condition:
+As with text few-shot prompting, examples provide format, tone or criteria. In voice, samples can condition:
 
 - Voice identity
 - Rhythm
@@ -452,7 +452,7 @@ OpenAI Voice Engine showed generation conditioned on a 15-second sample. Access 
 
 That supports the technical direction, but does not mean every commercial S2S model offers this capability today.
 
-In a product, it is useful to separate:
+For production use, separate:
 
 1. **Authorized base voice**, which defines identity
 2. **Turn style**, which defines emotion, energy and rhythm
@@ -463,13 +463,13 @@ Clear controls are also needed:
 - Verifiable consent
 - Sample provenance
 - Blocked identities
-- Synthetic-audio detection and labelling
+- Synthetic-audio detection and labeling
 - Revocation
 - Traces of the sample used in each session
 - Anti-impersonation limits
 - Protection of samples at rest and in transit
 
-Improving imitation of a human voice cannot become a path to cloning anyone.
+Better voice imitation must not become a mechanism for cloning arbitrary people.
 
 ## One harness for all three architectures
 
@@ -504,31 +504,31 @@ cost_per_successful_minute
 
 ### Protocol
 
-1. Fix the same scenario and the same expected outcome
+1. Use the same scenario and expected outcome
 2. Run several seeds or sessions
 3. Record input audio and the audio that was actually played
 4. Compare tool traces and side effects
 5. Run a blinded human evaluation of naturalness
-6. Analyse failures by architecture, not only averages
+6. Analyze failures by architecture, not only averages
 7. Repeat under congestion and slow dependencies
 
-The goal is not to prove one option saves a few milliseconds in a lab. It is to discover which one preserves the conversation, completes the task and retains control when components fail or overlap.
+The goal is not to prove one option saves a few milliseconds in a lab. It is to find which architecture preserves the conversation, completes the task and retains control when components fail or overlap.
 
 ## Conclusion
 
-Full cascade still makes a lot of sense when modularity, control and auditability matter most.
+Full cascade remains a strong choice when modularity, control and auditability matter most.
 
-Half cascade is especially attractive when we want audio-native understanding without giving up an external TTS and a governable text output.
+Half cascade is especially attractive when audio-native understanding matters but you still want an external TTS and text output you can govern directly.
 
 Speech-to-speech offers the best starting point for timing, prosody and full-duplex. Even so, it does not eliminate the runtime or tools.
 
-The direction I find most promising is hybrid:
+The hybrid direction looks most promising:
 
 > **A fast S2S surface for the conversation, a heavier cognitive plane for the work, and a persistent contract that keeps them synchronized.**
 
 A `Voice Prompt Pack` with authorized samples, pronunciations and expressive policy can be added to that architecture.
 
-The result is not a model trying to do everything. It is a system in which each layer works at the speed and with the level of control it needs.
+Each layer can then operate at the speed and with the level of control it needs instead of forcing one model to do everything.
 
 ## Sources
 
