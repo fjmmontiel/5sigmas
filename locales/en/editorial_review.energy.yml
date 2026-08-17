@@ -20,3 +20,9 @@ certified_routes:
     english_blob_sha: e740ad672225b69c6fa5511d6690842782d7783c
     review_scope: prose, headings, lists, FAQs, terminology, technical meaning, quantitative evidence, references, visual hooks
     note: Side-by-side native-English review; tightened training/inference cadence, rebound-effect, grid/PPA, water, geography and FAQ phrasing without changing any claim, number, source or visual placement.
+  - route: series/ia-pib-bienestar-energia/03-pib-vs-bienestar.md
+    reviewed_on: 2026-08-17
+    spanish_blob_sha: 79db69068465384e56486a9aaff69bcd7fba644e
+    english_blob_sha: c1732c377c6b50c73ac332fccf73f9f6c0e96d9e
+    review_scope: prose, headings, lists, FAQs, terminology, technical meaning, quantitative evidence, references, visual hooks
+    note: Side-by-side native-English review; removed literal GDP/well-being, relative-income, survey-bias and alternative-framework phrasing while preserving the canonical argument, evidence and visual placement.
