@@ -4,9 +4,11 @@ on:
   pull_request:
     paths:
       - 'locales/en/**/*.md'
+      - 'locales/en/**/*.html'
       - 'docs/**/*.md'
       - 'locales/en/manifest.yml'
       - 'scripts/audit_english_editorial_quality.py'
+      - 'scripts/audit_english_html_editorial_quality.py'
       - '.github/workflows/english-editorial-quality.yml'
 
 permissions:
@@ -27,17 +29,23 @@ jobs:
       - name: Install Python dependencies
         run: pip install pyyaml
 
-      - name: Audit all published English Markdown against Spanish canonical structure
+      - name: Audit published English Markdown against Spanish canonical structure
         run: |
           python scripts/audit_english_editorial_quality.py \
             --strict \
-            --json artifacts/english-editorial-quality/report.json
+            --json artifacts/english-editorial-quality/markdown-report.json
+
+      - name: Audit static list text in localized English HTML snippets
+        run: |
+          python scripts/audit_english_html_editorial_quality.py \
+            --strict \
+            --json artifacts/english-editorial-quality/html-report.json
 
       - name: Upload editorial audit report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: english-editorial-quality-report
-          path: artifacts/english-editorial-quality/report.json
+          path: artifacts/english-editorial-quality/
           if-no-files-found: error
           retention-days: 14
