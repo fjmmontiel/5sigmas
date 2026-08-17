@@ -55,7 +55,7 @@ try {
       'approximately ten times more energy than a conventional web search', 'forty times the energy use of that search',
       '415 TWh in 2024', 'between 945 TWh and 1,260 TWh in 2030', 'from 50 TWh in 2023 to 554 TWh in 2030',
       'approximately 180 to 320 million tonnes', 'between 1.6 and 7.6 times higher', 'between 98% and 99% of global production',
-      'approximately 2.3 MWh', 'between 1.2 and 5 million tonnes of electronic waste by 2030', 'between 36 and 52 weeks',
+      'approximately 2.3 MWh', 'between 1.2 and 5 million tonnes of electronic waste by 2030', 'range from 36 to 52 weeks',
       'around two million liters per day', 'from 560 billion liters in 2024 to 1.2 trillion in 2030',
       'around 85 million liters per year', 'around 2.01 trillion liters', 'roughly 3.6 times',
       'more than 20% of the country\'s total electricity consumption', 'close to 80% by 2030',
@@ -78,7 +78,7 @@ try {
       const text = (await training.textContent()) || '';
       requireText(text, ['Two phases with radically different consumption profiles', 'Training', '~42 GWh', 'Inference', '~2.9 Wh', '×10 versus a web search (0.3 Wh)', 'up to ×40 per minute of generated video'], `${viewport.name}: training/inference`);
       forbidText(text, ['Dos fases con perfiles', 'Entrenamiento', 'Inferencia', '~2,9 Wh'], `${viewport.name}: training/inference`);
-      await checkPlacement(training, viewport.name, 'training/inference', 'A model with millions of daily users consumes energy continuously, not episodically.', 'Why efficiency does not stop demand');
+      await checkPlacement(training, viewport.name, 'training/inference', 'Energy use does not end with training.', 'Why efficiency does not stop demand');
       await checkOverflow(training, viewport.name, 'training/inference'); await capture(training, viewport.name, 'training-inference');
     }
 
@@ -116,7 +116,7 @@ try {
       const text = (await demand.textContent()) || '';
       requireText(text, ['From global data to the local bottleneck', '2024 · 415 TWh', '2030 base · 945 TWh', '2030 high · 1,260 TWh', '100 MW continuous', '~100,000 homes', '500 MW continuous', '~500,000 homes', '~2 GW', '~2 million homes'], `${viewport.name}: demand projection`);
       forbidText(text, ['Del dato global al cuello de botella local', '2030 alto', '1.260 TWh', '100 MW continuos', '100.000 hogares'], `${viewport.name}: demand projection`);
-      await checkPlacement(demand, viewport.name, 'demand projection', 'associated CO₂ emissions rising from approximately 180 to 320 million tonnes', 'When using a comparison with households');
+      await checkPlacement(demand, viewport.name, 'demand projection', 'associated CO₂ emissions rising from approximately 180 to 320 million tonnes', 'Household comparisons should be read');
       await checkOverflow(demand, viewport.name, 'demand projection'); await capture(demand, viewport.name, 'demand-projection');
     }
 
@@ -156,7 +156,7 @@ try {
       const text = (await geography.textContent()) || '';
       requireText(text, ['The same AI, two geographies', 'Training follows electricity. Serving follows latency.', 'Training', 'It seeks cheap electricity and massive capacity.', '$/MWh · available power', 'Inference', 'It seeks proximity and stable response times.', 'milliseconds · connectivity', 'Concentration becomes a grid problem.', 'Ireland', '>20%'], `${viewport.name}: geography`);
       forbidText(text, ['La misma IA, dos geografías', 'Entrenar sigue la energía', 'Busca electricidad barata', 'potencia disponible', 'Inferencia', 'Busca proximidad'], `${viewport.name}: geography`);
-      await checkPlacement(geography, viewport.name, 'geography', 'This concentration has consequences for the local grid:', 'The next chapter examines the other side of the equation');
+      await checkPlacement(geography, viewport.name, 'geography', 'At AI\'s current deployment scale', 'The next chapter examines the other side of the equation');
       await checkOverflow(geography, viewport.name, 'geography'); await capture(geography, viewport.name, 'geography');
     }
 
