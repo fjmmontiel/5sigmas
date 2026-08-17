@@ -21,7 +21,7 @@ const contracts = {
     evidence:['4–10 years in key markets','Power grid and water are the most severe bottlenecks','Space changes three levers; it does not make everything viable','Mass: every kilogram launched shapes the design','Falling launch cost opens comparison, not automatic viability','Future: depends on total operating cost','560 billion litres per year','1.2 trillion litres in 2030','95–99%','$0.002 per kWh','100 GW of AI compute','What is the FOOL paper and what does it propose for the satellite downlink bottleneck?','Base sources'],
     reject:['What to carry into the rest of the series','That is a genuine form of data gravity','The correct comparison'],
     refs:['5. References',10],
-    hooks:[['h2','2. Terrestrial bottlenecks','.ddc[data-demo="dc-01-bottlenecks"]','h3','Power grid'],['h2','3. Why space enters the discussion','.dpe[data-demo="dc-01-why-space"]','p','What is real as a potential advantage'],['h2','4. The launch-cost inflection point','.dli[data-demo="dc-01-launch-cost"]','p','On 4 February 2026']],
+    hooks:[['h2','2. Terrestrial bottlenecks','.ddc[data-demo="dc-01-bottlenecks"]','h3','Power grid'],['h2','3. Why space enters the discussion','.dpe[data-demo="dc-01-why-space"]','p','A genuine potential advantage appears'],['h2','4. The launch-cost inflection point','.dli[data-demo="dc-01-launch-cost"]','p','On 4 February 2026']],
     overflow:['.ddc','.dpe','.dli'],
   },
   '02-energia-calor-conectividad': {
