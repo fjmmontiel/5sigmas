@@ -15,7 +15,7 @@ video_duration: "PT1M0S"
 
 A model can refuse a dangerous request and still remain vulnerable to an attack that changes the form of the question. The distinction matters because a jailbreak does not try to convince the system that the request is good. It tries to find an input that makes the model produce a continuation that its controls should have blocked.
 
-In the earliest cases, a human trick was enough. A character, a story, or a reformulation could make the model abandon a restriction in one particular conversation. The technical shift arrives when that search is automated and the attacker can try thousands of variants against a clear metric.
+In the earliest cases, a human trick was enough. A character, a story or a reformulation could make the model abandon a restriction in one particular conversation. The technical shift comes when that search is automated and the attacker can try thousands of variants against a clear metric.
 
 ## Refusing a request does not create a perfect boundary
 
@@ -25,17 +25,17 @@ That also explains why temperature zero does not solve the problem. If an advers
 
 {{ include_html("snippets/seguridad-ia/02-superficie-jailbreak.html") }}
 
-To evaluate a system, we have to observe what happens when a persistent person can vary the input, observe the output, and try again.
+To evaluate a system, we have to observe what happens when a persistent person can vary the input, observe the output and try again.
 
 ## Trying many variants changes the cost of the attack
 
 Work on universal and transferable attacks popularized an important idea. An adversarial suffix can be optimized to increase the probability that the model starts with an affirmative response and then transferred to other queries and models.
 
-The GCG method treats tokens as discrete variables and searches for substitutions that improve the objective. The attacker does not need to understand every detail of the model. They need an evaluation function, the ability to try variants, and a path to observe the result ([Zou et al., 2023](https://arxiv.org/abs/2307.15043)).
+The GCG method treats tokens as discrete variables and searches for substitutions that improve the objective. The attacker does not need to understand every detail of the model. They need an evaluation function, the ability to try variants and a path to observe the result ([Zou et al., 2023](https://arxiv.org/abs/2307.15043)).
 
-Transfer does not mean that there is one universal master key for every model. It means that a defense evaluated on a single formulation may be measuring an input surface that is too narrow. The attacker optimizes over a family of inputs, and the system should evaluate over that same family.
+Transfer does not mean that there is one universal master key for every model. It means that a defense evaluated on a single formulation may be measuring an input surface that is too narrow. The attacker optimizes over a family of inputs, and the system should be evaluated across that same family.
 
-OWASP summarizes another part of the problem with Best-of-N attacks: if the attacker can generate many variations, risk no longer depends only on the success probability of one attempt. The exact percentage depends on the model, objective, budget, and evaluation; it should not be carried over as a universal guarantee for any product ([OWASP Prompt Injection Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html)).
+OWASP summarizes another part of the problem with Best-of-N attacks: if the attacker can generate many variations, risk no longer depends only on the success probability of one attempt. The exact percentage depends on the model, objective, budget and evaluation; it should not be carried over as a universal guarantee for any product ([OWASP Prompt Injection Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html)).
 
 ## The threat model needs an attack budget
 
@@ -46,8 +46,8 @@ An evaluation should explicitly fix:
 - maximum number of attempts
 - whether the attacker sees previous responses
 - whether the next prompt can adapt
-- whether the attacker has access to logits, scores, or only text
-- whether language, encoding, or format can change
+- whether the attacker has access to logits, scores or only text
+- whether language, encoding or format can change
 - whether the system applies rate limiting or identity-based blocking
 - whether the attack targets an isolated conversation or an agent with tools
 
@@ -57,7 +57,7 @@ The same model can show a very different profile under `N=1` and under an adapti
 
 ## Which controls remain useful
 
-Rate limiting and circuit breakers remain useful. They reduce attack speed, raise its cost, and create opportunities to trigger review. The mistake is presenting that friction as a complete solution.
+Rate limiting and circuit breakers remain useful. They reduce attack speed, raise its cost and create opportunities to trigger review. The mistake is presenting that friction as a complete solution.
 
 An input filter can block known patterns. An output classifier can detect dangerous content while it is being generated. An attempt limit can stop the search. None of those layers decides by itself whether the system is authorized to perform an external action.
 
@@ -78,9 +78,9 @@ The minimum evaluation should separate four outcomes:
 
 {{ include_html("snippets/seguridad-ia/02-outcome-ladder.html") }}
 
-Each transition needs a different test. Collapsing them creates two opposite errors. The model can appear broken when it only generated irrelevant text, or it can appear safe because the filter blocked the answer while the runtime left the same effect reachable through another route.
+Each transition needs a different test. Conflating them creates two opposite errors. The model can appear broken when it only generated irrelevant text, or it can appear safe because the filter blocked the answer while the runtime left the same effect reachable through another route.
 
-The conclusion of this chapter is uncomfortable but practical. Alignment reduces the frequency of dangerous responses. Product security also depends on attempt budgets, classification, authorization, scopes, observability, and the ability to stop.
+The practical conclusion is straightforward. Alignment reduces the frequency of dangerous responses. Product security also depends on attempt budgets, classification, authorization, scopes, observability and the ability to stop.
 
 ## References
 
