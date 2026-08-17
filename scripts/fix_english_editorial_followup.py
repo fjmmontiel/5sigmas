@@ -2,8 +2,8 @@
 """Apply the second, human-reviewed English editorial cleanup for PR #213.
 
 This migration is intentionally finite: normalize sentence-final punctuation copied
-onto short fragment lists and rewrite the literal constructions confirmed during
-ES→EN review of Foundations Chapters 1–2. It is not a generic prose rewriter.
+onto short fragment lists and rewrite literal constructions confirmed during ES→EN
+review. It is not a generic prose rewriter.
 """
 
 from __future__ import annotations
@@ -68,6 +68,14 @@ REPLACEMENTS: dict[str, dict[str, str]] = {
         "With the representations solved, the next problem is processing them without losing the thread as sequences of those vectors become longer.":
             "Once inputs are represented numerically, the next challenge is processing long sequences while preserving useful context.",
     },
+    "temas/evaluacion-modelos.md": {
+        "- duplicate closure": "- duplicate end-of-call events",
+        "## 3. Use your own golden set": "## 3. Build your own reference set",
+        "The **golden set** contains real or designed examples representative of the domain. Every case needs:":
+            "The **reference set** (often called a *golden set*) contains real or designed examples representative of the domain. Every case needs:",
+        "- filtering regressions": "- screening for regressions",
+        "- affinity with its own model family": "- bias toward outputs from its own model family",
+    },
 }
 
 
@@ -99,8 +107,6 @@ def normalize_fragment_list_punctuation(path: Path) -> int:
             bodies = [item[2] for item in block]
             counts = [len(WORD_RE.findall(re.sub(r"[`*_\[\]()]", " ", body))) for body in bodies]
             endings = [body[-1] if body and body[-1] in ".!?" else "bare" for body in bodies]
-            # High-confidence Spanish-list artifact: every earlier item is a
-            # short bare fragment and only the final item carries a period.
             if all(count <= 12 for count in counts) and endings[-1] == "." and all(end == "bare" for end in endings[:-1]):
                 index = block[-1][0]
                 raw = lines[index]
