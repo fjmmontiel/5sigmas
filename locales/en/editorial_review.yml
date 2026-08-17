@@ -96,3 +96,21 @@ certified_routes:
     english_blob_sha: 1ce36f303005e3ccda8223973b7e667db0107e6b
     review_scope: prose, headings, lists, terminology, technical meaning, evidence, references, memory semantics, visual hooks
     note: Side-by-side native-English editorial review; tightened memory-governance, repair and state-management phrasing without changing quantitative evidence, trust semantics, references, evaluation stages or visual hooks.
+  - route: series/datacenters-espacio/00_presentacion_serie.md
+    reviewed_on: 2026-08-17
+    spanish_blob_sha: e5fabd9da8e33525b745f07ad9e935e2f1c4192c
+    english_blob_sha: 92d51811694fd88bba7fe3bb87868ccf88b0838d
+    review_scope: prose, headings, chapter summaries, terminology, evidence, links, visual hooks
+    note: Side-by-side native-English editorial review; restored the canonical 350,000× compute-growth evidence and chapter links while preserving the series thesis, quantitative caveats and visual semantics.
+  - route: series/datacenters-espacio/01-por-que-ahora.md
+    reviewed_on: 2026-08-17
+    spanish_blob_sha: 68231b9f28f308e9dcf6e2d495b0d40051f5fe64
+    english_blob_sha: 63443dbfa4699f585ac6bf883a30536d9b2cc8ec
+    review_scope: prose, headings, FAQs, terminology, technical meaning, evidence, references, visual hooks
+    note: Side-by-side native-English editorial review; removed literal Spanish discourse around orbital constraints, cooling and economic caveats while preserving every number, source, example, section and visual hook.
+  - route: series/datacenters-espacio/02-energia-calor-conectividad.md
+    reviewed_on: 2026-08-17
+    spanish_blob_sha: e68051380c3535053b32de3ec58fcf5ea96fd432
+    english_blob_sha: 2e4e89097f112db91c03e88fadaf905bb905ec4d
+    review_scope: prose, headings, lists, FAQs, terminology, technical meaning, evidence, references, visual hooks
+    note: Side-by-side native-English editorial review; tightened thermal, solar, connectivity and maintenance prose without changing physics, quantitative evidence, references, teaching order or visual semantics.
