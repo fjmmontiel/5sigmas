@@ -12,8 +12,10 @@ Hard errors:
 
 Review signals (reported, not hard failures):
 - English routes with materially more Markdown bullets than their Spanish source;
-- clusters of three or more very short English bullets, which often indicate
-  sentence fragmentation that should be reviewed in rendered context.
+- clusters of three or more very short English bullets;
+- short list blocks with mixed terminal punctuation;
+- a small set of high-precision translationese phrases that deserve native-English
+  review in context.
 
 Code fences are ignored. Front matter is ignored. Generated/non-editorial files
 are not scanned; the published route list in locales/en/manifest.yml is the scope.
@@ -40,6 +42,18 @@ BULLET_RE = re.compile(r"^(?P<indent>\s*)[-*+]\s+(?P<body>\S.*)$")
 FENCE_RE = re.compile(r"^\s*(```|~~~)")
 WORD_RE = re.compile(r"\b[\w’'-]+\b", re.UNICODE)
 QUESTION_COLON_RE = re.compile(r"(?:\*\*|__)[^\n]{1,180}\?(?:\*\*|__):")
+
+# These are review signals, not automatic errors. They are deliberately narrow:
+# each commonly appears in literal Spanish→English prose but can still be valid
+# English in context. The audit surfaces them for human judgement rather than
+# rewriting them blindly.
+TRANSLATIONESE_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
+    ("we_are_going_to", re.compile(r"\bwe are going to\b", re.IGNORECASE)),
+    ("is_the_following", re.compile(r"\bis the following\b", re.IGNORECASE)),
+    ("are_the_following", re.compile(r"\bare the following\b", re.IGNORECASE)),
+    ("we_will_see", re.compile(r"\bwe will see\b", re.IGNORECASE)),
+    ("it_is_convenient_or_advisable", re.compile(r"\bit is (?:convenient|advisable) to\b", re.IGNORECASE)),
+)
 
 
 @dataclass(frozen=True)
@@ -101,11 +115,30 @@ def visible_body(body: str) -> str:
     return re.sub(r"\s*<!--.*?-->\s*$", "", body).rstrip()
 
 
+def bullet_blocks(path: Path) -> list[list[tuple[int, str, str]]]:
+    blocks: list[list[tuple[int, str, str]]] = []
+    current: list[tuple[int, str, str]] = []
+    previous_line: int | None = None
+    previous_indent: str | None = None
+
+    for line_no, indent, body in markdown_bullets(path):
+        adjacent = previous_line is not None and line_no <= previous_line + 2
+        same_indent = previous_indent == indent
+        if current and (not adjacent or not same_indent):
+            blocks.append(current)
+            current = []
+        current.append((line_no, indent, body))
+        previous_line = line_no
+        previous_indent = indent
+    if current:
+        blocks.append(current)
+    return blocks
+
+
 def punctuation_findings(route: str, path: Path) -> list[Finding]:
     findings: list[Finding] = []
-    bullets = markdown_bullets(path)
 
-    for line_no, _indent, body in bullets:
+    for line_no, _indent, body in markdown_bullets(path):
         visible = visible_body(body)
         if visible.endswith(";"):
             findings.append(
@@ -120,36 +153,18 @@ def punctuation_findings(route: str, path: Path) -> list[Finding]:
 
     # Detect list blocks that preserve Spanish sentence punctuation across
     # separate Markdown bullets, e.g. "Search...," / "Memory...," / "Worlds.".
-    # A single comma-ended bullet is only suspicious; two or more within one
-    # short contiguous block is a deterministic translation artifact here.
-    cluster: list[tuple[int, str, str]] = []
-    previous_line: int | None = None
-    previous_indent: str | None = None
-
-    def flush(items: list[tuple[int, str, str]]) -> None:
-        comma_items = [item for item in items if visible_body(item[2]).endswith(",")]
-        if len(items) >= 3 and len(comma_items) >= 2:
+    for block in bullet_blocks(path):
+        comma_items = [item for item in block if visible_body(item[2]).endswith(",")]
+        if len(block) >= 3 and len(comma_items) >= 2:
             findings.append(
                 Finding(
                     kind="comma_chained_bullet_list",
                     route=route,
-                    line=items[0][0],
-                    excerpt=" | ".join(visible_body(item[2]) for item in items[:5])[:320],
+                    line=block[0][0],
+                    excerpt=" | ".join(visible_body(item[2]) for item in block[:5])[:320],
                     severity="error",
                 )
             )
-
-    for line_no, indent, body in bullets:
-        adjacent = previous_line is not None and line_no <= previous_line + 2
-        same_indent = previous_indent == indent
-        if cluster and (not adjacent or not same_indent):
-            flush(cluster)
-            cluster = []
-        cluster.append((line_no, indent, body))
-        previous_line = line_no
-        previous_indent = indent
-    if cluster:
-        flush(cluster)
 
     for line_no, line in body_lines(path):
         if QUESTION_COLON_RE.search(line):
@@ -163,6 +178,28 @@ def punctuation_findings(route: str, path: Path) -> list[Finding]:
                 )
             )
 
+    return findings
+
+
+def translationese_findings(route: str, path: Path) -> list[Finding]:
+    findings: list[Finding] = []
+    for line_no, line in body_lines(path):
+        # Skip raw HTML/template lines: the editorial text in those surfaces is
+        # checked in their canonical snippet source, not inferred here.
+        stripped = line.strip()
+        if not stripped or stripped.startswith(("<", "{{", "!!!")):
+            continue
+        for name, pattern in TRANSLATIONESE_PATTERNS:
+            if pattern.search(line):
+                findings.append(
+                    Finding(
+                        kind=f"translationese_{name}",
+                        route=route,
+                        line=line_no,
+                        excerpt=stripped[:300],
+                        severity="review",
+                    )
+                )
     return findings
 
 
@@ -184,40 +221,44 @@ def fragmentation_findings(route: str, en_path: Path, es_path: Path) -> list[Fin
             )
         )
 
-    # Short-bullet clusters are only a review signal. They can be good UI copy,
-    # but clusters in prose-heavy articles are where machine-translated cadence
-    # most often hides.
-    cluster: list[tuple[int, str]] = []
-    previous_line: int | None = None
-    for line_no, _indent, body in en_bullets:
-        words = WORD_RE.findall(re.sub(r"[`*_\[\]()]", " ", body))
-        short = len(words) <= 8
-        adjacent = previous_line is not None and line_no <= previous_line + 2
-        if short and (not cluster or adjacent):
-            cluster.append((line_no, body))
-        else:
-            if len(cluster) >= 3:
-                findings.append(
-                    Finding(
-                        kind="short_bullet_cluster",
-                        route=route,
-                        line=cluster[0][0],
-                        excerpt=" | ".join(item for _, item in cluster[:4])[:260],
-                        severity="review",
-                    )
+    # Short-bullet clusters can be perfectly good checklists, so this is a
+    # review signal rather than a failure.
+    for block in bullet_blocks(en_path):
+        short_items: list[tuple[int, str]] = []
+        for line_no, _indent, body in block:
+            words = WORD_RE.findall(re.sub(r"[`*_\[\]()]", " ", body))
+            if len(words) <= 8:
+                short_items.append((line_no, body))
+        if len(block) >= 3 and len(short_items) == len(block):
+            findings.append(
+                Finding(
+                    kind="short_bullet_cluster",
+                    route=route,
+                    line=block[0][0],
+                    excerpt=" | ".join(item for _, item in short_items[:4])[:260],
+                    severity="review",
                 )
-            cluster = [(line_no, body)] if short else []
-        previous_line = line_no
-    if len(cluster) >= 3:
-        findings.append(
-            Finding(
-                kind="short_bullet_cluster",
-                route=route,
-                line=cluster[0][0],
-                excerpt=" | ".join(item for _, item in cluster[:4])[:260],
-                severity="review",
             )
-        )
+
+        # Short fragment lists should normally use one punctuation convention.
+        # Mixed endings often survive a literal source translation: e.g. four
+        # bare fragments followed by one period solely because it was the final
+        # item in the Spanish sentence-like list.
+        if len(block) >= 3:
+            visible = [visible_body(item[2]) for item in block]
+            word_counts = [len(WORD_RE.findall(re.sub(r"[`*_\[\]()]", " ", item))) for item in visible]
+            if all(count <= 12 for count in word_counts):
+                endings = [item[-1] if item and item[-1] in ".!?" else "bare" for item in visible]
+                if "bare" in endings and any(end in {".", "!", "?"} for end in endings):
+                    findings.append(
+                        Finding(
+                            kind="mixed_fragment_list_punctuation",
+                            route=route,
+                            line=block[0][0],
+                            excerpt=" | ".join(visible[:5])[:320],
+                            severity="review",
+                        )
+                    )
 
     return findings
 
@@ -228,6 +269,7 @@ def audit(routes: Iterable[str]) -> list[Finding]:
         en_path = EN_ROOT / route
         es_path = ES_ROOT / route
         findings.extend(punctuation_findings(route, en_path))
+        findings.extend(translationese_findings(route, en_path))
         findings.extend(fragmentation_findings(route, en_path, es_path))
     return findings
 
