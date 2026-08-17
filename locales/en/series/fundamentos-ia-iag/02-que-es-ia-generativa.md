@@ -22,9 +22,9 @@ The [previous chapter](./01-que-es-ia.md) mapped the main layers of AI. Here we 
 
 Generative AI generates text, images, code, audio, and video instead of classifying inputs or discriminating between different classes.
 
-The training loop still follows the same broad ML pattern: data is processed, parameters are updated and an objective is optimized.
+The training loop still follows the same broad ML pattern: data flows through the system, parameters are updated, and the objective is optimized.
 
-What changed is what is learned and the scale at which it is applied. Three connected ideas make that shift easier to understand:
+The shift is in what the model learns and the scale at which that learning is applied. Three connected ideas make it easier to understand:
 
 - **Embeddings**: how the model represents meaning as numbers.
 - **Transformer**: the architecture that makes it possible to process long context in parallel.
@@ -32,13 +32,13 @@ What changed is what is learned and the scale at which it is applied. Three conn
 
 ---
 
-## 1. Embeddings: Translating text into numbers
+## 1. Embeddings: Turning text into numbers
 
 ML models need numbers as input, and text is not naturally numerical.
 
 A common pipeline has three steps.
 
-First, text is divided into **tokens**: the units the model processes. A token can be a whole word, part of a word or punctuation; for example, the Spanish word «agente» may be split into multiple subword tokens rather than represented as one token. ([OpenAI Tokenizer](https://platform.openai.com/tokenizer))
+First, text is divided into **tokens**: the units the model processes. A token can be a whole word, part of a word, or punctuation; for example, the Spanish word «agente» may be split into multiple subword tokens rather than represented as one token. ([OpenAI Tokenizer](https://platform.openai.com/tokenizer))
 
 Each token is then converted into a **vector**: a list of thousands of numbers representing its position in a mathematical space. At this point the values are arbitrary: the format exists, but the semantics do not.
 
@@ -49,9 +49,9 @@ The resulting vector representation is called an **embedding** ([original paper]
 
 Operations on those positions capture relationships: `king − man + woman ≈ queen`.
 
-> The model does not "understand" words: it learns that certain tokens appear in similar contexts and assigns them nearby positions in vector space. Semantics emerges on its own during training.
+> The model does not "understand" words: it learns that certain tokens appear in similar contexts and assigns them nearby positions in vector space. Semantic structure emerges during training.
 
-Modern multimodal systems ultimately represent text, images and audio numerically, although each modality may use a different encoder or front end before those representations are processed together.
+Modern multimodal systems ultimately represent text, images, and audio numerically, although each modality may use a different encoder or front end before those representations are processed together.
 
 {{ include_html("snippets/fundamentos-ia-iag/02-embeddings.html") }}
 
@@ -70,32 +70,32 @@ The Transformer solves both with one central mechanism: **attention**.
 
 For every token it processes, the model calculates how relevant every other token in the context is. In "The bank where I sat was wet," when processing "bank," attention connects it with "sat" and "wet" and determines that it refers to a place or object you can sit on rather than a financial institution, without any rule explicitly establishing that interpretation.
 
-Internally it works with the same principle as neural networks: weights are adjusted to reduce error. What changes is the architecture of those connections, because attention relates all tokens in the context at once instead of doing so sequentially.
+Internally it uses the same principle as neural networks: weights are adjusted to reduce error. What changes is the architecture of those connections. Attention relates all tokens in the context at once instead of processing those relationships sequentially.
 
 What makes the Transformer so valuable is not only that it solves those two problems, but that the architecture is **general**: it works for text, images, audio, video, and code. The Transformer dominates the language-model stack (GPT, Claude, Gemini, Llama) and an important part of the modern multimodal stack, although not all generative AI shares exactly the same architecture: Stable Diffusion, for example, is a latent diffusion model, not a pure Transformer.
 
 {{ include_html("snippets/fundamentos-ia-iag/02-transformer.html") }}
 
-The architecture was ready, and the leap forward came when it was applied at an unprecedented scale of data and compute.
+The architecture was in place; the breakthrough came from applying it at an unprecedented scale of data and compute.
 
 ---
 
-## 3. Scaling laws: when quantity becomes quality
+## 3. Scaling laws: How performance changes with scale
 
-Training uses **self-supervised learning**: without labels and with a simple signal (predicting the next token), the model learns from the raw volume of text, and that volume produces a result that surprised even the people who designed it.
+Training uses **self-supervised learning**: with no manual labels and a simple signal such as predicting the next token, the model learns from raw text at scale. The capabilities that emerged from that process surprised even the people who designed these systems.
 
-In 2020, OpenAI published ([Scaling Laws][r3]) that model performance follows a **predictable relationship** with three variables: parameters, training data, and compute.
+In 2020, OpenAI reported in [Scaling Laws][r3] that model performance follows a **predictable relationship** with three variables: parameters, training data, and compute.
 
-> **Scaling law**: It states that doubling compute with the right proportion of data and parameters produces a predictable and consistent improvement in performance. In other words, more data and compute produce better AI models.
+> **Scaling law**: with the right balance of data and parameters, increasing compute produces a predictable and consistent improvement in performance. In practical terms, more data and compute can produce better AI models.
 
-What was unexpected was not that models improved, but that **at a certain scale capabilities appeared that nobody had programmed**: few-shot learning, arithmetic, translation, code synthesis, and following complex instructions.
+What was unexpected was not that models improved, but that **some capabilities appeared only at larger scales even though nobody had explicitly programmed them**: few-shot learning, arithmetic, translation, code synthesis, and following complex instructions.
 
-These capabilities are called **emergent capabilities** because they were not part of anyone's design. Later literature debates how much of that emergence is a real change in the model and how much is an artifact of the metric used to measure it, but the practical jump in usefulness at scale is undeniable.
+These are called **emergent capabilities** because they were not explicitly designed into the system. Later literature debates how much of that emergence reflects a real change in the model and how much is an artifact of the metric used to measure it, but the practical increase in usefulness at scale is clear.
 
 <details markdown="1">
 <summary><strong>What is few-shot learning?</strong></summary>
 
-The model can learn to perform a new task after seeing only two or three examples included directly in the prompt, without retraining or seeing more data. You show it a couple of translations in the format you need and it generalizes to the rest. Before language models at scale, this required a dedicated training set; now it happens in the context of a single call. It is a capability that GPT-3 demonstrated in 2020 ([GPT-3 paper][r4]) and that nobody had anticipated from a training signal as simple as predicting the next token.
+The model can perform a new task after seeing only two or three examples included directly in the prompt, without retraining or additional training data. Show it a couple of translations in the format you need and it can generalize to the rest. Before language models at scale, this required a dedicated training set; now it can happen within the context of a single call. GPT-3 demonstrated this capability in 2020 ([GPT-3 paper][r4]), even though its training signal was as simple as predicting the next token.
 
 </details>
 
@@ -107,13 +107,13 @@ The same curve becomes concrete when we walk through the GPT family model by mod
 
 ### Foundation models
 
-The result of these emergent capabilities is **foundation models** ([Foundation Models][r6]): models pretrained on large volumes of text and adaptable to multiple tasks without retraining from scratch.
+These capabilities led to **foundation models** ([Foundation Models][r6]): models pretrained on large volumes of text and adaptable to multiple tasks without retraining from scratch.
 
-A single model can write, summarize, translate, classify, extract information, and generate code. This is where the real usefulness of Generative AI becomes effective: we now have a single model that serves multiple tasks.
+A single model can write, summarize, translate, classify, extract information, and generate code. This is where generative AI becomes broadly useful in practice: one model can serve many different tasks.
 
 > A foundation model is not an expert in one specific task, but a compressed representation of human language and knowledge that can be specialized.
 
-Where before you trained one model per task, now one model serves many, and adaptation can be as lightweight as changing the instructions or as deep as reinforcement learning with human feedback (RLHF, [InstructGPT][r7]), which is what turns a model that predicts text into one that follows instructions.
+Where you once trained one model per task, a single pretrained model can now serve many tasks. Adaptation can be as lightweight as changing the instructions or as deep as reinforcement learning with human feedback (RLHF, [InstructGPT][r7]), which turns a model that predicts text into one that follows instructions.
 
 What changes in each case is the type of system you build on top of it.
 
@@ -125,7 +125,7 @@ They all start from the same base AI architecture, the Transformer, are pretrain
 
 ## 4. LLM, LLM + RAG, Agent
 
-Further to the right does not mean better: it means more capabilities, higher operating cost, and more difficulty controlling the system when something fails.
+Moving to the right along this spectrum does not mean better. It means more capabilities, higher operating cost, and more difficulty controlling the system when something fails.
 
 ### Plain LLM
 
@@ -137,83 +137,83 @@ The limitation is that this knowledge is static and has a cutoff date: it does n
 
 ### LLM + RAG (Retrieval-Augmented Generation)
 
-RAG solves the static-knowledge problem by adding a retrieval step before generation ([RAG paper][r5]). The mechanism uses the embeddings from the previous chapter: the documents in your knowledge base are converted into vectors and stored.
+RAG addresses the static-knowledge problem by adding a retrieval step before generation ([RAG paper][r5]). The mechanism uses the embeddings described earlier: documents in your knowledge base are converted into vectors and stored.
 
-When a query arrives, it is also vectorized and the system finds the closest fragments in embedding space, meaning the ones most relevant by meaning.
+When a query arrives, it is also vectorized and the system retrieves the semantically closest fragments in embedding space.
 
 Those fragments are included in the model's context together with the question, and the model reads and reasons over them to answer.
 
-The result is that the model can answer accurately about things that were not in its base training (internal documentation, updated regulations, proprietary knowledge bases).
+The result is that the model can answer accurately about information that was not in its base training, such as internal documentation, updated regulations, or proprietary knowledge bases.
 
-But there is an important nuance: the system does not learn anything new permanently. It only reads the relevant documents on each query, just as you would consult a case file before answering.
+There is an important nuance: the system does not learn anything new permanently. It only reads the relevant documents for each query, much as you would consult a case file before answering.
 
 ### Agent
 
-The model no longer only answers: it can plan, use tools, and act in loops with access to web search, executable code, databases, and APIs, which lets it split a complex task into steps, execute each one, read the results, and adjust the plan.
+The model is no longer limited to answering. It can plan, use tools, and act in loops with access to web search, executable code, databases, and APIs. That lets it split a complex task into steps, execute each one, read the results, and adjust the plan.
 
-That makes it capable of things no model alone could do, but with proportional risk: the longer the chain of steps, the greater the probability that one failure propagates into the final result.
+This makes it capable of tasks that a model alone could not complete, but the risk grows with the chain of actions: the longer the sequence, the more opportunities there are for one failure to propagate into the final result.
 
 {{ include_html("snippets/fundamentos-ia-iag/02-llm-rag-agente.html") }}
 
-The Agent is where the promise of Software 2.0 is completed: not only is the logic learned, the system also acts.
+Agents extend the Software 2.0 idea one step further: the system not only learns logic, it can also act.
 
-As we can anticipate, any of these configurations needs an engineering lifecycle to work in production.
+Any of these configurations still needs an engineering lifecycle to work reliably in production.
 
 ---
 
 ## 5. LLMOps: the complete lifecycle for GenAI in production
 
-LLMOps follows the same logic as the lifecycle from the previous chapter (capture data, train, evaluate, deploy, monitor), but with one fundamental difference for 99% of the companies/individuals applying these technologies:
+LLMOps follows the same logic as the lifecycle from the previous chapter (capture data, train, evaluate, deploy, monitor), but with one fundamental difference for 99% of the companies and individuals applying these technologies:
 
-> **The model is a third-party service** — OpenAI, Anthropic, Google, Meta... models that you consume through an API; you do not train them and you do not have access to their weights.
+> **The model is a third-party service**: OpenAI, Anthropic, Google, Meta... models that you consume through an API. You do not train them and you do not have access to their weights.
 
-In classic MLOps the central artifact is the model, while in basic LLMOps the central artifacts are the **prompt** and the **context** you pass in each call, so what used to be "retrain" here becomes "rewrite the instructions" and provide the appropriate context for each prompt.
+In classic MLOps, the central artifact is the model. In basic LLMOps, the central artifacts are the **prompt** and the **context** you pass in each call. What used to be "retrain" often becomes "rewrite the instructions" and provide the right context for each prompt.
 
 ### What you manage in LLMOps
 
-**Prompts**: the equivalent of your system's code, where a poorly worded instruction degrades performance just like a bug, which is why prompts are versioned, tested, and deployed like any other software artifact.
+**Prompts** are the equivalent of your system's code: a poorly worded instruction can degrade performance just like a bug. That is why prompts are versioned, tested, and deployed like other software artifacts.
 
-**Context**: system prompt, conversation history, RAG documents: everything that enters each call determines response quality and, at the same time, cost, because you pay for every token that goes in and out.
+**Context** includes the system prompt, conversation history, and RAG documents. Everything that enters each call affects response quality and cost, because you pay for every token that goes in and out.
 
-**Evaluation**: you cannot retrain to correct an error, so the only lever available is the prompt and the context, and without evaluation (automatic, human, or through another model such as LLM-as-judge) you cannot iterate with judgment. That makes evaluation the most underestimated and the most critical step in the entire lifecycle.
+**Evaluation** is essential because you cannot simply retrain the underlying model to correct an error. The main levers available are the prompt and context, and without evaluation—automatic, human, or through another model such as LLM-as-judge—you cannot iterate systematically. That makes evaluation one of the most underestimated and critical parts of the lifecycle.
 
 <details markdown="1">
 <summary><strong>What is LLM-as-judge?</strong></summary>
 
-Instead of a person reviewing every response, another language model is used as an automatic evaluator. You pass it the question, the generated answer, and criteria (is it correct? is it concise? does it cite sources?), and the model returns a score or verdict. It is much faster and cheaper than human review at scale, although it carries the risk of inheriting the evaluator model's biases. The usual approach is to combine them: LLM-as-judge for continuous volume, human review for ambiguous cases and for validating that the evaluator itself works well.
+Instead of having a person review every response, another language model is used as an automatic evaluator. You pass it the question, the generated answer, and criteria such as correctness, concision, or source use, and the model returns a score or verdict. It is much faster and cheaper than human review at scale, although it can inherit the evaluator model's biases. A common approach is to combine both: LLM-as-judge for high-volume continuous evaluation, human review for ambiguous cases, and human checks that the evaluator itself remains reliable.
 
 </details>
 
-Latency, cost per query, semantic-drift monitoring, prompt versioning: all of it exists so that the improvement lifecycle is traceable in production.
+Latency, cost per query, semantic-drift monitoring, and prompt versioning all make the improvement lifecycle traceable in production.
 
 {{ include_html("snippets/fundamentos-ia-iag/02-llmops.html") }}
 
-> The system's behavior changes with the instructions, not with the model, which is an advantage (iteration is cheap) but also a risk, because a prompt change can silently break the system if there is no automated evaluation.
+> The system's behavior changes with the instructions, not with the model. That makes iteration cheap, but it also creates risk: a prompt change can silently break the system if there is no automated evaluation.
 
 ### External API vs your own open-source model
 
-The previous lifecycle assumes that you consume the model through an API, which is the starting point for most people. But there is a second route: hosting an open-source model yourself.
+The previous lifecycle assumes that you consume the model through an API, which is the starting point for most people. There is a second route: hosting an open-source model yourself.
 
-The LLMOps flow changes at specific points depending on which one you choose.
+The LLMOps flow changes at specific points depending on which route you choose.
 
 **External API** (OpenAI, Anthropic, Google, Mistral API…)
 
-You do not manage the model; you only manage the prompt, context, and evaluation. The cost is per token and the bill grows with volume.
-The model can change without you deciding it: a provider update can be a general improvement but a regression for your use case. Data leaves your infrastructure on every call, which can be a problem in regulated environments.
+You do not manage the model; you manage the prompt, context, and evaluation. The cost is per token and the bill grows with volume.
+The model can change without you deciding it: a provider update can improve the model overall while still creating a regression for your use case. Data leaves your infrastructure on every call, which can be a problem in regulated environments.
 
 <details markdown="1">
-<summary><strong>How is the privacy problem with external APIs usually addressed?</strong></summary>
+<summary><strong>How is the privacy risk with external APIs usually addressed?</strong></summary>
 
 The main providers offer ways to operate in regulated environments. The most common is a **zero data retention** policy: the provider contractually commits not to store your data or use it to train its models.
 
-OpenAI, Anthropic, and Google offer it for enterprise customers. This is complemented by a **Data Processing Agreement** (DPA) with GDPR compliance for operations in Europe, and in sectors such as healthcare, a **Business Associate Agreement** (BAA) for HIPAA compliance.
+OpenAI, Anthropic, and Google offer it for enterprise customers. This is complemented by a **Data Processing Agreement** (DPA) with GDPR compliance for operations in Europe and, in sectors such as healthcare, a **Business Associate Agreement** (BAA) for HIPAA compliance.
 
 Some providers also offer endpoints with data residency in the EU, so the data does not leave the region.
 </details>
 
 **Your own open-source model** (DeepSeek, Mistral, Qwen, Phi…)
 
-The model lives in your infrastructure. The per-token cost disappears, but the fixed cost of GPUs appears. You have full control over the model version, the data does not leave your servers, and you can fine-tune on your own data if the base model is not sufficient.
+The model runs in your infrastructure. Per-token API pricing disappears, but you take on fixed GPU costs. You have full control over the model version, the data does not leave your servers, and you can fine-tune on your own data if the base model is not sufficient.
 
 In exchange, you add a new operations layer: inference-server management, model updates, scaling under load, and hardware monitoring.
 
@@ -225,7 +225,7 @@ In exchange, you add a new operations layer: inference-server management, model 
 | Additional ops | Minimal | Inference server, GPUs, scaling |
 | Fine-tuning | Only through provider fine-tuning | Free on your own data |
 
-The choice is not technical but business-driven: iteration speed, request volume, privacy requirements, and cost at scale.
+The choice is not purely technical; it is driven by iteration speed, request volume, privacy requirements, and cost at scale.
 
 Many teams start with an external API and migrate parts to open-source when volume justifies it or regulation requires it.
 
@@ -271,8 +271,8 @@ A vector is a list of numbers with no semantics of its own: the format exists, b
 **Why is the Transformer considered a general architecture?**
 Because it works for text, images, audio, video, and code, using the same attention mechanism that relates all tokens in the context at once. It is the central component of modern LLMs (GPT, Claude, Gemini, Llama) and an important part of the multimodal stack, making it the dominant architecture of current generative AI.
 
-**What is the few-shot learning that emerges with scale?**
-It is the ability to learn to perform a new task after seeing only two or three examples in the prompt itself, without retraining the model. GPT-3 demonstrated it in 2020 and nobody had anticipated it: the training signal was predicting the next token, and from that emerged the ability to generalize from minimal examples.
+**What is few-shot learning, and why does scale matter?**
+Few-shot learning is the ability to perform a new task after seeing only two or three examples in the prompt itself, without retraining the model. GPT-3 demonstrated it in 2020 even though its training objective was simply next-token prediction; at scale, the model could generalize from a small number of in-context examples.
 
 **What is the main risk of using an agent instead of only RAG?**
-An agent can plan and execute external tools, which expands what it can solve, but failures propagate in a chain: the longer the sequence of steps, the harder it is to detect where the result went wrong. With RAG, the model only reads relevant fragments and answers; with an agent, every intermediate action is an additional failure point.
+An agent can plan and execute external tools, which expands what it can solve, but failures propagate through the chain: the longer the sequence of steps, the harder it is to detect where the result went wrong. With RAG, the model only reads relevant fragments and answers; with an agent, every intermediate action is an additional failure point.
