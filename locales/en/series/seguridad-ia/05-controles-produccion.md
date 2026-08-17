@@ -12,11 +12,11 @@ tags:
 
 # Chapter 5 — Production controls
 
-A secure system limits what each component can see, which actions require authorization, what happens when a defense fails and how the team can reconstruct what happened. The promise that the model will never make a mistake is not enough.
+A secure system limits what each component can see, which actions require authorization, what happens when a defense fails and how the team can show what happened. The promise that the model will never make a mistake is not enough.
 
 Defense in depth does not mean stacking filters until the product becomes unusable. It means distributing responsibilities across layers that do not share exactly the same attack surface.
 
-In 2026, that boundary can no longer be thought of only as “LLM + tools.” Real systems connect agents to MCP servers, persistent memory, other agents, browsers, repositories, email, databases and code runtimes. Every integration creates a trust boundary that needs explicit permissions, validation and a way to shut it down.
+In 2026, that boundary can no longer be thought of only as “LLM + tools.” Real systems connect agents to MCP servers, persistent memory, other agents, browsers, repositories, email, databases and code runtimes. Every integration adds another trust channel, which needs explicit permissions, validation and a way to shut it down.
 
 ## Separate document reading from actions
 
