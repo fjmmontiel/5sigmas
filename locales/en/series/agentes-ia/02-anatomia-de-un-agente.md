@@ -41,7 +41,7 @@ A tool should not be presented to the model as a vague sentence such as “you c
 
 If a `send_email` tool accepts an ambiguous recipient, the model may fill the argument with a plausible inference. The problem is not only that the LLM can be wrong: the system has designed a dangerous boundary. A good tool contract makes illegal states difficult to express.
 
-The Model Context Protocol formalizes part of this boundary for connecting agent clients to tool servers. Its authorization specification distinguishes, among other cases, a call performed on behalf of a person from an application-to-application call. That distinction is fundamental: “the agent can inspect inventory” does not automatically mean “the agent can purchase.” This series points to the current protocol specification rather than a historical snapshot.
+The Model Context Protocol formalizes part of the interface between agent clients and tool servers. Its authorization specification distinguishes, among other cases, calls made on behalf of a person from application-to-application calls. That distinction is fundamental: “the agent can inspect inventory” does not automatically mean “the agent can purchase.” This series points to the current protocol specification rather than a historical snapshot.
 
 ## Context, memory, and state are not the same thing
 
@@ -51,7 +51,7 @@ This is the information the model receives in the current turn: instructions, me
 
 ### Memory
 
-This is information retained across turns or sessions: preferences, confirmed facts, summaries, or vector representations. Memory is not trustworthy by default; it needs rules for writing, expiration, correction, and deletion.
+This is information retained across turns or sessions: preferences, confirmed facts, summaries, or vector representations. Memory should not be trusted by default; it needs rules for writing, expiration, correction, and deletion.
 
 ### Operational state
 
@@ -69,9 +69,9 @@ or:
 
 `requested → accepted → running → retrying → failed`
 
-User-facing language must respect that machine. “The operation has started” can describe `accepted`; “the operation has finished” is only correct in `succeeded`. Honesty should not depend on the model being cautious—it should depend on the runtime exposing states the model can express without inventing completion.
+User-facing language must reflect that state machine. “The operation has started” can describe `accepted`; “the operation has finished” is only correct in `succeeded`. Accurate status should not depend on the model being cautious; it should depend on the runtime exposing states the model can report without inventing completion.
 
-The Reactive/Proactive Agent pattern used by 5sigmas follows this separation: visible conversation, operations, pending updates, locks, and traces live in different structures. It solves a small but recurring problem: accepting work now and closing it only once an external result exists, without blocking the chat or emitting partial messages as if they were final.
+The Reactive/Proactive Agent pattern used by 5sigmas applies this separation: visible conversation, operations, pending updates, locks, and traces live in different structures. It addresses a recurring problem: accepting work now and closing it only once an external result exists, without blocking the chat or emitting partial messages as if they were final.
 
 ## Memory is not a universal solution
 
@@ -81,7 +81,7 @@ Adding a vector database does not turn a system into an agent. Retrieval can hel
 - which documents are trustworthy
 - how evidence is cited
 - what to do with conflicting results
-- when retrieval has not found enough information
+- when retrieval has not returned enough information
 
 Memory can also increase the attack surface. If an agent writes a malicious instruction into memory and later retrieves it as trusted context, the problem has not disappeared—it has become persistent.
 
