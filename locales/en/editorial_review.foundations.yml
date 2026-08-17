@@ -14,3 +14,9 @@ certified_routes:
     english_blob_sha: 7565f9140c25b107b559b27861a4eaa53789796a
     review_scope: prose, headings, lists, FAQs, terminology, technical meaning, evidence, references, visual hooks
     note: Side-by-side native-English review; tightened learning-signal, algorithm-adjustment, Software 2.0, milestone, MLOps and FAQ phrasing without changing any claim, example, reference, section order or visual semantic.
+  - route: series/fundamentos-ia-iag/02-que-es-ia-generativa.md
+    reviewed_on: 2026-08-17
+    spanish_blob_sha: 8cbb29f8a6229ff5ed7573fafc760cbc275a6182
+    english_blob_sha: 422dfa539d850710dc92a10df1f68e843dbf8b44
+    review_scope: prose, headings, lists, FAQs, terminology, technical meaning, evidence, references, visual hooks
+    note: Side-by-side native-English review; removed literal scaling, embedding, foundation-model, RAG/agent and LLMOps phrasing while preserving all canonical claims, numbers, caveats, references, section order and visual semantics.
