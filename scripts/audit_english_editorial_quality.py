@@ -40,6 +40,7 @@ ES_ROOT = ROOT / "docs"
 EN_ROOT = ROOT / "locales" / "en"
 MANIFEST = EN_ROOT / "manifest.yml"
 EDITORIAL_REVIEW = EN_ROOT / "editorial_review.yml"
+EDITORIAL_REVIEW_FRAGMENTS = "editorial_review.*.yml"
 
 BULLET_RE = re.compile(r"^(?P<indent>\s*)[-*+]\s+(?P<body>\S.*)$")
 FENCE_RE = re.compile(r"^\s*(```|~~~)")
@@ -82,12 +83,19 @@ def load_manifest() -> dict:
 
 
 def load_editorial_review() -> dict:
-    if not EDITORIAL_REVIEW.is_file():
-        return {}
-    data = yaml.safe_load(EDITORIAL_REVIEW.read_text(encoding="utf-8")) or {}
-    if not isinstance(data, dict):
-        raise SystemExit("locales/en/editorial_review.yml must contain a mapping")
-    return data
+    merged: dict[str, list] = {"certified_routes": []}
+    paths = [EDITORIAL_REVIEW, *sorted(EN_ROOT.glob(EDITORIAL_REVIEW_FRAGMENTS))]
+    for path in paths:
+        if not path.is_file():
+            continue
+        data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+        if not isinstance(data, dict):
+            raise SystemExit(f"{path.relative_to(ROOT)} must contain a mapping")
+        entries = data.get("certified_routes") or []
+        if not isinstance(entries, list):
+            raise SystemExit(f"{path.relative_to(ROOT)} certified_routes must be a list")
+        merged["certified_routes"].extend(entries)
+    return merged
 
 
 def published_markdown_routes() -> list[str]:
@@ -175,8 +183,6 @@ def punctuation_findings(route: str, path: Path) -> list[Finding]:
                 )
             )
 
-    # Detect list blocks that preserve Spanish sentence punctuation across
-    # separate Markdown bullets, e.g. "Search...," / "Memory...," / "Worlds.".
     for block in bullet_blocks(path):
         comma_items = [item for item in block if visible_body(item[2]).endswith(",")]
         if len(block) >= 3 and len(comma_items) >= 2:
@@ -208,8 +214,6 @@ def punctuation_findings(route: str, path: Path) -> list[Finding]:
 def translationese_findings(route: str, path: Path) -> list[Finding]:
     findings: list[Finding] = []
     for line_no, line in body_lines(path):
-        # Skip raw HTML/template lines: the editorial text in those surfaces is
-        # checked in their canonical snippet source, not inferred here.
         stripped = line.strip()
         if not stripped or stripped.startswith(("<", "{{", "!!!")):
             continue
@@ -245,8 +249,6 @@ def fragmentation_findings(route: str, en_path: Path, es_path: Path) -> list[Fin
             )
         )
 
-    # Short-bullet clusters can be perfectly good checklists, so this is a
-    # review signal rather than a failure.
     for block in bullet_blocks(en_path):
         short_items: list[tuple[int, str]] = []
         for line_no, _indent, body in block:
@@ -264,10 +266,6 @@ def fragmentation_findings(route: str, en_path: Path, es_path: Path) -> list[Fin
                 )
             )
 
-        # Short fragment lists should normally use one punctuation convention.
-        # Mixed endings often survive a literal source translation: e.g. four
-        # bare fragments followed by one period solely because it was the final
-        # item in the Spanish sentence-like list.
         if len(block) >= 3:
             visible = [visible_body(item[2]) for item in block]
             word_counts = [len(WORD_RE.findall(re.sub(r"[`*_\[\]()]", " ", item))) for item in visible]
@@ -295,7 +293,7 @@ def certification_findings(routes: Iterable[str]) -> tuple[list[Finding], int, i
 
     entries = load_editorial_review().get("certified_routes") or []
     if not isinstance(entries, list):
-        raise SystemExit("locales/en/editorial_review.yml certified_routes must be a list")
+        raise SystemExit("Editorial review certified_routes must be a list")
 
     for entry in entries:
         if not isinstance(entry, dict) or not entry.get("route"):
