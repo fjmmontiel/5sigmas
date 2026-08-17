@@ -1,0 +1,43 @@
+name: English editorial quality
+
+on:
+  pull_request:
+    paths:
+      - 'locales/en/**/*.md'
+      - 'docs/**/*.md'
+      - 'locales/en/manifest.yml'
+      - 'scripts/audit_english_editorial_quality.py'
+      - '.github/workflows/english-editorial-quality.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  editorial-quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install Python dependencies
+        run: pip install pyyaml
+
+      - name: Audit all published English Markdown against Spanish canonical structure
+        run: |
+          python scripts/audit_english_editorial_quality.py \
+            --strict \
+            --json artifacts/english-editorial-quality/report.json
+
+      - name: Upload editorial audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: english-editorial-quality-report
+          path: artifacts/english-editorial-quality/report.json
+          if-no-files-found: error
+          retention-days: 14
