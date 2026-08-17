@@ -1,6 +1,6 @@
 ---
 title: Production controls — limit actions when the model fails
-description: "Which controls limit damage when an AI system reads external content, uses tools and one defense fails."
+description: "Which controls limit damage when an AI system reads external content, uses tools, and one defense fails."
 date: 2026-08-06
 keywords: production LLM security, least privilege, dual LLM, guardrails, MCP security, tool poisoning, agent observability
 tags:
@@ -12,11 +12,11 @@ tags:
 
 # Chapter 5 — Production controls
 
-A secure system limits what each component can see, which actions require authorization, what happens when a defense fails and how to demonstrate what happened. The promise that the model will never make a mistake is not enough.
+A secure system limits what each component can see, which actions require authorization, what happens when a defense fails and how the team can reconstruct what happened. The promise that the model will never make a mistake is not enough.
 
 Defense in depth does not mean stacking filters until the product becomes unusable. It means distributing responsibilities across layers that do not share exactly the same attack surface.
 
-In 2026, that boundary can no longer be thought of only as “LLM + tools.” Real systems connect agents to MCP servers, persistent memory, other agents, browsers, repositories, email, databases and code runtimes. Every integration adds a trust channel that needs permissions, validation and an explicit way to stop.
+In 2026, that boundary can no longer be thought of only as “LLM + tools.” Real systems connect agents to MCP servers, persistent memory, other agents, browsers, repositories, email, databases and code runtimes. Every integration creates a trust boundary that needs explicit permissions, validation and a way to shut it down.
 
 ## Separate document reading from actions
 
@@ -24,7 +24,7 @@ The dual-LLM pattern proposes a clear boundary. A quarantined model can read unt
 
 {{ include_html("snippets/seguridad-ia/05-defense-depth.html") }}
 
-The separation does not eliminate every injection. A summary can be contaminated and a classifier can be wrong. The advantage is that the attack path is no longer a direct jump from arbitrary text to a privileged action.
+The separation does not eliminate all injection risk. A summary can be contaminated and a classifier can be wrong. The advantage is that the attack path is no longer a direct jump from arbitrary text to a privileged action.
 
 The general rule is broader than the dual-LLM pattern: **the component that processes untrusted data should not automatically inherit the ability to produce irreversible effects**.
 
@@ -56,7 +56,7 @@ MCP simplifies the connection between LLM applications and external tools, but s
 
 OWASP identifies several MCP-specific surfaces: **tool poisoning**, *rug pull* of definitions after initial approval, *tool shadowing* between servers, *confused deputy*, overly broad OAuth permissions and exfiltration through apparently legitimate channels ([OWASP MCP Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/MCP_Security_Cheat_Sheet.html)).
 
-The case of *tool poisoning* is especially important because it reproduces the same property we saw with RAG. A tool description or server response ends up inside the model context. If it contains hostile instructions and the client treats it as trusted content, the tool channel becomes another prompt-injection path ([OWASP MCP Tool Poisoning](https://owasp.org/www-community/attacks/MCP_Tool_Poisoning)).
+*Tool poisoning* is especially important because it has the same property we saw with RAG. A tool description or server response ends up inside the model context. If it contains hostile instructions and the client treats it as trusted content, the tool channel becomes another prompt-injection path ([OWASP MCP Tool Poisoning](https://owasp.org/www-community/attacks/MCP_Tool_Poisoning)).
 
 {{ include_html("snippets/seguridad-ia/05-mcp-boundary.html") }}
 
@@ -78,21 +78,21 @@ The previous chapter showed that a hostile input can persist and reappear later.
 
 OWASP recommends validating and sanitizing data before persistence, isolating memory between users and sessions, limiting duration and size, and auditing sensitive content ([OWASP AI Agent Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html)).
 
-That suggests a useful rule: **writing memory is a privileged action**. Not necessarily as sensitive as sending a payment, but important enough to require provenance, scope and revocation.
+A useful rule follows: **writing to memory is a privileged action**. It is not necessarily as sensitive as sending a payment, but it is important enough to require provenance, scope and revocation.
 
 ## Classify text while it is generated
 
 Constitutional Classifiers presents input and output classifiers that can evaluate the sequence as it is generated. If dangerous content appears, the system can stop generation without waiting until the end.
 
-That improves response time and experience, but it does not replace the rest of the architecture. A guardrail is still a model or component that needs evaluation. It also adds cost, latency and another signal to monitor.
+This can improve response time and user experience, but it does not replace the rest of the architecture. A guardrail is still a model or component that needs evaluation. It also adds cost, latency and another signal to monitor.
 
-Classifiers are most useful when the control they exercise is connected to the risk. A low-impact conversation can use a cheap check. A sensitive tool call may require a specialized layer, deterministic validation and human approval.
+Classifiers are most useful when their enforcement matches the risk. A low-impact conversation can use a cheap check. A sensitive tool call may require a specialized layer, deterministic validation and human approval.
 
 The mistake is to put the guardrail only in front of visible text and leave an equivalent path open through a tool. **Blocking the response while allowing the action is not a mitigation.**
 
 ## Design a real kill path
 
-A production agent needs a way to stop that does not depend on the model itself cooperating.
+A production agent needs a stop mechanism that does not depend on the model itself cooperating.
 
 That *kill path* can include:
 
@@ -110,17 +110,17 @@ The important property is that the control lives outside the natural-language ch
 
 ## Record what happens so it can be stopped
 
-Security telemetry should follow the decision path. It is useful to preserve request identity, retrieved source, memory used, policy decision, proposed tool, authorization, result and abort reason without recording unnecessary secrets or personal content.
+Security telemetry should follow the decision path. Preserve request identity, retrieved source, memory used, policy decision, proposed tool, authorization, result and abort reason without recording unnecessary secrets or personal content.
 
 A minimum trace for an action should make it possible to reconstruct:
 
 `input → retrieval/memory → model decision → tool proposal → policy decision → execution → resulting state`
 
-The signal is not only a log. Sudden changes in approval rates, rejection reasons, tool usage, MCP servers consulted or retries can indicate a bypass or regression. Without a baseline, the team learns about the problem only when it is already investigating the incident.
+These traces are useful for more than post-incident reconstruction. Sudden changes in approval rates, rejection reasons, tool usage, MCP servers consulted or retries can indicate a bypass or regression. Without a baseline, the problem may only become visible during incident response.
 
 ## Turn security into a release gate
 
-The red teaming from the previous chapter has operational value only if its results can block a release.
+The previous chapter's red-team work has operational value only if its results can block a release.
 
 A security gate for an agent can be small and specific:
 
@@ -151,9 +151,9 @@ A reasonable architecture for a flow with external content and sensitive actions
 9. End-to-end telemetry
 10. Abort, audit and recovery
 
-The sequence is not intended as a universal recipe. It serves to make visible where data is separated from action and where the system can be stopped.
+This is not a universal recipe; it shows where data is separated from action and where the system can be stopped.
 
-The series ends with an unglamorous and very useful rule. **The more power you give to a system that interprets language, the less you can depend on that language being interpreted as you expect.** Real control lives in runtime boundaries, permissions, authorization, isolation, observability and the ability to recover.
+The final rule is simple and practical. **The more power you give to a system that interprets language, the less you can depend on that language being interpreted as you expect.** Real control lives in runtime boundaries, permissions, authorization, isolation, observability and the ability to recover.
 
 ## References
 
