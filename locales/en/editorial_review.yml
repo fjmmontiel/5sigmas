@@ -72,3 +72,27 @@ certified_routes:
     english_blob_sha: b50d15c99f7794628ceafb3068cbc0aa47aed7d8
     review_scope: prose, headings, lists, terminology, technical meaning, references, operational semantics
     note: Side-by-side native-English editorial review; tightened production-failure, retry, asynchronous-runtime, observability and release-checklist prose without changing budgets, failure modes, references or teaching sequence.
+  - route: series/seguridad-ia/00_presentacion_serie.md
+    reviewed_on: 2026-08-17
+    spanish_blob_sha: 66fddcaa10bbb1223e8feb3b9b8a6fdf958eb8bd
+    english_blob_sha: 7ba62054ed15deb16d55ca75da072dcb81a51a91
+    review_scope: prose, headings, chapter summaries, terminology, technical meaning, links
+    note: Side-by-side native-English editorial review; tightened the series thesis and chapter summaries without changing scope, technical framing, links or teaching sequence.
+  - route: series/seguridad-ia/01-prompt-injection.md
+    reviewed_on: 2026-08-17
+    spanish_blob_sha: 0b6ef6ae1550895d1b06edee3822525b57e786b4
+    english_blob_sha: d0603dd7d169e13c31c3064e494788568f8d731c
+    review_scope: prose, headings, FAQs, terminology, technical meaning, evidence, references, visual hooks
+    note: Side-by-side native-English editorial review; removed literal discourse and metaphorical Spanish phrasing while preserving the control/data model, retrieval evidence, defenses, references, FAQs and visual semantics.
+  - route: series/seguridad-ia/02-jailbreaks.md
+    reviewed_on: 2026-08-17
+    spanish_blob_sha: d1271483f5d9069a8117725847d1c98e75afb197
+    english_blob_sha: ad1022f5d6baa6af6ff95718c28b5c67a086cc70
+    review_scope: prose, headings, lists, terminology, technical meaning, evidence, references, visual hooks
+    note: Side-by-side native-English editorial review; tightened attack-search, evaluation-family and outcome wording without changing the GCG/Best-of-N claims, attack-budget contract, references or visual semantics.
+  - route: series/seguridad-ia/03-envenenamiento.md
+    reviewed_on: 2026-08-17
+    spanish_blob_sha: 20d652742530b4ad5dec308834d3186e183e0121
+    english_blob_sha: 1ce36f303005e3ccda8223973b7e667db0107e6b
+    review_scope: prose, headings, lists, terminology, technical meaning, evidence, references, memory semantics, visual hooks
+    note: Side-by-side native-English editorial review; tightened memory-governance, repair and state-management phrasing without changing quantitative evidence, trust semantics, references, evaluation stages or visual hooks.
