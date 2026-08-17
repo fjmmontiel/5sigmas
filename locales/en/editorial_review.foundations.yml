@@ -20,3 +20,9 @@ certified_routes:
     english_blob_sha: 422dfa539d850710dc92a10df1f68e843dbf8b44
     review_scope: prose, headings, lists, FAQs, terminology, technical meaning, evidence, references, visual hooks
     note: Side-by-side native-English review; removed literal scaling, embedding, foundation-model, RAG/agent and LLMOps phrasing while preserving all canonical claims, numbers, caveats, references, section order and visual semantics.
+  - route: series/fundamentos-ia-iag/03-ia-vs-ia-generativa.md
+    reviewed_on: 2026-08-18
+    spanish_blob_sha: 7028fdd5ffe32e9f497734d2922aa0c8e4c18e7c
+    english_blob_sha: 3b5aaac68abd25e7c6116f0b3d27d60cb18c8fb9
+    review_scope: prose, headings, lists, FAQs, terminology, technical meaning, evidence, references, visual hooks
+    note: Side-by-side native-English review; removed literal decision framing, orphan structured-output prose, determinism/evaluation translationese, operational-matrix phrasing and fraud-example scaffolding while preserving the five-difference model, risk taxonomy, all claims, caveats, references, section order and visual semantics.
