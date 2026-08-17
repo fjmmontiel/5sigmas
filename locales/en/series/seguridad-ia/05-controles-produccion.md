@@ -140,16 +140,16 @@ OWASP explicitly includes adversarial validation, CI/CD and release gates in its
 
 A reasonable architecture for a flow with external content and sensitive actions can follow this sequence:
 
-1. ingestion labeled as untrusted;
-2. quarantined reading;
-3. structured and validated output;
-4. memory with provenance and scope if persistence is needed;
-5. decision with limited tools;
-6. independent authorization by user, resource and operation;
-7. sandbox for risky execution;
-8. reversible tool where possible;
-9. end-to-end telemetry;
-10. abort, audit and recovery.
+1. Ingestion labeled as untrusted
+2. Quarantined reading
+3. Structured and validated output
+4. Memory with provenance and scope if persistence is needed
+5. Decision with limited tools
+6. Independent authorization by user, resource and operation
+7. Sandbox for risky execution
+8. Reversible tool where possible
+9. End-to-end telemetry
+10. Abort, audit and recovery
 
 The sequence is not intended as a universal recipe. It serves to make visible where data is separated from action and where the system can be stopped.
 
