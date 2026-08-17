@@ -11,7 +11,7 @@ tags:
 
 # Chapter 1 — What an AI agent is—and is not
 
-The word *agent* has become a label for almost any application that uses a language model. An assistant that drafts an email, a workflow with three APIs, and a system that chooses steps dynamically can all be described with the same word. That ambiguity is the first problem to solve.
+The word *agent* has become a label for almost any application that uses a language model. An assistant that drafts an email, a workflow with three APIs, and a system that chooses steps dynamically can all end up with the same label. That ambiguity is the first problem to solve.
 
 In this series we use an operational definition: **an agent is a system that receives an objective, decides which actions are needed to move toward it, executes those actions in an environment, and uses the results to decide the next step**. The model may be the component that proposes an action, but the agent also includes the runtime, tools, state, and policies that constrain execution.
 
@@ -43,7 +43,7 @@ The system receives a broad goal and can discover new plans, tools, and subgoals
 
 An LLM computes a next action or response from the context it receives. By itself it does not maintain a reliable database of operations, possess natural authority over an API, or know whether an external action actually completed unless the runtime tells it.
 
-The agent appears when the model is surrounded by a contract:
+A system becomes an agent when the model is embedded in an explicit contract:
 
 - **Objective:** what completing the task means.
 - **Context:** which information it may read and for how long.
@@ -62,7 +62,7 @@ The useful question is not “what tasks can the agent do?” but:
 
 > Which decisions are we delegating, over which environment, with what evidence, and with what recovery path?
 
-This avoids two opposite errors: calling every API invocation an agent and losing precision, or imagining an agent as a digital person that can solve any problem if given enough context.
+This avoids two opposite errors. One is calling every API invocation an agent and losing precision. The other is imagining an agent as a digital person that can solve any problem if given enough context.
 
 ## What to remember
 
