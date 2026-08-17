@@ -53,6 +53,12 @@ EXACT_REPLACEMENTS: dict[str, dict[str, str]] = {
             "* If it changes substantially (**data drift**), performance can fall, so the system needs **monitoring** and sometimes **retraining**.",
         "That is why it matters to know **what is being adjusted**, because each family of algorithms learns in a different way.\nThis is also a key factor because it means AI systems are not static. They need continuous maintenance and monitoring.":
             "What gets adjusted matters because different algorithm families learn in different ways. AI systems are not static products: they need ongoing monitoring and maintenance.",
+        "- **What type of AI application is it?**: the family/technology it uses":
+            "- **What type of AI application is it?** The family or technology it uses",
+        "- **How does it learn?**: where the “teacher” comes from":
+            "- **How does it learn?** Where the learning signal comes from",
+        "- **How is it adjusted?**: how the model changes during training":
+            "- **What changes during training?** Which parts of the model are adjusted",
     },
     "series/fundamentos-ia-iag/02-que-es-ia-generativa.md": {
         "Reading Chapter 1 before continuing is recommended.":
@@ -76,14 +82,6 @@ EXACT_REPLACEMENTS: dict[str, dict[str, str]] = {
         "With the representations solved, the next problem is processing them without losing the thread as sequences of those vectors become longer.":
             "Once inputs are represented numerically, the next challenge is processing long sequences while preserving useful context.",
     },
-    "series/fundamentos-ia-iag/01-que-es-ia.md": {
-        "- **What type of AI application is it?**: the family/technology it uses":
-            "- **What type of AI application is it?** The family or technology it uses",
-        "- **How does it learn?**: where the “teacher” comes from":
-            "- **How does it learn?** Where the learning signal comes from",
-        "- **How is it adjusted?**: how the model changes during training":
-            "- **What changes during training?** Which parts of the model are adjusted",
-    },
     "series/from-cave-to-agi/05-mas-alla.md": {
         "- Search and verification over solution spaces,":
             "- Search and verification over solution spaces",
@@ -97,17 +95,6 @@ EXACT_REPLACEMENTS: dict[str, dict[str, str]] = {
             "- Systems capable of perceiving and acting in the physical world",
     },
 }
-
-# Merge duplicate dictionary entries above while keeping the source readable.
-FOUNDATIONS_EXTRA = {
-    "- **What type of AI application is it?**: the family/technology it uses":
-        "- **What type of AI application is it?** The family or technology it uses",
-    "- **How does it learn?**: where the “teacher” comes from":
-        "- **How does it learn?** Where the learning signal comes from",
-    "- **How is it adjusted?**: how the model changes during training":
-        "- **What changes during training?** Which parts of the model are adjusted",
-}
-EXACT_REPLACEMENTS.setdefault("series/fundamentos-ia-iag/01-que-es-ia.md", {}).update(FOUNDATIONS_EXTRA)
 
 
 def routes() -> list[str]:
@@ -182,10 +169,9 @@ def normalize_final_fragment_period(path: Path) -> int:
             and endings[-1] == "."
             and all(end == "bare" for end in endings[:-1])
         ):
-            index, raw_line, visible = block[-1]
+            index, raw_line, _visible = block[-1]
             newline = "\n" if raw_line.endswith("\n") else ""
             line = raw_line[:-1] if newline else raw_line
-            # Keep any trailing HTML comment intact.
             comment_match = re.match(r"^(?P<main>.*?)(?P<comment>\s*<!--.*?-->\s*)$", line)
             main = comment_match.group("main") if comment_match else line
             comment = comment_match.group("comment") if comment_match else ""
