@@ -3,10 +3,12 @@
 
 This is intentionally narrower than semantic/route parity. It catches mechanical
 translation patterns that can survive a faithful translation while still reading
-unnaturally in English, especially list punctuation copied from Spanish prose.
+unnaturally in English, especially punctuation and list syntax copied from Spanish.
 
 Hard errors:
-- any Markdown bullet in a published English editorial route ending in `;`.
+- any Markdown bullet in a published English editorial route ending in `;`;
+- comma-chained Markdown lists that use each bullet as one clause of a sentence;
+- a bold question immediately followed by a colon (`**Question?**:`).
 
 Review signals (reported, not hard failures):
 - English routes with materially more Markdown bullets than their Spanish source;
@@ -37,6 +39,7 @@ MANIFEST = EN_ROOT / "manifest.yml"
 BULLET_RE = re.compile(r"^(?P<indent>\s*)[-*+]\s+(?P<body>\S.*)$")
 FENCE_RE = re.compile(r"^\s*(```|~~~)")
 WORD_RE = re.compile(r"\b[\w’'-]+\b", re.UNICODE)
+QUESTION_COLON_RE = re.compile(r"(?:\*\*|__)[^\n]{1,180}\?(?:\*\*|__):")
 
 
 @dataclass(frozen=True)
@@ -94,11 +97,16 @@ def markdown_bullets(path: Path) -> list[tuple[int, str, str]]:
     return bullets
 
 
-def semicolon_findings(route: str, path: Path) -> list[Finding]:
+def visible_body(body: str) -> str:
+    return re.sub(r"\s*<!--.*?-->\s*$", "", body).rstrip()
+
+
+def punctuation_findings(route: str, path: Path) -> list[Finding]:
     findings: list[Finding] = []
-    for line_no, _indent, body in markdown_bullets(path):
-        # Strip trailing HTML comments because they do not alter rendered prose.
-        visible = re.sub(r"\s*<!--.*?-->\s*$", "", body).rstrip()
+    bullets = markdown_bullets(path)
+
+    for line_no, _indent, body in bullets:
+        visible = visible_body(body)
         if visible.endswith(";"):
             findings.append(
                 Finding(
@@ -109,6 +117,52 @@ def semicolon_findings(route: str, path: Path) -> list[Finding]:
                     severity="error",
                 )
             )
+
+    # Detect list blocks that preserve Spanish sentence punctuation across
+    # separate Markdown bullets, e.g. "Search...," / "Memory...," / "Worlds.".
+    # A single comma-ended bullet is only suspicious; two or more within one
+    # short contiguous block is a deterministic translation artifact here.
+    cluster: list[tuple[int, str, str]] = []
+    previous_line: int | None = None
+    previous_indent: str | None = None
+
+    def flush(items: list[tuple[int, str, str]]) -> None:
+        comma_items = [item for item in items if visible_body(item[2]).endswith(",")]
+        if len(items) >= 3 and len(comma_items) >= 2:
+            findings.append(
+                Finding(
+                    kind="comma_chained_bullet_list",
+                    route=route,
+                    line=items[0][0],
+                    excerpt=" | ".join(visible_body(item[2]) for item in items[:5])[:320],
+                    severity="error",
+                )
+            )
+
+    for line_no, indent, body in bullets:
+        adjacent = previous_line is not None and line_no <= previous_line + 2
+        same_indent = previous_indent == indent
+        if cluster and (not adjacent or not same_indent):
+            flush(cluster)
+            cluster = []
+        cluster.append((line_no, indent, body))
+        previous_line = line_no
+        previous_indent = indent
+    if cluster:
+        flush(cluster)
+
+    for line_no, line in body_lines(path):
+        if QUESTION_COLON_RE.search(line):
+            findings.append(
+                Finding(
+                    kind="question_followed_by_colon",
+                    route=route,
+                    line=line_no,
+                    excerpt=line.strip()[:260],
+                    severity="error",
+                )
+            )
+
     return findings
 
 
@@ -173,7 +227,7 @@ def audit(routes: Iterable[str]) -> list[Finding]:
     for route in routes:
         en_path = EN_ROOT / route
         es_path = ES_ROOT / route
-        findings.extend(semicolon_findings(route, en_path))
+        findings.extend(punctuation_findings(route, en_path))
         findings.extend(fragmentation_findings(route, en_path, es_path))
     return findings
 
