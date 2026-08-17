@@ -36,6 +36,30 @@ certified_routes:
     english_blob_sha: ad6f72772b90af510d7491cfd8117f3059290ab8
     review_scope: prose, headings, lists, terminology, technical meaning, references, visual hooks
     note: Side-by-side native-English editorial review; tightened trust-channel, memory, classifier, telemetry and release-gate prose without changing controls, examples, references, sequence or visual semantics.
+  - route: series/agentes-ia/00_presentacion_serie.md
+    reviewed_on: 2026-08-17
+    spanish_blob_sha: a1055c74524dc338e3728ce32cb55b4addefd1ab
+    english_blob_sha: b80a4234cd4fe97aeccadc9f8f5d7d558edcb6c1
+    review_scope: prose, headings, chapter summaries, terminology, technical meaning, links
+    note: Side-by-side native-English editorial review; tightened overview and asynchronous-completion wording without changing the series thesis, chapter scope, links or teaching sequence.
+  - route: series/agentes-ia/01-que-es-un-agente.md
+    reviewed_on: 2026-08-17
+    spanish_blob_sha: a1c2193e00aee740f649850eb602ae34264ad399
+    english_blob_sha: aeb7208253307aaf0f28db27012a163cd5e5cc04
+    review_scope: prose, headings, lists, FAQs, terminology, technical meaning, references, visual hooks
+    note: Side-by-side native-English editorial review; removed literal Spanish framing around agent definitions and system contracts while preserving autonomy levels, claims, references, FAQs and visual semantics.
+  - route: series/agentes-ia/02-anatomia-de-un-agente.md
+    reviewed_on: 2026-08-17
+    spanish_blob_sha: ae59bdc0948450ec4bb872c42958f9b1d7d5cb02
+    english_blob_sha: a4e1a6d872dcb76530f0bbf3294abde4979d7a98
+    review_scope: prose, headings, lists, terminology, technical meaning, references, runtime semantics, visual hooks
+    note: Side-by-side native-English editorial review; tightened MCP, memory, state-machine and asynchronous-runtime prose without changing tool contracts, authorization distinctions, state semantics, references or teaching order.
+  - route: series/agentes-ia/03-como-evaluar-un-agente.md
+    reviewed_on: 2026-08-17
+    spanish_blob_sha: d866fe83f704c07d83cc0670538457a580ab013c
+    english_blob_sha: aa185f4aa70a9332d4ec5d5e1840e9f8dc5be93f
+    review_scope: prose, headings, lists, terminology, technical meaning, references, evaluation semantics, visual hooks
+    note: Side-by-side native-English editorial review; corrected count-noun, partial-outcome, document-reference and NIST-status phrasing without changing dimensions, examples, gates, references or teaching sequence.
   - route: series/agentes-ia/04-seguridad-agentes.md
     reviewed_on: 2026-08-17
     spanish_blob_sha: ea048acee952795c5217715755029042d7a58b6b
