@@ -24,3 +24,15 @@ certified_routes:
     english_blob_sha: 92a35d9f8200ebbd962e2a929a9d22c7148c406b
     review_scope: prose, headings, FAQs, terminology, technical meaning, references, visual hooks
     note: Side-by-side native-English editorial review; removed literal Spanish syntax and translationese while preserving all canonical claims, caveats, examples, references, teaching order and visual semantics.
+  - route: series/seguridad-ia/04-red-teaming.md
+    reviewed_on: 2026-08-17
+    spanish_blob_sha: b6de185998b3210dae3b0ebf5dc5725f0f15be76
+    english_blob_sha: 9d7d20ac1867f31d103fd75d4e9f8a5d2a028d5a
+    review_scope: prose, headings, lists, terminology, technical meaning, references, visual hooks
+    note: Side-by-side native-English editorial review; removed literal discourse, awkward causal phrasing and mechanical security-list wording while preserving every threat-model element, evaluation distinction, reference, teaching sequence and visual semantics.
+  - route: series/seguridad-ia/05-controles-produccion.md
+    reviewed_on: 2026-08-17
+    spanish_blob_sha: 35f3a4815c02fce5aafcf7998986a5570e736132
+    english_blob_sha: ad6f72772b90af510d7491cfd8117f3059290ab8
+    review_scope: prose, headings, lists, terminology, technical meaning, references, visual hooks
+    note: Side-by-side native-English editorial review; tightened trust-channel, memory, classifier, telemetry and release-gate prose without changing controls, examples, references, sequence or visual semantics.
