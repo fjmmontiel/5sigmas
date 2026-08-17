@@ -12,11 +12,11 @@ video_duration: "PT1M26S"
 
 # Chapter 2: Mechanize (≈ 1640 - 1956)
 
-This chapter explains how humanity went from calculating with physical machines to designing general-purpose computers capable of executing any program. By the end, you will understand why separating instructions from mechanism was the decisive conceptual turn in the history of computing, how Alan Turing defined what it means to compute before any modern computer existed, and how Boolean logic stopped being philosophy and became circuit engineering. No technical background is required, although knowing the previous chapter helps. The story spans three centuries in which every advance reveals that the limit was not hardware, but the question someone dared to ask.
+This chapter explains how humanity went from calculating with physical machines to designing general-purpose computers capable of executing any program. By the end, you will understand why separating instructions from mechanism was the decisive conceptual turn in the history of computing, how Alan Turing defined what it means to compute before any modern computer existed, and how Boolean logic stopped being philosophy and became circuit engineering. No technical background is required, although knowing the previous chapter helps. Across those three centuries, progress came not only from better hardware but from reframing what machines could be asked to do.
 
-In the previous chapter we saw how humanity learned to represent quantities, relationships and change with symbols. Once those symbols could be manipulated according to rules, the next question almost asked itself: if a procedure is well defined, can a machine execute it?
+In the previous chapter we saw how humanity learned to represent quantities, relationships and change with symbols. Once those symbols could be manipulated according to rules, the next question followed naturally: if a procedure is well defined, can a machine execute it?
 
-The answer did not appear all at once. It arrived in layers. First we automated specific operations. Then we learned to encode instructions outside the machine. Later we understood that logic itself could also be expressed mechanically. And finally, we built devices capable of storing programs, executing operations based on conditions, and treating information as a formal quantity.
+The answer emerged in stages. First we automated specific operations. Then we learned to encode instructions outside the machine. Later we understood that logic itself could also be expressed mechanically. Finally, we built devices capable of storing programs, executing operations based on conditions, and treating information as a formal quantity.
 
 This chapter follows that path. It is not only the history of how we learned to build computers. It is the history of how we turned abstract procedures into executable processes.
 
@@ -28,7 +28,7 @@ This chapter follows that path. It is not only the history of how we learned to 
 
 The [Pascaline](https://www.britannica.com/technology/Pascaline), built by Blaise Pascal between 1642 and 1644, automated addition and subtraction through geared wheels. A few decades later, Leibniz's [Step Reckoner](https://www.britannica.com/technology/Step-Reckoner) extended the idea and made multiplication and division possible through mechanical repetitions of simpler operations.
 
-The leap mattered, but these were still calculating machines, not computers in the full sense. They executed a specific family of operations. They did not store a general sequence of instructions, could not change their behavior according to intermediate states, and did not clearly separate the mechanism doing the work from the procedure it had to follow.
+That was an important step, but these were still calculating machines, not computers in the full sense. They executed a specific family of operations. They did not store a general sequence of instructions, could not change their behavior according to intermediate states, and did not clearly separate the mechanism doing the work from the procedure it had to follow.
 
 {{ include_html("snippets/from-cave-to-agi/02-limite-calculadoras.html") }}
 
@@ -36,7 +36,7 @@ The leap mattered, but these were still calculating machines, not computers in t
 
 The next decisive advance did not come from mathematics, but from the textile industry. The [Jacquard loom](https://www.britannica.com/technology/Jacquard-loom), developed in 1804-1805, used interchangeable punched cards to control complex weaving patterns. The machine did not "understand" the pattern. It simply executed a sequence of instructions encoded in an external medium.
 
-Here appears an idea that would reshape everything that followed. A machine's behavior can depend on an interchangeable description of steps. This was not yet modern software, but it was a clear precursor to programmability: the mechanism and the instructions stopped being completely fused together.
+This introduced an idea that would shape everything that followed. A machine's behavior can depend on an interchangeable description of steps. This was not yet modern software, but it was a clear precursor to programmability: the mechanism and the instructions stopped being completely fused together.
 
 ### Babbage and Lovelace: the general machine before it existed
 
@@ -44,7 +44,7 @@ Charles Babbage took that intuition much further with the [Analytical Engine](ht
 
 The machine was never fully built, but conceptually it was already much closer to a general-purpose computer than to a mechanical calculator. It was not designed for one operation. It was designed to execute different procedures.
 
-In 1843, [Ada Lovelace](https://www.computerhistory.org/babbage/adalovelace/) published her famous notes on the Analytical Engine. They contain what is commonly regarded as the first published program for a computational machine: a procedure for calculating Bernoulli numbers. Her deeper intuition was more ambitious still. If a machine can manipulate symbols according to rules, then it is not limited to numbers in the narrow sense. It can operate over any domain that admits a sufficiently precise notation, an idea that anticipates general-purpose computing long before the hardware existed to sustain it.
+In 1843, [Ada Lovelace](https://www.computerhistory.org/babbage/adalovelace/) published her famous notes on the Analytical Engine. They contain what is commonly regarded as the first published program for a computational machine: a procedure for calculating Bernoulli numbers. Her broader insight went further. If a machine can manipulate symbols according to rules, then it is not limited to numbers in the narrow sense. It can operate over any domain that admits a sufficiently precise notation, an idea that anticipates general-purpose computing long before the hardware existed to sustain it.
 
 ---
 
@@ -58,7 +58,7 @@ The value of this step is not only mathematical elegance. It turns logical reaso
 
 ### Shannon: the bridge between logic and circuits
 
-For decades, Boolean algebra was a brilliant construction with little practical translation. The bridge came from Claude Shannon. In his 1937 master's thesis, later published as *[A Symbolic Analysis of Relay and Switching Circuits](https://dspace.mit.edu/handle/1721.1/11173)*, he showed that Boolean algebra could be applied to the design of switching circuits.
+For decades, Boolean algebra was a brilliant construction with little practical application. The bridge came from Claude Shannon. In his 1937 master's thesis, later published as *[A Symbolic Analysis of Relay and Switching Circuits](https://dspace.mit.edu/handle/1721.1/11173)*, he showed that Boolean algebra could be applied to the design of switching circuits.
 
 That connection was decisive. The problem was no longer only how to reason about true and false on paper, but how to build physical devices that implement logical operations. This is where digital logic becomes the material basis of modern computing. A logical proposition stops being only a form of thought and becomes a way of wiring a machine.
 
@@ -108,7 +108,7 @@ The power of this abstraction is enormous. On the one hand, the Turing machine p
     halt</code></pre>
 
     <p>
-      The problem appears when that program is run on its own code, that is, when we evaluate <code>PARADOX(PARADOX)</code>.
+      The contradiction arises when that program is run on its own code, that is, when we evaluate <code>PARADOX(PARADOX)</code>.
       If the verifier predicts that it halts, then the program enters an infinite loop. If it predicts that it loops forever, then the program halts.
       Either way, we get a contradiction.
     </p>
@@ -121,7 +121,7 @@ The power of this abstraction is enormous. On the one hand, the Turing machine p
   </div>
 </details>
 
-That result changes the tone of the entire discipline. Computing stops being only a promise of unlimited automation and acquires provable limits. Not every difficult problem is simply a matter of more time or more hardware, because some boundaries arise from the mathematical structure of the problem itself.
+That result gives computing provable limits. Not every difficult problem is simply a matter of more time or more hardware, because some boundaries arise from the mathematical structure of the problem itself.
 
 {{ include_html("snippets/from-cave-to-agi/02-maquina-turing.html") }}
 
@@ -129,7 +129,7 @@ That result changes the tone of the entire discipline. Computing stops being onl
 
 In 1948, Shannon changed the framework again with *[A Mathematical Theory of Communication](https://people.math.harvard.edu/~ctm/home/text/others/shannon/entropy/entropy.pdf)*. This time the focus was not logical circuits, but information as a measurable quantity. The conceptual shift is deep: to build a general theory of communication, a message has to be analyzed without depending on its meaning.
 
-From this come ideas that are central to everything that follows: compression, channel capacity, redundancy, reliable transmission under noise, and the practical notion of the bit as an elementary unit of information. Modern computing does not only need logic and memory. It also needs a precise theory of how much can be represented, transmitted and reconstructed.
+This gives rise to ideas that are central to everything that follows: compression, channel capacity, redundancy, reliable transmission under noise, and the practical notion of the bit as an elementary unit of information. Modern computing does not only need logic and memory. It also needs a precise theory of how much can be represented, transmitted and reconstructed.
 
 ---
 
@@ -137,17 +137,17 @@ From this come ideas that are central to everything that follows: compression, c
 
 ### The stored program: the great conceptual simplification
 
-The next transformation is to move instructions inside the machine itself. The [stored-program concept](https://www.britannica.com/technology/stored-program-concept) holds that instructions and data can reside in the same memory and be treated under a common encoding.
+The next transformation moved instructions inside the machine itself. The [stored-program concept](https://www.britannica.com/technology/stored-program-concept) holds that instructions and data can reside in the same memory and be treated under a common encoding.
 
 The idea became associated with the 1945 *[First Draft of a Report on the EDVAC](https://archive.computerhistory.org/resources/text/Knuth_Don_X4100/PDF_index/k-8-pdf/k-8-u2593-Draft-EDVAC.pdf)* and, over time, with what is called the von Neumann architecture. The practical effect was enormous. Changing tasks no longer required physically rewiring the machine or replacing external mechanisms. It was enough to change the contents of memory.
 
-Here the separation between hardware and program stops being an external intuition, as in Jacquard, and becomes the organizing principle of the modern computer.
+At this point, the separation between hardware and program stopped being an external intuition, as in Jacquard, and became the organizing principle of the modern computer.
 
 ### ENIAC, Baby and EDSAC: the computer stops being an idea
 
-It is worth distinguishing the milestones carefully because they are often conflated. [ENIAC](https://www.britannica.com/technology/ENIAC), completed in 1945, demonstrated that general-purpose electronic computing was physically viable. But reprogramming it was still costly and cumbersome because it depended on panels and wiring.
+These milestones are often conflated, so the distinction matters. [ENIAC](https://www.britannica.com/technology/ENIAC), completed in 1945, demonstrated that general-purpose electronic computing was physically viable. But reprogramming it was still costly and cumbersome because it depended on panels and wiring.
 
-The [Manchester Baby](https://www.computerhistory.org/revolution/birth-of-the-computer/4/87) became, in 1948, the first machine to execute a stored program from memory. It was an experimental demonstration, not a stable computing service, but it marked a change of regime.
+The [Manchester Baby](https://www.computerhistory.org/revolution/birth-of-the-computer/4/87) became, in 1948, the first machine to execute a stored program from memory. It was an experimental demonstration, not a stable computing service, but it marked a fundamental shift.
 
 [EDSAC](https://www.britannica.com/technology/EDSAC), operational in Cambridge in 1949, turned that principle into a machine useful to real users: the programmable computer as practical infrastructure rather than only an experimental demonstration.
 
@@ -157,7 +157,7 @@ The [Manchester Baby](https://www.computerhistory.org/revolution/birth-of-the-co
 
 When John McCarthy, Marvin Minsky, Nathaniel Rochester and Claude Shannon drafted the 1955 proposal for the *[Dartmouth Summer Research Project on Artificial Intelligence](https://www-formal.stanford.edu/jmc/history/dartmouth/dartmouth.html)* to be held in the summer of 1956, the technical framework was already in place. Symbolic logic, digital circuits, a theory of computation, quantifiable information and programmable electronic computers all existed.
 
-The novelty was no longer asking whether a machine could calculate. That part was beginning to be settled. The new question was whether processes such as learning, abstraction, language use or problem solving could also be described precisely enough to be executed by a machine.
+The new question was no longer whether a machine could calculate; that part was beginning to be settled. It was whether processes such as learning, abstraction, language use or problem solving could also be described precisely enough to be executed by a machine.
 
 AI did not emerge in a vacuum. It emerged when general computation stopped being an aspiration and became a real foundation on which something more ambitious could be imagined.
 
@@ -169,7 +169,7 @@ AI did not emerge in a vacuum. It emerged when general computation stopped being
 
 By 1956, humanity no longer only knew how to represent the world with symbols. It knew how to build machines that manipulated those symbols automatically, repeatedly and generally. We had gone from automating specific calculations to designing devices capable of executing programs, implementing logic, storing instructions and operating on quantifiable information.
 
-That change transforms everything. From this point on, the central question will no longer be how to mechanize calculation, but how to make a machine adjust its behavior from experience, data and objectives. That is the starting point of the next chapter.
+That shift changes the central question. From this point on, the problem is no longer how to mechanize calculation, but how to make a machine adjust its behavior from experience, data and objectives. That is the starting point of the next chapter.
 
 !!! tip "Next chapter"
     [Chapter 3 — Learn →](./03-aprender.md) — How a machine can improve from data: from the perceptron and expert systems to the deep-learning revival before 2012.
