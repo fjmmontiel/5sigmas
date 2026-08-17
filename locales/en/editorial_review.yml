@@ -9,6 +9,6 @@ certified_routes:
   - route: articulos-tecnicos/voice-agent-architectures.md
     reviewed_on: 2026-08-17
     spanish_blob_sha: de7880e2128fdddfbee9895e684bf772aa4ea9d9
-    english_blob_sha: ad78ad4e2a5ec3e200a0cd86fff6178a165b34d5
+    english_blob_sha: 37c71052f458e1389ee0ff230c499f447cf001a1
     review_scope: prose, headings, lists, terminology, technical meaning, references, visual hooks
     note: Native-English editorial pass after canonical fidelity restoration; no technical claims, evidence, references, teaching order or visual semantics changed.
