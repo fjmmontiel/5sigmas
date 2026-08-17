@@ -69,15 +69,15 @@ or:
 
 `requested → accepted → running → retrying → failed`
 
-User-facing language must respect that machine. “The operation has been started” can describe `accepted`; “the operation has finished” is only correct in `succeeded`. Honesty should not depend on the model being cautious—it should depend on the runtime exposing states the model can express without inventing completion.
+User-facing language must respect that machine. “The operation has started” can describe `accepted`; “the operation has finished” is only correct in `succeeded`. Honesty should not depend on the model being cautious—it should depend on the runtime exposing states the model can express without inventing completion.
 
-The Reactive/Proactive Agent pattern used by 5sigmas follows this separation: visible conversation, operations, pending updates, locks, and traces live in different structures. It solves a small but recurring problem: accept work now and close it only when an external result exists, without blocking the chat or emitting partial messages as if they were final.
+The Reactive/Proactive Agent pattern used by 5sigmas follows this separation: visible conversation, operations, pending updates, locks, and traces live in different structures. It solves a small but recurring problem: accepting work now and closing it only once an external result exists, without blocking the chat or emitting partial messages as if they were final.
 
 ## Memory is not a universal solution
 
 Adding a vector database does not turn a system into an agent. Retrieval can help find documentation, but the system must still decide:
 
-- which query to make
+- what query to run
 - which documents are trustworthy
 - how evidence is cited
 - what to do with conflicting results
