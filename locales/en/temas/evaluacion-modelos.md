@@ -51,7 +51,7 @@ For a voice assistant:
 - time to first audio
 - interruptions
 - task success
-- duplicate closure
+- duplicate end-of-call events
 
 The metric must reflect the failure that matters. Optimizing textual similarity when the real problem is executing a transfer twice measures the wrong surface.
 
@@ -73,9 +73,9 @@ Then calculate performance by segment, not only one global number.
 
 A taxonomy enables actionable questions: “Does the new model improve long queries but regress on Spanish proper names?” That helps a decision. “It gained two points” does not.
 
-## 3. Use your own golden set
+## 3. Build your own reference set
 
-The **golden set** contains real or designed examples representative of the domain. Every case needs:
+The **reference set** (often called a *golden set*) contains real or designed examples representative of the domain. Every case needs:
 
 - input
 - relevant context
@@ -147,7 +147,7 @@ A judge model can scale open-ended evaluations. It receives the input, responses
 
 It is useful for:
 
-- filtering regressions
+- screening for regressions
 - comparing many variants
 - evaluating format and coverage
 - prioritizing samples for human review
@@ -156,7 +156,7 @@ Risks include:
 
 - position bias
 - preference for longer answers
-- affinity with its own model family
+- bias toward outputs from its own model family
 - prompt sensitivity
 - shared errors with the evaluated model
 
@@ -217,7 +217,7 @@ Evaluation is not a final phase. It is the loop that lets a system change withou
 
 There is no universal one. Use benchmarks for general capabilities and your own set for the product's task, language, data, latency and risk.
 
-### How many examples does a golden set need?
+### How many examples does a reference set need?
 
 It depends on diversity and the size of the improvement you need to detect. Start with representative cases and critical failures, measure segment coverage and expand where uncertainty is high.
 
