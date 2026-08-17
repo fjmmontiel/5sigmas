@@ -64,10 +64,10 @@ try {
       const hookOrder = await visual.evaluate((node) => {
         const content = node.closest('.md-content__inner') || document.querySelector('.md-content__inner') || document.body;
         const before = [...content.querySelectorAll('h2')].find((el) =>
-          (el.textContent || '').trim().startsWith('The real bottlenecks')
+          (el.textContent || '').includes('The real bottlenecks')
         );
         const after = [...content.querySelectorAll('h3')].find((el) =>
-          (el.textContent || '').trim().startsWith('Electricity')
+          (el.textContent || '').includes('Electricity')
         );
         if (!before || !after) return false;
         const beforeToVisual = before.compareDocumentPosition(node) & Node.DOCUMENT_POSITION_FOLLOWING;
