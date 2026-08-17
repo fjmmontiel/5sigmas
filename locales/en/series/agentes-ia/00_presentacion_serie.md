@@ -46,7 +46,7 @@ This series builds a technical and practical map for separating agent hype from 
 
 ### 5. **From demo to an operable system**
 - Budgets, limits, retries, idempotency and observability.
-- Asynchronous work and proactive completion without falsely claiming completion to the user.
+- Asynchronous work and proactive completion without claiming success before the work is finished.
 - When a deterministic workflow is the better architecture and when an agent adds real value.
 
 ## The thesis of this series
