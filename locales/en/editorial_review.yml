@@ -117,6 +117,6 @@ certified_routes:
   - route: series/datacenters-espacio/03-que-es-datacenter-espacio.md
     reviewed_on: 2026-08-17
     spanish_blob_sha: 41fa1e38fd044e74eaf8134d56cb5be5ce33da38
-    english_blob_sha: ca3bc5e85c59ef614472b1c9646ac2f0c43d9a28
+    english_blob_sha: e041f2cb8645cf9250059d13dcd5b70e9d244427
     review_scope: prose, headings, FAQs, terminology, technical meaning, evidence, references, visual hooks
     note: Side-by-side native-English editorial review; removed literal Spanish framing around orbital data processing, resilience, megaprojects and economic viability while preserving every quantitative claim, source, FAQ, section order and visual semantic.
