@@ -11,9 +11,9 @@ tags:
 
 # Chapter 1 — Why now
 
-In this chapter we describe the pressure AI compute demand places on terrestrial infrastructure and the six bottlenecks that limit the expansion of data centers on Earth. By the end, we will understand what has brought space into the discussion as an alternative for certain use cases.
+This chapter describes the pressure AI compute demand places on terrestrial infrastructure and the six bottlenecks that limit the expansion of data centers on Earth. By the end, you will understand what has brought space into the discussion as an alternative for certain use cases.
 
-The idea of putting computing infrastructure in space is not new. What is new is that, for the first time, three factors are converging that make this discussion more feasible: compute demand growing faster than terrestrial infrastructure can absorb it, launch costs that have fallen by orders of magnitude over the last decade, and a commercial space industry with real capacity to deploy infrastructure in orbit.
+The idea of putting computing infrastructure in space is not new. What is new is that three factors have now converged to make the idea more plausible: compute demand is growing faster than terrestrial infrastructure can absorb it, launch costs have fallen by orders of magnitude over the last decade, and the commercial space industry now has real capacity to deploy infrastructure in orbit.
 
 ---
 
@@ -61,15 +61,15 @@ For applications that require low latency, geographic proximity to the user matt
 
 ## 3. Why space enters the discussion
 
-None of these frictions disappears in space. But some change in nature in ways that could make space advantageous for certain workloads.
+None of these constraints disappears in space. But some change in ways that could make orbital infrastructure advantageous for certain workloads.
 
 The most obvious premise is solar energy: in orbit, solar panels receive irradiance of 1,361–1,367 W/m² without atmospheric absorption and, in the most favourable orbits, with much more continuous exposure than on Earth. In dawn–dusk sun-synchronous orbits, the corporate Starcloud/Lumen Orbit white paper projects capacity factors of 95–99%, versus 15–25% for terrestrial installations ([Starcloud][r10]). Under the same launch, amortization and operating assumptions, that document estimates an equivalent energy cost of around $0.002 per kWh. This is an industry projection, not an observed market price ([Starcloud][r10]).
 
-The premise repeated most often in popular articles is the coldness of space as a source of cooling. This premise is more complicated than it looks, and it is the subject of the next chapter.
+Popular explanations often point to the cold of space as a cooling advantage. The physics is more complicated than that, and it is the subject of the next chapter.
 
 {{ include_html("snippets/datacenters-espacio/01-por-que-espacio.html") }}
 
-What is real as a potential advantage is that, for applications processing satellite data in orbit, processing on the satellite itself or in nearby orbital infrastructure can drastically reduce the volume of data that must be sent down to Earth (downlink), one of the most constrained resources in the satellite pipeline. The 2024 FOOL paper (*Addressing the Downlink Bottleneck in Satellite Computing*) shows that neural feature compression can reduce the required bandwidth by up to 80% without losing information relevant to common Earth-observation tasks ([arXiv][r8]).
+A genuine potential advantage appears in workloads that process satellite data in orbit: processing on the satellite itself or in nearby orbital infrastructure can drastically reduce the volume of data that must be sent down to Earth (downlink), one of the most constrained resources in the satellite pipeline. The 2024 FOOL paper (*Addressing the Downlink Bottleneck in Satellite Computing*) shows that neural feature compression can reduce the required bandwidth by up to 80% without losing information relevant to common Earth-observation tasks ([arXiv][r8]).
 
 ---
 
@@ -95,13 +95,13 @@ The next chapter examines exactly what it physically means to have computing in 
 There are six recurring bottlenecks. The power grid: some operators already report waits of several years for new capacity ([Network World][r4]). Water: a 100 MW center can consume around two million litres per day under some cooling designs ([GOV.UK][r5]). Land and permits: the largest campuses occupy extensive areas and need slow approval processes, especially when they also require new transmission infrastructure ([Greenpeace][r3]). Heat: rack densities associated with AI are already pushing air cooling to its limits ([Greenpeace][r3]). And latency: applications sensitive to response time still require physical proximity to the end user.
 
 **How much has the cost of launching to space fallen over recent decades?**
-From tens of thousands of dollars per kilogram in the Space Shuttle era to ranges around $1,400–$2,500 with today's reusable launchers ([Space Investments][r9]). Starship aims to reduce that cost further in the 2030s, but those figures remain projections rather than observed operational prices. That decline of more than one order of magnitude is what means the economics of orbital data centers are no longer trivially negative for certain use cases, even though the cost remains several times higher than equivalent terrestrial infrastructure.
+From tens of thousands of dollars per kilogram in the Space Shuttle era to ranges around $1,400–$2,500 with today's reusable launchers ([Space Investments][r9]). Starship aims to reduce that cost further in the 2030s, but those figures remain projections rather than observed operational prices. That decline of more than one order of magnitude is what makes the economics of orbital data centers no longer trivially negative for certain use cases, even though the cost remains several times higher than equivalent terrestrial infrastructure.
 
 **What did Elon Musk argue about space as AI infrastructure?**
 On 4 February 2026 he said that, within 30–36 months, the cheapest place to deploy AI would be space ([YouTube][r7]). His thesis is that new electricity demand from AI is growing faster than the ability to build generation and grid infrastructure on Earth, while orbit can access nearly continuous solar power. One week earlier, SpaceX had filed with the FCC for a constellation of up to one million satellites for orbital computing, although that filing included neither a deployment schedule nor a detailed cost estimate ([SpaceNews][r6]).
 
 **What unique advantage does space have over terrestrial infrastructure for AI?**
-The strongest advantage is energy: in the most favourable orbits, solar panels can receive light almost continuously apart from brief eclipses, something impossible on Earth ([Starcloud][r10]). For certain use cases, orbital computing also reduces the downlink bottleneck: processing on the satellite and sending down only results can substantially reduce the bandwidth required ([arXiv][r8]). The caution matters: the energy advantage is potential and depends on launch cost and the thermal system not consuming that benefit.
+The strongest advantage is energy: in the most favourable orbits, solar panels can receive light almost continuously apart from brief eclipses, something impossible on Earth ([Starcloud][r10]). For certain use cases, orbital computing also reduces the downlink bottleneck: processing on the satellite and sending down only results can substantially reduce the bandwidth required ([arXiv][r8]). The caveat is important: the energy advantage is only potential, and launch and thermal-management costs can erase it.
 
 **What is the FOOL paper and what does it propose for the satellite downlink bottleneck?**
 FOOL (*Addressing the Downlink Bottleneck in Satellite Computing with Neural Feature Compression*, 2024) proposes using neural feature compression directly onboard the satellite: instead of downlinking raw Earth-observation data, the satellite runs a neural network that extracts the relevant features and transmits only those, which can be orders of magnitude smaller. The authors show reductions of up to 80% in the bandwidth needed for common observation tasks, reinforcing the idea that onboard processing is currently the orbital use case with the strongest practical justification ([arXiv][r8]).
