@@ -12,3 +12,15 @@ certified_routes:
     english_blob_sha: 37c71052f458e1389ee0ff230c499f447cf001a1
     review_scope: prose, headings, lists, terminology, technical meaning, references, visual hooks
     note: Native-English editorial pass after canonical fidelity restoration; no technical claims, evidence, references, teaching order or visual semantics changed.
+  - route: series/from-cave-to-agi/02-mecanizar.md
+    reviewed_on: 2026-08-17
+    spanish_blob_sha: 1ffad744b2fc785232f6faf758d5b0c346fa7835
+    english_blob_sha: edab09b2a635c87f27d754f5b9b8ae70efea4b9c
+    review_scope: prose, headings, optional explanation, terminology, technical meaning, references, visual hooks
+    note: Side-by-side native-English editorial review; removed Spanish-shaped discourse and historical phrasing without changing claims, examples, references, section order or visual semantics.
+  - route: series/multimodalidad-iag/01-el-problema.md
+    reviewed_on: 2026-08-17
+    spanish_blob_sha: ce0dcf4626b0619c936a0c120a68bd9868e92b75
+    english_blob_sha: 92a35d9f8200ebbd962e2a929a9d22c7148c406b
+    review_scope: prose, headings, FAQs, terminology, technical meaning, references, visual hooks
+    note: Side-by-side native-English editorial review; removed literal Spanish syntax and translationese while preserving all canonical claims, caveats, examples, references, teaching order and visual semantics.
