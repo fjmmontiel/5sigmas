@@ -12,7 +12,7 @@ tags:
 
 # Chapter 3 — How to evaluate an AI agent
 
-A chatbot can often be evaluated by comparing an answer with a reference. An agent can produce the right final answer after using the wrong tool, spending ten times more steps than necessary, or leaving irreversible changes behind. Agent evaluation therefore has to inspect the whole task.
+A chatbot can often be evaluated by comparing an answer with a reference. An agent can produce the right final answer after using the wrong tool, taking ten times as many steps as necessary, or leaving irreversible changes behind. Agent evaluation therefore has to inspect the whole task.
 
 {{ include_html("snippets/agentes-ia/03-evaluacion.html") }}
 
@@ -35,7 +35,7 @@ A useful task should specify:
 
 ### 1. Outcome
 
-Did the task finish correctly? This is the most visible dimension, but not the only one. The metric should represent partial results and distinguish “could not complete” from “completed despite insufficient data.”
+Did the task finish correctly? This is the most visible dimension, but not the only one. The evaluation should account for partial outcomes and distinguish “could not complete” from “completed despite insufficient data.”
 
 ### 2. Trajectory
 
@@ -53,9 +53,9 @@ How long did it take? How many tokens, calls, and retries did it consume? What h
 
 Public benchmarks are useful for comparing capabilities, but they do not replace your own cases. Domain rules, permissions, data, and the consequences of failure change the definition of success.
 
-An LLM-as-judge can help evaluate open-ended text, but introduces another source of variability. When an objective condition exists, combine it with deterministic checks: a numeric result, valid JSON, an executable test, a documentary reference, or a concrete database mutation.
+An LLM-as-judge can help evaluate open-ended text, but introduces another source of variability. When an objective condition exists, combine it with deterministic checks: a numeric result, valid JSON, an executable test, a document reference, or a concrete database mutation.
 
-NIST is investigating *evaluation probes*: checks embedded into the workflow to inspect results and traceability. The work remains ongoing rather than a finished industry standard. The direction matters because it moves evaluation away from a final snapshot and toward the behavior of the system while it works.
+NIST is investigating *evaluation probes*: checks embedded into the workflow to inspect results and traceability. The work is still ongoing; it is not yet an established industry standard. This direction matters because it shifts evaluation from a final snapshot to the system's behavior during execution.
 
 ## The agent can also “cheat”
 
