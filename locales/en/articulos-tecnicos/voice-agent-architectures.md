@@ -350,7 +350,7 @@ There is no winning architecture for every product.
 
 ### Choose full cascade when
 
-- You need mandatory text-level traceability and stage-level control
+- Text-level traceability and stage-level control are mandatory
 - Providers need to be interchangeable
 - The product depends on a specific TTS voice
 - The domain can tolerate a more turn-based conversation
@@ -362,7 +362,7 @@ There is no winning architecture for every product.
 - You want to eliminate STT → LLM reconciliation
 - The external TTS voice is a product advantage
 - You can design and evaluate a `SpeechPlan`
-- You need policy-controllable text output
+- You need text output you can govern directly
 
 ### Choose S2S when
 
@@ -518,7 +518,7 @@ The goal is not to prove one option saves a few milliseconds in a lab. It is to 
 
 Full cascade remains a strong choice when modularity, control and auditability matter most.
 
-Half cascade is especially attractive when audio-native understanding matters but you still want an external TTS and policy-controllable text output.
+Half cascade is especially attractive when audio-native understanding matters but you still want an external TTS and text output you can govern directly.
 
 Speech-to-speech offers the best starting point for timing, prosody and full-duplex. Even so, it does not eliminate the runtime or tools.
 
