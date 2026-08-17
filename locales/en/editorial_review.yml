@@ -36,3 +36,15 @@ certified_routes:
     english_blob_sha: ad6f72772b90af510d7491cfd8117f3059290ab8
     review_scope: prose, headings, lists, terminology, technical meaning, references, visual hooks
     note: Side-by-side native-English editorial review; tightened trust-channel, memory, classifier, telemetry and release-gate prose without changing controls, examples, references, sequence or visual semantics.
+  - route: series/agentes-ia/04-seguridad-agentes.md
+    reviewed_on: 2026-08-17
+    spanish_blob_sha: ea048acee952795c5217715755029042d7a58b6b
+    english_blob_sha: 91db6875ba928f9b06eb365d7866762fa17e91d7
+    review_scope: prose, headings, lists, terminology, technical meaning, references, visual hooks
+    note: Side-by-side native-English editorial review; removed literal Spanish framing around external data, trust layers and human confirmation while preserving the threat model, controls, references, teaching sequence and visual semantics.
+  - route: series/agentes-ia/05-de-la-demo-a-produccion.md
+    reviewed_on: 2026-08-17
+    spanish_blob_sha: d6af01834dca4daaae36c94d2891bc8d8eb32c01
+    english_blob_sha: b50d15c99f7794628ceafb3068cbc0aa47aed7d8
+    review_scope: prose, headings, lists, terminology, technical meaning, references, operational semantics
+    note: Side-by-side native-English editorial review; tightened production-failure, retry, asynchronous-runtime, observability and release-checklist prose without changing budgets, failure modes, references or teaching sequence.
