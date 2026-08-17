@@ -28,12 +28,12 @@ NIST describes this class of failure as *agent hijacking* and connects it to ins
 
 An instruction such as “do not send money without confirmation” can help, but it should not be the only control. Effective authorization needs mechanisms the runtime can verify:
 
-- the identity of the agent and the person delegating authority;
-- the specific tool and operation;
-- the resources and data included;
-- the time scope of the authorization;
-- human approval for irreversible actions;
-- a verifiable record of what was done;
+- the identity of the agent and the person delegating authority
+- the specific tool and operation
+- the resources and data included
+- the time scope of the authorization
+- human approval for irreversible actions
+- a verifiable record of what was done
 - revocation and response to abuse.
 
 NIST's work on agent identity addresses how software and AI agents can be identified, authenticated, authorized, and audited when acting for people or applications. The question is not simply “who is the agent?” but which authority it can demonstrate for a concrete action.

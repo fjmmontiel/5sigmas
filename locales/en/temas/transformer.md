@@ -107,11 +107,11 @@ That does not mean total model cost is always `O(n²)`. Projections and feed-for
 
 Research directions include:
 
-- local or sparse attention;
-- compression and external memory;
-- retrieval of relevant chunks;
-- more efficient kernels;
-- state-space models;
+- local or sparse attention
+- compression and external memory
+- retrieval of relevant chunks
+- more efficient kernels
+- state-space models
 - hybrid architectures.
 
 Mamba showed that selective state-space models can process sequences with linear scaling and remain competitive across several domains.[^mamba] That does not make the Transformer obsolete. It opens another point in the design space.
@@ -128,12 +128,12 @@ The [Multimodality in Generative AI](/en/series/multimodalidad-iag/00_presentaci
 
 Knowing the Transformer is not enough to explain a model's behaviour. Other important factors include:
 
-- pretraining data;
-- the loss objective;
-- the tokenizer;
-- scale and compute budget;
-- instruction tuning;
-- preference optimization;
+- pretraining data
+- the loss objective
+- the tokenizer
+- scale and compute budget
+- instruction tuning
+- preference optimization
 - context and tools during inference.
 
 Two models with similar blocks can behave very differently because of the rest of the system.

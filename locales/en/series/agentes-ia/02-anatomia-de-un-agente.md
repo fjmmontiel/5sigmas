@@ -31,12 +31,12 @@ In practice there is a fifth cross-cutting component: **policy**. Policy determi
 
 A tool should not be presented to the model as a vague sentence such as “you can query the system.” It needs an explicit contract:
 
-- a stable name;
-- a description of when to use it and when not to;
-- an argument schema;
-- type and range validation;
-- read or write permissions;
-- timeout and retry policy;
+- a stable name
+- a description of when to use it and when not to
+- an argument schema
+- type and range validation
+- read or write permissions
+- timeout and retry policy
 - a clear representation of success, error, and partial results.
 
 If a `send_email` tool accepts an ambiguous recipient, the model may fill the argument with a plausible inference. The problem is not only that the LLM can be wrong: the system has designed a dangerous boundary. A good tool contract makes illegal states difficult to express.
@@ -77,10 +77,10 @@ The Reactive/Proactive Agent pattern used by 5sigmas follows this separation: vi
 
 Adding a vector database does not turn a system into an agent. Retrieval can help find documentation, but the system must still decide:
 
-- which query to make;
-- which documents are trustworthy;
-- how evidence is cited;
-- what to do with conflicting results;
+- which query to make
+- which documents are trustworthy
+- how evidence is cited
+- what to do with conflicting results
 - when retrieval has not found enough information.
 
 Memory can also increase the attack surface. If an agent writes a malicious instruction into memory and later retrieves it as trusted context, the problem has not disappeared—it has become persistent.

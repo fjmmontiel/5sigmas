@@ -29,28 +29,28 @@ No layer replaces the others. The key is connecting every metric to a product de
 
 For a data extractor:
 
-- required fields;
-- valid formats;
-- precision and recall;
-- handling of missing values;
+- required fields
+- valid formats
+- precision and recall
+- handling of missing values
 - cost of a false positive.
 
 For an agent with tools:
 
-- action selection;
-- correct arguments;
-- operation order;
-- idempotency;
-- final state;
+- action selection
+- correct arguments
+- operation order
+- idempotency
+- final state
 - user-facing message.
 
 For a voice assistant:
 
-- intent understanding;
-- entities;
-- time to first audio;
-- interruptions;
-- task success;
+- intent understanding
+- entities
+- time to first audio
+- interruptions
+- task success
 - duplicate closure.
 
 The metric must reflect the failure that matters. Optimizing textual similarity when the real problem is executing a transfer twice measures the wrong surface.
@@ -59,14 +59,14 @@ The metric must reflect the failure that matters. Optimizing textual similarity 
 
 An average hides where the system fails. The evaluation set should label relevant dimensions:
 
-- intent or task type;
-- difficulty;
-- language and market;
-- length and noise;
-- ambiguity;
-- need for external knowledge;
-- tool use;
-- impact of error;
+- intent or task type
+- difficulty
+- language and market
+- length and noise
+- ambiguity
+- need for external knowledge
+- tool use
+- impact of error
 - affected population or segment.
 
 Then calculate performance by segment, not only one global number.
@@ -77,11 +77,11 @@ A taxonomy enables actionable questions: “Does the new model improve long quer
 
 The **golden set** contains real or designed examples representative of the domain. Every case needs:
 
-- input;
-- relevant context;
-- expected result or rubric;
-- segment labels;
-- failure severity;
+- input
+- relevant context
+- expected result or rubric
+- segment labels
+- failure severity
 - provenance and date.
 
 {{ include_html("snippets/temas/evaluation-reference-set.html") }}
@@ -121,12 +121,12 @@ Not everything needs a generative judge.
 
 Use rules or execution to:
 
-- validate JSON and schemas;
-- compare numeric values;
-- run tests;
-- check citations and URLs;
-- verify API arguments;
-- inspect final state;
+- validate JSON and schemas
+- compare numeric values
+- run tests
+- check citations and URLs
+- verify API arguments
+- inspect final state
 - measure latency and cost.
 
 A deterministic metric is usually cheaper, reproducible and auditable. Generative evaluation should be reserved for dimensions that genuinely require judgement.
@@ -147,17 +147,17 @@ A judge model can scale open-ended evaluations. It receives the input, responses
 
 It is useful for:
 
-- filtering regressions;
-- comparing many variants;
-- evaluating format and coverage;
+- filtering regressions
+- comparing many variants
+- evaluating format and coverage
 - prioritizing samples for human review.
 
 Risks include:
 
-- position bias;
-- preference for longer answers;
-- affinity with its own model family;
-- prompt sensitivity;
+- position bias
+- preference for longer answers
+- affinity with its own model family
+- prompt sensitivity
 - shared errors with the evaluated model.
 
 A judge needs calibration. Compare it against a human-annotated set, measure agreement by segment and review important disagreements. For high-impact decisions, it should not be the sole authority.

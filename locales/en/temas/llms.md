@@ -31,9 +31,9 @@ The exact segmentation depends on the vocabulary and algorithm. Methods such as 
 
 Tokenization matters because it affects:
 
-- cost, which is often measured in tokens;
-- effective context length;
-- representation of languages and code;
+- cost, which is often measured in tokens
+- effective context length
+- representation of languages and code
 - the ease of copying numbers, names or uncommon strings.
 
 ## 2. Tokens become representations
@@ -107,12 +107,12 @@ That is why “larger” is not a sufficient explanation. A useful comparison ne
 
 An LLM is particularly useful when the task allows linguistic variation and the result can be verified or corrected:
 
-- transform and summarize text;
-- extract information into a schema;
-- generate drafts and code;
-- classify from instructions and examples;
-- translate between representations;
-- coordinate tools through structured arguments;
+- transform and summarize text
+- extract information into a schema
+- generate drafts and code
+- classify from instructions and examples
+- translate between representations
+- coordinate tools through structured arguments
 - reason over information present in the context.
 
 The complete system improves when explicit constraints, examples, validators, retrieval and evaluation on real cases are added.

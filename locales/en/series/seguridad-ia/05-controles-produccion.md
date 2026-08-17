@@ -36,14 +36,14 @@ An agent that only needs to read documents should not receive a tool that can al
 
 Every tool should declare at least:
 
-- name and purpose;
-- argument schema;
-- permissions and reachable resources;
-- allowed operations;
-- timeout and consumption limits;
-- error behavior;
-- idempotency or retry strategy;
-- reversibility;
+- name and purpose
+- argument schema
+- permissions and reachable resources
+- allowed operations
+- timeout and consumption limits
+- error behavior
+- idempotency or retry strategy
+- reversibility
 - action risk class.
 
 The runtime must validate the call and authorize it according to user, resource and operation. The model can propose. It should not become the final authority merely because it generated valid JSON.
@@ -96,12 +96,12 @@ A production agent needs a way to stop that does not depend on the model itself 
 
 That *kill path* can include:
 
-- a circuit breaker per user, tenant or workflow;
-- immediate revocation of tool credentials;
-- cancellation of executions in progress;
-- retry and budget limits;
-- temporary blocking of a specific tool;
-- rollback or reconciliation of partially executed actions;
+- a circuit breaker per user, tenant or workflow
+- immediate revocation of tool credentials
+- cancellation of executions in progress
+- retry and budget limits
+- temporary blocking of a specific tool
+- rollback or reconciliation of partially executed actions
 - a degraded read-only mode.
 
 The important property is that the control lives outside the natural-language channel that may be compromised.
@@ -124,12 +124,12 @@ The red teaming from the previous chapter has operational value only if its resu
 
 A security gate for an agent can be small and specific:
 
-- no destructive action without independent authorization;
-- no sensitive tool accessible from untrusted external content without a structural boundary;
-- zero cross-tenant memory leakage in the regression set;
-- tool schemas and scopes compared against an approved baseline;
-- indirect prompt-injection scenarios executed end-to-end;
-- kill switch and rollback verified;
+- no destructive action without independent authorization
+- no sensitive tool accessible from untrusted external content without a structural boundary
+- zero cross-tenant memory leakage in the regression set
+- tool schemas and scopes compared against an approved baseline
+- indirect prompt-injection scenarios executed end-to-end
+- kill switch and rollback verified
 - enough logs to reconstruct every privileged action.
 
 {{ include_html("snippets/seguridad-ia/05-release-gate.html") }}

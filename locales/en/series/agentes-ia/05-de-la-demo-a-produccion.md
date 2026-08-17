@@ -18,12 +18,12 @@ A demo can look autonomous for two minutes. Production begins when a tool is slo
 
 An agent should have explicit limits:
 
-- maximum number of steps;
-- maximum calls per tool;
-- total execution time;
-- tokens or estimated cost;
-- maximum context size;
-- retry count;
+- maximum number of steps
+- maximum calls per tool
+- total execution time
+- tokens or estimated cost
+- maximum context size
+- retry count
 - actions that require approval.
 
 Without a budget, an ambiguous task can produce an expensive loop. The limit is not merely an optimization detail: it defines stopping behavior. Once reached, the agent should summarize state, request information, escalate to a person, or return a clear failure.
@@ -62,11 +62,11 @@ Traces are not only for debugging. They support evaluation, explain decisions, e
 
 An agent is not the natural evolution of every automation. Avoid one when:
 
-- the path is known and deterministic;
-- the action is irreversible and cannot be verified adequately;
-- the data is too sensitive for the available environment;
-- latency or cost cannot tolerate variability;
-- the success criterion cannot be expressed or reviewed;
+- the path is known and deterministic
+- the action is irreversible and cannot be verified adequately
+- the data is too sensitive for the available environment
+- latency or cost cannot tolerate variability
+- the success criterion cannot be expressed or reviewed
 - a conventional function solves the problem with less risk surface.
 
 In those cases, a deterministic workflow, form, or normal function is often better. Use an agent for the part where uncertainty in the sequence is worth the additional cost of delegating decisions.

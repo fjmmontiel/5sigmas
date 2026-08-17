@@ -20,13 +20,13 @@ A chatbot can often be evaluated by comparing an answer with a reference. An age
 
 A useful task should specify:
 
-- the initial state of the environment;
-- the user's objective;
-- allowed tools;
-- accessible data;
-- the success condition;
-- forbidden actions;
-- a budget for steps, time, or cost;
+- the initial state of the environment
+- the user's objective
+- allowed tools
+- accessible data
+- the success condition
+- forbidden actions
+- a budget for steps, time, or cost
 - the expected result and abstention cases.
 
 “Answer invoice questions well” is too vague. “Given a customer and a date range, locate overdue invoices, calculate the total, and prepare a draft without sending it” is concrete enough to build reproducible cases and separate reading, calculation, and writing.

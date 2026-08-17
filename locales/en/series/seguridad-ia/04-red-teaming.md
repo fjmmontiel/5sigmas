@@ -40,8 +40,8 @@ OWASP already treats agentic red teaming as a full-lifecycle activity: identify 
 
 An evaluation should separate at least three levels:
 
-- what the model knows how to do;
-- how much it improves a person trying to complete a task;
+- what the model knows how to do
+- how much it improves a person trying to complete a task
 - what the product can execute with its tools and permissions.
 
 The first question belongs to model capability. The second measures human *uplift*. The third is a property of the complete system.
@@ -106,14 +106,14 @@ This decomposition turns one “attack success” percentage into useful enginee
 
 A good test includes wording variations and adversarial documents, but also everyday system failures:
 
-- timeouts and partial responses;
-- tool errors;
-- retries;
-- duplicated actions;
-- reduced permissions;
-- revoked credentials;
-- modified tool schemas;
-- expired or contaminated memory;
+- timeouts and partial responses
+- tool errors
+- retries
+- duplicated actions
+- reduced permissions
+- revoked credentials
+- modified tool schemas
+- expired or contaminated memory
 - human interruption halfway through an execution.
 
 Many incidents do not require the attacker to control every step. It is enough for a hostile input to coincide with a retry, an excessive permission or incomplete reconciliation.
@@ -124,13 +124,13 @@ The most valuable result of a red team is not the report. It is the reproducible
 
 Whenever possible, each finding should become a case with:
 
-- an input fixture;
-- a known initial state;
-- fixed tools and scopes;
-- attacker budget;
-- success criterion;
-- stop criterion;
-- expected trace evidence;
+- an input fixture
+- a known initial state
+- fixed tools and scopes
+- attacker budget
+- success criterion
+- stop criterion
+- expected trace evidence
 - final-state verification.
 
 That case should run again when the model, prompt, retrieval, memory, a tool or the authorization policy changes.
