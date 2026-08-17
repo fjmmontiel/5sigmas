@@ -135,19 +135,11 @@ Una métrica determinista suele ser más barata, reproducible y auditable. La ev
 
 ## 6. Evaluación humana
 
-Los humanos pueden valorar corrección, utilidad, tono, claridad o preferencia. Para que la señal sea fiable hacen falta:
+Los humanos pueden valorar corrección, utilidad, tono, claridad o preferencia. Para que esa señal sea fiable hay que diseñar el protocolo: qué dimensión se juzga, qué ejemplos anclan la rúbrica, qué información se oculta al evaluador, dónde se duplica anotación y cómo se tratan los desacuerdos.
 
-- una rúbrica concreta
-- ejemplos positivos y negativos
-- entrenamiento de evaluadores
-- doble anotación en una muestra
-- resolución de desacuerdos
-- orden aleatorio y cegado del modelo
-- medición de acuerdo
+{{ include_html("snippets/temas/evaluation-human-protocol.html") }}
 
-La preferencia relativa suele ser más fácil que asignar una nota absoluta. Chatbot Arena popularizó comparaciones pareadas y un ranking agregado a partir de votos.[^arena]
-
-La preferencia tampoco equivale a verdad. Un texto más fluido puede ganar frente a otro más correcto. La rúbrica debe separar dimensiones.
+La preferencia tampoco equivale a verdad. Un texto más fluido puede ganar frente a otro más correcto. Cuando existe una comprobación externa, conviene usarla y reservar el juicio humano para las dimensiones que realmente lo necesitan.
 
 ## 7. LLM como juez
 

@@ -1,0 +1,176 @@
+<div class="ehp-wrap" data-demo="topic-evaluation-human-protocol">
+  <div class="ehp-head">
+    <div class="ehp-kicker">RÚBRICA → CEGADO → JUICIOS INDEPENDIENTES → DESACUERDO → EVIDENCIA</div>
+    <div class="ehp-title">Una evaluación humana fiable necesita un protocolo, no solo votos</div>
+    <div class="ehp-sub">El objetivo es convertir juicios humanos en una señal auditable: definir qué se juzga, reducir pistas irrelevantes, observar el desacuerdo y conservarlo por dimensión y segmento.</div>
+  </div>
+
+  <div class="ehp-flow" role="img" aria-label="Protocolo de evaluación humana desde la rúbrica hasta el informe por dimensión y segmento">
+    <section class="ehp-stage ehp-stage--rubric">
+      <div class="ehp-num">01</div>
+      <div class="ehp-stage-label">RÚBRICA</div>
+      <h3>Define la dimensión antes de mirar respuestas</h3>
+      <div class="ehp-dimensions">
+        <span>corrección</span><span>utilidad</span><span>claridad</span><span>tono</span>
+      </div>
+      <div class="ehp-anchors"><span>ejemplo +</span><span>ejemplo −</span></div>
+      <p>Separar criterios evita que una impresión global esconda qué propiedad ganó o falló.</p>
+    </section>
+
+    <div class="ehp-arrow" aria-hidden="true">→</div>
+
+    <section class="ehp-stage ehp-stage--blind">
+      <div class="ehp-num">02</div>
+      <div class="ehp-stage-label">ASIGNACIÓN CIEGA</div>
+      <h3>Mismo caso, identidad oculta y orden aleatorio</h3>
+      <div class="ehp-case">prompt + contexto</div>
+      <div class="ehp-answers">
+        <div><b>A</b><span>modelo oculto</span></div>
+        <div><b>B</b><span>modelo oculto</span></div>
+      </div>
+      <p>El cegado reduce pistas de identidad y posición; no convierte un criterio subjetivo en verdad objetiva.</p>
+    </section>
+
+    <div class="ehp-arrow" aria-hidden="true">→</div>
+
+    <section class="ehp-stage ehp-stage--ratings">
+      <div class="ehp-num">03</div>
+      <div class="ehp-stage-label">JUICIOS INDEPENDIENTES</div>
+      <h3>Solapa una muestra entre evaluadores</h3>
+      <div class="ehp-raters">
+        <div><span>EVALUADOR 1</span><strong>A</strong><small>preferencia / rúbrica</small></div>
+        <div><span>EVALUADOR 2</span><strong>B</strong><small>preferencia / rúbrica</small></div>
+      </div>
+      <p>La doble anotación en un subconjunto permite medir acuerdo sin exigir duplicar cada caso.</p>
+    </section>
+
+    <div class="ehp-arrow" aria-hidden="true">→</div>
+
+    <section class="ehp-stage ehp-stage--resolve">
+      <div class="ehp-num">04</div>
+      <div class="ehp-stage-label">DESACUERDO</div>
+      <h3>El conflicto es información sobre el protocolo</h3>
+      <div class="ehp-disagreement">
+        <span>criterio ambiguo</span>
+        <span>error de anotación</span>
+        <span>preferencia legítimamente plural</span>
+      </div>
+      <div class="ehp-loop"><b>↺</b><span>adjudica casos críticos y mejora rúbrica / ejemplos</span></div>
+    </section>
+
+    <div class="ehp-arrow" aria-hidden="true">→</div>
+
+    <section class="ehp-stage ehp-stage--report">
+      <div class="ehp-num">05</div>
+      <div class="ehp-stage-label">EVIDENCIA</div>
+      <h3>Reporta algo más útil que una media</h3>
+      <div class="ehp-report-grid">
+        <div><span>DIMENSIÓN</span><strong>corrección · utilidad…</strong></div>
+        <div><span>SEGMENTO</span><strong>idioma · tarea · riesgo…</strong></div>
+        <div><span>ACUERDO</span><strong>en la muestra solapada</strong></div>
+        <div><span>ADJUDICACIÓN</span><strong>qué casos y por qué</strong></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="ehp-pairwise">
+    <div class="ehp-pairwise-head">
+      <span>COMPARACIÓN PAREADA</span>
+      <strong>Reduce la carga de asignar una escala absoluta, pero solo mide la preferencia definida por la tarea</strong>
+    </div>
+    <div class="ehp-battle">
+      <div class="ehp-battle-answer"><span>RESPUESTA A</span><b>contenido</b></div>
+      <div class="ehp-vote">
+        <span>A mejor</span><span>empate</span><span>B mejor</span>
+      </div>
+      <div class="ehp-battle-answer"><span>RESPUESTA B</span><b>contenido</b></div>
+    </div>
+    <p>Chatbot Arena usa batallas anónimas y aleatorizadas para recoger preferencias pareadas. Ese diseño es útil para preferencia; no sustituye una fuente externa de verdad cuando la corrección puede verificarse.</p>
+  </div>
+
+  <div class="ehp-contracts">
+    <div><span>CEGADO ≠ OBJETIVIDAD</span><strong>ocultar identidad y aleatorizar el orden reduce sesgos de presentación, no elimina la subjetividad del criterio</strong></div>
+    <div><span>ACUERDO ≠ VERDAD</span><strong>el acuerdo sirve para diagnosticar el protocolo; un criterio mal definido o un sesgo compartido puede producir consenso</strong></div>
+    <div><span>PREFERENCIA ≠ CORRECCIÓN</span><strong>si existe una comprobación externa, ejecútala; la fluidez o el estilo no deben sustituir evidencia factual</strong></div>
+  </div>
+
+  <div class="ehp-ref">Fuentes primarias:
+    <a href="https://arxiv.org/abs/2403.04132">Chiang et al., Chatbot Arena (2024) · comparación pareada anónima y aleatorizada</a> ·
+    <a href="https://aclanthology.org/2021.humeval-1.15/">Oortwijn et al. (2021) · resolución sistemática del desacuerdo</a> ·
+    <a href="https://aclanthology.org/2022.humeval-1.6/">Shimorina &amp; Belz (2022) · documentación reproducible de evaluación humana</a>
+  </div>
+</div>
+
+<style>
+.ehp-wrap,.ehp-wrap *{box-sizing:border-box}
+.ehp-wrap{
+  --ehp-a:var(--md-primary-fg-color,#26a69a);
+  --ehp-b:#4757d6;
+  --ehp-c:var(--md-accent-fg-color,#ffb343);
+  --ehp-r:#d95d6f;
+  --ehp-bg:var(--md-default-bg-color,#fff);
+  --ehp-fg:var(--md-default-fg-color,#111827);
+  --ehp-muted:color-mix(in srgb,var(--ehp-fg) 60%,transparent);
+  --ehp-border:color-mix(in srgb,var(--ehp-fg) 14%,transparent);
+  container-type:inline-size;
+  margin:1.1rem 0 1.5rem;
+  padding:clamp(14px,2vw,22px);
+  border:1px solid var(--ehp-border);
+  border-radius:20px;
+  background:
+    radial-gradient(90% 120% at 0 0,color-mix(in srgb,var(--ehp-b) 7%,transparent),transparent 56%),
+    radial-gradient(90% 120% at 100% 0,color-mix(in srgb,var(--ehp-a) 7%,transparent),transparent 58%),
+    var(--ehp-bg);
+  color:var(--ehp-fg)
+}
+.ehp-head{display:grid;gap:4px;margin-bottom:13px}
+.ehp-kicker{font-size:10px;font-weight:950;letter-spacing:.1em;color:var(--ehp-muted)}
+.ehp-title{max-width:58ch;font-size:clamp(18px,2.1vw,24px);font-weight:900;line-height:1.12;letter-spacing:-.02em}
+.ehp-sub{max-width:96ch;font-size:13.2px;line-height:1.47;color:var(--ehp-muted)}
+.ehp-flow{display:grid;grid-template-columns:minmax(0,1fr) 16px minmax(0,1fr) 16px minmax(0,1fr) 16px minmax(0,1fr) 16px minmax(0,1fr);gap:5px;align-items:stretch;min-width:0}
+.ehp-stage{min-width:0;padding:10px;border:1px solid var(--ehp-border);border-radius:14px;background:color-mix(in srgb,var(--ehp-bg) 96%,var(--ehp-fg) 4%);display:grid;align-content:start;gap:6px}
+.ehp-stage--rubric{border-color:color-mix(in srgb,var(--ehp-b) 38%,var(--ehp-border));background:color-mix(in srgb,var(--ehp-b) 4%,var(--ehp-bg))}
+.ehp-stage--blind{border-color:color-mix(in srgb,var(--ehp-c) 44%,var(--ehp-border));background:color-mix(in srgb,var(--ehp-c) 4%,var(--ehp-bg))}
+.ehp-stage--ratings{border-color:color-mix(in srgb,var(--ehp-a) 42%,var(--ehp-border));background:color-mix(in srgb,var(--ehp-a) 4%,var(--ehp-bg))}
+.ehp-stage--resolve{border-color:color-mix(in srgb,var(--ehp-r) 42%,var(--ehp-border));background:color-mix(in srgb,var(--ehp-r) 4%,var(--ehp-bg))}
+.ehp-stage--report{border-color:color-mix(in srgb,var(--ehp-b) 34%,var(--ehp-border));background:color-mix(in srgb,var(--ehp-b) 3%,var(--ehp-bg))}
+.ehp-num{display:grid;place-items:center;width:24px;height:24px;border-radius:8px;background:color-mix(in srgb,var(--ehp-fg) 8%,var(--ehp-bg));font:900 9px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--ehp-muted)}
+.ehp-stage-label{font-size:8.3px;font-weight:950;letter-spacing:.08em;color:var(--ehp-muted)}
+.ehp-stage h3{margin:0;font-size:11.7px;line-height:1.22}
+.ehp-stage p{margin:0;font-size:8.9px;line-height:1.35;color:var(--ehp-muted)}
+.ehp-arrow{display:grid;place-items:center;font-size:16px;font-weight:950;color:var(--ehp-muted)}
+.ehp-dimensions{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+.ehp-dimensions span,.ehp-anchors span{padding:4px 5px;border:1px solid var(--ehp-border);border-radius:7px;background:var(--ehp-bg);font-size:7.7px;font-weight:850;text-align:center}
+.ehp-anchors{display:grid;grid-template-columns:1fr 1fr;gap:4px}.ehp-anchors span:first-child{border-left:2px solid var(--ehp-a)}.ehp-anchors span:last-child{border-left:2px solid var(--ehp-r)}
+.ehp-case{padding:6px;border:1px dashed color-mix(in srgb,var(--ehp-c) 65%,var(--ehp-border));border-radius:8px;background:var(--ehp-bg);font:850 8px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;text-align:center}
+.ehp-answers{display:grid;grid-template-columns:1fr 1fr;gap:4px}.ehp-answers>div{padding:6px;border:1px solid var(--ehp-border);border-radius:8px;background:var(--ehp-bg);display:grid;gap:2px;text-align:center}.ehp-answers b{font-size:10px}.ehp-answers span{font-size:7.2px;color:var(--ehp-muted)}
+.ehp-raters{display:grid;gap:4px}.ehp-raters>div{display:grid;grid-template-columns:1fr auto;gap:2px 6px;align-items:center;padding:5px 6px;border:1px solid var(--ehp-border);border-radius:8px;background:var(--ehp-bg)}.ehp-raters span{font-size:7px;font-weight:900;color:var(--ehp-muted)}.ehp-raters strong{grid-row:1/3;grid-column:2;font-size:13px}.ehp-raters small{font-size:7px;color:var(--ehp-muted)}
+.ehp-disagreement{display:grid;gap:4px}.ehp-disagreement span{padding:4px 5px;border-left:2px solid var(--ehp-r);border-radius:0 7px 7px 0;background:var(--ehp-bg);font-size:7.7px;font-weight:800;line-height:1.2}
+.ehp-loop{display:grid;grid-template-columns:auto 1fr;gap:5px;align-items:center;padding:5px 6px;border:1px dashed var(--ehp-border);border-radius:8px}.ehp-loop b{font-size:13px;color:var(--ehp-r)}.ehp-loop span{font-size:7.6px;font-weight:800;line-height:1.2}
+.ehp-report-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px}.ehp-report-grid>div{padding:5px;border:1px solid var(--ehp-border);border-radius:8px;background:var(--ehp-bg);display:grid;gap:2px}.ehp-report-grid span{font-size:6.8px;font-weight:950;letter-spacing:.05em;color:var(--ehp-muted)}.ehp-report-grid strong{font-size:7.4px;line-height:1.2}
+.ehp-pairwise{margin-top:10px;padding:10px;border:1px solid color-mix(in srgb,var(--ehp-b) 34%,var(--ehp-border));border-radius:13px;background:color-mix(in srgb,var(--ehp-b) 3%,var(--ehp-bg));display:grid;gap:7px}
+.ehp-pairwise-head{display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:start}.ehp-pairwise-head span{font-size:8px;font-weight:950;letter-spacing:.08em;color:var(--ehp-muted)}.ehp-pairwise-head strong{font-size:10.3px;line-height:1.28}
+.ehp-battle{display:grid;grid-template-columns:1fr minmax(130px,.7fr) 1fr;gap:6px;align-items:stretch}.ehp-battle-answer{padding:7px;border:1px solid var(--ehp-border);border-radius:9px;background:var(--ehp-bg);display:grid;gap:4px}.ehp-battle-answer span{font-size:7.4px;font-weight:950;color:var(--ehp-muted)}.ehp-battle-answer b{font-size:9px}
+.ehp-vote{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;align-items:center}.ehp-vote span{padding:6px 3px;border:1px solid var(--ehp-border);border-radius:999px;background:var(--ehp-bg);font-size:7px;font-weight:850;text-align:center}
+.ehp-pairwise p{margin:0;font-size:8.9px;line-height:1.35;color:var(--ehp-muted)}
+.ehp-contracts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}
+.ehp-contracts>div{min-width:0;padding:9px 10px;border-left:3px solid var(--ehp-b);border-radius:0 9px 9px 0;background:color-mix(in srgb,var(--ehp-b) 4%,var(--ehp-bg));display:grid;gap:3px}
+.ehp-contracts>div:nth-child(2){border-left-color:var(--ehp-c);background:color-mix(in srgb,var(--ehp-c) 4%,var(--ehp-bg))}
+.ehp-contracts>div:nth-child(3){border-left-color:var(--ehp-r);background:color-mix(in srgb,var(--ehp-r) 4%,var(--ehp-bg))}
+.ehp-contracts span{font-size:8.2px;font-weight:950;letter-spacing:.07em;color:var(--ehp-muted)}.ehp-contracts strong{font-size:9.3px;line-height:1.3}
+.ehp-ref{margin-top:9px;font-size:8.7px;line-height:1.36;color:var(--ehp-muted)}.ehp-ref a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+@container (max-width:800px){
+  .ehp-flow{grid-template-columns:1fr;gap:5px}
+  .ehp-arrow{height:14px;font-size:0}.ehp-arrow::before{content:"↓";font-size:15px}
+  .ehp-battle{grid-template-columns:1fr}.ehp-vote{order:3}
+  .ehp-pairwise-head{grid-template-columns:1fr}
+  .ehp-contracts{grid-template-columns:1fr}
+}
+@container (max-width:430px){
+  .ehp-wrap{padding:12px;border-radius:16px}.ehp-title{font-size:18px}.ehp-sub{font-size:12px}
+  .ehp-report-grid{grid-template-columns:1fr}.ehp-dimensions{grid-template-columns:1fr 1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  .ehp-wrap *{animation-duration:0s!important;animation-delay:0s!important;transition-duration:0s!important;scroll-behavior:auto!important}
+}
+</style>

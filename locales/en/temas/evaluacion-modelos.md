@@ -135,19 +135,11 @@ A deterministic metric is usually cheaper, reproducible and auditable. Generativ
 
 ## 6. Human evaluation
 
-Humans can assess correctness, usefulness, tone, clarity or preference. Reliable human evaluation needs:
+Humans can assess correctness, usefulness, tone, clarity or preference. For that signal to be reliable, the protocol has to specify which dimension is being judged, which examples anchor the rubric, what information is hidden from the rater, where annotation is duplicated, and how disagreements are handled.
 
-- a concrete rubric;
-- positive and negative examples;
-- evaluator training;
-- double annotation on a sample;
-- disagreement resolution;
-- randomized ordering and model blinding;
-- agreement measurement.
+{{ include_html("snippets/temas/evaluation-human-protocol.html") }}
 
-Relative preference is often easier than assigning an absolute score. Chatbot Arena popularized pairwise comparisons and aggregate rankings from votes.[^arena]
-
-Preference is not the same as truth. A more fluent answer can beat a more correct one. The rubric should separate dimensions.
+Preference is still not the same as truth. A more fluent answer can beat a more correct one. When an external check exists, use it and reserve human judgment for dimensions that genuinely require it.
 
 ## 7. LLM as a judge
 
