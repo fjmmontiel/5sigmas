@@ -11,12 +11,12 @@ tags:
 
 # Chapter 3 — What is “a data center in space”?
 
-This chapter describes what processing data in orbit means, which projects already have real hardware operating and where the boundary lies between use cases that are viable today and those that remain speculative. By the end, we will know the projects with hardware in orbit in early 2026 (Starcloud, Axiom, D-Orbit, ADA Space), understand the difference between onboard processing and general-purpose computing, and have a viability map by use case with which to evaluate the megaproject argument.
+This chapter explains what processing data in orbit means, which projects already have real hardware operating, and where the boundary lies between use cases that are viable today and those that remain speculative. It covers the projects with hardware in orbit in early 2026 (Starcloud, Axiom, D-Orbit, ADA Space), the difference between onboard processing and general-purpose computing, and a viability map for evaluating the megaproject argument.
 
 !!! info "Prerequisites"
     This chapter assumes you know the concepts introduced in [Chapter 2 — Energy, heat and connectivity](./02-energia-calor-conectividad.md).
 
-The previous two chapters established the context (why space is being discussed now) and the physics of the main problems (heat, energy, connectivity). This chapter takes the series into its final stretch by answering the most direct question: what does it really mean to have a data center in orbit, what is it useful for today, and what do the most ambitious projects look like?
+The previous two chapters established the context (why space is being discussed now) and the physics of the main problems (heat, energy, connectivity). This chapter moves the series toward its conclusion by answering the most direct question: what does it really mean to have a data center in orbit, what is it useful for today, and what do the most ambitious projects look like?
 
 The short answer is that “data center in space” is not a single concept but a spectrum of possibilities with very different viability profiles, ranging from observation satellites with onboard processing (already existing and viable) to massive computing facilities in geostationary orbit (decades away, if ever).
 
@@ -32,19 +32,19 @@ The most important distinction is between storing and processing in orbit the da
 
 Earth-observation satellites generate enormous amounts of data. A hyperspectral observation satellite can generate terabytes of data per day. Downlinking all of that information requires bandwidth that exceeds the available link capacity in many missions.
 
-The natural solution is to process it on the satellite itself: instead of downlinking raw data, the satellite runs classification, change-detection or feature-extraction algorithms and transmits only the results (which can be orders of magnitude smaller than the raw data). The concept has a name of its own: “data gravity”, the friction created by bringing massive datasets down to Earth before being able to work with them.
+The natural solution is to process it on the satellite itself: instead of downlinking raw data, the satellite runs classification, change-detection or feature-extraction algorithms and transmits only the results (which can be orders of magnitude smaller than the raw data). This is often described as “data gravity”: the friction created by bringing massive datasets down to Earth before they can be processed.
 
 {{ include_html("snippets/datacenters-espacio/03-procesar-donde-nace.html") }}
 
-A concrete example: Fujitsu and Yamaguchi University announced in November 2025 an edge-computing technology for small SAR satellites capable of processing images almost in real time in less than ten minutes, even under power and radiation constraints ([Fujitsu / Yamaguchi][r1]). In parallel, D-Orbit already sells “space cloud” services to run applications and process data directly in orbit, and integrates that logic into operational observation programmes such as IRIDE-NOX ([D-Orbit][r11]).
+A concrete example: Fujitsu and Yamaguchi University announced in November 2025 an edge-computing technology for small SAR satellites capable of processing images almost in real time in less than ten minutes, even under power and radiation constraints ([Fujitsu / Yamaguchi][r1]). In parallel, D-Orbit already sells “space cloud” services to run applications and process data directly in orbit, and integrates that logic into operational observation programs such as IRIDE-NOX ([D-Orbit][r11]).
 
-These systems operate at a scale of 100–500 W and perform inference only (not training). They are among the most mature use cases in the spectrum and represent the application where the advantage of orbital processing is clearest today: process where the data is born so that everything does not have to be downlinked to Earth.
+These systems operate at a scale of 100–500 W and perform inference only (not training). They are among the most mature use cases in the spectrum and represent the application where the advantage of orbital processing is clearest today: process data at its source so the full raw dataset does not have to be downlinked to Earth.
 
 ### General-purpose computing in orbit
 
 Moving general-purpose computing into space (the equivalent of an AWS data center in orbit) is a different and much more speculative scenario. It does not solve any problem that cannot be solved more cheaply on Earth except in very specific cases: applications that require real-time access to satellite data with minimum latency, systems that need to operate in high-radiation environments for resilience reasons, or use cases where the jurisdiction of data in orbit has specific value.
 
-That third case (data that does not belong to any terrestrial jurisdiction) is an argument that appears in some discussions of digital sovereignty and privacy. The recent legal discussion revolves precisely around that gap: how to interpret satellite jurisdiction, which obligations survive when data crosses multiple countries in orbit and how far a maritime-like “flag” logic could go ([JURIST][r8], [UNOOSA][r12]). Today it remains a theoretical and regulatory debate, not an established legal framework.
+That third case—data outside a single terrestrial jurisdiction—is sometimes raised in discussions of digital sovereignty and privacy. Recent legal debate focuses on that gap: how to interpret satellite jurisdiction, which obligations survive when data crosses multiple countries in orbit, and how far a maritime-like “flag” logic could go ([JURIST][r8], [UNOOSA][r12]). Today it remains a theoretical and regulatory debate, not an established legal framework.
 
 ---
 
@@ -66,13 +66,13 @@ Of these, the most significant case for the debate about AI in space is Starclou
 
 Starcloud's next launch is scheduled for October 2026, with multiple H100s and the Nvidia Blackwell platform. The company's stated long-term vision is a 5 GW orbital data center with 4 km × 4 km solar-panel and radiator structures ([KPMG][r4]).
 
-Axiom Space, meanwhile, launched the first two dedicated orbital data-center nodes in LEO on 11 January 2026, with 2.5 Gbps optical connectivity (compatible with Space Development Agency standards) and high-capacity Spacebilt storage hardware (122 TB Phison SSDs) ([Axiom][r2], [ISS National Lab][r3]). China has moved faster in scale: ADA Space's Three-Body constellation has twelve satellites launched in May 2025, each with 744 TOPS of compute, 30 TB of storage and 100 Gbps laser inter-satellite links, for a total of 5 petaflops according to the available industry reporting ([SpaceNews][r5]). The planned expansion is to 2,800 satellites targeting 1,000 petaflops ([SpaceNews][r5]).
+Axiom Space, meanwhile, launched the first two dedicated orbital data-center nodes in LEO on 11 January 2026, with 2.5 Gbps optical connectivity (compatible with Space Development Agency standards) and high-capacity Spacebilt storage hardware (122 TB Phison SSDs) ([Axiom][r2], [ISS National Lab][r3]). China has scaled faster: ADA Space's Three-Body constellation has twelve satellites launched in May 2025, each with 744 TOPS of compute, 30 TB of storage and 100 Gbps laser inter-satellite links, for a total of 5 petaflops according to the available industry reporting ([SpaceNews][r5]). The planned expansion is to 2,800 satellites targeting 1,000 petaflops ([SpaceNews][r5]).
 
 ---
 
 ## 3. Resilient storage and disaster recovery
 
-One direction that has some logic for space is extremely resilient storage.
+One use case with a plausible orbital rationale is extremely resilient storage.
 
 Terrestrial backup and disaster-recovery systems solve geographic resilience by keeping copies of data in locations far enough apart that a disaster affecting one region does not destroy every copy. Locations on different continents are the current standard.
 
@@ -86,11 +86,11 @@ Lonestar Data Holdings is developing disaster-recovery-oriented storage in cislu
 
 Beyond the physics described in the previous chapter, there are operational implications that any serious viability assessment must include.
 
-**Upgrade cycles.** Terrestrial data centers continuously upgrade hardware: new GPU generations, more memory, better cooling systems. In orbit, the hardware that is launched is the hardware that operates until the end of the mission. Racks cannot be added, radiation-degraded chips cannot be replaced, and the system cannot be adapted to new AI models that require more memory or a different accelerator type. The useful life of satellites using Nvidia-like COTS chips is measured in years, not decades.
+**Upgrade cycles.** Terrestrial data centers continuously upgrade hardware: new GPU generations, more memory, better cooling systems. In orbit, the hardware that is launched is the hardware that operates until the end of the mission. Racks cannot be added, radiation-degraded chips cannot be replaced, and the system cannot be adapted to new AI models that require more memory or a different accelerator type. The useful life of satellites using Nvidia-class COTS chips is measured in years, not decades.
 
-**Radiation tolerance.** Consumer chips are not designed to operate in the radiation environment of low Earth orbit or beyond. Radiation-tolerant chips exist but have significantly lower compute density than modern consumer chips. The alternative is software-protection approaches (Radshield, Fujitsu's “radiation armour”) that improve immunity to bit errors by up to 720 times under heavy-ion irradiation, but add compute overhead and system complexity ([KPMG][r4]).
+**Radiation tolerance.** Consumer chips are not designed to operate in the radiation environment of low Earth orbit or beyond. Radiation-tolerant chips exist but have significantly lower compute density than modern consumer chips. The alternative is software-protection approaches (Radshield, Fujitsu's “radiation armor”) that improve immunity to bit errors by up to 720 times under heavy-ion irradiation, but add compute overhead and system complexity ([KPMG][r4]).
 
-**Operational autonomy.** An orbital data center has to operate substantially autonomously. Operators cannot physically access the system, so all management is remote and constrained by communication-link windows and bandwidth. Incident management in such a system is radically different from management on Earth.
+**Operational autonomy.** An orbital data center must operate largely autonomously. Operators cannot physically access the system, so all management is remote and constrained by communication-link windows and bandwidth. Incident management in such a system is radically different from management on Earth.
 
 **Regulatory framework.** The 1967 Outer Space Treaty establishes that objects in space are the responsibility of the state that launched them. Communication frequencies are regulated by the ITU. Deorbiting at end of life is an increasingly explicit requirement in national regulations: LEO satellites cannot be abandoned indefinitely, and the growth of Starlink, OneWeb and other constellations is intensifying the regulatory discussion around that end-of-life cycle.
 
@@ -104,25 +104,25 @@ Massive-scale projects exist at different stages of development, from pilots alr
 
 **SpaceX / Orbital Data Center System.** On 30 January 2026, SpaceX filed an application with the FCC to operate a constellation of up to one million satellites for orbital data processing, with projections of 100 GW of AI compute. The satellites would use Starlink V3 (which offers more than 1 Tbps per satellite through laser links) and carry ML accelerators onboard to preprocess data before transmission. The FCC accepted the application for public comment in February 2026, but the filing did not include a deployment schedule or detailed cost ([SpaceNews][r7], [FCC][r17]). The economic viability of this project depends on Starship reaching the projected launch cadence and costs.
 
-**Google Project Suncatcher.** Google announced Project Suncatcher in November 2025 as a research moonshot to explore scalable ML in space, and Planet announced that it would build and operate the project's advanced platform. What is public today is a research demonstrator for validating TPUs and optical links in orbit, with prototypes planned for 2027, not a committed roadmap for a commercial data center ([Google][r13], [Planet][r15]).
+**Google Project Suncatcher.** Google announced Project Suncatcher in November 2025 as a research moonshot to explore scalable ML in space, and Planet announced that it would build and operate the project's advanced platform. What has been announced so far is a research demonstrator for validating TPUs and optical links in orbit, with prototypes planned for 2027, not a committed roadmap for a commercial data center ([Google][r13], [Planet][r15]).
 
 **Starcloud (5 GW).** The startup envisions a 5 GW orbital data center with 4 km × 4 km solar panels and radiators, which would generate more power than the largest power plant in the United States. Its roadmap includes a next launch with multiple H100s and the Blackwell platform in October 2026. It then proposes scaling gradually toward an orbital cloud offering ([KPMG][r4]).
 
-**SBSP (Space-Based Solar Power).** Orbital solar-power projects that would transmit energy to Earth by microwave are technically different from data centers but share orbital-hardware infrastructure. ESA maintains SOLARIS as a study and maturation programme for SBSP in Europe, while Space Solar argues that CASSIOPeiA could enable commercial deployments from 2030 if the technology and regulation mature ([ESA][r9], [Space Solar][r16]). If SBSP develops at scale, it could create orbital power-management infrastructure that shares components with massive orbital computing.
+**SBSP (Space-Based Solar Power).** Orbital solar-power projects that would transmit energy to Earth by microwave are technically different from data centers but share orbital-hardware infrastructure. ESA maintains SOLARIS as a study and maturation program for SBSP in Europe, while Space Solar argues that CASSIOPeiA could enable commercial deployments from 2030 if the technology and regulation mature ([ESA][r9], [Space Solar][r16]). If SBSP develops at scale, it could create orbital power-management infrastructure that shares components with massive orbital computing.
 
 ---
 
 ## 6. Does it make sense today?
 
-The answer changes radically by use case, and the situation has changed since 2023 with the first real hardware milestones in orbit.
+The answer depends heavily on the use case, and the situation has changed since 2023 with the first real hardware milestones in orbit.
 
-**It makes sense today and there is already hardware in orbit:** onboard processing of observation-satellite data to reduce downlink (Fujitsu/Yamaguchi, D-Orbit IRIDE). First high-value orbital-storage trials (Axiom/Spacebilt). Technical demonstrations of high-end AI in orbit (Starcloud H100).
+**Makes sense today, with hardware already in orbit:** onboard processing of observation-satellite data to reduce downlink (Fujitsu/Yamaguchi, D-Orbit IRIDE). First high-value orbital-storage trials (Axiom/Spacebilt). Technical demonstrations of high-end AI in orbit (Starcloud H100).
 
-**It could make sense in 5–10 years:** orbital edge computing for communications constellations, where processing in the node itself reduces latency. Computing for space-exploration missions where communication latency with Earth is unacceptable. Orbital data centers at tens-of-megawatts scale if Starship reaches its projected costs.
+**Could make sense in 5–10 years:** orbital edge computing for communications constellations, where processing in the node itself reduces latency. Computing for space-exploration missions where communication latency with Earth is unacceptable. Orbital data centers at tens-of-megawatts scale if Starship reaches its projected costs.
 
-**Speculative within the visible horizon:** general-purpose orbital data centers that compete economically with terrestrial facilities for general AI workloads. Google Suncatcher and SpaceX's million-satellite project belong to this category today, although both have intermediate milestones planned for 2026–2027.
+**Still speculative within the foreseeable horizon:** general-purpose orbital data centers that compete economically with terrestrial facilities for general AI workloads. Google Suncatcher and SpaceX's million-satellite project belong to this category today, although both have intermediate milestones planned for 2026–2027.
 
-> Space is not a short-term solution to the bottlenecks of terrestrial data centers. It is a niche direction with specific use cases where the unique properties of the orbital environment have enough value to justify the added cost. What changed in 2025–2026 is that this niche is ceasing to be only theory: real hardware is in orbit processing real data. The distance between today's niche and the massive infrastructure envisioned by the most ambitious projects remains enormous, and the physical problems of heat and mass have not disappeared. But the starting point is no longer paper.
+> Space is not a short-term solution to the bottlenecks of terrestrial data centers. It is a niche direction with specific use cases where the unique properties of the orbital environment have enough value to justify the added cost. What changed in 2025–2026 is that this niche is no longer purely theoretical: real hardware is in orbit processing real data. The distance between today's niche and the massive infrastructure envisioned by the most ambitious projects remains enormous, and the physical problems of heat and mass have not disappeared. The starting point is now real hardware rather than paper studies.
 
 The next chapter closes the series with an inventory of the resources consumed by terrestrial data centers: water, energy, critical minerals and lifecycle. That analysis is the right starting point for evaluating which constraints space solves and which it inherits without any added advantage.
 
@@ -131,19 +131,19 @@ The next chapter closes the series with an inventory of the resources consumed b
 ## Frequently asked questions
 
 **Which projects already have real computing hardware operating in orbit in 2026?**
-Several prototypes and demonstrators. Starcloud launched a satellite with an Nvidia H100 GPU in November 2025 and announced the in-orbit training of a simplified NanoGPT-style model plus active inference with Google Gemma. Axiom Space launched AxDCU-1 to the ISS and two ODC nodes to LEO in January 2026 with 2.5 Gbps optical connectivity. The ADA Space Three-Body constellation has had 12 operational satellites since May 2025 with 5 petaflops total according to industry reporting. D-Orbit AIX runs object-detection models on operational satellites. Tiansuan/BUPT-1 has operated since January 2023 as the first documented cloud-native satellite in this series ([tiansuan.org.cn][r6]).
+Several prototypes and demonstrators are already operating. Starcloud launched a satellite with an Nvidia H100 GPU in November 2025 and announced the in-orbit training of a simplified NanoGPT-style model plus active inference with Google Gemma. Axiom Space launched AxDCU-1 to the ISS and two ODC nodes to LEO in January 2026 with 2.5 Gbps optical connectivity. The ADA Space Three-Body constellation has had 12 operational satellites since May 2025 with 5 petaflops total according to industry reporting. D-Orbit AIX runs object-detection models on operational satellites. Tiansuan/BUPT-1 has operated since January 2023 as the first documented cloud-native satellite in this series ([tiansuan.org.cn][r6]).
 
 **What is the difference between onboard processing and general-purpose computing in orbit?**
 Onboard processing is specialized inference inside the satellite itself: specific models run on the data that satellite generates to reduce what must be downlinked to Earth. It is the most mature case and the one with the strongest economic rationale. General-purpose computing in orbit is different and much more speculative: it would be equivalent to moving an AWS data center into space to serve arbitrary workloads from there. Today that solves no problem more cheaply than on Earth except in very specific cases.
 
 **For which use cases does orbital computing make economic sense today?**
-Three make sense today: onboard processing of observation satellites to reduce downlink (D-Orbit AIX, IRIDE), high-value archival storage for extreme resilience (Spacebilt/Axiom's 122 TB SSDs mark the current threshold), and advanced-compute demonstrations to validate hardware and orbital operations. In 5–10 years, orbital edge computing for communications constellations and the first tens-of-megawatts data centers could be added if Starship reaches its projected costs.
+Three use cases have a credible case today: onboard processing of observation satellites to reduce downlink (D-Orbit AIX, IRIDE), high-value archival storage for extreme resilience (Spacebilt/Axiom's 122 TB SSDs mark the current threshold), and advanced-compute demonstrations to validate hardware and orbital operations. In 5–10 years, orbital edge computing for communications constellations and the first tens-of-megawatts data centers could be added if Starship reaches its projected costs.
 
 **What is the “Digital Flag State” debate and why does it matter for data in space?**
-It is a way of summarizing a legal debate inspired by maritime law: applying a “flag” logic to the satellite under which the jurisdiction of the country of registration would dominate over data travelling in orbit. It is not a rule in force, but it matters because it reveals the underlying problem: data sovereignty and orbital jurisdiction do not fit neatly together today. If such a framework were ever consolidated, it would add a digital-sovereignty argument to the economic viability of orbital computing.
+The term summarizes a legal debate inspired by maritime law: applying a “flag” logic to the satellite under which the jurisdiction of the country of registration would dominate over data travelling in orbit. It is not a rule in force, but it matters because it reveals the underlying problem: data sovereignty and orbital jurisdiction do not fit neatly together today. If such a framework were ever formalized, it would add a digital-sovereignty argument to the economic viability of orbital computing.
 
 **When could orbital data centers compete economically with terrestrial ones for general-purpose workloads?**
-Probably not this decade for arbitrary workloads. Current launch costs make installing megawatts of compute in orbit several times more expensive than on Earth. For the equation to close, Starship would need to reach less than $200 per kilogram at high cadence, thermal-management systems would need to move from partial demonstrations to robust megawatt-scale operation, and hardware-refresh cycles could not remain an obstacle for the workloads being served. The most optimistic projections place that crossover in the second half of the 2030s ([Space Investments][r10]).
+Probably not this decade for arbitrary workloads. Current launch costs make installing megawatts of compute in orbit several times more expensive than on Earth. For the economics to work, Starship would need to reach less than $200 per kilogram at high cadence, thermal-management systems would need to move from partial demonstrations to robust megawatt-scale operation, and hardware-refresh cycles would also need a workable solution for the workloads being served. The most optimistic projections place that crossover in the second half of the 2030s ([Space Investments][r10]).
 
 ---
 
@@ -162,9 +162,9 @@ Probably not this decade for arbitrary workloads. Current launch costs make inst
 | R6 | **Tiansuan (2023)** — *Satellite Computing: A Case Study of Cloud-Native Satellites* ([tiansuan.org.cn][r6]) | BUPT-1 operational since January 2023 with cloud-native architecture in orbit. |
 | R7 | **SpaceNews (2026)** — *SpaceX files plans for million-satellite orbital data center constellation* ([SpaceNews][r7]) | SpaceX requests 1M satellites, 100 GW of compute and Starlink V3 >1 Tbps/satellite. |
 | R8 | **JURIST (2026)** — *Orbital data centers and the legal vacuum threatening AI governance* ([JURIST][r8]) | Legal opinion column on the regulatory gap and data sovereignty in orbital infrastructure. |
-| R9 | **ESA** — *SOLARIS / clean energy from space* ([ESA][r9]) | Status of the European space-based solar-power programme as a feasibility and maturation initiative. |
+| R9 | **ESA** — *SOLARIS / clean energy from space* ([ESA][r9]) | Status of the European space-based solar-power program as a feasibility and maturation initiative. |
 | R10 | **Space Investments (2025)** — *Orbital Data Centers 2025-2030 Transition* ([Space Investments][r10]) | Orbital market: $1.78B in 2029, $39B in 2035 and technology-maturity table by subsystem. |
-| R11 | **D-Orbit** — *Advanced Services / IRIDE-NOX* ([D-Orbit][r11]) | Space-cloud services and operational participation in Italy's IRIDE-NOX programme. |
+| R11 | **D-Orbit** — *Advanced Services / IRIDE-NOX* ([D-Orbit][r11]) | Space-cloud services and operational participation in Italy's IRIDE-NOX program. |
 | R12 | **UNOOSA** — *Outer Space Treaty* ([UNOOSA][r12]) | Fundamental legal framework for activities in outer space. |
 | R13 | **Google (2025)** — *Project Suncatcher* ([Google][r13]) | Research moonshot to explore scalable ML in space with TPUs and solar power, with prototypes planned for 2027. |
 | R14 | **Lonestar (2025-2026)** — *Lunar data center / DRaaS* ([Lonestar][r14]) | Disaster-recovery-oriented storage in lunar and cislunar environments. |

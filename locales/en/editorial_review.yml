@@ -114,3 +114,9 @@ certified_routes:
     english_blob_sha: 2e4e89097f112db91c03e88fadaf905bb905ec4d
     review_scope: prose, headings, lists, FAQs, terminology, technical meaning, evidence, references, visual hooks
     note: Side-by-side native-English editorial review; tightened thermal, solar, connectivity and maintenance prose without changing physics, quantitative evidence, references, teaching order or visual semantics.
+  - route: series/datacenters-espacio/03-que-es-datacenter-espacio.md
+    reviewed_on: 2026-08-17
+    spanish_blob_sha: 41fa1e38fd044e74eaf8134d56cb5be5ce33da38
+    english_blob_sha: e041f2cb8645cf9250059d13dcd5b70e9d244427
+    review_scope: prose, headings, FAQs, terminology, technical meaning, evidence, references, visual hooks
+    note: Side-by-side native-English editorial review; removed literal Spanish framing around orbital data processing, resilience, megaprojects and economic viability while preserving every quantitative claim, source, FAQ, section order and visual semantic.
