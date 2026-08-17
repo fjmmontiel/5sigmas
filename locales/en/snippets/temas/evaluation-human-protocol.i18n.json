@@ -2,7 +2,7 @@
   "source": "snippets/temas/evaluation-human-protocol.html",
   "source_blob_sha": "5074bd8e20b3382ddd2e884822e8a0e9c02cba2f",
   "replacements": {
-    "RÃšBRICA â†’ CEGADO â†’ JUICIOS INDEPENDIENTES â†’ DESACUERDO â†’ EVIDENCIA": "RUBRIC â†’ BLINDING â†’ INDEPENDENT JUDGMENTS â†’ DISAGREEMENT 26 TAGâ€“",
+    "RÃšBRICA â†’ CEGADO â†’ JUICIOS INDEPENDIENTES â†’ DESACUERDO â†’ EVIDENCIA": "RUBRIC â†’ BLINDING â†’ INDEPENDENT JUDGMENTS â†’ DISAGREEMENT â†’ EVIDENCE",
     "Una evaluaciÃ³n humana fiable necesita un protocolo, no solo votos": "Reliable human evaluation needs a protocol, not just votes",
     "El objetivo es convertir juicios humanos en una seÃ±al auditable: definir quÃ© se juzga, reducir pistas irrelevantes, observar el desacuerdo y conservarlo por dimensiÃ³n y segmento.": "The goal is to turn human judgments into an auditable signal: define what is judged, reduce irrelevant cues, observe disagreement, and preserve it by dimension and segment.",
     "Protocolo de evaluaciÃ³n humana desde la rÃºbrica hasta el informe por dimensiÃ³n y segmento": "Human-evaluation protocol from the rubric to reporting by dimension and segment",
@@ -42,7 +42,7 @@
     "en la muestra solapada": "on the overlap sample",
     "ADJUDICACIÃ“N": "ADJUDICATION",
     "quÃ© casos y por quÃ©": "which cases and why",
-    "COMPARACIÃ“N PAREADH": "PAIRWISE COMPARISON",
+    "COMPARACIÃ“N PAREADA": "PAIRWISE COMPARISON",
     "Reduce la carga de asignar una escala absoluta, pero solo mide la preferencia definida por la tarea": "Reduces the burden of assigning an absolute scale, but only measures the preference defined by the task",
     "RESPUESTA A": "ANSWER A",
     "RESPUESTA B": "ANSWER B",
@@ -51,4 +51,36 @@
     "empate": "tie",
     "B mejor": "B better",
     "Chatbot Arena usa batallas anÃ³nimas y aleatorizadas para recoger preferencias pareadas. Ese diseÃ±o es Ãºtil para preferencia; no sustituye una fuente externa de verdad cuando la correcciÃ³n puede verificarse.": "Chatbot Arena uses anonymous, randomized battles to collect pairwise preferences. That design is useful for preference; it does not replace an external source of truth when correctness can be verified.",
-    "CEGDDbô$¤UD•d”DB#¢$$Ä”äD”är(šô$¤T5D•d•E’"À¢&ö7VÇF"–FVçF–FB’ÆVF÷&—¦"VÂ÷&FVâ&VGV6R6W6v÷2FR&W6VçF6œ;6âÂæòVÆ–Ö–æÆ7V&¦WF—f–FBFVÂ7&—FW&–ò#¢&†–F–ær–FVçF—G’æB&æFöÖ—¦–ær÷&FW"&VGV6W2&W6VçFF–öâ&–3²—BFöW2æ÷B&VÖ÷fR7V&¦V7F—f—G’g&öÒF†R7&—FW&–öâ"À¢$5TU$Dò(šdU$DB#¢$u$TTÔTåB(šE%UD‚"À¢&VÂ7VW&Fò6—'fR&F–væ÷7F–6"VÂ&÷Fö6öÆó²Vâ7&—FW&–òÖÂFVf–æ–FòòVâ6W6vò6ö×'F–FòVVFR&öGV6—"6öç6Vç6ò#¢&w&VVÖVçB†VÇ2F–væ÷6RF†R&÷Fö6öÃ²ö÷&Ç’FVf–æVB7&—FW&–öâ÷"6†&VB&–26â&öGV6R6öç6Vç7W2"À¢%$TdU$Tä4”(š4õ%$T44¼94â#¢%$TdU$Tä4R(š4õ%$T5DäU52"À¢'6’W†—7FRVæ6ö×&ö&6œ;6âW‡FW&æÂV¦V<;§FÆ²ÆfÇV–FW¢òVÂW7F–ÆòæòFV&Vâ7W7F—GV—"Wf–FVæ6–f7GVÂ#¢'v†VââW‡FW&æÂ6†V6²W†—7G2Â'Vâ—C²fÇVVæ7’÷"7G–ÆR6†÷VÆBæ÷B&WÆ6Rf7GVÂWf–FVæ6R"À¢$gVVçFW2&–Ö&–3¢#¢%&–Ö'’6÷W&6W3¢"À¢$6†–ærWBÂâÂ6†F&÷B&Væƒ##B’+r6ö×&6œ;6â&VFì;6æ–Ö’ÆVF÷&—¦F#¢$6†–ærWBÂâÂ6†F&÷B&Væƒ##B’+ræöç–Ö÷W2&æFöÖ—¦VB—'v—6R6ö×&—6öâ"À¢$ö÷'Gv–¦âWBÂâƒ##’+r&W6öÇV6œ;6â6—7FVÜ:F–6FVÂFW67VW&Fò#¢$ö÷'Gv–¦âWBÂâƒ##’+r7—7FVÖF–2F—6w&VVÖVçB&W6öÇWF–öâ"À¢%6†–Ö÷&–æf×²&VÇ¢ƒ##"’+rFö7VÖVçF6œ;6â&W&öGV6–&ÆRFRWfÇV6œ;6â‡VÖæ#¢%6†–Ö÷&–æf×²&VÇ¢ƒ##"’+r&W&öGV6–&ÆR‡VÖâÖWfÇVF–öâFö7VÖVçFF–öâ ¢ÒÀ¢&f÷&&–FFVåö÷WGWE÷Fö¶Vç2#¢°¢%,9¤%$”4"À¢$4TtDò"À¢$¥T”4”õ2”äDUTäD”
+    "CEGADO â‰  OBJETIVIDAD": "BLINDING â‰  OBJECTIVITY",
+    "ocultar identidad y aleatorizar el orden reduce sesgos de presentaciÃ³n, no elimina la subjetividad del criterio": "hiding identity and randomizing order reduces presentation bias; it does not remove subjectivity from the criterion",
+    "ACUERDO â‰  VERDAD": "AGREEMENT â‰  TRUTH",
+    "el acuerdo sirve para diagnosticar el protocolo; un criterio mal definido o un sesgo compartido puede producir consenso": "agreement helps diagnose the protocol; a poorly defined criterion or shared bias can produce consensus",
+    "PREFERENCIA â‰  CORRECCIÃ“N": "PREFERENCE â‰  CORRECTNESS",
+    "si existe una comprobaciÃ³n externa, ejecÃºtala; la fluidez o el estilo no deben sustituir evidencia factual": "when an external check exists, run it; fluency or style should not replace factual evidence",
+    "Fuentes primarias:": "Primary sources:",
+    "Chiang et al., Chatbot Arena (2024) Â· comparaciÃ³n pareada anÃ³nima y aleatorizada": "Chiang et al., Chatbot Arena (2024) Â· anonymous randomized pairwise comparison",
+    "Oortwijn et al. (2021) Â· resoluciÃ³n sistemÃ¡tica del desacuerdo": "Oortwijn et al. (2021) Â· systematic disagreement resolution",
+    "Shimorina &amp; Belz (2022) Â· documentaciÃ³n reproducible de evaluaciÃ³n humana": "Shimorina &amp; Belz (2022) Â· reproducible human-evaluation documentation"
+  },
+  "forbidden_output_tokens": [
+    "RÃšBRICA",
+    "CEGADO",
+    "JUICIOS INDEPENDIENTES",
+    "DESACUERDO",
+    "evaluaciÃ³n humana",
+    "ASIGNACIÃ“N CIEGA",
+    "EVALUADOR",
+    "preferencia / rÃºbrica",
+    "DIMENSIÃ“N",
+    "SEGMENTO",
+    "ACUERDO",
+    "ADJUDICACIÃ“N",
+    "COMPARACIÃ“N PAREADA",
+    "RESPUESTA A",
+    "RESPUESTA B",
+    "CEGADO â‰  OBJETIVIDAD",
+    "ACUERDO â‰  VERDAD",
+    "PREFERENCIA â‰  CORRECCIÃ“N",
+    "Fuentes primarias:"
+  ]
+}
