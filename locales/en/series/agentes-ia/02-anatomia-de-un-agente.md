@@ -37,7 +37,7 @@ A tool should not be presented to the model as a vague sentence such as “you c
 - type and range validation
 - read or write permissions
 - timeout and retry policy
-- a clear representation of success, error, and partial results.
+- a clear representation of success, error, and partial results
 
 If a `send_email` tool accepts an ambiguous recipient, the model may fill the argument with a plausible inference. The problem is not only that the LLM can be wrong: the system has designed a dangerous boundary. A good tool contract makes illegal states difficult to express.
 
@@ -81,7 +81,7 @@ Adding a vector database does not turn a system into an agent. Retrieval can hel
 - which documents are trustworthy
 - how evidence is cited
 - what to do with conflicting results
-- when retrieval has not found enough information.
+- when retrieval has not found enough information
 
 Memory can also increase the attack surface. If an agent writes a malicious instruction into memory and later retrieves it as trusted context, the problem has not disappeared—it has become persistent.
 

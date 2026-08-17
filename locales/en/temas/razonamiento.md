@@ -90,7 +90,7 @@ More compute does not produce monotonic improvement. Failure modes include:
 - propagation of an incorrect initial assumption
 - reinforced confidence in a wrong answer
 - interaction-breaking latency
-- cost greater than simply using a stronger model.
+- cost greater than simply using a stronger model
 
 The right policy is not “always think more.” It is to **route compute according to difficulty and the value of the answer**.
 
@@ -115,7 +115,7 @@ The challenge moves into the contract:
 - how to validate
 - what to do on timeout or partial results
 - how to prevent duplicates
-- how to resume after interruption.
+- how to resume after interruption
 
 The important separation is operational: **the model proposes; the runtime validates and executes; the real result updates state; only then does the system choose the next step**. Current agent runtimes expose exactly this loop and can apply guardrails around tool calls.[^agentguardrails]
 

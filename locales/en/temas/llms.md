@@ -34,7 +34,7 @@ Tokenization matters because it affects:
 - cost, which is often measured in tokens
 - effective context length
 - representation of languages and code
-- the ease of copying numbers, names or uncommon strings.
+- the ease of copying numbers, names or uncommon strings
 
 ## 2. Tokens become representations
 
@@ -113,7 +113,7 @@ An LLM is particularly useful when the task allows linguistic variation and the 
 - classify from instructions and examples
 - translate between representations
 - coordinate tools through structured arguments
-- reason over information present in the context.
+- reason over information present in the context
 
 The complete system improves when explicit constraints, examples, validators, retrieval and evaluation on real cases are added.
 

@@ -11,14 +11,14 @@ tags:
 
 # Chapter 1 — What is AI?
 
-This chapter presents a framework for understanding any modern artificial-intelligence system, from a spam filter to a large language model. By the end, the reader will be able to distinguish the four main technological families (AI, ML, DL and GenAI), understand where the signal that makes a system learn comes from, and know what changes internally in each type of algorithm during training. No technical experience is required, although becoming familiar with the terms will make the following chapters easier to follow. The chapter closes with MLOps, the engineering that turns a trained model into a product that works reliably in the real world.
+This chapter presents a framework for understanding any modern artificial-intelligence system, from a spam filter to a large language model. By the end, the reader will be able to distinguish the four main technological families (AI, ML, DL and GenAI), understand where the signal that makes a system learn comes from, and know what changes internally in each type of algorithm during training. No technical experience is required, although becoming familiar with the terms will make the following chapters easier to follow. The chapter closes with MLOps: the engineering practices that turn a trained model into a reliable product.
 
 Artificial intelligence is **not a “mind” or an autonomous entity**.
-It is a family of **systems built to optimize a task** from data, with a measurable objective, and with the ability to improve through some mechanism of “learning”.
+It is a family of **systems built to optimize a task** against a measurable objective, often using data and some form of learning.
 
-Sometimes these systems classify, sometimes they predict, sometimes they decide and, in the most recent cases, they **generate content**.
+AI systems may classify, predict, make decisions or, more recently, **generate content**.
 
-To avoid confusing products, models and marketing, we are going to use a simple framework that lets us understand **any modern AI system**.
+To separate products, models and marketing claims, we'll use a simple framework that works across **modern AI systems**.
 
 Any “AI system” can be understood by answering:
 
@@ -26,11 +26,11 @@ Any “AI system” can be understood by answering:
 - **How does it learn?** Where the learning signal comes from
 - **What changes during training?** Which parts of the model are adjusted
 
-We will answer each question in order.
+We'll take those questions in order.
 
 ---
 ## 1. The General Framework: AI, ML, DL and GenAI
-An effective way to visualize the hierarchy is the following:
+A useful way to see the hierarchy is:
 
 * **Artificial Intelligence (AI):** the broadest concept. It refers to **machines or software that imitate capabilities associated with human intelligence** in order to reason, solve problems or make decisions. In the human-body analogy, AI would be the **“brain”**.
 
@@ -49,19 +49,19 @@ We now know how to identify which technological family a system uses. The second
 
 ## 2. How do these systems learn?
 
-These are not types of models, but **different ways of constructing the learning signal**: in other words, what kind of teacher we use.
+These are not model types. They describe **how the learning signal is constructed**—in other words, where the supervision comes from.
 
-> Supervised / unsupervised / self-supervised / reinforcement learning (RL) describe **where the teacher comes from**.
+> Supervised / unsupervised / self-supervised / reinforcement learning (RL) describe **where the learning signal comes from**.
 
 {{ include_html("snippets/fundamentos-ia/tipos_aprendizaje.html") }}
 
-We now know where the “teacher” comes from. The third question completes the framework: **what exactly changes inside the model when it learns?** The answer depends on the type of algorithm, and understanding it is what separates using AI from understanding AI.
+That answers where the learning signal comes from. The third question completes the framework: **what exactly changes inside the model during training?** The answer depends on the algorithm family.
 
-## 3. How these systems are adjusted
+## 3. What changes during training
 
-Knowing **where the signal that makes a system learn comes from** (supervised / self-supervised / RL) is not enough.
+Knowing **where the learning signal comes from** (supervised / self-supervised / RL) is not enough.
 
-The key is to understand **what is adjusted and how** so that the model improves.
+The next question is **what changes inside the model and how those changes improve performance**.
 
 ### 3.1 The universal learning loop
 
@@ -77,10 +77,9 @@ The key is to understand **what is adjusted and how** so that the model improves
 Models are trained on a **sample of the world** (the data available today) and are expected to capture **general patterns** that continue to hold in the future.
 
 * If future data is **similar**, the model generalizes well.
-* If it changes substantially (**data drift**), performance falls and it is advisable to **monitor** and **retrain**.
+* If it changes substantially (**data drift**), performance can fall, so the system needs **monitoring** and sometimes **retraining**.
 
-That is why it matters to know **what is being adjusted**, because each family of algorithms learns in a different way.
-This is also a key factor because it means AI systems are not static. They need continuous maintenance and monitoring.
+What gets adjusted matters because different algorithm families learn in different ways. AI systems are not static products: they need ongoing monitoring and maintenance.
 
 ---
 

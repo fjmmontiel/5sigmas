@@ -112,7 +112,7 @@ Research directions include:
 - retrieval of relevant chunks
 - more efficient kernels
 - state-space models
-- hybrid architectures.
+- hybrid architectures
 
 Mamba showed that selective state-space models can process sequences with linear scaling and remain competitive across several domains.[^mamba] That does not make the Transformer obsolete. It opens another point in the design space.
 
@@ -134,7 +134,7 @@ Knowing the Transformer is not enough to explain a model's behaviour. Other impo
 - scale and compute budget
 - instruction tuning
 - preference optimization
-- context and tools during inference.
+- context and tools during inference
 
 Two models with similar blocks can behave very differently because of the rest of the system.
 

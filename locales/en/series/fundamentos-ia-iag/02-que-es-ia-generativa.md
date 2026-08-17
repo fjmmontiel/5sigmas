@@ -13,18 +13,18 @@ video_duration: "PT1M14S"
 
 # Chapter 2 — What is Generative AI?
 
-This chapter explains how generative AI works, from its fundamental pieces to the systems used in production today. By the end, the reader will understand what embeddings are and why they allow text to be treated mathematically, how the Transformer solved the problems of earlier models through the attention mechanism, and what scaling laws and emergent capabilities are. The chapter also covers the three main practical configurations (plain LLM, RAG, and agent) and the LLMOps lifecycle that makes it possible to operate any of them in production. Reading Chapter 1 before continuing is recommended.
+This chapter explains how generative AI works, from its fundamental pieces to the systems used in production today. By the end, the reader will understand what embeddings are and why they allow text to be treated mathematically, how the Transformer solved the problems of earlier models through the attention mechanism, and what scaling laws and emergent capabilities are. The chapter also covers the three main practical configurations (plain LLM, RAG, and agent) and the LLMOps lifecycle that makes it possible to operate any of them in production. Reading Chapter 1 first is recommended.
 
 !!! info "Prerequisites"
     This chapter assumes you know the general AI framework described in [Chapter 1 — What is AI?](./01-que-es-ia.md).
 
-In the [previous chapter](./01-que-es-ia.md) we saw the different layers within AI, and now we are going to go deeper into one specific aspect of DL: generative AI.
+The [previous chapter](./01-que-es-ia.md) mapped the main layers of AI. Here we focus on one branch of deep learning: generative AI.
 
 Generative AI generates text, images, code, audio, and video instead of classifying inputs or discriminating between different classes.
 
-The underlying mechanism is the same as in any ML system, with data coming in, parameters being adjusted, and error that we try to reduce at each phase of training.
+The training loop still follows the same broad ML pattern: data is processed, parameters are updated and an objective is optimized.
 
-What changed is what is learned and the scale at which it is applied. That change rests on three pieces that fit together in order:
+What changed is what is learned and the scale at which it is applied. Three connected ideas make that shift easier to understand:
 
 - **Embeddings**: how the model represents meaning as numbers.
 - **Transformer**: the architecture that makes it possible to process long context in parallel.
@@ -36,27 +36,26 @@ What changed is what is learned and the scale at which it is applied. That chang
 
 ML models need numbers as input, and text is not naturally numerical.
 
-The solution happens through three chained steps.
+A common pipeline has three steps.
 
-First, text is divided into **tokens**: the smallest unit the model processes. A token can be a complete word, a syllable, or a punctuation mark; for example, the Spanish word «agente» is often tokenized as «ag» + «ente», rather than as a single unit. ([OpenAI Tokenizer](https://platform.openai.com/tokenizer))
+First, text is divided into **tokens**: the units the model processes. A token can be a whole word, part of a word or punctuation; for example, the Spanish word «agente» may be split into multiple subword tokens rather than represented as one token. ([OpenAI Tokenizer](https://platform.openai.com/tokenizer))
 
 Each token is then converted into a **vector**: a list of thousands of numbers representing its position in a mathematical space. At this point the values are arbitrary: the format exists, but the semantics do not.
 
-What training adds is meaning to those vectors through semantics, through geometry.
-The vectors are adjusted until words that appear in similar contexts end up close to one another.
+Training gives those vectors useful geometry. Tokens that appear in similar contexts tend to acquire related representations.
 
-That already-adjusted vector is called an **embedding** ([original paper][r2]).
+The resulting vector representation is called an **embedding** ([original paper][r2]).
 «King» and «Queen» end up close. «King» and «Coal», far apart.
 
 Operations on those positions capture relationships: `king − man + woman ≈ queen`.
 
 > The model does not "understand" words: it learns that certain tokens appear in similar contexts and assigns them nearby positions in vector space. Semantics emerges on its own during training.
 
-Text, images, and audio all go through the same process of being converted into vectors before they are processed, which allows one architecture to work across different modalities.
+Modern multimodal systems ultimately represent text, images and audio numerically, although each modality may use a different encoder or front end before those representations are processed together.
 
 {{ include_html("snippets/fundamentos-ia-iag/02-embeddings.html") }}
 
-With the representations solved, the next problem is processing them without losing the thread as sequences of those vectors become longer.
+Once inputs are represented numerically, the next challenge is processing long sequences while preserving useful context.
 
 ---
 

@@ -33,7 +33,7 @@ For a data extractor:
 - valid formats
 - precision and recall
 - handling of missing values
-- cost of a false positive.
+- cost of a false positive
 
 For an agent with tools:
 
@@ -42,7 +42,7 @@ For an agent with tools:
 - operation order
 - idempotency
 - final state
-- user-facing message.
+- user-facing message
 
 For a voice assistant:
 
@@ -51,7 +51,7 @@ For a voice assistant:
 - time to first audio
 - interruptions
 - task success
-- duplicate closure.
+- duplicate closure
 
 The metric must reflect the failure that matters. Optimizing textual similarity when the real problem is executing a transfer twice measures the wrong surface.
 
@@ -67,7 +67,7 @@ An average hides where the system fails. The evaluation set should label relevan
 - need for external knowledge
 - tool use
 - impact of error
-- affected population or segment.
+- affected population or segment
 
 Then calculate performance by segment, not only one global number.
 
@@ -82,7 +82,7 @@ The **golden set** contains real or designed examples representative of the doma
 - expected result or rubric
 - segment labels
 - failure severity
-- provenance and date.
+- provenance and date
 
 {{ include_html("snippets/temas/evaluation-reference-set.html") }}
 
@@ -127,7 +127,7 @@ Use rules or execution to:
 - check citations and URLs
 - verify API arguments
 - inspect final state
-- measure latency and cost.
+- measure latency and cost
 
 A deterministic metric is usually cheaper, reproducible and auditable. Generative evaluation should be reserved for dimensions that genuinely require judgement.
 
@@ -150,7 +150,7 @@ It is useful for:
 - filtering regressions
 - comparing many variants
 - evaluating format and coverage
-- prioritizing samples for human review.
+- prioritizing samples for human review
 
 Risks include:
 
@@ -158,7 +158,7 @@ Risks include:
 - preference for longer answers
 - affinity with its own model family
 - prompt sensitivity
-- shared errors with the evaluated model.
+- shared errors with the evaluated model
 
 A judge needs calibration. Compare it against a human-annotated set, measure agreement by segment and review important disagreements. For high-impact decisions, it should not be the sole authority.
 

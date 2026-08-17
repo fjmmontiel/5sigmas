@@ -44,7 +44,7 @@ Every tool should declare at least:
 - error behavior
 - idempotency or retry strategy
 - reversibility
-- action risk class.
+- action risk class
 
 The runtime must validate the call and authorize it according to user, resource and operation. The model can propose. It should not become the final authority merely because it generated valid JSON.
 
@@ -102,7 +102,7 @@ That *kill path* can include:
 - retry and budget limits
 - temporary blocking of a specific tool
 - rollback or reconciliation of partially executed actions
-- a degraded read-only mode.
+- a degraded read-only mode
 
 The important property is that the control lives outside the natural-language channel that may be compromised.
 
@@ -130,7 +130,7 @@ A security gate for an agent can be small and specific:
 - tool schemas and scopes compared against an approved baseline
 - indirect prompt-injection scenarios executed end-to-end
 - kill switch and rollback verified
-- enough logs to reconstruct every privileged action.
+- enough logs to reconstruct every privileged action
 
 {{ include_html("snippets/seguridad-ia/05-release-gate.html") }}
 

@@ -34,7 +34,7 @@ An instruction such as “do not send money without confirmation” can help, bu
 - the time scope of the authorization
 - human approval for irreversible actions
 - a verifiable record of what was done
-- revocation and response to abuse.
+- revocation and response to abuse
 
 NIST's work on agent identity addresses how software and AI agents can be identified, authenticated, authorized, and audited when acting for people or applications. The question is not simply “who is the agent?” but which authority it can demonstrate for a concrete action.
 

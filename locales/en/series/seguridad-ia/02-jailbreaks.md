@@ -49,7 +49,7 @@ An evaluation should explicitly fix:
 - whether the attacker has access to logits, scores, or only text
 - whether language, encoding, or format can change
 - whether the system applies rate limiting or identity-based blocking
-- whether the attack targets an isolated conversation or an agent with tools.
+- whether the attack targets an isolated conversation or an agent with tools
 
 {{ include_html("snippets/seguridad-ia/02-attack-budget.html") }}
 

@@ -24,7 +24,7 @@ An agent should have explicit limits:
 - tokens or estimated cost
 - maximum context size
 - retry count
-- actions that require approval.
+- actions that require approval
 
 Without a budget, an ambiguous task can produce an expensive loop. The limit is not merely an optimization detail: it defines stopping behavior. Once reached, the agent should summarize state, request information, escalate to a person, or return a clear failure.
 
@@ -67,7 +67,7 @@ An agent is not the natural evolution of every automation. Avoid one when:
 - the data is too sensitive for the available environment
 - latency or cost cannot tolerate variability
 - the success criterion cannot be expressed or reviewed
-- a conventional function solves the problem with less risk surface.
+- a conventional function solves the problem with less risk surface
 
 In those cases, a deterministic workflow, form, or normal function is often better. Use an agent for the part where uncertainty in the sequence is worth the additional cost of delegating decisions.
 

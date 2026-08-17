@@ -42,7 +42,7 @@ An evaluation should separate at least three levels:
 
 - what the model knows how to do
 - how much it improves a person trying to complete a task
-- what the product can execute with its tools and permissions.
+- what the product can execute with its tools and permissions
 
 The first question belongs to model capability. The second measures human *uplift*. The third is a property of the complete system.
 
@@ -114,7 +114,7 @@ A good test includes wording variations and adversarial documents, but also ever
 - revoked credentials
 - modified tool schemas
 - expired or contaminated memory
-- human interruption halfway through an execution.
+- human interruption halfway through an execution
 
 Many incidents do not require the attacker to control every step. It is enough for a hostile input to coincide with a retry, an excessive permission or incomplete reconciliation.
 
@@ -131,7 +131,7 @@ Whenever possible, each finding should become a case with:
 - success criterion
 - stop criterion
 - expected trace evidence
-- final-state verification.
+- final-state verification
 
 That case should run again when the model, prompt, retrieval, memory, a tool or the authorization policy changes.
 
