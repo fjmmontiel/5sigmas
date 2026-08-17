@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Remove terminal semicolons from Markdown bullets in published English routes.
+"""Remove confirmed mechanical punctuation artifacts from published English.
 
-This is a deliberately narrow remediation for a confirmed translation artifact.
-It never changes prose, tables, code fences, front matter or non-published files.
-The deeper question of whether a list should exist at all remains a human review
-step handled by audit_english_editorial_quality.py review signals.
+This remediation stays deliberately narrow. It removes terminal semicolons from
+Markdown bullets, normalizes one confirmed comma-chained list, and rewrites the
+three question-plus-colon bullets found by the editorial audit. It does not make
+general prose changes; broader list fragmentation remains a human-review signal
+in audit_english_editorial_quality.py.
 """
 
 from __future__ import annotations
@@ -22,6 +23,29 @@ BULLET_RE = re.compile(r"^(?P<prefix>\s*[-*+]\s+)(?P<body>\S.*)$")
 FENCE_RE = re.compile(r"^\s*(```|~~~)")
 COMMENT_RE = re.compile(r"(?P<visible>.*?)(?P<comment>\s*<!--.*?-->\s*)$")
 
+EXACT_REPLACEMENTS: dict[str, dict[str, str]] = {
+    "series/fundamentos-ia-iag/01-que-es-ia.md": {
+        "- **What type of AI application is it?**: the family/technology it uses":
+            "- **What type of AI application is it?** The family or technology it uses",
+        "- **How does it learn?**: where the “teacher” comes from":
+            "- **How does it learn?** Where the learning signal comes from",
+        "- **How is it adjusted?**: how the model changes during training":
+            "- **What changes during training?** Which parts of the model are adjusted",
+    },
+    "series/from-cave-to-agi/05-mas-alla.md": {
+        "- Search and verification over solution spaces,":
+            "- Search and verification over solution spaces",
+        "- Selective memory during inference,":
+            "- Selective memory during inference",
+        "- Continual learning across multiple timescales,":
+            "- Continual learning across multiple timescales",
+        "- Internal models of environments,":
+            "- Internal models of environments",
+        "- Systems capable of perceiving and acting in the physical world.":
+            "- Systems capable of perceiving and acting in the physical world",
+    },
+}
+
 
 def routes() -> list[str]:
     data = yaml.safe_load(MANIFEST.read_text(encoding="utf-8")) or {}
@@ -32,7 +56,7 @@ def routes() -> list[str]:
     )
 
 
-def clean(path: Path) -> int:
+def clean_semicolon_bullets(path: Path) -> int:
     lines = path.read_text(encoding="utf-8").splitlines(keepends=True)
     changed = 0
     in_frontmatter = bool(lines and lines[0].strip() == "---")
@@ -74,6 +98,23 @@ def clean(path: Path) -> int:
     return changed
 
 
+def apply_exact_replacements(route: str, path: Path) -> int:
+    replacements = EXACT_REPLACEMENTS.get(route)
+    if not replacements:
+        return 0
+
+    text = path.read_text(encoding="utf-8")
+    original = text
+    changed = 0
+    for old, new in replacements.items():
+        if old in text:
+            text = text.replace(old, new)
+            changed += 1
+    if text != original:
+        path.write_text(text, encoding="utf-8")
+    return changed
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--write", action="store_true")
@@ -84,15 +125,15 @@ def main() -> int:
     for route in routes():
         path = EN_ROOT / route
         original = path.read_text(encoding="utf-8")
-        count = clean(path)
+        count = clean_semicolon_bullets(path) + apply_exact_replacements(route, path)
         if count:
             touched.append((route, count))
             total += count
             if not args.write:
                 path.write_text(original, encoding="utf-8")
 
-    mode = "removed" if args.write else "would remove"
-    print(f"{mode} {total} terminal semicolons across {len(touched)} routes")
+    mode = "fixed" if args.write else "would fix"
+    print(f"{mode} {total} mechanical English editorial artifacts across {len(touched)} routes")
     for route, count in touched:
         print(f"  {count:3} {route}")
     return 0
