@@ -1,0 +1,16 @@
+version: 1
+canonical_source_locale: es
+scope_manifest: locales/en/manifest.yml
+certified_routes:
+  - route: series/fundamentos-ia-iag/00_presentacion_serie.md
+    reviewed_on: 2026-08-17
+    spanish_blob_sha: f399f0245e6dd162883d19c1983ae7af497de24d
+    english_blob_sha: 86a210bc38d38700fc8d4ff90b57b71917365d67
+    review_scope: prose, headings, chapter summaries, terminology, technical meaning, links
+    note: Side-by-side native-English review; the overview already reads naturally and preserves the canonical thesis and teaching structure, so no rewrite was needed.
+  - route: series/fundamentos-ia-iag/01-que-es-ia.md
+    reviewed_on: 2026-08-17
+    spanish_blob_sha: c8333bb1f5506cec58583c699f4b939cdd9f172f
+    english_blob_sha: 7565f9140c25b107b559b27861a4eaa53789796a
+    review_scope: prose, headings, lists, FAQs, terminology, technical meaning, evidence, references, visual hooks
+    note: Side-by-side native-English review; tightened learning-signal, algorithm-adjustment, Software 2.0, milestone, MLOps and FAQ phrasing without changing any claim, example, reference, section order or visual semantic.
