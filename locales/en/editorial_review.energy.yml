@@ -1,0 +1,16 @@
+version: 1
+canonical_source_locale: es
+scope_manifest: locales/en/manifest.yml
+certified_routes:
+  - route: series/ia-pib-bienestar-energia/00_presentacion_serie.md
+    reviewed_on: 2026-08-17
+    spanish_blob_sha: a67707a46d8538274ada5ca6d9dd66d32615258f
+    english_blob_sha: 6451f53faef6f37c19c65e65f380c04c9138414d
+    review_scope: prose, headings, chapter summaries, terminology, technical meaning, links, visual hooks
+    note: Side-by-side native-English review; no content rewrite was needed.
+  - route: series/ia-pib-bienestar-energia/01-electricidad-bienestar.md
+    reviewed_on: 2026-08-17
+    spanish_blob_sha: 7bae3284a517530244eb79a5e480ebb19e2ff81f
+    english_blob_sha: 9d8eb7948ee9650d749692ec38754f81777abe2e
+    review_scope: prose, headings, lists, FAQs, terminology, technical meaning, evidence, references, visual hooks
+    note: Side-by-side native-English review; tightened correlation, supply-quality, outage-cost and AI-access-gap phrasing without changing meaning or evidence.
