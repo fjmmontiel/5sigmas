@@ -8,6 +8,7 @@ on:
       - 'docs/**/*.md'
       - 'locales/en/manifest.yml'
       - 'scripts/audit_english_editorial_quality.py'
+      - 'scripts/audit_english_ordered_list_quality.py'
       - 'scripts/audit_english_html_editorial_quality.py'
       - '.github/workflows/english-editorial-quality.yml'
 
@@ -34,6 +35,12 @@ jobs:
           python scripts/audit_english_editorial_quality.py \
             --strict \
             --json artifacts/english-editorial-quality/markdown-report.json
+
+      - name: Audit ordered-list punctuation in published English Markdown
+        run: |
+          python scripts/audit_english_ordered_list_quality.py \
+            --strict \
+            --json artifacts/english-editorial-quality/ordered-list-report.json
 
       - name: Audit static list text in localized English HTML snippets
         run: |
