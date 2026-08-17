@@ -14,3 +14,9 @@ certified_routes:
     english_blob_sha: 9d8eb7948ee9650d749692ec38754f81777abe2e
     review_scope: prose, headings, lists, FAQs, terminology, technical meaning, evidence, references, visual hooks
     note: Side-by-side native-English review; tightened correlation, supply-quality, outage-cost and AI-access-gap phrasing without changing meaning or evidence.
+  - route: series/ia-pib-bienestar-energia/02-ia-tecnologia-electrica.md
+    reviewed_on: 2026-08-17
+    spanish_blob_sha: 7e6f8320f45fca2c594a9986e1b9c6fbbbe3bf3a
+    english_blob_sha: e740ad672225b69c6fa5511d6690842782d7783c
+    review_scope: prose, headings, lists, FAQs, terminology, technical meaning, quantitative evidence, references, visual hooks
+    note: Side-by-side native-English review; tightened training/inference cadence, rebound-effect, grid/PPA, water, geography and FAQ phrasing without changing any claim, number, source or visual placement.
