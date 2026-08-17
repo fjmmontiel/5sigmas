@@ -5,7 +5,7 @@ on:
     branches:
       - agent/en-editorial-naturalness-audit
     paths:
-      - 'scripts/fix_english_semicolon_bullets.py'
+      - 'scripts/fix_english_editorial_followup.py'
       - '.github/workflows/apply-english-editorial-cleanup.yml'
 
 permissions:
@@ -28,8 +28,8 @@ jobs:
       - name: Install audit dependency
         run: pip install pyyaml
 
-      - name: Remove confirmed semicolon bullet artifacts
-        run: python scripts/fix_english_semicolon_bullets.py --write
+      - name: Apply reviewed editorial cleanup
+        run: python scripts/fix_english_editorial_followup.py
 
       - name: Verify hard editorial anti-patterns are gone
         run: python scripts/audit_english_editorial_quality.py --strict
@@ -43,5 +43,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add locales/en
-          git commit -m "fix(en): remove semicolon bullet artifacts"
+          git commit -m "fix(en): normalize editorial list style and translationese"
           git push origin HEAD:agent/en-editorial-naturalness-audit
