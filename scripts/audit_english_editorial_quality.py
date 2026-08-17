@@ -61,7 +61,7 @@ TRANSLATIONESE_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
     ("adds_real_value_to", re.compile(r"\badds real value to\b", re.IGNORECASE)),
     ("justifies_cost_and_coupling", re.compile(r"\bjustifies its cost and coupling\b", re.IGNORECASE)),
     ("makes_the_most_sense_to_me", re.compile(r"\bmakes the most sense to me\b", re.IGNORECASE)),
-    ("it_is_useful_to_separate", re.compile(r"\bit is useful to separate\b", re.IGNORECASE)),
+    ("it_is_useful_to_separate", re.compile(r"\bit is (?:also )?useful to separate\b", re.IGNORECASE)),
 )
 
 
