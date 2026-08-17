@@ -16,7 +16,7 @@ hide:
 
 {{ include_html("snippets/series_meta.html", series_dir="agentes-ia", data_state="complete", data_level="technical", status_label="Complete", level_label="Technical", progress_total="5", extra_rows="<div class=\"series-meta-row\"><span class=\"series-meta-label\">Prerequisites:</span> <span class=\"series-meta-value\"><a href=\"/en/series/fundamentos-ia-iag/00_presentacion_serie/\">AI and Generative AI Foundations</a> · <a href=\"/en/series/modelos-razonadores/00_presentacion_serie/\">Reasoning Models</a></span></div>") }}
 
-A chatbot generates responses. An agent can **decide a sequence of actions**, use tools, and observe what happened before deciding what to do next.
+A chatbot generates responses. An agent can **decide a sequence of actions**, use tools, observe the result, and decide what to do next.
 
 That does not turn the model into an autonomous entity or remove the need to engineer the surrounding system. Quite the opposite: once a model can read email, query a database, execute code or change a record, the problem is no longer only text quality. State, permissions, evaluation, cost and stopping behavior become part of the system.
 
@@ -37,7 +37,7 @@ This series builds a technical and practical map for separating agent hype from 
 ### 3. **How to evaluate an agent**
 - Reproducible tasks instead of answer-only benchmarks.
 - Traces, task success, cost, latency and recovery from failures.
-- The problem of an agent being able to "cheat" its own evaluation.
+- How an agent can "cheat" its own evaluation.
 
 ### 4. **Security: when reading data becomes acting**
 - Direct and indirect prompt injection.
@@ -46,7 +46,7 @@ This series builds a technical and practical map for separating agent hype from 
 
 ### 5. **From demo to an operable system**
 - Budgets, limits, retries, idempotency and observability.
-- Asynchronous work and proactive completion without lying to the user.
+- Asynchronous work and proactive completion without falsely claiming completion to the user.
 - When a deterministic workflow is the better architecture and when an agent adds real value.
 
 ## The thesis of this series
