@@ -75,13 +75,13 @@ A score without audited examples can measure the attacker's ability to fool the 
 
 An agent evaluation needs to record:
 
-1. the input and its provenance;
-2. what the system retrieved or remembered;
-3. the model's decision;
-4. the proposed tool call;
-5. the authorization that was applied;
-6. the tool result;
-7. the final state and the possibility of recovery.
+1. The input and its provenance
+2. What the system retrieved or remembered
+3. The model's decision
+4. The proposed tool call
+5. The authorization that was applied
+6. The tool result
+7. The final state and the possibility of recovery
 
 Each point allows a different test. A filter can block an output while leaving retrieval untouched. A policy engine can deny the tool while still recording dangerous memory. A runtime can abort in time and leave partial state that needs reconciliation.
 
