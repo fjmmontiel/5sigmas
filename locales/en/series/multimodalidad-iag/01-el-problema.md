@@ -13,7 +13,7 @@ tags:
 
 This article describes what multimodality really means in AI: not only that a model can "see" images, but the broader problem of integrating text, images, audio, video and continuous signals without destroying what each one contributes. By the end you will understand why the field goes far beyond vision-language models, the difference between translating a modality into text and keeping it active during reasoning, and how the five capabilities (perception, alignment, reasoning, generation and action) that today define a truly multimodal system fit together. The article is accessible if you have some background in language models, although it does not require previous knowledge of computer vision or audio processing.
 
-Multimodality is often explained as if it were the moment when a language model stopped working only with text and began receiving images. This is not false, but it is too narrow to describe the field as it exists today.
+Multimodality is often explained as if it were the moment when a language model stopped working only with text and began receiving images. That is not wrong, but it is too narrow to describe the field as it exists today.
 
 By 2026, we already have models that represent text, images, video, audio and documents in the same embedding space; systems that maintain spoken dialogue natively; architectures that process interleaved sequences of text, images and video; and models that introduce continuous signals from the physical world into the inference process.
 
@@ -26,7 +26,7 @@ This distinction matters because not every solution does the same job.
 
 Some systems convert an image into a textual description and delegate all reasoning from that point onward to the language model. Others keep part of the visual, acoustic or document evidence active within the representation and decision process itself.
 
-Both approaches can be useful and can solve real tasks, but they do not solve exactly the same problem. The first reduces the modality as early as possible to exploit a channel we already handle well, while the second tries to preserve for longer what text does not capture particularly well: position, temporal synchrony, prosodic nuance, document structure, continuous signal or perceptual context. That is where multimodality really begins as a technical problem, rather than as an interface trick.
+Both approaches can be useful and can solve real tasks, but they do not solve exactly the same problem. The first reduces the modality as early as possible to use a channel we already handle well, while the second preserves for longer what text does not capture well: position, temporal synchrony, prosodic nuance, document structure, continuous signal or perceptual context. That is where multimodality really begins as a technical problem, rather than as an interface trick.
 
 ---
 
@@ -38,7 +38,7 @@ Robotics adds another family of signals that do not fit comfortably into the cla
 
 ImageBind made this explicit by bringing images, text, audio, depth, thermal maps and IMU (inertial) data into a single representation space [ImageBind][r4], while PaLM-E carried that logic into visual observations and continuous state for planning and manipulation tasks [PaLM-E][r5]. Gemini Embedding 2 already incorporates text, images, video, audio and documents as a native product primitive.
 
-It is worth insisting on this point because a large part of the confusion starts here. When people talk about multimodality, they are often actually talking about vision-language.
+This distinction matters because much of the confusion starts here. When people talk about multimodality, they are often actually talking about vision-language systems.
 
 That subfield has been central in recent years and explains a huge fraction of the visible progress, from CLIP to Flamingo or BLIP-2, but it does not exhaust the field.
 
@@ -48,13 +48,13 @@ A system capable of understanding a radiograph with textual instructions, indexi
 
 ## 2. The problem is not adding modalities, but crossing them without destroying them
 
-A system can accept an image and still remain deeply text-centric: it only has to turn the image into a caption and do everything else over that caption.
+A system can accept an image and still remain deeply text-centric: it only has to turn the image into a caption and perform all subsequent reasoning over that caption.
 
-If the task is to obtain a coarse summary of visual content, cost and simplicity favor that strategy. The problem appears when what matters is not a description but, for example: where an object is, exactly what part changes between two images, what handwritten text appears in one corner, what happens before and after in an audio clip, or what nuance in speech changes the meaning of a sentence.
+If the task is to obtain a coarse summary of visual content, cost and simplicity favor that strategy. That strategy breaks down when the task depends not on a description but on where an object is, exactly what part changes between two images, what handwritten text appears in one corner, what happens before and after in an audio clip, or what nuance in speech changes the meaning of a sentence.
 
 At that point, reducing the original signal too early stops being an elegant solution and becomes a source of error.
 
-That is why it is useful to distinguish three levels.
+Three levels help clarify the distinction.
 
 The first is **translation**: converting one modality into another, usually text.
 
@@ -62,7 +62,7 @@ The second is **alignment**: learning that two different signals refer to the sa
 
 The third is **operational co-presence**: allowing several modalities to keep participating in inference or generation without being immediately reduced to a single one.
 
-CLIP helped establish the second level by learning robust correspondences between images and text from natural supervision [CLIP][r1], and ImageBind showed that this logic could extend far beyond the classic pair [ImageBind][r4]. [Flamingo][r2] and [BLIP-2][r3], in turn, showed that alignment could also be articulated as a bridge between specialized modules, while Gemini 2.5 and [Qwen2.5-Omni][r6] move the problem into a temporal regime where the question is no longer only alignment, but responding, listening and generating under real latency constraints.
+CLIP helped establish the second level by learning robust correspondences between images and text from natural supervision [CLIP][r1], and ImageBind showed that this logic could extend far beyond the classic pair [ImageBind][r4]. [Flamingo][r2] and [BLIP-2][r3], in turn, showed that alignment could also be implemented through bridges between specialized modules, while Gemini 2.5 and [Qwen2.5-Omni][r6] move the problem into a temporal regime where the question is no longer only alignment, but responding, listening and generating under real latency constraints.
 
 ---
 
@@ -80,7 +80,7 @@ PaLM-E takes another route by injecting visual observations and continuous state
 
 Qwen2.5-Omni pushes toward an end-to-end model with multimodal understanding and generation in streaming. The shared space is a very powerful strategy, but it is neither the only one nor a sufficient definition of the field.
 
-A more precise formulation is this: a system is multimodal when it integrates information from several modalities within the process of representation, inference, generation or action.
+A more precise formulation is this: a system is multimodal when it integrates information from several modalities during representation, inference, generation or action.
 
 That can be achieved with joint embeddings, connectors between modules, cross-attention, interleaved sequences, more unified models or combinations of all of the above.
 
@@ -88,15 +88,15 @@ That can be achieved with joint embeddings, connectors between modules, cross-at
 
 ## 4. What capabilities define a multimodal system today
 
-The cleanest way to organize the problem is to separate five capabilities.
+A useful way to structure the problem is to separate five capabilities.
 
 **Perceive.** The system has to convert heterogeneous signals into useful representations: read a page, recognize the content of an image, follow an audio segment, distinguish voices or understand a video sequence.
 
-**Align.** It is not enough to perceive two signals separately, because the system has to learn when they are talking about the same thing. That was the heart of CLIP and remains central to embeddings and retrieval. Gemini Embedding 2 is a good representation of this layer because it unifies text, images, video, audio and documents in an embedding space usable for multimodal search, classification and clustering.
+**Align.** It is not enough to perceive two signals separately, because the system has to learn when they are talking about the same thing. That was the heart of CLIP and remains central to embeddings and retrieval. Gemini Embedding 2 illustrates this layer well because it unifies text, images, video, audio and documents in an embedding space usable for multimodal search, classification and clustering.
 
 **Reason.** Once the signals are aligned, the system has to operate over them: compare, verify, locate, summarize, answer questions or follow temporal dependencies.
 
-**Generate.** A multimodal system does not always end in text. It can produce speech, an image, perhaps video, perhaps a structured representation, perhaps a combination of several outputs. Gemini 2.5 Native Audio and Qwen2.5-Omni are especially useful for explaining this layer because they shift the center of the story from "understanding an image" toward maintaining a conversation and producing multimodal responses in real time.
+**Generate.** A multimodal system does not always end in text. It can produce speech, an image, perhaps video, perhaps a structured representation, perhaps a combination of several outputs. Gemini 2.5 Native Audio and Qwen2.5-Omni are especially useful for explaining this layer because they shift the focus from "understanding an image" toward maintaining a conversation and producing multimodal responses in real time.
 
 **Act.** As soon as the system uses tools or enters a physical environment, multimodality stops being only a matter of understanding and becomes a matter of situated decision-making. PaLM-E is important here because it combines language, observation and continuous state in robotics tasks.
 
@@ -116,7 +116,7 @@ The third difficulty is **grounding**. A system can produce a verbally impeccabl
 
 The fourth difficulty is **asymmetry**. The phrase "from any input modality to any output modality" captures the aspiration of the field, but it does not uniformly describe what real systems do. Some are very strong at embeddings and retrieval but do not generate. Others generate speech but not images. Others understand video but still answer mostly in text. Others mix perception and action but are not universal outside their domain. The direction is any-to-any, but the real state of the field remains uneven and architecturally heterogeneous.
 
-The fifth difficulty is **modality collapse**. In systems trained on distributions that are heavily imbalanced across modalities, the model tends to rely almost exclusively on the most represented modality, regardless of which one is most informative for the concrete task.
+The fifth difficulty is **modality collapse**. In systems trained on distributions that are heavily imbalanced across modalities, the model tends to rely almost exclusively on the most represented modality, regardless of which one is most informative for the specific task.
 
 {{ include_html("snippets/multimodalidad-iag/01-colapso-modal.html") }}
 
@@ -124,7 +124,7 @@ The fifth difficulty is **modality collapse**. In systems trained on distributio
 
 ## 6. What this chapter prepares
 
-From this point onward, it no longer makes sense to write the series as if multimodality were the elegant name for VLMs. That part of the field remains extremely important, but it is no longer enough to organize the whole space.
+From this point onward, the series should not treat multimodality as a synonym for VLMs. That part of the field remains extremely important, but it is no longer enough to organize the whole space.
 
 The rest of the series answers a more general question: how different modalities are aligned, which architectures preserve evidence better, how to evaluate them without fooling ourselves, and what risks appear when perception, generation and action are coupled in the same system.
 
@@ -172,10 +172,10 @@ The rest of the series answers a more general question: how different modalities
 Language is a discrete sequence of symbols with direct semantic structure. Images are high-dimensional continuous signals with spatial structure, without natural units equivalent to words. For a system to operate with both, it has to learn correspondences that are not given in advance, and it often learns them incompletely or with bias.
 
 **What is the difference between reducing a modality to text and keeping it active during reasoning?**
-Reducing an image to its textual description is useful when what matters is coarse semantic content. The problem appears when what matters is where something is, what changes between two images, or what nuance in speech changes the meaning of a sentence: in those cases, reducing the original signal too early stops being elegant and becomes a source of error. Keeping the signal active during reasoning is precisely the distinction between translation and operational co-presence.
+Reducing an image to its textual description is useful when what matters is coarse semantic content. That reduction breaks down when what matters is where something is, what changes between two images, or what nuance in speech changes the meaning of a sentence: in those cases, reducing the original signal too early is no longer an elegant simplification and becomes a source of error. Keeping the signal active during reasoning is precisely the distinction between translation and operational co-presence.
 
 **What does it mean for a model to have grounding problems, and what are the consequences?**
 Grounding is the ability to support an answer with the actual evidence in the perceptual signal rather than only with statistical inferences about which answer is likely. When it fails, the model can produce a verbally correct answer that is not grounded in the image or audio it received: it sounds reasonable but contradicts the physical evidence.
 
 **Why can a system appear multimodal while in practice relying almost only on text?**
-This is the effect of modality collapse: when training data are heavily imbalanced across modalities, the model tends to rely almost exclusively on the most represented modality even when another one is more informative for the concrete task. Text has much higher semantic density per byte than a noisy image, so in poorly balanced systems the model learns to answer from prior linguistic biases and ignore visual information.
+This is the effect of modality collapse: when training data are heavily imbalanced across modalities, the model tends to rely almost exclusively on the most represented modality even when another one is more informative for the specific task. Text has much higher semantic density per byte than a noisy image, so in poorly balanced systems the model learns to answer from prior linguistic biases and ignore visual information.
