@@ -1,0 +1,22 @@
+version: 1
+canonical_source_locale: es
+scope_manifest: locales/en/manifest.yml
+certified_routes:
+  - route: series/multimodalidad-iag/00_presentacion_serie.md
+    reviewed_on: 2026-08-18
+    spanish_blob_sha: 37f1c97ebd04ac2a2c792516ffaa3365eb98e224
+    english_blob_sha: 130c666b9081785d8d053594d59cd23cb77e64b1
+    review_scope: prose, headings, chapter summaries, terminology, technical meaning, links
+    note: Side-by-side native-English review; the overview already reads naturally and preserves the canonical thesis, chronology and five-part teaching structure, so no rewrite was needed.
+  - route: series/multimodalidad-iag/02-alineamiento.md
+    reviewed_on: 2026-08-18
+    spanish_blob_sha: 8969942635479051b562599cda1775940615976c
+    english_blob_sha: c7f655b92bdd379da939c0c59749ab1522905605
+    review_scope: prose, headings, lists, FAQs, terminology, technical meaning, evidence, references, visual hooks
+    note: Side-by-side native-English review; tightened contrastive-learning, ImageBind, synthetic-instruction, data-quality and preference-alignment prose while preserving every canonical claim, caveat, reference, section order and visual semantic.
+  - route: series/multimodalidad-iag/03-arquitecturas.md
+    reviewed_on: 2026-08-18
+    spanish_blob_sha: 9e1987fbff783e40e851849b538ed816c092e6a0
+    english_blob_sha: 10547775d25769293932be8ba4e7a83b954d5ee4
+    review_scope: prose, headings, lists, FAQs, terminology, technical meaning, evidence, references, visual hooks
+    note: Side-by-side native-English review; removed literal connector, native-tokenization, omni/streaming and trade-off phrasing while preserving the four architecture families, quantitative evidence, caveats, references, section order and visual semantics.
