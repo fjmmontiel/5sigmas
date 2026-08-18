@@ -8,34 +8,34 @@ certified_routes:
     spanish_blob_sha: 6d80c6477f0ab8909e9d6bef582cfe5704f6e0d7
     english_blob_sha: ddc5d5ddeb710df587e3e60231f58860aa7818e5
     review_scope: prose, learning flow, navigation, featured media, concept cards, series cards, engineering entry, responsive structure
-    note: Restored the canonical watch-manipulate-go-deeper learning flow, test-time-compute video entry, visual-first navigation and the same three featured visual topics while using native English media and routes.
+    note: "Restored the canonical watch-manipulate-go-deeper learning flow, test-time-compute video entry, visual-first navigation and the same three featured visual topics while using native English media and routes."
   - route: proximamente.md
     reviewed_on: 2026-08-18
     spanish_blob_sha: 73f84d062d7045bb0e3aefb238811ec591e513f7
     english_blob_sha: 47587560e034efe88fe8f6fa54153a94493913b7
     review_scope: prose, labels, research ordering, navigation
-    note: Native-English editorial review; tightened translated heading and research-status prose while preserving the canonical six-topic order and publication-status semantics.
+    note: "Native-English editorial review; tightened translated heading and research-status prose while preserving the canonical six-topic order and publication-status semantics."
   - route: visuales/index.md
     reviewed_on: 2026-08-18
     spanish_blob_sha: 1fee9be2a4d37133e3cabcf50998ad5cb1c736de
     english_blob_sha: 4440980765fdbe682356080f310e359013f78eda
     review_scope: prose, videos, guided paths, interactive visual sequence, labels, navigation, native media, responsive semantics
-    note: Side-by-side review found the English visual hub already faithful and native-quality; its video, guided-path and Best-of-N/PRM-vs-ORM/ImageBind interaction structure matches the canonical pedagogical sequence while using native English media.
+    note: "Side-by-side review found the English visual hub already faithful and native-quality; its video, guided-path and Best-of-N/PRM-vs-ORM/ImageBind interaction structure matches the canonical pedagogical sequence while using native English media."
   - route: series/index.md
     reviewed_on: 2026-08-18
     spanish_blob_sha: b63629609b4e8f0f2a853fa2d072e7a4e230b0d1
     english_blob_sha: ab361a9819731ce4bd2aa368bdf5dbba32d954ec
     review_scope: prose, series ordering, descriptions, recommended path, navigation
-    note: Restored the canonical visual-first fast-entry CTA and tightened the recommended-path prose without changing the eight-series order or descriptions.
+    note: "Restored the canonical visual-first fast-entry CTA and tightened the recommended-path prose without changing the eight-series order or descriptions."
   - route: articulos-tecnicos/index.md
     reviewed_on: 2026-08-18
     spanish_blob_sha: 8cc5cba47ef1c6ae17a28e1d6b78da772f8499f9
     english_blob_sha: 811f5c6454af692d7498afac9d726b13f242d761
     review_scope: prose, layout structure, published-note cards, in-preparation items, navigation, engineering framing
-    note: Replaced the reduced Markdown-only English index with the canonical landing-page structure: three published notes, two in-preparation items and the final series entry, translated into native technical English.
+    note: "Replaced the reduced Markdown-only English index with the canonical landing-page structure: three published notes, two in-preparation items and the final series entry, translated into native technical English."
   - route: meta/about.md
     reviewed_on: 2026-08-18
     spanish_blob_sha: 6ea200d5a89b4af66809b417e36b7fafa4db64d3
     english_blob_sha: 9bd723922f5a02f5f49621bb8ab377dfd62b380d
     review_scope: prose, author description, editorial method, formats, contact
-    note: Restored the canonical distinction between videos and interactive visuals and tightened the format description without changing project, author or editorial-method claims.
+    note: "Restored the canonical distinction between videos and interactive visuals and tightened the format description without changing project, author or editorial-method claims."
