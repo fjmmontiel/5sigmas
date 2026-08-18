@@ -37,7 +37,7 @@ hide:
       <span>01 · Reasoning Models</span>
     </header>
 
-    <a class="s5-start-card__media" href="/en/videos/series/modelos-razonadores/03-test-time-compute/" aria-label="Understand test-time compute in a 1-minute 29-second video">
+    <a class="s5-start-card__media" href="/en/videos/series/modelos-razonadores/03-test-time-compute/" aria-label="Understand test-time compute in a one-minute video">
       <img src="/en/series/modelos-razonadores/03-test-time-compute.jpg" alt="Visual explaining test-time compute" />
     </a>
 
@@ -46,7 +46,7 @@ hide:
         <small>Start with one idea</small>
         <strong>Understand test-time compute</strong>
       </span>
-      <span class="s5-start-card__cta-meta"><span aria-hidden="true">▶</span> Video · 1:29</span>
+      <span class="s5-start-card__cta-meta"><span aria-hidden="true">▶</span> Video · 1:00</span>
     </a>
 
     <div class="s5-start-card__detail">
