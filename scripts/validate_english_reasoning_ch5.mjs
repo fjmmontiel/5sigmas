@@ -69,10 +69,10 @@ try {
       'Claude Sonnet 5',
       'TabooRAG and alignment-based denial-of-service attacks',
       'Agent hijacking',
-      'You cannot supervise what you cannot read.',
+      'If the reasoning is illegible, that monitoring channel cannot provide reliable supervision.',
       'Hard budgets for time, tokens and tools',
       'Clear fallbacks',
-      'Abstain when it is the right choice',
+      'Abstain when confidence is insufficient',
       'Many-Shot Jailbreaking',
       'accuracy falls by 53%',
     ], `${viewport.name}: article`);

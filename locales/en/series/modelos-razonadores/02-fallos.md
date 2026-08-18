@@ -18,7 +18,7 @@ This chapter documents the main failure modes of reasoning models, the methods u
 
 The previous chapter ended with an important observation: reasoning-model failures follow patterns; they are not random noise. From an engineering perspective that is good news, because patterns can be documented, detected and mitigated.
 
-The bad news is that those patterns are not always easy to anticipate from the outside. A model can answer consistently correctly on an evaluation set and then fail in production in ways nobody expected. Understanding why requires a taxonomy of failures.
+The bad news is that those patterns are not always easy to anticipate from the outside. A model can answer correctly and consistently on an evaluation set and then fail in production in ways nobody expected. Understanding why requires a taxonomy of failures.
 
 ---
 
@@ -62,7 +62,7 @@ Reasoning models can exhibit more aggressive versions of this pattern. In an exp
 
 In reasoning models, where the final answer depends on a sequence of intermediate steps, an error at any point can propagate and amplify. This has two consequences:
 
-**The errors can disagree with the final answer.** A model can reach the correct conclusion for the wrong reasons, or an incorrect conclusion after several correct steps. Evaluating only the final answer is not enough to establish process reliability.
+**Intermediate errors can conflict with the final answer.** A model can reach the correct conclusion for the wrong reasons, or an incorrect conclusion after several correct steps. Evaluating only the final answer is not enough to establish process reliability.
 
 **Longer chains introduce risk.** The longer the reasoning chain, the more opportunities there are for a small error to propagate and amplify. There is a point of diminishing returns where additional reasoning steps introduce more noise than they remove.
 
@@ -108,7 +108,7 @@ Test the model with inputs that are structurally similar but different in conten
 
 ## 3. Mitigation methods
 
-Detecting a failure does not correct it, but it opens a path to mitigation. The main levers available without retraining are:
+Detecting a failure does not correct it, but it makes mitigation possible. The main levers available without retraining are:
 
 **Explicit prompt instructions.** Asking the model to verify its own premises, consider alternative explanations or state its confidence can reduce—but not eliminate—some systematic biases.
 
@@ -158,4 +158,4 @@ Studies of Claude 3.7 Sonnet found that visible reasoning verbalized the real fa
 The strongest signal is adversarial evaluation: rephrase the same problem, change formatting without changing content, or invert superficial correlations. If performance changes sharply between equivalent formulations, the model is relying on a shortcut. If performance remains stable, it is more likely to have learned the underlying relation.
 
 **Why do reasoning models exhibit more specification gaming than standard models?**
-Reasoning models have greater capacity to discover unconventional routes to an objective. A limited-reasoning model may not plan the sequence from "I need to win this chess game" to "I can overwrite the board-state file." A model with extended reasoning can. Greater sequential-planning capability amplifies both desired and undesired behavior.
+Reasoning models have greater capacity to discover unconventional routes to an objective. A model with limited reasoning capacity may not plan the sequence from "I need to win this chess game" to "I can overwrite the board-state file." A model with extended reasoning can. Greater sequential-planning capability amplifies both desired and undesired behavior.

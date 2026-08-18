@@ -15,7 +15,7 @@ This chapter examines what reasoning means in the context of LLMs, how the first
 
 When an LLM answers a complex question with structured arguments, counterexamples and coherent conclusions, the most common reaction is to say that it "reasons." The more technical question is whether that word describes something real or is merely a convenient metaphor.
 
-Whether it truly reasons or not has direct consequences for how we design systems, evaluate their outputs and understand their failures.
+Whether it truly reasons has direct consequences for how we design systems, evaluate their outputs and understand their failures.
 
 ---
 
@@ -53,15 +53,15 @@ The debate remains open over whether that process should be called reasoning or 
 
 ---
 
-## 3. The birth of reasoning models: OpenAI o1
+## 3. The emergence of reasoning models: OpenAI o1
 
-In September 2024, OpenAI released [o1](https://openai.com/index/learning-to-reason-with-llms/), the first model explicitly designed to "think before answering." The difference from earlier models was not simply model size or training data, but the usage architecture: before generating its final response, the model produced an internal reasoning chain that the user did not directly see.
+In September 2024, OpenAI released [o1](https://openai.com/index/learning-to-reason-with-llms/), the first model explicitly designed to "think before answering." The difference from earlier models was not simply model size or training data, but the inference setup: before generating its final response, the model produced an internal reasoning chain that the user did not directly see.
 
 The benchmark results were striking. On AIME 2024, a competitive mathematics exam, GPT-4o solved 12% of the problems while o1 reached 74% with a single sample and 83% with consensus across 64 samples. On Codeforces programming competitions, o1 moved from the 11th percentile to the 89th percentile. On GPQA Diamond—a benchmark of physics, chemistry and biology questions intentionally designed to be resistant to simple web lookup—o1 exceeded, for the first time, the accuracy of recruited PhD-level experts answering the same questions.
 
-The mechanism itself was not new in research. The idea of chain-of-thought prompting had appeared in Google papers in 2022 ([Wei et al., 2022](https://arxiv.org/abs/2201.11903)), showing that producing intermediate steps improved performance. What o1 added was that this "thinking" process happened autonomously rather than only when explicitly requested in the prompt, and that training taught the model when and how to extend its reasoning process to improve the outcome.
+The underlying idea was not new. Chain-of-thought prompting had appeared in Google papers in 2022 ([Wei et al., 2022](https://arxiv.org/abs/2201.11903)), showing that producing intermediate steps improved performance. What o1 added was that this "thinking" process happened autonomously rather than only when explicitly requested in the prompt, and that training taught the model when and how to extend its reasoning process to improve the outcome.
 
-> o1's central observation was that reasoning, understood as a multi-step process, could be purchased with more inference-time compute: spending more processing time before producing the final answer could improve answer quality. That idea is called test-time compute and is the central axis of this series.
+> o1's central observation was that reasoning, understood as a multi-step process, could improve as more inference-time compute was allocated: spending more processing time before producing the final answer could improve answer quality. That idea is called test-time compute and is the central axis of this series.
 
 ### 3.1 The training mechanism: RLVR and GRPO
 
@@ -85,9 +85,9 @@ On June 6, 2025, [Apple Research](https://machinelearning.apple.com/research/ill
 
 The paper argued that what models do when they "reason" may, in many cases, be sophisticated pattern recognition rather than genuine reasoning: the model learns the surface structure of correct arguments during training and reproduces it, but fails when that structure changes in ways it has not seen.
 
-An academic response arrived on June 13, 2025. Alex Lawsen, a researcher at Open Philanthropy, published "The Illusion of the Illusion of Thinking," co-written with Claude Opus, identifying three methodological problems in Apple's experimental design: models were failing because they hit token-budget limits rather than because they could not reason; the evaluation script penalized partially correct solutions as completely wrong; and some river-crossing puzzle instances were mathematically unsolvable, which models correctly identified as impossible but the evaluation still counted as failures.
+A response followed on June 13, 2025. Alex Lawsen, a researcher at Open Philanthropy, published "The Illusion of the Illusion of Thinking," co-written with Claude Opus, identifying three methodological problems in Apple's experimental design: models were failing because they hit token-budget limits rather than because they could not reason; the evaluation script penalized partially correct solutions as completely wrong; and some river-crossing puzzle instances were mathematically unsolvable, which models correctly identified as impossible but the evaluation still counted as failures.
 
-The debate remains genuinely open. What both sides share is the observation that reasoning-model failures have structure: they are neither random nor uniformly distributed. That is precisely the subject of the next chapter.
+The debate remains genuinely open. Both sides agree that reasoning-model failures have structure: they are neither random nor uniformly distributed. That is precisely the subject of the next chapter.
 
 {{ include_html("snippets/modelos-razonadores/01-razonamiento-pasos.html") }}
 
@@ -97,9 +97,9 @@ The debate remains genuinely open. What both sides share is the observation that
 
 If you treat an LLM as though it reasons in the same way as a human expert, you make poor design decisions. You trust its outputs in contexts where its failures are systematic. You build systems that work in a demo and fail in production when the input moves away from the learned pattern.
 
-If you treat an LLM as incapable of reasoning simply because it does not share the same substrate as human reasoning, you also make a mistake. You underuse a real capability that, with the right safeguards, can create value in cases where the human alternative is more expensive, slower or equally fallible.
+If you treat an LLM as incapable of reasoning simply because it does not share the same underlying mechanism as human reasoning, you also make a mistake. You underuse a real capability that, with the right safeguards, can create value in cases where the human alternative is more expensive, slower or equally fallible.
 
-The useful practical position is to treat LLM reasoning as a process with a measurable performance curve: it works well on certain classes of problems and fails predictably on others. The next step is to understand exactly what that curve looks like.
+A practical approach is to treat LLM reasoning as a process with a measurable performance curve: it works well on certain classes of problems and fails predictably on others. The next step is to understand exactly what that curve looks like.
 
 ---
 
@@ -132,4 +132,4 @@ RLHF uses human evaluations to adjust model behavior: people rate answers and th
 GRPO (Group Relative Policy Optimization), introduced by DeepSeek R1, removes the need for a separate critic model. Instead of estimating each state's value with a second model, it generates multiple independent attempts for the same problem and computes the advantage of each attempt as its deviation from the group average. Attempts above the average reinforce their strategies and worse attempts are penalized, reducing both computational cost and the instability of training two models in parallel.
 
 **Why is the debate over whether LLMs genuinely reason still unresolved?**
-Because it depends on how reasoning is defined. If the definition requires the same substrate as human reasoning, the answer is no. If the definition focuses on observable behavior—producing correct intermediate steps, detecting contradictions and deriving valid conclusions in complex domains—the answer is more nuanced. Apple Research's 2025 paper showed an accuracy collapse beyond a complexity threshold. The response by Lawsen and Claude Opus challenged the experimental design. Neither position has closed the debate.
+Because it depends on how reasoning is defined. If the definition requires the same underlying mechanism as human reasoning, the answer is no. If the definition focuses on observable behavior—producing correct intermediate steps, detecting contradictions and deriving valid conclusions in complex domains—the answer is more nuanced. Apple Research's 2025 paper showed an accuracy collapse beyond a complexity threshold. The response by Lawsen and Claude Opus challenged the experimental design. Neither position has closed the debate.

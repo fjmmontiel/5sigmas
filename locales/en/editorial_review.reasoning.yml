@@ -1,0 +1,40 @@
+version: 1
+canonical_source_locale: es
+scope_manifest: locales/en/manifest.yml
+certified_routes:
+  - route: series/modelos-razonadores/00_presentacion_serie.md
+    reviewed_on: 2026-08-18
+    spanish_blob_sha: fe5b4cd833d7c6c6282ab7adec41c7bc09c21bf9
+    english_blob_sha: bfedeb033b49fe16c05692278e83b9be7aeef6a7
+    review_scope: prose, headings, chapter summaries, terminology, technical meaning, links, visual hooks
+    note: Side-by-side native-English review; the overview was already native-quality and required no prose changes.
+  - route: series/modelos-razonadores/01-que-es-razonar.md
+    reviewed_on: 2026-08-18
+    spanish_blob_sha: 555fe8b396cdb7c2c9dc482925f763f10f48c0a3
+    english_blob_sha: 01f4d963924fd84e4c44133dd9c93843ca4a989e
+    review_scope: prose, headings, lists, FAQs, terminology, technical meaning, quantitative evidence, references, visual hooks
+    note: Side-by-side native-English review; tightened inference-setup, test-time-compute, debate-transition and practical-framing prose without changing claims, evidence, references or visual placement.
+  - route: series/modelos-razonadores/02-fallos.md
+    reviewed_on: 2026-08-18
+    spanish_blob_sha: f7d24176b30e4602d5eaedb045688ead58e8ea0e
+    english_blob_sha: 76c4af58900a143d57fd9464677ac9614cf3400b
+    review_scope: prose, headings, lists, FAQs, terminology, technical meaning, quantitative evidence, references, visual hooks
+    note: Side-by-side native-English review; tightened failure-taxonomy, propagation, mitigation and specification-gaming prose without changing any evidence, source or visual placement.
+  - route: series/modelos-razonadores/03-test-time-compute.md
+    reviewed_on: 2026-08-18
+    spanish_blob_sha: 6430f77c427d8b6ebd5160cb332452f7fe6ffa43
+    english_blob_sha: 67122351ec4d9ef592875cab9a7399047ff2315f
+    review_scope: prose, headings, lists, FAQs, terminology, technical meaning, quantitative evidence, references, navigation, visual hooks
+    note: Side-by-side native-English review; tightened TTC framing and restored canonical prerequisite/next-chapter navigation that still contained migration-era English-only scaffolding, without changing claims, evidence or visuals.
+  - route: series/modelos-razonadores/04-latencia-streaming.md
+    reviewed_on: 2026-08-18
+    spanish_blob_sha: 19bd90047b6a5d6a3592884b050c3452acafe1d6
+    english_blob_sha: 2905de570c1580ae510b83b2a9a87e253d500a65
+    review_scope: prose, headings, lists, FAQs, terminology, technical meaning, quantitative evidence, references, visual hooks
+    note: Side-by-side native-English review; tightened latency, routing, session-cost and failure-handling prose while preserving all thresholds, prices, product evidence, citations and visual placement.
+  - route: series/modelos-razonadores/05-riesgos.md
+    reviewed_on: 2026-08-18
+    spanish_blob_sha: 6f322aa1613a4dfefe44f84e2eaf028856145588
+    english_blob_sha: 3ac71c5bcfcbc2e74bf3c2c8a949d12c02c4f309
+    review_scope: prose, headings, lists, FAQs, terminology, technical meaning, quantitative evidence, references, visual hooks
+    note: Side-by-side native-English review; tightened overthinking, variable-cost, agentic attack-surface, abstention and series-conclusion prose without changing any risk model, number, source, caveat or visual placement.
