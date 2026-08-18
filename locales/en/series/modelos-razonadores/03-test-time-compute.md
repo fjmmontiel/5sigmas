@@ -11,10 +11,10 @@ tags:
 
 # Chapter 3 — Test-Time Compute
 
-The previous chapters established that LLM reasoning consumes resources and produces predictable failure modes. This chapter adds the piece that connects the two: the reasoning process has a scaling law of its own. By the end, you will understand what test-time compute is and why it represents a second scaling dimension independent of training; you will know the three main levers for converting additional compute into better answers—more steps, more candidates and more structure—and the quality, cost and latency tradeoff profile of each one.
+The previous chapters established that LLM reasoning consumes resources and produces predictable failure modes. This chapter connects those ideas through a second scaling dimension: the reasoning process has a scaling law of its own. By the end, you will understand what test-time compute is and why it represents a second scaling dimension independent of training; you will know the three main levers for converting additional compute into better answers—more steps, more candidates and more structure—and the quality, cost and latency tradeoff profile of each one.
 
 !!! info "Prerequisites"
-    This chapter builds on the concepts introduced earlier in the **Reasoning Models** series: what it means for an LLM to reason and how reasoning systems fail. The complete English versions of those chapters are being mirrored into this same series; the [series introduction](./00_presentacion_serie.md) provides the current map.
+    This chapter assumes the concepts introduced in the previous chapters: [Chapter 1 — What does it mean for an LLM to "reason"?](./01-que-es-razonar.md) and [Chapter 2 — Failures](./02-fallos.md).
 
 The central observation is that spending more compute while generating the answer—at inference time—can produce better answers in a predictable way for particular classes of problems. This is the idea behind **test-time compute scaling**.
 
@@ -40,7 +40,7 @@ There are three principal mechanisms for translating additional inference comput
 
 Chain-of-thought ([Wei et al., 2022](https://arxiv.org/abs/2201.11903)) is the most direct mechanism. Instead of producing the final answer immediately, the model first generates a sequence of intermediate steps that decompose the problem. Those steps consume tokens and computation, but the final answer can benefit from explicitly resolving the subproblems that come before it.
 
-Modern reasoning-oriented systems have internalized this pattern. Rather than requiring the user to explicitly request “think step by step,” the serving system can decide how much reasoning effort to allocate based on the perceived complexity of the task.
+Modern reasoning models have internalized this pattern. Rather than requiring the user to explicitly request “think step by step,” the model or serving system can determine how much reasoning effort to allocate based on the perceived complexity of the task.
 
 One technique for controlling that extension is **budget forcing**: suppressing an early stopping signal and adding a continuation cue such as “Wait” so the model continues deliberating. The s1-32B work ([Muennighoff et al., 2025](https://arxiv.org/abs/2501.19393)), trained on only 1,000 curated examples, used this idea to improve AIME24 from 50% to 56.7% and reported performance above o1-preview on that benchmark. The intuition is simple: if the model is about to commit to a weak answer too early, additional reasoning gives it another opportunity to revise.
 
@@ -121,7 +121,7 @@ The next chapter translates this into the concrete product problem: what happens
 ---
 
 !!! tip "Next reading"
-    More compute on paper means real seconds in a product. Continue with the **Reasoning Models** series to see how latency, streaming and human interaction constrain the serving design: [series overview →](./00_presentacion_serie.md)
+    More compute on paper means real seconds in a product. Continue with [Chapter 4 — Physical time: latency, streaming and human interaction →](./04-latencia-streaming.md)
 
 ## 5. References
 
