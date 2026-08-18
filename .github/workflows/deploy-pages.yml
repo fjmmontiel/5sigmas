@@ -60,6 +60,12 @@ jobs:
       - name: Audit rendered English locale
         run: python scripts/audit_locale.py --locale en --site site/en
 
+      - name: Audit combined SEO crawl
+        run: python scripts/audit_seo_site.py --site-dir site --output-dir seo-audit --label deploy
+
+      - name: Test SEO audit crawler
+        run: python -m unittest scripts.tests.test_audit_seo_site
+
       - name: Restore reviewed English TTC media
         id: en-ttc-cache
         uses: actions/cache/restore@v4
