@@ -23,7 +23,7 @@ The model can interpret context. The runtime should decide which content has aut
 
 In a **direct injection**, the primary input attempts to change the assistant's objective or rules. In an **indirect injection**, the influence appears inside a source the system consults, such as documentation, a webpage, a message or a tool output.
 
-Indirect injection is especially important in RAG and agent systems because the content can enter through a source the product already uses as working material.
+Indirect injection is especially important in RAG and agent systems because the content can enter through a source the product already uses as input.
 
 ## RAG retrieves relevance, not authority
 
@@ -50,9 +50,9 @@ The categories can overlap, but measuring them separately helps identify which c
 
 A clearer system prompt can reduce errors, but it is still natural language interpreted by the model alongside the rest of the context. Filters and classifiers can add coverage, but they should not be the final authority over sensitive operations either.
 
-Defence becomes stronger when the architecture around the model changes.
+Stronger defenses come from changing the architecture around the model.
 
-## Defence principles
+## Defense principles
 
 {{ include_html("snippets/seguridad-ia/01-defensa-en-capas.html") }}
 
@@ -82,7 +82,7 @@ Observability should make it possible to reconstruct which information entered t
 
 ## How to evaluate a system
 
-A useful evaluation reproduces the real path and separates several stages: external input, retrieval, decision change, proposed tool use, authorization and final effect. That makes it possible to see whether the risk is stopped in retrieval, policy or immediately before an operation executes.
+A useful evaluation reproduces the real path and separates several stages: external input, retrieval, decision change, proposed tool use, authorization and final effect. That makes it possible to identify where the risk is contained: during retrieval, by policy, or immediately before an operation executes.
 
 {{ include_html("snippets/seguridad-ia/04-causal-chain.html") }}
 

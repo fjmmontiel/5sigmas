@@ -1,0 +1,49 @@
+version: 1
+canonical_source_locale: es
+scope_manifest: locales/en/manifest.yml
+
+# These certifications cover native-English prose plus the existing canonical
+# article-hook and interactive-visual semantics validated by topic browser QA.
+certified_routes:
+  - route: temas/index.md
+    reviewed_on: 2026-08-18
+    spanish_blob_sha: 705264e2e0aea0dc4b4f4374c8999f02f2d977d2
+    english_blob_sha: 077645a99ffc25fe62b04154d261d55587ce56fa
+    review_scope: prose, headings, navigation copy, terminology, content coverage, links
+    note: Side-by-side native-English editorial review; restored the canonical references to visuals and animations and tightened landing-page prose without changing concept scope or navigation semantics.
+  - route: temas/llms.md
+    reviewed_on: 2026-08-18
+    spanish_blob_sha: c1f1f1b396be4fc811d240ff55b0b7ad52098a0e
+    english_blob_sha: 3d94d3d028c94939c3878071ee17eae891c25cca
+    review_scope: prose, headings, lists, FAQs, terminology, technical meaning, evidence, references, visual hooks
+    note: Side-by-side native-English editorial review; tightened translated syntax and terminology while preserving the tokenization, training, adaptation, scaling and operational-state teaching flow and every visual hook.
+  - route: temas/transformer.md
+    reviewed_on: 2026-08-18
+    spanish_blob_sha: 58e22122dc62facf1a89e5dfe65bf41e1ff01b91
+    english_blob_sha: 4a76c7de6ce63d9e0fd780825eb30f17d0afd724
+    review_scope: prose, headings, lists, FAQs, terminology, technical meaning, evidence, references, visual hooks
+    note: Side-by-side native-English editorial review; tightened architecture and design-space phrasing and normalized US English without changing QKV, masking, residual, cost or multimodal semantics.
+  - route: temas/razonamiento.md
+    reviewed_on: 2026-08-18
+    spanish_blob_sha: a4398d3fdf156bcd4e78092656ccfab6e7a99bc8
+    english_blob_sha: 7de95df5236e317500b90a8f22f47e51c055ecce
+    review_scope: prose, headings, lists, FAQs, terminology, technical meaning, evidence, references, visual hooks
+    note: Side-by-side native-English editorial review; removed literal cost/contract phrasing, normalized fragmented search-list punctuation and tightened latency framing without changing CoT, verifier, TTC or tool-use claims.
+  - route: temas/evaluacion-modelos.md
+    reviewed_on: 2026-08-18
+    spanish_blob_sha: 21bce3774e4debaf888057927305039a4c040910
+    english_blob_sha: 7edde0936e6dd4f60fa4dddd49f37d2afe94d50b
+    review_scope: prose, headings, lists, FAQs, terminology, technical meaning, evidence, references, visual hooks
+    note: Side-by-side native-English editorial review; tightened reference-set, incident and operational-loop wording without changing metrics, statistical caveats, calibration, product-evaluation structure or visuals.
+  - route: temas/agentes-ia.md
+    reviewed_on: 2026-08-18
+    spanish_blob_sha: 201e8b42a0fc2e0141231cfec20d8907cc2352c8
+    english_blob_sha: 74ce29f2dc7be9a037c455bfb62b8dfea4d48bd5
+    review_scope: prose, headings, lists, FAQs, terminology, technical meaning, evidence, references, visual hooks
+    note: Side-by-side native-English editorial review; restored the canonical videos/visuals coverage and tightened agency, authority-boundary and workflow-risk prose without changing system contracts or autonomy semantics.
+  - route: temas/prompt-injection.md
+    reviewed_on: 2026-08-18
+    spanish_blob_sha: c707ef766f50b4e9bf580bb347a9508fdd912aaa
+    english_blob_sha: 2e2fb7267d0f83c9869e1f34bd42f37b73559327
+    review_scope: prose, headings, lists, FAQs, terminology, technical meaning, security model, visual hooks
+    note: Side-by-side native-English editorial review; tightened indirect-injection, defense and containment wording without changing the data/control distinction, authorization model, evaluation flow or visual semantics.
