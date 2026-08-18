@@ -41,3 +41,5 @@ exports/
 task.md
 CLAUDE*.md
 AGENTS*.md
+# Generated SEO crawl / Search Console evidence
+seo-audit/
