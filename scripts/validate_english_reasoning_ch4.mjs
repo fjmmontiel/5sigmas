@@ -156,7 +156,7 @@ try {
         ttftAfter: bodyText.indexOf('Dynamic routing: RouteLLM'),
         routingBefore: bodyText.indexOf('which model to activate and how much reasoning budget'),
         routing: bodyText.indexOf('RouteLLM: route each query to the right model'),
-        routingAfter: bodyText.indexOf('The current version of that pattern can be seen in GPT-5.6'),
+        routingAfter: bodyText.indexOf('GPT-5.6 exposes the same pattern.'),
         latencyBefore: bodyText.indexOf('a long wait followed by an error instead of an answer'),
         latency: bodyText.indexOf('Latency, cost and design for reasoning models'),
         latencyAfter: bodyText.indexOf('Design patterns for optimizing TTC in products'),
