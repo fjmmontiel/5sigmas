@@ -48,7 +48,7 @@ const page = await browser.newPage({ viewport: desktop });
 const es = await measure(page, '/', desktop);
 const en = await measure(page, '/en/', desktop);
 
-if (!en.imageLoaded || en.imageSource !== '/en/series/modelos-razonadores/01-que-es-razonar.jpg') {
+if (!en.imageLoaded || en.imageSource !== '/en/series/modelos-razonadores/03-test-time-compute.jpg') {
   failures.push(`/en/: canonical native-English hero visual is missing or broken: ${JSON.stringify(en.imageSource)}`);
 }
 if (!en.media || en.media.height < 220) failures.push(`/en/: English hero media is visually too small: ${JSON.stringify(en.media)}`);
