@@ -37,6 +37,6 @@ certified_routes:
   - route: meta/about.md
     reviewed_on: 2026-08-18
     spanish_blob_sha: 6ea200d5a89b4af66809b417e36b7fafa4db64d3
-    english_blob_sha: 9bd723922f5a02f5f49621bb8ab377dfd62b380d
+    english_blob_sha: c8843cf21032b511c595015a9e71cde59542d763
     review_scope: prose, author description, editorial method, formats, contact
-    note: "Restored the canonical distinction between videos and interactive visuals and tightened the format description without changing project, author or editorial-method claims."
+    note: "Restored the canonical distinction between videos and interactive visuals, tightened the format description, and expressed the dual Physics/Mathematics degrees in native English without changing project, author or editorial-method claims."
