@@ -20,3 +20,15 @@ certified_routes:
     english_blob_sha: 10547775d25769293932be8ba4e7a83b954d5ee4
     review_scope: prose, headings, lists, FAQs, terminology, technical meaning, evidence, references, visual hooks
     note: Side-by-side native-English review; removed literal connector, native-tokenization, omni/streaming and trade-off phrasing while preserving the four architecture families, quantitative evidence, caveats, references, section order and visual semantics.
+  - route: series/multimodalidad-iag/04-evaluacion.md
+    reviewed_on: 2026-08-18
+    spanish_blob_sha: 874651b3364f4e12349b3bcbf601100ecc978675
+    english_blob_sha: 91d212122bd3e0907e0fbb50f74f89bbfd5f193d
+    review_scope: prose, headings, lists, FAQs, terminology, technical meaning, evidence, references, visual hooks
+    note: Side-by-side native-English review; tightened grounding and language-prior explanations, benchmark-contamination framing, calibration/localization prose and the document/audio/reasoning/video/hallucination evaluation sections while preserving every result, caveat, source, section order and visual semantic.
+  - route: series/multimodalidad-iag/05-riesgos.md
+    reviewed_on: 2026-08-18
+    spanish_blob_sha: f78012a959b29a9e790a68cd0b7ed226e9a16e8d
+    english_blob_sha: 3ea8109b4798dc03b60a5822e1faeb5746bd64f5
+    review_scope: prose, headings, lists, FAQs, terminology, technical meaning, evidence, references, visual hooks
+    note: Side-by-side native-English review; tightened multimodal attack-surface, visual/audio injection, tool leakage, privacy, poisoning, perception-to-action failure and regulatory prose while preserving the canonical threat models, >86% WhisperInject evidence, EU AI Act framing, references, section order and visual semantics.
