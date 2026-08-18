@@ -11,7 +11,7 @@ tags:
 
 # Chapter 5 — Risks: overthinking, cost, attacks and alignment
 
-The previous chapters described the benefits of test-time compute: better quality, higher reliability and more capability for complex tasks. This chapter completes the picture with the risks introduced by that same power. By the end, the reader will understand overthinking and why more reasoning can produce worse answers, know the attack surfaces opened by models with tools (prompt injection, TabooRAG, agent hijacking), and have design criteria for managing the risk profile of these systems.
+The previous chapters described the benefits of test-time compute: better quality, higher reliability and more capability for complex tasks. This chapter covers the risks introduced by the same capability. By the end, the reader will understand overthinking and why more reasoning can produce worse answers, know the attack surfaces opened by models with tools (prompt injection, TabooRAG, agent hijacking), and have design criteria for managing the risk profile of these systems.
 
 !!! info "Prerequisites"
     This chapter closes the series. It is recommended to have read the previous four chapters, especially [Chapter 3 — Test-Time Compute](./03-test-time-compute.md) and [Chapter 4 — Latency](./04-latencia-streaming.md).
@@ -36,7 +36,7 @@ The practical implication is that the test-time compute budget should not be "th
 
 Apple Research (2025) documented the pattern quantitatively: reasoning models reach their quality peak at around 1,500 reasoning tokens for simple tasks, and quality falls by approximately 18 percentage points when moving from 1,500 to 8,000 reasoning tokens. That is a measurable deterioration, not a speculative degradation.
 
-Current models are beginning to make the response explicit: Gemini 3.5 Flash lets the system select reasoning levels to tune the balance between quality, cost and latency. The product lesson does not change: having more capability does not require using the maximum budget for every query. The system should decide how much to think before it starts, and be able to stop when additional compute stops adding value ([Google DeepMind, 2026](https://deepmind.google/models/model-cards/gemini-3-5-flash/)).
+Current models increasingly expose this control explicitly. Gemini 3.5 Flash lets the system select reasoning levels to tune the balance between quality, cost and latency. The product lesson does not change: having more capability does not require using the maximum budget for every query. The system should decide how much to think before it starts, and be able to stop when additional compute stops adding value ([Google DeepMind, 2026](https://deepmind.google/models/model-cards/gemini-3-5-flash/)).
 
 {{ include_html("snippets/modelos-razonadores/05-overthinking-curva.html") }}
 
@@ -46,9 +46,9 @@ Current models are beginning to make the response explicit: Gemini 3.5 Flash let
 
 The three-way tension that every generative-AI system has to manage becomes sharper in reasoning models.
 
-### The debt profile
+### The cost profile
 
-In models without extended reasoning, quality debt is paid relatively uniformly: the model works well on the distribution of cases it was trained for and fails on cases outside that distribution. Cost and latency are predictable.
+In models without extended reasoning, quality failures are relatively stable across the operating distribution: the model works well on the cases it was trained for and fails on cases outside that distribution. Cost and latency are predictable.
 
 In reasoning models, cost and latency are variable. A simple query and a complex query can have radically different cost profiles, which makes budget planning more difficult. API bills can become unpredictable if there are no explicit budgets per query or per session.
 
@@ -66,7 +66,7 @@ The previous chapter covered perceived-latency thresholds. In product-quality te
 
 Reasoning models with access to tools, RAG or browsing have attack surfaces that simple conversational models do not have.
 
-The scale of that surface has also changed. Claude Sonnet 5 is presented as a model capable of planning, using browsers and terminals, and executing tasks autonomously. The farther the model can progress through a workflow, the more important controls over tools, context and permissions become. Anthropic's safety documentation evaluates prompt-injection risk inside agentic systems, not only in the initial prompt ([Anthropic, 2026](https://www.anthropic.com/news/claude-sonnet-5); [Claude Sonnet 5 System Card](https://www-cdn.anthropic.com/73ad94ca3c0502e75e46637cc62c8bd9532a7f2c/Claude%20Sonnet%205%20System%20Card.pdf)).
+That attack surface has expanded as models have become more agentic. Claude Sonnet 5 is presented as a model capable of planning, using browsers and terminals, and executing tasks autonomously. The farther a model can progress through a workflow, the more important controls over tools, context and permissions become. Anthropic's safety documentation evaluates prompt-injection risk inside agentic systems, not only in the initial prompt ([Anthropic, 2026](https://www.anthropic.com/news/claude-sonnet-5); [Claude Sonnet 5 System Card](https://www-cdn.anthropic.com/73ad94ca3c0502e75e46637cc62c8bd9532a7f2c/Claude%20Sonnet%205%20System%20Card.pdf)).
 
 ### Prompt injection in tool environments
 
@@ -80,9 +80,9 @@ In long reasoning chains with multiple tool calls, information from earlier step
 
 ### TabooRAG and alignment-based denial-of-service attacks
 
-A documented variant of attack against RAG systems exploits the model's own safety system: wrapping a benign query in context that the model interprets as "restricted high risk" in order to provoke a systematic refusal. The attack, called TabooRAG ([Li et al., 2026](https://arxiv.org/abs/2603.03919)), does not seek to extract information or manipulate the model toward malicious outputs; instead, it makes the model refuse to process legitimate queries by contaminating the context with risk signals. It is effectively a denial-of-service attack that uses the model's alignment as the mechanism.
+A documented RAG attack variant exploits the model's own safety system: it wraps a benign query in context that the model interprets as "restricted high risk" to provoke a systematic refusal. The attack, called TabooRAG ([Li et al., 2026](https://arxiv.org/abs/2603.03919)), does not seek to extract information or manipulate the model toward malicious outputs; instead, it makes the model refuse to process legitimate queries by contaminating the context with risk signals. It is effectively a denial-of-service attack that uses the model's alignment as the mechanism.
 
-The defense is not trivial: filters that detect high-risk language to protect the model can also be exploited to block it. RAG systems need mechanisms for validating retrieved content before it enters the model context, not only filters on the final output.
+Defending against it is difficult because filters that detect high-risk language to protect the model can also be exploited to block it. RAG systems need mechanisms for validating retrieved content before it enters the model context, not only filters on the final output.
 
 {{ include_html("snippets/modelos-razonadores/05-taborag-flujo.html") }}
 
@@ -94,13 +94,13 @@ For production agent systems, this pattern is a real operational risk: objective
 
 ### Agent hijacking
 
-Agent hijacking occurs when a malicious actor manages to manipulate the agent's memory or decision context persistently across sessions. Unlike a prompt injection that affects a single response, agent hijacking can redirect system behavior across multiple future interactions without the user being aware.
+Agent hijacking occurs when a malicious actor manipulates the agent's memory or decision context persistently across sessions. Unlike a prompt injection that affects a single response, agent hijacking can redirect system behavior across multiple future interactions without the user being aware.
 
 Agents that maintain persistent memory, use updatable external knowledge bases or can modify their own system context are especially susceptible. A malicious instruction stored in the agent's memory can influence all subsequent responses until it is detected and removed, which may be too late if the contents of that memory are not monitored.
 
 ### Illegibility of the reasoning chain as a supervision risk
 
-In models where reinforcement learning has produced illegible reasoning chains — mixtures of meaningless characters, fragments in unrelated languages, incoherent text interleaved with coherent text ([Jose, 2025](https://arxiv.org/abs/2510.27338)) — monitoring the reasoning process as a safety mechanism stops working. You cannot supervise what you cannot read.
+In models where reinforcement learning has produced illegible reasoning chains—mixtures of meaningless characters, fragments in unrelated languages, incoherent text interleaved with coherent text ([Jose, 2025](https://arxiv.org/abs/2510.27338))—monitoring the reasoning process becomes a weaker safety mechanism. If the reasoning is illegible, that monitoring channel cannot provide reliable supervision.
 
 For production systems where reasoning supervision is a safety layer, CoT legibility is not a cosmetic preference but a functional requirement. Models whose training does not preserve legibility make any monitoring system based on chain of thought fundamentally less reliable as a safeguard.
 
@@ -124,9 +124,9 @@ For actions with external or difficult-to-reverse consequences, add an explicit 
 
 Define explicitly what happens when the system exceeds its budget without reaching a satisfactory answer: produce the best partial answer available, ask the user for more information, hand off to a human operator, or simply state that it cannot answer with sufficient confidence within the operating constraints.
 
-### Abstain when it is the right choice
+### Abstain when confidence is insufficient
 
-A well-designed system knows when it does not know. Producing a low-confidence answer with a strong appearance of certainty is more harmful than stating uncertainty explicitly. Reasoning models should have clear criteria for when confidence in the reasoning is sufficient to produce a final output and when it is preferable to abstain or request more data.
+A well-designed system should represent uncertainty explicitly and abstain when confidence is insufficient. Producing a low-confidence answer with a strong appearance of certainty is more harmful than stating uncertainty directly. Reasoning models should have clear criteria for when confidence in the reasoning is sufficient to produce a final output and when it is preferable to abstain or request more data.
 
 {{ include_html("snippets/modelos-razonadores/05-riesgos-ttc.html") }}
 
@@ -134,14 +134,14 @@ A well-designed system knows when it does not know. Producing a low-confidence a
 
 ## 5. Series conclusion
 
-The map built by this series has four pieces:
+The series has established four points:
 
 1. LLM reasoning is a process with steps, real cost and predictable failures, different from but not incomparable to human reasoning.
 2. Failures have a taxonomy: shortcuts, systematic errors, objective drift and cascading propagation. Knowing the taxonomy makes it possible to detect them and design mitigations.
 3. Test-time compute converts compute into quality, with a tradeoff profile between quality, cost and latency that has to be managed actively.
 4. The risks of these systems are manageable with the right criteria: hard budgets, stopping signals, verification at critical points, explicit fallbacks and the ability to abstain.
 
-The practical conclusion is not that these systems are dangerous, nor that they are infallible. It is that they require deliberate design so that their advantages outweigh their risks, and that design is within reach of any team that understands the underlying mechanisms well.
+The practical conclusion is that these systems require deliberate design so that their advantages outweigh their risks. Teams that understand the underlying mechanisms can apply those controls directly.
 
 ---
 
