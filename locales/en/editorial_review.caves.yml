@@ -1,0 +1,16 @@
+version: 1
+canonical_source_locale: es
+scope_manifest: locales/en/manifest.yml
+certified_routes:
+  - route: series/from-cave-to-agi/00_presentacion_serie.md
+    reviewed_on: 2026-08-18
+    spanish_blob_sha: abb50f246cf5b3738f02b390d18b53be692fa169
+    english_blob_sha: 4205cb1a9ee869a2c35d5c1bec9df6f50c7aead2
+    review_scope: prose, headings, chapter summaries, terminology, technical meaning, evidence, links
+    note: Side-by-side native-English review; restored omitted mathematical/computing anchors in the chapter summaries and tightened the series framing without changing the canonical thesis, chronology, links or teaching sequence.
+  - route: series/from-cave-to-agi/01-representar.md
+    reviewed_on: 2026-08-18
+    spanish_blob_sha: 06421bac90709c22a45888c48a7a7854d22a1ad0
+    english_blob_sha: d6771f6e56838d7bd7be8625ccf4967877119a21
+    review_scope: prose, headings, lists, FAQs, terminology, technical meaning, evidence, references, visual hooks
+    note: Side-by-side native-English review; removed literal abstraction, notation, deduction, scientific-revolution and calculus phrasing while preserving every historical claim, caveat, source, section order, FAQ and visual semantic.
