@@ -59,12 +59,6 @@ jobs:
       - name: Audit search foundation
         run: python scripts/audit_multilingual_search_foundation.py
 
-      - name: Audit generated SEO crawl
-        run: python scripts/audit_seo_site.py --site-dir site --output-dir seo-audit --label pr
-
-      - name: Test SEO audit crawler
-        run: python -m unittest scripts.tests.test_audit_seo_site
-
       - name: Enforce priority topic hub contract
         run: python scripts/audit_priority_topic_hubs.py
 
@@ -94,6 +88,12 @@ jobs:
         env:
           S5_LOCALE: en
         run: mkdocs build -f mkdocs.en.yml --clean --strict
+
+      - name: Audit generated SEO crawl
+        run: python scripts/audit_seo_site.py --site-dir site --output-dir seo-audit --label pr
+
+      - name: Test SEO audit crawler
+        run: python -m unittest scripts.tests.test_audit_seo_site
 
       - name: Restore reviewed English TTC media
         id: en-ttc-cache
