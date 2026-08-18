@@ -76,8 +76,8 @@ hide:
     <div>
       <div class="s5-eyebrow">Recommended path</div>
       <h2>Foundations → models → agents → systems.</h2>
-      <p>Build the mental model first, then move into reasoning, multimodality, agents, security and infrastructure. If you prefer a faster entry point, start with the visual explanations and return to the chapter for depth.</p>
-      <a class="s5-text-link" href="/en/series/fundamentos-ia-iag/00_presentacion_serie/">Start with the foundations →</a>
+      <p>Build the mental model first, then move into reasoning, multimodality, agents, security and infrastructure. If you prefer a faster entry point, start with the videos and interactive visuals and return to the chapter for depth.</p>
+      <a class="s5-text-link" href="/en/visuales/">Start with videos and interactive visuals →</a>
     </div>
     <div class="s5-note-feature__meta">Concept<br />Mechanism<br />Evidence<br />Production</div>
   </div>
