@@ -12,31 +12,31 @@ tags:
 
 # Chapter 5 — Risks: visual prompt injection, action and operational security
 
-This article describes the security risks that are specific to multimodal systems: risks that do not exist in text-only models because the threat enters through a modality that ordinary filters do not analyze. By reading it, you will understand how visual prompt injection works (and its audio equivalent documented by WhisperInject), what happens when a tool-using system receives a successful injection, what privacy problems image and document processing introduces, and why the risk profile changes qualitatively when a system not only responds but acts. The article is useful for any team designing or deploying multimodal systems in production, with or without prior AI-security background.
+This article covers security risks that are specific to multimodal systems: threats that do not exist in the same form in text-only models because they enter through modalities that ordinary text filters do not inspect. It explains how visual prompt injection works, including the audio equivalent documented by WhisperInject; what happens when a successful injection reaches a tool-using system; what privacy risks come with image and document processing; and why the risk profile changes qualitatively when a system can act rather than only respond. It is intended for teams designing or deploying multimodal systems in production, regardless of their prior AI-security background.
 
-Multimodal systems introduce attack surfaces that do not exist in text-only models. When a system can read images, scanned documents or audio fragments, malicious content in those modalities can alter its behavior in ways that filters designed for text do not detect, because those filters operate on the user's explicit input rather than on what the model extracts from an image while processing it.
+Multimodal systems introduce attack surfaces that text-only models do not have. When a system can read images, scanned documents or audio fragments, malicious content in those modalities can alter its behavior in ways that text-focused filters cannot detect, because those filters operate on the user's explicit input rather than on information the model extracts while processing an image or audio signal.
 
-Each risk category has its own mechanism and its own defensive-design criteria, but they all share that property: the threat enters through a modality that the system does not analyze with the same tools it uses for text.
+The mechanisms differ across risk categories, but they share a common property: the threat enters through a modality that the system does not inspect with the same controls it applies to text.
 
-A second dimension changes the analysis substantially: the difference between a system that responds and a system that acts. When the system can call tools, modify records, send messages or plan actions over an environment, the error surface and the attack surface grow at the same time.
+Another distinction changes the risk analysis substantially: whether the system only responds or can also act. Once a system can call tools, modify records, send messages or plan actions in an environment, its error surface and attack surface expand together.
 
-A successful injection in a system that only generates text produces an incorrect response, but the same injection in a system with tools can trigger an irreversible action. That asymmetry of consequences is why defensive design in multimodality cannot be treated as a minor extension of defensive design for text-only systems.
+A successful injection in a text-only response system produces an incorrect response. The same injection in a tool-using system can trigger an irreversible action. That difference in consequences is why multimodal defensive design cannot be treated as a minor extension of text-only safeguards.
 
 ---
 
 ## 1. Visual prompt injection
 
-Prompt injection is an attack in which an attacker places instructions for the model inside content that the model processes as data.
+Prompt injection is an attack in which an attacker places instructions for the model inside content that the model is supposed to process as data.
 
-In text-only systems, this means including instructional text in the user's input. In multimodal systems, the instructions can be inside the image itself: a photograph of a document, a screenshot or a product image can contain overlaid or embedded text that the model reads as instructions and follows if it has no mechanism for distinguishing those instructions from data content [Greshake et al., 2023][r1].
+In text-only systems, this means including instructional text in the user's input. In multimodal systems, the instructions can be embedded inside the image itself: a photograph of a document, a screenshot or a product image can contain overlaid or embedded text that the model reads as instructions and follows if it cannot distinguish those instructions from the data content [Greshake et al., 2023][r1].
 
-This vector is harder to filter than its textual equivalents for several cumulative reasons. Instructions in images do not pass through the system's text filters because they do not exist as text in the input until the model processes them internally, which means that any guardrail applied before inference cannot see them. They can also be visually obfuscated—low-contrast text, rotated text, text integrated into visual patterns—in ways that standard OCR does not detect but the model still interprets, expanding the attack surface without having to bypass any explicit filter. The attacker can also combine visual instructions with normal prompt text to build multi-stage attacks in which the image disables restrictions and the text then exploits that change [Qi et al., 2024][r2][Bailey et al., 2023][r3].
+This vector is harder to filter than its textual equivalents for several compounding reasons. Instructions inside images do not pass through the system's text filters because they do not exist as text in the input until the model interprets them, so guardrails applied before inference cannot see them. They can also be visually obfuscated—low-contrast text, rotated text or text integrated into visual patterns—in ways that standard OCR does not detect but the model still interprets, expanding the attack surface without bypassing any explicit text filter. An attacker can also combine visual instructions with normal prompt text to build multi-stage attacks in which the image weakens restrictions and the text exploits the resulting behavior [Qi et al., 2024][r2][Bailey et al., 2023][r3].
 
-The risk is especially relevant in any system that processes arbitrary documents uploaded by users: invoices, contracts, screenshots and product photographs. In all of those contexts, the content is untrusted and can contain embedded instructions that the system may execute if it is not designed to treat them differently [OWASP][r4][NCSC][r5].
+This matters most in systems that process arbitrary user-uploaded documents such as invoices, contracts, screenshots or product photographs. In all of those cases, the content is untrusted and may contain embedded instructions that the system could follow unless it is explicitly designed to treat them as data rather than control [OWASP][r4][NCSC][r5].
 
 {{ include_html("snippets/multimodalidad-iag/05-prompt-injection-visual.html") }}
 
-The same vector exists in audio. Researchers have shown that it is possible to add imperceptible perturbations to input audio to manipulate audio-language models and force them to generate harmful content or execute malicious instructions even though the human listener never spoke them. WhisperInject documented this effect against audio-language models such as Qwen2.5-Omni: the perturbation is inaudible to humans but bypasses the model's safety protocols with a success rate above 86%, with direct implications for any system that accepts audio as trusted input [2026][r6].
+The same attack vector exists in audio. Researchers have shown that imperceptible perturbations added to input audio can manipulate audio-language models and cause them to generate harmful content or execute malicious instructions without those instructions being audibly spoken by a human. WhisperInject documented this effect against models such as Qwen2.5-Omni: the perturbation is inaudible to humans but bypasses the model's safety protocols with a success rate above 86%, with direct implications for any system that treats incoming audio as trusted input [2026][r6].
 
 {{ include_html("snippets/multimodalidad-iag/05-whisperinject.html") }}
 
@@ -44,13 +44,13 @@ The same vector exists in audio. Researchers have shown that it is possible to a
 
 ## 2. System leakage and tool manipulation
 
-When a multimodal system has access to tools—API calls, database access, the ability to send messages—visual prompt injection can be used not only to alter the system's response but also to trigger external actions. The image contains instructions that modify the system's behavior (ignore previous instructions, act as though the user had certain permissions, follow an alternative flow) and, once altered, the system executes tools with external effects: sending data to an external URL, deleting records, or generating responses that include content from the system context.
+When a multimodal system can use tools—API calls, database access or message sending—visual prompt injection can do more than alter the generated response. An injected image can contain instructions that change the model's behavior, such as telling it to ignore previous instructions, assume permissions the user does not have or follow a different workflow. If the model accepts those instructions, it may then use its tools to create external effects: sending data to an external URL, deleting records or including system-context content in its response.
 
-The mechanism works in two phases: the image reconfigures the model's active constraints and, from that point onward, the model acts under that altered configuration using the available tools. This second phase matters especially when the system has extensive system instructions containing configuration information, business logic or user data, because if the attack succeeds in making the model include its system-context content in the response, that information is exposed to the attacker without any output filter necessarily having reviewed it.
+The attack has two stages. First, the injected content changes the constraints the model is following. Then the model continues operating under those altered constraints with whatever tools are available. This becomes especially dangerous when system instructions contain configuration data, business logic or user information: if the attack causes the model to reveal that context, the information can reach the attacker before any downstream output control detects it.
 
-Defensive design begins with a least-privilege principle applied to tools: if document processing does not require sending email or modifying database records, those tools should not be available in that context.
+Defensive design starts by applying least privilege to tools. If document processing does not require email access or database writes, those capabilities should not be available in that execution context.
 
-The system's output after processing untrusted content should be reviewed before it passes to the next stage of the pipeline, so that a successful injection cannot propagate into irreversible actions.
+Outputs produced after processing untrusted content should also be validated before they can trigger the next stage of a workflow, so a successful injection cannot propagate directly into irreversible actions.
 
 {{ include_html("snippets/multimodalidad-iag/05-fuga-sistema.html") }}
 
@@ -58,13 +58,13 @@ The system's output after processing untrusted content should be reviewed before
 
 ## 3. Privacy: images, documents and metadata
 
-Multimodal systems that process images and documents have access to categories of personal information that text-only systems generally do not handle, and the risk comes not only from external attacks but also from the system's own design when it does not account for the type of data it is ingesting.
+Multimodal systems that process images and documents can access categories of personal information that text-only systems often do not handle. The risk comes not only from external attacks but also from system design that fails to account for the sensitivity of the data being ingested.
 
-An image of an identity document, a photo taken in a private space, a screenshot containing banking information, or a scanned medical document contains sensitive data that should not be stored, processed on unsuitable infrastructure, or included in future training data. The problem is that general-purpose multimodal systems do not always have mechanisms for determining what kind of content they are receiving before they process it.
+An identity document, a photo taken in a private space, a screenshot containing banking information or a scanned medical record may contain sensitive data that should not be stored, processed on unsuitable infrastructure or reused for future training. General-purpose multimodal systems do not always determine the sensitivity of this content before processing it.
 
-Image metadata is often ignored even though JPEG images can include EXIF data containing the GPS location where the photo was taken, the device type and the exact time. A system that stores those files without stripping the metadata can therefore extract location information that the user may not have intended to share.
+Image metadata is another frequently overlooked source of sensitive information. JPEG files can contain EXIF fields with GPS coordinates, device information and an exact timestamp. Storing those files without removing the metadata can therefore retain location information that the user did not intend to share.
 
-The principle of data minimization applies particularly strongly to multimodal systems: process the image only for the specific task required, do not store it longer than necessary, and do not use it for any secondary purpose without explicit consent.
+Data minimization is especially important for multimodal systems: process an image only for the required task, retain it only as long as necessary and do not reuse it for secondary purposes without explicit consent.
 
 {{ include_html("snippets/multimodalidad-iag/05-exif-privacidad.html") }}
 
@@ -72,13 +72,13 @@ The principle of data minimization applies particularly strongly to multimodal s
 
 ## 4. Data poisoning in systems with continuous learning
 
-When a multimodal system includes some mechanism for continuous learning or for updating its knowledge base from interactions, data poisoning becomes an additional attack surface. The attacker introduces carefully designed content—images or documents—that, when processed and potentially incorporated into the system's learning, changes the representations the model will use in future interactions.
+If a multimodal system continuously learns from interactions or updates a knowledge base from newly ingested content, data poisoning becomes an additional attack surface. An attacker can introduce carefully designed images or documents that, once processed and incorporated into the system's learning or retrieval corpus, alter the representations or evidence used in future interactions.
 
-Unlike prompt injection, this attack does not affect a single interaction but the system's long-term behavior, making it harder to detect and more expensive to reverse.
+Unlike prompt injection, this attack can affect the system's long-term behavior rather than a single interaction, which makes it harder to detect and more expensive to reverse.
 
-Multimodal retrieval-augmented generation (RAG) systems, in which the system indexes visual documents and retrieves them to answer questions, are especially vulnerable. A malicious document indexed in the knowledge base can be retrieved for questions controlled by the attacker, systematically injecting false information into future answers.
+Multimodal retrieval-augmented generation (RAG) systems are particularly exposed because they index visual documents and later retrieve them as evidence. A malicious document in the knowledge base can be surfaced by attacker-controlled queries and systematically inject false information into future answers.
 
-The most effective mitigation is strict separation between the inference pipeline and any mechanism that updates the model or knowledge base. Documents should be reviewed before they are indexed, and documents from untrusted sources should have limited or no access to the system's knowledge base.
+The strongest mitigation is strict separation between inference and any mechanism that updates the model or knowledge base. Documents should be reviewed before indexing, and content from untrusted sources should either be excluded or admitted only under tightly constrained indexing and retrieval policies.
 
 {{ include_html("snippets/multimodalidad-iag/05-rag-envenenamiento.html") }}
 
@@ -86,23 +86,23 @@ The most effective mitigation is strict separation between the inference pipelin
 
 ## 5. What changes when the system acts
 
-The four risks above exist in any multimodal system. But when the system can act—using tools, accessing APIs, controlling interfaces or planning steps in an environment—the consequences expand qualitatively, not merely quantitatively.
+The four risks above exist in any multimodal system. When the system can act through tools, APIs, interfaces or multi-step plans, however, the consequences change qualitatively rather than simply becoming more frequent.
 
-The first change is **reversibility**. An incorrect response can be ignored or corrected. An action executed against a database, filesystem or external service may not be reversible. Defensive design in tool-using systems has to assume that any successful injection can have persistent consequences, which raises the confidence threshold required before executing any tool with external effects.
+The first change is **reversibility**. An incorrect response can be ignored or corrected. An action against a database, filesystem or external service may not be reversible. Tool-using systems therefore have to assume that a successful injection can create persistent effects, which raises the confidence threshold required before executing any tool with external consequences.
 
-The second change is the **attack surface created by composition**. In systems that chain perception with action—observe an image, reason about it, call a tool, use the result to generate the next action—a perceptual error propagates through the entire chain. A manipulated image that produces an incorrect representation can generate a completely wrong sequence of actions, each of which appears locally reasonable given the preceding state.
+The second change is the **attack surface created by composition**. In systems that chain perception and action—observe an image, reason about it, call a tool, then use the result to choose the next action—a perceptual error can propagate through the entire sequence. A manipulated image that produces an incorrect representation can lead to a completely wrong chain of actions, each of which appears locally reasonable given the state produced by the previous step.
 
-That propagation effect makes attacks on the perceptual layer much more valuable to an adversary in agentic systems than in understanding-only systems.
+This propagation makes attacks on the perceptual layer much more valuable to an adversary in agentic systems than in systems that only interpret content.
 
 {{ include_html("snippets/multimodalidad-iag/05-agencia-propagacion.html") }}
 
-The third change is **attribution**. In a conversational system, the origin of an incorrect response is relatively traceable. In a perception–reasoning–action pipeline in which each step involves different components, a failure may originate in perception, reasoning, tool selection or interpretation of the tool result. That opacity in the causal chain complicates both post-incident diagnosis and assignment of responsibility, with practical implications for the design of logs, alerts and rollback mechanisms.
+The third change is **attribution**. In a conversational system, the source of an incorrect response is relatively easy to trace. In a perception–reasoning–action pipeline built from multiple components, a failure may originate in perception, reasoning, tool selection or interpretation of a tool result. That ambiguity complicates both incident diagnosis and assignment of responsibility, with direct implications for logs, alerts and rollback mechanisms.
 
-The defensive-design principle that follows from these three changes is *confinement by stage*: every transition from perception to reasoning to action should include a verification point where the system can evaluate whether the conditions for the next action are coherent with the original input. In practice, that means treating the output of the perception layer as untrusted input before using it to select an action, just as user input is treated as untrusted before being passed to the model.
+The corresponding defensive principle is *confinement by stage*: every transition from perception to reasoning to action should include a verification point that checks whether the next action is consistent with the original input. In practice, the output of the perception layer should be treated as untrusted input before it is used to select an action, just as user input is treated as untrusted before it reaches the model.
 
-A fourth change specific to multimodal agentic systems is **hallucinations with action consequences**. In a conversational system, a hallucination produces an incorrect answer that the user can discard. In an agentic system, a perceptual hallucination produces an action on the environment: the model believes it sees an element that is not there, or believes a condition is satisfied when it is not, and acts accordingly. If that action modifies environmental state—a file, a database, a submitted form—the hallucination has produced an irreversible effect that is not necessarily identifiable as such in the system logs.
+A fourth change is **hallucinations with action consequences**. In a conversational system, a hallucination produces an incorrect response that the user can discard. In an agentic system, a perceptual hallucination can trigger an action in the environment: the model believes it sees an element that is not there, or believes a condition is satisfied when it is not, and acts accordingly. If the action changes environmental state—a file, a database or a submitted form—the hallucination has created an irreversible effect that may not be identifiable as such in the system logs.
 
-The **agentic infinite loop** is a structural variant of the same problem: a system that perceives the environment, executes an action, observes the result and decides on the next action can enter a cycle in which each observation reinforces the previous action instead of correcting it, especially if perception of the post-action state is biased by what the system expected to see. Such a cycle does not end because the error is recognized but because resources are exhausted or an external supervision mechanism intervenes, which underlines the importance of iteration limits and stopping conditions in any perception–action loop.
+The **agentic infinite loop** is a structural variant of the same problem. A system that perceives the environment, executes an action, observes the result and chooses the next action can enter a cycle in which each observation reinforces the previous action instead of correcting it, especially when perception of the post-action state is biased by what the system expected to see. Such a loop stops only when resources are exhausted or an external supervision mechanism intervenes, not because the system recognizes the underlying error. That makes iteration limits and explicit stopping conditions essential in any perception–action loop.
 
 {{ include_html("snippets/multimodalidad-iag/05-alucinacion-accion.html") }}
 
@@ -110,9 +110,9 @@ The **agentic infinite loop** is a structural variant of the same problem: a sys
 
 ## 6. Demographic bias and regulatory compliance
 
-The security risks of multimodal systems are not limited to active attacks. Vision-language models can encode demographic biases in ways that general-capability benchmarks do not detect. Those biases come from training data, are amplified during alignment with human preferences, and are difficult to identify because general benchmarks do not measure them explicitly.
+The risks of multimodal systems are not limited to active attacks. Vision-language models can encode demographic biases that general-capability benchmarks do not detect. Those biases originate in training data, can be amplified during alignment with human preferences and remain difficult to identify when general benchmarks do not measure them explicitly.
 
-The European regulatory framework addresses part of this problem directly. The EU AI Act (Regulation 2024/1689) classifies systems by risk and establishes transparency, auditability and bias-evaluation obligations for systems that interact with people or make decisions affecting them [EU AI Act][r7]. Multimodal systems that process images, video or audio of people in high-risk contexts—facial recognition, personnel selection, medical evaluation—fall under the regulation's most demanding categories, with requirements including activity logs, impact assessment and mandatory human oversight. That classification by risk level is the organizing structure the EU AI Act applies to the field and determines which systems can be deployed in the EU without additional conformity requirements.
+The European regulatory framework addresses part of this problem directly. The EU AI Act (Regulation 2024/1689) classifies systems by risk and establishes transparency, auditability and bias-evaluation obligations for systems that interact with people or make decisions affecting them [EU AI Act][r7]. Multimodal systems that process images, video or audio of people in high-risk contexts—facial recognition, personnel selection or medical evaluation—fall under the regulation's most demanding categories, with requirements that include activity logs, impact assessment and mandatory human oversight. The applicable risk category therefore determines which additional conformity requirements a system must satisfy before deployment in the EU.
 
 {{ include_html("snippets/multimodalidad-iag/05-riesgos-multimodal.html") }}
 
@@ -148,7 +148,7 @@ The European regulatory framework addresses part of this problem directly. The E
 ## Frequently asked questions
 
 **Why is prompt injection harder to filter in multimodal systems than in text-only systems?**
-Because malicious instructions travel inside the image as visual content rather than as explicit text in the user's input. Text filters cannot see them because they do not exist as text until the model processes them internally. They can also be obfuscated in ways that standard OCR does not detect but the model still interprets, expanding the attack surface without having to bypass any explicit filter.
+Because malicious instructions can be embedded in an image as visual content rather than appearing as explicit text in the user's input. Text filters cannot see them until the model interprets the image. They can also be obfuscated in ways that standard OCR misses but the model still interprets, expanding the attack surface without requiring the attacker to bypass an explicit text filter.
 
 **What concrete risk does a hallucination introduce in a system that can act on the environment?**
 Unlike a conversational system, where a hallucination produces an incorrect response that the user can discard, a tool-using system that hallucinates can execute an action with irreversible external effects: deleting a record, sending data to a URL or calling an API. If the image that caused the failure is not clearly represented in the logs, the source of the problem is difficult to trace afterward.
@@ -157,4 +157,4 @@ Unlike a conversational system, where a hallucination produces an incorrect resp
 It means the model can attribute characteristics such as socioeconomic status or a user's history from cues in an image or audio that do not objectively contain that information. That behavior amplifies stereotypes present in the training data and can lead to automated discriminatory treatment without any explicit human decision.
 
 **What changes in the risk profile when the system not only responds but executes autonomous chained steps?**
-The fundamental change is irreversibility: every transition from perception to reasoning to action can propagate an initial error through the entire chain, and every step can produce effects that cannot be undone. The longer the chain of autonomous steps, the greater the probability that a failure in the perception layer propagates and compromises the complete result, because each subsequent step starts from the incorrect state left by the previous one.
+The fundamental change is irreversibility: every transition from perception to reasoning to action can propagate an initial error through the entire chain, and every step can produce effects that cannot be undone. The longer the autonomous chain, the more opportunities an initial perceptual failure has to propagate and compromise the final outcome, because each subsequent step starts from the incorrect state left by the previous one.
