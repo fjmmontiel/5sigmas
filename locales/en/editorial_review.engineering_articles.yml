@@ -1,6 +1,7 @@
 version: 1
 canonical_source_locale: es
 scope_manifest: locales/en/manifest.yml
+# Revalidated after canonical topic-hub merge 1443b923; final CI must use the current main merge ref.
 
 certified_routes:
   - route: articulos-tecnicos/proactive-reactive-agent-and-tool-calls.md
