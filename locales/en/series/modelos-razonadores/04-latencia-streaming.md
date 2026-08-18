@@ -11,12 +11,12 @@ tags:
 
 # Chapter 4 — Physical time: latency, streaming and human interaction
 
-The previous chapter described test-time compute as a design variable. This chapter translates that variable into a concrete product problem: what happens when compute time in a paper becomes real seconds that a user has to wait. By the end, you will know the perceived-latency thresholds that determine when waiting breaks the user experience, understand the difference between TTFT and total latency and why that distinction matters for design, and know which design patterns can exploit test-time compute without destroying usability.
+The previous chapter described test-time compute as a design variable. This chapter turns that variable into a concrete product problem: what happens when abstract compute becomes seconds of real user wait time. By the end, you will know the perceived-latency thresholds that determine when waiting breaks the user experience, understand the difference between TTFT and total latency and why that distinction matters for design, and know which design patterns can exploit test-time compute without destroying usability.
 
 !!! info "Prerequisites"
     This chapter assumes that you know the test-time compute concept introduced in [Chapter 3 — Test-Time Compute](./03-test-time-compute.md).
 
-"Thinking longer" in a paper is measured in tokens. In a product, it is measured in seconds of blank screen, in more expensive sessions, and in systems with more places where something can fail.
+"Thinking longer" in a paper is measured in tokens. In a product, it appears as blank-screen seconds, higher session cost and more places where the system can fail.
 
 Translating theory into practice requires understanding three things: how long a user can wait before the experience breaks, how streaming changes the perception of that wait, and which design patterns can exploit test-time compute without destroying usability.
 
@@ -35,7 +35,7 @@ Reasoning models with long chains of thought routinely operate in the 10–60 se
 
 It is worth understanding why that latency is not solved simply with faster hardware. The reasoning chain is sequential: token 500 cannot be generated before token 499 exists. The latency of a single request is bounded by `chain_length ÷ generation_speed`. A longer chain requires more time even if hardware improves. Streaming can make progress visible, but it does not eliminate the work the model has to complete.
 
-What can move is the denominator. If generation speed increases 10× through specialized inference hardware, speculative decoding or new silicon architectures, the same 10,000-token chain falls from 100 seconds to 10 seconds. If speed increases 100×, it falls to 1 second. In that scenario, reasoning depths that today are reserved for high-value requests because they take minutes would become available for any interaction without perceptible friction, with the same depth of analysis. The current limit is therefore not a permanent property of reasoning models, but the state of hardware at this point on the curve.
+The denominator can still change. If generation speed increases 10× through specialized inference hardware, speculative decoding or new silicon architectures, the same 10,000-token chain falls from 100 seconds to 10 seconds. If speed increases 100×, it falls to 1 second. In that scenario, reasoning depths that today are reserved for high-value requests because they take minutes would become available for ordinary interactions without perceptible friction, at the same depth of analysis. The current limit is therefore not a permanent property of reasoning models; it reflects the state of inference hardware today.
 
 In real systems that combine an LLM with tool calls and RAG, total latency for a medium-complexity request can be around 20 seconds, with pure reasoning accounting for 7–8 seconds and the remainder distributed across API calls, document retrieval and result synthesis. Those numbers matter for design: they show that perceived-latency improvements can come both from the model (less TTC) and from the system architecture (faster tools, RAG caches).
 
@@ -45,15 +45,15 @@ A critical distinction in this context is the difference between **TTFT (Time To
 
 ### Dynamic routing: RouteLLM
 
-A relevant pattern in this context is dynamic routing, formulated as a technique under the name [RouteLLM (Ong et al., 2024)](https://arxiv.org/abs/2406.18665): instead of applying the most capable (and slowest) model to every request, a lightweight classifier analyzes the incoming query and decides which model and how much test-time compute are appropriate to solve it.
+One relevant pattern is dynamic routing, exemplified by [RouteLLM (Ong et al., 2024)](https://arxiv.org/abs/2406.18665): instead of applying the most capable—and slowest—model to every request, a lightweight classifier analyzes the incoming query and decides which model and how much test-time compute are appropriate to solve it.
 
-A simple factual question goes to a fast, inexpensive model. A complex reasoning problem goes to a slow, expensive model. The user receives the quality required for each request type without paying the maximum latency or cost on all of them. The router adds marginal latency itself, but the net saving can be large when the request distribution is heterogeneous. The original paper established the mechanism. Current product evidence appears in model families that separate capability from effort.
+A simple factual question goes to a fast, inexpensive model. A complex reasoning problem goes to a slow, expensive model. The user receives the quality required for each request type without paying the maximum latency or cost on all of them. The router adds marginal latency itself, but the net saving can be large when the request distribution is heterogeneous. The original paper established the mechanism. Current products expose the same idea through separate controls for model capability and reasoning effort.
 
 The current version of the problem is no longer just choosing between two models. Claude Sonnet 5 allows the effort level to be adjusted, and Gemini 3.5 Flash exposes reasoning levels that move the balance between quality, cost and latency. In production, the router may need to decide two things: which model to activate and how much reasoning budget to assign to that request ([Anthropic, 2026](https://www.anthropic.com/news/claude-sonnet-5); [Google DeepMind, 2026](https://deepmind.google/models/model-cards/gemini-3-5-flash/)).
 
 {{ include_html("snippets/modelos-razonadores/04-routellm-decision.html") }}
 
-The current version of that pattern can be seen in GPT-5.6. OpenAI offers three capability tiers, Sol, Terra and Luna, and allows reasoning effort to be adjusted. Selection no longer consists only of choosing a fast model or a deep one. The system also has to decide how much budget to allocate to each request ([OpenAI, 2026](https://developers.openai.com/api/docs/models/gpt-5.6-sol)).
+GPT-5.6 exposes the same pattern. OpenAI offers three capability tiers, Sol, Terra and Luna, and allows reasoning effort to be adjusted. Selection is no longer just a choice between a fast model and a deep one; the system also has to decide how much reasoning budget to allocate to each request ([OpenAI, 2026](https://developers.openai.com/api/docs/models/gpt-5.6-sol)).
 
 Claude Sonnet 5 and Gemini 3.5 Flash expose similar controls. Sonnet 5 allows effort to be adjusted, while Gemini 3.5 Flash provides reasoning levels that move the balance between quality, cost and latency ([Anthropic, 2026](https://www.anthropic.com/news/claude-sonnet-5); [Google DeepMind, 2026](https://deepmind.google/models/model-cards/gemini-3-5-flash/)).
 
@@ -77,7 +77,7 @@ The problem with streaming in reasoning models is that the chain of thought is n
 
 ---
 
-## 3. Session cost and breakpoints
+## 3. Session cost and failure points
 
 More test-time compute does not only add latency for the user: it adds session cost and multiplies the number of places where something can fail.
 
@@ -85,9 +85,9 @@ More test-time compute does not only add latency for the user: it adds session c
 
 In generative AI systems, cost is billed per generated token. Claude Sonnet 5 shows how that tension is managed today. It has configurable effort levels and an introductory price of $2 per million input tokens and $10 per million output tokens through August 31, 2026. After that, pricing becomes $3 and $15 respectively ([Anthropic, 2026](https://www.anthropic.com/news/claude-sonnet-5)). A longer reasoning chain can improve the result, but it can also increase the bill even when the user never sees those tokens.
 
-Systems that use test-time compute intensively need explicit cost-management strategies: maximum budgets per session, query classification to scale the reasoning level, and cost monitoring by request type to identify patterns that consume more than they produce.
+Systems that use test-time compute intensively need explicit cost-management strategies: maximum budgets per session, query classification to scale the reasoning level, and cost monitoring by request type to identify requests whose cost exceeds the value they deliver.
 
-### Breakpoints
+### Failure points
 
 A long reasoning chain is also a chain with more steps where something can fail:
 
@@ -118,7 +118,7 @@ In agent flows where the model calls external tools or acts on real systems, ver
 
 ### Explicit fallbacks
 
-Define what the system does when the reasoning chain fails: does it return the latest partial answer? Does it ask the user for more information? Does it degrade to a simpler model that can still provide something? Systems without explicit fallbacks degenerate into opaque errors that the user cannot interpret.
+Define what the system does when the reasoning chain fails: does it return the latest partial answer? Does it ask the user for more information? Does it degrade to a simpler model that can still provide something? Systems without explicit fallbacks end up producing opaque errors that the user cannot interpret.
 
 > A system that uses test-time compute responsibly knows when to stop, what to do when it stops early, and how to communicate that to the user without breaking the experience.
 
