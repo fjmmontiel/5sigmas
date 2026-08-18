@@ -15,33 +15,33 @@ hide:
 
 {{ include_html("snippets/series_meta.html", series_dir="from-cave-to-agi", data_state="complete", data_level="general", status_label="Complete", level_label="General", progress_total="5") }}
 
-This series is a historical journey from humanity's first attempts to abstract the world through symbols to the creation of massive language models that *seem to understand it*.
+This series follows the history of abstraction from humanity's earliest symbolic representations to massive language models that *seem to understand the world*.
 
-We will follow how the need to count led to calculation, how the desire to mechanize reasoning led to computing, and how the attempt to imitate the brain brought us into the era of generative AI.
+We will trace how the need to count led to calculation, how attempts to mechanize reasoning led to computing, and how efforts to imitate the brain brought us into the era of generative AI.
 
-The history matters because the generative-AI systems we use today are not artifacts without a past. They are the direct result of five centuries of mathematical notation, eight decades of computing and more than half a century of machine learning. Following that chain from the beginning changes how you understand why AI works the way it does, where its real limits are and what may come next. Without the context, recent advances look like magic. With it, they form a sequence you can follow.
+That history matters because today's generative-AI systems did not appear in isolation. They are the direct result of five centuries of mathematical notation, eight decades of computing and more than half a century of machine learning. Following that chain from the beginning makes it easier to understand why AI works the way it does, where its real limits lie and what may come next. Without that context, recent advances can look like magic. With it, their development has a traceable logic.
 
 ## Contents
 
 ### 1. Represent (≈ 40,000 BCE – 1700)
 - **Invent languages for describing the world:** from physical counting—marks and notches—to numbers and manipulable symbols.
 - **Formalize truth:** the Greeks establish proof and geometry as standards for verifiable knowledge.
-- **Do science with mathematics:** notation such as zero and algebra, then models for prediction and calculus for describing change.
+- **Do science with mathematics:** zero and algebra make notation more expressive; mathematical models enable prediction; calculus introduces derivatives and equations for describing changing quantities.
 
 ### 2. Mechanize (≈ 1700 – 1956)
-- **Turn symbols into machinery:** automate calculation mechanically and later electronically. This is where the obsession with computation begins.
+- **Turn symbols into machinery:** automate calculation mechanically and later electronically. This is where computation becomes an explicit engineering goal.
 - **Separate program from hardware:** from Jacquard and Babbage to reusable instructions independent of a specific machine.
-- **Foundations of modern computing:** logic, proof, computability and its limits, practical computer architecture, information and compression.
+- **Foundations of modern computing:** Boolean logic, formal proof, computability and its limits through Turing, practical memory-based architecture, and Shannon's theory of information and compression.
 
 ### 3. Learn (≈ 1956 – 2012)
-- **From rules to data:** move from hand-coding intelligence to fitting models from examples.
-- **Engines of practical learning:** probability, optimization and parameter adjustment through backpropagation.
-- **Before the LLM era:** the perceptron and its limits, the rise and fall of symbolic AI, statistical NLP and the neural revival driven by data, GPUs, benchmarks and scale.
+- **From rules to data:** move from hand-coding intelligence to fitting models from data.
+- **Engines of practical learning:** probability and generalization, including Bayes; optimization through gradients and regularization; and parameter adjustment through backpropagation.
+- **Before the LLM era:** the perceptron and its limits, the rise and fall of symbolic AI, statistical NLP with n-grams and HMM/CRF models, and the neural revival driven by data, GPUs, benchmarks and scale.
 
 ### 4. Scale (≈ 2012 – 2024)
-- **Scale as a multiplier:** deep learning accelerates through more data, compute and better representations; 2012 marks a regime change.
-- **Transformers and foundation models:** attention enables massive pretraining and broad reuse. Scaling laws and human alignment turn this into the inflection point that eventually produces ChatGPT.
-- **From answering to acting and unifying modalities:** tools, agents and multimodality across text, image and audio.
+- **Scale as a multiplier:** deep learning accelerates through more data and compute plus better representations; 2012 marks a regime change.
+- **Transformers and foundation models:** attention enables massive pretraining and broad reuse. Scaling laws and human alignment make this a major inflection point that eventually leads to ChatGPT.
+- **From answering to acting, while unifying modalities:** tools and agents extend models into action; multimodality brings text, image and audio into shared systems.
 
 ### 5. Beyond the Transformer (≈ 2022 – Q1 2026)
 - **The limits of pure scaling:** why the Transformer alone is not enough to describe where the frontier is moving.
