@@ -98,7 +98,7 @@ That change set up the next stage. Scale was no longer only a matter of adding p
 | R5 | [Brown et al. (2020) — *Language Models are Few-Shot Learners*](https://proceedings.neurips.cc/paper/2020/file/1457c0d6bfcb4967418bfb8ac142f64a-Paper.pdf) | GPT-3 and large-scale in-context learning. |
 | R6 | [Dosovitskiy et al. (2020) — *An Image is Worth 16x16 Words*](https://arxiv.org/pdf/2010.11929) | Vision Transformer. |
 | R7 | [Radford et al. (2021) — *CLIP*](https://proceedings.mlr.press/v139/radford21a/radford21a.pdf) | Image-language alignment. |
-| R8 | [Ramesh et al. (2021) — *Zero-Shot Text-to-Image Generation*](https://proceedings.mlr.press/v139/ramesh21a/radford21a.pdf) | DALL·E and text-to-image generation. |
+| R8 | [Ramesh et al. (2021) — *Zero-Shot Text-to-Image Generation*](https://proceedings.mlr.press/v139/ramesh21a/ramesh21a.pdf) | DALL·E and text-to-image generation. |
 | R9 | [Rombach et al. (2022) — *High-Resolution Image Synthesis with Latent Diffusion Models*](https://openaccess.thecvf.com/content/CVPR2022/papers/Rombach_High-Resolution_Image_Synthesis_With_Latent_Diffusion_Models_CVPR_2022_paper.pdf) | Latent diffusion and efficient image generation. |
 | R10 | [Hestness et al. (2017) — *Deep Learning Scaling is Predictable, Empirically*](https://arxiv.org/abs/1712.00409) | Scaling curves in deep learning. |
 | R11 | [Kaplan et al. (2020) — *Scaling Laws for Neural Language Models*](https://arxiv.org/abs/2001.08361) | Scaling laws for language models. |
@@ -115,7 +115,7 @@ That change set up the next stage. Scale was no longer only a matter of adding p
 ## Frequently asked questions
 
 **Why is AlexNet's 2012 success considered a regime change rather than just another milestone?**  
-Before AlexNet, computer vision relied heavily on features hand-designed by human experts: the model learned from those representations but did not learn the representation itself. AlexNet showed that a deep network trained directly on pixels could outperform those systems by such a large margin—15.3% versus 26.2% top-5 error on ImageNet—that it changed the field's perception and showed that data and compute, rather than manual feature design, had become dominant levers alongside architecture.
+Before AlexNet, computer vision relied heavily on features hand-designed by human experts: the model learned from those representations but did not learn the representation itself. AlexNet showed that a deep network trained directly on pixels could outperform those systems by such a large margin—15.3% versus 26.2% top-5 error on ImageNet—that it changed the field's perception and showed that data and compute—not manual feature design—had become the dominant levers in that regime.
 
 **What architectural advantage does the Transformer have over recurrent networks?**  
 Recurrent networks process a sequence step by step, which limits training parallelism and makes long-range dependencies harder to preserve because each step depends on the previous one. With self-attention, the Transformer lets each token directly attend to other positions in the context while training can be massively parallelized. This made it practical to train on data volumes that would previously have been much harder to exploit.
