@@ -20,3 +20,9 @@ certified_routes:
     english_blob_sha: bb216cda328723ec1748c3d4491a38d20c1ab6de
     review_scope: prose, headings, FAQs, terminology, technical meaning, evidence, references, visual hooks
     note: Side-by-side native-English review; tightened symbolic-AI, statistical-learning, neural-network, NLP and pre-AlexNet transitions while preserving every historical claim, quantitative detail, source, FAQ, section order and visual semantic.
+  - route: series/from-cave-to-agi/04-escalar.md
+    reviewed_on: 2026-08-18
+    spanish_blob_sha: 538591863bd0c856b2464482bc6571fe6e6bcc2f
+    english_blob_sha: 2d3efa35eb52ef90e09059525e5c33dbebd00784
+    review_scope: prose, headings, FAQs, terminology, technical meaning, quantitative evidence, references, visual hooks
+    note: Side-by-side native-English review; removed translated scale/foundation-model framing and restored the canonical AlexNet FAQ contrast between data/compute and manual feature design without changing any quantitative result, caveat, source, section order or visual semantic.
