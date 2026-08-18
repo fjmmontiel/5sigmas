@@ -15,13 +15,13 @@ tags:
 This chapter describes the limits exposed by pure Transformer scaling and the directions the field is opening to move beyond them. By the end, you will understand why a long context window is not the same as persistent memory, what architectures such as Mamba contribute relative to standard attention, and how active search over solution spaces—exemplified by AlphaGo and its descendants—is changing the kinds of systems we build. The chapter also covers world models, foundation robotics and the capital bets that reveal where the ecosystem believes the next frontier lies. It is intended for readers who already understand foundation models and want to see where the field may go beyond scaling alone.
 
 !!! note "Update"
-    This chapter covers the state of the field through Q1 2026. Sections on specific models, invested capital and benchmarks can change quickly; the sections on structural Transformer limitations are more stable.
+    This chapter covers the state of the field through Q1 2026. Sections on specific models, investment levels and benchmarks can change quickly; sections on structural Transformer limitations are more stable.
 
-This chapter follows the previous one not only chronologically but conceptually. Transformer scaling remains a central force, but it is no longer enough on its own to describe where the frontier is moving.
+The chapter follows the previous one conceptually as well as chronologically. Transformer scaling remains a central force, but it is no longer enough on its own to describe where the frontier is moving.
 
-Several new intuitions have emerged in recent years. Some address practical limits of the Transformer itself, such as the cost of long context and memory. Others expand the kind of system being built: models that use tools, actively search for solutions, learn during inference or try to construct internal representations of the world rather than only predict the next piece of text.
+Several new directions have emerged in recent years. Some address practical limits of the Transformer itself, such as the cost of long context and memory. Others expand the kind of system being built: models that use tools, actively search for solutions, learn during inference or construct internal representations of the world rather than only predict the next piece of text.
 
-This chapter follows that new phase.
+This chapter traces that shift.
 
 ---
 
@@ -31,7 +31,7 @@ The Transformer reorganized the field because it was parallelizable, scalable an
 
 The first is computational. Standard attention becomes expensive as context length grows, turning long memory into a hardware and efficiency problem.
 
-The second is functional. A pretrained Transformer can know a great deal, but its weights are usually fixed at inference time. It can use immediate context, but it does not naturally maintain a living, persistent memory that keeps learning while it works.
+The second is functional. A pretrained Transformer can know a great deal, but its weights are usually fixed at inference time. It can use immediate context, but it does not naturally maintain persistent memory that updates while the system is in use.
 
 The third is structural. Predicting the next element of a sequence well is not necessarily equivalent to planning, actively searching for a solution, manipulating external tools or constructing a causal model of an environment.
 
@@ -39,7 +39,7 @@ That is why the current frontier is not only about training larger models. It is
 
 ### 1.1 Truth, uncertainty and hallucination
 
-Another important limitation appears here. Generative LLMs trained around next-token prediction are not directly optimized to distinguish truth, falsehood and unknown information. They are optimized to produce plausible continuations given their training distributions and reward signals. When information is insufficient or the context is underspecified, that pressure can push the model to complete rather than abstain.
+This also exposes a reliability limit. Generative LLMs trained around next-token prediction are not directly optimized to distinguish truth, falsehood and unknown information. They are optimized to produce plausible continuations given their training distributions and reward signals. When information is insufficient or the context is underspecified, that pressure can push the model to complete rather than abstain.
 
 This is why the problem should be framed carefully. There are serious arguments that hallucinations may never disappear completely in open-ended, general-purpose systems. Recent theory argues that hallucination is unavoidable for computable LLMs used as general problem solvers, while more applied work argues that standard training and evaluation procedures reward guessing over admitting uncertainty.
 
@@ -57,11 +57,11 @@ The same logic later reappeared in other contexts. In 2022, [ReAct](https://arxi
 
 {{ include_html("snippets/from-cave-to-agi/05-agentes-convergencia.html") }}
 
-DeepMind's lineage can be traced more continuously. In July 2024, [AlphaProof and AlphaGeometry 2](https://deepmind.google/blog/ai-solves-imo-problems-at-silver-medal-level/) showed that combining language models, search and reinforcement learning could reach silver-medal performance at the International Mathematical Olympiad. In May 2025, [AlphaEvolve](https://deepmind.google/blog/alphaevolve-a-gemini-powered-coding-agent-for-designing-advanced-algorithms/) extended that idea to algorithm discovery: Gemini models, automated evaluators and an evolutionary framework working together to improve code and discover new algorithms. Later that year, in the official IMO 2025 evaluation, Gemini Deep Think reached gold-medal level, reinforcing the idea that a base model combined with active search and formal verification can cross the threshold of top human competitors in olympiad mathematics.
+Within DeepMind, the progression is more direct. In July 2024, [AlphaProof and AlphaGeometry 2](https://deepmind.google/blog/ai-solves-imo-problems-at-silver-medal-level/) showed that combining language models, search and reinforcement learning could reach silver-medal performance at the International Mathematical Olympiad. In May 2025, [AlphaEvolve](https://deepmind.google/blog/alphaevolve-a-gemini-powered-coding-agent-for-designing-advanced-algorithms/) extended that idea to algorithm discovery: Gemini models, automated evaluators and an evolutionary framework working together to improve code and discover new algorithms. Later that year, in the official IMO 2025 evaluation, Gemini Deep Think reached gold-medal level, reinforcing the idea that a base model combined with active search and formal verification can cross the threshold of top human competitors in olympiad mathematics.
 
 [DeepMind's March 2026 retrospective](https://deepmind.google/blog/10-years-of-alphago/) on ten years of AlphaGo makes this genealogy explicit. It presents AlphaProof and AlphaEvolve as continuations of the same intuition that made AlphaGo and AlphaZero powerful: combine capable models with search, verification and planning to traverse enormous spaces where answering well once is not enough.
 
-A change in the basic unit is becoming visible. The useful system is no longer only the model; it is the model plus search, plus tools, plus evaluation.
+The useful unit is increasingly the whole system rather than the model alone: model, search, tools and evaluation working together.
 
 {{ include_html("snippets/from-cave-to-agi/05-busqueda-solucion.html") }}
 
@@ -77,19 +77,19 @@ Another clear frontier is memory. LLM context windows have grown dramatically, b
 
 [Mamba](https://arxiv.org/abs/2312.00752) revived this tradition with a key idea: make some parameters input-dependent to improve selection of relevant information while achieving linear scaling with sequence length. The point was not only speed. It was an attempt to preserve useful reasoning over long sequences without always paying the price of full attention.
 
-[Mamba-2](https://arxiv.org/abs/2405.21060) went further and showed a deep mathematical relationship between attention and state space models, proposing a refined layer that is faster and competitive. The deeper message matters: this may not be a total break with the Transformer, but the emergence of a broader family of sequence and memory mechanisms.
+[Mamba-2](https://arxiv.org/abs/2405.21060) went further and showed a deep mathematical relationship between attention and state space models, proposing a refined layer that is faster and competitive. The result suggests that this may be less a clean break from the Transformer than the emergence of a broader family of sequence and memory mechanisms.
 
 ### 3.2 Titans, MIRAS and memory that learns during inference
 
-Google Research's line goes one step further. [Titans](https://arxiv.org/abs/2501.00663) introduces long-term neural memory that updates while the model is operating. The central idea is not merely to retain more context, but to decide what deserves consolidation into memory according to novelty or surprise.
+Google Research pushes this further. [Titans](https://arxiv.org/abs/2501.00663) introduces long-term neural memory that updates while the model is operating. The central idea is not merely to retain more context, but to decide what deserves consolidation into memory according to novelty or surprise.
 
-Google later presented [Titans + MIRAS](https://research.google/blog/titans-miras-helping-ai-have-long-term-memory/) as an explicit direction toward test-time memorization: systems that maintain useful memory during execution without relying only on offline retraining. This introduces an important intuition for the current phase: learning may not need to be confined to training. Some relevant learning may happen during use as well.
+Google later presented [Titans + MIRAS](https://research.google/blog/titans-miras-helping-ai-have-long-term-memory/) as an explicit direction toward test-time memorization: systems that maintain useful memory during execution without relying only on offline retraining. The implication is that some useful learning may happen during use, not only during training.
 
 ### 3.3 Nested Learning
 
-For now, the same direction culminates in [Nested Learning](https://research.google/blog/introducing-nested-learning-a-new-ml-paradigm-for-continual-learning/), presented by Google Research in 2025 as a continual-learning paradigm based on nested optimization problems with different update frequencies. The idea is to reinterpret architecture and optimization as parts of one multilevel system.
+Google Research extended the same direction with [Nested Learning](https://research.google/blog/introducing-nested-learning-a-new-ml-paradigm-for-continual-learning/), presented in 2025 as a continual-learning paradigm based on nested optimization problems with different update frequencies. The idea is to reinterpret architecture and optimization as parts of one multilevel system.
 
-It is not yet a new field standard. But it points to something important: the future of learning may depend less on one large training loop and more on several levels of adaptation operating at different rates, from immediate memory to more persistent internal modification.
+It is not yet a new field standard. The broader direction nevertheless suggests that future systems may rely less on one large training loop and more on several levels of adaptation operating at different rates, from immediate memory to more persistent internal modification.
 
 {{ include_html("snippets/from-cave-to-agi/05-arquitecturas-post-transformer.html") }}
 
@@ -97,25 +97,25 @@ It is not yet a new field standard. But it points to something important: the fu
 
 ## 4. World models: learning structure, not only sequences
 
-Another strong direction tries to move beyond next-token prediction by learning internal representations of how an environment evolves.
+World-model research takes a different route: learning internal representations of how an environment evolves rather than relying only on next-token prediction.
 
 {{ include_html("snippets/from-cave-to-agi/05-world-models-ecosystem.html") }}
 
 [DreamerV3](https://arxiv.org/abs/2301.04104), and later its version published in [Nature](https://www.nature.com/articles/s41586-025-08744-2), showed that a world model can learn to imagine possible futures and reuse that ability to solve more than 150 tasks with a single configuration, including collecting diamonds in Minecraft from scratch. The key is not only performance but the kind of approach: the system learns a latent model of the environment and plans within it.
 
-In parallel, [I-JEPA](https://arxiv.org/abs/2301.08243) pushes a different but related intuition. Rather than reconstructing every pixel, it predicts semantic representations in a latent space. It is not a complete world model in Dreamer's sense, but it belongs to the same family of ideas that prioritize structure over literal reconstruction.
+In parallel, [I-JEPA](https://arxiv.org/abs/2301.08243) pursues a related idea. Rather than reconstructing every pixel, it predicts semantic representations in a latent space. It is not a complete world model in Dreamer's sense, but it belongs to the same family of ideas that prioritize structure over literal reconstruction.
 
-[Genie 2](https://deepmind.google/blog/genie-2-a-large-scale-foundation-world-model/) takes this direction into an especially suggestive domain: generating playable, controllable 3D environments from a single input image. The work is still early and demonstrative, but the thesis is visible: if a system can model world dynamics well enough, it can become useful not only for answering questions but for training agents and exploring action spaces.
+[Genie 2](https://deepmind.google/blog/genie-2-a-large-scale-foundation-world-model/) extends this approach to generating playable, controllable 3D environments from a single input image. The work is still early and demonstrative, but the thesis is visible: if a system can model world dynamics well enough, it can become useful not only for answering questions but for training agents and exploring action spaces.
 
 ### 4.1 The thesis is already moving capital
 
-This is no longer only an academic research direction. In March 2026, Reuters reported that [AMI](https://www.reuters.com/business/ex-meta-ai-chief-yann-lecuns-ami-raises-103-billion-alternative-ai-approach-2026-03-10/), Yann LeCun's startup, raised $1.03 billion to develop systems centered on reasoning, planning and modeling the real world. A month earlier, Reuters reported that Fei-Fei Li's [World Labs](https://www.reuters.com/business/ai-pioneer-fei-fei-lis-world-labs-raises-1-billion-funding-2026-02-18/) raised $1 billion to advance “spatial intelligence.”
+The idea is already attracting significant capital. In March 2026, Reuters reported that [AMI](https://www.reuters.com/business/ex-meta-ai-chief-yann-lecuns-ami-raises-103-billion-alternative-ai-approach-2026-03-10/), Yann LeCun's startup, raised $1.03 billion to develop systems centered on reasoning, planning and modeling the real world. A month earlier, Reuters reported that Fei-Fei Li's [World Labs](https://www.reuters.com/business/ai-pioneer-fei-fei-lis-world-labs-raises-1-billion-funding-2026-02-18/) raised $1 billion to advance “spatial intelligence.”
 
-Those numbers do not prove that this will be the winning route. They do show that a significant part of the ecosystem believes the next leap will not come from scaling language alone, but from modeling the world's spatial, causal and interactive structure more effectively.
+Those rounds do not show that world models are the winning approach. They do show that a significant part of the ecosystem believes the next leap will not come from scaling language alone, but from modeling the world's spatial, causal and interactive structure more effectively.
 
-These are no longer laboratory bets measured in hundreds of millions. In 2026 alone, OpenAI announced **$110 billion** in new investment, Anthropic closed **$30 billion**, and xAI another **$20 billion**. In parallel, large technology companies plan roughly **$635 billion** of AI capital expenditure in 2026 alone.
+The investment scale extends far beyond those two companies. In 2026 alone, OpenAI announced **$110 billion** in new investment, Anthropic closed **$30 billion**, and xAI another **$20 billion**. In parallel, large technology companies plan roughly **$635 billion** of AI capital expenditure in 2026 alone.
 
-The signal is hard to ignore: the frontier is no longer only an algorithmic problem. Capital is moving toward four concrete bottlenecks—**models, compute, energy and the physical world**—because better training is no longer enough.
+Capital is concentrating around four concrete bottlenecks—**models, compute, energy and the physical world**—because better training alone is no longer enough.
 
 Those systems must also be deployed, powered, and given spatial perception and action in the real world.
 
@@ -125,17 +125,17 @@ Those systems must also be deployed, powered, and given spatial perception and a
 
 ## 5. From model to body: robotics and physical action
 
-If the frontier moves toward systems that perceive, plan and act, robotics stops being a footnote and returns to the center of the debate.
+As systems are expected to perceive, plan and act, robotics becomes a central systems problem.
 
 [RT-2](https://arxiv.org/abs/2307.15818) showed that a vision-language-action model can transfer some knowledge acquired from web data into robotic-control tasks. The important point is not only that the robot can execute movements, but that it can use more general representations to interpret instructions and generalize beyond a strictly robotic training set.
 
-Figure is one of the most visible bets in this phase. First because of its early commercial orientation: in 2024 it announced a partnership with BMW to deploy humanoid robots in a factory. Then because of its intelligence layer: [Helix](https://www.figure.ai/news/helix) was introduced in 2025 as a general vision-language-action model for humanoid control, capable of controlling the full upper body and even coordinating two robots on shared tasks. By late 2025, the company had published deployment metrics for [Figure 02 at BMW](https://www.figure.ai/news/production-at-bmw), including accumulated operating hours, parts handled and documented production contribution. Figure therefore combines a clear general-purpose VLA narrative with explicit industrial deployment.
+Figure is one of the most visible bets in this phase because it combines early commercial deployment with a general-purpose intelligence layer. In 2024 it announced a partnership with BMW to deploy humanoid robots in a factory. [Helix](https://www.figure.ai/news/helix) was then introduced in 2025 as a general vision-language-action model for humanoid control, capable of controlling the full upper body and even coordinating two robots on shared tasks. By late 2025, the company had published deployment metrics for [Figure 02 at BMW](https://www.figure.ai/news/production-at-bmw), including accumulated operating hours, parts handled and documented production contribution. Figure therefore combines a clear general-purpose VLA narrative with explicit industrial deployment.
 
-Tesla represents a different bet. Its [Optimus](https://www.tesla.com/AI) approach is a general humanoid deeply integrated with the rest of its physical-AI, perception, control and manufacturing stack. The company presents it as a general-purpose autonomous robot for unsafe, repetitive or boring tasks. Public evidence through Q1 2026, however, remains more programmatic than Figure's: Reuters reported in 2024 that Tesla aimed to use Optimus internally at low scale in 2025 and later expand toward external customers, but that ambition still looks more like a corporate roadmap than an industrial deployment documented as explicitly as Figure's.
+Tesla takes a different approach. Its [Optimus](https://www.tesla.com/AI) approach is a general humanoid deeply integrated with the rest of its physical-AI, perception, control and manufacturing stack. The company presents it as a general-purpose autonomous robot for unsafe, repetitive or boring tasks. Public evidence through Q1 2026, however, remains more programmatic than Figure's: Reuters reported in 2024 that Tesla aimed to use Optimus internally at low scale in 2025 and later expand toward external customers, but that ambition still looks more like a corporate roadmap than an industrial deployment documented as explicitly as Figure's.
 
-[NVIDIA Project GR00T](https://investor.nvidia.com/news/press-release-details/2024/NVIDIA-Announces-Project-GR00T-Foundation-Model-for-Humanoid-Robots-and-Major-Isaac-Robotics-Platform-Update/default.aspx) expresses the same intuition from another angle: foundation models for humanoid robots, combined with simulation, synthetic data, perception and specialized hardware.
+[NVIDIA Project GR00T](https://investor.nvidia.com/news/press-release-details/2024/NVIDIA-Announces-Project-GR00T-Foundation-Model-for-Humanoid-Robots-and-Major-Isaac-Robotics-Platform-Update/default.aspx) targets the same shift from another layer of the stack: foundation models for humanoid robots, combined with simulation, synthetic data, perception and specialized hardware.
 
-We are not yet at reliable general-purpose robots that work in arbitrary environments. But the change in approach is clear. Robotics is beginning to inherit the logic of foundation models: one base is expected to transfer across many tasks instead of being completely reprogrammed for each one.
+We are not yet at reliable general-purpose robots that work in arbitrary environments. The approach is shifting toward foundation-model logic: one base is expected to transfer across many tasks instead of being completely reprogrammed for each one.
 
 {{ include_html("snippets/from-cave-to-agi/05-robotica-fundacional.html") }}
 
@@ -143,9 +143,9 @@ We are not yet at reliable general-purpose robots that work in arbitrary environ
 
 ## 6. What this new phase is trying to solve
 
-Taken together, the movement is clear. Transformer scaling produced extremely capable systems, but it also exposed several limitations: memory that is short relative to long-horizon tasks, little internal adaptation during inference, planning that remains weak in some domains and incomplete understanding of the physical world.
+These directions target limitations exposed by Transformer scaling: memory that is short relative to long-horizon tasks, little internal adaptation during inference, planning that remains weak in some domains and incomplete understanding of the physical world.
 
-The directions that currently appear most promising are aimed precisely at those points:
+Current research therefore emphasizes:
 
 - Search and verification over solution spaces
 - Selective memory during inference
@@ -153,7 +153,7 @@ The directions that currently appear most promising are aimed precisely at those
 - Internal models of environments
 - Systems capable of perceiving and acting in the physical world
 
-We do not yet know which combination will prevail. What does appear clear is that AI's future is not determined only by larger models, but by better-organized systems that can interact with the world more effectively.
+We do not yet know which combination will prevail. Regardless of which one does, progress is increasingly coming from better-organized systems that can interact with the world more effectively, not only from larger models.
 
 !!! tip "Next series"
     This chapter closes the history of how we got here. The next series enters one of today's most active fronts: [Multimodality in Generative AI →](/en/series/multimodalidad-iag/00_presentacion_serie/)

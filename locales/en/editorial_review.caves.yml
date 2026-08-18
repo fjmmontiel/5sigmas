@@ -26,3 +26,9 @@ certified_routes:
     english_blob_sha: 2d3efa35eb52ef90e09059525e5c33dbebd00784
     review_scope: prose, headings, FAQs, terminology, technical meaning, quantitative evidence, references, visual hooks
     note: Side-by-side native-English review; removed translated scale/foundation-model framing and restored the canonical AlexNet FAQ contrast between data/compute and manual feature design without changing any quantitative result, caveat, source, section order or visual semantic.
+  - route: series/from-cave-to-agi/05-mas-alla.md
+    reviewed_on: 2026-08-18
+    spanish_blob_sha: 7924126668053eec5be6156a3ceb957f51892ef6
+    english_blob_sha: 21d4852e5ff44e0fe86bf85d781fdcb9b2e36275
+    review_scope: prose, headings, lists, FAQs, terminology, technical meaning, quantitative evidence, references, visual hooks
+    note: Side-by-side native-English review; removed translated discourse around post-Transformer limits, search, memory, world models, capital and robotics while preserving every model lineage, quantitative claim, caveat, source, section order, FAQ and visual semantic.
