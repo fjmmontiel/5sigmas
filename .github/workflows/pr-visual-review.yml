@@ -89,6 +89,12 @@ jobs:
           S5_LOCALE: en
         run: mkdocs build -f mkdocs.en.yml --clean --strict
 
+      - name: Audit generated SEO crawl
+        run: python scripts/audit_seo_site.py --site-dir site --output-dir seo-audit --label pr
+
+      - name: Test SEO audit crawler
+        run: python -m unittest scripts.tests.test_audit_seo_site
+
       - name: Restore reviewed English TTC media
         id: en-ttc-cache
         uses: actions/cache/restore@v4

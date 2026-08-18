@@ -253,9 +253,13 @@ def on_post_page(output: str, page, config, **kwargs) -> str:
     source_route = _src_route(src_path)
     translated_to_english = src_path in _published_routes("en")
     current_language = _current_language(config)
+    spanish_routes = _spanish_public_routes()
 
     selector_targets = {
-        "es": source_route,
+        # Do not manufacture a Spanish watch route for an English-only
+        # generated surface. Fall back to the English home, as for any other
+        # published English page without a Spanish counterpart.
+        "es": source_route if source_route in spanish_routes else "/",
         "en": _english_route(source_route) if translated_to_english else "/en/",
     }
 
