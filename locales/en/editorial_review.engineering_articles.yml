@@ -1,0 +1,17 @@
+version: 1
+canonical_source_locale: es
+scope_manifest: locales/en/manifest.yml
+
+certified_routes:
+  - route: articulos-tecnicos/proactive-reactive-agent-and-tool-calls.md
+    reviewed_on: 2026-08-18
+    spanish_blob_sha: a0ae2541fc30e84db1b60ac616b626dd79d05eda
+    english_blob_sha: 18721f37e51cb99401c8fabd6670e84a13f7960d
+    review_scope: prose, code-adjacent explanation, runtime semantics, async lifecycle, production evolution, visual hooks
+    note: Side-by-side native-English review; removed literal timing/background/completion phrasing and translated rhetorical setup while preserving RuntimeState, acceptance, retry, pending-update, idempotency and production-harness semantics and every code/visual hook.
+  - route: articulos-tecnicos/reactive-proactive-voice-agents.md
+    reviewed_on: 2026-08-18
+    spanish_blob_sha: 2118cb532aabb41483c54be34a4313a50918b6ce
+    english_blob_sha: b0693ce4137582ee3b0573a86f5f6b6c9c707844
+    review_scope: prose, state machines, identifiers, ActivityGate, barge-in, batch delivery, telemetry, tests, references, visual hooks
+    note: Full side-by-side review found the English article already faithful and native-quality; the four-clock model, delivery policy, selective cancellation, batch/idempotency contract, metrics, tests and references match the canonical teaching sequence without requiring editorial churn.
