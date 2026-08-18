@@ -1,0 +1,16 @@
+version: 1
+canonical_source_locale: es
+scope_manifest: locales/en/manifest.yml
+certified_routes:
+  - route: series/modelos-razonadores/00_presentacion_serie.md
+    reviewed_on: 2026-08-18
+    spanish_blob_sha: fe5b4cd833d7c6c6282ab7adec41c7bc09c21bf9
+    english_blob_sha: bfedeb033b49fe16c05692278e83b9be7aeef6a7
+    review_scope: prose, headings, chapter summaries, terminology, technical meaning, links, visual hooks
+    note: Side-by-side native-English review; the overview was already native-quality and required no prose changes.
+  - route: series/modelos-razonadores/01-que-es-razonar.md
+    reviewed_on: 2026-08-18
+    spanish_blob_sha: 555fe8b396cdb7c2c9dc482925f763f10f48c0a3
+    english_blob_sha: 01f4d963924fd84e4c44133dd9c93843ca4a989e
+    review_scope: prose, headings, lists, FAQs, terminology, technical meaning, quantitative evidence, references, visual hooks
+    note: Side-by-side native-English review; tightened inference-setup, test-time-compute, debate-transition and practical-framing prose without changing claims, evidence, references or visual placement.
