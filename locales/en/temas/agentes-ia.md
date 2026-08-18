@@ -39,13 +39,13 @@ A reliable agent needs more than a prompt and several functions:
 
 {{ include_html("snippets/temas/agent-system-boundary.html") }}
 
-The [AI Agents — from responding to acting](/en/series/agentes-ia/00_presentacion_serie/) series develops these components through five progressive chapters.
+The [AI Agents — from responding to acting](/en/series/agentes-ia/00_presentacion_serie/) series develops these components through videos, visuals and five progressive chapters.
 
 ## Tool calling is not the same as agency
 
-An LLM can produce structured arguments for a function. That is **tool calling**. Agency appears when the system can decide *when* to use a tool, interpret its result and choose what to do next.
+An LLM can produce structured arguments for a function. That is **tool calling**. Agency begins when the system can decide *when* to use a tool, interpret its result and choose what to do next.
 
-A tool should remain a software contract. The model proposes a call; the runtime keeps the authority boundary and decides whether it may execute.
+A tool should remain a software contract. The model proposes a call; the runtime enforces the authority boundary and decides whether it may execute.
 
 {{ include_html("snippets/temas/agent-tool-gate.html") }}
 
@@ -85,7 +85,7 @@ Agency is useful when:
 - the system can verify progress and outcome
 - permissions and cost can be bounded
 
-A conventional workflow may be better when the path is known, the error budget is tiny or a deterministic function solves the problem with less risk surface.
+A conventional workflow may be better when the path is known, the error budget is tiny or a deterministic function solves the problem with fewer ways to fail.
 
 ## Where to go deeper in 5sigmas
 
@@ -100,7 +100,7 @@ A conventional workflow may be better when the path is known, the error budget i
 
 ### Is ChatGPT an AI agent?
 
-It depends on the capability being used. A chat interface that only generates text behaves as a conversational assistant. A system that can choose tools, operate on external resources and continue from their results includes agentic behaviour. The label should describe the real system, not only the model it uses.
+It depends on the capability being used. A chat interface that only generates text behaves as a conversational assistant. A system that can choose tools, operate on external resources and continue from their results includes agentic behavior. The label should describe the real system, not only the model it uses.
 
 ### Is RAG an agent?
 

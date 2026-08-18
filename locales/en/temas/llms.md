@@ -11,7 +11,7 @@ date_modified: 2026-08-16
 
 An **LLM** (*Large Language Model*) is a neural network trained to estimate which token may come next in a sequence. During pretraining it observes large amounts of text and adjusts its parameters to reduce prediction error. It can then generate text, answer questions, summarize, translate or produce code because many tasks can be formulated as conditional sequence continuation.
 
-The definition is simple. The resulting behaviour is not. A useful way to understand it is to separate four pieces: **tokenization, representation, prediction and adaptation**.
+The definition is simple, but the resulting behavior is not. A useful way to understand it is to separate four pieces: **tokenization, representation, prediction and adaptation**.
 
 ## The 60-second answer
 
@@ -57,7 +57,7 @@ For an autoregressive LLM, training optimizes the probability of the true token 
 
 {{ include_html("snippets/temas/llm-next-token.html") }}
 
-The model receives a sequence and must assign high probability to the real token that follows at each position. The gradient indicates how to modify millions or billions of parameters to make fewer errors on the next batch.
+The model receives a sequence and must assign high probability to the actual token that follows at each position. The gradient indicates how to modify millions or billions of parameters to make fewer errors on the next batch.
 
 At scale, solving that task well requires learning deep regularities. To predict a plausible continuation, the model needs to capture grammar, style, relationships between concepts, coding conventions and part of the statistical structure of the world described in its data.
 
@@ -75,13 +75,13 @@ The model learns general patterns from large corpora. The result is a **base mod
 
 ### Instruction tuning
 
-The model is trained on instruction-response pairs so it learns to interpret requests and adopt useful response formats. This phase turns general continuation ability into assistant-like behaviour.
+The model is trained on instruction-response pairs so it learns to interpret requests and adopt useful response formats. This phase turns general continuation ability into assistant-like behavior.
 
 ### Preference optimization
 
-Human comparisons, reward models or other signals are used to favour responses considered more useful, safe or aligned with the product. InstructGPT was an early demonstration that supervised fine-tuning plus preference learning could improve instruction following without changing the fundamental generative objective.[^instructgpt]
+Human comparisons, reward models or other signals are used to favor responses considered more useful, safe or aligned with the product. InstructGPT was an early demonstration that supervised fine-tuning plus preference learning could improve instruction following without changing the fundamental generative objective.[^instructgpt]
 
-These stages change observable behaviour. They do not guarantee that the model knows a source, stays coherent during a long operation or executes actions reliably.
+These stages change observable behavior. They do not guarantee that the model knows a source, stays coherent during a long operation or executes actions reliably.
 
 ## Parameters, context and external knowledge
 
@@ -101,7 +101,7 @@ Performance does not depend only on parameter count. The amount and quality of d
 
 Work on *scaling laws* showed predictable relationships between loss, model size, data and compute. Chinchilla added an important qualification: for a fixed training budget, increasing parameters without enough additional tokens can leave a model undertrained.[^gpt3][^chinchilla]
 
-That is why “larger” is not a sufficient explanation. A useful comparison needs to know the training regime and evaluation task.
+That is why “larger” is not a sufficient explanation. A useful comparison requires knowing the training regime and evaluation task.
 
 ## What an LLM can do well
 
@@ -115,7 +115,7 @@ An LLM is particularly useful when the task allows linguistic variation and the 
 - coordinate tools through structured arguments
 - reason over information present in the context
 
-The complete system improves when explicit constraints, examples, validators, retrieval and evaluation on real cases are added.
+The system becomes more reliable when you add explicit constraints, examples, validators, retrieval and evaluation on real cases.
 
 ## Limits that do not disappear with a better prompt
 

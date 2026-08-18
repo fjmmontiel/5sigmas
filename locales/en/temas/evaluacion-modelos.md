@@ -1,7 +1,7 @@
 ---
 title: "Evaluating AI models"
 seo_title: "How to evaluate AI models: benchmarks, quality and production"
-description: "How to evaluate an AI model and system with benchmarks, domain sets, judges, human review and product metrics without confusing a score with real value."
+description: "How to evaluate an AI model and system with benchmarks, reference sets, judges, human review and product metrics without confusing a score with real value."
 keywords: "AI model evaluation, LLM benchmark, evals, human evaluation, LLM as a judge, benchmark contamination, AI quality"
 date: 2026-04-07
 date_modified: 2026-08-16
@@ -71,7 +71,7 @@ An average hides where the system fails. The evaluation set should label relevan
 
 Then calculate performance by segment, not only one global number.
 
-A taxonomy enables actionable questions: “Does the new model improve long queries but regress on Spanish proper names?” That helps a decision. “It gained two points” does not.
+A taxonomy enables actionable questions: “Does the new model improve long queries but regress on Spanish proper names?” That supports a decision. “It gained two points” does not.
 
 ## 3. Build your own reference set
 
@@ -86,7 +86,7 @@ The **reference set** (often called a *golden set*) contains real or designed ex
 
 {{ include_html("snippets/temas/evaluation-reference-set.html") }}
 
-It should be versioned like code. When an incident appears, add a regression case. When the product changes, update the distribution while keeping a stable subset for comparing versions.
+It should be versioned like code. When an incident occurs, add a regression case. When the product changes, update the distribution while keeping a stable subset for comparing versions.
 
 Size alone does not guarantee coverage. Prioritize representative cases and critical failures, then expand the set where uncertainty or risk requires it.
 
@@ -129,7 +129,7 @@ Use rules or execution to:
 - inspect final state
 - measure latency and cost
 
-A deterministic metric is usually cheaper, reproducible and auditable. Generative evaluation should be reserved for dimensions that genuinely require judgement.
+A deterministic metric is usually cheaper, reproducible and auditable. Generative evaluation should be reserved for dimensions that genuinely require judgment.
 
 {{ include_html("snippets/temas/evaluation-verifier-routing.html") }}
 
@@ -202,7 +202,7 @@ For stochastic systems, separate uncertainty caused by which cases were sampled 
 
 {{ include_html("snippets/temas/evaluation-cycle.html") }}
 
-Evaluation is not a final phase. It is the loop that lets a system change without forgetting what it has already learned about its failures.[^openai-evals]
+Evaluation is not a final phase. It is the loop that lets teams change the system without losing what they have learned about its failures.[^openai-evals]
 
 ## Where to go deeper in 5sigmas
 

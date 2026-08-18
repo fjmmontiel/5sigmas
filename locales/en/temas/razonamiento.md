@@ -25,7 +25,7 @@ That is why it helps to separate three questions:
 
 Modern reasoning models spend more compute during inference. This strategy is known as **test-time compute** or **inference-time compute**. Instead of fixing all capability during training, the system can spend additional steps on difficult queries.
 
-The benefit is adaptive capability. The cost appears in latency, tokens, variability and operations.
+The benefit is adaptive capability. The tradeoffs are latency, token usage, variability and operational complexity.
 
 ## Chain of thought
 
@@ -59,9 +59,9 @@ Concrete algorithms differ in how they manage the frontier:
 
 - **beam search:** keeps a bounded set of candidates according to a score
 - **Tree of Thoughts:** can branch, evaluate and backtrack among intermediate states
-- **Monte Carlo Tree Search / UCT:** allocates exploration according to observed value and uncertainty across branches.[^uct]
+- **Monte Carlo Tree Search / UCT:** allocates exploration according to observed value and uncertainty across branches[^uct]
 - **programs or tools:** turn part of the search space into verifiable operations
-- **explicit planning:** separates plan creation from execution.
+- **explicit planning:** separates plan creation from execution
 
 Search adds value when there is a signal that distinguishes promising states. Without a reliable evaluator, a system can multiply plausible candidates without improving selection.
 
@@ -108,7 +108,7 @@ Tools change the problem. The model no longer needs to simulate every operation 
 
 A calculator reduces arithmetic errors. Retrieval brings current information. An interpreter executes code. An API can act on an external system.
 
-The challenge moves into the contract:
+The challenge shifts to the execution contract:
 
 - when to call
 - which arguments to use
@@ -129,7 +129,7 @@ In chat, several seconds may be acceptable for a complex task. In voice, the sam
 
 The [Reasoning Models](/en/series/modelos-razonadores/00_presentacion_serie/) series and the comparison of [voice-agent architectures](/en/articulos-tecnicos/voice-agent-architectures/) develop these boundaries in more detail.
 
-This prevents optimizing only the benchmark while forgetting the interaction.
+Treating latency as part of system design prevents benchmark-only optimization from ignoring the interaction.
 
 ## How to evaluate reasoning
 
