@@ -1,7 +1,7 @@
 ---
 title: "Artificial intelligence concepts"
 seo_title: "Artificial intelligence concepts explained with technical rigor"
-description: "Answer-first guides to LLMs, Transformers, agents, prompt injection, reasoning and AI evaluation, connected to learning series and engineering notes."
+description: "Answer-first guides to LLMs, Transformers, agents, prompt injection, reasoning and AI evaluation, connected to learning series, visuals and engineering notes."
 keywords: "artificial intelligence concepts, LLM, Transformer, AI agents, prompt injection, AI reasoning, model evaluation"
 hide:
   - toc
@@ -14,7 +14,7 @@ hide:
 <section class="s5-page-intro">
   <div class="s5-eyebrow">Concepts</div>
   <h1>A direct entry point to the ideas behind modern AI.</h1>
-  <p>These guides answer the essential question first and then open up the mechanism. Each concept links to the chapters and engineering notes where it is applied in practice.</p>
+  <p>These guides answer the essential question first, then explain the mechanism. Each concept links to the chapters, animations and engineering notes where it is applied in practice.</p>
 </section>
 
 <section class="s5-section" aria-labelledby="core-concepts">
@@ -64,7 +64,7 @@ hide:
     <div>
       <div class="s5-eyebrow">Next level</div>
       <h2>From concept to system.</h2>
-      <p>The learning series develop each idea progressively. The engineering notes show what changes once latency, state, tools, audio and human interaction become part of the system.</p>
+      <p>The series develop each idea step by step. The engineering notes show what changes once latency, state, tools, audio and human interaction become part of the system.</p>
       <a class="s5-text-link" href="/en/series/">Explore the series →</a><br />
       <a class="s5-text-link" href="/en/articulos-tecnicos/">Open the engineering notes →</a>
     </div>
