@@ -6,8 +6,8 @@ same ``site/`` tree. Route-aware language links therefore reference valid future
 locale pages that do not exist yet at the moment the Spanish search audit runs.
 
 This wrapper stages only routes explicitly declared in each configured locale's
-manifest, runs the existing strict search audit unchanged, then removes the staged
-markers. Arbitrary missing internal links still fail normally.
+manifest, runs the strict search audit plus the canonical priority-topic contract,
+then removes the staged markers. Arbitrary missing internal links still fail normally.
 """
 
 from __future__ import annotations
@@ -17,6 +17,7 @@ from urllib.parse import urlsplit
 
 import yaml
 
+import audit_priority_topic_hubs
 import audit_search_foundation
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -165,7 +166,10 @@ def _cleanup_staged_routes(created_files: list[Path]) -> None:
 def main() -> int:
     created_files = _stage_manifest_routes()
     try:
-        return audit_search_foundation.main()
+        search_result = audit_search_foundation.main()
+        if search_result:
+            return search_result
+        return audit_priority_topic_hubs.main()
     finally:
         _cleanup_staged_routes(created_files)
 
