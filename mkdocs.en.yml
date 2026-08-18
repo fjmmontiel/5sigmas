@@ -173,7 +173,7 @@ nav:
       - What is an AI agent?: temas/agentes-ia.md
       - What is prompt injection?: temas/prompt-injection.md
   - Build:
-      - Technical Articles: articulos-tecnicos/index.md
+      - articulos-tecnicos/index.md
       - Proactive and reactive agents and tool calls: articulos-tecnicos/proactive-reactive-agent-and-tool-calls.md
       - Reactive-proactive voice agents: articulos-tecnicos/reactive-proactive-voice-agents.md
       - Three architectures for voice agents: articulos-tecnicos/voice-agent-architectures.md

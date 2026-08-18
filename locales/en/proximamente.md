@@ -11,9 +11,9 @@ hide:
 <div class="s5-landing">
 
 <section class="s5-page-intro">
-  <div class="s5-eyebrow">Under research</div>
-  <h1>What comes next.</h1>
-  <p>Topics currently being studied. The order shows editorial continuity, not a committed publication date.</p>
+  <div class="s5-eyebrow">Research in progress</div>
+  <h1>What's next.</h1>
+  <p>Topics currently under study. The order reflects editorial continuity, not a committed publication date.</p>
 </section>
 
 <section class="s5-section">
