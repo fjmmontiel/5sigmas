@@ -48,7 +48,7 @@ When a multimodal system can use tools—API calls, database access or message s
 
 The attack has two stages. First, the injected content changes the constraints the model is following. Then the model continues operating under those altered constraints with whatever tools are available. This becomes especially dangerous when system instructions contain configuration data, business logic or user information: if the attack causes the model to reveal that context, the information can reach the attacker before any downstream output control detects it.
 
-Defensive design starts by applying least privilege to tools. If document processing does not require email access or database writes, those capabilities should not be available in that execution context.
+Defensive design starts with least-privilege tool access. If document processing does not require email access or database writes, those capabilities should not be available in that execution context.
 
 Outputs produced after processing untrusted content should also be validated before they can trigger the next stage of a workflow, so a successful injection cannot propagate directly into irreversible actions.
 
