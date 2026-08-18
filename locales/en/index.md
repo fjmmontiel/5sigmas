@@ -1,6 +1,6 @@
 ---
 title: 5sigmas
-description: Artificial intelligence explained with rigor through videos, interactive visuals, learning series, primary sources and production engineering.
+description: Artificial intelligence explained rigorously through videos, animations, learning series and technical notes.
 hide:
   - navigation
   - toc
@@ -37,7 +37,7 @@ hide:
       <span>01 · Reasoning Models</span>
     </header>
 
-    <a class="s5-start-card__media" href="/en/videos/series/modelos-razonadores/03-test-time-compute/" aria-label="Understand test-time compute in a short video">
+    <a class="s5-start-card__media" href="/en/videos/series/modelos-razonadores/03-test-time-compute/" aria-label="Understand test-time compute in a 1-minute 29-second video">
       <img src="/en/series/modelos-razonadores/03-test-time-compute.jpg" alt="Visual explaining test-time compute" />
     </a>
 
@@ -46,7 +46,7 @@ hide:
         <small>Start with one idea</small>
         <strong>Understand test-time compute</strong>
       </span>
-      <span class="s5-start-card__cta-meta"><span aria-hidden="true">▶</span> Video</span>
+      <span class="s5-start-card__cta-meta"><span aria-hidden="true">▶</span> Video · 1:29</span>
     </a>
 
     <div class="s5-start-card__detail">
@@ -63,7 +63,7 @@ hide:
   <div class="s5-why__copy">
     <div class="s5-eyebrow">The standard behind the name</div>
     <h2 id="s5-why-title">Why 5sigmas?</h2>
-    <p>In particle physics, a result is conventionally treated as a discovery only when it reaches <strong>five-sigma significance</strong>: a threshold stringent enough that an extreme background fluctuation has a probability of roughly one in 3.5 million under the usual Gaussian interpretation.</p>
+    <p>In particle physics, a result is conventionally treated as a discovery only when it reaches <strong>five-sigma significance</strong>: a threshold stringent enough that the probability of mistaking an extreme fluctuation for a real signal is roughly one in 3.5 million.</p>
     <p>5sigmas applies the same editorial principle to artificial intelligence: separate durable knowledge from daily noise, demand evidence, and build judgment before accepting a narrative, tool or promise.</p>
     <div class="s5-why__metrics" aria-label="Meaning of five sigma">
       <span><strong>5σ</strong><small>discovery threshold</small></span>
