@@ -87,7 +87,7 @@ The same residual structure surrounds both attention and the feed-forward networ
 
 BERT popularized bidirectional encoder stacks for representations useful in classification, extraction and language understanding.[^bert] GPT-style families popularized the causal decoder for generation. The original Transformer combined both: the encoder represented the full input and the decoder generated the output while consulting those representations through *cross-attention*.[^transformer]
 
-“Transformer” therefore does not imply one single diagram. It describes a family of blocks and attention contracts.
+“Transformer” therefore does not imply a single fixed diagram. It describes a family of blocks and attention contracts.
 
 ## Why it displaced recurrent networks
 
@@ -95,7 +95,7 @@ RNNs and LSTMs update a state step by step. That creates a sequential dependency
 
 {{ include_html("snippets/temas/transformer-rnn-vs-attention.html") }}
 
-The advantage applies over positions already known during training: attention reduces the number of sequential operations within a layer and shortens the path between distant positions. The price is dense pairwise interaction, which matters increasingly as context grows.
+The advantage applies over positions already known during training: attention reduces the number of sequential operations within a layer and shortens the path between distant positions. The tradeoff is dense pairwise interaction, which matters increasingly as context grows.
 
 ## The cost of attention
 
@@ -114,7 +114,7 @@ Research directions include:
 - state-space models
 - hybrid architectures
 
-Mamba showed that selective state-space models can process sequences with linear scaling and remain competitive across several domains.[^mamba] That does not make the Transformer obsolete. It opens another point in the design space.
+Mamba showed that selective state-space models can process sequences with linear scaling and remain competitive across several domains.[^mamba] That does not make the Transformer obsolete. It adds another point to the design space.
 
 ## Transformers beyond text
 
@@ -126,7 +126,7 @@ The [Multimodality in Generative AI](/en/series/multimodalidad-iag/00_presentaci
 
 ## What the architecture does not explain by itself
 
-Knowing the Transformer is not enough to explain a model's behaviour. Other important factors include:
+Knowing the Transformer is not enough to explain a model's behavior. Other important factors include:
 
 - pretraining data
 - the loss objective
