@@ -11,19 +11,19 @@ tags:
 
 # Chapter 4 — Scale (≈ 2012–2024)
 
-This chapter explains what happened when deep learning found enough scale: more data, more compute and architectures designed to exploit both. By the end, you will understand why the Transformer reorganized the entire discipline by making training radically more parallelizable, what scaling laws are and why they turned scaling into a scientific methodology with testable predictions, and how massive pretraining produced foundation models—a reusable general base for hundreds of different tasks. The chapter is accessible with a basic understanding of machine learning and is especially useful for understanding the logic behind systems such as GPT-3, BERT and Gemini.
+This chapter explains what happened when deep learning reached sufficient scale: more data, more compute and architectures designed to exploit both. By the end, you will understand why the Transformer reorganized the entire discipline by making training radically more parallelizable, what scaling laws are and why they turned scaling into a scientific methodology with testable predictions, and how massive pretraining produced foundation models—a reusable general base for hundreds of different tasks. The chapter is accessible with a basic understanding of machine learning and is especially useful for understanding the logic behind systems such as GPT-3, BERT and Gemini.
 
-The previous three chapters assembled the necessary pieces: representing the world with symbols, mechanizing procedures and learning from data. After 2012, those pieces stopped advancing independently. Data, compute, optimization and architecture began reinforcing one another at unprecedented scale.
+The previous three chapters established the necessary pieces: representing the world with symbols, mechanizing procedures and learning from data. After 2012, those pieces stopped advancing independently. Data, compute, optimization and architecture began reinforcing one another at unprecedented scale.
 
-This chapter follows that regime change. It is not only about the rise of deep learning. It is about the point at which progress became increasingly driven by a systematic combination of scale, reuse and transfer, eventually producing models that no longer solved one task but entire families of tasks.
+This chapter follows that regime change. It is not only about the rise of deep learning, but about the point at which progress became increasingly driven by a systematic combination of scale, reuse and transfer, eventually producing models that no longer solved one task but entire families of tasks.
 
 ---
 
-## 1. 2012: when scale stopped being a detail
+## 1. 2012: when scale became central
 
 [AlexNet](https://proceedings.neurips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf) won ILSVRC 2012 with a result that changed the field's perception: 15.3% top-5 error versus 26.2% for the runner-up. The system was trained on 1.2 million images using two GTX 580 GPUs for six days, combining a deeper-than-usual network with ReLU, dropout, data augmentation and an efficient GPU implementation.
 
-It is important to understand what this result actually demonstrated. AlexNet did not invent convolutional networks from scratch, nor did it single-handedly establish mature scaling laws. What it clearly showed was that when depth, data, regularization and compute reach sufficient critical mass, performance can improve in a way that no longer looks like a small incremental refinement.
+It is important to understand what this result actually demonstrated. AlexNet did not invent convolutional networks from scratch, nor did it single-handedly establish mature scaling laws. What it clearly showed was that when depth, data, regularization and compute all reach sufficient scale, performance can improve in a way that no longer looks like a small incremental refinement.
 
 The lesson of 2012 was not that architecture had stopped mattering. It was that a good architecture can remain below its potential for years and suddenly take off when hardware and data volume stop being the bottleneck.
 
@@ -53,7 +53,7 @@ The idea that performance improves relatively predictably as parameters, data an
 
 {{ include_html("snippets/from-cave-to-agi/04-leyes-escala.html") }}
 
-This does not mean scale explains everything. It means that once an architecture and training objective are good enough, increasing resources stops being a secondary implementation choice and becomes part of the system's practical theory.
+This does not mean scale explains everything. It means that once an architecture and training objective are good enough, increasing resources stops being a secondary implementation choice and becomes part of how the system is designed and its performance is forecast.
 
 An important caution belongs here. The literature on [emergent abilities](https://arxiv.org/pdf/2206.07682) has been influential because it describes abrupt performance jumps on some tasks once models cross certain sizes. But later work, such as [*Are Emergent Abilities of Large Language Models a Mirage?*](https://arxiv.org/pdf/2304.15004), argues that some of this apparent abruptness can depend on the metric or evaluation method. The prudent conclusion is therefore not that every new capability mysteriously appears at a threshold, but that scale has produced new or much more robust capabilities while the strong interpretation of emergence remains debated.
 
@@ -67,17 +67,17 @@ This leads to the framework of [foundation models](https://crfm.stanford.edu/ass
 
 The technical and economic consequence is enormous. The same base model can serve as reusable infrastructure for writing, summarization, translation, classification, information extraction, code generation, knowledge retrieval and multimodal work, with relatively small adaptations compared with training a new system for every task.
 
-That is the deeper shift of this period. For decades, AI progressed as a collection of specialized systems. With foundation models, the center of gravity moved toward general pretrained bases that are subsequently adapted, aligned or composed for particular uses.
+This is the deeper shift of the period. For decades, AI progressed as a collection of specialized systems. With foundation models, the field shifted toward general pretrained bases that are subsequently adapted, aligned or composed for particular uses.
 
 {{ include_html("snippets/from-cave-to-agi/04-preentrenamiento-finetuning.html") }}
 
 ---
 
-## 5. What this period prepared
+## 5. What this period made possible
 
 By 2024, the field had changed structurally. AI was no longer conceived primarily as a set of isolated solutions; it increasingly organized itself around larger, reusable and multimodal base models.
 
-That change prepares the next stage. Scale is no longer only a matter of adding parameters or data. It becomes the foundation from which new problems emerge: more effective memory, better tool use, more active search and a richer relationship with the world beyond text.
+That change set up the next stage. Scale was no longer only a matter of adding parameters or data. It became the foundation for a new set of problems: more effective memory, better tool use, more active search and a richer relationship with the world beyond text.
 
 !!! tip "Next chapter"
     [Chapter 5 — Beyond the Transformer →](./05-mas-alla.md) — Which limits pure scaling exposed and which directions the field is opening: inference-time memory, active search, world models and robotics.
@@ -115,7 +115,7 @@ That change prepares the next stage. Scale is no longer only a matter of adding 
 ## Frequently asked questions
 
 **Why is AlexNet's 2012 success considered a regime change rather than just another milestone?**  
-Before AlexNet, computer vision relied heavily on features hand-designed by human experts: the model learned from those representations but did not learn the representation itself. AlexNet showed that a deep network trained directly on pixels could outperform those systems by such a large margin—15.3% versus 26.2% top-5 error on ImageNet—that it changed the field's perception and demonstrated the leverage of data and compute alongside architecture.
+Before AlexNet, computer vision relied heavily on features hand-designed by human experts: the model learned from those representations but did not learn the representation itself. AlexNet showed that a deep network trained directly on pixels could outperform those systems by such a large margin—15.3% versus 26.2% top-5 error on ImageNet—that it changed the field's perception and showed that data and compute—not manual feature design—had become the dominant levers in that regime.
 
 **What architectural advantage does the Transformer have over recurrent networks?**  
 Recurrent networks process a sequence step by step, which limits training parallelism and makes long-range dependencies harder to preserve because each step depends on the previous one. With self-attention, the Transformer lets each token directly attend to other positions in the context while training can be massively parallelized. This made it practical to train on data volumes that would previously have been much harder to exploit.
