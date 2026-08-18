@@ -2,6 +2,8 @@ version: 1
 canonical_source_locale: es
 scope_manifest: locales/en/manifest.yml
 
+# These certifications cover native-English prose plus the existing canonical
+# article-hook and interactive-visual semantics validated by topic browser QA.
 certified_routes:
   - route: temas/index.md
     reviewed_on: 2026-08-18
