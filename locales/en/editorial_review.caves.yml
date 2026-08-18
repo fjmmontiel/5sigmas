@@ -14,3 +14,9 @@ certified_routes:
     english_blob_sha: d6771f6e56838d7bd7be8625ccf4967877119a21
     review_scope: prose, headings, lists, FAQs, terminology, technical meaning, evidence, references, visual hooks
     note: Side-by-side native-English review; removed literal abstraction, notation, deduction, scientific-revolution and calculus phrasing while preserving every historical claim, caveat, source, section order, FAQ and visual semantic.
+  - route: series/from-cave-to-agi/03-aprender.md
+    reviewed_on: 2026-08-18
+    spanish_blob_sha: 0a96b15b9c15df05b588da824e84b8143198c595
+    english_blob_sha: bb216cda328723ec1748c3d4491a38d20c1ab6de
+    review_scope: prose, headings, FAQs, terminology, technical meaning, evidence, references, visual hooks
+    note: Side-by-side native-English review; tightened symbolic-AI, statistical-learning, neural-network, NLP and pre-AlexNet transitions while preserving every historical claim, quantitative detail, source, FAQ, section order and visual semantic.
