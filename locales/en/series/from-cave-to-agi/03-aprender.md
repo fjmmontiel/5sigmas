@@ -33,13 +33,13 @@ This approach reached its most solid form in expert systems. Rather than aiming 
 
 [MYCIN](https://www.shortliffe.net/Buchanan-Shortliffe-1984/Chapter-30.pdf), developed at Stanford in the 1970s, became one of the best-known examples. It recommended treatments for serious bacterial infections and showed that a rule-based system could perform at a high level inside a tightly bounded domain. [XCON, also called R1](https://cdn.aaai.org/AAAI/1980/AAAI80-076.pdf), automated VAX computer configuration at Digital Equipment and became one of the most cited industrial examples of the period.
 
-What matters about these systems is not only that they worked, but why. They worked well when the domain was relatively stable, when the decision vocabulary could be bounded and when expert knowledge could realistically be converted into maintainable rules.
+What matters about these systems is not only that they worked, but why. They worked well when the domain was relatively stable, when the set of possible decisions could be bounded and when expert knowledge could realistically be converted into maintainable rules.
 
 {{ include_html("snippets/from-cave-to-agi/03-simbolica.html") }}
 
 ### Why that path eventually hit a ceiling
 
-The limitation appeared when knowledge stopped being small, stable and easy to formalize. Maintaining an expert system did not mean writing the rules once. It meant revising them, extending them, resolving conflicts among them and absorbing exceptions. As the domain grew more complex, so did the knowledge base.
+The approach began to break down once the knowledge base was no longer small, stable and easy to formalize. Maintaining an expert system did not mean writing the rules once. It meant revising them, extending them, resolving conflicts among them and absorbing exceptions. As the domain grew more complex, so did the knowledge base.
 
 This exposed one of symbolic AI's major bottlenecks: knowledge acquisition. Extracting expert knowledge and translating it into a formal base was expensive, slow and fragile. The problem was not only computational. It was also human and organizational.
 
@@ -59,19 +59,19 @@ Learning means capturing a regularity that continues to work outside the trainin
 
 [Vapnik's statistical learning theory](https://link.springer.com/book/10.1007/978-1-4757-3264-1) offered a language for reasoning about capacity, empirical risk and control of overfitting. In parallel, [Valiant](https://people.mpi-inf.mpg.de/~mehlhorn/SeminarEvolvability/ValiantLearnable.pdf) formalized learning as the acquisition of knowledge without explicit programming. Machine learning therefore began to consolidate not as a collection of tricks, but as a discipline with foundations addressing what can be learned, with how much data and under what conditions.
 
-Probability also stopped being an accessory and moved to the center. In many domains, a system does not only need to decide. It also needs to represent uncertainty, combine incomplete evidence and update its beliefs when new data arrives.
+Probability also moved from a supporting role to the center of the field. In many domains, a system does not only need to decide. It also needs to represent uncertainty, combine incomplete evidence and update its beliefs when new data arrives.
 
 ### Optimize parameters instead of writing rules
 
 If a model learns from examples, its parameters must be adjusted to reduce error. That idea feels obvious today, but it reorganized the entire field. Learning increasingly became an optimization problem.
 
-The classic precursor to stochastic optimization already appears in [Robbins and Monro (1951)](https://www.columbia.edu/~ww2040/8100F16/RM51.pdf). Later, stochastic gradient descent made it possible to train models on large datasets without recalculating the error over every example at each step. Regularization and validation techniques were added so that a model would not only fit the past well, but preserve its ability to generalize.
+A classic precursor to stochastic optimization appears in [Robbins and Monro (1951)](https://www.columbia.edu/~ww2040/8100F16/RM51.pdf). Later, stochastic gradient descent made it possible to train models on large datasets without recalculating the error over every example at each step. Regularization and validation techniques were added so that a model would not only fit the past well, but preserve its ability to generalize.
 
-Neural networks were not the field's only focus during this phase. Decision trees, kernel methods, probabilistic models and ensemble techniques also grew. The underlying shift was not yet “everything is deep learning.” It was that many tasks were starting to be described more naturally as statistical fitting problems than as lists of hand-written rules.
+Neural networks were not the field's only focus during this phase. Decision trees, kernel methods, probabilistic models and ensemble methods also advanced. The underlying shift was not yet “everything is deep learning.” It was that many tasks were starting to be described more naturally as statistical fitting problems than as lists of hand-written rules.
 
 ### Representation is learned too
 
-This is where the decisive difference between many classical methods and deep networks appears. In many earlier approaches, a human had to design much of the relevant feature representation manually. The model learned from those features, but it did not learn the representation itself very well.
+This is a key distinction between many classical methods and deep networks. In many earlier approaches, a human had to design much of the relevant feature representation manually. The model learned from those features, but it did not learn the representation itself very well.
 
 Multilayer neural networks promised something more ambitious: useful intermediate representations learned directly from data. The idea had existed for much longer, but for years it was difficult to turn into a robust practice.
 
@@ -81,7 +81,7 @@ Multilayer neural networks promised something more ambitious: useful intermediat
 
 ## 3. The perceptron, its critique and the return of neural networks
 
-### The first neural excitement
+### The first wave of neural enthusiasm
 
 Rosenblatt's perceptron first appeared as a proposal in 1957 and was formalized more fully in his 1958 paper, [*The Perceptron: A Probabilistic Model for Information Storage and Organization in the Brain*](https://www.ovid.com/00006832-195811000-00007). It was one of the first influential formulations of a trainable artificial neuron.
 
@@ -95,7 +95,7 @@ The problem was not that the analysis was wrong. The problem was that for years 
 
 ### Backpropagation and multilayer networks
 
-That obstacle began to break when training deep networks stopped being a vague intuition and became an operationally convincing recipe. The 1986 paper by [Rumelhart, Hinton and Williams](https://gwern.net/doc/ai/nn/1986-rumelhart-2.pdf) made error backpropagation the emblematic procedure for adjusting multilayer networks. The idea was to propagate error backward from the output to estimate how each weight should change.
+That barrier began to fall once deep-network training moved from a vague idea to a convincing operational procedure. The 1986 paper by [Rumelhart, Hinton and Williams](https://gwern.net/doc/ai/nn/1986-rumelhart-2.pdf) made error backpropagation the emblematic procedure for adjusting multilayer networks. The idea was to propagate error backward from the output to estimate how each weight should change.
 
 The principle had earlier precedents, but 1986 was the inflection point that made it central to the neural-network community ([history of backpropagation](https://people.idsia.ch/~juergen/who-invented-backpropagation.html)). From then on, neural networks were no longer only a biologically inspired promise. They became a family of models that could be trained with a general technique.
 
@@ -105,7 +105,7 @@ The principle had earlier precedents, but 1986 was the inflection point that mad
 
 ## 4. NLP before transformers
 
-Natural-language processing followed a trajectory for a long time that was very different from the one transformers would later impose. Before large neural models, statistical and sequential approaches dominated the field.
+For a long time, natural-language processing followed a very different trajectory from the one transformers later established. Before large neural models, statistical and sequential approaches dominated the field.
 
 [N-gram models](https://web.stanford.edu/~jurafsky/slp3/3.pdf), whose lineage partly traces back to Shannon's ideas about sequences, estimated the probability of a word from a small number of preceding words. They were simple, effective and extremely useful, but had an obvious limitation: their effective memory was short.
 
@@ -131,9 +131,9 @@ Shared benchmarks were also necessary to measure progress. Without common benchm
 
 ### The immediate prelude to the explosion
 
-Before AlexNet there was an important prologue. Work such as [*Reducing the Dimensionality of Data with Neural Networks*](https://www.cs.toronto.edu/~hinton/absps/science.pdf) in 2006 and [*Greedy Layer-Wise Training of Deep Networks*](https://proceedings.neurips.cc/paper/3048-greedy-layer-wise-training-of-deep-networks.pdf) in 2007 helped reopen the problem of training deep networks when it was still unclear whether they could scale reliably from direct initialization.
+Several important developments came before AlexNet. Work such as [*Reducing the Dimensionality of Data with Neural Networks*](https://www.cs.toronto.edu/~hinton/absps/science.pdf) in 2006 and [*Greedy Layer-Wise Training of Deep Networks*](https://proceedings.neurips.cc/paper/3048-greedy-layer-wise-training-of-deep-networks.pdf) in 2007 helped reopen the problem of training deep networks when it was still unclear whether they could scale reliably from direct initialization.
 
-That period did not solve everything, but it changed the intellectual climate. Deep networks stopped looking like a historical curiosity and began to recover empirical credibility.
+That work did not solve everything, but it made deep networks empirically credible again.
 
 ### 2012 as a threshold
 
@@ -143,11 +143,11 @@ The improvement was large enough to redirect the field. AlexNet did not single-h
 
 ---
 
-## 6. What this period prepared
+## 6. What this period made possible
 
-By 2012, AI had changed profoundly. It had not completely abandoned rules or logic, but it no longer treated them as the primary route to building capable systems at scale. The center of gravity had shifted toward models that learn from data, adjust parameters and improve as examples, compute and representation quality grow.
+By 2012, AI had changed profoundly. It had not completely abandoned rules or logic, but it no longer treated them as the primary route to building capable systems at scale. The field had shifted toward models that learn from data, adjust parameters and improve as examples, compute and representation quality grow.
 
-That shift prepares the ground for the next chapter. The story is no longer mainly about whether a machine can learn from data, but about what happens when that learning finds enough scale.
+That shift prepares the ground for the next chapter. The story is no longer mainly about whether a machine can learn from data, but about what happens when learning reaches sufficient scale.
 
 !!! tip "Next chapter"
     [Chapter 4 — Scale →](./04-escalar.md) — AlexNet, the Transformer and scaling laws: what happened when learning met massive datasets, GPUs and new architectures.
@@ -195,7 +195,7 @@ They worked well while the domain was stable and bounded, such as bacterial-infe
 The shift was not merely toward more data; it changed the central question. Symbolic AI asked which rules had to be written to solve a task. Statistical learning asked which regularities a model could infer from enough examples. Learning became an optimization problem—adjusting parameters to reduce error—rather than formalizing expert knowledge in a rule base.
 
 **Why did backpropagation unlock neural networks?**  
-It provided a general operational recipe where there had previously been mostly intuition. Rumelhart, Hinton and Williams' 1986 paper showed how to propagate error backward from the output to estimate how each weight in each layer should change. Ideas for training multilayer networks had existed before, but without a systematic, reproducible procedure, deep networks could not be trained reliably and the field remained limited to shallow models.
+It provided a general training procedure where there had previously been mostly intuition. Rumelhart, Hinton and Williams' 1986 paper showed how to propagate error backward from the output to estimate how each weight in each layer should change. Ideas for training multilayer networks had existed before, but without a systematic, reproducible procedure, deep networks could not be trained reliably and the field remained limited to shallow models.
 
 **Why did the AI winters happen if the basic ideas were sound?**  
 Because the gap between what the field promised and what it could deliver with the available resources was too large. The first winter followed inflated expectations and complexity barriers highlighted by reports such as Lighthill's in 1973. The second, in the late 1980s, arrived when expert systems exposed their scaling limits and the specialized AI-hardware market collapsed. The ideas were not necessarily wrong; the data, compute and training algorithms were not yet sufficient for what those ideas required.
