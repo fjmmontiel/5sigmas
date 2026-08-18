@@ -7,9 +7,9 @@ certified_routes:
   - route: index.md
     reviewed_on: 2026-08-18
     spanish_blob_sha: 6d80c6477f0ab8909e9d6bef582cfe5704f6e0d7
-    english_blob_sha: ddc5d5ddeb710df587e3e60231f58860aa7818e5
+    english_blob_sha: c5be98eb90e4e89fa5b8562865e3d3f9372d3bda
     review_scope: prose, learning flow, navigation, featured media, concept cards, series cards, engineering entry, responsive structure
-    note: "Restored the canonical watch-manipulate-go-deeper learning flow, test-time-compute video entry, visual-first navigation and the same three featured visual topics while using native English media and routes."
+    note: "Restored the canonical watch-manipulate-go-deeper learning flow, exact test-time-compute video entry metadata, visual-first navigation and the same three featured visual topics while using native English media and routes."
   - route: proximamente.md
     reviewed_on: 2026-08-18
     spanish_blob_sha: 73f84d062d7045bb0e3aefb238811ec591e513f7
