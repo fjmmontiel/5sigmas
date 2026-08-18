@@ -69,7 +69,7 @@ This framework recognizes that the transition is gradual rather than all-or-noth
 
 For AI-safety researchers, the critical threshold is not simply "better than humans at cognitive tasks" but the **capacity for recursive improvement**: a system improving its own design to produce successively more capable systems. A system could surpass all humans on all tasks without crossing that threshold. If it did cross it, however, the pace of change could exceed humans' ability to understand and control what is happening. Current operational frameworks go further: Anthropic defines specific thresholds based on the ability to automate an AI researcher's work, from bounded tasks to full autonomous research cycles ([Anthropic RSP][r_rsp]).
 
-> The ambiguity is deliberate, not an oversight: different communities are trying to capture different properties of the same concept.
+> The ambiguity is not an oversight: different communities are trying to capture different properties of the same concept.
 
 {{ include_html("snippets/fundamentos-ia-iag/04-niveles-agi.html") }}
 
@@ -154,7 +154,7 @@ No current system satisfies the cognitive definition of AGI, the full economic d
 
 {{ include_html("snippets/fundamentos-ia-iag/04-ia-vs-humanos.html") }}
 
-Frontier models from 2025-2026 show expert-level performance in specific domains such as software, formal mathematics, or text analysis, but there is no public consensus or evidence that they have reached the Competent AGI threshold under DeepMind's framework across most cognitive tasks. In domains requiring physical experience, tacit knowledge, or robust causal reasoning, they remain below it.
+Frontier models from 2025-2026 show expert-level performance in specific domains such as software, formal mathematics, or text analysis, but there is no publicly available evidence with broad agreement that they have reached the Competent AGI threshold under DeepMind's framework across most cognitive tasks. In domains requiring physical experience, tacit knowledge, or robust causal reasoning, they remain below it.
 
 METR evaluates the **task time horizon**: the duration of tasks a model can complete with 50% reliability. In March 2025 that horizon was ~1 hour; with GPT-5-thinking, METR estimates it at ~2 hours 15 minutes ([METR, 2025][r12]). The trend is a doubling about every seven months, and the next significant threshold is the jump to days or weeks, where the risks of real autonomy emerge.
 
