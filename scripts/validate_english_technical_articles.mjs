@@ -243,7 +243,9 @@ try {
   const hubResponse = await hub.goto(`${base}/en/articulos-tecnicos/`, { waitUntil: 'networkidle' });
   if (!hubResponse?.ok()) failures.push(`/en/articulos-tecnicos/: HTTP ${hubResponse?.status() ?? 'no response'}`);
   const hubBody = await hub.locator('body').innerText();
-  if (!hubBody.includes('Technical Articles')) failures.push('/en/articulos-tecnicos/: missing English hub title');
+  const hubH1 = (await hub.locator('h1').first().innerText()).trim();
+  if (hubH1 !== 'Real systems. Explicit decisions.') failures.push(`/en/articulos-tecnicos/: missing canonical English hub heading`);
+  if (!(await hub.title()).startsWith('Engineering')) failures.push('/en/articulos-tecnicos/: missing canonical English hub document title');
   for (const article of articles) {
     const hasRouteLink = await hub.locator('a').evaluateAll((nodes, route) => nodes.some((node) => {
       try { return new URL(node.href).pathname === route; } catch { return false; }
