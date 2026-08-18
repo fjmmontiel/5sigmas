@@ -26,3 +26,9 @@ certified_routes:
     english_blob_sha: 3b5aaac68abd25e7c6116f0b3d27d60cb18c8fb9
     review_scope: prose, headings, lists, FAQs, terminology, technical meaning, evidence, references, visual hooks
     note: Side-by-side native-English review; removed literal decision framing, orphan structured-output prose, determinism/evaluation translationese, operational-matrix phrasing and fraud-example scaffolding while preserving the five-difference model, risk taxonomy, all claims, caveats, references, section order and visual semantics.
+  - route: series/fundamentos-ia-iag/04-agi.md
+    reviewed_on: 2026-08-18
+    spanish_blob_sha: 17acfd932c7dde4699fd72664bbc299a9af3cb07
+    english_blob_sha: d8929978a79970372a2e3b6f7b8f768c74a3f0b9
+    review_scope: prose, headings, lists, FAQs, terminology, technical meaning, evidence, references, visual hooks
+    note: Side-by-side native-English review; tightened AGI-definition, safety, current-capability, understanding, economic-impact, alignment, task-horizon and FAQ prose while preserving every canonical claim, quantity, caveat, reference, section order and visual semantic.
