@@ -16,7 +16,9 @@ tools:
     en_route: /en/tools/llm-cost-latency/
     es_parity: true
     en_parity: true
-    tests: pending_ci
+    tests: implemented_pending_ci
+    visual_review: pending_ci_artifacts
+    provenance: primary_sources_verified_2026-08-21
     data_freshness: provider_pricing_review_required
     last_reviewed: 2026-08-21
   - id: model-price-performance
