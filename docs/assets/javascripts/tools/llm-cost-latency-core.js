@@ -5,11 +5,32 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   'use strict';
 
-  const VERSION = '1.0.0';
+  const VERSION = '1.1.0';
   const clamp = (value, min, max) => Math.min(max, Math.max(min, Number(value) || 0));
   const nonNegative = (value) => Math.max(0, Number(value) || 0);
 
+  function resolvePricing(pricing, asOf = new Date()) {
+    if (!pricing || typeof pricing !== 'object') return pricing || null;
+    const future = pricing.future_price;
+    if (!future || !future.effective_from) return pricing;
+
+    const currentDate = asOf instanceof Date ? asOf : new Date(asOf);
+    const effectiveDate = new Date(`${future.effective_from}T00:00:00Z`);
+    if (Number.isNaN(currentDate.getTime()) || Number.isNaN(effectiveDate.getTime()) || currentDate < effectiveDate) {
+      return pricing;
+    }
+
+    return {
+      ...pricing,
+      input_usd_per_million: future.input_usd_per_million ?? pricing.input_usd_per_million,
+      cached_input_usd_per_million: future.cached_input_usd_per_million ?? pricing.cached_input_usd_per_million,
+      output_usd_per_million: future.output_usd_per_million ?? pricing.output_usd_per_million,
+      active_price_effective_from: future.effective_from
+    };
+  }
+
   function calculate(raw, pricing) {
+    const activePricing = resolvePricing(pricing, raw?.asOfDate ?? new Date());
     const inputTokens = nonNegative(raw.inputTokens);
     const outputTokens = nonNegative(raw.outputTokens);
     const cacheHitRate = clamp(raw.cacheHitRate, 0, 100) / 100;
@@ -22,14 +43,14 @@
     const monthlyBudgetUsd = nonNegative(raw.monthlyBudgetUsd);
     const latencyTargetMs = nonNegative(raw.latencyTargetMs);
 
-    const baseInputRate = nonNegative(raw.inputPrice ?? pricing?.input_usd_per_million);
-    const baseOutputRate = nonNegative(raw.outputPrice ?? pricing?.output_usd_per_million);
-    const declaredCachedRate = raw.cachedInputPrice ?? pricing?.cached_input_usd_per_million;
+    const baseInputRate = nonNegative(raw.inputPrice ?? activePricing?.input_usd_per_million);
+    const baseOutputRate = nonNegative(raw.outputPrice ?? activePricing?.output_usd_per_million);
+    const declaredCachedRate = raw.cachedInputPrice ?? activePricing?.cached_input_usd_per_million;
     const baseCachedRate = declaredCachedRate === null || declaredCachedRate === undefined || declaredCachedRate === ''
       ? baseInputRate
       : nonNegative(declaredCachedRate);
 
-    const longContext = pricing?.long_context || null;
+    const longContext = activePricing?.long_context || null;
     const longContextActive = Boolean(
       longContext &&
       nonNegative(longContext.threshold_input_tokens) > 0 &&
@@ -86,7 +107,8 @@
         outputRate,
         longContextActive,
         inputMultiplier,
-        outputMultiplier
+        outputMultiplier,
+        activePriceEffectiveFrom: activePricing?.active_price_effective_from || null
       },
       cost: {
         uncachedInputCost,
@@ -120,5 +142,5 @@
     };
   }
 
-  return { VERSION, calculate };
+  return { VERSION, calculate, resolvePricing };
 });
