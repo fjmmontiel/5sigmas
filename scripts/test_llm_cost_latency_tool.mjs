@@ -109,11 +109,13 @@ assert.ok(gemini35Lite, 'Gemini 3.5 Flash-Lite preset required');
 {
   const active = resolvePricing(sonnet5, '2026-08-21T12:00:00Z');
   close(active.input_usd_per_million, 2, 1e-12, 'Sonnet 5 introductory input rate');
+  close(active.cached_input_usd_per_million, 0.2, 1e-12, 'Sonnet 5 introductory cache-read rate');
   close(active.output_usd_per_million, 10, 1e-12, 'Sonnet 5 introductory output rate');
   assert.equal(active.active_price_effective_from, undefined);
 
   const future = resolvePricing(sonnet5, '2026-09-01T00:00:00Z');
   close(future.input_usd_per_million, 3, 1e-12, 'Sonnet 5 standard input rate');
+  close(future.cached_input_usd_per_million, 0.3, 1e-12, 'Sonnet 5 standard cache-read rate');
   close(future.output_usd_per_million, 15, 1e-12, 'Sonnet 5 standard output rate');
   assert.equal(future.active_price_effective_from, '2026-09-01');
 }
@@ -138,12 +140,16 @@ for (const preset of pricing.presets) {
   assert.ok(preset.provider && preset.model, `${preset.id}: provider/model required`);
   assert.ok(Number.isFinite(preset.input_usd_per_million), `${preset.id}: input rate required`);
   assert.ok(Number.isFinite(preset.output_usd_per_million), `${preset.id}: output rate required`);
+  assert.ok(preset.cached_input_usd_per_million === null || Number.isFinite(preset.cached_input_usd_per_million), `${preset.id}: cache-read rate must be null or numeric`);
   assert.match(preset.source?.url || '', /^https:\/\//, `${preset.id}: primary-source URL required`);
   assert.match(preset.source?.verified_on || '', /^2026-\d{2}-\d{2}$/, `${preset.id}: verification date required`);
   if (preset.future_price) {
     assert.match(preset.future_price.effective_from || '', /^20\d{2}-\d{2}-\d{2}$/, `${preset.id}: future effective date required`);
     assert.ok(Number.isFinite(preset.future_price.input_usd_per_million), `${preset.id}: future input rate required`);
     assert.ok(Number.isFinite(preset.future_price.output_usd_per_million), `${preset.id}: future output rate required`);
+    if (preset.cached_input_usd_per_million !== null) {
+      assert.ok(Number.isFinite(preset.future_price.cached_input_usd_per_million), `${preset.id}: future cache-read rate required when current cache-read rate is modelled`);
+    }
   }
 }
 
