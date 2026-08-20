@@ -1,10 +1,13 @@
 #!/usr/bin/env node
 
+import fs from 'node:fs';
 import { chromium } from 'playwright';
 
 const base = process.env.S5_PREVIEW_BASE || 'http://127.0.0.1:8000';
 const failures = [];
 const browser = await chromium.launch({ headless: true });
+const artifactDir = 'artifacts/visual-review';
+fs.mkdirSync(artifactDir, { recursive: true });
 
 const cases = [
   { route: '/herramientas/coste-latencia-llm/', locale: 'es' },
@@ -83,6 +86,11 @@ for (const spec of cases) {
     }
     if (!hasWebApplication) failures.push(`${spec.route} ${viewport.name}: WebApplication JSON-LD missing`);
 
+    await page.locator('[data-action="reset"]').click();
+    await page.screenshot({
+      path: `${artifactDir}/llm-cost-latency-${spec.locale}-${viewport.name}.png`,
+      fullPage: true
+    });
     await page.close();
   }
 }
@@ -94,4 +102,4 @@ if (failures.length) {
   for (const failure of failures) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log('LLM cost/latency browser QA passed: ES/EN, 390px/1440px, interactivity, labels, provenance, JSON-LD and horizontal fit verified.');
+console.log('LLM cost/latency browser QA passed: ES/EN, 390px/1440px, interactivity, labels, provenance, JSON-LD, horizontal fit and visual evidence verified.');
