@@ -1,0 +1,9 @@
+locale: en
+route_strategy: explicit-equivalents
+routes:
+  - canonical: herramientas/index.md
+    localized: tools/index.md
+  - canonical: herramientas/coste-latencia-llm.md
+    localized: tools/llm-cost-latency.md
+published_files:
+  - llms.txt
