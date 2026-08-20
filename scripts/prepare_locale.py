@@ -8,11 +8,12 @@ Locale builds are intentionally source-strict:
 - shared global assets (CSS/JS/design system) come from ``docs``;
 - article-adjacent images, video and audio are *not* inherited from Spanish;
 - a canonical media file is shared only when the locale manifest explicitly lists
-  it under ``shared_media``.
+  it under ``shared_media``;
+- interactive tools may declare localized slugs in ``tools/locale-<locale>.yml``.
 
 Draft translations may exist under ``locales/<locale>`` without entering the
-MkDocs build until their route is added to the manifest. This prevents both
-accidental publication and strict-nav failures while a full locale is mirrored.
+MkDocs build until their route is declared. This prevents both accidental
+publication and strict-nav failures while a full locale is mirrored.
 """
 
 from __future__ import annotations
@@ -28,6 +29,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DOCS = ROOT / "docs"
 LOCALES = ROOT / "locales"
 BUILD = ROOT / ".locale-build"
+TOOLS = ROOT / "tools"
 
 SHARED_DIRS = ("assets", "stylesheets", "javascripts")
 SHARED_ROOT_FILES = ("favicon.svg",)
@@ -44,6 +46,19 @@ def _manifest(locale: str) -> dict:
     return data
 
 
+def _tool_manifest(locale: str) -> dict:
+    path = TOOLS / f"locale-{locale}.yml"
+    if not path.is_file():
+        return {}
+    data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    if not isinstance(data, dict):
+        raise SystemExit(f"Tool locale manifest must be a mapping: {path}")
+    declared = str(data.get("locale") or "").strip().lower()
+    if declared and declared != locale:
+        raise SystemExit(f"Tool locale manifest declares {declared!r}, expected {locale!r}: {path}")
+    return data
+
+
 def _safe_relative(raw: object, *, field: str, locale: str) -> Path:
     relative = Path(str(raw).strip().lstrip("/"))
     if not str(relative) or ".." in relative.parts or relative.is_absolute():
@@ -54,8 +69,31 @@ def _safe_relative(raw: object, *, field: str, locale: str) -> Path:
 def _list_field(manifest: dict, field: str, locale: str) -> list[object]:
     entries = manifest.get(field) or []
     if not isinstance(entries, list):
-        raise SystemExit(f"locales/{locale}/manifest.yml {field} must be a list")
+        raise SystemExit(f"manifest {field} must be a list for {locale}")
     return entries
+
+
+def _tool_routes(locale: str) -> list[Path]:
+    data = _tool_manifest(locale)
+    routes = data.get("routes") or []
+    if not isinstance(routes, list):
+        raise SystemExit(f"tools/locale-{locale}.yml routes must be a list")
+    result: list[Path] = []
+    canonical_seen: set[Path] = set()
+    localized_seen: set[Path] = set()
+    for entry in routes:
+        if not isinstance(entry, dict):
+            raise SystemExit(f"Invalid tool route entry for {locale}: {entry!r}")
+        canonical = _safe_relative(entry.get("canonical"), field="tool canonical route", locale=locale)
+        localized = _safe_relative(entry.get("localized"), field="tool localized route", locale=locale)
+        if canonical.suffix.lower() != ".md" or localized.suffix.lower() != ".md":
+            raise SystemExit(f"Tool routes must be Markdown for {locale}: {entry!r}")
+        if canonical in canonical_seen or localized in localized_seen:
+            raise SystemExit(f"Duplicate tool route mapping for {locale}: {entry!r}")
+        canonical_seen.add(canonical)
+        localized_seen.add(localized)
+        result.append(localized)
+    return result
 
 
 def _published_routes(locale: str, manifest: dict) -> list[Path]:
@@ -65,21 +103,19 @@ def _published_routes(locale: str, manifest: dict) -> list[Path]:
         if relative.suffix.lower() != ".md":
             raise SystemExit(f"Unexpected published_routes extension for {locale}: {relative}")
         routes.append(relative)
+    routes.extend(_tool_routes(locale))
+    if len(routes) != len(set(routes)):
+        raise SystemExit(f"Duplicate published route after tool expansion for {locale}")
     return routes
 
 
 def _discover_route_snippets(locale: str, source: Path, manifest: dict) -> set[Path]:
-    """Return translated HTML dependencies referenced by published Markdown.
-
-    The published route remains the publication authority. A draft route cannot
-    pull snippets into the build because it is never scanned. Every discovered
-    dependency must exist in the locale source; Spanish fallback is impossible.
-    """
+    """Return translated HTML dependencies referenced by published Markdown."""
     result: set[Path] = set()
     for route in _published_routes(locale, manifest):
         path = source / route
         if not path.is_file():
-            raise SystemExit(f"Manifest-declared locale file is missing: locales/{locale}/{route}")
+            raise SystemExit(f"Declared locale file is missing: locales/{locale}/{route}")
         text = path.read_text(encoding="utf-8")
         for raw in INCLUDE_HTML_RE.findall(text):
             relative = _safe_relative(raw, field="route snippet", locale=locale)
@@ -120,11 +156,9 @@ def _copy_declared_locale_files(locale: str, source: Path, target: Path, manifes
 
     for relative in _published_routes(locale, manifest):
         if relative not in seen:
-            _copy_locale_file(locale, source, target, relative, field="published_routes")
+            _copy_locale_file(locale, source, target, relative, field="published_routes/tool routes")
             seen.add(relative)
 
-    # Explicit snippets remain useful for dependencies that do not originate in
-    # a published Markdown route. Route-local dependencies are discovered below.
     for raw in _list_field(manifest, "required_snippets", locale):
         relative = _safe_relative(raw, field="required_snippets", locale=locale)
         if relative.suffix.lower() != ".html":
@@ -138,7 +172,12 @@ def _copy_declared_locale_files(locale: str, source: Path, target: Path, manifes
             _copy_locale_file(locale, source, target, relative, field="published route dependency")
             seen.add(relative)
 
-    for raw in _list_field(manifest, "published_files", locale):
+    published_files = list(_list_field(manifest, "published_files", locale))
+    tool_files = _tool_manifest(locale).get("published_files") or []
+    if not isinstance(tool_files, list):
+        raise SystemExit(f"tools/locale-{locale}.yml published_files must be a list")
+    published_files.extend(tool_files)
+    for raw in published_files:
         relative = _safe_relative(raw, field="published_files", locale=locale)
         if relative not in seen:
             _copy_locale_file(locale, source, target, relative, field="published_files")
@@ -156,7 +195,6 @@ def prepare(locale: str) -> Path:
         shutil.rmtree(target)
     target.mkdir(parents=True)
 
-    # The design/runtime layer is shared. Content-bearing media is not.
     for dirname in SHARED_DIRS:
         src = DOCS / dirname
         if src.exists():
