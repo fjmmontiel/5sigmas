@@ -37,7 +37,7 @@ hide:
 
 <section class="s5-page-intro">
   <div class="s5-eyebrow">Herramientas</div>
-  <h1>Comprueba el sistema cambiando sus variables.</h1>
+  <h1>Experimenta con las variables de un sistema de IA.</h1>
   <p>Calculadoras, visualizadores y laboratorios para responder preguntas de ingeniería de IA con supuestos visibles. Cada herramienta explica la fórmula, documenta las fuentes y permite reproducir el escenario.</p>
 </section>
 
@@ -45,9 +45,9 @@ hide:
   <div class="s5-section-head s5-section-head--with-copy">
     <div>
       <div class="s5-eyebrow">Disponible</div>
-      <h2 id="s5-tools-available">Herramientas publicables</h2>
+      <h2 id="s5-tools-available">Herramientas disponibles</h2>
     </div>
-    <p>Solo aparecen aquí cuando la versión española e inglesa comparten lógica, fuentes y pruebas.</p>
+    <p>Una herramienta aparece aquí cuando las versiones española e inglesa comparten la misma lógica, fuentes y pruebas.</p>
   </div>
 
   <div class="s5-tool-index-grid">
@@ -63,8 +63,8 @@ hide:
 <section class="s5-section s5-tools-roadmap" aria-labelledby="s5-tools-roadmap">
   <div>
     <div class="s5-eyebrow">Hoja de ruta</div>
-    <h2 id="s5-tools-roadmap">Una biblioteca técnica, no una colección de demos.</h2>
-    <p>La sección crecerá por familias: coste y capacidad, memoria e inferencia, RAG, agentes, evaluación, seguridad, datos e infraestructura. Las herramientas no publicadas no tienen páginas vacías.</p>
+    <h2 id="s5-tools-roadmap">Familias de herramientas planificadas</h2>
+    <p>La sección crecerá por problemas concretos: coste y capacidad, memoria e inferencia, RAG, agentes, evaluación, seguridad, datos e infraestructura. Las herramientas todavía no publicadas no generan páginas vacías.</p>
   </div>
   <div class="s5-tools-roadmap__list" aria-label="Próximas familias de herramientas">
     <div class="s5-tools-roadmap__row"><span>02</span><strong>Precio y rendimiento de modelos</strong><span>explorador</span></div>
@@ -72,7 +72,7 @@ hide:
     <div class="s5-tools-roadmap__row"><span>04</span><strong>Atención y contexto Transformer</strong><span>visualizador</span></div>
     <div class="s5-tools-roadmap__row"><span>05</span><strong>Recuperación y evaluación RAG</strong><span>laboratorio</span></div>
     <div class="s5-tools-roadmap__row"><span>06</span><strong>Latencia, coste y fiabilidad de agentes</strong><span>explorador</span></div>
-    <div class="s5-tools-roadmap__row"><span>07</span><strong>Benchmarks, scaling e infraestructura</strong><span>datos</span></div>
+    <div class="s5-tools-roadmap__row"><span>07</span><strong>Benchmarks, escalado e infraestructura</strong><span>datos</span></div>
     <div class="s5-tools-roadmap__row"><span>08</span><strong>Ecosistema global de IA</strong><span>datos</span></div>
   </div>
 </section>
@@ -81,7 +81,7 @@ hide:
   <div class="s5-section-head s5-section-head--with-copy">
     <div>
       <div class="s5-eyebrow">Criterio</div>
-      <h2 id="s5-tools-method">Qué exige una herramienta de 5sigmas</h2>
+      <h2 id="s5-tools-method">Qué debe mostrar una herramienta de 5sigmas</h2>
     </div>
   </div>
   <div class="s5-entry-grid">
