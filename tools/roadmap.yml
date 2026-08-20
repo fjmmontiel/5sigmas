@@ -1,0 +1,123 @@
+version: 1
+minimum_tools: 18
+quality_states:
+  - planned
+  - in_progress
+  - excellent
+updated: 2026-08-21
+tools:
+  - id: llm-cost-latency
+    order: 1
+    es_title: Calculadora de coste y latencia de LLMs
+    en_title: LLM Cost & Latency Calculator
+    category: calculator
+    status: in_progress
+    es_route: /herramientas/coste-latencia-llm/
+    en_route: /en/tools/llm-cost-latency/
+    es_parity: true
+    en_parity: true
+    tests: pending_ci
+    data_freshness: provider_pricing_review_required
+    last_reviewed: 2026-08-21
+  - id: model-price-performance
+    order: 2
+    es_title: Explorador precio/rendimiento de modelos
+    en_title: Model Price/Performance Explorer
+    category: explorer
+    status: planned
+  - id: inference-vram
+    order: 3
+    es_title: Calculadora de VRAM para inferencia
+    en_title: AI Inference VRAM Calculator
+    category: calculator
+    status: planned
+  - id: kv-cache-context
+    order: 4
+    es_title: Explorador de KV cache y ventana de contexto
+    en_title: KV Cache & Context Window Explorer
+    category: explorer
+    status: planned
+  - id: transformer-attention
+    order: 5
+    es_title: Visualizador de atención Transformer
+    en_title: Transformer Attention Visualizer
+    category: visualizer
+    status: planned
+  - id: token-context-budget
+    order: 6
+    es_title: Planificador de presupuesto de contexto
+    en_title: Token/Context Budget Planner
+    category: planner
+    status: planned
+  - id: rag-retrieval-lab
+    order: 7
+    es_title: Laboratorio de recuperación RAG
+    en_title: RAG Retrieval Lab
+    category: lab
+    status: planned
+  - id: rag-evaluation
+    order: 8
+    es_title: Playground de evaluación RAG
+    en_title: RAG Evaluation Playground
+    category: evaluator
+    status: planned
+  - id: voice-latency-budget
+    order: 9
+    es_title: Explorador de presupuesto de latencia para agentes de voz
+    en_title: Voice-Agent Latency Budget Explorer
+    category: explorer
+    status: planned
+  - id: voice-cost-capacity
+    order: 10
+    es_title: Planificador de coste y capacidad para agentes de voz
+    en_title: Voice-Agent Cost & Capacity Planner
+    category: planner
+    status: planned
+  - id: agent-reliability
+    order: 11
+    es_title: Playground de fiabilidad y evaluación de agentes
+    en_title: Agent Reliability / Eval Playground
+    category: evaluator
+    status: planned
+  - id: prompt-injection-threat
+    order: 12
+    es_title: Explorador de amenazas de prompt injection
+    en_title: Prompt-Injection Threat Explorer
+    category: explorer
+    status: planned
+  - id: benchmark-reliability
+    order: 13
+    es_title: Explorador de fiabilidad de benchmarks
+    en_title: Benchmark Reliability Explorer
+    category: explorer
+    status: planned
+  - id: model-capability-timeline
+    order: 14
+    es_title: Línea temporal de capacidades de modelos
+    en_title: Model Capability Timeline
+    category: data_explorer
+    status: planned
+  - id: scaling-laws
+    order: 15
+    es_title: Explorador de leyes de escalado
+    en_title: Scaling-Laws Explorer
+    category: explorer
+    status: planned
+  - id: training-compute-energy
+    order: 16
+    es_title: Estimador de cómputo y energía de entrenamiento
+    en_title: Training Compute / Energy Estimator
+    category: calculator
+    status: planned
+  - id: datacenter-ai-capacity
+    order: 17
+    es_title: Explorador de capacidad de IA en datacenters
+    en_title: Datacenter AI Capacity Explorer
+    category: explorer
+    status: planned
+  - id: global-ai-ecosystem
+    order: 18
+    es_title: Explorador del ecosistema global de IA
+    en_title: Global AI Ecosystem Explorer
+    category: data_explorer
+    status: planned
