@@ -12,6 +12,7 @@
       copyFailed: 'No se pudo copiar; la URL ya contiene el escenario.',
       noCacheRate: 'Este preset no codifica una tarifa específica de lectura de caché. Se usa la tarifa de entrada como aproximación conservadora hasta que introduzcas una tarifa manual.',
       longContext: 'Se ha activado el ajuste de precio por contexto largo del proveedor.',
+      scheduledPrice: 'La tarifa efectiva desde {date} se ha aplicado automáticamente.',
       withinBudget: 'Dentro del presupuesto',
       overBudget: 'Supera el presupuesto',
       noBudget: 'Sin presupuesto objetivo',
@@ -33,6 +34,7 @@
       copyFailed: 'Could not copy; the URL already contains the scenario.',
       noCacheRate: 'This preset does not encode a specific cache-read rate. The input rate is used as a conservative approximation until you enter a manual cache rate.',
       longContext: 'The provider long-context pricing adjustment is active.',
+      scheduledPrice: 'The rate effective from {date} has been applied automatically.',
       withinBudget: 'Within budget',
       overBudget: 'Over budget',
       noBudget: 'No budget target',
@@ -87,6 +89,7 @@
 
   const number = (name) => Number(fields[name]?.value ?? 0);
   const preset = () => presetMap.get(modelSelect?.value) || null;
+  const activePreset = (selected) => window.S5LlmCostLatency.resolvePricing(selected, new Date());
   const formatCurrency = (value, digits = 2) => new Intl.NumberFormat(locale === 'es' ? 'es-ES' : 'en-US', {
     style: 'currency', currency: 'USD', minimumFractionDigits: digits, maximumFractionDigits: digits
   }).format(Number(value) || 0);
@@ -113,10 +116,11 @@
 
   function updatePriceFieldsFromPreset(selected, preserveCacheRate = false) {
     if (!selected) return;
-    fields.inputPrice.value = selected.input_usd_per_million;
-    fields.outputPrice.value = selected.output_usd_per_million;
-    const hasCacheRate = selected.cached_input_usd_per_million !== null && selected.cached_input_usd_per_million !== undefined;
-    fields.cachedInputPrice.value = hasCacheRate ? selected.cached_input_usd_per_million : selected.input_usd_per_million;
+    const active = activePreset(selected);
+    fields.inputPrice.value = active.input_usd_per_million;
+    fields.outputPrice.value = active.output_usd_per_million;
+    const hasCacheRate = active.cached_input_usd_per_million !== null && active.cached_input_usd_per_million !== undefined;
+    fields.cachedInputPrice.value = hasCacheRate ? active.cached_input_usd_per_million : active.input_usd_per_million;
     if (!hasCacheRate && !preserveCacheRate) fields.cacheHitRate.value = 0;
   }
 
@@ -177,8 +181,12 @@
     }
     if (sourceDate) sourceDate.textContent = `${strings.updated}: ${selected.source.verified_on}`;
     const notes = [selected.notes?.[locale] || ''];
-    if (selected.cached_input_usd_per_million == null && number('cacheHitRate') > 0) notes.push(strings.noCacheRate);
+    const active = activePreset(selected);
+    if (active.cached_input_usd_per_million == null && number('cacheHitRate') > 0) notes.push(strings.noCacheRate);
     if (result.pricing.longContextActive) notes.push(strings.longContext);
+    if (result.pricing.activePriceEffectiveFrom) {
+      notes.push(strings.scheduledPrice.replace('{date}', result.pricing.activePriceEffectiveFrom));
+    }
     if (sourceNote) sourceNote.textContent = notes.filter(Boolean).join(' ');
   }
 
