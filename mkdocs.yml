@@ -55,6 +55,9 @@ nav:
   - Inicio: index.md
   - Ver: visuales/index.md
   - Vídeos: videos/index.md
+  - Herramientas:
+      - herramientas/index.md
+      - Coste y latencia de LLMs: herramientas/coste-latencia-llm.md
   - Aprender:
       - Conceptos:
           - temas/index.md
