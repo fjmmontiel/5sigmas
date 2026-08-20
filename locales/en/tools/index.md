@@ -37,7 +37,7 @@ hide:
 
 <section class="s5-page-intro">
   <div class="s5-eyebrow">Tools</div>
-  <h1>Test the system by changing its variables.</h1>
+  <h1>Explore an AI system by changing its variables.</h1>
   <p>Calculators, visualizers and labs for answering AI engineering questions with explicit assumptions. Each tool documents the formula, cites its sources and makes the scenario reproducible.</p>
 </section>
 
@@ -45,9 +45,9 @@ hide:
   <div class="s5-section-head s5-section-head--with-copy">
     <div>
       <div class="s5-eyebrow">Available</div>
-      <h2 id="s5-tools-available">Release-ready tools</h2>
+      <h2 id="s5-tools-available">Available tools</h2>
     </div>
-    <p>A tool appears here only when the English and Spanish versions share the same logic, sources and tests.</p>
+    <p>A tool appears here when the English and Spanish versions share the same logic, sources and tests.</p>
   </div>
 
   <div class="s5-tool-index-grid">
@@ -63,8 +63,8 @@ hide:
 <section class="s5-section s5-tools-roadmap" aria-labelledby="s5-tools-roadmap">
   <div>
     <div class="s5-eyebrow">Roadmap</div>
-    <h2 id="s5-tools-roadmap">A technical library, not a collection of demos.</h2>
-    <p>The section will grow by problem family: cost and capacity, memory and inference, RAG, agents, evaluation, security, data and infrastructure. Unreleased tools do not get empty placeholder pages.</p>
+    <h2 id="s5-tools-roadmap">Planned tool families</h2>
+    <p>The section will grow around concrete engineering problems: cost and capacity, memory and inference, RAG, agents, evaluation, security, data and infrastructure. Unreleased tools do not get empty placeholder pages.</p>
   </div>
   <div class="s5-tools-roadmap__list" aria-label="Upcoming tool families">
     <div class="s5-tools-roadmap__row"><span>02</span><strong>Model price and performance</strong><span>explorer</span></div>
@@ -81,7 +81,7 @@ hide:
   <div class="s5-section-head s5-section-head--with-copy">
     <div>
       <div class="s5-eyebrow">Standard</div>
-      <h2 id="s5-tools-method">What a 5sigmas tool must make explicit</h2>
+      <h2 id="s5-tools-method">What a 5sigmas tool must show</h2>
     </div>
   </div>
   <div class="s5-entry-grid">
