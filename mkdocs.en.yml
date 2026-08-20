@@ -109,6 +109,9 @@ nav:
   - Home: index.md
   - Watch: visuales/index.md
   - Videos: videos/index.md
+  - Tools:
+      - tools/index.md
+      - LLM Cost & Latency: tools/llm-cost-latency.md
   - Learn:
       - Series: series/index.md
       - AI and Generative AI Foundations:
