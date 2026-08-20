@@ -1,7 +1,7 @@
 ---
 title: Calculadora de coste y latencia de LLMs
 description: Estima coste por solicitud, gasto mensual, tiempo de respuesta y concurrencia de una aplicación LLM a partir de tokens, caché, TTFT, velocidad y tráfico.
-keywords: calculadora coste LLM, latencia LLM, TTFT, tokens por segundo, coste API LLM, prompt caching, concurrencia LLM
+keywords: calculadora coste LLM, latencia LLM, TTFT, tokens por segundo, coste API LLM, caché de prompts, concurrencia LLM
 hide:
   - toc
   - navigation
@@ -37,7 +37,7 @@ hide:
 
 <section class="s5-page-intro">
   <div class="s5-eyebrow">Herramientas · LLMs · 01</div>
-  <h1>Coste y latencia de un LLM, en el mismo escenario.</h1>
+  <h1>Calcula el coste y la latencia de un LLM en el mismo escenario.</h1>
   <p>Introduce el tamaño de la solicitud, la carga y las características de respuesta. La calculadora separa precio, tiempo de respuesta y capacidad para que puedas ver qué variable está limitando el sistema.</p>
 </section>
 
@@ -53,9 +53,9 @@ hide:
       <h2>Modelo y precios</h2>
       <div class="s5-tool-field-grid s5-tool-field-grid--single">
         <div class="s5-tool-field">
-          <label for="s5-es-model">Modelo o preset</label>
+          <label for="s5-es-model">Modelo o configuración</label>
           <select id="s5-es-model" data-field="model" aria-describedby="s5-es-model-note"></select>
-          <small id="s5-es-model-note">Los presets usan precios públicos verificados; todas las tarifas siguen siendo editables.</small>
+          <small id="s5-es-model-note">Las configuraciones usan precios públicos verificados; todas las tarifas siguen siendo editables.</small>
         </div>
       </div>
       <div class="s5-tool-field-grid">
@@ -126,7 +126,7 @@ hide:
           <input id="s5-es-budget" data-field="monthlyBudgetUsd" type="number" min="0" step="50" inputmode="decimal" value="1500" />
         </div>
         <div class="s5-tool-field">
-          <label for="s5-es-target">Objetivo respuesta · ms</label>
+          <label for="s5-es-target">Objetivo de respuesta · ms</label>
           <input id="s5-es-target" data-field="latencyTargetMs" type="number" min="0" step="100" inputmode="decimal" value="10000" />
         </div>
       </div>
@@ -199,7 +199,7 @@ hide:
 
     <aside class="s5-tool-source" aria-label="Procedencia de los precios">
       <div class="s5-tool-source__head">
-        <a data-output="sourceLink" target="_blank" rel="noopener noreferrer">Preset</a>
+        <a data-output="sourceLink" target="_blank" rel="noopener noreferrer">Configuración</a>
         <span data-output="sourceDate"></span>
       </div>
       <p data-output="sourceNote"></p>
@@ -213,13 +213,13 @@ hide:
     <h2 id="s5-tool-method-title">Qué calcula y qué no.</h2>
   </div>
   <div class="s5-tool-method__body">
-    <p><strong>Coste.</strong> Separa tokens de entrada no cacheados, tokens servidos desde caché y tokens de salida. Los precios del preset son un punto de partida: puedes sustituirlos por tu contrato, batch pricing o cualquier tarifa efectiva.</p>
+    <p><strong>Coste.</strong> Separa tokens de entrada no cacheados, tokens servidos desde caché y tokens de salida. Los precios de la configuración son un punto de partida: puedes sustituirlos por tu contrato, tarifas por lotes (batch) o cualquier tarifa efectiva.</p>
     <div class="s5-tool-method__formula">coste = (T<sub>in,no-cache</sub> × P<sub>in</sub> + T<sub>in,cache</sub> × P<sub>cache</sub> + T<sub>out</sub> × P<sub>out</sub>) / 1.000.000</div>
     <p><strong>Latencia.</strong> TTFT representa todo lo que ocurre hasta recibir el primer token. Después se aproxima la generación como <code>(tokens_salida − 1) / tokens_por_segundo</code>. Es un modelo de respuesta completa, no de latencia percibida durante streaming.</p>
     <div class="s5-tool-method__formula">tiempo_respuesta ≈ TTFT + (T<sub>out</sub> − 1) / velocidad</div>
-    <p><strong>Capacidad.</strong> Para carga estable se aplica la ley de Little: concurrencia media ≈ tasa de llegada × tiempo en servicio. Sirve para presupuestar capacidad media; no sustituye un modelo de colas para tráfico bursty, p95/p99, rate limits, retries o batching.</p>
+    <p><strong>Capacidad.</strong> Para carga estable se aplica la ley de Little: concurrencia media ≈ tasa de llegada × tiempo en servicio. Sirve para presupuestar capacidad media; no sustituye un modelo de colas para tráfico con ráfagas, percentiles p95/p99, límites de tasa, reintentos o procesamiento por lotes.</p>
     <div class="s5-tool-method__formula">concurrencia_media ≈ solicitudes/segundo × segundos/solicitud</div>
-    <p class="s5-tool-method__notes">No se incluyen llamadas a tools, búsquedas web, almacenamiento de caché, cargos por audio/imagen, prioridad, descuentos de volumen ni infraestructura propia salvo que los incorpores en las tarifas. Los presets que tienen reglas de contexto largo conocidas las aplican automáticamente y lo indican junto a la fuente.</p>
+    <p class="s5-tool-method__notes">No se incluyen llamadas a herramientas, búsquedas web, almacenamiento de caché, cargos por audio/imagen, procesamiento prioritario, descuentos por volumen ni infraestructura propia salvo que los incorpores en las tarifas. Las configuraciones con reglas conocidas de precio por contexto largo las aplican automáticamente y muestran el ajuste junto a la fuente.</p>
   </div>
 </section>
 
@@ -236,9 +236,9 @@ hide:
 
 <section class="s5-section" aria-labelledby="s5-tool-sources">
   <div class="s5-section-head">
-    <h2 id="s5-tool-sources">Fuentes de los presets</h2>
+    <h2 id="s5-tool-sources">Fuentes de precios</h2>
   </div>
-  <p>La capa de datos guarda la organización, URL primaria y fecha de verificación de cada preset. En esta versión se incluyen páginas oficiales de <a href="https://developers.openai.com/api/docs/models" target="_blank" rel="noopener noreferrer">OpenAI</a>, <a href="https://www.anthropic.com/news/claude-sonnet-5" target="_blank" rel="noopener noreferrer">Anthropic</a> y <a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener noreferrer">Google AI for Developers</a>. Los precios pueden cambiar; revisa siempre el enlace mostrado para el modelo seleccionado antes de tomar una decisión contractual.</p>
+  <p>La capa de datos guarda la organización, URL primaria y fecha de verificación de cada configuración. En esta versión se incluyen páginas oficiales de <a href="https://developers.openai.com/api/docs/models" target="_blank" rel="noopener noreferrer">OpenAI</a>, <a href="https://www.anthropic.com/news/claude-sonnet-5" target="_blank" rel="noopener noreferrer">Anthropic</a> y <a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener noreferrer">Google AI for Developers</a>. Los precios pueden cambiar; revisa siempre el enlace mostrado para el modelo seleccionado antes de tomar una decisión contractual.</p>
 </section>
 
 </div>
