@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-08-21",
+  "currency": "USD",
+  "unit": "per_1m_tokens",
+  "methodology": {
+    "es": "Precios públicos de API verificados contra documentación primaria. La calculadora permite editar todos los precios. No se incluyen costes de herramientas, búsquedas, almacenamiento de caché, procesamiento prioritario ni otros extras salvo que se indique explícitamente.",
+    "en": "Public API prices verified against primary documentation. Every rate remains editable in the calculator. Tool calls, search, cache storage, priority processing and other add-ons are excluded unless explicitly stated."
+  },
+  "presets": [
+    {
+      "id": "openai-gpt-5-6-sol",
+      "provider": "OpenAI",
+      "model": "GPT-5.6 Sol",
+      "input_usd_per_million": 5.0,
+      "cached_input_usd_per_million": 0.5,
+      "output_usd_per_million": 30.0,
+      "long_context": {
+        "threshold_input_tokens": 272000,
+        "input_multiplier": 2.0,
+        "output_multiplier": 1.5
+      },
+      "source": {
+        "title": "GPT-5.6 Sol Model | OpenAI API",
+        "url": "https://developers.openai.com/api/docs/models/gpt-5.6-sol",
+        "verified_on": "2026-08-21"
+      },
+      "notes": {
+        "es": "OpenAI indica que las solicitudes con más de 272k tokens de entrada multiplican por 2 el precio de entrada y por 1,5 el de salida para toda la solicitud. La calculadora aplica ese ajuste automáticamente.",
+        "en": "OpenAI states that requests above 272k input tokens are billed at 2x input and 1.5x output for the full request. The calculator applies that adjustment automatically."
+      }
+    },
+    {
+      "id": "openai-gpt-5-6-terra",
+      "provider": "OpenAI",
+      "model": "GPT-5.6 Terra",
+      "input_usd_per_million": 2.0,
+      "cached_input_usd_per_million": 0.2,
+      "output_usd_per_million": 12.0,
+      "long_context": {
+        "threshold_input_tokens": 272000,
+        "input_multiplier": 2.0,
+        "output_multiplier": 1.5
+      },
+      "source": {
+        "title": "GPT-5.6 Terra Model | OpenAI API",
+        "url": "https://developers.openai.com/api/docs/models/gpt-5.6-terra",
+        "verified_on": "2026-08-21"
+      },
+      "notes": {
+        "es": "El ajuste de contexto largo por encima de 272k tokens se aplica automáticamente.",
+        "en": "The long-context pricing adjustment above 272k input tokens is applied automatically."
+      }
+    },
+    {
+      "id": "openai-gpt-5-6-luna",
+      "provider": "OpenAI",
+      "model": "GPT-5.6 Luna",
+      "input_usd_per_million": 0.2,
+      "cached_input_usd_per_million": 0.02,
+      "output_usd_per_million": 1.2,
+      "long_context": {
+        "threshold_input_tokens": 272000,
+        "input_multiplier": 2.0,
+        "output_multiplier": 1.5
+      },
+      "source": {
+        "title": "GPT-5.6 Luna Model | OpenAI API",
+        "url": "https://developers.openai.com/api/docs/models/gpt-5.6-luna",
+        "verified_on": "2026-08-21"
+      },
+      "notes": {
+        "es": "El ajuste de contexto largo por encima de 272k tokens se aplica automáticamente.",
+        "en": "The long-context pricing adjustment above 272k input tokens is applied automatically."
+      }
+    },
+    {
+      "id": "anthropic-claude-sonnet-5",
+      "provider": "Anthropic",
+      "model": "Claude Sonnet 5",
+      "input_usd_per_million": 2.0,
+      "cached_input_usd_per_million": null,
+      "output_usd_per_million": 10.0,
+      "valid_through": "2026-08-31",
+      "future_price": {
+        "effective_from": "2026-09-01",
+        "input_usd_per_million": 3.0,
+        "output_usd_per_million": 15.0
+      },
+      "source": {
+        "title": "Introducing Claude Sonnet 5 | Anthropic",
+        "url": "https://www.anthropic.com/news/claude-sonnet-5",
+        "verified_on": "2026-08-21"
+      },
+      "notes": {
+        "es": "Precio introductorio vigente hasta el 31 de agosto de 2026. La tarifa específica de lectura de caché no se modela en este preset: la calculadora parte de 0% de caché y permite introducir una tarifa manual.",
+        "en": "Introductory pricing is valid through August 31, 2026. This preset does not encode a cache-read rate: the calculator starts at 0% cache and lets you enter a manual rate."
+      }
+    },
+    {
+      "id": "google-gemini-2-5-flash",
+      "provider": "Google",
+      "model": "Gemini 2.5 Flash",
+      "input_usd_per_million": 0.3,
+      "cached_input_usd_per_million": 0.03,
+      "output_usd_per_million": 2.5,
+      "source": {
+        "title": "Gemini Developer API pricing | Google AI for Developers",
+        "url": "https://ai.google.dev/gemini-api/docs/pricing",
+        "verified_on": "2026-08-21"
+      },
+      "notes": {
+        "es": "La tarifa de caché representa el precio por tokens de contexto cacheados. El almacenamiento de caché por hora se factura aparte y no se incluye en esta estimación.",
+        "en": "The cache rate represents cached-context token pricing. Hourly cache storage is billed separately and is not included in this estimate."
+      }
+    }
+  ]
+}
