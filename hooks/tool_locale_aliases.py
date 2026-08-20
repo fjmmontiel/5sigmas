@@ -42,8 +42,7 @@ def _src_route(src_path: str) -> str:
     return "/" + path.with_suffix("").as_posix().strip("/") + "/"
 
 
-def _english_public_route(src_path: str) -> str:
-    route = _src_route(src_path)
+def _english_public_route(route: str) -> str:
     return "/en/" if route == "/" else "/en" + route
 
 
@@ -76,19 +75,20 @@ def on_post_page(output: str, page, config, **kwargs) -> str:
         english_src = ROUTE_PAIRS.get(src_path)
         if not english_src:
             return output
-        targets = {
-            "es": _src_route(src_path),
-            "en": _english_public_route(english_src),
-        }
+        es_route = _src_route(src_path)
+        en_route = _src_route(english_src)
     else:
         inverse = {en: es for es, en in ROUTE_PAIRS.items()}
         spanish_src = inverse.get(src_path)
         if not spanish_src:
             return output
-        targets = {
-            "es": _src_route(spanish_src),
-            "en": _english_public_route(src_path),
-        }
+        es_route = _src_route(spanish_src)
+        en_route = _src_route(src_path)
+
+    targets = {
+        "es": es_route,
+        "en": _english_public_route(en_route),
+    }
 
     def rewrite(match: re.Match[str]) -> str:
         return _replace_href(match.group(0), targets[match.group("lang").lower()])
@@ -114,10 +114,7 @@ def on_post_build(config, **kwargs) -> None:
         return
 
     language = _language(config)
-    pairs = [
-        (_src_route(es_src), _src_route(en_src))
-        for es_src, en_src in ROUTE_PAIRS.items()
-    ]
+    pairs = [(_src_route(es_src), _src_route(en_src)) for es_src, en_src in ROUTE_PAIRS.items()]
     by_current = {
         (es_route if language == "es" else en_route): (es_route, en_route)
         for es_route, en_route in pairs
@@ -131,8 +128,7 @@ def on_post_build(config, **kwargs) -> None:
         loc = url_node.find(f"{{{SITEMAP_NS}}}loc")
         if loc is None or not loc.text:
             continue
-        current_route = _normalize_route(loc.text, language)
-        pair = by_current.get(current_route)
+        pair = by_current.get(_normalize_route(loc.text, language))
         if not pair:
             continue
 
@@ -143,11 +139,8 @@ def on_post_build(config, **kwargs) -> None:
         es_route, en_route = pair
         for hreflang, href in (
             ("es", GLOBAL_ORIGIN + es_route),
-            ("en", GLOBAL_ORIGIN + _english_public_route(en_route.lstrip("/").replace("/", "/")).replace("/en/en/", "/en/")),
+            ("en", GLOBAL_ORIGIN + _english_public_route(en_route)),
         ):
-            # en_route is already a public route; build the /en prefix directly.
-            if hreflang == "en":
-                href = GLOBAL_ORIGIN + ("/en/" if en_route == "/" else "/en" + en_route)
             ET.SubElement(
                 url_node,
                 f"{{{XHTML_NS}}}link",
