@@ -1,0 +1,83 @@
+version: 1
+last_reviewed: 2026-08-21
+quality_states:
+  - planned
+  - in_progress
+  - excellent
+tools:
+  - id: llm-cost-latency
+    order: 1
+    status: in_progress
+    es_path: docs/herramientas/llm-cost-latency.md
+    en_path: locales/en/tools/llm-cost-latency.md
+    data_freshness: none
+    tests: pending
+    es_en_parity: complete
+  - id: model-price-performance
+    order: 2
+    status: planned
+    data_freshness: volatile_provider_and_benchmark_data
+  - id: inference-vram
+    order: 3
+    status: planned
+    data_freshness: none_for_formula_core
+  - id: kv-cache-context
+    order: 4
+    status: planned
+    data_freshness: none_for_formula_core
+  - id: transformer-attention
+    order: 5
+    status: planned
+    data_freshness: none
+  - id: token-context-budget
+    order: 6
+    status: planned
+    data_freshness: none
+  - id: rag-retrieval-lab
+    order: 7
+    status: planned
+    data_freshness: none
+  - id: rag-evaluation
+    order: 8
+    status: planned
+    data_freshness: none
+  - id: voice-latency-budget
+    order: 9
+    status: planned
+    data_freshness: none_for_formula_core
+  - id: voice-cost-capacity
+    order: 10
+    status: planned
+    data_freshness: volatile_provider_data_when_presets_are_added
+  - id: agent-reliability-eval
+    order: 11
+    status: planned
+    data_freshness: none
+  - id: prompt-injection-threats
+    order: 12
+    status: planned
+    data_freshness: slow_changing_security_guidance
+  - id: benchmark-reliability
+    order: 13
+    status: planned
+    data_freshness: benchmark_specific
+  - id: model-capability-timeline
+    order: 14
+    status: planned
+    data_freshness: monthly_or_on_material_release
+  - id: scaling-laws
+    order: 15
+    status: planned
+    data_freshness: source_versioned
+  - id: training-compute-energy
+    order: 16
+    status: planned
+    data_freshness: hardware_and_energy_assumptions
+  - id: datacenter-ai-capacity
+    order: 17
+    status: planned
+    data_freshness: hardware_and_infrastructure_assumptions
+  - id: global-ai-ecosystem
+    order: 18
+    status: planned
+    data_freshness: annual_or_source_release
