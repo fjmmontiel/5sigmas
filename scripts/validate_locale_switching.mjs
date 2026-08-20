@@ -42,9 +42,8 @@ const sitemapText = async (route) => {
 const esSitemap = await sitemapText('/sitemap.xml');
 const enSitemap = await sitemapText('/en/sitemap.xml');
 
-const assertSitemapPair = (sourceRoute) => {
-  const enRoute = sourceRoute === '/' ? '/en/' : `/en${sourceRoute}`;
-  const esHref = `hreflang="es" href="${absolute(sourceRoute)}"`;
+const assertSitemapPair = (esRoute, enRoute) => {
+  const esHref = `hreflang="es" href="${absolute(esRoute)}"`;
   const enHref = `hreflang="en" href="${absolute(enRoute)}"`;
   for (const [name, xml] of [['Spanish sitemap', esSitemap], ['English sitemap', enSitemap]]) {
     if (!xml.includes(esHref)) failures.push(`${name}: missing ${esHref}`);
@@ -72,7 +71,7 @@ const assertTranslatedPair = async ({ es, en }) => {
       if (!targetResponse.ok()) failures.push(`${route}: opposite-locale selector target returns ${targetResponse.status()}: ${target.pathname}`);
     }
   }
-  assertSitemapPair(es);
+  assertSitemapPair(es, en);
 };
 
 await assertTranslatedPair({ es: '/series/agentes-ia/02-anatomia-de-un-agente/', en: '/en/series/agentes-ia/02-anatomia-de-un-agente/' });
@@ -93,6 +92,8 @@ await assertTranslatedPair({ es: '/temas/prompt-injection/', en: '/en/temas/prom
 await assertTranslatedPair({ es: '/visuales/', en: '/en/visuales/' });
 await assertTranslatedPair({ es: '/videos/', en: '/en/videos/' });
 await assertTranslatedPair({ es: '/videos/series/fundamentos-ia-iag/00_presentacion_serie/', en: '/en/videos/series/fundamentos-ia-iag/00_presentacion_serie/' });
+await assertTranslatedPair({ es: '/herramientas/', en: '/en/tools/' });
+await assertTranslatedPair({ es: '/herramientas/coste-latencia-llm/', en: '/en/tools/llm-cost-latency/' });
 await assertTranslatedPair({ es: '/', en: '/en/' });
 
 const untranslated = '/temas/agi/';
@@ -110,4 +111,4 @@ if (failures.length) {
   for (const failure of failures) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log('Locale-switch quality QA passed: selectors preserve translated routes, XML sitemaps carry truthful hreflang pairs, and untranslated pages expose no false English equivalent.');
+console.log('Locale-switch quality QA passed: selectors preserve translated routes, explicit localized tool slugs, XML sitemap hreflang pairs, and safe fallbacks.');
