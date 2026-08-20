@@ -9,7 +9,7 @@ import { fileURLToPath } from 'node:url';
 const require = createRequire(import.meta.url);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
-const { calculate } = require(path.join(root, 'docs/assets/javascripts/tools/llm-cost-latency-core.js'));
+const { calculate, resolvePricing } = require(path.join(root, 'docs/assets/javascripts/tools/llm-cost-latency-core.js'));
 const pricing = JSON.parse(fs.readFileSync(path.join(root, 'docs/assets/data/tools/llm-pricing.json'), 'utf8'));
 
 const close = (actual, expected, epsilon = 1e-9, label = '') => {
@@ -95,7 +95,44 @@ const base = {
   assert.equal(result.cost.requestsPerMonth, 105_600);
 }
 
-assert.ok(pricing.presets.length >= 5, 'expected at least five sourced pricing presets');
+const presets = new Map(pricing.presets.map((preset) => [preset.id, preset]));
+const sonnet5 = presets.get('anthropic-claude-sonnet-5');
+const gemini36 = presets.get('google-gemini-3-6-flash');
+const gemini37 = presets.get('google-gemini-3-7-flash');
+const gemini35Lite = presets.get('google-gemini-3-5-flash-lite');
+
+assert.ok(sonnet5, 'Claude Sonnet 5 preset required');
+assert.ok(gemini36, 'Gemini 3.6 Flash preset required');
+assert.ok(gemini37, 'Gemini 3.7 Flash preset required');
+assert.ok(gemini35Lite, 'Gemini 3.5 Flash-Lite preset required');
+
+{
+  const active = resolvePricing(sonnet5, '2026-08-21T12:00:00Z');
+  close(active.input_usd_per_million, 2, 1e-12, 'Sonnet 5 introductory input rate');
+  close(active.output_usd_per_million, 10, 1e-12, 'Sonnet 5 introductory output rate');
+  assert.equal(active.active_price_effective_from, undefined);
+
+  const future = resolvePricing(sonnet5, '2026-09-01T00:00:00Z');
+  close(future.input_usd_per_million, 3, 1e-12, 'Sonnet 5 standard input rate');
+  close(future.output_usd_per_million, 15, 1e-12, 'Sonnet 5 standard output rate');
+  assert.equal(future.active_price_effective_from, '2026-09-01');
+}
+
+{
+  const current = resolvePricing(gemini36, '2026-08-21T12:00:00Z');
+  close(current.input_usd_per_million, 0.75, 1e-12, 'Gemini 3.6 promotional input rate');
+  close(current.cached_input_usd_per_million, 0.075, 1e-12, 'Gemini 3.6 promotional cache rate');
+  close(current.output_usd_per_million, 3.75, 1e-12, 'Gemini 3.6 promotional output rate');
+
+  const future = resolvePricing(gemini36, '2027-01-01T00:00:00Z');
+  close(future.input_usd_per_million, 1.5, 1e-12, 'Gemini 3.6 2027 input rate');
+  close(future.cached_input_usd_per_million, 0.15, 1e-12, 'Gemini 3.6 2027 cache rate');
+  close(future.output_usd_per_million, 7.5, 1e-12, 'Gemini 3.6 2027 output rate');
+  assert.equal(future.active_price_effective_from, '2027-01-01');
+}
+
+assert.ok(pricing.presets.length >= 8, 'expected at least eight sourced pricing presets');
+assert.equal(pricing.freshness_policy?.review_interval_days, 14, 'pricing freshness policy must be explicit');
 for (const preset of pricing.presets) {
   assert.match(preset.id, /^[a-z0-9-]+$/);
   assert.ok(preset.provider && preset.model, `${preset.id}: provider/model required`);
@@ -103,6 +140,11 @@ for (const preset of pricing.presets) {
   assert.ok(Number.isFinite(preset.output_usd_per_million), `${preset.id}: output rate required`);
   assert.match(preset.source?.url || '', /^https:\/\//, `${preset.id}: primary-source URL required`);
   assert.match(preset.source?.verified_on || '', /^2026-\d{2}-\d{2}$/, `${preset.id}: verification date required`);
+  if (preset.future_price) {
+    assert.match(preset.future_price.effective_from || '', /^20\d{2}-\d{2}-\d{2}$/, `${preset.id}: future effective date required`);
+    assert.ok(Number.isFinite(preset.future_price.input_usd_per_million), `${preset.id}: future input rate required`);
+    assert.ok(Number.isFinite(preset.future_price.output_usd_per_million), `${preset.id}: future output rate required`);
+  }
 }
 
-console.log(`LLM cost/latency math passed: ${pricing.presets.length} sourced presets; cache, long-context, latency and capacity cases verified.`);
+console.log(`LLM cost/latency math passed: ${pricing.presets.length} sourced presets; cache, scheduled pricing, long-context, latency and capacity cases verified.`);
