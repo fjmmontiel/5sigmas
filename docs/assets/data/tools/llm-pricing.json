@@ -9,7 +9,7 @@
     "rule": "Provider pricing is volatile. Re-verify presets against primary documentation at least every 14 days and whenever a listed provider changes model pricing. Future effective prices are encoded when the provider has already announced them."
   },
   "methodology": {
-    "es": "Precios públicos de API verificados contra documentación primaria. La calculadora permite editar todas las tarifas. La caché representa lecturas de tokens ya cacheados; no se modelan escrituras ni almacenamiento de caché. Tampoco se incluyen tools, búsquedas, procesamiento prioritario u otros extras salvo que se indique explícitamente.",
+    "es": "Precios públicos de API verificados contra documentación primaria. La calculadora permite editar todas las tarifas. La caché representa lecturas de tokens ya cacheados; no se modelan escrituras ni almacenamiento de caché. Tampoco se incluyen llamadas a herramientas, búsquedas, procesamiento prioritario u otros extras salvo que se indique explícitamente.",
     "en": "Public API prices verified against primary documentation. Every rate remains editable. Cache represents reads of already-cached tokens; cache writes and storage are not modelled. Tool calls, search, priority processing and other add-ons are also excluded unless explicitly stated."
   },
   "presets": [
@@ -84,22 +84,23 @@
       "provider": "Anthropic",
       "model": "Claude Sonnet 5",
       "input_usd_per_million": 2.0,
-      "cached_input_usd_per_million": null,
+      "cached_input_usd_per_million": 0.2,
       "output_usd_per_million": 10.0,
       "valid_through": "2026-08-31",
       "future_price": {
         "effective_from": "2026-09-01",
         "input_usd_per_million": 3.0,
+        "cached_input_usd_per_million": 0.3,
         "output_usd_per_million": 15.0
       },
       "source": {
-        "title": "Introducing Claude Sonnet 5 | Anthropic",
-        "url": "https://www.anthropic.com/news/claude-sonnet-5",
+        "title": "Pricing | Claude Platform Docs",
+        "url": "https://platform.claude.com/docs/en/about-claude/pricing",
         "verified_on": "2026-08-21"
       },
       "notes": {
-        "es": "Precio introductorio vigente hasta el 31 de agosto de 2026; desde el 1 de septiembre Anthropic anuncia 3 USD/MTok de entrada y 15 USD/MTok de salida. La calculadora cambiará automáticamente a esa tarifa cuando entre en vigor. Este preset no codifica una tarifa de lectura de caché, así que empieza en 0% de caché y permite una tarifa manual.",
-        "en": "Introductory pricing is valid through August 31, 2026; Anthropic states that pricing changes to $3/MTok input and $15/MTok output on September 1. The calculator will switch automatically when that rate takes effect. This preset does not encode a cache-read rate, so it starts at 0% cache and allows a manual rate."
+        "es": "Hasta el 31 de agosto de 2026: 2 USD/MTok de entrada, 0,20 de lectura de caché y 10 de salida. Desde el 1 de septiembre: 3/0,30/15 USD por MTok. La calculadora cambia automáticamente cuando entra en vigor la nueva tarifa. Las escrituras de caché de 5 minutos (1,25× entrada) y 1 hora (2×) no están incluidas.",
+        "en": "Through August 31, 2026: $2/MTok input, $0.20 cache reads and $10 output. From September 1: $3/$0.30/$15 per MTok. The calculator switches automatically when the new rate takes effect. Five-minute cache writes (1.25× input) and one-hour cache writes (2×) are not included."
       }
     },
     {
@@ -118,7 +119,7 @@
       },
       "source": {
         "title": "Gemini Developer API pricing | Google AI for Developers",
-        "url": "https://ai.google.dev/gemini-api/docs/pricing",
+        "url": "https://ai.google.dev/gemini-api/docs/pricing?hl=en",
         "verified_on": "2026-08-21"
       },
       "notes": {
@@ -142,7 +143,7 @@
       },
       "source": {
         "title": "Gemini Developer API pricing | Google AI for Developers",
-        "url": "https://ai.google.dev/gemini-api/docs/pricing",
+        "url": "https://ai.google.dev/gemini-api/docs/pricing?hl=en",
         "verified_on": "2026-08-21"
       },
       "notes": {
@@ -159,7 +160,7 @@
       "output_usd_per_million": 2.5,
       "source": {
         "title": "Gemini Developer API pricing | Google AI for Developers",
-        "url": "https://ai.google.dev/gemini-api/docs/pricing",
+        "url": "https://ai.google.dev/gemini-api/docs/pricing?hl=en",
         "verified_on": "2026-08-21"
       },
       "notes": {
@@ -176,7 +177,7 @@
       "output_usd_per_million": 2.5,
       "source": {
         "title": "Gemini Developer API pricing | Google AI for Developers",
-        "url": "https://ai.google.dev/gemini-api/docs/pricing",
+        "url": "https://ai.google.dev/gemini-api/docs/pricing?hl=en",
         "verified_on": "2026-08-21"
       },
       "notes": {
