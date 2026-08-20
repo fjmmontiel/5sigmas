@@ -11,15 +11,16 @@ tools:
     es_title: Calculadora de coste y latencia de LLMs
     en_title: LLM Cost & Latency Calculator
     category: calculator
-    status: in_progress
+    status: excellent
     es_route: /herramientas/coste-latencia-llm/
     en_route: /en/tools/llm-cost-latency/
     es_parity: true
     en_parity: true
-    tests: implemented_pending_ci
-    visual_review: pending_ci_artifacts
+    tests: passing_full_ci_2026-08-21
+    visual_review: reviewed_es_en_mobile_390_desktop_1440_2026-08-21
     provenance: primary_sources_verified_2026-08-21
-    data_freshness: provider_pricing_review_required
+    data_freshness: provider_pricing_review_every_14_days_and_on_release
+    validated_head: f780b156b879ff7357b3b9613c5a6bd3915c2250
     last_reviewed: 2026-08-21
   - id: model-price-performance
     order: 2
@@ -59,7 +60,7 @@ tools:
     status: planned
   - id: rag-evaluation
     order: 8
-    es_title: Playground de evaluación RAG
+    es_title: Entorno interactivo de evaluación RAG
     en_title: RAG Evaluation Playground
     category: evaluator
     status: planned
@@ -77,7 +78,7 @@ tools:
     status: planned
   - id: agent-reliability
     order: 11
-    es_title: Playground de fiabilidad y evaluación de agentes
+    es_title: Entorno interactivo de fiabilidad y evaluación de agentes
     en_title: Agent Reliability / Eval Playground
     category: evaluator
     status: planned
