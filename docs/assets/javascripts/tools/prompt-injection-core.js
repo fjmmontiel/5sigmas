@@ -5,6 +5,26 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   'use strict';
 
+  const METHODOLOGY_VERSION = '1.0.0';
+  const SOURCE_REVIEW_DATE = '2026-08-21';
+  const SOURCES = Object.freeze([
+    Object.freeze({
+      organization: 'OWASP GenAI Security Project',
+      title: 'LLM01:2025 Prompt Injection',
+      url: 'https://genai.owasp.org/llmrisk/llm01-prompt-injection/'
+    }),
+    Object.freeze({
+      organization: 'OWASP Cheat Sheet Series',
+      title: 'LLM Prompt Injection Prevention Cheat Sheet',
+      url: 'https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html'
+    }),
+    Object.freeze({
+      organization: 'OpenAI',
+      title: 'Understanding prompt injections',
+      url: 'https://openai.com/safety/prompt-injections/'
+    })
+  ]);
+
   const DEFAULTS = Object.freeze({
     preset: 'web-agent',
     vector: 'indirect',
@@ -113,5 +133,5 @@
     };
   }
 
-  return { DEFAULTS, PRESETS, normalize, evaluate };
+  return { METHODOLOGY_VERSION, SOURCE_REVIEW_DATE, SOURCES, DEFAULTS, PRESETS, normalize, evaluate };
 });
