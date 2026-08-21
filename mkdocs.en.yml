@@ -121,6 +121,8 @@ nav:
       - RAG Evaluation: tools/rag-evaluation.md
       - Voice-Agent Latency: tools/voice-latency-budget.md
       - Voice-Agent Cost & Capacity: tools/voice-cost-capacity.md
+      - Agent Reliability & Eval: tools/agent-reliability-eval.md
+      - Prompt-Injection Threats: tools/prompt-injection-threat.md
   - Learn:
       - Series: series/index.md
       - AI and Generative AI Foundations:
@@ -187,7 +189,7 @@ nav:
   - Build:
       - articulos-tecnicos/index.md
       - Proactive and reactive agents and tool calls: articulos-tecnicos/proactive-reactive-agent-and-tool-calls.md
-      - Reactive-proactive voice agents: articulos-tecnicos/reactive-proactive-voice-agents.md
+      - Reactive and proactive voice agents: articulos-tecnicos/reactive-proactive-voice-agents.md
       - Three architectures for voice agents: articulos-tecnicos/voice-agent-architectures.md
   - Coming Soon: proximamente.md
   - About: meta/about.md

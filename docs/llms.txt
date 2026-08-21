@@ -18,6 +18,7 @@
 - [Latencia de agentes de voz](https://5sigmas.com/herramientas/latencia-agente-voz/index.html.md): descompone el tiempo hasta el primer audio y el barge-in entre transporte, fin de turno, STT, modelo, TTS y buffering con supuestos editables.
 - [Coste y capacidad de agentes de voz](https://5sigmas.com/herramientas/coste-capacidad-agente-voz/index.html.md): estima gasto mensual, coste por llamada, unidades facturables, workers y concurrencia de STT/TTS separando llamadas activas de generación de proveedor.
 - [Fiabilidad y evaluación de agentes](https://5sigmas.com/herramientas/fiabilidad-evaluacion-agentes/index.html.md): separa éxito final, primer intento, recuperación tras reintentos, decisiones de herramientas, incidencias operativas y eficiencia de la trayectoria con criterios explícitos e intervalos de incertidumbre.
+- [Explorador de amenazas de prompt injection](https://5sigmas.com/herramientas/amenazas-prompt-injection/index.html.md): modela de forma defensiva rutas desde contenido no confiable hacia datos, herramientas, salida externa y memoria, con controles arquitectónicos explícitos y sin convertir la seguridad en un score probabilístico.
 
 ## Conceptos fundamentales
 

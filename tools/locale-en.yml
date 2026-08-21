@@ -25,5 +25,7 @@ routes:
     localized: tools/voice-cost-capacity.md
   - canonical: herramientas/fiabilidad-evaluacion-agentes.md
     localized: tools/agent-reliability-eval.md
+  - canonical: herramientas/amenazas-prompt-injection.md
+    localized: tools/prompt-injection-threat.md
 published_files:
   - llms.txt
