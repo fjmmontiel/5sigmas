@@ -5,5 +5,7 @@ routes:
     localized: tools/index.md
   - canonical: herramientas/coste-latencia-llm.md
     localized: tools/llm-cost-latency.md
+  - canonical: herramientas/precio-rendimiento-modelos.md
+    localized: tools/model-price-performance.md
 published_files:
   - llms.txt
