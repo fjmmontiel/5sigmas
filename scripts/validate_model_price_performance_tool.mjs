@@ -50,11 +50,18 @@ for (const spec of cases) {
     if (points !== 5) failures.push(`${spec.route} ${viewport.name}: expected 5 chart points, got ${points}`);
     const frontierPoints = await page.locator('.s5-model-point[data-frontier="true"]').count();
     if (frontierPoints !== 3) failures.push(`${spec.route} ${viewport.name}: expected 3 default frontier points, got ${frontierPoints}`);
+    const anchors = await page.locator('[data-model-anchor]').count();
+    const leaders = await page.locator('[data-model-leader]').count();
+    if (anchors !== points || leaders !== points) failures.push(`${spec.route} ${viewport.name}: expected one anchor and leader per chart label, got ${anchors}/${leaders} for ${points} labels`);
 
     const labelGeometry = await page.locator('[data-model-chart-points]').evaluate((container) => {
       const bounds = container.getBoundingClientRect();
       const labels = [...container.querySelectorAll('.s5-model-point')].map((node) => ({
         id: node.dataset.modelId,
+        rect: node.getBoundingClientRect()
+      }));
+      const anchors = [...container.querySelectorAll('[data-model-anchor]')].map((node) => ({
+        id: node.dataset.modelAnchor,
         rect: node.getBoundingClientRect()
       }));
       const overlaps = [];
@@ -71,10 +78,21 @@ for (const spec of cases) {
         rect.left < bounds.left - 1 || rect.right > bounds.right + 1 ||
         rect.top < bounds.top - 1 || rect.bottom > bounds.bottom + 1
       )).map(({ id }) => id);
-      return { overlaps, outside };
+      const coveredAnchors = [];
+      for (const anchor of anchors) {
+        const x = (anchor.rect.left + anchor.rect.right) / 2;
+        const y = (anchor.rect.top + anchor.rect.bottom) / 2;
+        for (const label of labels) {
+          if (x >= label.rect.left - 1 && x <= label.rect.right + 1 && y >= label.rect.top - 1 && y <= label.rect.bottom + 1) {
+            coveredAnchors.push(`${anchor.id}/${label.id}`);
+          }
+        }
+      }
+      return { overlaps, outside, coveredAnchors };
     });
     if (labelGeometry.overlaps.length) failures.push(`${spec.route} ${viewport.name}: chart labels overlap: ${labelGeometry.overlaps.join(', ')}`);
     if (labelGeometry.outside.length) failures.push(`${spec.route} ${viewport.name}: chart labels leave plot bounds: ${labelGeometry.outside.join(', ')}`);
+    if (labelGeometry.coveredAnchors.length) failures.push(`${spec.route} ${viewport.name}: displaced labels cover true data anchors: ${labelGeometry.coveredAnchors.join(', ')}`);
 
     const sourceLinks = await page.locator('[data-model-focus] a[href^="https://"]').count();
     if (sourceLinks < 2) failures.push(`${spec.route} ${viewport.name}: focused model does not expose both provenance links`);
@@ -131,4 +149,4 @@ if (failures.length) {
   for (const failure of failures) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log('Model price/performance browser QA passed: ES/EN, 390px/1440px, filters, workload updates, Pareto frontier, collision-free chart labels, provenance, JSON-LD, horizontal fit and visual evidence verified.');
+console.log('Model price/performance browser QA passed: ES/EN, 390px/1440px, filters, workload updates, Pareto frontier, collision-free anchored chart labels, provenance, JSON-LD, horizontal fit and visual evidence verified.');
