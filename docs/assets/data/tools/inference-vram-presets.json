@@ -13,7 +13,7 @@
       "title": "llama-models · model SKU definitions",
       "url": "https://github.com/meta-llama/llama-models/blob/main/models/sku_list.py",
       "verified_on": "2026-08-21",
-      "notes": "Primary source for Llama 3.1 hidden dimension, layer count, attention-head count and KV-head count."
+      "notes": "Primary source for Llama 3.1 hidden dimension, layer count, attention-head count, KV-head count and the distinct 405B MP8/MP16 geometries."
     },
     {
       "id": "meta-llama-3-1-model-card",
@@ -60,8 +60,8 @@
       "note_en": "70B is a nominal family size. The architecture uses GQA with 8 KV heads versus 64 attention heads."
     },
     {
-      "id": "meta-llama-3-1-405b",
-      "label": "Llama 3.1 405B",
+      "id": "meta-llama-3-1-405b-mp8",
+      "label": "Llama 3.1 405B · MP8",
       "parameters_b": 405,
       "layers": 126,
       "hidden_size": 16384,
@@ -69,8 +69,21 @@
       "kv_heads": 8,
       "max_context_tokens": 131072,
       "source_ids": ["meta-llama-model-skus", "meta-llama-3-1-model-card"],
-      "note_es": "El tamaño 405B es nominal. Este preset sirve para explorar memoria; una implantación real suele requerir paralelismo y decisiones de formato específicas.",
-      "note_en": "405B is a nominal family size. This preset is for memory exploration; real deployments normally require explicit parallelism and storage-format choices."
+      "note_es": "Geometría BF16 MP8 publicada por Meta: 128 cabezas de atención y 8 cabezas KV. El tamaño 405B sigue siendo nominal.",
+      "note_en": "Meta's published BF16 MP8 geometry: 128 attention heads and 8 KV heads. The 405B parameter count remains nominal."
+    },
+    {
+      "id": "meta-llama-3-1-405b-mp16",
+      "label": "Llama 3.1 405B · MP16",
+      "parameters_b": 405,
+      "layers": 126,
+      "hidden_size": 16384,
+      "attention_heads": 128,
+      "kv_heads": 16,
+      "max_context_tokens": 131072,
+      "source_ids": ["meta-llama-model-skus", "meta-llama-3-1-model-card"],
+      "note_es": "Geometría BF16 MP16 publicada por Meta: 128 cabezas de atención y 16 cabezas KV. La KV cache resultante es mayor que en la variante MP8.",
+      "note_en": "Meta's published BF16 MP16 geometry: 128 attention heads and 16 KV heads. Its KV cache is therefore larger than the MP8 variant."
     }
   ]
 }
