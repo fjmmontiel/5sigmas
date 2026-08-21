@@ -13,5 +13,7 @@ routes:
     localized: tools/kv-cache-context.md
   - canonical: herramientas/atencion-transformer.md
     localized: tools/transformer-attention.md
+  - canonical: herramientas/presupuesto-contexto.md
+    localized: tools/context-budget.md
 published_files:
   - llms.txt
