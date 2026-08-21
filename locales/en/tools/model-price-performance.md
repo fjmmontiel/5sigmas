@@ -206,9 +206,9 @@ hide:
 <section class="s5-section" aria-labelledby="s5-model-related">
   <div class="s5-section-head"><h2 id="s5-model-related">For a better model decision</h2></div>
   <div class="s5-simple-list">
-    <a class="s5-list-row" href="/en/topics/model-evaluation/"><span class="s5-list-row__n">01</span><span class="s5-list-row__title">Model evaluation</span><span class="s5-list-row__desc">Why a benchmark is not the objective and how to build representative evals.</span><span class="s5-list-row__meta">Concept</span></a>
+    <a class="s5-list-row" href="/en/temas/evaluacion-modelos/"><span class="s5-list-row__n">01</span><span class="s5-list-row__title">Model evaluation</span><span class="s5-list-row__desc">Why a benchmark is not the objective and how to build representative evals.</span><span class="s5-list-row__meta">Concept</span></a>
     <a class="s5-list-row" href="/en/tools/llm-cost-latency/"><span class="s5-list-row__n">02</span><span class="s5-list-row__title">LLM cost and latency</span><span class="s5-list-row__desc">Move from model comparison to traffic, concurrency and latency budgeting.</span><span class="s5-list-row__meta">Tool</span></a>
-    <a class="s5-list-row" href="/en/topics/llms/"><span class="s5-list-row__n">03</span><span class="s5-list-row__title">What is an LLM?</span><span class="s5-list-row__desc">Tokens, context and generation behind these metrics.</span><span class="s5-list-row__meta">Concept</span></a>
+    <a class="s5-list-row" href="/en/temas/llms/"><span class="s5-list-row__n">03</span><span class="s5-list-row__title">What is an LLM?</span><span class="s5-list-row__desc">Tokens, context and generation behind these metrics.</span><span class="s5-list-row__meta">Concept</span></a>
   </div>
 </section>
 
