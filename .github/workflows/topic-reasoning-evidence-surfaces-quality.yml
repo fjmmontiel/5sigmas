@@ -14,6 +14,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
   evidence-surfaces:
     runs-on: ubuntu-latest
@@ -65,11 +69,11 @@ jobs:
       - name: Validate reasoning evidence surfaces ES/EN
         run: node scripts/validate_reasoning_evidence_surfaces_visual.mjs
 
-      - name: Upload reasoning evidence-surface review
-        if: always()
+      - name: Upload reasoning evidence-surface review on failure
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: reasoning-evidence-surfaces-visual-review
           path: artifacts/visual-review/reasoning-evidence-surfaces-*.png
           if-no-files-found: warn
-          retention-days: 14
+          retention-days: 1

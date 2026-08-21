@@ -48,6 +48,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
   series-mirror:
     runs-on: ubuntu-latest
@@ -193,10 +197,11 @@ jobs:
       - name: Validate English video hub
         run: node scripts/validate_english_video_hub.mjs
 
-      - name: Upload English mirror screenshots
-        if: always()
+      - name: Upload English mirror screenshots on failure
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: 5sigmas-en-series-mirror
           path: artifacts/visual-review/english-*.png
           if-no-files-found: error
+          retention-days: 1

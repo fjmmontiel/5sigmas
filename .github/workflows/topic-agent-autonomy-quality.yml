@@ -14,6 +14,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
   autonomy:
     runs-on: ubuntu-latest
@@ -65,11 +69,11 @@ jobs:
       - name: Validate agent autonomy ES/EN
         run: node scripts/validate_agent_autonomy_visual.mjs
 
-      - name: Upload agent autonomy visual evidence
-        if: always()
+      - name: Upload agent autonomy visual evidence on failure
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: agent-autonomy-visual-review
           path: artifacts/visual-review/agent-autonomy-*.png
           if-no-files-found: warn
-          retention-days: 14
+          retention-days: 1

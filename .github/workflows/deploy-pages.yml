@@ -225,11 +225,11 @@ jobs:
           S5_REQUIRE_EN_TTC_MEDIA: '1'
         run: node scripts/validate_english_reasoning_ttc.mjs
 
-      - name: Upload live English screenshots
-        if: always()
+      - name: Upload live English screenshots on failure
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: 5sigmas-en-live-qa
           path: artifacts/visual-review/english-*.png
           if-no-files-found: warn
-          retention-days: 14
+          retention-days: 1

@@ -12,6 +12,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
   reasoning-ch5:
     runs-on: ubuntu-latest
@@ -65,10 +69,11 @@ jobs:
       - name: Validate canonical English Reasoning Chapter 5 fidelity
         run: node scripts/validate_english_reasoning_ch5.mjs
 
-      - name: Upload Reasoning Chapter 5 screenshots
-        if: always()
+      - name: Upload Reasoning Chapter 5 screenshots on failure
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: english-reasoning-ch5-review
           path: artifacts/visual-review/english-reasoning-ch5-*.png
           if-no-files-found: ignore
+          retention-days: 1
