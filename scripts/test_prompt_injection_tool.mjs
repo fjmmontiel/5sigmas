@@ -2,6 +2,15 @@ import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 const assert = require('assert');
 const core = require('../docs/assets/javascripts/tools/prompt-injection-core.js');
+
+assert.equal(core.METHODOLOGY_VERSION, '1.0.0');
+assert.equal(core.SOURCE_REVIEW_DATE, '2026-08-21');
+assert.deepEqual(
+  core.SOURCES.map((source) => new URL(source.url).hostname),
+  ['genai.owasp.org', 'cheatsheetseries.owasp.org', 'openai.com'],
+  'exported methodology provenance must retain the reviewed primary guidance'
+);
+
 const worst = core.evaluate({ preset: 'privileged-agent' });
 assert.equal(worst.summary.reachablePaths, 5);
 assert.equal(worst.summary.highImpactPaths, 4);
