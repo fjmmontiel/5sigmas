@@ -20,20 +20,11 @@ hide:
   "isPartOf": {"@type": "WebSite", "name": "5sigmas", "url": "https://5sigmas.com/"},
   "mainEntity": {
     "@type": "ItemList",
-    "numberOfItems": 2,
+    "numberOfItems": 3,
     "itemListElement": [
-      {
-        "@type": "ListItem",
-        "position": 1,
-        "url": "https://5sigmas.com/herramientas/coste-latencia-llm/",
-        "name": "Calculadora de coste y latencia de LLMs"
-      },
-      {
-        "@type": "ListItem",
-        "position": 2,
-        "url": "https://5sigmas.com/herramientas/precio-rendimiento-modelos/",
-        "name": "Explorador de precio y rendimiento de modelos de IA"
-      }
+      {"@type": "ListItem", "position": 1, "url": "https://5sigmas.com/herramientas/coste-latencia-llm/", "name": "Calculadora de coste y latencia de LLMs"},
+      {"@type": "ListItem", "position": 2, "url": "https://5sigmas.com/herramientas/precio-rendimiento-modelos/", "name": "Explorador de precio y rendimiento de modelos de IA"},
+      {"@type": "ListItem", "position": 3, "url": "https://5sigmas.com/herramientas/vram-inferencia/", "name": "Calculadora de VRAM para inferencia"}
     ]
   }
 }
@@ -49,10 +40,7 @@ hide:
 
 <section class="s5-section" aria-labelledby="s5-tools-available">
   <div class="s5-section-head s5-section-head--with-copy">
-    <div>
-      <div class="s5-eyebrow">Disponible</div>
-      <h2 id="s5-tools-available">Herramientas disponibles</h2>
-    </div>
+    <div><div class="s5-eyebrow">Disponible</div><h2 id="s5-tools-available">Herramientas disponibles</h2></div>
     <p>Una herramienta aparece aquí cuando las versiones española e inglesa comparten la misma lógica, fuentes y pruebas.</p>
   </div>
 
@@ -69,6 +57,12 @@ hide:
       <p>Compara el coste de tu carga con Intelligence Index, velocidad, TTFT y contexto, manteniendo separadas las fuentes de precio y rendimiento.</p>
       <span class="s5-tool-index-card__cta">Abrir explorador →</span>
     </a>
+    <a class="s5-tool-index-card" href="/herramientas/vram-inferencia/">
+      <span class="s5-tool-index-card__meta">Calculadora · Infraestructura · 03</span>
+      <h2>VRAM para inferencia</h2>
+      <p>Separa pesos, KV cache y reserva de runtime para estimar memoria total, memoria por GPU, contexto máximo y concurrencia aproximada.</p>
+      <span class="s5-tool-index-card__cta">Abrir calculadora →</span>
+    </a>
   </div>
 </section>
 
@@ -79,9 +73,9 @@ hide:
     <p>La sección crece una herramienta cada vez. No se publican páginas vacías: cada entrada aparece cuando tiene interacción real, paridad ES/EN, fuentes y pruebas.</p>
   </div>
   <div class="s5-tools-roadmap__list" aria-label="Próximas familias de herramientas">
-    <div class="s5-tools-roadmap__row"><span>03</span><strong>VRAM de inferencia</strong><span>calculadora</span></div>
     <div class="s5-tools-roadmap__row"><span>04</span><strong>KV cache y ventana de contexto</strong><span>explorador</span></div>
     <div class="s5-tools-roadmap__row"><span>05</span><strong>Atención Transformer</strong><span>visualizador</span></div>
+    <div class="s5-tools-roadmap__row"><span>06</span><strong>Presupuesto de tokens y contexto</strong><span>planificador</span></div>
     <div class="s5-tools-roadmap__row"><span>07–08</span><strong>Recuperación y evaluación RAG</strong><span>laboratorio</span></div>
     <div class="s5-tools-roadmap__row"><span>09–11</span><strong>Latencia, coste y fiabilidad de agentes</strong><span>explorador</span></div>
     <div class="s5-tools-roadmap__row"><span>13–18</span><strong>Benchmarks, escalado, infraestructura y ecosistema global</strong><span>datos</span></div>
@@ -90,27 +84,12 @@ hide:
 
 <section class="s5-section" aria-labelledby="s5-tools-method">
   <div class="s5-section-head s5-section-head--with-copy">
-    <div>
-      <div class="s5-eyebrow">Criterio</div>
-      <h2 id="s5-tools-method">Qué debe mostrar una herramienta de 5sigmas</h2>
-    </div>
+    <div><div class="s5-eyebrow">Criterio</div><h2 id="s5-tools-method">Qué debe mostrar una herramienta de 5sigmas</h2></div>
   </div>
   <div class="s5-entry-grid">
-    <div class="s5-entry">
-      <div class="s5-entry__index">01</div>
-      <div class="s5-entry__title">Supuestos visibles</div>
-      <div class="s5-entry__text">Las cifras editables se separan de los datos observados. Si una estimación depende de un supuesto, puedes cambiarlo.</div>
-    </div>
-    <div class="s5-entry">
-      <div class="s5-entry__index">02</div>
-      <div class="s5-entry__title">Fuentes primarias</div>
-      <div class="s5-entry__text">Precios, límites y datos variables incluyen procedencia y fecha de verificación. Los valores obsoletos no se presentan como actuales.</div>
-    </div>
-    <div class="s5-entry">
-      <div class="s5-entry__index">03</div>
-      <div class="s5-entry__title">Resultado reproducible</div>
-      <div class="s5-entry__text">Cuando aporta valor, el escenario se puede compartir o exportar con sus entradas, resultados y procedencia.</div>
-    </div>
+    <div class="s5-entry"><div class="s5-entry__index">01</div><div class="s5-entry__title">Supuestos visibles</div><div class="s5-entry__text">Las cifras editables se separan de los datos observados. Si una estimación depende de un supuesto, puedes cambiarlo.</div></div>
+    <div class="s5-entry"><div class="s5-entry__index">02</div><div class="s5-entry__title">Fuentes primarias</div><div class="s5-entry__text">Precios, límites y datos variables incluyen procedencia y fecha de verificación. Los valores obsoletos no se presentan como actuales.</div></div>
+    <div class="s5-entry"><div class="s5-entry__index">03</div><div class="s5-entry__title">Resultado reproducible</div><div class="s5-entry__text">Cuando aporta valor, el escenario se puede compartir o exportar con sus entradas, resultados y procedencia.</div></div>
   </div>
 </section>
 
