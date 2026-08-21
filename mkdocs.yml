@@ -64,6 +64,7 @@ nav:
       - Atención Transformer: herramientas/atencion-transformer.md
       - Presupuesto de contexto: herramientas/presupuesto-contexto.md
       - Recuperación RAG: herramientas/laboratorio-recuperacion-rag.md
+      - Evaluación RAG: herramientas/evaluacion-rag.md
   - Aprender:
       - Conceptos:
           - temas/index.md

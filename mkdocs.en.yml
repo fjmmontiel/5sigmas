@@ -118,6 +118,7 @@ nav:
       - Transformer Attention: tools/transformer-attention.md
       - Context Budget: tools/context-budget.md
       - RAG Retrieval: tools/rag-retrieval-lab.md
+      - RAG Evaluation: tools/rag-evaluation.md
   - Learn:
       - Series: series/index.md
       - AI and Generative AI Foundations:

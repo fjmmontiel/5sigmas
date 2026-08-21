@@ -14,6 +14,7 @@
 - [Visualizador de atención Transformer](https://5sigmas.com/herramientas/atencion-transformer/index.html.md): permite manipular scores, máscara causal, softmax y valores para observar cómo una cabeza de atención genera una mezcla ponderada.
 - [Planificador de presupuesto de contexto](https://5sigmas.com/herramientas/presupuesto-contexto/index.html.md): distribuye la ventana entre sistema, herramientas, historial, RAG, usuario, salida reservada y margen; muestra headroom, overflow y presión futura.
 - [Laboratorio de recuperación RAG](https://5sigmas.com/herramientas/laboratorio-recuperacion-rag/index.html.md): calcula Precision@k, Recall@k, MRR y nDCG sobre un ranking visible, prueba reranking y separa calidad de recuperación de la huella de chunking y solape.
+- [Evaluación RAG](https://5sigmas.com/herramientas/evaluacion-rag/index.html.md): separa relevancia del contexto, fidelidad, corrección y cobertura, con etiquetas visibles, pesos configurables e intervalos de incertidumbre.
 
 ## Conceptos fundamentales
 

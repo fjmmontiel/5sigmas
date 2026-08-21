@@ -114,22 +114,33 @@ tools:
     es_title: Laboratorio de recuperación RAG
     en_title: RAG Retrieval Lab
     category: lab
-    status: in_progress
+    status: excellent
     es_route: /herramientas/laboratorio-recuperacion-rag/
     en_route: /en/tools/rag-retrieval-lab/
     es_parity: true
     en_parity: true
-    tests: core_math_chunking_reranking_and_browser_gates_added_2026-08-21_pending_full_validation
-    visual_review: pending_es_en_mobile_390_desktop_1440
+    tests: passing_full_ci_2026-08-21_head_29427e5367ca903320717f39702b7c3a93bd973b
+    visual_review: reviewed_es_en_mobile_390_desktop_1440_2026-08-21
     provenance: dpr_rag_beir_ndcg_primary_sources_verified_2026-08-21
     data_freshness: static_method_review_on_ir_metric_semantics_change
+    validated_head: 29427e5367ca903320717f39702b7c3a93bd973b
+    release_commit: ecbb67ccdb9255ff60e258f8afee304000d769df
     last_reviewed: 2026-08-21
   - id: rag-evaluation
     order: 8
     es_title: Entorno interactivo de evaluación RAG
     en_title: RAG Evaluation Playground
     category: evaluator
-    status: planned
+    status: in_progress
+    es_route: /herramientas/evaluacion-rag/
+    en_route: /en/tools/rag-evaluation/
+    es_parity: true
+    en_parity: true
+    tests: numerical_uncertainty_share_state_and_browser_gates_added_2026-08-21_pending_full_ci
+    visual_review: pending_es_en_mobile_390_desktop_1440
+    provenance: ragas_eacl_2024_and_ares_primary_sources_verified_2026-08-21
+    data_freshness: static_method_review_on_rag_evaluation_semantics_change
+    last_reviewed: 2026-08-21
   - id: voice-latency-budget
     order: 9
     es_title: Explorador de presupuesto de latencia para agentes de voz

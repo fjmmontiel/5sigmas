@@ -17,5 +17,7 @@ routes:
     localized: tools/context-budget.md
   - canonical: herramientas/laboratorio-recuperacion-rag.md
     localized: tools/rag-retrieval-lab.md
+  - canonical: herramientas/evaluacion-rag.md
+    localized: tools/rag-evaluation.md
 published_files:
   - llms.txt

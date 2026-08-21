@@ -20,7 +20,7 @@ hide:
   "isPartOf": {"@type": "WebSite", "name": "5sigmas", "url": "https://5sigmas.com/"},
   "mainEntity": {
     "@type": "ItemList",
-    "numberOfItems": 7,
+    "numberOfItems": 8,
     "itemListElement": [
       {"@type": "ListItem", "position": 1, "url": "https://5sigmas.com/herramientas/coste-latencia-llm/", "name": "Calculadora de coste y latencia de LLMs"},
       {"@type": "ListItem", "position": 2, "url": "https://5sigmas.com/herramientas/precio-rendimiento-modelos/", "name": "Explorador de precio y rendimiento de modelos de IA"},
@@ -28,7 +28,8 @@ hide:
       {"@type": "ListItem", "position": 4, "url": "https://5sigmas.com/herramientas/kv-cache-contexto/", "name": "Explorador de KV cache y ventana de contexto"},
       {"@type": "ListItem", "position": 5, "url": "https://5sigmas.com/herramientas/atencion-transformer/", "name": "Visualizador de atención Transformer"},
       {"@type": "ListItem", "position": 6, "url": "https://5sigmas.com/herramientas/presupuesto-contexto/", "name": "Planificador de presupuesto de contexto y tokens"},
-      {"@type": "ListItem", "position": 7, "url": "https://5sigmas.com/herramientas/laboratorio-recuperacion-rag/", "name": "Laboratorio de recuperación RAG"}
+      {"@type": "ListItem", "position": 7, "url": "https://5sigmas.com/herramientas/laboratorio-recuperacion-rag/", "name": "Laboratorio de recuperación RAG"},
+      {"@type": "ListItem", "position": 8, "url": "https://5sigmas.com/herramientas/evaluacion-rag/", "name": "Entorno interactivo de evaluación RAG"}
     ]
   }
 }
@@ -91,6 +92,12 @@ hide:
       <p>Mide Precision@k, Recall@k, MRR y nDCG sobre un ranking visible; prueba reranking y separa calidad de recuperación de la huella de chunking y solape.</p>
       <span class="s5-tool-index-card__cta">Abrir laboratorio →</span>
     </a>
+    <a class="s5-tool-index-card" href="/herramientas/evaluacion-rag/">
+      <span class="s5-tool-index-card__meta">Evaluador · RAG · 08</span>
+      <h2>Evaluación RAG</h2>
+      <p>Separa relevancia del contexto, fidelidad, corrección y cobertura; inspecciona afirmaciones, intervalos y pesos sin esconder el diagnóstico en un único score.</p>
+      <span class="s5-tool-index-card__cta">Abrir evaluador →</span>
+    </a>
   </div>
 </section>
 
@@ -101,7 +108,6 @@ hide:
     <p>La sección crece una herramienta cada vez. No se publican páginas vacías: cada entrada aparece cuando tiene interacción real, paridad ES/EN, fuentes y pruebas.</p>
   </div>
   <div class="s5-tools-roadmap__list" aria-label="Próximas familias de herramientas">
-    <div class="s5-tools-roadmap__row"><span>08</span><strong>Evaluación RAG de contexto, fidelidad y respuesta</strong><span>evaluador</span></div>
     <div class="s5-tools-roadmap__row"><span>09–12</span><strong>Agentes: latencia, coste, fiabilidad y seguridad</strong><span>exploradores</span></div>
     <div class="s5-tools-roadmap__row"><span>13–18</span><strong>Benchmarks, escalado, infraestructura y ecosistema global</strong><span>datos</span></div>
   </div>
