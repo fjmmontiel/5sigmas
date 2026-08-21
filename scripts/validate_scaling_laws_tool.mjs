@@ -42,6 +42,8 @@ try {
       if (await page.locator('[data-output="chart"] svg').count() !== 1) failures.push(`${spec.route} ${viewport.name}: allocation SVG missing`);
       if (await page.locator('.s5-scaling-marker').count() !== 2) failures.push(`${spec.route} ${viewport.name}: optimum/current markers missing`);
 
+      const sensitivity = page.locator('details').filter({ has: page.locator('[data-field="alpha"]') });
+      await sensitivity.evaluate((element) => { element.open = true; });
       await page.locator('[data-field="alpha"]').fill('0.20');
       await page.locator('[data-field="beta"]').fill('0.40');
       const changedP = Number((await page.locator('[data-output="parameter-exponent"]').textContent() || '').replace(',', '.'));
