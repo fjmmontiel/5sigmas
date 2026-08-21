@@ -29,5 +29,7 @@ routes:
     localized: tools/prompt-injection-threat.md
   - canonical: herramientas/fiabilidad-benchmarks.md
     localized: tools/benchmark-reliability.md
+  - canonical: herramientas/linea-temporal-capacidades-modelos.md
+    localized: tools/model-capability-timeline.md
 published_files:
   - llms.txt

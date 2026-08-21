@@ -70,6 +70,7 @@ nav:
       - Fiabilidad y evaluación de agentes: herramientas/fiabilidad-evaluacion-agentes.md
       - Amenazas de prompt injection: herramientas/amenazas-prompt-injection.md
       - Fiabilidad de benchmarks: herramientas/fiabilidad-benchmarks.md
+      - Línea temporal de capacidades: herramientas/linea-temporal-capacidades-modelos.md
   - Aprender:
       - Conceptos:
           - temas/index.md

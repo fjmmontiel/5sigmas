@@ -20,7 +20,7 @@ hide:
   "isPartOf": {"@type": "WebSite", "name": "5sigmas", "url": "https://5sigmas.com/en/"},
   "mainEntity": {
     "@type": "ItemList",
-    "numberOfItems": 13,
+    "numberOfItems": 14,
     "itemListElement": [
       {"@type": "ListItem", "position": 1, "url": "https://5sigmas.com/en/tools/llm-cost-latency/", "name": "LLM Cost & Latency Calculator"},
       {"@type": "ListItem", "position": 2, "url": "https://5sigmas.com/en/tools/model-price-performance/", "name": "Model Price/Performance Explorer"},
@@ -34,7 +34,8 @@ hide:
       {"@type": "ListItem", "position": 10, "url": "https://5sigmas.com/en/tools/voice-cost-capacity/", "name": "Voice-Agent Cost & Capacity Planner"},
       {"@type": "ListItem", "position": 11, "url": "https://5sigmas.com/en/tools/agent-reliability-eval/", "name": "Agent Reliability / Eval Playground"},
       {"@type": "ListItem", "position": 12, "url": "https://5sigmas.com/en/tools/prompt-injection-threat/", "name": "Prompt-Injection Threat Explorer"},
-      {"@type": "ListItem", "position": 13, "url": "https://5sigmas.com/en/tools/benchmark-reliability/", "name": "Benchmark Reliability Explorer"}
+      {"@type": "ListItem", "position": 13, "url": "https://5sigmas.com/en/tools/benchmark-reliability/", "name": "Benchmark Reliability Explorer"},
+      {"@type": "ListItem", "position": 14, "url": "https://5sigmas.com/en/tools/model-capability-timeline/", "name": "Model Capability Timeline"}
     ]
   }
 }
@@ -66,13 +67,14 @@ hide:
     <a class="s5-tool-index-card" href="/en/tools/agent-reliability-eval/"><span class="s5-tool-index-card__meta">Evaluator · Agents · 11</span><h2>Agent reliability and evaluation</h2><p>Separate final success, first-pass success, retry recovery, tool decisions, timeouts and trajectory efficiency; apply explicit release gates instead of hiding everything in one score.</p><span class="s5-tool-index-card__cta">Open evaluator →</span></a>
     <a class="s5-tool-index-card" href="/en/tools/prompt-injection-threat/"><span class="s5-tool-index-card__meta">Explorer · Security · 12</span><h2>Prompt-injection threat paths</h2><p>Trace paths from untrusted content into sensitive data, write-capable tools, external egress and persistent memory, then test which architectural boundaries cut each path.</p><span class="s5-tool-index-card__cta">Open explorer →</span></a>
     <a class="s5-tool-index-card" href="/en/tools/benchmark-reliability/"><span class="s5-tool-index-card__meta">Explorer · Evaluation · 13</span><h2>Benchmark reliability</h2><p>Check statistical resolution, saturation, sensitivity to invalid or potentially exposed items, and whether the ranking changes when task composition shifts.</p><span class="s5-tool-index-card__cta">Open explorer →</span></a>
+    <a class="s5-tool-index-card" href="/en/tools/model-capability-timeline/"><span class="s5-tool-index-card__meta">Data explorer · Models · 14</span><h2>Model capability timeline</h2><p>Follow published results for one benchmark at a time, keep conditions and point-level provenance visible, and surface protocol breaks instead of blending incompatible metrics.</p><span class="s5-tool-index-card__cta">Open explorer →</span></a>
   </div>
 </section>
 
 <section class="s5-section s5-tools-roadmap" aria-labelledby="s5-tools-roadmap">
   <div><div class="s5-eyebrow">Roadmap</div><h2 id="s5-tools-roadmap">What comes next</h2><p>The section grows one tool at a time. There are no empty placeholder pages: an entry appears when it has real interaction, ES/EN parity, provenance and tests.</p></div>
   <div class="s5-tools-roadmap__list" aria-label="Upcoming tool families">
-    <div class="s5-tools-roadmap__row"><span>14–18</span><strong>Capabilities, scaling, infrastructure and the global ecosystem</strong><span>data</span></div>
+    <div class="s5-tools-roadmap__row"><span>15–18</span><strong>Scaling, infrastructure and the global ecosystem</strong><span>data</span></div>
   </div>
 </section>
 
