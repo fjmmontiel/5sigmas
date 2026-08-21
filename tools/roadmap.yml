@@ -216,15 +216,17 @@ tools:
     es_title: Explorador de fiabilidad de benchmarks
     en_title: Benchmark Reliability Explorer
     category: explorer
-    status: in_progress
+    status: excellent
     es_route: /herramientas/fiabilidad-benchmarks/
     en_route: /en/tools/benchmark-reliability/
     es_parity: true
     en_parity: true
-    tests: numerical_and_provenance_gates_added_2026-08-21_browser_release_gate_added_pending_full_validation
-    visual_review: pending_es_en_mobile_390_desktop_1440
+    tests: passing_full_ci_2026-08-21_head_0c705eaf
+    visual_review: reviewed_es_en_mobile_390_desktop_1440_2026-08-21
     provenance: benchmark_lottery_helm_livebench_verified_2026-08-21
     data_freshness: static_method_review_on_benchmark_evaluation_semantics_change
+    validated_head: 0c705eaf8dd3d49f0c2f5daa9f1ff99c5a7afa97
+    release_commit: 5c4aab8803ad62a9db1ab51a714b3c8286fe027e
     last_reviewed: 2026-08-21
   - id: model-capability-timeline
     order: 14
