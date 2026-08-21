@@ -36,7 +36,9 @@ for (const [label,path] of [['ES','docs/herramientas/atencion-transformer.md'],[
   const text = fs.readFileSync(path,'utf8');
   assert(text.includes('https://arxiv.org/abs/1706.03762'), `${label} page must cite Attention Is All You Need`);
   assert(text.includes('https://docs.pytorch.org/docs/main/generated/torch.nn.functional.scaled_dot_product_attention.html'), `${label} page must cite PyTorch SDPA docs`);
-  assert(text.includes('softmax'), `${label} page must explain softmax`);
+  assert(text.includes('https://arxiv.org/abs/1902.10186'), `${label} page must cite Attention is not Explanation`);
+  assert(text.includes('https://arxiv.org/abs/1908.04626'), `${label} page must cite Attention is not not Explanation`);
+  assert(text.includes('softmax(Ŝ / T)'), `${label} page must expose the tool's masked temperature normalization exactly`);
 }
 if (failures.length) { console.error('Transformer attention visualizer tests failed:'); for (const failure of failures) console.error(` - ${failure}`); process.exit(1); }
 console.log('Transformer attention visualizer tests passed: masking, softmax, temperature, head presets, value mixing, matrix normalization and provenance verified.');
