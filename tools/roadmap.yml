@@ -182,15 +182,17 @@ tools:
     es_title: Entorno interactivo de fiabilidad y evaluación de agentes
     en_title: Agent Reliability / Eval Playground
     category: evaluator
-    status: in_progress
+    status: excellent
     es_route: /herramientas/fiabilidad-evaluacion-agentes/
     en_route: /en/tools/agent-reliability-eval/
     es_parity: true
     en_parity: true
-    tests: local_core_math_and_boundary_tests_passing_2026-08-21
-    visual_review: pending_es_en_mobile_390_desktop_1440
+    tests: passing_full_ci_2026-08-21_head_aa0e4e47
+    visual_review: reviewed_es_en_mobile_390_desktop_1440_2026-08-21
     provenance: openai_trace_grading_tau_bench_and_agentbench_verified_2026-08-21
     data_freshness: static_method_review_on_agent_eval_semantics_change
+    validated_head: aa0e4e4752178ba0772e385edcacfe62ecf73562
+    release_commit: 46ee063b172bddb51e1e2526335cb4375d5240a6
     last_reviewed: 2026-08-21
   - id: prompt-injection-threat
     order: 12
