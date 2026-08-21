@@ -27,15 +27,16 @@ tools:
     es_title: Explorador precio/rendimiento de modelos
     en_title: Model Price/Performance Explorer
     category: explorer
-    status: in_progress
+    status: excellent
     es_route: /herramientas/precio-rendimiento-modelos/
     en_route: /en/tools/model-price-performance/
     es_parity: true
     en_parity: true
-    tests: pending_full_ci
-    visual_review: pending_es_en_mobile_390_desktop_1440
+    tests: passing_full_ci_2026-08-21
+    visual_review: reviewed_es_en_mobile_390_desktop_1440_2026-08-21
     provenance: provider_primary_sources_plus_artificial_analysis_verified_2026-08-21
-    data_freshness: pricing_and_benchmark_review_every_14_days_and_on_release
+    data_freshness: pricing_and_benchmark_review_every_14_days_and_performance_daily_during_active_review
+    validated_head: 2384b6a0311683f4bf5be584bf54a6891683bf49
     last_reviewed: 2026-08-21
   - id: inference-vram
     order: 3
