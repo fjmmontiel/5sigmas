@@ -38,8 +38,8 @@ hide:
 
 <section class="s5-page-intro">
   <div class="s5-eyebrow">Tools · LLMs · 06</div>
-  <h1>Decide what deserves your context budget.</h1>
-  <p>A large context window is still a finite budget. Separate instructions, tool schemas, history, RAG context, the current user message, output reserve and operating headroom to see what fits before you truncate or fail.</p>
+  <h1>Allocate the context window before the request exceeds the limit.</h1>
+  <p>A large context window is still a finite budget. Separate instructions, tool schemas, history, RAG context, the current user message, output reserve and operating headroom to see what fits before truncation or failure.</p>
 </section>
 
 <div class="s5-tool-summary-strip" aria-label="Core relationships">
@@ -100,7 +100,7 @@ hide:
     </div>
 
     <div class="s5-context-budget-bar-wrap">
-      <div class="s5-tool-breakdown__head"><strong>Who occupies the window</strong><span data-output="utilization">—</span></div>
+      <div class="s5-tool-breakdown__head"><strong>Context-window allocation</strong><span data-output="utilization">—</span></div>
       <div class="s5-context-budget-bar" data-budget-bar role="img" aria-label="Context budget distribution"></div>
       <div class="s5-context-budget-legend" data-budget-legend aria-label="Budget legend"></div>
     </div>
@@ -122,7 +122,7 @@ hide:
 </div>
 
 <section class="s5-tool-method" aria-labelledby="s5-context-method-en">
-  <div><div class="s5-eyebrow">Method</div><h2 id="s5-context-method-en">Protect what you do not want truncated first.</h2></div>
+  <div><div class="s5-eyebrow">Method</div><h2 id="s5-context-method-en">Separate input, output reserve and headroom before calculating capacity.</h2></div>
   <div class="s5-tool-method__body">
     <p><strong>Input budget.</strong> The configured context window is split between tokens already sent to the model, output capacity you want to preserve, and explicit operating headroom.</p>
     <div class="s5-tool-method__formula">available_input = context_window − reserved_output − safety_headroom</div>
