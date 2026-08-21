@@ -9,6 +9,7 @@
 - [AI tools](https://5sigmas.com/en/tools/index.html.md): calculators, visualizers, evaluators and data explorers with visible assumptions and source provenance.
 - [LLM Cost & Latency Calculator](https://5sigmas.com/en/tools/llm-cost-latency/index.html.md): estimate cost per request, monthly spend, response time and average concurrency from tokens, caching, TTFT, generation speed and traffic.
 - [Model Price/Performance Explorer](https://5sigmas.com/en/tools/model-price-performance/index.html.md): compare workload cost, Intelligence Index, output speed, TTFT and context while keeping pricing and performance provenance separate.
+- [AI Inference VRAM Calculator](https://5sigmas.com/en/tools/inference-vram/index.html.md): estimate model-weight memory, KV cache, runtime reserve, per-GPU memory and approximate context/concurrency capacity.
 
 ## Core concepts
 
