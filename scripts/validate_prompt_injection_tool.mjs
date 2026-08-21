@@ -1,36 +1,119 @@
+#!/usr/bin/env node
+
+import fs from 'node:fs';
 import { chromium } from 'playwright';
 
-const base = process.env.S5_BASE_URL || 'http://127.0.0.1:8000';
+const base = process.env.S5_PREVIEW_BASE || process.env.S5_BASE_URL || 'http://127.0.0.1:8000';
+const failures = [];
+const artifactDir = 'artifacts/visual-review';
+fs.mkdirSync(artifactDir, { recursive: true });
+
 const cases = [
-  { path: '/herramientas/amenazas-prompt-injection/', locale: 'es' },
-  { path: '/en/tools/prompt-injection-threat/', locale: 'en' }
+  { route: '/herramientas/amenazas-prompt-injection/', locale: 'es' },
+  { route: '/en/tools/prompt-injection-threat/', locale: 'en' }
 ];
-const widths = [390, 1440];
+const viewports = [
+  { width: 390, height: 844, name: 'mobile' },
+  { width: 1440, height: 1100, name: 'desktop' }
+];
+
 const browser = await chromium.launch({ headless: true });
 try {
-  for (const c of cases) {
-    for (const width of widths) {
-      const page = await browser.newPage({ viewport: { width, height: 1200 } });
-      await page.goto(`${base}${c.path}`, { waitUntil: 'networkidle' });
-      await page.waitForSelector('[data-s5-prompt-injection]');
-      const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1);
-      if (overflow) throw new Error(`${c.path} overflows at ${width}px`);
-      const jsonLd = await page.locator('script[type="application/ld+json"]').textContent();
-      const parsed = JSON.parse(jsonLd);
-      if (parsed['@type'] !== 'WebApplication') throw new Error(`${c.path} missing WebApplication JSON-LD`);
+  for (const spec of cases) {
+    for (const viewport of viewports) {
+      const page = await browser.newPage({ viewport });
+      let response = await page.goto(`${base}${spec.route}`, { waitUntil: 'networkidle' });
+      if (!response?.ok()) {
+        failures.push(`${spec.route} ${viewport.name}: HTTP ${response?.status() ?? 'no response'}`);
+        await page.close();
+        continue;
+      }
+
+      if (await page.locator('[data-s5-prompt-injection]').count() !== 1) failures.push(`${spec.route} ${viewport.name}: tool root missing`);
+      const overflowPx = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+      if (overflowPx > 1) failures.push(`${spec.route} ${viewport.name}: horizontal overflow ${overflowPx}px`);
+      if (await page.locator('.md-sidebar--primary:visible').count()) failures.push(`${spec.route} ${viewport.name}: documentation navigation visible`);
+      if (await page.locator('.md-footer:visible').count()) failures.push(`${spec.route} ${viewport.name}: documentation footer visible`);
+
+      const unlabeled = await page.locator('[data-field]').evaluateAll((nodes) => nodes.filter((node) => {
+        if (node.closest('label')) return false;
+        return !node.id || !document.querySelector(`label[for="${CSS.escape(node.id)}"]`);
+      }).length);
+      if (unlabeled) failures.push(`${spec.route} ${viewport.name}: ${unlabeled} controls lack programmatic labels`);
+
+      if (spec.locale === 'es') {
+        const bodyText = ` ${(await page.locator('[data-s5-prompt-injection]').innerText()).toLowerCase().replace(/\s+/g, ' ')} `;
+        for (const anglicism of [' score ', ' payload ', ' payloads ', ' egress ', ' tools ']) {
+          if (bodyText.includes(anglicism)) failures.push(`${spec.route} ${viewport.name}: avoid Spanish UI anglicism ${anglicism.trim()}`);
+        }
+        if (!bodyText.includes('no estima la probabilidad')) failures.push(`${spec.route} ${viewport.name}: probability limitation missing`);
+      }
+
+      const jsonLdBlocks = await page.locator('script[type="application/ld+json"]').allTextContents();
+      let hasWebApplication = false;
+      for (const raw of jsonLdBlocks) {
+        try {
+          const parsed = JSON.parse(raw);
+          if (parsed['@type'] === 'WebApplication') hasWebApplication = true;
+        } catch {
+          failures.push(`${spec.route} ${viewport.name}: invalid JSON-LD`);
+        }
+      }
+      if (!hasWebApplication) failures.push(`${spec.route} ${viewport.name}: WebApplication JSON-LD missing`);
+
+      const sourceLinks = await page.locator('.s5-note-feature__meta a').evaluateAll((links) => links.map((link) => link.href));
+      for (const expected of ['genai.owasp.org/llmrisk/llm01-prompt-injection', 'cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html', 'openai.com/safety/prompt-injections']) {
+        if (!sourceLinks.some((href) => href.includes(expected))) failures.push(`${spec.route} ${viewport.name}: source missing ${expected}`);
+      }
+
       const preset = page.locator('[data-field="preset"]');
       await preset.selectOption('privileged-agent');
-      if ((await page.locator('[data-output="reachablePaths"]').textContent()) !== '5') throw new Error(`${c.path} privileged preset should expose 5 modeled paths`);
+      if ((await page.locator('[data-output="reachablePaths"]').textContent() || '').trim() !== '5') failures.push(`${spec.route} ${viewport.name}: privileged preset should expose five modeled paths`);
+      if ((await page.locator('[data-output="highImpactPaths"]').textContent() || '').trim() !== '4') failures.push(`${spec.route} ${viewport.name}: privileged preset should expose four high-impact paths`);
+
       await page.locator('[data-field="quarantineReader"]').check();
-      if ((await page.locator('[data-output="reachablePaths"]').textContent()) !== '0') throw new Error(`${c.path} indirect quarantine should block modeled privileged influence`);
+      if ((await page.locator('[data-output="reachablePaths"]').textContent() || '').trim() !== '0') failures.push(`${spec.route} ${viewport.name}: indirect quarantine should block modeled privileged influence`);
+
       await page.locator('[data-field="vector"]').selectOption('direct');
-      if ((await page.locator('[data-output="reachablePaths"]').textContent()) === '0') throw new Error(`${c.path} must not claim quarantine blocks direct-user steering`);
-      const labels = await page.locator('label').count();
-      if (labels < 10) throw new Error(`${c.path} unexpectedly missing labeled controls`);
+      if ((await page.locator('[data-output="reachablePaths"]').textContent() || '').trim() === '0') failures.push(`${spec.route} ${viewport.name}: isolated reader must not claim to block direct-user steering`);
+
+      await page.locator('[data-field="vector"]').selectOption('indirect');
+      await page.locator('[data-field="quarantineReader"]').uncheck();
+      await page.locator('[data-field="outputSecretFilter"]').check();
+      if (await page.locator('[data-path="sensitive-disclosure"]').getAttribute('data-state') !== 'blocked') failures.push(`${spec.route} ${viewport.name}: known-secret rendered-output path should be blocked by modeled filter`);
+      if (await page.locator('[data-path="data-exfiltration"]').getAttribute('data-state') !== 'reachable') failures.push(`${spec.route} ${viewport.name}: output filter must not falsely block external-egress exfiltration`);
+
+      await page.locator('[data-action="share"]').click();
+      for (const token of ['preset=', 'vector=', 'quarantineReader=', 'humanApproval=', 'egressRestriction=']) {
+        if (!page.url().includes(token)) failures.push(`${spec.route} ${viewport.name}: share URL missing ${token}`);
+      }
+
+      response = await page.goto(`${base}${spec.route}?preset=privileged-agent&vector=indirect&quarantineReader=1&humanApproval=0&egressRestriction=0`, { waitUntil: 'networkidle' });
+      if (!response?.ok()) failures.push(`${spec.route} ${viewport.name}: deep-link HTTP ${response?.status() ?? 'no response'}`);
+      if (!(await page.locator('[data-field="quarantineReader"]').isChecked())) failures.push(`${spec.route} ${viewport.name}: deep-link quarantine state not restored`);
+      if ((await page.locator('[data-output="reachablePaths"]').textContent() || '').trim() !== '0') failures.push(`${spec.route} ${viewport.name}: deep-link reachability state not restored`);
+
+      await page.goto(`${base}${spec.route}`, { waitUntil: 'networkidle' });
+      const kpis = await page.locator('.s5-threat-kpis > div').evaluateAll((nodes) => nodes.map((node) => {
+        const r = node.getBoundingClientRect();
+        return { x: r.x, y: r.y, width: r.width, height: r.height };
+      }));
+      if (viewport.width >= 1200 && kpis.length === 4) {
+        if (Math.max(...kpis.map((b) => b.y)) - Math.min(...kpis.map((b) => b.y)) > 1) failures.push(`${spec.route} desktop: four KPI cells should share one row`);
+        if (Math.max(...kpis.map((b) => b.width)) - Math.min(...kpis.map((b) => b.width)) > 1) failures.push(`${spec.route} desktop: KPI cells should have equal width`);
+      }
+
+      await page.screenshot({ path: `${artifactDir}/prompt-injection-${spec.locale}-${viewport.name}.png`, fullPage: true });
       await page.close();
     }
   }
-  console.log('Prompt-injection browser validation passed.');
 } finally {
   await browser.close();
 }
+
+if (failures.length) {
+  console.error('Prompt-injection browser QA failed:');
+  for (const failure of failures) console.error(` - ${failure}`);
+  process.exit(1);
+}
+console.log('Prompt-injection browser QA passed: ES/EN, 390px/1440px, reachability semantics, deep links, provenance, JSON-LD, labels and horizontal fit verified.');
