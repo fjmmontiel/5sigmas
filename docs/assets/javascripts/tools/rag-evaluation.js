@@ -18,7 +18,8 @@
         balanced: ['Perfil equilibrado', 'No aparece un cuello de botella dominante con los umbrales didácticos actuales; revisa los intervalos y los casos individuales antes de concluir.']
       },
       interval: (low, high) => `IC Wilson 95% sobre las unidades etiquetadas: ${pct(low)}–${pct(high)}`,
-      weighted: (score) => `Score ponderado: ${pct(score)}. Los pesos son visibles y editables; no es una métrica estándar de RAGAS o ARES.`
+      weighted: (score) => `Score ponderado: ${pct(score)}. Los pesos son visibles y editables; no es una métrica estándar de RAGAS o ARES.`,
+      weightedOff: 'Score ponderado desactivado: asigna un peso mayor que cero a al menos una dimensión.'
     },
     en: {
       copied: 'Link copied.', copyFailed: 'Automatic copy failed. Copy the browser URL instead.', reset: 'Scenario reset.', downloaded: 'JSON generated.',
@@ -31,7 +32,8 @@
         balanced: ['Balanced profile', 'No single bottleneck dominates under the current teaching thresholds; inspect intervals and individual labels before concluding.']
       },
       interval: (low, high) => `95% Wilson interval over labelled units: ${pct(low)}–${pct(high)}`,
-      weighted: (score) => `Weighted score: ${pct(score)}. Weights are visible and editable; this is not a standard RAGAS or ARES metric.`
+      weighted: (score) => `Weighted score: ${pct(score)}. Weights are visible and editable; this is not a standard RAGAS or ARES metric.`,
+      weightedOff: 'Weighted score disabled: assign a positive weight to at least one dimension.'
     }
   }[locale];
 
@@ -176,8 +178,8 @@
     outputs.supportCount.textContent = `${result.counts.supportedClaims}/${result.counts.claims}`;
     outputs.correctCount.textContent = `${result.counts.correctClaims}/${result.counts.claims}`;
     outputs.coverageCount.textContent = `${result.counts.coveredFacts}/${result.counts.referenceFacts}`;
-    outputs.weightedScore.textContent = pct(result.weightedScore);
-    outputs.weightedRead.textContent = copy.weighted(result.weightedScore);
+    outputs.weightedScore.textContent = result.weights.sum === 0 ? '—' : pct(result.weightedScore);
+    outputs.weightedRead.textContent = result.weights.sum === 0 ? copy.weightedOff : copy.weighted(result.weightedScore);
     const [diagnosisTitle, diagnosisText] = copy.diagnosis[result.diagnosis];
     outputs.diagnosis.textContent = diagnosisTitle;
     outputs.diagnosisText.textContent = diagnosisText;
@@ -221,7 +223,8 @@
       outputs: {
         metrics: result.metrics,
         intervals95Wilson: result.intervals,
-        weightedScore: result.weightedScore,
+        normalizedWeights: result.weights,
+        weightedScore: result.weights.sum === 0 ? null : result.weightedScore,
         diagnosis: result.diagnosis
       },
       provenance: [
