@@ -26,6 +26,7 @@ assert.equal(defaults.counts.correctClaims, 3);
 assert.equal(defaults.metrics.answerCorrectness, 3 / 5);
 assert.equal(defaults.metrics.referenceCoverage, 3 / 4);
 assert.equal(defaults.diagnosis, 'grounding');
+assert.ok(defaults.weightedScore >= 0 && defaults.weightedScore <= 1);
 
 const perfect = core.evaluate({
   contexts: core.DEFAULT_CONTEXTS.map((x) => ({ ...x, relevant: true })),
@@ -51,6 +52,14 @@ assert.equal(weights.faithfulness, 0.2);
 assert.equal(weights.answerCorrectness, 0.3);
 assert.equal(weights.referenceCoverage, 0.4);
 
+const zeroWeights = core.normalizeWeights({ contextRelevance: 0, faithfulness: 0, answerCorrectness: 0, referenceCoverage: 0 });
+assert.equal(zeroWeights.contextRelevance, 0.25);
+assert.equal(zeroWeights.faithfulness, 0.3);
+assert.equal(zeroWeights.answerCorrectness, 0.3);
+assert.equal(zeroWeights.referenceCoverage, 0.15);
+assert.equal(zeroWeights.usedDefaultFallback, true);
+assert.ok(core.evaluate({ weights: { contextRelevance: 0, faithfulness: 0, answerCorrectness: 0, referenceCoverage: 0 } }).weightedScore <= 1);
+
 const encodedContexts = core.encodeFlags(core.DEFAULT_CONTEXTS, ['relevant']);
 assert.deepEqual(core.decodeFlags(encodedContexts, core.DEFAULT_CONTEXTS, ['relevant']), core.DEFAULT_CONTEXTS);
 const encodedClaims = core.encodeFlags(core.DEFAULT_CLAIMS, ['supported', 'correct']);
@@ -67,4 +76,4 @@ for (const source of [es, en]) {
 assert.match(es, /No es un LLM judge/);
 assert.match(en, /This is not an LLM judge/);
 
-console.log('RAG evaluation metrics, uncertainty, diagnosis, share-state encoding and provenance passed.');
+console.log('RAG evaluation metrics, uncertainty, diagnosis, zero-weight fallback, share-state encoding and provenance passed.');
