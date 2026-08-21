@@ -165,15 +165,17 @@ tools:
     es_title: Planificador de coste y capacidad para agentes de voz
     en_title: Voice-Agent Cost & Capacity Planner
     category: planner
-    status: in_progress
+    status: excellent
     es_route: /herramientas/coste-capacidad-agente-voz/
     en_route: /en/tools/voice-cost-capacity/
     es_parity: true
     en_parity: true
-    tests: numerical_core_gates_added_2026-08-21_pending_browser_build_and_full_ci
-    visual_review: pending_es_en_mobile_390_desktop_1440
-    provenance: twilio_spain_openai_live_transcribe_gpt_5_6_luna_and_elevenlabs_api_pricing_verified_2026-08-21
+    tests: passing_full_ci_2026-08-21_head_bdaca00b
+    visual_review: reviewed_es_en_mobile_390_desktop_1440_2026-08-21
+    provenance: twilio_spain_openai_live_transcribe_gpt_5_6_luna_elevenlabs_pricing_and_concurrency_verified_2026-08-21
     data_freshness: provider_pricing_review_every_14_days_and_on_release
+    validated_head: bdaca00b8dbc9006250207cfe8d9c0caf7925bb3
+    release_commit: 252e139933eca56d1a21c08174e30a63eda076f0
     last_reviewed: 2026-08-21
   - id: agent-reliability
     order: 11
