@@ -14,6 +14,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
   latency-clocks:
     runs-on: ubuntu-latest
@@ -65,11 +69,11 @@ jobs:
       - name: Validate reasoning latency ES/EN
         run: node scripts/validate_reasoning_latency_visual.mjs
 
-      - name: Upload reasoning latency review
-        if: always()
+      - name: Upload reasoning latency review on failure
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: reasoning-latency-visual-review
           path: artifacts/visual-review/reasoning-latency-*.png
           if-no-files-found: warn
-          retention-days: 14
+          retention-days: 1
