@@ -7,5 +7,7 @@ routes:
     localized: tools/llm-cost-latency.md
   - canonical: herramientas/precio-rendimiento-modelos.md
     localized: tools/model-price-performance.md
+  - canonical: herramientas/vram-inferencia.md
+    localized: tools/inference-vram.md
 published_files:
   - llms.txt
