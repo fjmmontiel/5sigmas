@@ -45,7 +45,9 @@
   }
 
   function formatUsd(value, digits = 2) {
-    return new Intl.NumberFormat(locale === 'es' ? 'es-ES' : 'en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: digits, minimumFractionDigits: digits }).format(value);
+    const options = { maximumFractionDigits: digits, minimumFractionDigits: digits };
+    if (locale === 'es') return `${new Intl.NumberFormat('es-ES', options).format(value)} USD`;
+    return new Intl.NumberFormat('en-US', { ...options, style: 'currency', currency: 'USD' }).format(value);
   }
 
   function number(name, fallback = 0) {
