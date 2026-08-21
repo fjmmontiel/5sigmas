@@ -1,6 +1,6 @@
 ---
 title: AI Tools — calculators, visualizers and labs
-description: Interactive 5sigmas tools for LLM cost and latency, model comparison, inference memory, Transformer attention, RAG, voice agents, evaluation, benchmarks and AI infrastructure.
+description: Interactive 5sigmas tools for LLMs, model comparison, inference, Transformer attention, RAG, agents, evaluation and AI infrastructure.
 keywords: AI tools, LLM calculator, compare AI models, LLM cost, LLM latency, AI VRAM, Transformer attention, RAG evaluation, voice agents, AI benchmarks
 hide:
   - toc
