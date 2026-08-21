@@ -33,9 +33,10 @@
     const t = TEXT[locale];
     const feedback = root.querySelector('[data-s5-tool-feedback]');
     const fields = Array.from(root.querySelectorAll('[data-field]'));
+    let readUrlState = true;
 
     function read() {
-      const params = new URLSearchParams(location.search);
+      const params = readUrlState ? new URLSearchParams(location.search) : new URLSearchParams();
       const raw = {
         items: params.has('n') ? params.get('n') : root.querySelector('[data-field="items"]').value,
         invalidRate: params.has('invalid') ? params.get('invalid') : root.querySelector('[data-field="invalidRate"]').value,
@@ -74,7 +75,7 @@
       const result = Core.evaluate(read());
       apply(result.input);
       const m = result.metrics;
-      const out = (name, value) => { const node = root.querySelector(`[data-output="${name}"]`); if (node) node.textContent = value; };
+      const out = (name, value) => root.querySelectorAll(`[data-output="${name}"]`).forEach((node) => { node.textContent = value; });
       out('scoreA', pct(m.scoreA)); out('scoreB', pct(m.scoreB)); out('gap', `${fmt(Math.abs(m.gap), 2)} pp · ${winner(m.gap, t)}`);
       out('cleanItems', m.cleanItems.toLocaleString(locale === 'es' ? 'es-ES' : 'en-US'));
       out('intervalA', `${pct(m.intervalA.low)}–${pct(m.intervalA.high)}`); out('intervalB', `${pct(m.intervalB.low)}–${pct(m.intervalB.high)}`);
@@ -109,6 +110,9 @@
     root.querySelector('[data-action="share"]').addEventListener('click', async () => { const result = render(); const url = currentUrl(result.input); history.replaceState(null, '', url); try { await navigator.clipboard.writeText(url); message(t.copied); } catch (_) { message(url); } });
     root.querySelector('[data-action="export"]').addEventListener('click', () => { render(); const blob = new Blob([root.dataset.snapshot], { type: 'application/json' }); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = '5sigmas-benchmark-reliability.json'; a.click(); URL.revokeObjectURL(a.href); message(t.exported); });
 
-    const initial = read(); apply(initial); render();
+    const initial = read();
+    apply(initial);
+    readUrlState = false;
+    render();
   });
 })();
