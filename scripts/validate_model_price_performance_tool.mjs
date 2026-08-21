@@ -51,6 +51,31 @@ for (const spec of cases) {
     const frontierPoints = await page.locator('.s5-model-point[data-frontier="true"]').count();
     if (frontierPoints !== 3) failures.push(`${spec.route} ${viewport.name}: expected 3 default frontier points, got ${frontierPoints}`);
 
+    const labelGeometry = await page.locator('[data-model-chart-points]').evaluate((container) => {
+      const bounds = container.getBoundingClientRect();
+      const labels = [...container.querySelectorAll('.s5-model-point')].map((node) => ({
+        id: node.dataset.modelId,
+        rect: node.getBoundingClientRect()
+      }));
+      const overlaps = [];
+      for (let i = 0; i < labels.length; i += 1) {
+        for (let j = i + 1; j < labels.length; j += 1) {
+          const a = labels[i].rect;
+          const b = labels[j].rect;
+          const width = Math.min(a.right, b.right) - Math.max(a.left, b.left);
+          const height = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top);
+          if (width > 1 && height > 1) overlaps.push(`${labels[i].id}/${labels[j].id}`);
+        }
+      }
+      const outside = labels.filter(({ rect }) => (
+        rect.left < bounds.left - 1 || rect.right > bounds.right + 1 ||
+        rect.top < bounds.top - 1 || rect.bottom > bounds.bottom + 1
+      )).map(({ id }) => id);
+      return { overlaps, outside };
+    });
+    if (labelGeometry.overlaps.length) failures.push(`${spec.route} ${viewport.name}: chart labels overlap: ${labelGeometry.overlaps.join(', ')}`);
+    if (labelGeometry.outside.length) failures.push(`${spec.route} ${viewport.name}: chart labels leave plot bounds: ${labelGeometry.outside.join(', ')}`);
+
     const sourceLinks = await page.locator('[data-model-focus] a[href^="https://"]').count();
     if (sourceLinks < 2) failures.push(`${spec.route} ${viewport.name}: focused model does not expose both provenance links`);
 
@@ -106,4 +131,4 @@ if (failures.length) {
   for (const failure of failures) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log('Model price/performance browser QA passed: ES/EN, 390px/1440px, filters, workload updates, Pareto frontier, provenance, JSON-LD, horizontal fit and visual evidence verified.');
+console.log('Model price/performance browser QA passed: ES/EN, 390px/1440px, filters, workload updates, Pareto frontier, collision-free chart labels, provenance, JSON-LD, horizontal fit and visual evidence verified.');
