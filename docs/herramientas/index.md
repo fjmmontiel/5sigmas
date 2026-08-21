@@ -20,11 +20,12 @@ hide:
   "isPartOf": {"@type": "WebSite", "name": "5sigmas", "url": "https://5sigmas.com/"},
   "mainEntity": {
     "@type": "ItemList",
-    "numberOfItems": 3,
+    "numberOfItems": 4,
     "itemListElement": [
       {"@type": "ListItem", "position": 1, "url": "https://5sigmas.com/herramientas/coste-latencia-llm/", "name": "Calculadora de coste y latencia de LLMs"},
       {"@type": "ListItem", "position": 2, "url": "https://5sigmas.com/herramientas/precio-rendimiento-modelos/", "name": "Explorador de precio y rendimiento de modelos de IA"},
-      {"@type": "ListItem", "position": 3, "url": "https://5sigmas.com/herramientas/vram-inferencia/", "name": "Calculadora de VRAM para inferencia"}
+      {"@type": "ListItem", "position": 3, "url": "https://5sigmas.com/herramientas/vram-inferencia/", "name": "Calculadora de VRAM para inferencia"},
+      {"@type": "ListItem", "position": 4, "url": "https://5sigmas.com/herramientas/kv-cache-contexto/", "name": "Explorador de KV cache y ventana de contexto"}
     ]
   }
 }
@@ -63,6 +64,12 @@ hide:
       <p>Separa pesos, KV cache y reserva de runtime para estimar memoria total, memoria por GPU, contexto máximo y concurrencia aproximada.</p>
       <span class="s5-tool-index-card__cta">Abrir calculadora →</span>
     </a>
+    <a class="s5-tool-index-card" href="/herramientas/kv-cache-contexto/">
+      <span class="s5-tool-index-card__meta">Explorador · Infraestructura · 04</span>
+      <h2>KV cache y ventana de contexto</h2>
+      <p>Visualiza cómo cambian la memoria de KV cache y la capacidad de contexto con GQA/MQA, precisión, concurrencia y presupuesto de memoria.</p>
+      <span class="s5-tool-index-card__cta">Abrir explorador →</span>
+    </a>
   </div>
 </section>
 
@@ -73,7 +80,6 @@ hide:
     <p>La sección crece una herramienta cada vez. No se publican páginas vacías: cada entrada aparece cuando tiene interacción real, paridad ES/EN, fuentes y pruebas.</p>
   </div>
   <div class="s5-tools-roadmap__list" aria-label="Próximas familias de herramientas">
-    <div class="s5-tools-roadmap__row"><span>04</span><strong>KV cache y ventana de contexto</strong><span>explorador</span></div>
     <div class="s5-tools-roadmap__row"><span>05</span><strong>Atención Transformer</strong><span>visualizador</span></div>
     <div class="s5-tools-roadmap__row"><span>06</span><strong>Presupuesto de tokens y contexto</strong><span>planificador</span></div>
     <div class="s5-tools-roadmap__row"><span>07–08</span><strong>Recuperación y evaluación RAG</strong><span>laboratorio</span></div>
