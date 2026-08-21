@@ -49,6 +49,9 @@ jobs:
       - name: Verify model explorer math, frontier and provenance
         run: node scripts/test_model_price_performance_tool.mjs
 
+      - name: Verify inference VRAM math and architecture provenance
+        run: node scripts/test_inference_vram_tool.mjs
+
       - name: Build Spanish site strictly
         run: mkdocs build --clean --strict
 
@@ -85,7 +88,9 @@ jobs:
             curl --fail --silent http://127.0.0.1:8000/herramientas/coste-latencia-llm/ > /dev/null && \
             curl --fail --silent http://127.0.0.1:8000/en/tools/llm-cost-latency/ > /dev/null && \
             curl --fail --silent http://127.0.0.1:8000/herramientas/precio-rendimiento-modelos/ > /dev/null && \
-            curl --fail --silent http://127.0.0.1:8000/en/tools/model-price-performance/ > /dev/null && exit 0
+            curl --fail --silent http://127.0.0.1:8000/en/tools/model-price-performance/ > /dev/null && \
+            curl --fail --silent http://127.0.0.1:8000/herramientas/vram-inferencia/ > /dev/null && \
+            curl --fail --silent http://127.0.0.1:8000/en/tools/inference-vram/ > /dev/null && exit 0
             sleep 1
           done
           cat /tmp/5sigmas-tools-preview.log
@@ -96,6 +101,9 @@ jobs:
 
       - name: Validate model explorer in browser and capture visual evidence
         run: node scripts/validate_model_price_performance_tool.mjs
+
+      - name: Validate inference VRAM calculator and capture visual evidence
+        run: node scripts/validate_inference_vram_tool.mjs
 
       - name: Validate localized route switching and hreflang
         run: node scripts/validate_locale_switching.mjs
@@ -108,5 +116,6 @@ jobs:
           path: |
             artifacts/visual-review/llm-cost-latency-*.png
             artifacts/visual-review/model-price-performance-*.png
+            artifacts/visual-review/inference-vram-*.png
           if-no-files-found: warn
           retention-days: 14
