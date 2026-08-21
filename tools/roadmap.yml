@@ -43,15 +43,16 @@ tools:
     es_title: Calculadora de VRAM para inferencia
     en_title: AI Inference VRAM Calculator
     category: calculator
-    status: in_progress
+    status: excellent
     es_route: /herramientas/vram-inferencia/
     en_route: /en/tools/inference-vram/
     es_parity: true
     en_parity: true
-    tests: logic_and_browser_tests_added_pending_full_ci_2026-08-21
-    visual_review: pending_es_en_mobile_390_desktop_1440_ci_artifacts
+    tests: passing_full_ci_2026-08-21
+    visual_review: reviewed_es_en_mobile_390_desktop_1440_2026-08-21
     provenance: meta_primary_architecture_sources_plus_vllm_verified_2026-08-21
     data_freshness: static_architecture_presets_review_on_upstream_source_change
+    validated_head: 263a3913742ed0a17e3348a6788782f91e567e5b
     last_reviewed: 2026-08-21
   - id: kv-cache-context
     order: 4
