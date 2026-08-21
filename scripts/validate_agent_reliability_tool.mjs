@@ -42,6 +42,14 @@ for (const spec of cases) {
     const unlabeled = await page.locator('[data-field]').evaluateAll((nodes) => nodes.filter((node) => !node.id || !document.querySelector(`label[for="${CSS.escape(node.id)}"]`)).length);
     if (unlabeled) failures.push(`${spec.route} ${viewport.name}: ${unlabeled} controls lack programmatic labels`);
 
+    if (spec.locale === 'es') {
+      const bodyText = (await page.locator('[data-s5-agent-reliability]').innerText()).toLowerCase();
+      for (const anglicism of [' retries ', ' retry ', ' tools ', ' tool ', ' gates ', ' outcome ']) {
+        if (` ${bodyText.replace(/\s+/g, ' ')} `.includes(anglicism)) failures.push(`${spec.route} ${viewport.name}: avoid Spanish UI anglicism ${anglicism.trim()}`);
+      }
+      if (!bodyText.includes('los criterios comparan estimaciones puntuales')) failures.push(`${spec.route} ${viewport.name}: point-estimate gate limitation missing`);
+    }
+
     const finalSuccess = percent(await page.locator('[data-output="finalSuccess"]').textContent());
     const firstPass = percent(await page.locator('[data-output="firstPass"]').textContent());
     const toolAccuracy = percent(await page.locator('[data-output="toolAccuracy"]').textContent());
@@ -52,7 +60,8 @@ for (const spec of cases) {
     if (Math.abs(retryRecovery - 57.1) > 0.11) failures.push(`${spec.route} ${viewport.name}: default retry recovery should be 57.1%, got ${retryRecovery}`);
 
     const gateSummary = (await page.locator('[data-output="gateSummary"]').textContent() || '').trim();
-    if (gateSummary !== '4/6 gates') failures.push(`${spec.route} ${viewport.name}: expected 4/6 default gates, got ${gateSummary}`);
+    const expectedSummary = spec.locale === 'es' ? '4/6 criterios' : '4/6 gates';
+    if (gateSummary !== expectedSummary) failures.push(`${spec.route} ${viewport.name}: expected ${expectedSummary}, got ${gateSummary}`);
     if (await page.locator('[data-gate="toolDecision"]').getAttribute('data-state') !== 'fail') failures.push(`${spec.route} ${viewport.name}: tool-decision gate should fail at default`);
     if (await page.locator('[data-gate="policyViolations"]').getAttribute('data-state') !== 'fail') failures.push(`${spec.route} ${viewport.name}: policy gate should fail at default`);
 
@@ -60,7 +69,8 @@ for (const spec of cases) {
     await page.locator('[data-field="correctToolDecisions"]').dispatchEvent('input');
     await page.locator('[data-field="policyViolationTasks"]').fill('1');
     await page.locator('[data-field="policyViolationTasks"]').dispatchEvent('input');
-    if ((await page.locator('[data-output="gateSummary"]').textContent() || '').trim() !== '6/6 gates') failures.push(`${spec.route} ${viewport.name}: corrected scenario should pass all gates`);
+    const allPassSummary = spec.locale === 'es' ? '6/6 criterios' : '6/6 gates';
+    if ((await page.locator('[data-output="gateSummary"]').textContent() || '').trim() !== allPassSummary) failures.push(`${spec.route} ${viewport.name}: corrected scenario should pass all criteria`);
     if (await page.locator('[data-output="gateSummary"]').getAttribute('data-state') !== 'pass') failures.push(`${spec.route} ${viewport.name}: all-pass summary state missing`);
 
     await page.locator('[data-action="share"]').click();
@@ -111,4 +121,4 @@ if (failures.length) {
   for (const failure of failures) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log('Agent reliability browser QA passed: ES/EN, 390px/1440px, outcomes, trace metrics, release gates, deep links, provenance, JSON-LD, labels and horizontal fit verified.');
+console.log('Agent reliability browser QA passed: ES/EN, 390px/1440px, outcomes, trace metrics, release criteria, Spanish terminology, deep links, provenance, JSON-LD, labels and horizontal fit verified.');
