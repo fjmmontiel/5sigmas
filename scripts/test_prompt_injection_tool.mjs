@@ -20,4 +20,19 @@ const egressBlocked = core.evaluate({ preset: 'privileged-agent', egressRestrict
 assert.equal(egressBlocked.paths.find((p) => p.id === 'data-exfiltration').reachable, false);
 const memoryBlocked = core.evaluate({ preset: 'privileged-agent', memoryWriteValidation: true });
 assert.equal(memoryBlocked.paths.find((p) => p.id === 'persistent-poisoning').reachable, false);
+const independentControls = core.evaluate({
+  preset: 'privileged-agent',
+  toolsEnabled: false,
+  writeTools: true,
+  externalEgress: false,
+  egressRestriction: false,
+  persistentMemory: false,
+  memoryWriteValidation: false
+});
+assert.equal(independentControls.input.writeTools, true, 'disabling tool execution must not rewrite the write-capability input');
+assert.equal(independentControls.input.egressRestriction, false, 'removing an egress channel must not silently enable the egress-policy control');
+assert.equal(independentControls.input.memoryWriteValidation, false, 'removing persistent memory must not silently enable the memory-validation control');
+assert.equal(independentControls.paths.find((p) => p.id === 'unauthorized-action').reachable, false);
+assert.equal(independentControls.paths.find((p) => p.id === 'data-exfiltration').reachable, false);
+assert.equal(independentControls.paths.find((p) => p.id === 'persistent-poisoning').reachable, false);
 console.log('Prompt-injection threat model tests passed.');
