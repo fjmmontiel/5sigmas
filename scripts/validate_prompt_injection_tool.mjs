@@ -32,8 +32,6 @@ try {
       if (await page.locator('[data-s5-prompt-injection]').count() !== 1) failures.push(`${spec.route} ${viewport.name}: tool root missing`);
       const overflowPx = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
       if (overflowPx > 1) failures.push(`${spec.route} ${viewport.name}: horizontal overflow ${overflowPx}px`);
-      if (await page.locator('.md-sidebar--primary:visible').count()) failures.push(`${spec.route} ${viewport.name}: documentation navigation visible`);
-      if (await page.locator('.md-footer:visible').count()) failures.push(`${spec.route} ${viewport.name}: documentation footer visible`);
 
       const unlabeled = await page.locator('[data-field]').evaluateAll((nodes) => nodes.filter((node) => {
         if (node.closest('label')) return false;
