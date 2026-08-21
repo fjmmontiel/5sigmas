@@ -1,7 +1,7 @@
 ---
 title: AI Tools — calculators, visualizers and labs
-description: Interactive 5sigmas tools for LLM cost and latency, inference memory, RAG, voice agents, evaluation, benchmarks and AI infrastructure.
-keywords: AI tools, LLM calculator, LLM cost, LLM latency, AI VRAM, RAG evaluation, voice agents, AI benchmarks
+description: Interactive 5sigmas tools for LLM cost and latency, model comparison, inference memory, RAG, voice agents, evaluation, benchmarks and AI infrastructure.
+keywords: AI tools, LLM calculator, compare AI models, LLM cost, LLM latency, AI VRAM, RAG evaluation, voice agents, AI benchmarks
 hide:
   - toc
   - navigation
@@ -20,13 +20,19 @@ hide:
   "isPartOf": {"@type": "WebSite", "name": "5sigmas", "url": "https://5sigmas.com/en/"},
   "mainEntity": {
     "@type": "ItemList",
-    "numberOfItems": 1,
+    "numberOfItems": 2,
     "itemListElement": [
       {
         "@type": "ListItem",
         "position": 1,
         "url": "https://5sigmas.com/en/tools/llm-cost-latency/",
         "name": "LLM Cost & Latency Calculator"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "url": "https://5sigmas.com/en/tools/model-price-performance/",
+        "name": "Model Price/Performance Explorer"
       }
     ]
   }
@@ -38,7 +44,7 @@ hide:
 <section class="s5-page-intro">
   <div class="s5-eyebrow">Tools</div>
   <h1>Explore an AI system by changing its variables.</h1>
-  <p>Calculators, visualizers and labs for answering AI engineering questions with explicit assumptions. Each tool documents the formula, cites its sources and makes the scenario reproducible.</p>
+  <p>Calculators, visualizers and labs for answering AI engineering questions with explicit assumptions. Each tool documents its method, cites its sources and makes the scenario reproducible.</p>
 </section>
 
 <section class="s5-section" aria-labelledby="s5-tools-available">
@@ -57,23 +63,28 @@ hide:
       <p>Turn tokens, caching, traffic, TTFT, generation speed and concurrency into cost per request, monthly spend, response time and approximate capacity.</p>
       <span class="s5-tool-index-card__cta">Open calculator →</span>
     </a>
+    <a class="s5-tool-index-card" href="/en/tools/model-price-performance/">
+      <span class="s5-tool-index-card__meta">Explorer · Models · 02</span>
+      <h2>Model price and performance</h2>
+      <p>Compare your workload cost with Intelligence Index, output speed, TTFT and context while keeping pricing and performance provenance separate.</p>
+      <span class="s5-tool-index-card__cta">Open explorer →</span>
+    </a>
   </div>
 </section>
 
 <section class="s5-section s5-tools-roadmap" aria-labelledby="s5-tools-roadmap">
   <div>
     <div class="s5-eyebrow">Roadmap</div>
-    <h2 id="s5-tools-roadmap">Planned tool families</h2>
-    <p>The section will grow around concrete engineering problems: cost and capacity, memory and inference, RAG, agents, evaluation, security, data and infrastructure. Unreleased tools do not get empty placeholder pages.</p>
+    <h2 id="s5-tools-roadmap">What comes next</h2>
+    <p>The section grows one tool at a time. There are no empty placeholder pages: an entry appears when it has real interaction, ES/EN parity, provenance and tests.</p>
   </div>
   <div class="s5-tools-roadmap__list" aria-label="Upcoming tool families">
-    <div class="s5-tools-roadmap__row"><span>02</span><strong>Model price and performance</strong><span>explorer</span></div>
-    <div class="s5-tools-roadmap__row"><span>03</span><strong>Inference VRAM and KV cache</strong><span>calculator</span></div>
-    <div class="s5-tools-roadmap__row"><span>04</span><strong>Transformer attention and context</strong><span>visualizer</span></div>
-    <div class="s5-tools-roadmap__row"><span>05</span><strong>RAG retrieval and evaluation</strong><span>lab</span></div>
-    <div class="s5-tools-roadmap__row"><span>06</span><strong>Agent latency, cost and reliability</strong><span>explorer</span></div>
-    <div class="s5-tools-roadmap__row"><span>07</span><strong>Benchmarks, scaling and infrastructure</strong><span>data</span></div>
-    <div class="s5-tools-roadmap__row"><span>08</span><strong>Global AI ecosystem</strong><span>data</span></div>
+    <div class="s5-tools-roadmap__row"><span>03</span><strong>Inference VRAM</strong><span>calculator</span></div>
+    <div class="s5-tools-roadmap__row"><span>04</span><strong>KV cache and context window</strong><span>explorer</span></div>
+    <div class="s5-tools-roadmap__row"><span>05</span><strong>Transformer attention</strong><span>visualizer</span></div>
+    <div class="s5-tools-roadmap__row"><span>07–08</span><strong>RAG retrieval and evaluation</strong><span>lab</span></div>
+    <div class="s5-tools-roadmap__row"><span>09–11</span><strong>Agent latency, cost and reliability</strong><span>explorer</span></div>
+    <div class="s5-tools-roadmap__row"><span>13–18</span><strong>Benchmarks, scaling, infrastructure and the global ecosystem</strong><span>data</span></div>
   </div>
 </section>
 
