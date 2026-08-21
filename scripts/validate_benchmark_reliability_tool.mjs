@@ -44,6 +44,9 @@ try {
       const tableRegion = page.locator('.s5-benchmark-table-scroll');
       if ((await tableRegion.getAttribute('role')) !== 'region' || !(await tableRegion.getAttribute('aria-label'))) failures.push(`${spec.route} ${viewport.name}: scrollable task table must be a labelled region`);
 
+      const interpretation = page.locator('[data-output="interpretation"]');
+      if ((await interpretation.getAttribute('aria-live')) !== 'polite') failures.push(`${spec.route} ${viewport.name}: interpretation summary must announce updates politely`);
+
       const jsonLdBlocks = await page.locator('script[type="application/ld+json"]').allTextContents();
       let hasWebApplication = false;
       for (const raw of jsonLdBlocks) {
@@ -63,9 +66,10 @@ try {
 
       const bodyText = ` ${(await root.innerText()).toLowerCase().replace(/\s+/g, ' ')} `;
       if (spec.locale === 'es') {
-        for (const phrase of ['p-value', 'score agregado', 'ranking']) {
+        for (const phrase of ['p-value', 'puntuaciones agregadas', 'ranking']) {
           if (!bodyText.includes(phrase)) failures.push(`${spec.route} ${viewport.name}: key Spanish methodological phrase missing: ${phrase}`);
         }
+        if (bodyText.includes('score agregado') || bodyText.includes('tareas y scores')) failures.push(`${spec.route} ${viewport.name}: avoid unnecessary English score jargon in Spanish copy`);
         if (!bodyText.includes('no son evidencia de contaminación')) failures.push(`${spec.route} ${viewport.name}: contamination limitation missing`);
         if (!bodyText.includes('supone puntuación binaria')) failures.push(`${spec.route} ${viewport.name}: binary-score approximation missing`);
       } else {
@@ -81,6 +85,10 @@ try {
       if (scoreA !== '80.3%' || scoreB !== '80.0%') failures.push(`${spec.route} ${viewport.name}: default weighted scores are wrong (${scoreA}, ${scoreB})`);
       if (!gap.includes('0.25 pp')) failures.push(`${spec.route} ${viewport.name}: default gap should be 0.25 pp`);
       if (cleanItems !== '980') failures.push(`${spec.route} ${viewport.name}: default usable item count should be 980`);
+
+      const defaultInterpretation = (await interpretation.textContent() || '').toLowerCase();
+      if (spec.locale === 'es' && (!defaultInterpretation.includes('modelo a lidera por 0.25 pp') || !defaultInterpretation.includes('puede cambiar'))) failures.push(`${spec.route} ${viewport.name}: Spanish default interpretation is incomplete`);
+      if (spec.locale === 'en' && (!defaultInterpretation.includes('model a leads by 0.25 pp') || !defaultInterpretation.includes('can flip'))) failures.push(`${spec.route} ${viewport.name}: English default interpretation is incomplete`);
 
       const defaultWeightStatus = (await page.locator('[data-output="weightStatus"]').textContent() || '').toLowerCase();
       if (spec.locale === 'es' && !defaultWeightStatus.includes('puede cambiar')) failures.push(`${spec.route} ${viewport.name}: default ranking should be weight-fragile in Spanish`);
@@ -111,8 +119,11 @@ try {
       }
       const tieGap = (await page.locator('[data-output="gap"]').first().textContent() || '').trim().toLowerCase();
       const tieGapItems = (await page.locator('[data-output="gapItems"]').textContent() || '').trim();
+      const tieInterpretation = (await interpretation.textContent() || '').toLowerCase();
       if (!tieGap.includes('0.00 pp')) failures.push(`${spec.route} ${viewport.name}: tie scenario should render a zero gap`);
       if (tieGapItems !== '0') failures.push(`${spec.route} ${viewport.name}: tie scenario must show zero items of lead, got ${tieGapItems}`);
+      if (spec.locale === 'es' && !tieInterpretation.includes('quedan empatados')) failures.push(`${spec.route} ${viewport.name}: Spanish tie interpretation missing`);
+      if (spec.locale === 'en' && !tieInterpretation.includes('are tied')) failures.push(`${spec.route} ${viewport.name}: English tie interpretation missing`);
       if ((await page.locator('[data-output="invalidEnvelope"]').textContent() || '').trim().toLowerCase() !== 'no') failures.push(`${spec.route} ${viewport.name}: invalid-item envelope must be inactive when there is no observed lead`);
       if ((await page.locator('[data-output="contaminationEnvelope"]').textContent() || '').trim().toLowerCase() !== 'no') failures.push(`${spec.route} ${viewport.name}: contamination envelope must be inactive when there is no observed lead`);
 
@@ -181,4 +192,4 @@ if (failures.length) {
   for (const failure of failures) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log('Benchmark reliability browser QA passed: ES/EN, 390px/1440px, default math, tie handling, ranking sensitivity, integrity envelopes, deep links, provenance, JSON-LD, labels, readable diagnostic geometry and contained mobile table scrolling verified.');
+console.log('Benchmark reliability browser QA passed: ES/EN, 390px/1440px, default math, interpretation, tie handling, ranking sensitivity, integrity envelopes, deep links, provenance, JSON-LD, labels, readable diagnostic geometry and contained mobile table scrolling verified.');
