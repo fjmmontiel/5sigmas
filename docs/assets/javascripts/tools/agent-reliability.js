@@ -10,8 +10,7 @@
       downloaded: 'JSON generado.', reset: 'Escenario restablecido.', pass: 'Pasa', fail: 'No pasa',
       gateSummary: (p, t) => `${p}/${t} gates`,
       interval: (l, h) => `IC 95% ${pct(l)}–${pct(h)}`,
-      monthly: (n) => `${num(n, 0)} tareas/mes`,
-      failures: (n) => `${num(n, 0)} fallos finales esperados`,
+      monthly: (n) => `${num(n, 0)} tareas/mes`, failures: (n) => `${num(n, 0)} fallos finales esperados`,
       range: (l, h) => `rango por IC 95%: ${num(l, 0)}–${num(h, 0)}`
     },
     en: {
@@ -19,17 +18,23 @@
       downloaded: 'JSON generated.', reset: 'Scenario reset.', pass: 'Pass', fail: 'Fail',
       gateSummary: (p, t) => `${p}/${t} gates`,
       interval: (l, h) => `95% CI ${pct(l)}–${pct(h)}`,
-      monthly: (n) => `${num(n, 0)} tasks/month`,
-      failures: (n) => `${num(n, 0)} expected final failures`,
+      monthly: (n) => `${num(n, 0)} tasks/month`, failures: (n) => `${num(n, 0)} expected final failures`,
       range: (l, h) => `95% CI-derived range: ${num(l, 0)}–${num(h, 0)}`
     }
   }[locale];
+
+  for (const field of root.querySelectorAll('.s5-tool-field')) {
+    const input = field.querySelector('[data-field]');
+    const label = field.querySelector('label');
+    if (!input || !label) continue;
+    if (!input.id) input.id = `s5-agent-${locale}-${input.dataset.field}`;
+    if (!label.htmlFor) label.htmlFor = input.id;
+  }
 
   const fields = Object.fromEntries([...root.querySelectorAll('[data-field]')].map((el) => [el.dataset.field, el]));
   const outputs = Object.fromEntries([...root.querySelectorAll('[data-output]')].map((el) => [el.dataset.output, el]));
   const feedback = root.querySelector('[data-s5-tool-feedback]');
   const gateRows = Object.fromEntries([...root.querySelectorAll('[data-gate]')].map((el) => [el.dataset.gate, el]));
-
   const paramMap = {
     tasks: 'n', firstPassSuccesses: 'fp', retryingTasks: 'rt', retryRecoveredTasks: 'rr', totalRetryAttempts: 'ra',
     expectedToolDecisions: 'td', correctToolDecisions: 'tc', wrongToolDecisions: 'tw', totalAgentSteps: 'st', unnecessarySteps: 'us',
@@ -49,7 +54,6 @@
     feedback.textContent = text; feedback.hidden = false;
     clearTimeout(setFeedback.timer); setFeedback.timer = setTimeout(() => { feedback.hidden = true; }, 2200);
   }
-
   function renderGate(item) {
     const row = gateRows[item.key];
     if (!row) return;
@@ -59,7 +63,6 @@
     if (state) state.textContent = item.pass ? copy.pass : copy.fail;
     if (actual) actual.textContent = `${pct(item.value)} ${item.direction === 'min' ? '≥' : '≤'} ${pct(item.threshold)}`;
   }
-
   function render() {
     const result = core.evaluate(currentInput());
     outputs.finalSuccess.textContent = pct(result.metrics.finalSuccessRate);
@@ -84,7 +87,6 @@
     outputs.monthlyPolicy.textContent = num(result.projection.expectedPolicyViolationTasks, 0);
     return result;
   }
-
   function scenarioUrl() {
     const url = new URL(window.location.href); url.search = '';
     const input = core.normalize(currentInput());
@@ -116,7 +118,6 @@
   });
   root.querySelector('[data-action="export"]')?.addEventListener('click', exportJson);
   root.querySelector('[data-action="reset"]')?.addEventListener('click', reset);
-
   if (!restoreFromUrl()) Object.entries(core.DEFAULTS).forEach(([name, value]) => setField(name, value));
   render();
 })();
