@@ -1,7 +1,8 @@
 /* Tool pages are full-width product surfaces. The locale frontmatter normally hides
-   documentation sidebars; keep the layout safe if a translated page loses that flag. */
+   documentation chrome; keep the layout safe if a translated page loses that flag. */
 body:has(.s5-tool-page) .md-sidebar--primary,
-body:has(.s5-tool-page) .md-sidebar--secondary {
+body:has(.s5-tool-page) .md-sidebar--secondary,
+body:has(.s5-tool-page) .md-footer {
   display: none;
 }
 
@@ -131,6 +132,11 @@ body:has(.s5-tool-page) .md-sidebar--secondary {
   }
   .s5-voice-latency-kpis .s5-tool-kpi:nth-child(even) {
     padding-left: 1rem;
+    border-right: 0;
+  }
+  .s5-voice-latency-kpis .s5-tool-kpi:last-child {
+    grid-column: 1 / -1;
+    padding-left: 0;
     border-right: 0;
   }
 }
