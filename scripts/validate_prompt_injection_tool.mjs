@@ -102,6 +102,10 @@ try {
       if ((await page.locator('[data-output="reachablePaths"]').textContent() || '').trim() !== '0') failures.push(`${spec.route} ${viewport.name}: deep-link reachability state not restored`);
 
       await page.goto(`${base}${spec.route}`, { waitUntil: 'networkidle' });
+      const blockedLabel = (await page.locator('[data-output="blockedPaths"]').textContent() || '').trim().toLowerCase();
+      if (spec.locale === 'es' && !blockedLabel.includes('rutas bloqueadas')) failures.push(`${spec.route} ${viewport.name}: blocked-path KPI lacks a descriptive Spanish label`);
+      if (spec.locale === 'en' && !blockedLabel.includes('blocked paths')) failures.push(`${spec.route} ${viewport.name}: blocked-path KPI lacks a descriptive English label`);
+
       const kpis = await page.locator('.s5-threat-kpis > div').evaluateAll((nodes) => nodes.map((node) => {
         const r = node.getBoundingClientRect();
         return { x: r.x, y: r.y, width: r.width, height: r.height };
@@ -109,6 +113,16 @@ try {
       if (viewport.width >= 1200 && kpis.length === 4) {
         if (Math.max(...kpis.map((b) => b.y)) - Math.min(...kpis.map((b) => b.y)) > 1) failures.push(`${spec.route} desktop: four KPI cells should share one row`);
         if (Math.max(...kpis.map((b) => b.width)) - Math.min(...kpis.map((b) => b.width)) > 1) failures.push(`${spec.route} desktop: KPI cells should have equal width`);
+
+        const scenarioWidths = await page.locator('.s5-tool-controls__section:first-child .s5-tool-field').evaluateAll((nodes) => nodes.map((node) => node.getBoundingClientRect().width));
+        if (scenarioWidths.some((width) => width < 280)) failures.push(`${spec.route} desktop: scenario selects are too narrow for their selected labels`);
+
+        const influenceLines = await page.locator('[data-output="influence"]').evaluate((node) => {
+          const style = getComputedStyle(node);
+          const lineHeight = Number.parseFloat(style.lineHeight) || Number.parseFloat(style.fontSize) * 1.2;
+          return node.getBoundingClientRect().height / lineHeight;
+        });
+        if (influenceLines > 1.25) failures.push(`${spec.route} desktop: privileged-influence KPI wraps across multiple lines`);
       }
 
       await page.screenshot({ path: `${artifactDir}/prompt-injection-${spec.locale}-${viewport.name}.png`, fullPage: true });
@@ -124,4 +138,4 @@ if (failures.length) {
   for (const failure of failures) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log('Prompt-injection browser QA passed: ES/EN, 390px/1440px, reachability semantics, independent controls, deep links, provenance, JSON-LD, labels and horizontal fit verified.');
+console.log('Prompt-injection browser QA passed: ES/EN, 390px/1440px, reachability semantics, independent controls, desktop readability, deep links, provenance, JSON-LD, labels and horizontal fit verified.');
