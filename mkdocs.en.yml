@@ -120,6 +120,7 @@ nav:
       - RAG Retrieval: tools/rag-retrieval-lab.md
       - RAG Evaluation: tools/rag-evaluation.md
       - Voice-Agent Latency: tools/voice-latency-budget.md
+      - Voice-Agent Cost & Capacity: tools/voice-cost-capacity.md
   - Learn:
       - Series: series/index.md
       - AI and Generative AI Foundations:

@@ -158,13 +158,23 @@ tools:
     provenance: openai_realtime_deepgram_endpointing_elevenlabs_latency_twilio_media_streams_and_stivers_turn_taking_verified_2026-08-21
     data_freshness: static_method_review_on_voice_api_semantics_change
     validated_head: f356e518fc4d939280ab81a4a9b06cbce4c39f48
+    release_commit: b574917abed951ae735f5b0f667ef524474cd39a
     last_reviewed: 2026-08-21
   - id: voice-cost-capacity
     order: 10
     es_title: Planificador de coste y capacidad para agentes de voz
     en_title: Voice-Agent Cost & Capacity Planner
     category: planner
-    status: planned
+    status: in_progress
+    es_route: /herramientas/coste-capacidad-agente-voz/
+    en_route: /en/tools/voice-cost-capacity/
+    es_parity: true
+    en_parity: true
+    tests: numerical_core_gates_added_2026-08-21_pending_browser_build_and_full_ci
+    visual_review: pending_es_en_mobile_390_desktop_1440
+    provenance: twilio_spain_openai_live_transcribe_gpt_5_6_luna_and_elevenlabs_api_pricing_verified_2026-08-21
+    data_freshness: provider_pricing_review_every_14_days_and_on_release
+    last_reviewed: 2026-08-21
   - id: agent-reliability
     order: 11
     es_title: Entorno interactivo de fiabilidad y evaluación de agentes
