@@ -16,6 +16,7 @@
 - [Laboratorio de recuperación RAG](https://5sigmas.com/herramientas/laboratorio-recuperacion-rag/index.html.md): calcula Precision@k, Recall@k, MRR y nDCG sobre un ranking visible, prueba reranking y separa calidad de recuperación de la huella de chunking y solape.
 - [Evaluación RAG](https://5sigmas.com/herramientas/evaluacion-rag/index.html.md): separa relevancia del contexto, fidelidad, corrección y cobertura, con etiquetas visibles, pesos configurables e intervalos de incertidumbre.
 - [Latencia de agentes de voz](https://5sigmas.com/herramientas/latencia-agente-voz/index.html.md): descompone el tiempo hasta el primer audio y el barge-in entre transporte, fin de turno, STT, modelo, TTS y buffering con supuestos editables.
+- [Coste y capacidad de agentes de voz](https://5sigmas.com/herramientas/coste-capacidad-agente-voz/index.html.md): estima gasto mensual, coste por llamada, unidades facturables, workers y concurrencia de STT/TTS separando llamadas activas de generación de proveedor.
 
 ## Conceptos fundamentales
 
