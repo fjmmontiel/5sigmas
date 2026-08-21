@@ -18,6 +18,7 @@ on:
       - 'docs/stylesheets/tools-agent-reliability.css'
       - 'docs/stylesheets/tools-prompt-injection.css'
       - 'docs/stylesheets/tools-benchmark-reliability.css'
+      - 'docs/stylesheets/tools-model-capability-timeline.css'
       - 'tools/**'
       - 'hooks/locale_alternates.py'
       - 'scripts/prepare_locale.py'
@@ -96,6 +97,9 @@ jobs:
       - name: Verify benchmark reliability math and provenance
         run: node scripts/test_benchmark_reliability_tool.mjs
 
+      - name: Verify model capability timeline data, chronology and provenance
+        run: node scripts/test_model_capability_timeline_tool.mjs
+
       - name: Build Spanish site strictly
         run: mkdocs build --clean --strict
 
@@ -154,7 +158,9 @@ jobs:
             curl --fail --silent http://127.0.0.1:8000/herramientas/amenazas-prompt-injection/ > /dev/null && \
             curl --fail --silent http://127.0.0.1:8000/en/tools/prompt-injection-threat/ > /dev/null && \
             curl --fail --silent http://127.0.0.1:8000/herramientas/fiabilidad-benchmarks/ > /dev/null && \
-            curl --fail --silent http://127.0.0.1:8000/en/tools/benchmark-reliability/ > /dev/null && exit 0
+            curl --fail --silent http://127.0.0.1:8000/en/tools/benchmark-reliability/ > /dev/null && \
+            curl --fail --silent http://127.0.0.1:8000/herramientas/linea-temporal-capacidades-modelos/ > /dev/null && \
+            curl --fail --silent http://127.0.0.1:8000/en/tools/model-capability-timeline/ > /dev/null && exit 0
             sleep 1
           done
           cat /tmp/5sigmas-tools-preview.log
@@ -199,6 +205,9 @@ jobs:
       - name: Validate benchmark reliability explorer and capture visual evidence
         run: node scripts/validate_benchmark_reliability_tool.mjs
 
+      - name: Validate model capability timeline and capture visual evidence
+        run: node scripts/validate_model_capability_timeline_tool.mjs
+
       - name: Validate localized route switching and hreflang
         run: node scripts/validate_locale_switching.mjs
 
@@ -221,6 +230,7 @@ jobs:
             artifacts/visual-review/agent-reliability-*.png
             artifacts/visual-review/prompt-injection-*.png
             artifacts/visual-review/benchmark-reliability-*.png
+            artifacts/visual-review/model-capability-timeline-*.png
           if-no-files-found: warn
           retention-days: 1
           overwrite: true
