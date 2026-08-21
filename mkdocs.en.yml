@@ -124,6 +124,7 @@ nav:
       - Agent Reliability & Eval: tools/agent-reliability-eval.md
       - Prompt-Injection Threats: tools/prompt-injection-threat.md
       - Benchmark Reliability: tools/benchmark-reliability.md
+      - Model Capability Timeline: tools/model-capability-timeline.md
   - Learn:
       - Series: series/index.md
       - AI and Generative AI Foundations:
