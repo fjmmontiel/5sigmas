@@ -14,7 +14,7 @@
 }
 
 .s5-context-budget-bar > span {
-  width: var(--share, 0%);
+  flex: 0 0 var(--share, 0%);
   min-width: 0;
   background: var(--s5-text);
   border-right: 1px solid var(--s5-bg);
