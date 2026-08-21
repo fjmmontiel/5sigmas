@@ -33,6 +33,20 @@ try {
       const jsonLd = await page.locator('script[type="application/ld+json"]').allTextContents();
       if (!jsonLd.some((raw) => { try { return JSON.parse(raw)['@type'] === 'WebApplication'; } catch { return false; } })) failures.push(`${spec.route} ${viewport.name}: WebApplication JSON-LD missing`);
 
+      const summaryBoxes = await page.locator('.s5-tool-summary-strip > div').evaluateAll((nodes) => nodes.map((node) => {
+        const box = node.getBoundingClientRect();
+        return { top: box.top, left: box.left, width: box.width };
+      }));
+      if (summaryBoxes.length !== 4) failures.push(`${spec.route} ${viewport.name}: expected four summary items`);
+      if (viewport.width >= 1000 && summaryBoxes.length === 4) {
+        const tops = summaryBoxes.map((box) => box.top);
+        if (Math.max(...tops) - Math.min(...tops) > 2) failures.push(`${spec.route} desktop: four-item summary must remain on one row`);
+      }
+      if (viewport.width <= 520 && summaryBoxes.length === 4) {
+        const lefts = summaryBoxes.map((box) => box.left);
+        if (Math.max(...lefts) - Math.min(...lefts) > 2) failures.push(`${spec.route} mobile: summary items must stack on one column`);
+      }
+
       const nOpt = (await page.locator('[data-output="optimal-params"]').textContent() || '').trim();
       const dOpt = (await page.locator('[data-output="optimal-tokens"]').textContent() || '').trim();
       if (!/[0-9]/.test(nOpt) || !/[0-9]/.test(dOpt)) failures.push(`${spec.route} ${viewport.name}: optimum allocation not rendered`);
@@ -76,4 +90,4 @@ if (failures.length) {
   failures.forEach((failure) => console.error(` - ${failure}`));
   process.exit(1);
 }
-console.log('Scaling-laws browser QA passed: ES/EN, 390/1440, deep links, sensitivity controls, accessible inputs, provenance and contained chart verified.');
+console.log('Scaling-laws browser QA passed: ES/EN, 390/1440, summary geometry, deep links, sensitivity controls, accessible inputs, provenance and contained chart verified.');
