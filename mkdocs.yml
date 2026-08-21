@@ -69,6 +69,7 @@ nav:
       - Coste y capacidad de agentes de voz: herramientas/coste-capacidad-agente-voz.md
       - Fiabilidad y evaluación de agentes: herramientas/fiabilidad-evaluacion-agentes.md
       - Amenazas de prompt injection: herramientas/amenazas-prompt-injection.md
+      - Fiabilidad de benchmarks: herramientas/fiabilidad-benchmarks.md
   - Aprender:
       - Conceptos:
           - temas/index.md

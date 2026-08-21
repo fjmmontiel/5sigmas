@@ -27,5 +27,7 @@ routes:
     localized: tools/agent-reliability-eval.md
   - canonical: herramientas/amenazas-prompt-injection.md
     localized: tools/prompt-injection-threat.md
+  - canonical: herramientas/fiabilidad-benchmarks.md
+    localized: tools/benchmark-reliability.md
 published_files:
   - llms.txt

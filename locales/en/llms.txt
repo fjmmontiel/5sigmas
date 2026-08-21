@@ -19,6 +19,7 @@
 - [Voice-Agent Cost & Capacity Planner](https://5sigmas.com/en/tools/voice-cost-capacity/index.html.md): estimate monthly spend, cost per call, billable units, workers and STT/TTS provider concurrency while keeping active calls separate from active generation requests.
 - [Agent Reliability / Eval Playground](https://5sigmas.com/en/tools/agent-reliability-eval/index.html.md): separate final success, first-pass success, retry recovery, tool decisions, operational incidences and trajectory efficiency with explicit release gates and uncertainty intervals.
 - [Prompt-Injection Threat Explorer](https://5sigmas.com/en/tools/prompt-injection-threat/index.html.md): defensively model paths from untrusted content into sensitive data, write-capable tools, external egress and persistent memory with explicit architectural controls and no probabilistic risk score.
+- [Benchmark Reliability Explorer](https://5sigmas.com/en/tools/benchmark-reliability/index.html.md): separate statistical resolution, saturation, sensitivity to invalid or potentially exposed test items, and ranking fragility under changes in task composition.
 
 ## Core concepts
 

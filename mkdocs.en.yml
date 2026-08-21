@@ -123,6 +123,7 @@ nav:
       - Voice-Agent Cost & Capacity: tools/voice-cost-capacity.md
       - Agent Reliability & Eval: tools/agent-reliability-eval.md
       - Prompt-Injection Threats: tools/prompt-injection-threat.md
+      - Benchmark Reliability: tools/benchmark-reliability.md
   - Learn:
       - Series: series/index.md
       - AI and Generative AI Foundations:
