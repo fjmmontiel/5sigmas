@@ -30,8 +30,8 @@
     const nonInputReserve = input.reservedOutput + input.safetyTokens;
     const availableInput = Math.max(0, input.contextLimit - nonInputReserve);
     const remainingInput = availableInput - usedInput;
-    const overflowTokens = Math.max(0, -remainingInput);
     const totalPlanned = usedInput + nonInputReserve;
+    const overflowTokens = Math.max(0, totalPlanned - input.contextLimit);
     const utilization = totalPlanned / input.contextLimit;
     const inputUtilization = availableInput > 0 ? usedInput / availableInput : null;
     const fits = totalPlanned <= input.contextLimit;
