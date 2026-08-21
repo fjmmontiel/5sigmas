@@ -61,6 +61,7 @@ nav:
       - Precio y rendimiento de modelos: herramientas/precio-rendimiento-modelos.md
       - VRAM para inferencia: herramientas/vram-inferencia.md
       - KV cache y contexto: herramientas/kv-cache-contexto.md
+      - Atención Transformer: herramientas/atencion-transformer.md
   - Aprender:
       - Conceptos:
           - temas/index.md
