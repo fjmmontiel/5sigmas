@@ -20,7 +20,7 @@ hide:
   "isPartOf": {"@type": "WebSite", "name": "5sigmas", "url": "https://5sigmas.com/en/"},
   "mainEntity": {
     "@type": "ItemList",
-    "numberOfItems": 7,
+    "numberOfItems": 8,
     "itemListElement": [
       {"@type": "ListItem", "position": 1, "url": "https://5sigmas.com/en/tools/llm-cost-latency/", "name": "LLM Cost & Latency Calculator"},
       {"@type": "ListItem", "position": 2, "url": "https://5sigmas.com/en/tools/model-price-performance/", "name": "Model Price/Performance Explorer"},
@@ -28,7 +28,8 @@ hide:
       {"@type": "ListItem", "position": 4, "url": "https://5sigmas.com/en/tools/kv-cache-context/", "name": "KV Cache & Context Window Explorer"},
       {"@type": "ListItem", "position": 5, "url": "https://5sigmas.com/en/tools/transformer-attention/", "name": "Transformer Attention Visualizer"},
       {"@type": "ListItem", "position": 6, "url": "https://5sigmas.com/en/tools/context-budget/", "name": "Token & Context Budget Planner"},
-      {"@type": "ListItem", "position": 7, "url": "https://5sigmas.com/en/tools/rag-retrieval-lab/", "name": "RAG Retrieval Lab"}
+      {"@type": "ListItem", "position": 7, "url": "https://5sigmas.com/en/tools/rag-retrieval-lab/", "name": "RAG Retrieval Lab"},
+      {"@type": "ListItem", "position": 8, "url": "https://5sigmas.com/en/tools/rag-evaluation/", "name": "RAG Evaluation Playground"}
     ]
   }
 }
@@ -91,6 +92,12 @@ hide:
       <p>Measure Precision@k, Recall@k, MRR and nDCG on a visible ranking; test reranking while keeping retrieval quality separate from chunking and overlap footprint.</p>
       <span class="s5-tool-index-card__cta">Open lab →</span>
     </a>
+    <a class="s5-tool-index-card" href="/en/tools/rag-evaluation/">
+      <span class="s5-tool-index-card__meta">Evaluator · RAG · 08</span>
+      <h2>RAG evaluation</h2>
+      <p>Separate context relevance, faithfulness, correctness and coverage; inspect claims, uncertainty intervals and weights without hiding diagnosis inside one score.</p>
+      <span class="s5-tool-index-card__cta">Open evaluator →</span>
+    </a>
   </div>
 </section>
 
@@ -101,7 +108,6 @@ hide:
     <p>The section grows one tool at a time. There are no empty placeholder pages: an entry appears when it has real interaction, ES/EN parity, provenance and tests.</p>
   </div>
   <div class="s5-tools-roadmap__list" aria-label="Upcoming tool families">
-    <div class="s5-tools-roadmap__row"><span>08</span><strong>RAG evaluation across context, faithfulness and answer quality</strong><span>evaluator</span></div>
     <div class="s5-tools-roadmap__row"><span>09–12</span><strong>Agents: latency, cost, reliability and security</strong><span>explorers</span></div>
     <div class="s5-tools-roadmap__row"><span>13–18</span><strong>Benchmarks, scaling, infrastructure and the global ecosystem</strong><span>data</span></div>
   </div>
