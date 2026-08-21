@@ -46,6 +46,9 @@ jobs:
       - name: Verify calculator math and pricing provenance
         run: node scripts/test_llm_cost_latency_tool.mjs
 
+      - name: Verify model explorer math, frontier and provenance
+        run: node scripts/test_model_price_performance_tool.mjs
+
       - name: Build Spanish site strictly
         run: mkdocs build --clean --strict
 
@@ -80,7 +83,9 @@ jobs:
           echo $! > /tmp/5sigmas-tools-preview.pid
           for attempt in {1..30}; do
             curl --fail --silent http://127.0.0.1:8000/herramientas/coste-latencia-llm/ > /dev/null && \
-            curl --fail --silent http://127.0.0.1:8000/en/tools/llm-cost-latency/ > /dev/null && exit 0
+            curl --fail --silent http://127.0.0.1:8000/en/tools/llm-cost-latency/ > /dev/null && \
+            curl --fail --silent http://127.0.0.1:8000/herramientas/precio-rendimiento-modelos/ > /dev/null && \
+            curl --fail --silent http://127.0.0.1:8000/en/tools/model-price-performance/ > /dev/null && exit 0
             sleep 1
           done
           cat /tmp/5sigmas-tools-preview.log
@@ -88,6 +93,9 @@ jobs:
 
       - name: Validate calculator in browser and capture visual evidence
         run: node scripts/validate_llm_cost_latency_tool.mjs
+
+      - name: Validate model explorer in browser and capture visual evidence
+        run: node scripts/validate_model_price_performance_tool.mjs
 
       - name: Validate localized route switching and hreflang
         run: node scripts/validate_locale_switching.mjs
@@ -97,6 +105,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: 5sigmas-tools-visual-review
-          path: artifacts/visual-review/llm-cost-latency-*.png
+          path: |
+            artifacts/visual-review/llm-cost-latency-*.png
+            artifacts/visual-review/model-price-performance-*.png
           if-no-files-found: warn
           retention-days: 14
