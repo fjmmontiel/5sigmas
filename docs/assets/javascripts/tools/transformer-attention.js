@@ -23,13 +23,14 @@
     }
   };
 
-  const fmt = (value, digits = 2) => Number(value).toLocaleString(undefined, { maximumFractionDigits: digits, minimumFractionDigits: digits });
+  const fmt = (value, digits = 2) => Number(value).toLocaleString(locale === 'es' ? 'es-ES' : 'en-US', { maximumFractionDigits: digits, minimumFractionDigits: digits });
   const pct = (value) => `${(value * 100).toFixed(value >= 0.1 ? 1 : 2)}%`;
   const clampIndex = (value, length) => Math.max(0, Math.min(length - 1, Number(value) || 0));
 
   document.querySelectorAll('[data-s5-transformer-attention]').forEach((root) => {
     const locale = root.dataset.locale === 'en' ? 'en' : 'es';
     const t = I18N[locale];
+    const format = (value, digits = 2) => Number(value).toLocaleString(locale === 'es' ? 'es-ES' : 'en-US', { maximumFractionDigits: digits, minimumFractionDigits: digits });
     const form = root.querySelector('[data-s5-tool-form]');
     const textField = form.querySelector('[data-field="text"]');
     const headField = form.querySelector('[data-field="head"]');
@@ -76,11 +77,11 @@
     function renderKpis(current) {
       root.querySelector('[data-output="queryToken"]').textContent = `${current.queryIndex + 1} · ${current.tokens[current.queryIndex]}`;
       root.querySelector('[data-output="topToken"]').textContent = `${current.topIndex + 1} · ${current.tokens[current.topIndex]} · ${pct(current.weights[current.topIndex])}`;
-      root.querySelector('[data-output="entropy"]').textContent = `${fmt(current.entropy, 2)} nat`;
-      root.querySelector('[data-output="effectiveTokens"]').textContent = fmt(current.effectiveTokens, 2);
-      root.querySelector('[data-output="outputScalar"]').textContent = fmt(current.output, 3);
+      root.querySelector('[data-output="entropy"]').textContent = `${format(current.entropy, 2)} nat`;
+      root.querySelector('[data-output="effectiveTokens"]').textContent = format(current.effectiveTokens, 2);
+      root.querySelector('[data-output="outputScalar"]').textContent = format(current.output, 3);
       root.querySelector('[data-output="allowedKeys"]').textContent = `${current.allowedKeys}/${current.tokens.length}`;
-      temperatureValue.textContent = fmt(current.temperature, 2);
+      temperatureValue.textContent = format(current.temperature, 2);
     }
 
     function renderMatrix(current) {
@@ -149,7 +150,7 @@
             <label for="${valueId}">${t.valueLabel}</label>
             <input id="${valueId}" data-value-index="${index}" type="number" step="0.1" value="${current.values[index].toFixed(2)}" />
           </div>
-          <div class="s5-attention-key-row__contribution"><small>α × V</small><strong>${fmt(current.contributions[index], 3)}</strong></div>`;
+          <div class="s5-attention-key-row__contribution"><small>α × V</small><strong>${format(current.contributions[index], 3)}</strong></div>`;
         rowHost.appendChild(item);
       });
     }
@@ -163,7 +164,7 @@
         row.className = 's5-attention-head-row';
         row.dataset.headChoice = item.head;
         if (item.head === state.head) row.dataset.selected = 'true';
-        row.innerHTML = `<span>${t.heads[item.head]}</span><strong>${state.tokens[item.topIndex]} · ${pct(item.topWeight)}</strong><small>${fmt(item.effectiveTokens, 2)} ${t.effective}</small>`;
+        row.innerHTML = `<span>${t.heads[item.head]}</span><strong>${state.tokens[item.topIndex]} · ${pct(item.topWeight)}</strong><small>${format(item.effectiveTokens, 2)} ${t.effective}</small>`;
         comparisonHost.appendChild(row);
       });
     }
@@ -224,7 +225,7 @@
       headField.value = state.head;
       causalField.checked = state.causal;
       temperatureField.value = String(state.temperature);
-      setTokens(text, Number(params.get('q')));
+      setTokens(text, params.has('q') ? Number(params.get('q')) : null);
       const logits = (params.get('s') || '').split(',').map(Number);
       const values = (params.get('v') || '').split(',').map(Number);
       if (logits.length === state.tokens.length && logits.every(Number.isFinite)) state.logits = logits;
