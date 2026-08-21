@@ -33,6 +33,7 @@ for (const spec of cases) {
     if (await page.locator('[data-s5-voice-latency]').count() !== 1) failures.push(`${spec.route} ${viewport.name}: explorer root missing`);
     const overflowPx = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
     if (overflowPx > 1) failures.push(`${spec.route} ${viewport.name}: horizontal overflow ${overflowPx}px`);
+    if (await page.locator('.md-sidebar--primary:visible').count()) failures.push(`${spec.route} ${viewport.name}: documentation navigation is visible on the tool surface`);
 
     const unlabeled = await page.locator('[data-s5-tool-form] input, [data-s5-tool-form] select').evaluateAll((nodes) => nodes.filter((node) => !node.id || !document.querySelector(`label[for="${CSS.escape(node.id)}"]`)).length);
     if (unlabeled) failures.push(`${spec.route} ${viewport.name}: ${unlabeled} controls lack labels`);
@@ -104,4 +105,4 @@ if (failures.length) {
   for (const failure of failures) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log('Voice latency browser QA passed: ES/EN, 390px/1440px, architecture presets, critical-path math, impossible targets, barge-in, deep links, provenance, JSON-LD, labels and responsive overflow verified.');
+console.log('Voice latency browser QA passed: ES/EN, 390px/1440px, architecture presets, critical-path math, impossible targets, barge-in, deep links, provenance, JSON-LD, labels, hidden docs navigation and responsive overflow verified.');
