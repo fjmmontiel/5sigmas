@@ -34,9 +34,18 @@ for (const spec of cases) {
     const overflowPx = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
     if (overflowPx > 1) failures.push(`${spec.route} ${viewport.name}: horizontal overflow ${overflowPx}px`);
     if (await page.locator('.md-sidebar--primary:visible').count()) failures.push(`${spec.route} ${viewport.name}: documentation navigation is visible on the tool surface`);
+    if (await page.locator('.md-footer:visible').count()) failures.push(`${spec.route} ${viewport.name}: documentation footer/navigation is visible on the tool surface`);
 
     const unlabeled = await page.locator('[data-s5-tool-form] input, [data-s5-tool-form] select').evaluateAll((nodes) => nodes.filter((node) => !node.id || !document.querySelector(`label[for="${CSS.escape(node.id)}"]`)).length);
     if (unlabeled) failures.push(`${spec.route} ${viewport.name}: ${unlabeled} controls lack labels`);
+
+    if (viewport.width <= 900) {
+      const kpiGridBox = await page.locator('.s5-voice-latency-kpis').boundingBox();
+      const lastKpiBox = await page.locator('.s5-voice-latency-kpis .s5-tool-kpi').last().boundingBox();
+      if (!kpiGridBox || !lastKpiBox || Math.abs(kpiGridBox.width - lastKpiBox.width) > 1) {
+        failures.push(`${spec.route} ${viewport.name}: third KPI must span the full responsive row`);
+      }
+    }
 
     const defaultResponse = await msValue(page.locator('[data-output="responseMs"]'));
     const defaultModelBudget = await msValue(page.locator('[data-output="modelBudget"]'));
@@ -105,4 +114,4 @@ if (failures.length) {
   for (const failure of failures) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log('Voice latency browser QA passed: ES/EN, 390px/1440px, architecture presets, critical-path math, impossible targets, barge-in, deep links, provenance, JSON-LD, labels, hidden docs navigation and responsive overflow verified.');
+console.log('Voice latency browser QA passed: ES/EN, 390px/1440px, architecture presets, critical-path math, impossible targets, barge-in, deep links, provenance, JSON-LD, labels, hidden docs chrome, responsive KPI geometry and horizontal fit verified.');
