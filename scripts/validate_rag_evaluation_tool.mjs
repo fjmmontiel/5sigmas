@@ -81,6 +81,13 @@ for (const spec of cases) {
     const currentContext = await numberText(page.locator('[data-output="contextRelevance"]'));
     if (Math.abs(weighted - currentContext) > 1) failures.push(`${spec.route} ${viewport.name}: explicit weights are not reflected in composite score`);
 
+    for (const field of ['wContext', 'wFaithfulness', 'wCorrectness', 'wCoverage']) await page.locator(`[data-field="${field}"]`).fill('0');
+    await page.locator('[data-field="wCoverage"]').dispatchEvent('input');
+    const disabledScore = (await page.locator('[data-output="weightedScore"]').textContent() || '').trim();
+    const disabledRead = (await page.locator('[data-output="weightedRead"]').textContent() || '').trim();
+    if (disabledScore !== '—') failures.push(`${spec.route} ${viewport.name}: zero weights should disable the composite score`);
+    if (!/desactivado|disabled/i.test(disabledRead)) failures.push(`${spec.route} ${viewport.name}: zero-weight explanation missing`);
+
     await page.locator('[data-action="share"]').click();
     if (!page.url().includes('ctx=') || !page.url().includes('clm=') || !page.url().includes('w=')) failures.push(`${spec.route} ${viewport.name}: share URL missing evaluator state`);
 
@@ -121,4 +128,4 @@ if (failures.length) {
   for (const failure of failures) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log('RAG evaluation browser QA passed: ES/EN, 390px/1440px, metric separation, toggles, weighting, uncertainty, deep links, provenance, JSON-LD, labels and responsive overflow verified.');
+console.log('RAG evaluation browser QA passed: ES/EN, 390px/1440px, metric separation, toggles, explicit weighting/disabled-zero state, uncertainty, deep links, provenance, JSON-LD, labels and responsive overflow verified.');
