@@ -39,6 +39,10 @@ try {
       }).length);
       if (unlabeled) failures.push(`${spec.route} ${viewport.name}: ${unlabeled} controls lack programmatic labels`);
 
+      if (await page.locator('.s5-tool-results').getAttribute('aria-live') !== null) failures.push(`${spec.route} ${viewport.name}: full results region must not be a noisy live region`);
+      const liveRegion = page.locator('.s5-threat-live[role="status"][aria-live="polite"][aria-atomic="true"]');
+      if (await liveRegion.count() !== 1) failures.push(`${spec.route} ${viewport.name}: concise result live region missing`);
+
       if (spec.locale === 'es') {
         const bodyText = ` ${(await page.locator('[data-s5-prompt-injection]').innerText()).toLowerCase().replace(/\s+/g, ' ')} `;
         for (const anglicism of [' score ', ' payload ', ' payloads ', ' egress ', ' tools ']) {
@@ -68,9 +72,13 @@ try {
       await preset.selectOption('privileged-agent');
       if ((await page.locator('[data-output="reachablePaths"]').textContent() || '').trim() !== '5') failures.push(`${spec.route} ${viewport.name}: privileged preset should expose five modeled paths`);
       if ((await page.locator('[data-output="highImpactPaths"]').textContent() || '').trim() !== '4') failures.push(`${spec.route} ${viewport.name}: privileged preset should expose four high-impact paths`);
+      if (!(await liveRegion.textContent() || '').includes('5')) failures.push(`${spec.route} ${viewport.name}: live summary did not update with reachable path count`);
 
       await page.locator('[data-field="quarantineReader"]').check();
       if ((await page.locator('[data-output="reachablePaths"]').textContent() || '').trim() !== '0') failures.push(`${spec.route} ${viewport.name}: indirect quarantine should block modeled privileged influence`);
+      const containedPosture = (await page.locator('[data-output="posture"]').textContent() || '').trim();
+      if (spec.locale === 'es' && containedPosture !== 'Contenida') failures.push(`${spec.route} ${viewport.name}: contained Spanish posture should agree grammatically with “postura”`);
+      if (spec.locale === 'en' && containedPosture !== 'Contained') failures.push(`${spec.route} ${viewport.name}: contained English posture label is incorrect`);
 
       await page.locator('[data-field="vector"]').selectOption('direct');
       if ((await page.locator('[data-output="reachablePaths"]').textContent() || '').trim() === '0') failures.push(`${spec.route} ${viewport.name}: isolated reader must not claim to block direct-user steering`);
@@ -138,4 +146,4 @@ if (failures.length) {
   for (const failure of failures) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log('Prompt-injection browser QA passed: ES/EN, 390px/1440px, reachability semantics, independent controls, desktop readability, deep links, provenance, JSON-LD, labels and horizontal fit verified.');
+console.log('Prompt-injection browser QA passed: ES/EN, 390px/1440px, reachability semantics, concise live-region accessibility, independent controls, desktop readability, deep links, provenance, JSON-LD, labels and horizontal fit verified.');
