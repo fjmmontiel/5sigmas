@@ -17,6 +17,7 @@
 - [RAG Evaluation Playground](https://5sigmas.com/en/tools/rag-evaluation/index.html.md): separate context relevance, faithfulness, correctness and reference coverage with visible labels, configurable weights and uncertainty intervals.
 - [Voice-Agent Latency Budget Explorer](https://5sigmas.com/en/tools/voice-latency-budget/index.html.md): break down time to first audio and barge-in across transport, turn end, STT, model, TTS and buffering with editable assumptions.
 - [Voice-Agent Cost & Capacity Planner](https://5sigmas.com/en/tools/voice-cost-capacity/index.html.md): estimate monthly spend, cost per call, billable units, workers and STT/TTS provider concurrency while keeping active calls separate from active generation requests.
+- [Agent Reliability / Eval Playground](https://5sigmas.com/en/tools/agent-reliability-eval/index.html.md): separate final success, first-pass success, retry recovery, tool decisions, operational incidences and trajectory efficiency with explicit release gates and uncertainty intervals.
 
 ## Core concepts
 
