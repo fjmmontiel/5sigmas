@@ -29,6 +29,13 @@
     referenceCoverage: 15
   };
 
+  const DIAG_THRESHOLDS = {
+    contextRelevance: 0.5,
+    faithfulness: 0.7,
+    answerCorrectness: 0.7,
+    referenceCoverage: 0.7
+  };
+
   function clampInt(value, min, max) {
     const n = Number(value);
     if (!Number.isFinite(n)) return min;
@@ -86,12 +93,14 @@
   }
 
   function diagnose(metrics) {
-    const { contextRelevance, faithfulness, answerCorrectness, referenceCoverage } = metrics;
-    if (contextRelevance < 0.5) return 'retrieval';
-    if (faithfulness < 0.7) return 'grounding';
-    if (answerCorrectness < 0.7) return 'correctness';
-    if (referenceCoverage < 0.7) return 'coverage';
-    return 'balanced';
+    const failed = [];
+    if (metrics.contextRelevance < DIAG_THRESHOLDS.contextRelevance) failed.push('retrieval');
+    if (metrics.faithfulness < DIAG_THRESHOLDS.faithfulness) failed.push('grounding');
+    if (metrics.answerCorrectness < DIAG_THRESHOLDS.answerCorrectness) failed.push('correctness');
+    if (metrics.referenceCoverage < DIAG_THRESHOLDS.referenceCoverage) failed.push('coverage');
+    if (failed.length === 0) return 'balanced';
+    if (failed.length > 1) return 'multiple';
+    return failed[0];
   }
 
   function evaluate(input) {
@@ -162,6 +171,7 @@
     DEFAULT_CONTEXTS,
     DEFAULT_CLAIMS,
     DEFAULT_WEIGHTS,
+    DIAG_THRESHOLDS,
     ratio,
     wilson,
     normalizeWeights,
