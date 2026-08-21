@@ -1,3 +1,10 @@
+/* Tool pages are full-width product surfaces. The locale frontmatter normally hides
+   documentation sidebars; keep the layout safe if a translated page loses that flag. */
+body:has(.s5-tool-page) .md-sidebar--primary,
+body:has(.s5-tool-page) .md-sidebar--secondary {
+  display: none;
+}
+
 .s5-voice-latency-kpis {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
