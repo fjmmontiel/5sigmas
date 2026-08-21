@@ -6,9 +6,20 @@
   const locale = root.dataset.locale === 'en' ? 'en' : 'es';
   const strings = locale === 'en'
     ? { reachable:'Reachable', blocked:'Blocked', contained:'Contained', steering:'Steering only', impact:'Impact path open', copied:'Link copied', exported:'JSON exported', reset:'Scenario reset' }
-    : { reachable:'Alcanzable', blocked:'Bloqueado', contained:'Contenido', steering:'Solo desvío', impact:'Hay vía de impacto', copied:'Enlace copiado', exported:'JSON exportado', reset:'Escenario restablecido' };
+    : { reachable:'Alcanzable', blocked:'Bloqueado', contained:'Contenida', steering:'Solo desvío', impact:'Hay vía de impacto', copied:'Enlace copiado', exported:'JSON exportado', reset:'Escenario restablecido' };
   const fields = Array.from(root.querySelectorAll('[data-field]'));
   const feedback = root.querySelector('[data-s5-tool-feedback]');
+  const results = root.querySelector('.s5-tool-results');
+  let liveSummary = null;
+  if (results) {
+    results.removeAttribute('aria-live');
+    liveSummary = document.createElement('p');
+    liveSummary.className = 's5-threat-live';
+    liveSummary.setAttribute('role', 'status');
+    liveSummary.setAttribute('aria-live', 'polite');
+    liveSummary.setAttribute('aria-atomic', 'true');
+    results.prepend(liveSummary);
+  }
 
   function read(){
     const raw={};
@@ -43,6 +54,11 @@
   function blockedPathsLabel(count){
     if(locale==='en') return `${count} blocked ${count===1?'path':'paths'}`;
     return `${count} ${count===1?'ruta bloqueada':'rutas bloqueadas'}`;
+  }
+  function liveSummaryLabel(result){
+    const posture = postureLabel(result.summary.posture);
+    if(locale==='en') return `${posture}. ${result.summary.reachablePaths} of 5 impact paths reachable; ${result.summary.highImpactPaths} high-impact paths reachable.`;
+    return `${posture}. ${result.summary.reachablePaths} de 5 rutas de impacto alcanzables; ${result.summary.highImpactPaths} rutas de alto impacto alcanzables.`;
   }
 
   function whyText(item, input){
@@ -105,6 +121,7 @@
     set('blockedPaths',blockedPathsLabel(result.summary.blockedPaths));
     set('highImpactPaths',String(result.summary.highImpactPaths));
     set('influence',result.summary.privilegedInfluence?strings.reachable:strings.blocked);
+    if(liveSummary) liveSummary.textContent=liveSummaryLabel(result);
     for(const item of result.paths){
       const row=root.querySelector(`[data-path="${item.id}"]`);
       if(!row) continue;
@@ -150,7 +167,15 @@
   });
   root.querySelector('[data-action="export"]')?.addEventListener('click',()=>{
     const result=render();
-    const blob=new Blob([JSON.stringify({generatedAt:new Date().toISOString(),...result},null,2)],{type:'application/json'});
+    const payload={
+      tool:'5sigmas-prompt-injection-threat-explorer',
+      methodologyVersion:core.METHODOLOGY_VERSION,
+      sourceReviewDate:core.SOURCE_REVIEW_DATE,
+      generatedAt:new Date().toISOString(),
+      sources:core.SOURCES,
+      ...result
+    };
+    const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
     const a=document.createElement('a');
     a.href=URL.createObjectURL(blob);
     a.download='5sigmas-prompt-injection-threat-model.json';
