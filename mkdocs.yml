@@ -62,6 +62,7 @@ nav:
       - VRAM para inferencia: herramientas/vram-inferencia.md
       - KV cache y contexto: herramientas/kv-cache-contexto.md
       - Atención Transformer: herramientas/atencion-transformer.md
+      - Presupuesto de contexto: herramientas/presupuesto-contexto.md
   - Aprender:
       - Conceptos:
           - temas/index.md
