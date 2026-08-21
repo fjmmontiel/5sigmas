@@ -31,6 +31,7 @@
       copyFailed: 'No se pudo copiar automáticamente; la URL ya contiene el escenario.',
       reset: 'Escenario restablecido.',
       exported: 'JSON exportado.',
+      barLabel: (planned, limit) => `Distribución del contexto: ${planned} planificados frente a un límite de ${limit}`,
       labels: {
         systemTokens: 'Sistema', toolTokens: 'Herramientas', historyTokens: 'Historial', ragTokens: 'RAG', userTokens: 'Usuario', reservedOutput: 'Salida reservada', safetyTokens: 'Margen'
       }
@@ -51,6 +52,7 @@
       copyFailed: 'Automatic copy failed; the URL already contains the scenario.',
       reset: 'Scenario reset.',
       exported: 'JSON exported.',
+      barLabel: (planned, limit) => `Context allocation: ${planned} planned against a ${limit} limit`,
       labels: {
         systemTokens: 'System', toolTokens: 'Tools', historyTokens: 'History', ragTokens: 'RAG', userTokens: 'User', reservedOutput: 'Output reserve', safetyTokens: 'Safety'
       }
@@ -64,10 +66,19 @@
 
   function parseStateFromUrl() {
     const search = new URLSearchParams(location.search);
+    const raw = { ...defaults };
+    let touched = false;
     for (const [key, short] of Object.entries(params)) {
       if (!fields[key] || !search.has(short)) continue;
       const value = Number(search.get(short));
-      if (Number.isFinite(value) && value >= 0) fields[key].value = String(value);
+      if (!Number.isFinite(value) || value < 0) continue;
+      raw[key] = value;
+      touched = true;
+    }
+    if (!touched) return;
+    const normalized = core.normalize(raw);
+    for (const key of Object.keys(params)) {
+      if (fields[key]) fields[key].value = String(normalized[key]);
     }
   }
 
@@ -97,6 +108,12 @@
     if (!bar || !legend) return;
     bar.replaceChildren();
     legend.replaceChildren();
+    const displayTotal = Math.max(1, result.context.limit, result.context.planned);
+    const overflow = result.context.planned > result.context.limit;
+    bar.classList.toggle('is-overflow', overflow);
+    bar.style.setProperty('--limit-share', `${Math.min(100, result.context.limit / displayTotal * 100)}%`);
+    bar.setAttribute('aria-label', copy.barLabel(fmtTokens(result.context.planned), fmtTokens(result.context.limit)));
+
     const segments = [
       ['systemTokens', result.components.systemTokens],
       ['toolTokens', result.components.toolTokens],
@@ -107,7 +124,7 @@
       ['safetyTokens', result.reserve.safety]
     ];
     for (const [key, tokens] of segments) {
-      const share = Math.max(0, Math.min(1, tokens / result.context.limit));
+      const share = Math.max(0, Math.min(1, tokens / displayTotal));
       const segment = document.createElement('span');
       segment.dataset.segment = key;
       segment.style.setProperty('--share', `${share * 100}%`);
@@ -119,10 +136,10 @@
       item.textContent = `${copy.labels[key]} · ${fmtTokens(tokens)}`;
       legend.appendChild(item);
     }
-    if (result.context.planned < result.context.limit) {
+    if (!overflow && result.context.planned < result.context.limit) {
       const empty = document.createElement('span');
       empty.dataset.segment = 'free';
-      empty.style.setProperty('--share', `${Math.max(0, (result.context.limit - result.context.planned) / result.context.limit) * 100}%`);
+      empty.style.setProperty('--share', `${Math.max(0, (result.context.limit - result.context.planned) / displayTotal) * 100}%`);
       empty.title = `${locale === 'es' ? 'Libre' : 'Free'} · ${fmtTokens(result.context.limit - result.context.planned)}`;
       bar.appendChild(empty);
     }
@@ -162,7 +179,7 @@
     setOutput('inputUse', fmtPct(result.input.utilization));
     setOutput('overflow', result.context.overflowTokens > 0 ? fmtTokens(result.context.overflowTokens) : '0');
     setOutput('largestBlock', result.rankedComponents[0] ? `${copy.labels[result.rankedComponents[0].key]} · ${fmtTokens(result.rankedComponents[0].tokens)}` : '—');
-    setOutput('turns', result.growth.historyGrowthPerTurn === 0 ? copy.unlimited : (result.growth.turnsUntilPressure === 0 ? copy.now : copy.turns(result.growth.turnsUntilPressure)));
+    setOutput('turns', !result.context.fits ? copy.now : (result.growth.historyGrowthPerTurn === 0 ? copy.unlimited : copy.turns(result.growth.turnsUntilPressure)));
 
     const budgetStatus = outputs.budgetStatus;
     if (budgetStatus) {
@@ -177,7 +194,7 @@
     }
     const growthStatus = outputs.growthStatus;
     if (growthStatus) {
-      growthStatus.textContent = result.growth.historyGrowthPerTurn === 0 ? copy.noGrowth : `${fmtTokens(result.growth.historyGrowthPerTurn)} / ${locale === 'es' ? 'turno' : 'turn'}`;
+      growthStatus.textContent = !result.context.fits ? copy.now : (result.growth.historyGrowthPerTurn === 0 ? copy.noGrowth : `${fmtTokens(result.growth.historyGrowthPerTurn)} / ${locale === 'es' ? 'turno' : 'turn'}`);
       growthStatus.dataset.state = result.context.fits ? 'good' : 'warn';
     }
 
