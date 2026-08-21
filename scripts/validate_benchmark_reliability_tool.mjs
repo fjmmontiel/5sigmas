@@ -41,6 +41,9 @@ try {
       }).length);
       if (unlabeled) failures.push(`${spec.route} ${viewport.name}: ${unlabeled} controls lack programmatic labels`);
 
+      const tableRegion = page.locator('.s5-benchmark-table-scroll');
+      if ((await tableRegion.getAttribute('role')) !== 'region' || !(await tableRegion.getAttribute('aria-label'))) failures.push(`${spec.route} ${viewport.name}: scrollable task table must be a labelled region`);
+
       const jsonLdBlocks = await page.locator('script[type="application/ld+json"]').allTextContents();
       let hasWebApplication = false;
       for (const raw of jsonLdBlocks) {
@@ -64,9 +67,11 @@ try {
           if (!bodyText.includes(phrase)) failures.push(`${spec.route} ${viewport.name}: key Spanish methodological phrase missing: ${phrase}`);
         }
         if (!bodyText.includes('no son evidencia de contaminación')) failures.push(`${spec.route} ${viewport.name}: contamination limitation missing`);
+        if (!bodyText.includes('supone puntuación binaria')) failures.push(`${spec.route} ${viewport.name}: binary-score approximation missing`);
       } else {
         if (!bodyText.includes('do not infer paired significance')) failures.push(`${spec.route} ${viewport.name}: paired-comparison limitation missing`);
         if (!bodyText.includes('not contamination detection')) failures.push(`${spec.route} ${viewport.name}: contamination limitation missing`);
+        if (!bodyText.includes('assumes binary scoring')) failures.push(`${spec.route} ${viewport.name}: binary-score approximation missing`);
       }
 
       const scoreA = (await page.locator('[data-output="scoreA"]').first().textContent() || '').trim();
@@ -98,6 +103,19 @@ try {
       if ((await page.locator('[data-output="invalidEnvelope"]').textContent() || '').trim().toLowerCase() !== 'no') failures.push(`${spec.route} ${viewport.name}: zero invalid items must not cover the gap`);
       if ((await page.locator('[data-output="contaminationEnvelope"]').textContent() || '').trim().toLowerCase() !== 'no') failures.push(`${spec.route} ${viewport.name}: zero exposure must not cover the gap`);
 
+      await page.locator('[data-field="invalidRate"]').fill('10');
+      await page.locator('[data-field="contaminationExposure"]').fill('25');
+      for (let index = 0; index < 4; index += 1) {
+        await page.locator(`[data-field="a${index}"]`).fill('80');
+        await page.locator(`[data-field="b${index}"]`).fill('80');
+      }
+      const tieGap = (await page.locator('[data-output="gap"]').first().textContent() || '').trim().toLowerCase();
+      const tieGapItems = (await page.locator('[data-output="gapItems"]').textContent() || '').trim();
+      if (!tieGap.includes('0.00 pp')) failures.push(`${spec.route} ${viewport.name}: tie scenario should render a zero gap`);
+      if (tieGapItems !== '0') failures.push(`${spec.route} ${viewport.name}: tie scenario must show zero items of lead, got ${tieGapItems}`);
+      if ((await page.locator('[data-output="invalidEnvelope"]').textContent() || '').trim().toLowerCase() !== 'no') failures.push(`${spec.route} ${viewport.name}: invalid-item envelope must be inactive when there is no observed lead`);
+      if ((await page.locator('[data-output="contaminationEnvelope"]').textContent() || '').trim().toLowerCase() !== 'no') failures.push(`${spec.route} ${viewport.name}: contamination envelope must be inactive when there is no observed lead`);
+
       await page.locator('[data-action="share"]').click();
       for (const token of ['n=', 'invalid=', 'contam=', 'swing=', 'w0=', 'a0=', 'b0=']) {
         if (!page.url().includes(token)) failures.push(`${spec.route} ${viewport.name}: share URL missing ${token}`);
@@ -117,8 +135,9 @@ try {
         return { x: r.x, y: r.y, width: r.width, height: r.height };
       }));
       if (viewport.width >= 1200 && kpis.length === 4) {
-        if (Math.max(...kpis.map((b) => b.y)) - Math.min(...kpis.map((b) => b.y)) > 1) failures.push(`${spec.route} desktop: KPI cells should share one row`);
+        if (Math.abs(kpis[0].y - kpis[1].y) > 1 || Math.abs(kpis[2].y - kpis[3].y) > 1) failures.push(`${spec.route} desktop: KPI cells should form a clean 2×2 grid`);
         if (Math.max(...kpis.map((b) => b.width)) - Math.min(...kpis.map((b) => b.width)) > 1) failures.push(`${spec.route} desktop: KPI cells should have equal width`);
+        if (!(kpis[2].y > kpis[0].y)) failures.push(`${spec.route} desktop: KPI second row is missing`);
 
         const summaryCells = await page.locator('.s5-tool-summary-strip > div').evaluateAll((nodes) => nodes.map((node) => {
           const r = node.getBoundingClientRect();
@@ -126,11 +145,27 @@ try {
         }));
         if (summaryCells.length !== 4 || Math.max(...summaryCells.map((b) => b.y)) - Math.min(...summaryCells.map((b) => b.y)) > 1) failures.push(`${spec.route} desktop: four benchmark summary dimensions should share one row`);
 
+        const panelGeometry = await page.locator('.s5-benchmark-panel').evaluateAll((nodes) => nodes.map((node) => {
+          const r = node.getBoundingClientRect();
+          return { x: r.x, width: r.width };
+        }));
+        if (panelGeometry.length !== 4 || Math.max(...panelGeometry.map((b) => b.x)) - Math.min(...panelGeometry.map((b) => b.x)) > 1) failures.push(`${spec.route} desktop: diagnostic panels should use one readable column inside the results rail`);
+
+        const pairWidths = await page.locator('.s5-benchmark-pair').evaluateAll((nodes) => nodes.map((node) => node.getBoundingClientRect().width));
+        if (pairWidths.some((width) => width < 180)) failures.push(`${spec.route} desktop: diagnostic pair is too narrow for readable text (${Math.min(...pairWidths)}px)`);
+
         const tableFit = await page.locator('.s5-benchmark-table').evaluate((table) => {
           const wrapper = table.parentElement;
           return { tableWidth: table.scrollWidth, wrapperWidth: wrapper?.clientWidth || 0 };
         });
         if (tableFit.tableWidth - tableFit.wrapperWidth > 1) failures.push(`${spec.route} desktop: task-score table requires horizontal scrolling (${tableFit.tableWidth}px > ${tableFit.wrapperWidth}px)`);
+      }
+
+      if (viewport.width <= 600) {
+        const mobileTable = await page.locator('.s5-benchmark-table').evaluate((table) => ({ width: table.scrollWidth, firstPosition: getComputedStyle(table.querySelector('th:first-child')).position }));
+        const mobileRegionWidth = await tableRegion.evaluate((node) => node.clientWidth);
+        if (mobileTable.width <= mobileRegionWidth) failures.push(`${spec.route} mobile: task table should preserve readable columns inside its own horizontal scroller`);
+        if (mobileTable.firstPosition !== 'sticky') failures.push(`${spec.route} mobile: task name column should remain sticky while the table scrolls`);
       }
 
       await page.screenshot({ path: `${artifactDir}/benchmark-reliability-${spec.locale}-${viewport.name}.png`, fullPage: true });
@@ -146,4 +181,4 @@ if (failures.length) {
   for (const failure of failures) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log('Benchmark reliability browser QA passed: ES/EN, 390px/1440px, default math, ranking sensitivity, integrity envelopes, deep links, provenance, JSON-LD, labels, desktop table fit and horizontal fit verified.');
+console.log('Benchmark reliability browser QA passed: ES/EN, 390px/1440px, default math, tie handling, ranking sensitivity, integrity envelopes, deep links, provenance, JSON-LD, labels, readable diagnostic geometry and contained mobile table scrolling verified.');
