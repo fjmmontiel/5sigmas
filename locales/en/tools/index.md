@@ -20,7 +20,7 @@ hide:
   "isPartOf": {"@type": "WebSite", "name": "5sigmas", "url": "https://5sigmas.com/en/"},
   "mainEntity": {
     "@type": "ItemList",
-    "numberOfItems": 8,
+    "numberOfItems": 9,
     "itemListElement": [
       {"@type": "ListItem", "position": 1, "url": "https://5sigmas.com/en/tools/llm-cost-latency/", "name": "LLM Cost & Latency Calculator"},
       {"@type": "ListItem", "position": 2, "url": "https://5sigmas.com/en/tools/model-price-performance/", "name": "Model Price/Performance Explorer"},
@@ -29,7 +29,8 @@ hide:
       {"@type": "ListItem", "position": 5, "url": "https://5sigmas.com/en/tools/transformer-attention/", "name": "Transformer Attention Visualizer"},
       {"@type": "ListItem", "position": 6, "url": "https://5sigmas.com/en/tools/context-budget/", "name": "Token & Context Budget Planner"},
       {"@type": "ListItem", "position": 7, "url": "https://5sigmas.com/en/tools/rag-retrieval-lab/", "name": "RAG Retrieval Lab"},
-      {"@type": "ListItem", "position": 8, "url": "https://5sigmas.com/en/tools/rag-evaluation/", "name": "RAG Evaluation Playground"}
+      {"@type": "ListItem", "position": 8, "url": "https://5sigmas.com/en/tools/rag-evaluation/", "name": "RAG Evaluation Playground"},
+      {"@type": "ListItem", "position": 9, "url": "https://5sigmas.com/en/tools/voice-latency-budget/", "name": "Voice-Agent Latency Budget Explorer"}
     ]
   }
 }
@@ -98,6 +99,12 @@ hide:
       <p>Separate context relevance, faithfulness, correctness and coverage; inspect claims, uncertainty intervals and weights without hiding diagnosis inside one score.</p>
       <span class="s5-tool-index-card__cta">Open evaluator →</span>
     </a>
+    <a class="s5-tool-index-card" href="/en/tools/voice-latency-budget/">
+      <span class="s5-tool-index-card__meta">Explorer · Voice · 09</span>
+      <h2>Voice-agent latency</h2>
+      <p>Break down time to first audio across transport, turn end, STT, model, TTS and buffering, then calculate the interruption path separately.</p>
+      <span class="s5-tool-index-card__cta">Open explorer →</span>
+    </a>
   </div>
 </section>
 
@@ -108,7 +115,7 @@ hide:
     <p>The section grows one tool at a time. There are no empty placeholder pages: an entry appears when it has real interaction, ES/EN parity, provenance and tests.</p>
   </div>
   <div class="s5-tools-roadmap__list" aria-label="Upcoming tool families">
-    <div class="s5-tools-roadmap__row"><span>09–12</span><strong>Agents: latency, cost, reliability and security</strong><span>explorers</span></div>
+    <div class="s5-tools-roadmap__row"><span>10–12</span><strong>Agents: cost, reliability and security</strong><span>explorers</span></div>
     <div class="s5-tools-roadmap__row"><span>13–18</span><strong>Benchmarks, scaling, infrastructure and the global ecosystem</strong><span>data</span></div>
   </div>
 </section>
