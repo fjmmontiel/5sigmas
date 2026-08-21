@@ -39,45 +39,79 @@ jobs:
             const preserveArtifactId = Number(process.env.PRESERVE_ARTIFACT_ID);
             const cutoff = Date.now() - minAgeHours * 60 * 60 * 1000;
 
-            const artifacts = await github.paginate(
-              github.rest.actions.listArtifactsForRepo,
-              { owner, repo, per_page: 100 }
-            );
+            const isProtected = (artifact) =>
+              artifact.id === preserveArtifactId ||
+              artifact.name === 'english-ttc-reviewed-seed';
 
-            const candidates = artifacts.filter((artifact) => {
-              if (artifact.expired) return false;
-              if (artifact.id === preserveArtifactId) return false;
-              if (artifact.name === 'english-ttc-reviewed-seed') return false;
-              return Date.parse(artifact.created_at) < cutoff;
-            });
-
-            const bytes = candidates.reduce(
-              (sum, artifact) => sum + (artifact.size_in_bytes || 0),
-              0
-            );
-
-            core.info(
-              `Deleting ${candidates.length} obsolete artifacts (${(bytes / 1024 / 1024).toFixed(1)} MiB)`
-            );
-
-            for (const artifact of candidates) {
-              core.info(
-                `Deleting ${artifact.id} ${artifact.name} ` +
-                `(${(artifact.size_in_bytes / 1024 / 1024).toFixed(1)} MiB, ${artifact.created_at})`
+            const listCandidates = async () => {
+              const artifacts = await github.paginate(
+                github.rest.actions.listArtifactsForRepo,
+                { owner, repo, per_page: 100 }
               );
-              await github.rest.actions.deleteArtifact({
-                owner,
-                repo,
-                artifact_id: artifact.id,
-              });
+              return artifacts.filter((artifact) =>
+                !artifact.expired &&
+                !isProtected(artifact) &&
+                Date.parse(artifact.created_at) < cutoff
+              );
+            };
+
+            let deletedCount = 0;
+            let deletedBytes = 0;
+
+            // Multiple passes handle eventual consistency and partial API failures.
+            for (let pass = 1; pass <= 3; pass += 1) {
+              const candidates = await listCandidates();
+              core.info(`Cleanup pass ${pass}: ${candidates.length} candidates`);
+              if (candidates.length === 0) break;
+
+              for (const artifact of candidates) {
+                try {
+                  core.info(
+                    `Deleting ${artifact.id} ${artifact.name} ` +
+                    `(${(artifact.size_in_bytes / 1024 / 1024).toFixed(1)} MiB, ${artifact.created_at})`
+                  );
+                  await github.rest.actions.deleteArtifact({
+                    owner,
+                    repo,
+                    artifact_id: artifact.id,
+                  });
+                  deletedCount += 1;
+                  deletedBytes += artifact.size_in_bytes || 0;
+                } catch (error) {
+                  // Continue so one transient/stale artifact cannot abort the full cleanup.
+                  core.warning(
+                    `Could not delete artifact ${artifact.id} ${artifact.name}: ` +
+                    `${error.status || ''} ${error.message || error}`
+                  );
+                }
+              }
+
+              if (pass < 3) {
+                await new Promise((resolve) => setTimeout(resolve, 3000));
+              }
             }
+
+            const leftovers = await listCandidates();
 
             await core.summary
               .addHeading('Actions artifact cleanup')
               .addTable([
-                [{data: 'Deleted artifacts', header: true}, String(candidates.length)],
-                [{data: 'Storage removed', header: true}, `${(bytes / 1024 / 1024).toFixed(1)} MiB`],
+                [{data: 'Deleted artifacts', header: true}, String(deletedCount)],
+                [{data: 'Storage removed', header: true}, `${(deletedBytes / 1024 / 1024).toFixed(1)} MiB`],
                 [{data: 'Minimum age', header: true}, `${minAgeHours} hours`],
                 [{data: 'Protected artifact', header: true}, 'english-ttc-reviewed-seed (9176659529)'],
+                [{data: 'Old non-protected leftovers', header: true}, String(leftovers.length)],
               ])
               .write();
+
+            if (leftovers.length > 0) {
+              for (const artifact of leftovers) {
+                core.error(
+                  `Leftover ${artifact.id} ${artifact.name} ` +
+                  `(${(artifact.size_in_bytes / 1024 / 1024).toFixed(1)} MiB, ${artifact.created_at})`
+                );
+              }
+              core.setFailed(
+                `${leftovers.length} old non-protected Actions artifacts remain after cleanup`
+              );
+            }
