@@ -62,7 +62,8 @@
     const maxRetrying = Math.max(0, tasks - firstPassSuccesses);
     const retryingTasks = int(raw.retryingTasks, 0, maxRetrying, Math.min(DEFAULTS.retryingTasks, maxRetrying));
     const retryRecoveredTasks = int(raw.retryRecoveredTasks, 0, retryingTasks, Math.min(DEFAULTS.retryRecoveredTasks, retryingTasks));
-    const totalRetryAttempts = int(raw.totalRetryAttempts, retryingTasks, 100000000, Math.max(DEFAULTS.totalRetryAttempts, retryingTasks));
+    const retryFallback = tasks === 0 ? 0 : Math.max(DEFAULTS.totalRetryAttempts, retryingTasks);
+    const totalRetryAttempts = int(raw.totalRetryAttempts, retryingTasks, 100000000, retryFallback);
 
     const expectedToolDecisions = int(raw.expectedToolDecisions, 0, 100000000, DEFAULTS.expectedToolDecisions);
     const correctToolDecisions = int(raw.correctToolDecisions, 0, expectedToolDecisions, Math.min(DEFAULTS.correctToolDecisions, expectedToolDecisions));
@@ -144,11 +145,7 @@
 
     return {
       input,
-      counts: {
-        finalSuccesses,
-        finalFailures,
-        missedToolDecisions
-      },
+      counts: { finalSuccesses, finalFailures, missedToolDecisions },
       metrics,
       intervals,
       gates,
