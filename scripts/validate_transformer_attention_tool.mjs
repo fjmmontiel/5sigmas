@@ -55,6 +55,8 @@ for (const spec of cases) for (const viewport of viewports) {
   const hrefs = await page.locator('.s5-tool-method__notes a').evaluateAll((nodes)=>nodes.map((node)=>node.href));
   if (!hrefs.some((href)=>href.includes('arxiv.org/abs/1706.03762'))) failures.push(`${spec.route} ${viewport.name}: paper provenance missing`);
   if (!hrefs.some((href)=>href.includes('docs.pytorch.org/docs/main/generated/torch.nn.functional.scaled_dot_product_attention.html'))) failures.push(`${spec.route} ${viewport.name}: PyTorch provenance missing`);
+  if (!hrefs.some((href)=>href.includes('arxiv.org/abs/1902.10186'))) failures.push(`${spec.route} ${viewport.name}: Jain/Wallace interpretability provenance missing`);
+  if (!hrefs.some((href)=>href.includes('arxiv.org/abs/1908.04626'))) failures.push(`${spec.route} ${viewport.name}: Wiegreffe/Pinter interpretability provenance missing`);
 
   await page.locator('[data-action="reset"]').click();
   await page.locator('[data-field="text"]').fill('safe <img/src=x/onerror=window.__s5Xss=1> safe');
@@ -69,10 +71,16 @@ for (const spec of cases) for (const viewport of viewports) {
     failures.push(`${spec.route} ${viewport.name}: token labels are not rendered as inert text ${JSON.stringify(injectionState)}`);
   }
 
+  await page.locator('[data-field="text"]').fill(`safe ${'x'.repeat(110)} safe`);
+  await page.locator('[data-field="text"]').dispatchEvent('change');
+  await page.waitForFunction(() => document.querySelectorAll('[data-attention-matrix] tbody tr').length === 3);
+  const longTokenOverflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+  if (longTokenOverflow > 1) failures.push(`${spec.route} ${viewport.name}: long token caused horizontal page overflow ${longTokenOverflow}px`);
+
   await page.locator('[data-action="reset"]').click();
   await page.screenshot({ path:`${artifactDir}/transformer-attention-${spec.locale}-${viewport.name}.png`, fullPage:true });
   await page.close();
 }
 await browser.close();
 if (failures.length) { console.error('Transformer attention browser QA failed:'); for (const failure of failures) console.error(` - ${failure}`); process.exit(1); }
-console.log('Transformer attention browser QA passed: ES/EN, 390px/1440px, masking, temperature, editable scores/values, head switching, matrix integrity, inert token rendering, provenance, JSON-LD and shareable state verified.');
+console.log('Transformer attention browser QA passed: ES/EN, 390px/1440px, masking, temperature, editable scores/values, head switching, matrix integrity, inert/long token rendering, provenance, JSON-LD and shareable state verified.');
