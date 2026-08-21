@@ -15,6 +15,7 @@ on:
       - 'docs/stylesheets/tools-rag-evaluation.css'
       - 'docs/stylesheets/tools-voice-latency.css'
       - 'docs/stylesheets/tools-voice-cost-capacity.css'
+      - 'docs/stylesheets/tools-agent-reliability.css'
       - 'tools/**'
       - 'hooks/locale_alternates.py'
       - 'scripts/prepare_locale.py'
@@ -84,6 +85,9 @@ jobs:
       - name: Verify voice cost/capacity math and provenance
         run: node scripts/test_voice_cost_capacity_tool.mjs
 
+      - name: Verify agent reliability metrics and gates
+        run: node scripts/test_agent_reliability_tool.mjs
+
       - name: Build Spanish site strictly
         run: mkdocs build --clean --strict
 
@@ -136,7 +140,9 @@ jobs:
             curl --fail --silent http://127.0.0.1:8000/herramientas/latencia-agente-voz/ > /dev/null && \
             curl --fail --silent http://127.0.0.1:8000/en/tools/voice-latency-budget/ > /dev/null && \
             curl --fail --silent http://127.0.0.1:8000/herramientas/coste-capacidad-agente-voz/ > /dev/null && \
-            curl --fail --silent http://127.0.0.1:8000/en/tools/voice-cost-capacity/ > /dev/null && exit 0
+            curl --fail --silent http://127.0.0.1:8000/en/tools/voice-cost-capacity/ > /dev/null && \
+            curl --fail --silent http://127.0.0.1:8000/herramientas/fiabilidad-evaluacion-agentes/ > /dev/null && \
+            curl --fail --silent http://127.0.0.1:8000/en/tools/agent-reliability-eval/ > /dev/null && exit 0
             sleep 1
           done
           cat /tmp/5sigmas-tools-preview.log
@@ -172,6 +178,9 @@ jobs:
       - name: Validate voice cost/capacity planner and capture visual evidence
         run: node scripts/validate_voice_cost_capacity_tool.mjs
 
+      - name: Validate agent reliability playground and capture visual evidence
+        run: node scripts/validate_agent_reliability_tool.mjs
+
       - name: Validate localized route switching and hreflang
         run: node scripts/validate_locale_switching.mjs
 
@@ -191,6 +200,7 @@ jobs:
             artifacts/visual-review/rag-evaluation-*.png
             artifacts/visual-review/voice-latency-*.png
             artifacts/visual-review/voice-cost-capacity-*.png
+            artifacts/visual-review/agent-reliability-*.png
           if-no-files-found: warn
           retention-days: 1
           overwrite: true
