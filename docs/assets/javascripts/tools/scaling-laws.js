@@ -105,10 +105,13 @@
     const margin = { top: 34, right: 32, bottom: 72, left: 68 };
     const innerW = width - margin.left - margin.right;
     const innerH = height - margin.top - margin.bottom;
-    const logs = curve.points.map((p) => Math.log10(p.N));
-    const losses = curve.points.map((p) => p.loss);
-    const minX = Math.min(...logs);
-    const maxX = Math.max(...logs);
+    const logs = [...curve.points.map((p) => Math.log10(p.N)), Math.log10(sameRatio.N)];
+    const losses = [...curve.points.map((p) => p.loss), sameRatio.loss];
+    const rawMinX = Math.min(...logs);
+    const rawMaxX = Math.max(...logs);
+    const xPad = Math.max(0.08, (rawMaxX - rawMinX) * 0.04);
+    const minX = rawMinX - xPad;
+    const maxX = rawMaxX + xPad;
     const minY = Math.min(...losses);
     const maxY = Math.max(...losses);
     const yPad = Math.max(0.015, (maxY - minY) * 0.12);
