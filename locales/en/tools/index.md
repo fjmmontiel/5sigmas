@@ -20,20 +20,11 @@ hide:
   "isPartOf": {"@type": "WebSite", "name": "5sigmas", "url": "https://5sigmas.com/en/"},
   "mainEntity": {
     "@type": "ItemList",
-    "numberOfItems": 2,
+    "numberOfItems": 3,
     "itemListElement": [
-      {
-        "@type": "ListItem",
-        "position": 1,
-        "url": "https://5sigmas.com/en/tools/llm-cost-latency/",
-        "name": "LLM Cost & Latency Calculator"
-      },
-      {
-        "@type": "ListItem",
-        "position": 2,
-        "url": "https://5sigmas.com/en/tools/model-price-performance/",
-        "name": "Model Price/Performance Explorer"
-      }
+      {"@type": "ListItem", "position": 1, "url": "https://5sigmas.com/en/tools/llm-cost-latency/", "name": "LLM Cost & Latency Calculator"},
+      {"@type": "ListItem", "position": 2, "url": "https://5sigmas.com/en/tools/model-price-performance/", "name": "Model Price/Performance Explorer"},
+      {"@type": "ListItem", "position": 3, "url": "https://5sigmas.com/en/tools/inference-vram/", "name": "AI Inference VRAM Calculator"}
     ]
   }
 }
@@ -49,10 +40,7 @@ hide:
 
 <section class="s5-section" aria-labelledby="s5-tools-available">
   <div class="s5-section-head s5-section-head--with-copy">
-    <div>
-      <div class="s5-eyebrow">Available</div>
-      <h2 id="s5-tools-available">Available tools</h2>
-    </div>
+    <div><div class="s5-eyebrow">Available</div><h2 id="s5-tools-available">Available tools</h2></div>
     <p>A tool appears here when the English and Spanish versions share the same logic, sources and tests.</p>
   </div>
 
@@ -69,6 +57,12 @@ hide:
       <p>Compare your workload cost with Intelligence Index, output speed, TTFT and context while keeping pricing and performance provenance separate.</p>
       <span class="s5-tool-index-card__cta">Open explorer →</span>
     </a>
+    <a class="s5-tool-index-card" href="/en/tools/inference-vram/">
+      <span class="s5-tool-index-card__meta">Calculator · Infrastructure · 03</span>
+      <h2>Inference VRAM</h2>
+      <p>Separate weights, KV cache and runtime reserve to estimate total memory, memory per GPU, maximum context and approximate concurrency.</p>
+      <span class="s5-tool-index-card__cta">Open calculator →</span>
+    </a>
   </div>
 </section>
 
@@ -79,9 +73,9 @@ hide:
     <p>The section grows one tool at a time. There are no empty placeholder pages: an entry appears when it has real interaction, ES/EN parity, provenance and tests.</p>
   </div>
   <div class="s5-tools-roadmap__list" aria-label="Upcoming tool families">
-    <div class="s5-tools-roadmap__row"><span>03</span><strong>Inference VRAM</strong><span>calculator</span></div>
     <div class="s5-tools-roadmap__row"><span>04</span><strong>KV cache and context window</strong><span>explorer</span></div>
     <div class="s5-tools-roadmap__row"><span>05</span><strong>Transformer attention</strong><span>visualizer</span></div>
+    <div class="s5-tools-roadmap__row"><span>06</span><strong>Token and context budget</strong><span>planner</span></div>
     <div class="s5-tools-roadmap__row"><span>07–08</span><strong>RAG retrieval and evaluation</strong><span>lab</span></div>
     <div class="s5-tools-roadmap__row"><span>09–11</span><strong>Agent latency, cost and reliability</strong><span>explorer</span></div>
     <div class="s5-tools-roadmap__row"><span>13–18</span><strong>Benchmarks, scaling, infrastructure and the global ecosystem</strong><span>data</span></div>
@@ -90,27 +84,12 @@ hide:
 
 <section class="s5-section" aria-labelledby="s5-tools-method">
   <div class="s5-section-head s5-section-head--with-copy">
-    <div>
-      <div class="s5-eyebrow">Standard</div>
-      <h2 id="s5-tools-method">What a 5sigmas tool must show</h2>
-    </div>
+    <div><div class="s5-eyebrow">Standard</div><h2 id="s5-tools-method">What a 5sigmas tool must show</h2></div>
   </div>
   <div class="s5-entry-grid">
-    <div class="s5-entry">
-      <div class="s5-entry__index">01</div>
-      <div class="s5-entry__title">Visible assumptions</div>
-      <div class="s5-entry__text">Editable estimates are kept separate from observed data. If a result depends on an assumption, you can change it.</div>
-    </div>
-    <div class="s5-entry">
-      <div class="s5-entry__index">02</div>
-      <div class="s5-entry__title">Primary sources</div>
-      <div class="s5-entry__text">Prices, limits and other changing data carry provenance and a verification date. Stale values are not presented as current.</div>
-    </div>
-    <div class="s5-entry">
-      <div class="s5-entry__index">03</div>
-      <div class="s5-entry__title">Reproducible output</div>
-      <div class="s5-entry__text">When useful, a scenario can be shared or exported with its inputs, outputs and provenance intact.</div>
-    </div>
+    <div class="s5-entry"><div class="s5-entry__index">01</div><div class="s5-entry__title">Visible assumptions</div><div class="s5-entry__text">Editable estimates are kept separate from observed data. If a result depends on an assumption, you can change it.</div></div>
+    <div class="s5-entry"><div class="s5-entry__index">02</div><div class="s5-entry__title">Primary sources</div><div class="s5-entry__text">Prices, limits and other changing data carry provenance and a verification date. Stale values are not presented as current.</div></div>
+    <div class="s5-entry"><div class="s5-entry__index">03</div><div class="s5-entry__title">Reproducible output</div><div class="s5-entry__text">When useful, a scenario can be shared or exported with its inputs, outputs and provenance intact.</div></div>
   </div>
 </section>
 
