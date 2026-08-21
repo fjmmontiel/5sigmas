@@ -7,8 +7,9 @@
 .s5-attention-temperature input { width:100%; }
 .s5-attention-temperature output { min-width:3.2rem; text-align:right; font-size:.75rem; font-variant-numeric:tabular-nums; }
 .s5-attention-kpis { grid-template-columns:repeat(3,minmax(0,1fr)); }
-.s5-attention-kpis .s5-tool-kpi:nth-child(even) { padding-left:1.2rem; border-right:1px solid var(--s5-line); }
-.s5-attention-kpis .s5-tool-kpi:nth-child(3n) { padding-left:1.2rem; border-right:0; }
+.s5-attention-kpis .s5-tool-kpi { padding-left:0; border-right:1px solid var(--s5-line); }
+.s5-attention-kpis .s5-tool-kpi:nth-child(3n+2),.s5-attention-kpis .s5-tool-kpi:nth-child(3n) { padding-left:1.2rem; }
+.s5-attention-kpis .s5-tool-kpi:nth-child(3n) { border-right:0; }
 .s5-attention-kpis .s5-tool-kpi strong { font-size:clamp(1.05rem,2.2vw,1.7rem); letter-spacing:-.03em; line-height:1.14; }
 .s5-attention-section { margin-top:2rem; padding-top:.85rem; border-top:1px solid var(--s5-line-strong); }
 .s5-attention-section__head { display:flex; justify-content:space-between; gap:1rem; align-items:baseline; margin-bottom:.75rem; }
