@@ -49,6 +49,14 @@ for (const spec of cases) {
     }).length);
     if (wrappedKpis) failures.push(`${spec.route} ${viewport.name}: ${wrappedKpis} primary cost KPIs wrap across lines`);
 
+    const currencyTexts = await page.locator('.s5-voice-cost-kpis .s5-tool-kpi > strong').allTextContents();
+    if (spec.locale === 'es' && currencyTexts.some((text) => !text.trim().endsWith(' USD'))) {
+      failures.push(`${spec.route} ${viewport.name}: Spanish cost KPIs must use an explicit non-breaking-looking USD unit`);
+    }
+    if (spec.locale === 'en' && currencyTexts.some((text) => !text.trim().startsWith('$'))) {
+      failures.push(`${spec.route} ${viewport.name}: English cost KPIs must use leading dollar notation`);
+    }
+
     const referenceHierarchy = await page.locator('.s5-voice-cost-reference > div').first().evaluate((node) => {
       const small = node.querySelector('small')?.getBoundingClientRect();
       const label = node.querySelector('[data-field="presetLabel"]')?.getBoundingClientRect();
@@ -147,4 +155,4 @@ if (failures.length) {
   for (const failure of failures) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log('Voice cost/capacity browser QA passed: ES/EN, 390px/1440px, billing math surface, provider-concurrency semantics, quotas, deep links, provenance, JSON-LD, labels, KPI/reference hierarchy, responsive capacity geometry and horizontal fit verified.');
+console.log('Voice cost/capacity browser QA passed: ES/EN, 390px/1440px, billing math surface, provider-concurrency semantics, quotas, deep links, provenance, JSON-LD, labels, localized currency, KPI/reference hierarchy, responsive capacity geometry and horizontal fit verified.');
