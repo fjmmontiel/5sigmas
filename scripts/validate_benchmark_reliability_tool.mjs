@@ -95,8 +95,8 @@ try {
       const stableStatus = (await page.locator('[data-output="weightStatus"]').textContent() || '').toLowerCase();
       if (spec.locale === 'es' && !stableStatus.includes('estable')) failures.push(`${spec.route} ${viewport.name}: large-gap scenario should be stable in Spanish`);
       if (spec.locale === 'en' && !stableStatus.includes('stable')) failures.push(`${spec.route} ${viewport.name}: large-gap scenario should be stable in English`);
-      if ((await page.locator('[data-output="invalidEnvelope"]').textContent() || '').trim().toLowerCase() !== (spec.locale === 'es' ? 'no' : 'no')) failures.push(`${spec.route} ${viewport.name}: zero invalid items must not cover the gap`);
-      if ((await page.locator('[data-output="contaminationEnvelope"]').textContent() || '').trim().toLowerCase() !== (spec.locale === 'es' ? 'no' : 'no')) failures.push(`${spec.route} ${viewport.name}: zero exposure must not cover the gap`);
+      if ((await page.locator('[data-output="invalidEnvelope"]').textContent() || '').trim().toLowerCase() !== 'no') failures.push(`${spec.route} ${viewport.name}: zero invalid items must not cover the gap`);
+      if ((await page.locator('[data-output="contaminationEnvelope"]').textContent() || '').trim().toLowerCase() !== 'no') failures.push(`${spec.route} ${viewport.name}: zero exposure must not cover the gap`);
 
       await page.locator('[data-action="share"]').click();
       for (const token of ['n=', 'invalid=', 'contam=', 'swing=', 'w0=', 'a0=', 'b0=']) {
@@ -119,6 +119,18 @@ try {
       if (viewport.width >= 1200 && kpis.length === 4) {
         if (Math.max(...kpis.map((b) => b.y)) - Math.min(...kpis.map((b) => b.y)) > 1) failures.push(`${spec.route} desktop: KPI cells should share one row`);
         if (Math.max(...kpis.map((b) => b.width)) - Math.min(...kpis.map((b) => b.width)) > 1) failures.push(`${spec.route} desktop: KPI cells should have equal width`);
+
+        const summaryCells = await page.locator('.s5-tool-summary-strip > div').evaluateAll((nodes) => nodes.map((node) => {
+          const r = node.getBoundingClientRect();
+          return { y: r.y, width: r.width };
+        }));
+        if (summaryCells.length !== 4 || Math.max(...summaryCells.map((b) => b.y)) - Math.min(...summaryCells.map((b) => b.y)) > 1) failures.push(`${spec.route} desktop: four benchmark summary dimensions should share one row`);
+
+        const tableFit = await page.locator('.s5-benchmark-table').evaluate((table) => {
+          const wrapper = table.parentElement;
+          return { tableWidth: table.scrollWidth, wrapperWidth: wrapper?.clientWidth || 0 };
+        });
+        if (tableFit.tableWidth - tableFit.wrapperWidth > 1) failures.push(`${spec.route} desktop: task-score table requires horizontal scrolling (${tableFit.tableWidth}px > ${tableFit.wrapperWidth}px)`);
       }
 
       await page.screenshot({ path: `${artifactDir}/benchmark-reliability-${spec.locale}-${viewport.name}.png`, fullPage: true });
@@ -134,4 +146,4 @@ if (failures.length) {
   for (const failure of failures) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log('Benchmark reliability browser QA passed: ES/EN, 390px/1440px, default math, ranking sensitivity, integrity envelopes, deep links, provenance, JSON-LD, labels and horizontal fit verified.');
+console.log('Benchmark reliability browser QA passed: ES/EN, 390px/1440px, default math, ranking sensitivity, integrity envelopes, deep links, provenance, JSON-LD, labels, desktop table fit and horizontal fit verified.');
