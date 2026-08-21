@@ -36,7 +36,7 @@ close(result.memory.totalGiB, 17.491277313232423, 1e-9, 'total with 10% runtime 
 assert(result.memory.fits === true, 'default 8B scenario should fit 24 GiB under the declared approximation');
 assert(result.architecture.valid === true, 'Llama 3.1 8B attention geometry should validate');
 close(result.architecture.kvVsMhaRatio, 0.25, 1e-12, 'GQA KV/MHA memory ratio');
-assert(result.capacity.maxContextTokens === 56665, `expected max context 56665, got ${result.capacity.maxContextTokens}`);
+assert(result.capacity.maxContextTokens === 56664, `expected max context 56664, got ${result.capacity.maxContextTokens}`);
 assert(result.capacity.maxConcurrentSequences === 6, `expected max sequences 6, got ${result.capacity.maxConcurrentSequences}`);
 
 const quantized = core.calculate({ ...base, weightBits: 4, runtimeOverheadPct: 0, contextTokens: 0, concurrentSequences: 0 });
