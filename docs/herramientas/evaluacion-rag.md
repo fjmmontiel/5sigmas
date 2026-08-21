@@ -60,7 +60,7 @@ hide:
         <div class="s5-tool-field"><label for="s5-rag-eval-es-wa">Corrección</label><input id="s5-rag-eval-es-wa" data-field="wCorrectness" type="number" min="0" max="100" step="5" value="30" /></div>
         <div class="s5-tool-field"><label for="s5-rag-eval-es-wv">Cobertura</label><input id="s5-rag-eval-es-wv" data-field="wCoverage" type="number" min="0" max="100" step="5" value="15" /></div>
       </div>
-      <p class="s5-rag-eval-weight-note">Los pesos se normalizan automáticamente. El score compuesto es una ayuda de decisión configurable, no una métrica estándar ni una reproducción de RAGAS/ARES.</p>
+      <p class="s5-rag-eval-weight-note">Mientras al menos un peso sea mayor que cero, los pesos se normalizan automáticamente. Si todos son cero, el score compuesto se desactiva. Es una ayuda de decisión configurable, no una métrica estándar ni una reproducción de RAGAS/ARES.</p>
       <div class="s5-tool-actions" aria-label="Acciones del escenario">
         <button class="s5-tool-action" type="button" data-action="share">Copiar enlace</button>
         <button class="s5-tool-action" type="button" data-action="export">Exportar JSON</button>
