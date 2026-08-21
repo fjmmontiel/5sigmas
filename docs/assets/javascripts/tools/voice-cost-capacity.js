@@ -10,14 +10,14 @@
     es: {
       copied: 'Enlace copiado.', copyFailed: 'No se pudo copiar automáticamente. Copia la URL del navegador.',
       reset: 'Escenario restablecido.', downloaded: 'JSON generado.', unlimited: 'Sin límite configurado',
-      within: (n) => `${formatNumber(n, 1)} streams de margen`, over: (n) => `${formatNumber(Math.abs(n), 1)} streams por encima`,
-      largest: 'Mayor partida', presetNote: 'Tarifas públicas verificadas el 21-08-2026; edítalas para reflejar tu contrato y región.'
+      within: (n) => `${formatNumber(n, 1)} de margen`, over: (n) => `${formatNumber(Math.abs(n), 1)} por encima`,
+      presetNote: 'Tarifas y supuestos públicos verificados el 21-08-2026; edítalos para reflejar tu contrato, región y arquitectura.'
     },
     en: {
       copied: 'Link copied.', copyFailed: 'Automatic copy failed. Copy the browser URL instead.',
       reset: 'Scenario reset.', downloaded: 'JSON generated.', unlimited: 'No limit configured',
-      within: (n) => `${formatNumber(n, 1)} streams headroom`, over: (n) => `${formatNumber(Math.abs(n), 1)} streams over`,
-      largest: 'Largest line item', presetNote: 'Public rates verified on 2026-08-21; edit them to match your contract and region.'
+      within: (n) => `${formatNumber(n, 1)} headroom`, over: (n) => `${formatNumber(Math.abs(n), 1)} over`,
+      presetNote: 'Public rates and assumptions verified on 2026-08-21; edit them to match your contract, region and architecture.'
     }
   }[locale];
 
@@ -30,10 +30,10 @@
   const paramMap = {
     callsPerMonth: 'c', averageCallMinutes: 'd', userSpeechPercent: 'u', agentSpeechPercent: 'a',
     serviceHoursPerMonth: 'h', peakConcurrency: 'p', targetWorkerUtilizationPercent: 'wu', sessionsPerWorker: 'sw',
-    sttConcurrencyLimit: 'sl', ttsConcurrencyLimit: 'tl', telephonyUsdPerConnectedMinute: 'tp', mediaStreamUsdPerConnectedMinute: 'mp',
-    sttUsdPerUserAudioMinute: 'sp', ttsUsdPer1000Characters: 'tts', charactersPerAgentMinute: 'ch',
-    llmInputTokensPerCall: 'it', llmOutputTokensPerCall: 'ot', llmInputUsdPerMillionTokens: 'ip',
-    llmOutputUsdPerMillionTokens: 'op', fixedUsdPerCall: 'fc'
+    sttSessionsPerCall: 'ss', ttsGenerationDutyPercent: 'td', sttConcurrencyLimit: 'sl', ttsConcurrencyLimit: 'tl',
+    telephonyUsdPerConnectedMinute: 'tp', mediaStreamUsdPerConnectedMinute: 'mp', sttUsdPerUserAudioMinute: 'sp',
+    ttsUsdPer1000Characters: 'tts', charactersPerAgentMinute: 'ch', llmInputTokensPerCall: 'it',
+    llmOutputTokensPerCall: 'ot', llmInputUsdPerMillionTokens: 'ip', llmOutputUsdPerMillionTokens: 'op', fixedUsdPerCall: 'fc'
   };
 
   function formatNumber(value, digits = 0) {
@@ -82,6 +82,8 @@
       peakConcurrency: t.peak_concurrency,
       targetWorkerUtilizationPercent: c.target_worker_utilization_percent,
       sessionsPerWorker: c.sessions_per_worker,
+      sttSessionsPerCall: c.stt_sessions_per_call,
+      ttsGenerationDutyPercent: c.tts_generation_duty_percent,
       sttConcurrencyLimit: c.stt_concurrency_limit,
       ttsConcurrencyLimit: c.tts_concurrency_limit,
       telephonyUsdPerConnectedMinute: r.telephony_usd_per_connected_minute,
@@ -140,8 +142,8 @@
     outputs.peakRatio.textContent = `${formatNumber(result.capacity.peakToAverage, 1)}×`;
     outputs.workers.textContent = String(result.capacity.workersRequired);
     outputs.workerRead.textContent = `${formatNumber(result.capacity.targetSessionsPerWorker, 1)} / ${result.input.sessionsPerWorker}`;
-    outputs.sttStreams.textContent = formatNumber(result.capacity.expectedActiveSttStreamsAtPeak, 1);
-    outputs.ttsStreams.textContent = formatNumber(result.capacity.expectedActiveTtsStreamsAtPeak, 1);
+    outputs.sttStreams.textContent = formatNumber(result.capacity.expectedConcurrentSttSessionsAtPeak, 1);
+    outputs.ttsStreams.textContent = formatNumber(result.capacity.expectedConcurrentTtsRequestsAtPeak, 1);
     outputs.sttQuota.textContent = quotaText(result.capacity.sttQuota);
     outputs.ttsQuota.textContent = quotaText(result.capacity.ttsQuota);
     outputs.sttQuota.dataset.state = result.capacity.sttQuota.within === false ? 'over' : 'ok';
@@ -172,7 +174,7 @@
   function exportJson() {
     const result = render();
     const payload = {
-      schema_version: 1,
+      schema_version: 2,
       tool: '5sigmas-voice-cost-capacity',
       exported_at: new Date().toISOString(),
       source_snapshot: presetData ? { updated_at: presetData.updated_at, preset: presetData.presets?.[0]?.id } : null,
@@ -213,6 +215,7 @@
 
   root.querySelector('[data-action="share"]')?.addEventListener('click', async () => {
     const url = scenarioUrl();
+    history.replaceState(null, '', url);
     try { await navigator.clipboard.writeText(url); setFeedback(copy.copied); }
     catch { setFeedback(copy.copyFailed); }
   });
