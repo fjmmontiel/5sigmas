@@ -19,6 +19,7 @@ const viewports = [
 ];
 
 const numberText = async (locator) => Number((await locator.textContent() || '').trim().replace(',', '.').replace('%', ''));
+const intersects = (a, b) => a && b && a.x < b.x + b.width && a.x + a.width > b.x && a.y < b.y + b.height && a.y + a.height > b.y;
 
 for (const spec of cases) {
   for (const viewport of viewports) {
@@ -50,6 +51,12 @@ for (const spec of cases) {
     const highlighted = await page.locator('[data-ranking] .s5-rag-result[data-in-k="true"]').count();
     if (defaultRows !== 10) failures.push(`${spec.route} ${viewport.name}: expected 10 visible ranked candidates, got ${defaultRows}`);
     if (highlighted !== 5) failures.push(`${spec.route} ${viewport.name}: expected 5 top-k highlighted rows, got ${highlighted}`);
+
+    if (viewport.name === 'mobile') {
+      const rankLabelBox = await page.locator('[data-ranking] .s5-rag-result__rank small').first().boundingBox();
+      const titleBox = await page.locator('[data-ranking] .s5-rag-result__body strong').first().boundingBox();
+      if (intersects(rankLabelBox, titleBox)) failures.push(`${spec.route} mobile: rank label overlaps the result title`);
+    }
 
     await page.locator('[data-field="rerankDepth"]').fill('8');
     await page.locator('[data-field="rerankDepth"]').dispatchEvent('input');
@@ -111,4 +118,4 @@ if (failures.length) {
   for (const failure of failures) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log('RAG retrieval browser QA passed: ES/EN, 390px/1440px, metric math, reranking, chunk overlap, deep links, provenance, JSON-LD, labels and responsive overflow verified.');
+console.log('RAG retrieval browser QA passed: ES/EN, 390px/1440px, metric math, reranking, chunk overlap, deep links, provenance, JSON-LD, labels, ranking geometry and responsive overflow verified.');

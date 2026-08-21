@@ -19,7 +19,8 @@
 .s5-rag-separation-note { margin-top: .9rem; padding: .9rem 1rem; border-left: 3px solid var(--s5-accent); background: color-mix(in srgb, var(--s5-accent) 6%, transparent); border-radius: 0 10px 10px 0; }
 .s5-rag-separation-note p { margin: 0; }
 @media (max-width: 700px) {
-  .s5-rag-result { grid-template-columns: 46px minmax(0,1fr) 68px; gap: .5rem; padding: .7rem; }
+  .s5-rag-result { grid-template-columns: 30px minmax(0,1fr) 68px; gap: .65rem; padding: .7rem; }
+  .s5-rag-result__rank small { display: none; }
   .s5-rag-result__body span { font-size: .67rem; }
   .s5-rag-result__grade small { text-align: right; }
   .s5-rag-readout { grid-template-columns: 1fr; }

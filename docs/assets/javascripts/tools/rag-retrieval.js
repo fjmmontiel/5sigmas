@@ -21,7 +21,7 @@
       rank: 'posición',
       synthetic: 'Ejemplo sintético',
       chunkRead: ({ chunks, duplicationRatio, stride }) => `${chunks.toLocaleString('es-ES')} chunks · stride ${stride.toLocaleString('es-ES')} · ${(duplicationRatio * 100).toFixed(1)}% de tokens duplicados por solape`,
-      metricRead: ({ k, precision, recall, mrr, ndcg }) => `A k=${k}: precisión ${(precision * 100).toFixed(0)}%, recall ${(recall * 100).toFixed(0)}%, MRR ${mrr.toFixed(2)} y nDCG ${ndcg.toFixed(2)}.`,
+      metricRead: ({ k, precision, recall, mrr, ndcg }) => `A k=${k}: precisión ${fmtPct(precision)}, recall ${fmtPct(recall, 1)}, MRR ${mrr.toFixed(2)} y nDCG ${ndcg.toFixed(2)}.`,
       titles: {
         A: 'Búsqueda vectorial y recuperación densa', B: 'Arquitectura RAG', C: 'Notas de prompt engineering', D: 'Recuperación híbrida sparse+dense', E: 'Estrategias de chunking', F: 'Parámetros de sampling del LLM', G: 'Reranking con cross-encoder', H: 'Dimensionalidad de embeddings', I: 'Métricas de evaluación RAG', J: 'UX genérica de chatbot', K: 'Reescritura de consultas', L: 'Checklist de despliegue no relacionado'
       }
@@ -40,7 +40,7 @@
       rank: 'rank',
       synthetic: 'Synthetic example',
       chunkRead: ({ chunks, duplicationRatio, stride }) => `${chunks.toLocaleString('en-US')} chunks · stride ${stride.toLocaleString('en-US')} · ${(duplicationRatio * 100).toFixed(1)}% duplicate indexed tokens from overlap`,
-      metricRead: ({ k, precision, recall, mrr, ndcg }) => `At k=${k}: precision ${(precision * 100).toFixed(0)}%, recall ${(recall * 100).toFixed(0)}%, MRR ${mrr.toFixed(2)}, and nDCG ${ndcg.toFixed(2)}.`,
+      metricRead: ({ k, precision, recall, mrr, ndcg }) => `At k=${k}: precision ${fmtPct(precision)}, recall ${fmtPct(recall, 1)}, MRR ${mrr.toFixed(2)}, and nDCG ${ndcg.toFixed(2)}.`,
       titles: Object.fromEntries(core.DEFAULT_RESULTS.map((item) => [item.id, item.title]))
     }
   }[locale];
@@ -89,7 +89,11 @@
   }
 
   function fmtPct(value, digits = 0) {
-    return `${(value * 100).toFixed(digits)}%`;
+    const formatter = new Intl.NumberFormat(locale === 'es' ? 'es-ES' : 'en-US', {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: digits
+    });
+    return `${formatter.format(value * 100)}%`;
   }
 
   function setFeedback(text) {
@@ -124,7 +128,7 @@
     const m = scenario.metrics;
     const c = scenario.chunking;
     outputs.precision.textContent = fmtPct(m.precision);
-    outputs.recall.textContent = fmtPct(m.recall);
+    outputs.recall.textContent = fmtPct(m.recall, 1);
     outputs.mrr.textContent = m.mrr.toFixed(2);
     outputs.ndcg.textContent = m.ndcg.toFixed(2);
     outputs.relevant.textContent = `${m.relevantRetrieved}/${m.k}`;
