@@ -219,3 +219,43 @@ extra_css:
 hooks:
   - hooks/reading_time.py
   - hooks/og_article_type.py
+  - hooks/serve_md_versions.py
+  - hooks/jsonld_article.py
+  - hooks/video_embed.py
+  - hooks/reading_navigation.py
+  - hooks/direct_reader_navigation.py
+  - hooks/wip_series.py
+  - hooks/nosnippet.py
+  - hooks/sitemap_noindex.py
+  - hooks/video_sitemap.py
+  - hooks/locale_alternates.py
+
+plugins:
+  - search
+  - tags:
+  - macros
+  - redirects:
+      enabled: !ENV [MKDOCS_REDIRECTS, true]
+      redirect_maps:
+        'meta/advisor-ia.md': 'meta/about.md'
+        'roadmaps.md': 'series/index.md'
+        'series/fundamentos-ia-iag/index.md': 'series/fundamentos-ia-iag/00_presentacion_serie.md'
+        'series/from-cave-to-agi/index.md': 'series/from-cave-to-agi/00_presentacion_serie.md'
+        'series/multimodalidad-iag/index.md': 'series/multimodalidad-iag/00_presentacion_serie.md'
+        'series/modelos-razonadores/index.md': 'series/modelos-razonadores/00_presentacion_serie.md'
+        'series/ia-pib-bienestar-energia/index.md': 'series/ia-pib-bienestar-energia/00_presentacion_serie.md'
+        'series/datacenters-espacio/index.md': 'series/datacenters-espacio/00_presentacion_serie.md'
+        'series/seguridad-ia/index.md': 'series/seguridad-ia/00_presentacion_serie.md'
+        'series/agentes-ia/index.md': 'series/agentes-ia/00_presentacion_serie.md'
+  - social:
+      cards_layout: clean
+      cards_layout_options:
+        background_color: "#ffffff"
+        color: "#111111"
+        font_family: Inter
+      enabled: true
+exclude_docs: |
+  drafts/
+  drafts/**
+  assets/templates/**
+  includes/
