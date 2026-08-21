@@ -80,9 +80,9 @@ tools:
     en_route: /en/tools/transformer-attention/
     es_parity: true
     en_parity: true
-    tests: numerical_and_browser_gates_added_2026-08-21_pending_full_ci
+    tests: numerical_browser_security_and_long_token_gates_added_2026-08-21_pending_full_ci
     visual_review: pending_es_en_mobile_390_desktop_1440
-    provenance: vaswani_transformer_paper_plus_pytorch_sdpa_verified_2026-08-21
+    provenance: vaswani_pytorch_sdpa_plus_attention_interpretability_debate_verified_2026-08-21
     data_freshness: static_method_review_on_source_semantics_change
     last_reviewed: 2026-08-21
   - id: token-context-budget
