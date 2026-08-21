@@ -9,5 +9,7 @@ routes:
     localized: tools/model-price-performance.md
   - canonical: herramientas/vram-inferencia.md
     localized: tools/inference-vram.md
+  - canonical: herramientas/kv-cache-contexto.md
+    localized: tools/kv-cache-context.md
 published_files:
   - llms.txt
