@@ -23,9 +23,11 @@
     }
   };
 
-  const fmt = (value, digits = 2) => Number(value).toLocaleString(locale === 'es' ? 'es-ES' : 'en-US', { maximumFractionDigits: digits, minimumFractionDigits: digits });
   const pct = (value) => `${(value * 100).toFixed(value >= 0.1 ? 1 : 2)}%`;
   const clampIndex = (value, length) => Math.max(0, Math.min(length - 1, Number(value) || 0));
+  const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (character) => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[character]));
 
   document.querySelectorAll('[data-s5-transformer-attention]').forEach((root) => {
     const locale = root.dataset.locale === 'en' ? 'en' : 'es';
@@ -98,7 +100,7 @@
       state.tokens.forEach((token, index) => {
         const th = document.createElement('th');
         th.scope = 'col';
-        th.innerHTML = `<span>${index + 1}</span><strong>${token}</strong>`;
+        th.innerHTML = `<span>${index + 1}</span><strong>${escapeHtml(token)}</strong>`;
         headRow.appendChild(th);
       });
       thead.appendChild(headRow);
@@ -113,7 +115,7 @@
         button.type = 'button';
         button.dataset.queryRow = String(rowIndex);
         button.setAttribute('aria-label', `${t.rowAria}: ${state.tokens[rowIndex]}`);
-        button.innerHTML = `<span>${rowIndex + 1}</span><strong>${state.tokens[rowIndex]}</strong>`;
+        button.innerHTML = `<span>${rowIndex + 1}</span><strong>${escapeHtml(state.tokens[rowIndex])}</strong>`;
         rowTh.appendChild(button);
         tr.appendChild(rowTh);
         weights.forEach((weight, colIndex) => {
@@ -139,7 +141,7 @@
         const logitId = `s5-att-logit-${locale}-${index}`;
         const valueId = `s5-att-value-${locale}-${index}`;
         item.innerHTML = `
-          <div class="s5-attention-key-row__token"><span>${index + 1}</span><strong>${token}</strong></div>
+          <div class="s5-attention-key-row__token"><span>${index + 1}</span><strong>${escapeHtml(token)}</strong></div>
           <div class="s5-attention-key-row__score">
             <label for="${logitId}">${t.logitLabel}</label>
             <input id="${logitId}" data-logit-index="${index}" type="range" min="-4" max="4" step="0.1" value="${current.logits[index].toFixed(1)}" />
@@ -164,7 +166,7 @@
         row.className = 's5-attention-head-row';
         row.dataset.headChoice = item.head;
         if (item.head === state.head) row.dataset.selected = 'true';
-        row.innerHTML = `<span>${t.heads[item.head]}</span><strong>${state.tokens[item.topIndex]} · ${pct(item.topWeight)}</strong><small>${format(item.effectiveTokens, 2)} ${t.effective}</small>`;
+        row.innerHTML = `<span>${t.heads[item.head]}</span><strong>${escapeHtml(state.tokens[item.topIndex])} · ${pct(item.topWeight)}</strong><small>${format(item.effectiveTokens, 2)} ${t.effective}</small>`;
         comparisonHost.appendChild(row);
       });
     }
