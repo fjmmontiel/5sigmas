@@ -21,6 +21,10 @@ on:
       - 'mkdocs.en.yml'
   workflow_dispatch:
 
+concurrency:
+  group: interactive-tools-quality-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
@@ -127,7 +131,7 @@ jobs:
         run: node scripts/validate_locale_switching.mjs
 
       - name: Upload tools visual review
-        if: always()
+        if: ${{ failure() || github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.pull_request.draft == false) }}
         uses: actions/upload-artifact@v4
         with:
           name: 5sigmas-tools-visual-review
@@ -138,4 +142,5 @@ jobs:
             artifacts/visual-review/kv-context-*.png
             artifacts/visual-review/transformer-attention-*.png
           if-no-files-found: warn
-          retention-days: 14
+          retention-days: 1
+          overwrite: true
