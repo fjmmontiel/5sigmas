@@ -24,6 +24,10 @@ permissions:
   actions: read
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
   build-and-capture:
     runs-on: ubuntu-latest
@@ -207,14 +211,14 @@ jobs:
       - name: Validate responsive interaction polish
         run: node scripts/validate_responsive_polish.mjs
 
-      - name: Upload visual review
-        if: always()
+      - name: Upload visual review on failure
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: 5sigmas-visual-review
           path: artifacts/visual-review/*
           if-no-files-found: warn
-          retention-days: 14
+          retention-days: 1
 
   english-locale:
     runs-on: ubuntu-latest
@@ -272,20 +276,11 @@ jobs:
       - name: Validate English SEO and schema parity
         run: node scripts/validate_english_seo.mjs
 
-      - name: Upload English visual review
-        if: always()
+      - name: Upload English visual review on failure
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: 5sigmas-en-visual-review
           path: artifacts/visual-review/english-*.png
           if-no-files-found: warn
-          retention-days: 14
-
-      - name: Upload English locale preview
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: 5sigmas-en-preview
-          path: site/en
-          if-no-files-found: warn
-          retention-days: 14
+          retention-days: 1

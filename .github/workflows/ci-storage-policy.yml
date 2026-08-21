@@ -1,0 +1,80 @@
+name: CI storage policy
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  artifact-policy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Reject wasteful Actions artifacts
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          import sys
+
+          errors = []
+          workflow_dir = Path('.github/workflows')
+
+          for path in sorted([*workflow_dir.glob('*.yml'), *workflow_dir.glob('*.yaml')]):
+              lines = path.read_text(encoding='utf-8').splitlines()
+              for index, line in enumerate(lines):
+                  if 'uses: actions/upload-artifact@' not in line:
+                      continue
+
+                  uses_indent = len(line) - len(line.lstrip())
+                  step_indent = max(uses_indent - 2, 0)
+                  start = index
+                  while start > 0:
+                      candidate = lines[start - 1]
+                      stripped = candidate.lstrip()
+                      indent = len(candidate) - len(stripped)
+                      if indent == step_indent and stripped.startswith('- '):
+                          start -= 1
+                          break
+                      start -= 1
+
+                  end = index + 1
+                  while end < len(lines):
+                      candidate = lines[end]
+                      stripped = candidate.lstrip()
+                      indent = len(candidate) - len(stripped)
+                      if indent == step_indent and stripped.startswith('- '):
+                          break
+                      end += 1
+
+                  block = '\n'.join(lines[start:end])
+                  if not re.search(r'(?m)^\s*retention-days:\s*1\s*(?:#.*)?$', block):
+                      errors.append(f'{path}:{index + 1}: upload-artifact must set retention-days: 1')
+
+                  for match in re.finditer(r'(?m)^\s*path:\s*["\']?([^"\'\n#]+)', block):
+                      artifact_path = match.group(1).strip()
+                      if artifact_path == 'site' or artifact_path.startswith('site/'):
+                          errors.append(
+                              f'{path}:{index + 1}: do not retain built site directories with upload-artifact; '
+                              'validate them in-run or use upload-pages-artifact for deployment'
+                          )
+
+          if errors:
+              print('CI storage policy violations:', file=sys.stderr)
+              for error in errors:
+                  print(f' - {error}', file=sys.stderr)
+              raise SystemExit(1)
+
+          print('CI storage policy OK: all generic artifacts are capped at one day and no site build is retained.')
+          PY

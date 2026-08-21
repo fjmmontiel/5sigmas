@@ -51,7 +51,7 @@ jobs:
           name: 5sigmas-video-media-manifest
           path: .video-media/manifest.json
           if-no-files-found: error
-          retention-days: 30
+          retention-days: 1
 
       - name: Validate R2 publishing configuration
         if: inputs.publish

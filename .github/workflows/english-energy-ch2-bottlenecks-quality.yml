@@ -12,6 +12,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
   energy-ch2-bottlenecks:
     runs-on: ubuntu-latest
@@ -65,10 +69,11 @@ jobs:
       - name: Validate canonical Energy Chapter 2 bottlenecks visual
         run: node scripts/validate_english_energy_ch2_bottlenecks.mjs
 
-      - name: Upload Energy Chapter 2 bottlenecks screenshots
-        if: always()
+      - name: Upload Energy Chapter 2 bottlenecks screenshots on failure
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: english-energy-ch2-bottlenecks-review
           path: artifacts/visual-review/english-energy-ch2-bottlenecks-*.png
           if-no-files-found: ignore
+          retention-days: 1

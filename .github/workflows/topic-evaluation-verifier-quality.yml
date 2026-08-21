@@ -14,6 +14,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
   verifier-routing:
     runs-on: ubuntu-latest
@@ -65,11 +69,11 @@ jobs:
       - name: Validate verifier routing ES/EN
         run: node scripts/validate_evaluation_verifier_visual.mjs
 
-      - name: Upload verifier visual evidence
-        if: always()
+      - name: Upload verifier visual evidence on failure
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: evaluation-verifier-visual-review
           path: artifacts/visual-review/evaluation-verifier-routing-*.png
           if-no-files-found: warn
-          retention-days: 14
+          retention-days: 1

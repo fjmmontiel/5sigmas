@@ -16,6 +16,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
   reasoning-ch2:
     runs-on: ubuntu-latest
@@ -78,10 +82,11 @@ jobs:
       - name: Validate canonical English Reasoning Chapter 2 specification gaming
         run: node scripts/validate_english_reasoning_ch2_spec_gaming.mjs
 
-      - name: Upload Reasoning Chapter 2 screenshots
-        if: always()
+      - name: Upload Reasoning Chapter 2 screenshots on failure
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: english-reasoning-ch2-review
           path: artifacts/visual-review/english-reasoning-ch2-*.png
           if-no-files-found: ignore
+          retention-days: 1
