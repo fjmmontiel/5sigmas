@@ -75,15 +75,17 @@ tools:
     es_title: Visualizador de atención Transformer
     en_title: Transformer Attention Visualizer
     category: visualizer
-    status: in_progress
+    status: excellent
     es_route: /herramientas/atencion-transformer/
     en_route: /en/tools/transformer-attention/
     es_parity: true
     en_parity: true
-    tests: numerical_browser_security_and_long_token_gates_added_2026-08-21_pending_full_ci
-    visual_review: pending_es_en_mobile_390_desktop_1440
+    tests: passing_full_ci_2026-08-21_head_916df009
+    visual_review: reviewed_es_en_mobile_390_desktop_1440_2026-08-21
     provenance: vaswani_pytorch_sdpa_plus_attention_interpretability_debate_verified_2026-08-21
     data_freshness: static_method_review_on_source_semantics_change
+    validated_head: 916df0094bb1e1362226c8246b6f42682d5ef54a
+    integration_note: latest_main_ci_storage_policy_merged_without_tool_content_changes_2026-08-21
     last_reviewed: 2026-08-21
   - id: token-context-budget
     order: 6
