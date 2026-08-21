@@ -14,6 +14,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
   uncertainty:
     runs-on: ubuntu-latest
@@ -65,11 +69,11 @@ jobs:
       - name: Validate statistical uncertainty ES/EN
         run: node scripts/validate_evaluation_uncertainty_visual.mjs
 
-      - name: Upload uncertainty visual evidence
-        if: always()
+      - name: Upload uncertainty visual evidence on failure
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: evaluation-uncertainty-visual-review
           path: artifacts/visual-review/evaluation-uncertainty-*.png
           if-no-files-found: warn
-          retention-days: 14
+          retention-days: 1
