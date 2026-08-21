@@ -38,13 +38,13 @@ hide:
 
 <section class="s5-page-intro">
   <div class="s5-eyebrow">Herramientas · LLMs · 06</div>
-  <h1>Decide qué merece ocupar tu contexto.</h1>
-  <p>Una ventana grande no elimina el presupuesto. Separa instrucciones, esquemas de herramientas, historial, contexto RAG, mensaje actual, salida reservada y margen operativo para ver cuánto cabe antes de truncar o fallar.</p>
+  <h1>Distribuye la ventana de contexto antes de superar el límite.</h1>
+  <p>Una ventana grande sigue siendo un presupuesto finito. Separa instrucciones, esquemas de herramientas, historial, contexto RAG, mensaje actual, salida reservada y margen operativo para ver cuánto cabe antes de truncar o fallar.</p>
 </section>
 
 <div class="s5-tool-summary-strip" aria-label="Relaciones principales">
   <div><small>Ventana</small><strong>input + salida + margen</strong></div>
-  <div><small>Input</small><strong>sistema + tools + historial + RAG + usuario</strong></div>
+  <div><small>Input</small><strong>sistema + herramientas + historial + RAG + usuario</strong></div>
   <div><small>Presión futura</small><strong>margen ÷ crecimiento por turno</strong></div>
 </div>
 
@@ -71,7 +71,7 @@ hide:
       <h2>Qué entra en cada llamada</h2>
       <div class="s5-tool-field-grid">
         <div class="s5-tool-field"><label for="s5-context-es-system">Sistema / developer · tokens</label><input id="s5-context-es-system" data-field="systemTokens" type="number" min="0" step="1" inputmode="numeric" value="2500" /></div>
-        <div class="s5-tool-field"><label for="s5-context-es-tools">Herramientas / schemas · tokens</label><input id="s5-context-es-tools" data-field="toolTokens" type="number" min="0" step="1" inputmode="numeric" value="5000" /></div>
+        <div class="s5-tool-field"><label for="s5-context-es-tools">Herramientas / esquemas · tokens</label><input id="s5-context-es-tools" data-field="toolTokens" type="number" min="0" step="1" inputmode="numeric" value="5000" /></div>
         <div class="s5-tool-field"><label for="s5-context-es-history">Historial · tokens</label><input id="s5-context-es-history" data-field="historyTokens" type="number" min="0" step="1" inputmode="numeric" value="20000" /></div>
         <div class="s5-tool-field"><label for="s5-context-es-rag">Contexto RAG · tokens</label><input id="s5-context-es-rag" data-field="ragTokens" type="number" min="0" step="1" inputmode="numeric" value="24000" /></div>
         <div class="s5-tool-field"><label for="s5-context-es-user">Mensaje actual · tokens</label><input id="s5-context-es-user" data-field="userTokens" type="number" min="0" step="1" inputmode="numeric" value="2000" /></div>
@@ -100,7 +100,7 @@ hide:
     </div>
 
     <div class="s5-context-budget-bar-wrap">
-      <div class="s5-tool-breakdown__head"><strong>Quién ocupa la ventana</strong><span data-output="utilization">—</span></div>
+      <div class="s5-tool-breakdown__head"><strong>Distribución de la ventana</strong><span data-output="utilization">—</span></div>
       <div class="s5-context-budget-bar" data-budget-bar role="img" aria-label="Distribución del presupuesto de contexto"></div>
       <div class="s5-context-budget-legend" data-budget-legend aria-label="Leyenda del presupuesto"></div>
     </div>
@@ -122,11 +122,11 @@ hide:
 </div>
 
 <section class="s5-tool-method" aria-labelledby="s5-context-method">
-  <div><div class="s5-eyebrow">Método</div><h2 id="s5-context-method">Protege primero lo que no quieres truncar.</h2></div>
+  <div><div class="s5-eyebrow">Método</div><h2 id="s5-context-method">Separa input, salida reservada y margen antes de calcular capacidad.</h2></div>
   <div class="s5-tool-method__body">
     <p><strong>Presupuesto de input.</strong> La ventana configurada se reparte entre los tokens que ya llegan al modelo, la salida máxima que quieres permitir y un margen operativo explícito.</p>
     <div class="s5-tool-method__formula">input_disponible = ventana_contexto − salida_reservada − margen</div>
-    <p><strong>Demanda real.</strong> El input se desglosa para que un crecimiento de historial, un schema de herramientas grande o más chunks RAG no quede oculto dentro de una única cifra.</p>
+    <p><strong>Demanda real.</strong> El input se desglosa para que un crecimiento de historial, un esquema de herramientas grande o más chunks RAG no quede oculto dentro de una única cifra.</p>
     <div class="s5-tool-method__formula">input_usado = sistema + herramientas + historial + RAG + usuario</div>
     <p><strong>Overflow.</strong> Si el input usado supera el input disponible, la herramienta muestra exactamente cuántos tokens hay que recuperar. No decide automáticamente qué eliminar: esa prioridad depende de tu producto. En su lugar muestra qué bloques podrían absorber la reducción.</p>
     <p><strong>Conversaciones largas.</strong> El número de turnos restantes es una aproximación lineal: margen de input actual dividido entre el crecimiento de historial que configures. Resumir, compactar o descartar mensajes cambia esa dinámica.</p>
