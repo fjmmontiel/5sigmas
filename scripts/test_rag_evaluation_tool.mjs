@@ -16,6 +16,13 @@ assert.ok(interval.low > 0.25 && interval.low < 0.5);
 assert.ok(interval.high > 0.9 && interval.high <= 1);
 assert.ok(interval.low <= 0.8 && interval.high >= 0.8);
 
+assert.deepEqual(core.DIAG_THRESHOLDS, {
+  contextRelevance: 0.5,
+  faithfulness: 0.7,
+  answerCorrectness: 0.7,
+  referenceCoverage: 0.7
+});
+
 const defaults = core.evaluate({});
 assert.equal(defaults.counts.relevantContexts, 4);
 assert.equal(defaults.counts.contexts, 6);
@@ -25,7 +32,7 @@ assert.equal(defaults.metrics.faithfulness, 3 / 5);
 assert.equal(defaults.counts.correctClaims, 3);
 assert.equal(defaults.metrics.answerCorrectness, 3 / 5);
 assert.equal(defaults.metrics.referenceCoverage, 3 / 4);
-assert.equal(defaults.diagnosis, 'grounding');
+assert.equal(defaults.diagnosis, 'multiple');
 assert.ok(defaults.weightedScore >= 0 && defaults.weightedScore <= 1);
 
 const perfect = core.evaluate({
@@ -45,6 +52,14 @@ const retrievalFailure = core.evaluate({
   coveredFacts: 4
 });
 assert.equal(retrievalFailure.diagnosis, 'retrieval');
+
+const multipleFailure = core.evaluate({
+  contexts: core.DEFAULT_CONTEXTS.map((x, i) => ({ ...x, relevant: i === 0 })),
+  claims: core.DEFAULT_CLAIMS.map((x) => ({ ...x, supported: false, correct: true })),
+  referenceFacts: 4,
+  coveredFacts: 4
+});
+assert.equal(multipleFailure.diagnosis, 'multiple');
 
 const weights = core.normalizeWeights({ contextRelevance: 10, faithfulness: 20, answerCorrectness: 30, referenceCoverage: 40 });
 assert.equal(weights.contextRelevance, 0.1);
@@ -77,4 +92,4 @@ for (const source of [es, en]) {
 assert.match(es, /No es un LLM judge/);
 assert.match(en, /This is not an LLM judge/);
 
-console.log('RAG evaluation metrics, uncertainty, diagnosis, zero-weight semantics, share-state encoding and provenance passed.');
+console.log('RAG evaluation metrics, uncertainty, transparent diagnosis thresholds, zero-weight semantics, share-state encoding and provenance passed.');
