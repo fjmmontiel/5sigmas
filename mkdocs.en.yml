@@ -113,6 +113,8 @@ nav:
       - tools/index.md
       - LLM Cost & Latency: tools/llm-cost-latency.md
       - Model Price/Performance: tools/model-price-performance.md
+      - Inference VRAM: tools/inference-vram.md
+      - KV Cache & Context: tools/kv-cache-context.md
   - Learn:
       - Series: series/index.md
       - AI and Generative AI Foundations:
