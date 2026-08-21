@@ -15,7 +15,8 @@
         grounding: ['Cuello de botella: fidelidad', 'El contexto parece razonable, pero demasiadas afirmaciones de la respuesta no están respaldadas por la evidencia recuperada.'],
         correctness: ['Cuello de botella: corrección', 'La respuesta usa el contexto, pero demasiadas afirmaciones no coinciden con la referencia o el juicio de corrección.'],
         coverage: ['Cuello de botella: cobertura', 'La respuesta evita muchos errores, pero deja hechos de referencia sin cubrir.'],
-        balanced: ['Perfil equilibrado', 'No aparece un cuello de botella dominante con los umbrales didácticos actuales; revisa los intervalos y los casos individuales antes de concluir.']
+        multiple: ['Varios frentes fallan', 'Más de una dimensión cruza su umbral didáctico. Revisa las métricas por separado en lugar de atribuir el problema a una sola causa.'],
+        balanced: ['Perfil equilibrado', 'Ninguna dimensión cruza los umbrales didácticos actuales; revisa los intervalos y los casos individuales antes de concluir.']
       },
       interval: (low, high) => `IC Wilson 95% sobre las unidades etiquetadas: ${pct(low)}–${pct(high)}`,
       weighted: (score) => `Score ponderado: ${pct(score)}. Los pesos son visibles y editables; no es una métrica estándar de RAGAS o ARES.`,
@@ -29,7 +30,8 @@
         grounding: ['Bottleneck: faithfulness', 'Context looks reasonable, but too many answer claims are unsupported by the retrieved evidence.'],
         correctness: ['Bottleneck: correctness', 'The answer uses the context, but too many claims disagree with the reference or correctness judgment.'],
         coverage: ['Bottleneck: coverage', 'The answer avoids many errors but leaves reference facts uncovered.'],
-        balanced: ['Balanced profile', 'No single bottleneck dominates under the current teaching thresholds; inspect intervals and individual labels before concluding.']
+        multiple: ['Multiple dimensions fail', 'More than one dimension crosses its teaching threshold. Inspect the metrics separately instead of assigning the problem to one cause.'],
+        balanced: ['Balanced profile', 'No dimension crosses the current teaching thresholds; inspect intervals and individual labels before concluding.']
       },
       interval: (low, high) => `95% Wilson interval over labelled units: ${pct(low)}–${pct(high)}`,
       weighted: (score) => `Weighted score: ${pct(score)}. Weights are visible and editable; this is not a standard RAGAS or ARES metric.`,
