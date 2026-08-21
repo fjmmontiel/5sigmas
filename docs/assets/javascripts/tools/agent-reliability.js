@@ -8,10 +8,10 @@
     es: {
       copied: 'Enlace copiado.', copyFailed: 'No se pudo copiar automáticamente. Copia la URL del navegador.',
       downloaded: 'JSON generado.', reset: 'Escenario restablecido.', pass: 'Pasa', fail: 'No pasa',
-      gateSummary: (p, t) => `${p}/${t} gates`,
+      gateSummary: (p, t) => `${p}/${t} criterios`,
       interval: (l, h) => `IC 95% ${pct(l)}–${pct(h)}`,
       monthly: (n) => `${num(n, 0)} tareas/mes`, failures: (n) => `${num(n, 0)} fallos finales esperados`,
-      range: (l, h) => `rango por IC 95%: ${num(l, 0)}–${num(h, 0)}`
+      range: (l, h) => `rango derivado del IC 95%: ${num(l, 0)}–${num(h, 0)}`
     },
     en: {
       copied: 'Link copied.', copyFailed: 'Automatic copy failed. Copy the browser URL instead.',
