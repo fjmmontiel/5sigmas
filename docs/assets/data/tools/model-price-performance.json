@@ -1,0 +1,191 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-08-21",
+  "currency": "USD",
+  "freshness_policy": {
+    "review_interval_days": 14,
+    "performance_review_interval_days": 1,
+    "review_on_model_or_benchmark_release": true,
+    "rule": "Re-verify first-party pricing/specifications and Intelligence Index scores at least every 14 days. Re-check volatile Artificial Analysis output-speed and TTFT snapshots daily while this explorer is under active review, and whenever model serving or benchmark methodology changes."
+  },
+  "methodology": {
+    "benchmark": "Artificial Analysis Intelligence Index plus model-page snapshots of independently measured first-party API output speed and time to first token. The Intelligence Index is a broad composite benchmark, not a universal definition of model quality; reasoning-effort variants are treated as distinct configurations.",
+    "pricing": "First-party standard API list prices are used for the current date. Tool/search/grounding charges, cache writes, volume discounts, batch pricing and premium service tiers are excluded. Announced future prices are encoded when available.",
+    "workload": "Scenario cost uses editable input and output token counts: cost = input_tokens × input_rate / 1e6 + output_tokens × output_rate / 1e6. It does not attempt to estimate hidden reasoning-token usage unless the provider bills those tokens as output and they are present in the supplied output-token count.",
+    "frontier": "A model is on the displayed price/intelligence frontier when no other scored model has both an equal-or-higher Intelligence Index and an equal-or-lower scenario cost, with at least one strict improvement.",
+    "comparability": "Speed and TTFT are point-in-time observations from the named Artificial Analysis model page and can move as the underlying first-party API serving changes. Locale mirrors and provider aggregate pages can update on different cadences, so this dataset deliberately uses the English model page as the consistent snapshot surface. Benchmark scores can also move when evaluation methodology or model serving changes. Use this explorer to narrow choices, then validate on your own workload."
+  },
+  "models": [
+    {
+      "id": "anthropic-claude-opus-5-max",
+      "provider": "Anthropic",
+      "model": "Claude Opus 5",
+      "variant": "Adaptive reasoning · max",
+      "reasoning": true,
+      "release_date": "2026-07-24",
+      "context_tokens": 1000000,
+      "max_output_tokens": 128000,
+      "input_usd_per_million": 5.0,
+      "output_usd_per_million": 25.0,
+      "intelligence_index": 63,
+      "output_tokens_per_second": 55.0,
+      "ttft_seconds": 58.23,
+      "sources": {
+        "specs_pricing": {
+          "title": "Models overview | Claude Platform Docs",
+          "url": "https://platform.claude.com/docs/en/about-claude/models/overview",
+          "verified_on": "2026-08-21"
+        },
+        "benchmark": {
+          "title": "Claude Opus 5 (max) | Artificial Analysis",
+          "url": "https://artificialanalysis.ai/models/claude-opus-5",
+          "verified_on": "2026-08-21",
+          "performance_snapshot_on": "2026-08-21",
+          "performance_surface": "English model page; first-party Anthropic API measurement",
+          "index_family": "Artificial Analysis Intelligence Index v4.x"
+        }
+      }
+    },
+    {
+      "id": "openai-gpt-5-6-sol-max",
+      "provider": "OpenAI",
+      "model": "GPT-5.6 Sol",
+      "variant": "Reasoning effort · max",
+      "reasoning": true,
+      "release_date": "2026-07-09",
+      "context_tokens": 1050000,
+      "max_output_tokens": 128000,
+      "input_usd_per_million": 5.0,
+      "output_usd_per_million": 30.0,
+      "long_context": {
+        "threshold_input_tokens": 272000,
+        "input_multiplier": 2.0,
+        "output_multiplier": 1.5
+      },
+      "intelligence_index": 61,
+      "output_tokens_per_second": 61.7,
+      "ttft_seconds": 153.87,
+      "sources": {
+        "specs_pricing": {
+          "title": "GPT-5.6 Sol Model | OpenAI API",
+          "url": "https://developers.openai.com/api/docs/models/gpt-5.6-sol",
+          "verified_on": "2026-08-21"
+        },
+        "benchmark": {
+          "title": "GPT-5.6 Sol (max) | Artificial Analysis",
+          "url": "https://artificialanalysis.ai/models/gpt-5-6-sol/",
+          "verified_on": "2026-08-21",
+          "performance_snapshot_on": "2026-08-21",
+          "performance_surface": "English model page; first-party OpenAI API measurement",
+          "index_family": "Artificial Analysis Intelligence Index v4.x"
+        }
+      }
+    },
+    {
+      "id": "openai-gpt-5-6-terra-max",
+      "provider": "OpenAI",
+      "model": "GPT-5.6 Terra",
+      "variant": "Reasoning effort · max",
+      "reasoning": true,
+      "release_date": "2026-07-09",
+      "context_tokens": 1050000,
+      "max_output_tokens": 128000,
+      "input_usd_per_million": 2.0,
+      "output_usd_per_million": 12.0,
+      "long_context": {
+        "threshold_input_tokens": 272000,
+        "input_multiplier": 2.0,
+        "output_multiplier": 1.5
+      },
+      "intelligence_index": 57,
+      "output_tokens_per_second": 118.6,
+      "ttft_seconds": 164.01,
+      "sources": {
+        "specs_pricing": {
+          "title": "GPT-5.6 Terra Model | OpenAI API",
+          "url": "https://developers.openai.com/api/docs/models/gpt-5.6-terra",
+          "verified_on": "2026-08-21"
+        },
+        "benchmark": {
+          "title": "GPT-5.6 Terra (max) | Artificial Analysis",
+          "url": "https://artificialanalysis.ai/models/gpt-5-6-terra",
+          "verified_on": "2026-08-21",
+          "performance_snapshot_on": "2026-08-21",
+          "performance_surface": "English model page; first-party OpenAI API measurement",
+          "index_family": "Artificial Analysis Intelligence Index v4.x"
+        }
+      }
+    },
+    {
+      "id": "openai-gpt-5-6-luna-max",
+      "provider": "OpenAI",
+      "model": "GPT-5.6 Luna",
+      "variant": "Reasoning effort · max",
+      "reasoning": true,
+      "release_date": "2026-07-09",
+      "context_tokens": 1050000,
+      "max_output_tokens": 128000,
+      "input_usd_per_million": 0.2,
+      "output_usd_per_million": 1.2,
+      "long_context": {
+        "threshold_input_tokens": 272000,
+        "input_multiplier": 2.0,
+        "output_multiplier": 1.5
+      },
+      "intelligence_index": 52,
+      "output_tokens_per_second": 150.2,
+      "ttft_seconds": 139.13,
+      "sources": {
+        "specs_pricing": {
+          "title": "GPT-5.6 Luna Model | OpenAI API",
+          "url": "https://developers.openai.com/api/docs/models/gpt-5.6-luna",
+          "verified_on": "2026-08-21"
+        },
+        "benchmark": {
+          "title": "GPT-5.6 Luna (max) | Artificial Analysis",
+          "url": "https://artificialanalysis.ai/models/gpt-5-6-luna/",
+          "verified_on": "2026-08-21",
+          "performance_snapshot_on": "2026-08-21",
+          "performance_surface": "English model page; first-party OpenAI API measurement",
+          "index_family": "Artificial Analysis Intelligence Index v4.x"
+        }
+      }
+    },
+    {
+      "id": "google-gemini-3-6-flash-high",
+      "provider": "Google",
+      "model": "Gemini 3.6 Flash",
+      "variant": "Thinking level · high",
+      "reasoning": true,
+      "release_date": "2026-07-21",
+      "context_tokens": 1048576,
+      "max_output_tokens": 65536,
+      "input_usd_per_million": 0.75,
+      "output_usd_per_million": 3.75,
+      "valid_through": "2026-12-31",
+      "future_price": {
+        "effective_from": "2027-01-01",
+        "input_usd_per_million": 1.5,
+        "output_usd_per_million": 7.5
+      },
+      "intelligence_index": 52,
+      "output_tokens_per_second": 229.2,
+      "ttft_seconds": 18.99,
+      "sources": {
+        "specs_pricing": {
+          "title": "Gemini Developer API pricing | Google AI for Developers",
+          "url": "https://ai.google.dev/gemini-api/docs/pricing?hl=en",
+          "verified_on": "2026-08-21"
+        },
+        "benchmark": {
+          "title": "Gemini 3.6 Flash (high) | Artificial Analysis",
+          "url": "https://artificialanalysis.ai/models/gemini-3-6-flash",
+          "verified_on": "2026-08-21",
+          "performance_snapshot_on": "2026-08-21",
+          "performance_surface": "English model page; first-party Google API measurement",
+          "index_family": "Artificial Analysis Intelligence Index v4.x"
+        }
+      }
+    }
+  ]
+}

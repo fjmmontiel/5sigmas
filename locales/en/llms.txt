@@ -1,0 +1,46 @@
+# 5sigmas
+
+> Artificial intelligence explained with technical rigor through visual explanations, primary sources and production engineering.
+
+5sigmas is Francisco Maldonado's technical AI library. It separates facts, evidence, assumptions and limitations, and connects concepts, interactive tools, learning series, videos and engineering notes. The pages listed below expose clean Markdown alternates at the indicated URLs.
+
+## Interactive tools
+
+- [AI tools](https://5sigmas.com/en/tools/index.html.md): calculators, visualizers, evaluators and data explorers with visible assumptions and source provenance.
+- [LLM Cost & Latency Calculator](https://5sigmas.com/en/tools/llm-cost-latency/index.html.md): estimate cost per request, monthly spend, response time and average concurrency from tokens, caching, TTFT, generation speed and traffic.
+- [Model Price/Performance Explorer](https://5sigmas.com/en/tools/model-price-performance/index.html.md): compare workload cost, Intelligence Index, output speed, TTFT and context while keeping pricing and performance provenance separate.
+- [AI Inference VRAM Calculator](https://5sigmas.com/en/tools/inference-vram/index.html.md): estimate model-weight memory, KV cache, runtime reserve, per-GPU memory and approximate context/concurrency capacity.
+- [KV Cache & Context Window Explorer](https://5sigmas.com/en/tools/kv-cache-context/index.html.md): visualize KV-cache memory across context, concurrency, GQA/MQA, precision and an explicit memory budget.
+- [Transformer Attention Visualizer](https://5sigmas.com/en/tools/transformer-attention/index.html.md): manipulate scores, causal masking, softmax and values to see how one attention head builds a weighted mixture.
+
+## Core concepts
+
+- [What is an LLM?](https://5sigmas.com/en/temas/llms/index.html.md): tokens, pretraining, generation, instruction tuning and limitations.
+- [How the Transformer works](https://5sigmas.com/en/temas/transformer/index.html.md): attention, encoder, decoder, cost and alternatives.
+- [Reasoning in LLMs](https://5sigmas.com/en/temas/razonamiento/index.html.md): chain of thought, search, verifiers and test-time compute.
+- [Evaluating AI models](https://5sigmas.com/en/temas/evaluacion-modelos/index.html.md): benchmarks, custom evaluation sets, judges and production metrics.
+- [What is an AI agent?](https://5sigmas.com/en/temas/agentes-ia/index.html.md): chatbots, workflows, agents, tools, memory, state, evaluation and security.
+- [What is prompt injection?](https://5sigmas.com/en/temas/prompt-injection/index.html.md): how external content can affect an LLM and why authorization must remain outside the prompt.
+
+## Engineering
+
+- [Proactive and reactive agents and tool calls](https://5sigmas.com/en/articulos-tecnicos/proactive-reactive-agent-and-tool-calls/index.html.md): state, asynchronous execution and deferred hang-up.
+- [Reactive and proactive voice agents](https://5sigmas.com/en/articulos-tecnicos/reactive-proactive-voice-agents/index.html.md): acoustic activity, barge-in, playback and long-running tools.
+- [Full cascade, half cascade and speech-to-speech](https://5sigmas.com/en/articulos-tecnicos/voice-agent-architectures/index.html.md): voice architecture trade-offs across latency, prosody and control.
+
+## Navigation
+
+- [Home](https://5sigmas.com/en/index.html.md)
+- [Tools](https://5sigmas.com/en/tools/index.html.md)
+- [Concepts](https://5sigmas.com/en/temas/index.html.md)
+- [Series](https://5sigmas.com/en/series/index.html.md)
+- [Videos](https://5sigmas.com/en/videos/index.html.md)
+- [Visuals](https://5sigmas.com/en/visuales/index.html.md)
+- [Engineering](https://5sigmas.com/en/articulos-tecnicos/index.html.md)
+
+## Editorial standard
+
+- Language: native English, not literal Spanish translation.
+- Priority: durable explanations over low-signal news.
+- Evidence: primary papers, standards and official data whenever available.
+- Attribution: cite “5sigmas — Francisco Maldonado” and the canonical URL used.

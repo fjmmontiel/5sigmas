@@ -1,0 +1,189 @@
+{
+  "schema_version": 2,
+  "updated_at": "2026-08-21",
+  "currency": "USD",
+  "unit": "per_1m_tokens",
+  "freshness_policy": {
+    "review_interval_days": 14,
+    "review_on_provider_release": true,
+    "rule": "Provider pricing is volatile. Re-verify presets against primary documentation at least every 14 days and whenever a listed provider changes model pricing. Future effective prices are encoded when the provider has already announced them."
+  },
+  "methodology": {
+    "es": "Precios públicos de API verificados contra documentación primaria. La calculadora permite editar todas las tarifas. La caché representa lecturas de tokens ya cacheados; no se modelan escrituras ni almacenamiento de caché. Tampoco se incluyen llamadas a herramientas, búsquedas, procesamiento prioritario u otros extras salvo que se indique explícitamente.",
+    "en": "Public API prices verified against primary documentation. Every rate remains editable. Cache represents reads of already-cached tokens; cache writes and storage are not modelled. Tool calls, search, priority processing and other add-ons are also excluded unless explicitly stated."
+  },
+  "presets": [
+    {
+      "id": "openai-gpt-5-6-sol",
+      "provider": "OpenAI",
+      "model": "GPT-5.6 Sol",
+      "input_usd_per_million": 5.0,
+      "cached_input_usd_per_million": 0.5,
+      "output_usd_per_million": 30.0,
+      "long_context": {
+        "threshold_input_tokens": 272000,
+        "input_multiplier": 2.0,
+        "output_multiplier": 1.5
+      },
+      "source": {
+        "title": "GPT-5.6 Sol Model | OpenAI API",
+        "url": "https://developers.openai.com/api/docs/models/gpt-5.6-sol",
+        "verified_on": "2026-08-21"
+      },
+      "notes": {
+        "es": "Por encima de 272k tokens de entrada, OpenAI aplica 2× a entrada y 1,5× a salida para toda la solicitud; la calculadora lo aplica automáticamente. Las escrituras de caché, que OpenAI factura aparte, no están incluidas.",
+        "en": "Above 272k input tokens, OpenAI applies 2× input and 1.5× output pricing to the full request; the calculator applies this automatically. Cache writes, which OpenAI prices separately, are not included."
+      }
+    },
+    {
+      "id": "openai-gpt-5-6-terra",
+      "provider": "OpenAI",
+      "model": "GPT-5.6 Terra",
+      "input_usd_per_million": 2.0,
+      "cached_input_usd_per_million": 0.2,
+      "output_usd_per_million": 12.0,
+      "long_context": {
+        "threshold_input_tokens": 272000,
+        "input_multiplier": 2.0,
+        "output_multiplier": 1.5
+      },
+      "source": {
+        "title": "GPT-5.6 Terra Model | OpenAI API",
+        "url": "https://developers.openai.com/api/docs/models/gpt-5.6-terra",
+        "verified_on": "2026-08-21"
+      },
+      "notes": {
+        "es": "El ajuste de contexto largo por encima de 272k tokens se aplica automáticamente. Las escrituras de caché no están incluidas.",
+        "en": "The long-context pricing adjustment above 272k input tokens is applied automatically. Cache writes are not included."
+      }
+    },
+    {
+      "id": "openai-gpt-5-6-luna",
+      "provider": "OpenAI",
+      "model": "GPT-5.6 Luna",
+      "input_usd_per_million": 0.2,
+      "cached_input_usd_per_million": 0.02,
+      "output_usd_per_million": 1.2,
+      "long_context": {
+        "threshold_input_tokens": 272000,
+        "input_multiplier": 2.0,
+        "output_multiplier": 1.5
+      },
+      "source": {
+        "title": "GPT-5.6 Luna Model | OpenAI API",
+        "url": "https://developers.openai.com/api/docs/models/gpt-5.6-luna",
+        "verified_on": "2026-08-21"
+      },
+      "notes": {
+        "es": "El ajuste de contexto largo por encima de 272k tokens se aplica automáticamente. Las escrituras de caché no están incluidas.",
+        "en": "The long-context pricing adjustment above 272k input tokens is applied automatically. Cache writes are not included."
+      }
+    },
+    {
+      "id": "anthropic-claude-sonnet-5",
+      "provider": "Anthropic",
+      "model": "Claude Sonnet 5",
+      "input_usd_per_million": 2.0,
+      "cached_input_usd_per_million": 0.2,
+      "output_usd_per_million": 10.0,
+      "valid_through": "2026-08-31",
+      "future_price": {
+        "effective_from": "2026-09-01",
+        "input_usd_per_million": 3.0,
+        "cached_input_usd_per_million": 0.3,
+        "output_usd_per_million": 15.0
+      },
+      "source": {
+        "title": "Pricing | Claude Platform Docs",
+        "url": "https://platform.claude.com/docs/en/about-claude/pricing",
+        "verified_on": "2026-08-21"
+      },
+      "notes": {
+        "es": "Hasta el 31 de agosto de 2026: 2 USD/MTok de entrada, 0,20 de lectura de caché y 10 de salida. Desde el 1 de septiembre: 3/0,30/15 USD por MTok. La calculadora cambia automáticamente cuando entra en vigor la nueva tarifa. Las escrituras de caché de 5 minutos (1,25× entrada) y 1 hora (2×) no están incluidas.",
+        "en": "Through August 31, 2026: $2/MTok input, $0.20 cache reads and $10 output. From September 1: $3/$0.30/$15 per MTok. The calculator switches automatically when the new rate takes effect. Five-minute cache writes (1.25× input) and one-hour cache writes (2×) are not included."
+      }
+    },
+    {
+      "id": "google-gemini-3-7-flash",
+      "provider": "Google",
+      "model": "Gemini 3.7 Flash",
+      "input_usd_per_million": 0.75,
+      "cached_input_usd_per_million": 0.075,
+      "output_usd_per_million": 3.75,
+      "valid_through": "2026-12-31",
+      "future_price": {
+        "effective_from": "2027-01-01",
+        "input_usd_per_million": 1.5,
+        "cached_input_usd_per_million": 0.15,
+        "output_usd_per_million": 7.5
+      },
+      "source": {
+        "title": "Gemini Developer API pricing | Google AI for Developers",
+        "url": "https://ai.google.dev/gemini-api/docs/pricing?hl=en",
+        "verified_on": "2026-08-21"
+      },
+      "notes": {
+        "es": "Tarifa estándar promocional vigente hasta el 31 de diciembre de 2026: 0,75 USD/MTok de entrada, 0,075 de lectura de caché y 3,75 de salida. Desde el 1 de enero de 2027 Google anuncia 1,50/0,15/7,50 USD por MTok. El almacenamiento de caché y grounding se facturan aparte y no se incluyen.",
+        "en": "Promotional standard pricing is valid through December 31, 2026: $0.75/MTok input, $0.075 cache read and $3.75 output. From January 1, 2027 Google states $1.50/$0.15/$7.50 per MTok. Cache storage and grounding are billed separately and are not included."
+      }
+    },
+    {
+      "id": "google-gemini-3-6-flash",
+      "provider": "Google",
+      "model": "Gemini 3.6 Flash",
+      "input_usd_per_million": 0.75,
+      "cached_input_usd_per_million": 0.075,
+      "output_usd_per_million": 3.75,
+      "valid_through": "2026-12-31",
+      "future_price": {
+        "effective_from": "2027-01-01",
+        "input_usd_per_million": 1.5,
+        "cached_input_usd_per_million": 0.15,
+        "output_usd_per_million": 7.5
+      },
+      "source": {
+        "title": "Gemini Developer API pricing | Google AI for Developers",
+        "url": "https://ai.google.dev/gemini-api/docs/pricing?hl=en",
+        "verified_on": "2026-08-21"
+      },
+      "notes": {
+        "es": "Tarifa estándar promocional vigente hasta el 31 de diciembre de 2026. Desde el 1 de enero de 2027 la tarifa anunciada pasa a 1,50 USD/MTok de entrada, 0,15 de lectura de caché y 7,50 de salida. El almacenamiento de caché y grounding se facturan aparte y no se incluyen.",
+        "en": "Promotional standard pricing is valid through December 31, 2026. From January 1, 2027 the announced rate becomes $1.50/MTok input, $0.15 cache read and $7.50 output. Cache storage and grounding are billed separately and are not included."
+      }
+    },
+    {
+      "id": "google-gemini-3-5-flash-lite",
+      "provider": "Google",
+      "model": "Gemini 3.5 Flash-Lite",
+      "input_usd_per_million": 0.3,
+      "cached_input_usd_per_million": 0.03,
+      "output_usd_per_million": 2.5,
+      "source": {
+        "title": "Gemini Developer API pricing | Google AI for Developers",
+        "url": "https://ai.google.dev/gemini-api/docs/pricing?hl=en",
+        "verified_on": "2026-08-21"
+      },
+      "notes": {
+        "es": "Tarifa estándar de Gemini 3.5 Flash-Lite para entrada de texto, imagen, vídeo y audio. El almacenamiento de caché por hora y grounding se facturan aparte.",
+        "en": "Gemini 3.5 Flash-Lite standard pricing for text, image, video and audio input. Hourly cache storage and grounding are billed separately."
+      }
+    },
+    {
+      "id": "google-gemini-2-5-flash",
+      "provider": "Google",
+      "model": "Gemini 2.5 Flash",
+      "input_usd_per_million": 0.3,
+      "cached_input_usd_per_million": 0.03,
+      "output_usd_per_million": 2.5,
+      "source": {
+        "title": "Gemini Developer API pricing | Google AI for Developers",
+        "url": "https://ai.google.dev/gemini-api/docs/pricing?hl=en",
+        "verified_on": "2026-08-21"
+      },
+      "notes": {
+        "es": "Tarifa estándar para entrada de texto, imagen o vídeo. El audio usa otra tarifa. El almacenamiento de caché por hora y grounding se facturan aparte.",
+        "en": "Standard text/image/video input rate. Audio uses a different rate. Hourly cache storage and grounding are billed separately."
+      }
+    }
+  ]
+}

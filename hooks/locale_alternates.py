@@ -6,12 +6,15 @@ cause requests such as ``/article/sitemap.xml``. 5sigmas instead uses:
 
 - exact route-aware URLs in the visible language selector;
 - ES/EN hreflang pairs in XML sitemaps for routes that truly exist in both locales;
-- an English-home selector fallback for Spanish-only pages.
+- an English-home selector fallback for Spanish-only pages;
+- explicit route equivalence for localized tool slugs (for example
+  ``/herramientas/`` ↔ ``/en/tools/``).
 
-``locales/en/manifest.yml`` remains the source of truth for published English pages.
+``locales/en/manifest.yml`` remains the source of truth for the editorial mirror.
+The interactive-tools product layer declares its localized routes in
+``tools/locale-en.yml`` so translated public slugs stay explicit and testable.
 Generated English video routes are derived from the manifest's generated-surface
-flags plus ``locales/en/media.yml`` so they stay truthful without pretending that
-hook-generated Markdown exists as locale source files.
+flags plus ``locales/en/media.yml``.
 """
 
 from __future__ import annotations
@@ -52,6 +55,32 @@ def _manifest_data(locale: str) -> dict[str, Any]:
         return {}
     data = yaml.safe_load(manifest.read_text(encoding="utf-8")) or {}
     return data if isinstance(data, dict) else {}
+
+
+@lru_cache(maxsize=8)
+def _tool_route_pairs(locale: str) -> dict[str, str]:
+    """Return canonical-source → localized-source tool route pairs."""
+    manifest = ROOT / "tools" / f"locale-{locale}.yml"
+    if not manifest.is_file():
+        return {}
+    data = yaml.safe_load(manifest.read_text(encoding="utf-8")) or {}
+    if not isinstance(data, dict):
+        raise RuntimeError(f"Tool locale manifest must be a mapping: {manifest}")
+    pairs: dict[str, str] = {}
+    localized_seen: set[str] = set()
+    for entry in data.get("routes") or []:
+        if not isinstance(entry, dict):
+            raise RuntimeError(f"Invalid tool locale route entry: {entry!r}")
+        canonical = str(entry.get("canonical") or "").strip().lstrip("/")
+        localized = str(entry.get("localized") or "").strip().lstrip("/")
+        for label, route in (("canonical", canonical), ("localized", localized)):
+            if not route or ".." in Path(route).parts or not route.endswith(".md"):
+                raise RuntimeError(f"Unsafe tool {label} route for {locale}: {route!r}")
+        if canonical in pairs or localized in localized_seen:
+            raise RuntimeError(f"Duplicate tool route equivalent for {locale}: {entry!r}")
+        pairs[canonical] = localized
+        localized_seen.add(localized)
+    return pairs
 
 
 def _generated_video_routes(locale: str, data: dict[str, Any]) -> frozenset[str]:
@@ -140,8 +169,9 @@ def _spanish_nav_sources() -> frozenset[str]:
 
 @lru_cache(maxsize=1)
 def _spanish_public_routes() -> frozenset[str]:
-    """Derive Spanish indexable routes from nav/front matter, not build output."""
-    sources = _spanish_nav_sources()
+    """Derive Spanish indexable routes from nav/front matter plus explicit tool routes."""
+    sources = set(_spanish_nav_sources())
+    sources.update(_tool_route_pairs("en").keys())
     routes: set[str] = set()
 
     for source_path in sources:
@@ -185,6 +215,7 @@ def _published_routes(locale: str) -> frozenset[str]:
         for route in (data.get("published_routes") or [])
         if str(route).strip()
     }
+    routes.update(_tool_route_pairs(locale).values())
     routes.update(_generated_video_routes(locale, data))
     return frozenset(routes)
 
@@ -201,6 +232,16 @@ def _src_route(src_path: str) -> str:
         parent = path.parent.as_posix().strip("/")
         return "/" if parent in {"", "."} else f"/{parent}/"
     return "/" + path.with_suffix("").as_posix().strip("/") + "/"
+
+
+@lru_cache(maxsize=8)
+def _tool_public_route_maps(locale: str) -> tuple[dict[str, str], dict[str, str]]:
+    source_pairs = _tool_route_pairs(locale)
+    canonical_to_localized = {
+        _src_route(canonical): _src_route(localized)
+        for canonical, localized in source_pairs.items()
+    }
+    return canonical_to_localized, {value: key for key, value in canonical_to_localized.items()}
 
 
 def _english_route(source_route: str) -> str:
@@ -250,31 +291,40 @@ def _source_route_from_sitemap_url(url: str, language: str) -> str:
 
 def on_post_page(output: str, page, config, **kwargs) -> str:
     src_path = page.file.src_path.lstrip("/")
-    source_route = _src_route(src_path)
-    translated_to_english = src_path in _published_routes("en")
     current_language = _current_language(config)
+    published_english = _published_routes("en")
+    tool_pairs = _tool_route_pairs("en")
+    tool_reverse = {localized: canonical for canonical, localized in tool_pairs.items()}
     spanish_routes = _spanish_public_routes()
 
+    if current_language == "en":
+        english_source = src_path
+        spanish_source = tool_reverse.get(english_source, english_source)
+    else:
+        spanish_source = src_path
+        english_source = tool_pairs.get(spanish_source, spanish_source)
+
+    spanish_route = _src_route(spanish_source)
+    english_source_route = _src_route(english_source)
+    translated_to_english = english_source in published_english
+
     selector_targets = {
-        # Do not manufacture a Spanish watch route for an English-only
-        # generated surface. Fall back to the English home, as for any other
-        # published English page without a Spanish counterpart.
-        "es": source_route if source_route in spanish_routes else "/",
-        "en": _english_route(source_route) if translated_to_english else "/en/",
+        "es": spanish_route if spanish_route in spanish_routes else "/",
+        "en": _english_route(english_source_route) if translated_to_english else "/en/",
     }
 
     def rewrite_selector(match: re.Match[str]) -> str:
         lang = match.group("lang").lower()
         return _replace_href(match.group(0), selector_targets[lang])
 
-    # Remove page-level hreflang links. Material interprets these as locale roots
-    # and fetches ``sitemap.xml`` relative to each href. SEO alternates are emitted
-    # in the XML sitemap instead, where exact page equivalence is unambiguous.
     output = _ALTERNATE_LINK_RE.sub("", output)
     output = _LANGUAGE_ANCHOR_RE.sub(rewrite_selector, output)
 
     if current_language == "en" and not translated_to_english:
-        raise RuntimeError(f"English page is not declared in locales/en/manifest.yml: {src_path}")
+        raise RuntimeError(
+            "English page is not declared in the editorial or tools locale contract: "
+            f"{src_path}"
+        )
 
     return output
 
@@ -286,8 +336,9 @@ def on_post_build(config, **kwargs) -> None:
         return
 
     language = _current_language(config)
-    published = _published_public_routes("en")
-    spanish_routes = _spanish_public_routes() if language == "en" else frozenset()
+    english_routes = _published_public_routes("en")
+    spanish_routes = _spanish_public_routes()
+    es_to_en, en_to_es = _tool_public_route_maps("en")
     tree = ET.parse(sitemap_path)
     root = tree.getroot()
     changed = False
@@ -297,21 +348,27 @@ def on_post_build(config, **kwargs) -> None:
         if loc_node is None or not loc_node.text:
             continue
 
-        source_route = _source_route_from_sitemap_url(loc_node.text, language)
+        local_route = _source_route_from_sitemap_url(loc_node.text, language)
 
         for child in list(url_node):
             if child.tag == f"{{{XHTML_NS}}}link":
                 url_node.remove(child)
                 changed = True
 
-        if source_route not in published:
-            continue
-        if language == "en" and source_route not in spanish_routes:
-            continue
+        if language == "en":
+            english_route = local_route
+            spanish_route = en_to_es.get(english_route, english_route)
+            if english_route not in english_routes or spanish_route not in spanish_routes:
+                continue
+        else:
+            spanish_route = local_route
+            english_route = es_to_en.get(spanish_route, spanish_route)
+            if spanish_route not in spanish_routes or english_route not in english_routes:
+                continue
 
         for hreflang, href in (
-            ("es", GLOBAL_ORIGIN + source_route),
-            ("en", GLOBAL_ORIGIN + _english_route(source_route)),
+            ("es", GLOBAL_ORIGIN + spanish_route),
+            ("en", GLOBAL_ORIGIN + _english_route(english_route)),
         ):
             ET.SubElement(
                 url_node,

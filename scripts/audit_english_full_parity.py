@@ -2,20 +2,9 @@
 """Measure English 5sigmas against the canonical Spanish public surface.
 
 Spanish under ``docs/`` is the route/media capability source of truth. English
-is complete only when it mirrors the same public routes and navigation graph,
-provides every translated visual dependency referenced by its own Markdown,
-declares native video for every canonical video-bearing article, carries the
-canonical shared browser runtime, and mirrors the canonical article-audio
-surface with locale-native binaries.
-
-Filename equality is intentionally *not* required for translated snippets:
-English visuals may be rewritten/restructured and are validated semantically by
-the dedicated browser QA. Likewise, route-local snippets are discovered from
-published English Markdown by ``prepare_locale.py`` and do not have to be
-duplicated in ``manifest.required_snippets``.
-
-When ``locales/en/manifest.yml`` declares ``status: complete`` (or --strict is
-used), any real publication-contract delta is a CI failure.
+is complete only when it mirrors the same public editorial and interactive-tool
+surface. Most routes preserve source slugs; product surfaces may declare an
+explicit canonical→localized mapping in ``tools/locale-en.yml``.
 """
 
 from __future__ import annotations
@@ -33,6 +22,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DOCS = ROOT / "docs"
 LOCALE = ROOT / "locales" / "en"
 MANIFEST = LOCALE / "manifest.yml"
+TOOL_MANIFEST = ROOT / "tools" / "locale-en.yml"
 LOCALE_MEDIA = LOCALE / "media.yml"
 LOCALE_AUDIO_INDEX = LOCALE / "article_audio.yml"
 SPANISH_AUDIO_INDEX = DOCS / "series" / "article_audio.yml"
@@ -47,7 +37,7 @@ PUBLIC_ROOT_FILES = (
     "series/index.md",
     "visuales/index.md",
 )
-PUBLIC_DIRS = ("series", "temas", "articulos-tecnicos")
+PUBLIC_DIRS = ("series", "temas", "articulos-tecnicos", "herramientas")
 GENERATED_NAV_ROUTES = {"videos/index.md"}
 
 INCLUDE_HTML_RE = re.compile(
@@ -77,9 +67,6 @@ def hidden(path: Path) -> bool:
 
 def expected_editorial_routes() -> set[str]:
     result: set[str] = set()
-    # Explicit root surfaces remain canonical routes even when a page is
-    # intentionally noindex (for example Coming Soon). noindex is an SEO
-    # directive, not a signal that locale route parity may omit the page.
     for rel in PUBLIC_ROOT_FILES:
         path = DOCS / rel
         if path.is_file():
@@ -128,6 +115,34 @@ def load_mapping(path: Path) -> dict[str, Any]:
 
 def manifest() -> dict[str, Any]:
     return load_mapping(MANIFEST)
+
+
+def tool_route_mapping() -> dict[str, str]:
+    data = load_mapping(TOOL_MANIFEST)
+    result: dict[str, str] = {}
+    localized_seen: set[str] = set()
+    for entry in data.get("routes") or []:
+        if not isinstance(entry, dict):
+            raise AssertionError(f"invalid tool route entry: {entry!r}")
+        canonical = str(entry.get("canonical") or "").strip().lstrip("/")
+        localized = str(entry.get("localized") or "").strip().lstrip("/")
+        if not canonical.endswith(".md") or not localized.endswith(".md"):
+            raise AssertionError(f"tool route mappings must use Markdown sources: {entry!r}")
+        if ".." in Path(canonical).parts or ".." in Path(localized).parts:
+            raise AssertionError(f"unsafe tool route mapping: {entry!r}")
+        if canonical in result or localized in localized_seen:
+            raise AssertionError(f"duplicate tool route mapping: {entry!r}")
+        result[canonical] = localized
+        localized_seen.add(localized)
+    return result
+
+
+def tool_published_files() -> set[str]:
+    data = load_mapping(TOOL_MANIFEST)
+    values = data.get("published_files") or []
+    if not isinstance(values, list):
+        raise AssertionError("tools/locale-en.yml published_files must be a list")
+    return {str(value).strip().lstrip("/") for value in values if str(value).strip()}
 
 
 def nav_paths(config_text: str) -> set[str]:
@@ -191,7 +206,6 @@ def compare(expected: set[str], actual: set[str]) -> dict[str, list[str]]:
 
 
 def required_subset(expected: set[str], actual: set[str]) -> dict[str, list[str]]:
-    """Require canonical capabilities while permitting locale-specific extras."""
     return {"missing": sorted(expected - actual), "extra": []}
 
 
@@ -243,6 +257,8 @@ def main() -> int:
     data = manifest()
     status = str(data.get("status") or "").strip().lower()
     strict = args.strict or status == "complete"
+    tool_map = tool_route_mapping()
+    tool_reverse = {localized: canonical for canonical, localized in tool_map.items()}
 
     routes = expected_editorial_routes()
     videos = video_pages(routes)
@@ -254,16 +270,18 @@ def main() -> int:
         expected_audio, english_audio
     )
 
-    declared_routes = set(data.get("published_routes") or [])
+    declared_routes = set(data.get("published_routes") or []) | set(tool_map)
     declared_snippets = set(data.get("required_snippets") or [])
-    declared_files = set(data.get("published_files") or [])
-    existing_routes = {
+    declared_files = set(data.get("published_files") or []) | tool_published_files()
+    raw_existing_routes = {
         path.relative_to(LOCALE).as_posix()
         for path in LOCALE.rglob("*.md")
         if path.is_file()
     }
+    existing_routes = {tool_reverse.get(route, route) for route in raw_existing_routes}
+    localized_expected_routes = {tool_map.get(route, route) for route in routes}
     english_snippets, snippet_failures = translated_snippet_contract(
-        routes, declared_snippets
+        localized_expected_routes, declared_snippets
     )
 
     es_cfg = MKDOCS_ES.read_text(encoding="utf-8")
@@ -273,7 +291,8 @@ def main() -> int:
         for path in nav_paths(es_cfg)
         if (DOCS / path).is_file() or path in GENERATED_NAV_ROUTES
     }
-    actual_nav = nav_paths(en_cfg)
+    raw_actual_nav = nav_paths(en_cfg)
+    actual_nav = {tool_reverse.get(route, route) for route in raw_actual_nav}
     es_js = javascript_paths(es_cfg)
     en_js = javascript_paths(en_cfg)
     en_video_pages = locale_video_pages(en_cfg)
@@ -281,6 +300,7 @@ def main() -> int:
     report: dict[str, Any] = {
         "status": status or "unknown",
         "strict": strict,
+        "route_equivalents": tool_map,
         "expected": {
             "editorial_routes": len(routes),
             "nav_routes": len(expected_nav),
@@ -330,6 +350,7 @@ def main() -> int:
 
     print("English full-parity audit")
     print(f"  canonical editorial routes:       {len(routes)}")
+    print(f"  explicit localized tool routes:   {len(tool_map)}")
     print(f"  canonical nav routes:             {len(expected_nav)}")
     print(f"  English snippet dependencies:     {len(english_snippets)}")
     print(f"  canonical video-bearing articles: {len(videos)}")

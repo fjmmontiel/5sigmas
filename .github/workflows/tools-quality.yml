@@ -1,0 +1,146 @@
+name: Interactive tools quality
+
+on:
+  pull_request:
+    paths:
+      - 'docs/herramientas/**'
+      - 'locales/en/tools/**'
+      - 'docs/assets/data/tools/**'
+      - 'docs/assets/javascripts/tools/**'
+      - 'docs/stylesheets/tools.css'
+      - 'docs/stylesheets/tools-kv-context.css'
+      - 'docs/stylesheets/tools-attention.css'
+      - 'tools/**'
+      - 'hooks/locale_alternates.py'
+      - 'scripts/prepare_locale.py'
+      - 'scripts/audit_english_full_parity.py'
+      - 'scripts/audit_multilingual_search_foundation.py'
+      - 'scripts/*tool*.mjs'
+      - 'scripts/validate_locale_switching.mjs'
+      - 'mkdocs.yml'
+      - 'mkdocs.en.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: interactive-tools-quality-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  tools-quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Verify calculator math and pricing provenance
+        run: node scripts/test_llm_cost_latency_tool.mjs
+
+      - name: Verify model explorer math, frontier and provenance
+        run: node scripts/test_model_price_performance_tool.mjs
+
+      - name: Verify inference VRAM math and architecture provenance
+        run: node scripts/test_inference_vram_tool.mjs
+
+      - name: Verify KV cache/context math and provenance
+        run: node scripts/test_kv_context_tool.mjs
+
+      - name: Verify Transformer attention math and provenance
+        run: node scripts/test_transformer_attention_tool.mjs
+
+      - name: Build Spanish site strictly
+        run: mkdocs build --clean --strict
+
+      - name: Audit Spanish search foundation
+        run: python scripts/audit_multilingual_search_foundation.py
+
+      - name: Prepare English locale
+        run: python scripts/prepare_locale.py --locale en
+
+      - name: Audit English source parity
+        run: python scripts/audit_locale.py --locale en
+
+      - name: Build English locale strictly
+        env:
+          S5_LOCALE: en
+        run: mkdocs build -f mkdocs.en.yml --clean --strict
+
+      - name: Audit rendered English locale
+        run: python scripts/audit_locale.py --locale en --site site/en
+
+      - name: Audit combined SEO crawl
+        run: python scripts/audit_seo_site.py --site-dir site --output-dir seo-audit --label tools
+
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Serve bilingual preview
+        run: |
+          python -m http.server 8000 --directory site > /tmp/5sigmas-tools-preview.log 2>&1 &
+          echo $! > /tmp/5sigmas-tools-preview.pid
+          for attempt in {1..30}; do
+            curl --fail --silent http://127.0.0.1:8000/herramientas/coste-latencia-llm/ > /dev/null && \
+            curl --fail --silent http://127.0.0.1:8000/en/tools/llm-cost-latency/ > /dev/null && \
+            curl --fail --silent http://127.0.0.1:8000/herramientas/precio-rendimiento-modelos/ > /dev/null && \
+            curl --fail --silent http://127.0.0.1:8000/en/tools/model-price-performance/ > /dev/null && \
+            curl --fail --silent http://127.0.0.1:8000/herramientas/vram-inferencia/ > /dev/null && \
+            curl --fail --silent http://127.0.0.1:8000/en/tools/inference-vram/ > /dev/null && \
+            curl --fail --silent http://127.0.0.1:8000/herramientas/kv-cache-contexto/ > /dev/null && \
+            curl --fail --silent http://127.0.0.1:8000/en/tools/kv-cache-context/ > /dev/null && \
+            curl --fail --silent http://127.0.0.1:8000/herramientas/atencion-transformer/ > /dev/null && \
+            curl --fail --silent http://127.0.0.1:8000/en/tools/transformer-attention/ > /dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/5sigmas-tools-preview.log
+          exit 1
+
+      - name: Validate calculator in browser and capture visual evidence
+        run: node scripts/validate_llm_cost_latency_tool.mjs
+
+      - name: Validate model explorer in browser and capture visual evidence
+        run: node scripts/validate_model_price_performance_tool.mjs
+
+      - name: Validate inference VRAM calculator and capture visual evidence
+        run: node scripts/validate_inference_vram_tool.mjs
+
+      - name: Validate KV cache/context explorer and capture visual evidence
+        run: node scripts/validate_kv_context_tool.mjs
+
+      - name: Validate Transformer attention visualizer and capture visual evidence
+        run: node scripts/validate_transformer_attention_tool.mjs
+
+      - name: Validate localized route switching and hreflang
+        run: node scripts/validate_locale_switching.mjs
+
+      - name: Upload tools visual review
+        if: ${{ failure() || github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.pull_request.draft == false) }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: 5sigmas-tools-visual-review
+          path: |
+            artifacts/visual-review/llm-cost-latency-*.png
+            artifacts/visual-review/model-price-performance-*.png
+            artifacts/visual-review/inference-vram-*.png
+            artifacts/visual-review/kv-context-*.png
+            artifacts/visual-review/transformer-attention-*.png
+          if-no-files-found: warn
+          retention-days: 1
+          overwrite: true

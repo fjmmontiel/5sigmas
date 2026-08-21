@@ -55,6 +55,13 @@ nav:
   - Inicio: index.md
   - Ver: visuales/index.md
   - Vídeos: videos/index.md
+  - Herramientas:
+      - herramientas/index.md
+      - Coste y latencia de LLMs: herramientas/coste-latencia-llm.md
+      - Precio y rendimiento de modelos: herramientas/precio-rendimiento-modelos.md
+      - VRAM para inferencia: herramientas/vram-inferencia.md
+      - KV cache y contexto: herramientas/kv-cache-contexto.md
+      - Atención Transformer: herramientas/atencion-transformer.md
   - Aprender:
       - Conceptos:
           - temas/index.md
@@ -176,6 +183,7 @@ extra_javascript:
     defer: true
 extra_css:
   - stylesheets/extra.css
+  - stylesheets/tools-kv-context.css
   - assets/stylesheets/animations.css
   - stylesheets/voice-report-animations.css
   - assets/stylesheets/series_energy_ai_preview.css

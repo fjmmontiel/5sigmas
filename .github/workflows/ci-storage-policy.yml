@@ -30,11 +30,12 @@ jobs:
 
           errors = []
           workflow_dir = Path('.github/workflows')
+          upload_use = re.compile(r'^\s*uses:\s*actions/upload-artifact@')
 
           for path in sorted([*workflow_dir.glob('*.yml'), *workflow_dir.glob('*.yaml')]):
               lines = path.read_text(encoding='utf-8').splitlines()
               for index, line in enumerate(lines):
-                  if 'uses: actions/upload-artifact@' not in line:
+                  if not upload_use.match(line):
                       continue
 
                   uses_indent = len(line) - len(line.lstrip())

@@ -5,9 +5,10 @@ The Spanish site is built first in CI, while alternate locales are added later t
 same ``site/`` tree. Route-aware language links therefore reference valid future
 locale pages that do not exist yet at the moment the Spanish search audit runs.
 
-This wrapper stages only routes explicitly declared in each configured locale's
-manifest, runs the strict search audit plus the canonical priority-topic contract,
-then removes the staged markers. Arbitrary missing internal links still fail normally.
+This wrapper stages routes explicitly declared in the locale editorial manifest and
+the interactive-tools locale contract, runs the strict search audit plus the
+canonical priority-topic contract, then removes the staged markers. Arbitrary
+missing internal links still fail normally.
 """
 
 from __future__ import annotations
@@ -27,7 +28,6 @@ CURRENT_LANGUAGE = "es"
 
 
 def _load_extra_block() -> dict:
-    """Safely parse only ``extra:`` instead of executable MkDocs YAML tags."""
     lines = CONFIG.read_text(encoding="utf-8").splitlines()
     try:
         start = next(
@@ -97,6 +97,30 @@ def _configured_alternates() -> list[tuple[str, str, dict]]:
     return configured
 
 
+def _tool_localized_routes(locale: str) -> list[str]:
+    path = ROOT / "tools" / f"locale-{locale}.yml"
+    if not path.is_file():
+        return []
+    data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    if not isinstance(data, dict):
+        raise AssertionError(f"Tool locale manifest must be a mapping: {path.relative_to(ROOT)}")
+    routes = data.get("routes") or []
+    if not isinstance(routes, list):
+        raise AssertionError(f"{path.relative_to(ROOT)} routes must be a list")
+    result: list[str] = []
+    for entry in routes:
+        if not isinstance(entry, dict):
+            raise AssertionError(f"Invalid tool route entry in {path.relative_to(ROOT)}: {entry!r}")
+        localized = str(entry.get("localized") or "").strip().lstrip("/")
+        if not localized or ".." in Path(localized).parts or not localized.endswith(".md"):
+            raise AssertionError(f"Unsafe localized tool route: {entry!r}")
+        source = ROOT / "locales" / locale / localized
+        if not source.is_file():
+            raise AssertionError(f"Tool locale route has no source: locales/{locale}/{localized}")
+        result.append(localized)
+    return result
+
+
 def _published_source_routes(locale: str, manifest: dict) -> list[str]:
     routes = manifest.get("published_routes") or []
     if not isinstance(routes, list):
@@ -113,11 +137,13 @@ def _published_source_routes(locale: str, manifest: dict) -> list[str]:
                 f"Manifest-published route has no locale source: locales/{locale}/{src}"
             )
         normalized.append(src)
+    normalized.extend(_tool_localized_routes(locale))
+    if len(normalized) != len(set(normalized)):
+        raise AssertionError(f"Duplicate locale route after tool expansion: {locale}")
     return normalized
 
 
 def _site_target(locale: str, source_path: str) -> Path:
-    """Map a locale Markdown source path to MkDocs' directory-style HTML output."""
     source = Path(source_path)
     if source.name == "index.md":
         relative = source.parent
@@ -147,8 +173,6 @@ def _cleanup_staged_routes(created_files: list[Path]) -> None:
     for target in reversed(created_files):
         target.unlink(missing_ok=True)
 
-    # Remove only directories that became empty as a consequence of removing our
-    # own marker files. Existing build output is never removed.
     parents = sorted(
         {parent for target in created_files for parent in target.parents if SITE in parent.parents or parent == SITE},
         key=lambda path: len(path.parts),

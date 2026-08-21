@@ -4,6 +4,15 @@
 
 5sigmas es una publicación de Francisco Maldonado sobre fundamentos de IA, modelos de lenguaje, razonamiento, multimodalidad, agentes, seguridad, infraestructura y sistemas de IA en producción. El contenido distingue hechos, evidencia, supuestos y límites. Las páginas enlazadas debajo disponen de una versión Markdown limpia en la URL indicada.
 
+## Herramientas interactivas
+
+- [Herramientas de IA](https://5sigmas.com/herramientas/index.html.md): calculadoras, visualizadores, evaluadores y exploradores con supuestos visibles y procedencia de datos.
+- [Calculadora de coste y latencia de LLMs](https://5sigmas.com/herramientas/coste-latencia-llm/index.html.md): coste por solicitud, gasto mensual, tiempo de respuesta y concurrencia media a partir de tokens, caché, TTFT, velocidad y tráfico.
+- [Explorador de precio y rendimiento de modelos](https://5sigmas.com/herramientas/precio-rendimiento-modelos/index.html.md): compara coste por carga, Intelligence Index, velocidad, TTFT y contexto manteniendo separadas las fuentes de precio y rendimiento.
+- [Calculadora de VRAM para inferencia](https://5sigmas.com/herramientas/vram-inferencia/index.html.md): estima memoria de pesos, KV cache, reserva de runtime, memoria por GPU y capacidad aproximada de contexto/concurrencia.
+- [Explorador de KV cache y ventana de contexto](https://5sigmas.com/herramientas/kv-cache-contexto/index.html.md): visualiza la memoria de KV cache frente a contexto, concurrencia, GQA/MQA, precisión y un presupuesto de memoria explícito.
+- [Visualizador de atención Transformer](https://5sigmas.com/herramientas/atencion-transformer/index.html.md): permite manipular scores, máscara causal, softmax y valores para observar cómo una cabeza de atención genera una mezcla ponderada.
+
 ## Conceptos fundamentales
 
 - [Qué es un LLM y cómo funciona](https://5sigmas.com/temas/llms/index.html.md): tokens, preentrenamiento, generación, ajuste por instrucciones y límites.
@@ -42,6 +51,7 @@
 ## Navegación
 
 - [Inicio](https://5sigmas.com/index.html.md)
+- [Herramientas](https://5sigmas.com/herramientas/index.html.md)
 - [Conceptos](https://5sigmas.com/temas/index.html.md)
 - [Series](https://5sigmas.com/series/index.html.md)
 - [Biblioteca de vídeos](https://5sigmas.com/videos/index.html.md)

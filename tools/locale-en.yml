@@ -1,0 +1,17 @@
+locale: en
+route_strategy: explicit-equivalents
+routes:
+  - canonical: herramientas/index.md
+    localized: tools/index.md
+  - canonical: herramientas/coste-latencia-llm.md
+    localized: tools/llm-cost-latency.md
+  - canonical: herramientas/precio-rendimiento-modelos.md
+    localized: tools/model-price-performance.md
+  - canonical: herramientas/vram-inferencia.md
+    localized: tools/inference-vram.md
+  - canonical: herramientas/kv-cache-contexto.md
+    localized: tools/kv-cache-context.md
+  - canonical: herramientas/atencion-transformer.md
+    localized: tools/transformer-attention.md
+published_files:
+  - llms.txt

@@ -1,0 +1,108 @@
+---
+title: Herramientas de IA — calculadoras, visualizadores y laboratorios
+description: Herramientas interactivas de 5sigmas para LLMs, modelos, inferencia, atención Transformer, RAG, agentes, evaluación e infraestructura de IA.
+keywords: herramientas IA, calculadora LLM, comparar modelos IA, coste LLM, latencia LLM, VRAM IA, atención Transformer, RAG evaluación, agentes de voz, benchmarks IA
+hide:
+  - toc
+  - navigation
+  - footer
+---
+
+<link rel="stylesheet" href="/stylesheets/tools.css" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Herramientas de IA — 5sigmas",
+  "url": "https://5sigmas.com/herramientas/",
+  "description": "Calculadoras, visualizadores, evaluadores y exploradores interactivos para comprender y diseñar sistemas de inteligencia artificial.",
+  "isPartOf": {"@type": "WebSite", "name": "5sigmas", "url": "https://5sigmas.com/"},
+  "mainEntity": {
+    "@type": "ItemList",
+    "numberOfItems": 5,
+    "itemListElement": [
+      {"@type": "ListItem", "position": 1, "url": "https://5sigmas.com/herramientas/coste-latencia-llm/", "name": "Calculadora de coste y latencia de LLMs"},
+      {"@type": "ListItem", "position": 2, "url": "https://5sigmas.com/herramientas/precio-rendimiento-modelos/", "name": "Explorador de precio y rendimiento de modelos de IA"},
+      {"@type": "ListItem", "position": 3, "url": "https://5sigmas.com/herramientas/vram-inferencia/", "name": "Calculadora de VRAM para inferencia"},
+      {"@type": "ListItem", "position": 4, "url": "https://5sigmas.com/herramientas/kv-cache-contexto/", "name": "Explorador de KV cache y ventana de contexto"},
+      {"@type": "ListItem", "position": 5, "url": "https://5sigmas.com/herramientas/atencion-transformer/", "name": "Visualizador de atención Transformer"}
+    ]
+  }
+}
+</script>
+
+<div class="s5-landing s5-tools-hub">
+
+<section class="s5-page-intro">
+  <div class="s5-eyebrow">Herramientas</div>
+  <h1>Experimenta con las variables de un sistema de IA.</h1>
+  <p>Calculadoras, visualizadores y laboratorios para responder preguntas de ingeniería de IA con supuestos visibles. Cada herramienta explica el método, documenta las fuentes y permite reproducir el escenario.</p>
+</section>
+
+<section class="s5-section" aria-labelledby="s5-tools-available">
+  <div class="s5-section-head s5-section-head--with-copy">
+    <div><div class="s5-eyebrow">Disponible</div><h2 id="s5-tools-available">Herramientas disponibles</h2></div>
+    <p>Una herramienta aparece aquí cuando las versiones española e inglesa comparten la misma lógica, fuentes y pruebas.</p>
+  </div>
+
+  <div class="s5-tool-index-grid">
+    <a class="s5-tool-index-card" href="/herramientas/coste-latencia-llm/">
+      <span class="s5-tool-index-card__meta">Calculadora · LLMs · 01</span>
+      <h2>Coste y latencia de LLMs</h2>
+      <p>Convierte tokens, caché, tráfico, TTFT, velocidad de generación y concurrencia en coste por solicitud, coste mensual, tiempo de respuesta y capacidad aproximada.</p>
+      <span class="s5-tool-index-card__cta">Abrir calculadora →</span>
+    </a>
+    <a class="s5-tool-index-card" href="/herramientas/precio-rendimiento-modelos/">
+      <span class="s5-tool-index-card__meta">Explorador · Modelos · 02</span>
+      <h2>Precio y rendimiento de modelos</h2>
+      <p>Compara el coste de tu carga con Intelligence Index, velocidad, TTFT y contexto, manteniendo separadas las fuentes de precio y rendimiento.</p>
+      <span class="s5-tool-index-card__cta">Abrir explorador →</span>
+    </a>
+    <a class="s5-tool-index-card" href="/herramientas/vram-inferencia/">
+      <span class="s5-tool-index-card__meta">Calculadora · Infraestructura · 03</span>
+      <h2>VRAM para inferencia</h2>
+      <p>Separa pesos, KV cache y reserva de runtime para estimar memoria total, memoria por GPU, contexto máximo y concurrencia aproximada.</p>
+      <span class="s5-tool-index-card__cta">Abrir calculadora →</span>
+    </a>
+    <a class="s5-tool-index-card" href="/herramientas/kv-cache-contexto/">
+      <span class="s5-tool-index-card__meta">Explorador · Infraestructura · 04</span>
+      <h2>KV cache y ventana de contexto</h2>
+      <p>Visualiza cómo cambian la memoria de KV cache y la capacidad de contexto con GQA/MQA, precisión, concurrencia y presupuesto de memoria.</p>
+      <span class="s5-tool-index-card__cta">Abrir explorador →</span>
+    </a>
+    <a class="s5-tool-index-card" href="/herramientas/atencion-transformer/">
+      <span class="s5-tool-index-card__meta">Visualizador · Arquitectura · 05</span>
+      <h2>Atención Transformer</h2>
+      <p>Manipula scores, máscara causal, softmax y valores para ver cómo una cabeza de atención convierte una consulta en una mezcla ponderada.</p>
+      <span class="s5-tool-index-card__cta">Abrir visualizador →</span>
+    </a>
+  </div>
+</section>
+
+<section class="s5-section s5-tools-roadmap" aria-labelledby="s5-tools-roadmap">
+  <div>
+    <div class="s5-eyebrow">Hoja de ruta</div>
+    <h2 id="s5-tools-roadmap">Lo siguiente</h2>
+    <p>La sección crece una herramienta cada vez. No se publican páginas vacías: cada entrada aparece cuando tiene interacción real, paridad ES/EN, fuentes y pruebas.</p>
+  </div>
+  <div class="s5-tools-roadmap__list" aria-label="Próximas familias de herramientas">
+    <div class="s5-tools-roadmap__row"><span>06</span><strong>Presupuesto de tokens y contexto</strong><span>planificador</span></div>
+    <div class="s5-tools-roadmap__row"><span>07–08</span><strong>Recuperación y evaluación RAG</strong><span>laboratorio</span></div>
+    <div class="s5-tools-roadmap__row"><span>09–12</span><strong>Agentes: latencia, coste, fiabilidad y seguridad</strong><span>exploradores</span></div>
+    <div class="s5-tools-roadmap__row"><span>13–18</span><strong>Benchmarks, escalado, infraestructura y ecosistema global</strong><span>datos</span></div>
+  </div>
+</section>
+
+<section class="s5-section" aria-labelledby="s5-tools-method">
+  <div class="s5-section-head s5-section-head--with-copy">
+    <div><div class="s5-eyebrow">Criterio</div><h2 id="s5-tools-method">Qué debe mostrar una herramienta de 5sigmas</h2></div>
+  </div>
+  <div class="s5-entry-grid">
+    <div class="s5-entry"><div class="s5-entry__index">01</div><div class="s5-entry__title">Supuestos visibles</div><div class="s5-entry__text">Las cifras editables se separan de los datos observados. Si una estimación depende de un supuesto, puedes cambiarlo.</div></div>
+    <div class="s5-entry"><div class="s5-entry__index">02</div><div class="s5-entry__title">Fuentes primarias</div><div class="s5-entry__text">Precios, límites y datos variables incluyen procedencia y fecha de verificación. Los valores obsoletos no se presentan como actuales.</div></div>
+    <div class="s5-entry"><div class="s5-entry__index">03</div><div class="s5-entry__title">Resultado reproducible</div><div class="s5-entry__text">Cuando aporta valor, el escenario se puede compartir o exportar con sus entradas, resultados y procedencia.</div></div>
+  </div>
+</section>
+
+</div>

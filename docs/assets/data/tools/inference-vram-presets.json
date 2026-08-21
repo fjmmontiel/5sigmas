@@ -1,0 +1,89 @@
+{
+  "version": 1,
+  "updated": "2026-08-21",
+  "methodology": {
+    "weight_memory": "Nominal parameter count × bits per stored weight, plus an explicit editable metadata overhead. Nominal family sizes are approximate rather than exact serialized tensor counts.",
+    "kv_cache": "Standard decoder-only attention approximation: layers × 2 (K,V) × KV heads × head dimension × KV bytes × tokens × concurrent sequences.",
+    "sharding": "Capacity outputs assume ideal even sharding of both model weights and KV cache across the configured devices. Actual serving frameworks, pipeline parallelism, replicas and hybrid attention can differ."
+  },
+  "sources": [
+    {
+      "id": "meta-llama-model-skus",
+      "organization": "Meta",
+      "title": "llama-models · model SKU definitions",
+      "url": "https://github.com/meta-llama/llama-models/blob/main/models/sku_list.py",
+      "verified_on": "2026-08-21",
+      "notes": "Primary source for Llama 3.1 hidden dimension, layer count, attention-head count, KV-head count and the distinct 405B MP8/MP16 geometries."
+    },
+    {
+      "id": "meta-llama-3-1-model-card",
+      "organization": "Meta",
+      "title": "Llama 3.1 model card",
+      "url": "https://github.com/meta-llama/llama-models/blob/main/models/llama3_1/MODEL_CARD.md",
+      "verified_on": "2026-08-21",
+      "notes": "Primary source for nominal model sizes, 128k context and use of grouped-query attention."
+    },
+    {
+      "id": "vllm-kv-cache",
+      "organization": "vLLM",
+      "title": "vLLM configuration and KV-cache capacity",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/config/index.html",
+      "verified_on": "2026-08-21",
+      "notes": "Primary serving documentation showing that KV cache is an explicit GPU-memory budget and that capacity is expressed in bytes/tokens."
+    }
+  ],
+  "presets": [
+    {
+      "id": "meta-llama-3-1-8b",
+      "label": "Llama 3.1 8B",
+      "parameters_b": 8,
+      "layers": 32,
+      "hidden_size": 4096,
+      "attention_heads": 32,
+      "kv_heads": 8,
+      "max_context_tokens": 131072,
+      "source_ids": ["meta-llama-model-skus", "meta-llama-3-1-model-card"],
+      "note_es": "El tamaño 8B es la denominación nominal de la familia. La memoria de pesos es una estimación, no el tamaño exacto de un checkpoint concreto.",
+      "note_en": "8B is the family's nominal size. Weight memory is an estimate, not the exact serialized size of a specific checkpoint."
+    },
+    {
+      "id": "meta-llama-3-1-70b",
+      "label": "Llama 3.1 70B",
+      "parameters_b": 70,
+      "layers": 80,
+      "hidden_size": 8192,
+      "attention_heads": 64,
+      "kv_heads": 8,
+      "max_context_tokens": 131072,
+      "source_ids": ["meta-llama-model-skus", "meta-llama-3-1-model-card"],
+      "note_es": "El tamaño 70B es nominal. La arquitectura usa GQA con 8 cabezas KV frente a 64 cabezas de atención.",
+      "note_en": "70B is a nominal family size. The architecture uses GQA with 8 KV heads versus 64 attention heads."
+    },
+    {
+      "id": "meta-llama-3-1-405b-mp8",
+      "label": "Llama 3.1 405B · MP8",
+      "parameters_b": 405,
+      "layers": 126,
+      "hidden_size": 16384,
+      "attention_heads": 128,
+      "kv_heads": 8,
+      "max_context_tokens": 131072,
+      "source_ids": ["meta-llama-model-skus", "meta-llama-3-1-model-card"],
+      "note_es": "Geometría BF16 MP8 publicada por Meta: 128 cabezas de atención y 8 cabezas KV. El tamaño 405B sigue siendo nominal.",
+      "note_en": "Meta's published BF16 MP8 geometry: 128 attention heads and 8 KV heads. The 405B parameter count remains nominal."
+    },
+    {
+      "id": "meta-llama-3-1-405b-mp16",
+      "label": "Llama 3.1 405B · MP16",
+      "parameters_b": 405,
+      "layers": 126,
+      "hidden_size": 16384,
+      "attention_heads": 128,
+      "kv_heads": 16,
+      "max_context_tokens": 131072,
+      "source_ids": ["meta-llama-model-skus", "meta-llama-3-1-model-card"],
+      "note_es": "Geometría BF16 MP16 publicada por Meta: 128 cabezas de atención y 16 cabezas KV. La KV cache resultante es mayor que en la variante MP8.",
+      "note_en": "Meta's published BF16 MP16 geometry: 128 attention heads and 16 KV heads. Its KV cache is therefore larger than the MP8 variant."
+    }
+  ]
+}
