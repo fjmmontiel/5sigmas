@@ -19,5 +19,7 @@ routes:
     localized: tools/rag-retrieval-lab.md
   - canonical: herramientas/evaluacion-rag.md
     localized: tools/rag-evaluation.md
+  - canonical: herramientas/latencia-agente-voz.md
+    localized: tools/voice-latency-budget.md
 published_files:
   - llms.txt

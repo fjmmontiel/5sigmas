@@ -65,6 +65,7 @@ nav:
       - Presupuesto de contexto: herramientas/presupuesto-contexto.md
       - Recuperación RAG: herramientas/laboratorio-recuperacion-rag.md
       - Evaluación RAG: herramientas/evaluacion-rag.md
+      - Latencia de agentes de voz: herramientas/latencia-agente-voz.md
   - Aprender:
       - Conceptos:
           - temas/index.md

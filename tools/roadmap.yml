@@ -131,22 +131,34 @@ tools:
     es_title: Entorno interactivo de evaluación RAG
     en_title: RAG Evaluation Playground
     category: evaluator
-    status: in_progress
+    status: excellent
     es_route: /herramientas/evaluacion-rag/
     en_route: /en/tools/rag-evaluation/
     es_parity: true
     en_parity: true
-    tests: numerical_uncertainty_share_state_and_browser_gates_added_2026-08-21_pending_full_ci
-    visual_review: pending_es_en_mobile_390_desktop_1440
+    tests: passing_full_ci_2026-08-21_head_0ebf1a0e9e8eaa9ca8363e053839a6570f775751
+    visual_review: reviewed_es_en_mobile_390_desktop_1440_2026-08-21
     provenance: ragas_eacl_2024_and_ares_primary_sources_verified_2026-08-21
     data_freshness: static_method_review_on_rag_evaluation_semantics_change
+    validated_head: 0ebf1a0e9e8eaa9ca8363e053839a6570f775751
+    release_commit: 7d7c4a6b8a4b51c8a276d6aeb7cc454860c4ac75
     last_reviewed: 2026-08-21
   - id: voice-latency-budget
     order: 9
     es_title: Explorador de presupuesto de latencia para agentes de voz
     en_title: Voice-Agent Latency Budget Explorer
     category: explorer
-    status: planned
+    status: excellent
+    es_route: /herramientas/latencia-agente-voz/
+    en_route: /en/tools/voice-latency-budget/
+    es_parity: true
+    en_parity: true
+    tests: passing_full_ci_2026-08-21_head_f356e518
+    visual_review: reviewed_es_en_mobile_390_desktop_1440_2026-08-21
+    provenance: openai_realtime_deepgram_endpointing_elevenlabs_latency_twilio_media_streams_and_stivers_turn_taking_verified_2026-08-21
+    data_freshness: static_method_review_on_voice_api_semantics_change
+    validated_head: f356e518fc4d939280ab81a4a9b06cbce4c39f48
+    last_reviewed: 2026-08-21
   - id: voice-cost-capacity
     order: 10
     es_title: Planificador de coste y capacidad para agentes de voz
