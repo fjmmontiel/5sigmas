@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-08-21",
+  "currency": "USD",
+  "freshness_policy": {
+    "review_interval_days": 14,
+    "review_on_provider_release": true,
+    "rule": "Provider prices are volatile. Re-verify every listed rate against the primary source at least every 14 days and whenever a provider changes pricing. Contracted, inbound, mobile, regional and volume pricing can differ materially from these public pay-as-you-go references."
+  },
+  "methodology": {
+    "es": "El preset inicial es un escenario de referencia reproducible, no una oferta comercial. Separa minutos conectados, audio del usuario, audio del agente, texto generado y tokens del modelo para que cada coste use su unidad de facturación correcta. Todas las tarifas deben permanecer editables porque los contratos, regiones y descuentos cambian el coste real.",
+    "en": "The initial preset is a reproducible reference scenario, not a commercial quote. It separates connected minutes, user audio, agent audio, generated text and model tokens so each cost uses the correct billing unit. Every rate must remain editable because contracts, regions and discounts change the real cost."
+  },
+  "presets": [
+    {
+      "id": "spain-cascade-reference-2026-08-21",
+      "label_es": "Referencia España · cascada",
+      "label_en": "Spain reference · cascade",
+      "traffic": {
+        "calls_per_month": 10000,
+        "average_call_minutes": 4,
+        "user_speech_percent": 42,
+        "agent_speech_percent": 38,
+        "service_hours_per_month": 220,
+        "peak_concurrency": 35
+      },
+      "capacity": {
+        "target_worker_utilization_percent": 70,
+        "sessions_per_worker": 50,
+        "stt_concurrency_limit": 0,
+        "tts_concurrency_limit": 0
+      },
+      "rates": {
+        "telephony_usd_per_connected_minute": 0.0178,
+        "media_stream_usd_per_connected_minute": 0.0044,
+        "stt_usd_per_user_audio_minute": 0.017,
+        "tts_usd_per_1000_characters": 0.05,
+        "characters_per_agent_minute": 1000,
+        "llm_input_tokens_per_call": 1400,
+        "llm_output_tokens_per_call": 220,
+        "llm_input_usd_per_million_tokens": 0.2,
+        "llm_output_usd_per_million_tokens": 1.2,
+        "fixed_usd_per_call": 0
+      },
+      "sources": [
+        {
+          "component": "telephony_and_media",
+          "organization": "Twilio",
+          "title": "Programmable Voice Pricing in Spain",
+          "url": "https://www.twilio.com/en-us/voice/pricing/es",
+          "verified_on": "2026-08-21",
+          "note_es": "Referencia de llamada saliente local a España: 0,0178 USD/min; Media Streams: 0,0044 USD/min. Móvil, entrante, SIP/BYOC y descuentos usan otras tarifas.",
+          "note_en": "Spain local outbound reference: $0.0178/min; Media Streams: $0.0044/min. Mobile, inbound, SIP/BYOC and discounted pricing use different rates."
+        },
+        {
+          "component": "stt",
+          "organization": "OpenAI",
+          "title": "GPT Live Transcribe Model",
+          "url": "https://developers.openai.com/api/docs/models/gpt-live-transcribe",
+          "verified_on": "2026-08-21",
+          "note_es": "GPT Live Transcribe se publica a 0,017 USD por minuto de audio.",
+          "note_en": "GPT Live Transcribe is listed at $0.017 per audio minute."
+        },
+        {
+          "component": "tts",
+          "organization": "ElevenLabs",
+          "title": "ElevenAPI Pricing",
+          "url": "https://elevenlabs.io/pricing/api",
+          "verified_on": "2026-08-21",
+          "note_es": "Flash/Turbo TTS: 0,05 USD por 1.000 caracteres. ElevenLabs aproxima 1.000 caracteres a ~1 minuto en su tabla; la relación caracteres/minuto queda editable.",
+          "note_en": "Flash/Turbo TTS: $0.05 per 1,000 characters. ElevenLabs approximates 1,000 characters as ~1 minute in its table; characters/minute remains editable."
+        },
+        {
+          "component": "llm",
+          "organization": "OpenAI",
+          "title": "GPT-5.6 Luna Model | OpenAI API",
+          "url": "https://developers.openai.com/api/docs/models/gpt-5.6-luna",
+          "verified_on": "2026-08-21",
+          "note_es": "Referencia de texto: 0,20 USD/MTok de entrada y 1,20 USD/MTok de salida. El ajuste de contexto largo de GPT-5.6 Luna no se activa con el escenario inicial.",
+          "note_en": "Text reference: $0.20/MTok input and $1.20/MTok output. GPT-5.6 Luna long-context pricing is not triggered by the initial scenario."
+        }
+      ]
+    }
+  ]
+}
