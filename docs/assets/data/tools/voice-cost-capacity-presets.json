@@ -1,15 +1,15 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "updated_at": "2026-08-21",
   "currency": "USD",
   "freshness_policy": {
     "review_interval_days": 14,
     "review_on_provider_release": true,
-    "rule": "Provider prices are volatile. Re-verify every listed rate against the primary source at least every 14 days and whenever a provider changes pricing. Contracted, inbound, mobile, regional and volume pricing can differ materially from these public pay-as-you-go references."
+    "rule": "Provider prices and concurrency rules are volatile. Re-verify every listed rate and provider-specific concurrency statement against the primary source at least every 14 days and whenever a provider changes pricing, plans or rate limits. Contracted, inbound, mobile, regional and volume pricing can differ materially from these public pay-as-you-go references."
   },
   "methodology": {
-    "es": "El preset inicial es un escenario de referencia reproducible, no una oferta comercial. Separa minutos conectados, audio del usuario, audio del agente, texto generado y tokens del modelo para que cada coste use su unidad de facturación correcta. Todas las tarifas deben permanecer editables porque los contratos, regiones y descuentos cambian el coste real.",
-    "en": "The initial preset is a reproducible reference scenario, not a commercial quote. It separates connected minutes, user audio, agent audio, generated text and model tokens so each cost uses the correct billing unit. Every rate must remain editable because contracts, regions and discounts change the real cost."
+    "es": "El preset inicial es un escenario de referencia reproducible, no una oferta comercial. Separa tiempo conectado, audio enviado a STT, audio sintetizado, texto generado y tokens del modelo para que cada coste use su unidad de facturación. También separa concurrencia de llamadas de concurrencia del proveedor: una sesión STT persistente puede ocupar una conexión durante toda la llamada, mientras que ElevenLabs cuenta una conexión WebSocket TTS solo durante la generación de audio. Todos los supuestos y tarifas permanecen editables.",
+    "en": "The initial preset is a reproducible reference scenario, not a commercial quote. It separates connected time, audio sent to STT, synthesized audio, generated text and model tokens so each cost uses the correct billing unit. It also separates call concurrency from provider concurrency: a persistent STT session can occupy one connection for the full call, while ElevenLabs counts a TTS WebSocket only while audio is being generated. Every assumption and rate remains editable."
   },
   "presets": [
     {
@@ -27,6 +27,8 @@
       "capacity": {
         "target_worker_utilization_percent": 70,
         "sessions_per_worker": 50,
+        "stt_sessions_per_call": 1,
+        "tts_generation_duty_percent": 5,
         "stt_concurrency_limit": 0,
         "tts_concurrency_limit": 0
       },
@@ -53,13 +55,22 @@
           "note_en": "Spain local outbound reference: $0.0178/min; Media Streams: $0.0044/min. Mobile, inbound, SIP/BYOC and discounted pricing use different rates."
         },
         {
+          "component": "media_stream_concurrency",
+          "organization": "Twilio",
+          "title": "Media Streams Overview",
+          "url": "https://www.twilio.com/docs/voice/media-streams",
+          "verified_on": "2026-08-21",
+          "note_es": "Twilio documenta un único Media Stream bidireccional por llamada y una conexión WebSocket por stream. El preset usa una sesión STT descendente por llamada como supuesto de arquitectura editable, no como límite universal de proveedor.",
+          "note_en": "Twilio documents one bidirectional Media Stream per Call and one WebSocket connection per stream. The preset uses one downstream STT session per call as an editable architecture assumption, not as a universal provider limit."
+        },
+        {
           "component": "stt",
           "organization": "OpenAI",
           "title": "GPT Live Transcribe Model",
           "url": "https://developers.openai.com/api/docs/models/gpt-live-transcribe",
           "verified_on": "2026-08-21",
-          "note_es": "GPT Live Transcribe se publica a 0,017 USD por minuto de audio.",
-          "note_en": "GPT Live Transcribe is listed at $0.017 per audio minute."
+          "note_es": "GPT Live Transcribe se publica a 0,017 USD por minuto de audio. Los límites publicados dependen del tier; el planificador no inventa un límite concurrente y deja ese campo a la configuración real del usuario.",
+          "note_en": "GPT Live Transcribe is listed at $0.017 per audio minute. Published rate limits depend on tier; the planner does not invent a concurrent-session cap and leaves that field to the user's actual configuration."
         },
         {
           "component": "tts",
@@ -69,6 +80,15 @@
           "verified_on": "2026-08-21",
           "note_es": "Flash/Turbo TTS: 0,05 USD por 1.000 caracteres. ElevenLabs aproxima 1.000 caracteres a ~1 minuto en su tabla; la relación caracteres/minuto queda editable.",
           "note_en": "Flash/Turbo TTS: $0.05 per 1,000 characters. ElevenLabs approximates 1,000 characters as ~1 minute in its table; characters/minute remains editable."
+        },
+        {
+          "component": "tts_concurrency",
+          "organization": "ElevenLabs",
+          "title": "Models — concurrency and priority",
+          "url": "https://elevenlabs.io/docs/overview/models",
+          "verified_on": "2026-08-21",
+          "note_es": "ElevenLabs indica que, con WebSocket, solo el tiempo de generación de audio cuenta para concurrencia y que un límite 5 puede soportar aproximadamente 100 conversaciones equilibradas. El 5% inicial es una heurística editable, no una garantía de capacidad.",
+          "note_en": "ElevenLabs states that with WebSockets only time spent generating audio counts toward concurrency and that a limit of 5 can typically support about 100 balanced conversations. The initial 5% duty factor is an editable heuristic, not a capacity guarantee."
         },
         {
           "component": "llm",
