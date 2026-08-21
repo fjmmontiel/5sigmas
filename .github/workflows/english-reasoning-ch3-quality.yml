@@ -12,6 +12,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
   reasoning-ch3:
     runs-on: ubuntu-latest
@@ -65,10 +69,11 @@ jobs:
       - name: Validate canonical English Reasoning Chapter 3 PRM/ORM visual
         run: node scripts/validate_english_reasoning_ch3.mjs
 
-      - name: Upload Reasoning Chapter 3 screenshots
-        if: always()
+      - name: Upload Reasoning Chapter 3 screenshots on failure
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: english-reasoning-ch3-review
           path: artifacts/visual-review/english-reasoning-ch3-*.png
           if-no-files-found: ignore
+          retention-days: 1
