@@ -182,7 +182,16 @@ tools:
     es_title: Entorno interactivo de fiabilidad y evaluación de agentes
     en_title: Agent Reliability / Eval Playground
     category: evaluator
-    status: planned
+    status: in_progress
+    es_route: /herramientas/fiabilidad-evaluacion-agentes/
+    en_route: /en/tools/agent-reliability-eval/
+    es_parity: true
+    en_parity: true
+    tests: local_core_math_and_boundary_tests_passing_2026-08-21
+    visual_review: pending_es_en_mobile_390_desktop_1440
+    provenance: openai_trace_grading_tau_bench_and_agentbench_verified_2026-08-21
+    data_freshness: static_method_review_on_agent_eval_semantics_change
+    last_reviewed: 2026-08-21
   - id: prompt-injection-threat
     order: 12
     es_title: Explorador de amenazas de prompt injection
