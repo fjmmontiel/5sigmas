@@ -18,7 +18,12 @@ const viewports = [
   { width: 1440, height: 1100, name: 'desktop' }
 ];
 
-const numberFrom = (text) => Number(String(text).replace(/[^0-9.,-]/g, '').replace(/\./g, '').replace(',', '.'));
+const numberFrom = (text, locale) => {
+  const cleaned = String(text).replace(/[^0-9.,-]/g, '');
+  return locale === 'es'
+    ? Number(cleaned.replace(/\./g, '').replace(',', '.'))
+    : Number(cleaned.replace(/,/g, ''));
+};
 
 for (const spec of cases) {
   for (const viewport of viewports) {
@@ -50,13 +55,13 @@ for (const spec of cases) {
     await page.locator('[data-field="contextTokens"]').fill('16384');
     await page.locator('[data-field="contextTokens"]').dispatchEvent('input');
     const kvAfter = (await page.locator('[data-output="kvCache"]').textContent() || '').trim();
-    if (!(numberFrom(kvAfter) > numberFrom(kvBefore))) failures.push(`${spec.route} ${viewport.name}: doubling context did not increase KV cache`);
+    if (!(numberFrom(kvAfter, spec.locale) > numberFrom(kvBefore, spec.locale))) failures.push(`${spec.route} ${viewport.name}: doubling context did not increase KV cache`);
 
     const weightBefore = (await page.locator('[data-output="weights"]').textContent() || '').trim();
     await page.locator('[data-field="weightBits"]').fill('4');
     await page.locator('[data-field="weightBits"]').dispatchEvent('input');
     const weightAfter = (await page.locator('[data-output="weights"]').textContent() || '').trim();
-    if (!(numberFrom(weightAfter) < numberFrom(weightBefore))) failures.push(`${spec.route} ${viewport.name}: lower weight precision did not reduce weight memory`);
+    if (!(numberFrom(weightAfter, spec.locale) < numberFrom(weightBefore, spec.locale))) failures.push(`${spec.route} ${viewport.name}: lower weight precision did not reduce weight memory`);
 
     await page.locator('[data-field="attentionHeads"]').fill('32');
     await page.locator('[data-field="kvHeads"]').fill('7');
