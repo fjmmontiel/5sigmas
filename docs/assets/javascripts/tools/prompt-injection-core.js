@@ -64,9 +64,6 @@
       if (key === 'preset' || key === 'vector') continue;
       out[key] = bool(raw[key], base[key]);
     }
-    if (!out.toolsEnabled) out.writeTools = false;
-    if (!out.persistentMemory) out.memoryWriteValidation = true;
-    if (!out.externalEgress) out.egressRestriction = true;
     return out;
   }
 
