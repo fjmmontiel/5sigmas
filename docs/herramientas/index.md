@@ -1,7 +1,7 @@
 ---
 title: Herramientas de IA — calculadoras, visualizadores y laboratorios
-description: Herramientas interactivas de 5sigmas para LLMs, modelos, inferencia, atención Transformer, RAG, agentes, evaluación e infraestructura de IA.
-keywords: herramientas IA, calculadora LLM, comparar modelos IA, coste LLM, latencia LLM, VRAM IA, atención Transformer, RAG evaluación, agentes de voz, benchmarks IA
+description: Herramientas interactivas de 5sigmas para LLMs, modelos, inferencia, contexto, atención Transformer, RAG, agentes, evaluación e infraestructura de IA.
+keywords: herramientas IA, calculadora LLM, comparar modelos IA, coste LLM, latencia LLM, presupuesto tokens, ventana contexto, VRAM IA, atención Transformer, RAG evaluación, agentes de voz, benchmarks IA
 hide:
   - toc
   - navigation
@@ -20,13 +20,14 @@ hide:
   "isPartOf": {"@type": "WebSite", "name": "5sigmas", "url": "https://5sigmas.com/"},
   "mainEntity": {
     "@type": "ItemList",
-    "numberOfItems": 5,
+    "numberOfItems": 6,
     "itemListElement": [
       {"@type": "ListItem", "position": 1, "url": "https://5sigmas.com/herramientas/coste-latencia-llm/", "name": "Calculadora de coste y latencia de LLMs"},
       {"@type": "ListItem", "position": 2, "url": "https://5sigmas.com/herramientas/precio-rendimiento-modelos/", "name": "Explorador de precio y rendimiento de modelos de IA"},
       {"@type": "ListItem", "position": 3, "url": "https://5sigmas.com/herramientas/vram-inferencia/", "name": "Calculadora de VRAM para inferencia"},
       {"@type": "ListItem", "position": 4, "url": "https://5sigmas.com/herramientas/kv-cache-contexto/", "name": "Explorador de KV cache y ventana de contexto"},
-      {"@type": "ListItem", "position": 5, "url": "https://5sigmas.com/herramientas/atencion-transformer/", "name": "Visualizador de atención Transformer"}
+      {"@type": "ListItem", "position": 5, "url": "https://5sigmas.com/herramientas/atencion-transformer/", "name": "Visualizador de atención Transformer"},
+      {"@type": "ListItem", "position": 6, "url": "https://5sigmas.com/herramientas/presupuesto-contexto/", "name": "Planificador de presupuesto de contexto y tokens"}
     ]
   }
 }
@@ -77,6 +78,12 @@ hide:
       <p>Manipula scores, máscara causal, softmax y valores para ver cómo una cabeza de atención convierte una consulta en una mezcla ponderada.</p>
       <span class="s5-tool-index-card__cta">Abrir visualizador →</span>
     </a>
+    <a class="s5-tool-index-card" href="/herramientas/presupuesto-contexto/">
+      <span class="s5-tool-index-card__meta">Planificador · LLMs · 06</span>
+      <h2>Presupuesto de tokens y contexto</h2>
+      <p>Reparte la ventana entre instrucciones, tools, historial, RAG, mensaje actual, salida y margen para detectar overflow y presión futura.</p>
+      <span class="s5-tool-index-card__cta">Abrir planificador →</span>
+    </a>
   </div>
 </section>
 
@@ -87,7 +94,6 @@ hide:
     <p>La sección crece una herramienta cada vez. No se publican páginas vacías: cada entrada aparece cuando tiene interacción real, paridad ES/EN, fuentes y pruebas.</p>
   </div>
   <div class="s5-tools-roadmap__list" aria-label="Próximas familias de herramientas">
-    <div class="s5-tools-roadmap__row"><span>06</span><strong>Presupuesto de tokens y contexto</strong><span>planificador</span></div>
     <div class="s5-tools-roadmap__row"><span>07–08</span><strong>Recuperación y evaluación RAG</strong><span>laboratorio</span></div>
     <div class="s5-tools-roadmap__row"><span>09–12</span><strong>Agentes: latencia, coste, fiabilidad y seguridad</strong><span>exploradores</span></div>
     <div class="s5-tools-roadmap__row"><span>13–18</span><strong>Benchmarks, escalado, infraestructura y ecosistema global</strong><span>datos</span></div>

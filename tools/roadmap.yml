@@ -21,6 +21,7 @@ tools:
     provenance: primary_sources_verified_2026-08-21
     data_freshness: provider_pricing_review_every_14_days_and_on_release
     validated_head: f780b156b879ff7357b3b9613c5a6bd3915c2250
+    release_commit: b7ecce9953de05f96cb0faeb79cc42f7c360901d
     last_reviewed: 2026-08-21
   - id: model-price-performance
     order: 2
@@ -37,6 +38,7 @@ tools:
     provenance: provider_primary_sources_plus_artificial_analysis_verified_2026-08-21
     data_freshness: pricing_and_benchmark_review_every_14_days_and_performance_daily_during_active_review
     validated_head: 2384b6a0311683f4bf5be584bf54a6891683bf49
+    release_commit: b7ecce9953de05f96cb0faeb79cc42f7c360901d
     last_reviewed: 2026-08-21
   - id: inference-vram
     order: 3
@@ -53,6 +55,7 @@ tools:
     provenance: meta_primary_architecture_sources_plus_vllm_verified_2026-08-21
     data_freshness: static_architecture_presets_review_on_upstream_source_change
     validated_head: 263a3913742ed0a17e3348a6788782f91e567e5b
+    release_commit: b7ecce9953de05f96cb0faeb79cc42f7c360901d
     last_reviewed: 2026-08-21
   - id: kv-cache-context
     order: 4
@@ -69,6 +72,7 @@ tools:
     provenance: meta_llama_primary_architecture_sources_plus_vllm_verified_2026-08-21
     data_freshness: static_architecture_presets_review_on_upstream_source_change
     validated_head: ed2bac4464c91eab54e5a154caae4d8f1017a061
+    release_commit: b7ecce9953de05f96cb0faeb79cc42f7c360901d
     last_reviewed: 2026-08-21
   - id: transformer-attention
     order: 5
@@ -86,13 +90,24 @@ tools:
     data_freshness: static_method_review_on_source_semantics_change
     validated_head: 916df0094bb1e1362226c8246b6f42682d5ef54a
     integration_note: latest_main_ci_storage_policy_merged_without_tool_content_changes_2026-08-21
+    release_commit: b7ecce9953de05f96cb0faeb79cc42f7c360901d
     last_reviewed: 2026-08-21
   - id: token-context-budget
     order: 6
     es_title: Planificador de presupuesto de contexto
     en_title: Token/Context Budget Planner
     category: planner
-    status: planned
+    status: excellent
+    es_route: /herramientas/presupuesto-contexto/
+    en_route: /en/tools/context-budget/
+    es_parity: true
+    en_parity: true
+    tests: passing_full_ci_2026-08-21_head_607568d64a6b0eaec0c04280c60e4c1b0e232143
+    visual_review: reviewed_es_en_mobile_390_desktop_1440_2026-08-21
+    provenance: openai_token_and_responses_context_semantics_verified_2026-08-21
+    data_freshness: static_method_review_on_provider_context_semantics_change
+    validated_head: 607568d64a6b0eaec0c04280c60e4c1b0e232143
+    last_reviewed: 2026-08-21
   - id: rag-retrieval-lab
     order: 7
     es_title: Laboratorio de recuperación RAG
