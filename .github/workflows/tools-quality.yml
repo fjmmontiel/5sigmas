@@ -10,6 +10,7 @@ on:
       - 'docs/stylesheets/tools.css'
       - 'docs/stylesheets/tools-kv-context.css'
       - 'docs/stylesheets/tools-attention.css'
+      - 'docs/stylesheets/tools-context-budget.css'
       - 'tools/**'
       - 'hooks/locale_alternates.py'
       - 'scripts/prepare_locale.py'
@@ -64,6 +65,9 @@ jobs:
       - name: Verify Transformer attention math and provenance
         run: node scripts/test_transformer_attention_tool.mjs
 
+      - name: Verify context budget math and provenance
+        run: node scripts/test_context_budget_tool.mjs
+
       - name: Build Spanish site strictly
         run: mkdocs build --clean --strict
 
@@ -106,7 +110,9 @@ jobs:
             curl --fail --silent http://127.0.0.1:8000/herramientas/kv-cache-contexto/ > /dev/null && \
             curl --fail --silent http://127.0.0.1:8000/en/tools/kv-cache-context/ > /dev/null && \
             curl --fail --silent http://127.0.0.1:8000/herramientas/atencion-transformer/ > /dev/null && \
-            curl --fail --silent http://127.0.0.1:8000/en/tools/transformer-attention/ > /dev/null && exit 0
+            curl --fail --silent http://127.0.0.1:8000/en/tools/transformer-attention/ > /dev/null && \
+            curl --fail --silent http://127.0.0.1:8000/herramientas/presupuesto-contexto/ > /dev/null && \
+            curl --fail --silent http://127.0.0.1:8000/en/tools/context-budget/ > /dev/null && exit 0
             sleep 1
           done
           cat /tmp/5sigmas-tools-preview.log
@@ -127,6 +133,9 @@ jobs:
       - name: Validate Transformer attention visualizer and capture visual evidence
         run: node scripts/validate_transformer_attention_tool.mjs
 
+      - name: Validate context budget planner and capture visual evidence
+        run: node scripts/validate_context_budget_tool.mjs
+
       - name: Validate localized route switching and hreflang
         run: node scripts/validate_locale_switching.mjs
 
@@ -141,6 +150,7 @@ jobs:
             artifacts/visual-review/inference-vram-*.png
             artifacts/visual-review/kv-context-*.png
             artifacts/visual-review/transformer-attention-*.png
+            artifacts/visual-review/context-budget-*.png
           if-no-files-found: warn
           retention-days: 1
           overwrite: true
