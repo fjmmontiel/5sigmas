@@ -66,15 +66,13 @@
     };
     const sum = Object.values(raw).reduce((a, b) => a + b, 0);
     if (sum === 0) {
-      const fallbackSum = Object.values(DEFAULT_WEIGHTS).reduce((a, b) => a + b, 0);
       return {
-        contextRelevance: DEFAULT_WEIGHTS.contextRelevance / fallbackSum,
-        faithfulness: DEFAULT_WEIGHTS.faithfulness / fallbackSum,
-        answerCorrectness: DEFAULT_WEIGHTS.answerCorrectness / fallbackSum,
-        referenceCoverage: DEFAULT_WEIGHTS.referenceCoverage / fallbackSum,
-        normalized: true,
-        sum: fallbackSum,
-        usedDefaultFallback: true
+        contextRelevance: 0,
+        faithfulness: 0,
+        answerCorrectness: 0,
+        referenceCoverage: 0,
+        normalized: false,
+        sum: 0
       };
     }
     return {
@@ -83,8 +81,7 @@
       answerCorrectness: raw.answerCorrectness / sum,
       referenceCoverage: raw.referenceCoverage / sum,
       normalized: true,
-      sum,
-      usedDefaultFallback: false
+      sum
     };
   }
 
