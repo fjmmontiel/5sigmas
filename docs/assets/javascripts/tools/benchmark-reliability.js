@@ -9,7 +9,7 @@
       yes: 'sí', no: 'no', unresolved: 'intervalos solapados', separated: 'intervalos separados', copied: 'Enlace copiado.', exported: 'JSON exportado.',
       flags: {
         'weight-fragile': 'ranking sensible a la composición', saturated: 'benchmark cerca del techo',
-        'contamination-sensitive': 'el gap cabe en la envolvente de exposición', 'invalid-item-sensitive': 'el gap cabe en la envolvente de ítems inválidos',
+        'contamination-sensitive': 'la diferencia cabe en la envolvente de exposición', 'invalid-item-sensitive': 'la diferencia cabe en la envolvente de ítems inválidos',
         'statistically-unresolved': 'resolución estadística limitada'
       }
     },
@@ -27,6 +27,31 @@
   function fmt(value, digits = 1) { return Number(value).toFixed(digits); }
   function pct(value, digits = 1) { return `${fmt(value, digits)}%`; }
   function winner(gap, t) { if (Math.abs(gap) < 1e-9) return t.tie; return gap > 0 ? t.modelA : t.modelB; }
+  function interpretation(metrics, locale, t) {
+    const tied = Math.abs(metrics.gap) < 1e-9;
+    if (locale === 'es') {
+      const lead = tied
+        ? 'Los modelos quedan empatados con los pesos actuales.'
+        : `${winner(metrics.gap, t)} lidera por ${fmt(metrics.absoluteGap, 2)} pp con los pesos actuales.`;
+      const composition = metrics.rankSensitivity.flips
+        ? 'El ganador puede cambiar al reponderar las familias de tareas.'
+        : 'El ganador se mantiene en todo el rango de ponderaciones explorado.';
+      const resolution = metrics.intervalOverlap
+        ? 'Los intervalos descriptivos se solapan.'
+        : 'Los intervalos descriptivos quedan separados.';
+      return `${lead} ${composition} ${resolution}`;
+    }
+    const lead = tied
+      ? 'The models are tied under the current weights.'
+      : `${winner(metrics.gap, t)} leads by ${fmt(metrics.absoluteGap, 2)} pp under the current weights.`;
+    const composition = metrics.rankSensitivity.flips
+      ? 'The winner can flip when task-family weights change.'
+      : 'The winner stays the same across the explored weight range.';
+    const resolution = metrics.intervalOverlap
+      ? 'The descriptive intervals overlap.'
+      : 'The descriptive intervals are separated.';
+    return `${lead} ${composition} ${resolution}`;
+  }
 
   document.querySelectorAll('[data-s5-benchmark-reliability]').forEach((root) => {
     const locale = root.dataset.locale === 'en' ? 'en' : 'es';
@@ -85,6 +110,7 @@
       out('invalidEnvelope', m.invalidEnvelopeCoversGap ? t.yes : t.no); out('contaminationEnvelope', m.contaminationEnvelopeCoversGap ? t.yes : t.no);
       out('weightRange', `${fmt(m.rankSensitivity.minGap, 2)} → ${fmt(m.rankSensitivity.maxGap, 2)} pp`);
       out('weightStatus', m.rankSensitivity.flips ? t.fragile : t.stable);
+      out('interpretation', interpretation(m, locale, t));
 
       root.querySelectorAll('[data-group-row]').forEach((row, index) => {
         const group = result.input.groups[index];
