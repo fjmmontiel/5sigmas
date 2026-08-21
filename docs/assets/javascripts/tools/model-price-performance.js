@@ -205,20 +205,63 @@
     );
   }
 
+  function boxContainsAnchor(box, anchor, gap = 5) {
+    return anchor.x >= box.left - gap && anchor.x <= box.right + gap && anchor.y >= box.top - gap && anchor.y <= box.bottom + gap;
+  }
+
+  function appendChartAnnotation(item, anchorX, anchorY, dx, dy) {
+    const length = Math.hypot(dx, dy);
+    const angle = Math.atan2(dy, dx);
+    const leader = document.createElement('span');
+    leader.dataset.modelLeader = item.row.id;
+    leader.setAttribute('aria-hidden', 'true');
+    leader.style.position = 'absolute';
+    leader.style.left = `${anchorX}px`;
+    leader.style.top = `${anchorY}px`;
+    leader.style.width = `${length}px`;
+    leader.style.height = '1px';
+    leader.style.background = 'var(--s5-line-strong)';
+    leader.style.opacity = '.58';
+    leader.style.transformOrigin = '0 50%';
+    leader.style.transform = `rotate(${angle}rad)`;
+    leader.style.pointerEvents = 'none';
+    leader.style.zIndex = '0';
+    chartPoints.append(leader);
+
+    const anchor = document.createElement('span');
+    anchor.dataset.modelAnchor = item.row.id;
+    anchor.setAttribute('aria-hidden', 'true');
+    anchor.style.position = 'absolute';
+    anchor.style.left = `${anchorX}px`;
+    anchor.style.top = `${anchorY}px`;
+    anchor.style.width = '6px';
+    anchor.style.height = '6px';
+    anchor.style.borderRadius = '50%';
+    anchor.style.background = 'var(--s5-text)';
+    anchor.style.transform = 'translate(-50%, -50%)';
+    anchor.style.pointerEvents = 'none';
+    anchor.style.zIndex = '3';
+    chartPoints.append(anchor);
+  }
+
   function placeChartLabels(items) {
     if (!chartPoints || !items.length) return;
     const plotWidth = chartPoints.clientWidth;
     const plotHeight = chartPoints.clientHeight;
     if (!plotWidth || !plotHeight) return;
 
+    const anchors = items.map((item) => ({
+      id: item.row.id,
+      x: item.x * plotWidth,
+      y: item.y * plotHeight
+    }));
     const candidates = [
-      [0, 0],
       [0, -34], [0, 34],
-      [48, 0], [-48, 0],
       [48, -28], [-48, -28], [48, 28], [-48, 28],
+      [58, 0], [-58, 0],
       [0, -68], [0, 68],
-      [86, 0], [-86, 0],
-      [86, -34], [-86, -34], [86, 34], [-86, 34]
+      [92, -34], [-92, -34], [92, 34], [-92, 34],
+      [100, 0], [-100, 0]
     ];
     const placed = [];
     const ordered = [...items].sort((a, b) => a.y - b.y || a.x - b.x || a.row.id.localeCompare(b.row.id));
@@ -238,21 +281,23 @@
           bottom: anchorY + dy + height / 2
         };
         const inside = box.left >= 2 && box.right <= plotWidth - 2 && box.top >= 2 && box.bottom <= plotHeight - 2;
-        if (inside && !placed.some((other) => boxesOverlap(box, other))) {
+        const clearsLabels = !placed.some((other) => boxesOverlap(box, other));
+        const clearsAnchors = anchors.every((anchor) => !boxContainsAnchor(box, anchor));
+        if (inside && clearsLabels && clearsAnchors) {
           chosen = { dx, dy, box };
           break;
         }
       }
 
       if (!chosen) {
-        const dx = 0;
-        const dy = placed.length % 2 ? 72 : -72;
+        const dx = anchorX < plotWidth / 2 ? 104 : -104;
+        const dy = anchorY < plotHeight / 2 ? 72 : -72;
         chosen = {
           dx,
           dy,
           box: {
-            left: anchorX - width / 2,
-            right: anchorX + width / 2,
+            left: anchorX + dx - width / 2,
+            right: anchorX + dx + width / 2,
             top: anchorY + dy - height / 2,
             bottom: anchorY + dy + height / 2
           }
@@ -263,6 +308,7 @@
       item.point.dataset.labelOffsetX = String(chosen.dx);
       item.point.dataset.labelOffsetY = String(chosen.dy);
       placed.push(chosen.box);
+      appendChartAnnotation(item, anchorX, anchorY, chosen.dx, chosen.dy);
     }
   }
 
@@ -307,6 +353,7 @@
       if (selectedModelId === row.id) point.dataset.selected = 'true';
       point.style.left = `${x * 100}%`;
       point.style.top = `${y * 100}%`;
+      point.style.zIndex = '2';
       point.dataset.modelId = row.id;
       point.textContent = shortName(row);
       point.title = `${row.provider} · ${row.model} · ${row.variant}`;
