@@ -112,6 +112,7 @@ nav:
   - Tools:
       - tools/index.md
       - LLM Cost & Latency: tools/llm-cost-latency.md
+      - Model Price/Performance: tools/model-price-performance.md
   - Learn:
       - Series: series/index.md
       - AI and Generative AI Foundations:
