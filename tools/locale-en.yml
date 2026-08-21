@@ -23,5 +23,7 @@ routes:
     localized: tools/voice-latency-budget.md
   - canonical: herramientas/coste-capacidad-agente-voz.md
     localized: tools/voice-cost-capacity.md
+  - canonical: herramientas/fiabilidad-evaluacion-agentes.md
+    localized: tools/agent-reliability-eval.md
 published_files:
   - llms.txt
