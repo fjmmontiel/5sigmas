@@ -1,0 +1,171 @@
+{
+  "schema_version": "1.0.0",
+  "updated": "2026-08-21",
+  "scope": "OpenAI release-reported benchmark history selected for explicit provenance and configuration notes. No cross-vendor normalization is attempted in v1.",
+  "freshness_policy": "Review on every relevant model release and at least every 30 days while the tool is active.",
+  "sources": {
+    "gpt41": {
+      "organization": "OpenAI",
+      "title": "Introducing GPT-4.1 in the API",
+      "url": "https://openai.com/index/gpt-4-1/",
+      "published": "2025-04-14"
+    },
+    "gpt5": {
+      "organization": "OpenAI",
+      "title": "Introducing GPT-5 for developers",
+      "url": "https://openai.com/index/introducing-gpt-5-for-developers/",
+      "published": "2025-08-07"
+    },
+    "gpt51": {
+      "organization": "OpenAI",
+      "title": "Introducing GPT-5.1 for developers",
+      "url": "https://openai.com/index/gpt-5-1-for-developers/",
+      "published": "2025-11-13"
+    },
+    "gpt52": {
+      "organization": "OpenAI",
+      "title": "Introducing GPT-5.2",
+      "url": "https://openai.com/index/introducing-gpt-5-2/",
+      "published": "2025-12-11"
+    },
+    "gpt53codex": {
+      "organization": "OpenAI",
+      "title": "Introducing GPT-5.3-Codex",
+      "url": "https://openai.com/index/introducing-gpt-5-3-codex/",
+      "published": "2026-02-05"
+    },
+    "gpt54": {
+      "organization": "OpenAI",
+      "title": "Introducing GPT-5.4",
+      "url": "https://openai.com/index/introducing-gpt-5-4/",
+      "published": "2026-03-05"
+    },
+    "gpt56": {
+      "organization": "OpenAI",
+      "title": "GPT-5.6: Frontier intelligence that scales with your ambition",
+      "url": "https://openai.com/index/gpt-5-6/",
+      "published": "2026-07-09"
+    }
+  },
+  "series": [
+    {
+      "id": "gpqa-diamond",
+      "category": "reasoning",
+      "title_es": "GPQA Diamond · razonamiento científico",
+      "title_en": "GPQA Diamond · scientific reasoning",
+      "metric": "accuracy_pct",
+      "unit": "%",
+      "higher_is_better": true,
+      "definition_es": "Preguntas científicas de nivel experto. La serie conserva la condición sin herramientas cuando la fuente la declara y muestra el esfuerzo de razonamiento reportado como parte del contexto.",
+      "definition_en": "Expert-level science questions. The series preserves the no-tools condition when explicitly reported and keeps reported reasoning effort visible as evaluation context.",
+      "caveat_es": "Los puntos proceden de tablas de lanzamiento, no de una reevaluación única ejecutada hoy. Cambios de prompt, extracción de respuesta o esfuerzo de razonamiento pueden mover la puntuación.",
+      "caveat_en": "Points come from release evaluation tables, not from one re-run performed today. Prompting, answer extraction, or reasoning-effort changes can move the score.",
+      "points": [
+        {"date":"2025-04-14","model":"GPT-4.1","score":66.3,"source":"gpt5","conditions":"no tools; value reported in GPT-5 comparison table","protocol":"release-table"},
+        {"date":"2025-08-07","model":"GPT-5","score":85.7,"source":"gpt5","conditions":"high reasoning; no tools","protocol":"release-table"},
+        {"date":"2025-11-13","model":"GPT-5.1","score":88.1,"source":"gpt51","conditions":"high reasoning; no tools","protocol":"release-table"},
+        {"date":"2025-12-11","model":"GPT-5.2 Thinking","score":92.4,"source":"gpt52","conditions":"maximum available reasoning; no tools","protocol":"release-table"},
+        {"date":"2026-03-05","model":"GPT-5.4","score":92.8,"source":"gpt54","conditions":"xhigh reasoning","protocol":"release-table"},
+        {"date":"2026-07-09","model":"GPT-5.6 Sol","score":94.6,"source":"gpt56","conditions":"release evaluation table; reasoning setting reported by source context","protocol":"release-table"}
+      ]
+    },
+    {
+      "id": "mmmu-pro-no-tools",
+      "category": "multimodal",
+      "title_es": "MMMU-Pro · razonamiento multimodal",
+      "title_en": "MMMU-Pro · multimodal reasoning",
+      "metric": "accuracy_pct",
+      "unit": "%",
+      "higher_is_better": true,
+      "definition_es": "Razonamiento multimodal sobre disciplinas académicas. Solo se incluyen valores MMMU-Pro sin herramientas; MMMU y MMMU-Pro se mantienen como benchmarks distintos.",
+      "definition_en": "Multimodal reasoning across academic disciplines. Only no-tools MMMU-Pro values are included; MMMU and MMMU-Pro remain distinct benchmarks.",
+      "caveat_es": "El esfuerzo de razonamiento y el tratamiento de imagen pueden variar entre lanzamientos. La herramienta no mezcla resultados con Python/herramientas con los de sin herramientas.",
+      "caveat_en": "Reasoning effort and image handling can vary across releases. The tool does not mix Python/tool-assisted results with no-tools results.",
+      "points": [
+        {"date":"2025-04-14","model":"GPT-4.1","score":60.3,"source":"gpt5","conditions":"MMMU-Pro; average across standard and vision sets; no tools in comparison context","protocol":"no-tools"},
+        {"date":"2025-08-07","model":"GPT-5","score":78.4,"source":"gpt5","conditions":"high reasoning; no tools","protocol":"no-tools"},
+        {"date":"2025-12-11","model":"GPT-5.2 Thinking","score":79.5,"source":"gpt52","conditions":"no tools","protocol":"no-tools"},
+        {"date":"2026-03-05","model":"GPT-5.4","score":81.2,"source":"gpt54","conditions":"xhigh reasoning; no tools","protocol":"no-tools"},
+        {"date":"2026-07-09","model":"GPT-5.6 Sol","score":83.0,"source":"gpt56","conditions":"no tools","protocol":"no-tools"}
+      ]
+    },
+    {
+      "id": "swe-bench-verified",
+      "category": "coding",
+      "title_es": "SWE-bench Verified · ingeniería de software",
+      "title_en": "SWE-bench Verified · software engineering",
+      "metric": "resolved_pct",
+      "unit": "%",
+      "higher_is_better": true,
+      "definition_es": "Resolución de issues reales en repositorios. La serie expone explícitamente un cambio de protocolo: el informe de GPT-5 omitía 23 de 500 problemas, mientras GPT-5.1 reportó los 500 con un harness JSON apply_patch.",
+      "definition_en": "Real repository issue resolution. The series explicitly exposes a protocol break: the GPT-5 report omitted 23 of 500 problems, while GPT-5.1 reported all 500 using a JSON apply_patch harness.",
+      "caveat_es": "No existe una única curva homogénea. Una misma generación (GPT-5) aparece con 74,9% en el protocolo de 477 problemas y 72,8% en la comparación posterior de 500 problemas: ocultar esa diferencia sería engañoso.",
+      "caveat_en": "There is no single homogeneous curve. The same GPT-5 generation appears at 74.9% under the 477-problem protocol and 72.8% in the later 500-problem comparison; hiding that difference would be misleading.",
+      "points": [
+        {"date":"2025-04-14","model":"GPT-4.1","score":54.6,"source":"gpt5","conditions":"23/500 problems omitted on OpenAI infrastructure","protocol":"477-problem"},
+        {"date":"2025-08-07","model":"GPT-5","score":74.9,"source":"gpt5","conditions":"23/500 problems omitted on OpenAI infrastructure","protocol":"477-problem"},
+        {"date":"2025-08-07","model":"GPT-5","score":72.8,"source":"gpt51","conditions":"all 500 problems; JSON apply_patch harness","protocol":"500-problem-apply-patch"},
+        {"date":"2025-11-13","model":"GPT-5.1","score":76.3,"source":"gpt51","conditions":"all 500 problems; JSON apply_patch harness","protocol":"500-problem-apply-patch"},
+        {"date":"2025-12-11","model":"GPT-5.2 Thinking","score":80.0,"source":"gpt52","conditions":"release table directly compared with GPT-5.1 76.3; all-problem protocol inherited in comparison","protocol":"500-problem-apply-patch"}
+      ]
+    },
+    {
+      "id": "swe-bench-pro",
+      "category": "coding",
+      "title_es": "SWE-Bench Pro · ingeniería multilenguaje",
+      "title_en": "SWE-Bench Pro · multi-language software engineering",
+      "metric": "resolved_pct",
+      "unit": "%",
+      "higher_is_better": true,
+      "definition_es": "Benchmark de ingeniería de software más reciente y multilenguaje. Se mantiene separado de SWE-bench Verified porque no son intercambiables.",
+      "definition_en": "Newer multi-language software-engineering benchmark. It remains separate from SWE-bench Verified because the two are not interchangeable.",
+      "caveat_es": "Las fuentes son tablas de lanzamiento. La etiqueta cambia de “Public” a “SWE-Bench Pro” en informes posteriores; no se asume que un cambio de nombre implique una nueva versión sin evidencia adicional.",
+      "caveat_en": "Sources are release tables. The label shifts from “Public” to “SWE-Bench Pro” in later reports; a naming change is not treated as a new benchmark version without additional evidence.",
+      "points": [
+        {"date":"2025-11-13","model":"GPT-5.1 Thinking","score":50.8,"source":"gpt52","conditions":"Public set; value reported in GPT-5.2 comparison","protocol":"public"},
+        {"date":"2025-12-11","model":"GPT-5.2 Thinking","score":55.6,"source":"gpt52","conditions":"Public set","protocol":"public"},
+        {"date":"2026-02-05","model":"GPT-5.3-Codex","score":56.8,"source":"gpt54","conditions":"reported in GPT-5.4 comparison table","protocol":"public"},
+        {"date":"2026-03-05","model":"GPT-5.4","score":57.7,"source":"gpt54","conditions":"Public set","protocol":"public"},
+        {"date":"2026-07-09","model":"GPT-5.6 Sol","score":64.6,"source":"gpt56","conditions":"SWE-Bench Pro release evaluation","protocol":"public"}
+      ]
+    },
+    {
+      "id": "toolathlon",
+      "category": "tool-use",
+      "title_es": "Toolathlon · uso de herramientas",
+      "title_en": "Toolathlon · tool use",
+      "metric": "score_pct",
+      "unit": "%",
+      "higher_is_better": true,
+      "definition_es": "Evaluación de uso de herramientas. La línea muestra valores reportados en lanzamientos sucesivos y conserva la procedencia de cada punto.",
+      "definition_en": "Tool-use evaluation. The line shows values reported across successive releases and preserves point-level provenance.",
+      "caveat_es": "Los cambios de harness o tooling pueden influir en el resultado. La pendiente es una cronología de resultados reportados, no una descomposición causal de cuánto mejoró el modelo base.",
+      "caveat_en": "Harness or tooling changes can affect results. The slope is a timeline of reported outcomes, not a causal decomposition of how much the base model improved.",
+      "points": [
+        {"date":"2025-11-13","model":"GPT-5.1 Thinking","score":36.1,"source":"gpt52","conditions":"value reported in GPT-5.2 comparison table","protocol":"release-table"},
+        {"date":"2025-12-11","model":"GPT-5.2 Thinking","score":46.3,"source":"gpt52","conditions":"release evaluation","protocol":"release-table"},
+        {"date":"2026-02-05","model":"GPT-5.3-Codex","score":51.9,"source":"gpt54","conditions":"value reported in GPT-5.4 comparison table","protocol":"release-table"},
+        {"date":"2026-03-05","model":"GPT-5.4","score":54.6,"source":"gpt54","conditions":"release evaluation","protocol":"release-table"},
+        {"date":"2026-07-09","model":"GPT-5.6 Sol","score":58.0,"source":"gpt56","conditions":"release evaluation","protocol":"release-table"}
+      ]
+    },
+    {
+      "id": "arc-agi-2",
+      "category": "abstract-reasoning",
+      "title_es": "ARC-AGI-2 Verified · razonamiento abstracto",
+      "title_en": "ARC-AGI-2 Verified · abstract reasoning",
+      "metric": "score_pct",
+      "unit": "%",
+      "higher_is_better": true,
+      "definition_es": "Problemas novedosos de razonamiento abstracto. La serie se detiene cuando los lanzamientos posteriores pasan a reportar ARC-AGI-3 en lugar de inventar continuidad entre versiones.",
+      "definition_en": "Novel abstract-reasoning problems. The series stops when later releases switch to ARC-AGI-3 rather than inventing continuity across benchmark versions.",
+      "caveat_es": "ARC-AGI-2 y ARC-AGI-3 son evaluaciones distintas. La ausencia de un punto de GPT-5.6 aquí es deliberada y evita mezclar versiones.",
+      "caveat_en": "ARC-AGI-2 and ARC-AGI-3 are different evaluations. GPT-5.6 is intentionally absent here to avoid mixing benchmark versions.",
+      "points": [
+        {"date":"2025-11-13","model":"GPT-5.1 Thinking","score":17.6,"source":"gpt52","conditions":"Verified; value reported in GPT-5.2 comparison","protocol":"verified-v2"},
+        {"date":"2025-12-11","model":"GPT-5.2 Thinking","score":52.9,"source":"gpt52","conditions":"Verified","protocol":"verified-v2"},
+        {"date":"2026-03-05","model":"GPT-5.4","score":73.3,"source":"gpt54","conditions":"Verified; xhigh reasoning unless otherwise specified by source","protocol":"verified-v2"}
+      ]
+    }
+  ]
+}
