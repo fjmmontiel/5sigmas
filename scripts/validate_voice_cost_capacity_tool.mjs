@@ -42,6 +42,22 @@ for (const spec of cases) {
     const unlabeled = await page.locator('[data-s5-tool-form] input, [data-s5-tool-form] select').evaluateAll((nodes) => nodes.filter((node) => !node.id || !document.querySelector(`label[for="${CSS.escape(node.id)}"]`)).length);
     if (unlabeled) failures.push(`${spec.route} ${viewport.name}: ${unlabeled} controls lack labels`);
 
+    const wrappedKpis = await page.locator('.s5-voice-cost-kpis .s5-tool-kpi > strong').evaluateAll((nodes) => nodes.filter((node) => {
+      const range = document.createRange();
+      range.selectNodeContents(node);
+      return range.getClientRects().length > 1;
+    }).length);
+    if (wrappedKpis) failures.push(`${spec.route} ${viewport.name}: ${wrappedKpis} primary cost KPIs wrap across lines`);
+
+    const referenceHierarchy = await page.locator('.s5-voice-cost-reference > div').first().evaluate((node) => {
+      const small = node.querySelector('small')?.getBoundingClientRect();
+      const label = node.querySelector('[data-field="presetLabel"]')?.getBoundingClientRect();
+      return small && label ? { smallBottom: small.bottom, labelTop: label.top } : null;
+    });
+    if (!referenceHierarchy || referenceHierarchy.labelTop < referenceHierarchy.smallBottom - 1) {
+      failures.push(`${spec.route} ${viewport.name}: reference snapshot label does not stack below its eyebrow`);
+    }
+
     const sttDefault = numericText(await page.locator('[data-output="sttStreams"]').textContent());
     const ttsDefault = numericText(await page.locator('[data-output="ttsStreams"]').textContent());
     const workersDefault = numericText(await page.locator('[data-output="workers"]').textContent());
@@ -131,4 +147,4 @@ if (failures.length) {
   for (const failure of failures) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log('Voice cost/capacity browser QA passed: ES/EN, 390px/1440px, billing math surface, provider-concurrency semantics, quotas, deep links, provenance, JSON-LD, labels, responsive capacity geometry and horizontal fit verified.');
+console.log('Voice cost/capacity browser QA passed: ES/EN, 390px/1440px, billing math surface, provider-concurrency semantics, quotas, deep links, provenance, JSON-LD, labels, KPI/reference hierarchy, responsive capacity geometry and horizontal fit verified.');
