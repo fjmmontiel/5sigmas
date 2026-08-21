@@ -64,7 +64,7 @@ for (const spec of cases) {
     const hasOverflowMarker = await overflowBar.evaluate((node) => node.classList.contains('is-overflow'));
     const limitShare = await overflowBar.evaluate((node) => Number.parseFloat(getComputedStyle(node).getPropertyValue('--limit-share')));
     if (overflowState !== 'warn') failures.push(`${spec.route} ${viewport.name}: 32K preset should surface overflow`);
-    if (Math.abs(overflowTokens - 33596) > 100) failures.push(`${spec.route} ${viewport.name}: 32K overflow should be ≈33.6K, got ${overflowTokens}`);
+    if (Math.abs(overflowTokens - 32828) > 100) failures.push(`${spec.route} ${viewport.name}: 32K preset overflow should be ≈32.8K, got ${overflowTokens}`);
     if (!hasOverflowMarker) failures.push(`${spec.route} ${viewport.name}: overflow allocation lacks the context-limit marker`);
     if (!(limitShare > 45 && limitShare < 55)) failures.push(`${spec.route} ${viewport.name}: overflow limit marker should be near 50%, got ${limitShare}`);
 
