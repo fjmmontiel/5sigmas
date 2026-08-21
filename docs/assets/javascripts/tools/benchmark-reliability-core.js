@@ -5,7 +5,7 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   'use strict';
 
-  const METHODOLOGY_VERSION = '1.0.0';
+  const METHODOLOGY_VERSION = '1.0.1';
   const SOURCE_REVIEW_DATE = '2026-08-21';
   const SOURCES = Object.freeze([
     Object.freeze({ organization: 'Dehghani et al.', title: 'The Benchmark Lottery', url: 'https://arxiv.org/abs/2107.07002' }),
@@ -79,14 +79,21 @@
     let maxGap = -Infinity;
     let minWeights = baseWeights;
     let maxWeights = baseWeights;
+    let evaluated = 0;
     const combinations = 1 << groups.length;
     for (let mask = 0; mask < combinations; mask += 1) {
-      const raw = baseWeights.map((weight, index) => weight * ((mask & (1 << index)) ? (1 + swing) : Math.max(0.0001, 1 - swing)));
-      const total = raw.reduce((acc, value) => acc + value, 0) || 1;
+      const raw = baseWeights.map((weight, index) => weight * ((mask & (1 << index)) ? (1 + swing) : (1 - swing)));
+      const total = raw.reduce((acc, value) => acc + value, 0);
+      if (total <= 0) continue;
       const weights = raw.map((value) => value / total);
       const gap = weightedScore(groups, 'a', weights) - weightedScore(groups, 'b', weights);
+      evaluated += 1;
       if (gap < minGap) { minGap = gap; minWeights = weights; }
       if (gap > maxGap) { maxGap = gap; maxWeights = weights; }
+    }
+    if (!evaluated) {
+      const gap = weightedScore(groups, 'a', baseWeights) - weightedScore(groups, 'b', baseWeights);
+      return { minGap: gap, maxGap: gap, minWeights: baseWeights, maxWeights: baseWeights, flips: false };
     }
     return { minGap, maxGap, minWeights, maxWeights, flips: minGap < 0 && maxGap > 0 };
   }
@@ -108,10 +115,11 @@
     const scoreB = weightedScore(input.groups, 'b', weights);
     const gap = scoreA - scoreB;
     const absoluteGap = Math.abs(gap);
+    const hasObservedGap = absoluteGap > 1e-12;
     const cleanItems = Math.max(1, Math.round(input.items * (1 - input.invalidRate / 100)));
     const invalidItems = Math.max(0, input.items - cleanItems);
     const exposureItems = Math.round(cleanItems * input.contaminationExposure / 100);
-    const gapItems = Math.max(1, Math.ceil(cleanItems * absoluteGap / 100));
+    const gapItems = hasObservedGap ? Math.ceil(cleanItems * absoluteGap / 100) : 0;
     const intervalA = wilson(scoreA, cleanItems);
     const intervalB = wilson(scoreB, cleanItems);
     const intervalOverlap = Math.max(intervalA.low, intervalB.low) <= Math.min(intervalA.high, intervalB.high);
@@ -126,6 +134,7 @@
       scoreB,
       gap,
       absoluteGap,
+      hasObservedGap,
       cleanItems,
       invalidItems,
       exposureItems,
@@ -134,8 +143,8 @@
       intervalB,
       intervalOverlap,
       maxHeadroom,
-      contaminationEnvelopeCoversGap: exposureItems >= gapItems,
-      invalidEnvelopeCoversGap: invalidItems >= gapItems,
+      contaminationEnvelopeCoversGap: hasObservedGap && exposureItems >= gapItems,
+      invalidEnvelopeCoversGap: hasObservedGap && invalidItems >= gapItems,
       rankSensitivity,
       groupWinners
     };
@@ -146,6 +155,7 @@
       flags: classify(input, metrics),
       caveats: [
         'Overlapping 95% Wilson intervals are a descriptive resolution check, not a paired significance test. Aggregate accuracies cannot recover the paired per-item error structure.',
+        'The Wilson calculation assumes binary item scoring and treats the normalized task weights as item shares. It is only an approximation when task families use different metrics or do not map to those item proportions.',
         'The contamination and invalid-item envelopes are worst-case sensitivity bounds. They show whether the observed gap could fit inside the stated exposure, not whether contamination or invalid scoring actually caused the gap.',
         'Weight sensitivity changes benchmark composition within the selected swing. A rank flip shows dependence on task weighting, not that either weighting is objectively correct.',
         'A benchmark score characterizes performance on the benchmark definition. It is not a complete measure of model quality or deployment fitness.'
