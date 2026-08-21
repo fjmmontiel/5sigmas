@@ -12,6 +12,7 @@ const cases = [
   { route:'/en/tools/transformer-attention/', locale:'en', repeated:'cat' }
 ];
 const viewports = [{width:390,height:844,name:'mobile'},{width:1440,height:1100,name:'desktop'}];
+const setRange = async (locator, value) => locator.evaluate((node, next) => { node.value = String(next); node.dispatchEvent(new Event('input', { bubbles:true })); }, value);
 
 for (const spec of cases) for (const viewport of viewports) {
   const page = await browser.newPage({ viewport });
@@ -35,10 +36,10 @@ for (const spec of cases) for (const viewport of viewports) {
   if (await page.locator('[data-attention-matrix] tbody tr[data-selected="true"] td[data-masked="true"]').count() !== 0) failures.push(`${spec.route} ${viewport.name}: disabling causal mask should expose future keys`);
   await page.locator('[data-action="reset"]').click();
   const entropyBefore = (await page.locator('[data-output="entropy"]').textContent() || '').trim();
-  await page.locator('[data-field="temperature"]').fill('3'); await page.locator('[data-field="temperature"]').dispatchEvent('input');
+  await setRange(page.locator('[data-field="temperature"]'), 3);
   if ((await page.locator('[data-output="entropy"]').textContent() || '').trim() === entropyBefore) failures.push(`${spec.route} ${viewport.name}: temperature did not change entropy`);
   await page.locator('[data-action="reset"]').click();
-  await page.locator('[data-logit-index="0"]').fill('4'); await page.locator('[data-logit-index="0"]').dispatchEvent('input');
+  await setRange(page.locator('[data-logit-index="0"]'), 4);
   const firstToken = (await page.locator('[data-field="queryIndex"] option').first().textContent() || '').split('·').pop().trim();
   if (!(await page.locator('[data-output="topToken"]').textContent() || '').includes(firstToken)) failures.push(`${spec.route} ${viewport.name}: editing a logit did not change dominant key`);
   const outputBefore = (await page.locator('[data-output="outputScalar"]').textContent() || '').trim();
