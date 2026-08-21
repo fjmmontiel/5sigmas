@@ -58,6 +58,7 @@ nav:
   - Herramientas:
       - herramientas/index.md
       - Coste y latencia de LLMs: herramientas/coste-latencia-llm.md
+      - Precio y rendimiento de modelos: herramientas/precio-rendimiento-modelos.md
   - Aprender:
       - Conceptos:
           - temas/index.md
