@@ -21,5 +21,7 @@ routes:
     localized: tools/rag-evaluation.md
   - canonical: herramientas/latencia-agente-voz.md
     localized: tools/voice-latency-budget.md
+  - canonical: herramientas/coste-capacidad-agente-voz.md
+    localized: tools/voice-cost-capacity.md
 published_files:
   - llms.txt
