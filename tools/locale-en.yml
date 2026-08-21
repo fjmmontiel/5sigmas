@@ -11,5 +11,7 @@ routes:
     localized: tools/inference-vram.md
   - canonical: herramientas/kv-cache-contexto.md
     localized: tools/kv-cache-context.md
+  - canonical: herramientas/atencion-transformer.md
+    localized: tools/transformer-attention.md
 published_files:
   - llms.txt
