@@ -12,6 +12,7 @@
 - [AI Inference VRAM Calculator](https://5sigmas.com/en/tools/inference-vram/index.html.md): estimate model-weight memory, KV cache, runtime reserve, per-GPU memory and approximate context/concurrency capacity.
 - [KV Cache & Context Window Explorer](https://5sigmas.com/en/tools/kv-cache-context/index.html.md): visualize KV-cache memory across context, concurrency, GQA/MQA, precision and an explicit memory budget.
 - [Transformer Attention Visualizer](https://5sigmas.com/en/tools/transformer-attention/index.html.md): manipulate scores, causal masking, softmax and values to see how one attention head builds a weighted mixture.
+- [Token & Context Budget Planner](https://5sigmas.com/en/tools/context-budget/index.html.md): allocate the window across system instructions, tools, history, RAG, user input, output reserve and safety headroom; surface overflow and future pressure.
 
 ## Core concepts
 
