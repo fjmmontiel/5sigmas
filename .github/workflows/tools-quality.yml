@@ -11,6 +11,7 @@ on:
       - 'docs/stylesheets/tools-kv-context.css'
       - 'docs/stylesheets/tools-attention.css'
       - 'docs/stylesheets/tools-context-budget.css'
+      - 'docs/stylesheets/tools-rag-retrieval.css'
       - 'tools/**'
       - 'hooks/locale_alternates.py'
       - 'scripts/prepare_locale.py'
@@ -68,6 +69,9 @@ jobs:
       - name: Verify context budget math and provenance
         run: node scripts/test_context_budget_tool.mjs
 
+      - name: Verify RAG retrieval math and provenance
+        run: node scripts/test_rag_retrieval_tool.mjs
+
       - name: Build Spanish site strictly
         run: mkdocs build --clean --strict
 
@@ -112,7 +116,9 @@ jobs:
             curl --fail --silent http://127.0.0.1:8000/herramientas/atencion-transformer/ > /dev/null && \
             curl --fail --silent http://127.0.0.1:8000/en/tools/transformer-attention/ > /dev/null && \
             curl --fail --silent http://127.0.0.1:8000/herramientas/presupuesto-contexto/ > /dev/null && \
-            curl --fail --silent http://127.0.0.1:8000/en/tools/context-budget/ > /dev/null && exit 0
+            curl --fail --silent http://127.0.0.1:8000/en/tools/context-budget/ > /dev/null && \
+            curl --fail --silent http://127.0.0.1:8000/herramientas/laboratorio-recuperacion-rag/ > /dev/null && \
+            curl --fail --silent http://127.0.0.1:8000/en/tools/rag-retrieval-lab/ > /dev/null && exit 0
             sleep 1
           done
           cat /tmp/5sigmas-tools-preview.log
@@ -136,6 +142,9 @@ jobs:
       - name: Validate context budget planner and capture visual evidence
         run: node scripts/validate_context_budget_tool.mjs
 
+      - name: Validate RAG retrieval lab and capture visual evidence
+        run: node scripts/validate_rag_retrieval_tool.mjs
+
       - name: Validate localized route switching and hreflang
         run: node scripts/validate_locale_switching.mjs
 
@@ -151,6 +160,7 @@ jobs:
             artifacts/visual-review/kv-context-*.png
             artifacts/visual-review/transformer-attention-*.png
             artifacts/visual-review/context-budget-*.png
+            artifacts/visual-review/rag-retrieval-*.png
           if-no-files-found: warn
           retention-days: 1
           overwrite: true

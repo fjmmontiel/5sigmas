@@ -117,6 +117,7 @@ nav:
       - KV Cache & Context: tools/kv-cache-context.md
       - Transformer Attention: tools/transformer-attention.md
       - Context Budget: tools/context-budget.md
+      - RAG Retrieval: tools/rag-retrieval-lab.md
   - Learn:
       - Series: series/index.md
       - AI and Generative AI Foundations:

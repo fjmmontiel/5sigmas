@@ -13,6 +13,7 @@
 - [Explorador de KV cache y ventana de contexto](https://5sigmas.com/herramientas/kv-cache-contexto/index.html.md): visualiza la memoria de KV cache frente a contexto, concurrencia, GQA/MQA, precisión y un presupuesto de memoria explícito.
 - [Visualizador de atención Transformer](https://5sigmas.com/herramientas/atencion-transformer/index.html.md): permite manipular scores, máscara causal, softmax y valores para observar cómo una cabeza de atención genera una mezcla ponderada.
 - [Planificador de presupuesto de contexto](https://5sigmas.com/herramientas/presupuesto-contexto/index.html.md): distribuye la ventana entre sistema, herramientas, historial, RAG, usuario, salida reservada y margen; muestra headroom, overflow y presión futura.
+- [Laboratorio de recuperación RAG](https://5sigmas.com/herramientas/laboratorio-recuperacion-rag/index.html.md): calcula Precision@k, Recall@k, MRR y nDCG sobre un ranking visible, prueba reranking y separa calidad de recuperación de la huella de chunking y solape.
 
 ## Conceptos fundamentales
 

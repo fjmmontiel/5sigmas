@@ -1,0 +1,27 @@
+.s5-rag-metrics { margin-top: 1rem; }
+.s5-rag-metrics .s5-tool-kpi strong { font-variant-numeric: tabular-nums; }
+.s5-rag-ranking { display: grid; gap: .55rem; margin-top: 1rem; }
+.s5-rag-result { display: grid; grid-template-columns: 58px minmax(0,1fr) 88px; gap: .75rem; align-items: center; padding: .78rem .9rem; border: 1px solid var(--s5-line); border-radius: 12px; background: var(--s5-surface); }
+.s5-rag-result[data-in-k="true"] { border-color: color-mix(in srgb, var(--s5-accent) 42%, var(--s5-line)); box-shadow: inset 3px 0 0 var(--s5-accent); }
+.s5-rag-result__rank { display: grid; justify-items: center; gap: .05rem; }
+.s5-rag-result__rank small, .s5-rag-result__body span, .s5-rag-result__grade small { font-size: .72rem; opacity: .68; }
+.s5-rag-result__rank strong { font-size: 1.15rem; font-variant-numeric: tabular-nums; }
+.s5-rag-result__body { min-width: 0; display: grid; gap: .22rem; }
+.s5-rag-result__body strong { line-height: 1.25; overflow-wrap: anywhere; }
+.s5-rag-result__body span { line-height: 1.35; }
+.s5-rag-result__grade { display: grid; justify-items: end; gap: .06rem; }
+.s5-rag-result__grade strong { display: inline-grid; place-items: center; min-width: 2rem; min-height: 2rem; padding: 0 .45rem; border-radius: 999px; border: 1px solid var(--s5-line); font-variant-numeric: tabular-nums; }
+.s5-rag-result__grade[data-relevant="true"] strong { border-color: color-mix(in srgb, var(--s5-accent) 55%, var(--s5-line)); }
+.s5-rag-readout { margin-top: 1rem; display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .75rem; }
+.s5-rag-readout > div { padding: .9rem 1rem; border: 1px solid var(--s5-line); border-radius: 12px; background: var(--s5-surface); }
+.s5-rag-readout small { display:block; opacity:.66; margin-bottom:.25rem; }
+.s5-rag-readout strong { line-height:1.35; }
+.s5-rag-separation-note { margin-top: .9rem; padding: .9rem 1rem; border-left: 3px solid var(--s5-accent); background: color-mix(in srgb, var(--s5-accent) 6%, transparent); border-radius: 0 10px 10px 0; }
+.s5-rag-separation-note p { margin: 0; }
+@media (max-width: 700px) {
+  .s5-rag-result { grid-template-columns: 30px minmax(0,1fr) 68px; gap: .65rem; padding: .7rem; }
+  .s5-rag-result__rank small { display: none; }
+  .s5-rag-result__body span { font-size: .67rem; }
+  .s5-rag-result__grade small { text-align: right; }
+  .s5-rag-readout { grid-template-columns: 1fr; }
+}

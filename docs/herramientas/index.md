@@ -20,14 +20,15 @@ hide:
   "isPartOf": {"@type": "WebSite", "name": "5sigmas", "url": "https://5sigmas.com/"},
   "mainEntity": {
     "@type": "ItemList",
-    "numberOfItems": 6,
+    "numberOfItems": 7,
     "itemListElement": [
       {"@type": "ListItem", "position": 1, "url": "https://5sigmas.com/herramientas/coste-latencia-llm/", "name": "Calculadora de coste y latencia de LLMs"},
       {"@type": "ListItem", "position": 2, "url": "https://5sigmas.com/herramientas/precio-rendimiento-modelos/", "name": "Explorador de precio y rendimiento de modelos de IA"},
       {"@type": "ListItem", "position": 3, "url": "https://5sigmas.com/herramientas/vram-inferencia/", "name": "Calculadora de VRAM para inferencia"},
       {"@type": "ListItem", "position": 4, "url": "https://5sigmas.com/herramientas/kv-cache-contexto/", "name": "Explorador de KV cache y ventana de contexto"},
       {"@type": "ListItem", "position": 5, "url": "https://5sigmas.com/herramientas/atencion-transformer/", "name": "Visualizador de atención Transformer"},
-      {"@type": "ListItem", "position": 6, "url": "https://5sigmas.com/herramientas/presupuesto-contexto/", "name": "Planificador de presupuesto de contexto y tokens"}
+      {"@type": "ListItem", "position": 6, "url": "https://5sigmas.com/herramientas/presupuesto-contexto/", "name": "Planificador de presupuesto de contexto y tokens"},
+      {"@type": "ListItem", "position": 7, "url": "https://5sigmas.com/herramientas/laboratorio-recuperacion-rag/", "name": "Laboratorio de recuperación RAG"}
     ]
   }
 }
@@ -84,6 +85,12 @@ hide:
       <p>Reparte la ventana entre instrucciones, tools, historial, RAG, mensaje actual, salida y margen para detectar overflow y presión futura.</p>
       <span class="s5-tool-index-card__cta">Abrir planificador →</span>
     </a>
+    <a class="s5-tool-index-card" href="/herramientas/laboratorio-recuperacion-rag/">
+      <span class="s5-tool-index-card__meta">Laboratorio · RAG · 07</span>
+      <h2>Recuperación RAG</h2>
+      <p>Mide Precision@k, Recall@k, MRR y nDCG sobre un ranking visible; prueba reranking y separa calidad de recuperación de la huella de chunking y solape.</p>
+      <span class="s5-tool-index-card__cta">Abrir laboratorio →</span>
+    </a>
   </div>
 </section>
 
@@ -94,7 +101,7 @@ hide:
     <p>La sección crece una herramienta cada vez. No se publican páginas vacías: cada entrada aparece cuando tiene interacción real, paridad ES/EN, fuentes y pruebas.</p>
   </div>
   <div class="s5-tools-roadmap__list" aria-label="Próximas familias de herramientas">
-    <div class="s5-tools-roadmap__row"><span>07–08</span><strong>Recuperación y evaluación RAG</strong><span>laboratorio</span></div>
+    <div class="s5-tools-roadmap__row"><span>08</span><strong>Evaluación RAG de contexto, fidelidad y respuesta</strong><span>evaluador</span></div>
     <div class="s5-tools-roadmap__row"><span>09–12</span><strong>Agentes: latencia, coste, fiabilidad y seguridad</strong><span>exploradores</span></div>
     <div class="s5-tools-roadmap__row"><span>13–18</span><strong>Benchmarks, escalado, infraestructura y ecosistema global</strong><span>datos</span></div>
   </div>

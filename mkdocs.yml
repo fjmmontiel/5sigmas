@@ -63,6 +63,7 @@ nav:
       - KV cache y contexto: herramientas/kv-cache-contexto.md
       - Atención Transformer: herramientas/atencion-transformer.md
       - Presupuesto de contexto: herramientas/presupuesto-contexto.md
+      - Recuperación RAG: herramientas/laboratorio-recuperacion-rag.md
   - Aprender:
       - Conceptos:
           - temas/index.md
