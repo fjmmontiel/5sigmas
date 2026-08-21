@@ -1,7 +1,7 @@
 ---
 title: Herramientas de IA — calculadoras, visualizadores y laboratorios
-description: Herramientas interactivas de 5sigmas para estimar costes y latencia de LLMs, comparar modelos, memoria de inferencia, RAG, agentes de voz, evaluación, benchmarks e infraestructura de IA.
-keywords: herramientas IA, calculadora LLM, comparar modelos IA, coste LLM, latencia LLM, VRAM IA, RAG evaluación, agentes de voz, benchmarks IA
+description: Herramientas interactivas de 5sigmas para estimar costes y latencia de LLMs, comparar modelos, memoria de inferencia, atención Transformer, RAG, agentes de voz, evaluación, benchmarks e infraestructura de IA.
+keywords: herramientas IA, calculadora LLM, comparar modelos IA, coste LLM, latencia LLM, VRAM IA, atención Transformer, RAG evaluación, agentes de voz, benchmarks IA
 hide:
   - toc
   - navigation
@@ -20,12 +20,13 @@ hide:
   "isPartOf": {"@type": "WebSite", "name": "5sigmas", "url": "https://5sigmas.com/"},
   "mainEntity": {
     "@type": "ItemList",
-    "numberOfItems": 4,
+    "numberOfItems": 5,
     "itemListElement": [
       {"@type": "ListItem", "position": 1, "url": "https://5sigmas.com/herramientas/coste-latencia-llm/", "name": "Calculadora de coste y latencia de LLMs"},
       {"@type": "ListItem", "position": 2, "url": "https://5sigmas.com/herramientas/precio-rendimiento-modelos/", "name": "Explorador de precio y rendimiento de modelos de IA"},
       {"@type": "ListItem", "position": 3, "url": "https://5sigmas.com/herramientas/vram-inferencia/", "name": "Calculadora de VRAM para inferencia"},
-      {"@type": "ListItem", "position": 4, "url": "https://5sigmas.com/herramientas/kv-cache-contexto/", "name": "Explorador de KV cache y ventana de contexto"}
+      {"@type": "ListItem", "position": 4, "url": "https://5sigmas.com/herramientas/kv-cache-contexto/", "name": "Explorador de KV cache y ventana de contexto"},
+      {"@type": "ListItem", "position": 5, "url": "https://5sigmas.com/herramientas/atencion-transformer/", "name": "Visualizador de atención Transformer"}
     ]
   }
 }
@@ -70,6 +71,12 @@ hide:
       <p>Visualiza cómo cambian la memoria de KV cache y la capacidad de contexto con GQA/MQA, precisión, concurrencia y presupuesto de memoria.</p>
       <span class="s5-tool-index-card__cta">Abrir explorador →</span>
     </a>
+    <a class="s5-tool-index-card" href="/herramientas/atencion-transformer/">
+      <span class="s5-tool-index-card__meta">Visualizador · Arquitectura · 05</span>
+      <h2>Atención Transformer</h2>
+      <p>Manipula scores, máscara causal, softmax y valores para ver cómo una cabeza de atención convierte una consulta en una mezcla ponderada.</p>
+      <span class="s5-tool-index-card__cta">Abrir visualizador →</span>
+    </a>
   </div>
 </section>
 
@@ -80,10 +87,9 @@ hide:
     <p>La sección crece una herramienta cada vez. No se publican páginas vacías: cada entrada aparece cuando tiene interacción real, paridad ES/EN, fuentes y pruebas.</p>
   </div>
   <div class="s5-tools-roadmap__list" aria-label="Próximas familias de herramientas">
-    <div class="s5-tools-roadmap__row"><span>05</span><strong>Atención Transformer</strong><span>visualizador</span></div>
     <div class="s5-tools-roadmap__row"><span>06</span><strong>Presupuesto de tokens y contexto</strong><span>planificador</span></div>
     <div class="s5-tools-roadmap__row"><span>07–08</span><strong>Recuperación y evaluación RAG</strong><span>laboratorio</span></div>
-    <div class="s5-tools-roadmap__row"><span>09–11</span><strong>Latencia, coste y fiabilidad de agentes</strong><span>explorador</span></div>
+    <div class="s5-tools-roadmap__row"><span>09–12</span><strong>Agentes: latencia, coste, fiabilidad y seguridad</strong><span>exploradores</span></div>
     <div class="s5-tools-roadmap__row"><span>13–18</span><strong>Benchmarks, escalado, infraestructura y ecosistema global</strong><span>datos</span></div>
   </div>
 </section>
