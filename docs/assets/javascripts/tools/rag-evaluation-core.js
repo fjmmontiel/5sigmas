@@ -65,14 +65,26 @@
       referenceCoverage: Math.max(0, Number(weights?.referenceCoverage) || 0)
     };
     const sum = Object.values(raw).reduce((a, b) => a + b, 0);
-    if (sum === 0) return { ...DEFAULT_WEIGHTS, normalized: false, sum: 100 };
+    if (sum === 0) {
+      const fallbackSum = Object.values(DEFAULT_WEIGHTS).reduce((a, b) => a + b, 0);
+      return {
+        contextRelevance: DEFAULT_WEIGHTS.contextRelevance / fallbackSum,
+        faithfulness: DEFAULT_WEIGHTS.faithfulness / fallbackSum,
+        answerCorrectness: DEFAULT_WEIGHTS.answerCorrectness / fallbackSum,
+        referenceCoverage: DEFAULT_WEIGHTS.referenceCoverage / fallbackSum,
+        normalized: true,
+        sum: fallbackSum,
+        usedDefaultFallback: true
+      };
+    }
     return {
       contextRelevance: raw.contextRelevance / sum,
       faithfulness: raw.faithfulness / sum,
       answerCorrectness: raw.answerCorrectness / sum,
       referenceCoverage: raw.referenceCoverage / sum,
       normalized: true,
-      sum
+      sum,
+      usedDefaultFallback: false
     };
   }
 
