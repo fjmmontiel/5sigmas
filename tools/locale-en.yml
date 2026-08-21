@@ -31,5 +31,7 @@ routes:
     localized: tools/benchmark-reliability.md
   - canonical: herramientas/linea-temporal-capacidades-modelos.md
     localized: tools/model-capability-timeline.md
+  - canonical: herramientas/leyes-escalado.md
+    localized: tools/scaling-laws.md
 published_files:
   - llms.txt
