@@ -81,8 +81,18 @@ try {
       if (await page.locator('[data-path="sensitive-disclosure"]').getAttribute('data-state') !== 'blocked') failures.push(`${spec.route} ${viewport.name}: known-secret rendered-output path should be blocked by modeled filter`);
       if (await page.locator('[data-path="data-exfiltration"]').getAttribute('data-state') !== 'reachable') failures.push(`${spec.route} ${viewport.name}: output filter must not falsely block external-egress exfiltration`);
 
+      await page.locator('[data-field="externalEgress"]').uncheck();
+      await page.locator('[data-field="egressRestriction"]').uncheck();
+      if (await page.locator('[data-control="egressRestriction"]').getAttribute('data-enabled') !== 'false') failures.push(`${spec.route} ${viewport.name}: disabling egress must not silently enable the egress-policy control`);
+      if (await page.locator('[data-path="data-exfiltration"]').getAttribute('data-state') !== 'blocked') failures.push(`${spec.route} ${viewport.name}: no-egress architecture should block modeled exfiltration without rewriting control state`);
+
+      await page.locator('[data-field="persistentMemory"]').uncheck();
+      await page.locator('[data-field="memoryWriteValidation"]').uncheck();
+      if (await page.locator('[data-control="memoryWriteValidation"]').getAttribute('data-enabled') !== 'false') failures.push(`${spec.route} ${viewport.name}: disabling memory must not silently enable the memory-validation control`);
+      if (await page.locator('[data-path="persistent-poisoning"]').getAttribute('data-state') !== 'blocked') failures.push(`${spec.route} ${viewport.name}: no-memory architecture should block persistence without rewriting control state`);
+
       await page.locator('[data-action="share"]').click();
-      for (const token of ['preset=', 'vector=', 'quarantineReader=', 'humanApproval=', 'egressRestriction=']) {
+      for (const token of ['preset=', 'vector=', 'quarantineReader=', 'humanApproval=', 'egressRestriction=0', 'memoryWriteValidation=0']) {
         if (!page.url().includes(token)) failures.push(`${spec.route} ${viewport.name}: share URL missing ${token}`);
       }
 
@@ -114,4 +124,4 @@ if (failures.length) {
   for (const failure of failures) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log('Prompt-injection browser QA passed: ES/EN, 390px/1440px, reachability semantics, deep links, provenance, JSON-LD, labels and horizontal fit verified.');
+console.log('Prompt-injection browser QA passed: ES/EN, 390px/1440px, reachability semantics, independent controls, deep links, provenance, JSON-LD, labels and horizontal fit verified.');
