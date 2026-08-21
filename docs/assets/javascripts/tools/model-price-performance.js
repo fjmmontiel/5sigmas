@@ -196,6 +196,76 @@
     return Number.isFinite(value) ? value : null;
   }
 
+  function boxesOverlap(a, b, gap = 4) {
+    return !(
+      a.right + gap <= b.left ||
+      b.right + gap <= a.left ||
+      a.bottom + gap <= b.top ||
+      b.bottom + gap <= a.top
+    );
+  }
+
+  function placeChartLabels(items) {
+    if (!chartPoints || !items.length) return;
+    const plotWidth = chartPoints.clientWidth;
+    const plotHeight = chartPoints.clientHeight;
+    if (!plotWidth || !plotHeight) return;
+
+    const candidates = [
+      [0, 0],
+      [0, -34], [0, 34],
+      [48, 0], [-48, 0],
+      [48, -28], [-48, -28], [48, 28], [-48, 28],
+      [0, -68], [0, 68],
+      [86, 0], [-86, 0],
+      [86, -34], [-86, -34], [86, 34], [-86, 34]
+    ];
+    const placed = [];
+    const ordered = [...items].sort((a, b) => a.y - b.y || a.x - b.x || a.row.id.localeCompare(b.row.id));
+
+    for (const item of ordered) {
+      const width = item.point.offsetWidth;
+      const height = item.point.offsetHeight;
+      const anchorX = item.x * plotWidth;
+      const anchorY = item.y * plotHeight;
+      let chosen = null;
+
+      for (const [dx, dy] of candidates) {
+        const box = {
+          left: anchorX + dx - width / 2,
+          right: anchorX + dx + width / 2,
+          top: anchorY + dy - height / 2,
+          bottom: anchorY + dy + height / 2
+        };
+        const inside = box.left >= 2 && box.right <= plotWidth - 2 && box.top >= 2 && box.bottom <= plotHeight - 2;
+        if (inside && !placed.some((other) => boxesOverlap(box, other))) {
+          chosen = { dx, dy, box };
+          break;
+        }
+      }
+
+      if (!chosen) {
+        const dx = 0;
+        const dy = placed.length % 2 ? 72 : -72;
+        chosen = {
+          dx,
+          dy,
+          box: {
+            left: anchorX - width / 2,
+            right: anchorX + width / 2,
+            top: anchorY + dy - height / 2,
+            bottom: anchorY + dy + height / 2
+          }
+        };
+      }
+
+      item.point.style.transform = `translate(calc(-50% + ${chosen.dx}px), calc(-50% + ${chosen.dy}px))`;
+      item.point.dataset.labelOffsetX = String(chosen.dx);
+      item.point.dataset.labelOffsetY = String(chosen.dy);
+      placed.push(chosen.box);
+    }
+  }
+
   function renderChart(rows, state) {
     if (!chart || !chartPoints) return;
     const xMetric = axis[state.xAxis] || axis.cost;
@@ -226,6 +296,7 @@
     outputs.chartYMin.textContent = yMetric.format(yMin);
     outputs.chartYMax.textContent = yMetric.format(yMax);
 
+    const pointItems = [];
     for (const row of drawable) {
       const x = scale(metricValue(row, state.xAxis), xMin, xMax);
       const y = 1 - scale(metricValue(row, state.yAxis), yMin, yMax);
@@ -246,7 +317,9 @@
         renderChart(rows, state);
       });
       chartPoints.append(point);
+      pointItems.push({ row, point, x, y });
     }
+    placeChartLabels(pointItems);
   }
 
   function shortName(row) {
