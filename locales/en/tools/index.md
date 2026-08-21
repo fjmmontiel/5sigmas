@@ -20,7 +20,7 @@ hide:
   "isPartOf": {"@type": "WebSite", "name": "5sigmas", "url": "https://5sigmas.com/en/"},
   "mainEntity": {
     "@type": "ItemList",
-    "numberOfItems": 10,
+    "numberOfItems": 11,
     "itemListElement": [
       {"@type": "ListItem", "position": 1, "url": "https://5sigmas.com/en/tools/llm-cost-latency/", "name": "LLM Cost & Latency Calculator"},
       {"@type": "ListItem", "position": 2, "url": "https://5sigmas.com/en/tools/model-price-performance/", "name": "Model Price/Performance Explorer"},
@@ -31,7 +31,8 @@ hide:
       {"@type": "ListItem", "position": 7, "url": "https://5sigmas.com/en/tools/rag-retrieval-lab/", "name": "RAG Retrieval Lab"},
       {"@type": "ListItem", "position": 8, "url": "https://5sigmas.com/en/tools/rag-evaluation/", "name": "RAG Evaluation Playground"},
       {"@type": "ListItem", "position": 9, "url": "https://5sigmas.com/en/tools/voice-latency-budget/", "name": "Voice-Agent Latency Budget Explorer"},
-      {"@type": "ListItem", "position": 10, "url": "https://5sigmas.com/en/tools/voice-cost-capacity/", "name": "Voice-Agent Cost & Capacity Planner"}
+      {"@type": "ListItem", "position": 10, "url": "https://5sigmas.com/en/tools/voice-cost-capacity/", "name": "Voice-Agent Cost & Capacity Planner"},
+      {"@type": "ListItem", "position": 11, "url": "https://5sigmas.com/en/tools/agent-reliability-eval/", "name": "Agent Reliability / Eval Playground"}
     ]
   }
 }
@@ -60,13 +61,14 @@ hide:
     <a class="s5-tool-index-card" href="/en/tools/rag-evaluation/"><span class="s5-tool-index-card__meta">Evaluator · RAG · 08</span><h2>RAG evaluation</h2><p>Separate context relevance, faithfulness, correctness and coverage; inspect claims, uncertainty intervals and weights without hiding diagnosis inside one score.</p><span class="s5-tool-index-card__cta">Open evaluator →</span></a>
     <a class="s5-tool-index-card" href="/en/tools/voice-latency-budget/"><span class="s5-tool-index-card__meta">Explorer · Voice · 09</span><h2>Voice-agent latency</h2><p>Break down time to first audio across transport, turn end, STT, model, TTS and buffering, then calculate the interruption path separately.</p><span class="s5-tool-index-card__cta">Open explorer →</span></a>
     <a class="s5-tool-index-card" href="/en/tools/voice-cost-capacity/"><span class="s5-tool-index-card__meta">Planner · Voice · 10</span><h2>Voice-agent cost and capacity</h2><p>Turn calls, minutes, STT, TTS and model tokens into monthly spend, then size workers and provider limits without treating calls and TTS generations as the same concurrency.</p><span class="s5-tool-index-card__cta">Open planner →</span></a>
+    <a class="s5-tool-index-card" href="/en/tools/agent-reliability-eval/"><span class="s5-tool-index-card__meta">Evaluator · Agents · 11</span><h2>Agent reliability and evaluation</h2><p>Separate final success, first-pass success, retry recovery, tool decisions, timeouts and trajectory efficiency; apply explicit release gates instead of hiding everything in one score.</p><span class="s5-tool-index-card__cta">Open evaluator →</span></a>
   </div>
 </section>
 
 <section class="s5-section s5-tools-roadmap" aria-labelledby="s5-tools-roadmap">
   <div><div class="s5-eyebrow">Roadmap</div><h2 id="s5-tools-roadmap">What comes next</h2><p>The section grows one tool at a time. There are no empty placeholder pages: an entry appears when it has real interaction, ES/EN parity, provenance and tests.</p></div>
   <div class="s5-tools-roadmap__list" aria-label="Upcoming tool families">
-    <div class="s5-tools-roadmap__row"><span>11–12</span><strong>Agents: reliability and security</strong><span>evaluation</span></div>
+    <div class="s5-tools-roadmap__row"><span>12</span><strong>Agents: security and prompt injection</strong><span>explorer</span></div>
     <div class="s5-tools-roadmap__row"><span>13–18</span><strong>Benchmarks, scaling, infrastructure and the global ecosystem</strong><span>data</span></div>
   </div>
 </section>
