@@ -27,7 +27,16 @@ tools:
     es_title: Explorador precio/rendimiento de modelos
     en_title: Model Price/Performance Explorer
     category: explorer
-    status: planned
+    status: in_progress
+    es_route: /herramientas/precio-rendimiento-modelos/
+    en_route: /en/tools/model-price-performance/
+    es_parity: true
+    en_parity: true
+    tests: pending_full_ci
+    visual_review: pending_es_en_mobile_390_desktop_1440
+    provenance: provider_primary_sources_plus_artificial_analysis_verified_2026-08-21
+    data_freshness: pricing_and_benchmark_review_every_14_days_and_on_release
+    last_reviewed: 2026-08-21
   - id: inference-vram
     order: 3
     es_title: Calculadora de VRAM para inferencia
