@@ -1,6 +1,6 @@
 ---
 title: Explorador de leyes de escalado — parámetros, datos y cómputo
-description: Redistribuye un presupuesto de entrenamiento entre parámetros y tokens con una superficie de pérdida tipo Chinchilla, compara el óptimo matemático y prueba sensibilidad a los exponentes.
+description: Explora cómo repartir cómputo entre parámetros y tokens con una superficie tipo Chinchilla, compara el óptimo y prueba la sensibilidad a sus exponentes.
 hide:
   - toc
   - navigation
