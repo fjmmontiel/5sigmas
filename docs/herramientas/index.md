@@ -20,7 +20,7 @@ hide:
   "isPartOf": {"@type": "WebSite", "name": "5sigmas", "url": "https://5sigmas.com/"},
   "mainEntity": {
     "@type": "ItemList",
-    "numberOfItems": 10,
+    "numberOfItems": 11,
     "itemListElement": [
       {"@type": "ListItem", "position": 1, "url": "https://5sigmas.com/herramientas/coste-latencia-llm/", "name": "Calculadora de coste y latencia de LLMs"},
       {"@type": "ListItem", "position": 2, "url": "https://5sigmas.com/herramientas/precio-rendimiento-modelos/", "name": "Explorador de precio y rendimiento de modelos de IA"},
@@ -31,7 +31,8 @@ hide:
       {"@type": "ListItem", "position": 7, "url": "https://5sigmas.com/herramientas/laboratorio-recuperacion-rag/", "name": "Laboratorio de recuperación RAG"},
       {"@type": "ListItem", "position": 8, "url": "https://5sigmas.com/herramientas/evaluacion-rag/", "name": "Entorno interactivo de evaluación RAG"},
       {"@type": "ListItem", "position": 9, "url": "https://5sigmas.com/herramientas/latencia-agente-voz/", "name": "Explorador de presupuesto de latencia para agentes de voz"},
-      {"@type": "ListItem", "position": 10, "url": "https://5sigmas.com/herramientas/coste-capacidad-agente-voz/", "name": "Planificador de coste y capacidad para agentes de voz"}
+      {"@type": "ListItem", "position": 10, "url": "https://5sigmas.com/herramientas/coste-capacidad-agente-voz/", "name": "Planificador de coste y capacidad para agentes de voz"},
+      {"@type": "ListItem", "position": 11, "url": "https://5sigmas.com/herramientas/fiabilidad-evaluacion-agentes/", "name": "Entorno interactivo de fiabilidad y evaluación de agentes"}
     ]
   }
 }
@@ -60,13 +61,14 @@ hide:
     <a class="s5-tool-index-card" href="/herramientas/evaluacion-rag/"><span class="s5-tool-index-card__meta">Evaluador · RAG · 08</span><h2>Evaluación RAG</h2><p>Separa relevancia del contexto, fidelidad, corrección y cobertura; inspecciona afirmaciones, intervalos y pesos sin esconder el diagnóstico en un único score.</p><span class="s5-tool-index-card__cta">Abrir evaluador →</span></a>
     <a class="s5-tool-index-card" href="/herramientas/latencia-agente-voz/"><span class="s5-tool-index-card__meta">Explorador · Voz · 09</span><h2>Latencia de agentes de voz</h2><p>Descompón el tiempo hasta el primer audio entre transporte, fin de turno, STT, modelo, TTS y buffering, y calcula el camino de interrupción por separado.</p><span class="s5-tool-index-card__cta">Abrir explorador →</span></a>
     <a class="s5-tool-index-card" href="/herramientas/coste-capacidad-agente-voz/"><span class="s5-tool-index-card__meta">Planificador · Voz · 10</span><h2>Coste y capacidad de agentes de voz</h2><p>Convierte llamadas, minutos, STT, TTS y tokens en coste mensual y dimensiona workers y límites de proveedor sin confundir llamadas simultáneas con peticiones de generación simultáneas.</p><span class="s5-tool-index-card__cta">Abrir planificador →</span></a>
+    <a class="s5-tool-index-card" href="/herramientas/fiabilidad-evaluacion-agentes/"><span class="s5-tool-index-card__meta">Evaluador · Agentes · 11</span><h2>Fiabilidad y evaluación de agentes</h2><p>Separa éxito final, primer intento, recuperación con retries, decisiones de tools, timeouts y eficiencia de la trayectoria; aplica gates de release sin ocultarlo todo en un score.</p><span class="s5-tool-index-card__cta">Abrir evaluador →</span></a>
   </div>
 </section>
 
 <section class="s5-section s5-tools-roadmap" aria-labelledby="s5-tools-roadmap">
   <div><div class="s5-eyebrow">Hoja de ruta</div><h2 id="s5-tools-roadmap">Lo siguiente</h2><p>La sección crece una herramienta cada vez. No se publican páginas vacías: cada entrada aparece cuando tiene interacción real, paridad ES/EN, fuentes y pruebas.</p></div>
   <div class="s5-tools-roadmap__list" aria-label="Próximas familias de herramientas">
-    <div class="s5-tools-roadmap__row"><span>11–12</span><strong>Agentes: fiabilidad y seguridad</strong><span>evaluación</span></div>
+    <div class="s5-tools-roadmap__row"><span>12</span><strong>Agentes: seguridad y prompt injection</strong><span>explorador</span></div>
     <div class="s5-tools-roadmap__row"><span>13–18</span><strong>Benchmarks, escalado, infraestructura y ecosistema global</strong><span>datos</span></div>
   </div>
 </section>
