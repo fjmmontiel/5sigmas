@@ -148,7 +148,16 @@ tools:
     es_title: Explorador de presupuesto de latencia para agentes de voz
     en_title: Voice-Agent Latency Budget Explorer
     category: explorer
-    status: planned
+    status: in_progress
+    es_route: /herramientas/latencia-agente-voz/
+    en_route: /en/tools/voice-latency-budget/
+    es_parity: true
+    en_parity: true
+    tests: numerical_and_browser_gates_added_2026-08-21_pending_full_build_and_visual_review
+    visual_review: pending_es_en_mobile_390_desktop_1440
+    provenance: openai_realtime_deepgram_endpointing_elevenlabs_latency_twilio_media_streams_and_stivers_turn_taking_verified_2026-08-21
+    data_freshness: static_method_review_on_voice_api_semantics_change
+    last_reviewed: 2026-08-21
   - id: voice-cost-capacity
     order: 10
     es_title: Planificador de coste y capacidad para agentes de voz
