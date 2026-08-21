@@ -131,15 +131,17 @@ tools:
     es_title: Entorno interactivo de evaluación RAG
     en_title: RAG Evaluation Playground
     category: evaluator
-    status: in_progress
+    status: excellent
     es_route: /herramientas/evaluacion-rag/
     en_route: /en/tools/rag-evaluation/
     es_parity: true
     en_parity: true
-    tests: numerical_uncertainty_share_state_and_browser_gates_added_2026-08-21_pending_full_ci
-    visual_review: pending_es_en_mobile_390_desktop_1440
+    tests: passing_full_ci_2026-08-21_head_0ebf1a0e9e8eaa9ca8363e053839a6570f775751
+    visual_review: reviewed_es_en_mobile_390_desktop_1440_2026-08-21
     provenance: ragas_eacl_2024_and_ares_primary_sources_verified_2026-08-21
     data_freshness: static_method_review_on_rag_evaluation_semantics_change
+    validated_head: 0ebf1a0e9e8eaa9ca8363e053839a6570f775751
+    release_commit: 7d7c4a6b8a4b51c8a276d6aeb7cc454860c4ac75
     last_reviewed: 2026-08-21
   - id: voice-latency-budget
     order: 9
