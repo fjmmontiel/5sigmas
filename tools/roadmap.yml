@@ -59,7 +59,16 @@ tools:
     es_title: Explorador de KV cache y ventana de contexto
     en_title: KV Cache & Context Window Explorer
     category: explorer
-    status: planned
+    status: in_progress
+    es_route: /herramientas/kv-cache-contexto/
+    en_route: /en/tools/kv-cache-context/
+    es_parity: true
+    en_parity: true
+    tests: numerical_and_browser_gates_added_2026-08-21_pending_full_ci
+    visual_review: pending_es_en_mobile_390_desktop_1440
+    provenance: meta_llama_primary_architecture_sources_plus_vllm_verified_2026-08-21
+    data_freshness: static_architecture_presets_review_on_upstream_source_change
+    last_reviewed: 2026-08-21
   - id: transformer-attention
     order: 5
     es_title: Visualizador de atención Transformer
