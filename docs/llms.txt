@@ -9,6 +9,7 @@
 - [Herramientas de IA](https://5sigmas.com/herramientas/index.html.md): calculadoras, visualizadores, evaluadores y exploradores con supuestos visibles y procedencia de datos.
 - [Calculadora de coste y latencia de LLMs](https://5sigmas.com/herramientas/coste-latencia-llm/index.html.md): coste por solicitud, gasto mensual, tiempo de respuesta y concurrencia media a partir de tokens, caché, TTFT, velocidad y tráfico.
 - [Explorador de precio y rendimiento de modelos](https://5sigmas.com/herramientas/precio-rendimiento-modelos/index.html.md): compara coste por carga, Intelligence Index, velocidad, TTFT y contexto manteniendo separadas las fuentes de precio y rendimiento.
+- [Calculadora de VRAM para inferencia](https://5sigmas.com/herramientas/vram-inferencia/index.html.md): estima memoria de pesos, KV cache, reserva de runtime, memoria por GPU y capacidad aproximada de contexto/concurrencia.
 
 ## Conceptos fundamentales
 
