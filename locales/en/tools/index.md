@@ -1,7 +1,7 @@
 ---
 title: AI Tools — calculators, visualizers and labs
-description: Interactive 5sigmas tools for LLMs, model comparison, inference, Transformer attention, RAG, agents, evaluation and AI infrastructure.
-keywords: AI tools, LLM calculator, compare AI models, LLM cost, LLM latency, AI VRAM, Transformer attention, RAG evaluation, voice agents, AI benchmarks
+description: Interactive 5sigmas tools for LLMs, model comparison, inference, context planning, Transformer attention, RAG, agents, evaluation and AI infrastructure.
+keywords: AI tools, LLM calculator, compare AI models, LLM cost, LLM latency, token budget, context window, AI VRAM, Transformer attention, RAG evaluation, voice agents, AI benchmarks
 hide:
   - toc
   - navigation
@@ -20,13 +20,14 @@ hide:
   "isPartOf": {"@type": "WebSite", "name": "5sigmas", "url": "https://5sigmas.com/en/"},
   "mainEntity": {
     "@type": "ItemList",
-    "numberOfItems": 5,
+    "numberOfItems": 6,
     "itemListElement": [
       {"@type": "ListItem", "position": 1, "url": "https://5sigmas.com/en/tools/llm-cost-latency/", "name": "LLM Cost & Latency Calculator"},
       {"@type": "ListItem", "position": 2, "url": "https://5sigmas.com/en/tools/model-price-performance/", "name": "Model Price/Performance Explorer"},
       {"@type": "ListItem", "position": 3, "url": "https://5sigmas.com/en/tools/inference-vram/", "name": "AI Inference VRAM Calculator"},
       {"@type": "ListItem", "position": 4, "url": "https://5sigmas.com/en/tools/kv-cache-context/", "name": "KV Cache & Context Window Explorer"},
-      {"@type": "ListItem", "position": 5, "url": "https://5sigmas.com/en/tools/transformer-attention/", "name": "Transformer Attention Visualizer"}
+      {"@type": "ListItem", "position": 5, "url": "https://5sigmas.com/en/tools/transformer-attention/", "name": "Transformer Attention Visualizer"},
+      {"@type": "ListItem", "position": 6, "url": "https://5sigmas.com/en/tools/context-budget/", "name": "Token & Context Budget Planner"}
     ]
   }
 }
@@ -77,6 +78,12 @@ hide:
       <p>Manipulate scores, causal masking, softmax and values to see how one attention head turns a query into a weighted mixture.</p>
       <span class="s5-tool-index-card__cta">Open visualizer →</span>
     </a>
+    <a class="s5-tool-index-card" href="/en/tools/context-budget/">
+      <span class="s5-tool-index-card__meta">Planner · LLMs · 06</span>
+      <h2>Token and context budget</h2>
+      <p>Allocate the window across instructions, tools, history, RAG, the current message, output and safety headroom to surface overflow and future pressure.</p>
+      <span class="s5-tool-index-card__cta">Open planner →</span>
+    </a>
   </div>
 </section>
 
@@ -87,7 +94,6 @@ hide:
     <p>The section grows one tool at a time. There are no empty placeholder pages: an entry appears when it has real interaction, ES/EN parity, provenance and tests.</p>
   </div>
   <div class="s5-tools-roadmap__list" aria-label="Upcoming tool families">
-    <div class="s5-tools-roadmap__row"><span>06</span><strong>Token and context budget</strong><span>planner</span></div>
     <div class="s5-tools-roadmap__row"><span>07–08</span><strong>RAG retrieval and evaluation</strong><span>lab</span></div>
     <div class="s5-tools-roadmap__row"><span>09–12</span><strong>Agents: latency, cost, reliability and security</strong><span>explorers</span></div>
     <div class="s5-tools-roadmap__row"><span>13–18</span><strong>Benchmarks, scaling, infrastructure and the global ecosystem</strong><span>data</span></div>
