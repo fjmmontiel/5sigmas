@@ -1,7 +1,7 @@
 ---
 title: Herramientas de IA — calculadoras, visualizadores y laboratorios
-description: Herramientas interactivas de 5sigmas para estimar costes y latencia de LLMs, memoria de inferencia, RAG, agentes de voz, evaluación, benchmarks e infraestructura de IA.
-keywords: herramientas IA, calculadora LLM, coste LLM, latencia LLM, VRAM IA, RAG evaluación, agentes de voz, benchmarks IA
+description: Herramientas interactivas de 5sigmas para estimar costes y latencia de LLMs, comparar modelos, memoria de inferencia, RAG, agentes de voz, evaluación, benchmarks e infraestructura de IA.
+keywords: herramientas IA, calculadora LLM, comparar modelos IA, coste LLM, latencia LLM, VRAM IA, RAG evaluación, agentes de voz, benchmarks IA
 hide:
   - toc
   - navigation
@@ -20,13 +20,19 @@ hide:
   "isPartOf": {"@type": "WebSite", "name": "5sigmas", "url": "https://5sigmas.com/"},
   "mainEntity": {
     "@type": "ItemList",
-    "numberOfItems": 1,
+    "numberOfItems": 2,
     "itemListElement": [
       {
         "@type": "ListItem",
         "position": 1,
         "url": "https://5sigmas.com/herramientas/coste-latencia-llm/",
         "name": "Calculadora de coste y latencia de LLMs"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "url": "https://5sigmas.com/herramientas/precio-rendimiento-modelos/",
+        "name": "Explorador de precio y rendimiento de modelos de IA"
       }
     ]
   }
@@ -38,7 +44,7 @@ hide:
 <section class="s5-page-intro">
   <div class="s5-eyebrow">Herramientas</div>
   <h1>Experimenta con las variables de un sistema de IA.</h1>
-  <p>Calculadoras, visualizadores y laboratorios para responder preguntas de ingeniería de IA con supuestos visibles. Cada herramienta explica la fórmula, documenta las fuentes y permite reproducir el escenario.</p>
+  <p>Calculadoras, visualizadores y laboratorios para responder preguntas de ingeniería de IA con supuestos visibles. Cada herramienta explica el método, documenta las fuentes y permite reproducir el escenario.</p>
 </section>
 
 <section class="s5-section" aria-labelledby="s5-tools-available">
@@ -57,23 +63,28 @@ hide:
       <p>Convierte tokens, caché, tráfico, TTFT, velocidad de generación y concurrencia en coste por solicitud, coste mensual, tiempo de respuesta y capacidad aproximada.</p>
       <span class="s5-tool-index-card__cta">Abrir calculadora →</span>
     </a>
+    <a class="s5-tool-index-card" href="/herramientas/precio-rendimiento-modelos/">
+      <span class="s5-tool-index-card__meta">Explorador · Modelos · 02</span>
+      <h2>Precio y rendimiento de modelos</h2>
+      <p>Compara el coste de tu carga con Intelligence Index, velocidad, TTFT y contexto, manteniendo separadas las fuentes de precio y rendimiento.</p>
+      <span class="s5-tool-index-card__cta">Abrir explorador →</span>
+    </a>
   </div>
 </section>
 
 <section class="s5-section s5-tools-roadmap" aria-labelledby="s5-tools-roadmap">
   <div>
     <div class="s5-eyebrow">Hoja de ruta</div>
-    <h2 id="s5-tools-roadmap">Familias de herramientas planificadas</h2>
-    <p>La sección crecerá por problemas concretos: coste y capacidad, memoria e inferencia, RAG, agentes, evaluación, seguridad, datos e infraestructura. Las herramientas todavía no publicadas no generan páginas vacías.</p>
+    <h2 id="s5-tools-roadmap">Lo siguiente</h2>
+    <p>La sección crece una herramienta cada vez. No se publican páginas vacías: cada entrada aparece cuando tiene interacción real, paridad ES/EN, fuentes y pruebas.</p>
   </div>
   <div class="s5-tools-roadmap__list" aria-label="Próximas familias de herramientas">
-    <div class="s5-tools-roadmap__row"><span>02</span><strong>Precio y rendimiento de modelos</strong><span>explorador</span></div>
-    <div class="s5-tools-roadmap__row"><span>03</span><strong>VRAM de inferencia y KV cache</strong><span>calculadora</span></div>
-    <div class="s5-tools-roadmap__row"><span>04</span><strong>Atención y contexto Transformer</strong><span>visualizador</span></div>
-    <div class="s5-tools-roadmap__row"><span>05</span><strong>Recuperación y evaluación RAG</strong><span>laboratorio</span></div>
-    <div class="s5-tools-roadmap__row"><span>06</span><strong>Latencia, coste y fiabilidad de agentes</strong><span>explorador</span></div>
-    <div class="s5-tools-roadmap__row"><span>07</span><strong>Benchmarks, escalado e infraestructura</strong><span>datos</span></div>
-    <div class="s5-tools-roadmap__row"><span>08</span><strong>Ecosistema global de IA</strong><span>datos</span></div>
+    <div class="s5-tools-roadmap__row"><span>03</span><strong>VRAM de inferencia</strong><span>calculadora</span></div>
+    <div class="s5-tools-roadmap__row"><span>04</span><strong>KV cache y ventana de contexto</strong><span>explorador</span></div>
+    <div class="s5-tools-roadmap__row"><span>05</span><strong>Atención Transformer</strong><span>visualizador</span></div>
+    <div class="s5-tools-roadmap__row"><span>07–08</span><strong>Recuperación y evaluación RAG</strong><span>laboratorio</span></div>
+    <div class="s5-tools-roadmap__row"><span>09–11</span><strong>Latencia, coste y fiabilidad de agentes</strong><span>explorador</span></div>
+    <div class="s5-tools-roadmap__row"><span>13–18</span><strong>Benchmarks, escalado, infraestructura y ecosistema global</strong><span>datos</span></div>
   </div>
 </section>
 
