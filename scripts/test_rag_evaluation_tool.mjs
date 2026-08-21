@@ -53,12 +53,13 @@ assert.equal(weights.answerCorrectness, 0.3);
 assert.equal(weights.referenceCoverage, 0.4);
 
 const zeroWeights = core.normalizeWeights({ contextRelevance: 0, faithfulness: 0, answerCorrectness: 0, referenceCoverage: 0 });
-assert.equal(zeroWeights.contextRelevance, 0.25);
-assert.equal(zeroWeights.faithfulness, 0.3);
-assert.equal(zeroWeights.answerCorrectness, 0.3);
-assert.equal(zeroWeights.referenceCoverage, 0.15);
-assert.equal(zeroWeights.usedDefaultFallback, true);
-assert.ok(core.evaluate({ weights: { contextRelevance: 0, faithfulness: 0, answerCorrectness: 0, referenceCoverage: 0 } }).weightedScore <= 1);
+assert.equal(zeroWeights.contextRelevance, 0);
+assert.equal(zeroWeights.faithfulness, 0);
+assert.equal(zeroWeights.answerCorrectness, 0);
+assert.equal(zeroWeights.referenceCoverage, 0);
+assert.equal(zeroWeights.normalized, false);
+assert.equal(zeroWeights.sum, 0);
+assert.equal(core.evaluate({ weights: { contextRelevance: 0, faithfulness: 0, answerCorrectness: 0, referenceCoverage: 0 } }).weightedScore, 0);
 
 const encodedContexts = core.encodeFlags(core.DEFAULT_CONTEXTS, ['relevant']);
 assert.deepEqual(core.decodeFlags(encodedContexts, core.DEFAULT_CONTEXTS, ['relevant']), core.DEFAULT_CONTEXTS);
@@ -76,4 +77,4 @@ for (const source of [es, en]) {
 assert.match(es, /No es un LLM judge/);
 assert.match(en, /This is not an LLM judge/);
 
-console.log('RAG evaluation metrics, uncertainty, diagnosis, zero-weight fallback, share-state encoding and provenance passed.');
+console.log('RAG evaluation metrics, uncertainty, diagnosis, zero-weight semantics, share-state encoding and provenance passed.');
