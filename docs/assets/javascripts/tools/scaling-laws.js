@@ -46,17 +46,21 @@
     if (el) el.textContent = value;
   }
 
-  function value(name) {
-    return Number(fields[name] && fields[name].value);
+  function safeValue(name, fallback, min, max) {
+    const raw = Number(fields[name] && fields[name].value);
+    if (!Number.isFinite(raw) || raw <= 0) return fallback;
+    return Math.min(max, Math.max(min, raw));
   }
 
   function readInput() {
+    const alphaFallback = basePreset ? basePreset.alpha : 0.34;
+    const betaFallback = basePreset ? basePreset.beta : 0.28;
     return {
-      parametersB: value('parametersB'),
-      tokensB: value('tokensB'),
-      budgetMultiplier: value('budgetMultiplier'),
-      alpha: value('alpha'),
-      beta: value('beta')
+      parametersB: safeValue('parametersB', 70, 0.001, 1e7),
+      tokensB: safeValue('tokensB', 1400, 0.001, 1e9),
+      budgetMultiplier: safeValue('budgetMultiplier', 1, 0.01, 1000),
+      alpha: safeValue('alpha', alphaFallback, 0.01, 2),
+      beta: safeValue('beta', betaFallback, 0.01, 2)
     };
   }
 
