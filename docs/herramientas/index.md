@@ -1,6 +1,6 @@
 ---
 title: Herramientas de IA — calculadoras, visualizadores y laboratorios
-description: Herramientas interactivas de 5sigmas para estimar costes y latencia de LLMs, comparar modelos, memoria de inferencia, atención Transformer, RAG, agentes de voz, evaluación, benchmarks e infraestructura de IA.
+description: Herramientas interactivas de 5sigmas para LLMs, modelos, inferencia, atención Transformer, RAG, agentes, evaluación e infraestructura de IA.
 keywords: herramientas IA, calculadora LLM, comparar modelos IA, coste LLM, latencia LLM, VRAM IA, atención Transformer, RAG evaluación, agentes de voz, benchmarks IA
 hide:
   - toc
