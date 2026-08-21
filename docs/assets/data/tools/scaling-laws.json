@@ -14,7 +14,8 @@
       "alpha": 0.34,
       "beta": 0.28,
       "compute_per_param_token": 6,
-      "source": "hoffmann-2022"
+      "source": "hoffmann-2022",
+      "precision_note": "The explorer uses the rounded coefficients printed in the paper. Analytical optima computed from those rounded values need not reproduce every table or fitted frontier in the paper exactly."
     }
   ],
   "sources": {
