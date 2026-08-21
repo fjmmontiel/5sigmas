@@ -115,6 +115,7 @@ nav:
       - Model Price/Performance: tools/model-price-performance.md
       - Inference VRAM: tools/inference-vram.md
       - KV Cache & Context: tools/kv-cache-context.md
+      - Transformer Attention: tools/transformer-attention.md
   - Learn:
       - Series: series/index.md
       - AI and Generative AI Foundations:
