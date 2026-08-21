@@ -226,7 +226,29 @@
 
   function applyUrlState() {
     const query = new URLSearchParams(window.location.search);
-    for (const [name, key] of Object.entries(params)) if (query.has(key) && fields[name]) fields[name].value = query.get(key);
+    const presetId = query.get(params.preset);
+    if (presetId === 'custom') {
+      presetSelect.value = 'custom';
+    } else if (presetId && presetMap.has(presetId)) {
+      presetSelect.value = presetId;
+      applyPreset(presetMap.get(presetId));
+    } else if (presetId) {
+      presetSelect.value = 'custom';
+    }
+
+    for (const [name, key] of Object.entries(params)) {
+      if (name === 'preset') continue;
+      if (query.has(key) && fields[name]) fields[name].value = query.get(key);
+    }
+
+    const preset = selectedPreset();
+    if (preset) {
+      const geometryMatches = Number(fields.layers.value) === Number(preset.layers)
+        && Number(fields.hiddenSize.value) === Number(preset.hidden_size)
+        && Number(fields.attentionHeads.value) === Number(preset.attention_heads)
+        && Number(fields.kvHeads.value) === Number(preset.kv_heads);
+      if (!geometryMatches) presetSelect.value = 'custom';
+    }
   }
 
   function reset() {
