@@ -30,7 +30,7 @@ const parseCompact = (text) => {
 for (const spec of cases) {
   for (const viewport of viewports) {
     const page = await browser.newPage({ viewport });
-    const response = await page.goto(`${base}${spec.route}`, { waitUntil: 'networkidle' });
+    let response = await page.goto(`${base}${spec.route}`, { waitUntil: 'networkidle' });
     if (!response?.ok()) {
       failures.push(`${spec.route} ${viewport.name}: HTTP ${response?.status() ?? 'no response'}`);
       await page.close();
@@ -60,8 +60,18 @@ for (const spec of cases) {
     await page.locator('[data-context-preset="32768"]').click();
     const overflowState = await page.locator('[data-output="budgetStatus"]').getAttribute('data-state');
     const overflowTokens = parseCompact(await page.locator('[data-output="overflow"]').textContent());
+    const overflowBar = page.locator('[data-budget-bar]');
+    const hasOverflowMarker = await overflowBar.evaluate((node) => node.classList.contains('is-overflow'));
+    const limitShare = await overflowBar.evaluate((node) => Number.parseFloat(getComputedStyle(node).getPropertyValue('--limit-share')));
     if (overflowState !== 'warn') failures.push(`${spec.route} ${viewport.name}: 32K preset should surface overflow`);
     if (Math.abs(overflowTokens - 33596) > 100) failures.push(`${spec.route} ${viewport.name}: 32K overflow should be ≈33.6K, got ${overflowTokens}`);
+    if (!hasOverflowMarker) failures.push(`${spec.route} ${viewport.name}: overflow allocation lacks the context-limit marker`);
+    if (!(limitShare > 45 && limitShare < 55)) failures.push(`${spec.route} ${viewport.name}: overflow limit marker should be near 50%, got ${limitShare}`);
+
+    await page.locator('[data-field="historyGrowthPerTurn"]').fill('0');
+    await page.locator('[data-field="historyGrowthPerTurn"]').dispatchEvent('input');
+    const overflowTurnsText = (await page.locator('[data-output="turns"]').textContent() || '').trim();
+    if (/sin presión por historial|no configured history pressure/i.test(overflowTurnsText)) failures.push(`${spec.route} ${viewport.name}: overflow plus zero growth must still report current pressure`);
 
     await page.locator('[data-action="reset"]').click();
     await page.locator('[data-field="historyGrowthPerTurn"]').fill('0');
@@ -94,7 +104,14 @@ for (const spec of cases) {
     if (!sourceLinks.some((href) => href.includes('help.openai.com/en/articles/4936856'))) failures.push(`${spec.route} ${viewport.name}: token-limit source missing`);
     if (!sourceLinks.some((href) => href.includes('developers.openai.com/api/reference'))) failures.push(`${spec.route} ${viewport.name}: Responses source missing`);
 
-    await page.locator('[data-action="reset"]').click();
+    response = await page.goto(`${base}${spec.route}?c=0&rag=1234.6`, { waitUntil: 'networkidle' });
+    if (!response?.ok()) failures.push(`${spec.route} ${viewport.name}: normalized deep-link HTTP ${response?.status() ?? 'no response'}`);
+    const normalizedLimit = await page.locator('[data-field="contextLimit"]').inputValue();
+    const normalizedRag = await page.locator('[data-field="ragTokens"]').inputValue();
+    if (normalizedLimit !== '1') failures.push(`${spec.route} ${viewport.name}: deep-link context limit must normalize to 1, got ${normalizedLimit}`);
+    if (normalizedRag !== '1235') failures.push(`${spec.route} ${viewport.name}: deep-link RAG tokens must normalize to integer tokens, got ${normalizedRag}`);
+
+    await page.goto(`${base}${spec.route}`, { waitUntil: 'networkidle' });
     await page.screenshot({ path: `${artifactDir}/context-budget-${spec.locale}-${viewport.name}.png`, fullPage: true });
     await page.close();
   }
@@ -106,4 +123,4 @@ if (failures.length) {
   for (const failure of failures) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log('Context budget browser QA passed: ES/EN, 390px/1440px, math interactions, overflow, diagnostics, provenance, JSON-LD, labels and shareable state verified.');
+console.log('Context budget browser QA passed: ES/EN, 390px/1440px, math interactions, overflow marker, normalized deep links, diagnostics, provenance, JSON-LD, labels and shareable state verified.');
