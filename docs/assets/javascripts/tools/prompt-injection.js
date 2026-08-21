@@ -40,6 +40,10 @@
     setFields(core.normalize(raw));
   }
   function postureLabel(p){ return p==='contained'?strings.contained:p==='steering-only'?strings.steering:strings.impact; }
+  function blockedPathsLabel(count){
+    if(locale==='en') return `${count} blocked ${count===1?'path':'paths'}`;
+    return `${count} ${count===1?'ruta bloqueada':'rutas bloqueadas'}`;
+  }
 
   function whyText(item, input){
     if (locale === 'en') {
@@ -98,7 +102,7 @@
     const set=(n,v)=>{const el=root.querySelector(`[data-output="${n}"]`); if(el) el.textContent=v;};
     set('posture',postureLabel(result.summary.posture));
     set('reachablePaths',String(result.summary.reachablePaths));
-    set('blockedPaths',String(result.summary.blockedPaths));
+    set('blockedPaths',blockedPathsLabel(result.summary.blockedPaths));
     set('highImpactPaths',String(result.summary.highImpactPaths));
     set('influence',result.summary.privilegedInfluence?strings.reachable:strings.blocked);
     for(const item of result.paths){
