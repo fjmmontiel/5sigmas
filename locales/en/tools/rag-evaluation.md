@@ -60,7 +60,7 @@ hide:
         <div class="s5-tool-field"><label for="s5-rag-eval-en-wa">Correctness</label><input id="s5-rag-eval-en-wa" data-field="wCorrectness" type="number" min="0" max="100" step="5" value="30" /></div>
         <div class="s5-tool-field"><label for="s5-rag-eval-en-wv">Coverage</label><input id="s5-rag-eval-en-wv" data-field="wCoverage" type="number" min="0" max="100" step="5" value="15" /></div>
       </div>
-      <p class="s5-rag-eval-weight-note">Weights are normalized automatically. The composite score is a configurable decision aid, not a standard metric or a reproduction of RAGAS/ARES.</p>
+      <p class="s5-rag-eval-weight-note">While at least one weight is positive, weights are normalized automatically. If all four are zero, the composite score is disabled. It is a configurable decision aid, not a standard metric or a reproduction of RAGAS/ARES.</p>
       <div class="s5-tool-actions" aria-label="Scenario actions">
         <button class="s5-tool-action" type="button" data-action="share">Copy link</button>
         <button class="s5-tool-action" type="button" data-action="export">Export JSON</button>
@@ -128,7 +128,7 @@ hide:
   <div class="s5-simple-list">
     <a class="s5-list-row" href="/en/tools/rag-retrieval-lab/"><span class="s5-list-row__n">01</span><span class="s5-list-row__title">RAG Retrieval Lab</span><span class="s5-list-row__desc">Measure ranking quality with Precision@k, Recall@k, MRR and nDCG before evaluating generation.</span><span class="s5-list-row__meta">Tool</span></a>
     <a class="s5-list-row" href="/en/tools/context-budget/"><span class="s5-list-row__n">02</span><span class="s5-list-row__title">Context budget</span><span class="s5-list-row__desc">Check how much retrieved context actually fits beside the rest of the prompt.</span><span class="s5-list-row__meta">Tool</span></a>
-    <a class="s5-list-row" href="/en/topics/model-evaluation/"><span class="s5-list-row__n">03</span><span class="s5-list-row__title">Model evaluation</span><span class="s5-list-row__desc">Design the metric from the decision you need to make, not the other way around.</span><span class="s5-list-row__meta">Concept</span></a>
+    <a class="s5-list-row" href="/en/temas/evaluacion-modelos/"><span class="s5-list-row__n">03</span><span class="s5-list-row__title">Model evaluation</span><span class="s5-list-row__desc">Design the metric from the decision you need to make, not the other way around.</span><span class="s5-list-row__meta">Concept</span></a>
   </div>
 </section>
 
