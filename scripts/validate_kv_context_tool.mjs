@@ -130,6 +130,19 @@ for (const spec of cases) {
     }
     if (!hasWebApplication) failures.push(`${spec.route} ${viewport.name}: WebApplication JSON-LD missing`);
 
+    await page.goto(`${base}${spec.route}?m=meta-llama-3-1-70b`, { waitUntil: 'networkidle' });
+    await page.waitForFunction(() => document.querySelector('[data-field="preset"]')?.options.length >= 5);
+    const deepLinkState = await page.locator('[data-s5-tool-form]').evaluate(() => ({
+      preset: document.querySelector('[data-field="preset"]')?.value,
+      layers: Number(document.querySelector('[data-field="layers"]')?.value),
+      hiddenSize: Number(document.querySelector('[data-field="hiddenSize"]')?.value),
+      attentionHeads: Number(document.querySelector('[data-field="attentionHeads"]')?.value),
+      kvHeads: Number(document.querySelector('[data-field="kvHeads"]')?.value)
+    }));
+    if (deepLinkState.preset !== 'meta-llama-3-1-70b' || deepLinkState.layers !== 80 || deepLinkState.hiddenSize !== 8192 || deepLinkState.attentionHeads !== 64 || deepLinkState.kvHeads !== 8) {
+      failures.push(`${spec.route} ${viewport.name}: preset-only deep link did not restore the 70B architecture`);
+    }
+
     await page.locator('[data-action="reset"]').click();
     await page.screenshot({ path: `${artifactDir}/kv-context-${spec.locale}-${viewport.name}.png`, fullPage: true });
     await page.close();
@@ -142,4 +155,4 @@ if (failures.length) {
   for (const failure of failures) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log('KV cache/context browser QA passed: ES/EN, 390px/1440px, math interactions, budget/context warnings, chart geometry, provenance, JSON-LD and shareable state verified.');
+console.log('KV cache/context browser QA passed: ES/EN, 390px/1440px, math interactions, warnings, chart geometry, provenance, deep-link restoration, JSON-LD and shareable state verified.');
