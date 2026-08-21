@@ -32,6 +32,8 @@
       peakConcurrency: nonNegative(raw.peakConcurrency, 35),
       targetWorkerUtilizationPercent: clamp(raw.targetWorkerUtilizationPercent, 1, 100, 70),
       sessionsPerWorker: Math.max(1, Math.round(nonNegative(raw.sessionsPerWorker, 50))),
+      sttSessionsPerCall: nonNegative(raw.sttSessionsPerCall, 1),
+      ttsGenerationDutyPercent: percent(raw.ttsGenerationDutyPercent, 5),
       sttConcurrencyLimit: Math.round(nonNegative(raw.sttConcurrencyLimit, 0)),
       ttsConcurrencyLimit: Math.round(nonNegative(raw.ttsConcurrencyLimit, 0)),
       telephonyUsdPerConnectedMinute: nonNegative(raw.telephonyUsdPerConnectedMinute, 0.0178),
@@ -83,8 +85,12 @@
     const provisionedSessions = workersRequired * input.sessionsPerWorker;
     const targetUsableSessions = provisionedSessions * targetWorkerUtilization;
     const targetCapacityHeadroom = targetUsableSessions - input.peakConcurrency;
-    const expectedActiveSttStreamsAtPeak = input.peakConcurrency * input.userSpeechPercent / 100;
-    const expectedActiveTtsStreamsAtPeak = input.peakConcurrency * input.agentSpeechPercent / 100;
+
+    // Provider concurrency is deliberately separated from speech playback duty cycle.
+    // A persistent STT session can stay open for the entire call, while streaming TTS
+    // providers may count only periods where the model is actively generating audio.
+    const expectedConcurrentSttSessionsAtPeak = input.peakConcurrency * input.sttSessionsPerCall;
+    const expectedConcurrentTtsRequestsAtPeak = input.peakConcurrency * input.ttsGenerationDutyPercent / 100;
 
     const breakdown = {
       telephony: telephonyCost,
@@ -125,10 +131,10 @@
         provisionedSessions,
         targetUsableSessions,
         targetCapacityHeadroom,
-        expectedActiveSttStreamsAtPeak,
-        expectedActiveTtsStreamsAtPeak,
-        sttQuota: quota(input.sttConcurrencyLimit, expectedActiveSttStreamsAtPeak),
-        ttsQuota: quota(input.ttsConcurrencyLimit, expectedActiveTtsStreamsAtPeak)
+        expectedConcurrentSttSessionsAtPeak,
+        expectedConcurrentTtsRequestsAtPeak,
+        sttQuota: quota(input.sttConcurrencyLimit, expectedConcurrentSttSessionsAtPeak),
+        ttsQuota: quota(input.ttsConcurrencyLimit, expectedConcurrentTtsRequestsAtPeak)
       }
     };
   }
