@@ -46,7 +46,7 @@ hide:
 <div class="s5-tool-field"><label>Maximum timeout rate (%)</label><input data-field="maxTimeoutPercent" type="number" min="0" max="100" step="0.5" value="5" /></div>
 <div class="s5-tool-field"><label>Maximum policy-adherence failure (%)</label><input data-field="maxPolicyViolationPercent" type="number" min="0" max="100" step="0.1" value="1" /></div>
 <div class="s5-tool-field"><label>Maximum unnecessary steps (%)</label><input data-field="maxUnnecessaryStepPercent" type="number" min="0" max="100" step="0.5" value="15" /></div>
-</div><div class="s5-tool-actions"><button class="s5-tool-action" type="button" data-action="share">Copy link</button><button class="s5-tool-action" type="button" data-action="export">Export JSON</button><button class="s5-tool-action" type="button" data-action="reset">Reset</button></div><p class="s5-tool-feedback" data-s5-tool-feedback hidden aria-live="polite"></p></section>
+</div><p class="s5-agent-note">The gates compare point estimates. The 95% intervals are shown separately and are not used to auto-approve a release.</p><div class="s5-tool-actions"><button class="s5-tool-action" type="button" data-action="share">Copy link</button><button class="s5-tool-action" type="button" data-action="export">Export JSON</button><button class="s5-tool-action" type="button" data-action="reset">Reset</button></div><p class="s5-tool-feedback" data-s5-tool-feedback hidden aria-live="polite"></p></section>
 </form>
 
 <section class="s5-tool-results" aria-live="polite">
