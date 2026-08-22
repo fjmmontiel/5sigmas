@@ -1,0 +1,76 @@
+{
+  "version": 1,
+  "updated": "2026-08-22",
+  "scope": "Datacenter AI capacity explorer. Hardware presets provide reference dense-compute and maximum power values; facility power, representative PUE, capacity reserve, rack electrical/cooling envelopes, average accelerator power and non-accelerator IT overhead remain explicit user assumptions.",
+  "freshness_policy": "Review accelerator presets and rack reference sources on upstream NVIDIA specification changes and at least every 90 days. Review PUE semantics when The Green Grid guidance changes materially.",
+  "presets": [
+    {
+      "id": "h100-sxm-bf16",
+      "title_es": "NVIDIA H100 SXM · BF16 denso",
+      "title_en": "NVIDIA H100 SXM · dense BF16",
+      "peak_dense_tflops": 989,
+      "tdp_w": 700,
+      "source": "nvidia-h100",
+      "note_es": "989 TFLOP/s es el pico BF16 denso de referencia usado por NVIDIA para MFU; 700 W es el TDP máximo configurable, no consumo medio medido.",
+      "note_en": "989 TFLOP/s is NVIDIA's dense BF16 reference peak used for MFU; 700 W is configurable maximum TDP, not measured average draw."
+    },
+    {
+      "id": "h200-sxm-bf16",
+      "title_es": "NVIDIA H200 SXM · BF16 denso",
+      "title_en": "NVIDIA H200 SXM · dense BF16",
+      "peak_dense_tflops": 989.5,
+      "tdp_w": 700,
+      "source": "nvidia-h200",
+      "note_es": "NVIDIA publica 1.979 TFLOP/s BF16 con sparsity para H200 SXM; el preset usa la mitad como pico denso. El TDP máximo configurable publicado es 700 W.",
+      "note_en": "NVIDIA publishes 1,979 BF16 TFLOP/s with sparsity for H200 SXM; this preset uses half as the dense peak. Published configurable maximum TDP is 700 W."
+    },
+    {
+      "id": "b200-sxm-bf16",
+      "title_es": "NVIDIA B200 SXM · BF16 denso",
+      "title_en": "NVIDIA B200 SXM · dense BF16",
+      "peak_dense_tflops": 2250,
+      "tdp_w": 1000,
+      "source": "nvidia-b200",
+      "note_es": "HGX B200 publica 36 PFLOP/s FP16/BF16 con sparsity para 8 GPU; el preset deriva 2,25 PFLOP/s densos por GPU. La guía DGX B200 documenta un límite máximo por GPU de hasta 1.000 W.",
+      "note_en": "HGX B200 publishes 36 PFLOP/s FP16/BF16 with sparsity for 8 GPUs; this preset derives 2.25 dense PFLOP/s per GPU. The DGX B200 guide documents a maximum per-GPU limit up to 1,000 W."
+    }
+  ],
+  "sources": {
+    "nvidia-h100": {
+      "organization": "NVIDIA",
+      "title": "H100 Tensor Core GPU product specifications",
+      "url": "https://www.nvidia.com/en-us/data-center/h100/",
+      "reviewed": "2026-08-22",
+      "notes": "H100 SXM maximum configurable TDP is up to 700 W. The dense BF16 reference peak is represented as 989 TFLOP/s, consistent with NVIDIA MFU guidance."
+    },
+    "nvidia-h200": {
+      "organization": "NVIDIA",
+      "title": "H200 Tensor Core GPU product specifications",
+      "url": "https://www.nvidia.com/en-us/data-center/h200/",
+      "reviewed": "2026-08-22",
+      "notes": "H200 SXM publishes 1,979 BF16 TFLOP/s with sparsity and up to 700 W configurable maximum TDP; dense BF16 is represented as half the sparsity-assisted figure."
+    },
+    "nvidia-b200": {
+      "organization": "NVIDIA",
+      "title": "HGX B200 specifications and DGX B200 power guidance",
+      "url": "https://www.nvidia.com/en-us/data-center/hgx/",
+      "secondary_url": "https://docs.nvidia.com/dgx/dgxb200-user-guide/introduction-to-dgxb200.html",
+      "reviewed": "2026-08-22",
+      "notes": "HGX B200 publishes 36 PFLOP/s FP16/BF16 with sparsity across 8 GPUs. DGX B200 documentation reports maximum per-GPU power up to 1,000 W under the full-power PSU configuration."
+    },
+    "nvidia-b200-rack": {
+      "organization": "NVIDIA",
+      "title": "Data Center Best Practices with DGX B200",
+      "url": "https://docs.nvidia.com/dgx-pdf/nvidia-dgx-superpod-data-center-best-practices-with-dgx-b200.pdf",
+      "reviewed": "2026-08-22",
+      "notes": "Primary reference showing that rack electrical and cooling envelopes are first-class deployment constraints. NVIDIA documents example DGX B200 rack profiles around 28.6 kW for two systems and 57.2 kW for four systems, with site-specific airflow requirements. These figures are context only; the explorer keeps rack limits editable."
+    },
+    "green-grid-pue": {
+      "organization": "The Green Grid",
+      "title": "Power Usage Effectiveness (PUE)",
+      "url": "https://www.thegreengrid.org/node/372",
+      "reviewed": "2026-08-22",
+      "notes": "PUE is total data-center energy divided by IT equipment energy. Applying a representative PUE to a power envelope is an engineering approximation; actual PUE varies with operating point, climate and time."
+    }
+  }
+}

@@ -267,22 +267,33 @@ tools:
     es_title: Estimador de cómputo y energía de entrenamiento
     en_title: Training Compute / Energy Estimator
     category: calculator
-    status: in_progress
+    status: excellent
     es_route: /herramientas/computo-energia-entrenamiento/
     en_route: /en/tools/training-compute-energy/
     es_parity: true
     en_parity: true
-    tests: numerical_and_browser_gates_authored_2026-08-22_pending_execution
-    visual_review: pending_es_en_mobile_390_desktop_1440
+    tests: passing_full_ci_2026-08-22_head_2ff70175
+    visual_review: reviewed_es_en_mobile_390_desktop_1440_2026-08-22
     provenance: nvidia_h100_h200_hoffmann_2022_green_grid_pue_verified_2026-08-22
     data_freshness: hardware_presets_review_every_90_days_and_on_upstream_change
+    validated_head: 2ff70175a76f1513ebe9f43a2af287172eab9ef9
+    release_commit: adf651cd8a1dcf387de66890677b0709f329b476
     last_reviewed: 2026-08-22
   - id: datacenter-ai-capacity
     order: 17
     es_title: Explorador de capacidad de IA en datacenters
     en_title: Datacenter AI Capacity Explorer
     category: explorer
-    status: planned
+    status: in_progress
+    es_route: /herramientas/capacidad-datacenter-ia/
+    en_route: /en/tools/datacenter-ai-capacity/
+    es_parity: true
+    en_parity: true
+    tests: numerical_and_browser_gates_added_2026-08-22_pending_release_ci
+    visual_review: pending_es_en_mobile_390_desktop_1440
+    provenance: nvidia_h100_h200_hgx_b200_dgx_b200_rack_and_green_grid_pue_verified_2026-08-22
+    data_freshness: hardware_presets_review_every_90_days_and_on_upstream_change
+    last_reviewed: 2026-08-22
   - id: global-ai-ecosystem
     order: 18
     es_title: Explorador del ecosistema global de IA

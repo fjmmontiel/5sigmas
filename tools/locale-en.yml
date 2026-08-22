@@ -35,5 +35,7 @@ routes:
     localized: tools/scaling-laws.md
   - canonical: herramientas/computo-energia-entrenamiento.md
     localized: tools/training-compute-energy.md
+  - canonical: herramientas/capacidad-datacenter-ia.md
+    localized: tools/datacenter-ai-capacity.md
 published_files:
   - llms.txt
