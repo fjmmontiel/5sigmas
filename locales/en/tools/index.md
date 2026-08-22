@@ -1,7 +1,7 @@
 ---
 title: AI Tools — calculators, visualizers and labs
 description: Interactive 5sigmas tools for LLMs, model comparison, inference, context planning, Transformer attention, RAG, agents, evaluation and AI infrastructure.
-keywords: AI tools, LLM calculator, compare AI models, LLM cost, LLM latency, token budget, context window, AI VRAM, Transformer attention, RAG evaluation, voice agents, AI benchmarks, scaling laws, AI training energy, training compute
+keywords: AI tools, LLM calculator, compare AI models, LLM cost, LLM latency, token budget, context window, AI VRAM, Transformer attention, RAG evaluation, voice agents, AI benchmarks, scaling laws, AI training energy, training compute, AI datacenter capacity, datacenter power, rack cooling
 hide:
   - toc
   - navigation
@@ -20,7 +20,7 @@ hide:
   "isPartOf": {"@type": "WebSite", "name": "5sigmas", "url": "https://5sigmas.com/en/"},
   "mainEntity": {
     "@type": "ItemList",
-    "numberOfItems": 16,
+    "numberOfItems": 17,
     "itemListElement": [
       {"@type": "ListItem", "position": 1, "url": "https://5sigmas.com/en/tools/llm-cost-latency/", "name": "LLM Cost & Latency Calculator"},
       {"@type": "ListItem", "position": 2, "url": "https://5sigmas.com/en/tools/model-price-performance/", "name": "Model Price/Performance Explorer"},
@@ -37,7 +37,8 @@ hide:
       {"@type": "ListItem", "position": 13, "url": "https://5sigmas.com/en/tools/benchmark-reliability/", "name": "Benchmark Reliability Explorer"},
       {"@type": "ListItem", "position": 14, "url": "https://5sigmas.com/en/tools/model-capability-timeline/", "name": "Model Capability Timeline"},
       {"@type": "ListItem", "position": 15, "url": "https://5sigmas.com/en/tools/scaling-laws/", "name": "Scaling-Laws Explorer"},
-      {"@type": "ListItem", "position": 16, "url": "https://5sigmas.com/en/tools/training-compute-energy/", "name": "AI Training Compute & Energy Estimator"}
+      {"@type": "ListItem", "position": 16, "url": "https://5sigmas.com/en/tools/training-compute-energy/", "name": "AI Training Compute & Energy Estimator"},
+      {"@type": "ListItem", "position": 17, "url": "https://5sigmas.com/en/tools/datacenter-ai-capacity/", "name": "Datacenter AI Capacity Explorer"}
     ]
   }
 }
@@ -72,13 +73,14 @@ hide:
     <a class="s5-tool-index-card" href="/en/tools/model-capability-timeline/"><span class="s5-tool-index-card__meta">Data explorer · Models · 14</span><h2>Model capability timeline</h2><p>Follow published results for one benchmark at a time, keep conditions and point-level provenance visible, and surface protocol breaks instead of blending incompatible metrics.</p><span class="s5-tool-index-card__cta">Open explorer →</span></a>
     <a class="s5-tool-index-card" href="/en/tools/scaling-laws/"><span class="s5-tool-index-card__meta">Explorer · Scaling · 15</span><h2>Scaling laws</h2><p>Reallocate a fixed training budget between parameters and tokens, compare the optimum of a Chinchilla-style surface, and test how sensitive that optimum is to the fitted exponents.</p><span class="s5-tool-index-card__cta">Open explorer →</span></a>
     <a class="s5-tool-index-card" href="/en/tools/training-compute-energy/"><span class="s5-tool-index-card__meta">Calculator · Infrastructure · 16</span><h2>Training compute and energy</h2><p>Turn accelerators, MFU, schedule, average power and PUE into model FLOPs, estimated runtime, facility power and energy while keeping dense-workload assumptions separate from electrical assumptions.</p><span class="s5-tool-index-card__cta">Open calculator →</span></a>
+    <a class="s5-tool-index-card" href="/en/tools/datacenter-ai-capacity/"><span class="s5-tool-index-card__meta">Explorer · Infrastructure · 17</span><h2>Datacenter AI capacity</h2><p>Compare total power, PUE, physical slots, per-rack electrical power and cooling to find how many accelerators can be active and which physical constraint binds.</p><span class="s5-tool-index-card__cta">Open explorer →</span></a>
   </div>
 </section>
 
 <section class="s5-section s5-tools-roadmap" aria-labelledby="s5-tools-roadmap">
   <div><div class="s5-eyebrow">Roadmap</div><h2 id="s5-tools-roadmap">What comes next</h2><p>The section grows one tool at a time. There are no empty placeholder pages: an entry appears when it has real interaction, ES/EN parity, provenance and tests.</p></div>
   <div class="s5-tools-roadmap__list" aria-label="Upcoming tool families">
-    <div class="s5-tools-roadmap__row"><span>17–18</span><strong>Datacenter capacity and the global AI ecosystem</strong><span>data</span></div>
+    <div class="s5-tools-roadmap__row"><span>18</span><strong>Global AI ecosystem</strong><span>data</span></div>
   </div>
 </section>
 
