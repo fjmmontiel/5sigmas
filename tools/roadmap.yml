@@ -301,4 +301,15 @@ tools:
     es_title: Explorador del ecosistema global de IA
     en_title: Global AI Ecosystem Explorer
     category: data_explorer
-    status: planned
+    status: excellent
+    es_route: /herramientas/ecosistema-global-ia/
+    en_route: /en/tools/global-ai-ecosystem/
+    es_parity: true
+    en_parity: true
+    tests: passing_full_ci_2026-08-22_head_92f4ffae
+    visual_review: reviewed_es_en_mobile_390_desktop_1440_2026-08-22
+    provenance: stanford_ai_index_2026_stanford_ai_index_2025_linkedin_oxford_gair_2025_corrected_verified_2026-08-22
+    data_freshness: source_snapshot_review_every_30_days_and_on_source_revision
+    validated_head: 92f4ffae09bd19f38ca6cc1ad0c2e1096e49b25b
+    release_commit: 3fc7ad5ccb24d34eb3589b6621e3ba6d6b45b955
+    last_reviewed: 2026-08-22
