@@ -24,6 +24,7 @@
 - [Scaling-Laws Explorer](https://5sigmas.com/en/tools/scaling-laws/index.html.md): reallocate a fixed training budget between parameters and tokens with a Chinchilla-style loss surface, inspect the conditional optimum and test sensitivity to the fitted exponents.
 - [AI Training Compute & Energy Estimator](https://5sigmas.com/en/tools/training-compute-energy/index.html.md): estimate model FLOPs, runtime, facility power and energy from accelerators, MFU, average power, PUE, parameters and tokens while keeping compute and electrical assumptions separate.
 - [Datacenter AI Capacity Explorer](https://5sigmas.com/en/tools/datacenter-ai-capacity/index.html.md): compare total facility power, PUE, installed slots, per-rack electrical power and cooling to size the active accelerator fleet while keeping training compute and measured inference throughput separate.
+- [Global AI Ecosystem Explorer](https://5sigmas.com/en/tools/global-ai-ecosystem/index.html.md): compare country-level investment, company formation, infrastructure, model development, talent and policy signals with visible coverage, normalization and weights; missing observations never become zeros.
 
 ## Core concepts
 

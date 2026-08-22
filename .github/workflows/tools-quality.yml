@@ -22,6 +22,7 @@ on:
       - 'docs/stylesheets/tools-scaling-laws.css'
       - 'docs/stylesheets/tools-training-energy.css'
       - 'docs/stylesheets/tools-datacenter-capacity.css'
+      - 'docs/stylesheets/tools-global-ai-ecosystem.css'
       - 'tools/**'
       - 'hooks/locale_alternates.py'
       - 'scripts/prepare_locale.py'
@@ -112,6 +113,9 @@ jobs:
       - name: Verify datacenter capacity constraints and provenance
         run: node scripts/test_datacenter_ai_capacity_tool.mjs
 
+      - name: Verify global AI ecosystem coverage, normalization and provenance
+        run: node scripts/test_global_ai_ecosystem_tool.mjs
+
       - name: Build Spanish site strictly
         run: mkdocs build --clean --strict
 
@@ -178,7 +182,9 @@ jobs:
             curl --fail --silent http://127.0.0.1:8000/herramientas/computo-energia-entrenamiento/ > /dev/null && \
             curl --fail --silent http://127.0.0.1:8000/en/tools/training-compute-energy/ > /dev/null && \
             curl --fail --silent http://127.0.0.1:8000/herramientas/capacidad-datacenter-ia/ > /dev/null && \
-            curl --fail --silent http://127.0.0.1:8000/en/tools/datacenter-ai-capacity/ > /dev/null && exit 0
+            curl --fail --silent http://127.0.0.1:8000/en/tools/datacenter-ai-capacity/ > /dev/null && \
+            curl --fail --silent http://127.0.0.1:8000/herramientas/ecosistema-global-ia/ > /dev/null && \
+            curl --fail --silent http://127.0.0.1:8000/en/tools/global-ai-ecosystem/ > /dev/null && exit 0
             sleep 1
           done
           cat /tmp/5sigmas-tools-preview.log
@@ -235,6 +241,9 @@ jobs:
       - name: Validate datacenter AI capacity explorer and capture visual evidence
         run: node scripts/validate_datacenter_ai_capacity_tool.mjs
 
+      - name: Validate global AI ecosystem explorer and capture visual evidence
+        run: node scripts/validate_global_ai_ecosystem_tool.mjs
+
       - name: Validate localized route switching and hreflang
         run: node scripts/validate_locale_switching.mjs
 
@@ -261,6 +270,7 @@ jobs:
             artifacts/visual-review/scaling-laws-*.png
             artifacts/visual-review/training-compute-energy-*.png
             artifacts/visual-review/datacenter-ai-capacity-*.png
+            artifacts/visual-review/global-ai-ecosystem-*.png
           if-no-files-found: warn
           retention-days: 1
           overwrite: true
