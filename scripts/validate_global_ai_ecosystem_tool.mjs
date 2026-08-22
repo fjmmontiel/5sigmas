@@ -56,24 +56,32 @@ try {
       const mobileRankGeometry = await firstRankRow.evaluate((node) => {
         const score = node.querySelector('.s5-ecosystem-score');
         const country = node.querySelector('.s5-ecosystem-country');
-        if (!score || !country) return null;
+        const countryName = country?.querySelector('strong');
+        if (!score || !country || !countryName) return null;
         const scoreBox = score.getBoundingClientRect();
         const countryBox = country.getBoundingClientRect();
+        const countryNameBox = countryName.getBoundingClientRect();
         const style = getComputedStyle(score);
         const lineHeight = Number.parseFloat(style.lineHeight) || Number.parseFloat(style.fontSize) * 1.2;
         return {
           scoreTop: scoreBox.top,
+          scoreBottom: scoreBox.bottom,
+          scoreCenter: scoreBox.top + scoreBox.height / 2,
           scoreHeight: scoreBox.height,
           scoreClientWidth: score.clientWidth,
           scoreScrollWidth: score.scrollWidth,
           countryTop: countryBox.top,
+          countryBottom: countryBox.bottom,
+          countryNameCenter: countryNameBox.top + countryNameBox.height / 2,
           lineHeight,
           scoreText: (score.textContent || '').trim(),
         };
       });
       if (!mobileRankGeometry) failures.push(`${spec.route} ${viewport.name}: first ranking row geometry unavailable`);
       if (viewport.width <= 520 && mobileRankGeometry) {
-        if (Math.abs(mobileRankGeometry.scoreTop - mobileRankGeometry.countryTop) > 4) failures.push(`${spec.route} mobile: score must share the first grid row with the country label`);
+        const centerDelta = Math.abs(mobileRankGeometry.scoreCenter - mobileRankGeometry.countryNameCenter);
+        const overlapsCountryBlock = mobileRankGeometry.scoreCenter >= mobileRankGeometry.countryTop - 1 && mobileRankGeometry.scoreCenter <= mobileRankGeometry.countryBottom + 1;
+        if (!overlapsCountryBlock || centerDelta > 6) failures.push(`${spec.route} mobile: score must stay beside the country name in the first grid row`);
         if (mobileRankGeometry.scoreScrollWidth > mobileRankGeometry.scoreClientWidth + 1) failures.push(`${spec.route} mobile: ranking score overflows its score column`);
         if (mobileRankGeometry.scoreHeight > mobileRankGeometry.lineHeight * 1.5) failures.push(`${spec.route} mobile: ranking score wrapped across multiple lines (${mobileRankGeometry.scoreText})`);
       }
@@ -128,4 +136,4 @@ if (failures.length) {
   failures.forEach((failure) => console.error(` - ${failure}`));
   process.exit(1);
 }
-console.log('Global AI ecosystem browser QA passed: ES/EN, 390/1440, 28-record coverage, strict missing-data exclusion, dynamic signals/table, deep links, provenance, accessible tool controls, single-line mobile ranking scores and responsive containment verified.');
+console.log('Global AI ecosystem browser QA passed: ES/EN, 390/1440, 28-record coverage, strict missing-data exclusion, dynamic signals/table, deep links, provenance, accessible tool controls, single-line mobile ranking scores aligned with country names, and responsive containment verified.');
