@@ -25,6 +25,15 @@
     },
   }[locale];
 
+  const sourceNotesEs = {
+    stanford_ai_index_2026_investment: 'Inversión privada en IA y nuevas empresas financiadas en 2025 según Quid. Las figuras publicadas muestran las 15 áreas principales de cada señal; un país que no aparece se conserva como dato ausente, nunca como cero.',
+    stanford_ai_index_2026_datacenters: 'Recuento de instalaciones Cloudscene de 2025 para las 15 áreas mostradas por el informe. El número de centros no mide su tamaño, aceleradores de IA ni utilización.',
+    stanford_ai_index_2026_models: 'Snapshot de Epoch AI del 22-04-2026. La figura solo publica geografías seleccionadas; una ausencia se conserva como dato ausente y no como cero modelos.',
+    stanford_ai_index_2025_linkedin_skills: 'Penetración relativa de habilidades de IA basada en perfiles de LinkedIn para los países mostrados en la figura. La cobertura y representatividad de la plataforma varían entre países; no se infieren valores ausentes.',
+    oxford_gair_2025: 'Policy Capacity es un pilar de la metodología 2025 de Oxford Insights, no una medida completa del rendimiento gubernamental. Solo se incorporan valores verificados en la tabla publicada.',
+    stanford_global_vibrancy_reference: 'Se muestra únicamente como referencia externa cuando ya existe un valor verificado. Nunca entra en la puntuación de 5sigmas porque reutilizar un índice compuesto produciría doble conteo.',
+  };
+
   const q = (selector) => root.querySelector(selector);
   const els = {
     metricControls: q('[data-output="metric-controls"]'), ranking: q('[data-output="ranking"]'),
@@ -195,7 +204,7 @@
       a.rel = 'noopener noreferrer';
       a.textContent = `${source.organization} · ${source.title}`;
       const small = document.createElement('small');
-      const notes = locale === 'en' ? (source.notes_en || source.notes) : (source.notes_es || source.notes);
+      const notes = locale === 'en' ? source.notes : (sourceNotesEs[source.id] || source.notes);
       small.textContent = `${notes} ${t.checked}: ${source.retrieved}.`;
       li.append(a, small);
       els.sources.appendChild(li);
