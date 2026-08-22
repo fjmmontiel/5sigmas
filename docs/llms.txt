@@ -24,6 +24,7 @@
 - [Explorador de leyes de escalado](https://5sigmas.com/herramientas/leyes-escalado/index.html.md): redistribuye un presupuesto fijo de entrenamiento entre parámetros y tokens con una superficie tipo Chinchilla, muestra el óptimo condicionado y permite probar la sensibilidad a los exponentes del ajuste.
 - [Estimador de cómputo y energía de entrenamiento](https://5sigmas.com/herramientas/computo-energia-entrenamiento/index.html.md): estima FLOPs, duración, potencia y energía de instalación a partir de aceleradores, MFU, consumo medio, PUE, parámetros y tokens, manteniendo separados los supuestos de cómputo y electricidad.
 - [Explorador de capacidad de IA en datacenters](https://5sigmas.com/herramientas/capacidad-datacenter-ia/index.html.md): contrasta potencia total, PUE, slots instalados, potencia eléctrica y refrigeración por rack para dimensionar la flota activa, manteniendo separados el cómputo de entrenamiento y el throughput de inferencia medido.
+- [Explorador del ecosistema global de IA](https://5sigmas.com/herramientas/ecosistema-global-ia/index.html.md): compara señales nacionales de inversión, creación de empresas, infraestructura, desarrollo de modelos, talento y política con cobertura, normalización y pesos visibles; los datos ausentes nunca se convierten en cero.
 
 ## Conceptos fundamentales
 
