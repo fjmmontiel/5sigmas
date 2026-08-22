@@ -60,7 +60,7 @@
     const gpus = Math.round(clamp(finitePositive(input.gpus, 1024), 1, 1e7));
     const durationHours = clamp(finitePositive(input.durationHours, 720), 0.01, 1e7);
     const mfu = clamp(finitePositive(input.mfuPct, 45) / 100, 0.001, 1);
-    const powerUtilization = clamp(finitePositive(input.powerUtilizationPct, 85) / 100, 0.001, 1.5);
+    const powerUtilization = clamp(finitePositive(input.powerUtilizationPct, 85) / 100, 0.001, 1);
     const otherIT = clamp(Number.isFinite(Number(input.otherITPct)) ? Number(input.otherITPct) / 100 : 0.15, 0, 10);
     const pue = clamp(finitePositive(input.pue, 1.2), 1, 5);
     const computeFactor = clamp(finitePositive(input.computeFactor, 6), 0.1, 100);
@@ -129,7 +129,7 @@
       gpus: Math.round(clamp(finitePositive(params.get('g'), 1024), 1, 1e7)),
       durationHours: clamp(finitePositive(params.get('h'), 720), 0.01, 1e7),
       mfuPct: clamp(finitePositive(params.get('mfu'), 45), 0.1, 100),
-      powerUtilizationPct: clamp(finitePositive(params.get('pwr'), 85), 0.1, 150),
+      powerUtilizationPct: clamp(finitePositive(params.get('pwr'), 85), 0.1, 100),
       otherITPct: clamp(Number.isFinite(Number(params.get('it'))) ? Number(params.get('it')) : 15, 0, 1000),
       pue: clamp(finitePositive(params.get('pue'), 1.2), 1, 5),
       parametersB: clamp(finitePositive(params.get('n'), 70), 0.001, 1e7),
