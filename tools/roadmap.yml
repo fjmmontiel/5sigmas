@@ -267,7 +267,16 @@ tools:
     es_title: Estimador de cómputo y energía de entrenamiento
     en_title: Training Compute / Energy Estimator
     category: calculator
-    status: planned
+    status: in_progress
+    es_route: /herramientas/computo-energia-entrenamiento/
+    en_route: /en/tools/training-compute-energy/
+    es_parity: true
+    en_parity: true
+    tests: numerical_and_browser_gates_authored_2026-08-22_pending_execution
+    visual_review: pending_es_en_mobile_390_desktop_1440
+    provenance: nvidia_h100_h200_hoffmann_2022_green_grid_pue_verified_2026-08-22
+    data_freshness: hardware_presets_review_every_90_days_and_on_upstream_change
+    last_reviewed: 2026-08-22
   - id: datacenter-ai-capacity
     order: 17
     es_title: Explorador de capacidad de IA en datacenters
