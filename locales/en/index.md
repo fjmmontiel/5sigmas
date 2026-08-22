@@ -80,6 +80,7 @@ hide:
 <section class="s5-entry-section" aria-labelledby="s5-entry-title">
   <div class="s5-section-head s5-section-head--compact">
     <h2 id="s5-entry-title">Choose how to continue</h2>
+    <a href="/en/tools/">Experiment with tools →</a>
   </div>
   <nav class="s5-entry-grid" aria-label="Ways to enter the English 5sigmas library">
     <a class="s5-entry" href="/en/visuales/">
