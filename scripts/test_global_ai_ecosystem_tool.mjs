@@ -15,40 +15,46 @@ function close(actual, expected, tolerance = 1e-9) {
 }
 
 assert(data.snapshot_date === '2026-08-22', 'Dataset snapshot date drifted');
-assert(data.methodology_version === '2026-08-22-v1', 'Methodology version drifted');
+assert(data.methodology_version === '2026-08-22-v2', 'Methodology version drifted');
 assert(data.metrics.length === 6, 'Expected six independently selectable signals');
-assert(data.countries.length === 10, 'Initial country set must remain explicit');
+assert(data.countries.length === 28, `Expected 28 explicit country records, got ${data.countries.length}`);
+assert(new Set(data.countries.map((country) => country.id)).size === data.countries.length, 'Country ids must be unique');
 
 const defaultScenario = Core.computeScenario(data, {});
-assert(defaultScenario.activeIds.join(',') === 'private_investment_2025,new_ai_companies_2025,data_centers_2025', 'Default active signals drifted');
-assert(defaultScenario.comparableCount === 9, `Expected 9 default-comparable countries, got ${defaultScenario.comparableCount}`);
-assert(defaultScenario.excluded.length === 1 && defaultScenario.excluded[0].id === 'sg', 'Singapore must be excluded when its data-center value is missing');
-assert(defaultScenario.excluded[0].missing.includes('data_centers_2025'), 'Missing-data reason must remain explicit');
-assert(defaultScenario.rows[0].id === 'us', 'US should lead the initial sourced scenario');
+assert(defaultScenario.activeIds.join(',') === 'private_investment_2025,new_ai_companies_2025', 'Default active signals drifted');
+assert(defaultScenario.comparableCount === 12, `Expected 12 default-comparable countries, got ${defaultScenario.comparableCount}`);
+assert(defaultScenario.rows[0].id === 'us', 'US should lead the sourced default scenario');
 close(Object.values(defaultScenario.weights).reduce((a, b) => a + b, 0), 1);
 assert(!defaultScenario.activeIds.includes('reference_vibrancy_2024'), 'External Stanford composite must never enter the 5sigmas composite');
+assert(defaultScenario.excluded.some((item) => item.id === 'sa' && item.missing.includes('new_ai_companies_2025')), 'Saudi Arabia must be explicitly excluded when company formation is missing');
+assert(defaultScenario.excluded.some((item) => item.id === 'nl' && item.missing.includes('private_investment_2025')), 'Countries outside a source chart must remain missing rather than become zero');
 
-const singapore = data.countries.find((country) => country.id === 'sg');
-assert(singapore.values.data_centers_2025 === null, 'Missing observation must remain null in source data');
+const infrastructureScenario = Core.computeScenario(data, { activeMetrics: [...defaultScenario.activeIds, 'data_centers_2025'] });
+assert(infrastructureScenario.comparableCount === 9, `Expected 9 countries with current capital, company and data-center coverage, got ${infrastructureScenario.comparableCount}`);
+assert(infrastructureScenario.excluded.some((item) => item.id === 'sg' && item.missing.includes('data_centers_2025')), 'Singapore must remain missing for the published data-center chart');
+
 assert(Core.transformValue(null, 'linear') === null, 'Null must never be coerced to zero');
 assert(Core.transformValue('', 'linear') === null, 'Empty value must never be coerced to zero');
+assert(Core.transformValue(undefined, 'log1p') === null, 'Undefined must never be coerced to zero');
 
 const modelsScenario = Core.computeScenario(data, { activeMetrics: [...defaultScenario.activeIds, 'notable_models_2025'] });
-assert(modelsScenario.comparableCount === 5, `Expected 5 countries when notable models are active, got ${modelsScenario.comparableCount}`);
-assert(modelsScenario.rows.map((row) => row.id).every((id) => ['us','cn','gb','ca','fr'].includes(id)), 'Model-development coverage must not invent missing values');
+assert(modelsScenario.comparableCount === 7, `Expected 7 countries when notable-model coverage is active, got ${modelsScenario.comparableCount}`);
+assert(modelsScenario.rows.map((row) => row.id).every((id) => ['us','cn','gb','fr','ca','sg','kr'].includes(id)), 'Model-development coverage must not invent missing values');
 
 const talentScenario = Core.computeScenario(data, { activeMetrics: [...defaultScenario.activeIds, 'ai_skill_penetration_2024'] });
-assert(talentScenario.comparableCount === 7, `Expected 7 countries with talent coverage, got ${talentScenario.comparableCount}`);
+assert(talentScenario.comparableCount === 8, `Expected 8 countries with current-momentum plus talent coverage, got ${talentScenario.comparableCount}`);
+assert(talentScenario.rows.some((row) => row.id === 'il'), 'Verified Israel skill penetration should remain available');
+assert(!talentScenario.rows.some((row) => row.id === 'sg'), 'Missing 2015–24 Singapore skill value must not be inferred from an older edition');
 
 const policyScenario = Core.computeScenario(data, { activeMetrics: [...defaultScenario.activeIds, 'policy_capacity_2025'] });
-assert(policyScenario.comparableCount === 8, `Expected 8 countries with policy coverage, got ${policyScenario.comparableCount}`);
+assert(policyScenario.comparableCount === 9, `Expected 9 countries with current-momentum plus policy coverage, got ${policyScenario.comparableCount}`);
 assert(policyScenario.excluded.some((item) => item.id === 'ca' && item.missing.includes('policy_capacity_2025')), 'Canada missing policy observation must exclude it rather than become zero');
 
 const zeroWeights = Core.computeScenario(data, {
   activeMetrics: defaultScenario.activeIds,
   weights: Object.fromEntries(defaultScenario.activeIds.map((id) => [id, 0]))
 });
-defaultScenario.activeIds.forEach((id) => close(zeroWeights.weights[id], 1 / 3));
+defaultScenario.activeIds.forEach((id) => close(zeroWeights.weights[id], 1 / 2));
 
 const investment = data.metrics.find((metric) => metric.id === 'private_investment_2025');
 const investmentBounds = defaultScenario.bounds.private_investment_2025;
@@ -69,4 +75,13 @@ data.sources.forEach((source) => {
   assert(source.retrieved === '2026-08-22', `Source ${source.id} must carry the current retrieval date`);
 });
 
-console.log('global-ai-ecosystem: normalization, missing-data, weighting, state and provenance checks passed');
+const investmentCountries = data.countries.filter((country) => country.values.private_investment_2025 !== null);
+const companyCountries = data.countries.filter((country) => country.values.new_ai_companies_2025 !== null);
+const datacenterCountries = data.countries.filter((country) => country.values.data_centers_2025 !== null);
+const skillCountries = data.countries.filter((country) => country.values.ai_skill_penetration_2024 !== null);
+assert(investmentCountries.length === 15, '2025 investment signal must reproduce the 15 published areas, no more and no fewer');
+assert(companyCountries.length === 15, '2025 company-formation signal must reproduce the 15 published areas, no more and no fewer');
+assert(datacenterCountries.length === 15, '2025 data-center signal must reproduce the 15 published areas, no more and no fewer');
+assert(skillCountries.length === 14, '2015–24 skill penetration signal must reproduce the 14 country observations shown around the global baseline');
+
+console.log('global-ai-ecosystem: 28-country coverage, normalization, missing-data, weighting, state and provenance checks passed');
