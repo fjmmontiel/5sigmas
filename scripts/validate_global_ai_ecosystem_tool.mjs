@@ -72,16 +72,20 @@ try {
           scoreScrollWidth: score.scrollWidth,
           countryTop: countryBox.top,
           countryBottom: countryBox.bottom,
-          countryNameCenter: countryNameBox.top + countryNameBox.height / 2,
+          countryNameTop: countryNameBox.top,
+          countryNameBottom: countryNameBox.bottom,
           lineHeight,
           scoreText: (score.textContent || '').trim(),
         };
       });
       if (!mobileRankGeometry) failures.push(`${spec.route} ${viewport.name}: first ranking row geometry unavailable`);
       if (viewport.width <= 520 && mobileRankGeometry) {
-        const centerDelta = Math.abs(mobileRankGeometry.scoreCenter - mobileRankGeometry.countryNameCenter);
-        const overlapsCountryBlock = mobileRankGeometry.scoreCenter >= mobileRankGeometry.countryTop - 1 && mobileRankGeometry.scoreCenter <= mobileRankGeometry.countryBottom + 1;
-        if (!overlapsCountryBlock || centerDelta > 6) failures.push(`${spec.route} mobile: score must stay beside the country name in the first grid row`);
+        // Different fonts/weights can have different line-box centers even when they are visibly on the same row.
+        // Assert the semantic layout contract instead: the score stays inside the country block, overlaps the
+        // country-name line vertically, remains single-line and never overflows its own column.
+        const insideCountryBlock = mobileRankGeometry.scoreCenter >= mobileRankGeometry.countryTop - 1 && mobileRankGeometry.scoreCenter <= mobileRankGeometry.countryBottom + 1;
+        const overlapsCountryNameLine = mobileRankGeometry.scoreBottom >= mobileRankGeometry.countryNameTop - 2 && mobileRankGeometry.scoreTop <= mobileRankGeometry.countryNameBottom + 2;
+        if (!insideCountryBlock || !overlapsCountryNameLine) failures.push(`${spec.route} mobile: score must stay beside the country name in the first grid row`);
         if (mobileRankGeometry.scoreScrollWidth > mobileRankGeometry.scoreClientWidth + 1) failures.push(`${spec.route} mobile: ranking score overflows its score column`);
         if (mobileRankGeometry.scoreHeight > mobileRankGeometry.lineHeight * 1.5) failures.push(`${spec.route} mobile: ranking score wrapped across multiple lines (${mobileRankGeometry.scoreText})`);
       }
