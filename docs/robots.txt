@@ -5,3 +5,4 @@ Allow: /
 Sitemap: https://5sigmas.com/sitemap.xml
 Sitemap: https://5sigmas.com/en/sitemap.xml
 Sitemap: https://5sigmas.com/video-sitemap.xml
+Sitemap: https://5sigmas.com/en/video-sitemap.xml
