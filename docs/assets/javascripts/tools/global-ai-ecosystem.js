@@ -45,8 +45,17 @@
   function regionName(region) {
     if (locale === 'en') return region;
     return ({
-      'North America': 'Norteamérica', 'East Asia': 'Asia oriental', 'South Asia': 'Asia meridional',
-      'Western Europe': 'Europa occidental', Pacific: 'Pacífico',
+      'North America': 'Norteamérica',
+      'East Asia': 'Asia oriental',
+      'South Asia': 'Asia meridional',
+      'Southeast Asia': 'Sudeste asiático',
+      'Western Asia': 'Asia occidental',
+      'Middle East': 'Oriente Medio',
+      'Western Europe': 'Europa occidental',
+      'Northern Europe': 'Europa septentrional',
+      'Eastern Europe': 'Europa oriental',
+      'Latin America': 'América Latina',
+      Pacific: 'Pacífico',
     })[region] || region;
   }
 
@@ -186,7 +195,8 @@
       a.rel = 'noopener noreferrer';
       a.textContent = `${source.organization} · ${source.title}`;
       const small = document.createElement('small');
-      small.textContent = `${source.notes} ${t.checked}: ${source.retrieved}.`;
+      const notes = locale === 'en' ? (source.notes_en || source.notes) : (source.notes_es || source.notes);
+      small.textContent = `${notes} ${t.checked}: ${source.retrieved}.`;
       li.append(a, small);
       els.sources.appendChild(li);
     });
