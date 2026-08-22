@@ -73,6 +73,7 @@ nav:
       - Línea temporal de capacidades: herramientas/linea-temporal-capacidades-modelos.md
       - Leyes de escalado: herramientas/leyes-escalado.md
       - Cómputo y energía de entrenamiento: herramientas/computo-energia-entrenamiento.md
+      - Capacidad de IA en datacenters: herramientas/capacidad-datacenter-ia.md
   - Aprender:
       - Conceptos:
           - temas/index.md
