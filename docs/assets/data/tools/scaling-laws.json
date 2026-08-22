@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "updated": "2026-08-22",
+  "scope": "Dense autoregressive Transformer pretraining intuition. Loss estimates use the Hoffmann et al. 2022 fitted surface and the 6ND training-compute approximation; they are not forecasts for modern post-training or mixture-of-experts systems.",
+  "freshness_policy": "Review when primary scaling-law evidence materially changes; otherwise annually because these fitted constants are historical rather than live provider data.",
+  "presets": [
+    {
+      "id": "chinchilla-2022",
+      "title_es": "Chinchilla · Hoffmann et al. 2022",
+      "title_en": "Chinchilla · Hoffmann et al. 2022",
+      "E": 1.69,
+      "A": 406.4,
+      "B": 410.7,
+      "alpha": 0.34,
+      "beta": 0.28,
+      "compute_per_param_token": 6,
+      "source": "hoffmann-2022",
+      "precision_note": "The explorer uses the rounded coefficients printed in the paper. Analytical optima computed from those rounded values need not reproduce every table or fitted frontier in the paper exactly."
+    }
+  ],
+  "sources": {
+    "hoffmann-2022": {
+      "organization": "DeepMind",
+      "title": "Training Compute-Optimal Large Language Models",
+      "published": "2022-03-29",
+      "url": "https://arxiv.org/abs/2203.15556",
+      "notes": "Fits L(N,D)=E+A/N^alpha+B/D^beta and reports approximately equal scaling of model size and training tokens under compute-optimal training."
+    },
+    "kaplan-2020": {
+      "organization": "OpenAI",
+      "title": "Scaling Laws for Neural Language Models",
+      "published": "2020-01-23",
+      "url": "https://arxiv.org/abs/2001.08361",
+      "notes": "Earlier empirical scaling-law study showing power-law relationships among loss, model size, data and training compute, with a different compute-optimal allocation regime."
+    }
+  }
+}

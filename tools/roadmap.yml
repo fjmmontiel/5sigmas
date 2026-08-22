@@ -4,7 +4,7 @@ quality_states:
   - planned
   - in_progress
   - excellent
-updated: 2026-08-21
+updated: 2026-08-22
 tools:
   - id: llm-cost-latency
     order: 1
@@ -233,22 +233,33 @@ tools:
     es_title: Línea temporal de capacidades de modelos
     en_title: Model Capability Timeline
     category: data_explorer
-    status: in_progress
+    status: excellent
     es_route: /herramientas/linea-temporal-capacidades-modelos/
     en_route: /en/tools/model-capability-timeline/
     es_parity: true
     en_parity: true
-    tests: numerical_protocol_export_and_browser_gates_authored_2026-08-21_pending_local_and_full_ci
-    visual_review: pending_es_en_mobile_390_desktop_1440
+    tests: passing_full_ci_2026-08-22_head_18e589c4
+    visual_review: reviewed_es_en_mobile_390_desktop_1440_2026-08-22
     provenance: openai_release_tables_gpt4_1_through_gpt5_6_verified_2026-08-21
     data_freshness: review_on_relevant_model_release_and_every_30_days
-    last_reviewed: 2026-08-21
+    validated_head: 18e589c4015a880bafcd1c101b172b1a0846e1c4
+    release_commit: 5b5eff61a7162084c235a6fe55d6d3cf64df2857
+    last_reviewed: 2026-08-22
   - id: scaling-laws
     order: 15
     es_title: Explorador de leyes de escalado
     en_title: Scaling-Laws Explorer
     category: explorer
-    status: planned
+    status: in_progress
+    es_route: /herramientas/leyes-escalado/
+    en_route: /en/tools/scaling-laws/
+    es_parity: true
+    en_parity: true
+    tests: numerical_and_browser_gates_authored_2026-08-22_pending_full_validation
+    visual_review: pending_es_en_mobile_390_desktop_1440
+    provenance: hoffmann_2022_chinchilla_and_kaplan_2020_verified_2026-08-22
+    data_freshness: static_historical_fit_review_on_primary_scaling_law_update
+    last_reviewed: 2026-08-22
   - id: training-compute-energy
     order: 16
     es_title: Estimador de cómputo y energía de entrenamiento

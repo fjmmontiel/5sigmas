@@ -19,6 +19,7 @@ on:
       - 'docs/stylesheets/tools-prompt-injection.css'
       - 'docs/stylesheets/tools-benchmark-reliability.css'
       - 'docs/stylesheets/tools-model-capability-timeline.css'
+      - 'docs/stylesheets/tools-scaling-laws.css'
       - 'tools/**'
       - 'hooks/locale_alternates.py'
       - 'scripts/prepare_locale.py'
@@ -100,6 +101,9 @@ jobs:
       - name: Verify model capability timeline data, chronology and provenance
         run: node scripts/test_model_capability_timeline_tool.mjs
 
+      - name: Verify scaling-laws compute allocation and provenance
+        run: node scripts/test_scaling_laws_tool.mjs
+
       - name: Build Spanish site strictly
         run: mkdocs build --clean --strict
 
@@ -160,7 +164,9 @@ jobs:
             curl --fail --silent http://127.0.0.1:8000/herramientas/fiabilidad-benchmarks/ > /dev/null && \
             curl --fail --silent http://127.0.0.1:8000/en/tools/benchmark-reliability/ > /dev/null && \
             curl --fail --silent http://127.0.0.1:8000/herramientas/linea-temporal-capacidades-modelos/ > /dev/null && \
-            curl --fail --silent http://127.0.0.1:8000/en/tools/model-capability-timeline/ > /dev/null && exit 0
+            curl --fail --silent http://127.0.0.1:8000/en/tools/model-capability-timeline/ > /dev/null && \
+            curl --fail --silent http://127.0.0.1:8000/herramientas/leyes-escalado/ > /dev/null && \
+            curl --fail --silent http://127.0.0.1:8000/en/tools/scaling-laws/ > /dev/null && exit 0
             sleep 1
           done
           cat /tmp/5sigmas-tools-preview.log
@@ -208,6 +214,9 @@ jobs:
       - name: Validate model capability timeline and capture visual evidence
         run: node scripts/validate_model_capability_timeline_tool.mjs
 
+      - name: Validate scaling-laws explorer and capture visual evidence
+        run: node scripts/validate_scaling_laws_tool.mjs
+
       - name: Validate localized route switching and hreflang
         run: node scripts/validate_locale_switching.mjs
 
@@ -231,6 +240,7 @@ jobs:
             artifacts/visual-review/prompt-injection-*.png
             artifacts/visual-review/benchmark-reliability-*.png
             artifacts/visual-review/model-capability-timeline-*.png
+            artifacts/visual-review/scaling-laws-*.png
           if-no-files-found: warn
           retention-days: 1
           overwrite: true

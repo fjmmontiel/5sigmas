@@ -1,7 +1,7 @@
 ---
 title: Herramientas de IA — calculadoras, visualizadores y laboratorios
 description: Herramientas interactivas de 5sigmas para LLMs, modelos, inferencia, contexto, atención Transformer, RAG, agentes, evaluación e infraestructura de IA.
-keywords: herramientas IA, calculadora LLM, comparar modelos IA, coste LLM, latencia LLM, presupuesto tokens, ventana contexto, VRAM IA, atención Transformer, RAG evaluación, agentes de voz, benchmarks IA
+keywords: herramientas IA, calculadora LLM, comparar modelos IA, coste LLM, latencia LLM, presupuesto tokens, ventana contexto, VRAM IA, atención Transformer, RAG evaluación, agentes de voz, benchmarks IA, leyes escalado
 hide:
   - toc
   - navigation
@@ -20,7 +20,7 @@ hide:
   "isPartOf": {"@type": "WebSite", "name": "5sigmas", "url": "https://5sigmas.com/"},
   "mainEntity": {
     "@type": "ItemList",
-    "numberOfItems": 14,
+    "numberOfItems": 15,
     "itemListElement": [
       {"@type": "ListItem", "position": 1, "url": "https://5sigmas.com/herramientas/coste-latencia-llm/", "name": "Calculadora de coste y latencia de LLMs"},
       {"@type": "ListItem", "position": 2, "url": "https://5sigmas.com/herramientas/precio-rendimiento-modelos/", "name": "Explorador de precio y rendimiento de modelos de IA"},
@@ -35,7 +35,8 @@ hide:
       {"@type": "ListItem", "position": 11, "url": "https://5sigmas.com/herramientas/fiabilidad-evaluacion-agentes/", "name": "Entorno interactivo de fiabilidad y evaluación de agentes"},
       {"@type": "ListItem", "position": 12, "url": "https://5sigmas.com/herramientas/amenazas-prompt-injection/", "name": "Explorador de amenazas de prompt injection"},
       {"@type": "ListItem", "position": 13, "url": "https://5sigmas.com/herramientas/fiabilidad-benchmarks/", "name": "Explorador de fiabilidad de benchmarks"},
-      {"@type": "ListItem", "position": 14, "url": "https://5sigmas.com/herramientas/linea-temporal-capacidades-modelos/", "name": "Línea temporal de capacidades de modelos"}
+      {"@type": "ListItem", "position": 14, "url": "https://5sigmas.com/herramientas/linea-temporal-capacidades-modelos/", "name": "Línea temporal de capacidades de modelos"},
+      {"@type": "ListItem", "position": 15, "url": "https://5sigmas.com/herramientas/leyes-escalado/", "name": "Explorador de leyes de escalado"}
     ]
   }
 }
@@ -68,13 +69,14 @@ hide:
     <a class="s5-tool-index-card" href="/herramientas/amenazas-prompt-injection/"><span class="s5-tool-index-card__meta">Explorador · Seguridad · 12</span><h2>Amenazas de prompt injection</h2><p>Traza rutas desde contenido no confiable hacia datos, herramientas, salida externa y memoria persistente, y comprueba qué límites arquitectónicos cortan cada camino.</p><span class="s5-tool-index-card__cta">Abrir explorador →</span></a>
     <a class="s5-tool-index-card" href="/herramientas/fiabilidad-benchmarks/"><span class="s5-tool-index-card__meta">Explorador · Evaluación · 13</span><h2>Fiabilidad de benchmarks</h2><p>Comprueba resolución estadística, saturación, sensibilidad a ítems inválidos o exposición del test y fragilidad del ranking cuando cambia la composición de tareas.</p><span class="s5-tool-index-card__cta">Abrir explorador →</span></a>
     <a class="s5-tool-index-card" href="/herramientas/linea-temporal-capacidades-modelos/"><span class="s5-tool-index-card__meta">Explorador de datos · Modelos · 14</span><h2>Línea temporal de capacidades</h2><p>Recorre resultados publicados de un benchmark a la vez, conserva condiciones y procedencia por punto y hace visibles los cambios de protocolo en lugar de mezclar métricas incompatibles.</p><span class="s5-tool-index-card__cta">Abrir explorador →</span></a>
+    <a class="s5-tool-index-card" href="/herramientas/leyes-escalado/"><span class="s5-tool-index-card__meta">Explorador · Escalado · 15</span><h2>Leyes de escalado</h2><p>Redistribuye un presupuesto fijo de entrenamiento entre parámetros y tokens, compara el óptimo de una superficie tipo Chinchilla y comprueba su sensibilidad a los exponentes del ajuste.</p><span class="s5-tool-index-card__cta">Abrir explorador →</span></a>
   </div>
 </section>
 
 <section class="s5-section s5-tools-roadmap" aria-labelledby="s5-tools-roadmap">
   <div><div class="s5-eyebrow">Hoja de ruta</div><h2 id="s5-tools-roadmap">Lo siguiente</h2><p>La sección crece una herramienta cada vez. No se publican páginas vacías: cada entrada aparece cuando tiene interacción real, paridad ES/EN, fuentes y pruebas.</p></div>
   <div class="s5-tools-roadmap__list" aria-label="Próximas familias de herramientas">
-    <div class="s5-tools-roadmap__row"><span>15–18</span><strong>Escalado, infraestructura y ecosistema global</strong><span>datos</span></div>
+    <div class="s5-tools-roadmap__row"><span>16–18</span><strong>Cómputo, infraestructura y ecosistema global</strong><span>datos</span></div>
   </div>
 </section>
 

@@ -71,6 +71,7 @@ nav:
       - Amenazas de prompt injection: herramientas/amenazas-prompt-injection.md
       - Fiabilidad de benchmarks: herramientas/fiabilidad-benchmarks.md
       - Línea temporal de capacidades: herramientas/linea-temporal-capacidades-modelos.md
+      - Leyes de escalado: herramientas/leyes-escalado.md
   - Aprender:
       - Conceptos:
           - temas/index.md

@@ -125,6 +125,7 @@ nav:
       - Prompt-Injection Threats: tools/prompt-injection-threat.md
       - Benchmark Reliability: tools/benchmark-reliability.md
       - Model Capability Timeline: tools/model-capability-timeline.md
+      - Scaling Laws: tools/scaling-laws.md
   - Learn:
       - Series: series/index.md
       - AI and Generative AI Foundations:
