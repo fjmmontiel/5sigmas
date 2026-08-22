@@ -1,6 +1,6 @@
 ---
 title: Global AI Ecosystem Explorer — compare countries with transparent weights
-description: Compare AI investment, company formation, infrastructure, model development, talent and policy signals without turning missing data into zeros or hiding how weights change the ranking.
+description: Compare national AI investment, companies, infrastructure, models, talent and policy with visible coverage, normalization and weights.
 hide:
   - toc
   - navigation
