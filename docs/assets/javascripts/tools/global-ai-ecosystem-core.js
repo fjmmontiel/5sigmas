@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const finite = (value) => Number.isFinite(Number(value));
+  const finite = (value) => value !== null && value !== undefined && value !== '' && Number.isFinite(Number(value));
   const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
   function transformValue(value, transform) {
@@ -140,7 +140,7 @@
     };
   }
 
-  window.S5GlobalAIEcosystemCore = {
+  const Core = {
     transformValue,
     normalizeWeights,
     comparableCountries,
@@ -151,4 +151,7 @@
     encodeState,
     decodeState,
   };
+
+  if (typeof module !== 'undefined' && module.exports) module.exports = Core;
+  if (typeof window !== 'undefined') window.S5GlobalAIEcosystemCore = Core;
 })();
