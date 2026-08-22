@@ -92,7 +92,7 @@
     }
   ],
   "countries": [
-    {"id":"us","name_es":"Estados Unidos","name_en":"United States","region":"North America","reference_vibrancy_2024":78.60,"values":{"private_investment_2025":285.88,"new_ai_companies_2025":1953,"data_centers_2025":5427,"notable_models_2025":59,"ai_skill_penetration_2024":2.63,"policy_capacity_2025":100.0}},
+    {"id":"us","name_es":"Estados Unidos","name_en":"United States","region":"North America","reference_vibrancy_2024":78.60,"values":{"private_investment_2025":285.88,"new_ai_companies_2025":1953,"data_centers_2025":5427,"notable_models_2025":59,"ai_skill_penetration_2024":2.63,"policy_capacity_2025":92.5}},
     {"id":"cn","name_es":"China","name_en":"China","region":"East Asia","reference_vibrancy_2024":36.95,"values":{"private_investment_2025":12.41,"new_ai_companies_2025":161,"data_centers_2025":449,"notable_models_2025":35,"ai_skill_penetration_2024":null,"policy_capacity_2025":92.5}},
     {"id":"gb","name_es":"Reino Unido","name_en":"United Kingdom","region":"Western Europe","reference_vibrancy_2024":16.64,"values":{"private_investment_2025":5.90,"new_ai_companies_2025":172,"data_centers_2025":523,"notable_models_2025":1,"ai_skill_penetration_2024":1.40,"policy_capacity_2025":100.0}},
     {"id":"fr","name_es":"Francia","name_en":"France","region":"Western Europe","reference_vibrancy_2024":14.63,"values":{"private_investment_2025":4.36,"new_ai_companies_2025":84,"data_centers_2025":322,"notable_models_2025":1,"ai_skill_penetration_2024":1.23,"policy_capacity_2025":77.5}},
@@ -160,7 +160,7 @@
       "title": "Government AI Readiness Index 2025 — Policy Capacity pillar",
       "url": "https://oxfordinsights.com/wp-content/uploads/2025/12/2025-Government-AI-Readiness-Index-2.pdf",
       "retrieved": "2026-08-22",
-      "notes": "Policy Capacity is one pillar of Oxford Insights' 2025 methodology, not a complete measure of government performance. Only values independently verified from the published country table are populated."
+      "notes": "Policy Capacity is one pillar of Oxford Insights' 2025 methodology, not a complete measure of government performance. The corrected January 2026 release notes that an earlier December publication contained incorrect scores and rankings; populated values use the corrected country table, and only independently verified values are included."
     },
     {
       "id": "stanford_global_vibrancy_reference",
