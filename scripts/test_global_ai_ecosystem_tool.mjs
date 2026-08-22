@@ -49,6 +49,10 @@ assert(!talentScenario.rows.some((row) => row.id === 'sg'), 'Missing 2015–24 S
 const policyScenario = Core.computeScenario(data, { activeMetrics: [...defaultScenario.activeIds, 'policy_capacity_2025'] });
 assert(policyScenario.comparableCount === 9, `Expected 9 countries with current-momentum plus policy coverage, got ${policyScenario.comparableCount}`);
 assert(policyScenario.excluded.some((item) => item.id === 'ca' && item.missing.includes('policy_capacity_2025')), 'Canada missing policy observation must exclude it rather than become zero');
+const usPolicy = data.countries.find((country) => country.id === 'us').values.policy_capacity_2025;
+assert(usPolicy === 92.5, `US Policy Capacity must use Oxford Insights' corrected 2025 country table (92.5), got ${usPolicy}`);
+const oxfordSource = data.sources.find((source) => source.id === 'oxford_gair_2025');
+assert(/corrected January 2026 release/i.test(oxfordSource?.notes || ''), 'Oxford provenance must document the corrected January 2026 release');
 
 const zeroWeights = Core.computeScenario(data, {
   activeMetrics: defaultScenario.activeIds,
