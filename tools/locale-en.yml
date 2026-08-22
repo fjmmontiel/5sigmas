@@ -33,5 +33,7 @@ routes:
     localized: tools/model-capability-timeline.md
   - canonical: herramientas/leyes-escalado.md
     localized: tools/scaling-laws.md
+  - canonical: herramientas/computo-energia-entrenamiento.md
+    localized: tools/training-compute-energy.md
 published_files:
   - llms.txt
