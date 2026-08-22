@@ -128,6 +128,7 @@ nav:
       - Scaling Laws: tools/scaling-laws.md
       - Training Compute & Energy: tools/training-compute-energy.md
       - Datacenter AI Capacity: tools/datacenter-ai-capacity.md
+      - Global AI Ecosystem: tools/global-ai-ecosystem.md
   - Learn:
       - Series: series/index.md
       - AI and Generative AI Foundations:
