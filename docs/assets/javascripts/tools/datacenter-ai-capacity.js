@@ -19,9 +19,11 @@
       },
       bottleneckSingle: 'El límite activo es',
       bottleneckMultiple: 'Los límites activos empatan entre',
+      capacitySentence: 'La capacidad utilizable es el mínimo entre límites independientes.',
       inferenceDisabled: 'No se deriva throughput de inferencia a partir de FLOPs. Introduce una medición sostenida por acelerador para mapear esta infraestructura a tokens/s.',
       inferenceEnabled: 'El throughput de inferencia usa exclusivamente la medición sostenida que has introducido; no se deriva del pico de FLOPs.',
-      accelerators: 'aceleradores'
+      accelerators: 'aceleradores',
+      perDay: 'EFLOP/día'
     },
     en: {
       loadError: 'The hardware reference could not be loaded.',
@@ -36,9 +38,11 @@
       },
       bottleneckSingle: 'The active limit is',
       bottleneckMultiple: 'The active limits tie between',
+      capacitySentence: 'Usable capacity is the minimum across independent constraints.',
       inferenceDisabled: 'Inference throughput is not derived from FLOPs. Enter a sustained per-accelerator measurement to map this infrastructure to tokens/s.',
       inferenceEnabled: 'Inference throughput uses only the sustained measurement you entered; it is not derived from peak FLOPs.',
-      accelerators: 'accelerators'
+      accelerators: 'accelerators',
+      perDay: 'EFLOP/day'
     }
   }[locale];
 
@@ -50,6 +54,10 @@
   function text(selector, value) {
     const el = root.querySelector(selector);
     if (el) el.textContent = value;
+  }
+
+  function textAll(selector, value) {
+    root.querySelectorAll(selector).forEach((el) => { el.textContent = value; });
   }
 
   function number(name, fallback, min, max, allowZero) {
@@ -153,11 +161,11 @@
     const bottleneckNames = result.bottlenecks.map((key) => copy.constraints[key]);
     const prefix = bottleneckNames.length > 1 ? copy.bottleneckMultiple : copy.bottleneckSingle;
 
-    text('[data-output="interpretation"]', `${prefix} ${bottleneckNames.join(locale === 'es' ? ' y ' : ' and ')}. La capacidad publicada es el mínimo entre límites independientes.`.replace('La capacidad publicada', locale === 'es' ? 'La capacidad publicada' : 'Published capacity'));
+    text('[data-output="interpretation"]', `${prefix} ${bottleneckNames.join(locale === 'es' ? ' y ' : ' and ')}. ${copy.capacitySentence}`);
     text('[data-output="active-accelerators"]', compactCount(result.activeAccelerators));
-    text('[data-output="bottleneck"]', bottleneckNames.join(locale === 'es' ? ' + ' : ' + '));
+    text('[data-output="bottleneck"]', bottleneckNames.join(' + '));
     text('[data-output="facility-draw"]', compactPowerKW(result.facilityDrawKW));
-    text('[data-output="training-throughput"]', compactCompute(result.sustainedTrainingPetaFlops));
+    textAll('[data-output="training-throughput"]', compactCompute(result.sustainedTrainingPetaFlops));
     text('[data-output="usable-it"]', compactPowerKW(result.usableITCapacityKW));
     text('[data-output="reserved-it"]', compactPowerKW(result.reservedITKW));
     text('[data-output="facility-headroom"]', compactPowerKW(result.facilityHeadroomKW));
@@ -167,7 +175,7 @@
     text('[data-output="rack-power-headroom"]', compactPowerKW(result.rackElectricalHeadroomKW));
     text('[data-output="rack-cooling-headroom"]', compactPowerKW(result.rackCoolingHeadroomKW));
     text('[data-output="peak-compute"]', compactCompute(result.peakDensePetaFlops));
-    text('[data-output="training-day"]', `${format(result.trainingExaFlopsPerDay, result.trainingExaFlopsPerDay >= 1000 ? 0 : 1)} EFLOP/día`.replace('día', locale === 'es' ? 'día' : 'day'));
+    text('[data-output="training-day"]', `${format(result.trainingExaFlopsPerDay, result.trainingExaFlopsPerDay >= 1000 ? 0 : 1)} ${copy.perDay}`);
     text('[data-output="slot-utilization"]', `${format(result.physicalSlotUtilization * 100, 1)}%`);
     text('[data-output="hardware-note"]', locale === 'es' ? preset.note_es : preset.note_en);
     text('[data-output="inference-note"]', result.inferenceAvailable ? copy.inferenceEnabled : copy.inferenceDisabled);
