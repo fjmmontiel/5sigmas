@@ -53,7 +53,7 @@
       gpus: Math.round(number('gpus', 1024, 1, 1e7)),
       durationHours: number('durationHours', 720, 0.01, 1e7),
       mfuPct: number('mfuPct', 45, 0.1, 100),
-      powerUtilizationPct: number('powerUtilizationPct', 85, 0.1, 150),
+      powerUtilizationPct: number('powerUtilizationPct', 85, 0.1, 100),
       otherITPct: number('otherITPct', 15, 0, 1000, true),
       pue: number('pue', 1.2, 1, 5),
       parametersB: number('parametersB', 70, 0.001, 1e7),
