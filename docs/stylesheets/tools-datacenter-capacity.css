@@ -1,10 +1,27 @@
-.s5-datacenter-capacity .s5-tool-summary-strip,
-.s5-datacenter-capacity-kpis {
+.s5-datacenter-capacity .s5-tool-summary-strip {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
+.s5-datacenter-capacity .s5-tool-results > .s5-section-head {
+  grid-template-columns: 1fr;
+  gap: .55rem;
+  align-items: start;
+}
+
+.s5-datacenter-capacity .s5-tool-results > .s5-section-head h2 {
+  max-width: 18ch;
+  margin-bottom: 0;
+}
+
+.s5-datacenter-capacity .s5-tool-results > .s5-section-head p {
+  max-width: 62ch;
+  margin: 0;
+}
+
 .s5-datacenter-capacity-kpis {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   border: 1px solid var(--md-default-fg-color--lightest);
   border-radius: 1rem;
   overflow: hidden;
@@ -16,8 +33,12 @@
   min-width: 0;
 }
 
-.s5-datacenter-capacity-kpis > div + div {
+.s5-datacenter-capacity-kpis > div:nth-child(even) {
   border-left: 1px solid var(--md-default-fg-color--lightest);
+}
+
+.s5-datacenter-capacity-kpis > div:nth-child(n + 3) {
+  border-top: 1px solid var(--md-default-fg-color--lightest);
 }
 
 .s5-datacenter-capacity-kpis small,
@@ -28,10 +49,16 @@
 
 .s5-datacenter-capacity-kpis strong {
   display: block;
-  font-size: clamp(1.35rem, 2.6vw, 2rem);
-  line-height: 1.05;
-  overflow-wrap: anywhere;
+  font-size: clamp(1.3rem, 2vw, 1.75rem);
+  line-height: 1.06;
+  overflow-wrap: break-word;
+  word-break: normal;
   margin: .3rem 0 .2rem;
+}
+
+.s5-datacenter-capacity-kpis > div:nth-child(2) strong {
+  font-size: clamp(1.05rem, 1.65vw, 1.35rem);
+  line-height: 1.08;
 }
 
 .s5-dc-panel {
@@ -106,7 +133,7 @@
 
 .s5-dc-detail-grid h3 { margin-top: 0; }
 .s5-dc-detail-grid p { margin: .45rem 0; }
-.s5-dc-detail-grid strong { overflow-wrap: anywhere; }
+.s5-dc-detail-grid strong { overflow-wrap: break-word; }
 
 .s5-dc-inference {
   margin-top: 1.35rem;
@@ -143,10 +170,7 @@
 .s5-dc-method p { color: var(--md-default-fg-color--light); }
 
 @media (max-width: 900px) {
-  .s5-datacenter-capacity .s5-tool-summary-strip,
-  .s5-datacenter-capacity-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .s5-datacenter-capacity-kpis > div:nth-child(3) { border-left: 0; border-top: 1px solid var(--md-default-fg-color--lightest); }
-  .s5-datacenter-capacity-kpis > div:nth-child(4) { border-top: 1px solid var(--md-default-fg-color--lightest); }
+  .s5-datacenter-capacity .s5-tool-summary-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .s5-dc-panel__head,
   .s5-dc-method { grid-template-columns: 1fr; }
 }
@@ -156,6 +180,7 @@
   .s5-datacenter-capacity-kpis,
   .s5-dc-detail-grid,
   .s5-dc-inference__metrics { grid-template-columns: 1fr; }
-  .s5-datacenter-capacity-kpis > div + div { border-left: 0; border-top: 1px solid var(--md-default-fg-color--lightest); }
+  .s5-datacenter-capacity-kpis > div:nth-child(even) { border-left: 0; }
+  .s5-datacenter-capacity-kpis > div + div { border-top: 1px solid var(--md-default-fg-color--lightest); }
   .s5-dc-constraint > div:first-child { align-items: flex-start; flex-direction: column; gap: .15rem; }
 }
