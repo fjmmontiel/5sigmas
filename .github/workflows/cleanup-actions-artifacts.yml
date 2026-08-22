@@ -6,8 +6,8 @@ on:
     paths:
       - '.github/workflows/cleanup-actions-artifacts.yml'
   schedule:
-    # Keep the tiny 500 MB account allowance from filling during CI bursts.
-    - cron: '17,47 * * * *'
+    # Generic artifacts are only failure evidence; remove them quickly.
+    - cron: '17 * * * *'
   workflow_dispatch:
     inputs:
       min_age_hours:
@@ -22,7 +22,7 @@ permissions:
 
 concurrency:
   group: cleanup-actions-artifacts
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   cleanup:
@@ -42,7 +42,13 @@ jobs:
             const preserveArtifactId = Number(process.env.PRESERVE_ARTIFACT_ID);
             const cutoff = Date.now() - minAgeHours * 60 * 60 * 1000;
 
+            // Two narrowly-scoped exceptions:
+            // 1) github-pages is required only until deploy-pages consumes it; a dedicated
+            //    workflow deletes it immediately after that workflow completes.
+            // 2) english-ttc-reviewed-seed is a small verified media fallback still used
+            //    when the dedicated Actions cache is cold.
             const isProtected = (artifact) =>
+              artifact.name === 'github-pages' ||
               artifact.id === preserveArtifactId ||
               artifact.name === 'english-ttc-reviewed-seed';
 
@@ -81,7 +87,6 @@ jobs:
                   deletedCount += 1;
                   deletedBytes += artifact.size_in_bytes || 0;
                 } catch (error) {
-                  // Continue so one transient/stale artifact cannot abort the full cleanup.
                   core.warning(
                     `Could not delete artifact ${artifact.id} ${artifact.name}: ` +
                     `${error.status || ''} ${error.message || error}`
@@ -102,7 +107,8 @@ jobs:
                 [{data: 'Deleted artifacts', header: true}, String(deletedCount)],
                 [{data: 'Storage removed', header: true}, `${(deletedBytes / 1024 / 1024).toFixed(1)} MiB`],
                 [{data: 'Minimum age', header: true}, `${minAgeHours} hours`],
-                [{data: 'Protected artifact', header: true}, 'english-ttc-reviewed-seed (9176659529)'],
+                [{data: 'Protected deployment artifact', header: true}, 'github-pages (deleted after deployment)'],
+                [{data: 'Protected media fallback', header: true}, 'english-ttc-reviewed-seed (9176659529)'],
                 [{data: 'Old non-protected leftovers', header: true}, String(leftovers.length)],
               ])
               .write();
