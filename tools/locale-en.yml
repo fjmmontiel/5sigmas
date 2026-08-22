@@ -37,5 +37,7 @@ routes:
     localized: tools/training-compute-energy.md
   - canonical: herramientas/capacidad-datacenter-ia.md
     localized: tools/datacenter-ai-capacity.md
+  - canonical: herramientas/ecosistema-global-ia.md
+    localized: tools/global-ai-ecosystem.md
 published_files:
   - llms.txt
