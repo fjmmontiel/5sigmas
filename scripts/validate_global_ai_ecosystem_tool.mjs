@@ -52,6 +52,32 @@ try {
       if (!leader.includes(spec.expectedCountry)) failures.push(`${spec.route} ${viewport.name}: expected US to lead default sourced scenario`);
       if (await page.locator('.s5-ecosystem-rank-row').count() !== 12) failures.push(`${spec.route} ${viewport.name}: expected 12 visible default ranking rows`);
 
+      const firstRankRow = page.locator('.s5-ecosystem-rank-row').first();
+      const mobileRankGeometry = await firstRankRow.evaluate((node) => {
+        const score = node.querySelector('.s5-ecosystem-score');
+        const country = node.querySelector('.s5-ecosystem-country');
+        if (!score || !country) return null;
+        const scoreBox = score.getBoundingClientRect();
+        const countryBox = country.getBoundingClientRect();
+        const style = getComputedStyle(score);
+        const lineHeight = Number.parseFloat(style.lineHeight) || Number.parseFloat(style.fontSize) * 1.2;
+        return {
+          scoreTop: scoreBox.top,
+          scoreHeight: scoreBox.height,
+          scoreClientWidth: score.clientWidth,
+          scoreScrollWidth: score.scrollWidth,
+          countryTop: countryBox.top,
+          lineHeight,
+          scoreText: (score.textContent || '').trim(),
+        };
+      });
+      if (!mobileRankGeometry) failures.push(`${spec.route} ${viewport.name}: first ranking row geometry unavailable`);
+      if (viewport.width <= 520 && mobileRankGeometry) {
+        if (Math.abs(mobileRankGeometry.scoreTop - mobileRankGeometry.countryTop) > 4) failures.push(`${spec.route} mobile: score must share the first grid row with the country label`);
+        if (mobileRankGeometry.scoreScrollWidth > mobileRankGeometry.scoreClientWidth + 1) failures.push(`${spec.route} mobile: ranking score overflows its score column`);
+        if (mobileRankGeometry.scoreHeight > mobileRankGeometry.lineHeight * 1.5) failures.push(`${spec.route} mobile: ranking score wrapped across multiple lines (${mobileRankGeometry.scoreText})`);
+      }
+
       const metricControls = page.locator('[data-metric-active]');
       if (await metricControls.count() !== 6) failures.push(`${spec.route} ${viewport.name}: expected six selectable signals`);
       const datacenterToggle = page.locator('[data-metric-active="data_centers_2025"]');
@@ -102,4 +128,4 @@ if (failures.length) {
   failures.forEach((failure) => console.error(` - ${failure}`));
   process.exit(1);
 }
-console.log('Global AI ecosystem browser QA passed: ES/EN, 390/1440, 28-record coverage, strict missing-data exclusion, dynamic signals/table, deep links, provenance, accessible tool controls and responsive containment verified.');
+console.log('Global AI ecosystem browser QA passed: ES/EN, 390/1440, 28-record coverage, strict missing-data exclusion, dynamic signals/table, deep links, provenance, accessible tool controls, single-line mobile ranking scores and responsive containment verified.');
