@@ -1,0 +1,59 @@
+name: Cleanup Pages deployment artifact
+
+on:
+  workflow_run:
+    workflows: ['Deploy MkDocs to GitHub Pages']
+    types: [completed]
+
+permissions:
+  actions: write
+  contents: read
+
+concurrency:
+  group: cleanup-pages-artifact
+  cancel-in-progress: false
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Delete consumed GitHub Pages artifacts
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const runId = context.payload.workflow_run.id;
+
+            const artifacts = await github.paginate(
+              github.rest.actions.listWorkflowRunArtifacts,
+              { owner, repo, run_id: runId, per_page: 100 }
+            );
+
+            const pagesArtifacts = artifacts.filter(
+              (artifact) => !artifact.expired && artifact.name === 'github-pages'
+            );
+
+            let deletedBytes = 0;
+            for (const artifact of pagesArtifacts) {
+              core.info(
+                `Deleting consumed Pages artifact ${artifact.id} ` +
+                `(${(artifact.size_in_bytes / 1024 / 1024).toFixed(1)} MiB)`
+              );
+              await github.rest.actions.deleteArtifact({
+                owner,
+                repo,
+                artifact_id: artifact.id,
+              });
+              deletedBytes += artifact.size_in_bytes || 0;
+            }
+
+            await core.summary
+              .addHeading('Pages artifact cleanup')
+              .addTable([
+                [{data: 'Source workflow run', header: true}, String(runId)],
+                [{data: 'Deleted Pages artifacts', header: true}, String(pagesArtifacts.length)],
+                [{data: 'Storage removed', header: true}, `${(deletedBytes / 1024 / 1024).toFixed(1)} MiB`],
+              ])
+              .write();
