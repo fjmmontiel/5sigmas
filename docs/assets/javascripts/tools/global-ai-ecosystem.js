@@ -28,7 +28,7 @@
   const q = (selector) => root.querySelector(selector);
   const els = {
     metricControls: q('[data-output="metric-controls"]'), ranking: q('[data-output="ranking"]'),
-    tableHead: q('[data-output="table-head"]'), tableBody: q('[data-output="table-body"]'),
+    tableHead: q('[data-output="table-head"]') || q('.s5-ecosystem-table thead'), tableBody: q('[data-output="table-body"]'),
     coverage: q('[data-output="coverage"]'), activeCount: q('[data-output="active-count"]'), leader: q('[data-output="leader"]'),
     focus: q('[data-field="focus"]'), focusPanel: q('[data-output="focus-panel"]'),
     sources: q('[data-output="sources"]'), feedback: q('[data-s5-tool-feedback]'),
@@ -123,6 +123,7 @@
   }
 
   function renderTableHead(scenario) {
+    if (!els.tableHead) return;
     const tr = document.createElement('tr');
     [t.country, t.tableScore, ...scenario.activeMetrics.map(metricName), t.reference].forEach((label) => {
       const th = document.createElement('th');
