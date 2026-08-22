@@ -71,11 +71,49 @@ jobs:
                               'validate them in-run or use upload-pages-artifact for deployment'
                           )
 
+          cleanup_path = workflow_dir / 'cleanup-actions-artifacts.yml'
+          if not cleanup_path.exists():
+              errors.append('cleanup-actions-artifacts.yml must exist')
+          else:
+              cleanup = cleanup_path.read_text(encoding='utf-8')
+              for required in (
+                  'schedule:',
+                  "cron: '17,47 * * * *'",
+                  "default: '1'",
+                  'actions: write',
+                  'deleteArtifact',
+                  "artifact.name === 'english-ttc-reviewed-seed'",
+              ):
+                  if required not in cleanup:
+                      errors.append(
+                          f'cleanup-actions-artifacts.yml must preserve storage safeguard: {required}'
+                      )
+
+          pages_cleanup_path = workflow_dir / 'cleanup-pages-artifact.yml'
+          if not pages_cleanup_path.exists():
+              errors.append('cleanup-pages-artifact.yml must exist so Pages artifacts are deleted after use')
+          else:
+              pages_cleanup = pages_cleanup_path.read_text(encoding='utf-8')
+              for required in (
+                  'workflow_run:',
+                  "workflows: ['Deploy MkDocs to GitHub Pages']",
+                  'actions: write',
+                  "artifact.name === 'github-pages'",
+                  'deleteArtifact',
+              ):
+                  if required not in pages_cleanup:
+                      errors.append(
+                          f'cleanup-pages-artifact.yml must preserve Pages cleanup safeguard: {required}'
+                      )
+
           if errors:
               print('CI storage policy violations:', file=sys.stderr)
               for error in errors:
                   print(f' - {error}', file=sys.stderr)
               raise SystemExit(1)
 
-          print('CI storage policy OK: all generic artifacts are capped at one day and no site build is retained.')
+          print(
+              'CI storage policy OK: generic artifacts are capped at one day, '
+              'old artifacts are continuously purged, and consumed Pages artifacts are deleted.'
+          )
           PY
