@@ -41,6 +41,13 @@ try {
       if (viewport.width >= 1000 && summaryBoxes.length === 4 && Math.max(...summaryBoxes.map((box) => box.top)) - Math.min(...summaryBoxes.map((box) => box.top)) > 2) failures.push(`${spec.route} desktop: summary must remain on one row`);
       if (viewport.width <= 520 && summaryBoxes.length === 4 && Math.max(...summaryBoxes.map((box) => box.left)) - Math.min(...summaryBoxes.map((box) => box.left)) > 2) failures.push(`${spec.route} mobile: summary items must stack`);
 
+      const resultIntro = await page.locator('.s5-tool-results > .s5-section-head').evaluate((node) => {
+        const heading = node.querySelector('h2')?.getBoundingClientRect();
+        const paragraph = node.querySelector('p')?.getBoundingClientRect();
+        return heading && paragraph ? { headingBottom: heading.bottom, paragraphTop: paragraph.top } : null;
+      });
+      if (!resultIntro || resultIntro.paragraphTop < resultIntro.headingBottom - 1) failures.push(`${spec.route} ${viewport.name}: result heading overlaps interpretation copy`);
+
       if (await page.locator('.s5-dc-constraint').count() !== 4) failures.push(`${spec.route} ${viewport.name}: expected four independent constraint bars`);
       if (await page.locator('.s5-dc-constraint--active').count() < 1) failures.push(`${spec.route} ${viewport.name}: active bottleneck not highlighted`);
 
@@ -78,10 +85,16 @@ try {
 
       const kpis = await page.locator('.s5-datacenter-capacity-kpis > div').evaluateAll((nodes) => nodes.map((node) => {
         const box = node.getBoundingClientRect();
-        return { top: box.top, left: box.left };
+        return { top: box.top, left: box.left, width: box.width };
       }));
       if (kpis.length !== 4) failures.push(`${spec.route} ${viewport.name}: expected four result KPIs`);
-      if (viewport.width >= 1000 && kpis.length === 4 && Math.max(...kpis.map((box) => box.top)) - Math.min(...kpis.map((box) => box.top)) > 2) failures.push(`${spec.route} desktop: KPI row geometry is uneven`);
+      if (viewport.width >= 1000 && kpis.length === 4) {
+        const firstRowAligned = Math.abs(kpis[0].top - kpis[1].top) <= 2;
+        const secondRowAligned = Math.abs(kpis[2].top - kpis[3].top) <= 2;
+        const twoDistinctRows = kpis[2].top - kpis[0].top > 20;
+        if (!firstRowAligned || !secondRowAligned || !twoDistinctRows) failures.push(`${spec.route} desktop: result KPIs must form a readable 2×2 grid`);
+        if (Math.min(...kpis.map((box) => box.width)) < 150) failures.push(`${spec.route} desktop: result KPI columns are too narrow`);
+      }
       if (viewport.width <= 520 && kpis.length === 4 && Math.max(...kpis.map((box) => box.left)) - Math.min(...kpis.map((box) => box.left)) > 2) failures.push(`${spec.route} mobile: KPI cards must stack without side-by-side compression`);
 
       await page.screenshot({ path: `${artifactDir}/datacenter-ai-capacity-${spec.locale}-${viewport.name}.png`, fullPage: true });
@@ -95,4 +108,4 @@ if (failures.length) {
   failures.forEach((failure) => console.error(` - ${failure}`));
   process.exit(1);
 }
-console.log('Datacenter AI capacity browser QA passed: ES/EN, 390/1440, independent constraints, MFU/power separation, measured inference mapping, deep links, accessible controls, provenance and responsive geometry verified.');
+console.log('Datacenter AI capacity browser QA passed: ES/EN, 390/1440, independent constraints, MFU/power separation, measured inference mapping, deep links, accessible controls, provenance and responsive result hierarchy verified.');
