@@ -45,13 +45,13 @@ jobs:
       - name: Validate and stage declared video media
         run: python scripts/prepare_video_media.py --output .video-media
 
-      - name: Upload deterministic media manifest
-        uses: actions/upload-artifact@v4
-        with:
-          name: 5sigmas-video-media-manifest
-          path: .video-media/manifest.json
-          if-no-files-found: error
-          retention-days: 1
+      - name: Record deterministic media manifest in logs
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f .video-media/manifest.json
+          echo "manifest_sha256=$(sha256sum .video-media/manifest.json | awk '{print $1}')"
+          echo "manifest_bytes=$(stat -c %s .video-media/manifest.json)"
 
       - name: Validate R2 publishing configuration
         if: inputs.publish
