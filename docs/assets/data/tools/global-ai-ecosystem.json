@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "snapshot_date": "2026-08-22",
+  "methodology_version": "2026-08-22-v1",
+  "title": "5sigmas Global AI Ecosystem Explorer — sourced comparison snapshot",
+  "scope_note": "This is an original 5sigmas comparison built from separately sourced country signals. It is not Stanford's Global AI Vibrancy score and does not reproduce Stanford's weighting scheme.",
+  "normalization": {
+    "method": "min_max_with_optional_log1p",
+    "range": [0, 100],
+    "missing_data": "A country is excluded from a ranking whenever any active metric is missing. Missing values are never treated as zero and weights are never silently redistributed.",
+    "weighting": "Active metric weights are normalized to sum to 1. Equal weights are the default; users can change every active metric weight.",
+    "population_scope": "Normalization is recomputed over countries that have complete data for the current active metric set. The resulting score is therefore scenario-relative, not an absolute measure of national AI capability."
+  },
+  "metrics": [
+    {
+      "id": "private_investment_2025",
+      "pillar": "capital",
+      "label_es": "Inversión privada en IA",
+      "label_en": "Private AI investment",
+      "year": 2025,
+      "unit": "USD billions",
+      "transform": "log1p",
+      "higher_is_better": true,
+      "default_active": true,
+      "default_weight": 1,
+      "source_id": "stanford_ai_index_2026_investment"
+    },
+    {
+      "id": "new_ai_companies_2025",
+      "pillar": "entrepreneurship",
+      "label_es": "Nuevas empresas de IA financiadas",
+      "label_en": "Newly funded AI companies",
+      "year": 2025,
+      "unit": "companies",
+      "transform": "log1p",
+      "higher_is_better": true,
+      "default_active": true,
+      "default_weight": 1,
+      "source_id": "stanford_ai_index_2026_investment"
+    },
+    {
+      "id": "data_centers_2025",
+      "pillar": "infrastructure",
+      "label_es": "Centros de datos",
+      "label_en": "Data centers",
+      "year": 2025,
+      "unit": "facilities",
+      "transform": "log1p",
+      "higher_is_better": true,
+      "default_active": true,
+      "default_weight": 1,
+      "source_id": "stanford_ai_index_2026_datacenters"
+    },
+    {
+      "id": "notable_models_2025",
+      "pillar": "model_development",
+      "label_es": "Modelos de IA notables",
+      "label_en": "Notable AI models",
+      "year": 2025,
+      "unit": "models",
+      "transform": "log1p",
+      "higher_is_better": true,
+      "default_active": false,
+      "default_weight": 1,
+      "source_id": "stanford_ai_index_2026_models"
+    },
+    {
+      "id": "ai_skill_penetration_2024",
+      "pillar": "talent",
+      "label_es": "Penetración relativa de habilidades de IA",
+      "label_en": "Relative AI skill penetration",
+      "year": 2024,
+      "unit": "x global occupational baseline",
+      "transform": "linear",
+      "higher_is_better": true,
+      "default_active": false,
+      "default_weight": 1,
+      "source_id": "stanford_ai_index_2025_linkedin_skills"
+    },
+    {
+      "id": "policy_capacity_2025",
+      "pillar": "policy",
+      "label_es": "Capacidad de política pública de IA",
+      "label_en": "AI policy capacity",
+      "year": 2025,
+      "unit": "Oxford Insights points (0–100)",
+      "transform": "linear",
+      "higher_is_better": true,
+      "default_active": false,
+      "default_weight": 1,
+      "source_id": "oxford_gair_2025"
+    }
+  ],
+  "countries": [
+    {"id":"us","name_es":"Estados Unidos","name_en":"United States","region":"North America","reference_vibrancy_2024":78.60,"values":{"private_investment_2025":285.88,"new_ai_companies_2025":1953,"data_centers_2025":5427,"notable_models_2025":59,"ai_skill_penetration_2024":2.63,"policy_capacity_2025":100.0}},
+    {"id":"cn","name_es":"China","name_en":"China","region":"East Asia","reference_vibrancy_2024":36.95,"values":{"private_investment_2025":12.41,"new_ai_companies_2025":161,"data_centers_2025":449,"notable_models_2025":35,"ai_skill_penetration_2024":null,"policy_capacity_2025":92.5}},
+    {"id":"in","name_es":"India","name_en":"India","region":"South Asia","reference_vibrancy_2024":21.59,"values":{"private_investment_2025":4.09,"new_ai_companies_2025":108,"data_centers_2025":153,"notable_models_2025":null,"ai_skill_penetration_2024":2.51,"policy_capacity_2025":96.0}},
+    {"id":"gb","name_es":"Reino Unido","name_en":"United Kingdom","region":"Western Europe","reference_vibrancy_2024":16.64,"values":{"private_investment_2025":5.90,"new_ai_companies_2025":172,"data_centers_2025":523,"notable_models_2025":1,"ai_skill_penetration_2024":1.40,"policy_capacity_2025":100.0}},
+    {"id":"sg","name_es":"Singapur","name_en":"Singapore","region":"East Asia","reference_vibrancy_2024":16.43,"values":{"private_investment_2025":1.82,"new_ai_companies_2025":49,"data_centers_2025":null,"notable_models_2025":1,"ai_skill_penetration_2024":null,"policy_capacity_2025":85.0}},
+    {"id":"jp","name_es":"Japón","name_en":"Japan","region":"East Asia","reference_vibrancy_2024":16.04,"values":{"private_investment_2025":1.11,"new_ai_companies_2025":56,"data_centers_2025":222,"notable_models_2025":null,"ai_skill_penetration_2024":null,"policy_capacity_2025":70.0}},
+    {"id":"ca","name_es":"Canadá","name_en":"Canada","region":"North America","reference_vibrancy_2024":15.56,"values":{"private_investment_2025":4.28,"new_ai_companies_2025":79,"data_centers_2025":337,"notable_models_2025":1,"ai_skill_penetration_2024":1.30,"policy_capacity_2025":null}},
+    {"id":"fr","name_es":"Francia","name_en":"France","region":"Western Europe","reference_vibrancy_2024":14.63,"values":{"private_investment_2025":4.36,"new_ai_companies_2025":84,"data_centers_2025":322,"notable_models_2025":1,"ai_skill_penetration_2024":1.23,"policy_capacity_2025":77.5}},
+    {"id":"de","name_es":"Alemania","name_en":"Germany","region":"Western Europe","reference_vibrancy_2024":13.15,"values":{"private_investment_2025":3.89,"new_ai_companies_2025":92,"data_centers_2025":529,"notable_models_2025":null,"ai_skill_penetration_2024":1.32,"policy_capacity_2025":84.5}},
+    {"id":"au","name_es":"Australia","name_en":"Australia","region":"Pacific","reference_vibrancy_2024":11.21,"values":{"private_investment_2025":2.52,"new_ai_companies_2025":38,"data_centers_2025":314,"notable_models_2025":null,"ai_skill_penetration_2024":0.95,"policy_capacity_2025":100.0}}
+  ],
+  "sources": [
+    {
+      "id": "stanford_ai_index_2026_investment",
+      "organization": "Stanford HAI AI Index",
+      "title": "2026 AI Index Report — Economy, Figure 4.2.8 and Figure 4.2.9",
+      "url": "https://hai.stanford.edu/assets/files/ai_index_report_2026_chapter_4_economy.pdf",
+      "retrieved": "2026-08-22",
+      "notes": "Quid-based 2025 private AI investment and newly funded AI company counts."
+    },
+    {
+      "id": "stanford_ai_index_2026_datacenters",
+      "organization": "Stanford HAI AI Index",
+      "title": "2026 AI Index Report — Research and Development, Figure 1.3.2",
+      "url": "https://hai.stanford.edu/assets/files/ai_index_report_2026.pdf",
+      "retrieved": "2026-08-22",
+      "notes": "Cloudscene 2025 facility counts; counts do not measure facility size, AI accelerator capacity or utilization."
+    },
+    {
+      "id": "stanford_ai_index_2026_models",
+      "organization": "Stanford HAI AI Index",
+      "title": "2026 AI Index Report — Research and Development, Figure 1.1.13",
+      "url": "https://hai.stanford.edu/assets/files/ai_index_report_2026.pdf",
+      "retrieved": "2026-08-22",
+      "notes": "Epoch AI snapshot dated 2026-04-22. The report visualizes only selected geographic areas; absent countries are stored as missing, never zero."
+    },
+    {
+      "id": "stanford_ai_index_2025_linkedin_skills",
+      "organization": "Stanford HAI AI Index / LinkedIn Economic Graph",
+      "title": "2025 AI Index Report — Relative AI skill penetration, 2015–2024",
+      "url": "https://hai.stanford.edu/assets/files/hai_ai_index_report_2025.pdf",
+      "retrieved": "2026-08-22",
+      "notes": "LinkedIn profile-based relative penetration. Coverage and platform representation differ by country; missing values are not inferred."
+    },
+    {
+      "id": "oxford_gair_2025",
+      "organization": "Oxford Insights",
+      "title": "Government AI Readiness Index 2025 — Policy Capacity pillar",
+      "url": "https://oxfordinsights.com/wp-content/uploads/2025/12/2025-Government-AI-Readiness-Index-2.pdf",
+      "retrieved": "2026-08-22",
+      "notes": "Policy Capacity is one pillar of Oxford Insights' 2025 methodology, not a complete measure of government performance. Values are used only where verified from the published table."
+    },
+    {
+      "id": "stanford_global_vibrancy_reference",
+      "organization": "Stanford HAI AI Index",
+      "title": "Global AI Vibrancy Tool — 2024 weighted index reference",
+      "url": "https://hai.stanford.edu/ai-index/global-vibrancy-tool",
+      "retrieved": "2026-08-22",
+      "notes": "Shown only as an external reference score. It is never included in the 5sigmas composite because doing so would double-count an already-composite index."
+    }
+  ]
+}
