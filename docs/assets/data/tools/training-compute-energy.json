@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "updated": "2026-08-22",
+  "scope": "Training-compute and facility-energy estimator for accelerator clusters. Hardware values are reference presets; utilization, power draw, non-accelerator IT overhead and PUE remain explicit user assumptions.",
+  "freshness_policy": "Review hardware presets on upstream NVIDIA specification changes and at least every 90 days. Methodology sources are reviewed when MFU, dense-training compute or PUE semantics materially change.",
+  "presets": [
+    {
+      "id": "h100-sxm-bf16",
+      "title_es": "NVIDIA H100 SXM · BF16 denso",
+      "title_en": "NVIDIA H100 SXM · dense BF16",
+      "peak_tflops": 989,
+      "tdp_w": 700,
+      "source": "nvidia-h100",
+      "note_es": "989 TFLOP/s usa el pico BF16 denso citado por NVIDIA; 700 W es el TDP máximo configurable del H100 SXM, no una medición de consumo medio.",
+      "note_en": "989 TFLOP/s uses NVIDIA's cited dense BF16 peak; 700 W is the configurable H100 SXM maximum TDP, not a measured average power draw."
+    },
+    {
+      "id": "h200-sxm-bf16",
+      "title_es": "NVIDIA H200 SXM · BF16 denso",
+      "title_en": "NVIDIA H200 SXM · dense BF16",
+      "peak_tflops": 989.5,
+      "tdp_w": 700,
+      "source": "nvidia-h200",
+      "note_es": "El H200 SXM publica 1.979 TFLOP/s BF16 con sparsity; el preset usa la mitad como pico denso. El TDP máximo configurable publicado es 700 W.",
+      "note_en": "H200 SXM publishes 1,979 BF16 TFLOP/s with sparsity; this preset uses half as the dense peak. Published configurable maximum TDP is 700 W."
+    }
+  ],
+  "sources": {
+    "nvidia-h100": {
+      "organization": "NVIDIA",
+      "title": "H100 Tensor Core GPU product specifications and NVIDIA BF16 training guidance",
+      "url": "https://www.nvidia.com/en-us/data-center/h100/",
+      "secondary_url": "https://docs.nvidia.com/bionemo-recipes/latest/main/recipes/recipes/opengenome2_llama_native_te/",
+      "reviewed": "2026-08-22",
+      "notes": "NVIDIA lists H100 SXM maximum TDP up to 700 W. Current NVIDIA training documentation uses 989 TFLOP/s/GPU as the maximum theoretical dense BF16 throughput for H100 when calculating MFU."
+    },
+    "nvidia-h200": {
+      "organization": "NVIDIA",
+      "title": "H200 Tensor Core GPU product specifications",
+      "url": "https://www.nvidia.com/en-us/data-center/h200/",
+      "reviewed": "2026-08-22",
+      "notes": "NVIDIA lists H200 SXM at 1,979 BF16 TFLOP/s with sparsity and up to 700 W configurable maximum TDP. The dense BF16 preset is therefore represented as half the sparsity-assisted figure."
+    },
+    "hoffmann-2022": {
+      "organization": "DeepMind",
+      "title": "Training Compute-Optimal Large Language Models",
+      "published": "2022-03-29",
+      "url": "https://arxiv.org/abs/2203.15556",
+      "notes": "Primary reference for compute-optimal dense Transformer training and the approximate C≈6ND compute model used here as an editable workload approximation."
+    },
+    "green-grid-pue": {
+      "organization": "The Green Grid",
+      "title": "Power Usage Effectiveness (PUE)",
+      "url": "https://www.thegreengrid.org/node/372",
+      "reviewed": "2026-08-22",
+      "notes": "PUE is defined as total data-center energy divided by IT equipment energy. The estimator applies PUE after accelerator plus non-accelerator IT energy."
+    }
+  }
+}

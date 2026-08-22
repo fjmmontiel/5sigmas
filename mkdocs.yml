@@ -72,6 +72,7 @@ nav:
       - Fiabilidad de benchmarks: herramientas/fiabilidad-benchmarks.md
       - Línea temporal de capacidades: herramientas/linea-temporal-capacidades-modelos.md
       - Leyes de escalado: herramientas/leyes-escalado.md
+      - Cómputo y energía de entrenamiento: herramientas/computo-energia-entrenamiento.md
   - Aprender:
       - Conceptos:
           - temas/index.md
