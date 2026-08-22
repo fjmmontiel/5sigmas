@@ -1,6 +1,6 @@
 ---
 title: Explorador del ecosistema global de IA — comparar países con pesos transparentes
-description: Compara señales de inversión, empresas, infraestructura, modelos, talento y política de IA sin convertir datos ausentes en ceros ni ocultar cómo cambia el ranking al cambiar los pesos.
+description: Compara inversión, empresas, infraestructura, modelos, talento y política de IA entre países con datos ausentes, normalización y pesos visibles.
 hide:
   - toc
   - navigation
