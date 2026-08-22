@@ -30,9 +30,39 @@ jobs:
 
           errors = []
           workflow_dir = Path('.github/workflows')
-          upload_use = re.compile(r'^\s*uses:\s*actions/upload-artifact@')
-          pages_upload_use = re.compile(r'^\s*uses:\s*actions/upload-pages-artifact@')
+          upload_use = re.compile(r'^\s*(?:-\s*)?uses:\s*actions/upload-artifact@')
+          pages_upload_use = re.compile(r'^\s*(?:-\s*)?uses:\s*actions/upload-pages-artifact@')
           pages_uploads = []
+
+          def step_block(lines, index):
+              line = lines[index]
+              stripped = line.lstrip()
+              uses_indent = len(line) - len(stripped)
+
+              if stripped.startswith('- '):
+                  step_indent = uses_indent
+                  start = index
+              else:
+                  step_indent = max(uses_indent - 2, 0)
+                  start = index
+                  while start > 0:
+                      candidate = lines[start - 1]
+                      candidate_stripped = candidate.lstrip()
+                      indent = len(candidate) - len(candidate_stripped)
+                      start -= 1
+                      if indent == step_indent and candidate_stripped.startswith('- '):
+                          break
+
+              end = index + 1
+              while end < len(lines):
+                  candidate = lines[end]
+                  candidate_stripped = candidate.lstrip()
+                  indent = len(candidate) - len(candidate_stripped)
+                  if indent == step_indent and candidate_stripped.startswith('- '):
+                      break
+                  end += 1
+
+              return '\n'.join(lines[start:end])
 
           for path in sorted([*workflow_dir.glob('*.yml'), *workflow_dir.glob('*.yaml')]):
               lines = path.read_text(encoding='utf-8').splitlines()
@@ -43,28 +73,7 @@ jobs:
                   if not upload_use.match(line):
                       continue
 
-                  uses_indent = len(line) - len(line.lstrip())
-                  step_indent = max(uses_indent - 2, 0)
-                  start = index
-                  while start > 0:
-                      candidate = lines[start - 1]
-                      stripped = candidate.lstrip()
-                      indent = len(candidate) - len(stripped)
-                      if indent == step_indent and stripped.startswith('- '):
-                          start -= 1
-                          break
-                      start -= 1
-
-                  end = index + 1
-                  while end < len(lines):
-                      candidate = lines[end]
-                      stripped = candidate.lstrip()
-                      indent = len(candidate) - len(stripped)
-                      if indent == step_indent and stripped.startswith('- '):
-                          break
-                      end += 1
-
-                  block = '\n'.join(lines[start:end])
+                  block = step_block(lines, index)
 
                   if not re.search(r'(?m)^\s*retention-days:\s*1\s*(?:#.*)?$', block):
                       errors.append(f'{path}:{index + 1}: upload-artifact must set retention-days: 1')
@@ -77,12 +86,10 @@ jobs:
                       )
                   else:
                       expression = if_match.group(1).split('#', 1)[0].strip()
-                      if expression.startswith('${{') and expression.endswith('}}'):
-                          expression = expression[3:-2].strip()
                       if expression != 'failure()':
                           errors.append(
                               f'{path}:{index + 1}: generic upload-artifact must be failure-only; '
-                              f'found if: {if_match.group(1).strip()}'
+                              f'found if: {expression}'
                           )
 
                   for match in re.finditer(r'(?m)^\s*path:\s*["\']?([^"\'\n#]+)', block):
