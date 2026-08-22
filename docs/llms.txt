@@ -22,6 +22,7 @@
 - [Explorador de fiabilidad de benchmarks](https://5sigmas.com/herramientas/fiabilidad-benchmarks/index.html.md): separa resolución estadística, saturación, sensibilidad a ítems inválidos o exposición potencial del test y fragilidad del ranking ante cambios de composición.
 - [Línea temporal de capacidades de modelos](https://5sigmas.com/herramientas/linea-temporal-capacidades-modelos/index.html.md): recorre resultados reportados de GPQA Diamond, MMMU-Pro, SWE-bench, Toolathlon y ARC-AGI-2 con procedencia por punto y cambios de protocolo visibles, sin mezclar benchmarks en un índice común.
 - [Explorador de leyes de escalado](https://5sigmas.com/herramientas/leyes-escalado/index.html.md): redistribuye un presupuesto fijo de entrenamiento entre parámetros y tokens con una superficie tipo Chinchilla, muestra el óptimo condicionado y permite probar la sensibilidad a los exponentes del ajuste.
+- [Estimador de cómputo y energía de entrenamiento](https://5sigmas.com/herramientas/computo-energia-entrenamiento/index.html.md): estima FLOPs, duración, potencia y energía de instalación a partir de aceleradores, MFU, consumo medio, PUE, parámetros y tokens, manteniendo separados los supuestos de cómputo y electricidad.
 
 ## Conceptos fundamentales
 
