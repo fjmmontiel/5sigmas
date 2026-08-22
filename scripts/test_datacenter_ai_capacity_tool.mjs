@@ -74,6 +74,9 @@ close(inference.approximateCompletionsPerSec, 5480, 1e-12);
 const highPower = Core.scenario({ ...defaults }, { ...h200, tdp_w: 1000 });
 if (highPower.activeAccelerators >= base.activeAccelerators) throw new Error('Higher accelerator power should not increase capacity');
 
+const defaultState = Core.queryState('', h200);
+if (defaultState.facilityReservePct !== 10 || defaultState.otherITPct !== 15 || defaultState.measuredTokensPerSecPerAccelerator !== 0) throw new Error('Missing query parameters must preserve documented defaults');
+
 const state = Core.queryState('?hw=h200-sxm-bf16&fac=20&pue=1.15&res=0&r=100&inst=32&rp=45&rc=40&pwr=75&it=20&mfu=50&tok=0&out=256', h200);
 if (state.facilityMW !== 20 || state.facilityReservePct !== 0 || state.measuredTokensPerSecPerAccelerator !== 0 || state.avgOutputTokens !== 256) throw new Error('Deep-link state parsing drifted');
 
