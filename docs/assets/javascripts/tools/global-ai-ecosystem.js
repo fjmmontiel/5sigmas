@@ -11,25 +11,25 @@
       loading: 'Cargando datos…', noComparable: 'No hay países con datos completos para esta combinación.',
       countries: 'países comparables', excluded: 'excluidos por datos ausentes', copied: 'Escenario copiado.',
       copyFail: 'No se pudo copiar automáticamente; usa la URL actual.', exported: 'Exportación preparada.',
-      score: 'Puntuación del escenario', reference: 'Referencia Stanford 2024', missing: 'Falta',
-      raw: 'Dato bruto', normalized: 'Normalizado', weight: 'Peso', active: 'Incluir',
+      score: 'Puntuación del escenario', reference: 'Referencia Stanford 2024', normalized: 'Normalizado', weight: 'Peso',
       scenarioNote: 'La puntuación se recalcula solo sobre países con datos completos en todas las métricas activas.',
+      country: 'País', tableScore: 'Puntuación', checked: 'Revisado',
     },
     en: {
       loading: 'Loading data…', noComparable: 'No countries have complete data for this combination.',
       countries: 'comparable countries', excluded: 'excluded for missing data', copied: 'Scenario copied.',
       copyFail: 'Automatic copy failed; use the current URL.', exported: 'Export prepared.',
-      score: 'Scenario score', reference: 'Stanford 2024 reference', missing: 'Missing',
-      raw: 'Raw value', normalized: 'Normalized', weight: 'Weight', active: 'Include',
+      score: 'Scenario score', reference: 'Stanford 2024 reference', normalized: 'Normalized', weight: 'Weight',
       scenarioNote: 'The score is recomputed only across countries with complete data for every active metric.',
+      country: 'Country', tableScore: 'Score', checked: 'Checked',
     },
   }[locale];
 
   const q = (selector) => root.querySelector(selector);
   const els = {
     metricControls: q('[data-output="metric-controls"]'), ranking: q('[data-output="ranking"]'),
-    tableBody: q('[data-output="table-body"]'), coverage: q('[data-output="coverage"]'),
-    activeCount: q('[data-output="active-count"]'), leader: q('[data-output="leader"]'),
+    tableHead: q('[data-output="table-head"]'), tableBody: q('[data-output="table-body"]'),
+    coverage: q('[data-output="coverage"]'), activeCount: q('[data-output="active-count"]'), leader: q('[data-output="leader"]'),
     focus: q('[data-field="focus"]'), focusPanel: q('[data-output="focus-panel"]'),
     sources: q('[data-output="sources"]'), feedback: q('[data-s5-tool-feedback]'),
   };
@@ -37,12 +37,30 @@
   let data;
   let state = { activeMetrics: [], weights: {}, focus: null };
 
+  const hasNumber = (value) => value !== null && value !== undefined && value !== '' && Number.isFinite(Number(value));
   const countryName = (country) => locale === 'en' ? country.name_en : country.name_es;
   const metricName = (metric) => locale === 'en' ? metric.label_en : metric.label_es;
   const fmt = (value, digits = 1) => new Intl.NumberFormat(locale === 'en' ? 'en-US' : 'es-ES', { maximumFractionDigits: digits }).format(value);
 
+  function regionName(region) {
+    if (locale === 'en') return region;
+    return ({
+      'North America': 'Norteamérica', 'East Asia': 'Asia oriental', 'South Asia': 'Asia meridional',
+      'Western Europe': 'Europa occidental', Pacific: 'Pacífico',
+    })[region] || region;
+  }
+
+  function unitName(metric) {
+    if (locale === 'en') return metric.unit;
+    return ({
+      private_investment_2025: 'miles de millones de USD', new_ai_companies_2025: 'empresas',
+      data_centers_2025: 'instalaciones', notable_models_2025: 'modelos',
+      ai_skill_penetration_2024: '× referencia ocupacional global', policy_capacity_2025: 'puntos Oxford Insights (0–100)',
+    })[metric.id] || metric.unit;
+  }
+
   function formatRaw(metric, value) {
-    if (!Number.isFinite(Number(value))) return '—';
+    if (!hasNumber(value)) return '—';
     const v = Number(value);
     if (metric.id === 'private_investment_2025') return `${fmt(v, 2)} B USD`;
     if (metric.id === 'ai_skill_penetration_2024') return `${fmt(v, 2)}×`;
@@ -75,20 +93,23 @@
   }
 
   function renderMetricControls() {
-    els.metricControls.innerHTML = '';
+    els.metricControls.replaceChildren();
     data.metrics.forEach((metric) => {
       const row = document.createElement('div');
       row.className = 's5-ecosystem-metric-control';
       const checked = state.activeMetrics.includes(metric.id);
-      row.innerHTML = `<label class="s5-ecosystem-check"><input type="checkbox" data-metric-active="${metric.id}" ${checked ? 'checked' : ''}><span><strong>${metricName(metric)}</strong><small>${metric.year} · ${metric.unit}</small></span></label><label class="s5-ecosystem-weight"><span>${t.weight}</span><input type="number" min="0" max="10" step="0.25" value="${state.weights[metric.id] ?? 1}" data-metric-weight="${metric.id}" ${checked ? '' : 'disabled'}></label>`;
+      row.innerHTML = `<label class="s5-ecosystem-check"><input type="checkbox" data-metric-active="${metric.id}" ${checked ? 'checked' : ''}><span><strong>${metricName(metric)}</strong><small>${metric.year} · ${unitName(metric)}</small></span></label><label class="s5-ecosystem-weight"><span>${t.weight}</span><input type="number" min="0" max="10" step="0.25" value="${state.weights[metric.id] ?? 1}" data-metric-weight="${metric.id}" ${checked ? '' : 'disabled'}></label>`;
       els.metricControls.appendChild(row);
     });
   }
 
   function renderRanking(scenario) {
-    els.ranking.innerHTML = '';
+    els.ranking.replaceChildren();
     if (!scenario.rows.length) {
-      els.ranking.innerHTML = `<p class="s5-tool-empty">${t.noComparable}</p>`;
+      const empty = document.createElement('p');
+      empty.className = 's5-tool-empty';
+      empty.textContent = t.noComparable;
+      els.ranking.appendChild(empty);
       return;
     }
     scenario.rows.forEach((row) => {
@@ -96,17 +117,46 @@
       item.type = 'button';
       item.className = `s5-ecosystem-rank-row${state.focus === row.id ? ' is-focus' : ''}`;
       item.dataset.country = row.id;
-      item.innerHTML = `<span class="s5-ecosystem-rank">${row.rank}</span><span class="s5-ecosystem-country"><strong>${countryName(row)}</strong><small>${row.region}</small></span><span class="s5-ecosystem-bar"><i style="width:${row.score.toFixed(2)}%"></i></span><strong class="s5-ecosystem-score">${fmt(row.score, 1)}</strong>`;
+      item.innerHTML = `<span class="s5-ecosystem-rank">${row.rank}</span><span class="s5-ecosystem-country"><strong>${countryName(row)}</strong><small>${regionName(row.region)}</small></span><span class="s5-ecosystem-bar"><i style="width:${row.score.toFixed(2)}%"></i></span><strong class="s5-ecosystem-score">${fmt(row.score, 1)}</strong>`;
       els.ranking.appendChild(item);
     });
   }
 
+  function renderTableHead(scenario) {
+    const tr = document.createElement('tr');
+    [t.country, t.tableScore, ...scenario.activeMetrics.map(metricName), t.reference].forEach((label) => {
+      const th = document.createElement('th');
+      th.textContent = label;
+      tr.appendChild(th);
+    });
+    els.tableHead.replaceChildren(tr);
+  }
+
   function renderTable(scenario) {
-    els.tableBody.innerHTML = '';
+    renderTableHead(scenario);
+    els.tableBody.replaceChildren();
     scenario.rows.forEach((row) => {
       const tr = document.createElement('tr');
-      const metricCells = scenario.activeMetrics.map((metric) => `<td><strong>${formatRaw(metric, row.raw[metric.id])}</strong><small>${fmt(row.normalized[metric.id], 1)}/100</small></td>`).join('');
-      tr.innerHTML = `<th scope="row">${row.rank}. ${countryName(row)}</th><td><strong>${fmt(row.score, 1)}</strong></td>${metricCells}<td>${row.reference_vibrancy_2024 === null ? '—' : fmt(row.reference_vibrancy_2024, 2)}</td>`;
+      const country = document.createElement('th');
+      country.scope = 'row';
+      country.textContent = `${row.rank}. ${countryName(row)}`;
+      const score = document.createElement('td');
+      const scoreStrong = document.createElement('strong');
+      scoreStrong.textContent = fmt(row.score, 1);
+      score.appendChild(scoreStrong);
+      tr.append(country, score);
+      scenario.activeMetrics.forEach((metric) => {
+        const td = document.createElement('td');
+        const strong = document.createElement('strong');
+        const small = document.createElement('small');
+        strong.textContent = formatRaw(metric, row.raw[metric.id]);
+        small.textContent = `${fmt(row.normalized[metric.id], 1)}/100`;
+        td.append(strong, small);
+        tr.appendChild(td);
+      });
+      const reference = document.createElement('td');
+      reference.textContent = row.reference_vibrancy_2024 === null ? '—' : fmt(row.reference_vibrancy_2024, 2);
+      tr.appendChild(reference);
       els.tableBody.appendChild(tr);
     });
   }
@@ -120,13 +170,13 @@
     state.focus = row.id;
     els.focus.value = row.id;
     const cards = scenario.activeMetrics.map((metric) => `<div><small>${metricName(metric)}</small><strong>${formatRaw(metric, row.raw[metric.id])}</strong><span>${t.normalized}: ${fmt(row.normalized[metric.id], 1)} · ${t.weight}: ${fmt(scenario.weights[metric.id] * 100, 0)}%</span></div>`).join('');
-    els.focusPanel.innerHTML = `<header><div><small>${row.region}</small><h3>${countryName(row)}</h3></div><div class="s5-ecosystem-focus-score"><small>${t.score}</small><strong>${fmt(row.score, 1)}</strong></div></header><div class="s5-ecosystem-focus-grid">${cards}</div><p>${t.reference}: <strong>${row.reference_vibrancy_2024 === null ? '—' : fmt(row.reference_vibrancy_2024, 2)}</strong>. ${t.scenarioNote}</p>`;
+    els.focusPanel.innerHTML = `<header><div><small>${regionName(row.region)}</small><h3>${countryName(row)}</h3></div><div class="s5-ecosystem-focus-score"><small>${t.score}</small><strong>${fmt(row.score, 1)}</strong></div></header><div class="s5-ecosystem-focus-grid">${cards}</div><p>${t.reference}: <strong>${row.reference_vibrancy_2024 === null ? '—' : fmt(row.reference_vibrancy_2024, 2)}</strong>. ${t.scenarioNote}</p>`;
   }
 
   function renderSources(scenario) {
     const activeSourceIds = new Set(scenario.activeMetrics.map((metric) => metric.source_id));
     activeSourceIds.add('stanford_global_vibrancy_reference');
-    els.sources.innerHTML = '';
+    els.sources.replaceChildren();
     data.sources.filter((source) => activeSourceIds.has(source.id)).forEach((source) => {
       const li = document.createElement('li');
       const a = document.createElement('a');
@@ -135,7 +185,7 @@
       a.rel = 'noopener noreferrer';
       a.textContent = `${source.organization} · ${source.title}`;
       const small = document.createElement('small');
-      small.textContent = `${source.notes} ${locale === 'en' ? 'Checked' : 'Revisado'}: ${source.retrieved}.`;
+      small.textContent = `${source.notes} ${t.checked}: ${source.retrieved}.`;
       li.append(a, small);
       els.sources.appendChild(li);
     });
@@ -143,7 +193,7 @@
 
   function rebuildFocusOptions(scenario) {
     const current = state.focus;
-    els.focus.innerHTML = '';
+    els.focus.replaceChildren();
     scenario.rows.forEach((row) => {
       const option = document.createElement('option');
       option.value = row.id;
@@ -233,6 +283,7 @@
       render();
     })
     .catch((error) => {
-      root.querySelector('[data-output="status"]').textContent = `${t.loading} ${error.message}`;
+      const status = root.querySelector('[data-output="status"]');
+      if (status) status.textContent = `${t.loading} ${error.message}`;
     });
 })();
