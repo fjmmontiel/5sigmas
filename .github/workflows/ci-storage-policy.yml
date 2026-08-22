@@ -31,10 +31,15 @@ jobs:
           errors = []
           workflow_dir = Path('.github/workflows')
           upload_use = re.compile(r'^\s*uses:\s*actions/upload-artifact@')
+          pages_upload_use = re.compile(r'^\s*uses:\s*actions/upload-pages-artifact@')
+          pages_uploads = []
 
           for path in sorted([*workflow_dir.glob('*.yml'), *workflow_dir.glob('*.yaml')]):
               lines = path.read_text(encoding='utf-8').splitlines()
               for index, line in enumerate(lines):
+                  if pages_upload_use.match(line):
+                      pages_uploads.append((path, index + 1))
+
                   if not upload_use.match(line):
                       continue
 
@@ -60,8 +65,25 @@ jobs:
                       end += 1
 
                   block = '\n'.join(lines[start:end])
+
                   if not re.search(r'(?m)^\s*retention-days:\s*1\s*(?:#.*)?$', block):
                       errors.append(f'{path}:{index + 1}: upload-artifact must set retention-days: 1')
+
+                  if_match = re.search(r'(?m)^\s*if:\s*(.+?)\s*$', block)
+                  if not if_match:
+                      errors.append(
+                          f'{path}:{index + 1}: generic upload-artifact is allowed only as failure evidence; '
+                          'add if: failure()'
+                      )
+                  else:
+                      expression = if_match.group(1).split('#', 1)[0].strip()
+                      if expression.startswith('${{') and expression.endswith('}}'):
+                          expression = expression[3:-2].strip()
+                      if expression != 'failure()':
+                          errors.append(
+                              f'{path}:{index + 1}: generic upload-artifact must be failure-only; '
+                              f'found if: {if_match.group(1).strip()}'
+                          )
 
                   for match in re.finditer(r'(?m)^\s*path:\s*["\']?([^"\'\n#]+)', block):
                       artifact_path = match.group(1).strip()
@@ -71,6 +93,13 @@ jobs:
                               'validate them in-run or use upload-pages-artifact for deployment'
                           )
 
+          if len(pages_uploads) != 1 or pages_uploads[0][0].name != 'deploy-pages.yml':
+              rendered = ', '.join(f'{path}:{line}' for path, line in pages_uploads) or 'none'
+              errors.append(
+                  'upload-pages-artifact is permitted exactly once, in deploy-pages.yml; '
+                  f'found: {rendered}'
+              )
+
           cleanup_path = workflow_dir / 'cleanup-actions-artifacts.yml'
           if not cleanup_path.exists():
               errors.append('cleanup-actions-artifacts.yml must exist')
@@ -78,10 +107,12 @@ jobs:
               cleanup = cleanup_path.read_text(encoding='utf-8')
               for required in (
                   'schedule:',
-                  "cron: '17,47 * * * *'",
+                  "cron: '17 * * * *'",
                   "default: '1'",
                   'actions: write',
                   'deleteArtifact',
+                  'cancel-in-progress: true',
+                  "artifact.name === 'github-pages'",
                   "artifact.name === 'english-ttc-reviewed-seed'",
               ):
                   if required not in cleanup:
@@ -113,7 +144,7 @@ jobs:
               raise SystemExit(1)
 
           print(
-              'CI storage policy OK: generic artifacts are capped at one day, '
-              'old artifacts are continuously purged, and consumed Pages artifacts are deleted.'
+              'CI storage policy OK: generic artifacts are failure-only with one-day maximum retention, '
+              'old generic artifacts are purged hourly, and the single required Pages artifact is deleted after deployment.'
           )
           PY
