@@ -35,11 +35,11 @@ try {
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
       if (overflow > 1) failures.push(`${spec.route} ${viewport.name}: page horizontal overflow ${overflow}px`);
 
-      const unlabeled = await page.locator('input, select, button').evaluateAll((nodes) => nodes.filter((node) => {
+      const unlabeled = await root.locator('input, select, button').evaluateAll((nodes) => nodes.filter((node) => {
         if (node.tagName === 'BUTTON') return !(node.textContent || '').trim() && !node.getAttribute('aria-label');
         return !node.getAttribute('aria-label') && (!node.id || !document.querySelector(`label[for="${CSS.escape(node.id)}"]`)) && !node.closest('label');
       }).length);
-      if (unlabeled) failures.push(`${spec.route} ${viewport.name}: ${unlabeled} unlabeled controls`);
+      if (unlabeled) failures.push(`${spec.route} ${viewport.name}: ${unlabeled} unlabeled tool controls`);
 
       const jsonLd = await page.locator('script[type="application/ld+json"]').allTextContents();
       if (!jsonLd.some((raw) => { try { return JSON.parse(raw)['@type'] === 'WebApplication'; } catch { return false; } })) failures.push(`${spec.route} ${viewport.name}: WebApplication JSON-LD missing`);
@@ -102,4 +102,4 @@ if (failures.length) {
   failures.forEach((failure) => console.error(` - ${failure}`));
   process.exit(1);
 }
-console.log('Global AI ecosystem browser QA passed: ES/EN, 390/1440, 28-record coverage, strict missing-data exclusion, dynamic signals/table, deep links, provenance, accessible controls and responsive containment verified.');
+console.log('Global AI ecosystem browser QA passed: ES/EN, 390/1440, 28-record coverage, strict missing-data exclusion, dynamic signals/table, deep links, provenance, accessible tool controls and responsive containment verified.');
