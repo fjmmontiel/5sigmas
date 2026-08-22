@@ -20,6 +20,7 @@ on:
       - 'docs/stylesheets/tools-benchmark-reliability.css'
       - 'docs/stylesheets/tools-model-capability-timeline.css'
       - 'docs/stylesheets/tools-scaling-laws.css'
+      - 'docs/stylesheets/tools-training-energy.css'
       - 'tools/**'
       - 'hooks/locale_alternates.py'
       - 'scripts/prepare_locale.py'
@@ -104,6 +105,9 @@ jobs:
       - name: Verify scaling-laws compute allocation and provenance
         run: node scripts/test_scaling_laws_tool.mjs
 
+      - name: Verify training compute/energy math and provenance
+        run: node scripts/test_training_compute_energy_tool.mjs
+
       - name: Build Spanish site strictly
         run: mkdocs build --clean --strict
 
@@ -166,7 +170,9 @@ jobs:
             curl --fail --silent http://127.0.0.1:8000/herramientas/linea-temporal-capacidades-modelos/ > /dev/null && \
             curl --fail --silent http://127.0.0.1:8000/en/tools/model-capability-timeline/ > /dev/null && \
             curl --fail --silent http://127.0.0.1:8000/herramientas/leyes-escalado/ > /dev/null && \
-            curl --fail --silent http://127.0.0.1:8000/en/tools/scaling-laws/ > /dev/null && exit 0
+            curl --fail --silent http://127.0.0.1:8000/en/tools/scaling-laws/ > /dev/null && \
+            curl --fail --silent http://127.0.0.1:8000/herramientas/computo-energia-entrenamiento/ > /dev/null && \
+            curl --fail --silent http://127.0.0.1:8000/en/tools/training-compute-energy/ > /dev/null && exit 0
             sleep 1
           done
           cat /tmp/5sigmas-tools-preview.log
@@ -217,6 +223,9 @@ jobs:
       - name: Validate scaling-laws explorer and capture visual evidence
         run: node scripts/validate_scaling_laws_tool.mjs
 
+      - name: Validate training compute/energy estimator and capture visual evidence
+        run: node scripts/validate_training_compute_energy_tool.mjs
+
       - name: Validate localized route switching and hreflang
         run: node scripts/validate_locale_switching.mjs
 
@@ -241,6 +250,7 @@ jobs:
             artifacts/visual-review/benchmark-reliability-*.png
             artifacts/visual-review/model-capability-timeline-*.png
             artifacts/visual-review/scaling-laws-*.png
+            artifacts/visual-review/training-compute-energy-*.png
           if-no-files-found: warn
           retention-days: 1
           overwrite: true
