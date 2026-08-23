@@ -2,6 +2,7 @@
 title: Más allá del Transformer — memoria y modelos del mundo
 description: Cómo el campo intenta ir más allá del puro escalado del Transformer combinando herramientas, búsqueda, memoria en inferencia, modelos del mundo y robótica.
 date: 2026-03-31
+date_modified: 2026-08-23
 keywords: "más allá del Transformer, test-time compute, memoria IA, modelos del mundo, Mamba, SSM, robótica IA, agentes IA, búsqueda IA, futuro IA"
 tags:
   - IA
@@ -31,7 +32,7 @@ Este capítulo recorre esa nueva fase.
 
 El Transformer reorganizó el campo porque era paralelizable, escalable y extremadamente general. Pero precisamente al escalarlo empezaron a hacerse visibles varios límites.
 
-El primero es computacional. La atención estándar crece de forma costosa con la longitud del contexto, y eso convierte la memoria larga en un problema de hardware y eficiencia.
+El primero es computacional. La atención estándar crece de forma costosa con la longitud del contexto, y eso convierte la memoria larga en un problema de hardware y eficiencia. El [visualizador de atención Transformer](/herramientas/atencion-transformer/) permite inspeccionar esa interacción token a token, mientras que el [explorador de KV cache y contexto](/herramientas/kv-cache-contexto/) muestra cómo ese coste se traduce en memoria y capacidad de contexto durante la inferencia.
 
 El segundo es funcional. Un Transformer preentrenado sabe muchísimo, pero sus pesos suelen quedar fijos en inferencia. Puede usar el contexto inmediato, pero no incorpora con naturalidad una memoria viva y persistente que aprende mientras trabaja.
 
@@ -177,7 +178,7 @@ No sabemos todavía qué combinación acabará imponiéndose. Lo que sí parece 
 | R5 | [DeepMind (2025) — *AlphaEvolve*](https://deepmind.google/blog/alphaevolve-a-gemini-powered-coding-agent-for-designing-advanced-algorithms/) | Anuncio de mayo de 2025: agente para descubrimiento y optimización algorítmica. |
 | R6 | [DeepMind (2026) — *10 years of AlphaGo*](https://deepmind.google/blog/10-years-of-alphago/) | Retrospectiva de marzo de 2026 que conecta AlphaGo, AlphaZero, AlphaProof y AlphaEvolve como una misma línea de búsqueda y planificación. |
 | R7 | [Gu & Dao (2023) — *Mamba*](https://arxiv.org/abs/2312.00752) | State space models selectivos y secuencias largas. |
-| R8 | [Dao & Gu (2024) — *Transformers are SSMs*](https://arxiv.org/abs/2405.21060) | Mamba-2 y dualidad entre atención y SSM. |
+| R8 | [Dao & Gu (2024) — *Transformers are SSMs*](https://arxiv.org/abs/2405.21060) | Mamba-2 y dualidad entre atención y SSMs. |
 | R9 | [Behrouz, Zhong & Mirrokni (2025) — *Titans*](https://arxiv.org/abs/2501.00663) | Memoria neuronal de largo plazo durante inferencia. |
 | R10 | [Google Research (2025) — *Titans + MIRAS*](https://research.google/blog/titans-miras-helping-ai-have-long-term-memory/) | Test-time memorization y memoria a largo plazo. |
 | R11 | [Google Research (2025) — *Nested Learning*](https://research.google/blog/introducing-nested-learning-a-new-ml-paradigm-for-continual-learning/) | Paradigma multinivel para aprendizaje continuo. |
