@@ -2,6 +2,7 @@
 title: "How to evaluate an AI agent"
 description: "Evaluating an agent requires measuring the whole task, traces, tools, cost, and recovery from failure. A convincing final answer is not enough."
 date: 2026-07-14
+date_modified: 2026-08-23
 keywords: "AI agent evaluation, agent evals, agent benchmarks, traces, LLM as judge, task success, observability"
 tags:
   - AI
@@ -81,6 +82,8 @@ Before deployment, a task should pass several gates:
 6. **Abstention:** without sufficient data or authorization, it does not improvise.
 
 This changes the question from “what percentage does it get right?” to “under which conditions can I trust it to complete this task?”
+
+The [agent reliability and evaluation playground](/en/tools/agent-reliability-eval/) turns that gate into a reproducible scenario and keeps final success, first-pass success, retry recovery, tool decisions, timeouts and trajectory efficiency as separate signals.
 
 ## What to remember
 
