@@ -2,6 +2,7 @@
 title: "La anatomía de un agente: tools, memoria y estado"
 description: "Cómo funciona por dentro un agente de IA: contexto, planificación, herramientas, memoria, estado y runtime. La tool call es un contrato, no magia."
 date: 2026-07-14
+date_modified: 2026-08-23
 keywords: "anatomía agente IA, tools, tool calling, memoria agentes, estado runtime, MCP, ReAct"
 tags:
   - IA
@@ -49,7 +50,7 @@ El protocolo Model Context Protocol formaliza una parte de este problema para co
 
 ### Contexto de ventana
 
-Es la información que el modelo recibe en el turno actual: instrucciones, mensajes, resultados de tools, documentos y señales del runtime. Tiene un límite de tamaño y debe tratarse como una vista de trabajo, no como una base de datos.
+Es la información que el modelo recibe en el turno actual: instrucciones, mensajes, resultados de tools, documentos y señales del runtime. Tiene un límite de tamaño y debe tratarse como una vista de trabajo, no como una base de datos. El [planificador de presupuesto de contexto](/herramientas/presupuesto-contexto/) permite repartir esa ventana entre instrucciones, esquemas de tools, historial, RAG, mensaje actual, salida reservada y margen de seguridad antes de que aparezca presión de contexto.
 
 ### Memoria
 
@@ -59,7 +60,7 @@ Es información que se conserva entre turnos o sesiones: preferencias, hechos co
 
 Describe lo que el sistema está haciendo: operaciones en vuelo, retries, resultados pendientes, locks, identificadores de idempotencia y eventos. Este estado pertenece al runtime. No debería volcarse sin filtrar en el historial visible porque puede confundir al usuario y al modelo.
 
-La distinción se vuelve crítica cuando una tool tarda. El usuario puede continuar la conversación mientras una operación externa sigue viva. Si el runtime trata todo como un mensaje, el modelo no sabe si una operación fue solicitada, aceptada, ejecutada o realmente completada.
+La distinción se vuelve crítica cuando una tool tarda. El usuario puede continuar la conversación mientras una operación externa sigue viva. Si el runtime trata todo como un mensaje, el modelo no sabe si una operación fue solicitada, aceptada, ejecutada o realmente completada. El [evaluador de fiabilidad y evaluación de agentes](/herramientas/fiabilidad-evaluacion-agentes/) permite convertir retries, timeouts, decisiones de herramientas y eficiencia de trayectoria en señales separadas en vez de reducir todo a la respuesta final.
 
 ## El agente como máquina de estados
 
@@ -85,7 +86,7 @@ Añadir una base vectorial no convierte un sistema en agente. La recuperación p
 - qué ocurre si hay resultados contradictorios;
 - cuándo la búsqueda no ha encontrado suficiente información.
 
-La memoria también puede ampliar la superficie de ataque. Si un agente escribe en memoria una instrucción maliciosa que luego se recupera como contexto confiable, el problema no desaparece: se ha convertido en persistente.
+La memoria también puede ampliar la superficie de ataque. Si un agente escribe en memoria una instrucción maliciosa que luego se recupera como contexto confiable, el problema no desaparece: se ha convertido en persistente. El [explorador de amenazas de prompt injection](/herramientas/amenazas-prompt-injection/) ayuda a razonar precisamente sobre esas fronteras de confianza, la procedencia de las instrucciones y la combinación de datos no confiables con capacidades del agente.
 
 ## Qué deberías recordar
 

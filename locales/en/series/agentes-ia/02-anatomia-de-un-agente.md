@@ -2,6 +2,7 @@
 title: "The anatomy of an agent: tools, memory, and state"
 description: "How an AI agent works internally: context, planning, tools, memory, state, and runtime. A tool call is a contract, not magic."
 date: 2026-07-14
+date_modified: 2026-08-23
 keywords: "AI agent anatomy, tools, tool calling, agent memory, runtime state, MCP, ReAct"
 tags:
   - AI
@@ -47,7 +48,7 @@ The Model Context Protocol formalizes part of the interface between agent client
 
 ### Context window
 
-This is the information the model receives in the current turn: instructions, messages, tool results, documents, and runtime signals. It has a finite size and should be treated as a working view, not as a database.
+This is the information the model receives in the current turn: instructions, messages, tool results, documents, and runtime signals. It has a finite size and should be treated as a working view, not as a database. The [context budget planner](/en/tools/context-budget/) lets you allocate that window across instructions, tool schemas, history, RAG, the current user message, reserved output, and safety headroom before context pressure appears.
 
 ### Memory
 
@@ -57,7 +58,7 @@ This is information retained across turns or sessions: preferences, confirmed fa
 
 This describes what the system is doing: in-flight operations, retries, pending results, locks, idempotency identifiers, and events. This state belongs to the runtime. It should not be dumped unfiltered into visible conversation history because it can confuse both the user and the model.
 
-The distinction becomes critical when a tool is slow. The user may continue the conversation while an external operation is still alive. If the runtime treats everything as a message, the model cannot reliably distinguish whether an operation was requested, accepted, executed, or actually completed.
+The distinction becomes critical when a tool is slow. The user may continue the conversation while an external operation is still alive. If the runtime treats everything as a message, the model cannot reliably distinguish whether an operation was requested, accepted, executed, or actually completed. The [agent reliability and evaluation playground](/en/tools/agent-reliability-eval/) turns retries, timeouts, tool decisions, and trajectory efficiency into separate signals instead of reducing the whole run to its final answer.
 
 ## The agent as a state machine
 
@@ -83,7 +84,7 @@ Adding a vector database does not turn a system into an agent. Retrieval can hel
 - what to do with conflicting results
 - when retrieval has not returned enough information
 
-Memory can also increase the attack surface. If an agent writes a malicious instruction into memory and later retrieves it as trusted context, the problem has not disappeared—it has become persistent.
+Memory can also increase the attack surface. If an agent writes a malicious instruction into memory and later retrieves it as trusted context, the problem has not disappeared—it has become persistent. The [prompt-injection threat explorer](/en/tools/prompt-injection-threat/) helps reason about exactly those trust boundaries, instruction provenance, and the combination of untrusted data with agent capabilities.
 
 ## What to remember
 
