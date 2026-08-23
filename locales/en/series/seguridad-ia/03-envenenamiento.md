@@ -2,6 +2,7 @@
 title: Poisoning — when a dangerous instruction stays in the system
 description: "What happens when a document or memory preserves a dangerous instruction and the system uses it again later."
 date: 2026-08-06
+date_modified: 2026-08-23
 keywords: RAG poisoning, agent memory, sleeper agents, memory poisoning, LLM backdoors, unlearning
 tags:
   - AI
@@ -22,7 +23,7 @@ The important difference is temporal. Classic prompt injection tries to modify a
 
 Storing an output in a database does not make it trustworthy. An agent's memory should record its origin, date, scope, permissions and expiration policy. Without those properties, the system can treat an old observation as a current instruction or turn a hypothesis into an operational fact.
 
-The same principle applies to RAG. Retrieval ranks documents by a relevance signal. It does not certify that the content is correct, current or authorized to govern an action.
+The same principle applies to RAG. Retrieval ranks documents by a relevance signal. It does not certify that the content is correct, current or authorized to govern an action. To test whether untrusted input can reach memory, tools or external egress, the [prompt-injection threat explorer](/en/tools/prompt-injection-threat/) models those paths and the controls that break them.
 
 {{ include_html("snippets/seguridad-ia/03-persistencia.html") }}
 

@@ -2,6 +2,7 @@
 title: Envenenamiento — cuando una instrucción peligrosa se queda en el sistema
 description: "Qué ocurre cuando un documento o una memoria conserva una instrucción peligrosa y el sistema la vuelve a usar más tarde."
 date: 2026-08-06
+date_modified: 2026-08-23
 keywords: envenenamiento RAG, memoria agentes, sleeper agents, memory poisoning, backdoors LLM, unlearning
 tags:
   - IA
@@ -24,7 +25,7 @@ La diferencia importante es temporal. El prompt injection clásico intenta modif
 
 Guardar una salida en una base de datos no la vuelve confiable. La memoria de un agente debe tener origen, fecha, ámbito, permisos y una política de caducidad. Sin esas propiedades el sistema puede tratar una observación antigua como una instrucción vigente o convertir una hipótesis en un hecho operativo.
 
-El mismo principio vale para RAG. La recuperación ordena documentos por una señal de relevancia. No certifica que el contenido sea correcto, actual o autorizado para gobernar una acción.
+El mismo principio vale para RAG. La recuperación ordena documentos por una señal de relevancia. No certifica que el contenido sea correcto, actual o autorizado para gobernar una acción. Para comprobar si una entrada no confiable puede alcanzar memoria, herramientas o una salida externa, el [explorador de amenazas de prompt injection](/herramientas/amenazas-prompt-injection/) permite modelar esas rutas y los controles que las cortan.
 
 {{ include_html("snippets/seguridad-ia/03-persistencia.html") }}
 
