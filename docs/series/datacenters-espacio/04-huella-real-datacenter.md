@@ -2,6 +2,7 @@
 title: La huella real de un datacenter
 description: "Agua, energía, minerales y ciclo de vida de los datacenters: qué consume la IA, por qué varía por ubicación y cómo medir su huella."
 date: 2026-06-14
+date_modified: 2026-08-23
 keywords: "consumo agua datacenters, huella ambiental inteligencia artificial, minerales críticos IA, PUE centros datos, WUE datacenter, cobalto minería IA, e-waste GPUs, golf vs datacenter agua, conflicto hídrico local"
 tags:
   - IA
@@ -64,7 +65,7 @@ Lo que ha cambiado con la IA no es principalmente el PUE de la instalación, que
 
 {{ include_html("snippets/datacenters-espacio/04-energia-densidad.html") }}
 
-Esta escalada de densidad obliga a rediseñar no solo los sistemas de refrigeración sino la distribución eléctrica, los suelos técnicos y la propia estructura del edificio. Los centros de datos construidos para cargas de 10 a 20 kW por rack necesitan actualizaciones de infraestructura sustanciales para acomodar hardware de IA de última generación, lo que explica parte del frenesí de construcción nueva y parte de la dificultad para predecir la evolución del consumo energético del sector: no es solo más cómputo, es un tipo de cómputo físicamente diferente.
+Esta escalada de densidad obliga a rediseñar no solo los sistemas de refrigeración sino la distribución eléctrica, los suelos técnicos y la propia estructura del edificio. Los centros de datos construidos para cargas de 10 a 20 kW por rack necesitan actualizaciones de infraestructura sustanciales para acomodar hardware de IA de última generación, lo que explica parte del frenesí de construcción nueva y parte de la dificultad para predecir la evolución del consumo energético del sector: no es solo más cómputo, es un tipo de cómputo físicamente diferente. El [explorador de capacidad de IA en datacenters](/herramientas/capacidad-datacenter-ia/) permite comprobar qué límite domina al combinar potencia total, PUE, slots, potencia por rack y capacidad de refrigeración.
 
 ---
 
