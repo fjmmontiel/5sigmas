@@ -4,7 +4,7 @@ seo_title: "Qué es un agente de IA: cómo funciona y en qué se diferencia de u
 description: "Qué es un agente de IA, cómo usa herramientas, memoria y estado, en qué se diferencia de un chatbot o workflow y qué necesita para funcionar de forma fiable."
 keywords: "agente de IA, agentes IA, AI agents, agentic AI, chatbot vs agente, tool calling, memoria agentes, agentes en producción"
 date: 2026-08-09
-date_modified: 2026-08-16
+date_modified: 2026-08-23
 ---
 
 # Qué es un agente de IA
@@ -63,7 +63,7 @@ Una respuesta final convincente no basta. Hay que medir la **tarea completa**: q
 
 {{ include_html("snippets/temas/agent-evaluation-trace.html") }}
 
-La traza hace observables las transiciones que una puntuación final oculta. Permite separar un fallo de selección de tool de uno de autorización, ejecución, estado o comunicación al usuario, y convertir cada incidente en un caso reproducible.
+La traza hace observables las transiciones que una puntuación final oculta. Permite separar un fallo de selección de tool de uno de autorización, ejecución, estado o comunicación al usuario, y convertir cada incidente en un caso reproducible. El [evaluador de fiabilidad y evaluación de agentes](/herramientas/fiabilidad-evaluacion-agentes/) permite trabajar con éxito final, primer intento, recuperación tras reintentos, decisiones de herramientas, timeouts y eficiencia de trayectoria como señales separadas.
 
 [Cómo evaluar un agente de IA](/series/agentes-ia/03-como-evaluar-un-agente/) desarrolla una arquitectura de gates para resultado, trayectoria, seguridad y economía operativa.
 
