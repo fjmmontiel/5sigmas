@@ -3,6 +3,7 @@ title: IA, PIB, bienestar y energía
 description: Impacto cuantitativo de la IA en energía, productividad y bienestar. Análisis con datos reales del Banco Mundial, IEA y Penn World Table, sin proyecciones especulativas.
 keywords: IA energía, PIB inteligencia artificial, productividad IA, bienestar tecnología, electricidad IA
 date: 2026-04-07
+date_modified: 2026-08-23
 tags:
   - IA
   - Energía
@@ -34,6 +35,8 @@ En esta serie exploraremos: <br>
 ### 2. **IA como tecnología eléctrica**
    - Qué implica en términos de **compute**, centros de datos, entrenamiento vs inferencia y eficiencia (y por qué la demanda puede crecer aunque mejore el hardware).
    - Principales cuellos de botella: energía, chips, datos, talento y regulación.
+   - Para convertir esos límites en restricciones físicas, el [explorador de capacidad de IA en datacenters](/herramientas/capacidad-datacenter-ia/) contrasta potencia total, PUE, slots, potencia y refrigeración por rack para identificar qué cuello de botella domina.
+   - Cuando la pregunta escala de una instalación a países y regiones, el [explorador del ecosistema global de IA](/herramientas/ecosistema-global-ia/) compara inversión, creación de empresas, infraestructura, modelos, talento y capacidad de política pública con cobertura, normalización y pesos visibles.
    {{ include_html("snippets/ia-pib-energia/series_energy_ai_02_ai.html") }}
 
 ### 3. **Medición: PIB vs bienestar (y qué mirar de verdad)**

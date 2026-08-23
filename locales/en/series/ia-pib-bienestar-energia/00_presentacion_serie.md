@@ -3,6 +3,7 @@ title: AI, GDP, Well-being and Energy
 description: Quantitative analysis of AI's impact on energy, productivity and well-being using real World Bank, IEA and Penn World Table data rather than speculative projections.
 keywords: AI energy, artificial intelligence GDP, AI productivity, technology well-being, AI electricity
 date: 2026-04-07
+date_modified: 2026-08-23
 tags:
   - AI
   - Energy
@@ -32,6 +33,8 @@ The goal is to answer two questions:
 ### 2. **AI as an electrical technology**
 - What AI means in terms of **compute**, data centers, training vs inference and efficiency—and why demand can keep growing even as hardware improves.
 - The main bottlenecks: energy, chips, data, talent and regulation.
+- To turn those limits into physical constraints, the [AI datacenter capacity explorer](/en/tools/datacenter-ai-capacity/) contrasts total power, PUE, slots, accelerator power and rack cooling to identify which bottleneck dominates.
+- When the question expands from one facility to countries and regions, the [global AI ecosystem explorer](/en/tools/global-ai-ecosystem/) compares investment, company formation, infrastructure, models, talent and policy capacity with visible coverage, normalization and weights.
 
 {{ include_html("snippets/ia-pib-energia/series_energy_ai_02_ai.html") }}
 

@@ -57,6 +57,8 @@ Las tres capas participan en la misma tarea, pero no responden a la misma pregun
 
 La separación se vuelve crítica cuando una tool tarda. La conversación puede registrar que una acción fue solicitada mientras el runtime sabe que sigue ejecutándose. Por eso el estado operativo —no el texto del chat ni una memoria recuperada— debe gobernar qué ocurrió realmente y qué puede afirmarse al usuario.
 
+En agentes de voz, ese runtime también tiene que cumplir restricciones físicas de conversación y operación. El [explorador de latencia para agentes de voz](/herramientas/latencia-agente-voz/) descompone transporte, fin de turno, STT, modelo, TTS, buffering e interrupción; el [planificador de coste y capacidad](/herramientas/coste-capacidad-agente-voz/) traduce llamadas, minutos, tokens y concurrencia en coste mensual, workers y límites de proveedor. Son restricciones distintas: una conversación puede ser rápida pero no escalar, o escalar con un presupuesto de latencia inaceptable.
+
 ## Cómo se evalúa un agente
 
 Una respuesta final convincente no basta. Hay que medir la **tarea completa**: qué decidió el agente, qué pudo ejecutar, qué efecto produjo y si el sistema quedó en un estado correcto y recuperable.
