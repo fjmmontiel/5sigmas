@@ -2,6 +2,7 @@
 title: "What is AGI: artificial general intelligence"
 description: "AGI means artificial general intelligence. This chapter explains its definitions, DeepMind's and OpenAI's levels, and what would still be required to reach it."
 date: 2026-03-20
+date_modified: 2026-08-23
 keywords: "agi, artificial general intelligence, what is agi, agi definition, deepmind agi levels, superintelligence, ai alignment, openai agi, agi risks"
 tags:
   - AI
@@ -159,6 +160,8 @@ Frontier models from 2025-2026 show expert-level performance in specific domains
 METR evaluates the **task time horizon**: the duration of tasks a model can complete with 50% reliability. In March 2025 that horizon was ~1 hour; with GPT-5-thinking, METR estimates it at ~2 hours 15 minutes ([METR, 2025][r12]). The trend is a doubling about every seven months, and the next significant threshold is the jump to days or weeks, where the risks of real autonomy emerge.
 
 ARC-AGI-2 measures the capability still missing for cognitive AGI: reasoning about completely new problems from very few examples, without memorizing patterns. Launched with initial results below 4%, Gemini 3 Deep Think reached 84.6% in February 2026, close to the ~85% threshold for beating the benchmark ([Gemini 3 Deep Think blog][r14]). Humanity's Last Exam (HLE), the hardest benchmark published to date, reached 48.4% with the same model, while human experts with references score ~85-90%. The ARC Prize organizers themselves insist that "AGI remains unsolved" and that ARC-AGI-2 was designed to keep tasks easy for humans and difficult for AI ([ARC Prize][r_arc]).
+
+To follow these milestones without collapsing different benchmarks, incompatible versions or protocol changes into one artificial curve, the [model capability timeline](/en/tools/model-capability-timeline/) keeps each series, its evaluation conditions and its source separate.
 
 The pace of progress over the last five years is unprecedented. Emergent capabilities with scale suggest dynamics that the scientific community does not fully understand, and the AGI debate has moved from academic speculation to the public, regulatory, and foreign-policy agenda.
 
