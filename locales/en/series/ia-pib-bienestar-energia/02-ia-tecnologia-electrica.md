@@ -2,6 +2,7 @@
 title: AI as an electrical technology
 description: What AI implies in compute and energy terms, why demand can grow even as hardware improves, and where the real bottlenecks are.
 date: 2026-04-08
+date_modified: 2026-08-23
 keywords: "AI electrical technology, artificial intelligence energy consumption, AI data centers energy, AI rebound effect, GPU TPU compute, LLM inference energy, data center PUE, AI energy bottlenecks"
 tags:
   - Economics
@@ -30,7 +31,7 @@ Developing and deploying AI models involves two phases with very different energ
 
 Training a large model requires processing massive amounts of data for weeks or months using thousands of specialized accelerators — GPUs or TPUs — in parallel. The energy consumed by a large-scale training run can equal the annual electricity consumption of thousands of homes. According to published estimates, the initial training of GPT-4 consumed around 42 GWh over several weeks, a figure comparable to the annual consumption of thousands of homes [Epoch AI (2023)](https://epoch.ai/data/ai-models).
 
-A given model is not retrained frequently, but training recurs for every new version, every specialized variant and every experiment run by research teams. Across dozens of active laboratories and companies, those training runs add up to growing energy demand concentrated in the data centers where the work happens.
+A given model is not retrained frequently, but training recurs for every new version, every specialized variant and every experiment run by research teams. Across dozens of active laboratories and companies, those training runs add up to growing energy demand concentrated in the data centers where the work happens. The [training compute and energy estimator](/en/tools/training-compute-energy/) turns those assumptions into FLOPs, duration, facility power and energy using editable accelerator, MFU, power and PUE inputs.
 
 ### Inference
 
@@ -70,7 +71,7 @@ AI's expansion as an electrical technology is constrained by more than investmen
 
 ### Electricity
 
-Electricity is the first and most direct bottleneck. Data centers need grid connections with sufficient capacity and guarantees of continuous supply. The IEA estimates that global data-center electricity consumption reached 415 TWh in 2024 and could reach between 945 TWh and 1,260 TWh in 2030 depending on the pace of adoption; the base scenario already slightly exceeds Japan's current electricity consumption [IEA (2025)](https://www.iea.org/reports/energy-and-ai).
+Electricity is the first and most direct bottleneck. Data centers need grid connections with sufficient capacity and guarantees of continuous supply. The IEA estimates that global data-center electricity consumption reached 415 TWh in 2024 and could reach between 945 TWh and 1,260 TWh in 2030 depending on the pace of adoption; the base scenario already slightly exceeds Japan's current electricity consumption [IEA (2025)](https://www.iea.org/reports/energy-and-ai). The [AI data-center capacity explorer](/en/tools/datacenter-ai-capacity/) lets you test which constraint dominates once facility power, PUE, rack power, cooling and physical slots interact.
 
 Within that total, the AI-specific component is growing faster than the rest of data workloads: a Greenpeace analysis (2025) estimates that electricity consumption attributable to AI workloads could grow from 50 TWh in 2023 to 554 TWh in 2030, an 11× increase in seven years, with associated CO₂ emissions rising from approximately 180 to 320 million tonnes over the same period [Greenpeace (2025)](https://www.greenpeace.de/publikationen/20250514-greenpeace-studie-umweltauswirkungen-ki-eng.pdf).
 
@@ -106,7 +107,7 @@ The number of people capable of designing, training and maintaining AI systems a
 
 ### Regulation
 
-Regulatory requirements for data centers, personal-data management and the use of AI systems in critical sectors vary enormously across jurisdictions. That variation creates uncertainty about which business models are viable in which geographies. The European AI Act, US restrictions on chip exports and debates over digital sovereignty across multiple countries create a constantly changing regulatory environment that shapes investment decisions.
+Regulatory requirements for data centers, personal-data management and the use of AI systems in critical sectors vary enormously across jurisdictions. That variation creates uncertainty about which business models are viable in which geographies. The European AI Act, US restrictions on chip exports and debates over digital sovereignty across multiple countries create a constantly changing regulatory environment that shapes investment decisions. To compare how infrastructure, investment, models, talent and policy capacity combine across countries, the [global AI ecosystem explorer](/en/tools/global-ai-ecosystem/) keeps coverage, normalization and weights explicit.
 
 ---
 
