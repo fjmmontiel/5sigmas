@@ -2,7 +2,7 @@
 title: Reactive and proactive agents and tool calls
 description: "A technical walkthrough of Reactive / Proactive Agent and the conversational contract it encapsulates: immediate response, asynchronous work, and deferred completion."
 date: 2026-04-23
-date_modified: 2026-05-11
+date_modified: 2026-08-23
 keywords: "reactive agent, proactive agent, tool calls, async tool calls, conversational runtime, background tasks, pending updates"
 article_state: published
 video: "reactive-proactive-agent-header-demo.mp4"
@@ -195,7 +195,7 @@ The third would be to place completion policy in an explicit component that deci
 
 That intermediate step also forces several pieces that can still remain implicit locally to become stricter. The first is idempotency: relying on an external API identifier is not enough; the runtime needs its own intent key so provisions and follow-ups are not duplicated after restarts or replays.
 
-The second is terminal-failure handling: when an operation exhausts its retries, it should not disappear or remain in limbo, but move to a DLQ with enough context for inspection, replay, or manual intervention. The third is observability: in production, knowing that “something took a long time” is not enough. The system must be able to reconstruct why a session remained aggregating results, why a completion went through `proactive` instead of `next_turn`, or exactly where a batch stopped progressing.
+The second is terminal-failure handling: when an operation exhausts its retries, it should not disappear or remain in limbo, but move to a DLQ with enough context for inspection, replay, or manual intervention. The third is observability: in production, knowing that “something took a long time” is not enough. The system must be able to reconstruct why a session remained aggregating results, why a completion went through `proactive` instead of `next_turn`, or exactly where a batch stopped progressing. The [agent reliability and evaluation playground](/en/tools/agent-reliability-eval/) turns those retries, timeouts, tool decisions, and trajectory steps into separate signals so you can locate where the runtime is actually failing.
 
 This evolution is therefore presented as a reliability harness rather than a complete platform architecture. Redis, a queue, workers, completion policy, a DLQ, and traces do not turn the demo into a full production platform, but they move it toward production without breaking what is valuable in the repository: the conversational contract. The agent still responds without waiting for the API, the visible history does not become a technical database, and the completion still returns only once, when the batch is actually ready to close.
 
