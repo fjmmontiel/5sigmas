@@ -2,6 +2,7 @@
 title: "What an AI agent is—and is not"
 description: "The difference between a chatbot, workflow, copilot, and agent. An agent is not just an LLM with tools: it is a system that decides actions within explicit boundaries."
 date: 2026-07-14
+date_modified: 2026-08-23
 keywords: "what is an AI agent, agentic AI, chatbot vs agent, workflow, tool calling, ReAct"
 tags:
   - AI
@@ -51,6 +52,8 @@ A system becomes an agent when the model is embedded in an explicit contract:
 - **State:** which operations are pending, complete, or failed.
 - **Policy:** what requires approval, what is forbidden, and when to stop.
 - **Verification:** how the system checks that the result is correct.
+
+When that contract reaches production, verification needs to separate final success, first-pass success, recovery after retries, timeouts, and tool decisions. The [agent reliability and evaluation playground](/en/tools/agent-reliability-eval/) lets you inspect those dimensions over a visible trajectory instead of collapsing them into a single success rate.
 
 ReAct popularized the pattern of interleaving reasoning and action: decide what is needed, act, and observe the result. Toolformer explored how a model can learn when invoking tools improves its output. Neither removes the engineering problem of deciding which tools exist, what permissions they have, and how each result is verified.
 
