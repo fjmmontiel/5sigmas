@@ -2,6 +2,7 @@
 title: Test-Time Compute
 description: "Test-time compute as a second scaling axis. The three levers—more steps, more candidates and more structure—and their quality, cost and latency tradeoffs in reasoning models."
 date: 2026-04-10
+date_modified: 2026-08-23
 keywords: "test-time compute, LLM reasoning, best-of-N, chain of thought, PRM, ORM, scaling laws, extended reasoning, budget forcing, DeepSeek R1, MCTS, self-consistency, Tree of Thoughts"
 tags:
   - AI
@@ -80,7 +81,7 @@ None of these levers is free. Each one has a distinct tradeoff surface that matt
 
 More internal steps mean more generated reasoning tokens. If a reasoning trajectory is an order of magnitude longer than a direct answer, the serving work can also be materially larger even when the underlying model is unchanged.
 
-Candidate generation multiplies the work more directly: best-of-5 requires five candidate runs before scoring. Tree search can consume orders of magnitude more compute than a single linear chain because several partial trajectories remain alive simultaneously.
+Candidate generation multiplies the work more directly: best-of-5 requires five candidate runs before scoring. Tree search can consume orders of magnitude more compute than a single linear chain because several partial trajectories remain alive simultaneously. To put numbers on that tradeoff before choosing a reasoning budget, the [LLM cost and latency calculator](/en/tools/llm-cost-latency/) lets you compare tokens, pricing and throughput under one scenario.
 
 ### Latency
 
