@@ -178,7 +178,7 @@ No sabemos todavía qué combinación acabará imponiéndose. Lo que sí parece 
 | R5 | [DeepMind (2025) — *AlphaEvolve*](https://deepmind.google/blog/alphaevolve-a-gemini-powered-coding-agent-for-designing-advanced-algorithms/) | Anuncio de mayo de 2025: agente para descubrimiento y optimización algorítmica. |
 | R6 | [DeepMind (2026) — *10 years of AlphaGo*](https://deepmind.google/blog/10-years-of-alphago/) | Retrospectiva de marzo de 2026 que conecta AlphaGo, AlphaZero, AlphaProof y AlphaEvolve como una misma línea de búsqueda y planificación. |
 | R7 | [Gu & Dao (2023) — *Mamba*](https://arxiv.org/abs/2312.00752) | State space models selectivos y secuencias largas. |
-| R8 | [Dao & Gu (2024) — *Transformers are SSMs*](https://arxiv.org/abs/2405.21060) | Mamba-2 y dualidad entre atención y SSMs. |
+| R8 | [Dao & Gu (2024) — *Transformers are SSMs*](https://arxiv.org/abs/2405.21060) | Mamba-2 y dualidad entre atención y SSM. |
 | R9 | [Behrouz, Zhong & Mirrokni (2025) — *Titans*](https://arxiv.org/abs/2501.00663) | Memoria neuronal de largo plazo durante inferencia. |
 | R10 | [Google Research (2025) — *Titans + MIRAS*](https://research.google/blog/titans-miras-helping-ai-have-long-term-memory/) | Test-time memorization y memoria a largo plazo. |
 | R11 | [Google Research (2025) — *Nested Learning*](https://research.google/blog/introducing-nested-learning-a-new-ml-paradigm-for-continual-learning/) | Paradigma multinivel para aprendizaje continuo. |
