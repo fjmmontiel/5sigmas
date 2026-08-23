@@ -2,6 +2,7 @@
 title: "Qué es AGI: inteligencia artificial general"
 description: "AGI significa inteligencia artificial general. Este capítulo explica sus definiciones, los niveles de DeepMind y OpenAI, y qué faltaría para alcanzarla."
 date: 2026-03-20
+date_modified: 2026-08-23
 keywords: "agi, inteligencia artificial general, qué es agi, agi definición, deepmind niveles agi, superinteligencia, alineamiento ia, agi openai, agi riesgos"
 tags:
   - IA
@@ -162,6 +163,8 @@ Los modelos frontier de 2025-2026 muestran rendimiento de nivel experto en domin
 METR evalúa el **horizonte temporal de tareas**: la longitud de tarea que un modelo resuelve con fiabilidad del 50%. En marzo de 2025 ese horizonte era de ~1 hora; con GPT-5-thinking, METR lo estima en ~2 horas 15 minutos ([METR, 2025][r12]). La tendencia es de duplicación cada ~7 meses, y el próximo umbral significativo es el salto a días o semanas, donde aparecen los riesgos de autonomía real.
 
 ARC-AGI-2 mide la capacidad que falta para AGI cognitiva: razonar sobre problemas completamente nuevos desde muy pocos ejemplos, sin memorización de patrones. Lanzado con resultados iniciales por debajo del 4%, Gemini 3 Deep Think alcanzó el 84,6% en febrero de 2026, rozando el umbral de ~85% para vencer el benchmark ([Gemini 3 Deep Think blog][r14]). Humanity's Last Exam (HLE), el benchmark más difícil publicado hasta la fecha, llegó al 48,4% con el mismo modelo, cuando los expertos humanos con referencias puntúan ~85-90%. Los propios organizadores de ARC Prize insisten en que "AGI remains unsolved" y en que ARC-AGI-2 se diseñó para mantener tareas fáciles para humanos y difíciles para IA ([ARC Prize][r_arc]).
+
+Para seguir estos hitos sin convertir benchmarks distintos, versiones incompatibles o cambios de protocolo en una única curva artificial, la [línea temporal de capacidades de modelos](/herramientas/linea-temporal-capacidades-modelos/) conserva cada serie, sus condiciones y su fuente por separado.
 
 La velocidad de progreso en los últimos cinco años no tiene precedentes. Las capacidades emergentes con la escala sugieren dinámicas que la comunidad científica no comprende del todo, y el debate sobre AGI ha pasado de especulación académica a agenda pública, regulatoria y de política exterior.
 
