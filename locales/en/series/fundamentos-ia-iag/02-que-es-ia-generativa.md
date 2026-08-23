@@ -2,6 +2,7 @@
 title: What is Generative AI
 description: "How generative AI works: from embeddings and the Transformer to foundation models. Scaling laws, LLMOps, and differences between LLMs, RAG, and agents."
 date: 2026-03-17
+date_modified: 2026-08-23
 keywords: "generative AI, what is generative AI, transformer, language models, LLM, embedding, scaling laws, GPT, foundation models, RLHF, fine-tuning"
 tags:
   - AI
@@ -139,11 +140,13 @@ The limitation is that this knowledge is static and has a cutoff date: it does n
 
 RAG addresses the static-knowledge problem by adding a retrieval step before generation ([RAG paper][r5]). The mechanism uses the embeddings described earlier: documents in your knowledge base are converted into vectors and stored.
 
-When a query arrives, it is also vectorized and the system retrieves the semantically closest fragments in embedding space.
+When a query arrives, it is also vectorized and the system retrieves the semantically closest fragments in embedding space. The [RAG retrieval lab](/en/tools/rag-retrieval-lab/) lets you inspect that ranking and measure Precision@k, Recall@k, MRR and nDCG before blaming the generator for a failure that starts in retrieval.
 
 Those fragments are included in the model's context together with the question, and the model reads and reasons over them to answer.
 
 The result is that the model can answer accurately about information that was not in its base training, such as internal documentation, updated regulations, or proprietary knowledge bases.
+
+Good retrieval still does not guarantee a reliable answer: the [RAG evaluation playground](/en/tools/rag-evaluation/) separates context relevance, faithfulness, correctness and coverage so you can locate which stage degraded the response.
 
 There is an important nuance: the system does not learn anything new permanently. It only reads the relevant documents for each query, much as you would consult a case file before answering.
 
@@ -216,6 +219,8 @@ Some providers also offer endpoints with data residency in the EU, so the data d
 The model runs in your infrastructure. Per-token API pricing disappears, but you take on fixed GPU costs. You have full control over the model version, the data does not leave your servers, and you can fine-tune on your own data if the base model is not sufficient.
 
 In exchange, you add a new operations layer: inference-server management, model updates, scaling under load, and hardware monitoring.
+
+Before choosing hardware, quantify the deployment's actual memory footprint: the [inference VRAM calculator](/en/tools/inference-vram/) separates weights, KV cache and runtime reserve to estimate total memory, memory per GPU, maximum context and approximate concurrency.
 
 | | External API | Your own open-source model |
 |---|---|---|
