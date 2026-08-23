@@ -2,6 +2,7 @@
 title: Risks — overthinking, cost, attacks and alignment
 description: "Overthinking, prompt injection and agent hijacking in reasoning models with tools. Design criteria for bounding risk in production."
 date: 2026-04-14
+date_modified: 2026-08-23
 keywords: "AI overthinking, reasoning model risks, prompt injection, TabooRAG, agent specification gaming, AI alignment, responsible AI systems, many-shot jailbreaking, CoT illegibility, agent hijacking"
 tags:
   - AI
@@ -50,7 +51,7 @@ The three-way tension that every generative-AI system has to manage becomes shar
 
 In models without extended reasoning, quality failures are relatively stable across the operating distribution: the model works well on the cases it was trained for and fails on cases outside that distribution. Cost and latency are predictable.
 
-In reasoning models, cost and latency are variable. A simple query and a complex query can have radically different cost profiles, which makes budget planning more difficult. API bills can become unpredictable if there are no explicit budgets per query or per session.
+In reasoning models, cost and latency are variable. A simple query and a complex query can have radically different cost profiles, which makes budget planning more difficult. API bills can become unpredictable if there are no explicit budgets per query or per session. The [LLM cost and latency calculator](/en/tools/llm-cost-latency/) turns that token and output budget into a comparable operating profile before you set limits per query or session.
 
 ### SLOs with variable reasoning
 
@@ -72,7 +73,7 @@ That attack surface has expanded as models have become more agentic. Claude Sonn
 
 When the model can read documents, browse web pages or execute code, the content of those external sources becomes an attack surface. A document designed to contain hidden instructions can try to redirect the model's behavior ("ignore the previous instructions and do X").
 
-In a simple conversational LLM, the attack surface is mainly what the user writes directly. In an agent with tools, the surface extends to all content the agent can read or process: web pages, attachments and API responses.
+In a simple conversational LLM, the attack surface is mainly what the user writes directly. In an agent with tools, the surface extends to all content the agent can read or process: web pages, attachments and API responses. The [prompt-injection threat explorer](/en/tools/prompt-injection-threat/) maps which data, tools, external outputs and memory remain reachable from that untrusted content and which independent controls cut each path.
 
 ### Context contamination
 
