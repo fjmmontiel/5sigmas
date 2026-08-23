@@ -2,7 +2,7 @@
 title: Agentes reactivos y proactivos en voz
 description: "Cómo separar la conversación, las tools asíncronas y la entrega de resultados para que un agente de voz no bloquee el turno, interrumpa mal o repita mensajes."
 date: 2026-08-04
-date_modified: 2026-08-05
+date_modified: 2026-08-23
 keywords: "agentes de voz, agente reactivo, agente proactivo, tool calls asíncronas, barge-in, full duplex, runtime conversacional, Twilio Media Streams, Pipecat"
 article_state: published
 tags:
@@ -256,6 +256,8 @@ Un barge-in suele requerir:
 4. Ajustar el historial al audio que sí llegó a escucharse
 5. Mantener las operaciones en marcha salvo que la nueva intención las invalide
 
+Ese camino de interrupción puede presupuestarse explícitamente con el [explorador de latencia para agentes de voz](/herramientas/latencia-agente-voz/), que separa detección de habla, cancelación, TTS, buffering y parada efectiva del playback.
+
 El SDK de voz de OpenAI expone este patrón al reaccionar a `input_audio_buffer.speech_started`. La aplicación puede cancelar la salida y truncar el audio del asistente para que el estado refleje solo lo que la persona oyó.[^openai-voice-agents]
 
 En telefonía, `clear` y `mark` permiten aplicar el mismo principio sobre el buffer de Twilio.[^twilio-websocket]
@@ -423,7 +425,9 @@ Sin esa correlación, un incidente se resume como “el bot interrumpió”. Con
 
 ## Qué probar antes de producción
 
-El test suite tiene que reproducir conflictos temporales, no solo conversaciones ideales:
+El test suite tiene que reproducir conflictos temporales, no solo conversaciones ideales.
+
+El [playground de fiabilidad y evaluación de agentes](/herramientas/fiabilidad-evaluacion-agentes/) permite convertir este tipo de trayectorias observables —decisiones de tools, retries, timeouts, cumplimiento de políticas y éxito final— en gates explícitos antes de publicar.
 
 - La tool termina mientras el usuario sigue hablando
 - La tool termina durante playback

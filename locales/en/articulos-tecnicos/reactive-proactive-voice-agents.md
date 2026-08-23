@@ -2,7 +2,7 @@
 title: Reactive and proactive agents in voice
 description: "How to separate conversation, asynchronous tools, and result delivery so a voice agent does not block the turn, interrupt badly, or repeat messages."
 date: 2026-08-04
-date_modified: 2026-08-05
+date_modified: 2026-08-23
 keywords: "voice agents, reactive agent, proactive agent, asynchronous tool calls, barge-in, full duplex, conversational runtime, Twilio Media Streams, Pipecat"
 article_state: published
 tags:
@@ -256,6 +256,8 @@ A barge-in usually requires:
 4. Adjust history to the audio that was actually heard
 5. Keep operations running unless the new intent invalidates them
 
+You can budget that interruption path explicitly with the [voice-agent latency budget explorer](/en/tools/voice-latency-budget/), which separates speech detection, cancellation, TTS, buffering and effective playback stop.
+
 The OpenAI voice SDK exposes this pattern by reacting to `input_audio_buffer.speech_started`. The application can cancel output and truncate assistant audio so that state reflects only what the person heard.[^openai-voice-agents]
 
 In telephony, `clear` and `mark` allow the same principle to be applied to Twilio's buffer.[^twilio-websocket]
@@ -423,7 +425,9 @@ Without that correlation, an incident is summarized as “the bot interrupted.�
 
 ## What to test before production
 
-The test suite has to reproduce timing conflicts, not only ideal conversations:
+The test suite has to reproduce timing conflicts, not only ideal conversations.
+
+The [agent reliability and evaluation playground](/en/tools/agent-reliability-eval/) turns this kind of observable trajectory —tool decisions, retries, timeouts, policy adherence and final success— into explicit release gates before shipping.
 
 - The tool finishes while the user is still speaking
 - The tool finishes during playback
