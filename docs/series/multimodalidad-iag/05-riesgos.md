@@ -2,6 +2,7 @@
 title: Riesgos de seguridad en sistemas multimodales
 description: "Prompt injection visual, privacidad, fugas de contexto y manipulación de herramientas cuando un sistema multimodal puede observar y actuar."
 date: 2026-04-03
+date_modified: 2026-08-23
 keywords: "riesgos IA multimodal, prompt injection visual, seguridad sistemas IA, privacidad imágenes IA, ataques LLM multimodal, alineamiento seguridad, IA responsable multimodal"
 tags:
   - IA
@@ -52,7 +53,7 @@ El mecanismo funciona en dos fases: la imagen reconfigura las restricciones acti
 
 El diseño defensivo parte de un principio de mínimo privilegio aplicado a las herramientas: si el procesamiento de documentos no requiere enviar emails o modificar registros de base de datos, esas herramientas no deben estar disponibles en ese contexto. 
 
-El output del sistema después de procesar contenido no confiable debe ser revisado antes de pasar a la siguiente etapa del pipeline, de forma que una inyección exitosa no pueda propagarse a acciones irreversibles.
+El output del sistema después de procesar contenido no confiable debe ser revisado antes de pasar a la siguiente etapa del pipeline, de forma que una inyección exitosa no pueda propagarse a acciones irreversibles. Para comprobar qué caminos siguen abiertos desde contenido no confiable hasta datos, herramientas, egress o memoria, el [explorador de amenazas de prompt injection](/herramientas/amenazas-prompt-injection/) permite modelar esas rutas y los controles que las cortan.
 
 {{ include_html("snippets/multimodalidad-iag/05-fuga-sistema.html") }}
 
