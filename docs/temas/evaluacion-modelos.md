@@ -4,7 +4,7 @@ seo_title: "Cómo evaluar modelos de IA: benchmarks, calidad y producción"
 description: "Cómo evaluar un modelo y un sistema de IA con benchmarks, conjuntos propios, jueces, pruebas humanas y métricas de producto sin confundir una puntuación con valor real."
 keywords: "evaluación modelos IA, benchmark LLM, evals, evaluación humana, LLM as a judge, contaminación benchmarks, calidad IA"
 date: 2026-04-07
-date_modified: 2026-08-16
+date_modified: 2026-08-23
 ---
 
 # Evaluación de modelos de IA
@@ -103,7 +103,7 @@ Antes de usar una puntuación, pregunta:
 - ¿la métrica captura severidad o solo acierto medio?
 - ¿hay intervalos de confianza y tamaño suficiente?
 
-Un benchmark puede medir conocimiento académico y no decir casi nada sobre tool calling, conversación, latencia o fiabilidad operacional.
+Un benchmark puede medir conocimiento académico y no decir casi nada sobre tool calling, conversación, latencia o fiabilidad operacional. El [explorador de fiabilidad de benchmarks](/herramientas/fiabilidad-benchmarks/) permite comprobar de forma interactiva resolución estadística, saturación, sensibilidad a ítems inválidos o potencialmente expuestos y fragilidad del ranking ante cambios de composición.
 
 ## Contaminación y saturación
 

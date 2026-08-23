@@ -4,7 +4,7 @@ seo_title: "Cómo funciona el Transformer: atención y arquitectura paso a paso"
 description: "Explicación técnica del Transformer: embeddings, autoatención, bloques residuales, encoder, decoder, coste y límites de la arquitectura."
 keywords: "Transformer, self-attention, autoatención, arquitectura Transformer, Query Key Value, encoder decoder, LLM"
 date: 2026-04-07
-date_modified: 2026-08-16
+date_modified: 2026-08-23
 ---
 
 # Cómo funciona el Transformer
@@ -43,6 +43,8 @@ La atención escalada conecta cuatro operaciones: proyectar `Q`, `K` y `V`; calc
 
 El producto `QKᵀ` calcula compatibilidades entre posiciones. El factor `√d_k` controla la escala de los logits. `softmax` convierte cada fila en pesos normalizados. La multiplicación por `V` produce una combinación ponderada de información.
 
+El [visualizador de atención Transformer](/herramientas/atencion-transformer/) permite cambiar scores, máscara causal y valores para observar directamente cómo esas operaciones modifican los pesos y la salida de una cabeza.
+
 La interpretación “cada palabra mira a todas las demás” es útil, aunque incompleta. En realidad, cada cabeza aprende proyecciones distintas y puede especializarse en patrones diferentes.
 
 ## 3. Multi-head attention
@@ -61,7 +63,7 @@ Un decoder autoregresivo no debe ver el futuro durante el entrenamiento. Se apli
 
 Así, aunque todas las posiciones del lote se procesen en paralelo durante el entrenamiento, cada predicción respeta el mismo contrato que existirá al generar: solo puede usar el prefijo disponible.
 
-Durante la inferencia, la generación sigue siendo secuencial porque el token siguiente no existe hasta que se elige el anterior. La caché KV evita recalcular claves y valores de todo el prefijo en cada paso.
+Durante la inferencia, la generación sigue siendo secuencial porque el token siguiente no existe hasta que se elige el anterior. La caché KV evita recalcular claves y valores de todo el prefijo en cada paso. El [explorador de KV cache y contexto](/herramientas/kv-cache-contexto/) hace visible cómo crece esa memoria con la longitud, GQA/MQA, precisión y concurrencia.
 
 ## 5. La red feed-forward
 

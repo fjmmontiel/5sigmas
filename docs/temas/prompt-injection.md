@@ -4,7 +4,7 @@ seo_title: "Prompt injection: qué es y cómo se reduce el riesgo"
 description: "Qué es prompt injection en sistemas con LLMs, por qué importa en RAG y agentes y qué principios de diseño reducen el riesgo de que contenido externo influya en una acción."
 keywords: "prompt injection, seguridad LLM, indirect prompt injection, RAG security, seguridad agentes IA"
 date: 2026-08-09
-date_modified: 2026-08-16
+date_modified: 2026-08-23
 ---
 
 # Qué es prompt injection
@@ -50,7 +50,7 @@ Las categorías pueden aparecer juntas, pero medirlas por separado ayuda a ident
 
 Un system prompt más claro puede reducir errores, pero sigue siendo lenguaje natural que el modelo interpreta junto con el resto del contexto. Los filtros y clasificadores pueden añadir cobertura, pero tampoco deberían ser la autoridad final sobre operaciones sensibles.
 
-La defensa gana fuerza cuando cambia la arquitectura alrededor del modelo.
+La defensa gana fuerza cuando cambia la arquitectura alrededor del modelo. El [explorador de amenazas de prompt injection](/herramientas/amenazas-prompt-injection/) permite trazar caminos desde contenido no confiable hasta datos, herramientas, salida externa o memoria persistente y comprobar qué límites arquitectónicos cortan cada ruta.
 
 ## Principios de defensa
 

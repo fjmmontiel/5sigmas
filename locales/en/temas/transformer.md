@@ -4,7 +4,7 @@ seo_title: "How the Transformer works: attention and architecture step by step"
 description: "Technical explanation of the Transformer: embeddings, self-attention, residual blocks, encoder, decoder, cost and architectural limits."
 keywords: "Transformer, self-attention, Transformer architecture, Query Key Value, encoder decoder, LLM"
 date: 2026-04-07
-date_modified: 2026-08-16
+date_modified: 2026-08-23
 ---
 
 # How the Transformer works
@@ -43,6 +43,8 @@ Scaled attention connects four operations: projecting `Q`, `K` and `V`; computin
 
 The product `QKᵀ` calculates compatibility between positions. The `√d_k` factor controls logit scale. `softmax` turns each row into normalized weights. Multiplication by `V` produces a weighted combination of information.
 
+The [Transformer attention visualizer](/en/tools/transformer-attention/) lets you change scores, causal masking and values to see directly how those operations alter one head's weights and output.
+
 The explanation “every word looks at all the others” is useful, though incomplete. Each head learns different projections and can specialize in different patterns.
 
 ## 3. Multi-head attention
@@ -61,7 +63,7 @@ An autoregressive decoder must not see the future during training. A triangular 
 
 So although all known positions in a batch can be processed in parallel during training, every prediction follows the same contract that will exist during generation: it can only use the available prefix.
 
-During inference, generation is still sequential because the next token does not exist until the previous one has been selected. The KV cache avoids recomputing keys and values for the whole prefix at each step.
+During inference, generation is still sequential because the next token does not exist until the previous one has been selected. The KV cache avoids recomputing keys and values for the whole prefix at each step. The [KV-cache and context explorer](/en/tools/kv-cache-context/) makes that memory growth visible as context length, GQA/MQA, precision and concurrency change.
 
 ## 5. The feed-forward network
 

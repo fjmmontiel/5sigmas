@@ -4,7 +4,7 @@ seo_title: "Qué es un LLM: cómo funciona un modelo de lenguaje grande"
 description: "Qué es un LLM, cómo tokeniza, aprende y genera texto, qué cambia con el ajuste por instrucciones y cuáles son sus límites técnicos."
 keywords: "LLM, large language model, modelo de lenguaje grande, tokens, preentrenamiento, Transformer, instruction tuning, RLHF"
 date: 2026-04-07
-date_modified: 2026-08-16
+date_modified: 2026-08-23
 ---
 
 # Qué es un LLM y cómo funciona
@@ -35,6 +35,8 @@ La tokenización importa porque condiciona:
 - la longitud efectiva del contexto
 - la representación de idiomas y código
 - la facilidad para copiar números, nombres o cadenas poco frecuentes
+
+Para llevar esas restricciones a un escenario concreto, la [calculadora de coste y latencia](/herramientas/coste-latencia-llm/) conecta tokens con gasto y tiempo de respuesta, el [planificador de presupuesto de contexto](/herramientas/presupuesto-contexto/) muestra cómo se reparte la ventana y el [explorador de precio y rendimiento](/herramientas/precio-rendimiento-modelos/) permite comparar modelos manteniendo separados carga, coste y rendimiento.
 
 ## 2. Los tokens se convierten en representaciones
 
