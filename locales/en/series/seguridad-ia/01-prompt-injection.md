@@ -2,6 +2,7 @@
 title: Prompt injection — when a document can change what the system does
 description: "How an instruction hidden in a document can enter an AI system and which controls separate reading from action."
 date: 2026-05-26
+date_modified: 2026-08-23
 keywords: "prompt injection, LLM security, indirect prompt injection, RAG security, AI agent security, dual LLM pattern"
 tags:
   - AI
@@ -79,6 +80,8 @@ One structural defense is privilege separation. The dual-LLM pattern, popularize
 {{ include_html("snippets/seguridad-ia/01-defensa-en-capas.html") }}
 
 That separation does not make the problem trivial, but it breaks the most direct path between hostile text and privileged action. That is the security objective: not an abstract promise of invulnerability, but a clear reduction in the attack path.
+
+The [prompt-injection threat explorer](/en/tools/prompt-injection-threat/) lets you model those end-to-end routes—from untrusted content to data, tools, external egress or persistent memory—and test which architectural boundaries cut each path.
 
 The second useful defense is least privilege. Every tool available to an agent should be justified by the concrete use case and given the smallest possible scope. If the task is to summarize a document, there should not be a path through which that same agent can send emails, delete files or execute arbitrary Python. The smaller the blast radius, the less profitable a successful injection becomes.
 
