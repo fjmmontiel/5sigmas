@@ -2,6 +2,7 @@
 title: IA como tecnología eléctrica
 description: Qué implica la IA en términos de cómputo y energía, por qué la demanda puede crecer aunque mejore el hardware, y cuáles son los cuellos de botella reales.
 date: 2026-04-08
+date_modified: 2026-08-23
 keywords: "IA tecnología eléctrica, consumo energético inteligencia artificial, datacenters IA energía, efecto rebote IA, cómputo GPU TPU, inferencia LLM energía, PUE datacenter, cuellos botella energía IA"
 tags:
   - Economía
@@ -32,7 +33,7 @@ El proceso de desarrollar y desplegar modelos de IA se divide en dos fases con p
 
 Entrenar un modelo grande requiere procesar cantidades masivas de datos durante semanas o meses usando miles de aceleradores especializados (GPUs o TPUs) en paralelo. El consumo energético de un entrenamiento de escala grande puede equivaler al consumo eléctrico de miles de hogares durante un año. El entrenamiento inicial de GPT-4, según estimaciones publicadas, consumió alrededor de 42 GWh a lo largo de varias semanas, una cifra comparable al consumo anual de miles de viviendas [Epoch AI (2023)](https://epoch.ai/data/ai-models).
 
-No es un proceso que se repite con frecuencia para el mismo modelo, pero sí se repite para cada nueva versión, cada variante especializada y cada experimento que llevan a cabo los equipos de investigación. La suma de todos esos entrenamientos, a lo largo de docenas de laboratorios y empresas activos, representa una demanda energética creciente y concentrada geográficamente en los centros de datos donde ocurre.
+No es un proceso que se repite con frecuencia para el mismo modelo, pero sí se repite para cada nueva versión, cada variante especializada y cada experimento que llevan a cabo los equipos de investigación. La suma de todos esos entrenamientos, a lo largo de docenas de laboratorios y empresas activos, representa una demanda energética creciente y concentrada geográficamente en los centros de datos donde ocurre. El [estimador de cómputo y energía de entrenamiento](/herramientas/computo-energia-entrenamiento/) permite llevar esos supuestos a FLOPs, duración, potencia de instalación y energía con aceleradores, MFU, consumo y PUE editables.
 
 ### Inferencia
 
@@ -72,7 +73,7 @@ La expansión de la IA como tecnología eléctrica no está limitada solo por el
 
 ### Energía
 
-El primero y más directo: los centros de datos necesitan conexiones a la red eléctrica con capacidad suficiente y garantías de suministro continuo. La IEA estima que el consumo eléctrico global de centros de datos alcanzó 415 TWh en 2024 y podría situarse entre 945 TWh y 1.260 TWh en 2030 según el ritmo de adopción; el escenario base ya queda ligeramente por encima del consumo eléctrico actual de Japón [IEA (2025)](https://www.iea.org/reports/energy-and-ai). 
+El primero y más directo: los centros de datos necesitan conexiones a la red eléctrica con capacidad suficiente y garantías de suministro continuo. La IEA estima que el consumo eléctrico global de centros de datos alcanzó 415 TWh en 2024 y podría situarse entre 945 TWh y 1.260 TWh en 2030 según el ritmo de adopción; el escenario base ya queda ligeramente por encima del consumo eléctrico actual de Japón [IEA (2025)](https://www.iea.org/reports/energy-and-ai). El [explorador de capacidad de IA en datacenters](/herramientas/capacidad-datacenter-ia/) permite comprobar qué restricción domina cuando interactúan potencia total, PUE, potencia y refrigeración por rack y slots físicos.
 
 Dentro de ese total, el componente específico de IA crece más rápido que el del resto de cargas de datos: un análisis de Greenpeace (2025) estima que el consumo eléctrico atribuible a cargas de trabajo de IA podría crecer de 50 TWh en 2023 a 554 TWh en 2030, un x11 en siete años, con las emisiones de CO₂ asociadas pasando de aproximadamente 180 a 320 millones de toneladas en ese mismo período [Greenpeace (2025)](https://www.greenpeace.de/publikationen/20250514-greenpeace-studie-umweltauswirkungen-ki-eng.pdf).
 
@@ -108,7 +109,7 @@ El número de personas capaces de diseñar, entrenar y mantener sistemas de IA a
 
 ### Regulación
 
-La regulación sobre centros de datos, gestión de datos personales y uso de sistemas de IA en sectores críticos varía enormemente entre jurisdicciones y añade incertidumbre sobre qué modelos de negocio son viables en qué geografías. El AI Act europeo, las restricciones de exportación de chips de la administración estadounidense, y los debates sobre soberanía digital en múltiples países crean un entorno regulatorio en permanente cambio que condiciona las decisiones de inversión.
+La regulación sobre centros de datos, gestión de datos personales y uso de sistemas de IA en sectores críticos varía enormemente entre jurisdicciones y añade incertidumbre sobre qué modelos de negocio son viables en qué geografías. El AI Act europeo, las restricciones de exportación de chips de la administración estadounidense, y los debates sobre soberanía digital en múltiples países crean un entorno regulatorio en permanente cambio que condiciona las decisiones de inversión. Para comparar cómo se combinan infraestructura, inversión, modelos, talento y capacidad de política entre países, el [explorador del ecosistema global de IA](/herramientas/ecosistema-global-ia/) mantiene visibles la cobertura, la normalización y los pesos del escenario.
 
 ---
 
