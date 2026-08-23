@@ -4,7 +4,7 @@ seo_title: "Reasoning in LLMs: chain of thought and test-time compute"
 description: "What reasoning means in an LLM, how chain of thought, search and verifiers work, and what they cost in latency, compute and reliability."
 keywords: "LLM reasoning, chain of thought, test-time compute, inference-time compute, self-consistency, verifiers, reasoning models"
 date: 2026-04-14
-date_modified: 2026-08-16
+date_modified: 2026-08-23
 ---
 
 # Reasoning in LLMs
@@ -25,7 +25,7 @@ That is why it helps to separate three questions:
 
 Modern reasoning models spend more compute during inference. This strategy is known as **test-time compute** or **inference-time compute**. Instead of fixing all capability during training, the system can spend additional steps on difficult queries.
 
-The benefit is adaptive capability. The tradeoffs are latency, token usage, variability and operational complexity.
+The benefit is adaptive capability. The tradeoffs are latency, token usage, variability and operational complexity. The [LLM cost and latency calculator](/en/tools/llm-cost-latency/) makes that tradeoff explicit by comparing model choice, token volume and response time under different assumptions.
 
 ## Chain of thought
 
@@ -117,13 +117,13 @@ The challenge shifts to the execution contract:
 - how to prevent duplicates
 - how to resume after interruption
 
-The important separation is operational: **the model proposes; the runtime validates and executes; the real result updates state; only then does the system choose the next step**. Current agent runtimes expose exactly this loop and can apply guardrails around tool calls.[^agentguardrails]
+The important separation is operational: **the model proposes; the runtime validates and executes; the real result updates state; only then does the system choose the next step**. Current agent runtimes expose exactly this loop and can apply guardrails around tool calls.[^agentguardrails] The [agent reliability and evaluation playground](/en/tools/agent-reliability/) lets you inspect that kind of trajectory by separating final success, first-pass success, retries, timeouts and tool decisions.
 
 The note [Proactive and reactive agents and tool calls](/en/articulos-tecnicos/proactive-reactive-agent-and-tool-calls/) develops this runtime.
 
 ## The human cost of latency
 
-In chat, several seconds may be acceptable for a complex task. In voice, the same delay can break conversational rhythm.
+In chat, several seconds may be acceptable for a complex task. In voice, the same delay can break conversational rhythm. The [voice-agent latency explorer](/en/tools/voice-agent-latency/) lets you break that delay down by stage and see which component dominates time to the first audible response.
 
 {{ include_html("snippets/temas/reasoning-latency-clocks.html") }}
 
