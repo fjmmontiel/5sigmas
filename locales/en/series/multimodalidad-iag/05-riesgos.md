@@ -2,6 +2,7 @@
 title: Security risks in multimodal systems
 description: "Visual prompt injection, privacy, context leakage and tool manipulation when a multimodal system can observe and act."
 date: 2026-04-03
+date_modified: 2026-08-23
 keywords: "multimodal AI risks, visual prompt injection, AI system security, AI image privacy, multimodal LLM attacks, safety alignment, responsible multimodal AI"
 tags:
   - AI
@@ -50,7 +51,7 @@ The attack has two stages. First, the injected content changes the constraints t
 
 Defensive design starts with least-privilege tool access. If document processing does not require email access or database writes, those capabilities should not be available in that execution context.
 
-Outputs produced after processing untrusted content should also be validated before they can trigger the next stage of a workflow, so a successful injection cannot propagate directly into irreversible actions.
+Outputs produced after processing untrusted content should also be validated before they can trigger the next stage of a workflow, so a successful injection cannot propagate directly into irreversible actions. To see which paths remain open from untrusted content to data, tools, egress or memory, the [prompt-injection threat explorer](/en/tools/prompt-injection-threat/) models those routes and the controls that break them.
 
 {{ include_html("snippets/multimodalidad-iag/05-fuga-sistema.html") }}
 
