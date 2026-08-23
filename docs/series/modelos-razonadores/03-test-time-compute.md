@@ -2,6 +2,7 @@
 title: Test-Time Compute
 description: "Test-time compute como segunda ley de escala. Las tres palancas (más pasos, más candidatos, más estructura) y su perfil de calidad, coste y latencia en modelos razonadores."
 date: 2026-04-10
+date_modified: 2026-08-23
 keywords: "test-time compute, razonamiento LLM, best-of-N, chain of thought, PRM, ORM, leyes de escala, razonamiento extendido, budget forcing, DeepSeek R1, MCTS, self-consistency, Tree of Thoughts"
 tags:
   - IA
@@ -80,7 +81,7 @@ Las tres palancas no son gratuitas. Cada una tiene un perfil de intercambios que
 
 Más pasos internos significa más tokens generados, y el coste de los modelos de IA generativa se factura por token. Una respuesta con cadena de pensamiento de cien pasos puede costar diez veces más que la respuesta directa del mismo modelo, independientemente de si la mejora de calidad justifica esa diferencia.
 
-La generación de candidatos multiplica el coste directamente: best-of-5 cuesta cinco veces más que best-of-1. La búsqueda en árbol puede costar órdenes de magnitud más que la cadena lineal para el mismo problema.
+La generación de candidatos multiplica el coste directamente: best-of-5 cuesta cinco veces más que best-of-1. La búsqueda en árbol puede costar órdenes de magnitud más que la cadena lineal para el mismo problema. Para poner números a ese intercambio antes de elegir un presupuesto de razonamiento, la [calculadora de coste y latencia LLM](/herramientas/coste-latencia-llm/) permite comparar tokens, precios y throughput bajo un mismo escenario.
 
 ### Latencia
 
@@ -149,4 +150,3 @@ Budget forcing suprime el token que señala el fin del razonamiento y añade una
 
 **¿Qué tipo de problemas se benefician más del chain-of-thought?**
 Los problemas con estructura secuencial y dependencias explícitas: matemáticas de varias operaciones, razonamiento lógico multinivel, código con dependencias complejas entre funciones. Los que se benefician menos son las tareas de recuperación factual directa (donde el conocimiento está accesible en los parámetros sin necesidad de razonamiento encadenado) y las preguntas de elección múltiple con respuestas cortas y bien definidas.
-
