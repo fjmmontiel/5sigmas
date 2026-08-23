@@ -2,6 +2,7 @@
 title: Scale — from AlexNet to foundation models
 description: How data, compute and scalable architectures transformed AI after 2012: AlexNet, the Transformer, pretraining, scaling laws and the birth of foundation models.
 date: 2026-03-30
+date_modified: 2026-08-23
 keywords: "AI scaling, AlexNet, Transformer, scaling laws, foundation models, pretraining, GPT history, deep learning history, ImageNet, BERT"
 tags:
   - AI
@@ -51,11 +52,17 @@ The same family of ideas spread beyond text. [Vision Transformer](https://arxiv.
 
 The idea that performance improves relatively predictably as parameters, data and compute increase did not originate with LLMs, but LLMs made it central. Work such as [*Deep Learning Scaling is Predictable, Empirically*](https://arxiv.org/abs/1712.00409), [*Scaling Laws for Neural Language Models*](https://arxiv.org/abs/2001.08361) and [*Training Compute-Optimal Large Language Models*](https://arxiv.org/pdf/2203.15556) progressively strengthened an important intuition: across many regimes, error falls according to stable power-law relationships, and progress depends not only on whether you scale, but on how you allocate the scale.
 
+Explore that allocation directly with the [scaling-laws explorer](/en/tools/scaling-laws/), which keeps the training budget fixed while showing how the balance between parameters and tokens changes.
+
 {{ include_html("snippets/from-cave-to-agi/04-leyes-escala.html") }}
 
 This does not mean scale explains everything. It means that once an architecture and training objective are good enough, increasing resources stops being a secondary implementation choice and becomes part of how the system is designed and its performance is forecast.
 
+To translate abstract compute into a physical budget, the [training compute and energy estimator](/en/tools/training-compute-energy/) turns accelerators, MFU, schedule, average power and PUE into FLOPs, estimated runtime and energy.
+
 An important caution belongs here. The literature on [emergent abilities](https://arxiv.org/pdf/2206.07682) has been influential because it describes abrupt performance jumps on some tasks once models cross certain sizes. But later work, such as [*Are Emergent Abilities of Large Language Models a Mirage?*](https://arxiv.org/pdf/2304.15004), argues that some of this apparent abruptness can depend on the metric or evaluation method. The prudent conclusion is therefore not that every new capability mysteriously appears at a threshold, but that scale has produced new or much more robust capabilities while the strong interpretation of emergence remains debated.
+
+To follow capability progress without mixing incompatible benchmarks or protocols, the [model capability timeline](/en/tools/model-capability-timeline/) tracks published results one benchmark at a time and keeps changes in evaluation conditions visible.
 
 {{ include_html("snippets/from-cave-to-agi/04-emergencia-capacidades.html") }}
 

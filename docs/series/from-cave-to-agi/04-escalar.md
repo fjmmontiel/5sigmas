@@ -2,6 +2,7 @@
 title: Escalar - de AlexNet a los modelos fundacionales
 description: Cómo datos, cómputo y arquitecturas escalables cambiaron la IA desde 2012. AlexNet, Transformer, preentrenamiento, leyes de escala y el nacimiento de los modelos fundacionales.
 date: 2026-03-30
+date_modified: 2026-08-23
 keywords: "escalar IA, AlexNet, Transformer, leyes de escala, modelos fundacionales, preentrenamiento, GPT historia, historia deep learning, ImageNet, BERT"
 tags:
   - IA
@@ -53,12 +54,17 @@ La misma familia de ideas se extendió además fuera del texto. [Vision Transfor
 
 La idea de que el rendimiento mejora de forma relativamente predecible al aumentar parámetros, datos y cómputo no nació con los LLMs, pero se volvió central con ellos. Trabajos como [Deep Learning Scaling is Predictable, Empirically](https://arxiv.org/abs/1712.00409), [Scaling Laws for Neural Language Models](https://arxiv.org/abs/2001.08361) y [Training Compute-Optimal Large Language Models](https://arxiv.org/pdf/2203.15556) fueron dando forma a una intuición cada vez más fuerte: en muchos regímenes, el error cae siguiendo relaciones de potencia estables, y el progreso depende tanto de cómo escalas como de qué escalas.
 
-{{ include_html("snippets/from-cave-to-agi/04-leyes-escala.html") }}
+Puedes experimentar con ese reparto en el [explorador de leyes de escalado](/herramientas/leyes-escalado/), que mantiene fijo el presupuesto de entrenamiento y muestra cómo cambia el equilibrio entre parámetros y tokens.
 
+{{ include_html("snippets/from-cave-to-agi/04-leyes-escala.html") }}
 
 Eso no significa que la escala lo explique todo. Significa que, una vez que una arquitectura y un objetivo de entrenamiento son suficientemente buenos, aumentar recursos deja de ser una cuestión secundaria y pasa a formar parte de la teoría práctica del sistema.
 
+Para traducir ese cómputo abstracto a una restricción física, la [calculadora de cómputo y energía de entrenamiento](/herramientas/computo-energia-entrenamiento/) convierte aceleradores, MFU, duración, potencia media y PUE en FLOPs, tiempo estimado y energía.
+
 En este punto conviene introducir una cautela importante. La literatura sobre [capacidades emergentes](https://arxiv.org/pdf/2206.07682) ha sido influyente porque describe saltos bruscos de rendimiento en ciertas tareas cuando el modelo supera determinados tamaños. Pero trabajos posteriores, como [Are Emergent Abilities of Large Language Models a Mirage?](https://arxiv.org/pdf/2304.15004), sostienen que parte de esa brusquedad puede depender de la métrica elegida o del modo de evaluar. Lo más prudente, por tanto, no es afirmar que toda capacidad nueva emerge de forma misteriosa, sino reconocer que la escala ha traído capacidades nuevas o mucho más robustas mientras la interpretación fuerte de esa emergencia sigue abierta.
+
+Si quieres observar esa evolución sin mezclar benchmarks ni protocolos incompatibles, la [línea temporal de capacidades de modelos](/herramientas/linea-temporal-capacidades-modelos/) sigue resultados publicados de un benchmark cada vez y mantiene visibles los cambios de condiciones.
 
 {{ include_html("snippets/from-cave-to-agi/04-emergencia-capacidades.html") }}
 
