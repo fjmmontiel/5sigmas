@@ -2,6 +2,7 @@
 title: Beyond the Transformer — memory and world models
 description: How the field is trying to move beyond pure Transformer scaling by combining tools, search, inference-time memory, world models and robotics.
 date: 2026-03-31
+date_modified: 2026-08-23
 keywords: "beyond the Transformer, test-time compute, AI memory, world models, Mamba, SSM, AI robotics, AI agents, AI search, future of AI"
 tags:
   - AI
@@ -29,7 +30,7 @@ This chapter traces that shift.
 
 The Transformer reorganized the field because it was parallelizable, scalable and extremely general. But scaling it also made several limits increasingly visible.
 
-The first is computational. Standard attention becomes expensive as context length grows, turning long memory into a hardware and efficiency problem.
+The first is computational. Standard attention becomes expensive as context length grows, turning long memory into a hardware and efficiency problem. The [Transformer attention visualizer](/en/tools/transformer-attention/) lets you inspect that token-to-token interaction, while the [KV-cache and context explorer](/en/tools/kv-cache-context/) shows how the same scaling pressure turns into memory use and context capacity during inference.
 
 The second is functional. A pretrained Transformer can know a great deal, but its weights are usually fixed at inference time. It can use immediate context, but it does not naturally maintain persistent memory that updates while the system is in use.
 

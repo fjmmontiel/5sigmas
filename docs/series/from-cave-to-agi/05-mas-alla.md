@@ -2,6 +2,7 @@
 title: Más allá del Transformer — memoria y modelos del mundo
 description: Cómo el campo intenta ir más allá del puro escalado del Transformer combinando herramientas, búsqueda, memoria en inferencia, modelos del mundo y robótica.
 date: 2026-03-31
+date_modified: 2026-08-23
 keywords: "más allá del Transformer, test-time compute, memoria IA, modelos del mundo, Mamba, SSM, robótica IA, agentes IA, búsqueda IA, futuro IA"
 tags:
   - IA
@@ -31,7 +32,7 @@ Este capítulo recorre esa nueva fase.
 
 El Transformer reorganizó el campo porque era paralelizable, escalable y extremadamente general. Pero precisamente al escalarlo empezaron a hacerse visibles varios límites.
 
-El primero es computacional. La atención estándar crece de forma costosa con la longitud del contexto, y eso convierte la memoria larga en un problema de hardware y eficiencia.
+El primero es computacional. La atención estándar crece de forma costosa con la longitud del contexto, y eso convierte la memoria larga en un problema de hardware y eficiencia. El [visualizador de atención Transformer](/herramientas/atencion-transformer/) permite inspeccionar esa interacción token a token, mientras que el [explorador de KV cache y contexto](/herramientas/kv-cache-contexto/) muestra cómo ese coste se traduce en memoria y capacidad de contexto durante la inferencia.
 
 El segundo es funcional. Un Transformer preentrenado sabe muchísimo, pero sus pesos suelen quedar fijos en inferencia. Puede usar el contexto inmediato, pero no incorpora con naturalidad una memoria viva y persistente que aprende mientras trabaja.
 
