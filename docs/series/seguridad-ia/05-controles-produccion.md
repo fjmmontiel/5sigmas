@@ -2,6 +2,7 @@
 title: Controles de producción — limitar las acciones cuando el modelo falla
 description: "Qué controles limitan el daño cuando un sistema con IA lee contenido externo, usa herramientas y una defensa falla."
 date: 2026-08-06
+date_modified: 2026-08-23
 keywords: seguridad producción LLM, mínimo privilegio, dual LLM, guardrails, MCP security, tool poisoning, observabilidad agentes
 tags:
   - IA
@@ -58,7 +59,7 @@ MCP simplifica la conexión entre aplicaciones con LLMs y herramientas externas,
 
 OWASP identifica varias superficies específicas de MCP: **tool poisoning**, *rug pull* de definiciones después de la aprobación inicial, *tool shadowing* entre servidores, *confused deputy*, permisos OAuth demasiado amplios y exfiltración mediante canales aparentemente legítimos ([OWASP MCP Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/MCP_Security_Cheat_Sheet.html)).
 
-El caso de *tool poisoning* es especialmente importante porque reproduce la misma propiedad que vimos con RAG. Una descripción de herramienta o una respuesta del servidor termina dentro del contexto del modelo. Si contiene instrucciones hostiles y el cliente la trata como contenido confiable, el canal de herramientas se convierte en otra vía de prompt injection ([OWASP MCP Tool Poisoning](https://owasp.org/www-community/attacks/MCP_Tool_Poisoning)).
+El caso de *tool poisoning* es especialmente importante porque reproduce la misma propiedad que vimos con RAG. Una descripción de herramienta o una respuesta del servidor termina dentro del contexto del modelo. Si contiene instrucciones hostiles y el cliente la trata como contenido confiable, el canal de herramientas se convierte en otra vía de prompt injection ([OWASP MCP Tool Poisoning](https://owasp.org/www-community/attacks/MCP_Tool_Poisoning)). El [explorador de amenazas de prompt injection](/herramientas/amenazas-prompt-injection/) permite modelar esa alcanzabilidad desde contenido no confiable hacia herramientas, datos, salida externa y memoria, y comprobar qué controles independientes cortan cada ruta.
 
 {{ include_html("snippets/seguridad-ia/05-mcp-boundary.html") }}
 

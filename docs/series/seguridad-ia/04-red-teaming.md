@@ -2,6 +2,7 @@
 title: Red-teaming — probar el camino completo antes del incidente
 description: "Cómo probar desde el documento que entra hasta la acción que el sistema puede ejecutar, antes de que ocurra un incidente."
 date: 2026-08-06
+date_modified: 2026-08-23
 keywords: red teaming IA, evaluación de seguridad, uplift humano, attack budget, agentes IA, benchmarks LLM
 tags:
   - IA
@@ -34,7 +35,7 @@ Antes de elegir un dataset o una métrica, una evaluación debería fijar al men
 
 {{ include_html("snippets/seguridad-ia/04-threat-model.html") }}
 
-Sin estas siete piezas, una tasa agregada de ataque puede ser precisa y seguir siendo poco útil para una decisión de producto.
+Sin estas siete piezas, una tasa agregada de ataque puede ser precisa y seguir siendo poco útil para una decisión de producto. El [explorador de amenazas de prompt injection](/herramientas/amenazas-prompt-injection/) permite convertir ese modelo de amenaza en rutas explícitas entre contenido no confiable, privilegios, herramientas, salida externa y memoria, y comprobar qué controles independientes cortan cada ruta.
 
 OWASP ya trata el red-teaming agéntico como una actividad de ciclo completo: identificar caminos de ataque, validar defensas y mantener feedback continuo entre diseño, despliegue y operación ([OWASP AI and Agentic Red Teaming, Q2 2026](https://genai.owasp.org/resource/ai-security-solutions-landscape-for-ai-and-agentic-red-teaming-q2-2026/)).
 
@@ -85,7 +86,7 @@ Una evaluación de un agente necesita registrar:
 6. el resultado de la herramienta;
 7. el estado final y la posibilidad de recuperación.
 
-Cada punto permite una prueba distinta. Un filtro puede bloquear una salida y dejar intacto el retrieval. Un policy engine puede denegar la herramienta y seguir registrando una memoria peligrosa. Un runtime puede abortar a tiempo y dejar un estado parcial que necesita reconciliación.
+Cada punto permite una prueba distinta. Un filtro puede bloquear una salida y dejar intacto el retrieval. Un policy engine puede denegar la herramienta y seguir registrando una memoria peligrosa. Un runtime puede abortar a tiempo y dejar un estado parcial que necesita reconciliación. El [playground de fiabilidad y evaluación de agentes](/herramientas/fiabilidad-evaluacion-agentes/) permite llevar esas señales de trayectoria a tasas de primer intento, decisiones de herramientas, reintentos, timeouts, política y criterios de publicación explícitos.
 
 El benchmark end-to-end no tiene que ser enorme. Tiene que ser representativo. Una tarea pequeña con una cuenta de prueba, un documento contaminado y una acción reversible puede revelar más que miles de prompts sin herramientas.
 
