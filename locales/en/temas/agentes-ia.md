@@ -57,6 +57,8 @@ All three layers participate in the same task, but they answer different questio
 
 The separation becomes critical when a tool takes time. The conversation may record that an action was requested while the runtime knows it is still executing. Operational state — not chat text or retrieved memory — must therefore govern what actually happened and what the system may claim to the user.
 
+For voice agents, that runtime also has to satisfy physical conversation and operating constraints. The [voice-agent latency budget explorer](/en/tools/voice-latency-budget/) decomposes transport, turn detection, STT, model, TTS, buffering and interruption latency; the [voice-agent cost and capacity planner](/en/tools/voice-cost-capacity/) translates calls, minutes, tokens and concurrency into monthly cost, worker capacity and provider limits. They are different constraints: a conversation can feel fast but fail to scale, or scale while missing an acceptable latency budget.
+
 ## How to evaluate an agent
 
 A convincing final answer is not enough. You need to measure the **complete task**: what the agent decided, what it was allowed to execute, what effect it produced, and whether the system ended in a correct, recoverable state.
