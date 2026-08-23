@@ -265,7 +265,7 @@ audio del usuario
 
 El diagrama es mucho más limpio. El sistema completo sigue necesitando telefonía, tools, estado, políticas, seguridad y observabilidad.
 
-Los modelos Realtime modernos pueden recibir y emitir audio directamente y también soportan function calling.[^openai-gpt-realtime] La ventaja principal es que comprensión y expresión comparten una representación acústica.
+Los modelos Realtime modernos pueden recibir y emitir audio directamente y también soportar function calling.[^openai-gpt-realtime] La ventaja principal es que comprensión y expresión comparten una representación acústica.
 
 {{ include_html("snippets/articulos-tecnicos/voice-arch-duplex.html") }}
 
