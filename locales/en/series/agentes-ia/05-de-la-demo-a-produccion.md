@@ -2,6 +2,7 @@
 title: "From demo to production: how to operate an agent"
 description: "What it takes to run an AI agent in production: budgets, retries, idempotency, observability, asynchronous work, fallbacks, and criteria for not using an agent."
 date: 2026-07-14
+date_modified: 2026-08-23
 keywords: "production AI agents, agent observability, retries, idempotency, background tasks, agent cost, fallbacks, conversational runtime"
 tags:
   - AI
@@ -56,7 +57,7 @@ Logs should make it possible to reconstruct a task without retaining secrets or 
 task_id · session_id · tool · attempt · policy_decision · latency · outcome · delivery_mode
 ```
 
-Traces do more than support debugging. They support evaluation, explain decisions, expose unstable tools, and let teams compare cost against successful task completion. A dashboard of “good responses” cannot explain why the task worked or whether the system is degrading.
+Traces do more than support debugging. They support evaluation, explain decisions, expose unstable tools, and let teams compare cost against successful task completion. A dashboard of “good responses” cannot explain why the task worked or whether the system is degrading. To turn those signals into explicit release criteria, try the [agent reliability and evaluation playground](/en/tools/agent-reliability-eval/), which separates final success, first-pass success, tool decisions, retries, timeouts, policy violations, and unnecessary steps.
 
 ## When not to use an agent
 
