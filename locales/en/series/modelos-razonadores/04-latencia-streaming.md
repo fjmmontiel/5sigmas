@@ -2,6 +2,7 @@
 title: Physical time — latency, streaming and human interaction
 description: "TTFT, streaming and perceived-latency thresholds in reasoning models. RouteLLM, design patterns and production session-cost management."
 date: 2026-04-11
+date_modified: 2026-08-23
 keywords: "AI latency, TTFT, LLM streaming, RouteLLM, test-time compute product, perceived latency, AI response time, AI SLO, speculative decoding"
 tags:
   - AI
@@ -40,6 +41,8 @@ The denominator can still change. If generation speed increases 10× through spe
 In real systems that combine an LLM with tool calls and RAG, total latency for a medium-complexity request can be around 20 seconds, with pure reasoning accounting for 7–8 seconds and the remainder distributed across API calls, document retrieval and result synthesis. Those numbers matter for design: they show that perceived-latency improvements can come both from the model (less TTC) and from the system architecture (faster tools, RAG caches).
 
 A critical distinction in this context is the difference between **TTFT (Time To First Token)** and total latency. TTFT is the time from when the user submits the query until they receive the first character of the response. In reasoning models that do not stream their chain of thought, TTFT equals the full reasoning time plus the time required to generate the first visible token, which can be several seconds even for responses that are short overall. TTFT determines the perceived responsiveness of the system; total latency determines the perceived generation speed once the response has started. Optimizing one without the other produces systems that feel slow even though they generate quickly, or systems that generate quickly but start late.
+
+To turn that trade-off into numbers, the [LLM cost and latency calculator](/en/tools/llm-cost-latency/) lets you vary tokens, throughput and pricing to separate TTFT, generation time and spend. When the constraint is how much history, RAG or reasoning fits before the session degrades, the [context-budget planner](/en/tools/context-budget/) makes that allocation visible. And when the decision is which model best fits a workload, the [model price/performance explorer](/en/tools/model-price-performance/) compares cost and performance without collapsing them into one metric.
 
 {{ include_html("snippets/modelos-razonadores/04-ttft-streaming.html") }}
 
