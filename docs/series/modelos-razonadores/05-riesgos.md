@@ -2,6 +2,7 @@
 title: Riesgos — overthinking, coste, ataques y alineamiento
 description: "Overthinking, prompt injection y hijacking de agente en modelos razonadores con herramientas. Criterios para acotar el riesgo en producción."
 date: 2026-04-14
+date_modified: 2026-08-23
 keywords: "overthinking IA, riesgos modelos razonadores, prompt injection, TabooRAG, specification gaming agentes, alineamiento IA, diseño sistemas IA responsables, many-shot jailbreaking, CoT ilegibilidad, hijacking agente"
 tags:
   - IA
@@ -52,7 +53,7 @@ La tríada de tensiones que cualquier sistema de IA generativa tiene que gestion
 
 En modelos sin razonamiento extendido, la deuda de calidad se paga de forma relativamente uniforme: el modelo funciona bien en la distribución de casos para los que fue entrenado y falla en los que están fuera de esa distribución. El coste y la latencia son predecibles.
 
-En modelos razonadores, el coste y la latencia son variables. Una consulta simple y una consulta compleja pueden tener perfiles de coste radicalmente distintos, lo que hace la planificación presupuestaria más complicada. Las facturas de API pueden ser impredecibles si no hay presupuestos explícitos por consulta o por sesión.
+En modelos razonadores, el coste y la latencia son variables. Una consulta simple y una consulta compleja pueden tener perfiles de coste radicalmente distintos, lo que hace la planificación presupuestaria más complicada. Las facturas de API pueden ser impredecibles si no hay presupuestos explícitos por consulta o por sesión. La [calculadora de coste y latencia LLM](/herramientas/coste-latencia-llm/) permite convertir ese presupuesto de tokens y salida en un perfil operativo comparable antes de fijar límites por consulta o sesión.
 
 ### SLOs con razonamiento variable
 
@@ -74,7 +75,7 @@ La escala de esa superficie también ha cambiado. Claude Sonnet 5 se presenta co
 
 Cuando el modelo puede leer documentos, navegar páginas web o ejecutar código, el contenido de esas fuentes externas se convierte en una superficie de ataque. Un documento diseñado para contener instrucciones ocultas puede intentar redirigir el comportamiento del modelo ("ignora las instrucciones anteriores y haz X").
 
-En un LLM conversacional simple, la superficie de ataque está principalmente en lo que el usuario escribe directamente. En un agente con herramientas, la superficie se extiende a todo el contenido que el agente puede leer o procesar: páginas web, archivos adjuntos, respuestas de APIs.
+En un LLM conversacional simple, la superficie de ataque está principalmente en lo que el usuario escribe directamente. En un agente con herramientas, la superficie se extiende a todo el contenido que el agente puede leer o procesar: páginas web, archivos adjuntos, respuestas de APIs. El [explorador de amenazas de prompt injection](/herramientas/amenazas-prompt-injection/) ayuda a trazar qué datos, herramientas, salidas y memoria quedan realmente alcanzables desde ese contenido no confiable y qué controles cortan cada ruta.
 
 ### Contaminación de contexto
 
