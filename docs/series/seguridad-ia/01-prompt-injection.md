@@ -2,6 +2,7 @@
 title: Prompt injection — cuando un documento puede cambiar lo que hace el sistema
 description: "Cómo una orden escondida en un documento puede entrar en un sistema con IA y qué controles separan la lectura de una acción."
 date: 2026-05-26
+date_modified: 2026-08-23
 keywords: prompt injection, seguridad LLM, indirect prompt injection, RAG security, agentes IA seguridad, dual LLM pattern
 tags:
   - IA
@@ -81,6 +82,8 @@ Una defensa estructural consiste en separar privilegios. El patrón dual-LLM, po
 {{ include_html("snippets/seguridad-ia/01-defensa-en-capas.html") }}
 
 Esa separación no convierte el problema en trivial, pero rompe el camino más directo entre el texto hostil y la acción privilegiada. Y eso es exactamente lo que quieres en seguridad: no una promesa abstracta de invulnerabilidad, sino una reducción clara de la ruta de ataque.
+
+El [explorador de amenazas de prompt injection](/herramientas/amenazas-prompt-injection/) permite modelar esas rutas de extremo a extremo —desde contenido no confiable hasta datos, herramientas, salida externa o memoria persistente— y comprobar qué límites arquitectónicos cortan cada camino.
 
 La segunda defensa útil es el mínimo privilegio. Cada herramienta disponible para un agente debe justificarse por el caso de uso concreto y con el menor scope posible. Si la tarea es resumir un documento, no debería existir un camino por el que ese mismo agente pueda enviar emails, borrar ficheros o ejecutar Python arbitrario. Cuanto más pequeño es el radio de acción, menos rentable se vuelve una inyección exitosa.
 
