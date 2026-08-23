@@ -2,6 +2,7 @@
 title: "Qué es un agente de IA y qué no lo es"
 description: "La diferencia entre chatbot, workflow, copiloto y agente. Un agente no es solo un LLM con herramientas: es un sistema que decide acciones dentro de unos límites."
 date: 2026-07-14
+date_modified: 2026-08-23
 keywords: "qué es un agente de IA, agentic AI, chatbot vs agente, workflow, tool calling, ReAct"
 tags:
   - IA
@@ -53,6 +54,8 @@ El agente aparece cuando alrededor del modelo se construye un contrato:
 - **Estado:** qué operaciones están pendientes, terminadas o fallidas.
 - **Política:** qué requiere aprobación, qué está prohibido y cuándo hay que parar.
 - **Verificación:** cómo se comprueba que el resultado es correcto.
+
+Cuando ese contrato se lleva a producción, la verificación necesita separar éxito final, éxito al primer intento, recuperación tras reintentos, timeouts y decisiones de herramientas. El [entorno interactivo de fiabilidad y evaluación de agentes](/herramientas/fiabilidad-evaluacion-agentes/) permite inspeccionar esas dimensiones sobre una trayectoria visible en lugar de reducirlas a una única tasa de éxito.
 
 La investigación de ReAct popularizó el patrón de intercalar razonamiento y acción: el sistema piensa qué necesita, actúa y observa el resultado. Toolformer exploró cómo un modelo puede aprender a invocar herramientas cuando una llamada mejora la respuesta. Ninguno de los dos trabajos elimina el problema de ingeniería: decidir qué herramientas existen, qué permisos tienen y cómo se comprueba cada resultado.
 
