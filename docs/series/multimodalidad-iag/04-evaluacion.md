@@ -2,6 +2,7 @@
 title: Evaluación de sistemas multimodales
 description: "Cómo evaluar sistemas multimodales sin confundir benchmarks con capacidad real: OCR, audio, grounding, razonamiento y fallos de las métricas."
 date: 2026-04-03
+date_modified: 2026-08-23
 keywords: "evaluación modelos multimodales, benchmarks multimodales, OCRBench, MMAU, VQA, MMMU, capacidades IA real, evaluación LLM multimodal, métricas IA generativa"
 tags:
   - IA
@@ -45,7 +46,7 @@ La contaminación en texto ya es un problema documentado: modelos que obtienen r
 
 La solución técnica es usar benchmarks con datos de evaluación que no existían en internet en el momento del preentrenamiento del modelo o que están protegidos de la indexación, aunque en la práctica la recomendación más útil es interpretar los resultados con escepticismo cuando el modelo evaluado tiene preentrenamiento masivo sobre datos de internet, sobre todo si el benchmark es antiguo.
 
-Los laboratorios más rigurosos realizan análisis de contaminación antes de publicar resultados: buscan en sus datos de entrenamiento imágenes similares a las del benchmark de evaluación y excluyen esas imágenes del análisis final. Sin ese análisis, los resultados publicados son una cota superior de la capacidad real del modelo en ese benchmark, no una medida directa.
+Los laboratorios más rigurosos realizan análisis de contaminación antes de publicar resultados: buscan en sus datos de entrenamiento imágenes similares a las del benchmark de evaluación y excluyen esas imágenes del análisis final. Sin ese análisis, los resultados publicados son una cota superior de la capacidad real del modelo en ese benchmark, no una medida directa. Antes de convertir una diferencia de décimas en una conclusión, el [explorador de fiabilidad de benchmarks](/herramientas/fiabilidad-benchmarks/) permite comprobar resolución, ítems inválidos, exposición potencial, saturación y sensibilidad del ranking a la composición del test.
 
 {{ include_html("snippets/multimodalidad-iag/04-contaminacion.html") }}
 

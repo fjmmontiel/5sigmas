@@ -2,6 +2,7 @@
 title: Evaluating multimodal systems
 description: "How to evaluate multimodal systems without confusing benchmarks with real capability: OCR, audio, grounding, reasoning and metric failures."
 date: 2026-04-03
+date_modified: 2026-08-23
 keywords: "multimodal model evaluation, multimodal benchmarks, OCRBench, MMAU, VQA, MMMU, real AI capabilities, multimodal LLM evaluation, generative AI metrics"
 tags:
   - AI
@@ -43,7 +44,7 @@ Contamination in text is already a documented problem: models that obtain except
 
 The technical solution is to use benchmarks whose evaluation data did not exist on the internet when the model was pretrained or that are protected from indexing. In practice, however, the most useful recommendation is to interpret results skeptically when the evaluated model was pretrained at internet scale, especially if the benchmark is old.
 
-The most rigorous labs perform contamination analyses before publishing results: they search their training data for images similar to those in the evaluation benchmark and exclude those images from the final analysis. Without that analysis, published results are an upper bound on the model's real capability on that benchmark, not a direct measurement.
+The most rigorous labs perform contamination analyses before publishing results: they search their training data for images similar to those in the evaluation benchmark and exclude those images from the final analysis. Without that analysis, published results are an upper bound on the model's real capability on that benchmark, not a direct measurement. Before turning a difference of a few tenths into a conclusion, the [benchmark reliability explorer](/en/tools/benchmark-reliability/) lets you inspect resolution, invalid items, potential exposure, saturation and ranking sensitivity to task composition.
 
 {{ include_html("snippets/multimodalidad-iag/04-contaminacion.html") }}
 
