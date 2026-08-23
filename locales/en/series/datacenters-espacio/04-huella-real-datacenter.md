@@ -2,6 +2,7 @@
 title: The real footprint of a data center
 description: "Water, energy, minerals and data-center lifecycle: what AI consumes, why impact varies by location, and how to measure its footprint."
 date: 2026-06-14
+date_modified: 2026-08-23
 keywords: "data center water consumption, AI environmental footprint, AI critical minerals, data center PUE, data center WUE, cobalt AI mining, GPU e-waste, golf vs data center water, local water conflict"
 tags:
   - AI
@@ -62,7 +63,7 @@ What AI has changed is not primarily facility PUE, which hyperscale operators ha
 
 {{ include_html("snippets/datacenters-espacio/04-energia-densidad.html") }}
 
-This increase in rack density requires redesigning not only cooling systems but also electrical distribution, raised floors and the building structure itself. Data centers built for 10–20 kW per rack need substantial infrastructure upgrades to accommodate latest-generation AI hardware. That explains part of the new-construction frenzy and part of the difficulty of forecasting sector electricity demand: it is not merely more compute, but a physically different kind of compute.
+This increase in rack density requires redesigning not only cooling systems but also electrical distribution, raised floors and the building structure itself. Data centers built for 10–20 kW per rack need substantial infrastructure upgrades to accommodate latest-generation AI hardware. That explains part of the new-construction frenzy and part of the difficulty of forecasting sector electricity demand: it is not merely more compute, but a physically different kind of compute. The [AI data-center capacity explorer](/en/tools/datacenter-ai-capacity/) lets you test which constraint dominates when total power, PUE, rack slots, rack power and cooling capacity interact.
 
 ---
 
