@@ -2,6 +2,7 @@
 title: Red teaming — test the full path before an incident
 description: "How to test the path from an incoming document to the action the system can execute, before an incident occurs."
 date: 2026-08-06
+date_modified: 2026-08-23
 keywords: AI red teaming, security evaluation, human uplift, attack budget, AI agents, LLM benchmarks
 tags:
   - AI
@@ -32,7 +33,7 @@ Before choosing a dataset or metric, an evaluation should define at least:
 
 {{ include_html("snippets/seguridad-ia/04-threat-model.html") }}
 
-Without these seven pieces, an aggregate attack rate can be precise and still provide little value for a product decision.
+Without these seven pieces, an aggregate attack rate can be precise and still provide little value for a product decision. The [prompt-injection threat explorer](/en/tools/prompt-injection-threat/) turns that threat model into explicit paths between untrusted content, privileges, tools, external egress and memory, and shows which independent controls cut each path.
 
 OWASP already treats agentic red teaming as a full-lifecycle activity: identify attack paths, validate defenses and maintain continuous feedback between design, deployment and operation ([OWASP AI and Agentic Red Teaming, Q2 2026](https://genai.owasp.org/resource/ai-security-solutions-landscape-for-ai-and-agentic-red-teaming-q2-2026/)).
 
@@ -83,7 +84,7 @@ An agent evaluation needs to record:
 6. The tool result
 7. The final state and the possibility of recovery
 
-Each stage supports a different test. A filter can block an output while leaving retrieval untouched. A policy engine can deny the tool while still recording dangerous memory. A runtime can abort in time and leave partial state that needs reconciliation.
+Each stage supports a different test. A filter can block an output while leaving retrieval untouched. A policy engine can deny the tool while still recording dangerous memory. A runtime can abort in time and leave partial state that needs reconciliation. The [agent reliability and evaluation playground](/en/tools/agent-reliability-eval/) turns those trajectory signals into first-pass rates, tool decisions, retries, timeouts, policy events and explicit release criteria.
 
 The end-to-end benchmark does not have to be huge. It has to be representative. A small task with a test account, a contaminated document and a reversible action can reveal more than thousands of prompts with no tools.
 
