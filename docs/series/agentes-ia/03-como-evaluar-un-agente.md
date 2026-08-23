@@ -2,6 +2,7 @@
 title: "Cómo evaluar un agente de IA"
 description: "Evaluar un agente exige medir la tarea completa, las trazas, las herramientas, el coste y la recuperación ante fallos. Una respuesta convincente no basta."
 date: 2026-07-14
+date_modified: 2026-08-23
 keywords: "evaluación agentes IA, agent evals, benchmarks agentes, trazas, LLM as judge, éxito de tarea, observabilidad"
 tags:
   - IA
@@ -83,6 +84,8 @@ Antes de desplegar, una tarea debería pasar varios gates:
 6. **Abstención:** si faltan datos o autorización, no improvisa.
 
 Este enfoque cambia la pregunta de “¿qué porcentaje acierta?” a “¿en qué condiciones puedo confiar en que complete esta tarea?”.
+
+El [evaluador de fiabilidad y evaluación de agentes](/herramientas/fiabilidad-evaluacion-agentes/) permite convertir ese gate en un escenario reproducible y separar éxito final, éxito al primer intento, recuperación tras reintentos, decisiones de herramientas, timeouts y eficiencia de trayectoria.
 
 ## Qué deberías recordar
 
