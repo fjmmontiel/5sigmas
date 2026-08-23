@@ -4,7 +4,7 @@ seo_title: "How to evaluate AI models: benchmarks, quality and production"
 description: "How to evaluate an AI model and system with benchmarks, reference sets, judges, human review and product metrics without confusing a score with real value."
 keywords: "AI model evaluation, LLM benchmark, evals, human evaluation, LLM as a judge, benchmark contamination, AI quality"
 date: 2026-04-07
-date_modified: 2026-08-16
+date_modified: 2026-08-23
 ---
 
 # Evaluating AI models
@@ -103,7 +103,7 @@ Before using a score, ask:
 - does the metric capture severity or only average correctness?
 - are there confidence intervals and enough samples?
 
-A benchmark may measure academic knowledge while saying almost nothing about tool calling, conversation, latency or operational reliability.
+A benchmark may measure academic knowledge while saying almost nothing about tool calling, conversation, latency or operational reliability. The [benchmark reliability explorer](/en/tools/benchmark-reliability/) lets you inspect statistical resolution, saturation, sensitivity to invalid or potentially exposed items, and ranking fragility when task composition changes.
 
 ## Contamination and saturation
 
