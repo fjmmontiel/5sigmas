@@ -2,7 +2,7 @@
 title: Tres arquitecturas para agentes de voz
 description: "Comparación práctica entre full cascade, half cascade y speech-to-speech, con foco en latencia, prosodia, tools, interrupciones y control."
 date: 2026-08-04
-date_modified: 2026-08-05
+date_modified: 2026-08-23
 keywords: "voice agents, full cascade, half cascade, speech to speech, audio in text out, realtime API, prosodia, streaming TTS, full duplex, arquitectura de voz"
 article_state: published
 tags:
@@ -94,6 +94,8 @@ Pero cada componente trabaja con información provisional.
 - El proveedor telefónico guarda audio que aún no se ha reproducido
 
 Un error temprano obliga a cancelar o rehacer trabajo posterior. Puedes tener servicios rápidos y, aun así, una conversación lenta por buffering, políticas conservadoras o mala coordinación.
+
+Para convertir ese presupuesto en una restricción operativa medible, el [explorador de latencia para agentes de voz](/herramientas/latencia-agente-voz/) separa transporte, detección de fin de turno, STT, modelo, TTS, buffering e interrupción y permite ver qué tramo domina la experiencia.
 
 ### El texto pierde parte de la señal
 
@@ -289,7 +291,7 @@ S2S y full-duplex no son lo mismo. Un modelo puede recibir audio y devolver audi
 
 **Latencia de tools.** La conversación no debería congelarse mientras una operación tarda. Hace falta delegación o continuidad asíncrona.
 
-**Coste.** Mantener una sesión audio-native continua puede ser más caro que activar modelos especializados por etapas.
+**Coste.** Mantener una sesión audio-native continua puede ser más caro que activar modelos especializados por etapas. El [planificador de coste y capacidad para agentes de voz](/herramientas/coste-capacidad-agente-voz/) permite traducir llamadas, minutos, tokens y concurrencia a coste mensual, workers y límites de proveedor antes de elegir arquitectura.
 
 **Compliance.** Redacción, filtrado, PII y políticas deben aplicarse al audio, al texto derivado y a las acciones.
 

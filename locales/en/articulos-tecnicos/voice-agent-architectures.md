@@ -2,7 +2,7 @@
 title: Three architectures for voice agents
 description: "A practical comparison of full cascade, half cascade and speech-to-speech, focusing on latency, prosody, tools, interruptions and control."
 date: 2026-08-04
-date_modified: 2026-08-17
+date_modified: 2026-08-23
 keywords: "voice agents, full cascade, half cascade, speech to speech, audio in text out, realtime API, prosody, streaming TTS, full duplex, voice architecture"
 article_state: published
 tags:
@@ -94,6 +94,8 @@ But each component works with provisional information.
 - The telephony provider buffers audio that has not yet been played
 
 An early mistake forces downstream work to be cancelled or redone. You can have fast services and still have a slow conversation because of buffering, conservative policies or poor coordination.
+
+To turn that budget into a measurable operating constraint, the [voice-agent latency budget explorer](/en/tools/voice-latency-budget/) separates transport, turn detection, STT, model, TTS, buffering and interruption latency so you can see which stage dominates the experience.
 
 ### Text loses part of the signal
 
@@ -289,7 +291,7 @@ S2S and full-duplex are not the same thing. A model can receive audio and return
 
 **Tool latency.** The conversation should not freeze while an operation takes time. Delegation or asynchronous continuity is needed.
 
-**Cost.** Keeping an audio-native session running continuously can be more expensive than activating specialized models by stage.
+**Cost.** Keeping an audio-native session running continuously can be more expensive than activating specialized models by stage. The [voice-agent cost and capacity planner](/en/tools/voice-cost-capacity/) translates calls, minutes, tokens and concurrency into monthly cost, worker capacity and provider limits before you commit to an architecture.
 
 **Compliance.** Redaction, filtering, PII and policies have to apply to audio, derived text and actions.
 
