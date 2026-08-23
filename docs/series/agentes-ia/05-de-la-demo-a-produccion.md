@@ -2,6 +2,7 @@
 title: "De la demo a producción: cómo operar un agente"
 description: "Qué hace falta para llevar un agente de IA a producción: presupuestos, retries, idempotencia, observabilidad, trabajo asíncrono, fallbacks y criterios para no usar agentes."
 date: 2026-07-14
+date_modified: 2026-08-23
 keywords: "agentes en producción, observabilidad agentes, retries, idempotencia, background tasks, costes agentes, fallbacks, runtime conversacional"
 tags:
   - IA
@@ -58,7 +59,7 @@ Los logs deben permitir reconstruir una tarea sin guardar secretos ni datos inne
 task_id · session_id · tool · attempt · policy_decision · latency · outcome · delivery_mode
 ```
 
-Las trazas no son solo para depurar. Sirven para evaluar el agente, explicar una decisión, detectar una herramienta inestable y comparar coste con éxito. Un dashboard de “respuestas buenas” no muestra por qué la tarea funcionó ni si el sistema está degradándose.
+Las trazas no son solo para depurar. Sirven para evaluar el agente, explicar una decisión, detectar una herramienta inestable y comparar coste con éxito. Un dashboard de “respuestas buenas” no muestra por qué la tarea funcionó ni si el sistema está degradándose. Para convertir esas señales en criterios explícitos de publicación, puedes probar el [playground de fiabilidad y evaluación de agentes](/herramientas/fiabilidad-evaluacion-agentes/), que separa éxito final, primer intento, decisiones de herramienta, reintentos, timeouts, política y pasos innecesarios.
 
 ## Cuándo no usar un agente
 
