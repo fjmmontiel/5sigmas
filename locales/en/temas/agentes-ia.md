@@ -4,7 +4,7 @@ seo_title: "What is an AI agent: how it works and how it differs from a chatbot"
 description: "What an AI agent is, how it uses tools, memory and state, how it differs from a chatbot or workflow, and what it needs to operate reliably."
 keywords: "AI agent, AI agents, agentic AI, chatbot vs agent, tool calling, agent memory, production AI agents"
 date: 2026-08-09
-date_modified: 2026-08-16
+date_modified: 2026-08-23
 ---
 
 # What is an AI agent?
@@ -63,7 +63,7 @@ A convincing final answer is not enough. You need to measure the **complete task
 
 {{ include_html("snippets/temas/agent-evaluation-trace.html") }}
 
-A trace exposes transitions that a final score hides. It separates a tool-selection failure from an authorization, execution, state, or user-communication failure, and turns each incident into a reproducible case.
+A trace exposes transitions that a final score hides. It separates a tool-selection failure from an authorization, execution, state, or user-communication failure, and turns each incident into a reproducible case. The [agent reliability and evaluation playground](/en/tools/agent-reliability-eval/) lets you inspect final success, first-pass success, retry recovery, tool decisions, timeouts and trajectory efficiency as separate signals.
 
 [How to evaluate an AI agent](/en/series/agentes-ia/03-como-evaluar-un-agente/) develops a gate architecture for outcome, trajectory, safety and operational economics.
 
