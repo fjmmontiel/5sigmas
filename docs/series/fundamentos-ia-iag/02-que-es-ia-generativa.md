@@ -2,6 +2,7 @@
 title: Qué es IA Generativa
 description: "Cómo funciona la IA generativa: del embedding y el Transformer a los modelos fundacionales. Leyes de escala, LLMOps y diferencias entre LLM, RAG y agentes."
 date: 2026-03-17
+date_modified: 2026-08-23
 keywords: "ia generativa, qué es ia generativa, transformer, modelos de lenguaje, LLM, embedding, leyes de escala, GPT, modelos fundacionales, RLHF, fine-tuning"
 tags:
   - IA
@@ -140,11 +141,13 @@ La limitación es que ese conocimiento es estático y tiene fecha de corte, no s
 
 El RAG resuelve el problema de conocimiento estático añadiendo un paso de búsqueda antes de generar ([paper RAG][r5]). El mecanismo usa los embeddings del capítulo anterior, los documentos de tu base de conocimiento se convierten en vectores y se almacenan. 
 
-Cuando llega una consulta, también se vectoriza y el sistema encuentra los fragmentos más cercanos en el espacio de embeddings, es decir, los más relevantes por significado. 
+Cuando llega una consulta, también se vectoriza y el sistema encuentra los fragmentos más cercanos en el espacio de embeddings, es decir, los más relevantes por significado. El [laboratorio de recuperación RAG](/herramientas/laboratorio-recuperacion-rag/) permite inspeccionar ese ranking y medir Precision@k, Recall@k, MRR y nDCG antes de culpar al generador por un fallo que nace en la recuperación.
 
 Esos fragmentos se incluyen en el contexto del modelo junto con la pregunta, y el modelo los lee y razona con ellos para responder.
 
 El resultado es que el modelo puede responder con precisión sobre cosas que no estaban en su entrenamiento base, (documentación interna, normativas actualizadas, bases de conocimiento propias). 
+
+Una recuperación correcta tampoco garantiza por sí sola una respuesta fiable: la [evaluación RAG](/herramientas/evaluacion-rag/) separa relevancia del contexto, fidelidad, corrección y cobertura para localizar en qué etapa se degrada la respuesta.
 
 Pero esto tiene un matiz, el sistema no aprende nada nuevo de forma permanente, solo lee los documentos relevantes en cada consulta, igual que harías tú consultando un expediente antes de responder.
 
@@ -217,6 +220,8 @@ Algunos proveedores disponen además de endpoints con residencia de datos en la 
 El modelo vive en tu infraestructura. El coste por token desaparece pero aparece el coste fijo de las GPUs. Tienes control total sobre la versión del modelo, los datos no salen de tus servidores y puedes hacer ajuste fino sobre tus propios datos si el modelo base no es suficiente.
 
 A cambio, añades una capa de operaciones nueva: gestión del servidor de inferencia, actualizaciones del modelo, escalado bajo carga y monitorización del hardware.
+
+Antes de elegir hardware conviene cuantificar la memoria real del despliegue: la [calculadora de VRAM para inferencia](/herramientas/vram-inferencia/) separa pesos, KV cache y reserva de runtime para estimar memoria total, memoria por GPU, contexto máximo y concurrencia aproximada.
 
 | | API externa | Open-source propio |
 |---|---|---|
