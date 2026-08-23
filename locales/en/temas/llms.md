@@ -4,7 +4,7 @@ seo_title: "What is an LLM: how a large language model works"
 description: "What an LLM is, how it tokenizes, learns and generates text, what instruction tuning changes, and the main technical limits."
 keywords: "LLM, large language model, tokens, pretraining, Transformer, instruction tuning, RLHF"
 date: 2026-04-07
-date_modified: 2026-08-16
+date_modified: 2026-08-23
 ---
 
 # What is an LLM and how does it work?
@@ -35,6 +35,8 @@ Tokenization matters because it affects:
 - effective context length
 - representation of languages and code
 - the ease of copying numbers, names or uncommon strings
+
+To make those constraints concrete, the [LLM cost and latency calculator](/en/tools/llm-cost-latency/) connects token volume to spend and response time, the [context-budget planner](/en/tools/context-budget/) shows how the window is allocated, and the [model price/performance explorer](/en/tools/model-price-performance/) compares models while keeping workload, cost and performance separate.
 
 ## 2. Tokens become representations
 
