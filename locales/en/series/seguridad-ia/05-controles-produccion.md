@@ -2,6 +2,7 @@
 title: Production controls — limit actions when the model fails
 description: "Which controls limit damage when an AI system reads external content, uses tools, and one defense fails."
 date: 2026-08-06
+date_modified: 2026-08-23
 keywords: production LLM security, least privilege, dual LLM, guardrails, MCP security, tool poisoning, agent observability
 tags:
   - AI
@@ -56,7 +57,7 @@ MCP simplifies the connection between LLM applications and external tools, but s
 
 OWASP identifies several MCP-specific surfaces: **tool poisoning**, *rug pull* of definitions after initial approval, *tool shadowing* between servers, *confused deputy*, overly broad OAuth permissions and exfiltration through apparently legitimate channels ([OWASP MCP Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/MCP_Security_Cheat_Sheet.html)).
 
-*Tool poisoning* is especially important because it has the same property we saw with RAG. A tool description or server response ends up inside the model context. If it contains hostile instructions and the client treats it as trusted content, the tool channel becomes another prompt-injection path ([OWASP MCP Tool Poisoning](https://owasp.org/www-community/attacks/MCP_Tool_Poisoning)).
+*Tool poisoning* is especially important because it has the same property we saw with RAG. A tool description or server response ends up inside the model context. If it contains hostile instructions and the client treats it as trusted content, the tool channel becomes another prompt-injection path ([OWASP MCP Tool Poisoning](https://owasp.org/www-community/attacks/MCP_Tool_Poisoning)). The [prompt-injection threat explorer](/en/tools/prompt-injection-threat/) models that reachability from untrusted content to tools, data, external egress and memory, and shows which independent controls cut each path.
 
 {{ include_html("snippets/seguridad-ia/05-mcp-boundary.html") }}
 
