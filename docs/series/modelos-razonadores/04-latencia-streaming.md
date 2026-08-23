@@ -2,6 +2,7 @@
 title: Tiempo físico — latencia, streaming e interacción humana
 description: "TTFT, streaming y umbrales de latencia percibida en modelos razonadores. RouteLLM, patrones de diseño y gestión de coste de sesión en producción."
 date: 2026-04-11
+date_modified: 2026-08-23
 keywords: "latencia IA, TTFT, streaming LLM, RouteLLM, test-time compute producto, latencia percibida, tiempo de respuesta IA, SLO IA, decodificación especulativa"
 tags:
   - IA
@@ -42,6 +43,8 @@ Lo que sí puede moverlo es el denominador. Si la velocidad de generación sube 
 En sistemas reales que combinan LLM con llamadas a herramientas y RAG, la latencia total de una consulta de complejidad media puede situarse en torno a los 20 segundos, con el razonamiento puro representando 7-8 segundos y el resto distribuido entre llamadas a APIs, recuperación de documentos y síntesis de resultados. Esos números son relevantes para el diseño: muestran que la mejora de latencia percibida puede buscarse tanto en el modelo (menos TTC) como en la arquitectura del sistema (herramientas más rápidas, cachés de RAG).
 
 Una distinción crítica en este contexto es la diferencia entre **TTFT (Time To First Token)** y la latencia total. TTFT es el tiempo que transcurre desde que el usuario envía la query hasta que recibe el primer carácter de la respuesta. En modelos razonadores que no hacen streaming de su cadena de pensamiento, el TTFT es igual al tiempo de razonamiento completo más el tiempo de generación del primer token visible, lo que puede ser de varios segundos incluso para respuestas que en total serían breves. El TTFT determina la percepción de respuesta del sistema; la latencia total, la percepción de velocidad de generación una vez iniciada. Optimizar uno sin el otro produce sistemas que se sienten lentos aunque generen rápido, o que generan rápido pero empiezan tarde.
+
+Para convertir ese compromiso en números, la [calculadora de coste y latencia LLM](/herramientas/coste-latencia-llm/) permite variar tokens, velocidad y precios para separar TTFT, tiempo de generación y coste. Si el problema es cuánto historial, RAG o razonamiento cabe antes de degradar la sesión, el [planificador de presupuesto de contexto](/herramientas/presupuesto-contexto/) hace visible ese reparto. Y cuando la decisión es qué modelo conviene para una carga concreta, el [explorador de precio y rendimiento](/herramientas/precio-rendimiento-modelos/) compara coste y rendimiento sin tratarlos como una única métrica.
 
 {{ include_html("snippets/modelos-razonadores/04-ttft-streaming.html") }}
 
