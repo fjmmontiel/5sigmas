@@ -4,7 +4,7 @@ seo_title: "How to evaluate AI models: benchmarks, quality and production"
 description: "How to evaluate an AI model and system with benchmarks, reference sets, judges, human review and product metrics without confusing a score with real value."
 keywords: "AI model evaluation, LLM benchmark, evals, human evaluation, LLM as a judge, benchmark contamination, AI quality"
 date: 2026-04-07
-date_modified: 2026-08-23
+date_modified: 2026-08-24
 ---
 
 # Evaluating AI models
@@ -143,7 +143,7 @@ Preference is still not the same as truth. A more fluent answer can beat a more 
 
 ## 7. LLM as a judge
 
-A judge model can scale open-ended evaluations. It receives the input, responses and a rubric, then produces a score or comparison.
+A judge model can scale open-ended evaluations.[^arena] It receives the input, responses and a rubric, then produces a score or comparison.
 
 It is useful for:
 
