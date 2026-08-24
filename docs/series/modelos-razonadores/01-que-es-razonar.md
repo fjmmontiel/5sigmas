@@ -2,6 +2,7 @@
 title: "Qué significa razonar en un LLM"
 description: "Qué significa razonar para un modelo de lenguaje, qué aportan o1 y DeepSeek R1, y por qué evaluar razonamiento exige mirar pasos, coste y fallos."
 date: 2026-04-08
+date_modified: 2026-08-24
 keywords: "modelos razonadores, razonamiento LLM, chain of thought, CoT, o1 OpenAI, test time compute, razonamiento IA, ilusión del pensamiento, Apple reasoning paper, cadenas de pensamiento"
 tags:
   - IA
@@ -60,6 +61,8 @@ El debate no está cerrado sobre si ese proceso puede llamarse razonamiento o si
 En septiembre de 2024, OpenAI publicó [o1](https://openai.com/index/learning-to-reason-with-llms/), el primer modelo diseñado explícitamente para "pensar antes de responder". La diferencia respecto a los modelos anteriores no estaba en el tamaño del modelo ni en los datos de entrenamiento, sino en la arquitectura de uso: antes de generar la respuesta final, el modelo generaba una cadena de razonamiento interna que el usuario no veía directamente.
 
 El resultado en los benchmarks fue llamativo. En el examen AIME 2024 (matemáticas de competición universitaria), GPT-4o resolvía el 12% de los problemas mientras o1 alcanzaba el 74% con una sola muestra y el 83% con consenso entre 64 muestras. En competición de programación (Codeforces), o1 pasaba del percentil 11 al percentil 89. En GPQA Diamond, un benchmark de preguntas de física, química y biología diseñadas para ser imposibles de buscar en Google, o1 superó por primera vez la precisión de expertos con doctorado reclutados para responder las mismas preguntas.
+
+Antes de convertir esas diferencias en una conclusión general sobre qué modelo es mejor, el [explorador de fiabilidad de benchmarks](/herramientas/fiabilidad-benchmarks/) permite comprobar resolución, saturación, exposición potencial, ítems inválidos y sensibilidad del ranking a la composición del test.
 
 El mecanismo no era nuevo en la investigación: la idea de "cadena de pensamiento" (chain-of-thought prompting) había aparecido en papers de Google en 2022 ([Wei et al., 2022](https://arxiv.org/abs/2201.11903)) y se había demostrado que producir los pasos intermedios mejoraba los resultados. Lo que o1 añadía era que ese proceso de "pensar" ocurría de forma autónoma, no solo cuando el prompt lo pedía explícitamente, y que el modelo aprendía durante el entrenamiento cuándo y cómo extender su cadena de razonamiento para mejorar el resultado.
 

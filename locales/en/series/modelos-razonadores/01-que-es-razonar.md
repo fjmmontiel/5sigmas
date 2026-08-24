@@ -2,6 +2,7 @@
 title: "What it means for an LLM to reason"
 description: "What reasoning means for a language model, what o1 and DeepSeek R1 added, and why evaluating reasoning requires looking at steps, cost and failure modes."
 date: 2026-04-08
+date_modified: 2026-08-24
 keywords: "reasoning models, LLM reasoning, chain of thought, CoT, OpenAI o1, test time compute, AI reasoning, illusion of thinking, Apple reasoning paper, chains of thought"
 tags:
   - AI
@@ -58,6 +59,8 @@ The debate remains open over whether that process should be called reasoning or 
 In September 2024, OpenAI released [o1](https://openai.com/index/learning-to-reason-with-llms/), the first model explicitly designed to "think before answering." The difference from earlier models was not simply model size or training data, but the inference setup: before generating its final response, the model produced an internal reasoning chain that the user did not directly see.
 
 The benchmark results were striking. On AIME 2024, a competitive mathematics exam, GPT-4o solved 12% of the problems while o1 reached 74% with a single sample and 83% with consensus across 64 samples. On Codeforces programming competitions, o1 moved from the 11th percentile to the 89th percentile. On GPQA Diamond—a benchmark of physics, chemistry and biology questions intentionally designed to be resistant to simple web lookup—o1 exceeded, for the first time, the accuracy of recruited PhD-level experts answering the same questions.
+
+Before turning those gaps into a general claim about which model is better, the [benchmark reliability explorer](/en/tools/benchmark-reliability/) lets you test resolution, saturation, potential test exposure, invalid items and ranking sensitivity to benchmark composition.
 
 The underlying idea was not new. Chain-of-thought prompting had appeared in Google papers in 2022 ([Wei et al., 2022](https://arxiv.org/abs/2201.11903)), showing that producing intermediate steps improved performance. What o1 added was that this "thinking" process happened autonomously rather than only when explicitly requested in the prompt, and that training taught the model when and how to extend its reasoning process to improve the outcome.
 
