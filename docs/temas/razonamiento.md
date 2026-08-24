@@ -4,7 +4,7 @@ seo_title: "Razonamiento en LLMs: chain of thought y test-time compute"
 description: "Qué significa razonar en un LLM, cómo funcionan chain of thought, búsqueda y verificadores, y qué se paga en latencia, coste y fiabilidad."
 keywords: "razonamiento LLM, chain of thought, test-time compute, inference-time compute, self-consistency, verificadores, modelos razonadores"
 date: 2026-04-14
-date_modified: 2026-08-16
+date_modified: 2026-08-23
 ---
 
 # Razonamiento en LLMs
@@ -25,7 +25,7 @@ Por eso conviene separar tres preguntas:
 
 Los modelos razonadores modernos dedican más cómputo durante la inferencia. Esa estrategia se conoce como **test-time compute** o **inference-time compute**. En lugar de fijar todo el rendimiento durante el entrenamiento, el sistema puede gastar más pasos en consultas difíciles.
 
-La ventaja es capacidad adaptable. El coste aparece en latencia, tokens, variabilidad y operación.
+La ventaja es capacidad adaptable. El coste aparece en latencia, tokens, variabilidad y operación. La [calculadora de coste y latencia LLM](/herramientas/coste-latencia-llm/) permite hacer explícito ese intercambio al comparar modelo, volumen de tokens y tiempo de respuesta bajo distintos supuestos.
 
 ## Chain of thought
 
@@ -117,13 +117,13 @@ El reto se desplaza hacia el contrato:
 - cómo evitar duplicados
 - cómo reanudar después de una interrupción
 
-La separación importante es operacional: **el modelo propone; el runtime valida y ejecuta; el resultado real actualiza el estado; solo entonces se decide el siguiente paso**. En implementaciones actuales, los runtimes de agentes exponen precisamente ese bucle y permiten aplicar guardrails alrededor de las tool calls.[^agentguardrails]
+La separación importante es operacional: **el modelo propone; el runtime valida y ejecuta; el resultado real actualiza el estado; solo entonces se decide el siguiente paso**. En implementaciones actuales, los runtimes de agentes exponen precisamente ese bucle y permiten aplicar guardrails alrededor de las tool calls.[^agentguardrails] El [playground de fiabilidad y evaluación de agentes](/herramientas/fiabilidad-evaluacion-agentes/) permite inspeccionar ese tipo de trayectoria separando éxito final, primer intento, retries, timeouts y decisiones de herramientas.
 
 La nota [Agente reactivo, proactivo y tool calls](/articulos-tecnicos/proactive-reactive-agent-and-tool-calls/) desarrolla ese runtime.
 
 ## El coste humano de la latencia
 
-En un chat, varios segundos pueden ser aceptables si la tarea es compleja. En voz, la misma demora rompe el ritmo conversacional.
+En un chat, varios segundos pueden ser aceptables si la tarea es compleja. En voz, la misma demora rompe el ritmo conversacional. El [explorador de latencia de agentes de voz](/herramientas/latencia-agente-voz/) permite descomponer ese retraso por etapas y comprobar qué componente domina el tiempo hasta la primera respuesta audible.
 
 {{ include_html("snippets/temas/reasoning-latency-clocks.html") }}
 
