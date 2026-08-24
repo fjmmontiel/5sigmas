@@ -251,7 +251,7 @@ Many teams start with an external API and migrate parts to open-source when volu
 | R1 | **Vaswani et al. (2017)** — *Attention Is All You Need* ([arXiv][r1]) | Original Transformer paper. |
 | R2 | **Mikolov et al. (2013)** — *Efficient Estimation of Word Representations in Vector Space* ([arXiv][r2]) | Establishes the modern concept of word embeddings (Word2Vec). |
 | R3 | **Kaplan et al. (2020)** — *Scaling Laws for Neural Language Models* ([arXiv][r3]) | Establishes scaling laws for LLMs. |
-| R4 | **Brown et al. (2020)** — *Language Models are Few-Shot Learners* ([arXiv][r4]) | Demonstrates emergent capabilities in foundation models at scale. |
+| R4 | **Brown et al. (2020)** — *Language Models are Few-Shot Learners* (GPT-3) ([arXiv][r4]) | Demonstrates emergent capabilities in foundation models at scale. |
 | R5 | **Lewis et al. (2020)** — *Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks* ([arXiv][r5]) | Foundational RAG paper. |
 | R6 | **Bommasani et al. (2021)** — *On the Opportunities and Risks of Foundation Models* ([arXiv][r6]) | Complete overview of foundation models: capabilities, risks, and society. |
 | R7 | **Ouyang et al. (2022)** — *Training language models to follow instructions with human feedback* ([arXiv][r7]) | Introduces fine-tuning with human feedback as a method for aligning LLMs. |
