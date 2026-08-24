@@ -123,7 +123,7 @@ The note [Proactive and reactive agents and tool calls](/en/articulos-tecnicos/p
 
 ## The human cost of latency
 
-In chat, several seconds may be acceptable for a complex task. In voice, the same delay can break conversational rhythm. The [voice-agent latency explorer](/en/tools/voice-agent-latency/) lets you break that delay down by stage and see which component dominates time to the first audible response.
+In chat, several seconds may be acceptable for a complex task. In voice, the same delay can break conversational rhythm. The [voice-agent latency explorer](/en/tools/voice-latency-budget/) lets you break that delay down by stage and see which component dominates time to the first audible response.
 
 {{ include_html("snippets/temas/reasoning-latency-clocks.html") }}
 
