@@ -117,13 +117,13 @@ El reto se desplaza hacia el contrato:
 - cómo evitar duplicados
 - cómo reanudar después de una interrupción
 
-La separación importante es operacional: **el modelo propone; el runtime valida y ejecuta; el resultado real actualiza el estado; solo entonces se decide el siguiente paso**. En implementaciones actuales, los runtimes de agentes exponen precisamente ese bucle y permiten aplicar guardrails alrededor de las tool calls.[^agentguardrails] El [playground de fiabilidad y evaluación de agentes](/herramientas/agent-reliability/) permite inspeccionar ese tipo de trayectoria separando éxito final, primer intento, retries, timeouts y decisiones de herramientas.
+La separación importante es operacional: **el modelo propone; el runtime valida y ejecuta; el resultado real actualiza el estado; solo entonces se decide el siguiente paso**. En implementaciones actuales, los runtimes de agentes exponen precisamente ese bucle y permiten aplicar guardrails alrededor de las tool calls.[^agentguardrails] El [playground de fiabilidad y evaluación de agentes](/herramientas/fiabilidad-evaluacion-agentes/) permite inspeccionar ese tipo de trayectoria separando éxito final, primer intento, retries, timeouts y decisiones de herramientas.
 
 La nota [Agente reactivo, proactivo y tool calls](/articulos-tecnicos/proactive-reactive-agent-and-tool-calls/) desarrolla ese runtime.
 
 ## El coste humano de la latencia
 
-En un chat, varios segundos pueden ser aceptables si la tarea es compleja. En voz, la misma demora rompe el ritmo conversacional. El [explorador de latencia de agentes de voz](/herramientas/latencia-agentes-voz/) permite descomponer ese retraso por etapas y comprobar qué componente domina el tiempo hasta la primera respuesta audible.
+En un chat, varios segundos pueden ser aceptables si la tarea es compleja. En voz, la misma demora rompe el ritmo conversacional. El [explorador de latencia de agentes de voz](/herramientas/latencia-agente-voz/) permite descomponer ese retraso por etapas y comprobar qué componente domina el tiempo hasta la primera respuesta audible.
 
 {{ include_html("snippets/temas/reasoning-latency-clocks.html") }}
 
