@@ -67,7 +67,7 @@ Before the [Transformer (2017)](https://arxiv.org/abs/1706.03762), models proces
 1. Training could not be parallelized.
 2. Context from the beginning was lost before reaching the end.
 
-The Transformer solves both with one central mechanism: **attention**.
+The Transformer solves both with one central mechanism: **attention**. The [Transformer attention visualizer](/en/tools/transformer-attention/) lets you follow scores, the causal mask, softmax and value mixing for one head step by step.
 
 For every token it processes, the model calculates how relevant every other token in the context is. In "The bank where I sat was wet," when processing "bank," attention connects it with "sat" and "wet" and determines that it refers to a place or object you can sit on rather than a financial institution, without any rule explicitly establishing that interpretation.
 
@@ -85,7 +85,7 @@ The architecture was in place; the breakthrough came from applying it at an unpr
 
 Training uses **self-supervised learning**: with no manual labels and a simple signal such as predicting the next token, the model learns from raw text at scale. The capabilities that emerged from that process surprised even the people who designed these systems.
 
-In 2020, OpenAI reported in [Scaling Laws][r3] that model performance follows a **predictable relationship** with three variables: parameters, training data, and compute.
+In 2020, OpenAI reported in [Scaling Laws][r3] that model performance follows a **predictable relationship** with three variables: parameters, training data, and compute. The [scaling-laws explorer](/en/tools/scaling-laws/) lets you move parameters and tokens under a fixed compute budget and inspect how the optimum changes within a Chinchilla-style surface.
 
 > **Scaling law**: with the right balance of data and parameters, increasing compute produces a predictable and consistent improvement in performance. In practical terms, more data and compute can produce better AI models.
 
@@ -176,7 +176,7 @@ In classic MLOps, the central artifact is the model. In basic LLMOps, the centra
 
 **Prompts** are the equivalent of your system's code: a poorly worded instruction can degrade performance just like a bug. That is why prompts are versioned, tested, and deployed like other software artifacts.
 
-**Context** includes the system prompt, conversation history, and RAG documents. Everything that enters each call affects response quality and cost, because you pay for every token that goes in and out.
+**Context** includes the system prompt, conversation history, and RAG documents. Everything that enters each call affects response quality and cost, because you pay for every token that goes in and out. The [context-budget planner](/en/tools/context-budget/) lets you allocate that window across system instructions, tool schemas, history, RAG, user input, output and safety headroom before overflow.
 
 **Evaluation** is essential because you cannot simply retrain the underlying model to correct an error. The main levers available are the prompt and context, and without evaluation—automatic, human, or through another model such as LLM-as-judge—you cannot iterate systematically. That makes evaluation one of the most underestimated and critical parts of the lifecycle.
 
@@ -187,7 +187,7 @@ Instead of having a person review every response, another language model is used
 
 </details>
 
-Latency, cost per query, semantic-drift monitoring, and prompt versioning all make the improvement lifecycle traceable in production.
+The [LLM cost-and-latency calculator](/en/tools/llm-cost-latency/) turns tokens, caching, TTFT, generation speed and traffic into cost per request, monthly spend, response time and concurrency; together with semantic-drift monitoring and prompt versioning, it makes the production improvement loop traceable.
 
 {{ include_html("snippets/fundamentos-ia-iag/02-llmops.html") }}
 
@@ -251,7 +251,7 @@ Many teams start with an external API and migrate parts to open-source when volu
 | R1 | **Vaswani et al. (2017)** — *Attention Is All You Need* ([arXiv][r1]) | Original Transformer paper. |
 | R2 | **Mikolov et al. (2013)** — *Efficient Estimation of Word Representations in Vector Space* ([arXiv][r2]) | Establishes the modern concept of word embeddings (Word2Vec). |
 | R3 | **Kaplan et al. (2020)** — *Scaling Laws for Neural Language Models* ([arXiv][r3]) | Establishes scaling laws for LLMs. |
-| R4 | **Brown et al. (2020)** — *Language Models are Few-Shot Learners* (GPT-3) ([arXiv][r4]) | Demonstrates emergent capabilities in foundation models at scale. |
+| R4 | **Brown et al. (2020)** — *Language Models are Few-Shot Learners* ([arXiv][r4]) | Demonstrates emergent capabilities in foundation models at scale. |
 | R5 | **Lewis et al. (2020)** — *Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks* ([arXiv][r5]) | Foundational RAG paper. |
 | R6 | **Bommasani et al. (2021)** — *On the Opportunities and Risks of Foundation Models* ([arXiv][r6]) | Complete overview of foundation models: capabilities, risks, and society. |
 | R7 | **Ouyang et al. (2022)** — *Training language models to follow instructions with human feedback* ([arXiv][r7]) | Introduces fine-tuning with human feedback as a method for aligning LLMs. |

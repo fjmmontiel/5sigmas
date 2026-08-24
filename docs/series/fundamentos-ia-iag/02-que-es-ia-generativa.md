@@ -68,7 +68,7 @@ Antes del [Transformer (2017)](https://arxiv.org/abs/1706.03762), los modelos pr
 1. El entrenamiento no se podía paralelizar
 2. El contexto del inicio se perdía antes de llegar al final.
 
-El Transformer resuelve ambos con un mecanismo central, **la atención**.
+El Transformer resuelve ambos con un mecanismo central, **la atención**. El [visualizador de atención Transformer](/herramientas/atencion-transformer/) permite seguir scores, máscara causal, softmax y mezcla de valores de una cabeza paso a paso.
 
 Por cada token que procesa, el modelo calcula cuánta relevancia tiene cada otro token del contexto. En "El banco donde me senté estaba mojado", al procesar "banco" la atención conecta con "senté" y "mojado" y determina que se trata de un mueble y no de una entidad financiera, sin que ninguna regla lo establezca explícitamente.
 
@@ -86,7 +86,7 @@ La arquitectura estaba lista, y el salto a años luz llegó cuando se la aplicó
 
 El entrenamiento usa **aprendizaje auto-supervisado**: sin etiquetas y con una señal simple (predecir el siguiente token), el modelo aprende del volumen bruto de texto, y ese volumen produce un resultado que sorprendió incluso a quienes lo diseñaron.
 
-En 2020, OpenAI publicó ([Scaling Laws][r3]) que el rendimiento de los modelos sigue una **relación predecible** con tres variables: parámetros, datos de entrenamiento y cómputo.
+En 2020, OpenAI publicó ([Scaling Laws][r3]) que el rendimiento de los modelos sigue una **relación predecible** con tres variables: parámetros, datos de entrenamiento y cómputo. El [explorador de leyes de escalado](/herramientas/leyes-escalado/) permite mover parámetros y tokens bajo un presupuesto de cómputo fijo y observar cómo cambia el óptimo dentro de una superficie tipo Chinchilla.
 
 > **Ley de escala**: Dicta que duplicar la potencia de cálculo con la proporción correcta de datos y parámetros produce una mejora predecible y consistente en el rendimiento. Es decir, a mayor cantidad de datos y cómputo, mejores modelos de IA.
 
@@ -177,7 +177,7 @@ En MLOps clásico el artefacto central es el modelo, mientras que en LLMOps bás
 
 **Prompts**: el equivalente al código de tu sistema, donde una instrucción mal formulada degrada el rendimiento igual que un bug, y por eso se versionan, se testean y se despliegan como cualquier artefacto de software.
 
-**Contexto**: system prompt, historial de conversación, documentos RAG: todo lo que entra en cada llamada determina la calidad de la respuesta y, al mismo tiempo, el coste, porque pagas por cada token que entra y sale.
+**Contexto**: system prompt, historial de conversación, documentos RAG: todo lo que entra en cada llamada determina la calidad de la respuesta y, al mismo tiempo, el coste, porque pagas por cada token que entra y sale. El [planificador de presupuesto de contexto](/herramientas/presupuesto-contexto/) permite repartir esa ventana entre sistema, herramientas, historial, RAG, entrada, salida y margen de seguridad antes de llegar a overflow.
 
 **Evaluación**: no puedes reentrenar para corregir un error, así que la única palanca disponible es el prompt y el contexto, y sin evaluación (automática, humana o mediante otro modelo como LLM-as-judge) no puedes iterar con criterio, lo que la convierte en el paso más subestimado y el más crítico de todo el ciclo.
 
@@ -188,7 +188,7 @@ En lugar de que una persona revise cada respuesta, se usa otro modelo de lenguaj
 
 </details>
 
-Latencia, coste por consulta, monitorización de deriva semántica, versionado de prompts: todo existe para que el ciclo de mejora sea trazable en producción.
+La [calculadora de coste y latencia de LLMs](/herramientas/coste-latencia-llm/) convierte tokens, caché, TTFT, velocidad y tráfico en coste por consulta, gasto mensual, tiempo de respuesta y concurrencia; junto con monitorización de deriva semántica y versionado de prompts, hace trazable el ciclo de mejora en producción.
 
 {{ include_html("snippets/fundamentos-ia-iag/02-llmops.html") }}
 
