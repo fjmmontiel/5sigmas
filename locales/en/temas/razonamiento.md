@@ -117,7 +117,7 @@ The challenge shifts to the execution contract:
 - how to prevent duplicates
 - how to resume after interruption
 
-The important separation is operational: **the model proposes; the runtime validates and executes; the real result updates state; only then does the system choose the next step**. Current agent runtimes expose exactly this loop and can apply guardrails around tool calls.[^agentguardrails] The [agent reliability and evaluation playground](/en/tools/agent-reliability/) lets you inspect that kind of trajectory by separating final success, first-pass success, retries, timeouts and tool decisions.
+The important separation is operational: **the model proposes; the runtime validates and executes; the real result updates state; only then does the system choose the next step**. Current agent runtimes expose exactly this loop and can apply guardrails around tool calls.[^agentguardrails] The [agent reliability and evaluation playground](/en/tools/agent-reliability-eval/) lets you inspect that kind of trajectory by separating final success, first-pass success, retries, timeouts and tool decisions.
 
 The note [Proactive and reactive agents and tool calls](/en/articulos-tecnicos/proactive-reactive-agent-and-tool-calls/) develops this runtime.
 
