@@ -4,7 +4,7 @@ seo_title: "Cómo evaluar modelos de IA: benchmarks, calidad y producción"
 description: "Cómo evaluar un modelo y un sistema de IA con benchmarks, conjuntos propios, jueces, pruebas humanas y métricas de producto sin confundir una puntuación con valor real."
 keywords: "evaluación modelos IA, benchmark LLM, evals, evaluación humana, LLM as a judge, contaminación benchmarks, calidad IA"
 date: 2026-04-07
-date_modified: 2026-08-23
+date_modified: 2026-08-24
 ---
 
 # Evaluación de modelos de IA
@@ -143,7 +143,7 @@ La preferencia tampoco equivale a verdad. Un texto más fluido puede ganar frent
 
 ## 7. LLM como juez
 
-Un modelo juez puede escalar evaluaciones abiertas. Recibe la entrada, las respuestas y una rúbrica, y produce una puntuación o comparación.
+Un modelo juez puede escalar evaluaciones abiertas.[^arena] Recibe la entrada, las respuestas y una rúbrica, y produce una puntuación o comparación.
 
 Es útil para:
 
