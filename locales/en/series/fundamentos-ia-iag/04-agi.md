@@ -2,7 +2,7 @@
 title: "What is AGI: artificial general intelligence"
 description: "AGI means artificial general intelligence. This chapter explains its definitions, DeepMind's and OpenAI's levels, and what would still be required to reach it."
 date: 2026-03-20
-date_modified: 2026-08-23
+date_modified: 2026-08-24
 keywords: "agi, artificial general intelligence, what is agi, agi definition, deepmind agi levels, superintelligence, ai alignment, openai agi, agi risks"
 tags:
   - AI
@@ -89,6 +89,8 @@ Current models can be impressive even to experienced practitioners, but they sti
 * Computer use and web navigation: Claude Sonnet 4.6 and GPT 5.4 operate graphical interfaces and execute complete browser workflows with a 1M-token context window ([Anthropic][r11]).
 * Synthesizing knowledge across domains when the relevant knowledge was present in the training data.
 * Olympiad mathematics and science: the most capable models achieve gold-medal performance in the IMO, IPhO, and IChO and exceed 90% on PhD-level science benchmarks ([Gemini 3 Deep Think blog][r14]). ARC-AGI-2 results are verified by the ARC Prize Foundation, but the Olympiad and HLE results are reported by the laboratories themselves.
+
+When a claim about progress depends on these scores, separate genuine capability gains from saturation, contamination, or composition changes; the [benchmark reliability explorer](/en/tools/benchmark-reliability/) shows how those factors can change the interpretation and ranking.
 
 ### What they lack
 

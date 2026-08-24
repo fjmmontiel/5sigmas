@@ -2,7 +2,7 @@
 title: "Qué es AGI: inteligencia artificial general"
 description: "AGI significa inteligencia artificial general. Este capítulo explica sus definiciones, los niveles de DeepMind y OpenAI, y qué faltaría para alcanzarla."
 date: 2026-03-20
-date_modified: 2026-08-23
+date_modified: 2026-08-24
 keywords: "agi, inteligencia artificial general, qué es agi, agi definición, deepmind niveles agi, superinteligencia, alineamiento ia, agi openai, agi riesgos"
 tags:
   - IA
@@ -92,6 +92,8 @@ Los modelos actuales tienen capacidades que impresionan tanto a quienes los usan
 * Uso del ordenador y navegación web: Claude Sonnet 4.6, GPT 5.4 operan interfaces gráficas y ejecutan flujos completos en el navegador con ventana de contexto de 1M tokens ([Anthropic][r11]).
 * Síntesis de conocimiento entre dominios cuando el conocimiento relevante estaba en los datos de entrenamiento.
 * Matemáticas y ciencias de olimpiada: los modelos más capaces alcanzan medalla de oro en IMO, IPhO e IChO y superan el 90% en benchmarks de ciencia a nivel PhD ([Gemini 3 Deep Think blog][r14]). Los resultados de ARC-AGI-2 están verificados por ARC Prize Foundation, pero los de olimpiadas y HLE son resultados reportados por los propios laboratorios.
+
+Cuando una conclusión sobre progreso depende de estas puntuaciones, conviene separar mejora real de saturación, contaminación o cambios de composición; el [explorador de fiabilidad de benchmarks](/herramientas/fiabilidad-benchmarks/) permite comprobar cómo esos factores pueden alterar la lectura y el ranking.
 
 ### Lo que les falta
 
