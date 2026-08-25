@@ -23,6 +23,15 @@
     }
 })();
 
+(function loadFiveSigmasAgentRuntime() {
+    if (document.querySelector('script[data-s5-agent-runtime]')) return;
+    var script = document.createElement('script');
+    script.src = '/assets/javascripts/agent-webmcp.js';
+    script.defer = true;
+    script.dataset.s5AgentRuntime = 'webmcp';
+    document.head.appendChild(script);
+})();
+
 function copyEmailToClipboard() {
     const email = "contacto@5sigmas.com";
     navigator.clipboard.writeText(email).then(() => {

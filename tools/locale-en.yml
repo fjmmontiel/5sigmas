@@ -41,3 +41,4 @@ routes:
     localized: tools/global-ai-ecosystem.md
 published_files:
   - llms.txt
+  - agent-tools.json
