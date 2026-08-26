@@ -23,13 +23,17 @@
     }
 })();
 
-(function loadFiveSigmasAgentRuntime() {
-    if (document.querySelector('script[data-s5-agent-runtime]')) return;
-    var script = document.createElement('script');
-    script.src = '/assets/javascripts/agent-webmcp.js';
-    script.defer = true;
-    script.dataset.s5AgentRuntime = 'webmcp';
-    document.head.appendChild(script);
+(function loadFiveSigmasAgentRuntimes() {
+    function load(src, marker) {
+        if (document.querySelector('script[data-s5-agent-runtime="' + marker + '"]')) return;
+        var script = document.createElement('script');
+        script.src = src;
+        script.defer = true;
+        script.dataset.s5AgentRuntime = marker;
+        document.head.appendChild(script);
+    }
+    load('/assets/javascripts/agent-webmcp.js', 'webmcp-tools');
+    load('/assets/javascripts/agent-knowledge-webmcp.js', 'webmcp-knowledge');
 })();
 
 function copyEmailToClipboard() {
