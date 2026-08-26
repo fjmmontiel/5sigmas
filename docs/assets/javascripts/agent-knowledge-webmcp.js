@@ -137,8 +137,12 @@
   async function fetchMarkdown(url) {
     if (!url) return '';
     const parsed = new URL(url, location.origin);
-    if (parsed.origin !== location.origin) return '';
-    const response = await fetch(parsed.href, { credentials: 'same-origin' });
+    let target = parsed;
+    if (parsed.origin !== location.origin && parsed.hostname === '5sigmas.com') {
+      target = new URL(`${parsed.pathname}${parsed.search}`, location.origin);
+    }
+    if (target.origin !== location.origin) return '';
+    const response = await fetch(target.href, { credentials: 'same-origin' });
     if (!response.ok) return '';
     return (await response.text()).slice(0, MAX_MARKDOWN_CHARS);
   }
