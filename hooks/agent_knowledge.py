@@ -20,6 +20,7 @@ from urllib.parse import urljoin, urlsplit, urlunsplit
 _PAGES: list[dict[str, Any]] = []
 
 _SKIP_TAGS = {"script", "style", "noscript", "template"}
+_VOID_TAGS = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"}
 _IMAGE_EXCLUSIONS = (
     "/assets/logo",
     "/assets/favicon",
@@ -140,6 +141,8 @@ class _RenderedPageParser(HTMLParser):
         self.stack.append({"tag": tag, "content": content, "skip": skip})
 
         if not content or skip:
+            if tag in _VOID_TAGS:
+                self.stack.pop()
             return
 
         depth = len(self.stack)
@@ -209,9 +212,13 @@ class _RenderedPageParser(HTMLParser):
                 }
             )
 
+        if tag in _VOID_TAGS:
+            self.stack.pop()
+
     def handle_startendtag(self, tag: str, attrs_list: list[tuple[str, str | None]]) -> None:
         self.handle_starttag(tag, attrs_list)
-        self.handle_endtag(tag)
+        if tag not in _VOID_TAGS:
+            self.handle_endtag(tag)
 
     def handle_data(self, data: str) -> None:
         if not self._in_content() or self._skipped():
@@ -368,8 +375,8 @@ def on_post_build(config, **kwargs) -> None:
         page_copy["evidence_item_ids"] = []
         items.append(page_copy)
 
-        for index, visual in enumerate(page["visuals"], start=1):
-            discriminator = f"{index}|{visual.get('kind')}|{visual.get('asset_url')}|{visual.get('fragment')}|{visual.get('title')}"
+        for visual in page["visuals"]:
+            discriminator = f"{visual.get('kind')}|{visual.get('asset_url')}|{visual.get('fragment')}|{visual.get('title')}"
             item_id = _stable_id("visual", locale, page["url"], discriminator)
             visual_item = {
                 "id": item_id,
@@ -393,8 +400,8 @@ def on_post_build(config, **kwargs) -> None:
             items.append(visual_item)
             page_copy["visual_item_ids"].append(item_id)
 
-        for index, source in enumerate(page["external_sources"], start=1):
-            discriminator = f"{index}|{source['url']}"
+        for source in page["external_sources"]:
+            discriminator = source["url"]
             item_id = _stable_id("evidence", locale, page["url"], discriminator)
             evidence_item = {
                 "id": item_id,
