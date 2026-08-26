@@ -4,6 +4,9 @@ The graph is intentionally derived from rendered output instead of a manually ma
 manifest. This keeps WebMCP coverage aligned with the public site: pages, meaningful
 images/SVGs, animation shells, videos, internal relationships and external evidence links
 are indexed only when they are part of the built locale.
+
+Repository implementation details are deliberately outside this public contract. GitHub
+URLs, repository source paths, commits and branch metadata must never enter the graph.
 """
 
 from __future__ import annotations
@@ -27,10 +30,25 @@ _IMAGE_EXCLUSIONS = (
     "/assets/images/social/",
     "material/",
 )
+_FORBIDDEN_AGENT_HOST_SUFFIXES = (
+    "github.com",
+    "githubusercontent.com",
+    "github.io",
+    "githubassets.com",
+)
+_FORBIDDEN_AGENT_URL_RE = re.compile(
+    r"(?:https?://)?(?:[a-z0-9-]+\.)*(?:github\.com|githubusercontent\.com|github\.io|githubassets\.com)(?:/[^\s<>\"']*)?",
+    re.IGNORECASE,
+)
 
 
 def _text(value: object) -> str:
     return re.sub(r"\s+", " ", str(value or "")).strip()
+
+
+def _public_text(value: object) -> str:
+    """Return human text with repository-host URLs removed, preserving normal prose."""
+    return _text(_FORBIDDEN_AGENT_URL_RE.sub("", str(value or "")))
 
 
 def _locale(config: Any) -> str:
@@ -98,6 +116,11 @@ def _classify_page(path: str) -> str:
     return "page"
 
 
+def _is_forbidden_agent_url(url: str) -> bool:
+    host = (urlsplit(str(url or "")).hostname or "").lower().rstrip(".")
+    return any(host == suffix or host.endswith(f".{suffix}") for suffix in _FORBIDDEN_AGENT_HOST_SUFFIXES)
+
+
 def _is_external(url: str, site_host: str) -> bool:
     parsed = urlsplit(url)
     return parsed.scheme in {"http", "https"} and bool(parsed.netloc) and parsed.netloc != site_host
@@ -105,7 +128,7 @@ def _is_external(url: str, site_host: str) -> bool:
 
 def _is_meaningful_image(url: str) -> bool:
     lower = url.lower()
-    return not any(marker in lower for marker in _IMAGE_EXCLUSIONS)
+    return not _is_forbidden_agent_url(url) and not any(marker in lower for marker in _IMAGE_EXCLUSIONS)
 
 
 class _RenderedPageParser(HTMLParser):
@@ -173,8 +196,8 @@ class _RenderedPageParser(HTMLParser):
                 record = {
                     "kind": "image",
                     "asset_url": src,
-                    "alt": _text(attrs.get("alt")),
-                    "title": _text(attrs.get("title")) or self.last_heading,
+                    "alt": _public_text(attrs.get("alt")),
+                    "title": _public_text(attrs.get("title")) or self.last_heading,
                     "heading": self.last_heading,
                 }
                 self.visuals.append(record)
@@ -187,30 +210,34 @@ class _RenderedPageParser(HTMLParser):
                     "kind": "svg",
                     "asset_url": "",
                     "fragment": attrs.get("id", ""),
-                    "title": _text(attrs.get("aria-label")) or self.last_heading,
+                    "title": _public_text(attrs.get("aria-label")) or self.last_heading,
                     "heading": self.last_heading,
                 }
             )
 
         if tag == "video":
+            src = urljoin(self.page_url, attrs["src"]) if attrs.get("src") else ""
+            poster = urljoin(self.page_url, attrs["poster"]) if attrs.get("poster") else ""
             video = {
                 "depth": depth,
                 "kind": "video",
-                "asset_url": urljoin(self.page_url, attrs["src"]) if attrs.get("src") else "",
-                "poster_url": urljoin(self.page_url, attrs["poster"]) if attrs.get("poster") else "",
-                "title": _text(attrs.get("title") or attrs.get("aria-label")) or self.last_heading,
+                "asset_url": "" if _is_forbidden_agent_url(src) else src,
+                "poster_url": "" if _is_forbidden_agent_url(poster) else poster,
+                "title": _public_text(attrs.get("title") or attrs.get("aria-label")) or self.last_heading,
                 "heading": self.last_heading,
                 "sources": [],
             }
             self._video_stack.append(video)
 
         if tag == "source" and self._video_stack and attrs.get("src"):
-            self._video_stack[-1]["sources"].append(
-                {
-                    "url": urljoin(self.page_url, attrs["src"]),
-                    "type": _text(attrs.get("type")),
-                }
-            )
+            source_url = urljoin(self.page_url, attrs["src"])
+            if not _is_forbidden_agent_url(source_url):
+                self._video_stack[-1]["sources"].append(
+                    {
+                        "url": source_url,
+                        "type": _text(attrs.get("type")),
+                    }
+                )
 
         if tag in _VOID_TAGS:
             self.stack.pop()
@@ -223,7 +250,7 @@ class _RenderedPageParser(HTMLParser):
     def handle_data(self, data: str) -> None:
         if not self._in_content() or self._skipped():
             return
-        value = _text(data)
+        value = _public_text(data)
         if not value:
             return
         self.body_text.append(value)
@@ -242,7 +269,7 @@ class _RenderedPageParser(HTMLParser):
         depth = len(self.stack)
 
         if self._heading is not None and self._heading["depth"] == depth and tag == self._heading["level"]:
-            value = _text(" ".join(self._heading["text"]))
+            value = _public_text(" ".join(self._heading["text"]))
             if value:
                 self.last_heading = value
                 self.headings.append({"level": self._heading["level"], "id": self._heading["id"], "text": value})
@@ -250,13 +277,13 @@ class _RenderedPageParser(HTMLParser):
 
         if self._anchor is not None and self._anchor["depth"] == depth and tag == "a":
             href = urljoin(self.page_url, self._anchor["href"])
-            label = _text(" ".join(self._anchor["text"])) or href
+            label = _public_text(" ".join(self._anchor["text"])) or ("External source" if _is_forbidden_agent_url(href) else href)
             if href.startswith(("http://", "https://")):
                 self.links.append({"url": href, "label": label})
             self._anchor = None
 
         if self._figure_caption is not None and self._figure_caption["depth"] == depth and tag == "figcaption":
-            caption = _text(" ".join(self._figure_caption["text"]))
+            caption = _public_text(" ".join(self._figure_caption["text"]))
             if caption and self.visuals:
                 self.visuals[-1]["caption"] = caption
                 if not self.visuals[-1].get("title"):
@@ -270,12 +297,12 @@ class _RenderedPageParser(HTMLParser):
                     "kind": "animation",
                     "asset_url": "",
                     "fragment": animation["id"],
-                    "title": animation["heading"] or "Interactive visual",
-                    "heading": animation["heading"],
+                    "title": _public_text(animation["heading"]) or "Interactive visual",
+                    "heading": _public_text(animation["heading"]),
                     "variant": animation["variant"],
                     "fullscreen": animation["fullscreen"],
-                    "text": _text(" ".join(animation["text"]))[:4000],
-                    "assets": sorted(set(animation["assets"])),
+                    "text": _public_text(" ".join(animation["text"]))[:4000],
+                    "assets": sorted(set(url for url in animation["assets"] if not _is_forbidden_agent_url(url))),
                 }
             )
             self._animation = None
@@ -284,7 +311,8 @@ class _RenderedPageParser(HTMLParser):
             video = self._video_stack.pop()
             if not video["asset_url"] and video["sources"]:
                 video["asset_url"] = video["sources"][0]["url"]
-            self.visuals.append({key: value for key, value in video.items() if key != "depth"})
+            if video["asset_url"] or video["sources"]:
+                self.visuals.append({key: value for key, value in video.items() if key != "depth"})
 
         self.stack.pop()
 
@@ -319,12 +347,18 @@ def on_post_page(output: str, page, config, **kwargs) -> str:
     keywords = meta.get("keywords") or []
     if isinstance(keywords, str):
         keywords = [part.strip() for part in keywords.split(",") if part.strip()]
+    keywords = [_public_text(keyword) for keyword in keywords if _public_text(keyword)]
     tags = meta.get("tags") or []
     if isinstance(tags, str):
         tags = [tags]
+    tags = [_public_text(tag) for tag in tags if _public_text(tag)]
 
     links = _dedupe_records(parser.links, ("url",))
-    external = [record for record in links if _is_external(record["url"], host)]
+    external = [
+        record
+        for record in links
+        if _is_external(record["url"], host) and not _is_forbidden_agent_url(record["url"])
+    ]
     internal = [record for record in links if not _is_external(record["url"], host)]
     visuals = _dedupe_records(parser.visuals, ("kind", "asset_url", "fragment", "title"))
 
@@ -334,16 +368,15 @@ def on_post_page(output: str, page, config, **kwargs) -> str:
             "id": page_id,
             "kind": _classify_page(canonical),
             "locale": locale,
-            "title": _text(page.title),
-            "description": _text(meta.get("description")),
+            "title": _public_text(page.title),
+            "description": _public_text(meta.get("description")),
             "url": canonical,
             "route": _normal_route(canonical),
             "markdown_url": canonical.rstrip("/") + "/index.html.md" if canonical.rstrip("/") else canonical + "index.html.md",
-            "source_path": _text(getattr(page.file, "src_path", "")),
             "keywords": keywords,
             "tags": tags,
             "headings": parser.headings[:80],
-            "text_excerpt": _text(" ".join(parser.body_text))[:12000],
+            "text_excerpt": _public_text(" ".join(parser.body_text))[:12000],
             "internal_links": internal[:200],
             "external_sources": external[:200],
             "visuals": visuals[:200],
@@ -376,20 +409,31 @@ def on_post_build(config, **kwargs) -> None:
         items.append(page_copy)
 
         for visual in page["visuals"]:
-            discriminator = f"{visual.get('kind')}|{visual.get('asset_url')}|{visual.get('fragment')}|{visual.get('title')}"
+            asset_url = visual.get("asset_url") or ""
+            poster_url = visual.get("poster_url") or ""
+            assets = [url for url in (visual.get("assets") or []) if not _is_forbidden_agent_url(url)]
+            sources = [source for source in (visual.get("sources") or []) if not _is_forbidden_agent_url(source.get("url", ""))]
+            if _is_forbidden_agent_url(asset_url):
+                asset_url = ""
+            if _is_forbidden_agent_url(poster_url):
+                poster_url = ""
+            if visual.get("kind") in {"image", "video"} and not asset_url and not sources:
+                continue
+
+            discriminator = f"{visual.get('kind')}|{asset_url}|{visual.get('fragment')}|{visual.get('title')}"
             item_id = _stable_id("visual", locale, page["url"], discriminator)
             visual_item = {
                 "id": item_id,
                 "kind": visual.get("kind") or "visual",
                 "locale": locale,
-                "title": _text(visual.get("title")) or _text(visual.get("alt")) or f"Visual from {page['title']}",
-                "description": _text(visual.get("caption") or visual.get("alt") or visual.get("text"))[:4000],
+                "title": _public_text(visual.get("title")) or _public_text(visual.get("alt")) or f"Visual from {page['title']}",
+                "description": _public_text(visual.get("caption") or visual.get("alt") or visual.get("text"))[:4000],
                 "url": page["url"] + (f"#{visual['fragment']}" if visual.get("fragment") else ""),
-                "asset_url": visual.get("asset_url") or "",
-                "poster_url": visual.get("poster_url") or "",
-                "assets": visual.get("assets") or [],
-                "sources": visual.get("sources") or [],
-                "heading": _text(visual.get("heading")),
+                "asset_url": asset_url,
+                "poster_url": poster_url,
+                "assets": assets,
+                "sources": sources,
+                "heading": _public_text(visual.get("heading")),
                 "parent_id": page["id"],
                 "parent_title": page["title"],
                 "parent_url": page["url"],
@@ -401,13 +445,15 @@ def on_post_build(config, **kwargs) -> None:
             page_copy["visual_item_ids"].append(item_id)
 
         for source in page["external_sources"]:
+            if _is_forbidden_agent_url(source["url"]):
+                continue
             discriminator = source["url"]
             item_id = _stable_id("evidence", locale, page["url"], discriminator)
             evidence_item = {
                 "id": item_id,
                 "kind": "evidence",
                 "locale": locale,
-                "title": _text(source["label"]) or urlsplit(source["url"]).netloc,
+                "title": _public_text(source["label"]) or urlsplit(source["url"]).netloc,
                 "description": f"External source referenced by {page['title']}",
                 "url": source["url"],
                 "domain": urlsplit(source["url"]).netloc,

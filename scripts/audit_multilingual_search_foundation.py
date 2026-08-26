@@ -26,6 +26,21 @@ ROOT = Path(__file__).resolve().parents[1]
 CONFIG = ROOT / "mkdocs.yml"
 SITE = ROOT / "site"
 CURRENT_LANGUAGE = "es"
+FORBIDDEN_AGENT_MARKERS = (
+    "github.com",
+    "githubusercontent.com",
+    "github.io",
+    "githubassets.com",
+)
+FORBIDDEN_AGENT_KEYS = {
+    "source_path",
+    "repository",
+    "repository_url",
+    "repo",
+    "branch",
+    "commit",
+    "commit_sha",
+}
 
 
 def _load_extra_block() -> dict:
@@ -188,6 +203,29 @@ def _cleanup_staged_routes(created_files: list[Path]) -> None:
             pass
 
 
+def _assert_public_agent_value(value, location: str = "graph") -> None:
+    if isinstance(value, dict):
+        leaked_keys = FORBIDDEN_AGENT_KEYS.intersection(value)
+        if leaked_keys:
+            raise AssertionError(
+                f"Public agent graph exposes repository metadata at {location}: {sorted(leaked_keys)}"
+            )
+        for key, child in value.items():
+            _assert_public_agent_value(child, f"{location}.{key}")
+        return
+    if isinstance(value, list):
+        for index, child in enumerate(value):
+            _assert_public_agent_value(child, f"{location}[{index}]")
+        return
+    if isinstance(value, str):
+        lower = value.lower()
+        leaked = [marker for marker in FORBIDDEN_AGENT_MARKERS if marker in lower]
+        if leaked:
+            raise AssertionError(
+                f"Public agent graph exposes forbidden repository host at {location}: {leaked[0]}"
+            )
+
+
 def _validate_agent_graph() -> None:
     graph_path = SITE / "agent" / "knowledge.json"
     if not graph_path.is_file():
@@ -195,6 +233,7 @@ def _validate_agent_graph() -> None:
     graph = json.loads(graph_path.read_text(encoding="utf-8"))
     if graph.get("schema_version") != 2 or graph.get("locale") != "es":
         raise AssertionError("Spanish agent graph has the wrong schema or locale")
+    _assert_public_agent_value(graph)
     items = graph.get("items") or []
     if not isinstance(items, list) or len(items) < 25:
         raise AssertionError(f"Spanish agent graph is unexpectedly small: {len(items)} items")
@@ -218,7 +257,7 @@ def _validate_agent_graph() -> None:
     print(
         "Agent knowledge graph: OK "
         f"({len(items)} items, {page_count} pages, {visual_count} visual/video items, "
-        f"{counts.get('evidence', 0)} evidence items)"
+        f"{counts.get('evidence', 0)} evidence items; repository exposure: 0)"
     )
 
 

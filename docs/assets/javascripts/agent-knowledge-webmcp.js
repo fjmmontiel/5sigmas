@@ -1,10 +1,13 @@
 (() => {
   'use strict';
 
-  const VERSION = '2026-08-26-knowledge-v2';
+  const VERSION = '2026-08-26-knowledge-v3-no-repository-exposure';
   const MAX_RESULTS = 24;
   const DEFAULT_RESULTS = 8;
   const MAX_MARKDOWN_CHARS = 30000;
+  const FORBIDDEN_AGENT_HOST_SUFFIXES = ['github.com', 'githubusercontent.com', 'github.io', 'githubassets.com'];
+  const PRIVATE_AGENT_KEYS = new Set(['source_path', 'repository', 'repository_url', 'repo', 'branch', 'commit', 'commit_sha']);
+  const URL_KEYS = new Set(['url', 'asset_url', 'poster_url', 'markdown_url', 'parent_url', 'graph_url', 'site_url']);
   let controller = null;
   let graphPromise = null;
 
@@ -20,6 +23,57 @@
     return String(value || '').replace(/\s+/g, ' ').trim();
   }
 
+  function isForbiddenAgentUrl(value) {
+    try {
+      const host = new URL(String(value || ''), location.origin).hostname.toLowerCase().replace(/\.$/, '');
+      return FORBIDDEN_AGENT_HOST_SUFFIXES.some((suffix) => host === suffix || host.endsWith(`.${suffix}`));
+    } catch {
+      return false;
+    }
+  }
+
+  function redactForbiddenReferences(value) {
+    let raw = String(value || '');
+    raw = raw.replace(/https?:\/\/[^\s<>"')]+/gi, (candidate) => isForbiddenAgentUrl(candidate) ? '' : candidate);
+    raw = raw.replace(/\b(?:[a-z0-9-]+\.)*(?:github\.com|githubusercontent\.com|github\.io|githubassets\.com)(?:\/[^\s<>"')]+)?/gi, '');
+    return raw;
+  }
+
+  function sanitizeAgentValue(value, key = '') {
+    if (PRIVATE_AGENT_KEYS.has(key)) return undefined;
+    if (Array.isArray(value)) {
+      return value.map((entry) => sanitizeAgentValue(entry)).filter((entry) => entry !== undefined);
+    }
+    if (value && typeof value === 'object') {
+      if (value.kind === 'evidence' && isForbiddenAgentUrl(value.url)) return undefined;
+      const sanitized = {};
+      for (const [childKey, childValue] of Object.entries(value)) {
+        const cleaned = sanitizeAgentValue(childValue, childKey);
+        if (cleaned !== undefined) sanitized[childKey] = cleaned;
+      }
+      return sanitized;
+    }
+    if (typeof value === 'string') {
+      if (URL_KEYS.has(key) && isForbiddenAgentUrl(value)) return undefined;
+      return redactForbiddenReferences(value);
+    }
+    return value;
+  }
+
+  function sanitizedGraph(payload) {
+    const items = (payload.items || [])
+      .map((item) => sanitizeAgentValue(item))
+      .filter((item) => item && item.id);
+    const counts = {};
+    for (const item of items) counts[item.kind] = (counts[item.kind] || 0) + 1;
+    return sanitizeAgentValue({
+      ...payload,
+      items,
+      counts,
+      total_items: items.length
+    });
+  }
+
   function tokens(value) {
     return clean(value)
       .toLocaleLowerCase(locale() === 'es' ? 'es' : 'en')
@@ -30,7 +84,7 @@
   }
 
   function result(payload) {
-    const structuredContent = { ...payload, webmcp_version: VERSION };
+    const structuredContent = sanitizeAgentValue({ ...payload, webmcp_version: VERSION });
     return {
       content: [{ type: 'text', text: JSON.stringify(structuredContent) }],
       structuredContent
@@ -45,7 +99,7 @@
         if (payload.schema_version !== 2 || !Array.isArray(payload.items)) {
           throw new Error('Unsupported 5sigmas knowledge graph schema');
         }
-        return payload;
+        return sanitizedGraph(payload);
       });
     }
     return graphPromise;
@@ -144,7 +198,7 @@
     if (target.origin !== location.origin) return '';
     const response = await fetch(target.href, { credentials: 'same-origin' });
     if (!response.ok) return '';
-    return (await response.text()).slice(0, MAX_MARKDOWN_CHARS);
+    return redactForbiddenReferences((await response.text()).slice(0, MAX_MARKDOWN_CHARS));
   }
 
   async function getKnowledgeItem({ id, include_content = true } = {}) {
@@ -239,7 +293,7 @@
       if (!selected) throw new Error(`Unknown 5sigmas knowledge item: ${parentId}`);
       parentId = selected.parent_id || selected.id;
     }
-    let rows = graph.items.filter((item) => item.kind === 'evidence' && (!parentId || item.parent_id === parentId));
+    let rows = graph.items.filter((item) => item.kind === 'evidence' && !isForbiddenAgentUrl(item.url) && (!parentId || item.parent_id === parentId));
     if (clean(query)) {
       const queryTokens = tokens(query);
       rows = rows
@@ -292,7 +346,7 @@
     await register(modelContext, {
       name: '5sigmas_search_knowledge',
       title: 'Search all 5sigmas knowledge',
-      description: 'Search every machine-indexed item deployed on 5sigmas in the current language: concepts, series chapters, engineering notes, tools, graphics, SVG diagrams, animations, videos and referenced evidence.',
+      description: 'Search every machine-indexed item deployed on 5sigmas in the current language: concepts, series chapters, engineering notes, tools, graphics, SVG diagrams, animations, videos and referenced evidence. Repository implementation metadata is never exposed.',
       inputSchema: {
         type: 'object',
         properties: {
@@ -308,7 +362,7 @@
     await register(modelContext, {
       name: '5sigmas_get_knowledge_item',
       title: 'Get a 5sigmas knowledge item',
-      description: 'Retrieve one indexed 5sigmas page, visual, animation, video or evidence item by stable ID. For site content and visuals it can also return the clean Markdown source of the parent page.',
+      description: 'Retrieve one indexed 5sigmas page, visual, animation, video or public evidence item by stable ID. For site content and visuals it can also return the clean deployed Markdown representation. Repository implementation metadata is never exposed.',
       inputSchema: {
         type: 'object',
         properties: {
@@ -324,7 +378,7 @@
     await register(modelContext, {
       name: '5sigmas_get_topic_bundle',
       title: 'Build a complete 5sigmas topic bundle',
-      description: 'Assemble the strongest 5sigmas material for one topic across concepts, learning series, engineering notes, executable tools, visuals/animations, videos and primary/external evidence.',
+      description: 'Assemble the strongest 5sigmas material for one topic across concepts, learning series, engineering notes, executable tools, visuals/animations, videos and public evidence.',
       inputSchema: {
         type: 'object',
         properties: {
@@ -340,7 +394,7 @@
     await register(modelContext, {
       name: '5sigmas_search_visuals',
       title: 'Search 5sigmas visuals and videos',
-      description: 'Find meaningful images, inline SVG diagrams, interactive animation shells and videos that are actually deployed inside 5sigmas content, linked back to their explanatory page and Markdown source.',
+      description: 'Find meaningful images, inline SVG diagrams, interactive animation shells and videos actually deployed inside 5sigmas content, linked back only to public 5sigmas pages and assets.',
       inputSchema: {
         type: 'object',
         properties: {
@@ -356,12 +410,12 @@
     await register(modelContext, {
       name: '5sigmas_get_evidence',
       title: 'Get 5sigmas evidence and sources',
-      description: 'Retrieve external evidence links referenced by 5sigmas. Filter globally by query or restrict to the page behind a specific knowledge item.',
+      description: 'Retrieve public external evidence links referenced by 5sigmas, excluding repository and implementation hosts. Filter globally by query or restrict to a specific knowledge item.',
       inputSchema: {
         type: 'object',
         properties: {
           query: { type: 'string', description: 'Optional source/evidence topic.' },
-          item_id: { type: 'string', description: 'Optional page or child knowledge item whose supporting external references should be returned.' },
+          item_id: { type: 'string', description: 'Optional page or child knowledge item whose public supporting external references should be returned.' },
           limit: { type: 'integer', minimum: 1, maximum: MAX_RESULTS, default: DEFAULT_RESULTS }
         },
         additionalProperties: false
@@ -372,7 +426,7 @@
     await register(modelContext, {
       name: '5sigmas_knowledge_stats',
       title: 'Inspect 5sigmas agent coverage',
-      description: 'Return counts of every knowledge-object type currently indexed from the deployed locale. Useful for verifying that pages, visuals, animations, videos and evidence are exposed.',
+      description: 'Return counts of public knowledge-object types currently indexed from the deployed locale. Repository implementation metadata is excluded from this surface.',
       inputSchema: { type: 'object', properties: {}, additionalProperties: false },
       execute: knowledgeStats
     }, signal);
