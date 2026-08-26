@@ -44,9 +44,15 @@ const wide = core.wilson(86, 100);
 assert.ok((narrow.high - narrow.low) < (wide.high - wide.low), 'larger samples should produce narrower Wilson intervals at the same rate');
 
 const knowledgeRuntime = fs.readFileSync(new URL('../docs/assets/javascripts/agent-knowledge-webmcp.js', import.meta.url), 'utf8');
+const learningRuntime = fs.readFileSync(new URL('../docs/assets/javascripts/agent-learning-webmcp.js', import.meta.url), 'utf8');
 const legacyRuntime = fs.readFileSync(new URL('../docs/assets/javascripts/agent-webmcp.js', import.meta.url), 'utf8');
 const knowledgeHook = fs.readFileSync(new URL('../hooks/agent_knowledge.py', import.meta.url), 'utf8');
+const semanticHook = fs.readFileSync(new URL('../hooks/semantic_navigation.py', import.meta.url), 'utf8');
+const keyMomentHook = fs.readFileSync(new URL('../hooks/video_key_moments.py', import.meta.url), 'utf8');
 const globalLoader = fs.readFileSync(new URL('../docs/javascripts/external-links.js', import.meta.url), 'utf8');
+const esVideoHook = fs.readFileSync(new URL('../hooks/video_sitemap.py', import.meta.url), 'utf8');
+const enVideoHook = fs.readFileSync(new URL('../hooks/video_sitemap_en.py', import.meta.url), 'utf8');
+
 for (const toolName of [
   '5sigmas_search_knowledge',
   '5sigmas_get_knowledge_item',
@@ -64,14 +70,32 @@ for (const marker of ['animation', 'video', 'evidence', 'visual', 'markdown_url'
   assert.ok(knowledgeHook.includes(marker), `knowledge graph generator must index ${marker}`);
 }
 
+assert.ok(learningRuntime.includes('5sigmas_get_learning_path'), 'learning runtime must expose the semantic navigation tool');
+assert.ok(learningRuntime.includes('readOnlyHint'), 'learning-path tool must be marked read-only');
+assert.ok(learningRuntime.includes('/en/agent/learning-paths.json') && learningRuntime.includes('/agent/learning-paths.json'), 'learning runtime must address both locale path graphs');
+for (const marker of ['read_next', 'watch_next', 'try_tool', 'understand', 'go_deeper']) {
+  assert.ok(semanticHook.includes(marker), `semantic navigation must generate ${marker}`);
+}
+assert.ok(semanticHook.includes('data-s5-semantic-nav'), 'semantic navigation must render crawlable HTML navigation');
+assert.ok(semanticHook.includes('learning-paths.json'), 'semantic navigation must publish a machine-readable path graph');
+
+for (const videoHook of [esVideoHook, enVideoHook]) {
+  assert.ok(videoHook.includes('"@type": "Clip"'), 'video schema must support explicit Clip key moments');
+  assert.ok(videoHook.includes('"@type": "SeekToAction"'), 'video schema must support automatic SeekToAction key moments');
+  assert.ok(videoHook.includes('?t={seek_to_second_number}'), 'video key moments must use a seekable URL template');
+}
+assert.ok(keyMomentHook.includes('key-moments.json'), 'video key-moment contract must be published for agents and QA');
+assert.ok(keyMomentHook.includes('seek_to_action') && keyMomentHook.includes('clip'), 'key-moment manifest must distinguish automatic and curated moments');
+
 for (const runtime of [knowledgeRuntime, legacyRuntime]) {
-  assert.ok(runtime.includes('FORBIDDEN_AGENT_HOST_SUFFIXES'), 'every WebMCP runtime must enforce repository-host exclusion');
+  assert.ok(runtime.includes('FORBIDDEN_AGENT_HOST_SUFFIXES'), 'every knowledge/tool WebMCP runtime must enforce repository-host exclusion');
   assert.ok(runtime.includes('githubusercontent.com'), 'repository-host exclusion must include GitHub content hosts');
-  assert.ok(runtime.includes('PRIVATE_AGENT_KEYS'), 'every WebMCP runtime must remove implementation metadata keys');
+  assert.ok(runtime.includes('PRIVATE_AGENT_KEYS'), 'every knowledge/tool WebMCP runtime must remove implementation metadata keys');
 }
 assert.ok(knowledgeHook.includes('_is_forbidden_agent_url'), 'knowledge graph generator must exclude repository hosts before publication');
 assert.ok(knowledgeHook.includes('Repository implementation details are deliberately outside this public contract'), 'knowledge generator must document the public/repository boundary');
 assert.ok(!knowledgeHook.includes('"source_path":'), 'public graph generator must not serialize repository source paths');
 assert.ok(globalLoader.includes('agent-knowledge-webmcp.js'), 'site-wide loader must load the knowledge WebMCP runtime');
+assert.ok(globalLoader.includes('agent-learning-webmcp.js'), 'site-wide loader must load the learning-path WebMCP runtime');
 
-console.log('Agent reliability math + full knowledge WebMCP source contract: OK; repository exposure disabled');
+console.log('Agent reliability + knowledge/learning WebMCP + semantic video source contracts: OK; repository exposure disabled');
