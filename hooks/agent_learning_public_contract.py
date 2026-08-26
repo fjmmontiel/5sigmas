@@ -2,7 +2,8 @@
 
 The semantic generator may use internal source identifiers while building. This final
 post-build boundary strips them before deployment and fails if repository metadata or
-GitHub-family hosts reach the public JSON.
+GitHub-family hosts reach the public JSON. It also verifies that the same crawlable
+links materially increase related-item coverage in the public knowledge graph.
 """
 
 from __future__ import annotations
@@ -30,6 +31,23 @@ _FORBIDDEN_HOST_SUFFIXES = (
     "github.io",
     "githubassets.com",
 )
+_PAGE_KINDS = {
+    "home",
+    "concept",
+    "concept-hub",
+    "engineering",
+    "engineering-hub",
+    "meta",
+    "page",
+    "series",
+    "series-chapter",
+    "series-hub",
+    "tool",
+    "tool-hub",
+    "video-hub",
+    "video-page",
+    "visual-hub",
+}
 
 
 def _forbidden_url(value: str) -> bool:
@@ -73,8 +91,31 @@ def _assert_public(value: Any, location: str = "learning_paths") -> None:
         raise RuntimeError(f"Public learning paths expose a repository host at {location}")
 
 
+def _assert_graph_relationships(site_dir: Path) -> tuple[int, int]:
+    graph_path = site_dir / "agent" / "knowledge.json"
+    if not graph_path.is_file():
+        raise RuntimeError(f"Knowledge graph missing before semantic coverage validation: {graph_path}")
+    graph = json.loads(graph_path.read_text(encoding="utf-8"))
+    pages = [
+        item
+        for item in (graph.get("items") or [])
+        if isinstance(item, dict) and item.get("kind") in _PAGE_KINDS
+    ]
+    if len(pages) < 100:
+        raise RuntimeError(f"Knowledge graph has too few page-like items for semantic validation: {len(pages)}")
+    with_three = sum(1 for item in pages if len(item.get("related_item_ids") or []) >= 3)
+    ratio = with_three / len(pages)
+    if ratio < 0.90:
+        raise RuntimeError(
+            "Semantic navigation did not materially increase knowledge-graph relationships: "
+            f"only {with_three}/{len(pages)} page-like items have >=3 related IDs"
+        )
+    return with_three, len(pages)
+
+
 def on_post_build(config, **kwargs) -> None:
-    path = Path(config["site_dir"]) / "agent" / "learning-paths.json"
+    site_dir = Path(config["site_dir"])
+    path = site_dir / "agent" / "learning-paths.json"
     if not path.is_file():
         raise RuntimeError(f"Semantic navigation did not emit {path}")
     payload = _sanitize(json.loads(path.read_text(encoding="utf-8")))
@@ -85,6 +126,13 @@ def on_post_build(config, **kwargs) -> None:
         raise RuntimeError(f"Public learning-path graph is unexpectedly small: {len(paths)}")
     if int(coverage.get("pages_with_paths") or 0) != len(paths):
         raise RuntimeError("Not every public semantic page has a learning path")
-    if int(coverage.get("total_internal_recommendations") or 0) < len(paths) * 3:
+    recommendations = int(coverage.get("total_internal_recommendations") or 0)
+    if recommendations < len(paths) * 3:
         raise RuntimeError("Semantic navigation averages fewer than three internal recommendations per public page")
+
+    with_three, graph_pages = _assert_graph_relationships(site_dir)
+    coverage["knowledge_graph_pages_with_3plus_related"] = with_three
+    coverage["knowledge_graph_page_count"] = graph_pages
+    coverage["knowledge_graph_3plus_related_ratio"] = round(with_three / graph_pages, 4)
+    payload["coverage"] = coverage
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
