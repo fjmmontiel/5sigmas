@@ -52,6 +52,7 @@ async function verifyWebMcp(page, spec, viewport) {
   try {
     await page.waitForFunction(() => document.documentElement.dataset.webmcp === 'ready', null, { timeout: 5000 });
     await page.waitForFunction(() => document.documentElement.dataset.webmcpKnowledge === 'ready', null, { timeout: 5000 });
+    await page.waitForFunction(() => document.documentElement.dataset.webmcpLearningPaths === 'ready', null, { timeout: 5000 });
   } catch {
     failures.push(`${spec.route}: WebMCP runtimes did not reach ready state`);
     return;
@@ -67,6 +68,7 @@ async function verifyWebMcp(page, spec, viewport) {
     '5sigmas_search_visuals',
     '5sigmas_get_evidence',
     '5sigmas_knowledge_stats',
+    '5sigmas_get_learning_path',
     '5sigmas_run_agent_reliability_eval'
   ];
   const names = await page.evaluate(() => window.__s5WebMcpTools.map((tool) => tool.name));
@@ -89,11 +91,13 @@ async function verifyWebMcp(page, spec, viewport) {
     });
     const visuals = await invoke('5sigmas_search_visuals', { query: testLocale === 'es' ? 'agente' : 'agent', limit: 8 });
     const bundle = await invoke('5sigmas_get_topic_bundle', { query: 'prompt injection', limit_per_kind: 3 });
+    const learning = await invoke('5sigmas_get_learning_path', { current_url: location.href, goal: 'learn' });
+    const topicLearning = await invoke('5sigmas_get_learning_path', { query: 'prompt injection', goal: 'build' });
     const dynamic = await invoke('5sigmas_run_agent_reliability_eval', { monthlyTasks: 123456 });
     let item = null;
     const firstPageResult = search?.structuredContent?.results?.find((entry) => entry.kind !== 'evidence');
     if (firstPageResult?.id) item = await invoke('5sigmas_get_knowledge_item', { id: firstPageResult.id, include_content: true });
-    return { stats, search, visuals, bundle, dynamic, item };
+    return { stats, search, visuals, bundle, learning, topicLearning, dynamic, item };
   }, spec.locale);
 
   const stats = probe.stats?.structuredContent;
@@ -105,6 +109,18 @@ async function verifyWebMcp(page, spec, viewport) {
   if (!probe.visuals?.structuredContent || !Array.isArray(probe.visuals.structuredContent.results)) failures.push(`${spec.route}: visual search returned an invalid payload`);
   const bundleGroups = Object.values(probe.bundle?.structuredContent?.bundle || {});
   if (!bundleGroups.some((entries) => Array.isArray(entries) && entries.length)) failures.push(`${spec.route}: topic bundle returned no connected knowledge`);
+
+  const learning = probe.learning?.structuredContent;
+  if (!learning?.current?.url) failures.push(`${spec.route}: learning path did not resolve the current page`);
+  if (!Array.isArray(learning?.recommendations) || learning.recommendations.length < 3) failures.push(`${spec.route}: learning path returned fewer than three recommendations`);
+  if (learning?.coverage?.pages_with_paths < 100) failures.push(`${spec.route}: learning-path coverage unexpectedly small`);
+  const learningText = JSON.stringify(learning || {}).toLowerCase();
+  if (learningText.includes('github.com') || learningText.includes('src_key') || learningText.includes('source_path')) failures.push(`${spec.route}: learning path leaked repository/source metadata`);
+
+  const topicLearning = probe.topicLearning?.structuredContent;
+  if (!Array.isArray(topicLearning?.recommendations) || topicLearning.recommendations.length < 3) failures.push(`${spec.route}: topic learning path returned fewer than three recommendations`);
+  if (!topicLearning?.recommendations?.some((entry) => entry.role === 'try_tool')) failures.push(`${spec.route}: build-oriented topic path did not surface an interactive tool`);
+
   if (!probe.dynamic?.structuredContent?.outputs || !Object.keys(probe.dynamic.structuredContent.outputs).length) failures.push(`${spec.route}: dynamic evaluator WebMCP execution returned no outputs`);
   if (Number(probe.dynamic?.structuredContent?.scenario?.monthlyTasks) !== 123456) failures.push(`${spec.route}: dynamic evaluator WebMCP did not apply the supplied traffic input`);
   if (!probe.item?.structuredContent?.item?.id) failures.push(`${spec.route}: get_knowledge_item failed for a page-like search result`);
@@ -125,6 +141,9 @@ for (const spec of cases) {
     await verifyWebMcp(page, spec, viewport);
 
     if (await page.locator('[data-s5-agent-reliability]').count() !== 1) failures.push(`${spec.route} ${viewport.name}: root missing`);
+    if (await page.locator('[data-s5-semantic-nav]').count() !== 1) failures.push(`${spec.route} ${viewport.name}: semantic learning navigation missing`);
+    const semanticCards = await page.locator('[data-s5-semantic-nav] [data-learning-role]').count();
+    if (semanticCards < 3) failures.push(`${spec.route} ${viewport.name}: semantic learning navigation has only ${semanticCards} cards`);
     const overflowPx = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
     if (overflowPx > 1) failures.push(`${spec.route} ${viewport.name}: horizontal overflow ${overflowPx}px`);
     if (await page.locator('.md-sidebar--primary:visible').count()) failures.push(`${spec.route} ${viewport.name}: documentation navigation visible`);
@@ -212,4 +231,4 @@ if (failures.length) {
   for (const failure of failures) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log('Agent reliability + full knowledge WebMCP browser QA passed: ES/EN, knowledge graph retrieval, visuals/evidence/topic bundles, dynamic evaluator execution, responsive UI, provenance and deep links verified.');
+console.log('Agent reliability + knowledge/learning WebMCP browser QA passed: ES/EN, semantic learning paths, knowledge graph retrieval, visuals/evidence/topic bundles, dynamic evaluator execution, responsive UI, provenance and deep links verified.');

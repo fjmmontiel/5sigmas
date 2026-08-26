@@ -1,0 +1,84 @@
+.s5-semantic-nav {
+  margin: 3rem 0 1.25rem;
+  padding: 1.35rem;
+  border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+  border-radius: 1rem;
+  background: color-mix(in srgb, var(--md-default-bg-color) 94%, var(--md-primary-fg-color) 6%);
+}
+
+.s5-semantic-nav__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.s5-semantic-nav__head h2 {
+  margin: 0;
+  font-size: clamp(1.15rem, 2vw, 1.55rem);
+}
+
+.s5-semantic-nav__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.s5-semantic-nav__card {
+  display: grid;
+  gap: 0.38rem;
+  min-height: 8rem;
+  padding: 1rem;
+  border: 1px solid color-mix(in srgb, currentColor 14%, transparent);
+  border-radius: 0.8rem;
+  color: inherit !important;
+  text-decoration: none !important;
+  transition: transform 140ms ease, border-color 140ms ease, box-shadow 140ms ease;
+}
+
+.s5-semantic-nav__card:hover,
+.s5-semantic-nav__card:focus-visible {
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, currentColor 35%, transparent);
+  box-shadow: 0 0.45rem 1.35rem color-mix(in srgb, #000 10%, transparent);
+}
+
+.s5-semantic-nav__card > span {
+  font-size: 0.72rem;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.66;
+}
+
+.s5-semantic-nav__card > strong {
+  font-size: 1rem;
+  line-height: 1.28;
+}
+
+.s5-semantic-nav__card > small {
+  align-self: end;
+  font-size: 0.78rem;
+  line-height: 1.42;
+  opacity: 0.72;
+}
+
+@media (max-width: 720px) {
+  .s5-semantic-nav {
+    margin-top: 2.25rem;
+    padding: 1rem;
+  }
+
+  .s5-semantic-nav__head {
+    display: block;
+  }
+
+  .s5-semantic-nav__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .s5-semantic-nav__card {
+    min-height: auto;
+  }
+}
