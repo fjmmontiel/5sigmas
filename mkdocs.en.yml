@@ -242,6 +242,7 @@ hooks:
   - hooks/direct_reader_navigation.py
   - hooks/sitemap_noindex.py
   - hooks/serve_md_versions.py
+  - hooks/semantic_navigation.py
   - hooks/locale_alternates.py
 
 # mkdocs.yml is inherited for common theme/configuration, but MkDocs replaces
