@@ -7,12 +7,13 @@ locale pages that do not exist yet at the moment the Spanish search audit runs.
 
 This wrapper stages routes explicitly declared in the locale editorial manifest and
 the interactive-tools locale contract, runs the strict search audit plus the
-canonical priority-topic contract, then removes the staged markers. Arbitrary
-missing internal links still fail normally.
+canonical priority-topic contract, validates the generated agent knowledge graph,
+then removes the staged markers. Arbitrary missing internal links still fail normally.
 """
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from urllib.parse import urlsplit
 
@@ -187,13 +188,51 @@ def _cleanup_staged_routes(created_files: list[Path]) -> None:
             pass
 
 
+def _validate_agent_graph() -> None:
+    graph_path = SITE / "agent" / "knowledge.json"
+    if not graph_path.is_file():
+        raise AssertionError("Spanish build did not emit site/agent/knowledge.json")
+    graph = json.loads(graph_path.read_text(encoding="utf-8"))
+    if graph.get("schema_version") != 2 or graph.get("locale") != "es":
+        raise AssertionError("Spanish agent graph has the wrong schema or locale")
+    items = graph.get("items") or []
+    if not isinstance(items, list) or len(items) < 25:
+        raise AssertionError(f"Spanish agent graph is unexpectedly small: {len(items)} items")
+    ids = [item.get("id") for item in items]
+    if len(ids) != len(set(ids)):
+        raise AssertionError("Spanish agent graph contains duplicate stable IDs")
+    known_ids = set(ids)
+    for item in items:
+        parent_id = item.get("parent_id")
+        if parent_id and parent_id not in known_ids:
+            raise AssertionError(f"Agent child item points to unknown parent: {parent_id}")
+    counts = graph.get("counts") or {}
+    page_count = sum(count for kind, count in counts.items() if kind not in {"image", "svg", "animation", "video", "evidence"})
+    visual_count = sum(counts.get(kind, 0) for kind in ("image", "svg", "animation", "video"))
+    if page_count < 20:
+        raise AssertionError(f"Agent graph indexes too few deployed pages: {page_count}")
+    if visual_count < 1:
+        raise AssertionError("Agent graph contains no first-class visuals/videos")
+    if counts.get("evidence", 0) < 1:
+        raise AssertionError("Agent graph contains no first-class evidence links")
+    print(
+        "Agent knowledge graph: OK "
+        f"({len(items)} items, {page_count} pages, {visual_count} visual/video items, "
+        f"{counts.get('evidence', 0)} evidence items)"
+    )
+
+
 def main() -> int:
     created_files = _stage_manifest_routes()
     try:
         search_result = audit_search_foundation.main()
         if search_result:
             return search_result
-        return audit_priority_topic_hubs.main()
+        priority_result = audit_priority_topic_hubs.main()
+        if priority_result:
+            return priority_result
+        _validate_agent_graph()
+        return 0
     finally:
         _cleanup_staged_routes(created_files)
 

@@ -23,15 +23,106 @@ function percent(text) {
   return Number(normalized);
 }
 
+async function installWebMcpHarness(page) {
+  await page.addInitScript(() => {
+    window.__s5WebMcpTools = [];
+    const registry = window.__s5WebMcpTools;
+    const modelContext = {
+      async registerTool(definition, options = {}) {
+        registry.push(definition);
+        const signal = options?.signal;
+        if (signal?.addEventListener) {
+          signal.addEventListener('abort', () => {
+            const index = registry.indexOf(definition);
+            if (index >= 0) registry.splice(index, 1);
+          }, { once: true });
+        }
+      }
+    };
+    Object.defineProperty(document, 'modelContext', {
+      configurable: true,
+      enumerable: true,
+      value: modelContext
+    });
+  });
+}
+
+async function verifyWebMcp(page, spec, viewport) {
+  if (viewport.name !== 'desktop') return;
+  try {
+    await page.waitForFunction(() => document.documentElement.dataset.webmcp === 'ready', null, { timeout: 5000 });
+    await page.waitForFunction(() => document.documentElement.dataset.webmcpKnowledge === 'ready', null, { timeout: 5000 });
+  } catch {
+    failures.push(`${spec.route}: WebMCP runtimes did not reach ready state`);
+    return;
+  }
+
+  const required = [
+    '5sigmas_discover_tools',
+    '5sigmas_search_library',
+    '5sigmas_page_context',
+    '5sigmas_search_knowledge',
+    '5sigmas_get_knowledge_item',
+    '5sigmas_get_topic_bundle',
+    '5sigmas_search_visuals',
+    '5sigmas_get_evidence',
+    '5sigmas_knowledge_stats',
+    '5sigmas_run_agent_reliability_eval'
+  ];
+  const names = await page.evaluate(() => window.__s5WebMcpTools.map((tool) => tool.name));
+  for (const name of required) {
+    if (!names.includes(name)) failures.push(`${spec.route}: WebMCP tool missing ${name}`);
+  }
+
+  const probe = await page.evaluate(async (testLocale) => {
+    const tools = window.__s5WebMcpTools;
+    const invoke = async (name, args) => {
+      const tool = tools.find((candidate) => candidate.name === name);
+      if (!tool) throw new Error(`missing ${name}`);
+      return await tool.execute(args || {});
+    };
+    const stats = await invoke('5sigmas_knowledge_stats', {});
+    const search = await invoke('5sigmas_search_knowledge', {
+      query: testLocale === 'es' ? 'fiabilidad agentes' : 'agent reliability',
+      kinds: ['tool', 'series-chapter', 'concept', 'engineering', 'page'],
+      limit: 8
+    });
+    const visuals = await invoke('5sigmas_search_visuals', { query: testLocale === 'es' ? 'agente' : 'agent', limit: 8 });
+    const bundle = await invoke('5sigmas_get_topic_bundle', { query: 'prompt injection', limit_per_kind: 3 });
+    const dynamic = await invoke('5sigmas_run_agent_reliability_eval', { monthlyTasks: 123456 });
+    let item = null;
+    const firstPageResult = search?.structuredContent?.results?.find((entry) => entry.kind !== 'evidence');
+    if (firstPageResult?.id) item = await invoke('5sigmas_get_knowledge_item', { id: firstPageResult.id, include_content: true });
+    return { stats, search, visuals, bundle, dynamic, item };
+  }, spec.locale);
+
+  const stats = probe.stats?.structuredContent;
+  if (!stats || stats.total_items < 25) failures.push(`${spec.route}: knowledge graph unexpectedly small (${stats?.total_items ?? 'missing'})`);
+  const visualCount = ['image', 'svg', 'animation', 'video'].reduce((sum, kind) => sum + Number(stats?.counts?.[kind] || 0), 0);
+  if (visualCount < 1) failures.push(`${spec.route}: knowledge graph exposes no visual/video items`);
+  if (Number(stats?.counts?.evidence || 0) < 1) failures.push(`${spec.route}: knowledge graph exposes no evidence items`);
+  if (!probe.search?.structuredContent?.results?.length) failures.push(`${spec.route}: knowledge search returned no agent-reliability material`);
+  if (!probe.visuals?.structuredContent || !Array.isArray(probe.visuals.structuredContent.results)) failures.push(`${spec.route}: visual search returned an invalid payload`);
+  const bundleGroups = Object.values(probe.bundle?.structuredContent?.bundle || {});
+  if (!bundleGroups.some((entries) => Array.isArray(entries) && entries.length)) failures.push(`${spec.route}: topic bundle returned no connected knowledge`);
+  if (!probe.dynamic?.structuredContent?.outputs || !Object.keys(probe.dynamic.structuredContent.outputs).length) failures.push(`${spec.route}: dynamic evaluator WebMCP execution returned no outputs`);
+  if (Number(probe.dynamic?.structuredContent?.scenario?.monthlyTasks) !== 123456) failures.push(`${spec.route}: dynamic evaluator WebMCP did not apply the supplied traffic input`);
+  if (!probe.item?.structuredContent?.item?.id) failures.push(`${spec.route}: get_knowledge_item failed for a page-like search result`);
+  if (!probe.item?.structuredContent?.markdown_content) failures.push(`${spec.route}: get_knowledge_item did not expose clean Markdown content for a page-like result`);
+}
+
 for (const spec of cases) {
   for (const viewport of viewports) {
     const page = await browser.newPage({ viewport });
+    await installWebMcpHarness(page);
     let response = await page.goto(`${base}${spec.route}`, { waitUntil: 'networkidle' });
     if (!response?.ok()) {
       failures.push(`${spec.route} ${viewport.name}: HTTP ${response?.status() ?? 'no response'}`);
       await page.close();
       continue;
     }
+
+    await verifyWebMcp(page, spec, viewport);
 
     if (await page.locator('[data-s5-agent-reliability]').count() !== 1) failures.push(`${spec.route} ${viewport.name}: root missing`);
     const overflowPx = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
@@ -117,8 +208,8 @@ for (const spec of cases) {
 
 await browser.close();
 if (failures.length) {
-  console.error('Agent reliability browser QA failed:');
+  console.error('Agent reliability / WebMCP browser QA failed:');
   for (const failure of failures) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log('Agent reliability browser QA passed: ES/EN, 390px/1440px, outcomes, trace metrics, release criteria, Spanish terminology, deep links, provenance, JSON-LD, labels and horizontal fit verified.');
+console.log('Agent reliability + full knowledge WebMCP browser QA passed: ES/EN, knowledge graph retrieval, visuals/evidence/topic bundles, dynamic evaluator execution, responsive UI, provenance and deep links verified.');

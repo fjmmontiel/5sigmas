@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
 import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
 const core = require('../docs/assets/javascripts/tools/agent-reliability-core.js');
@@ -42,4 +43,25 @@ const narrow = core.wilson(860, 1000);
 const wide = core.wilson(86, 100);
 assert.ok((narrow.high - narrow.low) < (wide.high - wide.low), 'larger samples should produce narrower Wilson intervals at the same rate');
 
-console.log('Agent reliability tool math: OK');
+const knowledgeRuntime = fs.readFileSync(new URL('../docs/assets/javascripts/agent-knowledge-webmcp.js', import.meta.url), 'utf8');
+const knowledgeHook = fs.readFileSync(new URL('../hooks/agent_knowledge.py', import.meta.url), 'utf8');
+const globalLoader = fs.readFileSync(new URL('../docs/javascripts/external-links.js', import.meta.url), 'utf8');
+for (const toolName of [
+  '5sigmas_search_knowledge',
+  '5sigmas_get_knowledge_item',
+  '5sigmas_get_topic_bundle',
+  '5sigmas_search_visuals',
+  '5sigmas_get_evidence',
+  '5sigmas_knowledge_stats'
+]) {
+  assert.ok(knowledgeRuntime.includes(toolName), `full knowledge runtime must expose ${toolName}`);
+}
+assert.ok(knowledgeRuntime.includes('document.modelContext'), 'knowledge runtime must use the current document.modelContext API');
+assert.ok(knowledgeRuntime.includes('readOnlyHint'), 'knowledge retrieval tools must be marked read-only');
+assert.ok(knowledgeRuntime.includes('/en/agent/knowledge.json') && knowledgeRuntime.includes('/agent/knowledge.json'), 'runtime must address both locale graphs');
+for (const marker of ['animation', 'video', 'evidence', 'visual', 'markdown_url', 'related_item_ids']) {
+  assert.ok(knowledgeHook.includes(marker), `knowledge graph generator must index ${marker}`);
+}
+assert.ok(globalLoader.includes('agent-knowledge-webmcp.js'), 'site-wide loader must load the knowledge WebMCP runtime');
+
+console.log('Agent reliability math + full knowledge WebMCP source contract: OK');
