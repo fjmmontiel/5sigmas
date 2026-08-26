@@ -6,16 +6,30 @@ The video generators already emit Google-supported VideoObject markup:
 
 This hook mirrors that contract into /videos/key-moments.json and enriches the public
 video catalogue without inventing timestamps that were not editorially reviewed.
+It also finalizes the public-only learning-path contract before deployment.
 """
 
 from __future__ import annotations
 
+import importlib.util
 import json
 from pathlib import Path
 from typing import Any
 
 
+_contract_spec = importlib.util.spec_from_file_location(
+    "s5_agent_learning_public_contract",
+    Path(__file__).with_name("agent_learning_public_contract.py"),
+)
+if _contract_spec is None or _contract_spec.loader is None:
+    raise RuntimeError("Unable to load hooks/agent_learning_public_contract.py")
+_learning_contract = importlib.util.module_from_spec(_contract_spec)
+_contract_spec.loader.exec_module(_learning_contract)
+
+
 def on_post_build(config, **kwargs) -> None:
+    _learning_contract.on_post_build(config, **kwargs)
+
     site_dir = Path(config["site_dir"])
     catalogue_path = site_dir / "videos" / "catalog.json"
     if not catalogue_path.is_file():
