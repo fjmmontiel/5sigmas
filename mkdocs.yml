@@ -233,6 +233,7 @@ hooks:
   - hooks/sitemap_noindex.py
   - hooks/video_sitemap.py
   - hooks/semantic_navigation.py
+  - hooks/video_key_moments.py
   - hooks/locale_alternates.py
 
 plugins:
