@@ -74,7 +74,7 @@ async function verifyWebMcp(page, spec, viewport) {
     if (!names.includes(name)) failures.push(`${spec.route}: WebMCP tool missing ${name}`);
   }
 
-  const probe = await page.evaluate(async () => {
+  const probe = await page.evaluate(async (testLocale) => {
     const tools = window.__s5WebMcpTools;
     const invoke = async (name, args) => {
       const tool = tools.find((candidate) => candidate.name === name);
@@ -82,15 +82,19 @@ async function verifyWebMcp(page, spec, viewport) {
       return await tool.execute(args || {});
     };
     const stats = await invoke('5sigmas_knowledge_stats', {});
-    const search = await invoke('5sigmas_search_knowledge', { query: 'agent reliability', limit: 8 });
-    const visuals = await invoke('5sigmas_search_visuals', { query: 'agent', limit: 8 });
+    const search = await invoke('5sigmas_search_knowledge', {
+      query: testLocale === 'es' ? 'fiabilidad agentes' : 'agent reliability',
+      kinds: ['tool', 'series-chapter', 'concept', 'engineering', 'page'],
+      limit: 8
+    });
+    const visuals = await invoke('5sigmas_search_visuals', { query: testLocale === 'es' ? 'agente' : 'agent', limit: 8 });
     const bundle = await invoke('5sigmas_get_topic_bundle', { query: 'prompt injection', limit_per_kind: 3 });
     const dynamic = await invoke('5sigmas_run_agent_reliability_eval', { monthlyTasks: 123456 });
     let item = null;
-    const firstId = search?.structuredContent?.results?.[0]?.id;
-    if (firstId) item = await invoke('5sigmas_get_knowledge_item', { id: firstId, include_content: true });
+    const firstPageResult = search?.structuredContent?.results?.find((entry) => entry.kind !== 'evidence');
+    if (firstPageResult?.id) item = await invoke('5sigmas_get_knowledge_item', { id: firstPageResult.id, include_content: true });
     return { stats, search, visuals, bundle, dynamic, item };
-  });
+  }, spec.locale);
 
   const stats = probe.stats?.structuredContent;
   if (!stats || stats.total_items < 25) failures.push(`${spec.route}: knowledge graph unexpectedly small (${stats?.total_items ?? 'missing'})`);
@@ -103,8 +107,8 @@ async function verifyWebMcp(page, spec, viewport) {
   if (!bundleGroups.some((entries) => Array.isArray(entries) && entries.length)) failures.push(`${spec.route}: topic bundle returned no connected knowledge`);
   if (!probe.dynamic?.structuredContent?.outputs || !Object.keys(probe.dynamic.structuredContent.outputs).length) failures.push(`${spec.route}: dynamic evaluator WebMCP execution returned no outputs`);
   if (Number(probe.dynamic?.structuredContent?.scenario?.monthlyTasks) !== 123456) failures.push(`${spec.route}: dynamic evaluator WebMCP did not apply the supplied traffic input`);
-  if (!probe.item?.structuredContent?.item?.id) failures.push(`${spec.route}: get_knowledge_item failed for a search result`);
-  if (!probe.item?.structuredContent?.markdown_content) failures.push(`${spec.route}: get_knowledge_item did not expose clean Markdown content`);
+  if (!probe.item?.structuredContent?.item?.id) failures.push(`${spec.route}: get_knowledge_item failed for a page-like search result`);
+  if (!probe.item?.structuredContent?.markdown_content) failures.push(`${spec.route}: get_knowledge_item did not expose clean Markdown content for a page-like result`);
 }
 
 for (const spec of cases) {
