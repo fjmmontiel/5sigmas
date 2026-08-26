@@ -211,6 +211,7 @@ extra_css:
   - stylesheets/visual-hub.css
   - stylesheets/visual-hub-responsive.css
   - stylesheets/video-library.css
+  - stylesheets/semantic-navigation.css
   - stylesheets/reader-navigation.css
   - stylesheets/reader-navigation-responsive.css
   - stylesheets/reader-direct-navigation.css
@@ -231,6 +232,7 @@ hooks:
   - hooks/nosnippet.py
   - hooks/sitemap_noindex.py
   - hooks/video_sitemap.py
+  - hooks/semantic_navigation.py
   - hooks/locale_alternates.py
 
 plugins:
