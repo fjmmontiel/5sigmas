@@ -44,6 +44,7 @@ const wide = core.wilson(86, 100);
 assert.ok((narrow.high - narrow.low) < (wide.high - wide.low), 'larger samples should produce narrower Wilson intervals at the same rate');
 
 const knowledgeRuntime = fs.readFileSync(new URL('../docs/assets/javascripts/agent-knowledge-webmcp.js', import.meta.url), 'utf8');
+const legacyRuntime = fs.readFileSync(new URL('../docs/assets/javascripts/agent-webmcp.js', import.meta.url), 'utf8');
 const knowledgeHook = fs.readFileSync(new URL('../hooks/agent_knowledge.py', import.meta.url), 'utf8');
 const globalLoader = fs.readFileSync(new URL('../docs/javascripts/external-links.js', import.meta.url), 'utf8');
 for (const toolName of [
@@ -62,6 +63,15 @@ assert.ok(knowledgeRuntime.includes('/en/agent/knowledge.json') && knowledgeRunt
 for (const marker of ['animation', 'video', 'evidence', 'visual', 'markdown_url', 'related_item_ids']) {
   assert.ok(knowledgeHook.includes(marker), `knowledge graph generator must index ${marker}`);
 }
+
+for (const runtime of [knowledgeRuntime, legacyRuntime]) {
+  assert.ok(runtime.includes('FORBIDDEN_AGENT_HOST_SUFFIXES'), 'every WebMCP runtime must enforce repository-host exclusion');
+  assert.ok(runtime.includes('githubusercontent.com'), 'repository-host exclusion must include GitHub content hosts');
+  assert.ok(runtime.includes('PRIVATE_AGENT_KEYS'), 'every WebMCP runtime must remove implementation metadata keys');
+}
+assert.ok(knowledgeHook.includes('_is_forbidden_agent_url'), 'knowledge graph generator must exclude repository hosts before publication');
+assert.ok(knowledgeHook.includes('Repository implementation details are deliberately outside this public contract'), 'knowledge generator must document the public/repository boundary');
+assert.ok(!knowledgeHook.includes('"source_path":'), 'public graph generator must not serialize repository source paths');
 assert.ok(globalLoader.includes('agent-knowledge-webmcp.js'), 'site-wide loader must load the knowledge WebMCP runtime');
 
-console.log('Agent reliability math + full knowledge WebMCP source contract: OK');
+console.log('Agent reliability math + full knowledge WebMCP source contract: OK; repository exposure disabled');
