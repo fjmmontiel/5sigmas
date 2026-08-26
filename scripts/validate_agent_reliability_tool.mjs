@@ -85,7 +85,7 @@ async function verifyWebMcp(page, spec, viewport) {
     const search = await invoke('5sigmas_search_knowledge', { query: 'agent reliability', limit: 8 });
     const visuals = await invoke('5sigmas_search_visuals', { query: 'agent', limit: 8 });
     const bundle = await invoke('5sigmas_get_topic_bundle', { query: 'prompt injection', limit_per_kind: 3 });
-    const dynamic = await invoke('5sigmas_run_agent_reliability_eval', { tasks: 100, firstPassSuccesses: 80, retryingTasks: 15, retryRecoveredTasks: 10 });
+    const dynamic = await invoke('5sigmas_run_agent_reliability_eval', { monthlyTasks: 123456 });
     let item = null;
     const firstId = search?.structuredContent?.results?.[0]?.id;
     if (firstId) item = await invoke('5sigmas_get_knowledge_item', { id: firstId, include_content: true });
@@ -102,6 +102,7 @@ async function verifyWebMcp(page, spec, viewport) {
   const bundleGroups = Object.values(probe.bundle?.structuredContent?.bundle || {});
   if (!bundleGroups.some((entries) => Array.isArray(entries) && entries.length)) failures.push(`${spec.route}: topic bundle returned no connected knowledge`);
   if (!probe.dynamic?.structuredContent?.outputs || !Object.keys(probe.dynamic.structuredContent.outputs).length) failures.push(`${spec.route}: dynamic evaluator WebMCP execution returned no outputs`);
+  if (Number(probe.dynamic?.structuredContent?.scenario?.monthlyTasks) !== 123456) failures.push(`${spec.route}: dynamic evaluator WebMCP did not apply the supplied traffic input`);
   if (!probe.item?.structuredContent?.item?.id) failures.push(`${spec.route}: get_knowledge_item failed for a search result`);
   if (!probe.item?.structuredContent?.markdown_content) failures.push(`${spec.route}: get_knowledge_item did not expose clean Markdown content`);
 }
