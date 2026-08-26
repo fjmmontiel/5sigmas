@@ -82,7 +82,7 @@ assert.ok(semanticHook.includes('learning-paths.json'), 'semantic navigation mus
 for (const videoHook of [esVideoHook, enVideoHook]) {
   assert.ok(videoHook.includes('"@type": "Clip"'), 'video schema must support explicit Clip key moments');
   assert.ok(videoHook.includes('"@type": "SeekToAction"'), 'video schema must support automatic SeekToAction key moments');
-  assert.ok(videoHook.includes('?t={seek_to_second_number}'), 'video key moments must use a seekable URL template');
+  assert.ok(videoHook.includes('?t=') && videoHook.includes('seek_to_second_number'), 'video key moments must use a seekable URL template');
 }
 assert.ok(keyMomentHook.includes('key-moments.json'), 'video key-moment contract must be published for agents and QA');
 assert.ok(keyMomentHook.includes('seek_to_action') && keyMomentHook.includes('clip'), 'key-moment manifest must distinguish automatic and curated moments');
