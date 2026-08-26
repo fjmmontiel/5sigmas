@@ -1,9 +1,12 @@
 (() => {
   'use strict';
 
-  const VERSION = '2026-08-25';
+  const VERSION = '2026-08-26-no-repository-exposure';
   const MAX_RESULTS = 12;
   const MAX_LINKS = 30;
+  const FORBIDDEN_AGENT_HOST_SUFFIXES = ['github.com', 'githubusercontent.com', 'github.io', 'githubassets.com'];
+  const PRIVATE_AGENT_KEYS = new Set(['source_path', 'repository', 'repository_url', 'repo', 'branch', 'commit', 'commit_sha']);
+  const URL_KEYS = new Set(['url', 'asset_url', 'poster_url', 'markdown_url', 'parent_url', 'catalog_url', 'canonical_url']);
   let registrationController = null;
 
   function locale() {
@@ -35,6 +38,42 @@
     return String(value || '').replace(/\s+/g, ' ').trim();
   }
 
+  function isForbiddenAgentUrl(value) {
+    try {
+      const host = new URL(String(value || ''), location.origin).hostname.toLowerCase().replace(/\.$/, '');
+      return FORBIDDEN_AGENT_HOST_SUFFIXES.some((suffix) => host === suffix || host.endsWith(`.${suffix}`));
+    } catch {
+      return false;
+    }
+  }
+
+  function redactForbiddenReferences(value) {
+    let raw = String(value || '');
+    raw = raw.replace(/https?:\/\/[^\s<>"')]+/gi, (candidate) => isForbiddenAgentUrl(candidate) ? '' : candidate);
+    raw = raw.replace(/\b(?:[a-z0-9-]+\.)*(?:github\.com|githubusercontent\.com|github\.io|githubassets\.com)(?:\/[^\s<>"')]+)?/gi, '');
+    return raw;
+  }
+
+  function sanitizeAgentPayload(value, key = '') {
+    if (PRIVATE_AGENT_KEYS.has(key)) return undefined;
+    if (Array.isArray(value)) {
+      return value.map((entry) => sanitizeAgentPayload(entry)).filter((entry) => entry !== undefined);
+    }
+    if (value && typeof value === 'object') {
+      const sanitized = {};
+      for (const [childKey, childValue] of Object.entries(value)) {
+        const cleaned = sanitizeAgentPayload(childValue, childKey);
+        if (cleaned !== undefined) sanitized[childKey] = cleaned;
+      }
+      return sanitized;
+    }
+    if (typeof value === 'string') {
+      if (URL_KEYS.has(key) && isForbiddenAgentUrl(value)) return undefined;
+      return redactForbiddenReferences(value);
+    }
+    return value;
+  }
+
   function tokens(value) {
     return text(value)
       .toLocaleLowerCase(locale() === 'es' ? 'es' : 'en')
@@ -45,7 +84,7 @@
   }
 
   function jsonResult(payload) {
-    const serializable = { ...payload, webmcp_version: VERSION };
+    const serializable = sanitizeAgentPayload({ ...payload, webmcp_version: VERSION });
     return {
       content: [{ type: 'text', text: JSON.stringify(serializable) }],
       structuredContent: serializable
@@ -219,7 +258,7 @@
       seen.add(key);
       const item = { label: text(anchor.textContent) || url.hostname, url: url.href };
       if (url.origin === location.origin) internal.push(item);
-      else external.push(item);
+      else if (!isForbiddenAgentUrl(url.href)) external.push(item);
     }
     return {
       internal: internal.slice(0, MAX_LINKS),
@@ -442,7 +481,7 @@
 
     await register(modelContext, {
       name: '5sigmas_page_context',
-      description: 'Return structured context for the current 5sigmas page: canonical URL, current tool metadata, headings, related internal content, external source links and language alternates.',
+      description: 'Return structured context for the current 5sigmas page: canonical URL, current tool metadata, headings, related internal content, public external evidence links and language alternates. Repository implementation metadata is never exposed.',
       inputSchema: { type: 'object', properties: {}, additionalProperties: false },
       execute: pageContext
     }, signal);
