@@ -72,6 +72,12 @@ def audit_locale(site_root: Path, locale: str, locale_prefix: str) -> list[str]:
         require(html_path.is_file(), f"{locale}: semantic path page missing: {current_url}", failures)
         links = row.get("links") or {}
         require(len(links) >= 3, f"{locale}: path has <3 recommendations: {current_url}", failures)
+        if current.get("kind") == "concept":
+            require(
+                "understand" not in links,
+                f"{locale}: concept page must not emit a second concept as 'understand': {current_url}",
+                failures,
+            )
         targets = set()
         for role, link in links.items():
             target = str((link or {}).get("url") or "")
