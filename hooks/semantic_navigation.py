@@ -388,10 +388,13 @@ def _build_path(current: dict[str, Any]) -> dict[str, Any]:
         links["try_tool"] = _link("try_tool", tool)
         excluded.add(tool["src_uri"])
 
-    concept = _best(current, {"concept"}, excluded=excluded)
-    if concept:
-        links["understand"] = _link("understand", concept)
-        excluded.add(concept["src_uri"])
+    # A concept page already performs the "understand" job. Adding a second concept
+    # under that label can turn weak token overlap into a misleading prerequisite.
+    if current["kind"] != "concept":
+        concept = _best(current, {"concept"}, excluded=excluded)
+        if concept:
+            links["understand"] = _link("understand", concept)
+            excluded.add(concept["src_uri"])
 
     deeper = _best(current, {"series", "series-chapter", "engineering", "series-hub"}, excluded=excluded)
     if deeper:
