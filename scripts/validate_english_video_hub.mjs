@@ -106,6 +106,8 @@ if (catalogue) {
     if (!videoPath.startsWith('/en/')) failures.push(`${video.id}: video URL is not native-English: ${video.video_url}`);
     if (!thumbPath.startsWith('/en/')) failures.push(`${video.id}: poster URL is not native-English: ${video.thumb_url}`);
     if (!String(video.source_url || '').startsWith('https://5sigmas.com/en/')) failures.push(`${video.id}: source URL is not English: ${video.source_url}`);
+    if (!String(video.publication_date || '').trim()) failures.push(`${video.id}: catalogue publication_date is missing`);
+    else if (Number.isNaN(Date.parse(video.publication_date))) failures.push(`${video.id}: catalogue publication_date is invalid: ${JSON.stringify(video.publication_date)}`);
   }
 
   for (const expectedTopic of ['foundations', 'history', 'multimodality', 'reasoning', 'impact', 'infrastructure', 'security', 'agents', 'engineering']) {
@@ -149,6 +151,9 @@ if (catalogue) {
       if (videoSchema.inLanguage !== 'en') failures.push(`${watchPath}: VideoObject inLanguage is ${JSON.stringify(videoSchema.inLanguage)}`);
       if (videoSchema.contentUrl !== video.video_url) failures.push(`${watchPath}: VideoObject contentUrl ${JSON.stringify(videoSchema.contentUrl)} != ${video.video_url}`);
       if (videoSchema.mainEntityOfPage?.['@id'] !== video.watch_url) failures.push(`${watchPath}: VideoObject mainEntityOfPage is not its watch URL`);
+      if (!String(videoSchema.uploadDate || '').trim()) failures.push(`${watchPath}: VideoObject uploadDate is missing`);
+      else if (videoSchema.uploadDate !== video.publication_date) failures.push(`${watchPath}: VideoObject uploadDate ${JSON.stringify(videoSchema.uploadDate)} != catalogue publication_date ${JSON.stringify(video.publication_date)}`);
+      else if (Number.isNaN(Date.parse(videoSchema.uploadDate))) failures.push(`${watchPath}: VideoObject uploadDate is invalid: ${JSON.stringify(videoSchema.uploadDate)}`);
     }
     const sourceHref = await page.locator('.s5-video-watch__source-link').getAttribute('href').catch(() => null);
     if (sourceHref !== video.source_url) failures.push(`${watchPath}: source/article link ${JSON.stringify(sourceHref)} != ${video.source_url}`);
@@ -168,6 +173,7 @@ if (catalogue) {
     for (const video of catalogue.videos) {
       if (!sitemap.includes(`<loc>${video.watch_url}</loc>`)) failures.push(`/en/video-sitemap.xml: missing ${video.watch_url}`);
       if (!sitemap.includes(video.video_url)) failures.push(`/en/video-sitemap.xml: missing native video ${video.video_url}`);
+      if (!sitemap.includes(`<video:publication_date>${video.publication_date}</video:publication_date>`)) failures.push(`/en/video-sitemap.xml: missing publication_date for ${video.watch_url}`);
     }
     if (/https:\/\/5sigmas\.com\/(?!en\/)[^<]*\.mp4/.test(sitemap)) failures.push('/en/video-sitemap.xml: contains a Spanish-namespace MP4 URL');
   }
