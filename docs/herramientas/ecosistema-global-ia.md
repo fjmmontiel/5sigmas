@@ -1,6 +1,6 @@
 ---
 title: Explorador del ecosistema global de IA — comparar países con pesos transparentes
-seo_title: Ecosistema global de IA: compara países
+seo_title: "Ecosistema global de IA: compara países"
 description: Compara inversión, empresas, infraestructura, modelos, talento y política de IA entre países con datos ausentes, normalización y pesos visibles.
 hide:
   - toc
