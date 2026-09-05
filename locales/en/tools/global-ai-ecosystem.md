@@ -1,6 +1,6 @@
 ---
 title: Global AI Ecosystem Explorer — compare countries with transparent weights
-seo_title: Global AI Ecosystem Explorer: Compare Countries
+seo_title: "Global AI Ecosystem Explorer: Compare Countries"
 description: Compare national AI investment, companies, infrastructure, models, talent and policy with visible coverage, normalization and weights.
 hide:
   - toc
