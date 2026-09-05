@@ -1,5 +1,6 @@
 ---
 title: Explorador del ecosistema global de IA — comparar países con pesos transparentes
+seo_title: "Ecosistema global de IA: compara países"
 description: Compara inversión, empresas, infraestructura, modelos, talento y política de IA entre países con datos ausentes, normalización y pesos visibles.
 hide:
   - toc
@@ -14,7 +15,7 @@ hide:
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Explorador del ecosistema global de IA — 5sigmas","url":"https://5sigmas.com/herramientas/ecosistema-global-ia/","applicationCategory":"EducationalApplication","operatingSystem":"Any","isAccessibleForFree":true,"description":"Explorador reproducible de señales nacionales de IA con normalización, pesos y cobertura de datos visibles."}</script>
 
 <div class="s5-landing s5-tool-page s5-global-ecosystem" data-s5-global-ai-ecosystem data-locale="es">
-<section class="s5-page-intro"><div class="s5-eyebrow">Herramientas · Datos · 18</div><h1>Compara ecosistemas de IA sin esconder qué datos y pesos producen el ranking.</h1><p>Activa las señales que quieras comparar, cambia su peso y observa qué países siguen siendo comparables. Los datos ausentes excluyen al país del escenario: nunca se convierten en cero ni se compensan silenciosamente.</p></section>
+<section class="s5-page-intro"><div class="s5-eyebrow">Herramientas · Datos · 18</div><h1>Ecosistema global de IA: compara países con datos y pesos transparentes.</h1><p>Un ecosistema nacional de IA combina capital, empresas, infraestructura, desarrollo de modelos, talento y capacidad de política pública para desarrollar y desplegar IA. Activa las señales que quieras comparar, cambia su peso y observa qué países siguen siendo comparables. Los datos ausentes excluyen al país del escenario: nunca se convierten en cero ni se compensan silenciosamente.</p></section>
 <div class="s5-tool-summary-strip"><div><small>Normalización</small><strong>0–100 por escenario</strong></div><div><small>Pesos</small><strong>editables</strong></div><div><small>Datos ausentes</small><strong>exclusión explícita</strong></div><div><small>Registros de país</small><strong>28</strong></div></div>
 
 <div class="s5-tool-workbench">

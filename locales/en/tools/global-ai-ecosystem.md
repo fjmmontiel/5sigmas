@@ -1,5 +1,6 @@
 ---
 title: Global AI Ecosystem Explorer — compare countries with transparent weights
+seo_title: "Global AI Ecosystem Explorer: Compare Countries"
 description: Compare national AI investment, companies, infrastructure, models, talent and policy with visible coverage, normalization and weights.
 hide:
   - toc
@@ -14,7 +15,7 @@ hide:
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Global AI Ecosystem Explorer — 5sigmas","url":"https://5sigmas.com/en/tools/global-ai-ecosystem/","applicationCategory":"EducationalApplication","operatingSystem":"Any","isAccessibleForFree":true,"description":"Reproducible country-level AI signal explorer with visible normalization, weights and data coverage."}</script>
 
 <div class="s5-landing s5-tool-page s5-global-ecosystem" data-s5-global-ai-ecosystem data-locale="en">
-<section class="s5-page-intro"><div class="s5-eyebrow">Tools · Data · 18</div><h1>Compare AI ecosystems without hiding which data and weights produce the ranking.</h1><p>Choose the signals you want to compare, change their weights, and see which countries remain comparable. Missing observations exclude a country from that scenario: they are never converted to zero or silently compensated for.</p></section>
+<section class="s5-page-intro"><div class="s5-eyebrow">Tools · Data · 18</div><h1>Global AI Ecosystem Explorer: compare countries with transparent data and weights.</h1><p>A national AI ecosystem combines the capital, companies, infrastructure, model development, talent and policy capacity that support AI development and deployment. Choose the signals you want to compare, change their weights, and see which countries remain comparable. Missing observations exclude a country from that scenario: they are never converted to zero or silently compensated for.</p></section>
 <div class="s5-tool-summary-strip"><div><small>Normalization</small><strong>0–100 per scenario</strong></div><div><small>Weights</small><strong>editable</strong></div><div><small>Missing data</small><strong>explicit exclusion</strong></div><div><small>Country records</small><strong>28</strong></div></div>
 
 <div class="s5-tool-workbench">
