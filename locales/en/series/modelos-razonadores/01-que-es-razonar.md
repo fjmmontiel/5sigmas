@@ -1,5 +1,6 @@
 ---
 title: "What it means for an LLM to reason"
+seo_title: "What it means for an LLM to reason"
 description: "What reasoning means for a language model, what o1 and DeepSeek R1 added, and why evaluating reasoning requires looking at steps, cost and failure modes."
 date: 2026-04-08
 date_modified: 2026-08-24
