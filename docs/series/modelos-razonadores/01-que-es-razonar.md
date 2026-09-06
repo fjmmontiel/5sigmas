@@ -1,5 +1,6 @@
 ---
 title: "Qué significa razonar en un LLM"
+seo_title: "Qué significa razonar en un LLM"
 description: "Qué significa razonar para un modelo de lenguaje, qué aportan o1 y DeepSeek R1, y por qué evaluar razonamiento exige mirar pasos, coste y fallos."
 date: 2026-04-08
 date_modified: 2026-08-24
