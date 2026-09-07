@@ -260,7 +260,8 @@ series/agentes-ia/02-anatomia-de-un-agente.md:
 series/agentes-ia/03-como-evaluar-un-agente.md:
   video: 03-como-evaluar-un-agente.mp4
   video_poster: 03-como-evaluar-un-agente.jpg
-  video_title: How to evaluate an AI agent
+  video_title: "Tutorial: how to evaluate an AI agent"
+  video_summary: "A practical tutorial for evaluating the agent's whole task: outcome, trajectory, permissions, cost, recovery, and abstention. A correct final answer is not enough."
   video_duration: PT32S
 
 series/agentes-ia/04-seguridad-agentes.md:
