@@ -49,7 +49,7 @@ Esto hace que full cascade sea especialmente útil cuando importan:
 - Un TTS concreto por identidad de voz o pronunciación.
 - La inspección textual de entradas, tool calls y respuestas.
 - La posibilidad de optimizar cada componente por separado.
-- Un comportamiento predecible ante fallos parciales.
+- La capacidad de aislar fallos y decidir qué componente reintentar, cancelar o sustituir.
 
 El coste de esa modularidad es coordinación. El STT puede seguir revisando una hipótesis mientras el LLM ya genera; el TTS puede tener audio en cola cuando el usuario interrumpe; una tool puede continuar ejecutándose después de cancelar la respuesta hablada. Por eso la latencia percibida no es sólo la suma de tres modelos.
 
@@ -139,21 +139,23 @@ La consecuencia práctica es que **modalidad e interacción deben evaluarse por 
 
 La última fila es la que evita la confusión más común: **S2S y full-duplex no son sinónimos**.
 
-## Qué arquitectura protege qué propiedad
+La tabla resume **tendencias de diseño**, no garantías de comportamiento. Un proveedor puede añadir transcripciones, control de voz o mejores mecanismos de interrupción a cualquiera de estas familias. La decisión debe validarse sobre el modelo, transporte, TTS y runtime concretos que vayan a operar el producto.
+
+## Qué propiedad favorece cada arquitectura
 
 No hay una ganadora universal. La decisión útil empieza por preguntar qué propiedad del producto no queremos degradar.
 
 {{ include_html("snippets/articulos-tecnicos/voice-arch-decision.html") }}
 
-### Full cascade protege modularidad y auditabilidad
+### Full cascade favorece modularidad y auditabilidad
 
 Es una buena base cuando la transcripción debe ser un artefacto de primera clase, la voz necesita un TTS específico, el equipo quiere cambiar proveedores por etapa o los controles operativos se expresan mejor sobre texto.
 
-### Audio-native + TTS protege comprensión acústica y control de voz
+### Audio-native + TTS favorece comprensión acústica y control de voz
 
 Tiene sentido cuando queremos que el modelo escuche la señal original pero seguimos necesitando una voz externa, pronunciaciones controladas o una salida textual explícita antes de hablar.
 
-### Speech-to-speech protege continuidad acústica y timing
+### Speech-to-speech reduce fronteras y favorece continuidad acústica
 
 Es una base fuerte cuando el ritmo, las interrupciones y la expresividad pesan más que la capacidad de sustituir cada etapa de forma independiente. A cambio, obliga a instrumentar mejor qué ocurrió dentro de la sesión y qué escuchó realmente el usuario.
 
