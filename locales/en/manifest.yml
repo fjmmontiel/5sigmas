@@ -10,6 +10,7 @@ published_routes:
   - proximamente.md
   - visuales/index.md
   - series/index.md
+  - series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.md
   - series/fundamentos-ia-iag/00_presentacion_serie.md
   - series/fundamentos-ia-iag/01-que-es-ia.md
   - series/fundamentos-ia-iag/02-que-es-ia-generativa.md
