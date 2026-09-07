@@ -45,11 +45,11 @@ La ventaja principal no es que sea sencillo. En producción puede ser una máqui
 
 Esto hace que full cascade sea especialmente útil cuando importan:
 
-- la elección independiente de proveedores por idioma o mercado;
-- un TTS concreto por identidad de voz o pronunciación;
-- la inspección textual de entradas, tool calls y respuestas;
-- la posibilidad de optimizar cada componente por separado;
-- un comportamiento predecible ante fallos parciales.
+- La elección independiente de proveedores por idioma o mercado.
+- Un TTS concreto por identidad de voz o pronunciación.
+- La inspección textual de entradas, tool calls y respuestas.
+- La posibilidad de optimizar cada componente por separado.
+- Un comportamiento predecible ante fallos parciales.
 
 El coste de esa modularidad es coordinación. El STT puede seguir revisando una hipótesis mientras el LLM ya genera; el TTS puede tener audio en cola cuando el usuario interrumpe; una tool puede continuar ejecutándose después de cancelar la respuesta hablada. Por eso la latencia percibida no es sólo la suma de tres modelos.
 
@@ -123,6 +123,8 @@ usuario habla → espera → agente habla → espera → usuario habla
 
 Un sistema full-duplex puede mantener actividad en ambas direcciones y decidir continuamente si debe escuchar, responder, pausar, interrumpir o producir un backchannel. GPT-Live, por ejemplo, se describe explícitamente como una arquitectura full-duplex que procesa entrada mientras genera salida y toma decisiones de interacción varias veces por segundo.[^gpt-live]
 
+La distinción no depende de una sola implementación comercial. Moshi modela en streams paralelos el habla del usuario y la del asistente para representar solapamientos, interrupciones e interjecciones sin depender de una segmentación explícita en turnos.[^moshi]
+
 {{ include_html("snippets/articulos-tecnicos/voice-arch-duplex.html") }}
 
 La consecuencia práctica es que **modalidad e interacción deben evaluarse por separado**:
@@ -161,13 +163,13 @@ Antes de elegir arquitectura, prepara el mismo conjunto de conversaciones y ejec
 
 Incluye al menos:
 
-- usuarios que se interrumpen y se corrigen;
-- ruido, acentos y velocidad de habla variable;
-- nombres propios, números y códigos alfanuméricos;
-- tools rápidas y tools lentas;
-- respuestas que deben cancelarse a mitad de reproducción;
-- errores parciales de STT, modelo, TTS o red;
-- conversaciones suficientemente largas para observar acumulación de estado.
+- Usuarios que se interrumpen y se corrigen.
+- Ruido, acentos y velocidad de habla variable.
+- Nombres propios, números y códigos alfanuméricos.
+- Tools rápidas y tools lentas.
+- Respuestas que deben cancelarse a mitad de reproducción.
+- Errores parciales de STT, modelo, TTS o red.
+- Conversaciones suficientemente largas para observar acumulación de estado.
 
 Después mide propiedades distintas, no una sola latencia media:
 
@@ -203,3 +205,4 @@ La [nota técnica sobre arquitecturas de agentes de voz](/articulos-tecnicos/voi
 [^gemini-live]: Google, [Get started with Gemini Live API](https://ai.google.dev/gemini-api/docs/live-api/get-started-sdk). Sesiones persistentes, entrada de audio y salida de audio nativa en tiempo real.
 [^gemini-tools]: Google, [Tool use with Live API](https://ai.google.dev/gemini-api/docs/live-api/tools). Contrato de function calling y devolución explícita de resultados a la sesión.
 [^gpt-live]: OpenAI, [Introducing GPT-Live](https://openai.com/index/introducing-gpt-live/), 8 de julio de 2026. Arquitectura full-duplex y separación entre interacción continua y trabajo más profundo.
+[^moshi]: Défossez et al. (2024), [Moshi: a speech-text foundation model for real-time dialogue](https://arxiv.org/abs/2410.00037). Diálogo hablado full-duplex con streams paralelos para usuario y asistente y sin segmentación explícita en turnos.
