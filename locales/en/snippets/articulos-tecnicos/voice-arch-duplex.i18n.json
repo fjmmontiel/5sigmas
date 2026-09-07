@@ -1,6 +1,6 @@
 {
   "source": "snippets/articulos-tecnicos/voice-arch-duplex.html",
-  "source_blob_sha": "6913579315792777fca4a452c28cd548d91c8e9d",
+  "source_blob_sha": "2ac80611caafcdc4b29f9d900091c1899a1f0a64",
   "replacements": {
     "Solapamiento full duplex entre usuario y agente": "Full-duplex overlap between user and agent",
     "Escuchar mientras habla.": "Listen while speaking.",
