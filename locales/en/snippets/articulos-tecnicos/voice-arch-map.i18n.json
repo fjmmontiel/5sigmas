@@ -1,22 +1,25 @@
 {
   "source": "snippets/articulos-tecnicos/voice-arch-map.html",
-  "source_blob_sha": "54fc048651397e7bed1e39e7b99ad230e85d7d79",
+  "source_blob_sha": "e7e03cae1876c05a3568d5eb590c0c32da216331",
   "replacements": {
-    "Comparación de las tres arquitecturas de agentes de voz": "Comparison of the three voice-agent architectures",
+    "Comparación de tres fronteras de modalidad en agentes de voz": "Comparison of three modality boundaries in voice agents",
     "Mapa": "Map",
     "¿Dónde colocas la frontera de texto?": "Where do you place the text boundary?",
-    "Ese corte cambia todo.": "That boundary changes everything.",
+    "La frontera cambia qué puedes observar, sustituir y preservar.": "The boundary changes what you can observe, replace, and preserve.",
+    "Modelo audio-native": "Audio-native model",
     "Texto": "Text",
-    "El texto separa comprensión y voz.": "Text separates understanding from voice.",
-    "El audio entra nativo. La voz sigue fuera.": "Audio enters natively. The voice stays external.",
-    "La representación acústica cruza todo el turno.": "The acoustic representation spans the whole turn."
+    "El texto separa STT, modelo y voz.": "Text separates STT, model, and voice.",
+    "El audio entra al modelo. La voz sigue detrás de texto.": "Audio enters the model directly. Voice still sits behind text.",
+    "El camino acústico no exige una frontera textual intermedia.": "The acoustic path does not require an intermediate text boundary."
   },
   "forbidden_output_tokens": [
-    "Comparación de las tres arquitecturas",
+    "Comparación de tres fronteras",
     "¿Dónde colocas la frontera de texto?",
-    "Ese corte cambia todo.",
-    "El texto separa comprensión",
-    "El audio entra nativo",
-    "La representación acústica"
+    "La frontera cambia qué puedes observar",
+    "Modelo audio-native",
+    "Texto",
+    "El texto separa STT",
+    "El audio entra al modelo",
+    "El camino acústico no exige"
   ]
 }
