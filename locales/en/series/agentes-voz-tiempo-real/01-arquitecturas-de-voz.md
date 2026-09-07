@@ -2,7 +2,7 @@
 title: "Voice architectures: where the text boundary lives"
 description: "Full cascade, audio-native with external TTS, speech-to-speech, and full-duplex are not four equivalent labels. This chapter separates modality, interaction, and orchestration so the architecture can be chosen against observable constraints."
 date: 2026-09-07
-date_modified: 2026-09-07
+date_modified: 2026-09-08
 keywords: "voice agent architectures, full cascade, half cascade, speech to speech, full duplex, STT LLM TTS, realtime voice"
 tags:
   - AI
@@ -69,7 +69,7 @@ The [voice-agent latency budget explorer](/en/tools/voice-latency-budget/) turns
 
 ### 2. Audio-native input with text output + external TTS
 
-There is no universal definition of *half cascade*. In 5sigmas, the term is only shorthand for this specific contract:
+*Half-cascade* is not a formal standard, but the term is now used in production frameworks. LiveKit, for example, defines a *half-cascade* as a realtime model that understands speech and returns text, paired with a separate TTS for output.[^livekit-pipelines] This series uses the term in exactly that sense:
 
 ```text
 user audio
@@ -191,7 +191,7 @@ The goal is not to prove that one architecture is newer. It is to determine **wh
 ## What to remember
 
 - Full cascade, audio-native + TTS, and speech-to-speech describe modality boundaries.
-- *Half cascade* is not a standard term; here it means the specific audio-in → text-out → TTS contract defined above.
+- *Half-cascade* is not a formal standard; here it uses the operational meaning defined above: audio-in → text-out → TTS.
 - Speech-to-speech does not imply full-duplex.
 - Full-duplex describes temporal overlap and interaction control, not how many models are in the stack.
 - Removing modality boundaries does not remove tools, state, permissions, traces, or recovery logic.
@@ -202,6 +202,7 @@ The deeper [voice-agent architecture engineering note](/en/articulos-tecnicos/vo
 ## References
 
 [^livekit-voice]: LiveKit, [Voice AI quickstart](https://docs.livekit.io/agents/start/voice-ai/). Documents STT–LLM–TTS pipelines and direct realtime models as first-class alternatives.
+[^livekit-pipelines]: LiveKit, [Pipeline types](https://docs.livekit.io/agents/models/pipelines/). Defines STT–LLM–TTS, realtime, and *half-cascade*; the latter uses a realtime model for understanding and a separate TTS for output.
 [^openai-realtime-model]: OpenAI, [GPT-Realtime model](https://developers.openai.com/api/docs/models/gpt-realtime). Text/audio modalities, Realtime transports, and function calling.
 [^openai-realtime-intro]: OpenAI, [Introducing the Realtime API](https://openai.com/index/introducing-the-realtime-api/). Describes the ASR → text model → TTS pipeline, loss of acoustic cues, and direct audio streaming.
 [^gemini-live]: Google, [Get started with Gemini Live API](https://ai.google.dev/gemini-api/docs/live-api/get-started-sdk). Persistent sessions with realtime audio input and native audio output.
