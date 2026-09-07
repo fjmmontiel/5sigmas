@@ -45,11 +45,11 @@ Its main advantage is not simplicity. A production cascade can become a complica
 
 That makes a full cascade particularly useful when the product needs:
 
-- independent provider choice by language or market;
-- a specific TTS for voice identity or pronunciation control;
-- textual inspection of inputs, tool calls, and responses;
-- per-stage optimization and replacement;
-- predictable handling of partial component failures.
+- Independent provider choice by language or market.
+- A specific TTS for voice identity or pronunciation control.
+- Textual inspection of inputs, tool calls, and responses.
+- Per-stage optimization and replacement.
+- Predictable handling of partial component failures.
 
 The cost of that modularity is coordination. The STT may still be revising a hypothesis while the LLM has started generating; the TTS may have audio queued when the user interrupts; a tool may continue running after the spoken response has been cancelled. Perceived latency is therefore not just the sum of three model calls.
 
@@ -123,6 +123,8 @@ user speaks → wait → agent speaks → wait → user speaks
 
 A full-duplex system can keep both directions active and continuously decide whether to listen, respond, pause, interrupt, or produce a backchannel. GPT-Live, for example, is explicitly described as a full-duplex architecture that processes input while generating output and makes interaction decisions many times per second.[^gpt-live]
 
+This distinction is not limited to one commercial implementation. Moshi models the user's speech and the assistant's speech as parallel streams, specifically to handle overlapping speech, interruptions, and interjections without relying on explicit turn segmentation.[^moshi]
+
 {{ include_html("snippets/articulos-tecnicos/voice-arch-duplex.html") }}
 
 The practical consequence is that **modality and interaction should be evaluated separately**:
@@ -161,13 +163,13 @@ Before choosing an architecture, prepare the same set of conversations and run e
 
 Include at least:
 
-- users who interrupt themselves and correct information mid-turn;
-- noise, accents, and different speaking rates;
-- names, numbers, and alphanumeric codes;
-- fast tools and slow tools;
-- responses that must be cancelled during playback;
-- partial failures in STT, model, TTS, or network transport;
-- sessions long enough to expose state-management problems.
+- Users who interrupt themselves and correct information mid-turn.
+- Noise, accents, and different speaking rates.
+- Names, numbers, and alphanumeric codes.
+- Fast tools and slow tools.
+- Responses that must be cancelled during playback.
+- Partial failures in STT, model, TTS, or network transport.
+- Sessions long enough to expose state-management problems.
 
 Then measure separate properties rather than one average latency:
 
@@ -203,3 +205,4 @@ The deeper [voice-agent architecture engineering note](/en/articulos-tecnicos/vo
 [^gemini-live]: Google, [Get started with Gemini Live API](https://ai.google.dev/gemini-api/docs/live-api/get-started-sdk). Persistent sessions with realtime audio input and native audio output.
 [^gemini-tools]: Google, [Tool use with Live API](https://ai.google.dev/gemini-api/docs/live-api/tools). Function-calling contract and explicit tool-result delivery back into the session.
 [^gpt-live]: OpenAI, [Introducing GPT-Live](https://openai.com/index/introducing-gpt-live/), July 8, 2026. Full-duplex architecture and separation between continuous interaction and deeper work.
+[^moshi]: Défossez et al. (2024), [Moshi: a speech-text foundation model for real-time dialogue](https://arxiv.org/abs/2410.00037). Full-duplex spoken dialogue with parallel user/assistant streams and no explicit turn segmentation.
