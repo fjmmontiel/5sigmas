@@ -49,7 +49,7 @@ That makes a full cascade particularly useful when the product needs:
 - A specific TTS for voice identity or pronunciation control.
 - Textual inspection of inputs, tool calls, and responses.
 - Per-stage optimization and replacement.
-- Predictable handling of partial component failures.
+- The ability to isolate failures and decide which component to retry, cancel, or replace.
 
 The cost of that modularity is coordination. The STT may still be revising a hypothesis while the LLM has started generating; the TTS may have audio queued when the user interrupts; a tool may continue running after the spoken response has been cancelled. Perceived latency is therefore not just the sum of three model calls.
 
@@ -139,21 +139,23 @@ The practical consequence is that **modality and interaction should be evaluated
 
 The last row removes the most common category error: **S2S and full-duplex are not synonyms**.
 
-## What each architecture is trying to protect
+The table summarizes **design tendencies**, not behavioral guarantees. A provider can add transcripts, voice controls, or better interruption handling to any of these families. The decision still has to be validated on the specific model, transport, TTS, and runtime that will operate the product.
+
+## What each architecture tends to favor
 
 There is no universal winner. A useful architecture decision starts by asking which product property you are least willing to degrade.
 
 {{ include_html("snippets/articulos-tecnicos/voice-arch-decision.html") }}
 
-### Full cascade protects modularity and auditability
+### Full cascade favors modularity and auditability
 
 It is a strong baseline when the transcript must be a first-class artifact, the product depends on a specific TTS, providers need to be interchangeable by stage, or operational controls are easiest to express on text.
 
-### Audio-native + TTS protects acoustic understanding and voice control
+### Audio-native + TTS favors acoustic understanding and voice control
 
 It fits when the model should hear the original signal but the product still needs an external voice, pronunciation controls, or an explicit textual boundary before speech is produced.
 
-### Speech-to-speech protects acoustic continuity and timing
+### Speech-to-speech reduces boundaries and favors acoustic continuity
 
 It is a strong starting point when conversational rhythm, interruptions, and expressiveness matter more than independent replacement of every stage. In return, the system has to instrument the session more carefully and keep track of what the user actually heard.
 
