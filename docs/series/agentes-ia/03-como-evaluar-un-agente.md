@@ -11,6 +11,8 @@ tags:
   - Observabilidad
 video: "03-como-evaluar-un-agente.mp4"
 video_duration: "PT60S"
+video_title: "Tutorial: cómo evaluar un agente de IA"
+video_summary: "Tutorial práctico para evaluar la tarea completa de un agente: resultado, trayectoria, permisos, coste, recuperación y abstención. Una respuesta final correcta no basta."
 ---
 
 # Capítulo 3 — Cómo evaluar un agente de IA
