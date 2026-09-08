@@ -5,7 +5,7 @@ scope_manifest: locales/en/manifest.yml
 certified_routes:
   - route: series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.md
     reviewed_on: 2026-09-08
-    spanish_blob_sha: e21d0eea3c9c8a4e96b0414f4168c164c5207c92
-    english_blob_sha: 9ce2f618108ea521d7af1bf3c5459106fd4e2edb
+    spanish_blob_sha: fc8d1fc6f580392640c1db8912f85fdbd02eae8f
+    english_blob_sha: ff051b81fa49e3d411a8332b0f8dbddea1460a5d
     review_scope: prose, headings, lists, terminology, technical meaning, references, architecture semantics, visual hooks
-    note: Side-by-side native-English editorial review after grounding half-cascade terminology in current LiveKit pipeline documentation; preserves the distinction between modality boundaries and duplex interaction, keeps evaluation language scoped, and introduces no translationese, mechanical list punctuation, or loss of technical caveats.
+    note: Side-by-side native-English editorial review after grounding half-cascade terminology and its provider-dependent text-only response requirement in current LiveKit pipeline documentation; preserves the distinction between modality boundaries and duplex interaction, keeps evaluation language scoped, and introduces no translationese, mechanical list punctuation, or loss of technical caveats.
