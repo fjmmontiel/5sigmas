@@ -73,6 +73,12 @@ check(esArticle.includes('Half-cascade* no es un estándar formal'), 'Spanish ar
 check(enArticle.includes('Half-cascade* is not a formal standard'), 'English article: half-cascade terminology is no longer explicitly scoped');
 check(esArticle.includes('LiveKit, [Pipeline types]'), 'Spanish article: missing primary LiveKit pipeline reference');
 check(enArticle.includes('LiveKit, [Pipeline types]'), 'English article: missing primary LiveKit pipeline reference');
+check(esArticle.includes('LiveKit, [Sequential pipeline architecture for voice agents]'), 'Spanish article: missing primary streaming-pipeline reference');
+check(enArticle.includes('LiveKit, [Sequential pipeline architecture for voice agents]'), 'English article: missing primary streaming-pipeline reference');
+check(esArticle.includes('camino crítico'), 'Spanish article: latency section no longer teaches critical-path reasoning');
+check(enArticle.includes('critical path'), 'English article: latency section no longer teaches critical-path reasoning');
+check(!esArticle.includes('T_first_audio ≈'), 'Spanish article: legacy naive additive first-audio formula remains');
+check(!enArticle.includes('T_first_audio ≈'), 'English article: legacy naive additive first-audio formula remains');
 check(mkdocsEs.includes('- Agentes de voz en tiempo real:\n          - Arquitecturas de voz: series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.md'), 'Spanish nav: realtime voice series chapter 1 is missing from canonical reader navigation');
 check(mkdocsEn.includes('- Realtime Voice Agents:\n          - Voice architectures: series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.md'), 'English nav: realtime voice series chapter 1 is missing from canonical reader navigation');
 
