@@ -90,6 +90,10 @@ check(esArticle.includes('## Segunda decisión: cuánto runtime quieres poseer')
 check(enArticle.includes('## A second decision: how much runtime do you want to own?'), 'English article: missing runtime ownership decision section');
 check(esArticle.includes('| Criterio | LiveKit Agents | Pipecat | Python vanilla/thin |'), 'Spanish article: missing compact LiveKit/Pipecat/vanilla runtime matrix');
 check(enArticle.includes('| Criterion | LiveKit Agents | Pipecat | Thin / vanilla Python |'), 'English article: missing compact LiveKit/Pipecat/vanilla runtime matrix');
+check(esArticle.includes('vanilla significa que no delegas la orquestación en un agent framework de este tipo; no significa que implementes WebRTC o SIP desde cero'), 'Spanish article: thin/vanilla is conflated with owning the WebRTC/SIP media stack');
+check(enArticle.includes('vanilla means you are not delegating orchestration to this kind of agent framework; it does not mean implementing WebRTC or SIP from scratch'), 'English article: thin/vanilla is conflated with owning the WebRTC/SIP media stack');
+check(esArticle.includes('Twilio Media Streams, por ejemplo, entrega audio crudo de la llamada a tu servidor'), 'Spanish article: missing carrier-managed PSTN Media Streams case');
+check(enArticle.includes('Twilio Media Streams, for example, sends raw call audio to your server'), 'English article: missing carrier-managed PSTN Media Streams case');
 check(esArticle.includes('**Recovery no equivale a continuidad de estado.**'), 'Spanish article: missing recovery-vs-state-continuity distinction');
 check(enArticle.includes('**Recovery is not the same as state continuity.**'), 'English article: missing recovery-vs-state-continuity distinction');
 check(esArticle.includes('**La seguridad también se reparte por capas.**'), 'Spanish article: missing layered security ownership');
@@ -123,7 +127,10 @@ for (const ref of [
   '[^pipecat-websocket-reconnect]:',
   '[^pipecat-service-events]:',
   '[^pipecat-websocket-auth]:',
+  '[^openai-realtime-transport]:',
   '[^openai-webrtc-scale]:',
+  '[^twilio-media-streams]:',
+  '[^twilio-media-messages]:',
 ]) {
   check(esArticle.includes(ref), `Spanish article: missing runtime primary reference ${ref}`);
   check(enArticle.includes(ref), `English article: missing runtime primary reference ${ref}`);
@@ -162,6 +169,8 @@ const cases = [
       'Escuchar mientras habla.',
       'Segunda decisión: cuánto runtime quieres poseer',
       'Matriz de decisión del runtime',
+      'vanilla significa que no delegas la orquestación en un agent framework',
+      'Twilio Media Streams, por ejemplo, entrega audio crudo de la llamada a tu servidor',
       'Recovery no equivale a continuidad de estado.',
       'La seguridad también se reparte por capas.',
       'Testing/evals es otra superficie de ownership.',
@@ -183,6 +192,8 @@ const cases = [
       'Listen while speaking.',
       'A second decision: how much runtime do you want to own?',
       'Runtime decision matrix',
+      'vanilla means you are not delegating orchestration to this kind of agent framework',
+      'Twilio Media Streams, for example, sends raw call audio to your server',
       'Recovery is not the same as state continuity.',
       'Security is layered as well.',
       'Testing and evals are another ownership surface.',
@@ -278,4 +289,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Voice architecture chapter 1 QA passed: ES/EN semantics, canonical mirrors, architecture-vs-duplex distinction, current-model freshness, runtime-ownership decision track including recovery/security/testing ownership, desktop/mobile geometry, interaction states, reader navigation, language integrity and runtime behavior are valid.');
+console.log('Voice architecture chapter 1 QA passed: ES/EN semantics, canonical mirrors, architecture-vs-duplex distinction, current-model freshness, runtime-ownership and media-endpoint ownership decisions including recovery/security/testing ownership, desktop/mobile geometry, interaction states, reader navigation, language integrity and runtime behavior are valid.');
