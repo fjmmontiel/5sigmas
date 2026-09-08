@@ -47,6 +47,7 @@ const [esArticle, enArticle] = await Promise.all([
   fs.readFile(esArticlePath, 'utf8'),
   fs.readFile(enArticlePath, 'utf8'),
 ]);
+const sourceById = new Map();
 
 for (const visual of visuals) {
   const [source, mirror, translationRaw] = await Promise.all([
@@ -54,6 +55,7 @@ for (const visual of visuals) {
     fs.readFile(path.resolve(visual.mirror), 'utf8'),
     fs.readFile(path.resolve(visual.translation), 'utf8'),
   ]);
+  sourceById.set(visual.id, source);
   const translation = JSON.parse(translationRaw);
   const canonicalSource = visual.source.replace(/^docs\//, '');
   check(esArticle.includes(visual.include), `Spanish article: missing ${visual.id} visual include`);
@@ -70,15 +72,21 @@ check(enArticle.includes('Half-cascade* is not a formal standard'), 'English art
 check(esArticle.includes('LiveKit, [Pipeline types]'), 'Spanish article: missing primary LiveKit pipeline reference');
 check(enArticle.includes('LiveKit, [Pipeline types]'), 'English article: missing primary LiveKit pipeline reference');
 
-const forbiddenSourceFragments = [
+const forbiddenVisualFragments = [
   'Speech-to-speech → ritmo y full-duplex',
   'S2S ↔',
   '<span class="s5v__kicker">Speech-to-speech</span><h3>Escuchar mientras habla.',
 ];
-for (const fragment of forbiddenSourceFragments) {
-  check(!esArticle.includes(fragment), `Spanish article: legacy architecture conflation remains: ${fragment}`);
-  check(!enArticle.includes(fragment), `English article: legacy architecture conflation remains: ${fragment}`);
+for (const fragment of forbiddenVisualFragments) {
+  for (const [id, source] of sourceById) {
+    check(!source.includes(fragment), `${id}: legacy architecture conflation remains in canonical visual source: ${fragment}`);
+  }
 }
+
+check(sourceById.get('map')?.includes('Audio-native + TTS'), 'map: missing explicit audio-native + TTS architecture label');
+check(sourceById.get('map')?.includes('<span class="is-model">S2S</span><i>→</i><span class="is-audio">Audio</span>'), 'map: S2S panel no longer encodes an audio → model → audio modality path');
+check(sourceById.get('duplex')?.includes('<span class="s5v__kicker">Full-duplex</span>'), 'duplex: kicker must identify the interaction axis as Full-duplex');
+check(sourceById.get('decision')?.includes('Speech-to-speech → continuidad acústica'), 'decision: S2S criterion must describe acoustic continuity rather than full-duplex');
 
 const browser = await chromium.launch({ headless: true });
 const cases = [
