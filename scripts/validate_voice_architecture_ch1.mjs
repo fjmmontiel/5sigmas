@@ -79,6 +79,12 @@ check(esArticle.includes('camino crítico'), 'Spanish article: latency section n
 check(enArticle.includes('critical path'), 'English article: latency section no longer teaches critical-path reasoning');
 check(!esArticle.includes('T_first_audio ≈'), 'Spanish article: legacy naive additive first-audio formula remains');
 check(!enArticle.includes('T_first_audio ≈'), 'English article: legacy naive additive first-audio formula remains');
+check(esArticle.includes('`gpt-realtime-2.1`'), 'Spanish article: current OpenAI realtime example is missing');
+check(enArticle.includes('`gpt-realtime-2.1`'), 'English article: current OpenAI realtime example is missing');
+check(esArticle.includes('[^openai-realtime-deprecation]:'), 'Spanish article: missing OpenAI realtime deprecation reference');
+check(enArticle.includes('[^openai-realtime-deprecation]:'), 'English article: missing OpenAI realtime deprecation reference');
+check(!esArticle.includes('`gpt-realtime`, por ejemplo'), 'Spanish article: deprecated gpt-realtime remains as a current example');
+check(!enArticle.includes('`gpt-realtime`, for example'), 'English article: deprecated gpt-realtime remains as a current example');
 
 check(esArticle.includes('## Segunda decisión: cuánto runtime quieres poseer'), 'Spanish article: missing runtime ownership decision section');
 check(enArticle.includes('## A second decision: how much runtime do you want to own?'), 'English article: missing runtime ownership decision section');
@@ -272,4 +278,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Voice architecture chapter 1 QA passed: ES/EN semantics, canonical mirrors, architecture-vs-duplex distinction, runtime-ownership decision track including recovery/security/testing ownership, desktop/mobile geometry, interaction states, reader navigation, language integrity and runtime behavior are valid.');
+console.log('Voice architecture chapter 1 QA passed: ES/EN semantics, canonical mirrors, architecture-vs-duplex distinction, current-model freshness, runtime-ownership decision track including recovery/security/testing ownership, desktop/mobile geometry, interaction states, reader navigation, language integrity and runtime behavior are valid.');
