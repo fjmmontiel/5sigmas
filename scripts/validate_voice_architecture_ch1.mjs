@@ -79,6 +79,26 @@ check(esArticle.includes('camino crítico'), 'Spanish article: latency section n
 check(enArticle.includes('critical path'), 'English article: latency section no longer teaches critical-path reasoning');
 check(!esArticle.includes('T_first_audio ≈'), 'Spanish article: legacy naive additive first-audio formula remains');
 check(!enArticle.includes('T_first_audio ≈'), 'English article: legacy naive additive first-audio formula remains');
+
+check(esArticle.includes('## Segunda decisión: cuánto runtime quieres poseer'), 'Spanish article: missing runtime ownership decision section');
+check(enArticle.includes('## A second decision: how much runtime do you want to own?'), 'English article: missing runtime ownership decision section');
+check(esArticle.includes('| Criterio | LiveKit Agents | Pipecat | Python vanilla/thin |'), 'Spanish article: missing compact LiveKit/Pipecat/vanilla runtime matrix');
+check(enArticle.includes('| Criterion | LiveKit Agents | Pipecat | Thin / vanilla Python |'), 'English article: missing compact LiveKit/Pipecat/vanilla runtime matrix');
+check(esArticle.includes('**1. Voice assistant en browser o móvil.**'), 'Spanish article: missing browser/mobile decision case');
+check(enArticle.includes('**1. Browser or mobile voice assistant.**'), 'English article: missing browser/mobile decision case');
+check(esArticle.includes('**2. Agente PSTN.**'), 'Spanish article: missing PSTN decision case');
+check(enArticle.includes('**2. PSTN agent.**'), 'English article: missing PSTN decision case');
+check(esArticle.includes('**3. Pipeline experimental o custom de bajo nivel.**'), 'Spanish article: missing low-level custom decision case');
+check(enArticle.includes('**3. Experimental or low-level custom pipeline.**'), 'English article: missing low-level custom decision case');
+check(esArticle.includes('Pipecat puede ejecutar su pipeline sobre `LiveKitTransport`'), 'Spanish article: missing explicit Pipecat/LiveKit hybrid');
+check(enArticle.includes('Pipecat can run its pipeline on `LiveKitTransport`'), 'English article: missing explicit Pipecat/LiveKit hybrid');
+check(esArticle.includes('Sin un benchmark controlado con el mismo hardware, red, provider, modelo, audio path y carga'), 'Spanish article: missing controlled-overhead benchmark caveat');
+check(enArticle.includes('Without a controlled benchmark on the same hardware, network, provider, model, audio path, and load'), 'English article: missing controlled-overhead benchmark caveat');
+for (const ref of ['[^livekit-agents]:', '[^livekit-self-hosting]:', '[^pipecat-pipeline]:', '[^pipecat-transports]:', '[^pipecat-turns]:', '[^pipecat-tools]:', '[^pipecat-metrics]:', '[^pipecat-livekit]:', '[^openai-webrtc-scale]:']) {
+  check(esArticle.includes(ref), `Spanish article: missing runtime primary reference ${ref}`);
+  check(enArticle.includes(ref), `English article: missing runtime primary reference ${ref}`);
+}
+
 check(mkdocsEs.includes('- Agentes de voz en tiempo real:\n          - Arquitecturas de voz: series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.md'), 'Spanish nav: realtime voice series chapter 1 is missing from canonical reader navigation');
 check(mkdocsEn.includes('- Realtime Voice Agents:\n          - Voice architectures: series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.md'), 'English nav: realtime voice series chapter 1 is missing from canonical reader navigation');
 
@@ -110,6 +130,11 @@ const cases = [
       '¿Dónde colocas la frontera de texto?',
       '¿Qué propiedad quieres proteger?',
       'Escuchar mientras habla.',
+      'Segunda decisión: cuánto runtime quieres poseer',
+      'Matriz de decisión del runtime',
+      'Voice assistant en browser o móvil.',
+      'Agente PSTN.',
+      'Pipeline experimental o custom de bajo nivel.',
     ],
     forbidden: [],
   },
@@ -123,6 +148,11 @@ const cases = [
       'Where do you place the text boundary?',
       'Which property do you want to protect?',
       'Listen while speaking.',
+      'A second decision: how much runtime do you want to own?',
+      'Runtime decision matrix',
+      'Browser or mobile voice assistant.',
+      'PSTN agent.',
+      'Experimental or low-level custom pipeline.',
     ],
     forbidden: [
       '¿Dónde colocas la frontera de texto?',
@@ -212,4 +242,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Voice architecture chapter 1 QA passed: ES/EN semantics, canonical mirrors, architecture-vs-duplex distinction, desktop/mobile geometry, interaction states, reader navigation, language integrity and runtime behavior are valid.');
+console.log('Voice architecture chapter 1 QA passed: ES/EN semantics, canonical mirrors, architecture-vs-duplex distinction, runtime-ownership decision track, desktop/mobile geometry, interaction states, reader navigation, language integrity and runtime behavior are valid.');
