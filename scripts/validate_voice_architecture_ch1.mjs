@@ -110,12 +110,14 @@ check(esArticle.includes('**Testing/evals es otra superficie de ownership.**'), 
 check(enArticle.includes('**Testing and evals are another ownership surface.**'), 'English article: missing testing/eval ownership comparison');
 check(esArticle.includes('Pipecat incluye **Pipecat Evals**'), 'Spanish article: missing current built-in Pipecat Evals capability');
 check(enArticle.includes('Pipecat includes **Pipecat Evals**'), 'English article: missing current built-in Pipecat Evals capability');
-check(esArticle.includes('simulaciones conversacionales text-only en LiveKit Cloud'), 'Spanish article: LiveKit simulations are overstated beyond their current text-only boundary');
-check(enArticle.includes('text-mode conversational simulations on LiveKit Cloud'), 'English article: LiveKit simulations are overstated beyond their current text-only boundary');
+check(esArticle.includes('simulaciones conversacionales en texto o audio en LiveKit Cloud'), 'Spanish article: missing current LiveKit text/audio simulation surface');
+check(enArticle.includes('text or audio conversational simulations on LiveKit Cloud'), 'English article: missing current LiveKit text/audio simulation surface');
+check(esArticle.includes('`lk agent simulate audio`'), 'Spanish article: missing current LiveKit audio-simulation CLI contract');
+check(enArticle.includes('`lk agent simulate audio`'), 'English article: missing current LiveKit audio-simulation CLI contract');
 check(esArticle.includes('no el transporte de producción'), 'Spanish article: Pipecat Evals does not distinguish eval transport from production transport');
 check(enArticle.includes('not the production transport'), 'English article: Pipecat Evals does not distinguish eval transport from production transport');
-check(!esArticle.includes('simulaciones end-to-end en LiveKit Cloud'), 'Spanish article: stale overbroad LiveKit simulation wording remains');
-check(!enArticle.includes('end-to-end simulations on LiveKit Cloud'), 'English article: stale overbroad LiveKit simulation wording remains');
+check(!esArticle.includes('simulaciones conversacionales text-only en LiveKit Cloud'), 'Spanish article: stale LiveKit text-only simulation statement remains');
+check(!enArticle.includes('text-mode conversational simulations on LiveKit Cloud'), 'English article: stale LiveKit text-only simulation statement remains');
 check(!esArticle.includes('el harness que convierte esa instrumentación en un conjunto reproducible de evals sigue siendo una decisión de la aplicación'), 'Spanish article: stale pre-Pipecat-Evals capability statement remains');
 check(!enArticle.includes('the harness that turns that instrumentation into a reproducible eval suite remains an application choice unless you adopt additional tooling'), 'English article: stale pre-Pipecat-Evals capability statement remains');
 check(esArticle.includes('developer velocity vs control'), 'Spanish article: missing developer-velocity/control trade-off');
@@ -155,6 +157,8 @@ for (const ref of [
   check(esArticle.includes(ref), `Spanish article: missing runtime primary reference ${ref}`);
   check(enArticle.includes(ref), `English article: missing runtime primary reference ${ref}`);
 }
+check(esArticle.includes('LiveKit, [Testing and evaluation]') && esArticle.includes('[Agent commands]'), 'Spanish article: missing current LiveKit testing/CLI primary references');
+check(enArticle.includes('LiveKit, [Testing and evaluation]') && enArticle.includes('[Agent commands]'), 'English article: missing current LiveKit testing/CLI primary references');
 
 check(mkdocsEs.includes('- Agentes de voz en tiempo real:\n          - Arquitecturas de voz: series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.md'), 'Spanish nav: realtime voice series chapter 1 is missing from canonical reader navigation');
 check(mkdocsEn.includes('- Realtime Voice Agents:\n          - Voice architectures: series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.md'), 'English nav: realtime voice series chapter 1 is missing from canonical reader navigation');
@@ -196,7 +200,8 @@ const cases = [
       'Recovery no equivale a continuidad de estado.',
       'La seguridad también se reparte por capas.',
       'Testing/evals es otra superficie de ownership.',
-      'simulaciones conversacionales text-only en LiveKit Cloud',
+      'simulaciones conversacionales en texto o audio en LiveKit Cloud',
+      'lk agent simulate audio',
       'no el transporte de producción',
       'Pipecat Evals',
       'Voice assistant en browser o móvil.',
@@ -224,7 +229,8 @@ const cases = [
       'Recovery is not the same as state continuity.',
       'Security is layered as well.',
       'Testing and evals are another ownership surface.',
-      'text-mode conversational simulations on LiveKit Cloud',
+      'text or audio conversational simulations on LiveKit Cloud',
+      'lk agent simulate audio',
       'not the production transport',
       'Pipecat Evals',
       'Browser or mobile voice assistant.',
@@ -319,4 +325,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Voice architecture chapter 1 QA passed: ES/EN semantics, canonical mirrors, architecture-vs-duplex distinction, current-model and text-only-modality freshness, runtime-ownership and media-endpoint ownership decisions including PSTN carrier codec/security/playback-accounting boundaries plus recovery/security and explicit testing/eval transport-coverage boundaries, desktop/mobile geometry, interaction states, reader navigation, language integrity and runtime behavior are valid.');
+console.log('Voice architecture chapter 1 QA passed: ES/EN semantics, canonical mirrors, architecture-vs-duplex distinction, current-model and text-only-modality freshness, runtime-ownership and media-endpoint ownership decisions including PSTN carrier codec/security/playback-accounting boundaries plus recovery/security and current LiveKit/Pipecat testing/eval transport-coverage boundaries, desktop/mobile geometry, interaction states, reader navigation, language integrity and runtime behavior are valid.');
