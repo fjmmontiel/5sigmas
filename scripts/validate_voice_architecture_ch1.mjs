@@ -104,6 +104,22 @@ check(esArticle.includes('no demuestra que la persona lo haya oído físicamente
 check(enArticle.includes('does not prove that the person physically heard the sample'), 'English article: Twilio mark is overstated as proof of human audibility');
 check(esArticle.includes('**Recovery no equivale a continuidad de estado.**'), 'Spanish article: missing recovery-vs-state-continuity distinction');
 check(enArticle.includes('**Recovery is not the same as state continuity.**'), 'English article: missing recovery-vs-state-continuity distinction');
+check(esArticle.includes('| Reliability / flow control |'), 'Spanish article: runtime matrix missing reliability/flow-control comparison');
+check(enArticle.includes('| Reliability / flow control |'), 'English article: runtime matrix missing reliability/flow-control comparison');
+check(esArticle.includes('`Agent Fallback Adapter`') && esArticle.includes('LiveKit Inference'), 'Spanish article: missing framework-vs-managed LiveKit fallback boundary');
+check(enArticle.includes('`Agent Fallback Adapter`') && enArticle.includes('LiveKit Inference'), 'English article: missing framework-vs-managed LiveKit fallback boundary');
+check(esArticle.includes('`ErrorEvent.recoverable`'), 'Spanish article: missing LiveKit recoverability semantics');
+check(enArticle.includes('`ErrorEvent.recoverable`'), 'English article: missing LiveKit recoverability semantics');
+check(esArticle.includes('`CancelFrame`, `ErrorFrame` upstream'), 'Spanish article: missing Pipecat cancellation/error-propagation primitives');
+check(enArticle.includes('`CancelFrame`, upstream `ErrorFrame`'), 'English article: missing Pipecat cancellation/error-propagation primitives');
+check(esArticle.includes('**Una cola no es backpressure por existir.**'), 'Spanish article: missing explicit queue-vs-backpressure rule');
+check(enArticle.includes('**A queue is not backpressure merely because it exists.**'), 'English article: missing explicit queue-vs-backpressure rule');
+check(esArticle.includes('bloquear, descartar, compactar/coalescer o degradar'), 'Spanish article: missing explicit full-queue policy choices');
+check(enArticle.includes('block, drop, coalesce, or degrade'), 'English article: missing explicit full-queue policy choices');
+check(esArticle.includes('TTS no cambia de provider una vez enviado audio') && esArticle.includes('LLM no reinicia por defecto después de emitir texto o tool calls'), 'Spanish article: missing partial-output retry guards');
+check(enArticle.includes('TTS does not switch providers once audio has been pushed') && enArticle.includes('LLM responses are not restarted by default after text or tool calls have streamed'), 'English article: missing partial-output retry guards');
+check(esArticle.includes('idempotencia de tools') && esArticle.includes('propagación de cancelación'), 'Spanish article: missing app-owned idempotency/cancellation contracts');
+check(enArticle.includes('tool idempotency') && enArticle.includes('cancellation propagation'), 'English article: missing app-owned idempotency/cancellation contracts');
 check(esArticle.includes('**La seguridad también se reparte por capas.**'), 'Spanish article: missing layered security ownership');
 check(enArticle.includes('**Security is layered as well.**'), 'English article: missing layered security ownership');
 check(esArticle.includes('**Testing/evals es otra superficie de ownership.**'), 'Spanish article: missing testing/eval ownership comparison');
@@ -159,7 +175,10 @@ for (const ref of [
   '[^livekit-billing]:',
   '[^livekit-tokens]:',
   '[^livekit-testing]:',
+  '[^livekit-fallback]:',
+  '[^livekit-errors]:',
   '[^pipecat-pipeline]:',
+  '[^pipecat-frame-processor]:',
   '[^pipecat-cascade-s2s]:',
   '[^pipecat-transports]:',
   '[^pipecat-turns]:',
@@ -184,6 +203,10 @@ for (const ref of [
 }
 check(esArticle.includes('LiveKit, [Testing and evaluation]') && esArticle.includes('[Agent commands]'), 'Spanish article: missing current LiveKit testing/CLI primary references');
 check(enArticle.includes('LiveKit, [Testing and evaluation]') && enArticle.includes('[Agent commands]'), 'English article: missing current LiveKit testing/CLI primary references');
+check(esArticle.includes('LiveKit, [Fallback strategies]') && esArticle.includes('[Events and error handling]'), 'Spanish article: missing LiveKit reliability primary references');
+check(enArticle.includes('LiveKit, [Fallback strategies]') && enArticle.includes('[Events and error handling]'), 'English article: missing LiveKit reliability primary references');
+check(esArticle.includes('Pipecat, [`FrameProcessor` source]'), 'Spanish article: missing Pipecat flow-control source reference');
+check(enArticle.includes('Pipecat, [`FrameProcessor` source]'), 'English article: missing Pipecat flow-control source reference');
 check(esArticle.includes('Pipecat, [Building With OpenAI Audio Models and APIs]'), 'Spanish article: missing first-party Pipecat cascade/S2S reference');
 check(enArticle.includes('Pipecat, [Building With OpenAI Audio Models and APIs]'), 'English article: missing first-party Pipecat cascade/S2S reference');
 
@@ -221,6 +244,12 @@ const cases = [
       'Segunda decisión: cuánto runtime quieres poseer',
       'Matriz de decisión del runtime',
       'Pipeline / modalidad',
+      'Reliability / flow control',
+      'Una cola no es backpressure por existir.',
+      'Agent Fallback Adapter',
+      'ErrorEvent.recoverable',
+      'CancelFrame',
+      'ErrorFrame',
       'vanilla significa que no delegas la orquestación en un agent framework',
       'Twilio Media Streams, por ejemplo, entrega audio de la llamada a tu servidor',
       'audio/x-mulaw',
@@ -255,6 +284,12 @@ const cases = [
       'A second decision: how much runtime do you want to own?',
       'Runtime decision matrix',
       'Pipeline / modality',
+      'Reliability / flow control',
+      'A queue is not backpressure merely because it exists.',
+      'Agent Fallback Adapter',
+      'ErrorEvent.recoverable',
+      'CancelFrame',
+      'ErrorFrame',
       'vanilla means you are not delegating orchestration to this kind of agent framework',
       'Twilio Media Streams, for example, sends call audio to your server',
       'audio/x-mulaw',
@@ -362,4 +397,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Voice architecture chapter 1 QA passed: ES/EN semantics, canonical mirrors, architecture-vs-duplex distinction, current-model and text-only-modality freshness, runtime/media ownership including pipeline/modality flexibility, provider-capability boundaries, proxy-evidence rejection, explicit total-cost ownership and open-source-vs-TCO boundaries, PSTN carrier codec/security/playback-accounting boundaries, recovery/security and current LiveKit/Pipecat testing/eval transport-coverage boundaries, desktop/mobile geometry, interaction states, reader navigation, language integrity and runtime behavior are valid.');
+console.log('Voice architecture chapter 1 QA passed: ES/EN semantics, canonical mirrors, architecture-vs-duplex distinction, current-model and text-only-modality freshness, runtime/media ownership including pipeline/modality and reliability/flow-control boundaries, partial-output retry/idempotency and queue/backpressure ownership, provider-capability boundaries, proxy-evidence rejection, explicit total-cost ownership and open-source-vs-TCO boundaries, PSTN carrier codec/security/playback-accounting boundaries, recovery/security and current LiveKit/Pipecat testing/eval transport-coverage boundaries, desktop/mobile geometry, interaction states, reader navigation, language integrity and runtime behavior are valid.');
