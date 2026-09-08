@@ -81,7 +81,7 @@ audio del usuario
 
 La diferencia con full cascade está en la entrada: el modelo conversacional ya no depende de una transcripción como única representación del turno. La diferencia con S2S está en la salida: **la voz sigue estando detrás de una frontera textual**.
 
-Los modelos realtime actuales pueden aceptar audio y producir texto o audio. Por ejemplo, `gpt-realtime` declara entrada y salida de texto y audio, además de function calling y transporte por WebRTC, WebSocket o SIP.[^openai-realtime-model] Esa capacidad permite construir un flujo audio-in/text-out aunque el producto elija un TTS separado.
+Esta arquitectura sólo existe si el proveedor realtime permite una modalidad de respuesta exclusivamente textual. LiveKit lo señala explícitamente como requisito y advierte de que el soporte varía por proveedor.[^livekit-pipelines] `gpt-realtime`, por ejemplo, declara entrada y salida de texto y audio, además de function calling y transporte por WebRTC, WebSocket o SIP.[^openai-realtime-model] Esa capacidad permite construir un flujo audio-in/text-out aunque el producto elija un TTS separado; no debe asumirse para cualquier modelo realtime.
 
 Esta arquitectura tiene sentido cuando la señal acústica aporta información útil a la comprensión, pero el producto quiere conservar un sintetizador especializado. El trade-off importante es fácil de pasar por alto: **la prosodia puede llegar al modelo y perderse de nuevo al cruzar la salida textual**.
 
@@ -191,7 +191,7 @@ El objetivo no es demostrar que una arquitectura es moderna. Es saber **qué sis
 ## Qué deberías recordar
 
 - Full cascade, audio-native + TTS y speech-to-speech describen dónde colocamos las fronteras de modalidad.
-- *Half-cascade* no es un estándar formal; aquí lo usamos en el sentido operativo documentado arriba: audio-in → text-out → TTS.
+- *Half-cascade* no es un estándar formal; aquí lo usamos en el sentido operativo documentado arriba: audio-in → text-out → TTS, y sólo cuando el modelo realtime admite salida text-only.
 - Speech-to-speech no implica full-duplex.
 - Full-duplex describe solapamiento temporal y control de interacción, no el número de modelos.
 - Reducir componentes no elimina tools, estado, permisos, trazas ni recuperación.
@@ -202,7 +202,7 @@ La [nota técnica sobre arquitecturas de agentes de voz](/articulos-tecnicos/voi
 ## Referencias
 
 [^livekit-voice]: LiveKit, [Voice AI quickstart](https://docs.livekit.io/agents/start/voice-ai/). Documenta como alternativas de primer nivel un pipeline STT–LLM–TTS y un modelo realtime directo.
-[^livekit-pipelines]: LiveKit, [Pipeline types](https://docs.livekit.io/agents/models/pipelines/). Define STT–LLM–TTS, realtime y *half-cascade*; esta última usa un modelo realtime para comprensión y un TTS separado para la salida.
+[^livekit-pipelines]: LiveKit, [Pipeline types](https://docs.livekit.io/agents/models/pipelines/). Define STT–LLM–TTS, realtime y *half-cascade*; esta última usa un modelo realtime para comprensión y un TTS separado para la salida, y requiere que el proveedor soporte una modalidad de respuesta text-only.
 [^openai-realtime-model]: OpenAI, [GPT-Realtime model](https://developers.openai.com/api/docs/models/gpt-realtime). Modalidades de texto/audio, transportes Realtime y function calling.
 [^openai-realtime-intro]: OpenAI, [Introducing the Realtime API](https://openai.com/index/introducing-the-realtime-api/). Describe el pipeline ASR → modelo de texto → TTS, la pérdida de señales acústicas y el streaming directo de audio.
 [^gemini-live]: Google, [Get started with Gemini Live API](https://ai.google.dev/gemini-api/docs/live-api/get-started-sdk). Sesiones persistentes, entrada de audio y salida de audio nativa en tiempo real.
