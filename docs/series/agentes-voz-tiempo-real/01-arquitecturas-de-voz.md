@@ -85,7 +85,7 @@ audio del usuario
 
 La diferencia con full cascade está en la entrada: el modelo conversacional ya no depende de una transcripción como única representación del turno. La diferencia con S2S está en la salida: **la voz sigue estando detrás de una frontera textual**.
 
-Esta arquitectura sólo existe si el proveedor realtime permite una modalidad de respuesta exclusivamente textual. LiveKit lo señala explícitamente como requisito y advierte de que el soporte varía por proveedor.[^livekit-pipelines] `gpt-realtime`, por ejemplo, declara entrada y salida de texto y audio, además de function calling y transporte por WebRTC, WebSocket o SIP.[^openai-realtime-model] Esa capacidad permite construir un flujo audio-in/text-out aunque el producto elija un TTS separado; no debe asumirse para cualquier modelo realtime.
+Esta arquitectura sólo existe si el proveedor realtime permite una modalidad de respuesta exclusivamente textual. LiveKit lo señala explícitamente como requisito y advierte de que el soporte varía por proveedor.[^livekit-pipelines] `gpt-realtime-2.1`, por ejemplo, declara entrada y salida de texto y audio y function calling.[^openai-realtime-model] OpenAI marcó el anterior `gpt-realtime` como deprecated el 20 de julio de 2026 y recomienda `gpt-realtime-2.1` antes de su retirada de la API el 20 de enero de 2027.[^openai-realtime-deprecation] Esa capacidad permite construir un flujo audio-in/text-out aunque el producto elija un TTS separado; no debe asumirse para cualquier modelo realtime.
 
 Esta arquitectura tiene sentido cuando la señal acústica aporta información útil a la comprensión, pero el producto quiere conservar un sintetizador especializado. El trade-off importante es fácil de pasar por alto: **la prosodia puede llegar al modelo y perderse de nuevo al cruzar la salida textual**.
 
@@ -113,7 +113,7 @@ OpenAI describe la Realtime API como una vía para transmitir audio de entrada y
 
 Reducir fronteras puede mejorar el ritmo conversacional y evitar parte de la reconciliación entre STT, LLM y TTS. Pero **speech-to-speech no elimina el resto del sistema**. El runtime sigue necesitando estado, tools, permisos, trazas, cancelación, idempotencia, observabilidad y una definición precisa de qué audio llegó realmente al usuario.
 
-Los modelos realtime también pueden hacer tool calling. `gpt-realtime` expone function calling, y Gemini Live requiere que la aplicación ejecute la función y devuelva el resultado a la sesión.[^openai-realtime-model][^gemini-tools] La frontera de negocio sigue fuera del modelo aunque la frontera acústica se haya simplificado.
+Los modelos realtime también pueden hacer tool calling. `gpt-realtime-2.1` expone function calling, y Gemini Live requiere que la aplicación ejecute la función y devuelva el resultado a la sesión.[^openai-realtime-model][^gemini-tools] La frontera de negocio sigue fuera del modelo aunque la frontera acústica se haya simplificado.
 
 ## Full-duplex es otro eje
 
@@ -276,7 +276,8 @@ La [nota técnica sobre arquitecturas de agentes de voz](/articulos-tecnicos/voi
 [^pipecat-service-events]: Pipecat, [Service Events](https://docs.pipecat.ai/api-reference/server/events/service-events). Los servicios basados en WebSocket documentan una política propia de reconnect con exponential backoff, separada del lifecycle del cliente.
 [^pipecat-websocket-auth]: Pipecat, [WebSocket Authentication](https://docs.pipecat.ai/pipecat-cloud/guides/websocket-authentication). Capacidad de Pipecat Cloud para proteger conexiones WebSocket con tokens HMAC de sesión; no es una propiedad universal de Pipecat core.
 [^openai-webrtc-scale]: OpenAI, [How OpenAI delivers low-latency voice AI at scale](https://openai.com/index/delivering-low-latency-voice-ai-at-scale/). Detalla las responsabilidades que WebRTC estandariza: ICE/NAT traversal, DTLS/SRTP, codecs, RTCP, echo cancellation y jitter buffering.
-[^openai-realtime-model]: OpenAI, [GPT-Realtime model](https://developers.openai.com/api/docs/models/gpt-realtime). Modalidades de texto/audio, transportes Realtime y function calling.
+[^openai-realtime-model]: OpenAI, [GPT-Realtime-2.1 model](https://developers.openai.com/api/docs/models/gpt-realtime-2.1). Documenta las modalidades de texto/audio y function calling del modelo realtime recomendado actualmente.
+[^openai-realtime-deprecation]: OpenAI, [Deprecations](https://developers.openai.com/api/docs/deprecations), 20 de julio de 2026. Marca `gpt-realtime` como deprecated, fija su retirada de la API para el 20 de enero de 2027 y recomienda `gpt-realtime-2.1` como replacement.
 [^openai-realtime-intro]: OpenAI, [Introducing the Realtime API](https://openai.com/index/introducing-the-realtime-api/). Describe el pipeline ASR → modelo de texto → TTS, la pérdida de señales acústicas y el streaming directo de audio.
 [^gemini-live]: Google, [Get started with Gemini Live API](https://ai.google.dev/gemini-api/docs/live-api/get-started-sdk). Sesiones persistentes, entrada de audio y salida de audio nativa en tiempo real.
 [^gemini-tools]: Google, [Tool use with Live API](https://ai.google.dev/gemini-api/docs/live-api/tools). Contrato de function calling y devolución explícita de resultados a la sesión.
