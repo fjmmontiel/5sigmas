@@ -120,6 +120,14 @@ check(!esArticle.includes('simulaciones conversacionales text-only en LiveKit Cl
 check(!enArticle.includes('text-mode conversational simulations on LiveKit Cloud'), 'English article: stale LiveKit text-only simulation statement remains');
 check(!esArticle.includes('el harness que convierte esa instrumentación en un conjunto reproducible de evals sigue siendo una decisión de la aplicación'), 'Spanish article: stale pre-Pipecat-Evals capability statement remains');
 check(!enArticle.includes('the harness that turns that instrumentation into a reproducible eval suite remains an application choice unless you adopt additional tooling'), 'English article: stale pre-Pipecat-Evals capability statement remains');
+check(esArticle.includes('**El coste total tampoco es el precio del framework.**'), 'Spanish article: missing explicit runtime total-cost ownership model');
+check(enArticle.includes('**Total cost is not the framework price.**'), 'English article: missing explicit runtime total-cost ownership model');
+check(esArticle.includes('coste_por_minuto_exitoso'), 'Spanish article: missing reproducible cost-per-successful-minute TCO structure');
+check(enArticle.includes('cost_per_successful_minute'), 'English article: missing reproducible cost-per-successful-minute TCO structure');
+check(esArticle.includes('Open source no significa coste total cero'), 'Spanish article: missing open-source-vs-zero-TCO caveat');
+check(enArticle.includes('Open source does not mean zero TCO'), 'English article: missing open-source-vs-zero-TCO caveat');
+check(esArticle.includes('modelos/inference, media o carrier, compute del runtime, observabilidad/almacenamiento y horas de ingeniería/operación'), 'Spanish article: total-cost model no longer separates the required cost layers');
+check(enArticle.includes('model/inference, media or carrier, runtime compute, observability/storage, and engineering/operations'), 'English article: total-cost model no longer separates the required cost layers');
 check(esArticle.includes('developer velocity vs control'), 'Spanish article: missing developer-velocity/control trade-off');
 check(enArticle.includes('developer velocity vs control'), 'English article: missing developer-velocity/control trade-off');
 check(esArticle.includes('**1. Voice assistant en browser o móvil.**'), 'Spanish article: missing browser/mobile decision case');
@@ -135,6 +143,8 @@ check(enArticle.includes('Without a controlled benchmark on the same hardware, n
 for (const ref of [
   '[^livekit-agents]:',
   '[^livekit-self-hosting]:',
+  '[^livekit-license]:',
+  '[^livekit-billing]:',
   '[^livekit-tokens]:',
   '[^livekit-testing]:',
   '[^pipecat-pipeline]:',
@@ -143,6 +153,8 @@ for (const ref of [
   '[^pipecat-tools]:',
   '[^pipecat-metrics]:',
   '[^pipecat-evals]:',
+  '[^pipecat-license]:',
+  '[^pipecat-deployment]:',
   '[^pipecat-livekit]:',
   '[^pipecat-session-lifecycle]:',
   '[^pipecat-websocket-reconnect]:',
@@ -200,6 +212,9 @@ const cases = [
       'Recovery no equivale a continuidad de estado.',
       'La seguridad también se reparte por capas.',
       'Testing/evals es otra superficie de ownership.',
+      'El coste total tampoco es el precio del framework.',
+      'coste_por_minuto_exitoso',
+      'Open source no significa coste total cero',
       'simulaciones conversacionales en texto o audio en LiveKit Cloud',
       'lk agent simulate audio',
       'no el transporte de producción',
@@ -229,6 +244,9 @@ const cases = [
       'Recovery is not the same as state continuity.',
       'Security is layered as well.',
       'Testing and evals are another ownership surface.',
+      'Total cost is not the framework price.',
+      'cost_per_successful_minute',
+      'Open source does not mean zero TCO',
       'text or audio conversational simulations on LiveKit Cloud',
       'lk agent simulate audio',
       'not the production transport',
@@ -325,4 +343,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Voice architecture chapter 1 QA passed: ES/EN semantics, canonical mirrors, architecture-vs-duplex distinction, current-model and text-only-modality freshness, runtime-ownership and media-endpoint ownership decisions including PSTN carrier codec/security/playback-accounting boundaries plus recovery/security and current LiveKit/Pipecat testing/eval transport-coverage boundaries, desktop/mobile geometry, interaction states, reader navigation, language integrity and runtime behavior are valid.');
+console.log('Voice architecture chapter 1 QA passed: ES/EN semantics, canonical mirrors, architecture-vs-duplex distinction, current-model and text-only-modality freshness, runtime/media ownership including explicit total-cost ownership and open-source-vs-TCO boundaries, PSTN carrier codec/security/playback-accounting boundaries, recovery/security and current LiveKit/Pipecat testing/eval transport-coverage boundaries, desktop/mobile geometry, interaction states, reader navigation, language integrity and runtime behavior are valid.');
