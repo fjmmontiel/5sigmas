@@ -5,7 +5,7 @@ scope_manifest: locales/en/manifest.yml
 certified_routes:
   - route: series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.md
     reviewed_on: 2026-09-08
-    spanish_blob_sha: c9f2fd5a36f3ed6e455a1a29396ddfbc1b494929
-    english_blob_sha: d7a92c6f0d6d1d987e19dac862f08238dd6f6971
-    review_scope: prose, headings, lists, terminology, technical meaning, references, architecture semantics, latency semantics, runtime ownership, LiveKit/Pipecat/vanilla decision matrix, workload cases, visual hooks
-    note: Side-by-side bilingual editorial review after adding the mandatory runtime-ownership track. ES and EN now distinguish modality architecture from orchestration framework, separate LiveKit Agents from LiveKit Cloud and Pipecat from its selected transport/provider, document the application responsibilities of thin/vanilla Python, include equivalent LiveKit/Pipecat/vanilla decision matrices and browser/PSTN/low-level workload cases, preserve the controlled-benchmark caveat for framework overhead, and retain the existing modality/full-duplex and critical-path latency semantics without translationese or information loss.
+    spanish_blob_sha: c735fb6e7a873c043b2080bbaf314f507b8b4117
+    english_blob_sha: 1f7cdeea9cab37b87128b1dcb2336eae52b21783
+    review_scope: prose, headings, lists, terminology, technical meaning, references, architecture semantics, latency semantics, runtime ownership, LiveKit/Pipecat/vanilla decision matrix, recovery/reconnect semantics, security/trust boundaries, testing/eval ownership, workload cases, visual hooks
+    note: Side-by-side bilingual editorial review after strengthening the mandatory runtime-ownership track. ES and EN distinguish modality architecture from orchestration framework, separate LiveKit Agents from LiveKit Cloud and Pipecat core from transport/Cloud capabilities, distinguish transport reconnect from runtime restart and business-state recovery, compare security ownership and test/eval ownership, document thin/vanilla responsibilities, preserve equivalent browser/PSTN/low-level/hybrid decision cases and the controlled-overhead benchmark caveat, and retain the modality/full-duplex and critical-path latency semantics without translationese or information loss.
