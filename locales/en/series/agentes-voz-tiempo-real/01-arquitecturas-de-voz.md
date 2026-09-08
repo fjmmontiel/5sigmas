@@ -163,6 +163,42 @@ It fits when the model should hear the original signal but the product still nee
 
 It is a strong starting point when conversational rhythm, interruptions, and expressiveness matter more than independent replacement of every stage. In return, the system has to instrument the session more carefully and keep track of what the user actually heard.
 
+## A second decision: how much runtime do you want to own?
+
+Choosing cascade, half-cascade, or S2S does not decide who implements the runtime. **LiveKit Agents, Pipecat, and a thin direct Python implementation operate at a different layer**: they connect media, models, turn-taking, tools, state, and lifecycle. Any of the three can participate in more than one modality architecture, depending on the providers behind it.
+
+LiveKit Agents makes `AgentSession` the session orchestrator and connects the agent to participants through LiveKit's realtime infrastructure. The framework includes voice-pipeline, turn-detection, interruption, and worker-lifecycle abstractions; agent servers exchange capacity, isolate jobs in separate processes, and can redispatch a session if a worker disappears.[^livekit-agents][^livekit-session][^livekit-server-lifecycle] **That does not make every LiveKit Cloud feature a framework feature.** The Agents framework and SIP can be self-hosted, while managed agent hosting, built-in observability, and other operational surfaces belong to LiveKit Cloud.[^livekit-self-hosting]
+
+Pipecat models the runtime as a sequence of `FrameProcessor`s carrying audio, text, control, and lifecycle frames. The transport is pluggable: its current docs include WebRTC through Daily or LiveKit, SmallWebRTC, and WebSocket for controlled or telephony-oriented paths.[^pipecat-pipeline][^pipecat-transports] Turn management, interruptions, function calling, metrics, and OpenTelemetry are exposed as configurable pipeline primitives.[^pipecat-turns][^pipecat-tools][^pipecat-metrics] **That does not mean Pipecat itself provides a global WebRTC network or a telephone carrier.** Those properties come from the selected transport and service.
+
+With thin or vanilla Python, the runtime does not disappear; **ownership moves into your application**. A direct provider SDK or protocol leaves your code responsible for the session contract and for integrating transport/media, buffering, turn-taking, cancellation, state, tools, retries, reconnect, backpressure, observability, replay/testing, security, and scaling. WebRTC already standardizes difficult pieces such as ICE/NAT traversal, DTLS/SRTP, codec negotiation, RTCP, echo cancellation, and jitter buffering, but somebody still has to connect that stack to the model and the business lifecycle.[^openai-webrtc-scale] With more direct WebSocket or RTP/SIP paths, even more of that responsibility can move back to the server.
+
+### Runtime decision matrix
+
+| Criterion | LiveKit Agents | Pipecat | Thin / vanilla Python |
+|---|---|---|---|
+| Abstraction boundary | Agent/session inside rooms + worker lifecycle | Frame pipeline + processors + selected transport | Provider events/protocol + your own primitives |
+| Media and transport | WebRTC as the primary path; SIP/telephony in the LiveKit ecosystem | Daily, LiveKit, SmallWebRTC, WebSocket, and serializers depending on the case | Whatever you integrate: WebRTC/WebSocket/SIP/RTP; you compose the pieces |
+| Turns, cancellation, tools | `AgentSession` provides turn handling, interruption, events, and tools | Turn strategies, `InterruptionFrame`, cancellation, and function calling are configurable | Your contracts; maximum control and maximum correctness surface |
+| Observability and replay | SDK metrics/data hooks; Cloud adds timeline, traces, and recordings | Metrics frames, observers, and OpenTelemetry; storage/replay remains your design | Instrumentation, correlation IDs, played-audio accounting, and replay are application responsibilities |
+| Deployment and failures | Worker capacity, job isolation, and draining are integrated; Cloud can manage hosting | Runner/pipeline lifecycle; hosting depends on your runtime or Pipecat Cloud | You define isolation, autoscaling, draining, reconnect, and recovery |
+| Extensibility / lock-in | Less media plumbing; more coupling to LiveKit room/session APIs | Highly extensible through processors/transports; coupled to Pipecat's frame model | Fewer framework dependencies, but stronger dependence on your own contracts and possibly one provider |
+| Dominant cost | Less plumbing engineering; infrastructure/Cloud cost depends on deployment | Less pipeline plumbing; selected transport/hosting cost + operations | More engineering and operations; justified only when the extra control has real product value |
+
+This is not a ranking, and there is no defensible rule that “vanilla is always lower latency.” LiveKit can add bridges between WebRTC and a model protocol; Pipecat adds frames, queues, and processors; vanilla can remove some of that abstraction but still needs buffering, transport, concurrency control, and recovery. **Without a controlled benchmark on the same hardware, network, provider, model, audio path, and load, this chapter will not publish a numeric framework-overhead ranking.** The useful experiment is to run the same workload and separate provider time, runtime queueing, transport, and playout.
+
+### Three concrete choices
+
+**1. Browser or mobile voice assistant.** If real users arrive over variable networks, WebRTC is the natural media baseline. LiveKit Agents fits well when you want rooms, media, agent workers, and optionally managed operations to form one coherent system.[^livekit-agents] Pipecat fits when processor/provider composition is the priority and you want to select Daily or LiveKit as the transport without rewriting the core pipeline.[^pipecat-transports][^pipecat-livekit] A direct connection to a provider's WebRTC API can make sense for a narrow single-model product or a prototype; it accepts tighter provider coupling and still does not remove server-side authentication, business state, or security concerns.
+
+**2. PSTN agent.** LiveKit is a strong option when you want SIP to terminate into the same room system and dispatch agents through the same lifecycle.[^livekit-sip] Pipecat is attractive when the carrier or streaming API is already chosen and you want serializers, turn strategies, STT/LLM/TTS, and tools to remain a replaceable pipeline; its `FastAPIWebsocketTransport` is explicitly designed for server-side WebSocket and telephony integrations.[^pipecat-telephony] Vanilla is appropriate when you already operate a SIP/RTP gateway or need carrier/media behavior that existing transports do not expose; in that case you also own more reconnect, codec, buffering, and call-lifecycle states.
+
+**3. Experimental or low-level custom pipeline.** Pipecat is a useful middle ground when you want custom processors, transport swaps, or per-frame inspection without rebuilding the entire lifecycle.[^pipecat-custom] Vanilla is the better fit when the experiment is the layer the framework would otherwise abstract away — packetization, frame sizing, provider event protocol, a custom duplex scheduler, or exact timestamp instrumentation. The extra implementation work then buys experimental control, not “simplicity.”
+
+There is also a concrete hybrid: **Pipecat can run its pipeline on `LiveKitTransport`**. That lets LiveKit own rooms/WebRTC while Pipecat owns processor composition.[^pipecat-livekit] The hybrid is useful only when each layer has a clear responsibility. Duplicating turn detection, buffering, or retry policy across two runtimes creates more failure states than it removes.
+
+A practical rule is conditional rather than absolute: *use the highest abstraction level that still preserves the control your product actually needs*. If your differentiation is media handling or scheduling, move down the stack. If it is agent logic and tools, spending engineering time rebuilding WebRTC, turn-taking, and worker lifecycle is usually poor allocation.
+
 ## A reproducible way to choose
 
 Before choosing an architecture, prepare the same set of conversations and run each candidate against the same task outcome. Do not compare only happy-path demos.
@@ -198,8 +234,10 @@ The goal is not to prove that one architecture is newer. It is to determine **wh
 - *Half-cascade* is not a formal standard; here it uses the operational meaning defined above: audio-in → text-out → TTS, and only when the realtime model supports text-only output.
 - Speech-to-speech does not imply full-duplex.
 - Full-duplex describes temporal overlap and interaction control, not how many models are in the stack.
+- LiveKit Agents, Pipecat, and vanilla Python are runtime choices, not modality architectures.
 - Removing modality boundaries does not remove tools, state, permissions, traces, or recovery logic.
-- The right architecture depends on what you want to protect: modularity, voice control, acoustic signal, timing, auditability, or portability.
+- Fewer framework dependencies do not imply lower operational complexity.
+- The right architecture depends on what you want to protect: modularity, voice control, acoustic signal, timing, auditability, portability, or runtime control.
 
 The deeper [voice-agent architecture engineering note](/en/articulos-tecnicos/voice-agent-architectures/) explores streaming contracts, prosody, and a possible separation between the conversational surface and an execution plane. The next chapters in this series will isolate turn-taking, latency, tools, transport, and evaluation instead of mixing them into one comparison.
 
@@ -208,6 +246,20 @@ The deeper [voice-agent architecture engineering note](/en/articulos-tecnicos/vo
 [^livekit-voice]: LiveKit, [Voice AI quickstart](https://docs.livekit.io/agents/start/voice-ai/). Documents STT–LLM–TTS pipelines and direct realtime models as first-class alternatives.
 [^livekit-pipelines]: LiveKit, [Pipeline types](https://docs.livekit.io/agents/models/pipelines/). Defines STT–LLM–TTS, realtime, and *half-cascade*; the latter uses a realtime model for understanding and a separate TTS for output, and requires provider support for a text-only response modality.
 [^livekit-streaming-pipeline]: LiveKit, [Sequential pipeline architecture for voice agents](https://livekit.com/blog/sequential-pipeline-architecture-voice-agents), March 23, 2026. Explains how streaming STT, model generation, and TTS overlap, and why end-to-end latency should not be modeled as a strictly blocking sum of complete stage latencies.
+[^livekit-agents]: LiveKit, [Agents framework introduction](https://docs.livekit.io/agents/). Describes the open-source framework, WebRTC to end users, pipeline abstractions, and the distinction from managed LiveKit Cloud capabilities.
+[^livekit-session]: LiveKit, [AgentSession](https://docs.livekit.io/agents/logic/sessions/). Session orchestration for input, voice pipeline, tools, turn handling, events, and control.
+[^livekit-server-lifecycle]: LiveKit, [Server lifecycle](https://docs.livekit.io/agents/server/lifecycle/). Capacity exchange, per-process job isolation, graceful draining, and redispatch after an agent disconnects.
+[^livekit-self-hosting]: LiveKit, [Self-hosting overview](https://docs.livekit.io/transport/self-hosting/). Separates self-hostable Agents framework/SIP from managed hosting, observability, and inference in LiveKit Cloud.
+[^livekit-sip]: LiveKit, [SIP primer](https://docs.livekit.io/reference/telephony/sip-primer/). SIP/RTP flow for connecting traditional telephony to LiveKit WebRTC applications and rooms.
+[^pipecat-pipeline]: Pipecat, [Pipeline & Frame Processing](https://docs.pipecat.ai/pipecat/learn/pipeline). Pipeline, `FrameProcessor`, frames, queueing, lifecycle, observers, and metrics.
+[^pipecat-transports]: Pipecat, [Transports](https://docs.pipecat.ai/pipecat/learn/transports) and [Choosing a Transport](https://docs.pipecat.ai/client/concepts/choosing-a-transport). Separates pipeline logic from transport and documents Daily, LiveKit, SmallWebRTC, and WebSocket use cases.
+[^pipecat-turns]: Pipecat, [User Turn Strategies](https://docs.pipecat.ai/api-reference/server/utilities/turn-management/user-turn-strategies). Configurable turn-start, turn-stop, and interruption strategies.
+[^pipecat-tools]: Pipecat, [Function Calling](https://docs.pipecat.ai/pipecat/learn/function-calling). Tools, context, interruption cancellation, and asynchronous function calls.
+[^pipecat-metrics]: Pipecat, [Metrics](https://docs.pipecat.ai/pipecat/fundamentals/metrics) and [OpenTelemetry Tracing](https://docs.pipecat.ai/api-reference/server/utilities/opentelemetry). TTFB, processing, usage, observers, and tracing.
+[^pipecat-telephony]: Pipecat, [FastAPIWebsocketTransport](https://docs.pipecat.ai/api-reference/server/services/transport/fastapi-websocket). Server-side WebSocket transport designed for telephony integrations and serializers.
+[^pipecat-custom]: Pipecat, [Custom FrameProcessor](https://docs.pipecat.ai/pipecat/fundamentals/custom-frame-processor). Extending a pipeline with application logic while retaining control/lifecycle frames.
+[^pipecat-livekit]: Pipecat, [LiveKitTransport](https://docs.pipecat.ai/api-reference/server/services/transport/livekit). Running a Pipecat pipeline over LiveKit rooms/WebRTC, self-hosted or Cloud.
+[^openai-webrtc-scale]: OpenAI, [How OpenAI delivers low-latency voice AI at scale](https://openai.com/index/delivering-low-latency-voice-ai-at-scale/). Details the responsibilities WebRTC standardizes: ICE/NAT traversal, DTLS/SRTP, codecs, RTCP, echo cancellation, and jitter buffering.
 [^openai-realtime-model]: OpenAI, [GPT-Realtime model](https://developers.openai.com/api/docs/models/gpt-realtime). Text/audio modalities, Realtime transports, and function calling.
 [^openai-realtime-intro]: OpenAI, [Introducing the Realtime API](https://openai.com/index/introducing-the-realtime-api/). Describes the ASR → text model → TTS pipeline, loss of acoustic cues, and direct audio streaming.
 [^gemini-live]: Google, [Get started with Gemini Live API](https://ai.google.dev/gemini-api/docs/live-api/get-started-sdk). Persistent sessions with realtime audio input and native audio output.
