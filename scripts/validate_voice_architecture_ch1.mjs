@@ -140,6 +140,18 @@ check(esArticle.includes('Pipecat puede ejecutar su pipeline sobre `LiveKitTrans
 check(enArticle.includes('Pipecat can run its pipeline on `LiveKitTransport`'), 'English article: missing explicit Pipecat/LiveKit hybrid');
 check(esArticle.includes('Sin un benchmark controlado con el mismo hardware, red, provider, modelo, audio path y carga'), 'Spanish article: missing controlled-overhead benchmark caveat');
 check(enArticle.includes('Without a controlled benchmark on the same hardware, network, provider, model, audio path, and load'), 'English article: missing controlled-overhead benchmark caveat');
+check(esArticle.includes('| Pipeline / modalidad |'), 'Spanish article: runtime matrix missing explicit pipeline/modality row');
+check(enArticle.includes('| Pipeline / modality |'), 'English article: runtime matrix missing explicit pipeline/modality row');
+check(esArticle.includes('half-cascade sólo cuando el servicio/modelo elegido expone los modos y eventos necesarios'), 'Spanish article: Pipecat half-cascade capability is no longer conditional on provider/model contracts');
+check(enArticle.includes('half-cascade only when the selected service/model exposes the required modes and events'), 'English article: Pipecat half-cascade capability is no longer conditional on provider/model contracts');
+check(esArticle.includes('full-duplex sigue dependiendo también del modelo, transporte y política de cancelación'), 'Spanish article: full-duplex is being attributed to the runtime alone');
+check(enArticle.includes('full duplex still depends on the model, transport, and cancellation policy'), 'English article: full-duplex is being attributed to the runtime alone');
+check(esArticle.includes('**No elijas el runtime por señales proxy.**'), 'Spanish article: missing proxy-signal rejection rule');
+check(enArticle.includes('**Do not choose the runtime from proxy signals.**'), 'English article: missing proxy-signal rejection rule');
+check(esArticle.includes('las estrellas de GitHub') && esArticle.includes('marketing del proveedor'), 'Spanish article: proxy-signal examples no longer cover popularity/marketing');
+check(enArticle.includes('GitHub stars') && enArticle.includes('vendor marketing'), 'English article: proxy-signal examples no longer cover popularity/marketing');
+check(esArticle.includes('no atribuyas al framework lo que proviene del modelo, el carrier o el transporte'), 'Spanish article: missing framework-vs-model/carrier/transport attribution caveat');
+check(enArticle.includes('do not attribute model-, carrier-, or transport-driven effects to the framework'), 'English article: missing framework-vs-model/carrier/transport attribution caveat');
 for (const ref of [
   '[^livekit-agents]:',
   '[^livekit-self-hosting]:',
@@ -148,6 +160,7 @@ for (const ref of [
   '[^livekit-tokens]:',
   '[^livekit-testing]:',
   '[^pipecat-pipeline]:',
+  '[^pipecat-cascade-s2s]:',
   '[^pipecat-transports]:',
   '[^pipecat-turns]:',
   '[^pipecat-tools]:',
@@ -171,6 +184,8 @@ for (const ref of [
 }
 check(esArticle.includes('LiveKit, [Testing and evaluation]') && esArticle.includes('[Agent commands]'), 'Spanish article: missing current LiveKit testing/CLI primary references');
 check(enArticle.includes('LiveKit, [Testing and evaluation]') && enArticle.includes('[Agent commands]'), 'English article: missing current LiveKit testing/CLI primary references');
+check(esArticle.includes('Pipecat, [Building With OpenAI Audio Models and APIs]'), 'Spanish article: missing first-party Pipecat cascade/S2S reference');
+check(enArticle.includes('Pipecat, [Building With OpenAI Audio Models and APIs]'), 'English article: missing first-party Pipecat cascade/S2S reference');
 
 check(mkdocsEs.includes('- Agentes de voz en tiempo real:\n          - Arquitecturas de voz: series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.md'), 'Spanish nav: realtime voice series chapter 1 is missing from canonical reader navigation');
 check(mkdocsEn.includes('- Realtime Voice Agents:\n          - Voice architectures: series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.md'), 'English nav: realtime voice series chapter 1 is missing from canonical reader navigation');
@@ -205,6 +220,7 @@ const cases = [
       'Escuchar mientras habla.',
       'Segunda decisión: cuánto runtime quieres poseer',
       'Matriz de decisión del runtime',
+      'Pipeline / modalidad',
       'vanilla significa que no delegas la orquestación en un agent framework',
       'Twilio Media Streams, por ejemplo, entrega audio de la llamada a tu servidor',
       'audio/x-mulaw',
@@ -215,6 +231,7 @@ const cases = [
       'El coste total tampoco es el precio del framework.',
       'coste_por_minuto_exitoso',
       'Open source no significa coste total cero',
+      'No elijas el runtime por señales proxy.',
       'simulaciones conversacionales en texto o audio en LiveKit Cloud',
       'lk agent simulate audio',
       'no el transporte de producción',
@@ -237,6 +254,7 @@ const cases = [
       'Listen while speaking.',
       'A second decision: how much runtime do you want to own?',
       'Runtime decision matrix',
+      'Pipeline / modality',
       'vanilla means you are not delegating orchestration to this kind of agent framework',
       'Twilio Media Streams, for example, sends call audio to your server',
       'audio/x-mulaw',
@@ -247,6 +265,7 @@ const cases = [
       'Total cost is not the framework price.',
       'cost_per_successful_minute',
       'Open source does not mean zero TCO',
+      'Do not choose the runtime from proxy signals.',
       'text or audio conversational simulations on LiveKit Cloud',
       'lk agent simulate audio',
       'not the production transport',
@@ -343,4 +362,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Voice architecture chapter 1 QA passed: ES/EN semantics, canonical mirrors, architecture-vs-duplex distinction, current-model and text-only-modality freshness, runtime/media ownership including explicit total-cost ownership and open-source-vs-TCO boundaries, PSTN carrier codec/security/playback-accounting boundaries, recovery/security and current LiveKit/Pipecat testing/eval transport-coverage boundaries, desktop/mobile geometry, interaction states, reader navigation, language integrity and runtime behavior are valid.');
+console.log('Voice architecture chapter 1 QA passed: ES/EN semantics, canonical mirrors, architecture-vs-duplex distinction, current-model and text-only-modality freshness, runtime/media ownership including pipeline/modality flexibility, provider-capability boundaries, proxy-evidence rejection, explicit total-cost ownership and open-source-vs-TCO boundaries, PSTN carrier codec/security/playback-accounting boundaries, recovery/security and current LiveKit/Pipecat testing/eval transport-coverage boundaries, desktop/mobile geometry, interaction states, reader navigation, language integrity and runtime behavior are valid.');
