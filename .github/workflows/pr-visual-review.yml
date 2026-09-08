@@ -199,6 +199,12 @@ jobs:
       - name: Capture and validate every progressive voice microlab
         run: node scripts/capture_voice_report_animations.mjs
 
+      - name: Validate Realtime Voice Agents chapter 1 end-to-end
+        run: node scripts/validate_voice_architecture_ch1.mjs
+
+      - name: Validate Realtime Voice Agents chapter 1 accessibility and intermediate states
+        run: node scripts/validate_voice_architecture_ch1_accessibility.mjs
+
       - name: Validate complete video experience lifecycle
         run: node scripts/validate_video_experience_v2.mjs
 
