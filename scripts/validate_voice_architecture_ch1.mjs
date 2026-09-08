@@ -108,8 +108,14 @@ check(esArticle.includes('**La seguridad también se reparte por capas.**'), 'Sp
 check(enArticle.includes('**Security is layered as well.**'), 'English article: missing layered security ownership');
 check(esArticle.includes('**Testing/evals es otra superficie de ownership.**'), 'Spanish article: missing testing/eval ownership comparison');
 check(enArticle.includes('**Testing and evals are another ownership surface.**'), 'English article: missing testing/eval ownership comparison');
-check(esArticle.includes('Pipecat ya incluye **Pipecat Evals**'), 'Spanish article: missing current built-in Pipecat Evals capability');
-check(enArticle.includes('Pipecat now includes **Pipecat Evals**'), 'English article: missing current built-in Pipecat Evals capability');
+check(esArticle.includes('Pipecat incluye **Pipecat Evals**'), 'Spanish article: missing current built-in Pipecat Evals capability');
+check(enArticle.includes('Pipecat includes **Pipecat Evals**'), 'English article: missing current built-in Pipecat Evals capability');
+check(esArticle.includes('simulaciones conversacionales text-only en LiveKit Cloud'), 'Spanish article: LiveKit simulations are overstated beyond their current text-only boundary');
+check(enArticle.includes('text-mode conversational simulations on LiveKit Cloud'), 'English article: LiveKit simulations are overstated beyond their current text-only boundary');
+check(esArticle.includes('no el transporte de producción'), 'Spanish article: Pipecat Evals does not distinguish eval transport from production transport');
+check(enArticle.includes('not the production transport'), 'English article: Pipecat Evals does not distinguish eval transport from production transport');
+check(!esArticle.includes('simulaciones end-to-end en LiveKit Cloud'), 'Spanish article: stale overbroad LiveKit simulation wording remains');
+check(!enArticle.includes('end-to-end simulations on LiveKit Cloud'), 'English article: stale overbroad LiveKit simulation wording remains');
 check(!esArticle.includes('el harness que convierte esa instrumentación en un conjunto reproducible de evals sigue siendo una decisión de la aplicación'), 'Spanish article: stale pre-Pipecat-Evals capability statement remains');
 check(!enArticle.includes('the harness that turns that instrumentation into a reproducible eval suite remains an application choice unless you adopt additional tooling'), 'English article: stale pre-Pipecat-Evals capability statement remains');
 check(esArticle.includes('developer velocity vs control'), 'Spanish article: missing developer-velocity/control trade-off');
@@ -190,6 +196,8 @@ const cases = [
       'Recovery no equivale a continuidad de estado.',
       'La seguridad también se reparte por capas.',
       'Testing/evals es otra superficie de ownership.',
+      'simulaciones conversacionales text-only en LiveKit Cloud',
+      'no el transporte de producción',
       'Pipecat Evals',
       'Voice assistant en browser o móvil.',
       'Agente PSTN.',
@@ -216,6 +224,8 @@ const cases = [
       'Recovery is not the same as state continuity.',
       'Security is layered as well.',
       'Testing and evals are another ownership surface.',
+      'text-mode conversational simulations on LiveKit Cloud',
+      'not the production transport',
       'Pipecat Evals',
       'Browser or mobile voice assistant.',
       'PSTN agent.',
@@ -309,4 +319,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Voice architecture chapter 1 QA passed: ES/EN semantics, canonical mirrors, architecture-vs-duplex distinction, current-model and text-only-modality freshness, runtime-ownership and media-endpoint ownership decisions including PSTN carrier codec/security/playback-accounting boundaries plus recovery/security/testing/eval ownership, desktop/mobile geometry, interaction states, reader navigation, language integrity and runtime behavior are valid.');
+console.log('Voice architecture chapter 1 QA passed: ES/EN semantics, canonical mirrors, architecture-vs-duplex distinction, current-model and text-only-modality freshness, runtime-ownership and media-endpoint ownership decisions including PSTN carrier codec/security/playback-accounting boundaries plus recovery/security and explicit testing/eval transport-coverage boundaries, desktop/mobile geometry, interaction states, reader navigation, language integrity and runtime behavior are valid.');
