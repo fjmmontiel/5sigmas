@@ -43,9 +43,11 @@ function gitBlobSha(text) {
   return crypto.createHash('sha1').update(`blob ${bytes.length}\0`).update(bytes).digest('hex');
 }
 
-const [esArticle, enArticle] = await Promise.all([
+const [esArticle, enArticle, mkdocsEs, mkdocsEn] = await Promise.all([
   fs.readFile(esArticlePath, 'utf8'),
   fs.readFile(enArticlePath, 'utf8'),
+  fs.readFile(path.resolve('mkdocs.yml'), 'utf8'),
+  fs.readFile(path.resolve('mkdocs.en.yml'), 'utf8'),
 ]);
 const sourceById = new Map();
 
@@ -71,6 +73,8 @@ check(esArticle.includes('Half-cascade* no es un estándar formal'), 'Spanish ar
 check(enArticle.includes('Half-cascade* is not a formal standard'), 'English article: half-cascade terminology is no longer explicitly scoped');
 check(esArticle.includes('LiveKit, [Pipeline types]'), 'Spanish article: missing primary LiveKit pipeline reference');
 check(enArticle.includes('LiveKit, [Pipeline types]'), 'English article: missing primary LiveKit pipeline reference');
+check(mkdocsEs.includes('- Agentes de voz en tiempo real:\n          - Arquitecturas de voz: series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.md'), 'Spanish nav: realtime voice series chapter 1 is missing from canonical reader navigation');
+check(mkdocsEn.includes('- Realtime Voice Agents:\n          - Voice architectures: series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.md'), 'English nav: realtime voice series chapter 1 is missing from canonical reader navigation');
 
 const forbiddenVisualFragments = [
   'Speech-to-speech → ritmo y full-duplex',
