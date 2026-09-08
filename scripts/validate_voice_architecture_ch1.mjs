@@ -108,6 +108,18 @@ check(esArticle.includes('| Reliability / flow control |'), 'Spanish article: ru
 check(enArticle.includes('| Reliability / flow control |'), 'English article: runtime matrix missing reliability/flow-control comparison');
 check(esArticle.includes('`Agent Fallback Adapter`') && esArticle.includes('LiveKit Inference'), 'Spanish article: missing framework-vs-managed LiveKit fallback boundary');
 check(enArticle.includes('`Agent Fallback Adapter`') && enArticle.includes('LiveKit Inference'), 'English article: missing framework-vs-managed LiveKit fallback boundary');
+check(
+  esArticle.includes('`Agent Fallback Adapter` ejecuta fallback STT/TTS/LLM dentro del proceso') &&
+    esArticle.includes('`Inference Fallback Adapter` vive en LiveKit Inference') &&
+    esArticle.includes('el gestionado puede reiniciar la petición desde el principio tras un fallo mid-stream'),
+  'Spanish article: LiveKit Agent-vs-Inference fallback scope/restart semantics drifted',
+);
+check(
+  enArticle.includes('`Agent Fallback Adapter` runs STT/TTS/LLM fallback in the agent process') &&
+    enArticle.includes('`Inference Fallback Adapter` lives in LiveKit Inference') &&
+    enArticle.includes('the managed adapter can restart the request from the beginning after a mid-stream failure'),
+  'English article: LiveKit Agent-vs-Inference fallback scope/restart semantics drifted',
+);
 check(esArticle.includes('`ErrorEvent.recoverable`'), 'Spanish article: missing LiveKit recoverability semantics');
 check(enArticle.includes('`ErrorEvent.recoverable`'), 'English article: missing LiveKit recoverability semantics');
 check(esArticle.includes('`CancelFrame`, `ErrorFrame` upstream'), 'Spanish article: missing Pipecat cancellation/error-propagation primitives');
@@ -247,6 +259,8 @@ const cases = [
       'Reliability / flow control',
       'Una cola no es backpressure por existir.',
       'Agent Fallback Adapter',
+      'Inference Fallback Adapter',
+      'puede reiniciar la petición desde el principio tras un fallo mid-stream',
       'ErrorEvent.recoverable',
       'CancelFrame',
       'ErrorFrame',
@@ -287,6 +301,8 @@ const cases = [
       'Reliability / flow control',
       'A queue is not backpressure merely because it exists.',
       'Agent Fallback Adapter',
+      'Inference Fallback Adapter',
+      'can restart the request from the beginning after a mid-stream failure',
       'ErrorEvent.recoverable',
       'CancelFrame',
       'ErrorFrame',
@@ -397,4 +413,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Voice architecture chapter 1 QA passed: ES/EN semantics, canonical mirrors, architecture-vs-duplex distinction, current-model and text-only-modality freshness, runtime/media ownership including pipeline/modality and reliability/flow-control boundaries, partial-output retry/idempotency and queue/backpressure ownership, provider-capability boundaries, proxy-evidence rejection, explicit total-cost ownership and open-source-vs-TCO boundaries, PSTN carrier codec/security/playback-accounting boundaries, recovery/security and current LiveKit/Pipecat testing/eval transport-coverage boundaries, desktop/mobile geometry, interaction states, reader navigation, language integrity and runtime behavior are valid.');
+console.log('Voice architecture chapter 1 QA passed: ES/EN semantics, canonical mirrors, architecture-vs-duplex distinction, current-model and text-only-modality freshness, runtime/media ownership including pipeline/modality and reliability/flow-control boundaries, in-process-vs-managed fallback scope and mid-stream restart semantics, partial-output retry/idempotency and queue/backpressure ownership, provider-capability boundaries, proxy-evidence rejection, explicit total-cost ownership and open-source-vs-TCO boundaries, PSTN carrier codec/security/playback-accounting boundaries, recovery/security and current LiveKit/Pipecat testing/eval transport-coverage boundaries, desktop/mobile geometry, interaction states, reader navigation, language integrity and runtime behavior are valid.');
