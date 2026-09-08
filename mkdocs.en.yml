@@ -184,6 +184,8 @@ nav:
           - How to evaluate an agent: series/agentes-ia/03-como-evaluar-un-agente.md
           - Agent security: series/agentes-ia/04-seguridad-agentes.md
           - From demo to production: series/agentes-ia/05-de-la-demo-a-produccion.md
+      - Realtime Voice Agents:
+          - Voice architectures: series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.md
   - Concepts:
       - Concepts: temas/index.md
       - What is an LLM?: temas/llms.md
