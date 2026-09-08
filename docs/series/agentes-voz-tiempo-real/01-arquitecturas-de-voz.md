@@ -53,17 +53,21 @@ Esto hace que full cascade sea especialmente útil cuando importan:
 
 El coste de esa modularidad es coordinación. El STT puede seguir revisando una hipótesis mientras el LLM ya genera; el TTS puede tener audio en cola cuando el usuario interrumpe; una tool puede continuar ejecutándose después de cancelar la respuesta hablada. Por eso la latencia percibida no es sólo la suma de tres modelos.
 
-Una primera aproximación útil es:
+Si medimos desde que el usuario deja de hablar hasta el primer audio reproducible, sumar `T_STT + T_LLM + T_TTS` como si todo ocurriera en serie puede contar dos veces trabajo que ya ocurrió o que se solapa. En un pipeline con streaming, el STT puede emitir hipótesis parciales mientras el usuario habla, el runtime puede iniciar la generación cuando dispone del turno y del texto necesarios, y el TTS puede sintetizar los primeros fragmentos mientras el modelo continúa generando. LiveKit describe explícitamente este solapamiento entre etapas en su arquitectura de pipeline.[^livekit-streaming-pipeline]
+
+Una descomposición más fiel es seguir el **camino crítico** desde el fin del habla hasta audio reproducible:
 
 ```text
-T_first_audio ≈
-    T_turn_detection
-  + T_STT
-  + T_model_first_output
-  + T_TTS_first_audio
-  + T_transport
-  + T_playback_buffer
+speech_stop_to_first_audio_ms
+= duración del camino crítico entre:
+  commit / endpointing del turno
+  finalización residual del STT, si queda trabajo pendiente
+  modelo → primer texto suficiente para hablar
+  TTS → primer audio reproducible
+  transporte + buffer de reproducción
 ```
+
+La palabra *residual* importa: si el STT ya trabajó durante el turno, esa latencia previa no debe volver a sumarse después de `speech_stop`. Del mismo modo, la generación completa del LLM no bloquea el primer audio cuando el TTS consume texto en streaming. Como los intervalos exactos dependen del runtime y del proveedor, conviene medir timestamps del mismo turno y reconstruir el camino crítico en lugar de sumar cifras de latencia publicadas de componentes aislados.
 
 El [explorador de latencia para agentes de voz](/herramientas/latencia-agente-voz/) permite convertir esa descomposición en un presupuesto explícito. En el capítulo dedicado a latencia separaremos además cuándo puede solaparse trabajo y cuándo una etapa bloquea realmente a la siguiente.
 
@@ -203,6 +207,7 @@ La [nota técnica sobre arquitecturas de agentes de voz](/articulos-tecnicos/voi
 
 [^livekit-voice]: LiveKit, [Voice AI quickstart](https://docs.livekit.io/agents/start/voice-ai/). Documenta como alternativas de primer nivel un pipeline STT–LLM–TTS y un modelo realtime directo.
 [^livekit-pipelines]: LiveKit, [Pipeline types](https://docs.livekit.io/agents/models/pipelines/). Define STT–LLM–TTS, realtime y *half-cascade*; esta última usa un modelo realtime para comprensión y un TTS separado para la salida, y requiere que el proveedor soporte una modalidad de respuesta text-only.
+[^livekit-streaming-pipeline]: LiveKit, [Sequential pipeline architecture for voice agents](https://livekit.com/blog/sequential-pipeline-architecture-voice-agents), 23 de marzo de 2026. Explica cómo el STT, la generación del modelo y el TTS se solapan mediante streaming y por qué la latencia end-to-end no debe modelarse como una suma estrictamente bloqueante de etapas completas.
 [^openai-realtime-model]: OpenAI, [GPT-Realtime model](https://developers.openai.com/api/docs/models/gpt-realtime). Modalidades de texto/audio, transportes Realtime y function calling.
 [^openai-realtime-intro]: OpenAI, [Introducing the Realtime API](https://openai.com/index/introducing-the-realtime-api/). Describe el pipeline ASR → modelo de texto → TTS, la pérdida de señales acústicas y el streaming directo de audio.
 [^gemini-live]: Google, [Get started with Gemini Live API](https://ai.google.dev/gemini-api/docs/live-api/get-started-sdk). Sesiones persistentes, entrada de audio y salida de audio nativa en tiempo real.
