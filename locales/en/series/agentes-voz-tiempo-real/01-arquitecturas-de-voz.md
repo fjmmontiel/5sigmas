@@ -53,17 +53,21 @@ That makes a full cascade particularly useful when the product needs:
 
 The cost of that modularity is coordination. The STT may still be revising a hypothesis while the LLM has started generating; the TTS may have audio queued when the user interrupts; a tool may continue running after the spoken response has been cancelled. Perceived latency is therefore not just the sum of three model calls.
 
-A useful first approximation is:
+If the measurement starts when the user stops speaking and ends at the first playable audio, adding `T_STT + T_LLM + T_TTS` as though every stage were serial can count work twice when it already happened or overlaps. In a streaming pipeline, STT can emit interim hypotheses while the user is still speaking, the runtime can start generation once it has the turn and text it needs, and TTS can synthesize the first chunks while the model continues generating. LiveKit's current pipeline architecture explicitly describes this overlap across stages.[^livekit-streaming-pipeline]
+
+A more faithful decomposition is to trace the **critical path** from speech stop to playable audio:
 
 ```text
-T_first_audio ≈
-    T_turn_detection
-  + T_STT
-  + T_model_first_output
-  + T_TTS_first_audio
-  + T_transport
-  + T_playback_buffer
+speech_stop_to_first_audio_ms
+= duration of the critical path through:
+  turn commit / endpointing
+  residual STT finalization, if any work remains
+  model → first text sufficient to speak
+  TTS → first playable audio
+  transport + playout buffer
 ```
+
+*Residual* is the important word: if STT already ran during the turn, that earlier latency should not be added again after `speech_stop`. Likewise, full LLM generation does not block first audio when TTS consumes streamed text. Because the exact overlap depends on the runtime and providers, measure timestamps from the same turn and reconstruct the critical path instead of adding headline latency numbers from isolated components.
 
 The [voice-agent latency budget explorer](/en/tools/voice-latency-budget/) turns that decomposition into an explicit operating budget. The latency chapter in this series will go further and separate work that can overlap from stages that truly block the next one.
 
@@ -203,6 +207,7 @@ The deeper [voice-agent architecture engineering note](/en/articulos-tecnicos/vo
 
 [^livekit-voice]: LiveKit, [Voice AI quickstart](https://docs.livekit.io/agents/start/voice-ai/). Documents STT–LLM–TTS pipelines and direct realtime models as first-class alternatives.
 [^livekit-pipelines]: LiveKit, [Pipeline types](https://docs.livekit.io/agents/models/pipelines/). Defines STT–LLM–TTS, realtime, and *half-cascade*; the latter uses a realtime model for understanding and a separate TTS for output, and requires provider support for a text-only response modality.
+[^livekit-streaming-pipeline]: LiveKit, [Sequential pipeline architecture for voice agents](https://livekit.com/blog/sequential-pipeline-architecture-voice-agents), March 23, 2026. Explains how streaming STT, model generation, and TTS overlap, and why end-to-end latency should not be modeled as a strictly blocking sum of complete stage latencies.
 [^openai-realtime-model]: OpenAI, [GPT-Realtime model](https://developers.openai.com/api/docs/models/gpt-realtime). Text/audio modalities, Realtime transports, and function calling.
 [^openai-realtime-intro]: OpenAI, [Introducing the Realtime API](https://openai.com/index/introducing-the-realtime-api/). Describes the ASR → text model → TTS pipeline, loss of acoustic cues, and direct audio streaming.
 [^gemini-live]: Google, [Get started with Gemini Live API](https://ai.google.dev/gemini-api/docs/live-api/get-started-sdk). Persistent sessions with realtime audio input and native audio output.
