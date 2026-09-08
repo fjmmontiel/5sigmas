@@ -81,6 +81,8 @@ check(!esArticle.includes('T_first_audio ≈'), 'Spanish article: legacy naive a
 check(!enArticle.includes('T_first_audio ≈'), 'English article: legacy naive additive first-audio formula remains');
 check(esArticle.includes('`gpt-realtime-2.1`'), 'Spanish article: current OpenAI realtime example is missing');
 check(enArticle.includes('`gpt-realtime-2.1`'), 'English article: current OpenAI realtime example is missing');
+check(esArticle.includes('output_modalities: ["text"]'), 'Spanish article: missing explicit OpenAI text-only response contract');
+check(enArticle.includes('output_modalities: ["text"]'), 'English article: missing explicit OpenAI text-only response contract');
 check(esArticle.includes('[^openai-realtime-deprecation]:'), 'Spanish article: missing OpenAI realtime deprecation reference');
 check(enArticle.includes('[^openai-realtime-deprecation]:'), 'English article: missing OpenAI realtime deprecation reference');
 check(!esArticle.includes('`gpt-realtime`, por ejemplo'), 'Spanish article: deprecated gpt-realtime remains as a current example');
@@ -100,6 +102,10 @@ check(esArticle.includes('**La seguridad también se reparte por capas.**'), 'Sp
 check(enArticle.includes('**Security is layered as well.**'), 'English article: missing layered security ownership');
 check(esArticle.includes('**Testing/evals es otra superficie de ownership.**'), 'Spanish article: missing testing/eval ownership comparison');
 check(enArticle.includes('**Testing and evals are another ownership surface.**'), 'English article: missing testing/eval ownership comparison');
+check(esArticle.includes('Pipecat ya incluye **Pipecat Evals**'), 'Spanish article: missing current built-in Pipecat Evals capability');
+check(enArticle.includes('Pipecat now includes **Pipecat Evals**'), 'English article: missing current built-in Pipecat Evals capability');
+check(!esArticle.includes('el harness que convierte esa instrumentación en un conjunto reproducible de evals sigue siendo una decisión de la aplicación'), 'Spanish article: stale pre-Pipecat-Evals capability statement remains');
+check(!enArticle.includes('the harness that turns that instrumentation into a reproducible eval suite remains an application choice unless you adopt additional tooling'), 'English article: stale pre-Pipecat-Evals capability statement remains');
 check(esArticle.includes('developer velocity vs control'), 'Spanish article: missing developer-velocity/control trade-off');
 check(enArticle.includes('developer velocity vs control'), 'English article: missing developer-velocity/control trade-off');
 check(esArticle.includes('**1. Voice assistant en browser o móvil.**'), 'Spanish article: missing browser/mobile decision case');
@@ -122,12 +128,14 @@ for (const ref of [
   '[^pipecat-turns]:',
   '[^pipecat-tools]:',
   '[^pipecat-metrics]:',
+  '[^pipecat-evals]:',
   '[^pipecat-livekit]:',
   '[^pipecat-session-lifecycle]:',
   '[^pipecat-websocket-reconnect]:',
   '[^pipecat-service-events]:',
   '[^pipecat-websocket-auth]:',
   '[^openai-realtime-transport]:',
+  '[^openai-realtime-output-modality]:',
   '[^openai-webrtc-scale]:',
   '[^twilio-media-streams]:',
   '[^twilio-media-messages]:',
@@ -174,6 +182,7 @@ const cases = [
       'Recovery no equivale a continuidad de estado.',
       'La seguridad también se reparte por capas.',
       'Testing/evals es otra superficie de ownership.',
+      'Pipecat Evals',
       'Voice assistant en browser o móvil.',
       'Agente PSTN.',
       'Pipeline experimental o custom de bajo nivel.',
@@ -197,6 +206,7 @@ const cases = [
       'Recovery is not the same as state continuity.',
       'Security is layered as well.',
       'Testing and evals are another ownership surface.',
+      'Pipecat Evals',
       'Browser or mobile voice assistant.',
       'PSTN agent.',
       'Experimental or low-level custom pipeline.',
@@ -289,4 +299,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Voice architecture chapter 1 QA passed: ES/EN semantics, canonical mirrors, architecture-vs-duplex distinction, current-model freshness, runtime-ownership and media-endpoint ownership decisions including recovery/security/testing ownership, desktop/mobile geometry, interaction states, reader navigation, language integrity and runtime behavior are valid.');
+console.log('Voice architecture chapter 1 QA passed: ES/EN semantics, canonical mirrors, architecture-vs-duplex distinction, current-model and text-only-modality freshness, runtime-ownership and media-endpoint ownership decisions including recovery/security/testing/eval ownership, desktop/mobile geometry, interaction states, reader navigation, language integrity and runtime behavior are valid.');
