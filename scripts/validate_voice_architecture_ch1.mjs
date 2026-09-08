@@ -94,8 +94,14 @@ check(esArticle.includes('| Criterio | LiveKit Agents | Pipecat | Python vanilla
 check(enArticle.includes('| Criterion | LiveKit Agents | Pipecat | Thin / vanilla Python |'), 'English article: missing compact LiveKit/Pipecat/vanilla runtime matrix');
 check(esArticle.includes('vanilla significa que no delegas la orquestación en un agent framework de este tipo; no significa que implementes WebRTC o SIP desde cero'), 'Spanish article: thin/vanilla is conflated with owning the WebRTC/SIP media stack');
 check(enArticle.includes('vanilla means you are not delegating orchestration to this kind of agent framework; it does not mean implementing WebRTC or SIP from scratch'), 'English article: thin/vanilla is conflated with owning the WebRTC/SIP media stack');
-check(esArticle.includes('Twilio Media Streams, por ejemplo, entrega audio crudo de la llamada a tu servidor'), 'Spanish article: missing carrier-managed PSTN Media Streams case');
-check(enArticle.includes('Twilio Media Streams, for example, sends raw call audio to your server'), 'English article: missing carrier-managed PSTN Media Streams case');
+check(esArticle.includes('Twilio Media Streams, por ejemplo, entrega audio de la llamada a tu servidor'), 'Spanish article: missing carrier-managed PSTN Media Streams case');
+check(enArticle.includes('Twilio Media Streams, for example, sends call audio to your server'), 'English article: missing carrier-managed PSTN Media Streams case');
+check(esArticle.includes('`audio/x-mulaw`, 8 kHz, mono'), 'Spanish article: missing concrete Twilio Media Streams codec contract');
+check(enArticle.includes('`audio/x-mulaw`, 8 kHz, mono'), 'English article: missing concrete Twilio Media Streams codec contract');
+check(esArticle.includes('`X-Twilio-Signature`'), 'Spanish article: missing Twilio Media Streams origin-authentication boundary');
+check(enArticle.includes('`X-Twilio-Signature`'), 'English article: missing Twilio Media Streams origin-authentication boundary');
+check(esArticle.includes('no demuestra que la persona lo haya oído físicamente'), 'Spanish article: Twilio mark is overstated as proof of human audibility');
+check(enArticle.includes('does not prove that the person physically heard the sample'), 'English article: Twilio mark is overstated as proof of human audibility');
 check(esArticle.includes('**Recovery no equivale a continuidad de estado.**'), 'Spanish article: missing recovery-vs-state-continuity distinction');
 check(enArticle.includes('**Recovery is not the same as state continuity.**'), 'English article: missing recovery-vs-state-continuity distinction');
 check(esArticle.includes('**La seguridad también se reparte por capas.**'), 'Spanish article: missing layered security ownership');
@@ -178,7 +184,9 @@ const cases = [
       'Segunda decisión: cuánto runtime quieres poseer',
       'Matriz de decisión del runtime',
       'vanilla significa que no delegas la orquestación en un agent framework',
-      'Twilio Media Streams, por ejemplo, entrega audio crudo de la llamada a tu servidor',
+      'Twilio Media Streams, por ejemplo, entrega audio de la llamada a tu servidor',
+      'audio/x-mulaw',
+      'X-Twilio-Signature',
       'Recovery no equivale a continuidad de estado.',
       'La seguridad también se reparte por capas.',
       'Testing/evals es otra superficie de ownership.',
@@ -202,7 +210,9 @@ const cases = [
       'A second decision: how much runtime do you want to own?',
       'Runtime decision matrix',
       'vanilla means you are not delegating orchestration to this kind of agent framework',
-      'Twilio Media Streams, for example, sends raw call audio to your server',
+      'Twilio Media Streams, for example, sends call audio to your server',
+      'audio/x-mulaw',
+      'X-Twilio-Signature',
       'Recovery is not the same as state continuity.',
       'Security is layered as well.',
       'Testing and evals are another ownership surface.',
@@ -299,4 +309,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Voice architecture chapter 1 QA passed: ES/EN semantics, canonical mirrors, architecture-vs-duplex distinction, current-model and text-only-modality freshness, runtime-ownership and media-endpoint ownership decisions including recovery/security/testing/eval ownership, desktop/mobile geometry, interaction states, reader navigation, language integrity and runtime behavior are valid.');
+console.log('Voice architecture chapter 1 QA passed: ES/EN semantics, canonical mirrors, architecture-vs-duplex distinction, current-model and text-only-modality freshness, runtime-ownership and media-endpoint ownership decisions including PSTN carrier codec/security/playback-accounting boundaries plus recovery/security/testing/eval ownership, desktop/mobile geometry, interaction states, reader navigation, language integrity and runtime behavior are valid.');
