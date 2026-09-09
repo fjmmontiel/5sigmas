@@ -10,8 +10,8 @@ await fs.mkdir(outDir, { recursive: true });
 const failures = [];
 const check = (condition, message) => { if (!condition) failures.push(message); };
 const cases = [
-  { locale: 'es', route: '/series/agentes-voz-tiempo-real/02-turn-taking/' },
-  { locale: 'en', route: '/en/series/agentes-voz-tiempo-real/02-turn-taking/' },
+  { locale: 'es', route: '/series/agentes-voz-tiempo-real/02-turn-taking/', runtimeHeader: 'Pregunta de turn-taking' },
+  { locale: 'en', route: '/en/series/agentes-voz-tiempo-real/02-turn-taking/', runtimeHeader: 'Turn-taking question' },
 ];
 const viewports = [
   { name: 'desktop', width: 1440, height: 1000, hasTouch: false },
@@ -79,6 +79,82 @@ try {
       const h1 = (await page.locator('main h1').first().innerText()).trim();
       check(h1.length >= 20, `${testCase.route}: ${viewport.name} missing article h1`);
 
+      // The four-column runtime matrix is wider than a phone viewport by design.
+      // Fail closed unless the final column is reachable through a real horizontal
+      // scroll container; a clipped table with no scroll affordance is not acceptable.
+      const runtimeTable = page.locator('main table').filter({ hasText: testCase.runtimeHeader }).first();
+      check((await runtimeTable.count()) === 1, `${testCase.route}: ${viewport.name} runtime decision table missing`);
+      if (await runtimeTable.count()) {
+        const tableState = await runtimeTable.evaluate((table, args) => {
+          const lastHeader = table.querySelector('thead th:last-child');
+          if (!lastHeader) return { hasLastHeader: false };
+
+          if (args.viewportName !== 'mobile') {
+            const tableBox = table.getBoundingClientRect();
+            const lastBox = lastHeader.getBoundingClientRect();
+            return {
+              hasLastHeader: true,
+              desktopFits: tableBox.right <= window.innerWidth + 1 && lastBox.right <= window.innerWidth + 1,
+              tableRight: tableBox.right,
+              lastRight: lastBox.right,
+              viewportWidth: window.innerWidth,
+            };
+          }
+
+          let scroller = table.parentElement;
+          while (scroller && scroller !== document.body) {
+            const style = getComputedStyle(scroller);
+            const canScroll = scroller.scrollWidth > scroller.clientWidth + 1;
+            const overflowAllowsScroll = style.overflowX === 'auto' || style.overflowX === 'scroll';
+            if (canScroll && overflowAllowsScroll) break;
+            scroller = scroller.parentElement;
+          }
+          if (!scroller || scroller === document.body) {
+            return { hasLastHeader: true, hasScroller: false };
+          }
+
+          const maxScroll = scroller.scrollWidth - scroller.clientWidth;
+          scroller.dataset.s5Ch2RuntimeScroller = args.marker;
+          scroller.scrollLeft = maxScroll;
+          // Force layout after changing scrollLeft before measuring reachability.
+          void scroller.offsetWidth;
+          const scrollerBox = scroller.getBoundingClientRect();
+          const lastBox = lastHeader.getBoundingClientRect();
+          return {
+            hasLastHeader: true,
+            hasScroller: true,
+            maxScroll,
+            actualScroll: scroller.scrollLeft,
+            lastColumnReachable: lastBox.left >= scrollerBox.left - 2 && lastBox.right <= scrollerBox.right + 2,
+            scrollerLeft: scrollerBox.left,
+            scrollerRight: scrollerBox.right,
+            lastLeft: lastBox.left,
+            lastRight: lastBox.right,
+          };
+        }, { viewportName: viewport.name, marker: `${testCase.locale}-${viewport.name}` });
+
+        check(tableState.hasLastHeader === true, `${testCase.route}: ${viewport.name} runtime table last header missing`);
+        if (viewport.name === 'desktop') {
+          check(tableState.desktopFits === true, `${testCase.route}: desktop runtime matrix clipped (${JSON.stringify(tableState)})`);
+        } else {
+          check(tableState.hasScroller === true, `${testCase.route}: mobile runtime matrix clips without horizontal scroll container (${JSON.stringify(tableState)})`);
+          check(Number(tableState.maxScroll) > 20 && Number(tableState.actualScroll) > 20, `${testCase.route}: mobile runtime matrix horizontal scroll is inert (${JSON.stringify(tableState)})`);
+          check(tableState.lastColumnReachable === true, `${testCase.route}: mobile runtime matrix final column is not reachable (${JSON.stringify(tableState)})`);
+
+          const scroller = page.locator(`[data-s5-ch2-runtime-scroller="${testCase.locale}-${viewport.name}"]`);
+          if (await scroller.count()) {
+            await scroller.screenshot({
+              path: path.join(outDir, `voice-turn-taking-ch2-${testCase.locale}-mobile-runtime-table-end.png`),
+              animations: 'disabled',
+            });
+            await scroller.evaluate((element) => {
+              element.scrollLeft = 0;
+              delete element.dataset.s5Ch2RuntimeScroller;
+            });
+          }
+        }
+      }
+
       for (const error of runtimeErrors) failures.push(`${testCase.route}: ${viewport.name} runtime error: ${error}`);
       await page.screenshot({
         path: path.join(outDir, `voice-turn-taking-ch2-${testCase.locale}-${viewport.name}-page.png`),
@@ -98,4 +174,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Turn-taking chapter browser/accessibility QA PASS: ES/EN route language, visual semantics, localization, desktop/mobile geometry, whole-page overflow, runtime errors and review screenshots are valid.');
+console.log('Turn-taking chapter browser/accessibility QA PASS: ES/EN route language, visual semantics, localization, desktop/mobile geometry, responsive runtime-matrix reachability, whole-page overflow, runtime errors and review screenshots are valid.');
