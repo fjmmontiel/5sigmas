@@ -1,5 +1,6 @@
 name: Voice chapter 1 GOLDEN integration gate
 
+# One-shot integration rerun after validator truth-alignment.
 on:
   push:
     branches:
