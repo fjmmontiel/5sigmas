@@ -120,8 +120,8 @@ check(
     enArticle.includes('the managed adapter can restart the request from the beginning after a mid-stream failure'),
   'English article: LiveKit Agent-vs-Inference fallback scope/restart semantics drifted',
 );
-check(esArticle.includes('`ErrorEvent.recoverable`'), 'Spanish article: missing LiveKit recoverability semantics');
-check(enArticle.includes('`ErrorEvent.recoverable`'), 'English article: missing LiveKit recoverability semantics');
+check(esArticle.includes('`ErrorEvent`') && esArticle.includes('`error.recoverable`'), 'Spanish article: missing LiveKit ErrorEvent error.recoverable semantics');
+check(enArticle.includes('`ErrorEvent`') && enArticle.includes('`error.recoverable`'), 'English article: missing LiveKit ErrorEvent error.recoverable semantics');
 check(esArticle.includes('`CancelFrame`, `ErrorFrame` upstream'), 'Spanish article: missing Pipecat cancellation/error-propagation primitives');
 check(enArticle.includes('`CancelFrame`, upstream `ErrorFrame`'), 'English article: missing Pipecat cancellation/error-propagation primitives');
 check(esArticle.includes('**Una cola no es backpressure por existir.**'), 'Spanish article: missing explicit queue-vs-backpressure rule');
@@ -239,7 +239,7 @@ for (const fragment of forbiddenVisualFragments) {
 check(sourceById.get('map')?.includes('Audio-native + TTS'), 'map: missing explicit audio-native + TTS architecture label');
 check(sourceById.get('map')?.includes('<span class="is-model">S2S</span><i>→</i><span class="is-audio">Audio</span>'), 'map: S2S panel no longer encodes an audio → model → audio modality path');
 check(sourceById.get('duplex')?.includes('<span class="s5v__kicker">Full-duplex</span>'), 'duplex: kicker must identify the interaction axis as Full-duplex');
-check(sourceById.get('decision')?.includes('Speech-to-speech → continuidad acústica'), 'decision: S2S criterion must describe acoustic continuity rather than full-duplex');
+check(sourceById.get('decision')?.includes('<b>Speech-to-speech</b><span>continuidad acústica y menos fronteras de modalidad</span>'), 'decision: S2S criterion must describe acoustic continuity rather than full-duplex');
 
 const browser = await chromium.launch({ headless: true });
 const cases = [
@@ -261,7 +261,7 @@ const cases = [
       'Agent Fallback Adapter',
       'Inference Fallback Adapter',
       'puede reiniciar la petición desde el principio tras un fallo mid-stream',
-      'ErrorEvent.recoverable',
+      'error.recoverable',
       'CancelFrame',
       'ErrorFrame',
       'vanilla significa que no delegas la orquestación en un agent framework',
@@ -303,7 +303,7 @@ const cases = [
       'Agent Fallback Adapter',
       'Inference Fallback Adapter',
       'can restart the request from the beginning after a mid-stream failure',
-      'ErrorEvent.recoverable',
+      'error.recoverable',
       'CancelFrame',
       'ErrorFrame',
       'vanilla means you are not delegating orchestration to this kind of agent framework',
