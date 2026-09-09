@@ -9,12 +9,15 @@ const visualPath = path.resolve('docs/snippets/articulos-tecnicos/voice-latency-
 const mirrorPath = path.resolve('locales/en/snippets/articulos-tecnicos/voice-latency-critical-path.html');
 const i18nPath = path.resolve('locales/en/snippets/articulos-tecnicos/voice-latency-critical-path.i18n.json');
 
-const [es, en, visual, mirror, i18nRaw] = await Promise.all([
+const [es, en, visual, mirror, i18nRaw, mkdocsEs, mkdocsEn, manifest] = await Promise.all([
   fs.readFile(esPath, 'utf8'),
   fs.readFile(enPath, 'utf8'),
   fs.readFile(visualPath, 'utf8'),
   fs.readFile(mirrorPath, 'utf8'),
   fs.readFile(i18nPath, 'utf8'),
+  fs.readFile(path.resolve('mkdocs.yml'), 'utf8'),
+  fs.readFile(path.resolve('mkdocs.en.yml'), 'utf8'),
+  fs.readFile(path.resolve('locales/en/manifest.yml'), 'utf8'),
 ]);
 const i18n = JSON.parse(i18nRaw);
 const failures = [];
@@ -24,6 +27,7 @@ const blobSha = (text) => {
   return crypto.createHash('sha1').update(`blob ${bytes.length}\0`).update(bytes).digest('hex');
 };
 
+const route = 'series/agentes-voz-tiempo-real/03-presupuesto-latencia.md';
 const include = '{{ include_html("snippets/articulos-tecnicos/voice-latency-critical-path.html") }}';
 check(es.includes(include), 'ES: missing latency critical-path visual include');
 check(en.includes(include), 'EN: missing latency critical-path visual include');
@@ -32,6 +36,14 @@ check(i18n.source === 'snippets/articulos-tecnicos/voice-latency-critical-path.h
 check(i18n.source_blob_sha === blobSha(visual), `EN visual i18n: source_blob_sha drift; expected ${blobSha(visual)}, got ${i18n.source_blob_sha}`);
 check(visual.includes('Mide eventos observables, no sumas de dashboards'), 'Visual: critical-path teaching claim missing');
 check(visual.includes('sumar sus duraciones completas puede contar trabajo dos veces'), 'Visual: streaming overlap/double-count warning missing');
+check(visual.includes('<code>speech_stop</code>') && visual.includes('acústica, borde de captura o VAD servidor'), 'Visual: speech-stop measurement boundary missing');
+check(visual.includes('/herramientas/latencia-agente-voz/'), 'Visual: canonical latency explorer link missing');
+check(i18n.replacements?.['/herramientas/latencia-agente-voz/'] === '/en/tools/voice-latency-budget/', 'EN visual i18n: localized latency explorer route missing');
+
+check(mkdocsEs.includes(`- Presupuesto de latencia: ${route}`), 'ES nav: chapter 3 route missing');
+check(mkdocsEn.includes(`- Latency budget: ${route}`), 'EN nav: chapter 3 route missing');
+check(manifest.includes(`  - ${route}`), 'EN manifest: chapter 3 published route missing');
+check(manifest.includes('  - snippets/articulos-tecnicos/voice-latency-critical-path.html'), 'EN manifest: chapter 3 visual required_snippets entry missing');
 
 const requiredPrimaryUrls = [
   'https://docs.livekit.io/deploy/observability/data/',
