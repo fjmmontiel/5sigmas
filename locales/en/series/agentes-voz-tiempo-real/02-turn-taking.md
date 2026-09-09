@@ -115,7 +115,7 @@ A *backchannel* is a short cue such as “yeah,” “uh-huh,” or “right” 
 
 LiveKit documents this distinction directly in adaptive interruption handling: VAD detects incoming user audio, then a separate model attempts to distinguish genuine barge-in from backchanneling or noise.[^livekit-adaptive-interruptions] That specific capability is a LiveKit Cloud surface under the conditions in its current documentation. It should not be attributed to the self-hosted framework as a universal property.
 
-Pipecat exposes turn start as a strategy. `VADUserTurnStartStrategy` is the most responsive option; `MinWordsUserTurnStartStrategy` can require more evidence while the bot is speaking, and external strategies can delegate the decision to another component.[^pipecat-turn-strategies]
+Pipecat exposes turn start as a strategy. `VADUserTurnStartStrategy` is the most responsive option. `MinWordsUserTurnStartStrategy` can require more evidence while the bot is speaking, and external strategies can delegate the decision to another component.[^pipecat-turn-strategies]
 
 The broader design rule is independent of either framework: **speech start is evidence for considering an interruption, not necessarily the final decision to yield the turn**.
 
@@ -142,9 +142,9 @@ At minimum:
 2. **Clear or truncate pending audio** that should no longer be played.
 3. **Cancel generation** when continuing to compute has no value.
 4. **Preserve only valid context** for the next turn.
-5. **Treat tools by semantics rather than reflex**: a read may be cancellable; an operation with side effects may require idempotency, durable state, or a policy not to cancel it.
+5. **Treat tools by semantics rather than reflex.** A read may be cancellable. An operation with side effects may require idempotency, durable state, or a policy not to cancel it.
 
-When LiveKit handles an interruption, it pauses agent speech and truncates conversation history to the portion of speech it considers heard before the interruption. It also exposes `session.interrupt()` for explicit interruption.[^livekit-turns] Pipecat uses `InterruptionFrame` to discard pending DataFrames and ControlFrames; SystemFrames have priority and are not discarded by that interruption.[^pipecat-system-frames]
+When LiveKit handles an interruption, it pauses agent speech and truncates conversation history to the portion of speech it considers heard before the interruption. It also exposes `session.interrupt()` for explicit interruption.[^livekit-turns] Pipecat uses `InterruptionFrame` to discard pending DataFrames and ControlFrames. SystemFrames have priority and are not discarded by that interruption.[^pipecat-system-frames]
 
 Those are **runtime semantics**, not physical proof of which samples reached a person's ear. If a transport or carrier owns another playback buffer, the product still has to correlate its state with the most authoritative playback boundary it can observe.
 
@@ -203,7 +203,7 @@ Pipecat is a natural fit when you need to combine different signals for turn sta
 
 An application can delegate turn detection to a realtime provider and consume its events, or it can run its own VAD and turn detector. Either way, it owns whatever the framework no longer provides: event ordering, deduplication, cancellation, playback buffers, confirmed state, tools, retries/reconnect, tracing, and tests.
 
-With OpenAI Realtime, for example, `server_vad` and `semantic_vad` are provider/service capabilities, not Python capabilities. The turn-detection contract can control automatic response creation and interruption of the active response; any product policy built on top remains application-owned.[^openai-realtime-vad]
+With OpenAI Realtime, for example, `server_vad` and `semantic_vad` are provider/service capabilities, not Python capabilities. The turn-detection contract can control automatic response creation and interruption of the active response. Any product policy built on top remains application-owned.[^openai-realtime-vad]
 
 ### A hybrid is reasonable when authority boundaries are explicit
 
@@ -219,7 +219,7 @@ If the browser connects directly to a realtime provider, server-side turn detect
 
 ### PSTN agent
 
-Telephony adds noise, compression, echo, and carrier buffering. VAD can remain a fast speech-start signal, but end-of-turn and interruption policies should be evaluated on real phone audio. A configuration that works on a laptop microphone is not sufficient evidence for μ-law 8 kHz or another telephony path. If the carrier terminates SIP and exposes media over WebSocket, the application runtime still has to distinguish media events, turn decisions, and playback state.
+Telephony adds noise, compression, echo, and carrier buffering. VAD can remain a fast speech-start signal, but end-of-turn and interruption policies should be evaluated on real phone audio. A configuration that works on a laptop microphone is not sufficient evidence for a different telephony route with different codec and buffering behavior. If the carrier terminates SIP and exposes media over WebSocket, the application runtime still has to distinguish media events, turn decisions, and playback state.
 
 ### Experimental or low-level pipeline
 
@@ -241,13 +241,13 @@ same instrumentation
 
 Measure at least:
 
-- premature endpoint rate;
-- the latency distribution from human completion to turn commit;
-- false interruption rate;
-- missed interruption rate;
-- the `speech_start → agent_playback_stop` distribution for accepted barge-ins;
-- stale continuation/audio after cancellation;
-- task success after genuine interruptions.
+- premature endpoint rate
+- the latency distribution from human completion to turn commit
+- false interruption rate
+- missed interruption rate
+- the `speech_start → agent_playback_stop` distribution for accepted barge-ins
+- stale continuation/audio after cancellation
+- task success after genuine interruptions
 
 Do not take results from a semantic detector on clean audio, a VAD on PSTN, and a third system on a browser microphone and present them as one ranking. They are different systems under different conditions.
 
