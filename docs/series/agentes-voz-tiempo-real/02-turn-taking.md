@@ -115,7 +115,7 @@ Un *backchannel* es una señal corta como «sí», «ajá» o «vale» que puede
 
 LiveKit documenta esta separación directamente en su adaptive interruption handling: VAD detecta audio entrante y un modelo posterior intenta distinguir barge-in genuino de backchannel/noise.[^livekit-adaptive-interruptions] Esa capacidad concreta pertenece a LiveKit Cloud bajo las condiciones descritas por sus docs; no debe atribuirse al framework autohospedado como una propiedad universal.
 
-Pipecat expone la decisión de inicio como estrategia. `VADUserTurnStartStrategy` es la opción más reactiva; `MinWordsUserTurnStartStrategy` puede exigir más evidencia cuando el bot está hablando, y existen estrategias externas para delegar la decisión a otro componente.[^pipecat-turn-strategies]
+Pipecat expone la decisión de inicio como estrategia. `VADUserTurnStartStrategy` es la opción más reactiva; `MinWordsUserTurnStartStrategy` puede exigir más evidencia cuando el bot está hablando. Además, `KrispVivaIPUserTurnStartStrategy` ejecuta el modelo de predicción de interrupciones Krisp VIVA IP después del VAD y sólo abre el turno si la probabilidad de interrupción supera el umbral configurado. Es una estrategia de Pipecat respaldada por el SDK/modelo de Krisp, no un modelo propio de Pipecat, y puede combinarse con transcripción como fallback.[^pipecat-turn-strategies]
 
 La regla de diseño es más general que cualquiera de los dos frameworks: **speech start es evidencia para considerar una interrupción, no necesariamente la decisión final de ceder el turno**.
 
@@ -144,7 +144,7 @@ Como mínimo:
 4. **Conservar sólo el contexto válido** para el siguiente turno.
 5. **Tratar tools por semántica**, no por reflejo: una lectura puede cancelarse; una operación con side effects puede necesitar idempotencia, estado durable o una política de no cancelación.
 
-LiveKit, cuando maneja una interrupción, pausa el habla del agente y ajusta el historial conversacional a la parte de la respuesta que considera escuchada antes de la interrupción; también expone `session.interrupt()` para interrupción explícita.[^livekit-turns] Pipecat usa `InterruptionFrame` para descartar DataFrames y ControlFrames pendientes; los SystemFrames tienen prioridad y no se descartan por esa interrupción.[^pipecat-system-frames]
+LiveKit, cuando maneja una interrupción, pausa el habla del agente y ajusta el historial conversacional a la parte de la respuesta que considera escuchada antes de la interrupción; también expone `session.interrupt()` para interrupción explícita.[^livekit-turns] Con manejo VAD/no-realtime, LiveKit modela además la **falsa interrupción**: si una interrupción no produce transcripción, la sesión puede clasificarla tras `false_interruption_timeout` y reanudar el habla pausada cuando `resume_false_interruption` está habilitado. Esa recuperación de sesión es distinta del modelo adaptive gestionado.[^livekit-turns] Pipecat usa `InterruptionFrame` para descartar DataFrames y ControlFrames pendientes; los SystemFrames tienen prioridad y no se descartan por esa interrupción.[^pipecat-system-frames]
 
 Esas son **semánticas de runtime**, no una garantía física de qué muestras llegaron al oído de una persona. Si el transporte o carrier mantiene su propio buffer, el producto necesita correlacionar su estado de reproducción con la frontera que realmente puede observar.
 
@@ -187,7 +187,7 @@ La elección del runtime cambia dónde viven estas políticas. No cambia la fís
 |---|---|---|---|
 | Inicio de habla | VAD dentro del manejo de turno o señal del realtime model | Estrategias de turn start: VAD, transcripción, min-words, externas | Evento del provider/VAD o detector propio; la app ordena y valida eventos |
 | Fin de turno | Turn detector, VAD, STT endpointing, manual o realtime-model detection | Estrategias de turn stop; Smart Turn es el default actual | Server VAD/semantic VAD del provider, detector propio o timeout explícito |
-| Barge-in | Interruption handling; adaptive es una superficie gestionada separada cuando aplica | Inicio de turno puede emitir interrupción; política totalmente componible | La app decide cuándo cancelar generación, audio y estado |
+| Barge-in | Interruption handling; adaptive es una superficie gestionada separada cuando aplica | VAD/min-words/Krisp VIVA IP/estrategias externas; emitir una interrupción sigue siendo decisión de la estrategia | La app decide cuándo cancelar generación, audio y estado |
 | Playback/history | `AgentSession` integra pausa/interrupción y truncado de contexto | Frames de interrupción y processors controlan qué sigue fluyendo | La app debe modelar buffers, correlación de playback y contexto confirmado |
 | Control fino | Alto dentro de las abstracciones de sesión/turn handling | Muy alto mediante estrategias/processors/frames | Máximo, a cambio de poseer ordering, cancellation, retries, tests y observabilidad |
 
