@@ -187,6 +187,7 @@ nav:
       - Realtime Voice Agents:
           - Voice architectures: series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.md
           - Turn-taking: series/agentes-voz-tiempo-real/02-turn-taking.md
+          - Latency budget: series/agentes-voz-tiempo-real/03-presupuesto-latencia.md
   - Concepts:
       - Concepts: temas/index.md
       - What is an LLM?: temas/llms.md
