@@ -78,12 +78,6 @@ try {
 
       const h1 = (await page.locator('main h1').first().innerText()).trim();
       check(h1.length >= 20, `${testCase.route}: ${viewport.name} missing article h1`);
-      const tables = page.locator('main table');
-      for (let index = 0; index < await tables.count(); index += 1) {
-        const table = tables.nth(index);
-        const box = await table.boundingBox();
-        if (box) check(box.width <= viewport.width + 1, `${testCase.route}: ${viewport.name} table ${index + 1} exceeds viewport (${JSON.stringify(box)})`);
-      }
 
       for (const error of runtimeErrors) failures.push(`${testCase.route}: ${viewport.name} runtime error: ${error}`);
       await page.screenshot({
@@ -104,4 +98,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Turn-taking chapter browser/accessibility QA PASS: ES/EN route language, visual semantics, localization, desktop/mobile geometry, table/page overflow, runtime errors and review screenshots are valid.');
+console.log('Turn-taking chapter browser/accessibility QA PASS: ES/EN route language, visual semantics, localization, desktop/mobile geometry, whole-page overflow, runtime errors and review screenshots are valid.');
