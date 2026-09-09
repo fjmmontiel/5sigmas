@@ -1,6 +1,6 @@
 {
   "source": "snippets/articulos-tecnicos/voice-turn-taking-signals.html",
-  "source_blob_sha": "91f27741a7edee32e43398681ce23d5af573edde",
+  "source_blob_sha": "e294eaa1253e88ded2f4233f280aa36eb3864751",
   "replacements": {
     "Cuatro señales distintas en el control de turnos de un agente de voz": "Four separate signals in a voice agent's turn-taking control",
     "Control de turnos": "Turn-taking control",
@@ -10,13 +10,11 @@
     "¿Hay habla ahora?": "Is there speech right now?",
     "Fin de turno": "End of turn",
     "¿Terminó la idea?": "Is the thought complete?",
-    "contexto + endpointing": "context + endpointing",
     "Interrupción": "Interruption",
     "¿Quiere tomar el turno?": "Is the user trying to take the turn?",
     "Commit y cancelación": "Commit and cancellation",
     "¿Qué estado sigue siendo válido?": "Which state is still valid?",
-    "playback · historial · tools": "playback · history · tools",
-    "El error típico es conectar el paso 1 directamente con el 4. Detectar voz es una observación; ceder el turno es una decisión de estado.": "A common failure is wiring step 1 directly to step 4. Detecting speech is an observation; yielding the turn is a state decision."
+    "Detectar voz es una observación. Ceder el turno exige una decisión de estado sobre playback, historial y tools.": "Detecting speech is an observation. Yielding the turn requires a state decision over playback, history, and tools."
   },
   "forbidden_output_tokens": [
     "Cuatro señales distintas",
@@ -30,6 +28,6 @@
     "¿Quiere tomar el turno?",
     "Commit y cancelación",
     "¿Qué estado sigue siendo válido?",
-    "El error típico es conectar"
+    "Detectar voz es una observación"
   ]
 }
