@@ -12,6 +12,7 @@ published_routes:
   - series/index.md
   - series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.md
   - series/agentes-voz-tiempo-real/02-turn-taking.md
+  - series/agentes-voz-tiempo-real/03-presupuesto-latencia.md
   - series/fundamentos-ia-iag/00_presentacion_serie.md
   - series/fundamentos-ia-iag/01-que-es-ia.md
   - series/fundamentos-ia-iag/02-que-es-ia-generativa.md
@@ -72,6 +73,7 @@ published_routes:
 required_snippets:
   - snippets/series_meta.html
   - snippets/articulos-tecnicos/voice-turn-taking-signals.html
+  - snippets/articulos-tecnicos/voice-latency-critical-path.html
   - snippets/from-cave-to-agi/01-sistemas-numeracion.html
   - snippets/from-cave-to-agi/01-algebra-despejar.html
   - snippets/from-cave-to-agi/01-cadena-deductiva.html
