@@ -37,9 +37,9 @@ Pero una pausa acústica no implica necesariamente un final conversacional.
 Imagina este turno:
 
 ```text
-Usuario: «Necesito cambiar la dirección…"
+Usuario: «Necesito cambiar la dirección…»
                          └── pausa de 350 ms ──┘
-Usuario: "…del pedido 4182»
+Usuario: «…del pedido 4182»
 ```
 
 Un sistema que convierta directamente `speech → silence` en `turn_end` puede responder después de «dirección» y pisar la segunda mitad de la petición. Hacer el silencio mínimo más largo reduce ese fallo, pero crea otro: después de un «sí» completo el agente espera innecesariamente.
@@ -99,7 +99,7 @@ fin del usuario
 
 Pipecat materializa esta separación mediante estrategias distintas de *turn start* y *turn stop*. Puede iniciar un turno con VAD o transcripción y cerrarlo con Smart Turn, un timeout, una señal externa u otra estrategia.[^pipecat-turn-strategies]
 
-Esta asimetría es útil porque los errores cuestan cosas diferentes. Detectar un comienzo unos cientos de milisegundos tarde hace que el agente hable encima del usuario. Cerrar un final demasiado pronto puede cambiar el significado de la petición completa.
+Esta asimetría es útil porque los errores cuestan cosas diferentes. Detectar un comienzo tarde hace que el agente hable encima del usuario. Cerrar un final demasiado pronto puede cambiar el significado de la petición completa.
 
 ## Barge-in: oír al usuario no basta para saber si debes callarte
 
@@ -219,7 +219,7 @@ Si el navegador habla directamente con un realtime provider, server-side turn de
 
 ### Agente PSTN
 
-Telefonía añade ruido, compresión, eco y buffering del carrier. El VAD puede seguir siendo una señal rápida de speech start, pero conviene evaluar end-of-turn e interrupciones con audio telefónico real. La configuración que funciona con un micrófono de portátil no es evidencia suficiente para μ-law 8 kHz u otra ruta telefónica. Si el carrier termina SIP y entrega media por WebSocket, el runtime de aplicación sigue necesitando distinguir evento de media, decisión de turno y estado de reproducción.
+Telefonía añade ruido, compresión, eco y buffering del carrier. El VAD puede seguir siendo una señal rápida de speech start, pero conviene evaluar end-of-turn e interrupciones con audio telefónico real. La configuración que funciona con un micrófono de portátil no es evidencia suficiente para otra ruta con codec y buffering distintos. Si el carrier termina SIP y entrega media por WebSocket, el runtime de aplicación sigue necesitando distinguir evento de media, decisión de turno y estado de reproducción.
 
 ### Pipeline experimental o low-level
 
