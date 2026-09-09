@@ -141,6 +141,7 @@ nav:
       - Agentes de voz en tiempo real:
           - Arquitecturas de voz: series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.md
           - Turn-taking: series/agentes-voz-tiempo-real/02-turn-taking.md
+          - Presupuesto de latencia: series/agentes-voz-tiempo-real/03-presupuesto-latencia.md
   - Construir:
       - articulos-tecnicos/index.md
       - Agente Reactivo, Proactivo y Tool calls: articulos-tecnicos/proactive-reactive-agent-and-tool-calls.md
