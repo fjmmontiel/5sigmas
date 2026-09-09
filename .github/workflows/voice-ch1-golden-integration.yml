@@ -1,6 +1,6 @@
 name: Voice chapter 1 GOLDEN integration gate
 
-# One-shot integration rerun after mobile duplex visual correction.
+# One-shot integration certification after calibrated mobile visual gate.
 on:
   push:
     branches:
