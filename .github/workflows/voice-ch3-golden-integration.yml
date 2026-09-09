@@ -1,7 +1,6 @@
 name: Voice chapter 3 GOLDEN integration gate
 
-# One-shot integration gate for chapter 3 after bilingual content, locale wiring,
-# source contracts and responsive browser QA were implemented.
+# One-shot integration rerun after tightening native ES visual terminology.
 on:
   push:
     branches:
