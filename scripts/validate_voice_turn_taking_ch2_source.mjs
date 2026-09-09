@@ -89,6 +89,19 @@ check(es.includes('Endpoint prematuro') && es.includes('Interrupción falsa') &&
 check(en.includes('Premature endpoint') && en.includes('False interruption') && en.includes('Missed interruption'), 'EN: failure taxonomy incomplete');
 check(es.includes('mismo corpus de audio') && es.includes('condiciones de red'), 'ES: controlled comparison rule missing');
 check(en.includes('same audio corpus') && en.includes('network conditions'), 'EN: controlled comparison rule missing');
+
+// Fresh interruption-ownership contract: do not imply LiveKit uniquely owns
+// model-based backchannel classification, and do not attribute Krisp's model to Pipecat.
+check(es.includes('KrispVivaIPUserTurnStartStrategy') && es.includes('SDK/modelo de Krisp') && es.includes('no un modelo propio de Pipecat'), 'ES: Pipecat/Krisp interruption-prediction ownership boundary missing');
+check(en.includes('KrispVivaIPUserTurnStartStrategy') && en.includes("Krisp's SDK/model") && en.includes('not a Pipecat-owned model'), 'EN: Pipecat/Krisp interruption-prediction ownership boundary missing');
+check(es.includes('VAD/min-words/Krisp VIVA IP/estrategias externas'), 'ES: runtime decision table omits current Pipecat interruption strategies');
+check(en.includes('VAD/min-words/Krisp VIVA IP/external start strategies'), 'EN: runtime decision table omits current Pipecat interruption strategies');
+
+// LiveKit core/session false-interruption recovery is distinct from the managed
+// adaptive interruption model. Both locales must preserve that boundary.
+check(es.includes('false_interruption_timeout') && es.includes('resume_false_interruption') && es.includes('recuperación de sesión es distinta del modelo adaptive gestionado'), 'ES: LiveKit false-interruption recovery boundary missing');
+check(en.includes('false_interruption_timeout') && en.includes('resume_false_interruption') && en.includes('session-level recovery is separate from the managed adaptive model'), 'EN: LiveKit false-interruption recovery boundary missing');
+
 check(!/^\s*-\s+.+;\s*$/m.test(en), 'EN: semicolon-list anti-pattern detected');
 check(!es.includes('LiveKit Agents es mejor'), 'ES: universal framework winner claim present');
 check(!en.includes('LiveKit Agents is better'), 'EN: universal framework winner claim present');
