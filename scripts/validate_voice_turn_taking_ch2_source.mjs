@@ -37,8 +37,8 @@ check(i18n.source_blob_sha === blobSha(visual), `EN visual i18n: source_blob_sha
 check(visual.includes('Cuatro preguntas relacionadas, pero no una secuencia lineal.'), 'Visual: missing explicit non-linear relationship');
 check(!visual.includes('<i>→</i>'), 'Visual: sequential arrows reintroduced between independent turn-taking decisions');
 
-check(mkdocsEs.includes(`Turn-taking: VAD, endpointing, interrupciones y barge-in: ${route}`), 'ES nav: chapter 2 route missing');
-check(mkdocsEn.includes(`Turn-taking: VAD, endpointing, interruptions and barge-in: ${route}`), 'EN nav: chapter 2 route missing');
+check(mkdocsEs.includes(`- Turn-taking: ${route}`), 'ES nav: chapter 2 route missing');
+check(mkdocsEn.includes(`- Turn-taking: ${route}`), 'EN nav: chapter 2 route missing');
 check(manifest.includes(`  - ${route}`), 'EN manifest: chapter 2 published route missing');
 check(manifest.includes('  - snippets/articulos-tecnicos/voice-turn-taking-signals.html'), 'EN manifest: turn-taking visual required_snippets entry missing');
 
