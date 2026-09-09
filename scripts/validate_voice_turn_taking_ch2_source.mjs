@@ -9,12 +9,15 @@ const visualPath = path.resolve('docs/snippets/articulos-tecnicos/voice-turn-tak
 const mirrorPath = path.resolve('locales/en/snippets/articulos-tecnicos/voice-turn-taking-signals.html');
 const i18nPath = path.resolve('locales/en/snippets/articulos-tecnicos/voice-turn-taking-signals.i18n.json');
 
-const [es, en, visual, mirror, i18nRaw] = await Promise.all([
+const [es, en, visual, mirror, i18nRaw, mkdocsEs, mkdocsEn, manifest] = await Promise.all([
   fs.readFile(esPath, 'utf8'),
   fs.readFile(enPath, 'utf8'),
   fs.readFile(visualPath, 'utf8'),
   fs.readFile(mirrorPath, 'utf8'),
   fs.readFile(i18nPath, 'utf8'),
+  fs.readFile(path.resolve('mkdocs.yml'), 'utf8'),
+  fs.readFile(path.resolve('mkdocs.en.yml'), 'utf8'),
+  fs.readFile(path.resolve('locales/en/manifest.yml'), 'utf8'),
 ]);
 const i18n = JSON.parse(i18nRaw);
 const failures = [];
@@ -24,12 +27,20 @@ const blobSha = (text) => {
   return crypto.createHash('sha1').update(`blob ${bytes.length}\0`).update(bytes).digest('hex');
 };
 
+const route = 'series/agentes-voz-tiempo-real/02-turn-taking.md';
 const include = '{{ include_html("snippets/articulos-tecnicos/voice-turn-taking-signals.html") }}';
 check(es.includes(include), 'ES: missing turn-taking signal visual include');
 check(en.includes(include), 'EN: missing turn-taking signal visual include');
 check(mirror.trim() === '<!-- 5sigmas-canonical-mirror -->', 'EN visual mirror: canonical marker missing');
 check(i18n.source === 'snippets/articulos-tecnicos/voice-turn-taking-signals.html', 'EN visual i18n: wrong source path');
 check(i18n.source_blob_sha === blobSha(visual), `EN visual i18n: source_blob_sha drift; expected ${blobSha(visual)}, got ${i18n.source_blob_sha}`);
+check(visual.includes('Cuatro preguntas relacionadas, pero no una secuencia lineal.'), 'Visual: missing explicit non-linear relationship');
+check(!visual.includes('<i>→</i>'), 'Visual: sequential arrows reintroduced between independent turn-taking decisions');
+
+check(mkdocsEs.includes(`Turn-taking: VAD, endpointing, interrupciones y barge-in: ${route}`), 'ES nav: chapter 2 route missing');
+check(mkdocsEn.includes(`Turn-taking: VAD, endpointing, interruptions and barge-in: ${route}`), 'EN nav: chapter 2 route missing');
+check(manifest.includes(`  - ${route}`), 'EN manifest: chapter 2 published route missing');
+check(manifest.includes('  - snippets/articulos-tecnicos/voice-turn-taking-signals.html'), 'EN manifest: turn-taking visual required_snippets entry missing');
 
 const requiredPrimaryUrls = [
   'https://github.com/snakers4/silero-vad',
@@ -78,6 +89,7 @@ check(es.includes('Endpoint prematuro') && es.includes('Interrupción falsa') &&
 check(en.includes('Premature endpoint') && en.includes('False interruption') && en.includes('Missed interruption'), 'EN: failure taxonomy incomplete');
 check(es.includes('mismo corpus de audio') && es.includes('condiciones de red'), 'ES: controlled comparison rule missing');
 check(en.includes('same audio corpus') && en.includes('network conditions'), 'EN: controlled comparison rule missing');
+check(!/^\s*-\s+.+;\s*$/m.test(en), 'EN: semicolon-list anti-pattern detected');
 check(!es.includes('LiveKit Agents es mejor'), 'ES: universal framework winner claim present');
 check(!en.includes('LiveKit Agents is better'), 'EN: universal framework winner claim present');
 
