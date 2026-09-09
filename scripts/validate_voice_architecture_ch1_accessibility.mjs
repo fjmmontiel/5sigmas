@@ -69,6 +69,18 @@ try {
         check(label.length >= 12, `${testCase.route}: ${viewport.name} ${visualName} missing meaningful aria-label`);
       }
 
+      if (viewport.name === 'mobile' && await duplex.count()) {
+        const rule = duplex.locator('.s5v__rule');
+        check((await rule.count()) === 1, `${testCase.route}: mobile duplex missing coordination rule`);
+        if (await rule.count()) {
+          const ruleBox = await rule.boundingBox();
+          const copyBox = await rule.locator('span').boundingBox();
+          check(Boolean(ruleBox && ruleBox.height <= 180), `${testCase.route}: mobile duplex coordination rule collapsed vertically (${JSON.stringify(ruleBox)})`);
+          check(Boolean(copyBox && copyBox.width >= 140), `${testCase.route}: mobile duplex coordination copy collapsed horizontally (${JSON.stringify(copyBox)})`);
+          check(Boolean(copyBox && copyBox.height <= 120), `${testCase.route}: mobile duplex coordination copy wraps pathologically (${JSON.stringify(copyBox)})`);
+        }
+      }
+
       for (const [visualName, stepper] of visuals) {
         if (!(await stepper.count())) continue;
         const buttons = stepper.locator('button[data-s5v-step]');
@@ -149,4 +161,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Voice architecture chapter 1 accessibility/intermediate-state QA passed: keyboard/touch activation, ARIA state, all interactive states, reduced-motion behavior and state screenshots are valid in ES/EN desktop/mobile.');
+console.log('Voice architecture chapter 1 accessibility/intermediate-state QA passed: keyboard/touch activation, ARIA state, all interactive states, reduced-motion behavior, mobile duplex coordination geometry and state screenshots are valid in ES/EN desktop/mobile.');
