@@ -115,7 +115,7 @@ A *backchannel* is a short cue such as “yeah,” “uh-huh,” or “right” 
 
 LiveKit documents this distinction directly in adaptive interruption handling: VAD detects incoming user audio, then a separate model attempts to distinguish genuine barge-in from backchanneling or noise.[^livekit-adaptive-interruptions] That specific capability is a LiveKit Cloud surface under the conditions in its current documentation. It should not be attributed to the self-hosted framework as a universal property.
 
-Pipecat exposes turn start as a strategy. `VADUserTurnStartStrategy` is the most responsive option. `MinWordsUserTurnStartStrategy` can require more evidence while the bot is speaking, and external strategies can delegate the decision to another component.[^pipecat-turn-strategies]
+Pipecat exposes turn start as a strategy. `VADUserTurnStartStrategy` is the most responsive option. `MinWordsUserTurnStartStrategy` can require more evidence while the bot is speaking. Pipecat also exposes `KrispVivaIPUserTurnStartStrategy`, which runs Krisp's VIVA interruption-prediction model after VAD and opens a user turn only when interruption probability exceeds the configured threshold. That is a Pipecat strategy backed by Krisp's SDK/model, not a Pipecat-owned model, and it can be paired with transcription as a fallback.[^pipecat-turn-strategies]
 
 The broader design rule is independent of either framework: **speech start is evidence for considering an interruption, not necessarily the final decision to yield the turn**.
 
@@ -144,7 +144,7 @@ At minimum:
 4. **Preserve only valid context** for the next turn.
 5. **Treat tools by semantics rather than reflex.** A read may be cancellable. An operation with side effects may require idempotency, durable state, or a policy not to cancel it.
 
-When LiveKit handles an interruption, it pauses agent speech and truncates conversation history to the portion of speech it considers heard before the interruption. It also exposes `session.interrupt()` for explicit interruption.[^livekit-turns] Pipecat uses `InterruptionFrame` to discard pending DataFrames and ControlFrames. SystemFrames have priority and are not discarded by that interruption.[^pipecat-system-frames]
+When LiveKit handles an interruption, it pauses agent speech and truncates conversation history to the portion of speech it considers heard before the interruption. It also exposes `session.interrupt()` for explicit interruption.[^livekit-turns] In VAD/non-realtime handling, LiveKit also models a **false interruption**: if an interruption produces no transcript, the session can classify it after `false_interruption_timeout` and resume paused speech when `resume_false_interruption` is enabled. That session-level recovery is separate from the managed adaptive model.[^livekit-turns] Pipecat uses `InterruptionFrame` to discard pending DataFrames and ControlFrames. SystemFrames have priority and are not discarded by that interruption.[^pipecat-system-frames]
 
 Those are **runtime semantics**, not physical proof of which samples reached a person's ear. If a transport or carrier owns another playback buffer, the product still has to correlate its state with the most authoritative playback boundary it can observe.
 
@@ -187,7 +187,7 @@ The runtime changes where these policies live. It does not change the physics of
 |---|---|---|---|
 | Speech onset | VAD inside turn handling or a signal from the realtime model | Turn-start strategies: VAD, transcription, min-words, external | Provider/VAD event or custom detector; the app orders and validates events |
 | End of turn | Turn detector, VAD, STT endpointing, manual control, or realtime-model detection | Turn-stop strategies; Smart Turn is the current default | Provider server VAD/semantic VAD, custom detector, or explicit timeout |
-| Barge-in | Interruption handling; adaptive handling is a separate managed surface where applicable | Turn start can emit an interruption; policy remains composable | The app decides when to cancel generation, audio, and state |
+| Barge-in | Interruption handling; adaptive handling is a separate managed surface where applicable | VAD/min-words/Krisp VIVA IP/external start strategies; interruption emission remains strategy-owned | The app decides when to cancel generation, audio, and state |
 | Playback/history | `AgentSession` integrates interruption and context truncation | Interruption frames and processors control what keeps flowing | The app must model buffers, playback correlation, and confirmed context |
 | Fine-grained control | High within session and turn-handling abstractions | Very high through strategies, processors, and frames | Maximum, in exchange for owning ordering, cancellation, retries, tests, and observability |
 
