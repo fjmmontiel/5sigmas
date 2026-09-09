@@ -1,38 +1,14 @@
-<section class="s5v s5v-turn-signals s5v--wide" aria-label="Cuatro señales distintas en el control de turnos de un agente de voz">
+<section class="s5v s5v-arch-map s5v-turn-signals s5v--wide" data-step="1" aria-label="Cuatro señales distintas en el control de turnos de un agente de voz">
   <div class="s5v__canvas">
-    <header class="s5v__head">
-      <div><span class="s5v__kicker">Control de turnos</span><h3>Una pausa no decide por sí sola quién habla</h3></div>
-      <p>Separa detección acústica, fin de turno, intención de interrupción y estado de reproducción.</p>
-    </header>
-    <div class="s5v-turn-signals__flow">
-      <div class="s5v-turn-signals__stage">
-        <span class="s5v-turn-signals__index">1</span>
-        <strong>Actividad de voz</strong>
-        <span>¿Hay habla ahora?</span>
-        <small>VAD / speech start-stop</small>
-      </div>
-      <i aria-hidden="true">→</i>
-      <div class="s5v-turn-signals__stage">
-        <span class="s5v-turn-signals__index">2</span>
-        <strong>Fin de turno</strong>
-        <span>¿Terminó la idea?</span>
-        <small>contexto + endpointing</small>
-      </div>
-      <i aria-hidden="true">→</i>
-      <div class="s5v-turn-signals__stage">
-        <span class="s5v-turn-signals__index">3</span>
-        <strong>Interrupción</strong>
-        <span>¿Quiere tomar el turno?</span>
-        <small>barge-in vs backchannel</small>
-      </div>
-      <i aria-hidden="true">→</i>
-      <div class="s5v-turn-signals__stage">
-        <span class="s5v-turn-signals__index">4</span>
-        <strong>Commit y cancelación</strong>
-        <span>¿Qué estado sigue siendo válido?</span>
-        <small>playback · historial · tools</small>
+    <header class="s5v__head"><div><span class="s5v__kicker">Control de turnos</span><h3>Una pausa no decide por sí sola quién habla</h3></div><p>Separa detección acústica, fin de turno, intención de interrupción y estado de reproducción.</p></header>
+    <div class="s5v-arch-map__panels">
+      <div data-panel="1" class="s5v-arch-map__pipe">
+        <span>Actividad de voz<br><small>¿Hay habla ahora?</small></span><i>→</i>
+        <span>Fin de turno<br><small>¿Terminó la idea?</small></span><i>→</i>
+        <span>Interrupción<br><small>¿Quiere tomar el turno?</small></span><i>→</i>
+        <span>Commit y cancelación<br><small>¿Qué estado sigue siendo válido?</small></span>
       </div>
     </div>
-    <p class="s5v__copy">El error típico es conectar el paso 1 directamente con el 4. Detectar voz es una observación; ceder el turno es una decisión de estado.</p>
+    <div class="s5v__copy">Detectar voz es una observación. Ceder el turno exige una decisión de estado sobre playback, historial y tools.</div>
   </div>
 </section>
