@@ -1,6 +1,6 @@
 {
   "source": "snippets/articulos-tecnicos/voice-arch-duplex.html",
-  "source_blob_sha": "d21ad4b58bbe5db99381cb68c13072046f3d1585",
+  "source_blob_sha": "96229ca5f4167829793b080d31164156347f876c",
   "replacements": {
     "Solapamiento full duplex entre usuario y agente": "Full-duplex overlap between user and agent",
     "Escuchar mientras habla.": "Listen while speaking.",
@@ -8,7 +8,7 @@
     "Usuario": "User",
     "Agente": "Agent",
     "“ajá”": "“mm-hm”",
-    "El solapamiento no elimina la coordinación": "Overlap does not remove coordination",
+    "Coordinación": "Coordination",
     "Estado, tools, cancelación y playback siguen siendo responsabilidades del sistema.": "State, tools, cancellation, and playback remain system responsibilities."
   },
   "forbidden_output_tokens": [
@@ -18,7 +18,7 @@
     "Usuario",
     "Agente",
     "“ajá”",
-    "El solapamiento no elimina",
+    "Coordinación",
     "Estado, tools, cancelación"
   ]
 }
