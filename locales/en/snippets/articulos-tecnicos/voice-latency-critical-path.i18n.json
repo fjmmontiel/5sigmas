@@ -1,6 +1,6 @@
 {
   "source": "snippets/articulos-tecnicos/voice-latency-critical-path.html",
-  "source_blob_sha": "0a914e53d8e4755add4620e7ff711bdd8e532b26",
+  "source_blob_sha": "5853244c3b562b8cc6f571e6c0142cc3d954948b",
   "replacements": {
     "Fronteras observables del presupuesto de latencia de un agente de voz": "Observable boundaries in a voice agent latency budget",
     "Camino crítico": "Critical path",
@@ -14,7 +14,9 @@
     "hay salida, aún no implica playout": "output exists, but playout has not necessarily begun",
     "Playback iniciado": "Playback started",
     "el dispositivo empieza a reproducir": "the device begins playback",
-    "Captura, red, STT, modelo, TTS, packetización y buffers contribuyen entre estas fronteras. Algunas etapas se solapan por streaming, así que sumar sus duraciones completas puede contar trabajo dos veces.": "Capture, network, STT, model, TTS, packetization, and buffers contribute between these boundaries. Some stages overlap through streaming, so adding their full durations can double-count work."
+    "Captura, red, STT, modelo, TTS, packetización y buffers contribuyen entre estas fronteras. Algunas etapas se solapan por streaming, así que sumar sus duraciones completas puede contar trabajo dos veces.": "Capture, network, STT, model, TTS, packetization, and buffers contribute between these boundaries. Some stages overlap through streaming, so adding their full durations can double-count work.",
+    "/herramientas/latencia-agente-voz/": "/en/tools/voice-latency-budget/",
+    "Prueba el presupuesto con el explorador interactivo de latencia": "Try the budget in the interactive latency explorer"
   },
   "forbidden_output_tokens": [
     "Fronteras observables",
@@ -28,6 +30,8 @@
     "hay salida",
     "Playback iniciado",
     "el dispositivo empieza",
-    "Captura, red, STT"
+    "Captura, red, STT",
+    "herramientas/latencia-agente-voz",
+    "Prueba el presupuesto"
   ]
 }
