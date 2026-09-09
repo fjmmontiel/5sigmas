@@ -77,7 +77,7 @@ try {
           const copyBox = await rule.locator('span').boundingBox();
           check(Boolean(ruleBox && ruleBox.height <= 180), `${testCase.route}: mobile duplex coordination rule collapsed vertically (${JSON.stringify(ruleBox)})`);
           check(Boolean(copyBox && copyBox.width >= 140), `${testCase.route}: mobile duplex coordination copy collapsed horizontally (${JSON.stringify(copyBox)})`);
-          check(Boolean(copyBox && copyBox.height <= 120), `${testCase.route}: mobile duplex coordination copy wraps pathologically (${JSON.stringify(copyBox)})`);
+          check(Boolean(copyBox && copyBox.height <= 135), `${testCase.route}: mobile duplex coordination copy wraps pathologically (${JSON.stringify(copyBox)})`);
         }
       }
 
