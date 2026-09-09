@@ -1,6 +1,6 @@
 name: Voice chapter 2 GOLDEN integration gate
 
-# One-shot integration certification for Realtime Voice Agents chapter 2.
+# One-shot integration rerun after mobile runtime-matrix scroll QA was added.
 on:
   push:
     branches:
