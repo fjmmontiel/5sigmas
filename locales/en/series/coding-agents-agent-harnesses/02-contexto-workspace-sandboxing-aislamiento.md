@@ -62,12 +62,12 @@ The workspace is the mutable state against which reads, edits, and commands run.
 
 In Git, that is not just “the branch.” It includes at least:
 
-- the current `HEAD`;
-- the index or staging area;
-- modified tracked files;
-- untracked files;
-- submodule state when present;
-- and any local artifact that affects behavior, such as generated files, caches, lockfiles, or project-local configuration where relevant.
+- the current `HEAD`.
+- the index or staging area.
+- modified tracked files.
+- untracked files.
+- submodule state when present.
+- any local artifact that affects behavior, such as generated files, caches, lockfiles, or project-local configuration where relevant.
 
 The `git status` documentation makes these states explicit: untracked files have their own state, ignored files are not shown unless requested, and submodules carry additional state.[^git-status] Therefore **`git diff` is not a complete inventory of the workspace**.
 
@@ -366,12 +366,12 @@ If it cannot, a “revert” or “cleanup” operation can destroy someone else
 
 A robust start-of-task snapshot should capture:
 
-- `base_sha` and `HEAD`;
-- machine-readable Git status;
-- a relevant untracked-file inventory;
-- submodules/LFS when they are part of the project;
-- instructions and configuration that control the build;
-- workspace/worktree identity;
+- `base_sha` and `HEAD`.
+- machine-readable Git status.
+- a relevant untracked-file inventory.
+- submodules/LFS when they are part of the project.
+- instructions and configuration that control the build.
+- workspace/worktree identity.
 - the effective sandbox policy.
 
 `git status --porcelain` helps expose parseable repository state, but even that does not make ignored files or external resources part of Git.[^git-status]
