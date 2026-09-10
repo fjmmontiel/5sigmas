@@ -57,8 +57,6 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Validate chapter 1 regression
-        run: node scripts/validate_voice_architecture_ch1.mjs
       - name: Validate chapter 2 source contract
         run: node scripts/validate_voice_turn_taking_ch2_source.mjs
       - name: Validate chapter 3 source contract
@@ -103,6 +101,8 @@ jobs:
           cat /tmp/voice-ch6-preview.log
           exit 1
 
+      - name: Regress chapter 1 end-to-end
+        run: node scripts/validate_voice_architecture_ch1.mjs
       - name: Audit browser resources
         run: node scripts/audit_browser_resources.mjs
       - name: Validate English series mirror
