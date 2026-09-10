@@ -1,0 +1,38 @@
+{
+  "source": "snippets/articulos-tecnicos/coding-agent-isolation-stack.html",
+  "source_blob_sha": "ebeda8292fae5a44d3e1fc6bfe0aeaf5cc4599e1",
+  "replacements": {
+    "Capas distintas de estado, ejecución e integración en el aislamiento de un coding agent": "Distinct state, execution, and integration layers in coding-agent isolation",
+    "Aislamiento ≠ una primitive": "Isolation ≠ one primitive",
+    "Worktree, sandbox e integración protegen fronteras diferentes": "Worktrees, sandboxes, and integration protect different boundaries",
+    "Separar archivos no restringe la red; restringir procesos no hace compatibles dos diffs.": "Separating files does not restrict the network; restricting processes does not make two diffs compatible.",
+    "Repo + base SHA": "Repo + base SHA",
+    "historia · refs · revisión inicial": "history · refs · initial revision",
+    "Vista de contexto": "Context view",
+    "lo que el modelo observa": "what the model observes",
+    "Workspace / worktree": "Workspace / worktree",
+    "HEAD · índice · dirty state": "HEAD · index · dirty state",
+    "Sandbox": "Sandbox",
+    "filesystem · red · procesos · identidad": "filesystem · network · processes · identity",
+    "Integración": "Integration",
+    "branch · commit · PR · revalidación": "branch · commit · PR · revalidation",
+    "separa estado mutable entre trayectorias; no es una security boundary.": "separates mutable state between trajectories; it is not a security boundary.",
+    "limita capacidades de ejecución; no resuelve conflictos semánticos. La entrega sólo es atribuible si el harness conserva base SHA, identidad del workspace, policy efectiva y el SHA exacto sobre el que pasaron los verificadores.": "limits execution capabilities; it does not resolve semantic conflicts. Delivery is attributable only if the harness retains the base SHA, workspace identity, effective policy, and exact SHA that the verifiers checked."
+  },
+  "forbidden_output_tokens": [
+    "Capas distintas de estado",
+    "Aislamiento ≠ una primitive",
+    "protegen fronteras diferentes",
+    "Separar archivos no restringe",
+    "historia · refs",
+    "Vista de contexto",
+    "lo que el modelo observa",
+    "índice · dirty state",
+    "filesystem · red",
+    "Integración",
+    "revalidación",
+    "separa estado mutable",
+    "limita capacidades de ejecución",
+    "La entrega sólo es atribuible"
+  ]
+}
