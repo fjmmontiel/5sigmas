@@ -1,6 +1,6 @@
 name: Voice ch5 relationship-first certification
 
-# One-shot milestone certification for the relationship-first network/media topology.
+# Final recertification after testing intermediate and terminal mobile topology at their natural scroll positions.
 on:
   push:
     branches:
