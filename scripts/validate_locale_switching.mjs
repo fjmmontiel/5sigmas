@@ -6,6 +6,26 @@ const base = process.env.S5_PREVIEW_BASE || 'http://127.0.0.1:8000';
 const failures = [];
 const browser = await chromium.launch({ headless: true });
 const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+const baseHost = new URL(base).host;
+
+const tracksSameOrigin = (url) => {
+  try {
+    return new URL(url).host === baseHost;
+  } catch {
+    return false;
+  }
+};
+
+page.on('response', (response) => {
+  if (response.status() >= 400 && tracksSameOrigin(response.url())) {
+    failures.push(`${new URL(page.url()).pathname}: same-origin resource returned HTTP ${response.status()}: ${response.url()}`);
+  }
+});
+page.on('requestfailed', (request) => {
+  if (tracksSameOrigin(request.url())) {
+    failures.push(`${new URL(page.url()).pathname}: same-origin resource failed: ${request.url()} (${request.failure()?.errorText ?? 'unknown error'})`);
+  }
+});
 
 const absolute = (path) => `https://5sigmas.com${path}`;
 const normalizeTarget = (href) => {
@@ -180,4 +200,4 @@ if (failures.length) {
   for (const failure of failures) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log('Locale-switch quality QA passed: bilingual Series hubs expose Realtime Voice Agents, all six ES/EN chapter selectors preserve translated routes and sitemap pairs, reader navigation stays inside the six-chapter collection, and safe fallbacks remain valid.');
+console.log('Locale-switch quality QA passed: bilingual Series hubs expose Realtime Voice Agents, all six ES/EN chapter selectors preserve translated routes and sitemap pairs, same-origin browser resources stay healthy, reader navigation stays inside the six-chapter collection, and safe fallbacks remain valid.');
