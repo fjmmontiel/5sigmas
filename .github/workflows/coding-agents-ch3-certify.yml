@@ -1,0 +1,186 @@
+# One-shot milestone integration/certification; remove after evidence is recorded.
+name: Coding Agents 2.3 certification
+
+on:
+  push:
+    branches:
+      - series/coding-agents-agent-harnesses-golden
+    paths:
+      - '.github/workflows/coding-agents-ch3-certify.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  certify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: series/coding-agents-agent-harnesses-golden
+
+      - name: Integrate chapter 2.3 and refresh checkpoint semantics
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+
+          def replace_once(path, old, new):
+              p = Path(path)
+              text = p.read_text(encoding='utf-8')
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f'{path}: expected exactly one replacement target, found {count}')
+              p.write_text(text.replace(old, new, 1), encoding='utf-8')
+
+          replace_once(
+              'docs/series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.md',
+              'Claude Code documenta que crea checkpoints del estado de archivos antes de ediciones y permite restaurar código y conversación de forma independiente. También documenta límites relevantes: cambios producidos directamente por comandos Bash y modificaciones externas concurrentes no quedan cubiertos de la misma forma por ese mecanismo, y checkpointing no sustituye a Git.[^claude-checkpoint]',
+              'Claude Code documenta que su checkpointing captura automáticamente el estado del código antes de cada prompt del usuario y rastrea los cambios realizados por sus herramientas de edición de archivos. Permite restaurar código y conversación de forma independiente. También documenta límites relevantes: los cambios producidos directamente por comandos Bash y las modificaciones externas concurrentes no quedan cubiertos de la misma forma, y checkpointing no sustituye a Git.[^claude-checkpoint]'
+          )
+          replace_once(
+              'locales/en/series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.md',
+              'Claude Code documents checkpoints of file state before edits and lets users restore code and conversation independently. Its documentation also names important limits: changes produced directly through Bash commands and concurrent external modifications are not covered in the same way, and checkpointing is not a replacement for Git.[^claude-checkpoint]',
+              'Claude Code documents checkpointing that automatically captures code state before each user prompt and tracks changes made through its file-editing tools. It lets users restore code and conversation independently. Its documentation also names important limits: changes made through Bash commands and concurrent external modifications are not covered in the same way, and checkpointing is not a replacement for Git.[^claude-checkpoint]'
+          )
+
+          replace_once(
+              'mkdocs.yml',
+              '          - Contexto, workspace y aislamiento: series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento.md\n',
+              '          - Contexto, workspace y aislamiento: series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento.md\n          - Specs, planificación y checkpoints: series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.md\n'
+          )
+          replace_once(
+              'mkdocs.en.yml',
+              '          - Repository context, workspaces and isolation: series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento.md\n',
+              '          - Repository context, workspaces and isolation: series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento.md\n          - Specs, planning and checkpoints: series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.md\n'
+          )
+          replace_once(
+              'locales/en/manifest.yml',
+              '  - series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento.md\n',
+              '  - series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento.md\n  - series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.md\n'
+          )
+          replace_once(
+              'locales/en/manifest.yml',
+              '  - snippets/articulos-tecnicos/coding-agent-isolation-stack.html\n',
+              '  - snippets/articulos-tecnicos/coding-agent-isolation-stack.html\n  - snippets/articulos-tecnicos/coding-agent-task-contract.html\n'
+          )
+
+          replace_once(
+              'scripts/validate_coding_agent_harness_ch3_source.mjs',
+              "check(es.includes('cambios producidos directamente por comandos Bash'), 'ES: Claude checkpoint scope limit missing');\ncheck(en.includes('changes produced directly through Bash commands'), 'EN: Claude checkpoint scope limit missing');\n",
+              "check(es.includes('antes de cada prompt del usuario') && es.includes('herramientas de edición de archivos'), 'ES: current Claude checkpoint capture semantics missing');\ncheck(en.includes('before each user prompt') && en.includes('file-editing tools'), 'EN: current Claude checkpoint capture semantics missing');\ncheck(es.includes('cambios producidos directamente por comandos Bash'), 'ES: Claude checkpoint scope limit missing');\ncheck(en.includes('changes made through Bash commands'), 'EN: Claude checkpoint scope limit missing');\ncheck(!es.includes('checkpoints del estado de archivos antes de ediciones'), 'ES: stale Claude checkpoint timing semantics detected');\ncheck(!en.includes('checkpoints of file state before edits'), 'EN: stale Claude checkpoint timing semantics detected');\n"
+          )
+
+          replace_once(
+              '.github/workflows/pr-visual-review.yml',
+              '      - name: Validate Coding Agents chapter 2 accessibility and responsive states\n        run: node scripts/validate_coding_agent_harness_ch2_accessibility.mjs\n\n',
+              '      - name: Validate Coding Agents chapter 2 accessibility and responsive states\n        run: node scripts/validate_coding_agent_harness_ch2_accessibility.mjs\n\n      - name: Validate Coding Agents chapter 3 source contract\n        run: node scripts/validate_coding_agent_harness_ch3_source.mjs\n\n      - name: Validate Coding Agents chapter 3 accessibility and responsive states\n        run: node scripts/validate_coding_agent_harness_ch3_accessibility.mjs\n\n'
+          )
+          PY
+
+          git diff --check
+          git diff -- docs/series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.md locales/en/series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.md scripts/validate_coding_agent_harness_ch3_source.mjs mkdocs.yml mkdocs.en.yml locales/en/manifest.yml .github/workflows/pr-visual-review.yml
+
+      - name: Persist integrated chapter state
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name '5sigmas GOLDEN orchestrator'
+          git config user.email '162696664+fjmmontiel@users.noreply.github.com'
+          git add \
+            docs/series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.md \
+            locales/en/series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.md \
+            scripts/validate_coding_agent_harness_ch3_source.mjs \
+            mkdocs.yml mkdocs.en.yml locales/en/manifest.yml \
+            .github/workflows/pr-visual-review.yml
+          git commit -m 'content(coding-agents): integrate chapter 2.3 for GOLDEN QA'
+          git push origin HEAD:series/coding-agents-agent-harnesses-golden
+          echo "INTEGRATION_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Validate chapter source contracts
+        run: |
+          node scripts/validate_coding_agent_harness_ch1_source.mjs
+          node scripts/validate_coding_agent_harness_ch2_source.mjs
+          node scripts/validate_coding_agent_harness_ch3_source.mjs
+
+      - name: Build Spanish strictly
+        run: mkdocs build --clean --strict
+
+      - name: Prepare and audit English sources
+        run: |
+          python scripts/prepare_locale.py --locale en
+          python scripts/audit_locale.py --locale en
+
+      - name: Build English strictly
+        env:
+          S5_LOCALE: en
+        run: mkdocs build -f mkdocs.en.yml --clean --strict
+
+      - name: Audit rendered English locale
+        run: python scripts/audit_locale.py --locale en --site site/en
+
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Serve combined preview
+        run: |
+          python -m http.server 8000 --directory site > /tmp/5sigmas-preview.log 2>&1 &
+          for attempt in {1..30}; do
+            curl --fail --silent http://127.0.0.1:8000/ > /dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/5sigmas-preview.log
+          exit 1
+
+      - name: Audit browser resources and locale mirrors
+        run: |
+          node scripts/audit_browser_resources.mjs
+          node scripts/validate_english_series_mirror.mjs
+          node scripts/validate_locale_switching.mjs
+
+      - name: Regress Coding Agents chapters 2.1 and 2.2
+        run: |
+          node scripts/validate_coding_agent_harness_ch1_locale_navigation.mjs
+          node scripts/validate_coding_agent_harness_ch1_accessibility.mjs
+          node scripts/validate_coding_agent_harness_ch2_accessibility.mjs
+
+      - name: Validate chapter 2.3 browser accessibility and responsive geometry
+        run: node scripts/validate_coding_agent_harness_ch3_accessibility.mjs
+
+      - name: Validate direct reader navigation
+        run: node scripts/validate_direct_reader_navigation.mjs
+
+      - name: Verify tested branch head
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$INTEGRATION_HEAD"
+          git status --short --untracked-files=no
+          echo "Certified integration head: $INTEGRATION_HEAD"
+
+      - name: Upload chapter 2.3 visual evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coding-agents-ch3-visual-evidence
+          path: artifacts/visual-review/coding-harness-ch3-*.png
+          if-no-files-found: warn
+          retention-days: 1
