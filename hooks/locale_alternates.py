@@ -2,11 +2,15 @@
 
 Material for MkDocs treats page-level ``link[rel=alternate]`` elements as locale
 roots and appends ``sitemap.xml`` to them. Exact per-page hreflang URLs therefore
-cause requests such as ``/article/sitemap.xml``. 5sigmas instead uses:
+cause requests such as ``/article/sitemap.xml``. Markdown representation links
+using an exact ``rel=alternate`` trigger the same integration even though they
+are alternate formats, not alternate deployed sites. 5sigmas instead uses:
 
 - exact route-aware URLs in the visible language selector;
 - ES/EN hreflang pairs in XML sitemaps for routes that truly exist in both locales;
 - an English-home selector fallback for Spanish-only pages;
+- ``rel=\"alternate related\"`` for Markdown mirrors so their alternate-format
+  semantics remain explicit without matching Material's exact site selector;
 - explicit route equivalence for localized tool slugs (for example
   ``/herramientas/`` ↔ ``/en/tools/``).
 
@@ -44,6 +48,10 @@ _LANGUAGE_ANCHOR_RE = re.compile(
     flags=re.IGNORECASE,
 )
 _HREF_RE = re.compile(r'\bhref=(["\']).*?\1', flags=re.IGNORECASE)
+_MARKDOWN_ALTERNATE_RE = re.compile(
+    r'\brel=(["\'])alternate\1(?=[^>]*\btype=(["\'])text/markdown\2)',
+    flags=re.IGNORECASE,
+)
 
 ET.register_namespace("", SITEMAP_NS)
 ET.register_namespace("xhtml", XHTML_NS)
@@ -318,6 +326,7 @@ def on_post_page(output: str, page, config, **kwargs) -> str:
         return _replace_href(match.group(0), selector_targets[lang])
 
     output = _ALTERNATE_LINK_RE.sub("", output)
+    output = _MARKDOWN_ALTERNATE_RE.sub('rel="alternate related"', output, count=1)
     output = _LANGUAGE_ANCHOR_RE.sub(rewrite_selector, output)
 
     if current_language == "en" and not translated_to_english:
