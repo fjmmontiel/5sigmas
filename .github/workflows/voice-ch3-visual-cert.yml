@@ -1,6 +1,6 @@
 name: Voice ch3 visual pedagogy certification
 
-# Milestone-only certification for the relationship-first latency timeline.
+# Certification revision 2: English canonical-mirror identity token fixed.
 on:
   push:
     branches:
