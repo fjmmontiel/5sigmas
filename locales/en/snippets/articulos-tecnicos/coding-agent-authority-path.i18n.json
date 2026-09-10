@@ -7,7 +7,7 @@
     "Una tool call no es todavía permiso para producir un efecto": "A tool call is not yet permission to produce an effect",
     "La propuesta del modelo cruza varias fronteras independientes antes de tocar un sistema externo.": "The model proposal crosses several independent boundaries before it can touch an external system.",
     "Contexto": "Context",
-    "repo · issue · web · output de tools": "repo · issue · web · tool output",
+    "repo · issue · web · output de tools": "repository · issue · web · tool output",
     "Propuesta": "Proposal",
     "tool + argumentos": "tool + arguments",
     "Policy": "Policy",
