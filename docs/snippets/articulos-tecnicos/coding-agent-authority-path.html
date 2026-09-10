@@ -1,0 +1,17 @@
+<section class="s5v s5v-arch-map s5v-coding-agent-authority-path s5v--wide" data-step="1" aria-label="Camino de autoridad desde contexto no confiable hasta un efecto externo de un coding agent">
+  <div class="s5v__canvas">
+    <header class="s5v__head"><div><span class="s5v__kicker">Autoridad · policy · credenciales</span><h3>Una tool call no es todavía permiso para producir un efecto</h3></div><p>La propuesta del modelo cruza varias fronteras independientes antes de tocar un sistema externo.</p></header>
+    <div class="s5v-arch-map__panels">
+      <div data-panel="1" class="s5v-arch-map__pipe">
+        <span>Contexto<br><small>repo · issue · web · output de tools</small></span>
+        <span>Propuesta<br><small>tool + argumentos</small></span>
+        <span>Policy<br><small>allow · ask · deny</small></span>
+        <span>Approval<br><small>acción concreta · scope · vigencia</small></span>
+        <span>Sandbox<br><small>filesystem · proceso · red</small></span>
+        <span>Credencial<br><small>identidad · permisos · expiración</small></span>
+        <span>Efecto + evidencia<br><small>resultado externo · audit · verifier</small></span>
+      </div>
+    </div>
+    <div class="s5v__copy"><strong>Defensa en profundidad:</strong> una frontera no sustituye a las demás. La sandbox puede impedir escribir fuera del workspace y aun así un token con demasiados permisos puede autorizar un efecto remoto. Un approval humano puede autorizar una llamada concreta y aun así no demostrar que sus argumentos sean seguros.</div>
+  </div>
+</section>
