@@ -5,12 +5,16 @@ import crypto from 'node:crypto';
 
 const esPath = path.resolve('docs/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.md');
 const enPath = path.resolve('locales/en/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.md');
+const visualPath = path.resolve('docs/snippets/articulos-tecnicos/voice-action-lifecycle.html');
+const mirrorPath = path.resolve('locales/en/snippets/articulos-tecnicos/voice-action-lifecycle.html');
+const i18nPath = path.resolve('locales/en/snippets/articulos-tecnicos/voice-action-lifecycle.i18n.json');
+
 const [es, en, snippet, mirror, i18nRaw, mkdocsEs, mkdocsEn, manifest] = await Promise.all([
   fs.readFile(esPath, 'utf8'),
   fs.readFile(enPath, 'utf8'),
-  fs.readFile(path.resolve('docs/snippets/articulos-tecnicos/voice-action-lifecycle.html'), 'utf8'),
-  fs.readFile(path.resolve('locales/en/snippets/articulos-tecnicos/voice-action-lifecycle.html'), 'utf8'),
-  fs.readFile(path.resolve('locales/en/snippets/articulos-tecnicos/voice-action-lifecycle.i18n.json'), 'utf8'),
+  fs.readFile(visualPath, 'utf8'),
+  fs.readFile(mirrorPath, 'utf8'),
+  fs.readFile(i18nPath, 'utf8'),
   fs.readFile(path.resolve('mkdocs.yml'), 'utf8'),
   fs.readFile(path.resolve('mkdocs.en.yml'), 'utf8'),
   fs.readFile(path.resolve('locales/en/manifest.yml'), 'utf8'),
@@ -19,6 +23,10 @@ const i18n = JSON.parse(i18nRaw);
 
 const failures = [];
 const check = (condition, message) => { if (!condition) failures.push(message); };
+const blobSha = (text) => {
+  const bytes = Buffer.from(text, 'utf8');
+  return crypto.createHash('sha1').update(`blob ${bytes.length}\0`).update(bytes).digest('hex');
+};
 
 const requiredPrimaryUrls = [
   'https://docs.livekit.io/agents/logic/tools/',
@@ -121,20 +129,65 @@ check(!/^\s*-\s+.+;\s*$/m.test(en), 'EN: semicolon-list anti-pattern detected');
 check(!/LiveKit (es|is) (el )?(mejor|best|fastest)/i.test(`${es}\n${en}`), 'Universal LiveKit winner claim detected');
 check(!/Pipecat (es|is) (el )?(mejor|best|fastest)/i.test(`${es}\n${en}`), 'Universal Pipecat winner claim detected');
 
-
 const visualInclude = '{{ include_html("snippets/articulos-tecnicos/voice-action-lifecycle.html") }}';
 check(es.includes(visualInclude), 'ES: action lifecycle visual include missing');
 check(en.includes(visualInclude), 'EN: action lifecycle visual include missing');
-check(snippet.includes('s5v-action-lifecycle') && snippet.includes('operation_id') && snippet.includes('UNKNOWN'), 'Visual: action lifecycle mechanism incomplete');
 check(mirror.trim() === '<!-- 5sigmas-canonical-mirror -->', 'EN: action lifecycle mirror marker invalid');
 check(i18n.source === 'snippets/articulos-tecnicos/voice-action-lifecycle.html', 'EN: action lifecycle i18n source path invalid');
-const snippetBytes = Buffer.from(snippet, 'utf8');
-const blobHeader = Buffer.from(`blob ${snippetBytes.length}\0`, 'utf8');
-const snippetBlobSha = crypto.createHash('sha1').update(Buffer.concat([blobHeader, snippetBytes])).digest('hex');
-check(i18n.source_blob_sha === snippetBlobSha, `EN: action lifecycle i18n source_blob_sha stale (${i18n.source_blob_sha} != ${snippetBlobSha})`);
-for (const token of ['Tool requested', 'Action admitted', 'External outcome', 'Result observed', 'system of record']) {
-  check(Object.values(i18n.replacements).some((value) => String(value).includes(token)), `EN: action lifecycle translation missing ${token}`);
+check(i18n.source_blob_sha === blobSha(snippet), `EN: action lifecycle i18n source_blob_sha stale (${i18n.source_blob_sha} != ${blobSha(snippet)})`);
+
+// Relationship-first visual contract: the mechanism must survive without prose/cards.
+check(snippet.includes('GOLDEN_VISUAL_CONTRACT'), 'Visual: GOLDEN_VISUAL_CONTRACT missing');
+for (const key of ['learning_objective:', 'mechanism:', 'visual_variables:', 'why_visual:']) {
+  check(snippet.includes(key), `Visual: contract field ${key} missing`);
 }
+for (const encoding of [
+  'x-position=time',
+  'lane=independent state domain',
+  'line continuity=lifecycle continues',
+  'vertical cut=barge-in boundary',
+  'branch topology=mutually exclusive external outcomes',
+  'dashed path=uncertain/reconciliation path',
+]) check(snippet.includes(encoding), `Visual: declared relationship encoding missing ${encoding}`);
+for (const forbidden of ['s5v-arch-map__pipe', 'data-s5v-stepper', 's5v__steps--tabs']) {
+  check(!snippet.includes(forbidden), `Visual: legacy/cosmetic primitive ${forbidden} must not return`);
+}
+for (const track of ['turn-a', 'turn-b', 'agent-audio', 'operation-running']) {
+  check(snippet.includes(`data-action-track="${track}"`), `Visual: missing state-domain track ${track}`);
+}
+for (const event of ['user-request', 'new-turn', 'audio-cancel', 'tool-requested', 'action-admitted', 'external-outcome', 'reconcile']) {
+  check(snippet.includes(`data-action-event="${event}"`), `Visual: missing observable/state event ${event}`);
+}
+check(snippet.includes('data-action-boundary="barge-in"'), 'Visual: barge-in boundary missing');
+for (const outcome of ['committed', 'failed', 'unknown']) {
+  check(snippet.includes(`data-action-outcome="${outcome}"`), `Visual: missing external outcome branch ${outcome}`);
+}
+check(snippet.includes('data-action-path="unknown-to-reconcile"'), 'Visual: UNKNOWN reconciliation path missing');
+check(snippet.includes('data-action-reconcile="effect-exists"'), 'Visual: reconciliation effect-exists path missing');
+check(snippet.includes('data-action-reconcile="no-effect"'), 'Visual: reconciliation no-effect/retry path missing');
+check(snippet.includes('overflow-x:auto') && snippet.includes('tabindex="0"'), 'Visual: mobile horizontal reachability missing');
+check(snippet.includes('min-width:980px') && snippet.includes('min-width:940px'), 'Visual: relationship-preserving timeline geometry missing');
+check(snippet.includes('@media(prefers-reduced-motion:reduce)'), 'Visual: reduced-motion contract missing');
+check(snippet.includes('RUNNING: cruza el barge-in'), 'Visual: operation continuity across barge-in not explained');
+check(snippet.includes('UNKNOWN') && snippet.includes('Consultar sistema de registro'), 'Visual: UNKNOWN → system-of-record reconciliation missing');
+check(snippet.includes('retry sólo si') && snippet.includes('segura/idempotente'), 'Visual: retry guard after reconciliation missing');
+
+const requiredEnglishVisualFragments = [
+  'Conversation ≠ effect',
+  'A barge-in cuts one track',
+  'What happens when the user interrupts',
+  'Durable operation',
+  'audio cancelled',
+  'RUNNING: crosses the barge-in',
+  'Query the system of record',
+  'retry only if',
+  'Production rule:',
+];
+for (const fragment of requiredEnglishVisualFragments) {
+  check(Object.values(i18n.replacements || {}).some((value) => String(value).includes(fragment)), `EN: action state-machine translation missing ${fragment}`);
+}
+check(Array.isArray(i18n.forbidden_output_tokens) && i18n.forbidden_output_tokens.length >= 20, 'EN: visual forbidden-output token list is too weak');
+
 check(mkdocsEs.includes('Tools, estado y acciones asíncronas: series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.md'), 'ES: chapter 4 navigation missing');
 check(mkdocsEn.includes('Tools, state and async actions: series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.md'), 'EN: chapter 4 navigation missing');
 check(manifest.includes('series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.md'), 'EN: chapter 4 manifest route missing');
@@ -154,5 +207,5 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Voice tools/state chapter source gate PASS');
-console.log(`ES bytes=${Buffer.byteLength(es)} EN bytes=${Buffer.byteLength(en)}`);
+console.log('Voice tools/state chapter source + relationship-first visual gate PASS');
+console.log(`ES bytes=${Buffer.byteLength(es)} EN bytes=${Buffer.byteLength(en)} visual_blob=${blobSha(snippet)}`);
