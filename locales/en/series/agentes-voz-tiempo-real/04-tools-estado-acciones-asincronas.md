@@ -352,15 +352,15 @@ A tool-calling test that only asks â€œdid the model select the right function?â€
 
 Add deterministic scenarios such as:
 
-1. barge-in before `ADMITTED`;
-2. barge-in after `RUNNING`;
-3. timeout after sending a mutation;
-4. duplicate result;
-5. reconnect while the action remains active;
-6. handoff before an async tool completes;
-7. crash between `COMMITTED` and user acknowledgement;
-8. late result after intent changes;
-9. two concurrent tool calls against the same resource;
+1. barge-in before `ADMITTED`.
+2. barge-in after `RUNNING`.
+3. timeout after sending a mutation.
+4. duplicate result.
+5. reconnect while the action remains active.
+6. handoff before an async tool completes.
+7. crash between `COMMITTED` and user acknowledgement.
+8. late result after intent changes.
+9. two concurrent tool calls against the same resource.
 10. retry with and without provider idempotency support.
 
 The assertion is not just the final sentence. Check durable state, number of side effects, causal order, and what audio the user actually heard.
