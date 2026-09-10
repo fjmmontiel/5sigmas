@@ -20,7 +20,7 @@
     "Modelo": "Model",
     "respuesta en streaming": "streaming response",
     "síntesis en streaming": "streaming synthesis",
-    "Media + buffer": "Media + buffer",
+    "Media + buffer": "Media / buffer",
     "red · cola": "network · queue",
     "reproducción": "playout",
     "camino residual que bloquea el primer playout": "residual path blocking first playout",
