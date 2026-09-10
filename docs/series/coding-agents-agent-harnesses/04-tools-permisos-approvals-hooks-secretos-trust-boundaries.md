@@ -521,15 +521,7 @@ La pregunta operativa es:
 ¿qué authority debt estamos acumulando?
 ```
 
-Conviene poder inventariar:
-
-- approvals persistentes activos;
-- quién los creó y cuándo;
-- scope exacto;
-- último uso;
-- owner;
-- fecha o condición de expiración;
-- mecanismo de revocación.
+El inventario debería registrar los approvals persistentes activos, quién creó cada uno y cuándo, su scope exacto, el último uso, su owner, la fecha o condición de expiración y el mecanismo de revocación.
 
 Un permiso antiguo para «resolver un incidente» no debería convertirse silenciosamente en baseline para todas las tareas futuras.
 

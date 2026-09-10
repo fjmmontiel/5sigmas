@@ -521,15 +521,7 @@ The operational question is:
 how much authority debt are we accumulating?
 ```
 
-A useful inventory includes:
-
-- active persistent approvals
-- who created each approval and when
-- exact scope
-- last use
-- owner
-- expiry date or expiry condition
-- revocation mechanism
+A useful inventory records active persistent approvals, who created each one and when, its exact scope, last use, owner, expiry date or condition, and revocation mechanism.
 
 An old permission granted to resolve an incident should not silently become the baseline for every future task.
 
