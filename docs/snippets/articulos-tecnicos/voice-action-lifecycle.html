@@ -116,7 +116,7 @@ why_visual: El texto puede enumerar cancelaciones y estados, pero no muestra sim
           <path d="M727 275 C770 316 790 338 830 348" class="s5v-action-state-machine__branch-unknown" marker-end="url(#s5v-action-unknown-arrow)" data-action-outcome="unknown"/>
           <circle cx="844" cy="352" r="8" fill="#ad5d00" class="s5v-action-state-machine__event"/><text x="860" y="357" class="s5v-action-state-machine__outcome" fill="#ad5d00">UNKNOWN</text>
 
-          <path d="M844 368 V408 H760" class="s5v-action-state-machine__branch-unknown" marker-end="url(#s5v-action-unknown-arrow)" data-action-path="unknown-to-reconcile"/>
+          <path d="M844 368 V408 H780" class="s5v-action-state-machine__branch-unknown" marker-end="url(#s5v-action-unknown-arrow)" data-action-path="unknown-to-reconcile"/>
           <polygon points="690,408 735,378 780,408 735,438" class="s5v-action-state-machine__reconcile" data-action-event="reconcile"/>
           <text x="648" y="462" class="s5v-action-state-machine__label">Consultar sistema de registro</text>
           <text x="657" y="482" class="s5v-action-state-machine__small">¿existe el efecto de op_42?</text>
@@ -125,9 +125,9 @@ why_visual: El texto puede enumerar cancelaciones y estados, pero no muestra sim
           <text x="486" y="399" class="s5v-action-state-machine__small">sí → persistir verdad</text>
           <text x="486" y="417" class="s5v-action-state-machine__outcome" fill="#23863a">COMMITTED</text>
 
-          <path d="M735 438 V487 H790" class="s5v-action-state-machine__branch-unknown" marker-end="url(#s5v-action-unknown-arrow)" data-action-reconcile="no-effect"/>
-          <text x="802" y="479" class="s5v-action-state-machine__small">no → retry sólo si</text>
-          <text x="802" y="497" class="s5v-action-state-machine__small" data-action-label="retry-guard">la operación es segura/idempotente</text>
+          <path d="M780 408 H835" class="s5v-action-state-machine__branch-unknown" marker-end="url(#s5v-action-unknown-arrow)" data-action-reconcile="no-effect"/>
+          <text x="850" y="399" class="s5v-action-state-machine__small">no → retry sólo si</text>
+          <text x="850" y="417" class="s5v-action-state-machine__small" data-action-label="retry-guard">la operación es segura/idempotente</text>
         </svg>
       </div>
     </figure>
