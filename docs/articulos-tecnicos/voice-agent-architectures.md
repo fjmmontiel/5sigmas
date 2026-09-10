@@ -1,9 +1,9 @@
 ---
-title: Tres arquitecturas para agentes de voz
-description: "Comparación práctica entre full cascade, half cascade y speech-to-speech, con foco en latencia, prosodia, tools, interrupciones y control."
+title: "Arquitecturas de agentes de voz: cascade, speech-to-speech y full-duplex"
+description: "Cómo funcionan full cascade, half cascade, speech-to-speech y full-duplex. Modelos, papers, latencia, interrupciones, tools y evidencia de GPT-Live."
 date: 2026-08-04
-date_modified: 2026-08-23
-keywords: "voice agents, full cascade, half cascade, speech to speech, audio in text out, realtime API, prosodia, streaming TTS, full duplex, arquitectura de voz"
+date_modified: 2026-09-10
+keywords: "voice agents, full cascade, half cascade, speech-to-speech, full duplex, half duplex, Moshi, GPT-Live, audio LLM, latency, tool calling"
 article_state: published
 tags:
   - IA
@@ -14,530 +14,375 @@ tags:
   - Tool Calling
 ---
 
-# Tres arquitecturas para agentes de voz
+# Arquitecturas de agentes de voz: cascade, speech-to-speech y full-duplex
 
-> **Comparación:** full cascade, half cascade y speech-to-speech.  
-> **Criterio:** latencia, prosodia, interrupciones, tools, control y coste de operación.  
-> **Hot take:** una superficie S2S rápida debería llevar la conversación. Un modelo más pesado debería encargarse del razonamiento y las acciones.
+> **La decisión principal no es cuántos modelos hay. Es dónde se pierde información, quién decide cuándo hablar y quién conserva el estado de las acciones.**
+>
+> **Corte de evidencia:** 10 de septiembre de 2026. Revisión técnica de fuentes primarias, no benchmark ejecutado por 5sigmas. Las recomendaciones y los contratos de software son propuestas de ingeniería. Las cifras publicadas conservan proveedor, configuración y definición de la métrica.
 
-Cuando se habla de arquitecturas de voz, casi siempre aparece la misma pregunta: ¿montamos STT, LLM y TTS o usamos directamente un modelo speech-to-speech?
+GPT-Live-1 llega a la API el 10 de septiembre de 2026. Es un punto de partida relevante para revisar la arquitectura de un agente de voz, pero no una razón para declarar obsoleta toda cascada. OpenAI comunica una mejora de **30 puntos porcentuales** frente a GPT-Realtime-2.1 en Full Duplex Bench y un primer puesto en Tau3 **con GPT-6 Astra medium como backend**. Son resultados del proveedor y de una configuración concreta, no una prueba independiente de superioridad universal.[^live-api]
 
-La pregunta es útil, pero mezcla varias decisiones. Una arquitectura puede consumir audio y seguir funcionando por turnos. Un full cascade puede tener barge-in y streaming. Un modelo audio-native puede entender la voz y devolver texto para que otro sistema la sintetice.
+Esta revisión separa representación acústica, interacción y ejecución. El catálogo bibliográfico cubre mecanismos representativos y benchmarks; no pretende enumerar todos los modelos comerciales ni atribuir detalles internos que un proveedor no haya publicado.
 
-Para comparar bien las opciones, separo cuatro ejes:
+## 0. Cuatro decisiones que no deben mezclarse
 
-1. **Modalidad:** full cascade, half cascade o speech-to-speech
-2. **Interacción:** por turnos o full-duplex
-3. **Iniciativa:** reactiva o proactiva
-4. **Orquestación:** un único modelo o una superficie rápida conectada a un plano de ejecución
+| Eje | Pregunta | Opciones |
+|---|---|---|
+| Fronteras de modalidad | ¿Qué cruza cada componente? | Audio → texto → texto → audio; audio → texto → audio; audio → audio |
+| Interacción | ¿Cuándo se escucha y se responde? | Turnos estrictos; turnos interrumpibles; interacción continua |
+| Orquestación | ¿Quién razona y ejecuta? | Un motor; varios especialistas; superficie de voz y backend asíncrono |
+| Iniciativa | ¿Qué activa una intervención? | Petición del usuario; evento externo; resultado pendiente; política proactiva |
 
-Aquí no comparo proveedores. Comparo los contratos que aparecen entre componentes y los problemas que cada arquitectura deja en manos del runtime.
+**Speech-to-speech y full-duplex no son sinónimos.** El primero describe el camino de las modalidades. El segundo describe la simultaneidad y el comportamiento temporal. OpenAI distingue explícitamente Live, Realtime y pipelines encadenados; Moshi aporta un ejemplo publicado de modelado conversacional continuo.[^voice-guide][^moshi]
+
+También hay tres significados distintos de «duplex»: un transporte bidireccional puede enviar y recibir paquetes; un runtime puede seguir detectando al usuario durante el playback; un modelo puede condicionar su siguiente salida acústica a la entrada que llega mientras habla. Cumplir el primero no demuestra los otros dos.
+
+Aquí **half cascade** significa específicamente **audio-in / text-out + TTS externo**. Es una etiqueta de arquitectura útil, no una nomenclatura científica universal. «Half» no significa half-duplex ni la mitad de la latencia.
 
 {{ include_html("snippets/articulos-tecnicos/voice-arch-map.html") }}
 
 ## 1. Full cascade: audio → STT → LLM → TTS → audio
 
-Full cascade separa cada responsabilidad:
-
 ```text
-audio del usuario
-→ VAD / endpointing
-→ speech-to-text
-→ texto parcial y final
-→ LLM + tools
-→ texto de respuesta
-→ text-to-speech
-→ buffer de playback
-→ audio al usuario
+Micrófono / telefonía
+    → ASR o STT: audio → hipótesis de texto
+    → LLM: texto + contexto + resultados de tools → respuesta
+    → TTS: texto + controles de voz → audio
+    → cola de reproducción → dispositivo
+
+En paralelo: detección de turnos, cancelación, trazas y estado de acciones.
 ```
 
-Es la arquitectura más conocida porque cada pieza se puede observar, medir y sustituir de forma independiente.
+STT y ASR nombran aquí la tarea de reconocimiento del habla; LLM es el modelo de lenguaje y TTS, la síntesis de voz. Cada frontera es un contrato observable y sustituible. Whisper es una referencia de ASR, no una garantía de streaming o endpointing por el mero hecho de integrar sus pesos.[^whisper]
 
-Puedes elegir un STT que funcione bien en un mercado concreto, un LLM especializado, un TTS con la voz de marca y una capa propia para controlar tools, estado e interrupciones.
+### Qué se está aproximando
 
-### Por qué sigue siendo una opción fuerte
+Una factorización modular idealizada es:
 
-**Modularidad.** Cambiar el TTS no obliga a cambiar el modelo que razona.
+\[
+p(y\mid x,c,s)=\sum_{z,t}p_{\mathrm{ASR}}(z\mid x)\,p_{\mathrm{LM}}(t\mid z,c)\,p_{\mathrm{TTS}}(y\mid t,s).
+\]
 
-**Auditabilidad.** La transcripción, las tool calls y el texto final quedan como artefactos separados. Eso simplifica la inspección y muchas políticas de compliance.
+Aquí \(x\) es audio entrante, \(z\) una transcripción, \(t\) la respuesta textual, \(y\) el audio saliente, \(c\) el contexto y \(s\) el control de voz. Es un **modelo analítico del sistema**, no la ecuación de entrenamiento de un producto. La independencia de cada etapa es una hipótesis explícita.
 
-**Control de voz.** Un TTS dedicado suele ofrecer diccionarios, pronunciaciones, estilos y voces más estables.
-
-**Portabilidad.** El mismo diseño puede adaptarse a telefonía, navegador y aplicaciones nativas con contratos bastante claros.
-
-**Optimización por tramo.** Cada componente puede desplegarse cerca del usuario, cachearse, cuantizarse o sustituirse por un modelo más pequeño.
-
-Full cascade no es una mala arquitectura. El problema aparece cuando la conversación tiene que sentirse humana. En ese momento deja de ser una tubería lineal y se convierte en una máquina de estados repartida entre varios servicios.
+En producción suele pasarse una única hipótesis \(\hat z\), no toda la distribución sobre transcripciones. «Quince» y «cincuenta» dejan entonces de competir como alternativas: el LLM recibe una decisión ya tomada. Conservar parciales, alternativas, confianza y confirmaciones de entidades es una decisión de producto, no algo que resuelva automáticamente un LLM mayor.
 
 {{ include_html("snippets/articulos-tecnicos/voice-arch-cascade.html") }}
 
-### La latencia no es solo una suma
+### La frontera de texto y la prosodia
 
-Una primera aproximación sería:
+Una transcripción convencional no conserva toda la información sobre pausas, énfasis o ritmo. Pero sería incorrecto afirmar que una cascada no puede usar señales acústicas: puede incorporar marcas temporales, eventos no verbales o un encoder paralelo. SALMONN y Qwen2-Audio muestran distintas formas de incorporar información de audio a un modelo lingüístico.[^salmonn][^qwen2audio]
 
-```text
-T_first_audio =
-    T_endpointing
-  + T_STT_stable
-  + T_LLM_first_tokens
-  + T_TTS_first_chunk
-  + T_transport
-  + T_playback_buffer
-```
+La intuición se formaliza mediante la desigualdad de procesamiento de datos: bajo la cadena de Markov \(U\to X\to Z\), \(I(U;Z)\leq I(U;X)\). No demuestra que cualquier modelo de audio comprenda mejor la intención; demuestra que un resumen textual no puede crear información ausente. Con canales auxiliares, el objeto relevante pasa a ser \((Z,A)\), no solo \(Z\). Esta es una deducción sobre el diseño del canal.
 
-Pero cada componente trabaja con información provisional.
-
-- El VAD decide si el usuario terminó
-- El STT emite parciales que todavía pueden cambiar
-- El LLM puede empezar con una hipótesis incompleta
-- El TTS sintetiza texto que quizá haya que corregir
-- El proveedor telefónico guarda audio que aún no se ha reproducido
-
-Un error temprano obliga a cancelar o rehacer trabajo posterior. Puedes tener servicios rápidos y, aun así, una conversación lenta por buffering, políticas conservadoras o mala coordinación.
-
-Para convertir ese presupuesto en una restricción operativa medible, el [explorador de latencia para agentes de voz](/herramientas/latencia-agente-voz/) separa transporte, detección de fin de turno, STT, modelo, TTS, buffering e interrupción y permite ver qué tramo domina la experiencia.
-
-### El texto pierde parte de la señal
-
-La transcripción conserva muy bien el contenido léxico. No conserva por completo:
-
-- Velocidad y cambios de ritmo
-- Energía
-- Vacilaciones
-- Sarcasmo
-- Emoción
-- Alargamientos
-- Énfasis
-- Pronunciaciones poco habituales
-- Ruido y distancia del micrófono
-
-OpenAI destacó esta pérdida al presentar Realtime API. En una cadena ASR → modelo de texto → TTS desaparecen señales como emoción, énfasis y acentos, y además se añade latencia.[^openai-realtime-intro]
-
-La pérdida ocurre en dos direcciones:
-
-1. **Comprensión.** El LLM recibe menos información sobre la intención y el estado del usuario
-2. **Expresión.** El TTS recibe texto, pero no siempre sabe cómo debería decirlo
+Una salida TTS puede ser muy expresiva aunque la entrada fuese texto. **Expresividad de salida y conservación de la señal de entrada son propiedades diferentes.** Tampoco debe tratarse una inferencia acústica de emoción como un hecho demostrado sobre la persona.
 
 {{ include_html("snippets/articulos-tecnicos/voice-arch-prosody-loss.html") }}
 
-### Demasiados componentes comparten el estado
+### Streaming, especulación y control
 
-En full cascade hay que reconciliar:
+Una cascada no tiene por qué esperar la transcripción completa, después toda la respuesta y después todo el audio. Puede solapar reconocimiento, generación y síntesis. LiveKit documenta control de turnos e interrupciones en sistemas compuestos; Pipecat organiza procesamiento mediante frames y pipelines.[^livekit][^pipecat]
 
-```text
-vad_state
-transcript_revision
-llm_response_state
-tool_state
-tts_state
-playback_state
-conversation_state
-```
+Ese solapamiento introduce un problema concreto: **qué trabajo es provisional y qué trabajo ya no se puede retirar**. Una revisión del STT puede invalidar la respuesta especulativa; una frase enviada al TTS puede seguir en cola; una frase reproducida ya no puede «desdecirse» mediante una cancelación interna.
 
-Un barge-in puede llegar mientras el STT corrige el turno anterior, el LLM sigue generando, una tool continúa en marcha y el audio ya sintetizado espera en el buffer.
+La cascada ofrece puntos claros para registrar transcripciones, validar texto antes de sintetizar, elegir una voz y cambiar proveedores. El coste de esa modularidad es coordinar revisiones, backpressure, fallos parciales y cancelación. Los logs textuales facilitan la auditoría, pero no certifican por sí solos que el usuario oyera el texto correcto.
 
-Una implementación madura no cancela “todo el pipeline”. Cancela una respuesta concreta, elimina el audio pendiente, ajusta el historial a lo que se oyó y decide por separado qué hacer con las operaciones que siguen vivas.
+**Encaje recomendado:** dominios donde pesan el control del texto, la portabilidad, los diccionarios de pronunciación y el diagnóstico por etapas. Debe compararse contra alternativas con el mismo runtime, no contra una implementación batch deliberadamente lenta.
 
-## 2. Half cascade: audio → modelo audio-native → texto streaming → TTS
-
-Half cascade suele explicarse de forma ambigua. En este report uso el término para esta arquitectura:
+## 2. Half cascade: audio → modelo de audio → texto → TTS
 
 ```text
-audio del usuario
-→ modelo realtime audio-native
-→ texto de respuesta en streaming
-→ TTS externo
-→ audio al usuario
+Audio → encoder / adaptación de audio → modelo lingüístico
+                                      → texto estable + estilo opcional
+                                      → TTS externo → playback
+Transcripción auxiliar ───────────────────────────────→ observabilidad
 ```
 
-El modelo escucha el audio directamente y lo usa para comprender el turno. La salida, en cambio, sigue siendo texto. Ese texto se envía a un TTS externo.
+El modelo recibe una representación del audio sin exigir una transcripción externa como única entrada. Qwen2-Audio es una referencia de audio-in / text-out. Ultravox distingue explícitamente la comprensión directa del audio de una transcripción auxiliar para logs. La API Realtime documenta respuestas con `output_modalities: ["text"]`.[^qwen2audio][^ultravox][^realtime]
 
-Así desaparece el STT como frontera independiente, pero se mantiene una voz especializada y controlable.
-
-El SDK oficial de OpenAI muestra sesiones Realtime con `output_modalities: ["text"]` y streaming a través de `response.output_text.delta`.[^openai-python-realtime] Ese contrato permite construir audio-in / text-out sin pedir al modelo que genere audio.
+**Audio-native no significa ausencia de encoder, de supervisión textual o de componentes preentrenados con ASR.** Describe la interfaz y la representación disponibles para el modelo. Tampoco demuestra que un checkpoint acepte audio indefinido en streaming: eso exige comprobar causalidad, ventanas, estado y la API concreta.
 
 {{ include_html("snippets/articulos-tecnicos/voice-arch-half.html") }}
 
-### Qué gana frente a full cascade
+### Qué cambia y qué no
 
-**Comprensión audio-native.** El modelo puede usar tono, pausas, ritmo y vacilaciones como parte de la intención.
+Se evita la frontera obligatoria ASR externo → LLM, pero no desaparecen los errores de reconocimiento de entidades. El modelo puede explotar pistas acústicas si su entrenamiento y sus evaluaciones lo respaldan. En la salida sigue existiendo una frontera textual: un TTS que recibe únicamente «De acuerdo» no conoce necesariamente cómo debía decirse.
 
-**Menos reconciliación.** Ya no hay que coordinar un STT parcial, un STT final y un LLM como tres estados distintos.
-
-**Streaming al TTS.** Los deltas de texto pueden empezar a sintetizarse antes de que termine la respuesta completa.
-
-**Voz independiente.** El producto conserva el TTS que mejor encaja por calidad, precio, idiomas o identidad de marca.
-
-**Tool calling desde audio.** El modelo puede decidir una tool sin convertir antes toda la interacción en una transcripción definitiva.
-
-Es una opción muy interesante, aunque tiene un matiz importante: conservar la prosodia en la entrada no significa conservarla en la salida.
-
-### La prosodia entra y puede perderse al salir
-
-El modelo puede detectar que el usuario está frustrado, duda o habla en voz baja.
-
-Si el TTS solo recibe esto:
-
-```text
-Entiendo. Voy a revisarlo.
-```
-
-puede leerlo con un tono neutro. La comprensión fue audio-native, pero la respuesta volvió a cruzar una frontera de texto plano.
-
-Una forma de evitarlo es añadir un contrato intermedio:
+Un contrato intermedio puede transportar instrucciones expresivas. Este **SpeechPlan es una propuesta de aplicación**, no un estándar de OpenAI, Qwen o Ultravox:
 
 ```json
 {
-  "text": "Entiendo. Voy a revisarlo.",
-  "speech_plan": {
-    "intent": "reassuring",
-    "pace": 0.92,
-    "energy": 0.42,
-    "pause_before_ms": 180,
-    "emphasis": ["entiendo"],
-    "pronunciations": {},
-    "voice_profile": "support_es_v3"
-  }
+  "response_id": "r42",
+  "segment_id": "r42.3",
+  "text": "La entrevista sigue pendiente de confirmación.",
+  "delivery": {"style": "neutral", "pace": "measured"},
+  "pronunciation_lexicon_version": "es-v3",
+  "commit": "stable_text"
 }
 ```
 
-El `SpeechPlan` no se enseña al usuario y tampoco tiene por qué entrar en el historial. Su función es transportar la intención expresiva hasta el TTS.
+El adaptador debe mapear esos campos a controles realmente soportados por el sintetizador. Un campo `style` ignorado no conserva la prosodia. Ultravox documenta la integración de un TTS externo; eso prueba la viabilidad del contrato, no la equivalencia acústica entre proveedores.[^ultravox-tts]
 
 {{ include_html("snippets/articulos-tecnicos/voice-arch-speech-plan.html") }}
 
-Se puede producir de tres formas:
+### La unidad de streaming importa
 
-1. El modelo devuelve el texto y los metadatos en paralelo
-2. Una capa ligera deriva el plan a partir del audio y de la respuesta
-3. El TTS recibe instrucciones de estilo o tokens expresivos
+No enviaría cada token aislado al sintetizador. Un chunker puede esperar una cláusula estable, un máximo de espera o una frontera de puntuación. Debe combinar latencia, estabilidad semántica y continuidad prosódica, y distinguir texto provisional de texto comprometido.
 
-La primera opción facilita la trazabilidad. La segunda separa mejor conversación y control de voz. La tercera reduce contratos, aunque también acopla más el sistema al proveedor de síntesis.
+Ejemplo: «Sí…» seguido de «…hay disponibilidad, pero no el viernes» no debería convertirse en una confirmación prematura. Proponer una pequeña espera es distinto de inventar un valor universal de milisegundos: el umbral debe ajustarse con las métricas de esa voz y de ese idioma.
 
-### El streaming necesita un buen chunker
+**Encaje recomendado:** la información acústica de entrada aporta valor, pero el producto necesita un TTS concreto o aprobación del texto antes de emitirlo. Sigue siendo necesario cancelar síntesis, vaciar buffers, conservar el estado de tools y registrar lo efectivamente reproducido.
 
-Enviar cada delta al TTS reduce la espera, pero puede romper la entonación. Fragmentos demasiado cortos suenan entrecortados. Fragmentos demasiado largos retrasan el primer audio.
+## 3. Speech-to-speech: audio → modelo → audio
 
-Un *semantic chunker* puede cerrar una unidad cuando encuentra:
+S2S elimina la necesidad de exponer un intercambio exclusivamente textual entre comprensión y síntesis. **No obliga a tener un solo transformer, ni prohíbe generar texto internamente.** AudioLM estudia representaciones discretas semánticas y acústicas; EnCodec estudia compresión neural; ninguno de esos ingredientes basta por sí solo para producir un agente conversacional.[^audiolm][^encodec]
 
-- Puntuación fuerte
-- Una cláusula estable
-- Un límite de longitud
-- Una pausa explícita del `SpeechPlan`
-- Un cambio de intención
-- Una tool call que obliga a detener la respuesta
+Dentro de S2S aparecen varias familias:
 
-```python
-async for delta in realtime.output_text():
-    chunker.push(delta)
+| Familia | Mecanismo representativo | Distinción importante |
+|---|---|---|
+| Secuencias de modalidades | SpeechGPT relaciona representaciones discretas de habla y lenguaje mediante adaptación e instrucciones | Integrar voz no elimina necesariamente pasos secuenciales |
+| Texto y audio alineados | Moshi genera un flujo textual asociado a su propia habla junto a flujos acústicos | Texto auxiliar no equivale a un STT externo obligatorio |
+| Thinker–Talker | Qwen2.5-Omni y Qwen3-Omni separan procesamiento semántico y generación de voz con acoplamiento interno | Dos módulos internos no son automáticamente una cascada de servicios de texto |
+| Adaptadores alrededor de un LLM | LLaMA-Omni y Freeze-Omni exploran integración de comprensión y salida hablada con distintos grados de preservación del LLM | Hay que inspeccionar entrenamiento y runtime, no deducir duplex por el nombre |
 
-    for phrase in chunker.pop_ready_phrases():
-        await tts.enqueue(
-            text=phrase.text,
-            speech_plan=phrase.speech_plan,
-        )
-```
+Estas son familias representativas, no particiones mutuamente excluyentes.[^speechgpt][^moshi][^qwen25][^qwen3][^llamaomni][^freeze]
 
-El chunker necesita un pequeño margen de revisión. Una respuesta puede empezar con “Sí” y continuar con “Sí, pero…”. Sintetizar el primer token demasiado pronto crea una promesa acústica difícil de retirar.
+### Qué significa «nativo» a nivel de tokens
 
-### Qué sigue siendo necesario
+Un codec transforma la onda en representaciones compactas. El modelo predice representaciones; un decoder las convierte en audio. La compresión, la causalidad y la cantidad de contexto futuro condicionan qué tan pronto puede emitirse un fragmento. Un buen modelo semántico con un decoder que exige mucho contexto puede seguir teniendo mala latencia de inicio.[^audiolm][^encodec][^qwen3]
 
-Half cascade no elimina:
+En Moshi, Mimi opera a 12,5 frames por segundo; hay flujos separados de audio del usuario y del agente y un flujo textual auxiliar. Su diseño combina transformers temporal y de profundidad. El paper distingue 160 ms teóricos y aproximadamente 200 ms prácticos: **no son un SLA telefónico de respuesta útil**.[^moshi]
 
-- El playback y su truncado
-- La cancelación del TTS
-- La coordinación de tools
-- Los resultados asíncronos
-- La idempotencia
-- La entrega proactiva
-- La medición hasta el audio que realmente se escuchó
+Como modelo analítico simplificado de conversación continua:
 
-También introduce el `SpeechPlan`. Tiene sentido cuando la comprensión acústica y la libertad de elegir TTS compensan ese contrato adicional.
+\[
+q_\theta(a^{\mathrm{out}}_{1:T}\Vert a^{\mathrm{in}}_{1:T},c)
+:=\prod_t q_\theta(a^{\mathrm{out}}_t\mid a^{\mathrm{in}}_{\le t},a^{\mathrm{out}}_{<t},c).
+\]
 
-## 3. Speech-to-speech: audio ↔ modelo
+El símbolo \(\Vert\) indica condicionamiento causal, no condicionamiento ordinario sobre entradas futuras. Los índices representan frames alineados tras los retardos de implementación. Se omiten codebooks y variables textuales para mostrar el requisito causal: la salida futura puede depender de audio entrante nuevo. La ecuación no afirma una factorización interna concreta para GPT-Live.
 
-En speech-to-speech, el mismo modelo consume audio y produce audio:
-
-```text
-audio del usuario
-↔ modelo speech-to-speech
-↔ audio del agente
-```
-
-El diagrama es mucho más limpio. El sistema completo sigue necesitando telefonía, tools, estado, políticas, seguridad y observabilidad.
-
-Los modelos Realtime modernos pueden recibir y emitir audio directamente y también soportar function calling.[^openai-gpt-realtime] La ventaja principal es que comprensión y expresión comparten una representación acústica.
+## 4. Half-duplex, barge-in y full-duplex
 
 {{ include_html("snippets/articulos-tecnicos/voice-arch-duplex.html") }}
 
-### Dónde destaca S2S
+**Turnos estrictos.** El agente espera el cierre del turno, produce una respuesta y no incorpora habla simultánea durante ella. Puede ser una interfaz push-to-talk o una política de aplicación. Un modelo S2S también puede usarse así.
 
-**Ritmo conversacional.** Puede generar backchannels, adaptar el tempo y reaccionar sin esperar una transcripción estable.
+**Turnos interrumpibles.** El runtime continúa observando la entrada y puede parar la respuesta al detectar que el usuario toma la palabra. Eso es *barge-in*. No demuestra que el modelo integre de forma continua lo que oye dentro de su generación acústica. Realtime permite controlar detección de turnos y respuestas automáticas; el endpointing semántico no se reduce a esperar silencio.[^realtime][^vad]
 
-**Continuidad prosódica.** La señal acústica no tiene que comprimirse a texto entre la entrada y la respuesta.
+**Interacción full-duplex continua.** El sistema procesa entrada y salida simultáneas y decide si continuar, pausar, responder brevemente o ceder el turno. No significa que deba hablar por encima del usuario. Moshi, PersonaPlex y GPT-Live permiten estudiar esta clase de comportamiento desde diseños distintos.[^moshi][^personaplex][^live-intro]
 
-**Barge-in más natural.** La sesión puede reaccionar a la actividad del usuario y cortar la salida con menos intermediarios.
+Una cascada puede ofrecer entrada y salida concurrentes mediante orquestación. Eso permite construir un **sistema** duplex sin convertir cada modelo en un modelo nativamente duplex. La comparación debe declarar la capa a la que se refiere.
 
-**Menos fronteras.** Se reducen serializaciones, contratos y buffers entre STT, LLM y TTS.
+### Silencio, interrupción y backchannel no son lo mismo
 
-**Mejor encaje para full-duplex.** Algunos modelos pueden escuchar mientras hablan y ajustar la respuesta durante el solapamiento.
+«Ajá» puede ser una señal para que el agente continúe; «No, espera, cambia la fecha» puede exigir detenerse. Ruido de fondo y una conversación lateral no deberían recibir automáticamente el mismo tratamiento. Las sucesivas versiones de Full-Duplex-Bench incorporan aspectos distintos de pausa, solapamiento y conversación prolongada.[^fdb1][^fdb15][^fdb2]
 
-S2S y full-duplex no son lo mismo. Un modelo puede recibir audio y devolver audio de forma estrictamente turn-based. Full-duplex exige procesar las dos direcciones a la vez y mantener coherencia cuando ambos hablan.
+Un sistema que detiene toda salida ante cualquier sonido puede obtener una buena cifra de tiempo de parada y una experiencia pésima. Por eso hay que medir tanto el tiempo de reacción como la corrección de la decisión de interrumpir.
 
-### Qué se vuelve más difícil
+## 5. Cómo se entrenan estas capacidades
 
-**Auditabilidad.** Hay que derivar transcripciones, tool traces y estado escuchado sin asumir que todo el audio generado llegó al usuario.
+Hay tres problemas de aprendizaje separados: representar el audio, decidir el contenido y producir voz con el timing adecuado. Entrenar uno no resuelve automáticamente los demás.
 
-**Control de voz.** La pronunciación, el estilo y la identidad dependen más de las capacidades del modelo.
+Los modelos audio-language estudian alineamiento entre encoders y LLM, instrucciones multimodales y conservación de capacidades lingüísticas. Los modelos de generación estudian tokens acústicos, alineamiento con texto y síntesis incremental. Los modelos de interacción necesitan ejemplos donde importe qué ocurre mientras otra persona habla.[^salmonn][^qwen2audio][^speechgpt][^freeze]
 
-**Latencia de tools.** La conversación no debería congelarse mientras una operación tarda. Hace falta delegación o continuidad asíncrona.
+PersonaPlex adapta la línea de Moshi para controlar rol y voz mediante prompts textuales y acústicos, combinando datos de interacción real y conversaciones sintéticas.[^personaplex] La consecuencia de ingeniería es importante: un dataset de turnos perfectamente alternados puede enseñar contenido, pero no ofrece por sí solo cobertura de interrupciones, vacilaciones y solapamientos naturales.
 
-**Coste.** Mantener una sesión audio-native continua puede ser más caro que activar modelos especializados por etapas. El [planificador de coste y capacidad para agentes de voz](/herramientas/coste-capacidad-agente-voz/) permite traducir llamadas, minutos, tokens y concurrencia a coste mensual, workers y límites de proveedor antes de elegir arquitectura.
+Para evaluar una integración nueva separaría las ablaciones: mismo LLM con texto frente a audio; mismo audio-model con varios TTS; mismo modelo con endpointing distinto; mismo frontend con backends de distinta capacidad. Cambiar todas las piezas simultáneamente impide atribuir la mejora a la arquitectura.
 
-**Compliance.** Redacción, filtrado, PII y políticas deben aplicarse al audio, al texto derivado y a las acciones.
-
-**Portabilidad.** El contrato de sesión, las voces y el function calling suelen estar más ligados al proveedor.
-
-## Medir algo más que el primer audio
-
-Una comparación justa necesita separar varios tiempos:
+## 6. Hot take: S2S delante, razonamiento pesado detrás
 
 ```text
-T_detection       fin de intervención detectado
-T_decision        intención y primera decisión útil
-T_first_audio     primer audio reproducible
-T_interruption    speech_started → silencio real del agente
-T_completion      operación aceptada → resultado
-T_delivery        resultado listo → cierre escuchado
+            voz / silencios / solapamientos
+Usuario ⇄ superficie conversacional rápida
+                         ⇅ solicitudes y resultados
+                  backend asíncrono
+                         ⇅
+          retrieval · herramientas · workflows
+                         ⇅
+               estado de negocio persistente
 ```
 
-{{ include_html("snippets/articulos-tecnicos/voice-arch-latency.html") }}
-
-S2S suele tener ventaja en `T_first_audio` y `T_interruption`. Puede perder parte de esa ventaja con un turn detection conservador o una red inestable.
-
-Full cascade puede ser competitivo si STT, LLM y TTS son rápidos y trabajan en streaming. Su dificultad aparece en la coordinación.
-
-Half cascade ocupa un punto intermedio. Mantiene comprensión audio-native y conserva una voz externa que se puede optimizar y controlar.
-
-La evaluación también necesita métricas de calidad:
-
-- Precisión de intención con ruido y acentos
-- Conservación de entidades
-- Corrección de los argumentos de tools
-- Naturalidad prosódica
-- Estabilidad de la voz
-- Interrupciones falsas
-- Respuestas duplicadas
-- Éxito de tarea
-- Trazabilidad del resultado
-
-## Matriz de decisión
-
-| Dimensión | Full cascade | Half cascade | Speech-to-speech |
-|---|---|---|---|
-| Comprensión de prosodia | Baja o indirecta | Alta en entrada | Alta en entrada |
-| Prosodia de salida | Alta si el TTS es bueno | Alta con `SpeechPlan` + TTS | Nativa y dependiente del modelo |
-| Latencia mínima posible | Media | Baja-media | Baja |
-| Control de voz | Muy alto | Muy alto | Variable |
-| Tool calling observable | Muy alto | Alto | Medio-alto |
-| Complejidad de orquestación | Muy alta | Alta | Menor en modalidad, no en negocio |
-| Portabilidad entre proveedores | Alta | Media | Baja-media |
-| Full-duplex natural | Difícil | Posible | Mejor encaje |
-| Compliance textual | Directo | Directo en salida | Requiere derivaciones fiables |
-| Personalización acústica | TTS dedicado | TTS dedicado | Dependiente del modelo |
-| Debugging por etapas | Excelente | Bueno | Más difícil |
-
-No hay una arquitectura ganadora para todos los productos.
-
-{{ include_html("snippets/articulos-tecnicos/voice-arch-decision.html") }}
-
-### Elegir full cascade cuando
-
-- La trazabilidad textual y el control por etapas son obligatorios
-- Hay que poder cambiar proveedores
-- La voz depende de un TTS concreto
-- El dominio tolera una conversación más turn-based
-- El equipo ya sabe operar una máquina de estados distribuida
-
-### Elegir half cascade cuando
-
-- La señal acústica aporta valor real a la comprensión
-- Se quiere eliminar la reconciliación STT → LLM
-- La voz externa es una ventaja de producto
-- Se puede diseñar y evaluar un `SpeechPlan`
-- Hace falta una salida textual gobernable
-
-### Elegir S2S cuando
-
-- El timing, la naturalidad y el full-duplex son prioritarios
-- El modelo ofrece una voz y un tool calling adecuados
-- El equipo puede instrumentar el audio escuchado y las acciones
-- La sesión continua compensa el coste y el acoplamiento
-- El producto acepta menos modularidad en el comportamiento acústico
-
-## Hot take: S2S delante, razonamiento pesado detrás
-
-Mi apuesta no es sustituir toda la plataforma por un modelo S2S gigante.
-
-La arquitectura que más sentido me hace separa dos velocidades:
-
-```text
-S2S Interaction Surface
-    ↕ eventos, contexto y entregas
-Cognitive Execution Plane
-    ↕
-tools, RAG, workflows, workers y side effects
-```
-
-La **S2S Interaction Surface** es pequeña, rápida y full-duplex. Se ocupa de la parte humana:
-
-- Escuchar
-- Saber cuándo intervenir
-- Producir backchannels
-- Mantener una voz estable
-- Gestionar barge-in
-- Resolver preguntas ligeras
-- Aceptar trabajo
-- Entregar resultados cuando haya un hueco seguro
-
-El **Cognitive Execution Plane** puede ser más pesado. Se ocupa de la parte computacional:
-
-- Razonamiento profundo
-- Planificación
-- RAG
-- Tool calls
-- Rutinas paralelas
-- Retries
-- Idempotencia
-- Validaciones
-- Compensaciones
-- Generación de resultados estructurados
-
-La superficie no espera bloqueada. Puede decir:
-
-> “Lo estoy revisando. Cuéntame mientras tanto qué horario prefieres.”
-
-El plano cognitivo sigue trabajando y publica un `DeliveryEnvelope` cuando termina. La superficie decide si lo entrega, lo agrupa o lo incorpora al siguiente turno.
-
-GPT-Live apunta en una dirección parecida. Una superficie full-duplex mantiene la conversación mientras delega búsqueda, razonamiento más profundo y trabajo complejo a un modelo frontier.[^gpt-live]
-
-MoshiRAG explora una idea relacionada desde investigación. Combina una interfaz full-duplex compacta con retrieval asíncrono para mejorar la factualidad sin romper la interacción.[^moshirag]
+La hipótesis de diseño es separar el ritmo de la conversación del coste de resolver una tarea. GPT-Live documenta esta separación; MoshiRAG estudia recuperación asíncrona de conocimiento para una interfaz full-duplex. Retrieval no es una transacción: la evidencia de MoshiRAG no demuestra seguridad de pagos o reservas.[^live-guide][^moshirag]
 
 {{ include_html("snippets/articulos-tecnicos/voice-arch-surface.html") }}
 
-### Few-shot prompting con muestras de voz
+La superficie puede seguir escuchando durante una búsqueda. No necesita llenar el tiempo con «perfecto», «gracias» o «lo estoy revisando» en cada turno. Un backchannel debe cumplir una función conversacional, no ocultar la latencia real.
 
-El siguiente paso sería poder pasar ejemplos de audio autorizados a la superficie:
+### Tres estados que no deben confundirse
 
-```text
-system instructions
-+ conversational policy
-+ pronunciation lexicon
-+ 3–15 s audio references
-+ consent and provenance metadata
-```
+1. **Observado:** audio y correcciones que llegaron al sistema.
+2. **Reproducido:** parte de la respuesta que alcanzó el punto de playback instrumentado.
+3. **Confirmado:** acciones cuyo resultado fue validado por el sistema de negocio.
+
+Estos tres registros no avanzan a la misma velocidad. El historial no debería afirmar «entrevista confirmada» porque el LLM generó esa frase, ni porque existe audio pendiente en una cola.
+
+Un `DeliveryEnvelope` podría incluir `task_id`, versión del contexto relevante, estado de ejecución, resultado estructurado, procedencia y una clave de deduplicación. Es un contrato propuesto aquí, no una API de proveedor. Al recibirlo se revalida su pertinencia: una corrección de fecha puede invalidarlo; una frase no relacionada no tiene por qué hacerlo.
+
+**Interrumpir voz no equivale a cancelar una acción.** La guía de delegación de Live distingue ambos ciclos de vida.[^live-delegation] Para una operación con efectos externos propongo autorización en el ejecutor, idempotencia, consulta de estado tras un timeout y una política de compensación cuando proceda. Ningún prompt sustituye estas garantías.
+
+### El detalle de telefonía que rompe muchas demos
+
+Twilio documenta `clear` para vaciar el buffer y `mark` para seguir la reproducción. Pero también devuelve marcas pendientes después de `clear`: **un `mark` recibido no siempre significa audio reproducido**.[^twilio]
+
+El ledger debe distinguir completado por playback de descartado por limpieza. Incluso una confirmación de playback del proveedor no demuestra que la persona oyera o entendiera el mensaje. La métrica debe nombrar el punto exacto de observación.
+
+## 7. Latencia: cinco relojes, no una cifra de marketing
+
+{{ include_html("snippets/articulos-tecnicos/voice-arch-latency.html") }}
+
+| Métrica propuesta | Inicio → final | Qué revela |
+|---|---|---|
+| Primer sonido | Fin real de intervención → primer audio reproducido | Sensación inicial, incluidos fillers |
+| Primera respuesta útil | Fin real de intervención → primer contenido que responde | Tiempo hasta información relevante |
+| Interrupción | Inicio de interrupción válida → silencio real de la salida | Capacidad de ceder el turno |
+| Acción | Solicitud aceptada → efecto confirmado | Ejecución, no fluidez verbal |
+| Entrega | Resultado disponible → resultado reproducido | Coordinación entre backend y conversación |
+
+Estas definiciones son propuestas para el harness, no equivalencias entre métricas de papers. El fin real de intervención necesita anotación externa o referencia conocida: usar el endpoint que decidió el propio sistema puede ocultar su error.
+
+### Camino crítico, no suma de p95
+
+Para un grafo de dependencias, una aproximación de finalización es:
+
+\[
+F_v=d_v+\max_{u\in\operatorname{pred}(v)}F_u.
+\]
+
+El tiempo hasta el primer audio depende del camino crítico, de qué prefijos son utilizables y de las colas. Las etapas pueden solaparse. Además, \(p95(A+B)\) no es, en general, \(p95(A)+p95(B)\). Hay que calcular percentiles sobre trazas completas de la misma población.
+
+Qwen3-Omni reporta 234 ms de primer paquete teórico en una configuración de concurrencia 1; la misma tabla reporta 728 ms con concurrencia 4 y 1.172 ms con concurrencia 6. Eso ilustra sensibilidad a carga, no latencia universal de llamada.[^qwen3]
+
+Full-Duplex-Bench-v3 reporta, en su propio protocolo, 6,89 s y pass@1 de 0,60 para GPT-Realtime, frente a 4,25 s y 0,54 para Gemini Live 3.1. Es un ejemplo de trade-off dentro de un estudio, **no una comparación válida con los 160 ms de Moshi**. Tampoco su baseline Whisper–GPT-4o–TTS representa el límite de todas las cascadas.[^fdb3]
+
+No conectaría esos números con una línea de tendencia. Las definiciones, cargas, runtimes, modelos y tareas son diferentes.
+
+## 8. GPT-Live: qué aporta la evidencia y qué no
+
+| Fecha | Hito verificado | Lectura arquitectónica |
+|---|---|---|
+| 2024 | Moshi | El diálogo continuo con flujos acústicos separados ya tiene una referencia publicada |
+| 2025 | Qwen2.5/3-Omni | El acoplamiento semántico y acústico puede tener módulos internos y salida incremental |
+| Enero de 2026 | PersonaPlex | El control de rol y voz también puede estudiarse en interacción full-duplex |
+| Abril de 2026 | MoshiRAG | Recuperación asíncrona sin convertir cada búsqueda en un turno bloqueante |
+| 8 de julio de 2026 | Presentación de GPT-Live | Interacción continua con delegación para trabajo complejo |
+| 3 de agosto de 2026 | Publicación de ingeniería | Camino de audio y trabajo asíncrono tratados por separado |
+| 10 de septiembre de 2026 | GPT-Live-1 en la API | La separación frontend/backend pasa a ser una opción de integración publicada |
+
+Fuentes: papers y publicaciones oficiales.[^moshi][^qwen25][^qwen3][^personaplex][^moshirag][^live-intro][^live-engineering][^live-api]
+
+La tendencia defendible es **integración acústica para conversar y separación de responsabilidades para trabajar**. Es una síntesis de ingeniería, no una regresión estadística ni una afirmación de que todos los agentes deban adoptar el mismo diseño.
+
+El artículo de ingeniería de GPT-Live describe una ruta de medios de baja latencia separada de llamadas asíncronas al backend y mecanismos de continuidad de sesiones.[^live-engineering] No publica suficiente detalle para reconstruir su tokenizer, número de parámetros, mezcla completa de datos o política interna de entrenamiento. No atribuyo a GPT-Live los detalles de Mimi o de Thinker–Talker.
+
+«SOTA» exige declarar benchmark, versión, fecha, configuración y procedencia de la evaluación. Un primer puesto de un sistema con backend Astra no aísla la capacidad del frontend de voz. Esta revisión no incorpora una reproducción independiente de ese ranking ni un experimento propio con GPT-Live-1.
+
+## 9. Matriz de decisión sin un ganador ficticio
+
+{{ include_html("snippets/articulos-tecnicos/voice-arch-decision.html") }}
+
+| Necesidad dominante | Punto de partida razonable | Condición que puede cambiar la decisión |
+|---|---|---|
+| Validar cada frase antes de pronunciarla | Full cascade o audio-in/text-out | El control añadido retrasa el audio; medir su coste real |
+| Conservar una voz/TTS de producto | Full o half cascade | Una solución S2S concreta también puede ofrecer control de voz |
+| Interpretar pistas acústicas | Half cascade o S2S | Demostrar mejora en datos del dominio, no asumirla |
+| Manejar solapamiento y turnos naturales | Modelo/runtime con full-duplex probado | Evaluar falsas interrupciones y entidades corregidas |
+| Razonar o ejecutar tareas largas | Frontend y backend desacoplados | Consistencia y entrega de resultados pasan a ser centrales |
+| Operar o cambiar componentes por separado | Cascade modular | Más contratos, observabilidad y coordinación |
+
+Los gráficos de selección son guías cualitativas; no contienen mediciones comparativas de proveedores.
+
+### Variantes que los tres nombres simplifican
+
+Puede haber ASR externo seguido de un modelo que genere texto y audio; un canal textual acompañado de un encoder prosódico; enrutamiento entre S2S y cascada según el riesgo; o respuestas precomputadas junto a generación libre. Son composiciones de los mismos ejes, no excepciones que obliguen a inventar una escala lineal de «mejor arquitectura».
+
+LiveKit y Pipecat son opciones de runtime, no una cuarta modalidad de modelo. Una implementación Python propia ofrece control sobre el estado, pero obliga al equipo a asumir transporte, concurrencia, cancelación y pruebas. Mi recomendación es comparar primero el contrato de interrupción, playback y tools; después decidir framework. Usar un framework no concede automáticamente corrección distribuida.[^livekit][^pipecat]
+
+### Coste y capacidad
+
+Compararía **coste por tarea completada**, no solo precio por minuto o token:
+
+\[
+C_{\mathrm{éxito}}=\frac{C_{\mathrm{voz}}+C_{\mathrm{backend}}+C_{\mathrm{telefonía}}+C_{\mathrm{infra}}+C_{\mathrm{reintentos}}}{N_{\mathrm{tareas\ correctas}}}.
+\]
+
+Hay que fijar duración facturable, silencios, caché, concurrencia, colas, cancelaciones y trabajo desperdiciado. Un modelo local puede tener coste marginal de API nulo y coste de capacidad considerable. Una sesión continua puede consumir recursos durante el silencio; eso no demuestra que toda implementación S2S sea más cara.
+
+Los exploradores de [latencia](/herramientas/latencia-agente-voz/) y [coste y capacidad](/herramientas/coste-capacidad-agente-voz/) sirven para explicitar hipótesis. Sus escenarios no sustituyen medidas del despliegue.
+
+## 10. Voz personalizada y seguridad
+
+VALL-E estudia condicionamiento acústico con una muestra de tres segundos. PersonaPlex combina control de rol y voz en conversación full-duplex. Son evidencias de capacidades concretas, no de que todo proveedor permita clonar cualquier voz.[^valle][^personaplex]
 
 {{ include_html("snippets/articulos-tecnicos/voice-arch-voice-prompt.html") }}
 
-La analogía con el few-shot prompting de texto es directa. Los ejemplos enseñan formato, tono o criterio. En voz, las muestras pueden condicionar:
+Separaría identidad autorizada, pronunciación y estilo por turno. Las muestras deben tener procedencia y permiso; las credenciales y autorizaciones de tools permanecen fuera del modelo. El audio de una persona no debe convertirse en una fuente privilegiada de instrucciones para el backend. Aplicaría minimización de datos, trazabilidad de la voz elegida y controles contra suplantación.
 
-- Identidad vocal
-- Ritmo
-- Timbre
-- Pronunciación
-- Estilo
-- Entorno acústico
-- Expresividad
+Estas son recomendaciones de diseño, no una certificación legal. Del mismo modo, retener una transcripción no vuelve automáticamente conforme a un sistema, y no retener audio no garantiza privacidad si las trazas contienen datos personales.
 
-VALL-E demostró *acoustic prompting* con una grabación de tres segundos y mostró conservación de identidad, emoción y entorno.[^valle]
+## 11. Un mismo harness para las tres arquitecturas
 
-OpenAI Voice Engine mostró generación condicionada por una muestra de 15 segundos. El acceso se mantuvo limitado por los riesgos de suplantación.[^voice-engine]
+**Corpus.** Construiría escenarios con ruido, telefonía, idiomas y acentos del producto; nombres y números difíciles; autocorrecciones; pausas largas; interrupciones reales; backchannels; tools lentas; resultados que llegan durante otro turno y cortes de conexión. Una evaluación de contenido como VoiceBench y una evaluación temporal como Full-Duplex-Bench responden preguntas diferentes.[^voicebench][^fdb1][^fdb15][^fdb2][^fdb3]
 
-Eso respalda la dirección técnica, pero no significa que todos los modelos S2S comerciales ofrezcan hoy esta capacidad.
+**Control experimental.** Mismo objetivo, instrucciones, herramientas y referencias. Fijar snapshot del modelo, configuración de voz, transporte, región, endpointing y carga. Comparar el producto completo y, por separado, ablaciones que cambien una sola pieza. Publicar qué fallos son del agente y qué ejecuciones quedaron invalidadas por el harness.
 
-En producto conviene separar:
+**Medición.** Registrar audio de entrada y salida en el punto instrumentado, hipótesis de texto, respuestas, llamadas a tools, efectos confirmados y buffers descartados. Medir exactitud de entidades, argumentos, éxito de tarea, interrupciones correctas e incorrectas, duplicación de acciones, primera respuesta útil y coste por éxito.
 
-1. **Voz base autorizada**, que define la identidad
-2. **Estilo del turno**, que define emoción, energía y ritmo
-3. **Entorno o calidad**, que no debería copiarse por accidente
+**Estadística.** Repetir escenarios, presentar tamaño de muestra y distribuciones. Usar comparaciones emparejadas y, cuando corresponda, bootstrap agrupado por interlocutor o sesión. No tratar como observaciones independientes cien turnos de una única llamada. Evaluar naturalidad con jueces humanos ciegos y no convertir un MOS de otro protocolo en una escala común.
 
-También hacen falta controles claros:
+### Casos de aceptación que bloquearían una release
 
-- Consentimiento verificable
-- Procedencia de la muestra
-- Identidades bloqueadas
-- Detección y etiquetado de audio sintético
-- Revocación
-- Trazas de la muestra usada en cada sesión
-- Límites contra la suplantación
-- Protección de las muestras en reposo y en tránsito
+| Caso | Invariante que exigiría |
+|---|---|
+| «El viernes… perdón, el lunes» | Ninguna acción confirmada usa la fecha descartada |
+| «Ajá» durante una explicación | La política distingue escucha de una petición real de parada |
+| Interrupción con audio ya en cola | No se reproduce una respuesta invalidada después del vaciado |
+| Timeout de una reserva | Se consulta el estado antes de repetir una operación no idempotente |
+| Resultado antiguo tras una corrección | El resultado se revalida antes de anunciarlo |
+| Fin de llamada con despedida pendiente | El cierre no depende solo de que el modelo terminara de generar |
 
-Mejorar la imitación de una voz humana no puede convertirse en una vía para clonar a cualquiera.
-
-## Un mismo harness para las tres arquitecturas
-
-Las tres variantes deberían evaluarse con el mismo corpus y el mismo contrato de tarea.
-
-### Dataset
-
-- Idiomas y mercados reales
-- Ruido, reverberación y telefonía degradada
-- Voces rápidas, lentas y con acentos
-- Interrupciones
-- Autocorrecciones
-- Tools rápidas y lentas
-- Resultados que llegan durante otro turno
-- Entidades sensibles y pronunciaciones de marca
-
-### Métricas
-
-```text
-turn_detection_delay_ms
-speech_stop_to_first_audio_ms
-barge_in_to_silence_ms
-semantic_error_rate
-entity_preservation_rate
-tool_argument_accuracy
-task_success_rate
-prosody_preference_score
-voice_identity_stability
-duplicate_delivery_rate
-cost_per_successful_minute
-```
-
-### Protocolo
-
-1. Fijar el mismo escenario y el mismo resultado esperado
-2. Ejecutar varias semillas o sesiones
-3. Registrar el audio de entrada y el audio que de verdad se reprodujo
-4. Comparar tool traces y side effects
-5. Hacer una evaluación humana ciega de naturalidad
-6. Analizar los fallos por arquitectura y no solo los promedios
-7. Repetir con congestión y dependencias lentas
-
-El objetivo no es demostrar que una opción ahorra unos milisegundos en laboratorio. Es descubrir cuál mantiene la conversación, completa la tarea y conserva el control cuando los componentes fallan o se solapan.
+Los umbrales numéricos se fijan según riesgo y experiencia del producto. No propongo aprobar todos los dominios con un único p95 ni doy por superados estos casos sin ejecutar la prueba.
 
 ## Conclusión
 
-Full cascade sigue teniendo mucho sentido cuando pesan más la modularidad, el control y la auditabilidad.
+Full cascade ofrece contratos explícitos. Half cascade elimina la transcripción externa como frontera obligatoria y conserva un sintetizador independiente. S2S integra el camino acústico, pero sus mecanismos internos y su interacción pueden ser muy distintos.
 
-Half cascade es especialmente atractiva cuando queremos comprensión audio-native sin renunciar a un TTS externo y a una salida textual gobernable.
+Full-duplex es otra decisión: escuchar durante la salida, interpretar el solapamiento y decidir cuándo ceder la palabra. Y ninguna de estas opciones elimina la responsabilidad de mantener coherentes lo observado, lo reproducido y lo confirmado.
 
-Speech-to-speech ofrece el mejor punto de partida para timing, prosodia y full-duplex. Aun así, no elimina el runtime ni las tools.
+**Mi punto de partida para agentes con interacción rica y tareas largas sería una superficie de voz rápida, un backend asíncrono y un estado de negocio persistente. Para un flujo donde manda la validación textual o una voz específica, empezaría por una cascada. La elección final se gana en el mismo harness, no contando cajas en un diagrama.**
 
-La dirección que veo más prometedora es híbrida:
+## Fuentes primarias
 
-> **Una superficie S2S rápida para la conversación, un plano cognitivo más pesado para el trabajo y un contrato persistente que los mantenga sincronizados.**
-
-A esa arquitectura se le puede sumar un `Voice Prompt Pack` con muestras autorizadas, pronunciaciones y política expresiva.
-
-El resultado no es un modelo que intenta hacerlo todo. Es un sistema en el que cada capa trabaja a la velocidad y con el nivel de control que necesita.
-
-## Fuentes
-
-[^openai-realtime-intro]: OpenAI, [Introducing the Realtime API](https://openai.com/index/introducing-the-realtime-api/). Comparación con pipelines ASR → LLM → TTS y pérdida de señales acústicas.
-[^openai-python-realtime]: OpenAI, [OpenAI Python SDK — Realtime API](https://github.com/openai/openai-python). Ejemplo de `output_modalities: ["text"]` y streaming `response.output_text.delta`.
-[^openai-gpt-realtime]: OpenAI, [gpt-realtime model](https://developers.openai.com/api/docs/models/gpt-realtime). Entrada y salida de texto y audio, WebRTC, WebSocket, SIP y function calling.
-[^gpt-live]: OpenAI, [Introducing GPT-Live](https://openai.com/index/introducing-gpt-live/), 8 de julio de 2026. Superficie full-duplex con delegación a un modelo frontier.
-[^moshirag]: MoshiRAG, [Full-Duplex Spoken Dialogue with Retrieval-Augmented Generation](https://arxiv.org/abs/2604.12928), 2026.
-[^valle]: Microsoft Research, [VALL-E](https://www.microsoft.com/en-us/research/project/vall-e-x/vall-e/). Acoustic prompting con una muestra de tres segundos y consideraciones éticas.
-[^voice-engine]: OpenAI, [Navigating the challenges and opportunities of synthetic voices](https://openai.com/index/navigating-the-challenges-and-opportunities-of-synthetic-voices/). Voice Engine condicionado por una muestra de 15 segundos y despliegue limitado por seguridad.
+[^voice-guide]: OpenAI, [Voice agents](https://developers.openai.com/api/docs/guides/voice-agents), 2026-09-10.
+[^whisper]: Radford et al., [Robust Speech Recognition via Large-Scale Weak Supervision](https://arxiv.org/abs/2212.04356), 2022.
+[^salmonn]: Tang et al., [SALMONN: Towards Generic Hearing Abilities for Large Language Models](https://arxiv.org/abs/2310.13289), 2023.
+[^qwen2audio]: Qwen team, [Qwen2-Audio Technical Report](https://arxiv.org/html/2407.10759v1), 2024.
+[^ultravox]: Ultravox, [Frequently asked questions](https://docs.ultravox.ai/gettingstarted/faq), 2026-09-10.
+[^realtime]: OpenAI, [Realtime conversations](https://developers.openai.com/api/docs/guides/realtime-conversations), 2026-09-10.
+[^audiolm]: Borsos et al., [AudioLM: a Language Modeling Approach to Audio Generation](https://arxiv.org/abs/2209.03143), 2022.
+[^encodec]: Défossez et al., [High Fidelity Neural Audio Compression](https://arxiv.org/abs/2210.13438), 2022.
+[^speechgpt]: Zhang et al., [SpeechGPT: Empowering Large Language Models with Intrinsic Cross-Modal Conversational Abilities](https://arxiv.org/abs/2305.11000), 2023.
+[^moshi]: Défossez et al., [Moshi: a speech-text foundation model for real-time dialogue](https://arxiv.org/html/2410.00037v2), 2024.
+[^qwen25]: Qwen team, [Qwen2.5-Omni Technical Report](https://arxiv.org/html/2503.20215v1), 2025.
+[^qwen3]: Qwen team, [Qwen3-Omni Technical Report](https://arxiv.org/html/2509.17765v1), 2025.
+[^llamaomni]: Fang et al., [LLaMA-Omni: Seamless Speech Interaction with Large Language Models](https://arxiv.org/abs/2409.06666), 2024.
+[^freeze]: Wang et al., [Freeze-Omni: A Smart and Low Latency Speech-to-speech Dialogue Model with Frozen LLM](https://arxiv.org/abs/2411.00774), 2024.
+[^personaplex]: Roy et al. / NVIDIA, [PersonaPlex: Voice and Role Control for Full Duplex Conversational Speech Models](https://research.nvidia.com/labs/adlr/personaplex/), 2026-01-15.
+[^fdb1]: Lin et al., [Full-Duplex-Bench: A Benchmark to Evaluate Full-Duplex Spoken Dialogue Models on Turn-Taking Capabilities](https://arxiv.org/abs/2503.04721), 2025.
+[^fdb15]: Full-Duplex-Bench authors, [Full-Duplex-Bench v1.5](https://arxiv.org/abs/2507.23159), 2025.
+[^fdb2]: Full-Duplex-Bench authors, [Full-Duplex-Bench v2](https://arxiv.org/abs/2510.07838), 2025.
+[^fdb3]: Full-Duplex-Bench authors, [Full-Duplex-Bench-v3: Benchmarking Tool Use for Full-Duplex Voice Agents Under Real-World Disfluency](https://arxiv.org/html/2604.04847v1), 2026-04-06.
+[^voicebench]: Chen et al., [VoiceBench: Benchmarking LLM-Based Voice Assistants](https://arxiv.org/abs/2410.17196), 2024.
+[^live-intro]: OpenAI, [Introducing GPT-Live](https://openai.com/index/introducing-gpt-live/), 2026-07-08.
+[^live-engineering]: OpenAI, [Continuous voice interaction with GPT-Live](https://openai.com/index/continuous-voice-interaction-with-gpt-live/), 2026-08-03.
+[^live-api]: OpenAI, [Build more natural voice experiences with GPT-Live-1 in the API](https://openai.com/index/introducing-gpt-live-1-in-the-api/), 2026-09-10.
+[^live-guide]: OpenAI, [Live API guide](https://developers.openai.com/api/docs/guides/live), 2026-09-10.
+[^live-delegation]: OpenAI, [Live delegation](https://developers.openai.com/api/docs/guides/live-delegation), 2026-09-10.
+[^moshirag]: Chien et al., [MoshiRAG: Asynchronous Knowledge Retrieval for Full-Duplex Speech Language Models](https://arxiv.org/abs/2604.12928), 2026-04-14.
+[^twilio]: Twilio, [Media Streams: WebSocket messages](https://www.twilio.com/docs/voice/media-streams/websocket-messages), 2026-09-10.
+[^livekit]: LiveKit, [Turns overview](https://docs.livekit.io/agents/logic/turns/), 2026-09-10.
+[^pipecat]: Pipecat, [Pipeline](https://docs.pipecat.ai/pipecat/learn/pipeline), 2026-09-10.
+[^vad]: OpenAI, [Voice activity detection](https://developers.openai.com/api/docs/guides/realtime-vad), 2026-09-10.
+[^valle]: Wang et al., [Neural Codec Language Models are Zero-Shot Text to Speech Synthesizers](https://arxiv.org/abs/2301.02111), 2023.
+[^ultravox-tts]: Ultravox, [Bring your own TTS](https://docs.ultravox.ai/voices/bring-your-own), 2026-09-10.
