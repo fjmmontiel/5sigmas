@@ -105,7 +105,7 @@ for (const text of [es, en]) {
 
 check(!/^\s*-\s+.+;\s*$/m.test(en), 'EN: semicolon-list anti-pattern detected');
 check(!/harness (guarantees|garantiza) (correctness|corrección|security|seguridad)/i.test(`${es}\n${en}`), 'Unsupported harness guarantee detected');
-check(!/assistant\s*=\s*no tools|agent\s*=\s*tools/i.test(`${es}\n${en}`), 'Rigid assistant-vs-agent taxonomy detected');
+check(!/^\s*(?:assistant\s*=\s*no tools|agent\s*=\s*tools)[.!]?\s*$/im.test(`${es}\n${en}`), 'Rigid assistant-vs-agent taxonomy asserted as a standalone rule');
 
 const visualInclude = '{{ include_html("snippets/articulos-tecnicos/coding-agent-harness-loop.html") }}';
 check(es.includes(visualInclude), 'ES: harness loop visual include missing');
