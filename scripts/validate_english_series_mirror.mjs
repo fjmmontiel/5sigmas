@@ -20,9 +20,12 @@ const presentations = [
 ];
 
 const realtimeVoice = {
-  route: '/en/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz/',
-  title: 'Realtime Voice Agents',
-  chapterTitle: 'Chapter 1 — Voice architectures: where the text boundary lives',
+  enRoute: '/en/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz/',
+  enTitle: 'Realtime Voice Agents',
+  enChapterTitle: 'Chapter 1 — Voice architectures: where the text boundary lives',
+  esRoute: '/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz/',
+  esTitle: 'Agentes de voz en tiempo real',
+  esChapterTitle: 'Capítulo 1 — Arquitecturas de voz: dónde colocas la frontera de texto',
 };
 
 const nativePresentationMedia = new Map([
@@ -69,8 +72,14 @@ for (const [slug, title] of presentations) {
   if (!hubLinks.includes(expected)) failures.push(`/en/series/: missing ${expected}`);
   if (!hubText.includes(title)) failures.push(`/en/series/: missing title ${JSON.stringify(title)}`);
 }
-if (!hubLinks.includes(realtimeVoice.route)) failures.push(`/en/series/: missing ${realtimeVoice.route}`);
-if (!hubText.includes(realtimeVoice.title)) failures.push(`/en/series/: missing title ${JSON.stringify(realtimeVoice.title)}`);
+if (!hubLinks.includes(realtimeVoice.enRoute)) failures.push(`/en/series/: missing ${realtimeVoice.enRoute}`);
+if (!hubText.includes(realtimeVoice.enTitle)) failures.push(`/en/series/: missing title ${JSON.stringify(realtimeVoice.enTitle)}`);
+
+const esHubText = await visit('/series/');
+const esHubLinks = await page.locator('.s5-simple-list a.s5-list-row').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('href')));
+if (esHubLinks.length !== 9) failures.push(`/series/: expected 9 canonical series cards, got ${esHubLinks.length}`);
+if (!esHubLinks.includes(realtimeVoice.esRoute)) failures.push(`/series/: missing ${realtimeVoice.esRoute}`);
+if (!esHubText.includes(realtimeVoice.esTitle)) failures.push(`/series/: missing title ${JSON.stringify(realtimeVoice.esTitle)}`);
 
 for (const [slug, expectedTitle] of presentations) {
   const route = `/en/series/${slug}/00_presentacion_serie/`;
@@ -103,12 +112,17 @@ for (const [slug, expectedTitle] of presentations) {
   }
 }
 
-const voiceBody = await visit(realtimeVoice.route);
-if (!voiceBody.includes(realtimeVoice.chapterTitle)) {
-  failures.push(`${realtimeVoice.route}: missing canonical chapter title ${JSON.stringify(realtimeVoice.chapterTitle)}`);
+const voiceBody = await visit(realtimeVoice.enRoute);
+if (!voiceBody.includes(realtimeVoice.enChapterTitle)) {
+  failures.push(`${realtimeVoice.enRoute}: missing canonical chapter title ${JSON.stringify(realtimeVoice.enChapterTitle)}`);
 }
 for (const marker of forbidden) {
-  if (voiceBody.includes(marker)) failures.push(`${realtimeVoice.route}: Spanish visual/UI marker leaked: ${JSON.stringify(marker)}`);
+  if (voiceBody.includes(marker)) failures.push(`${realtimeVoice.enRoute}: Spanish visual/UI marker leaked: ${JSON.stringify(marker)}`);
+}
+
+const esVoiceBody = await visit(realtimeVoice.esRoute);
+if (!esVoiceBody.includes(realtimeVoice.esChapterTitle)) {
+  failures.push(`${realtimeVoice.esRoute}: missing canonical chapter title ${JSON.stringify(realtimeVoice.esChapterTitle)}`);
 }
 
 await page.goto(`${base}/en/series/ia-pib-bienestar-energia/00_presentacion_serie/`, { waitUntil: 'networkidle' });
@@ -134,7 +148,9 @@ for (const expected of ['Play attack', 'Hostile content', 'Crosses authorization
 
 for (const route of [
   '/en/series/',
-  realtimeVoice.route,
+  '/series/',
+  realtimeVoice.enRoute,
+  realtimeVoice.esRoute,
   '/en/series/ia-pib-bienestar-energia/00_presentacion_serie/',
   '/en/series/datacenters-espacio/00_presentacion_serie/',
   '/en/series/seguridad-ia/00_presentacion_serie/',
@@ -158,4 +174,4 @@ if (failures.length) {
   for (const failure of failures) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log('English series mirror QA passed: nine canonical series entries including Realtime Voice Agents, localized embedded visuals, native-English presentation media only when declared, desktop/mobile overflow clean.');
+console.log('Bilingual series hub QA passed: nine canonical entries including Realtime Voice Agents, localized chapter routes, native-English presentation media only when declared, desktop/mobile overflow clean.');
