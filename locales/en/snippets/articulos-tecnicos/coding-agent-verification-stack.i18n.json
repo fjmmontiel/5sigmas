@@ -1,0 +1,40 @@
+{
+  "source": "snippets/articulos-tecnicos/coding-agent-verification-stack.html",
+  "source_blob_sha": "a00e59382851f1af81917c94c63b72f60c2b78a7",
+  "replacements": {
+    "Pila de evidencia que convierte un cambio de código en una decisión de aceptar, reabrir o devolver la tarea": "Evidence stack that turns a code change into a decision to accept, rework, or hand back the task",
+    "Verificación · review · stop": "Verification · review · stop",
+    "«Done» exige evidencia ligada al candidato exacto": "“Done” requires evidence bound to the exact candidate",
+    "Un test verde es una señal. El harness sólo puede cerrar cuando el contrato actual, el commit actual y todas las verificaciones obligatorias siguen alineados.": "A green test is one signal. The harness can close only while the current contract, current commit, and every required verification remain aligned.",
+    "Candidato": "Candidate",
+    "head SHA · entorno · contrato": "head SHA · environment · contract",
+    "Checks deterministas": "Deterministic checks",
+    "tests · tipos · lint · estado": "tests · types · lint · state",
+    "Diff review": "Diff review",
+    "scope · API · config · tests": "scope · API · config · tests",
+    "Juicio adicional": "Additional judgment",
+    "rubric · humano · caveats": "rubric · human · caveats",
+    "Freshness gate": "Freshness gate",
+    "mismo SHA · misma evidencia": "same SHA · same evidence",
+    "Decisión": "Decision",
+    "accept · rework · handback": "accept · rework · handback",
+    "Regla de cierre:": "Closure rule:",
+    "cualquier cambio posterior al candidato invalida la evidencia que dependa de ese estado. «El agente dice que terminó» no sustituye tests, revisión ni comprobación del resultado real.": "any later change to the candidate invalidates evidence that depends on that state. “The agent says it is done” does not replace tests, review, or verification of the real outcome."
+  },
+  "forbidden_output_tokens": [
+    "Pila de evidencia",
+    "Verificación · review",
+    "exige evidencia ligada",
+    "Un test verde es una señal",
+    "Candidato",
+    "entorno · contrato",
+    "Checks deterministas",
+    "tipos · lint",
+    "Juicio adicional",
+    "humano · caveats",
+    "mismo SHA · misma evidencia",
+    "Decisión",
+    "Regla de cierre",
+    "cualquier cambio posterior"
+  ]
+}
