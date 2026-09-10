@@ -1,6 +1,6 @@
 {
   "source": "snippets/articulos-tecnicos/voice-latency-critical-path.html",
-  "source_blob_sha": "5158337db77f49ee48e4b23b511cb3e3d686d575",
+  "source_blob_sha": "d4e4f65ef5cc2ed456bb65766e32e997c455a57e",
   "replacements": {
     "Timeline del camino crítico de latencia desde fin de habla hasta primera reproducción": "Latency critical-path timeline from speech end to first playout",
     "Camino crítico": "Critical path",
@@ -23,7 +23,7 @@
     "Media + buffer": "Media / buffer",
     "red · cola": "network · queue",
     "reproducción": "playout",
-    "camino residual que bloquea el primer playout": "residual path blocking first playout",
+    "L_user · camino residual hasta first_playout": "L_user · residual path to first playout",
     "Trabajo ya realizado mientras el usuario habla.": "Work already completed while the user is speaking.",
     "Sólo la finalización STT posterior al fin de habla puede entrar en esta espera.": "Only STT finalization after speech end can contribute to this wait.",
     "Modelo y TTS pueden seguir después de que el usuario ya oye el inicio.": "Model and TTS can continue after the user already hears the response begin.",
