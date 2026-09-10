@@ -1,0 +1,187 @@
+name: Voice chapter 6 current Pipecat certification
+
+on:
+  push:
+    branches:
+      - series/realtime-voice-agents-golden
+    paths:
+      - '.github/workflows/voice-ch6-current-pipecat-cert.yml'
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  certify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Correct Pipecat error semantics in ES and EN and harden source gate
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          replacements = {
+            Path('docs/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.md'): [
+              (
+                "Para errores, un `FrameProcessor` dispara `on_error` antes de propagar `ErrorFrame` upstream. El frame expone mensaje, excepción opcional, `fatal` y el processor de origen. En la API actual, `fatal=True` indica un error no recuperable que cancela el pipeline; `fatal=False` permite que la aplicación capture el error y aplique una estrategia como failover sin forzar ese shutdown.[^pipecat-errors]\n\nEstas primitives permiten un ledger detallado del pipeline. No conviertas sus nombres en tu única taxonomía de producto. `fatal=False` no demuestra que el turno haya salido bien: sólo evita que ese error obligue a terminar el pipeline. No dice por sí solo si una reserva quedó creada, si existió recovery en otra capa o si el usuario oyó audio parcial.",
+                "Para errores, un `FrameProcessor` dispara `on_error` antes de propagar `ErrorFrame` upstream. El frame expone mensaje, excepción opcional, `category` y el `processor` de origen; en la API actual, `processor.is_usable` ya refleja si ese processor puede seguir haciendo su trabajo. Pipecat separa así el estado del componente de la decisión sobre la vida del pipeline.[^pipecat-events][^pipecat-errors]\n\n`ErrorFrame.fatal`, `push_error(..., fatal=...)` y `FatalErrorFrame` están deprecados y la documentación indica que se eliminarán en 2.0.0. `fatal=True` todavía cancela el pipeline por compatibilidad, pero el modelo recomendado es marcar el processor como no usable y dejar que `PipelineWorker` aplique `ProcessorUnusablePolicy`: `CONTINUE` (default), `END` o `CANCEL`. Un `ServiceSwitcher` puede usar ese estado para failover.[^pipecat-errors]\n\nEstas primitives permiten un ledger detallado del pipeline. No conviertas sus nombres en tu única taxonomía de producto. Que `processor.is_usable` siga siendo `True` no demuestra que el turno haya salido bien, y `CONTINUE` tampoco significa éxito: sólo describe que el framework puede seguir ejecutando. No dice por sí solo si una reserva quedó creada, si existió recovery en otra capa o si el usuario oyó audio parcial.",
+              ),
+              (
+                "[^pipecat-errors]: Pipecat, [FrameProcessor Events — Error Handling](https://docs.pipecat.ai/api-reference/server/events/frame-processor-events).",
+                "[^pipecat-events]: Pipecat, [FrameProcessor Events](https://docs.pipecat.ai/api-reference/server/events/frame-processor-events).\n[^pipecat-errors]: Pipecat, [Error Handling](https://docs.pipecat.ai/pipecat/fundamentals/error-handling).",
+              ),
+              ("date_modified: 2026-09-10", "date_modified: 2026-09-11"),
+            ],
+            Path('locales/en/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.md'): [
+              (
+                "For errors, a `FrameProcessor` fires `on_error` before an `ErrorFrame` is propagated upstream. The frame carries the error string, optional exception, `fatal`, and source processor. In the current API, `fatal=True` marks an unrecoverable error that cancels the pipeline; `fatal=False` lets application code handle the error and apply a strategy such as failover without forcing that shutdown.[^pipecat-errors]\n\nThese primitives can support a detailed pipeline ledger. They should not become the entire product taxonomy. `fatal=False` does not prove that the turn succeeded: it only means this error does not force pipeline termination. It does not tell you whether a booking was committed, whether another layer recovered, or whether the caller heard partial audio.",
+                "For errors, a `FrameProcessor` fires `on_error` before an `ErrorFrame` is propagated upstream. The frame carries the error string, optional exception, `category`, and source `processor`; in the current API, `processor.is_usable` already reflects whether that processor can still do its job. Pipecat therefore separates component usability from the decision to keep the pipeline running.[^pipecat-events][^pipecat-errors]\n\n`ErrorFrame.fatal`, `push_error(..., fatal=...)`, and `FatalErrorFrame` are deprecated and documented for removal in 2.0.0. `fatal=True` still cancels the pipeline for compatibility, but the recommended model is to mark the processor unusable and let `PipelineWorker` apply `ProcessorUnusablePolicy`: `CONTINUE` (the default), `END`, or `CANCEL`. A `ServiceSwitcher` can use that state for failover.[^pipecat-errors]\n\nThese primitives can support a detailed pipeline ledger. They should not become the entire product taxonomy. A processor remaining `is_usable=True` does not prove that the turn succeeded, and `CONTINUE` does not mean success either: those states only describe that the framework can keep executing. They do not tell you whether a booking was committed, whether another layer recovered, or whether the caller heard partial audio.",
+              ),
+              (
+                "[^pipecat-errors]: Pipecat, [FrameProcessor Events — Error Handling](https://docs.pipecat.ai/api-reference/server/events/frame-processor-events).",
+                "[^pipecat-events]: Pipecat, [FrameProcessor Events](https://docs.pipecat.ai/api-reference/server/events/frame-processor-events).\n[^pipecat-errors]: Pipecat, [Error Handling](https://docs.pipecat.ai/pipecat/fundamentals/error-handling).",
+              ),
+              ("date_modified: 2026-09-10", "date_modified: 2026-09-11"),
+            ],
+          }
+
+          for path, edits in replacements.items():
+              text = path.read_text(encoding='utf-8')
+              for old, new in edits:
+                  if text.count(old) != 1:
+                      raise SystemExit(f'{path}: expected exactly one patch target, found {text.count(old)} for {old[:90]!r}')
+                  text = text.replace(old, new)
+              path.write_text(text, encoding='utf-8')
+
+          gate_path = Path('scripts/validate_voice_evaluation_observability_ch6_source.mjs')
+          gate = gate_path.read_text(encoding='utf-8')
+          url_needle = "  'https://docs.pipecat.ai/api-reference/server/events/frame-processor-events',\n"
+          url_replacement = url_needle + "  'https://docs.pipecat.ai/pipecat/fundamentals/error-handling',\n"
+          if gate.count(url_needle) != 1:
+              raise SystemExit(f'source gate URL insertion drift: {gate.count(url_needle)}')
+          gate = gate.replace(url_needle, url_replacement)
+
+          start_marker = "// Pipecat 1.x current source/docs (revalidated 2026-09-11): ErrorFrame again exposes fatal."
+          end_marker = "check(es.includes('`UserBotLatencyObserver` mide entre la parada de habla detectada')"
+          start = gate.find(start_marker)
+          end = gate.find(end_marker, start)
+          if start < 0 or end < 0:
+              raise SystemExit(f'source gate Pipecat block drift: start={start} end={end}')
+          corrected = r'''// Pipecat current source/docs (revalidated 2026-09-11): processor usability is distinct from pipeline termination.
+check(es.includes('`processor.is_usable` ya refleja') && es.includes('`ErrorFrame.fatal`') && es.includes('deprecados') && es.includes('2.0.0'), 'ES: current Pipecat processor-usability/deprecation semantics missing');
+check(en.includes('`processor.is_usable` already reflects') && en.includes('`ErrorFrame.fatal`') && en.includes('deprecated') && en.includes('2.0.0'), 'EN: current Pipecat processor-usability/deprecation semantics missing');
+check(es.includes('`ProcessorUnusablePolicy`') && es.includes('`CONTINUE` (default)') && es.includes('`END`') && es.includes('`CANCEL`'), 'ES: current Pipecat pipeline policy semantics missing');
+check(en.includes('`ProcessorUnusablePolicy`') && en.includes('`CONTINUE` (the default)') && en.includes('`END`') && en.includes('`CANCEL`'), 'EN: current Pipecat pipeline policy semantics missing');
+check(es.includes('`ServiceSwitcher` puede usar ese estado para failover'), 'ES: current Pipecat failover boundary missing');
+check(en.includes('`ServiceSwitcher` can use that state for failover'), 'EN: current Pipecat failover boundary missing');
+check(!es.includes('En la API actual, `fatal=True` indica un error no recuperable') && !en.includes('In the current API, `fatal=True` marks an unrecoverable error'), 'Stale Pipecat fatal-first semantics remain');
+check(es.includes('Que `processor.is_usable` siga siendo `True` no demuestra que el turno haya salido bien') && es.includes('`CONTINUE` tampoco significa éxito'), 'ES: Pipecat framework-state-vs-product-outcome boundary missing');
+check(en.includes('A processor remaining `is_usable=True` does not prove that the turn succeeded') && en.includes('`CONTINUE` does not mean success either'), 'EN: Pipecat framework-state-vs-product-outcome boundary missing');
+'''
+          gate = gate[:start] + corrected + gate[end:]
+          gate_path.write_text(gate, encoding='utf-8')
+          PY
+          git diff --check
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Validate chapter 2 source contract
+        run: node scripts/validate_voice_turn_taking_ch2_source.mjs
+      - name: Validate chapter 3 source contract
+        run: node scripts/validate_voice_latency_ch3_source.mjs
+      - name: Validate chapter 4 source contract
+        run: node scripts/validate_voice_tools_state_ch4_source.mjs
+      - name: Validate chapter 5 source contract
+        run: node scripts/validate_voice_network_telephony_ch5_source.mjs
+      - name: Validate chapter 6 source and relationship contract
+        run: node scripts/validate_voice_evaluation_observability_ch6_source.mjs
+
+      - name: Build Spanish strictly
+        env:
+          DISABLE_MKDOCS_2_WARNING: 'true'
+        run: mkdocs build --clean --strict
+      - name: Prepare English locale
+        run: python scripts/prepare_locale.py --locale en
+      - name: Audit English source
+        run: python scripts/audit_locale.py --locale en
+      - name: Build English strictly
+        env:
+          S5_LOCALE: en
+          DISABLE_MKDOCS_2_WARNING: 'true'
+        run: mkdocs build -f mkdocs.en.yml --clean --strict
+      - name: Audit rendered English
+        run: python scripts/audit_locale.py --locale en --site site/en
+
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Serve combined preview
+        run: |
+          python -m http.server 8000 --directory site > /tmp/voice-ch6-preview.log 2>&1 &
+          for attempt in {1..30}; do
+            curl --fail --silent http://127.0.0.1:8000/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability/ > /dev/null && \
+            curl --fail --silent http://127.0.0.1:8000/en/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability/ > /dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/voice-ch6-preview.log
+          exit 1
+
+      - name: Regress chapter 1 end-to-end
+        run: node scripts/validate_voice_architecture_ch1.mjs
+      - name: Audit browser resources
+        run: node scripts/audit_browser_resources.mjs
+      - name: Validate English series mirror
+        run: node scripts/validate_english_series_mirror.mjs
+      - name: Validate locale switching
+        run: node scripts/validate_locale_switching.mjs
+      - name: Regress chapter 1 accessibility
+        run: node scripts/validate_voice_architecture_ch1_accessibility.mjs
+      - name: Regress chapter 2 relationship geometry
+        run: node scripts/validate_voice_turn_taking_ch2_accessibility.mjs
+      - name: Regress chapter 3 relationship geometry
+        run: node scripts/validate_voice_latency_ch3_accessibility.mjs
+      - name: Regress chapter 4 relationship geometry
+        run: node scripts/validate_voice_tools_state_ch4_accessibility.mjs
+      - name: Regress chapter 5 relationship geometry
+        run: node scripts/validate_voice_network_telephony_ch5_accessibility.mjs
+      - name: Validate chapter 6 causal evidence geometry and accessibility
+        run: node scripts/validate_voice_evaluation_observability_ch6_accessibility.mjs
+      - name: Validate direct reader navigation
+        run: node scripts/validate_direct_reader_navigation.mjs
+
+      - name: Commit exact tested source correction
+        shell: bash
+        run: |
+          git config user.name '5sigmas GOLDEN orchestrator'
+          git config user.email 'actions@users.noreply.github.com'
+          git add docs/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.md locales/en/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.md scripts/validate_voice_evaluation_observability_ch6_source.mjs
+          test -n "$(git diff --cached --name-only)"
+          git diff --cached --check
+          git commit -m 'fix(voice): align chapter 6 with current Pipecat error semantics'
+          git push origin HEAD:series/realtime-voice-agents-golden
+          echo "CERTIFIED_SHA=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+
+      - name: Upload chapter 6 visual evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: voice-ch6-current-pipecat-review
+          path: artifacts/visual-review/voice-eval-ch6-*.png
+          if-no-files-found: error
+          retention-days: 2
+      - name: Report certified SHA
+        run: echo "Certified and pushed $CERTIFIED_SHA"
