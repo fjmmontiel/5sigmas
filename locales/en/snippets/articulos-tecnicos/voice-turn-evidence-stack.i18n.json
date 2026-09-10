@@ -1,0 +1,35 @@
+{
+  "source": "snippets/articulos-tecnicos/voice-turn-evidence-stack.html",
+  "source_blob_sha": "cc355c04283bf021f36af312372593b46c3f5d8e",
+  "replacements": {
+    "Capas de evidencia para diagnosticar un turno de voz": "Evidence layers for diagnosing a voice turn",
+    "Evaluación y reliability": "Evaluation and reliability",
+    "Un turno necesita más de una señal para explicar por qué falló": "A turn needs more than one signal to explain why it failed",
+    "Resultado, control conversacional, media y runtime responden preguntas distintas.": "Outcome, conversational control, media, and runtime answer different questions.",
+    "Resultado": "Outcome",
+    "¿se completó la tarea correcta?": "was the right task completed?",
+    "Conversación": "Conversation",
+    "turno · interrupción · solape": "turn · interruption · overlap",
+    "Media": "Media",
+    "ingest · playout · jitter/loss": "ingest · playout · jitter/loss",
+    "Runtime": "Runtime",
+    "provider · tool · retry · crash": "provider · tool · retry · crash",
+    "primer observable dañino": "first harmful observable",
+    "causa raíz": "root cause",
+    "Guarda el": "Keep the",
+    "separado de la": "separate from the",
+    "Un fallback puede recuperar un error interno sin producir fallo visible; una transcripción perfecta puede ocultar que una tool no hizo el efecto prometido.": "A fallback can recover an internal error without producing a user-visible failure; a perfect transcript can hide that a tool did not produce the promised effect."
+  },
+  "forbidden_output_tokens": [
+    "Capas de evidencia para diagnosticar",
+    "Evaluación y reliability",
+    "Un turno necesita más de una señal",
+    "Resultado, control conversacional",
+    "¿se completó la tarea correcta?",
+    "Conversación",
+    "turno · interrupción · solape",
+    "primer observable dañino",
+    "causa raíz",
+    "Un fallback puede recuperar"
+  ]
+}

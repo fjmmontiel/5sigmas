@@ -1,0 +1,14 @@
+<section class="s5v s5v-arch-map s5v-turn-evidence-stack s5v--wide" data-step="1" aria-label="Capas de evidencia para diagnosticar un turno de voz">
+  <div class="s5v__canvas">
+    <header class="s5v__head"><div><span class="s5v__kicker">Evaluación y reliability</span><h3>Un turno necesita más de una señal para explicar por qué falló</h3></div><p>Resultado, control conversacional, media y runtime responden preguntas distintas.</p></header>
+    <div class="s5v-arch-map__panels">
+      <div data-panel="1" class="s5v-arch-map__pipe">
+        <span>Resultado<br><small>¿se completó la tarea correcta?</small></span>
+        <span>Conversación<br><small>turno · interrupción · solape</small></span>
+        <span>Media<br><small>ingest · playout · jitter/loss</small></span>
+        <span>Runtime<br><small>provider · tool · retry · crash</small></span>
+      </div>
+    </div>
+    <div class="s5v__copy">Guarda el <strong>primer observable dañino</strong> separado de la <strong>causa raíz</strong>. Un fallback puede recuperar un error interno sin producir fallo visible; una transcripción perfecta puede ocultar que una tool no hizo el efecto prometido.</div>
+  </div>
+</section>

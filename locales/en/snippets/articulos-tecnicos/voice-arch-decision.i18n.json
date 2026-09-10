@@ -1,22 +1,28 @@
 {
   "source": "snippets/articulos-tecnicos/voice-arch-decision.html",
-  "source_blob_sha": "a7b7e80fc6a8d50a1d59d8a2c2c94fc1e8b4ea29",
+  "source_blob_sha": "36beadb1a4461b86495e330217869669d6f47d54",
   "replacements": {
-    "Elección de arquitectura según la prioridad del producto": "Architecture choice by product priority",
+    "Elección de arquitectura según la propiedad del producto que se quiere proteger": "Architecture choice by the product property you want to protect",
     "Decisión": "Decision",
-    "No hay una ganadora universal.": "There is no universal winner.",
-    "Elige qué quieres proteger.": "Choose what you want to protect.",
-    "Equilibrio": "Balance",
-    "máxima observabilidad": "maximum observability",
-    "ritmo y full-duplex": "rhythm and full duplex"
+    "¿Qué propiedad quieres proteger?": "Which property do you want to protect?",
+    "La arquitectura cambia el tipo de control que conservas.": "The architecture changes which kind of control you keep.",
+    "Fronteras": "Boundaries",
+    "Señal": "Signal",
+    "Continuidad": "Continuity",
+    "fronteras explícitas y componentes sustituibles": "explicit boundaries and replaceable components",
+    "audio original al modelo y voz separada": "original audio to the model with a separate voice layer",
+    "continuidad acústica y menos fronteras de modalidad": "acoustic continuity with fewer modality boundaries"
   },
   "forbidden_output_tokens": [
     "Elección de arquitectura",
     "Decisión",
-    "No hay una ganadora universal",
-    "Elige qué quieres proteger",
-    "Equilibrio",
-    "máxima observabilidad",
-    "ritmo y full-duplex"
+    "¿Qué propiedad quieres proteger?",
+    "La arquitectura cambia",
+    "Fronteras",
+    "Señal",
+    "Continuidad",
+    "fronteras explícitas",
+    "audio original al modelo",
+    "continuidad acústica"
   ]
 }

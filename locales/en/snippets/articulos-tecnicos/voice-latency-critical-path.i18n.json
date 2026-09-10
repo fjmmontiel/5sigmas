@@ -1,0 +1,42 @@
+{
+  "source": "snippets/articulos-tecnicos/voice-latency-critical-path.html",
+  "source_blob_sha": "84c94a5a3828476f06d71078048c99e446f755b5",
+  "replacements": {
+    "Fronteras observables del presupuesto de latencia de un agente de voz": "Observable boundaries in a voice agent latency budget",
+    "Camino crítico": "Critical path",
+    "Mide eventos observables, no sumas de dashboards": "Measure observable events, not dashboard sums",
+    "El trabajo interno puede solaparse; las fronteras de usuario siguen siendo medibles.": "Internal work can overlap while user-facing boundaries remain measurable.",
+    "Fin de habla": "Speech end",
+    "última muestra útil": "last useful sample",
+    "Turno confirmado": "Turn committed",
+    "la respuesta ya puede depender del turno": "the response can now depend on the turn",
+    "Primer audio reproducible": "First playable audio",
+    "hay salida, aún no implica reproducción": "output exists, but playback has not necessarily begun",
+    "Reproducción iniciada": "Playback started",
+    "el dispositivo empieza a reproducir": "the device begins playback",
+    "Captura, red, STT, modelo, TTS, packetización y buffers contribuyen entre estas fronteras. Algunas etapas se solapan por streaming, así que sumar sus duraciones completas puede contar trabajo dos veces.": "Capture, network, STT, model, TTS, packetization, and buffers contribute between these boundaries. Some stages overlap through streaming, so adding their full durations can double-count work.",
+    "Etiqueta dónde observaste": "Label where you observed",
+    "acústica, borde de captura o VAD servidor; cada frontera incluye capas distintas.": "acoustic timing, the capture edge, or server VAD; each boundary includes different layers.",
+    "/herramientas/latencia-agente-voz/": "/en/tools/voice-latency-budget/",
+    "Prueba el presupuesto con el explorador interactivo de latencia": "Try the budget in the interactive latency explorer"
+  },
+  "forbidden_output_tokens": [
+    "Fronteras observables",
+    "Camino crítico",
+    "Mide eventos observables",
+    "El trabajo interno puede solaparse",
+    "Fin de habla",
+    "última muestra útil",
+    "Turno confirmado",
+    "la respuesta ya puede depender",
+    "Primer audio reproducible",
+    "hay salida",
+    "Reproducción iniciada",
+    "el dispositivo empieza",
+    "Captura, red, STT",
+    "Etiqueta dónde observaste",
+    "acústica, borde de captura",
+    "herramientas/latencia-agente-voz",
+    "Prueba el presupuesto"
+  ]
+}

@@ -199,6 +199,42 @@ jobs:
       - name: Capture and validate every progressive voice microlab
         run: node scripts/capture_voice_report_animations.mjs
 
+      - name: Validate Realtime Voice Agents chapter 1 end-to-end
+        run: node scripts/validate_voice_architecture_ch1.mjs
+
+      - name: Validate Realtime Voice Agents chapter 1 accessibility and intermediate states
+        run: node scripts/validate_voice_architecture_ch1_accessibility.mjs
+
+      - name: Validate Realtime Voice Agents chapter 2 source contract
+        run: node scripts/validate_voice_turn_taking_ch2_source.mjs
+
+      - name: Validate Realtime Voice Agents chapter 2 accessibility and responsive states
+        run: node scripts/validate_voice_turn_taking_ch2_accessibility.mjs
+
+      - name: Validate Realtime Voice Agents chapter 3 source contract
+        run: node scripts/validate_voice_latency_ch3_source.mjs
+
+      - name: Validate Realtime Voice Agents chapter 3 accessibility and responsive states
+        run: node scripts/validate_voice_latency_ch3_accessibility.mjs
+
+      - name: Validate Realtime Voice Agents chapter 4 source contract
+        run: node scripts/validate_voice_tools_state_ch4_source.mjs
+
+      - name: Validate Realtime Voice Agents chapter 4 accessibility and responsive states
+        run: node scripts/validate_voice_tools_state_ch4_accessibility.mjs
+
+      - name: Validate Realtime Voice Agents chapter 5 source contract
+        run: node scripts/validate_voice_network_telephony_ch5_source.mjs
+
+      - name: Validate Realtime Voice Agents chapter 5 accessibility and responsive states
+        run: node scripts/validate_voice_network_telephony_ch5_accessibility.mjs
+
+      - name: Validate Realtime Voice Agents chapter 6 source contract
+        run: node scripts/validate_voice_evaluation_observability_ch6_source.mjs
+
+      - name: Validate Realtime Voice Agents chapter 6 accessibility and responsive states
+        run: node scripts/validate_voice_evaluation_observability_ch6_accessibility.mjs
+
       - name: Validate complete video experience lifecycle
         run: node scripts/validate_video_experience_v2.mjs
 

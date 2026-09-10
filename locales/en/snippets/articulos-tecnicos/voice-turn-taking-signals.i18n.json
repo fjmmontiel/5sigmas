@@ -1,0 +1,33 @@
+{
+  "source": "snippets/articulos-tecnicos/voice-turn-taking-signals.html",
+  "source_blob_sha": "1c153dd1733984edfa6f9602462e1654ad347507",
+  "replacements": {
+    "Cuatro señales distintas en el control de turnos de un agente de voz": "Four separate signals in a voice agent's turn-taking control",
+    "Control de turnos": "Turn-taking control",
+    "Una pausa no decide por sí sola quién habla": "A pause does not decide who gets the floor",
+    "Cuatro preguntas relacionadas, pero no una secuencia lineal.": "Four related questions, not a linear sequence.",
+    "Actividad de voz": "Voice activity",
+    "¿Hay habla ahora?": "Is there speech right now?",
+    "Fin de turno": "End of turn",
+    "¿Terminó la idea?": "Is the thought complete?",
+    "Interrupción": "Interruption",
+    "¿Quiere tomar el turno?": "Is the user trying to take the turn?",
+    "Commit y cancelación": "Commit and cancellation",
+    "¿Qué estado sigue siendo válido?": "Which state is still valid?",
+    "VAD aporta una observación. End-of-turn, barge-in y cancelación consumen esa evidencia en momentos distintos y pueden tomar decisiones diferentes.": "VAD provides an observation. End-of-turn, barge-in, and cancellation consume that evidence at different times and can reach different decisions."
+  },
+  "forbidden_output_tokens": [
+    "Cuatro señales distintas",
+    "Control de turnos",
+    "Una pausa no decide",
+    "Cuatro preguntas relacionadas",
+    "Actividad de voz",
+    "¿Hay habla ahora?",
+    "Fin de turno",
+    "¿Terminó la idea?",
+    "¿Quiere tomar el turno?",
+    "Commit y cancelación",
+    "¿Qué estado sigue siendo válido?",
+    "VAD aporta una observación"
+  ]
+}

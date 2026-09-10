@@ -138,6 +138,13 @@ nav:
           - Cómo evaluar un agente: series/agentes-ia/03-como-evaluar-un-agente.md
           - Seguridad de agentes: series/agentes-ia/04-seguridad-agentes.md
           - De la demo a producción: series/agentes-ia/05-de-la-demo-a-produccion.md
+      - Agentes de voz en tiempo real:
+          - Arquitecturas de voz: series/agentes-voz-tiempo-real/01-arquitecturas-de-voz.md
+          - Turn-taking: series/agentes-voz-tiempo-real/02-turn-taking.md
+          - Presupuesto de latencia: series/agentes-voz-tiempo-real/03-presupuesto-latencia.md
+          - Tools, estado y acciones asíncronas: series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.md
+          - WebRTC, SIP y telefonía: series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red.md
+          - Evaluación, observabilidad y reliability: series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.md
   - Construir:
       - articulos-tecnicos/index.md
       - Agente Reactivo, Proactivo y Tool calls: articulos-tecnicos/proactive-reactive-agent-and-tool-calls.md
