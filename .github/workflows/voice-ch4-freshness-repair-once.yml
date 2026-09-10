@@ -1,0 +1,72 @@
+name: Voice chapter 4 freshness repair once
+
+on:
+  push:
+    branches:
+      - series/realtime-voice-agents-golden
+    paths:
+      - '.github/workflows/voice-ch4-freshness-repair-once.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: series/realtime-voice-agents-golden
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Apply current Pipecat per-tool cancellation semantics
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          def replace_once(path, old, new):
+              p = Path(path)
+              text = p.read_text(encoding='utf-8')
+              if text.count(old) != 1:
+                  raise SystemExit(f'{path}: expected one match, found {text.count(old)}')
+              p.write_text(text.replace(old, new, 1), encoding='utf-8')
+
+          replace_once(
+            'docs/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.md',
+            "La API actual expone la cancelación dirigida por el modelo de otra forma. Para funciones asíncronas (`cancel_on_interruption=False`), habilita `enable_async_tool_cancellation=True` en el servicio LLM. Cuando hay al menos una función asíncrona disponible, Pipecat añade la tool integrada `cancel_async_tool_call` y las instrucciones necesarias para que el modelo pueda cancelar una llamada asíncrona obsoleta. `timeout_secs` sigue siendo el límite por tool y sustituye `function_call_timeout_secs` para esa función.[^pipecat-functions]\n\nEstas primitivas controlan la ejecución que Pipecat posee. La documentación actual no afirma que cancelar la llamada asíncrona deshaga un side effect remoto; el contrato con la API o worker externo debe establecer el resultado real.",
+            "La API actual hace esta decisión **por tool**. Con `@tool_options(cancel_on_interruption=False, cancellable_by_llm=True, timeout_secs=...)`, una función asíncrona puede seguir conversando mientras corre y, además, permite que el modelo solicite su cancelación si deja de ser relevante. Pipecat anuncia entonces una tool `cancel_<name>` específica para esa función; `tool_call_id` sólo es necesario para seleccionar una llamada concreta cuando hay varias instancias de la misma tool en vuelo. El antiguo flag global `enable_async_tool_cancellation` está deprecado y se eliminará en 2.0.0.[^pipecat-functions]\n\n`timeout_secs` sigue siendo el límite por tool y sustituye `function_call_timeout_secs` para esa función. Si el handler supera el deadline, Pipecat lo cancela lanzando `asyncio.CancelledError`; ese deadline cubre el handler, no trabajo que el propio handler haya desacoplado en otra task.[^pipecat-functions]\n\nEstas primitivas controlan la ejecución que Pipecat posee. Cancelar el handler o su llamada asíncrona no demuestra que un side effect remoto ya enviado haya sido revertido; el contrato con la API o worker externo debe establecer el resultado real."
+          )
+
+          replace_once(
+            'locales/en/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.md',
+            "The current API exposes model-directed cancellation differently. For asynchronous functions (`cancel_on_interruption=False`), enable `enable_async_tool_cancellation=True` on the LLM service. When at least one async function is available, Pipecat adds the built-in `cancel_async_tool_call` tool and supporting system instructions so the model can cancel a stale async call. `timeout_secs` remains the per-tool timeout and overrides `function_call_timeout_secs` for that function.[^pipecat-functions]\n\nThese primitives control execution Pipecat owns. The current documentation does not claim that cancelling the async call reverses a remote side effect; the contract with the external API or worker must establish the actual outcome.",
+            "The current API makes this decision **per tool**. With `@tool_options(cancel_on_interruption=False, cancellable_by_llm=True, timeout_secs=...)`, an asynchronous function can let the conversation continue while it runs and also allow the model to request cancellation when the work is no longer relevant. Pipecat then advertises a tool-specific `cancel_<name>` function. A `tool_call_id` is only needed to select one call when multiple instances of the same tool are in flight. The older service-wide `enable_async_tool_cancellation` flag is deprecated and will be removed in 2.0.0.[^pipecat-functions]\n\n`timeout_secs` remains the per-tool deadline and overrides `function_call_timeout_secs` for that function. If the handler exceeds the deadline, Pipecat cancels it by raising `asyncio.CancelledError`. The deadline covers the handler itself, not work that the handler detached into a separate task.[^pipecat-functions]\n\nThese primitives control execution Pipecat owns. Cancelling the handler or its async call does not prove that a remote side effect already submitted was reversed. The contract with the external API or worker must establish the actual outcome."
+          )
+
+          p = Path('scripts/validate_voice_tools_state_ch4_source.mjs')
+          text = p.read_text(encoding='utf-8')
+          old = "check(es.includes('`enable_async_tool_cancellation=True`') && es.includes('`cancel_async_tool_call`') && es.includes('`timeout_secs`') && es.includes('`function_call_timeout_secs`'), 'ES: current Pipecat async cancellation/timeout semantics missing');\ncheck(en.includes('`enable_async_tool_cancellation=True`') && en.includes('`cancel_async_tool_call`') && en.includes('`timeout_secs`') && en.includes('`function_call_timeout_secs`'), 'EN: current Pipecat async cancellation/timeout semantics missing');\ncheck(!es.includes('`cancellable_by_llm=True`') && !en.includes('`cancellable_by_llm=True`'), 'Stale Pipecat cancellable_by_llm API claim detected');\ncheck(!es.includes('`cancel_<nombre>`') && !en.includes('`cancel_<name>`'), 'Stale Pipecat per-tool cancel_<name> claim detected');\ncheck(!es.includes('`asyncio.CancelledError`') && !en.includes('`asyncio.CancelledError`'), 'Unsupported Pipecat timeout cancellation-mechanism claim detected');"
+          new = "check(es.includes('`cancellable_by_llm=True`') && es.includes('`cancel_<name>`') && es.includes('`tool_call_id`') && es.includes('`timeout_secs`') && es.includes('`function_call_timeout_secs`') && es.includes('`asyncio.CancelledError`'), 'ES: current Pipecat per-tool cancellation/timeout semantics missing');\ncheck(en.includes('`cancellable_by_llm=True`') && en.includes('`cancel_<name>`') && en.includes('`tool_call_id`') && en.includes('`timeout_secs`') && en.includes('`function_call_timeout_secs`') && en.includes('`asyncio.CancelledError`'), 'EN: current Pipecat per-tool cancellation/timeout semantics missing');\ncheck(es.includes('`enable_async_tool_cancellation`') && es.includes('deprecado') && es.includes('2.0.0'), 'ES: Pipecat deprecated global cancellation flag caveat missing');\ncheck(en.includes('`enable_async_tool_cancellation`') && en.includes('deprecated') && en.includes('2.0.0'), 'EN: Pipecat deprecated global cancellation flag caveat missing');\ncheck(!es.includes('`cancel_async_tool_call`') && !en.includes('`cancel_async_tool_call`'), 'Stale Pipecat global cancel_async_tool_call claim detected');"
+          if text.count(old) != 1:
+              raise SystemExit(f'chapter 4 gate: expected one stale assertion block, found {text.count(old)}')
+          p.write_text(text.replace(old, new, 1), encoding='utf-8')
+          PY
+      - name: Validate repaired source contract
+        run: node scripts/validate_voice_tools_state_ch4_source.mjs
+      - name: Verify scope and persist repair
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --check
+          actual=$(git diff --name-only | sort)
+          expected=$(printf '%s\n' 'docs/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.md' 'locales/en/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.md' 'scripts/validate_voice_tools_state_ch4_source.mjs' | sort)
+          test "$actual" = "$expected"
+          git config user.name '5sigmas-golden-bot'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.md locales/en/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.md scripts/validate_voice_tools_state_ch4_source.mjs
+          git commit -m 'fix(voice): refresh Pipecat per-tool cancellation semantics'
+          git push origin HEAD:series/realtime-voice-agents-golden
