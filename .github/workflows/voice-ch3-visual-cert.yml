@@ -1,0 +1,93 @@
+name: Voice ch3 visual pedagogy certification
+
+# Milestone-only certification for the relationship-first latency timeline.
+on:
+  push:
+    branches:
+      - series/realtime-voice-agents-golden
+    paths:
+      - '.github/workflows/voice-ch3-visual-cert.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  certify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Validate chapter 3 source and visual contract
+        run: node scripts/validate_voice_latency_ch3_source.mjs
+
+      - name: Build Spanish strictly
+        run: mkdocs build --clean --strict
+
+      - name: Prepare English locale
+        run: python scripts/prepare_locale.py --locale en
+
+      - name: Audit English source
+        run: python scripts/audit_locale.py --locale en
+
+      - name: Build English strictly
+        env:
+          S5_LOCALE: en
+        run: mkdocs build -f mkdocs.en.yml --clean --strict
+
+      - name: Audit rendered English
+        run: python scripts/audit_locale.py --locale en --site site/en
+
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Serve combined preview
+        run: |
+          python -m http.server 8000 --directory site > /tmp/voice-ch3-preview.log 2>&1 &
+          for attempt in {1..30}; do
+            curl --fail --silent http://127.0.0.1:8000/series/agentes-voz-tiempo-real/03-presupuesto-latencia/ > /dev/null && \
+            curl --fail --silent http://127.0.0.1:8000/en/series/agentes-voz-tiempo-real/03-presupuesto-latencia/ > /dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/voice-ch3-preview.log
+          exit 1
+
+      - name: Audit browser resources
+        run: node scripts/audit_browser_resources.mjs
+
+      - name: Validate English series mirror
+        run: node scripts/validate_english_series_mirror.mjs
+
+      - name: Validate locale switching
+        run: node scripts/validate_locale_switching.mjs
+
+      - name: Validate chapter 3 relationship geometry and accessibility
+        run: node scripts/validate_voice_latency_ch3_accessibility.mjs
+
+      - name: Validate direct reader navigation
+        run: node scripts/validate_direct_reader_navigation.mjs
+
+      - name: Upload chapter 3 visual evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: voice-ch3-relationship-first-review
+          path: artifacts/visual-review/voice-latency-ch3-*.png
+          if-no-files-found: warn
+          retention-days: 2
