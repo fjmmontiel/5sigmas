@@ -1,5 +1,5 @@
 name: Realtime Voice Agents SERIES GOLDEN release gate v2
-# Re-run after current primary-source freshness repair for chapter 4.
+# Chapter 1 is an end-to-end gate and runs only after Playwright + preview are ready.
 
 on:
   push:
@@ -96,9 +96,8 @@ jobs:
           for name in sorted(snippet_names): print('snippet', name)
           PY
 
-      - name: Run all six Realtime Voice source contracts from scratch
+      - name: Run source-only Realtime Voice contracts from scratch
         run: |
-          node scripts/validate_voice_architecture_ch1.mjs
           node scripts/validate_voice_turn_taking_ch2_source.mjs
           node scripts/validate_voice_latency_ch3_source.mjs
           node scripts/validate_voice_tools_state_ch4_source.mjs
@@ -183,6 +182,7 @@ jobs:
 
       - name: Run all six Realtime Voice desktop/mobile/accessibility gates from scratch
         run: |
+          node scripts/validate_voice_architecture_ch1.mjs
           node scripts/validate_voice_architecture_ch1_accessibility.mjs
           node scripts/validate_voice_turn_taking_ch2_accessibility.mjs
           node scripts/validate_voice_latency_ch3_accessibility.mjs
