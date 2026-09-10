@@ -1,6 +1,6 @@
 name: Voice ch3 visual pedagogy certification
 
-# Certification revision 3: pixel-review spacing correction for the critical-path annotation.
+# Certification revision 4: final pixel-review annotation layout.
 on:
   push:
     branches:
