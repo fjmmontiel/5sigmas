@@ -1,4 +1,5 @@
 # One-shot milestone integration/certification; remove after evidence is recorded.
+# Persistent workflow wiring is applied separately by the GitHub connector.
 name: Coding Agents 2.3 certification
 
 on:
@@ -72,16 +73,10 @@ jobs:
               "check(es.includes('cambios producidos directamente por comandos Bash'), 'ES: Claude checkpoint scope limit missing');\ncheck(en.includes('changes produced directly through Bash commands'), 'EN: Claude checkpoint scope limit missing');\n",
               "check(es.includes('antes de cada prompt del usuario') && es.includes('herramientas de edición de archivos'), 'ES: current Claude checkpoint capture semantics missing');\ncheck(en.includes('before each user prompt') && en.includes('file-editing tools'), 'EN: current Claude checkpoint capture semantics missing');\ncheck(es.includes('cambios producidos directamente por comandos Bash'), 'ES: Claude checkpoint scope limit missing');\ncheck(en.includes('changes made through Bash commands'), 'EN: Claude checkpoint scope limit missing');\ncheck(!es.includes('checkpoints del estado de archivos antes de ediciones'), 'ES: stale Claude checkpoint timing semantics detected');\ncheck(!en.includes('checkpoints of file state before edits'), 'EN: stale Claude checkpoint timing semantics detected');\n"
           )
-
-          replace_once(
-              '.github/workflows/pr-visual-review.yml',
-              '      - name: Validate Coding Agents chapter 2 accessibility and responsive states\n        run: node scripts/validate_coding_agent_harness_ch2_accessibility.mjs\n\n',
-              '      - name: Validate Coding Agents chapter 2 accessibility and responsive states\n        run: node scripts/validate_coding_agent_harness_ch2_accessibility.mjs\n\n      - name: Validate Coding Agents chapter 3 source contract\n        run: node scripts/validate_coding_agent_harness_ch3_source.mjs\n\n      - name: Validate Coding Agents chapter 3 accessibility and responsive states\n        run: node scripts/validate_coding_agent_harness_ch3_accessibility.mjs\n\n'
-          )
           PY
 
           git diff --check
-          git diff -- docs/series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.md locales/en/series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.md scripts/validate_coding_agent_harness_ch3_source.mjs mkdocs.yml mkdocs.en.yml locales/en/manifest.yml .github/workflows/pr-visual-review.yml
+          git diff -- docs/series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.md locales/en/series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.md scripts/validate_coding_agent_harness_ch3_source.mjs mkdocs.yml mkdocs.en.yml locales/en/manifest.yml
 
       - name: Persist integrated chapter state
         shell: bash
@@ -93,8 +88,7 @@ jobs:
             docs/series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.md \
             locales/en/series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.md \
             scripts/validate_coding_agent_harness_ch3_source.mjs \
-            mkdocs.yml mkdocs.en.yml locales/en/manifest.yml \
-            .github/workflows/pr-visual-review.yml
+            mkdocs.yml mkdocs.en.yml locales/en/manifest.yml
           git commit -m 'content(coding-agents): integrate chapter 2.3 for GOLDEN QA'
           git push origin HEAD:series/coding-agents-agent-harnesses-golden
           echo "INTEGRATION_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
