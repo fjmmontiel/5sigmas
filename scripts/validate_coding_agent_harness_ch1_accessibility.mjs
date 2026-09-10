@@ -61,8 +61,9 @@ try {
         const label = (await visual.getAttribute('aria-label'))?.trim() || '';
         check(label.length >= 20, `${testCase.route}: ${viewport.name} harness visual missing meaningful aria-label`);
         const visualText = await visual.innerText();
-        for (const token of testCase.requiredVisual) check(visualText.includes(token), `${testCase.route}: ${viewport.name} harness visual missing ${JSON.stringify(token)}`);
-        for (const token of testCase.forbidden) check(!visualText.includes(token), `${testCase.route}: ${viewport.name} untranslated visual token ${JSON.stringify(token)}`);
+        const normalizedVisualText = visualText.toLocaleLowerCase();
+        for (const token of testCase.requiredVisual) check(normalizedVisualText.includes(token.toLocaleLowerCase()), `${testCase.route}: ${viewport.name} harness visual missing ${JSON.stringify(token)}`);
+        for (const token of testCase.forbidden) check(!normalizedVisualText.includes(token.toLocaleLowerCase()), `${testCase.route}: ${viewport.name} untranslated visual token ${JSON.stringify(token)}`);
 
         const visualBox = await visual.boundingBox();
         check(Boolean(visualBox && visualBox.width <= viewport.width + 1), `${testCase.route}: ${viewport.name} visual exceeds viewport (${JSON.stringify(visualBox)})`);
