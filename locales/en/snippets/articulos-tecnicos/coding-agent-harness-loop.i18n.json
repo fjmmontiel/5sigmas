@@ -16,7 +16,7 @@
     "tests · diff · política · handback": "tests · diff · policy · handback",
     "El paso crítico está entre": "The critical boundary is between",
     "proponer": "proposing",
-    "y": "and",
+    "</strong> y <strong>": "</strong> and <strong>",
     "actuar": "acting",
     ". El harness decide qué contexto recibe el modelo, valida permisos, ejecuta shell/ediciones/git en un workspace, devuelve la observación al siguiente turno y conserva el estado necesario para repetir. Un test verde o un diff revisable son señales para decidir si el bucle continúa; no son propiedades del modelo por sí solo.": ". The harness decides what context the model receives, validates permissions, executes shell commands, edits, and git operations in a workspace, returns observations to the next turn, and preserves the state needed to repeat. A passing test or a reviewable diff is evidence for deciding whether the loop continues; neither is a property of the model by itself."
   },
