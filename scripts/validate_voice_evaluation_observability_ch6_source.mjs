@@ -111,8 +111,10 @@ check(en.includes('Agent insights') && en.includes('LiveKit Cloud capability') &
 check(es.includes('`ev.error.recoverable`') && es.includes('no éxito del producto'), 'ES: LiveKit recoverability-vs-outcome boundary missing');
 check(en.includes('`ev.error.recoverable`') && en.includes('not product success'), 'EN: LiveKit recoverability-vs-outcome boundary missing');
 
-check(es.includes('`FrameProcessor` dispara `on_error`') && es.includes('flag `fatal`'), 'ES: Pipecat error propagation semantics missing');
-check(en.includes('`FrameProcessor` fires `on_error`') && en.includes('`fatal` flag'), 'EN: Pipecat error propagation semantics missing');
+check(es.includes('`FrameProcessor` dispara `on_error`') && es.includes('`error.processor.is_usable`') && es.includes('`on_usable_changed`') && es.includes('deprecado desde v1.8.0') && es.includes('se elimina en 2.0.0'), 'ES: current Pipecat error/usability semantics missing');
+check(en.includes('`FrameProcessor` fires `on_error`') && en.includes('`error.processor.is_usable`') && en.includes('`on_usable_changed`') && en.includes('deprecated since v1.8.0') && en.includes('removed in 2.0.0'), 'EN: current Pipecat error/usability semantics missing');
+check(!es.includes('flag `fatal` que indica si el pipeline se cancelará'), 'ES: stale Pipecat fatal semantics returned');
+check(!en.includes('`fatal` flag indicating whether the pipeline will be cancelled'), 'EN: stale Pipecat fatal semantics returned');
 check(es.includes('`UserBotLatencyObserver` mide entre la parada de habla detectada') && es.includes('inicio de habla del bot'), 'ES: Pipecat latency metric boundary missing');
 check(en.includes('`UserBotLatencyObserver` measures from detected user-speech stop') && en.includes('bot-speech start'), 'EN: Pipecat latency metric boundary missing');
 

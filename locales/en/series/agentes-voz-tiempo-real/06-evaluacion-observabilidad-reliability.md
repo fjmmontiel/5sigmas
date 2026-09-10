@@ -274,9 +274,9 @@ Pipecat can emit `MetricsFrame` objects for performance and usage. `UserBotLaten
 
 `TurnTrackingObserver` exposes turn start/end and interruption state. Other built-in observers cover LLM activity, transcription, and startup timing.[^pipecat-observers]
 
-For errors, a `FrameProcessor` fires `on_error` before an `ErrorFrame` is propagated upstream. `ErrorFrame` carries an error string, optional exception, source processor, and a `fatal` flag indicating whether the pipeline will be cancelled.[^pipecat-errors]
+For errors, a `FrameProcessor` fires `on_error` before an `ErrorFrame` is propagated upstream. The frame carries the error string, optional exception, error category, and source processor. In the current API, `fatal` is deprecated since v1.8.0 and removed in 2.0.0; the current signal for whether that processor can still accept work is `error.processor.is_usable`, with `on_usable_changed` exposing later usability transitions.[^pipecat-errors]
 
-These primitives can support a detailed pipeline ledger. They should not become the entire product taxonomy. A fatal `ErrorFrame` describes pipeline behavior. It does not tell you whether a booking was committed or whether the caller heard partial audio.
+These primitives can support a detailed pipeline ledger. They should not become the entire product taxonomy. `is_usable=False` describes the processor's current ability to do its job, not the turn outcome. It does not tell you whether a booking was committed, whether another layer recovered, or whether the caller heard partial audio.
 
 Pipecat's own Evals lifecycle documentation also draws the boundary around local regression coverage: deployed transport, sustained load/concurrency, hidden tool state, production drift, exact-audio replay, and persisted trend comparisons need additional layers.[^pipecat-lifecycle]
 
