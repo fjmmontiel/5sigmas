@@ -142,11 +142,11 @@ check(manifest.includes('snippets/articulos-tecnicos/voice-action-lifecycle.html
 
 check(es.includes('`ToolFlag.CANCELLABLE`') && es.includes('nombre de tool, no por argumentos') && es.includes('`replace`'), 'ES: current LiveKit cancellation/duplicate semantics missing');
 check(en.includes('`ToolFlag.CANCELLABLE`') && en.includes('tool name, not its arguments') && en.includes('`replace`'), 'EN: current LiveKit cancellation/duplicate semantics missing');
-check(es.includes('`enable_async_tool_cancellation=True`') && es.includes('`cancel_async_tool_call`') && es.includes('`timeout_secs`') && es.includes('`function_call_timeout_secs`'), 'ES: current Pipecat async cancellation/timeout semantics missing');
-check(en.includes('`enable_async_tool_cancellation=True`') && en.includes('`cancel_async_tool_call`') && en.includes('`timeout_secs`') && en.includes('`function_call_timeout_secs`'), 'EN: current Pipecat async cancellation/timeout semantics missing');
-check(!es.includes('`cancellable_by_llm=True`') && !en.includes('`cancellable_by_llm=True`'), 'Stale Pipecat cancellable_by_llm API claim detected');
-check(!es.includes('`cancel_<nombre>`') && !en.includes('`cancel_<name>`'), 'Stale Pipecat per-tool cancel_<name> claim detected');
-check(!es.includes('`asyncio.CancelledError`') && !en.includes('`asyncio.CancelledError`'), 'Unsupported Pipecat timeout cancellation-mechanism claim detected');
+check(es.includes('cancellable_by_llm=True') && es.includes('`cancel_<name>`') && es.includes('`tool_call_id`') && es.includes('`timeout_secs`') && es.includes('`function_call_timeout_secs`') && es.includes('`asyncio.CancelledError`'), 'ES: current Pipecat per-tool cancellation/timeout semantics missing');
+check(en.includes('cancellable_by_llm=True') && en.includes('`cancel_<name>`') && en.includes('`tool_call_id`') && en.includes('`timeout_secs`') && en.includes('`function_call_timeout_secs`') && en.includes('`asyncio.CancelledError`'), 'EN: current Pipecat per-tool cancellation/timeout semantics missing');
+check(es.includes('`enable_async_tool_cancellation`') && es.includes('deprecado') && es.includes('2.0.0'), 'ES: Pipecat deprecated global cancellation flag caveat missing');
+check(en.includes('`enable_async_tool_cancellation`') && en.includes('deprecated') && en.includes('2.0.0'), 'EN: Pipecat deprecated global cancellation flag caveat missing');
+check(!es.includes('`cancel_async_tool_call`') && !en.includes('`cancel_async_tool_call`'), 'Stale Pipecat global cancel_async_tool_call claim detected');
 
 if (failures.length) {
   console.error(`Voice tools/state chapter source gate failed (${failures.length}):`);

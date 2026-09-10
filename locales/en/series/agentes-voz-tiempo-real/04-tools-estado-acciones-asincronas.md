@@ -199,9 +199,11 @@ Pipecat documents two useful behaviors:
 Async functions can also emit intermediate results with `is_final=False` before sending the final result.[^pipecat-functions]
 
 
-The current API exposes model-directed cancellation differently. For asynchronous functions (`cancel_on_interruption=False`), enable `enable_async_tool_cancellation=True` on the LLM service. When at least one async function is available, Pipecat adds the built-in `cancel_async_tool_call` tool and supporting system instructions so the model can cancel a stale async call. `timeout_secs` remains the per-tool timeout and overrides `function_call_timeout_secs` for that function.[^pipecat-functions]
+The current API makes this decision **per tool**. With `@tool_options(cancel_on_interruption=False, cancellable_by_llm=True, timeout_secs=...)`, an asynchronous function can let the conversation continue while it runs and also allow the model to request cancellation when the work is no longer relevant. Pipecat then advertises a tool-specific `cancel_<name>` function. A `tool_call_id` is only needed to select one call when multiple instances of the same tool are in flight. The older service-wide `enable_async_tool_cancellation` flag is deprecated and will be removed in 2.0.0.[^pipecat-functions]
 
-These primitives control execution Pipecat owns. The current documentation does not claim that cancelling the async call reverses a remote side effect; the contract with the external API or worker must establish the actual outcome.
+`timeout_secs` remains the per-tool deadline and overrides `function_call_timeout_secs` for that function. If the handler exceeds the deadline, Pipecat cancels it by raising `asyncio.CancelledError`. The deadline covers the handler itself, not work that the handler detached into a separate task.[^pipecat-functions]
+
+These primitives control execution Pipecat owns. Cancelling the handler or its async call does not prove that a remote side effect already submitted was reversed. The contract with the external API or worker must establish the actual outcome.
 
 That is a useful primitive for experiences such as “I’m still checking.” It does not make the underlying side effect durable, idempotent, or compensable.
 
