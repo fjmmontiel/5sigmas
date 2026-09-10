@@ -344,7 +344,7 @@ Un secret scanner que corre después de `git push` puede detectar una fuga, pero
 
 También hay que invertir la pregunta: **¿con qué autoridad corre el hook?**
 
-Claude Code documenta que los command hooks se ejecutan con los permisos completos del usuario. Su documentación además advierte una diferencia relevante de workspace trust: en sesiones `-p` o SDK no existe el diálogo interactivo de trust y los hooks incluidos en `.claude/settings.json` de un repositorio pueden ejecutarse en un folder que el usuario nunca aprobó interactivamente.[^claude-hooks]
+Claude Code documenta que los command hooks se ejecutan con los permisos completos del usuario.[^claude-hooks] La configuración de proyecto añade otra frontera: las reglas `permissions.allow` y `additionalDirectories` de `.claude/settings.json` sólo otorgan capacidad después de aceptar workspace trust; en modo no interactivo con `-p` no aparece diálogo y esas concesiones permanecen ignoradas.[^claude-permissions] Para hooks definidos en el frontmatter de subagentes de proyecto, la documentación actual exige workspace trust desde v2.1.218; versiones anteriores podían ejecutarlos desde carpetas no confiadas.[^claude-hooks]
 
 Eso hace que el propio repositorio sea parte del threat model.
 

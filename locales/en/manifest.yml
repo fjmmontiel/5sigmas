@@ -19,6 +19,7 @@ published_routes:
   - series/coding-agents-agent-harnesses/01-que-es-agent-harness.md
   - series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento.md
   - series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.md
+  - series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries.md
   - series/fundamentos-ia-iag/00_presentacion_serie.md
   - series/fundamentos-ia-iag/01-que-es-ia.md
   - series/fundamentos-ia-iag/02-que-es-ia-generativa.md
@@ -86,6 +87,7 @@ required_snippets:
   - snippets/articulos-tecnicos/coding-agent-harness-loop.html
   - snippets/articulos-tecnicos/coding-agent-isolation-stack.html
   - snippets/articulos-tecnicos/coding-agent-task-contract.html
+  - snippets/articulos-tecnicos/coding-agent-authority-path.html
   - snippets/from-cave-to-agi/01-sistemas-numeracion.html
   - snippets/from-cave-to-agi/01-algebra-despejar.html
   - snippets/from-cave-to-agi/01-cadena-deductiva.html
