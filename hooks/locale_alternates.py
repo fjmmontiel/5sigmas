@@ -289,6 +289,26 @@ def _source_route_from_sitemap_url(url: str, language: str) -> str:
     return route
 
 
+def _strip_page_level_alternates(site_dir: Path) -> int:
+    """Remove language alternate tags after every renderer/plugin has finished.
+
+    ``on_post_page`` already strips the tags from each rendered page. This final
+    build-level pass is deliberately redundant: theme/plugin ordering must never
+    be able to reintroduce a page URL as a Material locale root, because Material
+    will append ``sitemap.xml`` to that URL at runtime and create deterministic
+    nested 404 requests.
+    """
+    removed = 0
+    for html_path in site_dir.rglob("*.html"):
+        output = html_path.read_text(encoding="utf-8")
+        cleaned, count = _ALTERNATE_LINK_RE.subn("", output)
+        if not count:
+            continue
+        html_path.write_text(cleaned, encoding="utf-8")
+        removed += count
+    return removed
+
+
 def on_post_page(output: str, page, config, **kwargs) -> str:
     src_path = page.file.src_path.lstrip("/")
     current_language = _current_language(config)
@@ -330,52 +350,56 @@ def on_post_page(output: str, page, config, **kwargs) -> str:
 
 
 def on_post_build(config, **kwargs) -> None:
-    """Add truthful ES/EN hreflang pairs to this locale's XML sitemap."""
-    sitemap_path = Path(config["site_dir"]) / "sitemap.xml"
-    if not sitemap_path.is_file():
-        return
+    """Finalize page locale safety and add truthful ES/EN sitemap alternates."""
+    site_dir = Path(config["site_dir"])
+    sitemap_path = site_dir / "sitemap.xml"
 
-    language = _current_language(config)
-    english_routes = _published_public_routes("en")
-    spanish_routes = _spanish_public_routes()
-    es_to_en, en_to_es = _tool_public_route_maps("en")
-    tree = ET.parse(sitemap_path)
-    root = tree.getroot()
-    changed = False
+    if sitemap_path.is_file():
+        language = _current_language(config)
+        english_routes = _published_public_routes("en")
+        spanish_routes = _spanish_public_routes()
+        es_to_en, en_to_es = _tool_public_route_maps("en")
+        tree = ET.parse(sitemap_path)
+        root = tree.getroot()
+        changed = False
 
-    for url_node in root.findall(f"{{{SITEMAP_NS}}}url"):
-        loc_node = url_node.find(f"{{{SITEMAP_NS}}}loc")
-        if loc_node is None or not loc_node.text:
-            continue
-
-        local_route = _source_route_from_sitemap_url(loc_node.text, language)
-
-        for child in list(url_node):
-            if child.tag == f"{{{XHTML_NS}}}link":
-                url_node.remove(child)
-                changed = True
-
-        if language == "en":
-            english_route = local_route
-            spanish_route = en_to_es.get(english_route, english_route)
-            if english_route not in english_routes or spanish_route not in spanish_routes:
-                continue
-        else:
-            spanish_route = local_route
-            english_route = es_to_en.get(spanish_route, spanish_route)
-            if spanish_route not in spanish_routes or english_route not in english_routes:
+        for url_node in root.findall(f"{{{SITEMAP_NS}}}url"):
+            loc_node = url_node.find(f"{{{SITEMAP_NS}}}loc")
+            if loc_node is None or not loc_node.text:
                 continue
 
-        for hreflang, href in (
-            ("es", GLOBAL_ORIGIN + spanish_route),
-            ("en", GLOBAL_ORIGIN + _english_route(english_route)),
-        ):
-            ET.SubElement(
-                url_node,
-                f"{{{XHTML_NS}}}link",
-                {"rel": "alternate", "hreflang": hreflang, "href": href},
-            )
-        changed = True
+            local_route = _source_route_from_sitemap_url(loc_node.text, language)
 
-    if changed:
-        tree.write(sitemap_path, encoding="utf-8", xml_declaration=True)
+            for child in list(url_node):
+                if child.tag == f"{{{XHTML_NS}}}link":
+                    url_node.remove(child)
+                    changed = True
+
+            if language == "en":
+                english_route = local_route
+                spanish_route = en_to_es.get(english_route, english_route)
+                if english_route not in english_routes or spanish_route not in spanish_routes:
+                    continue
+            else:
+                spanish_route = local_route
+                english_route = es_to_en.get(spanish_route, spanish_route)
+                if spanish_route not in spanish_routes or english_route not in english_routes:
+                    continue
+
+            for hreflang, href in (
+                ("es", GLOBAL_ORIGIN + spanish_route),
+                ("en", GLOBAL_ORIGIN + _english_route(english_route)),
+            ):
+                ET.SubElement(
+                    url_node,
+                    f"{{{XHTML_NS}}}link",
+                    {"rel": "alternate", "hreflang": hreflang, "href": href},
+                )
+            changed = True
+
+        if changed:
+            tree.write(sitemap_path, encoding="utf-8", xml_declaration=True)
+
+    removed = _strip_page_level_alternates(site_dir)
+    if removed:
+        print(f"Locale alternates: stripped {removed} page-level hreflang tags after build")
