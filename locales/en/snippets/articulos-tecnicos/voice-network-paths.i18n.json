@@ -1,6 +1,6 @@
 {
   "source": "snippets/articulos-tecnicos/voice-network-paths.html",
-  "source_blob_sha": "4646d70e7a78409efe2da994fae6186c19783411",
+  "source_blob_sha": "3bade92cb398de027940be33140de88f9ab331f8",
   "replacements": {
     "Tres fronteras de transporte para llevar audio hasta un agente de voz": "Three transport boundaries for carrying audio into a voice agent",
     "Red y media": "Network and media",
