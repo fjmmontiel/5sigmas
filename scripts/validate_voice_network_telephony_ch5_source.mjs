@@ -72,7 +72,7 @@ for (const text of [es, en]) {
     'ICE', 'STUN', 'TURN', 'UDP', 'TCP', 'TLS',
     'Opus', 'PCMA', 'PCMU', 'RTP', 'SRTP', 'SDP',
     'jitterBufferDelay', 'jitterBufferEmittedCount', 'jitterBufferTargetDelay', 'jitterBufferMinimumDelay',
-    'audio/x-mulaw', '8000', 'mark', 'clear',
+    'audio/x-mulaw', '8 kHz', 'mark', 'clear',
     'SmallWebRTCTransport', 'TwilioFrameSerializer',
   ]) check(text.includes(token), `Missing required network/media token ${token}`);
 }
