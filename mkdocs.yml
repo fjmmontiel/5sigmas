@@ -147,6 +147,7 @@ nav:
           - Evaluación, observabilidad y reliability: series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.md
       - Coding agents y agent harnesses:
           - Qué es un agent harness: series/coding-agents-agent-harnesses/01-que-es-agent-harness.md
+          - Contexto, workspace y aislamiento: series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento.md
   - Construir:
       - articulos-tecnicos/index.md
       - Agente Reactivo, Proactivo y Tool calls: articulos-tecnicos/proactive-reactive-agent-and-tool-calls.md
