@@ -9,6 +9,7 @@ await fs.mkdir(outDir, { recursive: true });
 
 const failures = [];
 const check = (condition, message) => { if (!condition) failures.push(message); };
+const center = (box) => ({ x: box.x + box.width / 2, y: box.y + box.height / 2 });
 
 const source = await fs.readFile(path.resolve('docs/snippets/articulos-tecnicos/voice-network-paths.html'), 'utf8');
 for (const token of ['GOLDEN_VISUAL_CONTRACT', 'learning_objective:', 'mechanism:', 'visual_variables:', 'why_visual:']) {
@@ -58,8 +59,6 @@ const viewports = [
   { name: 'mobile', width: 390, height: 844, hasTouch: true },
 ];
 
-const center = (box) => ({ x: box.x + box.width / 2, y: box.y + box.height / 2 });
-
 const browser = await chromium.launch({ headless: true });
 try {
   for (const testCase of cases) {
@@ -93,11 +92,12 @@ try {
         check((await visual.locator('[data-network-route]').count()) === 3, `${testCase.route}: ${viewport.name} all three topologies must be visible simultaneously`);
 
         const visualBox = await visual.boundingBox();
-        check(Boolean(visualBox && visualBox.width <= viewport.width + 1), `${testCase.route}: ${viewport.name} visual exceeds viewport (${JSON.stringify(visualBox)})`);
+        check(Boolean(visualBox && visualBox.width <= viewport.width + 1), `${testCase.route}: ${viewport.name} visual exceeds viewport ${JSON.stringify(visualBox)}`);
 
         const scroll = visual.locator('.s5v-network-topology__scroll');
         const svg = visual.locator('.s5v-network-topology__svg');
         check((await scroll.count()) === 1 && (await svg.count()) === 1, `${testCase.route}: ${viewport.name} topology canvas missing`);
+
         if ((await scroll.count()) && (await svg.count())) {
           const scrollState = await scroll.evaluate((node) => ({ tabIndex: node.tabIndex, scrollWidth: node.scrollWidth, clientWidth: node.clientWidth }));
           check(scrollState.tabIndex >= 0, `${testCase.route}: ${viewport.name} topology is not keyboard-focusable`);
@@ -106,8 +106,9 @@ try {
 
           const getBox = async (selector) => {
             const locator = visual.locator(selector);
-            if ((await locator.count()) !== 1) {
-              failures.push(`${testCase.route}: ${viewport.name} expected one ${selector}, found ${await locator.count()}`);
+            const count = await locator.count();
+            if (count !== 1) {
+              failures.push(`${testCase.route}: ${viewport.name} expected one ${selector}, found ${count}`);
               return null;
             }
             return locator.boundingBox();
@@ -170,6 +171,31 @@ try {
           check(activeAnimations === 0, `${testCase.route}: ${viewport.name} reduced-motion view has ${activeAnimations} active animations`);
 
           if (viewport.name === 'mobile') {
+            const midState = await scroll.evaluate((node) => {
+              const maxScroll = node.scrollWidth - node.clientWidth;
+              node.scrollLeft = Math.round(maxScroll * 0.55);
+              void node.offsetWidth;
+              const box = node.getBoundingClientRect();
+              const visible = (selector) => {
+                const item = node.querySelector(selector);
+                if (!item) return false;
+                const b = item.getBoundingClientRect();
+                return b.right >= box.left - 2 && b.left <= box.right + 2;
+              };
+              return {
+                maxScroll,
+                actualScroll: node.scrollLeft,
+                endpointReachable: visible('[data-network-node="webrtc-endpoint"]'),
+                sipMediaReachable: visible('[data-network-node="media-endpoint"]'),
+                turnReachable: visible('[data-network-node="turn-relay"]'),
+                carrierGatewayReachable: visible('[data-network-node="carrier-media-gateway"]'),
+              };
+            });
+            check(midState.maxScroll > 500 && midState.actualScroll > 200, `${testCase.route}: mobile topology mid-scroll is inert ${JSON.stringify(midState)}`);
+            check(midState.endpointReachable || midState.sipMediaReachable, `${testCase.route}: mobile cannot reach media termination nodes at their natural scroll position ${JSON.stringify(midState)}`);
+            check(midState.turnReachable || midState.carrierGatewayReachable, `${testCase.route}: mobile cannot reach intermediate relay/gateway nodes ${JSON.stringify(midState)}`);
+            await scroll.screenshot({ path: path.join(outDir, `voice-network-ch5-${testCase.locale}-mobile-topology-mid.png`), animations: 'disabled' });
+
             const endState = await scroll.evaluate((node) => {
               const maxScroll = node.scrollWidth - node.clientWidth;
               node.scrollLeft = maxScroll;
@@ -184,15 +210,13 @@ try {
               return {
                 maxScroll,
                 actualScroll: node.scrollLeft,
-                endpointReachable: visible('[data-network-node="webrtc-endpoint"]'),
                 agentReachable: visible('[data-network-node="agent-runtime"]'),
-                sipMediaReachable: visible('[data-network-node="media-endpoint"]'),
+                sipAgentReachable: visible('[data-network-node="sip-agent-runtime"]'),
                 appRuntimeReachable: visible('[data-network-node="app-runtime"]'),
               };
             });
-            check(endState.maxScroll > 500 && endState.actualScroll > 500, `${testCase.route}: mobile topology horizontal scroll is inert ${JSON.stringify(endState)}`);
-            check(endState.agentReachable && endState.appRuntimeReachable, `${testCase.route}: mobile cannot reach right-side runtime endpoints ${JSON.stringify(endState)}`);
-            check(endState.endpointReachable || endState.sipMediaReachable, `${testCase.route}: mobile cannot reach media termination nodes ${JSON.stringify(endState)}`);
+            check(endState.maxScroll > 500 && endState.actualScroll > 500, `${testCase.route}: mobile topology end-scroll is inert ${JSON.stringify(endState)}`);
+            check(endState.agentReachable && endState.sipAgentReachable && endState.appRuntimeReachable, `${testCase.route}: mobile cannot reach all right-side runtime endpoints ${JSON.stringify(endState)}`);
             await scroll.screenshot({ path: path.join(outDir, `voice-network-ch5-${testCase.locale}-mobile-topology-end.png`), animations: 'disabled' });
             await scroll.evaluate((node) => { node.scrollLeft = 0; });
           }
