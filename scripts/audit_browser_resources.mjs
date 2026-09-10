@@ -7,6 +7,18 @@ const paths = [
   '/temas/',
   '/series/',
   '/series/modelos-razonadores/03-test-time-compute/',
+  '/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz/',
+  '/series/agentes-voz-tiempo-real/02-turn-taking/',
+  '/series/agentes-voz-tiempo-real/03-presupuesto-latencia/',
+  '/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas/',
+  '/series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red/',
+  '/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability/',
+  '/en/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz/',
+  '/en/series/agentes-voz-tiempo-real/02-turn-taking/',
+  '/en/series/agentes-voz-tiempo-real/03-presupuesto-latencia/',
+  '/en/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas/',
+  '/en/series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red/',
+  '/en/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability/',
 ];
 
 const isTransientExternalFontFailure = (url, resourceType) => {
@@ -73,4 +85,4 @@ if (failures.size > 0) {
   process.exit(1);
 }
 
-console.log(`Browser resource audit passed for ${paths.length} representative pages.`);
+console.log(`Browser resource audit passed for ${paths.length} representative pages, including all 12 Realtime Voice Agents ES/EN routes.`);
