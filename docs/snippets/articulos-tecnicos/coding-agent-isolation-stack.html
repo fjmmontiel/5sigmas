@@ -1,0 +1,15 @@
+<section class="s5v s5v-arch-map s5v-coding-agent-isolation s5v--wide" data-step="1" aria-label="Capas distintas de estado, ejecución e integración en el aislamiento de un coding agent">
+  <div class="s5v__canvas">
+    <header class="s5v__head"><div><span class="s5v__kicker">Aislamiento ≠ una primitive</span><h3>Worktree, sandbox e integración protegen fronteras diferentes</h3></div><p>Separar archivos no restringe la red; restringir procesos no hace compatibles dos diffs.</p></header>
+    <div class="s5v-arch-map__panels">
+      <div data-panel="1" class="s5v-arch-map__pipe">
+        <span>Repo + base SHA<br><small>historia · refs · revisión inicial</small></span>
+        <span>Vista de contexto<br><small>lo que el modelo observa</small></span>
+        <span>Workspace / worktree<br><small>HEAD · índice · dirty state</small></span>
+        <span>Sandbox<br><small>filesystem · red · procesos · identidad</small></span>
+        <span>Integración<br><small>branch · commit · PR · revalidación</small></span>
+      </div>
+    </div>
+    <div class="s5v__copy"><strong>Worktree</strong> separa estado mutable entre trayectorias; no es una security boundary. <strong>Sandbox</strong> limita capacidades de ejecución; no resuelve conflictos semánticos. La entrega sólo es atribuible si el harness conserva base SHA, identidad del workspace, policy efectiva y el SHA exacto sobre el que pasaron los verificadores.</div>
+  </div>
+</section>
