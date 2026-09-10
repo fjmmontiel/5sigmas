@@ -1,6 +1,6 @@
 {
   "source": "snippets/articulos-tecnicos/voice-latency-critical-path.html",
-  "source_blob_sha": "dba3f32b0a2ca0021b7e1598a8fa0d97d655b138",
+  "source_blob_sha": "5158337db77f49ee48e4b23b511cb3e3d686d575",
   "replacements": {
     "Timeline del camino crítico de latencia desde fin de habla hasta primera reproducción": "Latency critical-path timeline from speech end to first playout",
     "Camino crítico": "Critical path",
