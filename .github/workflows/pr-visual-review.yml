@@ -235,6 +235,15 @@ jobs:
       - name: Validate Realtime Voice Agents chapter 6 accessibility and responsive states
         run: node scripts/validate_voice_evaluation_observability_ch6_accessibility.mjs
 
+      - name: Validate Coding Agents chapter 1 source contract
+        run: node scripts/validate_coding_agent_harness_ch1_source.mjs
+
+      - name: Validate Coding Agents chapter 1 locale and reader navigation
+        run: node scripts/validate_coding_agent_harness_ch1_locale_navigation.mjs
+
+      - name: Validate Coding Agents chapter 1 accessibility and responsive states
+        run: node scripts/validate_coding_agent_harness_ch1_accessibility.mjs
+
       - name: Validate complete video experience lifecycle
         run: node scripts/validate_video_experience_v2.mjs
 
