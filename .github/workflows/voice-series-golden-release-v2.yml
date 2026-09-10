@@ -1,0 +1,232 @@
+name: Realtime Voice Agents SERIES GOLDEN release gate v2
+
+on:
+  push:
+    branches:
+      - series/realtime-voice-agents-golden
+    paths:
+      - '.github/workflows/voice-series-golden-release-v2.yml'
+
+permissions:
+  actions: read
+  contents: read
+
+concurrency:
+  group: voice-series-golden-release-v2
+  cancel-in-progress: false
+
+jobs:
+  release-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: series/realtime-voice-agents-golden
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Verify series scope and source tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(find docs/series/agentes-voz-tiempo-real -maxdepth 1 -type f -name '0*.md' | wc -l)" = '6'
+          test "$(find locales/en/series/agentes-voz-tiempo-real -maxdepth 1 -type f -name '0*.md' | wc -l)" = '6'
+          git diff --check origin/main...HEAD
+          if git diff --name-only origin/main...HEAD | grep -E '^\.github/workflows/voice-ch[0-9].*(once|integration)'; then
+            echo 'Temporary chapter workflow remains in release scope'
+            exit 1
+          fi
+
+      - name: Inventory every Realtime Voice article and teaching artifact
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/visual-review
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib, json, re
+
+          def git_blob_sha(data: bytes) -> str:
+              return hashlib.sha1(f'blob {len(data)}\0'.encode() + data).hexdigest()
+
+          es_root = Path('docs/series/agentes-voz-tiempo-real')
+          en_root = Path('locales/en/series/agentes-voz-tiempo-real')
+          articles = sorted(es_root.glob('0*.md'))
+          rows, video_refs = [], []
+          snippet_names = set()
+          for es in articles:
+              en = en_root / es.name
+              if not en.is_file():
+                  raise SystemExit(f'missing EN article {en}')
+              for locale, path in [('es', es), ('en', en)]:
+                  data = path.read_bytes()
+                  text = data.decode('utf-8')
+                  rows.append({'kind':'article','locale':locale,'path':str(path),'git_blob_sha':git_blob_sha(data),'sha256':hashlib.sha256(data).hexdigest(),'bytes':len(data)})
+                  snippet_names.update(re.findall(r'include_html\("snippets/articulos-tecnicos/([^"/]+\.html)"\)', text))
+                  video_refs.extend((locale, str(path), m.group(0)) for m in re.finditer(r'[^\s)\]"\']+\.(?:mp4|webm)|/videos/', text, re.I))
+          for name in sorted(snippet_names):
+              canonical = Path('docs/snippets/articulos-tecnicos') / name
+              mirror = Path('locales/en/snippets/articulos-tecnicos') / name
+              i18n = mirror.with_suffix('.i18n.json')
+              for required in (canonical, mirror, i18n):
+                  if not required.is_file():
+                      raise SystemExit(f'missing artifact {required}')
+              data = canonical.read_bytes()
+              expected_blob = git_blob_sha(data)
+              contract = json.loads(i18n.read_text(encoding='utf-8'))
+              if contract.get('source_blob_sha') != expected_blob:
+                  raise SystemExit(f'stale EN i18n source_blob_sha for {name}: {contract.get("source_blob_sha")} != {expected_blob}')
+              for p, locale in [(canonical,'es-canonical'), (mirror,'en-mirror'), (i18n,'en-i18n')]:
+                  raw = p.read_bytes()
+                  rows.append({'kind':'snippet','locale':locale,'path':str(p),'git_blob_sha':git_blob_sha(raw),'sha256':hashlib.sha256(raw).hexdigest(),'bytes':len(raw)})
+          payload = {'articles':len(articles),'snippets':sorted(snippet_names),'video_refs':video_refs,'files':rows}
+          Path('artifacts/visual-review/voice-series-inventory.json').write_text(json.dumps(payload, indent=2), encoding='utf-8')
+          print(f'articles={len(articles)} teaching_snippets={len(snippet_names)} video_refs={len(video_refs)}')
+          for name in sorted(snippet_names): print('snippet', name)
+          PY
+
+      - name: Run all six Realtime Voice source contracts from scratch
+        run: |
+          node scripts/validate_voice_architecture_ch1.mjs
+          node scripts/validate_voice_turn_taking_ch2_source.mjs
+          node scripts/validate_voice_latency_ch3_source.mjs
+          node scripts/validate_voice_tools_state_ch4_source.mjs
+          node scripts/validate_voice_network_telephony_ch5_source.mjs
+          node scripts/validate_voice_evaluation_observability_ch6_source.mjs
+
+      - name: Validate media declarations, signatures and schema
+        run: |
+          python scripts/prepare_video_media.py --check
+          python scripts/audit_media_magic.py
+          python scripts/test_video_schema_contract.py
+
+      - name: Strict Spanish build and public-series publication contract
+        run: |
+          mkdocs build --clean --strict
+          python scripts/audit_publication_contract.py
+
+      - name: Prepare, audit and strictly build English locale
+        env:
+          S5_LOCALE: en
+        run: |
+          python scripts/prepare_locale.py --locale en
+          python scripts/audit_locale.py --locale en
+          mkdocs build -f mkdocs.en.yml --clean --strict
+          python scripts/audit_locale.py --locale en --site site/en
+
+      - name: Restore reviewed English TTC media
+        id: en-ttc-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: .localized-media/en/ttc-v1
+          key: s5-en-ttc-4e6238a7dffc03643b48e08f7c579fb7d710217a827720113e7477c633be0f33
+
+      - name: Seed reviewed English TTC media from verified artifact
+        if: steps.en-ttc-cache.outputs.cache-hit != 'true'
+        uses: actions/download-artifact@v4
+        with:
+          name: english-ttc-reviewed-seed
+          path: .localized-media/en/ttc-v1
+          run-id: 31689108864
+          github-token: ${{ github.token }}
+
+      - name: Verify and stage reviewed English TTC media
+        shell: bash
+        run: |
+          set -euo pipefail
+          media='.localized-media/en/ttc-v1'
+          mp4="$media/03-test-time-compute.mp4"
+          jpg="$media/03-test-time-compute.jpg"
+          echo '4e6238a7dffc03643b48e08f7c579fb7d710217a827720113e7477c633be0f33  .localized-media/en/ttc-v1/03-test-time-compute.mp4' | sha256sum -c -
+          echo '60cee7a788f546bb58e56e5008ca21c7efd9317b9b84c059a9427465d6e40f50  .localized-media/en/ttc-v1/03-test-time-compute.jpg' | sha256sum -c -
+          test "$(stat -c %s "$mp4")" = '4337214'
+          test "$(stat -c %s "$jpg")" = '105949'
+          mkdir -p site/en/series/modelos-razonadores
+          cp "$mp4" site/en/series/modelos-razonadores/03-test-time-compute.mp4
+          cp "$jpg" site/en/series/modelos-razonadores/03-test-time-compute.jpg
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Serve combined preview
+        run: |
+          python -m http.server 8000 --directory site > /tmp/5sigmas-preview.log 2>&1 &
+          for attempt in {1..30}; do
+            curl --fail --silent http://127.0.0.1:8000/en/ > /dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/5sigmas-preview.log
+          exit 1
+
+      - name: Browser resources, locale and mirror contracts
+        run: |
+          node scripts/audit_browser_resources.mjs
+          node scripts/validate_english_locale.mjs
+          node scripts/validate_english_home_parity.mjs
+
+      - name: Run all six Realtime Voice desktop/mobile/accessibility gates from scratch
+        run: |
+          node scripts/validate_voice_architecture_ch1_accessibility.mjs
+          node scripts/validate_voice_turn_taking_ch2_accessibility.mjs
+          node scripts/validate_voice_latency_ch3_accessibility.mjs
+          node scripts/validate_voice_tools_state_ch4_accessibility.mjs
+          node scripts/validate_voice_network_telephony_ch5_accessibility.mjs
+          node scripts/validate_voice_evaluation_observability_ch6_accessibility.mjs
+
+      - name: Reader navigation and responsive canon gates
+        run: |
+          node scripts/validate_direct_reader_navigation.mjs
+          node scripts/validate_reader_header_overlap.mjs
+          node scripts/validate_responsive_polish.mjs
+
+      - name: Capture strongest-series comparison pages
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          import { chromium } from 'playwright';
+          import fs from 'node:fs/promises';
+          await fs.mkdir('artifacts/visual-review', { recursive: true });
+          const browser = await chromium.launch({ headless: true });
+          const cases = [
+            ['voice-es','/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz/'],
+            ['voice-en','/en/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz/'],
+            ['canon-es','/series/modelos-razonadores/03-test-time-compute/'],
+            ['canon-en','/en/series/modelos-razonadores/03-test-time-compute/'],
+          ];
+          for (const [name, route] of cases) {
+            for (const [viewport,width,height] of [['desktop',1440,1000],['mobile',390,844]]) {
+              const context = await browser.newContext({ viewport:{width,height}, isMobile:viewport==='mobile', hasTouch:viewport==='mobile', reducedMotion:'reduce' });
+              const page = await context.newPage();
+              const response = await page.goto(`http://127.0.0.1:8000${route}`, { waitUntil:'networkidle' });
+              if (!response?.ok()) throw new Error(`${route} -> ${response?.status()}`);
+              await page.screenshot({ path:`artifacts/visual-review/series-compare-${name}-${viewport}.png`, fullPage:true, animations:'disabled' });
+              await context.close();
+            }
+          }
+          await browser.close();
+          NODE
+
+      - name: Upload SERIES GOLDEN evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: realtime-voice-series-golden-evidence-v2
+          path: artifacts/visual-review/*
+          if-no-files-found: warn
+          retention-days: 1
