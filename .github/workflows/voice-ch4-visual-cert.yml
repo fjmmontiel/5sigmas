@@ -1,6 +1,6 @@
 name: Voice ch4 relationship-first certification
 
-# Final recertification after pixel-review reconciliation labels were separated and collision-gated.
+# Final recertification after expanding the relationship canvas so localized retry guards stay in-bounds.
 on:
   push:
     branches:
