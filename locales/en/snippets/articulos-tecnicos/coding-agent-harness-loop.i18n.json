@@ -1,0 +1,37 @@
+{
+  "source": "snippets/articulos-tecnicos/coding-agent-harness-loop.html",
+  "source_blob_sha": "b1d289c86f3b6e31c08cb975481147783243e430",
+  "replacements": {
+    "Fronteras de responsabilidad en el bucle de un coding agent": "Responsibility boundaries in a coding-agent loop",
+    "Modelo ≠ harness": "Model ≠ harness",
+    "El modelo propone; el harness convierte propuestas en trabajo sobre un repositorio": "The model proposes; the harness turns proposals into repository work",
+    "La autonomía aparece cuando un runtime mantiene el bucle, ejecuta tools bajo política y decide cuándo verificar, continuar o devolver control.": "Autonomy emerges when a runtime maintains the loop, executes tools under policy, and decides when to verify, continue, or hand control back.",
+    "Contrato de tarea": "Task contract",
+    "objetivo · alcance · restricciones": "goal · scope · constraints",
+    "Modelo": "Model",
+    "propone la siguiente acción": "proposes the next action",
+    "Harness + entorno": "Harness + environment",
+    "contexto · tools · sandbox · estado": "context · tools · sandbox · state",
+    "Verificador / stop": "Verifier / stop",
+    "tests · diff · política · handback": "tests · diff · policy · handback",
+    "El paso crítico está entre": "The critical boundary is between",
+    "proponer": "proposing",
+    "y": "and",
+    "actuar": "acting",
+    ". El harness decide qué contexto recibe el modelo, valida permisos, ejecuta shell/ediciones/git en un workspace, devuelve la observación al siguiente turno y conserva el estado necesario para repetir. Un test verde o un diff revisable son señales para decidir si el bucle continúa; no son propiedades del modelo por sí solo.": ". The harness decides what context the model receives, validates permissions, executes shell commands, edits, and git operations in a workspace, returns observations to the next turn, and preserves the state needed to repeat. A passing test or a reviewable diff is evidence for deciding whether the loop continues; neither is a property of the model by itself."
+  },
+  "forbidden_output_tokens": [
+    "Fronteras de responsabilidad",
+    "El modelo propone",
+    "La autonomía aparece",
+    "Contrato de tarea",
+    "objetivo · alcance",
+    "propone la siguiente acción",
+    "Harness + entorno",
+    "contexto · tools",
+    "Verificador / stop",
+    "El paso crítico está entre",
+    "actuar",
+    "El harness decide qué contexto"
+  ]
+}
