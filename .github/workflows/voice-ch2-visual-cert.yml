@@ -1,5 +1,6 @@
 name: Voice ch2 visual pedagogy certification
 
+# Certification revision: true SVG branch aligned to backchannel/barge-in outcome lanes.
 on:
   push:
     branches:
