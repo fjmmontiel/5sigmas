@@ -189,6 +189,7 @@ nav:
           - Turn-taking: series/agentes-voz-tiempo-real/02-turn-taking.md
           - Latency budget: series/agentes-voz-tiempo-real/03-presupuesto-latencia.md
           - Tools, state and async actions: series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.md
+          - WebRTC, SIP and telephony: series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red.md
   - Concepts:
       - Concepts: temas/index.md
       - What is an LLM?: temas/llms.md

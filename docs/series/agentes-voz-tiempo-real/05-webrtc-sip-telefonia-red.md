@@ -43,6 +43,8 @@ Carrier WebSocket media
 PSTN/carrier → carrier media gateway → WSS audio protocol → application/runtime
 ```
 
+{{ include_html("snippets/articulos-tecnicos/voice-network-paths.html") }}
+
 La última opción no convierte WebSocket en un sustituto general de SIP o WebRTC. Simplemente mueve la frontera: el carrier posee la terminación telefónica y expone un protocolo de media de aplicación.
 
 ## WebRTC: la ruta elegida por ICE importa
