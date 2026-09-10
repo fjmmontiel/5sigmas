@@ -1,13 +1,22 @@
 import { chromium } from 'playwright';
 
 const baseUrl = process.env.S5_PREVIEW_URL ?? 'http://127.0.0.1:8000';
-const paths = [
+const defaultPaths = [
   '/',
   '/visuales/',
   '/temas/',
   '/series/',
   '/series/modelos-razonadores/03-test-time-compute/',
 ];
+const requestedPaths = (process.env.S5_BROWSER_RESOURCE_PATHS ?? '')
+  .split(',')
+  .map((value) => value.trim())
+  .filter(Boolean);
+const paths = requestedPaths.length ? [...new Set(requestedPaths)] : defaultPaths;
+
+for (const path of paths) {
+  if (!path.startsWith('/')) throw new Error(`Browser resource audit path must start with '/': ${path}`);
+}
 
 const isTransientExternalFontFailure = (url, resourceType) => {
   if (resourceType !== 'font') return false;
@@ -73,4 +82,4 @@ if (failures.size > 0) {
   process.exit(1);
 }
 
-console.log(`Browser resource audit passed for ${paths.length} representative pages.`);
+console.log(`Browser resource audit passed for ${paths.length} pages.`);

@@ -68,6 +68,12 @@ hide:
       <span class="s5-list-row__desc">De responder a actuar: tools, memoria, estado, evaluación, seguridad y operación de agentes en producción.</span>
       <span class="s5-list-row__meta">5 capítulos</span>
     </a>
+    <a class="s5-list-row" href="/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz/">
+      <span class="s5-list-row__n">09</span>
+      <span class="s5-list-row__title">Agentes de voz en tiempo real</span>
+      <span class="s5-list-row__desc">Arquitecturas, turn-taking, latencia, tools, telefonía y evaluación para sistemas conversacionales de voz en producción.</span>
+      <span class="s5-list-row__meta">6 capítulos</span>
+    </a>
   </nav>
 </section>
 

@@ -1,0 +1,117 @@
+name: Realtime Voice Agents live QA
+
+on:
+  workflow_run:
+    workflows: ["Deploy MkDocs to GitHub Pages"]
+    types: [completed]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: realtime-voice-live-${{ github.event.workflow_run.head_branch }}
+  cancel-in-progress: true
+
+jobs:
+  live-voice-series:
+    if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Wait for Realtime Voice Agents deployment
+        shell: bash
+        run: |
+          set -euo pipefail
+          url='https://5sigmas.com/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz/'
+          for attempt in {1..18}; do
+            body="$(curl --fail --silent --show-error --location "$url" || true)"
+            if grep -q 'Capítulo 1 — Arquitecturas de voz' <<< "$body"; then
+              echo 'Realtime Voice Agents production route is serving the deployed series.'
+              exit 0
+            fi
+            sleep 5
+          done
+          echo 'Realtime Voice Agents production route did not become ready within the validation window.'
+          exit 1
+
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Audit live resources across all ES/EN voice routes
+        env:
+          S5_PREVIEW_URL: https://5sigmas.com
+          S5_BROWSER_RESOURCE_PATHS: >-
+            /series/,
+            /en/series/,
+            /series/agentes-voz-tiempo-real/01-arquitecturas-de-voz/,
+            /en/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz/,
+            /series/agentes-voz-tiempo-real/02-turn-taking/,
+            /en/series/agentes-voz-tiempo-real/02-turn-taking/,
+            /series/agentes-voz-tiempo-real/03-presupuesto-latencia/,
+            /en/series/agentes-voz-tiempo-real/03-presupuesto-latencia/,
+            /series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas/,
+            /en/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas/,
+            /series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red/,
+            /en/series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red/,
+            /series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability/,
+            /en/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability/
+        run: node scripts/audit_browser_resources.mjs
+
+      - name: Validate live bilingual series hub and mirror
+        env:
+          S5_PREVIEW_BASE: https://5sigmas.com
+        run: node scripts/validate_english_series_mirror.mjs
+
+      - name: Validate all live ES/EN route switches and reader progression
+        env:
+          S5_PREVIEW_BASE: https://5sigmas.com
+        run: node scripts/validate_locale_switching.mjs
+
+      - name: Validate live chapter 1 visual states and accessibility
+        env:
+          S5_PREVIEW_BASE: https://5sigmas.com
+        run: node scripts/validate_voice_architecture_ch1_accessibility.mjs
+
+      - name: Validate live chapter 2 visual states and accessibility
+        env:
+          S5_PREVIEW_BASE: https://5sigmas.com
+        run: node scripts/validate_voice_turn_taking_ch2_accessibility.mjs
+
+      - name: Validate live chapter 3 visual states and accessibility
+        env:
+          S5_PREVIEW_BASE: https://5sigmas.com
+        run: node scripts/validate_voice_latency_ch3_accessibility.mjs
+
+      - name: Validate live chapter 4 visual states and accessibility
+        env:
+          S5_PREVIEW_BASE: https://5sigmas.com
+        run: node scripts/validate_voice_tools_state_ch4_accessibility.mjs
+
+      - name: Validate live chapter 5 visual states and accessibility
+        env:
+          S5_PREVIEW_BASE: https://5sigmas.com
+        run: node scripts/validate_voice_network_telephony_ch5_accessibility.mjs
+
+      - name: Validate live chapter 6 visual states and accessibility
+        env:
+          S5_PREVIEW_BASE: https://5sigmas.com
+        run: node scripts/validate_voice_evaluation_observability_ch6_accessibility.mjs
+
+      - name: Upload live voice failure evidence
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: realtime-voice-live-qa-failure
+          path: artifacts/visual-review/voice-*.png
+          if-no-files-found: warn
+          retention-days: 1

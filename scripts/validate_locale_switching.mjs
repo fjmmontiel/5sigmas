@@ -74,6 +74,75 @@ const assertTranslatedPair = async ({ es, en }) => {
   assertSitemapPair(es, en);
 };
 
+const assertSeriesHub = async ({ route, voiceRoute, title }) => {
+  const response = await page.goto(`${base}${route}`, { waitUntil: 'networkidle' });
+  if (!response?.ok()) {
+    failures.push(`${route}: HTTP ${response?.status() ?? 'no response'}`);
+    return;
+  }
+  const links = await page.locator('.s5-simple-list a.s5-list-row').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('href')));
+  const body = await page.locator('body').innerText();
+  if (links.length !== 9) failures.push(`${route}: expected 9 canonical series cards, got ${links.length}`);
+  if (!links.includes(voiceRoute)) failures.push(`${route}: missing Realtime Voice Agents route ${voiceRoute}`);
+  if (!body.includes(title)) failures.push(`${route}: missing Realtime Voice Agents title ${JSON.stringify(title)}`);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.reload({ waitUntil: 'networkidle' });
+  const geometry = await page.evaluate(() => ({ viewport: document.documentElement.clientWidth, scroll: document.documentElement.scrollWidth }));
+  if (geometry.scroll > geometry.viewport + 2) failures.push(`${route}: mobile horizontal overflow ${geometry.scroll}px > ${geometry.viewport}px`);
+  await page.setViewportSize({ width: 1280, height: 900 });
+};
+
+const voicePairs = [
+  { es: '/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz/', en: '/en/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz/' },
+  { es: '/series/agentes-voz-tiempo-real/02-turn-taking/', en: '/en/series/agentes-voz-tiempo-real/02-turn-taking/' },
+  { es: '/series/agentes-voz-tiempo-real/03-presupuesto-latencia/', en: '/en/series/agentes-voz-tiempo-real/03-presupuesto-latencia/' },
+  { es: '/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas/', en: '/en/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas/' },
+  { es: '/series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red/', en: '/en/series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red/' },
+  { es: '/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability/', en: '/en/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability/' },
+];
+
+const assertVoiceReaderSequence = async (routes, hubRoute, label) => {
+  for (let index = 0; index < routes.length; index += 1) {
+    const route = routes[index];
+    const response = await page.goto(`${base}${route}`, { waitUntil: 'networkidle' });
+    if (!response?.ok()) {
+      failures.push(`${route}: ${label} reader route returned ${response?.status() ?? 'no response'}`);
+      continue;
+    }
+    if (await page.locator('.s5-reader-shell').count() !== 1) failures.push(`${route}: ${label} missing canonical reader shell`);
+
+    const prev = page.locator('.s5-reader-topbar .s5-reader-arrow--prev').first();
+    const next = page.locator('.s5-reader-topbar .s5-reader-arrow--next').first();
+    if (await prev.count() !== 1 || await next.count() !== 1) {
+      failures.push(`${route}: ${label} reader previous/next controls missing`);
+      continue;
+    }
+
+    if (index === 0) {
+      if (!(await prev.evaluate((node) => node.classList.contains('is-disabled')))) failures.push(`${route}: ${label} first chapter previous control must be disabled`);
+    } else if (normalizeTarget(await prev.getAttribute('href')) !== routes[index - 1]) {
+      failures.push(`${route}: ${label} previous chapter target drifted from ${routes[index - 1]}`);
+    }
+
+    if (index === routes.length - 1) {
+      if (!(await next.evaluate((node) => node.classList.contains('is-disabled')))) failures.push(`${route}: ${label} final chapter next control must be disabled`);
+      const completion = page.locator('.s5-reader-end__next').first();
+      if (await completion.count() !== 1 || normalizeTarget(await completion.getAttribute('href')) !== hubRoute) {
+        failures.push(`${route}: ${label} completion must return to ${hubRoute}`);
+      }
+    } else if (normalizeTarget(await next.getAttribute('href')) !== routes[index + 1]) {
+      failures.push(`${route}: ${label} next chapter target drifted from ${routes[index + 1]}`);
+    }
+  }
+};
+
+await assertSeriesHub({ route: '/series/', voiceRoute: voicePairs[0].es, title: 'Agentes de voz en tiempo real' });
+await assertSeriesHub({ route: '/en/series/', voiceRoute: voicePairs[0].en, title: 'Realtime Voice Agents' });
+
+for (const pair of voicePairs) await assertTranslatedPair(pair);
+await assertVoiceReaderSequence(voicePairs.map((pair) => pair.es), '/series/', 'Spanish Realtime Voice Agents');
+await assertVoiceReaderSequence(voicePairs.map((pair) => pair.en), '/en/series/', 'English Realtime Voice Agents');
+
 await assertTranslatedPair({ es: '/series/agentes-ia/02-anatomia-de-un-agente/', en: '/en/series/agentes-ia/02-anatomia-de-un-agente/' });
 await assertTranslatedPair({ es: '/series/agentes-ia/00_presentacion_serie/', en: '/en/series/agentes-ia/00_presentacion_serie/' });
 await assertTranslatedPair({ es: '/series/fundamentos-ia-iag/02-que-es-ia-generativa/', en: '/en/series/fundamentos-ia-iag/02-que-es-ia-generativa/' });
@@ -111,4 +180,4 @@ if (failures.length) {
   for (const failure of failures) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log('Locale-switch quality QA passed: selectors preserve translated routes, explicit localized tool slugs, XML sitemap hreflang pairs, and safe fallbacks.');
+console.log('Locale-switch quality QA passed: bilingual Series hubs expose Realtime Voice Agents, all six ES/EN chapter selectors preserve translated routes and sitemap pairs, reader navigation stays inside the six-chapter collection, and safe fallbacks remain valid.');

@@ -23,11 +23,11 @@ certified_routes:
     review_scope: prose, videos, guided paths, interactive visual sequence, labels, navigation, native media, responsive semantics
     note: "Side-by-side review found the English visual hub already faithful and native-quality; its video, guided-path and Best-of-N/PRM-vs-ORM/ImageBind interaction structure matches the canonical pedagogical sequence while using native English media."
   - route: series/index.md
-    reviewed_on: 2026-08-18
-    spanish_blob_sha: b63629609b4e8f0f2a853fa2d072e7a4e230b0d1
-    english_blob_sha: ab361a9819731ce4bd2aa368bdf5dbba32d954ec
-    review_scope: prose, series ordering, descriptions, recommended path, navigation
-    note: "Restored the canonical visual-first fast-entry CTA and tightened the recommended-path prose without changing the eight-series order or descriptions."
+    reviewed_on: 2026-09-10
+    spanish_blob_sha: 4c6e0b1242a38f77882350538e1a6623b369205a
+    english_blob_sha: d8b7338c4e7acc1fcc8e6c3002343b93cc03c19c
+    review_scope: prose, series ordering, descriptions, recommended path, navigation, ES/EN parity
+    note: "Post-merge release verification found that Realtime Voice Agents was present in the site navigation but missing from the canonical Series landing page. Added it as the ninth bilingual series, linking directly to chapter 1 because this program intentionally starts at 1.1 rather than a presentation chapter; descriptions, chapter count and locale routes were reviewed side by side."
   - route: articulos-tecnicos/index.md
     reviewed_on: 2026-08-18
     spanish_blob_sha: 8cc5cba47ef1c6ae17a28e1d6b78da772f8499f9
