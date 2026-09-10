@@ -1,0 +1,48 @@
+name: Voice chapter 5 source-gate repair
+
+on:
+  push:
+    branches:
+      - series/realtime-voice-agents-golden
+    paths:
+      - '.github/workflows/voice-ch5-gate-repair.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: series/realtime-voice-agents-golden
+          fetch-depth: 0
+
+      - name: Repair inconsistent 8 kHz source-gate token and retrigger integration
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          gate = Path('scripts/validate_voice_network_telephony_ch5_source.mjs')
+          text = gate.read_text(encoding='utf-8')
+          old = "'audio/x-mulaw', '8000', 'mark', 'clear',"
+          new = "'audio/x-mulaw', '8 kHz', 'mark', 'clear',"
+          if text.count(old) != 1:
+              raise SystemExit(f'expected one obsolete generic 8000 token, found {text.count(old)}')
+          gate.write_text(text.replace(old, new, 1), encoding='utf-8')
+
+          integration = Path('.github/workflows/voice-ch5-golden-integration.yml')
+          wf = integration.read_text(encoding='utf-8')
+          marker = '# source-gate repair: use the article/RFC unit spelling 8 kHz, not a redundant bare 8000 token\n'
+          if marker not in wf:
+              integration.write_text(wf + '\n' + marker, encoding='utf-8')
+          PY
+          node scripts/validate_voice_network_telephony_ch5_source.mjs || true
+          git diff --check
+          git config user.name '5sigmas-golden-bot'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add scripts/validate_voice_network_telephony_ch5_source.mjs .github/workflows/voice-ch5-golden-integration.yml
+          git commit -m 'chore(voice): run chapter 5 GOLDEN integration v2'
+          git push origin HEAD:series/realtime-voice-agents-golden
