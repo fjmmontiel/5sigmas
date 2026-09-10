@@ -145,6 +145,8 @@ nav:
           - Tools, estado y acciones asíncronas: series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.md
           - WebRTC, SIP y telefonía: series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red.md
           - Evaluación, observabilidad y reliability: series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.md
+      - Coding agents y agent harnesses:
+          - Qué es un agent harness: series/coding-agents-agent-harnesses/01-que-es-agent-harness.md
   - Construir:
       - articulos-tecnicos/index.md
       - Agente Reactivo, Proactivo y Tool calls: articulos-tecnicos/proactive-reactive-agent-and-tool-calls.md
