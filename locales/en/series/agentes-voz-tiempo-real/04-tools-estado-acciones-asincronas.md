@@ -168,7 +168,6 @@ Handoffs introduce an important ownership distinction. Async tools attached to a
 
 That solves **runtime ownership**. It does not replace idempotency keys, durable workflow state, or reconciliation with the external API.
 
-
 ### Runtime cancellation and duplicate handling are not business idempotency
 
 LiveKit async tools finish by default even when the user moves on. To let the LLM stop a running call, the tool must explicitly opt in with `ToolFlag.CANCELLABLE`.[^livekit-async-tools] That cancellation acts on work the runtime controls; it does not prove that an external API reversed an effect it already accepted or committed.
@@ -198,10 +197,9 @@ Pipecat documents two useful behaviors:
 
 Async functions can also emit intermediate results with `is_final=False` before sending the final result.[^pipecat-functions]
 
-
 The current API makes this decision **per tool**. With `@tool_options(cancel_on_interruption=False, cancellable_by_llm=True, timeout_secs=...)`, an asynchronous function can let the conversation continue while it runs and also allow the model to request cancellation when the work is no longer relevant. Pipecat then advertises a tool-specific `cancel_<name>` function. A `tool_call_id` is only needed to select one call when multiple instances of the same tool are in flight. The older service-wide `enable_async_tool_cancellation` flag is deprecated and will be removed in 2.0.0.[^pipecat-functions]
 
-`timeout_secs` remains the per-tool deadline and overrides `function_call_timeout_secs` for that function. If the handler exceeds the deadline, Pipecat cancels it by raising `asyncio.CancelledError`. The deadline covers the handler itself, not work that the handler detached into a separate task.[^pipecat-functions]
+The documentation defines `timeout_secs` as the per-tool deadline that overrides `function_call_timeout_secs`, cancelling the handler with `asyncio.CancelledError` when it exceeds the limit. That deadline covers the handler itself, not work the handler detached into a separate task.[^pipecat-functions] **Do not currently treat it as an absolute guarantee for an async tool that emits intermediate updates.** As of September 10, 2026, `LLMService` on `main` cancels its `timeout_task` whenever `result_callback` delivers any result; upstream issue #5481 documents that an `is_final=False` callback can therefore disarm the deadline before the final result.[^pipecat-timeout-5481] If the deadline is a safety or reliability boundary, add an application-owned watchdog/cancellation path and verify the deployed Pipecat version until the upstream behavior is fixed.
 
 These primitives control execution Pipecat owns. Cancelling the handler or its async call does not prove that a remote side effect already submitted was reversed. The contract with the external API or worker must establish the actual outcome.
 
@@ -441,4 +439,5 @@ LiveKit Agents and Pipecat provide useful primitives at different boundaries. Va
 [^livekit-tasks]: LiveKit Documentation, *Tasks and task groups*. https://docs.livekit.io/agents/logic/tasks/
 [^livekit-handoffs]: LiveKit Documentation, *Agents and handoffs*. https://docs.livekit.io/agents/logic/agents-handoffs/
 [^pipecat-functions]: Pipecat Documentation, *Function Calling*. https://docs.pipecat.ai/pipecat/learn/function-calling
+[^pipecat-timeout-5481]: Pipecat GitHub, *Per-tool timeout_secs is disarmed by an intermediate (is_final=False) result callback — hung async tools are never bounded*, issue #5481. https://github.com/pipecat-ai/pipecat/issues/5481
 [^openai-realtime-cancel]: OpenAI API Reference, *Realtime client events — response.cancel / output_audio_buffer.clear*. https://platform.openai.com/docs/api-reference/realtime-client-events/conversation/item/create
