@@ -17,6 +17,7 @@ published_routes:
   - series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red.md
   - series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.md
   - series/coding-agents-agent-harnesses/01-que-es-agent-harness.md
+  - series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento.md
   - series/fundamentos-ia-iag/00_presentacion_serie.md
   - series/fundamentos-ia-iag/01-que-es-ia.md
   - series/fundamentos-ia-iag/02-que-es-ia-generativa.md
@@ -82,6 +83,7 @@ required_snippets:
   - snippets/articulos-tecnicos/voice-network-paths.html
   - snippets/articulos-tecnicos/voice-turn-evidence-stack.html
   - snippets/articulos-tecnicos/coding-agent-harness-loop.html
+  - snippets/articulos-tecnicos/coding-agent-isolation-stack.html
   - snippets/from-cave-to-agi/01-sistemas-numeracion.html
   - snippets/from-cave-to-agi/01-algebra-despejar.html
   - snippets/from-cave-to-agi/01-cadena-deductiva.html
