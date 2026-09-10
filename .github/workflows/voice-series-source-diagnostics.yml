@@ -1,0 +1,50 @@
+name: Realtime Voice Agents SERIES source diagnostics
+
+on:
+  push:
+    branches:
+      - series/realtime-voice-agents-golden
+    paths:
+      - '.github/workflows/voice-series-source-diagnostics.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  source-contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: series/realtime-voice-agents-golden
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run all source contracts with diagnostics
+        shell: bash
+        run: |
+          set -o pipefail
+          mkdir -p artifacts/visual-review
+          {
+            for gate in \
+              scripts/validate_voice_architecture_ch1.mjs \
+              scripts/validate_voice_turn_taking_ch2_source.mjs \
+              scripts/validate_voice_latency_ch3_source.mjs \
+              scripts/validate_voice_tools_state_ch4_source.mjs \
+              scripts/validate_voice_network_telephony_ch5_source.mjs \
+              scripts/validate_voice_evaluation_observability_ch6_source.mjs; do
+              echo "===== $gate ====="
+              node "$gate" || true
+            done
+          } 2>&1 | tee artifacts/visual-review/voice-series-source-contracts.log
+          ! grep -qE 'gate failed|source gate failed|chapter source gate failed|failed \(' artifacts/visual-review/voice-series-source-contracts.log
+      - name: Upload diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: realtime-voice-series-source-diagnostics
+          path: artifacts/visual-review/voice-series-source-contracts.log
+          if-no-files-found: error
+          retention-days: 1
