@@ -15,12 +15,16 @@ const cases = [
     route: '/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas/',
     tableHeader: 'Necesidad',
     systemOfRecord: 'sistema de registro',
+    reconcileTitle: 'Consultar sistema de registro',
+    reconcileQuestion: '¿existe el efecto de op_42?',
   },
   {
     locale: 'en',
     route: '/en/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas/',
     tableHeader: 'Need',
     systemOfRecord: 'system of record',
+    reconcileTitle: 'Query the system of record',
+    reconcileQuestion: 'does the effect of op_42 exist?',
   },
 ];
 const viewports = [
@@ -86,8 +90,20 @@ try {
             }
             return locator.boundingBox();
           };
+          const getTextBox = async (text) => {
+            const locator = visual.getByText(text, { exact: true });
+            if ((await locator.count()) !== 1) {
+              failures.push(`${testCase.route}: ${viewport.name} expected one text ${JSON.stringify(text)}, found ${await locator.count()}`);
+              return null;
+            }
+            return locator.boundingBox();
+          };
           const centerX = (b) => b.x + b.width / 2;
           const centerY = (b) => b.y + b.height / 2;
+          const overlaps = (a, b, pad = 2) => !(
+            a.x + a.width + pad <= b.x || b.x + b.width + pad <= a.x ||
+            a.y + a.height + pad <= b.y || b.y + b.height + pad <= a.y
+          );
 
           const barge = await getBox('[data-action-boundary="barge-in"]');
           const agentAudio = await getBox('[data-action-track="agent-audio"]');
@@ -103,6 +119,8 @@ try {
           const effectExists = await getBox('[data-action-reconcile="effect-exists"]');
           const noEffect = await getBox('[data-action-reconcile="no-effect"]');
           const retryGuard = await getBox('[data-action-label="retry-guard"]');
+          const reconcileTitle = await getTextBox(testCase.reconcileTitle);
+          const reconcileQuestion = await getTextBox(testCase.reconcileQuestion);
           const svgBox = await svg.boundingBox();
 
           if (barge && agentAudio && operation && newTurn && admitted && externalOutcome) {
@@ -123,11 +141,16 @@ try {
           if (unknown && unknownToReconcile && reconcile && effectExists && noEffect) {
             check(centerY(reconcile) > centerY(unknown) + 35, `${testCase.route}: ${viewport.name} UNKNOWN does not descend into reconciliation`);
             check(centerY(unknownToReconcile) > centerY(unknown), `${testCase.route}: ${viewport.name} UNKNOWN reconciliation path has no downward extent`);
-            check(effectExists.width > 50 && noEffect.height > 25, `${testCase.route}: ${viewport.name} reconciliation outcomes are not materially distinct paths`);
+            check(effectExists.width > 50 && noEffect.width > 35, `${testCase.route}: ${viewport.name} reconciliation outcomes are not materially distinct paths`);
+            check(centerX(effectExists) < centerX(reconcile) - 45 && centerX(noEffect) > centerX(reconcile) + 25, `${testCase.route}: ${viewport.name} yes/no reconciliation branches do not diverge spatially`);
           }
 
           if (retryGuard && svgBox) {
             check(retryGuard.x >= svgBox.x && retryGuard.x + retryGuard.width <= svgBox.x + svgBox.width - 4, `${testCase.route}: ${viewport.name} retry-guard label clips outside the relationship canvas (${JSON.stringify({ retryGuard, svgBox })})`);
+          }
+          if (retryGuard && reconcileTitle && reconcileQuestion) {
+            check(!overlaps(retryGuard, reconcileTitle), `${testCase.route}: ${viewport.name} retry-guard overlaps reconciliation title (${JSON.stringify({ retryGuard, reconcileTitle })})`);
+            check(!overlaps(retryGuard, reconcileQuestion), `${testCase.route}: ${viewport.name} retry-guard overlaps reconciliation question (${JSON.stringify({ retryGuard, reconcileQuestion })})`);
           }
 
           const animations = await visual.evaluate((node) => node.getAnimations({ subtree: true }).length);
@@ -238,4 +261,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Voice tools/state chapter relationship-first browser/accessibility QA PASS: ES/EN state-machine topology, barge-in/audio-vs-operation geometry, UNKNOWN reconciliation, label clipping, mobile reachability, reduced-motion, runtime-matrix reachability, whole-page overflow and runtime errors are valid.');
+console.log('Voice tools/state chapter relationship-first browser/accessibility QA PASS: ES/EN state-machine topology, barge-in/audio-vs-operation geometry, UNKNOWN reconciliation, label collision/clipping, mobile reachability, reduced-motion, runtime-matrix reachability, whole-page overflow and runtime errors are valid.');
