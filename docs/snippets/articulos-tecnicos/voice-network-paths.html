@@ -1,12 +1,147 @@
-<section class="s5v s5v-arch-map s5v-network-paths s5v--wide" data-s5v-stepper data-s5v-steps="3" data-step="1" aria-label="Tres fronteras de transporte para llevar audio hasta un agente de voz">
-  <div class="s5v__canvas">
-    <header class="s5v__head"><div><span class="s5v__kicker">Red y media</span><h3>El mismo agente puede recibir audio desde tres fronteras muy distintas</h3></div><p>Señalización, transporte de media y runtime no tienen por qué pertenecer al mismo componente.</p></header>
-    <div class="s5v__steps s5v__steps--tabs"><button data-s5v-step="1">Browser · WebRTC</button><button data-s5v-step="2">PSTN · SIP/RTP</button><button data-s5v-step="3">PSTN · WSS</button></div>
-    <div class="s5v-arch-map__panels">
-      <div data-panel="1" class="s5v-arch-map__pipe"><span>Browser<br><small>micrófono</small></span><span>WebRTC + ICE<br><small>STUN/TURN según ruta</small></span><span>Endpoint / SFU<br><small>media realtime</small></span><span>Agent runtime<br><small>turns · modelos · tools</small></span></div>
-      <div data-panel="2" class="s5v-arch-map__pipe"><span>PSTN / carrier<br><small>pierna telefónica</small></span><span>SIP + SDP<br><small>señaliza la sesión</small></span><span>RTP / SRTP<br><small>transporta el audio</small></span><span>Media endpoint<br><small>normaliza para el agente</small></span></div>
-      <div data-panel="3" class="s5v-arch-map__pipe"><span>PSTN / carrier<br><small>termina SIP/RTP</small></span><span>Media gateway<br><small>contrato del carrier</small></span><span>WSS audio<br><small>p. ej. Media Streams</small></span><span>App / runtime<br><small>buffering y estado de app</small></span></div>
-    </div>
-    <div class="s5v__copy">La pregunta de arquitectura no es sólo qué protocolo aparece en el diagrama. Identifica quién posee <strong>conectividad y recovery</strong>, quién negocia <strong>codec y buffering</strong> y qué observabilidad llega al <strong>runtime del agente</strong>. Un WebSocket de carrier puede ocultar SIP/RTP a tu aplicación; un framework de agents puede no poseer la media plane que consume.</div>
+<!-- GOLDEN_VISUAL_CONTRACT
+learning_objective: Comparar tres rutas de audio y ver, por su topología, qué plano y qué operador poseen cada tramo: WebRTC directo o relay, SIP separado de RTP, y telefonía terminada por carrier que sólo expone WSS a la aplicación.
+mechanism: Tres trazas simultáneas comparten el mismo destino lógico pero cruzan fronteras distintas. WebRTC bifurca entre candidate pair directo y relay TURN; SIP/SDP viaja por una pista de control separada de RTP/SRTP; en Media Streams el carrier mantiene SIP/RTP dentro de su dominio y sólo WSS cruza a la aplicación.
+visual_variables: x-position=ownership progression; lane=network architecture; solid path=media; dotted path=signaling/control; branch topology=direct versus relayed media; shaded zone=operator/trust boundary; vertical boundary=protocol handoff; line continuity=audio path; annotation=codec/transport contract at the boundary.
+why_visual: Una lista de protocolos no muestra qué recorrido cambia cuando ICE selecciona relay, por qué un SIP 200 OK puede coexistir con RTP roto, ni cómo un carrier puede ocultar por completo SIP/RTP a la aplicación. Las tres topologías en paralelo hacen visibles esas diferencias sin depender de tabs o color-only state.
+-->
+<section class="s5v s5v-network-paths s5v-network-topology s5v--wide" aria-label="Tres topologías de red para audio realtime con fronteras de ownership, señalización y media">
+  <style>
+    .s5v-network-topology,.s5v-network-topology *{box-sizing:border-box}
+    .s5v-network-topology{--ink:#07191b;--muted:#58676a;--line:rgba(7,25,27,.14);--soft:#f6f8f7;--media:#087f8f;--control:#7a5af8;--relay:#ad5d00;--boundary:#315aa8;color:var(--ink);font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;display:grid;margin:28px auto 34px;max-width:1380px}
+    .s5v-network-topology__sheet{padding:30px;border:1px solid var(--line);border-radius:28px;background:linear-gradient(180deg,#fff,#fbfcfc);box-shadow:0 22px 54px rgba(18,35,39,.1);overflow:hidden}
+    .s5v-network-topology__head{display:flex;align-items:end;justify-content:space-between;gap:28px;margin-bottom:20px}
+    .s5v-network-topology__kicker{font-size:.73rem;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--boundary)}
+    .s5v-network-topology h3{margin:7px 0 0;font-size:clamp(1.7rem,3vw,2.55rem);line-height:1.02;letter-spacing:-.04em;max-width:760px}
+    .s5v-network-topology__lead{max-width:490px;margin:0;color:var(--muted);font-size:.82rem;line-height:1.45;font-weight:700;text-align:right}
+    .s5v-network-topology__figure{margin:0;padding:18px 18px 16px;border:1px solid var(--line);border-radius:20px;background:#fff}
+    .s5v-network-topology__caption{display:flex;align-items:baseline;justify-content:space-between;gap:18px;margin:0 0 12px}
+    .s5v-network-topology__caption strong{font-size:.95rem;letter-spacing:-.015em}
+    .s5v-network-topology__caption span{max-width:540px;color:var(--muted);font-size:.68rem;line-height:1.35;font-weight:700;text-align:right}
+    .s5v-network-topology__scroll{overflow-x:auto;overscroll-behavior-inline:contain;padding:2px 1px 8px;scrollbar-width:thin}
+    .s5v-network-topology__scroll:focus-visible{outline:3px solid rgba(49,90,168,.22);outline-offset:4px;border-radius:10px}
+    .s5v-network-topology__svg{display:block;width:100%;min-width:1040px;height:auto;overflow:visible}
+    .s5v-network-topology__zone-browser{fill:#f6f8ff;stroke:#cbd7ef;stroke-width:1.5}
+    .s5v-network-topology__zone-network{fill:#fff9ef;stroke:#ead8b7;stroke-width:1.5}
+    .s5v-network-topology__zone-platform{fill:#f2fbfa;stroke:#b9ded8;stroke-width:1.5}
+    .s5v-network-topology__zone-carrier{fill:#fff7f3;stroke:#e8c9b9;stroke-width:1.5}
+    .s5v-network-topology__zone-app{fill:#f7f5ff;stroke:#d5ccf7;stroke-width:1.5}
+    .s5v-network-topology__divider{stroke:#dfe5e4;stroke-width:2}
+    .s5v-network-topology__boundary{stroke:#6f7b7d;stroke-width:2;stroke-dasharray:7 6}
+    .s5v-network-topology__media{stroke:var(--media);stroke-width:7;fill:none;stroke-linecap:round;stroke-linejoin:round}
+    .s5v-network-topology__media-alt{stroke:var(--relay);stroke-width:5;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:11 8}
+    .s5v-network-topology__control{stroke:var(--control);stroke-width:4;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:4 7}
+    .s5v-network-topology__hidden-media{stroke:#9a6b55;stroke-width:5;fill:none;stroke-linecap:round;stroke-dasharray:9 7}
+    .s5v-network-topology__handoff{stroke:var(--boundary);stroke-width:3;fill:none;stroke-linecap:round}
+    .s5v-network-topology__node{fill:#fff;stroke-width:4}
+    .s5v-network-topology__node-media{stroke:var(--media)}
+    .s5v-network-topology__node-control{stroke:var(--control)}
+    .s5v-network-topology__node-relay{stroke:var(--relay)}
+    .s5v-network-topology__node-carrier{stroke:#9a6b55}
+    .s5v-network-topology__label{font-size:14px;font-weight:900;fill:var(--ink)}
+    .s5v-network-topology__small{font-size:11.5px;font-weight:800;fill:var(--muted)}
+    .s5v-network-topology__lane{font-size:14px;font-weight:950;fill:var(--ink)}
+    .s5v-network-topology__zone-label{font-size:11px;font-weight:950;letter-spacing:.08em;fill:#536164}
+    .s5v-network-topology__protocol{font:900 11.5px/1 "SFMono-Regular",Consolas,monospace;fill:var(--ink)}
+    .s5v-network-topology__media-text{font-size:11px;font-weight:900;fill:var(--media)}
+    .s5v-network-topology__control-text{font-size:11px;font-weight:900;fill:var(--control)}
+    .s5v-network-topology__relay-text{font-size:11px;font-weight:900;fill:var(--relay)}
+    .s5v-network-topology__callout{margin-top:15px;display:grid;grid-template-columns:auto 1fr;gap:10px 14px;align-items:start;padding:14px 16px;border-radius:15px;background:var(--soft);border:1px solid var(--line);font-size:.73rem;line-height:1.45;color:var(--muted);font-weight:750}
+    .s5v-network-topology__callout strong{color:var(--ink)}
+    .s5v-network-topology__legend{display:flex;flex-wrap:wrap;gap:14px 18px;margin-top:12px;font-size:.68rem;font-weight:800;color:var(--muted)}
+    .s5v-network-topology__legend span{display:inline-flex;align-items:center;gap:7px}
+    .s5v-network-topology__legend i{display:inline-block;width:34px;height:0;border-top:4px solid var(--media);border-radius:4px}
+    .s5v-network-topology__legend .is-control{border-top:3px dashed var(--control)}
+    .s5v-network-topology__legend .is-alt{border-top:3px dashed var(--relay)}
+    @media(max-width:720px){.s5v-network-topology__sheet{padding:20px 14px;border-radius:22px}.s5v-network-topology__head{display:grid;gap:9px}.s5v-network-topology__lead{text-align:left}.s5v-network-topology__figure{padding:15px 10px 12px}.s5v-network-topology__caption{display:grid;gap:6px}.s5v-network-topology__caption span{text-align:left}.s5v-network-topology__svg{min-width:1010px}.s5v-network-topology__callout{grid-template-columns:1fr}}
+    @media(prefers-reduced-motion:reduce){.s5v-network-topology *{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+  </style>
+
+  <div class="s5v-network-topology__sheet">
+    <header class="s5v-network-topology__head">
+      <div><div class="s5v-network-topology__kicker">Red y media</div><h3>El protocolo visible depende de dónde termina cada frontera</h3></div>
+      <p class="s5v-network-topology__lead">Las tres rutas acaban en lógica de agente, pero la aplicación no posee el mismo tramo de red, señalización ni codec en cada una.</p>
+    </header>
+
+    <figure class="s5v-network-topology__figure" aria-labelledby="s5v-network-title">
+      <figcaption class="s5v-network-topology__caption">
+        <strong id="s5v-network-title">Tres rutas simultáneas, tres repartos de ownership</strong>
+        <span>La geometría separa media, señalización y fronteras operativas; no hay tabs ni estados de color.</span>
+      </figcaption>
+      <div class="s5v-network-topology__scroll" tabindex="0" aria-label="Mapa desplazable de rutas WebRTC, SIP/RTP y carrier WSS">
+        <svg class="s5v-network-topology__svg" viewBox="0 0 1080 760" role="img" aria-labelledby="s5v-network-svg-title s5v-network-svg-desc">
+          <title id="s5v-network-svg-title">WebRTC, SIP/RTP y carrier WSS cruzan fronteras diferentes</title>
+          <desc id="s5v-network-svg-desc">La primera ruta muestra WebRTC + ICE con alternativa directa o relay TURN. La segunda separa SIP + SDP como señalización de RTP / SRTP como media. La tercera mantiene SIP y RTP dentro del carrier y sólo cruza WSS audio hacia la aplicación, usando Twilio Media Streams como ejemplo de contrato audio/x-mulaw a 8 kHz mono.</desc>
+
+          <defs>
+            <marker id="s5v-net-media-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#087f8f"/></marker>
+            <marker id="s5v-net-control-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#7a5af8"/></marker>
+            <marker id="s5v-net-relay-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#ad5d00"/></marker>
+          </defs>
+
+          <line x1="20" y1="252" x2="1060" y2="252" class="s5v-network-topology__divider"/>
+          <line x1="20" y1="500" x2="1060" y2="500" class="s5v-network-topology__divider"/>
+
+          <!-- Browser / WebRTC -->
+          <g data-network-route="webrtc">
+            <text x="28" y="34" class="s5v-network-topology__lane">1 · Browser · WebRTC</text>
+            <rect x="28" y="52" width="188" height="172" rx="20" class="s5v-network-topology__zone-browser" data-network-zone="browser"/>
+            <rect x="238" y="52" width="354" height="172" rx="20" class="s5v-network-topology__zone-network" data-network-zone="internet"/>
+            <rect x="614" y="52" width="418" height="172" rx="20" class="s5v-network-topology__zone-platform" data-network-zone="media-platform"/>
+            <text x="46" y="75" class="s5v-network-topology__zone-label">DISPOSITIVO</text><text x="256" y="75" class="s5v-network-topology__zone-label">RED / NAT / FIREWALL</text><text x="632" y="75" class="s5v-network-topology__zone-label">MEDIA + RUNTIME</text>
+            <circle cx="130" cy="136" r="18" class="s5v-network-topology__node s5v-network-topology__node-media" data-network-node="browser"/><text x="96" y="172" class="s5v-network-topology__label">Browser</text><text x="92" y="190" class="s5v-network-topology__small">micrófono</text>
+            <circle cx="700" cy="136" r="18" class="s5v-network-topology__node s5v-network-topology__node-media" data-network-node="webrtc-endpoint"/><text x="650" y="172" class="s5v-network-topology__label">Endpoint / SFU</text>
+            <circle cx="922" cy="136" r="18" class="s5v-network-topology__node s5v-network-topology__node-media" data-network-node="agent-runtime"/><text x="874" y="172" class="s5v-network-topology__label">Agent runtime</text>
+            <path d="M148 124 C300 92 520 92 682 124" class="s5v-network-topology__media" marker-end="url(#s5v-net-media-arrow)" data-network-path="webrtc-direct"/>
+            <text x="350" y="99" class="s5v-network-topology__media-text">candidate pair directo · UDP preferido</text>
+            <circle cx="430" cy="184" r="15" class="s5v-network-topology__node s5v-network-topology__node-relay" data-network-node="turn-relay"/><text x="404" y="216" class="s5v-network-topology__protocol">TURN</text>
+            <path d="M148 146 C245 190 318 184 412 184 M448 184 C532 184 610 177 686 148" class="s5v-network-topology__media-alt" marker-end="url(#s5v-net-relay-arrow)" data-network-path="webrtc-relay"/>
+            <text x="220" y="205" class="s5v-network-topology__relay-text">fallback relay: ruta + dominio de fallo cambian</text>
+            <path d="M718 136 H904" class="s5v-network-topology__media" marker-end="url(#s5v-net-media-arrow)" data-network-path="webrtc-to-runtime"/>
+            <text x="750" y="124" class="s5v-network-topology__protocol">WebRTC + ICE</text>
+          </g>
+
+          <!-- SIP / RTP -->
+          <g data-network-route="sip-rtp">
+            <text x="28" y="286" class="s5v-network-topology__lane">2 · PSTN · SIP/RTP</text>
+            <rect x="28" y="304" width="244" height="166" rx="20" class="s5v-network-topology__zone-carrier" data-network-zone="sip-carrier"/>
+            <rect x="294" y="304" width="738" height="166" rx="20" class="s5v-network-topology__zone-platform" data-network-zone="sip-platform"/>
+            <text x="46" y="327" class="s5v-network-topology__zone-label">PSTN / CARRIER</text><text x="312" y="327" class="s5v-network-topology__zone-label">SIP EDGE + MEDIA + RUNTIME</text>
+            <circle cx="138" cy="390" r="18" class="s5v-network-topology__node s5v-network-topology__node-carrier" data-network-node="pstn"/><text x="107" y="426" class="s5v-network-topology__label">Llamada</text>
+            <circle cx="490" cy="354" r="16" class="s5v-network-topology__node s5v-network-topology__node-control" data-network-node="sip-edge"/><text x="456" y="382" class="s5v-network-topology__label">SIP edge</text>
+            <circle cx="680" cy="422" r="18" class="s5v-network-topology__node s5v-network-topology__node-media" data-network-node="media-endpoint"/><text x="628" y="454" class="s5v-network-topology__label">Media endpoint</text>
+            <circle cx="922" cy="422" r="18" class="s5v-network-topology__node s5v-network-topology__node-media" data-network-node="sip-agent-runtime"/><text x="874" y="454" class="s5v-network-topology__label">Agent runtime</text>
+            <path d="M156 380 C260 335 350 344 472 354" class="s5v-network-topology__control" marker-end="url(#s5v-net-control-arrow)" data-network-path="sip-signaling"/>
+            <text x="250" y="342" class="s5v-network-topology__control-text">SIP + SDP · señalización</text>
+            <path d="M506 362 C552 372 590 389 646 412" class="s5v-network-topology__control" data-network-path="sip-control-to-media"/>
+            <path d="M156 398 C330 432 470 429 662 422" class="s5v-network-topology__media" marker-end="url(#s5v-net-media-arrow)" data-network-path="rtp-media"/>
+            <text x="290" y="448" class="s5v-network-topology__media-text">RTP / SRTP · transporta el audio</text>
+            <path d="M698 422 H904" class="s5v-network-topology__media" marker-end="url(#s5v-net-media-arrow)" data-network-path="rtp-to-runtime"/>
+            <text x="548" y="341" class="s5v-network-topology__small">SIP 200 OK ≠ RTP bidireccional</text>
+          </g>
+
+          <!-- Carrier WSS -->
+          <g data-network-route="carrier-wss">
+            <text x="28" y="534" class="s5v-network-topology__lane">3 · PSTN · WSS</text>
+            <rect x="28" y="552" width="566" height="166" rx="20" class="s5v-network-topology__zone-carrier" data-network-zone="wss-carrier"/>
+            <rect x="616" y="552" width="416" height="166" rx="20" class="s5v-network-topology__zone-app" data-network-zone="application"/>
+            <text x="46" y="575" class="s5v-network-topology__zone-label">CARRIER POSEE TELEFONÍA</text><text x="634" y="575" class="s5v-network-topology__zone-label">APLICACIÓN POSEE EL PROTOCOLO WSS</text>
+            <circle cx="126" cy="640" r="18" class="s5v-network-topology__node s5v-network-topology__node-carrier" data-network-node="carrier-pstn"/><text x="90" y="676" class="s5v-network-topology__label">PSTN</text>
+            <circle cx="360" cy="640" r="18" class="s5v-network-topology__node s5v-network-topology__node-carrier" data-network-node="carrier-media-gateway"/><text x="303" y="676" class="s5v-network-topology__label">Media gateway</text>
+            <circle cx="820" cy="640" r="18" class="s5v-network-topology__node s5v-network-topology__node-media" data-network-node="app-runtime"/><text x="773" y="676" class="s5v-network-topology__label">App / runtime</text>
+            <path d="M144 640 H342" class="s5v-network-topology__hidden-media" data-network-path="carrier-hidden-sip-rtp"/>
+            <text x="184" y="625" class="s5v-network-topology__protocol">SIP/RTP dentro del carrier</text>
+            <line x1="604" y1="570" x2="604" y2="700" class="s5v-network-topology__boundary" data-network-boundary="carrier-app"/>
+            <path d="M378 640 H802" class="s5v-network-topology__media" marker-end="url(#s5v-net-media-arrow)" data-network-path="wss-audio"/>
+            <text x="468" y="624" class="s5v-network-topology__protocol">WSS audio</text>
+            <text x="640" y="610" class="s5v-network-topology__small">Twilio Media Streams: audio/x-mulaw · 8 kHz · mono</text>
+            <text x="187" y="700" class="s5v-network-topology__small">La app no termina SIP/RTP</text>
+            <text x="641" y="700" class="s5v-network-topology__small">contrato del carrier → buffering y estado de app</text>
+          </g>
+        </svg>
+      </div>
+      <div class="s5v-network-topology__legend" aria-label="Leyenda de tipos de trayectoria"><span><i></i>media/audio</span><span><i class="is-control"></i>señalización/control</span><span><i class="is-alt"></i>ruta alternativa/relay</span></div>
+    </figure>
+
+    <div class="s5v-network-topology__callout"><strong>Lectura operacional</strong><span>WebRTC hace observable qué candidate pair quedó seleccionado; SIP exige inspeccionar señalización y RTP por separado; un carrier WSS puede esconder ambos planos tras su gateway. Antes de culpar al framework o al modelo, localiza qué frontera posee el tramo que degradó el audio.</span></div>
   </div>
 </section>
