@@ -15,6 +15,7 @@
     "RED / NAT / FIREWALL": "NETWORK / NAT / FIREWALL",
     "MEDIA + RUNTIME": "MEDIA + RUNTIME",
     "micrófono": "microphone",
+    "Agent runtime": "agent runtime",
     "candidate pair directo · UDP preferido": "direct candidate pair · UDP preferred",
     "fallback relay: ruta + dominio de fallo cambian": "relay fallback: path + failure domain change",
     "PSTN / CARRIER": "PSTN / CARRIER",
