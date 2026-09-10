@@ -32,6 +32,8 @@ Conviene separar al menos cuatro eventos:
 
 No son equivalentes.
 
+{{ include_html("snippets/articulos-tecnicos/voice-action-lifecycle.html") }}
+
 El modelo puede emitir dos veces la misma tool call. La aplicación puede aceptar una acción y perder la conexión antes de recibir el resultado. El proveedor externo puede completar el pago aunque el usuario interrumpa el audio. Una respuesta puede llegar después de un handoff a otro agente.
 
 Por eso, en producción, **la frontera autoritativa de una acción debe vivir fuera del texto generado por el modelo**.
@@ -166,6 +168,15 @@ Hay una distinción importante en los handoffs. Las tools asíncronas ligadas a 
 
 Esto resuelve **ownership dentro del runtime**. No sustituye idempotency keys, durable workflow state ni reconciliación con la API externa.
 
+
+### Cancelación y duplicados del runtime no son idempotencia de negocio
+
+Las async tools de LiveKit terminan por defecto aunque el usuario cambie de tema. Si quieres que el LLM pueda detener una llamada en curso, la tool debe optar explícitamente por `ToolFlag.CANCELLABLE`.[^livekit-async-tools] Esa cancelación actúa sobre el trabajo que controla el runtime; no demuestra que una API externa haya revertido un efecto que ya aceptó o confirmó.
+
+LiveKit también documenta políticas para llamadas duplicadas: `allow`, `reject`, `replace` y `confirm`. La detección de duplicados se hace por **nombre de tool, no por argumentos**; `replace` cancela la llamada activa antes de lanzar la nueva y exige que la tool activa sea cancelable.[^livekit-async-tools]
+
+Eso es control de ejecución dentro del agente, no deduplicación de negocio. Dos llamadas con el mismo nombre pueden representar operaciones distintas, y dos tool calls con IDs distintos pueden representar la misma intención humana. La frontera durable sigue siendo `operation_id` + idempotency key + sistema de registro.
+
 ### Tasks y handoffs cambian quién posee el turno
 
 `AgentTask` representa un objetivo acotado que toma control de la sesión hasta devolver un resultado. `TaskGroup` permite secuenciar tareas con contexto compartido.[^livekit-tasks]
@@ -186,6 +197,11 @@ Pipecat distingue dos comportamientos útiles:
 - con `cancel_on_interruption=False`, la llamada se trata como asíncrona: la conversación puede continuar y, cuando llega el resultado, Pipecat lo inyecta en contexto como mensaje de developer y dispara una nueva inferencia.[^pipecat-functions]
 
 Las funciones asíncronas también pueden enviar resultados intermedios con `is_final=False` antes del resultado final.[^pipecat-functions]
+
+
+La API actual hace otra distinción útil. Una función con `cancel_on_interruption=False` puede exponer `cancellable_by_llm=True`; Pipecat anuncia entonces una tool `cancel_<nombre>` para que el modelo detenga esa llamada. `timeout_secs` limita la ejecución del handler y, al expirar, el handler recibe `asyncio.CancelledError`. La propia documentación advierte que trabajo que el handler haya lanzado en una task independiente **no se cancela con él**.[^pipecat-functions]
+
+Por tanto, incluso una cancelación correcta del handler sigue sin demostrar que el side effect remoto se haya cancelado. El contrato con la API o worker externo debe decir qué ocurrió realmente.
 
 Esto es una primitiva potente para una UX de «sigo comprobándolo». Pero la semántica de negocio sigue siendo tuya. `cancel_on_interruption=False` no convierte un side effect en durable, idempotente ni compensable.
 

@@ -1,13 +1,21 @@
 #!/usr/bin/env node
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import crypto from 'node:crypto';
 
 const esPath = path.resolve('docs/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.md');
 const enPath = path.resolve('locales/en/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.md');
-const [es, en] = await Promise.all([
+const [es, en, snippet, mirror, i18nRaw, mkdocsEs, mkdocsEn, manifest] = await Promise.all([
   fs.readFile(esPath, 'utf8'),
   fs.readFile(enPath, 'utf8'),
+  fs.readFile(path.resolve('docs/snippets/articulos-tecnicos/voice-action-lifecycle.html'), 'utf8'),
+  fs.readFile(path.resolve('locales/en/snippets/articulos-tecnicos/voice-action-lifecycle.html'), 'utf8'),
+  fs.readFile(path.resolve('locales/en/snippets/articulos-tecnicos/voice-action-lifecycle.i18n.json'), 'utf8'),
+  fs.readFile(path.resolve('mkdocs.yml'), 'utf8'),
+  fs.readFile(path.resolve('mkdocs.en.yml'), 'utf8'),
+  fs.readFile(path.resolve('locales/en/manifest.yml'), 'utf8'),
 ]);
+const i18n = JSON.parse(i18nRaw);
 
 const failures = [];
 const check = (condition, message) => { if (!condition) failures.push(message); };
@@ -112,6 +120,30 @@ for (const anchor of vanillaEn) check(en.includes(anchor), `EN: vanilla ownershi
 check(!/^\s*-\s+.+;\s*$/m.test(en), 'EN: semicolon-list anti-pattern detected');
 check(!/LiveKit (es|is) (el )?(mejor|best|fastest)/i.test(`${es}\n${en}`), 'Universal LiveKit winner claim detected');
 check(!/Pipecat (es|is) (el )?(mejor|best|fastest)/i.test(`${es}\n${en}`), 'Universal Pipecat winner claim detected');
+
+
+const visualInclude = '{{ include_html("snippets/articulos-tecnicos/voice-action-lifecycle.html") }}';
+check(es.includes(visualInclude), 'ES: action lifecycle visual include missing');
+check(en.includes(visualInclude), 'EN: action lifecycle visual include missing');
+check(snippet.includes('s5v-action-lifecycle') && snippet.includes('operation_id') && snippet.includes('UNKNOWN'), 'Visual: action lifecycle mechanism incomplete');
+check(mirror.trim() === '<!-- 5sigmas-canonical-mirror -->', 'EN: action lifecycle mirror marker invalid');
+check(i18n.source === 'snippets/articulos-tecnicos/voice-action-lifecycle.html', 'EN: action lifecycle i18n source path invalid');
+const snippetBytes = Buffer.from(snippet, 'utf8');
+const blobHeader = Buffer.from(`blob ${snippetBytes.length}\0`, 'utf8');
+const snippetBlobSha = crypto.createHash('sha1').update(Buffer.concat([blobHeader, snippetBytes])).digest('hex');
+check(i18n.source_blob_sha === snippetBlobSha, `EN: action lifecycle i18n source_blob_sha stale (${i18n.source_blob_sha} != ${snippetBlobSha})`);
+for (const token of ['Tool requested', 'Action admitted', 'External outcome', 'Result observed', 'system of record']) {
+  check(Object.values(i18n.replacements).some((value) => String(value).includes(token)), `EN: action lifecycle translation missing ${token}`);
+}
+check(mkdocsEs.includes('Tools, estado y acciones asíncronas: series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.md'), 'ES: chapter 4 navigation missing');
+check(mkdocsEn.includes('Tools, state and async actions: series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.md'), 'EN: chapter 4 navigation missing');
+check(manifest.includes('series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.md'), 'EN: chapter 4 manifest route missing');
+check(manifest.includes('snippets/articulos-tecnicos/voice-action-lifecycle.html'), 'EN: chapter 4 required snippet missing');
+
+check(es.includes('`ToolFlag.CANCELLABLE`') && es.includes('nombre de tool, no por argumentos') && es.includes('`replace`'), 'ES: current LiveKit cancellation/duplicate semantics missing');
+check(en.includes('`ToolFlag.CANCELLABLE`') && en.includes('tool name, not its arguments') && en.includes('`replace`'), 'EN: current LiveKit cancellation/duplicate semantics missing');
+check(es.includes('`cancellable_by_llm=True`') && es.includes('`timeout_secs`') && es.includes('`asyncio.CancelledError`') && es.includes('no se cancela con él'), 'ES: current Pipecat cancellation/timeout semantics missing');
+check(en.includes('`cancellable_by_llm=True`') && en.includes('`timeout_secs`') && en.includes('`asyncio.CancelledError`') && en.includes('is not cancelled with the handler'), 'EN: current Pipecat cancellation/timeout semantics missing');
 
 if (failures.length) {
   console.error(`Voice tools/state chapter source gate failed (${failures.length}):`);

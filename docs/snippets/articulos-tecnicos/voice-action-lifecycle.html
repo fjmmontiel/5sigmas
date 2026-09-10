@@ -1,0 +1,14 @@
+<section class="s5v s5v-arch-map s5v-action-lifecycle s5v--wide" data-step="1" aria-label="Ciclo de vida de una acción externa durante una conversación de voz">
+  <div class="s5v__canvas">
+    <header class="s5v__head"><div><span class="s5v__kicker">Estado y efectos</span><h3>Separa lo que el agente dice de lo que el negocio hizo</h3></div><p>Un barge-in puede cortar el audio sin revertir una operación ya admitida.</p></header>
+    <div class="s5v-arch-map__panels">
+      <div data-panel="1" class="s5v-arch-map__pipe">
+        <span>Tool solicitada<br><small>propuesta del modelo</small></span>
+        <span>Acción admitida<br><small><code>operation_id</code> persistido</small></span>
+        <span>Resultado externo<br><small>COMMITTED · FAILED · UNKNOWN</small></span>
+        <span>Resultado observado<br><small>reconciliar antes de hablar</small></span>
+      </div>
+    </div>
+    <div class="s5v__copy"><code>cancel speech</code> no mueve la máquina de estado hacia atrás. Si la respuesta externa se pierde después de enviar una mutación, entra en <code>UNKNOWN</code>: consulta el sistema de registro antes de reintentar. Sólo después decide si el resultado sigue siendo relevante para el turno actual.</div>
+  </div>
+</section>

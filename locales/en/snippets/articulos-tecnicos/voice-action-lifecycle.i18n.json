@@ -1,0 +1,34 @@
+{
+  "source": "snippets/articulos-tecnicos/voice-action-lifecycle.html",
+  "source_blob_sha": "ce5d3e72623e16f0d4af6a13d49c7a6493309dc3",
+  "replacements": {
+    "Ciclo de vida de una acción externa durante una conversación de voz": "Lifecycle of an external action during a voice conversation",
+    "Estado y efectos": "State and effects",
+    "Separa lo que el agente dice de lo que el negocio hizo": "Separate what the agent says from what the business did",
+    "Un barge-in puede cortar el audio sin revertir una operación ya admitida.": "A barge-in can stop the audio without reversing an operation that was already admitted.",
+    "Tool solicitada": "Tool requested",
+    "propuesta del modelo": "model proposal",
+    "Acción admitida": "Action admitted",
+    "persistido": "persisted",
+    "Resultado externo": "External outcome",
+    "Resultado observado": "Result observed",
+    "reconciliar antes de hablar": "reconcile before speaking",
+    "no mueve la máquina de estado hacia atrás. Si la respuesta externa se pierde después de enviar una mutación, entra en": "does not move the state machine backwards. If the external response is lost after sending a mutation, enter",
+    "consulta el sistema de registro antes de reintentar. Sólo después decide si el resultado sigue siendo relevante para el turno actual.": "query the system of record before retrying. Only then decide whether the result is still relevant to the current turn."
+  },
+  "forbidden_output_tokens": [
+    "Ciclo de vida de una acción externa",
+    "Estado y efectos",
+    "Separa lo que el agente dice",
+    "Un barge-in puede cortar",
+    "Tool solicitada",
+    "propuesta del modelo",
+    "Acción admitida",
+    "persistido",
+    "Resultado externo",
+    "Resultado observado",
+    "reconciliar antes de hablar",
+    "no mueve la máquina",
+    "consulta el sistema de registro"
+  ]
+}

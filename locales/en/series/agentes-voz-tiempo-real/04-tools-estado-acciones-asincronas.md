@@ -32,6 +32,8 @@ Separate at least four events:
 
 They are not equivalent.
 
+{{ include_html("snippets/articulos-tecnicos/voice-action-lifecycle.html") }}
+
 The model can emit the same tool call twice. The application can admit an action and lose the connection before receiving the result. An external provider can complete a payment after the user interrupts the agent’s speech. A result can arrive after control has already handed off to another agent.
 
 In production, **the authoritative boundary for an action must live outside model-generated text**.
@@ -73,13 +75,13 @@ A tool schema prevents some shape errors. It does not establish business semanti
 
 Before admitting an action, validate the constraints relevant to the domain:
 
-- user identity and authorization;
-- normalized arguments;
-- current resource preconditions;
-- whether explicit confirmation is required;
-- amount, frequency, or scope limits;
-- idempotency and duplicate detection;
-- deadline and retry policy;
+- user identity and authorization
+- normalized arguments
+- current resource preconditions
+- whether explicit confirmation is required
+- amount, frequency, or scope limits
+- idempotency and duplicate detection
+- deadline and retry policy
 - which outcomes can be compensated and which are irreversible.
 
 The tool declaration describes what the model **may request**. The application remains responsible for deciding what it **may execute**.
@@ -128,10 +130,10 @@ The result of `op_42` remains true even though the conversational turn that laun
 
 The application must decide how to handle that late result. A safe pattern is to:
 
-- persist it first;
-- determine whether it is still relevant to the current goal;
-- avoid blindly inserting it as if it belonged to the newest turn;
-- reconcile any real effect before launching a conflicting second action;
+- persist it first
+- determine whether it is still relevant to the current goal
+- avoid blindly inserting it as if it belonged to the newest turn
+- reconcile any real effect before launching a conflicting second action
 - tell the user what actually happened, not what the dialogue expected to happen.
 
 A `turn_id` helps detect that the conversation advanced. An `operation_id` prevents the effect from being lost.
@@ -166,6 +168,15 @@ Handoffs introduce an important ownership distinction. Async tools attached to a
 
 That solves **runtime ownership**. It does not replace idempotency keys, durable workflow state, or reconciliation with the external API.
 
+
+### Runtime cancellation and duplicate handling are not business idempotency
+
+LiveKit async tools finish by default even when the user moves on. To let the LLM stop a running call, the tool must explicitly opt in with `ToolFlag.CANCELLABLE`.[^livekit-async-tools] That cancellation acts on work the runtime controls; it does not prove that an external API reversed an effect it already accepted or committed.
+
+LiveKit also documents duplicate-call policies: `allow`, `reject`, `replace`, and `confirm`. Duplicate detection is based on the **tool name, not its arguments**; `replace` cancels the active call before starting the replacement and requires the active tool to be cancellable.[^livekit-async-tools]
+
+That is execution control inside the agent, not business deduplication. Two calls with the same tool name may represent different operations, while two tool-call IDs may represent the same human intent. The durable boundary remains `operation_id` + idempotency key + system of record.
+
 ### Tasks and handoffs change turn ownership
 
 An `AgentTask` is a focused objective that takes control of the session until it returns a result. `TaskGroup` sequences such tasks while sharing context within the group.[^livekit-tasks]
@@ -182,10 +193,15 @@ Pipecat integrates function calling with its LLM flow, and its context aggregato
 
 Pipecat documents two useful behaviors:
 
-- with `cancel_on_interruption=True`, the documented default, the function call participates in the flow that waits for its result;
+- with `cancel_on_interruption=True`, the documented default, the function call participates in the flow that waits for its result
 - with `cancel_on_interruption=False`, the call is treated as asynchronous, the conversation can continue, and the eventual result is injected into context as a developer message that triggers another LLM inference.[^pipecat-functions]
 
 Async functions can also emit intermediate results with `is_final=False` before sending the final result.[^pipecat-functions]
+
+
+The current API adds another useful distinction. A function with `cancel_on_interruption=False` can expose `cancellable_by_llm=True`; Pipecat then advertises a matching `cancel_<name>` tool so the model can stop that call. `timeout_secs` bounds handler execution and, when it expires, the handler receives `asyncio.CancelledError`. The documentation explicitly notes that work the handler spawned into an independent task **is not cancelled with the handler**.[^pipecat-functions]
+
+So even successful handler cancellation still does not prove that a remote side effect was cancelled. The contract with the external API or worker must establish the actual outcome.
 
 That is a useful primitive for experiences such as “I’m still checking.” It does not make the underlying side effect durable, idempotent, or compensable.
 
@@ -201,19 +217,19 @@ Direct SDKs and protocols let you define exactly the boundaries your product nee
 
 Beyond transport, media, buffering, turn-taking, and cancellation from the earlier chapters, a vanilla implementation must own here:
 
-- tool registry and schemas;
-- validation, authorization, and confirmations;
-- provider-call → business-operation mapping;
-- durable state machine;
-- idempotency keys;
-- timeouts, retries, and retry budgets;
-- bounded concurrency and backpressure;
-- cancellation and compensation;
-- late-result correlation;
-- crash persistence and recovery;
-- handoff/session migration;
-- tracing, audit log, and replay;
-- race and partial-failure tests;
+- tool registry and schemas
+- validation, authorization, and confirmations
+- provider-call → business-operation mapping
+- durable state machine
+- idempotency keys
+- timeouts, retries, and retry budgets
+- bounded concurrency and backpressure
+- cancellation and compensation
+- late-result correlation
+- crash persistence and recovery
+- handoff/session migration
+- tracing, audit log, and replay
+- race and partial-failure tests
 - workers, queues, and scaling for long-running actions.
 
 Fewer framework layers can mean more control. **They do not mean less system to build.**
@@ -393,16 +409,16 @@ When they are mixed together, the agent can sound confident while its internal s
 
 For each tool class, capture distributions and rates rather than only an average:
 
-- admission latency;
-- time to commit or result;
-- timeout and retry rates;
-- duplicate-suppression rate;
-- operations left in `UNKNOWN`;
-- late results after turn changes;
-- cancellation requested vs cancellation confirmed;
-- compensations;
-- handoffs with pending operations;
-- reconciliation failures;
+- admission latency
+- time to commit or result
+- timeout and retry rates
+- duplicate-suppression rate
+- operations left in `UNKNOWN`
+- late results after turn changes
+- cancellation requested vs cancellation confirmed
+- compensations
+- handoffs with pending operations
+- reconciliation failures
 - time from commit to audible acknowledgement.
 
 Do not compare different runtimes under different workloads, providers, or policies and label the delta “framework overhead.” To attribute overhead, hold hardware, network, provider/model, external action, load, turn-taking policy, and persistence strategy constant.
