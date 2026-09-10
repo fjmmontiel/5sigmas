@@ -1,0 +1,187 @@
+name: GOLDEN Coding Agents 2.4 milestone v4
+
+on:
+  push:
+    branches:
+      - series/coding-agents-agent-harnesses-golden
+    paths:
+      - '.github/workflows/golden-coding-agents-ch4-milestone-v4.yml'
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  certify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: series/coding-agents-agent-harnesses-golden
+          fetch-depth: 0
+
+      - name: Remove active-article editorial review signal
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+
+          def replace_once(path, old, new):
+              p = Path(path)
+              text = p.read_text(encoding='utf-8')
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f'{path}: expected exactly one target, found {count}')
+              p.write_text(text.replace(old, new, 1), encoding='utf-8')
+
+          replace_once(
+              'docs/series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries.md',
+              '''Conviene poder inventariar:\n\n- approvals persistentes activos;\n- quién los creó y cuándo;\n- scope exacto;\n- último uso;\n- owner;\n- fecha o condición de expiración;\n- mecanismo de revocación.''',
+              '''El inventario debería registrar los approvals persistentes activos, quién creó cada uno y cuándo, su scope exacto, el último uso, su owner, la fecha o condición de expiración y el mecanismo de revocación.'''
+          )
+          replace_once(
+              'locales/en/series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries.md',
+              '''A useful inventory includes:\n\n- active persistent approvals\n- who created each approval and when\n- exact scope\n- last use\n- owner\n- expiry date or expiry condition\n- revocation mechanism''',
+              '''A useful inventory records active persistent approvals, who created each one and when, its exact scope, last use, owner, expiry date or condition, and revocation mechanism.'''
+          )
+          PY
+          git diff --check
+          git config user.name '5sigmas GOLDEN orchestrator'
+          git config user.email '162696664+fjmmontiel@users.noreply.github.com'
+          git add docs/series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries.md locales/en/series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries.md
+          git commit -m 'polish(coding-agents): remove chapter 2.4 editorial review signal'
+          git push origin HEAD:series/coding-agents-agent-harnesses-golden
+          git rev-parse HEAD | tee /tmp/certified-head.txt
+          test -z "$(git status --porcelain)"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Source and active-article editorial gates
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/validate_coding_agent_harness_ch1_source.mjs
+          node scripts/validate_coding_agent_harness_ch2_source.mjs
+          node scripts/validate_coding_agent_harness_ch3_source.mjs
+          node scripts/validate_coding_agent_harness_ch4_source.mjs
+          mkdir -p artifacts/english-editorial-quality
+          python scripts/audit_english_editorial_quality.py --strict --json artifacts/english-editorial-quality/markdown-report.json | tee /tmp/editorial.log
+          if grep -E 'REVIEW .*series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries\.md' /tmp/editorial.log; then
+            echo 'Active article still has editorial review signals'
+            exit 1
+          fi
+          python scripts/audit_english_ordered_list_quality.py --strict --json artifacts/english-editorial-quality/ordered-list-report.json
+          python scripts/audit_english_html_editorial_quality.py --strict --json artifacts/english-editorial-quality/html-report.json
+
+      - name: Strict Spanish build
+        run: mkdocs build --clean --strict
+
+      - name: Strict English build and parity
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/prepare_locale.py --locale en
+          S5_LOCALE=en mkdocs build -f mkdocs.en.yml --clean --strict
+          python scripts/audit_english_full_parity.py
+
+      - name: Restore reviewed English TTC media
+        id: en-ttc-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: .localized-media/en/ttc-v1
+          key: s5-en-ttc-4e6238a7dffc03643b48e08f7c579fb7d710217a827720113e7477c633be0f33
+
+      - name: Seed reviewed English TTC media
+        if: steps.en-ttc-cache.outputs.cache-hit != 'true'
+        uses: actions/download-artifact@v4
+        with:
+          name: english-ttc-reviewed-seed
+          path: .localized-media/en/ttc-v1
+          run-id: 31689108864
+          github-token: ${{ github.token }}
+
+      - name: Stage reviewed English TTC media
+        shell: bash
+        run: |
+          set -euo pipefail
+          media='.localized-media/en/ttc-v1'
+          echo '4e6238a7dffc03643b48e08f7c579fb7d710217a827720113e7477c633be0f33  .localized-media/en/ttc-v1/03-test-time-compute.mp4' | sha256sum -c -
+          echo '60cee7a788f546bb58e56e5008ca21c7efd9317b9b84c059a9427465d6e40f50  .localized-media/en/ttc-v1/03-test-time-compute.jpg' | sha256sum -c -
+          target='site/en/series/modelos-razonadores'
+          mkdir -p "$target"
+          cp "$media/03-test-time-compute.mp4" "$target/03-test-time-compute.mp4"
+          cp "$media/03-test-time-compute.jpg" "$target/03-test-time-compute.jpg"
+
+      - name: Localize generated public URLs for preview QA
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          for root in [Path('site/videos')]:
+              for target in [root / 'catalog.json', *root.rglob('*.html')]:
+                  if target.is_file():
+                      text = target.read_text(encoding='utf-8')
+                      target.write_text(text.replace('https://5sigmas.com/', '/'), encoding='utf-8')
+          PY
+
+      - name: Serve preview
+        shell: bash
+        run: |
+          python -m http.server 8000 --directory site > /tmp/5sigmas-ch4-preview.log 2>&1 &
+          for attempt in {1..30}; do
+            curl --fail --silent http://127.0.0.1:8000/ >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/5sigmas-ch4-preview.log
+          exit 1
+
+      - name: Resource, locale, navigation and browser gates
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/audit_browser_resources.mjs
+          node scripts/validate_english_series_mirror.mjs
+          node scripts/validate_locale_switching.mjs
+          node scripts/validate_coding_agent_harness_ch1_locale_navigation.mjs
+          node scripts/validate_direct_reader_navigation.mjs
+          node scripts/validate_coding_agent_harness_ch1_accessibility.mjs
+          node scripts/validate_coding_agent_harness_ch2_accessibility.mjs
+          node scripts/validate_coding_agent_harness_ch3_accessibility.mjs
+          node scripts/validate_coding_agent_harness_ch4_accessibility.mjs
+
+      - name: Record certification evidence
+        if: always()
+        shell: bash
+        run: |
+          mkdir -p artifacts/golden-ch4
+          cp /tmp/certified-head.txt artifacts/golden-ch4/certified-head.txt 2>/dev/null || true
+          git status --short > artifacts/golden-ch4/git-status.txt
+          git rev-parse HEAD > artifacts/golden-ch4/worktree-head.txt
+          git diff --check > artifacts/golden-ch4/diff-check.txt 2>&1 || true
+          cp -R artifacts/visual-review artifacts/golden-ch4/visual-review 2>/dev/null || true
+          cp -R artifacts/english-editorial-quality artifacts/golden-ch4/english-editorial-quality 2>/dev/null || true
+
+      - name: Upload milestone evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: golden-coding-agents-ch4-evidence-v4
+          path: artifacts/golden-ch4/
+          if-no-files-found: error
+          retention-days: 2
