@@ -1,6 +1,6 @@
 {
   "source": "snippets/articulos-tecnicos/voice-action-lifecycle.html",
-  "source_blob_sha": "eb318369aa0e259c996d1fe74673801809a9a9ee",
+  "source_blob_sha": "c522b3508d521d3eea29ae36da53adc316334b35",
   "replacements": {
     "Timeline y máquina de estados que separan barge-in, audio y efectos externos": "Timeline and state machine separating barge-in, audio, and external effects",
     "Conversación ≠ efecto": "Conversation ≠ effect",
