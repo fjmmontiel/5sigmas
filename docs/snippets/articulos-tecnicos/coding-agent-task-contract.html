@@ -1,0 +1,16 @@
+<section class="s5v s5v-arch-map s5v-coding-agent-task-contract s5v--wide" data-step="1" aria-label="Flujo entre petición, contrato de tarea, plan revisable, verificación y cierre de un coding agent">
+  <div class="s5v__canvas">
+    <header class="s5v__head"><div><span class="s5v__kicker">Contrato estable · estrategia revisable</span><h3>Replanificar no cambia qué significa terminar</h3></div><p>La spec fija objetivo, scope y aceptación. El plan puede cambiar cuando una observación invalida una hipótesis.</p></header>
+    <div class="s5v-arch-map__panels">
+      <div data-panel="1" class="s5v-arch-map__pipe">
+        <span>Petición + reglas<br><small>intención · policy del repo</small></span>
+        <span>Contrato vN<br><small>goal · scope · acceptance · stop</small></span>
+        <span>Plan / grafo vM<br><small>dependencias · hipótesis</small></span>
+        <span>Ejecutar + observar<br><small>si cambia la evidencia → replan</small></span>
+        <span>Verificar + checkpoint<br><small>estado · inputs · verification_head_sha</small></span>
+        <span>Done / handback<br><small>evidencia completa o decisión pendiente</small></span>
+      </div>
+    </div>
+    <div class="s5v__copy"><strong>Replan</strong> cambia la estrategia manteniendo el contrato. <strong>Enmienda</strong> cambia qué resultado está autorizado y obliga a revalidar la evidencia afectada. Un checkpoint sólo demuestra continuidad si declara qué estado captura y a qué revisión pertenece.</div>
+  </div>
+</section>
