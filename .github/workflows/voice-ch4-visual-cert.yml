@@ -1,6 +1,6 @@
 name: Voice ch4 relationship-first certification
 
-# Recertification after manual pixel review: locale leakage + SVG label clipping fixed.
+# Final recertification after current Pipecat timeout semantics were narrowed against upstream main.
 on:
   push:
     branches:
