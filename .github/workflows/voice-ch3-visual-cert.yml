@@ -1,6 +1,6 @@
 name: Voice ch3 visual pedagogy certification
 
-# Certification revision 2: English canonical-mirror identity token fixed.
+# Certification revision 3: pixel-review spacing correction for the critical-path annotation.
 on:
   push:
     branches:
