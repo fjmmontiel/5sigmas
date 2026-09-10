@@ -14,11 +14,13 @@ const cases = [
     locale: 'es',
     route: '/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas/',
     tableHeader: 'Necesidad',
+    systemOfRecord: 'sistema de registro',
   },
   {
     locale: 'en',
     route: '/en/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas/',
     tableHeader: 'Need',
+    systemOfRecord: 'system of record',
   },
 ];
 const viewports = [
@@ -48,40 +50,130 @@ try {
       const h1 = (await page.locator('main h1').first().innerText()).trim();
       check(h1.length >= 20, `${testCase.route}: ${viewport.name} missing article h1`);
 
-      const visual = page.locator('.s5v-action-lifecycle');
-      check((await visual.count()) === 1, `${testCase.route}: ${viewport.name} expected exactly one action lifecycle visual`);
+      const visual = page.locator('.s5v-action-state-machine');
+      check((await visual.count()) === 1, `${testCase.route}: ${viewport.name} expected exactly one relationship-first action state machine`);
       if (await visual.count()) {
         const label = (await visual.getAttribute('aria-label'))?.trim() || '';
-        check(label.length >= 20, `${testCase.route}: ${viewport.name} action visual missing meaningful aria-label`);
-        const cards = visual.locator('.s5v-arch-map__pipe > span');
-        check((await cards.count()) === 4, `${testCase.route}: ${viewport.name} expected four action-boundary cards`);
+        check(label.length >= 30, `${testCase.route}: ${viewport.name} action visual missing meaningful aria-label`);
+        check((await visual.locator('.s5v-arch-map__pipe').count()) === 0, `${testCase.route}: ${viewport.name} legacy card pipe returned`);
+        check((await visual.locator('[data-s5v-stepper], .s5v__steps--tabs').count()) === 0, `${testCase.route}: ${viewport.name} cosmetic tabs/stepper returned`);
+
         const visualBox = await visual.boundingBox();
         check(Boolean(visualBox && visualBox.width <= viewport.width + 1), `${testCase.route}: ${viewport.name} visual exceeds viewport (${JSON.stringify(visualBox)})`);
-        for (let index = 0; index < await cards.count(); index += 1) {
-          const box = await cards.nth(index).boundingBox();
-          check(Boolean(box && box.width >= (viewport.name === 'mobile' ? 180 : 70)), `${testCase.route}: ${viewport.name} action card ${index + 1} collapsed (${JSON.stringify(box)})`);
-          check(Boolean(box && box.height <= 180), `${testCase.route}: ${viewport.name} action card ${index + 1} wraps pathologically (${JSON.stringify(box)})`);
-        }
-        const copy = (await visual.locator('.s5v__copy').innerText()).trim();
-        check(copy.includes('UNKNOWN'), `${testCase.route}: ${viewport.name} UNKNOWN reconciliation missing from visual`);
-        check(copy.includes('cancel speech'), `${testCase.route}: ${viewport.name} cancellation boundary missing from visual`);
-        if (testCase.locale === 'en') {
-          const bodyText = await visual.innerText();
-          for (const token of ['Estado y efectos', 'Separa lo que el agente dice', 'Tool solicitada', 'Acción admitida', 'Resultado externo', 'Resultado observado', 'consulta el sistema de registro']) {
-            check(!bodyText.includes(token), `${testCase.route}: ${viewport.name} untranslated visual token ${JSON.stringify(token)}`);
+
+        const scroll = visual.locator('.s5v-action-state-machine__scroll');
+        const svg = visual.locator('.s5v-action-state-machine__svg');
+        check((await scroll.count()) === 1 && (await svg.count()) === 1, `${testCase.route}: ${viewport.name} relationship canvas missing`);
+
+        if ((await scroll.count()) && (await svg.count())) {
+          const scrollState = await scroll.evaluate((node) => ({
+            tabIndex: node.tabIndex,
+            scrollWidth: node.scrollWidth,
+            clientWidth: node.clientWidth,
+            scrollLeft: node.scrollLeft,
+          }));
+          check(scrollState.tabIndex >= 0, `${testCase.route}: ${viewport.name} timeline is not keyboard-focusable`);
+          check(scrollState.scrollWidth >= scrollState.clientWidth, `${testCase.route}: ${viewport.name} invalid scroll geometry ${JSON.stringify(scrollState)}`);
+          if (viewport.name === 'mobile') {
+            check(scrollState.scrollWidth > scrollState.clientWidth + 400, `${testCase.route}: mobile state machine collapsed instead of preserving topology ${JSON.stringify(scrollState)}`);
           }
-          check(bodyText.includes('system of record'), `${testCase.route}: ${viewport.name} English system-of-record wording missing`);
+
+          const getBox = async (selector) => {
+            const locator = visual.locator(selector);
+            if ((await locator.count()) !== 1) {
+              failures.push(`${testCase.route}: ${viewport.name} expected one ${selector}, found ${await locator.count()}`);
+              return null;
+            }
+            return locator.boundingBox();
+          };
+          const centerX = (b) => b.x + b.width / 2;
+          const centerY = (b) => b.y + b.height / 2;
+
+          const barge = await getBox('[data-action-boundary="barge-in"]');
+          const agentAudio = await getBox('[data-action-track="agent-audio"]');
+          const operation = await getBox('[data-action-track="operation-running"]');
+          const newTurn = await getBox('[data-action-event="new-turn"]');
+          const admitted = await getBox('[data-action-event="action-admitted"]');
+          const externalOutcome = await getBox('[data-action-event="external-outcome"]');
+          const committed = await getBox('[data-action-outcome="committed"]');
+          const failed = await getBox('[data-action-outcome="failed"]');
+          const unknown = await getBox('[data-action-outcome="unknown"]');
+          const unknownToReconcile = await getBox('[data-action-path="unknown-to-reconcile"]');
+          const reconcile = await getBox('[data-action-event="reconcile"]');
+          const effectExists = await getBox('[data-action-reconcile="effect-exists"]');
+          const noEffect = await getBox('[data-action-reconcile="no-effect"]');
+
+          if (barge && agentAudio && operation && newTurn && admitted && externalOutcome) {
+            const bx = centerX(barge);
+            check(agentAudio.x < bx - 80 && agentAudio.x + agentAudio.width <= bx + 15, `${testCase.route}: ${viewport.name} agent audio must end at barge-in (${JSON.stringify({ agentAudio, barge })})`);
+            check(operation.x < bx - 80 && operation.x + operation.width > bx + 150, `${testCase.route}: ${viewport.name} durable operation must visibly cross barge-in (${JSON.stringify({ operation, barge })})`);
+            check(centerX(admitted) < bx - 50, `${testCase.route}: ${viewport.name} action must be admitted before barge-in`);
+            check(centerX(newTurn) > bx + 30, `${testCase.route}: ${viewport.name} new conversational turn must begin after barge-in`);
+            check(centerX(externalOutcome) > bx + 150, `${testCase.route}: ${viewport.name} external outcome must occur after barge-in`);
+          }
+
+          if (committed && failed && unknown) {
+            const ys = { committed: centerY(committed), failed: centerY(failed), unknown: centerY(unknown) };
+            check(ys.committed + 35 < ys.failed && ys.failed + 35 < ys.unknown, `${testCase.route}: ${viewport.name} COMMITTED/FAILED/UNKNOWN are not topologically distinct branches (${JSON.stringify(ys)})`);
+            check(committed.width > 30 && failed.width > 30 && unknown.width > 30, `${testCase.route}: ${viewport.name} outcome branches collapsed`);
+          }
+
+          if (unknown && unknownToReconcile && reconcile && effectExists && noEffect) {
+            check(centerY(reconcile) > centerY(unknown) + 35, `${testCase.route}: ${viewport.name} UNKNOWN does not descend into reconciliation`);
+            check(centerY(unknownToReconcile) > centerY(unknown), `${testCase.route}: ${viewport.name} UNKNOWN reconciliation path has no downward extent`);
+            check(effectExists.width > 50 && noEffect.height > 25, `${testCase.route}: ${viewport.name} reconciliation outcomes are not materially distinct paths`);
+          }
+
+          const animations = await visual.evaluate((node) => node.getAnimations({ subtree: true }).length);
+          check(animations === 0, `${testCase.route}: ${viewport.name} reduced-motion view still has ${animations} active animations`);
+
+          if (viewport.name === 'mobile') {
+            const endState = await scroll.evaluate((node) => {
+              const maxScroll = node.scrollWidth - node.clientWidth;
+              node.scrollLeft = maxScroll;
+              void node.offsetWidth;
+              const box = node.getBoundingClientRect();
+              const visible = (selector) => {
+                const item = node.querySelector(selector);
+                if (!item) return false;
+                const b = item.getBoundingClientRect();
+                return b.right >= box.left - 2 && b.left <= box.right + 2;
+              };
+              return {
+                maxScroll,
+                actualScroll: node.scrollLeft,
+                committedReachable: visible('[data-action-outcome="committed"]'),
+                failedReachable: visible('[data-action-outcome="failed"]'),
+                unknownReachable: visible('[data-action-outcome="unknown"]'),
+                reconcileReachable: visible('[data-action-event="reconcile"]'),
+                retryGuardReachable: visible('[data-action-reconcile="no-effect"]'),
+              };
+            });
+            check(endState.maxScroll > 400 && endState.actualScroll > 400, `${testCase.route}: mobile relationship canvas horizontal scroll is inert (${JSON.stringify(endState)})`);
+            check(endState.committedReachable && endState.failedReachable && endState.unknownReachable, `${testCase.route}: mobile cannot reach all external outcome branches (${JSON.stringify(endState)})`);
+            check(endState.reconcileReachable && endState.retryGuardReachable, `${testCase.route}: mobile cannot reach UNKNOWN reconciliation/retry guard (${JSON.stringify(endState)})`);
+            await scroll.screenshot({ path: path.join(outDir, `voice-tools-ch4-${testCase.locale}-mobile-state-machine-end.png`), animations: 'disabled' });
+            await scroll.evaluate((node) => { node.scrollLeft = 0; });
+          }
         }
-        await visual.screenshot({
-          path: path.join(outDir, `voice-tools-ch4-${testCase.locale}-${viewport.name}-lifecycle.png`),
-          animations: 'disabled',
-        });
+
+        const bodyText = (await visual.innerText()).trim();
+        check(bodyText.includes('UNKNOWN'), `${testCase.route}: ${viewport.name} UNKNOWN state missing`);
+        check(bodyText.includes('operation_id'), `${testCase.route}: ${viewport.name} operation_id authority boundary missing`);
+        check(bodyText.toLowerCase().includes(testCase.systemOfRecord), `${testCase.route}: ${viewport.name} localized system-of-record reconciliation missing`);
+        if (testCase.locale === 'en') {
+          for (const token of [
+            'Conversación ≠ efecto', 'Un barge-in corta una pista', 'Qué ocurre cuando', 'Timeline desplazable',
+            'Reserva a las 21:00', 'Mejor a las 21:30', 'el turno ya cambió', 'Audio agente', 'audio cancelado',
+            'Operación durable', 'cruza el barge-in', 'la operación no retrocede', 'respuesta externa',
+            'Consultar sistema de registro', 'persistir verdad', 'retry sólo si', 'Regla de producción',
+          ]) check(!bodyText.includes(token), `${testCase.route}: ${viewport.name} untranslated visual token ${JSON.stringify(token)}`);
+        }
+
+        await visual.screenshot({ path: path.join(outDir, `voice-tools-ch4-${testCase.locale}-${viewport.name}-state-machine.png`), animations: 'disabled' });
       }
 
-      const documentOverflow = await page.evaluate(() => ({
-        scrollWidth: document.documentElement.scrollWidth,
-        clientWidth: document.documentElement.clientWidth,
-      }));
+      const documentOverflow = await page.evaluate(() => ({ scrollWidth: document.documentElement.scrollWidth, clientWidth: document.documentElement.clientWidth }));
       check(documentOverflow.scrollWidth <= documentOverflow.clientWidth + 1, `${testCase.route}: ${viewport.name} horizontal page overflow ${JSON.stringify(documentOverflow)}`);
 
       const runtimeTable = page.locator('main table').filter({ hasText: testCase.tableHeader }).last();
@@ -110,13 +202,7 @@ try {
           void scroller.offsetWidth;
           const scrollerBox = scroller.getBoundingClientRect();
           const lastBox = lastHeader.getBoundingClientRect();
-          return {
-            hasLastHeader: true,
-            hasScroller: true,
-            maxScroll,
-            actualScroll: scroller.scrollLeft,
-            lastColumnReachable: lastBox.left >= scrollerBox.left - 2 && lastBox.right <= scrollerBox.right + 2,
-          };
+          return { hasLastHeader: true, hasScroller: true, maxScroll, actualScroll: scroller.scrollLeft, lastColumnReachable: lastBox.left >= scrollerBox.left - 2 && lastBox.right <= scrollerBox.right + 2 };
         }, { viewportName: viewport.name, marker: `${testCase.locale}-${viewport.name}` });
         check(tableState.hasLastHeader === true, `${testCase.route}: ${viewport.name} runtime table last header missing`);
         if (viewport.name === 'desktop') {
@@ -126,21 +212,12 @@ try {
           check(Number(tableState.maxScroll) > 20 && Number(tableState.actualScroll) > 20, `${testCase.route}: mobile runtime matrix horizontal scroll is inert (${JSON.stringify(tableState)})`);
           check(tableState.lastColumnReachable === true, `${testCase.route}: mobile runtime matrix final column is not reachable (${JSON.stringify(tableState)})`);
           const scroller = page.locator(`[data-s5-ch4-tools-scroller="${testCase.locale}-${viewport.name}"]`);
-          if (await scroller.count()) {
-            await scroller.screenshot({
-              path: path.join(outDir, `voice-tools-ch4-${testCase.locale}-mobile-runtime-table-end.png`),
-              animations: 'disabled',
-            });
-          }
+          if (await scroller.count()) await scroller.screenshot({ path: path.join(outDir, `voice-tools-ch4-${testCase.locale}-mobile-runtime-table-end.png`), animations: 'disabled' });
         }
       }
 
       for (const error of runtimeErrors) failures.push(`${testCase.route}: ${viewport.name} runtime error: ${error}`);
-      await page.screenshot({
-        path: path.join(outDir, `voice-tools-ch4-${testCase.locale}-${viewport.name}-page.png`),
-        fullPage: true,
-        animations: 'disabled',
-      });
+      await page.screenshot({ path: path.join(outDir, `voice-tools-ch4-${testCase.locale}-${viewport.name}-page.png`), fullPage: true, animations: 'disabled' });
       await context.close();
     }
   }
@@ -149,9 +226,9 @@ try {
 }
 
 if (failures.length) {
-  console.error(`Voice tools/state chapter browser/accessibility QA failed (${failures.length}):`);
+  console.error(`Voice tools/state chapter relationship-first browser/accessibility QA failed (${failures.length}):`);
   for (const failure of failures) console.error(`- ${failure}`);
   process.exit(1);
 }
 
-console.log('Voice tools/state chapter browser/accessibility QA PASS: ES/EN route language, localized action-lifecycle visual, desktop/mobile geometry, reduced-motion context, runtime-matrix reachability, whole-page overflow, runtime errors and review screenshots are valid.');
+console.log('Voice tools/state chapter relationship-first browser/accessibility QA PASS: ES/EN state-machine topology, barge-in/audio-vs-operation geometry, UNKNOWN reconciliation, mobile reachability, reduced-motion, runtime-matrix reachability, whole-page overflow and runtime errors are valid.');
