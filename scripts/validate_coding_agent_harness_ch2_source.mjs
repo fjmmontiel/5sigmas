@@ -92,6 +92,19 @@ check(en.includes('“working tree clean” is a specific Git property, not proo
 check(es.includes('un “merge limpio” tampoco demuestra compatibilidad semántica'), 'ES: clean-merge caveat missing');
 check(en.includes('a clean merge is not proof of semantic compatibility either'), 'EN: clean-merge caveat missing');
 
+check(
+  es.includes('refs/bisect') && es.includes('refs/worktree') && es.includes('refs/rewritten') &&
+  es.includes('“la mayoría”, no “todas”'),
+  'ES: linked-worktree shared-vs-per-worktree ref semantics missing',
+);
+check(
+  en.includes('refs/bisect') && en.includes('refs/worktree') && en.includes('refs/rewritten') &&
+  en.includes('“most,” not “all.”'),
+  'EN: linked-worktree shared-vs-per-worktree ref semantics missing',
+);
+check(!es.includes('Git object store / refs compartidos'), 'ES: stale all-refs-shared shorthand remains');
+check(!en.includes('shared Git object store / refs'), 'EN: stale all-refs-shared shorthand remains');
+
 for (const text of [es, en]) {
   check(text.includes('preexisting_changes') && text.includes('agent_changes') && text.includes('external_changes_during_run'), 'Dirty-state ownership model incomplete');
   check(text.includes('test_t1') && text.includes('test_t2') && text.includes('/tmp/t1') && text.includes('/tmp/t2'), 'Parallel-agent worked example incomplete');
