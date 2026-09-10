@@ -74,6 +74,27 @@ const assertTranslatedPair = async ({ es, en }) => {
   assertSitemapPair(es, en);
 };
 
+const assertSeriesHub = async ({ route, voiceRoute, title }) => {
+  const response = await page.goto(`${base}${route}`, { waitUntil: 'networkidle' });
+  if (!response?.ok()) {
+    failures.push(`${route}: HTTP ${response?.status() ?? 'no response'}`);
+    return;
+  }
+  const links = await page.locator('.s5-simple-list a.s5-list-row').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('href')));
+  const body = await page.locator('body').innerText();
+  if (links.length !== 9) failures.push(`${route}: expected 9 canonical series cards, got ${links.length}`);
+  if (!links.includes(voiceRoute)) failures.push(`${route}: missing Realtime Voice Agents route ${voiceRoute}`);
+  if (!body.includes(title)) failures.push(`${route}: missing Realtime Voice Agents title ${JSON.stringify(title)}`);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.reload({ waitUntil: 'networkidle' });
+  const geometry = await page.evaluate(() => ({ viewport: document.documentElement.clientWidth, scroll: document.documentElement.scrollWidth }));
+  if (geometry.scroll > geometry.viewport + 2) failures.push(`${route}: mobile horizontal overflow ${geometry.scroll}px > ${geometry.viewport}px`);
+  await page.setViewportSize({ width: 1280, height: 900 });
+};
+
+await assertSeriesHub({ route: '/series/', voiceRoute: '/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz/', title: 'Agentes de voz en tiempo real' });
+await assertSeriesHub({ route: '/en/series/', voiceRoute: '/en/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz/', title: 'Realtime Voice Agents' });
+
 await assertTranslatedPair({ es: '/series/agentes-ia/02-anatomia-de-un-agente/', en: '/en/series/agentes-ia/02-anatomia-de-un-agente/' });
 await assertTranslatedPair({ es: '/series/agentes-ia/00_presentacion_serie/', en: '/en/series/agentes-ia/00_presentacion_serie/' });
 await assertTranslatedPair({ es: '/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz/', en: '/en/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz/' });
@@ -112,4 +133,4 @@ if (failures.length) {
   for (const failure of failures) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log('Locale-switch quality QA passed: selectors preserve translated routes, including Realtime Voice Agents, explicit localized tool slugs, XML sitemap hreflang pairs, and safe fallbacks.');
+console.log('Locale-switch quality QA passed: bilingual Series hubs expose Realtime Voice Agents, selectors preserve translated routes, XML sitemap hreflang pairs, and safe fallbacks.');
