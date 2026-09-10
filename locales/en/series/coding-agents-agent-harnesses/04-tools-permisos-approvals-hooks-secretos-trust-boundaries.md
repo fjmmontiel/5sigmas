@@ -344,7 +344,7 @@ A secret scanner that runs after `git push` can detect a leak. It cannot retroac
 
 The reverse question matters too: **with which authority does the hook run?**
 
-Claude Code documents that command hooks run with the user’s full permissions.[^claude-hooks] Project configuration adds another boundary: `permissions.allow` rules and `additionalDirectories` in `.claude/settings.json` grant capability only after workspace trust is accepted; in non-interactive `-p` mode no dialog appears and those grants remain ignored.[^claude-permissions] For hooks defined in project-subagent frontmatter, the current documentation requires workspace trust as of v2.1.218; earlier versions could run them from folders that had not been trusted.[^claude-hooks]
+Claude Code documents that command hooks run with the user’s full permissions.[^claude-hooks] Its current workspace-trust semantics also differ by configuration type: interactive sessions hold settings-file hooks until the workspace is trusted, while `claude -p` and SDK sessions treat the folder as trusted for those hooks, so hooks committed in `.claude/settings.json` can run even when the user has never approved that folder interactively.[^claude-hooks] By contrast, capability-expanding `permissions.allow` rules and `additionalDirectories` from `.claude/settings.json` remain unused in `-p`/SDK when that exact folder has not previously been trusted; no dialog appears and Claude Code emits a warning.[^claude-permissions] Project-subagent frontmatter hooks follow a stricter rule: as of v2.1.218 they require workspace trust; earlier versions could run them from untrusted folders.[^claude-hooks]
 
 That makes repository configuration part of the threat model.
 
