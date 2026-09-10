@@ -117,11 +117,13 @@ git worktree add -b agent/search   ../wt-search   main
 Conceptually, that gives you:
 
 ```text
-shared Git object store / refs
+shared Git object store + most refs/metadata
         │
         ├── wt-payments/  HEAD=agent/payments  own index  own files
         └── wt-search/    HEAD=agent/search    own index  own files
 ```
+
+Git generally shares refs under `refs/`, but there are per-worktree exceptions (`refs/bisect`, `refs/worktree`, `refs/rewritten`), while pseudorefs such as `HEAD` are specific to each worktree.[^git-worktree] That is why the diagram says “most,” not “all.”
 
 This prevents an important class of interference: two agents no longer overwrite the same `router.py` or use the same index merely because they run in parallel.
 
