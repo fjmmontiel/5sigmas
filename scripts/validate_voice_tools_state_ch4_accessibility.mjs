@@ -102,6 +102,8 @@ try {
           const reconcile = await getBox('[data-action-event="reconcile"]');
           const effectExists = await getBox('[data-action-reconcile="effect-exists"]');
           const noEffect = await getBox('[data-action-reconcile="no-effect"]');
+          const retryGuard = await getBox('[data-action-label="retry-guard"]');
+          const svgBox = await svg.boundingBox();
 
           if (barge && agentAudio && operation && newTurn && admitted && externalOutcome) {
             const bx = centerX(barge);
@@ -122,6 +124,10 @@ try {
             check(centerY(reconcile) > centerY(unknown) + 35, `${testCase.route}: ${viewport.name} UNKNOWN does not descend into reconciliation`);
             check(centerY(unknownToReconcile) > centerY(unknown), `${testCase.route}: ${viewport.name} UNKNOWN reconciliation path has no downward extent`);
             check(effectExists.width > 50 && noEffect.height > 25, `${testCase.route}: ${viewport.name} reconciliation outcomes are not materially distinct paths`);
+          }
+
+          if (retryGuard && svgBox) {
+            check(retryGuard.x >= svgBox.x && retryGuard.x + retryGuard.width <= svgBox.x + svgBox.width - 4, `${testCase.route}: ${viewport.name} retry-guard label clips outside the relationship canvas (${JSON.stringify({ retryGuard, svgBox })})`);
           }
 
           const animations = await visual.evaluate((node) => node.getAnimations({ subtree: true }).length);
@@ -146,7 +152,7 @@ try {
                 failedReachable: visible('[data-action-outcome="failed"]'),
                 unknownReachable: visible('[data-action-outcome="unknown"]'),
                 reconcileReachable: visible('[data-action-event="reconcile"]'),
-                retryGuardReachable: visible('[data-action-reconcile="no-effect"]'),
+                retryGuardReachable: visible('[data-action-label="retry-guard"]'),
               };
             });
             check(endState.maxScroll > 400 && endState.actualScroll > 400, `${testCase.route}: mobile relationship canvas horizontal scroll is inert (${JSON.stringify(endState)})`);
@@ -167,6 +173,7 @@ try {
             'Reserva a las 21:00', 'Mejor a las 21:30', 'el turno ya cambió', 'Audio agente', 'audio cancelado',
             'Operación durable', 'cruza el barge-in', 'la operación no retrocede', 'respuesta externa',
             'Consultar sistema de registro', 'persistir verdad', 'retry sólo si', 'Regla de producción',
+            'Si pierdes la respuesta', 'Sólo el sistema de registro',
           ]) check(!bodyText.includes(token), `${testCase.route}: ${viewport.name} untranslated visual token ${JSON.stringify(token)}`);
         }
 
@@ -231,4 +238,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Voice tools/state chapter relationship-first browser/accessibility QA PASS: ES/EN state-machine topology, barge-in/audio-vs-operation geometry, UNKNOWN reconciliation, mobile reachability, reduced-motion, runtime-matrix reachability, whole-page overflow and runtime errors are valid.');
+console.log('Voice tools/state chapter relationship-first browser/accessibility QA PASS: ES/EN state-machine topology, barge-in/audio-vs-operation geometry, UNKNOWN reconciliation, label clipping, mobile reachability, reduced-motion, runtime-matrix reachability, whole-page overflow and runtime errors are valid.');
