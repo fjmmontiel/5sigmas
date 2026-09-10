@@ -35,6 +35,7 @@ const requiredPrimaryUrls = [
   'https://docs.livekit.io/agents/logic/tasks/',
   'https://docs.livekit.io/agents/logic/agents-handoffs/',
   'https://docs.pipecat.ai/pipecat/learn/function-calling',
+  'https://github.com/pipecat-ai/pipecat/issues/5481',
   'https://platform.openai.com/docs/api-reference/realtime-client-events/conversation/item/create',
 ];
 for (const url of requiredPrimaryUrls) {
@@ -199,6 +200,8 @@ check(es.includes('cancellable_by_llm=True') && es.includes('`cancel_<name>`') &
 check(en.includes('cancellable_by_llm=True') && en.includes('`cancel_<name>`') && en.includes('`tool_call_id`') && en.includes('`timeout_secs`') && en.includes('`function_call_timeout_secs`') && en.includes('`asyncio.CancelledError`'), 'EN: current Pipecat per-tool cancellation/timeout semantics missing');
 check(es.includes('`enable_async_tool_cancellation`') && es.includes('deprecado') && es.includes('2.0.0'), 'ES: Pipecat deprecated global cancellation flag caveat missing');
 check(en.includes('`enable_async_tool_cancellation`') && en.includes('deprecated') && en.includes('2.0.0'), 'EN: Pipecat deprecated global cancellation flag caveat missing');
+check(es.includes('No lo trates hoy como una garantía absoluta') && es.includes('issue upstream #5481') && es.includes('watchdog/cancelación independiente'), 'ES: Pipecat intermediate-update timeout bug caveat missing');
+check(en.includes('Do not currently treat it as an absolute guarantee') && en.includes('upstream issue #5481') && en.includes('application-owned watchdog/cancellation path'), 'EN: Pipecat intermediate-update timeout bug caveat missing');
 check(!es.includes('`cancel_async_tool_call`') && !en.includes('`cancel_async_tool_call`'), 'Stale Pipecat global cancel_async_tool_call claim detected');
 
 if (failures.length) {
