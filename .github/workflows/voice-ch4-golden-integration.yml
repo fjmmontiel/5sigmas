@@ -1,0 +1,151 @@
+name: Voice chapter 4 GOLDEN integration gate
+
+on:
+  push:
+    branches:
+      - series/realtime-voice-agents-golden
+    paths:
+      - '.github/workflows/voice-ch4-golden-integration.yml'
+
+permissions:
+  actions: read
+  contents: read
+
+concurrency:
+  group: voice-ch4-golden-integration
+  cancel-in-progress: false
+
+jobs:
+  golden:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: series/realtime-voice-agents-golden
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Validate media declarations and signatures
+        run: |
+          python scripts/prepare_video_media.py --check
+          python scripts/audit_media_magic.py
+          python scripts/test_video_schema_contract.py
+
+      - name: Validate chapter 4 source contract
+        run: node scripts/validate_voice_tools_state_ch4_source.mjs
+
+      - name: Strict Spanish build
+        run: mkdocs build --clean --strict
+
+      - name: Prepare and audit English locale sources
+        env:
+          S5_LOCALE: en
+        run: |
+          python scripts/prepare_locale.py --locale en
+          python scripts/audit_locale.py --locale en
+
+      - name: Strict English build and rendered locale audit
+        env:
+          S5_LOCALE: en
+        run: |
+          mkdocs build -f mkdocs.en.yml --clean --strict
+          python scripts/audit_locale.py --locale en --site site/en
+
+      - name: Restore reviewed English TTC media
+        id: en-ttc-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: .localized-media/en/ttc-v1
+          key: s5-en-ttc-4e6238a7dffc03643b48e08f7c579fb7d710217a827720113e7477c633be0f33
+
+      - name: Seed reviewed English TTC media from verified artifact
+        if: steps.en-ttc-cache.outputs.cache-hit != 'true'
+        uses: actions/download-artifact@v4
+        with:
+          name: english-ttc-reviewed-seed
+          path: .localized-media/en/ttc-v1
+          run-id: 31689108864
+          github-token: ${{ github.token }}
+
+      - name: Verify and stage reviewed English TTC media
+        shell: bash
+        run: |
+          set -euo pipefail
+          media='.localized-media/en/ttc-v1'
+          mp4="$media/03-test-time-compute.mp4"
+          jpg="$media/03-test-time-compute.jpg"
+          echo '4e6238a7dffc03643b48e08f7c579fb7d710217a827720113e7477c633be0f33  .localized-media/en/ttc-v1/03-test-time-compute.mp4' | sha256sum -c -
+          echo '60cee7a788f546bb58e56e5008ca21c7efd9317b9b84c059a9427465d6e40f50  .localized-media/en/ttc-v1/03-test-time-compute.jpg' | sha256sum -c -
+          test "$(stat -c %s "$mp4")" = '4337214'
+          test "$(stat -c %s "$jpg")" = '105949'
+          target='site/en/series/modelos-razonadores'
+          mkdir -p "$target"
+          cp "$mp4" "$target/03-test-time-compute.mp4"
+          cp "$jpg" "$target/03-test-time-compute.jpg"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Serve combined preview
+        run: |
+          python -m http.server 8000 --directory site > /tmp/5sigmas-preview.log 2>&1 &
+          echo $! > /tmp/5sigmas-preview.pid
+          for attempt in {1..30}; do
+            curl --fail --silent http://127.0.0.1:8000/en/ > /dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/5sigmas-preview.log
+          exit 1
+
+      - name: Browser resource and broken-media audit
+        run: node scripts/audit_browser_resources.mjs
+
+      - name: Locale and mirror browser gates
+        run: |
+          node scripts/validate_english_locale.mjs
+          node scripts/validate_english_home_parity.mjs
+
+      - name: Chapter 1 regression gate
+        run: |
+          node scripts/validate_voice_architecture_ch1.mjs
+          node scripts/validate_voice_architecture_ch1_accessibility.mjs
+
+      - name: Chapter 2 regression gate
+        run: |
+          node scripts/validate_voice_turn_taking_ch2_source.mjs
+          node scripts/validate_voice_turn_taking_ch2_accessibility.mjs
+
+      - name: Chapter 3 regression gate
+        run: |
+          node scripts/validate_voice_latency_ch3_source.mjs
+          node scripts/validate_voice_latency_ch3_accessibility.mjs
+
+      - name: Chapter 4 browser/accessibility gate
+        run: node scripts/validate_voice_tools_state_ch4_accessibility.mjs
+
+      - name: Reader navigation gate
+        run: node scripts/validate_direct_reader_navigation.mjs
+
+      - name: Upload chapter 4 GOLDEN visual evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: voice-ch4-golden-visual-evidence
+          path: artifacts/visual-review/voice-tools-ch4-*.png
+          if-no-files-found: error
+          retention-days: 1
