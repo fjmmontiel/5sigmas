@@ -1,6 +1,6 @@
 {
   "source": "snippets/articulos-tecnicos/voice-turn-taking-signals.html",
-  "source_blob_sha": "311436cf3e633fd4f6f62a0ef029040a50475a34",
+  "source_blob_sha": "278fc1dc13598a30c8e5177933b757925bc43b68",
   "replacements": {
     "Separar visualmente detección acústica, decisión de turno e interrupción mostrando que ocurren en tiempos distintos y pueden producir resultados distintos.": "Visually separate acoustic detection, turn decisions, and interruption by showing that they occur at different times and can produce different outcomes.",
     "Dos timelines muestran (1) una pausa interna donde VAD cae sin cerrar el turno y (2) habla solapada donde speech_start abre una decisión que bifurca entre backchannel y barge-in.": "Two timelines show (1) an internal pause where VAD drops without closing the turn and (2) overlapping speech where speech_start opens a decision that branches between backchannel and barge-in.",
