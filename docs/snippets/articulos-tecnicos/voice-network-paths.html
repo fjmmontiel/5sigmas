@@ -1,6 +1,7 @@
-<section class="s5v s5v-arch-map s5v-network-paths s5v--wide" data-step="1" aria-label="Tres fronteras de transporte para llevar audio hasta un agente de voz">
+<section class="s5v s5v-arch-map s5v-network-paths s5v--wide" data-s5v-stepper data-s5v-steps="3" data-step="1" aria-label="Tres fronteras de transporte para llevar audio hasta un agente de voz">
   <div class="s5v__canvas">
     <header class="s5v__head"><div><span class="s5v__kicker">Red y media</span><h3>El mismo agente puede recibir audio desde tres fronteras muy distintas</h3></div><p>Señalización, transporte de media y runtime no tienen por qué pertenecer al mismo componente.</p></header>
+    <div class="s5v__steps s5v__steps--tabs"><button data-s5v-step="1">Browser · WebRTC</button><button data-s5v-step="2">PSTN · SIP/RTP</button><button data-s5v-step="3">PSTN · WSS</button></div>
     <div class="s5v-arch-map__panels">
       <div data-panel="1" class="s5v-arch-map__pipe"><span>Browser<br><small>micrófono</small></span><span>WebRTC + ICE<br><small>STUN/TURN según ruta</small></span><span>Endpoint / SFU<br><small>media realtime</small></span><span>Agent runtime<br><small>turns · modelos · tools</small></span></div>
       <div data-panel="2" class="s5v-arch-map__pipe"><span>PSTN / carrier<br><small>pierna telefónica</small></span><span>SIP + SDP<br><small>señaliza la sesión</small></span><span>RTP / SRTP<br><small>transporta el audio</small></span><span>Media endpoint<br><small>normaliza para el agente</small></span></div>
