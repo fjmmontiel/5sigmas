@@ -1,6 +1,6 @@
 {
   "source": "snippets/articulos-tecnicos/voice-turn-evidence-stack.html",
-  "source_blob_sha": "bfb7af8013be0a0d522055ff61ed0c4e09b0e825",
+  "source_blob_sha": "4e7b42ce54e7da30d57042ba0117e7935ff9a706",
   "replacements": {
     "Distinguir en un mismo turno la causa raíz, la recuperación, el primer observable dañino y el resultado final, viendo qué evidencia aporta cada capa.": "Distinguish the root cause, recovery, first harmful observable, and final outcome within one turn, while seeing what evidence each layer contributes.",
     "Un timeline causal alinea runtime, conversación, media y resultado. Un timeout interno ocurre antes del síntoma; el fallback recupera la capacidad de responder, pero el retraso aparece más tarde como primer observable dañino mientras el resultado de negocio puede seguir siendo correcto. Las cuatro capas convergen en una diagnosis multidimensional.": "A causal timeline aligns runtime, conversation, media, and outcome. An internal timeout happens before the symptom; fallback restores the ability to respond, but the delay appears later as the first harmful observable while the business outcome can still be correct. The four layers converge on a multidimensional diagnosis.",

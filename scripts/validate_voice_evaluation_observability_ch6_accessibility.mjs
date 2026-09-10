@@ -122,6 +122,10 @@ try {
           };
         }, { mobile: viewport.name === 'mobile' });
         check(scrollState.focusable === true, `${testCase.route}: ${viewport.name} graph scroller is not keyboard-focusable`);
+        if (viewport.name === 'desktop') {
+          check(scrollState.maxScroll <= 2, `${testCase.route}: desktop evidence graph still clips behind an internal horizontal scroll (${JSON.stringify(scrollState)})`);
+          check(scrollState.diagnosisReachable === true, `${testCase.route}: desktop diagnosis bundle is not fully visible without scrolling (${JSON.stringify(scrollState)})`);
+        }
         if (viewport.name === 'mobile') {
           check(scrollState.maxScroll > 300, `${testCase.route}: mobile causal graph did not preserve topology through horizontal reachability (${JSON.stringify(scrollState)})`);
           check(scrollState.actualScroll > 250, `${testCase.route}: mobile causal graph horizontal scroll is inert (${JSON.stringify(scrollState)})`);

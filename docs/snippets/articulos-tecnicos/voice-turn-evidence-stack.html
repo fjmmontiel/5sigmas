@@ -7,7 +7,7 @@ why_visual: Una tabla puede enumerar symptom/cause/recovery/outcome, pero no hac
 <section class="s5v s5v-turn-evidence-stack s5v-turn-evidence-graph s5v--wide" aria-label="Grafo causal de evidencia de un turno que separa causa raíz, recuperación, primer observable dañino y resultado">
   <style>
     .s5v-turn-evidence-graph,.s5v-turn-evidence-graph *{box-sizing:border-box}
-    .s5v-turn-evidence-graph{--ink:#07191b;--muted:#59686a;--line:rgba(7,25,27,.14);--soft:#f6f8f7;--runtime:#7255d9;--conv:#315aa8;--media:#087f8f;--outcome:#23863a;--harm:#b43d35;--recover:#ad5d00;color:var(--ink);font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;display:grid;margin:28px auto 34px;max-width:1380px}
+    .s5v-turn-evidence-graph{--ink:#07191b;--muted:#59686a;--line:rgba(7,25,27,.14);--soft:#f6f8f7;--runtime:#7255d9;--conv:#315aa8;--media:#087f8f;--outcome:#23863a;--harm:#b43d35;--recover:#ad5d00;color:var(--ink);font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;display:grid;position:relative;left:50%;width:min(1160px,calc(100vw - 180px));max-width:none;margin:28px 0 34px;transform:translateX(-50%)}
     .s5v-turn-evidence-graph__sheet{padding:30px;border:1px solid var(--line);border-radius:28px;background:linear-gradient(180deg,#fff,#fbfcfc);box-shadow:0 22px 54px rgba(18,35,39,.1);overflow:hidden}
     .s5v-turn-evidence-graph__head{display:flex;align-items:end;justify-content:space-between;gap:28px;margin-bottom:20px}
     .s5v-turn-evidence-graph__kicker{font-size:.73rem;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--runtime)}
@@ -19,7 +19,7 @@ why_visual: Una tabla puede enumerar symptom/cause/recovery/outcome, pero no hac
     .s5v-turn-evidence-graph__caption span{max-width:520px;color:var(--muted);font-size:.68rem;line-height:1.35;font-weight:700;text-align:right}
     .s5v-turn-evidence-graph__scroll{overflow-x:auto;overscroll-behavior-inline:contain;padding:2px 1px 8px;scrollbar-width:thin}
     .s5v-turn-evidence-graph__scroll:focus-visible{outline:3px solid rgba(114,85,217,.23);outline-offset:4px;border-radius:10px}
-    .s5v-turn-evidence-graph__svg{display:block;width:100%;min-width:1020px;height:auto;overflow:visible}
+    .s5v-turn-evidence-graph__svg{display:block;width:100%;min-width:0;height:auto;overflow:visible}
     .s5v-turn-evidence-graph__axis{stroke:#6f7b7d;stroke-width:1.5}
     .s5v-turn-evidence-graph__guide{stroke:#e1e6e5;stroke-width:2}
     .s5v-turn-evidence-graph__runtime{stroke:var(--runtime);fill:var(--runtime)}
@@ -42,7 +42,7 @@ why_visual: Una tabla puede enumerar symptom/cause/recovery/outcome, pero no hac
     .s5v-turn-evidence-graph__truth{margin-top:15px;display:grid;grid-template-columns:auto 1fr;gap:10px 14px;align-items:start;padding:14px 16px;border-radius:15px;background:var(--soft);border:1px solid var(--line);font-size:.73rem;line-height:1.45;color:var(--muted);font-weight:750}
     .s5v-turn-evidence-graph__truth strong{color:var(--ink)}
     .s5v-turn-evidence-graph__truth-mark{width:10px;height:10px;margin-top:4px;border-radius:999px;background:var(--harm);box-shadow:0 0 0 5px rgba(180,61,53,.1)}
-    @media(max-width:720px){.s5v-turn-evidence-graph__sheet{padding:20px 14px;border-radius:22px}.s5v-turn-evidence-graph__head{display:grid;gap:9px}.s5v-turn-evidence-graph__lead{text-align:left}.s5v-turn-evidence-graph__figure{padding:15px 10px 12px}.s5v-turn-evidence-graph__caption{display:grid;gap:6px}.s5v-turn-evidence-graph__caption span{text-align:left}.s5v-turn-evidence-graph__svg{min-width:1000px}.s5v-turn-evidence-graph__truth{grid-template-columns:1fr}.s5v-turn-evidence-graph__truth-mark{display:none}}
+    @media(max-width:720px){.s5v-turn-evidence-graph{left:auto;width:100%;max-width:100%;margin:28px auto 34px;transform:none}.s5v-turn-evidence-graph__sheet{padding:20px 14px;border-radius:22px}.s5v-turn-evidence-graph__head{display:grid;gap:9px}.s5v-turn-evidence-graph__lead{text-align:left}.s5v-turn-evidence-graph__figure{padding:15px 10px 12px}.s5v-turn-evidence-graph__caption{display:grid;gap:6px}.s5v-turn-evidence-graph__caption span{text-align:left}.s5v-turn-evidence-graph__svg{min-width:1000px}.s5v-turn-evidence-graph__truth{grid-template-columns:1fr}.s5v-turn-evidence-graph__truth-mark{display:none}}
     @media(prefers-reduced-motion:reduce){.s5v-turn-evidence-graph *{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
   </style>
 
