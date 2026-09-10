@@ -256,6 +256,12 @@ jobs:
       - name: Validate Coding Agents chapter 3 accessibility and responsive states
         run: node scripts/validate_coding_agent_harness_ch3_accessibility.mjs
 
+      - name: Validate Coding Agents chapter 4 source contract
+        run: node scripts/validate_coding_agent_harness_ch4_source.mjs
+
+      - name: Validate Coding Agents chapter 4 accessibility and responsive states
+        run: node scripts/validate_coding_agent_harness_ch4_accessibility.mjs
+
       - name: Validate complete video experience lifecycle
         run: node scripts/validate_video_experience_v2.mjs
 
