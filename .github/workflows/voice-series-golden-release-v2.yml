@@ -1,4 +1,5 @@
 name: Realtime Voice Agents SERIES GOLDEN release gate v2
+# Re-run after current primary-source freshness repair for chapter 4.
 
 on:
   push:
