@@ -1,6 +1,6 @@
 {
   "source": "snippets/articulos-tecnicos/coding-agent-harness-loop.html",
-  "source_blob_sha": "b1d289c86f3b6e31c08cb975481147783243e430",
+  "source_blob_sha": "81d67d851b148155f1a75d687be693af6f066ebd",
   "replacements": {
     "Fronteras de responsabilidad en el bucle de un coding agent": "Responsibility boundaries in a coding-agent loop",
     "Modelo ≠ harness": "Model ≠ harness",
@@ -18,7 +18,7 @@
     "proponer": "proposing",
     "</strong> y <strong>": "</strong> and <strong>",
     "actuar": "acting",
-    ". El harness decide qué contexto recibe el modelo, valida permisos, ejecuta shell/ediciones/git en un workspace, devuelve la observación al siguiente turno y conserva el estado necesario para repetir. Un test verde o un diff revisable son señales para decidir si el bucle continúa; no son propiedades del modelo por sí solo.": ". The harness decides what context the model receives, validates permissions, executes shell commands, edits, and git operations in a workspace, returns observations to the next turn, and preserves the state needed to repeat. A passing test or a reviewable diff is evidence for deciding whether the loop continues; neither is a property of the model by itself."
+    ". El harness decide qué contexto recibe el modelo, valida permisos, ejecuta shell/ediciones/git en un workspace, devuelve la observación al siguiente turno y conserva la continuidad causal y el estado necesarios para repetir. Un test verde o un diff revisable son señales para decidir si el bucle continúa; no son propiedades del modelo por sí solo.": ". The harness decides what context the model receives, validates permissions, executes shell commands, edits, and git operations in a workspace, returns observations to the next turn, and preserves the causal continuity and state needed to repeat. A passing test or a reviewable diff is evidence for deciding whether the loop continues; neither is a property of the model by itself."
   },
   "forbidden_output_tokens": [
     "Fronteras de responsabilidad",
