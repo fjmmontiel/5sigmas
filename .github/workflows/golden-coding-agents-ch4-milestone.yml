@@ -1,0 +1,187 @@
+name: GOLDEN Coding Agents 2.4 milestone
+
+on:
+  push:
+    branches:
+      - series/coding-agents-agent-harnesses-golden
+    paths:
+      - '.github/workflows/golden-coding-agents-ch4-milestone.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  certify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: series/coding-agents-agent-harnesses-golden
+          fetch-depth: 0
+
+      - name: Apply current-source correction and canonical integration
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+
+          def replace_once(path, old, new):
+              p = Path(path)
+              text = p.read_text(encoding='utf-8')
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f'{path}: expected exactly one replacement target, found {count}')
+              p.write_text(text.replace(old, new, 1), encoding='utf-8')
+
+          es = 'docs/series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries.md'
+          en = 'locales/en/series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries.md'
+          replace_once(
+              es,
+              'Claude Code documenta que los command hooks se ejecutan con los permisos completos del usuario. Su documentación además advierte una diferencia relevante de workspace trust: en sesiones `-p` o SDK no existe el diálogo interactivo de trust y los hooks incluidos en `.claude/settings.json` de un repositorio pueden ejecutarse en un folder que el usuario nunca aprobó interactivamente.[^claude-hooks]',
+              'Claude Code documenta que los command hooks se ejecutan con los permisos completos del usuario.[^claude-hooks] La configuración de proyecto añade otra frontera: las reglas `permissions.allow` y `additionalDirectories` de `.claude/settings.json` sólo otorgan capacidad después de aceptar workspace trust; en modo no interactivo con `-p` no aparece diálogo y esas concesiones permanecen ignoradas.[^claude-permissions] Para hooks definidos en el frontmatter de subagentes de proyecto, la documentación actual exige workspace trust desde v2.1.218; versiones anteriores podían ejecutarlos desde carpetas no confiadas.[^claude-hooks]'
+          )
+          replace_once(
+              en,
+              'Claude Code documents that command hooks run with the user’s full permissions. Its documentation also calls out a workspace-trust distinction: `-p` and SDK sessions do not show the interactive trust dialog, so hooks committed in a repository’s `.claude/settings.json` can run in a folder the user never approved interactively.[^claude-hooks]',
+              'Claude Code documents that command hooks run with the user’s full permissions.[^claude-hooks] Project configuration adds another boundary: `permissions.allow` rules and `additionalDirectories` in `.claude/settings.json` grant capability only after workspace trust is accepted; in non-interactive `-p` mode no dialog appears and those grants remain ignored.[^claude-permissions] For hooks defined in project-subagent frontmatter, the current documentation requires workspace trust as of v2.1.218; earlier versions could run them from folders that had not been trusted.[^claude-hooks]'
+          )
+
+          route = 'series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries.md'
+          replace_once(
+              'mkdocs.yml',
+              '          - Specs, planificación y checkpoints: series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.md\n',
+              '          - Specs, planificación y checkpoints: series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.md\n          - Tools, permisos y trust boundaries: ' + route + '\n'
+          )
+          replace_once(
+              'mkdocs.en.yml',
+              '          - Specs, planning and checkpoints: series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.md\n',
+              '          - Specs, planning and checkpoints: series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.md\n          - Tools, permissions and trust boundaries: ' + route + '\n'
+          )
+          replace_once(
+              'locales/en/manifest.yml',
+              '  - series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.md\n',
+              '  - series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.md\n  - ' + route + '\n'
+          )
+          replace_once(
+              'locales/en/manifest.yml',
+              '  - snippets/articulos-tecnicos/coding-agent-task-contract.html\n',
+              '  - snippets/articulos-tecnicos/coding-agent-task-contract.html\n  - snippets/articulos-tecnicos/coding-agent-authority-path.html\n'
+          )
+
+          replace_once(
+              '.github/workflows/pr-visual-review.yml',
+              '      - name: Validate Coding Agents chapter 3 accessibility and responsive states\n        run: node scripts/validate_coding_agent_harness_ch3_accessibility.mjs\n',
+              '      - name: Validate Coding Agents chapter 3 accessibility and responsive states\n        run: node scripts/validate_coding_agent_harness_ch3_accessibility.mjs\n\n      - name: Validate Coding Agents chapter 4 source contract\n        run: node scripts/validate_coding_agent_harness_ch4_source.mjs\n\n      - name: Validate Coding Agents chapter 4 accessibility and responsive states\n        run: node scripts/validate_coding_agent_harness_ch4_accessibility.mjs\n'
+          )
+
+          source_gate = 'scripts/validate_coding_agent_harness_ch4_source.mjs'
+          replace_once(
+              source_gate,
+              "check(en.includes('command hooks run with the user’s full permissions'), 'EN: hook privilege caveat missing');\n",
+              "check(en.includes('command hooks run with the user’s full permissions'), 'EN: hook privilege caveat missing');\ncheck(es.includes('en modo no interactivo con `-p` no aparece diálogo y esas concesiones permanecen ignoradas'), 'ES: current non-interactive workspace-trust behavior missing');\ncheck(en.includes('in non-interactive `-p` mode no dialog appears and those grants remain ignored'), 'EN: current non-interactive workspace-trust behavior missing');\ncheck(es.includes('workspace trust desde v2.1.218'), 'ES: project-subagent hook trust version boundary missing');\ncheck(en.includes('workspace trust as of v2.1.218'), 'EN: project-subagent hook trust version boundary missing');\ncheck(!es.includes('hooks incluidos en `.claude/settings.json` de un repositorio pueden ejecutarse en un folder que el usuario nunca aprobó interactivamente'), 'ES: stale project-hook trust overclaim present');\ncheck(!en.includes('hooks committed in a repository’s `.claude/settings.json` can run in a folder the user never approved interactively'), 'EN: stale project-hook trust overclaim present');\n"
+          )
+          PY
+
+          git diff --check
+          git diff -- docs/series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries.md \
+            locales/en/series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries.md \
+            mkdocs.yml mkdocs.en.yml locales/en/manifest.yml \
+            scripts/validate_coding_agent_harness_ch4_source.mjs .github/workflows/pr-visual-review.yml
+
+          git config user.name '5sigmas GOLDEN orchestrator'
+          git config user.email '162696664+fjmmontiel@users.noreply.github.com'
+          git add docs/series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries.md \
+            locales/en/series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries.md \
+            mkdocs.yml mkdocs.en.yml locales/en/manifest.yml \
+            scripts/validate_coding_agent_harness_ch4_source.mjs .github/workflows/pr-visual-review.yml
+          git commit -m 'fix(coding-agents): integrate and refresh chapter 2.4 trust boundaries'
+          git push origin HEAD:series/coding-agents-agent-harnesses-golden
+          git rev-parse HEAD | tee /tmp/certified-head.txt
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Run source and bilingual editorial gates
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/validate_coding_agent_harness_ch1_source.mjs
+          node scripts/validate_coding_agent_harness_ch2_source.mjs
+          node scripts/validate_coding_agent_harness_ch3_source.mjs
+          node scripts/validate_coding_agent_harness_ch4_source.mjs
+          python scripts/audit_english_editorial_quality.py --strict --json artifacts/english-editorial-quality/markdown-report.json
+          python scripts/audit_english_ordered_list_quality.py --strict --json artifacts/english-editorial-quality/ordered-list-report.json
+          python scripts/audit_english_html_editorial_quality.py --strict --json artifacts/english-editorial-quality/html-report.json
+
+      - name: Strict Spanish and English builds
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdocs build --clean --strict
+          python scripts/prepare_locale.py --locale en
+          S5_LOCALE=en mkdocs build -f mkdocs.en.yml --clean --strict
+          python scripts/audit_english_full_parity.py
+
+      - name: Serve preview
+        shell: bash
+        run: |
+          python -m http.server 8000 --directory site > /tmp/5sigmas-ch4-preview.log 2>&1 &
+          for attempt in {1..30}; do
+            curl --fail --silent http://127.0.0.1:8000/ >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/5sigmas-ch4-preview.log
+          exit 1
+
+      - name: Run locale, resource, navigation and chapter browser gates
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/audit_browser_resources.mjs
+          node scripts/validate_english_series_mirror.mjs
+          node scripts/validate_locale_switching.mjs
+          node scripts/validate_coding_agent_harness_ch1_locale_navigation.mjs
+          node scripts/validate_direct_reader_navigation.mjs
+          node scripts/validate_coding_agent_harness_ch1_accessibility.mjs
+          node scripts/validate_coding_agent_harness_ch2_accessibility.mjs
+          node scripts/validate_coding_agent_harness_ch3_accessibility.mjs
+          node scripts/validate_coding_agent_harness_ch4_accessibility.mjs
+
+      - name: Record certification evidence
+        if: always()
+        shell: bash
+        run: |
+          mkdir -p artifacts/golden-ch4
+          cp /tmp/certified-head.txt artifacts/golden-ch4/certified-head.txt 2>/dev/null || true
+          git status --short > artifacts/golden-ch4/git-status.txt
+          git rev-parse HEAD > artifacts/golden-ch4/worktree-head.txt
+          git diff --check > artifacts/golden-ch4/diff-check.txt 2>&1 || true
+          cp -R artifacts/visual-review artifacts/golden-ch4/visual-review 2>/dev/null || true
+          cp -R artifacts/english-editorial-quality artifacts/golden-ch4/english-editorial-quality 2>/dev/null || true
+
+      - name: Upload milestone evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: golden-coding-agents-ch4-evidence
+          path: artifacts/golden-ch4/
+          if-no-files-found: error
+          retention-days: 2
