@@ -1,0 +1,11 @@
+<section class="s5v s5v-arch-map s5v-network-paths s5v--wide" data-step="1" aria-label="Tres fronteras de transporte para llevar audio hasta un agente de voz">
+  <div class="s5v__canvas">
+    <header class="s5v__head"><div><span class="s5v__kicker">Red y media</span><h3>El mismo agente puede recibir audio desde tres fronteras muy distintas</h3></div><p>Señalización, transporte de media y runtime no tienen por qué pertenecer al mismo componente.</p></header>
+    <div class="s5v-arch-map__panels">
+      <div data-panel="1" class="s5v-arch-map__pipe"><span>Browser<br><small>micrófono</small></span><span>WebRTC + ICE<br><small>STUN/TURN según ruta</small></span><span>Endpoint / SFU<br><small>media realtime</small></span><span>Agent runtime<br><small>turns · modelos · tools</small></span></div>
+      <div data-panel="2" class="s5v-arch-map__pipe"><span>PSTN / carrier<br><small>pierna telefónica</small></span><span>SIP + SDP<br><small>señaliza la sesión</small></span><span>RTP / SRTP<br><small>transporta el audio</small></span><span>Media endpoint<br><small>normaliza para el agente</small></span></div>
+      <div data-panel="3" class="s5v-arch-map__pipe"><span>PSTN / carrier<br><small>termina SIP/RTP</small></span><span>Media gateway<br><small>contrato del carrier</small></span><span>WSS audio<br><small>p. ej. Media Streams</small></span><span>App / runtime<br><small>buffering y estado de app</small></span></div>
+    </div>
+    <div class="s5v__copy">La pregunta de arquitectura no es sólo qué protocolo aparece en el diagrama. Identifica quién posee <strong>conectividad y recovery</strong>, quién negocia <strong>codec y buffering</strong> y qué observabilidad llega al <strong>runtime del agente</strong>. Un WebSocket de carrier puede ocultar SIP/RTP a tu aplicación; un framework de agents puede no poseer la media plane que consume.</div>
+  </div>
+</section>
