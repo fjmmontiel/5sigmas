@@ -168,7 +168,6 @@ Hay una distinción importante en los handoffs. Las tools asíncronas ligadas a 
 
 Esto resuelve **ownership dentro del runtime**. No sustituye idempotency keys, durable workflow state ni reconciliación con la API externa.
 
-
 ### Cancelación y duplicados del runtime no son idempotencia de negocio
 
 Las async tools de LiveKit terminan por defecto aunque el usuario cambie de tema. Si quieres que el LLM pueda detener una llamada en curso, la tool debe optar explícitamente por `ToolFlag.CANCELLABLE`.[^livekit-async-tools] Esa cancelación actúa sobre el trabajo que controla el runtime; no demuestra que una API externa haya revertido un efecto que ya aceptó o confirmó.
@@ -198,10 +197,9 @@ Pipecat distingue dos comportamientos útiles:
 
 Las funciones asíncronas también pueden enviar resultados intermedios con `is_final=False` antes del resultado final.[^pipecat-functions]
 
-
 La API actual hace esta decisión **por tool**. Con `@tool_options(cancel_on_interruption=False, cancellable_by_llm=True, timeout_secs=...)`, una función asíncrona puede seguir conversando mientras corre y, además, permite que el modelo solicite su cancelación si deja de ser relevante. Pipecat anuncia entonces una tool `cancel_<name>` específica para esa función; `tool_call_id` sólo es necesario para seleccionar una llamada concreta cuando hay varias instancias de la misma tool en vuelo. El antiguo flag global `enable_async_tool_cancellation` está deprecado y se eliminará en 2.0.0.[^pipecat-functions]
 
-`timeout_secs` sigue siendo el límite por tool y sustituye `function_call_timeout_secs` para esa función. Si el handler supera el deadline, Pipecat lo cancela lanzando `asyncio.CancelledError`; ese deadline cubre el handler, no trabajo que el propio handler haya desacoplado en otra task.[^pipecat-functions]
+La documentación define `timeout_secs` como el deadline por tool que sustituye `function_call_timeout_secs` para esa función y cancela el handler con `asyncio.CancelledError` si excede el límite. Ese deadline cubre el handler, no trabajo que el propio handler haya desacoplado en otra task.[^pipecat-functions] **No lo trates hoy como una garantía absoluta para una tool async que emite updates intermedios.** A 10 de septiembre de 2026, el código de `LLMService` en `main` cancela el `timeout_task` cuando `result_callback` entrega cualquier resultado; el issue upstream #5481 documenta que un callback con `is_final=False` puede por ello desarmar el deadline antes del resultado final.[^pipecat-timeout-5481] Si ese límite es una frontera de reliability o safety, añade un watchdog/cancelación independiente en la aplicación y verifica la versión desplegada hasta que el comportamiento upstream quede corregido.
 
 Estas primitivas controlan la ejecución que Pipecat posee. Cancelar el handler o su llamada asíncrona no demuestra que un side effect remoto ya enviado haya sido revertido; el contrato con la API o worker externo debe establecer el resultado real.
 
@@ -441,4 +439,5 @@ LiveKit Agents y Pipecat aportan primitivas útiles en fronteras distintas. Vani
 [^livekit-tasks]: LiveKit Documentation, *Tasks and task groups*. https://docs.livekit.io/agents/logic/tasks/
 [^livekit-handoffs]: LiveKit Documentation, *Agents and handoffs*. https://docs.livekit.io/agents/logic/agents-handoffs/
 [^pipecat-functions]: Pipecat Documentation, *Function Calling*. https://docs.pipecat.ai/pipecat/learn/function-calling
+[^pipecat-timeout-5481]: Pipecat GitHub, *Per-tool timeout_secs is disarmed by an intermediate (is_final=False) result callback — hung async tools are never bounded*, issue #5481. https://github.com/pipecat-ai/pipecat/issues/5481
 [^openai-realtime-cancel]: OpenAI API Reference, *Realtime client events — response.cancel / output_audio_buffer.clear*. https://platform.openai.com/docs/api-reference/realtime-client-events/conversation/item/create
