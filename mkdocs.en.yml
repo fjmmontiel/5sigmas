@@ -193,6 +193,7 @@ nav:
           - Evaluation, observability and reliability: series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.md
       - Coding Agents & Agent Harnesses:
           - What is an agent harness?: series/coding-agents-agent-harnesses/01-que-es-agent-harness.md
+          - Repository context, workspaces and isolation: series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento.md
   - Concepts:
       - Concepts: temas/index.md
       - What is an LLM?: temas/llms.md
