@@ -117,11 +117,13 @@ git worktree add -b agent/search   ../wt-search   main
 El resultado conceptual es:
 
 ```text
-Git object store / refs compartidos
+Git object store + la mayoría de refs/metadatos compartidos
         │
         ├── wt-payments/  HEAD=agent/payments  index propio  archivos propios
         └── wt-search/    HEAD=agent/search    index propio  archivos propios
 ```
+
+Git comparte en general las refs bajo `refs/`, pero hay excepciones por worktree (`refs/bisect`, `refs/worktree`, `refs/rewritten`) y pseudorefs como `HEAD` son específicas de cada worktree.[^git-worktree] Por eso el diagrama anterior dice “la mayoría”, no “todas”.
 
 Esto evita una clase importante de interferencia: dos agentes ya no sobrescriben el mismo `router.py` ni comparten el mismo índice simplemente porque ejecutan en paralelo.
 
