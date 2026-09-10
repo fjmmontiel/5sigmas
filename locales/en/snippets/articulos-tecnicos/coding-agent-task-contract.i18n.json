@@ -19,6 +19,7 @@
     "Done / handback": "Done / handback",
     "evidencia completa o decisión pendiente": "complete evidence or pending decision",
     "cambia la estrategia manteniendo el contrato.": "changes the strategy while keeping the contract fixed.",
+    "Enmienda": "Amendment",
     "cambia qué resultado está autorizado y obliga a revalidar la evidencia afectada. Un checkpoint sólo demuestra continuidad si declara qué estado captura y a qué revisión pertenece.": "changes the authorized outcome and requires affected evidence to be revalidated. A checkpoint proves continuity only when it states what it captures and which revision it belongs to."
   },
   "forbidden_output_tokens": [
@@ -37,6 +38,7 @@
     "estado · inputs",
     "evidencia completa",
     "cambia la estrategia",
+    "Enmienda",
     "cambia qué resultado"
   ]
 }
