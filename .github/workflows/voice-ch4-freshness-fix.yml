@@ -1,0 +1,238 @@
+name: Voice chapter 4 freshness repair
+
+on:
+  push:
+    branches:
+      - series/realtime-voice-agents-golden
+    paths:
+      - '.github/workflows/voice-ch4-freshness-fix.yml'
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: voice-ch4-freshness-fix
+  cancel-in-progress: false
+
+jobs:
+  repair-and-certify:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: series/realtime-voice-agents-golden
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Repair stale Pipecat cancellation semantics and certification
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib
+
+          ES = Path('docs/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.md')
+          EN = Path('locales/en/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.md')
+          VALIDATOR = Path('scripts/validate_voice_tools_state_ch4_source.mjs')
+          REVIEW = Path('locales/en/editorial_review.voice-agents.yml')
+
+          def replace_once(path: Path, old: str, new: str, label: str):
+              text = path.read_text(encoding='utf-8')
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f'{label}: expected exactly one match, found {count}')
+              path.write_text(text.replace(old, new, 1), encoding='utf-8')
+
+          def blob_sha(path: Path) -> str:
+              data = path.read_bytes()
+              return hashlib.sha1(f'blob {len(data)}\0'.encode() + data).hexdigest()
+
+          es_old = '''La API actual hace otra distinción útil. Una función con `cancel_on_interruption=False` puede exponer `cancellable_by_llm=True`; Pipecat anuncia entonces una tool `cancel_<nombre>` para que el modelo detenga esa llamada. `timeout_secs` limita la ejecución del handler y, al expirar, el handler recibe `asyncio.CancelledError`. La propia documentación advierte que trabajo que el handler haya lanzado en una task independiente **no se cancela con él**.[^pipecat-functions]
+
+Por tanto, incluso una cancelación correcta del handler sigue sin demostrar que el side effect remoto se haya cancelado. El contrato con la API o worker externo debe decir qué ocurrió realmente.'''
+          es_new = '''La API actual expone la cancelación dirigida por el modelo de otra forma. Para funciones asíncronas (`cancel_on_interruption=False`), habilita `enable_async_tool_cancellation=True` en el servicio LLM. Cuando hay al menos una función asíncrona disponible, Pipecat añade la tool integrada `cancel_async_tool_call` y las instrucciones necesarias para que el modelo pueda cancelar una llamada asíncrona obsoleta. `timeout_secs` sigue siendo el límite por tool y sustituye `function_call_timeout_secs` para esa función.[^pipecat-functions]
+
+Estas primitivas controlan la ejecución que Pipecat posee. La documentación actual no afirma que cancelar la llamada asíncrona deshaga un side effect remoto; el contrato con la API o worker externo debe establecer el resultado real.'''
+          replace_once(ES, es_old, es_new, 'ES Pipecat cancellation freshness')
+
+          en_old = '''The current API adds another useful distinction. A function with `cancel_on_interruption=False` can expose `cancellable_by_llm=True`; Pipecat then advertises a matching `cancel_<name>` tool so the model can stop that call. `timeout_secs` bounds handler execution and, when it expires, the handler receives `asyncio.CancelledError`. The documentation explicitly notes that work the handler spawned into an independent task **is not cancelled with the handler**.[^pipecat-functions]
+
+So even successful handler cancellation still does not prove that a remote side effect was cancelled. The contract with the external API or worker must establish the actual outcome.'''
+          en_new = '''The current API exposes model-directed cancellation differently. For asynchronous functions (`cancel_on_interruption=False`), enable `enable_async_tool_cancellation=True` on the LLM service. When at least one async function is available, Pipecat adds the built-in `cancel_async_tool_call` tool and supporting system instructions so the model can cancel a stale async call. `timeout_secs` remains the per-tool timeout and overrides `function_call_timeout_secs` for that function.[^pipecat-functions]
+
+These primitives control execution Pipecat owns. The current documentation does not claim that cancelling the async call reverses a remote side effect; the contract with the external API or worker must establish the actual outcome.'''
+          replace_once(EN, en_old, en_new, 'EN Pipecat cancellation freshness')
+
+          validator_old = '''check(es.includes('`cancellable_by_llm=True`') && es.includes('`timeout_secs`') && es.includes('`asyncio.CancelledError`') && es.includes('no se cancela con él'), 'ES: current Pipecat cancellation/timeout semantics missing');
+          check(en.includes('`cancellable_by_llm=True`') && en.includes('`timeout_secs`') && en.includes('`asyncio.CancelledError`') && en.includes('is not cancelled with the handler'), 'EN: current Pipecat cancellation/timeout semantics missing');'''
+          validator_new = '''check(es.includes('`enable_async_tool_cancellation=True`') && es.includes('`cancel_async_tool_call`') && es.includes('`timeout_secs`') && es.includes('`function_call_timeout_secs`'), 'ES: current Pipecat async cancellation/timeout semantics missing');
+          check(en.includes('`enable_async_tool_cancellation=True`') && en.includes('`cancel_async_tool_call`') && en.includes('`timeout_secs`') && en.includes('`function_call_timeout_secs`'), 'EN: current Pipecat async cancellation/timeout semantics missing');
+          check(!es.includes('`cancellable_by_llm=True`') && !en.includes('`cancellable_by_llm=True`'), 'Stale Pipecat cancellable_by_llm API claim detected');
+          check(!es.includes('`cancel_<nombre>`') && !en.includes('`cancel_<name>`'), 'Stale Pipecat per-tool cancel_<name> claim detected');
+          check(!es.includes('`asyncio.CancelledError`') && !en.includes('`asyncio.CancelledError`'), 'Unsupported Pipecat timeout cancellation-mechanism claim detected');'''
+          replace_once(VALIDATOR, validator_old, validator_new, 'Pipecat source gate freshness')
+
+          review = REVIEW.read_text(encoding='utf-8')
+          review = review.replace(
+              'Pipecat cancel_on_interruption/cancellable_by_llm/timeout semantics, handler-vs-spawned-task cancellation boundary',
+              'Pipecat cancel_on_interruption/enable_async_tool_cancellation/cancel_async_tool_call/timeout semantics, runtime-cancellation-vs-business-effect boundary',
+              1,
+          )
+          review = review.replace(
+              'Pipecat handler cancellation is explicitly separated from independently spawned work.',
+              'Pipecat async-call cancellation via the built-in cancel_async_tool_call tool is explicitly separated from business-side-effect cancellation.',
+              1,
+          )
+          new_es_sha = blob_sha(ES)
+          new_en_sha = blob_sha(EN)
+          review = review.replace('spanish_blob_sha: 70bece4f60863a7c46cc9f21c69f2378c629a702', f'spanish_blob_sha: {new_es_sha}', 1)
+          review = review.replace('english_blob_sha: 283a859dd6a5140f952d10c684a667decf676e53', f'english_blob_sha: {new_en_sha}', 1)
+          if 'cancellable_by_llm' in review or 'handler-vs-spawned-task' in review:
+              raise SystemExit('Editorial certification still contains stale Pipecat API semantics')
+          REVIEW.write_text(review, encoding='utf-8')
+          print(f'ES_BLOB={new_es_sha}')
+          print(f'EN_BLOB={new_en_sha}')
+          PY
+
+      - name: Validate media declarations and signatures
+        run: |
+          python scripts/prepare_video_media.py --check
+          python scripts/audit_media_magic.py
+          python scripts/test_video_schema_contract.py
+
+      - name: Validate chapter 4 source contract
+        run: node scripts/validate_voice_tools_state_ch4_source.mjs
+
+      - name: Strict Spanish build
+        run: mkdocs build --clean --strict
+
+      - name: Prepare and audit English locale sources
+        env:
+          S5_LOCALE: en
+        run: |
+          python scripts/prepare_locale.py --locale en
+          python scripts/audit_locale.py --locale en
+
+      - name: Strict English build and rendered locale audit
+        env:
+          S5_LOCALE: en
+        run: |
+          mkdocs build -f mkdocs.en.yml --clean --strict
+          python scripts/audit_locale.py --locale en --site site/en
+
+      - name: Restore reviewed English TTC media
+        id: en-ttc-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: .localized-media/en/ttc-v1
+          key: s5-en-ttc-4e6238a7dffc03643b48e08f7c579fb7d710217a827720113e7477c633be0f33
+
+      - name: Seed reviewed English TTC media from verified artifact
+        if: steps.en-ttc-cache.outputs.cache-hit != 'true'
+        uses: actions/download-artifact@v4
+        with:
+          name: english-ttc-reviewed-seed
+          path: .localized-media/en/ttc-v1
+          run-id: 31689108864
+          github-token: ${{ github.token }}
+
+      - name: Verify and stage reviewed English TTC media
+        shell: bash
+        run: |
+          set -euo pipefail
+          media='.localized-media/en/ttc-v1'
+          mp4="$media/03-test-time-compute.mp4"
+          jpg="$media/03-test-time-compute.jpg"
+          echo '4e6238a7dffc03643b48e08f7c579fb7d710217a827720113e7477c633be0f33  .localized-media/en/ttc-v1/03-test-time-compute.mp4' | sha256sum -c -
+          echo '60cee7a788f546bb58e56e5008ca21c7efd9317b9b84c059a9427465d6e40f50  .localized-media/en/ttc-v1/03-test-time-compute.jpg' | sha256sum -c -
+          test "$(stat -c %s "$mp4")" = '4337214'
+          test "$(stat -c %s "$jpg")" = '105949'
+          target='site/en/series/modelos-razonadores'
+          mkdir -p "$target"
+          cp "$mp4" "$target/03-test-time-compute.mp4"
+          cp "$jpg" "$target/03-test-time-compute.jpg"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Serve combined preview
+        run: |
+          python -m http.server 8000 --directory site > /tmp/5sigmas-preview.log 2>&1 &
+          for attempt in {1..30}; do
+            curl --fail --silent http://127.0.0.1:8000/en/ > /dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/5sigmas-preview.log
+          exit 1
+
+      - name: Browser resource and broken-media audit
+        run: node scripts/audit_browser_resources.mjs
+
+      - name: Locale and mirror browser gates
+        run: |
+          node scripts/validate_english_locale.mjs
+          node scripts/validate_english_home_parity.mjs
+
+      - name: Chapter 1 regression gate
+        run: |
+          node scripts/validate_voice_architecture_ch1.mjs
+          node scripts/validate_voice_architecture_ch1_accessibility.mjs
+
+      - name: Chapter 2 regression gate
+        run: |
+          node scripts/validate_voice_turn_taking_ch2_source.mjs
+          node scripts/validate_voice_turn_taking_ch2_accessibility.mjs
+
+      - name: Chapter 3 regression gate
+        run: |
+          node scripts/validate_voice_latency_ch3_source.mjs
+          node scripts/validate_voice_latency_ch3_accessibility.mjs
+
+      - name: Chapter 4 browser/accessibility gate
+        run: node scripts/validate_voice_tools_state_ch4_accessibility.mjs
+
+      - name: Reader navigation gate
+        run: node scripts/validate_direct_reader_navigation.mjs
+
+      - name: Upload chapter 4 refreshed visual evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: voice-ch4-refreshed-visual-evidence
+          path: artifacts/visual-review/voice-tools-ch4-*.png
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: Persist repaired chapter 4 only after all gates pass
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add \
+            docs/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.md \
+            locales/en/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.md \
+            scripts/validate_voice_tools_state_ch4_source.mjs \
+            locales/en/editorial_review.voice-agents.yml
+          git diff --cached --check
+          git diff --cached --quiet && { echo 'No repair diff produced'; exit 1; }
+          git commit -m 'fix(voice): refresh Pipecat async cancellation semantics'
+          git push origin HEAD:series/realtime-voice-agents-golden
