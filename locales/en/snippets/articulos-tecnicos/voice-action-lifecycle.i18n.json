@@ -1,6 +1,6 @@
 {
   "source": "snippets/articulos-tecnicos/voice-action-lifecycle.html",
-  "source_blob_sha": "cf560f94cc192a7736800e44c9ff2639b7583c00",
+  "source_blob_sha": "2abc262a2397dac2dbe503fc5f1c169353e0d4b6",
   "replacements": {
     "Timeline y máquina de estados que separan barge-in, audio y efectos externos": "Timeline and state machine separating barge-in, audio, and external effects",
     "Conversación ≠ efecto": "Conversation ≠ effect",
@@ -32,6 +32,7 @@
     "la operación es segura/idempotente": "the operation is safe/idempotent",
     "Regla de producción:": "Production rule:",
     "cambia la conversación; no cambia por sí solo la verdad de": "changes the conversation; by itself it does not change the truth of",
+    "Si pierdes la respuesta después de enviar una mutación,": "If the response is lost after sending a mutation,",
     "significa «reconciliar», no «reintentar». Sólo el sistema de registro puede resolver qué efecto existe realmente.": "means \"reconcile\", not \"retry\". Only the system of record can resolve which effect actually exists."
   },
   "forbidden_output_tokens": [
@@ -65,6 +66,7 @@
     "operación es segura",
     "Regla de producción",
     "cambia la conversación",
+    "Si pierdes la respuesta",
     "significa «reconciliar»",
     "Sólo el sistema de registro"
   ]
