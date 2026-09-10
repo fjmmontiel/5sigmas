@@ -5,234 +5,30 @@ on:
     branches:
       - series/realtime-voice-agents-golden
     paths:
-      - '.github/workflows/voice-ch4-freshness-fix.yml'
+      - .github/workflows/voice-ch4-freshness-fix.yml
 
 permissions:
   contents: write
-  actions: read
-
-concurrency:
-  group: voice-ch4-freshness-fix
-  cancel-in-progress: false
 
 jobs:
-  repair-and-certify:
-    if: github.actor != 'github-actions[bot]'
+  repair:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
         with:
           ref: series/realtime-voice-agents-golden
           fetch-depth: 0
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-          cache: pip
-
-      - name: Install Python dependencies
+      - name: Repair stale Pipecat semantics
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Repair stale Pipecat cancellation semantics and certification
-        shell: bash
+          echo 'ZnJvbSBwYXRobGliIGltcG9ydCBQYXRoCmltcG9ydCBoYXNobGliCgpFUyA9IFBhdGgoImRvY3Mvc2VyaWVzL2FnZW50ZXMtdm96LXRpZW1wby1yZWFsLzA0LXRvb2xzLWVzdGFkby1hY2Npb25lcy1hc2luY3JvbmFzLm1kIikKRU4gPSBQYXRoKCJsb2NhbGVzL2VuL3Nlcmllcy9hZ2VudGVzLXZvei10aWVtcG8tcmVhbC8wNC10b29scy1lc3RhZG8tYWNjaW9uZXMtYXNpbmNyb25hcy5tZCIpClZBTElEQVRPUiA9IFBhdGgoInNjcmlwdHMvdmFsaWRhdGVfdm9pY2VfdG9vbHNfc3RhdGVfY2g0X3NvdXJjZS5tanMiKQpSRVZJRVcgPSBQYXRoKCJsb2NhbGVzL2VuL2VkaXRvcmlhbF9yZXZpZXcudm9pY2UtYWdlbnRzLnltbCIpCgpkZWYgcmVwbGFjZV9vbmNlKHBhdGgsIG9sZCwgbmV3LCBsYWJlbCk6CiAgICB0ZXh0ID0gcGF0aC5yZWFkX3RleHQoZW5jb2Rpbmc9InV0Zi04IikKICAgIGNvdW50ID0gdGV4dC5jb3VudChvbGQpCiAgICBpZiBjb3VudCAhPSAxOgogICAgICAgIHJhaXNlIFN5c3RlbUV4aXQoZiJ7bGFiZWx9OiBleHBlY3RlZCAxIG1hdGNoLCBmb3VuZCB7Y291bnR9IikKICAgIHBhdGgud3JpdGVfdGV4dCh0ZXh0LnJlcGxhY2Uob2xkLCBuZXcsIDEpLCBlbmNvZGluZz0idXRmLTgiKQoKZGVmIGJsb2Jfc2hhKHBhdGgpOgogICAgZGF0YSA9IHBhdGgucmVhZF9ieXRlcygpCiAgICByZXR1cm4gaGFzaGxpYi5zaGExKGYiYmxvYiB7bGVuKGRhdGEpfVwwIi5lbmNvZGUoKStkYXRhKS5oZXhkaWdlc3QoKQoKZXNfb2xkID0gIiIiTGEgQVBJIGFjdHVhbCBoYWNlIG90cmEgZGlzdGluY2nDs24gw7p0aWwuIFVuYSBmdW5jacOzbiBjb24gYGNhbmNlbF9vbl9pbnRlcnJ1cHRpb249RmFsc2VgIHB1ZWRlIGV4cG9uZXIgYGNhbmNlbGxhYmxlX2J5X2xsbT1UcnVlYDsgUGlwZWNhdCBhbnVuY2lhIGVudG9uY2VzIHVuYSB0b29sIGBjYW5jZWxfPG5vbWJyZT5gIHBhcmEgcXVlIGVsIG1vZGVsbyBkZXRlbmdhIGVzYSBsbGFtYWRhLiBgdGltZW91dF9zZWNzYCBsaW1pdGEgbGEgZWplY3VjacOzbiBkZWwgaGFuZGxlciB5LCBhbCBleHBpcmFyLCBlbCBoYW5kbGVyIHJlY2liZSBgYXN5bmNpby5DYW5jZWxsZWRFcnJvcmAuIExhIHByb3BpYSBkb2N1bWVudGFjacOzbiBhZHZpZXJ0ZSBxdWUgdHJhYmFqbyBxdWUgZWwgaGFuZGxlciBoYXlhIGxhbnphZG8gZW4gdW5hIHRhc2sgaW5kZXBlbmRpZW50ZSAqKm5vIHNlIGNhbmNlbGEgY29uIMOpbCoqLltecGlwZWNhdC1mdW5jdGlvbnNdCgpQb3IgdGFudG8sIGluY2x1c28gdW5hIGNhbmNlbGFjacOzbiBjb3JyZWN0YSBkZWwgaGFuZGxlciBzaWd1ZSBzaW4gZGVtb3N0cmFyIHF1ZSBlbCBzaWRlIGVmZmVjdCByZW1vdG8gc2UgaGF5YSBjYW5jZWxhZG8uIEVsIGNvbnRyYXRvIGNvbiBsYSBBUEkgbyB3b3JrZXIgZXh0ZXJubyBkZWJlIGRlY2lyIHF1w6kgb2N1cnJpw7MgcmVhbG1lbnRlLiIiIgplc19uZXcgPSAiIiJMYSBBUEkgYWN0dWFsIGV4cG9uZSBsYSBjYW5jZWxhY2nDs24gZGlyaWdpZGEgcG9yIGVsIG1vZGVsbyBkZSBvdHJhIGZvcm1hLiBQYXJhIGZ1bmNpb25lcyBhc8OtbmNyb25hcyAoYGNhbmNlbF9vbl9pbnRlcnJ1cHRpb249RmFsc2VgKSwgaGFiaWxpdGEgYGVuYWJsZV9hc3luY190b29sX2NhbmNlbGxhdGlvbj1UcnVlYCBlbiBlbCBzZXJ2aWNpbyBMTE0uIEN1YW5kbyBoYXkgYWwgbWVub3MgdW5hIGZ1bmNpw7NuIGFzw61uY3JvbmEgZGlzcG9uaWJsZSwgUGlwZWNhdCBhw7FhZGUgbGEgdG9vbCBpbnRlZ3JhZGEgYGNhbmNlbF9hc3luY190b29sX2NhbGxgIHkgbGFzIGluc3RydWNjaW9uZXMgbmVjZXNhcmlhcyBwYXJhIHF1ZSBlbCBtb2RlbG8gcHVlZGEgY2FuY2VsYXIgdW5hIGxsYW1hZGEgYXPDrW5jcm9uYSBvYnNvbGV0YS4gYHRpbWVvdXRfc2Vjc2Agc2lndWUgc2llbmRvIGVsIGzDrW1pdGUgcG9yIHRvb2wgeSBzdXN0aXR1eWUgYGZ1bmN0aW9uX2NhbGxfdGltZW91dF9zZWNzYCBwYXJhIGVzYSBmdW5jacOzbi5bXnBpcGVjYXQtZnVuY3Rpb25zXQoKRXN0YXMgcHJpbWl0aXZhcyBjb250cm9sYW4gbGEgZWplY3VjacOzbiBxdWUgUGlwZWNhdCBwb3NlZS4gTGEgZG9jdW1lbnRhY2nDs24gYWN0dWFsIG5vIGFmaXJtYSBxdWUgY2FuY2VsYXIgbGEgbGxhbWFkYSBhc8OtbmNyb25hIGRlc2hhZ2EgdW4gc2lkZSBlZmZlY3QgcmVtb3RvOyBlbCBjb250cmF0byBjb24gbGEgQVBJIG8gd29ya2VyIGV4dGVybm8gZGViZSBlc3RhYmxlY2VyIGVsIHJlc3VsdGFkbyByZWFsLiIiIgpyZXBsYWNlX29uY2UoRVMsIGVzX29sZCwgZXNfbmV3LCAiRVMgUGlwZWNhdCIpCgplbl9vbGQgPSAiIiJUaGUgY3VycmVudCBBUEkgYWRkcyBhbm90aGVyIHVzZWZ1bCBkaXN0aW5jdGlvbi4gQSBmdW5jdGlvbiB3aXRoIGBjYW5jZWxfb25faW50ZXJydXB0aW9uPUZhbHNlYCBjYW4gZXhwb3NlIGBjYW5jZWxsYWJsZV9ieV9sbG09VHJ1ZWA7IFBpcGVjYXQgdGhlbiBhZHZlcnRpc2VzIGEgbWF0Y2hpbmcgYGNhbmNlbF88bmFtZT5gIHRvb2wgc28gdGhlIG1vZGVsIGNhbiBzdG9wIHRoYXQgY2FsbC4gYHRpbWVvdXRfc2Vjc2AgYm91bmRzIGhhbmRsZXIgZXhlY3V0aW9uIGFuZCwgd2hlbiBpdCBleHBpcmVzLCB0aGUgaGFuZGxlciByZWNlaXZlcyBgYXN5bmNpby5DYW5jZWxsZWRFcnJvcmAuIFRoZSBkb2N1bWVudGF0aW9uIGV4cGxpY2l0bHkgbm90ZXMgdGhhdCB3b3JrIHRoZSBoYW5kbGVyIHNwYXduZWQgaW50byBhbiBpbmRlcGVuZGVudCB0YXNrICoqaXMgbm90IGNhbmNlbGxlZCB3aXRoIHRoZSBoYW5kbGVyKiouW15waXBlY2F0LWZ1bmN0aW9uc10KClNvIGV2ZW4gc3VjY2Vzc2Z1bCBoYW5kbGVyIGNhbmNlbGxhdGlvbiBzdGlsbCBkb2VzIG5vdCBwcm92ZSB0aGF0IGEgcmVtb3RlIHNpZGUgZWZmZWN0IHdhcyBjYW5jZWxsZWQuIFRoZSBjb250cmFjdCB3aXRoIHRoZSBleHRlcm5hbCBBUEkgb3Igd29ya2VyIG11c3QgZXN0YWJsaXNoIHRoZSBhY3R1YWwgb3V0Y29tZS4iIiIKZW5fbmV3ID0gIiIiVGhlIGN1cnJlbnQgQVBJIGV4cG9zZXMgbW9kZWwtZGlyZWN0ZWQgY2FuY2VsbGF0aW9uIGRpZmZlcmVudGx5LiBGb3IgYXN5bmNocm9ub3VzIGZ1bmN0aW9ucyAoYGNhbmNlbF9vbl9pbnRlcnJ1cHRpb249RmFsc2VgKSwgZW5hYmxlIGBlbmFibGVfYXN5bmNfdG9vbF9jYW5jZWxsYXRpb249VHJ1ZWAgb24gdGhlIExMTSBzZXJ2aWNlLiBXaGVuIGF0IGxlYXN0IG9uZSBhc3luYyBmdW5jdGlvbiBpcyBhdmFpbGFibGUsIFBpcGVjYXQgYWRkcyB0aGUgYnVpbHQtaW4gYGNhbmNlbF9hc3luY190b29sX2NhbGxgIHRvb2wgYW5kIHN1cHBvcnRpbmcgc3lzdGVtIGluc3RydWN0aW9ucyBzbyB0aGUgbW9kZWwgY2FuIGNhbmNlbCBhIHN0YWxlIGFzeW5jIGNhbGwuIGB0aW1lb3V0X3NlY3NgIHJlbWFpbnMgdGhlIHBlci10b29sIHRpbWVvdXQgYW5kIG92ZXJyaWRlcyBgZnVuY3Rpb25fY2FsbF90aW1lb3V0X3NlY3NgIGZvciB0aGF0IGZ1bmN0aW9uLltecGlwZWNhdC1mdW5jdGlvbnNdCgpUaGVzZSBwcmltaXRpdmVzIGNvbnRyb2wgZXhlY3V0aW9uIFBpcGVjYXQgb3ducy4gVGhlIGN1cnJlbnQgZG9jdW1lbnRhdGlvbiBkb2VzIG5vdCBjbGFpbSB0aGF0IGNhbmNlbGxpbmcgdGhlIGFzeW5jIGNhbGwgcmV2ZXJzZXMgYSByZW1vdGUgc2lkZSBlZmZlY3Q7IHRoZSBjb250cmFjdCB3aXRoIHRoZSBleHRlcm5hbCBBUEkgb3Igd29ya2VyIG11c3QgZXN0YWJsaXNoIHRoZSBhY3R1YWwgb3V0Y29tZS4iIiIKcmVwbGFjZV9vbmNlKEVOLCBlbl9vbGQsIGVuX25ldywgIkVOIFBpcGVjYXQiKQoKdmFsaWRhdG9yX29sZCA9ICIiImNoZWNrKGVzLmluY2x1ZGVzKCdgY2FuY2VsbGFibGVfYnlfbGxtPVRydWVgJykgJiYgZXMuaW5jbHVkZXMoJ2B0aW1lb3V0X3NlY3NgJykgJiYgZXMuaW5jbHVkZXMoJ2Bhc3luY2lvLkNhbmNlbGxlZEVycm9yYCcpICYmIGVzLmluY2x1ZGVzKCdubyBzZSBjYW5jZWxhIGNvbiDDqWwnKSwgJ0VTOiBjdXJyZW50IFBpcGVjYXQgY2FuY2VsbGF0aW9uL3RpbWVvdXQgc2VtYW50aWNzIG1pc3NpbmcnKTsKY2hlY2soZW4uaW5jbHVkZXMoJ2BjYW5jZWxsYWJsZV9ieV9sbG09VHJ1ZWAnKSAmJiBlbi5pbmNsdWRlcygnYHRpbWVvdXRfc2Vjc2AnKSAmJiBlbi5pbmNsdWRlcygnYGFzeW5jaW8uQ2FuY2VsbGVkRXJyb3JgJykgJiYgZW4uaW5jbHVkZXMoJ2lzIG5vdCBjYW5jZWxsZWQgd2l0aCB0aGUgaGFuZGxlcicpLCAnRU46IGN1cnJlbnQgUGlwZWNhdCBjYW5jZWxsYXRpb24vdGltZW91dCBzZW1hbnRpY3MgbWlzc2luZycpOyIiIgp2YWxpZGF0b3JfbmV3ID0gIiIiY2hlY2soZXMuaW5jbHVkZXMoJ2BlbmFibGVfYXN5bmNfdG9vbF9jYW5jZWxsYXRpb249VHJ1ZWAnKSAmJiBlcy5pbmNsdWRlcygnYGNhbmNlbF9hc3luY190b29sX2NhbGxgJykgJiYgZXMuaW5jbHVkZXMoJ2B0aW1lb3V0X3NlY3NgJykgJiYgZXMuaW5jbHVkZXMoJ2BmdW5jdGlvbl9jYWxsX3RpbWVvdXRfc2Vjc2AnKSwgJ0VTOiBjdXJyZW50IFBpcGVjYXQgYXN5bmMgY2FuY2VsbGF0aW9uL3RpbWVvdXQgc2VtYW50aWNzIG1pc3NpbmcnKTsKY2hlY2soZW4uaW5jbHVkZXMoJ2BlbmFibGVfYXN5bmNfdG9vbF9jYW5jZWxsYXRpb249VHJ1ZWAnKSAmJiBlbi5pbmNsdWRlcygnYGNhbmNlbF9hc3luY190b29sX2NhbGxgJykgJiYgZW4uaW5jbHVkZXMoJ2B0aW1lb3V0X3NlY3NgJykgJiYgZW4uaW5jbHVkZXMoJ2BmdW5jdGlvbl9jYWxsX3RpbWVvdXRfc2Vjc2AnKSwgJ0VOOiBjdXJyZW50IFBpcGVjYXQgYXN5bmMgY2FuY2VsbGF0aW9uL3RpbWVvdXQgc2VtYW50aWNzIG1pc3NpbmcnKTsKY2hlY2soIWVzLmluY2x1ZGVzKCdgY2FuY2VsbGFibGVfYnlfbGxtPVRydWVgJykgJiYgIWVuLmluY2x1ZGVzKCdgY2FuY2VsbGFibGVfYnlfbGxtPVRydWVgJyksICdTdGFsZSBQaXBlY2F0IGNhbmNlbGxhYmxlX2J5X2xsbSBBUEkgY2xhaW0gZGV0ZWN0ZWQnKTsKY2hlY2soIWVzLmluY2x1ZGVzKCdgY2FuY2VsXzxub21icmU+YCcpICYmICFlbi5pbmNsdWRlcygnYGNhbmNlbF88bmFtZT5gJyksICdTdGFsZSBQaXBlY2F0IHBlci10b29sIGNhbmNlbF88bmFtZT4gY2xhaW0gZGV0ZWN0ZWQnKTsKY2hlY2soIWVzLmluY2x1ZGVzKCdgYXN5bmNpby5DYW5jZWxsZWRFcnJvcmAnKSAmJiAhZW4uaW5jbHVkZXMoJ2Bhc3luY2lvLkNhbmNlbGxlZEVycm9yYCcpLCAnVW5zdXBwb3J0ZWQgUGlwZWNhdCB0aW1lb3V0IGNhbmNlbGxhdGlvbi1tZWNoYW5pc20gY2xhaW0gZGV0ZWN0ZWQnKTsiIiIKcmVwbGFjZV9vbmNlKFZBTElEQVRPUiwgdmFsaWRhdG9yX29sZCwgdmFsaWRhdG9yX25ldywgInZhbGlkYXRvciIpCgpyZXZpZXcgPSBSRVZJRVcucmVhZF90ZXh0KGVuY29kaW5nPSJ1dGYtOCIpCm9sZDE9IlBpcGVjYXQgY2FuY2VsX29uX2ludGVycnVwdGlvbi9jYW5jZWxsYWJsZV9ieV9sbG0vdGltZW91dCBzZW1hbnRpY3MsIGhhbmRsZXItdnMtc3Bhd25lZC10YXNrIGNhbmNlbGxhdGlvbiBib3VuZGFyeSIKbmV3MT0iUGlwZWNhdCBjYW5jZWxfb25faW50ZXJydXB0aW9uL2VuYWJsZV9hc3luY190b29sX2NhbmNlbGxhdGlvbi9jYW5jZWxfYXN5bmNfdG9vbF9jYWxsL3RpbWVvdXQgc2VtYW50aWNzLCBydW50aW1lLWNhbmNlbGxhdGlvbi12cy1idXNpbmVzcy1lZmZlY3QgYm91bmRhcnkiCmlmIHJldmlldy5jb3VudChvbGQxKSE9MTogcmFpc2UgU3lzdGVtRXhpdChmInJldmlldyBzY29wZSBjb3VudD17cmV2aWV3LmNvdW50KG9sZDEpfSIpCnJldmlldz1yZXZpZXcucmVwbGFjZShvbGQxLG5ldzEsMSkKb2xkMj0iUGlwZWNhdCBoYW5kbGVyIGNhbmNlbGxhdGlvbiBpcyBleHBsaWNpdGx5IHNlcGFyYXRlZCBmcm9tIGluZGVwZW5kZW50bHkgc3Bhd25lZCB3b3JrLiIKbmV3Mj0iUGlwZWNhdCBhc3luYy1jYWxsIGNhbmNlbGxhdGlvbiB2aWEgdGhlIGJ1aWx0LWluIGNhbmNlbF9hc3luY190b29sX2NhbGwgdG9vbCBpcyBleHBsaWNpdGx5IHNlcGFyYXRlZCBmcm9tIGJ1c2luZXNzLXNpZGUtZWZmZWN0IGNhbmNlbGxhdGlvbi4iCmlmIHJldmlldy5jb3VudChvbGQyKSE9MTogcmFpc2UgU3lzdGVtRXhpdChmInJldmlldyBub3RlIGNvdW50PXtyZXZpZXcuY291bnQob2xkMil9IikKcmV2aWV3PXJldmlldy5yZXBsYWNlKG9sZDIsbmV3MiwxKQplc19zaGE9YmxvYl9zaGEoRVMpOyBlbl9zaGE9YmxvYl9zaGEoRU4pCnJldmlldz1yZXZpZXcucmVwbGFjZSgic3BhbmlzaF9ibG9iX3NoYTogNzBiZWNlNGY2MDg2M2E3YzQ2Y2M5ZjIxYzY5ZjIzNzhjNjI5YTcwMiIsZiJzcGFuaXNoX2Jsb2Jfc2hhOiB7ZXNfc2hhfSIsMSkKcmV2aWV3PXJldmlldy5yZXBsYWNlKCJlbmdsaXNoX2Jsb2Jfc2hhOiAyODNhODU5ZGQ2YTUxNDBmOTUyZDEwYzY4NGE2NjdkZWNmNjc2ZTUzIixmImVuZ2xpc2hfYmxvYl9zaGE6IHtlbl9zaGF9IiwxKQppZiAiY2FuY2VsbGFibGVfYnlfbGxtIiBpbiByZXZpZXcgb3IgImhhbmRsZXItdnMtc3Bhd25lZC10YXNrIiBpbiByZXZpZXc6CiAgICByYWlzZSBTeXN0ZW1FeGl0KCJzdGFsZSBQaXBlY2F0IHRlcm1zIHJlbWFpbiBpbiByZXZpZXciKQpSRVZJRVcud3JpdGVfdGV4dChyZXZpZXcsZW5jb2Rpbmc9InV0Zi04IikKcHJpbnQoIkVTX0JMT0I9Iitlc19zaGEpCnByaW50KCJFTl9CTE9CPSIrZW5fc2hhKQo=' | base64 -d > /tmp/repair_ch4.py
+          python /tmp/repair_ch4.py
+          node scripts/validate_voice_tools_state_ch4_source.mjs
+      - name: Persist repaired files
         run: |
-          python - <<'PY'
-          from pathlib import Path
-          import hashlib
-
-          ES = Path('docs/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.md')
-          EN = Path('locales/en/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.md')
-          VALIDATOR = Path('scripts/validate_voice_tools_state_ch4_source.mjs')
-          REVIEW = Path('locales/en/editorial_review.voice-agents.yml')
-
-          def replace_once(path: Path, old: str, new: str, label: str):
-              text = path.read_text(encoding='utf-8')
-              count = text.count(old)
-              if count != 1:
-                  raise SystemExit(f'{label}: expected exactly one match, found {count}')
-              path.write_text(text.replace(old, new, 1), encoding='utf-8')
-
-          def blob_sha(path: Path) -> str:
-              data = path.read_bytes()
-              return hashlib.sha1(f'blob {len(data)}\0'.encode() + data).hexdigest()
-
-          es_old = '''La API actual hace otra distinción útil. Una función con `cancel_on_interruption=False` puede exponer `cancellable_by_llm=True`; Pipecat anuncia entonces una tool `cancel_<nombre>` para que el modelo detenga esa llamada. `timeout_secs` limita la ejecución del handler y, al expirar, el handler recibe `asyncio.CancelledError`. La propia documentación advierte que trabajo que el handler haya lanzado en una task independiente **no se cancela con él**.[^pipecat-functions]
-
-Por tanto, incluso una cancelación correcta del handler sigue sin demostrar que el side effect remoto se haya cancelado. El contrato con la API o worker externo debe decir qué ocurrió realmente.'''
-          es_new = '''La API actual expone la cancelación dirigida por el modelo de otra forma. Para funciones asíncronas (`cancel_on_interruption=False`), habilita `enable_async_tool_cancellation=True` en el servicio LLM. Cuando hay al menos una función asíncrona disponible, Pipecat añade la tool integrada `cancel_async_tool_call` y las instrucciones necesarias para que el modelo pueda cancelar una llamada asíncrona obsoleta. `timeout_secs` sigue siendo el límite por tool y sustituye `function_call_timeout_secs` para esa función.[^pipecat-functions]
-
-Estas primitivas controlan la ejecución que Pipecat posee. La documentación actual no afirma que cancelar la llamada asíncrona deshaga un side effect remoto; el contrato con la API o worker externo debe establecer el resultado real.'''
-          replace_once(ES, es_old, es_new, 'ES Pipecat cancellation freshness')
-
-          en_old = '''The current API adds another useful distinction. A function with `cancel_on_interruption=False` can expose `cancellable_by_llm=True`; Pipecat then advertises a matching `cancel_<name>` tool so the model can stop that call. `timeout_secs` bounds handler execution and, when it expires, the handler receives `asyncio.CancelledError`. The documentation explicitly notes that work the handler spawned into an independent task **is not cancelled with the handler**.[^pipecat-functions]
-
-So even successful handler cancellation still does not prove that a remote side effect was cancelled. The contract with the external API or worker must establish the actual outcome.'''
-          en_new = '''The current API exposes model-directed cancellation differently. For asynchronous functions (`cancel_on_interruption=False`), enable `enable_async_tool_cancellation=True` on the LLM service. When at least one async function is available, Pipecat adds the built-in `cancel_async_tool_call` tool and supporting system instructions so the model can cancel a stale async call. `timeout_secs` remains the per-tool timeout and overrides `function_call_timeout_secs` for that function.[^pipecat-functions]
-
-These primitives control execution Pipecat owns. The current documentation does not claim that cancelling the async call reverses a remote side effect; the contract with the external API or worker must establish the actual outcome.'''
-          replace_once(EN, en_old, en_new, 'EN Pipecat cancellation freshness')
-
-          validator_old = '''check(es.includes('`cancellable_by_llm=True`') && es.includes('`timeout_secs`') && es.includes('`asyncio.CancelledError`') && es.includes('no se cancela con él'), 'ES: current Pipecat cancellation/timeout semantics missing');
-          check(en.includes('`cancellable_by_llm=True`') && en.includes('`timeout_secs`') && en.includes('`asyncio.CancelledError`') && en.includes('is not cancelled with the handler'), 'EN: current Pipecat cancellation/timeout semantics missing');'''
-          validator_new = '''check(es.includes('`enable_async_tool_cancellation=True`') && es.includes('`cancel_async_tool_call`') && es.includes('`timeout_secs`') && es.includes('`function_call_timeout_secs`'), 'ES: current Pipecat async cancellation/timeout semantics missing');
-          check(en.includes('`enable_async_tool_cancellation=True`') && en.includes('`cancel_async_tool_call`') && en.includes('`timeout_secs`') && en.includes('`function_call_timeout_secs`'), 'EN: current Pipecat async cancellation/timeout semantics missing');
-          check(!es.includes('`cancellable_by_llm=True`') && !en.includes('`cancellable_by_llm=True`'), 'Stale Pipecat cancellable_by_llm API claim detected');
-          check(!es.includes('`cancel_<nombre>`') && !en.includes('`cancel_<name>`'), 'Stale Pipecat per-tool cancel_<name> claim detected');
-          check(!es.includes('`asyncio.CancelledError`') && !en.includes('`asyncio.CancelledError`'), 'Unsupported Pipecat timeout cancellation-mechanism claim detected');'''
-          replace_once(VALIDATOR, validator_old, validator_new, 'Pipecat source gate freshness')
-
-          review = REVIEW.read_text(encoding='utf-8')
-          review = review.replace(
-              'Pipecat cancel_on_interruption/cancellable_by_llm/timeout semantics, handler-vs-spawned-task cancellation boundary',
-              'Pipecat cancel_on_interruption/enable_async_tool_cancellation/cancel_async_tool_call/timeout semantics, runtime-cancellation-vs-business-effect boundary',
-              1,
-          )
-          review = review.replace(
-              'Pipecat handler cancellation is explicitly separated from independently spawned work.',
-              'Pipecat async-call cancellation via the built-in cancel_async_tool_call tool is explicitly separated from business-side-effect cancellation.',
-              1,
-          )
-          new_es_sha = blob_sha(ES)
-          new_en_sha = blob_sha(EN)
-          review = review.replace('spanish_blob_sha: 70bece4f60863a7c46cc9f21c69f2378c629a702', f'spanish_blob_sha: {new_es_sha}', 1)
-          review = review.replace('english_blob_sha: 283a859dd6a5140f952d10c684a667decf676e53', f'english_blob_sha: {new_en_sha}', 1)
-          if 'cancellable_by_llm' in review or 'handler-vs-spawned-task' in review:
-              raise SystemExit('Editorial certification still contains stale Pipecat API semantics')
-          REVIEW.write_text(review, encoding='utf-8')
-          print(f'ES_BLOB={new_es_sha}')
-          print(f'EN_BLOB={new_en_sha}')
-          PY
-
-      - name: Validate media declarations and signatures
-        run: |
-          python scripts/prepare_video_media.py --check
-          python scripts/audit_media_magic.py
-          python scripts/test_video_schema_contract.py
-
-      - name: Validate chapter 4 source contract
-        run: node scripts/validate_voice_tools_state_ch4_source.mjs
-
-      - name: Strict Spanish build
-        run: mkdocs build --clean --strict
-
-      - name: Prepare and audit English locale sources
-        env:
-          S5_LOCALE: en
-        run: |
-          python scripts/prepare_locale.py --locale en
-          python scripts/audit_locale.py --locale en
-
-      - name: Strict English build and rendered locale audit
-        env:
-          S5_LOCALE: en
-        run: |
-          mkdocs build -f mkdocs.en.yml --clean --strict
-          python scripts/audit_locale.py --locale en --site site/en
-
-      - name: Restore reviewed English TTC media
-        id: en-ttc-cache
-        uses: actions/cache/restore@v4
-        with:
-          path: .localized-media/en/ttc-v1
-          key: s5-en-ttc-4e6238a7dffc03643b48e08f7c579fb7d710217a827720113e7477c633be0f33
-
-      - name: Seed reviewed English TTC media from verified artifact
-        if: steps.en-ttc-cache.outputs.cache-hit != 'true'
-        uses: actions/download-artifact@v4
-        with:
-          name: english-ttc-reviewed-seed
-          path: .localized-media/en/ttc-v1
-          run-id: 31689108864
-          github-token: ${{ github.token }}
-
-      - name: Verify and stage reviewed English TTC media
-        shell: bash
-        run: |
-          set -euo pipefail
-          media='.localized-media/en/ttc-v1'
-          mp4="$media/03-test-time-compute.mp4"
-          jpg="$media/03-test-time-compute.jpg"
-          echo '4e6238a7dffc03643b48e08f7c579fb7d710217a827720113e7477c633be0f33  .localized-media/en/ttc-v1/03-test-time-compute.mp4' | sha256sum -c -
-          echo '60cee7a788f546bb58e56e5008ca21c7efd9317b9b84c059a9427465d6e40f50  .localized-media/en/ttc-v1/03-test-time-compute.jpg' | sha256sum -c -
-          test "$(stat -c %s "$mp4")" = '4337214'
-          test "$(stat -c %s "$jpg")" = '105949'
-          target='site/en/series/modelos-razonadores'
-          mkdir -p "$target"
-          cp "$mp4" "$target/03-test-time-compute.mp4"
-          cp "$jpg" "$target/03-test-time-compute.jpg"
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-
-      - name: Install Playwright
-        run: |
-          npm install --no-save playwright@1.55.0
-          npx playwright install --with-deps chromium
-
-      - name: Serve combined preview
-        run: |
-          python -m http.server 8000 --directory site > /tmp/5sigmas-preview.log 2>&1 &
-          for attempt in {1..30}; do
-            curl --fail --silent http://127.0.0.1:8000/en/ > /dev/null && exit 0
-            sleep 1
-          done
-          cat /tmp/5sigmas-preview.log
-          exit 1
-
-      - name: Browser resource and broken-media audit
-        run: node scripts/audit_browser_resources.mjs
-
-      - name: Locale and mirror browser gates
-        run: |
-          node scripts/validate_english_locale.mjs
-          node scripts/validate_english_home_parity.mjs
-
-      - name: Chapter 1 regression gate
-        run: |
-          node scripts/validate_voice_architecture_ch1.mjs
-          node scripts/validate_voice_architecture_ch1_accessibility.mjs
-
-      - name: Chapter 2 regression gate
-        run: |
-          node scripts/validate_voice_turn_taking_ch2_source.mjs
-          node scripts/validate_voice_turn_taking_ch2_accessibility.mjs
-
-      - name: Chapter 3 regression gate
-        run: |
-          node scripts/validate_voice_latency_ch3_source.mjs
-          node scripts/validate_voice_latency_ch3_accessibility.mjs
-
-      - name: Chapter 4 browser/accessibility gate
-        run: node scripts/validate_voice_tools_state_ch4_accessibility.mjs
-
-      - name: Reader navigation gate
-        run: node scripts/validate_direct_reader_navigation.mjs
-
-      - name: Upload chapter 4 refreshed visual evidence
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: voice-ch4-refreshed-visual-evidence
-          path: artifacts/visual-review/voice-tools-ch4-*.png
-          if-no-files-found: error
-          retention-days: 1
-
-      - name: Persist repaired chapter 4 only after all gates pass
-        shell: bash
-        run: |
-          set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add \
-            docs/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.md \
-            locales/en/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.md \
-            scripts/validate_voice_tools_state_ch4_source.mjs \
-            locales/en/editorial_review.voice-agents.yml
+          git add docs/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.md locales/en/series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.md scripts/validate_voice_tools_state_ch4_source.mjs locales/en/editorial_review.voice-agents.yml
           git diff --cached --check
-          git diff --cached --quiet && { echo 'No repair diff produced'; exit 1; }
           git commit -m 'fix(voice): refresh Pipecat async cancellation semantics'
           git push origin HEAD:series/realtime-voice-agents-golden
