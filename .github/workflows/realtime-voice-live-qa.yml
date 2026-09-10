@@ -107,11 +107,11 @@ jobs:
           S5_PREVIEW_BASE: https://5sigmas.com
         run: node scripts/validate_voice_evaluation_observability_ch6_accessibility.mjs
 
-      - name: Upload live voice evidence
-        if: always()
+      - name: Upload live voice failure evidence
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: realtime-voice-live-qa-evidence
+          name: realtime-voice-live-qa-failure
           path: artifacts/visual-review/voice-*.png
           if-no-files-found: warn
           retention-days: 1
