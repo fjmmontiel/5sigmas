@@ -1,0 +1,16 @@
+<section class="s5v s5v-arch-map s5v-coding-agent-verification-stack s5v--wide" data-step="1" aria-label="Pila de evidencia que convierte un cambio de código en una decisión de aceptar, reabrir o devolver la tarea">
+  <div class="s5v__canvas">
+    <header class="s5v__head"><div><span class="s5v__kicker">Verificación · review · stop</span><h3>«Done» exige evidencia ligada al candidato exacto</h3></div><p>Un test verde es una señal. El harness sólo puede cerrar cuando el contrato actual, el commit actual y todas las verificaciones obligatorias siguen alineados.</p></header>
+    <div class="s5v-arch-map__panels">
+      <div data-panel="1" class="s5v-arch-map__pipe">
+        <span>Candidato<br><small>head SHA · entorno · contrato</small></span>
+        <span>Checks deterministas<br><small>tests · tipos · lint · estado</small></span>
+        <span>Diff review<br><small>scope · API · config · tests</small></span>
+        <span>Juicio adicional<br><small>rubric · humano · caveats</small></span>
+        <span>Freshness gate<br><small>mismo SHA · misma evidencia</small></span>
+        <span>Decisión<br><small>accept · rework · handback</small></span>
+      </div>
+    </div>
+    <div class="s5v__copy"><strong>Regla de cierre:</strong> cualquier cambio posterior al candidato invalida la evidencia que dependa de ese estado. «El agente dice que terminó» no sustituye tests, revisión ni comprobación del resultado real.</div>
+  </div>
+</section>
