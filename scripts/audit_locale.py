@@ -30,7 +30,11 @@ HIGH_SIGNAL_SPANISH = (
 
 MISSING_SNIPPET_RE = re.compile(r"Missing locale snippet:", re.IGNORECASE)
 MARKDOWN_LINK_RE = re.compile(
-    r'<link\b(?=[^>]*\brel=["\']alternate["\'])(?=[^>]*\btype=["\']text/markdown["\'])[^>]*\bhref=["\']([^"\']+)',
+    r'<link\b(?=[^>]*\brel=["\'][^"\']*\balternate\b[^"\']*["\'])(?=[^>]*\btype=["\']text/markdown["\'])[^>]*\bhref=["\']([^"\']+)',
+    re.IGNORECASE,
+)
+MATERIAL_UNSAFE_MARKDOWN_LINK_RE = re.compile(
+    r'<link\b(?=[^>]*\brel=["\']alternate["\'])(?=[^>]*\btype=["\']text/markdown["\'])[^>]*>',
     re.IGNORECASE,
 )
 ROBOTS_NOINDEX_RE = re.compile(
@@ -88,6 +92,11 @@ def audit_site(site: Path) -> list[str]:
         text = path.read_text(encoding="utf-8", errors="replace")
         if MISSING_SNIPPET_RE.search(text):
             errors.append(f"missing translated snippet rendered in {path.relative_to(site)}")
+        if MATERIAL_UNSAFE_MARKDOWN_LINK_RE.search(text):
+            errors.append(
+                f"Material-unsafe exact rel=alternate Markdown link rendered in {path.relative_to(site)}; "
+                "it is interpreted as an alternate site root and triggers a nested sitemap.xml request"
+            )
         for markdown_url in MARKDOWN_LINK_RE.findall(text):
             parsed = urlsplit(markdown_url)
             if parsed.path.startswith("/en/"):
