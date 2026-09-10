@@ -68,6 +68,12 @@ hide:
       <span class="s5-list-row__desc">From answering to acting: tools, memory, state, evaluation, security and production operation.</span>
       <span class="s5-list-row__meta">5 chapters</span>
     </a>
+    <a class="s5-list-row" href="/en/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz/">
+      <span class="s5-list-row__n">09</span>
+      <span class="s5-list-row__title">Realtime Voice Agents</span>
+      <span class="s5-list-row__desc">Architectures, turn-taking, latency, tools, telephony and evaluation for production voice systems.</span>
+      <span class="s5-list-row__meta">6 chapters</span>
+    </a>
   </nav>
 </section>
 
