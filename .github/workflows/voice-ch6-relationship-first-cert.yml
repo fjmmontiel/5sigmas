@@ -1,0 +1,148 @@
+name: Voice chapter 6 relationship-first certification
+
+on:
+  push:
+    branches:
+      - series/realtime-voice-agents-golden
+    paths:
+      - '.github/workflows/voice-ch6-relationship-first-cert.yml'
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  certify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Correct current Pipecat error semantics in ES/EN
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          replacements = {
+            Path('docs/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.md'): (
+              """Para errores, un `FrameProcessor` dispara `on_error` antes de propagar `ErrorFrame` upstream. El frame expone mensaje, excepción opcional, categoría y el processor de origen. En la API actual, `fatal` está deprecado desde v1.8.0 y se elimina en 2.0.0; la señal vigente para saber si el processor puede seguir aceptando trabajo es `error.processor.is_usable`, con `on_usable_changed` cuando cambia ese estado.[^pipecat-errors]\n\nEstas primitives permiten un ledger detallado del pipeline. No conviertas sus nombres en tu única taxonomía de producto. `is_usable=False` describe la capacidad actual de un processor, no el outcome del turno: no dice por sí solo si una reserva quedó creada, si existió recovery en otra capa o si el usuario oyó audio parcial.""",
+              """Para errores, un `FrameProcessor` dispara `on_error` antes de propagar `ErrorFrame` upstream. El frame expone mensaje, excepción opcional, `fatal` y el processor de origen. En la API actual, `fatal=True` indica un error no recuperable que cancela el pipeline; `fatal=False` permite que la aplicación capture el error y aplique una estrategia como failover sin forzar ese shutdown.[^pipecat-errors]\n\nEstas primitives permiten un ledger detallado del pipeline. No conviertas sus nombres en tu única taxonomía de producto. `fatal=False` no demuestra que el turno haya salido bien: sólo evita que ese error obligue a terminar el pipeline. No dice por sí solo si una reserva quedó creada, si existió recovery en otra capa o si el usuario oyó audio parcial.""",
+            ),
+            Path('locales/en/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.md'): (
+              """For errors, a `FrameProcessor` fires `on_error` before an `ErrorFrame` is propagated upstream. The frame carries the error string, optional exception, error category, and source processor. In the current API, `fatal` is deprecated since v1.8.0 and removed in 2.0.0; the current signal for whether that processor can still accept work is `error.processor.is_usable`, with `on_usable_changed` exposing later usability transitions.[^pipecat-errors]\n\nThese primitives can support a detailed pipeline ledger. They should not become the entire product taxonomy. `is_usable=False` describes the processor's current ability to do its job, not the turn outcome. It does not tell you whether a booking was committed, whether another layer recovered, or whether the caller heard partial audio.""",
+              """For errors, a `FrameProcessor` fires `on_error` before an `ErrorFrame` is propagated upstream. The frame carries the error string, optional exception, `fatal`, and source processor. In the current API, `fatal=True` marks an unrecoverable error that cancels the pipeline; `fatal=False` lets application code handle the error and apply a strategy such as failover without forcing that shutdown.[^pipecat-errors]\n\nThese primitives can support a detailed pipeline ledger. They should not become the entire product taxonomy. `fatal=False` does not prove that the turn succeeded: it only means this error does not force pipeline termination. It does not tell you whether a booking was committed, whether another layer recovered, or whether the caller heard partial audio.""",
+            ),
+          }
+
+          for path, (old, new) in replacements.items():
+              text = path.read_text(encoding='utf-8')
+              if text.count(old) != 1:
+                  raise SystemExit(f'{path}: expected exactly one stale Pipecat block, found {text.count(old)}')
+              path.write_text(text.replace(old, new), encoding='utf-8')
+          PY
+          git diff --check
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Validate chapter 1 regression
+        run: node scripts/validate_voice_architecture_ch1.mjs
+      - name: Validate chapter 2 source contract
+        run: node scripts/validate_voice_turn_taking_ch2_source.mjs
+      - name: Validate chapter 3 source contract
+        run: node scripts/validate_voice_latency_ch3_source.mjs
+      - name: Validate chapter 4 source contract
+        run: node scripts/validate_voice_tools_state_ch4_source.mjs
+      - name: Validate chapter 5 source contract
+        run: node scripts/validate_voice_network_telephony_ch5_source.mjs
+      - name: Validate chapter 6 source and relationship contract
+        run: node scripts/validate_voice_evaluation_observability_ch6_source.mjs
+
+      - name: Build Spanish strictly
+        env:
+          DISABLE_MKDOCS_2_WARNING: 'true'
+        run: mkdocs build --clean --strict
+
+      - name: Prepare English locale
+        run: python scripts/prepare_locale.py --locale en
+      - name: Audit English source
+        run: python scripts/audit_locale.py --locale en
+      - name: Build English strictly
+        env:
+          S5_LOCALE: en
+          DISABLE_MKDOCS_2_WARNING: 'true'
+        run: mkdocs build -f mkdocs.en.yml --clean --strict
+      - name: Audit rendered English
+        run: python scripts/audit_locale.py --locale en --site site/en
+
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Serve combined preview
+        run: |
+          python -m http.server 8000 --directory site > /tmp/voice-ch6-preview.log 2>&1 &
+          for attempt in {1..30}; do
+            curl --fail --silent http://127.0.0.1:8000/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability/ > /dev/null && \
+            curl --fail --silent http://127.0.0.1:8000/en/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability/ > /dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/voice-ch6-preview.log
+          exit 1
+
+      - name: Audit browser resources
+        run: node scripts/audit_browser_resources.mjs
+      - name: Validate English series mirror
+        run: node scripts/validate_english_series_mirror.mjs
+      - name: Validate locale switching
+        run: node scripts/validate_locale_switching.mjs
+      - name: Regress chapter 1 accessibility
+        run: node scripts/validate_voice_architecture_ch1_accessibility.mjs
+      - name: Regress chapter 2 relationship geometry
+        run: node scripts/validate_voice_turn_taking_ch2_accessibility.mjs
+      - name: Regress chapter 3 relationship geometry
+        run: node scripts/validate_voice_latency_ch3_accessibility.mjs
+      - name: Regress chapter 4 relationship geometry
+        run: node scripts/validate_voice_tools_state_ch4_accessibility.mjs
+      - name: Regress chapter 5 relationship geometry
+        run: node scripts/validate_voice_network_telephony_ch5_accessibility.mjs
+      - name: Validate chapter 6 causal evidence geometry and accessibility
+        run: node scripts/validate_voice_evaluation_observability_ch6_accessibility.mjs
+      - name: Validate direct reader navigation
+        run: node scripts/validate_direct_reader_navigation.mjs
+
+      - name: Commit exact tested factual correction
+        shell: bash
+        run: |
+          git config user.name '5sigmas GOLDEN orchestrator'
+          git config user.email 'actions@users.noreply.github.com'
+          git add docs/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.md locales/en/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.md
+          test -n "$(git diff --cached --name-only)"
+          git diff --cached --check
+          git commit -m 'fix(voice): align chapter 6 Pipecat error semantics'
+          git push origin HEAD:series/realtime-voice-agents-golden
+          echo "CERTIFIED_SHA=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+
+      - name: Upload chapter 6 visual evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: voice-ch6-relationship-first-review
+          path: artifacts/visual-review/voice-eval-ch6-*.png
+          if-no-files-found: error
+          retention-days: 2
+
+      - name: Report certified SHA
+        run: echo "Certified and pushed $CERTIFIED_SHA"
