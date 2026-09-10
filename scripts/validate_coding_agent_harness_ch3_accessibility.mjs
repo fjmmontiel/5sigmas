@@ -19,8 +19,8 @@ const cases = [
   {
     locale: 'en',
     route: '/en/series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints/',
-    requiredVisual: ['Stable contract', 'Request + rules', 'Contract vN', 'Plan / graph vM', 'Execute + observe', 'Verify + checkpoint', 'Done / handback', 'verification_head_sha'],
-    forbidden: ['Contrato estable', 'Petición + reglas', 'intención · policy', 'Contrato vN', 'Plan / grafo', 'dependencias · hipótesis', 'Ejecutar + observar', 'si cambia la evidencia', 'Verificar + checkpoint', 'evidencia completa', 'cambia la estrategia', 'cambia qué resultado'],
+    requiredVisual: ['Stable contract', 'Request + rules', 'Contract vN', 'Plan / graph vM', 'Execute + observe', 'Verify + checkpoint', 'Done / handback', 'verification_head_sha', 'Amendment'],
+    forbidden: ['Contrato estable', 'Petición + reglas', 'intención · policy', 'Contrato vN', 'Plan / grafo', 'dependencias · hipótesis', 'Ejecutar + observar', 'si cambia la evidencia', 'Verificar + checkpoint', 'evidencia completa', 'cambia la estrategia', 'Enmienda', 'cambia qué resultado'],
   },
 ];
 const viewports = [
