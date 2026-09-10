@@ -199,9 +199,9 @@ Pipecat distingue dos comportamientos útiles:
 Las funciones asíncronas también pueden enviar resultados intermedios con `is_final=False` antes del resultado final.[^pipecat-functions]
 
 
-La API actual hace otra distinción útil. Una función con `cancel_on_interruption=False` puede exponer `cancellable_by_llm=True`; Pipecat anuncia entonces una tool `cancel_<nombre>` para que el modelo detenga esa llamada. `timeout_secs` limita la ejecución del handler y, al expirar, el handler recibe `asyncio.CancelledError`. La propia documentación advierte que trabajo que el handler haya lanzado en una task independiente **no se cancela con él**.[^pipecat-functions]
+La API actual expone la cancelación dirigida por el modelo de otra forma. Para funciones asíncronas (`cancel_on_interruption=False`), habilita `enable_async_tool_cancellation=True` en el servicio LLM. Cuando hay al menos una función asíncrona disponible, Pipecat añade la tool integrada `cancel_async_tool_call` y las instrucciones necesarias para que el modelo pueda cancelar una llamada asíncrona obsoleta. `timeout_secs` sigue siendo el límite por tool y sustituye `function_call_timeout_secs` para esa función.[^pipecat-functions]
 
-Por tanto, incluso una cancelación correcta del handler sigue sin demostrar que el side effect remoto se haya cancelado. El contrato con la API o worker externo debe decir qué ocurrió realmente.
+Estas primitivas controlan la ejecución que Pipecat posee. La documentación actual no afirma que cancelar la llamada asíncrona deshaga un side effect remoto; el contrato con la API o worker externo debe establecer el resultado real.
 
 Esto es una primitiva potente para una UX de «sigo comprobándolo». Pero la semántica de negocio sigue siendo tuya. `cancel_on_interruption=False` no convierte un side effect en durable, idempotente ni compensable.
 

@@ -199,9 +199,9 @@ Pipecat documents two useful behaviors:
 Async functions can also emit intermediate results with `is_final=False` before sending the final result.[^pipecat-functions]
 
 
-The current API adds another useful distinction. A function with `cancel_on_interruption=False` can expose `cancellable_by_llm=True`; Pipecat then advertises a matching `cancel_<name>` tool so the model can stop that call. `timeout_secs` bounds handler execution and, when it expires, the handler receives `asyncio.CancelledError`. The documentation explicitly notes that work the handler spawned into an independent task **is not cancelled with the handler**.[^pipecat-functions]
+The current API exposes model-directed cancellation differently. For asynchronous functions (`cancel_on_interruption=False`), enable `enable_async_tool_cancellation=True` on the LLM service. When at least one async function is available, Pipecat adds the built-in `cancel_async_tool_call` tool and supporting system instructions so the model can cancel a stale async call. `timeout_secs` remains the per-tool timeout and overrides `function_call_timeout_secs` for that function.[^pipecat-functions]
 
-So even successful handler cancellation still does not prove that a remote side effect was cancelled. The contract with the external API or worker must establish the actual outcome.
+These primitives control execution Pipecat owns. The current documentation does not claim that cancelling the async call reverses a remote side effect; the contract with the external API or worker must establish the actual outcome.
 
 That is a useful primitive for experiences such as “I’m still checking.” It does not make the underlying side effect durable, idempotent, or compensable.
 
