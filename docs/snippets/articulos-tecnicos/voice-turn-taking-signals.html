@@ -66,10 +66,8 @@ why_visual: El texto puede enumerar las cuatro señales, pero el timeline permit
     .s5v-turn-note--warning{color:#9c6500}
     .s5v-turn-note--ok{color:var(--ok)}
     .s5v-turn-note--stop{color:var(--stop)}
-    .s5v-turn-branch{z-index:2;align-self:center;height:34px;position:relative}
-    .s5v-turn-branch::before,.s5v-turn-branch::after{content:"";position:absolute;left:0;width:100%;height:50%;border-left:2px solid var(--decision)}
-    .s5v-turn-branch::before{top:0;border-top:2px solid var(--decision);border-radius:10px 0 0 0}
-    .s5v-turn-branch::after{bottom:0;border-bottom:2px solid var(--decision);border-radius:0 0 0 10px}
+    .s5v-turn-branch{z-index:2;align-self:stretch;width:100%;height:100%;overflow:visible}
+    .s5v-turn-branch path{fill:none;stroke:var(--decision);stroke-width:2.2;vector-effect:non-scaling-stroke}
     .s5v-turn-rule{
       margin-top:16px;padding:13px 15px;border-radius:15px;background:var(--soft);border:1px solid var(--line);
       font-size:.72rem;line-height:1.42;font-weight:750;color:var(--muted)
@@ -141,7 +139,10 @@ why_visual: El texto puede enumerar las cuatro señales, pero el timeline permit
           <div class="s5v-turn-lane-label" style="grid-column:1;grid-row:4">Decisión</div>
           <div class="s5v-turn-track" style="grid-column:6/9;grid-row:4"></div>
           <div class="s5v-turn-note" style="grid-column:6/8;grid-row:4">¿quiere tomar el turno?</div>
-          <div class="s5v-turn-branch" data-turn-branch="intent" style="grid-column:8/10;grid-row:4/6" aria-hidden="true"></div>
+          <svg class="s5v-turn-branch" data-turn-branch="intent" style="grid-column:8/9;grid-row:4/7" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+            <path data-turn-branch-path="continue" d="M0 15 C45 15 45 50 100 50"></path>
+            <path data-turn-branch-path="cancel" d="M0 15 C45 15 45 85 100 85"></path>
+          </svg>
           <div class="s5v-turn-lane-label" style="grid-column:1;grid-row:5">Si es backchannel</div>
           <div class="s5v-turn-segment s5v-turn-segment--continue" data-turn-outcome="continue" style="grid-column:9/13;grid-row:5">continuar audio</div>
           <div class="s5v-turn-lane-label" style="grid-column:1;grid-row:6">Si es barge-in</div>
