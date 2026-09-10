@@ -30,7 +30,7 @@ jobs:
           edits = [
             (
               'display:grid;margin:28px auto 34px;max-width:1380px',
-              'display:grid;position:relative;left:50%;width:min(1280px,calc(100vw - 48px));max-width:none;margin:28px 0 34px;transform:translateX(-50%)',
+              'display:grid;position:relative;left:50%;width:min(1160px,calc(100vw - 180px));max-width:none;margin:28px 0 34px;transform:translateX(-50%)',
             ),
             (
               '.s5v-turn-evidence-graph__svg{display:block;width:100%;min-width:1020px;height:auto;overflow:visible}',
