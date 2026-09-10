@@ -194,6 +194,7 @@ nav:
       - Coding Agents & Agent Harnesses:
           - What is an agent harness?: series/coding-agents-agent-harnesses/01-que-es-agent-harness.md
           - Repository context, workspaces and isolation: series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento.md
+          - Specs, planning and checkpoints: series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.md
   - Concepts:
       - Concepts: temas/index.md
       - What is an LLM?: temas/llms.md

@@ -86,8 +86,12 @@ check(es.includes('ya no prueba continuidad causal'), 'ES: checkpoint continuity
 check(en.includes('they no longer prove causal continuity'), 'EN: checkpoint continuity caveat missing');
 check(es.includes('comentarios añadidos después') && es.includes('no ve automáticamente'), 'ES: requirements-snapshot caveat missing');
 check(en.includes('later issue comments') && en.includes('does not automatically'), 'EN: requirements-snapshot caveat missing');
+check(es.includes('antes de cada prompt del usuario') && es.includes('herramientas de edición de archivos'), 'ES: current Claude checkpoint capture semantics missing');
+check(en.includes('before each user prompt') && en.includes('file-editing tools'), 'EN: current Claude checkpoint capture semantics missing');
 check(es.includes('cambios producidos directamente por comandos Bash'), 'ES: Claude checkpoint scope limit missing');
-check(en.includes('changes produced directly through Bash commands'), 'EN: Claude checkpoint scope limit missing');
+check(en.includes('changes made through Bash commands'), 'EN: Claude checkpoint scope limit missing');
+check(!es.includes('checkpoints del estado de archivos antes de ediciones'), 'ES: stale Claude checkpoint timing semantics detected');
+check(!en.includes('checkpoints of file state before edits'), 'EN: stale Claude checkpoint timing semantics detected');
 check(es.includes('shadow Git repository'), 'ES: Gemini checkpoint mechanism missing');
 check(en.includes('shadow Git repository'), 'EN: Gemini checkpoint mechanism missing');
 

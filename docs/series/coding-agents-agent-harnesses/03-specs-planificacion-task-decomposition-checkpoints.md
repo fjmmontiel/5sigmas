@@ -254,7 +254,7 @@ Un PASS no debería vivir como un booleano eterno. Tiene que estar ligado al có
 
 «Tenemos checkpoints» puede describir capacidades muy diferentes.
 
-Claude Code documenta que crea checkpoints del estado de archivos antes de ediciones y permite restaurar código y conversación de forma independiente. También documenta límites relevantes: cambios producidos directamente por comandos Bash y modificaciones externas concurrentes no quedan cubiertos de la misma forma por ese mecanismo, y checkpointing no sustituye a Git.[^claude-checkpoint]
+Claude Code documenta que su checkpointing captura automáticamente el estado del código antes de cada prompt del usuario y rastrea los cambios realizados por sus herramientas de edición de archivos. Permite restaurar código y conversación de forma independiente. También documenta límites relevantes: los cambios producidos directamente por comandos Bash y las modificaciones externas concurrentes no quedan cubiertos de la misma forma, y checkpointing no sustituye a Git.[^claude-checkpoint]
 
 Gemini CLI documenta otro diseño: cuando su checkpointing está habilitado, crea una snapshot basada en un shadow Git repository antes de modificaciones de archivos y guarda además estado conversacional/tooling para poder restaurarlo.[^gemini-checkpoint]
 
