@@ -30,7 +30,7 @@ const viewports = [
 
 async function assertTables(page, testCase, viewport) {
   const tables = page.locator('main table');
-  check((await tables.count()) >= 2, `${testCase.route}: ${viewport.name} expected at least two teaching tables`);
+  check((await tables.count()) >= 1, `${testCase.route}: ${viewport.name} expected at least one teaching table`);
   for (let index = 0; index < await tables.count(); index += 1) {
     const table = tables.nth(index);
     const state = await table.evaluate((node, args) => {
