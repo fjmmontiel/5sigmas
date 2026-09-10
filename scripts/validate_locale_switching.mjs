@@ -76,6 +76,7 @@ const assertTranslatedPair = async ({ es, en }) => {
 
 await assertTranslatedPair({ es: '/series/agentes-ia/02-anatomia-de-un-agente/', en: '/en/series/agentes-ia/02-anatomia-de-un-agente/' });
 await assertTranslatedPair({ es: '/series/agentes-ia/00_presentacion_serie/', en: '/en/series/agentes-ia/00_presentacion_serie/' });
+await assertTranslatedPair({ es: '/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz/', en: '/en/series/agentes-voz-tiempo-real/01-arquitecturas-de-voz/' });
 await assertTranslatedPair({ es: '/series/fundamentos-ia-iag/02-que-es-ia-generativa/', en: '/en/series/fundamentos-ia-iag/02-que-es-ia-generativa/' });
 await assertTranslatedPair({ es: '/series/multimodalidad-iag/01-el-problema/', en: '/en/series/multimodalidad-iag/01-el-problema/' });
 await assertTranslatedPair({ es: '/series/ia-pib-bienestar-energia/03-pib-vs-bienestar/', en: '/en/series/ia-pib-bienestar-energia/03-pib-vs-bienestar/' });
@@ -111,4 +112,4 @@ if (failures.length) {
   for (const failure of failures) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log('Locale-switch quality QA passed: selectors preserve translated routes, explicit localized tool slugs, XML sitemap hreflang pairs, and safe fallbacks.');
+console.log('Locale-switch quality QA passed: selectors preserve translated routes, including Realtime Voice Agents, explicit localized tool slugs, XML sitemap hreflang pairs, and safe fallbacks.');
