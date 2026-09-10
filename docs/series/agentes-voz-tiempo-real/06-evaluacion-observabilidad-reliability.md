@@ -2,7 +2,7 @@
 title: "Evaluar un agente de voz: evidencia por turno, observabilidad y reliability"
 description: "Cómo saber si un agente de voz funciona de verdad: outcome, turn-taking, media, tools y runtime unidos en una taxonomía de fallos y un loop producción→eval→regresión."
 date: 2026-09-10
-date_modified: 2026-09-10
+date_modified: 2026-09-11
 tags:
   - IA
   - Voz
@@ -274,9 +274,11 @@ Pipecat puede emitir `MetricsFrame` con métricas de performance/usage. `UserBot
 
 `TurnTrackingObserver` expone inicio/fin de turnos e interrupciones. Otros observers pueden registrar actividad de LLM, transcripción y startup.[^pipecat-observers]
 
-Para errores, un `FrameProcessor` dispara `on_error` antes de propagar `ErrorFrame` upstream. El frame expone mensaje, excepción opcional, `fatal` y el processor de origen. En la API actual, `fatal=True` indica un error no recuperable que cancela el pipeline; `fatal=False` permite que la aplicación capture el error y aplique una estrategia como failover sin forzar ese shutdown.[^pipecat-errors]
+Para errores, un `FrameProcessor` dispara `on_error` antes de propagar `ErrorFrame` upstream. El frame expone mensaje, excepción opcional, `category` y el `processor` de origen; en la API actual, `processor.is_usable` refleja si ese processor puede seguir haciendo su trabajo. Pipecat separa así el estado del componente de la decisión sobre la vida del pipeline.[^pipecat-events][^pipecat-errors]
 
-Estas primitives permiten un ledger detallado del pipeline. No conviertas sus nombres en tu única taxonomía de producto. `fatal=False` no demuestra que el turno haya salido bien: sólo evita que ese error obligue a terminar el pipeline. No dice por sí solo si una reserva quedó creada, si existió recovery en otra capa o si el usuario oyó audio parcial.
+`ErrorFrame.fatal`, `push_error(..., fatal=...)` y `FatalErrorFrame` están deprecados y la documentación indica que se eliminarán en 2.0.0. `fatal=True` todavía cancela el pipeline por compatibilidad, pero el modelo actual recomendado es marcar el processor como no usable y dejar que `PipelineWorker` aplique `ProcessorUnusablePolicy`: `CONTINUE` (default), `END` o `CANCEL`. Un `ServiceSwitcher` puede usar ese estado para failover.[^pipecat-errors]
+
+Estas primitives permiten un ledger detallado del pipeline. No conviertas sus nombres en tu única taxonomía de producto. Que `processor.is_usable` siga siendo `True` no demuestra que el turno haya salido bien, y `CONTINUE` tampoco significa éxito: sólo describe que el framework puede seguir ejecutando. No dice por sí solo si una reserva quedó creada, si existió recovery en otra capa o si el usuario oyó audio parcial.
 
 Pipecat Evals completa la parte local de regresión, pero su propia documentación separa explícitamente lo que queda fuera: transport desplegado, carga/concurrencia, estado oculto de tools, producción drift, replay de audio exacto y trend/bake-off persistente requieren capas adicionales.[^pipecat-lifecycle]
 
@@ -404,5 +406,6 @@ Una buena plataforma de observabilidad te ayuda a ver eventos. Una buena estrate
 [^pipecat-metrics]: Pipecat, [Metrics](https://docs.pipecat.ai/pipecat/fundamentals/metrics).
 [^pipecat-userbot]: Pipecat, [User-Bot Latency Observer](https://docs.pipecat.ai/api-reference/server/utilities/observers/user-bot-latency-observer).
 [^pipecat-observers]: Pipecat, [Observer Pattern](https://docs.pipecat.ai/api-reference/server/utilities/observers/observer-pattern).
-[^pipecat-errors]: Pipecat, [FrameProcessor Events — Error Handling](https://docs.pipecat.ai/api-reference/server/events/frame-processor-events).
+[^pipecat-events]: Pipecat, [FrameProcessor Events](https://docs.pipecat.ai/api-reference/server/events/frame-processor-events).
+[^pipecat-errors]: Pipecat, [Error Handling](https://docs.pipecat.ai/pipecat/fundamentals/error-handling).
 [^otel-errors]: OpenTelemetry, [Recording errors](https://opentelemetry.io/docs/specs/semconv/general/recording-errors/).

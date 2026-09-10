@@ -31,6 +31,7 @@ const primaryUrls = [
   'https://docs.pipecat.ai/api-reference/server/utilities/observers/user-bot-latency-observer',
   'https://docs.pipecat.ai/api-reference/server/utilities/observers/observer-pattern',
   'https://docs.pipecat.ai/api-reference/server/events/frame-processor-events',
+  'https://docs.pipecat.ai/pipecat/fundamentals/error-handling',
   'https://opentelemetry.io/docs/specs/semconv/general/recording-errors/',
 ];
 for (const url of primaryUrls) {
@@ -111,13 +112,16 @@ check(en.includes('Agent insights') && en.includes('LiveKit Cloud capability') &
 check(es.includes('`ev.error.recoverable`') && es.includes('no éxito del producto'), 'ES: LiveKit recoverability-vs-outcome boundary missing');
 check(en.includes('`ev.error.recoverable`') && en.includes('not product success'), 'EN: LiveKit recoverability-vs-outcome boundary missing');
 
-// Pipecat 1.x current source/docs (revalidated 2026-09-11): ErrorFrame again exposes fatal.
-check(es.includes('`FrameProcessor` dispara `on_error`') && es.includes('`fatal=True`') && es.includes('cancela el pipeline') && es.includes('`fatal=False`'), 'ES: current Pipecat ErrorFrame fatal semantics missing');
-check(en.includes('`FrameProcessor` fires `on_error`') && en.includes('`fatal=True`') && en.includes('cancels the pipeline') && en.includes('`fatal=False`'), 'EN: current Pipecat ErrorFrame fatal semantics missing');
-check(!es.includes('`error.processor.is_usable`') && !es.includes('deprecado desde v1.8.0'), 'ES: stale Pipecat is_usable/deprecation semantics remain');
-check(!en.includes('`error.processor.is_usable`') && !en.includes('deprecated since v1.8.0'), 'EN: stale Pipecat is_usable/deprecation semantics remain');
-check(es.includes('`fatal=False` no demuestra que el turno haya salido bien'), 'ES: Pipecat fatal-vs-product-outcome boundary missing');
-check(en.includes('`fatal=False` does not prove that the turn succeeded'), 'EN: Pipecat fatal-vs-product-outcome boundary missing');
+// Pipecat current source/docs (revalidated 2026-09-11): processor usability is distinct from pipeline termination.
+check(es.includes('`processor.is_usable` refleja') && es.includes('`ErrorFrame.fatal`') && es.includes('deprecados') && es.includes('2.0.0'), 'ES: current Pipecat processor-usability/deprecation semantics missing');
+check(en.includes('`processor.is_usable` reflects') && en.includes('`ErrorFrame.fatal`') && en.includes('deprecated') && en.includes('2.0.0'), 'EN: current Pipecat processor-usability/deprecation semantics missing');
+check(es.includes('`ProcessorUnusablePolicy`') && es.includes('`CONTINUE` (default)') && es.includes('`END`') && es.includes('`CANCEL`'), 'ES: current Pipecat pipeline policy semantics missing');
+check(en.includes('`ProcessorUnusablePolicy`') && en.includes('`CONTINUE` (the default)') && en.includes('`END`') && en.includes('`CANCEL`'), 'EN: current Pipecat pipeline policy semantics missing');
+check(es.includes('`ServiceSwitcher` puede usar ese estado para failover'), 'ES: current Pipecat failover boundary missing');
+check(en.includes('`ServiceSwitcher` can use that state for failover'), 'EN: current Pipecat failover boundary missing');
+check(!es.includes('En la API actual, `fatal=True` indica un error no recuperable') && !en.includes('In the current API, `fatal=True` marks an unrecoverable error'), 'Stale Pipecat fatal-first semantics remain');
+check(es.includes('Que `processor.is_usable` siga siendo `True` no demuestra que el turno haya salido bien') && es.includes('`CONTINUE` tampoco significa éxito'), 'ES: Pipecat framework-state-vs-product-outcome boundary missing');
+check(en.includes('A processor remaining `is_usable=True` does not prove that the turn succeeded') && en.includes('`CONTINUE` does not mean success either'), 'EN: Pipecat framework-state-vs-product-outcome boundary missing');
 check(es.includes('`UserBotLatencyObserver` mide entre la parada de habla detectada') && es.includes('inicio de habla del bot'), 'ES: Pipecat latency metric boundary missing');
 check(en.includes('`UserBotLatencyObserver` measures from detected user-speech stop') && en.includes('bot-speech start'), 'EN: Pipecat latency metric boundary missing');
 
