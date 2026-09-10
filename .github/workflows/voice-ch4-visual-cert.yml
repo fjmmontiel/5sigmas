@@ -1,5 +1,6 @@
 name: Voice ch4 relationship-first certification
 
+# Recertification after manual pixel review: locale leakage + SVG label clipping fixed.
 on:
   push:
     branches:
