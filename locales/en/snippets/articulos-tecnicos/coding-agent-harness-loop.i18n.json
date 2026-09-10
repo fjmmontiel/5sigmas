@@ -1,6 +1,6 @@
 {
   "source": "snippets/articulos-tecnicos/coding-agent-harness-loop.html",
-  "source_blob_sha": "81d67d851b148155f1a75d687be693af6f066ebd",
+  "source_blob_sha": "7111fafa6a13aba783053b08bb43bfc5410952e5",
   "replacements": {
     "Fronteras de responsabilidad en el bucle de un coding agent": "Responsibility boundaries in a coding-agent loop",
     "Modelo ≠ harness": "Model ≠ harness",
