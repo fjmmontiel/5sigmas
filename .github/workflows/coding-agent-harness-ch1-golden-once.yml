@@ -31,6 +31,8 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
@@ -112,7 +114,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          git fetch --no-tags --depth=1 origin main
+          git fetch --no-tags origin main
           git diff --name-only origin/main...HEAD | tee /tmp/ch1-scope.txt
           if grep -Ev '^(docs/series/coding-agents-agent-harnesses/01-que-es-agent-harness\.md|docs/snippets/articulos-tecnicos/coding-agent-harness-loop\.html|locales/en/series/coding-agents-agent-harnesses/01-que-es-agent-harness\.md|locales/en/snippets/articulos-tecnicos/coding-agent-harness-loop(\.html|\.i18n\.json)|locales/en/manifest\.yml|mkdocs\.yml|mkdocs\.en\.yml|scripts/validate_coding_agent_harness_ch1_(source|accessibility|locale_navigation)\.mjs|\.github/workflows/coding-agent-harness-ch1-golden-once\.yml)$' /tmp/ch1-scope.txt; then
             echo 'Unexpected file outside the chapter 2.1 construction scope.'
