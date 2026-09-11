@@ -1,4 +1,5 @@
 name: Context Engineering 3.3 GOLDEN certification
+# Recertification trigger after final Spanish-copy repair.
 
 on:
   push:
