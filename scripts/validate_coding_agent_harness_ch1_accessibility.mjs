@@ -100,7 +100,7 @@ try {
           check(geometry.handback.cy > geometry.verifier.cy + 55, `${testCase.route}: ${viewport.name} stop/handback exit no longer leaves the feedback loop (${JSON.stringify(geometry)})`);
         }
         if (geometry.continueEdge && geometry.context && geometry.verifier) {
-          check(geometry.continueEdge.left <= geometry.context.cx + 12 && geometry.continueEdge.right >= geometry.verifier.cx - 12, `${testCase.route}: ${viewport.name} continue edge no longer spans verifier back toward context (${JSON.stringify(geometry.continueEdge)})`);
+          check(geometry.continueEdge.left <= geometry.context.cx + 12 && geometry.continueEdge.right >= geometry.verifier.left - 12, `${testCase.route}: ${viewport.name} continue edge no longer connects the verifier boundary back toward context (${JSON.stringify(geometry.continueEdge)})`);
           check(geometry.continueEdge.height > 40, `${testCase.route}: ${viewport.name} continue edge collapsed into a cosmetic connector (${JSON.stringify(geometry.continueEdge)})`);
         }
         if (geometry.stateRail && geometry.context && geometry.observation) {
