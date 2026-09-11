@@ -24,7 +24,9 @@
     "favorece conservar audio original hacia el modelo sin acoplar la voz al mismo modelo.": "favors preserving original audio into the model without coupling the voice layer to that same model.",
     "Proteger continuidad acústica:": "Protect acoustic continuity:",
     "favorece reducir fronteras de modalidad en el camino principal.": "favors reducing modality boundaries in the primary path.",
-    "Mapa conceptual ordinal, no benchmark cuantitativo. La posición resume la estructura de modalidad; el runtime, el provider y el canal siguen pudiendo cambiar el resultado operativo.": "Ordinal conceptual map, not a quantitative benchmark. Position summarizes the modality structure; runtime, provider, and channel can still change the operational outcome."
+    "Mapa conceptual ordinal, no benchmark cuantitativo. La posición resume la estructura de modalidad; el runtime, el provider y el canal siguen pudiendo cambiar el resultado operativo.": "Ordinal conceptual map, not a quantitative benchmark. Position summarizes the modality structure; runtime, provider, and channel can still change the operational outcome.",
+    "fronteras textuales obligatorias": "mandatory text boundaries",
+    "continuidad acústica": "acoustic continuity"
   },
   "forbidden_output_tokens": [
     "Mapa conceptual de decisión",
