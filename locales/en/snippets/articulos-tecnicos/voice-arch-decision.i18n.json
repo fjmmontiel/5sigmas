@@ -1,6 +1,6 @@
 {
   "source": "snippets/articulos-tecnicos/voice-arch-decision.html",
-  "source_blob_sha": "d6c3b85df424bbdc269e824cd1bf79688e437761",
+  "source_blob_sha": "0a6df6d7eb1526e1fe40b807667f58f3d0a3a796",
   "replacements": {
     "x-position=continuidad acústica del camino principal": "x-position=acoustic continuity on the primary path",
     "y-position=fronteras textuales obligatorias y sustituibles": "y-position=mandatory explicit and replaceable text boundaries",
@@ -14,7 +14,6 @@
     "Fronteras": "Boundaries",
     "Señal + voz": "Signal + voice",
     "Continuidad": "Continuity",
-    "Mapa de decisión desplazable horizontalmente en pantallas estrechas": "Decision map scrollable horizontally on narrow screens",
     "Mapa ordinal con continuidad acústica en el eje horizontal y fronteras de texto explícitas en el vertical": "Ordinal map with acoustic continuity on the horizontal axis and explicit text boundaries on the vertical axis",
     "↑ más fronteras de texto": "↑ more text boundaries",
     "más continuidad acústica →": "more acoustic continuity →",
@@ -39,7 +38,6 @@
     "Fronteras",
     "Señal + voz",
     "Continuidad",
-    "desplazable horizontalmente",
     "fronteras de texto",
     "continuidad acústica",
     "Proteger fronteras",
