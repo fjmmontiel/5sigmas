@@ -1,0 +1,103 @@
+<section class="s5v s5v-context-memory-lifecycle s5v--wide" aria-label="Cómo working state, memoria episódica, memoria semántica, estado autoritativo y checkpoints se relacionan sin ser equivalentes">
+  <style>
+    .s5v-context-memory-lifecycle .ml-scroll{overflow-x:auto;overscroll-behavior-inline:contain;padding:.35rem .2rem .8rem;scrollbar-gutter:stable;outline:none}
+    .s5v-context-memory-lifecycle .ml-scroll:focus-visible{box-shadow:0 0 0 3px color-mix(in srgb,var(--md-accent-fg-color,#7c4dff) 36%,transparent);border-radius:14px}
+    .s5v-context-memory-lifecycle .ml-stage{width:100%;min-width:0;max-width:1180px;margin:0 auto}
+    .s5v-context-memory-lifecycle svg{display:block;width:100%;height:auto;overflow:visible}
+    .s5v-context-memory-lifecycle text{fill:currentColor;font-family:inherit}
+    .s5v-context-memory-lifecycle .ml-boundary{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 96%,var(--md-accent-fg-color,#7c4dff) 4%);stroke:currentColor;stroke-width:2;stroke-dasharray:8 7;opacity:.9}
+    .s5v-context-memory-lifecycle .ml-node{fill:var(--md-default-bg-color,#fff);stroke:currentColor;stroke-width:2.3}
+    .s5v-context-memory-lifecycle .ml-node--strong{stroke-width:3.4}
+    .s5v-context-memory-lifecycle .ml-derived{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 88%,var(--md-accent-fg-color,#7c4dff) 12%);stroke:currentColor;stroke-width:2.8}
+    .s5v-context-memory-lifecycle .ml-authority{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 91%,var(--md-accent-fg-color,#7c4dff) 9%);stroke:currentColor;stroke-width:3.2}
+    .s5v-context-memory-lifecycle .ml-checkpoint{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 95%,currentColor 5%);stroke:currentColor;stroke-width:2.2;stroke-dasharray:7 5}
+    .s5v-context-memory-lifecycle .ml-edge{fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#ml-arrow)}
+    .s5v-context-memory-lifecycle .ml-edge--derived{stroke-width:2.1;stroke-dasharray:6 5;opacity:.8;marker-end:url(#ml-arrow-open)}
+    .s5v-context-memory-lifecycle .ml-edge--authority{stroke-width:3.5}
+    .s5v-context-memory-lifecycle .ml-label{font-size:16px;font-weight:800;text-anchor:middle}
+    .s5v-context-memory-lifecycle .ml-sub{font-size:12.5px;text-anchor:middle;opacity:.75}
+    .s5v-context-memory-lifecycle .ml-kicker{font-size:13px;font-weight:850;letter-spacing:.07em;text-transform:uppercase;opacity:.75}
+    .s5v-context-memory-lifecycle .ml-edge-label{font-size:12px;font-weight:750;paint-order:stroke;stroke:var(--md-default-bg-color,#fff);stroke-width:5px;stroke-linejoin:round}
+    .s5v-context-memory-lifecycle .ml-legend{display:flex;gap:1rem;flex-wrap:wrap;margin:.35rem 0 0;font-size:.87rem;opacity:.86}
+    .s5v-context-memory-lifecycle .ml-legend span{display:inline-flex;gap:.42rem;align-items:center}
+    .s5v-context-memory-lifecycle .ml-legend i{width:1.5rem;border-top:3px solid currentColor}
+    .s5v-context-memory-lifecycle .ml-legend .is-derived i{border-top-width:2px;border-top-style:dashed}
+    .s5v-context-memory-lifecycle .s5v__copy{margin-top:.85rem}
+    @media (max-width:700px){.s5v-context-memory-lifecycle .ml-scroll{margin-inline:-.35rem;padding-inline:.35rem}.s5v-context-memory-lifecycle .ml-stage{width:auto;min-width:1080px}.s5v-context-memory-lifecycle .ml-legend{font-size:.82rem}}
+  </style>
+  <!-- GOLDEN_VISUAL_CONTRACT
+    learning-objective="Show that working state, episodic memory, semantic memory, authoritative state, retrieval and checkpoints have different contracts and interact through explicit write, consolidation, read, invalidation and resume paths."
+    mechanism="working state -> action/observation -> episodic append -> consolidation -> semantic memory -> selective retrieval -> working state; authoritative system-of-record -> fresh read -> working state and can override stale derived memory; execution state -> checkpoint -> resume -> execution state without making checkpoint a memory category."
+    visual-variables="central position encodes active working state; lower persistent plane separates episodic and semantic stores; right-side authority boundary encodes system-of-record ownership; dashed derivation edges encode consolidation lineage; a separate checkpoint lane encodes resume semantics rather than memory semantics; directed loops encode lifecycle."
+    why-visual="The core lesson is relational: persistence, retrieval and checkpointing cut across memory categories. A list or table cannot show that semantic memory is derived from episodes, that authoritative state enters through a fresh read, and that checkpoints resume execution on a different path."
+    relationship="memory-lifecycle:working->episode->semantic->working;authoritative->working;authoritative-conflict->derived-stale;execution->checkpoint->execution"
+    evidence="working-state,episodic-append,semantic-consolidation,derived-from,selective-retrieval,system-of-record,fresh-read,authority,stale-invalidation,checkpoint,resume"
+    interaction="static:no-cosmetic-controls"
+    mobile="horizontal-scroll-preserves-memory-lifecycle-authority-and-checkpoint-topology"
+  -->
+  <div class="s5v__canvas">
+    <header class="s5v__head">
+      <div><span class="s5v__kicker">Memory lifecycle · semántica ≠ persistencia</span><h3>La memoria útil necesita rutas distintas para recordar, consolidar, verificar y reanudar</h3></div>
+      <p>Working state es lo que condiciona la decisión actual. Episodios y conocimiento semántico pueden persistir fuera del contexto. El system of record conserva autoridad de negocio. Un checkpoint reanuda ejecución, pero no convierte su snapshot en memoria semántica.</p>
+    </header>
+    <div class="ml-scroll" tabindex="0" role="region" aria-label="Diagrama desplazable del lifecycle de memoria y estado">
+      <div class="ml-stage">
+        <svg viewBox="0 0 1160 760" role="img" aria-labelledby="ml-title ml-desc">
+          <title id="ml-title">Working state, episodios, memoria semántica, estado autoritativo y checkpoints</title>
+          <desc id="ml-desc">El working set central recibe recuerdos recuperados y lecturas frescas del system of record. Las acciones producen observaciones que se guardan como episodios. Una consolidación deriva memoria semántica de episodios conservando lineage, y retrieval devuelve sólo memorias relevantes al working set. El estado autoritativo puede invalidar o superar una memoria derivada stale. Una lane separada serializa estado de ejecución en checkpoints y lo reanuda, mostrando que checkpoint y memoria tienen contratos diferentes.</desc>
+          <defs>
+            <marker id="ml-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="currentColor"/></marker>
+            <marker id="ml-arrow-open" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M1,1 L8,3 L1,5" fill="none" stroke="currentColor" stroke-width="1.5"/></marker>
+          </defs>
+
+          <rect data-boundary="active-runtime" class="ml-boundary" x="320" y="58" width="500" height="290" rx="24"/>
+          <text x="344" y="88" class="ml-kicker">RUNTIME ACTIVO · TRANSITORIO</text>
+          <g data-node="working-set"><rect class="ml-node ml-node--strong" x="445" y="126" width="250" height="92" rx="18"/><text x="570" y="157" class="ml-label">WORKING SET Wₜ</text><text x="570" y="181" class="ml-sub">request · instructions · tool results</text><text x="570" y="202" class="ml-sub">retrieved memory · fresh state</text></g>
+          <g data-node="decision-action"><rect class="ml-node" x="480" y="260" width="180" height="60" rx="14"/><text x="570" y="286" class="ml-label">Decision / action</text><text x="570" y="307" class="ml-sub">effect + observation</text></g>
+          <path data-edge="working-to-action" class="ml-edge" d="M570 218 V252"/>
+
+          <rect data-boundary="memory-plane" class="ml-boundary" x="40" y="398" width="750" height="300" rx="24"/>
+          <text x="64" y="428" class="ml-kicker">PERSISTENT MEMORY PLANE · DERIVED / RECALLABLE</text>
+          <g data-node="episodic-store"><rect class="ml-node" x="82" y="476" width="230" height="96" rx="17"/><text x="197" y="507" class="ml-label">EPISODIC STORE</text><text x="197" y="532" class="ml-sub">events · time · source · result</text><text x="197" y="553" class="ml-sub">appendable history</text></g>
+          <g data-node="consolidation"><path class="ml-derived" d="M360 485 H472 L500 524 L472 563 H360 L388 524 Z"/><text x="430" y="516" class="ml-label">Consolidate</text><text x="430" y="540" class="ml-sub">policy + evidence</text></g>
+          <g data-node="semantic-store"><rect class="ml-derived" x="548" y="476" width="205" height="96" rx="17"/><text x="650" y="507" class="ml-label">SEMANTIC MEMORY</text><text x="650" y="532" class="ml-sub">derived knowledge</text><text x="650" y="553" class="ml-sub">derived_from episodes</text></g>
+          <g data-node="retrieval"><rect class="ml-node" x="516" y="612" width="268" height="56" rx="14"/><text x="650" y="637" class="ml-label">Selective retrieval</text><text x="650" y="658" class="ml-sub">relevance + scope + freshness</text></g>
+
+          <path data-edge="action-to-episode" class="ml-edge" d="M520 320 C432 356 280 392 208 468"/>
+          <text x="323" y="390" class="ml-edge-label">append observation</text>
+          <path data-edge="episode-to-consolidation" class="ml-edge" d="M312 524 H380"/>
+          <path data-edge="consolidation-to-semantic" class="ml-edge" d="M480 524 H540"/>
+          <path data-edge="semantic-lineage" class="ml-edge ml-edge--derived" d="M616 476 C548 444 390 444 252 476"/>
+          <text x="435" y="448" class="ml-edge-label">derived_from</text>
+          <path data-edge="semantic-to-retrieval" class="ml-edge" d="M650 572 V604"/>
+          <path data-edge="retrieval-to-working" class="ml-edge" d="M720 612 C820 542 808 288 695 197"/>
+          <text x="798" y="432" class="ml-edge-label">inject only when useful</text>
+
+          <rect data-boundary="authority-plane" class="ml-boundary" x="848" y="74" width="272" height="430" rx="24"/>
+          <text x="872" y="104" class="ml-kicker">BUSINESS AUTHORITY · EXTERNAL</text>
+          <g data-node="system-of-record"><rect class="ml-authority" x="884" y="148" width="200" height="102" rx="18"/><text x="984" y="180" class="ml-label">SYSTEM OF RECORD</text><text x="984" y="205" class="ml-sub">plan · permission · consent</text><text x="984" y="228" class="ml-sub">current authoritative state</text></g>
+          <g data-node="source-revision"><rect class="ml-node" x="902" y="330" width="164" height="70" rx="14"/><text x="984" y="358" class="ml-label">Source revision</text><text x="984" y="382" class="ml-sub">world changed</text></g>
+          <path data-edge="authority-to-working" class="ml-edge ml-edge--authority" d="M884 198 C820 174 756 170 703 170"/>
+          <text x="790" y="155" class="ml-edge-label">fresh read</text>
+          <path data-edge="source-change" class="ml-edge" d="M984 250 V322"/>
+          <path data-edge="invalidate-semantic" class="ml-edge ml-edge--authority" d="M902 365 C824 390 774 443 714 476"/>
+          <text x="821" y="429" class="ml-edge-label">contradiction → stale / lower authority</text>
+
+          <rect data-boundary="checkpoint-lane" class="ml-boundary" x="836" y="548" width="294" height="150" rx="22"/>
+          <text x="860" y="577" class="ml-kicker">RECOVERY LANE · DIFFERENT CONTRACT</text>
+          <g data-node="checkpoint"><rect class="ml-checkpoint" x="873" y="604" width="220" height="60" rx="14"/><text x="983" y="629" class="ml-label">CHECKPOINT</text><text x="983" y="651" class="ml-sub">serialize / resume execution</text></g>
+          <path data-edge="execution-to-checkpoint" class="ml-edge ml-edge--derived" d="M660 292 C790 318 876 447 935 596"/>
+          <text x="803" y="500" class="ml-edge-label">snapshot runtime</text>
+          <path data-edge="checkpoint-to-working" class="ml-edge ml-edge--derived" d="M1010 604 C1068 466 1000 300 704 206"/>
+          <text x="1024" y="478" class="ml-edge-label">resume ≠ recall</text>
+        </svg>
+      </div>
+    </div>
+    <div class="ml-legend" aria-label="Leyenda del diagrama">
+      <span><i></i> flujo de estado o acción</span>
+      <span class="is-derived"><i></i> derivación / checkpoint</span>
+      <span>línea gruesa = autoridad actual</span>
+    </div>
+    <p class="s5v__copy"><strong>Persistir no hace equivalentes estos stores.</strong> Episodios registran eventos, memoria semántica consolida conocimiento derivado, el system of record gobierna estado de negocio y el checkpoint existe para reanudar ejecución. Sólo el subconjunto seleccionado entra en <code>Wₜ</code>.</p>
+  </div>
+</section>
