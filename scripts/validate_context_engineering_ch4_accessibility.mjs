@@ -14,12 +14,12 @@ const cases = [
     locale: 'es',
     route: '/series/context-engineering-memory-mcp/04-retrieval-context-assembly-freshness-relevance-conflict-grounding/',
     required: [
-      'Retrieval ≠ ensamblado ≠ grounding','GENERACIÓN DE CANDIDATOS','QUERY / TAREA','LÉXICO','SEMÁNTICO','ESTRUCTURADO',
+      'Retrieval ≠ ensamblado ≠ grounding','GENERACIÓN DE CANDIDATOS','CONSULTA / TAREA','LÉXICO','SEMÁNTICO','ESTRUCTURADO',
       'CANDIDATOS','POLÍTICA DE ENSAMBLADO · APLICACIÓN','1 · ÁMBITO + ACL','2 · FRESCURA + VERSIÓN','3 · AUTORIDAD',
-      'CONFLICT SET','FUENTE AUTORITATIVA / READ-THROUGH','SYSTEM OF RECORD · rev B','rev A indexada → STALE',
-      'EVIDENCE CONTEXT Aₜ','MODELO','CLAIMS','ABSTENER / ESCALAR','grounded_by evidence_id','RECHAZADO'
+      'CONJUNTO DE CONFLICTOS','FUENTE AUTORITATIVA · LECTURA DIRECTA','SISTEMA DE REGISTRO · rev B','rev A indexada → OBSOLETA',
+      'CONTEXTO DE EVIDENCIA Aₜ','MODELO','AFIRMACIONES','ABSTENER / ESCALAR','grounded_by ID de evidencia','RECHAZADO'
     ],
-    forbidden: [],
+    forbidden: ['QUERY / TAREA','source revision ≠ index age','CONFLICT SET','SYSTEM OF RECORD · rev B','EVIDENCE CONTEXT Aₜ','CLAIMS'],
   },
   {
     locale: 'en',
@@ -31,9 +31,9 @@ const cases = [
       'EVIDENCE CONTEXT Aₜ','MODEL','CLAIMS','ABSTAIN / ESCALATE','grounded_by evidence_id','REJECTED'
     ],
     forbidden: [
-      'ensamblado','Recuperar candidatos','La similitud ayuda','GENERACIÓN DE CANDIDATOS','QUERY / TAREA','LÉXICO','SEMÁNTICO','ESTRUCTURADO',
+      'ensamblado','Recuperar candidatos','La similitud ayuda','GENERACIÓN DE CANDIDATOS','CONSULTA / TAREA','LÉXICO','SEMÁNTICO','ESTRUCTURADO',
       'POLÍTICA DE ENSAMBLADO','ÁMBITO','FRESCURA','AUTORIDAD','FUENTE AUTORITATIVA','lectura fresca','CONTEXTO ADMITIDO',
-      'MODELO','ABSTENER','RECHAZADO','Leyenda del diagrama','flujo admitido','línea gruesa'
+      'SISTEMA DE REGISTRO','CONTEXTO DE EVIDENCIA','AFIRMACIONES','MODELO','ABSTENER','RECHAZADO','Leyenda del diagrama','flujo admitido','línea gruesa'
     ],
   },
 ];
