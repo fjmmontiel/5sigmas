@@ -129,7 +129,7 @@ const snippetBytes = Buffer.from(snippet, 'utf8');
 const blobHeader = Buffer.from(`blob ${snippetBytes.length}\0`, 'utf8');
 const snippetBlobSha = crypto.createHash('sha1').update(Buffer.concat([blobHeader, snippetBytes])).digest('hex');
 check(i18n.source_blob_sha === snippetBlobSha, `EN: isolation visual source_blob_sha stale (${i18n.source_blob_sha} != ${snippetBlobSha})`);
-for (const token of ['Isolation across three dimensions','Separate worktrees can still share risks','SHARED GIT','MUTABLE STATE','CAPABILITIES','INTEGRATION','network crosses policy','without namespace','target changes → invalidate evidence','evidence that must be revalidated']) {
+for (const token of ['Isolation across three dimensions','Separate worktrees can still share risks','SHARED GIT','MUTABLE STATE','CAPABILITIES','INTEGRATION','allowed network effect','without namespace','target changes → invalidate evidence','evidence that must be revalidated']) {
   check(snippet.includes(token) || Object.values(i18n.replacements).some((value) => String(value).includes(token)), `EN visual translation missing ${token}`);
 }
 
