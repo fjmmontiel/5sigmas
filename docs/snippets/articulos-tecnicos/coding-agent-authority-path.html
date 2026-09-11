@@ -1,17 +1,116 @@
-<section class="s5v s5v-arch-map s5v-coding-agent-authority-path s5v--wide" data-step="1" aria-label="Camino de autoridad desde contexto no confiable hasta un efecto externo de un coding agent">
+<section class="s5v s5v-coding-agent-authority-path s5v--wide" aria-label="Grafo de autoridad desde contexto no confiable hasta un efecto externo de un coding agent">
+  <style>
+    .s5v-coding-agent-authority-path .s5v-authority__scroll{overflow-x:auto;overscroll-behavior-inline:contain;padding:.35rem .2rem .8rem;scrollbar-gutter:stable;outline:none}
+    .s5v-coding-agent-authority-path .s5v-authority__scroll:focus-visible{box-shadow:0 0 0 3px color-mix(in srgb,var(--md-accent-fg-color,#7c4dff) 36%,transparent);border-radius:14px}
+    .s5v-coding-agent-authority-path .s5v-authority__stage{min-width:980px;max-width:1160px;margin:0 auto}
+    .s5v-coding-agent-authority-path svg{display:block;width:100%;height:auto;overflow:visible}
+    .s5v-coding-agent-authority-path text{fill:currentColor;font-family:inherit}
+    .s5v-coding-agent-authority-path .a-boundary{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 96%,var(--md-accent-fg-color,#7c4dff) 4%);stroke:currentColor;stroke-width:2;stroke-dasharray:10 8;opacity:.96}
+    .s5v-coding-agent-authority-path .a-node{fill:var(--md-default-bg-color,#fff);stroke:currentColor;stroke-width:2.6}
+    .s5v-coding-agent-authority-path .a-node--control{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 91%,var(--md-accent-fg-color,#7c4dff) 9%)}
+    .s5v-coding-agent-authority-path .a-node--effect{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 86%,var(--md-accent-fg-color,#7c4dff) 14%);stroke-width:3}
+    .s5v-coding-agent-authority-path .a-node--evidence{fill:var(--md-default-bg-color,#fff);stroke-width:2.4}
+    .s5v-coding-agent-authority-path .a-gate{fill:var(--md-default-bg-color,#fff);stroke:currentColor;stroke-width:3}
+    .s5v-coding-agent-authority-path .a-edge{fill:none;stroke:currentColor;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#a-arrow)}
+    .s5v-coding-agent-authority-path .a-edge--conditional{stroke-dasharray:7 6}
+    .s5v-coding-agent-authority-path .a-edge--invalidate{stroke-dasharray:3 7;stroke-width:3.2}
+    .s5v-coding-agent-authority-path .a-edge--audit{stroke-width:2;stroke-dasharray:9 7;opacity:.78}
+    .s5v-coding-agent-authority-path .a-kicker{font-size:13px;font-weight:850;letter-spacing:.08em;text-transform:uppercase;opacity:.68}
+    .s5v-coding-agent-authority-path .a-label{font-size:16px;font-weight:850;text-anchor:middle}
+    .s5v-coding-agent-authority-path .a-sub{font-size:12.5px;text-anchor:middle;opacity:.76}
+    .s5v-coding-agent-authority-path .a-edge-label{font-size:12px;font-weight:800;paint-order:stroke;stroke:var(--md-default-bg-color,#fff);stroke-width:6px;stroke-linejoin:round}
+    .s5v-coding-agent-authority-path .a-region-label{font-size:12px;font-weight:900;letter-spacing:.1em;opacity:.7}
+    .s5v-coding-agent-authority-path .s5v-authority__legend{display:flex;gap:1rem;flex-wrap:wrap;margin:.25rem 0 0;font-size:.86rem;opacity:.86}
+    .s5v-coding-agent-authority-path .s5v-authority__legend span{display:inline-flex;gap:.42rem;align-items:center}
+    .s5v-coding-agent-authority-path .s5v-authority__legend i{width:1.55rem;border-top:3px solid currentColor}
+    .s5v-coding-agent-authority-path .s5v-authority__legend .is-boundary i{border-top-width:2px;border-top-style:dashed}
+    .s5v-coding-agent-authority-path .s5v-authority__legend .is-recheck i{border-top-width:2px;border-top-style:dotted}
+    .s5v-coding-agent-authority-path .s5v__copy{margin-top:.85rem}
+    @media (max-width:700px){.s5v-coding-agent-authority-path .s5v-authority__scroll{margin-inline:-.35rem;padding-inline:.35rem}.s5v-coding-agent-authority-path .s5v-authority__stage{min-width:1120px}.s5v-coding-agent-authority-path .s5v-authority__legend{font-size:.82rem}}
+  </style>
+  <!-- GOLDEN_VISUAL_CONTRACT
+    learning-objective="Understand that a model proposal becomes an external effect only when several independent authority controls agree, and that no single control substitutes for the others."
+    mechanism="untrusted context can influence a model proposal; the harness canonicalizes the requested action, fans it out to tool/schema, policy/approval, and sandbox/network controls, rechecks approval binding if the request changed, then crosses a local execution boundary; remote authority is separately constrained by projected credentials and destination ACL/IAM before an effect can occur; deny, re-approval, remote rejection, and successful effects all feed an evidence ledger."
+    visual-variables="three spatial regions encode trust domains; parallel control nodes encode independent gates rather than a sequence; converging arrows encode conjunction before execution; dashed boundaries encode local sandbox and trust boundaries; a dotted return encodes TOCTOU invalidation/re-approval; a second convergence outside the sandbox encodes credential plus remote authorization; audit arrows converge on one evidence ledger."
+    why-visual="A row of boxes falsely implies that policy, approval, sandboxing, credentials, and remote ACLs are sequential substitutes. The graph shows their partial orthogonality, where authority actually composes, why local sandboxing does not narrow a remote token, and how a changed request invalidates an earlier approval."
+    relationship="untrusted-context->proposal->canonical-request|request->{tool-schema,policy,approval,sandbox-network}->local-gate|request-change->reapproval|local-gate+credential+remote-acl->remote-gate->effect|all-outcomes->evidence"
+    evidence="tool-surface,allow-ask-deny,approval-subject-digest,sandbox-network-boundary,credential-identity-scope,remote-acl-iam,effect-result,audit-verifier"
+    interaction="static:no-cosmetic-controls"
+    mobile="horizontal-scroll-preserves-parallel-authority-topology"
+  -->
   <div class="s5v__canvas">
-    <header class="s5v__head"><div><span class="s5v__kicker">Autoridad · policy · credenciales</span><h3>Una tool call no es todavía permiso para producir un efecto</h3></div><p>La propuesta del modelo cruza varias fronteras independientes antes de tocar un sistema externo.</p></header>
-    <div class="s5v-arch-map__panels">
-      <div data-panel="1" class="s5v-arch-map__pipe">
-        <span>Contexto<br><small>repo · issue · web · output de tools</small></span>
-        <span>Propuesta<br><small>tool + argumentos</small></span>
-        <span>Policy<br><small>allow · ask · deny</small></span>
-        <span>Approval<br><small>acción concreta · scope · vigencia</small></span>
-        <span>Sandbox<br><small>filesystem · proceso · red</small></span>
-        <span>Credencial<br><small>identidad · permisos · expiración</small></span>
-        <span>Efecto + evidencia<br><small>resultado externo · audit · verifier</small></span>
+    <header class="s5v__head"><div><span class="s5v__kicker">Autoridad · policy · credenciales</span><h3>Una tool call sólo produce un efecto cuando varias fronteras independientes lo permiten</h3></div><p>La propuesta del modelo no es autoridad. Tool surface, policy, approval, sandbox, credencial y controles remotos responden preguntas distintas.</p></header>
+    <div class="s5v-authority__scroll" tabindex="0" role="region" aria-label="Diagrama desplazable de composición de autoridad de un coding agent">
+      <div class="s5v-authority__stage">
+        <svg viewBox="0 0 1160 930" role="img" aria-labelledby="authority-title authority-desc">
+          <title id="authority-title">Cómo se compone la autoridad antes de que un coding agent produzca un efecto externo</title>
+          <desc id="authority-desc">Contexto no confiable puede influir una propuesta del modelo, pero el harness convierte esa propuesta en una solicitud canónica y la evalúa mediante controles independientes de tool y esquema, policy, approval y sandbox con red. Esos controles convergen antes de ejecutar. Si cambian argumentos, target, artefacto o identidad después de la aprobación, el digest deja de coincidir y la acción debe volver a aprobación. Fuera de la sandbox, una credencial con scope mínimo y los controles del sistema remoto vuelven a limitar la autoridad. Un efecto, un rechazo o una denegación terminan en evidencia auditable sin registrar el secreto.</desc>
+          <defs><marker id="a-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="currentColor"/></marker></defs>
+
+          <rect class="a-boundary" data-boundary="untrusted" x="26" y="50" width="248" height="330" rx="32"/>
+          <rect class="a-boundary" data-boundary="harness" x="300" y="50" width="516" height="690" rx="32"/>
+          <rect class="a-boundary" data-boundary="external" x="842" y="50" width="292" height="690" rx="32"/>
+          <text x="48" y="82" class="a-region-label">INPUT NO CONFIABLE</text>
+          <text x="322" y="82" class="a-region-label">ENFORCEMENT DEL HARNESS</text>
+          <text x="864" y="82" class="a-region-label">AUTORIDAD EXTERNA</text>
+
+          <g data-node="context"><rect class="a-node" x="58" y="112" width="184" height="86" rx="25"/><text x="150" y="145" class="a-label">Contexto</text><text x="150" y="169" class="a-sub">repo · issue · web</text><text x="150" y="187" class="a-sub">output de tools</text></g>
+          <g data-node="proposal"><rect class="a-node" x="58" y="242" width="184" height="92" rx="25"/><text x="150" y="278" class="a-label">Propuesta del modelo</text><text x="150" y="303" class="a-sub">tool + argumentos inferidos</text></g>
+          <path data-edge="context-to-proposal" class="a-edge" d="M150 198 V236"/>
+
+          <g data-node="canonical-request"><rect class="a-node a-node--control" x="350" y="105" width="416" height="102" rx="28"/><text x="558" y="138" class="a-kicker" text-anchor="middle">SOLICITUD CANÓNICA</text><text x="558" y="166" class="a-label">tool · args normalizados · target · identidad</text><text x="558" y="190" class="a-sub">task_id · policy_version · effect intent</text></g>
+          <path data-edge="proposal-to-request" class="a-edge" d="M242 286 C292 286 302 156 344 156"/>
+
+          <g data-control="tool-schema"><rect class="a-node a-node--control" x="342" y="262" width="202" height="94" rx="26"/><text x="443" y="294" class="a-label">Tool + schema</text><text x="443" y="318" class="a-sub">¿expuesta? · ¿args válidos?</text><text x="443" y="338" class="a-sub">T(a)</text></g>
+          <g data-control="policy"><rect class="a-node a-node--control" x="572" y="262" width="202" height="94" rx="26"/><text x="673" y="294" class="a-label">Policy</text><text x="673" y="318" class="a-sub">ALLOW · ASK · DENY</text><text x="673" y="338" class="a-sub">P(a)</text></g>
+          <g data-control="approval"><rect class="a-node a-node--control" x="342" y="402" width="202" height="124" rx="26"/><text x="443" y="432" class="a-label">Approval ligado</text><text x="443" y="455" class="a-sub">scope · vigencia · identidad</text><text x="443" y="476" class="a-sub">H(tool,args,target,identity,policy_v)</text><text x="443" y="498" class="a-sub">A(a)</text></g>
+          <g data-control="sandbox-network"><rect class="a-node a-node--control" x="572" y="402" width="202" height="124" rx="26"/><text x="673" y="432" class="a-label">Sandbox + red</text><text x="673" y="455" class="a-sub">filesystem · proceso · egress</text><text x="673" y="476" class="a-sub">capacidad local alcanzable</text><text x="673" y="498" class="a-sub">S(a)</text></g>
+
+          <path data-edge="request-to-tool" class="a-edge" d="M490 207 C470 225 452 236 443 256"/>
+          <path data-edge="request-to-policy" class="a-edge" d="M626 207 C648 225 664 238 673 256"/>
+          <path data-edge="request-to-approval" class="a-edge a-edge--conditional" d="M414 207 C350 251 326 331 384 396"/>
+          <text x="327" y="332" class="a-edge-label">si ASK</text>
+          <path data-edge="request-to-sandbox" class="a-edge" d="M700 207 C772 265 774 335 718 396"/>
+
+          <g data-node="request-changed"><rect class="a-node" x="318" y="566" width="230" height="72" rx="24"/><text x="433" y="594" class="a-label">Δ request tras revisar</text><text x="433" y="618" class="a-sub">args · target · artefacto · identidad</text></g>
+          <path data-edge="request-change-to-approval" class="a-edge a-edge--invalidate" d="M408 566 C375 548 374 529 395 522"/>
+          <text x="307" y="542" class="a-edge-label">digest mismatch → reaprobar</text>
+
+          <g data-node="local-gate"><path class="a-gate" d="M675 566 L750 620 L675 674 L600 620 Z"/><text x="675" y="612" class="a-label">Gate local</text><text x="675" y="635" class="a-sub">T ∧ P ∧ S ∧ A</text></g>
+          <path data-edge="tool-to-local-gate" class="a-edge" d="M500 356 C522 455 563 555 617 594"/>
+          <path data-edge="policy-to-local-gate" class="a-edge" d="M694 356 C707 447 708 526 690 563"/>
+          <path data-edge="approval-to-local-gate" class="a-edge" d="M544 482 C586 502 623 536 645 570"/>
+          <path data-edge="sandbox-to-local-gate" class="a-edge" d="M673 526 V560"/>
+
+          <g data-outcome="deny-reask"><rect class="a-node" x="330" y="670" width="220" height="70" rx="24"/><text x="440" y="698" class="a-label">DENY / re-ASK</text><text x="440" y="720" class="a-sub">sin efecto · conserva evidencia</text></g>
+          <path data-edge="policy-deny" class="a-edge a-edge--conditional" d="M624 350 C570 407 544 590 507 664"/><text x="522" y="577" class="a-edge-label">DENY / approval inválido</text>
+          <path data-edge="local-gate-deny" class="a-edge a-edge--conditional" d="M600 620 C572 629 545 646 516 666"/>
+
+          <g data-node="effective-invocation"><rect class="a-node" x="621" y="692" width="176" height="66" rx="23"/><text x="709" y="718" class="a-label">Invocación efectiva</text><text x="709" y="740" class="a-sub">tool + args exactos</text></g>
+          <path data-edge="local-gate-to-invocation" class="a-edge" d="M675 674 V686"/>
+
+          <g data-control="credential"><rect class="a-node a-node--control" x="872" y="188" width="232" height="112" rx="26"/><text x="988" y="220" class="a-label">Credencial proyectada</text><text x="988" y="244" class="a-sub">identidad · scopes · expiración</text><text x="988" y="266" class="a-sub">valor no entra en el audit log</text><text x="988" y="286" class="a-sub">C(a)</text></g>
+          <g data-control="remote-acl"><rect class="a-node a-node--control" x="872" y="350" width="232" height="112" rx="26"/><text x="988" y="382" class="a-label">ACL / IAM remoto</text><text x="988" y="406" class="a-sub">branch protection · role · policy</text><text x="988" y="428" class="a-sub">el destino puede rechazar</text><text x="988" y="448" class="a-sub">R(a)</text></g>
+          <text x="853" y="512" class="a-edge-label">sandbox local ≠ scope del token remoto</text>
+
+          <g data-node="remote-gate"><path class="a-gate" d="M987 548 L1060 600 L987 652 L914 600 Z"/><text x="987" y="591" class="a-label">Gate remoto</text><text x="987" y="614" class="a-sub">invocación ∧ C ∧ R</text></g>
+          <path data-edge="credential-to-remote-gate" class="a-edge" d="M988 300 V542"/>
+          <path data-edge="acl-to-remote-gate" class="a-edge" d="M1038 462 C1054 500 1040 548 1020 562"/>
+          <path data-edge="invocation-to-remote-gate" class="a-edge" d="M797 725 C852 725 873 650 929 622"/>
+
+          <g data-outcome="remote-reject"><rect class="a-node" x="862" y="690" width="116" height="64" rx="22"/><text x="920" y="716" class="a-label">REJECT</text><text x="920" y="737" class="a-sub">sin efecto</text></g>
+          <g data-outcome="effect"><rect class="a-node a-node--effect" x="994" y="690" width="116" height="64" rx="22"/><text x="1052" y="716" class="a-label">EFECTO</text><text x="1052" y="737" class="a-sub">estado remoto</text></g>
+          <path data-edge="remote-gate-reject" class="a-edge a-edge--conditional" d="M960 648 C944 664 930 674 921 684"/>
+          <path data-edge="remote-gate-effect" class="a-edge" d="M1014 648 C1030 664 1042 674 1049 684"/>
+
+          <g data-node="evidence"><rect class="a-node a-node--evidence" x="300" y="814" width="820" height="84" rx="28"/><text x="710" y="844" class="a-label">Ledger de autoridad + verifier</text><text x="710" y="869" class="a-sub">request digest · policy/rule · approval · identity/scopes · sandbox/network · resultado · verification_head_sha</text><text x="710" y="889" class="a-sub">registra decisiones y efectos; nunca el valor del secreto</text></g>
+          <path data-edge="deny-to-evidence" class="a-edge a-edge--audit" d="M440 740 C440 780 500 802 555 808"/>
+          <path data-edge="reject-to-evidence" class="a-edge a-edge--audit" d="M920 754 C914 785 880 801 845 808"/>
+          <path data-edge="effect-to-evidence" class="a-edge a-edge--audit" d="M1052 754 C1044 788 995 803 950 808"/>
+        </svg>
       </div>
     </div>
-    <div class="s5v__copy"><strong>Defensa en profundidad:</strong> una frontera no sustituye a las demás. La sandbox puede impedir escribir fuera del workspace y aun así un token con demasiados permisos puede autorizar un efecto remoto. Un approval humano puede autorizar una llamada concreta y aun así no demostrar que sus argumentos sean seguros.</div>
+    <div class="s5v-authority__legend" aria-label="Leyenda del grafo de autoridad"><span><i></i>flujo autorizado o evaluado</span><span class="is-boundary"><i></i>frontera de confianza/capacidad</span><span class="is-recheck"><i></i>cambio que invalida una aprobación</span></div>
+    <div class="s5v__copy"><strong>La conjunción es la idea:</strong> exponer una tool no concede autoridad; una aprobación no amplía la sandbox; la sandbox local no reduce por sí sola los scopes de una credencial remota; y un approval deja de representar la decisión humana si cambia el request que se ejecutará. Cada salida, incluida una denegación, debe dejar evidencia suficiente para reconstruir qué autoridad existía realmente.</div>
   </div>
 </section>
