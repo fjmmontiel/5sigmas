@@ -15,15 +15,15 @@ const cases = [
     locale: 'es',
     route: '/series/coding-agents-agent-harnesses/01-que-es-agent-harness/',
     tableHeader: 'Responsabilidad',
-    requiredVisual: ['Modelo ≠ harness', 'Contrato de tarea', 'Modelo', 'Harness + entorno', 'Verificador / stop', 'continuidad causal'],
+    requiredVisual: ['Modelo ≠ harness', 'La autonomía está en el bucle', 'Tarea', 'Contexto', 'Modelo', 'Policy + dispatch', 'Workspace + tools', 'Observación', 'Verificar', 'continue', 'Done / handback', 'run state · provenance · checkpoint · evidence', 'cerrar el feedback loop'],
     forbidden: [],
   },
   {
     locale: 'en',
     route: '/en/series/coding-agents-agent-harnesses/01-que-es-agent-harness/',
     tableHeader: 'Responsibility',
-    requiredVisual: ['Model ≠ harness', 'Task contract', 'Model', 'Harness + environment', 'Verifier / stop', 'causal continuity'],
-    forbidden: ['Fronteras de responsabilidad', 'Modelo ≠ harness', 'Contrato de tarea', 'propone la siguiente acción', 'Harness + entorno', 'Verificador / stop', 'continuidad causal'],
+    requiredVisual: ['Model ≠ harness', 'Autonomy lives in the loop', 'Task', 'Context', 'Model', 'Policy + dispatch', 'Workspace + tools', 'Observation', 'Verify', 'continue', 'Done / handback', 'run state · provenance · checkpoint · evidence', 'closing the feedback loop'],
+    forbidden: ['La autonomía está en el bucle', 'Tarea', 'Contexto', 'Modelo', 'propone; no ejecuta', 'contexto acotado', 'propuesta', 'acción autorizada', 'Observación', 'resultado vuelve', 'Verificar', 'nueva evidencia', 'flujo causal', 'estado persistente', 'cerrar el feedback loop'],
   },
 ];
 
@@ -59,7 +59,7 @@ try {
       check((await visual.count()) === 1, `${testCase.route}: ${viewport.name} expected exactly one harness visual`);
       if (await visual.count()) {
         const label = (await visual.getAttribute('aria-label'))?.trim() || '';
-        check(label.length >= 20, `${testCase.route}: ${viewport.name} harness visual missing meaningful aria-label`);
+        check(label.length >= 35, `${testCase.route}: ${viewport.name} harness visual missing meaningful aria-label`);
         const visualText = await visual.innerText();
         const normalizedVisualText = visualText.toLocaleLowerCase();
         for (const token of testCase.requiredVisual) check(normalizedVisualText.includes(token.toLocaleLowerCase()), `${testCase.route}: ${viewport.name} harness visual missing ${JSON.stringify(token)}`);
@@ -67,13 +67,64 @@ try {
 
         const visualBox = await visual.boundingBox();
         check(Boolean(visualBox && visualBox.width <= viewport.width + 1), `${testCase.route}: ${viewport.name} visual exceeds viewport (${JSON.stringify(visualBox)})`);
-        const pipe = visual.locator('.s5v-arch-map__pipe').first();
-        const cards = pipe.locator(':scope > span');
-        check((await cards.count()) === 4, `${testCase.route}: ${viewport.name} expected four responsibility cards`);
-        for (let index = 0; index < await cards.count(); index += 1) {
-          const box = await cards.nth(index).boundingBox();
-          check(Boolean(box && box.width >= (viewport.name === 'mobile' ? 120 : 55)), `${testCase.route}: ${viewport.name} card ${index + 1} collapsed (${JSON.stringify(box)})`);
-          check(Boolean(box && box.height <= (viewport.name === 'mobile' ? 190 : 210)), `${testCase.route}: ${viewport.name} card ${index + 1} wraps pathologically (${JSON.stringify(box)})`);
+        check((await visual.locator('.s5v-arch-map__pipe').count()) === 0, `${testCase.route}: ${viewport.name} obsolete linear card pipe rendered`);
+        check((await visual.locator('.s5v__steps--tabs').count()) === 0, `${testCase.route}: ${viewport.name} cosmetic tabs rendered`);
+
+        const geometry = await visual.evaluate((root) => {
+          const box = (selector) => {
+            const node = root.querySelector(selector);
+            if (!node) return null;
+            const r = node.getBoundingClientRect();
+            return { left: r.left, right: r.right, top: r.top, bottom: r.bottom, width: r.width, height: r.height, cx: r.left + r.width / 2, cy: r.top + r.height / 2 };
+          };
+          return {
+            context: box('[data-node="context"]'),
+            model: box('[data-node="model"]'),
+            dispatch: box('[data-node="dispatch"]'),
+            workspace: box('[data-node="workspace"]'),
+            observation: box('[data-node="observation"]'),
+            verifier: box('[data-node="verifier"]'),
+            handback: box('[data-node="handback"]'),
+            continueEdge: box('[data-edge="continue-return"]'),
+            stopEdge: box('[data-edge="stop-exit"]'),
+            stateRail: box('[data-state-rail="run-state"]'),
+          };
+        });
+        for (const [name, box] of Object.entries(geometry)) check(Boolean(box && box.width > 1 && box.height >= 0), `${testCase.route}: ${viewport.name} relationship geometry missing ${name} (${JSON.stringify(box)})`);
+        if (geometry.model && geometry.context && geometry.dispatch && geometry.workspace && geometry.observation && geometry.verifier && geometry.handback) {
+          check(geometry.model.cy < geometry.context.cy - 70, `${testCase.route}: ${viewport.name} model is not visibly outside/above the harness loop (${JSON.stringify(geometry)})`);
+          check(geometry.context.cx < geometry.dispatch.cx - 80, `${testCase.route}: ${viewport.name} context→dispatch direction collapsed (${JSON.stringify(geometry)})`);
+          check(geometry.workspace.cx > geometry.dispatch.cx + 180, `${testCase.route}: ${viewport.name} workspace no longer sits across the execution boundary (${JSON.stringify(geometry)})`);
+          check(geometry.observation.cy > geometry.dispatch.cy + 70, `${testCase.route}: ${viewport.name} observation is not visibly downstream of execution (${JSON.stringify(geometry)})`);
+          check(geometry.verifier.cx < geometry.observation.cx - 60, `${testCase.route}: ${viewport.name} observation→verifier direction collapsed (${JSON.stringify(geometry)})`);
+          check(geometry.handback.cy > geometry.verifier.cy + 55, `${testCase.route}: ${viewport.name} stop/handback exit no longer leaves the feedback loop (${JSON.stringify(geometry)})`);
+        }
+        if (geometry.continueEdge && geometry.context && geometry.verifier) {
+          check(geometry.continueEdge.left <= geometry.context.cx + 12 && geometry.continueEdge.right >= geometry.verifier.cx - 12, `${testCase.route}: ${viewport.name} continue edge no longer spans verifier back toward context (${JSON.stringify(geometry.continueEdge)})`);
+          check(geometry.continueEdge.height > 40, `${testCase.route}: ${viewport.name} continue edge collapsed into a cosmetic connector (${JSON.stringify(geometry.continueEdge)})`);
+        }
+        if (geometry.stateRail && geometry.context && geometry.observation) {
+          check(geometry.stateRail.top > geometry.context.cy && geometry.stateRail.right >= geometry.observation.cx, `${testCase.route}: ${viewport.name} persistent state rail no longer underpins the loop (${JSON.stringify(geometry.stateRail)})`);
+        }
+
+        const scroller = visual.locator('.s5v-harness-loop__scroll');
+        check((await scroller.count()) === 1, `${testCase.route}: ${viewport.name} topology-preserving scroll region missing`);
+        if (await scroller.count()) {
+          check((await scroller.getAttribute('tabindex')) === '0', `${testCase.route}: ${viewport.name} visual scroll region is not keyboard focusable`);
+          const scrollState = await scroller.evaluate((node) => {
+            const maxScroll = node.scrollWidth - node.clientWidth;
+            node.scrollLeft = maxScroll;
+            void node.offsetWidth;
+            return { maxScroll, actualScroll: node.scrollLeft, clientWidth: node.clientWidth, scrollWidth: node.scrollWidth };
+          });
+          if (viewport.name === 'mobile') {
+            check(scrollState.maxScroll > 300 && scrollState.actualScroll > 300, `${testCase.route}: mobile relationship canvas did not preserve topology through horizontal scroll (${JSON.stringify(scrollState)})`);
+            await scroller.screenshot({ path: path.join(outDir, `coding-harness-ch1-${testCase.locale}-mobile-loop-end.png`), animations: 'disabled' });
+            await scroller.evaluate((node) => { node.scrollLeft = 0; });
+          } else {
+            check(scrollState.scrollWidth >= 900, `${testCase.route}: desktop relationship canvas collapsed unexpectedly (${JSON.stringify(scrollState)})`);
+            await scroller.evaluate((node) => { node.scrollLeft = 0; });
+          }
         }
         await visual.screenshot({ path: path.join(outDir, `coding-harness-ch1-${testCase.locale}-${viewport.name}-visual.png`), animations: 'disabled' });
       }
@@ -143,4 +194,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Coding agent harness chapter browser/accessibility QA PASS: ES/EN language, localized harness visual, four-card geometry, reduced-motion, desktop/mobile layout, comparison-table reachability, page overflow, runtime errors and review screenshots are valid.');
+console.log('Coding agent harness chapter browser/accessibility QA PASS: ES/EN language, relationship-first feedback-loop geometry, model/harness/environment boundaries, continue/stop branching, persistent state rail, topology-preserving mobile scroll, reduced-motion, comparison-table reachability, page overflow, runtime errors and review screenshots are valid.');
