@@ -1,4 +1,5 @@
 name: Coding Agents chapter 2.1 GOLDEN milestone
+# milestone retry after restoring shared EN manifest parity
 
 on:
   push:
