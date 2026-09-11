@@ -88,8 +88,8 @@
           <path data-edge="policy-deny" class="a-flow a-flow--conditional" d="M450 327 C421 394 400 464 391 522"/>
           <path data-edge="local-gate-deny" class="a-flow a-flow--conditional" d="M503 478 C463 482 431 498 406 523"/>
 
-          <g data-node="effective-invocation"><rect class="a-request" x="650" y="448" width="126" height="72" rx="36"/><text x="713" y="478" class="a-label">Invocación</text><text x="713" y="499" class="a-sub">tool + args exactos</text></g>
-          <path data-edge="local-gate-to-invocation" class="a-flow" d="M647 478 H644"/>
+          <g data-node="effective-invocation"><rect class="a-request" x="668" y="448" width="128" height="72" rx="36"/><text x="732" y="478" class="a-label">Invocación</text><text x="732" y="499" class="a-sub">tool + args exactos</text></g>
+          <path data-edge="local-gate-to-invocation" class="a-flow" d="M647 478 H662"/>
 
           <line x1="814" y1="92" x2="814" y2="568" stroke="currentColor" stroke-width="2" stroke-dasharray="6 8" opacity=".45"/>
           <text x="821" y="420" class="a-note" transform="rotate(-90 821 420)">sandbox local ≠ scope del token remoto</text>
@@ -101,7 +101,7 @@
           <g data-node="remote-gate"><path class="a-gate" d="M977 414 L1049 468 L977 522 L905 468 Z"/><text x="977" y="460" class="a-label">Gate remoto</text><text x="977" y="483" class="a-sub">invocación ∧ C ∧ R</text></g>
           <path data-edge="credential-to-remote-gate" class="a-flow" d="M912 304 C911 374 931 414 950 430"/>
           <path data-edge="acl-to-remote-gate" class="a-flow" d="M1042 304 C1043 374 1023 414 1004 430"/>
-          <path data-edge="invocation-to-remote-gate" class="a-flow" d="M776 484 C834 484 862 468 899 468"/>
+          <path data-edge="invocation-to-remote-gate" class="a-flow" d="M796 484 C842 484 869 468 899 468"/>
 
           <g data-outcome="remote-reject"><circle class="a-outcome" cx="908" cy="562" r="43"/><text x="908" y="558" class="a-label">REJECT</text><text x="908" y="578" class="a-sub">sin efecto</text></g>
           <g data-outcome="effect"><circle class="a-outcome a-outcome--effect" cx="1046" cy="562" r="43"/><text x="1046" y="558" class="a-label">EFECTO</text><text x="1046" y="578" class="a-sub">estado remoto</text></g>
