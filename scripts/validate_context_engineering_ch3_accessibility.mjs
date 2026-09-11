@@ -14,9 +14,9 @@ const cases = [
     locale: 'es',
     route: '/series/context-engineering-memory-mcp/03-memory-architectures-working-episodic-semantic-persistent-state/',
     required: [
-      'Memory lifecycle · semántica ≠ persistencia','WORKING SET Wₜ','EPISODIC STORE','Consolidate','SEMANTIC MEMORY',
-      'Selective retrieval','BUSINESS AUTHORITY · EXTERNAL','SYSTEM OF RECORD','fresh read',
-      'contradiction → stale / lower authority','RECOVERY LANE · DIFFERENT CONTRACT','CHECKPOINT','resume ≠ recall',
+      'Ciclo de vida de memoria · semántica ≠ persistencia','WORKING SET Wₜ','MEMORIA EPISÓDICA','Consolidar','MEMORIA SEMÁNTICA',
+      'Retrieval selectivo','AUTORIDAD DE NEGOCIO · EXTERNA','SYSTEM OF RECORD','lectura fresca',
+      'contradicción → stale / menor autoridad','RUTA DE RECUPERACIÓN · CONTRATO DISTINTO','CHECKPOINT','reanudar ≠ recordar',
       'Persistir no hace equivalentes estos stores.'
     ],
     forbidden: [],
@@ -31,7 +31,8 @@ const cases = [
       'Persistence does not make these stores equivalent.'
     ],
     forbidden: [
-      'semántica ≠ persistencia','La memoria útil necesita','RUNTIME ACTIVO','PERSISTENT MEMORY PLANE · DERIVED / RECALLABLE',
+      'Ciclo de vida de memoria','La memoria útil necesita','RUNTIME ACTIVO','PLANO DE MEMORIA PERSISTENTE',
+      'MEMORIA EPISÓDICA','MEMORIA SEMÁNTICA','AUTORIDAD DE NEGOCIO','RUTA DE RECUPERACIÓN',
       'flujo de estado o acción','derivación / checkpoint','línea gruesa = autoridad actual','Persistir no hace'
     ],
   },
