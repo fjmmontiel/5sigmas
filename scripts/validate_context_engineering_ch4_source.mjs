@@ -94,6 +94,9 @@ for (const token of ['relevance','freshness','authority','permission','grounding
   check(es.includes(token), `ES: final distinction missing ${token}`);
   check(en.includes(token), `EN: final distinction missing ${token}`);
 }
+check(!es.includes('atomicamente'), 'ES: unaccented atomicamente regression detected');
+check(!es.includes('candidate relevance en business authority'), 'ES: mixed-language authority sentence regression detected');
+check(!es.includes('source IDs, revisiones, ACLs y contracts'), 'ES: mixed-language application-boundary sentence regression detected');
 check(!/^\s*-\s+.+;\s*$/m.test(en), 'EN: semicolon-list anti-pattern detected');
 check(!/\?\./.test(en), 'EN: malformed question punctuation detected');
 
