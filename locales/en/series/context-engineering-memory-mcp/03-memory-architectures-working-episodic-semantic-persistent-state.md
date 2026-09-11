@@ -18,10 +18,10 @@ An agent can remember a user preference for months and still make the wrong deci
 
 The design problem is not only **what to store**. It is separating four questions:
 
-1. what state does the task need **now** to reason?;
-2. which past experiences are worth keeping as episodes?;
-3. which patterns or derived facts are worth consolidating as semantic knowledge?;
-4. which data is **authoritative product state** and should be read from a system of record instead of trusted as agent memory?
+1. What state does the task need **now** to reason?
+2. Which past experiences are worth keeping as episodes?
+3. Which patterns or derived facts are worth consolidating as semantic knowledge?
+4. Which data is **authoritative product state** and should be read from a system of record instead of trusted as agent memory?
 
 A fifth distinction prevents many confused designs: **persistent is not, by itself, a cognitive memory type**. Persistence describes how long data survives and where it lives. A conversation, an episode, an embedding, a consolidated preference, or a checkpoint can all be persistent while carrying different semantics.
 
@@ -33,12 +33,12 @@ CoALA proposes a conceptual architecture that separates working memory from long
 
 Let \(W_t\) denote the working set used for one concrete decision. It may contain:
 
-- the current request;
-- active instructions;
-- recent tool results;
-- a relevant slice of history;
-- retrieved memories;
-- a fresh read of external state.
+- the current request
+- active instructions
+- recent tool results
+- a relevant slice of history
+- retrieved memories
+- a fresh read of external state
 
 \(W_t\) is **active state**, not necessarily persistent state. It can be reconstructed on every turn from external sources.
 
@@ -69,9 +69,9 @@ retention / sensitivity metadata
 
 Examples:
 
-- “the user rejected this proposal on 2026-09-11”;
-- “run-42 failed because the payments schema rejected `currency=null`”;
-- “the agent called `cancel_subscription` and received `409 already_cancelled`”.
+- “the user rejected this proposal on 2026-09-11”
+- “run-42 failed because the payments schema rejected `currency=null`”
+- “the agent called `cancel_subscription` and received `409 already_cancelled`”
 
 Time and provenance are part of the meaning. Remove both and an episode can turn into an ambiguous statement that looks universal.
 
@@ -95,11 +95,11 @@ derived_from = [e17, e24, e31]
 
 Consolidation reduces retrieval and context cost, but creates a derived representation. It therefore needs answers to:
 
-- which episodes produced it?;
-- which rule or model performed the consolidation?;
-- when was it updated?;
-- what evidence contradicts it?;
-- when should it be invalidated or recomputed?
+- Which episodes produced it?
+- Which rule or model performed the consolidation?
+- When was it updated?
+- What evidence contradicts it?
+- When should it be invalidated or recomputed?
 
 A semantic memory should not automatically be promoted to “truth.” It may be a useful inference, a likely preference, or a learned rule. Its **authority** depends on the source and domain.
 
@@ -109,13 +109,13 @@ A support agent may remember that a customer was on the Pro plan yesterday. That
 
 Current values such as:
 
-- subscription;
-- permissions;
-- balance;
-- consent;
-- ownership;
-- inventory;
-- order state;
+- subscription
+- permissions
+- balance
+- consent
+- ownership
+- inventory
+- order state
 
 often belong to a **system of record** outside the agent.
 
@@ -149,13 +149,13 @@ This separation prevents misleading claims such as “we use a vector database, 
 
 Retrieval answers **how we access** information. It may use:
 
-- exact keys;
-- SQL;
-- text search;
-- embeddings;
-- graph traversal;
-- filters by user, time, version, or tenant;
-- a combination of these.
+- exact keys
+- SQL
+- text search
+- embeddings
+- graph traversal
+- filters by user, time, version, or tenant
+- a combination of these
 
 Episodic and semantic describe **what the information represents**. Retrieval describes **how we find it**.
 
@@ -185,7 +185,7 @@ The inverse distinction matters too: persistent memory containing a user's prefe
 
 ## What current frameworks provide — and what they do not
 
-The OpenAI Agents SDK documents `Session` as a persistence layer for conversation history across runs. The runner retrieves prior items, prepends them to the next turn, and persists new items; implementations can use SQLite, Redis, SQLAlchemy, OpenAI Conversations, or other backends.[^openai-sessions] The SDK also supports limiting retrieved history and compaction over sessions.[^openai-sessions]
+The OpenAI Agents SDK documents `Session` as a persistence layer for conversation history across runs. The runner retrieves prior items, prepends them to the next turn, and persists new items. Implementations can use SQLite, Redis, SQLAlchemy, OpenAI Conversations, or other backends.[^openai-sessions] The SDK also supports limiting retrieved history and compaction over sessions.[^openai-sessions]
 
 That is a **harness capability**. It does not decide which part of a conversation is a durable preference, which business datum is authoritative, or when a semantic memory should be invalidated.
 
@@ -213,13 +213,13 @@ provenance + retention + invalidation metadata
 
 Useful checks before a write include:
 
-- is this an observation or an inference?;
-- does it really belong to this user or tenant?;
-- does it contain secrets or data that should not persist?;
-- is there already an equivalent memory?;
-- is there enough evidence to consolidate a semantic fact?;
-- which future event should invalidate it?;
-- does the product or user permit retaining it?
+- Is this an observation or an inference?
+- Does it really belong to this user or tenant?
+- Does it contain secrets or data that should not persist?
+- Is there already an equivalent memory?
+- Is there enough evidence to consolidate a semantic fact?
+- Which future event should invalidate it?
+- Does the product or user permit retaining it?
 
 The model can propose a memory write. The application still owns the persistence contract.
 
@@ -243,10 +243,10 @@ For an operational response that the product permits, the preference may still b
 
 Conflict resolution needs at least:
 
-1. **scope**: are both records about the same decision?;
-2. **authority**: which source governs that decision?;
-3. **freshness/version**: which state is still applicable?;
-4. **provenance**: where did the derived memory come from?;
+1. **scope**: are both records about the same decision?
+2. **authority**: which source governs that decision?
+3. **freshness/version**: which state is still applicable?
+4. **provenance**: where did the derived memory come from?
 5. **policy**: should it be invalidated, corrected, or retained with lower priority?
 
 “Newest timestamp wins” is not a universal policy either. A new episode can be a weak observation while an older authoritative rule remains valid.
@@ -297,13 +297,13 @@ AUTHORITATIVE
 
 When a new ticket opens:
 
-1. the assembler does not load the entire history;
-2. it retrieves the relevant semantic preference;
-3. it reads fresh state for sensitive decisions;
-4. it builds \(W_t\);
-5. it executes the action;
-6. it stores the result as an episode;
-7. it updates semantic memory only when the consolidation policy justifies it.
+1. The assembler does not load the entire history.
+2. It retrieves the relevant semantic preference.
+3. It reads fresh state for sensitive decisions.
+4. It builds \(W_t\).
+5. It executes the action.
+6. It stores the result as an episode.
+7. It updates semantic memory only when the consolidation policy justifies it.
 
 If the user changes the preferred channel, new episodes can supersede the prior semantic memory. If the plan changes, the agent does not need to “learn” the new plan through memory: it reads the system of record again.
 
@@ -313,16 +313,16 @@ Useful memory cannot be evaluated with recall@k alone.
 
 Measure separately:
 
-- **write precision**: how many persisted writes actually deserved persistence;
-- **retrieval usefulness**: whether retrieved memory improves the task;
-- **stale-memory override rate**: how often old memory displaces more authoritative evidence;
-- **conflict-resolution accuracy**: whether the right source wins when records disagree;
-- **provenance coverage**: what fraction of derived memories retain origin and version;
-- **consolidation fidelity**: whether semantic memory preserves the relevant invariants from its episodes;
-- **deletion/correction propagation**: whether source changes reach dependent derivatives;
-- **cross-tenant leakage**: any scope mixing should be a critical failure;
-- **memory-induced task-success delta** against the same agent without that memory;
-- **resume correctness** for checkpoints, evaluated separately from memory quality.
+- **write precision**: how many persisted writes actually deserved persistence
+- **retrieval usefulness**: whether retrieved memory improves the task
+- **stale-memory override rate**: how often old memory displaces more authoritative evidence
+- **conflict-resolution accuracy**: whether the right source wins when records disagree
+- **provenance coverage**: what fraction of derived memories retain origin and version
+- **consolidation fidelity**: whether semantic memory preserves the relevant invariants from its episodes
+- **deletion/correction propagation**: whether source changes reach dependent derivatives
+- **cross-tenant leakage**: any scope mixing should be a critical failure
+- **memory-induced task-success delta** against the same agent without that memory
+- **resume correctness** for checkpoints, evaluated separately from memory quality
 
 The final separation matters: an architecture can have good memory and poor recovery, or excellent checkpointing and poor memory selection.
 
