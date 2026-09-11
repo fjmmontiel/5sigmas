@@ -88,9 +88,7 @@ for (const text of [es, en]) {
     'credential_identity', 'arguments_digest', 'policy_version', 'approval_id',
     'credential_value_logged', 'network_destination', 'verification_head_sha',
   ]) check(text.toLowerCase().includes(token.toLowerCase()), `Missing authority-contract token ${token}`);
-  for (const symbol of ['T(a)', 'P(a)', 'S(a)', 'C(a)', 'R(a)', 'A(a)']) {
-    check(text.includes(symbol), `Missing executable predicate term ${symbol}`);
-  }
+  for (const symbol of ['T(a)', 'P(a)', 'S(a)', 'C(a)', 'R(a)', 'A(a)']) check(text.includes(symbol), `Missing executable predicate term ${symbol}`);
 }
 
 check(es.includes('post-hook != preventive control'), 'ES: post-hook timing boundary missing');
@@ -124,21 +122,46 @@ for (const text of [es, en]) {
 }
 
 const visualInclude = '{{ include_html("snippets/articulos-tecnicos/coding-agent-authority-path.html") }}';
-check(es.includes(visualInclude), 'ES: authority-path visual include missing');
-check(en.includes(visualInclude), 'EN: authority-path visual include missing');
-for (const token of ['Contexto', 'Propuesta', 'Policy', 'Approval', 'Sandbox', 'Credencial', 'Efecto + evidencia']) {
-  check(snippet.includes(token), `Visual: authority stage missing ${token}`);
-}
-check(snippet.includes('una frontera no sustituye a las demás'), 'Visual: defense-in-depth caveat missing');
-check(mirror.trim() === '<!-- 5sigmas-canonical-mirror -->', 'EN: authority-path visual mirror marker invalid');
-check(i18n.source === 'snippets/articulos-tecnicos/coding-agent-authority-path.html', 'EN: authority-path visual i18n source path invalid');
+check(es.includes(visualInclude), 'ES: authority graph visual include missing');
+check(en.includes(visualInclude), 'EN: authority graph visual include missing');
+check(snippet.includes('GOLDEN_VISUAL_CONTRACT'), 'Visual: GOLDEN_VISUAL_CONTRACT missing');
+check(snippet.includes('interaction="static:no-cosmetic-controls"'), 'Visual: static no-cosmetic-controls contract missing');
+check(snippet.includes('relationship="untrusted-context->proposal->canonical-request'), 'Visual: relationship topology contract missing');
+check(snippet.includes('mobile="horizontal-scroll-preserves-parallel-authority-topology"'), 'Visual: mobile topology-preservation contract missing');
+check(!snippet.includes('s5v-arch-map__pipe'), 'Visual: legacy linear card pipe is forbidden');
+check(!snippet.includes('data-s5v-stepper'), 'Visual: cosmetic stepper is forbidden');
+check(!/<button\b/i.test(snippet), 'Visual: cosmetic buttons are forbidden');
+
+for (const token of [
+  'data-boundary="untrusted"', 'data-boundary="harness"', 'data-boundary="external"',
+  'data-node="context"', 'data-node="proposal"', 'data-node="canonical-request"',
+  'data-control="tool-schema"', 'data-control="policy"', 'data-control="approval"', 'data-control="sandbox-network"',
+  'data-node="request-changed"', 'data-node="local-gate"', 'data-outcome="deny-reask"', 'data-node="effective-invocation"',
+  'data-control="credential"', 'data-control="remote-acl"', 'data-node="remote-gate"',
+  'data-outcome="remote-reject"', 'data-outcome="effect"', 'data-node="evidence"',
+  'data-edge="request-change-to-approval"', 'data-edge="local-gate-to-invocation"', 'data-edge="credential-to-remote-gate"',
+  'data-edge="acl-to-remote-gate"', 'data-edge="invocation-to-remote-gate"', 'data-edge="effect-to-evidence"',
+]) check(snippet.includes(token), `Visual: required topology token missing ${token}`);
+
+for (const invariant of [
+  'H(tool,args,target,identity,policy_v)', 'T ∧ P ∧ S ∧ A', 'invocación ∧ C ∧ R',
+  'digest mismatch → reaprobar', 'sandbox local ≠ scope del token remoto',
+  'request digest · policy/rule · approval · identity/scopes · sandbox/network · resultado · verification_head_sha',
+  'nunca el valor del secreto',
+]) check(snippet.includes(invariant), `Visual: authority invariant missing ${invariant}`);
+
+check(mirror.trim() === '<!-- 5sigmas-canonical-mirror -->', 'EN: authority graph visual mirror marker invalid');
+check(i18n.source === 'snippets/articulos-tecnicos/coding-agent-authority-path.html', 'EN: authority graph visual i18n source path invalid');
 const snippetBytes = Buffer.from(snippet, 'utf8');
 const blobHeader = Buffer.from(`blob ${snippetBytes.length}\0`, 'utf8');
 const snippetBlobSha = crypto.createHash('sha1').update(Buffer.concat([blobHeader, snippetBytes])).digest('hex');
-check(i18n.source_blob_sha === snippetBlobSha, `EN: authority-path visual source_blob_sha stale (${i18n.source_blob_sha} != ${snippetBlobSha})`);
-for (const token of ['Authority · policy · credentials', 'A tool call is not yet permission', 'Context', 'Proposal', 'Policy', 'Approval', 'Sandbox', 'Credential', 'Effect + evidence', 'Defense in depth']) {
-  check(snippet.includes(token) || Object.values(i18n.replacements).some((value) => String(value).includes(token)), `EN visual translation missing ${token}`);
-}
+check(i18n.source_blob_sha === snippetBlobSha, `EN: authority graph source_blob_sha stale (${i18n.source_blob_sha} != ${snippetBlobSha})`);
+for (const token of [
+  'Authority · policy · credentials', 'A tool call produces an effect only', 'UNTRUSTED INPUT', 'HARNESS ENFORCEMENT',
+  'EXTERNAL AUTHORITY', 'Model proposal', 'CANONICAL REQUEST', 'Bound approval', 'Sandbox + network',
+  'digest mismatch → re-approve', 'Local gate', 'Projected credential', 'Remote ACL / IAM',
+  'local sandbox ≠ remote token scope', 'Remote gate', 'Authority ledger + verifier', 'Conjunction is the point:',
+]) check(snippet.includes(token) || Object.values(i18n.replacements).some((value) => String(value).includes(token)), `EN visual translation missing ${token}`);
 
 const route = 'series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries.md';
 check(mkdocsEs.includes('Tools, permisos y trust boundaries: ' + route), 'ES: Series 2 / chapter 2.4 navigation missing');
@@ -153,4 +176,4 @@ if (failures.length) {
 }
 
 console.log('Coding agent harness chapter 2.4 source gate PASS');
-console.log(`ES bytes=${Buffer.byteLength(es)} EN bytes=${Buffer.byteLength(en)}`);
+console.log(`ES bytes=${Buffer.byteLength(es)} EN bytes=${Buffer.byteLength(en)} visual_blob=${snippetBlobSha}`);
