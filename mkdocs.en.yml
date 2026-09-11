@@ -198,6 +198,8 @@ nav:
           - Tools, permissions and trust boundaries: series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries.md
           - Tests, verifiers and task evaluation: series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion.md
           - Long-running tasks, memory and subagents: series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad.md
+      - Context Engineering, Memory & MCP:
+          - Context engineering vs prompt engineering: series/context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineering.md
   - Concepts:
       - Concepts: temas/index.md
       - What is an LLM?: temas/llms.md
