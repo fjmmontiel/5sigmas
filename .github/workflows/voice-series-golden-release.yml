@@ -1,5 +1,5 @@
 name: Voice series GOLDEN release audit
-# rerun after S2S continuity criterion clarification
+# rerun after synchronizing the localized decision-map source hash
 
 on:
   push:
