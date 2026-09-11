@@ -96,6 +96,8 @@ try {
           };
           const sources = ['instructions','examples','history','tools','retrieval','observations','memory'];
           return {
+            stage: box('.s5v-context-assembly__stage'),
+            scroller: box('.s5v-context-assembly__scroll'),
             candidateBoundary: box('[data-boundary="candidate-universe"]'),
             promptBoundary: box('[data-boundary="prompt-engineering"]'),
             contextBoundary: box('[data-boundary="context-engineering"]'),
@@ -114,6 +116,8 @@ try {
         });
 
         for (const [name, box] of Object.entries({
+          stage: geometry.stage,
+          scroller: geometry.scroller,
           candidateBoundary: geometry.candidateBoundary,
           promptBoundary: geometry.promptBoundary,
           contextBoundary: geometry.contextBoundary,
@@ -152,8 +156,10 @@ try {
           check(geometry.environment.cx > geometry.action.cx + 120, `${testCase.route}: ${viewport.name} action→effect direction collapsed`);
           check(contains(geometry.environmentBoundary, geometry.action, 5) && contains(geometry.environmentBoundary, geometry.environment, 5), `${testCase.route}: ${viewport.name} external action/effect nodes escaped environment boundary`);
         }
-        if (geometry.feedback && geometry.sources.observations && geometry.environment) {
-          check(geometry.feedback.height > 55 && geometry.feedback.width > 450, `${testCase.route}: ${viewport.name} feedback loop collapsed into cosmetic connector (${JSON.stringify(geometry.feedback)})`);
+        if (geometry.feedback && geometry.sources.observations && geometry.environment && geometry.stage) {
+          const feedbackWidthRatio = geometry.feedback.width / geometry.stage.width;
+          const feedbackHeightRatio = geometry.feedback.height / Math.max(geometry.environment.height, 1);
+          check(feedbackWidthRatio > 0.55 && feedbackHeightRatio > 0.9, `${testCase.route}: ${viewport.name} feedback loop collapsed into cosmetic connector (${JSON.stringify({ feedback: geometry.feedback, stage: geometry.stage, environment: geometry.environment, feedbackWidthRatio, feedbackHeightRatio })})`);
           check(geometry.feedback.left <= geometry.sources.observations.cx + 15 && geometry.feedback.right >= geometry.environment.cx - 15, `${testCase.route}: ${viewport.name} feedback no longer spans effect→next-turn candidate relationship`);
         }
         if (geometry.instructionsEdge && geometry.examplesEdge) {
@@ -169,13 +175,24 @@ try {
             const maxScroll = node.scrollWidth - node.clientWidth;
             node.scrollLeft = maxScroll;
             void node.offsetWidth;
-            return { maxScroll, actualScroll: node.scrollLeft, clientWidth: node.clientWidth, scrollWidth: node.scrollWidth };
+            const stage = node.querySelector('.s5v-context-assembly__stage')?.getBoundingClientRect();
+            const scrollBox = node.getBoundingClientRect();
+            return {
+              maxScroll,
+              actualScroll: node.scrollLeft,
+              clientWidth: node.clientWidth,
+              scrollWidth: node.scrollWidth,
+              stageWidth: stage?.width ?? 0,
+              stageRight: stage?.right ?? 0,
+              scrollerRight: scrollBox.right,
+            };
           });
           if (viewport.name === 'mobile') {
             check(scrollState.maxScroll > 300 && scrollState.actualScroll > 300, `${testCase.route}: mobile relationship canvas did not preserve topology through horizontal scroll (${JSON.stringify(scrollState)})`);
             await scroller.screenshot({ path: path.join(outDir, `context-engineering-ch1-${testCase.locale}-mobile-visual-end.png`), animations: 'disabled' });
           } else {
-            check(scrollState.scrollWidth >= 1000, `${testCase.route}: desktop relationship canvas collapsed unexpectedly (${JSON.stringify(scrollState)})`);
+            check(scrollState.maxScroll <= 1 && scrollState.actualScroll <= 1, `${testCase.route}: desktop relationship canvas should fit without horizontal clipping (${JSON.stringify(scrollState)})`);
+            check(scrollState.stageWidth >= 900 && scrollState.stageRight <= scrollState.scrollerRight + 1, `${testCase.route}: desktop relationship stage is too narrow or escapes its viewport (${JSON.stringify(scrollState)})`);
           }
           await scroller.evaluate((node) => { node.scrollLeft = 0; });
         }
@@ -205,4 +222,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Context engineering chapter 3.1 browser/accessibility QA PASS: ES/EN language, prompt⊂context geometry, seven-source convergence, inference boundary, effect/feedback loop, topology-preserving mobile scroll, reduced-motion, overflow, runtime errors and review screenshots are valid.');
+console.log('Context engineering chapter 3.1 browser/accessibility QA PASS: ES/EN language, prompt⊂context geometry, seven-source convergence, inference boundary, effect/feedback loop, desktop-fit + topology-preserving mobile scroll, reduced-motion, overflow, runtime errors and review screenshots are valid.');
