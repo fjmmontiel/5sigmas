@@ -25,10 +25,10 @@
   </style>
   <!-- GOLDEN_VISUAL_CONTRACT
     learning-objective="Show that MCP interoperability does not collapse trust: a host owns policy and one client per server; resources/prompts cross inward as untrusted inputs, while tool actions cross approval, authorization and downstream boundaries before creating effects."
-    mechanism="user/model -> host policy; host -> client A -> local server and host -> client B -> remote server; resources/prompts flow back toward host context/instruction policy; tool proposal flows through approval + MCP authorization -> remote server -> downstream authorization -> external effect; modern 2026 requests carry version/capabilities per request while legacy initialize is isolated as compatibility-only."
+    mechanism="user/model -> host policy; host -> client A -> local server and host -> client B -> remote server; resources/prompts flow back toward host context/instruction policy; model proposes tool -> host policy/approval -> client B -> remote server -> MCP authorization -> downstream authorization -> external effect; modern 2026 requests carry version/capabilities per request while legacy initialize is isolated as compatibility-only."
     visual-variables="nested boundaries encode ownership and isolation; parallel client-server lanes encode 1:1 relationships; opposite arrow direction distinguishes inbound context from outbound action; a thick multi-boundary path encodes side-effect authority; dashed legacy path encodes deprecated lifecycle rather than current control flow."
     why-visual="A list of MCP roles hides the important mechanism: servers are isolated peers, incoming content and outgoing actions cross different policy gates, and protocol success is not the same as authorization or business success."
-    relationship="host-policy->{client-a->server-a,client-b->server-b};{resources,prompts}->host-context;model->tool-proposal->approval->mcp-auth->server-b->downstream-auth->external-effect;legacy-initialize!=modern-request-local-metadata"
+    relationship="model->host-policy->client-b->server-b->mcp-auth->downstream-auth->external-effect;host-policy->client-a->server-a;{resources,prompts}->host-context;legacy-initialize!=modern-request-local-metadata"
     evidence="host-client-server-ownership,1-to-1-client-server,server-isolation,tools-resources-prompts,approval,authorization,downstream-token-boundary,2026-stateless-lifecycle,legacy-compatibility"
     interaction="static:no-cosmetic-controls"
     mobile="horizontal-scroll-preserves-host-server-trust-and-side-effect-topology"
@@ -42,7 +42,7 @@
       <div class="mt-stage">
         <svg viewBox="0 0 1200 790" role="img" aria-labelledby="mt-title mt-desc">
           <title id="mt-title">MCP como protocolo dentro de varias fronteras de confianza</title>
-          <desc id="mt-desc">El usuario y el modelo viven en un host que aplica política. El host crea dos clientes separados, cada uno conectado a un único servidor. Recursos y prompts vuelven como entradas hacia el host. Una propuesta de tool debe cruzar aprobación, autorización MCP, el servidor y autorización downstream antes de producir un efecto externo. La ruta moderna 2026 usa metadatos de versión y capacidades por request; initialize aparece sólo como compatibilidad legacy.</desc>
+          <desc id="mt-desc">El usuario y el modelo viven en un host que aplica política. El host crea dos clientes separados, cada uno conectado a un único servidor. Recursos y prompts vuelven como entradas hacia el host. Una propuesta de tool pasa primero por política y aprobación del host, después por el cliente y servidor correspondientes, autorización MCP y autorización downstream antes de producir un efecto externo. La ruta moderna 2026 usa metadatos de versión y capacidades por request; initialize aparece sólo como compatibilidad legacy.</desc>
           <defs><marker id="mt-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="currentColor"/></marker></defs>
 
           <rect data-boundary="host" class="mt-boundary" x="32" y="78" width="474" height="596" rx="24"/>
@@ -51,12 +51,14 @@
           <g data-node="model"><rect class="mt-node" x="286" y="138" width="150" height="62" rx="14"/><text x="361" y="163" class="mt-label">MODELO</text><text x="361" y="185" class="mt-sub">propone · razona</text></g>
           <g data-node="host-policy"><rect class="mt-host" x="112" y="246" width="314" height="92" rx="18"/><text x="269" y="274" class="mt-label">POLÍTICA DEL HOST</text><text x="269" y="299" class="mt-sub">scope · aislamiento · approvals · contexto</text><text x="269" y="320" class="mt-sub">jerarquía de instrucciones · server trust</text></g>
           <path data-edge="user-policy" class="mt-edge" d="M147 200 C153 222 184 235 205 242"/>
-          <path data-edge="model-policy" class="mt-edge" d="M361 200 C354 222 329 235 314 242"/>
+          <path data-edge="model-policy" class="mt-edge mt-edge--effect" d="M361 200 C354 222 329 235 314 242"/>
+          <text x="370" y="226" class="mt-edge-label">tool propuesto</text>
 
           <g data-node="client-a"><rect class="mt-node mt-node--strong" x="86" y="414" width="160" height="70" rx="15"/><text x="166" y="442" class="mt-label">CLIENT A</text><text x="166" y="466" class="mt-sub">1:1 con server A</text></g>
           <g data-node="client-b"><rect class="mt-node mt-node--strong" x="292" y="414" width="160" height="70" rx="15"/><text x="372" y="442" class="mt-label">CLIENT B</text><text x="372" y="466" class="mt-sub">1:1 con server B</text></g>
           <path data-edge="policy-client-a" class="mt-edge" d="M211 338 C190 366 175 386 168 406"/>
-          <path data-edge="policy-client-b" class="mt-edge" d="M327 338 C346 366 365 386 370 406"/>
+          <path data-edge="policy-client-b" class="mt-edge mt-edge--effect" d="M327 338 C346 366 365 386 370 406"/>
+          <text x="383" y="372" class="mt-edge-label">policy + approval</text>
           <path data-edge="server-a-input" class="mt-edge mt-edge--in" d="M166 570 C150 548 149 516 161 492"/>
           <path data-edge="server-b-input" class="mt-edge mt-edge--in" d="M372 570 C386 548 389 516 377 492"/>
           <text x="269" y="528" class="mt-edge-label">resources / prompts → candidatos e instrucciones no privilegiadas</text>
@@ -72,9 +74,8 @@
           <text x="574" y="406" class="mt-kicker">SERVER B · REMOTO / HTTP</text>
           <g data-node="server-b"><rect class="mt-node mt-node--strong" x="594" y="438" width="186" height="70" rx="16"/><text x="687" y="466" class="mt-label">SERVER B</text><text x="687" y="490" class="mt-sub">tools · resources · prompts</text></g>
           <g data-node="mcp-auth"><rect class="mt-risk" x="594" y="546" width="186" height="68" rx="14"/><text x="687" y="572" class="mt-label">AUTH MCP</text><text x="687" y="596" class="mt-sub">identity · scope · audience</text></g>
-          <path data-edge="client-b-server-b" class="mt-edge" d="M452 449 C504 447 548 457 586 469"/>
-          <path data-edge="tool-proposal" class="mt-edge mt-edge--effect" d="M361 200 C490 232 514 456 586 557"/>
-          <text x="480" y="326" class="mt-edge-label">tool propuesto → policy / approval</text>
+          <path data-edge="client-b-server-b" class="mt-edge mt-edge--effect" d="M452 449 C504 447 548 457 586 469"/>
+          <path data-edge="server-b-auth" class="mt-edge mt-edge--effect" d="M687 508 V538"/>
 
           <rect data-boundary="downstream" class="mt-boundary" x="864" y="376" width="304" height="298" rx="22"/>
           <text x="888" y="406" class="mt-kicker">OTRA FRONTERA · SISTEMA DOWNSTREAM</text>
