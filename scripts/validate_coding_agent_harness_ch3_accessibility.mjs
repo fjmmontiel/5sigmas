@@ -138,7 +138,7 @@ try {
           check(scrollState.max > 400 && scrollState.actual > 400, `${testCase.route}: mobile graph does not preserve wide topology with real horizontal scrolling (${JSON.stringify(scrollState)})`);
           const scrollerBox = await box(scroller);
           const reverifiedEnd = await box(visual.locator('[data-evidence="reverified-v2"]'));
-          check(Boolean(scrollerBox && reverifiedEnd && reverifiedEnd.left >= scrollerBox.left - 2 && reverifiedEnd.right <= scrollerBox.right + 2), `${testCase.route}: mobile final revalidation node unreachable after scrolling (${JSON.stringify({scrollerBox,reverifiedEnd})})`);
+          check(Boolean(scrollerBox && reverifiedEnd && reverifiedEnd.x >= scrollerBox.x - 2 && reverifiedEnd.right <= scrollerBox.right + 2), `${testCase.route}: mobile final revalidation node unreachable after scrolling (${JSON.stringify({scrollerBox,reverifiedEnd})})`);
           await visual.screenshot({ path: path.join(outDir, `coding-harness-ch3-${testCase.locale}-mobile-visual-end.png`), animations: 'disabled' });
           await scroller.evaluate((node) => { node.scrollLeft = 0; });
         }
