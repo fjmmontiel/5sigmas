@@ -104,6 +104,8 @@ check(snippet.includes('GOLDEN_VISUAL_CONTRACT'), 'Visual: relationship-first co
 check(snippet.includes('relationship="superset-and-feedback:'), 'Visual: set-inclusion + feedback relationship missing');
 check(snippet.includes('interaction="static:no-cosmetic-controls"'), 'Visual: cosmetic interaction must be explicitly rejected');
 check(snippet.includes('mobile="horizontal-scroll-preserves-source-convergence-and-feedback-topology"'), 'Visual: mobile topology preservation contract missing');
+check(snippet.includes('.s5v-context-assembly__stage{width:100%;min-width:0;max-width:1180px;margin:0 auto}'), 'Visual: desktop stage must fit the available width without horizontal clipping');
+check(snippet.includes('.s5v-context-assembly__stage{width:auto;min-width:1000px}'), 'Visual: mobile stage must preserve topology through intentional horizontal scrolling');
 check(!snippet.includes('s5v-arch-map__pipe'), 'Visual regression: linear card-pipe pattern returned');
 check(!snippet.includes('data-s5v-stepper') && !snippet.includes('s5v__steps--tabs'), 'Visual regression: cosmetic tabs/stepper returned');
 for (const source of ['instructions', 'examples', 'history', 'tools', 'retrieval', 'observations', 'memory']) {
