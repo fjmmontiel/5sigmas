@@ -108,10 +108,13 @@ for (const token of [
   'mobile="horizontal-scroll-preserves-retrieval-assembly-conflict-and-grounding-topology"',
   '.rg-stage{width:100%;min-width:0;max-width:1180px;margin:0 auto}',
   '.rg-stage{width:auto;min-width:1100px}',
-  'Retrieval ≠ ensamblado ≠ grounding','POLÍTICA DE ENSAMBLADO · APLICACIÓN','CONFLICT SET','EVIDENCE CONTEXT Aₜ'
+  'Retrieval ≠ ensamblado ≠ grounding','POLÍTICA DE ENSAMBLADO · APLICACIÓN','CONJUNTO DE CONFLICTOS','CONTEXTO DE EVIDENCIA Aₜ'
 ]) check(snippet.includes(token), `Visual: missing contract ${token}`);
 check(!snippet.includes('s5v-arch-map__pipe'), 'Visual regression: linear card-pipe pattern returned');
 check(!snippet.includes('data-s5v-stepper') && !snippet.includes('s5v__steps--tabs') && !snippet.includes('data-s5v-tabs'), 'Visual regression: cosmetic tabs/stepper returned');
+for (const token of ['QUERY / TAREA','source revision ≠ index age','CONFLICT SET','SYSTEM OF RECORD · rev B','EVIDENCE CONTEXT Aₜ','>CLAIMS<']) {
+  check(!snippet.includes(token), `Visual ES naturalness regression: ${token}`);
+}
 
 for (const node of [
   'query','lexical','semantic','structured','candidate-pool','scope-gate','freshness-gate','authority-gate','conflict-gate',
@@ -125,8 +128,8 @@ for (const edge of [
   'pool-to-scope','scope-to-freshness','freshness-to-authority','authority-to-conflict','authority-freshness',
   'conflict-to-context','context-to-model','model-to-claims','unresolved-to-abstain','claim-to-evidence','reject-path'
 ]) check(snippet.includes(`data-edge="${edge}"`), `Visual: missing relationship edge ${edge}`);
-check(snippet.includes('rev A indexada → STALE'), 'Visual: source-version invalidation consequence missing');
-check(snippet.includes('grounded_by evidence_id'), 'Visual: claim-level evidence grounding missing');
+check(snippet.includes('rev A indexada → OBSOLETA'), 'Visual: source-version invalidation consequence missing');
+check(snippet.includes('grounded_by ID de evidencia'), 'Visual: claim-level evidence grounding missing');
 check(snippet.includes('ranking propone; no autoriza'), 'Visual: relevance-vs-authority distinction missing');
 
 check(mirror.trim() === '<!-- 5sigmas-canonical-mirror -->', 'EN: visual canonical mirror marker invalid');
