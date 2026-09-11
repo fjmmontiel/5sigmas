@@ -16,7 +16,7 @@ tags:
 
 A large context window answers a capacity question: **how many tokens can the system accept for one inference under a specific API contract**. It does not answer the production question: **which information deserves to occupy that space now**.
 
-A coding agent can have 150,000 tokens of available capacity and still fail because it carries 40,000 tokens of stale logs, compresses a critical exception into an ambiguous summary, or retrieves a decision made against an older `HEAD` without retaining the version that decision came from.
+A coding agent can have a very large context window and still fail because it carries too much stale logging, compresses a critical exception into an ambiguous summary, or retrieves a decision made against an older `HEAD` without retaining the version that decision came from.
 
 This chapter separates four mechanisms that are often collapsed into one:
 
@@ -158,12 +158,12 @@ Provenance is more than attaching a URL.
 
 For context engineering, a material context item should let us answer:
 
-- what entity or source did this come from?.
-- which exact version did we observe?.
-- when was it captured?.
-- what transformation produced the active representation?.
-- was that transformation exact, extractive, or lossy?.
-- which change should invalidate it?.
+- what entity or source did this come from?
+- which exact version did we observe?
+- when was it captured?
+- what transformation produced the active representation?
+- was that transformation exact, extractive, or lossy?
+- which change should invalidate it?
 - can the application rehydrate the source when verification is needed?
 
 W3C PROV-O defines general relationships among entities, activities, and agents, including derivation and invalidation.[^prov-o] An agent does not need RDF or PROV-O to implement good lineage. The useful discipline is conceptual: **a derived representation should remain connected to what it was derived from**.
@@ -227,7 +227,7 @@ The same principle applies to policies, tickets, database schemas, external APIs
 
 ## Worked example: a coding agent under token pressure
 
-Suppose the candidate universe contains:
+Suppose this **purely illustrative** candidate universe; the numbers are not a provider claim or benchmark:
 
 ```text
 4k   task instructions and contract
@@ -238,7 +238,7 @@ Suppose the candidate universe contains:
 12k  memories and prior decisions
 ```
 
-The available dynamic budget is 60k.
+The available dynamic budget in this illustrative scenario is 60k.
 
 A naive strategy takes the newest items until the window is full. It can easily keep 42k of logs and evict the task specification.
 
