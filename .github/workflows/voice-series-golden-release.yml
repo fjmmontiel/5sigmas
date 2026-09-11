@@ -1,5 +1,5 @@
 name: Voice series GOLDEN release audit
-# exact-current-content rerun after final mobile relationship-map compaction
+# exact-current-content rerun after final relationship-first visual correction
 
 on:
   push:
@@ -123,12 +123,3 @@ jobs:
 
       - name: Validate direct reader progression
         run: node scripts/validate_direct_reader_navigation.mjs
-
-      - name: Upload zero-based series visual evidence
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: voice-series-golden-release-evidence
-          path: artifacts/visual-review/*
-          if-no-files-found: error
-          retention-days: 1
