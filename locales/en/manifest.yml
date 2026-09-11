@@ -21,6 +21,7 @@ published_routes:
   - series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.md
   - series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries.md
   - series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion.md
+  - series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad.md
   - series/fundamentos-ia-iag/00_presentacion_serie.md
   - series/fundamentos-ia-iag/01-que-es-ia.md
   - series/fundamentos-ia-iag/02-que-es-ia-generativa.md
@@ -90,6 +91,7 @@ required_snippets:
   - snippets/articulos-tecnicos/coding-agent-task-contract.html
   - snippets/articulos-tecnicos/coding-agent-authority-path.html
   - snippets/articulos-tecnicos/coding-agent-verification-stack.html
+  - snippets/articulos-tecnicos/coding-agent-long-task-state.html
   - snippets/from-cave-to-agi/01-sistemas-numeracion.html
   - snippets/from-cave-to-agi/01-algebra-despejar.html
   - snippets/from-cave-to-agi/01-cadena-deductiva.html
