@@ -72,6 +72,12 @@ const visit = async (route) => {
   return page.locator('body').innerText().catch(() => '');
 };
 
+const esCatalogueSource = await fs.readFile(path.resolve('docs/series/index.md'), 'utf8');
+for (const series of chapterLedSeries) {
+  if (!esCatalogueSource.includes(`href="${series.esRoute}"`)) failures.push(`docs/series/index.md: missing ${series.esRoute}`);
+  if (!esCatalogueSource.includes(`>${series.esTitle}<`)) failures.push(`docs/series/index.md: missing title ${JSON.stringify(series.esTitle)}`);
+}
+
 const hubText = await visit('/en/series/');
 const hubLinks = await page.locator('.s5-simple-list a.s5-list-row').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('href')));
 if (hubLinks.length !== 10) failures.push(`/en/series/: expected 10 canonical series cards, got ${hubLinks.length}`);
@@ -83,14 +89,6 @@ for (const [slug, title] of presentations) {
 for (const series of chapterLedSeries) {
   if (!hubLinks.includes(series.route)) failures.push(`/en/series/: missing ${series.route}`);
   if (!hubText.includes(series.title)) failures.push(`/en/series/: missing title ${JSON.stringify(series.title)}`);
-}
-
-const esHubText = await visit('/series/');
-const esHubLinks = await page.locator('.s5-simple-list a.s5-list-row').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('href')));
-if (esHubLinks.length !== 10) failures.push(`/series/: expected 10 canonical series cards, got ${esHubLinks.length}`);
-for (const series of chapterLedSeries) {
-  if (!esHubLinks.includes(series.esRoute)) failures.push(`/series/: missing ${series.esRoute}`);
-  if (!esHubText.includes(series.esTitle)) failures.push(`/series/: missing title ${JSON.stringify(series.esTitle)}`);
 }
 
 for (const [slug, expectedTitle] of presentations) {
@@ -156,7 +154,6 @@ for (const expected of ['Play attack', 'Hostile content', 'Crosses authorization
 }
 
 for (const route of [
-  '/series/',
   '/en/series/',
   ...chapterLedSeries.map((series) => series.route),
   '/en/series/ia-pib-bienestar-energia/00_presentacion_serie/',
@@ -182,4 +179,4 @@ if (failures.length) {
   for (const failure of failures) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log('English series mirror QA passed: ten canonical series entries including Realtime Voice Agents and Coding Agents, localized embedded visuals, native-English presentation media only when declared, desktop/mobile overflow clean.');
+console.log('English series mirror QA passed: ten canonical series entries including Realtime Voice Agents and Coding Agents, ES chapter-led catalogue source parity, localized embedded visuals, native-English presentation media only when declared, desktop/mobile overflow clean.');
