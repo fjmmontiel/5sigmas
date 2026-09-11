@@ -1,5 +1,6 @@
 name: Context Engineering 3.1 GOLDEN certification
 
+# Pixel-QA retry after constraining long localized SVG labels.
 on:
   push:
     branches:
