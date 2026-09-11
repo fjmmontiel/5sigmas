@@ -41,8 +41,8 @@ R_{\mathrm{struct}}(q_t)
 
 where:
 
-- \(R_{\mathrm{lex}}\) prioritizes lexical matches, identifiers, and exact terms;
-- \(R_{\mathrm{sem}}\) uses vector representations for semantic proximity;
+- \(R_{\mathrm{lex}}\) prioritizes lexical matches, identifiers, and exact terms.
+- \(R_{\mathrm{sem}}\) uses vector representations for semantic proximity.
 - \(R_{\mathrm{struct}}\) uses structured queries: SQL, metadata filters, graph traversal, APIs, or exact keys.
 
 \(C_t\) is a **candidate set**, not the final context.
@@ -106,11 +106,11 @@ One alternative is to fuse **ranks**. Reciprocal Rank Fusion (RRF), for example,
 
 It does not answer whether a document:
 
-- is current;
-- is visible to the user;
-- governs the decision;
-- conflicts with another source;
-- contains the evidence the answer needs;
+- is current.
+- is visible to the user.
+- governs the decision.
+- conflicts with another source.
+- contains the evidence the answer needs.
 - will actually support the model's claims.
 
 That is why `hybrid retrieval` and `context assembly` are not synonyms.
@@ -257,9 +257,9 @@ The answer does not come from “pick the closest chunk.”
 
 The policy needs to know that:
 
-- `e3` governs the current rule;
-- `e4` governs the current facts about the order;
-- `e2` is stale;
+- `e3` governs the current rule.
+- `e4` governs the current facts about the order.
+- `e2` is stale.
 - `e1` may help explain the domain but does not authorize the action.
 
 The same pattern appears in permissions, billing, compliance, inventory, feature flags, and any domain with a system of record.
@@ -299,10 +299,10 @@ resolution = unresolved
 
 The policy can then:
 
-- admit the winning evidence while preserving the resolution provenance;
-- keep both perspectives when time or scope makes them compatible;
-- request a fresh read;
-- abstain;
+- admit the winning evidence while preserving the resolution provenance.
+- keep both perspectives when time or scope makes them compatible.
+- request a fresh read.
+- abstain.
 - escalate to human review.
 
 Do not force the model to “pick something” when the system cannot justify the choice.
@@ -370,9 +370,9 @@ answer has citations
 
 because a citation can:
 
-- point to a source that does not support the claim;
-- cover only part of a sentence;
-- refer to a retrieved document that was not actually used;
+- point to a source that does not support the claim.
+- cover only part of a sentence.
+- refer to a retrieved document that was not actually used.
 - hide relevant contradictory evidence.
 
 Recent academic work studies exactly this gap between generating references and verifying claim-level support. We should not assume that “RAG + citations” automatically yields faithful attribution.[^reclaim]
@@ -418,11 +418,11 @@ After filtering and conflict resolution, the assembler still has to decide **wha
 
 Under budget \(B_t\), it may need to:
 
-- deduplicate overlapping chunks;
-- group evidence about the same proposition;
-- retain the smallest span that preserves support;
-- keep revision or date next to the content;
-- reserve room for relevant counterevidence;
+- deduplicate overlapping chunks.
+- group evidence about the same proposition.
+- retain the smallest span that preserves support.
+- keep revision or date next to the content.
+- reserve room for relevant counterevidence.
 - avoid displacing one authoritative source with ten redundant low-authority chunks.
 
 Chapter 3.2 covered compaction and budget. The additional constraint here is that budget optimization happens **after preserving the evidence contract**.
@@ -500,10 +500,10 @@ That is the practical reason not to call the whole mechanism “RAG.”
 
 Measure whether required evidence appears in the candidate set:
 
-- recall@k over relevant evidence IDs;
-- exact-identifier coverage;
-- recall by query type;
-- candidates later rejected by ACL/scope;
+- recall@k over relevant evidence IDs.
+- exact-identifier coverage.
+- recall by query type.
+- candidates later rejected by ACL/scope.
 - latency and cost per retriever.
 
 A reranker can only reorder candidates it received. It cannot recover evidence that never entered its candidate set.
@@ -512,23 +512,23 @@ A reranker can only reorder candidates it received. It cannot recover evidence t
 
 Measure the policy itself:
 
-- **stale admission rate**: stale evidence that reached context;
-- **authority error rate**: a lower-authority source displaced the governing one;
-- **conflict detection recall**;
-- **conflict resolution accuracy**;
-- **ACL/scope violation rate**;
-- **evidence redundancy** under the budget;
+- **stale admission rate**: stale evidence that reached context.
+- **authority error rate**: a lower-authority source displaced the governing one.
+- **conflict detection recall**.
+- **conflict resolution accuracy**.
+- **ACL/scope violation rate**.
+- **evidence redundancy** under the budget.
 - **required-evidence retention** after deduplication or compaction.
 
 ### Grounding
 
 Evaluate generation against the evidence packet:
 
-- share of material claims with support;
-- citation precision: the cited source actually supports the claim;
-- citation completeness: claims that require evidence but lack it;
-- unsupported-claim rate;
-- contradiction-with-evidence rate;
+- share of material claims with support.
+- citation precision: the cited source actually supports the claim.
+- citation completeness: claims that require evidence but lack it.
+- unsupported-claim rate.
+- contradiction-with-evidence rate.
 - correct abstention behavior when `conflict = unresolved`.
 
 Do not collapse these numbers into one metric before knowing which failure you need to catch.
@@ -554,11 +554,11 @@ Sensitive content does not need to be retained indefinitely. Hashes, IDs, or min
 
 But if the system stores only the final answer, it cannot tell whether it:
 
-- never retrieved the correct source;
-- dropped it because of a broken filter;
-- admitted a stale revision;
-- resolved a conflict incorrectly;
-- or generated an unsupported claim despite good evidence.
+- never retrieved the correct source.
+- dropped it because of a broken filter.
+- admitted a stale revision.
+- resolved a conflict incorrectly.
+- generated an unsupported claim despite good evidence.
 
 ## 17. Production implication: retrieve wide, assemble narrow
 
