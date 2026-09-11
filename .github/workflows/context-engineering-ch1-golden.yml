@@ -99,4 +99,4 @@ jobs:
             artifacts/context-engineering-ch1-golden/*
             artifacts/visual-review/context-engineering-ch1-*.png
           if-no-files-found: warn
-          retention-days: 3
+          retention-days: 1
