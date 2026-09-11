@@ -38,7 +38,7 @@ why_visual: Prose can list trade-offs, but the map makes the structural relation
     .s5v-decision-map__tradeoff path{fill:none;stroke:rgba(7,25,27,.16);stroke-width:2;stroke-dasharray:5 8}
     .s5v-decision-map__vector{position:absolute;left:50%;top:54%;width:30%;height:3px;background:var(--accent);transform-origin:0 50%;z-index:1;transition:none}
     .s5v-decision-map__vector::after{content:"";position:absolute;right:-1px;top:50%;transform:translateY(-50%);border-left:9px solid var(--accent);border-top:6px solid transparent;border-bottom:6px solid transparent}
-    .s5v-decision-map__target{position:absolute;width:34px;height:34px;border:3px solid var(--accent);border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 0 8px rgba(115,87,255,.09);z-index:4;transition:none}
+    .s5v-decision-map__target{position:absolute;width:34px;height:34px;border:3px solid var(--accent);border-radius:50%;transform:translate(calc(-50% - 86px),calc(-50% - 7px));box-shadow:0 0 0 8px rgba(115,87,255,.09);z-index:4;transition:none;pointer-events:none}
     .s5v-decision-map[data-step="1"] .s5v-decision-map__vector{left:50%;top:56%;width:43%;transform:rotate(220deg)}
     .s5v-decision-map[data-step="1"] .s5v-decision-map__target{left:17%;top:18%}
     .s5v-decision-map[data-step="2"] .s5v-decision-map__vector{left:25%;top:75%;width:38%;transform:rotate(-43deg)}
@@ -57,11 +57,11 @@ why_visual: Prose can list trade-offs, but the map makes the structural relation
       .s5v-decision-map{margin:18px auto 22px}
       .s5v-decision-map .s5v__canvas{padding:16px 14px;border-radius:22px}
       .s5v-decision-map .s5v__head{display:grid;gap:6px;margin-bottom:12px}.s5v-decision-map .s5v__head p{text-align:left}
-      .s5v-decision-map .s5v__steps{flex-wrap:nowrap;overflow-x:auto;padding:2px 0 4px;margin-bottom:8px}
-      .s5v-decision-map .s5v__steps button{flex:0 0 auto}
+      .s5v-decision-map .s5v__steps{flex-wrap:nowrap;overflow-x:auto;gap:5px;padding:2px 0 4px;margin-bottom:8px}
+      .s5v-decision-map .s5v__steps button{flex:0 0 auto;padding:8px 9px;font-size:.66rem}
       .s5v-decision-map__scroller{overflow-x:visible;overflow-y:visible;scrollbar-gutter:auto;padding:0}
       .s5v-decision-map__plot{min-width:0;width:calc(100% - 58px);min-height:320px;margin:20px 6px 38px 52px}
-      .s5v-decision-map__axis-y{left:-47px;width:40px;font-size:.56rem}
+      .s5v-decision-map__axis-y{left:0;top:-18px;width:auto;font-size:.56rem;white-space:nowrap;text-align:left}
       .s5v-decision-map__axis-x{right:0;font-size:.56rem}
       .s5v-decision-map__node{width:122px;padding:6px 5px 6px 17px}
       .s5v-decision-map__node::after{left:3px;top:10px;width:8px;height:8px}
@@ -70,6 +70,7 @@ why_visual: Prose can list trade-offs, but the map makes the structural relation
       .s5v-decision-map__node--cascade{left:19%;top:18%}
       .s5v-decision-map__node--half{left:50%;top:50%}
       .s5v-decision-map__node--s2s{left:78%;top:82%}
+      .s5v-decision-map__target{transform:translate(calc(-50% - 54px),calc(-50% - 5px))}
       .s5v-decision-map[data-step="1"] .s5v-decision-map__target{left:19%;top:18%}
       .s5v-decision-map[data-step="2"] .s5v-decision-map__target{left:50%;top:50%}
       .s5v-decision-map[data-step="3"] .s5v-decision-map__target{left:78%;top:82%}
