@@ -34,8 +34,47 @@ check(en.includes(include), 'EN: missing turn-taking signal visual include');
 check(mirror.trim() === '<!-- 5sigmas-canonical-mirror -->', 'EN visual mirror: canonical marker missing');
 check(i18n.source === 'snippets/articulos-tecnicos/voice-turn-taking-signals.html', 'EN visual i18n: wrong source path');
 check(i18n.source_blob_sha === blobSha(visual), `EN visual i18n: source_blob_sha drift; expected ${blobSha(visual)}, got ${i18n.source_blob_sha}`);
-check(visual.includes('Cuatro preguntas relacionadas, pero no una secuencia lineal.'), 'Visual: missing explicit non-linear relationship');
-check(!visual.includes('<i>→</i>'), 'Visual: sequential arrows reintroduced between independent turn-taking decisions');
+
+// PROGRAM AMENDMENT: visual pedagogy is relationship-first. This artifact
+// must encode time, authority layers, state duration and an actual outcome
+// branch. A row of labeled boxes or cosmetic tab swapping is a hard failure.
+const artifactContract = [
+  'GOLDEN_VISUAL_CONTRACT',
+  'learning_objective:',
+  'mechanism:',
+  'visual_variables:',
+  'why_visual:',
+  'x-position=time',
+  'row=signal/authority layer',
+  'vertical marker=observable/decision boundary',
+  'branch row=alternative outcome',
+];
+for (const token of artifactContract) check(visual.includes(token), `Visual contract: missing ${token}`);
+check(!visual.includes('s5v-arch-map__pipe'), 'Visual pedagogy: legacy linear box pipe reintroduced');
+check(!visual.includes('data-s5v-stepper'), 'Visual pedagogy: cosmetic stepper/tabs reintroduced');
+check(!visual.includes('s5v__steps--tabs'), 'Visual pedagogy: tab-swapping primitive reintroduced');
+check((visual.match(/data-turn-scenario=/g) || []).length === 2, 'Visual pedagogy: expected exactly two temporal scenarios');
+check(visual.includes('data-turn-scenario="pause"') && visual.includes('data-turn-scenario="overlap"'), 'Visual pedagogy: pause/overlap scenarios missing');
+
+const relationshipAnchors = [
+  'data-turn-segment="user-speech-a"',
+  'data-turn-segment="user-speech-b"',
+  'data-turn-segment="vad-silence"',
+  'data-turn-segment="turn-open"',
+  'data-turn-marker="vad-stop"',
+  'data-turn-marker="turn-commit"',
+  'data-turn-segment="agent-playout"',
+  'data-turn-segment="overlap-speech"',
+  'data-turn-marker="interrupt-candidate"',
+  'data-turn-branch="intent"',
+  'data-turn-outcome="continue"',
+  'data-turn-outcome="cancel"',
+  'data-turn-marker="barge-in-cancel"',
+];
+for (const anchor of relationshipAnchors) check(visual.includes(anchor), `Visual pedagogy: missing relationship anchor ${anchor}`);
+check(visual.includes('overflow-x:auto') && visual.includes('tabindex="0"'), 'Responsive visual: timeline must preserve horizontal time geometry with keyboard/touch scrolling');
+check(visual.includes('@media (prefers-reduced-motion:reduce)'), 'Visual: reduced-motion contract missing');
+check(visual.includes('Detección ≠ decisión ≠ efecto.'), 'Visual: detection/decision/effect invariant missing');
 
 check(mkdocsEs.includes(`- Turn-taking: ${route}`), 'ES nav: chapter 2 route missing');
 check(mkdocsEn.includes(`- Turn-taking: ${route}`), 'EN nav: chapter 2 route missing');
@@ -90,15 +129,17 @@ check(en.includes('Premature endpoint') && en.includes('False interruption') && 
 check(es.includes('mismo corpus de audio') && es.includes('condiciones de red'), 'ES: controlled comparison rule missing');
 check(en.includes('same audio corpus') && en.includes('network conditions'), 'EN: controlled comparison rule missing');
 
-// Fresh interruption-ownership contract: do not imply LiveKit uniquely owns
-// model-based backchannel classification, and do not attribute Krisp's model to Pipecat.
+// Current Pipecat separation: VAD analyzer emits low-level signals, while
+// start strategies decide whether those signals open a user turn. Krisp VIVA
+// is an integration backed by Krisp's model/SDK, not a Pipecat-owned model.
 check(es.includes('KrispVivaIPUserTurnStartStrategy') && es.includes('SDK/modelo de Krisp') && es.includes('no un modelo propio de Pipecat'), 'ES: Pipecat/Krisp interruption-prediction ownership boundary missing');
 check(en.includes('KrispVivaIPUserTurnStartStrategy') && en.includes("Krisp's SDK/model") && en.includes('not a Pipecat-owned model'), 'EN: Pipecat/Krisp interruption-prediction ownership boundary missing');
 check(es.includes('VAD/min-words/Krisp VIVA IP/estrategias externas'), 'ES: runtime decision table omits current Pipecat interruption strategies');
 check(en.includes('VAD/min-words/Krisp VIVA IP/external start strategies'), 'EN: runtime decision table omits current Pipecat interruption strategies');
 
-// LiveKit core/session false-interruption recovery is distinct from the managed
-// adaptive interruption model. Both locales must preserve that boundary.
+// LiveKit core/session false-interruption recovery is distinct from the
+// LiveKit Cloud adaptive interruption model. Both locales preserve that
+// product/framework boundary.
 check(es.includes('false_interruption_timeout') && es.includes('resume_false_interruption') && es.includes('recuperación de sesión es distinta del modelo adaptive gestionado'), 'ES: LiveKit false-interruption recovery boundary missing');
 check(en.includes('false_interruption_timeout') && en.includes('resume_false_interruption') && en.includes('session-level recovery is separate from the managed adaptive model'), 'EN: LiveKit false-interruption recovery boundary missing');
 

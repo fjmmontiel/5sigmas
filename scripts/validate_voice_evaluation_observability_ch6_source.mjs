@@ -31,6 +31,7 @@ const primaryUrls = [
   'https://docs.pipecat.ai/api-reference/server/utilities/observers/user-bot-latency-observer',
   'https://docs.pipecat.ai/api-reference/server/utilities/observers/observer-pattern',
   'https://docs.pipecat.ai/api-reference/server/events/frame-processor-events',
+  'https://docs.pipecat.ai/pipecat/fundamentals/error-handling',
   'https://opentelemetry.io/docs/specs/semconv/general/recording-errors/',
 ];
 for (const url of primaryUrls) {
@@ -111,10 +112,16 @@ check(en.includes('Agent insights') && en.includes('LiveKit Cloud capability') &
 check(es.includes('`ev.error.recoverable`') && es.includes('no éxito del producto'), 'ES: LiveKit recoverability-vs-outcome boundary missing');
 check(en.includes('`ev.error.recoverable`') && en.includes('not product success'), 'EN: LiveKit recoverability-vs-outcome boundary missing');
 
-check(es.includes('`FrameProcessor` dispara `on_error`') && es.includes('`error.processor.is_usable`') && es.includes('`on_usable_changed`') && es.includes('deprecado desde v1.8.0') && es.includes('se elimina en 2.0.0'), 'ES: current Pipecat error/usability semantics missing');
-check(en.includes('`FrameProcessor` fires `on_error`') && en.includes('`error.processor.is_usable`') && en.includes('`on_usable_changed`') && en.includes('deprecated since v1.8.0') && en.includes('removed in 2.0.0'), 'EN: current Pipecat error/usability semantics missing');
-check(!es.includes('flag `fatal` que indica si el pipeline se cancelará'), 'ES: stale Pipecat fatal semantics returned');
-check(!en.includes('`fatal` flag indicating whether the pipeline will be cancelled'), 'EN: stale Pipecat fatal semantics returned');
+// Pipecat current source/docs (revalidated 2026-09-11): processor usability is distinct from pipeline termination.
+check(es.includes('`processor.is_usable` refleja') && es.includes('`ErrorFrame.fatal`') && es.includes('deprecados') && es.includes('2.0.0'), 'ES: current Pipecat processor-usability/deprecation semantics missing');
+check(en.includes('`processor.is_usable` reflects') && en.includes('`ErrorFrame.fatal`') && en.includes('deprecated') && en.includes('2.0.0'), 'EN: current Pipecat processor-usability/deprecation semantics missing');
+check(es.includes('`ProcessorUnusablePolicy`') && es.includes('`CONTINUE` (default)') && es.includes('`END`') && es.includes('`CANCEL`'), 'ES: current Pipecat pipeline policy semantics missing');
+check(en.includes('`ProcessorUnusablePolicy`') && en.includes('`CONTINUE` (the default)') && en.includes('`END`') && en.includes('`CANCEL`'), 'EN: current Pipecat pipeline policy semantics missing');
+check(es.includes('`ServiceSwitcher` puede usar ese estado para failover'), 'ES: current Pipecat failover boundary missing');
+check(en.includes('`ServiceSwitcher` can use that state for failover'), 'EN: current Pipecat failover boundary missing');
+check(!es.includes('En la API actual, `fatal=True` indica un error no recuperable') && !en.includes('In the current API, `fatal=True` marks an unrecoverable error'), 'Stale Pipecat fatal-first semantics remain');
+check(es.includes('Que `processor.is_usable` siga siendo `True` no demuestra que el turno haya salido bien') && es.includes('`CONTINUE` tampoco significa éxito'), 'ES: Pipecat framework-state-vs-product-outcome boundary missing');
+check(en.includes('A processor remaining `is_usable=True` does not prove that the turn succeeded') && en.includes('`CONTINUE` does not mean success either'), 'EN: Pipecat framework-state-vs-product-outcome boundary missing');
 check(es.includes('`UserBotLatencyObserver` mide entre la parada de habla detectada') && es.includes('inicio de habla del bot'), 'ES: Pipecat latency metric boundary missing');
 check(en.includes('`UserBotLatencyObserver` measures from detected user-speech stop') && en.includes('bot-speech start'), 'EN: Pipecat latency metric boundary missing');
 
@@ -144,14 +151,25 @@ check(!/Pipecat (es|is) (el )?(mejor|best|fastest)/i.test(`${es}\n${en}`), 'Univ
 const visualInclude = '{{ include_html("snippets/articulos-tecnicos/voice-turn-evidence-stack.html") }}';
 check(es.includes(visualInclude), 'ES: turn evidence visual include missing');
 check(en.includes(visualInclude), 'EN: turn evidence visual include missing');
-check(snippet.includes('s5v-turn-evidence-stack') && snippet.includes('Resultado') && snippet.includes('Conversación') && snippet.includes('Media') && snippet.includes('Runtime'), 'Visual: four evidence layers incomplete');
+check(snippet.includes('GOLDEN_VISUAL_CONTRACT'), 'Visual: GOLDEN visual contract missing');
+check(!snippet.includes('s5v-arch-map__pipe'), 'Visual: legacy linear card pipe returned');
+check(!snippet.includes('data-s5v-stepper') && !snippet.includes('s5v__steps--tabs'), 'Visual: cosmetic tabs/stepper returned');
+for (const token of [
+  's5v-turn-evidence-graph', 'data-evidence-event="provider-timeout"', 'data-evidence-event="fallback"',
+  'data-evidence-boundary="first-harmful"', 'data-evidence-event="first-playout"',
+  'data-evidence-event="business-success"', 'data-evidence-diagnosis="bundle"',
+  'data-evidence-converges="runtime"', 'data-evidence-converges="conversation"',
+  'data-evidence-converges="media"', 'data-evidence-converges="outcome"',
+  'causa raíz', 'recuperación', 'primer observable dañino', 'SUCCESS',
+]) check(snippet.includes(token), `Visual: relationship-first evidence token missing ${token}`);
+check(snippet.includes('x-position=time') && snippet.includes('lane=evidence domain') && snippet.includes('solid arrow=causal propagation') && snippet.includes('dashed arrow=recovery path'), 'Visual: declared relationship variables incomplete');
 check(mirror.trim() === '<!-- 5sigmas-canonical-mirror -->', 'EN: turn evidence canonical mirror marker invalid');
 check(i18n.source === 'snippets/articulos-tecnicos/voice-turn-evidence-stack.html', 'EN: turn evidence i18n source path invalid');
 const snippetBytes = Buffer.from(snippet, 'utf8');
 const blobHeader = Buffer.from(`blob ${snippetBytes.length}\0`, 'utf8');
 const snippetBlobSha = crypto.createHash('sha1').update(Buffer.concat([blobHeader, snippetBytes])).digest('hex');
 check(i18n.source_blob_sha === snippetBlobSha, `EN: turn evidence source_blob_sha stale (${i18n.source_blob_sha} != ${snippetBlobSha})`);
-for (const token of ['Evidence layers', 'Evaluation and reliability', 'Outcome', 'Conversation', 'first harmful observable', 'root cause']) {
+for (const token of ['Turn-level evidence', 'Outcome', 'Conversation', 'first harmful observable', 'root cause', 'recovery', 'Turn diagnosis']) {
   check(snippet.includes(token) || Object.values(i18n.replacements).some((value) => String(value).includes(token)), `EN visual translation missing ${token}`);
 }
 

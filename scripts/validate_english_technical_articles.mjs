@@ -217,7 +217,13 @@ async function validateVoiceArch(page, article, viewportName) {
   await expectCount(page, article.route, '.s5v-latency .s5v-latency__rows > div', 3);
   await expectCount(page, article.route, '.s5v-latency .s5v-latency__legend span', 5);
   await expectCount(page, article.route, '.s5v-decision [data-s5v-step]', 3);
-  await expectCount(page, article.route, '.s5v-decision .s5v-decision__cards > div', 3);
+  await expectCount(page, article.route, '.s5v-decision .s5v-decision-map__node', 3);
+  await expectCount(page, article.route, '.s5v-decision .s5v-decision-map__axis-x', 1);
+  await expectCount(page, article.route, '.s5v-decision .s5v-decision-map__axis-y', 1);
+  await expectCount(page, article.route, '.s5v-decision .s5v-decision-map__vector', 1);
+  await expectCount(page, article.route, '.s5v-decision .s5v-decision-map__target', 1);
+  await expectCount(page, article.route, '.s5v-decision .s5v-decision-map__tradeoff path', 1);
+  await expectCount(page, article.route, '.s5v-decision [data-s5v-copy]', 3);
   await expectCount(page, article.route, '.s5v-surface .s5v-surface__envelopes span', 2);
   await expectCount(page, article.route, '.s5v-surface .s5v-surface__bottom > div', 2);
   await expectCount(page, article.route, '.s5v-voice-prompt .s5v-voice-prompt__samples span', 3);

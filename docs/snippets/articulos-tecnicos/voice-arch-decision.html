@@ -1,7 +1,118 @@
-<section class="s5v s5v-decision" data-s5v-stepper data-s5v-steps="3" data-step="1" data-anim-fullscreen="on" data-anim-contrast="off" aria-label="Elección de arquitectura según la propiedad del producto que se quiere proteger">
+<!-- GOLDEN_VISUAL_CONTRACT
+learning_objective: Show how the modality architecture shifts as the product protects explicit text boundaries, direct acoustic evidence with a separate voice layer, or end-to-end acoustic continuity.
+mechanism: A two-axis ordinal map places full cascade, audio-native plus TTS, and speech-to-speech by mandatory text boundaries and acoustic continuity. Changing the design priority moves both a target and a direction vector to a different region.
+visual_variables: x-position=continuidad acústica del camino principal; y-position=fronteras textuales obligatorias y sustituibles; vector direction=presión de diseño; target position=región favorecida. These variables are ordinal, not benchmark magnitudes.
+why_visual: Prose can list trade-offs, but the map makes the structural relationship between the three modality families and the consequence of changing priorities visible at once.
+-->
+<section class="s5v s5v-decision s5v-decision-map s5v--wide" data-s5v-stepper data-s5v-steps="3" data-step="1" data-anim-fullscreen="on" data-anim-contrast="off" aria-label="Mapa conceptual de decisión entre full cascade, audio-native con TTS y speech-to-speech">
+  <style>
+    .s5v-decision-map,.s5v-decision-map *{box-sizing:border-box}
+    .s5v-decision-map{--ink:#07191b;--muted:#59686b;--line:rgba(7,25,27,.14);--soft:#f5f8f7;--accent:#7357ff;--accent-soft:#f0edff;color:var(--ink);font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;margin:28px auto 34px;max-width:1380px}
+    .s5v-decision-map .s5v__canvas{padding:30px;border:1px solid var(--line);border-radius:28px;background:linear-gradient(180deg,#fff,#fbfcfc);box-shadow:0 22px 54px rgba(18,35,39,.1)}
+    .s5v-decision-map .s5v__head{display:flex;align-items:end;justify-content:space-between;gap:28px;margin-bottom:18px}
+    .s5v-decision-map .s5v__head>div{min-width:0}
+    .s5v-decision-map .s5v__kicker{font-size:.73rem;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:#0c8392}
+    .s5v-decision-map h3{margin:7px 0 0;font-size:clamp(1.65rem,3vw,2.55rem);line-height:1.02;letter-spacing:-.04em}
+    .s5v-decision-map .s5v__head p{max-width:440px;margin:0;color:var(--muted);font-size:.82rem;line-height:1.45;font-weight:700;text-align:right}
+    .s5v-decision-map .s5v__steps{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
+    .s5v-decision-map .s5v__steps button{appearance:none;border:1px solid var(--line);border-radius:999px;background:#fff;color:var(--muted);padding:9px 13px;font:850 .72rem/1 "Avenir Next","Avenir","Segoe UI",sans-serif;cursor:pointer;transition:transform .16s ease,background .16s ease,border-color .16s ease}
+    .s5v-decision-map .s5v__steps button:hover{transform:translateY(-1px)}
+    .s5v-decision-map .s5v__steps button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff!important}
+    .s5v-decision-map__figure{margin:0}
+    .s5v-decision-map__scroller{max-width:100%;overflow-x:auto;overflow-y:hidden;overscroll-behavior-inline:contain;scrollbar-gutter:stable;padding:0 2px 7px}
+    .s5v-decision-map__plot{position:relative;min-width:760px;min-height:405px;border-left:2px solid rgba(7,25,27,.38);border-bottom:2px solid rgba(7,25,27,.38);margin:34px 40px 50px 82px;background:linear-gradient(90deg,transparent 49.8%,rgba(7,25,27,.05) 50%,transparent 50.2%),linear-gradient(0deg,transparent 49.8%,rgba(7,25,27,.05) 50%,transparent 50.2%),radial-gradient(circle at 50% 50%,rgba(115,87,255,.035),transparent 58%)}
+    .s5v-decision-map__plot::after{content:"";position:absolute;right:-3px;bottom:-5px;border-left:8px solid rgba(7,25,27,.45);border-top:5px solid transparent;border-bottom:5px solid transparent}
+    .s5v-decision-map__plot::before{content:"";position:absolute;left:-5px;top:-3px;border-bottom:8px solid rgba(7,25,27,.45);border-left:5px solid transparent;border-right:5px solid transparent}
+    .s5v-decision-map__axis-x{position:absolute;right:4px;bottom:-34px;color:var(--muted);font-size:.61rem;font-weight:900;letter-spacing:.01em;white-space:nowrap}
+    .s5v-decision-map__axis-y{position:absolute;left:-72px;top:3px;width:62px;color:var(--muted);font-size:.61rem;font-weight:900;line-height:1.18;text-align:right}
+    .s5v-decision-map__node{position:absolute;width:190px;transform:translate(-50%,-50%);padding:7px 8px 7px 22px;border-radius:10px;background:rgba(255,255,255,.9);z-index:3}
+    .s5v-decision-map__node::after{content:"";position:absolute;left:4px;top:12px;width:9px;height:9px;border-radius:50%;background:var(--ink);box-shadow:0 0 0 4px #fff,0 0 0 5px rgba(7,25,27,.16)}
+    .s5v-decision-map__node b{display:block;font-size:.79rem;line-height:1.15}
+    .s5v-decision-map__node span{display:block;margin-top:4px;color:var(--muted);font-size:.61rem;line-height:1.25;font-weight:720}
+    .s5v-decision-map__node--cascade{left:17%;top:18%}
+    .s5v-decision-map__node--half{left:50%;top:50%}
+    .s5v-decision-map__node--s2s{left:83%;top:82%}
+    .s5v-decision-map__node--cascade::before,.s5v-decision-map__node--half::before,.s5v-decision-map__node--s2s::before{content:"";position:absolute;left:-2px;top:6px;width:21px;height:21px;border-radius:50%;border:2px solid transparent;transition:border-color .16s ease,transform .16s ease}
+    .s5v-decision-map[data-step="1"] .s5v-decision-map__node--cascade::before,.s5v-decision-map[data-step="2"] .s5v-decision-map__node--half::before,.s5v-decision-map[data-step="3"] .s5v-decision-map__node--s2s::before{border-color:rgba(115,87,255,.55);transform:scale(1.12)}
+    .s5v-decision-map__tradeoff{position:absolute;left:14%;top:16%;width:72%;height:68%;pointer-events:none;z-index:0}
+    .s5v-decision-map__tradeoff path{fill:none;stroke:rgba(7,25,27,.16);stroke-width:2;stroke-dasharray:5 8}
+    .s5v-decision-map__vector{position:absolute;left:50%;top:54%;width:30%;height:3px;background:var(--accent);transform-origin:0 50%;z-index:1;transition:none}
+    .s5v-decision-map__vector::after{content:"";position:absolute;right:-1px;top:50%;transform:translateY(-50%);border-left:9px solid var(--accent);border-top:6px solid transparent;border-bottom:6px solid transparent}
+    .s5v-decision-map__target{position:absolute;width:34px;height:34px;border:3px solid var(--accent);border-radius:50%;transform:translate(calc(-50% - 86px),calc(-50% - 7px));box-shadow:0 0 0 8px rgba(115,87,255,.09);z-index:4;transition:none;pointer-events:none}
+    .s5v-decision-map[data-step="1"] .s5v-decision-map__vector{left:50%;top:56%;width:43%;transform:rotate(220deg)}
+    .s5v-decision-map[data-step="1"] .s5v-decision-map__target{left:17%;top:18%}
+    .s5v-decision-map[data-step="2"] .s5v-decision-map__vector{left:25%;top:75%;width:38%;transform:rotate(-43deg)}
+    .s5v-decision-map[data-step="2"] .s5v-decision-map__target{left:50%;top:50%}
+    .s5v-decision-map[data-step="3"] .s5v-decision-map__vector{left:50%;top:44%;width:43%;transform:rotate(40deg)}
+    .s5v-decision-map[data-step="3"] .s5v-decision-map__target{left:83%;top:82%}
+    .s5v-decision-map__legend{display:flex;gap:9px;align-items:flex-start;margin:2px 0 0;color:var(--muted);font-size:.65rem;line-height:1.4;font-weight:720}
+    .s5v-decision-map__legend i{flex:0 0 24px;height:3px;margin-top:7px;background:var(--accent);border-radius:99px;position:relative}
+    .s5v-decision-map__legend i::after{content:"";position:absolute;right:-1px;top:50%;transform:translateY(-50%);border-left:6px solid var(--accent);border-top:4px solid transparent;border-bottom:4px solid transparent}
+    .s5v-decision-map__state{margin-top:14px;padding:13px 15px;border-radius:15px;background:var(--soft);border:1px solid var(--line);font-size:.72rem;line-height:1.42;font-weight:750;color:var(--muted)}
+    .s5v-decision-map__state span{display:none}
+    .s5v-decision-map[data-step="1"] .s5v-decision-map__state [data-s5v-copy="1"],.s5v-decision-map[data-step="2"] .s5v-decision-map__state [data-s5v-copy="2"],.s5v-decision-map[data-step="3"] .s5v-decision-map__state [data-s5v-copy="3"]{display:inline}
+    .s5v-decision-map__state strong{color:var(--ink)}
+    .s5v-decision-map__caption{margin:11px 0 0;color:var(--muted);font-size:.62rem;line-height:1.4;font-weight:720;font-style:italic}
+    @media(max-width:720px){
+      .s5v-decision-map{margin:18px auto 22px}
+      .s5v-decision-map .s5v__canvas{padding:16px 14px;border-radius:22px}
+      .s5v-decision-map .s5v__head{display:grid;gap:6px;margin-bottom:12px}.s5v-decision-map .s5v__head p{text-align:left}
+      .s5v-decision-map .s5v__steps{flex-wrap:nowrap;overflow-x:auto;gap:5px;padding:2px 0 4px;margin-bottom:8px}
+      .s5v-decision-map .s5v__steps button{flex:0 0 auto;padding:8px 9px;font-size:.66rem}
+      .s5v-decision-map__scroller{overflow-x:visible;overflow-y:visible;scrollbar-gutter:auto;padding:0}
+      .s5v-decision-map__plot{min-width:0;width:calc(100% - 58px);min-height:320px;margin:20px 6px 38px 52px}
+      .s5v-decision-map__axis-y{left:0;top:-18px;width:auto;font-size:.56rem;white-space:nowrap;text-align:left}
+      .s5v-decision-map__axis-x{right:0;font-size:.56rem}
+      .s5v-decision-map__node{width:122px;padding:6px 5px 6px 17px}
+      .s5v-decision-map__node::after{left:3px;top:10px;width:8px;height:8px}
+      .s5v-decision-map__node b{font-size:.68rem}
+      .s5v-decision-map__node span{font-size:.57rem;line-height:1.2}
+      .s5v-decision-map__node--cascade{left:19%;top:18%}
+      .s5v-decision-map__node--half{left:50%;top:50%}
+      .s5v-decision-map__node--s2s{left:78%;top:82%}
+      .s5v-decision-map__target{transform:translate(calc(-50% - 54px),calc(-50% - 5px))}
+      .s5v-decision-map[data-step="1"] .s5v-decision-map__target{left:19%;top:18%}
+      .s5v-decision-map[data-step="2"] .s5v-decision-map__target{left:50%;top:50%}
+      .s5v-decision-map[data-step="3"] .s5v-decision-map__target{left:78%;top:82%}
+      .s5v-decision-map[data-step="1"] .s5v-decision-map__vector{left:50%;top:56%;width:45%;transform:rotate(220deg)}
+      .s5v-decision-map[data-step="2"] .s5v-decision-map__vector{left:25%;top:75%;width:40%;transform:rotate(-43deg)}
+      .s5v-decision-map[data-step="3"] .s5v-decision-map__vector{left:50%;top:44%;width:45%;transform:rotate(40deg)}
+      .s5v-decision-map__legend{font-size:.62rem}
+      .s5v-decision-map__state{margin-top:10px;padding:10px 12px;font-size:.69rem}
+      .s5v-decision-map__caption{margin-top:8px;font-size:.6rem}
+    }
+    @media(prefers-reduced-motion:reduce){.s5v-decision-map *{transition-duration:0s!important;animation:none!important}}
+  </style>
   <div class="s5v__canvas">
-    <header class="s5v__head"><div><span class="s5v__kicker">Decisión</span><h3>¿Qué propiedad quieres proteger?</h3></div><p>La arquitectura cambia el tipo de control que conservas.</p></header>
-    <div class="s5v__steps s5v__steps--tabs"><button data-s5v-step="1">Fronteras</button><button data-s5v-step="2">Señal</button><button data-s5v-step="3">Continuidad</button></div>
-    <div class="s5v-decision__cards"><div data-choice="1"><b>Full cascade</b><span>fronteras explícitas y componentes sustituibles</span></div><div data-choice="2"><b>Audio-native + TTS</b><span>audio original al modelo y voz separada</span></div><div data-choice="3"><b>Speech-to-speech</b><span>continuidad acústica y menos fronteras de modalidad</span></div></div>
+    <header class="s5v__head">
+      <div><span class="s5v__kicker">Decisión</span><h3>¿Qué propiedad quieres proteger?</h3></div>
+      <p>La arquitectura cambia el tipo de control que conservas.</p>
+    </header>
+    <div class="s5v__steps" aria-label="Prioridad de diseño">
+      <button data-s5v-step="1">Fronteras</button>
+      <button data-s5v-step="2">Señal + voz</button>
+      <button data-s5v-step="3">Continuidad</button>
+    </div>
+    <figure class="s5v-decision-map__figure">
+      <div class="s5v-decision-map__scroller">
+        <div class="s5v-decision-map__plot" aria-label="Mapa ordinal con continuidad acústica en el eje horizontal y fronteras de texto explícitas en el vertical">
+          <span class="s5v-decision-map__axis-y">↑ más fronteras de texto</span>
+          <span class="s5v-decision-map__axis-x">más continuidad acústica →</span>
+          <svg class="s5v-decision-map__tradeoff" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path d="M3 4 C34 30 66 70 97 96"/></svg>
+          <div class="s5v-decision-map__node s5v-decision-map__node--cascade"><b>Full cascade</b><span>fronteras explícitas · componentes sustituibles</span></div>
+          <div class="s5v-decision-map__node s5v-decision-map__node--half"><b>Audio-native + TTS</b><span>audio original · voz separada</span></div>
+          <div class="s5v-decision-map__node s5v-decision-map__node--s2s"><b>Speech-to-speech</b><span>continuidad acústica y menos fronteras de modalidad</span></div>
+          <div class="s5v-decision-map__vector" aria-hidden="true"></div>
+          <div class="s5v-decision-map__target" aria-hidden="true"></div>
+        </div>
+      </div>
+      <div class="s5v-decision-map__legend"><i aria-hidden="true"></i><span>El vector indica presión de diseño hacia una región; no representa una magnitud, calidad ni latencia.</span></div>
+      <div class="s5v-decision-map__state">
+        <span data-s5v-copy="1"><strong>Proteger fronteras:</strong> favorece contratos textuales visibles y componentes sustituibles.</span>
+        <span data-s5v-copy="2"><strong>Proteger señal + voz:</strong> favorece conservar audio original hacia el modelo sin acoplar la voz al mismo modelo.</span>
+        <span data-s5v-copy="3"><strong>Proteger continuidad acústica:</strong> favorece reducir fronteras de modalidad en el camino principal.</span>
+      </div>
+      <figcaption class="s5v-decision-map__caption">Mapa conceptual ordinal, no benchmark cuantitativo. La posición resume la estructura de modalidad; runtime, provider y canal siguen pudiendo cambiar el resultado operativo.</figcaption>
+    </figure>
   </div>
 </section>
