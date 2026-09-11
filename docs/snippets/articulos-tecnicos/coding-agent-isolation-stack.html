@@ -2,7 +2,7 @@
   <style>
     .s5v-coding-agent-isolation .s5v-isolation__scroll{overflow-x:auto;overscroll-behavior-inline:contain;padding:.35rem .2rem .8rem;scrollbar-gutter:stable;outline:none}
     .s5v-coding-agent-isolation .s5v-isolation__scroll:focus-visible{box-shadow:0 0 0 3px color-mix(in srgb,var(--md-accent-fg-color,#7c4dff) 36%,transparent);border-radius:14px}
-    .s5v-coding-agent-isolation .s5v-isolation__stage{min-width:1040px;max-width:1160px;margin:0 auto}
+    .s5v-coding-agent-isolation .s5v-isolation__stage{min-width:930px;max-width:1160px;margin:0 auto}
     .s5v-coding-agent-isolation svg{display:block;width:100%;height:auto;overflow:visible}
     .s5v-coding-agent-isolation text{fill:currentColor;font-family:inherit}
     .s5v-coding-agent-isolation .i-rail{fill:none;stroke:currentColor;stroke-width:4;stroke-linecap:round}
@@ -11,15 +11,15 @@
     .s5v-coding-agent-isolation .i-edge--invalidate{stroke-dasharray:4 7;stroke-width:3.5}
     .s5v-coding-agent-isolation .i-worktree{fill:var(--md-default-bg-color,#fff);stroke:currentColor;stroke-width:3}
     .s5v-coding-agent-isolation .i-sandbox{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 94%,var(--md-accent-fg-color,#7c4dff) 6%);stroke:currentColor;stroke-width:2.5;stroke-dasharray:10 8}
-    .s5v-coding-agent-isolation .i-service{fill:none;stroke:currentColor;stroke-width:2}
+    .s5v-coding-agent-isolation .i-service{fill:var(--md-default-bg-color,#fff);stroke:currentColor;stroke-width:2}
     .s5v-coding-agent-isolation .i-integration{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 88%,var(--md-accent-fg-color,#7c4dff) 12%);stroke:currentColor;stroke-width:3}
     .s5v-coding-agent-isolation .i-verify{fill:var(--md-default-bg-color,#fff);stroke:currentColor;stroke-width:3}
-    .s5v-coding-agent-isolation .i-shared-risk{fill:none;stroke:currentColor;stroke-width:2.5;stroke-dasharray:3 7}
+    .s5v-coding-agent-isolation .i-shared-risk{fill:var(--md-default-bg-color,#fff);stroke:currentColor;stroke-width:2.5;stroke-dasharray:3 7}
     .s5v-coding-agent-isolation .i-dot{fill:currentColor}
     .s5v-coding-agent-isolation .i-kicker{font-size:14px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;opacity:.68}
     .s5v-coding-agent-isolation .i-label{font-size:17px;font-weight:800;text-anchor:middle}
     .s5v-coding-agent-isolation .i-sub{font-size:13px;text-anchor:middle;opacity:.74}
-    .s5v-coding-agent-isolation .i-edge-label{font-size:13px;font-weight:750;paint-order:stroke;stroke:var(--md-default-bg-color,#fff);stroke-width:5px;stroke-linejoin:round}
+    .s5v-coding-agent-isolation .i-edge-label{font-size:13px;font-weight:750;paint-order:stroke;stroke:var(--md-default-bg-color,#fff);stroke-width:6px;stroke-linejoin:round}
     .s5v-coding-agent-isolation .i-axis-label{font-size:13px;font-weight:800;letter-spacing:.06em;opacity:.72}
     .s5v-coding-agent-isolation .s5v-isolation__legend{display:flex;gap:1rem;flex-wrap:wrap;margin:.25rem 0 0;font-size:.86rem;opacity:.85}
     .s5v-coding-agent-isolation .s5v-isolation__legend span{display:inline-flex;gap:.42rem;align-items:center}
@@ -43,39 +43,43 @@
     <header class="s5v__head"><div><span class="s5v__kicker">Aislamiento en tres dimensiones</span><h3>Dos worktrees separados aún pueden compartir riesgos fuera del filesystem</h3></div><p>Estado mutable, capacidades de ejecución e integración son fronteras distintas. Hay que aislar cada una por la razón correcta.</p></header>
     <div class="s5v-isolation__scroll" tabindex="0" role="region" aria-label="Diagrama desplazable de aislamiento de estado, ejecución e integración">
       <div class="s5v-isolation__stage">
-        <svg viewBox="0 0 1160 790" role="img" aria-labelledby="isolation-title isolation-desc">
+        <svg viewBox="0 0 1160 900" role="img" aria-labelledby="isolation-title isolation-desc">
           <title id="isolation-title">Tres fronteras independientes al ejecutar coding agents en paralelo</title>
           <desc id="isolation-desc">Un repositorio común y una revisión base alimentan dos worktrees con HEAD, índice y dirty state propios. Cada tarea se ejecuta bajo una frontera de sandbox independiente que controla filesystem, red, procesos e identidad. Los efectos de red cruzan esa frontera hacia recursos externos. Ambas tareas pueden seguir colisionando en un recurso externo si no existe namespace por tarea. Los commits candidatos vuelven a converger en integración; si la integración cambia el SHA, la evidencia ligada al SHA anterior debe invalidarse y ejecutarse de nuevo.</desc>
           <defs><marker id="i-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="currentColor"/></marker></defs>
 
-          <text x="24" y="92" class="i-axis-label">GIT COMPARTIDO</text>
-          <path data-shared-rail="repository" class="i-rail" d="M190 94 H1022"/>
-          <circle class="i-dot" cx="340" cy="94" r="6"/><circle class="i-dot" cx="760" cy="94" r="6"/>
-          <text x="606" y="69" class="i-label">Repo común · object store · la mayoría de refs</text>
-          <text x="606" y="119" class="i-sub">base_sha=A · compartir objetos Git no convierte dos worktrees en el mismo workspace</text>
+          <text x="24" y="90" class="i-axis-label">GIT COMPARTIDO</text>
+          <path data-shared-rail="repository" class="i-rail" d="M180 92 H1040"/>
+          <circle class="i-dot" cx="330" cy="92" r="6"/><circle class="i-dot" cx="770" cy="92" r="6"/>
+          <text x="610" y="62" class="i-label">Repo común · object store · la mayoría de refs</text>
+          <text x="610" y="124" class="i-sub">base_sha=A · dos workspaces distintos sobre un repositorio común</text>
 
-          <text x="24" y="232" class="i-axis-label">ESTADO MUTABLE</text>
-          <path data-edge="repo-to-worktree-a" class="i-edge" d="M340 100 V168"/><path data-edge="repo-to-worktree-b" class="i-edge" d="M760 100 V168"/>
-          <g data-worktree="T1"><rect class="i-worktree" x="174" y="174" width="332" height="156" rx="34"/><text x="340" y="208" class="i-kicker" text-anchor="middle">WORKTREE T1 · agent/parser</text><text x="340" y="244" class="i-label">HEAD · index · archivos propios</text><text x="340" y="271" class="i-sub">tracked dirty · untracked · artefactos locales</text><text x="340" y="302" class="i-sub">separa estado de trabajo; no concede ni revoca red/secretos</text></g>
-          <g data-worktree="T2"><rect class="i-worktree" x="594" y="174" width="332" height="156" rx="34"/><text x="760" y="208" class="i-kicker" text-anchor="middle">WORKTREE T2 · agent/tests</text><text x="760" y="244" class="i-label">HEAD · index · archivos propios</text><text x="760" y="271" class="i-sub">tracked dirty · untracked · artefactos locales</text><text x="760" y="302" class="i-sub">otro workspace mutable sobre el mismo repositorio común</text></g>
+          <text x="24" y="228" class="i-axis-label">ESTADO MUTABLE</text>
+          <path data-edge="repo-to-worktree-a" class="i-edge" d="M330 98 V170"/><path data-edge="repo-to-worktree-b" class="i-edge" d="M770 98 V170"/>
+          <g data-worktree="T1"><rect class="i-worktree" x="175" y="178" width="310" height="132" rx="32"/><text x="330" y="211" class="i-kicker" text-anchor="middle">WORKTREE T1 · agent/parser</text><text x="330" y="247" class="i-label">HEAD · index · archivos propios</text><text x="330" y="276" class="i-sub">tracked dirty · untracked · artefactos locales</text></g>
+          <g data-worktree="T2"><rect class="i-worktree" x="615" y="178" width="310" height="132" rx="32"/><text x="770" y="211" class="i-kicker" text-anchor="middle">WORKTREE T2 · agent/tests</text><text x="770" y="247" class="i-label">HEAD · index · archivos propios</text><text x="770" y="276" class="i-sub">tracked dirty · untracked · artefactos locales</text></g>
+          <text x="550" y="330" class="i-sub">worktree separa estado Git mutable; no restringe red, procesos ni secretos</text>
 
-          <text x="24" y="408" class="i-axis-label">CAPACIDADES</text>
-          <g data-sandbox="T1"><rect class="i-sandbox" x="168" y="360" width="270" height="190" rx="34"/><text x="190" y="389" class="i-kicker">SANDBOX T1 · policy</text><circle class="i-service" cx="303" cy="452" r="52"/><text x="303" y="446" class="i-label">Proceso T1</text><text x="303" y="469" class="i-sub">tests · tools</text><path data-edge="t1-process-to-worktree" class="i-edge" d="M303 400 C303 370 320 349 331 326"/><text x="232" y="350" class="i-edge-label">filesystem</text><text x="303" y="526" class="i-sub">red · procesos · identidad</text></g>
-          <rect data-service="T1" class="i-service" x="462" y="414" width="128" height="72" rx="24"/><text x="526" y="441" class="i-label">DB test_t1</text><text x="526" y="464" class="i-sub">namespace T1</text><path data-edge="t1-network" class="i-edge" d="M355 452 H456"/><text x="405" y="434" class="i-edge-label" text-anchor="middle">red cruza policy</text>
+          <text x="24" y="420" class="i-axis-label">CAPACIDADES</text>
+          <g data-sandbox="T1"><rect class="i-sandbox" x="180" y="370" width="250" height="190" rx="32"/><text x="305" y="402" class="i-kicker" text-anchor="middle">SANDBOX T1 · policy</text><circle class="i-service" cx="305" cy="475" r="50"/><text x="305" y="468" class="i-label">Proceso T1</text><text x="305" y="491" class="i-sub">tests · tools</text><text x="305" y="536" class="i-sub">red · procesos · identidad</text></g>
+          <path data-edge="t1-process-to-worktree" class="i-edge" d="M305 425 C305 385 317 346 326 314"/><text x="255" y="354" class="i-edge-label">filesystem</text>
+          <rect data-service="T1" class="i-service" x="462" y="438" width="128" height="72" rx="24"/><text x="526" y="466" class="i-label">DB test_t1</text><text x="526" y="489" class="i-sub">namespace T1</text><path data-edge="t1-network" class="i-edge" d="M355 475 H456"/><text x="405" y="452" class="i-edge-label" text-anchor="middle">red autorizada</text>
 
-          <g data-sandbox="T2"><rect class="i-sandbox" x="668" y="360" width="270" height="190" rx="34"/><text x="690" y="389" class="i-kicker">SANDBOX T2 · policy</text><circle class="i-service" cx="803" cy="452" r="52"/><text x="803" y="446" class="i-label">Proceso T2</text><text x="803" y="469" class="i-sub">tests · tools</text><path data-edge="t2-process-to-worktree" class="i-edge" d="M803 400 C803 370 786 349 769 326"/><text x="839" y="350" class="i-edge-label">filesystem</text><text x="803" y="526" class="i-sub">la policy limita los efectos</text></g>
-          <rect data-service="T2" class="i-service" x="962" y="414" width="128" height="72" rx="24"/><text x="1026" y="441" class="i-label">DB test_t2</text><text x="1026" y="464" class="i-sub">namespace T2</text><path data-edge="t2-network" class="i-edge" d="M855 452 H956"/><text x="905" y="434" class="i-edge-label" text-anchor="middle">red cruza policy</text>
+          <g data-sandbox="T2"><rect class="i-sandbox" x="690" y="370" width="250" height="190" rx="32"/><text x="815" y="402" class="i-kicker" text-anchor="middle">SANDBOX T2 · policy</text><circle class="i-service" cx="815" cy="475" r="50"/><text x="815" y="468" class="i-label">Proceso T2</text><text x="815" y="491" class="i-sub">tests · tools</text><text x="815" y="536" class="i-sub">policy limita los efectos</text></g>
+          <path data-edge="t2-process-to-worktree" class="i-edge" d="M815 425 C815 385 793 346 774 314"/><text x="836" y="354" class="i-edge-label">filesystem</text>
+          <rect data-service="T2" class="i-service" x="972" y="438" width="128" height="72" rx="24"/><text x="1036" y="466" class="i-label">DB test_t2</text><text x="1036" y="489" class="i-sub">namespace T2</text><path data-edge="t2-network" class="i-edge" d="M865 475 H966"/><text x="915" y="452" class="i-edge-label" text-anchor="middle">red autorizada</text>
 
-          <g data-shared-risk="external-resource"><circle class="i-shared-risk" cx="628" cy="522" r="29"/><text x="628" y="528" class="i-label">!</text><text x="628" y="568" class="i-sub">cache / socket / DB sin namespace</text></g>
-          <path data-edge="t1-shared-resource" class="i-edge i-edge--shared" d="M355 478 C424 531 522 525 593 522"/><path data-edge="t2-shared-resource" class="i-edge i-edge--shared" d="M751 489 C717 516 684 521 661 522"/>
+          <g data-shared-risk="external-resource"><circle class="i-shared-risk" cx="625" cy="545" r="30"/><text x="625" y="551" class="i-label">!</text><text x="625" y="594" class="i-sub">cache / socket / DB sin namespace</text></g>
+          <path data-edge="t1-shared-resource" class="i-edge i-edge--shared" d="M350 507 C425 568 520 554 589 546"/><path data-edge="t2-shared-resource" class="i-edge i-edge--shared" d="M770 514 C730 541 690 545 661 545"/>
+          <text x="625" y="620" class="i-sub">si ambos procesos llegan aquí, los worktrees no evitan la colisión</text>
 
-          <text x="24" y="650" class="i-axis-label">INTEGRACIÓN</text>
-          <g data-candidate="T1"><circle class="i-dot" cx="340" cy="628" r="7"/><text x="340" y="610" class="i-sub">candidate_sha=C1</text></g><g data-candidate="T2"><circle class="i-dot" cx="760" cy="628" r="7"/><text x="760" y="610" class="i-sub">candidate_sha=C2</text></g>
-          <path data-edge="t1-to-integration" class="i-edge" d="M340 635 C390 680 444 694 495 694"/><path data-edge="t2-to-integration" class="i-edge" d="M760 635 C710 680 656 694 635 694"/>
-          <g data-node="integration"><path class="i-integration" d="M565 646 L635 694 L565 742 L495 694 Z"/><text x="565" y="688" class="i-label">Integrar</text><text x="565" y="710" class="i-sub">merge / rebase</text></g>
-          <path data-edge="integration-to-verification" class="i-edge" d="M635 694 H815"/><text x="724" y="676" class="i-edge-label" text-anchor="middle">nuevo estado exacto</text>
-          <g data-node="verification-head"><rect class="i-verify" x="820" y="650" width="278" height="88" rx="28"/><text x="959" y="684" class="i-label">verification_head_sha</text><text x="959" y="709" class="i-sub">tests · diff review · evidencia</text></g>
-          <path data-edge="evidence-invalidation" class="i-edge i-edge--invalidate" d="M1038 650 C1084 614 1092 582 1058 565 C1004 538 940 585 943 645"/><text x="1011" y="552" class="i-edge-label" text-anchor="middle">target cambia → invalida evidencia</text>
+          <text x="24" y="716" class="i-axis-label">INTEGRACIÓN</text>
+          <g data-candidate="T1"><circle class="i-dot" cx="330" cy="690" r="7"/><text x="330" y="670" class="i-sub">candidate_sha=C1</text></g><g data-candidate="T2"><circle class="i-dot" cx="770" cy="690" r="7"/><text x="770" y="670" class="i-sub">candidate_sha=C2</text></g>
+          <path data-edge="t1-to-integration" class="i-edge" d="M330 697 C390 750 465 760 520 760"/><path data-edge="t2-to-integration" class="i-edge" d="M770 697 C720 740 665 758 640 760"/>
+          <g data-node="integration"><path class="i-integration" d="M580 712 L646 760 L580 808 L514 760 Z"/><text x="580" y="754" class="i-label">Integrar</text><text x="580" y="778" class="i-sub">merge / rebase</text></g>
+          <path data-edge="integration-to-verification" class="i-edge" d="M646 760 H820"/><text x="733" y="740" class="i-edge-label" text-anchor="middle">nuevo estado exacto</text>
+          <g data-node="verification-head"><rect class="i-verify" x="826" y="716" width="274" height="88" rx="28"/><text x="963" y="750" class="i-label">verification_head_sha</text><text x="963" y="775" class="i-sub">tests · diff review · evidencia</text></g>
+          <path data-edge="evidence-invalidation" class="i-edge i-edge--invalidate" d="M1040 716 C1085 675 1082 638 1045 625 C990 606 938 649 946 710"/><text x="1002" y="610" class="i-edge-label" text-anchor="middle">target cambia → invalida evidencia</text>
         </svg>
       </div>
     </div>
