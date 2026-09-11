@@ -74,6 +74,12 @@ hide:
       <span class="s5-list-row__desc">Architectures, turn-taking, latency, tools, telephony and evaluation for production voice systems.</span>
       <span class="s5-list-row__meta">6 chapters</span>
     </a>
+    <a class="s5-list-row" href="/en/series/coding-agents-agent-harnesses/01-que-es-agent-harness/">
+      <span class="s5-list-row__n">10</span>
+      <span class="s5-list-row__title">Coding Agents & Agent Harnesses</span>
+      <span class="s5-list-row__desc">Context, isolation, task contracts, permissions, verification and durable state for agents that modify software repositories.</span>
+      <span class="s5-list-row__meta">6 chapters</span>
+    </a>
   </nav>
 </section>
 
