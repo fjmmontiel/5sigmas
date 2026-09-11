@@ -17,7 +17,7 @@ const cases = [
       'Ciclo de vida de memoria · semántica ≠ persistencia','WORKING SET Wₜ','MEMORIA EPISÓDICA','Consolidar','MEMORIA SEMÁNTICA',
       'Retrieval selectivo','AUTORIDAD DE NEGOCIO · EXTERNA','SYSTEM OF RECORD','lectura fresca',
       'contradicción → stale / menor autoridad','RUTA DE RECUPERACIÓN · CONTRATO DISTINTO','CHECKPOINT','reanudar ≠ recordar',
-      'Persistir no hace equivalentes estos stores.'
+      'Persistir no hace equivalentes estos almacenes.'
     ],
     forbidden: [],
   },
