@@ -3,16 +3,29 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import crypto from 'node:crypto';
 
-const [es, en, snippet, mirror, i18nRaw] = await Promise.all([
+const [es, en, snippet, mirror, i18nRaw, mkdocsEs, mkdocsEn, manifestEn, prVisual] = await Promise.all([
   fs.readFile(path.resolve('docs/series/context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineering.md'), 'utf8'),
   fs.readFile(path.resolve('locales/en/series/context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineering.md'), 'utf8'),
   fs.readFile(path.resolve('docs/snippets/articulos-tecnicos/context-engineering-assembly-loop.html'), 'utf8'),
   fs.readFile(path.resolve('locales/en/snippets/articulos-tecnicos/context-engineering-assembly-loop.html'), 'utf8'),
   fs.readFile(path.resolve('locales/en/snippets/articulos-tecnicos/context-engineering-assembly-loop.i18n.json'), 'utf8'),
+  fs.readFile(path.resolve('mkdocs.yml'), 'utf8'),
+  fs.readFile(path.resolve('mkdocs.en.yml'), 'utf8'),
+  fs.readFile(path.resolve('locales/en/manifest.yml'), 'utf8'),
+  fs.readFile(path.resolve('.github/workflows/pr-visual-review.yml'), 'utf8'),
 ]);
 const i18n = JSON.parse(i18nRaw);
 const failures = [];
 const check = (condition, message) => { if (!condition) failures.push(message); };
+
+const route = 'series/context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineering.md';
+const visualPath = 'snippets/articulos-tecnicos/context-engineering-assembly-loop.html';
+check(mkdocsEs.includes('Context engineering, memoria y MCP:') && mkdocsEs.includes(`Context engineering vs prompt engineering: ${route}`), 'ES: Series 3 / chapter 3.1 navigation missing');
+check(mkdocsEn.includes('Context Engineering, Memory & MCP:') && mkdocsEn.includes(`Context engineering vs prompt engineering: ${route}`), 'EN: Series 3 / chapter 3.1 navigation missing');
+check(manifestEn.includes(`  - ${route}`), 'EN: chapter 3.1 missing from published_routes manifest');
+check(manifestEn.includes(`  - ${visualPath}`), 'EN: context assembly visual missing from required_snippets manifest');
+check(prVisual.includes('node scripts/validate_context_engineering_ch1_source.mjs'), 'CI: chapter 3.1 source gate missing from PR visual review');
+check(prVisual.includes('node scripts/validate_context_engineering_ch1_accessibility.mjs'), 'CI: chapter 3.1 browser/accessibility gate missing from PR visual review');
 
 const primaryUrls = [
   'https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents',
@@ -95,6 +108,10 @@ check(!snippet.includes('s5v-arch-map__pipe'), 'Visual regression: linear card-p
 check(!snippet.includes('data-s5v-stepper') && !snippet.includes('s5v__steps--tabs'), 'Visual regression: cosmetic tabs/stepper returned');
 for (const source of ['instructions', 'examples', 'history', 'tools', 'retrieval', 'observations', 'memory']) {
   check(snippet.includes(`data-source="${source}"`), `Visual: missing candidate source ${source}`);
+  check(snippet.includes(`data-edge="${source}-to-assembler"`), `Visual: source ${source} lacks explicit convergence edge`);
+}
+for (const boundary of ['candidate-universe', 'prompt-engineering', 'context-engineering', 'environment-effects']) {
+  check(snippet.includes(`data-boundary="${boundary}"`), `Visual: missing semantic boundary ${boundary}`);
 }
 for (const node of ['assembler', 'inference-context', 'model', 'action', 'environment']) {
   check(snippet.includes(`data-node="${node}"`), `Visual: missing mechanism node ${node}`);
@@ -104,15 +121,16 @@ for (const edge of ['assembler-to-context', 'context-to-model', 'model-to-action
 }
 check(snippet.includes('PROMPT ENGINEERING') && snippet.includes('CONTEXT ENGINEERING · CADA INFERENCIA'), 'Visual: prompt/context responsibility boundaries missing');
 check(snippet.includes('candidatos ≠ contexto'), 'Visual: candidate-vs-effective-context distinction missing');
+check(snippet.includes('Siete fuentes candidatas') && snippet.includes('instrucciones y ejemplos forman la parte de prompt engineering'), 'Visual: accessible description does not match seven source lanes / prompt subset');
 check(snippet.includes('Cₜ₊₁') && snippet.includes('no reescribe retroactivamente Cₜ'), 'Visual: temporal feedback semantics missing');
 
 check(mirror.trim() === '<!-- 5sigmas-canonical-mirror -->', 'EN: visual canonical mirror marker invalid');
-check(i18n.source === 'snippets/articulos-tecnicos/context-engineering-assembly-loop.html', 'EN: visual i18n source path invalid');
+check(i18n.source === visualPath, 'EN: visual i18n source path invalid');
 const snippetBytes = Buffer.from(snippet, 'utf8');
 const blobHeader = Buffer.from(`blob ${snippetBytes.length}\0`, 'utf8');
 const snippetBlobSha = crypto.createHash('sha1').update(Buffer.concat([blobHeader, snippetBytes])).digest('hex');
 check(i18n.source_blob_sha === snippetBlobSha, `EN: visual source_blob_sha stale (${i18n.source_blob_sha} != ${snippetBlobSha})`);
-for (const token of ['The model does not see', 'UNIVERSE OF CANDIDATE INFORMATION', 'Message history', 'Tools and contracts', 'Runtime observations', 'Memory / persistent state', 'Select', 'ACTUAL CONTEXT Cₜ', 'cannot see what was excluded', 'Real effect', 'Cₜ₊₁']) {
+for (const token of ['The model does not see', 'Seven candidate sources', 'UNIVERSE OF CANDIDATE INFORMATION', 'Message history', 'Tools and contracts', 'Runtime observations', 'Memory / persistent state', 'Select', 'ACTUAL CONTEXT Cₜ', 'cannot see what was excluded', 'Real effect', 'Cₜ₊₁']) {
   check(Object.values(i18n.replacements).some((value) => String(value).includes(token)), `EN visual translation missing ${token}`);
 }
 
