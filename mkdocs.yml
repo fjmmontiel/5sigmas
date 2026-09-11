@@ -135,7 +135,7 @@ nav:
           - Presentación: series/agentes-ia/00_presentacion_serie.md
           - Qué es un agente: series/agentes-ia/01-que-es-un-agente.md
           - Anatomía de un agente: series/agentes-ia/02-anatomia-de-un-agente.md
-          - Cómo evaluar un agente: series/agentes-ia/03-como-evaluiar-un-agente.md
+          - Cómo evaluar un agente: series/agentes-ia/03-como-evaluar-un-agente.md
           - Seguridad de agentes: series/agentes-ia/04-seguridad-agentes.md
           - De la demo a producción: series/agentes-ia/05-de-la-demo-a-produccion.md
       - Agentes de voz en tiempo real:
