@@ -78,8 +78,6 @@ for (const text of [es, en]) {
 
 check(es.includes('un ejemplo de contrato del harness, no un estándar'), 'ES: illustrative-format caveat missing');
 check(en.includes('an illustrative harness contract, not an industry standard'), 'EN: illustrative-format caveat missing');
-check(es.includes('Replanificar no autoriza a redefinir éxito'), 'ES: replan-vs-contract boundary missing');
-check(en.includes('Replanning does not authorize redefining success'), 'EN: replan-vs-contract boundary missing');
 check(es.includes('la evidencia tiene dependencias'), 'ES: evidence dependency model missing');
 check(en.includes('evidence has dependencies'), 'EN: evidence dependency model missing');
 check(es.includes('ya no prueba continuidad causal'), 'ES: checkpoint continuity caveat missing');
@@ -90,11 +88,8 @@ check(es.includes('antes de cada prompt del usuario') && es.includes('herramient
 check(en.includes('before each user prompt') && en.includes('file-editing tools'), 'EN: current Claude checkpoint capture semantics missing');
 check(es.includes('cambios producidos directamente por comandos Bash'), 'ES: Claude checkpoint scope limit missing');
 check(en.includes('changes made through Bash commands'), 'EN: Claude checkpoint scope limit missing');
-check(!es.includes('checkpoints del estado de archivos antes de ediciones'), 'ES: stale Claude checkpoint timing semantics detected');
-check(!en.includes('checkpoints of file state before edits'), 'EN: stale Claude checkpoint timing semantics detected');
 check(es.includes('shadow Git repository'), 'ES: Gemini checkpoint mechanism missing');
 check(en.includes('shadow Git repository'), 'EN: Gemini checkpoint mechanism missing');
-
 for (const text of [es, en]) {
   check(!/plan (?:is|es) (?:the |la )?(?:task )?(?:spec|contract|contrato)/i.test(text), 'Plan incorrectly equated with task contract');
   check(!/checkpoint (?:guarantees|garantiza) (?:recovery|recuperación|continuity|continuidad)/i.test(text), 'Checkpoint incorrectly asserted to guarantee recovery/continuity');
@@ -104,17 +99,35 @@ check(!/^\s*-\s+.+;\s*$/m.test(en), 'EN: semicolon-list anti-pattern detected');
 const visualInclude = '{{ include_html("snippets/articulos-tecnicos/coding-agent-task-contract.html") }}';
 check(es.includes(visualInclude), 'ES: task-contract visual include missing');
 check(en.includes(visualInclude), 'EN: task-contract visual include missing');
-check(snippet.includes('Contrato vN') && snippet.includes('Plan / grafo vM') && snippet.includes('Verificar + checkpoint') && snippet.includes('Done / handback'), 'Visual: task-contract lifecycle incomplete');
-check(snippet.includes('Replan') && snippet.includes('Enmienda') && snippet.includes('verification_head_sha'), 'Visual: replan/amendment/evidence boundary incomplete');
+
+// Relationship-first visual contract: fail closed against the retired linear card-pipe primitive.
+check(snippet.includes('GOLDEN_VISUAL_CONTRACT'), 'Visual: GOLDEN_VISUAL_CONTRACT missing');
+for (const key of ['learning-objective=', 'mechanism=', 'visual-variables=', 'why-visual=', 'relationship=', 'interaction="static:no-cosmetic-controls"', 'mobile=']) {
+  check(snippet.includes(key), `Visual: contract field missing ${key}`);
+}
+check(!snippet.includes('s5v-arch-map__pipe'), 'Visual: legacy linear card pipe returned');
+check(!snippet.includes('data-s5v-stepper') && !snippet.includes('s5v__steps--tabs'), 'Visual: cosmetic stepper/tabs returned');
+for (const token of [
+  'data-contract="v1-replan"', 'data-plan="v1"', 'data-observation="invalid-assumption"', 'data-edge="replan-loop"', 'data-plan="v2"',
+  'data-authority="product-decision"', 'data-contract="v2"', 'data-graph="v1"', 'data-edge="contract-v2-to-c"',
+  'data-edge="amendment-invalidates-evidence"', 'data-evidence="stale-v1"', 'data-evidence="reverified-v2"',
+]) check(snippet.includes(token), `Visual: relationship node/edge missing ${token}`);
+check(snippet.includes('contract_version=1') && snippet.includes('contract_version=2'), 'Visual: contract-version transition missing');
+check(snippet.includes('candidate_sha=C1') && snippet.includes('candidate_sha=C2'), 'Visual: candidate-bound evidence identity missing');
+check(snippet.includes('overflow-x:auto') && snippet.includes('tabindex="0"'), 'Visual: mobile topology-preserving focusable scroller missing');
+check(snippet.includes('tc-edge--dependency') && snippet.includes('tc-edge--replan') && snippet.includes('tc-edge--invalidate'), 'Visual: dependency/replan/invalidation geometry semantics missing');
+
 check(mirror.trim() === '<!-- 5sigmas-canonical-mirror -->', 'EN: task-contract visual mirror marker invalid');
 check(i18n.source === 'snippets/articulos-tecnicos/coding-agent-task-contract.html', 'EN: task-contract visual i18n source path invalid');
 const snippetBytes = Buffer.from(snippet, 'utf8');
 const blobHeader = Buffer.from(`blob ${snippetBytes.length}\0`, 'utf8');
 const snippetBlobSha = crypto.createHash('sha1').update(Buffer.concat([blobHeader, snippetBytes])).digest('hex');
 check(i18n.source_blob_sha === snippetBlobSha, `EN: task-contract visual source_blob_sha stale (${i18n.source_blob_sha} != ${snippetBlobSha})`);
-for (const token of ['Stable contract · revisable strategy', 'Replanning does not change what completion means', 'Request + rules', 'Contract vN', 'Plan / graph vM', 'Execute + observe', 'Verify + checkpoint', 'Done / handback', 'new evidence → replan']) {
-  check(snippet.includes(token) || Object.values(i18n.replacements).some((value) => String(value).includes(token)), `EN visual translation missing ${token}`);
-}
+for (const token of [
+  'Stable contract · revisable strategy', 'Replanning and amending do not invalidate the same things', 'AUTHORITY · WHAT SUCCESS MEANS',
+  'STRATEGY · DEPENDENCIES', 'EVIDENCE · FRESHNESS', 'Contract v1 remains fixed', 'replan · contract unchanged',
+  'EXTERNAL AUTHORITY', 'Contract v2', 'propagates invalidation', 'STALE for acceptance v2', 'Reverify v2',
+]) check(Object.values(i18n.replacements).some((value) => String(value).includes(token)), `EN visual translation missing ${token}`);
 
 const route = 'series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.md';
 check(mkdocsEs.includes('Specs, planificación y checkpoints: ' + route), 'ES: Series 2 / chapter 2.3 navigation missing');
@@ -127,6 +140,5 @@ if (failures.length) {
   for (const failure of failures) console.error(`- ${failure}`);
   process.exit(1);
 }
-
-console.log('Coding agent harness chapter 2.3 source gate PASS');
-console.log(`ES bytes=${Buffer.byteLength(es)} EN bytes=${Buffer.byteLength(en)}`);
+console.log('Coding agent harness chapter 2.3 source + relationship-first visual gate PASS');
+console.log(`ES bytes=${Buffer.byteLength(es)} EN bytes=${Buffer.byteLength(en)} visual_blob=${snippetBlobSha}`);
