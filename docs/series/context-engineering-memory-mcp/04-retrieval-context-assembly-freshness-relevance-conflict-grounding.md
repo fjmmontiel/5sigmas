@@ -22,7 +22,7 @@ Puede estar desactualizado. Puede pertenecer a otro tenant. Puede describir una 
 
 > **retrieval propone candidatos; el ensamblado de contexto decide qué evidencia entra; el grounding conecta cada afirmación con la evidencia admitida.**
 
-Mezclar las tres capas produce sistemas difíciles de depurar. Un `top_k=10` no es una política de verdad, y un similarity score no sustituye freshness, authority, permisos o provenance.
+Mezclar las tres capas produce sistemas difíciles de depurar. Un `top_k=10` no es una política de verdad, y una puntuación de similitud no sustituye frescura, autoridad, permisos o provenance.
 
 {{ include_html("snippets/articulos-tecnicos/context-retrieval-grounding.html") }}
 
@@ -43,7 +43,7 @@ donde:
 
 - \(R_{\mathrm{lex}}\) prioriza coincidencias léxicas, identificadores y términos exactos;
 - \(R_{\mathrm{sem}}\) usa representaciones vectoriales para proximidad semántica;
-- \(R_{\mathrm{struct}}\) aplica queries estructuradas: SQL, filtros por metadata, graph traversal, APIs o claves exactas.
+- \(R_{\mathrm{struct}}\) aplica consultas estructuradas: SQL, filtros por metadatos, recorridos de grafos, APIs o claves exactas.
 
 \(C_t\) es un **conjunto de candidatos**, no el contexto final.
 
@@ -79,16 +79,16 @@ Un único “RAG accuracy” puede ocultar tres fallos completamente distintos.
 
 La búsqueda semántica es buena cuando la intención y el vocabulario no coinciden literalmente. La búsqueda léxica conserva señales que un embedding puede diluir: códigos de error, nombres propios, identificadores, cláusulas exactas o símbolos.
 
-Anthropic describe este motivo en su trabajo de Contextual Retrieval: combina embeddings con BM25 y después fusiona resultados; su experimento es evidencia de **ese setup**, no una prueba de que una configuración híbrida concreta sea universalmente superior.[^anthropic-contextual]
+Anthropic describe este motivo en su trabajo de Contextual Retrieval: combina embeddings con BM25 y después fusiona resultados; su experimento es evidencia de **esa configuración**, no una prueba de que una configuración híbrida concreta sea universalmente superior.[^anthropic-contextual]
 
-PostgreSQL documenta `ts_rank` y `ts_rank_cd` como funciones de ranking léxico y advierte explícitamente que relevance es dependiente de la aplicación y puede necesitar señales adicionales, como la fecha de modificación.[^postgres-ranking]
+PostgreSQL documenta `ts_rank` y `ts_rank_cd` como funciones de ranking léxico y advierte explícitamente que la relevancia depende de la aplicación y puede necesitar señales adicionales, como la fecha de modificación.[^postgres-ranking]
 
-`pgvector` documenta vector similarity search y su uso conjunto con PostgreSQL full-text search para búsqueda híbrida, incluyendo rank fusion o reranking como opciones.[^pgvector]
+`pgvector` documenta búsqueda por similitud vectorial y su uso conjunto con PostgreSQL full-text search para búsqueda híbrida, incluyendo fusión de rankings o reranking como opciones.[^pgvector]
 
 La consecuencia práctica es sencilla:
 
 ```text
-exact identifier?       lexical puede dominar
+identificador exacto?   lexical puede dominar
 paráfrasis conceptual?  semantic puede recuperar mejor
 estado de negocio?      structured/live read puede ser obligatorio
 consulta mixta?         varios retrievers pueden generar candidatos
@@ -98,9 +98,9 @@ No existe un retriever que convierta relevancia en autoridad por sí solo.
 
 ## 3. Fusionar rankings no fusiona significado
 
-Dos retrievers pueden producir scores incompatibles.
+Dos retrievers pueden producir puntuaciones incompatibles.
 
-Un cosine similarity, un score BM25, `ts_rank_cd` y un score de reranker no comparten necesariamente escala, distribución ni calibración. Sumarlos como si fueran probabilidades comparables crea una precisión aparente que no existe.
+Una similitud coseno, una puntuación BM25, `ts_rank_cd` y la puntuación de un reranker no comparten necesariamente escala, distribución ni calibración. Sumarlas como si fueran probabilidades comparables crea una precisión aparente que no existe.
 
 Una alternativa es fusionar **rangos**. Reciprocal Rank Fusion (RRF), por ejemplo, combina listas según la posición de cada documento y no requiere que sus puntuaciones originales compartan escala.[^elastic-rrf] Eso resuelve un problema de combinación de ranking.
 
@@ -110,14 +110,14 @@ No resuelve estos otros:
 - si el usuario puede verlo;
 - si gobierna la decisión;
 - si contradice otra fuente;
-- si el chunk contiene la evidencia necesaria;
-- si el modelo terminará apoyando sus claims en él.
+- si el fragmento contiene la evidencia necesaria;
+- si el modelo terminará apoyando sus afirmaciones en él.
 
 Por eso `hybrid retrieval` y `context assembly` no son sinónimos.
 
 ## 4. La relevancia es una señal; no es verdad
 
-Un candidato útil puede modelarse con metadata suficiente para no perder su contrato:
+Un candidato útil puede modelarse con metadatos suficientes para no perder su contrato:
 
 ```text
 evidence_id
@@ -158,7 +158,7 @@ Para decisiones sensibles suele ser más seguro usar **restricciones antes que r
 6. budget y orden final
 ```
 
-Un documento prohibido no debe ganar porque tenga un similarity score extraordinario.
+Un documento prohibido no debe ganar porque tenga una puntuación de similitud extraordinaria.
 
 ## 5. La frescura tiene al menos dos relojes
 
@@ -188,7 +188,7 @@ También puede ocurrir lo contrario: un documento antiguo sigue siendo la polít
 
 Por eso **«gana el timestamp más reciente»** tampoco es una regla universal.
 
-OpenAI describe en su agente interno una distinción operativa útil: context precomputado/embebido para retrieval y, cuando la información es stale o falta, queries live al data warehouse para validar el estado actual.[^openai-data-agent] Es una decisión de esa aplicación, no una propiedad automática de RAG.
+OpenAI describe en su agente interno una distinción operativa útil: contexto precomputado y embebido para retrieval y, cuando la información está stale o falta, consultas en vivo al data warehouse para validar el estado actual.[^openai-data-agent] Es una decisión de esa aplicación, no una propiedad automática de RAG.
 
 Para datos volátiles, una estrategia frecuente es:
 
@@ -202,7 +202,7 @@ retrieve candidate
 
 ## 6. El índice necesita una política de invalidación
 
-Freshness no se arregla sólo al consultar. También debemos decidir qué ocurre cuando cambia la fuente:
+La frescura no se arregla sólo al consultar. También debemos decidir qué ocurre cuando cambia la fuente:
 
 ```text
 source rev A
@@ -220,32 +220,32 @@ Las opciones dependen del sistema, pero el contrato debe ser observable.
 
 Preguntas mínimas:
 
-- ¿cómo sabemos qué revisión originó cada chunk?;
-- ¿hay deletes/tombstones?;
-- ¿un update reemplaza atomicamente todos los chunks de un documento?;
-- ¿qué pasa durante el intervalo entre source update e index refresh?;
-- ¿puede la query excluir revisiones obsoletas?;
+- ¿cómo sabemos qué revisión originó cada fragmento?;
+- ¿hay borrados o tombstones?;
+- ¿una actualización reemplaza atómicamente todos los fragmentos de un documento?;
+- ¿qué pasa durante el intervalo entre la actualización de la fuente y el refresco del índice?;
+- ¿puede la consulta excluir revisiones obsoletas?;
 - ¿cuándo obligamos a consultar la fuente viva?
 
 Sin estas respuestas, `updated_at` puede convertirse en decoración.
 
 ## 7. La autoridad no es lo mismo que la relevancia
 
-Supongamos que un agente de soporte pregunta si puede hacer un refund.
+Supongamos que un agente de soporte pregunta si puede hacer un reembolso.
 
 Recupera:
 
 ```text
-e1 — forum interno
-"Normalmente aceptamos refunds hasta 60 días"
-semantic score alto
+e1 — foro interno
+"Normalmente aceptamos reembolsos hasta 60 días"
+puntuación semántica alta
 
 e2 — policy rev A
-"Refunds hasta 30 días"
+"Reembolsos hasta 30 días"
 muy relevante, pero superseded
 
 e3 — policy rev B
-"Refunds hasta 14 días"
+"Reembolsos hasta 14 días"
 fuente autoritativa vigente
 
 e4 — order API
@@ -253,7 +253,7 @@ purchased_at = 20 días
 estado actual del pedido
 ```
 
-La respuesta correcta no sale de “escoger el chunk más parecido”.
+La respuesta correcta no sale de “escoger el fragmento más parecido”.
 
 La política necesita saber que:
 
@@ -262,11 +262,11 @@ La política necesita saber que:
 - `e2` es stale;
 - `e1` puede servir como contexto explicativo, pero no autoriza la acción.
 
-Esto generaliza a permisos, billing, compliance, inventario, feature flags y cualquier dominio donde exista un system of record.
+Esto generaliza a permisos, facturación, cumplimiento, inventario, feature flags y cualquier dominio donde exista un system of record.
 
 ## 8. Los conflictos deben ser objetos explícitos
 
-Dos candidatos contradictorios no deberían desaparecer dentro de un promedio de scores.
+Dos candidatos contradictorios no deberían desaparecer dentro de un promedio de puntuaciones.
 
 Primero determina si existe realmente un conflicto:
 
@@ -300,8 +300,8 @@ resolution = unresolved
 La salida de la política puede ser:
 
 - admitir la evidencia ganadora y conservar provenance de la decisión;
-- mostrar ambas perspectivas si el tiempo o scope las hace compatibles;
-- pedir una fresh read;
+- mostrar ambas perspectivas si el tiempo o el scope las hace compatibles;
+- pedir una lectura fresca;
 - abstenerse;
 - escalar a revisión humana.
 
@@ -309,9 +309,9 @@ No hay que obligar al modelo a “elegir algo” si el sistema no puede justific
 
 ## 9. El modelo no debería resolver silenciosamente la autoridad
 
-Podemos darle al modelo instrucciones como “prefiere documentación oficial”, pero eso no sustituye enforcement de aplicación.
+Podemos darle al modelo instrucciones como “prefiere documentación oficial”, pero eso no sustituye controles de aplicación verificables.
 
-El modelo ve texto. La aplicación conoce —o debe conocer— permisos, tenant, source IDs, revisiones, ACLs y contracts.
+El modelo ve texto. La aplicación conoce —o debe conocer— permisos, tenant, IDs de fuente, revisiones, ACL y contratos.
 
 Una frontera más robusta es:
 
@@ -332,21 +332,21 @@ El modelo puede ayudar a clasificar o rerankear. La aplicación sigue siendo res
 
 ## 10. Qué ofrecen APIs actuales y qué no
 
-OpenAI Vector Store Search permite buscar chunks relevantes con filtros por atributos, un número máximo de resultados, opciones de ranking y query rewriting. La respuesta incluye contenido, atributos y un similarity score.[^openai-vector-search]
+OpenAI Vector Store Search permite buscar fragmentos relevantes con filtros por atributos, un número máximo de resultados, opciones de ranking y query rewriting. La respuesta incluye contenido, atributos y una puntuación de similitud.[^openai-vector-search]
 
-Eso es una **capacidad de retrieval gestionado**. El score no certifica freshness ni truth, y la aplicación sigue teniendo que decidir qué significan los atributos, qué fuente es autoritativa y si una revisión sigue vigente.
+Eso es una **capacidad de retrieval gestionado**. La puntuación no certifica frescura ni verdad, y la aplicación sigue teniendo que decidir qué significan los atributos, qué fuente es autoritativa y si una revisión sigue vigente.
 
 Google Agent Search puede devolver `groundingChunks` y `groundingSupports` que relacionan segmentos de la respuesta con fuentes recuperadas; su documentación también indica que grounding metadata puede faltar, por ejemplo cuando la relevancia de fuente es insuficiente.[^google-grounding]
 
-Eso es una **capacidad del servicio de grounding**. No demuestra que todo claim sea verdadero ni sustituye una política de conflict resolution propia del dominio.
+Eso es una **capacidad del servicio de grounding**. No demuestra que toda afirmación sea verdadera ni sustituye una política de resolución de conflictos propia del dominio.
 
-Anthropic Contextual Retrieval demuestra otra frontera: mejorar candidate retrieval mediante contexto de chunk, lexical search, embeddings y reranking.[^anthropic-contextual] Tampoco convierte candidate relevance en business authority.
+Anthropic Contextual Retrieval demuestra otra frontera: mejorar la recuperación de candidatos mediante contexto de fragmento, búsqueda léxica, embeddings y reranking.[^anthropic-contextual] Tampoco convierte la relevancia de un candidato en autoridad de negocio.
 
 ## 11. El grounding empieza después del retrieval
 
 Para este capítulo usamos una definición operativa:
 
-> un claim está grounded cuando existe una relación verificable entre ese claim y evidencia admitida que realmente lo sostiene.
+> una afirmación está grounded cuando existe una relación verificable entre esa afirmación y evidencia admitida que realmente la sostiene.
 
 Podemos representarlo como:
 
@@ -360,7 +360,7 @@ E_j
 A_t
 \]
 
-donde \(E_j\) son los evidence IDs que sostienen el claim.
+donde \(E_j\) son los IDs de evidencia que sostienen la afirmación.
 
 Esto es más fuerte que:
 
@@ -368,18 +368,18 @@ Esto es más fuerte que:
 answer has citations
 ```
 
-porque una citation puede:
+porque una cita puede:
 
-- apuntar a una fuente que no contiene el claim;
+- apuntar a una fuente que no contiene la afirmación;
 - cubrir sólo parte de una frase;
 - referirse a un documento recuperado pero no usado;
 - ocultar que existe evidencia contradictoria.
 
-La evidencia académica reciente trata precisamente esta distinción entre generar referencias y comprobar soporte claim-level; no debemos asumir que “RAG + citas” produce attribution fiel automáticamente.[^reclaim]
+La evidencia académica reciente trata precisamente esta distinción entre generar referencias y comprobar soporte por afirmación; no debemos asumir que “RAG + citas” produce atribución fiel automáticamente.[^reclaim]
 
 ## 12. Construye el contexto como un paquete de evidencia
 
-En producción, el modelo debería recibir algo más estructurado que una concatenación de chunks:
+En producción, el modelo debería recibir algo más estructurado que una concatenación de fragmentos:
 
 ```text
 EVIDENCE PACKET
@@ -410,7 +410,7 @@ resolution = unresolved
 required_behavior = abstain_or_escalate
 ```
 
-El formato exacto puede ser JSON, objetos internos o texto estructurado. El contrato importante es conservar identidad y metadata hasta generación y evaluación.
+El formato exacto puede ser JSON, objetos internos o texto estructurado. El contrato importante es conservar identidad y metadatos hasta generación y evaluación.
 
 ## 13. Ordenar contexto también es una decisión
 
@@ -418,16 +418,16 @@ Después de filtrar y resolver conflictos todavía queda un problema: **qué evi
 
 Con un budget \(B_t\), el assembler puede necesitar:
 
-- deduplicar chunks solapados;
+- deduplicar fragmentos solapados;
 - agrupar evidencia sobre la misma proposición;
 - conservar el fragmento mínimo que mantiene el soporte;
 - incluir la revisión/fecha junto al contenido;
 - reservar espacio para evidencia contraria relevante;
-- no desplazar una fuente autoritativa por diez chunks redundantes de baja autoridad.
+- no desplazar una fuente autoritativa por diez fragmentos redundantes de baja autoridad.
 
 El capítulo 3.2 trató compaction y budget. Aquí la diferencia es que el budget se aplica **después de preservar el contrato epistemológico de la evidencia**.
 
-Comprimir cinco chunks conflictivos en una frase sin provenance puede ahorrar tokens y destruir precisamente lo que necesitábamos saber.
+Comprimir cinco fragmentos conflictivos en una frase sin provenance puede ahorrar tokens y destruir precisamente lo que necesitábamos saber.
 
 ## 14. Caso completo: una política que cambió hoy
 
@@ -437,7 +437,7 @@ Pregunta:
 "¿Puedo reembolsar este pedido?"
 ```
 
-Candidate generation encuentra:
+La generación de candidatos encuentra:
 
 ```text
 lexical
@@ -451,7 +451,7 @@ structured
   e4 order_api live state
 ```
 
-Assembly:
+Ensamblado:
 
 ```text
 scope / ACL        PASS all
@@ -462,13 +462,13 @@ conflict           rev-A vs rev-B resolved by supersession
 budget             keep e3 + e4; e1 optional explanation
 ```
 
-Evidence packet:
+Paquete de evidencia:
 
 ```text
 A_t = [e3, e4]
 ```
 
-Generation:
+Generación:
 
 ```text
 claim c1:
@@ -488,9 +488,9 @@ Ahora podemos depurar cada capa.
 
 Si `e3` no apareció, es un fallo de retrieval.
 
-Si apareció pero `e2` ganó, es un fallo de assembly/freshness.
+Si apareció pero `e2` ganó, es un fallo de ensamblado/frescura.
 
-Si `e3` y `e4` entraron pero el modelo afirmó 30 días, es un fallo de generation/grounding.
+Si `e3` y `e4` entraron pero el modelo afirmó 30 días, es un fallo de generación/grounding.
 
 Ésa es la razón práctica para no llamar a todo “RAG”.
 
@@ -500,11 +500,11 @@ Si `e3` y `e4` entraron pero el modelo afirmó 30 días, es un fallo de generati
 
 Mide si la evidencia necesaria aparece en el conjunto de candidatos:
 
-- recall@k sobre evidence IDs relevantes;
-- coverage de exact identifiers;
-- recall por tipo de query;
-- tasa de candidates bloqueados posteriormente por ACL/scope;
-- latency/cost por retriever.
+- recall@k sobre IDs de evidencia relevantes;
+- cobertura de identificadores exactos;
+- recall por tipo de consulta;
+- tasa de candidatos bloqueados posteriormente por ACL/scope;
+- latencia/coste por retriever.
 
 Un reranker sólo puede reordenar candidatos que recibió. No recupera evidencia que nunca entró en su conjunto de candidatos.
 
@@ -522,11 +522,11 @@ Mide la política:
 
 ### Grounding
 
-Mide generación contra el evidence packet:
+Mide generación contra el paquete de evidencia:
 
-- porcentaje de claims materiales con soporte;
-- citation precision: la fuente citada realmente sostiene el claim;
-- citation completeness: claims que deberían citar evidencia y no la citan;
+- porcentaje de afirmaciones materiales con soporte;
+- citation precision: la fuente citada realmente sostiene la afirmación;
+- citation completeness: afirmaciones que deberían citar evidencia y no la citan;
 - unsupported-claim rate;
 - contradiction-with-evidence rate;
 - correcto comportamiento de abstención cuando `conflict = unresolved`.
@@ -535,7 +535,7 @@ No mezcles estos números en una única métrica hasta saber qué fallo quieres 
 
 ## 16. Qué registrar para poder depurar un turno
 
-Un trace útil debería reconstruir:
+Una traza útil debería reconstruir:
 
 ```text
 query / task
@@ -550,7 +550,7 @@ generated claim → evidence links
 abstain / escalation decision
 ```
 
-No hace falta guardar contenido sensible indefinidamente. Se pueden almacenar hashes, IDs o metadata minimizada según la política de privacidad.
+No hace falta guardar contenido sensible indefinidamente. Se pueden almacenar hashes, IDs o metadatos minimizados según la política de privacidad.
 
 Pero si sólo guardamos la respuesta final, no podremos saber si el sistema:
 
@@ -558,17 +558,17 @@ Pero si sólo guardamos la respuesta final, no podremos saber si el sistema:
 - la descartó por un filtro defectuoso;
 - aceptó una revisión stale;
 - resolvió mal un conflicto;
-- o generó un claim no soportado pese a tener buena evidencia.
+- o generó una afirmación sin soporte pese a tener buena evidencia.
 
 ## 17. Implicación de producción: maximiza recall al recuperar y filtra con rigor al ensamblar
 
-La arquitectura robusta no pregunta “¿qué vector database usamos?” antes de definir el contrato de evidencia.
+La arquitectura robusta no pregunta “¿qué base de datos vectorial usamos?” antes de definir el contrato de evidencia.
 
 Pregunta:
 
 ```text
 CANDIDATES
-¿qué retrievers maximizan recall para nuestras queries?
+¿qué retrievers maximizan recall para nuestras consultas?
 
 ELIGIBILITY
 ¿qué scope, ACL y versiones pueden entrar?
@@ -586,7 +586,7 @@ BUDGET
 ¿qué evidencia mínima conserva el soporte?
 
 GROUNDING
-¿cómo ligamos cada claim a evidence IDs?
+¿cómo ligamos cada afirmación a IDs de evidencia?
 
 EVALS
 ¿qué capa falló cuando la respuesta fue incorrecta?
