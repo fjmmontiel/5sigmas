@@ -85,6 +85,7 @@ check(en.includes('fresh authoritative state') && en.includes('stale derived mem
 check(es.includes('«Último timestamp gana» tampoco es una política universal'), 'ES: timestamp authority caveat missing');
 check(en.includes('“Newest timestamp wins” is not a universal policy either'), 'EN: timestamp authority caveat missing');
 check(!es.includes('cuarto bucket') && !es.includes('Deletion y corrección') && !es.includes('data pipeline'), 'ES: unnatural mixed-language lifecycle terminology returned');
+check(!snippet.includes('estos stores') && snippet.includes('estos almacenes'), 'ES visual: unnatural stores wording returned');
 check(!/^\s*-\s+.+;\s*$/m.test(en), 'EN: semicolon-list anti-pattern detected');
 check(!/\?\./.test(en), 'EN: malformed question punctuation detected');
 

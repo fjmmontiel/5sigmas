@@ -1,6 +1,6 @@
 {
   "source": "snippets/articulos-tecnicos/context-memory-lifecycle.html",
-  "source_blob_sha": "d61d6be2c0c2c34deb32d2794b6cc85ee9b1ab40",
+  "source_blob_sha": "3bf539f248200257b96ea5c9ff5e289135129c55",
   "replacements": {
     "Cómo el estado de trabajo, la memoria episódica, la memoria semántica, el estado autoritativo y los checkpoints se relacionan sin ser equivalentes": "How working state, episodic memory, semantic memory, authoritative state, and checkpoints relate without being equivalent",
     "Ciclo de vida de memoria · semántica ≠ persistencia": "Memory lifecycle · semantics ≠ persistence",
@@ -46,6 +46,6 @@
     "flujo de estado o acción": "state or action flow",
     "derivación / checkpoint": "derivation / checkpoint",
     "línea gruesa = autoridad actual": "thick line = current authority",
-    "<strong>Persistir no hace equivalentes estos stores.</strong> Los episodios registran eventos, la memoria semántica consolida conocimiento derivado, el system of record gobierna el estado de negocio y el checkpoint existe para reanudar ejecución. Sólo el subconjunto seleccionado entra en <code>Wₜ</code>.": "<strong>Persistence does not make these stores equivalent.</strong> Episodes record events, semantic memory consolidates derived knowledge, the system of record governs business state, and the checkpoint exists to resume execution. Only the selected subset enters <code>Wₜ</code>."
+    "<strong>Persistir no hace equivalentes estos almacenes.</strong> Los episodios registran eventos, la memoria semántica consolida conocimiento derivado, el system of record gobierna el estado de negocio y el checkpoint existe para reanudar ejecución. Sólo el subconjunto seleccionado entra en <code>Wₜ</code>.": "<strong>Persistence does not make these stores equivalent.</strong> Episodes record events, semantic memory consolidates derived knowledge, the system of record governs business state, and the checkpoint exists to resume execution. Only the selected subset enters <code>Wₜ</code>."
   }
 }
