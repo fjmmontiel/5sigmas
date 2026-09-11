@@ -1,6 +1,6 @@
 {
   "source": "snippets/articulos-tecnicos/voice-arch-decision.html",
-  "source_blob_sha": "4a387c24240beb9c6fc9b92782f980dbd49634c3",
+  "source_blob_sha": "007a505b1730644628cb08faefb027b002c67b19",
   "replacements": {
     "x-position=continuidad acústica del camino principal": "x-position=acoustic continuity on the primary path",
     "y-position=fronteras textuales obligatorias y sustituibles": "y-position=mandatory explicit and replaceable text boundaries",
@@ -20,7 +20,7 @@
     "más continuidad acústica →": "more acoustic continuity →",
     "fronteras explícitas · componentes sustituibles": "explicit boundaries · replaceable components",
     "audio original · voz separada": "original audio · separate voice layer",
-    "menos fronteras · continuidad acústica": "fewer boundaries · acoustic continuity",
+    "continuidad acústica y menos fronteras de modalidad": "acoustic continuity and fewer modality boundaries",
     "El vector indica presión de diseño hacia una región; no representa una magnitud, calidad ni latencia.": "The vector shows design pressure toward a region; it does not represent magnitude, quality, or latency.",
     "Proteger fronteras:": "Protect boundaries:",
     "favorece contratos textuales visibles y componentes sustituibles.": "favors visible text contracts and replaceable components.",
