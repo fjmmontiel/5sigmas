@@ -26,7 +26,16 @@
     .s5v-coding-harness-loop .s5v__copy{margin-top:.85rem}
     @media (max-width:700px){.s5v-coding-harness-loop .s5v-harness-loop__scroll{margin-inline:-.35rem;padding-inline:.35rem}.s5v-coding-harness-loop .s5v-harness-loop__stage{min-width:940px}.s5v-coding-harness-loop .s5v-harness-loop__legend{font-size:.82rem}}
   </style>
-  <!-- GOLDEN_VISUAL_CONTRACT relationship="feedback-loop:model-proposal->policy-execution->observation->verification->context" evidence="task-policy-input,model-boundary,workspace-boundary,persistent-run-state,continue-return,stop-handback" interaction="static:no-cosmetic-controls" mobile="horizontal-scroll-preserves-loop-topology" -->
+  <!-- GOLDEN_VISUAL_CONTRACT
+    learning-objective="Understand that a coding agent is a causal execution loop owned by the harness, not a model that merely has tools."
+    mechanism="task/policy -> context -> model proposal -> policy/dispatch -> workspace effect -> observation -> verifier; continue feeds evidence back into context while stop exits to done/handback."
+    visual-variables="horizontal/vertical position encodes causal order and ownership; directed arrows encode control/data flow; the enclosing boundary encodes harness ownership; branch geometry encodes continue vs stop; the lower rail encodes persistent state/provenance across iterations."
+    why-visual="The feedback edge, execution-boundary crossing, stop branch and persistent-state rail are simultaneous relationships that a linear prose list or table would flatten or falsely serialize."
+    relationship="feedback-loop:model-proposal->policy-execution->observation->verification->context"
+    evidence="task-policy-input,model-boundary,workspace-boundary,persistent-run-state,continue-return,stop-handback"
+    interaction="static:no-cosmetic-controls"
+    mobile="horizontal-scroll-preserves-loop-topology"
+  -->
   <div class="s5v__canvas">
     <header class="s5v__head"><div><span class="s5v__kicker">Modelo ≠ harness</span><h3>La autonomía está en el bucle que vuelve a alimentar al modelo</h3></div><p>El modelo propone una acción. El harness conserva estado, aplica política, ejecuta, observa y decide si existe evidencia para continuar o parar.</p></header>
     <div class="s5v-harness-loop__scroll" tabindex="0" role="region" aria-label="Diagrama desplazable del bucle de ejecución del harness">
