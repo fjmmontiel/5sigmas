@@ -74,7 +74,7 @@ const assertTranslatedPair = async ({ es, en }) => {
   assertSitemapPair(es, en);
 };
 
-const assertSeriesHub = async ({ route, voiceRoute, title }) => {
+const assertSeriesHub = async ({ route, entries }) => {
   const response = await page.goto(`${base}${route}`, { waitUntil: 'networkidle' });
   if (!response?.ok()) {
     failures.push(`${route}: HTTP ${response?.status() ?? 'no response'}`);
@@ -82,9 +82,11 @@ const assertSeriesHub = async ({ route, voiceRoute, title }) => {
   }
   const links = await page.locator('.s5-simple-list a.s5-list-row').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('href')));
   const body = await page.locator('body').innerText();
-  if (links.length !== 9) failures.push(`${route}: expected 9 canonical series cards, got ${links.length}`);
-  if (!links.includes(voiceRoute)) failures.push(`${route}: missing Realtime Voice Agents route ${voiceRoute}`);
-  if (!body.includes(title)) failures.push(`${route}: missing Realtime Voice Agents title ${JSON.stringify(title)}`);
+  if (links.length !== 10) failures.push(`${route}: expected 10 canonical series cards, got ${links.length}`);
+  for (const entry of entries) {
+    if (!links.includes(entry.route)) failures.push(`${route}: missing series route ${entry.route}`);
+    if (!body.includes(entry.title)) failures.push(`${route}: missing series title ${JSON.stringify(entry.title)}`);
+  }
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload({ waitUntil: 'networkidle' });
   const geometry = await page.evaluate(() => ({ viewport: document.documentElement.clientWidth, scroll: document.documentElement.scrollWidth }));
@@ -101,7 +103,16 @@ const voicePairs = [
   { es: '/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability/', en: '/en/series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability/' },
 ];
 
-const assertVoiceReaderSequence = async (routes, hubRoute, label) => {
+const codingPairs = [
+  { es: '/series/coding-agents-agent-harnesses/01-que-es-agent-harness/', en: '/en/series/coding-agents-agent-harnesses/01-que-es-agent-harness/' },
+  { es: '/series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento/', en: '/en/series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento/' },
+  { es: '/series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints/', en: '/en/series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints/' },
+  { es: '/series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries/', en: '/en/series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries/' },
+  { es: '/series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion/', en: '/en/series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion/' },
+  { es: '/series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad/', en: '/en/series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad/' },
+];
+
+const assertReaderSequence = async (routes, hubRoute, label) => {
   for (let index = 0; index < routes.length; index += 1) {
     const route = routes[index];
     const response = await page.goto(`${base}${route}`, { waitUntil: 'networkidle' });
@@ -136,12 +147,28 @@ const assertVoiceReaderSequence = async (routes, hubRoute, label) => {
   }
 };
 
-await assertSeriesHub({ route: '/series/', voiceRoute: voicePairs[0].es, title: 'Agentes de voz en tiempo real' });
-await assertSeriesHub({ route: '/en/series/', voiceRoute: voicePairs[0].en, title: 'Realtime Voice Agents' });
+await assertSeriesHub({
+  route: '/series/',
+  entries: [
+    { route: voicePairs[0].es, title: 'Agentes de voz en tiempo real' },
+    { route: codingPairs[0].es, title: 'Coding agents y agent harnesses' },
+  ],
+});
+await assertSeriesHub({
+  route: '/en/series/',
+  entries: [
+    { route: voicePairs[0].en, title: 'Realtime Voice Agents' },
+    { route: codingPairs[0].en, title: 'Coding Agents & Agent Harnesses' },
+  ],
+});
 
 for (const pair of voicePairs) await assertTranslatedPair(pair);
-await assertVoiceReaderSequence(voicePairs.map((pair) => pair.es), '/series/', 'Spanish Realtime Voice Agents');
-await assertVoiceReaderSequence(voicePairs.map((pair) => pair.en), '/en/series/', 'English Realtime Voice Agents');
+await assertReaderSequence(voicePairs.map((pair) => pair.es), '/series/', 'Spanish Realtime Voice Agents');
+await assertReaderSequence(voicePairs.map((pair) => pair.en), '/en/series/', 'English Realtime Voice Agents');
+
+for (const pair of codingPairs) await assertTranslatedPair(pair);
+await assertReaderSequence(codingPairs.map((pair) => pair.es), '/series/', 'Spanish Coding Agents');
+await assertReaderSequence(codingPairs.map((pair) => pair.en), '/en/series/', 'English Coding Agents');
 
 await assertTranslatedPair({ es: '/series/agentes-ia/02-anatomia-de-un-agente/', en: '/en/series/agentes-ia/02-anatomia-de-un-agente/' });
 await assertTranslatedPair({ es: '/series/agentes-ia/00_presentacion_serie/', en: '/en/series/agentes-ia/00_presentacion_serie/' });
@@ -180,4 +207,4 @@ if (failures.length) {
   for (const failure of failures) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log('Locale-switch quality QA passed: bilingual Series hubs expose Realtime Voice Agents, all six ES/EN chapter selectors preserve translated routes and sitemap pairs, reader navigation stays inside the six-chapter collection, and safe fallbacks remain valid.');
+console.log('Locale-switch quality QA passed: bilingual Series hubs expose Realtime Voice Agents and Coding Agents, all twelve chapter selectors preserve translated routes and sitemap pairs, reader navigation stays inside each six-chapter collection, and safe fallbacks remain valid.');
