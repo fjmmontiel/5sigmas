@@ -72,6 +72,14 @@ async function assertVisualDensity(root, label, mode) {
     const text = (node.innerText || '').replace(/\s+/g, ' ').trim();
     const interactive = node.querySelectorAll('button, input').length;
     const rect = node.getBoundingClientRect();
+    const relationshipMap = node.classList.contains('s5v-decision-map');
+    const relationshipStructure = relationshipMap ? {
+      nodes: node.querySelectorAll('.s5v-decision-map__node').length,
+      axes: node.querySelectorAll('.s5v-decision-map__axis-x, .s5v-decision-map__axis-y').length,
+      vectors: node.querySelectorAll('.s5v-decision-map__vector').length,
+      targets: node.querySelectorAll('.s5v-decision-map__target').length,
+      tradeoffPaths: node.querySelectorAll('.s5v-decision-map__tradeoff path').length,
+    } : null;
     const tinyText = [...node.querySelectorAll('b, span, p, small, em, code')]
       .map((el) => {
         const style = getComputedStyle(el);
@@ -86,10 +94,20 @@ async function assertVisualDensity(root, label, mode) {
         };
       })
       .filter((item) => item.width > 0 && item.height > 0 && item.size < 9);
-    return { chars: text.length, interactive, width: rect.width, height: rect.height, tinyText };
+    return { chars: text.length, interactive, width: rect.width, height: rect.height, tinyText, relationshipMap, relationshipStructure };
   });
 
-  if (metrics.chars > 330) {
+  if (metrics.relationshipMap) {
+    const structure = metrics.relationshipStructure;
+    if (!structure || structure.nodes !== 3 || structure.axes !== 2 || structure.vectors !== 1 || structure.targets !== 1 || structure.tradeoffPaths !== 1) {
+      throw new Error(`${label}: relationship-first map structure regressed: ${JSON.stringify(structure)}`);
+    }
+    // A relationship map legitimately carries concise axis/node/state labels. Keep a
+    // guard against prose dumps, but do not apply the legacy 330-character card rule.
+    if (metrics.chars > 850) {
+      throw new Error(`${label}: relationship-first map carries excessive visible prose (${metrics.chars} characters)`);
+    }
+  } else if (metrics.chars > 330) {
     throw new Error(`${label}: the visual duplicates too much prose (${metrics.chars} visible characters)`);
   }
   if (metrics.tinyText.length > 0) {

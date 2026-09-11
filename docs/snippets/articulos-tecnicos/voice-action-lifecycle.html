@@ -1,14 +1,137 @@
-<section class="s5v s5v-arch-map s5v-action-lifecycle s5v--wide" data-step="1" aria-label="Ciclo de vida de una acción externa durante una conversación de voz">
-  <div class="s5v__canvas">
-    <header class="s5v__head"><div><span class="s5v__kicker">Estado y efectos</span><h3>Separa lo que el agente dice de lo que el negocio hizo</h3></div><p>Un barge-in puede cortar el audio sin revertir una operación ya admitida.</p></header>
-    <div class="s5v-arch-map__panels">
-      <div data-panel="1" class="s5v-arch-map__pipe">
-        <span>Tool solicitada<br><small>propuesta del modelo</small></span>
-        <span>Acción admitida<br><small><code>operation_id</code> persistido</small></span>
-        <span>Resultado externo<br><small>COMMITTED · FAILED · UNKNOWN</small></span>
-        <span>Resultado observado<br><small>reconciliar antes de hablar</small></span>
+<!-- GOLDEN_VISUAL_CONTRACT
+learning_objective: Ver que una interrupción conversacional puede detener generación y playout sin rebobinar una operación de negocio ya admitida, y entender por qué UNKNOWN exige reconciliación antes de retry.
+mechanism: Un timeline sincroniza conversación, audio y una operación durable. El marcador de barge-in corta la pista de audio mientras la operación cruza ese instante y continúa hasta una bifurcación COMMITTED/FAILED/UNKNOWN. La rama UNKNOWN sólo vuelve a una decisión después de consultar el sistema de registro.
+visual_variables: x-position=time; lane=independent state domain; line continuity=lifecycle continues; vertical cut=barge-in boundary; branch topology=mutually exclusive external outcomes; y-position=outcome state; dashed path=uncertain/reconciliation path; circle=observable event.
+why_visual: El texto puede enumerar cancelaciones y estados, pero no muestra simultáneamente que el turno avanza mientras la verdad de negocio sigue otra trayectoria. La geometría hace visible que cortar audio y cancelar un side effect son operaciones distintas y que UNKNOWN no autoriza un retry directo.
+-->
+<section class="s5v s5v-action-lifecycle s5v-action-state-machine s5v--wide" aria-label="Timeline y máquina de estados que separan barge-in, audio y efectos externos">
+  <style>
+    .s5v-action-state-machine,.s5v-action-state-machine *{box-sizing:border-box}
+    .s5v-action-state-machine{--ink:#07191b;--muted:#58676a;--line:rgba(7,25,27,.14);--soft:#f6f8f7;--conv:#315aa8;--audio:#087f8f;--op:#7a5af8;--ok:#23863a;--fail:#b43d35;--unknown:#ad5d00;color:var(--ink);font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;display:grid;margin:28px auto 34px;max-width:1380px}
+    .s5v-action-state-machine__sheet{padding:30px;border:1px solid var(--line);border-radius:28px;background:linear-gradient(180deg,#fff,#fbfcfc);box-shadow:0 22px 54px rgba(18,35,39,.1);overflow:hidden}
+    .s5v-action-state-machine__head{display:flex;align-items:end;justify-content:space-between;gap:28px;margin-bottom:20px}
+    .s5v-action-state-machine__kicker{font-size:.73rem;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--op)}
+    .s5v-action-state-machine h3{margin:7px 0 0;font-size:clamp(1.7rem,3vw,2.55rem);line-height:1.02;letter-spacing:-.04em;max-width:760px}
+    .s5v-action-state-machine__lead{max-width:470px;margin:0;color:var(--muted);font-size:.82rem;line-height:1.45;font-weight:700;text-align:right}
+    .s5v-action-state-machine__figure{margin:0;padding:18px 18px 16px;border:1px solid var(--line);border-radius:20px;background:#fff}
+    .s5v-action-state-machine__caption{display:flex;align-items:baseline;justify-content:space-between;gap:18px;margin:0 0 12px}
+    .s5v-action-state-machine__caption strong{font-size:.95rem;letter-spacing:-.015em}
+    .s5v-action-state-machine__caption span{max-width:510px;color:var(--muted);font-size:.68rem;line-height:1.35;font-weight:700;text-align:right}
+    .s5v-action-state-machine__scroll{overflow-x:auto;overscroll-behavior-inline:contain;padding:2px 1px 8px;scrollbar-width:thin}
+    .s5v-action-state-machine__scroll:focus-visible{outline:3px solid rgba(122,90,248,.23);outline-offset:4px;border-radius:10px}
+    .s5v-action-state-machine__svg{display:block;width:100%;min-width:980px;height:auto;overflow:visible}
+    .s5v-action-state-machine__axis{stroke:#6f7b7d;stroke-width:1.5}
+    .s5v-action-state-machine__guide{stroke:#dfe5e4;stroke-width:2}
+    .s5v-action-state-machine__conversation{stroke:var(--conv);stroke-width:12;stroke-linecap:round;fill:none}
+    .s5v-action-state-machine__audio{stroke:var(--audio);stroke-width:12;stroke-linecap:round;fill:none}
+    .s5v-action-state-machine__operation{stroke:var(--op);stroke-width:12;stroke-linecap:round;fill:none}
+    .s5v-action-state-machine__branch-ok{stroke:var(--ok);stroke-width:5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+    .s5v-action-state-machine__branch-fail{stroke:var(--fail);stroke-width:5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+    .s5v-action-state-machine__branch-unknown{stroke:var(--unknown);stroke-width:5;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:10 8}
+    .s5v-action-state-machine__reconcile{stroke:var(--unknown);stroke-width:4;fill:#fff8ed}
+    .s5v-action-state-machine__event{stroke:#fff;stroke-width:4}
+    .s5v-action-state-machine__barge{stroke:var(--fail);stroke-width:2.5;stroke-dasharray:8 6}
+    .s5v-action-state-machine__cut{stroke:var(--fail);stroke-width:5;stroke-linecap:round}
+    .s5v-action-state-machine__label{font-size:15px;font-weight:900;fill:var(--ink)}
+    .s5v-action-state-machine__lane{font-size:14px;font-weight:900;fill:var(--muted)}
+    .s5v-action-state-machine__small{font-size:12px;font-weight:800;fill:var(--muted)}
+    .s5v-action-state-machine__mono{font:800 12px/1 "SFMono-Regular",Consolas,monospace;fill:var(--ink)}
+    .s5v-action-state-machine__outcome{font:900 13px/1 "SFMono-Regular",Consolas,monospace}
+    .s5v-action-state-machine__barge-label{font-size:12px;font-weight:900;fill:var(--fail)}
+    .s5v-action-state-machine__note{font-size:12px;font-weight:850;fill:var(--muted)}
+    .s5v-action-state-machine__truth{margin-top:15px;display:grid;grid-template-columns:auto 1fr;gap:10px 14px;align-items:start;padding:14px 16px;border-radius:15px;background:var(--soft);border:1px solid var(--line);font-size:.73rem;line-height:1.45;color:var(--muted);font-weight:750}
+    .s5v-action-state-machine__truth strong{color:var(--ink)}
+    .s5v-action-state-machine__truth code{font-size:.72em}
+    .s5v-action-state-machine__truth-mark{width:10px;height:10px;margin-top:4px;border-radius:999px;background:var(--unknown);box-shadow:0 0 0 5px #fff0dc}
+    @media(max-width:720px){.s5v-action-state-machine__sheet{padding:20px 14px;border-radius:22px}.s5v-action-state-machine__head{display:grid;gap:9px}.s5v-action-state-machine__lead{text-align:left}.s5v-action-state-machine__figure{padding:15px 10px 12px}.s5v-action-state-machine__caption{display:grid;gap:6px}.s5v-action-state-machine__caption span{text-align:left}.s5v-action-state-machine__svg{min-width:940px}.s5v-action-state-machine__truth{grid-template-columns:1fr}.s5v-action-state-machine__truth-mark{display:none}}
+    @media(prefers-reduced-motion:reduce){.s5v-action-state-machine *{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+  </style>
+
+  <div class="s5v-action-state-machine__sheet">
+    <header class="s5v-action-state-machine__head">
+      <div><div class="s5v-action-state-machine__kicker">Conversación ≠ efecto</div><h3>Un barge-in corta una pista; no rebobina la operación</h3></div>
+      <p class="s5v-action-state-machine__lead">Las tres lanes comparten tiempo, pero no autoridad. La conversación puede avanzar mientras <code>op_42</code> sigue siendo una obligación pendiente del sistema.</p>
+    </header>
+
+    <figure class="s5v-action-state-machine__figure" aria-labelledby="s5v-action-life-title">
+      <figcaption class="s5v-action-state-machine__caption">
+        <strong id="s5v-action-life-title">Qué ocurre cuando el usuario interrumpe después de admitir una acción</strong>
+        <span>La topología, no el color, codifica el mecanismo: continuidad temporal arriba; bifurcación de verdad de negocio abajo.</span>
+      </figcaption>
+
+      <div class="s5v-action-state-machine__scroll" tabindex="0" aria-label="Timeline desplazable de conversación, audio y operación con ramas de resultado externo">
+        <svg class="s5v-action-state-machine__svg" viewBox="0 0 1080 540" role="img" aria-labelledby="s5v-action-svg-title s5v-action-svg-desc">
+          <title id="s5v-action-svg-title">Barge-in y estado durable de una operación</title>
+          <desc id="s5v-action-svg-desc">El usuario cambia el turno y el audio del agente se cancela en el barge-in, mientras una operación admitida continúa. Su resultado externo se bifurca en committed, failed o unknown. Unknown conduce a reconciliación con el sistema de registro antes de cualquier retry.</desc>
+
+          <defs>
+            <marker id="s5v-action-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#6f7b7d"/></marker>
+            <marker id="s5v-action-ok-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#23863a"/></marker>
+            <marker id="s5v-action-fail-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#b43d35"/></marker>
+            <marker id="s5v-action-unknown-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#ad5d00"/></marker>
+          </defs>
+
+          <line x1="160" y1="42" x2="990" y2="42" class="s5v-action-state-machine__axis" marker-end="url(#s5v-action-arrow)"/><text x="160" y="28" class="s5v-action-state-machine__small">TIEMPO RELATIVO →</text>
+
+          <text x="20" y="112" class="s5v-action-state-machine__lane">Conversación</text>
+          <line x1="160" y1="108" x2="990" y2="108" class="s5v-action-state-machine__guide"/>
+          <path d="M190 108 H480" class="s5v-action-state-machine__conversation" data-action-track="turn-a"/>
+          <circle cx="190" cy="108" r="8" fill="#315aa8" class="s5v-action-state-machine__event" data-action-event="user-request"/>
+          <text x="178" y="82" class="s5v-action-state-machine__label">«Reserva a las 21:00»</text>
+          <path d="M550 108 H760" class="s5v-action-state-machine__conversation" data-action-track="turn-b"/>
+          <circle cx="550" cy="108" r="8" fill="#315aa8" class="s5v-action-state-machine__event" data-action-event="new-turn"/>
+          <text x="535" y="82" class="s5v-action-state-machine__label">«Mejor a las 21:30»</text>
+          <text x="784" y="113" class="s5v-action-state-machine__small">el turno ya cambió</text>
+
+          <text x="20" y="188" class="s5v-action-state-machine__lane">Audio agente</text>
+          <line x1="160" y1="184" x2="990" y2="184" class="s5v-action-state-machine__guide"/>
+          <path d="M330 184 H500" class="s5v-action-state-machine__audio" data-action-track="agent-audio"/>
+          <text x="350" y="163" class="s5v-action-state-machine__small">respuesta / playout</text>
+          <line x1="493" y1="173" x2="507" y2="195" class="s5v-action-state-machine__cut"/><line x1="507" y1="173" x2="493" y2="195" class="s5v-action-state-machine__cut" data-action-event="audio-cancel"/>
+          <text x="520" y="189" class="s5v-action-state-machine__barge-label">audio cancelado</text>
+
+          <text x="20" y="272" class="s5v-action-state-machine__lane">Operación durable</text>
+          <line x1="160" y1="268" x2="990" y2="268" class="s5v-action-state-machine__guide"/>
+          <circle cx="270" cy="268" r="9" fill="#7a5af8" class="s5v-action-state-machine__event" data-action-event="tool-requested"/>
+          <text x="225" y="244" class="s5v-action-state-machine__mono">tool_requested</text>
+          <path d="M270 268 H720" class="s5v-action-state-machine__operation" data-action-track="operation-running"/>
+          <circle cx="340" cy="268" r="9" fill="#7a5af8" class="s5v-action-state-machine__event" data-action-event="action-admitted"/>
+          <text x="307" y="302" class="s5v-action-state-machine__mono">action_admitted</text>
+          <text x="322" y="321" class="s5v-action-state-machine__small">operation_id=op_42 persistido</text>
+          <text x="548" y="247" class="s5v-action-state-machine__small">RUNNING: cruza el barge-in</text>
+
+          <line x1="500" y1="58" x2="500" y2="340" class="s5v-action-state-machine__barge" data-action-boundary="barge-in"/>
+          <text x="510" y="65" class="s5v-action-state-machine__barge-label">BARGE-IN</text>
+          <text x="510" y="336" class="s5v-action-state-machine__note">la operación no retrocede aquí</text>
+
+          <circle cx="720" cy="268" r="10" fill="#fff" stroke="#7a5af8" stroke-width="4" data-action-event="external-outcome"/>
+          <text x="680" y="238" class="s5v-action-state-machine__small">respuesta externa</text>
+
+          <path d="M727 261 C770 220 790 198 830 188" class="s5v-action-state-machine__branch-ok" marker-end="url(#s5v-action-ok-arrow)" data-action-outcome="committed"/>
+          <circle cx="844" cy="184" r="8" fill="#23863a" class="s5v-action-state-machine__event"/><text x="860" y="189" class="s5v-action-state-machine__outcome" fill="#23863a">COMMITTED</text>
+
+          <path d="M730 268 H830" class="s5v-action-state-machine__branch-fail" marker-end="url(#s5v-action-fail-arrow)" data-action-outcome="failed"/>
+          <circle cx="844" cy="268" r="8" fill="#b43d35" class="s5v-action-state-machine__event"/><text x="860" y="273" class="s5v-action-state-machine__outcome" fill="#b43d35">FAILED</text>
+
+          <path d="M727 275 C770 316 790 338 830 348" class="s5v-action-state-machine__branch-unknown" marker-end="url(#s5v-action-unknown-arrow)" data-action-outcome="unknown"/>
+          <circle cx="844" cy="352" r="8" fill="#ad5d00" class="s5v-action-state-machine__event"/><text x="860" y="357" class="s5v-action-state-machine__outcome" fill="#ad5d00">UNKNOWN</text>
+
+          <path d="M844 368 V408 H780" class="s5v-action-state-machine__branch-unknown" marker-end="url(#s5v-action-unknown-arrow)" data-action-path="unknown-to-reconcile"/>
+          <polygon points="690,408 735,378 780,408 735,438" class="s5v-action-state-machine__reconcile" data-action-event="reconcile"/>
+          <text x="648" y="462" class="s5v-action-state-machine__label">Consultar sistema de registro</text>
+          <text x="657" y="482" class="s5v-action-state-machine__small">¿existe el efecto de op_42?</text>
+
+          <path d="M690 408 H585" class="s5v-action-state-machine__branch-ok" marker-end="url(#s5v-action-ok-arrow)" data-action-reconcile="effect-exists"/>
+          <text x="486" y="399" class="s5v-action-state-machine__small">sí → persistir verdad</text>
+          <text x="486" y="417" class="s5v-action-state-machine__outcome" fill="#23863a">COMMITTED</text>
+
+          <path d="M780 408 H835" class="s5v-action-state-machine__branch-unknown" marker-end="url(#s5v-action-unknown-arrow)" data-action-reconcile="no-effect"/>
+          <text x="850" y="399" class="s5v-action-state-machine__small">no → retry sólo si</text>
+          <text x="850" y="417" class="s5v-action-state-machine__small" data-action-label="retry-guard">la operación es segura/idempotente</text>
+        </svg>
       </div>
-    </div>
-    <div class="s5v__copy"><code>cancel speech</code> no mueve la máquina de estado hacia atrás. Si la respuesta externa se pierde después de enviar una mutación, entra en <code>UNKNOWN</code>: consulta el sistema de registro antes de reintentar. Sólo después decide si el resultado sigue siendo relevante para el turno actual.</div>
+    </figure>
+
+    <div class="s5v-action-state-machine__truth"><span class="s5v-action-state-machine__truth-mark" aria-hidden="true"></span><span><strong>Regla de producción:</strong> <code>cancel speech</code> cambia la conversación; no cambia por sí solo la verdad de <code>operation_id</code>. Si pierdes la respuesta después de enviar una mutación, <code>UNKNOWN</code> significa «reconciliar», no «reintentar». Sólo el sistema de registro puede resolver qué efecto existe realmente.</span></div>
   </div>
 </section>

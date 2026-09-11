@@ -1,14 +1,133 @@
-<section class="s5v s5v-arch-map s5v-latency-path s5v--wide" data-step="1" aria-label="Fronteras observables del presupuesto de latencia de un agente de voz">
-  <div class="s5v__canvas">
-    <header class="s5v__head"><div><span class="s5v__kicker">Camino crítico</span><h3>Mide eventos observables, no sumas de dashboards</h3></div><p>El trabajo interno puede solaparse; las fronteras de usuario siguen siendo medibles.</p></header>
-    <div class="s5v-arch-map__panels">
-      <div data-panel="1" class="s5v-arch-map__pipe">
-        <span>Fin de habla<br><small>última muestra útil</small></span>
-        <span>Turno confirmado<br><small>la respuesta ya puede depender del turno</small></span>
-        <span>Primer audio reproducible<br><small>hay salida, aún no implica reproducción</small></span>
-        <span>Reproducción iniciada<br><small>el dispositivo empieza a reproducir</small></span>
+<!-- GOLDEN_VISUAL_CONTRACT
+learning_objective: Ver por qué la espera percibida speech_stop→first_playout depende del camino crítico residual y no de sumar la duración completa de STT, LLM, TTS y red.
+mechanism: Un timeline de una cascade streaming coloca trabajo que ya ocurrió antes de speech_stop, trabajo residual que desbloquea el primer audio y trabajo que continúa después de first_playout; las lanes se solapan para hacer visible el streaming.
+visual_variables: x-position=time; lane=pipeline stage; segment length=activity duration; overlap=concurrency; vertical marker=observable boundary; shaded zone=work completed before speech_stop; connected critical ribbon=blocking path to first_playout; continuation beyond first_playout=non-blocking work for first sound.
+why_visual: Una lista de métricas no permite ver qué trabajo se solapa ni qué parte ya terminó antes del inicio de L_user; el timeline muestra de un vistazo por qué sumar duraciones completas cuenta trabajo que no está en el camino crítico.
+-->
+<section class="s5v s5v-latency-path s5v-latency-timeline s5v--wide" aria-label="Timeline del camino crítico de latencia desde fin de habla hasta primera reproducción">
+  <style>
+    .s5v-latency-timeline,.s5v-latency-timeline *{box-sizing:border-box}
+    .s5v-latency-timeline{
+      --ink:#07191b;--muted:#58676a;--line:rgba(7,25,27,.13);--soft:#f5f8f7;
+      --voice:#087f8f;--voice-soft:#e5f5f6;--turn:#7a5af8;--turn-soft:#f0ecff;
+      --model:#315aa8;--model-soft:#eaf0fb;--tts:#ad5d00;--tts-soft:#fff1df;
+      --media:#23863a;--media-soft:#eaf6e8;--critical:#c43e35;--critical-soft:#fff0ed;
+      color:var(--ink);font-family:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",Arial,sans-serif;
+      display:grid;margin:28px auto 34px;max-width:1380px
+    }
+    .s5v-latency-timeline__sheet{
+      padding:30px;border:1px solid var(--line);border-radius:28px;background:linear-gradient(180deg,#fff,#fbfcfc);
+      box-shadow:0 22px 54px rgba(18,35,39,.1);overflow:hidden
+    }
+    .s5v-latency-timeline__head{display:flex;align-items:end;justify-content:space-between;gap:28px;margin-bottom:18px}
+    .s5v-latency-timeline__kicker{font-size:.73rem;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--critical)}
+    .s5v-latency-timeline h3{margin:7px 0 0;font-size:clamp(1.7rem,3vw,2.55rem);line-height:1.02;letter-spacing:-.04em}
+    .s5v-latency-timeline__lead{max-width:500px;margin:0;color:var(--muted);font-size:.82rem;line-height:1.45;font-weight:700;text-align:right}
+    .s5v-latency-timeline__case{margin:0;padding:20px 18px 15px;border:1px solid var(--line);border-radius:20px;background:#fff}
+    .s5v-latency-timeline__caption{display:flex;gap:18px;align-items:baseline;justify-content:space-between;margin-bottom:14px}
+    .s5v-latency-timeline__caption strong{font-size:.95rem;letter-spacing:-.015em}
+    .s5v-latency-timeline__caption span{color:var(--muted);font-size:.68rem;line-height:1.35;font-weight:700;max-width:500px;text-align:right}
+    .s5v-latency-scroll{overflow-x:auto;overscroll-behavior-inline:contain;padding:3px 1px 10px;scrollbar-width:thin}
+    .s5v-latency-scroll:focus-visible{outline:3px solid rgba(196,62,53,.22);outline-offset:4px;border-radius:10px}
+    .s5v-latency-canvas{
+      position:relative;min-width:900px;display:grid;grid-template-columns:118px repeat(16,minmax(42px,1fr));
+      grid-auto-rows:41px;column-gap:0;row-gap:7px;padding:6px 8px 10px 0
+    }
+    .s5v-latency-axis{grid-column:2/-1;grid-row:1;position:relative;border-bottom:1px solid var(--line)}
+    .s5v-latency-axis::after{content:"";position:absolute;right:0;bottom:-4px;border-left:7px solid var(--muted);border-top:4px solid transparent;border-bottom:4px solid transparent}
+    .s5v-latency-axis span{position:absolute;left:0;bottom:7px;color:var(--muted);font-size:.58rem;font-weight:850;letter-spacing:.05em;text-transform:uppercase}
+    .s5v-latency-zone{z-index:0;align-self:stretch;border-right:1px dashed rgba(8,127,143,.28);background:linear-gradient(90deg,rgba(8,127,143,.08),rgba(8,127,143,.025))}
+    .s5v-latency-window{z-index:1;align-self:stretch;border-left:1px solid rgba(196,62,53,.26);border-right:1px solid rgba(196,62,53,.26);background:linear-gradient(180deg,rgba(196,62,53,.04),rgba(196,62,53,.012))}
+    .s5v-latency-lane{align-self:center;padding-right:12px;color:var(--muted);font-size:.64rem;font-weight:900;line-height:1.15;text-align:right}
+    .s5v-latency-track{align-self:center;height:3px;background:var(--line);border-radius:999px;z-index:2}
+    .s5v-latency-segment{align-self:center;height:22px;border-radius:999px;z-index:3;display:flex;align-items:center;justify-content:center;padding:0 8px;font-size:.58rem;font-weight:900;white-space:nowrap;overflow:hidden;border:1px solid transparent}
+    .s5v-latency-segment--speech,.s5v-latency-segment--stt{background:var(--voice-soft);border-color:rgba(8,127,143,.25);color:#056875}
+    .s5v-latency-segment--stt-residual{background:repeating-linear-gradient(135deg,#eefafa 0 8px,#fff 8px 16px);border-color:rgba(8,127,143,.35);color:#056875}
+    .s5v-latency-segment--turn{background:var(--turn-soft);border-color:rgba(122,90,248,.26);color:#6046c6}
+    .s5v-latency-segment--model{background:var(--model-soft);border-color:rgba(49,90,168,.24);color:var(--model)}
+    .s5v-latency-segment--tts{background:var(--tts-soft);border-color:rgba(173,93,0,.25);color:#8a4b00}
+    .s5v-latency-segment--media{background:var(--media-soft);border-color:rgba(35,134,58,.25);color:var(--media)}
+    .s5v-latency-segment--play{background:var(--media);color:#fff}
+    .s5v-latency-marker{position:relative;z-index:6;border-left:2px dashed currentColor;color:var(--muted)}
+    .s5v-latency-marker span{position:absolute;top:4px;left:6px;transform:translateY(-100%);padding:4px 6px;border-radius:7px;background:#fff;border:1px solid var(--line);font:800 .52rem/1.15 "SFMono-Regular",Consolas,monospace;white-space:nowrap;box-shadow:0 4px 10px rgba(18,35,39,.06)}
+    .s5v-latency-marker--start{color:var(--critical)}.s5v-latency-marker--turn{color:var(--turn)}.s5v-latency-marker--model{color:var(--model)}.s5v-latency-marker--audio{color:var(--tts)}.s5v-latency-marker--play{color:var(--media)}
+    .s5v-latency-critical{z-index:4;align-self:center;height:8px;border-radius:999px;background:var(--critical);box-shadow:0 0 0 4px var(--critical-soft);position:relative}
+    .s5v-latency-critical::after{content:"";position:absolute;right:-1px;top:-4px;border-left:9px solid var(--critical);border-top:8px solid transparent;border-bottom:8px solid transparent}
+    .s5v-latency-critical-label{z-index:5;align-self:start;justify-self:center;padding-top:3px;color:var(--critical);font-size:.59rem;line-height:1.2;font-weight:900;white-space:nowrap}
+    .s5v-latency-note{z-index:5;align-self:start;padding-top:2px;font-size:.56rem;line-height:1.22;font-weight:850;color:var(--muted)}
+    .s5v-latency-note--stt{color:#056875}.s5v-latency-note--post{color:#6c7779}
+    .s5v-latency-rule{margin-top:15px;padding:13px 15px;border-radius:15px;background:var(--soft);border:1px solid var(--line);font-size:.72rem;line-height:1.44;font-weight:750;color:var(--muted)}
+    .s5v-latency-rule strong{color:var(--ink)}.s5v-latency-rule a{font-weight:900}
+    @media (max-width:720px){
+      .s5v-latency-timeline__sheet{padding:20px 14px;border-radius:22px}
+      .s5v-latency-timeline__head{display:grid;gap:9px}.s5v-latency-timeline__lead{text-align:left}
+      .s5v-latency-timeline__case{padding:15px 10px 12px}
+      .s5v-latency-timeline__caption{display:grid;gap:6px}.s5v-latency-timeline__caption span{text-align:left}
+      .s5v-latency-canvas{min-width:860px}
+    }
+    @media (prefers-reduced-motion:reduce){.s5v-latency-timeline *{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+  </style>
+
+  <div class="s5v-latency-timeline__sheet">
+    <header class="s5v-latency-timeline__head">
+      <div><div class="s5v-latency-timeline__kicker">Camino crítico</div><h3>La espera del usuario no es STT + LLM + TTS completos</h3></div>
+      <p class="s5v-latency-timeline__lead">El tiempo va de izquierda a derecha. El ejemplo muestra estructura de una cascade streaming, no un benchmark ni una escala de milisegundos.</p>
+    </header>
+
+    <figure class="s5v-latency-timeline__case" aria-labelledby="s5v-latency-title">
+      <figcaption class="s5v-latency-timeline__caption">
+        <strong id="s5v-latency-title">Qué trabajo bloquea realmente <code>speech_stop → first_playout</code></strong>
+        <span>El solapamiento permite que unas etapas avancen mientras otras siguen activas.</span>
+      </figcaption>
+      <div class="s5v-latency-scroll" tabindex="0" aria-label="Timeline desplazable del trabajo solapado entre habla, STT, fin de turno, modelo, TTS y reproducción">
+        <div class="s5v-latency-canvas">
+          <div class="s5v-latency-axis"><span>tiempo relativo →</span></div>
+
+          <div class="s5v-latency-zone" data-latency-zone="pre-speech-stop" style="grid-column:2/7;grid-row:2/9"></div>
+          <div class="s5v-latency-window" data-latency-window="user-wait" style="grid-column:7/14;grid-row:2/11"></div>
+
+          <div class="s5v-latency-lane" style="grid-column:1;grid-row:2">Usuario</div>
+          <div class="s5v-latency-track" style="grid-column:2/18;grid-row:2"></div>
+          <div class="s5v-latency-segment s5v-latency-segment--speech" data-latency-segment="user-speech" style="grid-column:2/7;grid-row:2">habla útil</div>
+
+          <div class="s5v-latency-lane" style="grid-column:1;grid-row:3">STT streaming</div>
+          <div class="s5v-latency-track" style="grid-column:2/18;grid-row:3"></div>
+          <div class="s5v-latency-segment s5v-latency-segment--stt" data-latency-segment="stt-pre" style="grid-column:2/7;grid-row:3">parciales durante el habla</div>
+          <div class="s5v-latency-segment s5v-latency-segment--stt-residual" data-latency-segment="stt-residual" style="grid-column:7/8;grid-row:3">residual</div>
+
+          <div class="s5v-latency-lane" style="grid-column:1;grid-row:4">Fin de turno</div>
+          <div class="s5v-latency-track" style="grid-column:7/18;grid-row:4"></div>
+          <div class="s5v-latency-segment s5v-latency-segment--turn" data-latency-segment="eou-wait" style="grid-column:7/9;grid-row:4">endpointing</div>
+
+          <div class="s5v-latency-lane" style="grid-column:1;grid-row:5">Modelo</div>
+          <div class="s5v-latency-track" style="grid-column:9/18;grid-row:5"></div>
+          <div class="s5v-latency-segment s5v-latency-segment--model" data-latency-segment="llm-stream" style="grid-column:9/16;grid-row:5">respuesta en streaming</div>
+
+          <div class="s5v-latency-lane" style="grid-column:1;grid-row:6">TTS</div>
+          <div class="s5v-latency-track" style="grid-column:11/18;grid-row:6"></div>
+          <div class="s5v-latency-segment s5v-latency-segment--tts" data-latency-segment="tts-stream" style="grid-column:11/17;grid-row:6">síntesis en streaming</div>
+
+          <div class="s5v-latency-lane" style="grid-column:1;grid-row:7">Media + buffer</div>
+          <div class="s5v-latency-track" style="grid-column:12/18;grid-row:7"></div>
+          <div class="s5v-latency-segment s5v-latency-segment--media" data-latency-segment="media-to-playout" style="grid-column:12/14;grid-row:7">red · cola</div>
+          <div class="s5v-latency-segment s5v-latency-segment--play" data-latency-segment="playout" style="grid-column:14/18;grid-row:7">reproducción</div>
+
+          <div class="s5v-latency-marker s5v-latency-marker--start" data-latency-marker="speech-stop" style="grid-column:7;grid-row:2/9"><span>speech_stop</span></div>
+          <div class="s5v-latency-marker s5v-latency-marker--turn" data-latency-marker="turn-commit" style="grid-column:9;grid-row:4/9"><span>turn_commit</span></div>
+          <div class="s5v-latency-marker s5v-latency-marker--model" data-latency-marker="first-token" style="grid-column:10;grid-row:5/9"><span>first_token</span></div>
+          <div class="s5v-latency-marker s5v-latency-marker--audio" data-latency-marker="first-audio" style="grid-column:12;grid-row:6/9"><span>first_audio</span></div>
+          <div class="s5v-latency-marker s5v-latency-marker--play" data-latency-marker="first-playout" style="grid-column:14;grid-row:7/11"><span>first_playout</span></div>
+
+          <div class="s5v-latency-critical" data-latency-critical-path="true" style="grid-column:7/14;grid-row:8"></div>
+          <div class="s5v-latency-critical-label" style="grid-column:7/14;grid-row:9">L_user · camino residual hasta first_playout</div>
+
+          <div class="s5v-latency-note" style="grid-column:2/7;grid-row:10">Trabajo ya realizado mientras el usuario habla.</div>
+          <div class="s5v-latency-note s5v-latency-note--stt" style="grid-column:7/11;grid-row:10">Sólo la finalización STT posterior al fin de habla puede entrar en esta espera.</div>
+          <div class="s5v-latency-note s5v-latency-note--post" style="grid-column:14/18;grid-row:10">Modelo y TTS pueden seguir después de que el usuario ya oye el inicio.</div>
+        </div>
       </div>
-    </div>
-    <div class="s5v__copy">Captura, red, STT, modelo, TTS, packetización y buffers contribuyen entre estas fronteras. Algunas etapas se solapan por streaming, así que sumar sus duraciones completas puede contar trabajo dos veces. Etiqueta dónde observaste <code>speech_stop</code>: acústica, borde de captura o VAD servidor; cada frontera incluye capas distintas. <a href="/herramientas/latencia-agente-voz/">Prueba el presupuesto con el explorador interactivo de latencia</a>.</div>
+    </figure>
+
+    <div class="s5v-latency-rule"><strong>Qué evita el doble conteo:</strong> la anchura total de cada lane representa actividad, pero <code>L_user</code> sólo abarca <code>speech_stop → first_playout</code>. STT ya hizo trabajo antes de esa frontera y LLM/TTS se solapan; sumar sus duraciones completas atribuiría a la espera trabajo que ocurrió en paralelo o fuera de la ventana. Etiqueta además dónde observaste <code>speech_stop</code>: acústica, borde de captura o VAD servidor. <a href="/herramientas/latencia-agente-voz/">Prueba el presupuesto con el explorador interactivo de latencia</a>.</div>
   </div>
 </section>
