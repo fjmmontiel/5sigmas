@@ -58,9 +58,23 @@ why_visual: Prose can list trade-offs, but the map makes the structural relation
       .s5v-decision-map .s5v__head{display:grid;gap:9px}.s5v-decision-map .s5v__head p{text-align:left}
       .s5v-decision-map .s5v__steps{flex-wrap:nowrap;overflow-x:auto;padding:2px 0 5px}
       .s5v-decision-map .s5v__steps button{flex:0 0 auto}
-      .s5v-decision-map__plot{min-width:760px;min-height:390px;margin-top:30px;margin-bottom:48px}
-      .s5v-decision-map__axis-y{left:-69px;width:59px;font-size:.58rem}
-      .s5v-decision-map__axis-x{font-size:.58rem}
+      .s5v-decision-map__scroller{overflow-x:visible;overflow-y:visible;scrollbar-gutter:auto;padding:0}
+      .s5v-decision-map__plot{min-width:0;width:calc(100% - 58px);min-height:390px;margin:30px 6px 48px 52px}
+      .s5v-decision-map__axis-y{left:-47px;width:40px;font-size:.56rem}
+      .s5v-decision-map__axis-x{right:0;font-size:.56rem}
+      .s5v-decision-map__node{width:122px;padding:6px 5px 6px 17px}
+      .s5v-decision-map__node::after{left:3px;top:10px;width:8px;height:8px}
+      .s5v-decision-map__node b{font-size:.68rem}
+      .s5v-decision-map__node span{font-size:.54rem;line-height:1.2}
+      .s5v-decision-map__node--cascade{left:19%;top:18%}
+      .s5v-decision-map__node--half{left:50%;top:50%}
+      .s5v-decision-map__node--s2s{left:81%;top:82%}
+      .s5v-decision-map[data-step="1"] .s5v-decision-map__target{left:19%;top:18%}
+      .s5v-decision-map[data-step="2"] .s5v-decision-map__target{left:50%;top:50%}
+      .s5v-decision-map[data-step="3"] .s5v-decision-map__target{left:81%;top:82%}
+      .s5v-decision-map[data-step="1"] .s5v-decision-map__vector{left:50%;top:56%;width:45%;transform:rotate(220deg)}
+      .s5v-decision-map[data-step="2"] .s5v-decision-map__vector{left:25%;top:75%;width:40%;transform:rotate(-43deg)}
+      .s5v-decision-map[data-step="3"] .s5v-decision-map__vector{left:50%;top:44%;width:45%;transform:rotate(40deg)}
       .s5v-decision-map__legend{font-size:.62rem}
       .s5v-decision-map__state{font-size:.69rem}
       .s5v-decision-map__caption{font-size:.6rem}
@@ -78,7 +92,7 @@ why_visual: Prose can list trade-offs, but the map makes the structural relation
       <button data-s5v-step="3">Continuidad</button>
     </div>
     <figure class="s5v-decision-map__figure">
-      <div class="s5v-decision-map__scroller" tabindex="0" aria-label="Mapa de decisión desplazable horizontalmente en pantallas estrechas">
+      <div class="s5v-decision-map__scroller">
         <div class="s5v-decision-map__plot" aria-label="Mapa ordinal con continuidad acústica en el eje horizontal y fronteras de texto explícitas en el vertical">
           <span class="s5v-decision-map__axis-y">↑ más fronteras de texto</span>
           <span class="s5v-decision-map__axis-x">más continuidad acústica →</span>
