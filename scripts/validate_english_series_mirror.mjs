@@ -25,6 +25,12 @@ const realtimeVoice = {
   chapterTitle: 'Chapter 1 — Voice architectures: where the text boundary lives',
 };
 
+const codingAgents = {
+  route: '/en/series/coding-agents-agent-harnesses/01-que-es-agent-harness/',
+  title: 'Coding Agents & Agent Harnesses',
+  chapterTitle: 'What is an agent harness?',
+};
+
 const nativePresentationMedia = new Map([
   ['fundamentos-ia-iag', '00_presentacion_serie'],
   ['from-cave-to-agi', '00_presentacion_serie'],
@@ -63,14 +69,16 @@ const visit = async (route) => {
 
 const hubText = await visit('/en/series/');
 const hubLinks = await page.locator('.s5-simple-list a.s5-list-row').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('href')));
-if (hubLinks.length !== 9) failures.push(`/en/series/: expected 9 canonical series cards, got ${hubLinks.length}`);
+if (hubLinks.length !== 10) failures.push(`/en/series/: expected 10 canonical series cards, got ${hubLinks.length}`);
 for (const [slug, title] of presentations) {
   const expected = `/en/series/${slug}/00_presentacion_serie/`;
   if (!hubLinks.includes(expected)) failures.push(`/en/series/: missing ${expected}`);
   if (!hubText.includes(title)) failures.push(`/en/series/: missing title ${JSON.stringify(title)}`);
 }
-if (!hubLinks.includes(realtimeVoice.route)) failures.push(`/en/series/: missing ${realtimeVoice.route}`);
-if (!hubText.includes(realtimeVoice.title)) failures.push(`/en/series/: missing title ${JSON.stringify(realtimeVoice.title)}`);
+for (const series of [realtimeVoice, codingAgents]) {
+  if (!hubLinks.includes(series.route)) failures.push(`/en/series/: missing ${series.route}`);
+  if (!hubText.includes(series.title)) failures.push(`/en/series/: missing title ${JSON.stringify(series.title)}`);
+}
 
 for (const [slug, expectedTitle] of presentations) {
   const route = `/en/series/${slug}/00_presentacion_serie/`;
@@ -103,12 +111,14 @@ for (const [slug, expectedTitle] of presentations) {
   }
 }
 
-const voiceBody = await visit(realtimeVoice.route);
-if (!voiceBody.includes(realtimeVoice.chapterTitle)) {
-  failures.push(`${realtimeVoice.route}: missing canonical chapter title ${JSON.stringify(realtimeVoice.chapterTitle)}`);
-}
-for (const marker of forbidden) {
-  if (voiceBody.includes(marker)) failures.push(`${realtimeVoice.route}: Spanish visual/UI marker leaked: ${JSON.stringify(marker)}`);
+for (const series of [realtimeVoice, codingAgents]) {
+  const body = await visit(series.route);
+  if (!body.includes(series.chapterTitle)) {
+    failures.push(`${series.route}: missing canonical chapter title ${JSON.stringify(series.chapterTitle)}`);
+  }
+  for (const marker of forbidden) {
+    if (body.includes(marker)) failures.push(`${series.route}: Spanish visual/UI marker leaked: ${JSON.stringify(marker)}`);
+  }
 }
 
 await page.goto(`${base}/en/series/ia-pib-bienestar-energia/00_presentacion_serie/`, { waitUntil: 'networkidle' });
@@ -135,6 +145,7 @@ for (const expected of ['Play attack', 'Hostile content', 'Crosses authorization
 for (const route of [
   '/en/series/',
   realtimeVoice.route,
+  codingAgents.route,
   '/en/series/ia-pib-bienestar-energia/00_presentacion_serie/',
   '/en/series/datacenters-espacio/00_presentacion_serie/',
   '/en/series/seguridad-ia/00_presentacion_serie/',
@@ -158,4 +169,4 @@ if (failures.length) {
   for (const failure of failures) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log('English series mirror QA passed: nine canonical series entries including Realtime Voice Agents, localized embedded visuals, native-English presentation media only when declared, desktop/mobile overflow clean.');
+console.log('English series mirror QA passed: ten canonical series entries including Realtime Voice Agents and Coding Agents & Agent Harnesses, localized embedded visuals, native-English presentation media only when declared, desktop/mobile overflow clean.');
