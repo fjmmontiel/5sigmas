@@ -1,6 +1,6 @@
 {
   "source": "snippets/articulos-tecnicos/coding-agent-verification-stack.html",
-  "source_blob_sha": "bb8c83c019605eed573bc1fc47a0f73fb414ed0d",
+  "source_blob_sha": "944ef2fa39d54d919798c9347c8a5843808e0663",
   "replacements": {
     "Grafo de evidencia que decide si un candidato de coding agent se acepta, vuelve a trabajo o se devuelve": "Evidence graph that decides whether a coding-agent candidate is accepted, sent back for rework, or handed back",
     "Evidencia · freshness · stop": "Evidence · freshness · stop",
