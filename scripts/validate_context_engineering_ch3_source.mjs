@@ -43,16 +43,16 @@ const conceptPairs = [
   ['Episodic memory: hechos situados en el tiempo', 'Episodic memory: events situated in time'],
   ['Semantic memory: conocimiento consolidado, no una copia del historial', 'Semantic memory: consolidated knowledge, not copied history'],
   ['Estado persistente autoritativo: memoria del agente no debe sustituirlo', 'Authoritative persistent state: agent memory should not replace it'],
-  ['Persistencia es un eje, no un cuarto bucket', 'Persistence is an axis, not a fourth bucket'],
+  ['La persistencia es un eje, no un cuarto tipo', 'Persistence is an axis, not a fourth bucket'],
   ['Retrieval tampoco es un tipo de memoria', 'Retrieval is not a memory type either'],
   ['Checkpoint ≠ memory', 'Checkpoint ≠ memory'],
   ['Qué ofrecen los frameworks actuales y qué no', 'What current frameworks provide — and what they do not'],
   ['Escribir memoria es una operación con política', 'Writing memory is a policy-controlled operation'],
   ['Conflictos: autoridad primero, después relevancia', 'Conflicts: authority first, then relevance'],
-  ['Deletion y corrección necesitan lineage', 'Deletion and correction need lineage'],
+  ['Borrado y corrección necesitan trazabilidad', 'Deletion and correction need lineage'],
   ['Caso completo: agente de soporte', 'Worked example: a support agent'],
   ['Cómo evaluar una arquitectura de memoria', 'How to evaluate a memory architecture'],
-  ['Implicación de producción: trata memoria como un data pipeline', 'Production implication: treat memory as a data pipeline'],
+  ['Implicación de producción: trata memoria como un pipeline de datos', 'Production implication: treat memory as a data pipeline'],
 ];
 for (const [esToken, enToken] of conceptPairs) {
   check(es.toLowerCase().includes(esToken.toLowerCase()), `ES: missing concept ${esToken}`);
@@ -84,6 +84,7 @@ check(es.includes('fresh authoritative state') && es.includes('stale derived mem
 check(en.includes('fresh authoritative state') && en.includes('stale derived memory'), 'EN: authority ordering missing');
 check(es.includes('«Último timestamp gana» tampoco es una política universal'), 'ES: timestamp authority caveat missing');
 check(en.includes('“Newest timestamp wins” is not a universal policy either'), 'EN: timestamp authority caveat missing');
+check(!es.includes('cuarto bucket') && !es.includes('Deletion y corrección') && !es.includes('data pipeline'), 'ES: unnatural mixed-language lifecycle terminology returned');
 check(!/^\s*-\s+.+;\s*$/m.test(en), 'EN: semicolon-list anti-pattern detected');
 check(!/\?\./.test(en), 'EN: malformed question punctuation detected');
 
