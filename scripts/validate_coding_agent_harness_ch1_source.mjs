@@ -111,6 +111,10 @@ const visualInclude = '{{ include_html("snippets/articulos-tecnicos/coding-agent
 check(es.includes(visualInclude), 'ES: harness loop visual include missing');
 check(en.includes(visualInclude), 'EN: harness loop visual include missing');
 check(snippet.includes('GOLDEN_VISUAL_CONTRACT'), 'Visual: relationship-first contract marker missing');
+check(snippet.includes('learning-objective="'), 'Visual contract: learning objective missing');
+check(snippet.includes('mechanism="'), 'Visual contract: mechanism missing');
+check(snippet.includes('visual-variables="'), 'Visual contract: visual variables missing');
+check(snippet.includes('why-visual="'), 'Visual contract: why-visual justification missing');
 check(snippet.includes('relationship="feedback-loop:'), 'Visual: feedback-loop relationship is not declared');
 check(snippet.includes('interaction="static:no-cosmetic-controls"'), 'Visual: interaction contract must explicitly reject cosmetic controls');
 check(snippet.includes('mobile="horizontal-scroll-preserves-loop-topology"'), 'Visual: mobile topology-preservation contract missing');
