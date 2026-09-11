@@ -14,7 +14,6 @@ const [es, en, snippet, mirror, i18nRaw, mkdocsEs, mkdocsEn, manifest] = await P
   fs.readFile(path.resolve('locales/en/manifest.yml'), 'utf8'),
 ]);
 const i18n = JSON.parse(i18nRaw);
-
 const failures = [];
 const check = (condition, message) => { if (!condition) failures.push(message); };
 
@@ -72,13 +71,10 @@ for (const anchor of esAnchors) check(es.includes(anchor), `ES: missing concept 
 for (const anchor of enAnchors) check(en.includes(anchor), `EN: missing concept ${anchor}`);
 
 for (const text of [es, en]) {
-  for (const token of [
-    'base_sha', 'integration_target', 'HEAD', 'index', 'worktree', 'branch', 'sandbox',
-    'untracked', 'ignored', 'submodule', 'filesystem', 'network', 'process', 'credential',
-    'service_namespace', 'verification_head_sha', 'cleanup_state', 'rebase', 'merge',
-  ]) check(text.toLowerCase().includes(token.toLowerCase()), `Missing repository-isolation token ${token}`);
+  for (const token of ['base_sha','integration_target','HEAD','index','worktree','branch','sandbox','untracked','ignored','submodule','filesystem','network','process','credential','service_namespace','verification_head_sha','cleanup_state','rebase','merge']) {
+    check(text.toLowerCase().includes(token.toLowerCase()), `Missing repository-isolation token ${token}`);
+  }
 }
-
 check(es.includes('`git diff` no es un inventario completo del workspace'), 'ES: git diff inventory caveat missing');
 check(en.includes('`git diff` is not a complete inventory of the workspace'), 'EN: git diff inventory caveat missing');
 check(es.includes('Un worktree aísla estado de trabajo; no limita por sí mismo'), 'ES: worktree security boundary missing');
@@ -91,33 +87,21 @@ check(es.includes('“working tree clean” es una propiedad Git concreta, no un
 check(en.includes('“working tree clean” is a specific Git property, not proof of a reproducible environment'), 'EN: clean-worktree caveat missing');
 check(es.includes('un “merge limpio” tampoco demuestra compatibilidad semántica'), 'ES: clean-merge caveat missing');
 check(en.includes('a clean merge is not proof of semantic compatibility either'), 'EN: clean-merge caveat missing');
-
-check(
-  es.includes('refs/bisect') && es.includes('refs/worktree') && es.includes('refs/rewritten') &&
-  es.includes('“la mayoría”, no “todas”'),
-  'ES: linked-worktree shared-vs-per-worktree ref semantics missing',
-);
-check(
-  en.includes('refs/bisect') && en.includes('refs/worktree') && en.includes('refs/rewritten') &&
-  en.includes('“most,” not “all.”'),
-  'EN: linked-worktree shared-vs-per-worktree ref semantics missing',
-);
+check(es.includes('refs/bisect') && es.includes('refs/worktree') && es.includes('refs/rewritten') && es.includes('“la mayoría”, no “todas”'), 'ES: linked-worktree shared-vs-per-worktree ref semantics missing');
+check(en.includes('refs/bisect') && en.includes('refs/worktree') && en.includes('refs/rewritten') && en.includes('“most,” not “all.”'), 'EN: linked-worktree shared-vs-per-worktree ref semantics missing');
 check(!es.includes('Git object store / refs compartidos'), 'ES: stale all-refs-shared shorthand remains');
 check(!en.includes('shared Git object store / refs'), 'EN: stale all-refs-shared shorthand remains');
-
 for (const text of [es, en]) {
   check(text.includes('preexisting_changes') && text.includes('agent_changes') && text.includes('external_changes_during_run'), 'Dirty-state ownership model incomplete');
   check(text.includes('test_t1') && text.includes('test_t2') && text.includes('/tmp/t1') && text.includes('/tmp/t2'), 'Parallel-agent worked example incomplete');
   check(text.includes('verification_head_sha') && text.includes('cleanup_state'), 'Production recovery identity incomplete');
 }
-
 check(es.includes('Worktree y sandbox son mecanismos distintos incluso dentro del mismo producto'), 'ES: Codex product-boundary caveat missing');
 check(en.includes('Worktree and sandbox are distinct mechanisms even inside the same product'), 'EN: Codex product-boundary caveat missing');
 check(es.includes('execution environment') && es.includes('branch capability') && es.includes('merge policy'), 'ES: GitHub capability boundary missing');
 check(en.includes('execution environment') && en.includes('branch capability') && en.includes('merge policy'), 'EN: GitHub capability boundary missing');
 check(es.includes('varias políticas'), 'ES: Gemini effective-mode caveat missing');
 check(en.includes('several policies'), 'EN: Gemini effective-mode caveat missing');
-
 check(!/worktree (?:es|is) (?:un |a )?(?:security )?sandbox/i.test(`${es}\n${en}`), 'Worktree incorrectly equated with sandbox');
 check(!/(?:container|contenedor) (?:guarantees|garantiza) (?:security|seguridad)/i.test(`${es}\n${en}`), 'Container incorrectly asserted to guarantee security');
 check(!/(?:branch|rama) (?:contains|contiene) (?:all|todo) (?:workspace|estado)/i.test(`${es}\n${en}`), 'Branch incorrectly equated with complete workspace state');
@@ -126,15 +110,26 @@ check(!/^\s*-\s+.+;\s*$/m.test(en), 'EN: semicolon-list anti-pattern detected');
 const visualInclude = '{{ include_html("snippets/articulos-tecnicos/coding-agent-isolation-stack.html") }}';
 check(es.includes(visualInclude), 'ES: isolation visual include missing');
 check(en.includes(visualInclude), 'EN: isolation visual include missing');
-check(snippet.includes('Repo + base SHA') && snippet.includes('Vista de contexto') && snippet.includes('Workspace / worktree') && snippet.includes('Sandbox') && snippet.includes('Integración'), 'Visual: isolation layers incomplete');
-check(snippet.includes('no es una security boundary') && snippet.includes('no resuelve conflictos semánticos'), 'Visual: worktree/sandbox limits missing');
+check(snippet.includes('GOLDEN_VISUAL_CONTRACT'), 'Visual: GOLDEN_VISUAL_CONTRACT missing');
+for (const token of [
+  'learning-objective=', 'mechanism=', 'visual-variables=', 'why-visual=', 'interaction="static:no-cosmetic-controls"',
+  'data-shared-rail="repository"', 'data-worktree="T1"', 'data-worktree="T2"', 'data-sandbox="T1"', 'data-sandbox="T2"',
+  'data-service="T1"', 'data-service="T2"', 'data-shared-risk="external-resource"', 'data-candidate="T1"', 'data-candidate="T2"',
+  'data-node="integration"', 'data-node="verification-head"', 'data-edge="evidence-invalidation"', 'verification_head_sha',
+]) check(snippet.includes(token), `Visual: missing relationship contract token ${token}`);
+for (const forbidden of ['s5v-arch-map__pipe','data-s5v-stepper','s5v__steps--tabs','data-panel=','<button']) {
+  check(!snippet.includes(forbidden), `Visual: cosmetic/linear primitive forbidden: ${forbidden}`);
+}
+check(snippet.includes('recurso compartido sin namespace') || snippet.includes('cache / socket / DB sin namespace'), 'Visual: residual shared-resource collision missing');
+check(snippet.includes('merge limpio puede seguir siendo semánticamente incorrecto'), 'Visual: integration semantic-conflict limit missing');
+check(snippet.includes('target cambia → invalida evidencia'), 'Visual: evidence freshness/invalidation relationship missing');
 check(mirror.trim() === '<!-- 5sigmas-canonical-mirror -->', 'EN: isolation visual canonical mirror marker invalid');
 check(i18n.source === 'snippets/articulos-tecnicos/coding-agent-isolation-stack.html', 'EN: isolation visual i18n source path invalid');
 const snippetBytes = Buffer.from(snippet, 'utf8');
 const blobHeader = Buffer.from(`blob ${snippetBytes.length}\0`, 'utf8');
 const snippetBlobSha = crypto.createHash('sha1').update(Buffer.concat([blobHeader, snippetBytes])).digest('hex');
 check(i18n.source_blob_sha === snippetBlobSha, `EN: isolation visual source_blob_sha stale (${i18n.source_blob_sha} != ${snippetBlobSha})`);
-for (const token of ['Isolation ≠ one primitive', 'Context view', 'what the model observes', 'HEAD · index · dirty state', 'filesystem · network · processes · identity', 'Integration', 'not a security boundary', 'does not resolve semantic conflicts']) {
+for (const token of ['Isolation across three dimensions','Separate worktrees can still share risks','SHARED GIT','MUTABLE STATE','CAPABILITIES','INTEGRATION','network crosses policy','without namespace','target changes → invalidate evidence','evidence that must be revalidated']) {
   check(snippet.includes(token) || Object.values(i18n.replacements).some((value) => String(value).includes(token)), `EN visual translation missing ${token}`);
 }
 
@@ -148,6 +143,5 @@ if (failures.length) {
   for (const failure of failures) console.error(`- ${failure}`);
   process.exit(1);
 }
-
-console.log('Coding agent harness chapter 2.2 source gate PASS');
+console.log('Coding agent harness chapter 2.2 source gate PASS: claims, ES/EN parity, primary sources and relationship-first isolation visual contract are valid.');
 console.log(`ES bytes=${Buffer.byteLength(es)} EN bytes=${Buffer.byteLength(en)}`);
