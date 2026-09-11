@@ -1,5 +1,5 @@
 name: Voice series GOLDEN release audit
-# milestone rerun after relationship-first decision-map blob pin
+# final zero-based rerun after visual/i18n/editorial recertification
 
 on:
   push:
@@ -44,6 +44,31 @@ jobs:
         run: |
           python scripts/prepare_locale.py --locale en
           python scripts/audit_locale.py --locale en
+          python scripts/audit_english_editorial_quality.py --strict
+
+      - name: Verify Voice editorial certifications match exact ES/EN blobs
+        run: |
+          python - <<'PY'
+          import hashlib
+          from pathlib import Path
+          import yaml
+          root = Path('.')
+          review = yaml.safe_load((root / 'locales/en/editorial_review.voice-agents.yml').read_text())
+          entries = review.get('certified_routes', [])
+          assert len(entries) == 6, f'expected six Voice editorial certifications, got {len(entries)}'
+          def blob(path):
+              data = path.read_bytes()
+              return hashlib.sha1(f'blob {len(data)}\0'.encode() + data).hexdigest()
+          for item in entries:
+              route = item['route']
+              es = root / 'docs' / route
+              en = root / 'locales/en' / route
+              actual_es = blob(es)
+              actual_en = blob(en)
+              assert actual_es == item['spanish_blob_sha'], f'{route}: stale ES certification {item["spanish_blob_sha"]} != {actual_es}'
+              assert actual_en == item['english_blob_sha'], f'{route}: stale EN certification {item["english_blob_sha"]} != {actual_en}'
+          print('Voice editorial certifications match all six exact ES/EN blobs.')
+          PY
 
       - name: Build English strictly
         env:
