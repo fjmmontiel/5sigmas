@@ -78,7 +78,7 @@ for (const [locale, text] of [['ES', es], ['EN', en]]) {
 
 check(es.includes('retrieval propone candidatos; el ensamblado de contexto decide qué evidencia entra; el grounding conecta cada afirmación con la evidencia admitida'), 'ES: retrieval/assembly/grounding boundary missing');
 check(en.includes('retrieval proposes candidates; context assembly decides what evidence enters; grounding connects claims to the admitted evidence'), 'EN: retrieval/assembly/grounding boundary missing');
-check(es.includes('gana el timestamp más reciente') && es.includes('no es una regla universal'), 'ES: freshness timestamp caveat missing');
+check(es.includes('gana el timestamp más reciente') && /(?:no|tampoco) es una regla universal/.test(es), 'ES: freshness timestamp caveat missing');
 check(en.includes('newest timestamp wins') && en.includes('not a universal rule'), 'EN: freshness timestamp caveat missing');
 check(es.includes('**capacidad de retrieval gestionado**'), 'ES: OpenAI managed retrieval capability boundary missing');
 check(en.includes('**managed retrieval capability**'), 'EN: OpenAI managed retrieval capability boundary missing');
