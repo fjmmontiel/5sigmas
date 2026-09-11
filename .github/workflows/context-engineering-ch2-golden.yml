@@ -1,6 +1,6 @@
 name: Context Engineering 3.2 GOLDEN certification
 
-# One-shot article certification after semantic extraction/compaction visual repair.
+# One-shot recertification after manual pixel QA removed label collisions.
 on:
   push:
     branches:
