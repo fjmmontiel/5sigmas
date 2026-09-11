@@ -36,11 +36,11 @@ The **host** is the AI application: an IDE, desktop app, chat interface, interna
 
 The host:
 
-- creates and manages multiple MCP clients;
-- decides which servers may be connected;
-- enforces security and consent policy;
-- aggregates context across servers;
-- integrates the model and decides what reaches it;
+- creates and manages multiple MCP clients.
+- decides which servers may be connected.
+- enforces security and consent policy.
+- aggregates context across servers.
+- integrates the model and decides what reaches it.
 - preserves boundaries between servers that should not see one another.
 
 ### Client
@@ -84,7 +84,7 @@ The specification separates three server-side primitives with different interact
 | **Resource** | URI-addressed data | application-driven | data exposure, freshness, scope |
 | **Prompt** | a message/instruction template | user-controlled | untrusted instructions, apparent authority |
 
-Those labels describe the specification's interaction model; the protocol does not mandate a particular UI.
+Those labels describe the specification's interaction model. The protocol does not mandate a particular UI.
 
 The practical consequence is that a host should not put all three primitives into one undifferentiated bucket of “things from the server.”
 
@@ -213,10 +213,10 @@ Under 2026-07-28 a server **must** implement `server/discover`, although a clien
 
 `server/discover` can return:
 
-- supported protocol versions;
-- capabilities;
-- self-declared server identity;
-- optional instructions;
+- supported protocol versions.
+- capabilities.
+- self-declared server identity.
+- optional instructions.
 - caching hints.
 
 The specification includes an important caveat: `serverInfo` is **self-reported**, is not verified by the protocol, and should not drive security decisions.[^mcp-discover]
@@ -266,11 +266,11 @@ With a local stdio server, the client may launch a subprocess and communicate ov
 
 The important boundaries include:
 
-- which executable is launched;
-- which OS user runs it;
-- which environment variables it inherits;
-- which directories it can read or write;
-- which network destinations it can reach;
+- which executable is launched.
+- which OS user runs it.
+- which environment variables it inherits.
+- which directories it can read or write.
+- which network destinations it can reach.
 - which secrets exist in the process environment.
 
 “Local” does not mean “safe.” A local server with access to the user's home directory and unrestricted egress can have more privilege than a well-isolated remote service.
@@ -281,12 +281,12 @@ In 2026-07-28, Streamable HTTP uses self-contained POST requests; a request may 
 
 The boundaries shift to:
 
-- allowed origin and endpoint;
-- TLS;
-- authorization;
-- scopes and audience;
-- rate limiting;
-- gateway/WAF controls;
+- allowed origin and endpoint.
+- TLS.
+- authorization.
+- scopes and audience.
+- rate limiting.
+- gateway/WAF controls.
 - egress from the server to downstream systems.
 
 The protocol is the same. The failure domain is not.
@@ -410,8 +410,8 @@ This chapter therefore does not teach “sampling is a capability every modern M
 
 The correct September 2026 rule is:
 
-- understand sampling and roots when interoperating with existing implementations;
-- do not make them a new architectural dependency without checking the current recommended path in the relevant spec and SDK;
+- understand sampling and roots when interoperating with existing implementations.
+- do not make them a new architectural dependency without checking the current recommended path in the relevant spec and SDK.
 - always record protocol version because available semantics depend on it.
 
 ## 16. Server catalogs can change; hosts need cache and invalidation policy
