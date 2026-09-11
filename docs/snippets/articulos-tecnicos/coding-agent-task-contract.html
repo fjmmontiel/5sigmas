@@ -1,16 +1,103 @@
-<section class="s5v s5v-arch-map s5v-coding-agent-task-contract s5v--wide" data-step="1" aria-label="Flujo entre petición, contrato de tarea, plan revisable, verificación y cierre de un coding agent">
+<section class="s5v s5v-coding-agent-task-contract s5v--wide" aria-label="Comparación gráfica entre replanificar bajo el mismo contrato y enmendar el contrato invalidando evidencia de un coding agent">
+  <style>
+    .s5v-coding-agent-task-contract .s5v-task-contract__scroll{overflow-x:auto;overscroll-behavior-inline:contain;padding:.35rem .2rem .8rem;scrollbar-gutter:stable;outline:none}
+    .s5v-coding-agent-task-contract .s5v-task-contract__scroll:focus-visible{box-shadow:0 0 0 3px color-mix(in srgb,var(--md-accent-fg-color,#7c4dff) 36%,transparent);border-radius:14px}
+    .s5v-coding-agent-task-contract .s5v-task-contract__stage{min-width:1040px;max-width:1180px;margin:0 auto}
+    .s5v-coding-agent-task-contract svg{display:block;width:100%;height:auto;overflow:visible}
+    .s5v-coding-agent-task-contract text{fill:currentColor;font-family:inherit}
+    .s5v-coding-agent-task-contract .tc-zone{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 96%,var(--md-accent-fg-color,#7c4dff) 4%);stroke:currentColor;stroke-width:1.5;stroke-dasharray:7 8;opacity:.95}
+    .s5v-coding-agent-task-contract .tc-contract{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 90%,var(--md-accent-fg-color,#7c4dff) 10%);stroke:currentColor;stroke-width:3}
+    .s5v-coding-agent-task-contract .tc-node{fill:var(--md-default-bg-color,#fff);stroke:currentColor;stroke-width:2.5}
+    .s5v-coding-agent-task-contract .tc-evidence{fill:var(--md-default-bg-color,#fff);stroke:currentColor;stroke-width:2.5}
+    .s5v-coding-agent-task-contract .tc-stale{fill:var(--md-default-bg-color,#fff);stroke:currentColor;stroke-width:3;stroke-dasharray:5 6}
+    .s5v-coding-agent-task-contract .tc-edge{fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#tc-arrow)}
+    .s5v-coding-agent-task-contract .tc-edge--dependency{stroke-width:2.4}
+    .s5v-coding-agent-task-contract .tc-edge--replan{stroke-width:3.5;stroke-dasharray:10 7}
+    .s5v-coding-agent-task-contract .tc-edge--amend{stroke-width:3.5}
+    .s5v-coding-agent-task-contract .tc-edge--invalidate{stroke-width:3.5;stroke-dasharray:4 7}
+    .s5v-coding-agent-task-contract .tc-lane{font-size:13px;font-weight:850;letter-spacing:.08em;opacity:.68}
+    .s5v-coding-agent-task-contract .tc-kicker{font-size:13px;font-weight:850;letter-spacing:.06em;opacity:.7;text-anchor:middle}
+    .s5v-coding-agent-task-contract .tc-label{font-size:16px;font-weight:800;text-anchor:middle}
+    .s5v-coding-agent-task-contract .tc-sub{font-size:12.5px;text-anchor:middle;opacity:.76}
+    .s5v-coding-agent-task-contract .tc-edge-label{font-size:12.5px;font-weight:780;paint-order:stroke;stroke:var(--md-default-bg-color,#fff);stroke-width:6px;stroke-linejoin:round}
+    .s5v-coding-agent-task-contract .tc-divider{stroke:currentColor;stroke-width:1.5;stroke-dasharray:3 10;opacity:.35}
+    .s5v-coding-agent-task-contract .tc-cross{stroke:currentColor;stroke-width:4;stroke-linecap:round}
+    .s5v-coding-agent-task-contract .s5v-task-contract__legend{display:flex;gap:1rem;flex-wrap:wrap;margin:.2rem 0 0;font-size:.86rem;opacity:.86}
+    .s5v-coding-agent-task-contract .s5v-task-contract__legend span{display:inline-flex;gap:.42rem;align-items:center}
+    .s5v-coding-agent-task-contract .s5v-task-contract__legend i{width:1.55rem;border-top:3px solid currentColor}
+    .s5v-coding-agent-task-contract .s5v-task-contract__legend .is-replan i{border-top-style:dashed}
+    .s5v-coding-agent-task-contract .s5v-task-contract__legend .is-invalidate i{border-top-style:dotted}
+    .s5v-coding-agent-task-contract .s5v__copy{margin-top:.85rem}
+    @media(max-width:700px){.s5v-coding-agent-task-contract .s5v-task-contract__scroll{margin-inline:-.35rem;padding-inline:.35rem}.s5v-coding-agent-task-contract .s5v-task-contract__stage{min-width:1100px}.s5v-coding-agent-task-contract .s5v-task-contract__legend{font-size:.82rem}}
+  </style>
+  <!-- GOLDEN_VISUAL_CONTRACT
+    learning-objective="Distinguish ordinary replanning from a task-contract amendment by seeing which authority and evidence edges change."
+    mechanism="an observation can invalidate a planning assumption and loop strategy from plan v1 to plan v2 while contract v1 remains authoritative; an authorized requirements change creates contract v2, invalidates dependent plan nodes and evidence tied to contract v1, and forces revalidation before completion."
+    visual-variables="three horizontal lanes encode authority, strategy/dependency, and evidence; solid arrows encode dependency/authorization; dashed loop encodes replanning under the same contract; version shift in the authority lane encodes amendment; dotted propagation encodes stale evidence; branched DAG edges encode work dependencies."
+    why-visual="Prose can define replan and amendment, but the graph makes the critical asymmetry visible at once: replanning loops below an unchanged authority rail, whereas an amendment changes that rail and propagates invalidation into downstream work and verification evidence."
+    relationship="replan:contract-v1->plan-v1->observation->plan-v2|amendment:authority-change->contract-v2->dependency-invalidation->stale-evidence->reverify"
+    interaction="static:no-cosmetic-controls"
+    mobile="horizontal-scroll-preserves-lanes-loops-branches-and-invalidation-paths"
+  -->
   <div class="s5v__canvas">
-    <header class="s5v__head"><div><span class="s5v__kicker">Contrato estable · estrategia revisable</span><h3>Replanificar no cambia qué significa terminar</h3></div><p>La spec fija objetivo, scope y aceptación. El plan puede cambiar cuando una observación invalida una hipótesis.</p></header>
-    <div class="s5v-arch-map__panels">
-      <div data-panel="1" class="s5v-arch-map__pipe">
-        <span>Petición + reglas<br><small>intención · policy del repo</small></span>
-        <span>Contrato vN<br><small>goal · scope · acceptance · stop</small></span>
-        <span>Plan / grafo vM<br><small>dependencias · hipótesis</small></span>
-        <span>Ejecutar + observar<br><small>si cambia la evidencia → replan</small></span>
-        <span>Verificar + checkpoint<br><small>estado · inputs · verification_head_sha</small></span>
-        <span>Done / handback<br><small>evidencia completa o decisión pendiente</small></span>
+    <header class="s5v__head"><div><span class="s5v__kicker">Contrato estable · estrategia revisable</span><h3>Replanificar y enmendar no invalidan lo mismo</h3></div><p>Una observación puede cambiar el camino sin cambiar el objetivo. Una nueva decisión autorizada sí cambia qué evidencia demuestra éxito.</p></header>
+    <div class="s5v-task-contract__scroll" tabindex="0" role="region" aria-label="Diagrama desplazable de replanificación, enmienda de contrato e invalidación de evidencia">
+      <div class="s5v-task-contract__stage">
+        <svg viewBox="0 0 1180 850" role="img" aria-labelledby="task-contract-title task-contract-desc">
+          <title id="task-contract-title">Replanificar mantiene el contrato; una enmienda cambia la autoridad e invalida evidencia dependiente</title>
+          <desc id="task-contract-desc">El lado izquierdo muestra un contrato versión uno que permanece fijo mientras una observación invalida una hipótesis del plan y produce un plan versión dos. El lado derecho muestra una decisión autorizada que crea contrato versión dos; ese cambio invalida nodos dependientes y evidencia verificada contra contrato versión uno, que debe volver a verificarse antes del cierre.</desc>
+          <defs><marker id="tc-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="currentColor"/></marker></defs>
+
+          <text x="24" y="78" class="tc-lane">AUTORIDAD · QUÉ SIGNIFICA ÉXITO</text>
+          <text x="24" y="310" class="tc-lane">ESTRATEGIA · DEPENDENCIAS</text>
+          <text x="24" y="680" class="tc-lane">EVIDENCIA · FRESHNESS</text>
+          <line x1="590" y1="72" x2="590" y2="804" class="tc-divider"/>
+          <text x="305" y="116" class="tc-kicker">A · REPLAN: MISMO CONTRATO</text>
+          <text x="885" y="116" class="tc-kicker">B · ENMIENDA: NUEVA AUTORIDAD</text>
+
+          <g data-contract="v1-replan"><rect class="tc-contract" x="110" y="145" width="390" height="92" rx="26"/><text x="305" y="177" class="tc-label">Contrato v1 permanece fijo</text><text x="305" y="202" class="tc-sub">goal · scope · acceptance · stop</text><text x="305" y="221" class="tc-sub">la observación no autoriza redefinir éxito</text></g>
+          <path data-edge="contract-v1-to-plan-v1" class="tc-edge" d="M305 237 V335"/>
+
+          <g data-plan="v1"><rect class="tc-node" x="95" y="342" width="150" height="76" rx="22"/><text x="170" y="373" class="tc-label">Plan v1</text><text x="170" y="397" class="tc-sub">hipótesis inicial</text></g>
+          <g data-node="inspect"><circle class="tc-node" cx="315" cy="380" r="44"/><text x="315" y="376" class="tc-label">A</text><text x="315" y="397" class="tc-sub">inspeccionar</text></g>
+          <g data-node="serializer-assumption"><circle class="tc-node" cx="455" cy="380" r="44"/><text x="455" y="376" class="tc-label">C</text><text x="455" y="397" class="tc-sub">serializer</text></g>
+          <path data-edge="plan-v1-to-a" class="tc-edge tc-edge--dependency" d="M245 380 H265"/>
+          <path data-edge="a-to-c" class="tc-edge tc-edge--dependency" d="M359 380 H405"/>
+
+          <g data-observation="invalid-assumption"><path class="tc-zone" d="M365 455 H520 V535 H365 Z"/><text x="442" y="480" class="tc-kicker">OBSERVACIÓN</text><text x="442" y="505" class="tc-label">to_dict() filtra mal</text><text x="442" y="526" class="tc-sub">hipótesis C inválida</text></g>
+          <path data-edge="c-to-observation" class="tc-edge" d="M455 424 V449"/>
+          <path data-edge="replan-loop" class="tc-edge tc-edge--replan" d="M365 497 C270 497 205 500 170 540 C142 572 160 606 225 606"/>
+          <text x="197" y="522" class="tc-edge-label">replan · contrato intacto</text>
+          <g data-plan="v2"><rect class="tc-node" x="225" y="566" width="250" height="82" rx="24"/><text x="350" y="596" class="tc-label">Plan v2</text><text x="350" y="620" class="tc-sub">serializer público + tests de esquema</text><text x="350" y="640" class="tc-sub">contract_version=1</text></g>
+          <path data-edge="plan-v2-to-evidence" class="tc-edge" d="M350 648 V706"/>
+          <g data-evidence="same-contract"><rect class="tc-evidence" x="205" y="713" width="290" height="88" rx="25"/><text x="350" y="744" class="tc-label">Checkpoint + verificación</text><text x="350" y="768" class="tc-sub">contract v1 · candidate_sha=C2</text><text x="350" y="790" class="tc-sub">evidencia nueva sobre la estrategia corregida</text></g>
+
+          <g data-contract="v1-amend"><rect class="tc-contract" x="650" y="145" width="220" height="92" rx="26"/><text x="760" y="177" class="tc-label">Contrato v1</text><text x="760" y="202" class="tc-sub">esquema público=A</text><text x="760" y="221" class="tc-sub">evidencia ligada a v1</text></g>
+          <g data-authority="product-decision"><path class="tc-zone" d="M945 145 H1110 V237 H945 Z"/><text x="1027" y="176" class="tc-kicker">AUTORIDAD EXTERNA</text><text x="1027" y="201" class="tc-label">decisión de producto</text><text x="1027" y="222" class="tc-sub">el esquema debe ser B</text></g>
+          <path data-edge="authority-to-contract-v2" class="tc-edge tc-edge--amend" d="M1027 237 C1027 270 970 277 928 277"/>
+          <text x="985" y="264" class="tc-edge-label">enmienda autorizada</text>
+          <g data-contract="v2"><rect class="tc-contract" x="748" y="255" width="180" height="82" rx="24"/><text x="838" y="286" class="tc-label">Contrato v2</text><text x="838" y="310" class="tc-sub">acceptance cambia</text><text x="838" y="330" class="tc-sub">contract_version=2</text></g>
+          <path data-edge="contract-v1-to-existing-evidence" class="tc-edge tc-edge--dependency" d="M760 237 C690 322 690 590 760 704"/>
+
+          <g data-graph="v1"><rect class="tc-zone" x="645" y="362" width="490" height="232" rx="30"/><text x="675" y="393" class="tc-kicker" text-anchor="start">DEPENDENCIAS DEL PLAN</text>
+            <circle class="tc-node" cx="720" cy="470" r="38"/><text x="720" y="468" class="tc-label">B</text><text x="720" y="487" class="tc-sub">parser</text>
+            <circle class="tc-node" cx="850" cy="430" r="38"/><text x="850" y="428" class="tc-label">C</text><text x="850" y="447" class="tc-sub">serializer</text>
+            <circle class="tc-node" cx="980" cy="470" r="38"/><text x="980" y="468" class="tc-label">D</text><text x="980" y="487" class="tc-sub">tests</text>
+            <circle class="tc-node" cx="1070" cy="540" r="38"/><text x="1070" y="538" class="tc-label">F</text><text x="1070" y="557" class="tc-sub">integrar</text>
+            <path data-edge="b-to-d" class="tc-edge tc-edge--dependency" d="M758 470 H936"/><path data-edge="c-to-d" class="tc-edge tc-edge--dependency" d="M887 443 C920 447 938 454 947 460"/><path data-edge="d-to-f" class="tc-edge tc-edge--dependency" d="M1010 493 L1040 515"/>
+          </g>
+          <path data-edge="contract-v2-to-c" class="tc-edge tc-edge--invalidate" d="M838 337 C838 355 842 374 847 390"/><text x="862" y="361" class="tc-edge-label">afecta C</text>
+          <path data-edge="invalidate-c-to-d" class="tc-edge tc-edge--invalidate" d="M885 416 C930 400 985 409 995 431"/>
+          <path data-edge="invalidate-d-to-f" class="tc-edge tc-edge--invalidate" d="M1014 488 C1050 484 1080 493 1083 505"/>
+
+          <g data-evidence="stale-v1"><rect class="tc-stale" x="675" y="713" width="245" height="88" rx="25"/><text x="797" y="743" class="tc-label">PASS de contrato v1</text><text x="797" y="767" class="tc-sub">candidate_sha=C1</text><text x="797" y="789" class="tc-sub">STALE para acceptance v2</text><path class="tc-cross" d="M692 728 L714 750 M714 728 L692 750"/></g>
+          <path data-edge="amendment-invalidates-evidence" class="tc-edge tc-edge--invalidate" d="M838 337 C920 405 960 580 912 706"/><text x="947" y="621" class="tc-edge-label">propaga invalidación</text>
+          <g data-evidence="reverified-v2"><rect class="tc-evidence" x="958" y="713" width="190" height="88" rx="25"/><text x="1053" y="743" class="tc-label">Revalidar v2</text><text x="1053" y="767" class="tc-sub">nuevo candidate_sha</text><text x="1053" y="789" class="tc-sub">sólo entonces → done</text></g>
+          <path data-edge="stale-to-reverify" class="tc-edge" d="M920 757 H950"/>
+        </svg>
       </div>
     </div>
-    <div class="s5v__copy"><strong>Replan</strong> cambia la estrategia manteniendo el contrato. <strong>Enmienda</strong> cambia qué resultado está autorizado y obliga a revalidar la evidencia afectada. Un checkpoint sólo demuestra continuidad si declara qué estado captura y a qué revisión pertenece.</div>
+    <div class="s5v-task-contract__legend" aria-label="Leyenda del diagrama"><span><i></i>dependencia / autorización</span><span class="is-replan"><i></i>replan bajo el mismo contrato</span><span class="is-invalidate"><i></i>evidencia o nodo que queda stale</span></div>
+    <div class="s5v__copy"><strong>Replan:</strong> cambia la estrategia porque una hipótesis cayó; el contrato v1 sigue definiendo éxito. <strong>Enmienda:</strong> una fuente autorizada cambia el contrato, así que los nodos y verificaciones que dependían de la condición anterior dejan de demostrar el resultado. Un checkpoint sólo conserva evidencia útil si declara <code>contract_version</code>, inputs y <code>verification_head_sha</code>.</div>
   </div>
 </section>
