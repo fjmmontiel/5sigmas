@@ -80,11 +80,11 @@ We could spend hours refining that wording. If the runtime retrieves a 2024 poli
 
 The same is true when:
 
-- the correct document is retrieved but truncated just before the relevant exception;
-- the agent has 80 overlapping tools and loads every tool definition on every turn;
-- history preserves a decision that a later tool observation has already invalidated;
-- stale memory conflicts with the current source and the system has no precedence rule;
-- a 15,000-line tool result pushes the governing constraint out of the useful context;
+- the correct document is retrieved but truncated just before the relevant exception.
+- the agent has 80 overlapping tools and loads every tool definition on every turn.
+- history preserves a decision that a later tool observation has already invalidated.
+- stale memory conflicts with the current source and the system has no precedence rule.
+- a 15,000-line tool result pushes the governing constraint out of the useful context.
 - the application has access to the right information but never retrieves it.
 
 None of those failures is guaranteed to disappear because we write a better sentence.
@@ -145,14 +145,14 @@ First define the candidate set.
 
 It can include:
 
-- global and task-specific instructions;
-- conversation history;
-- repository files or symbols;
-- tool definitions;
-- tool results;
-- retrievable documents;
-- user or task memory;
-- workflow state;
+- global and task-specific instructions.
+- conversation history.
+- repository files or symbols.
+- tool definitions.
+- tool results.
+- retrievable documents.
+- user or task memory.
+- workflow state.
 - time, identity, tenant, or permission metadata.
 
 Eligibility does not imply that a source should always be inserted.
@@ -167,12 +167,12 @@ A factual question about an invoice may only require the invoice, the applicable
 
 Relevance can be determined with:
 
-- deterministic rules;
-- lexical search;
-- embeddings;
-- structured queries;
-- agentic navigation with tools;
-- a selector model;
+- deterministic rules.
+- lexical search.
+- embeddings.
+- structured queries.
+- agentic navigation with tools.
+- a selector model.
 - a combination of those mechanisms.
 
 There is no universally best selector. The design depends on how dynamic the corpus is, the acceptable latency, the required precision, and the cost of missing information.
@@ -197,11 +197,11 @@ Retrieving both without provenance or precedence creates a new failure mode.
 
 The assembler needs enough metadata to distinguish at least:
 
-- who produced the information;
-- when it was produced;
-- the scope for which it is valid;
-- whether it is a direct observation or a summary;
-- which source is normative;
+- who produced the information.
+- when it was produced.
+- the scope for which it is valid.
+- whether it is a direct observation or a summary.
+- which source is normative.
 - whether the information may be stale.
 
 Chapters 3.2–3.4 go deeper into budget, provenance, memory, freshness, and conflict. The important point here is simpler: **selecting information without preserving authority can create an internally inconsistent context**.
@@ -212,16 +212,16 @@ Not everything needs to travel as raw data.
 
 A 200-turn history can become:
 
-- the most recent turns verbatim;
-- a summary of durable decisions;
-- references to external artifacts;
+- the most recent turns verbatim.
+- a summary of durable decisions.
+- references to external artifacts.
 - recent observations without redundant raw tool output.
 
 A 500-page document can enter as:
 
-- selected pages;
-- retrieved chunks;
-- a structured table;
+- selected pages.
+- retrieved chunks.
+- a structured table.
 - a summary that preserves links back to the source.
 
 Every transformation buys tokens, latency, or focus by accepting some risk of information loss. Aggressive compaction may erase a critical exception; keeping every byte raw can crowd out more important signals.
@@ -234,12 +234,12 @@ Two contexts containing the same facts need not behave identically if structure,
 
 Depending on the API, the assembler must decide:
 
-- which instructions take precedence;
-- where examples and evidence appear;
-- how tool schemas are represented;
-- which parts of history remain verbatim;
-- which results are dropped or summarized;
-- how untrusted data is separated from instructions;
+- which instructions take precedence.
+- where examples and evidence appear.
+- how tool schemas are represented.
+- which parts of history remain verbatim.
+- which results are dropped or summarized.
+- how untrusted data is separated from instructions.
 - how stable prefixes are preserved when prompt caching matters.
 
 Prompt engineering appears again here: **the wording and internal organization of instructions still matter**, but they now sit inside a broader assembly policy.
@@ -281,11 +281,11 @@ This directly connects to the previous agent-harness series. The harness owns ca
 
 The system can:
 
-- compact history;
-- persist notes outside the window;
-- retrieve memory on demand;
-- delegate to subagents with isolated contexts;
-- clear tool output that has already been consumed;
+- compact history.
+- persist notes outside the window.
+- retrieve memory on demand.
+- delegate to subagents with isolated contexts.
+- clear tool output that has already been consumed.
 - preserve references instead of full content.
 
 Anthropic documents compaction, structured note-taking, and subagents as distinct techniques for work that extends beyond one context window.[^anthropic-context] They are not interchangeable: each preserves and loses different information.
@@ -300,15 +300,15 @@ Load information up front because it is likely to be needed.
 
 Benefits:
 
-- fewer retrieval round trips;
-- immediate availability;
+- fewer retrieval round trips.
+- immediate availability.
 - simpler reproducibility when the package is versioned.
 
 Costs:
 
-- larger context;
-- more potentially irrelevant information;
-- more staleness risk if the preloaded package ages;
+- larger context.
+- more potentially irrelevant information.
+- more staleness risk if the preloaded package ages.
 - higher input cost when effective caching is unavailable.
 
 ### Just-in-time
@@ -317,15 +317,15 @@ Keep references and retrieve detail only when the task requires it.
 
 Benefits:
 
-- tighter budget control;
-- fresher data;
+- tighter budget control.
+- fresher data.
 - the agent can refine search based on intermediate observations.
 
 Costs:
 
-- additional latency and tool calls;
-- more retrieval failure modes;
-- the agent may not know what it needs to look for;
+- additional latency and tool calls.
+- more retrieval failure modes.
+- the agent may not know what it needs to look for.
 - weaker reproducibility when an external source changes.
 
 Anthropic describes a hybrid strategy in Claude Code: some information enters up front, while primitives such as glob and grep let the agent discover additional context on demand.[^anthropic-context]
@@ -423,13 +423,13 @@ A useful evaluation should version at least:
 
 It should also distinguish different failure classes:
 
-- **omission**: required evidence never entered;
-- **pollution**: irrelevant information degraded the decision;
-- **staleness**: an old version was included;
-- **conflict**: incompatible sources entered without a precedence rule;
-- **over-compression**: summarization removed a critical constraint;
-- **tool-context bloat**: schemas or capabilities consumed too much budget;
-- **history drift**: history preserved a hypothesis that later evidence invalidated;
+- **omission**: required evidence never entered.
+- **pollution**: irrelevant information degraded the decision.
+- **staleness**: an old version was included.
+- **conflict**: incompatible sources entered without a precedence rule.
+- **over-compression**: summarization removed a critical constraint.
+- **tool-context bloat**: schemas or capabilities consumed too much budget.
+- **history drift**: history preserved a hypothesis that later evidence invalidated.
 - **provenance loss**: a fact entered without enough information about its source or valid scope.
 
 That changes the evaluation question. Instead of asking:
@@ -446,12 +446,12 @@ In production, context engineering should be treated as system code and data, no
 
 That means recording, or being able to reconstruct where security and privacy allow:
 
-- which sources were available;
-- which were selected;
-- their versions and freshness;
-- which transformations were applied;
-- which tools were exposed;
-- which policy assembled the context;
+- which sources were available.
+- which were selected.
+- their versions and freshness.
+- which transformations were applied.
+- which tools were exposed.
+- which policy assembled the context.
 - which model/config consumed it.
 
 This does not mean indiscriminately persisting sensitive data. Observability still has to respect privacy and security. But without some reproducible identity for the context, a failure becomes:
