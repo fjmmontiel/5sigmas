@@ -1,0 +1,128 @@
+name: Coding Agents GOLDEN PR gate
+
+on:
+  pull_request:
+    paths:
+      - 'docs/series/coding-agents-agent-harnesses/**'
+      - 'locales/en/series/coding-agents-agent-harnesses/**'
+      - 'docs/snippets/articulos-tecnicos/coding-agent-*.html'
+      - 'locales/en/snippets/articulos-tecnicos/coding-agent-*'
+      - 'scripts/validate_coding_agent_harness_ch*.mjs'
+      - 'scripts/audit_browser_resources.mjs'
+      - 'scripts/validate_direct_reader_navigation.mjs'
+      - 'locales/en/manifest.yml'
+      - 'mkdocs.yml'
+      - 'mkdocs.en.yml'
+      - '.github/workflows/pr-coding-agents-golden.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  coding-agents-golden:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Validate chapter 2.1 source and relationship contract
+        run: node scripts/validate_coding_agent_harness_ch1_source.mjs
+
+      - name: Validate chapter 2.2 source and relationship contract
+        run: node scripts/validate_coding_agent_harness_ch2_source.mjs
+
+      - name: Validate chapter 2.3 source and relationship contract
+        run: node scripts/validate_coding_agent_harness_ch3_source.mjs
+
+      - name: Validate chapter 2.4 source and relationship contract
+        run: node scripts/validate_coding_agent_harness_ch4_source.mjs
+
+      - name: Validate chapter 2.5 source and relationship contract
+        run: node scripts/validate_coding_agent_harness_ch5_source.mjs
+
+      - name: Validate chapter 2.6 source and relationship contract
+        run: node scripts/validate_coding_agent_harness_ch6_source.mjs
+
+      - name: Build Spanish strictly
+        run: mkdocs build --clean --strict
+
+      - name: Prepare English locale
+        run: python scripts/prepare_locale.py --locale en
+
+      - name: Audit English locale sources
+        run: python scripts/audit_locale.py --locale en
+
+      - name: Build English strictly
+        env:
+          S5_LOCALE: en
+        run: mkdocs build -f mkdocs.en.yml --clean --strict
+
+      - name: Audit rendered English locale
+        run: python scripts/audit_locale.py --locale en --site site/en
+
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Serve combined preview
+        run: |
+          python -m http.server 8000 --directory site > /tmp/5sigmas-preview.log 2>&1 &
+          echo $! > /tmp/5sigmas-preview.pid
+          for attempt in {1..30}; do
+            curl --fail --silent http://127.0.0.1:8000/ > /dev/null && curl --fail --silent http://127.0.0.1:8000/en/ > /dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/5sigmas-preview.log
+          exit 1
+
+      - name: Audit browser resources
+        run: node scripts/audit_browser_resources.mjs
+
+      - name: Validate chapter 2.1 relationship geometry and accessibility
+        run: node scripts/validate_coding_agent_harness_ch1_accessibility.mjs
+
+      - name: Validate chapter 2.2 relationship geometry and accessibility
+        run: node scripts/validate_coding_agent_harness_ch2_accessibility.mjs
+
+      - name: Validate chapter 2.3 relationship geometry and accessibility
+        run: node scripts/validate_coding_agent_harness_ch3_accessibility.mjs
+
+      - name: Validate chapter 2.4 relationship geometry and accessibility
+        run: node scripts/validate_coding_agent_harness_ch4_accessibility.mjs
+
+      - name: Validate chapter 2.5 relationship geometry and accessibility
+        run: node scripts/validate_coding_agent_harness_ch5_accessibility.mjs
+
+      - name: Validate chapter 2.6 relationship geometry and accessibility
+        run: node scripts/validate_coding_agent_harness_ch6_accessibility.mjs
+
+      - name: Validate direct reader navigation
+        run: node scripts/validate_direct_reader_navigation.mjs
+
+      - name: Upload Coding Agents visual evidence on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coding-agents-pr-gate-visual-evidence
+          path: artifacts/visual-review/coding-harness-ch*.png
+          if-no-files-found: warn
+          retention-days: 3
