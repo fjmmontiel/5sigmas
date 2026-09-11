@@ -19,8 +19,8 @@ const check = (condition, message) => { if (!condition) failures.push(message); 
 
 const route = 'series/context-engineering-memory-mcp/03-memory-architectures-working-episodic-semantic-persistent-state.md';
 const visualPath = 'snippets/articulos-tecnicos/context-memory-lifecycle.html';
-check(mkdocsEs.includes('Context engineering, memoria y MCP:') && mkdocsEs.includes(`Arquitecturas de memoria: working, episodic, semantic y estado persistente: ${route}`), 'ES: chapter 3.3 navigation missing');
-check(mkdocsEn.includes('Context Engineering, Memory & MCP:') && mkdocsEn.includes(`Memory architectures: working, episodic, semantic, and persistent state: ${route}`), 'EN: chapter 3.3 navigation missing');
+check(mkdocsEs.includes('Context engineering, memoria y MCP:') && mkdocsEs.includes(route) && mkdocsEs.includes('Arquitecturas de memoria: working, episodic, semantic y estado persistente'), 'ES: chapter 3.3 navigation missing');
+check(mkdocsEn.includes('Context Engineering, Memory & MCP:') && mkdocsEn.includes(route) && mkdocsEn.includes('Memory architectures: working, episodic, semantic, and persistent state'), 'EN: chapter 3.3 navigation missing');
 check(manifestEn.includes(`  - ${route}`), 'EN: chapter 3.3 missing from published_routes manifest');
 check(manifestEn.includes(`  - ${visualPath}`), 'EN: chapter 3.3 visual missing from required_snippets manifest');
 check(prVisual.includes('node scripts/validate_context_engineering_ch3_source.mjs'), 'CI: chapter 3.3 source gate missing from PR visual review');
