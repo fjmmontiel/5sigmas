@@ -1,5 +1,5 @@
 name: Voice series GOLDEN release audit
-# final zero-based rerun after visual/i18n/editorial recertification
+# rerun after mobile decision-map geometry/readability correction
 
 on:
   push:
