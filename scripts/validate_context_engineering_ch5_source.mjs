@@ -76,14 +76,15 @@ check(!/\?\./.test(en),'EN: malformed question punctuation');
 
 const include='{{ include_html("snippets/articulos-tecnicos/context-mcp-trust-boundaries.html") }}';
 check(es.includes(include)&&en.includes(include),'ES/EN: MCP visual include missing');
-for(const token of ['GOLDEN_VISUAL_CONTRACT','relationship="model->host-policy->client-b->server-b->mcp-auth->downstream-auth->external-effect','interaction="static:no-cosmetic-controls"','mobile="horizontal-scroll-preserves-host-server-trust-and-side-effect-topology"','.mt-stage{width:100%;min-width:0;max-width:1200px;margin:0 auto}','MCP ≠ confianza implícita','POLÍTICA DEL HOST','OTRA FRONTERA · SISTEMA DOWNSTREAM','2026-07-28: versión + capabilities por request']) check(snippet.includes(token),`Visual missing contract ${token}`);
+for(const token of ['GOLDEN_VISUAL_CONTRACT','relationship="model->host-policy->client-b->server-b->mcp-auth->downstream-auth->external-effect','interaction="static:no-cosmetic-controls"','mobile="horizontal-scroll-preserves-host-server-trust-and-side-effect-topology"','.mt-stage{width:100%;min-width:0;max-width:1200px;margin:0 auto}','MCP ≠ confianza implícita','POLÍTICA DEL HOST','OTRA FRONTERA · SISTEMA POSTERIOR','2026-07-28: versión + capacidades por solicitud']) check(snippet.includes(token),`Visual missing contract ${token}`);
 check(!snippet.includes('s5v-arch-map__pipe')&&!snippet.includes('data-s5v-stepper')&&!snippet.includes('data-s5v-tabs'),'Visual: cosmetic linear/tabs pattern returned');
+check(!snippet.includes('policy + approval')&&!snippet.includes('LIFECYCLE')&&!snippet.includes('SISTEMA DOWNSTREAM'),'Visual: avoidable English labels returned to ES source');
 for(const node of ['user','model','host-policy','client-a','client-b','server-a','local-resources','server-b','mcp-auth','downstream-auth','external-effect']) check(snippet.includes(`data-node="${node}"`),`Visual missing node ${node}`);
 for(const boundary of ['host','server-a','server-b','downstream','lifecycle']) check(snippet.includes(`data-boundary="${boundary}"`),`Visual missing boundary ${boundary}`);
 for(const edge of ['user-policy','model-policy','policy-client-a','policy-client-b','client-a-server-a','client-b-server-b','server-b-auth','resource-back-a','server-a-input','server-b-input','server-downstream-auth','auth-effect','modern-request','legacy-initialize','server-isolation']) check(snippet.includes(`data-edge="${edge}"`),`Visual missing relationship ${edge}`);
 check(snippet.includes('1:1 con server A')&&snippet.includes('1:1 con server B'),'Visual: client/server cardinality missing');
-check(snippet.includes('token propio · no passthrough'),'Visual: downstream token boundary missing');
-check(snippet.includes('≤ 2025-11-25: initialize · legacy'),'Visual: legacy lifecycle caveat missing');
+check(snippet.includes('token propio · sin token passthrough'),'Visual: downstream token boundary missing');
+check(snippet.includes('≤ 2025-11-25: initialize · legado'),'Visual: legacy lifecycle caveat missing');
 
 check(mirror.trim()==='<!-- 5sigmas-canonical-mirror -->','EN: canonical mirror marker invalid');
 check(i18n.source===visualPath,'EN: MCP i18n source invalid');
