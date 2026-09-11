@@ -1,6 +1,6 @@
 {
   "source": "snippets/articulos-tecnicos/coding-agent-long-task-state.html",
-  "source_blob_sha": "813342d718aca597cba8c07d3fb8d943846d8582",
+  "source_blob_sha": "35542e2cfe7bef73f06983447688d1cf1d4a7abe",
   "replacements": {
     "Topología de estado durable, subagentes, recuperación e integración para una tarea larga de coding agent": "Durable-state, subagent, recovery, and integration topology for a long-running coding-agent task",
     "Durabilidad · recovery · fan-in": "Durability · recovery · fan-in",
@@ -37,7 +37,6 @@
     "base=A · workspace=WB": "base=A · workspace=WB",
     "candidate=W2": "candidate=W2",
     "postcondition/evidence belong to W2@A": "postcondition/evidence belong to W2@A",
-    "fan-out por ownership + dependencies": "fan-out by ownership + dependencies",
     "Target A": "Target A",
     "main@A": "main@A",
     "Target B": "Target B",
@@ -74,6 +73,6 @@
     "perder contexto o transporte no debe borrar la identidad de la tarea. Tras fan-out o recovery, el sistema reconstruye estado por IDs durables; tras fan-in o cambio de target, deriva un nuevo candidate SHA e invalida toda evidencia que ya no pueda demostrarse fresh.": "losing context or transport must not erase task identity. After fan-out or recovery, the system rebuilds state from durable IDs; after fan-in or target movement, it derives a new candidate SHA and invalidates any evidence that can no longer be shown to be fresh."
   },
   "forbidden_output_tokens": [
-    "Topología de estado durable", "La continuidad vive", "El contexto puede compactarse", "Diagrama desplazable", "Cómo sobrevive una tarea larga", "CONTEXTO TRANSITORIO", "CONTROL DURABLE", "WORKSPACES PARALELOS", "OBSERVABILIDAD", "Contexto root", "mensajes + tools", "puede desaparecer", "cambia contexto", "continúa la tarea", "Ledger durable", "sobrevive al contexto", "migración", "fan-out por", "main avanzó", "Candidato integrado", "nuevo SHA", "dependiente", "sólo tras", "stream/UI cae", "Nuevo stream", "Leyenda del diagrama", "estado / ejecución", "invalidación de evidencia", "reconciliación", "Regla operativa", "perder contexto o transporte"
+    "Topología de estado durable", "La continuidad vive", "El contexto puede compactarse", "Diagrama desplazable", "Cómo sobrevive una tarea larga", "CONTEXTO TRANSITORIO", "CONTROL DURABLE", "WORKSPACES PARALELOS", "OBSERVABILIDAD", "Contexto root", "mensajes + tools", "puede desaparecer", "cambia contexto", "continúa la tarea", "Ledger durable", "sobrevive al contexto", "migración", "main avanzó", "Candidato integrado", "nuevo SHA", "dependiente", "sólo tras", "stream/UI cae", "Nuevo stream", "Leyenda del diagrama", "estado / ejecución", "invalidación de evidencia", "reconciliación", "Regla operativa", "perder contexto o transporte"
   ]
 }
