@@ -19,6 +19,7 @@
     .s5v-coding-agent-authority-path .a-ledger{fill:var(--md-default-bg-color,#fff);stroke:currentColor;stroke-width:2.4}
     .s5v-coding-agent-authority-path .a-letter{font-size:27px;font-weight:900;text-anchor:middle}
     .s5v-coding-agent-authority-path .a-label{font-size:15px;font-weight:850;text-anchor:middle}
+    .s5v-coding-agent-authority-path .a-label--small{font-size:13px}
     .s5v-coding-agent-authority-path .a-sub{font-size:12px;text-anchor:middle;opacity:.76}
     .s5v-coding-agent-authority-path .a-region{font-size:12px;font-weight:900;letter-spacing:.09em;opacity:.7}
     .s5v-coding-agent-authority-path .a-note{font-size:11.5px;font-weight:800;paint-order:stroke;stroke:var(--md-default-bg-color,#fff);stroke-width:5px;stroke-linejoin:round}
@@ -58,7 +59,7 @@
 
           <g data-node="context"><circle class="a-control" cx="126" cy="158" r="62"/><text x="126" y="151" class="a-label">Contexto</text><text x="126" y="173" class="a-sub">repo · issue · web</text><text x="126" y="192" class="a-sub">output de tools</text></g>
           <path data-edge="context-to-proposal" class="a-flow" d="M126 220 V270"/>
-          <g data-node="proposal"><circle class="a-control a-control--soft" cx="126" cy="344" r="68"/><text x="126" y="337" class="a-label">Propuesta</text><text x="126" y="359" class="a-sub">tool + argumentos</text><text x="126" y="378" class="a-sub">inferidos por el modelo</text></g>
+          <g data-node="proposal"><circle class="a-control a-control--soft" cx="126" cy="344" r="68"/><text x="126" y="337" class="a-label a-label--small">Propuesta del modelo</text><text x="126" y="359" class="a-sub">tool + argumentos</text><text x="126" y="378" class="a-sub">inferidos por el modelo</text></g>
 
           <g data-node="canonical-request"><rect class="a-request" x="304" y="108" width="448" height="94" rx="47"/><text x="528" y="139" class="a-region" text-anchor="middle">SOLICITUD CANÓNICA</text><text x="528" y="165" class="a-label">tool · args normalizados · target · identidad</text><text x="528" y="187" class="a-sub">task_id · policy_version · effect intent</text></g>
           <path data-edge="proposal-to-request" class="a-flow" d="M194 344 C245 344 248 156 298 156"/>
@@ -94,7 +95,7 @@
           <line x1="814" y1="92" x2="814" y2="568" stroke="currentColor" stroke-width="2" stroke-dasharray="6 8" opacity=".45"/>
           <text x="821" y="420" class="a-note" transform="rotate(-90 821 420)">sandbox local ≠ scope del token remoto</text>
 
-          <g data-control="credential"><circle class="a-control" cx="912" cy="250" r="54"/><text x="912" y="259" class="a-letter">C</text><text x="912" y="322" class="a-label">Credencial</text><text x="912" y="342" class="a-sub">identidad · scopes · expiración</text></g>
+          <g data-control="credential"><circle class="a-control" cx="912" cy="250" r="54"/><text x="912" y="259" class="a-letter">C</text><text x="912" y="322" class="a-label a-label--small">Credencial proyectada</text><text x="912" y="342" class="a-sub">identidad · scopes · expiración</text></g>
           <g data-control="remote-acl"><circle class="a-control" cx="1042" cy="250" r="54"/><text x="1042" y="259" class="a-letter">R</text><text x="1042" y="322" class="a-label">ACL / IAM remoto</text><text x="1042" y="342" class="a-sub">role · branch protection</text></g>
           <text x="977" y="378" class="a-sub">C(a) y R(a) son autoridad del destino, no de la sandbox</text>
 
