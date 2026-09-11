@@ -61,12 +61,16 @@ for(const [locale,text] of [['ES',es],['EN',en]]){
   check(text.includes('tool discovery ≠ authorization; tool selection ≠ consent; schema validation ≠ policy approval.'),`${locale}: tool/auth/consent boundary missing`);
   check(text.includes('HOST ≠ SERVER')&&text.includes('capability discovery ≠ authorization')&&text.includes('protocol success ≠ business success'),`${locale}: final responsibility boundary missing`);
 }
-check(es.includes('eliminó ese handshake y el `Mcp-Session-Id` del core moderno'),'ES: modern stateless correction missing');
+check(es.includes('eliminó ese intercambio inicial y el `Mcp-Session-Id` del núcleo moderno'),'ES: modern stateless correction missing');
 check(en.includes('removed that handshake and `Mcp-Session-Id` from the modern core'),'EN: modern stateless correction missing');
 check(es.includes('`serverInfo` es **self-reported**')&&es.includes('no debe usarse para decisiones de seguridad'),'ES: serverInfo caveat missing');
 check(en.includes('`serverInfo` is **self-reported**')&&en.includes('should not drive security decisions'),'EN: serverInfo caveat missing');
 check(es.includes('roots, sampling y logging quedaron **deprecated**'),'ES: deprecated-feature caveat missing');
 check(en.includes('roots, sampling, and logging were **deprecated**'),'EN: deprecated-feature caveat missing');
+check(!es.includes('Las defenses'),'ES: translationese "defenses" returned');
+check(!es.includes('Empieza por ownership'),'ES: avoidable ownership anglicism returned');
+check(!es.includes('mismo bucket'),'ES: avoidable bucket anglicism returned');
+check(!es.includes('core moderno es stateless'),'ES: avoidable stateless/core scaffolding returned');
 check(!/^\s*-\s+.+;\s*$/m.test(en),'EN: semicolon-list anti-pattern detected');
 check(!/\?\./.test(en),'EN: malformed question punctuation');
 
