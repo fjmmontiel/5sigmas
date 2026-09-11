@@ -28,11 +28,11 @@
   </style>
   <!-- GOLDEN_VISUAL_CONTRACT
     learning-objective="Show that a finite context budget forces representational choices, while provenance remains outside the budget as lineage that lets the application verify, rehydrate, or invalidate derived context."
-    mechanism="candidate evidence -> policy constraints/prioritization -> verbatim|compact|reference|drop -> bounded active context; compacted/reference items retain lineage to source versions; source-version change invalidates dependent derived context."
+    mechanism="candidate evidence -> policy constraints/prioritization -> verbatim|extract|compact|reference|drop -> bounded active context; extracted/compacted/reference items retain lineage to source versions; source-version change invalidates dependent derived context."
     visual-variables="candidate size encodes token pressure; branching encodes distinct reduction operations; the budget envelope encodes finite capacity; dashed backward lineage edges encode derivation; a source-version change crosses the lineage graph to mark derived context stale."
     why-visual="The key relationship is not a list of context-management techniques. The diagram must show that raw information can stay outside the inference budget while lineage still connects transformed context to its source, and that source changes propagate invalidation."
-    relationship="budget-convergence-and-lineage:candidates->policy->{verbatim|compact|reference|drop}->bounded-context;derived->source-version;source-change->stale"
-    evidence="finite-budget,mandatory-policy,token-cost,compaction,reference,drop,provenance,source-version,invalidation,rehydration"
+    relationship="budget-convergence-and-lineage:candidates->policy->{verbatim|extract|compact|reference|drop}->bounded-context;derived->source-version;source-change->stale"
+    evidence="finite-budget,mandatory-policy,token-cost,structured-extraction,compaction,reference,drop,provenance,source-version,invalidation,rehydration"
     interaction="static:no-cosmetic-controls"
     mobile="horizontal-scroll-preserves-budget-branching-lineage-and-invalidation-topology"
   -->
@@ -41,11 +41,11 @@
       <div><span class="s5v__kicker">Ejemplo · budget ≠ capacidad máxima</span><h3>Reducir contexto cambia representaciones; provenance mantiene el camino de vuelta</h3></div>
       <p>Escenario ilustrativo: los tamaños sólo muestran presión relativa sobre un presupuesto finito; no son límites de un proveedor ni resultados de benchmark. La lineage queda fuera del presupuesto activo y permite verificar, rehidratar o invalidar lo transformado.</p>
     </header>
-    <div class="cb-scroll" tabindex="0" role="region" aria-label="Diagrama desplazable de priorización, compaction, provenance e invalidación">
+    <div class="cb-scroll" tabindex="0" role="region" aria-label="Diagrama desplazable de priorización, transformación, provenance e invalidación">
       <div class="cb-stage">
         <svg viewBox="0 0 1160 760" role="img" aria-labelledby="cb-title cb-desc">
           <title id="cb-title">De un universo candidato a un contexto acotado con lineage verificable</title>
-          <desc id="cb-desc">Escenario ilustrativo. Información candidata con distinto coste converge en una política de selección. El contenido obligatorio entra verbatim; logs grandes se compactan; documentos grandes permanecen fuera y entran mediante referencia; contenido stale se descarta. El contexto activo queda dentro de un presupuesto finito. Los items derivados conservan provenance hacia una fuente versionada; cuando esa versión cambia, la representación dependiente pasa a stale y debe revalidarse o rehidratarse.</desc>
+          <desc id="cb-desc">Escenario ilustrativo. Información candidata con distinto coste converge en una política de selección. El contenido obligatorio entra verbatim; los logs se reducen mediante extracción estructurada; el historial se compacta; documentos grandes permanecen fuera y entran mediante referencia; contenido stale se descarta. El contexto activo queda dentro de un presupuesto finito. Los items derivados conservan provenance hacia una fuente versionada; cuando esa versión cambia, la representación dependiente pasa a stale y debe revalidarse o rehidratarse.</desc>
           <defs>
             <marker id="cb-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="currentColor"/></marker>
             <marker id="cb-arrow-open" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M1,1 L8,3 L1,5" fill="none" stroke="currentColor" stroke-width="1.5"/></marker>
@@ -67,15 +67,17 @@
           <path data-edge="history-to-gate" class="cb-edge" d="M248 490 C303 490 318 423 350 396"/>
           <path data-edge="stale-to-gate" class="cb-edge" d="M248 581 C308 581 330 457 364 420"/>
 
-          <g data-node="verbatim"><rect class="cb-node cb-node--strong" x="520" y="112" width="150" height="64" rx="14"/><text x="595" y="139" class="cb-label">VERBATIM</text><text x="595" y="161" class="cb-sub">política exacta</text></g>
-          <g data-node="compact"><rect class="cb-derived" x="520" y="226" width="150" height="72" rx="14"/><text x="595" y="254" class="cb-label">COMPACT</text><text x="595" y="277" class="cb-sub">logs → fallos</text></g>
-          <g data-node="reference"><rect class="cb-derived" x="520" y="350" width="150" height="72" rx="14"/><text x="595" y="378" class="cb-label">REFERENCIA</text><text x="595" y="401" class="cb-sub">pointer + version</text></g>
-          <g data-node="drop"><rect class="cb-node" x="520" y="474" width="150" height="64" rx="14"/><text x="595" y="501" class="cb-label">DROP / DEFER</text><text x="595" y="523" class="cb-sub">no entra ahora</text></g>
+          <g data-node="verbatim"><rect class="cb-node cb-node--strong" x="520" y="92" width="150" height="58" rx="14"/><text x="595" y="116" class="cb-label">VERBATIM</text><text x="595" y="136" class="cb-sub">política exacta</text></g>
+          <g data-node="extract"><rect class="cb-derived" x="520" y="184" width="150" height="62" rx="14"/><text x="595" y="209" class="cb-label">EXTRACT</text><text x="595" y="231" class="cb-sub">logs → fallos</text></g>
+          <g data-node="compact"><rect class="cb-derived" x="520" y="278" width="150" height="62" rx="14"/><text x="595" y="303" class="cb-label">COMPACT</text><text x="595" y="325" class="cb-sub">history → summary</text></g>
+          <g data-node="reference"><rect class="cb-derived" x="520" y="372" width="150" height="62" rx="14"/><text x="595" y="397" class="cb-label">REFERENCIA</text><text x="595" y="419" class="cb-sub">pointer + version</text></g>
+          <g data-node="drop"><rect class="cb-node" x="520" y="466" width="150" height="58" rx="14"/><text x="595" y="490" class="cb-label">DROP / DEFER</text><text x="595" y="510" class="cb-sub">no entra ahora</text></g>
 
-          <path data-edge="gate-to-verbatim" class="cb-edge" d="M453 302 C478 247 489 165 513 147"/>
-          <path data-edge="gate-to-compact" class="cb-edge" d="M466 330 C487 302 495 274 513 264"/>
-          <path data-edge="gate-to-reference" class="cb-edge" d="M466 363 C490 369 496 380 513 384"/>
-          <path data-edge="gate-to-drop" class="cb-edge" d="M451 404 C478 449 490 493 513 502"/>
+          <path data-edge="gate-to-verbatim" class="cb-edge" d="M446 283 C476 217 492 138 513 124"/>
+          <path data-edge="gate-to-extract" class="cb-edge" d="M460 311 C484 274 496 225 513 216"/>
+          <path data-edge="gate-to-compact" class="cb-edge" d="M468 340 C489 327 498 312 513 310"/>
+          <path data-edge="gate-to-reference" class="cb-edge" d="M464 370 C489 378 498 399 513 402"/>
+          <path data-edge="gate-to-drop" class="cb-edge" d="M449 403 C479 437 493 486 513 493"/>
 
           <rect data-boundary="budget-envelope" class="cb-context" x="716" y="94" width="230" height="454" rx="22"/>
           <text x="831" y="124" class="cb-kicker" text-anchor="middle">CONTEXTO ACTIVO · Bdynamic = 60k</text>
@@ -89,9 +91,10 @@
           <text x="831" y="445" class="cb-label">Summary · 9k</text><text x="831" y="469" class="cb-sub">derivado de history@v8</text><text x="831" y="489" class="cb-sub">lossy=true</text>
           <text x="831" y="529" class="cb-sub">23k quedan libres / reservados</text>
 
-          <path data-edge="verbatim-to-context" class="cb-edge" d="M670 144 H736"/>
-          <path data-edge="compact-to-context" class="cb-edge" d="M670 262 C699 282 705 352 736 362"/>
-          <path data-edge="reference-to-context" class="cb-edge" d="M670 386 C704 352 710 281 736 273"/>
+          <path data-edge="verbatim-to-context" class="cb-edge" d="M670 121 C702 128 716 168 736 178"/>
+          <path data-edge="extract-to-context" class="cb-edge" d="M670 215 C710 238 705 348 736 364"/>
+          <path data-edge="compact-to-context" class="cb-edge" d="M670 309 C714 344 706 439 736 455"/>
+          <path data-edge="reference-to-context" class="cb-edge" d="M670 403 C708 367 711 284 736 270"/>
           <text x="693" y="206" class="cb-edge-label" text-anchor="middle">sólo esto cruza</text>
 
           <g data-node="model"><circle class="cb-node cb-node--strong" cx="1062" cy="320" r="67"/><text x="1062" y="313" class="cb-label">Modelo</text><text x="1062" y="337" class="cb-sub">ve Cₜ</text><text x="1062" y="358" class="cb-sub">no ve el raw excluido</text></g>
@@ -119,6 +122,6 @@
       <span class="is-lineage"><i></i> lineage hacia la fuente</span>
       <span>capacidad visual = presupuesto, no importancia</span>
     </div>
-    <p class="s5v__copy"><strong>La reducción de tokens nunca es gratis.</strong> Si una pieza entra resumida o como referencia, la aplicación necesita conservar fuera de la ventana qué fuente y versión la originaron. Esa lineage permite volver al raw y evita tratar evidencia derivada de un estado antiguo como si certificara el estado actual.</p>
+    <p class="s5v__copy"><strong>La reducción de tokens nunca es gratis.</strong> Si una pieza entra extraída, resumida o como referencia, la aplicación necesita conservar fuera de la ventana qué fuente y versión la originaron. Esa lineage permite volver al raw y evita tratar evidencia derivada de un estado antiguo como si certificara el estado actual.</p>
   </div>
 </section>
