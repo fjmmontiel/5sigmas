@@ -110,14 +110,28 @@ check(!/^\s*(?:assistant\s*=\s*no tools|agent\s*=\s*tools)[.!]?\s*$/im.test(`${e
 const visualInclude = '{{ include_html("snippets/articulos-tecnicos/coding-agent-harness-loop.html") }}';
 check(es.includes(visualInclude), 'ES: harness loop visual include missing');
 check(en.includes(visualInclude), 'EN: harness loop visual include missing');
-check(snippet.includes('Modelo ≠ harness') && snippet.includes('Contrato de tarea') && snippet.includes('Harness + entorno') && snippet.includes('Verificador / stop'), 'Visual: responsibility boundary incomplete');
+check(snippet.includes('GOLDEN_VISUAL_CONTRACT'), 'Visual: relationship-first contract marker missing');
+check(snippet.includes('relationship="feedback-loop:'), 'Visual: feedback-loop relationship is not declared');
+check(snippet.includes('interaction="static:no-cosmetic-controls"'), 'Visual: interaction contract must explicitly reject cosmetic controls');
+check(snippet.includes('mobile="horizontal-scroll-preserves-loop-topology"'), 'Visual: mobile topology-preservation contract missing');
+check(!snippet.includes('s5v-arch-map__pipe'), 'Visual regression: interchangeable linear card pipe returned');
+check(!snippet.includes('data-s5v-stepper') && !snippet.includes('s5v__steps--tabs'), 'Visual regression: cosmetic stepper/tabs returned');
+for (const node of ['task-policy', 'context', 'model', 'dispatch', 'workspace', 'observation', 'verifier', 'handback']) {
+  check(snippet.includes(`data-node="${node}"`), `Visual: missing causal node ${node}`);
+}
+for (const edge of ['task-to-context', 'context-to-model', 'model-to-dispatch', 'dispatch-to-workspace', 'workspace-to-observation', 'observation-to-verifier', 'continue-return', 'stop-exit']) {
+  check(snippet.includes(`data-edge="${edge}"`), `Visual: missing causal edge ${edge}`);
+}
+check(snippet.includes('data-state-rail="run-state"'), 'Visual: persistent harness state rail missing');
+check(snippet.includes('MODEL / PROVIDER') && snippet.includes('HARNESS RUNTIME') && snippet.includes('ENVIRONMENT / EFFECTS'), 'Visual: model/harness/environment ownership boundaries missing');
+check(snippet.includes('nueva evidencia → nuevo contexto') && snippet.includes('continue') && snippet.includes('Done / handback'), 'Visual: continue return and stop exit are not both taught');
 check(mirror.trim() === '<!-- 5sigmas-canonical-mirror -->', 'EN: harness visual canonical mirror marker invalid');
 check(i18n.source === 'snippets/articulos-tecnicos/coding-agent-harness-loop.html', 'EN: harness visual i18n source path invalid');
 const snippetBytes = Buffer.from(snippet, 'utf8');
 const blobHeader = Buffer.from(`blob ${snippetBytes.length}\0`, 'utf8');
 const snippetBlobSha = crypto.createHash('sha1').update(Buffer.concat([blobHeader, snippetBytes])).digest('hex');
 check(i18n.source_blob_sha === snippetBlobSha, `EN: harness visual source_blob_sha stale (${i18n.source_blob_sha} != ${snippetBlobSha})`);
-for (const token of ['Model ≠ harness', 'Task contract', 'proposes the next action', 'Harness + environment', 'Verifier / stop', 'causal']) {
+for (const token of ['Autonomy lives in the loop', 'Task', 'Context', 'Model', 'authorized action crosses the boundary', 'Observation', 'Verify', 'new evidence → new context', 'persistent harness state', 'closing the feedback loop']) {
   check(snippet.includes(token) || Object.values(i18n.replacements).some((value) => String(value).includes(token)), `EN visual translation missing ${token}`);
 }
 
