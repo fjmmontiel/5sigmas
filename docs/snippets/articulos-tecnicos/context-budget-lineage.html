@@ -38,14 +38,14 @@
   -->
   <div class="s5v__canvas">
     <header class="s5v__head">
-      <div><span class="s5v__kicker">Budget ≠ capacidad máxima</span><h3>Reducir contexto cambia representaciones; provenance mantiene el camino de vuelta</h3></div>
-      <p>El presupuesto decide qué cruza a la inferencia. La lineage queda fuera de ese presupuesto y permite verificar, rehidratar o invalidar lo que fue transformado.</p>
+      <div><span class="s5v__kicker">Ejemplo · budget ≠ capacidad máxima</span><h3>Reducir contexto cambia representaciones; provenance mantiene el camino de vuelta</h3></div>
+      <p>Escenario ilustrativo: los tamaños sólo muestran presión relativa sobre un presupuesto finito; no son límites de un proveedor ni resultados de benchmark. La lineage queda fuera del presupuesto activo y permite verificar, rehidratar o invalidar lo transformado.</p>
     </header>
     <div class="cb-scroll" tabindex="0" role="region" aria-label="Diagrama desplazable de priorización, compaction, provenance e invalidación">
       <div class="cb-stage">
         <svg viewBox="0 0 1160 760" role="img" aria-labelledby="cb-title cb-desc">
           <title id="cb-title">De un universo candidato a un contexto acotado con lineage verificable</title>
-          <desc id="cb-desc">Información candidata con distinto coste converge en una política de selección. El contenido obligatorio entra verbatim; logs grandes se compactan; documentos grandes permanecen fuera y entran mediante referencia; contenido stale se descarta. El contexto activo queda dentro de un presupuesto finito. Los items derivados conservan provenance hacia una fuente versionada; cuando esa versión cambia, la representación dependiente pasa a stale y debe revalidarse o rehidratarse.</desc>
+          <desc id="cb-desc">Escenario ilustrativo. Información candidata con distinto coste converge en una política de selección. El contenido obligatorio entra verbatim; logs grandes se compactan; documentos grandes permanecen fuera y entran mediante referencia; contenido stale se descarta. El contexto activo queda dentro de un presupuesto finito. Los items derivados conservan provenance hacia una fuente versionada; cuando esa versión cambia, la representación dependiente pasa a stale y debe revalidarse o rehidratarse.</desc>
           <defs>
             <marker id="cb-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="currentColor"/></marker>
             <marker id="cb-arrow-open" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M1,1 L8,3 L1,5" fill="none" stroke="currentColor" stroke-width="1.5"/></marker>
