@@ -6,6 +6,9 @@ on:
       - series/coding-agents-agent-harnesses-golden
     paths:
       - '.github/workflows/coding-harness-ch5-golden.yml'
+      - 'mkdocs.yml'
+      - 'mkdocs.en.yml'
+      - 'locales/en/manifest.yml'
       - 'docs/series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion.md'
       - 'locales/en/series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion.md'
       - 'docs/snippets/articulos-tecnicos/coding-agent-verification-stack.html'
