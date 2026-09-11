@@ -1,6 +1,6 @@
 {
   "source": "snippets/articulos-tecnicos/context-engineering-assembly-loop.html",
-  "source_blob_sha": "00e01676bd5fe1d3a3f3839014e644fe681e952b",
+  "source_blob_sha": "4cdab7bf7f4518ef4ecb0eca8a3453d1ad507811",
   "replacements": {
     "Cómo el context engineering ensambla el contexto real que recibe un modelo": "How context engineering assembles the actual context a model receives",
     "Prompt ⊂ contexto": "Prompt ⊂ context",
