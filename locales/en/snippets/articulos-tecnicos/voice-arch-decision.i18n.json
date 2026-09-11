@@ -1,6 +1,6 @@
 {
   "source": "snippets/articulos-tecnicos/voice-arch-decision.html",
-  "source_blob_sha": "c7934eeebee2eaf4dde79ddaa56ff1fb1d68f500",
+  "source_blob_sha": "cb4eb6fb3b7a8553af5f3873bef7add50e5501b4",
   "replacements": {
     "Mapa conceptual de decisión entre full cascade, audio-native con TTS y speech-to-speech": "Conceptual decision map for full cascade, audio-native plus TTS, and speech-to-speech",
     "Decisión": "Decision",
