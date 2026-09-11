@@ -1,6 +1,6 @@
 ---
 title: "Retrieval y ensamblado de contexto: frescura, relevancia, conflictos y grounding"
-description: "Cómo separar candidate retrieval de la política que decide qué evidencia entra en contexto, cómo resolver frescura y conflictos y cómo mantener grounding verificable por claim."
+description: "Cómo separar la recuperación de candidatos de la política que decide qué evidencia entra en contexto, resolver frescura y conflictos y mantener un grounding verificable por afirmación."
 date: 2026-09-11
 date_modified: 2026-09-11
 keywords: "retrieval, RAG, context assembly, freshness, relevance, grounding, conflict resolution, hybrid search, context engineering"
@@ -20,13 +20,13 @@ Puede estar desactualizado. Puede pertenecer a otro tenant. Puede describir una 
 
 Ésa es la frontera de este capítulo:
 
-> **retrieval propone candidatos; context assembly decide qué evidencia entra; grounding conecta claims con la evidencia admitida.**
+> **retrieval propone candidatos; el ensamblado de contexto decide qué evidencia entra; el grounding conecta cada afirmación con la evidencia admitida.**
 
 Mezclar las tres capas produce sistemas difíciles de depurar. Un `top_k=10` no es una política de verdad, y un similarity score no sustituye freshness, authority, permisos o provenance.
 
 {{ include_html("snippets/articulos-tecnicos/context-retrieval-grounding.html") }}
 
-## 1. Retrieval no es context assembly
+## 1. Retrieval no es ensamblado de contexto
 
 Llamemos \(q_t\) a la consulta derivada de la tarea actual. Un sistema puede generar candidatos desde varios retrievers:
 
@@ -102,7 +102,7 @@ Dos retrievers pueden producir scores incompatibles.
 
 Un cosine similarity, un score BM25, `ts_rank_cd` y un score de reranker no comparten necesariamente escala, distribución ni calibración. Sumarlos como si fueran probabilidades comparables crea una precisión aparente que no existe.
 
-Una alternativa es fusionar **rangos**. Reciprocal Rank Fusion (RRF), por ejemplo, combina listas según la posición de cada documento y no requiere que sus raw scores compartan escala.[^elastic-rrf] Eso resuelve un problema de combinación de ranking.
+Una alternativa es fusionar **rangos**. Reciprocal Rank Fusion (RRF), por ejemplo, combina listas según la posición de cada documento y no requiere que sus puntuaciones originales compartan escala.[^elastic-rrf] Eso resuelve un problema de combinación de ranking.
 
 No resuelve estos otros:
 
@@ -115,7 +115,7 @@ No resuelve estos otros:
 
 Por eso `hybrid retrieval` y `context assembly` no son sinónimos.
 
-## 4. Relevance es una señal; no es truth
+## 4. La relevancia es una señal; no es verdad
 
 Un candidato útil puede modelarse con metadata suficiente para no perder su contrato:
 
@@ -147,7 +147,7 @@ final_score =
 
 salvo que esas señales estén definidas, calibradas y evaluadas para el dominio.
 
-Para decisiones sensibles suele ser más seguro usar **constraints antes de preference ranking**:
+Para decisiones sensibles suele ser más seguro usar **restricciones antes que ranking por preferencia**:
 
 ```text
 1. scope / tenant / ACL
@@ -160,7 +160,7 @@ Para decisiones sensibles suele ser más seguro usar **constraints antes de pref
 
 Un documento prohibido no debe ganar porque tenga un similarity score extraordinario.
 
-## 5. Freshness tiene al menos dos relojes
+## 5. La frescura tiene al menos dos relojes
 
 “Lo indexamos hace cinco minutos” no implica “el hecho tiene cinco minutos”.
 
@@ -186,7 +186,7 @@ El índice es reciente; el contenido sigue stale.
 
 También puede ocurrir lo contrario: un documento antiguo sigue siendo la política vigente porque no ha sido superseded.
 
-Por eso **newest timestamp wins** tampoco es una regla universal.
+Por eso **«gana el timestamp más reciente»** tampoco es una regla universal.
 
 OpenAI describe en su agente interno una distinción operativa útil: context precomputado/embebido para retrieval y, cuando la información es stale o falta, queries live al data warehouse para validar el estado actual.[^openai-data-agent] Es una decisión de esa aplicación, no una propiedad automática de RAG.
 
@@ -196,7 +196,7 @@ Para datos volátiles, una estrategia frecuente es:
 retrieve candidate
 → inspect version/freshness requirement
 → if decision requires current authority:
-     read-through source of record
+     lectura directa del system of record
 → assemble with the validated revision
 ```
 
@@ -229,7 +229,7 @@ Preguntas mínimas:
 
 Sin estas respuestas, `updated_at` puede convertirse en decoración.
 
-## 7. Authority no es lo mismo que relevance
+## 7. La autoridad no es lo mismo que la relevancia
 
 Supongamos que un agente de soporte pregunta si puede hacer un refund.
 
@@ -342,7 +342,7 @@ Eso es una **capacidad del servicio de grounding**. No demuestra que todo claim 
 
 Anthropic Contextual Retrieval demuestra otra frontera: mejorar candidate retrieval mediante contexto de chunk, lexical search, embeddings y reranking.[^anthropic-contextual] Tampoco convierte candidate relevance en business authority.
 
-## 11. Grounding empieza después del retrieval
+## 11. El grounding empieza después del retrieval
 
 Para este capítulo usamos una definición operativa:
 
@@ -377,7 +377,7 @@ porque una citation puede:
 
 La evidencia académica reciente trata precisamente esta distinción entre generar referencias y comprobar soporte claim-level; no debemos asumir que “RAG + citas” produce attribution fiel automáticamente.[^reclaim]
 
-## 12. Construye el contexto como un evidence packet
+## 12. Construye el contexto como un paquete de evidencia
 
 En producción, el modelo debería recibir algo más estructurado que una concatenación de chunks:
 
@@ -429,7 +429,7 @@ El capítulo 3.2 trató compaction y budget. Aquí la diferencia es que el budge
 
 Comprimir cinco chunks conflictivos en una frase sin provenance puede ahorrar tokens y destruir precisamente lo que necesitábamos saber.
 
-## 14. Caso completo: una policy que cambió hoy
+## 14. Caso completo: una política que cambió hoy
 
 Pregunta:
 
@@ -494,11 +494,11 @@ Si `e3` y `e4` entraron pero el modelo afirmó 30 días, es un fallo de generati
 
 Ésa es la razón práctica para no llamar a todo “RAG”.
 
-## 15. Cómo evaluar retrieval, assembly y grounding por separado
+## 15. Cómo evaluar retrieval, ensamblado y grounding por separado
 
-### Candidate retrieval
+### Recuperación de candidatos
 
-Mide si la evidencia necesaria aparece en el candidate set:
+Mide si la evidencia necesaria aparece en el conjunto de candidatos:
 
 - recall@k sobre evidence IDs relevantes;
 - coverage de exact identifiers;
@@ -506,9 +506,9 @@ Mide si la evidencia necesaria aparece en el candidate set:
 - tasa de candidates bloqueados posteriormente por ACL/scope;
 - latency/cost por retriever.
 
-Un reranker sólo puede reordenar candidatos que recibió. No recupera evidencia que nunca entró en su candidate set.
+Un reranker sólo puede reordenar candidatos que recibió. No recupera evidencia que nunca entró en su conjunto de candidatos.
 
-### Assembly
+### Ensamblado
 
 Mide la política:
 
@@ -560,7 +560,7 @@ Pero si sólo guardamos la respuesta final, no podremos saber si el sistema:
 - resolvió mal un conflicto;
 - o generó un claim no soportado pese a tener buena evidencia.
 
-## 17. Implicación de producción: retrieve wide, assemble narrow
+## 17. Implicación de producción: maximiza recall al recuperar y filtra con rigor al ensamblar
 
 La arquitectura robusta no pregunta “¿qué vector database usamos?” antes de definir el contrato de evidencia.
 
