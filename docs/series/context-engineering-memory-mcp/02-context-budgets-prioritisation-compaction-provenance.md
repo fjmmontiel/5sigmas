@@ -16,7 +16,7 @@ tags:
 
 Una ventana de contexto grande responde a una pregunta física: **cuántos tokens puede aceptar el sistema en una inferencia bajo un contrato concreto**. No responde a la pregunta de producción: **qué información merece ocupar ese espacio ahora**.
 
-Un agente de código puede tener 150.000 tokens disponibles y, aun así, fallar porque mantiene 40.000 tokens de logs obsoletos, compacta una excepción crítica dentro de un resumen ambiguo o recupera una decisión tomada sobre un `HEAD` anterior sin conservar de qué versión provenía.
+Un agente de código puede disponer de una ventana de contexto muy amplia y, aun así, fallar porque conserva demasiados logs obsoletos, compacta una excepción crítica dentro de un resumen ambiguo o recupera una decisión tomada sobre un `HEAD` anterior sin conservar de qué versión provenía.
 
 Este capítulo separa cuatro mecanismos que suelen mezclarse:
 
@@ -227,7 +227,7 @@ La misma lógica aplica a políticas, tickets, esquemas de base de datos, APIs e
 
 ## Caso completo: un agente de código bajo presión de tokens
 
-Supongamos este universo candidato:
+Supongamos este universo candidato **puramente ilustrativo**; las cifras no describen un proveedor ni un benchmark:
 
 ```text
 4k   instrucciones y contrato de tarea
@@ -238,7 +238,7 @@ Supongamos este universo candidato:
 12k  memorias y decisiones anteriores
 ```
 
-El presupuesto dinámico disponible es 60k.
+El presupuesto dinámico disponible en este escenario ilustrativo es 60k.
 
 Una estrategia ingenua toma los elementos más recientes hasta llenar el límite. Puede terminar incluyendo 42k de logs y expulsando la spec.
 
