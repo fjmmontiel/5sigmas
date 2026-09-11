@@ -125,4 +125,4 @@ jobs:
           name: coding-agents-pr-gate-visual-evidence
           path: artifacts/visual-review/coding-harness-ch*.png
           if-no-files-found: warn
-          retention-days: 3
+          retention-days: 1
