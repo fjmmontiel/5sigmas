@@ -1,6 +1,6 @@
 {
   "source": "snippets/articulos-tecnicos/context-mcp-trust-boundaries.html",
-  "source_blob_sha": "4a3abb83d82d428e6c5511a4e2496c2a1ba9e220",
+  "source_blob_sha": "118eeea682e66db49ab7480e139acd97d01f91a3",
   "replacements": {
     "MCP separa host, clientes y servidores: los recursos y prompts cruzan hacia la política del host, mientras los tools deben cruzar aprobación y autorización antes de producir efectos externos": "MCP separates host, clients, and servers: resources and prompts cross toward host policy, while tools must cross approval and authorization before producing external effects",
     "MCP ≠ confianza implícita": "MCP ≠ implicit trust",
