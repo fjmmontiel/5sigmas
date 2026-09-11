@@ -1,5 +1,5 @@
 name: Voice series GOLDEN release audit
-# rerun after mobile decision-map geometry/readability correction
+# rerun after S2S continuity criterion clarification
 
 on:
   push:
