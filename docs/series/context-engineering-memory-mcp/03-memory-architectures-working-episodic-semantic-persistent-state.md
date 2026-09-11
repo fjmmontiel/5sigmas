@@ -131,7 +131,7 @@ stale derived memory
 
 No significa que la fuente externa nunca falle. Significa que la aplicación debe modelar explícitamente qué fuente tiene autoridad para cada decisión, en vez de dejar que «lo que el agente recuerda» gane por aparecer primero en el prompt.
 
-## Persistencia es un eje, no un cuarto bucket
+## La persistencia es un eje, no un cuarto tipo
 
 Podemos clasificar una pieza de estado en dos ejes diferentes:
 
@@ -251,9 +251,9 @@ La resolución necesita al menos:
 
 «Último timestamp gana» tampoco es una política universal. Un episodio nuevo puede ser una observación débil, mientras que una regla autoritativa más antigua sigue vigente.
 
-## Deletion y corrección necesitan lineage
+## Borrado y corrección necesitan trazabilidad
 
-Persistir memoria crea obligaciones de lifecycle.
+Persistir memoria crea obligaciones de ciclo de vida.
 
 Si un usuario corrige «prefiero email» por «prefiero llamadas», el sistema necesita saber qué representaciones derivadas actualizar. Si una fuente se elimina por política de retención o privacidad, las memorias que dependen de ella no deberían seguir sobreviviendo sin una decisión explícita.
 
@@ -272,7 +272,7 @@ No hace falta implementar un grafo formal para todo. Sí hace falta poder explic
 
 ## Caso completo: agente de soporte
 
-Consideremos cuatro stores separados:
+Consideremos cuatro almacenes separados:
 
 ```text
 WORKING
@@ -299,13 +299,13 @@ Al abrir un ticket nuevo:
 
 1. el assembler no carga todo el historial;
 2. recupera la preferencia semántica relevante;
-3. consulta fresh state para decisiones sensibles;
+3. consulta el estado actual para decisiones sensibles;
 4. construye \(W_t\);
 5. ejecuta la acción;
 6. guarda el resultado como episodio;
 7. sólo actualiza memoria semántica si la política de consolidación lo justifica.
 
-Si el usuario cambia el canal preferido, los nuevos episodios pueden supersede la memoria anterior. Si cambia el plan, no hace falta «enseñar» al agente el nuevo plan mediante memoria: se vuelve a leer del system of record.
+Si el usuario cambia el canal preferido, los nuevos episodios pueden sustituir la memoria anterior. Si cambia el plan, no hace falta «enseñar» al agente el nuevo plan mediante memoria: se vuelve a leer del system of record.
 
 ## Cómo evaluar una arquitectura de memoria
 
@@ -326,7 +326,7 @@ Mide por separado:
 
 Esta última separación es importante: una arquitectura puede tener buena memoria y mal recovery, o excelente checkpointing y mala selección de recuerdos.
 
-## Implicación de producción: trata memoria como un data pipeline
+## Implicación de producción: trata memoria como un pipeline de datos
 
 Una arquitectura de memoria madura necesita contratos explícitos para:
 
