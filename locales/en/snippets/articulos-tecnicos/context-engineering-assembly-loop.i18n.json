@@ -1,6 +1,6 @@
 {
   "source": "snippets/articulos-tecnicos/context-engineering-assembly-loop.html",
-  "source_blob_sha": "41c676732635cc49939eece8160aef56f471747e",
+  "source_blob_sha": "f397011f7dfc2d7487177359768d8a00bcee0a88",
   "replacements": {
     "Cómo el context engineering ensambla el contexto real que recibe un modelo": "How context engineering assembles the actual context a model receives",
     "Prompt ⊂ contexto": "Prompt ⊂ context",
@@ -8,7 +8,7 @@
     "Context engineering decide qué información cruza la frontera de inferencia, con qué prioridad, frescura, procedencia y coste. Prompt engineering trabaja dentro de una parte de ese problema.": "Context engineering decides which information crosses the inference boundary, with what priority, freshness, provenance, and cost. Prompt engineering operates within one part of that problem.",
     "Diagrama desplazable del ensamblado de contexto antes y después de una inferencia": "Scrollable diagram of context assembly before and after an inference",
     "De las fuentes candidatas al contexto real de inferencia": "From candidate sources to the actual inference context",
-    "Seis fuentes candidatas, incluido el prompt, convergen en una política de selección y ensamblado. Sólo el contexto ensamblado cruza hacia el modelo. Una salida puede producir una acción sobre el entorno; su observación vuelve al conjunto de información candidata del siguiente turno. La frontera de prompt engineering cubre instrucciones y ejemplos, mientras context engineering abarca el ensamblado y el ciclo completo.": "Six candidate sources, including the prompt, converge on a selection and assembly policy. Only the assembled context crosses into the model. An output can trigger an action on the environment; its observation returns to the candidate information for the next turn. The prompt-engineering boundary covers instructions and examples, while context engineering spans assembly and the full loop.",
+    "Siete fuentes candidatas convergen en una política de selección y ensamblado; instrucciones y ejemplos forman la parte de prompt engineering. Sólo el contexto ensamblado cruza hacia el modelo. Una salida puede producir una acción sobre el entorno; su observación vuelve al conjunto de información candidata del siguiente turno. Context engineering abarca el ensamblado y el ciclo completo.": "Seven candidate sources converge on a selection and assembly policy; instructions and examples form the prompt-engineering part. Only the assembled context crosses into the model. An output can trigger an action on the environment; its observation returns to the candidate information for the next turn. Context engineering spans assembly and the full loop.",
     "UNIVERSO DE INFORMACIÓN CANDIDATA": "UNIVERSE OF CANDIDATE INFORMATION",
     "PROMPT ENGINEERING": "PROMPT ENGINEERING",
     "Instrucciones": "Instructions",
