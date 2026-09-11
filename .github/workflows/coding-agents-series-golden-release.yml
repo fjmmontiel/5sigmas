@@ -1,0 +1,158 @@
+name: Coding Agents series GOLDEN release audit
+
+on:
+  push:
+    branches:
+      - series/coding-agents-agent-harnesses-golden
+    paths:
+      - '.github/workflows/coding-agents-series-golden-release.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  series-golden:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Validate media declarations and binary contracts
+        run: |
+          python scripts/prepare_video_media.py --check
+          python scripts/audit_media_magic.py
+          python scripts/test_video_schema_contract.py
+
+      - name: Re-certify all six Coding Agents source and relationship contracts
+        run: |
+          node scripts/validate_coding_agent_harness_ch1_source.mjs
+          node scripts/validate_coding_agent_harness_ch2_source.mjs
+          node scripts/validate_coding_agent_harness_ch3_source.mjs
+          node scripts/validate_coding_agent_harness_ch4_source.mjs
+          node scripts/validate_coding_agent_harness_ch5_source.mjs
+          node scripts/validate_coding_agent_harness_ch6_source.mjs
+
+      - name: Build Spanish strictly
+        run: mkdocs build --clean --strict
+
+      - name: Validate publication contract
+        run: python scripts/audit_publication_contract.py
+
+      - name: Prepare and audit English sources
+        run: |
+          python scripts/prepare_locale.py --locale en
+          python scripts/audit_locale.py --locale en
+          python scripts/audit_english_editorial_quality.py --strict
+
+      - name: Build English strictly
+        env:
+          S5_LOCALE: en
+        run: mkdocs build -f mkdocs.en.yml --clean --strict
+
+      - name: Audit rendered English
+        run: python scripts/audit_locale.py --locale en --site site/en
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Serve combined preview
+        run: |
+          python -m http.server 8000 --directory site > /tmp/coding-series-preview.log 2>&1 &
+          echo $! > /tmp/coding-series-preview.pid
+          for attempt in {1..30}; do
+            curl --fail --silent http://127.0.0.1:8000/series/coding-agents-agent-harnesses/01-que-es-agent-harness/ > /dev/null && \
+            curl --fail --silent http://127.0.0.1:8000/en/series/coding-agents-agent-harnesses/01-que-es-agent-harness/ > /dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/coding-series-preview.log
+          exit 1
+
+      - name: Audit browser resources and locale contracts
+        run: |
+          node scripts/audit_browser_resources.mjs
+          node scripts/validate_english_series_mirror.mjs
+          node scripts/validate_locale_switching.mjs
+          node scripts/validate_english_locale.mjs
+
+      - name: Re-certify all six Coding Agents relationship geometries and accessibility
+        run: |
+          node scripts/validate_coding_agent_harness_ch1_accessibility.mjs
+          node scripts/validate_coding_agent_harness_ch2_accessibility.mjs
+          node scripts/validate_coding_agent_harness_ch3_accessibility.mjs
+          node scripts/validate_coding_agent_harness_ch4_accessibility.mjs
+          node scripts/validate_coding_agent_harness_ch5_accessibility.mjs
+          node scripts/validate_coding_agent_harness_ch6_accessibility.mjs
+
+      - name: Validate direct reader progression
+        run: node scripts/validate_direct_reader_navigation.mjs
+
+      - name: Inventory Series 2 canonical source and localized artifacts
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          routes = [
+              '01-que-es-agent-harness.md',
+              '02-contexto-workspace-sandboxing-aislamiento.md',
+              '03-specs-planificacion-task-decomposition-checkpoints.md',
+              '04-tools-permisos-approvals-hooks-secretos-trust-boundaries.md',
+              '05-tests-verifiers-review-diffs-stop-conditions-evaluacion.md',
+              '06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad.md',
+          ]
+          snippets = [
+              'coding-agent-harness-loop',
+              'coding-agent-isolation-stack',
+              'coding-agent-task-contract',
+              'coding-agent-authority-path',
+              'coding-agent-verification-stack',
+              'coding-agent-long-task-state',
+          ]
+          for route in routes:
+              es = Path('docs/series/coding-agents-agent-harnesses') / route
+              en = Path('locales/en/series/coding-agents-agent-harnesses') / route
+              assert es.is_file(), es
+              assert en.is_file(), en
+              assert es.stat().st_size > 5000, f'{es}: unexpectedly small'
+              assert en.stat().st_size > 5000, f'{en}: unexpectedly small'
+          for stem in snippets:
+              src = Path('docs/snippets/articulos-tecnicos') / f'{stem}.html'
+              mirror = Path('locales/en/snippets/articulos-tecnicos') / f'{stem}.html'
+              i18n = Path('locales/en/snippets/articulos-tecnicos') / f'{stem}.i18n.json'
+              assert src.is_file() and src.stat().st_size > 1000, src
+              assert mirror.read_text().strip() == '<!-- 5sigmas-canonical-mirror -->', mirror
+              data = json.loads(i18n.read_text())
+              assert data['source'] == f'snippets/articulos-tecnicos/{stem}.html', i18n
+              assert data.get('source_blob_sha'), i18n
+          print('Series 2 inventory PASS: 6 ES articles, 6 EN articles, 6 canonical visuals, 6 EN mirrors/i18n manifests.')
+          PY
+
+      - name: Ensure exact release SHA and clean tracked source
+        run: |
+          test "$(git rev-parse HEAD)" = "${GITHUB_SHA}"
+          test -z "$(git status --porcelain --untracked-files=no)"
+          echo "Certified Series 2 release SHA: ${GITHUB_SHA}"
+
+      - name: Upload zero-based Series 2 visual evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coding-agents-series-golden-release-evidence
+          path: artifacts/visual-review/*
+          if-no-files-found: error
+          retention-days: 2
