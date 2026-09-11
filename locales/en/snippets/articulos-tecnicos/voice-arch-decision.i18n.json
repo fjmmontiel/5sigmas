@@ -1,6 +1,6 @@
 {
   "source": "snippets/articulos-tecnicos/voice-arch-decision.html",
-  "source_blob_sha": "1eaf14b2bdd6d71143d8d39bed8db31df03ec7e6",
+  "source_blob_sha": "e1a807065a89b309c5874acef944aa4d4bb08104",
   "replacements": {
     "x-position=continuidad acústica del camino principal": "x-position=acoustic continuity on the primary path",
     "y-position=fronteras textuales obligatorias y sustituibles": "y-position=mandatory explicit and replaceable text boundaries",
