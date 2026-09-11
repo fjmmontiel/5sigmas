@@ -24,6 +24,7 @@ published_routes:
   - series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad.md
   - series/context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineering.md
   - series/context-engineering-memory-mcp/02-context-budgets-prioritisation-compaction-provenance.md
+  - series/context-engineering-memory-mcp/03-memory-architectures-working-episodic-semantic-persistent-state.md
   - series/fundamentos-ia-iag/00_presentacion_serie.md
   - series/fundamentos-ia-iag/01-que-es-ia.md
   - series/fundamentos-ia-iag/02-que-es-ia-generativa.md
@@ -57,7 +58,7 @@ published_routes:
   - series/datacenters-espacio/02-energia-calor-conectividad.md
   - series/datacenters-espacio/03-que-es-datacenter-espacio.md
   - series/datacenters-espacio/04-huella-real-datacenter.md
-  - series/seguridad-ia/00_presentacion_serie.md
+  - series/seguridad-ia/00-series-mapa.md
   - series/seguridad-ia/01-prompt-injection.md
   - series/seguridad-ia/02-jailbreaks.md
   - series/seguridad-ia/03-envenenamiento.md
@@ -96,6 +97,7 @@ required_snippets:
   - snippets/articulos-tecnicos/coding-agent-long-task-state.html
   - snippets/articulos-tecnicos/context-engineering-assembly-loop.html
   - snippets/articulos-tecnicos/context-budget-lineage.html
+  - snippets/articulos-tecnicos/context-memory-lifecycle.html
   - snippets/from-cave-to-agi/01-sistemas-numeracion.html
   - snippets/from-cave-to-agi/01-algebra-despejar.html
   - snippets/from-cave-to-agi/01-cadena-deductiva.html
