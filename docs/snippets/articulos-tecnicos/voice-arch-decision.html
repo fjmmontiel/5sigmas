@@ -54,18 +54,19 @@ why_visual: Prose can list trade-offs, but the map makes the structural relation
     .s5v-decision-map__state strong{color:var(--ink)}
     .s5v-decision-map__caption{margin:11px 0 0;color:var(--muted);font-size:.62rem;line-height:1.4;font-weight:720;font-style:italic}
     @media(max-width:720px){
-      .s5v-decision-map .s5v__canvas{padding:20px 14px;border-radius:22px}
-      .s5v-decision-map .s5v__head{display:grid;gap:9px}.s5v-decision-map .s5v__head p{text-align:left}
-      .s5v-decision-map .s5v__steps{flex-wrap:nowrap;overflow-x:auto;padding:2px 0 5px}
+      .s5v-decision-map{margin:18px auto 22px}
+      .s5v-decision-map .s5v__canvas{padding:16px 14px;border-radius:22px}
+      .s5v-decision-map .s5v__head{display:grid;gap:6px;margin-bottom:12px}.s5v-decision-map .s5v__head p{text-align:left}
+      .s5v-decision-map .s5v__steps{flex-wrap:nowrap;overflow-x:auto;padding:2px 0 4px;margin-bottom:8px}
       .s5v-decision-map .s5v__steps button{flex:0 0 auto}
       .s5v-decision-map__scroller{overflow-x:visible;overflow-y:visible;scrollbar-gutter:auto;padding:0}
-      .s5v-decision-map__plot{min-width:0;width:calc(100% - 58px);min-height:390px;margin:30px 6px 48px 52px}
+      .s5v-decision-map__plot{min-width:0;width:calc(100% - 58px);min-height:320px;margin:20px 6px 38px 52px}
       .s5v-decision-map__axis-y{left:-47px;width:40px;font-size:.56rem}
       .s5v-decision-map__axis-x{right:0;font-size:.56rem}
       .s5v-decision-map__node{width:122px;padding:6px 5px 6px 17px}
       .s5v-decision-map__node::after{left:3px;top:10px;width:8px;height:8px}
       .s5v-decision-map__node b{font-size:.68rem}
-      .s5v-decision-map__node span{font-size:.54rem;line-height:1.2}
+      .s5v-decision-map__node span{font-size:.57rem;line-height:1.2}
       .s5v-decision-map__node--cascade{left:19%;top:18%}
       .s5v-decision-map__node--half{left:50%;top:50%}
       .s5v-decision-map__node--s2s{left:78%;top:82%}
@@ -76,8 +77,8 @@ why_visual: Prose can list trade-offs, but the map makes the structural relation
       .s5v-decision-map[data-step="2"] .s5v-decision-map__vector{left:25%;top:75%;width:40%;transform:rotate(-43deg)}
       .s5v-decision-map[data-step="3"] .s5v-decision-map__vector{left:50%;top:44%;width:45%;transform:rotate(40deg)}
       .s5v-decision-map__legend{font-size:.62rem}
-      .s5v-decision-map__state{font-size:.69rem}
-      .s5v-decision-map__caption{font-size:.6rem}
+      .s5v-decision-map__state{margin-top:10px;padding:10px 12px;font-size:.69rem}
+      .s5v-decision-map__caption{margin-top:8px;font-size:.6rem}
     }
     @media(prefers-reduced-motion:reduce){.s5v-decision-map *{transition-duration:0s!important;animation:none!important}}
   </style>
