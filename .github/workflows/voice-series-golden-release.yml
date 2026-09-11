@@ -123,3 +123,12 @@ jobs:
 
       - name: Validate direct reader progression
         run: node scripts/validate_direct_reader_navigation.mjs
+
+      - name: Upload final visual review evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: voice-series-final-visual-review
+          path: artifacts/visual-review
+          if-no-files-found: error
+          retention-days: 1
