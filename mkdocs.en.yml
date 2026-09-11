@@ -201,6 +201,7 @@ nav:
       - Context Engineering, Memory & MCP:
           - Context engineering vs prompt engineering: series/context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineering.md
           - Context budgets, prioritization, compaction, and provenance: series/context-engineering-memory-mcp/02-context-budgets-prioritisation-compaction-provenance.md
+          - Memory architectures: working, episodic, semantic, and persistent state: series/context-engineering-memory-mcp/03-memory-architectures-working-episodic-semantic-persistent-state.md
   - Concepts:
       - Concepts: temas/index.md
       - What is an LLM?: temas/llms.md
