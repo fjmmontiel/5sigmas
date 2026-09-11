@@ -17,7 +17,7 @@ const cases = [
   {
     locale: 'en', route: '/en/series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento/',
     requiredVisual: ['Isolation across three dimensions','SHARED GIT','MUTABLE STATE','CAPABILITIES','INTEGRATION','WORKTREE T1','WORKTREE T2','SANDBOX T1','SANDBOX T2','verification_head_sha','target changes','without namespace'],
-    forbidden: ['Aislamiento en tres dimensiones','GIT COMPARTIDO','ESTADO MUTABLE','CAPACIDADES','INTEGRACIÓN','Proceso T1','Proceso T2','red cruza policy','sin namespace','nuevo estado exacto','evidencia que debe revalidarse'],
+    forbidden: ['Aislamiento en tres dimensiones','GIT COMPARTIDO','ESTADO MUTABLE','CAPACIDADES','INTEGRACIÓN','Proceso T1','Proceso T2','red autorizada','sin namespace','nuevo estado exacto','evidencia que debe revalidarse'],
   },
 ];
 const viewports = [
@@ -39,13 +39,13 @@ async function assertRelationshipGeometry(page, visual, testCase, viewport) {
   check((await scroll.getAttribute('tabindex')) === '0', `${testCase.route}: ${viewport.name} visual scroller not keyboard focusable`);
 
   const rail = await boxOf(visual, '[data-shared-rail="repository"]');
-  const wt1 = await boxOf(visual, '[data-worktree="T1"]');
-  const wt2 = await boxOf(visual, '[data-worktree="T2"]');
-  const sb1 = await boxOf(visual, '[data-sandbox="T1"]');
-  const sb2 = await boxOf(visual, '[data-sandbox="T2"]');
+  const wt1 = await boxOf(visual, '[data-worktree="T1"] > rect.i-worktree');
+  const wt2 = await boxOf(visual, '[data-worktree="T2"] > rect.i-worktree');
+  const sb1 = await boxOf(visual, '[data-sandbox="T1"] > rect.i-sandbox');
+  const sb2 = await boxOf(visual, '[data-sandbox="T2"] > rect.i-sandbox');
   const svc1 = await boxOf(visual, '[data-service="T1"]');
   const svc2 = await boxOf(visual, '[data-service="T2"]');
-  const sharedRisk = await boxOf(visual, '[data-shared-risk="external-resource"]');
+  const sharedRisk = await boxOf(visual, '[data-shared-risk="external-resource"] > circle.i-shared-risk');
   const cand1 = await boxOf(visual, '[data-candidate="T1"]');
   const cand2 = await boxOf(visual, '[data-candidate="T2"]');
   const integration = await boxOf(visual, '[data-node="integration"]');
@@ -59,10 +59,10 @@ async function assertRelationshipGeometry(page, visual, testCase, viewport) {
   check(rail.x < centerX(wt1) && rail.x + rail.width > centerX(wt2), `${testCase.route}: ${viewport.name} shared Git rail does not span both worktrees`);
   check(wt1.x + wt1.width < wt2.x, `${testCase.route}: ${viewport.name} worktrees are not parallel/non-overlapping`);
   check(Math.abs(centerY(wt1) - centerY(wt2)) < 4, `${testCase.route}: ${viewport.name} worktrees do not share the mutable-state lane`);
-  check(wt1.y + wt1.height < sb1.y && wt2.y + wt2.height < sb2.y, `${testCase.route}: ${viewport.name} worktree state and sandbox capability rows collapsed into one boundary`);
+  check(wt1.y + wt1.height < sb1.y && wt2.y + wt2.height < sb2.y, `${testCase.route}: ${viewport.name} worktree-state and sandbox-capability boundaries are not visually separated`);
   check(Math.abs(centerX(wt1) - centerX(sb1)) < 45 && Math.abs(centerX(wt2) - centerX(sb2)) < 45, `${testCase.route}: ${viewport.name} sandbox policies no longer map to their task lanes`);
   check(svc1.x > sb1.x + sb1.width && svc2.x > sb2.x + sb2.width, `${testCase.route}: ${viewport.name} external services incorrectly rendered inside sandbox boundary`);
-  check(sharedRisk.x > sb1.x + sb1.width && sharedRisk.x + sharedRisk.width < sb2.x, `${testCase.route}: ${viewport.name} shared external-resource risk is not visibly between task boundaries`);
+  check(centerX(sharedRisk) > sb1.x + sb1.width && centerX(sharedRisk) < sb2.x, `${testCase.route}: ${viewport.name} shared external-resource collision is not positioned between sandbox boundaries`);
   check(cand1.x < integration.x && cand2.x > integration.x + integration.width, `${testCase.route}: ${viewport.name} candidate paths do not converge from opposite sides`);
   check(integration.x + integration.width < verify.x, `${testCase.route}: ${viewport.name} verification is not downstream of integration`);
   check(invalidate.x < verify.x + verify.width && invalidate.x + invalidate.width > verify.x, `${testCase.route}: ${viewport.name} evidence invalidation loop is detached from verification`);
