@@ -1,6 +1,6 @@
 {
   "source": "snippets/articulos-tecnicos/context-retrieval-grounding.html",
-  "source_blob_sha": "6e2985e52ea0aba6f2a3cddaaae6cbb1c35e783b",
+  "source_blob_sha": "5ad9eed3db7b9ffdfa5aeddb965b73229b302531",
   "replacements": {
     "Cómo retrieval genera candidatos y una política separada de ensamblado decide frescura, autoridad, conflicto y grounding antes de que la evidencia llegue al modelo": "How retrieval generates candidates and a separate assembly policy decides freshness, authority, conflict, and grounding before evidence reaches the model",
     "Retrieval ≠ ensamblado ≠ grounding": "Retrieval ≠ assembly ≠ grounding",
