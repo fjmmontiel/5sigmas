@@ -1,16 +1,94 @@
-<section class="s5v s5v-arch-map s5v-coding-agent-verification-stack s5v--wide" data-step="1" aria-label="Pila de evidencia que convierte un cambio de código en una decisión de aceptar, reabrir o devolver la tarea">
+<section class="s5v s5v-coding-agent-verification-stack s5v--wide" aria-label="Grafo de evidencia que decide si un candidato de coding agent se acepta, vuelve a trabajo o se devuelve">
+  <style>
+    .s5v-coding-agent-verification-stack .s5v-verify__scroll{overflow-x:auto;overscroll-behavior-inline:contain;padding:.35rem .2rem .8rem;scrollbar-gutter:stable;outline:none}
+    .s5v-coding-agent-verification-stack .s5v-verify__scroll:focus-visible{box-shadow:0 0 0 3px color-mix(in srgb,var(--md-accent-fg-color,#7c4dff) 36%,transparent);border-radius:14px}
+    .s5v-coding-agent-verification-stack .s5v-verify__stage{width:100%;min-width:0;max-width:1160px;margin:0 auto}
+    .s5v-coding-agent-verification-stack svg{display:block;width:100%;height:auto;overflow:visible}
+    .s5v-coding-agent-verification-stack text{fill:currentColor;font-family:inherit}
+    .s5v-coding-agent-verification-stack .v-zone{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 97%,var(--md-accent-fg-color,#7c4dff) 3%);stroke:currentColor;stroke-width:2;stroke-dasharray:10 8}
+    .s5v-coding-agent-verification-stack .v-node{fill:var(--md-default-bg-color,#fff);stroke:currentColor;stroke-width:2.7}
+    .s5v-coding-agent-verification-stack .v-node--signal{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 92%,var(--md-accent-fg-color,#7c4dff) 8%)}
+    .s5v-coding-agent-verification-stack .v-node--gate{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 87%,var(--md-accent-fg-color,#7c4dff) 13%);stroke-width:3.2}
+    .s5v-coding-agent-verification-stack .v-node--stale{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 93%,#d32f2f 7%);stroke-dasharray:6 5}
+    .s5v-coding-agent-verification-stack .v-node--accept{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 84%,#2e7d32 16%)}
+    .s5v-coding-agent-verification-stack .v-node--rework{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 88%,#f9a825 12%)}
+    .s5v-coding-agent-verification-stack .v-node--handback{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 90%,#c62828 10%)}
+    .s5v-coding-agent-verification-stack .v-flow{fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#v-arrow)}
+    .s5v-coding-agent-verification-stack .v-flow--evidence{stroke-width:2.4}
+    .s5v-coding-agent-verification-stack .v-flow--invalidate{stroke-width:3;stroke-dasharray:4 7}
+    .s5v-coding-agent-verification-stack .v-flow--rerun{stroke-width:2.5;stroke-dasharray:9 7}
+    .s5v-coding-agent-verification-stack .v-flow--branch{stroke-width:2.8}
+    .s5v-coding-agent-verification-stack .v-region{font-size:12px;font-weight:900;letter-spacing:.09em;opacity:.72}
+    .s5v-coding-agent-verification-stack .v-title{font-size:16px;font-weight:900;text-anchor:middle}
+    .s5v-coding-agent-verification-stack .v-sub{font-size:11px;text-anchor:middle;opacity:.78}
+    .s5v-coding-agent-verification-stack .v-mini{font-size:10px;text-anchor:middle;opacity:.76}
+    .s5v-coding-agent-verification-stack .v-note{font-size:11px;font-weight:800;paint-order:stroke;stroke:var(--md-default-bg-color,#fff);stroke-width:5px;stroke-linejoin:round}
+    .s5v-coding-agent-verification-stack .v-note--middle{text-anchor:middle}
+    .s5v-coding-agent-verification-stack .v-outcome{font-size:14px;font-weight:950;text-anchor:middle}
+    .s5v-coding-agent-verification-stack .v-outcome-sub{font-size:10.5px;text-anchor:middle;opacity:.78}
+    .s5v-coding-agent-verification-stack .s5v-verify__legend{display:flex;gap:1rem;flex-wrap:wrap;margin:.3rem 0 0;font-size:.84rem;opacity:.86}
+    .s5v-coding-agent-verification-stack .s5v-verify__legend span{display:inline-flex;gap:.42rem;align-items:center}
+    .s5v-coding-agent-verification-stack .s5v-verify__legend i{width:1.55rem;border-top:3px solid currentColor}
+    .s5v-coding-agent-verification-stack .s5v-verify__legend .is-invalidate i{border-top-style:dotted}
+    .s5v-coding-agent-verification-stack .s5v-verify__legend .is-rerun i{border-top-style:dashed}
+    .s5v-coding-agent-verification-stack .s5v__copy{margin-top:.85rem}
+    @media (max-width:700px){.s5v-coding-agent-verification-stack .s5v-verify__scroll{margin-inline:-.35rem;padding-inline:.35rem}.s5v-coding-agent-verification-stack .s5v-verify__stage{width:auto;min-width:1120px}.s5v-coding-agent-verification-stack .s5v-verify__legend{font-size:.8rem}}
+  </style>
+  <!-- GOLDEN_VISUAL_CONTRACT
+    learning-objective="See that acceptance is a conjunction over independent evidence bound to one exact candidate, while rework and handback are distinct stop outcomes."
+    mechanism="candidate A fans out to independent deterministic, diff-review, judgment, and postcondition evidence; those signals converge at a sufficiency-and-freshness gate; the gate branches to ACCEPT, REWORK, or HANDBACK. A later candidate B invalidates evidence that depends on A and loops back to the affected producers; unknown dependency is fail-closed and must be reverified."
+    visual-variables="fan-out encodes independent evidence producers; convergence encodes conjunction; a diamond encodes the closure predicate; three outgoing branches encode distinct stop outcomes; a lower mutation lane encodes candidate A to B state transition; dotted invalidation arrows encode stale evidence; a dashed return encodes selective rerun."
+    why-visual="A linear row falsely implies tests, review, judgment, freshness, and decision are sequential substitutes. The graph shows parallel evidence production, candidate binding, invalidation after mutation, and the difference between stopping and succeeding."
+    relationship="candidate-A->{deterministic,diff-review,judgment,postcondition}->evidence-set->freshness-gate->{accept,rework,handback}|candidate-A->candidate-B->invalidate-dependent-evidence->rerun-affected-verifiers"
+    evidence="candidate_sha,contract_version,environment_fingerprint,verifier_version,required_checks,diff_review,postcondition,review_provenance,freshness,stop_reason"
+    interaction="static:no-cosmetic-controls"
+    mobile="horizontal-scroll-preserves-evidence-topology"
+  -->
   <div class="s5v__canvas">
-    <header class="s5v__head"><div><span class="s5v__kicker">Verificación · review · stop</span><h3>«Done» exige evidencia ligada al candidato exacto</h3></div><p>Un test verde es una señal. El harness sólo puede cerrar cuando el contrato actual, el commit actual y todas las verificaciones obligatorias siguen alineados.</p></header>
-    <div class="s5v-arch-map__panels">
-      <div data-panel="1" class="s5v-arch-map__pipe">
-        <span>Candidato<br><small>head SHA · entorno · contrato</small></span>
-        <span>Checks deterministas<br><small>tests · tipos · lint · estado</small></span>
-        <span>Diff review<br><small>scope · API · config · tests</small></span>
-        <span>Juicio adicional<br><small>rubric · humano · caveats</small></span>
-        <span>Freshness gate<br><small>mismo SHA · misma evidencia</small></span>
-        <span>Decisión<br><small>accept · rework · handback</small></span>
+    <header class="s5v__head"><div><span class="s5v__kicker">Evidencia · freshness · stop</span><h3>«Done» es una decisión derivada de evidencia fresca del candidato exacto</h3></div><p>Tests, review y juicio adicional producen señales independientes. El harness las liga al mismo estado y sólo entonces decide aceptar, reabrir o devolver la tarea.</p></header>
+    <div class="s5v-verify__scroll" tabindex="0" role="region" aria-label="Diagrama desplazable de convergencia, invalidación y decisión de evidencia">
+      <div class="s5v-verify__stage">
+        <svg viewBox="0 0 1160 790" role="img" aria-labelledby="verify-title verify-desc">
+          <title id="verify-title">Cómo un harness decide si un candidato está verificado</title>
+          <desc id="verify-desc">El candidato A produce en paralelo checks deterministas, revisión del diff, juicio adicional y verificación de postcondiciones. Las cuatro evidencias convergen en un conjunto ligado al mismo SHA, contrato y entorno. Un gate comprueba cobertura y freshness y se bifurca en aceptar, rework o handback. Si aparece el candidato B, la evidencia dependiente de A queda stale y vuelve sólo a los verifiers afectados; si la dependencia es desconocida, se revalida de forma conservadora.</desc>
+          <defs><marker id="v-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="currentColor"/></marker></defs>
+
+          <rect class="v-zone" data-zone="candidate" x="22" y="54" width="235" height="668" rx="28"/>
+          <rect class="v-zone" data-zone="evidence" x="282" y="54" width="480" height="668" rx="28"/>
+          <rect class="v-zone" data-zone="decision" x="787" y="54" width="351" height="668" rx="28"/>
+          <text x="42" y="84" class="v-region">IDENTIDAD DEL CANDIDATO</text>
+          <text x="302" y="84" class="v-region">EVIDENCIA INDEPENDIENTE</text>
+          <text x="807" y="84" class="v-region">CIERRE DEL HARNESS</text>
+
+          <g data-node="candidate-a"><rect class="v-node v-node--signal" x="57" y="122" width="165" height="116" rx="24"/><text x="139.5" y="151" class="v-title">Candidato A</text><text x="139.5" y="176" class="v-sub">sha 73ab91f · contrato v3</text><text x="139.5" y="197" class="v-sub">env py311-linux-8f42</text><text x="139.5" y="218" class="v-mini">estado que se intenta aceptar</text></g>
+          <path data-edge="candidate-to-deterministic" class="v-flow v-flow--evidence" d="M222 148 C268 148 280 148 320 148"/><path data-edge="candidate-to-diff" class="v-flow v-flow--evidence" d="M222 170 C270 170 278 258 320 258"/><path data-edge="candidate-to-judgment" class="v-flow v-flow--evidence" d="M222 193 C270 193 278 368 320 368"/><path data-edge="candidate-to-postcondition" class="v-flow v-flow--evidence" d="M222 216 C270 216 278 478 320 478"/>
+
+          <g data-evidence="deterministic"><circle class="v-node" cx="405" cy="148" r="61"/><text x="405" y="139" class="v-title" textLength="112" lengthAdjust="spacingAndGlyphs">Checks deterministas</text><text x="405" y="162" class="v-sub">tests · tipos · lint</text><text x="405" y="181" class="v-mini">verifier_version + result</text></g>
+          <g data-evidence="diff-review"><circle class="v-node" cx="405" cy="273" r="61"/><text x="405" y="264" class="v-title">Diff review</text><text x="405" y="287" class="v-sub">scope · API · tests · config</text><text x="405" y="306" class="v-mini">base → candidate A</text></g>
+          <g data-evidence="judgment"><circle class="v-node" cx="405" cy="398" r="61"/><text x="405" y="389" class="v-title">Juicio adicional</text><text x="405" y="412" class="v-sub">rubric · humano · modelo</text><text x="405" y="431" class="v-mini">provenance + caveats</text></g>
+          <g data-evidence="postcondition"><circle class="v-node" cx="405" cy="523" r="61"/><text x="405" y="514" class="v-title">Postcondición</text><text x="405" y="537" class="v-sub">efecto real · estado externo</text><text x="405" y="556" class="v-mini">resultado observado</text></g>
+
+          <g data-node="evidence-set"><rect class="v-node v-node--signal" x="548" y="202" width="174" height="266" rx="28"/><text x="635" y="232" class="v-title">Evidence set A</text><text x="635" y="257" class="v-sub">candidate_sha = 73ab91f</text><text x="635" y="278" class="v-sub">contract_version = 3</text><text x="635" y="299" class="v-sub">environment = 8f42</text><line x1="575" y1="318" x2="695" y2="318" stroke="currentColor" opacity=".32"/><text x="635" y="343" class="v-mini">required_checks ✓</text><text x="635" y="364" class="v-mini">diff_review ✓</text><text x="635" y="385" class="v-mini">postcondition ✓</text><text x="635" y="406" class="v-mini">policy / approvals ✓</text><text x="635" y="438" class="v-sub">fresh para A</text></g>
+          <path data-edge="deterministic-to-evidence" class="v-flow v-flow--evidence" d="M466 148 C516 148 514 253 548 253"/><path data-edge="diff-to-evidence" class="v-flow v-flow--evidence" d="M466 273 H542"/><path data-edge="judgment-to-evidence" class="v-flow v-flow--evidence" d="M466 398 C516 398 514 382 548 382"/><path data-edge="postcondition-to-evidence" class="v-flow v-flow--evidence" d="M466 523 C520 523 516 438 548 438"/>
+
+          <g data-node="freshness-gate"><path class="v-node v-node--gate" d="M874 212 L956 300 L874 388 L792 300 Z"/><text x="874" y="279" class="v-title">¿Suficiente</text><text x="874" y="302" class="v-title">y fresh?</text><text x="874" y="327" class="v-sub">C ∧ V ∧ D ∧ P ∧ F</text></g>
+          <path data-edge="evidence-to-gate" class="v-flow" d="M722 335 C752 335 760 300 786 300"/><text x="750" y="283" class="v-note v-note--middle">mismo candidato</text>
+
+          <g data-outcome="accept"><rect class="v-node v-node--accept" x="1000" y="122" width="116" height="88" rx="22"/><text x="1058" y="154" class="v-outcome">ACCEPT</text><text x="1058" y="178" class="v-outcome-sub">success + stop</text></g>
+          <g data-outcome="rework"><rect class="v-node v-node--rework" x="1000" y="256" width="116" height="88" rx="22"/><text x="1058" y="288" class="v-outcome">REWORK</text><text x="1058" y="312" class="v-outcome-sub">fixable gap</text></g>
+          <g data-outcome="handback"><rect class="v-node v-node--handback" x="1000" y="390" width="116" height="96" rx="22"/><text x="1058" y="421" class="v-outcome">HANDBACK</text><text x="1058" y="445" class="v-outcome-sub">authority · env</text><text x="1058" y="463" class="v-outcome-sub">budget · no progress</text></g>
+          <path data-edge="gate-accept" class="v-flow v-flow--branch" d="M908 246 C948 213 960 166 994 166"/><path data-edge="gate-rework" class="v-flow v-flow--branch" d="M956 300 H994"/><path data-edge="gate-handback" class="v-flow v-flow--branch" d="M909 354 C950 381 961 438 994 438"/>
+          <text x="955" y="199" class="v-note">pass</text><text x="962" y="285" class="v-note">gap corregible</text><text x="936" y="408" class="v-note">bloqueado / incierto</text><path d="M1127 122 h10 v364 h-10" fill="none" stroke="currentColor" stroke-width="2"/><text x="1122" y="522" class="v-mini" text-anchor="end">todos paran; sólo ACCEPT es éxito</text>
+
+          <g data-node="candidate-b"><rect class="v-node" x="57" y="542" width="165" height="106" rx="24"/><text x="139.5" y="571" class="v-title">Candidato B</text><text x="139.5" y="596" class="v-sub">sha 84cd120 · contrato v3</text><text x="139.5" y="617" class="v-sub">A + nuevo commit</text><text x="139.5" y="637" class="v-mini">nuevo estado verificable</text></g>
+          <path data-edge="candidate-a-to-b" class="v-flow" d="M139 238 V536"/><text x="150" y="505" class="v-note">nuevo commit</text>
+          <g data-node="stale-evidence"><rect class="v-node v-node--stale" x="304" y="621" width="428" height="76" rx="22"/><text x="518" y="648" class="v-title">Evidencia dependiente de A → STALE</text><text x="518" y="672" class="v-sub">tests A · review A · postcondition A ≠ evidencia de B</text><text x="518" y="690" class="v-mini">dependencia desconocida → revalidar fail-closed</text></g>
+          <path data-edge="candidate-b-invalidates" class="v-flow v-flow--invalidate" d="M222 595 C260 595 269 659 298 659"/><path data-edge="stale-to-rerun" class="v-flow v-flow--rerun" d="M518 621 C518 590 485 582 455 566"/><text x="548" y="602" class="v-note">rerun sólo de evidencia afectada</text>
+          <path data-edge="rework-to-candidate" class="v-flow v-flow--rerun" d="M1000 325 C942 346 912 559 760 589 C610 620 286 517 222 580"/>
+        </svg>
       </div>
     </div>
-    <div class="s5v__copy"><strong>Regla de cierre:</strong> cualquier cambio posterior al candidato invalida la evidencia que dependa de ese estado. «El agente dice que terminó» no sustituye tests, revisión ni comprobación del resultado real.</div>
+    <div class="s5v-verify__legend" aria-hidden="true"><span><i></i>evidencia / decisión</span><span class="is-invalidate"><i></i>invalidación por cambio de candidato</span><span class="is-rerun"><i></i>rework / revalidación selectiva</span></div>
+    <div class="s5v__copy"><strong>Regla de cierre:</strong> la evidencia pertenece al candidato, contrato y entorno que la produjeron. Cambiar el head SHA no convierte un PASS viejo en PASS nuevo; si no se conoce la dependencia, se vuelve a verificar.</div>
   </div>
 </section>

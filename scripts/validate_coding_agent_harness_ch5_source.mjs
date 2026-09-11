@@ -31,69 +31,18 @@ for (const url of primaryUrls) {
 }
 
 const esAnchors = [
-  'Test, verifier, reviewer y stop condition no son sinónimos',
-  '«Los tests pasan» sólo tiene significado respecto a un contrato',
-  'El resultado importa más que una trayectoria ritual',
-  'Los verifiers deben observar el efecto real',
-  'La evidencia debe estar ligada al candidato exacto',
-  'No todo cambio obliga a repetir absolutamente todo',
-  'Los tests también son parte del diff y pueden estar equivocados',
-  'Diff review cubre preguntas que una suite puede no codificar',
-  'Un model reviewer es evidencia probabilística, no un oracle',
-  'La revisión también envejece',
-  'Stop condition no significa success condition',
-  'Un success gate puede expresarse explícitamente',
-  'Stop conditions de fallo también protegen calidad y coste',
-  'El entorno de evaluación forma parte del resultado',
-  'Evaluar un coding agent exige evaluar modelo + harness + tarea + grader',
-  'Un benchmark verde también puede medir mal',
-  'Una ejecución no estima fiabilidad',
-  'Capability eval y regression gate tienen objetivos distintos',
-  'Caso trabajado: cerrar correctamente `--json`',
-  'Qué debería guardar el harness para poder explicar un cierre',
-  'Trade-off: cobertura, latencia y coste de verificación',
-  'Implicación de producción: «done» debe ser un estado derivado',
+  'Test, verifier, reviewer y stop condition no son sinónimos','«Los tests pasan» sólo tiene significado respecto a un contrato','El resultado importa más que una trayectoria ritual','Los verifiers deben observar el efecto real','La evidencia debe estar ligada al candidato exacto','No todo cambio obliga a repetir absolutamente todo','Los tests también son parte del diff y pueden estar equivocados','Diff review cubre preguntas que una suite puede no codificar','Un model reviewer es evidencia probabilística, no un oracle','La revisión también envejece','Stop condition no significa success condition','Un success gate puede expresarse explícitamente','Stop conditions de fallo también protegen calidad y coste','El entorno de evaluación forma parte del resultado','Evaluar un coding agent exige evaluar modelo + harness + tarea + grader','Un benchmark verde también puede medir mal','Una ejecución no estima fiabilidad','Capability eval y regression gate tienen objetivos distintos','Caso trabajado: cerrar correctamente `--json`','Qué debería guardar el harness para poder explicar un cierre','Trade-off: cobertura, latencia y coste de verificación','Implicación de producción: «done» debe ser un estado derivado',
 ];
 const enAnchors = [
-  'Tests, verifiers, reviewers, and stop conditions are different objects',
-  '“The tests pass” only means something relative to a contract',
-  'The outcome matters more than a ritualized trajectory',
-  'Verifiers should observe the real effect',
-  'Evidence must be bound to the exact candidate',
-  'Not every change requires rerunning absolutely everything',
-  'Tests are also part of the diff, and they can be wrong',
-  'Diff review covers questions a suite may never encode',
-  'A model reviewer is probabilistic evidence, not an oracle',
-  'Reviews become stale too',
-  'A stop condition is not the same as a success condition',
-  'A success gate can be made explicit',
-  'Failure stop conditions protect quality and cost as well',
-  'The evaluation environment is part of the result',
-  'Evaluating a coding agent means evaluating model + harness + task + grader',
-  'A green benchmark can still measure the wrong thing',
-  'One run does not estimate reliability',
-  'Capability evals and regression gates answer different questions',
-  'Worked example: closing the `--json` task correctly',
-  'What the harness should store to explain closure',
-  'Trade-off: verification coverage, latency, and cost',
-  'Production implication: “done” should be a derived state',
+  'Tests, verifiers, reviewers, and stop conditions are different objects','“The tests pass” only means something relative to a contract','The outcome matters more than a ritualized trajectory','Verifiers should observe the real effect','Evidence must be bound to the exact candidate','Not every change requires rerunning absolutely everything','Tests are also part of the diff, and they can be wrong','Diff review covers questions a suite may never encode','A model reviewer is probabilistic evidence, not an oracle','Reviews become stale too','A stop condition is not the same as a success condition','A success gate can be made explicit','Failure stop conditions protect quality and cost as well','The evaluation environment is part of the result','Evaluating a coding agent means evaluating model + harness + task + grader','A green benchmark can still measure the wrong thing','One run does not estimate reliability','Capability evals and regression gates answer different questions','Worked example: closing the `--json` task correctly','What the harness should store to explain closure','Trade-off: verification coverage, latency, and cost','Production implication: “done” should be a derived state',
 ];
 for (const anchor of esAnchors) check(es.includes(anchor), `ES: missing concept ${anchor}`);
 for (const anchor of enAnchors) check(en.includes(anchor), `EN: missing concept ${anchor}`);
 
 for (const text of [es, en]) {
-  for (const token of [
-    'candidate_sha', 'contract_version', 'environment_fingerprint', 'verifier_version',
-    'required_checks', 'diff_review', 'test_oracle_changed', 'all_evidence_matches_candidate',
-    'stop_reason', 'ACCEPTED', 'REWORK_REQUIRED', 'HAND_BACK_TO_HUMAN',
-    'BLOCKED_BY_AUTHORITY', 'ENVIRONMENT_FAILURE', 'BUDGET_EXHAUSTED', 'NO_PROGRESS',
-    'agent_says_done', 'pass@k', 'pass^k',
-  ]) check(text.includes(token), `Missing verification/eval contract token ${token}`);
-  for (const symbol of ['C(h)', 'V(h)', 'D(h)', 'P(h)', 'F(h)']) {
-    check(text.includes(symbol), `Missing acceptance predicate term ${symbol}`);
-  }
+  for (const token of ['candidate_sha','contract_version','environment_fingerprint','verifier_version','required_checks','diff_review','test_oracle_changed','all_evidence_matches_candidate','stop_reason','ACCEPTED','REWORK_REQUIRED','HAND_BACK_TO_HUMAN','BLOCKED_BY_AUTHORITY','ENVIRONMENT_FAILURE','BUDGET_EXHAUSTED','NO_PROGRESS','agent_says_done','pass@k','pass^k']) check(text.includes(token), `Missing verification/eval contract token ${token}`);
+  for (const symbol of ['C(h)','V(h)','D(h)','P(h)','F(h)']) check(text.includes(symbol), `Missing acceptance predicate term ${symbol}`);
 }
-
 check(es.includes('84cd120 → NOT YET VERIFIED'), 'ES: candidate-change invalidation example missing');
 check(en.includes('84cd120 → NOT YET VERIFIED'), 'EN: candidate-change invalidation example missing');
 check(es.includes('verification_result sin candidate identity = evidencia incompleta'), 'ES: candidate-bound evidence invariant missing');
@@ -107,7 +56,6 @@ check(en.includes('assuming independent and identically distributed trials'), 'E
 check(es.includes('BLOCKED/UNVERIFIED') && es.includes('no `PASS`'), 'ES: unavailable mandatory verifier fail-closed rule missing');
 check(en.includes('BLOCKED/UNVERIFIED') && en.includes('not `PASS`'), 'EN: unavailable mandatory verifier fail-closed rule missing');
 check(!/^\s*-\s+.+;\s*$/m.test(en), 'EN: semicolon-list anti-pattern detected');
-
 for (const text of [es, en]) {
   check(!/(?:tests? pass|tests? pasan).*(?:therefore|por tanto|therefore proves|demuestra).*(?:task|tarea).*(?:complete|terminada)/i.test(text), 'Tests incorrectly framed as sufficient proof of completion');
   check(!/(?:reviewer|grader).*(?:ground truth|oracle).*(?:is|es)/i.test(text), 'Reviewer/grader incorrectly framed as ground truth');
@@ -115,33 +63,30 @@ for (const text of [es, en]) {
 }
 
 const visualInclude = '{{ include_html("snippets/articulos-tecnicos/coding-agent-verification-stack.html") }}';
-check(es.includes(visualInclude), 'ES: verification-stack visual include missing');
-check(en.includes(visualInclude), 'EN: verification-stack visual include missing');
-for (const token of ['Candidato', 'Checks deterministas', 'Diff review', 'Juicio adicional', 'Freshness gate', 'Decisión']) {
-  check(snippet.includes(token), `Visual: verification stage missing ${token}`);
-}
-check(snippet.includes('cualquier cambio posterior al candidato invalida la evidencia'), 'Visual: evidence invalidation rule missing');
-check(mirror.trim() === '<!-- 5sigmas-canonical-mirror -->', 'EN: verification-stack visual mirror marker invalid');
-check(i18n.source === 'snippets/articulos-tecnicos/coding-agent-verification-stack.html', 'EN: verification-stack visual i18n source path invalid');
+check(es.includes(visualInclude), 'ES: verification visual include missing');
+check(en.includes(visualInclude), 'EN: verification visual include missing');
+check(snippet.includes('GOLDEN_VISUAL_CONTRACT'), 'Visual: GOLDEN_VISUAL_CONTRACT missing');
+check(snippet.includes('interaction="static:no-cosmetic-controls"'), 'Visual: static no-cosmetic-controls contract missing');
+check(snippet.includes('relationship="candidate-A->{deterministic,diff-review,judgment,postcondition}->evidence-set->freshness-gate->{accept,rework,handback}|candidate-A->candidate-B->invalidate-dependent-evidence->rerun-affected-verifiers"'), 'Visual: relationship topology contract missing');
+check(snippet.includes('mobile="horizontal-scroll-preserves-evidence-topology"'), 'Visual: mobile topology-preservation contract missing');
+check(!snippet.includes('s5v-arch-map__pipe'), 'Visual: legacy linear card pipe is forbidden');
+check(!snippet.includes('data-s5v-stepper'), 'Visual: cosmetic stepper is forbidden');
+check(!/<button\b/i.test(snippet), 'Visual: cosmetic buttons are forbidden');
+for (const token of ['data-zone="candidate"','data-zone="evidence"','data-zone="decision"','data-node="candidate-a"','data-node="candidate-b"','data-evidence="deterministic"','data-evidence="diff-review"','data-evidence="judgment"','data-evidence="postcondition"','data-node="evidence-set"','data-node="freshness-gate"','data-node="stale-evidence"','data-outcome="accept"','data-outcome="rework"','data-outcome="handback"','data-edge="candidate-to-deterministic"','data-edge="candidate-to-diff"','data-edge="candidate-to-judgment"','data-edge="candidate-to-postcondition"','data-edge="deterministic-to-evidence"','data-edge="diff-to-evidence"','data-edge="judgment-to-evidence"','data-edge="postcondition-to-evidence"','data-edge="evidence-to-gate"','data-edge="gate-accept"','data-edge="gate-rework"','data-edge="gate-handback"','data-edge="candidate-a-to-b"','data-edge="candidate-b-invalidates"','data-edge="stale-to-rerun"','data-edge="rework-to-candidate"']) check(snippet.includes(token), `Visual: required topology token missing ${token}`);
+for (const invariant of ['candidate_sha = 73ab91f','contract_version = 3','environment = 8f42','C ∧ V ∧ D ∧ P ∧ F','todos paran; sólo ACCEPT es éxito','Evidencia dependiente de A → STALE','dependencia desconocida → revalidar fail-closed','rerun sólo de evidencia afectada','Cambiar el head SHA no convierte un PASS viejo en PASS nuevo']) check(snippet.includes(invariant), `Visual: verification invariant missing ${invariant}`);
+check(mirror.trim() === '<!-- 5sigmas-canonical-mirror -->', 'EN: verification visual mirror marker invalid');
+check(i18n.source === 'snippets/articulos-tecnicos/coding-agent-verification-stack.html', 'EN: verification visual i18n source path invalid');
 const snippetBytes = Buffer.from(snippet, 'utf8');
 const blobHeader = Buffer.from(`blob ${snippetBytes.length}\0`, 'utf8');
 const snippetBlobSha = crypto.createHash('sha1').update(Buffer.concat([blobHeader, snippetBytes])).digest('hex');
-check(i18n.source_blob_sha === snippetBlobSha, `EN: verification-stack visual source_blob_sha stale (${i18n.source_blob_sha} != ${snippetBlobSha})`);
-for (const token of ['Verification · review · stop', '“Done” requires evidence', 'Candidate', 'Deterministic checks', 'Diff review', 'Additional judgment', 'Freshness gate', 'Decision', 'Closure rule']) {
-  check(snippet.includes(token) || Object.values(i18n.replacements).some((value) => String(value).includes(token)), `EN visual translation missing ${token}`);
-}
+check(i18n.source_blob_sha === snippetBlobSha, `EN: verification visual source_blob_sha stale (${i18n.source_blob_sha} != ${snippetBlobSha})`);
+for (const token of ['Evidence · freshness · stop','CANDIDATE IDENTITY','INDEPENDENT EVIDENCE','HARNESS CLOSURE','Candidate A','Deterministic checks','Diff review','Additional judgment','Postcondition','Evidence set A','Sufficient','and fresh?','same candidate','ACCEPT','REWORK','HANDBACK','all three stop; only ACCEPT is success','Candidate B','Evidence dependent on A → STALE','unknown dependency → revalidate fail-closed','rerun only affected evidence','Closure rule:']) check(snippet.includes(token) || Object.values(i18n.replacements).some((value) => String(value).includes(token)), `EN visual translation missing ${token}`);
 
 const route = 'series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion.md';
 check(mkdocsEs.includes('Tests, verifiers y evaluación de tareas: ' + route), 'ES: Series 2 / chapter 2.5 navigation missing');
 check(mkdocsEn.includes('Tests, verifiers and task evaluation: ' + route), 'EN: Series 2 / chapter 2.5 navigation missing');
 check(manifest.includes(route), 'EN: chapter 2.5 manifest route missing');
 check(manifest.includes('snippets/articulos-tecnicos/coding-agent-verification-stack.html'), 'EN: chapter 2.5 required snippet missing');
-
-if (failures.length) {
-  console.error(`Coding agent harness chapter 2.5 source gate failed (${failures.length}):`);
-  for (const failure of failures) console.error(`- ${failure}`);
-  process.exit(1);
-}
-
-console.log('Coding agent harness chapter 2.5 source gate PASS');
-console.log(`ES bytes=${Buffer.byteLength(es)} EN bytes=${Buffer.byteLength(en)}`);
+if (failures.length) { console.error(`Coding agent harness chapter 2.5 source gate failed (${failures.length}):`); for (const failure of failures) console.error(`- ${failure}`); process.exit(1); }
+console.log('Coding agent harness chapter 2.5 source/relationship gate PASS');
+console.log(`ES bytes=${Buffer.byteLength(es)} EN bytes=${Buffer.byteLength(en)} visual_blob=${snippetBlobSha}`);
