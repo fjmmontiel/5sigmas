@@ -1,6 +1,6 @@
 {
   "source": "snippets/articulos-tecnicos/context-budget-lineage.html",
-  "source_blob_sha": "dcee713ecfa33560840d314fdbcf5462170f03d3",
+  "source_blob_sha": "cf7bc29cd57093f02c88f506176653c82813ca40",
   "replacements": {
     "Cómo una política de contexto prioriza, transforma y conserva provenance bajo un presupuesto finito": "How a context policy prioritizes, transforms, and preserves provenance under a finite budget",
     "Ejemplo · budget ≠ capacidad máxima": "Example · budget ≠ maximum capacity",
@@ -45,10 +45,10 @@
     "derivado de history@v8": "derived from history@v8",
     "lossy=true": "lossy=true",
     "23k quedan libres / reservados": "23k remain free / reserved",
-    "sólo esto cruza": "only this crosses",
     "Modelo": "Model",
     "ve Cₜ": "sees Cₜ",
-    "no ve el raw excluido": "cannot see excluded raw data",
+    "no ve el raw": "cannot see excluded",
+    "excluido": "raw data",
     "PROVENANCE / LINEAGE · NO NECESITA OCUPAR Cₜ COMPLETO": "PROVENANCE / LINEAGE · NEED NOT OCCUPY ALL OF Cₜ",
     "logs@run17 · raw": "logs@run17 · raw",
     "history@v8 · raw": "history@v8 · raw",
