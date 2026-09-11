@@ -42,23 +42,23 @@ for (const url of primaryUrls) {
 }
 
 const conceptPairs = [
-  ['Retrieval no es context assembly', 'Retrieval is not context assembly'],
+  ['Retrieval no es ensamblado de contexto', 'Retrieval is not context assembly'],
   ['Léxico, semántico y estructurado resuelven problemas diferentes', 'Lexical, semantic, and structured retrieval solve different problems'],
   ['Fusionar rankings no fusiona significado', 'Fusing rankings does not fuse meaning'],
-  ['Relevance es una señal; no es truth', 'Relevance is a signal, not truth'],
-  ['Freshness tiene al menos dos relojes', 'Freshness has at least two clocks'],
+  ['La relevancia es una señal; no es verdad', 'Relevance is a signal, not truth'],
+  ['La frescura tiene al menos dos relojes', 'Freshness has at least two clocks'],
   ['El índice necesita una política de invalidación', 'The index needs an invalidation policy'],
-  ['Authority no es lo mismo que relevance', 'Authority is not relevance'],
+  ['La autoridad no es lo mismo que la relevancia', 'Authority is not relevance'],
   ['Los conflictos deben ser objetos explícitos', 'Conflicts should be explicit objects'],
   ['El modelo no debería resolver silenciosamente la autoridad', 'The model should not silently own authority resolution'],
   ['Qué ofrecen APIs actuales y qué no', 'What current APIs provide — and what they do not'],
-  ['Grounding empieza después del retrieval', 'Grounding starts after retrieval'],
-  ['Construye el contexto como un evidence packet', 'Build context as an evidence packet'],
+  ['El grounding empieza después del retrieval', 'Grounding starts after retrieval'],
+  ['Construye el contexto como un paquete de evidencia', 'Build context as an evidence packet'],
   ['Ordenar contexto también es una decisión', 'Context ordering is also a decision'],
-  ['Caso completo: una policy que cambió hoy', 'Worked example: a policy changed today'],
-  ['Cómo evaluar retrieval, assembly y grounding por separado', 'Evaluate retrieval, assembly, and grounding separately'],
+  ['Caso completo: una política que cambió hoy', 'Worked example: a policy changed today'],
+  ['Cómo evaluar retrieval, ensamblado y grounding por separado', 'Evaluate retrieval, assembly, and grounding separately'],
   ['Qué registrar para poder depurar un turno', 'What to trace for a debuggable turn'],
-  ['Implicación de producción: retrieve wide, assemble narrow', 'Production implication: retrieve wide, assemble narrow'],
+  ['Implicación de producción: maximiza recall al recuperar y filtra con rigor al ensamblar', 'Production implication: retrieve wide, assemble narrow'],
 ];
 for (const [esToken, enToken] of conceptPairs) {
   check(es.toLowerCase().includes(esToken.toLowerCase()), `ES: missing concept ${esToken}`);
@@ -76,9 +76,9 @@ for (const [locale, text] of [['ES', es], ['EN', en]]) {
   }
 }
 
-check(es.includes('retrieval propone candidatos; context assembly decide qué evidencia entra; grounding conecta claims con la evidencia admitida'), 'ES: retrieval/assembly/grounding boundary missing');
+check(es.includes('retrieval propone candidatos; el ensamblado de contexto decide qué evidencia entra; el grounding conecta cada afirmación con la evidencia admitida'), 'ES: retrieval/assembly/grounding boundary missing');
 check(en.includes('retrieval proposes candidates; context assembly decides what evidence enters; grounding connects claims to the admitted evidence'), 'EN: retrieval/assembly/grounding boundary missing');
-check(es.includes('newest timestamp wins') && es.includes('no es una regla universal'), 'ES: freshness timestamp caveat missing');
+check(es.includes('gana el timestamp más reciente') && es.includes('no es una regla universal'), 'ES: freshness timestamp caveat missing');
 check(en.includes('newest timestamp wins') && en.includes('not a universal rule'), 'EN: freshness timestamp caveat missing');
 check(es.includes('**capacidad de retrieval gestionado**'), 'ES: OpenAI managed retrieval capability boundary missing');
 check(en.includes('**managed retrieval capability**'), 'EN: OpenAI managed retrieval capability boundary missing');
@@ -86,7 +86,7 @@ check(es.includes('**capacidad del servicio de grounding**'), 'ES: Google ground
 check(en.includes('**grounding-service capability**'), 'EN: Google grounding-service capability boundary missing');
 check(es.includes('no una prueba de que una configuración híbrida concreta sea universalmente superior'), 'ES: hybrid-retrieval generalization caveat missing');
 check(en.includes('not proof that one hybrid configuration is universally superior'), 'EN: hybrid-retrieval generalization caveat missing');
-check(es.includes('constraints antes de preference ranking'), 'ES: constraint-before-ranking policy missing');
+check(es.includes('restricciones antes que ranking por preferencia'), 'ES: constraint-before-ranking policy missing');
 check(en.includes('constraints before preference ranking'), 'EN: constraint-before-ranking policy missing');
 check(es.includes('`unresolved` es un estado válido'), 'ES: unresolved conflict state missing');
 check(en.includes('`unresolved` is a valid system state'), 'EN: unresolved conflict state missing');
