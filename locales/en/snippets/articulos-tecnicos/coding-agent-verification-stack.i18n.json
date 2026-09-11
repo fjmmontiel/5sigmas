@@ -1,6 +1,6 @@
 {
   "source": "snippets/articulos-tecnicos/coding-agent-verification-stack.html",
-  "source_blob_sha": "4190de6f6e45be2dbf469c75aefd5e54851a1dd9",
+  "source_blob_sha": "bb8c83c019605eed573bc1fc47a0f73fb414ed0d",
   "replacements": {
     "Grafo de evidencia que decide si un candidato de coding agent se acepta, vuelve a trabajo o se devuelve": "Evidence graph that decides whether a coding-agent candidate is accepted, sent back for rework, or handed back",
     "Evidencia · freshness · stop": "Evidence · freshness · stop",
@@ -68,38 +68,6 @@
     "la evidencia pertenece al candidato, contrato y entorno que la produjeron. Cambiar el head SHA no convierte un PASS viejo en PASS nuevo; si no se conoce la dependencia, se vuelve a verificar.": "evidence belongs to the candidate, contract, and environment that produced it. Changing the head SHA does not turn an old PASS into a new PASS; when dependency is unknown, verify again."
   },
   "forbidden_output_tokens": [
-    "Grafo de evidencia",
-    "Evidencia · freshness",
-    "decisión derivada",
-    "IDENTIDAD DEL CANDIDATO",
-    "EVIDENCIA INDEPENDIENTE",
-    "CIERRE DEL HARNESS",
-    "Candidato A",
-    "contrato v3",
-    "estado que se intenta aceptar",
-    "Checks deterministas",
-    "tipos · lint",
-    "Juicio adicional",
-    "humano · modelo",
-    "Postcondición",
-    "efecto real",
-    "resultado observado",
-    "fresh para A",
-    "¿Suficiente",
-    "mismo candidato",
-    "gap corregible",
-    "bloqueado / incierto",
-    "todos paran; sólo ACCEPT es éxito",
-    "Candidato B",
-    "nuevo commit",
-    "nuevo estado verificable",
-    "Evidencia dependiente",
-    "evidencia de B",
-    "dependencia desconocida",
-    "rerun sólo",
-    "invalidación por cambio de candidato",
-    "revalidación selectiva",
-    "Regla de cierre",
-    "la evidencia pertenece"
+    "Grafo de evidencia", "Evidencia · freshness", "decisión derivada", "IDENTIDAD DEL CANDIDATO", "EVIDENCIA INDEPENDIENTE", "CIERRE DEL HARNESS", "Candidato A", "contrato v3", "estado que se intenta aceptar", "Checks deterministas", "tipos · lint", "Juicio adicional", "humano · modelo", "Postcondición", "efecto real", "resultado observado", "fresh para A", "¿Suficiente", "mismo candidato", "gap corregible", "bloqueado / incierto", "todos paran; sólo ACCEPT es éxito", "Candidato B", "nuevo commit", "nuevo estado verificable", "Evidencia dependiente", "evidencia de B", "dependencia desconocida", "rerun sólo", "invalidación por cambio de candidato", "revalidación selectiva", "Regla de cierre", "la evidencia pertenece"
   ]
 }
