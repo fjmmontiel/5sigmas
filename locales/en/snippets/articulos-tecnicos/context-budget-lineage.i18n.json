@@ -1,6 +1,6 @@
 {
   "source": "snippets/articulos-tecnicos/context-budget-lineage.html",
-  "source_blob_sha": "0eb954923d0b5ae7c4a73d0eab745faaa06f7fff",
+  "source_blob_sha": "1e5064b0a364f0937f2c623c59bd791b1b54a98f",
   "replacements": {
     "Cómo una política de contexto prioriza, transforma y conserva provenance bajo un presupuesto finito": "How a context policy prioritizes, transforms, and preserves provenance under a finite budget",
     "Budget ≠ capacidad máxima": "Budget ≠ maximum capacity",
