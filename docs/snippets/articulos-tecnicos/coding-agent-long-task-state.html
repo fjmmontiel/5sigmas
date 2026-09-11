@@ -1,0 +1,141 @@
+<section class="s5v s5v-coding-agent-long-task-state s5v--wide" aria-label="Topología de estado durable, subagentes, recuperación e integración para una tarea larga de coding agent">
+  <style>
+    .s5v-coding-agent-long-task-state .s5v-long__scroll{overflow-x:auto;overscroll-behavior-inline:contain;padding:.35rem .2rem .8rem;scrollbar-gutter:stable;outline:none}
+    .s5v-coding-agent-long-task-state .s5v-long__scroll:focus-visible{box-shadow:0 0 0 3px color-mix(in srgb,var(--md-accent-fg-color,#7c4dff) 36%,transparent);border-radius:14px}
+    .s5v-coding-agent-long-task-state .s5v-long__stage{width:100%;min-width:0;max-width:1180px;margin:0 auto}
+    .s5v-coding-agent-long-task-state svg{display:block;width:100%;height:auto;overflow:visible}
+    .s5v-coding-agent-long-task-state text{fill:currentColor;font-family:inherit}
+    .s5v-coding-agent-long-task-state .l-zone{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 97%,var(--md-accent-fg-color,#7c4dff) 3%);stroke:currentColor;stroke-width:2;stroke-dasharray:10 8}
+    .s5v-coding-agent-long-task-state .l-node{fill:var(--md-default-bg-color,#fff);stroke:currentColor;stroke-width:2.3}
+    .s5v-coding-agent-long-task-state .l-node--state{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 88%,var(--md-accent-fg-color,#7c4dff) 12%);stroke-width:3}
+    .s5v-coding-agent-long-task-state .l-node--worker{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 93%,#1565c0 7%)}
+    .s5v-coding-agent-long-task-state .l-node--warn{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 92%,#c62828 8%);stroke-dasharray:6 5}
+    .s5v-coding-agent-long-task-state .l-node--good{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 86%,#2e7d32 14%)}
+    .s5v-coding-agent-long-task-state .l-flow{fill:none;stroke:currentColor;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#l-arrow)}
+    .s5v-coding-agent-long-task-state .l-flow--state{stroke-width:4}
+    .s5v-coding-agent-long-task-state .l-flow--invalidate{stroke-dasharray:5 7;stroke-width:3}
+    .s5v-coding-agent-long-task-state .l-flow--recovery{stroke-dasharray:10 7;stroke-width:2.7}
+    .s5v-coding-agent-long-task-state .l-flow--observe{stroke-width:1.7;stroke-dasharray:3 6;opacity:.72}
+    .s5v-coding-agent-long-task-state .l-region{font-size:12px;font-weight:900;letter-spacing:.08em;opacity:.72}
+    .s5v-coding-agent-long-task-state .l-title{font-size:14px;font-weight:900;text-anchor:middle}
+    .s5v-coding-agent-long-task-state .l-sub{font-size:10.8px;text-anchor:middle;opacity:.82}
+    .s5v-coding-agent-long-task-state .l-mini{font-size:9.6px;text-anchor:middle;opacity:.73}
+    .s5v-coding-agent-long-task-state .l-label{font-size:10px;font-weight:800;opacity:.82}
+    .s5v-coding-agent-long-task-state .s5v-long__legend{display:flex;gap:1rem;flex-wrap:wrap;margin:.3rem 0 0;font-size:.84rem;opacity:.86}
+    .s5v-coding-agent-long-task-state .s5v-long__legend span{display:inline-flex;gap:.42rem;align-items:center}
+    .s5v-coding-agent-long-task-state .s5v-long__legend i{width:1.55rem;border-top:3px solid currentColor}
+    .s5v-coding-agent-long-task-state .s5v-long__legend .is-recovery i{border-top-style:dashed}
+    .s5v-coding-agent-long-task-state .s5v-long__legend .is-invalidate i{border-top-style:dotted}
+    .s5v-coding-agent-long-task-state .s5v__copy{margin-top:.85rem}
+    @media (max-width:700px){.s5v-coding-agent-long-task-state .s5v-long__scroll{margin-inline:-.35rem;padding-inline:.35rem}.s5v-coding-agent-long-task-state .s5v-long__stage{width:auto;min-width:1160px}.s5v-coding-agent-long-task-state .s5v-long__legend{font-size:.8rem}}
+  </style>
+  <!-- GOLDEN_VISUAL_CONTRACT
+    learning-objective="See that a long-running coding task survives context resets, process disconnects and subagent fan-out only when durable control state, workspace identity and evidence provenance remain separate from transient model context."
+    mechanism="root context at t0 writes and reads one durable task ledger; context can compact/reset and resume at t1 without changing task identity. The ledger fans work out to subagents with separate workspaces/base SHAs and receives their candidate/evidence outputs. A moving target branch and fan-in create a new integration candidate, which invalidates dependent worker evidence and requires integration re-verification before merge. A disconnect recovery lane rebuilds the application view from saved state/items before applying buffered live events. An observability rail attributes root, worker, tool and integration transitions."
+    visual-variables="horizontal position encodes lifecycle from context to delegation to integration; a thick central rail encodes durable state surviving context lifetime; fan-out/fan-in geometry encodes parallel ownership; separate worker boxes encode failure/workspace domains; dotted edges encode evidence invalidation; dashed edges encode recovery/reconciliation; target A to B movement encodes base drift; a bottom rail encodes causal observability across actors."
+    why-visual="A table cannot show that context may disappear while task state persists, workers execute in parallel on separate bases, target drift changes the integrated candidate, old evidence becomes stale, and recovery joins saved state with new live events before execution continues."
+    relationship="context-A->durable-ledger->context-B|durable-ledger->{worker-A,worker-B}->{integration-candidate}|target-A->target-B->integration-candidate->stale-worker-evidence->reverify->merge|disconnect->buffer-live->retrieve-saved-state->reconcile-by-id->continue|{root,workers,integration}->observability-rail"
+    evidence="task_id,contract_version,target_sha,work_unit_id,owner,base_sha,workspace_id,candidate_sha,event_id,item_id,subagent_id,action_id,verifier_id,evidence_freshness,stop_reason"
+    interaction="static:no-cosmetic-controls"
+    mobile="horizontal-scroll-preserves-persistence-fanout-recovery-and-invalidation-topology"
+  -->
+  <div class="s5v__canvas">
+    <header class="s5v__head"><div><span class="s5v__kicker">Durabilidad · recovery · fan-in</span><h3>La continuidad vive en el estado durable, no en un único contexto del modelo</h3></div><p>El contexto puede compactarse o reiniciarse. La identidad de tarea, los workspaces, los efectos y la evidencia deben poder reconstruirse y volver a converger sobre un candidato integrado verificable.</p></header>
+    <div class="s5v-long__scroll" tabindex="0" role="region" aria-label="Diagrama desplazable del ciclo de vida de una tarea larga con estado durable, subagentes, recuperación e integración">
+      <div class="s5v-long__stage">
+        <svg viewBox="0 0 1180 900" role="img" aria-labelledby="long-title long-desc">
+          <title id="long-title">Cómo sobrevive una tarea larga a cambios de contexto, subagentes y fallos</title>
+          <desc id="long-desc">Un contexto raíz en t0 se conecta a un ledger durable que conserva task ID, contrato, target, ownership y estado de efectos. Tras compaction o reset aparece un contexto raíz t1 que recupera el mismo ledger. El ledger delega dos work units a subagentes con workspaces y base SHA propios. Sus candidatos convergen con un target branch que avanza de A a B, creando un nuevo candidato integrado. Ese fan-in invalida evidencia dependiente de los candidatos anteriores y obliga a revalidar antes de merge. En paralelo, una desconexión se recupera abriendo un stream nuevo, recuperando estado guardado, reconciliando por IDs y aplicando eventos nuevos. Un rail inferior conserva observabilidad causal de root, subagentes, tools e integración.</desc>
+          <defs><marker id="l-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="currentColor"/></marker></defs>
+
+          <rect class="l-zone" data-zone="context" x="24" y="52" width="326" height="242" rx="28"/>
+          <rect class="l-zone" data-zone="durable" x="374" y="52" width="350" height="242" rx="28"/>
+          <rect class="l-zone" data-zone="workers" x="24" y="322" width="700" height="328" rx="28"/>
+          <rect class="l-zone" data-zone="integration" x="750" y="52" width="406" height="598" rx="28"/>
+          <rect class="l-zone" data-zone="recovery" x="24" y="680" width="1132" height="178" rx="28"/>
+          <text x="44" y="82" class="l-region">CONTEXTO TRANSITORIO</text>
+          <text x="394" y="82" class="l-region">CONTROL DURABLE</text>
+          <text x="44" y="352" class="l-region">OWNERSHIP + WORKSPACES PARALELOS</text>
+          <text x="770" y="82" class="l-region">FAN-IN · FRESHNESS · MERGE</text>
+          <text x="44" y="710" class="l-region">RECOVERY + OBSERVABILIDAD</text>
+
+          <rect data-node="context-a" class="l-node" x="56" y="112" width="118" height="104" rx="20"/>
+          <text x="115" y="142" class="l-title">Contexto root t0</text><text x="115" y="166" class="l-sub">mensajes + tools</text><text x="115" y="188" class="l-mini">puede desaparecer</text>
+          <rect data-node="context-transition" class="l-node" x="202" y="124" width="118" height="80" rx="18"/>
+          <text x="261" y="153" class="l-title">compact / reset</text><text x="261" y="177" class="l-sub">cambia contexto</text>
+          <path data-edge="context-a-transition" class="l-flow" d="M174 164 L196 164"/>
+          <rect data-node="context-b" class="l-node" x="202" y="226" width="118" height="52" rx="16"/>
+          <text x="261" y="249" class="l-title">Contexto root t1</text><text x="261" y="268" class="l-mini">continúa la tarea</text>
+          <path data-edge="transition-context-b" class="l-flow" d="M261 204 L261 220"/>
+
+          <rect data-node="durable-ledger" class="l-node l-node--state" x="407" y="104" width="284" height="154" rx="24"/>
+          <text x="549" y="133" class="l-title">Ledger durable de tarea</text>
+          <text x="549" y="157" class="l-sub">task_id · contract_version · target_sha</text>
+          <text x="549" y="180" class="l-sub">ownership · blockers · pending actions</text>
+          <text x="549" y="203" class="l-sub">candidate/effect/evidence provenance</text>
+          <text x="549" y="232" class="l-mini">sobrevive al contexto y al proceso</text>
+          <path data-edge="context-a-ledger" class="l-flow l-flow--state" d="M174 150 C275 98 337 126 401 145"/>
+          <path data-edge="ledger-context-b" class="l-flow l-flow--state" d="M401 227 C352 245 337 251 326 252"/>
+          <text x="344" y="108" class="l-label">persist / read</text>
+
+          <rect data-node="worker-a" class="l-node l-node--worker" x="76" y="392" width="254" height="168" rx="24"/>
+          <text x="203" y="423" class="l-title">Worker A · API</text><text x="203" y="449" class="l-sub">work_unit_id=api · owner=A</text><text x="203" y="472" class="l-sub">base=A · workspace=WA</text><text x="203" y="495" class="l-sub">candidate=W1</text><text x="203" y="525" class="l-mini">local tests/evidence belong to W1@A</text>
+          <rect data-node="worker-b" class="l-node l-node--worker" x="412" y="392" width="254" height="168" rx="24"/>
+          <text x="539" y="423" class="l-title">Worker B · migración</text><text x="539" y="449" class="l-sub">work_unit_id=db · owner=B</text><text x="539" y="472" class="l-sub">base=A · workspace=WB</text><text x="539" y="495" class="l-sub">candidate=W2</text><text x="539" y="525" class="l-mini">postcondition/evidence belong to W2@A</text>
+          <path data-edge="ledger-worker-a" class="l-flow" d="M478 258 C430 316 310 333 203 386"/>
+          <path data-edge="ledger-worker-b" class="l-flow" d="M621 258 C650 312 610 338 539 386"/>
+
+          <rect data-node="target-a" class="l-node" x="789" y="116" width="132" height="72" rx="18"/>
+          <text x="855" y="145" class="l-title">Target A</text><text x="855" y="169" class="l-sub">main@A</text>
+          <rect data-node="target-b" class="l-node" x="985" y="116" width="132" height="72" rx="18"/>
+          <text x="1051" y="145" class="l-title">Target B</text><text x="1051" y="169" class="l-sub">main avanzó</text>
+          <path data-edge="target-a-b" class="l-flow" d="M921 152 L979 152"/>
+          <text x="950" y="137" class="l-label">drift</text>
+
+          <rect data-node="integration-candidate" class="l-node l-node--state" x="834" y="270" width="240" height="116" rx="24"/>
+          <text x="954" y="301" class="l-title">Candidato integrado I9</text><text x="954" y="327" class="l-sub">integrate(B, W1, W2)</text><text x="954" y="352" class="l-sub">nuevo SHA + diff combinado</text>
+          <path data-edge="worker-a-integration" class="l-flow" d="M330 448 C610 430 704 356 828 325"/>
+          <path data-edge="worker-b-integration" class="l-flow" d="M666 468 C735 447 780 382 828 341"/>
+          <path data-edge="target-b-integration" class="l-flow" d="M1051 188 C1051 222 1010 244 990 264"/>
+
+          <rect data-node="stale-evidence" class="l-node l-node--warn" x="790" y="430" width="176" height="92" rx="20"/>
+          <text x="878" y="458" class="l-title">Evidence W1/W2</text><text x="878" y="482" class="l-sub">dependiente → STALE</text><text x="878" y="505" class="l-mini">I9 ≠ W1 ≠ W2</text>
+          <path data-edge="integration-invalidates" class="l-flow l-flow--invalidate" d="M910 386 C894 401 885 410 880 424"/>
+          <rect data-node="reverify" class="l-node" x="990" y="430" width="132" height="92" rx="20"/>
+          <text x="1056" y="458" class="l-title">Reverify I9</text><text x="1056" y="483" class="l-sub">integration checks</text><text x="1056" y="505" class="l-mini">fresh evidence</text>
+          <path data-edge="stale-reverify" class="l-flow l-flow--invalidate" d="M966 476 L984 476"/>
+          <rect data-node="merge" class="l-node l-node--good" x="897" y="558" width="154" height="64" rx="20"/>
+          <text x="974" y="586" class="l-title">MERGE</text><text x="974" y="608" class="l-sub">sólo tras I9 verified</text>
+          <path data-edge="reverify-merge" class="l-flow" d="M1056 522 C1054 544 1028 555 1018 558"/>
+
+          <rect data-node="disconnect" class="l-node l-node--warn" x="58" y="742" width="142" height="72" rx="18"/>
+          <text x="129" y="770" class="l-title">Disconnect</text><text x="129" y="793" class="l-sub">stream/UI cae</text>
+          <rect data-node="buffer-live" class="l-node" x="236" y="742" width="154" height="72" rx="18"/>
+          <text x="313" y="770" class="l-title">Nuevo stream</text><text x="313" y="793" class="l-sub">buffer live events</text>
+          <rect data-node="retrieve" class="l-node" x="426" y="742" width="170" height="72" rx="18"/>
+          <text x="511" y="770" class="l-title">Retrieve saved state</text><text x="511" y="793" class="l-sub">session · items · actions</text>
+          <rect data-node="reconcile" class="l-node l-node--state" x="632" y="742" width="170" height="72" rx="18"/>
+          <text x="717" y="770" class="l-title">Reconcile by ID</text><text x="717" y="793" class="l-sub">item_id · final state</text>
+          <rect data-node="continue" class="l-node l-node--good" x="838" y="742" width="132" height="72" rx="18"/>
+          <text x="904" y="770" class="l-title">Continue</text><text x="904" y="793" class="l-sub">apply new updates</text>
+          <path data-edge="disconnect-buffer" class="l-flow l-flow--recovery" d="M200 778 L230 778"/>
+          <path data-edge="buffer-retrieve" class="l-flow l-flow--recovery" d="M390 778 L420 778"/>
+          <path data-edge="retrieve-reconcile" class="l-flow l-flow--recovery" d="M596 778 L626 778"/>
+          <path data-edge="reconcile-continue" class="l-flow l-flow--recovery" d="M802 778 L832 778"/>
+          <path data-edge="ledger-recovery" class="l-flow l-flow--recovery" d="M691 220 C730 300 730 560 718 650 C700 682 560 694 511 736"/>
+
+          <rect data-node="observability" class="l-node" x="995" y="742" width="132" height="72" rx="18"/>
+          <text x="1061" y="770" class="l-title">Causal trace</text><text x="1061" y="793" class="l-sub">root · worker · tool · I9</text>
+          <path data-edge="continue-observability" class="l-flow l-flow--observe" d="M970 778 L989 778"/>
+          <path data-edge="worker-a-observe" class="l-flow l-flow--observe" d="M203 560 C300 675 772 699 1040 736"/>
+          <path data-edge="worker-b-observe" class="l-flow l-flow--observe" d="M539 560 C650 650 872 691 1050 736"/>
+          <path data-edge="integration-observe" class="l-flow l-flow--observe" d="M1010 622 C1040 666 1052 702 1057 736"/>
+        </svg>
+      </div>
+    </div>
+    <div class="s5v-long__legend" aria-label="Leyenda del diagrama">
+      <span><i></i>estado / ejecución</span><span class="is-invalidate"><i></i>invalidación de evidencia</span><span class="is-recovery"><i></i>recovery / reconciliación</span>
+    </div>
+    <p class="s5v__copy"><strong>Regla operativa:</strong> perder contexto o transporte no debe borrar la identidad de la tarea. Tras fan-out o recovery, el sistema reconstruye estado por IDs durables; tras fan-in o cambio de target, deriva un nuevo candidate SHA e invalida toda evidencia que ya no pueda demostrarse fresh.</p>
+  </div>
+</section>

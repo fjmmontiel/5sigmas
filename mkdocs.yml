@@ -145,6 +145,13 @@ nav:
           - Tools, estado y acciones asíncronas: series/agentes-voz-tiempo-real/04-tools-estado-acciones-asincronas.md
           - WebRTC, SIP y telefonía: series/agentes-voz-tiempo-real/05-webrtc-sip-telefonia-red.md
           - Evaluación, observabilidad y reliability: series/agentes-voz-tiempo-real/06-evaluacion-observabilidad-reliability.md
+      - Coding agents y agent harnesses:
+          - Qué es un agent harness: series/coding-agents-agent-harnesses/01-que-es-agent-harness.md
+          - Contexto, workspace y aislamiento: series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento.md
+          - Specs, planificación y checkpoints: series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.md
+          - Tools, permisos y trust boundaries: series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries.md
+          - Tests, verifiers y evaluación de tareas: series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion.md
+          - Tareas largas, memoria y subagentes: series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad.md
   - Construir:
       - articulos-tecnicos/index.md
       - Agente Reactivo, Proactivo y Tool calls: articulos-tecnicos/proactive-reactive-agent-and-tool-calls.md
