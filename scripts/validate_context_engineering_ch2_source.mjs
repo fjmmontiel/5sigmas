@@ -97,6 +97,10 @@ check(es.includes('ejemplo de esquema de aplicación') && es.includes('no un est
 check(en.includes('illustrative application schema') && en.includes('not a provider standard'), 'EN: provenance schema caveat missing');
 check(es.includes('model capability\n≠\nprovider/API context-management capability\n≠\napplication/harness context policy'), 'ES: model/provider/application boundary missing');
 check(en.includes('model capability\n≠\nprovider/API context-management capability\n≠\napplication/harness context policy'), 'EN: model/provider/application boundary missing');
+check(es.includes('universo candidato **puramente ilustrativo**') && es.includes('las cifras no describen un proveedor ni un benchmark'), 'ES: numeric scenario must be explicitly illustrative');
+check(en.includes('**purely illustrative** candidate universe') && en.includes('numbers are not a provider claim or benchmark'), 'EN: numeric scenario must be explicitly illustrative');
+check(!es.includes('150.000 tokens disponibles') && !en.includes('150,000 tokens of available capacity'), 'Opening must not imply an uncited concrete provider/model capacity');
+check(!/\?\./.test(en), 'EN: malformed question punctuation detected');
 check(!/^\s*-\s+.+;\s*$/m.test(en), 'EN: semicolon-list anti-pattern detected');
 
 const visualInclude = '{{ include_html("snippets/articulos-tecnicos/context-budget-lineage.html") }}';
@@ -108,6 +112,8 @@ check(snippet.includes('interaction="static:no-cosmetic-controls"'), 'Visual: co
 check(snippet.includes('mobile="horizontal-scroll-preserves-budget-branching-lineage-and-invalidation-topology"'), 'Visual: mobile topology preservation contract missing');
 check(snippet.includes('.cb-stage{width:100%;min-width:0;max-width:1180px;margin:0 auto}'), 'Visual: desktop stage must fit available width');
 check(snippet.includes('.cb-stage{width:auto;min-width:1080px}'), 'Visual: mobile stage must preserve topology through horizontal scrolling');
+check(snippet.includes('Ejemplo · budget ≠ capacidad máxima'), 'Visual: illustrative-scenario kicker missing');
+check(snippet.includes('no son límites de un proveedor ni resultados de benchmark'), 'Visual: numeric-example caveat missing');
 check(!snippet.includes('s5v-arch-map__pipe'), 'Visual regression: linear card-pipe pattern returned');
 check(!snippet.includes('data-s5v-stepper') && !snippet.includes('s5v__steps--tabs'), 'Visual regression: cosmetic tabs/stepper returned');
 
@@ -143,10 +149,10 @@ const blobHeader = Buffer.from(`blob ${snippetBytes.length}\0`, 'utf8');
 const snippetBlobSha = crypto.createHash('sha1').update(Buffer.concat([blobHeader, snippetBytes])).digest('hex');
 check(i18n.source_blob_sha === snippetBlobSha, `EN: visual source_blob_sha stale (${i18n.source_blob_sha} != ${snippetBlobSha})`);
 for (const token of [
-  'Budget ≠ maximum capacity', 'CANDIDATES · OUTSIDE THE MODEL', 'Policy · 4k', 'Constraints',
-  'COMPACT', 'REFERENCE', 'DROP / DEFER', 'ACTIVE CONTEXT · Bdynamic = 60k',
-  'Model', 'PROVENANCE / LINEAGE', 'HEAD changes → STALE', 'flow into active context',
-  'lineage back to source', 'Token reduction is never free'
+  'Example · budget ≠ maximum capacity', 'Illustrative scenario:', 'not provider limits or benchmark results',
+  'CANDIDATES · OUTSIDE THE MODEL', 'Policy · 4k', 'Constraints', 'COMPACT', 'REFERENCE', 'DROP / DEFER',
+  'ACTIVE CONTEXT · Bdynamic = 60k', 'Model', 'PROVENANCE / LINEAGE', 'HEAD changes → STALE',
+  'flow into active context', 'lineage back to source', 'Token reduction is never free'
 ]) {
   check(Object.values(i18n.replacements).some((value) => String(value).includes(token)), `EN visual translation missing ${token}`);
 }
