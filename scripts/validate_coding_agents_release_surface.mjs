@@ -82,7 +82,7 @@ try {
       check((await target.count()) === 1, `${hub.route}: ${viewport.name} missing unique Coding Agents row ${JSON.stringify(hub.title)}`);
       if (await target.count()) {
         check(normalizePath(await target.first().getAttribute('href')) === hub.href, `${hub.route}: ${viewport.name} Coding Agents row points to ${JSON.stringify(await target.first().getAttribute('href'))}, expected ${hub.href}`);
-        const text = await target.first().innerText();
+        const text = (await target.first().textContent()) || '';
         check(text.includes(hub.meta), `${hub.route}: ${viewport.name} Coding Agents row missing ${JSON.stringify(hub.meta)}`);
       }
       const htmlLang = (await page.locator('html').getAttribute('lang') || '').toLowerCase();
