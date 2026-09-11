@@ -84,7 +84,6 @@
           <text x="539" y="423" class="l-title">Worker B · migración</text><text x="539" y="449" class="l-sub">work_unit_id=db · owner=B</text><text x="539" y="472" class="l-sub">base=A · workspace=WB</text><text x="539" y="495" class="l-sub">candidate=W2</text><text x="539" y="525" class="l-mini">postcondition/evidence belong to W2@A</text>
           <path data-edge="ledger-worker-a" class="l-flow" d="M478 258 C430 316 310 333 203 386"/>
           <path data-edge="ledger-worker-b" class="l-flow" d="M621 258 C650 312 610 338 539 386"/>
-          <text x="332" y="326" class="l-label">fan-out por ownership + dependencies</text>
 
           <rect data-node="target-a" class="l-node" x="789" y="116" width="132" height="72" rx="18"/>
           <text x="855" y="145" class="l-title">Target A</text><text x="855" y="169" class="l-sub">main@A</text>
@@ -123,7 +122,7 @@
           <path data-edge="buffer-retrieve" class="l-flow l-flow--recovery" d="M390 778 L420 778"/>
           <path data-edge="retrieve-reconcile" class="l-flow l-flow--recovery" d="M596 778 L626 778"/>
           <path data-edge="reconcile-continue" class="l-flow l-flow--recovery" d="M802 778 L832 778"/>
-          <path data-edge="ledger-recovery" class="l-flow l-flow--recovery" d="M549 258 C549 626 511 652 511 736"/>
+          <path data-edge="ledger-recovery" class="l-flow l-flow--recovery" d="M691 220 C730 300 730 560 718 650 C700 682 560 694 511 736"/>
 
           <rect data-node="observability" class="l-node" x="995" y="742" width="132" height="72" rx="18"/>
           <text x="1061" y="770" class="l-title">Causal trace</text><text x="1061" y="793" class="l-sub">root · worker · tool · I9</text>
