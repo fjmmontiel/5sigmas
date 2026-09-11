@@ -3,16 +3,15 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import crypto from 'node:crypto';
 
+const read = (p) => fs.readFile(path.resolve(p), 'utf8');
 const [es, en, snippet, mirror, i18nRaw, mkdocsEs, mkdocsEn, manifestEn, prVisual] = await Promise.all([
-  fs.readFile(path.resolve('docs/series/context-engineering-memory-mcp/02-context-budgets-prioritisation-compaction-provenance.md'), 'utf8'),
-  fs.readFile(path.resolve('locales/en/series/context-engineering-memory-mcp/02-context-budgets-prioritisation-compaction-provenance.md'), 'utf8'),
-  fs.readFile(path.resolve('docs/snippets/articulos-tecnicos/context-budget-lineage.html'), 'utf8'),
-  fs.readFile(path.resolve('locales/en/snippets/articulos-tecnicos/context-budget-lineage.html'), 'utf8'),
-  fs.readFile(path.resolve('locales/en/snippets/articulos-tecnicos/context-budget-lineage.i18n.json'), 'utf8'),
-  fs.readFile(path.resolve('mkdocs.yml'), 'utf8'),
-  fs.readFile(path.resolve('mkdocs.en.yml'), 'utf8'),
-  fs.readFile(path.resolve('locales/en/manifest.yml'), 'utf8'),
-  fs.readFile(path.resolve('.github/workflows/pr-visual-review.yml'), 'utf8'),
+  read('docs/series/context-engineering-memory-mcp/02-context-budgets-prioritisation-compaction-provenance.md'),
+  read('locales/en/series/context-engineering-memory-mcp/02-context-budgets-prioritisation-compaction-provenance.md'),
+  read('docs/snippets/articulos-tecnicos/context-budget-lineage.html'),
+  read('locales/en/snippets/articulos-tecnicos/context-budget-lineage.html'),
+  read('locales/en/snippets/articulos-tecnicos/context-budget-lineage.i18n.json'),
+  read('mkdocs.yml'), read('mkdocs.en.yml'), read('locales/en/manifest.yml'),
+  read('.github/workflows/pr-visual-review.yml'),
 ]);
 const i18n = JSON.parse(i18nRaw);
 const failures = [];
@@ -43,77 +42,74 @@ for (const url of primaryUrls) {
   check(en.includes(url), `EN: missing primary source ${url}`);
 }
 
-const esAnchors = [
-  'El máximo de contexto no es tu presupuesto operativo',
-  'Un item de contexto necesita más que texto',
-  'Priorizar no es ordenar por similarity score',
-  'Qué hacer cuando una pieza útil no cabe',
-  'Compaction es una transformación, no memoria perfecta',
-  'Cache no es compaction',
-  'Provenance: poder volver desde una representación a su origen',
-  'Freshness no es una timestamp',
-  'Caso completo: un agente de código bajo presión de tokens',
-  'Tool search y context loading son priorización, no magia',
-  'Cómo evaluar una política de contexto',
-  'Implicación de producción: persiste el assembly manifest',
+const conceptPairs = [
+  ['El máximo de contexto no es tu presupuesto operativo', 'The maximum context window is not your operational budget'],
+  ['Un item de contexto necesita más que texto', 'A context item needs more than text'],
+  ['Priorizar no es ordenar por similarity score', 'Prioritization is not sorting by similarity score'],
+  ['Qué hacer cuando una pieza útil no cabe', 'What to do when useful information does not fit'],
+  ['Compaction es una transformación, no memoria perfecta', 'Compaction is a transformation, not perfect memory'],
+  ['Cache no es compaction', 'Cache is not compaction'],
+  ['Provenance: poder volver desde una representación a su origen', 'Provenance: being able to walk from a representation back to its source'],
+  ['Freshness no es una timestamp', 'Freshness is not a timestamp'],
+  ['Caso completo: un agente de código bajo presión de tokens', 'Worked example: a coding agent under token pressure'],
+  ['Tool search y context loading son priorización, no magia', 'Tool search and context loading are prioritization mechanisms, not magic'],
+  ['Cómo evaluar una política de contexto', 'How to evaluate a context policy'],
+  ['Implicación de producción: persiste el assembly manifest', 'Production implication: persist an assembly manifest'],
 ];
-const enAnchors = [
-  'The maximum context window is not your operational budget',
-  'A context item needs more than text',
-  'Prioritization is not sorting by similarity score',
-  'What to do when useful information does not fit',
-  'Compaction is a transformation, not perfect memory',
-  'Cache is not compaction',
-  'Provenance: being able to walk from a representation back to its source',
-  'Freshness is not a timestamp',
-  'Worked example: a coding agent under token pressure',
-  'Tool search and context loading are prioritization mechanisms, not magic',
-  'How to evaluate a context policy',
-  'Production implication: persist an assembly manifest',
-];
-for (const anchor of esAnchors) check(es.toLowerCase().includes(anchor.toLowerCase()), `ES: missing concept ${anchor}`);
-for (const anchor of enAnchors) check(en.toLowerCase().includes(anchor.toLowerCase()), `EN: missing concept ${anchor}`);
-
-for (const text of [es, en]) {
-  for (const token of ['B_{\\text{input}}', 'B_{\\text{dynamic}}', 'z_i', 'u_i', 'x_i', 'provenance', 'rehydrat', 'STALE', 'derived_from', 'lossy']) {
-    check(text.toLowerCase().includes(token.toLowerCase()), `Missing budget/provenance contract ${token}`);
-  }
-  for (const token of ['Verbatim', 'Selection', 'Structured extraction', 'Compaction', 'Reference + rehydration', 'Drop']) {
-    const localized = text === es ? ({
-      'Verbatim':'Verbatim', 'Selection':'Selección', 'Structured extraction':'Extracción estructurada',
-      'Compaction':'Compaction', 'Reference + rehydration':'Referencia + rehidratación', 'Drop':'Drop'
-    })[token] : token;
-    check(text.toLowerCase().includes(localized.toLowerCase()), `Missing context-reduction operation ${localized}`);
-  }
+for (const [esToken, enToken] of conceptPairs) {
+  check(es.toLowerCase().includes(esToken.toLowerCase()), `ES: missing concept ${esToken}`);
+  check(en.toLowerCase().includes(enToken.toLowerCase()), `EN: missing concept ${enToken}`);
 }
 
-check(es.includes('`B_dynamic` no es una propiedad del modelo'), 'ES: operational budget must not be attributed to the model');
-check(en.includes('`B_dynamic` is not a model property'), 'EN: operational budget must not be attributed to the model');
-check(es.includes('Es una **decisión de producto y runtime**'), 'ES: application/runtime budget ownership missing');
-check(en.includes('It is an **application and runtime policy**'), 'EN: application/runtime budget ownership missing');
+for (const text of [es, en]) {
+  for (const token of ['B_{\\text{input}}','B_{\\text{dynamic}}','z_i','u_i','x_i','provenance','rehydrat','STALE','derived_from','lossy']) {
+    check(text.toLowerCase().includes(token.toLowerCase()), `Missing budget/provenance contract ${token}`);
+  }
+}
+const ops = [
+  ['Verbatim','Verbatim'],
+  ['Selección','Selection'],
+  ['Extracción estructurada','Structured extraction'],
+  ['Compaction','Compaction'],
+  ['Referencia + rehidratación','Reference + rehydration'],
+  ['Drop','Drop'],
+];
+for (const [esOp,enOp] of ops) {
+  check(es.toLowerCase().includes(esOp.toLowerCase()), `ES: missing operation ${esOp}`);
+  check(en.toLowerCase().includes(enOp.toLowerCase()), `EN: missing operation ${enOp}`);
+}
+
+check(es.includes('`B_dynamic` no es una propiedad del modelo') && es.includes('Es una **decisión de producto y runtime**'), 'ES: operational-budget ownership boundary missing');
+check(en.includes('`B_dynamic` is not a model property') && en.includes('It is an **application and runtime policy**'), 'EN: operational-budget ownership boundary missing');
 check(es.includes('Caching puede hacer más barato reutilizar un prefijo') && es.includes('No elimina lógicamente ese contenido'), 'ES: cache-vs-compaction boundary missing');
 check(en.includes('Caching can make a repeated prefix cheaper') && en.includes('does not logically remove that content'), 'EN: cache-vs-compaction boundary missing');
 check(es.includes('ejemplo de esquema de aplicación') && es.includes('no un estándar de proveedor'), 'ES: provenance schema caveat missing');
 check(en.includes('illustrative application schema') && en.includes('not a provider standard'), 'EN: provenance schema caveat missing');
-check(es.includes('model capability\n≠\nprovider/API context-management capability\n≠\napplication/harness context policy'), 'ES: model/provider/application boundary missing');
-check(en.includes('model capability\n≠\nprovider/API context-management capability\n≠\napplication/harness context policy'), 'EN: model/provider/application boundary missing');
+const ownershipBoundary = 'model capability\n≠\nprovider/API context-management capability\n≠\napplication/harness context policy';
+check(es.includes(ownershipBoundary), 'ES: model/provider/application boundary missing');
+check(en.includes(ownershipBoundary), 'EN: model/provider/application boundary missing');
 check(es.includes('universo candidato **puramente ilustrativo**') && es.includes('las cifras no describen un proveedor ni un benchmark'), 'ES: numeric scenario must be explicitly illustrative');
 check(en.includes('**purely illustrative** candidate universe') && en.includes('numbers are not a provider claim or benchmark'), 'EN: numeric scenario must be explicitly illustrative');
+check(es.includes('42k  logs') && es.includes('extracción de fallos + pointer al raw'), 'ES: worked example must distinguish log extraction from compaction');
+check(en.includes('42k  logs') && en.includes('structured failures + raw pointer'), 'EN: worked example must distinguish log extraction from compaction');
 check(!es.includes('150.000 tokens disponibles') && !en.includes('150,000 tokens of available capacity'), 'Opening must not imply an uncited concrete provider/model capacity');
 check(!/\?\./.test(en), 'EN: malformed question punctuation detected');
 check(!/^\s*-\s+.+;\s*$/m.test(en), 'EN: semicolon-list anti-pattern detected');
 
 const visualInclude = '{{ include_html("snippets/articulos-tecnicos/context-budget-lineage.html") }}';
-check(es.includes(visualInclude), 'ES: context-budget visual include missing');
-check(en.includes(visualInclude), 'EN: context-budget visual include missing');
-check(snippet.includes('GOLDEN_VISUAL_CONTRACT'), 'Visual: relationship-first contract marker missing');
-check(snippet.includes('relationship="budget-convergence-and-lineage:'), 'Visual: budget + lineage relationship missing');
-check(snippet.includes('interaction="static:no-cosmetic-controls"'), 'Visual: cosmetic interaction must be explicitly rejected');
-check(snippet.includes('mobile="horizontal-scroll-preserves-budget-branching-lineage-and-invalidation-topology"'), 'Visual: mobile topology preservation contract missing');
-check(snippet.includes('.cb-stage{width:100%;min-width:0;max-width:1180px;margin:0 auto}'), 'Visual: desktop stage must fit available width');
-check(snippet.includes('.cb-stage{width:auto;min-width:1080px}'), 'Visual: mobile stage must preserve topology through horizontal scrolling');
-check(snippet.includes('Ejemplo · budget ≠ capacidad máxima'), 'Visual: illustrative-scenario kicker missing');
-check(snippet.includes('no son límites de un proveedor ni resultados de benchmark'), 'Visual: numeric-example caveat missing');
+check(es.includes(visualInclude) && en.includes(visualInclude), 'ES/EN: context-budget visual include missing');
+for (const token of [
+  'GOLDEN_VISUAL_CONTRACT',
+  'relationship="budget-convergence-and-lineage:',
+  'verbatim|extract|compact|reference|drop',
+  'structured-extraction',
+  'interaction="static:no-cosmetic-controls"',
+  'mobile="horizontal-scroll-preserves-budget-branching-lineage-and-invalidation-topology"',
+  '.cb-stage{width:100%;min-width:0;max-width:1180px;margin:0 auto}',
+  '.cb-stage{width:auto;min-width:1080px}',
+  'Ejemplo · budget ≠ capacidad máxima',
+  'no son límites de un proveedor ni resultados de benchmark',
+]) check(snippet.includes(token), `Visual: missing contract ${token}`);
 check(!snippet.includes('s5v-arch-map__pipe'), 'Visual regression: linear card-pipe pattern returned');
 check(!snippet.includes('data-s5v-stepper') && !snippet.includes('s5v__steps--tabs'), 'Visual regression: cosmetic tabs/stepper returned');
 
@@ -121,41 +117,37 @@ for (const source of ['policy','repo','logs','history','stale']) {
   check(snippet.includes(`data-source="${source}"`), `Visual: missing candidate source ${source}`);
   check(snippet.includes(`data-edge="${source}-to-gate"`), `Visual: source ${source} lacks prioritization edge`);
 }
-for (const node of ['policy-gate','verbatim','compact','reference','drop','model','repo-new-version']) {
+for (const node of ['policy-gate','verbatim','extract','compact','reference','drop','model','repo-new-version']) {
   check(snippet.includes(`data-node="${node}"`), `Visual: missing mechanism node ${node}`);
 }
 for (const boundary of ['candidate-universe','budget-envelope','provenance-plane']) {
   check(snippet.includes(`data-boundary="${boundary}"`), `Visual: missing semantic boundary ${boundary}`);
 }
 for (const edge of [
-  'gate-to-verbatim','gate-to-compact','gate-to-reference','gate-to-drop',
-  'verbatim-to-context','compact-to-context','reference-to-context','context-to-model',
+  'gate-to-verbatim','gate-to-extract','gate-to-compact','gate-to-reference','gate-to-drop',
+  'verbatim-to-context','extract-to-context','compact-to-context','reference-to-context','context-to-model',
   'logs-lineage','history-lineage','repo-lineage','source-version-change','invalidate-derived-context'
-]) {
-  check(snippet.includes(`data-edge="${edge}"`), `Visual: missing relationship edge ${edge}`);
-}
+]) check(snippet.includes(`data-edge="${edge}"`), `Visual: missing relationship edge ${edge}`);
 for (const sourceVersion of ['logs-run17','history-v8','repo-a1b2c3']) {
   check(snippet.includes(`data-source-version="${sourceVersion}"`), `Visual: missing source-version lineage node ${sourceVersion}`);
 }
+check(snippet.includes('EXTRACT') && snippet.includes('logs → fallos'), 'Visual: structured extraction path missing');
+check(snippet.includes('COMPACT') && snippet.includes('history → summary'), 'Visual: history compaction path missing');
 check(snippet.includes('HEAD cambia → STALE'), 'Visual: source-version invalidation consequence missing');
 check(snippet.includes('derived_from · version · transform · rehydrate'), 'Visual: provenance semantics missing');
-check(snippet.includes('CONTEXTO ACTIVO · Bdynamic = 60k'), 'Visual: bounded active context missing');
-check(snippet.includes('23k quedan libres / reservados'), 'Visual: budget headroom missing');
+check(snippet.includes('CONTEXTO ACTIVO · Bdynamic = 60k') && snippet.includes('23k quedan libres / reservados'), 'Visual: bounded active context/headroom missing');
 
 check(mirror.trim() === '<!-- 5sigmas-canonical-mirror -->', 'EN: visual canonical mirror marker invalid');
 check(i18n.source === visualPath, 'EN: visual i18n source path invalid');
-const snippetBytes = Buffer.from(snippet, 'utf8');
-const blobHeader = Buffer.from(`blob ${snippetBytes.length}\0`, 'utf8');
-const snippetBlobSha = crypto.createHash('sha1').update(Buffer.concat([blobHeader, snippetBytes])).digest('hex');
-check(i18n.source_blob_sha === snippetBlobSha, `EN: visual source_blob_sha stale (${i18n.source_blob_sha} != ${snippetBlobSha})`);
+const bytes = Buffer.from(snippet, 'utf8');
+const blobSha = crypto.createHash('sha1').update(Buffer.concat([Buffer.from(`blob ${bytes.length}\0`, 'utf8'), bytes])).digest('hex');
+check(i18n.source_blob_sha === blobSha, `EN: visual source_blob_sha stale (${i18n.source_blob_sha} != ${blobSha})`);
 for (const token of [
-  'Example · budget ≠ maximum capacity', 'Illustrative scenario:', 'not provider limits or benchmark results',
-  'CANDIDATES · OUTSIDE THE MODEL', 'Policy · 4k', 'Constraints', 'COMPACT', 'REFERENCE', 'DROP / DEFER',
-  'ACTIVE CONTEXT · Bdynamic = 60k', 'Model', 'PROVENANCE / LINEAGE', 'HEAD changes → STALE',
-  'flow into active context', 'lineage back to source', 'Token reduction is never free'
-]) {
-  check(Object.values(i18n.replacements).some((value) => String(value).includes(token)), `EN visual translation missing ${token}`);
-}
+  'Example · budget ≠ maximum capacity','not provider limits or benchmark results','CANDIDATES · OUTSIDE THE MODEL',
+  'Policy · 4k','Constraints','VERBATIM','EXTRACT','logs → failures','COMPACT','history → summary','REFERENCE','DROP / DEFER',
+  'ACTIVE CONTEXT · Bdynamic = 60k','Model','PROVENANCE / LINEAGE','HEAD changes → STALE',
+  'flow into active context','lineage back to source','Token reduction is never free'
+]) check(Object.values(i18n.replacements).some((value) => String(value).includes(token)), `EN visual translation missing ${token}`);
 
 if (failures.length) {
   console.error(`Context engineering chapter 3.2 source gate failed (${failures.length}):`);
@@ -163,4 +155,4 @@ if (failures.length) {
   process.exit(1);
 }
 console.log('Context engineering chapter 3.2 source gate PASS');
-console.log(`ES bytes=${Buffer.byteLength(es)} EN bytes=${Buffer.byteLength(en)} visual_blob=${snippetBlobSha}`);
+console.log(`ES bytes=${Buffer.byteLength(es)} EN bytes=${Buffer.byteLength(en)} visual_blob=${blobSha}`);
