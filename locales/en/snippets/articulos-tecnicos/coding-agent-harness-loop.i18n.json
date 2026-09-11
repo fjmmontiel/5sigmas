@@ -1,6 +1,6 @@
 {
   "source": "snippets/articulos-tecnicos/coding-agent-harness-loop.html",
-  "source_blob_sha": "6a214f4230bb0988ea14196a9bd10a83bd43cd22",
+  "source_blob_sha": "2898f9c0edfeb9a51967a6932d02938110114b5a",
   "replacements": {
     "Bucle causal de un coding agent y frontera entre modelo, harness y entorno": "Causal coding-agent loop and the boundary between model, harness, and environment",
     "Modelo ≠ harness": "Model ≠ harness",
