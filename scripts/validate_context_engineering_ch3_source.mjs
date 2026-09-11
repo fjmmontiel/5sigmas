@@ -100,6 +100,8 @@ for (const token of [
   'mobile="horizontal-scroll-preserves-memory-lifecycle-authority-and-checkpoint-topology"',
   '.ml-stage{width:100%;min-width:0;max-width:1180px;margin:0 auto}',
   '.ml-stage{width:auto;min-width:1080px}',
+  'Ciclo de vida de memoria · semántica ≠ persistencia',
+  'MEMORIA EPISÓDICA','MEMORIA SEMÁNTICA','AUTORIDAD DE NEGOCIO · EXTERNA','RUTA DE RECUPERACIÓN · CONTRATO DISTINTO',
 ]) check(snippet.includes(token), `Visual: missing contract ${token}`);
 check(!snippet.includes('s5v-arch-map__pipe'), 'Visual regression: linear card-pipe pattern returned');
 check(!snippet.includes('data-s5v-stepper') && !snippet.includes('s5v__steps--tabs') && !snippet.includes('data-s5v-tabs'), 'Visual regression: cosmetic tabs/stepper returned');
@@ -116,10 +118,10 @@ for (const edge of [
   'semantic-lineage','semantic-to-retrieval','retrieval-to-working','authority-to-working',
   'source-change','invalidate-semantic','execution-to-checkpoint','checkpoint-to-working'
 ]) check(snippet.includes(`data-edge="${edge}"`), `Visual: missing relationship edge ${edge}`);
-check(snippet.includes('contradiction → stale / lower authority'), 'Visual: authoritative-state invalidation consequence missing');
-check(snippet.includes('resume ≠ recall'), 'Visual: checkpoint/resume boundary missing');
+check(snippet.includes('contradicción → stale / menor autoridad'), 'Visual: authoritative-state invalidation consequence missing');
+check(snippet.includes('reanudar ≠ recordar'), 'Visual: checkpoint/resume boundary missing');
 check(snippet.includes('derived_from'), 'Visual: semantic-memory lineage missing');
-check(snippet.includes('fresh read'), 'Visual: fresh authoritative read missing');
+check(snippet.includes('lectura fresca'), 'Visual: fresh authoritative read missing');
 
 check(mirror.trim() === '<!-- 5sigmas-canonical-mirror -->', 'EN: visual canonical mirror marker invalid');
 check(i18n.source === visualPath, 'EN: visual i18n source path invalid');
