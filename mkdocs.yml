@@ -154,6 +154,7 @@ nav:
           - Tareas largas, memoria y subagentes: series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad.md
       - Context engineering, memoria y MCP:
           - Context engineering vs prompt engineering: series/context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineering.md
+          - Context budgets, priorización, compaction y provenance: series/context-engineering-memory-mcp/02-context-budgets-prioritisation-compaction-provenance.md
   - Construir:
       - articulos-tecnicos/index.md
       - Agente Reactivo, Proactivo y Tool calls: articulos-tecnicos/proactive-reactive-agent-and-tool-calls.md
