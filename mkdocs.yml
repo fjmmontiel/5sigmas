@@ -150,6 +150,7 @@ nav:
           - Contexto, workspace y aislamiento: series/coding-agents-agent-harnesses/02-contexto-workspace-sandboxing-aislamiento.md
           - Specs, planificación y checkpoints: series/coding-agents-agent-harnesses/03-specs-planificacion-task-decomposition-checkpoints.md
           - Tools, permisos y trust boundaries: series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries.md
+          - Tests, verifiers y evaluación de tareas: series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion.md
   - Construir:
       - articulos-tecnicos/index.md
       - Agente Reactivo, Proactivo y Tool calls: articulos-tecnicos/proactive-reactive-agent-and-tool-calls.md
