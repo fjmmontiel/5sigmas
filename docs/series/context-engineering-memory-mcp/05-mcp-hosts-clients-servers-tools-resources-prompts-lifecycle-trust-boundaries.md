@@ -22,11 +22,11 @@ MCP estandariza **cómo una aplicación se conecta con capacidades y contexto ex
 
 La distinción importa porque un servidor MCP puede exponer datos, instrucciones y acciones con efectos reales. Si tratamos «habla MCP» como equivalente a «es seguro y merece confianza», hemos confundido interoperabilidad con autoridad.
 
-Este capítulo usa como referencia principal la especificación **MCP 2026-07-28**, que cambió de forma material el ciclo de vida: el core moderno es stateless, eliminó el handshake `initialize`/`initialized` y las sesiones de protocolo, y mueve versión/capabilities a cada request. Los clientes que necesiten interoperar con revisiones 2025 todavía deben entender el lifecycle anterior.[^mcp-2026-release][^mcp-versioning]
+Este capítulo usa como referencia principal la especificación **MCP 2026-07-28**, que cambió de forma material el ciclo de vida: el núcleo moderno no mantiene estado de protocolo, eliminó el intercambio inicial `initialize`/`initialized` y las sesiones de protocolo, y mueve versión y capacidades a cada solicitud. Los clientes que necesiten interoperar con revisiones 2025 todavía deben entender el ciclo de vida anterior.[^mcp-2026-release][^mcp-versioning]
 
 {{ include_html("snippets/articulos-tecnicos/context-mcp-trust-boundaries.html") }}
 
-## 1. Empieza por ownership: host, client y server no son sinónimos
+## 1. Empieza por las responsabilidades: host, client y server no son sinónimos
 
 La arquitectura oficial de MCP separa tres papeles.[^mcp-architecture]
 
@@ -53,9 +53,9 @@ Esto es más que una elección de nombres. Si el host habla con tres servidores,
 
 Un **server MCP** expone capacidades y contexto mediante primitivas del protocolo. Puede ser un proceso local iniciado por el host o un servicio remoto.
 
-El server no debería recibir la conversación completa por defecto. Recibe las requests que el client correspondiente decide enviarle y responde dentro de ese contrato.
+El server no debería recibir la conversación completa por defecto. Recibe las solicitudes que el client correspondiente decide enviarle y responde dentro de ese contrato.
 
-Una forma útil de pensar en el ownership es:
+Una forma útil de pensar en el reparto de responsabilidades es:
 
 ```text
 HOST
@@ -76,7 +76,7 @@ MCP hace interoperable la conexión. No convierte todos esos dominios en uno sol
 
 ## 2. Tools, resources y prompts no son tres formas de decir «contexto»
 
-La especificación distingue tres primitivas server-side con modelos de interacción diferentes.[^mcp-tools][^mcp-resources][^mcp-prompts]
+La especificación distingue tres primitivas del lado del servidor con modelos de interacción diferentes.[^mcp-tools][^mcp-resources][^mcp-prompts]
 
 | Primitiva | Qué representa | Control conceptual por defecto | Riesgo dominante |
 |---|---|---|---|
@@ -86,13 +86,13 @@ La especificación distingue tres primitivas server-side con modelos de interacc
 
 Estas etiquetas describen el modelo de interacción de la especificación; el protocolo no obliga a una UI concreta.
 
-La consecuencia práctica es que el host no debería meter las tres primitivas en el mismo bucket de «cosas que vienen del server».
+La consecuencia práctica es que el host no debería meter las tres primitivas en el mismo grupo de «cosas que vienen del server».
 
 ## 3. Tools describen acciones, no conceden permiso para ejecutarlas
 
 Los tools se descubren mediante `tools/list` y se invocan mediante `tools/call`.[^mcp-tools]
 
-Un tool incluye, entre otros campos, un nombre y un `inputSchema`. La revisión 2026-07-28 exige que el server declare la capability `tools` si los soporta y recomienda orden determinista en las listas para facilitar caching y estabilidad de prompt.
+Un tool incluye, entre otros campos, un nombre y un `inputSchema`. La revisión 2026-07-28 exige que el server declare la capacidad `tools` si los soporta y recomienda orden determinista en las listas para facilitar la caché y la estabilidad del prompt.
 
 Pero el schema sólo responde a una pregunta:
 
@@ -116,9 +116,9 @@ Por tanto:
 
 > **tool discovery ≠ authorization; tool selection ≠ consent; schema validation ≠ policy approval.**
 
-## 4. Las annotations son hints, no una frontera de seguridad
+## 4. Las `annotations` son señales (`hints`), no una frontera de seguridad
 
-MCP define annotations de tools como señales sobre comportamiento esperado. La documentación oficial insiste en que esas annotations son **hints** y deben considerarse no confiables si proceden de un server no confiable.[^mcp-tool-annotations]
+MCP define `annotations` de tools como señales sobre comportamiento esperado. La documentación oficial insiste en que son **hints** y deben considerarse no confiables si proceden de un server no confiable.[^mcp-tool-annotations]
 
 Un server malicioso puede declarar algo equivalente a «read only» y seguir intentando un efecto destructivo.
 
@@ -135,7 +135,7 @@ server trust level
 + explicit approval when required
 ```
 
-Una annotation puede enriquecer la decisión. No sustituye controles de ejecución.
+Una `annotation` puede enriquecer la decisión. No sustituye controles de ejecución.
 
 ## 5. Resources son datos; el host decide si entran en contexto
 
@@ -176,11 +176,11 @@ protocol role ≠ instruction authority
 
 Que una cadena llegue en un objeto `Prompt` significa que cumple ese contrato MCP. No significa que pueda sobreescribir políticas del sistema.
 
-## 7. El lifecycle moderno cambió: en 2026-07-28 no hay initialize
+## 7. El ciclo de vida moderno cambió: en 2026-07-28 no hay initialize
 
 Éste es uno de los puntos donde mucha documentación antigua ya induce a error.
 
-Hasta `2025-11-25`, MCP usaba un lifecycle stateful con:
+Hasta `2025-11-25`, MCP usaba un ciclo de vida con estado:
 
 ```text
 client -> initialize
@@ -189,9 +189,9 @@ client -> notifications/initialized
 ... session ...
 ```
 
-La revisión **2026-07-28** eliminó ese handshake y el `Mcp-Session-Id` del core moderno.[^mcp-2026-release][^mcp-versioning]
+La revisión **2026-07-28** eliminó ese intercambio inicial y el `Mcp-Session-Id` del núcleo moderno.[^mcp-2026-release][^mcp-versioning]
 
-Ahora cada request es autocontenida e incluye metadata como:
+Ahora cada solicitud es autocontenida e incluye metadatos como:
 
 ```text
 io.modelcontextprotocol/protocolVersion
@@ -199,27 +199,27 @@ io.modelcontextprotocol/clientInfo
 io.modelcontextprotocol/clientCapabilities
 ```
 
-En Streamable HTTP cada request también lleva `MCP-Protocol-Version`; las requests relevantes exponen `Mcp-Method` y, cuando aplica, `Mcp-Name` para routing/autorización en infraestructura HTTP.[^mcp-http]
+En Streamable HTTP cada solicitud también lleva `MCP-Protocol-Version`; las solicitudes relevantes exponen `Mcp-Method` y, cuando aplica, `Mcp-Name` para enrutamiento y autorización en infraestructura HTTP.[^mcp-http]
 
 La consecuencia operacional es importante:
 
-> **stateless protocol no significa stateless application.**
+> **un protocolo sin estado no implica una aplicación sin estado.**
 
-Si una herramienta necesita estado durable, ese estado debe ser explícito: base de datos, handle, task ID, resource ID o estructura equivalente. No debe depender de una afinidad de sesión oculta en el transporte.
+Si una herramienta necesita estado persistente, ese estado debe ser explícito: base de datos, identificador, task ID, resource ID o estructura equivalente. No debe depender de una afinidad de sesión oculta en el transporte.
 
-## 8. `server/discover` descubre capabilities; no autentica al server
+## 8. `server/discover` descubre capacidades; no autentica al server
 
-En 2026-07-28 el server **MUST** implementar `server/discover`, aunque el client no está obligado a llamarlo antes de otras requests.[^mcp-discover]
+En 2026-07-28 el server **MUST** implementar `server/discover`, aunque el client no está obligado a llamarlo antes de otras solicitudes.[^mcp-discover]
 
 `server/discover` puede devolver:
 
 - versiones soportadas;
-- capabilities;
+- capacidades;
 - identidad declarada del server;
 - instrucciones opcionales;
-- hints de caching.
+- indicaciones de caché.
 
-Pero la especificación deja una caveat crítica: `serverInfo` es **self-reported** y no debe usarse para decisiones de seguridad.[^mcp-discover]
+Pero la especificación deja una advertencia crítica: `serverInfo` es **self-reported** y no debe usarse para decisiones de seguridad.[^mcp-discover]
 
 Por tanto:
 
@@ -233,13 +233,13 @@ no equivale a:
 server cryptographically proven to be the authorized payments service
 ```
 
-La autenticidad viene del canal, la configuración del host, TLS, authorization metadata, identidad desplegada y controles equivalentes, no del string `serverInfo.name`.
+La autenticidad viene del canal, la configuración del host, TLS, metadatos de autorización, identidad desplegada y controles equivalentes, no de la cadena `serverInfo.name`.
 
 ## 9. Compatibilidad: un client moderno puede tener que hablar con dos eras del protocolo
 
-Los SDKs oficiales actuales soportan el modelo moderno y compatibilidad con el lifecycle anterior. La documentación del SDK Go describe explícitamente los dos modelos: handshake hasta `2025-11-25` y requests stateless desde `2026-07-28`.[^mcp-go-lifecycle]
+Los SDKs oficiales actuales soportan el modelo moderno y la compatibilidad con el ciclo de vida anterior. La documentación del SDK Go describe explícitamente los dos modelos: intercambio inicial hasta `2025-11-25` y solicitudes sin estado desde `2026-07-28`.[^mcp-go-lifecycle]
 
-Esto afecta testing y observabilidad.
+Esto afecta a las pruebas y a la observabilidad.
 
 Un mismo producto puede ver:
 
@@ -262,7 +262,7 @@ MCP define transportes estándar para escenarios locales y remotos.[^mcp-http]
 
 ### stdio
 
-En un server local por stdio, el client puede lanzar un subprocess y comunicarse por stdin/stdout.
+En un server local por stdio, el client puede lanzar un subproceso y comunicarse por stdin/stdout.
 
 Las fronteras relevantes incluyen:
 
@@ -273,23 +273,23 @@ Las fronteras relevantes incluyen:
 - qué red puede alcanzar;
 - qué secretos existen en el entorno.
 
-«Local» no significa «seguro». Un server local con acceso al home del usuario y salida de red puede tener más privilegios que un servicio remoto bien aislado.
+«Local» no significa «seguro». Un server local con acceso al directorio personal del usuario y salida de red puede tener más privilegios que un servicio remoto bien aislado.
 
 ### Streamable HTTP
 
-En 2026-07-28 Streamable HTTP usa requests POST autocontenidas; puede devolver JSON o SSE ligado a esa request. La revisión moderna elimina el GET stream global y las sesiones de protocolo.[^mcp-http]
+En 2026-07-28 Streamable HTTP usa solicitudes POST autocontenidas; puede devolver JSON o SSE ligado a esa solicitud. La revisión moderna elimina el stream GET global y las sesiones de protocolo.[^mcp-http]
 
 Aquí las fronteras cambian a:
 
 - origen/endpoint permitido;
 - TLS;
-- authorization;
+- autorización;
 - scopes/audience;
-- rate limiting;
+- limitación de tasa;
 - gateway/WAF;
-- egress desde el server hacia sistemas downstream.
+- salida de red desde el server hacia sistemas downstream.
 
-El protocolo es el mismo; el failure domain no lo es.
+El protocolo es el mismo; el dominio de fallo no lo es.
 
 ## 11. Autenticación, autorización y consentimiento son tres decisiones distintas
 
@@ -306,9 +306,9 @@ CONSENT / APPROVAL
 ¿acepta el usuario esta acción concreta ahora?
 ```
 
-MCP define un framework de autorización para HTTP basado en OAuth y exige controles como resource indicators/audience binding cuando aplica.[^mcp-auth]
+MCP define un marco de autorización para HTTP basado en OAuth y exige controles como resource indicators/audience binding cuando aplica.[^mcp-auth]
 
-La especificación también prohíbe un anti-pattern especialmente peligroso: **token passthrough**. Un server MCP que llama a una API downstream no debe reenviar sin más el access token que recibió del client; debe usar credenciales/token emitidos para el recurso downstream correspondiente.[^mcp-security]
+La especificación también prohíbe un antipatrón especialmente peligroso: **token passthrough**. Un server MCP que llama a una API downstream no debe reenviar sin más el token de acceso que recibió del client; debe usar credenciales o un token emitido para el recurso downstream correspondiente.[^mcp-security]
 
 Esto evita que un token válido para un recurso se convierta accidentalmente en credencial universal.
 
@@ -354,25 +354,25 @@ MCP no crea prompt injection, pero facilita componer fuentes y tools de distinto
 
 Un resource puede contener texto hostil. Un tool puede permitir enviar datos a Internet. El modelo puede intentar conectar ambas cosas.
 
-Las defenses que importan viven sobre todo en el host y en la infraestructura:
+Las defensas que importan viven sobre todo en el host y en la infraestructura:
 
 ```text
-least privilege
-context provenance
-server isolation
+mínimo privilegio
+procedencia del contexto
+aislamiento de servidores
 sandboxing
-egress controls
-argument validation
-approval policy
-secret isolation
-post-action verification
+control de salida de red
+validación de argumentos
+política de aprobación
+aislamiento de secretos
+verificación tras la acción
 ```
 
-Las annotations ayudan a describir riesgo, pero no hacen que el modelo sea inmune a instrucciones embebidas.[^mcp-tool-annotations]
+Las `annotations` ayudan a describir riesgo, pero no hacen que el modelo sea inmune a instrucciones embebidas.[^mcp-tool-annotations]
 
 ## 14. MRTR: cuando el server necesita más input sin volver a sesiones ocultas
 
-La revisión 2026-07-28 reemplaza server-initiated requests mantenidas en una conexión por **Multi Round-Trip Requests (MRTR)**.[^mcp-mrtr][^mcp-2026-release]
+La revisión 2026-07-28 reemplaza las solicitudes iniciadas por el server y mantenidas en una conexión por **Multi Round-Trip Requests (MRTR)**.[^mcp-mrtr][^mcp-2026-release]
 
 Un `tools/call`, `resources/read` o `prompts/get` puede responder con:
 
@@ -382,7 +382,7 @@ inputRequests = {...}
 requestState = opaque state
 ```
 
-El client obtiene la entrada necesaria —por ejemplo, una elicitation— y reintenta la request original con `inputResponses`.
+El client obtiene la entrada necesaria —por ejemplo, mediante una `elicitation` al usuario— y reintenta la solicitud original con `inputResponses`.
 
 La relación es:
 
@@ -398,11 +398,11 @@ retry original request + bound response
 complete result
 ```
 
-El objetivo arquitectónico es conservar interacciones multi-step sin volver a depender de una sesión de transporte oculta.
+El objetivo arquitectónico es conservar interacciones de varios pasos sin volver a depender de una sesión de transporte oculta.
 
-## 15. Sampling y roots requieren una caveat temporal en 2026
+## 15. Sampling y roots requieren una advertencia temporal en 2026
 
-Mucha documentación de MCP anterior a julio de 2026 presenta **sampling** y **roots** como features client-side centrales.
+Mucha documentación de MCP anterior a julio de 2026 presenta **sampling** y **roots** como capacidades centrales del client.
 
 En `2026-07-28`, roots, sampling y logging quedaron **deprecated**, con ventana de compatibilidad, mientras los flujos server→client se reorganizan alrededor de MRTR y extensiones.[^mcp-deprecated][^mcp-2026-release]
 
@@ -411,14 +411,14 @@ Por eso este capítulo no enseña «sampling es una capability que todo MCP mode
 La regla correcta a septiembre de 2026 es:
 
 - entiende sampling/roots para interoperar con implementaciones existentes;
-- no los uses como base arquitectónica nueva sin comprobar el path recomendado por la revisión y SDK concretos;
+- no los uses como base arquitectónica nueva sin comprobar el mecanismo recomendado por la revisión y los SDK concretos;
 - registra siempre protocol version porque cambia la semántica disponible.
 
-## 16. El server puede cambiar su catálogo; el host necesita cache e invalidación
+## 16. El server puede cambiar su catálogo; el host necesita caché e invalidación
 
-`tools/list`, `resources/list`, `prompts/list` y algunas lecturas devuelven en 2026 hints como `ttlMs` y `cacheScope`; los catálogos deben ser deterministas cuando el conjunto subyacente no cambia.[^mcp-tools][^mcp-resources][^mcp-prompts]
+`tools/list`, `resources/list`, `prompts/list` y algunas lecturas devuelven en 2026 indicaciones como `ttlMs` y `cacheScope`; los catálogos deben ser deterministas cuando el conjunto subyacente no cambia.[^mcp-tools][^mcp-resources][^mcp-prompts]
 
-Esto mejora caching, pero no elimina invalidación.
+Esto mejora el uso de caché, pero no elimina la necesidad de invalidación.
 
 El host necesita decidir:
 
@@ -430,11 +430,11 @@ how to react to listChanged/subscription notifications
 what happens when an invoked name disappears
 ```
 
-Un catálogo cacheado bajo credenciales A no debe reutilizarse ciegamente bajo credenciales B.
+Un catálogo guardado en caché bajo credenciales A no debe reutilizarse ciegamente bajo credenciales B.
 
-## 17. Failure recovery: reintentar una lectura no es igual que reintentar una acción
+## 17. Recuperación ante fallos: reintentar una lectura no es igual que reintentar una acción
 
-Cuando falla una request MCP, el host necesita distinguir la semántica de la operación.
+Cuando falla una solicitud MCP, el host necesita distinguir la semántica de la operación.
 
 ```text
 resources/read
@@ -447,7 +447,7 @@ tools/call mutating
   retry may duplicate external effect
 ```
 
-No deduzcas idempotencia sólo del nombre del tool ni de una annotation no confiable.
+No deduzcas idempotencia sólo del nombre del tool ni de una `annotation` no confiable.
 
 Para mutaciones, el diseño debería preferir contratos explícitos:
 
@@ -458,11 +458,11 @@ precondition/version
 post-action readback
 ```
 
-MCP transporta la llamada. La garantía de exactly-once o idempotencia pertenece a la aplicación/downstream salvo que un contrato específico demuestre lo contrario.
+MCP transporta la llamada. La garantía de ejecución exactamente una vez (`exactly-once`) o de idempotencia pertenece a la aplicación o al sistema downstream salvo que un contrato específico demuestre lo contrario.
 
 ## 18. Observabilidad: registra la cadena de responsabilidad, no sólo JSON-RPC
 
-Un trace útil debería permitir reconstruir:
+Una traza útil debería permitir reconstruir:
 
 ```text
 host_session / turn_id
@@ -481,15 +481,15 @@ downstream operation_id
 latency / timeout / retry
 ```
 
-Para security/debugging también interesa conservar qué **client instance** y qué **server trust policy** participaron.
+Para seguridad y depuración también interesa conservar qué **instancia de client** y qué **política de confianza del server** participaron.
 
-No registres access tokens, authorization codes o secretos para ganar observabilidad.
+No registres tokens de acceso, códigos de autorización o secretos para ganar observabilidad.
 
-## 19. Testing: prueba el contrato y también lo que ocurre cuando el server miente
+## 19. Pruebas: prueba el contrato y también lo que ocurre cuando el server miente
 
-Un test feliz de `tools/list → tools/call` es insuficiente.
+Una prueba nominal de `tools/list → tools/call` es insuficiente.
 
-Mínimo, evalúa:
+Como mínimo, evalúa:
 
 ```text
 protocol-version compatibility
@@ -507,7 +507,7 @@ prompt/resource containing hostile instructions
 mutating tool retry after ambiguous timeout
 ```
 
-El proyecto MCP mantiene un repositorio oficial de conformance; úsalo para protocolo, pero añade tests de política del host porque conformance no conoce las reglas de tu negocio.[^mcp-conformance]
+El proyecto MCP mantiene un repositorio oficial de conformance; úsalo para protocolo, pero añade pruebas de política del host porque conformance no conoce las reglas de tu negocio.[^mcp-conformance]
 
 ## 20. Caso completo: un server de GitHub con lectura y merge
 
@@ -538,19 +538,19 @@ model sees merge_pr
 Debe parecerse más a:
 
 ```text
-1. host creates one client for this server
-2. host discovers/knows capabilities under current protocol version
-3. resources become candidate context, not automatic truth
-4. user/model selects review prompt under host instruction hierarchy
-5. model proposes merge_pr
-6. host policy checks server trust + user permission + repo + branch protection
-7. approval is requested if policy requires it
-8. call includes expected_head_sha to bind intent to reviewed state
-9. server authenticates/authorizes downstream GitHub operation separately
-10. host records result and verifies final repository state
+1. el host crea un client para este server
+2. el host descubre o conoce las capacidades bajo la versión de protocolo actual
+3. los resources pasan a ser contexto candidato, no verdad automática
+4. usuario/modelo selecciona el prompt de revisión bajo la jerarquía de instrucciones del host
+5. el modelo propone merge_pr
+6. la política del host comprueba confianza del server + permiso del usuario + repo + branch protection
+7. se solicita aprobación si la política la exige
+8. la llamada incluye expected_head_sha para vincular la intención al estado revisado
+9. el server autentica y autoriza por separado la operación downstream en GitHub
+10. el host registra el resultado y verifica el estado final del repositorio
 ```
 
-MCP reduce trabajo de integración entre pasos 1–5 y 8. No elimina los pasos de policy, authorization y verification.
+MCP reduce trabajo de integración entre los pasos 1–5 y 8. No elimina los pasos de política, autorización y verificación.
 
 ## 21. Implicación de producción: usa MCP como protocolo, no como autoridad
 
