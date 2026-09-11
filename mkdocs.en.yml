@@ -200,6 +200,7 @@ nav:
           - Long-running tasks, memory and subagents: series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad.md
       - Context Engineering, Memory & MCP:
           - Context engineering vs prompt engineering: series/context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineering.md
+          - Context budgets, prioritization, compaction, and provenance: series/context-engineering-memory-mcp/02-context-budgets-prioritisation-compaction-provenance.md
   - Concepts:
       - Concepts: temas/index.md
       - What is an LLM?: temas/llms.md
