@@ -1,6 +1,6 @@
 name: Context Engineering 3.1 GOLDEN certification
 
-# One-shot recertification after desktop-fit correction.
+# One-shot recertification after desktop-fit correction and responsive geometry-gate repair.
 on:
   push:
     branches:
