@@ -58,6 +58,14 @@ function distance(a, b) {
   return Math.hypot(a.x - b.x, a.y - b.y);
 }
 
+function horizontallyContained(inner, outer, tolerance = 2) {
+  return Boolean(
+    inner && outer &&
+    inner.x >= outer.x - tolerance &&
+    inner.x + inner.width <= outer.x + outer.width + tolerance
+  );
+}
+
 const browser = await chromium.launch({ headless: true });
 try {
   for (const testCase of cases) {
@@ -102,17 +110,27 @@ try {
       const decision = page.locator('.s5v-decision');
       if (await decision.count()) {
         const plot = decision.locator('.s5v-decision-map__plot');
+        const scroller = decision.locator('.s5v-decision-map__scroller');
         const cascade = decision.locator('.s5v-decision-map__node--cascade');
         const half = decision.locator('.s5v-decision-map__node--half');
         const s2s = decision.locator('.s5v-decision-map__node--s2s');
         check((await plot.count()) === 1, `${testCase.route}: ${viewport.name} decision plot missing`);
         check((await cascade.count()) === 1 && (await half.count()) === 1 && (await s2s.count()) === 1, `${testCase.route}: ${viewport.name} decision architecture points missing`);
         if ((await cascade.count()) && (await half.count()) && (await s2s.count())) {
-          const c = center(await cascade.boundingBox());
-          const h = center(await half.boundingBox());
-          const s = center(await s2s.boundingBox());
+          const cBox = await cascade.boundingBox();
+          const hBox = await half.boundingBox();
+          const sBox = await s2s.boundingBox();
+          const c = center(cBox);
+          const h = center(hBox);
+          const s = center(sBox);
           check(Boolean(c && h && s && c.x < h.x && h.x < s.x), `${testCase.route}: ${viewport.name} acoustic-continuity x-order collapsed (${JSON.stringify({ c, h, s })})`);
           check(Boolean(c && h && s && c.y < h.y && h.y < s.y), `${testCase.route}: ${viewport.name} text-boundary y-order collapsed (${JSON.stringify({ c, h, s })})`);
+          if (viewport.name === 'mobile') {
+            const scrollerBox = await scroller.boundingBox();
+            check(horizontallyContained(cBox, scrollerBox), `${testCase.route}: mobile full-cascade region requires hidden horizontal reveal (${JSON.stringify({ cBox, scrollerBox })})`);
+            check(horizontallyContained(hBox, scrollerBox), `${testCase.route}: mobile half-cascade region requires hidden horizontal reveal (${JSON.stringify({ hBox, scrollerBox })})`);
+            check(horizontallyContained(sBox, scrollerBox), `${testCase.route}: mobile S2S region requires hidden horizontal reveal (${JSON.stringify({ sBox, scrollerBox })})`);
+          }
         }
       }
 
@@ -140,7 +158,14 @@ try {
             const vector = stepper.locator('.s5v-decision-map__vector');
             check((await target.count()) === 1, `${testCase.route}: ${viewport.name} decision target missing at step ${step}`);
             check((await vector.count()) === 1, `${testCase.route}: ${viewport.name} decision vector missing at step ${step}`);
-            if (await target.count()) decisionTargets.push(center(await target.boundingBox()));
+            if (await target.count()) {
+              const targetBox = await target.boundingBox();
+              decisionTargets.push(center(targetBox));
+              if (viewport.name === 'mobile') {
+                const scrollerBox = await stepper.locator('.s5v-decision-map__scroller').boundingBox();
+                check(horizontallyContained(targetBox, scrollerBox), `${testCase.route}: mobile decision target ${step} is off-screen and requires manual reveal (${JSON.stringify({ targetBox, scrollerBox })})`);
+              }
+            }
           }
 
           await stepper.screenshot({
@@ -188,8 +213,11 @@ try {
       const target = reducedDecision.locator('.s5v-decision-map__target');
       const before = center(await target.boundingBox());
       await reducedDecision.locator('button[data-s5v-step="3"]').tap();
-      const after = center(await target.boundingBox());
+      const afterBox = await target.boundingBox();
+      const after = center(afterBox);
       check(distance(before, after) >= 55, `${testCase.route}: decision relationship collapses under reduced-motion (${distance(before, after).toFixed(1)}px)`);
+      const scrollerBox = await reducedDecision.locator('.s5v-decision-map__scroller').boundingBox();
+      check(horizontallyContained(afterBox, scrollerBox), `${testCase.route}: reduced-motion mobile S2S target requires hidden horizontal reveal (${JSON.stringify({ afterBox, scrollerBox })})`);
     }
 
     if (await reducedPage.locator('.s5v-duplex').count()) {
@@ -222,4 +250,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Voice architecture chapter 1 accessibility/intermediate-state QA passed: keyboard/touch activation, ARIA state, relationship-first decision geometry, meaningful state movement, reduced-motion behavior, mobile duplex coordination geometry and state screenshots are valid in ES/EN desktop/mobile.');
+console.log('Voice architecture chapter 1 accessibility/intermediate-state QA passed: keyboard/touch activation, ARIA state, relationship-first decision geometry, all mobile architecture regions and selected targets remain visible without manual horizontal reveal, meaningful state movement, reduced-motion behavior, mobile duplex coordination geometry and state screenshots are valid in ES/EN desktop/mobile.');
