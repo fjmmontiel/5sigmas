@@ -2,7 +2,7 @@
   <style>
     .s5v-context-assembly .s5v-context-assembly__scroll{overflow-x:auto;overscroll-behavior-inline:contain;padding:.35rem .2rem .8rem;scrollbar-gutter:stable;outline:none}
     .s5v-context-assembly .s5v-context-assembly__scroll:focus-visible{box-shadow:0 0 0 3px color-mix(in srgb,var(--md-accent-fg-color,#7c4dff) 36%,transparent);border-radius:14px}
-    .s5v-context-assembly .s5v-context-assembly__stage{min-width:1040px;max-width:1180px;margin:0 auto}
+    .s5v-context-assembly .s5v-context-assembly__stage{width:100%;min-width:0;max-width:1180px;margin:0 auto}
     .s5v-context-assembly svg{display:block;width:100%;height:auto;overflow:visible}
     .s5v-context-assembly text{fill:currentColor;font-family:inherit}
     .s5v-context-assembly .c-boundary{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 94%,var(--md-accent-fg-color,#7c4dff) 6%);stroke:currentColor;stroke-width:2;stroke-dasharray:9 8;opacity:.88}
@@ -26,7 +26,7 @@
     .s5v-context-assembly .s5v-context-assembly__legend i{width:1.55rem;border-top:3px solid currentColor}
     .s5v-context-assembly .s5v-context-assembly__legend .is-boundary i{border-top-width:2px;border-top-style:dashed;opacity:.7}
     .s5v-context-assembly .s5v__copy{margin-top:.85rem}
-    @media (max-width:700px){.s5v-context-assembly .s5v-context-assembly__scroll{margin-inline:-.35rem;padding-inline:.35rem}.s5v-context-assembly .s5v-context-assembly__stage{min-width:1000px}.s5v-context-assembly .s5v-context-assembly__legend{font-size:.82rem}}
+    @media (max-width:700px){.s5v-context-assembly .s5v-context-assembly__scroll{margin-inline:-.35rem;padding-inline:.35rem}.s5v-context-assembly .s5v-context-assembly__stage{width:auto;min-width:1000px}.s5v-context-assembly .s5v-context-assembly__legend{font-size:.82rem}}
   </style>
   <!-- GOLDEN_VISUAL_CONTRACT
     learning-objective="Distinguish prompt engineering from context engineering by showing that prompt instructions/examples are only two candidate inputs into a context-assembly policy that runs before every inference."
