@@ -44,8 +44,8 @@
     <div class="rg-scroll" tabindex="0" role="region" aria-label="Diagrama desplazable de retrieval, ensamblado, conflictos y grounding">
       <div class="rg-stage">
         <svg viewBox="0 0 1180 760" role="img" aria-labelledby="rg-title rg-desc">
-          <title id="rg-title">De una consulta a candidatos, contexto admitido y claims grounded</title>
-          <desc id="rg-desc">Una consulta se abre en retrieval léxico, semántico y estructurado. Sus resultados convergen como candidatos, no como verdad. La política de ensamblado filtra ámbito y permisos, comprueba versión y frescura, separa fuentes autoritativas de derivadas y detecta conflictos. La evidencia admitida forma un contexto acotado para el modelo. Los claims generados mantienen enlaces de grounding hacia evidence IDs; un conflicto no resuelto sigue una rama de abstención o escalado.</desc>
+          <title id="rg-title">De una consulta a candidatos, contexto admitido y afirmaciones respaldadas</title>
+          <desc id="rg-desc">Una consulta se abre en retrieval léxico, semántico y estructurado. Sus resultados convergen como candidatos, no como verdad. La política de ensamblado filtra ámbito y permisos, comprueba versión y frescura, separa fuentes autoritativas de derivadas y detecta conflictos. La evidencia admitida forma un contexto acotado para el modelo. Las afirmaciones generadas mantienen enlaces de grounding hacia IDs de evidencia; un conflicto no resuelto sigue una rama de abstención o escalado.</desc>
           <defs>
             <marker id="rg-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="currentColor"/></marker>
             <marker id="rg-arrow-open" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M1,1 L8,3 L1,5" fill="none" stroke="currentColor" stroke-width="1.5"/></marker>
@@ -53,7 +53,7 @@
 
           <rect data-boundary="retrieval-plane" class="rg-boundary" x="30" y="72" width="380" height="500" rx="24"/>
           <text x="54" y="102" class="rg-kicker">GENERACIÓN DE CANDIDATOS</text>
-          <g data-node="query"><rect class="rg-node rg-node--strong" x="72" y="130" width="160" height="70" rx="16"/><text x="152" y="158" class="rg-label">QUERY / TAREA</text><text x="152" y="182" class="rg-sub">intención + ámbito</text></g>
+          <g data-node="query"><rect class="rg-node rg-node--strong" x="72" y="130" width="160" height="70" rx="16"/><text x="152" y="158" class="rg-label">CONSULTA / TAREA</text><text x="152" y="182" class="rg-sub">intención + ámbito</text></g>
           <g data-node="lexical"><rect class="rg-node" x="72" y="260" width="130" height="70" rx="14"/><text x="137" y="288" class="rg-label">LÉXICO</text><text x="137" y="312" class="rg-sub">términos · IDs</text></g>
           <g data-node="semantic"><rect class="rg-node" x="218" y="260" width="150" height="70" rx="14"/><text x="293" y="288" class="rg-label">SEMÁNTICO</text><text x="293" y="312" class="rg-sub">similitud vectorial</text></g>
           <g data-node="structured"><rect class="rg-node" x="126" y="368" width="188" height="70" rx="14"/><text x="220" y="396" class="rg-label">ESTRUCTURADO</text><text x="220" y="420" class="rg-sub">SQL · filtros · grafo</text></g>
@@ -68,9 +68,9 @@
           <rect data-boundary="assembly-plane" class="rg-boundary" x="444" y="72" width="360" height="500" rx="24"/>
           <text x="468" y="102" class="rg-kicker">POLÍTICA DE ENSAMBLADO · APLICACIÓN</text>
           <g data-node="scope-gate"><rect class="rg-policy" x="488" y="136" width="270" height="64" rx="15"/><text x="623" y="162" class="rg-label">1 · ÁMBITO + ACL</text><text x="623" y="185" class="rg-sub">tenant · permiso · tipo de fuente</text></g>
-          <g data-node="freshness-gate"><rect class="rg-policy" x="488" y="232" width="270" height="64" rx="15"/><text x="623" y="258" class="rg-label">2 · FRESCURA + VERSIÓN</text><text x="623" y="281" class="rg-sub">source revision ≠ index age</text></g>
+          <g data-node="freshness-gate"><rect class="rg-policy" x="488" y="232" width="270" height="64" rx="15"/><text x="623" y="258" class="rg-label">2 · FRESCURA + VERSIÓN</text><text x="623" y="281" class="rg-sub">revisión de fuente ≠ edad del índice</text></g>
           <g data-node="authority-gate"><rect class="rg-policy" x="488" y="328" width="270" height="64" rx="15"/><text x="623" y="354" class="rg-label">3 · AUTORIDAD</text><text x="623" y="377" class="rg-sub">quién gobierna esta decisión</text></g>
-          <g data-node="conflict-gate"><path class="rg-conflict" d="M530 442 H716 L750 482 L716 522 H530 L496 482 Z"/><text x="623" y="474" class="rg-label">CONFLICT SET</text><text x="623" y="497" class="rg-sub">resolver o conservar incertidumbre</text></g>
+          <g data-node="conflict-gate"><path class="rg-conflict" d="M530 442 H716 L750 482 L716 522 H530 L496 482 Z"/><text x="623" y="474" class="rg-label">CONJUNTO DE CONFLICTOS</text><text x="623" y="497" class="rg-sub">resolver o conservar incertidumbre</text></g>
           <path data-edge="pool-to-scope" class="rg-edge" d="M348 516 C424 500 450 210 480 174"/>
           <text x="408" y="386" class="rg-edge-label">ranking propone; no autoriza</text>
           <path data-edge="scope-to-freshness" class="rg-edge" d="M623 200 V224"/>
@@ -78,16 +78,16 @@
           <path data-edge="authority-to-conflict" class="rg-edge" d="M623 392 V434"/>
 
           <rect data-boundary="authority-plane" class="rg-boundary" x="444" y="604" width="360" height="122" rx="22"/>
-          <text x="468" y="633" class="rg-kicker">FUENTE AUTORITATIVA / READ-THROUGH</text>
-          <g data-node="system-of-record"><rect class="rg-node rg-node--strong" x="504" y="654" width="238" height="48" rx="13"/><text x="623" y="676" class="rg-label">SYSTEM OF RECORD · rev B</text><text x="623" y="695" class="rg-sub">lectura fresca cuando importa</text></g>
+          <text x="468" y="633" class="rg-kicker">FUENTE AUTORITATIVA · LECTURA DIRECTA</text>
+          <g data-node="system-of-record"><rect class="rg-node rg-node--strong" x="493" y="654" width="260" height="48" rx="13"/><text x="623" y="676" class="rg-label">SISTEMA DE REGISTRO · rev B</text><text x="623" y="695" class="rg-sub">lectura fresca cuando importa</text></g>
           <path data-edge="authority-freshness" class="rg-edge rg-edge--authority" d="M690 654 C782 604 790 326 758 272"/>
-          <text x="780" y="575" class="rg-edge-label">rev A indexada → STALE</text>
+          <text x="780" y="575" class="rg-edge-label">rev A indexada → OBSOLETA</text>
 
           <rect data-boundary="generation-plane" class="rg-boundary" x="838" y="72" width="312" height="500" rx="24"/>
           <text x="862" y="102" class="rg-kicker">CONTEXTO ADMITIDO + GENERACIÓN</text>
-          <g data-node="bounded-context"><rect class="rg-node rg-node--strong" x="884" y="144" width="220" height="74" rx="16"/><text x="994" y="173" class="rg-label">EVIDENCE CONTEXT Aₜ</text><text x="994" y="197" class="rg-sub">IDs · versión · procedencia</text></g>
+          <g data-node="bounded-context"><rect class="rg-node rg-node--strong" x="884" y="144" width="220" height="74" rx="16"/><text x="994" y="173" class="rg-label">CONTEXTO DE EVIDENCIA Aₜ</text><text x="994" y="197" class="rg-sub">IDs · versión · procedencia</text></g>
           <g data-node="model"><rect class="rg-node" x="918" y="270" width="152" height="62" rx="15"/><text x="994" y="297" class="rg-label">MODELO</text><text x="994" y="319" class="rg-sub">genera desde Aₜ</text></g>
-          <g data-node="claims"><rect class="rg-node rg-node--strong" x="884" y="384" width="220" height="86" rx="16"/><text x="994" y="411" class="rg-label">CLAIMS</text><text x="994" y="435" class="rg-sub">c₁ → e7 · c₂ → e12</text><text x="994" y="456" class="rg-sub">c₃ → sin soporte</text></g>
+          <g data-node="claims"><rect class="rg-node rg-node--strong" x="884" y="384" width="220" height="86" rx="16"/><text x="994" y="411" class="rg-label">AFIRMACIONES</text><text x="994" y="435" class="rg-sub">c₁ → e7 · c₂ → e12</text><text x="994" y="456" class="rg-sub">c₃ → sin soporte</text></g>
           <g data-node="abstain"><rect class="rg-stale" x="884" y="500" width="220" height="52" rx="14"/><text x="994" y="523" class="rg-label">ABSTENER / ESCALAR</text><text x="994" y="543" class="rg-sub">conflicto no resuelto</text></g>
           <path data-edge="conflict-to-context" class="rg-edge" d="M750 470 C806 420 830 230 876 190"/>
           <text x="827" y="333" class="rg-edge-label">sólo evidencia admitida</text>
@@ -96,18 +96,18 @@
           <path data-edge="unresolved-to-abstain" class="rg-edge" d="M750 496 C806 508 842 520 876 526"/>
           <text x="816" y="505" class="rg-edge-label">unresolved</text>
           <path data-edge="claim-to-evidence" class="rg-edge rg-edge--ground" d="M884 420 C804 390 798 185 884 176"/>
-          <text x="827" y="232" class="rg-edge-label">grounded_by evidence_id</text>
+          <text x="827" y="232" class="rg-edge-label">grounded_by ID de evidencia</text>
 
-          <g data-node="rejected-stale"><rect class="rg-stale" x="306" y="628" width="112" height="56" rx="13"/><text x="362" y="651" class="rg-label">RECHAZADO</text><text x="362" y="672" class="rg-sub">stale / no ACL</text></g>
+          <g data-node="rejected-stale"><rect class="rg-stale" x="306" y="628" width="112" height="56" rx="13"/><text x="362" y="651" class="rg-label">RECHAZADO</text><text x="362" y="672" class="rg-sub">obsoleta / sin ACL</text></g>
           <path data-edge="reject-path" class="rg-edge rg-edge--candidate" d="M488 264 C436 306 418 526 392 620"/>
         </svg>
       </div>
     </div>
     <div class="rg-legend" aria-label="Leyenda del diagrama">
       <span><i></i> flujo admitido / control</span>
-      <span class="is-ground"><i></i> enlace claim → evidencia</span>
+      <span class="is-ground"><i></i> enlace afirmación → evidencia</span>
       <span>línea gruesa = validación contra autoridad actual</span>
     </div>
-    <p class="s5v__copy"><strong>Retrieve wide, assemble narrow.</strong> Un resultado relevante sigue siendo sólo un candidato. El contexto final debe conservar versión, autoridad, permisos y conflictos; y cada claim material debería poder trazarse a la evidencia que realmente entró en <code>Aₜ</code>.</p>
+    <p class="s5v__copy"><strong>Recupera un conjunto amplio de candidatos y ensambla sólo la evidencia elegible.</strong> Un resultado relevante sigue siendo sólo un candidato. El contexto final debe conservar versión, autoridad, permisos y conflictos; y cada afirmación material debería poder trazarse a la evidencia que realmente entró en <code>Aₜ</code>.</p>
   </div>
 </section>
