@@ -1,14 +1,120 @@
-<section class="s5v s5v-arch-map s5v-coding-harness-loop s5v--wide" data-step="1" aria-label="Fronteras de responsabilidad en el bucle de un coding agent">
+<section class="s5v s5v-coding-harness-loop s5v--wide" aria-label="Bucle causal de un coding agent y frontera entre modelo, harness y entorno">
+  <style>
+    .s5v-coding-harness-loop .s5v-harness-loop__scroll{overflow-x:auto;overscroll-behavior-inline:contain;padding:.35rem .2rem .8rem;scrollbar-gutter:stable;outline:none}
+    .s5v-coding-harness-loop .s5v-harness-loop__scroll:focus-visible{box-shadow:0 0 0 3px color-mix(in srgb,var(--md-accent-fg-color,#7c4dff) 36%,transparent);border-radius:14px}
+    .s5v-coding-harness-loop .s5v-harness-loop__stage{min-width:980px;max-width:1120px;margin:0 auto}
+    .s5v-coding-harness-loop svg{display:block;width:100%;height:auto;overflow:visible}
+    .s5v-coding-harness-loop .h-boundary{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 92%,var(--md-accent-fg-color,#7c4dff) 8%);stroke:currentColor;stroke-width:2;stroke-dasharray:9 8;opacity:.9}
+    .s5v-coding-harness-loop .h-edge{fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#h-arrow)}
+    .s5v-coding-harness-loop .h-edge--return{stroke-width:4}
+    .s5v-coding-harness-loop .h-edge--stop{stroke-dasharray:8 7}
+    .s5v-coding-harness-loop .h-state{fill:none;stroke:currentColor;stroke-width:2;stroke-dasharray:3 6;opacity:.65}
+    .s5v-coding-harness-loop .h-node{fill:var(--md-default-bg-color,#fff);stroke:currentColor;stroke-width:3}
+    .s5v-coding-harness-loop .h-node--model{stroke-width:4}
+    .s5v-coding-harness-loop .h-node--verify{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 88%,var(--md-accent-fg-color,#7c4dff) 12%)}
+    .s5v-coding-harness-loop .h-dot{fill:currentColor}
+    .s5v-coding-harness-loop text{fill:currentColor;font-family:inherit}
+    .s5v-coding-harness-loop .h-kicker{font-size:15px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;opacity:.7}
+    .s5v-coding-harness-loop .h-label{font-size:18px;font-weight:800;text-anchor:middle}
+    .s5v-coding-harness-loop .h-sub{font-size:14px;text-anchor:middle;opacity:.72}
+    .s5v-coding-harness-loop .h-edge-label{font-size:14px;font-weight:750;paint-order:stroke;stroke:var(--md-default-bg-color,#fff);stroke-width:5px;stroke-linejoin:round}
+    .s5v-coding-harness-loop .h-state-label{font-size:14px;font-weight:750;opacity:.78;text-anchor:middle}
+    .s5v-coding-harness-loop .s5v-harness-loop__legend{display:flex;gap:1rem;flex-wrap:wrap;margin:.25rem 0 0;font-size:.88rem;opacity:.85}
+    .s5v-coding-harness-loop .s5v-harness-loop__legend span{display:inline-flex;gap:.42rem;align-items:center}
+    .s5v-coding-harness-loop .s5v-harness-loop__legend i{width:1.55rem;border-top:3px solid currentColor}
+    .s5v-coding-harness-loop .s5v-harness-loop__legend .is-state i{border-top-width:2px;border-top-style:dashed;opacity:.65}
+    .s5v-coding-harness-loop .s5v__copy{margin-top:.85rem}
+    @media (max-width:700px){.s5v-coding-harness-loop .s5v-harness-loop__scroll{margin-inline:-.35rem;padding-inline:.35rem}.s5v-coding-harness-loop .s5v-harness-loop__stage{min-width:940px}.s5v-coding-harness-loop .s5v-harness-loop__legend{font-size:.82rem}}
+  </style>
+  <!-- GOLDEN_VISUAL_CONTRACT relationship="feedback-loop:model-proposal->policy-execution->observation->verification->context" evidence="task-policy-input,model-boundary,workspace-boundary,persistent-run-state,continue-return,stop-handback" interaction="static:no-cosmetic-controls" mobile="horizontal-scroll-preserves-loop-topology" -->
   <div class="s5v__canvas">
-    <header class="s5v__head"><div><span class="s5v__kicker">Modelo ≠ harness</span><h3>El modelo propone; el harness convierte propuestas en trabajo sobre un repositorio</h3></div><p>La autonomía aparece cuando un runtime mantiene el bucle, ejecuta tools bajo política y decide cuándo verificar, continuar o devolver control.</p></header>
-    <div class="s5v-arch-map__panels">
-      <div data-panel="1" class="s5v-arch-map__pipe">
-        <span>Contrato de tarea<br><small>objetivo · alcance · restricciones</small></span>
-        <span>Modelo<br><small>propone la siguiente acción</small></span>
-        <span>Harness + entorno<br><small>contexto · tools · sandbox · estado</small></span>
-        <span>Verificador / stop<br><small>tests · diff · política · handback</small></span>
+    <header class="s5v__head"><div><span class="s5v__kicker">Modelo ≠ harness</span><h3>La autonomía está en el bucle que vuelve a alimentar al modelo</h3></div><p>El modelo propone una acción. El harness conserva estado, aplica política, ejecuta, observa y decide si existe evidencia para continuar o parar.</p></header>
+    <div class="s5v-harness-loop__scroll" tabindex="0" role="region" aria-label="Diagrama desplazable del bucle de ejecución del harness">
+      <div class="s5v-harness-loop__stage">
+        <svg viewBox="0 0 1080 610" role="img" aria-labelledby="harness-loop-title harness-loop-desc">
+          <title id="harness-loop-title">Bucle causal entre modelo, harness, workspace y verificador</title>
+          <desc id="harness-loop-desc">La tarea y la política entran al ensamblador de contexto. El contexto cruza hacia el modelo, que devuelve una propuesta. El harness autoriza y despacha la acción al workspace, recibe una observación y la verifica. Si debe continuar, la observación y el estado vuelven al siguiente contexto; si debe parar, el flujo sale como done o handback. El estado persistente pertenece al harness y no al modelo.</desc>
+          <defs>
+            <marker id="h-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="currentColor"/></marker>
+          </defs>
+
+          <path class="h-boundary" d="M105 184 Q105 155 134 155 H708 Q737 155 737 184 V535 Q737 564 708 564 H134 Q105 564 105 535 Z"/>
+          <text x="135" y="188" class="h-kicker">HARNESS RUNTIME · posee continuidad</text>
+
+          <g data-node="task-policy">
+            <circle class="h-node" cx="54" cy="286" r="34"/>
+            <text x="54" y="278" class="h-label">Tarea</text>
+            <text x="54" y="300" class="h-sub">+ policy</text>
+          </g>
+          <path data-edge="task-to-context" class="h-edge" d="M88 286 H154"/>
+          <text x="118" y="267" class="h-edge-label" text-anchor="middle">invariante</text>
+
+          <g data-node="context">
+            <circle class="h-node" cx="205" cy="286" r="51"/>
+            <text x="205" y="280" class="h-label">Contexto</text>
+            <text x="205" y="302" class="h-sub">estado → prompt</text>
+          </g>
+
+          <g data-node="model">
+            <circle class="h-node h-node--model" cx="421" cy="72" r="57"/>
+            <text x="421" y="66" class="h-label">Modelo</text>
+            <text x="421" y="88" class="h-sub">propone; no ejecuta</text>
+          </g>
+          <text x="421" y="16" class="h-kicker" text-anchor="middle">MODEL / PROVIDER</text>
+          <path data-edge="context-to-model" class="h-edge" d="M237 246 C276 190 327 129 374 101"/>
+          <text x="291" y="179" class="h-edge-label" text-anchor="middle">contexto acotado</text>
+
+          <g data-node="dispatch">
+            <circle class="h-node" cx="421" cy="286" r="55"/>
+            <text x="421" y="276" class="h-label">Policy + dispatch</text>
+            <text x="421" y="300" class="h-sub">allow · ask · deny</text>
+          </g>
+          <path data-edge="model-to-dispatch" class="h-edge" d="M421 129 V225"/>
+          <text x="438" y="181" class="h-edge-label">propuesta</text>
+
+          <g data-node="workspace">
+            <circle class="h-node" cx="915" cy="286" r="64"/>
+            <text x="915" y="278" class="h-label">Workspace + tools</text>
+            <text x="915" y="302" class="h-sub">shell · edit · git · APIs</text>
+          </g>
+          <text x="915" y="188" class="h-kicker" text-anchor="middle">ENVIRONMENT / EFFECTS</text>
+          <path data-edge="dispatch-to-workspace" class="h-edge" d="M476 286 H845"/>
+          <text x="653" y="268" class="h-edge-label" text-anchor="middle">acción autorizada cruza la frontera</text>
+
+          <g data-node="observation">
+            <circle class="h-node" cx="609" cy="430" r="55"/>
+            <text x="609" y="421" class="h-label">Observación</text>
+            <text x="609" y="445" class="h-sub">stdout · diff · efecto</text>
+          </g>
+          <path data-edge="workspace-to-observation" class="h-edge" d="M878 338 C823 408 746 430 670 430"/>
+          <text x="787" y="397" class="h-edge-label" text-anchor="middle">resultado vuelve al runtime</text>
+
+          <g data-node="verifier">
+            <path class="h-node h-node--verify" d="M421 368 L492 430 L421 492 L350 430 Z"/>
+            <text x="421" y="425" class="h-label">Verificar</text>
+            <text x="421" y="449" class="h-sub">continue · stop</text>
+          </g>
+          <path data-edge="observation-to-verifier" class="h-edge" d="M554 430 H498"/>
+
+          <path data-edge="continue-return" class="h-edge h-edge--return" d="M350 430 C270 430 205 389 205 343"/>
+          <text x="257" y="413" class="h-edge-label" text-anchor="middle">continue</text>
+          <text x="252" y="451" class="h-sub">nueva evidencia → nuevo contexto</text>
+
+          <g data-node="handback">
+            <circle class="h-dot" cx="205" cy="535" r="8"/>
+            <text x="205" y="581" class="h-label">Done / handback</text>
+          </g>
+          <path data-edge="stop-exit" class="h-edge h-edge--stop" d="M380 473 C337 515 282 535 219 535"/>
+          <text x="321" y="533" class="h-edge-label" text-anchor="middle">stop</text>
+
+          <path data-state-rail="run-state" class="h-state" d="M175 522 H683"/>
+          <path class="h-state" d="M205 337 V522 M421 341 V368 M421 492 V522 M609 485 V522"/>
+          <circle class="h-dot" cx="205" cy="522" r="5"/><circle class="h-dot" cx="421" cy="522" r="5"/><circle class="h-dot" cx="609" cy="522" r="5"/>
+          <text x="530" y="551" class="h-state-label">run state · provenance · checkpoint · evidence</text>
+        </svg>
       </div>
     </div>
-    <div class="s5v__copy">El paso crítico está entre <strong>proponer</strong> y <strong>actuar</strong>. El harness decide qué contexto recibe el modelo, valida permisos, ejecuta shell/ediciones/git en un workspace, devuelve la observación al siguiente turno y conserva la continuidad causal y el estado necesarios para repetir. Un test verde o un diff revisable son señales para decidir si el bucle continúa; no son propiedades del modelo por sí solo.</div>
+    <div class="s5v-harness-loop__legend" aria-label="Leyenda del diagrama"><span><i></i>flujo causal</span><span class="is-state"><i></i>estado persistente del harness</span></div>
+    <div class="s5v__copy">La diferencia no es «usar tools». Es <strong>cerrar el feedback loop</strong>: la observación de una acción cambia el estado con el que se construye el siguiente contexto. El modelo sólo participa en el tramo contexto → propuesta; la continuidad, la política de ejecución, la evidencia y la decisión continue/stop pertenecen al harness. Si el runtime no puede reconstruir ese estado, no existe una trayectoria reproducible que continuar.</div>
   </div>
 </section>
