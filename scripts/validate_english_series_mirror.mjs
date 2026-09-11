@@ -28,7 +28,7 @@ const realtimeVoice = {
 const codingAgents = {
   route: '/en/series/coding-agents-agent-harnesses/01-que-es-agent-harness/',
   title: 'Coding Agents & Agent Harnesses',
-  chapterTitle: 'What is an agent harness?',
+  chapterTitle: 'Chapter 1 — What an agent harness is, and what it adds beyond a model or coding assistant',
 };
 
 const nativePresentationMedia = new Map([
