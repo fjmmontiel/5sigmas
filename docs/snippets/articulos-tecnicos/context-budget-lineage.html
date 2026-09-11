@@ -16,6 +16,7 @@
     .s5v-context-budget-lineage .cb-label{font-size:16px;font-weight:800;text-anchor:middle}
     .s5v-context-budget-lineage .cb-sub{font-size:12.5px;text-anchor:middle;opacity:.74}
     .s5v-context-budget-lineage .cb-kicker{font-size:13px;font-weight:850;letter-spacing:.07em;text-transform:uppercase;opacity:.75}
+    .s5v-context-budget-lineage .cb-budget-title{font-size:10.5px;font-weight:850;letter-spacing:.035em;text-anchor:middle;opacity:.78}
     .s5v-context-budget-lineage .cb-edge-label{font-size:12.5px;font-weight:750;paint-order:stroke;stroke:var(--md-default-bg-color,#fff);stroke-width:5px;stroke-linejoin:round}
     .s5v-context-budget-lineage .cb-budget{stroke:currentColor;stroke-width:2;fill:none}
     .s5v-context-budget-lineage .cb-budget-fill{fill:color-mix(in srgb,var(--md-accent-fg-color,#7c4dff) 16%,transparent)}
@@ -80,7 +81,7 @@
           <path data-edge="gate-to-drop" class="cb-edge" d="M449 403 C479 437 493 486 513 493"/>
 
           <rect data-boundary="budget-envelope" class="cb-context" x="716" y="94" width="230" height="454" rx="22"/>
-          <text x="831" y="124" class="cb-kicker" text-anchor="middle">CONTEXTO ACTIVO · Bdynamic = 60k</text>
+          <text x="831" y="124" class="cb-budget-title">CONTEXTO ACTIVO · Bdynamic = 60k</text>
           <rect class="cb-budget-fill" x="744" y="151" width="174" height="55" rx="10"/><rect class="cb-budget" x="744" y="151" width="174" height="55" rx="10"/>
           <text x="831" y="177" class="cb-label">Política · 4k</text><text x="831" y="196" class="cb-sub">verbatim</text>
           <rect class="cb-budget-fill" x="744" y="222" width="174" height="93" rx="10"/><rect class="cb-budget" x="744" y="222" width="174" height="93" rx="10"/>
@@ -95,9 +96,8 @@
           <path data-edge="extract-to-context" class="cb-edge" d="M670 215 C710 238 705 348 736 364"/>
           <path data-edge="compact-to-context" class="cb-edge" d="M670 309 C714 344 706 439 736 455"/>
           <path data-edge="reference-to-context" class="cb-edge" d="M670 403 C708 367 711 284 736 270"/>
-          <text x="693" y="206" class="cb-edge-label" text-anchor="middle">sólo esto cruza</text>
 
-          <g data-node="model"><circle class="cb-node cb-node--strong" cx="1062" cy="320" r="67"/><text x="1062" y="313" class="cb-label">Modelo</text><text x="1062" y="337" class="cb-sub">ve Cₜ</text><text x="1062" y="358" class="cb-sub">no ve el raw excluido</text></g>
+          <g data-node="model"><circle class="cb-node cb-node--strong" cx="1062" cy="320" r="67"/><text x="1062" y="307" class="cb-label">Modelo</text><text x="1062" y="331" class="cb-sub">ve Cₜ</text><text x="1062" y="351" class="cb-sub">no ve el raw</text><text x="1062" y="369" class="cb-sub">excluido</text></g>
           <path data-edge="context-to-model" class="cb-edge" d="M946 320 H987"/>
 
           <rect data-boundary="provenance-plane" class="cb-boundary" x="304" y="634" width="832" height="102" rx="20"/>
