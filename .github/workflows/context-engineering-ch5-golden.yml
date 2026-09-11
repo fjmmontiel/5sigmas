@@ -1,0 +1,135 @@
+name: Context Engineering 3.5 GOLDEN certification
+
+on:
+  push:
+    branches:
+      - series/context-engineering-memory-mcp-golden
+    paths:
+      - '.github/workflows/context-engineering-ch5-golden.yml'
+      - 'docs/series/context-engineering-memory-mcp/05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries.md'
+      - 'locales/en/series/context-engineering-memory-mcp/05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries.md'
+      - 'docs/snippets/articulos-tecnicos/context-mcp-trust-boundaries.html'
+      - 'locales/en/snippets/articulos-tecnicos/context-mcp-trust-boundaries.html'
+      - 'locales/en/snippets/articulos-tecnicos/context-mcp-trust-boundaries.i18n.json'
+      - 'scripts/validate_context_engineering_ch5_source.mjs'
+      - 'scripts/validate_context_engineering_ch5_accessibility.mjs'
+      - '.github/workflows/pr-visual-review.yml'
+      - 'mkdocs.yml'
+      - 'mkdocs.en.yml'
+      - 'locales/en/manifest.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  certify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Validate media declarations and signatures
+        run: |
+          python scripts/prepare_video_media.py --check
+          python scripts/audit_media_magic.py
+
+      - name: Validate chapter 3.1 source regression
+        run: node scripts/validate_context_engineering_ch1_source.mjs
+
+      - name: Validate chapter 3.2 source regression
+        run: node scripts/validate_context_engineering_ch2_source.mjs
+
+      - name: Validate chapter 3.3 source regression
+        run: node scripts/validate_context_engineering_ch3_source.mjs
+
+      - name: Validate chapter 3.4 source regression
+        run: node scripts/validate_context_engineering_ch4_source.mjs
+
+      - name: Validate chapter 3.5 source and relationship contract
+        run: node scripts/validate_context_engineering_ch5_source.mjs
+
+      - name: Build Spanish strictly
+        run: mkdocs build --clean --strict
+
+      - name: Prepare English locale
+        run: python scripts/prepare_locale.py --locale en
+
+      - name: Audit English locale sources
+        run: python scripts/audit_locale.py --locale en
+
+      - name: Build English strictly
+        env:
+          S5_LOCALE: en
+        run: mkdocs build -f mkdocs.en.yml --clean --strict
+
+      - name: Audit rendered English locale
+        run: python scripts/audit_locale.py --locale en --site site/en
+
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Serve combined preview
+        run: |
+          python -m http.server 8000 --directory site > /tmp/5sigmas-preview.log 2>&1 &
+          echo $! > /tmp/5sigmas-preview.pid
+          for attempt in {1..30}; do
+            curl --fail --silent http://127.0.0.1:8000/ > /dev/null && curl --fail --silent http://127.0.0.1:8000/en/ > /dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/5sigmas-preview.log
+          exit 1
+
+      - name: Audit browser resources and locale
+        run: |
+          node scripts/audit_browser_resources.mjs
+          node scripts/validate_english_locale.mjs
+
+      - name: Validate chapter 3.1 relationship geometry regression
+        run: node scripts/validate_context_engineering_ch1_accessibility.mjs
+
+      - name: Validate chapter 3.2 relationship geometry regression
+        run: node scripts/validate_context_engineering_ch2_accessibility.mjs
+
+      - name: Validate chapter 3.3 relationship geometry regression
+        run: node scripts/validate_context_engineering_ch3_accessibility.mjs
+
+      - name: Validate chapter 3.4 relationship geometry regression
+        run: node scripts/validate_context_engineering_ch4_accessibility.mjs
+
+      - name: Validate chapter 3.5 relationship geometry and accessibility
+        run: node scripts/validate_context_engineering_ch5_accessibility.mjs
+
+      - name: Validate direct reader navigation
+        run: node scripts/validate_direct_reader_navigation.mjs
+
+      - name: Ensure certification SHA and clean tracked source
+        shell: bash
+        run: |
+          echo "CERTIFICATION_SHA=$(git rev-parse HEAD)"
+          git status --short
+          test -z "$(git status --short --untracked-files=no)"
+
+      - name: Upload chapter 3.5 visual evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: context-engineering-ch5-golden-evidence
+          path: artifacts/visual-review/context-engineering-ch5-*.png
+          if-no-files-found: error
+          retention-days: 1
