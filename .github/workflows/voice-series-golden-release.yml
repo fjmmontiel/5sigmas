@@ -1,5 +1,5 @@
 name: Voice series GOLDEN release audit
-# rerun after synchronizing the localized decision-map source hash
+# final rerun after pixel QA found and gated hidden mobile decision targets
 
 on:
   push:
