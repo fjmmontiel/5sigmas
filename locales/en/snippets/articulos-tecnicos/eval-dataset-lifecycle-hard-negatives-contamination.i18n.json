@@ -1,6 +1,6 @@
 {
   "source": "snippets/articulos-tecnicos/eval-dataset-lifecycle-hard-negatives-contamination.html",
-  "source_blob_sha": "fec916288357e4f618aa070b0f902f2faad9a5bc",
+  "source_blob_sha": "c81a874b2b053149a16f858150c6bfc4373f4b81",
   "replacements": {
     "Ciclo de vida de un eval set offline, sus bancos y sus riesgos de leakage": "Lifecycle of an offline eval set, its banks, and leakage risks",
     "Congela lo que comparas": "Freeze what you compare",
