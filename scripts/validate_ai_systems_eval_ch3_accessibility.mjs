@@ -9,7 +9,7 @@ await fs.mkdir(outDir, { recursive: true });
 
 const routes = {
   es: '/series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo/',
-  en: '/en/series/evaluating-ai-systems-production/03-llm-as-judge-human-evaluation-calibration-bias-variance-agreement/',
+  en: '/en/series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo/',
 };
 const failures = [];
 const check = (condition, message) => { if (!condition) failures.push(message); };

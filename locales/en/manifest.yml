@@ -36,7 +36,7 @@ published_routes:
   - series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.md
   - series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria.md
   - series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning.md
-  - series/evaluating-ai-systems-production/03-llm-as-judge-human-evaluation-calibration-bias-variance-agreement.md
+  - series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo.md
   - series/fundamentos-ia-iag/00_presentacion_serie.md
   - series/fundamentos-ia-iag/01-que-es-ia.md
   - series/fundamentos-ia-iag/02-que-es-ia-generativa.md

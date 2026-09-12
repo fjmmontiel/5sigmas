@@ -6,7 +6,7 @@ import crypto from 'node:crypto';
 const read = (p) => fs.readFile(path.resolve(p), 'utf8');
 const [es, en, visual, mirror, i18nRaw, mkEs, mkEn, manifest, workflow] = await Promise.all([
   read('docs/series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo.md'),
-  read('locales/en/series/evaluating-ai-systems-production/03-llm-as-judge-human-evaluation-calibration-bias-variance-agreement.md'),
+  read('locales/en/series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo.md'),
   read('docs/snippets/articulos-tecnicos/eval-judge-calibration-bias-agreement.html'),
   read('locales/en/snippets/articulos-tecnicos/eval-judge-calibration-bias-agreement.html'),
   read('locales/en/snippets/articulos-tecnicos/eval-judge-calibration-bias-agreement.i18n.json'),
@@ -16,14 +16,19 @@ const i18n = JSON.parse(i18nRaw);
 const failures = [];
 const check = (ok, msg) => { if (!ok) failures.push(msg); };
 const routeEs = 'series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo.md';
-const routeEn = 'series/evaluating-ai-systems-production/03-llm-as-judge-human-evaluation-calibration-bias-variance-agreement.md';
+const routeEn = 'series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo.md';
 const visualPath = 'snippets/articulos-tecnicos/eval-judge-calibration-bias-agreement.html';
+const staleRouteEn = 'series/evaluating-ai-systems-production/03-llm-as-judge-human-evaluation-calibration-bias-variance-agreement.md';
 
 // Publication surfaces: keep DRAFTING fail-closed until the chapter is wired everywhere.
 check(mkEs.includes(routeEs), 'ES: chapter 5.3 navigation missing');
 check(mkEn.includes(routeEn), 'EN: chapter 5.3 navigation missing');
 check(manifest.includes(`  - ${routeEn}`), 'EN: chapter 5.3 missing from published_routes');
 check(manifest.includes(`  - ${visualPath}`), 'EN: chapter 5.3 visual missing from required_snippets');
+check(manifest.includes('route_strategy: preserve-source-slugs'), 'EN: locale manifest must preserve canonical source slugs');
+check(routeEn === routeEs, 'EN: chapter 5.3 route must preserve canonical source slug');
+check(!mkEn.includes(staleRouteEn), 'EN: stale native-English chapter route remains in navigation');
+check(!manifest.includes(`  - ${staleRouteEn}`), 'EN: stale native-English chapter route remains in manifest');
 check(workflow.includes('validate_ai_systems_eval_ch3_source.mjs'), 'CI: 5.3 source gate missing from permanent review');
 check(workflow.includes('validate_ai_systems_eval_ch3_accessibility.mjs'), 'CI: 5.3 accessibility gate missing from permanent review');
 
