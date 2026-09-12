@@ -79,12 +79,6 @@ jobs:
           replace_once('locales/en/manifest.yml',
               '  - snippets/articulos-tecnicos/inference-prefill-decode-latency-budget.html\n',
               '  - snippets/articulos-tecnicos/inference-prefill-decode-latency-budget.html\n  - ' + visual + '\n')
-
-          pr = '.github/workflows/pr-visual-review.yml'
-          pr_anchor = '      - name: Validate LLM Inference Engineering chapter 1 accessibility and responsive states\n        run: node scripts/validate_inference_engineering_ch1_accessibility.mjs\n'
-          replace_once(pr, pr_anchor, pr_anchor + '\n      - name: Validate LLM Inference Engineering chapter 2 source contract\n        run: node scripts/validate_inference_engineering_ch2_source.mjs\n\n      - name: Validate LLM Inference Engineering chapter 2 accessibility and responsive states\n        run: node scripts/validate_inference_engineering_ch2_accessibility.mjs\n')
-
-          Path('.github/workflows/series4-ch2-integrate.yml').unlink()
           PY
 
       - name: Run deterministic source gate before push
@@ -98,8 +92,7 @@ jobs:
           git add docs/series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.md \
             locales/en/series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.md \
             scripts/validate_inference_engineering_ch2_source.mjs \
-            mkdocs.yml mkdocs.en.yml locales/en/manifest.yml .github/workflows/pr-visual-review.yml \
-            .github/workflows/series4-ch2-integrate.yml
+            mkdocs.yml mkdocs.en.yml locales/en/manifest.yml
           git diff --cached --check
           git commit -m 'feat(series4): integrate chapter 4.2 for GOLDEN QA'
           git push origin HEAD:series/llm-inference-engineering-economics-golden
