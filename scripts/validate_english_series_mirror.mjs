@@ -40,7 +40,7 @@ const contextEngineering = {
 const inferenceEngineering = {
   route: '/en/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget/',
   title: 'LLM Inference Engineering & Economics',
-  chapterTitle: 'Chapter 1 — Prefill vs decode: TTFT, TPOT, throughput and the latency budget',
+  chapterTitle: 'Chapter 1 — Prefill vs decode: TTFT, TPOT, throughput, and the latency budget',
 };
 
 const nativePresentationMedia = new Map([
