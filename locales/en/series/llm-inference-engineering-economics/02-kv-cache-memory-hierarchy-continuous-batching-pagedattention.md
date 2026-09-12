@@ -16,7 +16,7 @@ tags:
 
 The previous chapter separated **prefill**, **decode**, and the scheduler. A constraint now ties all three together: **every active sequence needs reusable state, and that state occupies memory while the request remains live**.
 
-Two servers running the same model on the same number of GPUs can therefore sustain very different amounts of concurrent work depending on:
+Two deployments on the same GPU type and count can therefore sustain very different amounts of concurrent work depending on:
 
 - how many live tokens they keep in KV cache.
 - the model’s attention architecture.
@@ -126,7 +126,7 @@ An “80 GB GPU” therefore does not mean “80 GB for context.” The rest of 
 
 ## Why maximum contiguous reservation wastes capacity
 
-Imagine three requests with very different realized lengths:
+Imagine three requests with the same declared `8k` maximum but very different realized lengths:
 
 ```text
 A: maximum 8k, finishes at 1.2k
@@ -216,6 +216,8 @@ This reconnects to Chapter 4.1. Maximizing instantaneous occupancy may improve t
 When VRAM is insufficient, some runtimes can retain reusable blocks in host memory and promote them back to GPU when needed.
 
 vLLM currently documents an `OffloadingConnector` that copies completed KV blocks from GPU to pinned host memory and can use secondary tiers, promoting blocks back to GPU on demand.[^vllm-offload] TensorRT-LLM also supports host offloading before selected blocks are evicted from the GPU cache.[^trt-kv]
+
+Here, **offload is not one semantic category**. vLLM’s `OffloadingConnector` extends the prefix cache: it moves **completed, reusable KV blocks** to slower tiers and promotes them again on a hit. That is not equivalent to suspending an active sequence because KV capacity ran out. Other runtimes may offload active-request state, preempt and recompute it, or use a different policy; a benchmark must record which policy is actually enabled.[^vllm-offload][^hf-continuous]
 
 The right relationship is:
 

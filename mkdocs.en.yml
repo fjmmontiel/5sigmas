@@ -207,6 +207,7 @@ nav:
           - Skills, plugins, subagents, and hooks: series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation.md
       - LLM Inference Engineering & Economics:
           - Prefill vs decode: series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.md
+          - KV cache, memory hierarchy, continuous batching and PagedAttention: series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.md
   - Concepts:
       - Concepts: temas/index.md
       - What is an LLM?: temas/llms.md

@@ -104,6 +104,12 @@ check(es.includes('paged ≠ utilización perfecta'), 'ES: paging fragmentation 
 check(en.includes('paged = perfect utilization'), 'EN: paging fragmentation caveat missing');
 check(es.includes('no convierte memoria lenta en VRAM gratuita'), 'ES: offload cost boundary missing');
 check(en.includes('does not turn slower memory into free VRAM'), 'EN: offload cost boundary missing');
+check(!es.includes('mismo modelo y el mismo número de GPUs'), 'ES: deployment comparison must not vary model architecture while claiming the same model');
+check(!en.includes('same model on the same number of GPUs'), 'EN: deployment comparison must not vary model architecture while claiming the same model');
+check(es.includes('mismo máximo declarado de `8k`') && es.includes('longitudes realizadas muy distintas'), 'ES: contiguous-reservation example must distinguish declared maximum from realized length');
+check(en.includes('same declared `8k` maximum') && en.includes('very different realized lengths'), 'EN: contiguous-reservation example must distinguish declared maximum from realized length');
+check(es.includes('offload no designa una única semántica') && es.includes('bloques KV completados y reutilizables') && es.includes('no equivale a pausar una secuencia activa'), 'ES: offload semantics boundary missing');
+check(en.includes('offload is not one semantic category') && en.includes('completed, reusable KV blocks') && en.includes('not equivalent to suspending an active sequence'), 'EN: offload semantics boundary missing');
 check(es.includes('no una constante multiplicativa') || es.includes('no una constante multiplicativa que podamos trasladar'), 'ES: historical performance generalization caveat missing');
 check(en.includes('not a multiplicative constant'), 'EN: historical performance generalization caveat missing');
 check(!/^\s*-\s+.+;\s*$/m.test(en), 'EN: semicolon-list anti-pattern detected');

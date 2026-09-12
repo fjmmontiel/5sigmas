@@ -16,7 +16,7 @@ tags:
 
 El capítulo anterior separó **prefill**, **decode** y el scheduler. Ahora aparece una restricción que conecta las tres piezas: **cada secuencia activa necesita estado reutilizable y ese estado ocupa memoria mientras la petición siga viva**.
 
-Por eso dos servidores con el mismo modelo y el mismo número de GPUs pueden admitir cantidades muy distintas de trabajo simultáneo según:
+Por eso dos despliegues sobre el mismo tipo y número de GPUs pueden admitir cantidades muy distintas de trabajo simultáneo según:
 
 - cuántos tokens vivos mantienen en KV cache;
 - qué arquitectura de atención usa el modelo;
@@ -126,7 +126,7 @@ Por tanto, «GPU de 80 GB» no equivale a «80 GB para contexto». Primero hay q
 
 ## El problema de una reserva contigua máxima
 
-Imaginemos tres peticiones con máximos declarados muy distintos:
+Imaginemos tres peticiones con el mismo máximo declarado de `8k`, pero longitudes realizadas muy distintas:
 
 ```text
 A: máximo 8k, termina en 1.2k
@@ -217,6 +217,8 @@ Cuando la VRAM no basta, algunos runtimes pueden mantener bloques reutilizables 
 
 vLLM documenta actualmente un `OffloadingConnector` que mueve bloques KV completados desde GPU hacia pinned host memory y permite tiers secundarios, con promociones de vuelta a GPU bajo demanda.[^vllm-offload] TensorRT-LLM también soporta host offloading antes de expulsar ciertos bloques del cache GPU.[^trt-kv]
 
+Aquí **offload no designa una única semántica**. El `OffloadingConnector` de vLLM extiende el prefix cache: descarga **bloques KV completados y reutilizables** a tiers más lentos y los vuelve a promover cuando hay un hit. Eso no equivale a pausar una secuencia activa por falta de KV. Otros runtimes pueden descargar estado de una petición activa, preemptarla y recomputar, o aplicar otra política; un benchmark debe registrar cuál está realmente activa.[^vllm-offload][^hf-continuous]
+
 La relación correcta es:
 
 ```text
@@ -224,7 +226,7 @@ GPU VRAM  ←→  host / pinned memory  ←→  tier secundario opcional
  más rápida      mayor capacidad             aún más lejos
 ```
 
-Offloading **no convierte memoria lenta en VRAM gratis**. Introduce transferencia, coordinación y una política de qué merece permanecer caliente. Si la tasa de misses o promociones es alta, el movimiento puede entrar en el camino crítico.
+Offloading **no convierte memoria lenta en VRAM gratuita**. Introduce transferencia, coordinación y una política de qué merece permanecer caliente. Si la tasa de misses o promociones es alta, el movimiento puede entrar en el camino crítico.
 
 Por eso hay que medir, al menos:
 
