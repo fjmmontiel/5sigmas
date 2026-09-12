@@ -24,7 +24,10 @@ const chapters = [
 const navEs = read('mkdocs.yml');
 const navEn = read('mkdocs.en.yml');
 const manifest = read('locales/en/manifest.yml');
+const hubEs = read('docs/series/index.md');
+const hubEn = read('locales/en/series/index.md');
 const seriesWorkflow = read('.github/workflows/series4-golden-review.yml');
+const liveWorkflow = read('.github/workflows/inference-engineering-live-qa.yml');
 
 let previousEsNav = -1;
 let previousEnNav = -1;
@@ -69,11 +72,10 @@ for (let i = 0; i < chapters.length; i += 1) {
 
   assert(manifest.includes(`${base}/${article}`), `${article} missing from EN manifest`);
   assert(manifest.includes(`snippets/articulos-tecnicos/${visual}`), `${visual} missing from EN manifest`);
-  // The dedicated Series 4 PR workflow is the permanent owner for all six
-  // chapter source/accessibility gates. pr-visual-review remains a broader
-  // site-wide regression suite and is not required to duplicate these steps.
   assert(seriesWorkflow.includes(`validate_inference_engineering_ch${n}_source.mjs`), `chapter ${n} source gate missing from Series 4 PR workflow`);
   assert(seriesWorkflow.includes(`validate_inference_engineering_ch${n}_accessibility.mjs`), `chapter ${n} accessibility gate missing from Series 4 PR workflow`);
+  assert(liveWorkflow.includes(`validate_inference_engineering_ch${n}_accessibility.mjs`), `chapter ${n} accessibility gate missing from Series 4 live workflow`);
+  assert(liveWorkflow.includes(article.replace(/\.md$/, '/')), `chapter ${n} route missing from Series 4 live workflow resource inventory`);
 
   inventory.push({
     chapter: `4.${n}`,
@@ -85,17 +87,42 @@ for (let i = 0; i < chapters.length; i += 1) {
   });
 }
 
+const firstRoute = '/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget/';
+const firstRouteEn = `/en${firstRoute}`;
+assert(hubEs.includes(`href="${firstRoute}"`), 'Series 4 missing from Spanish canonical series hub');
+assert(hubEs.includes('Ingeniería y economía de inferencia de LLMs'), 'Series 4 Spanish canonical hub title missing');
+assert(hubEn.includes(`href="${firstRouteEn}"`), 'Series 4 missing from English canonical series hub');
+assert(hubEn.includes('LLM Inference Engineering & Economics'), 'Series 4 English canonical hub title missing');
+
 assert(chapters.length === 6, 'Series 4 chapter inventory must contain exactly six chapters');
 assert(seriesWorkflow.includes('validate_inference_engineering_series4_release.mjs'), 'Series 4 PR workflow does not execute deterministic release inventory');
 assert(seriesWorkflow.includes('validate_english_series_mirror.mjs'), 'Series 4 PR workflow does not execute English series mirror validation');
+assert(seriesWorkflow.includes('validate_locale_switching.mjs'), 'Series 4 PR workflow does not execute locale-switch/reader-sequence validation');
 assert(seriesWorkflow.includes('validate_reader_header_overlap.mjs'), 'Series 4 PR workflow does not execute reader header overlap validation');
 assert(seriesWorkflow.includes('validate_responsive_polish.mjs'), 'Series 4 PR workflow does not execute responsive polish validation');
+assert(liveWorkflow.includes('workflow_run:'), 'Series 4 live workflow must be deployment-triggered');
+assert(liveWorkflow.includes('Deploy MkDocs to GitHub Pages'), 'Series 4 live workflow is not bound to the canonical deployment workflow');
+assert(liveWorkflow.includes("github.event.workflow_run.head_branch == 'main'"), 'Series 4 live workflow must only validate main deployments');
+assert(liveWorkflow.includes('audit_browser_resources.mjs'), 'Series 4 live workflow does not audit browser resources');
+assert(liveWorkflow.includes('validate_english_series_mirror.mjs'), 'Series 4 live workflow does not validate bilingual series discovery');
+assert(liveWorkflow.includes('validate_locale_switching.mjs'), 'Series 4 live workflow does not validate locale switching and reader progression');
 
 if (!process.exitCode) {
   fs.mkdirSync('artifacts/visual-review', { recursive: true });
   fs.writeFileSync(
     'artifacts/visual-review/inference-engineering-series4-inventory.json',
-    `${JSON.stringify({ generatedFrom: process.env.GITHUB_SHA || 'local', chapters: inventory }, null, 2)}\n`,
+    `${JSON.stringify({
+      generatedFrom: process.env.GITHUB_SHA || 'local',
+      hubs: {
+        es: { path: 'docs/series/index.md', sha256: sha256('docs/series/index.md') },
+        en: { path: 'locales/en/series/index.md', sha256: sha256('locales/en/series/index.md') },
+      },
+      workflows: {
+        pullRequest: { path: '.github/workflows/series4-golden-review.yml', sha256: sha256('.github/workflows/series4-golden-review.yml') },
+        live: { path: '.github/workflows/inference-engineering-live-qa.yml', sha256: sha256('.github/workflows/inference-engineering-live-qa.yml') },
+      },
+      chapters: inventory,
+    }, null, 2)}\n`,
   );
-  console.log(`Series 4 deterministic release inventory PASS (${inventory.length} chapters, zero video dependencies).`);
+  console.log(`Series 4 deterministic release inventory PASS (${inventory.length} chapters, bilingual hub discovery, permanent PR/live gates, zero video dependencies).`);
 }
