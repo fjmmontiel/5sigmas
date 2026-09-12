@@ -6,17 +6,35 @@ from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-from .client import GSCClient
+from .client import GSCClient, GSCError
 from .engine import build_report, load_json, render_markdown
 
 
 MADRID_TZ = ZoneInfo("Europe/Madrid")
+ALLOWED_PERMISSION_LEVELS = {"siteFullUser", "siteOwner"}
 
 
 def _resolve_mode(mode: str) -> str:
     if mode != "auto":
         return mode
     return "full" if datetime.now(MADRID_TZ).hour < 13 else "delta"
+
+
+def _assert_site_access(client: GSCClient) -> str:
+    entries = client.list_sites().get("siteEntry", []) or []
+    match = next((item for item in entries if item.get("siteUrl") == client.site_url), None)
+    if match is None:
+        raise GSCError(
+            f"Service account cannot see Search Console property {client.site_url!r}. "
+            "Add its client_email to that exact property in Search Console."
+        )
+    permission = match.get("permissionLevel") or "unknown"
+    if permission not in ALLOWED_PERMISSION_LEVELS:
+        raise GSCError(
+            f"Search Console permission {permission!r} is insufficient for the configured "
+            "Search Analytics + URL Inspection contract; grant Full user access."
+        )
+    return permission
 
 
 def parse_args() -> argparse.Namespace:
@@ -41,6 +59,7 @@ def main() -> int:
     experiments = load_json(args.experiments)
     tracked = load_json(args.tracked)
     client = GSCClient(args.site_url)
+    permission_level = _assert_site_access(client)
     report = build_report(
         client,
         mode=mode,
@@ -48,6 +67,11 @@ def main() -> int:
         tracked=tracked,
         now=datetime.now(MADRID_TZ),
     )
+    report["auth"] = {
+        "principal_type": "service_account",
+        "permission_level": permission_level,
+        "oauth_scope": "https://www.googleapis.com/auth/webmasters.readonly",
+    }
     markdown = render_markdown(report)
 
     output_dir = Path(args.output_dir)

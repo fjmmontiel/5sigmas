@@ -61,12 +61,15 @@ jobs:
           echo "Resolved mode: $mode"
 
       - name: Build direct Search Console report
+        id: report
         env:
           GSC_SERVICE_ACCOUNT_JSON: ${{ secrets.GSC_SERVICE_ACCOUNT_JSON }}
         shell: bash
         run: |
-          set -euo pipefail
+          set -uo pipefail
           mkdir -p seo-gsc-output
+          failed=false
+
           if [[ -z "${GSC_SERVICE_ACCOUNT_JSON:-}" ]]; then
             generated_at="$(date -Iseconds)"
             cat > seo-gsc-output/report.md <<EOF
@@ -93,12 +96,52 @@ jobs:
               json.dump(payload, handle, indent=2)
               handle.write("\n")
           PY
-            exit 0
+            failed=true
+          else
+            set +e
+            python -m seo.gsc run \
+              --mode "${{ steps.mode.outputs.mode }}" \
+              --output-dir seo-gsc-output \
+              > seo-gsc-output/run.log 2>&1
+            rc=$?
+            set -e
+
+            if [[ "$rc" -ne 0 ]]; then
+              error_message="$(tail -n 1 seo-gsc-output/run.log | tr '\r\n`' '   ' | cut -c1-1200)"
+              generated_at="$(date -Iseconds)"
+              export GSC_ERROR_MESSAGE="$error_message"
+              cat > seo-gsc-output/report.md <<EOF
+          # 5sigmas direct Search Console state
+
+          - **Status:** \`ERROR\`
+          - **Mode:** \`${{ steps.mode.outputs.mode }}\`
+          - **Generated:** \`${generated_at}\`
+          - **Blocker:** ${error_message}
+
+          The direct Google Search Console call failed. Inspect this workflow run for the full traceback. No SEO intervention should be selected from this state.
+          EOF
+              python - <<'PY'
+          import json
+          import os
+          from datetime import datetime, timezone
+          payload = {
+              "schema_version": 1,
+              "status": "ERROR",
+              "mode": "${{ steps.mode.outputs.mode }}",
+              "generated_at": datetime.now(timezone.utc).isoformat(),
+              "blocker": os.environ.get("GSC_ERROR_MESSAGE", "direct Search Console call failed"),
+          }
+          with open("seo-gsc-output/report.json", "w", encoding="utf-8") as handle:
+              json.dump(payload, handle, indent=2)
+              handle.write("\n")
+          PY
+              failed=true
+            else
+              cat seo-gsc-output/run.log
+            fi
           fi
 
-          python -m seo.gsc run \
-            --mode "${{ steps.mode.outputs.mode }}" \
-            --output-dir seo-gsc-output
+          echo "failed=$failed" >> "$GITHUB_OUTPUT"
 
       - name: Publish durable Search Console state issue
         env:
@@ -123,3 +166,10 @@ jobs:
       - name: Add report to workflow summary
         shell: bash
         run: cat seo-gsc-output/report.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Fail closed when direct GSC state is not operational
+        if: steps.report.outputs.failed == 'true'
+        shell: bash
+        run: |
+          echo "Direct GSC state is not operational; see the durable state issue and prior logs."
+          exit 1

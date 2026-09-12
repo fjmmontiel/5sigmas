@@ -6,6 +6,7 @@ This package is the first-party data layer for the 5sigmas SEO/GEO growth loop. 
 
 - Property: `sc-domain:5sigmas.com`.
 - Authentication: dedicated Google service account, OAuth 2.0 scope `https://www.googleapis.com/auth/webmasters.readonly`.
+- Required Search Console role: **Full user** (least privilege for this Search Analytics + URL Inspection contract). Owner also works but is not required.
 - APIs: Search Analytics, Sitemaps and URL Inspection.
 - This package does **not** call Google's Indexing API and does not claim to request indexing.
 - No credential is stored in the repository. GitHub Actions reads the JSON key only from the repository secret `GSC_SERVICE_ACCOUNT_JSON`.
@@ -71,33 +72,36 @@ Expiry of mechanical protection does not mean the page must be changed. It only 
 
 GitHub's timezone-aware scheduler is used so DST does not require manual cron changes. A manual `workflow_dispatch` is also available.
 
-Every successful run creates or updates exactly one open issue:
+Every run creates or updates exactly one open issue:
 
 `[seo-gsc-state] 5sigmas direct Search Console ledger`
 
-The issue body contains the latest readable report and machine-readable JSON. ChatGPT growth automations should read this issue as their authenticated Search Console evidence source and fail closed when its status is not `OK` or it is stale.
+The issue body contains the latest readable report and machine-readable JSON. Normal authenticated runs use `status=OK`. Missing bootstrap uses `BOOTSTRAP_REQUIRED`; API/auth failures use `ERROR`. ChatGPT growth automations read this issue as their Search Console evidence source and fail closed whenever the state is not fresh `OK`.
 
 ## One-time human bootstrap
 
 The repository side is fully automated. A human must establish the Google identity and secret once:
 
 1. In Google Cloud, create or select a project dedicated to 5sigmas operations and enable **Google Search Console API**.
-2. Create a service account such as `5sigmas-gsc-reader`. No Google Cloud IAM role is needed for Search Console access.
+2. Create a service account such as `5sigmas-gsc-reader`. Do not grant it a Google Cloud IAM role; Search Console access is assigned separately.
 3. Create one **JSON** key for that service account. Record the service account `client_email`.
-4. In Google Search Console, open the `5sigmas.com` domain property → **Settings → Users and permissions** and add the service-account email as a **delegated owner**. The automation itself requests only the read-only OAuth scope.
+4. In Google Search Console, open the `5sigmas.com` domain property → **Settings → Users and permissions → Add user** and add the service-account email as a **Full user**. Owner is unnecessary because this integration never writes Search Console state or uses the Indexing API.
 5. In GitHub `fjmmontiel/5sigmas` → **Settings → Secrets and variables → Actions → New repository secret**, create exactly:
 
    `GSC_SERVICE_ACCOUNT_JSON`
 
    Paste the entire JSON key contents as the secret value.
 6. Delete the downloaded JSON from ordinary Downloads/local working folders after the secret is stored (or move it to a proper password/secret vault if a recovery copy is intentionally retained).
-7. In GitHub → **Actions → GSC Direct Growth Data → Run workflow**, choose `full`. The run must finish green and the repository must contain one open `[seo-gsc-state]` issue whose body starts with `Status: OK` and shows authenticated Search Console data.
+7. Optional immediate certification: in GitHub → **Actions → GSC Direct Growth Data → Run workflow**, choose `full`. Otherwise the next scheduled 09:40/15:40 run performs the same bootstrap verification automatically. A healthy run finishes green and updates the state issue with `status=OK` and authenticated Search Console metrics.
 
-After step 7, no recurring human action is required unless the service-account key is revoked/rotated or Google access is intentionally changed.
+After that, no recurring human action is required unless the service-account key is revoked/rotated or Google access is intentionally changed.
+
+If Google Cloud blocks creation of user-managed service-account keys through an organization policy, do not weaken that policy just for this integration. Migrate the workflow to GitHub OIDC / Workload Identity Federation instead.
 
 ## Primary documentation
 
 - Search Console OAuth: https://developers.google.com/webmaster-tools/v1/how-tos/authorizing
+- Search Console API overview/access: https://developers.google.com/webmaster-tools/about
 - Search Analytics query/data state: https://developers.google.com/webmaster-tools/v1/searchanalytics/query
 - URL Inspection API: https://developers.google.com/webmaster-tools/v1/urlInspection.index/inspect
 - Sitemaps API: https://developers.google.com/webmaster-tools/v1/sitemaps
