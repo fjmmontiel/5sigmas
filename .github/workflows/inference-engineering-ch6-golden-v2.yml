@@ -108,7 +108,7 @@ jobs:
             exit 1
           fi
           all_untracked="$(git ls-files --others --exclude-standard)"
-          unexpected_untracked="$(printf '%s\n' "$all_untracked" | sed '/^$/d' | grep -vE '^artifacts/visual-review/inference-engineering-ch[1-6]-' || true)"
+          unexpected_untracked="$(printf '%s\n' "$all_untracked" | sed '/^$/d' | grep -vE '^artifacts/visual-review/(inference-engineering-ch[1-6]-.*\.png|english-home-desktop\.png|english-agent-library-desktop\.png|english-agent-anatomy-desktop\.png|english-home-mobile\.png|english-agent-anatomy-mobile\.png|english-agent-security-mobile\.png|reader-contextual-desktop\.png|reader-compact-mobile\.png|reader-presentation-narrow-mobile\.png|reader-material-drawer-tablet\.png)$' || true)"
           if [ -n "$unexpected_untracked" ]; then
             printf 'Unexpected untracked files after certification gates:\n%s\n' "$unexpected_untracked"
             exit 1
