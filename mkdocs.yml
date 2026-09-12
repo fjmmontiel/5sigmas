@@ -169,6 +169,7 @@ nav:
       - Evaluar sistemas de IA en producción:
           - "Qué evaluar: modelo, componente, sistema, workflow y trayectoria": series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria.md
           - "Offline eval sets: curación, hard negatives, contaminación y versionado": series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning.md
+          - "LLM-as-judge y evaluación humana: calibración, sesgo, varianza y acuerdo": series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo.md
   - Construir:
       - articulos-tecnicos/index.md
       - Agente Reactivo, Proactivo y Tool calls: articulos-tecnicos/proactive-reactive-agent-and-tool-calls.md
