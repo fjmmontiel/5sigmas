@@ -1,5 +1,6 @@
 <section class="s5v s5v-quant-parallel s5v--wide" aria-label="Relación entre cuantización, memoria, kernels y topologías de paralelismo">
   <style>
+    .s5v-quant-parallel{scroll-margin-top:84px}
     .s5v-quant-parallel .s5v-quant-parallel__scroll{overflow-x:auto;overscroll-behavior-inline:contain;padding:.35rem .2rem .8rem;scrollbar-gutter:stable;outline:none}
     .s5v-quant-parallel .s5v-quant-parallel__scroll:focus-visible{box-shadow:0 0 0 3px color-mix(in srgb,var(--md-accent-fg-color,#7c4dff) 36%,transparent);border-radius:14px}
     .s5v-quant-parallel .s5v-quant-parallel__stage{width:100%;min-width:0;max-width:1240px;margin:0 auto}
@@ -23,7 +24,7 @@
     .s5v-quant-parallel .s5v-quant-parallel__legend .is-comm i{border-top-style:dashed}
     .s5v-quant-parallel .s5v-quant-parallel__legend .is-boundary i{border-top-width:2px;border-top-style:dashed;opacity:.7}
     .s5v-quant-parallel .s5v__copy{margin-top:.85rem}
-    @media (max-width:700px){.s5v-quant-parallel .s5v-quant-parallel__scroll{margin-inline:-.35rem;padding-inline:.35rem}.s5v-quant-parallel .s5v-quant-parallel__stage{width:auto;min-width:1180px}.s5v-quant-parallel .s5v-quant-parallel__legend{font-size:.82rem}}
+    @media (max-width:700px){.s5v-quant-parallel{scroll-margin-top:72px}.s5v-quant-parallel .s5v-quant-parallel__scroll{margin-inline:-.35rem;padding-inline:.35rem}.s5v-quant-parallel .s5v-quant-parallel__stage{width:auto;min-width:1180px}.s5v-quant-parallel .s5v-quant-parallel__legend{font-size:.82rem}}
   </style>
   <!-- GOLDEN_VISUAL_CONTRACT
     learning-objective="Show that quantization changes the representation and movement of selected tensors, while parallelism changes tensor placement and communication; neither operation guarantees a proportional latency speedup."
@@ -55,12 +56,12 @@
 
           <g data-node="kernel"><rect class="q-node q-node--major" x="688" y="122" width="250" height="118" rx="20"/><text x="813" y="152" class="q-label">Kernel soportado</text><text x="813" y="178" class="q-sub">GPU · runtime · GEMM/attention</text><text x="813" y="207" class="q-small">sin kernel favorable, menos bytes ≠ menos latencia</text></g>
           <g data-node="memory-performance"><rect class="q-node" x="988" y="104" width="194" height="105" rx="18"/><text x="1085" y="135" class="q-label">Sistema</text><text x="1085" y="160" class="q-sub">VRAM · ancho de banda</text><text x="1085" y="183" class="q-sub">TTFT · TPOT · throughput</text></g>
-          <g data-node="quality"><rect class="q-node q-node--warn" x="988" y="260" width="194" height="118" rx="18"/><text x="1085" y="291" class="q-label">Calidad</text><text x="1085" y="316" class="q-sub">tareas · contexto largo</text><text x="1085" y="340" class="q-sub">cambio de distribución</text><text x="1085" y="364" class="q-small">se evalúa; no se infiere del dtype</text></g>
+          <g data-node="quality"><rect class="q-node q-node--warn" x="988" y="260" width="194" height="118" rx="18"/><text x="1085" y="291" class="q-label">Calidad</text><text x="1085" y="316" class="q-sub">tareas · contexto largo</text><text x="1085" y="340" class="q-sub">cambio de distribución</text><text x="1085" y="360" class="q-small">se evalúa; no se infiere del dtype</text></g>
 
           <path class="q-edge" d="M268 153 H344"/><path class="q-edge" d="M268 261 H322 Q344 261 344 240"/><path class="q-edge" d="M268 369 H322 Q344 369 344 316"/>
           <path class="q-edge" d="M604 214 H688"/><path class="q-edge" d="M938 174 H988"/>
           <path class="q-edge q-edge--eval" d="M604 326 H900 Q944 326 988 319"/>
-          <text x="646" y="201" class="q-edge-label">representación empaquetada</text><text x="963" y="158" class="q-edge-label">ejecución</text><text x="792" y="314" class="q-edge-label">validar error → comportamiento</text>
+          <text x="792" y="314" class="q-edge-label">validar error → comportamiento</text>
 
           <rect data-boundary="parallelism" class="q-boundary" x="24" y="486" width="1192" height="466" rx="24"/>
           <text x="48" y="516" class="q-kicker">PARALELISMO · DISTRIBUCIÓN Y COMUNICACIÓN POR PETICIÓN</text>
