@@ -1,0 +1,110 @@
+<section class="s5v s5v-benchmark-boundary s5v--wide" aria-label="Relación entre workload, carga, latencia, goodput, coste, energía y frontera de hardware">
+  <style>
+    .s5v-benchmark-boundary{scroll-margin-top:84px}
+    .s5v-benchmark-boundary .s5v-benchmark-boundary__scroll{overflow-x:auto;overscroll-behavior-inline:contain;padding:.35rem .2rem .8rem;scrollbar-gutter:stable;outline:none}
+    .s5v-benchmark-boundary .s5v-benchmark-boundary__scroll:focus-visible{box-shadow:0 0 0 3px color-mix(in srgb,var(--md-accent-fg-color,#7c4dff) 36%,transparent);border-radius:14px}
+    .s5v-benchmark-boundary .s5v-benchmark-boundary__stage{width:100%;min-width:0;max-width:1240px;margin:0 auto}
+    .s5v-benchmark-boundary svg{display:block;width:100%;height:auto;overflow:visible}
+    .s5v-benchmark-boundary text{fill:currentColor;font-family:inherit}
+    .s5v-benchmark-boundary .ib-boundary{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 96%,var(--md-accent-fg-color,#7c4dff) 4%);stroke:currentColor;stroke-width:2;stroke-dasharray:8 8;opacity:.92}
+    .s5v-benchmark-boundary .ib-node{fill:var(--md-default-bg-color,#fff);stroke:currentColor;stroke-width:2.25}
+    .s5v-benchmark-boundary .ib-node--major{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 87%,var(--md-accent-fg-color,#7c4dff) 13%);stroke-width:3}
+    .s5v-benchmark-boundary .ib-node--warn{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 92%,currentColor 8%);stroke-dasharray:5 4}
+    .s5v-benchmark-boundary .ib-edge{fill:none;stroke:currentColor;stroke-width:2.7;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#ib-arrow)}
+    .s5v-benchmark-boundary .ib-edge--measure{stroke-dasharray:7 5}
+    .s5v-benchmark-boundary .ib-edge--feedback{stroke-dasharray:3 5}
+    .s5v-benchmark-boundary .ib-label{font-size:13.5px;font-weight:820;text-anchor:middle}
+    .s5v-benchmark-boundary .ib-sub{font-size:11px;text-anchor:middle;opacity:.81}
+    .s5v-benchmark-boundary .ib-small{font-size:10.4px;font-weight:720;text-anchor:middle;opacity:.83}
+    .s5v-benchmark-boundary .ib-kicker{font-size:12.3px;font-weight:850;letter-spacing:.07em;text-transform:uppercase;opacity:.74}
+    .s5v-benchmark-boundary .ib-edge-label{font-size:10.5px;font-weight:760;paint-order:stroke;stroke:var(--md-default-bg-color,#fff);stroke-width:5px;stroke-linejoin:round;text-anchor:middle}
+    .s5v-benchmark-boundary .ib-axis{fill:none;stroke:currentColor;stroke-width:2.2;marker-end:url(#ib-arrow)}
+    .s5v-benchmark-boundary .ib-curve{fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round}
+    .s5v-benchmark-boundary .ib-curve--tail{stroke-dasharray:6 4}
+    .s5v-benchmark-boundary .s5v-benchmark-boundary__legend{display:flex;gap:1rem;flex-wrap:wrap;margin:.25rem 0 0;font-size:.88rem;opacity:.86}
+    .s5v-benchmark-boundary .s5v-benchmark-boundary__legend span{display:inline-flex;gap:.42rem;align-items:center}
+    .s5v-benchmark-boundary .s5v-benchmark-boundary__legend i{width:1.55rem;border-top:3px solid currentColor}
+    .s5v-benchmark-boundary .s5v-benchmark-boundary__legend .is-measure i{border-top-style:dashed}
+    .s5v-benchmark-boundary .s5v-benchmark-boundary__legend .is-boundary i{border-top-width:2px;border-top-style:dashed;opacity:.7}
+    .s5v-benchmark-boundary .s5v__copy{margin-top:.85rem}
+    @media (max-width:700px){.s5v-benchmark-boundary{scroll-margin-top:72px}.s5v-benchmark-boundary .s5v-benchmark-boundary__scroll{margin-inline:-.35rem;padding-inline:.35rem}.s5v-benchmark-boundary .s5v-benchmark-boundary__stage{width:auto;min-width:1180px}.s5v-benchmark-boundary .s5v-benchmark-boundary__legend{font-size:.82rem}}
+    @media (prefers-reduced-motion:reduce){.s5v-benchmark-boundary *{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+  </style>
+  <!-- GOLDEN_VISUAL_CONTRACT
+    learning-objective="Show why an inference benchmark is a coupled measurement protocol: workload and arrival process create queueing, client timing exposes TTFT/ITL/e2e, SLO filtering converts throughput into goodput, the same run defines cost and energy denominators, and hardware topology bounds the regime being measured."
+    mechanism="workload distribution -> load generator -> queue -> inference service -> response/evaluation -> {raw completion -> throughput | SLO+quality filter -> goodput}; request-send/first-output/final-output define timing endpoints; a physical SUT boundary encloses queue/service/hardware while a power meter integrates the same performance window; measured cost and energy divide by attempts or successful tasks; increasing offered load feeds queue growth, tail latency and eventual throughput plateau/goodput loss."
+    visual-variables="left-to-right topology encodes the request path; branching encodes throughput versus goodput; nested physical boundary encodes what power measurement includes; aligned vertical markers encode timing and power windows; a lower saturation plot uses geometry to show offered-load increase, throughput plateau and rising tail latency rather than describing them as cards."
+    why-visual="The chapter's central failure mode is comparing scalars whose measurement boundaries differ. The diagram makes those boundaries, denominators, and saturation feedback spatially explicit."
+    relationship="workload->load-generator->queue->service->response->{throughput|SLO+quality->goodput};timing-endpoints->{TTFT,ITL,e2e};SUT-boundary->power-integral;cost+energy+success-count->{cost/task,energy/task};offered-load->queue->tail-latency+throughput-plateau->goodput"
+    evidence="workload,arrival-process,queue,service,response,quality-filter,throughput,goodput,client-clock,SUT-boundary,hardware,power-meter,cost-ledger,successful-tasks,saturation-sweep"
+    interaction="static:no-cosmetic-controls"
+    mobile="horizontal-scroll-preserves-request-measurement-energy-saturation-topology"
+  -->
+  <div class="s5v__canvas">
+    <header class="s5v__head"><div><span class="s5v__kicker">El número nace de una frontera</span><h3>Un benchmark conecta tráfico, reloj, calidad, coste, energía y hardware</h3></div><p>La misma request puede producir cifras distintas si cambia el proceso de llegadas, la frontera temporal, el estado de cache o el sistema incluido en la medición. Goodput añade SLO y éxito; energía exige integrar potencia durante la misma ventana de performance.</p></header>
+    <div class="s5v-benchmark-boundary__scroll" tabindex="0" role="region" aria-label="Diagrama desplazable del protocolo de benchmarking de inferencia">
+      <div class="s5v-benchmark-boundary__stage">
+        <svg viewBox="0 0 1240 1120" role="img" aria-labelledby="ib-title ib-desc">
+          <title id="ib-title">Protocolo reproducible para medir inferencia</title>
+          <desc id="ib-desc">Un workload y un proceso de llegadas alimentan un load generator, una cola y un servicio de inferencia dentro de una frontera física del sistema. Las respuestas se separan entre throughput bruto y goodput filtrado por SLO y calidad. Marcadores alineados definen request send, first output y final output. Un medidor de potencia integra la misma ventana. Coste y energía se dividen por requests o tareas correctas según el denominador declarado. Una curva inferior muestra que más carga aumenta throughput hasta un plateau mientras cola y tail latency pueden crecer y reducir goodput.</desc>
+          <defs><marker id="ib-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="currentColor"/></marker></defs>
+
+          <text x="34" y="52" class="ib-kicker">REQUEST PATH · EL WORKLOAD CREA EL RÉGIMEN</text>
+          <g data-node="workload"><rect class="ib-node ib-node--major" x="38" y="92" width="170" height="112" rx="18"/><text x="123" y="122" class="ib-label">Workload</text><text x="123" y="148" class="ib-sub">input/output distributions</text><text x="123" y="172" class="ib-sub">shared prefixes · task mix</text><text x="123" y="192" class="ib-small">qué se pide</text></g>
+          <g data-node="arrival-process"><rect class="ib-node" x="248" y="92" width="170" height="112" rx="18"/><text x="333" y="122" class="ib-label">Load generator</text><text x="333" y="148" class="ib-sub">rate · concurrency</text><text x="333" y="172" class="ib-sub">constant · Poisson · burst</text><text x="333" y="192" class="ib-small">cuándo llega</text></g>
+
+          <rect data-boundary="sut" class="ib-boundary" x="454" y="72" width="516" height="282" rx="25"/>
+          <text x="476" y="101" class="ib-kicker">SUT · FRONTERA FÍSICA DECLARADA</text>
+          <g data-node="queue"><rect class="ib-node" x="484" y="130" width="134" height="92" rx="16"/><text x="551" y="160" class="ib-label">Queue</text><text x="551" y="184" class="ib-sub">scheduler wait</text><text x="551" y="205" class="ib-small">crece con saturación</text></g>
+          <g data-node="service"><rect class="ib-node ib-node--major" x="662" y="122" width="164" height="108" rx="17"/><text x="744" y="153" class="ib-label">Inference service</text><text x="744" y="178" class="ib-sub">prefill · decode · batch</text><text x="744" y="202" class="ib-small">runtime + model config</text></g>
+          <g data-node="hardware"><rect class="ib-node" x="662" y="260" width="260" height="66" rx="15"/><text x="792" y="286" class="ib-label">Hardware topology</text><text x="792" y="309" class="ib-sub">accelerators · memory · interconnect · host</text></g>
+
+          <g data-node="response"><rect class="ib-node ib-node--major" x="1010" y="118" width="188" height="112" rx="18"/><text x="1104" y="148" class="ib-label">Response + eval</text><text x="1104" y="174" class="ib-sub">tokens · status · quality</text><text x="1104" y="198" class="ib-small">qué terminó y si sirvió</text></g>
+          <path class="ib-edge" d="M208 148 H248"/><path class="ib-edge" d="M418 148 H484"/><path class="ib-edge" d="M618 176 H662"/><path class="ib-edge" d="M826 176 H1010"/>
+
+          <g data-node="throughput"><rect class="ib-node" x="998" y="276" width="156" height="70" rx="15"/><text x="1076" y="304" class="ib-label">Throughput</text><text x="1076" y="327" class="ib-sub">req/s · tok/s</text></g>
+          <g data-node="quality-filter"><rect class="ib-node ib-node--warn" x="976" y="390" width="184" height="88" rx="15"/><text x="1068" y="418" class="ib-label">SLO + quality gate</text><text x="1068" y="442" class="ib-sub">latency · success</text><text x="1068" y="462" class="ib-small">filtra completions</text></g>
+          <g data-node="goodput"><rect class="ib-node ib-node--major" x="976" y="516" width="184" height="78" rx="15"/><text x="1068" y="545" class="ib-label">Goodput</text><text x="1068" y="570" class="ib-sub">successful + within SLO / s</text></g>
+          <path class="ib-edge" d="M1104 230 V276"/><text x="1147" y="255" class="ib-edge-label">all completed</text>
+          <path class="ib-edge" d="M1070 230 C1070 300 1068 320 1068 390"/><text x="1018" y="368" class="ib-edge-label">per request</text>
+          <path class="ib-edge" d="M1068 478 V516"/>
+
+          <text x="34" y="400" class="ib-kicker">CLIENT CLOCK · PUBLICA LOS ENDPOINTS, NO SÓLO EL ACRÓNIMO</text>
+          <rect data-boundary="client-clock" class="ib-boundary" x="38" y="426" width="842" height="168" rx="22"/>
+          <line x1="92" y1="520" x2="822" y2="520" class="ib-axis"/>
+          <g data-node="request-send"><circle cx="138" cy="520" r="9" class="ib-node ib-node--major"/><line x1="138" y1="472" x2="138" y2="568" class="ib-edge--measure" stroke="currentColor" stroke-width="2"/><text x="138" y="458" class="ib-label">request send</text><text x="138" y="585" class="ib-small">t₀</text></g>
+          <g data-node="first-output"><circle cx="414" cy="520" r="9" class="ib-node ib-node--major"/><line x1="414" y1="472" x2="414" y2="568" class="ib-edge--measure" stroke="currentColor" stroke-width="2"/><text x="414" y="458" class="ib-label">first output</text><text x="414" y="585" class="ib-small">TTFT boundary</text></g>
+          <g data-node="token-gap"><circle cx="574" cy="520" r="7" class="ib-node"/><circle cx="628" cy="520" r="7" class="ib-node"/><path d="M581 491 H621" class="ib-edge--measure" stroke="currentColor" stroke-width="2"/><text x="601" y="480" class="ib-label">ITL / chunk gaps</text></g>
+          <g data-node="final-output"><circle cx="774" cy="520" r="9" class="ib-node ib-node--major"/><line x1="774" y1="472" x2="774" y2="568" class="ib-edge--measure" stroke="currentColor" stroke-width="2"/><text x="774" y="458" class="ib-label">final output</text><text x="774" y="585" class="ib-small">e2e boundary</text></g>
+          <path class="ib-edge--measure" d="M148 496 H404" stroke="currentColor" stroke-width="3"/><text x="276" y="486" class="ib-edge-label">TTFT = network + queue + prompt + first output</text>
+          <path class="ib-edge--measure" d="M424 544 H764" stroke="currentColor" stroke-width="3"/><text x="594" y="565" class="ib-edge-label">decode / streaming interval</text>
+
+          <text x="34" y="654" class="ib-kicker">MISMA VENTANA · DENOMINADORES DIFERENTES</text>
+          <rect data-boundary="accounting" class="ib-boundary" x="38" y="680" width="1122" height="204" rx="22"/>
+          <g data-node="power-meter"><rect class="ib-node ib-node--major" x="66" y="726" width="184" height="100" rx="16"/><text x="158" y="756" class="ib-label">Power meter</text><text x="158" y="781" class="ib-sub">P_SUT(t)</text><text x="158" y="805" class="ib-small">misma performance window</text></g>
+          <g data-node="energy-integral"><rect class="ib-node" x="300" y="726" width="182" height="100" rx="16"/><text x="391" y="756" class="ib-label">∫ P(t) dt</text><text x="391" y="781" class="ib-sub">E_run</text><text x="391" y="805" class="ib-small">energía medida</text></g>
+          <g data-node="cost-ledger"><rect class="ib-node" x="534" y="726" width="182" height="100" rx="16"/><text x="625" y="756" class="ib-label">Cost ledger</text><text x="625" y="781" class="ib-sub">C_run</text><text x="625" y="805" class="ib-small">frontera declarada</text></g>
+          <g data-node="successful-tasks"><rect class="ib-node" x="768" y="726" width="168" height="100" rx="16"/><text x="852" y="756" class="ib-label">Task success</text><text x="852" y="781" class="ib-sub">N_success</text><text x="852" y="805" class="ib-small">quality contract</text></g>
+          <g data-node="normalized-outcomes"><rect class="ib-node ib-node--major" x="982" y="716" width="154" height="120" rx="16"/><text x="1059" y="746" class="ib-label">Normalize</text><text x="1059" y="771" class="ib-sub">€/request · €/task</text><text x="1059" y="795" class="ib-sub">Wh/request · Wh/task</text><text x="1059" y="818" class="ib-small">declara denominator</text></g>
+          <path class="ib-edge" d="M250 776 H300"/><path class="ib-edge" d="M482 776 C640 870 875 870 982 800"/><path class="ib-edge" d="M716 776 H982"/><path class="ib-edge" d="M936 776 H982"/>
+          <path class="ib-edge ib-edge--measure" d="M158 726 C158 642 706 640 706 354"/><text x="423" y="631" class="ib-edge-label">power boundary must match declared SUT</text>
+
+          <text x="34" y="938" class="ib-kicker">SATURATION SWEEP · LA CARGA CAMBIA EL RÉGIMEN</text>
+          <g data-node="saturation-sweep">
+            <line x1="86" y1="1060" x2="600" y2="1060" class="ib-axis"/><line x1="86" y1="1060" x2="86" y2="952" class="ib-axis"/>
+            <text x="340" y="1090" class="ib-label">offered load λ →</text><text x="38" y="1006" class="ib-small" transform="rotate(-90 38 1006)">rate</text>
+            <path class="ib-curve" d="M106 1042 C220 1014 308 982 400 970 C474 960 532 960 572 960"/>
+            <text x="502" y="946" class="ib-small">throughput plateau</text>
+            <path class="ib-curve ib-curve--tail" d="M106 1038 C316 1036 390 1018 446 984 C500 952 534 920 572 906"/>
+            <text x="496" y="898" class="ib-small">queue / tail ↑</text>
+          </g>
+          <g data-node="operating-region"><rect class="ib-node ib-node--major" x="682" y="958" width="198" height="92" rx="16"/><text x="781" y="988" class="ib-label">Operating region</text><text x="781" y="1013" class="ib-sub">capacity + SLO + quality</text><text x="781" y="1036" class="ib-small">no máximo tok/s aislado</text></g>
+          <g data-node="report"><rect class="ib-node" x="944" y="950" width="194" height="108" rx="16"/><text x="1041" y="980" class="ib-label">Report distribution</text><text x="1041" y="1005" class="ib-sub">p50/p95/p99 · errors</text><text x="1041" y="1028" class="ib-sub">run-to-run variance</text><text x="1041" y="1050" class="ib-small">protocol + versions</text></g>
+          <path class="ib-edge" d="M600 1010 H682"/><path class="ib-edge" d="M880 1004 H944"/>
+        </svg>
+      </div>
+    </div>
+    <div class="s5v-benchmark-boundary__legend" aria-label="Leyenda del diagrama"><span><i></i>flujo causal</span><span class="is-measure"><i></i>frontera o ventana de medida</span><span class="is-boundary"><i></i>scope que debe declararse</span></div>
+    <p class="s5v__copy"><strong>Lectura:</strong> un mismo runtime puede producir números distintos al cambiar workload o proceso de llegadas. TTFT se mide en la frontera cliente si ése es el contrato; goodput filtra completions por SLO y éxito; la energía integra potencia sobre el SUT declarado durante la misma ventana; coste y energía sólo adquieren sentido cuando se publica su denominador.</p>
+  </div>
+</section>
