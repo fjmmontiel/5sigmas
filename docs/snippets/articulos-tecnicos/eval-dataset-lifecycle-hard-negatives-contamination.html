@@ -48,7 +48,7 @@
     </header>
     <div class="s5v-eval-dataset__scroll" tabindex="0" role="region" aria-label="Diagrama desplazable del ciclo de vida y riesgos de un conjunto de evaluación offline">
       <div class="s5v-eval-dataset__stage">
-        <svg viewBox="0 0 1320 960" role="img" aria-labelledby="ed-title ed-desc">
+        <svg viewBox="0 0 1320 1060" role="img" aria-labelledby="ed-title ed-desc">
           <title id="ed-title">Ciclo de vida versionado de un eval set offline</title>
           <desc id="ed-desc">Los casos candidatos pasan por provenance y elegibilidad, después por una unidad de agrupación que evita separar dependencias y finalmente se asignan a bancos con propósitos diferentes: desarrollo, regresión, holdout congelado o challenge rotatorio. Los items admitidos quedan dentro de una release con manifest y hash. Un par hard positive y hard negative cambia una condición causal manteniendo el resto aproximadamente constante. Cuatro canales de riesgo separados muestran exposición de entrenamiento, leakage entre splits, leakage de desarrollo y leakage temporal. Los fallos de producción alimentan la siguiente versión, no mutan la release actual.</desc>
           <defs><marker id="ed-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="currentColor"/></marker></defs>
@@ -61,7 +61,6 @@
 
           <rect data-boundary="release" class="ed-release" x="734" y="54" width="552" height="410" rx="27"/>
           <text x="758" y="84" class="ed-kicker">RELEASE v · IDENTIDAD CONGELADA PARA COMPARAR</text>
-
           <g data-node="dev"><rect class="ed-node ed-node--bank" x="766" y="116" width="214" height="84" rx="16"/><text x="873" y="144" class="ed-label">Dev / calibration</text><text x="873" y="169" class="ed-sub">visible · iterar tareas/graders</text><text x="873" y="190" class="ed-small">no es evidencia independiente</text></g>
           <g data-node="regression"><rect class="ed-node ed-node--bank" x="1028" y="116" width="218" height="84" rx="16"/><text x="1137" y="144" class="ed-label">Regression bank</text><text x="1137" y="169" class="ed-sub">fallos conocidos que no deben volver</text><text x="1137" y="190" class="ed-small">estable por intención</text></g>
           <g data-node="holdout"><rect class="ed-node ed-node--major" x="766" y="230" width="214" height="92" rx="16"/><text x="873" y="260" class="ed-label">Holdout / release</text><text x="873" y="285" class="ed-sub">acceso restringido</text><text x="873" y="307" class="ed-small">confirma sin haber optimizado aquí</text></g>
@@ -71,7 +70,6 @@
           <path class="ed-edge ed-edge--admit" d="M724 126 C748 126 742 276 766 276"/>
           <path class="ed-edge ed-edge--admit" d="M724 126 C756 126 1000 276 1028 276"/>
           <text x="724" y="109" class="ed-edge-label">asigna por función, no al azar por fila</text>
-
           <g data-node="manifest"><rect class="ed-node ed-node--major" x="852" y="360" width="308" height="78" rx="17"/><text x="1006" y="388" class="ed-label">Manifest canónico + hash</text><text x="1006" y="412" class="ed-sub">item IDs · split · source snapshot</text><text x="1006" y="432" class="ed-small">labels · transforms · payload hashes</text></g>
           <path data-path="freeze" class="ed-edge" d="M873 322 C873 345 900 350 928 360"/><path class="ed-edge" d="M1137 322 C1137 345 1114 351 1084 360"/>
 
@@ -81,7 +79,6 @@
           <g data-node="hard-negative"><rect class="ed-node ed-node--major" x="296" y="656" width="214" height="96" rx="17"/><text x="403" y="686" class="ed-label">31 días → deny</text><text x="403" y="712" class="ed-sub">hard negative</text><text x="403" y="734" class="ed-small">cambia la variable que decide</text></g>
           <path data-path="hard-pair" class="ed-edge ed-edge--admit" d="M240 600 H270 C286 600 280 584 296 584"/><path class="ed-edge ed-edge--admit" d="M270 600 C286 600 280 704 296 704"/>
           <text x="275" y="626" class="ed-edge-label">Δ* · frontera causal</text>
-
           <g data-node="pair-check"><rect class="ed-node" x="558" y="582" width="238" height="112" rx="18"/><text x="677" y="612" class="ed-label">Consistencia pareada</text><text x="677" y="638" class="ed-sub">¿acierta a ambos lados?</text><text x="677" y="663" class="ed-small">no sustituye accuracy global</text><text x="677" y="685" class="ed-small">ni convierte rareza en relevancia</text></g>
           <path class="ed-edge" d="M510 584 C538 584 538 617 558 617"/><path class="ed-edge" d="M510 704 C538 704 538 660 558 660"/>
 
@@ -95,16 +92,15 @@
           <path data-path="risk-temporal" class="ed-edge ed-edge--risk" d="M1171 658 V636 C1171 616 1254 616 1254 438"/>
           <line class="ed-cross" x1="814" y1="331" x2="840" y2="305"/><line class="ed-cross" x1="814" y1="305" x2="840" y2="331"/>
           <text x="823" y="350" class="ed-edge-label">si optimizas aquí, deja de ser holdout</text>
-
           <g data-node="scanner"><rect class="ed-node" x="842" y="770" width="430" height="70" rx="16"/><text x="1057" y="797" class="ed-label">Overlap scanner = detector de candidatos, no certificado de limpieza</text><text x="1057" y="822" class="ed-sub">exact match / embedding / provenance review responden preguntas distintas</text></g>
           <path class="ed-edge ed-edge--risk" d="M942 730 V770"/><path class="ed-edge ed-edge--risk" d="M1171 730 V770"/>
 
-          <text x="28" y="810" class="ed-kicker">4 · FRESCURA SIN REESCRIBIR EL PASADO</text>
-          <g data-node="production-failure"><rect class="ed-node" x="34" y="842" width="214" height="76" rx="16"/><text x="141" y="870" class="ed-label">Fallo nuevo / cambio de producto</text><text x="141" y="895" class="ed-sub">bug · policy · idioma · riesgo</text></g>
-          <g data-node="next-version"><rect class="ed-node ed-node--major" x="322" y="842" width="242" height="76" rx="16"/><text x="443" y="870" class="ed-label">Siguiente versión D(v+1)</text><text x="443" y="895" class="ed-sub">curar → revisar → nuevo manifest/hash</text></g>
-          <path data-path="next-version" class="ed-edge ed-edge--next" d="M248 880 H322"/>
-          <path class="ed-edge ed-edge--next" d="M564 880 H720 C770 880 758 438 852 418"/>
-          <text x="653" y="866" class="ed-edge-label">no muta D(v) en silencio</text>
+          <text x="28" y="888" class="ed-kicker">4 · FRESCURA SIN REESCRIBIR EL PASADO</text>
+          <g data-node="production-failure"><rect class="ed-node" x="34" y="918" width="214" height="76" rx="16"/><text x="141" y="946" class="ed-label">Fallo nuevo / cambio de producto</text><text x="141" y="971" class="ed-sub">bug · policy · idioma · riesgo</text></g>
+          <g data-node="next-version"><rect class="ed-node ed-node--major" x="322" y="918" width="242" height="76" rx="16"/><text x="443" y="946" class="ed-label">Siguiente versión D(v+1)</text><text x="443" y="971" class="ed-sub">curar → revisar → nuevo manifest/hash</text></g>
+          <path data-path="next-version" class="ed-edge ed-edge--next" d="M248 956 H322"/>
+          <path class="ed-edge ed-edge--next" d="M564 956 H720 C790 956 758 438 852 418"/>
+          <text x="653" y="942" class="ed-edge-label">no muta D(v) en silencio</text>
         </svg>
       </div>
     </div>
