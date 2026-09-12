@@ -1,0 +1,143 @@
+name: Context Engineering Series 3 GOLDEN release certification
+
+on:
+  push:
+    branches:
+      - series/context-engineering-memory-mcp-golden
+    paths:
+      - '.github/workflows/context-engineering-series3-golden.yml'
+      - 'docs/series/context-engineering-memory-mcp/**'
+      - 'locales/en/series/context-engineering-memory-mcp/**'
+      - 'docs/snippets/articulos-tecnicos/context-*.html'
+      - 'locales/en/snippets/articulos-tecnicos/context-*'
+      - 'scripts/validate_context_engineering_*'
+      - '.github/workflows/pr-visual-review.yml'
+      - 'mkdocs.yml'
+      - 'mkdocs.en.yml'
+      - 'locales/en/manifest.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  certify-series:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Assert current main is an ancestor and checkout is exact
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          test "$(git merge-base HEAD origin/main)" = "$(git rev-parse origin/main)"
+          echo "SERIES_CERTIFICATION_SHA=$(git rev-parse HEAD)"
+          test -z "$(git status --short --untracked-files=no)"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Validate canonical media declarations and signatures
+        run: |
+          python scripts/prepare_video_media.py --check
+          python scripts/audit_media_magic.py
+          python scripts/test_video_schema_contract.py
+
+      - name: Validate Series 3 deterministic inventory and publication surfaces
+        run: |
+          node scripts/validate_context_engineering_series3_release.mjs
+          python scripts/audit_publication_contract.py
+
+      - name: Validate all Series 3 source and relationship contracts
+        run: |
+          node scripts/validate_context_engineering_ch1_source.mjs
+          node scripts/validate_context_engineering_ch2_source.mjs
+          node scripts/validate_context_engineering_ch3_source.mjs
+          node scripts/validate_context_engineering_ch4_source.mjs
+          node scripts/validate_context_engineering_ch5_source.mjs
+          node scripts/validate_context_engineering_ch6_source.mjs
+
+      - name: Build Spanish strictly
+        run: mkdocs build --clean --strict
+
+      - name: Prepare and audit English source
+        run: |
+          python scripts/prepare_locale.py --locale en
+          python scripts/audit_locale.py --locale en
+
+      - name: Build English strictly
+        env:
+          S5_LOCALE: en
+        run: mkdocs build -f mkdocs.en.yml --clean --strict
+
+      - name: Audit rendered English
+        run: python scripts/audit_locale.py --locale en --site site/en
+
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Serve combined preview
+        run: |
+          python -m http.server 8000 --directory site > /tmp/5sigmas-series3-preview.log 2>&1 &
+          echo $! > /tmp/5sigmas-series3-preview.pid
+          for attempt in {1..30}; do
+            curl --fail --silent http://127.0.0.1:8000/ > /dev/null && curl --fail --silent http://127.0.0.1:8000/en/ > /dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/5sigmas-series3-preview.log
+          exit 1
+
+      - name: Audit browser resources and locale
+        run: |
+          node scripts/audit_browser_resources.mjs
+          node scripts/validate_english_locale.mjs
+
+      - name: Re-run all Series 3 geometry, accessibility and responsive gates
+        run: |
+          node scripts/validate_context_engineering_ch1_accessibility.mjs
+          node scripts/validate_context_engineering_ch2_accessibility.mjs
+          node scripts/validate_context_engineering_ch3_accessibility.mjs
+          node scripts/validate_context_engineering_ch4_accessibility.mjs
+          node scripts/validate_context_engineering_ch5_accessibility.mjs
+          node scripts/validate_context_engineering_ch6_accessibility.mjs
+
+      - name: Validate reader navigation and responsive shell
+        run: |
+          node scripts/validate_direct_reader_navigation.mjs
+          node scripts/validate_reader_header_overlap.mjs
+          node scripts/validate_responsive_polish.mjs
+
+      - name: Re-assert exact SHA and clean tracked source
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "SERIES_CERTIFICATION_SHA=$(git rev-parse HEAD)"
+          git status --short
+          test -z "$(git status --short --untracked-files=no)"
+
+      - name: Upload complete Series 3 release evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: context-engineering-series3-golden-evidence
+          path: |
+            artifacts/visual-review/context-engineering-*.png
+            artifacts/visual-review/context-engineering-series3-inventory.json
+          if-no-files-found: error
+          retention-days: 2
