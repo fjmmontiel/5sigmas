@@ -49,12 +49,19 @@ jobs:
           data = json.loads(i18n_path.read_text())
           repl = data['replacements']
 
-          old_desc = 'Una línea gruesa representa una trayectoria concreta que atraviesa sólo algunos nodos y termina en un outcome y estado final. En la parte inferior una flecha hacia dentro indica diagnosticar en fronteras estrechas y otra hacia fuera indica confirmar el cambio en la frontera donde vive el riesgo del producto.'
-          new_desc = 'Una secuencia gruesa dirigida representa una trayectoria concreta: conecta los nodos usados en el trial y termina en un outcome y estado final. En la parte inferior una flecha hacia dentro indica diagnosticar en fronteras estrechas y otra hacia fuera indica confirmar el cambio en la frontera donde vive el riesgo del producto.'
-          if old_desc not in repl:
-              raise SystemExit('old visual description translation key missing')
+          desc_matches = [key for key in repl if 'Una línea gruesa representa una trayectoria concreta' in key]
+          if len(desc_matches) != 1:
+              raise SystemExit(f'expected one canonical visual description key, found {len(desc_matches)}')
+          old_desc = desc_matches[0]
+          new_desc = old_desc.replace(
+              'Una línea gruesa representa una trayectoria concreta que atraviesa sólo algunos nodos y termina en un outcome y estado final.',
+              'Una secuencia gruesa dirigida representa una trayectoria concreta: conecta los nodos usados en el trial y termina en un outcome y estado final.',
+          )
           old_en = repl.pop(old_desc)
-          repl[new_desc] = old_en.replace('A thick path represents one realized trajectory that crosses only some nodes', 'A thick directed sequence represents one realized trajectory: it connects the nodes used in the trial')
+          repl[new_desc] = old_en.replace(
+              'A thick path represents one realized trajectory that crosses only some nodes',
+              'A thick directed sequence represents one realized trajectory: it connects the nodes used in the trial',
+          )
 
           old_task = 'caso y criterios · contexto del trial'
           if old_task not in repl:
