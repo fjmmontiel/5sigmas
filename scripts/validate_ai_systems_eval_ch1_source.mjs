@@ -75,7 +75,7 @@ for (const anchor of esAnchors) check(es.includes(anchor), `ES: missing concept 
 for (const anchor of enAnchors) check(en.includes(anchor), `EN: missing concept ${anchor}`);
 
 for (const text of [es, en]) {
-  for (const token of ['S(x, e; M, C, \\pi)', 'B_{diagnostic}', '\\Delta_{model\\mid harness}', 'Recall@k', 'trajectory', 'outcome', 'workflow', 'System Under Test']) {
+  for (const token of ['S(x, e; M, C, \\pi)', 'B_{diagnostic}', '\\Delta_{system}', '\\Delta_{model\\mid harness}', 'Recall@k', 'z_1', 'trajectory', 'outcome', 'workflow', 'System Under Test']) {
     check(text.includes(token), `Missing required evaluation token ${token}`);
   }
   check(text.includes('task_id / dataset_version'), 'Reproducibility record must include task/dataset version');
@@ -117,6 +117,7 @@ for (const node of ['change', 'question', 'task', 'environment', 'retriever', 'm
   check(snippet.includes(`data-node="${node}"`), `Visual: missing mechanism node ${node}`);
 }
 check(snippet.includes('data-path="trajectory"'), 'Visual: realized trajectory path missing');
+check((snippet.match(/data-role="trial-context"/g) || []).length === 2, 'Visual: task and environment must be explicitly marked as trial context');
 check(snippet.includes('Diagnosticar → hacia dentro') && snippet.includes('Confirmar → hacia fuera'), 'Visual: diagnose-narrow / confirm-broad relationship missing');
 check(snippet.includes('Trayectoria = evidencia de una ejecución; outcome ≠ trayectoria'), 'Visual: trajectory/outcome distinction missing');
 
@@ -126,7 +127,7 @@ const snippetBytes = Buffer.from(snippet, 'utf8');
 const blobHeader = Buffer.from(`blob ${snippetBytes.length}\0`, 'utf8');
 const snippetBlobSha = crypto.createHash('sha1').update(Buffer.concat([blobHeader, snippetBytes])).digest('hex');
 check(i18n.source_blob_sha === snippetBlobSha, `EN: visual source_blob_sha stale (${i18n.source_blob_sha} != ${snippetBlobSha})`);
-for (const token of ['Set the boundary first', 'DIAGNOSTIC BOUNDARY', 'PRODUCT BOUNDARY', 'POLICY / ORCHESTRATION', 'trajectory realized in this trial', 'Outcome + final state', 'Diagnose → move inward', 'Confirm → move outward', 'outcome ≠ trajectory']) {
+for (const token of ['Set the boundary first', 'DIAGNOSTIC BOUNDARY', 'END-TO-END TRIAL BOUNDARY', 'POLICY / ORCHESTRATION', 'trajectory realized in this trial', 'Outcome + final state', 'Diagnose → move inward', 'Confirm → move outward', 'outcome ≠ trajectory']) {
   check(Object.values(i18n.replacements).some((value) => String(value).includes(token)), `EN visual translation missing ${token}`);
 }
 

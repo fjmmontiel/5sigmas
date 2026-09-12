@@ -78,7 +78,7 @@ La ventaja es diagnóstica: si mantenemos `c`, `d`, dataset y grader constantes,
 
 La limitación es igual de importante: **el resultado no describe automáticamente el producto**. Un modelo mejor en esa frontera puede empeorar el sistema si aumenta latencia, rompe un formato que asumía un parser, cambia patrones de tool calling o interactúa peor con el workflow.
 
-Incluso benchmarks etiquetados como «agentic» suelen fijar un harness concreto. Las model cards actuales de Google DeepMind, por ejemplo, publican resultados de Terminal-bench junto al harness usado; ese detalle forma parte de la configuración evaluada, no es decoración metodológica.[^gemini-card]
+Incluso benchmarks etiquetados como «agentic» suelen fijar un harness concreto. La model card de Gemini 3.5 Flash publicada por Google DeepMind en mayo de 2026, por ejemplo, reporta Terminal-bench 2.1 con el harness Terminus-2; ese detalle forma parte de la configuración evaluada, no es decoración metodológica.[^gemini-card]
 
 ### Qué puede concluir una model eval
 
@@ -168,10 +168,10 @@ Podemos escribir:
 \[
 \tau_i
 =
-(a_1, o_1, a_2, o_2, \ldots, a_T, o_T)
+(a_1, z_1, a_2, z_2, \ldots, a_T, z_T)
 \]
 
-para un trial `i`.
+para un trial `i`, donde `a_t` es una acción y `z_t` la observación o estado que devuelve el entorno. Reservamos `o` para el outcome final y así no confundimos una observación intermedia con el resultado del trial.
 
 Evaluar `τ` sirve para preguntas que el resultado final no responde:
 
@@ -237,13 +237,15 @@ B_{diagnostic}
 =\min\{B : \Delta \subseteq B \land B\text{ observa el efecto esperado}\}
 \]
 
-Y después exigir:
+Y después, si afirmamos que el cambio mejora el producto, exigir evidencia en la frontera de sistema:
 
 \[
-\Delta U_{product}\mid B_{system} > 0
+\Delta_{system}
+=
+E[U_{product}(S_{after})]-E[U_{product}(S_{before})] > 0
 \]
 
-si afirmamos que el cambio mejora el producto.
+donde `U_product` representa la utilidad de producto que realmente nos importa y ambos términos se estiman bajo el mismo protocolo representativo. La desigualdad no se presume por una mejora local: debe medirse.
 
 La notación sólo dice:
 
@@ -430,4 +432,4 @@ Ese movimiento —**diagnosticar estrecho, confirmar amplio**— será la base d
 [^anthropic-evals]: Anthropic Engineering, *Demystifying evals for AI agents*, 9 Jan 2026. https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents
 [^openai-agentkit]: OpenAI, *Introducing AgentKit*, 6 Oct 2025; Evals section documents datasets and Trace Grading for end-to-end agentic workflows. https://openai.com/index/introducing-agentkit/
 [^openai-evals]: OpenAI Evals, *GDPval*. https://evals.openai.com/
-[^gemini-card]: Google DeepMind, *Gemini 3.5 Flash model card*, evaluation table and methodology notes including named harnesses for agentic benchmarks. https://deepmind.google/models/model-cards/gemini-3-5-flash/
+[^gemini-card]: Google DeepMind, *Gemini 3.5 Flash model card*, published 19 May 2026; the evaluation table reports Terminal-bench 2.1 with the Terminus-2 harness. https://deepmind.google/models/model-cards/gemini-3-5-flash/

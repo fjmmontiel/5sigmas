@@ -32,7 +32,7 @@
   </style>
   <!-- GOLDEN_VISUAL_CONTRACT
     learning-objective="Show that model, component, workflow, trajectory and system are different evaluation objects: the workflow is a policy inside the system, a trajectory is one realized path through it, and wider boundaries increase product validity while reducing causal attribution."
-    mechanism="change/risk -> choose narrowest boundary containing the mechanism -> execute task/environment through system boundary -> workflow policy selects components/model/tools -> one realized trajectory produces outcome/state; local evals diagnose model/component/workflow behavior while system eval confirms product utility; trajectory evidence explains the path but does not replace outcome."
+    mechanism="change/risk -> choose narrowest boundary containing the mechanism -> evaluate a trial whose task/environment define context -> workflow policy selects components/model/tools -> one realized trajectory produces outcome/state; local evals diagnose model/component/workflow behavior while the end-to-end eval confirms product utility; trial context is not automatically part of the production SUT; trajectory evidence explains the path but does not replace outcome."
     visual-variables="nested dashed boundaries encode model/component/workflow/system scope; a single thick path crossing selected nodes encodes one realized trajectory; outcome sits outside the policy graph as final evidence; lower inward/outward arrows encode diagnose-narrow versus confirm-broad without implying a universal scalar ranking."
     why-visual="The chapter's main failure mode is treating evaluation levels as interchangeable. Spatial containment and the realized path make the distinction between policy, execution record, outcome and system boundary explicit."
     relationship="change->diagnostic-boundary;system>{workflow>{components>{model,tools}},environment};workflow-policy->realized-trajectory->outcome;trajectory+outcome->evidence;diagnose->narrower-boundary;confirm->broader-boundary"
@@ -43,7 +43,7 @@
   <div class="s5v__canvas">
     <header class="s5v__head">
       <div><span class="s5v__kicker">Primero fija la frontera</span><h3>Diagnostica en la capa del cambio; confirma donde vive el riesgo real</h3></div>
-      <p>El workflow es una política dentro del sistema. La trayectoria es una ejecución concreta de esa política. El outcome es el estado o resultado que finalmente importa. Una eval útil deja claro cuál de esas fronteras está midiendo.</p>
+      <p>El workflow es una política dentro del sistema. La trayectoria es una ejecución concreta de esa política. El outcome es el estado o resultado que finalmente importa. La frontera exterior representa el trial end-to-end: task y environment son contexto evaluado y no se convierten por ello en componentes del SUT de producción.</p>
     </header>
     <div class="s5v-eval-boundary__scroll" tabindex="0" role="region" aria-label="Diagrama desplazable de fronteras de evaluación en un sistema de IA">
       <div class="s5v-eval-boundary__stage">
@@ -58,10 +58,10 @@
           <path class="eb-edge" d="M224 130 H276"/>
 
           <rect data-boundary="system" class="eb-boundary" x="544" y="60" width="650" height="565" rx="28"/>
-          <text x="570" y="90" class="eb-kicker">SYSTEM EVAL · FRONTERA DEL PRODUCTO</text>
+          <text x="570" y="90" class="eb-kicker">SYSTEM EVAL · FRONTERA END-TO-END DEL TRIAL</text>
 
-          <g data-node="task"><rect class="eb-node" x="570" y="118" width="142" height="78" rx="15"/><text x="641" y="147" class="eb-label">Task + input</text><text x="641" y="173" class="eb-sub">caso y criterios</text></g>
-          <g data-node="environment"><rect class="eb-node eb-node--evidence" x="570" y="494" width="206" height="82" rx="15"/><text x="673" y="524" class="eb-label">Environment</text><text x="673" y="548" class="eb-sub">tools · data · permissions</text><text x="673" y="568" class="eb-small">estado inicial + dependencias</text></g>
+          <g data-node="task" data-role="trial-context"><rect class="eb-node" x="570" y="118" width="142" height="78" rx="15"/><text x="641" y="147" class="eb-label">Task + input</text><text x="641" y="173" class="eb-sub">caso y criterios · contexto del trial</text></g>
+          <g data-node="environment" data-role="trial-context"><rect class="eb-node eb-node--evidence" x="570" y="494" width="206" height="82" rx="15"/><text x="673" y="524" class="eb-label">Environment</text><text x="673" y="548" class="eb-sub">tools · data · permissions</text><text x="673" y="568" class="eb-small">estado inicial + dependencias</text></g>
 
           <rect data-boundary="workflow" class="eb-boundary eb-boundary--inner" x="746" y="112" width="418" height="352" rx="24"/>
           <text x="770" y="142" class="eb-kicker">WORKFLOW EVAL · POLÍTICA / ORQUESTACIÓN</text>

@@ -78,7 +78,7 @@ The main advantage is diagnostic isolation. If `c`, `d`, the dataset, and the gr
 
 The limit matters just as much: **that result does not automatically describe the product**. A model that performs better inside this boundary can make the system worse if it increases latency, breaks a format assumed by a parser, changes tool-calling behavior, or interacts poorly with the workflow.
 
-Even benchmarks described as agentic often fix a specific harness. Current Google DeepMind model cards, for example, publish Terminal-bench results alongside the harness used. That setup detail is part of the evaluated configuration, not methodological decoration.[^gemini-card]
+Even benchmarks described as agentic often fix a specific harness. Google DeepMind’s May 2026 Gemini 3.5 Flash model card, for example, reports Terminal-bench 2.1 with the Terminus-2 harness. That setup detail is part of the evaluated configuration, not methodological decoration.[^gemini-card]
 
 ### What a model eval can support
 
@@ -168,10 +168,10 @@ We can write a trajectory as:
 \[
 \tau_i
 =
-(a_1, o_1, a_2, o_2, \ldots, a_T, o_T)
+(a_1, z_1, a_2, z_2, \ldots, a_T, z_T)
 \]
 
-for trial `i`.
+for trial `i`, where `a_t` is an action and `z_t` is the observation or state returned by the environment. We reserve `o` for the final outcome so an intermediate observation is not confused with the trial result.
 
 Trajectory evaluation answers questions that the final result cannot answer:
 
@@ -238,8 +238,12 @@ B_{diagnostic}
 If we claim product improvement, we then need evidence at the system boundary:
 
 \[
-\Delta U_{product}\mid B_{system} > 0
+\Delta_{system}
+=
+E[U_{product}(S_{after})]-E[U_{product}(S_{before})] > 0
 \]
+
+where `U_product` is the product utility we actually care about and both terms are estimated under the same representative protocol. The inequality is not implied by a local gain; it has to be measured.
 
 The notation encodes two rules:
 
@@ -426,4 +430,4 @@ That movement — **diagnose narrow, confirm broad** — is the foundation for t
 [^anthropic-evals]: Anthropic Engineering, *Demystifying evals for AI agents*, Jan 9, 2026. https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents
 [^openai-agentkit]: OpenAI, *Introducing AgentKit*, Oct 6, 2025; the Evals section documents datasets and Trace Grading for end-to-end agentic workflows. https://openai.com/index/introducing-agentkit/
 [^openai-evals]: OpenAI Evals, *GDPval*. https://evals.openai.com/
-[^gemini-card]: Google DeepMind, *Gemini 3.5 Flash model card*, evaluation table and methodology notes including named harnesses for agentic benchmarks. https://deepmind.google/models/model-cards/gemini-3-5-flash/
+[^gemini-card]: Google DeepMind, *Gemini 3.5 Flash model card*, published May 19, 2026; the evaluation table reports Terminal-bench 2.1 with the Terminus-2 harness. https://deepmind.google/models/model-cards/gemini-3-5-flash/
