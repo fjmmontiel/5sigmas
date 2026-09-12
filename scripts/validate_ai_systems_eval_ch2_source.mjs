@@ -95,8 +95,8 @@ check(esPlain.includes('Un holdout que todo el equipo inspecciona a diario deja 
 check(enPlain.includes('A holdout that the whole team reads every day no longer acts as a holdout'), 'EN: development-leakage caveat missing');
 check(esPlain.includes('la fecha de snapshot es parte del caso') || esPlain.includes('La fecha de snapshot es parte del caso'), 'ES: temporal leakage snapshot requirement missing');
 check(enPlain.includes('The snapshot date is part of the case'), 'EN: temporal leakage snapshot requirement missing');
-check(esPlain.includes('no demuestra por sí solo mayor éxito del sistema') || esPlain.includes('No'), 'ES: local/e2e distinction unexpectedly missing');
-check(enPlain.includes('does not replace overall accuracy'), 'EN: hard-pair metric scope caveat missing');
+check(esPlain.includes('`PC` no sustituye la accuracy global'), 'ES: hard-pair metric scope caveat missing');
+check(enPlain.includes('`PC` does not replace overall accuracy'), 'EN: hard-pair metric scope caveat missing');
 check(!/^\s*-\s+.+;\s*$/m.test(en), 'EN: semicolon-list anti-pattern detected');
 
 const forbiddenEn = [
@@ -131,8 +131,9 @@ const snippetBytes = Buffer.from(snippet, 'utf8');
 const blobHeader = Buffer.from(`blob ${snippetBytes.length}\0`, 'utf8');
 const snippetBlobSha = crypto.createHash('sha1').update(Buffer.concat([blobHeader, snippetBytes])).digest('hex');
 check(i18n.source_blob_sha === snippetBlobSha, `EN: visual source_blob_sha stale (${i18n.source_blob_sha} != ${snippetBlobSha})`);
+const visualEnglishHas = (token) => snippet.includes(token) || Object.values(i18n.replacements).some((value) => String(value).includes(token));
 for (const token of ['Freeze what you compare', 'ADMISSION AND SPLIT', 'FROZEN IDENTITY FOR COMPARISON', 'Holdout / release', 'Rotating challenge', 'HARD PAIR', 'Training exposure', 'Cross-split leakage', 'Development leakage', 'Temporal leakage', 'not a cleanliness certificate', 'Next version D(v+1)', 'does not silently mutate D(v)']) {
-  check(Object.values(i18n.replacements).some((value) => String(value).includes(token)), `EN visual translation missing ${token}`);
+  check(visualEnglishHas(token), `EN visual translation/native token missing ${token}`);
 }
 
 if (failures.length) {
