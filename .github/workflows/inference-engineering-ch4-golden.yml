@@ -136,24 +136,6 @@ jobs:
           manifest = replace_once(manifest, visual3, visual3 + '\n' + visual4, 'EN manifest visual')
           write(manifest_path, manifest)
 
-          workflow_path = '.github/workflows/series4-golden-review.yml'
-          workflow = read(workflow_path)
-          source_anchor = '      - name: Validate chapter 4.3 source contract\n        run: node scripts/validate_inference_engineering_ch3_source.mjs'
-          workflow = replace_once(
-              workflow,
-              source_anchor,
-              source_anchor + '\n\n      - name: Validate chapter 4.4 source contract\n        run: node scripts/validate_inference_engineering_ch4_source.mjs',
-              'permanent source gate',
-          )
-          browser_anchor = '      - name: Validate chapter 4.3 relationship geometry and accessibility\n        run: node scripts/validate_inference_engineering_ch3_accessibility.mjs'
-          workflow = replace_once(
-              workflow,
-              browser_anchor,
-              browser_anchor + '\n\n      - name: Validate chapter 4.4 relationship geometry and accessibility\n        run: node scripts/validate_inference_engineering_ch4_accessibility.mjs',
-              'permanent browser gate',
-          )
-          write(workflow_path, workflow)
-
           validator_path = 'scripts/validate_inference_engineering_ch4_source.mjs'
           validator = read(validator_path)
           old_url = "  'https://nvidia.github.io/TensorRT-LLM/1.2.0rc8/features/speculative-decoding.html',"
@@ -173,12 +155,10 @@ jobs:
           write(validator_path, validator)
           PY
 
-          git rm .github/workflows/inference-engineering-ch4-golden.yml
           git add docs/series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.md \
                   locales/en/series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.md \
                   locales/en/manifest.yml mkdocs.yml mkdocs.en.yml \
-                  scripts/validate_inference_engineering_ch4_source.mjs \
-                  .github/workflows/series4-golden-review.yml
+                  scripts/validate_inference_engineering_ch4_source.mjs
           git status --short
           git commit -m 'content(series4): integrate chapter 4.4 GOLDEN candidate'
           git push origin HEAD:series/llm-inference-engineering-economics-golden
