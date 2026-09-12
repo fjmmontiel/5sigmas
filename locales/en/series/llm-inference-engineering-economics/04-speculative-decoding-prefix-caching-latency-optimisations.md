@@ -16,7 +16,7 @@ tags:
 
 The previous chapters separated **prefill**, **decode**, **KV-cache memory**, quantization, and parallelism. With those boundaries in place, we can analyze two optimizations that are often grouped together even though they change different work:
 
-- **prefix caching** reuses prefill work that has already been computed and is still valid;
+- **prefix caching** reuses prefill work that has already been computed and is still valid.
 - **speculative decoding** computes cheap candidate tokens in an attempt to validate several tokens with fewer sequential target-model steps.
 
 The distinction matters. A prefix-cache hit does not guess future tokens. It reuses already verified state for an identical prefix under the runtime's cache-identity contract. Speculation does introduce work that may be rejected.
@@ -116,13 +116,13 @@ With a valid hit, the request can avoid recomputing state for those 7,680 tokens
 
 Reusable state depends on tokens and on any information that changes the K/V computation. Depending on the model and runtime, relevant identity can include:
 
-- tokenizer and token IDs;
-- exact model revision;
-- adapter/LoRA;
-- multimodal inputs or their hashes;
-- positions/RoPE configuration;
-- attention/KV layout;
-- relevant dtype/configuration;
+- tokenizer and token IDs.
+- exact model revision.
+- adapter/LoRA.
+- multimodal inputs or their hashes.
+- positions/RoPE configuration.
+- attention/KV layout.
+- relevant dtype/configuration.
 - tenant or trust domain.
 
 vLLM currently implements prefix caching with block hashes that include tokens, the previous-prefix hash, and extra data where necessary. It also exposes `cache_salt` to isolate reuse groups.[^vllm-apc-design] TensorRT-LLM documents salting plus retention and offload policies as parts of its KV-cache system.[^trt-kv]
@@ -183,10 +183,10 @@ Reuse helps when there is **real prefix repetition**.
 
 Typical examples include:
 
-- long shared system prompts;
-- many questions over the same document;
-- conversations that share earlier history;
-- agents with identical base context and different suffixes;
+- long shared system prompts.
+- many questions over the same document.
+- conversations that share earlier history.
+- agents with identical base context and different suffixes.
 - batch workloads derived from one common template.
 
 It helps little when most prompts diverge in the first blocks, when reusable state is evicted before reuse, or when isolation policy prevents sharing among requests that otherwise look similar.
@@ -242,14 +242,14 @@ We do not assume that `T_verify(k)` equals the cost of one ordinary token or sca
 
 If the proposer is often correct, the target can commit more tokens per useful cycle. But two systems with the same acceptance rate can perform very differently because they differ in:
 
-- proposer cost;
-- proposed depth `k`;
-- verification cost;
-- target size;
-- extra KV state;
-- batch and concurrency;
-- scheduler behavior;
-- interconnect when draft and target are distributed;
+- proposer cost.
+- proposed depth `k`.
+- verification cost.
+- target size.
+- extra KV state.
+- batch and concurrency.
+- scheduler behavior.
+- interconnect when draft and target are distributed.
 - sequence length and difficulty.
 
 vLLM currently exposes per-request metrics such as `mean_acceptance_length`, `draft_acceptance_rate`, speculative-step counts, draft-token counts, and accepted-draft-token counts.[^vllm-acceptance] Those metrics help explain **why** a configuration helped or failed, but they must be read alongside TTFT, TPOT/ITL, throughput, and goodput.
@@ -293,7 +293,7 @@ Published speedups for these families should not be combined as if they measured
 
 Proposed tokens need enough state to be verified and continued. Rejected speculative state cannot be committed as though the tokens had been accepted.
 
-TensorRT-LLM documents that draft tokens consume KV pages and count against the executor's token limit before scheduling. It also documents **KV cache rewind**, in which pages allocated to rejected speculative tokens are returned to the pool.[^trt-spec]
+In TensorRT-LLM 1.2.0rc8, the documented two-model executor accounted draft tokens against KV pages and `max_num_tokens`, and used **KV cache rewind** to return pages allocated to rejected speculative tokens.[^trt-spec-12] The current 1.3.0rc26 documentation preserves an important operational boundary: speculative decoding targets low batch sizes, and its draft/target example explicitly disables the overlap scheduler.[^trt-spec-current] The allocator/rewind details are treated here as version-specific implementation evidence, not as a universal speculative-decoding contract.
 
 Therefore:
 
@@ -309,13 +309,13 @@ Increasing `k` can increase accepted tokens per verification while also reservin
 
 A single-request microbenchmark can favor speculative decoding because target verification exploits parallel work. Under high concurrency, the picture can reverse:
 
-- proposer work consumes capacity that could serve other requests;
-- draft tokens reserve KV and scheduler budget;
-- larger target batches may already amortize some costs;
-- speculative verification changes shapes and possibly kernel selection;
+- proposer work consumes capacity that could serve other requests.
+- draft tokens reserve KV and scheduler budget.
+- larger target batches may already amortize some costs.
+- speculative verification changes shapes and possibly kernel selection.
 - the objective may shift from individual latency to **SLO goodput**.
 
-TensorRT-LLM documents a concrete scheduler interaction: in its two-model speculation architecture, the overlap scheduler is unsupported and is disabled.[^trt-spec]
+Current TensorRT-LLM documentation says speedups are observable at low batch sizes and its draft/target example instantiates `LLM(..., disable_overlap_scheduler=True)`; this configuration is not generalized here as a restriction of every speculative algorithm or runtime.[^trt-spec-current]
 
 A result such as “1.8× faster” without request rate, batch shape, hardware, runtime, and exact metric is therefore not a production rule.
 
@@ -449,22 +449,22 @@ Also separate cold start from warm execution and record whether the proposer sha
 
 Two configurations isolate an optimization only when the experiment fixes or reports:
 
-- target model and exact revision;
-- tokenizer;
-- proposer/draft and revision, when present;
-- acceptance/verification method;
-- runtime and commit/version;
-- hardware, driver, and CUDA;
-- quantization and KV dtype;
-- TP/PP/DP/EP/CP;
-- scheduler and batching;
-- prefix-cache block size/hash/salt/retention;
-- `(L_in,L_out)` and actual degree of prefix sharing;
-- request rate/concurrency;
-- sampling parameters;
-- warmup;
-- enough repetitions;
-- median, percentiles, and distribution/variance;
+- target model and exact revision.
+- tokenizer.
+- proposer/draft and revision, when present.
+- acceptance/verification method.
+- runtime and commit/version.
+- hardware, driver, and CUDA.
+- quantization and KV dtype.
+- TP/PP/DP/EP/CP.
+- scheduler and batching.
+- prefix-cache block size/hash/salt/retention.
+- `(L_in,L_out)` and actual degree of prefix sharing.
+- request rate/concurrency.
+- sampling parameters.
+- warmup.
+- enough repetitions.
+- median, percentiles, and distribution/variance.
 - quality/output under the same harness when the algorithm does not guarantee exact equivalence.
 
 If an experiment changes model, hardware, runtime, and workload at once, it compares two complete stacks. It does not isolate the causal effect of speculative decoding or prefix caching.
@@ -528,7 +528,7 @@ The first needs **repetition + correct identity + cache capacity**. The second n
 
 The correct decision is not to enable the newest technique. It is to demonstrate on the real workload what work disappears, what extra work appears, and what happens to **latency, goodput, memory, and correctness** together.
 
-The next chapter turns these mechanisms into an economic problem: **utilization, cost per token, cost per request, and capacity planning**.
+The next chapter moves these mechanisms into workload-aware serving: **model routing, fallback, result/response caching, and policies that choose among paths under real load**.
 
 ## References
 
@@ -540,7 +540,9 @@ The next chapter turns these mechanisms into an economic problem: **utilization,
 
 [^trt-kv]: NVIDIA TensorRT-LLM, **KV Cache System**. Block reuse, search, prioritized eviction, salting/offload, and partial reuse. https://nvidia.github.io/TensorRT-LLM/features/kvcache.html
 
-[^trt-spec]: NVIDIA TensorRT-LLM, **Speculative Decoding**. Draft preparation, scheduler/KV accounting, verification, and KV-cache rewind. https://nvidia.github.io/TensorRT-LLM/1.2.0rc8/features/speculative-decoding.html
+[^trt-spec-current]: NVIDIA TensorRT-LLM, **Speculative Decoding**, current 1.3.0rc26 documentation. Low-batch scope, draft/target configuration, and currently supported methods. https://nvidia.github.io/TensorRT-LLM/1.3.0rc26/features/speculative-decoding.html
+
+[^trt-spec-12]: NVIDIA TensorRT-LLM, **Speculative Decoding**, 1.2.0rc8. Version-specific implementation detail for KV-page accounting, `max_num_tokens`, and KV-cache rewind. https://nvidia.github.io/TensorRT-LLM/1.2.0rc8/features/speculative-decoding.html
 
 [^vllm-draft]: vLLM, **Draft Models**. Draft-model speculative decoding and current configuration surface. https://docs.vllm.ai/en/latest/features/speculative_decoding/draft_model/
 

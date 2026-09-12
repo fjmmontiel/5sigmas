@@ -33,6 +33,7 @@ const primaryUrls = [
   'https://docs.vllm.ai/en/latest/design/prefix_caching/',
   'https://docs.vllm.ai/en/latest/usage/security/',
   'https://nvidia.github.io/TensorRT-LLM/features/kvcache.html',
+  'https://nvidia.github.io/TensorRT-LLM/1.3.0rc26/features/speculative-decoding.html',
   'https://nvidia.github.io/TensorRT-LLM/1.2.0rc8/features/speculative-decoding.html',
   'https://docs.vllm.ai/en/latest/features/speculative_decoding/draft_model/',
   'https://docs.vllm.ai/en/latest/features/speculative_decoding/n_gram/',
@@ -101,6 +102,12 @@ check(es.includes('no podemos sumar porcentajes de mejora'), 'ES: non-additive o
 check(en.includes('percentages cannot simply be added'), 'EN: non-additive optimization caveat missing');
 check(es.includes('comparison entre stacks') && es.includes('no evidencia causal'), 'ES: benchmark attribution boundary missing');
 check(en.includes('compares two complete stacks') && en.includes('does not isolate the causal effect'), 'EN: benchmark attribution boundary missing');
+check(es.includes('1.2.0rc8') && es.includes('implementación versionada') && es.includes('1.3.0rc26'), 'ES: TensorRT version/current-boundary caveat missing');
+check(en.includes('1.2.0rc8') && en.includes('version-specific implementation evidence') && en.includes('1.3.0rc26'), 'EN: TensorRT version/current-boundary caveat missing');
+check(es.includes('model routing, fallback, caching de resultados/respuestas'), 'ES: next-chapter 4.5 continuity missing');
+check(en.includes('model routing, fallback, result/response caching'), 'EN: next-chapter 4.5 continuity missing');
+check(!es.includes('En el siguiente capítulo convertiremos estas piezas en un problema económico'), 'ES: stale next-chapter 4.5 description detected');
+check(!en.includes('The next chapter turns these mechanisms into an economic problem'), 'EN: stale next-chapter 4.5 description detected');
 check(!/^\s*-\s+.+;\s*$/m.test(en), 'EN: semicolon-list anti-pattern detected');
 
 const visualInclude = '{{ include_html("snippets/articulos-tecnicos/inference-speculative-prefix-latency.html") }}';

@@ -293,7 +293,7 @@ No se deben mezclar speedups publicados para estas familias como si midieran la 
 
 Los tokens propuestos necesitan estado suficiente para ser verificados/continuados. Si parte del draft se rechaza, ese estado no puede quedar comprometido como si hubiera sido aceptado.
 
-TensorRT-LLM documenta que sus draft tokens consumen páginas KV y cuentan contra el límite de tokens del executor antes de scheduling. También documenta **KV cache rewind**: las páginas asignadas a tokens especulativos rechazados vuelven al pool.[^trt-spec]
+En la documentación de TensorRT-LLM 1.2.0rc8, la arquitectura de two-model speculation contabilizaba los draft tokens contra páginas KV y `max_num_tokens`, y documentaba **KV cache rewind** para devolver al pool páginas de tokens rechazados.[^trt-spec-12] La documentación actual 1.3.0rc26 conserva una frontera operativa importante: speculative decoding está orientado a low batch sizes y su ejemplo draft/target desactiva explícitamente el overlap scheduler.[^trt-spec-current] Esos detalles de allocator/rewind se tratan aquí como implementación versionada, no como contrato universal de speculative decoding.
 
 Por tanto:
 
@@ -315,7 +315,7 @@ Un microbenchmark de una petición aislada puede favorecer speculative decoding 
 - verificar secuencias especulativas puede alterar shapes y kernel selection;
 - el objetivo puede pasar de latencia individual a **SLO goodput**.
 
-TensorRT-LLM documenta incluso interacciones concretas entre speculative decoding y scheduler: en su arquitectura de two-model speculation, el overlap scheduler no está soportado y se desactiva.[^trt-spec]
+La documentación actual de TensorRT-LLM advierte que los speedups se observan a low batch sizes y su ejemplo draft/target instancia `LLM(..., disable_overlap_scheduler=True)`; esa configuración no se generaliza aquí como una restricción de todos los algoritmos o runtimes.[^trt-spec-current]
 
 Por eso un resultado «1.8× más rápido» sin request rate, batch, hardware, runtime y métrica exacta no es una regla de producción.
 
@@ -528,7 +528,7 @@ El primero necesita **repetición + identidad correcta + capacidad de cache**. E
 
 La decisión correcta no es «usar la técnica más nueva». Es demostrar, con el workload real, qué trabajo desaparece, qué trabajo adicional aparece y qué ocurre con **latencia, goodput, memoria y corrección** al mismo tiempo.
 
-En el siguiente capítulo convertiremos estas piezas en un problema económico: **utilización, coste por token, coste por petición y capacity planning**.
+En el siguiente capítulo llevaremos estas piezas al plano de serving adaptativo: **model routing, fallback, caching de resultados/respuestas y decisiones condicionadas por el workload**.
 
 ## Referencias
 
@@ -540,7 +540,9 @@ En el siguiente capítulo convertiremos estas piezas en un problema económico: 
 
 [^trt-kv]: NVIDIA TensorRT-LLM, **KV Cache System**. Block reuse, search, prioritized eviction, salting/offload y partial reuse. https://nvidia.github.io/TensorRT-LLM/features/kvcache.html
 
-[^trt-spec]: NVIDIA TensorRT-LLM, **Speculative Decoding**. Draft preparation, scheduler/KV accounting, verification y KV cache rewind. https://nvidia.github.io/TensorRT-LLM/1.2.0rc8/features/speculative-decoding.html
+[^trt-spec-current]: NVIDIA TensorRT-LLM, **Speculative Decoding**, documentación actual 1.3.0rc26. Alcance low-batch, configuración draft/target y métodos soportados. https://nvidia.github.io/TensorRT-LLM/1.3.0rc26/features/speculative-decoding.html
+
+[^trt-spec-12]: NVIDIA TensorRT-LLM, **Speculative Decoding**, 1.2.0rc8. Detalle de implementación versionado sobre accounting de páginas KV, `max_num_tokens` y KV cache rewind. https://nvidia.github.io/TensorRT-LLM/1.2.0rc8/features/speculative-decoding.html
 
 [^vllm-draft]: vLLM, **Draft Models**. Draft-model speculative decoding y configuración actual. https://docs.vllm.ai/en/latest/features/speculative_decoding/draft_model/
 

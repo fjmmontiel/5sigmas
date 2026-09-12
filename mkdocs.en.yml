@@ -209,6 +209,7 @@ nav:
           - Prefill vs decode: series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.md
           - KV cache, memory hierarchy, continuous batching and PagedAttention: series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.md
           - Quantization, parallelism, and memory/performance/quality trade-offs: series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs.md
+          - Speculative decoding, prefix caching, and other latency optimizations: series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.md
   - Concepts:
       - Concepts: temas/index.md
       - What is an LLM?: temas/llms.md

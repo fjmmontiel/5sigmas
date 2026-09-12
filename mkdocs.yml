@@ -163,6 +163,7 @@ nav:
           - Prefill vs decode: series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.md
           - KV cache, jerarquía de memoria, continuous batching y PagedAttention: series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.md
           - Cuantización, paralelismo y compromisos de memoria, rendimiento y calidad: series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs.md
+          - Speculative decoding, prefix caching y otras optimizaciones de latencia: series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.md
   - Construir:
       - articulos-tecnicos/index.md
       - Agente Reactivo, Proactivo y Tool calls: articulos-tecnicos/proactive-reactive-agent-and-tool-calls.md
