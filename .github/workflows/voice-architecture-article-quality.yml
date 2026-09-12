@@ -1,0 +1,67 @@
+name: Voice architecture article quality
+
+on:
+  pull_request:
+    paths:
+      - 'docs/articulos-tecnicos/voice-agent-architectures.md'
+      - 'locales/en/articulos-tecnicos/voice-agent-architectures.md'
+      - 'docs/snippets/articulos-tecnicos/voice-arch-*.html'
+      - 'locales/en/snippets/articulos-tecnicos/voice-arch-*'
+      - 'scripts/validate_voice_architecture_article.mjs'
+      - '.github/workflows/voice-architecture-article-quality.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: voice-article-quality-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  article-math-and-responsive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      S5_REVIEW_HEAD: ${{ github.event.pull_request.head.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install existing site dependencies
+        run: pip install -r requirements.txt
+      - name: Strict bilingual site build
+        run: |
+          mkdocs build --clean --strict
+          python scripts/prepare_locale.py --locale en
+          S5_LOCALE=en mkdocs build -f mkdocs.en.yml --clean --strict
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install existing browser QA runtime
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Serve built site
+        run: |
+          python -m http.server 8000 --directory site > /tmp/voice-article-preview.log 2>&1 &
+          for attempt in {1..30}; do
+            curl --fail --silent http://127.0.0.1:8000/articulos-tecnicos/voice-agent-architectures/ > /dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/voice-article-preview.log
+          exit 1
+      - name: Verify actual article mathematics and interactions
+        run: node scripts/validate_voice_architecture_article.mjs
+      - name: Persist focused failure evidence
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: voice-architecture-article-review
+          path: artifacts/voice-article-review/
+          if-no-files-found: warn
+          retention-days: 1
+          overwrite: true
