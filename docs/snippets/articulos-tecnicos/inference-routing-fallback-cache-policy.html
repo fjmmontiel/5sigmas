@@ -1,0 +1,94 @@
+<section class="s5v s5v-routing-policy s5v--wide" aria-label="Relación entre cache de respuestas, routing de modelo, fallback y placement de workers">
+  <style>
+    .s5v-routing-policy{scroll-margin-top:84px}
+    .s5v-routing-policy .s5v-routing-policy__scroll{overflow-x:auto;overscroll-behavior-inline:contain;padding:.35rem .2rem .8rem;scrollbar-gutter:stable;outline:none}
+    .s5v-routing-policy .s5v-routing-policy__scroll:focus-visible{box-shadow:0 0 0 3px color-mix(in srgb,var(--md-accent-fg-color,#7c4dff) 36%,transparent);border-radius:14px}
+    .s5v-routing-policy .s5v-routing-policy__stage{width:100%;min-width:0;max-width:1240px;margin:0 auto}
+    .s5v-routing-policy svg{display:block;width:100%;height:auto;overflow:visible}
+    .s5v-routing-policy text{fill:currentColor;font-family:inherit}
+    .s5v-routing-policy .rp-boundary{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 96%,var(--md-accent-fg-color,#7c4dff) 4%);stroke:currentColor;stroke-width:2;stroke-dasharray:8 8;opacity:.92}
+    .s5v-routing-policy .rp-node{fill:var(--md-default-bg-color,#fff);stroke:currentColor;stroke-width:2.3}
+    .s5v-routing-policy .rp-node--major{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 87%,var(--md-accent-fg-color,#7c4dff) 13%);stroke-width:3}
+    .s5v-routing-policy .rp-node--warn{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 91%,currentColor 9%);stroke-dasharray:5 4}
+    .s5v-routing-policy .rp-edge{fill:none;stroke:currentColor;stroke-width:2.7;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#rp-arrow)}
+    .s5v-routing-policy .rp-edge--feedback{stroke-dasharray:7 5}
+    .s5v-routing-policy .rp-edge--fallback{stroke-dasharray:4 4}
+    .s5v-routing-policy .rp-label{font-size:13.5px;font-weight:820;text-anchor:middle}
+    .s5v-routing-policy .rp-sub{font-size:11.2px;text-anchor:middle;opacity:.8}
+    .s5v-routing-policy .rp-small{font-size:10.5px;font-weight:700;text-anchor:middle;opacity:.83}
+    .s5v-routing-policy .rp-kicker{font-size:12.5px;font-weight:850;letter-spacing:.07em;text-transform:uppercase;opacity:.74}
+    .s5v-routing-policy .rp-edge-label{font-size:10.5px;font-weight:760;paint-order:stroke;stroke:var(--md-default-bg-color,#fff);stroke-width:5px;stroke-linejoin:round;text-anchor:middle}
+    .s5v-routing-policy .s5v-routing-policy__legend{display:flex;gap:1rem;flex-wrap:wrap;margin:.25rem 0 0;font-size:.88rem;opacity:.86}
+    .s5v-routing-policy .s5v-routing-policy__legend span{display:inline-flex;gap:.42rem;align-items:center}
+    .s5v-routing-policy .s5v-routing-policy__legend i{width:1.55rem;border-top:3px solid currentColor}
+    .s5v-routing-policy .s5v-routing-policy__legend .is-fallback i{border-top-style:dashed}
+    .s5v-routing-policy .s5v-routing-policy__legend .is-boundary i{border-top-width:2px;border-top-style:dashed;opacity:.7}
+    .s5v-routing-policy .s5v__copy{margin-top:.85rem}
+    @media (max-width:700px){.s5v-routing-policy{scroll-margin-top:72px}.s5v-routing-policy .s5v-routing-policy__scroll{margin-inline:-.35rem;padding-inline:.35rem}.s5v-routing-policy .s5v-routing-policy__stage{width:auto;min-width:1180px}.s5v-routing-policy .s5v-routing-policy__legend{font-size:.82rem}}
+  </style>
+  <!-- GOLDEN_VISUAL_CONTRACT
+    learning-objective="Separate response-cache reuse, model selection, failure fallback, and worker placement so each production decision has its own inputs, correctness boundary, and feedback."
+    mechanism="request -> hard eligibility -> response-cache lookup -> hit returns admitted cached result or miss enters model policy -> model selection -> worker placement -> attempt -> success; failure -> fallback eligibility -> compatible fallback model -> worker placement -> retry; telemetry and paired evals feed policy updates rather than changing historical outcomes."
+    visual-variables="topology separates pre-execution cache short-circuit, pre-attempt model routing, post-failure fallback, and post-model replica placement; branches encode cache hit/miss, primary success/failure, fallback allowed/blocked, while dashed feedback encodes offline evaluation and policy updates."
+    why-visual="The chapter's central error is collapsing four different routing/caching decisions into one box. The graph shows when each decision happens and which state it may legally reuse or change."
+    relationship="request->eligibility->cache->{hit-result|miss->model-policy->selected-model->worker-placement->attempt->{success|failure->fallback-gate->{compatible-fallback|terminal-failure}}};telemetry+paired-evals->policy-update"
+    evidence="eligibility,cache-identity,cache-hit,cache-miss,model-policy,selected-model,worker-placement,primary-attempt,fallback-gate,fallback-model,terminal-failure,telemetry,paired-evals,policy-update"
+    interaction="static:no-cosmetic-controls"
+    mobile="horizontal-scroll-preserves-cache-routing-fallback-placement-topology"
+  -->
+  <div class="s5v__canvas">
+    <header class="s5v__head"><div><span class="s5v__kicker">Cuatro decisiones distintas</span><h3>Cache, model routing, fallback y worker placement no son la misma capa</h3></div><p>Primero se aplican restricciones duras. Un cache hit puede evitar inferencia; un miss activa la política de modelo. Sólo después se elige un worker. El fallback ocurre tras un fallo y necesita su propio presupuesto y contrato de compatibilidad.</p></header>
+    <div class="s5v-routing-policy__scroll" tabindex="0" role="region" aria-label="Diagrama desplazable de cache de respuestas, selección de modelo, placement de workers y fallback">
+      <div class="s5v-routing-policy__stage">
+        <svg viewBox="0 0 1240 1040" role="img" aria-labelledby="rp-title rp-desc">
+          <title id="rp-title">Política de serving condicionada por workload y SLO</title>
+          <desc id="rp-desc">La petición atraviesa restricciones duras y un cache de respuestas. Un hit admitido devuelve un resultado cacheado; un miss entra en una política que elige modelo. El modelo seleccionado se envía a un worker según carga y localidad KV. Un fallo abre una rama de fallback sólo si el error, el presupuesto y la compatibilidad lo permiten. Telemetría y evaluaciones pareadas alimentan actualizaciones posteriores de la política.</desc>
+          <defs><marker id="rp-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="currentColor"/></marker></defs>
+
+          <rect data-boundary="decision-plane" class="rp-boundary" x="24" y="50" width="1192" height="430" rx="24"/>
+          <text x="48" y="80" class="rp-kicker">DECISION PLANE · CORRECCIÓN ANTES QUE SCORE</text>
+
+          <g data-node="request"><rect class="rp-node rp-node--major" x="48" y="166" width="150" height="86" rx="17"/><text x="123" y="196" class="rp-label">Request</text><text x="123" y="220" class="rp-sub">input + tenant + SLO</text></g>
+          <g data-node="eligibility"><rect class="rp-node" x="238" y="136" width="196" height="146" rx="17"/><text x="336" y="166" class="rp-label">Elegibilidad dura</text><text x="336" y="191" class="rp-sub">capabilities · región</text><text x="336" y="215" class="rp-sub">context · policy · health</text><text x="336" y="239" class="rp-small">filtra antes de optimizar</text></g>
+          <g data-node="cache-lookup"><rect class="rp-node rp-node--major" x="478" y="166" width="180" height="86" rx="17"/><text x="568" y="196" class="rp-label">Response cache</text><text x="568" y="220" class="rp-sub">identity + freshness</text></g>
+          <g data-node="cache-hit"><rect class="rp-node rp-node--major" x="714" y="102" width="190" height="96" rx="17"/><text x="809" y="132" class="rp-label">HIT admitido</text><text x="809" y="157" class="rp-sub">reutiliza output</text><text x="809" y="180" class="rp-small">sin inferencia nueva</text></g>
+          <g data-node="model-policy"><rect class="rp-node rp-node--major" x="714" y="258" width="190" height="108" rx="17"/><text x="809" y="288" class="rp-label">Política de modelo</text><text x="809" y="313" class="rp-sub">quality · cost · latency</text><text x="809" y="338" class="rp-small">workload + capacity</text></g>
+          <g data-node="selected-model"><rect class="rp-node" x="964" y="258" width="202" height="108" rx="17"/><text x="1065" y="288" class="rp-label">Modelo elegido</text><text x="1065" y="313" class="rp-sub">modelo/revisión/config</text><text x="1065" y="338" class="rp-small">antes del primer attempt</text></g>
+
+          <path class="rp-edge" d="M198 209 H238"/><path class="rp-edge" d="M434 209 H478"/>
+          <path class="rp-edge" d="M658 193 C684 193 686 150 714 150"/><text x="684" y="143" class="rp-edge-label">hit</text>
+          <path class="rp-edge" d="M658 225 C686 225 686 312 714 312"/><text x="684" y="285" class="rp-edge-label">miss</text>
+          <path class="rp-edge" d="M904 312 H964"/>
+          <text x="808" y="416" class="rp-small">Cache de respuesta ≠ prefix/KV cache: aquí se reutiliza el output final, no sólo prefill.</text>
+
+          <rect data-boundary="execution-plane" class="rp-boundary" x="24" y="510" width="1192" height="378" rx="24"/>
+          <text x="48" y="540" class="rp-kicker">EXECUTION PLANE · PLACEMENT, ATTEMPT Y FALLBACK</text>
+
+          <g data-node="worker-placement"><rect class="rp-node rp-node--major" x="54" y="620" width="190" height="110" rx="17"/><text x="149" y="650" class="rp-label">Worker placement</text><text x="149" y="675" class="rp-sub">load + KV locality</text><text x="149" y="700" class="rp-small">replica, no model policy</text></g>
+          <g data-node="primary-attempt"><rect class="rp-node rp-node--major" x="296" y="620" width="176" height="110" rx="17"/><text x="384" y="650" class="rp-label">Attempt</text><text x="384" y="675" class="rp-sub">deadline + retry budget</text><text x="384" y="700" class="rp-small">streaming state matters</text></g>
+          <g data-node="success"><rect class="rp-node rp-node--major" x="524" y="556" width="176" height="92" rx="17"/><text x="612" y="586" class="rp-label">Success</text><text x="612" y="611" class="rp-sub">resultado + provenance</text></g>
+          <g data-node="fallback-gate"><rect class="rp-node rp-node--warn" x="524" y="700" width="198" height="124" rx="17"/><text x="623" y="730" class="rp-label">Fallback gate</text><text x="623" y="755" class="rp-sub">error · budget · compat</text><text x="623" y="780" class="rp-small">¿es seguro reintentar?</text><text x="623" y="802" class="rp-small">¿ya hubo output visible?</text></g>
+          <g data-node="fallback-model"><rect class="rp-node rp-node--major" x="782" y="700" width="184" height="110" rx="17"/><text x="874" y="730" class="rp-label">Modelo fallback</text><text x="874" y="755" class="rp-sub">capabilities compatibles</text><text x="874" y="780" class="rp-small">nuevo placement</text></g>
+          <g data-node="terminal-failure"><rect class="rp-node rp-node--warn" x="1020" y="700" width="164" height="110" rx="17"/><text x="1102" y="730" class="rp-label">Fallo terminal</text><text x="1102" y="755" class="rp-sub">sin fallback válido</text><text x="1102" y="780" class="rp-small">degradar / rechazar</text></g>
+
+          <path class="rp-edge" d="M1065 366 C1065 500 149 502 149 620"/>
+          <path class="rp-edge" d="M244 675 H296"/>
+          <path class="rp-edge" d="M472 650 C496 650 498 602 524 602"/><text x="498" y="591" class="rp-edge-label">ok</text>
+          <path class="rp-edge rp-edge--fallback" d="M472 700 C498 700 498 762 524 762"/><text x="498" y="746" class="rp-edge-label">fail</text>
+          <path class="rp-edge rp-edge--fallback" d="M722 744 H782"/><text x="752" y="735" class="rp-edge-label">allowed</text>
+          <path class="rp-edge rp-edge--fallback" d="M722 786 C858 866 958 850 1020 786"/><text x="875" y="846" class="rp-edge-label">blocked</text>
+          <path class="rp-edge rp-edge--fallback" d="M874 700 C874 618 254 566 149 620"/>
+          <text x="873" y="875" class="rp-small">Fallback no revierte output ya emitido ni side effects externos.</text>
+
+          <g data-node="telemetry"><rect class="rp-node" x="118" y="936" width="218" height="74" rx="16"/><text x="227" y="964" class="rp-label">Telemetría por decisión</text><text x="227" y="988" class="rp-sub">route · cache · attempt · outcome</text></g>
+          <g data-node="paired-evals"><rect class="rp-node" x="442" y="936" width="218" height="74" rx="16"/><text x="551" y="964" class="rp-label">Evals pareadas / shadow</text><text x="551" y="988" class="rp-sub">observan alternativas no elegidas</text></g>
+          <g data-node="policy-update"><rect class="rp-node rp-node--major" x="766" y="936" width="218" height="74" rx="16"/><text x="875" y="964" class="rp-label">Actualiza policy</text><text x="875" y="988" class="rp-sub">versionada · reversible</text></g>
+          <path class="rp-edge rp-edge--feedback" d="M336 973 H442"/><path class="rp-edge rp-edge--feedback" d="M660 973 H766"/>
+          <path class="rp-edge rp-edge--feedback" d="M875 936 C875 905 809 905 809 366"/>
+        </svg>
+      </div>
+    </div>
+    <div class="s5v-routing-policy__legend" aria-label="Leyenda"><span><i></i>camino causal</span><span class="is-fallback"><i></i>fallback / feedback</span><span class="is-boundary"><i></i>frontera de decisión</span></div>
+    <p class="s5v__copy"><strong>Lectura:</strong> el sistema filtra primero lo que no puede ejecutar correctamente. El cache puede cerrar la request sin inferencia. En un miss, el router elige modelo y después otra capa elige worker. Un fallo no habilita automáticamente fallback: debe quedar presupuesto, ser compatible y no romper semántica por output parcial o efectos externos. La política mejora con evidencia de decisiones y alternativas, no sólo con los casos que eligió.</p>
+  </div>
+</section>
