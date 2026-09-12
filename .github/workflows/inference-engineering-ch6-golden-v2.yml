@@ -101,6 +101,8 @@ jobs:
       - name: Record exact certification identities
         shell: bash
         run: |
+          git status --short
+          test -z "$(git status --porcelain)"
           mkdir -p artifacts/visual-review
           {
             echo "certified_sha=$(git rev-parse HEAD)"
@@ -109,8 +111,6 @@ jobs:
             echo "visual_blob=$(git hash-object docs/snippets/articulos-tecnicos/inference-benchmark-measurement-boundary.html)"
             echo "workflow_blob=$(git hash-object .github/workflows/series4-golden-review.yml)"
           } | tee artifacts/visual-review/inference-engineering-ch6-identities.txt
-          git status --short
-          test -z "$(git status --porcelain)"
 
       - name: Verify branch still points at certified SHA
         shell: bash
