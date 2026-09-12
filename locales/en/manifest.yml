@@ -35,6 +35,7 @@ published_routes:
   - series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving.md
   - series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.md
   - series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria.md
+  - series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning.md
   - series/fundamentos-ia-iag/00_presentacion_serie.md
   - series/fundamentos-ia-iag/01-que-es-ia.md
   - series/fundamentos-ia-iag/02-que-es-ia-generativa.md
@@ -118,6 +119,7 @@ required_snippets:
   - snippets/articulos-tecnicos/inference-routing-fallback-cache-policy.html
   - snippets/articulos-tecnicos/inference-benchmark-measurement-boundary.html
   - snippets/articulos-tecnicos/eval-boundary-system-workflow-trajectory.html
+  - snippets/articulos-tecnicos/eval-dataset-lifecycle-hard-negatives-contamination.html
   - snippets/from-cave-to-agi/01-sistemas-numeracion.html
   - snippets/from-cave-to-agi/01-algebra-despejar.html
   - snippets/from-cave-to-agi/01-cadena-deductiva.html
