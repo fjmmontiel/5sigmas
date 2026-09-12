@@ -1,0 +1,163 @@
+<section class="s5v s5v-kv-paging s5v--wide" aria-label="Relación entre KV cache, PagedAttention, continuous batching y jerarquía de memoria">
+  <style>
+    .s5v-kv-paging .s5v-kv-paging__scroll{overflow-x:auto;overscroll-behavior-inline:contain;padding:.35rem .2rem .8rem;scrollbar-gutter:stable;outline:none}
+    .s5v-kv-paging .s5v-kv-paging__scroll:focus-visible{box-shadow:0 0 0 3px color-mix(in srgb,var(--md-accent-fg-color,#7c4dff) 36%,transparent);border-radius:14px}
+    .s5v-kv-paging .s5v-kv-paging__stage{width:100%;min-width:0;max-width:1240px;margin:0 auto}
+    .s5v-kv-paging svg{display:block;width:100%;height:auto;overflow:visible}
+    .s5v-kv-paging text{fill:currentColor;font-family:inherit}
+    .s5v-kv-paging .k-boundary{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 95%,var(--md-accent-fg-color,#7c4dff) 5%);stroke:currentColor;stroke-width:2;stroke-dasharray:8 8;opacity:.92}
+    .s5v-kv-paging .k-node{fill:var(--md-default-bg-color,#fff);stroke:currentColor;stroke-width:2.5}
+    .s5v-kv-paging .k-node--major{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 87%,var(--md-accent-fg-color,#7c4dff) 13%);stroke-width:3.5}
+    .s5v-kv-paging .k-page{fill:var(--md-default-bg-color,#fff);stroke:currentColor;stroke-width:2}
+    .s5v-kv-paging .k-page--used{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 84%,var(--md-accent-fg-color,#7c4dff) 16%);stroke-width:2.5}
+    .s5v-kv-paging .k-page--free{stroke-dasharray:5 4;opacity:.7}
+    .s5v-kv-paging .k-edge{fill:none;stroke:currentColor;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#kv-arrow)}
+    .s5v-kv-paging .k-edge--life{stroke-dasharray:8 6;stroke-width:3.2}
+    .s5v-kv-paging .k-edge--tier{stroke-width:3.2}
+    .s5v-kv-paging .k-edge--return{marker-end:none;marker-start:url(#kv-arrow-start)}
+    .s5v-kv-paging .k-label{font-size:16px;font-weight:800;text-anchor:middle}
+    .s5v-kv-paging .k-sub{font-size:12.5px;text-anchor:middle;opacity:.76}
+    .s5v-kv-paging .k-kicker{font-size:13px;font-weight:850;letter-spacing:.07em;text-transform:uppercase;opacity:.72}
+    .s5v-kv-paging .k-small{font-size:11.5px;font-weight:700;opacity:.82}
+    .s5v-kv-paging .k-edge-label{font-size:12.5px;font-weight:760;paint-order:stroke;stroke:var(--md-default-bg-color,#fff);stroke-width:5px;stroke-linejoin:round}
+    .s5v-kv-paging .k-block-text{font-size:12px;font-weight:800;text-anchor:middle}
+    .s5v-kv-paging .s5v-kv-paging__legend{display:flex;gap:1rem;flex-wrap:wrap;margin:.25rem 0 0;font-size:.88rem;opacity:.86}
+    .s5v-kv-paging .s5v-kv-paging__legend span{display:inline-flex;gap:.42rem;align-items:center}
+    .s5v-kv-paging .s5v-kv-paging__legend i{width:1.55rem;border-top:3px solid currentColor}
+    .s5v-kv-paging .s5v-kv-paging__legend .is-life i{border-top-style:dashed}
+    .s5v-kv-paging .s5v-kv-paging__legend .is-boundary i{border-top-width:2px;border-top-style:dashed;opacity:.7}
+    .s5v-kv-paging .s5v__copy{margin-top:.85rem}
+    @media (max-width:700px){.s5v-kv-paging .s5v-kv-paging__scroll{margin-inline:-.35rem;padding-inline:.35rem}.s5v-kv-paging .s5v-kv-paging__stage{width:auto;min-width:1120px}.s5v-kv-paging .s5v-kv-paging__legend{font-size:.82rem}}
+  </style>
+  <!-- GOLDEN_VISUAL_CONTRACT
+    learning-objective="Show why KV-cache capacity is an allocation-and-lifecycle problem, distinguish paged KV allocation from continuous-batching scheduling, and expose the cost boundary introduced by memory tiering."
+    mechanism="logical KV blocks for each live request -> block table/cache manager -> non-contiguous physical GPU pages; request completion releases owned pages -> free capacity becomes visible to the scheduler -> a waiting request is admitted and receives pages; optional offload moves reusable pages between GPU and slower host tiers."
+    visual-variables="horizontal topology encodes logical-to-physical mapping; separate request/cache/GPU boundaries encode ownership; dashed lifecycle edges encode finish-release-admit feedback; lower vertical tier encodes slower/larger memory; bidirectional tier arrows encode offload/promotion rather than free capacity."
+    why-visual="The teaching point is relational: PagedAttention changes where logical state may live, continuous batching changes when requests join or leave the active set, and offload changes the memory tier. A table would hide the ownership, reclamation and admission feedback loop."
+    relationship="request-logical-blocks->block-table->physical-gpu-pages;request-A-finish->release-pages->free-pool->scheduler->admit-C->allocate-pages;gpu-pages<->host-tier"
+    evidence="logical-blocks,block-table,physical-pages,release,reuse,continuous-scheduler,waiting-request,host-offload,promotion"
+    interaction="static:no-cosmetic-controls"
+    mobile="horizontal-scroll-preserves-logical-to-physical-mapping-reclamation-and-tier-boundaries"
+  -->
+  <div class="s5v__canvas">
+    <header class="s5v__head"><div><span class="s5v__kicker">Memoria viva · asignación · scheduling</span><h3>Paging decide dónde vive el KV; continuous batching decide quién está activo</h3></div><p>Los bloques lógicos de una secuencia pueden mapearse a páginas físicas no contiguas. Cuando una petición termina, libera páginas; el scheduler puede admitir otra petición en una iteración posterior. Mover bloques a host añade capacidad, pero también movimiento.</p></header>
+    <div class="s5v-kv-paging__scroll" tabindex="0" role="region" aria-label="Diagrama desplazable de bloques KV lógicos, páginas físicas, liberación y continuous batching">
+      <div class="s5v-kv-paging__stage">
+        <svg viewBox="0 0 1240 800" role="img" aria-labelledby="kv-paging-title kv-paging-desc">
+          <title id="kv-paging-title">De bloques KV lógicos a páginas físicas y de liberación a nueva admisión</title>
+          <desc id="kv-paging-desc">Las peticiones A y B poseen bloques KV lógicos. Una block table los mapea a páginas GPU no contiguas. A termina, sus páginas se liberan y la capacidad vuelve al pool. El scheduler de continuous batching puede entonces admitir la petición C y asignarle páginas sin esperar a que B termine. Una frontera inferior muestra offload y promoción entre GPU y memoria host como movimiento explícito, no como VRAM gratuita.</desc>
+          <defs>
+            <marker id="kv-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="currentColor"/></marker>
+            <marker id="kv-arrow-start" markerWidth="10" markerHeight="10" refX="1" refY="3" orient="auto-start-reverse" markerUnits="strokeWidth"><path d="M9,0 L9,6 L0,3 z" fill="currentColor"/></marker>
+          </defs>
+
+          <rect data-boundary="logical-requests" class="k-boundary" x="24" y="58" width="348" height="420" rx="24"/>
+          <text x="48" y="88" class="k-kicker">PETICIONES · ESPACIO LÓGICO</text>
+
+          <g data-node="request-a">
+            <rect class="k-node k-node--major" x="58" y="116" width="280" height="92" rx="18"/>
+            <text x="198" y="144" class="k-label">Request A · activa</text>
+            <text x="198" y="166" class="k-sub">KV lógico · 3 bloques vivos</text>
+            <g data-node="logical-a0"><rect class="k-page k-page--used" x="83" y="178" width="54" height="24" rx="6"/><text x="110" y="195" class="k-block-text">A0</text></g>
+            <g data-node="logical-a1"><rect class="k-page k-page--used" x="147" y="178" width="54" height="24" rx="6"/><text x="174" y="195" class="k-block-text">A1</text></g>
+            <g data-node="logical-a2"><rect class="k-page k-page--used" x="211" y="178" width="54" height="24" rx="6"/><text x="238" y="195" class="k-block-text">A2</text></g>
+          </g>
+
+          <g data-node="request-b">
+            <rect class="k-node" x="58" y="234" width="280" height="86" rx="18"/>
+            <text x="198" y="262" class="k-label">Request B · activa</text>
+            <text x="198" y="284" class="k-sub">continúa aunque A termine</text>
+            <g data-node="logical-b0"><rect class="k-page k-page--used" x="115" y="292" width="54" height="22" rx="6"/><text x="142" y="308" class="k-block-text">B0</text></g>
+            <g data-node="logical-b1"><rect class="k-page k-page--used" x="179" y="292" width="54" height="22" rx="6"/><text x="206" y="308" class="k-block-text">B1</text></g>
+          </g>
+
+          <g data-node="request-c-waiting">
+            <rect class="k-node" x="58" y="354" width="280" height="88" rx="18"/>
+            <text x="198" y="382" class="k-label">Request C · esperando</text>
+            <text x="198" y="405" class="k-sub">sin páginas KV asignadas todavía</text>
+            <text x="198" y="428" class="k-small" text-anchor="middle">entra cuando política + capacidad lo permiten</text>
+          </g>
+
+          <rect data-boundary="allocation-manager" class="k-boundary" x="404" y="58" width="310" height="420" rx="24"/>
+          <text x="428" y="88" class="k-kicker">CACHE MANAGER · BLOCK TABLE</text>
+          <g data-node="block-table">
+            <rect class="k-node k-node--major" x="438" y="118" width="242" height="202" rx="18"/>
+            <text x="559" y="146" class="k-label">Mapeo lógico → físico</text>
+            <text x="474" y="180" class="k-small">A0</text><text x="530" y="180" class="k-small">→</text><text x="584" y="180" class="k-small">P7</text>
+            <text x="474" y="211" class="k-small">A1</text><text x="530" y="211" class="k-small">→</text><text x="584" y="211" class="k-small">P2</text>
+            <text x="474" y="242" class="k-small">A2</text><text x="530" y="242" class="k-small">→</text><text x="584" y="242" class="k-small">P11</text>
+            <text x="474" y="273" class="k-small">B0</text><text x="530" y="273" class="k-small">→</text><text x="584" y="273" class="k-small">P4</text>
+            <text x="474" y="304" class="k-small">B1</text><text x="530" y="304" class="k-small">→</text><text x="584" y="304" class="k-small">P9</text>
+          </g>
+          <g data-node="released-a">
+            <rect class="k-node" x="438" y="352" width="242" height="90" rx="16"/>
+            <text x="559" y="379" class="k-label">A termina → release</text>
+            <text x="559" y="402" class="k-sub">P7 · P2 · P11 vuelven al pool</text>
+            <text x="559" y="425" class="k-small" text-anchor="middle">ownership/reference state se actualiza</text>
+          </g>
+
+          <rect data-boundary="gpu-physical-pool" class="k-boundary" x="746" y="58" width="470" height="420" rx="24"/>
+          <text x="770" y="88" class="k-kicker">GPU VRAM · POOL FÍSICO DE BLOQUES KV</text>
+          <g data-node="gpu-pool">
+            <rect class="k-node" x="780" y="114" width="402" height="206" rx="18"/>
+            <text x="981" y="142" class="k-label">Páginas físicas · no contiguas por request</text>
+            <g data-node="page-p0"><rect class="k-page k-page--free" x="812" y="164" width="62" height="42" rx="8"/><text x="843" y="190" class="k-block-text">P0</text></g>
+            <g data-node="page-p2"><rect class="k-page k-page--used" x="888" y="164" width="62" height="42" rx="8"/><text x="919" y="182" class="k-block-text">P2</text><text x="919" y="199" class="k-small" text-anchor="middle">A1</text></g>
+            <g data-node="page-p4"><rect class="k-page k-page--used" x="964" y="164" width="62" height="42" rx="8"/><text x="995" y="182" class="k-block-text">P4</text><text x="995" y="199" class="k-small" text-anchor="middle">B0</text></g>
+            <g data-node="page-p7"><rect class="k-page k-page--used" x="1040" y="164" width="62" height="42" rx="8"/><text x="1071" y="182" class="k-block-text">P7</text><text x="1071" y="199" class="k-small" text-anchor="middle">A0</text></g>
+            <g data-node="page-p8"><rect class="k-page k-page--free" x="812" y="222" width="62" height="42" rx="8"/><text x="843" y="248" class="k-block-text">P8</text></g>
+            <g data-node="page-p9"><rect class="k-page k-page--used" x="888" y="222" width="62" height="42" rx="8"/><text x="919" y="240" class="k-block-text">P9</text><text x="919" y="257" class="k-small" text-anchor="middle">B1</text></g>
+            <g data-node="page-p10"><rect class="k-page k-page--free" x="964" y="222" width="62" height="42" rx="8"/><text x="995" y="248" class="k-block-text">P10</text></g>
+            <g data-node="page-p11"><rect class="k-page k-page--used" x="1040" y="222" width="62" height="42" rx="8"/><text x="1071" y="240" class="k-block-text">P11</text><text x="1071" y="257" class="k-small" text-anchor="middle">A2</text></g>
+            <text x="981" y="296" class="k-sub">bloques libres y ocupados comparten el mismo pool</text>
+          </g>
+          <g data-node="free-pool">
+            <rect class="k-node k-node--major" x="780" y="352" width="402" height="90" rx="16"/>
+            <text x="981" y="379" class="k-label">Capacidad recuperada</text>
+            <text x="981" y="402" class="k-sub">P7 · P2 · P11 pueden reasignarse</text>
+            <text x="981" y="425" class="k-small" text-anchor="middle">free blocks → capacidad de admisión</text>
+          </g>
+
+          <path data-edge="a-to-table" class="k-edge" d="M338 162 H430"/>
+          <path data-edge="b-to-table" class="k-edge" d="M338 277 C382 277 392 267 430 267"/>
+          <path data-edge="table-to-gpu" class="k-edge" d="M680 218 H772"/>
+          <text x="726" y="207" class="k-edge-label" text-anchor="middle">page ids</text>
+          <path data-edge="finish-to-release" class="k-edge k-edge--life" d="M198 208 C198 470 368 470 430 397"/>
+          <text x="292" y="459" class="k-edge-label">fin de A</text>
+          <path data-edge="release-to-free" class="k-edge k-edge--life" d="M680 397 H772"/>
+          <text x="726" y="386" class="k-edge-label" text-anchor="middle">libera</text>
+
+          <rect data-boundary="continuous-scheduler" class="k-boundary" x="24" y="512" width="1192" height="140" rx="24"/>
+          <text x="48" y="542" class="k-kicker">CONTINUOUS BATCHING · ITERATION-LEVEL SCHEDULING</text>
+          <g data-node="scheduler">
+            <rect class="k-node k-node--major" x="86" y="566" width="236" height="58" rx="16"/>
+            <text x="204" y="590" class="k-label">Scheduler</text><text x="204" y="613" class="k-sub">active set · política · SLOs</text>
+          </g>
+          <g data-node="finish-event"><rect class="k-node" x="386" y="566" width="192" height="58" rx="16"/><text x="482" y="590" class="k-label">A termina</text><text x="482" y="613" class="k-sub">B sigue activo</text></g>
+          <g data-node="capacity-event"><rect class="k-node" x="642" y="566" width="206" height="58" rx="16"/><text x="745" y="590" class="k-label">Bloques vuelven</text><text x="745" y="613" class="k-sub">capacidad cambia</text></g>
+          <g data-node="admitted-c"><rect class="k-node k-node--major" x="912" y="566" width="236" height="58" rx="16"/><text x="1030" y="590" class="k-label">Admitir C</text><text x="1030" y="613" class="k-sub">siguiente iteración elegible</text></g>
+          <path data-edge="scheduler-to-finish" class="k-edge k-edge--life" d="M322 595 H378"/>
+          <path data-edge="finish-to-capacity" class="k-edge k-edge--life" d="M578 595 H634"/>
+          <path data-edge="capacity-to-admit" class="k-edge k-edge--life" d="M848 595 H904"/>
+          <path data-edge="free-to-scheduler" class="k-edge k-edge--life" d="M981 442 C981 506 745 494 745 558"/>
+          <text x="887" y="502" class="k-edge-label">free capacity</text>
+          <path data-edge="scheduler-to-c" class="k-edge k-edge--life" d="M1030 566 C1030 500 198 504 198 450"/>
+          <text x="616" y="490" class="k-edge-label" text-anchor="middle">admisión ≠ asignación física</text>
+          <path data-edge="c-to-table" class="k-edge k-edge--life" d="M338 405 C380 405 393 330 430 316"/>
+
+          <rect data-boundary="host-memory-tier" class="k-boundary" x="24" y="688" width="1192" height="88" rx="24"/>
+          <text x="48" y="718" class="k-kicker">JERARQUÍA DE MEMORIA · MÁS CAPACIDAD, MÁS MOVIMIENTO</text>
+          <g data-node="host-tier"><rect class="k-node" x="372" y="721" width="340" height="40" rx="13"/><text x="542" y="746" class="k-label">Host / pinned memory · tier más lento</text></g>
+          <g data-node="gpu-hot-tier"><rect class="k-node k-node--major" x="862" y="721" width="278" height="40" rx="13"/><text x="1001" y="746" class="k-label">GPU · bloques calientes</text></g>
+          <path data-edge="gpu-to-host" class="k-edge k-edge--tier" d="M854 736 H720"/>
+          <text x="787" y="727" class="k-edge-label" text-anchor="middle">offload</text>
+          <path data-edge="host-to-gpu" class="k-edge k-edge--tier" d="M720 752 H854"/>
+          <text x="787" y="770" class="k-edge-label" text-anchor="middle">promote</text>
+          <text x="68" y="750" class="k-small">offload amplía capacidad; no elimina el coste de transferir estado</text>
+        </svg>
+      </div>
+    </div>
+    <div class="s5v-kv-paging__legend" aria-label="Leyenda del diagrama"><span><i></i>asignación / ownership</span><span class="is-life"><i></i>lifecycle y feedback de capacidad</span><span class="is-boundary"><i></i>frontera de responsabilidad</span></div>
+    <p class="s5v__copy"><strong>Lectura:</strong> PagedAttention o un KV cache paginado cambia la relación entre bloques lógicos y memoria física. Continuous batching cambia el conjunto de peticiones activas en cada iteración. El vínculo entre ambos es la capacidad: terminar una petición libera estado y puede permitir una nueva admisión. Offload añade otro tier; no convierte memoria lenta en VRAM gratuita.</p>
+  </div>
+</section>
