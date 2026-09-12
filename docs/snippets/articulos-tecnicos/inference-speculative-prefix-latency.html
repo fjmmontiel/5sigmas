@@ -1,0 +1,96 @@
+<section class="s5v s5v-reuse-spec s5v--wide" aria-label="Relación entre reutilización de prefijos, especulación, KV cache y presupuesto de latencia">
+  <style>
+    .s5v-reuse-spec{scroll-margin-top:84px}
+    .s5v-reuse-spec .s5v-reuse-spec__scroll{overflow-x:auto;overscroll-behavior-inline:contain;padding:.35rem .2rem .8rem;scrollbar-gutter:stable;outline:none}
+    .s5v-reuse-spec .s5v-reuse-spec__scroll:focus-visible{box-shadow:0 0 0 3px color-mix(in srgb,var(--md-accent-fg-color,#7c4dff) 36%,transparent);border-radius:14px}
+    .s5v-reuse-spec .s5v-reuse-spec__stage{width:100%;min-width:0;max-width:1240px;margin:0 auto}
+    .s5v-reuse-spec svg{display:block;width:100%;height:auto;overflow:visible}
+    .s5v-reuse-spec text{fill:currentColor;font-family:inherit}
+    .s5v-reuse-spec .rs-boundary{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 95%,var(--md-accent-fg-color,#7c4dff) 5%);stroke:currentColor;stroke-width:2;stroke-dasharray:8 8;opacity:.92}
+    .s5v-reuse-spec .rs-node{fill:var(--md-default-bg-color,#fff);stroke:currentColor;stroke-width:2.35}
+    .s5v-reuse-spec .rs-node--major{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 87%,var(--md-accent-fg-color,#7c4dff) 13%);stroke-width:3}
+    .s5v-reuse-spec .rs-node--warn{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 91%,currentColor 9%);stroke-dasharray:5 4}
+    .s5v-reuse-spec .rs-edge{fill:none;stroke:currentColor;stroke-width:2.7;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#rs-arrow)}
+    .s5v-reuse-spec .rs-edge--feedback{stroke-dasharray:7 5}
+    .s5v-reuse-spec .rs-edge--reject{stroke-dasharray:4 4}
+    .s5v-reuse-spec .rs-label{font-size:14px;font-weight:820;text-anchor:middle}
+    .s5v-reuse-spec .rs-sub{font-size:11.5px;text-anchor:middle;opacity:.8}
+    .s5v-reuse-spec .rs-small{font-size:10.8px;font-weight:700;text-anchor:middle;opacity:.83}
+    .s5v-reuse-spec .rs-kicker{font-size:13px;font-weight:850;letter-spacing:.07em;text-transform:uppercase;opacity:.74}
+    .s5v-reuse-spec .rs-edge-label{font-size:10.8px;font-weight:760;paint-order:stroke;stroke:var(--md-default-bg-color,#fff);stroke-width:5px;stroke-linejoin:round;text-anchor:middle}
+    .s5v-reuse-spec .s5v-reuse-spec__legend{display:flex;gap:1rem;flex-wrap:wrap;margin:.25rem 0 0;font-size:.88rem;opacity:.86}
+    .s5v-reuse-spec .s5v-reuse-spec__legend span{display:inline-flex;gap:.42rem;align-items:center}
+    .s5v-reuse-spec .s5v-reuse-spec__legend i{width:1.55rem;border-top:3px solid currentColor}
+    .s5v-reuse-spec .s5v-reuse-spec__legend .is-feedback i{border-top-style:dashed}
+    .s5v-reuse-spec .s5v-reuse-spec__legend .is-boundary i{border-top-width:2px;border-top-style:dashed;opacity:.7}
+    .s5v-reuse-spec .s5v__copy{margin-top:.85rem}
+    @media (max-width:700px){.s5v-reuse-spec{scroll-margin-top:72px}.s5v-reuse-spec .s5v-reuse-spec__scroll{margin-inline:-.35rem;padding-inline:.35rem}.s5v-reuse-spec .s5v-reuse-spec__stage{width:auto;min-width:1180px}.s5v-reuse-spec .s5v-reuse-spec__legend{font-size:.82rem}}
+  </style>
+  <!-- GOLDEN_VISUAL_CONTRACT
+    learning-objective="Separate verified prefix reuse from speculative future-token work and show where each mechanism changes the latency budget, KV state, scheduler pressure, and correctness boundary."
+    mechanism="request prefix -> cache identity -> lookup -> hit reuses verified KV or miss performs prefill -> remaining prefill -> first token; decode state -> proposer -> target verification -> accepted prefix commits or rejected suffix rewinds/corrects -> next decode state; retained cache and speculative depth both feed KV/scheduler pressure."
+    visual-variables="upper topology uses branching hit/miss paths around the cache boundary and rejoins at uncached prefill; lower topology uses proposal/verification with explicit accept and reject/rewind branches that rejoin only at committed target state; dashed feedback edges encode shared KV and scheduler pressure rather than semantic execution order."
+    why-visual="The chapter depends on seeing that prefix reuse skips already verified prefill while speculation creates disposable future work. A table cannot show both branch semantics and their shared pressure on KV capacity and scheduling."
+    relationship="prefix->identity->lookup->{reuse-kv|cold-prefill}->remaining-prefill->first-token;target-state->proposer->verification->{accept|reject-rewind}->committed-state;cache-retention-and-spec-depth->kv-scheduler-pressure"
+    evidence="prefix-identity,cache-hit,cache-miss,reused-kv,eviction,salt,uncached-prefill,proposer,draft-tokens,target-verification,acceptance,rejection,rewind,commit,kv-pressure,scheduler-pressure"
+    interaction="static:no-cosmetic-controls"
+    mobile="horizontal-scroll-preserves-hit-miss-and-accept-reject-topology"
+  -->
+  <div class="s5v__canvas">
+    <header class="s5v__head"><div><span class="s5v__kicker">Reutilizar ≠ especular</span><h3>El cache evita prefill ya verificado; la especulación crea candidatos que el target todavía debe aceptar</h3></div><p>Las dos técnicas pueden reducir latencia, pero por mecanismos distintos. Ambas consumen estado y compiten por scheduler/KV capacity, así que el efecto end-to-end depende del workload.</p></header>
+    <div class="s5v-reuse-spec__scroll" tabindex="0" role="region" aria-label="Diagrama desplazable de prefix caching y speculative decoding con ramas de hit, miss, aceptación y rechazo">
+      <div class="s5v-reuse-spec__stage">
+        <svg viewBox="0 0 1240 1010" role="img" aria-labelledby="rs-title rs-desc">
+          <title id="rs-title">Trabajo reutilizado frente a trabajo especulativo en inferencia LLM</title>
+          <desc id="rs-desc">La mitad superior muestra cómo un prefijo se identifica, busca en cache y toma una rama hit que reutiliza KV verificado o una rama miss que ejecuta prefill antes de reunirse en el sufijo no cacheado. La mitad inferior muestra cómo un proposer genera candidatos que el target verifica, acepta o rechaza; el estado rechazado se rebobina antes de comprometer el siguiente estado. Ambos mecanismos presionan la capacidad KV y el scheduler.</desc>
+          <defs><marker id="rs-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="currentColor"/></marker></defs>
+
+          <rect data-boundary="reuse" class="rs-boundary" x="24" y="50" width="1192" height="386" rx="24"/>
+          <text x="48" y="80" class="rs-kicker">PREFIX CACHING · REUTILIZA ESTADO YA VERIFICADO</text>
+
+          <g data-node="prefix"><rect class="rs-node rs-node--major" x="52" y="146" width="166" height="82" rx="17"/><text x="135" y="176" class="rs-label">Prefijo request</text><text x="135" y="201" class="rs-sub">tokens + contexto relevante</text></g>
+          <g data-node="identity"><rect class="rs-node" x="268" y="132" width="190" height="110" rx="17"/><text x="363" y="162" class="rs-label">Identidad de cache</text><text x="363" y="187" class="rs-sub">tokens · modelo · adapter</text><text x="363" y="210" class="rs-sub">salt / dominio de confianza</text></g>
+          <g data-node="lookup"><rect class="rs-node rs-node--major" x="508" y="146" width="164" height="82" rx="17"/><text x="590" y="176" class="rs-label">Lookup</text><text x="590" y="201" class="rs-sub">bloques KV reutilizables</text></g>
+
+          <g data-node="hit"><rect class="rs-node rs-node--major" x="728" y="96" width="192" height="98" rx="17"/><text x="824" y="126" class="rs-label">HIT</text><text x="824" y="151" class="rs-sub">reutiliza KV verificado</text><text x="824" y="174" class="rs-small">salta ese prefill</text></g>
+          <g data-node="miss"><rect class="rs-node rs-node--warn" x="728" y="242" width="192" height="98" rx="17"/><text x="824" y="272" class="rs-label">MISS</text><text x="824" y="297" class="rs-sub">prefill normal</text><text x="824" y="320" class="rs-small">publica bloques reutilizables</text></g>
+          <g data-node="remaining-prefill"><rect class="rs-node rs-node--major" x="976" y="146" width="202" height="96" rx="17"/><text x="1077" y="176" class="rs-label">Prefill restante</text><text x="1077" y="201" class="rs-sub">sufijo no reutilizado</text><text x="1077" y="224" class="rs-small">→ primera salida</text></g>
+
+          <path class="rs-edge" d="M218 187 H268"/><path class="rs-edge" d="M458 187 H508"/>
+          <path class="rs-edge" d="M672 176 C700 176 702 145 728 145"/><text x="701" y="136" class="rs-edge-label">hit</text>
+          <path class="rs-edge rs-edge--reject" d="M672 198 C700 198 702 291 728 291"/><text x="701" y="265" class="rs-edge-label">miss</text>
+          <path class="rs-edge" d="M920 145 C948 145 948 184 976 184"/><path class="rs-edge" d="M920 291 C954 291 946 210 976 210"/>
+          <text x="1077" y="284" class="rs-small">Un hit reduce trabajo de prefill; no implica menor TPOT.</text>
+          <text x="1077" y="309" class="rs-small">Hit rate ≠ reducción proporcional de TTFT.</text>
+
+          <g data-node="retention"><rect class="rs-node" x="298" y="306" width="312" height="84" rx="16"/><text x="454" y="334" class="rs-label">Retención · eviction · offload</text><text x="454" y="359" class="rs-sub">más estado reusable ↔ menos páginas libres</text></g>
+          <path class="rs-edge rs-edge--feedback" d="M824 194 C824 384 650 374 610 350"/>
+
+          <rect data-boundary="speculation" class="rs-boundary" x="24" y="474" width="1192" height="404" rx="24"/>
+          <text x="48" y="504" class="rs-kicker">SPECULATIVE DECODING · LOS CANDIDATOS AÚN NO ESTÁN COMPROMETIDOS</text>
+
+          <g data-node="target-state"><rect class="rs-node rs-node--major" x="52" y="594" width="164" height="84" rx="17"/><text x="134" y="624" class="rs-label">Estado target</text><text x="134" y="649" class="rs-sub">secuencia confirmada</text></g>
+          <g data-node="proposer"><rect class="rs-node" x="270" y="566" width="190" height="140" rx="17"/><text x="365" y="596" class="rs-label">Proposer</text><text x="365" y="621" class="rs-sub">draft · n-gram · MTP…</text><text x="365" y="648" class="rs-small">d₁ d₂ … dₖ</text><text x="365" y="674" class="rs-small">trabajo barato, no confirmado</text></g>
+          <g data-node="verify"><rect class="rs-node rs-node--major" x="514" y="580" width="190" height="112" rx="17"/><text x="609" y="611" class="rs-label">Target verifica</text><text x="609" y="636" class="rs-sub">regla de aceptación</text><text x="609" y="662" class="rs-small">coste de verification</text></g>
+          <g data-node="accept"><rect class="rs-node rs-node--major" x="760" y="526" width="190" height="94" rx="17"/><text x="855" y="556" class="rs-label">Acepta prefijo</text><text x="855" y="581" class="rs-sub">d₁…dⱼ válidos</text><text x="855" y="603" class="rs-small">puede confirmar >1 token</text></g>
+          <g data-node="reject"><rect class="rs-node rs-node--warn" x="760" y="680" width="190" height="104" rx="17"/><text x="855" y="710" class="rs-label">Rechazo / corrección</text><text x="855" y="735" class="rs-sub">suffix especulativo inválido</text><text x="855" y="759" class="rs-small">rewind / libera estado rechazado</text></g>
+          <g data-node="commit"><rect class="rs-node rs-node--major" x="1004" y="594" width="174" height="100" rx="17"/><text x="1091" y="624" class="rs-label">Commit KV/state</text><text x="1091" y="649" class="rs-sub">sólo secuencia aceptada</text><text x="1091" y="673" class="rs-small">→ siguiente iteración</text></g>
+
+          <path class="rs-edge" d="M216 636 H270"/><path class="rs-edge" d="M460 636 H514"/>
+          <path class="rs-edge" d="M704 616 C730 616 730 573 760 573"/><text x="731" y="559" class="rs-edge-label">accept</text>
+          <path class="rs-edge rs-edge--reject" d="M704 656 C730 656 730 732 760 732"/><text x="730" y="716" class="rs-edge-label">reject</text>
+          <path class="rs-edge" d="M950 573 C978 573 976 626 1004 626"/><path class="rs-edge rs-edge--reject" d="M950 732 C982 732 970 662 1004 662"/>
+          <path class="rs-edge rs-edge--feedback" d="M1091 694 C1091 838 134 840 134 678"/>
+          <text x="612" y="831" class="rs-small">El beneficio depende de tokens comprometidos / (draft + verify + correction + scheduler/KV), no sólo de acceptance rate.</text>
+
+          <g data-node="pressure"><rect class="rs-node rs-node--warn" x="350" y="910" width="540" height="68" rx="16"/><text x="620" y="936" class="rs-label">KV capacity + scheduler + batching = frontera compartida</text><text x="620" y="960" class="rs-sub">retener prefijos y profundizar la especulación pueden elevar presión de memoria/cola y cambiar goodput</text></g>
+          <path class="rs-edge rs-edge--feedback" d="M454 390 C454 438 480 440 480 474"/>
+          <path class="rs-edge rs-edge--feedback" d="M365 706 C365 866 486 876 520 910"/>
+          <path class="rs-edge rs-edge--feedback" d="M855 784 C855 860 790 882 758 910"/>
+        </svg>
+      </div>
+    </div>
+    <div class="s5v-reuse-spec__legend" aria-hidden="true"><span><i></i>camino causal</span><span class="is-feedback"><i></i>presión/feedback de recursos</span><span class="is-boundary"><i></i>frontera de mecanismo</span></div>
+    <p class="s5v__copy"><strong>Lectura:</strong> prefix caching sólo puede saltar trabajo que ya produjo estado KV compatible. Speculative decoding hace trabajo nuevo y provisional: únicamente lo que pasa la verificación entra en el estado comprometido. El scheduler y la memoria conectan ambos mecanismos con el resultado de producción.</p>
+  </div>
+</section>
