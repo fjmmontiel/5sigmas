@@ -24,7 +24,6 @@ const chapters = [
 const navEs = read('mkdocs.yml');
 const navEn = read('mkdocs.en.yml');
 const manifest = read('locales/en/manifest.yml');
-const prVisual = read('.github/workflows/pr-visual-review.yml');
 const seriesWorkflow = read('.github/workflows/series4-golden-review.yml');
 
 let previousEsNav = -1;
@@ -70,8 +69,9 @@ for (let i = 0; i < chapters.length; i += 1) {
 
   assert(manifest.includes(`${base}/${article}`), `${article} missing from EN manifest`);
   assert(manifest.includes(`snippets/articulos-tecnicos/${visual}`), `${visual} missing from EN manifest`);
-  assert(prVisual.includes(`validate_inference_engineering_ch${n}_source.mjs`), `chapter ${n} source gate missing from canonical PR visual workflow`);
-  assert(prVisual.includes(`validate_inference_engineering_ch${n}_accessibility.mjs`), `chapter ${n} accessibility gate missing from canonical PR visual workflow`);
+  // The dedicated Series 4 PR workflow is the permanent owner for all six
+  // chapter source/accessibility gates. pr-visual-review remains a broader
+  // site-wide regression suite and is not required to duplicate these steps.
   assert(seriesWorkflow.includes(`validate_inference_engineering_ch${n}_source.mjs`), `chapter ${n} source gate missing from Series 4 PR workflow`);
   assert(seriesWorkflow.includes(`validate_inference_engineering_ch${n}_accessibility.mjs`), `chapter ${n} accessibility gate missing from Series 4 PR workflow`);
 
