@@ -1,0 +1,95 @@
+name: LLM Inference Engineering 4.3 integration bootstrap
+
+on:
+  push:
+    branches:
+      - series/llm-inference-engineering-economics-golden
+    paths:
+      - '.github/workflows/inference-engineering-ch3-bootstrap.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  integrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: series/llm-inference-engineering-economics-golden
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Register chapter 4.3 in canonical publication surfaces
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          route = 'series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs.md'
+          visual = 'snippets/articulos-tecnicos/inference-quantization-parallelism-tradeoffs.html'
+
+          def insert_after(path, needle, addition):
+              p = Path(path)
+              text = p.read_text(encoding='utf-8')
+              if addition.strip() in text:
+                  return
+              lines = text.splitlines()
+              for i, line in enumerate(lines):
+                  if needle in line:
+                      lines.insert(i + 1, addition)
+                      p.write_text('\n'.join(lines) + '\n', encoding='utf-8')
+                      return
+              raise SystemExit(f'{path}: anchor not found: {needle}')
+
+          insert_after(
+              'mkdocs.yml',
+              '02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.md',
+              f'          - Cuantización, paralelismo y compromisos de memoria, rendimiento y calidad: {route}',
+          )
+          insert_after(
+              'mkdocs.en.yml',
+              '02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.md',
+              f'          - Quantization, parallelism, and memory/performance/quality trade-offs: {route}',
+          )
+          insert_after(
+              'locales/en/manifest.yml',
+              '  - series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.md',
+              f'  - {route}',
+          )
+          insert_after(
+              'locales/en/manifest.yml',
+              '  - snippets/articulos-tecnicos/inference-kv-cache-paging-batching.html',
+              f'  - {visual}',
+          )
+
+          workflow = Path('.github/workflows/pr-visual-review.yml')
+          text = workflow.read_text(encoding='utf-8')
+          source_line = '      - name: Validate LLM Inference Engineering chapter 3 source contract\n        run: node scripts/validate_inference_engineering_ch3_source.mjs\n'
+          a11y_line = '      - name: Validate LLM Inference Engineering chapter 3 accessibility and responsive states\n        run: node scripts/validate_inference_engineering_ch3_accessibility.mjs\n'
+          if source_line not in text:
+              anchor = '      - name: Validate LLM Inference Engineering chapter 2 accessibility and responsive states\n        run: node scripts/validate_inference_engineering_ch2_accessibility.mjs\n'
+              if anchor not in text:
+                  raise SystemExit('pr-visual-review.yml: chapter 4.2 accessibility anchor missing')
+              text = text.replace(anchor, anchor + '\n' + source_line + '\n' + a11y_line, 1)
+              workflow.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Validate deterministic source contract before commit
+        run: node scripts/validate_inference_engineering_ch3_source.mjs
+
+      - name: Commit canonical integration
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --check
+          git status --short
+          test -n "$(git status --short --untracked-files=no)"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add mkdocs.yml mkdocs.en.yml locales/en/manifest.yml .github/workflows/pr-visual-review.yml
+          git commit -m 'integrate(series4): register chapter 4.3 publication surfaces'
+          git push origin HEAD:series/llm-inference-engineering-economics-golden
+          echo "INTEGRATED_SHA=$(git rev-parse HEAD)"
