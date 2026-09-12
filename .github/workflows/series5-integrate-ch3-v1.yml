@@ -1,0 +1,84 @@
+name: Series 5 integrate chapter 5.3
+
+on:
+  push:
+    branches:
+      - series/evaluating-ai-systems-production-golden
+    paths:
+      - '.github/workflows/series5-integrate-ch3-v1.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  integrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: series/evaluating-ai-systems-production-golden
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Integrate chapter 5.3 into canonical publication surfaces
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          def insert_after(path, anchor, addition):
+              p = Path(path)
+              text = p.read_text()
+              if addition.strip() in text:
+                  return
+              if anchor not in text:
+                  raise SystemExit(f'anchor not found in {path}: {anchor!r}')
+              p.write_text(text.replace(anchor, anchor + addition, 1))
+
+          insert_after(
+              'mkdocs.yml',
+              '          - "Offline eval sets: curación, hard negatives, contaminación y versionado": series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning.md\n',
+              '          - "LLM-as-judge y evaluación humana: calibración, sesgo, varianza y acuerdo": series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo.md\n',
+          )
+          insert_after(
+              'mkdocs.en.yml',
+              '          - "Offline eval sets: curation, hard negatives, contamination, and versioning": series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning.md\n',
+              '          - "LLM-as-judge and human evaluation: calibration, bias, variance, and agreement": series/evaluating-ai-systems-production/03-llm-as-judge-human-evaluation-calibration-bias-variance-agreement.md\n',
+          )
+          insert_after(
+              'locales/en/manifest.yml',
+              '  - series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning.md\n',
+              '  - series/evaluating-ai-systems-production/03-llm-as-judge-human-evaluation-calibration-bias-variance-agreement.md\n',
+          )
+          insert_after(
+              'locales/en/manifest.yml',
+              '  - snippets/articulos-tecnicos/eval-dataset-lifecycle-hard-negatives-contamination.html\n',
+              '  - snippets/articulos-tecnicos/eval-judge-calibration-bias-agreement.html\n',
+          )
+          insert_after(
+              '.github/workflows/series5-golden-review.yml',
+              '          node scripts/validate_ai_systems_eval_ch2_source.mjs\n',
+              '          node scripts/validate_ai_systems_eval_ch3_source.mjs\n',
+          )
+          insert_after(
+              '.github/workflows/series5-golden-review.yml',
+              '          node scripts/validate_ai_systems_eval_ch2_accessibility.mjs\n',
+              '          node scripts/validate_ai_systems_eval_ch3_accessibility.mjs\n',
+          )
+          PY
+
+      - name: Run chapter 5.3 source gate before persisting integration
+        run: node scripts/validate_ai_systems_eval_ch3_source.mjs
+
+      - name: Persist scope-clean integration
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add mkdocs.yml mkdocs.en.yml locales/en/manifest.yml .github/workflows/series5-golden-review.yml
+          git diff --cached --check
+          git diff --cached --stat
+          git commit -m 'feat(series5): integrate chapter 5.3 publication gates'
+          git push origin HEAD:series/evaluating-ai-systems-production-golden
