@@ -55,7 +55,7 @@ request
 
 That already rules out two common mistakes:
 
-1. a prefix-cache hit does not imply lower TPOT;
+1. a prefix-cache hit does not imply lower TPOT.
 2. speculative decoding does not remove initial prefill or guarantee lower TTFT.
 
 Both techniques also share resources with the rest of serving. Retained KV consumes capacity. A draft model or speculative tokens consume compute, memory, KV pages, and scheduler budget. A local optimization can therefore increase queueing or reduce global goodput.
@@ -323,9 +323,9 @@ A result such as “1.8× faster” without request rate, batch shape, hardware,
 
 A request can:
 
-1. reuse a previously computed KV prefix;
-2. prefill the uncached suffix;
-3. enter decode;
+1. reuse a previously computed KV prefix.
+2. prefill the uncached suffix.
+3. enter decode.
 4. use speculation to try to commit several tokens per verification.
 
 Their percentages cannot simply be added.
