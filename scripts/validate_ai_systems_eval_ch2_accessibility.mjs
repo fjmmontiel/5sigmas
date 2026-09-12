@@ -136,14 +136,14 @@ try {
 
       const text = await visual.innerText();
       if (locale === 'es') {
-        for (const token of ['Congela lo que comparas', 'Holdout / release', 'Challenge rotatorio', '29 días → allow', '31 días → deny', 'Exposición de training', 'Leakage de desarrollo', 'Overlap scanner = detector de candidatos, no certificado de limpieza', 'Siguiente versión D(v+1)']) {
+        for (const token of ['CONGELA LO QUE COMPARAS', 'Holdout / release', 'Challenge rotatorio', '29 días → allow', '31 días → deny', 'Exposición de training', 'Leakage de desarrollo', 'Overlap scanner = detector de candidatos, no certificado de limpieza', 'Siguiente versión D(v+1)']) {
           check(text.includes(token), `ES/${viewport.name}: localized visual text missing ${token}`);
         }
       } else {
-        for (const token of ['Freeze what you compare', 'Holdout / release', 'Rotating challenge', '29 days → allow', '31 days → deny', 'Training exposure', 'Development leakage', 'Overlap scanner = candidate detector, not a cleanliness certificate', 'Next version D(v+1)']) {
+        for (const token of ['FREEZE WHAT YOU COMPARE', 'Holdout / release', 'Rotating challenge', '29 days → allow', '31 days → deny', 'Training exposure', 'Development leakage', 'Overlap scanner = candidate detector, not a cleanliness certificate', 'Next version D(v+1)']) {
           check(text.includes(token), `EN/${viewport.name}: localized visual text missing ${token}`);
         }
-        check(!text.includes('Congela lo que comparas') && !text.includes('Exposición de training') && !text.includes('Siguiente versión'), `EN/${viewport.name}: Spanish visual leakage detected`);
+        check(!text.includes('CONGELA LO QUE COMPARAS') && !text.includes('Exposición de training') && !text.includes('Siguiente versión'), `EN/${viewport.name}: Spanish visual leakage detected`);
       }
 
       const motion = await visual.evaluate((root) => [root, ...root.querySelectorAll('*')].map((element) => {
@@ -151,9 +151,6 @@ try {
         return { animation: style.animationName, duration: style.animationDuration, transition: style.transitionDuration };
       }).filter((value) => value.animation !== 'none' && value.duration !== '0s'));
       check(motion.length === 0, `${locale}/${viewport.name}: visual should remain static under reduced motion ${JSON.stringify(motion.slice(0, 5))}`);
-
-      await scroll.focus();
-      check(await scroll.evaluate((node) => document.activeElement === node), `${locale}/${viewport.name}: topology scroller cannot receive keyboard focus`);
 
       const screenshotBase = `ai-systems-eval-ch2-${locale}-${viewport.name}`;
       await page.screenshot({ path: path.join(outDir, `${screenshotBase}-page.png`), fullPage: true, animations: 'disabled' });
@@ -165,6 +162,9 @@ try {
         check(reachedEnd, `${locale}/mobile: final columns are not reachable by horizontal scrolling`);
         await visual.screenshot({ path: path.join(outDir, `${screenshotBase}-visual-end.png`), animations: 'disabled' });
       }
+
+      await scroll.focus();
+      check(await scroll.evaluate((node) => document.activeElement === node), `${locale}/${viewport.name}: topology scroller cannot receive keyboard focus`);
     }
     await context.close();
   }
