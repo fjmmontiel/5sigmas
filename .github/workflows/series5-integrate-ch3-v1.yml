@@ -58,16 +58,6 @@ jobs:
               '  - snippets/articulos-tecnicos/eval-dataset-lifecycle-hard-negatives-contamination.html\n',
               '  - snippets/articulos-tecnicos/eval-judge-calibration-bias-agreement.html\n',
           )
-          insert_after(
-              '.github/workflows/series5-golden-review.yml',
-              '          node scripts/validate_ai_systems_eval_ch2_source.mjs\n',
-              '          node scripts/validate_ai_systems_eval_ch3_source.mjs\n',
-          )
-          insert_after(
-              '.github/workflows/series5-golden-review.yml',
-              '          node scripts/validate_ai_systems_eval_ch2_accessibility.mjs\n',
-              '          node scripts/validate_ai_systems_eval_ch3_accessibility.mjs\n',
-          )
           PY
 
       - name: Run chapter 5.3 source gate before persisting integration
@@ -77,8 +67,8 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add mkdocs.yml mkdocs.en.yml locales/en/manifest.yml .github/workflows/series5-golden-review.yml
+          git add mkdocs.yml mkdocs.en.yml locales/en/manifest.yml
           git diff --cached --check
           git diff --cached --stat
-          git commit -m 'feat(series5): integrate chapter 5.3 publication gates'
+          git commit -m 'feat(series5): integrate chapter 5.3 publication routes'
           git push origin HEAD:series/evaluating-ai-systems-production-golden
