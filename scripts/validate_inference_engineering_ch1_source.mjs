@@ -29,6 +29,7 @@ check(prVisual.includes('node scripts/validate_inference_engineering_ch1_accessi
 
 const primaryUrls = [
   'https://docs.nvidia.com/aiperf/reference/ai-perf-metrics-reference',
+  'https://docs.nvidia.com/aiperf/getting-started/migrating-from-gen-ai-perf',
   'https://docs.nvidia.com/nim/benchmarking/llm/latest/metrics.html',
   'https://docs.vllm.ai/en/latest/benchmarking/cli/',
   'https://arxiv.org/abs/2401.09670',
@@ -43,6 +44,7 @@ for (const url of primaryUrls) {
 const esAnchors = [
   'La petición cambia de forma después del prefill',
   'TTFT mide una frontera visible para el cliente, no una sola operación',
+  'En modelos con razonamiento, distingue TTFT de TTFO',
   'TPOT e ITL necesitan una definición antes de compararse',
   'La latencia total combina espera inicial y generación',
   'Longitud de entrada y longitud de salida presionan partes diferentes',
@@ -59,6 +61,7 @@ const esAnchors = [
 const enAnchors = [
   'The request changes shape after prefill',
   'TTFT is a client-visible boundary, not one operation',
+  'For reasoning models, distinguish TTFT from TTFO',
   'Define TPOT and ITL before comparing them',
   'Total latency combines initial waiting and generation',
   'Input length and output length stress different parts of the path',
@@ -76,7 +79,7 @@ for (const anchor of esAnchors) check(es.includes(anchor), `ES: missing concept 
 for (const anchor of enAnchors) check(en.includes(anchor), `EN: missing concept ${anchor}`);
 
 for (const text of [es, en]) {
-  for (const token of ['L_in', 'L_out', 'T_{TTFT}', 'T_{e2e}', 'TPOT', 'TTFT', 'ITL', 'goodput', 'throughput', 'KV cache', 'scheduler']) {
+  for (const token of ['L_in', 'L_out', 'T_{TTFT}', 'T_{e2e}', 'TPOT', 'TTFT', 'TTFO', 'ITL', 'goodput', 'throughput', 'KV cache', 'scheduler']) {
     check(text.includes(token), `Missing required inference token ${token}`);
   }
   check(text.includes('0.450 + (120-1)\\cdot0.025'), 'Illustrative latency arithmetic missing');
@@ -86,6 +89,8 @@ for (const text of [es, en]) {
 
 check(es.includes('TTFT no es sinónimo de tiempo de kernel de prefill'), 'ES: TTFT/prefill measurement-boundary caveat missing');
 check(en.includes('TTFT is therefore not synonymous with prefill kernel time'), 'EN: TTFT/prefill measurement-boundary caveat missing');
+check(es.includes('TTFT llega hasta el primer token de cualquier tipo, incluidos tokens de razonamiento') && es.includes('TTFO, time to first output token, llega hasta el primer token no razonador de salida'), 'ES: current AIPerf TTFT/TTFO reasoning boundary missing');
+check(en.includes('TTFT ends at the first token of any type, including a reasoning token') && en.includes('TTFO, time to first output token, ends at the first non-reasoning output token'), 'EN: current AIPerf TTFT/TTFO reasoning boundary missing');
 check(es.includes('heurística, no una ley'), 'ES: compute-bound/memory-bound caveat missing');
 check(en.includes('heuristic, not a law'), 'EN: compute-bound/memory-bound caveat missing');
 check(es.includes('no publica un ranking de runtimes'), 'ES: uncontrolled benchmark ranking rejection missing');
