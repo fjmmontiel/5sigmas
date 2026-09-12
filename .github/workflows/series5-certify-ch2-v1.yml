@@ -1,5 +1,5 @@
-# One-shot 5.2 article certification. Delete after a successful exact-SHA receipt.
-name: Series 5 certify chapter 5.2 v1
+# One-shot 5.2 article recertification after fail-closed source-gate repair. Delete after a successful exact-SHA receipt.
+name: Series 5 certify chapter 5.2 v2
 
 on:
   push:
@@ -25,7 +25,7 @@ jobs:
         run: |
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
           test -z "$(git status --porcelain)"
-          printf 'certified_sha=%s\n' "$GITHUB_SHA" | tee /tmp/series5-ch2-v1-evidence.txt
+          printf 'certified_sha=%s\n' "$GITHUB_SHA" | tee /tmp/series5-ch2-v2-evidence.txt
 
       - uses: actions/setup-python@v5
         with:
@@ -123,16 +123,16 @@ jobs:
             sha256sum docs/series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning.md | awk '{print "es_sha256=" $1}'
             sha256sum locales/en/series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning.md | awk '{print "en_sha256=" $1}'
             sha256sum docs/snippets/articulos-tecnicos/eval-dataset-lifecycle-hard-negatives-contamination.html | awk '{print "visual_sha256=" $1}'
-          } >> /tmp/series5-ch2-v1-evidence.txt
-          cat /tmp/series5-ch2-v1-evidence.txt
+          } >> /tmp/series5-ch2-v2-evidence.txt
+          cat /tmp/series5-ch2-v2-evidence.txt
 
       - name: Upload chapter 5.2 certification evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ai-systems-evaluation-ch2-certification-v1
+          name: ai-systems-evaluation-ch2-certification-v2
           path: |
-            /tmp/series5-ch2-v1-evidence.txt
+            /tmp/series5-ch2-v2-evidence.txt
             artifacts/visual-review/ai-systems-eval-ch1-*.png
             artifacts/visual-review/ai-systems-eval-ch2-*.png
             artifacts/visual-review/english-series-mirror-*.png
