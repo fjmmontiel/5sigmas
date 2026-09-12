@@ -165,6 +165,7 @@ nav:
           - Cuantización, paralelismo y compromisos de memoria, rendimiento y calidad: series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs.md
           - Speculative decoding, prefix caching y otras optimizaciones de latencia: series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.md
           - Model routing, fallback, caching y serving adaptado al workload: series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving.md
+          - Benchmarking de inferencia: cost/task, throughput, latencia, energía y hardware: series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.md
   - Construir:
       - articulos-tecnicos/index.md
       - Agente Reactivo, Proactivo y Tool calls: articulos-tecnicos/proactive-reactive-agent-and-tool-calls.md
