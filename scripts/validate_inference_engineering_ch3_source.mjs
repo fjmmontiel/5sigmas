@@ -126,10 +126,10 @@ for (const node of ['weights', 'activations', 'kv', 'quantizer', 'kernel', 'memo
   check(snippet.includes(`data-node="${node}"`), `Visual: missing mechanism node ${node}`);
 }
 check(snippet.includes('menos bytes ≠ menos latencia'), 'Visual: quantization latency caveat missing');
-check(snippet.includes('TP · tensor shard') && snippet.includes('collective dentro de capas'), 'Visual: TP communication relation missing');
+check(snippet.includes('TP · tensor fragmentado') && snippet.includes('collective dentro de capas'), 'Visual: TP communication relation missing');
 check(snippet.includes('EP · expertos') && snippet.includes('all-to-all'), 'Visual: EP routing/communication relation missing');
-check(snippet.includes('CP · contexto') && snippet.includes('attention necesita estado remoto'), 'Visual: CP remote-attention relation missing');
-check(snippet.includes('Interconnect + runtime + workload deciden el resultado'), 'Visual: topology outcome boundary missing');
+check(snippet.includes('CP · contexto') && snippet.includes('la atención necesita estado remoto'), 'Visual: CP remote-attention relation missing');
+check(snippet.includes('Interconexión + runtime + carga deciden el resultado'), 'Visual: topology outcome boundary missing');
 
 check(mirror.trim() === '<!-- 5sigmas-canonical-mirror -->', 'EN: visual canonical mirror marker invalid');
 check(i18n.source === visualPath, 'EN: visual i18n source path invalid');
