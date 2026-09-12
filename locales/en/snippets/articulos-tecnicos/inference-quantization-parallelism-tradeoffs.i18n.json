@@ -30,7 +30,6 @@
     "tareas · contexto largo": "tasks · long context",
     "cambio de distribución": "distribution shift",
     "se evalúa; no se infiere del dtype": "measure it; do not infer it from dtype",
-    "ejecución": "execution",
     "validar error → comportamiento": "validate error → behavior",
     "PARALELISMO · DISTRIBUCIÓN Y COMUNICACIÓN POR PETICIÓN": "PARALLELISM · PLACEMENT AND COMMUNICATION PER REQUEST",
     "DP · réplicas": "DP · replicas",
