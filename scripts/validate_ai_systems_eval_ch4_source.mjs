@@ -90,7 +90,7 @@ check(enPlain.includes('A Layer 1 failure should not disappear'), 'EN: non-compe
 check(!/^\s*-\s+.+;\s*$/m.test(en), 'EN: semicolon-list anti-pattern detected');
 
 for (const [pattern, label] of [
-  [/timeout[^\n]{0,40}(?:means|=)[^\n]{0,20}(?:no side effect|did not happen)/i, 'timeout=no-side-effect'],
+  [/\ba timeout\s+(?:always\s+)?means\s+(?:the operation\s+)?did not happen/i, 'timeout=no-side-effect'],
   [/(?:fewer|less) (?:steps|tool calls)[^\n]{0,60}(?:always|necessarily) (?:means?|is) better/i, 'fewer-steps=better'],
   [/(?:golden|reference) trajectory[^\n]{0,70}(?:is|equals) (?:the )?(?:only )?(?:correct|valid) path/i, 'reference-path=truth'],
   [/task success[^\n]{0,70}(?:proves|guarantees)[^\n]{0,30}policy compliance/i, 'success=compliance'],
