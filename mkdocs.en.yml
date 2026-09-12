@@ -211,7 +211,7 @@ nav:
           - Quantization, parallelism, and memory/performance/quality trade-offs: series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs.md
           - Speculative decoding, prefix caching, and other latency optimizations: series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.md
           - Model routing, fallback, caching, and workload-aware serving: series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving.md
-          - Benchmarking inference: cost/task, throughput, latency, energy, and hardware constraints: series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.md
+          - "Benchmarking inference: cost/task, throughput, latency, energy, and hardware constraints": series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.md
   - Concepts:
       - Concepts: temas/index.md
       - What is an LLM?: temas/llms.md

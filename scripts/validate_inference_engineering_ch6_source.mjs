@@ -21,8 +21,8 @@ const check = (condition, message) => { if (!condition) failures.push(message); 
 
 const route = 'series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.md';
 const visualPath = 'snippets/articulos-tecnicos/inference-benchmark-measurement-boundary.html';
-check(mkdocsEs.includes(`Benchmarking de inferencia: cost/task, throughput, latencia, energía y hardware: ${route}`), 'ES: Series 4 / chapter 4.6 navigation missing');
-check(mkdocsEn.includes(`Benchmarking inference: cost/task, throughput, latency, energy, and hardware constraints: ${route}`), 'EN: Series 4 / chapter 4.6 navigation missing');
+check(mkdocsEs.includes(`"Benchmarking de inferencia: cost/task, throughput, latencia, energía y hardware": ${route}`), 'ES: Series 4 / chapter 4.6 navigation missing');
+check(mkdocsEn.includes(`"Benchmarking inference: cost/task, throughput, latency, energy, and hardware constraints": ${route}`), 'EN: Series 4 / chapter 4.6 navigation missing');
 check(manifestEn.includes(`  - ${route}`), 'EN: chapter 4.6 missing from published_routes manifest');
 check(manifestEn.includes(`  - ${visualPath}`), 'EN: chapter 4.6 visual missing from required_snippets manifest');
 check(seriesWorkflow.includes('node scripts/validate_inference_engineering_ch6_source.mjs'), 'CI: chapter 4.6 source gate missing from permanent Series 4 review');
