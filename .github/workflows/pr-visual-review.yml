@@ -289,6 +289,12 @@ jobs:
       - name: Validate Context Engineering chapter 5 accessibility and responsive states
         run: node scripts/validate_context_engineering_ch5_accessibility.mjs
 
+      - name: Validate Context Engineering chapter 6 source contract
+        run: node scripts/validate_context_engineering_ch6_source.mjs
+
+      - name: Validate Context Engineering chapter 6 accessibility and responsive states
+        run: node scripts/validate_context_engineering_ch6_accessibility.mjs
+
       - name: Validate complete video experience lifecycle
         run: node scripts/validate_video_experience_v2.mjs
 
