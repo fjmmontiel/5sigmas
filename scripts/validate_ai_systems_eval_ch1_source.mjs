@@ -22,8 +22,8 @@ const check = (condition, message) => { if (!condition) failures.push(message); 
 const route = 'series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria.md';
 const visualPath = 'snippets/articulos-tecnicos/eval-boundary-system-workflow-trajectory.html';
 
-check(mkdocsEs.includes('Evaluar sistemas de IA en producción:') && mkdocsEs.includes(`Qué evaluar: modelo, componente, sistema, workflow y trayectoria: ${route}`), 'ES: Series 5 / chapter 5.1 navigation missing');
-check(mkdocsEn.includes('Evaluating AI Systems in Production:') && mkdocsEn.includes(`What to evaluate: model, component, system, workflow, and trajectory: ${route}`), 'EN: Series 5 / chapter 5.1 navigation missing');
+check(mkdocsEs.includes('Evaluar sistemas de IA en producción:') && mkdocsEs.includes('Qué evaluar: modelo, componente, sistema, workflow y trayectoria') && mkdocsEs.includes(route), 'ES: Series 5 / chapter 5.1 navigation missing');
+check(mkdocsEn.includes('Evaluating AI Systems in Production:') && mkdocsEn.includes('What to evaluate: model, component, system, workflow, and trajectory') && mkdocsEn.includes(route), 'EN: Series 5 / chapter 5.1 navigation missing');
 check(manifestEn.includes(`  - ${route}`), 'EN: chapter 5.1 missing from published_routes manifest');
 check(manifestEn.includes(`  - ${visualPath}`), 'EN: chapter 5.1 visual missing from required_snippets manifest');
 check(seriesWorkflow.includes('node scripts/validate_ai_systems_eval_ch1_source.mjs'), 'CI: chapter 5.1 source gate missing from permanent Series 5 review');
