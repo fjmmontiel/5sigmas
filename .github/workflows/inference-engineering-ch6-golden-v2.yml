@@ -101,13 +101,15 @@ jobs:
       - name: Record exact certification identities
         shell: bash
         run: |
-          git status --short
-          test -z "$(git status --porcelain)"
+          tracked_dirty="$(git status --porcelain --untracked-files=no)"
+          test -z "$tracked_dirty"
+          unexpected_untracked="$(git ls-files --others --exclude-standard | grep -v '^artifacts/visual-review/inference-engineering-ch6-' || true)"
+          test -z "$unexpected_untracked"
           mkdir -p artifacts/visual-review
           {
             echo "certified_sha=$(git rev-parse HEAD)"
             echo "es_blob=$(git hash-object docs/series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.md)"
-            echo "en_blob=$(git hash-object locales/en/series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.md)"
+            echo "en_blob=$(git hash-object locales/en/series/llm-inference-engineering-economics/06-benchmarking-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.md 2>/dev/null || git hash-object locales/en/series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.md)"
             echo "visual_blob=$(git hash-object docs/snippets/articulos-tecnicos/inference-benchmark-measurement-boundary.html)"
             echo "workflow_blob=$(git hash-object .github/workflows/series4-golden-review.yml)"
           } | tee artifacts/visual-review/inference-engineering-ch6-identities.txt
