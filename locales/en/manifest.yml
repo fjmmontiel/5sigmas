@@ -28,6 +28,12 @@ published_routes:
   - series/context-engineering-memory-mcp/04-retrieval-context-assembly-freshness-relevance-conflict-grounding.md
   - series/context-engineering-memory-mcp/05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries.md
   - series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation.md
+  - series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.md
+  - series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.md
+  - series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs.md
+  - series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.md
+  - series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving.md
+  - series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.md
   - series/fundamentos-ia-iag/00_presentacion_serie.md
   - series/fundamentos-ia-iag/01-que-es-ia.md
   - series/fundamentos-ia-iag/02-que-es-ia-generativa.md
@@ -104,6 +110,12 @@ required_snippets:
   - snippets/articulos-tecnicos/context-retrieval-grounding.html
   - snippets/articulos-tecnicos/context-mcp-trust-boundaries.html
   - snippets/articulos-tecnicos/context-extension-isolation-lifecycle.html
+  - snippets/articulos-tecnicos/inference-prefill-decode-latency-budget.html
+  - snippets/articulos-tecnicos/inference-kv-cache-paging-batching.html
+  - snippets/articulos-tecnicos/inference-quantization-parallelism-tradeoffs.html
+  - snippets/articulos-tecnicos/inference-speculative-prefix-latency.html
+  - snippets/articulos-tecnicos/inference-routing-fallback-cache-policy.html
+  - snippets/articulos-tecnicos/inference-benchmark-measurement-boundary.html
   - snippets/from-cave-to-agi/01-sistemas-numeracion.html
   - snippets/from-cave-to-agi/01-algebra-despejar.html
   - snippets/from-cave-to-agi/01-cadena-deductiva.html

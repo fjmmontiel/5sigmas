@@ -1,0 +1,117 @@
+name: LLM Inference Engineering live QA
+
+on:
+  workflow_run:
+    workflows: ["Deploy MkDocs to GitHub Pages"]
+    types: [completed]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: inference-engineering-live-${{ github.event.workflow_run.head_branch }}
+  cancel-in-progress: true
+
+jobs:
+  live-inference-series:
+    if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Wait for LLM Inference Engineering deployment
+        shell: bash
+        run: |
+          set -euo pipefail
+          url='https://5sigmas.com/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget/'
+          for attempt in {1..18}; do
+            body="$(curl --fail --silent --show-error --location "$url" || true)"
+            if grep -q 'Capítulo 1' <<< "$body" && grep -q 'Prefill' <<< "$body"; then
+              echo 'LLM Inference Engineering production route is serving the deployed series.'
+              exit 0
+            fi
+            sleep 5
+          done
+          echo 'LLM Inference Engineering production route did not become ready within the validation window.'
+          exit 1
+
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Audit live resources across all ES/EN inference routes
+        env:
+          S5_PREVIEW_URL: https://5sigmas.com
+          S5_BROWSER_RESOURCE_PATHS: >-
+            /series/,
+            /en/series/,
+            /series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget/,
+            /en/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget/,
+            /series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention/,
+            /en/series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention/,
+            /series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs/,
+            /en/series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs/,
+            /series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations/,
+            /en/series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations/,
+            /series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving/,
+            /en/series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving/,
+            /series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints/,
+            /en/series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints/
+        run: node scripts/audit_browser_resources.mjs
+
+      - name: Validate live bilingual series hub and mirror
+        env:
+          S5_PREVIEW_BASE: https://5sigmas.com
+        run: node scripts/validate_english_series_mirror.mjs
+
+      - name: Validate live ES/EN route switching and reader progression
+        env:
+          S5_PREVIEW_BASE: https://5sigmas.com
+        run: node scripts/validate_locale_switching.mjs
+
+      - name: Validate live chapter 4.1 visual states and accessibility
+        env:
+          S5_PREVIEW_BASE: https://5sigmas.com
+        run: node scripts/validate_inference_engineering_ch1_accessibility.mjs
+
+      - name: Validate live chapter 4.2 visual states and accessibility
+        env:
+          S5_PREVIEW_BASE: https://5sigmas.com
+        run: node scripts/validate_inference_engineering_ch2_accessibility.mjs
+
+      - name: Validate live chapter 4.3 visual states and accessibility
+        env:
+          S5_PREVIEW_BASE: https://5sigmas.com
+        run: node scripts/validate_inference_engineering_ch3_accessibility.mjs
+
+      - name: Validate live chapter 4.4 visual states and accessibility
+        env:
+          S5_PREVIEW_BASE: https://5sigmas.com
+        run: node scripts/validate_inference_engineering_ch4_accessibility.mjs
+
+      - name: Validate live chapter 4.5 visual states and accessibility
+        env:
+          S5_PREVIEW_BASE: https://5sigmas.com
+        run: node scripts/validate_inference_engineering_ch5_accessibility.mjs
+
+      - name: Validate live chapter 4.6 visual states and accessibility
+        env:
+          S5_PREVIEW_BASE: https://5sigmas.com
+        run: node scripts/validate_inference_engineering_ch6_accessibility.mjs
+
+      - name: Upload live Series 4 failure evidence
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: inference-engineering-live-qa-failure
+          path: artifacts/visual-review/inference-engineering-*.png
+          if-no-files-found: warn
+          retention-days: 1

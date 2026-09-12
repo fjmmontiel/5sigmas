@@ -82,7 +82,7 @@ const assertSeriesHub = async ({ route, entries }) => {
   }
   const links = await page.locator('.s5-simple-list a.s5-list-row').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('href')));
   const body = await page.locator('body').innerText();
-  if (links.length !== 11) failures.push(`${route}: expected 11 canonical series cards, got ${links.length}`);
+  if (links.length !== 12) failures.push(`${route}: expected 12 canonical series cards, got ${links.length}`);
   for (const { targetRoute, title } of entries) {
     if (!links.includes(targetRoute)) failures.push(`${route}: missing canonical series route ${targetRoute}`);
     if (!body.includes(title)) failures.push(`${route}: missing canonical series title ${JSON.stringify(title)}`);
@@ -119,6 +119,15 @@ const contextPairs = [
   { es: '/series/context-engineering-memory-mcp/04-retrieval-context-assembly-freshness-relevance-conflict-grounding/', en: '/en/series/context-engineering-memory-mcp/04-retrieval-context-assembly-freshness-relevance-conflict-grounding/' },
   { es: '/series/context-engineering-memory-mcp/05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries/', en: '/en/series/context-engineering-memory-mcp/05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries/' },
   { es: '/series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation/', en: '/en/series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation/' },
+];
+
+const inferencePairs = [
+  { es: '/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget/', en: '/en/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget/' },
+  { es: '/series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention/', en: '/en/series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention/' },
+  { es: '/series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs/', en: '/en/series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs/' },
+  { es: '/series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations/', en: '/en/series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations/' },
+  { es: '/series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving/', en: '/en/series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving/' },
+  { es: '/series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints/', en: '/en/series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints/' },
 ];
 
 const assertReaderSequence = async (routes, hubRoute, label) => {
@@ -162,6 +171,7 @@ await assertSeriesHub({
     { targetRoute: voicePairs[0].es, title: 'Agentes de voz en tiempo real' },
     { targetRoute: codingPairs[0].es, title: 'Coding agents y agent harnesses' },
     { targetRoute: contextPairs[0].es, title: 'Context engineering, memoria y MCP' },
+    { targetRoute: inferencePairs[0].es, title: 'Ingeniería y economía de inferencia de LLMs' },
   ],
 });
 await assertSeriesHub({
@@ -170,6 +180,7 @@ await assertSeriesHub({
     { targetRoute: voicePairs[0].en, title: 'Realtime Voice Agents' },
     { targetRoute: codingPairs[0].en, title: 'Coding Agents & Agent Harnesses' },
     { targetRoute: contextPairs[0].en, title: 'Context Engineering, Memory & MCP' },
+    { targetRoute: inferencePairs[0].en, title: 'LLM Inference Engineering & Economics' },
   ],
 });
 
@@ -184,6 +195,10 @@ await assertReaderSequence(codingPairs.map((pair) => pair.en), '/en/series/', 'E
 for (const pair of contextPairs) await assertTranslatedPair(pair);
 await assertReaderSequence(contextPairs.map((pair) => pair.es), '/series/', 'Spanish Context Engineering, Memory & MCP');
 await assertReaderSequence(contextPairs.map((pair) => pair.en), '/en/series/', 'English Context Engineering, Memory & MCP');
+
+for (const pair of inferencePairs) await assertTranslatedPair(pair);
+await assertReaderSequence(inferencePairs.map((pair) => pair.es), '/series/', 'Spanish LLM Inference Engineering & Economics');
+await assertReaderSequence(inferencePairs.map((pair) => pair.en), '/en/series/', 'English LLM Inference Engineering & Economics');
 
 await assertTranslatedPair({ es: '/series/agentes-ia/02-anatomia-de-un-agente/', en: '/en/series/agentes-ia/02-anatomia-de-un-agente/' });
 await assertTranslatedPair({ es: '/series/agentes-ia/00_presentacion_serie/', en: '/en/series/agentes-ia/00_presentacion_serie/' });
@@ -222,4 +237,4 @@ if (failures.length) {
   for (const failure of failures) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log('Locale-switch quality QA passed: bilingual Series hubs expose Realtime Voice Agents, Coding Agents & Agent Harnesses, and Context Engineering, Memory & MCP; all 18 routes across the three six-chapter collections preserve translated selectors and sitemap pairs, reader navigation stays inside each collection, and safe fallbacks remain valid.');
+console.log('Locale-switch quality QA passed: bilingual Series hubs expose Realtime Voice Agents, Coding Agents & Agent Harnesses, Context Engineering, Memory & MCP, and LLM Inference Engineering & Economics; all 24 routes across the four six-chapter collections preserve translated selectors and sitemap pairs, reader navigation stays inside each collection, and safe fallbacks remain valid.');

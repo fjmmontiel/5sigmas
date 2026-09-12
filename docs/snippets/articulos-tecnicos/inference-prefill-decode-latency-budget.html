@@ -1,0 +1,114 @@
+<section class="s5v s5v-inference-phases s5v--wide" aria-label="Relación entre prefill, decode, TTFT, TPOT, throughput y el presupuesto de latencia">
+  <style>
+    .s5v-inference-phases .s5v-inference-phases__scroll{overflow-x:auto;overscroll-behavior-inline:contain;padding:.35rem .2rem .8rem;scrollbar-gutter:stable;outline:none}
+    .s5v-inference-phases .s5v-inference-phases__scroll:focus-visible{box-shadow:0 0 0 3px color-mix(in srgb,var(--md-accent-fg-color,#7c4dff) 36%,transparent);border-radius:14px}
+    .s5v-inference-phases .s5v-inference-phases__stage{width:100%;min-width:0;max-width:1240px;margin:0 auto}
+    .s5v-inference-phases svg{display:block;width:100%;height:auto;overflow:visible}
+    .s5v-inference-phases text{fill:currentColor;font-family:inherit}
+    .s5v-inference-phases .p-boundary{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 95%,var(--md-accent-fg-color,#7c4dff) 5%);stroke:currentColor;stroke-width:2;stroke-dasharray:8 8;opacity:.9}
+    .s5v-inference-phases .p-node{fill:var(--md-default-bg-color,#fff);stroke:currentColor;stroke-width:2.5}
+    .s5v-inference-phases .p-node--major{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 87%,var(--md-accent-fg-color,#7c4dff) 13%);stroke-width:3.5}
+    .s5v-inference-phases .p-kv{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 92%,var(--md-accent-fg-color,#7c4dff) 8%);stroke:currentColor;stroke-width:2.5}
+    .s5v-inference-phases .p-edge{fill:none;stroke:currentColor;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#p-arrow)}
+    .s5v-inference-phases .p-edge--pressure{stroke-dasharray:8 6;stroke-width:3.2}
+    .s5v-inference-phases .p-edge--state{stroke-width:3.5}
+    .s5v-inference-phases .p-bracket{fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round}
+    .s5v-inference-phases .p-divider{stroke:currentColor;stroke-width:1.5;opacity:.25}
+    .s5v-inference-phases .p-label{font-size:16px;font-weight:800;text-anchor:middle}
+    .s5v-inference-phases .p-sub{font-size:12.5px;text-anchor:middle;opacity:.74}
+    .s5v-inference-phases .p-kicker{font-size:13px;font-weight:850;letter-spacing:.07em;text-transform:uppercase;opacity:.72}
+    .s5v-inference-phases .p-edge-label{font-size:12.5px;font-weight:760;paint-order:stroke;stroke:var(--md-default-bg-color,#fff);stroke-width:5px;stroke-linejoin:round}
+    .s5v-inference-phases .p-metric{font-size:14px;font-weight:850;text-anchor:middle}
+    .s5v-inference-phases .p-small{font-size:11.5px;font-weight:700;opacity:.8}
+    .s5v-inference-phases .s5v-inference-phases__legend{display:flex;gap:1rem;flex-wrap:wrap;margin:.25rem 0 0;font-size:.88rem;opacity:.86}
+    .s5v-inference-phases .s5v-inference-phases__legend span{display:inline-flex;gap:.42rem;align-items:center}
+    .s5v-inference-phases .s5v-inference-phases__legend i{width:1.55rem;border-top:3px solid currentColor}
+    .s5v-inference-phases .s5v-inference-phases__legend .is-pressure i{border-top-style:dashed}
+    .s5v-inference-phases .s5v-inference-phases__legend .is-boundary i{border-top-width:2px;border-top-style:dashed;opacity:.7}
+    .s5v-inference-phases .s5v__copy{margin-top:.85rem}
+    @media (max-width:700px){.s5v-inference-phases .s5v-inference-phases__scroll{margin-inline:-.35rem;padding-inline:.35rem}.s5v-inference-phases .s5v-inference-phases__stage{width:auto;min-width:1120px}.s5v-inference-phases .s5v-inference-phases__legend{font-size:.82rem}}
+  </style>
+  <!-- GOLDEN_VISUAL_CONTRACT
+    learning-objective="Separate client-observed latency from server inference phases and show how scheduler pressure couples TTFT, TPOT and throughput."
+    mechanism="request arrival -> queue/scheduler -> prefill builds KV state -> first-output boundary -> repeated decode steps extend KV -> final output; concurrent demand changes queue/batching and therefore the observed latency/throughput trade-off."
+    visual-variables="horizontal position encodes time; separate client/server lanes encode measurement boundary; the KV rail encodes reusable state created by prefill and extended by decode; brackets encode TTFT, TPOT and e2e; dashed scheduler-pressure edges encode population-level coupling to throughput."
+    why-visual="The teaching point depends on simultaneous temporal and causal relationships: TTFT spans more than prefill, decode repeats over growing state, and batching pressure can improve throughput while moving per-request latency. A table would hide those boundaries."
+    relationship="timeline-and-feedback:arrival->queue->prefill->first-output->decode-loop->complete;prefill->kv->decode;concurrency->scheduler->{queue,batching}->latency-and-throughput"
+    evidence="client-measurement,queue,prefill,kv-cache,first-output,decode-loop,tpot,e2e,concurrency,scheduler,throughput"
+    interaction="static:no-cosmetic-controls"
+    mobile="horizontal-scroll-preserves-time-axis-phase-boundaries-and-scheduler-pressure"
+  -->
+  <div class="s5v__canvas">
+    <header class="s5v__head"><div><span class="s5v__kicker">Una petición · dos fases · varias esperas</span><h3>TTFT no es «tiempo de prefill» y TPOT no es «throughput»</h3></div><p>La línea temporal conserva dos fronteras: lo que observa el cliente y lo que ejecuta el servidor. Prefill crea estado reutilizable; decode lo extiende. El scheduler conecta ambas fases con la capacidad agregada.</p></header>
+    <div class="s5v-inference-phases__scroll" tabindex="0" role="region" aria-label="Diagrama desplazable de prefill, decode y presupuesto de latencia">
+      <div class="s5v-inference-phases__stage">
+        <svg viewBox="0 0 1240 760" role="img" aria-labelledby="inference-phases-title inference-phases-desc">
+          <title id="inference-phases-title">De la llegada de una petición al primer token y al bucle de decode</title>
+          <desc id="inference-phases-desc">La petición entra desde el cliente, espera en cola y pasa a prefill. Prefill procesa el prompt, construye el KV cache y permite la primera salida. Decode reutiliza y amplía ese estado en pasos sucesivos hasta completar la respuesta. El bracket de TTFT abarca red, cola, prefill y primera entrega. TPOT caracteriza la parte posterior al primer token según la definición del benchmark. Una lane de concurrencia presiona el scheduler: más batching puede elevar throughput y también mover TTFT o TPOT.</desc>
+          <defs><marker id="p-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="currentColor"/></marker></defs>
+
+          <rect data-boundary="client-observation" class="p-boundary" x="24" y="62" width="1192" height="150" rx="24"/>
+          <text x="48" y="92" class="p-kicker">CLIENTE · PUNTO DE MEDICIÓN END-TO-END</text>
+          <g data-node="request-sent"><circle class="p-node" cx="98" cy="145" r="24"/><text x="98" y="150" class="p-label">t₀</text><text x="98" y="187" class="p-sub">request sent</text></g>
+          <g data-node="first-output"><circle class="p-node p-node--major" cx="724" cy="145" r="29"/><text x="724" y="150" class="p-label">y₁</text><text x="724" y="190" class="p-sub">primera salida recibida</text></g>
+          <g data-node="final-output"><circle class="p-node" cx="1138" cy="145" r="24"/><text x="1138" y="150" class="p-label">✓</text><text x="1138" y="187" class="p-sub">respuesta completa</text></g>
+          <path data-edge="client-timeline" class="p-edge" d="M124 145 H691 M754 145 H1111"/>
+          <path data-metric="ttft" class="p-bracket" d="M98 116 V104 H724 V116"/>
+          <text x="411" y="100" class="p-metric">TTFT · observado por cliente</text>
+          <path data-metric="generation" class="p-bracket" d="M724 116 V104 H1138 V116"/>
+          <text x="931" y="100" class="p-metric">generation / decode observado</text>
+          <path data-metric="e2e" class="p-bracket" d="M98 202 V216 H1138 V202"/>
+          <text x="618" y="236" class="p-metric">latencia end-to-end = TTFT + tiempo posterior al primer token</text>
+
+          <rect data-boundary="server-runtime" class="p-boundary" x="24" y="270" width="1192" height="300" rx="24"/>
+          <text x="48" y="300" class="p-kicker">SERVIDOR DE INFERENCIA · SPANS INTERNOS</text>
+
+          <g data-node="ingress"><rect class="p-node" x="64" y="342" width="122" height="70" rx="15"/><text x="125" y="371" class="p-label">Ingress</text><text x="125" y="392" class="p-sub">red · gateway</text></g>
+          <g data-node="queue"><rect class="p-node" x="232" y="342" width="132" height="70" rx="15"/><text x="298" y="371" class="p-label">Cola</text><text x="298" y="392" class="p-sub">admisión · espera</text></g>
+          <g data-node="prefill"><rect class="p-node p-node--major" x="410" y="326" width="190" height="102" rx="18"/><text x="505" y="357" class="p-label">PREFILL</text><text x="505" y="381" class="p-sub">procesa L_in tokens</text><text x="505" y="402" class="p-sub">crea estado para continuar</text></g>
+          <g data-node="first-token-server"><rect class="p-node" x="646" y="342" width="116" height="70" rx="15"/><text x="704" y="369" class="p-label">1ª salida</text><text x="704" y="392" class="p-sub">boundary server</text></g>
+          <g data-node="decode-1"><rect class="p-node p-node--major" x="810" y="326" width="112" height="102" rx="18"/><text x="866" y="358" class="p-label">DECODE</text><text x="866" y="383" class="p-sub">paso k</text><text x="866" y="404" class="p-sub">+ estado</text></g>
+          <g data-node="decode-2"><rect class="p-node p-node--major" x="970" y="326" width="112" height="102" rx="18"/><text x="1026" y="358" class="p-label">DECODE</text><text x="1026" y="383" class="p-sub">paso k+1</text><text x="1026" y="404" class="p-sub">+ estado</text></g>
+          <text x="1116" y="382" class="p-label">…</text>
+
+          <path data-edge="ingress-to-queue" class="p-edge" d="M186 377 H225"/>
+          <path data-edge="queue-to-prefill" class="p-edge" d="M364 377 H403"/>
+          <path data-edge="prefill-to-first" class="p-edge" d="M600 377 H639"/>
+          <path data-edge="first-to-decode" class="p-edge" d="M762 377 H803"/>
+          <path data-edge="decode-loop" class="p-edge" d="M922 377 H963 M1082 377 H1110"/>
+          <text x="386" y="357" class="p-edge-label" text-anchor="middle">scheduler</text>
+
+          <g data-node="kv-cache"><rect class="p-kv" x="410" y="470" width="672" height="62" rx="16"/><text x="435" y="495" class="p-kicker">ESTADO REUTILIZABLE · KV CACHE</text><text x="435" y="517" class="p-small">prefill construye KV₁:Lin</text><text x="774" y="517" class="p-small">decode añade KV₊₁</text><text x="956" y="517" class="p-small">y vuelve a reutilizarlo</text></g>
+          <path data-edge="prefill-to-kv" class="p-edge p-edge--state" d="M505 429 V463"/>
+          <path data-edge="kv-to-decode" class="p-edge p-edge--state" d="M866 470 V435"/>
+          <path data-edge="decode-extends-kv" class="p-edge p-edge--state" d="M1026 435 V463"/>
+
+          <path data-edge="server-first-to-client-first" class="p-edge" d="M704 342 C704 286 724 270 724 177"/>
+          <text x="757" y="270" class="p-edge-label">entrega</text>
+
+          <rect data-boundary="scheduler-pressure" class="p-boundary" x="24" y="606" width="1192" height="120" rx="24"/>
+          <text x="48" y="636" class="p-kicker">POBLACIÓN DE PETICIONES · CAPACIDAD</text>
+          <g data-node="concurrency"><rect class="p-node" x="72" y="654" width="205" height="48" rx="14"/><text x="174.5" y="675" class="p-label">Concurrencia / arrival rate</text><text x="174.5" y="694" class="p-sub">más trabajo simultáneo</text></g>
+          <g data-node="scheduler"><rect class="p-node p-node--major" x="408" y="648" width="222" height="60" rx="16"/><text x="519" y="673" class="p-label">Scheduler + batching</text><text x="519" y="695" class="p-sub">admisión · batch · chunking</text></g>
+          <g data-node="throughput"><rect class="p-node" x="774" y="654" width="190" height="48" rx="14"/><text x="869" y="675" class="p-label">Throughput / goodput</text><text x="869" y="694" class="p-sub">población completada</text></g>
+          <g data-node="latency-slos"><rect class="p-node" x="1000" y="654" width="174" height="48" rx="14"/><text x="1087" y="675" class="p-label">TTFT / TPOT</text><text x="1087" y="694" class="p-sub">SLO por petición</text></g>
+          <path data-edge="concurrency-to-scheduler" class="p-edge p-edge--pressure" d="M277 678 H401"/>
+          <path data-edge="scheduler-to-throughput" class="p-edge p-edge--pressure" d="M630 678 H767"/>
+          <path data-edge="scheduler-to-latency" class="p-edge p-edge--pressure" d="M630 691 C786 742 927 742 1000 691"/>
+          <path data-edge="scheduler-to-queue" class="p-edge p-edge--pressure" d="M519 648 C519 590 298 604 298 419"/>
+          <path data-edge="scheduler-to-prefill-decode" class="p-edge p-edge--pressure" d="M519 648 C519 584 764 590 866 435"/>
+          <text x="726" y="622" class="p-edge-label" text-anchor="middle">batching puede subir capacidad y mover latencia</text>
+
+          <path data-metric="tpot" class="p-bracket" d="M810 452 V446 H1082 V452"/>
+          <text x="946" y="444" class="p-metric">TPOT / ITL · definición del harness</text>
+        </svg>
+      </div>
+    </div>
+    <div class="s5v-inference-phases__legend" aria-label="Leyenda del diagrama">
+      <span><i></i> flujo causal de una petición</span>
+      <span class="is-pressure"><i></i> presión de scheduling / población</span>
+      <span class="is-boundary"><i></i> frontera de medición o runtime</span>
+    </div>
+    <p class="s5v__copy"><strong>La primera salida divide dos problemas distintos.</strong> TTFT visto desde el cliente abarca más que prefill: puede incluir red, cola, scheduling y entrega. Después, decode repite trabajo sobre estado reutilizable y TPOT/ITL describen esa cadencia sólo según la fórmula del benchmark. <strong>Throughput pertenece a la población</strong>: batching y concurrencia pueden mejorar utilización y, al mismo tiempo, empeorar la latencia de una petición. Por eso el presupuesto debe conservar las fronteras cliente/servidor y prefill/decode.</p>
+  </div>
+</section>

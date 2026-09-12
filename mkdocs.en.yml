@@ -205,6 +205,13 @@ nav:
           - Retrieval and context assembly: series/context-engineering-memory-mcp/04-retrieval-context-assembly-freshness-relevance-conflict-grounding.md
           - MCP hosts, clients, servers, tools, resources, prompts, lifecycle, and trust boundaries: series/context-engineering-memory-mcp/05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries.md
           - Skills, plugins, subagents, and hooks: series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation.md
+      - LLM Inference Engineering & Economics:
+          - Prefill vs decode: series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.md
+          - KV cache, memory hierarchy, continuous batching and PagedAttention: series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.md
+          - Quantization, parallelism, and memory/performance/quality trade-offs: series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs.md
+          - Speculative decoding, prefix caching, and other latency optimizations: series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.md
+          - Model routing, fallback, caching, and workload-aware serving: series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving.md
+          - "Benchmarking inference: cost/task, throughput, latency, energy, and hardware constraints": series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.md
   - Concepts:
       - Concepts: temas/index.md
       - What is an LLM?: temas/llms.md

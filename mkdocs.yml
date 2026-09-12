@@ -159,6 +159,13 @@ nav:
           - Retrieval y ensamblado de contexto: series/context-engineering-memory-mcp/04-retrieval-context-assembly-freshness-relevance-conflict-grounding.md
           - "MCP: hosts, clients, servers, tools, resources, prompts, ciclo de vida y fronteras de confianza": series/context-engineering-memory-mcp/05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries.md
           - Skills, plugins, subagentes y hooks: series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation.md
+      - Ingeniería y economía de inferencia de LLMs:
+          - Prefill vs decode: series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.md
+          - KV cache, jerarquía de memoria, continuous batching y PagedAttention: series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.md
+          - Cuantización, paralelismo y compromisos de memoria, rendimiento y calidad: series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs.md
+          - Speculative decoding, prefix caching y otras optimizaciones de latencia: series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.md
+          - Model routing, fallback, caching y serving adaptado al workload: series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving.md
+          - "Benchmarking de inferencia: cost/task, throughput, latencia, energía y hardware": series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.md
   - Construir:
       - articulos-tecnicos/index.md
       - Agente Reactivo, Proactivo y Tool calls: articulos-tecnicos/proactive-reactive-agent-and-tool-calls.md

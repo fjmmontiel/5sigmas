@@ -1,0 +1,137 @@
+name: Series 4 GOLDEN review
+
+on:
+  pull_request:
+    paths:
+      - 'docs/series/llm-inference-engineering-economics/**'
+      - 'locales/en/series/llm-inference-engineering-economics/**'
+      - 'docs/series/index.md'
+      - 'locales/en/series/index.md'
+      - 'docs/snippets/articulos-tecnicos/inference-*.html'
+      - 'locales/en/snippets/articulos-tecnicos/inference-*'
+      - 'scripts/validate_inference_engineering_*.mjs'
+      - 'scripts/audit_browser_resources.mjs'
+      - 'scripts/validate_english_series_mirror.mjs'
+      - 'scripts/validate_locale_switching.mjs'
+      - 'scripts/validate_direct_reader_navigation.mjs'
+      - 'scripts/validate_reader_header_overlap.mjs'
+      - 'scripts/validate_responsive_polish.mjs'
+      - 'mkdocs.yml'
+      - 'mkdocs.en.yml'
+      - 'locales/en/manifest.yml'
+      - '.github/workflows/series4-golden-review.yml'
+      - '.github/workflows/inference-engineering-live-qa.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  series4-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Validate complete Series 4 inventory and canonical publication surfaces
+        run: node scripts/validate_inference_engineering_series4_release.mjs
+
+      - name: Validate media declarations and signatures
+        run: |
+          python scripts/prepare_video_media.py --check
+          python scripts/audit_media_magic.py
+          python scripts/test_video_schema_contract.py
+
+      - name: Validate all Series 4 source contracts
+        run: |
+          node scripts/validate_inference_engineering_ch1_source.mjs
+          node scripts/validate_inference_engineering_ch2_source.mjs
+          node scripts/validate_inference_engineering_ch3_source.mjs
+          node scripts/validate_inference_engineering_ch4_source.mjs
+          node scripts/validate_inference_engineering_ch5_source.mjs
+          node scripts/validate_inference_engineering_ch6_source.mjs
+
+      - name: Build Spanish strictly
+        run: mkdocs build --clean --strict
+
+      - name: Audit public-series publication contract
+        run: python scripts/audit_publication_contract.py
+
+      - name: Prepare English locale
+        run: python scripts/prepare_locale.py --locale en
+
+      - name: Audit English locale sources
+        run: python scripts/audit_locale.py --locale en
+
+      - name: Build English strictly
+        env:
+          S5_LOCALE: en
+        run: mkdocs build -f mkdocs.en.yml --clean --strict
+
+      - name: Audit rendered English locale
+        run: python scripts/audit_locale.py --locale en --site site/en
+
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Serve combined preview
+        run: |
+          python -m http.server 8000 --directory site > /tmp/5sigmas-series4-preview.log 2>&1 &
+          for attempt in {1..30}; do
+            curl --fail --silent http://127.0.0.1:8000/ > /dev/null && curl --fail --silent http://127.0.0.1:8000/en/ > /dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/5sigmas-series4-preview.log
+          exit 1
+
+      - name: Audit browser resources, bilingual hub and locale parity
+        run: |
+          node scripts/audit_browser_resources.mjs
+          node scripts/validate_english_locale.mjs
+          node scripts/validate_english_series_mirror.mjs
+          node scripts/validate_locale_switching.mjs
+
+      - name: Validate all Series 4 relationship geometry and accessibility
+        run: |
+          node scripts/validate_inference_engineering_ch1_accessibility.mjs
+          node scripts/validate_inference_engineering_ch2_accessibility.mjs
+          node scripts/validate_inference_engineering_ch3_accessibility.mjs
+          node scripts/validate_inference_engineering_ch4_accessibility.mjs
+          node scripts/validate_inference_engineering_ch5_accessibility.mjs
+          node scripts/validate_inference_engineering_ch6_accessibility.mjs
+
+      - name: Validate reader navigation and responsive shell
+        run: |
+          node scripts/validate_direct_reader_navigation.mjs
+          node scripts/validate_reader_header_overlap.mjs
+          node scripts/validate_responsive_polish.mjs
+
+      - name: Upload Series 4 visual evidence on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: inference-engineering-series4-pr-gate-visual-evidence
+          path: |
+            artifacts/visual-review/inference-engineering-*.png
+            artifacts/visual-review/english-series-mirror-*.png
+          if-no-files-found: warn
+          retention-days: 1

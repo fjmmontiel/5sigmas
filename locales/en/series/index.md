@@ -86,6 +86,12 @@ hide:
       <span class="s5-list-row__desc">How to assemble context, manage budgets and memory, retrieve evidence, integrate MCP, and isolate extensions and subagents.</span>
       <span class="s5-list-row__meta">6 chapters</span>
     </a>
+    <a class="s5-list-row" href="/en/series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget/">
+      <span class="s5-list-row__n">12</span>
+      <span class="s5-list-row__title">LLM Inference Engineering & Economics</span>
+      <span class="s5-list-row__desc">Prefill and decode, KV cache, quantization, parallelism, speculative decoding, routing and benchmarking for production LLM serving decisions.</span>
+      <span class="s5-list-row__meta">6 chapters</span>
+    </a>
   </nav>
 </section>
 
