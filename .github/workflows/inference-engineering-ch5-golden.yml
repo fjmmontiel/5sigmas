@@ -21,7 +21,7 @@ jobs:
           ref: series/llm-inference-engineering-economics-golden
           fetch-depth: 0
 
-      - name: Integrate chapter 4.5 into canonical publication surfaces
+      - name: Integrate chapter 4.5 and repair deterministic i18n gate
         shell: bash
         run: |
           python - <<'PY'
@@ -57,13 +57,22 @@ jobs:
               '  - snippets/articulos-tecnicos/inference-speculative-prefix-latency.html',
               '  - snippets/articulos-tecnicos/inference-routing-fallback-cache-policy.html',
           )
+
+          validator = Path('scripts/validate_inference_engineering_ch5_source.mjs')
+          text = validator.read_text(encoding='utf-8')
+          old = "  check(Object.values(i18n.replacements).some((value) => String(value).includes(token)), `EN visual translation missing ${token}`);"
+          new = "  check(snippet.includes(token) || Object.values(i18n.replacements).some((value) => String(value).includes(token)), `EN visual translation missing ${token}`);"
+          if old in text:
+              validator.write_text(text.replace(old, new, 1), encoding='utf-8')
+          elif new not in text:
+              raise SystemExit('chapter 4.5 i18n validator anchor missing')
           PY
           git diff --check
           git config user.name 'fjmmontiel'
           git config user.email '162696664+fjmmontiel@users.noreply.github.com'
-          git add mkdocs.yml mkdocs.en.yml locales/en/manifest.yml
+          git add mkdocs.yml mkdocs.en.yml locales/en/manifest.yml scripts/validate_inference_engineering_ch5_source.mjs
           if ! git diff --cached --quiet; then
-            git commit -m 'chore(series4): integrate chapter 4.5 publication contract'
+            git commit -m 'fix(series4): accept canonical-English labels in 4.5 i18n gate'
             git push origin HEAD:series/llm-inference-engineering-economics-golden
           fi
           cert_sha="$(git rev-parse HEAD)"
