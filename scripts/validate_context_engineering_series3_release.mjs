@@ -46,7 +46,9 @@ for (let i = 0; i < chapters.length; i += 1) {
 
   const es = read(esPath);
   const en = read(enPath);
-  const forbidden = /\b(?:TODO|TBD|PLACEHOLDER|FIXME)\b/i;
+  // Canonical placeholder markers are uppercase engineering tokens. Keep this
+  // case-sensitive so ordinary Spanish prose such as "todo" is not a false positive.
+  const forbidden = /\b(?:TODO|TBD|PLACEHOLDER|FIXME)\b/;
   assert(!forbidden.test(es), `placeholder marker in ${esPath}`);
   assert(!forbidden.test(en), `placeholder marker in ${enPath}`);
   assert(es.includes(`include_html("snippets/articulos-tecnicos/${visual}")`), `${esPath} does not include canonical visual ${visual}`);
