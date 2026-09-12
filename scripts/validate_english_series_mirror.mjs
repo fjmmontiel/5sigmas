@@ -31,6 +31,12 @@ const codingAgents = {
   chapterTitle: 'Chapter 1 — What an agent harness is, and what it adds beyond a model or coding assistant',
 };
 
+const contextEngineering = {
+  route: '/en/series/context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineering/',
+  title: 'Context Engineering, Memory & MCP',
+  chapterTitle: 'Chapter 1 — Context engineering vs prompt engineering: what actually changes in the system',
+};
+
 const nativePresentationMedia = new Map([
   ['fundamentos-ia-iag', '00_presentacion_serie'],
   ['from-cave-to-agi', '00_presentacion_serie'],
@@ -69,13 +75,13 @@ const visit = async (route) => {
 
 const hubText = await visit('/en/series/');
 const hubLinks = await page.locator('.s5-simple-list a.s5-list-row').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('href')));
-if (hubLinks.length !== 10) failures.push(`/en/series/: expected 10 canonical series cards, got ${hubLinks.length}`);
+if (hubLinks.length !== 11) failures.push(`/en/series/: expected 11 canonical series cards, got ${hubLinks.length}`);
 for (const [slug, title] of presentations) {
   const expected = `/en/series/${slug}/00_presentacion_serie/`;
   if (!hubLinks.includes(expected)) failures.push(`/en/series/: missing ${expected}`);
   if (!hubText.includes(title)) failures.push(`/en/series/: missing title ${JSON.stringify(title)}`);
 }
-for (const series of [realtimeVoice, codingAgents]) {
+for (const series of [realtimeVoice, codingAgents, contextEngineering]) {
   if (!hubLinks.includes(series.route)) failures.push(`/en/series/: missing ${series.route}`);
   if (!hubText.includes(series.title)) failures.push(`/en/series/: missing title ${JSON.stringify(series.title)}`);
 }
@@ -111,7 +117,7 @@ for (const [slug, expectedTitle] of presentations) {
   }
 }
 
-for (const series of [realtimeVoice, codingAgents]) {
+for (const series of [realtimeVoice, codingAgents, contextEngineering]) {
   const body = await visit(series.route);
   if (!body.includes(series.chapterTitle)) {
     failures.push(`${series.route}: missing canonical chapter title ${JSON.stringify(series.chapterTitle)}`);
@@ -146,6 +152,7 @@ for (const route of [
   '/en/series/',
   realtimeVoice.route,
   codingAgents.route,
+  contextEngineering.route,
   '/en/series/ia-pib-bienestar-energia/00_presentacion_serie/',
   '/en/series/datacenters-espacio/00_presentacion_serie/',
   '/en/series/seguridad-ia/00_presentacion_serie/',
@@ -169,4 +176,4 @@ if (failures.length) {
   for (const failure of failures) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log('English series mirror QA passed: ten canonical series entries including Realtime Voice Agents and Coding Agents & Agent Harnesses, localized embedded visuals, native-English presentation media only when declared, desktop/mobile overflow clean.');
+console.log('English series mirror QA passed: eleven canonical series entries including Realtime Voice Agents, Coding Agents & Agent Harnesses, and Context Engineering, Memory & MCP; localized embedded visuals, native-English presentation media only when declared, desktop/mobile overflow clean.');
