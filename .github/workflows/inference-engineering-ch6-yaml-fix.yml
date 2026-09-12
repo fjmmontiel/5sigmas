@@ -1,0 +1,65 @@
+name: Inference Engineering ch6 YAML fix
+
+on:
+  push:
+    branches:
+      - series/llm-inference-engineering-economics-golden
+    paths:
+      - '.github/workflows/inference-engineering-ch6-yaml-fix.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: series/llm-inference-engineering-economics-golden
+          fetch-depth: 0
+
+      - name: Quote chapter 4.6 nav labels and keep gate exact
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          route = 'series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.md'
+          replacements = {
+              'mkdocs.yml': [
+                  (f'          - Benchmarking de inferencia: cost/task, throughput, latencia, energía y hardware: {route}',
+                   f'          - "Benchmarking de inferencia: cost/task, throughput, latencia, energía y hardware": {route}'),
+              ],
+              'mkdocs.en.yml': [
+                  (f'          - Benchmarking inference: cost/task, throughput, latency, energy, and hardware constraints: {route}',
+                   f'          - "Benchmarking inference: cost/task, throughput, latency, energy, and hardware constraints": {route}'),
+              ],
+              'scripts/validate_inference_engineering_ch6_source.mjs': [
+                  ('check(mkdocsEs.includes(`Benchmarking de inferencia: cost/task, throughput, latencia, energía y hardware: ${route}`),',
+                   'check(mkdocsEs.includes(`"Benchmarking de inferencia: cost/task, throughput, latencia, energía y hardware": ${route}`),'),
+                  ('check(mkdocsEn.includes(`Benchmarking inference: cost/task, throughput, latency, energy, and hardware constraints: ${route}`),',
+                   'check(mkdocsEn.includes(`"Benchmarking inference: cost/task, throughput, latency, energy, and hardware constraints": ${route}`),'),
+              ],
+          }
+          for file, pairs in replacements.items():
+              p = Path(file)
+              text = p.read_text(encoding='utf-8')
+              for old, new in pairs:
+                  if new in text:
+                      continue
+                  if old not in text:
+                      raise SystemExit(f'expected anchor missing in {file}: {old}')
+                  text = text.replace(old, new, 1)
+              p.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Commit fail-closed YAML repair
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add mkdocs.yml mkdocs.en.yml scripts/validate_inference_engineering_ch6_source.mjs
+          git diff --cached --quiet && exit 0
+          git commit -m 'Fix Series 4.6 YAML navigation labels'
+          git push origin HEAD:series/llm-inference-engineering-economics-golden
