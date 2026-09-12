@@ -21,12 +21,24 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Integrate chapter 3.6 into canonical publication surfaces
+      - name: Repair EN contract and integrate chapter 3.6 canonical surfaces
         shell: bash
         run: |
           set -euo pipefail
           python - <<'PY'
           from pathlib import Path
+          import re
+
+          en_path = Path('locales/en/series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation.md')
+          en = en_path.read_text(encoding='utf-8')
+          old = 'If `tools` is omitted, the subagent **inherits every tool available to subagents**.'
+          new = 'If `tools` is omitted, the subagent **inherits all tools available to subagents**.'
+          if old in en:
+              en = en.replace(old, new, 1)
+          elif new not in en:
+              raise SystemExit('EN article: expected Claude Code inheritance sentence missing')
+          en = re.sub(r'^(\s*-\s+.+);\s*$', r'\1.', en, flags=re.MULTILINE)
+          en_path.write_text(en, encoding='utf-8')
 
           def add_after(path: str, marker: str, addition: str) -> None:
               p = Path(path)
@@ -80,7 +92,7 @@ jobs:
           git config user.name 'fjmmontiel'
           git config user.email '162696664+fjmmontiel@users.noreply.github.com'
           git rm .github/workflows/context-engineering-ch6-integrate.yml
-          git add mkdocs.yml mkdocs.en.yml locales/en/manifest.yml .github/workflows/pr-visual-review.yml
+          git add mkdocs.yml mkdocs.en.yml locales/en/manifest.yml .github/workflows/pr-visual-review.yml locales/en/series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation.md
           git diff --cached --check
           git commit -m 'feat(context-engineering): integrate 3.6 publication gates'
           git push origin HEAD:series/context-engineering-memory-mcp-golden
