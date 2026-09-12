@@ -1,4 +1,5 @@
 name: Series 5 certify chapter 5.3
+# Exact-SHA certification rerun after canonical preserve-source-slugs repair.
 
 on:
   push:
