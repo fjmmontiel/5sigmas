@@ -77,7 +77,7 @@ try {
       page.off('response', listener);
       check(response?.ok(), `${hub.route}: ${viewport.name} HTTP ${response?.status() ?? 'no response'}`);
       const rows = page.locator('.s5-simple-list a.s5-list-row');
-      check((await rows.count()) === 11, `${hub.route}: ${viewport.name} expected exactly 11 canonical series rows, got ${await rows.count()}`);
+      check((await rows.count()) === 12, `${hub.route}: ${viewport.name} expected exactly 12 canonical series rows, got ${await rows.count()}`);
       const target = rows.filter({ has: page.locator(`span.s5-list-row__title:text-is("${hub.title}")`) });
       check((await target.count()) === 1, `${hub.route}: ${viewport.name} missing unique Coding Agents row ${JSON.stringify(hub.title)}`);
       if (await target.count()) {
@@ -160,4 +160,4 @@ if (failures.length) {
   for (const failure of failures) console.error(`- ${failure}`);
   process.exit(1);
 }
-console.log('Coding Agents release-surface QA PASS: ES/EN Series hubs expose the series among 11 canonical rows, all 12 chapter routes load without broken same-origin resources, locale switching and six-chapter reader progression remain exact, and desktop/mobile page geometry is clean.');
+console.log('Coding Agents release-surface QA PASS: ES/EN Series hubs expose the series among 12 canonical rows, all 12 chapter routes load without broken same-origin resources, locale switching and six-chapter reader progression remain exact, and desktop/mobile page geometry is clean.');
