@@ -107,7 +107,7 @@ jobs:
           {
             printf 'head=%s\n' "$(git rev-parse HEAD)"
             printf '%s\n' 'git_status_begin'
-            git status --porcelain
+            git status --porcelain --untracked-files=all
             printf '%s\n' 'git_status_end'
             git hash-object docs/series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria.md | sed 's/^/es_blob=/'
             git hash-object locales/en/series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria.md | sed 's/^/en_blob=/'
@@ -133,9 +133,15 @@ jobs:
           if-no-files-found: error
           retention-days: 1
 
-      - name: Reconfirm clean exact SHA after all gates
+      - name: Reconfirm exact SHA and source cleanliness after all gates
         if: success()
         shell: bash
         run: |
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
-          test -z "$(git status --porcelain)"
+          git diff --exit-code
+          git diff --cached --exit-code
+          unexpected="$(git status --porcelain --untracked-files=all | grep -vE '^\?\? artifacts/visual-review/' || true)"
+          if [ -n "$unexpected" ]; then
+            printf 'Unexpected working-tree changes after certification:\n%s\n' "$unexpected" >&2
+            exit 1
+          fi
