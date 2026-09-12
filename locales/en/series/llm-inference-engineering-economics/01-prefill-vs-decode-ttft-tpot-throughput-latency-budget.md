@@ -18,15 +18,15 @@ A generation request does not have one indivisible “model latency.” It has a
 
 When a user sends a long prompt and waits for a streamed answer, two questions matter separately:
 
-1. **How long until the first output appears?** That experience is commonly summarized by **TTFT, time to first token**.
+1. **How long until the first output boundary we are measuring?** That boundary is commonly summarized by **TTFT, time to first token**, but for models with reasoning tokens the harness must say whether it counts any first token or the first non-reasoning output visible to the user.
 2. **Once output starts, how quickly does it continue?** That experience is commonly described by **TPOT, time per output token**, or **ITL, inter-token latency**, depending on the benchmark harness definition.
 
 Those questions map approximately onto two runtime phases:
 
-- **prefill** consumes the input prompt, computes its representations, and builds the attention state required to continue, including the KV cache;
+- **prefill** consumes the input prompt, computes its representations, and builds the attention state required to continue, including the KV cache.
 - **decode** generates the continuation autoregressively, reusing prior state and appending new state token by token.
 
-“Approximately” matters. Client-measured TTFT usually includes networking, queueing, scheduling, prompt processing, first-token generation, and delivery of the first response. **TTFT is therefore not synonymous with prefill kernel time.** Likewise, client-measured TPOT describes the observed cadence after the first token; by itself it does not isolate one decode kernel.[^nvidia-aiperf]
+“Approximately” matters. Client-measured TTFT usually includes networking, queueing, scheduling, prompt processing, first-token generation, and delivery of the first response. **TTFT is therefore not synonymous with prefill kernel time.** Likewise, client-measured TPOT describes the observed cadence after the first token. By itself it does not isolate one decode kernel.[^nvidia-aiperf]
 
 {{ include_html("snippets/articulos-tecnicos/inference-prefill-decode-latency-budget.html") }}
 
@@ -80,6 +80,12 @@ NVIDIA AIPerf currently measures TTFT from client request submission to the firs
 
 A lower TTFT therefore **does not by itself prove that the prefill kernel became faster**. It can come from a shorter queue, prefix caching, a shorter prompt, a different network path, different batching, or another change anywhere inside the measured interval.
 
+### For reasoning models, distinguish TTFT from TTFO
+
+The meaning of “first token” can itself change with model behavior. In current AIPerf, **TTFT ends at the first token of any type, including a reasoning token**, while **TTFO, time to first output token, ends at the first non-reasoning output token**. For models without reasoning, the two boundaries coincide. For models that reason before producing visible output, they can diverge.[^nvidia-aiperf-ttfo]
+
+That distinction also matters when comparing historical tools. NVIDIA’s migration guide states that, for reasoning-capable models, AIPerf TTFO is the metric comparable to the older GenAI-Perf TTFT.[^nvidia-aiperf-ttfo] If the product SLO is “time until the user sees content,” copying a column named `TTFT` is therefore insufficient. The benchmark must state **which class of token ends the interval**.
+
 ## Define TPOT and ITL before comparing them
 
 After the first token, a common metric is the average amortized time per generated output token.
@@ -98,7 +104,7 @@ NVIDIA AIPerf uses the same algebraic form for its average ITL derived from end-
 
 The names are not universal, however. vLLM distinguishes:
 
-- **ITL** as the observed gaps between consecutive streamed outputs;
+- **ITL** as the observed gaps between consecutive streamed outputs.
 - **TPOT** as decode duration amortized over every output token except the first.
 
 With standard decoding and one token per streamed event, the values are often close. With speculative decoding, chunked streaming, or other strategies, one streamed event may contain several tokens, so ITL and TPOT no longer mean the same thing.[^vllm-bench]
@@ -156,17 +162,17 @@ Increasing `L_out` adds decode steps and grows per-sequence state as generation 
 
 Equal sequence lengths do not guarantee equal latency. Other material variables include:
 
-- model and architecture;
-- dtype and quantization;
-- accelerator type and interconnect topology;
-- kernels;
-- parallelism strategy;
-- effective batch size;
-- concurrency and request rate;
-- KV-cache state and policy;
-- prefix caching;
-- scheduler behavior;
-- sampling and speculative decoding;
+- model and architecture.
+- dtype and quantization.
+- accelerator type and interconnect topology.
+- kernels.
+- parallelism strategy.
+- effective batch size.
+- concurrency and request rate.
+- KV-cache state and policy.
+- prefix caching.
+- scheduler behavior.
+- sampling and speculative decoding.
 - serving protocol and network path.
 
 This is why `tokens/s` without a workload description is incomplete evidence.
@@ -179,13 +185,13 @@ Sarathi-Serve describes prefill as highly parallel prompt processing and decode 
 
 But that does **not** justify classifying every deployment with a fixed hardware slogan. The operating regime changes with:
 
-- batch size;
-- context length;
-- model architecture;
-- attention implementation and kernels;
-- precision;
-- speculative decoding;
-- parallelism;
+- batch size.
+- context length.
+- model architecture.
+- attention implementation and kernels.
+- precision.
+- speculative decoding.
+- parallelism.
 - accelerator and memory bandwidth.
 
 The production-safe statement is not “decode is always memory-bound.” It is **“prefill and decode have sufficiently different workload profiles that they should be measured and budgeted separately.”**
@@ -239,9 +245,9 @@ A human is waiting for an immediate reaction and then reading while output strea
 
 Typical priorities are:
 
-- low, stable TTFT;
-- TPOT or ITL fast enough for smooth streaming;
-- p95 and p99, not only means;
+- low, stable TTFT.
+- TPOT or ITL fast enough for smooth streaming.
+- p95 and p99, not only means.
 - goodput under product SLOs.
 
 Maximizing output tokens/s while allowing large queues can be the wrong optimization.
@@ -252,10 +258,10 @@ No user is waiting for every first token, and the system can process many docume
 
 The important objectives may shift toward:
 
-- aggregate throughput;
-- cost per million tokens or per completed task;
-- utilization;
-- stability on long inputs;
+- aggregate throughput.
+- cost per million tokens or per completed task.
+- utilization.
+- stability on long inputs.
 - total batch makespan.
 
 TTFT remains measurable, but it may no longer be the primary objective.
@@ -318,19 +324,19 @@ They are not interchangeable.
 
 A useful serving benchmark should fix or record at least:
 
-- exact model and revision;
-- engine/runtime and version;
-- hardware, accelerator count, and topology;
-- dtype or quantization;
-- tensor, pipeline, or data parallelism where applicable;
-- input and output lengths or their distributions;
-- concurrency, request rate, and arrival pattern;
-- batching and scheduling policy;
-- prefix/KV-cache state;
-- sampling and speculative decoding settings;
-- streaming protocol and measurement point;
-- exact formulas for TTFT, TPOT/ITL, end-to-end latency, and throughput;
-- warmup, duration, and repetition count;
+- exact model and revision.
+- engine/runtime and version.
+- hardware, accelerator count, and topology.
+- dtype or quantization.
+- tensor, pipeline, or data parallelism where applicable.
+- input and output lengths or their distributions.
+- concurrency, request rate, and arrival pattern.
+- batching and scheduling policy.
+- prefix/KV-cache state.
+- sampling and speculative decoding settings.
+- streaming protocol and measurement point.
+- exact formulas for TTFT, TPOT/ITL, end-to-end latency, and throughput.
+- warmup, duration, and repetition count.
 - relevant means and percentiles.
 
 vLLM currently warns that latency terminology is not standardized across benchmark tools and recommends comparing measurement points and formulas rather than names alone.[^vllm-bench] NVIDIA gives the same warning in its current metrics documentation.[^nvidia-nim-metrics]
@@ -384,6 +390,8 @@ The core point of this chapter is simpler:
 ## References
 
 [^nvidia-aiperf]: NVIDIA, **AIPerf Metrics Reference**. Client-observed definitions for TTFT, decode duration, and ITL. https://docs.nvidia.com/aiperf/reference/ai-perf-metrics-reference
+
+[^nvidia-aiperf-ttfo]: NVIDIA, **Migrating from GenAI-Perf**. Current TTFT versus TTFO semantics for reasoning-capable models and TTFO equivalence to the older GenAI-Perf TTFT boundary. https://docs.nvidia.com/aiperf/getting-started/migrating-from-gen-ai-perf
 
 [^nvidia-nim-metrics]: NVIDIA, **NIM LLM Benchmarking — Metrics**. Definitions for TTFT, end-to-end latency, and ITL/TPOT, including the caveat that tools can differ. https://docs.nvidia.com/nim/benchmarking/llm/latest/metrics.html
 
