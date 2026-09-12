@@ -20,9 +20,9 @@ A coding agent can have a very large context window and still fail because it ca
 
 This chapter separates four mechanisms that are often collapsed into one:
 
-1. **context limit**: the capacity exposed by the model/API;
-2. **operational budget**: how much of that capacity the application chooses to spend on input after reserving output and headroom;
-3. **prioritization and compaction**: what enters verbatim, what is transformed, what is referenced, and what is dropped;
+1. **context limit**: the capacity exposed by the model/API.
+2. **operational budget**: how much of that capacity the application chooses to spend on input after reserving output and headroom.
+3. **prioritization and compaction**: what enters verbatim, what is transformed, what is referenced, and what is dropped.
 4. **provenance**: the source, version, and transformation metadata needed to explain where an item came from and when it should no longer be trusted.
 
 Google documents context windows in tokens and exposes current input/output limits through model metadata rather than requiring developers to hard-code a number.[^google-tokens] Anthropic recommends counting tokens before a request and documents provider-specific overflow behavior.[^anthropic-window] Those are concrete API contracts, not universal behavior across every model.
@@ -104,10 +104,10 @@ The equation makes the decision surface explicit. **It does not claim that a fra
 
 A robust policy may:
 
-1. reject content outside the tenant or task scope;
-2. pin mandatory content;
-3. invalidate items whose version no longer matches the task state;
-4. rank the remaining evidence for the current decision;
+1. reject content outside the tenant or task scope.
+2. pin mandatory content.
+3. invalidate items whose version no longer matches the task state.
+4. rank the remaining evidence for the current decision.
 5. choose an appropriate representation when useful evidence is too expensive.
 
 That ordering prevents a semantically relevant fragment from displacing normative policy, or stale memory from winning merely because its embedding is closer to the query.
