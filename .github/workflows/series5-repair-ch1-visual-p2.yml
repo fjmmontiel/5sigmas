@@ -1,0 +1,85 @@
+name: Series 5 repair chapter 5.1 visual P2
+
+on:
+  push:
+    branches:
+      - series/evaluating-ai-systems-production-golden
+    paths:
+      - '.github/workflows/series5-repair-ch1-visual-p2.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: series/evaluating-ai-systems-production-golden
+
+      - name: Repair trajectory legibility and task-label overflow
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json, hashlib
+
+          visual = Path('docs/snippets/articulos-tecnicos/eval-boundary-system-workflow-trajectory.html')
+          p = visual.read_text()
+
+          replacements = {
+            'visual-variables="nested dashed boundaries encode model/component/workflow/system scope; a single thick path crossing selected nodes encodes one realized trajectory; outcome sits outside the policy graph as final evidence; lower inward/outward arrows encode diagnose-narrow versus confirm-broad without implying a universal scalar ranking."':
+            'visual-variables="nested dashed boundaries encode model/component/workflow/system scope; thick directed segments connecting the selected nodes encode one realized trajectory without obscuring node labels; outcome sits outside the policy graph as final evidence; lower inward/outward arrows encode diagnose-narrow versus confirm-broad without implying a universal scalar ranking."',
+            'Una línea gruesa representa una trayectoria concreta que atraviesa sólo algunos nodos y termina en un outcome y estado final.':
+            'Una secuencia gruesa dirigida representa una trayectoria concreta: conecta los nodos usados en el trial y termina en un outcome y estado final.',
+            '<g data-node="task" data-role="trial-context"><rect class="eb-node" x="570" y="118" width="142" height="78" rx="15"/><text x="641" y="147" class="eb-label">Task + input</text><text x="641" y="173" class="eb-sub">caso y criterios · contexto del trial</text></g>':
+            '<g data-node="task" data-role="trial-context"><rect class="eb-node" x="570" y="118" width="142" height="78" rx="15"/><text x="641" y="145" class="eb-label">Task + input</text><text x="641" y="168" class="eb-sub">caso y criterios</text><text x="641" y="187" class="eb-sub">contexto del trial</text></g>',
+            '<path class="eb-edge eb-edge--trajectory" data-path="trajectory" d="M712 157 H794 C828 157 829 260 858 260 H958 C1000 260 988 350 1026 350 H1118 C1142 350 1148 412 1148 486"/>':
+            '<g data-path="trajectory" aria-label="Trayectoria realizada"><path class="eb-edge eb-edge--trajectory" d="M712 157 H760 C782 157 777 260 794 260"/><path class="eb-edge eb-edge--trajectory" d="M922 260 H958"/><path class="eb-edge eb-edge--trajectory" d="M1026 304 V322"/><path class="eb-edge eb-edge--trajectory" d="M1094 350 H1118 C1142 350 1146 440 1118 494"/></g>',
+          }
+          for old, new in replacements.items():
+              if p.count(old) != 1:
+                  raise SystemExit(f'expected exactly one visual replacement target, got {p.count(old)}: {old[:90]}')
+              p = p.replace(old, new)
+          visual.write_text(p)
+
+          i18n_path = Path('locales/en/snippets/articulos-tecnicos/eval-boundary-system-workflow-trajectory.i18n.json')
+          data = json.loads(i18n_path.read_text())
+          repl = data['replacements']
+
+          old_desc = 'Una línea gruesa representa una trayectoria concreta que atraviesa sólo algunos nodos y termina en un outcome y estado final. En la parte inferior una flecha hacia dentro indica diagnosticar en fronteras estrechas y otra hacia fuera indica confirmar el cambio en la frontera donde vive el riesgo del producto.'
+          new_desc = 'Una secuencia gruesa dirigida representa una trayectoria concreta: conecta los nodos usados en el trial y termina en un outcome y estado final. En la parte inferior una flecha hacia dentro indica diagnosticar en fronteras estrechas y otra hacia fuera indica confirmar el cambio en la frontera donde vive el riesgo del producto.'
+          if old_desc not in repl:
+              raise SystemExit('old visual description translation key missing')
+          old_en = repl.pop(old_desc)
+          repl[new_desc] = old_en.replace('A thick path represents one realized trajectory that crosses only some nodes', 'A thick directed sequence represents one realized trajectory: it connects the nodes used in the trial')
+
+          old_task = 'caso y criterios · contexto del trial'
+          if old_task not in repl:
+              raise SystemExit('old task-label translation key missing')
+          repl.pop(old_task)
+          repl['caso y criterios'] = 'case and criteria'
+          repl['contexto del trial'] = 'trial context'
+
+          raw = visual.read_bytes()
+          header = f'blob {len(raw)}\0'.encode()
+          data['source_blob_sha'] = hashlib.sha1(header + raw).hexdigest()
+          i18n_path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n')
+          print('visual_blob', data['source_blob_sha'])
+          PY
+
+      - name: Verify source gate before committing
+        run: node scripts/validate_ai_systems_eval_ch1_source.mjs
+
+      - name: Remove one-shot repair workflow and commit repaired source
+        shell: bash
+        run: |
+          git rm .github/workflows/series5-repair-ch1-visual-p2.yml
+          git config user.name '5sigmas GOLDEN builder'
+          git config user.email '162696664+fjmmontiel@users.noreply.github.com'
+          git add docs/snippets/articulos-tecnicos/eval-boundary-system-workflow-trajectory.html locales/en/snippets/articulos-tecnicos/eval-boundary-system-workflow-trajectory.i18n.json
+          git diff --cached --check
+          git commit -m 'fix(series5): keep trajectory paths clear of diagram labels'
+          git push origin HEAD:series/evaluating-ai-systems-production-golden
