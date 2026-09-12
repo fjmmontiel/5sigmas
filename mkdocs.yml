@@ -152,6 +152,13 @@ nav:
           - Tools, permisos y trust boundaries: series/coding-agents-agent-harnesses/04-tools-permisos-approvals-hooks-secretos-trust-boundaries.md
           - Tests, verifiers y evaluación de tareas: series/coding-agents-agent-harnesses/05-tests-verifiers-review-diffs-stop-conditions-evaluacion.md
           - Tareas largas, memoria y subagentes: series/coding-agents-agent-harnesses/06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad.md
+      - Context engineering, memoria y MCP:
+          - Context engineering vs prompt engineering: series/context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineering.md
+          - Context budgets, priorización, compaction y provenance: series/context-engineering-memory-mcp/02-context-budgets-prioritisation-compaction-provenance.md
+          - "Arquitecturas de memoria: working, episodic, semantic y estado persistente": series/context-engineering-memory-mcp/03-memory-architectures-working-episodic-semantic-persistent-state.md
+          - Retrieval y ensamblado de contexto: series/context-engineering-memory-mcp/04-retrieval-context-assembly-freshness-relevance-conflict-grounding.md
+          - "MCP: hosts, clients, servers, tools, resources, prompts, ciclo de vida y fronteras de confianza": series/context-engineering-memory-mcp/05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries.md
+          - Skills, plugins, subagentes y hooks: series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation.md
   - Construir:
       - articulos-tecnicos/index.md
       - Agente Reactivo, Proactivo y Tool calls: articulos-tecnicos/proactive-reactive-agent-and-tool-calls.md

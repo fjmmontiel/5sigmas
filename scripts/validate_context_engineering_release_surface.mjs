@@ -9,28 +9,28 @@ const outDir = path.resolve('artifacts/visual-review');
 await fs.mkdir(outDir, { recursive: true });
 
 const chapters = [
-  '01-que-es-agent-harness',
-  '02-contexto-workspace-sandboxing-aislamiento',
-  '03-specs-planificacion-task-decomposition-checkpoints',
-  '04-tools-permisos-approvals-hooks-secretos-trust-boundaries',
-  '05-tests-verifiers-review-diffs-stop-conditions-evaluacion',
-  '06-tareas-largas-memoria-subagentes-recuperacion-merge-observabilidad',
+  '01-context-engineering-vs-prompt-engineering',
+  '02-context-budgets-prioritisation-compaction-provenance',
+  '03-memory-architectures-working-episodic-semantic-persistent-state',
+  '04-retrieval-context-assembly-freshness-relevance-conflict-grounding',
+  '05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries',
+  '06-skills-plugins-subagents-hooks-context-isolation-evaluation',
 ];
 const pairs = chapters.map((slug) => ({
-  es: `/series/coding-agents-agent-harnesses/${slug}/`,
-  en: `/en/series/coding-agents-agent-harnesses/${slug}/`,
+  es: `/series/context-engineering-memory-mcp/${slug}/`,
+  en: `/en/series/context-engineering-memory-mcp/${slug}/`,
 }));
 const expectedHub = {
   es: {
     route: '/series/',
     href: pairs[0].es,
-    title: 'Coding agents y agent harnesses',
+    title: 'Context engineering, memoria y MCP',
     meta: '6 capítulos',
   },
   en: {
     route: '/en/series/',
     href: pairs[0].en,
-    title: 'Coding Agents & Agent Harnesses',
+    title: 'Context Engineering, Memory & MCP',
     meta: '6 chapters',
   },
 };
@@ -79,18 +79,18 @@ try {
       const rows = page.locator('.s5-simple-list a.s5-list-row');
       check((await rows.count()) === 11, `${hub.route}: ${viewport.name} expected exactly 11 canonical series rows, got ${await rows.count()}`);
       const target = rows.filter({ has: page.locator(`span.s5-list-row__title:text-is("${hub.title}")`) });
-      check((await target.count()) === 1, `${hub.route}: ${viewport.name} missing unique Coding Agents row ${JSON.stringify(hub.title)}`);
+      check((await target.count()) === 1, `${hub.route}: ${viewport.name} missing unique Context Engineering row ${JSON.stringify(hub.title)}`);
       if (await target.count()) {
-        check(normalizePath(await target.first().getAttribute('href')) === hub.href, `${hub.route}: ${viewport.name} Coding Agents row points to ${JSON.stringify(await target.first().getAttribute('href'))}, expected ${hub.href}`);
+        check(normalizePath(await target.first().getAttribute('href')) === hub.href, `${hub.route}: ${viewport.name} Context Engineering row points to ${JSON.stringify(await target.first().getAttribute('href'))}, expected ${hub.href}`);
         const text = (await target.first().textContent()) || '';
-        check(text.includes(hub.meta), `${hub.route}: ${viewport.name} Coding Agents row missing ${JSON.stringify(hub.meta)}`);
+        check(text.includes(hub.meta), `${hub.route}: ${viewport.name} Context Engineering row missing ${JSON.stringify(hub.meta)}`);
       }
       const htmlLang = (await page.locator('html').getAttribute('lang') || '').toLowerCase();
       check(htmlLang.startsWith(locale), `${hub.route}: ${viewport.name} wrong html lang ${htmlLang}`);
       const overflow = await page.evaluate(() => ({ scrollWidth: document.documentElement.scrollWidth, clientWidth: document.documentElement.clientWidth }));
       check(overflow.scrollWidth <= overflow.clientWidth + 1, `${hub.route}: ${viewport.name} horizontal page overflow ${JSON.stringify(overflow)}`);
       check(badResources.length === 0, `${hub.route}: ${viewport.name} broken same-origin resources ${JSON.stringify(badResources)}`);
-      await page.screenshot({ path: path.join(outDir, `coding-agents-release-hub-${locale}-${viewport.name}.png`), fullPage: true, animations: 'disabled' });
+      await page.screenshot({ path: path.join(outDir, `context-engineering-release-hub-${locale}-${viewport.name}.png`), fullPage: true, animations: 'disabled' });
     }
 
     for (let index = 0; index < pairs.length; index += 1) {
@@ -156,8 +156,8 @@ try {
 }
 
 if (failures.length) {
-  console.error(`Coding Agents release-surface QA failed (${failures.length}):`);
+  console.error(`Context Engineering release-surface QA failed (${failures.length}):`);
   for (const failure of failures) console.error(`- ${failure}`);
   process.exit(1);
 }
-console.log('Coding Agents release-surface QA PASS: ES/EN Series hubs expose the series among 11 canonical rows, all 12 chapter routes load without broken same-origin resources, locale switching and six-chapter reader progression remain exact, and desktop/mobile page geometry is clean.');
+console.log('Context Engineering release-surface QA PASS: ES/EN Series hubs expose the series, all 12 chapter routes load without broken same-origin resources, locale switching and six-chapter reader progression remain exact, and desktop/mobile page geometry is clean.');

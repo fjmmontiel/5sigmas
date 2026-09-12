@@ -1,0 +1,127 @@
+<section class="s5v s5v-context-budget-lineage s5v--wide" aria-label="Cómo una política de contexto prioriza, transforma y conserva provenance bajo un presupuesto finito">
+  <style>
+    .s5v-context-budget-lineage .cb-scroll{overflow-x:auto;overscroll-behavior-inline:contain;padding:.35rem .2rem .8rem;scrollbar-gutter:stable;outline:none}
+    .s5v-context-budget-lineage .cb-scroll:focus-visible{box-shadow:0 0 0 3px color-mix(in srgb,var(--md-accent-fg-color,#7c4dff) 36%,transparent);border-radius:14px}
+    .s5v-context-budget-lineage .cb-stage{width:100%;min-width:0;max-width:1180px;margin:0 auto}
+    .s5v-context-budget-lineage svg{display:block;width:100%;height:auto;overflow:visible}
+    .s5v-context-budget-lineage text{fill:currentColor;font-family:inherit}
+    .s5v-context-budget-lineage .cb-boundary{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 96%,var(--md-accent-fg-color,#7c4dff) 4%);stroke:currentColor;stroke-width:2;stroke-dasharray:8 7;opacity:.9}
+    .s5v-context-budget-lineage .cb-node{fill:var(--md-default-bg-color,#fff);stroke:currentColor;stroke-width:2.4}
+    .s5v-context-budget-lineage .cb-node--strong{stroke-width:3.4}
+    .s5v-context-budget-lineage .cb-derived{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 88%,var(--md-accent-fg-color,#7c4dff) 12%);stroke:currentColor;stroke-width:2.8}
+    .s5v-context-budget-lineage .cb-context{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 93%,var(--md-accent-fg-color,#7c4dff) 7%);stroke:currentColor;stroke-width:3}
+    .s5v-context-budget-lineage .cb-edge{fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#cb-arrow)}
+    .s5v-context-budget-lineage .cb-edge--lineage{stroke-width:2;stroke-dasharray:6 5;opacity:.78;marker-end:url(#cb-arrow-open)}
+    .s5v-context-budget-lineage .cb-edge--invalidate{stroke-width:3.4;stroke-dasharray:4 5}
+    .s5v-context-budget-lineage .cb-label{font-size:16px;font-weight:800;text-anchor:middle}
+    .s5v-context-budget-lineage .cb-sub{font-size:12.5px;text-anchor:middle;opacity:.74}
+    .s5v-context-budget-lineage .cb-kicker{font-size:13px;font-weight:850;letter-spacing:.07em;text-transform:uppercase;opacity:.75}
+    .s5v-context-budget-lineage .cb-budget-title{font-size:10.5px;font-weight:850;letter-spacing:.035em;text-anchor:middle;opacity:.78}
+    .s5v-context-budget-lineage .cb-edge-label{font-size:12.5px;font-weight:750;paint-order:stroke;stroke:var(--md-default-bg-color,#fff);stroke-width:5px;stroke-linejoin:round}
+    .s5v-context-budget-lineage .cb-budget{stroke:currentColor;stroke-width:2;fill:none}
+    .s5v-context-budget-lineage .cb-budget-fill{fill:color-mix(in srgb,var(--md-accent-fg-color,#7c4dff) 16%,transparent)}
+    .s5v-context-budget-lineage .cb-legend{display:flex;gap:1rem;flex-wrap:wrap;margin:.35rem 0 0;font-size:.87rem;opacity:.86}
+    .s5v-context-budget-lineage .cb-legend span{display:inline-flex;gap:.42rem;align-items:center}
+    .s5v-context-budget-lineage .cb-legend i{width:1.5rem;border-top:3px solid currentColor}
+    .s5v-context-budget-lineage .cb-legend .is-lineage i{border-top-width:2px;border-top-style:dashed}
+    .s5v-context-budget-lineage .s5v__copy{margin-top:.85rem}
+    @media (max-width:700px){.s5v-context-budget-lineage .cb-scroll{margin-inline:-.35rem;padding-inline:.35rem}.s5v-context-budget-lineage .cb-stage{width:auto;min-width:1080px}.s5v-context-budget-lineage .cb-legend{font-size:.82rem}}
+  </style>
+  <!-- GOLDEN_VISUAL_CONTRACT
+    learning-objective="Show that a finite context budget forces representational choices, while provenance remains outside the budget as lineage that lets the application verify, rehydrate, or invalidate derived context."
+    mechanism="candidate evidence -> policy constraints/prioritization -> verbatim|extract|compact|reference|drop -> bounded active context; extracted/compacted/reference items retain lineage to source versions; source-version change invalidates dependent derived context."
+    visual-variables="candidate size encodes token pressure; branching encodes distinct reduction operations; the budget envelope encodes finite capacity; dashed backward lineage edges encode derivation; a source-version change crosses the lineage graph to mark derived context stale."
+    why-visual="The key relationship is not a list of context-management techniques. The diagram must show that raw information can stay outside the inference budget while lineage still connects transformed context to its source, and that source changes propagate invalidation."
+    relationship="budget-convergence-and-lineage:candidates->policy->{verbatim|extract|compact|reference|drop}->bounded-context;derived->source-version;source-change->stale"
+    evidence="finite-budget,mandatory-policy,token-cost,structured-extraction,compaction,reference,drop,provenance,source-version,invalidation,rehydration"
+    interaction="static:no-cosmetic-controls"
+    mobile="horizontal-scroll-preserves-budget-branching-lineage-and-invalidation-topology"
+  -->
+  <div class="s5v__canvas">
+    <header class="s5v__head">
+      <div><span class="s5v__kicker">Ejemplo · budget ≠ capacidad máxima</span><h3>Reducir contexto cambia representaciones; provenance mantiene el camino de vuelta</h3></div>
+      <p>Escenario ilustrativo: los tamaños sólo muestran presión relativa sobre un presupuesto finito; no son límites de un proveedor ni resultados de benchmark. La lineage queda fuera del presupuesto activo y permite verificar, rehidratar o invalidar lo transformado.</p>
+    </header>
+    <div class="cb-scroll" tabindex="0" role="region" aria-label="Diagrama desplazable de priorización, transformación, provenance e invalidación">
+      <div class="cb-stage">
+        <svg viewBox="0 0 1160 760" role="img" aria-labelledby="cb-title cb-desc">
+          <title id="cb-title">De un universo candidato a un contexto acotado con lineage verificable</title>
+          <desc id="cb-desc">Escenario ilustrativo. Información candidata con distinto coste converge en una política de selección. El contenido obligatorio entra verbatim; los logs se reducen mediante extracción estructurada; el historial se compacta; documentos grandes permanecen fuera y entran mediante referencia; contenido stale se descarta. El contexto activo queda dentro de un presupuesto finito. Los items derivados conservan provenance hacia una fuente versionada; cuando esa versión cambia, la representación dependiente pasa a stale y debe revalidarse o rehidratarse.</desc>
+          <defs>
+            <marker id="cb-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="currentColor"/></marker>
+            <marker id="cb-arrow-open" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M1,1 L8,3 L1,5" fill="none" stroke="currentColor" stroke-width="1.5"/></marker>
+          </defs>
+
+          <rect data-boundary="candidate-universe" class="cb-boundary" x="24" y="62" width="250" height="560" rx="24"/>
+          <text x="45" y="91" class="cb-kicker">CANDIDATOS · FUERA DEL MODELO</text>
+
+          <g data-source="policy"><rect class="cb-node cb-node--strong" x="50" y="122" width="198" height="62" rx="14"/><text x="149" y="148" class="cb-label">Política · 4k</text><text x="149" y="169" class="cb-sub">obligatoria · autoridad alta</text></g>
+          <g data-source="repo"><rect class="cb-node" x="50" y="210" width="198" height="76" rx="14"/><text x="149" y="239" class="cb-label">Repo · 18k</text><text x="149" y="261" class="cb-sub">files@a1b2c3</text></g>
+          <g data-source="logs"><rect class="cb-node" x="50" y="312" width="198" height="108" rx="14"/><text x="149" y="348" class="cb-label">Logs · 42k</text><text x="149" y="372" class="cb-sub">raw · repetitivos</text><text x="149" y="396" class="cb-sub">alto coste / señal dispersa</text></g>
+          <g data-source="history"><rect class="cb-node" x="50" y="446" width="198" height="88" rx="14"/><text x="149" y="479" class="cb-label">Historial · 35k</text><text x="149" y="502" class="cb-sub">decisiones + conversación</text></g>
+          <g data-source="stale"><rect class="cb-node" x="50" y="558" width="198" height="46" rx="14"/><text x="149" y="586" class="cb-label">Memoria stale · 12k</text></g>
+
+          <g data-node="policy-gate"><path class="cb-derived" d="M318 254 H438 L470 342 L438 430 H318 L350 342 Z"/><text x="393" y="307" class="cb-label">Restricciones</text><text x="393" y="330" class="cb-label">+ prioridad</text><text x="393" y="360" class="cb-sub">scope · trust · version</text><text x="393" y="382" class="cb-sub">utility · coste · budget</text></g>
+          <path data-edge="policy-to-gate" class="cb-edge" d="M248 153 C306 153 318 245 353 284"/>
+          <path data-edge="repo-to-gate" class="cb-edge" d="M248 248 C301 248 316 295 347 316"/>
+          <path data-edge="logs-to-gate" class="cb-edge" d="M248 366 H343"/>
+          <path data-edge="history-to-gate" class="cb-edge" d="M248 490 C303 490 318 423 350 396"/>
+          <path data-edge="stale-to-gate" class="cb-edge" d="M248 581 C308 581 330 457 364 420"/>
+
+          <g data-node="verbatim"><rect class="cb-node cb-node--strong" x="520" y="92" width="150" height="58" rx="14"/><text x="595" y="116" class="cb-label">VERBATIM</text><text x="595" y="136" class="cb-sub">política exacta</text></g>
+          <g data-node="extract"><rect class="cb-derived" x="520" y="184" width="150" height="62" rx="14"/><text x="595" y="209" class="cb-label">EXTRACT</text><text x="595" y="231" class="cb-sub">logs → fallos</text></g>
+          <g data-node="compact"><rect class="cb-derived" x="520" y="278" width="150" height="62" rx="14"/><text x="595" y="303" class="cb-label">COMPACT</text><text x="595" y="325" class="cb-sub">history → summary</text></g>
+          <g data-node="reference"><rect class="cb-derived" x="520" y="372" width="150" height="62" rx="14"/><text x="595" y="397" class="cb-label">REFERENCIA</text><text x="595" y="419" class="cb-sub">pointer + version</text></g>
+          <g data-node="drop"><rect class="cb-node" x="520" y="466" width="150" height="58" rx="14"/><text x="595" y="490" class="cb-label">DROP / DEFER</text><text x="595" y="510" class="cb-sub">no entra ahora</text></g>
+
+          <path data-edge="gate-to-verbatim" class="cb-edge" d="M446 283 C476 217 492 138 513 124"/>
+          <path data-edge="gate-to-extract" class="cb-edge" d="M460 311 C484 274 496 225 513 216"/>
+          <path data-edge="gate-to-compact" class="cb-edge" d="M468 340 C489 327 498 312 513 310"/>
+          <path data-edge="gate-to-reference" class="cb-edge" d="M464 370 C489 378 498 399 513 402"/>
+          <path data-edge="gate-to-drop" class="cb-edge" d="M449 403 C479 437 493 486 513 493"/>
+
+          <rect data-boundary="budget-envelope" class="cb-context" x="716" y="94" width="230" height="454" rx="22"/>
+          <text x="831" y="124" class="cb-budget-title">CONTEXTO ACTIVO · Bdynamic = 60k</text>
+          <rect class="cb-budget-fill" x="744" y="151" width="174" height="55" rx="10"/><rect class="cb-budget" x="744" y="151" width="174" height="55" rx="10"/>
+          <text x="831" y="177" class="cb-label">Política · 4k</text><text x="831" y="196" class="cb-sub">verbatim</text>
+          <rect class="cb-budget-fill" x="744" y="222" width="174" height="93" rx="10"/><rect class="cb-budget" x="744" y="222" width="174" height="93" rx="10"/>
+          <text x="831" y="252" class="cb-label">Repo actual · 18k</text><text x="831" y="276" class="cb-sub">chunks@a1b2c3</text><text x="831" y="298" class="cb-sub">+ pointer al raw</text>
+          <rect class="cb-budget-fill" x="744" y="331" width="174" height="69" rx="10"/><rect class="cb-budget" x="744" y="331" width="174" height="69" rx="10"/>
+          <text x="831" y="359" class="cb-label">Fallos · 6k</text><text x="831" y="382" class="cb-sub">derivados de logs@run17</text>
+          <rect class="cb-budget-fill" x="744" y="416" width="174" height="82" rx="10"/><rect class="cb-budget" x="744" y="416" width="174" height="82" rx="10"/>
+          <text x="831" y="445" class="cb-label">Summary · 9k</text><text x="831" y="469" class="cb-sub">derivado de history@v8</text><text x="831" y="489" class="cb-sub">lossy=true</text>
+          <text x="831" y="529" class="cb-sub">23k quedan libres / reservados</text>
+
+          <path data-edge="verbatim-to-context" class="cb-edge" d="M670 121 C702 128 716 168 736 178"/>
+          <path data-edge="extract-to-context" class="cb-edge" d="M670 215 C710 238 705 348 736 364"/>
+          <path data-edge="compact-to-context" class="cb-edge" d="M670 309 C714 344 706 439 736 455"/>
+          <path data-edge="reference-to-context" class="cb-edge" d="M670 403 C708 367 711 284 736 270"/>
+
+          <g data-node="model"><circle class="cb-node cb-node--strong" cx="1062" cy="320" r="67"/><text x="1062" y="307" class="cb-label">Modelo</text><text x="1062" y="331" class="cb-sub">ve Cₜ</text><text x="1062" y="351" class="cb-sub">no ve el raw</text><text x="1062" y="369" class="cb-sub">excluido</text></g>
+          <path data-edge="context-to-model" class="cb-edge" d="M946 320 H987"/>
+
+          <rect data-boundary="provenance-plane" class="cb-boundary" x="304" y="634" width="832" height="102" rx="20"/>
+          <text x="326" y="660" class="cb-kicker">PROVENANCE / LINEAGE · NO NECESITA OCUPAR Cₜ COMPLETO</text>
+          <g data-source-version="logs-run17"><rect class="cb-node" x="344" y="678" width="180" height="40" rx="11"/><text x="434" y="703" class="cb-label">logs@run17 · raw</text></g>
+          <g data-source-version="history-v8"><rect class="cb-node" x="565" y="678" width="180" height="40" rx="11"/><text x="655" y="703" class="cb-label">history@v8 · raw</text></g>
+          <g data-source-version="repo-a1b2c3"><rect class="cb-node" x="786" y="678" width="180" height="40" rx="11"/><text x="876" y="703" class="cb-label">repo@a1b2c3</text></g>
+          <g data-node="repo-new-version"><rect class="cb-derived" x="997" y="678" width="116" height="40" rx="11"/><text x="1055" y="703" class="cb-label">d4e5f6</text></g>
+
+          <path data-edge="logs-lineage" class="cb-edge cb-edge--lineage" d="M795 400 C751 573 562 594 440 672"/>
+          <path data-edge="history-lineage" class="cb-edge cb-edge--lineage" d="M846 498 C825 589 735 623 665 672"/>
+          <path data-edge="repo-lineage" class="cb-edge cb-edge--lineage" d="M843 314 C878 493 878 579 877 672"/>
+          <path data-edge="source-version-change" class="cb-edge cb-edge--invalidate" d="M966 698 H990"/>
+          <path data-edge="invalidate-derived-context" class="cb-edge cb-edge--invalidate" d="M1055 678 C1054 592 938 573 874 497"/>
+          <text x="1034" y="575" class="cb-edge-label" text-anchor="middle">HEAD cambia → STALE</text>
+          <text x="688" y="620" class="cb-edge-label" text-anchor="middle">derived_from · version · transform · rehydrate</text>
+        </svg>
+      </div>
+    </div>
+    <div class="cb-legend" aria-label="Leyenda del diagrama">
+      <span><i></i> flujo hacia el contexto activo</span>
+      <span class="is-lineage"><i></i> lineage hacia la fuente</span>
+      <span>capacidad visual = presupuesto, no importancia</span>
+    </div>
+    <p class="s5v__copy"><strong>La reducción de tokens nunca es gratis.</strong> Si una pieza entra extraída, resumida o como referencia, la aplicación necesita conservar fuera de la ventana qué fuente y versión la originaron. Esa lineage permite volver al raw y evita tratar evidencia derivada de un estado antiguo como si certificara el estado actual.</p>
+  </div>
+</section>

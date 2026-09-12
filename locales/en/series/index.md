@@ -80,6 +80,12 @@ hide:
       <span class="s5-list-row__desc">Context, isolation, task contracts, permissions, verification and durable state for agents that modify software repositories.</span>
       <span class="s5-list-row__meta">6 chapters</span>
     </a>
+    <a class="s5-list-row" href="/en/series/context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineering/">
+      <span class="s5-list-row__n">11</span>
+      <span class="s5-list-row__title">Context Engineering, Memory & MCP</span>
+      <span class="s5-list-row__desc">How to assemble context, manage budgets and memory, retrieve evidence, integrate MCP, and isolate extensions and subagents.</span>
+      <span class="s5-list-row__meta">6 chapters</span>
+    </a>
   </nav>
 </section>
 

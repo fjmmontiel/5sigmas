@@ -1,0 +1,149 @@
+name: Context Engineering release QA
+
+on:
+  pull_request:
+    paths:
+      - 'docs/series/index.md'
+      - 'locales/en/series/index.md'
+      - 'docs/series/context-engineering-memory-mcp/**'
+      - 'locales/en/series/context-engineering-memory-mcp/**'
+      - 'docs/snippets/articulos-tecnicos/context-*.html'
+      - 'locales/en/snippets/articulos-tecnicos/context-*'
+      - 'scripts/validate_context_engineering_ch*.mjs'
+      - 'scripts/validate_context_engineering_release_surface.mjs'
+      - '.github/workflows/context-engineering-live-qa.yml'
+  workflow_run:
+    workflows: ['Deploy MkDocs to GitHub Pages']
+    types: [completed]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: context-engineering-release-${{ github.event_name }}-${{ github.event.pull_request.number || github.event.workflow_run.head_sha || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  preview-gate:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Build Spanish strictly
+        run: mkdocs build --clean --strict
+
+      - name: Prepare English locale
+        run: python scripts/prepare_locale.py --locale en
+
+      - name: Audit English locale sources
+        run: python scripts/audit_locale.py --locale en
+
+      - name: Build English strictly
+        env:
+          S5_LOCALE: en
+        run: mkdocs build -f mkdocs.en.yml --clean --strict
+
+      - name: Audit rendered English locale
+        run: python scripts/audit_locale.py --locale en --site site/en
+
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Serve combined preview
+        run: |
+          python -m http.server 8000 --directory site > /tmp/5sigmas-preview.log 2>&1 &
+          echo $! > /tmp/5sigmas-preview.pid
+          for attempt in {1..30}; do
+            curl --fail --silent http://127.0.0.1:8000/series/ > /dev/null \
+              && curl --fail --silent http://127.0.0.1:8000/en/series/ > /dev/null \
+              && exit 0
+            sleep 1
+          done
+          cat /tmp/5sigmas-preview.log
+          exit 1
+
+      - name: Validate Context Engineering release surface
+        run: node scripts/validate_context_engineering_release_surface.mjs
+
+      - name: Revalidate Context Engineering relationship geometry and accessibility
+        run: |
+          node scripts/validate_context_engineering_ch1_accessibility.mjs
+          node scripts/validate_context_engineering_ch2_accessibility.mjs
+          node scripts/validate_context_engineering_ch3_accessibility.mjs
+          node scripts/validate_context_engineering_ch4_accessibility.mjs
+          node scripts/validate_context_engineering_ch5_accessibility.mjs
+          node scripts/validate_context_engineering_ch6_accessibility.mjs
+
+      - name: Upload repair evidence on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: context-engineering-release-repair-evidence
+          path: artifacts/visual-review/context-*.png
+          if-no-files-found: warn
+          retention-days: 1
+
+  live-gate:
+    if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Wait for Context Engineering production hub entry
+        run: |
+          for attempt in {1..24}; do
+            es="$(curl --fail --silent --show-error --location https://5sigmas.com/series/ || true)"
+            en="$(curl --fail --silent --show-error --location https://5sigmas.com/en/series/ || true)"
+            if grep -q 'Context engineering, memoria y MCP' <<< "$es" \
+              && grep -q 'Context Engineering, Memory &amp; MCP\|Context Engineering, Memory & MCP' <<< "$en"; then
+              echo 'Context Engineering series hub entry is live in ES and EN.'
+              exit 0
+            fi
+            sleep 5
+          done
+          echo 'Context Engineering production hub entry did not become ready within the validation window.'
+          exit 1
+
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Validate live Context Engineering release surface
+        env:
+          S5_PREVIEW_BASE: https://5sigmas.com
+        run: node scripts/validate_context_engineering_release_surface.mjs
+
+      - name: Upload live evidence on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: context-engineering-live-release-evidence
+          path: artifacts/visual-review/context-engineering-release-hub-*.png
+          if-no-files-found: warn
+          retention-days: 1

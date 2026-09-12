@@ -259,8 +259,41 @@ jobs:
       - name: Validate Coding Agents chapter 4 source contract
         run: node scripts/validate_coding_agent_harness_ch4_source.mjs
 
-      - name: Validate Coding Agents chapter 4 accessibility and responsive states
-        run: node scripts/validate_coding_agent_harness_ch4_accessibility.mjs
+      - name: Validate Context Engineering chapter 1 source contract
+        run: node scripts/validate_context_engineering_ch1_source.mjs
+
+      - name: Validate Context Engineering chapter 1 accessibility and responsive states
+        run: node scripts/validate_context_engineering_ch1_accessibility.mjs
+
+      - name: Validate Context Engineering chapter 2 source contract
+        run: node scripts/validate_context_engineering_ch2_source.mjs
+
+      - name: Validate Context Engineering chapter 2 accessibility and responsive states
+        run: node scripts/validate_context_engineering_ch2_accessibility.mjs
+
+      - name: Validate Context Engineering chapter 3 source contract
+        run: node scripts/validate_context_engineering_ch3_source.mjs
+
+      - name: Validate Context Engineering chapter 3 accessibility and responsive states
+        run: node scripts/validate_context_engineering_ch3_accessibility.mjs
+
+      - name: Validate Context Engineering chapter 4 source contract
+        run: node scripts/validate_context_engineering_ch4_source.mjs
+
+      - name: Validate Context Engineering chapter 4 accessibility and responsive states
+        run: node scripts/validate_context_engineering_ch4_accessibility.mjs
+
+      - name: Validate Context Engineering chapter 5 source contract
+        run: node scripts/validate_context_engineering_ch5_source.mjs
+
+      - name: Validate Context Engineering chapter 5 accessibility and responsive states
+        run: node scripts/validate_context_engineering_ch5_accessibility.mjs
+
+      - name: Validate Context Engineering chapter 6 source contract
+        run: node scripts/validate_context_engineering_ch6_source.mjs
+
+      - name: Validate Context Engineering chapter 6 accessibility and responsive states
+        run: node scripts/validate_context_engineering_ch6_accessibility.mjs
 
       - name: Validate complete video experience lifecycle
         run: node scripts/validate_video_experience_v2.mjs
