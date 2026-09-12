@@ -1,4 +1,5 @@
 name: Inference Engineering 4.6 GOLDEN certification v2
+# certification-revision: response-label-fit
 
 on:
   push:
