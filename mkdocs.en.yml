@@ -204,6 +204,7 @@ nav:
           - "Memory architectures: working, episodic, semantic, and persistent state": series/context-engineering-memory-mcp/03-memory-architectures-working-episodic-semantic-persistent-state.md
           - Retrieval and context assembly: series/context-engineering-memory-mcp/04-retrieval-context-assembly-freshness-relevance-conflict-grounding.md
           - MCP hosts, clients, servers, tools, resources, prompts, lifecycle, and trust boundaries: series/context-engineering-memory-mcp/05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries.md
+          - Skills, plugins, subagents, and hooks: series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation.md
   - Concepts:
       - Concepts: temas/index.md
       - What is an LLM?: temas/llms.md

@@ -158,6 +158,7 @@ nav:
           - "Arquitecturas de memoria: working, episodic, semantic y estado persistente": series/context-engineering-memory-mcp/03-memory-architectures-working-episodic-semantic-persistent-state.md
           - Retrieval y ensamblado de contexto: series/context-engineering-memory-mcp/04-retrieval-context-assembly-freshness-relevance-conflict-grounding.md
           - "MCP: hosts, clients, servers, tools, resources, prompts, ciclo de vida y fronteras de confianza": series/context-engineering-memory-mcp/05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries.md
+          - Skills, plugins, subagentes y hooks: series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation.md
   - Construir:
       - articulos-tecnicos/index.md
       - Agente Reactivo, Proactivo y Tool calls: articulos-tecnicos/proactive-reactive-agent-and-tool-calls.md

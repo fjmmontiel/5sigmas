@@ -127,7 +127,7 @@ The distribution boundary does not replace the identity boundary.
 
 Subagents are useful for reducing task interference, specializing instructions, or running work in parallel. But “another agent” does not automatically mean “another sandbox.”
 
-Claude Code makes that explicit. A subagent can configure its model, tools, skills, memory, and `isolation`. If `tools` is omitted, the subagent **inherits every tool available to subagents**. Repository isolation through a worktree only appears when `isolation: worktree` is configured.[^claude-subagents]
+Claude Code makes that explicit. A subagent can configure its model, tools, skills, memory, and `isolation`. If `tools` is omitted, the subagent **inherits all tools available to subagents**. Repository isolation through a worktree only appears when `isolation: worktree` is configured.[^claude-subagents]
 
 That yields an important invariant:
 
@@ -302,11 +302,11 @@ If a specialist returns only:
 
 the parent does not know:
 
-- which repository version was inspected;
-- which tests ran;
-- which sources were read;
-- which warnings were ignored;
-- whether the child workspace diverged;
+- which repository version was inspected.
+- which tests ran.
+- which sources were read.
+- which warnings were ignored.
+- whether the child workspace diverged.
 - which side effects occurred.
 
 A useful return envelope should be structured:
@@ -388,19 +388,19 @@ Evaluation needs two independent questions.
 
 ### Was delegation correct?
 
-- the right specialist was selected;
-- the delegation envelope was sufficient;
-- duplicate work was avoided;
-- handback happened when authority was missing;
+- the right specialist was selected.
+- the delegation envelope was sufficient.
+- duplicate work was avoided.
+- handback happened when authority was missing.
 - the child returned usable evidence.
 
 ### Was isolation real?
 
-- forbidden history was not forwarded;
-- tools outside the allowlist were not visible;
-- paths outside the workspace were not readable;
-- unnecessary secrets were not exposed;
-- forbidden network destinations were unreachable;
+- forbidden history was not forwarded.
+- tools outside the allowlist were not visible.
+- paths outside the workspace were not readable.
+- unnecessary secrets were not exposed.
+- forbidden network destinations were unreachable.
 - persistent memory was not written outside scope.
 
 Do not collapse both into one `task_success` metric.
@@ -479,11 +479,11 @@ The safe flow is closer to:
 
 Each primitive has a distinct role:
 
-- the **skill** supplies procedure;
-- the **plugin** distributes components;
-- the **subagent** separates work and model context;
-- the **hook** fixes a deterministic lifecycle transition;
-- the **integration** owns the external side effect;
+- the **skill** supplies procedure.
+- the **plugin** distributes components.
+- the **subagent** separates work and model context.
+- the **hook** fixes a deterministic lifecycle transition.
+- the **integration** owns the external side effect.
 - **policy** decides which authority may cross each boundary.
 
 None of them substitutes for the others.
