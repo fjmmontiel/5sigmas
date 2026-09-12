@@ -1,6 +1,6 @@
 ---
-title: "Cuantización, paralelismo y trade-offs de memoria, rendimiento y calidad"
-description: "Qué cambia realmente al cuantizar pesos, activaciones o KV cache, y cómo TP, PP, DP, EP y CP cambian placement, comunicación, memoria por rank y failure domains."
+title: "Cuantización, paralelismo y compromisos de memoria, rendimiento y calidad"
+description: "Qué cambia realmente al cuantizar pesos, activaciones o KV cache, y cómo TP, PP, DP, EP y CP cambian la distribución, la comunicación, la memoria por rank y los dominios de fallo."
 date: 2026-09-12
 date_modified: 2026-09-12
 keywords: "LLM quantization, tensor parallelism, pipeline parallelism, expert parallelism, context parallelism, FP8, INT4, AWQ, GPTQ"
@@ -12,7 +12,7 @@ tags:
   - GPUs
 ---
 
-# Capítulo 3 — Cuantización, paralelismo y trade-offs de memoria, rendimiento y calidad
+# Capítulo 3 — Cuantización, paralelismo y compromisos de memoria, rendimiento y calidad
 
 Los dos capítulos anteriores separaron el tiempo de **prefill/decode** y el presupuesto de **KV cache**. Ahora aparecen dos palancas que suelen resumirse demasiado:
 
@@ -50,7 +50,7 @@ Por tanto, una frase como «modelo INT4» es insuficiente para reproducir un res
 - granularidad de las escalas;
 - método y datos de calibración si existen;
 - módulos mantenidos en mayor precisión;
-- formato de packing/layout;
+- formato de empaquetado/layout;
 - kernels realmente seleccionados por el runtime;
 - hardware y versión del runtime.
 
@@ -84,11 +84,11 @@ TensorRT-LLM distingue explícitamente, entre otras, escalas per-channel, per-to
 
 En `W4A16`, por ejemplo, los pesos se almacenan con menos bits mientras las activaciones conservan una precisión mayor.
 
-Esto reduce con claridad el **payload de pesos**. Puede ser especialmente útil cuando mover pesos domina la ejecución, pero el efecto de latencia depende de que exista un kernel eficiente para el formato y del coste de dequant/packing.
+Esto reduce con claridad el **carga útil de pesos**. Puede ser especialmente útil cuando mover pesos domina la ejecución, pero el efecto de latencia depende de que exista un kernel eficiente para el formato y del coste de descuantización/empaquetado.
 
-GPTQ es un método de post-training quantization weight-only basado en información aproximada de segundo orden.[^gptq] AWQ también es weight-only, pero usa estadísticas de activación para identificar/proteger canales salientes mediante escalado.[^awq]
+GPTQ es un método de cuantización posentrenamiento sólo de pesos basado en información aproximada de segundo orden.[^gptq] AWQ también es weight-only, pero usa estadísticas de activación para identificar/proteger canales salientes mediante escalado.[^awq]
 
-Las cifras de velocidad publicadas en esos papers pertenecen a sus modelos, kernels, GPUs y baselines. No son un multiplicador transferible a cualquier deployment de 2026.
+Las cifras de velocidad publicadas en esos artículos pertenecen a sus modelos, kernels, GPUs y referencias de comparación. No son un multiplicador transferible a cualquier despliegue de 2026.
 
 ### Weight + activation
 
@@ -121,7 +121,7 @@ TTFT / TPOT / throughput
 max live tokens / concurrency
 ```
 
-## El ahorro ideal de payload es fácil; el footprint real no
+## El ahorro ideal de carga útil es fácil; la huella real no
 
 Para `N_w` pesos representados con `b_w` bits, el payload ideal es:
 
@@ -159,15 +159,15 @@ En 4 bits, el payload ideal sería:
 70\times10^9\cdot0.5\text{ bytes}=35\text{ GB}=32.6\text{ GiB}
 \]
 
-Eso es una reducción de **payload**, no una afirmación de que un proceso real consumirá exactamente 35 GB ni de que será 4× más rápido.
+Eso es una reducción de **carga útil**, no una afirmación de que un proceso real consumirá exactamente 35 GB ni de que será 4× más rápido.
 
-Si esos pesos cuantizados pudieran fragmentarse perfectamente entre cuatro ranks de tensor parallel, el payload ideal medio sería:
+Si esos pesos cuantizados pudieran fragmentarse perfectamente entre cuatro ranks de tensor parallel, la carga útil ideal media sería:
 
 \[
 35\text{ GB}/4=8.75\text{ GB por rank}
 \]
 
-Pero el footprint real por rank incluirá escalas, tensores replicados, buffers, KV cache y cualquier parte del modelo que no siga ese sharding. **Cuantización y paralelismo pueden reducir componentes distintos del presupuesto; no convierten automáticamente toda la VRAM en `payload / bits / GPUs`.**
+Pero el footprint real por rank incluirá escalas, tensores replicados, buffers, KV cache y cualquier parte del modelo que no siga ese sharding. **Cuantización y paralelismo pueden reducir componentes distintos del presupuesto; no convierten automáticamente toda la VRAM en `carga útil / bits / GPUs`.**
 
 ## La calidad no se deduce del nombre del esquema
 
@@ -196,7 +196,7 @@ paired outputs when possible
 
 Y debe incluir tareas que representen la producción real. Perplexity por sí sola puede detectar degradación de lenguaje, pero no sustituye evals de código, matemáticas, extracción estructurada, tool use o long-context si esas son las cargas de trabajo relevantes.
 
-## Paralelizar significa decidir placement
+## Paralelizar significa decidir dónde vive cada parte
 
 Cuando una GPU no puede alojar el modelo o no alcanza el SLO, podemos distribuir el trabajo. Pero «multi-GPU» no describe **qué dimensión** se distribuye.
 
@@ -323,7 +323,7 @@ porque es falso en general.
 
 La forma correcta es construir un **inventario por tensor/estado** y preguntar para cada elemento si está replicado, sharded o ausente en ese rank.
 
-## El interconnect forma parte del modelo de rendimiento
+## La interconexión forma parte del modelo de rendimiento
 
 Una comparación multi-GPU que sólo enumera «8×H100» está incompleta.
 
@@ -374,11 +374,11 @@ Por eso la optimización correcta empieza por el cuello observado:
 
 Son hipótesis que deben verificarse, no recetas universales.
 
-## Failure domains: una petición distribuida depende de más componentes
+## Dominios de fallo: una petición distribuida depende de más componentes
 
 Si una petición necesita cuatro ranks TP para cada capa, perder uno de esos ranks rompe ese grupo de ejecución. Lo mismo ocurre cuando una etapa PP necesaria no está disponible.
 
-Esto no significa que «multi-GPU sea menos fiable» de forma universal. Significa que el **failure domain de una petición** cambia con el placement.
+Esto no significa que «multi-GPU sea menos fiable» de forma universal. Significa que el **dominio de fallo de una petición** cambia con el placement.
 
 Hay que definir:
 
@@ -450,7 +450,7 @@ Para comparar dos configuraciones hay que fijar o reportar:
 - quantization recipe completa;
 - calibration dataset y seed si aplica;
 - GPU y driver/CUDA;
-- interconnect/topología;
+- interconexión/topología;
 - TP/PP/DP/EP/CP;
 - scheduler/batching;
 - KV dtype;

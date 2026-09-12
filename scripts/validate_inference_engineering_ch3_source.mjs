@@ -12,7 +12,7 @@ const [es, en, snippet, mirror, i18nRaw, mkdocsEs, mkdocsEn, manifestEn, prVisua
   fs.readFile(path.resolve('mkdocs.yml'), 'utf8'),
   fs.readFile(path.resolve('mkdocs.en.yml'), 'utf8'),
   fs.readFile(path.resolve('locales/en/manifest.yml'), 'utf8'),
-  fs.readFile(path.resolve('.github/workflows/pr-visual-review.yml'), 'utf8'),
+  fs.readFile(path.resolve('.github/workflows/series4-golden-review.yml'), 'utf8'),
 ]);
 
 const i18n = JSON.parse(i18nRaw);
@@ -25,8 +25,8 @@ check(mkdocsEs.includes(`Cuantización, paralelismo y trade-offs de memoria/cali
 check(mkdocsEn.includes(`Quantization, parallelism and memory/quality trade-offs: ${route}`) || mkdocsEn.includes(`Quantization, parallelism, and memory/performance/quality trade-offs: ${route}`), 'EN: Series 4 / chapter 4.3 navigation missing');
 check(manifestEn.includes(`  - ${route}`), 'EN: chapter 4.3 missing from published_routes manifest');
 check(manifestEn.includes(`  - ${visualPath}`), 'EN: chapter 4.3 visual missing from required_snippets manifest');
-check(prVisual.includes('node scripts/validate_inference_engineering_ch3_source.mjs'), 'CI: chapter 4.3 source gate missing from PR visual review');
-check(prVisual.includes('node scripts/validate_inference_engineering_ch3_accessibility.mjs'), 'CI: chapter 4.3 browser/accessibility gate missing from PR visual review');
+check(prVisual.includes('node scripts/validate_inference_engineering_ch3_source.mjs'), 'CI: chapter 4.3 source gate missing from permanent Series 4 review');
+check(prVisual.includes('node scripts/validate_inference_engineering_ch3_accessibility.mjs'), 'CI: chapter 4.3 browser/accessibility gate missing from permanent Series 4 review');
 
 const primaryUrls = [
   'https://nvidia.github.io/TensorRT-LLM/features/quantization.html',
@@ -49,18 +49,18 @@ const esAnchors = [
   'La operación básica introduce error de representación',
   'Weight-only y weight+activation atacan cuellos distintos',
   'El KV cache es una tercera decisión de precisión',
-  'El ahorro ideal de payload es fácil; el footprint real no',
+  'El ahorro ideal de carga útil es fácil; la huella real no',
   'La calidad no se deduce del nombre del esquema',
-  'Paralelizar significa decidir placement',
+  'Paralelizar significa decidir dónde vive cada parte',
   'Data parallel: escala peticiones, no una petición por arte de magia',
   'Tensor parallel: menos tensor por rank, más comunicación dentro de la capa',
   'Pipeline parallel: menos capas por rank, pero la petición atraviesa etapas',
   'Expert parallel: sólo tiene sentido si existen expertos',
   'Context parallel: fragmentar secuencia no fragmenta automáticamente pesos',
   'Las estrategias se componen, pero no con una fórmula universal de memoria',
-  'El interconnect forma parte del modelo de rendimiento',
+  'La interconexión forma parte del modelo de rendimiento',
   'Cuantización y paralelismo interactúan',
-  'Failure domains: una petición distribuida depende de más componentes',
+  'Dominios de fallo: una petición distribuida depende de más componentes',
   'Contrato para benchmarks reproducibles',
   'Evals deterministas antes del benchmark',
 ];
