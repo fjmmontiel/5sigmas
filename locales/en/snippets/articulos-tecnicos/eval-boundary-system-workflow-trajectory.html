@@ -1,0 +1,107 @@
+<section class="s5v s5v-eval-boundary s5v--wide" aria-label="Relación entre frontera de evaluación, workflow, trayectoria y outcome">
+  <style>
+    .s5v-eval-boundary{scroll-margin-top:84px}
+    .s5v-eval-boundary .s5v-eval-boundary__scroll{overflow-x:auto;overscroll-behavior-inline:contain;padding:.35rem .2rem .8rem;scrollbar-gutter:stable;outline:none}
+    .s5v-eval-boundary .s5v-eval-boundary__scroll:focus-visible{box-shadow:0 0 0 3px color-mix(in srgb,var(--md-accent-fg-color,#7c4dff) 36%,transparent);border-radius:14px}
+    .s5v-eval-boundary .s5v-eval-boundary__stage{width:100%;min-width:0;max-width:1240px;margin:0 auto}
+    .s5v-eval-boundary svg{display:block;width:100%;height:auto;overflow:visible}
+    .s5v-eval-boundary text{fill:currentColor;font-family:inherit}
+    .s5v-eval-boundary .eb-boundary{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 96%,var(--md-accent-fg-color,#7c4dff) 4%);stroke:currentColor;stroke-width:2;stroke-dasharray:8 8;opacity:.94}
+    .s5v-eval-boundary .eb-boundary--inner{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 98%,currentColor 2%);stroke-dasharray:5 5}
+    .s5v-eval-boundary .eb-node{fill:var(--md-default-bg-color,#fff);stroke:currentColor;stroke-width:2.2}
+    .s5v-eval-boundary .eb-node--major{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 87%,var(--md-accent-fg-color,#7c4dff) 13%);stroke-width:3}
+    .s5v-eval-boundary .eb-node--evidence{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 94%,currentColor 6%);stroke-dasharray:4 3}
+    .s5v-eval-boundary .eb-edge{fill:none;stroke:currentColor;stroke-width:2.7;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#eb-arrow)}
+    .s5v-eval-boundary .eb-edge--trajectory{stroke-width:4}
+    .s5v-eval-boundary .eb-edge--diagnose{stroke-dasharray:7 5}
+    .s5v-eval-boundary .eb-edge--confirm{stroke-dasharray:3 5}
+    .s5v-eval-boundary .eb-label{font-size:13.5px;font-weight:820;text-anchor:middle}
+    .s5v-eval-boundary .eb-sub{font-size:10.9px;text-anchor:middle;opacity:.82}
+    .s5v-eval-boundary .eb-small{font-size:10.2px;font-weight:720;text-anchor:middle;opacity:.83}
+    .s5v-eval-boundary .eb-kicker{font-size:12.2px;font-weight:850;letter-spacing:.07em;text-transform:uppercase;opacity:.74}
+    .s5v-eval-boundary .eb-edge-label{font-size:10.5px;font-weight:760;paint-order:stroke;stroke:var(--md-default-bg-color,#fff);stroke-width:5px;stroke-linejoin:round;text-anchor:middle}
+    .s5v-eval-boundary .eb-brace{fill:none;stroke:currentColor;stroke-width:2.1;stroke-dasharray:6 5}
+    .s5v-eval-boundary .s5v-eval-boundary__legend{display:flex;gap:1rem;flex-wrap:wrap;margin:.3rem 0 0;font-size:.88rem;opacity:.86}
+    .s5v-eval-boundary .s5v-eval-boundary__legend span{display:inline-flex;gap:.42rem;align-items:center}
+    .s5v-eval-boundary .s5v-eval-boundary__legend i{width:1.55rem;border-top:3px solid currentColor}
+    .s5v-eval-boundary .s5v-eval-boundary__legend .is-boundary i{border-top-style:dashed;border-top-width:2px}
+    .s5v-eval-boundary .s5v-eval-boundary__legend .is-diagnostic i{border-top-style:dashed}
+    .s5v-eval-boundary .s5v__copy{margin-top:.85rem}
+    @media (max-width:700px){.s5v-eval-boundary{scroll-margin-top:72px}.s5v-eval-boundary .s5v-eval-boundary__scroll{margin-inline:-.35rem;padding-inline:.35rem}.s5v-eval-boundary .s5v-eval-boundary__stage{width:auto;min-width:1180px}.s5v-eval-boundary .s5v-eval-boundary__legend{font-size:.82rem}}
+    @media (prefers-reduced-motion:reduce){.s5v-eval-boundary *{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+  </style>
+  <!-- GOLDEN_VISUAL_CONTRACT
+    learning-objective="Show that model, component, workflow, trajectory and system are different evaluation objects: the workflow is a policy inside the system, a trajectory is one realized path through it, and wider boundaries increase product validity while reducing causal attribution."
+    mechanism="change/risk -> choose narrowest boundary containing the mechanism -> execute task/environment through system boundary -> workflow policy selects components/model/tools -> one realized trajectory produces outcome/state; local evals diagnose model/component/workflow behavior while system eval confirms product utility; trajectory evidence explains the path but does not replace outcome."
+    visual-variables="nested dashed boundaries encode model/component/workflow/system scope; a single thick path crossing selected nodes encodes one realized trajectory; outcome sits outside the policy graph as final evidence; lower inward/outward arrows encode diagnose-narrow versus confirm-broad without implying a universal scalar ranking."
+    why-visual="The chapter's main failure mode is treating evaluation levels as interchangeable. Spatial containment and the realized path make the distinction between policy, execution record, outcome and system boundary explicit."
+    relationship="change->diagnostic-boundary;system>{workflow>{components>{model,tools}},environment};workflow-policy->realized-trajectory->outcome;trajectory+outcome->evidence;diagnose->narrower-boundary;confirm->broader-boundary"
+    evidence="model,component,workflow,trajectory,system,task,environment,outcome,state,grader,paired-comparison"
+    interaction="static:no-cosmetic-controls"
+    mobile="horizontal-scroll-preserves-nested-boundaries-trajectory-outcome-and-diagnostic-confirmation-arrows"
+  -->
+  <div class="s5v__canvas">
+    <header class="s5v__head">
+      <div><span class="s5v__kicker">Primero fija la frontera</span><h3>Diagnostica en la capa del cambio; confirma donde vive el riesgo real</h3></div>
+      <p>El workflow es una política dentro del sistema. La trayectoria es una ejecución concreta de esa política. El outcome es el estado o resultado que finalmente importa. Una eval útil deja claro cuál de esas fronteras está midiendo.</p>
+    </header>
+    <div class="s5v-eval-boundary__scroll" tabindex="0" role="region" aria-label="Diagrama desplazable de fronteras de evaluación en un sistema de IA">
+      <div class="s5v-eval-boundary__stage">
+        <svg viewBox="0 0 1240 980" role="img" aria-labelledby="eb-title eb-desc">
+          <title id="eb-title">Fronteras de evaluación desde modelo hasta sistema</title>
+          <desc id="eb-desc">Una hipótesis entra por la izquierda y selecciona la frontera diagnóstica más estrecha. Dentro de una frontera de sistema aparece un workflow, componentes, modelo, tools y entorno. Una línea gruesa representa una trayectoria concreta que atraviesa sólo algunos nodos y termina en un outcome y estado final. En la parte inferior una flecha hacia dentro indica diagnosticar en fronteras estrechas y otra hacia fuera indica confirmar el cambio en la frontera del producto.</desc>
+          <defs><marker id="eb-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="currentColor"/></marker></defs>
+
+          <text x="32" y="46" class="eb-kicker">1 · HIPÓTESIS Y FRONTERA DIAGNÓSTICA</text>
+          <g data-node="change"><rect class="eb-node eb-node--major" x="38" y="78" width="186" height="104" rx="18"/><text x="131" y="108" class="eb-label">Cambio o riesgo</text><text x="131" y="135" class="eb-sub">modelo · retriever · policy</text><text x="131" y="158" class="eb-sub">tool · estado · SLO</text></g>
+          <g data-node="question"><rect class="eb-node" x="276" y="78" width="226" height="104" rx="18"/><text x="389" y="108" class="eb-label">¿Dónde aparece el mecanismo?</text><text x="389" y="135" class="eb-sub">elige la frontera más estrecha</text><text x="389" y="158" class="eb-small">que todavía observa el efecto</text></g>
+          <path class="eb-edge" d="M224 130 H276"/>
+
+          <rect data-boundary="system" class="eb-boundary" x="544" y="60" width="650" height="565" rx="28"/>
+          <text x="570" y="90" class="eb-kicker">SYSTEM EVAL · FRONTERA DEL PRODUCTO</text>
+
+          <g data-node="task"><rect class="eb-node" x="570" y="118" width="142" height="78" rx="15"/><text x="641" y="147" class="eb-label">Task + input</text><text x="641" y="173" class="eb-sub">caso y criterios</text></g>
+          <g data-node="environment"><rect class="eb-node eb-node--evidence" x="570" y="494" width="206" height="82" rx="15"/><text x="673" y="524" class="eb-label">Environment</text><text x="673" y="548" class="eb-sub">tools · data · permissions</text><text x="673" y="568" class="eb-small">estado inicial + dependencias</text></g>
+
+          <rect data-boundary="workflow" class="eb-boundary eb-boundary--inner" x="746" y="112" width="418" height="352" rx="24"/>
+          <text x="770" y="142" class="eb-kicker">WORKFLOW EVAL · POLÍTICA / ORQUESTACIÓN</text>
+
+          <rect data-boundary="component" class="eb-boundary eb-boundary--inner" x="774" y="172" width="348" height="224" rx="20"/>
+          <text x="796" y="200" class="eb-kicker">COMPONENT EVAL</text>
+
+          <g data-node="retriever"><rect class="eb-node" x="794" y="224" width="128" height="72" rx="14"/><text x="858" y="252" class="eb-label">Retriever</text><text x="858" y="276" class="eb-sub">query → evidence</text></g>
+          <g data-node="model"><rect class="eb-node eb-node--major" x="958" y="216" width="136" height="88" rx="15"/><text x="1026" y="246" class="eb-label">Model</text><text x="1026" y="271" class="eb-sub">prompt/context → output</text><text x="1026" y="292" class="eb-small">MODEL EVAL</text></g>
+          <g data-node="guardrail"><rect class="eb-node" x="794" y="322" width="128" height="56" rx="13"/><text x="858" y="355" class="eb-label">Guardrail</text></g>
+          <g data-node="tools"><rect class="eb-node" x="958" y="322" width="136" height="56" rx="13"/><text x="1026" y="347" class="eb-label">Tool adapter</text><text x="1026" y="367" class="eb-sub">call ↔ result</text></g>
+
+          <g data-node="policy"><rect class="eb-node" x="808" y="414" width="292" height="34" rx="12"/><text x="954" y="436" class="eb-small">π: branch · retry · escalate · stop</text></g>
+
+          <path class="eb-edge eb-edge--trajectory" data-path="trajectory" d="M712 157 H794 C828 157 829 260 858 260 H958 C1000 260 988 350 1026 350 H1118 C1142 350 1148 412 1148 486"/>
+          <text x="944" y="166" class="eb-edge-label">τ · trayectoria realizada en este trial</text>
+
+          <g data-node="outcome"><rect class="eb-node eb-node--major" x="942" y="494" width="222" height="82" rx="16"/><text x="1053" y="523" class="eb-label">Outcome + estado final</text><text x="1053" y="548" class="eb-sub">éxito · seguridad · SLO · coste</text><text x="1053" y="568" class="eb-small">lo que importa al sistema</text></g>
+          <path class="eb-edge" d="M776 535 H942"/><text x="857" y="522" class="eb-edge-label">estado + dependencias</text>
+
+          <path class="eb-edge eb-edge--diagnose" d="M502 130 C540 130 552 224 596 224"/>
+          <text x="559" y="190" class="eb-edge-label">aislar Δ</text>
+
+          <text x="32" y="690" class="eb-kicker">2 · DOS MOVIMIENTOS DISTINTOS</text>
+          <g data-node="diagnose"><rect class="eb-node" x="42" y="728" width="532" height="118" rx="20"/><text x="308" y="760" class="eb-label">Diagnosticar → hacia dentro</text><text x="308" y="790" class="eb-sub">system → workflow → component → model</text><text x="308" y="816" class="eb-small">más aislamiento causal · menos cobertura del producto</text></g>
+          <path class="eb-edge eb-edge--diagnose" d="M514 866 H118"/><text x="316" y="892" class="eb-edge-label">localiza el mecanismo del cambio</text>
+
+          <g data-node="confirm"><rect class="eb-node eb-node--major" x="660" y="728" width="532" height="118" rx="20"/><text x="926" y="760" class="eb-label">Confirmar → hacia fuera</text><text x="926" y="790" class="eb-sub">model/component → workflow → system</text><text x="926" y="816" class="eb-small">más validez de producto · causa menos aislada</text></g>
+          <path class="eb-edge eb-edge--confirm" d="M718 866 H1118"/><text x="918" y="892" class="eb-edge-label">demuestra que la mejora importa al usuario</text>
+
+          <path class="eb-brace" d="M600 934 H1158"/>
+          <text x="879" y="958" class="eb-label">Trayectoria = evidencia de una ejecución; outcome ≠ trayectoria</text>
+        </svg>
+      </div>
+    </div>
+    <div class="s5v-eval-boundary__legend" aria-hidden="true">
+      <span class="is-boundary"><i></i> frontera evaluada</span>
+      <span><i></i> trayectoria realizada</span>
+      <span class="is-diagnostic"><i></i> movimiento diagnóstico / confirmación</span>
+    </div>
+    <p class="s5v__copy"><strong>Lectura:</strong> si cambias el retriever, empieza dentro de su frontera para aislar el mecanismo y luego sube hasta el sistema. Si el sistema falla, usa outcome y trayectoria para bajar de frontera hasta localizar la causa. No atribuyas al modelo un resultado que depende del workflow, tools o entorno.</p>
+  </div>
+</section>
