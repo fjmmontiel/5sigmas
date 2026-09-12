@@ -100,7 +100,7 @@ check(es.includes('no autoriza a afirmar que cualquier método llamado “specul
 check(en.includes('does not imply that every method carrying the label “speculative decoding” is distribution-preserving'), 'EN: exact-speculation attribution boundary missing');
 check(es.includes('no podemos sumar porcentajes de mejora'), 'ES: non-additive optimization caveat missing');
 check(en.includes('percentages cannot simply be added'), 'EN: non-additive optimization caveat missing');
-check(es.includes('comparison entre stacks') && es.includes('no evidencia causal'), 'ES: benchmark attribution boundary missing');
+check(es.includes('comparación entre stacks') && es.includes('no evidencia causal'), 'ES: benchmark attribution boundary missing');
 check(en.includes('compares two complete stacks') && en.includes('does not isolate the causal effect'), 'EN: benchmark attribution boundary missing');
 check(es.includes('1.2.0rc8') && es.includes('implementación versionada') && es.includes('1.3.0rc26'), 'ES: TensorRT version/current-boundary caveat missing');
 check(en.includes('1.2.0rc8') && en.includes('version-specific implementation evidence') && en.includes('1.3.0rc26'), 'EN: TensorRT version/current-boundary caveat missing');
