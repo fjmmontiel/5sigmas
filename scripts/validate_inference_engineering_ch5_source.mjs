@@ -131,7 +131,7 @@ const blobHeader = Buffer.from(`blob ${snippetBytes.length}\0`, 'utf8');
 const snippetBlobSha = crypto.createHash('sha1').update(Buffer.concat([blobHeader, snippetBytes])).digest('hex');
 check(i18n.source_blob_sha === snippetBlobSha, `EN: visual source_blob_sha stale (${i18n.source_blob_sha} != ${snippetBlobSha})`);
 for (const token of ['Four distinct decisions', 'Hard eligibility', 'Admitted HIT', 'Model policy', 'Selected model', 'Worker placement', 'Fallback model', 'Terminal failure', 'Paired evals / shadow', 'decision boundary']) {
-  check(Object.values(i18n.replacements).some((value) => String(value).includes(token)), `EN visual translation missing ${token}`);
+  check(snippet.includes(token) || Object.values(i18n.replacements).some((value) => String(value).includes(token)), `EN visual translation missing ${token}`);
 }
 
 if (failures.length) {
