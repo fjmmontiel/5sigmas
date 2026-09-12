@@ -1,5 +1,5 @@
 name: Series 5 certify chapter 5.3
-# Exact-SHA certification rerun after canonical preserve-source-slugs repair.
+# Exact-SHA certification rerun after canonical route repair and stale localized-route removal.
 
 on:
   push:
