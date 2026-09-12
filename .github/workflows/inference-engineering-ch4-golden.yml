@@ -1,0 +1,284 @@
+name: Inference Engineering 4.4 GOLDEN certification
+
+on:
+  push:
+    branches:
+      - series/llm-inference-engineering-economics-golden
+    paths:
+      - '.github/workflows/inference-engineering-ch4-golden.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  certify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: series/llm-inference-engineering-economics-golden
+
+      - name: Integrate current main and close chapter 4.4 canonical gaps
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name '5sigmas GOLDEN orchestrator'
+          git config user.email 'actions@users.noreply.github.com'
+          git fetch origin main
+          git merge --no-commit --no-ff origin/main
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          def read(path):
+              return Path(path).read_text(encoding='utf-8')
+
+          def write(path, text):
+              Path(path).write_text(text, encoding='utf-8')
+
+          def replace_once(text, old, new, label):
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f'{label}: expected exactly one anchor, found {count}')
+              return text.replace(old, new, 1)
+
+          es_path = 'docs/series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.md'
+          en_path = 'locales/en/series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.md'
+          es = read(es_path)
+          en = read(en_path)
+
+          es = replace_once(
+              es,
+              'TensorRT-LLM documenta que sus draft tokens consumen páginas KV y cuentan contra el límite de tokens del executor antes de scheduling. También documenta **KV cache rewind**: las páginas asignadas a tokens especulativos rechazados vuelven al pool.[^trt-spec]',
+              'En la documentación de TensorRT-LLM 1.2.0rc8, la arquitectura de two-model speculation contabilizaba los draft tokens contra páginas KV y `max_num_tokens`, y documentaba **KV cache rewind** para devolver al pool páginas de tokens rechazados.[^trt-spec-12] La documentación actual 1.3.0rc26 conserva una frontera operativa importante: speculative decoding está orientado a low batch sizes y su ejemplo draft/target desactiva explícitamente el overlap scheduler.[^trt-spec-current] Esos detalles de allocator/rewind se tratan aquí como implementación versionada, no como contrato universal de speculative decoding.',
+              'ES TensorRT allocator paragraph',
+          )
+          es = replace_once(
+              es,
+              'TensorRT-LLM documenta incluso interacciones concretas entre speculative decoding y scheduler: en su arquitectura de two-model speculation, el overlap scheduler no está soportado y se desactiva.[^trt-spec]',
+              'La documentación actual de TensorRT-LLM advierte que los speedups se observan a low batch sizes y su ejemplo draft/target instancia `LLM(..., disable_overlap_scheduler=True)`; esa configuración no se generaliza aquí como una restricción de todos los algoritmos o runtimes.[^trt-spec-current]',
+              'ES TensorRT scheduler paragraph',
+          )
+          es = replace_once(
+              es,
+              '[^trt-spec]: NVIDIA TensorRT-LLM, **Speculative Decoding**. Draft preparation, scheduler/KV accounting, verification y KV cache rewind. https://nvidia.github.io/TensorRT-LLM/1.2.0rc8/features/speculative-decoding.html',
+              '[^trt-spec-current]: NVIDIA TensorRT-LLM, **Speculative Decoding**, documentación actual 1.3.0rc26. Alcance low-batch, configuración draft/target y métodos soportados. https://nvidia.github.io/TensorRT-LLM/1.3.0rc26/features/speculative-decoding.html\n\n[^trt-spec-12]: NVIDIA TensorRT-LLM, **Speculative Decoding**, 1.2.0rc8. Detalle de implementación versionado sobre accounting de páginas KV, `max_num_tokens` y KV cache rewind. https://nvidia.github.io/TensorRT-LLM/1.2.0rc8/features/speculative-decoding.html',
+              'ES TensorRT reference',
+          )
+          es = replace_once(
+              es,
+              'En el siguiente capítulo convertiremos estas piezas en un problema económico: **utilización, coste por token, coste por petición y capacity planning**.',
+              'En el siguiente capítulo llevaremos estas piezas al plano de serving adaptativo: **model routing, fallback, caching de resultados/respuestas y decisiones condicionadas por el workload**.',
+              'ES next-chapter continuity',
+          )
+
+          en = replace_once(
+              en,
+              'TensorRT-LLM documents that draft tokens consume KV pages and count against the executor\'s token limit before scheduling. It also documents **KV cache rewind**, in which pages allocated to rejected speculative tokens are returned to the pool.[^trt-spec]',
+              'In TensorRT-LLM 1.2.0rc8, the documented two-model executor accounted draft tokens against KV pages and `max_num_tokens`, and used **KV cache rewind** to return pages allocated to rejected speculative tokens.[^trt-spec-12] The current 1.3.0rc26 documentation preserves an important operational boundary: speculative decoding targets low batch sizes, and its draft/target example explicitly disables the overlap scheduler.[^trt-spec-current] The allocator/rewind details are treated here as version-specific implementation evidence, not as a universal speculative-decoding contract.',
+              'EN TensorRT allocator paragraph',
+          )
+          en = replace_once(
+              en,
+              'TensorRT-LLM documents a concrete scheduler interaction: in its two-model speculation architecture, the overlap scheduler is unsupported and is disabled.[^trt-spec]',
+              'Current TensorRT-LLM documentation says speedups are observable at low batch sizes and its draft/target example instantiates `LLM(..., disable_overlap_scheduler=True)`; this configuration is not generalized here as a restriction of every speculative algorithm or runtime.[^trt-spec-current]',
+              'EN TensorRT scheduler paragraph',
+          )
+          en = replace_once(
+              en,
+              '[^trt-spec]: NVIDIA TensorRT-LLM, **Speculative Decoding**. Draft preparation, scheduler/KV accounting, verification, and KV-cache rewind. https://nvidia.github.io/TensorRT-LLM/1.2.0rc8/features/speculative-decoding.html',
+              '[^trt-spec-current]: NVIDIA TensorRT-LLM, **Speculative Decoding**, current 1.3.0rc26 documentation. Low-batch scope, draft/target configuration, and currently supported methods. https://nvidia.github.io/TensorRT-LLM/1.3.0rc26/features/speculative-decoding.html\n\n[^trt-spec-12]: NVIDIA TensorRT-LLM, **Speculative Decoding**, 1.2.0rc8. Version-specific implementation detail for KV-page accounting, `max_num_tokens`, and KV-cache rewind. https://nvidia.github.io/TensorRT-LLM/1.2.0rc8/features/speculative-decoding.html',
+              'EN TensorRT reference',
+          )
+          en = replace_once(
+              en,
+              'The next chapter turns these mechanisms into an economic problem: **utilization, cost per token, cost per request, and capacity planning**.',
+              'The next chapter moves these mechanisms into workload-aware serving: **model routing, fallback, result/response caching, and policies that choose among paths under real load**.',
+              'EN next-chapter continuity',
+          )
+          en, semicolon_count = re.subn(r'^(\s*-\s+.+);\s*$', lambda m: m.group(1) + '.', en, flags=re.MULTILINE)
+          if semicolon_count < 1:
+              raise SystemExit('EN semicolon-list repair: no offending bullets found')
+          write(es_path, es)
+          write(en_path, en)
+
+          mk_es_path = 'mkdocs.yml'
+          mk_es = read(mk_es_path)
+          mk_es_anchor = '          - Cuantización, paralelismo y compromisos de memoria, rendimiento y calidad: series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs.md'
+          mk_es = replace_once(
+              mk_es,
+              mk_es_anchor,
+              mk_es_anchor + '\n          - Speculative decoding, prefix caching y otras optimizaciones de latencia: series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.md',
+              'ES nav',
+          )
+          write(mk_es_path, mk_es)
+
+          mk_en_path = 'mkdocs.en.yml'
+          mk_en = read(mk_en_path)
+          mk_en_anchor = '          - Quantization, parallelism, and memory/performance/quality trade-offs: series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs.md'
+          mk_en = replace_once(
+              mk_en,
+              mk_en_anchor,
+              mk_en_anchor + '\n          - Speculative decoding, prefix caching, and other latency optimizations: series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.md',
+              'EN nav',
+          )
+          write(mk_en_path, mk_en)
+
+          manifest_path = 'locales/en/manifest.yml'
+          manifest = read(manifest_path)
+          route3 = '  - series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs.md'
+          route4 = '  - series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.md'
+          manifest = replace_once(manifest, route3, route3 + '\n' + route4, 'EN manifest route')
+          visual3 = '  - snippets/articulos-tecnicos/inference-quantization-parallelism-tradeoffs.html'
+          visual4 = '  - snippets/articulos-tecnicos/inference-speculative-prefix-latency.html'
+          manifest = replace_once(manifest, visual3, visual3 + '\n' + visual4, 'EN manifest visual')
+          write(manifest_path, manifest)
+
+          workflow_path = '.github/workflows/series4-golden-review.yml'
+          workflow = read(workflow_path)
+          source_anchor = '      - name: Validate chapter 4.3 source contract\n        run: node scripts/validate_inference_engineering_ch3_source.mjs'
+          workflow = replace_once(
+              workflow,
+              source_anchor,
+              source_anchor + '\n\n      - name: Validate chapter 4.4 source contract\n        run: node scripts/validate_inference_engineering_ch4_source.mjs',
+              'permanent source gate',
+          )
+          browser_anchor = '      - name: Validate chapter 4.3 relationship geometry and accessibility\n        run: node scripts/validate_inference_engineering_ch3_accessibility.mjs'
+          workflow = replace_once(
+              workflow,
+              browser_anchor,
+              browser_anchor + '\n\n      - name: Validate chapter 4.4 relationship geometry and accessibility\n        run: node scripts/validate_inference_engineering_ch4_accessibility.mjs',
+              'permanent browser gate',
+          )
+          write(workflow_path, workflow)
+
+          validator_path = 'scripts/validate_inference_engineering_ch4_source.mjs'
+          validator = read(validator_path)
+          old_url = "  'https://nvidia.github.io/TensorRT-LLM/1.2.0rc8/features/speculative-decoding.html',"
+          new_urls = "  'https://nvidia.github.io/TensorRT-LLM/1.3.0rc26/features/speculative-decoding.html',\n  'https://nvidia.github.io/TensorRT-LLM/1.2.0rc8/features/speculative-decoding.html',"
+          validator = replace_once(validator, old_url, new_urls, 'validator TensorRT URLs')
+          insertion = "check(en.includes('does not isolate the causal effect'), 'EN: benchmark attribution boundary missing');"
+          extra = """check(en.includes('does not isolate the causal effect'), 'EN: benchmark attribution boundary missing');
+check(es.includes('1.2.0rc8') && es.includes('implementación versionada') && es.includes('1.3.0rc26'), 'ES: TensorRT version/current-boundary caveat missing');
+check(en.includes('1.2.0rc8') && en.includes('version-specific implementation evidence') && en.includes('1.3.0rc26'), 'EN: TensorRT version/current-boundary caveat missing');
+check(es.includes('model routing, fallback, caching de resultados/respuestas'), 'ES: next-chapter 4.5 continuity missing');
+check(en.includes('model routing, fallback, result/response caching'), 'EN: next-chapter 4.5 continuity missing');
+check(!es.includes('En el siguiente capítulo convertiremos estas piezas en un problema económico'), 'ES: stale next-chapter 4.5 description detected');
+check(!en.includes('The next chapter turns these mechanisms into an economic problem'), 'EN: stale next-chapter 4.5 description detected');"""
+          validator = replace_once(validator, insertion, extra, 'validator freshness/continuity checks')
+          write(validator_path, validator)
+          PY
+
+          git rm .github/workflows/inference-engineering-ch4-golden.yml
+          git add docs/series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.md \
+                  locales/en/series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.md \
+                  locales/en/manifest.yml mkdocs.yml mkdocs.en.yml \
+                  scripts/validate_inference_engineering_ch4_source.mjs \
+                  .github/workflows/series4-golden-review.yml
+          git status --short
+          git commit -m 'content(series4): integrate chapter 4.4 GOLDEN candidate'
+          git push origin HEAD:series/llm-inference-engineering-economics-golden
+          mkdir -p artifacts/visual-review
+          git rev-parse HEAD | tee artifacts/visual-review/inference-engineering-ch4-certified-sha.txt
+          git status --porcelain=v1 --untracked-files=no | tee /tmp/tracked-status
+          test ! -s /tmp/tracked-status
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Validate media declarations and signatures
+        run: |
+          python scripts/prepare_video_media.py --check
+          python scripts/audit_media_magic.py
+
+      - name: Validate Series 4 source contracts through 4.4
+        run: |
+          node scripts/validate_inference_engineering_ch1_source.mjs
+          node scripts/validate_inference_engineering_ch2_source.mjs
+          node scripts/validate_inference_engineering_ch3_source.mjs
+          node scripts/validate_inference_engineering_ch4_source.mjs
+
+      - name: Build Spanish strictly
+        run: mkdocs build --clean --strict
+
+      - name: Audit publication contract
+        run: python scripts/audit_publication_contract.py
+
+      - name: Prepare and audit English source locale
+        run: |
+          python scripts/prepare_locale.py --locale en
+          python scripts/audit_locale.py --locale en
+
+      - name: Build and audit rendered English strictly
+        env:
+          S5_LOCALE: en
+        run: |
+          mkdocs build -f mkdocs.en.yml --clean --strict
+          python scripts/audit_locale.py --locale en --site site/en
+
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save --package-lock=false playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Serve combined preview
+        run: |
+          python -m http.server 8000 --directory site > /tmp/5sigmas-series4-ch4.log 2>&1 &
+          echo $! > /tmp/5sigmas-series4-ch4.pid
+          for attempt in {1..30}; do
+            curl --fail --silent http://127.0.0.1:8000/ > /dev/null \
+              && curl --fail --silent http://127.0.0.1:8000/en/ > /dev/null \
+              && exit 0
+            sleep 1
+          done
+          cat /tmp/5sigmas-series4-ch4.log
+          exit 1
+
+      - name: Audit browser resources and locale
+        run: |
+          node scripts/audit_browser_resources.mjs
+          node scripts/validate_english_locale.mjs
+
+      - name: Validate Series 4 relationship geometry and accessibility through 4.4
+        run: |
+          node scripts/validate_inference_engineering_ch1_accessibility.mjs
+          node scripts/validate_inference_engineering_ch2_accessibility.mjs
+          node scripts/validate_inference_engineering_ch3_accessibility.mjs
+          node scripts/validate_inference_engineering_ch4_accessibility.mjs
+
+      - name: Validate reader navigation
+        run: node scripts/validate_direct_reader_navigation.mjs
+
+      - name: Verify certified tree stayed exact
+        run: |
+          set -euo pipefail
+          expected="$(cat artifacts/visual-review/inference-engineering-ch4-certified-sha.txt)"
+          test "$(git rev-parse HEAD)" = "$expected"
+          git diff --exit-code
+          git diff --cached --exit-code
+          echo "Certified exact SHA: $expected"
+
+      - name: Upload chapter 4.4 GOLDEN evidence
+        if: always()
+        id: evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: inference-engineering-ch4-golden-evidence
+          path: |
+            artifacts/visual-review/inference-engineering-ch4-*.png
+            artifacts/visual-review/inference-engineering-ch4-certified-sha.txt
+          if-no-files-found: error
+          retention-days: 3
