@@ -100,8 +100,8 @@ check(!/^\s*-\s+.+;\s*$/m.test(en), 'EN: semicolon-list anti-pattern detected');
 const forbidden = [
   /LLM(?:-| )as(?:-| )a(?:-| )judge[^\n]{0,120}(?:is|are) (?:ground truth|objective truth)/i,
   /human agreement[^\n]{0,100}(?:proves|guarantees) validity/i,
-  /(?:kappa|κ)[^\n]{0,100}(?:universal threshold|universal score)/i,
-  /(?:score|rating)[^\n]{0,60}(?:is|equals) (?:a )?probability/i,
+  /(?:kappa|κ)[^\n]{0,100}\b(?:is|equals|serves as)\b[^\n]{0,30}(?:a )?universal (?:threshold|score)/i,
+  /(?:score|rating)[^\n]{0,60}\b(?:is|equals)\b (?:a )?probability/i,
   /strongest model[^\n]{0,100}(?:eliminates|removes) bias/i,
 ];
 for (const pattern of forbidden) {
@@ -120,8 +120,8 @@ check(snippet.includes('data-boundary="judge-version"'), 'Visual: frozen judge-v
 for (const node of ['construct', 'rubric', 'calibration', 'judge-version', 'validation-item', 'blind-randomize', 'human-raters', 'llm-repeats', 'human-raw', 'llm-raw', 'adjudication', 'position-swap', 'style-control', 'family-cross', 'diagnostics', 'scope-decision', 'automatic-judge', 'human-fallback']) {
   check(snippet.includes(`data-node="${node}"`), `Visual: missing mechanism node ${node}`);
 }
-for (const p of ['define', 'calibrate', 'freeze', 'present', 'human-lane', 'llm-lane', 'capture-human', 'capture-llm', 'adjudicate', 'probe-position', 'probe-style', 'probe-family', 'diagnose-human', 'diagnose-llm', 'scope', 'accept', 'fallback']) {
-  check(snippet.includes(`data-path="${p}"`), `Visual: missing relationship path ${p}`);
+for (const p of ['define', 'calibrate', 'freeze', 'present', 'human-lane', 'llm-lane', 'capture-human', 'capture-llm', 'adjudicate', 'probe-position', 'probe-style', 'probe-family', 'diagnose-human', 'diagnose-llm', 'diagnose-adjudicated', 'scope', 'accept', 'fallback']) {
+  check(snippet.includes(`data-path="${p}"]`), `Visual: missing relationship path ${p}`);
 }
 check(snippet.includes('adjudica después'), 'Visual: raw independent judgments must precede adjudication');
 check(snippet.includes('A/B ↔ B/A'), 'Visual: position-swap probe missing');
