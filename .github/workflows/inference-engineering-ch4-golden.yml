@@ -159,9 +159,9 @@ jobs:
           old_url = "  'https://nvidia.github.io/TensorRT-LLM/1.2.0rc8/features/speculative-decoding.html',"
           new_urls = "  'https://nvidia.github.io/TensorRT-LLM/1.3.0rc26/features/speculative-decoding.html',\n  'https://nvidia.github.io/TensorRT-LLM/1.2.0rc8/features/speculative-decoding.html',"
           validator = replace_once(validator, old_url, new_urls, 'validator TensorRT URLs')
-          insertion = "check(en.includes('does not isolate the causal effect'), 'EN: benchmark attribution boundary missing');"
+          insertion = "check(en.includes('compares two complete stacks') && en.includes('does not isolate the causal effect'), 'EN: benchmark attribution boundary missing');"
           extra = (
-              "check(en.includes('does not isolate the causal effect'), 'EN: benchmark attribution boundary missing');\n"
+              insertion + "\n"
               "check(es.includes('1.2.0rc8') && es.includes('implementación versionada') && es.includes('1.3.0rc26'), 'ES: TensorRT version/current-boundary caveat missing');\n"
               "check(en.includes('1.2.0rc8') && en.includes('version-specific implementation evidence') && en.includes('1.3.0rc26'), 'EN: TensorRT version/current-boundary caveat missing');\n"
               "check(es.includes('model routing, fallback, caching de resultados/respuestas'), 'ES: next-chapter 4.5 continuity missing');\n"
@@ -274,7 +274,7 @@ jobs:
           echo "Certified exact SHA: $expected"
 
       - name: Upload chapter 4.4 GOLDEN evidence
-        if: always()
+        if: success()
         id: evidence
         uses: actions/upload-artifact@v4
         with:
