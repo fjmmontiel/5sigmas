@@ -301,6 +301,12 @@ jobs:
       - name: Validate LLM Inference Engineering chapter 1 accessibility and responsive states
         run: node scripts/validate_inference_engineering_ch1_accessibility.mjs
 
+      - name: Validate LLM Inference Engineering chapter 2 source contract
+        run: node scripts/validate_inference_engineering_ch2_source.mjs
+
+      - name: Validate LLM Inference Engineering chapter 2 accessibility and responsive states
+        run: node scripts/validate_inference_engineering_ch2_accessibility.mjs
+
       - name: Validate complete video experience lifecycle
         run: node scripts/validate_video_experience_v2.mjs
 
