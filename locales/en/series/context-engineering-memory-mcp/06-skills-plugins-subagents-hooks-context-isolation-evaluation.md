@@ -127,7 +127,7 @@ The distribution boundary does not replace the identity boundary.
 
 Subagents are useful for reducing task interference, specializing instructions, or running work in parallel. But “another agent” does not automatically mean “another sandbox.”
 
-Claude Code makes that explicit. A subagent can configure its model, tools, skills, memory, and `isolation`. If `tools` is omitted, the subagent **inherits all tools available to the main conversation**. Repository isolation through a worktree only appears when `isolation: worktree` is configured.[^claude-subagents]
+Claude Code makes that explicit. A subagent can configure its model, tools, skills, memory, and `isolation`. If `tools` is omitted, the subagent **inherits every tool available to subagents**. Repository isolation through a worktree only appears when `isolation: worktree` is configured.[^claude-subagents]
 
 That yields an important invariant:
 
