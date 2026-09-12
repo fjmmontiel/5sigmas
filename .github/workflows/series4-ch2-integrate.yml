@@ -1,0 +1,243 @@
+name: Series 4 chapter 4.2 integration
+
+on:
+  push:
+    branches:
+      - series/llm-inference-engineering-economics-golden
+    paths:
+      - '.github/workflows/series4-ch2-integrate.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  integrate:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: series/llm-inference-engineering-economics-golden
+          fetch-depth: 0
+
+      - name: Apply fail-closed chapter 4.2 integration
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          def replace_once(path, old, new):
+              p = Path(path)
+              text = p.read_text()
+              n = text.count(old)
+              if n != 1:
+                  raise SystemExit(f'{path}: expected exactly one anchor, found {n}: {old[:120]!r}')
+              p.write_text(text.replace(old, new, 1))
+
+          es = 'docs/series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.md'
+          en = 'locales/en/series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.md'
+          source_gate = 'scripts/validate_inference_engineering_ch2_source.mjs'
+
+          replace_once(
+              es,
+              'Por eso dos servidores con el mismo modelo y el mismo número de GPUs pueden admitir cantidades muy distintas de trabajo simultáneo según:',
+              'Por eso dos despliegues sobre el mismo tipo y número de GPUs pueden admitir cantidades muy distintas de trabajo simultáneo según:'
+          )
+          replace_once(
+              en,
+              'Two servers running the same model on the same number of GPUs can therefore sustain very different amounts of concurrent work depending on:',
+              'Two deployments on the same GPU type and count can therefore sustain very different amounts of concurrent work depending on:'
+          )
+          replace_once(
+              es,
+              'Imaginemos tres peticiones con máximos declarados muy distintos:',
+              'Imaginemos tres peticiones con el mismo máximo declarado de `8k`, pero longitudes realizadas muy distintas:'
+          )
+          replace_once(
+              en,
+              'Imagine three requests with very different realized lengths:',
+              'Imagine three requests with the same declared `8k` maximum but very different realized lengths:'
+          )
+
+          es_anchor = 'vLLM documenta actualmente un `OffloadingConnector` que mueve bloques KV completados desde GPU hacia pinned host memory y permite tiers secundarios, con promociones de vuelta a GPU bajo demanda.[^vllm-offload] TensorRT-LLM también soporta host offloading antes de expulsar ciertos bloques del cache GPU.[^trt-kv]\n'
+          es_insert = es_anchor + '\nAquí **offload no designa una única semántica**. El `OffloadingConnector` de vLLM extiende el prefix cache: descarga **bloques KV completados y reutilizables** a tiers más lentos y los vuelve a promover cuando hay un hit. Eso no equivale a pausar una secuencia activa por falta de KV. Otros runtimes pueden descargar estado de una petición activa, preemptarla y recomputar, o aplicar otra política; un benchmark debe registrar cuál está realmente activa.[^vllm-offload][^hf-continuous]\n'
+          replace_once(es, es_anchor, es_insert)
+
+          en_anchor = 'vLLM currently documents an `OffloadingConnector` that copies completed KV blocks from GPU to pinned host memory and can use secondary tiers, promoting blocks back to GPU on demand.[^vllm-offload] TensorRT-LLM also supports host offloading before selected blocks are evicted from the GPU cache.[^trt-kv]\n'
+          en_insert = en_anchor + '\nHere, **offload is not one semantic category**. vLLM’s `OffloadingConnector` extends the prefix cache: it moves **completed, reusable KV blocks** to slower tiers and promotes them again on a hit. That is not equivalent to suspending an active sequence because KV capacity ran out. Other runtimes may offload active-request state, preempt and recompute it, or use a different policy; a benchmark must record which policy is actually enabled.[^vllm-offload][^hf-continuous]\n'
+          replace_once(en, en_anchor, en_insert)
+
+          source_anchor = "check(en.includes('does not turn slower memory into free VRAM'), 'EN: offload cost boundary missing');\n"
+          source_insert = source_anchor + "check(!es.includes('mismo modelo y el mismo número de GPUs'), 'ES: deployment comparison must not vary model architecture while claiming the same model');\ncheck(!en.includes('same model on the same number of GPUs'), 'EN: deployment comparison must not vary model architecture while claiming the same model');\ncheck(es.includes('mismo máximo declarado de `8k`') && es.includes('longitudes realizadas muy distintas'), 'ES: contiguous-reservation example must distinguish declared maximum from realized length');\ncheck(en.includes('same declared `8k` maximum') && en.includes('very different realized lengths'), 'EN: contiguous-reservation example must distinguish declared maximum from realized length');\ncheck(es.includes('offload no designa una única semántica') && es.includes('bloques KV completados y reutilizables') && es.includes('no equivale a pausar una secuencia activa'), 'ES: offload semantics boundary missing');\ncheck(en.includes('offload is not one semantic category') && en.includes('completed, reusable KV blocks') && en.includes('not equivalent to suspending an active sequence'), 'EN: offload semantics boundary missing');\n"
+          replace_once(source_gate, source_anchor, source_insert)
+
+          route = 'series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.md'
+          visual = 'snippets/articulos-tecnicos/inference-kv-cache-paging-batching.html'
+          replace_once(
+              'mkdocs.yml',
+              '          - Prefill vs decode: series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.md\n',
+              '          - Prefill vs decode: series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.md\n          - KV cache, jerarquía de memoria, continuous batching y PagedAttention: ' + route + '\n'
+          )
+          replace_once(
+              'mkdocs.en.yml',
+              '          - Prefill vs decode: series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.md\n',
+              '          - Prefill vs decode: series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.md\n          - KV cache, memory hierarchy, continuous batching and PagedAttention: ' + route + '\n'
+          )
+          replace_once(
+              'locales/en/manifest.yml',
+              '  - series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.md\n',
+              '  - series/llm-inference-engineering-economics/01-prefill-vs-decode-ttft-tpot-throughput-latency-budget.md\n  - ' + route + '\n'
+          )
+          replace_once(
+              'locales/en/manifest.yml',
+              '  - snippets/articulos-tecnicos/inference-prefill-decode-latency-budget.html\n',
+              '  - snippets/articulos-tecnicos/inference-prefill-decode-latency-budget.html\n  - ' + visual + '\n'
+          )
+
+          pr = '.github/workflows/pr-visual-review.yml'
+          pr_anchor = '      - name: Validate LLM Inference Engineering chapter 1 accessibility and responsive states\n        run: node scripts/validate_inference_engineering_ch1_accessibility.mjs\n'
+          pr_insert = pr_anchor + '\n      - name: Validate LLM Inference Engineering chapter 2 source contract\n        run: node scripts/validate_inference_engineering_ch2_source.mjs\n\n      - name: Validate LLM Inference Engineering chapter 2 accessibility and responsive states\n        run: node scripts/validate_inference_engineering_ch2_accessibility.mjs\n'
+          replace_once(pr, pr_anchor, pr_insert)
+
+          cert = r'''name: LLM Inference Engineering 4.2 GOLDEN certification
+
+on:
+  push:
+    branches:
+      - series/llm-inference-engineering-economics-golden
+    paths:
+      - '.github/workflows/inference-engineering-ch2-golden.yml'
+      - 'docs/series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.md'
+      - 'locales/en/series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.md'
+      - 'docs/snippets/articulos-tecnicos/inference-kv-cache-paging-batching.html'
+      - 'locales/en/snippets/articulos-tecnicos/inference-kv-cache-paging-batching.html'
+      - 'locales/en/snippets/articulos-tecnicos/inference-kv-cache-paging-batching.i18n.json'
+      - 'scripts/validate_inference_engineering_ch2_source.mjs'
+      - 'scripts/validate_inference_engineering_ch2_accessibility.mjs'
+      - '.github/workflows/pr-visual-review.yml'
+      - 'mkdocs.yml'
+      - 'mkdocs.en.yml'
+      - 'locales/en/manifest.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  certify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Validate media declarations and signatures
+        run: |
+          python scripts/prepare_video_media.py --check
+          python scripts/audit_media_magic.py
+
+      - name: Regress chapter 4.1 source and parity contract
+        run: node scripts/validate_inference_engineering_ch1_source.mjs
+
+      - name: Validate chapter 4.2 source and parity contract
+        run: node scripts/validate_inference_engineering_ch2_source.mjs
+
+      - name: Build Spanish strictly
+        run: mkdocs build --clean --strict
+
+      - name: Audit public-series publication contract
+        run: python scripts/audit_publication_contract.py
+
+      - name: Prepare English locale
+        run: python scripts/prepare_locale.py --locale en
+
+      - name: Audit English locale sources
+        run: python scripts/audit_locale.py --locale en
+
+      - name: Build English strictly
+        env:
+          S5_LOCALE: en
+        run: mkdocs build -f mkdocs.en.yml --clean --strict
+
+      - name: Audit rendered English locale
+        run: python scripts/audit_locale.py --locale en --site site/en
+
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Serve combined preview
+        run: |
+          python -m http.server 8000 --directory site > /tmp/5sigmas-preview.log 2>&1 &
+          echo $! > /tmp/5sigmas-preview.pid
+          for attempt in {1..30}; do
+            curl --fail --silent http://127.0.0.1:8000/ > /dev/null && curl --fail --silent http://127.0.0.1:8000/en/ > /dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/5sigmas-preview.log
+          exit 1
+
+      - name: Audit browser resources and locale
+        run: |
+          node scripts/audit_browser_resources.mjs
+          node scripts/validate_english_locale.mjs
+
+      - name: Regress chapter 4.1 relationship geometry and accessibility
+        run: node scripts/validate_inference_engineering_ch1_accessibility.mjs
+
+      - name: Validate chapter 4.2 relationship geometry and accessibility
+        run: node scripts/validate_inference_engineering_ch2_accessibility.mjs
+
+      - name: Validate direct reader navigation
+        run: node scripts/validate_direct_reader_navigation.mjs
+
+      - name: Ensure certification SHA and clean tracked source
+        shell: bash
+        run: |
+          echo "CERTIFICATION_SHA=$(git rev-parse HEAD)"
+          git status --short
+          test -z "$(git status --short --untracked-files=no)"
+
+      - name: Upload chapter 4.2 visual evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: inference-engineering-ch2-golden-evidence
+          path: artifacts/visual-review/inference-engineering-ch2-*.png
+          if-no-files-found: error
+          retention-days: 1
+'''
+          Path('.github/workflows/inference-engineering-ch2-golden.yml').write_text(cert)
+          Path('.github/workflows/series4-ch2-integrate.yml').unlink()
+          PY
+
+      - name: Run deterministic source gate before push
+        run: node scripts/validate_inference_engineering_ch2_source.mjs
+
+      - name: Commit integrated chapter state
+        shell: bash
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add docs/series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.md \
+            locales/en/series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.md \
+            scripts/validate_inference_engineering_ch2_source.mjs \
+            mkdocs.yml mkdocs.en.yml locales/en/manifest.yml .github/workflows/pr-visual-review.yml \
+            .github/workflows/inference-engineering-ch2-golden.yml .github/workflows/series4-ch2-integrate.yml
+          git diff --cached --check
+          git commit -m 'feat(series4): integrate chapter 4.2 for GOLDEN QA'
+          git push origin HEAD:series/llm-inference-engineering-economics-golden
