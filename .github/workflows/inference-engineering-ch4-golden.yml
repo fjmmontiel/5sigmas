@@ -20,147 +20,24 @@ jobs:
           fetch-depth: 0
           ref: series/llm-inference-engineering-economics-golden
 
-      - name: Integrate current main and close chapter 4.4 canonical gaps
+      - name: Repair deterministic Spanish benchmark attribution gate
         shell: bash
         run: |
           set -euo pipefail
           git config user.name '5sigmas GOLDEN orchestrator'
           git config user.email 'actions@users.noreply.github.com'
-          git fetch origin main
-          git merge --no-commit --no-ff origin/main
           python - <<'PY'
           from pathlib import Path
-          import re
-
-          def read(path):
-              return Path(path).read_text(encoding='utf-8')
-
-          def write(path, text):
-              Path(path).write_text(text, encoding='utf-8')
-
-          def replace_once(text, old, new, label):
-              count = text.count(old)
-              if count != 1:
-                  raise SystemExit(f'{label}: expected exactly one anchor, found {count}')
-              return text.replace(old, new, 1)
-
-          es_path = 'docs/series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.md'
-          en_path = 'locales/en/series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.md'
-          es = read(es_path)
-          en = read(en_path)
-
-          es = replace_once(
-              es,
-              'TensorRT-LLM documenta que sus draft tokens consumen páginas KV y cuentan contra el límite de tokens del executor antes de scheduling. También documenta **KV cache rewind**: las páginas asignadas a tokens especulativos rechazados vuelven al pool.[^trt-spec]',
-              'En la documentación de TensorRT-LLM 1.2.0rc8, la arquitectura de two-model speculation contabilizaba los draft tokens contra páginas KV y `max_num_tokens`, y documentaba **KV cache rewind** para devolver al pool páginas de tokens rechazados.[^trt-spec-12] La documentación actual 1.3.0rc26 conserva una frontera operativa importante: speculative decoding está orientado a low batch sizes y su ejemplo draft/target desactiva explícitamente el overlap scheduler.[^trt-spec-current] Esos detalles de allocator/rewind se tratan aquí como implementación versionada, no como contrato universal de speculative decoding.',
-              'ES TensorRT allocator paragraph',
-          )
-          es = replace_once(
-              es,
-              'TensorRT-LLM documenta incluso interacciones concretas entre speculative decoding y scheduler: en su arquitectura de two-model speculation, el overlap scheduler no está soportado y se desactiva.[^trt-spec]',
-              'La documentación actual de TensorRT-LLM advierte que los speedups se observan a low batch sizes y su ejemplo draft/target instancia `LLM(..., disable_overlap_scheduler=True)`; esa configuración no se generaliza aquí como una restricción de todos los algoritmos o runtimes.[^trt-spec-current]',
-              'ES TensorRT scheduler paragraph',
-          )
-          es = replace_once(
-              es,
-              '[^trt-spec]: NVIDIA TensorRT-LLM, **Speculative Decoding**. Draft preparation, scheduler/KV accounting, verification y KV cache rewind. https://nvidia.github.io/TensorRT-LLM/1.2.0rc8/features/speculative-decoding.html',
-              '[^trt-spec-current]: NVIDIA TensorRT-LLM, **Speculative Decoding**, documentación actual 1.3.0rc26. Alcance low-batch, configuración draft/target y métodos soportados. https://nvidia.github.io/TensorRT-LLM/1.3.0rc26/features/speculative-decoding.html\n\n[^trt-spec-12]: NVIDIA TensorRT-LLM, **Speculative Decoding**, 1.2.0rc8. Detalle de implementación versionado sobre accounting de páginas KV, `max_num_tokens` y KV cache rewind. https://nvidia.github.io/TensorRT-LLM/1.2.0rc8/features/speculative-decoding.html',
-              'ES TensorRT reference',
-          )
-          es = replace_once(
-              es,
-              'En el siguiente capítulo convertiremos estas piezas en un problema económico: **utilización, coste por token, coste por petición y capacity planning**.',
-              'En el siguiente capítulo llevaremos estas piezas al plano de serving adaptativo: **model routing, fallback, caching de resultados/respuestas y decisiones condicionadas por el workload**.',
-              'ES next-chapter continuity',
-          )
-
-          en = replace_once(
-              en,
-              'TensorRT-LLM documents that draft tokens consume KV pages and count against the executor\'s token limit before scheduling. It also documents **KV cache rewind**, in which pages allocated to rejected speculative tokens are returned to the pool.[^trt-spec]',
-              'In TensorRT-LLM 1.2.0rc8, the documented two-model executor accounted draft tokens against KV pages and `max_num_tokens`, and used **KV cache rewind** to return pages allocated to rejected speculative tokens.[^trt-spec-12] The current 1.3.0rc26 documentation preserves an important operational boundary: speculative decoding targets low batch sizes, and its draft/target example explicitly disables the overlap scheduler.[^trt-spec-current] The allocator/rewind details are treated here as version-specific implementation evidence, not as a universal speculative-decoding contract.',
-              'EN TensorRT allocator paragraph',
-          )
-          en = replace_once(
-              en,
-              'TensorRT-LLM documents a concrete scheduler interaction: in its two-model speculation architecture, the overlap scheduler is unsupported and is disabled.[^trt-spec]',
-              'Current TensorRT-LLM documentation says speedups are observable at low batch sizes and its draft/target example instantiates `LLM(..., disable_overlap_scheduler=True)`; this configuration is not generalized here as a restriction of every speculative algorithm or runtime.[^trt-spec-current]',
-              'EN TensorRT scheduler paragraph',
-          )
-          en = replace_once(
-              en,
-              '[^trt-spec]: NVIDIA TensorRT-LLM, **Speculative Decoding**. Draft preparation, scheduler/KV accounting, verification, and KV-cache rewind. https://nvidia.github.io/TensorRT-LLM/1.2.0rc8/features/speculative-decoding.html',
-              '[^trt-spec-current]: NVIDIA TensorRT-LLM, **Speculative Decoding**, current 1.3.0rc26 documentation. Low-batch scope, draft/target configuration, and currently supported methods. https://nvidia.github.io/TensorRT-LLM/1.3.0rc26/features/speculative-decoding.html\n\n[^trt-spec-12]: NVIDIA TensorRT-LLM, **Speculative Decoding**, 1.2.0rc8. Version-specific implementation detail for KV-page accounting, `max_num_tokens`, and KV-cache rewind. https://nvidia.github.io/TensorRT-LLM/1.2.0rc8/features/speculative-decoding.html',
-              'EN TensorRT reference',
-          )
-          en = replace_once(
-              en,
-              'The next chapter turns these mechanisms into an economic problem: **utilization, cost per token, cost per request, and capacity planning**.',
-              'The next chapter moves these mechanisms into workload-aware serving: **model routing, fallback, result/response caching, and policies that choose among paths under real load**.',
-              'EN next-chapter continuity',
-          )
-          en, semicolon_count = re.subn(r'^(\s*-\s+.+);\s*$', lambda m: m.group(1) + '.', en, flags=re.MULTILINE)
-          if semicolon_count < 1:
-              raise SystemExit('EN semicolon-list repair: no offending bullets found')
-          write(es_path, es)
-          write(en_path, en)
-
-          mk_es_path = 'mkdocs.yml'
-          mk_es = read(mk_es_path)
-          mk_es_anchor = '          - Cuantización, paralelismo y compromisos de memoria, rendimiento y calidad: series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs.md'
-          mk_es = replace_once(
-              mk_es,
-              mk_es_anchor,
-              mk_es_anchor + '\n          - Speculative decoding, prefix caching y otras optimizaciones de latencia: series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.md',
-              'ES nav',
-          )
-          write(mk_es_path, mk_es)
-
-          mk_en_path = 'mkdocs.en.yml'
-          mk_en = read(mk_en_path)
-          mk_en_anchor = '          - Quantization, parallelism, and memory/performance/quality trade-offs: series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs.md'
-          mk_en = replace_once(
-              mk_en,
-              mk_en_anchor,
-              mk_en_anchor + '\n          - Speculative decoding, prefix caching, and other latency optimizations: series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.md',
-              'EN nav',
-          )
-          write(mk_en_path, mk_en)
-
-          manifest_path = 'locales/en/manifest.yml'
-          manifest = read(manifest_path)
-          route3 = '  - series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs.md'
-          route4 = '  - series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.md'
-          manifest = replace_once(manifest, route3, route3 + '\n' + route4, 'EN manifest route')
-          visual3 = '  - snippets/articulos-tecnicos/inference-quantization-parallelism-tradeoffs.html'
-          visual4 = '  - snippets/articulos-tecnicos/inference-speculative-prefix-latency.html'
-          manifest = replace_once(manifest, visual3, visual3 + '\n' + visual4, 'EN manifest visual')
-          write(manifest_path, manifest)
-
-          validator_path = 'scripts/validate_inference_engineering_ch4_source.mjs'
-          validator = read(validator_path)
-          old_url = "  'https://nvidia.github.io/TensorRT-LLM/1.2.0rc8/features/speculative-decoding.html',"
-          new_urls = "  'https://nvidia.github.io/TensorRT-LLM/1.3.0rc26/features/speculative-decoding.html',\n  'https://nvidia.github.io/TensorRT-LLM/1.2.0rc8/features/speculative-decoding.html',"
-          validator = replace_once(validator, old_url, new_urls, 'validator TensorRT URLs')
-          insertion = "check(en.includes('compares two complete stacks') && en.includes('does not isolate the causal effect'), 'EN: benchmark attribution boundary missing');"
-          extra = (
-              insertion + "\n"
-              "check(es.includes('1.2.0rc8') && es.includes('implementación versionada') && es.includes('1.3.0rc26'), 'ES: TensorRT version/current-boundary caveat missing');\n"
-              "check(en.includes('1.2.0rc8') && en.includes('version-specific implementation evidence') && en.includes('1.3.0rc26'), 'EN: TensorRT version/current-boundary caveat missing');\n"
-              "check(es.includes('model routing, fallback, caching de resultados/respuestas'), 'ES: next-chapter 4.5 continuity missing');\n"
-              "check(en.includes('model routing, fallback, result/response caching'), 'EN: next-chapter 4.5 continuity missing');\n"
-              "check(!es.includes('En el siguiente capítulo convertiremos estas piezas en un problema económico'), 'ES: stale next-chapter 4.5 description detected');\n"
-              "check(!en.includes('The next chapter turns these mechanisms into an economic problem'), 'EN: stale next-chapter 4.5 description detected');"
-          )
-          validator = replace_once(validator, insertion, extra, 'validator freshness/continuity checks')
-          write(validator_path, validator)
+          path = Path('scripts/validate_inference_engineering_ch4_source.mjs')
+          text = path.read_text(encoding='utf-8')
+          old = "check(es.includes('comparison entre stacks') && es.includes('no evidencia causal'), 'ES: benchmark attribution boundary missing');"
+          new = "check(es.includes('comparación entre stacks') && es.includes('no evidencia causal'), 'ES: benchmark attribution boundary missing');"
+          if text.count(old) != 1:
+              raise SystemExit(f'expected exactly one stale ES benchmark gate, found {text.count(old)}')
+          path.write_text(text.replace(old, new, 1), encoding='utf-8')
           PY
-
-          git add docs/series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.md \
-                  locales/en/series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.md \
-                  locales/en/manifest.yml mkdocs.yml mkdocs.en.yml \
-                  scripts/validate_inference_engineering_ch4_source.mjs
-          git status --short
-          git commit -m 'content(series4): integrate chapter 4.4 GOLDEN candidate'
+          git add scripts/validate_inference_engineering_ch4_source.mjs
+          git commit -m 'test(series4): fix chapter 4.4 Spanish attribution invariant'
           git push origin HEAD:series/llm-inference-engineering-economics-golden
           mkdir -p artifacts/visual-review
           git rev-parse HEAD | tee artifacts/visual-review/inference-engineering-ch4-certified-sha.txt
