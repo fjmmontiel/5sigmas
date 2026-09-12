@@ -1,5 +1,5 @@
 name: Inference Engineering Series 4 GOLDEN release certification
-# release-contract-revision: 3
+# release-contract-revision: 4
 
 on:
   push:
