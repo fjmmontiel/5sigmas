@@ -34,7 +34,7 @@ const codingAgents = {
 const contextEngineering = {
   route: '/en/series/context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineering/',
   title: 'Context Engineering, Memory & MCP',
-  chapterTitle: 'Chapter 1 — Context engineering vs prompt engineering: what actually changes in the system',
+  chapterTitle: 'Chapter 1 — Context engineering vs prompt engineering: what enters the model, when, and why',
 };
 
 const nativePresentationMedia = new Map([
