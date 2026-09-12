@@ -112,7 +112,7 @@ check(es.includes(visualInclude), 'ES: 5.2 visual include missing');
 check(en.includes(visualInclude), 'EN: 5.2 visual include missing');
 check(snippet.includes('GOLDEN_VISUAL_CONTRACT'), 'Visual: relationship-first contract marker missing');
 check(snippet.includes('interaction="static:no-cosmetic-controls"'), 'Visual: cosmetic interaction must be rejected');
-check(snippet.includes('mobile="horizontal-scroll-preserves-source-to-release-lifecycle-hard-pair-risk-channels-and-next-version-loop"'), 'Visual: mobile topology preservation contract missing');
+check(snippet.includes('mobile="horizontal-scroll-preserves-source-to-release-lifecycle-hard-pair-risk-channels-and-next-version-lane"'), 'Visual: mobile topology preservation contract missing');
 check(!snippet.includes('data-s5v-stepper') && !snippet.includes('s5v__steps--tabs'), 'Visual regression: cosmetic tabs/stepper detected');
 check(snippet.includes('data-boundary="release"'), 'Visual: frozen release boundary missing');
 for (const node of ['source', 'provenance', 'group', 'dev', 'regression', 'holdout', 'challenge', 'manifest', 'hard-context', 'hard-positive', 'hard-negative', 'pair-check', 'training-exposure', 'cross-split', 'development-leakage', 'temporal-leakage', 'scanner', 'production-failure', 'next-version']) {
