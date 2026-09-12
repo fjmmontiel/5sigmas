@@ -24,7 +24,7 @@ const articles = [
   },
   {
     route: '/en/articulos-tecnicos/voice-agent-architectures/',
-    title: 'Three architectures for voice agents',
+    title: 'Voice-agent architectures: cascades, speech-to-speech and full-duplex',
     concepts: ['full cascade', 'half cascade', 'SpeechPlan', 'speech-to-speech'],
     kind: 'voice-arch', demos: 10, media: null,
     screenshot: 'english-technical-03-voice-architectures.png',
@@ -175,9 +175,11 @@ async function validateVoiceRp(page, article, viewportName) {
   return voiceRpSelectors.length;
 }
 
+// The revised ES/EN article explains execution before latency and selection.
+// Keep all ten visuals and the interaction checks; do not restore retired slogans.
 const voiceArchSelectors = [
   '.s5v-arch-map', '.s5v-cascade', '.s5v-prosody-loss', '.s5v-half', '.s5v-speech-plan',
-  '.s5v-duplex', '.s5v-latency', '.s5v-decision', '.s5v-surface', '.s5v-voice-prompt',
+  '.s5v-duplex', '.s5v-surface', '.s5v-latency', '.s5v-decision', '.s5v-voice-prompt',
 ];
 async function validateVoiceArch(page, article, viewportName) {
   const body = await page.locator('body').innerText();
@@ -190,19 +192,26 @@ async function validateVoiceArch(page, article, viewportName) {
   ]) if (body.includes(token)) failures.push(`${article.route}: English-only reauthoring remains ${JSON.stringify(token)}`);
 
   for (const token of [
-    'To compare the options properly, I separate four axes:',
-    'Latency is not only a sum', 'Too many components share state', 'Streaming needs a good chunker',
-    'Measure more than the first audio', 'Hot take: S2S in front, heavy reasoning behind',
+    'Four decisions that should not be mixed',
+    'Streaming, speculation and control',
+    'The streaming unit matters',
+    'Three states that must not be conflated',
+    'Latency: five clocks, not one marketing number',
+    'Continuous conversation and asynchronous execution',
     'One harness for all three architectures',
-    'A fast S2S surface for the conversation, a heavier cognitive plane for the work, and a persistent contract that keeps them synchronized.',
+    'Interrupting speech does not mean canceling an action.',
+    'First useful answer',
   ]) if (!body.includes(token)) failures.push(`${article.route}: missing canonical teaching anchor ${JSON.stringify(token)}`);
 
   const hooks = [
     'voice-arch-map.html', 'voice-arch-cascade.html', 'voice-arch-prosody-loss.html', 'voice-arch-half.html',
-    'voice-arch-speech-plan.html', 'voice-arch-duplex.html', 'voice-arch-latency.html', 'voice-arch-decision.html',
-    'voice-arch-surface.html', 'voice-arch-voice-prompt.html',
+    'voice-arch-speech-plan.html', 'voice-arch-duplex.html', 'voice-arch-surface.html', 'voice-arch-latency.html',
+    'voice-arch-decision.html', 'voice-arch-voice-prompt.html',
   ];
-  await validateHookSource(article.route, 'locales/en/articulos-tecnicos/voice-agent-architectures.md', hooks);
+  for (const source of [
+    'docs/articulos-tecnicos/voice-agent-architectures.md',
+    'locales/en/articulos-tecnicos/voice-agent-architectures.md',
+  ]) await validateHookSource(article.route, source, hooks);
   if (await page.locator('[data-demo^="tech-03-"]').count()) failures.push(`${article.route}: legacy simplified tech-03 visual remains`);
   await validateRoots(page, article.route, voiceArchSelectors, viewportName);
 
