@@ -1,0 +1,86 @@
+<section class="s5v s5v-quant-parallel s5v--wide" aria-label="Relación entre cuantización, memoria, kernels y topologías de paralelismo">
+  <style>
+    .s5v-quant-parallel .s5v-quant-parallel__scroll{overflow-x:auto;overscroll-behavior-inline:contain;padding:.35rem .2rem .8rem;scrollbar-gutter:stable;outline:none}
+    .s5v-quant-parallel .s5v-quant-parallel__scroll:focus-visible{box-shadow:0 0 0 3px color-mix(in srgb,var(--md-accent-fg-color,#7c4dff) 36%,transparent);border-radius:14px}
+    .s5v-quant-parallel .s5v-quant-parallel__stage{width:100%;min-width:0;max-width:1240px;margin:0 auto}
+    .s5v-quant-parallel svg{display:block;width:100%;height:auto;overflow:visible}
+    .s5v-quant-parallel text{fill:currentColor;font-family:inherit}
+    .s5v-quant-parallel .q-boundary{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 95%,var(--md-accent-fg-color,#7c4dff) 5%);stroke:currentColor;stroke-width:2;stroke-dasharray:8 8;opacity:.92}
+    .s5v-quant-parallel .q-node{fill:var(--md-default-bg-color,#fff);stroke:currentColor;stroke-width:2.4}
+    .s5v-quant-parallel .q-node--major{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 87%,var(--md-accent-fg-color,#7c4dff) 13%);stroke-width:3.2}
+    .s5v-quant-parallel .q-node--warn{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 91%,currentColor 9%);stroke-dasharray:5 4}
+    .s5v-quant-parallel .q-edge{fill:none;stroke:currentColor;stroke-width:2.7;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#qp-arrow)}
+    .s5v-quant-parallel .q-edge--comm{stroke-dasharray:7 5;stroke-width:3.2}
+    .s5v-quant-parallel .q-edge--eval{stroke-dasharray:3 5}
+    .s5v-quant-parallel .q-label{font-size:15px;font-weight:820;text-anchor:middle}
+    .s5v-quant-parallel .q-sub{font-size:12px;text-anchor:middle;opacity:.78}
+    .s5v-quant-parallel .q-small{font-size:11.5px;font-weight:700;text-anchor:middle;opacity:.82}
+    .s5v-quant-parallel .q-kicker{font-size:13px;font-weight:850;letter-spacing:.07em;text-transform:uppercase;opacity:.74}
+    .s5v-quant-parallel .q-edge-label{font-size:11.5px;font-weight:760;paint-order:stroke;stroke:var(--md-default-bg-color,#fff);stroke-width:5px;stroke-linejoin:round;text-anchor:middle}
+    .s5v-quant-parallel .s5v-quant-parallel__legend{display:flex;gap:1rem;flex-wrap:wrap;margin:.25rem 0 0;font-size:.88rem;opacity:.86}
+    .s5v-quant-parallel .s5v-quant-parallel__legend span{display:inline-flex;gap:.42rem;align-items:center}
+    .s5v-quant-parallel .s5v-quant-parallel__legend i{width:1.55rem;border-top:3px solid currentColor}
+    .s5v-quant-parallel .s5v-quant-parallel__legend .is-comm i{border-top-style:dashed}
+    .s5v-quant-parallel .s5v-quant-parallel__legend .is-boundary i{border-top-width:2px;border-top-style:dashed;opacity:.7}
+    .s5v-quant-parallel .s5v__copy{margin-top:.85rem}
+    @media (max-width:700px){.s5v-quant-parallel .s5v-quant-parallel__scroll{margin-inline:-.35rem;padding-inline:.35rem}.s5v-quant-parallel .s5v-quant-parallel__stage{width:auto;min-width:1180px}.s5v-quant-parallel .s5v-quant-parallel__legend{font-size:.82rem}}
+  </style>
+  <!-- GOLDEN_VISUAL_CONTRACT
+    learning-objective="Show that quantization changes the representation and movement of selected tensors, while parallelism changes tensor placement and communication; neither operation guarantees a proportional latency speedup."
+    mechanism="weights/activations/KV -> chosen quantization scope -> scales/packing/kernel path -> measured memory/performance plus quality evaluation; one request -> DP/TP/PP/EP/CP placement -> topology-specific communication -> latency/throughput/failure-domain outcome."
+    visual-variables="upper topology uses separate tensor lanes to encode quantization scope and a converging kernel/evaluation boundary; lower topology uses spatial placement across ranks to distinguish replicated requests, sharded tensors, pipeline stages, expert routing, and context shards; dashed edges encode inter-rank communication; boundaries encode runtime/hardware responsibility."
+    why-visual="The central lesson is structural: two deployments may have the same nominal bit width or GPU count while moving different tensors or communicating on different edges. A prose list cannot make the placement and communication differences simultaneously visible."
+    relationship="tensor-scope->quantizer-scales-packing->supported-kernel->memory-latency-and-quality;request->parallel-placement->collectives-or-handoffs->service-outcome"
+    evidence="weight-only,weight-activation,kv-cache,scales,packing,kernel-support,quality-eval,data-parallel,tensor-parallel,pipeline-parallel,expert-parallel,context-parallel,collectives,topology"
+    interaction="static:no-cosmetic-controls"
+    mobile="horizontal-scroll-preserves-tensor-scope-rank-placement-and-communication-topology"
+  -->
+  <div class="s5v__canvas">
+    <header class="s5v__head"><div><span class="s5v__kicker">Representación · placement · comunicación</span><h3>Menos bits cambia qué bytes se mueven; más GPUs cambia quién debe hablar con quién</h3></div><p>La cuantización sólo reduce los tensores que realmente se cuantizan y sólo acelera si el hardware/runtime ejecuta un kernel favorable. El paralelismo sólo ayuda si el trabajo ganado compensa comunicación, sincronización y estado replicado.</p></header>
+    <div class="s5v-quant-parallel__scroll" tabindex="0" role="region" aria-label="Diagrama desplazable de alcance de cuantización y topologías de paralelismo">
+      <div class="s5v-quant-parallel__stage">
+        <svg viewBox="0 0 1240 1000" role="img" aria-labelledby="qp-title qp-desc">
+          <title id="qp-title">Qué reduce la cuantización y qué comunicación introduce cada forma de paralelismo</title>
+          <desc id="qp-desc">La mitad superior separa pesos, activaciones y KV cache. Cada uno puede conservar precisión nativa o atravesar una cuantización con escalas y packing antes de un kernel soportado; memoria y rendimiento se miden por separado de la calidad. La mitad inferior compara data parallel, tensor parallel, pipeline parallel, expert parallel y context parallel mostrando qué se replica, qué se fragmenta y dónde aparecen comunicaciones entre ranks.</desc>
+          <defs><marker id="qp-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="currentColor"/></marker></defs>
+
+          <rect data-boundary="quantization" class="q-boundary" x="24" y="52" width="1192" height="398" rx="24"/>
+          <text x="48" y="82" class="q-kicker">CUANTIZACIÓN · EL BIT WIDTH NO DEFINE TODO EL CAMINO</text>
+
+          <g data-node="weights"><rect class="q-node q-node--major" x="58" y="112" width="210" height="82" rx="17"/><text x="163" y="142" class="q-label">Pesos</text><text x="163" y="166" class="q-sub">W16 · W8 · W4 · FP8/FP4…</text></g>
+          <g data-node="activations"><rect class="q-node" x="58" y="220" width="210" height="82" rx="17"/><text x="163" y="250" class="q-label">Activaciones</text><text x="163" y="274" class="q-sub">A16 · A8 · escalado dinámico/estático</text></g>
+          <g data-node="kv"><rect class="q-node" x="58" y="328" width="210" height="82" rx="17"/><text x="163" y="358" class="q-label">KV cache</text><text x="163" y="382" class="q-sub">dtype y escalas propios</text></g>
+
+          <g data-node="quantizer"><rect class="q-node q-node--major" x="344" y="144" width="260" height="218" rx="20"/><text x="474" y="174" class="q-label">Esquema de cuantización</text><text x="474" y="202" class="q-sub">scope · dtype · granularity</text><text x="474" y="231" class="q-small">per-tensor / channel / group / token</text><text x="474" y="260" class="q-small">calibración o escalas runtime</text><text x="474" y="289" class="q-small">scale / zero-point / metadata</text><text x="474" y="318" class="q-small">packing + layout</text><text x="474" y="346" class="q-small">error de representación</text></g>
+
+          <g data-node="kernel"><rect class="q-node q-node--major" x="688" y="122" width="250" height="118" rx="20"/><text x="813" y="152" class="q-label">Kernel soportado</text><text x="813" y="178" class="q-sub">GPU · runtime · GEMM/attention</text><text x="813" y="207" class="q-small">sin kernel favorable, menos bytes ≠ menos latencia</text></g>
+          <g data-node="memory-performance"><rect class="q-node" x="988" y="104" width="194" height="105" rx="18"/><text x="1085" y="135" class="q-label">Sistema</text><text x="1085" y="160" class="q-sub">VRAM · bandwidth</text><text x="1085" y="183" class="q-sub">TTFT · TPOT · throughput</text></g>
+          <g data-node="quality"><rect class="q-node q-node--warn" x="988" y="260" width="194" height="118" rx="18"/><text x="1085" y="291" class="q-label">Calidad</text><text x="1085" y="316" class="q-sub">tasks · long context</text><text x="1085" y="340" class="q-sub">distribution shift</text><text x="1085" y="364" class="q-small">se evalúa; no se infiere del dtype</text></g>
+
+          <path class="q-edge" d="M268 153 H344"/><path class="q-edge" d="M268 261 H322 Q344 261 344 240"/><path class="q-edge" d="M268 369 H322 Q344 369 344 316"/>
+          <path class="q-edge" d="M604 214 H688"/><path class="q-edge" d="M938 174 H988"/>
+          <path class="q-edge q-edge--eval" d="M604 326 H900 Q944 326 988 319"/>
+          <text x="646" y="201" class="q-edge-label">representación empaquetada</text><text x="963" y="158" class="q-edge-label">ejecución</text><text x="792" y="314" class="q-edge-label">validar error → comportamiento</text>
+
+          <rect data-boundary="parallelism" class="q-boundary" x="24" y="486" width="1192" height="466" rx="24"/>
+          <text x="48" y="516" class="q-kicker">PARALELISMO · PLACEMENT Y COMUNICACIÓN POR REQUEST</text>
+
+          <g data-node="dp"><rect class="q-node" x="56" y="550" width="206" height="166" rx="18"/><text x="159" y="578" class="q-label">DP · réplicas</text><rect class="q-node q-node--major" x="82" y="602" width="62" height="44" rx="9"/><rect class="q-node q-node--major" x="174" y="602" width="62" height="44" rx="9"/><text x="113" y="630" class="q-small">M</text><text x="205" y="630" class="q-small">M</text><text x="159" y="673" class="q-sub">requests distintos</text><text x="159" y="696" class="q-small">pesos replicados por réplica</text></g>
+
+          <g data-node="tp"><rect class="q-node" x="286" y="550" width="206" height="166" rx="18"/><text x="389" y="578" class="q-label">TP · tensor shard</text><rect class="q-node q-node--major" x="312" y="602" width="62" height="44" rx="9"/><rect class="q-node q-node--major" x="404" y="602" width="62" height="44" rx="9"/><text x="343" y="630" class="q-small">½W</text><text x="435" y="630" class="q-small">½W</text><path class="q-edge q-edge--comm" d="M374 624 H404"/><text x="389" y="672" class="q-sub">mismo request</text><text x="389" y="696" class="q-small">collective dentro de capas</text></g>
+
+          <g data-node="pp"><rect class="q-node" x="516" y="550" width="206" height="166" rx="18"/><text x="619" y="578" class="q-label">PP · capas</text><rect class="q-node q-node--major" x="542" y="602" width="62" height="44" rx="9"/><rect class="q-node q-node--major" x="634" y="602" width="62" height="44" rx="9"/><text x="573" y="630" class="q-small">L0…n</text><text x="665" y="630" class="q-small">Ln…m</text><path class="q-edge q-edge--comm" d="M604 624 H634"/><text x="619" y="672" class="q-sub">activación → etapa</text><text x="619" y="696" class="q-small">bubbles / balance de etapas</text></g>
+
+          <g data-node="ep"><rect class="q-node" x="746" y="550" width="206" height="166" rx="18"/><text x="849" y="578" class="q-label">EP · expertos</text><circle class="q-node q-node--major" cx="792" cy="624" r="23"/><circle class="q-node q-node--major" cx="906" cy="610" r="20"/><circle class="q-node q-node--major" cx="906" cy="654" r="20"/><path class="q-edge q-edge--comm" d="M815 619 C844 605 860 607 886 610"/><path class="q-edge q-edge--comm" d="M815 630 C844 648 860 650 886 653"/><text x="849" y="683" class="q-sub">router → experts</text><text x="849" y="705" class="q-small">dispatch / all-to-all / imbalance</text></g>
+
+          <g data-node="cp"><rect class="q-node" x="976" y="550" width="206" height="166" rx="18"/><text x="1079" y="578" class="q-label">CP · contexto</text><rect class="q-node q-node--major" x="1002" y="602" width="62" height="44" rx="9"/><rect class="q-node q-node--major" x="1094" y="602" width="62" height="44" rx="9"/><text x="1033" y="630" class="q-small">S₀</text><text x="1125" y="630" class="q-small">S₁</text><path class="q-edge q-edge--comm" d="M1064 624 H1094"/><text x="1079" y="672" class="q-sub">secuencia fragmentada</text><text x="1079" y="696" class="q-small">attention necesita estado remoto</text></g>
+
+          <g data-node="topology"><rect class="q-node q-node--major" x="180" y="770" width="880" height="118" rx="20"/><text x="620" y="800" class="q-label">Interconnect + runtime + workload deciden el resultado</text><text x="620" y="828" class="q-sub">NVLink/NVSwitch · PCIe · red inter-node · collective algorithm · batch · secuencia · MoE balance</text><text x="620" y="856" class="q-small">más ranks ⇒ menos trabajo local potencial, pero más dependencias de comunicación/sincronización y un failure domain distinto</text></g>
+          <path class="q-edge q-edge--comm" d="M159 716 V742 H620 V770"/><path class="q-edge q-edge--comm" d="M389 716 V742"/><path class="q-edge q-edge--comm" d="M619 716 V742"/><path class="q-edge q-edge--comm" d="M849 716 V742"/><path class="q-edge q-edge--comm" d="M1079 716 V742 H620"/>
+        </svg>
+      </div>
+    </div>
+    <div class="s5v-quant-parallel__legend" aria-label="Leyenda del diagrama"><span><i></i>placement / ejecución local</span><span class="is-comm"><i></i>comunicación / sincronización</span><span class="is-boundary"><i></i>frontera de mecanismo</span></div>
+    <p class="s5v__copy"><strong>Lectura:</strong> `W4A16` dice qué precisión usan pesos y activaciones; no dice qué kernel se ejecuta, cuánto ocupan las escalas ni qué calidad conserva el modelo. `TP=4` dice cómo se reparte parte del modelo; no dice cuánto tarda el collective ni si el interconnect puede sostenerlo. Bits y número de GPUs son entradas del sistema, no métricas de rendimiento.</p>
+  </div>
+</section>
