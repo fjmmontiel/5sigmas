@@ -168,6 +168,7 @@ nav:
           - "Benchmarking de inferencia: cost/task, throughput, latencia, energía y hardware": series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.md
       - Evaluar sistemas de IA en producción:
           - "Qué evaluar: modelo, componente, sistema, workflow y trayectoria": series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria.md
+          - "Offline eval sets: curación, hard negatives, contaminación y versionado": series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning.md
   - Construir:
       - articulos-tecnicos/index.md
       - Agente Reactivo, Proactivo y Tool calls: articulos-tecnicos/proactive-reactive-agent-and-tool-calls.md
