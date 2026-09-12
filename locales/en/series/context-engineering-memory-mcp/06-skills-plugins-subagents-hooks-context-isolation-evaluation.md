@@ -79,7 +79,7 @@ The design goal is usually `C_discovery << C_active`, but a large library still 
 
 Two failure modes matter in particular:
 
-1. **under-triggering**: the right skill exists but is not activated;
+1. **under-triggering**: the right skill exists but is not activated.
 2. **over-triggering**: an irrelevant skill activates and consumes context or introduces unnecessary instructions.
 
 A skill evaluation therefore cannot stop at “the skill gives a good answer when manually invoked.” It must also measure **selection and activation**.
