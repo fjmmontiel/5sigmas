@@ -102,9 +102,17 @@ jobs:
         shell: bash
         run: |
           tracked_dirty="$(git status --porcelain --untracked-files=no)"
-          test -z "$tracked_dirty"
-          unexpected_untracked="$(git ls-files --others --exclude-standard | grep -vE '^artifacts/visual-review/inference-engineering-ch[1-6]-' || true)"
-          test -z "$unexpected_untracked"
+          if [ -n "$tracked_dirty" ]; then
+            printf 'Unexpected tracked changes after certification gates:\n%s\n' "$tracked_dirty"
+            git diff -- || true
+            exit 1
+          fi
+          all_untracked="$(git ls-files --others --exclude-standard)"
+          unexpected_untracked="$(printf '%s\n' "$all_untracked" | sed '/^$/d' | grep -vE '^artifacts/visual-review/inference-engineering-ch[1-6]-' || true)"
+          if [ -n "$unexpected_untracked" ]; then
+            printf 'Unexpected untracked files after certification gates:\n%s\n' "$unexpected_untracked"
+            exit 1
+          fi
           mkdir -p artifacts/visual-review
           {
             echo "certified_sha=$(git rev-parse HEAD)"
