@@ -84,8 +84,10 @@ for (const text of [es, en]) {
   check(text.includes('outcome/state checks'), 'Reproducibility record must retain outcome/state checks');
 }
 
-check(es.includes('workflow describe las reglas o política') && es.includes('trayectoria') && es.includes('camino concreto'), 'ES: workflow-versus-trajectory distinction missing');
-check(en.includes('workflow describes the rules or policy') && en.includes('trajectory') && en.includes('path that actually occurred'), 'EN: workflow-versus-trajectory distinction missing');
+const esPlain = es.replace(/\*\*/g, '');
+const enPlain = en.replace(/\*\*/g, '');
+check(esPlain.includes('workflow describe las reglas o política') && esPlain.includes('trayectoria') && esPlain.includes('camino concreto'), 'ES: workflow-versus-trajectory distinction missing');
+check(enPlain.includes('workflow describes the rules or policy') && enPlain.includes('trajectory') && enPlain.includes('path that actually occurred'), 'EN: workflow-versus-trajectory distinction missing');
 check(es.includes('una trayectoria «bonita» no demuestra éxito'), 'ES: trajectory cannot substitute for outcome caveat missing');
 check(en.includes('a clean-looking trajectory does not prove success'), 'EN: trajectory cannot substitute for outcome caveat missing');
 check(es.includes('el resultado no describe automáticamente el producto'), 'ES: model-eval/product boundary caveat missing');
