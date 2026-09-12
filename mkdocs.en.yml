@@ -214,6 +214,7 @@ nav:
           - "Benchmarking inference: cost/task, throughput, latency, energy, and hardware constraints": series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.md
       - Evaluating AI Systems in Production:
           - "What to evaluate: model, component, system, workflow, and trajectory": series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria.md
+          - "Offline eval sets: curation, hard negatives, contamination, and versioning": series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning.md
   - Concepts:
       - Concepts: temas/index.md
       - What is an LLM?: temas/llms.md
