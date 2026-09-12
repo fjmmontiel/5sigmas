@@ -104,9 +104,9 @@ try {
       if (locale === 'es') {
         check(visualText.includes('menos bytes ≠ menos latencia'), `${locale}/${viewport.name}: kernel-support caveat missing`);
         check(visualText.includes('collective dentro de capas'), `${locale}/${viewport.name}: TP collective relation missing`);
-        check(visualText.includes('dispatch / all-to-all / imbalance'), `${locale}/${viewport.name}: EP communication relation missing`);
-        check(visualText.includes('attention necesita estado remoto'), `${locale}/${viewport.name}: CP remote-state relation missing`);
-        check(visualText.includes('Interconnect + runtime + workload deciden el resultado'), `${locale}/${viewport.name}: topology outcome boundary missing`);
+        check(visualText.includes('dispatch / all-to-all / desbalance'), `${locale}/${viewport.name}: EP communication relation missing`);
+        check(visualText.includes('la atención necesita estado remoto'), `${locale}/${viewport.name}: CP remote-state relation missing`);
+        check(visualText.includes('Interconexión + runtime + carga deciden el resultado'), `${locale}/${viewport.name}: topology outcome boundary missing`);
       } else {
         check(visualText.includes('fewer bytes ≠ lower latency'), `${locale}/${viewport.name}: kernel-support caveat missing`);
         check(visualText.includes('collective inside layers'), `${locale}/${viewport.name}: TP collective relation missing`);
