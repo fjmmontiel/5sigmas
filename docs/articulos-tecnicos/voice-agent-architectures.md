@@ -2,7 +2,7 @@
 title: "Arquitecturas de agentes de voz: cascade, speech-to-speech y full-duplex"
 description: "Cómo funcionan full cascade, half cascade, speech-to-speech y full-duplex. Modelos, papers, latencia, interrupciones, tools y evidencia de GPT-Live."
 date: 2026-08-04
-date_modified: 2026-09-10
+date_modified: 2026-09-12
 keywords: "voice agents, full cascade, half cascade, speech-to-speech, full duplex, half duplex, Moshi, GPT-Live, audio LLM, latency, tool calling"
 article_state: published
 tags:
@@ -16,13 +16,13 @@ tags:
 
 # Arquitecturas de agentes de voz: cascade, speech-to-speech y full-duplex
 
-> **La decisión principal no es cuántos modelos hay. Es dónde se pierde información, quién decide cuándo hablar y quién conserva el estado de las acciones.**
->
-> **Corte de evidencia:** 10 de septiembre de 2026. Revisión técnica de fuentes primarias, no benchmark ejecutado por 5sigmas. Las recomendaciones y los contratos de software son propuestas de ingeniería. Las cifras publicadas conservan proveedor, configuración y definición de la métrica.
+Un cliente pide una reserva para el viernes. Mientras el agente consulta disponibilidad, corrige: «Perdón, para el jueves». El sistema debe escuchar la corrección, evitar una confirmación antigua y comprobar qué ocurrió con la reserva. Que la voz suene natural no resuelve esas tres tareas.
 
-GPT-Live-1 llega a la API el 10 de septiembre de 2026. Es un punto de partida relevante para revisar la arquitectura de un agente de voz, pero no una razón para declarar obsoleta toda cascada. OpenAI comunica una mejora de **30 puntos porcentuales** frente a GPT-Realtime-2.1 en Full Duplex Bench y un primer puesto en Tau3 **con GPT-6 Astra medium como backend**. Son resultados del proveedor y de una configuración concreta, no una prueba independiente de superioridad universal.[^live-api]
+GPT-Live-1, disponible para integrar en aplicaciones desde el 10 de septiembre de 2026, permite escuchar mientras se habla y delegar razonamiento y acciones. Este análisis utiliza el lanzamiento para comparar tres recorridos del audio y, por separado, la gestión de turnos y el estado de las operaciones. No presenta una cascada como necesariamente obsoleta.[^live-api]
 
-Esta revisión separa representación acústica, interacción y ejecución. El catálogo bibliográfico cubre mecanismos representativos y benchmarks; no pretende enumerar todos los modelos comerciales ni atribuir detalles internos que un proveedor no haya publicado.
+> **Corte de evidencia:** 12 de septiembre de 2026. Revisión de 32 fuentes primarias seleccionadas, no recopilación exhaustiva ni benchmark ejecutado por 5sigmas. Las ecuaciones, contratos y pruebas propuestas se distinguen de los resultados publicados. Las cifras conservan proveedor, configuración y definición de la métrica.
+
+OpenAI comunica una mejora de **30 puntos porcentuales** frente a GPT-Realtime-2.1 en Full Duplex Bench y un primer puesto en Tau3 **con GPT-6 Astra medium como backend**, el modelo encargado del trabajo delegado. Son resultados del proveedor y de una configuración concreta, no una prueba independiente de superioridad universal.[^live-api]
 
 ## 0. Cuatro decisiones que no deben mezclarse
 
@@ -98,7 +98,7 @@ Audio → encoder / adaptación de audio → modelo lingüístico
 Transcripción auxiliar ───────────────────────────────→ observabilidad
 ```
 
-El modelo recibe una representación del audio sin exigir una transcripción externa como única entrada. Qwen2-Audio es una referencia de audio-in / text-out. Ultravox distingue explícitamente la comprensión directa del audio de una transcripción auxiliar para logs. La API Realtime documenta respuestas con `output_modalities: ["text"]`.[^qwen2audio][^ultravox][^realtime]
+El modelo recibe una representación del audio sin exigir una transcripción externa como única entrada. Qwen2-Audio es una referencia de audio-in / text-out. El repositorio de Ultravox describe entrada de audio y salida de texto, sin una etapa externa obligatoria de reconocimiento del habla. La API Realtime documenta respuestas con `output_modalities: ["text"]`.[^qwen2audio][^ultravox][^realtime]
 
 **Audio-native no significa ausencia de encoder, de supervisión textual o de componentes preentrenados con ASR.** Describe la interfaz y la representación disponibles para el modelo. Tampoco demuestra que un checkpoint acepte audio indefinido en streaming: eso exige comprobar causalidad, ventanas, estado y la API concreta.
 
@@ -191,7 +191,7 @@ PersonaPlex adapta la línea de Moshi para controlar rol y voz mediante prompts 
 
 Para evaluar una integración nueva separaría las ablaciones: mismo LLM con texto frente a audio; mismo audio-model con varios TTS; mismo modelo con endpointing distinto; mismo frontend con backends de distinta capacidad. Cambiar todas las piezas simultáneamente impide atribuir la mejora a la arquitectura.
 
-## 6. Hot take: S2S delante, razonamiento pesado detrás
+## 6. Conversación continua y ejecución asíncrona
 
 ```text
             voz / silencios / solapamientos
@@ -220,7 +220,7 @@ Estos tres registros no avanzan a la misma velocidad. El historial no debería a
 
 Un `DeliveryEnvelope` podría incluir `task_id`, versión del contexto relevante, estado de ejecución, resultado estructurado, procedencia y una clave de deduplicación. Es un contrato propuesto aquí, no una API de proveedor. Al recibirlo se revalida su pertinencia: una corrección de fecha puede invalidarlo; una frase no relacionada no tiene por qué hacerlo.
 
-**Interrumpir voz no equivale a cancelar una acción.** La guía de delegación de Live distingue ambos ciclos de vida.[^live-delegation] Para una operación con efectos externos propongo autorización en el ejecutor, idempotencia, consulta de estado tras un timeout y una política de compensación cuando proceda. Ningún prompt sustituye estas garantías.
+**Interrumpir voz no equivale a cancelar una acción.** La separación entre la ruta de audio y el trabajo delegado implica ciclos de vida distintos; detener la reproducción no prueba que el ejecutor haya revertido una operación.[^live-engineering][^live-delegation] Para una operación con efectos externos propongo autorización en el ejecutor, idempotencia, consulta de estado tras un timeout y una política de compensación cuando proceda. Ningún prompt sustituye estas garantías.
 
 ### El detalle de telefonía que rompe muchas demos
 
@@ -274,7 +274,7 @@ Fuentes: papers y publicaciones oficiales.[^moshi][^qwen25][^qwen3][^personaplex
 
 La tendencia defendible es **integración acústica para conversar y separación de responsabilidades para trabajar**. Es una síntesis de ingeniería, no una regresión estadística ni una afirmación de que todos los agentes deban adoptar el mismo diseño.
 
-El artículo de ingeniería de GPT-Live describe una ruta de medios de baja latencia separada de llamadas asíncronas al backend y mecanismos de continuidad de sesiones.[^live-engineering] No publica suficiente detalle para reconstruir su tokenizer, número de parámetros, mezcla completa de datos o política interna de entrenamiento. No atribuyo a GPT-Live los detalles de Mimi o de Thinker–Talker.
+El artículo de ingeniería de GPT-Live describe una ruta de audio separada de las llamadas asíncronas al modelo delegado. Para cambiar de instancia o compactar el contexto, prepara una instancia de reemplazo mientras la anterior sigue atendiendo la sesión. También separa una vista provisional de la conversación de un registro confirmado: texto, tiempos y atribución de hablante pueden cambiar antes de consolidarse. Son mecanismos publicados del sistema, no garantías de que cualquier implementación propia tenga la misma continuidad.[^live-engineering] No publica suficiente detalle para reconstruir su tokenizer, número de parámetros, mezcla completa de datos o política interna de entrenamiento. No atribuyo a GPT-Live los detalles de Mimi o de Thinker–Talker.
 
 «SOTA» exige declarar benchmark, versión, fecha, configuración y procedencia de la evaluación. Un primer puesto de un sistema con backend Astra no aísla la capacidad del frontend de voz. Esta revisión no incorpora una reproducción independiente de ese ranking ni un experimento propio con GPT-Live-1.
 
@@ -335,7 +335,8 @@ Estas son recomendaciones de diseño, no una certificación legal. Del mismo mod
 
 | Caso | Invariante que exigiría |
 |---|---|
-| «El viernes… perdón, el lunes» | Ninguna acción confirmada usa la fecha descartada |
+| Corrección de viernes a jueves antes de confirmar | Ninguna acción nueva se confirma con la fecha descartada |
+| Corrección después de confirmar una reserva | Se verifica el estado y se aplica la modificación o compensación autorizada; no se finge que nunca se reservó |
 | «Ajá» durante una explicación | La política distingue escucha de una petición real de parada |
 | Interrupción con audio ya en cola | No se reproduce una respuesta invalidada después del vaciado |
 | Timeout de una reserva | Se consulta el estado antes de repetir una operación no idempotente |
@@ -358,7 +359,7 @@ Full-duplex es otra decisión: escuchar durante la salida, interpretar el solapa
 [^whisper]: Radford et al., [Robust Speech Recognition via Large-Scale Weak Supervision](https://arxiv.org/abs/2212.04356), 2022.
 [^salmonn]: Tang et al., [SALMONN: Towards Generic Hearing Abilities for Large Language Models](https://arxiv.org/abs/2310.13289), 2023.
 [^qwen2audio]: Qwen team, [Qwen2-Audio Technical Report](https://arxiv.org/html/2407.10759v1), 2024.
-[^ultravox]: Ultravox, [Frequently asked questions](https://docs.ultravox.ai/gettingstarted/faq), 2026-09-10.
+[^ultravox]: Fixie, [Ultravox: repositorio y descripción de la arquitectura](https://github.com/fixie-ai/ultravox), consultado el 2026-09-12.
 [^realtime]: OpenAI, [Realtime conversations](https://developers.openai.com/api/docs/guides/realtime-conversations), 2026-09-10.
 [^audiolm]: Borsos et al., [AudioLM: a Language Modeling Approach to Audio Generation](https://arxiv.org/abs/2209.03143), 2022.
 [^encodec]: Défossez et al., [High Fidelity Neural Audio Compression](https://arxiv.org/abs/2210.13438), 2022.
