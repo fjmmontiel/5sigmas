@@ -26,7 +26,7 @@ This chapter asks one concrete question:
 
 We need two distinct evidence objects:
 
-1. **outcome**: the terminal state produced by the system;
+1. **outcome**: the terminal state produced by the system.
 2. **trajectory**: the observed sequence of decisions, tool calls, results, state changes, and recovery that led to that outcome.
 
 Anthropic makes this distinction explicit in its guidance on agent evaluations. A transcript or trajectory contains the complete execution, while the outcome is the final state of the environment. Graders can inspect either object or both.[^anthropic-evals] This separation matters because a single success rate cannot explain how success was obtained.
@@ -43,10 +43,10 @@ e_t = (o_t, d_t, a_t, r_t, s_{t+1})
 
 where:
 
-- `o_t` is the observation available before acting;
-- `d_t` is the agent's decision;
-- `a_t` is the executed action, such as a tool call or a response;
-- `r_t` is the observed result of that action;
+- `o_t` is the observation available before acting.
+- `d_t` is the agent's decision.
+- `a_t` is the executed action, such as a tool call or a response.
+- `r_t` is the observed result of that action.
 - `s_{t+1}` is the real state after the transition.
 
 The complete trajectory is:
@@ -71,10 +71,10 @@ When the result can be checked directly, the first grader should inspect the rea
 
 Examples include:
 
-- the reservation exists in the database with the correct dates and user;
-- the ticket ended in the expected state;
-- the produced file passes deterministic tests;
-- the order was cancelled exactly once;
+- the reservation exists in the database with the correct dates and user.
+- the ticket ended in the expected state.
+- the produced file passes deterministic tests.
+- the order was cancelled exactly once.
 - the user-facing message contains required contractual information.
 
 A simple binary variable is:
@@ -105,8 +105,8 @@ Ask whether the chosen action was compatible with the goal and the available sta
 
 Examples:
 
-- use a read tool before an irreversible operation when a precondition is missing;
-- avoid a write tool when the user only requested information;
+- use a read tool before an irreversible operation when a precondition is missing.
+- avoid a write tool when the user only requested information.
 - select the correct endpoint among similar operations.
 
 An exact check works when there is one correct selection. If several paths are valid, the grader should recognize equivalence or verify consequences rather than compare against one expected tool name.
@@ -129,10 +129,10 @@ idempotency or transaction identifier if relevant
 
 Correctness can be split into:
 
-- valid schema;
-- correct types and formats;
-- correct entity;
-- semantically correct values;
+- valid schema.
+- correct types and formats.
+- correct entity.
+- semantically correct values.
 - correct authorization and scope.
 
 Do not collapse these dimensions into a single `tool_call_pass` if you need to diagnose the error mechanism.
@@ -178,10 +178,10 @@ Quality and efficiency can then be compared among the valid trials.
 
 Examples of hard invariants include:
 
-- do not execute a write without required authorization;
-- do not cross tenant boundaries;
-- do not send secrets to an unapproved tool;
-- do not confirm an action that the backend rejected;
+- do not execute a write without required authorization.
+- do not cross tenant boundaries.
+- do not send secrets to an unapproved tool.
+- do not confirm an action that the backend rejected.
 - do not repeat a non-idempotent side effect without reconciling state first.
 
 The *Procedure-Aware Evaluation* paper formalizes the related risk of "corrupt success": tasks that appear successful by outcome while hiding procedural failures.[^procedure-aware] Its reported numbers belong to its benchmark and setup. We use the paper here to support the conceptual separation, not to transfer its percentages to another product.
@@ -214,7 +214,7 @@ create_refund(...)
 → client observes timeout
 ```
 
-If the agent interprets `timeout == did not happen` and repeats the call, it may duplicate the side effect.
+If the agent treats an ambiguous timeout as evidence that the operation did not happen and repeats the call, it may duplicate the side effect.
 
 The correct trajectory depends on the system contract:
 
@@ -307,8 +307,8 @@ There are tasks where a particular sequence really does matter.
 
 Examples include:
 
-- a regulated protocol requires consent before data access;
-- a security workflow requires approval before deployment;
+- a regulated protocol requires consent before data access.
+- a security workflow requires approval before deployment.
 - an educational task is explicitly testing whether the agent follows a process.
 
 In those cases, order or specific actions are part of the criterion.
@@ -332,14 +332,14 @@ That allows multiple valid plans around the relationships that actually matter.
 
 They are the first choice for observable facts:
 
-- tool names and arguments;
-- schema;
-- relative ordering between events;
-- permissions and approval IDs;
-- number of writes;
-- terminal state;
-- retries and timeouts;
-- cost or latency limits;
+- tool names and arguments.
+- schema.
+- relative ordering between events.
+- permissions and approval IDs.
+- number of writes.
+- terminal state.
+- retries and timeouts.
+- cost or latency limits.
 - duplicate side effects.
 
 Their advantage is clear reproducibility and attribution.
@@ -350,9 +350,9 @@ Their limitation is equally clear: they only verify what has been explicitly spe
 
 They are useful for semantic properties that are difficult to encode exactly:
 
-- whether a decision was supported by the observation available at that point;
-- whether the agent interpreted a tool error correctly;
-- whether a recovery action was reasonable under a natural-language policy;
+- whether a decision was supported by the observation available at that point.
+- whether the agent interpreted a tool error correctly.
+- whether a recovery action was reasonable under a natural-language policy.
 - whether the user-facing communication faithfully represents the observed state.
 
 They should follow the discipline from Chapter 5.3: versioned rubric, calibration against humans, an `unknown` output when evidence is insufficient, bias probes, and a declared scope.
@@ -363,10 +363,10 @@ Do not show the grader information the agent did not have if the question is "wa
 
 Human review is especially useful for:
 
-- high-risk trajectories;
-- new taxonomies;
-- grader disagreement;
-- unexplained failure clusters;
+- high-risk trajectories.
+- new taxonomies.
+- grader disagreement.
+- unexplained failure clusters.
 - periodic audits of automatic-grader false positives and false negatives.
 
 Anthropic recommends combining deterministic, model-based, and human graders according to the evidence type, and manually reviewing transcripts to verify that the graders are measuring the intended behavior.[^anthropic-evals]
@@ -468,9 +468,9 @@ Both may end with the user seeing "reservation confirmed." Only the first reconc
 
 The required graders are different:
 
-- outcome verifier: does the correct reservation exist?;
-- duplicate-side-effect verifier: does exactly one reservation exist?;
-- recovery verifier: was the ambiguous write reconciled before retry?;
+- outcome verifier: does the correct reservation exist?
+- duplicate-side-effect verifier: does exactly one reservation exist?
+- recovery verifier: was the ambiguous write reconciled before retry?
 - communication verifier: does the user-facing statement match the real state?
 
 ## Case C — Coding agent: green tests with an excessive trajectory
@@ -479,11 +479,11 @@ A coding agent receives a small task and eventually passes all tests.
 
 We still want to know:
 
-- which files it modified;
-- whether it left the allowed scope;
-- whether it ran destructive commands;
-- how often it repeated the same failure;
-- whether it reverted failed changes;
+- which files it modified.
+- whether it left the allowed scope.
+- whether it ran destructive commands.
+- how often it repeated the same failure.
+- whether it reverted failed changes.
 - whether it kept editing after the acceptance criteria were already met.
 
 The outcome verifier can inspect the tests and final diff. Trajectory evaluation adds policy, recovery, and cost evidence.
@@ -535,11 +535,11 @@ When outcome and trajectory disagree in a surprising way, do not automatically a
 
 The defect may be in:
 
-- the simulator;
-- the grader;
-- an ambiguous task;
-- the initial state;
-- the outcome definition;
+- the simulator.
+- the grader.
+- an ambiguous task.
+- the initial state.
+- the outcome definition.
 - the reference policy.
 
 Anthropic documents benchmark cases where grader or harness defects materially changed measured results once the evaluation was corrected.[^anthropic-evals]
