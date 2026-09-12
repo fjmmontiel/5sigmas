@@ -1,0 +1,130 @@
+name: Inference Engineering 4.6 GOLDEN certification
+
+on:
+  push:
+    branches:
+      - series/llm-inference-engineering-economics-golden
+    paths:
+      - '.github/workflows/inference-engineering-ch6-golden.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  certify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Validate media declarations and signatures
+        run: |
+          python scripts/prepare_video_media.py --check
+          python scripts/audit_media_magic.py
+
+      - name: Validate Series 4 source contracts 4.1–4.6
+        run: |
+          node scripts/validate_inference_engineering_ch1_source.mjs
+          node scripts/validate_inference_engineering_ch2_source.mjs
+          node scripts/validate_inference_engineering_ch3_source.mjs
+          node scripts/validate_inference_engineering_ch4_source.mjs
+          node scripts/validate_inference_engineering_ch5_source.mjs
+          node scripts/validate_inference_engineering_ch6_source.mjs
+
+      - name: Build Spanish strictly
+        run: mkdocs build --clean --strict
+
+      - name: Audit public-series publication contract
+        run: python scripts/audit_publication_contract.py
+
+      - name: Prepare and audit English locale
+        run: |
+          python scripts/prepare_locale.py --locale en
+          python scripts/audit_locale.py --locale en
+
+      - name: Build English strictly
+        env:
+          S5_LOCALE: en
+        run: mkdocs build -f mkdocs.en.yml --clean --strict
+
+      - name: Audit rendered English locale
+        run: python scripts/audit_locale.py --locale en --site site/en
+
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Serve combined preview
+        run: |
+          python -m http.server 8000 --directory site > /tmp/5sigmas-series4-ch6-preview.log 2>&1 &
+          for attempt in {1..30}; do
+            curl --fail --silent http://127.0.0.1:8000/ > /dev/null && curl --fail --silent http://127.0.0.1:8000/en/ > /dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/5sigmas-series4-ch6-preview.log
+          exit 1
+
+      - name: Audit browser resources, locale, and mirror
+        run: |
+          node scripts/audit_browser_resources.mjs
+          node scripts/validate_english_locale.mjs
+          node scripts/validate_english_series_mirror.mjs
+
+      - name: Validate Series 4 relationship geometry and accessibility 4.1–4.6
+        run: |
+          node scripts/validate_inference_engineering_ch1_accessibility.mjs
+          node scripts/validate_inference_engineering_ch2_accessibility.mjs
+          node scripts/validate_inference_engineering_ch3_accessibility.mjs
+          node scripts/validate_inference_engineering_ch4_accessibility.mjs
+          node scripts/validate_inference_engineering_ch5_accessibility.mjs
+          node scripts/validate_inference_engineering_ch6_accessibility.mjs
+
+      - name: Validate reader navigation
+        run: node scripts/validate_direct_reader_navigation.mjs
+
+      - name: Record exact certification identities
+        shell: bash
+        run: |
+          mkdir -p artifacts/visual-review
+          {
+            echo "certified_sha=$(git rev-parse HEAD)"
+            echo "es_blob=$(git hash-object docs/series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.md)"
+            echo "en_blob=$(git hash-object locales/en/series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.md)"
+            echo "visual_blob=$(git hash-object docs/snippets/articulos-tecnicos/inference-benchmark-measurement-boundary.html)"
+            echo "workflow_blob=$(git hash-object .github/workflows/series4-golden-review.yml)"
+          } | tee artifacts/visual-review/inference-engineering-ch6-identities.txt
+          git status --short
+          test -z "$(git status --porcelain)"
+
+      - name: Verify branch still points at certified SHA
+        shell: bash
+        run: |
+          remote_sha="$(git ls-remote origin refs/heads/series/llm-inference-engineering-economics-golden | cut -f1)"
+          test "$remote_sha" = "$GITHUB_SHA"
+
+      - name: Upload GOLDEN evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: inference-engineering-ch6-golden-evidence
+          path: |
+            artifacts/visual-review/inference-engineering-ch6-*.png
+            artifacts/visual-review/inference-engineering-ch6-identities.txt
+          if-no-files-found: error
+          retention-days: 7
