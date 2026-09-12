@@ -51,6 +51,9 @@ jobs:
       - name: Validate chapter 4.3 source contract
         run: node scripts/validate_inference_engineering_ch3_source.mjs
 
+      - name: Validate chapter 4.4 source contract
+        run: node scripts/validate_inference_engineering_ch4_source.mjs
+
       - name: Build Spanish strictly
         run: mkdocs build --clean --strict
 
@@ -99,6 +102,9 @@ jobs:
 
       - name: Validate chapter 4.3 relationship geometry and accessibility
         run: node scripts/validate_inference_engineering_ch3_accessibility.mjs
+
+      - name: Validate chapter 4.4 relationship geometry and accessibility
+        run: node scripts/validate_inference_engineering_ch4_accessibility.mjs
 
       - name: Validate direct reader navigation
         run: node scripts/validate_direct_reader_navigation.mjs
