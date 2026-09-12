@@ -80,6 +80,12 @@ hide:
       <span class="s5-list-row__desc">Contexto, aislamiento, contratos de tarea, permisos, verificación y estado durable para agentes que modifican repositorios de software.</span>
       <span class="s5-list-row__meta">6 capítulos</span>
     </a>
+    <a class="s5-list-row" href="/series/context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineering/">
+      <span class="s5-list-row__n">11</span>
+      <span class="s5-list-row__title">Context engineering, memoria y MCP</span>
+      <span class="s5-list-row__desc">Cómo ensamblar contexto, gestionar presupuestos y memoria, recuperar evidencia, integrar MCP y aislar extensiones y subagentes.</span>
+      <span class="s5-list-row__meta">6 capítulos</span>
+    </a>
   </nav>
 </section>
 
