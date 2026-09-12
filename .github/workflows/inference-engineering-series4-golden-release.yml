@@ -1,5 +1,5 @@
 name: Inference Engineering Series 4 GOLDEN release certification
-# release-contract-revision: 2
+# release-contract-revision: 3
 
 on:
   push:
@@ -14,7 +14,7 @@ permissions:
 jobs:
   certify-series:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
         with:
@@ -52,7 +52,7 @@ jobs:
       - name: Validate Series 4 deterministic inventory and publication surfaces
         run: node scripts/validate_inference_engineering_series4_release.mjs
 
-      - name: Validate all Series 4 source and relationship contracts
+      - name: Validate all Series 4 source contracts
         run: |
           node scripts/validate_inference_engineering_ch1_source.mjs
           node scripts/validate_inference_engineering_ch2_source.mjs
@@ -96,11 +96,12 @@ jobs:
           cat /tmp/5sigmas-series4-release-preview.log
           exit 1
 
-      - name: Audit browser resources, locale and mirror
+      - name: Audit browser resources, bilingual hub and locale progression
         run: |
           node scripts/audit_browser_resources.mjs
           node scripts/validate_english_locale.mjs
           node scripts/validate_english_series_mirror.mjs
+          node scripts/validate_locale_switching.mjs
 
       - name: Re-run all Series 4 geometry, accessibility and responsive gates
         run: |
@@ -130,12 +131,12 @@ jobs:
             ['series3-ch1','/series/context-engineering-memory-mcp/01-context-engineering-vs-prompt-engineering/'],
             ['series3-ch6','/series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation/'],
           ];
-          for (const [name,path] of targets) {
+          for (const [name,targetPath] of targets) {
             for (const [vp,w,h] of [['desktop',1440,1000],['mobile',390,844]]) {
               const page = await browser.newPage({viewport:{width:w,height:h}});
-              const response = await page.goto(`http://127.0.0.1:8000${path}`,{waitUntil:'networkidle'});
+              const response = await page.goto(`http://127.0.0.1:8000${targetPath}`,{waitUntil:'networkidle'});
               if (!response || !response.ok()) throw new Error(`${name} ${vp} failed: ${response?.status()}`);
-              await page.screenshot({path:`artifacts/visual-review/series4-comparison-${name}-${vp}.png`,fullPage:true});
+              await page.screenshot({path:`artifacts/visual-review/series4-comparison-${name}-${vp}.png`,fullPage:true,animations:'disabled'});
               await page.close();
             }
           }
@@ -152,6 +153,11 @@ jobs:
             echo "tree_sha=$(git rev-parse HEAD^{tree})"
             echo "release_validator_blob=$(git hash-object scripts/validate_inference_engineering_series4_release.mjs)"
             echo "permanent_workflow_blob=$(git hash-object .github/workflows/series4-golden-review.yml)"
+            echo "live_workflow_blob=$(git hash-object .github/workflows/inference-engineering-live-qa.yml)"
+            echo "series_hub_es_blob=$(git hash-object docs/series/index.md)"
+            echo "series_hub_en_blob=$(git hash-object locales/en/series/index.md)"
+            echo "locale_switch_validator_blob=$(git hash-object scripts/validate_locale_switching.mjs)"
+            echo "english_series_mirror_validator_blob=$(git hash-object scripts/validate_english_series_mirror.mjs)"
             for f in docs/series/llm-inference-engineering-economics/*.md; do echo "es_blob[$f]=$(git hash-object "$f")"; done
             for f in locales/en/series/llm-inference-engineering-economics/*.md; do echo "en_blob[$f]=$(git hash-object "$f")"; done
             for f in docs/snippets/articulos-tecnicos/inference-*.html; do echo "visual_blob[$f]=$(git hash-object "$f")"; done
@@ -176,6 +182,7 @@ jobs:
             artifacts/visual-review/inference-engineering-*.png
             artifacts/visual-review/inference-engineering-series4-inventory.json
             artifacts/visual-review/inference-engineering-series4-identities.txt
+            artifacts/visual-review/english-series-mirror-*.png
             artifacts/visual-review/series4-comparison-*.png
           if-no-files-found: warn
           retention-days: 2
