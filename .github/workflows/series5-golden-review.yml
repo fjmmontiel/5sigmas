@@ -50,7 +50,9 @@ jobs:
           node-version: '22'
 
       - name: Validate current Series 5 source contracts
-        run: node scripts/validate_ai_systems_eval_ch1_source.mjs
+        run: |
+          node scripts/validate_ai_systems_eval_ch1_source.mjs
+          node scripts/validate_ai_systems_eval_ch2_source.mjs
 
       - name: Validate media declarations and signatures
         run: |
@@ -101,7 +103,9 @@ jobs:
           node scripts/validate_locale_switching.mjs
 
       - name: Validate current Series 5 relationship geometry and accessibility
-        run: node scripts/validate_ai_systems_eval_ch1_accessibility.mjs
+        run: |
+          node scripts/validate_ai_systems_eval_ch1_accessibility.mjs
+          node scripts/validate_ai_systems_eval_ch2_accessibility.mjs
 
       - name: Validate reader navigation and responsive shell
         run: |
