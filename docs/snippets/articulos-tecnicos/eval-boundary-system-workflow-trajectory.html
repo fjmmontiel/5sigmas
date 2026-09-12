@@ -33,7 +33,7 @@
   <!-- GOLDEN_VISUAL_CONTRACT
     learning-objective="Show that model, component, workflow, trajectory and system are different evaluation objects: the workflow is a policy inside the system, a trajectory is one realized path through it, and wider boundaries increase product validity while reducing causal attribution."
     mechanism="change/risk -> choose narrowest boundary containing the mechanism -> evaluate a trial whose task/environment define context -> workflow policy selects components/model/tools -> one realized trajectory produces outcome/state; local evals diagnose model/component/workflow behavior while the end-to-end eval confirms product utility; trial context is not automatically part of the production SUT; trajectory evidence explains the path but does not replace outcome."
-    visual-variables="nested dashed boundaries encode model/component/workflow/system scope; a single thick path crossing selected nodes encodes one realized trajectory; outcome sits outside the policy graph as final evidence; lower inward/outward arrows encode diagnose-narrow versus confirm-broad without implying a universal scalar ranking."
+    visual-variables="nested dashed boundaries encode model/component/workflow/system scope; thick directed segments connecting the selected nodes encode one realized trajectory without obscuring node labels; outcome sits outside the policy graph as final evidence; lower inward/outward arrows encode diagnose-narrow versus confirm-broad without implying a universal scalar ranking."
     why-visual="The chapter's main failure mode is treating evaluation levels as interchangeable. Spatial containment and the realized path make the distinction between policy, execution record, outcome and system boundary explicit."
     relationship="change->diagnostic-boundary;system>{workflow>{components>{model,tools}},environment};workflow-policy->realized-trajectory->outcome;trajectory+outcome->evidence;diagnose->narrower-boundary;confirm->broader-boundary"
     evidence="model,component,workflow,trajectory,system,task,environment,outcome,state,grader,paired-comparison"
@@ -49,7 +49,7 @@
       <div class="s5v-eval-boundary__stage">
         <svg viewBox="0 0 1240 980" role="img" aria-labelledby="eb-title eb-desc">
           <title id="eb-title">Fronteras de evaluación desde modelo hasta sistema</title>
-          <desc id="eb-desc">Una hipótesis entra por la izquierda y selecciona la frontera diagnóstica más estrecha. La frontera exterior representa el trial end-to-end: task y environment aportan contexto evaluado, mientras el workflow contiene componentes, modelo y tools del sistema. Una línea gruesa representa una trayectoria concreta que atraviesa sólo algunos nodos y termina en un outcome y estado final. En la parte inferior una flecha hacia dentro indica diagnosticar en fronteras estrechas y otra hacia fuera indica confirmar el cambio en la frontera donde vive el riesgo del producto.</desc>
+          <desc id="eb-desc">Una hipótesis entra por la izquierda y selecciona la frontera diagnóstica más estrecha. La frontera exterior representa el trial end-to-end: task y environment aportan contexto evaluado, mientras el workflow contiene componentes, modelo y tools del sistema. Una secuencia gruesa dirigida representa una trayectoria concreta: conecta los nodos usados en el trial y termina en un outcome y estado final. En la parte inferior una flecha hacia dentro indica diagnosticar en fronteras estrechas y otra hacia fuera indica confirmar el cambio en la frontera donde vive el riesgo del producto.</desc>
           <defs><marker id="eb-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="currentColor"/></marker></defs>
 
           <text x="32" y="46" class="eb-kicker">1 · HIPÓTESIS Y FRONTERA DIAGNÓSTICA</text>
@@ -60,7 +60,7 @@
           <rect data-boundary="system" class="eb-boundary" x="544" y="60" width="650" height="565" rx="28"/>
           <text x="570" y="90" class="eb-kicker">SYSTEM EVAL · FRONTERA END-TO-END DEL TRIAL</text>
 
-          <g data-node="task" data-role="trial-context"><rect class="eb-node" x="570" y="118" width="142" height="78" rx="15"/><text x="641" y="147" class="eb-label">Task + input</text><text x="641" y="173" class="eb-sub">caso y criterios · contexto del trial</text></g>
+          <g data-node="task" data-role="trial-context"><rect class="eb-node" x="570" y="118" width="142" height="78" rx="15"/><text x="641" y="145" class="eb-label">Task + input</text><text x="641" y="168" class="eb-sub">caso y criterios</text><text x="641" y="187" class="eb-sub">contexto del trial</text></g>
           <g data-node="environment" data-role="trial-context"><rect class="eb-node eb-node--evidence" x="570" y="494" width="206" height="82" rx="15"/><text x="673" y="524" class="eb-label">Environment</text><text x="673" y="548" class="eb-sub">tools · data · permissions</text><text x="673" y="568" class="eb-small">estado inicial + dependencias</text></g>
 
           <rect data-boundary="workflow" class="eb-boundary eb-boundary--inner" x="746" y="112" width="418" height="352" rx="24"/>
@@ -76,7 +76,7 @@
 
           <g data-node="policy"><rect class="eb-node" x="808" y="414" width="292" height="34" rx="12"/><text x="954" y="436" class="eb-small">π: branch · retry · escalate · stop</text></g>
 
-          <path class="eb-edge eb-edge--trajectory" data-path="trajectory" d="M712 157 H794 C828 157 829 260 858 260 H958 C1000 260 988 350 1026 350 H1118 C1142 350 1148 412 1148 486"/>
+          <g data-path="trajectory" aria-label="Trayectoria realizada"><path class="eb-edge eb-edge--trajectory" d="M712 157 H760 C782 157 777 260 794 260"/><path class="eb-edge eb-edge--trajectory" d="M922 260 H958"/><path class="eb-edge eb-edge--trajectory" d="M1026 304 V322"/><path class="eb-edge eb-edge--trajectory" d="M1094 350 H1118 C1142 350 1146 440 1118 494"/></g>
           <text x="944" y="166" class="eb-edge-label">τ · trayectoria realizada en este trial</text>
 
           <g data-node="outcome"><rect class="eb-node eb-node--major" x="942" y="494" width="222" height="82" rx="16"/><text x="1053" y="523" class="eb-label">Outcome + estado final</text><text x="1053" y="548" class="eb-sub">éxito · seguridad · SLO · coste</text><text x="1053" y="568" class="eb-small">lo que importa al sistema</text></g>
