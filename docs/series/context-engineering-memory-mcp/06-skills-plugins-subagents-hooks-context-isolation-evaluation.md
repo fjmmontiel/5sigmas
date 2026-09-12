@@ -127,7 +127,7 @@ La frontera de distribución no sustituye la frontera de identidad.
 
 Los subagentes son útiles para reducir interferencia entre tareas, especializar instrucciones o ejecutar trabajo en paralelo. Pero «otro agente» no significa automáticamente «otro sandbox».
 
-Claude Code lo hace explícito. Un subagente puede configurar modelo, tools, skills, memoria y `isolation`. Si `tools` se omite, el subagente **hereda todas las tools disponibles para la conversación principal**. El aislamiento del repositorio mediante worktree sólo aparece cuando se configura `isolation: worktree`.[^claude-subagents]
+Claude Code lo hace explícito. Un subagente puede configurar modelo, tools, skills, memoria y `isolation`. Si `tools` se omite, el subagente **hereda todas las tools disponibles para subagentes**. El aislamiento del repositorio mediante worktree sólo aparece cuando se configura `isolation: worktree`.[^claude-subagents]
 
 Eso produce una regla importante:
 
