@@ -160,13 +160,15 @@ jobs:
           new_urls = "  'https://nvidia.github.io/TensorRT-LLM/1.3.0rc26/features/speculative-decoding.html',\n  'https://nvidia.github.io/TensorRT-LLM/1.2.0rc8/features/speculative-decoding.html',"
           validator = replace_once(validator, old_url, new_urls, 'validator TensorRT URLs')
           insertion = "check(en.includes('does not isolate the causal effect'), 'EN: benchmark attribution boundary missing');"
-          extra = """check(en.includes('does not isolate the causal effect'), 'EN: benchmark attribution boundary missing');
-check(es.includes('1.2.0rc8') && es.includes('implementación versionada') && es.includes('1.3.0rc26'), 'ES: TensorRT version/current-boundary caveat missing');
-check(en.includes('1.2.0rc8') && en.includes('version-specific implementation evidence') && en.includes('1.3.0rc26'), 'EN: TensorRT version/current-boundary caveat missing');
-check(es.includes('model routing, fallback, caching de resultados/respuestas'), 'ES: next-chapter 4.5 continuity missing');
-check(en.includes('model routing, fallback, result/response caching'), 'EN: next-chapter 4.5 continuity missing');
-check(!es.includes('En el siguiente capítulo convertiremos estas piezas en un problema económico'), 'ES: stale next-chapter 4.5 description detected');
-check(!en.includes('The next chapter turns these mechanisms into an economic problem'), 'EN: stale next-chapter 4.5 description detected');"""
+          extra = (
+              "check(en.includes('does not isolate the causal effect'), 'EN: benchmark attribution boundary missing');\n"
+              "check(es.includes('1.2.0rc8') && es.includes('implementación versionada') && es.includes('1.3.0rc26'), 'ES: TensorRT version/current-boundary caveat missing');\n"
+              "check(en.includes('1.2.0rc8') && en.includes('version-specific implementation evidence') && en.includes('1.3.0rc26'), 'EN: TensorRT version/current-boundary caveat missing');\n"
+              "check(es.includes('model routing, fallback, caching de resultados/respuestas'), 'ES: next-chapter 4.5 continuity missing');\n"
+              "check(en.includes('model routing, fallback, result/response caching'), 'EN: next-chapter 4.5 continuity missing');\n"
+              "check(!es.includes('En el siguiente capítulo convertiremos estas piezas en un problema económico'), 'ES: stale next-chapter 4.5 description detected');\n"
+              "check(!en.includes('The next chapter turns these mechanisms into an economic problem'), 'EN: stale next-chapter 4.5 description detected');"
+          )
           validator = replace_once(validator, insertion, extra, 'validator freshness/continuity checks')
           write(validator_path, validator)
           PY
