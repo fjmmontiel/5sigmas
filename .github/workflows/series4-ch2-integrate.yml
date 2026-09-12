@@ -51,6 +51,9 @@ jobs:
           replace_once(en,
               'Imagine three requests with very different realized lengths:',
               'Imagine three requests with the same declared `8k` maximum but very different realized lengths:')
+          replace_once(es,
+              'Offloading **no convierte memoria lenta en VRAM gratis**.',
+              'Offloading **no convierte memoria lenta en VRAM gratuita**.')
 
           es_anchor = 'vLLM documenta actualmente un `OffloadingConnector` que mueve bloques KV completados desde GPU hacia pinned host memory y permite tiers secundarios, con promociones de vuelta a GPU bajo demanda.[^vllm-offload] TensorRT-LLM también soporta host offloading antes de expulsar ciertos bloques del cache GPU.[^trt-kv]\n'
           replace_once(es, es_anchor, es_anchor + '\nAquí **offload no designa una única semántica**. El `OffloadingConnector` de vLLM extiende el prefix cache: descarga **bloques KV completados y reutilizables** a tiers más lentos y los vuelve a promover cuando hay un hit. Eso no equivale a pausar una secuencia activa por falta de KV. Otros runtimes pueden descargar estado de una petición activa, preemptarla y recomputar, o aplicar otra política; un benchmark debe registrar cuál está realmente activa.[^vllm-offload][^hf-continuous]\n')
