@@ -20,7 +20,7 @@ A customer requests a reservation for Friday. While the agent checks availabilit
 
 GPT-Live-1, available for application integration since September 10, 2026, can listen while speaking and delegate reasoning and actions. This analysis uses that release to compare three audio paths and, separately, turn management and operation state. It does not treat cascades as necessarily obsolete.[^live-api]
 
-> **Evidence cutoff:** September 12, 2026. A review of 32 selected primary sources, not an exhaustive literature survey or a benchmark run by 5sigmas. Proposed equations, contracts and tests are distinguished from published results. Numbers retain their provider, configuration and metric definition.
+> **Evidence cutoff:** September 12, 2026. A review of 30 selected primary sources, not an exhaustive literature survey or a benchmark run by 5sigmas. Proposed equations, contracts and tests are distinguished from published results. Numbers retain their provider, configuration and metric definition.
 
 OpenAI reports a **30-percentage-point** improvement over GPT-Realtime-2.1 on Full Duplex Bench and a first-place Tau3 result **with GPT-6 Astra medium as the backend**, the model handling delegated work. These are provider results for a particular configuration, not independent evidence of universal superiority.[^live-api]
 
@@ -33,7 +33,7 @@ OpenAI reports a **30-percentage-point** improvement over GPT-Realtime-2.1 on Fu
 | Orchestration | Who reasons and executes? | One engine; several specialists; voice surface plus asynchronous backend |
 | Initiative | What triggers an intervention? | User request; external event; pending result; proactive policy |
 
-**Speech-to-speech and full-duplex are not synonyms.** The former describes the modality path; the latter describes simultaneity and temporal behavior. OpenAI explicitly distinguishes Live, Realtime and chained pipelines; Moshi provides a published example of continuous conversational modeling.[^voice-guide][^moshi]
+**Speech-to-speech and full-duplex are not synonyms.** The former describes the modality path; the latter describes simultaneity and temporal behavior. OpenAI’s guide distinguishes speech-to-speech from chained pipelines; Moshi provides a published example of continuous conversational modeling.[^voice-guide][^moshi]
 
 There are also three distinct meanings of “duplex”: bidirectional transport can send and receive packets; a runtime can keep detecting the user during playback; a model can condition its next acoustic output on input arriving while it speaks. Satisfying the first does not establish the other two.
 
@@ -59,13 +59,11 @@ STT and ASR refer here to speech recognition; LLM is the language model and TTS 
 
 An idealized modular factorization is:
 
-\[
-p(y\mid x,c,s)=\sum_{z,t}p_{\mathrm{ASR}}(z\mid x)\,p_{\mathrm{LM}}(t\mid z,c)\,p_{\mathrm{TTS}}(y\mid t,s).
-\]
+<div class="s5-voice-equation" tabindex="0" role="group" aria-label="Equation; horizontally scrollable" style="max-width:100%;overflow-x:auto;padding:1rem 0"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mtable displaystyle="true" columnalign="right left" columnspacing="0em" rowspacing="3pt"><mtr><mtd><mi>p</mi><mo stretchy="false">(</mo><mi>y</mi><mo>∣</mo><mi>x</mi><mo>,</mo><mi>c</mi><mo>,</mo><mi>s</mi><mo stretchy="false">)</mo></mtd><mtd><mi></mi><mo>=</mo><munder><mo>∑</mo><mrow><mi>z</mi><mo>,</mo><mi>t</mi></mrow></munder><msub><mi>p</mi><mrow><mrow><mi>ASR</mi></mrow></mrow></msub><mo stretchy="false">(</mo><mi>z</mi><mo>∣</mo><mi>x</mi><mo stretchy="false">)</mo></mtd></mtr><mtr><mtd></mtd><mtd><mstyle scriptlevel="0"><mspace width="1em"></mspace></mstyle><mo>⋅</mo><msub><mi>p</mi><mrow><mrow><mi>LM</mi></mrow></mrow></msub><mo stretchy="false">(</mo><mi>t</mi><mo>∣</mo><mi>z</mi><mo>,</mo><mi>c</mi><mo stretchy="false">)</mo></mtd></mtr><mtr><mtd></mtd><mtd><mstyle scriptlevel="0"><mspace width="1em"></mspace></mstyle><mo>⋅</mo><msub><mi>p</mi><mrow><mrow><mi>TTS</mi></mrow></mrow></msub><mo stretchy="false">(</mo><mi>y</mi><mo>∣</mo><mi>t</mi><mo>,</mo><mi>s</mi><mo stretchy="false">)</mo><mo>.</mo></mtd></mtr></mtable></math></div>
 
-Here \(x\) is incoming audio, \(z\) a transcript, \(t\) the textual response, \(y\) outgoing audio, \(c\) context and \(s\) voice control. This is an **analytical system model**, not a product's training equation. Independence between stages is an explicit assumption.
+The sum ranges over the complete product of all three distributions. Here <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>x</mi></math> is incoming audio, <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>z</mi></math> a transcript, <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>t</mi></math> the textual response, <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>y</mi></math> outgoing audio, <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>c</mi></math> context and <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>s</mi></math> voice control. This is an **analytical system model**, not a product's training equation. Independence between stages is an explicit assumption.
 
-Production systems often pass a single hypothesis \(\hat z\), not the full distribution over transcripts. “Fifteen” and “fifty” then stop competing as alternatives: the LLM receives a decision already made. Retaining partials, alternatives, confidence and entity confirmations is a product decision, not something a larger LLM resolves automatically.
+Production systems often pass a single hypothesis <math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><mover><mi>z</mi><mo stretchy="false">^</mo></mover></mrow></math>, not the full distribution over transcripts. “Fifteen” and “fifty” then stop competing as alternatives: the LLM receives a decision already made. Retaining partials, alternatives, confidence and entity confirmations is a product decision, not something a larger LLM resolves automatically.
 
 {{ include_html("snippets/articulos-tecnicos/voice-arch-cascade.html") }}
 
@@ -73,7 +71,7 @@ Production systems often pass a single hypothesis \(\hat z\), not the full distr
 
 A conventional transcript does not preserve all information about pauses, emphasis or rhythm. However, it would be wrong to say that a cascade cannot use acoustic signals: it can carry timestamps, non-verbal events or a parallel encoder. SALMONN and Qwen2-Audio show different ways to incorporate audio information into a language model.[^salmonn][^qwen2audio]
 
-The intuition can be formalized with the data-processing inequality: under the Markov chain \(U\to X\to Z\), \(I(U;Z)\leq I(U;X)\). This does not prove that any audio model understands intent better; it says that a textual summary cannot create missing information. With side channels, the relevant object becomes \((Z,A)\), not only \(Z\). This is a deduction about channel design.
+Let U be the variable of interest, such as intent, and X and Z the audio and transcript as random variables. The data-processing inequality states that under the Markov chain <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>U</mi><mo accent="false" stretchy="false">→</mo><mi>X</mi><mo accent="false" stretchy="false">→</mo><mi>Z</mi></math>, <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>I</mi><mo stretchy="false">(</mo><mi>U</mi><mo>;</mo><mi>Z</mi><mo stretchy="false">)</mo><mo>≤</mo><mi>I</mi><mo stretchy="false">(</mo><mi>U</mi><mo>;</mo><mi>X</mi><mo stretchy="false">)</mo></math>. This does not prove that any audio model understands intent better; it says that a textual summary cannot create missing information. With side channels, the relevant object becomes <math xmlns="http://www.w3.org/1998/Math/MathML"><mo stretchy="false">(</mo><mi>Z</mi><mo>,</mo><mi>A</mi><mo stretchy="false">)</mo></math>, not only <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>Z</mi></math>. This is a deduction about channel design.
 
 TTS output can be highly expressive even when its input was text. **Output expressiveness and preservation of the input signal are different properties.** An acoustic inference about emotion should not be treated as a demonstrated fact about a person either.
 
@@ -156,12 +154,9 @@ In Moshi, Mimi operates at 12.5 frames per second; user and agent audio have sep
 
 A simplified analytical model of continuous conversation is:
 
-\[
-q_\theta(a^{\mathrm{out}}_{1:T}\Vert a^{\mathrm{in}}_{1:T},c)
-:=\prod_t q_\theta(a^{\mathrm{out}}_t\mid a^{\mathrm{in}}_{\le t},a^{\mathrm{out}}_{<t},c).
-\]
+<div class="s5-voice-equation" tabindex="0" role="group" aria-label="Equation; horizontally scrollable" style="max-width:100%;overflow-x:auto;padding:1rem 0"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mtable displaystyle="true" columnspacing="1em" rowspacing="3pt"><mtr><mtd><msub><mi>q</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><msubsup><mi>a</mi><mrow><mn>1</mn><mo>:</mo><mi>T</mi></mrow><mrow><mrow><mi>out</mi></mrow></mrow></msubsup><mo fence="false" stretchy="false">‖</mo><msubsup><mi>a</mi><mrow><mn>1</mn><mo>:</mo><mi>T</mi></mrow><mrow><mrow><mi>in</mi></mrow></mrow></msubsup><mo>,</mo><mi>c</mi><mo stretchy="false">)</mo></mtd></mtr><mtr><mtd><mo>:=</mo><munder><mo>∏</mo><mi>t</mi></munder><msub><mi>q</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><msubsup><mi>a</mi><mi>t</mi><mrow><mrow><mi>out</mi></mrow></mrow></msubsup><mo>∣</mo><msubsup><mi>a</mi><mrow><mo>≤</mo><mi>t</mi></mrow><mrow><mrow><mi>in</mi></mrow></mrow></msubsup><mo>,</mo><msubsup><mi>a</mi><mrow><mo>&lt;</mo><mi>t</mi></mrow><mrow><mrow><mi>out</mi></mrow></mrow></msubsup><mo>,</mo><mi>c</mi><mo stretchy="false">)</mo><mo>.</mo></mtd></mtr></mtable></math></div>
 
-The symbol \(\Vert\) denotes causal conditioning, not ordinary conditioning on future inputs. Indices represent aligned frames after implementation delays. Codebooks and textual variables are omitted to expose the causal requirement: future output can depend on newly arriving input audio. The equation does not assert a specific internal factorization for GPT-Live.
+The symbol <math xmlns="http://www.w3.org/1998/Math/MathML"><mo fence="false" stretchy="false">‖</mo></math> denotes causal conditioning, not ordinary conditioning on future inputs. Indices represent aligned frames after implementation delays. Codebooks and textual variables are omitted to expose the causal requirement: future output can depend on newly arriving input audio. The equation does not assert a specific internal factorization for GPT-Live.
 
 ## 4. Half-duplex, barge-in and full-duplex
 
@@ -204,7 +199,7 @@ User ⇄ fast conversational surface
             persistent business state
 ```
 
-The design hypothesis is to separate conversational pace from the cost of solving a task. GPT-Live documents this separation; MoshiRAG studies asynchronous knowledge retrieval for a full-duplex interface. Retrieval is not a transaction: MoshiRAG does not establish payment or booking safety.[^live-guide][^moshirag]
+The design hypothesis is to separate conversational pace from the cost of solving a task. GPT-Live documents this separation; MoshiRAG studies asynchronous knowledge retrieval for a full-duplex interface. Retrieval is not a transaction: MoshiRAG does not establish payment or booking safety.[^live-engineering][^moshirag]
 
 {{ include_html("snippets/articulos-tecnicos/voice-arch-surface.html") }}
 
@@ -220,7 +215,7 @@ These records do not advance at the same speed. History should not say “interv
 
 A `DeliveryEnvelope` could contain `task_id`, the relevant context version, execution status, a structured result, provenance and a deduplication key. This is a proposed contract, not a provider API. Its relevance is revalidated on receipt: a corrected date can invalidate it; unrelated new speech need not do so.
 
-**Interrupting speech does not mean canceling an action.** Separating the audio path from delegated work implies distinct lifecycles: stopping playback does not establish that the executor reversed an operation.[^live-engineering][^live-delegation] For an operation with external effects, I propose executor-side authorization, idempotency, status queries after timeouts and compensation where applicable. No prompt substitutes for these guarantees.
+**Interrupting speech does not mean canceling an action.** Separating the audio path from delegated work implies distinct lifecycles: stopping playback does not establish that the executor reversed an operation.[^live-engineering] For an operation with external effects, I propose executor-side authorization, idempotency, status queries after timeouts and compensation where applicable. No prompt substitutes for these guarantees.
 
 ### The telephony detail that breaks many demos
 
@@ -246,15 +241,13 @@ These are proposed harness definitions, not equivalences between paper metrics. 
 
 For a dependency graph, a completion-time approximation is:
 
-\[
-F_v=d_v+\max_{u\in\operatorname{pred}(v)}F_u.
-\]
+<div class="s5-voice-equation" tabindex="0" role="group" aria-label="Equation; horizontally scrollable" style="max-width:100%;overflow-x:auto;padding:1rem 0"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><msub><mi>F</mi><mi>v</mi></msub><mo>=</mo><msub><mi>d</mi><mi>v</mi></msub><mo>+</mo><munder><mo movablelimits="true">max</mo><mrow><mi>u</mi><mo>∈</mo><mi>pred</mi><mo stretchy="false">(</mo><mi>v</mi><mo stretchy="false">)</mo></mrow></munder><msub><mi>F</mi><mi>u</mi></msub><mo>.</mo></math></div>
 
-Time to first audio depends on the critical path, usable prefixes and queues. Stages can overlap. Furthermore, \(p95(A+B)\) is not generally \(p95(A)+p95(B)\). Compute percentiles over complete traces from the same population.
+Here dᵥ is node duration, Fᵥ its completion time and pred(v) its predecessors; the maximum is zero for a node without predecessors. Resource waits must be represented in the graph or durations. Time to first audio depends on the critical path, usable prefixes and queues. Stages can overlap. Furthermore, <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>p</mi><mn>95</mn><mo stretchy="false">(</mo><mi>A</mi><mo>+</mo><mi>B</mi><mo stretchy="false">)</mo></math> is not generally <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>p</mi><mn>95</mn><mo stretchy="false">(</mo><mi>A</mi><mo stretchy="false">)</mo><mo>+</mo><mi>p</mi><mn>95</mn><mo stretchy="false">(</mo><mi>B</mi><mo stretchy="false">)</mo></math>. Compute percentiles over complete traces from the same population.
 
-Qwen3-Omni reports theoretical first-packet latency of 234 ms at concurrency 1; the same table reports 728 ms at concurrency 4 and 1,172 ms at concurrency 6. This illustrates load sensitivity, not universal call latency.[^qwen3]
+Table 2 of Qwen3-Omni-30B-A3B reports theoretical audio-input first-packet latency of 234 ms at concurrency 1, 728 ms at concurrency 4 and 1,172 ms at concurrency 6. The study uses vLLM, with torch.compile and CUDA Graph optimizations for prediction and decoding; that passage does not identify the exact hardware. This is a within-report comparison, not universal call latency or device-playback timing.[^qwen3]
 
-Within its own protocol, Full-Duplex-Bench-v3 reports 6.89 s and pass@1 of 0.60 for GPT-Realtime, versus 4.25 s and 0.54 for Gemini Live 3.1. That is an example of a within-study trade-off, **not a valid comparison with Moshi's 160 ms**. Its Whisper–GPT-4o–TTS baseline does not represent the limit of all cascades either.[^fdb3]
+Within its own protocol, Full-Duplex-Bench-v3 reports mean task-completion latency of 6.89 s and pass@1 of 0.60 for GPT-Realtime, versus 4.25 s and 0.54 for Gemini Live 3.1. These seconds do not measure first sound; pass@1 expresses success on a single attempt. That is an example of a within-study trade-off, **not a valid comparison with Moshi's 160 ms**. Its Whisper–GPT-4o–TTS baseline does not represent the limit of all cascades either.[^fdb3]
 
 I would not connect these numbers with a trendline. Definitions, loads, runtimes, models and tasks differ.
 
@@ -303,9 +296,7 @@ LiveKit and Pipecat are runtime options, not a fourth model modality. A custom P
 
 I would compare **cost per completed task**, not only price per minute or token:
 
-\[
-C_{\mathrm{success}}=\frac{C_{\mathrm{voice}}+C_{\mathrm{backend}}+C_{\mathrm{telephony}}+C_{\mathrm{infra}}+C_{\mathrm{retries}}}{N_{\mathrm{correct\ tasks}}}.
-\]
+<div class="s5-voice-equation" tabindex="0" role="group" aria-label="Equation; horizontally scrollable" style="max-width:100%;overflow-x:auto;padding:1rem 0"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mtable displaystyle="true" columnalign="right left" columnspacing="0em" rowspacing="3pt"><mtr><mtd><msub><mi>C</mi><mrow><mrow><mi>total</mi></mrow></mrow></msub></mtd><mtd><mi></mi><mo>=</mo><msub><mi>C</mi><mrow><mrow><mi>voice</mi></mrow></mrow></msub><mo>+</mo><msub><mi>C</mi><mrow><mrow><mi>backend</mi></mrow></mrow></msub></mtd></mtr><mtr><mtd></mtd><mtd><mstyle scriptlevel="0"><mspace width="1em"></mspace></mstyle><mo>+</mo><msub><mi>C</mi><mrow><mrow><mi>telephony</mi></mrow></mrow></msub><mo>+</mo><msub><mi>C</mi><mrow><mrow><mi>infra</mi></mrow></mrow></msub></mtd></mtr><mtr><mtd></mtd><mtd><mstyle scriptlevel="0"><mspace width="1em"></mspace></mstyle><mo>+</mo><msub><mi>C</mi><mrow><mrow><mi>retries</mi></mrow></mrow></msub><mo>,</mo></mtd></mtr><mtr><mtd><msub><mi>C</mi><mrow><mrow><mi>success</mi></mrow></mrow></msub></mtd><mtd><mi></mi><mo>=</mo><mfrac><msub><mi>C</mi><mrow><mrow><mi>total</mi></mrow></mrow></msub><msub><mi>N</mi><mrow><mrow><mi>correct</mi><mtext> </mtext><mi>tasks</mi></mrow></mrow></msub></mfrac><mo>.</mo></mtd></mtr></mtable></math></div>
 
 Billable duration, silence, caching, concurrency, queues, cancellations and wasted work must be fixed. A local model can have zero marginal API cost and substantial capacity cost. A continuous session may consume resources during silence; that does not establish that every S2S implementation is more expensive.
 
@@ -365,21 +356,19 @@ Full-duplex is another decision: listening during output, interpreting overlap a
 [^encodec]: Défossez et al., [High Fidelity Neural Audio Compression](https://arxiv.org/abs/2210.13438), 2022.
 [^speechgpt]: Zhang et al., [SpeechGPT: Empowering Large Language Models with Intrinsic Cross-Modal Conversational Abilities](https://arxiv.org/abs/2305.11000), 2023.
 [^moshi]: Défossez et al., [Moshi: a speech-text foundation model for real-time dialogue](https://arxiv.org/html/2410.00037v2), 2024.
-[^qwen25]: Qwen team, [Qwen2.5-Omni Technical Report](https://arxiv.org/html/2503.20215v1), 2025.
+[^qwen25]: Qwen team, [Qwen2.5-Omni Technical Report](https://arxiv.org/abs/2503.20215), 2025.
 [^qwen3]: Qwen team, [Qwen3-Omni Technical Report](https://arxiv.org/html/2509.17765v1), 2025.
 [^llamaomni]: Fang et al., [LLaMA-Omni: Seamless Speech Interaction with Large Language Models](https://arxiv.org/abs/2409.06666), 2024.
 [^freeze]: Wang et al., [Freeze-Omni: A Smart and Low Latency Speech-to-speech Dialogue Model with Frozen LLM](https://arxiv.org/abs/2411.00774), 2024.
 [^personaplex]: Roy et al. / NVIDIA, [PersonaPlex: Voice and Role Control for Full Duplex Conversational Speech Models](https://research.nvidia.com/labs/adlr/personaplex/), 2026-01-15.
 [^fdb1]: Lin et al., [Full-Duplex-Bench: A Benchmark to Evaluate Full-Duplex Spoken Dialogue Models on Turn-Taking Capabilities](https://arxiv.org/abs/2503.04721), 2025.
-[^fdb15]: Full-Duplex-Bench authors, [Full-Duplex-Bench v1.5](https://arxiv.org/abs/2507.23159), 2025.
-[^fdb2]: Full-Duplex-Bench authors, [Full-Duplex-Bench v2](https://arxiv.org/abs/2510.07838), 2025.
+[^fdb15]: Full-Duplex-Bench authors, [Full-Duplex-Bench v1.5: Evaluating Overlap Handling for Full-Duplex Speech Models](https://arxiv.org/abs/2507.23159), 2025.
+[^fdb2]: Full-Duplex-Bench authors, [Full-Duplex-Bench-v2: A Multi-Turn Evaluation Framework for Duplex Dialogue Systems with an Automated Examiner](https://arxiv.org/abs/2510.07838), 2025.
 [^fdb3]: Full-Duplex-Bench authors, [Full-Duplex-Bench-v3: Benchmarking Tool Use for Full-Duplex Voice Agents Under Real-World Disfluency](https://arxiv.org/html/2604.04847v1), 2026-04-06.
 [^voicebench]: Chen et al., [VoiceBench: Benchmarking LLM-Based Voice Assistants](https://arxiv.org/abs/2410.17196), 2024.
 [^live-intro]: OpenAI, [Introducing GPT-Live](https://openai.com/index/introducing-gpt-live/), 2026-07-08.
-[^live-engineering]: OpenAI, [Continuous voice interaction with GPT-Live](https://openai.com/index/continuous-voice-interaction-with-gpt-live/), 2026-08-03.
+[^live-engineering]: OpenAI, [How we built a realtime system for responsive voice AI in six months](https://openai.com/index/continuous-voice-interaction-with-gpt-live/), 2026-08-03.
 [^live-api]: OpenAI, [Build more natural voice experiences with GPT-Live-1 in the API](https://openai.com/index/introducing-gpt-live-1-in-the-api/), 2026-09-10.
-[^live-guide]: OpenAI, [Live API guide](https://developers.openai.com/api/docs/guides/live), 2026-09-10.
-[^live-delegation]: OpenAI, [Live delegation](https://developers.openai.com/api/docs/guides/live-delegation), 2026-09-10.
 [^moshirag]: Chien et al., [MoshiRAG: Asynchronous Knowledge Retrieval for Full-Duplex Speech Language Models](https://arxiv.org/abs/2604.12928), 2026-04-14.
 [^twilio]: Twilio, [Media Streams: WebSocket messages](https://www.twilio.com/docs/voice/media-streams/websocket-messages), 2026-09-10.
 [^livekit]: LiveKit, [Turns overview](https://docs.livekit.io/agents/logic/turns/), 2026-09-10.
