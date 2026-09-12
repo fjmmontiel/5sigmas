@@ -1,0 +1,110 @@
+<section class="s5v s5v-judge-calibration s5v--wide" aria-label="Calibración de un juez humano o basado en LLM antes de usarlo como gate de release">
+  <style>
+    .s5v-judge-calibration{scroll-margin-top:84px}
+    .s5v-judge-calibration .jc-scroll{overflow-x:auto;overscroll-behavior-inline:contain;padding:.35rem .2rem .9rem;scrollbar-gutter:stable;outline:none}
+    .s5v-judge-calibration .jc-scroll:focus-visible{box-shadow:0 0 0 3px color-mix(in srgb,var(--md-accent-fg-color,#7c4dff) 36%,transparent);border-radius:14px}
+    .s5v-judge-calibration .jc-stage{width:100%;min-width:0;max-width:1320px;margin:0 auto}
+    .s5v-judge-calibration svg{display:block;width:100%;height:auto;overflow:visible}
+    .s5v-judge-calibration text{fill:currentColor;font-family:inherit}
+    .s5v-judge-calibration .jc-node{fill:var(--md-default-bg-color,#fff);stroke:currentColor;stroke-width:2.2}
+    .s5v-judge-calibration .jc-node--major{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 87%,var(--md-accent-fg-color,#7c4dff) 13%);stroke-width:3}
+    .s5v-judge-calibration .jc-node--probe{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 96%,currentColor 4%);stroke-dasharray:5 4}
+    .s5v-judge-calibration .jc-boundary{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 98%,currentColor 2%);stroke:currentColor;stroke-width:2.2;stroke-dasharray:8 7}
+    .s5v-judge-calibration .jc-edge{fill:none;stroke:currentColor;stroke-width:2.7;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#jc-arrow)}
+    .s5v-judge-calibration .jc-edge--primary{stroke-width:3.4}
+    .s5v-judge-calibration .jc-edge--probe{stroke-dasharray:7 6;opacity:.78}
+    .s5v-judge-calibration .jc-edge--fallback{stroke-dasharray:3 6}
+    .s5v-judge-calibration .jc-label{font-size:13.1px;font-weight:820;text-anchor:middle}
+    .s5v-judge-calibration .jc-sub{font-size:10.8px;text-anchor:middle;opacity:.84}
+    .s5v-judge-calibration .jc-small{font-size:9.9px;font-weight:720;text-anchor:middle;opacity:.82}
+    .s5v-judge-calibration .jc-kicker{font-size:11.8px;font-weight:850;letter-spacing:.07em;text-transform:uppercase;opacity:.76}
+    .s5v-judge-calibration .jc-edge-label{font-size:10.2px;font-weight:760;paint-order:stroke;stroke:var(--md-default-bg-color,#fff);stroke-width:5px;stroke-linejoin:round;text-anchor:middle}
+    .s5v-judge-calibration .jc-legend{display:flex;gap:1rem;flex-wrap:wrap;margin:.35rem 0 0;font-size:.87rem;opacity:.87}
+    .s5v-judge-calibration .jc-legend span{display:inline-flex;gap:.42rem;align-items:center}
+    .s5v-judge-calibration .jc-legend i{width:1.55rem;border-top:3px solid currentColor}
+    .s5v-judge-calibration .jc-legend .is-probe i{border-top-style:dashed;border-top-width:2px}
+    .s5v-judge-calibration .jc-legend .is-boundary i{border-top-style:dashed;border-top-width:2px}
+    .s5v-judge-calibration .s5v__copy{margin-top:.85rem}
+    @media (max-width:700px){.s5v-judge-calibration{scroll-margin-top:72px}.s5v-judge-calibration .jc-scroll{margin-inline:-.35rem;padding-inline:.35rem}.s5v-judge-calibration .jc-stage{width:auto;min-width:1220px}.s5v-judge-calibration .jc-legend{font-size:.82rem}}
+    @media (prefers-reduced-motion:reduce){.s5v-judge-calibration *{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+  </style>
+  <!-- GOLDEN_VISUAL_CONTRACT
+    learning-objective="Show that a judge becomes release evidence only after a rubric is calibrated on development cases, the concrete judge version is frozen, independent human/model judgments are preserved before adjudication, bias and repeatability probes are run, and the resulting diagnostics constrain the judge's allowed scope."
+    mechanism="product construct -> rubric -> calibration/dev bank -> frozen judge version; validation item -> blinded/randomized presentation -> independent human ratings and repeated LLM ratings; position/style/family probes perturb presentation while preserving the intended construct; raw agreement/confusion/kappa/repeat variance/swap consistency -> accept/restrict/reject scope -> automatic judge or human fallback."
+    visual-variables="solid arrows encode the evidence path; dashed arrows encode controlled bias probes or fallback; a dashed boundary encodes the frozen judge identity; parallel human and LLM lanes preserve independent observations before adjudication."
+    why-visual="The main failure mode is treating one judge score as ground truth. Spatially separating rubric calibration, judge identity, independent observations, bias probes, diagnostics and scope makes the measurement chain and its failure modes explicit."
+    relationship="construct->rubric->calibration-bank->judge-version;validation-item->blind-randomize->{human-raters,llm-repeats};human-raters->raw-human-labels;llm-repeats->raw-llm-labels;{position-swap,style-control,family-cross}->llm-repeats;{raw-human-labels,raw-llm-labels}->diagnostics->scope-decision->{automatic-judge,human-fallback}"
+    evidence="rubric-version,judge-model-revision,sampling-config,independent-labels,adjudication-after-capture,raw-agreement,confusion-matrix,kappa,repeat-variance,swap-consistency,bias-probes,scope-restriction"
+    interaction="static:no-cosmetic-controls"
+    mobile="horizontal-scroll-preserves-calibration-to-independent-judgments-to-bias-probes-to-diagnostics-to-scope-decision"
+  -->
+  <div class="s5v__canvas">
+    <header class="s5v__head">
+      <div><span class="s5v__kicker">Calibra antes de escalar</span><h3>El juez también forma parte del sistema de medida</h3></div>
+      <p>La señal útil no es «el LLM dio 4/5». Primero fija el constructo y la rúbrica, calibra en un banco de desarrollo, congela la identidad del juez, conserva juicios independientes y sólo después mide acuerdo, varianza y sesgos. El resultado final es un alcance permitido, no una autoridad universal.</p>
+    </header>
+    <div class="jc-scroll" tabindex="0" role="region" aria-label="Diagrama desplazable de calibración, acuerdo, sesgos y alcance de un judge">
+      <div class="jc-stage">
+        <svg viewBox="0 0 1320 940" role="img" aria-labelledby="jc-title jc-desc">
+          <title id="jc-title">Cadena de calibración de un judge antes de un gate de release</title>
+          <desc id="jc-desc">El constructo de producto se transforma en una rúbrica y un banco de calibración. La versión concreta del juez queda congelada con modelo, prompt, configuración y parser. Los items de validación se presentan de forma ciega y aleatoria a humanos independientes y a varias repeticiones del juez LLM. Pruebas de inversión de posición, estilo controlado y cruce de familias buscan sesgos. Los labels brutos alimentan acuerdo, matriz de confusión, kappa, varianza y consistencia de swap. Esos diagnósticos permiten aceptar, restringir o rechazar el juez y derivar casos no fiables a revisión humana.</desc>
+          <defs><marker id="jc-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="currentColor"/></marker></defs>
+
+          <text x="30" y="44" class="jc-kicker">1 · DEFINE Y CONGELA QUÉ ESTÁ JUZGANDO</text>
+          <g data-node="construct"><rect class="jc-node jc-node--major" x="34" y="74" width="184" height="88" rx="17"/><text x="126" y="104" class="jc-label">Constructo de producto</text><text x="126" y="130" class="jc-sub">qué comportamiento importa</text><text x="126" y="151" class="jc-small">riesgo + coste de error</text></g>
+          <g data-node="rubric"><rect class="jc-node" x="260" y="74" width="190" height="88" rx="17"/><text x="355" y="104" class="jc-label">Rúbrica observable</text><text x="355" y="130" class="jc-sub">pass · fail · unknown</text><text x="355" y="151" class="jc-small">dimensiones separadas</text></g>
+          <g data-node="calibration"><rect class="jc-node" x="492" y="74" width="196" height="88" rx="17"/><text x="590" y="104" class="jc-label">Calibration / dev bank</text><text x="590" y="130" class="jc-sub">iterar prompt + ejemplos</text><text x="590" y="151" class="jc-small">no es validación independiente</text></g>
+          <path data-path="define" class="jc-edge jc-edge--primary" d="M218 118 H260"/><path data-path="calibrate" class="jc-edge jc-edge--primary" d="M450 118 H492"/>
+
+          <rect data-boundary="judge-version" class="jc-boundary" x="730" y="54" width="556" height="150" rx="25"/>
+          <text x="754" y="83" class="jc-kicker">JUDGE VERSION · IDENTIDAD CONGELADA</text>
+          <g data-node="judge-version"><rect class="jc-node jc-node--major" x="766" y="106" width="482" height="70" rx="16"/><text x="1007" y="133" class="jc-label">model revision + rubric/prompt + config + evidence + parser</text><text x="1007" y="158" class="jc-sub">si cambia una pieza, vuelve a validar el juez</text></g>
+          <path data-path="freeze" class="jc-edge jc-edge--primary" d="M688 118 H766"/>
+
+          <text x="30" y="254" class="jc-kicker">2 · CONSERVA OBSERVACIONES INDEPENDIENTES</text>
+          <g data-node="validation-item"><rect class="jc-node jc-node--major" x="34" y="286" width="188" height="82" rx="16"/><text x="128" y="316" class="jc-label">Validation item</text><text x="128" y="342" class="jc-sub">holdout del judge</text><text x="128" y="362" class="jc-small">estrato declarado</text></g>
+          <g data-node="blind-randomize"><rect class="jc-node" x="268" y="286" width="202" height="82" rx="16"/><text x="369" y="316" class="jc-label">Blind + randomize</text><text x="369" y="342" class="jc-sub">oculta identidad · A/B o B/A</text><text x="369" y="362" class="jc-small">mismo criterio</text></g>
+          <path data-path="present" class="jc-edge jc-edge--primary" d="M222 327 H268"/>
+
+          <g data-node="human-raters"><rect class="jc-node" x="538" y="258" width="206" height="98" rx="17"/><text x="641" y="288" class="jc-label">Humanos H1 + H2</text><text x="641" y="314" class="jc-sub">labels independientes</text><text x="641" y="338" class="jc-small">sin ver el voto del otro</text></g>
+          <g data-node="llm-repeats"><rect class="jc-node" x="538" y="386" width="206" height="98" rx="17"/><text x="641" y="416" class="jc-label">LLM judge × R</text><text x="641" y="442" class="jc-sub">misma versión congelada</text><text x="641" y="466" class="jc-small">guarda distribución, no sólo media</text></g>
+          <path data-path="human-lane" class="jc-edge" d="M470 327 H510 V307 H538"/><path data-path="llm-lane" class="jc-edge" d="M470 327 H510 V435 H538"/>
+
+          <g data-node="human-raw"><rect class="jc-node jc-node--major" x="792" y="258" width="194" height="98" rx="17"/><text x="889" y="288" class="jc-label">Labels humanos brutos</text><text x="889" y="314" class="jc-sub">preserva desacuerdo</text><text x="889" y="338" class="jc-small">adjudica después</text></g>
+          <g data-node="llm-raw"><rect class="jc-node jc-node--major" x="792" y="386" width="194" height="98" rx="17"/><text x="889" y="416" class="jc-label">Labels / scores brutos</text><text x="889" y="442" class="jc-sub">R repeticiones por item</text><text x="889" y="466" class="jc-small">incluye unknown</text></g>
+          <path data-path="capture-human" class="jc-edge" d="M744 307 H792"/><path data-path="capture-llm" class="jc-edge" d="M744 435 H792"/>
+
+          <g data-node="adjudication"><rect class="jc-node" x="1040" y="258" width="208" height="98" rx="17"/><text x="1144" y="288" class="jc-label">Adjudicación humana</text><text x="1144" y="314" class="jc-sub">sólo tras capturar H1/H2</text><text x="1144" y="338" class="jc-small">referencia operativa ≠ borrar desacuerdo</text></g>
+          <path data-path="adjudicate" class="jc-edge" d="M986 307 H1040"/>
+
+          <text x="30" y="548" class="jc-kicker">3 · PRUEBA SESGOS COMO EXPERIMENTOS CONTROLADOS</text>
+          <g data-node="position-swap"><rect class="jc-node jc-node--probe" x="34" y="580" width="218" height="78" rx="16"/><text x="143" y="608" class="jc-label">Position swap</text><text x="143" y="633" class="jc-sub">A/B ↔ B/A</text><text x="143" y="653" class="jc-small">mismo contenido</text></g>
+          <g data-node="style-control"><rect class="jc-node jc-node--probe" x="286" y="580" width="218" height="78" rx="16"/><text x="395" y="608" class="jc-label">Style / length control</text><text x="395" y="633" class="jc-sub">conciso ↔ expandido</text><text x="395" y="653" class="jc-small">sin añadir claims</text></g>
+          <g data-node="family-cross"><rect class="jc-node jc-node--probe" x="538" y="580" width="218" height="78" rx="16"/><text x="647" y="608" class="jc-label">Generator × judge family</text><text x="647" y="633" class="jc-sub">cruza orígenes</text><text x="647" y="653" class="jc-small">no asumir neutralidad</text></g>
+          <path data-path="probe-position" class="jc-edge jc-edge--probe" d="M143 580 V526 C143 500 510 500 510 451 H538"/>
+          <path data-path="probe-style" class="jc-edge jc-edge--probe" d="M395 580 V536 C395 510 520 510 520 465 H538"/>
+          <path data-path="probe-family" class="jc-edge jc-edge--probe" d="M647 580 V484"/>
+
+          <text x="802" y="548" class="jc-kicker">4 · DIAGNÓSTICO → ALCANCE, NO AUTORIDAD</text>
+          <g data-node="diagnostics"><rect class="jc-node jc-node--major" x="804" y="580" width="244" height="146" rx="18"/><text x="926" y="609" class="jc-label">Diagnósticos</text><text x="926" y="637" class="jc-sub">pₒ + confusion matrix</text><text x="926" y="661" class="jc-sub">κ si el diseño lo permite</text><text x="926" y="685" class="jc-sub">repeat variance</text><text x="926" y="709" class="jc-small">swap consistency + probes por estrato</text></g>
+          <path data-path="diagnose-human" class="jc-edge" d="M889 356 V528 C889 548 900 558 910 580"/><path data-path="diagnose-llm" class="jc-edge" d="M889 484 V580"/><path data-path="diagnose-adjudicated" class="jc-edge" d="M1144 356 V530 C1144 552 1048 552 1048 620"/>
+
+          <g data-node="scope-decision"><rect class="jc-node jc-node--major" x="1092" y="580" width="196" height="146" rx="18"/><text x="1190" y="609" class="jc-label">Decisión de alcance</text><text x="1190" y="638" class="jc-sub">ACCEPT</text><text x="1190" y="662" class="jc-sub">RESTRICT</text><text x="1190" y="686" class="jc-sub">REJECT</text><text x="1190" y="710" class="jc-small">por estrato / riesgo</text></g>
+          <path data-path="scope" class="jc-edge jc-edge--primary" d="M1048 653 H1092"/>
+
+          <text x="30" y="790" class="jc-kicker">5 · SÓLO DESPUÉS ESCALA LA SEÑAL</text>
+          <g data-node="automatic-judge"><rect class="jc-node jc-node--major" x="702" y="814" width="224" height="78" rx="17"/><text x="814" y="843" class="jc-label">Judge automático</text><text x="814" y="869" class="jc-sub">sólo estratos validados</text><text x="814" y="889" class="jc-small">release / regression gate</text></g>
+          <g data-node="human-fallback"><rect class="jc-node" x="1010" y="814" width="238" height="78" rx="17"/><text x="1129" y="843" class="jc-label">Human fallback</text><text x="1129" y="869" class="jc-sub">ambigüedad · alto riesgo</text><text x="1129" y="889" class="jc-small">o estrato no validado</text></g>
+          <path data-path="accept" class="jc-edge" d="M1160 726 V772 C1160 792 926 792 926 814"/><path data-path="fallback" class="jc-edge jc-edge--fallback" d="M1218 726 V814"/>
+          <text x="1018" y="782" class="jc-edge-label">el alcance viaja con judge_version</text>
+        </svg>
+      </div>
+    </div>
+    <div class="jc-legend" aria-label="Leyenda del diagrama">
+      <span><i></i> camino de evidencia</span>
+      <span class="is-probe"><i></i> probe controlado / fallback</span>
+      <span class="is-boundary"><i></i> identidad del judge congelada</span>
+    </div>
+    <p class="s5v__copy"><strong>Lectura:</strong> calibra la rúbrica en desarrollo, congela una versión concreta del juez y valida sobre un banco independiente. Conserva labels humanos y repeticiones del LLM antes de adjudicar o agregar. Invierte posiciones y controla estilo/familia para buscar sesgos. Agreement, κ, varianza y swap consistency son diagnósticos distintos; juntos delimitan dónde el judge puede automatizar y dónde debe existir fallback humano.</p>
+  </div>
+</section>
