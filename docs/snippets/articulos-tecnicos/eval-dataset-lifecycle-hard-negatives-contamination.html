@@ -34,12 +34,12 @@
   <!-- GOLDEN_VISUAL_CONTRACT
     learning-objective="Show that a trustworthy offline eval release is produced by provenance and group-aware splitting, that dev/regression/holdout/challenge banks have different jobs and access policies, that hard-negative pairs test a boundary rather than generic difficulty, and that contamination/leakage risks cannot be collapsed into one scanner score."
     mechanism="candidate sources -> provenance/eligibility -> grouping unit -> bank assignment; admitted immutable items -> release manifest/hash; hard-positive/hard-negative pair shares pair identity while crossing one intended decision boundary; production failures feed the next version rather than mutating the frozen release; training exposure, cross-split leakage, development leakage and temporal leakage enter through different channels and require different controls."
-    visual-variables="solid arrows encode admitted lifecycle flow; dashed arrows encode leakage or exposure risk; dashed release boundary encodes frozen comparison identity; paired nodes encode a controlled hard boundary; a separate next-version loop encodes freshness without mutating the current release."
+    visual-variables="solid arrows encode admitted lifecycle flow; dashed arrows encode leakage or exposure risk; dashed release boundary encodes frozen comparison identity; paired nodes encode a controlled hard boundary; a separate next-version lane encodes freshness without mutating the current release."
     why-visual="The chapter's main failure mode is treating one mutable dataset and one contamination flag as sufficient. Spatial separation makes bank roles, version boundaries, leakage channels and the hard-pair relationship explicit."
     relationship="sources->provenance->grouping->{dev,regression,holdout,challenge}->release-manifest;hard-pair->{positive,negative};training-exposure->item-risk;cross-split-leakage->holdout-risk;development-leakage->holdout-invalid;temporal-leakage->snapshot-risk;production-failure->next-version"
     evidence="provenance,split-unit,dev,regression,holdout,challenge,hard-negative,pair-id,manifest-hash,source-snapshot,label-version,transform-version,training-exposure,development-leakage,temporal-leakage"
     interaction="static:no-cosmetic-controls"
-    mobile="horizontal-scroll-preserves-source-to-release-lifecycle-hard-pair-risk-channels-and-next-version-loop"
+    mobile="horizontal-scroll-preserves-source-to-release-lifecycle-hard-pair-risk-channels-and-next-version-lane"
   -->
   <div class="s5v__canvas">
     <header class="s5v__head">
@@ -65,11 +65,11 @@
           <g data-node="regression"><rect class="ed-node ed-node--bank" x="1028" y="116" width="218" height="84" rx="16"/><text x="1137" y="144" class="ed-label">Regression bank</text><text x="1137" y="169" class="ed-sub">fallos conocidos que no deben volver</text><text x="1137" y="190" class="ed-small">estable por intención</text></g>
           <g data-node="holdout"><rect class="ed-node ed-node--major" x="766" y="230" width="214" height="92" rx="16"/><text x="873" y="260" class="ed-label">Holdout / release</text><text x="873" y="285" class="ed-sub">acceso restringido</text><text x="873" y="307" class="ed-small">confirma sin haber optimizado aquí</text></g>
           <g data-node="challenge"><rect class="ed-node ed-node--bank" x="1028" y="230" width="218" height="92" rx="16"/><text x="1137" y="260" class="ed-label">Challenge rotatorio</text><text x="1137" y="285" class="ed-sub">casos frescos · riesgos nuevos</text><text x="1137" y="307" class="ed-small">no mezclar con histórico sin versión</text></g>
-          <path data-path="split" class="ed-edge ed-edge--admit" d="M694 126 H724 C748 126 742 158 766 158"/>
-          <path class="ed-edge ed-edge--admit" d="M724 126 C756 126 995 158 1028 158"/>
-          <path class="ed-edge ed-edge--admit" d="M724 126 C748 126 742 276 766 276"/>
-          <path class="ed-edge ed-edge--admit" d="M724 126 C756 126 1000 276 1028 276"/>
-          <text x="724" y="109" class="ed-edge-label">asigna por función, no al azar por fila</text>
+          <path data-path="split" class="ed-edge ed-edge--admit" d="M694 126 H748 V158 H766"/>
+          <path class="ed-edge ed-edge--admit" d="M694 126 H718 V102 H1004 V158 H1028"/>
+          <path class="ed-edge ed-edge--admit" d="M694 126 H748 V276 H766"/>
+          <path class="ed-edge ed-edge--admit" d="M694 126 H718 V340 H1004 V276 H1028"/>
+          <text x="594" y="207" class="ed-edge-label">asigna por función, no al azar por fila</text>
           <g data-node="manifest"><rect class="ed-node ed-node--major" x="852" y="360" width="308" height="78" rx="17"/><text x="1006" y="388" class="ed-label">Manifest canónico + hash</text><text x="1006" y="412" class="ed-sub">item IDs · split · source snapshot</text><text x="1006" y="432" class="ed-small">labels · transforms · payload hashes</text></g>
           <path data-path="freeze" class="ed-edge" d="M873 322 C873 345 900 350 928 360"/><path class="ed-edge" d="M1137 322 C1137 345 1114 351 1084 360"/>
 
@@ -99,8 +99,7 @@
           <g data-node="production-failure"><rect class="ed-node" x="34" y="918" width="214" height="76" rx="16"/><text x="141" y="946" class="ed-label">Fallo nuevo / cambio de producto</text><text x="141" y="971" class="ed-sub">bug · policy · idioma · riesgo</text></g>
           <g data-node="next-version"><rect class="ed-node ed-node--major" x="322" y="918" width="242" height="76" rx="16"/><text x="443" y="946" class="ed-label">Siguiente versión D(v+1)</text><text x="443" y="971" class="ed-sub">curar → revisar → nuevo manifest/hash</text></g>
           <path data-path="next-version" class="ed-edge ed-edge--next" d="M248 956 H322"/>
-          <path class="ed-edge ed-edge--next" d="M564 956 H720 C790 956 758 438 852 418"/>
-          <text x="653" y="942" class="ed-edge-label">no muta D(v) en silencio</text>
+          <text x="672" y="960" class="ed-edge-label">no muta D(v) en silencio</text>
         </svg>
       </div>
     </div>
