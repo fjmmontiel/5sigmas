@@ -23,7 +23,7 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Register chapter 4.3 in canonical publication surfaces
+      - name: Register chapter 4.3 and polish Spanish editorial surface
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -44,37 +44,47 @@ jobs:
                       return
               raise SystemExit(f'{path}: anchor not found: {needle}')
 
-          insert_after(
-              'mkdocs.yml',
-              '02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.md',
-              f'          - Cuantización, paralelismo y compromisos de memoria, rendimiento y calidad: {route}',
-          )
-          insert_after(
-              'mkdocs.en.yml',
-              '02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.md',
-              f'          - Quantization, parallelism, and memory/performance/quality trade-offs: {route}',
-          )
-          insert_after(
-              'locales/en/manifest.yml',
-              '  - series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.md',
-              f'  - {route}',
-          )
-          insert_after(
-              'locales/en/manifest.yml',
-              '  - snippets/articulos-tecnicos/inference-kv-cache-paging-batching.html',
-              f'  - {visual}',
-          )
+          insert_after('mkdocs.yml', '02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.md', f'          - Cuantización, paralelismo y compromisos de memoria, rendimiento y calidad: {route}')
+          insert_after('mkdocs.en.yml', '02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.md', f'          - Quantization, parallelism, and memory/performance/quality trade-offs: {route}')
+          insert_after('locales/en/manifest.yml', '  - series/llm-inference-engineering-economics/02-kv-cache-memory-hierarchy-continuous-batching-pagedattention.md', f'  - {route}')
+          insert_after('locales/en/manifest.yml', '  - snippets/articulos-tecnicos/inference-kv-cache-paging-batching.html', f'  - {visual}')
 
-          workflow = Path('.github/workflows/pr-visual-review.yml')
-          text = workflow.read_text(encoding='utf-8')
-          source_line = '      - name: Validate LLM Inference Engineering chapter 3 source contract\n        run: node scripts/validate_inference_engineering_ch3_source.mjs\n'
-          a11y_line = '      - name: Validate LLM Inference Engineering chapter 3 accessibility and responsive states\n        run: node scripts/validate_inference_engineering_ch3_accessibility.mjs\n'
-          if source_line not in text:
-              anchor = '      - name: Validate LLM Inference Engineering chapter 2 accessibility and responsive states\n        run: node scripts/validate_inference_engineering_ch2_accessibility.mjs\n'
-              if anchor not in text:
-                  raise SystemExit('pr-visual-review.yml: chapter 4.2 accessibility anchor missing')
-              text = text.replace(anchor, anchor + '\n' + source_line + '\n' + a11y_line, 1)
-              workflow.write_text(text, encoding='utf-8')
+          article = Path('docs/series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs.md')
+          text = article.read_text(encoding='utf-8')
+          replacements = {
+              'Cuantización, paralelismo y trade-offs de memoria, rendimiento y calidad': 'Cuantización, paralelismo y compromisos de memoria, rendimiento y calidad',
+              'cambian placement, comunicación, memoria por rank y failure domains': 'cambian la distribución, la comunicación, la memoria por rank y los dominios de fallo',
+              'formato de packing/layout': 'formato de empaquetado/layout',
+              'post-training quantization weight-only': 'cuantización posentrenamiento sólo de pesos',
+              '**payload de pesos**': '**carga útil de pesos**',
+              'del coste de dequant/packing': 'del coste de descuantización/empaquetado',
+              'publicadas en esos papers pertenecen a sus modelos, kernels, GPUs y baselines. No son un multiplicador transferible a cualquier deployment de 2026.': 'publicadas en esos artículos pertenecen a sus modelos, kernels, GPUs y referencias de comparación. No son un multiplicador transferible a cualquier despliegue de 2026.',
+              'El ahorro ideal de payload es fácil; el footprint real no': 'El ahorro ideal de carga útil es fácil; la huella real no',
+              'Eso es una reducción de **payload**': 'Eso es una reducción de **carga útil**',
+              'el payload ideal medio sería': 'la carga útil ideal media sería',
+              'Cuantización y paralelismo pueden reducir componentes distintos del presupuesto; no convierten automáticamente toda la VRAM en `payload / bits / GPUs`.': 'Cuantización y paralelismo pueden reducir componentes distintos del presupuesto; no convierten automáticamente toda la VRAM en `carga útil / bits / GPUs`.',
+              'Paralelizar significa decidir placement': 'Paralelizar significa decidir dónde vive cada parte',
+              'El interconnect forma parte del modelo de rendimiento': 'La interconexión forma parte del modelo de rendimiento',
+              'interconnect/topología': 'interconexión/topología',
+              'Failure domains: una petición distribuida depende de más componentes': 'Dominios de fallo: una petición distribuida depende de más componentes',
+              'el **failure domain de una petición**': 'el **dominio de fallo de una petición**',
+          }
+          for old, new in replacements.items():
+              if old not in text:
+                  raise SystemExit(f'ES polish anchor missing: {old}')
+              text = text.replace(old, new)
+          article.write_text(text, encoding='utf-8')
+
+          gate = Path('scripts/validate_inference_engineering_ch3_source.mjs')
+          g = gate.read_text(encoding='utf-8')
+          g = g.replace("fs.readFile(path.resolve('.github/workflows/pr-visual-review.yml'), 'utf8')", "fs.readFile(path.resolve('.github/workflows/series4-golden-review.yml'), 'utf8')")
+          g = g.replace("'El ahorro ideal de payload es fácil; el footprint real no'", "'El ahorro ideal de carga útil es fácil; la huella real no'")
+          g = g.replace("'Paralelizar significa decidir placement'", "'Paralelizar significa decidir dónde vive cada parte'")
+          g = g.replace("'El interconnect forma parte del modelo de rendimiento'", "'La interconexión forma parte del modelo de rendimiento'")
+          g = g.replace("'Failure domains: una petición distribuida depende de más componentes'", "'Dominios de fallo: una petición distribuida depende de más componentes'")
+          g = g.replace("check(prVisual.includes('node scripts/validate_inference_engineering_ch3_source.mjs'), 'CI: chapter 4.3 source gate missing from PR visual review');", "check(prVisual.includes('node scripts/validate_inference_engineering_ch3_source.mjs'), 'CI: chapter 4.3 source gate missing from permanent Series 4 review');")
+          g = g.replace("check(prVisual.includes('node scripts/validate_inference_engineering_ch3_accessibility.mjs'), 'CI: chapter 4.3 browser/accessibility gate missing from PR visual review');", "check(prVisual.includes('node scripts/validate_inference_engineering_ch3_accessibility.mjs'), 'CI: chapter 4.3 browser/accessibility gate missing from permanent Series 4 review');")
+          gate.write_text(g, encoding='utf-8')
           PY
 
       - name: Validate deterministic source contract before commit
@@ -89,7 +99,7 @@ jobs:
           test -n "$(git status --short --untracked-files=no)"
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add mkdocs.yml mkdocs.en.yml locales/en/manifest.yml .github/workflows/pr-visual-review.yml
-          git commit -m 'integrate(series4): register chapter 4.3 publication surfaces'
+          git add mkdocs.yml mkdocs.en.yml locales/en/manifest.yml docs/series/llm-inference-engineering-economics/03-quantization-parallelism-memory-quality-tradeoffs.md scripts/validate_inference_engineering_ch3_source.mjs
+          git commit -m 'integrate(series4): register and polish chapter 4.3'
           git push origin HEAD:series/llm-inference-engineering-economics-golden
           echo "INTEGRATED_SHA=$(git rev-parse HEAD)"
