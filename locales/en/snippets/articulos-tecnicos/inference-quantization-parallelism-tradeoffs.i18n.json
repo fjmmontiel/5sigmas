@@ -1,6 +1,6 @@
 {
   "source": "snippets/articulos-tecnicos/inference-quantization-parallelism-tradeoffs.html",
-  "source_blob_sha": "4b500ad055c3676c56720f3098bd0d9ba9c8ee7b",
+  "source_blob_sha": "247bfff671e71ea3c26117ffa38101effc3184de",
   "replacements": {
     "Relación entre cuantización, memoria, kernels y topologías de paralelismo": "Relationship among quantization, memory, kernels, and parallelism topologies",
     "Representación · distribución · comunicación": "Representation · placement · communication",
@@ -30,7 +30,6 @@
     "tareas · contexto largo": "tasks · long context",
     "cambio de distribución": "distribution shift",
     "se evalúa; no se infiere del dtype": "measure it; do not infer it from dtype",
-    "representación empaquetada": "packed representation",
     "ejecución": "execution",
     "validar error → comportamiento": "validate error → behavior",
     "PARALELISMO · DISTRIBUCIÓN Y COMUNICACIÓN POR PETICIÓN": "PARALLELISM · PLACEMENT AND COMMUNICATION PER REQUEST",
