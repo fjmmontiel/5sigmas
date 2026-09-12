@@ -1,0 +1,86 @@
+name: Context Engineering 3.6 integrate
+
+on:
+  push:
+    paths:
+      - '.github/workflows/context-engineering-ch6-integrate.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  integrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Integrate chapter 3.6 into canonical publication surfaces
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+
+          def add_after(path: str, marker: str, addition: str) -> None:
+              p = Path(path)
+              text = p.read_text(encoding='utf-8')
+              if addition.strip() in text:
+                  print(f'{path}: destination already present')
+                  return
+              count = text.count(marker)
+              if count != 1:
+                  raise SystemExit(f'{path}: expected marker exactly once, found {count}: {marker!r}')
+              p.write_text(text.replace(marker, marker + addition, 1), encoding='utf-8')
+              print(f'{path}: integrated')
+
+          add_after(
+              'mkdocs.yml',
+              '          - "MCP: hosts, clients, servers, tools, resources, prompts, ciclo de vida y fronteras de confianza": series/context-engineering-memory-mcp/05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries.md',
+              '\n          - Skills, plugins, subagentes y hooks: series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation.md',
+          )
+          add_after(
+              'mkdocs.en.yml',
+              '          - MCP hosts, clients, servers, tools, resources, prompts, lifecycle, and trust boundaries: series/context-engineering-memory-mcp/05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries.md',
+              '\n          - Skills, plugins, subagents, and hooks: series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation.md',
+          )
+          add_after(
+              'locales/en/manifest.yml',
+              '  - series/context-engineering-memory-mcp/05-mcp-hosts-clients-servers-tools-resources-prompts-lifecycle-trust-boundaries.md',
+              '\n  - series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation.md',
+          )
+          add_after(
+              'locales/en/manifest.yml',
+              '  - snippets/articulos-tecnicos/context-mcp-trust-boundaries.html',
+              '\n  - snippets/articulos-tecnicos/context-extension-isolation-lifecycle.html',
+          )
+          add_after(
+              '.github/workflows/pr-visual-review.yml',
+              '      - name: Validate Context Engineering chapter 5 accessibility and responsive states\n        run: node scripts/validate_context_engineering_ch5_accessibility.mjs',
+              '\n\n      - name: Validate Context Engineering chapter 6 source contract\n        run: node scripts/validate_context_engineering_ch6_source.mjs\n\n      - name: Validate Context Engineering chapter 6 accessibility and responsive states\n        run: node scripts/validate_context_engineering_ch6_accessibility.mjs',
+          )
+          PY
+
+      - name: Verify chapter 3.6 source contract after integration
+        run: node scripts/validate_context_engineering_ch6_source.mjs
+
+      - name: Verify clean patch
+        run: git diff --check
+
+      - name: Commit canonical integration and remove one-shot workflow
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'fjmmontiel'
+          git config user.email '162696664+fjmmontiel@users.noreply.github.com'
+          git rm .github/workflows/context-engineering-ch6-integrate.yml
+          git add mkdocs.yml mkdocs.en.yml locales/en/manifest.yml .github/workflows/pr-visual-review.yml
+          git diff --cached --check
+          git commit -m 'feat(context-engineering): integrate 3.6 publication gates'
+          git push origin HEAD:series/context-engineering-memory-mcp-golden
