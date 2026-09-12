@@ -18,7 +18,7 @@ Una petición de generación no tiene una única «latencia del modelo». Tiene 
 
 Cuando un usuario envía un prompt largo y espera una respuesta en streaming, dos preguntas importan por separado:
 
-1. **¿Cuánto tarda en aparecer la primera salida?** Esa experiencia se resume normalmente con **TTFT, time to first token**.
+1. **¿Cuánto tarda en llegar la primera salida que estamos midiendo?** Esa frontera suele resumirse con **TTFT, time to first token**, pero en modelos con tokens de razonamiento el harness debe aclarar si cuenta cualquier primer token o la primera salida no razonadora visible.
 2. **Una vez empieza la respuesta, ¿a qué ritmo progresa?** Esa experiencia se resume con métricas como **TPOT, time per output token**, o **ITL, inter-token latency**, según cómo las defina el harness de benchmark.
 
 Esas dos preguntas corresponden aproximadamente a dos fases del runtime del modelo:
@@ -79,6 +79,12 @@ Esta ecuación es un **presupuesto de sistema**, no una identidad que todos los 
 La definición actual de NVIDIA AIPerf mide TTFT desde que el cliente envía la petición hasta que recibe el primer chunk no vacío, e incluye explícitamente red, cola, procesamiento del prompt y generación de la primera salida.[^nvidia-aiperf] vLLM `bench serve` también lo mide en el cliente, desde el envío de la petición hasta la primera salida streamed recibida.[^vllm-bench]
 
 Por eso una reducción de TTFT **no demuestra por sí sola** que el kernel de prefill sea más rápido. Puede deberse a menor cola, mejor prefix caching, un prompt menor, mejor red, batching distinto o cambios en cualquier otra parte del camino medido.
+
+### En modelos con razonamiento, distingue TTFT de TTFO
+
+La definición concreta del «primer token» también puede cambiar con el tipo de modelo. En AIPerf actual, **TTFT llega hasta el primer token de cualquier tipo, incluidos tokens de razonamiento**, mientras **TTFO, time to first output token, llega hasta el primer token no razonador de salida**. Para modelos sin razonamiento, ambas fronteras coinciden; para modelos que razonan antes de producir salida visible pueden separarse.[^nvidia-aiperf-ttfo]
+
+Esto importa al comparar herramientas históricas: la guía de migración de NVIDIA indica que, para modelos con razonamiento, el TTFO de AIPerf es la métrica equivalente al antiguo TTFT de GenAI-Perf.[^nvidia-aiperf-ttfo] Por tanto, si el SLO del producto es «tiempo hasta que el usuario ve contenido», no basta con copiar una columna llamada `TTFT`: hay que fijar **qué clase de token termina el intervalo**.
 
 ## TPOT e ITL necesitan una definición antes de compararse
 
@@ -384,6 +390,8 @@ La idea que debe quedar de este primero es más sencilla:
 ## Referencias
 
 [^nvidia-aiperf]: NVIDIA, **AIPerf Metrics Reference**. Definiciones client-observed de TTFT, decode duration e ITL. https://docs.nvidia.com/aiperf/reference/ai-perf-metrics-reference
+
+[^nvidia-aiperf-ttfo]: NVIDIA, **Migrating from GenAI-Perf**. Diferencia actual entre TTFT y TTFO para modelos con razonamiento y equivalencia de TTFO con la antigua frontera TTFT de GenAI-Perf. https://docs.nvidia.com/aiperf/getting-started/migrating-from-gen-ai-perf
 
 [^nvidia-nim-metrics]: NVIDIA, **NIM LLM Benchmarking — Metrics**. Definiciones de TTFT, end-to-end latency e ITL/TPOT y caveat sobre diferencias entre herramientas. https://docs.nvidia.com/nim/benchmarking/llm/latest/metrics.html
 
