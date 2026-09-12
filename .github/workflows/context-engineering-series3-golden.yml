@@ -58,9 +58,7 @@ jobs:
           python scripts/test_video_schema_contract.py
 
       - name: Validate Series 3 deterministic inventory and publication surfaces
-        run: |
-          node scripts/validate_context_engineering_series3_release.mjs
-          python scripts/audit_publication_contract.py
+        run: node scripts/validate_context_engineering_series3_release.mjs
 
       - name: Validate all Series 3 source and relationship contracts
         run: |
@@ -73,6 +71,9 @@ jobs:
 
       - name: Build Spanish strictly
         run: mkdocs build --clean --strict
+
+      - name: Validate public-series publication contract against rendered site
+        run: python scripts/audit_publication_contract.py
 
       - name: Prepare and audit English source
         run: |
