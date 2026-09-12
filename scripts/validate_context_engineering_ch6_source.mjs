@@ -60,7 +60,7 @@ for(const [locale,text] of [['ES',es],['EN',en]]){
   check(text.includes('D = (')&&text.includes('allowed_context')&&text.includes('allowed_capabilities')&&text.includes('provenance_requirements'),`${locale}: delegation envelope incomplete`);
   for(const dimension of ['Workspace/filesystem','Tools']) check(text.toLowerCase().includes(dimension.toLowerCase()),`${locale}: isolation dimension missing ${dimension}`);
 }
-check(es.includes('si `tools` se omite')&&es.includes('tools disponibles para subagentes'),'ES: current Claude Code subagent inheritance boundary missing');
+check(es.includes('Si `tools` se omite')&&es.includes('tools disponibles para subagentes'),'ES: current Claude Code subagent inheritance boundary missing');
 check(en.includes('If `tools` is omitted')&&en.includes('tools available to subagents'),'EN: current Claude Code subagent inheritance boundary missing');
 check(es.includes('`isolation: worktree`')&&en.includes('`isolation: worktree`'),'ES/EN: explicit worktree isolation missing');
 check(es.includes('hook asíncrono')&&es.includes('no puede bloquear')&&en.includes('async hook')&&en.includes('cannot block'),'ES/EN: async hook prevention boundary missing');
