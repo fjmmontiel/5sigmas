@@ -21,7 +21,7 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Repair EN contract and integrate chapter 3.6 canonical surfaces
+      - name: Repair EN contract and integrate non-workflow publication surfaces
         shell: bash
         run: |
           set -euo pipefail
@@ -72,27 +72,34 @@ jobs:
               '  - snippets/articulos-tecnicos/context-mcp-trust-boundaries.html',
               '\n  - snippets/articulos-tecnicos/context-extension-isolation-lifecycle.html',
           )
-          add_after(
-              '.github/workflows/pr-visual-review.yml',
-              '      - name: Validate Context Engineering chapter 5 accessibility and responsive states\n        run: node scripts/validate_context_engineering_ch5_accessibility.mjs',
-              '\n\n      - name: Validate Context Engineering chapter 6 source contract\n        run: node scripts/validate_context_engineering_ch6_source.mjs\n\n      - name: Validate Context Engineering chapter 6 accessibility and responsive states\n        run: node scripts/validate_context_engineering_ch6_accessibility.mjs',
-          )
           PY
 
-      - name: Verify chapter 3.6 source contract after integration
-        run: node scripts/validate_context_engineering_ch6_source.mjs
+      - name: Verify chapter 3.6 source contract with staged permanent-workflow wiring
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp .github/workflows/pr-visual-review.yml /tmp/pr-visual-review.yml
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('.github/workflows/pr-visual-review.yml')
+          text=p.read_text(encoding='utf-8')
+          marker='      - name: Validate Context Engineering chapter 5 accessibility and responsive states\n        run: node scripts/validate_context_engineering_ch5_accessibility.mjs'
+          addition='\n\n      - name: Validate Context Engineering chapter 6 source contract\n        run: node scripts/validate_context_engineering_ch6_source.mjs\n\n      - name: Validate Context Engineering chapter 6 accessibility and responsive states\n        run: node scripts/validate_context_engineering_ch6_accessibility.mjs'
+          if addition.strip() not in text:
+              if text.count(marker)!=1: raise SystemExit('permanent workflow chapter 5 marker missing')
+              p.write_text(text.replace(marker,marker+addition,1),encoding='utf-8')
+          PY
+          node scripts/validate_context_engineering_ch6_source.mjs
+          mv /tmp/pr-visual-review.yml .github/workflows/pr-visual-review.yml
+          git diff --check
 
-      - name: Verify clean patch
-        run: git diff --check
-
-      - name: Commit canonical integration and remove one-shot workflow
+      - name: Commit non-workflow canonical integration
         shell: bash
         run: |
           set -euo pipefail
           git config user.name 'fjmmontiel'
           git config user.email '162696664+fjmmontiel@users.noreply.github.com'
-          git rm .github/workflows/context-engineering-ch6-integrate.yml
-          git add mkdocs.yml mkdocs.en.yml locales/en/manifest.yml .github/workflows/pr-visual-review.yml locales/en/series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation.md
+          git add mkdocs.yml mkdocs.en.yml locales/en/manifest.yml locales/en/series/context-engineering-memory-mcp/06-skills-plugins-subagents-hooks-context-isolation-evaluation.md
           git diff --cached --check
-          git commit -m 'feat(context-engineering): integrate 3.6 publication gates'
+          git commit -m 'feat(context-engineering): integrate 3.6 publication surfaces'
           git push origin HEAD:series/context-engineering-memory-mcp-golden
