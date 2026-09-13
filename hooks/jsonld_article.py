@@ -16,6 +16,11 @@ SERIES_NAMES = {
     "datacenters-espacio": "Datacenters en el espacio",
     "seguridad-ia": "Seguridad en IA",
     "agentes-ia": "Agentes de IA",
+    "agentes-voz-tiempo-real": "Agentes de voz en tiempo real",
+    "coding-agents-agent-harnesses": "Coding agents y agent harnesses",
+    "context-engineering-memory-mcp": "Context engineering, memoria y MCP",
+    "llm-inference-engineering-economics": "Ingeniería y economía de inferencia de LLMs",
+    "evaluating-ai-systems-production": "Evaluar sistemas de IA en producción",
 }
 
 

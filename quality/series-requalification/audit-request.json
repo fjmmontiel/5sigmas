@@ -1,8 +1,8 @@
 {
-  "diagnostic_revision": 3,
+  "diagnostic_revision": 4,
   "published_content_base": "baf32aefc3c9538bd90a5f28c2be395cb4fac0d5",
-  "requested_head_parent": "dbee2eb4991d997d10715e44cad436a2c5e52f40",
-  "reason": "Retry the bounded requalification diagnostic after fixing the negative fixtures' discovery bug: co-located *-transcript.md media assets must remain required media but must not inflate the standalone page inventory. Continue through source/render/build/browser only if fixtures pass; never auto-certify pixel or pedagogy.",
+  "requested_head_parent": "df06d8a9d49d91f5b8cf6ae3d500a88b23c6b53f",
+  "reason": "Bounded diagnostic after repairing the legacy publication-discovery blind spot, adding chapter-first series names to article metadata, bounding each browser context so the complete 84-page sweep cannot hang silently, and probing Security 00/01 native ES/EN MP4s with ffprobe. Missing llms/media/render surfaces remain fail-closed; never auto-certify pixel or pedagogy.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }

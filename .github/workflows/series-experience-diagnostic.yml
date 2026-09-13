@@ -21,44 +21,83 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 2
+
       - name: Record exact audited revisions
         run: |
           git rev-parse HEAD
           cat quality/series-requalification/audit-request.json
+
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
           cache: pip
+
       - name: Install existing build dependencies
         run: pip install -r requirements.txt
+
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+
       - name: Negative regression fixtures
         run: python scripts/test_series_experience_audit.py -v
+
+      - name: Public-series discovery regression
+        id: publication_discovery
+        continue-on-error: true
+        run: python scripts/test_publication_contract_discovery.py -v
+
       - name: Independent source coverage audit
         id: source
         continue-on-error: true
         run: python scripts/audit_series_experience.py
+
       - name: Build Spanish strictly
         run: mkdocs build --clean --strict
-      - name: Run legacy publication audit as a comparison, not certification
+
+      - name: Current publication contract across presentation-first and chapter-first series
+        id: publication
         continue-on-error: true
         run: python scripts/audit_publication_contract.py
+
+      - name: Inspect Security 00/01 native media with ffprobe
+        id: security_media_probe
+        continue-on-error: true
+        run: |
+          set -uo pipefail
+          files=(
+            "docs/series/seguridad-ia/00_presentacion_serie.mp4"
+            "docs/series/seguridad-ia/01-prompt-injection.mp4"
+            "locales/en/series/seguridad-ia/00_presentacion_serie.mp4"
+            "locales/en/series/seguridad-ia/01-prompt-injection.mp4"
+          )
+          command -v ffprobe
+          for file in "${files[@]}"; do
+            echo "=== ${file} ==="
+            test -s "${file}" || { echo "missing or empty: ${file}"; exit 1; }
+            ffprobe -v error \
+              -show_entries format=duration,format_name:stream=index,codec_type,codec_name,width,height,pix_fmt,channels,sample_rate \
+              -of json "${file}"
+          done
+
       - name: Prepare English
         run: python scripts/prepare_locale.py --locale en
+
       - name: Build English strictly
         env:
           S5_LOCALE: en
         run: mkdocs build -f mkdocs.en.yml --clean --strict
+
       - name: Independent complete rendered HTML audit
         id: rendered
         continue-on-error: true
         run: python scripts/audit_series_experience.py --site site
+
       - name: Install existing Playwright version
         run: |
           npm install --no-save playwright@1.55.0
           npx playwright install --with-deps chromium
+
       - name: Serve built preview
         run: |
           python -m http.server 8000 --directory site > /tmp/series-experience-preview.log 2>&1 &
@@ -66,30 +105,50 @@ jobs:
             if curl --fail --silent http://127.0.0.1:8000/en/ > /dev/null; then exit 0; fi
             sleep 1
           done
+          cat /tmp/series-experience-preview.log
           exit 1
+
       - name: All inventoried pages, desktop/mobile, normal/reduced motion
         id: browser
         continue-on-error: true
+        env:
+          S5_BROWSER_JOB_TIMEOUT_MS: '25000'
         run: node scripts/audit_series_experience_browser.mjs
+
       - name: Enforce technical failures; never certify pixel or pedagogical quality
         if: always()
         env:
+          PUBLICATION_DISCOVERY_OUTCOME: ${{ steps.publication_discovery.outcome }}
           SOURCE_OUTCOME: ${{ steps.source.outcome }}
+          PUBLICATION_OUTCOME: ${{ steps.publication.outcome }}
+          MEDIA_PROBE_OUTCOME: ${{ steps.security_media_probe.outcome }}
           RENDERED_OUTCOME: ${{ steps.rendered.outcome }}
           BROWSER_OUTCOME: ${{ steps.browser.outcome }}
         run: |
           python - <<'PY'
           import json, os
           from pathlib import Path
+
           print('GOLDEN=NOT_CERTIFIED; PIXEL_REVIEW=PENDING; PEDAGOGY_REVIEW=PENDING')
           for name in ('report.json', 'browser-report.json'):
               path = Path('artifacts/series-experience') / name
               if path.exists():
                   data = json.loads(path.read_text())
                   print(name, json.dumps(data.get('summary', {k:v for k,v in data.items() if k != 'results'}), ensure_ascii=False))
-          outcomes = [os.environ[k] for k in ('SOURCE_OUTCOME','RENDERED_OUTCOME','BROWSER_OUTCOME')]
-          raise SystemExit(0 if all(value == 'success' for value in outcomes) else 1)
+
+          names = (
+              'PUBLICATION_DISCOVERY_OUTCOME',
+              'SOURCE_OUTCOME',
+              'PUBLICATION_OUTCOME',
+              'MEDIA_PROBE_OUTCOME',
+              'RENDERED_OUTCOME',
+              'BROWSER_OUTCOME',
+          )
+          outcomes = {name: os.environ[name] for name in names}
+          print('TECHNICAL_OUTCOMES', json.dumps(outcomes, sort_keys=True))
+          raise SystemExit(0 if all(value == 'success' for value in outcomes.values()) else 1)
           PY
+
       - name: Retain bounded failed-diagnostic evidence
         if: failure()
         uses: actions/upload-artifact@v4
