@@ -217,10 +217,10 @@ If twenty tickets represent the same mechanism, twenty nearly identical tests in
 
 Before adding a case:
 
-1. **deduplicate by mechanism**, not just text;
-2. define the **equivalence class** you want to protect;
-3. add at least one **neighbor case** where correct behavior differs;
-4. add a **hard negative** when needed so the repair does not become a universal rule;
+1. **deduplicate by mechanism**, not just text.
+2. define the **equivalence class** you want to protect.
+3. add at least one **neighbor case** where correct behavior differs.
+4. add a **hard negative** when needed so the repair does not become a universal rule.
 5. keep **regression** and **capability** sets distinct.
 
 For example, a bug summarized as “never retry on a timeout” can lead to a naive repair that removes legitimate retries.
