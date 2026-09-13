@@ -1,0 +1,119 @@
+name: Evaluating AI Systems in Production live QA
+
+on:
+  workflow_run:
+    workflows: ["Deploy MkDocs to GitHub Pages"]
+    types: [completed]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: evaluating-ai-systems-live-${{ github.event.workflow_run.head_branch }}
+  cancel-in-progress: true
+
+jobs:
+  live-evaluating-ai-systems:
+    if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Wait for Evaluating AI Systems deployment
+        shell: bash
+        run: |
+          set -euo pipefail
+          url='https://5sigmas.com/series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria/'
+          for attempt in {1..18}; do
+            body="$(curl --fail --silent --show-error --location "$url" || true)"
+            if grep -q 'Capítulo 1' <<< "$body" && grep -q 'Qué evaluar' <<< "$body"; then
+              echo 'Evaluating AI Systems production route is serving the deployed series.'
+              exit 0
+            fi
+            sleep 5
+          done
+          echo 'Evaluating AI Systems production route did not become ready within the validation window.'
+          exit 1
+
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Audit live resources across all ES/EN evaluation routes
+        env:
+          S5_PREVIEW_URL: https://5sigmas.com
+          S5_BROWSER_RESOURCE_PATHS: >-
+            /series/,
+            /en/series/,
+            /series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria/,
+            /en/series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria/,
+            /series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning/,
+            /en/series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning/,
+            /series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo/,
+            /en/series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo/,
+            /series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy/,
+            /en/series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy/,
+            /series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-guardrails-regression-gates/,
+            /en/series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-guardrails-regression-gates/,
+            /series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops/,
+            /en/series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops/
+        run: node scripts/audit_browser_resources.mjs
+
+      - name: Validate live bilingual series hub and mirror
+        env:
+          S5_PREVIEW_BASE: https://5sigmas.com
+        run: node scripts/validate_english_series_mirror.mjs
+
+      - name: Validate live ES/EN route switching and reader progression
+        env:
+          S5_PREVIEW_BASE: https://5sigmas.com
+        run: node scripts/validate_locale_switching.mjs
+
+      - name: Validate live chapter 5.1 visual states and accessibility
+        env:
+          S5_PREVIEW_BASE: https://5sigmas.com
+        run: node scripts/validate_ai_systems_eval_ch1_accessibility.mjs
+
+      - name: Validate live chapter 5.2 visual states and accessibility
+        env:
+          S5_PREVIEW_BASE: https://5sigmas.com
+        run: node scripts/validate_ai_systems_eval_ch2_accessibility.mjs
+
+      - name: Validate live chapter 5.3 visual states and accessibility
+        env:
+          S5_PREVIEW_BASE: https://5sigmas.com
+        run: node scripts/validate_ai_systems_eval_ch3_accessibility.mjs
+
+      - name: Validate live chapter 5.4 visual states and accessibility
+        env:
+          S5_PREVIEW_BASE: https://5sigmas.com
+        run: node scripts/validate_ai_systems_eval_ch4_accessibility.mjs
+
+      - name: Validate live chapter 5.5 visual states and accessibility
+        env:
+          S5_PREVIEW_BASE: https://5sigmas.com
+        run: node scripts/validate_ai_systems_eval_ch5_accessibility.mjs
+
+      - name: Validate live chapter 5.6 visual states and accessibility
+        env:
+          S5_PREVIEW_BASE: https://5sigmas.com
+        run: node scripts/validate_ai_systems_eval_ch6_accessibility.mjs
+
+      - name: Upload live Series 5 failure evidence
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evaluating-ai-systems-live-qa-failure
+          path: |
+            artifacts/visual-review/ai-systems-eval-*.png
+            artifacts/visual-review/english-series-mirror-*.png
+          if-no-files-found: warn
+          retention-days: 1

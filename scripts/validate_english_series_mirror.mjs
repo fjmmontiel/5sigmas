@@ -43,6 +43,12 @@ const inferenceEngineering = {
   chapterTitle: 'Chapter 1 — Prefill vs decode: TTFT, TPOT, throughput, and the latency budget',
 };
 
+const evaluatingAiSystems = {
+  route: '/en/series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria/',
+  title: 'Evaluating AI Systems in Production',
+  chapterTitle: 'Chapter 1 — What to evaluate: model, component, system, workflow, and trajectory',
+};
+
 const nativePresentationMedia = new Map([
   ['fundamentos-ia-iag', '00_presentacion_serie'],
   ['from-cave-to-agi', '00_presentacion_serie'],
@@ -81,13 +87,13 @@ const visit = async (route) => {
 
 const hubText = await visit('/en/series/');
 const hubLinks = await page.locator('.s5-simple-list a.s5-list-row').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('href')));
-if (hubLinks.length !== 12) failures.push(`/en/series/: expected 12 canonical series cards, got ${hubLinks.length}`);
+if (hubLinks.length !== 13) failures.push(`/en/series/: expected 13 canonical series cards, got ${hubLinks.length}`);
 for (const [slug, title] of presentations) {
   const expected = `/en/series/${slug}/00_presentacion_serie/`;
   if (!hubLinks.includes(expected)) failures.push(`/en/series/: missing ${expected}`);
   if (!hubText.includes(title)) failures.push(`/en/series/: missing title ${JSON.stringify(title)}`);
 }
-for (const series of [realtimeVoice, codingAgents, contextEngineering, inferenceEngineering]) {
+for (const series of [realtimeVoice, codingAgents, contextEngineering, inferenceEngineering, evaluatingAiSystems]) {
   if (!hubLinks.includes(series.route)) failures.push(`/en/series/: missing ${series.route}`);
   if (!hubText.includes(series.title)) failures.push(`/en/series/: missing title ${JSON.stringify(series.title)}`);
 }
@@ -123,7 +129,7 @@ for (const [slug, expectedTitle] of presentations) {
   }
 }
 
-for (const series of [realtimeVoice, codingAgents, contextEngineering, inferenceEngineering]) {
+for (const series of [realtimeVoice, codingAgents, contextEngineering, inferenceEngineering, evaluatingAiSystems]) {
   const body = await visit(series.route);
   if (!body.includes(series.chapterTitle)) {
     failures.push(`${series.route}: missing canonical chapter title ${JSON.stringify(series.chapterTitle)}`);
@@ -160,6 +166,7 @@ for (const route of [
   codingAgents.route,
   contextEngineering.route,
   inferenceEngineering.route,
+  evaluatingAiSystems.route,
   '/en/series/ia-pib-bienestar-energia/00_presentacion_serie/',
   '/en/series/datacenters-espacio/00_presentacion_serie/',
   '/en/series/seguridad-ia/00_presentacion_serie/',
@@ -183,4 +190,4 @@ if (failures.length) {
   for (const failure of failures) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log('English series mirror QA passed: twelve canonical series entries including Realtime Voice Agents, Coding Agents & Agent Harnesses, Context Engineering, Memory & MCP, and LLM Inference Engineering & Economics; localized embedded visuals, native-English presentation media only when declared, desktop/mobile overflow clean.');
+console.log('English series mirror QA passed: thirteen canonical series entries including Realtime Voice Agents, Coding Agents & Agent Harnesses, Context Engineering, Memory & MCP, LLM Inference Engineering & Economics, and Evaluating AI Systems in Production; localized embedded visuals, native-English presentation media only when declared, desktop/mobile overflow clean.');
