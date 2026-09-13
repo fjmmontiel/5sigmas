@@ -167,7 +167,7 @@ PROMOTE sólo si:
   AND no hay degradación material en reliability
 ```
 
-Los límites concretos dependen del producto y del coste del fallo. No existe un 1%, 5% o p95 universal que convierta un canary en seguro.
+Los límites concretos dependen del producto y del coste del fallo. No existe un umbral universal de tráfico o latencia que convierta un canary en seguro.
 
 La documentación de Argo Rollouts también distingue explícitamente `Failed`, `Successful` e `Inconclusive` en los análisis. Esa tercera salida es importante: «no tengo evidencia suficiente» no debe colapsarse en PASS.[^argo-analysis]
 

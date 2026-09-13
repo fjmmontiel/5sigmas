@@ -20,8 +20,8 @@ The input distribution shifts, real dependencies enter the path, concurrency no 
 
 But “test in production” is not one method. **Shadow, canary, and A/B answer different questions**:
 
-- a **shadow** runs the candidate on copies of live traffic without using its response to serve the user;
-- a **canary** exposes a small share of real traffic to the candidate and watches safety and reliability before expanding;
+- a **shadow** runs the candidate on copies of live traffic without using its response to serve the user.
+- a **canary** exposes a small share of real traffic to the candidate and watches safety and reliability before expanding.
 - an **A/B test** experimentally assigns units to control or treatment to estimate a causal effect under a declared design.
 
 Confusing them leads to bad decisions. A shadow can show that the candidate behaves differently, but not how much a user metric will change. A canary can expose a rise in errors, but percentage traffic routing is not automatically a causal experiment. An A/B test can estimate causal impact and still be too slow or too risky as the first detector of a critical regression.
@@ -90,9 +90,9 @@ The numerator needs concrete semantics: different tool selection, a policy viola
 
 The candidate response does not determine what the user sees. A shadow therefore cannot directly observe:
 
-- whether users complete their task more successfully;
-- whether conversion, retention, or abandonment changes;
-- whether slower responses change user behavior;
+- whether users complete their task more successfully.
+- whether conversion, retention, or abandonment changes.
+- whether slower responses change user behavior.
 - whether the user adapts their next action to the candidate output.
 
 Shadow evidence is **counterfactual execution evidence**, not complete evidence about user experience.
@@ -120,13 +120,13 @@ In a canary, a small share of live traffic actually uses the new variant.
 
 The main goal is usually to reduce **blast radius** while observing production signals such as:
 
-- error rate;
-- timeout and cancellation rate;
-- tail latency;
-- policy violations;
-- tool failures;
-- cost per request or task;
-- sufficiently fast user-experience signals;
+- error rate.
+- timeout and cancellation rate.
+- tail latency.
+- policy violations.
+- tool failures.
+- cost per request or task.
+- sufficiently fast user-experience signals.
 - dependency saturation.
 
 Argo Rollouts is a concrete progressive-delivery implementation: it supports weighted steps, pauses, and analysis, and an `AnalysisRun` can allow progression, pause the rollout, or cause an abort according to declared conditions.[^argo-canary][^argo-analysis]
@@ -193,9 +193,9 @@ Per-request assignment is not always appropriate.
 
 Examples:
 
-- a copilot with persistent memory may require user-level assignment;
-- an enterprise agent may require tenant-level assignment so one organization does not mix policies;
-- a conversational experience may need sticky session-level assignment;
+- a copilot with persistent memory may require user-level assignment.
+- an enterprise agent may require tenant-level assignment so one organization does not mix policies.
+- a conversational experience may need sticky session-level assignment.
 - a collaborative system may create interference between users, undermining a naive user-level interpretation.
 
 Record the assignment unit, analysis unit, and actual exposure mechanism.
@@ -244,11 +244,11 @@ In this chapter, a **release guardrail** is a condition that constrains a deploy
 
 It may consume evidence from:
 
-- deterministic rules;
-- safety monitors;
-- reliability metrics;
-- calibrated graders;
-- human review;
+- deterministic rules.
+- safety monitors.
+- reliability metrics.
+- calibrated graders.
+- human review.
 - business signals.
 
 Its operational semantics matter:
@@ -274,8 +274,8 @@ For a variant \(v\), one schematic form is:
 
 where:
 
-- `H_hard` represents non-compensatory invariants;
-- `R_reliability` requires the candidate to remain within its operational budget;
+- `H_hard` represents non-compensatory invariants.
+- `R_reliability` requires the candidate to remain within its operational budget.
 - `E_evidence` requires the stage to have accumulated the evidence declared for its question.
 
 Do not replace these dimensions with an arbitrary average in which a conversion gain offsets a security violation.
@@ -391,12 +391,12 @@ For shadow, add which responses and side effects were suppressed and how control
 
 After the candidate wins, retain:
 
-- which version was evaluated;
-- which cohorts were exposed;
-- which guardrails passed;
-- which alerts occurred;
-- which rollout or rollback actions ran;
-- which results were descriptive and which were causal;
+- which version was evaluated.
+- which cohorts were exposed.
+- which guardrails passed.
+- which alerts occurred.
+- which rollout or rollback actions ran.
+- which results were descriptive and which were causal.
 - which delayed data arrived after the decision.
 
 This leads directly into the next chapter: online evaluation remains useful only when observability, failure taxonomy, and repair feed production evidence back into offline evals.
