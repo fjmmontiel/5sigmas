@@ -7,6 +7,9 @@ tags:
   - IA
   - Seguridad
   - LLMs
+video: "00_presentacion_serie.mp4"
+video_poster: "00_presentacion_serie.jpg"
+video_title: "Seguridad en IA"
 hide:
   - toc
 ---
