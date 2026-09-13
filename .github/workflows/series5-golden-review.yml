@@ -55,6 +55,7 @@ jobs:
           node scripts/validate_ai_systems_eval_ch2_source.mjs
           node scripts/validate_ai_systems_eval_ch3_source.mjs
           node scripts/validate_ai_systems_eval_ch4_source.mjs
+          node scripts/validate_ai_systems_eval_ch5_source.mjs
 
       - name: Validate media declarations and signatures
         run: |
@@ -110,6 +111,7 @@ jobs:
           node scripts/validate_ai_systems_eval_ch2_accessibility.mjs
           node scripts/validate_ai_systems_eval_ch3_accessibility.mjs
           node scripts/validate_ai_systems_eval_ch4_accessibility.mjs
+          node scripts/validate_ai_systems_eval_ch5_accessibility.mjs
 
       - name: Validate reader navigation and responsive shell
         run: |
