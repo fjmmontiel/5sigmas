@@ -64,14 +64,18 @@ jobs:
         id: security_media_probe
         continue-on-error: true
         run: |
-          set -uo pipefail
+          set -euo pipefail
+          if ! command -v ffprobe >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install -y ffmpeg
+          fi
+          command -v ffprobe
           files=(
             "docs/series/seguridad-ia/00_presentacion_serie.mp4"
             "docs/series/seguridad-ia/01-prompt-injection.mp4"
             "locales/en/series/seguridad-ia/00_presentacion_serie.mp4"
             "locales/en/series/seguridad-ia/01-prompt-injection.mp4"
           )
-          command -v ffprobe
           for file in "${files[@]}"; do
             echo "=== ${file} ==="
             test -s "${file}" || { echo "missing or empty: ${file}"; exit 1; }
