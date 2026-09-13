@@ -1,0 +1,119 @@
+<section class="s5v s5v-agent-trajectory s5v--wide" aria-label="Evaluación de una trayectoria de agente separando proceso, recuperación y resultado final">
+  <style>
+    .s5v-agent-trajectory{scroll-margin-top:84px}
+    .s5v-agent-trajectory .at-scroll{overflow-x:auto;overscroll-behavior-inline:contain;padding:.35rem .2rem .9rem;scrollbar-gutter:stable;outline:none}
+    .s5v-agent-trajectory .at-scroll:focus-visible{box-shadow:0 0 0 3px color-mix(in srgb,var(--md-accent-fg-color,#7c4dff) 36%,transparent);border-radius:14px}
+    .s5v-agent-trajectory .at-stage{width:100%;min-width:0;max-width:1320px;margin:0 auto}
+    .s5v-agent-trajectory svg{display:block;width:100%;height:auto;overflow:visible}
+    .s5v-agent-trajectory text{fill:currentColor;font-family:inherit}
+    .s5v-agent-trajectory .at-node{fill:var(--md-default-bg-color,#fff);stroke:currentColor;stroke-width:2.2}
+    .s5v-agent-trajectory .at-node--major{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 87%,var(--md-accent-fg-color,#7c4dff) 13%);stroke-width:3}
+    .s5v-agent-trajectory .at-node--gate{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 94%,currentColor 6%);stroke-width:2.6}
+    .s5v-agent-trajectory .at-node--fail{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 95%,currentColor 5%);stroke-dasharray:6 4}
+    .s5v-agent-trajectory .at-boundary{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 98%,currentColor 2%);stroke:currentColor;stroke-width:2.2;stroke-dasharray:8 7}
+    .s5v-agent-trajectory .at-edge{fill:none;stroke:currentColor;stroke-width:2.7;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#at-arrow)}
+    .s5v-agent-trajectory .at-edge--primary{stroke-width:3.4}
+    .s5v-agent-trajectory .at-edge--recovery{stroke-dasharray:7 6}
+    .s5v-agent-trajectory .at-edge--measure{stroke-dasharray:3 6;opacity:.82}
+    .s5v-agent-trajectory .at-label{font-size:12.8px;font-weight:820;text-anchor:middle}
+    .s5v-agent-trajectory .at-sub{font-size:10.5px;text-anchor:middle;opacity:.84}
+    .s5v-agent-trajectory .at-small{font-size:9.7px;font-weight:720;text-anchor:middle;opacity:.82}
+    .s5v-agent-trajectory .at-kicker{font-size:11.6px;font-weight:850;letter-spacing:.07em;text-transform:uppercase;opacity:.76}
+    .s5v-agent-trajectory .at-edge-label{font-size:9.8px;font-weight:760;paint-order:stroke;stroke:var(--md-default-bg-color,#fff);stroke-width:5px;stroke-linejoin:round;text-anchor:middle}
+    .s5v-agent-trajectory .at-legend{display:flex;gap:1rem;flex-wrap:wrap;margin:.35rem 0 0;font-size:.87rem;opacity:.87}
+    .s5v-agent-trajectory .at-legend span{display:inline-flex;gap:.42rem;align-items:center}
+    .s5v-agent-trajectory .at-legend i{width:1.55rem;border-top:3px solid currentColor}
+    .s5v-agent-trajectory .at-legend .is-recovery i{border-top-style:dashed;border-top-width:2px}
+    .s5v-agent-trajectory .at-legend .is-measure i{border-top-style:dotted;border-top-width:2px}
+    .s5v-agent-trajectory .s5v__copy{margin-top:.85rem}
+    @media (max-width:700px){.s5v-agent-trajectory{scroll-margin-top:72px}.s5v-agent-trajectory .at-scroll{margin-inline:-.35rem;padding-inline:.35rem}.s5v-agent-trajectory .at-stage{width:auto;min-width:1220px}.s5v-agent-trajectory .at-legend{font-size:.82rem}}
+    @media (prefers-reduced-motion:reduce){.s5v-agent-trajectory *{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+  </style>
+  <!-- GOLDEN_VISUAL_CONTRACT
+    learning-objective="Show why final task success cannot substitute for trajectory evaluation: each observation, decision, tool call, result and state transition can violate policy, fail to recover, duplicate a side effect or continue after the goal even when the terminal state looks correct."
+    mechanism="task+policy+initial-state -> observation -> decision -> precondition/policy gate -> tool call -> tool result -> state update -> either next observation or stop condition -> outcome; tool failure branches through failure classification -> state reconciliation -> retry/cancel/fallback; trajectory verifier reads events while outcome verifier reads terminal state; hard policy violations gate release before success/efficiency can compensate."
+    visual-variables="solid arrows encode normal execution; dashed arrows encode recovery; dotted arrows encode measurement; the policy boundary encloses side-effect authorization; parallel trajectory/outcome verifier lanes encode two different evidence objects; the final release gate places hard compliance before success and efficiency."
+    why-visual="A scalar success rate hides where failures occur and whether a correct-looking end state came from an unsafe path. The graph makes the execution loop, recovery branch, measurement boundaries, and non-compensatory policy gate spatially explicit."
+    relationship="task-policy-state->observation->decision->policy-gate->{deny,tool-call};tool-call->tool-result->{state-update,failure-classification};failure-classification->reconcile-state->{retry,cancel-fallback};state-update->{observation,stop-condition};stop-condition->outcome;trajectory-events->trajectory-verifier;outcome->outcome-verifier;{trajectory-verifier,outcome-verifier}->release-gate"
+    evidence="terminal-state-assertions,tool-selection,argument-correctness,preconditions,policy-events,side-effects,retries,reconciliation,recovery,stop-condition,actions-after-success,tokens,tool-calls,latency,cost"
+    interaction="static:no-cosmetic-controls"
+    mobile="horizontal-scroll-preserves-execution-loop-recovery-branches-parallel-verifiers-and-release-gate"
+  -->
+  <div class="s5v__canvas">
+    <header class="s5v__head">
+      <div><span class="s5v__kicker">RESULTADO ≠ TRAYECTORIA</span><h3>Evalúa lo que terminó y cómo llegó hasta ahí</h3></div>
+      <p>Un agente puede dejar el estado final correcto y aun así saltarse una aprobación, repetir un write tras un timeout o seguir actuando después de haber cumplido el objetivo. La evaluación separa el outcome terminal de la trayectoria y hace que los invariantes de política no puedan compensarse con éxito o eficiencia.</p>
+    </header>
+    <div class="at-scroll" tabindex="0" role="region" aria-label="Diagrama desplazable del bucle de agente, recuperación y verificadores de trayectoria y outcome">
+      <div class="at-stage">
+        <svg viewBox="0 0 1320 1010" role="img" aria-labelledby="at-title at-desc">
+          <title id="at-title">Evaluación de trayectoria de un agente con tools y recuperación</title>
+          <desc id="at-desc">La tarea, la política y el estado inicial alimentan observación, decisión y un gate de precondiciones antes del tool call. El resultado de la herramienta actualiza estado o entra en una rama de fallo que clasifica, reconcilia y decide retry, cancelación o fallback. La condición de parada lleva al outcome. Un verificador de trayectoria inspecciona eventos de tools, política, recuperación y eficiencia, mientras un verificador de outcome inspecciona el estado terminal. El gate de release trata violaciones duras de política como no compensables.</desc>
+          <defs><marker id="at-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="currentColor"/></marker></defs>
+
+          <text x="30" y="42" class="at-kicker">1 · EJECUCIÓN: CADA TRANSICIÓN DEJA EVIDENCIA</text>
+          <g data-node="task-policy-state"><rect class="at-node at-node--major" x="30" y="70" width="190" height="94" rx="17"/><text x="125" y="98" class="at-label">Task + policy + estado</text><text x="125" y="124" class="at-sub">objetivo · permisos · entorno</text><text x="125" y="148" class="at-small">frontera de evaluación declarada</text></g>
+          <g data-node="observation"><rect class="at-node" x="260" y="70" width="150" height="94" rx="17"/><text x="335" y="102" class="at-label">Observación</text><text x="335" y="128" class="at-sub">input + estado visible</text><text x="335" y="150" class="at-small">oₜ</text></g>
+          <g data-node="decision"><rect class="at-node" x="448" y="70" width="150" height="94" rx="17"/><text x="523" y="102" class="at-label">Decisión</text><text x="523" y="128" class="at-sub">tool · responder · parar</text><text x="523" y="150" class="at-small">dₜ</text></g>
+
+          <rect data-boundary="side-effect-policy" class="at-boundary" x="636" y="48" width="650" height="184" rx="24"/>
+          <text x="658" y="78" class="at-kicker">FRONTERA DE AUTORIZACIÓN / SIDE EFFECTS</text>
+          <g data-node="policy-gate"><rect class="at-node at-node--gate" x="670" y="102" width="178" height="94" rx="17"/><text x="759" y="132" class="at-label">Gate de precondiciones</text><text x="759" y="158" class="at-sub">policy · approval · scope</text><text x="759" y="181" class="at-small">antes del write</text></g>
+          <g data-node="tool-call"><rect class="at-node at-node--major" x="892" y="102" width="164" height="94" rx="17"/><text x="974" y="132" class="at-label">Tool call</text><text x="974" y="158" class="at-sub">name + arguments</text><text x="974" y="181" class="at-small">aₜ</text></g>
+          <g data-node="tool-result"><rect class="at-node" x="1094" y="102" width="158" height="94" rx="17"/><text x="1173" y="132" class="at-label">Tool result</text><text x="1173" y="158" class="at-sub">success · error · timeout</text><text x="1173" y="181" class="at-small">rₜ</text></g>
+          <path data-path="start" class="at-edge at-edge--primary" d="M220 117 H260"/>
+          <path data-path="observe-decide" class="at-edge at-edge--primary" d="M410 117 H448"/>
+          <path data-path="authorize" class="at-edge at-edge--primary" d="M598 117 H670"/>
+          <path data-path="call" class="at-edge at-edge--primary" d="M848 149 H892"/>
+          <path data-path="result" class="at-edge at-edge--primary" d="M1056 149 H1094"/>
+
+          <g data-node="policy-deny"><rect class="at-node at-node--fail" x="678" y="270" width="162" height="78" rx="16"/><text x="759" y="299" class="at-label">DENY / escalate</text><text x="759" y="325" class="at-sub">no side effect</text></g>
+          <path data-path="deny" class="at-edge at-edge--recovery" d="M759 196 V270"/>
+          <text x="780" y="238" class="at-edge-label">no autorizado</text>
+
+          <g data-node="state-update"><rect class="at-node at-node--major" x="1048" y="284" width="204" height="88" rx="17"/><text x="1150" y="314" class="at-label">State update</text><text x="1150" y="340" class="at-sub">estado real tras el tool</text><text x="1150" y="362" class="at-small">sₜ₊₁ + side effects</text></g>
+          <path data-path="result-success" class="at-edge" d="M1173 196 V284"/>
+
+          <text x="30" y="426" class="at-kicker">2 · RECUPERACIÓN: TIMEOUT NO SIGNIFICA «NO OCURRIÓ»</text>
+          <g data-node="failure-classification"><rect class="at-node at-node--fail" x="742" y="450" width="190" height="90" rx="17"/><text x="837" y="480" class="at-label">Clasifica el fallo</text><text x="837" y="506" class="at-sub">retryable · terminal · unknown</text><text x="837" y="530" class="at-small">¿pudo ocurrir el side effect?</text></g>
+          <g data-node="reconcile-state"><rect class="at-node at-node--fail" x="974" y="450" width="190" height="90" rx="17"/><text x="1069" y="480" class="at-label">Reconciliar estado</text><text x="1069" y="506" class="at-sub">read-back · idempotency key</text><text x="1069" y="530" class="at-small">antes de repetir un write</text></g>
+          <g data-node="retry-cancel-fallback"><rect class="at-node at-node--fail" x="974" y="586" width="190" height="90" rx="17"/><text x="1069" y="616" class="at-label">Retry · cancel · fallback</text><text x="1069" y="642" class="at-sub">decisión explícita</text><text x="1069" y="666" class="at-small">no reintento ciego</text></g>
+          <g data-node="duplicate-hazard"><rect class="at-node at-node--gate" x="742" y="586" width="190" height="90" rx="17"/><text x="837" y="616" class="at-label">Riesgo de duplicado</text><text x="837" y="642" class="at-sub">write ya aplicado + retry</text><text x="837" y="666" class="at-small">fallo de recuperación</text></g>
+          <path data-path="result-failure" class="at-edge at-edge--recovery" d="M1094 172 H1004 V402 H837 V450"/>
+          <path data-path="classify-reconcile" class="at-edge at-edge--recovery" d="M932 495 H974"/>
+          <path data-path="reconcile-decision" class="at-edge at-edge--recovery" d="M1069 540 V586"/>
+          <path data-path="duplicate" class="at-edge at-edge--recovery" d="M974 631 H932"/>
+          <path data-path="retry-loop" class="at-edge at-edge--recovery" d="M1164 631 H1268 V247 H974 V196"/>
+          <text x="1222" y="610" class="at-edge-label">si reconciliado</text>
+
+          <g data-node="stop-condition"><rect class="at-node" x="448" y="284" width="174" height="88" rx="17"/><text x="535" y="314" class="at-label">Stop condition</text><text x="535" y="340" class="at-sub">goal met · blocked · budget</text><text x="535" y="362" class="at-small">evita acciones post-éxito</text></g>
+          <g data-node="outcome"><rect class="at-node at-node--major" x="260" y="284" width="150" height="88" rx="17"/><text x="335" y="314" class="at-label">Outcome</text><text x="335" y="340" class="at-sub">estado terminal</text><text x="335" y="362" class="at-small">y(τ)</text></g>
+          <path data-path="state-loop" class="at-edge" d="M1048 328 H660 V220 H335 V164"/>
+          <path data-path="state-stop" class="at-edge" d="M1048 348 H622"/>
+          <path data-path="stop-outcome" class="at-edge at-edge--primary" d="M448 328 H410"/>
+
+          <text x="30" y="744" class="at-kicker">3 · DOS OBJETOS DE EVIDENCIA, UN GATE NO COMPENSATORIO</text>
+          <g data-node="trajectory-events"><rect class="at-node" x="30" y="774" width="190" height="92" rx="17"/><text x="125" y="804" class="at-label">Trajectory events</text><text x="125" y="830" class="at-sub">tools · policy · retries · stop</text><text x="125" y="854" class="at-small">τ = (e₁ … eₜ)</text></g>
+          <g data-node="trajectory-verifier"><rect class="at-node at-node--major" x="260" y="774" width="226" height="92" rx="17"/><text x="373" y="804" class="at-label">Verificador de trayectoria</text><text x="373" y="830" class="at-sub">correctness · compliance · recovery</text><text x="373" y="854" class="at-small">eficiencia sólo entre éxitos comparables</text></g>
+          <g data-node="outcome-verifier"><rect class="at-node at-node--major" x="260" y="894" width="226" height="82" rx="17"/><text x="373" y="924" class="at-label">Verificador de outcome</text><text x="373" y="950" class="at-sub">assertions del estado terminal</text></g>
+          <g data-node="release-gate"><rect class="at-node at-node--gate" x="548" y="804" width="302" height="142" rx="20"/><text x="699" y="837" class="at-label">Release gate</text><text x="699" y="866" class="at-sub">1. hard policy / safety invariants</text><text x="699" y="892" class="at-sub">2. task success + recovery</text><text x="699" y="918" class="at-sub">3. efficiency / cost distributions</text><text x="699" y="940" class="at-small">policy FAIL no se promedia con success</text></g>
+          <g data-node="release-pass"><rect class="at-node at-node--major" x="916" y="796" width="160" height="82" rx="17"/><text x="996" y="827" class="at-label">PASS</text><text x="996" y="853" class="at-sub">scope validado</text></g>
+          <g data-node="release-fail"><rect class="at-node at-node--fail" x="916" y="904" width="160" height="82" rx="17"/><text x="996" y="935" class="at-label">FAIL / inspect</text><text x="996" y="961" class="at-sub">preserva la trayectoria</text></g>
+          <path data-path="measure-trajectory" class="at-edge at-edge--measure" d="M125 676 V774"/>
+          <path data-path="trajectory-check" class="at-edge at-edge--primary" d="M220 820 H260"/>
+          <path data-path="outcome-check" class="at-edge at-edge--measure" d="M335 372 V894"/>
+          <path data-path="trajectory-gate" class="at-edge at-edge--primary" d="M486 820 H548"/>
+          <path data-path="outcome-gate" class="at-edge at-edge--primary" d="M486 935 H520 V902 H548"/>
+          <path data-path="gate-pass" class="at-edge at-edge--primary" d="M850 850 H916"/>
+          <path data-path="gate-fail" class="at-edge at-edge--recovery" d="M850 914 H884 V945 H916"/>
+        </svg>
+      </div>
+    </div>
+    <div class="at-legend" aria-label="Leyenda del diagrama">
+      <span><i></i>ejecución / evidencia principal</span>
+      <span class="is-recovery"><i></i>recuperación o fallo</span>
+      <span class="is-measure"><i></i>frontera de medida</span>
+    </div>
+    <p class="s5v__copy"><strong>Lectura:</strong> el outcome responde si el estado terminal satisface la tarea; la trayectoria responde qué tools se eligieron, con qué argumentos y autorización, qué side effects ocurrieron, cómo se manejaron fallos y cuándo se detuvo el agente. No penalices una ruta válida sólo por diferir de una «golden trajectory», pero tampoco permitas que un resultado correcto compense una violación de política.</p>
+  </div>
+</section>

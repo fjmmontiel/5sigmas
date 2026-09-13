@@ -212,6 +212,13 @@ nav:
           - Speculative decoding, prefix caching, and other latency optimizations: series/llm-inference-engineering-economics/04-speculative-decoding-prefix-caching-latency-optimisations.md
           - Model routing, fallback, caching, and workload-aware serving: series/llm-inference-engineering-economics/05-model-routing-fallback-caching-workload-aware-serving.md
           - "Benchmarking inference: cost/task, throughput, latency, energy, and hardware constraints": series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints.md
+      - Evaluating AI Systems in Production:
+          - "What to evaluate: model, component, system, workflow, and trajectory": series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria.md
+          - "Offline eval sets: curation, hard negatives, contamination, and versioning": series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning.md
+          - "LLM-as-judge and human evaluation: calibration, bias, variance, and agreement": series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo.md
+          - "Evaluating agent and tool trajectories: success, efficiency, recovery, and policy compliance": series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy.md
+          - "Online evaluation: shadow, canary, A/B, guardrails, and regression gates": series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-guardrails-regression-gates.md
+          - "Observability, failure taxonomies, and production → eval → repair feedback loops": series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops.md
   - Concepts:
       - Concepts: temas/index.md
       - What is an LLM?: temas/llms.md

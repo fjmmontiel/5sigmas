@@ -1,0 +1,113 @@
+<section class="s5v s5v-eval-dataset s5v--wide" aria-label="Ciclo de vida de un eval set offline, sus bancos y sus riesgos de leakage">
+  <style>
+    .s5v-eval-dataset{scroll-margin-top:84px}
+    .s5v-eval-dataset .s5v-eval-dataset__scroll{overflow-x:auto;overscroll-behavior-inline:contain;padding:.35rem .2rem .9rem;scrollbar-gutter:stable;outline:none}
+    .s5v-eval-dataset .s5v-eval-dataset__scroll:focus-visible{box-shadow:0 0 0 3px color-mix(in srgb,var(--md-accent-fg-color,#7c4dff) 36%,transparent);border-radius:14px}
+    .s5v-eval-dataset .s5v-eval-dataset__stage{width:100%;min-width:0;max-width:1320px;margin:0 auto}
+    .s5v-eval-dataset svg{display:block;width:100%;height:auto;overflow:visible}
+    .s5v-eval-dataset text{fill:currentColor;font-family:inherit}
+    .s5v-eval-dataset .ed-node{fill:var(--md-default-bg-color,#fff);stroke:currentColor;stroke-width:2.2}
+    .s5v-eval-dataset .ed-node--major{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 87%,var(--md-accent-fg-color,#7c4dff) 13%);stroke-width:3}
+    .s5v-eval-dataset .ed-node--bank{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 95%,var(--md-accent-fg-color,#7c4dff) 5%)}
+    .s5v-eval-dataset .ed-node--risk{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 96%,currentColor 4%);stroke-dasharray:5 4}
+    .s5v-eval-dataset .ed-release{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 98%,currentColor 2%);stroke:currentColor;stroke-width:2.2;stroke-dasharray:8 7}
+    .s5v-eval-dataset .ed-edge{fill:none;stroke:currentColor;stroke-width:2.7;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#ed-arrow)}
+    .s5v-eval-dataset .ed-edge--admit{stroke-width:3.4}
+    .s5v-eval-dataset .ed-edge--risk{stroke-dasharray:7 6;opacity:.72}
+    .s5v-eval-dataset .ed-edge--blocked{stroke-dasharray:3 6;opacity:.72}
+    .s5v-eval-dataset .ed-edge--next{stroke-dasharray:8 5}
+    .s5v-eval-dataset .ed-label{font-size:13.2px;font-weight:820;text-anchor:middle}
+    .s5v-eval-dataset .ed-sub{font-size:10.8px;text-anchor:middle;opacity:.84}
+    .s5v-eval-dataset .ed-small{font-size:9.9px;font-weight:720;text-anchor:middle;opacity:.82}
+    .s5v-eval-dataset .ed-kicker{font-size:11.9px;font-weight:850;letter-spacing:.07em;text-transform:uppercase;opacity:.76}
+    .s5v-eval-dataset .ed-edge-label{font-size:10.2px;font-weight:760;paint-order:stroke;stroke:var(--md-default-bg-color,#fff);stroke-width:5px;stroke-linejoin:round;text-anchor:middle}
+    .s5v-eval-dataset .ed-cross{stroke:currentColor;stroke-width:4;stroke-linecap:round}
+    .s5v-eval-dataset .s5v-eval-dataset__legend{display:flex;gap:1rem;flex-wrap:wrap;margin:.35rem 0 0;font-size:.87rem;opacity:.87}
+    .s5v-eval-dataset .s5v-eval-dataset__legend span{display:inline-flex;gap:.42rem;align-items:center}
+    .s5v-eval-dataset .s5v-eval-dataset__legend i{width:1.55rem;border-top:3px solid currentColor}
+    .s5v-eval-dataset .s5v-eval-dataset__legend .is-risk i{border-top-style:dashed;border-top-width:2px}
+    .s5v-eval-dataset .s5v-eval-dataset__legend .is-version i{border-top-style:dashed;border-top-width:2px}
+    .s5v-eval-dataset .s5v__copy{margin-top:.85rem}
+    @media (max-width:700px){.s5v-eval-dataset{scroll-margin-top:72px}.s5v-eval-dataset .s5v-eval-dataset__scroll{margin-inline:-.35rem;padding-inline:.35rem}.s5v-eval-dataset .s5v-eval-dataset__stage{width:auto;min-width:1220px}.s5v-eval-dataset .s5v-eval-dataset__legend{font-size:.82rem}}
+    @media (prefers-reduced-motion:reduce){.s5v-eval-dataset *{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+  </style>
+  <!-- GOLDEN_VISUAL_CONTRACT
+    learning-objective="Show that a trustworthy offline eval release is produced by provenance and group-aware splitting, that dev/regression/holdout/challenge banks have different jobs and access policies, that hard-negative pairs test a boundary rather than generic difficulty, and that contamination/leakage risks cannot be collapsed into one scanner score."
+    mechanism="candidate sources -> provenance/eligibility -> grouping unit -> bank assignment; admitted immutable items -> release manifest/hash; hard-positive/hard-negative pair shares pair identity while crossing one intended decision boundary; production failures feed the next version rather than mutating the frozen release; training exposure, cross-split leakage, development leakage and temporal leakage enter through different channels and require different controls."
+    visual-variables="solid arrows encode admitted lifecycle flow; dashed arrows encode leakage or exposure risk; dashed release boundary encodes frozen comparison identity; paired nodes encode a controlled hard boundary; a separate next-version lane encodes freshness without mutating the current release."
+    why-visual="The chapter's main failure mode is treating one mutable dataset and one contamination flag as sufficient. Spatial separation makes bank roles, version boundaries, leakage channels and the hard-pair relationship explicit."
+    relationship="sources->provenance->grouping->{dev,regression,holdout,challenge}->release-manifest;hard-pair->{positive,negative};training-exposure->item-risk;cross-split-leakage->holdout-risk;development-leakage->holdout-invalid;temporal-leakage->snapshot-risk;production-failure->next-version"
+    evidence="provenance,split-unit,dev,regression,holdout,challenge,hard-negative,pair-id,manifest-hash,source-snapshot,label-version,transform-version,training-exposure,development-leakage,temporal-leakage"
+    interaction="static:no-cosmetic-controls"
+    mobile="horizontal-scroll-preserves-source-to-release-lifecycle-hard-pair-risk-channels-and-next-version-lane"
+  -->
+  <div class="s5v__canvas">
+    <header class="s5v__head">
+      <div><span class="s5v__kicker">Congela lo que comparas</span><h3>Versiona la evidencia; rota lo que quieres descubrir</h3></div>
+      <p>Un eval set fiable no nace al guardar ejemplos en JSONL. Cada item necesita provenance, una unidad de split que preserve dependencias y una función explícita. Dev, regression, holdout y challenge no son cuatro nombres para el mismo banco. La release que comparas queda congelada; los fallos nuevos alimentan la siguiente versión.</p>
+    </header>
+    <div class="s5v-eval-dataset__scroll" tabindex="0" role="region" aria-label="Diagrama desplazable del ciclo de vida y riesgos de un conjunto de evaluación offline">
+      <div class="s5v-eval-dataset__stage">
+        <svg viewBox="0 0 1320 1060" role="img" aria-labelledby="ed-title ed-desc">
+          <title id="ed-title">Ciclo de vida versionado de un eval set offline</title>
+          <desc id="ed-desc">Los casos candidatos pasan por provenance y elegibilidad, después por una unidad de agrupación que evita separar dependencias y finalmente se asignan a bancos con propósitos diferentes: desarrollo, regresión, holdout congelado o challenge rotatorio. Los items admitidos quedan dentro de una release con manifest y hash. Un par hard positive y hard negative cambia una condición causal manteniendo el resto aproximadamente constante. Cuatro canales de riesgo separados muestran exposición de entrenamiento, leakage entre splits, leakage de desarrollo y leakage temporal. Los fallos de producción alimentan la siguiente versión, no mutan la release actual.</desc>
+          <defs><marker id="ed-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="currentColor"/></marker></defs>
+
+          <text x="28" y="45" class="ed-kicker">1 · ADMISIÓN Y SPLIT</text>
+          <g data-node="source"><rect class="ed-node ed-node--major" x="34" y="78" width="182" height="96" rx="18"/><text x="125" y="108" class="ed-label">Casos candidatos</text><text x="125" y="134" class="ed-sub">producción · expertos</text><text x="125" y="156" class="ed-sub">sintéticos · adversariales</text></g>
+          <g data-node="provenance"><rect class="ed-node" x="260" y="78" width="188" height="96" rx="18"/><text x="354" y="108" class="ed-label">Provenance + elegibilidad</text><text x="354" y="134" class="ed-sub">source · derechos · fecha</text><text x="354" y="156" class="ed-sub">referencia · grader</text></g>
+          <g data-node="group"><rect class="ed-node" x="492" y="78" width="202" height="96" rx="18"/><text x="593" y="108" class="ed-label">Unidad de agrupación</text><text x="593" y="134" class="ed-sub">document · repo · customer</text><text x="593" y="156" class="ed-small">seed / incident family</text></g>
+          <path data-path="admission" class="ed-edge ed-edge--admit" d="M216 126 H260"/><path class="ed-edge ed-edge--admit" d="M448 126 H492"/>
+
+          <rect data-boundary="release" class="ed-release" x="734" y="54" width="552" height="410" rx="27"/>
+          <text x="758" y="84" class="ed-kicker">RELEASE v · IDENTIDAD CONGELADA PARA COMPARAR</text>
+          <g data-node="dev"><rect class="ed-node ed-node--bank" x="766" y="116" width="214" height="84" rx="16"/><text x="873" y="144" class="ed-label">Dev / calibration</text><text x="873" y="169" class="ed-sub">visible · iterar tareas/graders</text><text x="873" y="190" class="ed-small">no es evidencia independiente</text></g>
+          <g data-node="regression"><rect class="ed-node ed-node--bank" x="1028" y="116" width="218" height="84" rx="16"/><text x="1137" y="144" class="ed-label">Regression bank</text><text x="1137" y="169" class="ed-sub">fallos conocidos que no deben volver</text><text x="1137" y="190" class="ed-small">estable por intención</text></g>
+          <g data-node="holdout"><rect class="ed-node ed-node--major" x="766" y="230" width="214" height="92" rx="16"/><text x="873" y="260" class="ed-label">Holdout / release</text><text x="873" y="285" class="ed-sub">acceso restringido</text><text x="873" y="307" class="ed-small">confirma sin haber optimizado aquí</text></g>
+          <g data-node="challenge"><rect class="ed-node ed-node--bank" x="1028" y="230" width="218" height="92" rx="16"/><text x="1137" y="260" class="ed-label">Challenge rotatorio</text><text x="1137" y="285" class="ed-sub">casos frescos · riesgos nuevos</text><text x="1137" y="307" class="ed-small">no mezclar con histórico sin versión</text></g>
+          <path data-path="split" class="ed-edge ed-edge--admit" d="M694 126 H748 V158 H766"/>
+          <path class="ed-edge ed-edge--admit" d="M694 126 H718 V102 H1004 V158 H1028"/>
+          <path class="ed-edge ed-edge--admit" d="M694 126 H748 V276 H766"/>
+          <path class="ed-edge ed-edge--admit" d="M694 126 H718 V340 H1004 V276 H1028"/>
+          <text x="594" y="207" class="ed-edge-label">asigna por función, no al azar por fila</text>
+          <g data-node="manifest"><rect class="ed-node ed-node--major" x="852" y="360" width="308" height="78" rx="17"/><text x="1006" y="388" class="ed-label">Manifest canónico + hash</text><text x="1006" y="412" class="ed-sub">item IDs · split · source snapshot</text><text x="1006" y="432" class="ed-small">labels · transforms · payload hashes</text></g>
+          <path data-path="freeze" class="ed-edge" d="M873 322 C873 345 900 350 928 360"/><path class="ed-edge" d="M1137 322 C1137 345 1114 351 1084 360"/>
+
+          <text x="28" y="526" class="ed-kicker">2 · HARD PAIR: DIFICULTAD CON UNA FRONTERA EXPLÍCITA</text>
+          <g data-node="hard-context"><rect class="ed-node" x="34" y="558" width="206" height="84" rx="16"/><text x="137" y="587" class="ed-label">Contexto compartido</text><text x="137" y="612" class="ed-sub">misma política · mismo estado</text><text x="137" y="632" class="ed-small">pair_id común</text></g>
+          <g data-node="hard-positive"><rect class="ed-node ed-node--major" x="296" y="536" width="214" height="96" rx="17"/><text x="403" y="566" class="ed-label">29 días → allow</text><text x="403" y="592" class="ed-sub">lado positivo</text><text x="403" y="614" class="ed-small">condición dentro del límite</text></g>
+          <g data-node="hard-negative"><rect class="ed-node ed-node--major" x="296" y="656" width="214" height="96" rx="17"/><text x="403" y="686" class="ed-label">31 días → deny</text><text x="403" y="712" class="ed-sub">hard negative</text><text x="403" y="734" class="ed-small">cambia la variable que decide</text></g>
+          <path data-path="hard-pair" class="ed-edge ed-edge--admit" d="M240 600 H270 C286 600 280 584 296 584"/><path class="ed-edge ed-edge--admit" d="M270 600 C286 600 280 704 296 704"/>
+          <text x="275" y="626" class="ed-edge-label">Δ* · frontera causal</text>
+          <g data-node="pair-check"><rect class="ed-node" x="558" y="582" width="238" height="112" rx="18"/><text x="677" y="612" class="ed-label">Consistencia pareada</text><text x="677" y="638" class="ed-sub">¿acierta a ambos lados?</text><text x="677" y="663" class="ed-small">no sustituye accuracy global</text><text x="677" y="685" class="ed-small">ni convierte rareza en relevancia</text></g>
+          <path class="ed-edge" d="M510 584 C538 584 538 617 558 617"/><path class="ed-edge" d="M510 704 C538 704 538 660 558 660"/>
+
+          <text x="842" y="526" class="ed-kicker">3 · CUATRO RIESGOS, CUATRO CANALES</text>
+          <g data-node="training-exposure"><rect class="ed-node ed-node--risk" x="842" y="558" width="200" height="72" rx="15"/><text x="942" y="585" class="ed-label">Exposición de training</text><text x="942" y="610" class="ed-sub">pretrain · fine-tune · distill</text></g>
+          <g data-node="cross-split"><rect class="ed-node ed-node--risk" x="1070" y="558" width="202" height="72" rx="15"/><text x="1171" y="585" class="ed-label">Leakage entre splits</text><text x="1171" y="610" class="ed-sub">duplicates · family · seed</text></g>
+          <g data-node="development-leakage"><rect class="ed-node ed-node--risk" x="842" y="658" width="200" height="72" rx="15"/><text x="942" y="685" class="ed-label">Leakage de desarrollo</text><text x="942" y="710" class="ed-sub">tuning mirando el holdout</text></g>
+          <g data-node="temporal-leakage"><rect class="ed-node ed-node--risk" x="1070" y="658" width="202" height="72" rx="15"/><text x="1171" y="685" class="ed-label">Leakage temporal</text><text x="1171" y="710" class="ed-sub">datos posteriores al cutoff</text></g>
+          <path data-path="risk-training" class="ed-edge ed-edge--risk" d="M942 558 V504 C942 486 906 486 906 464"/><path data-path="risk-cross-split" class="ed-edge ed-edge--risk" d="M1171 558 V506 C1171 487 1090 487 1090 464"/>
+          <path data-path="risk-development" class="ed-edge ed-edge--blocked" d="M842 694 H814 C788 694 804 322 830 322"/>
+          <path data-path="risk-temporal" class="ed-edge ed-edge--risk" d="M1171 658 V636 C1171 616 1254 616 1254 438"/>
+          <line class="ed-cross" x1="814" y1="331" x2="840" y2="305"/><line class="ed-cross" x1="814" y1="305" x2="840" y2="331"/>
+          <text x="823" y="350" class="ed-edge-label">si optimizas aquí, deja de ser holdout</text>
+          <g data-node="scanner"><rect class="ed-node" x="842" y="770" width="430" height="70" rx="16"/><text x="1057" y="797" class="ed-label">Overlap scanner = detector de candidatos, no certificado de limpieza</text><text x="1057" y="822" class="ed-sub">exact match / embedding / provenance review responden preguntas distintas</text></g>
+          <path class="ed-edge ed-edge--risk" d="M942 730 V770"/><path class="ed-edge ed-edge--risk" d="M1171 730 V770"/>
+
+          <text x="28" y="888" class="ed-kicker">4 · FRESCURA SIN REESCRIBIR EL PASADO</text>
+          <g data-node="production-failure"><rect class="ed-node" x="34" y="918" width="214" height="76" rx="16"/><text x="141" y="946" class="ed-label">Fallo nuevo / cambio de producto</text><text x="141" y="971" class="ed-sub">bug · policy · idioma · riesgo</text></g>
+          <g data-node="next-version"><rect class="ed-node ed-node--major" x="322" y="918" width="242" height="76" rx="16"/><text x="443" y="946" class="ed-label">Siguiente versión D(v+1)</text><text x="443" y="971" class="ed-sub">curar → revisar → nuevo manifest/hash</text></g>
+          <path data-path="next-version" class="ed-edge ed-edge--next" d="M248 956 H322"/>
+          <text x="672" y="960" class="ed-edge-label">no muta D(v) en silencio</text>
+        </svg>
+      </div>
+    </div>
+    <div class="s5v-eval-dataset__legend" aria-label="Leyenda del diagrama">
+      <span><i></i> flujo admitido</span>
+      <span class="is-risk"><i></i> riesgo de exposición / leakage</span>
+      <span class="is-version"><i></i> frontera de versión congelada</span>
+    </div>
+    <p class="s5v__copy"><strong>Lectura:</strong> primero decide qué unidad no puede cruzar splits, después asigna cada caso a un banco con una función explícita y congela la release mediante un manifest reproducible. Un hard negative útil prueba una frontera concreta. Un overlap scanner ayuda a investigar leakage, pero no demuestra que el modelo nunca vio el contenido. Los fallos nuevos entran en la siguiente versión en lugar de reescribir el histórico.</p>
+  </div>
+</section>
