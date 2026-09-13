@@ -32,12 +32,12 @@ Observability tries to reconstruct **what happened** in a running system.
 
 It can include:
 
-- aggregate metrics such as error rate, timeouts, tail latency, cost, and abandonment;
-- event and decision logs;
-- traces and spans connecting a request to models, retrieval, tools, guardrails, and handoffs;
-- dependency state;
-- user feedback;
-- support tickets, escalations, and incidents.
+- aggregate metrics such as error rate, timeouts, tail latency, cost, and abandonment
+- event and decision logs
+- traces and spans connecting a request to models, retrieval, tools, guardrails, and handoffs
+- dependency state
+- user feedback
+- support tickets, escalations, and incidents
 
 Evaluation asks a different question: **under a declared contract, does the system satisfy the behavior we want to measure?**
 
@@ -253,11 +253,11 @@ Anthropic emphasizes reading transcripts and grades because a low score can come
 
 Each new case should therefore version:
 
-- the task or fixture;
-- the environment;
-- the verifier or rubric;
-- the system candidate;
-- relevant external data.
+- the task or fixture
+- the environment
+- the verifier or rubric
+- the system candidate
+- relevant external data
 
 Changing a grader changes the **oracle**. Do not present that as an agent improvement until the two effects are separated.
 
