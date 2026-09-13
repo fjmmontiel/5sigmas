@@ -61,6 +61,11 @@ try {
       const htmlLang = (await page.locator('html').getAttribute('lang') || '').toLowerCase();
       check(htmlLang.startsWith(locale), `${locale}/${viewport.name}: wrong html lang ${htmlLang}`);
 
+      const nativeEquations = page.locator('.s5-native-equation math');
+      check((await nativeEquations.count()) === 8, `${locale}/${viewport.name}: expected 8 native MathML equations`);
+      const articleText = await page.locator('main').innerText();
+      check(!/\\(?:frac|mathbf|text|ldots|land|tau)\b/.test(articleText), `${locale}/${viewport.name}: raw TeX command leaked into rendered article`);
+
       const scroll = visual.locator('.at-scroll');
       check((await scroll.getAttribute('tabindex')) === '0', `${locale}/${viewport.name}: topology scroller must be keyboard focusable`);
       check((await scroll.getAttribute('role')) === 'region', `${locale}/${viewport.name}: topology scroller must expose region role`);

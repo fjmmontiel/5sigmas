@@ -37,9 +37,7 @@ Anthropic makes this distinction explicit in its guidance on agent evaluations. 
 
 For reasoning about one execution, represent each step as:
 
-\[
-e_t = (o_t, d_t, a_t, r_t, s_{t+1})
-\]
+<div class="s5-native-equation" data-equation="trajectory-event" tabindex="0" role="group" aria-label="Equation; horizontally scrollable" style="max-width:100%;overflow-x:auto;padding:1rem 0"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><msub><mi>e</mi><mrow><mi>t</mi></mrow></msub><mo>=</mo><mo>(</mo><msub><mi>o</mi><mrow><mi>t</mi></mrow></msub><mo>,</mo><msub><mi>d</mi><mrow><mi>t</mi></mrow></msub><mo>,</mo><msub><mi>a</mi><mrow><mi>t</mi></mrow></msub><mo>,</mo><msub><mi>r</mi><mrow><mi>t</mi></mrow></msub><mo>,</mo><msub><mi>s</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>)</mo></math></div>
 
 where:
 
@@ -51,15 +49,11 @@ where:
 
 The complete trajectory is:
 
-\[
-\tau = (e_1, e_2, \ldots, e_T)
-\]
+<div class="s5-native-equation" data-equation="trajectory-sequence" tabindex="0" role="group" aria-label="Equation; horizontally scrollable" style="max-width:100%;overflow-x:auto;padding:1rem 0"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mi>τ</mi><mo>=</mo><mo>(</mo><msub><mi>e</mi><mrow><mn>1</mn></mrow></msub><mo>,</mo><msub><mi>e</mi><mrow><mn>2</mn></mrow></msub><mo>,</mo><mo>…</mo><mo>,</mo><msub><mi>e</mi><mrow><mi>T</mi></mrow></msub><mo>)</mo></math></div>
 
 and the terminal outcome can be viewed as a function of the final state:
 
-\[
-y(\tau) = g(s_{T+1})
-\]
+<div class="s5-native-equation" data-equation="terminal-outcome" tabindex="0" role="group" aria-label="Equation; horizontally scrollable" style="max-width:100%;overflow-x:auto;padding:1rem 0"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mi>y</mi><mo>(</mo><mi>τ</mi><mo>)</mo><mo>=</mo><mi>g</mi><mo>(</mo><msub><mi>s</mi><mrow><mi>T</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>)</mo></math></div>
 
 This notation does not imply that every internal model thought should be scored. In production, the useful record is the set of **observable events that affect the decision or the world**: relevant inputs, tool calls, arguments, authorization decisions, results, errors, side effects, retries, handoffs, state changes, and the stop condition.
 
@@ -79,9 +73,7 @@ Examples include:
 
 A simple binary variable is:
 
-\[
-S_i = \mathbf{1}[\text{terminal assertions satisfied for trial } i]
-\]
+<div class="s5-native-equation" data-equation="terminal-success" tabindex="0" role="group" aria-label="Equation; horizontally scrollable" style="max-width:100%;overflow-x:auto;padding:1rem 0"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><msub><mi>S</mi><mrow><mi>i</mi></mrow></msub><mo>=</mo><mi>𝟙</mi><mo>[</mo><mtext>terminal assertions satisfied for trial </mtext><mi>i</mi><mo>]</mo></math></div>
 
 This measures **task success**. It does not measure policy compliance or recovery quality.
 
@@ -168,9 +160,7 @@ would let a good result compensate for a serious violation. If the policy repres
 
 A more appropriate gate is:
 
-\[
-G_i = H_i \land S_i
-\]
+<div class="s5-native-equation" data-equation="hard-gate" tabindex="0" role="group" aria-label="Equation; horizontally scrollable" style="max-width:100%;overflow-x:auto;padding:1rem 0"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><msub><mi>G</mi><mrow><mi>i</mi></mrow></msub><mo>=</mo><msub><mi>H</mi><mrow><mi>i</mi></mrow></msub><mo>∧</mo><msub><mi>S</mi><mrow><mi>i</mi></mrow></msub></math></div>
 
 where `H_i = 1` only when every applicable hard invariant passes.
 
@@ -228,9 +218,7 @@ So **recovery** includes detection, classification, and reconciliation, not just
 
 For declared recoverable failures, one descriptive metric is:
 
-\[
-R_{rec} = \frac{N_{recovered}}{N_{recoverable\ failures\ observed}}
-\]
+<div class="s5-native-equation" data-equation="recovery-rate" tabindex="0" role="group" aria-label="Equation; horizontally scrollable" style="max-width:100%;overflow-x:auto;padding:1rem 0"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><msub><mi>R</mi><mrow><mtext>rec</mtext></mrow></msub><mo>=</mo><mfrac><msub><mi>N</mi><mtext>recovered</mtext></msub><msub><mi>N</mi><mtext>recoverable failures observed</mtext></msub></mfrac></math></div>
 
 The denominator must be defined. Do not compare `R_rec` across systems if one grader exposes more failures or uses a different taxonomy.
 
@@ -254,9 +242,7 @@ The task is already solved but the agent keeps acting.
 
 For tasks with an unambiguous first terminal state, define:
 
-\[
-O_i = \#\{a_t: t > t_i^*\}
-\]
+<div class="s5-native-equation" data-equation="post-success-actions" tabindex="0" role="group" aria-label="Equation; horizontally scrollable" style="max-width:100%;overflow-x:auto;padding:1rem 0"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><msub><mi>O</mi><mrow><mi>i</mi></mrow></msub><mo>=</mo><mo>#</mo><mo>{</mo><msub><mi>a</mi><mrow><mi>t</mi></mrow></msub><mo>:</mo><mi>t</mi><mo>&gt;</mo><msubsup><mi>t</mi><mi>i</mi><mo>*</mo></msubsup><mo>}</mo></math></div>
 
 where `t_i^*` is the first point at which the terminal conditions are satisfied.
 
@@ -293,9 +279,7 @@ Then compare within comparable strata of difficulty and outcome.
 
 A useful aggregate operational-cost metric is:
 
-\[
-C_{success} = \frac{\sum_i C_i}{\sum_i S_i}
-\]
+<div class="s5-native-equation" data-equation="cost-per-success" tabindex="0" role="group" aria-label="Equation; horizontally scrollable" style="max-width:100%;overflow-x:auto;padding:1rem 0"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><msub><mi>C</mi><mrow><mtext>success</mtext></mrow></msub><mo>=</mo><mfrac><mrow><mo>∑</mo><mi>i</mi><mspace width="0.25em"/><msub><mi>C</mi><mrow><mi>i</mi></mrow></msub></mrow><mrow><mo>∑</mo><mi>i</mi><mspace width="0.25em"/><msub><mi>S</mi><mrow><mi>i</mi></mrow></msub></mrow></mfrac></math></div>
 
 provided that `C_i` also includes the cost of failed trials that consumed resources. If the product has hard compliance requirements, replace the denominator with successes that also pass those invariants.
 

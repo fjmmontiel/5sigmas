@@ -67,9 +67,12 @@ for (const [text, locale, anchors] of [
 ]) for (const anchor of anchors) check(text.includes(anchor), `${locale}: missing concept ${anchor}`);
 
 for (const [text, locale] of [[es, 'ES'], [en, 'EN']]) {
-  for (const token of ['e_t =', '\\tau =', 'y(\\tau)', 'S_i =', 'G_i = H_i \\land S_i', 'R_{rec}', 'O_i =', 'C_{success}']) {
-    check(text.includes(token), `${locale}: missing trajectory/evaluation token ${token}`);
-  }
+  const equations = ['trajectory-event','trajectory-sequence','terminal-outcome','terminal-success','hard-gate','recovery-rate','post-success-actions','cost-per-success'];
+  for (const name of equations) check(text.includes(`data-equation=\"${name}\"`), `${locale}: missing native equation ${name}`);
+  check((text.match(/class=\"s5-native-equation\"/g) || []).length === equations.length, `${locale}: expected ${equations.length} native display equations`);
+  check((text.match(/<math xmlns=\"http:\/\/www\.w3\.org\/1998\/Math\/MathML\" display=\"block\">/g) || []).length === equations.length, `${locale}: native MathML equation count drift`);
+  check(!/\\\\[[\s\S]*?\\\\]/.test(text), `${locale}: raw display TeX has no active renderer on this site`);
+  check(!/\\(?:frac|mathbf|text|ldots|land)\b/.test(text), `${locale}: raw TeX command leaked into article source`);
   for (const token of ['tool_name', 'preconditions observed', 'side_effect_status:', 'state_reconciled_before_retry:', 'post_success_actions', 'hard_policy_violation_rate', 'duplicate_side_effect_count', 'trace_id', 'retry lineage']) {
     check(text.includes(token), `${locale}: missing operational evidence ${token}`);
   }

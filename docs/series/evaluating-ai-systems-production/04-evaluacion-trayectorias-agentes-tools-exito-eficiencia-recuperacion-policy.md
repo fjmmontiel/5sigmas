@@ -37,9 +37,7 @@ Anthropic distingue explícitamente ambos objetos en su guía de evals para agen
 
 Para razonar sobre una ejecución podemos representar cada paso como:
 
-\[
-e_t = (o_t, d_t, a_t, r_t, s_{t+1})
-\]
+<div class="s5-native-equation" data-equation="trajectory-event" tabindex="0" role="group" aria-label="Ecuación; desplazable horizontalmente" style="max-width:100%;overflow-x:auto;padding:1rem 0"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><msub><mi>e</mi><mrow><mi>t</mi></mrow></msub><mo>=</mo><mo>(</mo><msub><mi>o</mi><mrow><mi>t</mi></mrow></msub><mo>,</mo><msub><mi>d</mi><mrow><mi>t</mi></mrow></msub><mo>,</mo><msub><mi>a</mi><mrow><mi>t</mi></mrow></msub><mo>,</mo><msub><mi>r</mi><mrow><mi>t</mi></mrow></msub><mo>,</mo><msub><mi>s</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>)</mo></math></div>
 
 donde:
 
@@ -51,15 +49,11 @@ donde:
 
 La trayectoria completa es:
 
-\[
-\tau = (e_1, e_2, \ldots, e_T)
-\]
+<div class="s5-native-equation" data-equation="trajectory-sequence" tabindex="0" role="group" aria-label="Ecuación; desplazable horizontalmente" style="max-width:100%;overflow-x:auto;padding:1rem 0"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mi>τ</mi><mo>=</mo><mo>(</mo><msub><mi>e</mi><mrow><mn>1</mn></mrow></msub><mo>,</mo><msub><mi>e</mi><mrow><mn>2</mn></mrow></msub><mo>,</mo><mo>…</mo><mo>,</mo><msub><mi>e</mi><mrow><mi>T</mi></mrow></msub><mo>)</mo></math></div>
 
 y el outcome terminal puede verse como una función del estado final:
 
-\[
-y(\tau) = g(s_{T+1})
-\]
+<div class="s5-native-equation" data-equation="terminal-outcome" tabindex="0" role="group" aria-label="Ecuación; desplazable horizontalmente" style="max-width:100%;overflow-x:auto;padding:1rem 0"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mi>y</mi><mo>(</mo><mi>τ</mi><mo>)</mo><mo>=</mo><mi>g</mi><mo>(</mo><msub><mi>s</mi><mrow><mi>T</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>)</mo></math></div>
 
 Esta notación no afirma que debamos puntuar cada pensamiento interno del modelo. En producción nos interesa registrar los **eventos observables que afectan la decisión o el mundo**: inputs relevantes, tool calls, argumentos, autorizaciones, resultados, errores, side effects, retries, handoffs, cambios de estado y condición de parada.
 
@@ -79,9 +73,7 @@ Ejemplos:
 
 Una variable binaria simple puede ser:
 
-\[
-S_i = \mathbf{1}[\text{terminal assertions satisfied for trial } i]
-\]
+<div class="s5-native-equation" data-equation="terminal-success" tabindex="0" role="group" aria-label="Ecuación; desplazable horizontalmente" style="max-width:100%;overflow-x:auto;padding:1rem 0"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><msub><mi>S</mi><mrow><mi>i</mi></mrow></msub><mo>=</mo><mi>𝟙</mi><mo>[</mo><mtext>aserciones terminales satisfechas para el trial </mtext><mi>i</mi><mo>]</mo></math></div>
 
 Esto mide **task success**, no policy compliance ni calidad de recuperación.
 
@@ -168,9 +160,7 @@ permitiría que un buen resultado compensase una violación grave. Si la políti
 
 Un gate más apropiado es:
 
-\[
-G_i = H_i \land S_i
-\]
+<div class="s5-native-equation" data-equation="hard-gate" tabindex="0" role="group" aria-label="Ecuación; desplazable horizontalmente" style="max-width:100%;overflow-x:auto;padding:1rem 0"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><msub><mi>G</mi><mrow><mi>i</mi></mrow></msub><mo>=</mo><msub><mi>H</mi><mrow><mi>i</mi></mrow></msub><mo>∧</mo><msub><mi>S</mi><mrow><mi>i</mi></mrow></msub></math></div>
 
 con `H_i = 1` sólo si se cumplen todos los invariantes duros aplicables.
 
@@ -228,9 +218,7 @@ Por eso **recovery** incluye detección, clasificación y reconciliación, no s�
 
 Para fallos recuperables declarados, una métrica descriptiva puede ser:
 
-\[
-R_{rec} = \frac{N_{recovered}}{N_{recoverable\ failures\ observed}}
-\]
+<div class="s5-native-equation" data-equation="recovery-rate" tabindex="0" role="group" aria-label="Ecuación; desplazable horizontalmente" style="max-width:100%;overflow-x:auto;padding:1rem 0"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><msub><mi>R</mi><mrow><mtext>rec</mtext></mrow></msub><mo>=</mo><mfrac><msub><mi>N</mi><mtext>recuperados</mtext></msub><msub><mi>N</mi><mtext>fallos recuperables observados</mtext></msub></mfrac></math></div>
 
 El denominador debe estar definido. No compares `R_rec` entre sistemas si uno expone más fallos al grader o usa otra taxonomía.
 
@@ -254,9 +242,7 @@ La tarea ya está resuelta pero el agente continúa ejecutando acciones.
 
 Podemos definir, para tareas donde existe un primer estado inequívocamente terminal:
 
-\[
-O_i = \#\{a_t: t > t_i^*\}
-\]
+<div class="s5-native-equation" data-equation="post-success-actions" tabindex="0" role="group" aria-label="Ecuación; desplazable horizontalmente" style="max-width:100%;overflow-x:auto;padding:1rem 0"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><msub><mi>O</mi><mrow><mi>i</mi></mrow></msub><mo>=</mo><mo>#</mo><mo>{</mo><msub><mi>a</mi><mrow><mi>t</mi></mrow></msub><mo>:</mo><mi>t</mi><mo>&gt;</mo><msubsup><mi>t</mi><mi>i</mi><mo>*</mo></msubsup><mo>}</mo></math></div>
 
 con `t_i^*` como el primer instante en que las condiciones terminales quedan satisfechas.
 
@@ -293,9 +279,7 @@ Después compara dentro de estratos equivalentes de dificultad y outcome.
 
 Una medida útil de coste operacional agregado es:
 
-\[
-C_{success} = \frac{\sum_i C_i}{\sum_i S_i}
-\]
+<div class="s5-native-equation" data-equation="cost-per-success" tabindex="0" role="group" aria-label="Ecuación; desplazable horizontalmente" style="max-width:100%;overflow-x:auto;padding:1rem 0"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><msub><mi>C</mi><mrow><mtext>success</mtext></mrow></msub><mo>=</mo><mfrac><mrow><mo>∑</mo><mi>i</mi><mspace width="0.25em"/><msub><mi>C</mi><mrow><mi>i</mi></mrow></msub></mrow><mrow><mo>∑</mo><mi>i</mi><mspace width="0.25em"/><msub><mi>S</mi><mrow><mi>i</mi></mrow></msub></mrow></mfrac></math></div>
 
 siempre que `C_i` incluya también el coste de trials fallidos que consumieron recursos. Si el producto exige compliance duro, sustituye el denominador por éxitos que además pasan esos invariantes.
 
