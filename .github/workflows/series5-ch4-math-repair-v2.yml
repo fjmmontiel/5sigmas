@@ -1,0 +1,150 @@
+name: Series 5 chapter 5.4 native math repair v2
+
+on:
+  push:
+    branches:
+      - series/evaluating-ai-systems-production-golden
+    paths:
+      - '.github/workflows/series5-ch4-math-repair-v2.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Verify expected parent
+        shell: bash
+        run: |
+          set -euo pipefail
+          expected='890c3558bb0d79b9babfbf422b000918e36e065e'
+          actual="$(git rev-parse HEAD^)"
+          test "$actual" = "$expected" || { echo "Unexpected parent: $actual"; exit 1; }
+
+      - name: Replace raw TeX with canonical native MathML and harden gates
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+
+          es_path = Path('docs/series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy.md')
+          en_path = Path('locales/en/series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy.md')
+
+          def wrap(name, aria, math):
+              return f'<div class="s5-native-equation" data-equation="{name}" tabindex="0" role="group" aria-label="{aria}" style="max-width:100%;overflow-x:auto;padding:1rem 0"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block">{math}</math></div>'
+
+          def sub(base, inner):
+              return f'<msub><mi>{base}</mi><mrow>{inner}</mrow></msub>'
+
+          e_t, o_t, d_t, a_t, r_t = [sub(x, '<mi>t</mi>') for x in ['e','o','d','a','r']]
+          s_tp1 = sub('s','<mi>t</mi><mo>+</mo><mn>1</mn>')
+          s_Tp1 = sub('s','<mi>T</mi><mo>+</mo><mn>1</mn>')
+          S_i, G_i, H_i, C_i, O_i = [sub(x, '<mi>i</mi>') for x in ['S','G','H','C','O']]
+          e1, e2, eT = sub('e','<mn>1</mn>'), sub('e','<mn>2</mn>'), sub('e','<mi>T</mi>')
+          t_i_star = '<msubsup><mi>t</mi><mi>i</mi><mo>*</mo></msubsup>'
+
+          common = {
+            'e_t = (o_t, d_t, a_t, r_t, s_{t+1})': ('trajectory-event', f'{e_t}<mo>=</mo><mo>(</mo>{o_t}<mo>,</mo>{d_t}<mo>,</mo>{a_t}<mo>,</mo>{r_t}<mo>,</mo>{s_tp1}<mo>)</mo>'),
+            'tau = (e_1, e_2, ldots, e_T)': ('trajectory-sequence', f'<mi>τ</mi><mo>=</mo><mo>(</mo>{e1}<mo>,</mo>{e2}<mo>,</mo><mo>…</mo><mo>,</mo>{eT}<mo>)</mo>'),
+            'y(tau) = g(s_{T+1})': ('terminal-outcome', f'<mi>y</mi><mo>(</mo><mi>τ</mi><mo>)</mo><mo>=</mo><mi>g</mi><mo>(</mo>{s_Tp1}<mo>)</mo>'),
+            'G_i = H_i land S_i': ('hard-gate', f'{G_i}<mo>=</mo>{H_i}<mo>∧</mo>{S_i}'),
+            'O_i = #{a_t: t > t_i^*}': ('post-success-actions', f'{O_i}<mo>=</mo><mo>#</mo><mo>{{</mo>{a_t}<mo>:</mo><mi>t</mi><mo>&gt;</mo>{t_i_star}<mo>}}</mo>'),
+            'C_{success} = frac{sum_i C_i}{sum_i S_i}': ('cost-per-success', f'{sub("C","<mtext>success</mtext>")}<mo>=</mo><mfrac><mrow><mo>∑</mo><mi>i</mi><mspace width="0.25em"/>{C_i}</mrow><mrow><mo>∑</mo><mi>i</mi><mspace width="0.25em"/>{S_i}</mrow></mfrac>'),
+          }
+          local = {
+            'es': {
+              'S_i = mathbf{1}[text{terminal assertions satisfied for trial } i]': ('terminal-success', f'{S_i}<mo>=</mo><mi>𝟙</mi><mo>[</mo><mtext>aserciones terminales satisfechas para el trial </mtext><mi>i</mi><mo>]</mo>'),
+              'R_{rec} = frac{N_{recovered}}{N_{recoverable failures observed}}': ('recovery-rate', f'{sub("R","<mtext>rec</mtext>")}<mo>=</mo><mfrac><msub><mi>N</mi><mtext>recuperados</mtext></msub><msub><mi>N</mi><mtext>fallos recuperables observados</mtext></msub></mfrac>'),
+            },
+            'en': {
+              'S_i = mathbf{1}[text{terminal assertions satisfied for trial } i]': ('terminal-success', f'{S_i}<mo>=</mo><mi>𝟙</mi><mo>[</mo><mtext>terminal assertions satisfied for trial </mtext><mi>i</mi><mo>]</mo>'),
+              'R_{rec} = frac{N_{recovered}}{N_{recoverable failures observed}}': ('recovery-rate', f'{sub("R","<mtext>rec</mtext>")}<mo>=</mo><mfrac><msub><mi>N</mi><mtext>recovered</mtext></msub><msub><mi>N</mi><mtext>recoverable failures observed</mtext></msub></mfrac>'),
+            },
+          }
+
+          display_re = re.compile(r'\\\[\s*(.*?)\s*\\\]', re.S)
+          expected = {'trajectory-event','trajectory-sequence','terminal-outcome','terminal-success','hard-gate','recovery-rate','post-success-actions','cost-per-success'}
+          for locale, path in [('es', es_path), ('en', en_path)]:
+              text = path.read_text(encoding='utf-8')
+              seen = []
+              def repl(match):
+                  expr = ' '.join(match.group(1).split())
+                  canonical = expr.replace('\\', '')
+                  spec = common.get(canonical) or local[locale].get(canonical)
+                  if not spec:
+                      raise SystemExit(f'{locale}: unexpected display formula: raw={expr!r} canonical={canonical!r}')
+                  name, math = spec
+                  seen.append(name)
+                  aria = 'Ecuación; desplazable horizontalmente' if locale == 'es' else 'Equation; horizontally scrollable'
+                  return wrap(name, aria, math)
+              repaired = display_re.sub(repl, text)
+              if set(seen) != expected or len(seen) != 8:
+                  raise SystemExit(f'{locale}: formula replacement mismatch: {seen}')
+              if display_re.search(repaired):
+                  raise SystemExit(f'{locale}: raw display TeX survived repair')
+              path.write_text(repaired, encoding='utf-8')
+
+          source_path = Path('scripts/validate_ai_systems_eval_ch4_source.mjs')
+          source = source_path.read_text(encoding='utf-8')
+          start_anchor = "for (const [text, locale] of [[es, 'ES'], [en, 'EN']]) {\n  for (const token of ['e_t ='"
+          ops_anchor = "  for (const token of ['tool_name'"
+          start = source.find(start_anchor)
+          end = source.find(ops_anchor, start)
+          if start < 0 or end < 0:
+              raise SystemExit('source gate formula block anchors not found')
+          prefix = """for (const [text, locale] of [[es, 'ES'], [en, 'EN']]) {
+  const equations = ['trajectory-event','trajectory-sequence','terminal-outcome','terminal-success','hard-gate','recovery-rate','post-success-actions','cost-per-success'];
+  for (const name of equations) check(text.includes(`data-equation=\"${name}\"`), `${locale}: missing native equation ${name}`);
+  check((text.match(/class=\"s5-native-equation\"/g) || []).length === equations.length, `${locale}: expected ${equations.length} native display equations`);
+  check((text.match(/<math xmlns=\"http:\/\/www\.w3\.org\/1998\/Math\/MathML\" display=\"block\">/g) || []).length === equations.length, `${locale}: native MathML equation count drift`);
+  check(!/\\\\\[[\\s\\S]*?\\\\\]/.test(text), `${locale}: raw display TeX has no active renderer on this site`);
+  check(!/\\\\(?:frac|mathbf|text|ldots|land)\\b/.test(text), `${locale}: raw TeX command leaked into article source`);
+"""
+          source_path.write_text(source[:start] + prefix + source[end:], encoding='utf-8')
+
+          acc_path = Path('scripts/validate_ai_systems_eval_ch4_accessibility.mjs')
+          acc = acc_path.read_text(encoding='utf-8')
+          if 'expected 8 native MathML equations' not in acc:
+              line = "      check(htmlLang.startsWith(locale), `${locale}/${viewport.name}: wrong html lang ${htmlLang}`);\n"
+              pos = acc.find(line)
+              if pos < 0:
+                  raise SystemExit('accessibility gate insertion anchor missing')
+              pos += len(line)
+              addition = """
+      const nativeEquations = page.locator('.s5-native-equation math');
+      check((await nativeEquations.count()) === 8, `${locale}/${viewport.name}: expected 8 native MathML equations`);
+      const articleText = await page.locator('main').innerText();
+      check(!/\\\\(?:frac|mathbf|text|ldots|land|tau)\\b/.test(articleText), `${locale}/${viewport.name}: raw TeX command leaked into rendered article`);
+"""
+              acc = acc[:pos] + addition + acc[pos:]
+              acc_path.write_text(acc, encoding='utf-8')
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Run hardened chapter 5.4 source gate
+        run: node scripts/validate_ai_systems_eval_ch4_source.mjs
+
+      - name: Commit repair and remove temporary workflows
+        shell: bash
+        run: |
+          set -euo pipefail
+          git rm .github/workflows/series5-certify-ch4-v1.yml
+          git rm .github/workflows/series5-ch4-math-repair-once.yml
+          git rm .github/workflows/series5-ch4-math-repair-v2.yml
+          git add docs/series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy.md \
+                  locales/en/series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy.md \
+                  scripts/validate_ai_systems_eval_ch4_source.mjs \
+                  scripts/validate_ai_systems_eval_ch4_accessibility.mjs
+          git diff --cached --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'fix(series5): render 5.4 equations as native MathML'
+          git push origin HEAD:series/evaluating-ai-systems-production-golden
