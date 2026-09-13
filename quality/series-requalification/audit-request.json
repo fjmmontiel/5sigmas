@@ -1,7 +1,8 @@
 {
-  "diagnostic_revision": 1,
+  "diagnostic_revision": 2,
   "published_content_base": "baf32aefc3c9538bd90a5f28c2be395cb4fac0d5",
-  "reason": "One bounded integration diagnostic: local DNS/browser/build dependencies are unavailable; prior gates omitted series, missing videos, mathematical rendering and actual screen-space quality. No deploy or publication.",
+  "requested_head_parent": "380fbe1a0eeb75dbfcd769362443202990700774",
+  "reason": "Bounded current-head integration diagnostic after Security presentation/1.1 visual repairs and strengthened negative media fixtures. Verify fixtures, source/render audit, strict ES/EN and focused full browser sweep; never treat this diagnostic as PIXEL_REVIEW or PEDAGOGY_REVIEW certification.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
