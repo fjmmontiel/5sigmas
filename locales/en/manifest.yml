@@ -39,6 +39,7 @@ published_routes:
   - series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo.md
   - series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy.md
   - series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-guardrails-regression-gates.md
+  - series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops.md
   - series/fundamentos-ia-iag/00_presentacion_serie.md
   - series/fundamentos-ia-iag/01-que-es-ia.md
   - series/fundamentos-ia-iag/02-que-es-ia-generativa.md
@@ -126,6 +127,7 @@ required_snippets:
   - snippets/articulos-tecnicos/eval-judge-calibration-bias-agreement.html
   - snippets/articulos-tecnicos/eval-agent-tool-trajectory-success-recovery-policy.html
   - snippets/articulos-tecnicos/eval-online-shadow-canary-ab-regression-gates.html
+  - snippets/articulos-tecnicos/eval-production-feedback-loop.html
   - snippets/from-cave-to-agi/01-sistemas-numeracion.html
   - snippets/from-cave-to-agi/01-algebra-despejar.html
   - snippets/from-cave-to-agi/01-cadena-deductiva.html
