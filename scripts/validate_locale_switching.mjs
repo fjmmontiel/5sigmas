@@ -82,7 +82,7 @@ const assertSeriesHub = async ({ route, entries }) => {
   }
   const links = await page.locator('.s5-simple-list a.s5-list-row').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('href')));
   const body = await page.locator('body').innerText();
-  if (links.length !== 12) failures.push(`${route}: expected 12 canonical series cards, got ${links.length}`);
+  if (links.length !== 13) failures.push(`${route}: expected 13 canonical series cards, got ${links.length}`);
   for (const { targetRoute, title } of entries) {
     if (!links.includes(targetRoute)) failures.push(`${route}: missing canonical series route ${targetRoute}`);
     if (!body.includes(title)) failures.push(`${route}: missing canonical series title ${JSON.stringify(title)}`);
@@ -130,6 +130,15 @@ const inferencePairs = [
   { es: '/series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints/', en: '/en/series/llm-inference-engineering-economics/06-benchmarking-inference-cost-task-throughput-latency-energy-hardware-constraints/' },
 ];
 
+const evaluationPairs = [
+  { es: '/series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria/', en: '/en/series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria/' },
+  { es: '/series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning/', en: '/en/series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning/' },
+  { es: '/series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo/', en: '/en/series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo/' },
+  { es: '/series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy/', en: '/en/series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy/' },
+  { es: '/series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-guardrails-regression-gates/', en: '/en/series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-guardrails-regression-gates/' },
+  { es: '/series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops/', en: '/en/series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops/' },
+];
+
 const assertReaderSequence = async (routes, hubRoute, label) => {
   for (let index = 0; index < routes.length; index += 1) {
     const route = routes[index];
@@ -172,6 +181,7 @@ await assertSeriesHub({
     { targetRoute: codingPairs[0].es, title: 'Coding agents y agent harnesses' },
     { targetRoute: contextPairs[0].es, title: 'Context engineering, memoria y MCP' },
     { targetRoute: inferencePairs[0].es, title: 'Ingeniería y economía de inferencia de LLMs' },
+    { targetRoute: evaluationPairs[0].es, title: 'Evaluar sistemas de IA en producción' },
   ],
 });
 await assertSeriesHub({
@@ -181,6 +191,7 @@ await assertSeriesHub({
     { targetRoute: codingPairs[0].en, title: 'Coding Agents & Agent Harnesses' },
     { targetRoute: contextPairs[0].en, title: 'Context Engineering, Memory & MCP' },
     { targetRoute: inferencePairs[0].en, title: 'LLM Inference Engineering & Economics' },
+    { targetRoute: evaluationPairs[0].en, title: 'Evaluating AI Systems in Production' },
   ],
 });
 
@@ -199,6 +210,10 @@ await assertReaderSequence(contextPairs.map((pair) => pair.en), '/en/series/', '
 for (const pair of inferencePairs) await assertTranslatedPair(pair);
 await assertReaderSequence(inferencePairs.map((pair) => pair.es), '/series/', 'Spanish LLM Inference Engineering & Economics');
 await assertReaderSequence(inferencePairs.map((pair) => pair.en), '/en/series/', 'English LLM Inference Engineering & Economics');
+
+for (const pair of evaluationPairs) await assertTranslatedPair(pair);
+await assertReaderSequence(evaluationPairs.map((pair) => pair.es), '/series/', 'Spanish Evaluating AI Systems in Production');
+await assertReaderSequence(evaluationPairs.map((pair) => pair.en), '/en/series/', 'English Evaluating AI Systems in Production');
 
 await assertTranslatedPair({ es: '/series/agentes-ia/02-anatomia-de-un-agente/', en: '/en/series/agentes-ia/02-anatomia-de-un-agente/' });
 await assertTranslatedPair({ es: '/series/agentes-ia/00_presentacion_serie/', en: '/en/series/agentes-ia/00_presentacion_serie/' });
@@ -237,4 +252,4 @@ if (failures.length) {
   for (const failure of failures) console.error(` - ${failure}`);
   process.exit(1);
 }
-console.log('Locale-switch quality QA passed: bilingual Series hubs expose Realtime Voice Agents, Coding Agents & Agent Harnesses, Context Engineering, Memory & MCP, and LLM Inference Engineering & Economics; all 24 routes across the four six-chapter collections preserve translated selectors and sitemap pairs, reader navigation stays inside each collection, and safe fallbacks remain valid.');
+console.log('Locale-switch quality QA passed: bilingual Series hubs expose Realtime Voice Agents, Coding Agents & Agent Harnesses, Context Engineering, Memory & MCP, LLM Inference Engineering & Economics, and Evaluating AI Systems in Production; all 30 routes across the five six-chapter collections preserve translated selectors and sitemap pairs, reader navigation stays inside each collection, and safe fallbacks remain valid.');
