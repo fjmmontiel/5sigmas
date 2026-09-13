@@ -1,0 +1,68 @@
+<section class="s5v s5v-online-eval s5v--wide" aria-label="Evaluación online progresiva desde shadow hasta experimento y rollout">
+  <style>
+    .s5v-online-eval{scroll-margin-top:84px}.s5v-online-eval .oe-scroll{overflow-x:auto;overscroll-behavior-inline:contain;padding:.35rem .2rem .9rem;scrollbar-gutter:stable;outline:none}.s5v-online-eval .oe-scroll:focus-visible{box-shadow:0 0 0 3px color-mix(in srgb,var(--md-accent-fg-color,#7c4dff) 36%,transparent);border-radius:14px}.s5v-online-eval .oe-stage{width:100%;min-width:0;max-width:1320px;margin:0 auto}.s5v-online-eval svg{display:block;width:100%;height:auto;overflow:visible}.s5v-online-eval text{fill:currentColor;font-family:inherit}.s5v-online-eval .oe-node{fill:var(--md-default-bg-color,#fff);stroke:currentColor;stroke-width:2.2}.s5v-online-eval .oe-node--major{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 87%,var(--md-accent-fg-color,#7c4dff) 13%);stroke-width:3}.s5v-online-eval .oe-node--gate{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 94%,currentColor 6%);stroke-width:2.8}.s5v-online-eval .oe-boundary{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 98%,currentColor 2%);stroke:currentColor;stroke-width:2;stroke-dasharray:8 7}.s5v-online-eval .oe-edge{fill:none;stroke:currentColor;stroke-width:2.7;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#oe-arrow)}.s5v-online-eval .oe-edge--primary{stroke-width:3.4}.s5v-online-eval .oe-edge--evidence{stroke-dasharray:4 6}.s5v-online-eval .oe-label{font-size:13px;font-weight:820;text-anchor:middle}.s5v-online-eval .oe-sub{font-size:10.5px;text-anchor:middle;opacity:.84}.s5v-online-eval .oe-small{font-size:9.7px;font-weight:720;text-anchor:middle;opacity:.82}.s5v-online-eval .oe-kicker{font-size:11.6px;font-weight:850;letter-spacing:.07em;text-transform:uppercase;opacity:.76}.s5v-online-eval .oe-edge-label{font-size:9.8px;font-weight:760;paint-order:stroke;stroke:var(--md-default-bg-color,#fff);stroke-width:5px;stroke-linejoin:round;text-anchor:middle}.s5v-online-eval .oe-legend{display:flex;gap:1rem;flex-wrap:wrap;margin:.35rem 0 0;font-size:.87rem;opacity:.87}.s5v-online-eval .oe-legend span{display:inline-flex;gap:.42rem;align-items:center}.s5v-online-eval .oe-legend i{width:1.55rem;border-top:3px solid currentColor}.s5v-online-eval .oe-legend .is-evidence i{border-top-style:dashed;border-top-width:2px}.s5v-online-eval .s5v__copy{margin-top:.85rem}@media (max-width:700px){.s5v-online-eval{scroll-margin-top:72px}.s5v-online-eval .oe-scroll{margin-inline:-.35rem;padding-inline:.35rem}.s5v-online-eval .oe-stage{width:auto;min-width:1220px}.s5v-online-eval .oe-legend{font-size:.82rem}}@media (prefers-reduced-motion:reduce){.s5v-online-eval *{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+  </style>
+  <!-- GOLDEN_VISUAL_CONTRACT
+    learning-objective="Separate the evidence questions answered by shadow traffic, canary exposure and randomized A/B experiments, then show how hard guardrails and evidence sufficiency determine promotion, pause or rollback."
+    mechanism="candidate identity -> offline gate -> shadow copy with response/write suppression -> canary real exposure -> randomized A/B when causal effect is required -> progressive rollout; each stage emits evidence into a release gate; hard guardrails can abort independently of product lift; inconclusive evidence pauses rather than passes."
+    visual-variables="solid arrows encode increasing real exposure; dashed arrows encode evidence flowing to the release gate; nested boundaries distinguish no-user-authority shadowing, limited real exposure and randomized causal assignment; abort and pause branches remain explicit."
+    why-visual="A linear checklist hides that each online method answers a different question and grants a different degree of authority over users and side effects. The visual makes exposure, causal interpretation and release decisions separate spatial variables."
+    relationship="candidate->offline->shadow->canary->{ab,rollout};shadow->release-gate;canary->release-gate;ab->release-gate;hard-guardrails->release-gate;release-gate->{promote,pause,rollback}"
+    evidence="candidate-version,shadow-disagreement,side-effect-boundary,error-rate,tail-latency,policy-violations,assignment-health,srm,treatment-effect,guardrails,observation-window"
+    interaction="static:no-cosmetic-controls"
+    mobile="horizontal-scroll-preserves-stage-order-evidence-lanes-and-release-decisions"
+  -->
+  <div class="s5v__canvas">
+    <header class="s5v__head">
+      <div><span class="s5v__kicker">EXPOSICIÓN ≠ CAUSALIDAD</span><h3>Cada etapa online compra una evidencia distinta</h3></div>
+      <p>Shadow observa al candidato sin servir su respuesta; canary concede exposición real con blast radius limitado; A/B randomiza cuando necesitas estimar efecto causal. Los guardrails duros pueden abortar aunque la métrica de producto mejore.</p>
+    </header>
+    <div class="oe-scroll" tabindex="0" role="region" aria-label="Diagrama desplazable de shadow, canary, A/B y regression gate">
+      <div class="oe-stage">
+        <svg viewBox="0 0 1320 790" role="img" aria-labelledby="oe-title oe-desc">
+          <title id="oe-title">Etapas de evaluación online y decisiones de release</title>
+          <desc id="oe-desc">Una identidad de candidato pasa por regresión offline, shadow sin autoridad sobre la respuesta, canary con exposición real limitada y experimento A/B cuando se necesita efecto causal. Shadow, canary, A/B y guardrails envían evidencia a un release gate que puede promover, pausar o revertir.</desc>
+          <defs><marker id="oe-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="currentColor"/></marker></defs>
+
+          <text x="30" y="42" class="oe-kicker">1 · AUMENTA EXPOSICIÓN SÓLO CUANDO CAMBIA LA PREGUNTA</text>
+          <g data-node="candidate"><rect class="oe-node oe-node--major" x="30" y="80" width="178" height="94" rx="17"/><text x="119" y="108" class="oe-label">Candidate ID</text><text x="119" y="134" class="oe-sub">modelo · prompt · tools</text><text x="119" y="158" class="oe-small">runtime · routing · flags</text></g>
+          <g data-node="offline"><rect class="oe-node" x="250" y="80" width="170" height="94" rx="17"/><text x="335" y="108" class="oe-label">Offline gate</text><text x="335" y="134" class="oe-sub">eval set · invariantes</text><text x="335" y="158" class="oe-small">sin tráfico live</text></g>
+
+          <rect data-boundary="shadow-boundary" class="oe-boundary" x="458" y="56" width="206" height="142" rx="22"/>
+          <text x="478" y="79" class="oe-kicker">SIN AUTORIDAD DE RESPUESTA</text>
+          <g data-node="shadow"><rect class="oe-node oe-node--major" x="478" y="96" width="166" height="82" rx="16"/><text x="561" y="124" class="oe-label">Shadow</text><text x="561" y="149" class="oe-sub">copia tráfico real</text><text x="561" y="169" class="oe-small">output descartado · writes aislados</text></g>
+
+          <rect data-boundary="canary-boundary" class="oe-boundary" x="700" y="56" width="206" height="142" rx="22"/>
+          <text x="720" y="79" class="oe-kicker">EXPOSICIÓN REAL LIMITADA</text>
+          <g data-node="canary"><rect class="oe-node oe-node--major" x="720" y="96" width="166" height="82" rx="16"/><text x="803" y="124" class="oe-label">Canary</text><text x="803" y="149" class="oe-sub">blast radius pequeño</text><text x="803" y="169" class="oe-small">abort · pause · promote</text></g>
+
+          <rect data-boundary="ab-boundary" class="oe-boundary" x="942" y="56" width="216" height="142" rx="22"/>
+          <text x="962" y="79" class="oe-kicker">ASIGNACIÓN EXPERIMENTAL</text>
+          <g data-node="ab"><rect class="oe-node oe-node--major" x="962" y="96" width="176" height="82" rx="16"/><text x="1050" y="124" class="oe-label">A/B randomizado</text><text x="1050" y="149" class="oe-sub">control ↔ tratamiento</text><text x="1050" y="169" class="oe-small">efecto causal bajo el diseño</text></g>
+          <g data-node="rollout"><rect class="oe-node" x="1192" y="96" width="98" height="82" rx="16"/><text x="1241" y="123" class="oe-label">Rollout</text><text x="1241" y="149" class="oe-sub">amplía</text><text x="1241" y="169" class="oe-small">exposición</text></g>
+
+          <path class="oe-edge oe-edge--primary" d="M208 127 H250"/><path class="oe-edge oe-edge--primary" d="M420 127 H478"/><path class="oe-edge oe-edge--primary" d="M644 137 H720"/><path class="oe-edge oe-edge--primary" d="M886 137 H962"/><path class="oe-edge oe-edge--primary" d="M1138 137 H1192"/>
+          <text x="682" y="116" class="oe-edge-label">autoridad real</text><text x="924" y="116" class="oe-edge-label">si necesitas causalidad</text>
+
+          <text x="30" y="270" class="oe-kicker">2 · NO MEZCLES LAS PREGUNTAS DE EVIDENCIA</text>
+          <g data-node="shadow-question"><rect class="oe-node" x="112" y="302" width="270" height="102" rx="17"/><text x="247" y="332" class="oe-label">¿Cómo se comporta?</text><text x="247" y="358" class="oe-sub">discrepancias · schema/tool errors</text><text x="247" y="382" class="oe-small">latencia/coste sobre inputs reales</text></g>
+          <g data-node="canary-question"><rect class="oe-node" x="472" y="302" width="270" height="102" rx="17"/><text x="607" y="332" class="oe-label">¿Es seguro ampliar?</text><text x="607" y="358" class="oe-sub">errors · p99 · policy · side effects</text><text x="607" y="382" class="oe-small">cohorte canary ≠ lift causal automático</text></g>
+          <g data-node="ab-question"><rect class="oe-node" x="832" y="302" width="270" height="102" rx="17"/><text x="967" y="332" class="oe-label">¿Qué efecto causa?</text><text x="967" y="358" class="oe-sub">randomization · exposure · metrics</text><text x="967" y="382" class="oe-small">SRM antes de interpretar Δ</text></g>
+          <path class="oe-edge oe-edge--evidence" d="M561 178 V236 H247 V302"/><path class="oe-edge oe-edge--evidence" d="M803 178 V244 H607 V302"/><path class="oe-edge oe-edge--evidence" d="M1050 178 V236 H967 V302"/>
+
+          <text x="30" y="482" class="oe-kicker">3 · EL RELEASE GATE COMPONE EVIDENCIA Y RIESGO</text>
+          <g data-node="hard-guardrails"><rect class="oe-node oe-node--gate" x="80" y="518" width="240" height="94" rx="17"/><text x="200" y="548" class="oe-label">Hard guardrails</text><text x="200" y="574" class="oe-sub">security · authorization · corruption</text><text x="200" y="596" class="oe-small">no compensatorios</text></g>
+          <g data-node="release-gate"><rect class="oe-node oe-node--major" x="512" y="506" width="296" height="118" rx="19"/><text x="660" y="540" class="oe-label">Regression / release gate</text><text x="660" y="568" class="oe-sub">H_hard ∧ R_reliability ∧ E_evidence</text><text x="660" y="594" class="oe-small">suficiencia de evidencia según etapa</text></g>
+          <g data-node="rollback"><rect class="oe-node oe-node--gate" x="994" y="466" width="214" height="78" rx="16"/><text x="1101" y="495" class="oe-label">ROLLBACK / ABORT</text><text x="1101" y="520" class="oe-sub">guardrail o reliability FAIL</text></g>
+          <g data-node="pause"><rect class="oe-node" x="994" y="562" width="214" height="78" rx="16"/><text x="1101" y="591" class="oe-label">PAUSE / REVIEW</text><text x="1101" y="616" class="oe-sub">evidencia inconclusa</text></g>
+          <g data-node="promote"><rect class="oe-node oe-node--major" x="994" y="658" width="214" height="78" rx="16"/><text x="1101" y="687" class="oe-label">PROMOTE</text><text x="1101" y="712" class="oe-sub">gates pasan + ventana completa</text></g>
+          <path class="oe-edge oe-edge--evidence" d="M247 404 V452 H590 V506"/><path class="oe-edge oe-edge--evidence" d="M607 404 V506"/><path class="oe-edge oe-edge--evidence" d="M967 404 V452 H730 V506"/><path class="oe-edge oe-edge--primary" d="M320 565 H512"/>
+          <path class="oe-edge" d="M808 544 H910 V505 H994"/><path class="oe-edge" d="M808 565 H994"/><path class="oe-edge" d="M808 590 H910 V697 H994"/>
+          <text x="900" y="490" class="oe-edge-label">FAIL</text><text x="900" y="555" class="oe-edge-label">INCONCLUSIVE</text><text x="900" y="680" class="oe-edge-label">PASS</text>
+        </svg>
+      </div>
+    </div>
+    <div class="oe-legend" aria-label="Leyenda"><span><i></i> aumenta exposición</span><span class="is-evidence"><i></i> evidencia hacia el gate</span></div>
+    <p class="s5v__copy"><strong>Lectura:</strong> shadow, canary y A/B no son tres intensidades del mismo test. Cambian quién ve la salida, qué side effects están permitidos y qué conclusión puedes defender. Un release gate serio conserva esa distinción y deja una salida explícita para evidencia inconclusa.</p>
+  </div>
+</section>
