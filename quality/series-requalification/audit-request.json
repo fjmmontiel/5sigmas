@@ -1,8 +1,8 @@
 {
-  "diagnostic_revision": 4,
+  "diagnostic_revision": 5,
   "published_content_base": "baf32aefc3c9538bd90a5f28c2be395cb4fac0d5",
-  "requested_head_parent": "df06d8a9d49d91f5b8cf6ae3d500a88b23c6b53f",
-  "reason": "Bounded diagnostic after repairing the legacy publication-discovery blind spot, adding chapter-first series names to article metadata, bounding each browser context so the complete 84-page sweep cannot hang silently, and probing Security 00/01 native ES/EN MP4s with ffprobe. Missing llms/media/render surfaces remain fail-closed; never auto-certify pixel or pedagogy.",
+  "requested_head_parent": "b157b95a2feea7d8394b5ea7a8bf996c338a9faf",
+  "reason": "Bounded Security 00/01 requalification diagnostic after correcting the generic video audit to exercise the real poster-first click/tap lifecycle and provisioning ffmpeg/ffprobe. Verify exact native ES/EN MP4 codec, duration, dimensions and audio facts plus the repaired technical browser lifecycle. Missing captions/transcript/key moments and PIXEL/PEDAGOGY reviews remain fail-closed and must not be auto-certified.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
