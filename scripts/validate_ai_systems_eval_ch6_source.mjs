@@ -18,7 +18,6 @@ const check = (ok, msg) => { if (!ok) failures.push(msg); };
 const route = 'series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops.md';
 const visualPath = 'snippets/articulos-tecnicos/eval-production-feedback-loop.html';
 
-// Publication surfaces remain fail-closed until 5.6 is wired into every canonical surface.
 check(mkEs.includes(route), 'ES: chapter 5.6 navigation missing');
 check(mkEn.includes(route), 'EN: chapter 5.6 navigation missing');
 check(manifest.includes(`  - ${route}`), 'EN: chapter 5.6 missing from published_routes');
@@ -93,8 +92,8 @@ check(esPlain.includes('Observabilidad no autoriza copiar conversaciones de prod
 check(enPlain.includes('Observability does not authorize copying production conversations into an eval set'), 'EN: production-data privacy rule missing');
 check(esPlain.includes('Un incidente no es todavía un eval case'), 'ES: incident != test boundary missing');
 check(enPlain.includes('An incident is not an eval case yet'), 'EN: incident != test boundary missing');
-check(esPlain.includes('Una modificación del grader es una modificación del **oracle**'), 'ES: grader/oracle change rule missing');
-check(enPlain.includes('Changing a grader changes the **oracle**'), 'EN: grader/oracle change rule missing');
+check(esPlain.includes('Una modificación del grader es una modificación del oracle'), 'ES: grader/oracle change rule missing');
+check(enPlain.includes('Changing a grader changes the oracle'), 'EN: grader/oracle change rule missing');
 check(esPlain.includes('REGRESSION_PASS` no equivale a `VERIFIED_IN_PRODUCTION'), 'ES: regression pass != live verification rule missing');
 check(enPlain.includes('`REGRESSION_PASS` is not `VERIFIED_IN_PRODUCTION`'), 'EN: regression pass != live verification rule missing');
 check(!/^\s*-\s+.+;\s*$/m.test(en), 'EN: semicolon-list anti-pattern detected');
