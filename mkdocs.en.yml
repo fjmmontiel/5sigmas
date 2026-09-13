@@ -218,6 +218,7 @@ nav:
           - "LLM-as-judge and human evaluation: calibration, bias, variance, and agreement": series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo.md
           - "Evaluating agent and tool trajectories: success, efficiency, recovery, and policy compliance": series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy.md
           - "Online evaluation: shadow, canary, A/B, guardrails, and regression gates": series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-guardrails-regression-gates.md
+          - "Observability, failure taxonomies, and production → eval → repair feedback loops": series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops.md
   - Concepts:
       - Concepts: temas/index.md
       - What is an LLM?: temas/llms.md
