@@ -92,6 +92,12 @@ hide:
       <span class="s5-list-row__desc">Prefill y decode, KV cache, cuantización, paralelismo, speculative decoding, routing y benchmarks para decidir cómo servir LLMs en producción.</span>
       <span class="s5-list-row__meta">6 capítulos</span>
     </a>
+    <a class="s5-list-row" href="/series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria/">
+      <span class="s5-list-row__n">13</span>
+      <span class="s5-list-row__title">Evaluar sistemas de IA en producción</span>
+      <span class="s5-list-row__desc">Qué evaluar, cómo construir eval sets, calibrar jueces, revisar trayectorias y conectar señales de producción con reparación y rollout.</span>
+      <span class="s5-list-row__meta">6 capítulos</span>
+    </a>
   </nav>
 </section>
 
