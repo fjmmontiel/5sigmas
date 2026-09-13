@@ -172,6 +172,7 @@ nav:
           - "LLM-as-judge y evaluación humana: calibración, sesgo, varianza y acuerdo": series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo.md
           - "Evaluación de trayectorias de agentes y tools: éxito, eficiencia, recuperación y cumplimiento de política": series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy.md
           - "Evaluación online: shadow, canary, A/B, guardrails y regression gates": series/evaluating-ai-systems-production/05-online-evaluation-shadow-canary-ab-guardrails-regression-gates.md
+          - "Observabilidad, taxonomías de fallos y feedback loops producción → eval → reparación": series/evaluating-ai-systems-production/06-observability-failure-taxonomies-production-eval-repair-feedback-loops.md
   - Construir:
       - articulos-tecnicos/index.md
       - Agente Reactivo, Proactivo y Tool calls: articulos-tecnicos/proactive-reactive-agent-and-tool-calls.md
