@@ -1,3 +1,4 @@
+# exact-SHA certification retry after deterministic validator normalization
 name: Series 5 chapter 5.6 exact-SHA certification
 
 on:
