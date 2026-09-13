@@ -92,6 +92,12 @@ hide:
       <span class="s5-list-row__desc">Prefill and decode, KV cache, quantization, parallelism, speculative decoding, routing and benchmarking for production LLM serving decisions.</span>
       <span class="s5-list-row__meta">6 chapters</span>
     </a>
+    <a class="s5-list-row" href="/en/series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria/">
+      <span class="s5-list-row__n">13</span>
+      <span class="s5-list-row__title">Evaluating AI Systems in Production</span>
+      <span class="s5-list-row__desc">What to evaluate, how to build eval sets, calibrate judges, inspect trajectories, and turn production signals into repair and rollout decisions.</span>
+      <span class="s5-list-row__meta">6 chapters</span>
+    </a>
   </nav>
 </section>
 
