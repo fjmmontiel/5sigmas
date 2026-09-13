@@ -74,6 +74,26 @@ def strip_code(text: str) -> str:
     return re.sub(r"`+[^`\n]*`+", "", text)
 
 
+def is_support_markdown(path: Path) -> bool:
+    """Return True for Markdown assets that are not standalone lesson routes.
+
+    Video transcripts intentionally live beside their article media and use the
+    documented ``*-transcript.md`` convention. They must be required as media,
+    but must never inflate the page inventory or create phantom locale routes.
+    ``index.md``/README files are likewise support/redirect surfaces rather than
+    lessons. Any other orphan Markdown file remains discoverable and therefore
+    fail-closed, including non-numbered appendix/glossary pages.
+    """
+    stem = path.stem.lower()
+    return (
+        path.name.lower() in {"index.md", "readme.md"}
+        or path.name.startswith("_")
+        or stem == "transcript"
+        or stem.endswith("-transcript")
+        or stem.endswith("_transcript")
+    )
+
+
 def discover(root: Path, scope: dict, configs: dict, published_en: set[str]) -> tuple[list[str], list[dict]]:
     findings: list[dict] = []
     targets = scope["series"]
@@ -98,6 +118,8 @@ def discover(root: Path, scope: dict, configs: dict, published_en: set[str]) -> 
     for source_root in (root / "docs", root / "locales/en"):
         for slug in targets:
             for p in sorted((source_root / "series" / slug).glob("*.md")):
+                if is_support_markdown(p):
+                    continue
                 discovered.append(p.relative_to(source_root).as_posix())
     return list(dict.fromkeys(discovered)), findings
 
