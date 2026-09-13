@@ -1,0 +1,71 @@
+<section class="s5v s5v-eval-feedback s5v--wide" aria-label="Feedback loop desde señales de producción hasta eval, reparación y verificación live">
+  <style>
+    .s5v-eval-feedback{scroll-margin-top:84px}.s5v-eval-feedback .fb-scroll{overflow-x:auto;overscroll-behavior-inline:contain;padding:.35rem .2rem .9rem;scrollbar-gutter:stable;outline:none}.s5v-eval-feedback .fb-scroll:focus-visible{box-shadow:0 0 0 3px color-mix(in srgb,var(--md-accent-fg-color,#7c4dff) 36%,transparent);border-radius:14px}.s5v-eval-feedback .fb-stage{width:100%;min-width:0;max-width:1320px;margin:0 auto}.s5v-eval-feedback svg{display:block;width:100%;height:auto;overflow:visible}.s5v-eval-feedback text{fill:currentColor;font-family:inherit}.s5v-eval-feedback .fb-node{fill:var(--md-default-bg-color,#fff);stroke:currentColor;stroke-width:2.2}.s5v-eval-feedback .fb-node--major{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 87%,var(--md-accent-fg-color,#7c4dff) 13%);stroke-width:3}.s5v-eval-feedback .fb-node--gate{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 95%,currentColor 5%);stroke-width:2.8}.s5v-eval-feedback .fb-boundary{fill:color-mix(in srgb,var(--md-default-bg-color,#fff) 98%,currentColor 2%);stroke:currentColor;stroke-width:2;stroke-dasharray:8 7}.s5v-eval-feedback .fb-edge{fill:none;stroke:currentColor;stroke-width:2.7;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#fb-arrow)}.s5v-eval-feedback .fb-edge--primary{stroke-width:3.4}.s5v-eval-feedback .fb-edge--evidence{stroke-dasharray:4 6}.s5v-eval-feedback .fb-label{font-size:13px;font-weight:820;text-anchor:middle}.s5v-eval-feedback .fb-sub{font-size:10.5px;text-anchor:middle;opacity:.84}.s5v-eval-feedback .fb-small{font-size:9.7px;font-weight:720;text-anchor:middle;opacity:.82}.s5v-eval-feedback .fb-kicker{font-size:11.6px;font-weight:850;letter-spacing:.07em;text-transform:uppercase;opacity:.76}.s5v-eval-feedback .fb-edge-label{font-size:9.8px;font-weight:760;paint-order:stroke;stroke:var(--md-default-bg-color,#fff);stroke-width:5px;stroke-linejoin:round;text-anchor:middle}.s5v-eval-feedback .fb-legend{display:flex;gap:1rem;flex-wrap:wrap;margin:.35rem 0 0;font-size:.87rem;opacity:.87}.s5v-eval-feedback .fb-legend span{display:inline-flex;gap:.42rem;align-items:center}.s5v-eval-feedback .fb-legend i{width:1.55rem;border-top:3px solid currentColor}.s5v-eval-feedback .fb-legend .is-evidence i{border-top-style:dashed;border-top-width:2px}.s5v-eval-feedback .s5v__copy{margin-top:.85rem}@media (max-width:700px){.s5v-eval-feedback{scroll-margin-top:72px}.s5v-eval-feedback .fb-scroll{margin-inline:-.35rem;padding-inline:.35rem}.s5v-eval-feedback .fb-stage{width:auto;min-width:1240px}.s5v-eval-feedback .fb-legend{font-size:.82rem}}@media (prefers-reduced-motion:reduce){.s5v-eval-feedback *{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+  </style>
+  <!-- GOLDEN_VISUAL_CONTRACT
+    learning-objective="Separate production observation from evaluation verdicts and show the chain required to convert a real failure into a reproducible, privacy-safe, versioned regression case whose repair is verified again in production."
+    mechanism="production signals -> session/trace reconstruction -> symptom/cause taxonomy -> evidence sufficiency split -> privacy-safe minimal reproduction -> dedupe/equivalence/neighbor cases -> versioned eval + verifier -> repair -> regression gate -> shadow/canary -> deploy -> production verification; insufficient evidence routes back to instrumentation rather than inventing a test."
+    visual-variables="solid arrows encode the repair/release path; dashed arrows encode evidence and feedback; separate observation and evaluation boundaries prevent telemetry=verdict; a branch for insufficient evidence returns to instrumentation; the post-deploy loop closes only at verified production behavior."
+    why-visual="A prose checklist can hide where evidence changes meaning. Spatially separating observation, diagnosis, eval construction, release validation and post-deploy verification makes it clear which transitions require a new criterion rather than another metric."
+    relationship="signals->reconstruct->taxonomy->{insufficient,reproducible};insufficient->instrumentation->signals;reproducible->redact->dedupe->versioned-eval->repair->regression-gate->shadow-canary->deploy->verify-production->signals"
+    evidence="candidate-id,trace-id,tool-state,dependency-state,user-feedback,privacy-decision,taxonomy-version,reproduction-fixture,expected-invariant,verifier-version,eval-set-version,deploy-id,recurrence"
+    interaction="static:no-cosmetic-controls"
+    mobile="horizontal-scroll-preserves-observation-diagnosis-eval-release-and-closed-loop-order"
+  -->
+  <div class="s5v__canvas">
+    <header class="s5v__head">
+      <div><span class="s5v__kicker">TELEMETRÍA ≠ VEREDICTO</span><h3>Un fallo de producción sólo entra al eval cuando su mecanismo es reproducible</h3></div>
+      <p>La señal detecta; el trace reconstruye; la taxonomía formula una causa; el caso mínimo la hace falsable; el regression gate valida la reparación; producción confirma si la familia de fallo realmente dejó de aparecer.</p>
+    </header>
+    <div class="fb-scroll" tabindex="0" role="region" aria-label="Diagrama desplazable del feedback loop producción, eval, reparación y verificación">
+      <div class="fb-stage">
+        <svg viewBox="0 0 1320 820" role="img" aria-labelledby="fb-title fb-desc">
+          <title id="fb-title">Feedback loop de producción a eval y reparación</title>
+          <desc id="fb-desc">Señales de producción alimentan reconstrucción y taxonomía. Si la evidencia es insuficiente se mejora instrumentación. Si el mecanismo es reproducible, se redacta y minimiza el caso, se deduplica con vecinos, se añade a un eval versionado, se repara, pasa regresión y despliegue controlado, y sólo se cierra tras verificación de producción.</desc>
+          <defs><marker id="fb-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="currentColor"/></marker></defs>
+
+          <rect data-boundary="observation-boundary" class="fb-boundary" x="24" y="52" width="386" height="236" rx="22"/>
+          <text x="46" y="78" class="fb-kicker">1 · OBSERVACIÓN — QUÉ OCURRIÓ</text>
+          <g data-node="signals"><rect class="fb-node fb-node--major" x="46" y="106" width="154" height="88" rx="16"/><text x="123" y="132" class="fb-label">Señales live</text><text x="123" y="156" class="fb-sub">metrics · logs · feedback</text><text x="123" y="178" class="fb-small">tickets · incidents</text></g>
+          <g data-node="reconstruct"><rect class="fb-node" x="234" y="106" width="154" height="88" rx="16"/><text x="311" y="132" class="fb-label">Reconstruir</text><text x="311" y="156" class="fb-sub">trace · spans · estado</text><text x="311" y="178" class="fb-small">candidate + deps</text></g>
+          <g data-node="instrumentation"><rect class="fb-node fb-node--gate" x="126" y="216" width="196" height="52" rx="14"/><text x="224" y="239" class="fb-label">Mejorar instrumentación</text><text x="224" y="258" class="fb-small">si no puedes explicar el evento</text></g>
+          <path class="fb-edge fb-edge--primary" d="M200 150 H234"/>
+
+          <rect data-boundary="diagnosis-boundary" class="fb-boundary" x="444" y="52" width="294" height="236" rx="22"/>
+          <text x="466" y="78" class="fb-kicker">2 · DIAGNÓSTICO — SÍNTOMA ≠ CAUSA</text>
+          <g data-node="taxonomy"><rect class="fb-node fb-node--major" x="470" y="106" width="242" height="88" rx="16"/><text x="591" y="132" class="fb-label">Taxonomía de fallo</text><text x="591" y="156" class="fb-sub">síntoma · mecanismo · impacto</text><text x="591" y="178" class="fb-small">taxonomy version</text></g>
+          <g data-node="sufficiency"><rect class="fb-node fb-node--gate" x="470" y="216" width="242" height="52" rx="14"/><text x="591" y="239" class="fb-label">¿Evidencia suficiente?</text><text x="591" y="258" class="fb-small">no inventes root cause</text></g>
+          <path class="fb-edge fb-edge--primary" d="M388 150 H470"/><path class="fb-edge" d="M591 194 V216"/>
+          <path class="fb-edge fb-edge--evidence" d="M470 242 H384 V242 H322"/><text x="403" y="232" class="fb-edge-label">NO</text>
+
+          <rect data-boundary="eval-boundary" class="fb-boundary" x="772" y="52" width="524" height="236" rx="22"/>
+          <text x="794" y="78" class="fb-kicker">3 · EVAL — INCIDENTE ≠ TEST</text>
+          <g data-node="redact"><rect class="fb-node" x="796" y="106" width="142" height="88" rx="16"/><text x="867" y="132" class="fb-label">Minimizar</text><text x="867" y="156" class="fb-sub">redact · permissions</text><text x="867" y="178" class="fb-small">fixture reproducible</text></g>
+          <g data-node="dedupe"><rect class="fb-node" x="968" y="106" width="142" height="88" rx="16"/><text x="1039" y="132" class="fb-label">Generalizar</text><text x="1039" y="156" class="fb-sub">dedupe · equivalencia</text><text x="1039" y="178" class="fb-small">neighbors · hard negatives</text></g>
+          <g data-node="versioned-eval"><rect class="fb-node fb-node--major" x="1140" y="106" width="132" height="88" rx="16"/><text x="1206" y="132" class="fb-label">Eval versionado</text><text x="1206" y="156" class="fb-sub">invariant + verifier</text><text x="1206" y="178" class="fb-small">oracle version</text></g>
+          <path class="fb-edge fb-edge--primary" d="M712 242 H754 V150 H796"/><text x="752" y="227" class="fb-edge-label">SÍ</text><path class="fb-edge fb-edge--primary" d="M938 150 H968"/><path class="fb-edge fb-edge--primary" d="M1110 150 H1140"/>
+
+          <text x="24" y="352" class="fb-kicker">4 · REPARACIÓN Y RELEASE — PASS ≠ LOOP CERRADO</text>
+          <g data-node="repair"><rect class="fb-node fb-node--major" x="74" y="390" width="180" height="92" rx="17"/><text x="164" y="420" class="fb-label">Repair candidate</text><text x="164" y="447" class="fb-sub">corrige mecanismo</text><text x="164" y="469" class="fb-small">no sólo el síntoma</text></g>
+          <g data-node="regression"><rect class="fb-node fb-node--gate" x="316" y="390" width="204" height="92" rx="17"/><text x="418" y="420" class="fb-label">Regression gate</text><text x="418" y="447" class="fb-sub">target + neighbors</text><text x="418" y="469" class="fb-small">hard invariants</text></g>
+          <g data-node="controlled-release"><rect class="fb-node" x="582" y="390" width="202" height="92" rx="17"/><text x="683" y="420" class="fb-label">Shadow / canary</text><text x="683" y="447" class="fb-sub">riesgo real controlado</text><text x="683" y="469" class="fb-small">abort · pause · promote</text></g>
+          <g data-node="deploy"><rect class="fb-node" x="846" y="390" width="170" height="92" rx="17"/><text x="931" y="420" class="fb-label">Deploy</text><text x="931" y="447" class="fb-sub">release identity</text><text x="931" y="469" class="fb-small">version observable</text></g>
+          <g data-node="verify-production"><rect class="fb-node fb-node--major" x="1078" y="390" width="204" height="92" rx="17"/><text x="1180" y="420" class="fb-label">Verificar producción</text><text x="1180" y="447" class="fb-sub">recurrence · drift</text><text x="1180" y="469" class="fb-small">misma failure family</text></g>
+          <path class="fb-edge fb-edge--primary" d="M1206 194 V330 H164 V390"/><path class="fb-edge fb-edge--primary" d="M254 436 H316"/><path class="fb-edge fb-edge--primary" d="M520 436 H582"/><path class="fb-edge fb-edge--primary" d="M784 436 H846"/><path class="fb-edge fb-edge--primary" d="M1016 436 H1078"/>
+
+          <rect data-boundary="evidence-boundary" class="fb-boundary" x="106" y="552" width="1108" height="180" rx="22"/>
+          <text x="130" y="580" class="fb-kicker">5 · PROVENANCE — LA EVIDENCIA DEBE SOBREVIVIR AL CAMBIO</text>
+          <g data-node="receipt"><rect class="fb-node" x="136" y="610" width="256" height="90" rx="16"/><text x="264" y="638" class="fb-label">Failure receipt</text><text x="264" y="663" class="fb-sub">trace ref · taxonomy · privacy</text><text x="264" y="686" class="fb-small">candidate + environment</text></g>
+          <g data-node="eval-receipt"><rect class="fb-node" x="532" y="610" width="256" height="90" rx="16"/><text x="660" y="638" class="fb-label">Eval receipt</text><text x="660" y="663" class="fb-sub">fixture · invariant · verifier</text><text x="660" y="686" class="fb-small">eval-set version</text></g>
+          <g data-node="release-receipt"><rect class="fb-node" x="928" y="610" width="256" height="90" rx="16"/><text x="1056" y="638" class="fb-label">Release receipt</text><text x="1056" y="663" class="fb-sub">repair · deploy · live evidence</text><text x="1056" y="686" class="fb-small">post-fix recurrence</text></g>
+          <path class="fb-edge fb-edge--evidence" d="M591 268 V566 H264 V610"/><path class="fb-edge fb-edge--evidence" d="M1206 194 V566 H660 V610"/><path class="fb-edge fb-edge--evidence" d="M1180 482 V566 H1056 V610"/>
+
+          <path class="fb-edge fb-edge--evidence" d="M1180 390 V330 H1300 V24 H123 V106"/>
+          <text x="1194" y="318" class="fb-edge-label">feedback live</text>
+        </svg>
+      </div>
+    </div>
+    <div class="fb-legend" aria-label="Leyenda"><span><i></i> flujo de reparación/release</span><span class="is-evidence"><i></i> evidencia y feedback</span></div>
+    <p class="s5v__copy"><strong>Lectura:</strong> una métrica o trace inicia una investigación; no aprueba ni suspende por sí solo. Si no puedes reproducir el mecanismo, mejora instrumentación. Si puedes, minimiza y redacta el caso, protege la clase de equivalencia con neighbors, versiona el verifier y sólo considera cerrado el loop cuando la reparación vuelve a producción y la familia de fallo deja de recurrir bajo observación fiable.</p>
+  </div>
+</section>
