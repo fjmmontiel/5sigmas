@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Negative fixtures for coverage and rendering blind spots reported in #305."""
+"""Negative fixtures for coverage, rendering and media blind spots reported in #305."""
 from pathlib import Path
 import tempfile
 import unittest
@@ -17,9 +17,26 @@ class ExperienceAuditTest(unittest.TestCase):
         self.write("mkdocs.yml", "nav:\n - series/datacenters-espacio/00_presentacion_serie.md\n - " + self.rel + "\n")
         self.write("mkdocs.en.yml", "nav:\n - " + self.rel + "\n")
         self.write("locales/en/manifest.yml", "published_routes:\n - " + self.rel + "\n")
-        self.article = "---\nvideo: lesson.mp4\n---\n# Lesson\n\n## Mechanism\nOne explicit relationship.\n"
-        self.write("docs/" + self.rel, self.article)
-        self.write("locales/en/" + self.rel, self.article)
+        self.article = (
+            "---\n"
+            "video: lesson.mp4\n"
+            "video_poster: lesson.jpg\n"
+            "video_duration: PT30S\n"
+            "video_title: Lesson video\n"
+            "video_summary: The mechanism in thirty seconds.\n"
+            "video_captions: lesson.vtt\n"
+            "video_transcript: lesson-transcript.md\n"
+            "video_chapters:\n"
+            "  - name: Problem\n    start: 0\n    end: 10\n"
+            "  - name: Mechanism\n    start: 10\n    end: 22\n"
+            "  - name: Consequence\n    start: 22\n    end: 30\n"
+            "---\n# Lesson\n\n## Mechanism\nOne explicit relationship.\n"
+        )
+        for prefix in ("docs/", "locales/en/"):
+            self.write(prefix + self.rel, self.article)
+            parent = str(Path(prefix + self.rel).parent)
+            for name in ("lesson.mp4", "lesson.jpg", "lesson.vtt", "lesson-transcript.md"):
+                self.write(f"{parent}/{name}", "fixture")
 
     def write(self, path, text):
         p = self.root / path
@@ -33,6 +50,7 @@ class ExperienceAuditTest(unittest.TestCase):
         report = audit(self.root, self.scope)
         self.assertEqual(report["summary"]["locale_pages"], 2)
         self.assertEqual(report["status"], "TECHNICAL_PASS_ONLY")
+        self.assertEqual(report["media"], "SOURCE_PASS_BINARY_PENDING")
         self.assertEqual(report["golden"], "NOT_CERTIFIED")
         self.assertEqual(report["pixel_review"], "PENDING")
 
@@ -91,13 +109,55 @@ class ExperienceAuditTest(unittest.TestCase):
 
     def test_video_can_be_explicitly_declared_in_locale_media(self):
         self.write("locales/en/" + self.rel, "# Lesson\nNo inherited Spanish video.\n")
-        self.write("locales/en/media.yml", self.rel + ":\n  video: lesson-en.mp4\n")
+        self.write("locales/en/media.yml", self.rel + ":\n  video: lesson.mp4\n")
         self.assertNotIn("VIDEO_DECLARATION_MISSING", self.codes(audit(self.root, self.scope)))
 
     def test_frontmatter_precedence_matches_video_hook(self):
         self.write("locales/en/media.yml", self.rel + ":\n  video: unexpected.mp4\n")
         en = audit(self.root, self.scope)["pages"][1]
         self.assertEqual(en["video"]["video"], "lesson.mp4")
+
+    def test_missing_video_binary_is_blocked(self):
+        (self.root / "docs/series/new-series/lesson.mp4").unlink()
+        self.assertEqual(self.codes(audit(self.root, self.scope))["VIDEO_FILE_MISSING"], 1)
+
+    def test_missing_captions_is_blocked_even_with_video(self):
+        for prefix in ("docs/", "locales/en/"):
+            path = self.root / prefix / self.rel
+            text = path.read_text().replace("video_captions: lesson.vtt\n", "")
+            path.write_text(text)
+        report = audit(self.root, self.scope)
+        self.assertEqual(self.codes(report)["VIDEO_CAPTIONS_MISSING"], 2)
+        self.assertEqual(report["media"], "SOURCE_FAIL")
+
+    def test_missing_transcript_is_blocked_even_with_captions(self):
+        for prefix in ("docs/", "locales/en/"):
+            path = self.root / prefix / self.rel
+            text = path.read_text().replace("video_transcript: lesson-transcript.md\n", "")
+            path.write_text(text)
+        self.assertEqual(self.codes(audit(self.root, self.scope))["VIDEO_TRANSCRIPT_MISSING"], 2)
+
+    def test_missing_curated_chapters_is_blocked(self):
+        for prefix in ("docs/", "locales/en/"):
+            path = self.root / prefix / self.rel
+            text = path.read_text()
+            text = text.split("video_chapters:\n", 1)[0] + "---\n# Lesson\n\n## Mechanism\nOne explicit relationship.\n"
+            path.write_text(text)
+        self.assertEqual(self.codes(audit(self.root, self.scope))["VIDEO_CHAPTERS_MISSING"], 2)
+
+    def test_invalid_chapter_outside_declared_duration_is_blocked(self):
+        path = self.root / "docs" / self.rel
+        text = path.read_text().replace("start: 22\n    end: 30", "start: 31\n    end: 35")
+        path.write_text(text)
+        self.assertIn("VIDEO_CHAPTER_INVALID", self.codes(audit(self.root, self.scope)))
+
+    def test_missing_video_title_and_summary_are_blocked(self):
+        path = self.root / "docs" / self.rel
+        text = path.read_text().replace("video_title: Lesson video\n", "").replace("video_summary: The mechanism in thirty seconds.\n", "")
+        path.write_text(text)
+        codes = self.codes(audit(self.root, self.scope))
+        self.assertEqual(codes["VIDEO_TITLE_MISSING"], 1)
+        self.assertEqual(codes["VIDEO_SUMMARY_MISSING"], 1)
 
     def test_rendered_raw_tex_is_blocked(self):
         html = '<html lang="es"><article><p>\\[Recall@k=\\frac{x}{y}\\]</p><video></video></article></html>'
