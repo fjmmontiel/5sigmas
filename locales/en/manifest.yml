@@ -37,6 +37,7 @@ published_routes:
   - series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria.md
   - series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning.md
   - series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo.md
+  - series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy.md
   - series/fundamentos-ia-iag/00_presentacion_serie.md
   - series/fundamentos-ia-iag/01-que-es-ia.md
   - series/fundamentos-ia-iag/02-que-es-ia-generativa.md
@@ -122,6 +123,7 @@ required_snippets:
   - snippets/articulos-tecnicos/eval-boundary-system-workflow-trajectory.html
   - snippets/articulos-tecnicos/eval-dataset-lifecycle-hard-negatives-contamination.html
   - snippets/articulos-tecnicos/eval-judge-calibration-bias-agreement.html
+  - snippets/articulos-tecnicos/eval-agent-tool-trajectory-success-recovery-policy.html
   - snippets/from-cave-to-agi/01-sistemas-numeracion.html
   - snippets/from-cave-to-agi/01-algebra-despejar.html
   - snippets/from-cave-to-agi/01-cadena-deductiva.html

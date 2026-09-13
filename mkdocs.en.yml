@@ -216,6 +216,7 @@ nav:
           - "What to evaluate: model, component, system, workflow, and trajectory": series/evaluating-ai-systems-production/01-que-evaluar-modelo-componente-sistema-workflow-trayectoria.md
           - "Offline eval sets: curation, hard negatives, contamination, and versioning": series/evaluating-ai-systems-production/02-offline-eval-sets-curation-hard-negatives-contamination-versioning.md
           - "LLM-as-judge and human evaluation: calibration, bias, variance, and agreement": series/evaluating-ai-systems-production/03-llm-as-judge-evaluacion-humana-calibracion-sesgo-varianza-acuerdo.md
+          - "Evaluating agent and tool trajectories: success, efficiency, recovery, and policy compliance": series/evaluating-ai-systems-production/04-evaluacion-trayectorias-agentes-tools-exito-eficiencia-recuperacion-policy.md
   - Concepts:
       - Concepts: temas/index.md
       - What is an LLM?: temas/llms.md
