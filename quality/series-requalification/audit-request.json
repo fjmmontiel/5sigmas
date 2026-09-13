@@ -1,0 +1,7 @@
+{
+  "diagnostic_revision": 1,
+  "published_content_base": "baf32aefc3c9538bd90a5f28c2be395cb4fac0d5",
+  "reason": "One bounded integration diagnostic: local DNS/browser/build dependencies are unavailable; prior gates omitted series, missing videos, mathematical rendering and actual screen-space quality. No deploy or publication.",
+  "contract_issue": 305,
+  "amendment_comment": 5655569434
+}

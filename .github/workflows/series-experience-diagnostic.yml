@@ -1,0 +1,101 @@
+name: Series experience requalification diagnostic
+
+on:
+  push:
+    branches: ['quality/post-datacenters-requalification']
+    paths: ['quality/series-requalification/audit-request.json']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: series-experience-diagnostic-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Record exact audited revisions
+        run: |
+          git rev-parse HEAD
+          cat quality/series-requalification/audit-request.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install existing build dependencies
+        run: pip install -r requirements.txt
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Negative regression fixtures
+        run: python scripts/test_series_experience_audit.py -v
+      - name: Independent source coverage audit
+        id: source
+        continue-on-error: true
+        run: python scripts/audit_series_experience.py
+      - name: Build Spanish strictly
+        run: mkdocs build --clean --strict
+      - name: Run legacy publication audit as a comparison, not certification
+        continue-on-error: true
+        run: python scripts/audit_publication_contract.py
+      - name: Prepare English
+        run: python scripts/prepare_locale.py --locale en
+      - name: Build English strictly
+        env:
+          S5_LOCALE: en
+        run: mkdocs build -f mkdocs.en.yml --clean --strict
+      - name: Independent complete rendered HTML audit
+        id: rendered
+        continue-on-error: true
+        run: python scripts/audit_series_experience.py --site site
+      - name: Install existing Playwright version
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Serve built preview
+        run: |
+          python -m http.server 8000 --directory site > /tmp/series-experience-preview.log 2>&1 &
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:8000/en/ > /dev/null; then exit 0; fi
+            sleep 1
+          done
+          exit 1
+      - name: All inventoried pages, desktop/mobile, normal/reduced motion
+        id: browser
+        continue-on-error: true
+        run: node scripts/audit_series_experience_browser.mjs
+      - name: Enforce technical failures; never certify pixel or pedagogical quality
+        if: always()
+        env:
+          SOURCE_OUTCOME: ${{ steps.source.outcome }}
+          RENDERED_OUTCOME: ${{ steps.rendered.outcome }}
+          BROWSER_OUTCOME: ${{ steps.browser.outcome }}
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          print('GOLDEN=NOT_CERTIFIED; PIXEL_REVIEW=PENDING; PEDAGOGY_REVIEW=PENDING')
+          for name in ('report.json', 'browser-report.json'):
+              path = Path('artifacts/series-experience') / name
+              if path.exists():
+                  data = json.loads(path.read_text())
+                  print(name, json.dumps(data.get('summary', {k:v for k,v in data.items() if k != 'results'}), ensure_ascii=False))
+          outcomes = [os.environ[k] for k in ('SOURCE_OUTCOME','RENDERED_OUTCOME','BROWSER_OUTCOME')]
+          raise SystemExit(0 if all(value == 'success' for value in outcomes) else 1)
+          PY
+      - name: Retain bounded failed-diagnostic evidence
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: series-experience-diagnostic
+          path: artifacts/series-experience/
+          retention-days: 1
+          if-no-files-found: warn
+          overwrite: true
