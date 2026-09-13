@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 """Negative fixtures for coverage and rendering blind spots reported in #305."""
-import json
 from pathlib import Path
 import tempfile
 import unittest
@@ -69,6 +68,26 @@ class ExperienceAuditTest(unittest.TestCase):
     def test_new_english_nav_chapter_cannot_escape_gate(self):
         self.write("mkdocs.en.yml", "nav:\n - " + self.rel + "\n - series/new-series/03-extra.md\n")
         self.assertEqual(audit(self.root, self.scope)["summary"]["locale_pages"], 4)
+
+    def test_nonnumbered_english_orphan_cannot_escape_gate(self):
+        self.write("locales/en/series/new-series/glossary.md", self.article)
+        report = audit(self.root, self.scope)
+        self.assertEqual(report["summary"]["locale_pages"], 4)
+        self.assertIn("NAV_ROUTE_MISSING", self.codes(report))
+
+    def test_manifest_only_page_cannot_escape_gate(self):
+        self.write("locales/en/manifest.yml", "published_routes:\n - " + self.rel + "\n - series/new-series/appendix.md\n")
+        self.assertEqual(audit(self.root, self.scope)["summary"]["locale_pages"], 4)
+
+    def test_empty_scope_cannot_pass(self):
+        with self.assertRaises(ValueError):
+            audit(self.root, {"excluded_through": "datacenters-espacio", "series": {}})
+
+    def test_nested_article_does_not_hide_later_math(self):
+        html = '<html lang="es"><article><article><p>Card</p></article><p>\\frac{x}{y}</p><video></video></article></html>'
+        issues, counts = rendered_findings(html, "es")
+        self.assertEqual(counts["video_elements"], 1)
+        self.assertIn("RAW_TEX_RENDERED", {f["code"] for f in issues})
 
     def test_video_can_be_explicitly_declared_in_locale_media(self):
         self.write("locales/en/" + self.rel, "# Lesson\nNo inherited Spanish video.\n")

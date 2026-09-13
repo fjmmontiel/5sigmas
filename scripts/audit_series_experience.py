@@ -66,9 +66,11 @@ def strip_code(text: str) -> str:
     return re.sub(r"`+[^`\n]*`+", "", text)
 
 
-def discover(root: Path, scope: dict, configs: dict) -> tuple[list[str], list[dict]]:
+def discover(root: Path, scope: dict, configs: dict, published_en: set[str]) -> tuple[list[str], list[dict]]:
     findings: list[dict] = []
     targets = scope["series"]
+    if not isinstance(targets, dict) or not targets or any(not names for names in targets.values()):
+        raise ValueError("Scope must contain nonempty series and baseline paths")
     es_nav = nav_paths(configs["es"].get("nav", []))
     order = list(dict.fromkeys(p.split("/")[1] for p in es_nav if len(p.split("/")) > 2))
     cutoff = scope["excluded_through"]
@@ -82,10 +84,13 @@ def discover(root: Path, scope: dict, configs: dict) -> tuple[list[str], list[di
         for p in nav_paths(configs[locale].get("nav", [])):
             if p.split("/")[1] in targets:
                 discovered.append(p)
-    for slug in targets:
-        for p in sorted((root / "docs/series" / slug).glob("*.md")):
-            if re.match(r"\d", p.name):
-                discovered.append(p.relative_to(root / "docs").as_posix())
+    for p in sorted(published_en):
+        if p.startswith("series/") and len(p.split("/")) > 2 and p.split("/")[1] in targets:
+            discovered.append(p)
+    for source_root in (root / "docs", root / "locales/en"):
+        for slug in targets:
+            for p in sorted((source_root / "series" / slug).glob("*.md")):
+                discovered.append(p.relative_to(source_root).as_posix())
     return list(dict.fromkeys(discovered)), findings
 
 
@@ -94,7 +99,7 @@ class ArticleHTML(HTMLParser):
     def __init__(self) -> None:
         super().__init__(convert_charrefs=True)
         self.stack: list[str] = []
-        self.article = False
+        self.article_depth = 0
         self.prose: list[str] = []
         self.code: list[str] = []
         self.videos = 0
@@ -106,8 +111,8 @@ class ArticleHTML(HTMLParser):
         if tag == "html":
             self.lang = attr.get("lang") or ""
         if tag == "article":
-            self.article = True
-        if not self.article:
+            self.article_depth += 1
+        if not self.article_depth:
             return
         if tag == "video":
             self.videos += 1
@@ -125,10 +130,10 @@ class ArticleHTML(HTMLParser):
             i = len(self.stack) - 1 - self.stack[::-1].index(tag)
             self.stack = self.stack[:i]
         if tag == "article":
-            self.article = False
+            self.article_depth = max(0, self.article_depth - 1)
 
     def handle_data(self, data: str) -> None:
-        if not self.article or any(t in self.stack for t in ("script", "style", "math", "annotation")):
+        if not self.article_depth or any(t in self.stack for t in ("script", "style", "math", "annotation")):
             return
         (self.code if any(t in self.stack for t in ("pre", "code")) else self.prose).append(data)
 
@@ -156,7 +161,7 @@ def audit(root: Path, scope: dict, site: Path | None = None) -> dict:
     configs = {"es": load_yaml(root / "mkdocs.yml"), "en": load_yaml(root / "mkdocs.en.yml")}
     manifest = load_yaml(root / "locales/en/manifest.yml")
     published_en = set(manifest.get("published_routes", []))
-    paths, findings = discover(root, scope, configs)
+    paths, findings = discover(root, scope, configs, published_en)
     entries: list[dict] = []
     for rel in paths:
         for locale in ("es", "en"):

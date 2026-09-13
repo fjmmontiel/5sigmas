@@ -10,8 +10,8 @@ only auditing code, tests and this contract, not editorial fixes.
 ## Scope is a floor, not a filter
 
 scope.json preserves the 42 known source paths per language, including two
-presentations. Discovery additionally uses ES/EN navigation and every numbered
-source chapter in those seven directories. A missing presentation, video or nav
+presentations. Discovery additionally uses ES/EN navigation and every Markdown
+source page in both locales plus manifest-only entries in those seven directories. A missing presentation, video or nav
 entry cannot delete a lesson from validation. EN manifest coverage is independent.
 
 ## Run locally
