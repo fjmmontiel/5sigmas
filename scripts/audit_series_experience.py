@@ -1,9 +1,15 @@
 #!/usr/bin/env python3
-"""Independent coverage/render audit; NEVER an automatic GOLDEN certificate.
+"""Independent coverage/render/media audit; NEVER an automatic GOLDEN certificate.
 
 The baseline is a scope floor, not a discovery filter. Navigation and on-disk
 chapters are reconciled with it, so deleting a presentation, video declaration,
 or navigation entry cannot silently make a published lesson disappear.
+
+This gate deliberately treats a video *declaration* as weaker evidence than a
+complete learning-media contract. A page can only clear the source-media layer
+when its native locale has a video, poster, duration, title/summary, captions,
+transcript, and editorially reviewed chapter/key-moment map. Binary codec,
+duration and playback are separate runtime checks and are never inferred here.
 """
 from __future__ import annotations
 
@@ -15,6 +21,7 @@ from collections import Counter
 from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlparse
 
 import yaml
 
@@ -35,6 +42,7 @@ InertLoader.add_constructor(None, _unknown_tag)
 TEX = re.compile(r"\\(?:frac|text|tau|pi|Delta|sum|prod|begin|end|lambda|mathbb|mathrm|mathbf|subseteq|land|min|max|mid|theta|sigma|alpha|beta)\b|\\[\[\]]|\$\$")
 INCLUDE = re.compile(r'include_html\(\s*[\"\x27]([^\"\x27]+)[\"\x27]')
 RAW_SNIPPET = re.compile(r'include_html\(|<\s*(?:section|svg|style)\b[^\n]*(?:s5v|anim-|viewBox|data-anim)', re.I)
+ISO_DURATION = re.compile(r"^PT(?:(?P<h>\d+)H)?(?:(?P<m>\d+)M)?(?:(?P<s>\d+(?:\.\d+)?)S)?$")
 
 
 def load_yaml(path: Path) -> dict:
@@ -92,6 +100,101 @@ def discover(root: Path, scope: dict, configs: dict, published_en: set[str]) -> 
             for p in sorted((source_root / "series" / slug).glob("*.md")):
                 discovered.append(p.relative_to(source_root).as_posix())
     return list(dict.fromkeys(discovered)), findings
+
+
+def _is_url(value: str) -> bool:
+    try:
+        return urlparse(value).scheme in {"http", "https"}
+    except ValueError:
+        return False
+
+
+def _duration_seconds(value: str) -> float | None:
+    match = ISO_DURATION.match(value.strip())
+    if not match:
+        return None
+    return float(match.group("h") or 0) * 3600 + float(match.group("m") or 0) * 60 + float(match.group("s") or 0)
+
+
+def _local_media_exists(source: Path, value: str) -> bool:
+    return bool(value) and (_is_url(value) or (source.parent / value).is_file())
+
+
+def media_findings(source: Path, meta: dict) -> tuple[list[dict], dict]:
+    """Check source-level learning-media completeness without pretending playback QA."""
+    findings: list[dict] = []
+    video = str(meta.get("video") or "").strip()
+    if not video:
+        return [{"code": "VIDEO_DECLARATION_MISSING"}], {}
+
+    poster = str(meta.get("video_poster") or Path(video).with_suffix(".jpg").name).strip()
+    duration = str(meta.get("video_duration") or "").strip()
+    title = str(meta.get("video_title") or "").strip()
+    summary = str(meta.get("video_summary") or "").strip()
+    captions = str(meta.get("video_captions") or "").strip()
+    transcript = str(meta.get("video_transcript") or "").strip()
+    chapters = meta.get("video_chapters")
+
+    if not _local_media_exists(source, video):
+        findings.append({"code": "VIDEO_FILE_MISSING", "detail": video})
+    if not poster:
+        findings.append({"code": "VIDEO_POSTER_MISSING"})
+    elif not _local_media_exists(source, poster):
+        findings.append({"code": "VIDEO_POSTER_FILE_MISSING", "detail": poster})
+    if not duration:
+        findings.append({"code": "VIDEO_DURATION_MISSING"})
+        duration_seconds = None
+    else:
+        duration_seconds = _duration_seconds(duration)
+        if duration_seconds is None or duration_seconds <= 0:
+            findings.append({"code": "VIDEO_DURATION_INVALID", "detail": duration})
+    if not title:
+        findings.append({"code": "VIDEO_TITLE_MISSING"})
+    if not summary:
+        findings.append({"code": "VIDEO_SUMMARY_MISSING"})
+    if not captions:
+        findings.append({"code": "VIDEO_CAPTIONS_MISSING"})
+    elif not _local_media_exists(source, captions):
+        findings.append({"code": "VIDEO_CAPTIONS_FILE_MISSING", "detail": captions})
+    if not transcript:
+        findings.append({"code": "VIDEO_TRANSCRIPT_MISSING"})
+    elif not _local_media_exists(source, transcript):
+        findings.append({"code": "VIDEO_TRANSCRIPT_FILE_MISSING", "detail": transcript})
+
+    normalized_chapters: list[dict] = []
+    if not isinstance(chapters, list) or not chapters:
+        findings.append({"code": "VIDEO_CHAPTERS_MISSING"})
+    else:
+        last_start = -1.0
+        for index, chapter in enumerate(chapters):
+            if not isinstance(chapter, dict):
+                findings.append({"code": "VIDEO_CHAPTER_INVALID", "detail": f"index {index}: not a mapping"})
+                continue
+            name = str(chapter.get("name") or "").strip()
+            start = chapter.get("start")
+            end = chapter.get("end")
+            if not name or not isinstance(start, (int, float)) or start < 0 or start <= last_start:
+                findings.append({"code": "VIDEO_CHAPTER_INVALID", "detail": f"index {index}: name/start/order"})
+                continue
+            if duration_seconds is not None and start >= duration_seconds:
+                findings.append({"code": "VIDEO_CHAPTER_INVALID", "detail": f"index {index}: start outside duration"})
+            if end is not None and (not isinstance(end, (int, float)) or end <= start or (duration_seconds is not None and end > duration_seconds + 0.01)):
+                findings.append({"code": "VIDEO_CHAPTER_INVALID", "detail": f"index {index}: invalid end"})
+            last_start = float(start)
+            normalized_chapters.append({"name": name, "start": start, **({"end": end} if end is not None else {})})
+
+    return findings, {
+        "video": video,
+        "video_poster": poster,
+        "video_duration": duration,
+        "video_title": title,
+        "video_summary": summary,
+        "video_captions": captions,
+        "video_transcript": transcript,
+        "video_chapters": normalized_chapters,
+        "binary_playback_review": "PENDING",
+        "content_alignment_review": "PENDING",
+    }
 
 
 class ArticleHTML(HTMLParser):
@@ -163,6 +266,7 @@ def audit(root: Path, scope: dict, site: Path | None = None) -> dict:
     published_en = set(manifest.get("published_routes", []))
     paths, findings = discover(root, scope, configs, published_en)
     entries: list[dict] = []
+    media_cache: dict[str, dict] = {}
     for rel in paths:
         for locale in ("es", "en"):
             source_root = root / ("docs" if locale == "es" else "locales/en")
@@ -185,15 +289,18 @@ def audit(root: Path, scope: dict, site: Path | None = None) -> dict:
             entry["tex_source_markers"] = dict(Counter(TEX.findall(strip_code(body))))
             entry["snippets"] = list(dict.fromkeys(INCLUDE.findall(body)))
             media_path = root / "locales" / locale / "media.yml"
-            media = load_yaml(media_path) if media_path.is_file() else {}
+            media_key = str(media_path)
+            if media_key not in media_cache:
+                media_cache[media_key] = load_yaml(media_path) if media_path.is_file() else {}
+            media = media_cache[media_key]
             configured = (configs[locale].get("extra") or {}).get("locale_video_pages", {}) or {}
             for data in (configured.get(rel, {}), media.get(rel, {})):
                 if isinstance(data, dict):
                     for key, value in data.items():
                         meta.setdefault(key, value)
-            entry["video"] = {k: meta[k] for k in ("video", "video_poster", "video_captions", "video_duration") if meta.get(k)}
-            if not meta.get("video"):
-                issues.append({"code": "VIDEO_DECLARATION_MISSING"})
+            media_issues, media_contract = media_findings(source, meta)
+            issues.extend(media_issues)
+            entry["video"] = media_contract
             for snippet in entry["snippets"]:
                 if not (source_root / snippet).is_file():
                     issues.append({"code": "LOCALE_SNIPPET_SOURCE_MISSING", "detail": snippet})
@@ -213,12 +320,13 @@ def audit(root: Path, scope: dict, site: Path | None = None) -> dict:
     counts = Counter(f["code"] for f in findings)
     counts.update(f["code"] for entry in entries for f in entry["findings"])
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "scope": "post-datacenters-exclusive",
         "status": "TECHNICAL_FAIL" if counts else "TECHNICAL_PASS_ONLY",
         "golden": "NOT_CERTIFIED",
         "rendered_html": "AUDITED" if site else "NOT_RUN",
         "browser": "NOT_RUN",
+        "media": "SOURCE_FAIL" if any(code.startswith("VIDEO_") for code in counts) else "SOURCE_PASS_BINARY_PENDING",
         "pixel_review": "PENDING",
         "pedagogy_review": "PENDING",
         "summary": {"series": len(scope["series"]), "pages_per_locale": len(paths), "locale_pages": len(entries), "findings": dict(sorted(counts.items()))},
