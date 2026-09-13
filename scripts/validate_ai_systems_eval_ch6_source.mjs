@@ -100,7 +100,7 @@ check(enPlain.includes('`REGRESSION_PASS` is not `VERIFIED_IN_PRODUCTION`'), 'EN
 check(!/^\s*-\s+.+;\s*$/m.test(en), 'EN: semicolon-list anti-pattern detected');
 
 for (const [pattern, label] of [
-  [/(?:telemetry|trace|metric)[^\n]{0,80}(?:is|equals|proves)[^\n]{0,40}(?:correctness|quality|root cause|eval verdict)/i, 'telemetry=verdict'],
+  [/(?:telemetry|trace|metric)[^\n]{0,80}(?:equals|proves|is(?!\s+(?:not|never)))[^\n]{0,40}(?:correctness|quality|root cause|eval verdict)/i, 'telemetry=verdict'],
   [/(?:incident|ticket)[^\n]{0,80}(?:must|should always)[^\n]{0,25}(?:become|turn into)[^\n]{0,25}(?:eval|test)/i, 'incident=mandatory-test'],
   [/passing (?:the )?(?:test|eval)[^\n]{0,80}(?:proves|guarantees)[^\n]{0,35}(?:root cause|fixed in production)/i, 'pass=root-cause/live-proof'],
   [/(?:trace all|record all|log all)[^\n]{0,80}(?:safe|best|always)/i, 'log-everything'],
