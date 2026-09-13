@@ -47,6 +47,128 @@ async function boundedClose(context) {
   }
 }
 
+async function inspectInlineVideo(page, job, errors) {
+  const video = page.locator('article [data-s5-inline-video-player]').first();
+  if (!(await video.count())) return null;
+
+  const root = page.locator('article [data-s5-inline-video]').first();
+  const poster = root.locator('[data-s5-inline-video-start]').first();
+  const source = video.locator('source').first();
+  const lifecycle = {
+    poster_present: (await poster.count()) === 1,
+    poster_initially_visible: false,
+    player_initially_hidden: false,
+    activation: job.width === 390 ? 'tap' : 'click',
+    range_status: null,
+    duration: null,
+    videoWidth: null,
+    videoHeight: null,
+    play_started: false,
+    seeked: false,
+    paused_after: false,
+  };
+
+  try {
+    await video.evaluate(node => {
+      node.muted = true;
+      node.volume = 0;
+    });
+
+    const sourceValue = await source.getAttribute('src');
+    if (!sourceValue) {
+      errors.push({ code: 'VIDEO_SOURCE_MISSING' });
+    } else {
+      const mediaUrl = new URL(sourceValue, page.url()).href;
+      const range = await page.request.get(mediaUrl, {
+        headers: { Range: 'bytes=0-1023' },
+        timeout: 8000,
+      });
+      lifecycle.range_status = range.status();
+      if (![200, 206].includes(range.status())) {
+        errors.push({
+          code: 'VIDEO_RANGE_ERROR',
+          status: range.status(),
+          url: mediaUrl,
+        });
+      }
+    }
+
+    if (!(await poster.count())) {
+      errors.push({ code: 'VIDEO_POSTER_CONTROL_MISSING' });
+      return lifecycle;
+    }
+
+    await poster.waitFor({ state: 'visible', timeout: 5000 });
+    lifecycle.poster_initially_visible = true;
+    lifecycle.player_initially_hidden = !(await video.isVisible());
+    if (!lifecycle.player_initially_hidden) {
+      errors.push({ code: 'VIDEO_PLAYER_VISIBLE_BEFORE_ACTIVATION' });
+    }
+
+    await poster.scrollIntoViewIfNeeded();
+    if (job.width === 390) await poster.tap({ timeout: 5000 });
+    else await poster.click({ timeout: 5000 });
+    await video.waitFor({ state: 'visible', timeout: 5000 });
+
+    await page.waitForFunction(() => {
+      const node = document.querySelector('article [data-s5-inline-video-player]');
+      return Boolean(node && node.readyState >= 1 && (!node.paused || node.currentTime > 0));
+    }, { timeout: 8000 });
+    lifecycle.play_started = true;
+
+    const media = await video.evaluate(async node => {
+      const duration = Number(node.duration);
+      const before = Number(node.currentTime);
+      node.pause();
+      let seeked = false;
+      if (Number.isFinite(duration) && duration > 1) {
+        const target = Math.min(Math.max(0.25, duration * 0.25), duration - 0.25);
+        if (Math.abs(target - before) > 0.05) {
+          await Promise.race([
+            new Promise(resolve => {
+              node.addEventListener('seeked', () => resolve(), { once: true });
+              node.currentTime = target;
+            }),
+            new Promise(resolve => setTimeout(resolve, 3000)),
+          ]);
+          seeked = Math.abs(Number(node.currentTime) - target) < 0.5;
+        } else {
+          seeked = true;
+        }
+      }
+      return {
+        duration,
+        currentTime: Number(node.currentTime),
+        paused: node.paused,
+        videoWidth: node.videoWidth,
+        videoHeight: node.videoHeight,
+        readyState: node.readyState,
+        seeked,
+      };
+    });
+
+    lifecycle.duration = media.duration;
+    lifecycle.videoWidth = media.videoWidth;
+    lifecycle.videoHeight = media.videoHeight;
+    lifecycle.seeked = media.seeked;
+    lifecycle.paused_after = media.paused;
+
+    if (
+      !Number.isFinite(media.duration) ||
+      media.duration <= 0 ||
+      media.videoWidth <= 0 ||
+      media.videoHeight <= 0
+    ) {
+      errors.push({ code: 'VIDEO_METADATA_INVALID', media });
+    }
+    if (!media.paused) errors.push({ code: 'VIDEO_PAUSE_FAILED' });
+    if (media.duration > 1 && !media.seeked) errors.push({ code: 'VIDEO_SEEK_FAILED' });
+  } catch (error) {
+    errors.push({ code: 'VIDEO_PLAYBACK_ERROR', detail: String(error) });
+  }
+  return lifecycle;
+}
+
 async function inspect(job) {
   let context;
   const errors = [];
@@ -228,58 +350,9 @@ async function inspect(job) {
         // Font size and internal scroll are review candidates, never automatic aesthetics PASS.
       }
 
-      // Exercise actual media when it exists. This remains technical evidence only.
-      const video = page.locator('article video').first();
-      if (await video.count()) {
-        try {
-          await video.scrollIntoViewIfNeeded();
-          await video.evaluate(node => {
-            node.muted = true;
-            node.volume = 0;
-          });
-          await video.waitFor({ state: 'visible', timeout: 5000 });
-          const media = await video.evaluate(async node => {
-            if (node.readyState < 1) {
-              await Promise.race([
-                new Promise((resolve, reject) => {
-                  node.addEventListener('loadedmetadata', resolve, { once: true });
-                  node.addEventListener(
-                    'error',
-                    () => reject(new Error('video error before metadata')),
-                    { once: true },
-                  );
-                }),
-                new Promise((_, reject) =>
-                  setTimeout(() => reject(new Error('metadata timeout')), 5000),
-                ),
-              ]);
-            }
-            await node.play();
-            await new Promise(resolve => setTimeout(resolve, 250));
-            const snapshot = {
-              duration: node.duration,
-              currentTime: node.currentTime,
-              paused: node.paused,
-              videoWidth: node.videoWidth,
-              videoHeight: node.videoHeight,
-              readyState: node.readyState,
-            };
-            node.pause();
-            return snapshot;
-          });
-          result.media = media;
-          result.playback_review = 'AUTOMATED_TECHNICAL_ONLY';
-          if (
-            !Number.isFinite(media.duration) ||
-            media.duration <= 0 ||
-            media.videoWidth <= 0 ||
-            media.videoHeight <= 0
-          ) {
-            errors.push({ code: 'VIDEO_METADATA_INVALID', media });
-          }
-        } catch (error) {
-          errors.push({ code: 'VIDEO_PLAYBACK_ERROR', detail: String(error) });
-        }
+      if (result.dom?.video_count) {
+        result.media = await inspectInlineVideo(page, job, errors);
+        result.playback_review = 'AUTOMATED_TECHNICAL_ONLY';
       }
 
       // Bounded evidence sample; never pretend these are pixel/pedagogy approvals.
@@ -370,7 +443,7 @@ const report = {
   golden: 'NOT_CERTIFIED',
   pixel_review: 'PENDING',
   pedagogy_review: 'PENDING',
-  interaction_review: 'NOT_RUN',
+  interaction_review: 'AUTOMATED_CONTROLS_ONLY',
   playback_review: 'AUTOMATED_TECHNICAL_ONLY',
   results,
 };
