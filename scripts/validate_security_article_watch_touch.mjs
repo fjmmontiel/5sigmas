@@ -262,7 +262,7 @@ try {
           fail(`${ctx}: page overflow after touch round trip`, geometry);
         }
         if (proxyErrors.length) fail(`${ctx}: canonical→preview proxy errors`, proxyErrors);
-        if (!proxyEvidence.some(item => new URL(item.canonical_url).pathname === item.watch)) {
+        if (!proxyEvidence.some(proxyItem => new URL(proxyItem.canonical_url).pathname === item.watch)) {
           fail(`${ctx}: canonical watch navigation was not fulfilled from exact preview`, { proxyEvidence });
         }
         if (!proxyEvidence.some(proxyItem => new URL(proxyItem.canonical_url).pathname === item.article)) {
