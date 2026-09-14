@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 24,
+  "diagnostic_revision": 25,
   "diagnostic_scope": "focused_security_00_01",
   "published_content_base": "baf32aefc3c9538bd90a5f28c2be395cb4fac0d5",
-  "requested_head_parent": "c770d2f74caf8ddbd1a64f06628b5454ee613870",
-  "reason": "The exact-head provenance-link run proved the Security 00/1.1 pages and teaching states technically, but manual review exposed one remaining evidence gap: Prompt Injection primary-source anchors live inside a collapsed references details element, so the prior screenshots did not exercise the newly changed hidden state. The focused browser gate now opens that details element with real mouse/touch, requires at least five visible absolute-HTTPS source links, checks expanded horizontal overflow, captures the expanded references block for ES/EN desktop/mobile normal/reduced motion, then closes it while persistent runtime/resource listeners remain active. Re-run the same focused Security milestone without changing content/media thresholds. Preserve SOURCE/RENDERED global failures and MEDIA_PASS fail-closed for four silent MP4s plus missing captions/transcripts/curated chapter maps. PIXEL_REVIEW and PEDAGOGY_REVIEW remain manual and must not be inferred from this technical gate.",
+  "requested_head_parent": "41a03e702afad1a71f958212c261791a893b44f6",
+  "reason": "The current Security 00/1.1 evidence proves desktop keyboard access to the article-to-watch link and real mobile touch for teaching controls, video start, and reader-next navigation, but it did not prove the article-to-watch link itself or the watch-to-article return path with a real touch gesture. Add a focused actual-built-page mobile round-trip gate for ES/EN under normal/reduced motion: article link visible and viewport-bounded, real tap to the locale-correct watch URL, prominent watch player present, watch source link visible and viewport-bounded, real tap back to the exact article, persistent runtime/resource listeners throughout, and no post-round-trip horizontal overflow. Do not change content/media thresholds. Preserve SOURCE/RENDERED global failures and MEDIA_PASS fail-closed for four silent MP4s plus missing captions/transcripts/curated chapter maps. PIXEL_REVIEW and PEDAGOGY_REVIEW remain manual and must not be inferred from this technical gate.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
