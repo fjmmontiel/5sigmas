@@ -16,9 +16,9 @@ hide:
 
 {{ include_html("snippets/series_meta.html", series_dir="seguridad-ia", data_state="complete", data_level="technical", status_label="Complete", level_label="Technical", progress_total="5", extra_rows="<div class=\"series-meta-row\"><span class=\"series-meta-label\">Prerequisites</span><span class=\"series-meta-value\"><a href=\"/en/series/fundamentos-ia-iag/00_presentacion_serie/\">AI and Generative AI Foundations</a> · <a href=\"/en/series/modelos-razonadores/00_presentacion_serie/\">Reasoning Models</a></span></div>") }}
 
-Software security often starts with a reliable assumption: if code and data are cleanly separated, the main attack classes are easier to bound. In LLM systems, that assumption is no longer sufficient because the system itself consumes instructions and data through the same medium: natural language.
+Software security often starts with a reliable assumption: if code and data are cleanly separated, the main attack classes are easier to bound. In LLM systems, that assumption is no longer sufficient because the system itself consumes [instructions and data through the same medium](https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html): natural language.
 
-That changes the risk surface structurally. A document retrieved by RAG, an observation written by another agent, a tool result or a note stored in memory can stop behaving like passive data and become an operational instruction if the system does not separate privileges, context and execution correctly.
+That changes the risk surface structurally. A document retrieved by RAG, an observation written by another agent, a tool result or a note stored in memory can stop behaving like passive data and become an operational instruction if the system does not [separate privileges, context and execution correctly](https://cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html).
 
 This series is not a catalogue of new AI security scares. Its goal is narrower: understand where the risk actually comes from, which parts belong to architecture and which belong to controls, and why many mitigations that sound reasonable buy time without closing the underlying path.
 
