@@ -119,11 +119,11 @@ La consecuencia práctica es una corrección de encuadre. El prompt injection se
 
 | Clave | Fuente | Descripción breve |
 | --- | --- | --- |
-| R1 | **OWASP** — *LLM Prompt Injection Prevention Cheat Sheet* | Explica por qué el problema nace de mezclar instrucciones y datos, y resume defensas de arquitectura, validación y mínimo privilegio. |
-| R2 | **Chang et al. (2026)** — *Overcoming the Retrieval Barrier: Indirect Prompt Injection in the Wild for LLM Systems* | Trabajo de USENIX sobre inyección indirecta realista en RAG y sistemas agénticos con *trigger fragments*, recuperación casi perfecta y ataques end-to-end. |
-| R3 | **OWASP GenAI LLM Top 10 2026 + Top 10 for Agentic Applications 2026** | Marcos vigentes para prompt injection y excessive agency y, en sistemas agénticos, goal hijack, tool misuse e identity/privilege abuse. |
-| R4 | **Anthropic (2026)** — *Next-generation Constitutional Classifiers* | Evolución hacia clasificación de intercambios y una arquitectura en cascada/probe que reduce el coste manteniendo defensa adaptativa por capas. |
-| R5 | **Hubinger et al. (2024)** — *Sleeper Agents* | Evidencia adyacente sobre backdoors de entrenamiento: muestra que comportamientos condicionados por un trigger pueden persistir tras SFT, RL y entrenamiento adversarial. No estudia prompt injection, RAG ni autorización de herramientas en runtime. |
+| R1 | **OWASP** — [*LLM Prompt Injection Prevention Cheat Sheet*](https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html) | Explica por qué el problema nace de mezclar instrucciones y datos, y resume defensas de arquitectura, validación y mínimo privilegio. |
+| R2 | **Chang et al. (2026)** — [*Overcoming the Retrieval Barrier: Indirect Prompt Injection in the Wild for LLM Systems*](https://www.usenix.org/conference/usenixsecurity26/presentation/chang-hongyan) | Trabajo de USENIX sobre inyección indirecta realista en RAG y sistemas agénticos con *trigger fragments*, recuperación casi perfecta y ataques end-to-end. |
+| R3 | [**OWASP GenAI LLM Top 10 2026**](https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/) + [**Top 10 for Agentic Applications 2026**](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/) | Marcos vigentes para prompt injection y excessive agency y, en sistemas agénticos, goal hijack, tool misuse e identity/privilege abuse. |
+| R4 | **Anthropic (2026)** — [*Next-generation Constitutional Classifiers*](https://www.anthropic.com/research/next-generation-constitutional-classifiers) | Evolución hacia clasificación de intercambios y una arquitectura en cascada/probe que reduce el coste manteniendo defensa adaptativa por capas. |
+| R5 | **Hubinger et al. (2024)** — [*Sleeper Agents*](https://arxiv.org/abs/2401.05566) | Evidencia adyacente sobre backdoors de entrenamiento: muestra que comportamientos condicionados por un trigger pueden persistir tras SFT, RL y entrenamiento adversarial. No estudia prompt injection, RAG ni autorización de herramientas en runtime. |
 
 </details>
 
