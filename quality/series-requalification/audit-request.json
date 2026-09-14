@@ -1,8 +1,8 @@
 {
-  "diagnostic_revision": 6,
+  "diagnostic_revision": 7,
   "published_content_base": "baf32aefc3c9538bd90a5f28c2be395cb4fac0d5",
-  "requested_head_parent": "b0acfb0e947ed8e567c3a0e025ad6d8ba583edcb",
-  "reason": "Focused Security 00/01 requalification after removing the mobile authorization-label collision, moving provenance badges into normal layout flow, and adding a codec-aware browser lifecycle diagnostic that prefers Google Chrome and distinguishes a browser-harness codec limitation from a product playback failure. Re-run ES/EN desktop/mobile normal/reduced technical evidence only; PIXEL_REVIEW and PEDAGOGY_REVIEW remain fail-closed manual gates.",
+  "requested_head_parent": "f30fee9755cf3a59954ac8c2e08232495f1ca095",
+  "reason": "Exact-head Security 00/1.1 requalification after the bilingual mobile hierarchy fixes. Add deterministic state evidence for all Prompt Injection teaching mechanisms, not only control-vs-data: ctxmix provenance/influence/authorization states, retrieval-barrier clean vs optimized-trigger top-K/context/proposal states, and defence-in-depth movement of the first effective boundary as independent controls are disabled. Exercise ES/EN desktop/mobile normal/reduced with real tap on mobile, canonical animation-shell parity, persistent runtime/resource listeners, global overflow, meaningful-text size checks, text-collision checks and bounded screenshots for manual PIXEL_REVIEW/PEDAGOGY_REVIEW. This remains technical evidence only; media stays fail-closed while authorized narration/captions/transcript/key moments are missing.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
