@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 16,
+  "diagnostic_revision": 17,
   "diagnostic_scope": "focused_security_00_01",
   "published_content_base": "baf32aefc3c9538bd90a5f28c2be395cb4fac0d5",
-  "requested_head_parent": "c025f14acf12e4fd8a0058879d8ce5b9e3799619",
-  "reason": "Correct the watch-locale audit after source inspection proved mkdocs.en.yml replaces the Spanish generator with hooks/video_sitemap_en.py. The previous gate was a false positive because it rendered English fixtures through hooks/video_sitemap.py. Restore the Spanish generator byte-for-byte, exercise the real ES and EN watch/hub/schema renderers independently, retain a Datacenters renderer regression fixture, and re-run strict ES/EN builds plus focused Security browser/lifecycle states. Keep MEDIA_PASS fail-closed for four silent MP4s and missing captions/transcripts/curated chapter maps. Focused only; global catalogue and prior pixel/pedagogy verdicts are not recertified here.",
+  "requested_head_parent": "9ed4aaa1d3a3438a5d45b6c14e61cf40ae5dd191",
+  "reason": "Complete the remaining Security 1.1 primary-source/parity review by scoping Sleeper Agents correctly as adjacent training-time backdoor evidence rather than prompt-injection evidence. Re-run strict ES/EN builds, publication/source/rendered audits, reciprocal article-watch locale contract, focused Security browser/lifecycle states and Prompt Injection mechanism states on the exact current head. Keep MEDIA_PASS fail-closed for four silent MP4s and missing captions/transcripts/curated chapter maps. Focused only; global catalogue is not recertified by this run.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
