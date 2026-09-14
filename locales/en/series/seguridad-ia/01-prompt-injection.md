@@ -110,7 +110,7 @@ The practical conclusion is that prompt injection will persist while systems mix
 ## 6. References
 
 <details markdown="1">
-<summary><strong>Core sources</strong></summary>
+<summary><strong>Sources and adjacent evidence</strong></summary>
 
 | Key | Source | Short description |
 | --- | --- | --- |
@@ -118,7 +118,7 @@ The practical conclusion is that prompt injection will persist while systems mix
 | R2 | **Chang et al. (2026)** — *Overcoming the Retrieval Barrier: Indirect Prompt Injection in the Wild for LLM Systems* | USENIX work on realistic indirect injection in RAG and agentic systems using *trigger fragments*, near-perfect retrieval and end-to-end attacks. |
 | R3 | **OWASP GenAI LLM Top 10 2026 + Top 10 for Agentic Applications 2026** | Current frameworks for prompt injection and excessive agency and, for agentic systems, goal hijack, tool misuse and identity/privilege abuse. |
 | R4 | **Anthropic (2026)** — *Next-generation Constitutional Classifiers* | Evolution to exchange classification and a cascade/probe architecture that reduces cost while retaining adaptive layered defense. |
-| R5 | **Hubinger et al. (2024)** — *Sleeper Agents* | Shows that malicious behavior activated by triggers can persist after standard safety training. |
+| R5 | **Hubinger et al. (2024)** — *Sleeper Agents* | Adjacent training-time backdoor evidence: shows trigger-conditioned behavior can persist through SFT, RL and adversarial training. It does not study prompt injection, RAG or runtime tool authorization. |
 
 </details>
 
