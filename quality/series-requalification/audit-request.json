@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 32,
+  "diagnostic_revision": 33,
   "diagnostic_scope": "focused_security_00_01",
   "published_content_base": "baf32aefc3c9538bd90a5f28c2be395cb4fac0d5",
-  "requested_head_parent": "246aa5fdfe41aff96003b869c4b3c329e4ae7bd1",
-  "reason": "Run 31 pixel evidence exposed an uncaught WCAG contrast defect in the active Security 00/1.1 visuals: small amber text used #b87400 on near-white/tinted backgrounds (about 3.2–3.8:1), and the RAG USER label used #16877e on white (about 4.37:1). The existing technical browser gates had no contrast assertion, so this could pass despite the reinforced accessibility contract. Verify the scoped ES/EN palette repair (#8f5a00 amber, #0f716a teal) and the new deterministic contrast gate with negative legacy-palette mutation fixtures across presentation/prompt, desktop/mobile and normal/reduced motion. Require all inspected small-text probes >= 4.5:1, no runtime/resource errors, and no regression in the existing interaction/layout/video/touch/focus/provenance checks. Site-facing color bytes changed, so PIXEL_REVIEW/PEDAGOGY_REVIEW must be re-inspected on this exact content revision and cannot be inherited. SOURCE/RENDERED global findings and MEDIA_PASS remain fail-closed; no ARTICLE_GOLDEN.",
+  "requested_head_parent": "e6ef6261b529bab1d15bcd1f6812c6b76fe0cdd7",
+  "reason": "Run 32 exposed two technical QA failures that must not be confused with product defects. The new contrast probe parsed Chromium CSS Color 4 translucent color(srgb ... / alpha) backgrounds as opaque, producing a false ~1.02:1 result for the danger proposal row; the gate is now repaired to composite every translucent ancestor background over the page before WCAG comparison, with a regression fixture, without changing the 4.5:1 threshold or any site-facing byte. Run 32 also timed out the focused browser gate at the existing 10-minute limit even though run 31 completed the same gate in about two minutes; rerun it unchanged rather than weakening/increasing the timeout. Verify ES/EN Security 00/1.1 desktop/mobile normal/reduced contrast >=4.5:1 plus all existing browser/layout/video/touch/focus/provenance checks. SOURCE/RENDERED global findings and MEDIA_PASS remain fail-closed. Site-facing contrast colors changed before run 32, so PIXEL_REVIEW/PEDAGOGY_REVIEW remain pending real inspection and cannot be inferred from this technical run. No ARTICLE_GOLDEN.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
