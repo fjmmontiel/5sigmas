@@ -130,6 +130,11 @@ jobs:
         continue-on-error: true
         run: node scripts/validate_security_requalification_browser.mjs
 
+      - name: Focused Security 00/01 end-to-next lifecycle, keyboard/touch, normal/reduced motion
+        id: security_video_lifecycle
+        continue-on-error: true
+        run: node scripts/validate_security_video_lifecycle.mjs
+
       - name: Focused Prompt Injection visual-state evidence across all teaching mechanisms
         id: security_prompt_states
         continue-on-error: true
@@ -146,6 +151,7 @@ jobs:
           RENDERED_OUTCOME: ${{ steps.rendered.outcome }}
           BROWSER_OUTCOME: ${{ steps.browser.outcome }}
           SECURITY_BROWSER_OUTCOME: ${{ steps.security_browser.outcome }}
+          SECURITY_VIDEO_LIFECYCLE_OUTCOME: ${{ steps.security_video_lifecycle.outcome }}
           SECURITY_PROMPT_STATES_OUTCOME: ${{ steps.security_prompt_states.outcome }}
         run: |
           python - <<'PY'
@@ -176,6 +182,15 @@ jobs:
                   'failure_count': len(data.get('failures', [])),
                   'failures': data.get('failures', []),
               }, ensure_ascii=False))
+          lifecycle_report = Path('artifacts/security-requalification/video-lifecycle/report.json')
+          if lifecycle_report.exists():
+              data = json.loads(lifecycle_report.read_text())
+              print('security-requalification/video-lifecycle/report.json', json.dumps({
+                  'engine': data.get('engine'),
+                  'chrome_launch_error': data.get('chrome_launch_error'),
+                  'failure_count': len(data.get('failures', [])),
+                  'failures': data.get('failures', []),
+              }, ensure_ascii=False))
           prompt_report = Path('artifacts/security-requalification/prompt-states/report.json')
           if prompt_report.exists():
               data = json.loads(prompt_report.read_text())
@@ -193,6 +208,7 @@ jobs:
               'MEDIA_PROBE_OUTCOME',
               'RENDERED_OUTCOME',
               'SECURITY_BROWSER_OUTCOME',
+              'SECURITY_VIDEO_LIFECYCLE_OUTCOME',
               'SECURITY_PROMPT_STATES_OUTCOME',
           ]
           if scope == 'full':
