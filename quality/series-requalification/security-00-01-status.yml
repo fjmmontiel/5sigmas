@@ -1,0 +1,104 @@
+schema_version: 1
+scope:
+  series: seguridad-ia
+  pages:
+    - 00_presentacion_serie
+    - 01-prompt-injection
+  locales: [es, en]
+  status: REQUALIFICATION_QA
+  article_golden: false
+
+media:
+  es:
+    00_presentacion_serie:
+      file: docs/series/seguridad-ia/00_presentacion_serie.mp4
+      codec: h264
+      dimensions: 1920x1080
+      pixel_format: yuv420p
+      duration_seconds: 60.300
+      audio_stream: false
+      narration_status: VOICE_MISSING
+      captions: MISSING
+      transcript: MISSING
+      key_moments: MISSING
+      media_pass: false
+    01-prompt-injection:
+      file: docs/series/seguridad-ia/01-prompt-injection.mp4
+      codec: h264
+      dimensions: 1920x1080
+      pixel_format: yuv420p
+      duration_seconds: 60.333
+      audio_stream: false
+      narration_status: VOICE_MISSING
+      captions: MISSING
+      transcript: MISSING
+      key_moments: MISSING
+      media_pass: false
+  en:
+    00_presentacion_serie:
+      file: locales/en/series/seguridad-ia/00_presentacion_serie.mp4
+      codec: h264
+      dimensions: 1920x1080
+      pixel_format: yuv420p
+      duration_seconds: 47.567
+      audio_stream: false
+      narration_status: VOICE_MISSING
+      captions: MISSING
+      transcript: MISSING
+      key_moments: MISSING
+      media_pass: false
+    01-prompt-injection:
+      file: locales/en/series/seguridad-ia/01-prompt-injection.mp4
+      codec: h264
+      dimensions: 1920x1080
+      pixel_format: yuv420p
+      duration_seconds: 47.567
+      audio_stream: false
+      narration_status: VOICE_MISSING
+      captions: MISSING
+      transcript: MISSING
+      key_moments: MISSING
+      media_pass: false
+
+narration_search:
+  status: NOT_FOUND
+  note: >-
+    No exact authorized audio narration was found in the connected GitHub operational repository
+    or by bounded Google Drive searches for seguridad-ia / Prompt Injection audio assets.
+    Drive contains historical Security/Prompt-Injection editorial and visual bundles, but the searches
+    performed did not return an audio MIME asset for these pages. This is not a claim that no asset can
+    exist outside the connected/searchable surfaces.
+
+visuals:
+  presentation_map:
+    es_source: docs/snippets/seguridad-ia/00-series-mapa.html
+    en_source: locales/en/snippets/seguridad-ia/00-series-mapa.html
+    mobile_overlap_fix: IMPLEMENTED_UNCERTIFIED
+    normal_motion: PENDING_CURRENT_HEAD
+    reduced_motion: PENDING_CURRENT_HEAD
+    desktop_pixel_review: PENDING
+    mobile_pixel_review: PENDING
+    pedagogy_review: PENDING
+  prompt_injection_control_data:
+    es_source: docs/snippets/seguridad-ia/01-control-vs-datos.html
+    en_source: locales/en/snippets/seguridad-ia/01-control-vs-datos.html
+    mobile_overlap_fix: IMPLEMENTED_UNCERTIFIED
+    normal_motion: PENDING_CURRENT_HEAD
+    reduced_motion: PENDING_CURRENT_HEAD
+    desktop_pixel_review: PENDING
+    mobile_pixel_review: PENDING
+    pedagogy_review: PENDING
+
+gates:
+  source_pass: PENDING_CURRENT_HEAD
+  build_pass: PENDING_CURRENT_HEAD
+  browser_pass: PENDING_CURRENT_HEAD
+  media_pass: FAIL
+  pixel_review: PENDING
+  pedagogy_review: PENDING
+
+blockers:
+  - authorized narration missing for silent ES/EN MP4s
+  - captions/transcripts/key moments incomplete
+  - current-head pixel review not yet completed
+  - current-head pedagogy review not yet completed
