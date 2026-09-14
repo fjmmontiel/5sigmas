@@ -58,16 +58,6 @@ TOPICS = {
     "seguridad-ia": ("seguridad", "Seguridad en IA"),
     "articulos-tecnicos": ("ingenieria", "Ingeniería de sistemas"),
 }
-TOPICS_EN = {
-    "fundamentos-ia-iag": ("fundamentos", "Fundamentals"),
-    "from-cave-to-agi": ("historia", "History of AI"),
-    "multimodalidad-iag": ("multimodalidad", "Multimodality"),
-    "modelos-razonadores": ("razonamiento", "Reasoning"),
-    "ia-pib-bienestar-energia": ("impacto", "Economics, energy and wellbeing"),
-    "datacenters-espacio": ("infraestructura", "Infrastructure"),
-    "seguridad-ia": ("seguridad", "AI Security"),
-    "articulos-tecnicos": ("ingenieria", "Systems engineering"),
-}
 NOISY_HEADINGS = {
     "fuentes",
     "referencias",
@@ -83,16 +73,6 @@ NOISY_HEADINGS = {
     "qué aprenderás",
     "que aprenderas",
     "prerrequisitos",
-    "sources",
-    "references",
-    "bibliography",
-    "notes",
-    "conclusions",
-    "summary",
-    "index",
-    "what you will learn",
-    "what you'll learn",
-    "prerequisites",
 }
 
 _video_entries: list[dict[str, Any]] = []
@@ -115,7 +95,6 @@ def on_files(files: Files, config, **kwargs) -> Files:
     _generated_markdown.clear()
 
     site_url = str(config.get("site_url") or DEFAULT_SITE_URL).rstrip("/")
-    locale = _locale_from_site_url(site_url)
     media_origin = os.environ.get("S5_VIDEO_MEDIA_ORIGIN", "").strip().rstrip("/")
 
     for source_file in list(files):
@@ -173,7 +152,7 @@ def on_files(files: Files, config, **kwargs) -> Files:
         reverse=True,
     )
 
-    hub_markdown = _render_hub(_video_entries, locale=locale)
+    hub_markdown = _render_hub(_video_entries)
     _append_generated_file(files, config, HUB_SRC_URI, hub_markdown, "hooks/video_sitemap.py")
     _generated_markdown[HUB_SRC_URI] = hub_markdown
 
@@ -259,94 +238,6 @@ def _split_frontmatter(text: str) -> tuple[dict[str, Any], str]:
     return (meta if isinstance(meta, dict) else {}), text[match.end() :]
 
 
-def _locale_from_site_url(site_url: str) -> str:
-    return "en" if re.search(r"/en/?$", str(site_url).rstrip("/") + "/") else "es"
-
-
-def _ui(locale: str) -> dict[str, str]:
-    if locale == "en":
-        return {
-            "all": "All",
-            "all_videos": "All videos",
-            "brief_video": "Short video",
-            "video_of": "Video explanation of {title}.",
-            "summary_fallback": "Summary",
-            "watch_aria": "Watch {title}",
-            "watch_video": "Watch video",
-            "read_article": "Read article",
-            "seo_suffix": "on video",
-            "captions_lang": "English",
-            "key_moments": "Key moments",
-            "jump_section": "Jump directly to a section",
-            "transcript": "Read reviewed transcript",
-            "unsupported": "Your browser does not support the video element.",
-            "timestamp_help": "Links with <code>?t=</code> open the video at a specific second.",
-            "video_summary": "Video summary",
-            "ideas_retain": "Key ideas to retain",
-            "context_evidence": "Context and evidence",
-            "continue_article": "Continue with the full article",
-            "source_explainer": "The chapter develops the mechanism, primary sources, limitations and connections with the rest of the series.",
-            "read_article_arrow": "Read the article →",
-            "next_step": "Next step",
-            "related_videos": "Related videos",
-            "hub_title": "Artificial intelligence videos",
-            "hub_seo": "Artificial intelligence video library",
-            "hub_description": "Complete library of short 5sigmas videos about artificial intelligence, language models, reasoning, multimodality, energy and infrastructure.",
-            "hub_keywords": "artificial intelligence videos, AI videos, LLM, Transformer, reasoning models, multimodality",
-            "library_eyebrow": "Video library",
-            "library_headline": "One technical idea per video. The full article one click away.",
-            "library_intro": "Explore the {count} explanations published on 5sigmas. Each video page includes a summary, key ideas, the original chapter and the next recommended content.",
-            "open_visuals": "Open the visual experience",
-            "explore_series": "Explore the series",
-            "filter_library": "Filter the video library",
-            "search": "Search",
-            "search_placeholder": "Topic, concept or series",
-            "video_topics": "Video topics",
-            "videos_available": "{count} videos available",
-            "no_results": "No videos match this search.",
-        }
-    return {
-        "all": "Todos",
-        "all_videos": "Todos los vídeos",
-        "brief_video": "Vídeo breve",
-        "video_of": "Explicación en vídeo de {title}.",
-        "summary_fallback": "Resumen",
-        "watch_aria": "Ver {title}",
-        "watch_video": "Ver vídeo",
-        "read_article": "Leer artículo",
-        "seo_suffix": "en vídeo",
-        "captions_lang": "Español",
-        "key_moments": "Momentos clave",
-        "jump_section": "Ve directamente a una sección",
-        "transcript": "Leer transcripción revisada",
-        "unsupported": "Tu navegador no soporta el elemento de vídeo.",
-        "timestamp_help": "Los enlaces con <code>?t=</code> abren el vídeo en un segundo concreto.",
-        "video_summary": "Resumen del vídeo",
-        "ideas_retain": "Las ideas que debes retener",
-        "context_evidence": "Contexto y evidencia",
-        "continue_article": "Continúa con el artículo completo",
-        "source_explainer": "El capítulo desarrolla el mecanismo, las fuentes primarias, los límites y las conexiones con el resto de la serie.",
-        "read_article_arrow": "Leer el artículo →",
-        "next_step": "Siguiente paso",
-        "related_videos": "Vídeos relacionados",
-        "hub_title": "Vídeos de inteligencia artificial",
-        "hub_seo": "Biblioteca de vídeos de inteligencia artificial en español",
-        "hub_description": "Biblioteca completa de vídeos breves de 5sigmas sobre inteligencia artificial, modelos de lenguaje, razonamiento, multimodalidad, energía e infraestructura.",
-        "hub_keywords": "vídeos inteligencia artificial, vídeos IA español, LLM, Transformer, modelos razonadores, multimodalidad",
-        "library_eyebrow": "Biblioteca de vídeo",
-        "library_headline": "Una idea técnica por vídeo. El artículo completo a un clic.",
-        "library_intro": "Explora las {count} explicaciones publicadas en 5sigmas. Cada página de vídeo incluye un resumen, ideas clave, el capítulo original y el siguiente contenido recomendado.",
-        "open_visuals": "Abrir la experiencia visual",
-        "explore_series": "Explorar las series",
-        "filter_library": "Filtrar la biblioteca de vídeos",
-        "search": "Buscar",
-        "search_placeholder": "Tema, concepto o serie",
-        "video_topics": "Temas de vídeo",
-        "videos_available": "{count} vídeos disponibles",
-        "no_results": "No hay vídeos que coincidan con la búsqueda.",
-    }
-
-
 def _build_entry(
     *,
     src_uri: str,
@@ -365,20 +256,18 @@ def _build_entry(
     watch_src_uri = (Path("videos") / source_parent / f"{video_stem}.md").as_posix()
     watch_url = f"{site_url}/{Path(watch_src_uri).with_suffix('').as_posix().strip('/')}/"
     source_url = _public_url(site_url, src_uri)
-    locale = _locale_from_site_url(site_url)
-    ui = _ui(locale)
 
-    topic_key, topic_label = _topic_for(src_uri, locale=locale)
+    topic_key, topic_label = _topic_for(src_uri)
     title = _plain_text(meta.get("video_title") or meta.get("title") or video_stem)
     description = _plain_text(
         meta.get("video_summary")
         or meta.get("description")
-        or ui["video_of"].format(title=title)
+        or f"Explicación en vídeo de {title}."
     )
     publication_date = _normalize_date(meta.get("date"))
     duration_iso = str(meta.get("video_duration") or "").strip()
     duration_seconds = _duration_to_seconds(duration_iso)
-    snippets = _extract_snippets(body, meta, locale=locale)
+    snippets = _extract_snippets(body, meta)
     chapters = _normalize_chapters(meta.get("video_chapters"), duration_seconds)
 
     captions_file = str(meta.get("video_captions") or "").strip()
@@ -396,7 +285,6 @@ def _build_entry(
 
     return {
         "id": re.sub(r"[^a-z0-9]+", "-", watch_src_uri.lower()).strip("-"),
-        "locale": locale,
         "source_src_uri": src_uri,
         "source_markdown": source_text,
         "source_url": source_url,
@@ -413,10 +301,10 @@ def _build_entry(
         "publication_date": publication_date,
         "duration_iso": duration_iso,
         "duration_seconds": duration_seconds,
-        "duration_label": _duration_label(duration_seconds, locale=locale),
+        "duration_label": _duration_label(duration_seconds),
         "topic": topic_key,
         "topic_label": topic_label,
-        "collection": _collection_label(src_uri, locale=locale),
+        "collection": _collection_label(src_uri),
         "snippets": snippets,
         "chapters": chapters,
         "transcript": transcript,
@@ -424,24 +312,21 @@ def _build_entry(
     }
 
 
-def _topic_for(src_uri: str, locale: str = "es") -> tuple[str, str]:
+def _topic_for(src_uri: str) -> tuple[str, str]:
     parts = Path(src_uri).parts
-    topics = TOPICS_EN if locale == "en" else TOPICS
-    fallback = ("otros", "Other topics") if locale == "en" else ("otros", "Otros temas")
     if len(parts) >= 2 and parts[0] == "series":
-        return topics.get(parts[1], fallback)
+        return TOPICS.get(parts[1], ("otros", "Otros temas"))
     if parts:
-        return topics.get(parts[0], fallback)
-    return fallback
+        return TOPICS.get(parts[0], ("otros", "Otros temas"))
+    return "otros", "Otros temas"
 
 
-def _collection_label(src_uri: str, locale: str = "es") -> str:
+def _collection_label(src_uri: str) -> str:
     parts = Path(src_uri).parts
-    topics = TOPICS_EN if locale == "en" else TOPICS
     if len(parts) >= 2 and parts[0] == "series":
-        return topics.get(parts[1], ("", parts[1].replace("-", " ").title()))[1]
+        return TOPICS.get(parts[1], ("", parts[1].replace("-", " ").title()))[1]
     if parts and parts[0] == "articulos-tecnicos":
-        return "Systems engineering" if locale == "en" else "Ingeniería de sistemas"
+        return "Ingeniería de sistemas"
     return "5sigmas"
 
 
@@ -502,7 +387,7 @@ def _keywords(meta: dict[str, Any]) -> list[str]:
     return [_plain_text(item) for item in raw if _plain_text(item)]
 
 
-def _extract_snippets(body: str, meta: dict[str, Any], locale: str = "es") -> list[dict[str, str]]:
+def _extract_snippets(body: str, meta: dict[str, Any]) -> list[dict[str, str]]:
     curated = meta.get("video_takeaways")
     if isinstance(curated, list):
         snippets = [
@@ -556,7 +441,7 @@ def _extract_snippets(body: str, meta: dict[str, Any], locale: str = "es") -> li
         return snippets
 
     description = _plain_text(meta.get("description") or "")
-    return [{"title": _ui(locale)["summary_fallback"], "excerpt": _truncate(description, 190)}]
+    return [{"title": "Resumen", "excerpt": _truncate(description, 190)}]
 
 
 def _truncate(value: str, limit: int) -> str:
@@ -597,8 +482,8 @@ def _clock_label(seconds: int) -> str:
     return f"{minutes}:{remaining:02d}"
 
 
-def _duration_label(seconds: int, locale: str = "es") -> str:
-    return _clock_label(seconds) if seconds else _ui(locale)["brief_video"]
+def _duration_label(seconds: int) -> str:
+    return _clock_label(seconds) if seconds else "Vídeo breve"
 
 
 def _timestamp_to_seconds(value: Any) -> int | None:
@@ -656,9 +541,7 @@ def _yaml_frontmatter(meta: dict[str, Any]) -> str:
     ) + "---\n\n"
 
 
-def _render_hub(entries: list[dict[str, Any]], locale: str = "es") -> str:
-    ui = _ui(locale)
-    prefix = "/en" if locale == "en" else ""
+def _render_hub(entries: list[dict[str, Any]]) -> str:
     counts = Counter(entry["topic"] for entry in entries)
     topic_labels = {
         entry["topic"]: entry["topic_label"]
@@ -667,7 +550,7 @@ def _render_hub(entries: list[dict[str, Any]], locale: str = "es") -> str:
     filters = [
         (
             '<button type="button" data-s5-video-filter="all" aria-pressed="true">'
-            f"{ui['all']} <span>{len(entries)}</span></button>"
+            f"Todos <span>{len(entries)}</span></button>"
         )
     ]
     for topic in sorted(topic_labels, key=lambda key: topic_labels[key]):
@@ -679,48 +562,52 @@ def _render_hub(entries: list[dict[str, Any]], locale: str = "es") -> str:
 
     cards = "\n".join(_render_hub_card(entry) for entry in entries)
     meta = {
-        "title": ui["hub_title"],
-        "seo_title": ui["hub_seo"],
-        "description": ui["hub_description"],
-        "keywords": ui["hub_keywords"],
+        "title": "Vídeos de inteligencia artificial",
+        "seo_title": "Biblioteca de vídeos de inteligencia artificial en español",
+        "description": (
+            "Biblioteca completa de vídeos breves de 5sigmas sobre inteligencia artificial, "
+            "modelos de lenguaje, razonamiento, multimodalidad, energía e infraestructura."
+        ),
+        "keywords": (
+            "vídeos inteligencia artificial, vídeos IA español, LLM, Transformer, "
+            "modelos razonadores, multimodalidad"
+        ),
         "hide": ["toc"],
     }
 
     return _yaml_frontmatter(meta) + f"""
 <div class="s5-video-library" data-s5-video-library>
   <section class="s5-video-library__intro">
-    <div class="s5-eyebrow">{ui['library_eyebrow']}</div>
-    <h1>{ui['library_headline']}</h1>
-    <p>{ui['library_intro'].format(count=len(entries))}</p>
+    <div class="s5-eyebrow">Biblioteca de vídeo</div>
+    <h1>Una idea técnica por vídeo. El artículo completo a un clic.</h1>
+    <p>Explora las {len(entries)} explicaciones publicadas en 5sigmas. Cada página de vídeo incluye un resumen, ideas clave, el capítulo original y el siguiente contenido recomendado.</p>
     <div class="s5-video-library__actions">
-      <a class="s5-video-library__primary" href="{prefix}/visuales/">{ui['open_visuals']}</a>
-      <a href="{prefix}/series/">{ui['explore_series']}</a>
+      <a class="s5-video-library__primary" href="/visuales/">Abrir la experiencia visual</a>
+      <a href="/series/">Explorar las series</a>
     </div>
   </section>
 
-  <section class="s5-video-library__controls" aria-label="{ui['filter_library']}">
+  <section class="s5-video-library__controls" aria-label="Filtrar la biblioteca de vídeos">
     <label>
-      <span>{ui['search']}</span>
-      <input type="search" data-s5-video-search placeholder="{ui['search_placeholder']}" autocomplete="off">
+      <span>Buscar</span>
+      <input type="search" data-s5-video-search placeholder="Tema, concepto o serie" autocomplete="off">
     </label>
-    <div class="s5-video-library__filters" role="toolbar" aria-label="{ui['video_topics']}">
+    <div class="s5-video-library__filters" role="toolbar" aria-label="Temas de vídeo">
       {''.join(filters)}
     </div>
-    <p data-s5-video-status aria-live="polite">{ui['videos_available'].format(count=len(entries))}</p>
+    <p data-s5-video-status aria-live="polite">{len(entries)} vídeos disponibles</p>
   </section>
 
   <section class="s5-video-library__grid" data-s5-video-grid>
     {cards}
   </section>
 
-  <p class="s5-video-library__empty" data-s5-video-empty hidden>{ui['no_results']}</p>
+  <p class="s5-video-library__empty" data-s5-video-empty hidden>No hay vídeos que coincidan con la búsqueda.</p>
 </div>
 """
 
 
 def _render_hub_card(entry: dict[str, Any]) -> str:
-    locale = str(entry.get("locale") or "es")
-    ui = _ui(locale)
     search = " ".join(
         [
             entry["title"],
@@ -736,7 +623,7 @@ def _render_hub_card(entry: dict[str, Any]) -> str:
 <article class="s5-video-card" data-s5-video-card
   data-topic="{html_escape(entry['topic'], quote=True)}"
   data-search="{html_escape(search, quote=True)}">
-  <a class="s5-video-card__poster" href="{entry['watch_url']}" aria-label="{html_escape(ui['watch_aria'].format(title=entry['title']), quote=True)}">
+  <a class="s5-video-card__poster" href="{entry['watch_url']}" aria-label="Ver {html_escape(entry['title'], quote=True)}">
     <img src="{entry['thumb_url']}" alt="" loading="lazy" width="1280" height="720">
     <span>{html_escape(entry['duration_label'])}</span>
   </a>
@@ -746,8 +633,8 @@ def _render_hub_card(entry: dict[str, Any]) -> str:
     <p>{html_escape(entry['description'])}</p>
     <small>{html_escape(snippets)}</small>
     <div class="s5-video-card__links">
-      <a href="{entry['watch_url']}">{ui['watch_video']}</a>
-      <a href="{entry['source_url']}">{ui['read_article']}</a>
+      <a href="{entry['watch_url']}">Ver vídeo</a>
+      <a href="{entry['source_url']}">Leer artículo</a>
     </div>
   </div>
 </article>
@@ -758,12 +645,9 @@ def _render_watch_page(
     entry: dict[str, Any],
     related: list[dict[str, Any]],
 ) -> str:
-    locale = str(entry.get("locale") or _locale_from_site_url(entry.get("source_url", "")))
-    ui = _ui(locale)
-    prefix = "/en" if locale == "en" else ""
     meta = {
         "title": entry["title"],
-        "seo_title": f"{entry['title']} {ui['seo_suffix']}",
+        "seo_title": f"{entry['title']} en vídeo",
         "description": entry["description"],
         "keywords": ", ".join(entry["keywords"]) if entry["keywords"] else entry["topic_label"],
         "date": entry["publication_date"],
@@ -775,7 +659,7 @@ def _render_watch_page(
     if entry["captions_playback_url"]:
         track = (
             f'<track kind="captions" src="{entry["captions_playback_url"]}" '
-            f'srclang="{locale}" label="{ui["captions_lang"]}" default>'
+            'srclang="es" label="Español" default>'
         )
 
     snippet_cards = "\n".join(
@@ -800,8 +684,8 @@ def _render_watch_page(
         chapters = f"""
   <section class="s5-video-watch__chapters" aria-labelledby="video-chapters-title">
     <div>
-      <span class="s5-eyebrow">{ui['key_moments']}</span>
-      <h2 id="video-chapters-title">{ui['jump_section']}</h2>
+      <span class="s5-eyebrow">Momentos clave</span>
+      <h2 id="video-chapters-title">Ve directamente a una sección</h2>
     </div>
     <ol>{chapter_links}</ol>
   </section>
@@ -811,7 +695,7 @@ def _render_watch_page(
     if entry["transcript"]:
         transcript = f"""
   <details class="s5-video-watch__transcript">
-    <summary>{ui['transcript']}</summary>
+    <summary>Leer transcripción revisada</summary>
 
 {entry['transcript']}
 
@@ -824,7 +708,7 @@ def _render_watch_page(
 <div class="s5-video-watch" data-s5-video-watch data-video-id="{html_escape(entry['id'], quote=True)}">
   <header class="s5-video-watch__header">
     <div class="s5-video-watch__crumbs">
-      <a href="{prefix}/videos/">{ui['all_videos']}</a>
+      <a href="/videos/">Todos los vídeos</a>
       <span>{html_escape(entry['topic_label'])}</span>
       <span>{html_escape(entry['duration_label'])}</span>
     </div>
@@ -836,15 +720,15 @@ def _render_watch_page(
     <video controls crossorigin="anonymous" preload="metadata" poster="{entry['thumb_playback_url']}" playsinline data-s5-watch-player>
       <source src="{entry['video_playback_url']}" type="video/mp4">
       {track}
-      {ui['unsupported']}
+      Tu navegador no soporta el elemento de vídeo.
     </video>
-    <p>{ui['timestamp_help']}</p>
+    <p>Los enlaces con <code>?t=</code> abren el vídeo en un segundo concreto.</p>
   </div>
 
   <section class="s5-video-watch__summary" aria-labelledby="video-summary-title">
     <div class="s5-video-watch__section-head">
-      <span class="s5-eyebrow">{ui['video_summary']}</span>
-      <h2 id="video-summary-title">{ui['ideas_retain']}</h2>
+      <span class="s5-eyebrow">Resumen del vídeo</span>
+      <h2 id="video-summary-title">Las ideas que debes retener</h2>
     </div>
     <div class="s5-video-watch__snippet-grid">
       {snippet_cards}
@@ -856,17 +740,17 @@ def _render_watch_page(
 
   <aside class="s5-video-watch__source">
     <div>
-      <span class="s5-eyebrow">{ui['context_evidence']}</span>
-      <h2>{ui['continue_article']}</h2>
-      <p>{ui['source_explainer']}</p>
+      <span class="s5-eyebrow">Contexto y evidencia</span>
+      <h2>Continúa con el artículo completo</h2>
+      <p>El capítulo desarrolla el mecanismo, las fuentes primarias, los límites y las conexiones con el resto de la serie.</p>
     </div>
-    <a class="s5-video-watch__source-link" href="{entry['source_url']}">{ui['read_article_arrow']}</a>
+    <a class="s5-video-watch__source-link" href="{entry['source_url']}">Leer el artículo →</a>
   </aside>
 
   <section class="s5-video-watch__related" aria-labelledby="related-videos-title">
     <div class="s5-video-watch__section-head">
-      <span class="s5-eyebrow">{ui['next_step']}</span>
-      <h2 id="related-videos-title">{ui['related_videos']}</h2>
+      <span class="s5-eyebrow">Siguiente paso</span>
+      <h2 id="related-videos-title">Vídeos relacionados</h2>
     </div>
     <div class="s5-video-watch__related-grid">
       {related_cards}
@@ -913,17 +797,18 @@ def _inject_jsonld(output: str, schema: dict[str, Any]) -> str:
 
 
 def _hub_schema(entries: list[dict[str, Any]], site_url: str) -> dict[str, Any]:
-    locale = _locale_from_site_url(site_url)
-    ui = _ui(locale)
     hub_url = f"{site_url}/videos/"
     return {
         "@context": "https://schema.org",
         "@type": "CollectionPage",
         "@id": f"{hub_url}#collection",
-        "name": ui["hub_title"],
-        "description": ui["hub_description"],
+        "name": "Vídeos de inteligencia artificial",
+        "description": (
+            "Biblioteca completa de explicaciones en vídeo de 5sigmas sobre "
+            "inteligencia artificial."
+        ),
         "url": hub_url,
-        "inLanguage": locale,
+        "inLanguage": "es",
         "isPartOf": {"@id": f"{site_url}/#website"},
         "mainEntity": {
             "@type": "ItemList",
@@ -942,7 +827,6 @@ def _hub_schema(entries: list[dict[str, Any]], site_url: str) -> dict[str, Any]:
 
 
 def _video_schema(entry: dict[str, Any], site_url: str) -> dict[str, Any]:
-    locale = str(entry.get("locale") or _locale_from_site_url(site_url))
     schema: dict[str, Any] = {
         "@context": "https://schema.org",
         "@type": "VideoObject",
@@ -952,7 +836,7 @@ def _video_schema(entry: dict[str, Any], site_url: str) -> dict[str, Any]:
         "thumbnailUrl": [entry["thumb_url"]],
         "contentUrl": entry["video_url"],
         "uploadDate": entry["publication_date"],
-        "inLanguage": locale,
+        "inLanguage": "es",
         "mainEntityOfPage": {"@id": entry["watch_url"]},
         "isBasedOn": {"@type": "CreativeWork", "@id": entry["source_url"]},
         "isPartOf": {"@id": f"{site_url}/#website"},
