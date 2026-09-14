@@ -8,6 +8,25 @@ scope:
   status: REQUALIFICATION_QA
   article_golden: false
 
+source_metadata_completion:
+  revision: c520d338531eb13532c2448bb628e342f44d727b
+  es:
+    00_presentacion_serie: STATIC_VIDEO_METADATA_COMPLETE
+    01-prompt-injection: STATIC_VIDEO_METADATA_COMPLETE
+  en:
+    00_presentacion_serie: STATIC_VIDEO_METADATA_COMPLETE
+    01-prompt-injection: STATIC_VIDEO_METADATA_COMPLETE
+  complete_fields: [video, video_poster, video_title, video_summary, video_duration]
+  watch_linkage:
+    status: GENERATED_BY_CANONICAL_VIDEO_HOOK
+    hook: hooks/video_embed.py
+    rule: site_url/videos/<article-directory>/<video-stem>/
+  still_fail_closed: [video_captions, video_transcript, video_chapters, audio_stream]
+  note: >-
+    Poster/title/summary metadata was completed only from the current bilingual article text and
+    already-existing native binaries. No captions, transcript, chapter timing or narration was
+    inferred or fabricated.
+
 media:
   es:
     00_presentacion_serie:
@@ -106,13 +125,21 @@ media_gate:
   script: scripts/validate_security_video_media.py
   integrated_workflow: .github/workflows/series-experience-diagnostic.yml
   policy:
-    - exactly one H.264 1920x1080 yuv420p video stream for the current Security 00/01 canon
+    - explicit video, poster, title, summary and ISO duration are mandatory
+    - captions must be declared as a non-empty local VTT
+    - transcript must be declared as a non-empty local Markdown or text file
+    - curated video_chapters must be named, ordered, non-overlapping, begin near zero and cover the declared duration
+    - exactly one H.264 1920x1080 yuv420p video stream is required for the current Security 00/01 canon
     - at least one audio stream is mandatory
     - declared ISO duration must be valid and within 1 second of ffprobe duration
     - gate never generates, clones, or substitutes Francisco's voice
   negative_fixtures:
     silent_video: MUST_FAIL_VIDEO_AUDIO_STREAM_MISSING
     duration_drift: MUST_FAIL_VIDEO_DURATION_METADATA_DRIFT
+    missing_captions: MUST_FAIL_VIDEO_CAPTIONS_MISSING
+    missing_transcript: MUST_FAIL_VIDEO_TRANSCRIPT_MISSING
+    missing_key_moments: MUST_FAIL_VIDEO_CHAPTERS_MISSING
+    invalid_chapter_ranges: MUST_FAIL_CHAPTER_CONTRACT
   local_assistant_validation:
     python_compile: PASS
     synthetic_self_test: PASS
@@ -131,6 +158,15 @@ media_gate:
       - locales/en/series/seguridad-ia/00_presentacion_serie.mp4
       - docs/series/seguridad-ia/01-prompt-injection.mp4
       - locales/en/series/seguridad-ia/01-prompt-injection.mp4
+  current_source_metadata:
+    revision: c520d338531eb13532c2448bb628e342f44d727b
+    static_metadata_missing: 0
+    captions_missing: 4
+    transcripts_missing: 4
+    chapter_maps_missing: 4
+    audio_streams_missing: 4
+    media_pass: false
+    diagnostic_pending: true
   previous_probe_semantics: >-
     Superseded. The earlier workflow merely printed ffprobe JSON, so its step could report
     success for a silent MP4. Run 34802165060 proves the replacement gate fails closed on
