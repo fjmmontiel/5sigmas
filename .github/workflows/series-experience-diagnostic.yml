@@ -164,7 +164,10 @@ jobs:
         id: security_article_watch_touch
         continue-on-error: true
         timeout-minutes: 5
-        run: node scripts/validate_security_article_watch_touch.mjs
+        run: |
+          node scripts/validate_security_article_watch_touch.mjs
+          test -s artifacts/security-requalification/article-watch-touch/report.json
+          test -s artifacts/security-requalification/article-watch-touch-report.json
 
       - name: Focused Prompt Injection visual-state evidence across all teaching mechanisms
         id: security_prompt_states
