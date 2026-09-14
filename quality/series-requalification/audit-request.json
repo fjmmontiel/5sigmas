@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 29,
+  "diagnostic_revision": 30,
   "diagnostic_scope": "focused_security_00_01",
   "published_content_base": "baf32aefc3c9538bd90a5f28c2be395cb4fac0d5",
-  "requested_head_parent": "74ad83260820c59ec3c28c5be6f2bad5f7f964c3",
-  "reason": "Diagnostic revision 28 retained the touch report and exposed 24 deterministic harness failures across the 8 ES/EN × Security 00/1.1 × normal/reduced mobile contexts: the test began on localhost while article/watch links are absolute canonical https://5sigmas.com URLs, so preview-origin semantics could classify an internal production link as external and the tap never completed in the same page. Verify the minimal harness-only correction: open the initial article at the canonical origin while fulfilling canonical requests from exact local preview bytes; require canonical article/watch origins throughout; require the watch route to be proxied at least once and the article route at least twice (initial load plus real touch return), so the initial load cannot mask a broken return. Preserve runtime/proxy error capture and both retained touch reports. Run one focused integration only. Do not change site-facing content, media, thresholds or GOLDEN conditions. SOURCE/RENDERED global findings and MEDIA_PASS must remain fail-closed; PIXEL_REVIEW/PEDAGOGY_REVIEW remain manual and cannot be inferred from this technical run.",
+  "requested_head_parent": "b499859be2ab6634fbbfcdbef27d8e4217ddedb6",
+  "reason": "Diagnostic revision 29 remained stuck in the focused Security browser diagnostic long enough to starve the later independent lifecycle, real-touch, visual-state and keyboard/focus gates. Verify the QA-only orchestration hardening that bounds that browser step to 10 minutes while preserving continue-on-error plus final outcome-based fail-closed enforcement. Re-run the corrected canonical-origin exact-preview article↔watch touch contract in the same focused integration and retain both touch reports. A browser timeout must count as SECURITY_BROWSER_OUTCOME=failure but must not prevent the independent later gates from producing evidence. Do not change site-facing content, media, thresholds or GOLDEN conditions. SOURCE/RENDERED global findings and MEDIA_PASS remain fail-closed; PIXEL_REVIEW/PEDAGOGY_REVIEW remain manual and cannot be inferred from this technical run.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
