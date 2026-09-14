@@ -153,6 +153,7 @@ jobs:
       - name: Focused Security 00/01 interaction, layout and codec-aware playback diagnostic
         id: security_browser
         continue-on-error: true
+        timeout-minutes: 10
         run: node scripts/validate_security_requalification_browser.mjs
 
       - name: Focused Security 00/01 end-to-next lifecycle, keyboard/touch, normal/reduced motion
