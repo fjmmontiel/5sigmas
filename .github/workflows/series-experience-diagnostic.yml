@@ -165,6 +165,11 @@ jobs:
         continue-on-error: true
         run: node scripts/validate_security_prompt_visual_states.mjs
 
+      - name: Focused Security 00/01 real keyboard traversal and visible focus
+        id: security_keyboard_focus
+        continue-on-error: true
+        run: node scripts/validate_security_keyboard_focus.mjs
+
       - name: Enforce technical failures; never certify pixel or pedagogical quality
         if: always()
         env:
@@ -180,6 +185,7 @@ jobs:
           SECURITY_BROWSER_OUTCOME: ${{ steps.security_browser.outcome }}
           SECURITY_VIDEO_LIFECYCLE_OUTCOME: ${{ steps.security_video_lifecycle.outcome }}
           SECURITY_PROMPT_STATES_OUTCOME: ${{ steps.security_prompt_states.outcome }}
+          SECURITY_KEYBOARD_FOCUS_OUTCOME: ${{ steps.security_keyboard_focus.outcome }}
         run: |
           python - <<'PY'
           import json, os
@@ -227,6 +233,15 @@ jobs:
                   'failure_count': len(data.get('failures', [])),
                   'failures': data.get('failures', []),
               }, ensure_ascii=False))
+          focus_report = Path('artifacts/security-requalification/keyboard-focus/report.json')
+          if focus_report.exists():
+              data = json.loads(focus_report.read_text())
+              print('security-requalification/keyboard-focus/report.json', json.dumps({
+                  'engine': data.get('engine'),
+                  'chrome_launch_error': data.get('chrome_launch_error'),
+                  'failure_count': len(data.get('failures', [])),
+                  'failures': data.get('failures', []),
+              }, ensure_ascii=False))
 
           names = [
               'PUBLICATION_DISCOVERY_OUTCOME',
@@ -239,6 +254,7 @@ jobs:
               'SECURITY_BROWSER_OUTCOME',
               'SECURITY_VIDEO_LIFECYCLE_OUTCOME',
               'SECURITY_PROMPT_STATES_OUTCOME',
+              'SECURITY_KEYBOARD_FOCUS_OUTCOME',
           ]
           if scope == 'full':
               names.append('BROWSER_OUTCOME')
