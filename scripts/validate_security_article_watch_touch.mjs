@@ -13,7 +13,8 @@ import path from 'node:path';
 import { chromium } from 'playwright';
 
 const base = process.env.S5_PREVIEW_BASE || 'http://127.0.0.1:8000';
-const out = path.resolve('artifacts/security-requalification/article-watch-touch');
+const evidenceRoot = path.resolve('artifacts/security-requalification');
+const out = path.join(evidenceRoot, 'article-watch-touch');
 await fs.mkdir(out, { recursive: true });
 
 const routes = [
@@ -193,10 +194,18 @@ try {
   await browser.close();
 }
 
-await fs.writeFile(
-  path.join(out, 'report.json'),
-  JSON.stringify({ engine: launched.engine, chrome_launch_error: launched.chromeError || null, failures, evidence }, null, 2),
-);
+const report = JSON.stringify({
+  engine: launched.engine,
+  chrome_launch_error: launched.chromeError || null,
+  failures,
+  evidence,
+}, null, 2);
+await fs.writeFile(path.join(out, 'report.json'), report);
+// Keep a second flat copy in the retained evidence root. The first exact-head
+// run proved the step but the nested report did not survive into the uploaded
+// diagnostic artifact; duplicating the small JSON summary makes evidence loss
+// deterministic to detect without moving or duplicating screenshots/media.
+await fs.writeFile(path.join(evidenceRoot, 'article-watch-touch-report.json'), report);
 
 if (failures.length) {
   console.error(`Security article↔watch touch gate FAILED (${failures.length}) using ${launched.engine}`);
