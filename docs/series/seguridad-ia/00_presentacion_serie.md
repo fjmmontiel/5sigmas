@@ -10,6 +10,8 @@ tags:
 video: "00_presentacion_serie.mp4"
 video_poster: "00_presentacion_serie.jpg"
 video_title: "Seguridad en IA"
+video_duration: "PT1M0S"
+video_summary: "Cómo una entrada no confiable puede influir en un sistema con IA y qué fronteras de autorización limitan que esa influencia se convierta en una acción."
 hide:
   - toc
 ---
