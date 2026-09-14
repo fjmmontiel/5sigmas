@@ -156,6 +156,14 @@ jobs:
         timeout-minutes: 10
         run: node scripts/validate_security_requalification_browser.mjs
 
+      - name: Focused Security 00/01 WCAG contrast with legacy-palette mutation fixtures
+        id: security_contrast
+        continue-on-error: true
+        timeout-minutes: 5
+        run: |
+          node scripts/validate_security_contrast.mjs --self-test
+          node scripts/validate_security_contrast.mjs
+
       - name: Focused Security 00/01 end-to-next lifecycle, keyboard/touch, normal/reduced motion
         id: security_video_lifecycle
         continue-on-error: true
@@ -195,6 +203,7 @@ jobs:
           RENDERED_OUTCOME: ${{ steps.rendered.outcome }}
           BROWSER_OUTCOME: ${{ steps.browser.outcome }}
           SECURITY_BROWSER_OUTCOME: ${{ steps.security_browser.outcome }}
+          SECURITY_CONTRAST_OUTCOME: ${{ steps.security_contrast.outcome }}
           SECURITY_VIDEO_LIFECYCLE_OUTCOME: ${{ steps.security_video_lifecycle.outcome }}
           SECURITY_ARTICLE_WATCH_TOUCH_OUTCOME: ${{ steps.security_article_watch_touch.outcome }}
           SECURITY_PROMPT_STATES_OUTCOME: ${{ steps.security_prompt_states.outcome }}
@@ -225,6 +234,15 @@ jobs:
               print('security-requalification/report.json', json.dumps({
                   'engine': data.get('engine'),
                   'chrome_launch_error': data.get('chrome_launch_error'),
+                  'failure_count': len(data.get('failures', [])),
+                  'failures': data.get('failures', []),
+              }, ensure_ascii=False))
+          contrast_report = Path('artifacts/security-requalification/contrast/report.json')
+          if contrast_report.exists():
+              data = json.loads(contrast_report.read_text())
+              print('security-requalification/contrast/report.json', json.dumps({
+                  'engine': data.get('engine'),
+                  'threshold': data.get('threshold'),
                   'failure_count': len(data.get('failures', [])),
                   'failures': data.get('failures', []),
               }, ensure_ascii=False))
@@ -274,6 +292,7 @@ jobs:
               'SECURITY_ARTICLE_WATCH_OUTCOME',
               'RENDERED_OUTCOME',
               'SECURITY_BROWSER_OUTCOME',
+              'SECURITY_CONTRAST_OUTCOME',
               'SECURITY_VIDEO_LIFECYCLE_OUTCOME',
               'SECURITY_ARTICLE_WATCH_TOUCH_OUTCOME',
               'SECURITY_PROMPT_STATES_OUTCOME',
