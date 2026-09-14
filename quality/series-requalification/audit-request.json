@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 25,
+  "diagnostic_revision": 26,
   "diagnostic_scope": "focused_security_00_01",
   "published_content_base": "baf32aefc3c9538bd90a5f28c2be395cb4fac0d5",
-  "requested_head_parent": "41a03e702afad1a71f958212c261791a893b44f6",
-  "reason": "The current Security 00/1.1 evidence proves desktop keyboard access to the article-to-watch link and real mobile touch for teaching controls, video start, and reader-next navigation, but it did not prove the article-to-watch link itself or the watch-to-article return path with a real touch gesture. Add a focused actual-built-page mobile round-trip gate for ES/EN under normal/reduced motion: article link visible and viewport-bounded, real tap to the locale-correct watch URL, prominent watch player present, watch source link visible and viewport-bounded, real tap back to the exact article, persistent runtime/resource listeners throughout, and no post-round-trip horizontal overflow. Do not change content/media thresholds. Preserve SOURCE/RENDERED global failures and MEDIA_PASS fail-closed for four silent MP4s plus missing captions/transcripts/curated chapter maps. PIXEL_REVIEW and PEDAGOGY_REVIEW remain manual and must not be inferred from this technical gate.",
+  "requested_head_parent": "f99e4b7956bcfbd129785c3fe4f90caed50ebe0d",
+  "reason": "Verify the previously unexercised evidence-retention hardening for the real mobile article-to-watch-to-article touch gate on the current Security 00/1.1 branch. The prior exact technical step passed, but its nested report did not survive the retained artifact; the follow-up gate now writes a flat artifacts/security-requalification/article-watch-touch-report.json sentinel. Run one focused integration to prove that sentinel is emitted and retained while rechecking strict ES/EN, source/render diagnostics, reciprocal article-watch, focused browser/lifecycle, real touch, prompt-state and real keyboard/focus gates. Do not change site-facing content, media, thresholds or GOLDEN conditions. Preserve SOURCE/RENDERED global failures and MEDIA_PASS fail-closed for four silent MP4s plus missing captions/transcripts/curated chapter maps. PIXEL_REVIEW and PEDAGOGY_REVIEW remain manual and must not be inferred from this technical integration.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
