@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 31,
+  "diagnostic_revision": 32,
   "diagnostic_scope": "focused_security_00_01",
   "published_content_base": "baf32aefc3c9538bd90a5f28c2be395cb4fac0d5",
-  "requested_head_parent": "5327138ad866482196d821e7d22687c554bb4826",
-  "reason": "Run 30 retained a contradictory touch artifact: top-level failures was empty, but two Prompt Injection mobile contexts accumulated canonical-proxy/runtime errors after the verdict checks while context teardown was still mutating the same arrays. Verify the fail-closed harness repair that waits for returned-article resource quiescence and re-checks/snapshots runtime and proxy errors after context close, so retained evidence can never contain hidden errors behind a PASS. Re-run the exact-preview ES/EN Security 00/1.1 real-touch round trip and require zero top-level failures, zero retained runtime/proxy errors, canonical browser origin, watch_proxy_count >= 1 and article_proxy_count >= 2 in every normal/reduced context. Do not change site-facing content, media, thresholds or GOLDEN conditions. SOURCE/RENDERED global findings and MEDIA_PASS remain fail-closed; PIXEL_REVIEW/PEDAGOGY_REVIEW remain manual and cannot be inferred from this technical run.",
+  "requested_head_parent": "246aa5fdfe41aff96003b869c4b3c329e4ae7bd1",
+  "reason": "Run 31 pixel evidence exposed an uncaught WCAG contrast defect in the active Security 00/1.1 visuals: small amber text used #b87400 on near-white/tinted backgrounds (about 3.2–3.8:1), and the RAG USER label used #16877e on white (about 4.37:1). The existing technical browser gates had no contrast assertion, so this could pass despite the reinforced accessibility contract. Verify the scoped ES/EN palette repair (#8f5a00 amber, #0f716a teal) and the new deterministic contrast gate with negative legacy-palette mutation fixtures across presentation/prompt, desktop/mobile and normal/reduced motion. Require all inspected small-text probes >= 4.5:1, no runtime/resource errors, and no regression in the existing interaction/layout/video/touch/focus/provenance checks. Site-facing color bytes changed, so PIXEL_REVIEW/PEDAGOGY_REVIEW must be re-inspected on this exact content revision and cannot be inherited. SOURCE/RENDERED global findings and MEDIA_PASS remain fail-closed; no ARTICLE_GOLDEN.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
