@@ -94,7 +94,7 @@ La tercera es estructurar los límites entre pasos. El output de retrieval, OCR,
 
 La cuarta es observabilidad. Los guardrails son útiles sobre todo cuando dejan rastro: qué aprobaron, qué bloquearon, qué tool call abortaron, cómo cambió la tasa de alertas y en qué ruta del pipeline ocurrió el desvío. Sin esa telemetría, el sistema no aprende nada de sus intentos fallidos y el bypass siguiente vuelve a parecer una sorpresa.
 
-Aquí entran también los clasificadores especializados. El trabajo de Anthropic sobre Constitutional Classifiers es relevante porque muestra una dirección pragmática: monitores de entrada y salida capaces de operar en *streaming*, con un coste adicional medible, y combinados como una capa más dentro de un modelo de defensa en profundidad. Su aportación tiene sentido dentro de un sistema más ancho, no como promesa de que el problema ya está resuelto.
+También entran aquí los clasificadores especializados, pero la referencia útil ya no es sólo el diseño de 2025. Anthropic publicó en enero de 2026 una segunda generación después de comprobar que los clasificadores separados de entrada y salida seguían expuestos a ataques de reconstrucción y ofuscación de salida. El sistema evolucionó hacia un clasificador de intercambio que evalúa la salida junto con su entrada y, después, hacia una arquitectura en cascada que combina un *probe* ligero con clasificadores más costosos sólo para los casos escalados. Anthropic reporta para su configuración final de producción un overhead aproximado del 1% si se aplica a tráfico de Claude Opus 4.0, tras más de 1.700 horas acumuladas de red teaming sobre 198.000 intentos. Es una capa de defensa en profundidad, no una prueba de que el prompt injection esté resuelto.
 
 ---
 
@@ -122,7 +122,7 @@ La consecuencia práctica es una corrección de encuadre. El prompt injection se
 | R1 | **OWASP** — *LLM Prompt Injection Prevention Cheat Sheet* | Explica por qué el problema nace de mezclar instrucciones y datos, y resume defensas de arquitectura, validación y mínimo privilegio. |
 | R2 | **Chang et al. (2026)** — *Overcoming the Retrieval Barrier: Indirect Prompt Injection in the Wild for LLM Systems* | Trabajo de USENIX sobre inyección indirecta realista en RAG y sistemas agénticos con *trigger fragments*, recuperación casi perfecta y ataques end-to-end. |
 | R3 | **OWASP GenAI LLM Top 10 2026 + Top 10 for Agentic Applications 2026** | Marcos vigentes para prompt injection y excessive agency y, en sistemas agénticos, goal hijack, tool misuse e identity/privilege abuse. |
-| R4 | **Anthropic (2025)** — *Constitutional Classifiers* | Defensa con clasificadores de entrada y salida, predicción en streaming y miles de horas de red teaming. |
+| R4 | **Anthropic (2026)** — *Next-generation Constitutional Classifiers* | Evolución hacia clasificación de intercambios y una arquitectura en cascada/probe que reduce el coste manteniendo defensa adaptativa por capas. |
 | R5 | **Hubinger et al. (2024)** — *Sleeper Agents* | Muestra que un comportamiento malicioso activado por disparadores puede persistir tras entrenamiento de seguridad estándar. |
 
 </details>
