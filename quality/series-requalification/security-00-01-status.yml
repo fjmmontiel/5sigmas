@@ -10,18 +10,20 @@ scope:
 
 head_state:
   current_content_head: 056f62f96595f9a3fa553024cd337059c47c5953
-  exact_qa_integration_head: dfab09ad051fcf8dfd1b2d4096d6ef8f0cb6b84b
-  last_exact_head_integration: dfab09ad051fcf8dfd1b2d4096d6ef8f0cb6b84b
-  last_exact_head_integration_run: 34874667427
+  exact_qa_integration_head: 014b743691c2fec20320f992b9ec50567437980b
+  last_exact_head_integration: 014b743691c2fec20320f992b9ec50567437980b
+  last_exact_head_integration_run: 34894292840
   last_exact_head_pixel_review: dfab09ad051fcf8dfd1b2d4096d6ef8f0cb6b84b
   last_exact_head_pedagogy_review: dfab09ad051fcf8dfd1b2d4096d6ef8f0cb6b84b
   current_content_vs_exact_qa_integration:
-    qa_commits_after_content: 4
+    qa_commits_after_content: 22
     site_facing_files_changed_after_content: 0
     classification: CURRENT_CONTENT_EXERCISED_WITH_QA_ONLY_INTEGRATION_HEAD
     qa_changed_files:
+      - .github/workflows/series-experience-diagnostic.yml
       - quality/series-requalification/security-00-01-status.yml
       - quality/series-requalification/audit-request.json
+      - scripts/validate_security_article_watch_touch.mjs
       - scripts/validate_security_requalification_browser.mjs
     visible_copy_changed: false
     teaching_visuals_changed: false
@@ -30,10 +32,12 @@ head_state:
     exact_content_render_reviewed: true
     note: >-
       The site-facing Security 00/1.1 content remains exactly the provenance-link revision 056f62f9.
-      The later integration commits only reconcile durable evidence, request exact-head diagnostics and
-      strengthen the browser gate so the collapsed provenance details are exercised. Run 34874667427
-      rendered the unchanged current content on the exact integration head and the resulting desktop/mobile,
-      normal/reduced evidence was manually inspected in this same-agent review.
+      Later commits only reconcile durable evidence and strengthen bounded QA. Run 34894292840 exercised
+      that unchanged content on exact integration head 014b7436 and closed the retained touch-evidence
+      race: all eight ES/EN × presentation/prompt × normal/reduced mobile contexts now retain zero
+      runtime/proxy errors after teardown while preserving canonical-origin round trips. Pixel/pedagogy
+      review is not re-issued by this technical run; the latest manual same-agent visual review remains
+      the unchanged-content review from run 34874667427.
   current_content_pixel_review: PASS_ACTIVE_SET_SAME_AGENT
   current_content_pedagogy_review: PASS_ACTIVE_SET_SAME_AGENT
   article_golden: false
@@ -199,15 +203,15 @@ media_gate:
     diagnostic_pending: false
     note: >-
       The provenance-link content revision does not alter video declarations or native media bytes.
-      Run 34874667427 reconfirmed the same fail-closed media state on the exact QA integration head.
+      Run 34894292840 reconfirmed the same fail-closed media state on the exact QA integration head.
   current_integration_checkpoint:
-    diagnostic_head: dfab09ad051fcf8dfd1b2d4096d6ef8f0cb6b84b
+    diagnostic_head: 014b743691c2fec20320f992b9ec50567437980b
     content_head_rendered: 056f62f96595f9a3fa553024cd337059c47c5953
-    diagnostic_run: 34874667427
+    diagnostic_run: 34894292840
     diagnostic_scope: focused_security_00_01
     workflow_conclusion: FAILURE_EXPECTED_FAIL_CLOSED
-    evidence_artifact_id: 10360386607
-    evidence_artifact_digest: sha256:c0aa3cdea6b889a09a0e1fde1b91a67565fe83f17cc52b2d3b33773d908e9928
+    evidence_artifact_id: 10368233685
+    evidence_artifact_digest: sha256:c4337aa6e9ca236783aced14fc305eae2dd44e4dd86fa473ef1a8c17e495e612
     global_browser_sweep: SKIPPED_FOCUSED_ITERATION
     observed_step_conclusions:
       negative_regression_fixtures: PASS
@@ -222,10 +226,25 @@ media_gate:
       rendered_html_audit_step: PASS
       security_browser: PASS
       video_lifecycle: PASS
+      real_touch_article_watch: PASS_RETAINED_ZERO_ERRORS
       security_prompt_visual_states: PASS
       expanded_provenance_details: PASS
       real_keyboard_focus: PASS
       final_enforcement: FAIL
+    touch_evidence_contract:
+      report_copies_identical: true
+      contexts: 8
+      top_level_failures: 0
+      retained_runtime_errors: 0
+      retained_proxy_errors: 0
+      canonical_origin: https://5sigmas.com
+      watch_proxy_count_min: 1
+      article_proxy_count_min: 2
+      note: >-
+        Run 30 exposed that mutable error arrays could gain teardown-time entries after the PASS verdict.
+        Run 31 waits for returned-article quiescence, re-checks after context close and snapshots the arrays
+        actually serialized. The retained flat and nested reports are byte-identical and clean in all eight
+        ES/EN presentation/prompt normal/reduced mobile contexts.
     expected_current_media_blockers:
       captions_missing: 4
       transcripts_missing: 4
@@ -234,10 +253,9 @@ media_gate:
     media_pass: false
     article_golden: false
     note: >-
-      The exact integration rendered and exercised the current Security 00/1.1 content, including the
-      formerly hidden collapsed provenance block. The final workflow failed as required because the
-      global source/rendered catalogue debt and active Security media debt remain; a green technical
-      substep is not converted into ARTICLE_GOLDEN.
+      The exact integration rendered and exercised the current Security 00/1.1 content. The final workflow
+      failed as required because the global source/rendered catalogue debt and active Security media debt
+      remain. Technical substeps, including the corrected real-touch gate, are not ARTICLE_GOLDEN.
   previous_probe_semantics: >-
     Superseded. The earlier workflow merely printed ffprobe JSON, so its step could report
     success for a silent MP4. Run 34802165060 proves the replacement gate fails closed on
@@ -256,6 +274,12 @@ superseded_evidence:
       the browser gate waited for removed trust-badge nodes and the retrieval gate required the literal
       English word "deviated" instead of validating the mechanism. The screenshots remain usable only
       because the visual source bytes are unchanged in the later reviewed technical head.
+  - head: b15a8b8e8148fd670e4c63bf1e436c3fd85e8060
+    diagnostic_run: 34891887687
+    reason: >-
+      The touch step itself was green, but retained run-30 evidence contained late proxy/runtime errors in
+      two Prompt Injection mobile contexts after the verdict had already been computed. That run is not
+      accepted as proof of a clean retained touch contract; run 31 supersedes it.
 
 current_reviewed_visual_revision:
   technical_head: dfab09ad051fcf8dfd1b2d4096d6ef8f0cb6b84b
@@ -358,7 +382,7 @@ visuals:
     pedagogy_review: PASS_CURRENT_CONTENT_SAME_AGENT
 
 global_catalogue_snapshot:
-  diagnostic_run: 34874667427
+  diagnostic_run: 34894292840
   series: 7
   routes_per_locale: 42
   locale_pages: 84
