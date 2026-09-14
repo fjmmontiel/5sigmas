@@ -57,6 +57,16 @@
   display: none !important;
 }
 
+/*
+ * Security 00/1.1 is under the reinforced GOLDEN article↔watch contract. Keep
+ * that navigation explicit and keyboard-reachable without changing the older
+ * reference series that intentionally retain the compact inline-player UI.
+ */
+article:has(.secpath) .s5-video-embed__watch,
+article:has(.ctxmix) .s5-video-embed__watch {
+  display: block !important;
+}
+
 /* Long-form reading should prioritise the article over the complete site tree. */
 @media (min-width: 76.25em) {
   .md-main__inner:not(:has(.s5-landing)) .md-sidebar--primary {
