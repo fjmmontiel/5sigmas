@@ -89,7 +89,7 @@ A third defense is to enforce boundaries between steps. The output of retrieval,
 
 The fourth defense is observability. Guardrails are especially useful when they leave a trace: what they approved, what they blocked, which tool call they aborted, how the alert rate changed and where in the pipeline the deviation occurred. Without that telemetry, the system learns nothing from failed attempts and the next bypass again looks like a surprise.
 
-Specialized classifiers also belong here. Anthropic's work on Constitutional Classifiers is relevant because it demonstrates a pragmatic direction: input and output monitors that can operate in *streaming*, with measurable additional cost, and combined as one layer inside a broader defense-in-depth model. They make sense as one component of a wider system, not as a promise that the problem is solved.
+Specialized classifiers also belong here, but the useful reference is no longer only the 2025 design. In January 2026, Anthropic published a second generation after finding that separate input and output classifiers were still vulnerable to reconstruction and output-obfuscation attacks. The system moved to an exchange classifier that evaluates an output in the context of its input, then to a cascade that uses a lightweight probe and escalates flagged exchanges to stronger classifiers. Anthropic reports roughly 1% compute overhead for its final production-grade configuration if applied to Claude Opus 4.0 traffic, after more than 1,700 cumulative hours of red teaming across 198,000 attempts. This is evidence for a defense-in-depth layer, not evidence that prompt injection has been solved.
 
 ---
 
@@ -117,7 +117,7 @@ The practical conclusion is that prompt injection will persist while systems mix
 | R1 | **OWASP** — *LLM Prompt Injection Prevention Cheat Sheet* | Explains why the problem arises from mixing instructions and data, and summarizes architectural defenses, validation and least privilege. |
 | R2 | **Chang et al. (2026)** — *Overcoming the Retrieval Barrier: Indirect Prompt Injection in the Wild for LLM Systems* | USENIX work on realistic indirect injection in RAG and agentic systems using *trigger fragments*, near-perfect retrieval and end-to-end attacks. |
 | R3 | **OWASP GenAI LLM Top 10 2026 + Top 10 for Agentic Applications 2026** | Current frameworks for prompt injection and excessive agency and, for agentic systems, goal hijack, tool misuse and identity/privilege abuse. |
-| R4 | **Anthropic (2025)** — *Constitutional Classifiers* | Defense using input/output classifiers, streaming prediction and thousands of hours of red teaming. |
+| R4 | **Anthropic (2026)** — *Next-generation Constitutional Classifiers* | Evolution to exchange classification and a cascade/probe architecture that reduces cost while retaining adaptive layered defense. |
 | R5 | **Hubinger et al. (2024)** — *Sleeper Agents* | Shows that malicious behavior activated by triggers can persist after standard safety training. |
 
 </details>
