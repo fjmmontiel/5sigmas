@@ -201,12 +201,14 @@ series/seguridad-ia/00_presentacion_serie.md:
   video: 00_presentacion_serie.mp4
   video_poster: 00_presentacion_serie.jpg
   video_title: AI Security
+  video_summary: "How an instruction hidden in a document can influence an AI system, how that risk can persist and which controls constrain actions."
   video_duration: PT48S
 
 series/seguridad-ia/01-prompt-injection.md:
   video: 01-prompt-injection.mp4
   video_poster: 01-prompt-injection.jpg
   video_title: Prompt Injection
+  video_summary: "How an instruction hidden in a document can enter an AI system and which controls separate reading from action."
   video_duration: PT48S
 
 series/seguridad-ia/02-jailbreaks.md:
