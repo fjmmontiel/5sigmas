@@ -1,4 +1,4 @@
-schema_version: 1
+schema_version: 2
 scope:
   series: seguridad-ia
   pages:
@@ -6,6 +6,35 @@ scope:
     - 01-prompt-injection
   locales: [es, en]
   status: REQUALIFICATION_QA
+  article_golden: false
+
+head_state:
+  current_content_head: 056f62f96595f9a3fa553024cd337059c47c5953
+  last_exact_head_integration: 2ac2b65cc09baa0905cdb5b994dbee2efce40cfb
+  last_exact_head_integration_run: 34860433000
+  last_exact_head_pixel_review: 2ac2b65cc09baa0905cdb5b994dbee2efce40cfb
+  last_exact_head_pedagogy_review: 2ac2b65cc09baa0905cdb5b994dbee2efce40cfb
+  current_content_vs_last_exact_review:
+    commits_ahead: 4
+    files_changed: 4
+    classification: PROVENANCE_LINK_MARKUP_ONLY
+    changed_files:
+      - docs/series/seguridad-ia/00_presentacion_serie.md
+      - docs/series/seguridad-ia/01-prompt-injection.md
+      - locales/en/series/seguridad-ia/00_presentacion_serie.md
+      - locales/en/series/seguridad-ia/01-prompt-injection.md
+    visible_copy_changed: false
+    teaching_visuals_changed: false
+    media_changed: false
+    browser_or_gate_code_changed: false
+    render_pixel_risk: true
+    note: >-
+      The current content head only makes the already-named primary sources directly navigable.
+      Because anchors can change rendered styling/pixels, the exact current content head has not
+      inherited the earlier page-level pixel or pedagogy verdict. Technical mechanism evidence from
+      the last exact-head review remains historical evidence only.
+  current_content_pixel_review: PENDING
+  current_content_pedagogy_review: PENDING
   article_golden: false
 
 source_metadata_completion:
@@ -159,7 +188,7 @@ media_gate:
         - docs/series/seguridad-ia/01-prompt-injection.mp4
         - locales/en/series/seguridad-ia/01-prompt-injection.mp4
   current_source_metadata:
-    revision: c520d338531eb13532c2448bb628e342f44d727b
+    revision: 056f62f96595f9a3fa553024cd337059c47c5953
     static_metadata_missing: 0
     captions_missing: 4
     transcripts_missing: 4
@@ -167,13 +196,14 @@ media_gate:
     audio_streams_missing: 4
     media_pass: false
     diagnostic_pending: false
+    note: >-
+      Only article-link markup changed after the last exact-head integration. Video declarations and
+      native media bytes did not change, so the previously verified binary facts remain applicable.
   current_integration_checkpoint:
-    diagnostic_head: a8177ef9cbb361f7a094709fc84826e943eaca9a
-    diagnostic_run: 34808958350
+    diagnostic_head: 2ac2b65cc09baa0905cdb5b994dbee2efce40cfb
+    diagnostic_run: 34860433000
     diagnostic_scope: focused_security_00_01
     workflow_conclusion: FAILURE_EXPECTED_FAIL_CLOSED
-    evidence_artifact_id: 10333609523
-    evidence_artifact_digest: sha256:c54799a73321bd27f2dd76e805dab2e4963a710be5473761e488efa0167c82ad
     global_browser_sweep: SKIPPED_FOCUSED_ITERATION
     observed_step_conclusions:
       negative_regression_fixtures: PASS
@@ -181,8 +211,12 @@ media_gate:
       strict_es_build: PASS
       publication_contract: PASS
       strict_en_build: PASS
+      structured_provenance_locale_metadata: PASS
+      reciprocal_article_watch_locale_ui: PASS
       security_browser: PASS
+      video_lifecycle: PASS
       security_prompt_visual_states: PASS
+      real_keyboard_focus: PASS
       final_enforcement: FAIL
     expected_current_media_blockers_from_source_and_unchanged_probe_facts:
       captions_missing: 4
@@ -192,11 +226,9 @@ media_gate:
     media_pass: false
     article_golden: false
     note: >-
-      The media/source/rendered audit steps use continue-on-error in the diagnostic workflow, so
-      GitHub's per-step conclusion alone cannot be used to claim those gates passed. The final
-      enforcement failed as required. Static metadata is now complete, while the current source plus
-      the previously ffprobed unchanged native binaries still fail the audiovisual contract on
-      captions, transcripts, curated chapter maps and audio streams.
+      The final workflow failed as required because the global source/rendered debt and the active
+      Security media debt remain. This exact-head integration is the latest technical/pixel/pedagogy
+      checkpoint, not a certification of the newer provenance-link content head.
   previous_probe_semantics: >-
     Superseded. The earlier workflow merely printed ffprobe JSON, so its step could report
     success for a silent MP4. Run 34802165060 proves the replacement gate fails closed on
@@ -214,92 +246,101 @@ superseded_evidence:
       The visual source was materially improved, but two focused harness assertions were stale:
       the browser gate waited for removed trust-badge nodes and the retrieval gate required the literal
       English word "deviated" instead of validating the mechanism. The screenshots remain usable only
-      because the visual source bytes are unchanged in the later certified technical head.
+      because the visual source bytes are unchanged in the later reviewed technical head.
 
 current_reviewed_visual_revision:
-  technical_head: c74fedcf6a82ca26502fcf4f65126fbec4056ef6
-  diagnostic_run: 34798370110
+  technical_head: 2ac2b65cc09baa0905cdb5b994dbee2efce40cfb
+  diagnostic_run: 34860433000
   diagnostic_scope: focused_security_00_01
   workflow_conclusion: FAILURE_EXPECTED_FAIL_CLOSED
   publication_discovery_pass: true
   publication_contract_pass: true
   strict_es_build_pass: true
   strict_en_build_pass: true
+  structured_metadata_pass: true
+  reciprocal_article_watch_pass: true
   security_browser_pass: true
+  video_lifecycle_pass: true
   prompt_visual_state_pass: true
+  real_keyboard_focus_pass: true
   source_pass: false
   rendered_pass: false
   global_browser_sweep: SKIPPED_FOCUSED_ITERATION
   media_pass: false
-  pixel_review: PASS_VISUAL_SET
-  pedagogy_review: PASS_VISUAL_SET
+  pixel_review: PASS_ACTIVE_SET_SAME_AGENT
+  pedagogy_review: PASS_ACTIVE_SET_SAME_AGENT
   article_golden: false
+  current_content_head: 056f62f96595f9a3fa553024cd337059c47c5953
+  current_content_head_pixel_review: PENDING
+  current_content_head_pedagogy_review: PENDING
   technical_notes:
     - focused Security browser gate passed in Google Chrome with real mobile tap, persistent resource/runtime listeners, poster-first playback, pause and seek
+    - poster→play→pause/seek/end→next lifecycle passed on the exact reviewed head
+    - real Tab traversal reached the Security article→watch link in ES/EN under normal/reduced motion with visible focus and Enter activation
     - Prompt Injection mechanism-state gate passed in Google Chrome for ES/EN desktop/mobile normal/reduced motion
     - global failure is intentional because the independent source/rendered audit still records unresolved media across the requalification catalogue and raw TeX outside Security 00/01
+    - four later commits only add primary-source link markup to the two ES/EN article pairs; they require a fresh page-level pixel review before any exact-current-head editorial PASS
   manual_pixel_review:
-    evidence_artifact_id: 10330825627
-    evidence_digest: sha256:94831dd603b11f4ee661704e0133a7124493e3ee30911d6f361a80fc868862c7
+    evidence_artifact_id: 10352819638
     inspected:
-      - presentation ES/EN desktop and mobile, including reduced-motion rendering
-      - control-vs-data ES/EN desktop/mobile states 1, 3 and 4
-      - retrieval barrier clean/poisoned mechanism states including final context/proposal, normal and reduced-motion samples
-      - defence-in-depth all-on and progressively disabled states ES/EN, desktop/mobile, including reduced-motion samples
-      - full-page Security presentation and Prompt Injection mobile captures for page-level hierarchy/overflow context
-    verdict: PASS_VISUAL_SET
-    note: >-
-      No remaining clipping, text collision, unreadable relationship, global horizontal overflow or locale
-      mismatch was found in the manually inspected exact-source visual evidence. Fixed site navigation can
-      appear inside Playwright locator screenshots while the tall locator is stitched; full-page evidence
-      was used to avoid misclassifying that capture artifact as an interior visual overlap.
+      - presentation ES/EN desktop/mobile full-page captures in normal/reduced motion
+      - Prompt Injection ES/EN desktop/mobile full-page captures in normal/reduced motion
+      - control-vs-data representative states
+      - retrieval barrier clean and poisoned states
+      - defence-in-depth all-on and progressively disabled states
+      - visible article→watch link placement below the player
+    verdict: PASS_ACTIVE_SET_SAME_AGENT
+    limitation: >-
+      Same-agent manual review of the exact 2ac2b65 head only. The current content head changes anchor
+      markup and therefore remains PENDING for page-level pixel review despite unchanged teaching visuals.
   manual_pedagogy_review:
-    verdict: PASS_VISUAL_SET
+    verdict: PASS_ACTIVE_SET_SAME_AGENT
     rationale:
       - presentation map teaches one hostile path with two authorization outcomes rather than a decorative architecture diagram
       - control-vs-data separates provenance/model influence from executable runtime authority and changes to a denied external action
       - retrieval barrier changes ranking/top-K membership, retrieved context and downstream proposal without fabricated similarity scores
       - defence-in-depth moves the first effective stopping boundary as independent controls are disabled and explicitly avoids multiplicative-probability claims
     limitation: >-
-      This is the pedagogy verdict for the current visual set, not ARTICLE_GOLDEN. The audiovisual learning
-      contract remains incomplete and the entire article cannot be certified until MEDIA_PASS and all other
-      article gates are green.
+      This is the same-agent pedagogy verdict for the exact reviewed visual set, not ARTICLE_GOLDEN and
+      not evidence for the newer provenance-link content head. The audiovisual learning contract remains
+      incomplete and the entire article cannot be certified until MEDIA_PASS and all other article gates are green.
 
 visuals:
   presentation_map:
     es_source: docs/snippets/seguridad-ia/00-series-mapa.html
     en_source: locales/en/snippets/seguridad-ia/00-series-mapa.html
     mechanism_states: hostile_path__broad_permissions_vs_least_privilege_authorization
-    current_state: VISUAL_PIXEL_AND_PEDAGOGY_PASS__ARTICLE_MEDIA_BLOCKED
-    desktop_pixel_review: PASS
-    mobile_pixel_review: PASS
-    pedagogy_review: PASS
+    current_state: VISUAL_ASSET_PASS_LAST_REVIEWED_HEAD__CURRENT_PAGE_REVIEW_PENDING__ARTICLE_MEDIA_BLOCKED
+    desktop_pixel_review: PASS_LAST_REVIEWED_HEAD
+    mobile_pixel_review: PASS_LAST_REVIEWED_HEAD
+    pedagogy_review: PASS_LAST_REVIEWED_HEAD
   prompt_injection_control_data:
     es_source: docs/snippets/seguridad-ia/01-control-vs-datos.html
     en_source: locales/en/snippets/seguridad-ia/01-control-vs-datos.html
     mechanism_states: provenance_to_context_to_model_proposal_to_runtime_authority
-    current_state: VISUAL_PIXEL_AND_PEDAGOGY_PASS__ARTICLE_MEDIA_BLOCKED
-    desktop_pixel_review: PASS
-    mobile_pixel_review: PASS
-    pedagogy_review: PASS
+    current_state: VISUAL_ASSET_PASS_LAST_REVIEWED_HEAD__CURRENT_PAGE_REVIEW_PENDING__ARTICLE_MEDIA_BLOCKED
+    desktop_pixel_review: PASS_LAST_REVIEWED_HEAD
+    mobile_pixel_review: PASS_LAST_REVIEWED_HEAD
+    pedagogy_review: PASS_LAST_REVIEWED_HEAD
   prompt_injection_retrieval_barrier:
     es_source: docs/snippets/seguridad-ia/01-rag-trigger-fragment.html
     en_source: locales/en/snippets/seguridad-ia/01-rag-trigger-fragment.html
     mechanism_states: clean_vs_optimized_trigger__topk_to_context_to_proposal
-    current_state: VISUAL_PIXEL_AND_PEDAGOGY_PASS__ARTICLE_MEDIA_BLOCKED
-    desktop_pixel_review: PASS
-    mobile_pixel_review: PASS
-    pedagogy_review: PASS
+    current_state: VISUAL_ASSET_PASS_LAST_REVIEWED_HEAD__CURRENT_PAGE_REVIEW_PENDING__ARTICLE_MEDIA_BLOCKED
+    desktop_pixel_review: PASS_LAST_REVIEWED_HEAD
+    mobile_pixel_review: PASS_LAST_REVIEWED_HEAD
+    pedagogy_review: PASS_LAST_REVIEWED_HEAD
   prompt_injection_defence_in_depth:
     es_source: docs/snippets/seguridad-ia/01-defensa-en-capas.html
     en_source: locales/en/snippets/seguridad-ia/01-defensa-en-capas.html
     mechanism_states: first_effective_boundary_moves_as_independent_controls_are_disabled
-    current_state: VISUAL_PIXEL_AND_PEDAGOGY_PASS__ARTICLE_MEDIA_BLOCKED
-    desktop_pixel_review: PASS
-    mobile_pixel_review: PASS
-    pedagogy_review: PASS
+    current_state: VISUAL_ASSET_PASS_LAST_REVIEWED_HEAD__CURRENT_PAGE_REVIEW_PENDING__ARTICLE_MEDIA_BLOCKED
+    desktop_pixel_review: PASS_LAST_REVIEWED_HEAD
+    mobile_pixel_review: PASS_LAST_REVIEWED_HEAD
+    pedagogy_review: PASS_LAST_REVIEWED_HEAD
 
 blockers:
+  - exact current content head page-level PIXEL_REVIEW and PEDAGOGY_REVIEW are pending after provenance-link markup changes
   - authorized Francisco narration missing for silent ES/EN MP4s after bounded connected GitHub + Drive + Gmail search
   - captions/transcripts/key moments incomplete and must not be fabricated without valid narration/media inputs
   - source/rendered experience audit remains fail-closed until the audiovisual contract is complete
