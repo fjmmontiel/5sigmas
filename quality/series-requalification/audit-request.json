@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 19,
+  "diagnostic_revision": 20,
   "diagnostic_scope": "focused_security_00_01",
   "published_content_base": "baf32aefc3c9538bd90a5f28c2be395cb4fac0d5",
-  "requested_head_parent": "93438143298888ff9bd511563d894fd70dfe6d24",
-  "reason": "Re-run the focused Security 00/1.1 exact-head integration milestone after the structured-provenance audit found a real bilingual hook gap: mkdocs.en.yml replaces inherited hooks, so English TechArticle pages were not receiving the shared article Open Graph provenance contract. The branch now delegates locale-aware article metadata through the shared English hook path and adds a rendered ES/EN negative-mutation gate for og:type, article author/section/published/modified/tags and TechArticle canonical language/date identity. Revalidate strict ES/EN builds, publication/source/rendered audits, the new structured metadata outcome, reciprocal article-watch locale contract, focused interaction/layout/playback, end-to-next keyboard/touch normal/reduced lifecycle, and Prompt Injection mechanism states. Preserve MEDIA_PASS fail-closed for four silent MP4s and missing captions/transcripts/curated chapter maps. Focused only; global catalogue is not recertified by this run.",
+  "requested_head_parent": "1ebd7de01797fc18ad562407dfff825ef5086494",
+  "reason": "Run one exact-head focused Security 00/1.1 integration milestone for the two independent contract repairs completed together: (1) restore native ES/EN rendered article Open Graph provenance after the English MkDocs hook-list replacement omitted the shared metadata hook, with negative-mutation checks for og:type, author, localized section, dates, tags and TechArticle canonical/language identity; and (2) close the accessibility gate gap by requiring real Tab traversal, :focus-visible treatment and Enter activation for video, article-watch and core Security teaching controls across ES/EN and normal/reduced motion. Revalidate strict ES/EN builds, publication/source/rendered audits, structured metadata, reciprocal article-watch contract, interaction/layout/playback, video lifecycle, Prompt Injection visual states and keyboard focus. Preserve MEDIA_PASS fail-closed for four silent MP4s and missing captions/transcripts/curated chapter maps. Focused only; global catalogue is not recertified by this run.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
