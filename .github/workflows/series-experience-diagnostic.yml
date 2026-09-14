@@ -160,6 +160,12 @@ jobs:
         continue-on-error: true
         run: node scripts/validate_security_video_lifecycle.mjs
 
+      - name: Focused Security 00/01 real touch article-watch round trip
+        id: security_article_watch_touch
+        continue-on-error: true
+        timeout-minutes: 5
+        run: node scripts/validate_security_article_watch_touch.mjs
+
       - name: Focused Prompt Injection visual-state evidence across all teaching mechanisms
         id: security_prompt_states
         continue-on-error: true
@@ -186,6 +192,7 @@ jobs:
           BROWSER_OUTCOME: ${{ steps.browser.outcome }}
           SECURITY_BROWSER_OUTCOME: ${{ steps.security_browser.outcome }}
           SECURITY_VIDEO_LIFECYCLE_OUTCOME: ${{ steps.security_video_lifecycle.outcome }}
+          SECURITY_ARTICLE_WATCH_TOUCH_OUTCOME: ${{ steps.security_article_watch_touch.outcome }}
           SECURITY_PROMPT_STATES_OUTCOME: ${{ steps.security_prompt_states.outcome }}
           SECURITY_KEYBOARD_FOCUS_OUTCOME: ${{ steps.security_keyboard_focus.outcome }}
         run: |
@@ -226,6 +233,15 @@ jobs:
                   'failure_count': len(data.get('failures', [])),
                   'failures': data.get('failures', []),
               }, ensure_ascii=False))
+          touch_report = Path('artifacts/security-requalification/article-watch-touch/report.json')
+          if touch_report.exists():
+              data = json.loads(touch_report.read_text())
+              print('security-requalification/article-watch-touch/report.json', json.dumps({
+                  'engine': data.get('engine'),
+                  'chrome_launch_error': data.get('chrome_launch_error'),
+                  'failure_count': len(data.get('failures', [])),
+                  'failures': data.get('failures', []),
+              }, ensure_ascii=False))
           prompt_report = Path('artifacts/security-requalification/prompt-states/report.json')
           if prompt_report.exists():
               data = json.loads(prompt_report.read_text())
@@ -255,6 +271,7 @@ jobs:
               'RENDERED_OUTCOME',
               'SECURITY_BROWSER_OUTCOME',
               'SECURITY_VIDEO_LIFECYCLE_OUTCOME',
+              'SECURITY_ARTICLE_WATCH_TOUCH_OUTCOME',
               'SECURITY_PROMPT_STATES_OUTCOME',
               'SECURITY_KEYBOARD_FOCUS_OUTCOME',
           ]
