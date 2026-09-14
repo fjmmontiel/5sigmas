@@ -114,11 +114,11 @@ The practical conclusion is that prompt injection will persist while systems mix
 
 | Key | Source | Short description |
 | --- | --- | --- |
-| R1 | **OWASP** — *LLM Prompt Injection Prevention Cheat Sheet* | Explains why the problem arises from mixing instructions and data, and summarizes architectural defenses, validation and least privilege. |
-| R2 | **Chang et al. (2026)** — *Overcoming the Retrieval Barrier: Indirect Prompt Injection in the Wild for LLM Systems* | USENIX work on realistic indirect injection in RAG and agentic systems using *trigger fragments*, near-perfect retrieval and end-to-end attacks. |
-| R3 | **OWASP GenAI LLM Top 10 2026 + Top 10 for Agentic Applications 2026** | Current frameworks for prompt injection and excessive agency and, for agentic systems, goal hijack, tool misuse and identity/privilege abuse. |
-| R4 | **Anthropic (2026)** — *Next-generation Constitutional Classifiers* | Evolution to exchange classification and a cascade/probe architecture that reduces cost while retaining adaptive layered defense. |
-| R5 | **Hubinger et al. (2024)** — *Sleeper Agents* | Adjacent training-time backdoor evidence: shows trigger-conditioned behavior can persist through SFT, RL and adversarial training. It does not study prompt injection, RAG or runtime tool authorization. |
+| R1 | **OWASP** — [*LLM Prompt Injection Prevention Cheat Sheet*](https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html) | Explains why the problem arises from mixing instructions and data, and summarizes architectural defenses, validation and least privilege. |
+| R2 | **Chang et al. (2026)** — [*Overcoming the Retrieval Barrier: Indirect Prompt Injection in the Wild for LLM Systems*](https://www.usenix.org/conference/usenixsecurity26/presentation/chang-hongyan) | USENIX work on realistic indirect injection in RAG and agentic systems using *trigger fragments*, near-perfect retrieval and end-to-end attacks. |
+| R3 | [**OWASP GenAI LLM Top 10 2026**](https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/) + [**Top 10 for Agentic Applications 2026**](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/) | Current frameworks for prompt injection and excessive agency and, for agentic systems, goal hijack, tool misuse and identity/privilege abuse. |
+| R4 | **Anthropic (2026)** — [*Next-generation Constitutional Classifiers*](https://www.anthropic.com/research/next-generation-constitutional-classifiers) | Evolution to exchange classification and a cascade/probe architecture that reduces cost while retaining adaptive layered defense. |
+| R5 | **Hubinger et al. (2024)** — [*Sleeper Agents*](https://arxiv.org/abs/2401.05566) | Adjacent training-time backdoor evidence: shows trigger-conditioned behavior can persist through SFT, RL and adversarial training. It does not study prompt injection, RAG or runtime tool authorization. |
 
 </details>
 
