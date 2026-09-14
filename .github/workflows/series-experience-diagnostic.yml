@@ -119,6 +119,11 @@ jobs:
           S5_BROWSER_JOB_TIMEOUT_MS: '25000'
         run: node scripts/audit_series_experience_browser.mjs
 
+      - name: Focused Security 00/01 interaction, layout and codec-aware playback diagnostic
+        id: security_browser
+        continue-on-error: true
+        run: node scripts/validate_security_requalification_browser.mjs
+
       - name: Enforce technical failures; never certify pixel or pedagogical quality
         if: always()
         env:
@@ -128,6 +133,7 @@ jobs:
           MEDIA_PROBE_OUTCOME: ${{ steps.security_media_probe.outcome }}
           RENDERED_OUTCOME: ${{ steps.rendered.outcome }}
           BROWSER_OUTCOME: ${{ steps.browser.outcome }}
+          SECURITY_BROWSER_OUTCOME: ${{ steps.security_browser.outcome }}
         run: |
           python - <<'PY'
           import json, os
@@ -139,6 +145,15 @@ jobs:
               if path.exists():
                   data = json.loads(path.read_text())
                   print(name, json.dumps(data.get('summary', {k:v for k,v in data.items() if k != 'results'}), ensure_ascii=False))
+          security_report = Path('artifacts/security-requalification/report.json')
+          if security_report.exists():
+              data = json.loads(security_report.read_text())
+              print('security-requalification/report.json', json.dumps({
+                  'engine': data.get('engine'),
+                  'chrome_launch_error': data.get('chrome_launch_error'),
+                  'failure_count': len(data.get('failures', [])),
+                  'failures': data.get('failures', []),
+              }, ensure_ascii=False))
 
           names = (
               'PUBLICATION_DISCOVERY_OUTCOME',
@@ -147,6 +162,7 @@ jobs:
               'MEDIA_PROBE_OUTCOME',
               'RENDERED_OUTCOME',
               'BROWSER_OUTCOME',
+              'SECURITY_BROWSER_OUTCOME',
           )
           outcomes = {name: os.environ[name] for name in names}
           print('TECHNICAL_OUTCOMES', json.dumps(outcomes, sort_keys=True))
@@ -158,7 +174,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: series-experience-diagnostic
-          path: artifacts/series-experience/
+          path: |
+            artifacts/series-experience/
+            artifacts/security-requalification/
           retention-days: 1
           if-no-files-found: warn
           overwrite: true
