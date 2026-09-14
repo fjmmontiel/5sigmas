@@ -112,11 +112,22 @@ jobs:
           npm install --no-save playwright@1.55.0
           npx playwright install --with-deps chromium
 
-      - name: Serve built preview
+      - name: Serve built preview with byte-range media support
         run: |
-          python -m http.server 8000 --directory site > /tmp/series-experience-preview.log 2>&1 &
+          python scripts/serve_preview.py --self-test
+          python scripts/serve_preview.py --directory site --port 8000 > /tmp/series-experience-preview.log 2>&1 &
           for attempt in {1..30}; do
-            if curl --fail --silent http://127.0.0.1:8000/en/ > /dev/null; then exit 0; fi
+            if curl --fail --silent http://127.0.0.1:8000/en/ > /dev/null; then
+              curl --fail --silent --show-error \
+                -H 'Range: bytes=0-99' \
+                -D /tmp/series-experience-range.headers \
+                -o /tmp/series-experience-range.bin \
+                http://127.0.0.1:8000/en/series/seguridad-ia/01-prompt-injection.mp4
+              grep -q '^HTTP/1.[01] 206' /tmp/series-experience-range.headers
+              grep -qi '^Content-Range: bytes 0-99/' /tmp/series-experience-range.headers
+              test "$(wc -c < /tmp/series-experience-range.bin)" -eq 100
+              exit 0
+            fi
             sleep 1
           done
           cat /tmp/series-experience-preview.log
