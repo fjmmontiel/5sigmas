@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 17,
+  "diagnostic_revision": 18,
   "diagnostic_scope": "focused_security_00_01",
   "published_content_base": "baf32aefc3c9538bd90a5f28c2be395cb4fac0d5",
-  "requested_head_parent": "9ed4aaa1d3a3438a5d45b6c14e61cf40ae5dd191",
-  "reason": "Complete the remaining Security 1.1 primary-source/parity review by scoping Sleeper Agents correctly as adjacent training-time backdoor evidence rather than prompt-injection evidence. Re-run strict ES/EN builds, publication/source/rendered audits, reciprocal article-watch locale contract, focused Security browser/lifecycle states and Prompt Injection mechanism states on the exact current head. Keep MEDIA_PASS fail-closed for four silent MP4s and missing captions/transcripts/curated chapter maps. Focused only; global catalogue is not recertified by this run.",
+  "requested_head_parent": "162de8801eba5def651bc589e647bbe4b6811d28",
+  "reason": "Re-run the focused Security 00/1.1 exact-head milestone after the previous artifact reproduced a real QA-harness gap: HTTP preview lacked byte-range media delivery, so quarter/end seeks remained at currentTime=0 and the ended/poster-reset lifecycle was not actually proven. The branch now serves QA media with byte-range support and makes lifecycle seeking explicit. Revalidate strict ES/EN builds, publication/source/rendered audits, reciprocal article-watch locale contract, focused interaction/layout/playback, end-to-next keyboard/touch normal/reduced lifecycle, and Prompt Injection mechanism states. Preserve MEDIA_PASS fail-closed for four silent MP4s and missing captions/transcripts/curated chapter maps. Focused only; global catalogue is not recertified by this run.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
