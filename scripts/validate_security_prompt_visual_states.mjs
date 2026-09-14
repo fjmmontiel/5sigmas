@@ -126,6 +126,8 @@ async function inspectRagtrace(page, item, mobile, motion, stem, record) {
   await assertReadableText(root, '.ragtrace__query,.ragtrace__doc-title,.ragtrace__doc-note,.ragtrace__ctx,.ragtrace__proposal span,.ragtrace__status,.ragtrace__foot', ctx);
 
   const modeEvidence = [];
+  let cleanProposal = '';
+  let cleanRetrieved = '';
   for (const mode of ['clean', 'poisoned']) {
     await activate(root.locator(`[data-mode-btn="${mode}"]`), mobile);
     await page.waitForTimeout(40);
@@ -145,11 +147,18 @@ async function inspectRagtrace(page, item, mobile, motion, stem, record) {
     const proposal = (await root.locator('[data-proposal-copy]').innerText()).trim();
     if (mode === 'clean') {
       check(!retrieved.toLowerCase().includes('envenenado') && !retrieved.toLowerCase().includes('poison'), `${ctx}: clean final context contains poisoned document`, { retrieved });
+      cleanRetrieved = retrieved;
+      cleanProposal = proposal;
     } else {
       const poisonWord = item.locale === 'es' ? 'envenenado' : 'poison';
       check(retrieved.toLowerCase().includes(poisonWord), `${ctx}: poisoned final context does not contain poisoned document`, { retrieved });
-      const deviationWord = item.locale === 'es' ? 'desviada' : 'deviated';
-      check(proposal.toLowerCase().includes(deviationWord), `${ctx}: poisoned final proposal does not show downstream deviation`, { proposal });
+      const normalizedProposal = proposal.toLowerCase();
+      const markers = item.locale === 'es'
+        ? ['propuesta desviada', 'destino no solicitado']
+        : ['drifted proposal', 'unrequested destination'];
+      check(markers.every(marker => normalizedProposal.includes(marker)), `${ctx}: poisoned final proposal does not show a concrete downstream deviation`, { proposal, markers });
+      check(Boolean(cleanProposal) && proposal !== cleanProposal, `${ctx}: poisoned proposal did not materially differ from clean proposal`, { cleanProposal, proposal });
+      check(Boolean(cleanRetrieved) && retrieved !== cleanRetrieved, `${ctx}: poisoned retrieval did not materially differ from clean retrieval`, { cleanRetrieved, retrieved });
     }
     await capture(root, `${stem}-ragtrace-${mode}-step-3.png`);
     modeEvidence.push({ mode, retrieved, proposal });
