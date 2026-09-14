@@ -121,7 +121,7 @@ La consecuencia práctica es una corrección de encuadre. El prompt injection se
 | --- | --- | --- |
 | R1 | **OWASP** — *LLM Prompt Injection Prevention Cheat Sheet* | Explica por qué el problema nace de mezclar instrucciones y datos, y resume defensas de arquitectura, validación y mínimo privilegio. |
 | R2 | **Chang et al. (2026)** — *Overcoming the Retrieval Barrier: Indirect Prompt Injection in the Wild for LLM Systems* | Trabajo de USENIX sobre inyección indirecta realista en RAG y sistemas agénticos con *trigger fragments*, recuperación casi perfecta y ataques end-to-end. |
-| R3 | **OWASP Top 10 for LLM Applications 2025** | Marco operativo para prompt injection, excessive agency, tool misuse y otras vulnerabilidades de aplicaciones con LLMs. |
+| R3 | **OWASP GenAI LLM Top 10 2026 + Top 10 for Agentic Applications 2026** | Marcos vigentes para prompt injection y excessive agency y, en sistemas agénticos, goal hijack, tool misuse e identity/privilege abuse. |
 | R4 | **Anthropic (2025)** — *Constitutional Classifiers* | Defensa con clasificadores de entrada y salida, predicción en streaming y miles de horas de red teaming. |
 | R5 | **Hubinger et al. (2024)** — *Sleeper Agents* | Muestra que un comportamiento malicioso activado por disparadores puede persistir tras entrenamiento de seguridad estándar. |
 
