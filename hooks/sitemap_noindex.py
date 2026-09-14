@@ -5,7 +5,9 @@ Complementa a wip_series.py, que ya elimina las series WIP completas.
 
 This hook also delegates to agent_knowledge.py so the machine-readable knowledge graph
 is generated for every configured locale without duplicating the hook list between the
-Spanish and English MkDocs configurations.
+Spanish and English MkDocs configurations. MkDocs replaces inherited hook lists, so the
+English build also delegates the shared article Open Graph metadata hook here; Spanish
+already runs that hook directly from mkdocs.yml.
 """
 
 import importlib.util
@@ -15,13 +17,28 @@ import re
 
 _noindex_urls: set = set()
 
-_agent_spec = importlib.util.spec_from_file_location(
-    "s5_agent_knowledge", Path(__file__).with_name("agent_knowledge.py")
-)
-if _agent_spec is None or _agent_spec.loader is None:
-    raise RuntimeError("Unable to load hooks/agent_knowledge.py")
-_agent_knowledge = importlib.util.module_from_spec(_agent_spec)
-_agent_spec.loader.exec_module(_agent_knowledge)
+
+def _load_hook(module_name: str):
+    path = Path(__file__).with_name(f"{module_name}.py")
+    spec = importlib.util.spec_from_file_location(f"s5_{module_name}", path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"Unable to load {path}")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+_agent_knowledge = _load_hook("agent_knowledge")
+_article_metadata = _load_hook("jsonld_article")
+
+
+def _content_language(config) -> str:
+    extra = config.get("extra") or {}
+    configured = str(extra.get("content_language") or extra.get("locale_code") or "").strip().lower()
+    if configured:
+        return configured
+    site_url = str(config.get("site_url") or "")
+    return "en" if "/en/" in site_url else "es"
 
 
 def on_config(config, **kwargs):
@@ -38,6 +55,8 @@ def on_page_context(context, page, config, nav, **kwargs):
 
 
 def on_post_page(output, page, config, **kwargs):
+    if _content_language(config).startswith("en"):
+        output = _article_metadata.on_post_page(output, page, config, **kwargs)
     return _agent_knowledge.on_post_page(output, page, config, **kwargs)
 
 
