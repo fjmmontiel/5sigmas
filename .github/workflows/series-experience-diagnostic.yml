@@ -163,11 +163,13 @@ jobs:
       - name: Focused Prompt Injection visual-state evidence across all teaching mechanisms
         id: security_prompt_states
         continue-on-error: true
+        timeout-minutes: 10
         run: node scripts/validate_security_prompt_visual_states.mjs
 
       - name: Focused Security 00/01 real keyboard traversal and visible focus
         id: security_keyboard_focus
         continue-on-error: true
+        timeout-minutes: 5
         run: node scripts/validate_security_keyboard_focus.mjs
 
       - name: Enforce technical failures; never certify pixel or pedagogical quality
