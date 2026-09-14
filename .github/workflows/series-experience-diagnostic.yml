@@ -87,6 +87,8 @@ jobs:
           fi
           command -v ffprobe
           python scripts/validate_security_video_media.py --self-test
+          python scripts/validate_security_media_locale_identity.py --self-test
+          python scripts/validate_security_media_locale_identity.py
           python scripts/validate_security_video_media.py
 
       - name: Prepare English
