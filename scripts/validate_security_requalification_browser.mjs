@@ -67,7 +67,7 @@ async function inspectVideo(page, ctx, record) {
     networkState: node.networkState,
   }));
 
-  const events = await video.evaluate(node => {
+  await video.evaluate(node => {
     const log = [];
     for (const name of ['loadstart','loadedmetadata','canplay','playing','pause','seeked','error']) {
       node.addEventListener(name, () => log.push({ name, t: Number(node.currentTime || 0), readyState: node.readyState, networkState: node.networkState, error: node.error ? { code: node.error.code, message: node.error.message } : null }));
@@ -75,9 +75,7 @@ async function inspectVideo(page, ctx, record) {
     window.__s5SecurityVideoEvents = log;
     node.muted = true;
     node.volume = 0;
-    return log;
   });
-  void events;
 
   check(await poster.isVisible(), `${ctx}: poster not initially visible`);
   check(!(await video.isVisible()), `${ctx}: player visible before poster activation`);
@@ -152,21 +150,36 @@ async function inspectVisual(page, item, mobile, motion, record) {
     check(!overlap(stage5, badge), `${item.locale}/${item.kind}/${mobile ? 'mobile' : 'desktop'}: authorization badge overlaps stage title`, { stage5, badge });
   } else {
     const root = page.locator('.ctxmix').first();
-    check((await root.count()) === 1, `${item.locale}/${item.kind}/${mobile ? 'mobile' : 'desktop'}/${motion}: ctxmix missing`);
+    const ctx = `${item.locale}/${item.kind}/${mobile ? 'mobile' : 'desktop'}/${motion}`;
+    check((await root.count()) === 1, `${ctx}: ctxmix missing`);
     if (!(await root.count())) return;
-    for (const step of ['2','3','4']) {
+
+    for (const step of ['1','2','3','4']) {
       await activate(root.locator(`[data-state-btn="${step}"]`), mobile);
-      check((await root.getAttribute('data-state')) === step, `${item.locale}/${item.kind}: step ${step} did not activate`);
+      check((await root.getAttribute('data-state')) === step, `${ctx}: step ${step} did not activate`);
     }
+
     const sources = root.locator('.ctxmix__source');
+    check((await sources.count()) === 3, `${ctx}: expected three provenance sources`, { count: await sources.count() });
     for (let i = 0; i < await sources.count(); i++) {
       const source = sources.nth(i);
-      const badge = await source.locator('[data-trust-badge]').boundingBox();
-      const title = await source.locator('[data-source-title]').boundingBox();
-      check(!overlap(badge, title), `${item.locale}/${item.kind}/${mobile ? 'mobile' : 'desktop'}: trust badge overlaps source title`, { i, badge, title });
+      const eyebrow = await source.locator('.ctxmix__eyebrow').boundingBox();
+      const title = await source.locator('.ctxmix__source-title').boundingBox();
+      const detailLocator = source.locator('p,.ctxmix__payload').first();
+      const detail = (await detailLocator.count()) ? await detailLocator.boundingBox() : null;
+      check(Boolean(eyebrow && title), `${ctx}: source ${i} missing provenance/title geometry`, { eyebrow, title });
+      check(!overlap(eyebrow, title), `${ctx}: source ${i} provenance label overlaps source title`, { eyebrow, title });
+      if (detail) check(!overlap(title, detail), `${ctx}: source ${i} title overlaps explanatory payload`, { title, detail });
     }
-    check(await root.locator('[data-node="authorization-gate"]').isVisible(), `${item.locale}/${item.kind}: authorization gate not visible at step 4`);
-    check(await root.locator('[data-node="execution-result"]').isVisible(), `${item.locale}/${item.kind}: execution result not visible at step 4`);
+
+    check((await root.locator('.ctxmix__segment').count()) === 3, `${ctx}: assembled context must preserve all three provenance segments`);
+    check(await root.locator('[data-node="authorization-gate"]').isVisible(), `${ctx}: authorization gate not visible at step 4`);
+    check(await root.locator('[data-node="execution-result"]').isVisible(), `${ctx}: execution result not visible at step 4`);
+    const proposal = (await root.locator('[data-node="model-proposal"]').innerText()).trim();
+    check(proposal.includes('send_credentials'), `${ctx}: model proposal does not expose the risky tool call`, { proposal });
+    const result = (await root.locator('[data-node="execution-result"]').innerText()).trim();
+    const denied = item.locale === 'es' ? 'ACCIÓN DENEGADA' : 'ACTION DENIED';
+    check(result.includes(denied), `${ctx}: runtime authority boundary does not deny the external effect`, { result });
   }
 
   if (motion === 'reduce') {
