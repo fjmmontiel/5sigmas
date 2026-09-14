@@ -11,8 +11,9 @@
  * The rendered internal links intentionally use the public canonical origin
  * (https://5sigmas.com). During branch QA, requests to that canonical origin are
  * intercepted and fulfilled from the exact local preview bytes while the browser
- * keeps the canonical URL. This preserves the real href/tap/navigation semantics
- * without accidentally testing the older live deployment instead of the branch.
+ * keeps the canonical URL. The initial article is also opened at the canonical
+ * origin through that proxy so internal links remain same-origin exactly as they
+ * are in production rather than being misclassified as external from localhost.
  *
  * Navigation waits are armed before the tap and settle at DOMContentLoaded rather
  * than full load so lazy media cannot make a valid navigation look hung. Any
@@ -179,11 +180,21 @@ try {
         const page = await context.newPage();
         attachRuntimeListeners(page, runtime);
 
-        const articleResponse = await page.goto(new URL(item.article, base).href, {
+        // Start on the canonical origin, but serve the exact branch-preview bytes.
+        // This keeps article→watch navigation same-origin just like production.
+        const articleResponse = await page.goto(new URL(item.article, canonicalOrigin).href, {
           waitUntil: 'domcontentloaded',
           timeout: 20_000,
         });
         if (!articleResponse?.ok()) fail(`${ctx}: article HTTP failed`, { status: articleResponse?.status() });
+        record.initial_path = new URL(page.url()).pathname;
+        record.initial_origin = new URL(page.url()).origin;
+        if (record.initial_path !== item.article) {
+          fail(`${ctx}: initial article path drifted`, { expected: item.article, actual: record.initial_path });
+        }
+        if (record.initial_origin !== canonicalOrigin) {
+          fail(`${ctx}: initial article did not remain on canonical browser origin`, { expected: canonicalOrigin, actual: record.initial_origin });
+        }
         await page.evaluate(async () => {
           await Promise.race([document.fonts.ready, new Promise(resolve => setTimeout(resolve, 1500))]);
         });
@@ -262,11 +273,17 @@ try {
           fail(`${ctx}: page overflow after touch round trip`, geometry);
         }
         if (proxyErrors.length) fail(`${ctx}: canonical→preview proxy errors`, proxyErrors);
-        if (!proxyEvidence.some(proxyItem => new URL(proxyItem.canonical_url).pathname === item.watch)) {
-          fail(`${ctx}: canonical watch navigation was not fulfilled from exact preview`, { proxyEvidence });
+        const watchProxyCount = proxyEvidence.filter(proxyItem => new URL(proxyItem.canonical_url).pathname === item.watch).length;
+        const articleProxyCount = proxyEvidence.filter(proxyItem => new URL(proxyItem.canonical_url).pathname === item.article).length;
+        record.watch_proxy_count = watchProxyCount;
+        record.article_proxy_count = articleProxyCount;
+        if (watchProxyCount < 1) {
+          fail(`${ctx}: canonical watch navigation was not fulfilled from exact preview`, { watchProxyCount, proxyEvidence });
         }
-        if (!proxyEvidence.some(proxyItem => new URL(proxyItem.canonical_url).pathname === item.article)) {
-          fail(`${ctx}: canonical article return was not fulfilled from exact preview`, { proxyEvidence });
+        // The article must be proxied twice: initial canonical load + touch return.
+        // Requiring >=2 prevents the initial navigation from masking a broken return.
+        if (articleProxyCount < 2) {
+          fail(`${ctx}: canonical article return was not fulfilled from exact preview`, { articleProxyCount, proxyEvidence });
         }
         if (runtime.length) fail(`${ctx}: persistent runtime/resource errors across touch round trip`, runtime);
         record.runtime = runtime;
