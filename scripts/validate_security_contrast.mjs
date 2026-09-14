@@ -13,17 +13,25 @@ function hexToRgb(hex) {
 }
 
 function relativeLuminance(rgb) {
-  const channels = rgb.map(value => {
+  const channels = rgb.slice(0, 3).map(value => {
     const c = value / 255;
     return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
   });
   return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2];
 }
 
-function contrastRatio(foreground, background) {
-  const a = relativeLuminance(hexToRgb(foreground));
-  const b = relativeLuminance(hexToRgb(background));
+function contrastRatioRgb(foreground, background) {
+  const a = relativeLuminance(foreground);
+  const b = relativeLuminance(background);
   return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+}
+
+function contrastRatio(foreground, background) {
+  return contrastRatioRgb(hexToRgb(foreground), hexToRgb(background));
+}
+
+function compositeRgb(foreground, background, alpha) {
+  return foreground.map((value, index) => value * alpha + background[index] * (1 - alpha));
 }
 
 function runSelfTest() {
@@ -39,11 +47,23 @@ function runSelfTest() {
     const actual = ratio >= AA_NORMAL;
     if (actual !== fixture.pass) failures.push({ ...fixture, ratio });
   }
+
+  // Regression fixture for CSS Color 4 translucent backgrounds. Chromium can
+  // return `color(srgb ... / alpha)` for color-mix(). The prior gate treated
+  // that tint as an opaque background and produced a false ~1:1 ratio instead
+  // of compositing it over the page background.
+  const risk = hexToRgb('#b93636');
+  const tintedWhite = compositeRgb(risk, [255, 255, 255], 0.05);
+  const riskRatio = contrastRatioRgb(risk, tintedWhite);
+  if (riskRatio < AA_NORMAL || riskRatio > contrastRatio('#b93636', '#ffffff')) {
+    failures.push({ name: 'translucent risk tint must be composited over white', ratio: riskRatio, background: tintedWhite });
+  }
+
   if (failures.length) {
     console.error('Security contrast self-test FAILED', JSON.stringify(failures, null, 2));
     process.exit(1);
   }
-  console.log('Security contrast self-test PASS: known legacy amber/teal mutations fail and repaired palette passes.');
+  console.log('Security contrast self-test PASS: legacy mutations fail, repaired palette passes, and translucent backgrounds are composited before WCAG comparison.');
 }
 
 if (process.argv.includes('--self-test')) {
@@ -143,7 +163,20 @@ try {
             ctx.fillStyle = '#000000';
             ctx.fillStyle = value;
             ctx.fillRect(0, 0, 1, 1);
-            return [...ctx.getImageData(0, 0, 1, 1).data];
+            const [r, g, b, a] = [...ctx.getImageData(0, 0, 1, 1).data];
+            return [r, g, b, a / 255];
+          };
+          const composite = (foreground, background) => {
+            const fa = foreground[3];
+            const ba = background[3];
+            const outA = fa + ba * (1 - fa);
+            if (outA <= 1e-9) return [0, 0, 0, 0];
+            return [
+              (foreground[0] * fa + background[0] * ba * (1 - fa)) / outA,
+              (foreground[1] * fa + background[1] * ba * (1 - fa)) / outA,
+              (foreground[2] * fa + background[2] * ba * (1 - fa)) / outA,
+              outA,
+            ];
           };
           const luminance = ([r, g, b]) => {
             const values = [r, g, b].map(value => {
@@ -156,16 +189,24 @@ try {
             const x = luminance(a), y = luminance(b);
             return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05);
           };
-          const alpha = value => {
-            const match = value.match(/rgba?\([^)]*[,/ ]\s*([0-9.]+)\s*\)$/i);
-            return value === 'transparent' ? 0 : match && value.startsWith('rgba') ? Number(match[1]) : 1;
-          };
           const effectiveBackground = node => {
+            const layers = [];
             for (let current = node; current; current = current.parentElement) {
               const value = getComputedStyle(current).backgroundColor;
-              if (value && alpha(value) > 0.98) return { value, source: current.className || current.tagName };
+              if (!value || value === 'transparent') continue;
+              const rgba = parseColor(value);
+              if (rgba[3] <= 1e-9) continue;
+              layers.push({ value, rgba, source: String(current.className || current.tagName) });
             }
-            return { value: 'rgb(255,255,255)', source: 'fallback-white' };
+            let effective = [255, 255, 255, 1];
+            for (let index = layers.length - 1; index >= 0; index -= 1) {
+              effective = composite(layers[index].rgba, effective);
+            }
+            return {
+              rgba: effective,
+              value: `rgb(${effective.slice(0, 3).map(channel => Math.round(channel)).join(', ')})`,
+              sources: layers.map(layer => ({ value: layer.value, source: layer.source, alpha: layer.rgba[3] })),
+            };
           };
           const rows = [];
           for (const selector of selectors) {
@@ -173,18 +214,18 @@ try {
               const style = getComputedStyle(node);
               const rect = node.getBoundingClientRect();
               if (style.display === 'none' || style.visibility === 'hidden' || Number(style.opacity) < 0.05 || rect.width <= 0 || rect.height <= 0) continue;
-              const fg = parseColor(style.color);
               const background = effectiveBackground(node);
-              const bg = parseColor(background.value);
+              const foregroundRaw = parseColor(style.color);
+              const foreground = foregroundRaw[3] < 0.999 ? composite(foregroundRaw, background.rgba) : foregroundRaw;
               rows.push({
                 selector,
                 text: (node.textContent || '').trim().slice(0, 120),
                 foreground: style.color,
                 background: background.value,
-                backgroundSource: String(background.source),
+                backgroundSources: background.sources,
                 fontSize: style.fontSize,
                 fontWeight: style.fontWeight,
-                ratio: ratio(fg, bg),
+                ratio: ratio(foreground, background.rgba),
               });
             }
           }
@@ -212,4 +253,4 @@ if (failures.length) {
   for (const failure of failures) console.error(JSON.stringify(failure));
   process.exit(1);
 }
-console.log(`Security contrast gate PASS: ${contexts.length} contexts, all inspected small-text probes >= ${AA_NORMAL}:1.`);
+console.log(`Security contrast gate PASS: ${contexts.length} contexts, all inspected small-text probes >= ${AA_NORMAL}:1 after compositing translucent backgrounds.`);
