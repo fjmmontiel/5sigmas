@@ -115,7 +115,7 @@ The practical conclusion is that prompt injection will persist while systems mix
 | Key | Source | Short description |
 | --- | --- | --- |
 | R1 | **OWASP** — *LLM Prompt Injection Prevention Cheat Sheet* | Explains why the problem arises from mixing instructions and data, and summarizes architectural defenses, validation and least privilege. |
-| R2 | **Chang et al. (2025)** — *Overcoming the Retrieval Barrier: Indirect Prompt Injection in the Wild for LLM Systems* | USENIX work on realistic indirect injection in RAG and agentic systems using *trigger fragments*, near-perfect retrieval and end-to-end attacks. |
+| R2 | **Chang et al. (2026)** — *Overcoming the Retrieval Barrier: Indirect Prompt Injection in the Wild for LLM Systems* | USENIX work on realistic indirect injection in RAG and agentic systems using *trigger fragments*, near-perfect retrieval and end-to-end attacks. |
 | R3 | **OWASP Top 10 for LLM Applications 2025** | Operational framework for prompt injection, excessive agency, tool misuse and other vulnerabilities in LLM applications. |
 | R4 | **Anthropic (2025)** — *Constitutional Classifiers* | Defense using input/output classifiers, streaming prediction and thousands of hours of red teaming. |
 | R5 | **Hubinger et al. (2024)** — *Sleeper Agents* | Shows that malicious behavior activated by triggers can persist after standard safety training. |
