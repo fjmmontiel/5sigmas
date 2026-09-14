@@ -76,7 +76,7 @@ jobs:
         continue-on-error: true
         run: python scripts/audit_publication_contract.py
 
-      - name: Inspect Security 00/01 native media with ffprobe
+      - name: Inspect Security 00/01 native media with fail-closed ffprobe gate
         id: security_media_probe
         continue-on-error: true
         run: |
@@ -86,19 +86,8 @@ jobs:
             sudo apt-get install -y ffmpeg
           fi
           command -v ffprobe
-          files=(
-            "docs/series/seguridad-ia/00_presentacion_serie.mp4"
-            "docs/series/seguridad-ia/01-prompt-injection.mp4"
-            "locales/en/series/seguridad-ia/00_presentacion_serie.mp4"
-            "locales/en/series/seguridad-ia/01-prompt-injection.mp4"
-          )
-          for file in "${files[@]}"; do
-            echo "=== ${file} ==="
-            test -s "${file}" || { echo "missing or empty: ${file}"; exit 1; }
-            ffprobe -v error \
-              -show_entries format=duration,format_name:stream=index,codec_type,codec_name,width,height,pix_fmt,channels,sample_rate \
-              -of json "${file}"
-          done
+          python scripts/validate_security_video_media.py --self-test
+          python scripts/validate_security_video_media.py
 
       - name: Prepare English
         run: python scripts/prepare_locale.py --locale en
@@ -170,6 +159,14 @@ jobs:
               if path.exists():
                   data = json.loads(path.read_text())
                   print(name, json.dumps(data.get('summary', {k:v for k,v in data.items() if k != 'results'}), ensure_ascii=False))
+          media_report = Path('artifacts/security-requalification/media-report.json')
+          if media_report.exists():
+              data = json.loads(media_report.read_text())
+              print('security-requalification/media-report.json', json.dumps({
+                  'status': data.get('status'),
+                  'failure_count': len(data.get('failures', [])),
+                  'failures': data.get('failures', []),
+              }, ensure_ascii=False))
           security_report = Path('artifacts/security-requalification/report.json')
           if security_report.exists():
               data = json.loads(security_report.read_text())
