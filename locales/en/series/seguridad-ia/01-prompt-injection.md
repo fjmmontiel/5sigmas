@@ -41,7 +41,7 @@ The practical consequence is simple: if the system reads untrusted content, assu
 
 ## 2. The instruction can enter through retrieval
 
-In a simple chat, the attacker still speaks directly with the model. That is already a problem, but the risk remains relatively contained: the malicious input and the effect stay within the same interaction.
+In a simple chat, the attacker still speaks directly to the model. That is already a problem, but the risk remains relatively contained: the malicious input and the effect stay within the same interaction.
 
 The situation changes when the system retrieves external documents or coordinates several steps before responding. In RAG, an agent may read an email, an internal wiki, a PDF or a support note and treat that content as legitimate working material. If a hostile instruction is embedded there, the attack no longer enters through the user's input box. It enters through the supply chain of the system's own context.
 
