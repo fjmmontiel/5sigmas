@@ -143,21 +143,21 @@ media_gate:
   local_assistant_validation:
     python_compile: PASS
     synthetic_self_test: PASS
-  ci_status: FAIL_EXPECTED_FAIL_CLOSED
-  diagnostic_run: 34802165060
-  diagnostic_head: 0ef4b66ec280f876fbc2133bb57e5e72d5279c03
-  evidence_artifact_id: 10331039350
-  evidence_artifact_digest: sha256:e2f6321a78bae80fdd742904717d736ef77c7e8fce9b22bc4ce56e498ffc27ed
-  real_media_result:
-    status: FAIL
-    failure_count: 4
-    failure_code: VIDEO_AUDIO_STREAM_MISSING
-    duration_drift_failures: 0
-    silent_videos:
-      - docs/series/seguridad-ia/00_presentacion_serie.mp4
-      - locales/en/series/seguridad-ia/00_presentacion_serie.mp4
-      - docs/series/seguridad-ia/01-prompt-injection.mp4
-      - locales/en/series/seguridad-ia/01-prompt-injection.mp4
+  prior_binary_diagnostic:
+    diagnostic_run: 34802165060
+    diagnostic_head: 0ef4b66ec280f876fbc2133bb57e5e72d5279c03
+    evidence_artifact_id: 10331039350
+    evidence_artifact_digest: sha256:e2f6321a78bae80fdd742904717d736ef77c7e8fce9b22bc4ce56e498ffc27ed
+    real_media_result:
+      status: FAIL
+      failure_count: 4
+      failure_code: VIDEO_AUDIO_STREAM_MISSING
+      duration_drift_failures: 0
+      silent_videos:
+        - docs/series/seguridad-ia/00_presentacion_serie.mp4
+        - locales/en/series/seguridad-ia/00_presentacion_serie.mp4
+        - docs/series/seguridad-ia/01-prompt-injection.mp4
+        - locales/en/series/seguridad-ia/01-prompt-injection.mp4
   current_source_metadata:
     revision: c520d338531eb13532c2448bb628e342f44d727b
     static_metadata_missing: 0
@@ -166,7 +166,37 @@ media_gate:
     chapter_maps_missing: 4
     audio_streams_missing: 4
     media_pass: false
-    diagnostic_pending: true
+    diagnostic_pending: false
+  current_integration_checkpoint:
+    diagnostic_head: a8177ef9cbb361f7a094709fc84826e943eaca9a
+    diagnostic_run: 34808958350
+    diagnostic_scope: focused_security_00_01
+    workflow_conclusion: FAILURE_EXPECTED_FAIL_CLOSED
+    evidence_artifact_id: 10333609523
+    evidence_artifact_digest: sha256:c54799a73321bd27f2dd76e805dab2e4963a710be5473761e488efa0167c82ad
+    global_browser_sweep: SKIPPED_FOCUSED_ITERATION
+    observed_step_conclusions:
+      negative_regression_fixtures: PASS
+      publication_discovery: PASS
+      strict_es_build: PASS
+      publication_contract: PASS
+      strict_en_build: PASS
+      security_browser: PASS
+      security_prompt_visual_states: PASS
+      final_enforcement: FAIL
+    expected_current_media_blockers_from_source_and_unchanged_probe_facts:
+      captions_missing: 4
+      transcripts_missing: 4
+      chapter_maps_missing: 4
+      audio_streams_missing: 4
+    media_pass: false
+    article_golden: false
+    note: >-
+      The media/source/rendered audit steps use continue-on-error in the diagnostic workflow, so
+      GitHub's per-step conclusion alone cannot be used to claim those gates passed. The final
+      enforcement failed as required. Static metadata is now complete, while the current source plus
+      the previously ffprobed unchanged native binaries still fail the audiovisual contract on
+      captions, transcripts, curated chapter maps and audio streams.
   previous_probe_semantics: >-
     Superseded. The earlier workflow merely printed ffprobe JSON, so its step could report
     success for a silent MP4. Run 34802165060 proves the replacement gate fails closed on
@@ -234,28 +264,6 @@ current_reviewed_visual_revision:
       This is the pedagogy verdict for the current visual set, not ARTICLE_GOLDEN. The audiovisual learning
       contract remains incomplete and the entire article cannot be certified until MEDIA_PASS and all other
       article gates are green.
-
-current_media_gate_revision:
-  diagnostic_head: 0ef4b66ec280f876fbc2133bb57e5e72d5279c03
-  diagnostic_run: 34802165060
-  diagnostic_scope: focused_security_00_01
-  workflow_conclusion: FAILURE_EXPECTED_FAIL_CLOSED
-  publication_discovery_pass: true
-  publication_contract_pass: true
-  strict_es_build_pass: true
-  strict_en_build_pass: true
-  security_browser_pass: true
-  prompt_visual_state_pass: true
-  media_pass: false
-  media_failure_count: 4
-  media_failure_code: VIDEO_AUDIO_STREAM_MISSING
-  duration_metadata_drift: false
-  source_pass: false
-  rendered_pass: false
-  global_browser_sweep: SKIPPED_FOCUSED_ITERATION
-  affects_visual_pixels: false
-  requires_new_visual_review: false
-  article_golden: false
 
 visuals:
   presentation_map:
