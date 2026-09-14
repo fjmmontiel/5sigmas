@@ -189,6 +189,49 @@ async function inspectVisual(page, item, mobile, motion, record) {
   record.interaction_review = 'AUTOMATED_TECHNICAL_ONLY';
 }
 
+async function inspectPromptProvenanceDetails(page, item, mobile, motion, record, stem) {
+  if (item.kind !== 'prompt') return;
+  const ctx = `${item.locale}/${item.kind}/${mobile ? 'mobile' : 'desktop'}/${motion}`;
+  const expectedSummary = item.locale === 'es' ? 'Fuentes y evidencia adyacente' : 'Sources and adjacent evidence';
+  const summary = page.getByText(expectedSummary, { exact: true }).first();
+  check((await summary.count()) === 1, `${ctx}: provenance details summary missing`);
+  if (!(await summary.count())) return;
+  const details = summary.locator('xpath=ancestor::details[1]');
+  check((await details.count()) === 1, `${ctx}: provenance details container missing`);
+  if (!(await details.count())) return;
+  check(!(await details.getAttribute('open')), `${ctx}: provenance details unexpectedly open before interaction`);
+
+  await activate(summary, mobile);
+  await page.waitForFunction((text) => {
+    const summaries = [...document.querySelectorAll('article details > summary')];
+    const node = summaries.find(el => el.textContent?.trim() === text);
+    return Boolean(node?.parentElement?.open);
+  }, expectedSummary, { timeout: 5000 });
+
+  const links = details.locator('a[href]');
+  const linkCount = await links.count();
+  check(linkCount >= 5, `${ctx}: provenance details must expose at least five source links`, { linkCount });
+  const linkEvidence = [];
+  for (let i = 0; i < linkCount; i++) {
+    const link = links.nth(i);
+    const href = await link.getAttribute('href');
+    const visible = await link.isVisible();
+    const box = visible ? await link.boundingBox() : null;
+    check(Boolean(href && /^https:\/\//.test(href)), `${ctx}: provenance source link ${i} must use an absolute HTTPS URL`, { href });
+    check(visible, `${ctx}: provenance source link ${i} is not visible after expansion`, { href });
+    if (box) {
+      check(box.x >= -1 && box.x + box.width <= record.width + 1, `${ctx}: provenance source link ${i} clips horizontally`, { href, box, width: record.width });
+    }
+    linkEvidence.push({ href, visible, box });
+  }
+  const geometry = await page.evaluate(() => ({ scrollWidth: document.documentElement.scrollWidth, clientWidth: document.documentElement.clientWidth }));
+  check(geometry.scrollWidth <= geometry.clientWidth + 1, `${ctx}: expanded provenance details introduce page overflow`, geometry);
+  record.provenance_details = { summary: expectedSummary, linkCount, links: linkEvidence, geometry };
+  await details.screenshot({ path: path.join(out, `${stem}-references-expanded.png`), animations: motion === 'reduce' ? 'disabled' : 'allow' });
+  await activate(summary, mobile);
+  check(!(await details.getAttribute('open')), `${ctx}: provenance details did not close after evidence capture`);
+}
+
 const launched = await launchBrowser();
 const browser = launched.browser;
 try {
@@ -214,12 +257,13 @@ try {
         check(geometry.lang.toLowerCase().startsWith(item.locale), `${ctx}: locale mismatch`, geometry);
         await inspectVisual(page, item, mobile, motion, record);
         await inspectVideo(page, ctx, record);
-        check(runtime.length === 0, `${ctx}: persistent runtime/resource errors`, runtime);
-        record.runtime = runtime;
         const stem = `${item.locale}-${item.kind}-${mobile?'mobile':'desktop'}-${motion}`;
         await page.screenshot({ path:path.join(out,`${stem}-page.png`), fullPage:true, animations:motion==='reduce'?'disabled':'allow' });
         const visual = page.locator(item.kind === 'presentation' ? '.secpath' : '.ctxmix').first();
         if(await visual.count()) await visual.screenshot({ path:path.join(out,`${stem}-visual.png`), animations:motion==='reduce'?'disabled':'allow' });
+        await inspectPromptProvenanceDetails(page, item, mobile, motion, record, stem);
+        check(runtime.length === 0, `${ctx}: persistent runtime/resource errors`, runtime);
+        record.runtime = runtime;
         evidence.push(record);
         await context.close();
       }
