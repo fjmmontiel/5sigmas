@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 21,
+  "diagnostic_revision": 22,
   "diagnostic_scope": "focused_security_00_01",
   "published_content_base": "baf32aefc3c9538bd90a5f28c2be395cb4fac0d5",
-  "requested_head_parent": "56974b3d9989637a82e92e950348e75aaeb2befb",
-  "reason": "Repeat the exact-head focused Security 00/1.1 integration milestone after the prior diagnostic exhausted the 35-minute job budget inside Prompt Injection visual-state capture and therefore skipped the dedicated real-keyboard/focus gate and retained no artifact. Bound the visual-state step to 10 minutes and keyboard-focus to 5 minutes without changing any quality threshold, content, media or GOLDEN condition, so a stuck evidence collector fails closed while later focus, enforcement and bounded artifact retention still execute. Revalidate strict ES/EN, publication/source/rendered audits, structured metadata, reciprocal article-watch, interaction/layout/playback, video lifecycle, visual-state evidence and real keyboard focus. Preserve MEDIA_PASS fail-closed for the four silent MP4s and missing captions/transcripts/curated chapter maps; PIXEL_REVIEW and PEDAGOGY_REVIEW remain manual and cannot be inferred from this technical run. Focused only; the global catalogue is not recertified.",
+  "requested_head_parent": "45e891903b83447b54b71f4a531af6b78dac7a5d",
+  "reason": "Revalidate Security 00/1.1 after the bounded exact-head diagnostic proved the visual-state collector is healthy but exposed a real desktop keyboard-access defect: the generated article-to-watch link exists yet is hidden by the legacy revamp-ux display:none!important rule in ES/EN presentation and Prompt Injection, normal and reduced motion. The repair restores that link only on the active Security 00/1.1 teaching surfaces via scoped selectors keyed to their existing secpath/ctxmix mechanisms, leaving Datacenters and earlier reference series under the legacy compact inline-player behavior. Re-run strict ES/EN, publication/source/rendered audits, structured metadata, reciprocal article-watch, interaction/layout/playback, video lifecycle, visual-state evidence and real Tab/focus/Enter. Preserve MEDIA_PASS fail-closed for the four silent MP4s and missing captions/transcripts/curated chapter maps; PIXEL_REVIEW and PEDAGOGY_REVIEW remain manual and cannot be inferred from technical checks. Focused only; the global catalogue is not recertified.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
