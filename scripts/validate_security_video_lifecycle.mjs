@@ -116,13 +116,23 @@ async function exerciseLifecycle(page, item, mobile, motion, record) {
   const ending = await video.evaluate(async (node) => {
     const duration = Number(node.duration);
     const target = Math.max(0, duration - Math.min(0.35, duration / 4));
-    node.currentTime = target;
-    await new Promise(resolve => node.addEventListener('seeked', resolve, { once: true }));
+    const seekResult = await new Promise(resolve => {
+      let settled = false;
+      const finish = (eventObserved) => {
+        if (settled) return;
+        settled = true;
+        resolve({ eventObserved, currentTime: Number(node.currentTime) });
+      };
+      node.addEventListener('seeked', () => finish(true), { once: true });
+      node.currentTime = target;
+      setTimeout(() => finish(false), 3000);
+    });
     const playPromise = node.play();
     if (playPromise && typeof playPromise.catch === 'function') await playPromise.catch(() => {});
-    return { duration, target };
+    return { duration, target, seekResult };
   });
   record.ending = ending;
+  check(Math.abs(ending.seekResult.currentTime - ending.target) <= 1.0, `${ctx}: end-seek did not reach expected position`, ending);
   await page.waitForFunction(() => {
     const rootNode = document.querySelector('article [data-s5-inline-video]');
     const node = rootNode?.querySelector('[data-s5-inline-video-player]');
