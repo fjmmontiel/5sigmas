@@ -1,4 +1,4 @@
-schema_version: 2
+schema_version: 3
 scope:
   series: seguridad-ia
   pages:
@@ -9,385 +9,161 @@ scope:
   article_golden: false
 
 head_state:
-  current_content_head: 056f62f96595f9a3fa553024cd337059c47c5953
-  exact_qa_integration_head: 014b743691c2fec20320f992b9ec50567437980b
-  last_exact_head_integration: 014b743691c2fec20320f992b9ec50567437980b
-  last_exact_head_integration_run: 34894292840
-  last_exact_head_pixel_review: dfab09ad051fcf8dfd1b2d4096d6ef8f0cb6b84b
-  last_exact_head_pedagogy_review: dfab09ad051fcf8dfd1b2d4096d6ef8f0cb6b84b
-  current_content_vs_exact_qa_integration:
-    qa_commits_after_content: 22
-    site_facing_files_changed_after_content: 0
-    classification: CURRENT_CONTENT_EXERCISED_WITH_QA_ONLY_INTEGRATION_HEAD
-    qa_changed_files:
-      - .github/workflows/series-experience-diagnostic.yml
-      - quality/series-requalification/security-00-01-status.yml
-      - quality/series-requalification/audit-request.json
-      - scripts/validate_security_article_watch_touch.mjs
-      - scripts/validate_security_requalification_browser.mjs
-    visible_copy_changed: false
-    teaching_visuals_changed: false
-    media_changed: false
-    browser_or_gate_code_changed: true
-    exact_content_render_reviewed: true
-    note: >-
-      The site-facing Security 00/1.1 content remains exactly the provenance-link revision 056f62f9.
-      Later commits only reconcile durable evidence and strengthen bounded QA. Run 34894292840 exercised
-      that unchanged content on exact integration head 014b7436 and closed the retained touch-evidence
-      race: all eight ES/EN × presentation/prompt × normal/reduced mobile contexts now retain zero
-      runtime/proxy errors after teardown while preserving canonical-origin round trips. Pixel/pedagogy
-      review is not re-issued by this technical run; the latest manual same-agent visual review remains
-      the unchanged-content review from run 34874667427.
+  current_content_head: f36e04bb5b1c6462863828bb13d676a1aa4b6dcf
+  exact_qa_integration_head: 2e1ed72c2cf6214e7a8b0ad9265314fb759e9889
+  diagnostic_run: 34900424729
+  evidence_artifact_id: 10371260583
+  evidence_artifact_sha256: 6a8068ccdb27d8317fc509242a4a61ce062602478796b1dcd9c211359c6c17e3
+  content_changed_since_previous_manual_review: true
+  site_facing_change_class: ACCESSIBILITY_CONTRAST_ONLY
+  visible_copy_changed: false
+  teaching_mechanism_changed: false
+  media_changed: false
   current_content_pixel_review: PASS_ACTIVE_SET_SAME_AGENT
   current_content_pedagogy_review: PASS_ACTIVE_SET_SAME_AGENT
+  independent_editorial_review: false
   article_golden: false
-
-source_metadata_completion:
-  revision: c520d338531eb13532c2448bb628e342f44d727b
-  es:
-    00_presentacion_serie: STATIC_VIDEO_METADATA_COMPLETE
-    01-prompt-injection: STATIC_VIDEO_METADATA_COMPLETE
-  en:
-    00_presentacion_serie: STATIC_VIDEO_METADATA_COMPLETE
-    01-prompt-injection: STATIC_VIDEO_METADATA_COMPLETE
-  complete_fields: [video, video_poster, video_title, video_summary, video_duration]
-  watch_linkage:
-    status: GENERATED_BY_CANONICAL_VIDEO_HOOK
-    hook: hooks/video_embed.py
-    rule: site_url/videos/<article-directory>/<video-stem>/
-  still_fail_closed: [video_captions, video_transcript, video_chapters, audio_stream]
   note: >-
-    Poster/title/summary metadata was completed only from the current bilingual article text and
-    already-existing native binaries. No captions, transcript, chapter timing or narration was
-    inferred or fabricated.
+    Security 00/1.1 site-facing pixels changed after the previous durable checkpoint to repair small-text
+    contrast in the presentation and RAG visual, mirrored in ES/EN. Run 34900424729 rendered the current
+    content inside exact QA integration head 2e1ed72c. The current artifact was manually inspected again
+    across ES/EN, desktop/mobile and normal/reduced motion before re-issuing same-agent pixel/pedagogy PASS.
 
-media:
-  es:
-    00_presentacion_serie:
-      file: docs/series/seguridad-ia/00_presentacion_serie.mp4
-      codec: h264
-      dimensions: 1920x1080
-      pixel_format: yuv420p
-      duration_seconds: 60.300
-      declared_duration: PT1M0S
-      duration_metadata_reconciled: true
-      audio_stream: false
-      narration_status: VOICE_MISSING
-      captions: MISSING
-      transcript: MISSING
-      key_moments: MISSING
-      media_pass: false
-    01-prompt-injection:
-      file: docs/series/seguridad-ia/01-prompt-injection.mp4
-      codec: h264
-      dimensions: 1920x1080
-      pixel_format: yuv420p
-      duration_seconds: 60.333
-      declared_duration: PT1M0S
-      duration_metadata_reconciled: true
-      audio_stream: false
-      narration_status: VOICE_MISSING
-      captions: MISSING
-      transcript: MISSING
-      key_moments: MISSING
-      media_pass: false
-  en:
-    00_presentacion_serie:
-      file: locales/en/series/seguridad-ia/00_presentacion_serie.mp4
-      codec: h264
-      dimensions: 1920x1080
-      pixel_format: yuv420p
-      duration_seconds: 47.567
-      declared_duration: PT48S
-      duration_metadata_reconciled: true
-      audio_stream: false
-      narration_status: VOICE_MISSING
-      captions: MISSING
-      transcript: MISSING
-      key_moments: MISSING
-      media_pass: false
-    01-prompt-injection:
-      file: locales/en/series/seguridad-ia/01-prompt-injection.mp4
-      codec: h264
-      dimensions: 1920x1080
-      pixel_format: yuv420p
-      duration_seconds: 47.567
-      declared_duration: PT48S
-      duration_metadata_reconciled: true
-      audio_stream: false
-      narration_status: VOICE_MISSING
-      captions: MISSING
-      transcript: MISSING
-      key_moments: MISSING
-      media_pass: false
-
-narration_search:
-  status: VOICE_MISSING_CONFIRMED_WITHIN_CONNECTED_SURFACES
-  github_operational_repo:
-    queries:
-      - seguridad-ia narration
-      - 01-prompt-injection
-      - VOICE_MISSING
-      - audio_mix
-      - narration asset
-    result: NO_AUTHORIZED_SECURITY_NARRATION_FOUND
-  google_drive:
-    traversed_security_folders: true
-    audio_mime_query_result: NO_RESULTS
-    targeted_queries:
-      - prompt injection mp3
-      - prompt injection wav
-      - narracion seguridad
-      - seguridad-ia mp4
-    result: NO_AUTHORIZED_SECURITY_NARRATION_FOUND
-  gmail:
-    query: 'after:2026/08/01 has:attachment {filename:wav filename:mp3 filename:m4a} {"prompt injection" seguridad 5sigmas} -in:trash -in:spam'
-    result: NO_RESULTS
-  rejected_substitutes:
-    - source: Google Drive VOICE_REPLACEMENT_NOTES.md
-      reason: >-
-        The historical XTTS/Kokoro POC explicitly says its Kokoro tracks do not imitate
-        the user's timbre and are safe alternatives to user-voice cloning. They are not
-        Francisco's authorized narration and must not be substituted into this series.
+contrast_repair:
+  status: PASS_CURRENT_CONTENT
+  gate: scripts/validate_security_contrast.mjs
+  workflow: .github/workflows/series-experience-diagnostic.yml
+  threshold_wcag_ratio: 4.5
+  rendered_contexts: 16
+  failures: 0
+  minimum_observed_ratio: 4.504877636810088
+  minimum_observed_probe: .defsim__result-badge
+  minimum_observed_context: en/prompt/desktop/no-preference
+  presentation_minimum_ratio: 4.554082412061247
+  translucent_backgrounds_composited: true
+  mutation_fixtures: PASS
   note: >-
-    The bounded connected GitHub + Google Drive + targeted Gmail search found no exact
-    authorized Francisco narration for Security 00/01. This does not prove that no asset
-    can exist outside connected/searchable surfaces. The correct fail-closed state remains
-    VOICE_MISSING.
+    The first contrast implementation was not accepted because translucent CSS Color 4 backgrounds were
+    treated as opaque. The corrected gate composites ancestor backgrounds before computing contrast and
+    keeps the original 4.5:1 threshold; no threshold was relaxed.
 
-media_gate:
-  script: scripts/validate_security_video_media.py
-  integrated_workflow: .github/workflows/series-experience-diagnostic.yml
-  policy:
-    - explicit video, poster, title, summary and ISO duration are mandatory
-    - captions must be declared as a non-empty local VTT
-    - transcript must be declared as a non-empty local Markdown or text file
-    - curated video_chapters must be named, ordered, non-overlapping, begin near zero and cover the declared duration
-    - exactly one H.264 1920x1080 yuv420p video stream is required for the current Security 00/01 canon
-    - at least one audio stream is mandatory
-    - declared ISO duration must be valid and within 1 second of ffprobe duration
-    - gate never generates, clones, or substitutes Francisco's voice
-  negative_fixtures:
-    silent_video: MUST_FAIL_VIDEO_AUDIO_STREAM_MISSING
-    duration_drift: MUST_FAIL_VIDEO_DURATION_METADATA_DRIFT
-    missing_captions: MUST_FAIL_VIDEO_CAPTIONS_MISSING
-    missing_transcript: MUST_FAIL_VIDEO_TRANSCRIPT_MISSING
-    missing_key_moments: MUST_FAIL_VIDEO_CHAPTERS_MISSING
-    invalid_chapter_ranges: MUST_FAIL_CHAPTER_CONTRACT
-  local_assistant_validation:
-    python_compile: PASS
-    synthetic_self_test: PASS
-  prior_binary_diagnostic:
-    diagnostic_run: 34802165060
-    diagnostic_head: 0ef4b66ec280f876fbc2133bb57e5e72d5279c03
-    evidence_artifact_id: 10331039350
-    evidence_artifact_digest: sha256:e2f6321a78bae80fdd742904717d736ef77c7e8fce9b22bc4ce56e498ffc27ed
-    real_media_result:
-      status: FAIL
-      failure_count: 4
-      failure_code: VIDEO_AUDIO_STREAM_MISSING
-      duration_drift_failures: 0
-      silent_videos:
-        - docs/series/seguridad-ia/00_presentacion_serie.mp4
-        - locales/en/series/seguridad-ia/00_presentacion_serie.mp4
-        - docs/series/seguridad-ia/01-prompt-injection.mp4
-        - locales/en/series/seguridad-ia/01-prompt-injection.mp4
-  current_source_metadata:
-    revision: 056f62f96595f9a3fa553024cd337059c47c5953
-    static_metadata_missing: 0
-    captions_missing: 4
-    transcripts_missing: 4
-    chapter_maps_missing: 4
-    audio_streams_missing: 4
-    media_pass: false
-    diagnostic_pending: false
-    note: >-
-      The provenance-link content revision does not alter video declarations or native media bytes.
-      Run 34894292840 reconfirmed the same fail-closed media state on the exact QA integration head.
-  current_integration_checkpoint:
-    diagnostic_head: 014b743691c2fec20320f992b9ec50567437980b
-    content_head_rendered: 056f62f96595f9a3fa553024cd337059c47c5953
-    diagnostic_run: 34894292840
-    diagnostic_scope: focused_security_00_01
-    workflow_conclusion: FAILURE_EXPECTED_FAIL_CLOSED
-    evidence_artifact_id: 10368233685
-    evidence_artifact_digest: sha256:c4337aa6e9ca236783aced14fc305eae2dd44e4dd86fa473ef1a8c17e495e612
-    global_browser_sweep: SKIPPED_FOCUSED_ITERATION
-    observed_step_conclusions:
-      negative_regression_fixtures: PASS
-      publication_discovery: PASS
-      source_coverage_audit_step: PASS
-      strict_es_build: PASS
-      publication_contract: PASS
-      security_media_probe_step: PASS_WITH_FAIL_CLOSED_REPORT
-      strict_en_build: PASS
-      structured_provenance_locale_metadata: PASS
-      reciprocal_article_watch_locale_ui: PASS
-      rendered_html_audit_step: PASS
-      security_browser: PASS
-      video_lifecycle: PASS
-      real_touch_article_watch: PASS_RETAINED_ZERO_ERRORS
-      security_prompt_visual_states: PASS
-      expanded_provenance_details: PASS
-      real_keyboard_focus: PASS
-      final_enforcement: FAIL
-    touch_evidence_contract:
-      report_copies_identical: true
-      contexts: 8
-      top_level_failures: 0
-      retained_runtime_errors: 0
-      retained_proxy_errors: 0
-      canonical_origin: https://5sigmas.com
-      watch_proxy_count_min: 1
-      article_proxy_count_min: 2
-      note: >-
-        Run 30 exposed that mutable error arrays could gain teardown-time entries after the PASS verdict.
-        Run 31 waits for returned-article quiescence, re-checks after context close and snapshots the arrays
-        actually serialized. The retained flat and nested reports are byte-identical and clean in all eight
-        ES/EN presentation/prompt normal/reduced mobile contexts.
-    expected_current_media_blockers:
-      captions_missing: 4
-      transcripts_missing: 4
-      chapter_maps_missing: 4
-      audio_streams_missing: 4
-    media_pass: false
-    article_golden: false
-    note: >-
-      The exact integration rendered and exercised the current Security 00/1.1 content. The final workflow
-      failed as required because the global source/rendered catalogue debt and active Security media debt
-      remain. Technical substeps, including the corrected real-touch gate, are not ARTICLE_GOLDEN.
-  previous_probe_semantics: >-
-    Superseded. The earlier workflow merely printed ffprobe JSON, so its step could report
-    success for a silent MP4. Run 34802165060 proves the replacement gate fails closed on
-    all four silent native Security videos while accepting the reconciled duration metadata.
+manual_pixel_review:
+  verdict: PASS_ACTIVE_SET_SAME_AGENT
+  evidence_artifact_id: 10371260583
+  inspected:
+    - complete presentation ES desktop normal and reduced captures
+    - complete presentation ES mobile normal and reduced captures
+    - complete presentation EN desktop normal and reduced captures
+    - complete presentation EN mobile normal and reduced captures
+    - complete Prompt Injection ES desktop normal and reduced captures
+    - complete Prompt Injection ES mobile normal and reduced captures
+    - complete Prompt Injection EN desktop normal and reduced captures
+    - complete Prompt Injection EN mobile normal and reduced captures
+    - presentation control-vs-data visual in both locales and viewports
+    - Prompt Injection control-vs-data visual in both locales and viewports
+    - retrieval clean/poisoned mechanism states including current contrast repair
+    - defence-in-depth states including current result badges
+    - normal/reduced-motion current states
+  observed:
+    clipping_or_overlap: NONE_FOUND_IN_CURRENT_ARTIFACT
+    global_horizontal_overflow: NONE_FOUND
+    unreadable_labels: NONE_FOUND
+    accidental_raw_markup: NONE_FOUND_IN_ACTIVE_SET_CAPTURES
+    locale_leakage: NONE_FOUND
+    mobile_relation_requires_giant_horizontal_canvas: false
+    contrast_regression: NONE_FOUND
+  limitation: >-
+    This is a same-agent editorial inspection of the current active set, not an independent review and not
+    a catalogue-wide pixel certification. Sticky site chrome visible in tall stitched element screenshots
+    was checked against the complete page captures; it does not obscure the corresponding content in the
+    full-page render.
 
-superseded_evidence:
-  - head: e3411f54078833aa7a9d6cf977172fa30f7acba6
-    diagnostic_run: 34795280576
-    reason: >-
-      Downloaded visual-state evidence contained 204 genuine mobile collisions, so the nominal step
-      status never constituted pixel or pedagogy approval.
-  - head: f9a07c64a3e120bb48639882156d37aa54b9cec3
-    diagnostic_run: 34797118816
-    reason: >-
-      The visual source was materially improved, but two focused harness assertions were stale:
-      the browser gate waited for removed trust-badge nodes and the retrieval gate required the literal
-      English word "deviated" instead of validating the mechanism. The screenshots remain usable only
-      because the visual source bytes are unchanged in the later reviewed technical head.
-  - head: b15a8b8e8148fd670e4c63bf1e436c3fd85e8060
-    diagnostic_run: 34891887687
-    reason: >-
-      The touch step itself was green, but retained run-30 evidence contained late proxy/runtime errors in
-      two Prompt Injection mobile contexts after the verdict had already been computed. That run is not
-      accepted as proof of a clean retained touch contract; run 31 supersedes it.
+manual_pedagogy_review:
+  verdict: PASS_ACTIVE_SET_SAME_AGENT
+  inspected_mechanisms:
+    - presentation path from hostile content through proposal to external authorization boundary
+    - control-vs-data distinction and change of execution authority
+    - retrieval clean versus poisoned top-K state and downstream proposal change
+    - defence-in-depth first-effective-boundary behavior and progressively disabled controls
+  observations:
+    interaction_changes_model_state_or_outcome: true
+    color_only_or_label_only_interaction: false
+    mechanism_inputs_outputs_observable: true
+    assumptions_or_counterexample_present_where_applicable: true
+  limitation: SAME_AGENT_NOT_INDEPENDENT
 
-current_reviewed_visual_revision:
-  technical_head: dfab09ad051fcf8dfd1b2d4096d6ef8f0cb6b84b
-  content_head_rendered: 056f62f96595f9a3fa553024cd337059c47c5953
-  diagnostic_run: 34874667427
-  diagnostic_scope: focused_security_00_01
+technical_gates:
   workflow_conclusion: FAILURE_EXPECTED_FAIL_CLOSED
-  evidence_artifact_id: 10360386607
-  evidence_artifact_digest: sha256:c0aa3cdea6b889a09a0e1fde1b91a67565fe83f17cc52b2d3b33773d908e9928
-  publication_discovery_pass: true
-  publication_contract_pass: true
-  strict_es_build_pass: true
-  strict_en_build_pass: true
-  structured_metadata_pass: true
-  reciprocal_article_watch_pass: true
-  security_browser_pass: true
-  video_lifecycle_pass: true
-  prompt_visual_state_pass: true
-  expanded_provenance_details_pass: true
-  real_keyboard_focus_pass: true
+  negative_regression_fixtures: PASS
+  publication_discovery: PASS
+  strict_es_build: PASS
+  publication_contract: PASS
+  strict_en_build: PASS
+  structured_provenance_locale_metadata: PASS
+  reciprocal_article_watch_locale_ui: PASS
+  security_browser_interaction_layout_playback: PASS
+  security_wcag_contrast: PASS
+  video_lifecycle: PASS
+  real_touch_article_watch: PASS
+  prompt_visual_states: PASS
+  expanded_provenance_details: PASS
+  real_keyboard_focus: PASS
+  final_enforcement: FAIL
+  global_browser_sweep: SKIPPED_FOCUSED_ITERATION
   source_pass: false
   rendered_pass: false
-  global_browser_sweep: SKIPPED_FOCUSED_ITERATION
+  browser_pass_active_set: true
   media_pass: false
   pixel_review: PASS_ACTIVE_SET_SAME_AGENT
   pedagogy_review: PASS_ACTIVE_SET_SAME_AGENT
   article_golden: false
-  current_content_head: 056f62f96595f9a3fa553024cd337059c47c5953
-  current_content_head_pixel_review: PASS_ACTIVE_SET_SAME_AGENT
-  current_content_head_pedagogy_review: PASS_ACTIVE_SET_SAME_AGENT
-  technical_notes:
-    - focused Security browser gate passed in Google Chrome with real mobile tap and persistent runtime/resource listeners
-    - poster→play→pause/seek/end→next lifecycle passed under normal/reduced motion
-    - real Tab traversal reached the Security article→watch link in ES/EN with visible focus and Enter activation
-    - Prompt Injection mechanism-state gate passed for ES/EN desktop/mobile normal/reduced motion
-    - collapsed Prompt Injection provenance details were opened with real interaction, exposing six visible absolute-HTTPS source links in every ES/EN desktop/mobile normal/reduced context without page overflow
-    - global failure is intentional because the independent source/rendered audit still records unresolved media across the requalification catalogue and raw TeX outside Security 00/01
-  manual_pixel_review:
-    evidence_artifact_id: 10360386607
-    inspected:
-      - presentation ES/EN desktop/mobile full-page captures in normal/reduced motion
-      - Prompt Injection ES/EN desktop/mobile full-page captures in normal/reduced motion
-      - expanded Prompt Injection provenance blocks ES/EN desktop/mobile normal/reduced motion
-      - control-vs-data representative current states across desktop/mobile and both locales
-      - retrieval barrier clean/poisoned current states across desktop/mobile and both locales
-      - defence-in-depth all-on/progressively-disabled current states across desktop/mobile and both locales
-      - visible article→watch placement and surrounding page hierarchy
-    verdict: PASS_ACTIVE_SET_SAME_AGENT
-    note: >-
-      The current site-facing content bytes are exactly 056f62f9 and were rendered inside the exact
-      dfab09ad QA integration. No clipping, global horizontal overflow, locale leakage, unreadable
-      source-link state or page-hierarchy regression was found in the manually inspected current evidence.
-    limitation: >-
-      Same-agent review only. This is a page/active-set pixel verdict, not an independent review and not
-      ARTICLE_GOLDEN; the audiovisual learning contract remains incomplete.
-  manual_pedagogy_review:
-    verdict: PASS_ACTIVE_SET_SAME_AGENT
-    rationale:
-      - presentation map teaches one hostile path with two authorization outcomes rather than a decorative architecture diagram
-      - control-vs-data separates provenance/model influence from executable runtime authority and changes to a denied external action
-      - retrieval barrier changes ranking/top-K membership, retrieved context and downstream proposal without fabricated similarity scores
-      - defence-in-depth moves the first effective stopping boundary as independent controls are disabled and explicitly avoids multiplicative-probability claims
-      - direct primary-source links are now visibly reachable in the expanded evidence state without replacing the mechanism explanation
-    limitation: >-
-      Same-agent pedagogy review of the current active set. It does not create independent editorial
-      evidence and cannot override MEDIA_PASS=false or unresolved catalogue-wide source/rendered debt.
 
-visuals:
-  presentation_map:
-    es_source: docs/snippets/seguridad-ia/00-series-mapa.html
-    en_source: locales/en/snippets/seguridad-ia/00-series-mapa.html
-    mechanism_states: hostile_path__broad_permissions_vs_least_privilege_authorization
-    current_state: CURRENT_PAGE_PASS_SAME_AGENT__ARTICLE_MEDIA_BLOCKED
-    desktop_pixel_review: PASS_CURRENT_CONTENT_SAME_AGENT
-    mobile_pixel_review: PASS_CURRENT_CONTENT_SAME_AGENT
-    pedagogy_review: PASS_CURRENT_CONTENT_SAME_AGENT
-  prompt_injection_control_data:
-    es_source: docs/snippets/seguridad-ia/01-control-vs-datos.html
-    en_source: locales/en/snippets/seguridad-ia/01-control-vs-datos.html
-    mechanism_states: provenance_to_context_to_model_proposal_to_runtime_authority
-    current_state: CURRENT_PAGE_PASS_SAME_AGENT__ARTICLE_MEDIA_BLOCKED
-    desktop_pixel_review: PASS_CURRENT_CONTENT_SAME_AGENT
-    mobile_pixel_review: PASS_CURRENT_CONTENT_SAME_AGENT
-    pedagogy_review: PASS_CURRENT_CONTENT_SAME_AGENT
-  prompt_injection_retrieval_barrier:
-    es_source: docs/snippets/seguridad-ia/01-rag-trigger-fragment.html
-    en_source: locales/en/snippets/seguridad-ia/01-rag-trigger-fragment.html
-    mechanism_states: clean_vs_optimized_trigger__topk_to_context_to_proposal
-    current_state: CURRENT_PAGE_PASS_SAME_AGENT__ARTICLE_MEDIA_BLOCKED
-    desktop_pixel_review: PASS_CURRENT_CONTENT_SAME_AGENT
-    mobile_pixel_review: PASS_CURRENT_CONTENT_SAME_AGENT
-    pedagogy_review: PASS_CURRENT_CONTENT_SAME_AGENT
-  prompt_injection_defence_in_depth:
-    es_source: docs/snippets/seguridad-ia/01-defensa-en-capas.html
-    en_source: locales/en/snippets/seguridad-ia/01-defensa-en-capas.html
-    mechanism_states: first_effective_boundary_moves_as_independent_controls_are_disabled
-    current_state: CURRENT_PAGE_PASS_SAME_AGENT__ARTICLE_MEDIA_BLOCKED
-    desktop_pixel_review: PASS_CURRENT_CONTENT_SAME_AGENT
-    mobile_pixel_review: PASS_CURRENT_CONTENT_SAME_AGENT
-    pedagogy_review: PASS_CURRENT_CONTENT_SAME_AGENT
+media:
+  status: FAIL
+  voice_policy: AUTHORIZED_EXISTING_NARRATION_ONLY
+  narration_status: VOICE_MISSING
+  exact_blocker_count: 16
+  blockers:
+    VIDEO_AUDIO_STREAM_MISSING: 4
+    VIDEO_CAPTIONS_MISSING: 4
+    VIDEO_TRANSCRIPT_MISSING: 4
+    VIDEO_CHAPTERS_MISSING: 4
+  es:
+    00_presentacion_serie:
+      codec: h264
+      dimensions: 1920x1080
+      pixel_format: yuv420p
+      duration_seconds: 60.300
+      audio_stream: false
+    01-prompt-injection:
+      codec: h264
+      dimensions: 1920x1080
+      pixel_format: yuv420p
+      duration_seconds: 60.333
+      audio_stream: false
+  en:
+    00_presentacion_serie:
+      codec: h264
+      dimensions: 1920x1080
+      pixel_format: yuv420p
+      duration_seconds: 47.567
+      audio_stream: false
+    01-prompt-injection:
+      codec: h264
+      dimensions: 1920x1080
+      pixel_format: yuv420p
+      duration_seconds: 47.567
+      audio_stream: false
+  forbidden_substitutions:
+    - generated_or_cloned_Francisco_voice
+    - alternate_voice_as_fallback
+    - fabricated_captions_transcript_or_key_moment_timing
 
-global_catalogue_snapshot:
-  diagnostic_run: 34894292840
-  series: 7
+catalogue_requalification:
+  target_series: 7
   routes_per_locale: 42
   locale_pages: 84
-  global_browser_sweep: SKIPPED_FOCUSED_ITERATION
-  unresolved_counts:
+  current_open_counts:
     RAW_TEX_RENDERED: 28
     VIDEO_DECLARATION_MISSING: 60
     VIDEO_NOT_RENDERED: 60
@@ -397,11 +173,46 @@ global_catalogue_snapshot:
     VIDEO_SUMMARY_MISSING: 18
     VIDEO_TITLE_MISSING: 9
   note: >-
-    These are fail-closed catalogue counts from the exact focused integration artifact. They are not
-    a statement that every page was pixel-reviewed in this iteration.
+    Run 34900424729 was intentionally focused on Security 00/1.1. These catalogue counts remain fail-closed;
+    no focused technical PASS is represented as global certification.
 
-blockers:
-  - authorized Francisco narration missing for silent ES/EN MP4s after bounded connected GitHub + Drive + Gmail search
-  - four audio streams, four caption files, four transcripts and four curated chapter/key-moment maps remain missing for Security 00/1.1
-  - source/rendered experience audit remains fail-closed until the audiovisual contract and remaining catalogue debt are resolved
-  - Security 1.2 remains blocked until Security 00/1.1 achieves complete ARTICLE_GOLDEN
+sources_and_locale:
+  material_claims_changed_in_this_contrast_repair: false
+  primary_source_research_required_by_this_pixel_change: false
+  structured_provenance_gate: PASS
+  locale_mirror_gate: PASS_ACTIVE_SET
+  note: >-
+    The contrast repair changed only presentation colors, not factual claims, figures, units, references,
+    equations or examples. Existing primary-source qualification therefore remains applicable; this run
+    does not invent a new factual revalidation receipt.
+
+release:
+  pr_created: false
+  merged: false
+  deployed: false
+  datacenters_or_pre_datacenters_modified: false
+  linkedin_lane_touched: false
+  release_contract_281_preserved: true
+
+history:
+  previous_manifest_blob_sha: cfff689f256e1c3192e017cfaf03245b1f263475
+  previous_durable_checkpoint_comment: 5670617117
+  historical_receipts_preserved_in_git_and_issue_305: true
+  superseded_visual_review:
+    content_head: 056f62f96595f9a3fa553024cd337059c47c5953
+    diagnostic_run: 34874667427
+    reason: >-
+      Superseded only as current pixel evidence because site-facing contrast colors changed afterward.
+      It remains historical evidence for the prior content revision.
+
+next_exact_gap:
+  stay_on_series: seguridad-ia
+  stay_on_pages: [00_presentacion_serie, 01-prompt-injection]
+  do_not_start: 02-jailbreaks
+  first_blocker: AUTHORIZED_NARRATION_AUDIO
+  dependent_blockers: [CAPTIONS, TRANSCRIPT, CURATED_KEY_MOMENTS]
+  allowed_parallel_work: >-
+    Continue only deterministic defects independent of missing authorized narration on the same active set.
+  article_golden_condition: >-
+    Do not grant ARTICLE_GOLDEN until audio, captions, transcript and curated key moments are complete and
+    the full conjunctive article gate is rerun on one stable exact revision with zero known P0/P1/P2.
