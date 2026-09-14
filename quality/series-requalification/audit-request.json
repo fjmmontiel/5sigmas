@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 23,
+  "diagnostic_revision": 24,
   "diagnostic_scope": "focused_security_00_01",
   "published_content_base": "baf32aefc3c9538bd90a5f28c2be395cb4fac0d5",
-  "requested_head_parent": "a9a1747327e9a93db513d3eda5dff56f3df18e48",
-  "reason": "Revalidate Security 00/1.1 after the current content head added direct primary-source anchors in the ES/EN presentation and Prompt Injection references. The four content files are the only site-facing changes since the last exact-head browser/pixel review; teaching visuals, media and browser/gate code are unchanged. Run strict ES/EN, publication/source/rendered audits, structured provenance/locale metadata, reciprocal article-watch, interaction/layout/playback, video lifecycle, visual-state evidence and real Tab/focus/Enter so the new anchor markup is exercised on the exact integration head. Preserve MEDIA_PASS fail-closed for the four silent MP4s and missing captions/transcripts/curated chapter maps. PIXEL_REVIEW and PEDAGOGY_REVIEW remain manual and must not be inferred from technical checks. Focused only; the global catalogue is not recertified.",
+  "requested_head_parent": "c770d2f74caf8ddbd1a64f06628b5454ee613870",
+  "reason": "The exact-head provenance-link run proved the Security 00/1.1 pages and teaching states technically, but manual review exposed one remaining evidence gap: Prompt Injection primary-source anchors live inside a collapsed references details element, so the prior screenshots did not exercise the newly changed hidden state. The focused browser gate now opens that details element with real mouse/touch, requires at least five visible absolute-HTTPS source links, checks expanded horizontal overflow, captures the expanded references block for ES/EN desktop/mobile normal/reduced motion, then closes it while persistent runtime/resource listeners remain active. Re-run the same focused Security milestone without changing content/media thresholds. Preserve SOURCE/RENDERED global failures and MEDIA_PASS fail-closed for four silent MP4s plus missing captions/transcripts/curated chapter maps. PIXEL_REVIEW and PEDAGOGY_REVIEW remain manual and must not be inferred from this technical gate.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
