@@ -97,6 +97,11 @@ jobs:
           S5_LOCALE: en
         run: mkdocs build -f mkdocs.en.yml --clean --strict
 
+      - name: Security 00/01 reciprocal article-watch links and locale UI
+        id: security_article_watch
+        continue-on-error: true
+        run: python scripts/validate_security_article_watch_contract.py
+
       - name: Independent complete rendered HTML audit
         id: rendered
         continue-on-error: true
@@ -148,6 +153,7 @@ jobs:
           SOURCE_OUTCOME: ${{ steps.source.outcome }}
           PUBLICATION_OUTCOME: ${{ steps.publication.outcome }}
           MEDIA_PROBE_OUTCOME: ${{ steps.security_media_probe.outcome }}
+          SECURITY_ARTICLE_WATCH_OUTCOME: ${{ steps.security_article_watch.outcome }}
           RENDERED_OUTCOME: ${{ steps.rendered.outcome }}
           BROWSER_OUTCOME: ${{ steps.browser.outcome }}
           SECURITY_BROWSER_OUTCOME: ${{ steps.security_browser.outcome }}
@@ -206,6 +212,7 @@ jobs:
               'SOURCE_OUTCOME',
               'PUBLICATION_OUTCOME',
               'MEDIA_PROBE_OUTCOME',
+              'SECURITY_ARTICLE_WATCH_OUTCOME',
               'RENDERED_OUTCOME',
               'SECURITY_BROWSER_OUTCOME',
               'SECURITY_VIDEO_LIFECYCLE_OUTCOME',
