@@ -1,9 +1,9 @@
 {
-  "diagnostic_revision": 26,
+  "diagnostic_revision": 27,
   "diagnostic_scope": "focused_security_00_01",
   "published_content_base": "baf32aefc3c9538bd90a5f28c2be395cb4fac0d5",
-  "requested_head_parent": "f99e4b7956bcfbd129785c3fe4f90caed50ebe0d",
-  "reason": "Verify the previously unexercised evidence-retention hardening for the real mobile article-to-watch-to-article touch gate on the current Security 00/1.1 branch. The prior exact technical step passed, but its nested report did not survive the retained artifact; the follow-up gate now writes a flat artifacts/security-requalification/article-watch-touch-report.json sentinel. Run one focused integration to prove that sentinel is emitted and retained while rechecking strict ES/EN, source/render diagnostics, reciprocal article-watch, focused browser/lifecycle, real touch, prompt-state and real keyboard/focus gates. Do not change site-facing content, media, thresholds or GOLDEN conditions. Preserve SOURCE/RENDERED global failures and MEDIA_PASS fail-closed for four silent MP4s plus missing captions/transcripts/curated chapter maps. PIXEL_REVIEW and PEDAGOGY_REVIEW remain manual and must not be inferred from this technical integration.",
+  "requested_head_parent": "70854f9a3297332b96ae14f822eb398a047aa435",
+  "reason": "Verify the corrected fail-closed mobile article-to-watch-to-article touch gate after diagnostic revision 26 exposed a real harness defect: waitForURL was armed after tap and waited for full load, then an uncaught timeout aborted before either touch report could be written. The gate now arms navigation before the real tap, settles at DOMContentLoaded, converts navigation/runtime exceptions into retained failures, and the workflow requires both nested and flat touch reports to exist before the touch step can pass. Run one focused exact-head integration and retain the reports. Do not change site-facing content, media, thresholds or GOLDEN conditions. Preserve SOURCE/RENDERED global failures and MEDIA_PASS fail-closed for four silent MP4s plus missing captions/transcripts/curated chapter maps. PIXEL_REVIEW and PEDAGOGY_REVIEW remain manual and must not be inferred from this technical integration.",
   "contract_issue": 305,
   "amendment_comment": 5655569434
 }
