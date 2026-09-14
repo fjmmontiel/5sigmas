@@ -16,9 +16,10 @@
  * are in production rather than being misclassified as external from localhost.
  *
  * Navigation waits are armed before the tap and settle at DOMContentLoaded rather
- * than full load so lazy media cannot make a valid navigation look hung. Any
- * unexpected browser/navigation exception is converted into retained fail-closed
- * evidence instead of aborting before report generation.
+ * than full load so lazy media cannot make a valid navigation look hung. Before a
+ * context is torn down, the returned article must also reach network quiescence.
+ * Runtime/proxy arrays are then checked again after context close so teardown-time
+ * failures can never appear in retained evidence while escaping the fail verdict.
  */
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -92,7 +93,12 @@ async function proxyCanonicalSiteToPreview(context, proxyEvidence, proxyErrors) 
         name: error?.name || 'Error',
         message: String(error?.message || error),
       });
-      await route.abort('failed');
+      try {
+        await route.abort('failed');
+      } catch {
+        // Context teardown can make abort itself impossible. The original proxy
+        // error is already retained and must be judged after context close.
+      }
     }
   });
 }
@@ -150,6 +156,22 @@ async function tapAndWaitPath(page, locator, expectedPath, ctx, label) {
   }
 }
 
+async function settleReturnedArticle(page, ctx) {
+  try {
+    await page.waitForLoadState('load', { timeout: 5_000 });
+    await page.waitForLoadState('networkidle', { timeout: 5_000 });
+    await page.waitForTimeout(200);
+    return true;
+  } catch (error) {
+    fail(`${ctx}: returned article did not reach resource quiescence before teardown`, {
+      name: error?.name || 'Error',
+      message: String(error?.message || error),
+      url: page.url(),
+    });
+    return false;
+  }
+}
+
 const launched = await launchBrowser();
 const browser = launched.browser;
 try {
@@ -169,6 +191,7 @@ try {
         canonical_origin_proxied_to_exact_preview: true,
       };
       let context = null;
+      let page = null;
       try {
         context = await browser.newContext({
           viewport: { width: 390, height: 844 },
@@ -177,7 +200,7 @@ try {
           reducedMotion: motion,
         });
         await proxyCanonicalSiteToPreview(context, proxyEvidence, proxyErrors);
-        const page = await context.newPage();
+        page = await context.newPage();
         attachRuntimeListeners(page, runtime);
 
         // Start on the canonical origin, but serve the exact branch-preview bytes.
@@ -265,6 +288,9 @@ try {
         if (record.final_origin !== canonicalOrigin) {
           fail(`${ctx}: touch round trip did not remain on canonical browser origin`, { expected: canonicalOrigin, actual: record.final_origin });
         }
+
+        await settleReturnedArticle(page, ctx);
+
         const geometry = await page.evaluate(() => ({
           scrollWidth: document.documentElement.scrollWidth,
           clientWidth: document.documentElement.clientWidth,
@@ -272,23 +298,20 @@ try {
         if (geometry.scrollWidth > geometry.clientWidth + 1) {
           fail(`${ctx}: page overflow after touch round trip`, geometry);
         }
-        if (proxyErrors.length) fail(`${ctx}: canonical→preview proxy errors`, proxyErrors);
+        if (proxyErrors.length) fail(`${ctx}: canonical→preview proxy errors`, [...proxyErrors]);
         const watchProxyCount = proxyEvidence.filter(proxyItem => new URL(proxyItem.canonical_url).pathname === item.watch).length;
         const articleProxyCount = proxyEvidence.filter(proxyItem => new URL(proxyItem.canonical_url).pathname === item.article).length;
         record.watch_proxy_count = watchProxyCount;
         record.article_proxy_count = articleProxyCount;
         if (watchProxyCount < 1) {
-          fail(`${ctx}: canonical watch navigation was not fulfilled from exact preview`, { watchProxyCount, proxyEvidence });
+          fail(`${ctx}: canonical watch navigation was not fulfilled from exact preview`, { watchProxyCount, proxyEvidence: [...proxyEvidence] });
         }
         // The article must be proxied twice: initial canonical load + touch return.
         // Requiring >=2 prevents the initial navigation from masking a broken return.
         if (articleProxyCount < 2) {
-          fail(`${ctx}: canonical article return was not fulfilled from exact preview`, { articleProxyCount, proxyEvidence });
+          fail(`${ctx}: canonical article return was not fulfilled from exact preview`, { articleProxyCount, proxyEvidence: [...proxyEvidence] });
         }
-        if (runtime.length) fail(`${ctx}: persistent runtime/resource errors across touch round trip`, runtime);
-        record.runtime = runtime;
-        record.proxy_errors = proxyErrors;
-        record.proxy_requests = proxyEvidence;
+        if (runtime.length) fail(`${ctx}: persistent runtime/resource errors across touch round trip`, [...runtime]);
         record.geometry = geometry;
       } catch (error) {
         record.unhandled_error = {
@@ -297,10 +320,6 @@ try {
         };
         fail(`${ctx}: unhandled touch round-trip exception`, record.unhandled_error);
       } finally {
-        record.runtime ??= runtime;
-        record.proxy_errors ??= proxyErrors;
-        record.proxy_requests ??= proxyEvidence;
-        evidence.push(record);
         if (context) {
           try {
             await context.close();
@@ -311,6 +330,23 @@ try {
             });
           }
         }
+
+        // The previous revision checked runtime/proxy arrays before context.close,
+        // while the retained report still held references to those mutable arrays.
+        // That allowed teardown-time errors to appear in the artifact after the
+        // verdict had already been computed. Re-check after close and snapshot the
+        // exact arrays that will be serialized so retained evidence and verdict are
+        // conjunctive by construction.
+        if (proxyErrors.length) {
+          fail(`${ctx}: proxy errors present in retained evidence after context teardown`, [...proxyErrors]);
+        }
+        if (runtime.length) {
+          fail(`${ctx}: runtime/resource errors present in retained evidence after context teardown`, [...runtime]);
+        }
+        record.runtime = [...runtime];
+        record.proxy_errors = [...proxyErrors];
+        record.proxy_requests = [...proxyEvidence];
+        evidence.push(record);
       }
     }
   }
@@ -329,7 +365,7 @@ const report = JSON.stringify({
 }, null, 2);
 await fs.writeFile(path.join(out, 'report.json'), report);
 // Keep a second flat copy in the retained evidence root. A prior exact-head run
-// proved the technical step but the nested report did not survive the artifact;
+// proved that step status alone is insufficient when the nested report is absent;
 // duplicating this small JSON summary makes retention deterministic to verify.
 await fs.writeFile(path.join(evidenceRoot, 'article-watch-touch-report.json'), report);
 
@@ -338,4 +374,4 @@ if (failures.length) {
   for (const item of failures) console.error(`- ${item.message}${item.detail ? ` :: ${JSON.stringify(item.detail)}` : ''}`);
   process.exit(1);
 }
-console.log(`Security article↔watch touch PASS using ${launched.engine}: ES/EN Security 00/1.1 × normal/reduced motion completed a real mobile tap round trip against exact branch preview bytes while preserving canonical hrefs.`);
+console.log(`Security article↔watch touch PASS using ${launched.engine}: ES/EN Security 00/1.1 × normal/reduced motion completed a real mobile tap round trip against exact branch preview bytes while preserving canonical hrefs and retaining zero runtime/proxy errors after teardown.`);
