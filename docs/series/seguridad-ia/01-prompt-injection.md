@@ -135,10 +135,10 @@ La consecuencia práctica es una corrección de encuadre. El prompt injection se
 Solo en un sentido muy general: en ambos casos datos no confiables alteran el comportamiento del sistema. Pero la diferencia práctica importa. En SQL injection el exploit vive dentro de una gramática formal y suele resolverse con separación estricta entre consulta y parámetros. En LLMs el problema es semántico: instrucciones y datos ya comparten el mismo medio, y el modelo no tiene una frontera dura entre ambos.
 
 **¿Por qué la inyección indirecta es más peligrosa que el prompt injection directo?**
-Porque el ataque ya no depende de una interacción frontal con el usuario, sino que se esconde en una fuente que el sistema ya considera relevante: un email, un documento, una página recuperada o una memoria escrita por otro agente. En ese momento, la instrucción hostil viaja dentro de la propia cadena de contexto del sistema.
+Porque el ataque deja de depender de una interacción frontal con el usuario y pasa a esconderse en una fuente que el sistema ya considera relevante: un correo, un documento, una página recuperada o la memoria escrita por otro agente. En ese punto la orden hostil viaja dentro de la propia cadena de contexto del sistema.
 
 **¿Sirven los guardrails basados en otro LLM?**
-Sirven como una capa adicional, no como sustituto de la arquitectura. Un guardrail puede bloquear casos obvios y mejorar cobertura, pero sigue siendo un modelo que procesa lenguaje natural y, por tanto, comparte parte de la misma superficie de ataque. Si el sistema mantiene privilegios amplios en el actor principal, el guardrail solo reduce parte del riesgo.
+Sirven como una capa adicional, no como sustituto de arquitectura. Un guardrail puede bloquear casos obvios y mejorar cobertura, pero sigue siendo un modelo que procesa lenguaje natural y, por tanto, comparte parte de la misma superficie de ataque. Si el sistema sigue dando privilegios amplios al actor principal, el guardrail solo reduce parte del riesgo.
 
 **¿Cuál es la defensa más importante si un agente usa herramientas?**
 La combinación de mínimo privilegio y separación de roles. El agente que lee contenido no confiable no debería tener acceso directo a acciones destructivas o sensibles. Y el agente que sí puede actuar debería hacerlo sobre entradas estructuradas y con scopes muy limitados.
