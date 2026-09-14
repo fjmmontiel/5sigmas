@@ -21,9 +21,9 @@ hide:
 
 {{ include_html("snippets/series_meta.html", series_dir="seguridad-ia", data_state="complete", data_level="tecnico", status_label="Terminada", level_label="Técnico", progress_total="5", extra_rows="<div class=\"series-meta-row\"><span class=\"series-meta-label\">Prerrequisitos</span><span class=\"series-meta-value\"><a href=\"/series/fundamentos-ia-iag/00_presentacion_serie/\">Fundamentos de IA e IA generativa</a> · <a href=\"/series/modelos-razonadores/00_presentacion_serie/\">Modelos razonadores</a></span></div>") }}
 
-La seguridad de software suele partir de una intuición bastante estable: si separas bien el código de los datos, las clases de ataque principales quedan acotadas. En sistemas con LLMs esa intuición deja de ser suficiente, porque el propio motor del sistema consume instrucciones y datos en el mismo medio: lenguaje natural.
+La seguridad de software suele partir de una intuición bastante estable: si separas bien el código de los datos, las clases de ataque principales quedan acotadas. En sistemas con LLMs esa intuición deja de ser suficiente, porque el propio motor del sistema consume [instrucciones y datos en el mismo medio](https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html): lenguaje natural.
 
-Eso cambia la superficie de riesgo de forma estructural. Un documento recuperado por RAG, una observación escrita por otro agente, una salida de herramienta o una nota guardada en memoria pueden dejar de ser simples datos y convertirse en una orden operativa si el sistema no separa bien privilegios, contexto y ejecución.
+Eso cambia la superficie de riesgo de forma estructural. Un documento recuperado por RAG, una observación escrita por otro agente, una salida de herramienta o una nota guardada en memoria pueden dejar de ser simples datos y convertirse en una orden operativa si el sistema no [separa bien privilegios, contexto y ejecución](https://cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html).
 
 La serie no intenta convertir la seguridad en IA en una lista de sustos nuevos. El objetivo es más preciso: entender dónde aparece el riesgo de verdad, qué parte pertenece a la arquitectura y qué parte pertenece a los controles, y por qué muchas mitigaciones que parecen razonables solo ganan tiempo pero no cierran el problema.
 
